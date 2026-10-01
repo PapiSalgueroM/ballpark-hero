@@ -100,6 +100,67 @@ export interface FoHubFacts {
   ledger?: CutLedger;
   /** Round 631: the sport's roster ceiling, when its sign path has one. */
   rosterMax?: number;
+  /**
+   * Round 722: a sport with a luxury tax above its cap (the NBA today): the
+   * bill the payroll would draw at season close and how far over the line it
+   * sits. Absent on the three sports without one, whose boxes are unchanged.
+   */
+  tax?: { bill: number; over: number };
+  /** Round 722: the roster floor the season cannot tip off below, when the sport has one. */
+  rosterFloor?: number;
+}
+
+/**
+ * Round 722: what the cap panel says under the payroll line, for a sport that
+ * carries a tax or a tip off roster floor. Both halves optional, so a board
+ * without either gets no lines and looks exactly as it did. The wording lives
+ * here, not in the panel component, for the same reason the boxes' does.
+ */
+export interface FoTaxFacts {
+  line: number;
+  bill: number;
+  /** Payroll less the line, negative when under it. */
+  over: number;
+  repeater: boolean;
+  /** Last season's bill, held back from this season's room. */
+  due: number;
+  firstApron: number;
+  secondApron: number;
+  aboveFirst: boolean;
+  aboveSecond: boolean;
+  /** A save from before the sport had a tax, still in that season: nothing to project yet. */
+  pending?: boolean;
+}
+export interface FoRosterFacts {
+  count: number;
+  floor: number;
+  max: number;
+  /** What a fill in man signs for, $M. */
+  minContract: number;
+}
+export interface FoCapLine { text: string; tone: 'muted' | 'bad' | 'good' }
+
+export function foCapLines(f: { tax?: FoTaxFacts; roster?: FoRosterFacts }): FoCapLine[] {
+  const out: FoCapLine[] = [];
+  if (f.tax?.pending) {
+    out.push({ text: 'No luxury tax this season. The league sets its tax line from the payrolls it carries out of the summer, and the tax starts next season.', tone: 'muted' });
+  } else if (f.tax) {
+    const t = f.tax;
+    out.push({ text: `Luxury tax line $${t.line}M, first apron $${t.firstApron}M, second apron $${t.secondApron}M.`, tone: 'muted' });
+    out.push(t.bill > 0
+      ? { text: `Projected tax $${t.bill}M: $${t.over}M over the line${t.repeater ? ', repeater rates' : ''}. Assessed at season close.`, tone: 'bad' }
+      : { text: `Under the tax line by $${Math.abs(t.over)}M.`, tone: 'good' });
+    if (t.due > 0) out.push({ text: `Last season's $${t.due}M tax bill is held back from this season's room.`, tone: 'bad' });
+    if (t.aboveSecond) out.push({ text: 'Over the second apron: a trade must send out at least the salary it brings back.', tone: 'bad' });
+    else if (t.aboveFirst) out.push({ text: 'Over the first apron: a trade must send out at least the salary it brings back.', tone: 'bad' });
+  }
+  if (f.roster) {
+    const r = f.roster;
+    out.push({ text: `${r.count} of ${r.max} roster spots filled, ${r.floor} needed at tip off.`, tone: 'muted' });
+    if (r.count > r.max) out.push({ text: `${r.count - r.max} too many. Waive down to ${r.max} before tip off.`, tone: 'bad' });
+    else if (r.count < r.floor) out.push({ text: `${r.floor - r.count} short: the league fills the gap on minimum deals ($${r.minContract}M each) when the season tips off.`, tone: 'bad' });
+  }
+  return out;
 }
 
 /** Sorted ovr at a percentile, 0 = worst man, 1 = best man. */
@@ -135,6 +196,13 @@ export function foHubTiles(f: FoHubFacts): FoTile[] {
     const hurt = f.roster.filter(p => p.out > 0);
     const star = best(f.roster);
     const starHurt = hurt.length > 0 ? [...hurt].sort((a, b) => b.ovr - a.ovr)[0] : null;
+    /* Round 722: a roster the season cannot start with outranks a hurt star
+       on the second line, because it is the one roster fact with a deadline.
+       Only a sport that declares a tip off floor has that deadline: the NHL
+       and MLB boards pass rosterMax for their sign path, can draft above it
+       and have no tip off refusal, so they keep their old line. */
+    const tooMany = f.rosterFloor != null && f.rosterMax != null ? f.roster.length - f.rosterMax : 0;
+    const tooFew = f.rosterFloor != null ? f.rosterFloor - f.roster.length : 0;
     out.push({
       key: 'team',
       icon: '👔',
@@ -142,13 +210,17 @@ export function foHubTiles(f: FoHubFacts): FoTile[] {
       value: hurt.length > 0
         ? `${hurt.length} unavailable`
         : `${f.roster.length} under contract`,
-      sub: starHurt
-        ? `${starHurt.name} is out ${starHurt.out} ${f.periodWord}${starHurt.out === 1 ? '' : 's'}`
-        : star
-          ? `${star.name} leads them at ${star.ovr}`
-          : 'Nobody on the books',
-      /* A missing star is the only roster fact that needs you today. */
-      accent: hurt.length > 0,
+      sub: tooMany > 0
+        ? `${tooMany} over the ${f.rosterMax} man limit. Waive before tip off.`
+        : tooFew > 0
+          ? `${tooFew} short of the ${f.rosterFloor} man floor. Filled on minimum deals at tip off.`
+          : starHurt
+            ? `${starHurt.name} is out ${starHurt.out} ${f.periodWord}${starHurt.out === 1 ? '' : 's'}`
+            : star
+              ? `${star.name} leads them at ${star.ovr}`
+              : 'Nobody on the books',
+      /* A missing star, or a roster the season cannot start with, is what needs you today. */
+      accent: hurt.length > 0 || tooMany > 0 || tooFew > 0,
     });
   }
 
@@ -189,24 +261,31 @@ export function foHubTiles(f: FoHubFacts): FoTile[] {
   {
     const over = f.capRoom < 0;
     const chip = best(f.roster.filter(p => p.out === 0));
+    /* Round 722: a tax cheque in the post is the trade fact that matters most
+       in a sport that has one. Over the cap alone is ordinary there. */
+    const taxed = !!f.tax && f.tax.bill > 0;
     out.push({
       key: 'trade',
       icon: '🤝',
       title: 'Trades',
-      value: over
-        ? `${money(f.capRoom)} to shed`
-        : f.tradeLine
-          ? 'Deal done'
-          : `${f.roster.length} to offer`,
-      sub: over
-        ? 'Move salary or the owner will'
-        : f.tradeLine
-          ? f.tradeLine
-          : chip
-            ? `Your biggest chip is ${chip.name}`
-            : 'Call a rival and see',
+      value: taxed
+        ? `Tax bill ${money(f.tax!.bill)}`
+        : over
+          ? `${money(f.capRoom)} to shed`
+          : f.tradeLine
+            ? 'Deal done'
+            : `${f.roster.length} to offer`,
+      sub: taxed
+        ? `${money(f.tax!.over)} over the tax line. Shed salary or pay it.`
+        : over
+          ? 'Move salary or the owner will'
+          : f.tradeLine
+            ? f.tradeLine
+            : chip
+              ? `Your biggest chip is ${chip.name}`
+              : 'Call a rival and see',
       /* Over the line is the one trade state that is genuinely urgent. */
-      accent: over,
+      accent: taxed || over,
     });
   }
 

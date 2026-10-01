@@ -601,6 +601,7 @@ serve(async (req) => {
       if (proved) {
         rowKnown = true;
         knownFullName = proved;
+        provedRow = proved;
         determined.push({ game: CACHE_GAME, cache_key: rowKey, verdict: { match: true, fullName: proved } });
       }
     }
@@ -609,6 +610,7 @@ serve(async (req) => {
       if (proved) {
         colKnown = true;
         knownFullName = proved;
+        provedCol = proved;
         determined.push({ game: CACHE_GAME, cache_key: colKey, verdict: { match: true, fullName: proved } });
       }
     }
@@ -632,7 +634,9 @@ serve(async (req) => {
         source: "records",
       };
       /* Round 707: when this answer overturned a cached pair, the pair row is
-         replaced too, so the model's stale no is not read again next time. */
+         replaced too, so the model's stale no is not read again next time.
+         Round 703: the same write when the records decided a half of a pair
+         that had no cached row, so the next ask is served as cached. */
       if (provedRow || provedCol) {
         try { await sb.from("ai_validation_cache").upsert({ game: CACHE_GAME, cache_key: cacheKey, verdict }); } catch { /* non-fatal */ }
       }
@@ -810,6 +814,31 @@ times over.`,
       aiVerdict = true;
     } catch {
       parsed = { valid: false, unverified: true, reason: "Couldn't verify your answer right now, please try again." };
+    }
+
+    /* ROUND 703: the model never outvotes the club records on a half they
+       proved. Before this, a proved half could reach this point with the other
+       half unknown, and the model's "no" on the proved half was returned and
+       then written back over the proved fact. provedRow and provedCol are set
+       by every records pass above (Round 707's re-check of a cached no and the
+       null-half pass alike), so this covers both. */
+    if (aiVerdict && (provedRow || provedCol) && parsed && typeof parsed === "object") {
+      const rec = parsed as Record<string, unknown>;
+      if (provedRow) rec.matchesRow = true;
+      if (provedCol) rec.matchesColumn = true;
+      if (typeof rec.matchesRow === "boolean" && typeof rec.matchesColumn === "boolean") {
+        rec.valid = rec.matchesRow && rec.matchesColumn;
+        rec.reason = {
+          [rowAttribute]: provedRow ? "Verified from our club records." : rec.matchesRow ? "Verified." : "This player does not match this attribute.",
+          [columnAttribute]: provedCol ? "Verified from our club records." : rec.matchesColumn ? "Verified." : "This player does not match this attribute.",
+        };
+      } else if (rec.valid !== true) {
+        /* A bare "no" that never says which half it meant cannot be read
+           against a half the records proved. Fail closed: unverified, and
+           nothing is cached. */
+        aiVerdict = false;
+        parsed = { valid: false, unverified: true, reason: "Couldn't verify your answer right now, please try again." };
+      }
     }
 
     // cache VERIFIED verdicts only, never the unverified fallbacks

@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { Loader2, Package, Timer } from 'lucide-react';
+import { Loader2, Package, Timer, Users } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { FlagImg } from '@/components/FlagImg';
 import { GameShell } from '@/components/game/GameShell';
 import { ResultScreen } from '@/components/game/ResultScreen';
 import { GameNav } from '@/components/game/GameNav';
@@ -9,14 +8,19 @@ import AdBanner from '@/components/ads/AdBanner';
 import ReportQuestion from '@/components/game/ReportQuestion';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
+import { BingoCardGrid } from '@/components/sports-bingo/BingoCardGrid';
+import { BingoHandOver } from '@/components/sports-bingo/BingoHandOver';
+import { BingoPackList } from '@/components/sports-bingo/BingoPackList';
+import { PassDeviceSetup } from '@/components/sports-bingo/PassDeviceSetup';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { getTodayET } from '@/lib/dateUtils';
 import { fetchSquadPool } from '@/lib/squadDeal';
 import { Player } from '@/types/game';
 import {
-  BingoGame, CARD_SIZE, CPU_LEVELS, CpuLevel, FREE_INDEX, PACK_COUNT, PACK_SECONDS,
-  buildGame, claimableSquares, cpuClaims, dailySeed, lehmer, lineCount, loadDailyBingo, saveDailyBingo,
-  scoreGame, squareCondition,
+  BingoGame, BingoTable, BingoTableSetup, CARD_SIZE, CPU_LEVELS, CpuLevel, FREE_INDEX, PACK_COUNT, PACK_SECONDS,
+  buildGame, claimSquare, claimableSquares, clearBingoTable, closeTurn, cpuClaims, createTable, dailySeed, declareWinner,
+  lehmer, lineCount, loadBingoTable, loadDailyBingo, openTurn, revealNext, saveBingoTable, saveDailyBingo, scoreGame,
+  seatGame, secondsFor, squaresOf,
 } from '@/lib/sportsBingo';
 
 /**
@@ -31,12 +35,32 @@ import {
  * open for its window and any square a player in the OPEN pack satisfies
  * can be claimed; when the next pack opens the old one is gone for good. A
  * tap on a square nothing in the pack matches shakes and costs nothing.
+ *
+ * Round 727: pass the device. Two to four seats on one phone, each with its
+ * own card, all hearing the same ten packs: every seat takes a turn on a
+ * pack before the next one opens, the phone changes hands on a screen that
+ * shows only the next name, and the first seat to the goal wins. The table
+ * is plain data in src/lib/sportsBingo.ts (the Rebuild seats shape); this
+ * page owns the clock, the storage and the drawing. The same setup picks
+ * which condition families the cards may use and how long a pack stays open.
  */
 
-type Phase = 'boot' | 'error' | 'setup' | 'playing' | 'done';
+type Phase = 'boot' | 'error' | 'setup' | 'tableSetup' | 'playing' | 'table' | 'done';
 type Mode = 'daily' | 'unlimited' | 'cpu';
 
 const SLUG = 'sports-bingo';
+
+/** A saved table worth offering to resume: not finished, and never mid turn.
+ *  A refresh mid turn restarts that turn from the hand over with nothing
+ *  turned up and a full clock, and the squares it already claimed stand, so
+ *  the seat gets some scan time back on a pack it has partly seen. That is a
+ *  known give in a party mode on one phone: the other ways out (saving the
+ *  clock every second, or ending the turn on any reload) cost more than it. */
+function resumableTable(): BingoTable | null {
+  const t = loadBingoTable();
+  if (!t || t.phase === 'done') return null;
+  return t.phase === 'turn' ? { ...t, phase: 'handover', revealed: 0 } : t;
+}
 
 export default function SportsBingo() {
   /* Round 428 part two: TODAY IS PINNED AT MOUNT, and every read, write and
@@ -61,9 +85,15 @@ export default function SportsBingo() {
   const [marked, setMarked] = useState<boolean[]>(dailyDone?.marked ?? []);
   const [cpuMarked, setCpuMarked] = useState<boolean[]>([]);
   const [wrongSquare, setWrongSquare] = useState<number | null>(null);
+  /* The shake's timer, cleared when the page goes away so it never fires
+     after it (in the page test it fired into a torn down window and threw). */
+  const shakeTimer = useRef<number | undefined>(undefined);
+  useEffect(() => () => window.clearTimeout(shakeTimer.current), []);
   /* The CPU's stream is separate from the board's build stream so its luck
      cannot change which packs everyone sees. */
   const cpuRngRef = useRef<() => number>(lehmer(1));
+  /* Round 727: the table, restored from storage when a game was left mid way. */
+  const [table, setTable] = useState<BingoTable | null>(resumableTable);
 
   useEffect(() => {
     let cancelled = false;
@@ -125,8 +155,41 @@ export default function SportsBingo() {
     setSecondsLeft(PACK_SECONDS);
   }, [game, mode, cpuLevel, packIndex]);
 
+  /* ---- Round 727: the table ---- */
+  const startTable = useCallback((setup: BingoTableSetup) => {
+    if (pool.length === 0) return;
+    const t = createTableFor(pool, setup);
+    setTable(t);
+    setSecondsLeft(secondsFor(t.difficulty));
+    setPhase('table');
+  }, [pool]);
+
+  const takeTurn = useCallback(() => {
+    setTable(t => (t ? openTurn(t) : t));
+    if (table) setSecondsLeft(secondsFor(table.difficulty));
+  }, [table]);
+
+  const endTurn = useCallback(() => {
+    setTable(t => (t ? closeTurn(t) : t));
+    if (table) setSecondsLeft(secondsFor(table.difficulty));
+  }, [table]);
+
+  const quitTable = useCallback(() => {
+    clearBingoTable();
+    setTable(null);
+    setPhase('setup');
+  }, []);
+
+  /* The table is kept across a refresh in every phase, so a group can put
+     the phone down and pick the game up where it was. */
   useEffect(() => {
-    if (phase !== 'playing') return;
+    if (phase === 'table' && table) saveBingoTable(table);
+  }, [phase, table]);
+
+  const inTurn = phase === 'table' && table?.phase === 'turn';
+  const ticking = phase === 'playing' || inTurn;
+  useEffect(() => {
+    if (!ticking) return;
     const t = setInterval(() => {
       setSecondsLeft(s => {
         if (s <= 1) return 0;
@@ -134,11 +197,13 @@ export default function SportsBingo() {
       });
     }, 1000);
     return () => clearInterval(t);
-  }, [phase]);
+  }, [ticking]);
 
   useEffect(() => {
-    if (phase === 'playing' && secondsLeft === 0) advancePack();
-  }, [phase, secondsLeft, advancePack]);
+    if (secondsLeft !== 0) return;
+    if (phase === 'playing') advancePack();
+    else if (inTurn) endTurn();
+  }, [phase, inTurn, secondsLeft, advancePack, endTurn]);
 
   const pack = game && phase !== 'setup' ? game.packs[packIndex] : null;
   const claimable = useMemo(
@@ -146,18 +211,30 @@ export default function SportsBingo() {
     [game, pack, marked],
   );
 
+  const shake = (sq: number) => {
+    setWrongSquare(sq);
+    window.clearTimeout(shakeTimer.current);
+    shakeTimer.current = window.setTimeout(() => setWrongSquare(w => (w === sq ? null : w)), 450);
+  };
+
   const tapSquare = (sq: number) => {
     if (phase !== 'playing' || !game || sq === FREE_INDEX || marked[sq]) return;
     if (claimable.has(sq)) {
       setMarked(prev => { const next = [...prev]; next[sq] = true; return next; });
     } else {
-      setWrongSquare(sq);
-      window.setTimeout(() => setWrongSquare(w => (w === sq ? null : w)), 450);
+      shake(sq);
     }
   };
 
-  const mySquares = marked.filter((m, i) => m && i !== FREE_INDEX).length;
-  const cpuSquares = cpuMarked.filter((m, i) => m && i !== FREE_INDEX).length;
+  const tapTableSquare = (sq: number) => {
+    if (!table || !inTurn) return;
+    const next = claimSquare(table, sq);
+    if (next === table) shake(sq);
+    else setTable(next);
+  };
+
+  const mySquares = squaresOf(marked);
+  const cpuSquares = squaresOf(cpuMarked);
   const finalScore = scoreGame(marked);
   const won = mode === 'cpu' ? mySquares > cpuSquares : mySquares >= 12;
   const isDone = phase === 'done';
@@ -165,7 +242,17 @@ export default function SportsBingo() {
      result never records, and the fresh one records once, in the same
      commit that then books it below. */
   const bookedDaily = mode === 'daily' && dailyDone !== null;
-  useGameCompletion(SLUG, isDone && !bookedDaily, finalScore, mySquares);
+  /* Round 727: a finished table records the first human seat's card, the
+     way Rebuild records the first human's run at a fuller table. */
+  const tableDone = phase === 'table' && table?.phase === 'done';
+  const firstHuman = table?.seats.find(s => s.kind === 'human') ?? null;
+  const tableScore = firstHuman ? scoreGame(firstHuman.marked) : 0;
+  useGameCompletion(
+    SLUG,
+    (isDone && !bookedDaily) || tableDone,
+    tableDone ? tableScore : finalScore,
+    tableDone ? (firstHuman ? squaresOf(firstHuman.marked) : 0) : mySquares,
+  );
 
   useEffect(() => {
     if (!isDone || mode !== 'daily' || dailyDone) return;
@@ -173,20 +260,33 @@ export default function SportsBingo() {
     saveDailyBingo(rec);
     setDailyDone(rec);
   }, [isDone, mode, dailyDone, marked]);
-  const doneSquares = dailyDone ? dailyDone.marked.filter((m, i) => m && i !== FREE_INDEX).length : 0;
+  const doneSquares = dailyDone ? squaresOf(dailyDone.marked) : 0;
 
-  const emojiGrid = useMemo(() => {
-    if (!isDone) return '';
+  const boardGrid = (board: boolean[]) => {
     const rows: string[] = [];
     for (let r = 0; r < 5; r += 1) {
       rows.push([0, 1, 2, 3, 4].map(c => {
         const i = r * 5 + c;
         if (i === FREE_INDEX) return '🎁';
-        return marked[i] ? '🟩' : '⬜';
+        return board[i] ? '🟩' : '⬜';
       }).join(''));
     }
-    return [`🎱 Sports Bingo: ${finalScore} pts`, ...rows].join('\n');
+    return rows;
+  };
+
+  const emojiGrid = useMemo(() => {
+    if (!isDone) return '';
+    return [`🎱 Sports Bingo: ${finalScore} pts`, ...boardGrid(marked)].join('\n');
   }, [isDone, marked, finalScore]);
+
+  const verdict = tableDone && table ? declareWinner(table) : null;
+  const winnerNames = verdict && table ? verdict.winners.map(i => table.seats[i].name) : [];
+  const tableWon = verdict && table ? verdict.winners.some(i => table.seats[i].kind === 'human') : false;
+  const tableGrid = useMemo(() => {
+    if (!table || !verdict) return '';
+    const lead = table.seats[verdict.winners[0]];
+    return [`🎱 Sports Bingo, ${table.seats.length} seats: ${winnerNames.join(' and ')} ${verdict.winners.length > 1 ? 'share it' : 'take it'}`, ...boardGrid(lead.marked)].join('\n');
+  }, [table, verdict, winnerNames]);
 
   const modeButton = (label: string, blurb: string, onClick: () => void) => (
     <button
@@ -198,11 +298,13 @@ export default function SportsBingo() {
     </button>
   );
 
+  const seatInChair = table ? table.seats[table.turn] : null;
+
   return (
     <>
       <PageSeo
         title="Sports Bingo: The Pack Opening Bingo Game | DoUKnowBall"
-        description="A bingo card of football conditions, packs of real players on a timer. Mark the squares your pulls satisfy before the pack closes. Daily shared card, unlimited mode, or race a CPU."
+        description="A bingo card of football conditions, packs of real players on a timer. Mark the squares your pulls satisfy before the pack closes. Daily shared card, unlimited mode, race a CPU, or pass one phone round the table."
         path="/sports-bingo"
       />
       <GameShell width="narrow" title="Sports Bingo" emoji="🎱" subtitle="Open packs, mark what matches, most squares wins.">
@@ -227,6 +329,11 @@ export default function SportsBingo() {
               <p>While a pack is open, tap every square someone in it satisfies. When the next pack opens, the old one is gone for good.</p>
               <p>Wrong taps cost nothing but time. Squares score 3, completed lines 2 each, a full blackout lands exactly 100.</p>
             </div>
+            {table && modeButton(
+              'Resume pass the device',
+              `${table.seats.length} seats, pack ${table.packIndex + 1} of ${PACK_COUNT}, ${table.seats[table.turn].name} is up next`,
+              () => { setSecondsLeft(secondsFor(table.difficulty)); setPhase('table'); },
+            )}
             {dailyDone
               ? modeButton('Daily card done', `${doneSquares} of 24 squares, ${scoreGame(dailyDone.marked)} pts. Tap to see today's card, a new one at midnight ET.`, () => start('daily', cpuLevel))
               : modeButton('Daily card', 'One shared card and pack run per day, same for everyone', () => start('daily', cpuLevel))}
@@ -247,7 +354,12 @@ export default function SportsBingo() {
               </div>
               <p className="text-[11px] text-muted-foreground mt-2">Same card, same packs, its own board. Most squares after pack {PACK_COUNT} wins.</p>
             </div>
+            {modeButton('Pass the device', 'Two to four of you on one phone, your own cards, the same packs. Pick what the squares can be and how fast it goes.', () => setPhase('tableSetup'))}
           </div>
+        )}
+
+        {phase === 'tableSetup' && (
+          <PassDeviceSetup onBack={() => setPhase('setup')} onStart={startTable} />
         )}
 
         {phase === 'playing' && game && pack && (
@@ -262,17 +374,7 @@ export default function SportsBingo() {
 
             {/* The open pack */}
             <div className="rounded-xl border border-border bg-surface-1 p-3">
-              <div className="grid grid-cols-1 gap-1.5">
-                {pack.map(p => (
-                  <div key={p.name} className="flex items-baseline justify-between gap-2 text-sm">
-                    <span className="font-semibold text-foreground truncate">{p.name}</span>
-                    <span className="text-[11px] text-muted-foreground shrink-0">
-                      {p.position} · {p.age > 0 ? `${p.age}y · ` : ''}<FlagImg name={p.nationality} size={11} showLabel /> · {p.league} · {p.marketValue}M
-                      {p.goals + p.assists > 0 ? ` · ${p.goals}g ${p.assists}a` : ''}
-                    </span>
-                  </div>
-                ))}
-              </div>
+              <BingoPackList pack={pack} />
               <button
                 onClick={advancePack}
                 className="mt-2 w-full rounded-lg border border-border bg-background py-2 text-xs font-semibold text-muted-foreground hover:text-primary hover:border-primary/40 transition-colors"
@@ -282,35 +384,91 @@ export default function SportsBingo() {
             </div>
 
             {/* The card */}
-            <div className="grid grid-cols-5 gap-1.5">
-              {Array.from({ length: CARD_SIZE }, (_, sq) => {
-                const cond = squareCondition(game, sq);
-                const isFree = sq === FREE_INDEX;
-                const isMarked = isFree || marked[sq];
-                return (
-                  <button
-                    key={sq}
-                    onClick={() => tapSquare(sq)}
-                    disabled={isFree || marked[sq]}
-                    className={cn(
-                      'aspect-square rounded-lg border p-1 text-center flex items-center justify-center transition-colors',
-                      isMarked
-                        ? 'bg-correct/20 border-correct text-foreground'
-                        : 'bg-card border-border hover:border-primary/50',
-                      wrongSquare === sq && 'animate-shake-wrong border-destructive',
-                    )}
-                  >
-                    <span className="text-[9px] sm:text-[10px] font-semibold leading-tight">
-                      {isFree ? '🎁 Free' : cond?.label}
-                    </span>
-                  </button>
-                );
-              })}
-            </div>
+            <BingoCardGrid game={game} marked={marked} wrongSquare={wrongSquare} onTap={tapSquare} />
             <p className="text-center text-[11px] text-muted-foreground">
               Tap a square someone in the open pack satisfies. Lines: {lineCount(marked)}
             </p>
           </div>
+        )}
+
+        {phase === 'table' && table && seatInChair && table.phase === 'handover' && (
+          <BingoHandOver
+            name={seatInChair.name}
+            packNumber={table.packIndex + 1}
+            first={table.packIndex === 0 && !table.seats.some(s => s.kind === 'human' && s.index < table.turn)}
+            cpuPlayed={table.seats.filter(s => s.kind === 'cpu' && s.index < table.turn).map(s => s.name)}
+            onReady={takeTurn}
+            onQuit={quitTable}
+          />
+        )}
+
+        {phase === 'table' && table && seatInChair && table.phase === 'turn' && (
+          <div className="space-y-4">
+            <div className="flex items-center justify-between text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+              <span className="inline-flex items-center gap-1.5"><Package className="w-4 h-4" /> Pack {table.packIndex + 1} of {PACK_COUNT}</span>
+              <span className="inline-flex items-center gap-1.5"><Users className="w-4 h-4" /> {seatInChair.name}</span>
+              <span className={cn('inline-flex items-center gap-1.5 tabular-nums', secondsLeft <= 4 ? 'text-destructive' : 'text-primary')}>
+                <Timer className="w-4 h-4" /> {secondsLeft}s
+              </span>
+            </div>
+            {table.fallback && (
+              <p className="text-center text-[11px] text-amber-600 dark:text-amber-400">
+                Your families fill {table.allowed} of 24 squares, the rest came from the whole bank.
+              </p>
+            )}
+
+            {/* The open pack, turned up one player at a time */}
+            <div className="rounded-xl border border-border bg-surface-1 p-3">
+              <BingoPackList pack={table.packs[table.packIndex]} revealed={table.revealed} onReveal={() => setTable(t => (t ? revealNext(t) : t))} />
+              <button
+                onClick={endTurn}
+                className="mt-2 w-full rounded-lg border border-border bg-background py-2 text-xs font-semibold text-muted-foreground hover:text-primary hover:border-primary/40 transition-colors"
+              >
+                Done with this pack, pass the phone
+              </button>
+            </div>
+
+            <BingoCardGrid game={seatGame(table, table.turn)} marked={seatInChair.marked} wrongSquare={wrongSquare} onTap={tapTableSquare} />
+            <p className="text-center text-[11px] text-muted-foreground">
+              Tap a square someone turned up satisfies. Lines: {lineCount(seatInChair.marked)} · {table.seats.map(s => `${s.name} ${squaresOf(s.marked)}`).join(' · ')}
+            </p>
+          </div>
+        )}
+
+        {tableDone && table && verdict && (
+          <ResultScreen
+            won={tableWon}
+            outcomeEmoji={verdict.winners.length > 1 ? '🤝' : '🎉'}
+            headline={
+              verdict.winners.length > 1
+                ? `Shared between ${winnerNames.join(' and ')}`
+                : `${winnerNames[0]} takes it!`
+            }
+            statLine={
+              verdict.by === 'goal'
+                ? table.goal === 'line'
+                  ? `First to a line, after ${table.packIndex + 1} pack${table.packIndex === 0 ? '' : 's'}`
+                  : `A full card, after ${table.packIndex + 1} pack${table.packIndex === 0 ? '' : 's'}`
+                : `Nobody got there in ${PACK_COUNT} packs, so most squares decides`
+            }
+            statRow={table.seats.map(s => ({ label: s.name, value: `${squaresOf(s.marked)} sq` }))}
+            emojiGrid={tableGrid}
+            share={{ score: String(scoreGame(table.seats[verdict.winners[0]].marked)), gameName: 'Sports Bingo', gamePath: '/sports-bingo' }}
+            onPlayAgain={() => { clearBingoTable(); setTable(null); setPhase('tableSetup'); }}
+            playAgainLabel="New table"
+          >
+            <div className="rounded-xl border border-border bg-background p-3 text-left">
+              {table.seats.map(s => (
+                <p key={s.index} className="flex items-center justify-between text-xs text-foreground py-0.5">
+                  <span className="truncate">{verdict.winners.includes(s.index) ? '🏆 ' : ''}{s.name}{s.kind === 'cpu' ? ' (CPU)' : ''}</span>
+                  <span className="ml-2 shrink-0 text-muted-foreground">
+                    {squaresOf(s.marked)} squares, {lineCount(s.marked)} line{lineCount(s.marked) === 1 ? '' : 's'}, {scoreGame(s.marked)} pts
+                    {s.doneAt !== null ? ` · there after ${s.doneAt} players` : ''}
+                  </span>
+                </p>
+              ))}
+            </div>
+          </ResultScreen>
         )}
 
         {isDone && (
@@ -340,10 +498,16 @@ export default function SportsBingo() {
         <GameSeoContent
           pageHasOwnH1
           title="Sports Bingo: The Pack Opening Bingo Game"
-          description="A 5 by 5 bingo card of football conditions, ten packs of real players on a timer, and the marking is the skill: claim the squares your pulls satisfy before each pack closes. One shared daily card, an unlimited mode, and a CPU opponent with three tempers."
+          description="A 5 by 5 bingo card of football conditions, ten packs of real players on a timer, and the marking is the skill: claim the squares your pulls satisfy before each pack closes. One shared daily card, an unlimited mode, a CPU opponent with three tempers, and a pass the device table for two to four people with custom cards."
         />
         <GameNav />
       </GameShell>
     </>
   );
+}
+
+/** A fresh table off a random seed. Not a useState initialiser, so the draw is one per tap. */
+function createTableFor(pool: Player[], setup: BingoTableSetup): BingoTable {
+  const seed = Math.floor(Math.random() * 2147483645) + 1;
+  return createTable(pool, seed, setup);
 }

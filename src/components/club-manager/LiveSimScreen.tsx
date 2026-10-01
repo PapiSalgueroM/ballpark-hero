@@ -11,6 +11,7 @@ import type {
 } from '@/lib/clubManager';
 import { HalftimeScreen } from '@/components/club-manager/HalftimeScreen';
 import { MadeUpTag } from '@/components/club-manager/SquadScreen';
+import { ShootoutKicks } from '@/components/club-manager/ShootoutKicks';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
 import { cardsAndSubsAt, liveLines, reportLines } from '@/lib/clubManagerMatchCentre';
 import type { CardsAndSubs } from '@/lib/clubManagerMatchCentre';
@@ -934,7 +935,10 @@ export function LiveSimScreen({
             <div className="text-center">
               <div className="text-white font-display font-bold text-2xl">FULL TIME</div>
               {report?.decidedBy === 'pens' && (
-                <div className="text-white/90 text-xs mt-1">Decided on penalties</div>
+                <div className="text-white/90 text-xs mt-1">
+                  {/* Round 782: the count, when the kicks were played one by one. */}
+                  Decided on penalties{report.shootout ? `, ${report.shootout.mine}-${report.shootout.theirs}` : ''}
+                </div>
               )}
               {report?.decidedBy === 'aet' && (
                 <div className="text-white/90 text-xs mt-1">Decided in extra time</div>
@@ -964,6 +968,11 @@ export function LiveSimScreen({
           <p key={p.id} className="text-[10px] text-yellow-400 text-center">🩹 {p.name} is down and you have no changes left.</p>
         )
       ))}
+
+      {/* Round 782: at the whistle, the shootout kick by kick when the manager had set an order. */}
+      {stage === 'done' && report?.shootout && (
+        <ShootoutKicks shootout={report.shootout} clubName={career.clubName} opponent={opponent} />
+      )}
 
       {/* the live stats, the report's own numbers counted up to this minute.
           Round 472: with the other club's name on it rather than "Them". */}

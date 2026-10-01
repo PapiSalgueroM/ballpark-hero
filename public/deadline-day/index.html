@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Round 90: index.html must never be cached. The hashed asset files
+         under /assets are immutable and still cache normally; only this
+         document has to stay fresh so a returning player always gets the
+         newest chunk names. -->
+    
+    
+    
+    <title>Deadline Day: Transfer Window Football Game | DoUKnowBall</title>
+    <!-- Round 69: static AdSense account association. The ad script itself stays
+         consent gated below; this meta tag just makes the site-to-account link
+         visible to Google's crawler on the raw HTML, no consent needed. -->
+    <meta name="google-adsense-account" content="ca-pub-2929318086316376">
+    <meta name="msvalidate.01" content="9C0F485E90B6744EF88628240F61B9E1">
+    <meta name="yandex-verification" content="78b02f385cab3272">
+    
+    <!-- Round 265: the home page's canonical, in the template rather than in
+         the app. Every OTHER page carries one because the prerenderer captures
+         the head after React has drawn it, but the home page is deliberately
+         not prerendered (the host regenerates it every build), so its canonical
+         only existed once JavaScript ran. Measured on the live site with
+         JavaScript off and a Googlebot user agent: ten pages checked, ten
+         canonicals, and the one that was missing was the home page. It is also
+         the page most likely to collect tracking parameters from shares, which
+         is exactly what a self referencing canonical is for. -->
+    
+
+    <!-- Round 281: who this site is, in the template rather than at runtime.
+
+         Every other page ships as a snapshot whose head is copied verbatim from
+         the build, so a tag React adds survives. The home page is the one page
+         that cannot work that way, because vite regenerates it from THIS file on
+         whatever machine builds the site, so anything added at runtime never
+         reaches the raw HTML. Measured on 2026-08-24, the shipped home page
+         carried zero structured data blocks: the WebApplication object the app
+         has been generating since Round 53 had never been seen by a crawler,
+         only by a browser that runs JavaScript. Same trap that swallowed the
+         canonical in Round 265 and the readable copy in Round 257.
+
+         WebSite and Organization are the two things Google reads to work out
+         whose domain this is and what to call it, and WebApplication is what
+         says the thing at this address is a free browser game rather than a
+         shop or a blog. All three are claims about the SITE rather than about
+         whichever page is being served, and each carries an @id naming the site
+         root so none of them can be read as a claim about the current page.
+         Putting them here does exactly that: the snapshots copy this head, so
+         all 126 of them carry the pair and a crawler can tie 127 documents to
+         one entity. The page level object, whatever type that page is, is still
+         emitted by PageSeo on top of this.
+
+         KEEP THIS IN STEP WITH SITE_JSON_LD in src/lib/pageSchema.ts.
+         scripts/simSchema.mjs parses this block and compares it against that
+         export, so the two cannot drift apart quietly. -->
+    <script type="application/ld+json">[{"@context":"https://schema.org","@type":"WebSite","@id":"https://douknowball.com/#website","name":"DoUKnowBall","alternateName":"Do U Know Ball","url":"https://douknowball.com/","inLanguage":"en","publisher":{"@id":"https://douknowball.com/#org"}},{"@context":"https://schema.org","@type":"Organization","@id":"https://douknowball.com/#org","name":"DoUKnowBall","url":"https://douknowball.com/","logo":"https://douknowball.com/icon-512.png"},{"@context":"https://schema.org","@type":"WebApplication","@id":"https://douknowball.com/#webapp","name":"DoUKnowBall","url":"https://douknowball.com/","applicationCategory":"GameApplication","operatingSystem":"Web Browser","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"publisher":{"@id":"https://douknowball.com/#org"}}]</script><script type="application/ld+json" data-rh="true">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"DoUKnowBall","item":"https://douknowball.com"},{"@type":"ListItem","position":2,"name":"Soccer Games","item":"https://douknowball.com/soccer"},{"@type":"ListItem","position":3,"name":"Deadline Day","item":"https://douknowball.com/deadline-day"}]}</script><script type="application/ld+json" data-rh="true">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Is Deadline Day the same as Club Manager?","acceptedAnswer":{"@type":"Answer","text":"It runs on the same transfer desk. The clubs, squads, market, asking prices, patience, valuation desk, rival bids and personal terms all come from Club Manager unchanged. Deadline Day is one day of it against the clock."}},{"@type":"Question","name":"Are the players and the deals real?","acceptedAnswer":{"@type":"Answer","text":"The players, their clubs, ratings, ages and values are the real ones Club Manager uses. The negotiations, the rival bids and the signings are simulated, so nothing that happens here is a claim about a real transfer."}},{"@type":"Question","name":"What happens to a deal at 11pm?","acceptedAnswer":{"@type":"Answer","text":"If you are still haggling, or the fee is agreed but his terms are not signed, the deal collapses and none of the money is spent."}},{"@type":"Question","name":"Can I replay today's window?","acceptedAnswer":{"@type":"Answer","text":"The daily is one go per day, and a refresh picks up where you left off. Free play has no limit, and every free play window is a fresh one."}},{"@type":"Question","name":"Does it count on the leaderboard?","acceptedAnswer":{"@type":"Answer","text":"Not yet. It records that you played, but it puts no points on the leaderboard for now."}},{"@type":"Question","name":"Is Deadline Day free to play?","acceptedAnswer":{"@type":"Answer","text":"Yes. Deadline Day is free to play on DoUKnowBall, right in your browser. No download and no signup needed."}}]}</script><script type="application/ld+json" data-rh="true">{"@context":"https://schema.org","@type":"Game","name":"Deadline Day: Transfer Window Football Game | DoUKnowBall","description":"Run recruitment at a real club on the last day of the window. Three or four gaps, one budget, twelve hours before it shuts. Free football transfer game.","url":"https://douknowball.com/deadline-day","isAccessibleForFree":true,"gamePlatform":"Web Browser","publisher":{"@id":"https://douknowball.com/#org"}}</script>
+    
+    
+    <!-- Round 286: the site's own social image, on its own domain. The old
+         one lived on the host's upload bucket, which is an external image host
+         (the legal rule allows exactly one, flagcdn.com), said "10+ games" on a
+         site with over a hundred, and had a line of garbled text at the bottom.
+         It is generated from the same source as the favicon and the header
+         mark: scripts/logo/gen_logo.py. -->
+    
+    
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="DoUKnowBall: free daily sports trivia, puzzles and career sims">
+    
+    
+    <!-- Round 286: icons. The SVG is the crisp one and modern browsers take it
+         first; the .ico carries 16, 32 and 48 for everything else; the touch
+         icon is what a phone shows when the site is added to a home screen. -->
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180">
+    <meta name="theme-color" content="#0b0d14">
+    <!-- Round 290: installable. The manifest names the same icons the tab and the home
+         screen already use, so Add to Home Screen on Android and desktop Chrome gets the
+         mark, the name and a standalone window. simBrand section 7 holds the file to the
+         icons on disk and this theme colour. -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="application-name" content="DoUKnowBall">
+    <meta name="apple-mobile-web-app-title" content="DoUKnowBall">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&amp;family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+    
+    <script>
+      // Owner 2026-08-05: no third-party editor badge should ever show on the
+      // live site. The host injects a floating "Edit with ..." badge into the
+      // published page after load; this watcher removes it (and anything like
+      // it) the moment it appears.
+      (function () {
+        var isBadge = function (el) {
+          if (!(el instanceof HTMLElement)) return false;
+          var idc = ((el.id || '') + ' ' + (el.className || '')).toString().toLowerCase();
+          if (idc.indexOf('lovable') !== -1 || idc.indexOf('gpt-engineer') !== -1 || idc.indexOf('gptengineer') !== -1) return true;
+          if (el.tagName === 'A') {
+            var href = (el.getAttribute('href') || '').toLowerCase();
+            if (href.indexOf('lovable.dev') !== -1 || href.indexOf('gptengineer.app') !== -1) return true;
+          }
+          return false;
+        };
+        var sweep = function () {
+          try {
+            var all = document.querySelectorAll('[id*="lovable" i], [class*="lovable" i], a[href*="lovable.dev"], a[href*="gptengineer"], [id*="gpt-engineer" i]');
+            for (var i = 0; i < all.length; i++) {
+              var el = all[i];
+              if (isBadge(el)) el.remove();
+            }
+          } catch (e) { /* never break the page over badge cleanup */ }
+        };
+        new MutationObserver(sweep).observe(document.documentElement, { childList: true, subtree: true });
+        document.addEventListener('DOMContentLoaded', sweep);
+        window.addEventListener('load', sweep);
+      })();
+    </script>
+    <script>
+      // Google Analytics loads only after Accept. AdSense is intentionally not
+      // global: direct visits to account, reset, fallback, and other screens
+      // without a deliberate slot do not load it. Auto Ads and Auto optimize
+      // stay off in the account. The static verification meta stays global.
+      (function () {
+        try {
+          if (localStorage.getItem('cookie-consent') === 'accepted') {
+            window.dataLayer = window.dataLayer || [];
+            window.gtag = function () { window.dataLayer.push(arguments); };
+            window.gtag('js', new Date());
+            window.gtag('config', 'G-KZQK2G68YC');
+            var g = document.createElement('script');
+            g.async = true;
+            g.src = 'https://www.googletagmanager.com/gtag/js?id=G-KZQK2G68YC';
+            document.head.appendChild(g);
+          }
+        } catch (e) { /* storage blocked: analytics stays off */ }
+      })();
+    </script>
+    
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <!-- Round 314: the moment before React mounts used to show this document's
+       full crawler copy as a wall of raw text (the owner filmed it). The block
+       stays completely in the DOM for crawlers and for no-JS visitors (the
+       noscript lifts the cap), but a browser that is about to boot the app
+       sees one dimmed screenful, which reads as the site loading rather than
+       a broken page. React replaces #root's children on mount, so the capped
+       wrapper lives exactly as long as the wait does. -->
+  <!-- Round 448: the dim was not enough. His words, with a screenshot: "that
+       thing still shows when u log in into douknowball with the balck screen
+       and all that text and i dont want taht". Every sign in with Google
+       comes back through a full reload of this document, so the wait before
+       React mounts is the first thing a player sees after choosing an
+       account, and a screenful of grey paragraphs is what it showed. The
+       copy stays exactly where it is for crawlers and for no-JS visitors; a
+       booting browser now sees the mark on the app's own background and
+       nothing else, because #dukb-boot sits over the copy inside #root and
+       React replaces #root's children on mount, so it vanishes at the exact
+       moment the app appears. The cap on the copy stays so the document
+       cannot scroll during the wait. -->
+  
+  <noscript></noscript>
+  
+  
+<link rel="canonical" href="https://douknowball.com/deadline-day" data-rh="true"><meta property="og:type" content="website" data-rh="true"><meta property="og:url" content="https://douknowball.com/deadline-day" data-rh="true"><meta property="og:image" content="https://douknowball.com/og-image.png" data-rh="true"><meta name="twitter:card" content="summary_large_image" data-rh="true"><meta name="twitter:image" content="https://douknowball.com/og-image.png" data-rh="true"><meta name="description" content="Run recruitment at a real club on the last day of the window. Three or four gaps, one budget, twelve hours before it shuts. Free football transfer game." data-rh="true"><meta property="og:title" content="Deadline Day: Transfer Window Football Game | DoUKnowBall" data-rh="true"><meta property="og:description" content="Run recruitment at a real club on the last day of the window. Three or four gaps, one budget, twelve hours before it shuts. Free football transfer game." data-rh="true"><meta name="twitter:title" content="Deadline Day: Transfer Window Football Game | DoUKnowBall" data-rh="true"><meta name="twitter:description" content="Run recruitment at a real club on the last day of the window. Three or four gaps, one budget, twelve hours before it shuts. Free football transfer game." data-rh="true">
+<style>html,body{background:#0a0a0b;color:#fafafa;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;margin:0;padding:0}a{color:#7dd3fc}#dukb-snapshot{padding:16px}</style>
+<style>#dukb-boot{position:fixed;inset:0;z-index:2147483000;display:flex;align-items:center;justify-content:center;background:#0a0a0b}#dukb-boot img{width:72px;height:72px}#dukb-snapshot{max-height:100vh;overflow:hidden}</style>
+<noscript><style>#dukb-boot{display:none}#dukb-snapshot{max-height:none;overflow:visible}</style></noscript>
+<script src="/prerender-boot.js" defer></script>
+</head>
+<body>
+<div id="root">
+<div id="dukb-boot" aria-hidden="true"><img src="/logo-mark.svg" alt="" width="72" height="72" decoding="async"></div>
+<div id="dukb-snapshot">
+<div data-site-chrome>
+<a href="/">DOUKNOWBALL</a>
+</div>
+<h1>Deadline Day</h1>
+<p>Twelve hours. One budget. The window shuts at 11pm.</p>
+<h2>Deadline Day: Transfer Window Football Game</h2>
+<p>Deadline Day is a free football transfer game on the Club Manager engine. Run recruitment at a real club on the last day of the window, haggle with selling clubs, agree personal terms with agents and fill the board's needs before the window shuts.</p>
+<p>Deadline Day puts you in charge of recruitment at a real club on the last day of the summer transfer window. The board have picked out three or four places in the side that need an upgrade, left you a budget, and the window shuts at 11pm.</p>
+<p>It runs on the Club Manager transfer desk, so every asking price, counter, patience count, valuation read, rival bid and agent's demand is the same one the full game plays. What is new is the clock: twelve hours, and every bid costs one of them.</p>
+<p>There is a daily, the same club, the same list and the same budget for everyone, and a free play mode at any club you like.</p>
+<h2>How to play Deadline Day, the free transfer window game</h2>
+<h3>Choosing the daily club or free play</h3>
+<li>Open today's window for the shared daily club, or pick any club in free play, or let the game pick one at random.</li>
+<h3>Reading the board's brief</h3>
+<li>Read the brief. Each need is a place in your current eleven, with who starts there now and the rating that would count as an upgrade.</li>
+<li>Under each need are two or three real players who could fill it, cheapest first, each with what your recruitment desk thinks he is worth.</li>
+<h3>Working a deal</h3>
+<li>Tap a player to open his deal, then call his club. The call is free and their asking price comes straight back.</li>
+<h4>Bidding at the fee table</h4>
+<li>Type a bid and watch the meter, or use the quick buttons to lowball, haggle or meet the ask. Sending it takes an hour.</li>
+<h4>Agreeing personal terms</h4>
+<li>Once the fee is agreed, his agent names a contract length, a weekly wage and a signing bonus. Offering terms takes an hour too.</li>
+<h3>Selling to raise money</h3>
+<li>Short of money? Sell one of your bench players to a club that has made an offer. Each sale takes an hour and the fee goes straight into the budget.</li>
+<h3>Finishing the day</h3>
+<li>Keep going until every need is filled, or shut the window yourself when you are done.</li>
+<h2>Deadline Day rules: the clock, the fee table and the grade</h2>
+<h3>The clock and the brief</h3>
+<li>The window opens at 11am and shuts at 11pm, so you have 12 hours.</li>
+<li>Calling a club and walking away cost no time. Every bid, every offer of terms and every sale costs one hour.</li>
+<li>The board want 3 or 4 places filled. A need is filled by a signing who can play that place and is rated at or above its line.</li>
+<li>The budget is about what the cheapest man for each need would cost at his listed price plus the signing bonus his agent asks for. The dearest man for every need would cost more than you have.</li>
+<li>Your desk gives a range for what each player is worth, and what he is really worth is always inside it.</li>
+<h3>How the selling club answers</h3>
+<li>Bid 97 percent of their ask or more and the fee is agreed.</li>
+<li>Between 75 and 97 percent they counter: the ask comes 40 percent of the way down to your bid, and it costs one round of their patience.</li>
+<li>Under 75 percent is an insult. The ask goes up 4 percent and it costs two rounds. Under 55 percent they end the talks on the spot.</li>
+<li>A selling club starts with 4 or 5 rounds of patience. Run it out and the deal is dead.</li>
+<h3>The agent and the budget</h3>
+<li>His agent hears 3 offers at most. An offer that adds up to what he asked for signs him, a near miss gets a lower wage demand back, and a poor one costs two tries or ends the meeting.</li>
+<li>The board will not go over the wage or the contract length he asks for, so you cannot pay him more a week to skip the signing bonus.</li>
+<li>The signing bonus comes out of the same budget as the fee. A bid or an offer you cannot afford is refused before the hour is spent, so the budget never goes below zero.</li>
+<h3>Rival clubs moving in</h3>
+<li>Rival clubs move for players on your list. If a rival is in for a man and you do not push his deal that hour, there is a 30 percent chance they sign him.</li>
+<li>If a rival is in at the fee table, your bid has to beat theirs. Bid at or under their number and there is a 30 percent chance they close the deal there and then.</li>
+<li>Walk away from a deal with a rival circling and they usually take him.</li>
+<h3>When the window shuts</h3>
+<li>When the window shuts, any deal still in talks or at the terms table collapses, and none of its money is spent.</li>
+<h4>How the grade adds up</h4>
+<li>The grade is out of 100: 50 for needs filled, 30 for value for money and 20 for budget left.</li>
+<li>Value for money is full for a fee at or under what the player is really worth and nothing at 1.5 times it, averaged over your signings.</li>
+<li>Budget points are the share of the budget you kept times the share of needs you filled, so a window that signs nobody scores nothing.</li>
+<li>The letters are A+ from 90, A from 80, B from 65, C from 50 and D from 35. Anything lower is an F.</li>
+<h3>The daily and the leaderboard</h3>
+<li>The daily is the same club, the same list, the same budget and the same dice for everyone on an Eastern day. One go per day, and a refresh picks up where you left off.</li>
+<li>Deadline Day records that you played but puts no points on the leaderboard for now, while the points system is being rebuilt.</li>
+<h2>A Deadline Day walkthrough, four signings before 11pm</h2>
+<h3>The board's shopping list</h3>
+<p>Say today's club needs a goalkeeper, a central midfielder, a right winger and a striker, and the board have left you £29m.</p>
+<h3>Haggling for the keeper</h3>
+<p>You start with the keeper. His club are asking £3.6m, your desk says he is worth £2.4m to £3.2m, and you bid £3.1m. That is a counter: they come down to £3.4m and one round of patience is gone. It is noon.</p>
+<p>You bid £3.3m, inside 97 percent of their ask, and the fee is agreed. His agent wants 4 years at 10k a week and a £1.8m bonus. You offer exactly that and he signs. It is 2pm and you have £23.9m left.</p>
+<h3>A rival steals a target</h3>
+<p>While you were on the phone, a rival came in for the dearest keeper on your list at noon and signed him at 2pm. It did not matter this time, but the same thing can happen to the striker you were saving for last.</p>
+<h3>The striker with an hour to spare</h3>
+<p>By 8pm the midfielder and the winger are in, three hours each. The striker's club will not budge much and a rival is in for him, so you bid over the rival's number and inside 97 percent of the ask. Fee agreed at 9pm, terms signed at 10pm, an hour to spare.</p>
+<h3>Grading the window</h3>
+<p>Four needs out of four. The keeper cost £3.3m for a £3m player, 10 percent over his real worth, which keeps 80 percent of his share of the value points, and say the other three went about 10 percent over too. That is 50 for needs, 24 for value and, with £1m of the £29m left, 0.7 for budget: 75 out of 100, a B.</p>
+<h2>Deadline Day tips for beating the clock without overpaying</h2>
+<h3>Using the free phone calls</h3>
+<li>Call every club on your list early. The call is free, and it puts every asking price in front of you before you spend an hour.</li>
+<h3>Pricing off your desk</h3>
+<li>Open around the middle of your desk's range, never under 75 percent of their ask, then come about half way up to their number each round. Every fee at or under his real worth keeps your value points whole.</li>
+<li>A haggle costs an hour and a round of patience. With plenty of clock, pitch low and come up. With the window closing, pay near the ask and get it done.</li>
+<li>Do not insult a club unless you mean it. Under 75 percent of the ask costs two rounds and pushes the price up.</li>
+<h3>Leaving room for the bonus</h3>
+<li>On a cheap player the signing bonus can be more than half the fee, so leave room for it before you agree the fee.</li>
+<h3>Seeing off the rivals</h3>
+<li>When a rival comes in, deal with that player next. Every hour you leave him alone they have a 30 percent shot at signing him.</li>
+<h3>Raising money from the bench</h3>
+<li>If the sums do not add up, sell a bench player early, so the money is there when the fee table needs it.</li>
+<h3>What the grade rewards</h3>
+<li>Money left only scores once the needs are filled, so a full window at a fair price beats a cheap half window.</li>
+<li>Shutting the window early earns nothing for the hours you did not use. Unused money counts, unused time does not.</li>
+<h2>Deadline Day FAQ: real players, the daily and the leaderboard</h2>
+<h3>Is Deadline Day the same as Club Manager?</h3>
+<p>It runs on the same transfer desk. The clubs, squads, market, asking prices, patience, valuation desk, rival bids and personal terms all come from Club Manager unchanged. Deadline Day is one day of it against the clock.</p>
+<h3>Are the players and the deals real?</h3>
+<p>The players, their clubs, ratings, ages and values are the real ones Club Manager uses. The negotiations, the rival bids and the signings are simulated, so nothing that happens here is a claim about a real transfer.</p>
+<h3>What happens to a deal at 11pm?</h3>
+<p>If you are still haggling, or the fee is agreed but his terms are not signed, the deal collapses and none of the money is spent.</p>
+<h3>Can I replay today's window?</h3>
+<p>The daily is one go per day, and a refresh picks up where you left off. Free play has no limit, and every free play window is a fresh one.</p>
+<h3>Does it count on the leaderboard?</h3>
+<p>Not yet. It records that you played, but it puts no points on the leaderboard for now.</p>
+<h3>Is Deadline Day free to play?</h3>
+<p>Yes. Deadline Day is free to play on DoUKnowBall, right in your browser. No download and no signup needed.</p>
+<h2>More games to play</h2>
+<a href="/soccer-conquest">🗺️ Soccer Conquest Imperialism across the top five leagues: 96 clubs on one map of Europe, winners annex whole empires until one club rules the continent</a>
+<a href="/stadium-tycoon">🏟️ Stadium Tycoon Idle empire: grow a tiny club through live toy matches, ten divisions, reputation stars and a legacy boardroom</a>
+<a href="/wonderkid-factory">🔭 Wonderkid Factory Idle academy: scout generated kids, grow them toward hidden ceilings and sell at the perfect moment</a>
+<a href="/nfl-gauntlet-draft">⚔️ Gauntlet Draft: NFL Pick your offense five cards at a time, then survive a five round cup</a>
+<a href="/stat-detective">🔎 Stat Detective Name the player behind the mystery stat line</a>
+<a href="/cbb-dynasty">🏀 CBB Dynasty College hoops sim: one-and-dones, conference tournaments, 32-team March, Cinderella</a>
+<div data-site-chrome>
+<p>All team names, competition names, logos and trademarks are property of their respective owners. DoUKnowBall is an independent fan project and is not affiliated with, endorsed by or sponsored by the NFL, NBA, UFC, NHL, MLB, FIFA, UEFA, the Premier League, the English Football League, LaLiga, Serie A, the Bundesliga, Ligue 1, the Eredivisie, MLS, the Saudi Pro League, the IOC, the NCAA, F1, the PGA Tour, NASCAR, the ATP or the WTA. Player names and statistics are used for identification and commentary only. © 2026 DoUKnowBall</p>
+<a href="/soccer">Soccer</a>
+<a href="/pro-basketball">NBA</a>
+<a href="/hockey">NHL</a>
+<a href="/pro-football">NFL</a>
+<a href="/baseball">MLB</a>
+<a href="/college">College</a>
+<a href="/search">Search Games</a>
+<a href="/about">About</a>
+<a href="/contact">Contact</a>
+<a href="/whats-new">What's New</a>
+<a href="/records">Record Books</a>
+<a href="/leaderboard">Leaderboard</a>
+<a href="/privacy">Privacy Policy</a>
+<a href="/terms">Terms of Service</a>
+<a href="/accessibility">Accessibility</a>
+<p>Ads and analytics only run if you press Accept. Essential only keeps them off and every game works the same. <a href="/privacy">Learn more</a></p>
+</div>
+</div>
+</div>
+</body>
+</html>

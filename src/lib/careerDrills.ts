@@ -63,7 +63,7 @@ import {
   ROUNDS_PER_RUN, type SprayConfig,
 } from './arcade';
 import { flightPath, keeperDive, type Aim, type KickSetup } from './freeKick';
-import { effectivePotential, type CareerState } from './soccerCareerEngine';
+import { effectivePotential, trainingStatFor, type CareerState, type TrainingStat } from './soccerCareerEngine';
 
 export { daySeed, lehmer, ROUNDS_PER_RUN };
 
@@ -77,6 +77,19 @@ export const DRILL_META: Record<DrillKind, { name: string; stat: DrillStat; stat
   gloves: { name: 'Glove Save', stat: 'reflexes', statLabel: 'Reflexes', emoji: '🧤', verb: 'saved', slug: 'career-drill-gloves' },
   firsttouch: { name: 'First Touch', stat: 'dribbling', statLabel: 'Dribbling', emoji: '👟', verb: 'controlled', slug: 'career-drill-firsttouch' },
 };
+
+/** What a drill trains for the man doing it, and the word his attribute
+    screen uses for it. The three position drills are dealt by position
+    (drillForPosition), so their stat never changes. First Touch is open to
+    every position and is a dribbling drill, so it trains whatever the cone
+    slalom trains for that position, through the same mapping
+    (trainingStatFor): Dribbling outfield, Positioning in goal. Round 784's
+    review found a keeper's First Touch still paying the stat his own
+    attribute screen calls Penalty Saving, under a tile that said Dribbling. */
+export function drillStatFor(kind: DrillKind, position: string): { stat: TrainingStat; label: string } {
+  if (kind === 'firsttouch') return trainingStatFor(position, 'dribbling');
+  return { stat: DRILL_META[kind].stat, label: DRILL_META[kind].statLabel };
+}
 
 /** The player's position picks the drill. Keepers dive, the back line and the
     holding midfielder tackle, everybody else shoots through the wall. */
@@ -547,14 +560,15 @@ export function applyDrillResult(prev: CareerState, kind: DrillKind, count: numb
   if (prev.trainingSeasonYear === year) return prev;
   const s = { ...prev };
   const meta = DRILL_META[kind];
+  const { stat, label } = drillStatFor(kind, s.position);
   const score = sessionScore(count);
   const headroom = drillHeadroom(s);
   const boost = drillBoost(score, headroom);
   s.trainingSeasonYear = year;
   if (boost > 0) {
-    s.statBoostNextSeason = { ...s.statBoostNextSeason, [meta.stat]: (s.statBoostNextSeason[meta.stat] || 0) + boost };
+    s.statBoostNextSeason = { ...s.statBoostNextSeason, [stat]: (s.statBoostNextSeason[stat] || 0) + boost };
     s.morale = clamp(s.morale + 2, 0, 100);
-    s.events = [...s.events, `${meta.emoji} ${meta.name} drill: ${count} of ${ROUNDS_PER_RUN}. +${boost} ${meta.statLabel} coming with next season's growth`];
+    s.events = [...s.events, `${meta.emoji} ${meta.name} drill: ${count} of ${ROUNDS_PER_RUN}. +${boost} ${label} coming with next season's growth`];
   } else if (score >= 50) {
     s.events = [...s.events, `${meta.emoji} ${meta.name} drill: ${count} of ${ROUNDS_PER_RUN}. Good session, but you are at your ceiling and there is nothing left to add`];
   } else {

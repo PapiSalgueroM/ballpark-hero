@@ -34,6 +34,7 @@ import {
 import { computeChemistry, formatChemistry } from '@/lib/chemistry';
 import { recordCompletion, getCurrentPlayerName } from '@/lib/completions';
 import { SlotReel } from '@/components/world-xi/SlotReel';
+import { SeasonReportTabs } from '@/components/world-xi/SeasonReportTabs';
 
 type Phase = 'boot' | 'error' | 'setup' | 'playing' | 'won' | 'lost';
 
@@ -614,6 +615,8 @@ const WorldXi = () => {
                     </p>
                   ))}
                 </div>
+
+                <SeasonReportTabs report={seasonReport} />
               </div>
             )}
 
@@ -629,7 +632,14 @@ const WorldXi = () => {
                 gamePath="/world-xi"
                 emojiGrid={
                   seasonReport
-                    ? `${emojiGrid}\nSeason sim: rated ${seasonReport.squadRating}/100, finished ${ordinal(seasonReport.tablePosition)}`
+                    ? [
+                        emojiGrid,
+                        `Season sim: rated ${seasonReport.squadRating}/100, finished ${ordinal(seasonReport.tablePosition)} with ${seasonReport.points} points`,
+                        /* Round 726: the share card carries the finish, the top
+                           scorer and the player of the season, as text. */
+                        ...(seasonReport.topScorer ? [`Top scorer: ${seasonReport.topScorer.name} (${seasonReport.topScorer.goals})`] : []),
+                        ...(seasonReport.playerOfSeason ? [`Player of the season: ${seasonReport.playerOfSeason.name}`] : []),
+                      ].join('\n')
                     : emojiGrid
                 }
               />

@@ -2,9 +2,9 @@
   "_comment": "Round 485. The sha256 of each function's repo index.ts at the moment it was last deployed, line endings normalised. See scripts/simEdgeSync.mjs for why this exists: evaluate-lineup sat for months with a repo file that looked correct and a deployed file that did not. When you deploy a function, update its entry here in the same commit.",
   "synced": {
     "validate-player": {
-      "sha256": "5cbe0e745f36ce85210b348a87079d14a5953cbaed4d8debbe798a574092d9c2",
-      "version": 11,
-      "date": "2026-09-06"
+      "sha256": "6d86c56262128569e97c6017ed626def0ca13b47c73ce8a54837b4e8f7cf56d4",
+      "version": 12,
+      "date": "2026-10-01"
     },
     "evaluate-lineup": {
       "sha256": "f1dbebaa834bd88955888559cf76302aea16eb370f98d2c01c6775888fc4cbef",
@@ -27,24 +27,49 @@
       "date": "2026-09-07"
     },
     "soccer-grid-validate": {
-      "sha256": "b795f2361a3aa8ad0f7e824b48bf5806ae7229627460972f8edbef1cdbfc289f",
-      "version": 24,
-      "date": "2026-09-30"
+      "sha256": "1dc92b2450f188dd63760323452d724990105a0564500e0caeaf59a0c8735c10",
+      "version": 25,
+      "date": "2026-10-01"
     },
     "college-grid-validate": {
-      "sha256": "ce927fee00d00122bd59881b2580b26e918c6f9aada60487c05e3fde187a771f",
-      "version": 16,
-      "date": "2026-09-07"
+      "sha256": "8dd6414f253d0c57af5b94e4ef9c55d38862bf1c600cb2e0ad1f00563156f7fc",
+      "version": 17,
+      "date": "2026-10-01"
     },
     "football-connect4-validate": {
-      "sha256": "173e874f584d64f7c2aeb943263ff50fcfe85d1c2fd42f70e57d0f179c59b844",
-      "version": 13,
-      "date": "2026-09-30"
+      "sha256": "de7ba71d255e2f3fa19acda2d420032e14667822d21971a16b579ed57578a53e",
+      "version": 14,
+      "date": "2026-10-01"
     },
     "scores-poll": {
       "sha256": "6ba6255c87b79861542a9521c45b19629ef4483d159d49485e9d12e4956283eb",
       "version": 10,
       "date": "2026-09-30"
+    },
+    "football-grid-validate": {
+      "sha256": "0a22a946e8a53a56f666e966832b1145e4006659dfa4f858a901f398ee5ebe35",
+      "version": 13,
+      "date": "2026-10-01"
+    },
+    "nba-connect4-validate": {
+      "sha256": "80999add3f6458a0c2cbd61f9efa238ec22c60232e772d5d812ac662282eca14",
+      "version": 10,
+      "date": "2026-10-01"
+    },
+    "nfl-connect4-validate": {
+      "sha256": "4bd87425a267990ce78b11652fd301c0c213f078d1ae7413a8fd03138c789ccb",
+      "version": 4,
+      "date": "2026-10-01"
+    },
+    "nhl-connect4-validate": {
+      "sha256": "7eb7e4afa155daf6ff23ae54cf7c8ef51c4ea4b856178d91c8bd6bb5660d66e2",
+      "version": 4,
+      "date": "2026-10-01"
+    },
+    "mlb-connect4-validate": {
+      "sha256": "fdeaa97f2fd5d08a00c96094b350aa7b272c6c670871c312bc2bc898e515d522",
+      "version": 4,
+      "date": "2026-10-01"
     }
   },
   "unverified": [
@@ -52,16 +77,11 @@
     "cbb-daily",
     "fantasy-draft-daily",
     "football-connect4-suggest",
-    "football-grid-validate",
     "guess-nation-daily",
-    "mlb-connect4-validate",
     "nascar-daily",
-    "nba-connect4-validate",
     "nba-evaluate-lineup",
     "nba-suggest-players",
     "nba-validate-player",
-    "nfl-connect4-validate",
-    "nhl-connect4-validate",
     "report-relay",
     "simulate-season",
     "suggest-players",

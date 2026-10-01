@@ -76,6 +76,7 @@ export const CATEGORIES: GameCategory[] = [
       { path: '/who-am-i', label: 'Who Am I?', emoji: '🕵️', description: 'Hunt the secret player with similarity scores', addedOn: '2026-07-02' },
       { path: '/club-manager', label: 'Club Manager', emoji: '💼', description: 'Manage any of 330 real clubs across 20 leagues, today or in a real past season: negotiations, board objectives, trophies and the sack race', addedOn: '2026-07-09', featured: true },
       { path: '/manager-hot-seat', label: 'Manager Hot Seat', emoji: '🪑', description: 'Take over a real club on a bad run. Five league games to hit the board\'s target or you are sacked', daily: true, addedOn: '2026-09-30' },
+      { path: '/deadline-day', label: 'Deadline Day', emoji: '⏰', description: 'Run recruitment at a real club on the last day of the window. Fill the board\'s needs before it shuts, without overpaying', daily: true, addedOn: '2026-10-01' },
       { path: '/soccer-conquest', label: 'Soccer Conquest', emoji: '🗺️', description: 'Imperialism across the top five leagues: 96 clubs on one map of Europe, winners annex whole empires until one club rules the continent', daily: true, addedOn: '2026-09-05' },
       { path: '/stadium-tycoon', label: 'Stadium Tycoon', emoji: '🏟️', description: 'Idle empire: grow a tiny club through live toy matches, ten divisions, reputation stars and a legacy boardroom', addedOn: '2026-08-17' },
       { path: '/wonderkid-factory', label: 'Wonderkid Factory', emoji: '🔭', description: 'Idle academy: scout generated kids, grow them toward hidden ceilings and sell at the perfect moment', addedOn: '2026-08-21' },
@@ -234,6 +235,7 @@ export const CATEGORIES: GameCategory[] = [
       { path: '/nhl-front-office', label: 'NHL Front Office', emoji: '🏢', description: 'Full GM sim with real 2026-27 rosters: hard cap, OT points, the bracket, the Cup', addedOn: '2026-08-11', featured: true },
       { path: '/nhl-connect-4', label: 'NHL Connect 4', emoji: '🏒', description: 'Hockey trivia meets Connect 4', addedOn: '2026-02-10' },
       { path: '/perfect-lineup-nhl', label: 'Perfect Lineup: NHL', emoji: '🏒', description: 'Build a dream line under random team & era constraints, then simulate', daily: true, addedOn: '2026-06-14' },
+      { path: '/nhl-gauntlet-draft', label: 'Gauntlet Draft: NHL', emoji: '🏒', description: 'Draft two lines, two pairs and a goalie five cards at a time, then survive the playoffs', daily: true, addedOn: '2026-10-01' },
     ],
   },
   {

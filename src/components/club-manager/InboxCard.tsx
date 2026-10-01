@@ -8,6 +8,8 @@ const KIND_ICON: Record<string, string> = {
   startMe: '😤', wantMove: '🧳', drama: '🍿', praise: '💐', roleTalk: '🤝',
   // Round 474: the five senders who are not in your squad.
   boardChase: '📋', agent: '💼', coachTip: '🏋️', fanGroup: '📣', reporter: '🎙️',
+  // Round 783: the job hunt's post.
+  jobApplication: '📨',
 };
 
 interface InboxCardProps {

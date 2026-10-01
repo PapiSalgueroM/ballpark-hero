@@ -92,8 +92,22 @@ export { GAME_CONTENT } from '${posix}/src/data/gameContent/index.ts';
 export { flatGuide } from '${posix}/src/data/gameContent/guideShape.ts';
 export { CATEGORIES } from '${posix}/src/data/gameRegistry.ts';
 `);
+/* Round 723: esbuild is found by walk-up from the repo root, the way node
+   resolves it, so a worktree inside the repo (which has no node_modules of its
+   own) can run the generator too. */
+const esbuildBin = (() => {
+  let dir = ROOT;
+  for (let i = 0; i < 6; i += 1) {
+    const candidate = path.join(dir, 'node_modules', '.bin', 'esbuild');
+    if (fs.existsSync(candidate)) return candidate;
+    const up = path.dirname(dir);
+    if (up === dir) break;
+    dir = up;
+  }
+  return path.join(ROOT, 'node_modules', '.bin', 'esbuild');
+})();
 execSync(
-  `"${path.join(ROOT, 'node_modules', '.bin', 'esbuild')}" "${ENTRY}" --bundle --format=esm --platform=node --outfile="${BUNDLE}" --log-level=error`,
+  `"${esbuildBin}" "${ENTRY}" --bundle --format=esm --platform=node --outfile="${BUNDLE}" --log-level=error`,
   { stdio: 'inherit' },
 );
 const { GAME_CONTENT, CATEGORIES, flatGuide } = await import(pathToFileURL(BUNDLE).href);

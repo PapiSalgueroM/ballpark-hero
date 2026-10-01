@@ -27,6 +27,9 @@ export default function ClubManagerSeasonSummary({ sm, c, g }: {
      block below simply does not render for it. */
   const parts = sm.seasonScoreParts;
   const partsTotal = parts ? parts.form + parts.title + parts.cup + parts.euro + parts.objectives : 0;
+  /* Round 783: a move you booked through an application outranks the offers,
+     and the rollover takes it whatever the button is tapped with. */
+  const summerMove = c.jobHunt?.summerMove ?? null;
   let tick = 0;
   const tickIn = () => ({ animationDelay: revealDelay(tick++) });
   return (
@@ -48,10 +51,17 @@ export default function ClubManagerSeasonSummary({ sm, c, g }: {
             gamePath: '/club-manager',
           }}
           onPlayAgain={() => g.nextSeason()}
-          playAgainLabel={`Continue to Season ${sm.season + 1}`}
+          playAgainLabel={summerMove ? `Start Season ${sm.season + 1} at ${summerMove.club}` : `Continue to Season ${sm.season + 1}`}
           playNext={
             <div className="space-y-3">
-              {sm.offers.length > 0 && (
+              {summerMove && (
+                <div data-summer-move className="text-left bg-surface-2 border border-gold/40 rounded-xl p-3">
+                  <div className="text-[10px] text-muted-foreground uppercase tracking-wider mb-1">🧳 Agreed during the season</div>
+                  <p className="text-sm font-bold text-foreground">You take over at {summerMove.club} for Season {sm.season + 1}.</p>
+                  <p className="text-[10px] text-muted-foreground mt-0.5">{summerMove.blurb}</p>
+                </div>
+              )}
+              {!summerMove && sm.offers.length > 0 && (
                 <div className="text-left bg-surface-2 border border-border/60 rounded-xl p-3">
                   <div className="text-[10px] text-muted-foreground uppercase tracking-wider mb-2">📞 Job offers on the table</div>
                   {/* Round 530: each offer rises in on its own beat, keyed on

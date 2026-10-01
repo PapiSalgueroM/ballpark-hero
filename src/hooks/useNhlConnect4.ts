@@ -3,6 +3,7 @@ import { makeFirstDraw } from '@/lib/firstDraw';
 import { getRandomConnect4Board } from '@/data/nhlConnect4Boards';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { normalizeName } from '@/lib/playerSearch';
+import { normalizeValidationReason } from '@/lib/validationReason';
 import { SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY } from '@/integrations/supabase/client';
 import type {
   Connect4Team,
@@ -165,8 +166,10 @@ export function useNhlConnect4() {
         const result = await resp.json();
 
         if (!result.valid) {
+          /* The reason may be an object keyed by the two attributes (a
+             records or cache decided refusal), never render it raw. */
           setValidationError(
-            result.reason || `${trimmed} doesn't match both "${colAttr}" and "${rowAttr}"`
+            normalizeValidationReason(result.reason, `${trimmed} doesn't match both "${colAttr}" and "${rowAttr}"`)
           );
           setIsValidating(false);
           return;

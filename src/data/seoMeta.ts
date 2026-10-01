@@ -49,6 +49,10 @@ export const SEO_META: Record<string, SeoMeta> = {
     title: 'Manager Hot Seat: Save Your Job Football Game',
     description: 'Take over a real club on a bad run. Five league games, one points target, and a board ready to sack you. Pick the shape and the talk. Free football game.',
   },
+  '/deadline-day': {
+    title: 'Deadline Day: Transfer Window Football Game',
+    description: 'Run recruitment at a real club on the last day of the window. Three or four gaps, one budget, twelve hours before it shuts. Free football transfer game.',
+  },
   '/club-manager': {
     title: 'Club Manager: Free Football Management Game',
     description: 'Manage any of 330 real clubs across 20 leagues, today or in a real past season. Transfers, tactics, the board and the sack race. Free soccer management sim.',
@@ -79,7 +83,7 @@ export const SEO_META: Record<string, SeoMeta> = {
   },
   '/sports-bingo': {
     title: 'Sports Bingo: Soccer Pack Opening Bingo Game',
-    description: 'Open timed packs of real players and mark every square on your soccer bingo card they satisfy before the pack closes. Daily, unlimited or race a CPU. Free.',
+    description: 'Open timed packs of real players and mark the squares on your soccer bingo card they match before the pack closes. Daily, race a CPU or pass the phone. Free.',
   },
   '/alphabet-sprint': {
     title: 'Alphabet Sprint: Timed Soccer Player Name Quiz',
@@ -328,6 +332,10 @@ export const SEO_META: Record<string, SeoMeta> = {
   '/mlb-gauntlet-draft': {
     title: 'Gauntlet Draft: MLB Lineup Card Draft Game',
     description: 'Fill an MLB lineup card one spot at a time from five real players, then survive a five round October against stronger teams. Free daily baseball draft.',
+  },
+  '/nhl-gauntlet-draft': {
+    title: 'Gauntlet Draft: NHL Lines and Goalie Draft Game',
+    description: 'Draft two NHL forward lines, two defense pairs and a goalie from five real players a pick, then survive a five round playoff. Free daily hockey draft.',
   },
   '/conquest-mlb': {
     title: 'MLB Conquest: Baseball Imperialism Map Game',

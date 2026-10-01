@@ -341,6 +341,39 @@ export function parseActiveRefreshMigration(sql) {
   return rows;
 }
 
+const RULE_ENTRY_REFRESH_ROW_RE = /^\s*\('((?:[^']|'')*)', '((?:[^']|'')*)', '((?:[^']|'')*)', '(classic|europe)', (\d+), '((?:[^']|'')*)', (\d+), '((?:[^']|'')*)'\),?$/gm;
+export const ROUND_784_MIGRATION = 'supabase/migrations/20261001120000_career_first_clubs.sql';
+
+/** Round 784: the rule entries a career migration rewrites in the same
+ *  transaction as the careers, each beside the value it replaces:
+ *  [{ id, a, b, rule, oldMinSteps, oldHint, minSteps, hint }] */
+export function parseRuleEntryRefresh(sql) {
+  const normalized = String(sql).replaceAll('\r\n', '\n');
+  const start = normalized.indexOf('  for desired in');
+  const end = normalized.indexOf('\n    ) as rows(puzzle_id, player_a, player_b, rule, old_min_steps, old_hint, min_steps, hint)', start);
+  if (start < 0 || end < 0) return [];
+  const unquote = value => value.replace(/''/g, "'");
+  return [...normalized.slice(start, end).matchAll(RULE_ENTRY_REFRESH_ROW_RE)].map(m => ({
+    id: unquote(m[1]), a: unquote(m[2]), b: unquote(m[3]), rule: m[4],
+    oldMinSteps: Number(m[5]), oldHint: unquote(m[6]), minSteps: Number(m[7]), hint: unquote(m[8]),
+  }));
+}
+
+/** Which side of such a rewrite a table is on: 'before' when every entry still
+ *  carries the value it replaces, 'after' when every one carries the new value,
+ *  'mixed' for anything else. liveEntry(id, rule) -> { minSteps, hint } | null */
+export function ruleEntryRefreshState(rows, liveEntry) {
+  let before = 0, after = 0;
+  for (const r of rows) {
+    const live = liveEntry(r.id, r.rule);
+    if (live && live.minSteps === r.oldMinSteps && live.hint === r.oldHint) before += 1;
+    else if (live && live.minSteps === r.minSteps && live.hint === r.hint) after += 1;
+  }
+  if (rows.length && before === rows.length) return 'before';
+  if (rows.length && after === rows.length) return 'after';
+  return 'mixed';
+}
+
 /** exact deletions and retained six-field rows from the quarantine companion */
 export function parseTransferPathCompanionMigration(sql) {
   const normalized = String(sql).replaceAll('\r\n', '\n');

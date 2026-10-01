@@ -24,14 +24,42 @@ import { readDailyRecord, writeDailyRecord } from '@/lib/dailyRecord';
  * a matching player swapped in deterministically. So a perfect player can
  * always, in principle, black out the card. The harness proves this over
  * hundreds of seeds rather than trusting this comment.
+ *
+ * Round 727, pass the device and custom cards (spec section 71). The deal
+ * now hands out one card PER SEAT off one stream, and the ten packs are the
+ * same objects for every seat, so a table of four is four cards hearing one
+ * call. The completability pass runs over the union of every seat's
+ * conditions, so each card can still be blacked out from the shared packs.
+ * Conditions carry a family (position, age, value, output, nationality,
+ * league) and a table can keep or drop whole families; a pick that cannot
+ * fill 24 squares is topped up from the rest of the bank and says so
+ * (`fallback`), never dealt short. The table itself is plain data and pure
+ * functions, the shape Rebuild's seats settled in Round 461, so
+ * scripts/simBingoSeats.mjs drives it with no page. A one seat deal with
+ * every family is byte for byte the Round 323 deal, which keeps the daily
+ * card where it was.
  */
+
+export type BingoFamily = 'position' | 'age' | 'value' | 'output' | 'nationality' | 'league';
 
 export interface BingoCondition {
   id: string;
   /** Short square label, must stay readable in a 5x5 grid cell. */
   label: string;
+  /** Round 727: the family a custom card keeps or drops. */
+  family: BingoFamily;
   test: (p: Player) => boolean;
 }
+
+export const FAMILIES: { id: BingoFamily; label: string; blurb: string }[] = [
+  { id: 'position', label: 'Positions', blurb: 'keeper, centre back, winger' },
+  { id: 'age', label: 'Ages', blurb: '21 or younger, 30 or older' },
+  { id: 'value', label: 'Values', blurb: '100M plus, under 20M' },
+  { id: 'output', label: 'Goals and assists', blurb: '10 plus goals, 7 plus assists' },
+  { id: 'nationality', label: 'Nationalities', blurb: 'a Brazilian, a Spaniard' },
+  { id: 'league', label: 'Leagues', blurb: 'Premier League, Serie A' },
+];
+export const ALL_FAMILIES: BingoFamily[] = FAMILIES.map(f => f.id);
 
 const DEF = new Set(['CB', 'LB', 'RB', 'LWB', 'RWB']);
 const MID = new Set(['CDM', 'CM', 'CAM']);
@@ -40,39 +68,39 @@ const FWD = new Set(['ST', 'CF']);
 const TOP5 = new Set(['Premier League', 'La Liga', 'Serie A', 'Bundesliga', 'Ligue 1']);
 
 export const CONDITIONS: BingoCondition[] = [
-  { id: 'gk', label: 'A goalkeeper', test: p => p.position === 'GK' },
-  { id: 'def', label: 'A defender', test: p => DEF.has(p.position) },
-  { id: 'fullback', label: 'A full back', test: p => p.position === 'LB' || p.position === 'RB' || p.position === 'LWB' || p.position === 'RWB' },
-  { id: 'cb', label: 'A centre back', test: p => p.position === 'CB' },
-  { id: 'mid', label: 'A central mid', test: p => MID.has(p.position) },
-  { id: 'winger', label: 'A winger', test: p => WIDE.has(p.position) },
-  { id: 'striker', label: 'A striker', test: p => FWD.has(p.position) },
-  { id: 'age30', label: 'Age 30 or older', test: p => p.age >= 30 },
-  { id: 'age23', label: 'Age 23 or younger', test: p => p.age > 0 && p.age <= 23 },
-  { id: 'prime', label: 'Age 25 to 29', test: p => p.age >= 25 && p.age <= 29 },
-  { id: 'wonderkid', label: 'Age 21 or younger', test: p => p.age > 0 && p.age <= 21 },
-  { id: 'v100', label: 'Worth 100M+', test: p => p.marketValue >= 100 },
-  { id: 'v60', label: 'Worth 60M+', test: p => p.marketValue >= 60 },
-  { id: 'v40', label: 'Worth 40M+', test: p => p.marketValue >= 40 },
-  { id: 'vcheap', label: 'Worth under 20M', test: p => p.marketValue < 20 },
-  { id: 'g10', label: '10+ goals', test: p => p.goals >= 10 },
-  { id: 'g15', label: '15+ goals', test: p => p.goals >= 15 },
-  { id: 'a7', label: '7+ assists', test: p => p.assists >= 7 },
-  { id: 'ga15', label: '15+ goals plus assists', test: p => p.goals + p.assists >= 15 },
-  { id: 'brazil', label: 'A Brazilian', test: p => p.nationality === 'Brazil' },
-  { id: 'france', label: 'A Frenchman', test: p => p.nationality === 'France' },
-  { id: 'england', label: 'An Englishman', test: p => p.nationality === 'England' },
-  { id: 'spain', label: 'A Spaniard', test: p => p.nationality === 'Spain' },
-  { id: 'argentina', label: 'An Argentine', test: p => p.nationality === 'Argentina' },
-  { id: 'germany', label: 'A German', test: p => p.nationality === 'Germany' },
-  { id: 'portugal', label: 'A Portuguese', test: p => p.nationality === 'Portugal' },
-  { id: 'netherlands', label: 'A Dutchman', test: p => p.nationality === 'Netherlands' },
-  { id: 'pl', label: 'Premier League', test: p => p.league === 'Premier League' },
-  { id: 'laliga', label: 'La Liga', test: p => p.league === 'La Liga' },
-  { id: 'seriea', label: 'Serie A', test: p => p.league === 'Serie A' },
-  { id: 'bundesliga', label: 'Bundesliga', test: p => p.league === 'Bundesliga' },
-  { id: 'ligue1', label: 'Ligue 1', test: p => p.league === 'Ligue 1' },
-  { id: 'offpiste', label: 'Outside the top 5 leagues', test: p => !TOP5.has(p.league) },
+  { id: 'gk', label: 'A goalkeeper', family: 'position', test: p => p.position === 'GK' },
+  { id: 'def', label: 'A defender', family: 'position', test: p => DEF.has(p.position) },
+  { id: 'fullback', label: 'A full back', family: 'position', test: p => p.position === 'LB' || p.position === 'RB' || p.position === 'LWB' || p.position === 'RWB' },
+  { id: 'cb', label: 'A centre back', family: 'position', test: p => p.position === 'CB' },
+  { id: 'mid', label: 'A central mid', family: 'position', test: p => MID.has(p.position) },
+  { id: 'winger', label: 'A winger', family: 'position', test: p => WIDE.has(p.position) },
+  { id: 'striker', label: 'A striker', family: 'position', test: p => FWD.has(p.position) },
+  { id: 'age30', label: 'Age 30 or older', family: 'age', test: p => p.age >= 30 },
+  { id: 'age23', label: 'Age 23 or younger', family: 'age', test: p => p.age > 0 && p.age <= 23 },
+  { id: 'prime', label: 'Age 25 to 29', family: 'age', test: p => p.age >= 25 && p.age <= 29 },
+  { id: 'wonderkid', label: 'Age 21 or younger', family: 'age', test: p => p.age > 0 && p.age <= 21 },
+  { id: 'v100', label: 'Worth 100M+', family: 'value', test: p => p.marketValue >= 100 },
+  { id: 'v60', label: 'Worth 60M+', family: 'value', test: p => p.marketValue >= 60 },
+  { id: 'v40', label: 'Worth 40M+', family: 'value', test: p => p.marketValue >= 40 },
+  { id: 'vcheap', label: 'Worth under 20M', family: 'value', test: p => p.marketValue < 20 },
+  { id: 'g10', label: '10+ goals', family: 'output', test: p => p.goals >= 10 },
+  { id: 'g15', label: '15+ goals', family: 'output', test: p => p.goals >= 15 },
+  { id: 'a7', label: '7+ assists', family: 'output', test: p => p.assists >= 7 },
+  { id: 'ga15', label: '15+ goals plus assists', family: 'output', test: p => p.goals + p.assists >= 15 },
+  { id: 'brazil', label: 'A Brazilian', family: 'nationality', test: p => p.nationality === 'Brazil' },
+  { id: 'france', label: 'A Frenchman', family: 'nationality', test: p => p.nationality === 'France' },
+  { id: 'england', label: 'An Englishman', family: 'nationality', test: p => p.nationality === 'England' },
+  { id: 'spain', label: 'A Spaniard', family: 'nationality', test: p => p.nationality === 'Spain' },
+  { id: 'argentina', label: 'An Argentine', family: 'nationality', test: p => p.nationality === 'Argentina' },
+  { id: 'germany', label: 'A German', family: 'nationality', test: p => p.nationality === 'Germany' },
+  { id: 'portugal', label: 'A Portuguese', family: 'nationality', test: p => p.nationality === 'Portugal' },
+  { id: 'netherlands', label: 'A Dutchman', family: 'nationality', test: p => p.nationality === 'Netherlands' },
+  { id: 'pl', label: 'Premier League', family: 'league', test: p => p.league === 'Premier League' },
+  { id: 'laliga', label: 'La Liga', family: 'league', test: p => p.league === 'La Liga' },
+  { id: 'seriea', label: 'Serie A', family: 'league', test: p => p.league === 'Serie A' },
+  { id: 'bundesliga', label: 'Bundesliga', family: 'league', test: p => p.league === 'Bundesliga' },
+  { id: 'ligue1', label: 'Ligue 1', family: 'league', test: p => p.league === 'Ligue 1' },
+  { id: 'offpiste', label: 'Outside the top 5 leagues', family: 'league', test: p => !TOP5.has(p.league) },
 ];
 
 const BY_ID = new Map(CONDITIONS.map(c => [c.id, c]));
@@ -121,20 +149,51 @@ export function squareCondition(game: BingoGame, square: number): BingoCondition
   return conditionById(game.cardIds[idx]);
 }
 
+/** The bank a custom card draws from: every condition in the chosen families, in bank order. */
+export function allowedConditions(families: readonly BingoFamily[]): BingoCondition[] {
+  const keep = new Set(families);
+  return CONDITIONS.filter(c => keep.has(c.family));
+}
+
+export interface BingoDeal {
+  /** One card per seat, 24 ids each, in seat order. */
+  cards: string[][];
+  /** The one pack sequence every seat is shown. */
+  packs: Player[][];
+  /** How many conditions the chosen families offered. */
+  allowed: number;
+  /** True when the families could not fill 24 squares and the rest of the
+   *  bank topped every card up. The page says so; the card is never short. */
+  fallback: boolean;
+}
+
 /**
- * Builds a full game: 24 distinct conditions plus 10 packs of 5 distinct
- * players, all off one seed, with the completability pass described in the
- * module header.
+ * Deals a table: one card per seat plus the ten packs every seat is shown,
+ * all off one seed, with the completability pass described in the module
+ * header run over the union of every seat's conditions.
+ *
+ * A seat's card is a shuffle of the allowed bank. When the bank is short of
+ * 24 the card takes the whole bank plus a top up drawn from the dropped
+ * families, drawn afresh per seat so the top ups differ, and `fallback` is
+ * set. With every family kept and one seat the stream is consumed in exactly
+ * the Round 323 order, so buildGame below deals the same daily it always has.
  */
-export function buildGame(pool: Player[], seed: number): BingoGame {
+export function dealCards(pool: Player[], seed: number, seats: number, families: readonly BingoFamily[] = ALL_FAMILIES): BingoDeal {
   const rng = lehmer(seed);
-  const cardIds = shuffled(CONDITIONS, rng).slice(0, CARD_SIZE - 1).map(c => c.id);
+  const allowed = allowedConditions(families);
+  const rest = CONDITIONS.filter(c => !allowed.includes(c));
+  const fallback = allowed.length < CARD_SIZE - 1;
+  const cards: string[][] = [];
+  for (let s = 0; s < Math.max(1, seats); s += 1) {
+    const bank = fallback ? [...allowed, ...shuffled(rest, rng).slice(0, CARD_SIZE - 1 - allowed.length)] : allowed;
+    cards.push(shuffled(bank, rng).slice(0, CARD_SIZE - 1).map(c => c.id));
+  }
 
   const need = PACK_COUNT * PACK_SIZE;
   const drawn = shuffled(pool, rng).slice(0, Math.min(need, pool.length));
   while (drawn.length < need && pool.length > 0) drawn.push(pool[Math.floor(rng() * pool.length)]);
 
-  /* Completability: every condition on the card must be satisfiable by at
+  /* Completability: every condition on every card must be satisfiable by at
      least one player somewhere in the sequence. A condition nothing matches
      gets a matching player from the pool swapped over the least useful
      drawn player, deterministic because the scan orders are deterministic.
@@ -142,7 +201,7 @@ export function buildGame(pool: Player[], seed: number): BingoGame {
      the evicted player must never be another condition's SOLE satisfier
      (one seed in three hundred lost a square exactly that way), and the
      pass repeats until stable in case a swap changes the picture. */
-  const conds = cardIds.map(conditionById);
+  const conds = [...new Set(cards.flat())].map(conditionById);
   for (let round = 0; round < conds.length; round += 1) {
     let swapped = false;
     for (const cond of conds) {
@@ -170,7 +229,16 @@ export function buildGame(pool: Player[], seed: number): BingoGame {
 
   const packs: Player[][] = [];
   for (let i = 0; i < PACK_COUNT; i += 1) packs.push(drawn.slice(i * PACK_SIZE, (i + 1) * PACK_SIZE));
-  return { cardIds, packs };
+  return { cards, packs, allowed: allowed.length, fallback };
+}
+
+/**
+ * Builds a solo game: 24 distinct conditions plus 10 packs of 5 distinct
+ * players, all off one seed. A one seat, every family deal.
+ */
+export function buildGame(pool: Player[], seed: number): BingoGame {
+  const deal = dealCards(pool, seed, 1);
+  return { cardIds: deal.cards[0], packs: deal.packs };
 }
 
 /** The daily seed: one shared card and pack sequence per ET date. */
@@ -195,11 +263,15 @@ export interface DailyBingoRecord {
   marked: boolean[];
 }
 
+function isBoard(x: unknown): x is boolean[] {
+  return Array.isArray(x) && x.length === CARD_SIZE && x.every(v => typeof v === 'boolean');
+}
+
 export function loadDailyBingo(date: string): DailyBingoRecord | null {
   return readDailyRecord<DailyBingoRecord>(SLUG, date, f => {
     const { marked } = f;
-    if (!Array.isArray(marked) || marked.length !== CARD_SIZE || !marked.every(x => typeof x === 'boolean')) return null;
-    return { date, marked: marked as boolean[] };
+    if (!isBoard(marked)) return null;
+    return { date, marked };
   });
 }
 
@@ -229,6 +301,11 @@ export function lineCount(marked: boolean[]): number {
   return lines;
 }
 
+/** Marked squares, the free centre not counted. */
+export function squaresOf(marked: boolean[]): number {
+  return marked.filter((m, i) => m && i !== FREE_INDEX).length;
+}
+
 /**
  * Sitewide ~100 scale (the Round 315 rule): squares carry most of it, lines
  * top it up, a full blackout is exactly 100.
@@ -236,7 +313,7 @@ export function lineCount(marked: boolean[]): number {
  * bonus = 100.
  */
 export function scoreGame(marked: boolean[]): number {
-  const squares = marked.filter((m, i) => m && i !== FREE_INDEX).length;
+  const squares = squaresOf(marked);
   const lines = lineCount(marked);
   const blackout = squares === CARD_SIZE - 1 ? 4 : 0;
   return squares * 3 + lines * 2 + blackout;
@@ -269,4 +346,292 @@ export function cpuClaims(game: BingoGame, pack: Player[], cpuMarked: boolean[],
     if (rng() < spec.accuracy) out.push(sq);
   }
   return out;
+}
+
+/* ---------------- Round 727: the table, two to four seats on one phone ---------------- */
+
+export type BingoGoal = 'line' | 'card';
+export const GOALS: { id: BingoGoal; label: string; blurb: string }[] = [
+  { id: 'line', label: 'First line', blurb: 'First to a full row, column or diagonal' },
+  { id: 'card', label: 'Full card', blurb: 'Most squares after pack 10, a blackout ends it early' },
+];
+
+export type BingoDifficulty = 'relaxed' | 'standard' | 'quick';
+export const DIFFICULTIES: { id: BingoDifficulty; label: string; seconds: number }[] = [
+  { id: 'relaxed', label: 'Relaxed', seconds: 20 },
+  { id: 'standard', label: 'Standard', seconds: PACK_SECONDS },
+  { id: 'quick', label: 'Quick', seconds: 10 },
+];
+export function secondsFor(difficulty: BingoDifficulty): number {
+  return (DIFFICULTIES.find(d => d.id === difficulty) ?? DIFFICULTIES[1]).seconds;
+}
+
+export type SeatKind = 'human' | 'cpu';
+export const MIN_SEATS = 2;
+export const MAX_SEATS = 4;
+
+export interface BingoSeatSetup {
+  kind: SeatKind;
+  name: string;
+  /** The temper a CPU seat plays with; ignored on a human seat. */
+  level: CpuLevel;
+}
+
+export interface BingoSeat extends BingoSeatSetup {
+  index: number;
+  marked: boolean[];
+  /** How many players this seat had been shown, over the whole game, when
+   *  it first met the goal. Null until it does. The tie rule reads it. */
+  doneAt: number | null;
+}
+
+export interface BingoTableSetup {
+  seats: BingoSeatSetup[];
+  families: BingoFamily[];
+  difficulty: BingoDifficulty;
+  goal: BingoGoal;
+}
+
+export type TablePhase = 'handover' | 'turn' | 'done';
+
+export interface BingoTable {
+  seed: number;
+  goal: BingoGoal;
+  difficulty: BingoDifficulty;
+  families: BingoFamily[];
+  allowed: number;
+  fallback: boolean;
+  /** The ten packs, the same objects for every seat. Saved with the table,
+   *  because the live pool can change under a resumed game and the seed
+   *  alone would then deal different packs. */
+  packs: Player[][];
+  /** One card per seat, in seat order. */
+  cards: string[][];
+  seats: BingoSeat[];
+  /** The pack on the table, 0 based. Every seat takes a turn on it before the next opens. */
+  packIndex: number;
+  /** The seat in the chair. */
+  turn: number;
+  /** Players of the open pack turned face up so far, this turn. */
+  revealed: number;
+  phase: TablePhase;
+}
+
+export function goalMet(marked: boolean[], goal: BingoGoal): boolean {
+  return goal === 'line' ? lineCount(marked) >= 1 : squaresOf(marked) === CARD_SIZE - 1;
+}
+
+/** A seat's view of the deal: its own card over the shared packs. */
+export function seatGame(t: BingoTable, index: number): BingoGame {
+  return { cardIds: t.cards[index], packs: t.packs };
+}
+
+/** Players shown to the seat in the chair so far, over the whole game. */
+export function revealsUsed(t: BingoTable): number {
+  return t.packIndex * PACK_SIZE + t.revealed;
+}
+
+const DEFAULT_NAMES = ['Player 1', 'Player 2', 'Player 3', 'Player 4'];
+
+export function defaultSeats(count: number): BingoSeatSetup[] {
+  return Array.from({ length: Math.min(MAX_SEATS, Math.max(MIN_SEATS, count)) }, (_, i) => ({ kind: 'human' as SeatKind, name: DEFAULT_NAMES[i], level: 'casual' as CpuLevel }));
+}
+
+function withSeat(t: BingoTable, seat: BingoSeat): BingoTable {
+  return { ...t, seats: t.seats.map(s => (s.index === seat.index ? seat : s)) };
+}
+
+/* A CPU seat's stream is its own, keyed by the deal, the pack and the seat,
+   so its luck can never move which packs the table sees and a resumed game
+   plays the same CPU turn it would have played before the refresh.
+   Exported so scripts/simBingoSeats.mjs can replay a CPU turn on the
+   table's own open pack and hold the engine to it. */
+export function cpuRng(t: BingoTable, seat: number): () => number {
+  return lehmer(((t.seed ^ (0x5bf03635 + t.packIndex * 7919 + seat * 104729)) >>> 0) || 7);
+}
+
+/** A seat count outside two to four is clamped, and a table with no human
+ *  seat gets one, because somebody is holding the phone. */
+export function createTable(pool: Player[], seed: number, setup: BingoTableSetup): BingoTable {
+  const base = setup.seats.slice(0, MAX_SEATS).map(s => ({ ...s, name: s.name.trim() || 'Player' }));
+  while (base.length < MIN_SEATS) base.push({ kind: 'cpu', name: `${CPU_LEVELS[0].label} CPU`, level: 'casual' });
+  if (!base.some(s => s.kind === 'human')) base[0] = { ...base[0], kind: 'human' };
+  /* Two seats with one name (two Sharp CPUs, two people both called Sam) get numbered, so the result reads. */
+  const seen = new Map<string, number>();
+  for (const s of base) {
+    const n = (seen.get(s.name) ?? 0) + 1;
+    seen.set(s.name, n);
+    if (n > 1) s.name = `${s.name} ${n}`;
+  }
+  const families = setup.families.filter((f, i, a) => a.indexOf(f) === i);
+  const deal = dealCards(pool, seed, base.length, families);
+  const seats: BingoSeat[] = base.map((s, index) => ({ ...s, index, marked: new Array(CARD_SIZE).fill(false), doneAt: null }));
+  return settleCpu({
+    seed, goal: setup.goal, difficulty: setup.difficulty, families,
+    allowed: deal.allowed, fallback: deal.fallback, packs: deal.packs, cards: deal.cards,
+    seats, packIndex: 0, turn: 0, revealed: 0, phase: 'handover',
+  });
+}
+
+/** The human seat in the chair takes the phone: its turn on the open pack begins, nothing turned up yet. */
+export function openTurn(t: BingoTable): BingoTable {
+  if (t.phase !== 'handover') return t;
+  const seat = t.seats[t.turn];
+  if (!seat || seat.kind !== 'human') return t;
+  return { ...t, phase: 'turn', revealed: 0 };
+}
+
+/** Turns the next player of the open pack face up. */
+export function revealNext(t: BingoTable): BingoTable {
+  if (t.phase !== 'turn' || t.revealed >= PACK_SIZE) return t;
+  return { ...t, revealed: t.revealed + 1 };
+}
+
+/** The seat in the chair claims a square a player already turned up satisfies. Anything else is refused unchanged. */
+export function claimSquare(t: BingoTable, sq: number): BingoTable {
+  if (t.phase !== 'turn') return t;
+  const seat = t.seats[t.turn];
+  if (!seat || seat.marked[sq]) return t;
+  const shown = t.packs[t.packIndex].slice(0, t.revealed);
+  if (!claimableSquares(seatGame(t, seat.index), shown, seat.marked).includes(sq)) return t;
+  const marked = [...seat.marked];
+  marked[sq] = true;
+  const doneAt = seat.doneAt ?? (goalMet(marked, t.goal) ? revealsUsed(t) : null);
+  return withSeat(t, { ...seat, marked, doneAt });
+}
+
+/** The turn is over (the clock ran out or the seat said so): the phone moves on. */
+export function closeTurn(t: BingoTable): BingoTable {
+  if (t.phase !== 'turn') return t;
+  return settleCpu(advance(t));
+}
+
+/* The next seat on this pack, or the next pack, or the end: the table stops
+   after the round in which somebody met the goal, so every seat has seen the
+   same packs, and after pack ten regardless. */
+function advance(t: BingoTable): BingoTable {
+  const turn = t.turn + 1;
+  if (turn < t.seats.length) return { ...t, turn, revealed: 0, phase: 'handover' };
+  const over = t.seats.some(s => s.doneAt !== null) || t.packIndex + 1 >= PACK_COUNT;
+  if (over) return { ...t, turn: 0, revealed: 0, phase: 'done' };
+  return { ...t, turn: 0, packIndex: t.packIndex + 1, revealed: 0, phase: 'handover' };
+}
+
+/* CPU seats in the chair play at once, the whole pack face up, so the phone
+   only ever stops on a human. */
+function settleCpu(t: BingoTable): BingoTable {
+  let cur = t;
+  while (cur.phase === 'handover' && cur.seats[cur.turn]?.kind === 'cpu') {
+    const seat = cur.seats[cur.turn];
+    const marked = [...seat.marked];
+    for (const sq of cpuClaims(seatGame(cur, seat.index), cur.packs[cur.packIndex], marked, seat.level, cpuRng(cur, seat.index))) marked[sq] = true;
+    const shown = { ...cur, revealed: PACK_SIZE };
+    const doneAt = seat.doneAt ?? (goalMet(marked, cur.goal) ? revealsUsed(shown) : null);
+    cur = advance(withSeat(shown, { ...seat, marked, doneAt }));
+  }
+  return cur;
+}
+
+export interface BingoVerdict {
+  /** Seat indexes sharing the win; one in the ordinary case. */
+  winners: number[];
+  /** 'goal' when somebody met it, 'squares' when nobody did and the count decided. */
+  by: 'goal' | 'squares';
+}
+
+/**
+ * The rule, in order: the seat that met the goal having been shown the fewest
+ * players; level on that, the most squares; still level, the win is shared.
+ * Nobody met it: most squares, shared when level.
+ */
+export function declareWinner(t: BingoTable): BingoVerdict {
+  const met = t.seats.filter(s => s.doneAt !== null);
+  let field = t.seats;
+  if (met.length > 0) {
+    const first = Math.min(...met.map(s => s.doneAt as number));
+    field = met.filter(s => s.doneAt === first);
+  }
+  const top = Math.max(...field.map(s => squaresOf(s.marked)));
+  return { winners: field.filter(s => squaresOf(s.marked) === top).map(s => s.index), by: met.length > 0 ? 'goal' : 'squares' };
+}
+
+/* ---------------- the table save, read fail closed ---------------- */
+
+const TABLE_KEY = 'sports-bingo-table';
+const TABLE_VERSION = 1;
+
+function isPlayer(x: unknown): x is Player {
+  if (!x || typeof x !== 'object') return false;
+  const p = x as Record<string, unknown>;
+  return typeof p.name === 'string' && typeof p.position === 'string' && typeof p.nationality === 'string'
+    && typeof p.league === 'string' && typeof p.club === 'string'
+    && typeof p.age === 'number' && typeof p.marketValue === 'number' && typeof p.goals === 'number' && typeof p.assists === 'number';
+}
+
+function isSeat(x: unknown, index: number): x is BingoSeat {
+  if (!x || typeof x !== 'object') return false;
+  const s = x as Record<string, unknown>;
+  return s.index === index && (s.kind === 'human' || s.kind === 'cpu') && typeof s.name === 'string'
+    && CPU_LEVELS.some(l => l.id === s.level) && isBoard(s.marked)
+    && (s.doneAt === null || (typeof s.doneAt === 'number' && Number.isInteger(s.doneAt) && s.doneAt >= 1));
+}
+
+/** The saved table, or null for anything that is not exactly one. Pure, so the harness feeds it strings. */
+export function parseBingoTable(raw: string | null): BingoTable | null {
+  if (!raw) return null;
+  try {
+    const parsed: unknown = JSON.parse(raw);
+    if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) return null;
+    const wrap = parsed as Record<string, unknown>;
+    if (wrap.v !== TABLE_VERSION || !wrap.table || typeof wrap.table !== 'object') return null;
+    const t = wrap.table as Record<string, unknown>;
+    if (typeof t.seed !== 'number' || !Number.isFinite(t.seed)) return null;
+    if (!GOALS.some(g => g.id === t.goal) || !DIFFICULTIES.some(d => d.id === t.difficulty)) return null;
+    if (!Array.isArray(t.families) || !t.families.every(f => ALL_FAMILIES.includes(f as BingoFamily))) return null;
+    if (typeof t.allowed !== 'number' || typeof t.fallback !== 'boolean') return null;
+    if (!Array.isArray(t.packs) || t.packs.length !== PACK_COUNT || !t.packs.every(p => Array.isArray(p) && p.length === PACK_SIZE && p.every(isPlayer))) return null;
+    if (!Array.isArray(t.seats) || t.seats.length < MIN_SEATS || t.seats.length > MAX_SEATS || !t.seats.every(isSeat)) return null;
+    const seats = t.seats as BingoSeat[];
+    if (!seats.some(s => s.kind === 'human')) return null;
+    if (!Array.isArray(t.cards) || t.cards.length !== seats.length
+      || !t.cards.every(c => Array.isArray(c) && c.length === CARD_SIZE - 1 && c.every(id => typeof id === 'string' && BY_ID.has(id)))) return null;
+    if (typeof t.packIndex !== 'number' || !Number.isInteger(t.packIndex) || t.packIndex < 0 || t.packIndex >= PACK_COUNT) return null;
+    if (typeof t.turn !== 'number' || !Number.isInteger(t.turn) || t.turn < 0 || t.turn >= seats.length) return null;
+    if (typeof t.revealed !== 'number' || !Number.isInteger(t.revealed) || t.revealed < 0 || t.revealed > PACK_SIZE) return null;
+    if (t.phase !== 'handover' && t.phase !== 'turn' && t.phase !== 'done') return null;
+    /* The phone only ever stops on a human. */
+    if (t.phase !== 'done' && seats[t.turn].kind !== 'human') return null;
+    return {
+      seed: t.seed, goal: t.goal as BingoGoal, difficulty: t.difficulty as BingoDifficulty,
+      families: t.families as BingoFamily[], allowed: t.allowed, fallback: t.fallback,
+      packs: t.packs as Player[][], cards: t.cards as string[][], seats,
+      packIndex: t.packIndex, turn: t.turn, revealed: t.revealed, phase: t.phase as TablePhase,
+    };
+  } catch {
+    return null;
+  }
+}
+
+export function loadBingoTable(): BingoTable | null {
+  try {
+    return parseBingoTable(localStorage.getItem(TABLE_KEY));
+  } catch {
+    return null;
+  }
+}
+
+export function saveBingoTable(t: BingoTable): void {
+  try {
+    localStorage.setItem(TABLE_KEY, JSON.stringify({ v: TABLE_VERSION, table: t }));
+  } catch {
+    /* storage full or blocked: the game still plays, it just will not survive a refresh */
+  }
+}
+
+export function clearBingoTable(): void {
+  try {
+    localStorage.removeItem(TABLE_KEY);
+  } catch {
+    /* nothing to clear */
+  }
 }
