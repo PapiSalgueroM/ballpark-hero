@@ -290,8 +290,9 @@ export function defenceRating(team: GmTeamState): number {
 export const SKILL_SLOTS = 5;
 export const OL_SLOTS = Number.POSITIVE_INFINITY;
 
-/** A group's chart: the saved order, then any man it does not name by rating.
-    With nothing saved this is the order by rating the sim always used. */
+/** A group's chart: the saved order, with any man it does not name slotted
+    in by his rating. With nothing saved this is the order by rating the sim
+    always used. */
 export function depthOrder(team: GmTeamState, pos: DepthPos): GmPlayer[] {
   const group = team.players.filter(p => p.pos === pos);
   const byRating = [...group].sort((a, b) => b.ovr - a.ovr);
@@ -304,8 +305,35 @@ export function depthOrder(team: GmTeamState, pos: DepthPos): GmPlayer[] {
     const p = byId.get(id);
     if (p && !seen.has(id)) { out.push(p); seen.add(id); }
   }
-  for (const p of byRating) if (!seen.has(p.id)) out.push(p);
+  /* A man the saved order does not name (signed, drafted or traded for since
+     the GM last touched this group) goes in ahead of the first man rated
+     below him. The first draft put him at the bottom whatever his rating, so
+     a better newcomer sat and the signing added nothing until the GM found
+     him on the chart. Taken best first, so two newcomers keep their order. */
+  for (const p of byRating) {
+    if (seen.has(p.id)) continue;
+    const at = out.findIndex(q => q.ovr < p.ovr);
+    if (at < 0) out.push(p); else out.splice(at, 0, p);
+  }
   return out;
+}
+
+/* A saved order that reads exactly like the order by rating is dropped, so
+   the group goes back to following the ratings: a swap and a swap back, or
+   a season of development that lines the GM's order up with the ratings,
+   leaves a chart the GM has handed back to the sim, and next season's
+   development and newcomers then sort by rating like any untouched group. */
+function settleDepth(team: GmTeamState, pos: DepthPos): void {
+  const saved = team.depth?.[pos];
+  if (!team.depth || !saved) return;
+  const byRating = team.players.filter(p => p.pos === pos).sort((a, b) => b.ovr - a.ovr).map(p => p.id).join(',');
+  if (depthOrder(team, pos).map(p => p.id).join(',') === byRating) delete team.depth[pos];
+  if (Object.keys(team.depth).length === 0) delete team.depth;
+}
+
+/** True when the GM has set this group's order himself (the board says so). */
+export function hasSavedDepth(team: GmTeamState, pos: DepthPos): boolean {
+  return !!team.depth?.[pos]?.length;
 }
 
 /** The whole chart, every group in DEPTH_GROUPS order. */
@@ -321,7 +349,15 @@ export function setDepthOrder(team: GmTeamState, pos: DepthPos, ids: string[]): 
   const given = [...ids].sort();
   if (group.length !== given.length || group.some((id, i) => id !== given[i])) return false;
   team.depth = { ...(team.depth ?? {}), [pos]: [...ids] };
+  settleDepth(team, pos);
   return true;
+}
+
+/** Hand a group back to the sim: its order by rating, nothing saved. */
+export function resetDepth(team: GmTeamState, pos: DepthPos): void {
+  if (!team.depth?.[pos]) return;
+  delete team.depth[pos];
+  if (Object.keys(team.depth).length === 0) delete team.depth;
 }
 
 /** Swap two men in a group's order. The board's tap to swap. */
@@ -861,12 +897,18 @@ export function prospectToPlayer(pr: Prospect, rng: () => number): GmPlayer | nu
 // Round 723: the franchise tag
 // ---------------------------------------------------------------------------
 
-/* THE REAL RULE, as the 2020 CBA writes it (Article 10, Section 2), quoted by
-   the Pro Football Hall of Fame's release on the 2020 designations,
+/* THE REAL RULE, in the CBA's words (Article 10, Section 2), as quoted by the
+   Pro Football Hall of Fame's release on the 2020 designations, dated
+   2020-03-16,
    https://www.profootballhof.com/news/2020-franchise-and-transition-players-named
-   and by the Buffalo Bills' explainer on the tag,
+   (read 2026-10-01). A second source for the same shape, from the CBA before
+   it: the Buffalo Bills' explainer on the tag, dated 2014-02-18, which quotes
+   the 2011 CBA's Article 10, Section 2 and calls the tag a one year, fully
+   guaranteed contract at the average of the five largest prior year salaries
+   at the position or 120 percent of his prior year salary, whichever is
+   greater,
    https://www.buffalobills.com/news/a-closer-look-what-is-the-franchise-tag-12632897
-   (both read 2026-10-01, and both carry the same wording): a club "can
+   (read 2026-10-01). The Hall of Fame's quote: a club "can
    designate one 'franchise' player ... among its veteran free agents"; the
    exclusive tender is "the greater of (i) the average of the top five
    salaries at the player's position for the current year ... or (ii) the
@@ -970,7 +1012,7 @@ function clearTag(p: GmPlayer): void {
     offseason (a tagged man is on one year, so he came up again and was
     tagged again), and dropping only the repeat still had 88 to 92 percent of
     clubs tagging. The top five rule lands at about a third of clubs an
-    offseason, which is the real league's range. */
+    offseason, the band the harness holds. */
 export function cpuFranchiseTags(league: LeagueState, userTeam?: string): { team: string; player: string; salary: number }[] {
   const out: { team: string; player: string; salary: number }[] = [];
   const everyone = Object.values(league.teams).flatMap(x => x.players);
@@ -1053,13 +1095,14 @@ export function runOffseason(league: LeagueState, rng: () => number, userTeam?: 
     t.losses = 0;
     t.picks = [1, 2, 3];
     rollDeadCap(t);
-    /* Round 723: a saved chart order forgets the men who have gone. The
+    /* Round 723: a saved chart order forgets the men who have gone, and one
+       that now reads like the order by rating is handed back to the sim. The
        field is only ever written where a GM has reordered something. */
     if (t.depth) {
       const live = new Set(t.players.map(p => p.id));
       for (const pos of DEPTH_GROUPS) {
-        const ids = t.depth[pos];
-        if (ids) t.depth[pos] = ids.filter(id => live.has(id));
+        const ids = t.depth?.[pos];
+        if (t.depth && ids) { t.depth[pos] = ids.filter(id => live.has(id)); settleDepth(t, pos); }
       }
     }
     /* Round 418: team.defense NO LONGER REACHES THE SIM AT ALL. An earlier

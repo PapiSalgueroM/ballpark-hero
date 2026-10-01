@@ -6,11 +6,14 @@
    offseason step the last draft pick runs), a club may tag one man whose
    deal is up: one fully guaranteed year at the mean of the five largest
    salaries at his position across the thirty two rosters this season, or 120
-   percent of his own salary, whichever is greater. That is the 2020 CBA's
-   exclusive tender (Article 10, Section 2; the engine cites the source). A
-   tagged man never reaches the pool. CPU clubs tag their best expiring
-   starter when he is one of the five best at his position league wide and
-   the tender fits their room.
+   percent of his own salary, whichever is greater. That is the CBA's
+   exclusive tender (Article 10, Section 2; the engine cites two sources)
+   without the Cap Percentage Average leg, which needs years of tag history
+   the sim does not have. A tagged man never reaches the pool, and once his
+   tag year is over without a second tag he is an ordinary man again (no tag
+   marks, no guarantee). CPU clubs tag their best expiring starter when he is
+   one of the five best at his position league wide and the tender fits their
+   room, and never touch the GM's club, whose tag is the GM's call.
 
    The depth chart. Every club carries an ordered chart per position group,
    by rating until the GM reorders it, and team strength reads its starters
@@ -18,9 +21,13 @@
    healthy skill men decide how many slots RB, WR and TE each earn), and each
    group's chart order decides who fills that group's slots. With a chart by
    rating that is exactly the men the pre round code picked, which is what
-   keeps every saved league and every seeded season unchanged. The line is
-   every healthy lineman, as it was before the round, so a save carrying six
-   or more of them reads exactly as it did too.
+   keeps every saved league's strength unchanged. The line is every healthy
+   lineman, as it was before the round, so a save carrying six or more of
+   them reads exactly as it did too. A man the GM's saved order does not name
+   (signed, drafted or traded for since) slots in ahead of the first named
+   man rated below him, and a saved order that reads exactly like the order
+   by rating is dropped, so a swap and a swap back hands the group back to
+   the sim.
 
    One more rule rides along: an untagged star (76 plus) on his last year now
    walks STAR_WALK_CHANCE of the time, where before he always stayed, so the
@@ -33,16 +40,28 @@
         on a table of fixtures: a man under the mean, a man over it, the top
         five mean recomputed here for every position on several leagues, and
         the second tag in a row costing at least 120 percent of the first.
-        Plus the refusals (second tag, years left, no room), the cap hit
-        landing now, and a cut tagged man costing his whole salary.
+        Plus the refusals (second tag, years left, no room), the cap check
+        charging only the raise (room between the raise and the whole tender
+        is enough, room just under the raise is not), the cap hit landing
+        now, and a cut tagged man costing his whole salary.
      2) a tagged man never appears in that year's free agent pool, over six
-        seeded offseasons per seed with the GM's club tagging and the CPU
-        clubs tagging, and he carries the tender into the season on one year.
+        seeded offseasons per seed with the GM's club tagging in even
+        offseasons and passing in odd ones and the CPU clubs tagging, and he
+        carries the tender into the season on one year. A man whose tag year
+        ends without a second tag carries no tag marks and no guarantee,
+        wherever he lands. The CPU policy never tags the GM's club: checked
+        in the GM's passing years and on a GM club picked, every offseason,
+        from the clubs the policy would tag.
      3) the chart moves strength the right way: over 200 random swaps of a
         starter and a backup within a group, a better backup promoted raises
         strength, a worse one lowers it, swapping back restores it exactly,
         and no swap changes how many men any group starts. An injured starter
-        is skipped and the next man in the order steps up.
+        is skipped and the next man in the order steps up. A newcomer to a
+        group with a saved order slots in at the rule's place: one who
+        outrates every starter in his group starts, and adds strength
+        whenever he moves no slot between groups; one rated below everyone
+        goes last. A swap and a swap back leaves no saved order, and a
+        better man signed after it starts and adds strength.
      4) the fixture: the pre round strength formula, frozen in this file, and
         the engine agree to 1e-9 on every club of several seeded leagues,
         fresh, after offseasons and drafts, and with a third of the clubs
@@ -95,7 +114,20 @@
      fixedslots  skill slots fixed at RB 1, WR 3, TE 1    -> 4
      olcap       the line cut to five starters            -> 4
      nostarwalk  every untagged star stays, the old rule  -> 7
-   Under a control the process exits non zero whether or not the expected
+     capstrict   the cap check charges the whole tender   -> 1
+                 against the room, not only the raise
+     usertag     the CPU policy no longer skips the GM's  -> 2
+                 club
+     noclear     a former tagged man keeps his tag marks  -> 2
+                 and guarantee after re-signing or walking
+     newbottom   a man the saved order does not name goes -> 3
+                 to the bottom, the first draft's rule
+     newtop      a man the saved order does not name goes -> 3
+                 to the top
+     keepsaved   a saved order equal to the order by      -> 3
+                 rating is kept, not handed back
+   Every anchor must appear exactly once in the engine, or the control
+   refuses to run. Under a control the process exits non zero whether or not the expected
    sections went red, and says which it was.
 
    Run: node scripts/simNflTagDepth.mjs
@@ -117,6 +149,12 @@ const EXPECT = {
   fixedslots: [4],
   olcap: [4],
   nostarwalk: [7],
+  capstrict: [1],
+  usertag: [2],
+  noclear: [2],
+  newbottom: [3],
+  newtop: [3],
+  keepsaved: [3],
 };
 if (CONTROL && !EXPECT[CONTROL]) {
   console.error(`NFL_TAG_DEPTH_CONTROL=${CONTROL} is not a control this harness knows (${Object.keys(EXPECT).join(', ')})`);
@@ -147,6 +185,30 @@ const SWAPS = {
     '        const walks = p.ovr < 76 ? rng() < 0.5 : rng() < STAR_WALK_CHANCE;',
     '        const walks = p.ovr < 76 ? rng() < 0.5 : (rng(), false);',
   ]],
+  capstrict: [[
+    '  const short = round1(salary - p.salary - capRoom(team, league.cap));',
+    '  const short = round1(salary - capRoom(team, league.cap));',
+  ]],
+  usertag: [[
+    '    if (t.abbr === userTeam || t.tagUsedFor === league.season + 1) continue;',
+    '    if (t.tagUsedFor === league.season + 1) continue;',
+  ]],
+  noclear: [[
+    '        clearTag(p);',
+    '        /* tag marks kept */',
+  ]],
+  newbottom: [[
+    '    if (at < 0) out.push(p); else out.splice(at, 0, p);',
+    '    out.push(p);',
+  ]],
+  newtop: [[
+    '    if (at < 0) out.push(p); else out.splice(at, 0, p);',
+    '    out.splice(0, 0, p);',
+  ]],
+  keepsaved: [[
+    "  if (depthOrder(team, pos).map(p => p.id).join(',') === byRating) delete team.depth[pos];",
+    "  if (depthOrder(team, pos).map(p => p.id).join(',') === byRating && false) delete team.depth[pos];",
+  ]],
 };
 const NOTE = {
   nochart: 'the engine copy fills every unit by rating, the chart order ignored',
@@ -155,6 +217,12 @@ const NOTE = {
   fixedslots: 'the engine copy starts RB 1, WR 3, TE 1 whatever the ratings say',
   olcap: 'the engine copy starts five linemen, not every healthy one',
   nostarwalk: 'the engine copy keeps every untagged star, the pre round rule',
+  capstrict: 'the engine copy charges the whole tender against the room, not only the raise',
+  usertag: 'the engine copy lets the CPU policy tag the GM\'s own club',
+  noclear: 'the engine copy keeps the tag marks and the guarantee after the tag year',
+  newbottom: 'the engine copy puts a man the saved order does not name at the bottom',
+  newtop: 'the engine copy puts a man the saved order does not name at the top',
+  keepsaved: 'the engine copy keeps a saved order that equals the order by rating',
 };
 
 const SECTION_NAMES = {
@@ -192,7 +260,8 @@ try {
   let enginePath = ENGINE;
   if (CONTROL) {
     for (const [now] of SWAPS[CONTROL]) {
-      if (!engineSrc.includes(now)) throw new Error(`control ${CONTROL}: ${JSON.stringify(now.slice(0, 70))} is not in frontOffice.ts, so it would change nothing. Refusing to run.`);
+      const n = engineSrc.split(now).length - 1;
+      if (n !== 1) throw new Error(`control ${CONTROL}: ${JSON.stringify(now.slice(0, 70))} appears ${n} times in frontOffice.ts, not once, so the rewrite would change ${n === 0 ? 'nothing' : 'more than its rule'}. Refusing to run.`);
     }
     let text = engineSrc;
     for (const [now, was] of SWAPS[CONTROL]) text = text.split(now).join(was);
@@ -232,7 +301,7 @@ try {
 }
 for (const fn of ['initLeague', 'runOffseason', 'teamStrength', 'defenceRating', 'winProb', 'depthOrder', 'depthChart', 'setDepthOrder', 'swapDepth',
   'unitStarters', 'starterIds', 'topFiveSalary', 'franchiseTagSalary', 'expiringPlayers', 'tagRefusal', 'applyFranchiseTag', 'cpuFranchiseTags',
-  'releasePlayer', 'capUsed', 'capRoom', 'generateDraftClass', 'draftOrder', 'prospectToPlayer']) {
+  'releasePlayer', 'capUsed', 'capRoom', 'generateDraftClass', 'draftOrder', 'prospectToPlayer', 'hasSavedDepth', 'resetDepth']) {
   if (typeof engine[fn] !== 'function') { console.error(`FAIL: frontOffice.ts does not export ${fn}`); process.exit(1); }
 }
 for (const k of ['DEPTH_GROUPS', 'SKILL_POS', 'DEF_POS', 'DEF_SLOTS', 'REPLACEMENT_OVR', 'SKILL_SLOTS', 'OL_SLOTS', 'TAG_TOP_N', 'TAG_PRIOR_MULT', 'TAG_CPU_MIN_OVR', 'STAR_WALK_CHANCE']) {
@@ -378,6 +447,35 @@ const SEEDS = [723, 20261001, 61, 4242, 9, 1337];
     lgf.cap = engine.capUsed(tf) + 1;
     const short = engine.tagRefusal(lgf, tf, af.id);
     ok(1, 'a tender the room cannot cover is refused with the shortfall', /over the cap/.test(short ?? '') && engine.applyFranchiseTag(lgf, tf, af.id).ok === false, String(short));
+    /* the size of the cap check. His old salary is already on the books, so
+       the room has to cover the raise, not the whole tender. One fixture
+       with room halfway between the raise and the whole tender (allowed) and
+       one with room just under the raise (refused), on every expiring man of
+       the club whose old salary leaves a real gap between the two. */
+    let between = 0, betweenBad = [], justUnder = 0, justUnderBad = [];
+    for (const man of engine.expiringPlayers(engine.initLeague(lcg(SEEDS[1])).teams[td.abbr])) {
+      if (man.salary < 1) continue;
+      const lgg = engine.initLeague(lcg(SEEDS[1]));
+      const tg = lgg.teams[td.abbr];
+      const tender = engine.franchiseTagSalary(lgg, man);
+      const raise = round1(tender - man.salary);
+      lgg.cap = round1(engine.capUsed(tg) + raise + man.salary / 2);
+      const room = engine.capRoom(tg, lgg.cap);
+      if (!(room >= raise && room < tender)) { betweenBad.push(`${man.name}: fixture room ${room} not between raise ${raise} and tender ${tender}`); continue; }
+      between += 1;
+      const why = engine.tagRefusal(lgg, tg, man.id);
+      const res = engine.applyFranchiseTag(lgg, tg, man.id);
+      if (why !== null || !res.ok) betweenBad.push(`${man.name}: room ${room} covers the raise ${raise} of a ${tender} tender and was refused (${why})`);
+      else if (engine.capRoom(tg, lgg.cap) < -1e-9) betweenBad.push(`${man.name}: the tag left room ${engine.capRoom(tg, lgg.cap)}`);
+      if (raise < 0.5) continue;
+      const lgu = engine.initLeague(lcg(SEEDS[1]));
+      const tu = lgu.teams[td.abbr];
+      lgu.cap = round1(engine.capUsed(tu) + raise - 0.2);
+      justUnder += 1;
+      if (engine.tagRefusal(lgu, tu, man.id) === null) justUnderBad.push(`${man.name}: room ${engine.capRoom(tu, lgu.cap)} under the raise ${raise} was allowed`);
+    }
+    ok(1, 'room for the raise but not the whole tender is enough to tag', between >= 1 && betweenBad.length === 0, betweenBad.slice(0, 3).join(' | ') || `${between} men`);
+    ok(1, 'room just under the raise is refused', justUnder >= 1 && justUnderBad.length === 0, justUnderBad.slice(0, 3).join(' | ') || `${justUnder} men`);
     /* the guarantee: cutting him is dead money in full, and the pool copy is ordinary */
     const dm = cuts.deadMoneyFor(a);
     ok(1, 'cutting a tagged man is dead money in full, nothing next season', near(dm.now, a.salary) && dm.next === 0, `${dm.now}/${dm.next} vs ${a.salary}`);

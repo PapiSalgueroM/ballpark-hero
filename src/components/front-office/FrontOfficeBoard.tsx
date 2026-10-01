@@ -15,7 +15,7 @@ import {
   type LeagueState, type GmGame, type Prospect, type PlayoffRound,
   ensureFoLeagueIds, NFL_ROSTER_MIN,
   /* Round 723: the depth chart the sim reads, and the franchise tag. */
-  DEPTH_GROUPS, depthChart, swapDepth, starterIds, type DepthPos,
+  DEPTH_GROUPS, depthChart, swapDepth, starterIds, hasSavedDepth, resetDepth, type DepthPos,
   expiringPlayers, tagRefusal, applyFranchiseTag, franchiseTagSalary,
 } from '@/lib/frontOffice';
 /* Round 631: a cut costs dead money and the man cannot come back this season. */
@@ -516,6 +516,16 @@ export default function FrontOfficeBoard() {
       persist({}, lg, myTeam);
     }
     setDepthPick(null);
+  };
+
+  /* Round 723: hand a group back to the sim, ordered by rating again. */
+  const sortDepth = (pos: DepthPos) => {
+    if (!league) return;
+    const lg: LeagueState = JSON.parse(JSON.stringify(league));
+    resetDepth(lg.teams[myTeam], pos);
+    setDepthPick(null);
+    setLeague(lg);
+    persist({}, lg, myTeam);
   };
 
   const doSign = (pid: string) => {
@@ -1020,7 +1030,13 @@ export default function FrontOfficeBoard() {
                   <span className="font-display text-sm font-bold text-foreground">{pos} depth</span>
                 </div>
                 <p className="text-center text-[10px] text-muted-foreground">
-                  Tap a man, then tap the one to swap him with. {n === 0 ? 'Nobody in this group starts as the roster stands.' : `The first ${n} start${n === 1 ? 's' : ''}.`}
+                  Tap a man, then tap the one to swap him with. {n === 0 ? 'Nobody in this group starts as the roster stands.' : `The first ${n} start${n === 1 ? 's' : ''}.`}{' '}
+                  {hasSavedDepth(my, pos) ? (
+                    <span data-depth-custom>
+                      This is your order, and anyone new slots in by his rating.{' '}
+                      <button data-depth-reset onClick={() => sortDepth(pos)} className="font-bold text-primary hover:underline">Sort by rating</button>
+                    </span>
+                  ) : 'Sorted by rating until you swap someone.'}
                 </p>
                 <div className="grid grid-cols-1 gap-1 sm:grid-cols-2">
                   {men.map((p, i) => (
