@@ -21,6 +21,9 @@ vi.mock('@/lib/badges', () => ({ getNewlyEarnedBadges: async () => [] }));
 vi.mock('@/components/game/ShareButtons', () => ({ default: () => null }));
 
 const KEY = 'nhl-front-office-save-v1';
+/* The real board on a 732 man league, clicked through several panels: well over vitest's 5 second
+   default when the suite runs files in parallel on a loaded machine (measured 5.4 and 6.1s). */
+const BOARD_TIMEOUT = 30000;
 function lehmer(seed: number) {
   let s = seed % 2147483647;
   if (s <= 0) s += 2147483646;
@@ -58,5 +61,5 @@ describe('NHL Front Office: stand in ratings on every list', () => {
     expect(view.container.querySelector('[data-trade-get-list]')!.querySelectorAll('[data-trade-row]')).toHaveLength(ana.players.length);
     const row = view.container.querySelector<HTMLElement>(`[data-trade-row="${stillThere.id}"]`)!;
     expect(row).toHaveTextContent(`${stillThere.name} (${stillThere.pos}) 68*`);
-  });
+  }, BOARD_TIMEOUT);
 });

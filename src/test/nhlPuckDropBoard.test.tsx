@@ -24,6 +24,9 @@ vi.mock('@/lib/badges', () => ({ getNewlyEarnedBadges: async () => [] }));
 vi.mock('@/components/game/ShareButtons', () => ({ default: () => null }));
 
 const KEY = 'nhl-front-office-save-v1';
+/* The real board on a 732 man league, clicked through several panels: well over vitest's 5 second
+   default when the suite runs files in parallel on a loaded machine (measured 5.4 and 6.1s). */
+const BOARD_TIMEOUT = 30000;
 function lehmer(seed: number) {
   let s = seed % 2147483647;
   if (s <= 0) s += 2147483646;
@@ -83,7 +86,7 @@ describe('NHL Front Office: the cut down before puck drop', () => {
     expect(live).not.toBeDisabled();
     fireEvent.click(live);
     expect(read().league.round).toBe(2);
-  });
+  }, BOARD_TIMEOUT);
 
   it('a league saved before the full rosters keeps its old rules: 17 men and Play is live', async () => {
     const league = initNhlLeague(lehmer(5));
@@ -98,5 +101,5 @@ describe('NHL Front Office: the cut down before puck drop', () => {
     expect(play).not.toBeDisabled();
     fireEvent.click(play);
     expect(read().league.round).toBe(2);
-  });
+  }, BOARD_TIMEOUT);
 });
