@@ -50,7 +50,12 @@ try {
       };
       const [anchor, replacement] = changes[control];
       assert.equal(source.split(anchor).length - 1, 1, `${module}: pause control must have one actual anchor`);
-      const changed = source.replace(anchor, replacement);
+      let changed = source.replace(anchor, replacement);
+      if (module === 'components/free-kick/FreeKickBoard') {
+        const cssImport = "from './FreeKickPractice.module.css'";
+        assert.equal(source.split(cssImport).length - 1, 1, 'Resolve exactly one practice CSS import in the copied Board');
+        changed = changed.replace(cssImport, "from '@/components/free-kick/FreeKickPractice.module.css'");
+      }
       assert.notEqual(changed, source, `${module}: pause control must alter the code`);
       const copy = path.join(folder, `${path.basename(module)}.${module.startsWith('hooks/') ? 'ts' : 'tsx'}`);
       await writeFile(copy, changed);
@@ -59,7 +64,7 @@ try {
     }
     env.NO_DOUBLE_SWAP = JSON.stringify(swaps);
   }
-  const run = spawnSync(process.execPath, [path.join(root, 'node_modules/vitest/vitest.mjs'), 'run', 'src/test/arcadePause.test.tsx', '--reporter=verbose'], { cwd: root, env, encoding: 'utf8', timeout: 120000 });
+  const run = spawnSync(process.execPath, [path.join(root, 'node_modules/vitest/vitest.mjs'), 'run', 'src/test/arcadePause.test.tsx', '--reporter=verbose', '--testTimeout=60000'], { cwd: root, env, encoding: 'utf8', timeout: 180000 });
   const output = `${run.stdout || ''}\n${run.stderr || ''}`;
   process.stdout.write(output);
   assert.ok(!run.error, String(run.error));

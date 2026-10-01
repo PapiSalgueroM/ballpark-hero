@@ -1,5 +1,12 @@
 # Work board
 
+**777 old-pause runner addendum:** the unchanged16-case positive run hit three default5s wall
+timeouts while thirteen assertions passed under current CPU load. No outcome or import failed.
+Root authorizes the wrapper's runner-only `--testTimeout=60000` for these same16 tests. Keep
+every fake active-time duration, score, seed, sample count, lifecycle assertion and all eight
+control mutations/counts unchanged. Actual assertion failures remain mandatory for controls;
+timeout or worker-RPC errors earn no credit. No shared Vitest config/test baseline change.
+
 **2026-10-01, Codex Round 780 CLAIMED: lineup fixture cap-key correction.**
 Root owns only `src/test/lineupPickerFilters.test.tsx`'s fixture gameId/gamePath literals and
 docs. Its completion hook is mocked, so `fixture-lineup` never describes a real shipped game,
