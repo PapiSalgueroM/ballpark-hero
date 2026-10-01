@@ -71,7 +71,8 @@
         worse run never overwrites, an equal run keeps the first, a better one
         replaces it, and no sport leaks into another.
      4. THE COPY MAKES NO PROMISE THE NUMBERS CONTRADICT. Read from the page
-        (comments stripped), its guide entry, its home tile and What's New:
+        (comments stripped), its guide entry, its home tile, its search
+        description in src/data/seoMeta.ts and What's New:
           a. where well played runs go unbeaten less than one in 1,000 (NBA,
              MLB), nothing says chase the perfect season, chase perfection,
              chase N-0 or run the table;
@@ -96,8 +97,10 @@
      rounded         the card line works its odds on the rounded overall  2:all four
      bestdown        any run, worse or not, replaces the stored best  3:all four
      copynba         the NBA hero is typed out as "chase the perfect season"  4:nba
+     copynbaguide    the NBA guide intro says "The goal is ... 82-0" again    4:nba
      copynhl         the NHL FAQ goes back to "Nearly impossible on purpose"  4:nhl
      copymlb         the MLB home tile goes back to "chase perfection"        4:mlb
+     copymlbseo      the MLB search description asks "Can you go unbeaten?"  4:mlb
      copynfl         the NFL tip goes back to "one time in ten"               4:nfl
    Exit 0 when a named control turned exactly its labels red, 1 when it did not
    (a dead control) or, with no control, on any failure, 2 for a control name
@@ -126,8 +129,10 @@ const CONTROLS = {
   rounded: { file: 'src/lib/perfectSeasonOdds.ts', module: true, from: 'const odds = perfectSeasonOdds(sport, overall);', to: 'const odds = perfectSeasonOdds(sport, Math.round(overall));', note: 'the card line works its odds out on the rounded overall, so a half overall prints the next one\'s odds', want: ALL(2) },
   bestdown: { file: 'src/lib/perfectSeason.ts', module: true, from: 'return best === null || run.wins > best.wins;', to: 'return true;', note: 'any finished run replaces the stored best, so a best can go down', want: ALL(3) },
   copynba: { file: 'src/pages/PerfectSeasonNba.tsx', module: false, from: '{perfectSeasonTagline(SPORT_KEY)}', to: 'Spin the wheel of NBA history, draft one player per stop, and chase the perfect season.', note: 'the NBA hero is typed out again and sells the perfect season', want: ['4:nba'] },
+  copynbaguide: { file: 'src/data/gameContent/basketball.ts', module: false, from: 'The name says 82-0, but the real chase is the best record you can post, and every result prints your odds of going unbeaten.', to: 'The goal is right there in the name: 82-0.', note: 'the NBA guide intro calls 82-0 the goal again', want: ['4:nba'] },
   copynhl: { file: 'src/data/gameContent/hockey.ts', module: false, from: 'a: "It depends on your overall, and the goalie counts most. An 88 lineup goes 82-0 about one run in 3,900, a 90 about one run in 250 and a 93 about one run in 19.', to: 'a: "Nearly impossible on purpose. Even a lineup full of 99s is capped below a 99 percent win chance per game, so most runs drop one somewhere.', note: 'the NHL FAQ calls 82-0 nearly impossible again', want: ['4:nhl'] },
   copymlb: { file: 'src/data/gameRegistry.ts', module: false, from: "description: 'Spin, draft across eras, chase 116 wins'", to: "description: 'Spin, draft across eras, chase perfection'", note: 'the MLB home tile sells perfection again', want: ['4:mlb'] },
+  copymlbseo: { file: 'src/data/seoMeta.ts', module: false, from: 'simulate all 162 games. Can you reach 116 wins? Free MLB game.', to: 'simulate all 162 games. Can you go unbeaten? Free MLB game.', note: 'the MLB search description asks about going unbeaten again', want: ['4:mlb'] },
   copynfl: { file: 'src/data/gameContent/football.ts', module: false, from: '"A typical well drafted roster, around 82, goes 17-0 about one run in 1,100, and even an 88 only about one run in 14, so treat 15 wins as a good day."', to: '"Even a stacked draft goes 17-0 only about one time in ten, so treat 15 wins as a good day."', note: 'the NFL tip goes back to a number nobody measured', want: ['4:nfl'] },
 };
 if (CONTROL && !CONTROLS[CONTROL]) { console.error(`SIM_PS_ODDS_CONTROL=${CONTROL} is not a control this harness knows (${Object.keys(CONTROLS).join(', ')})`); process.exit(2); }
@@ -348,6 +353,7 @@ const PAGE = { nba: 'PerfectSeasonNba', nhl: 'PerfectSeasonNhl', mlb: 'PerfectSe
 const GUIDE = { nba: 'basketball', nhl: 'hockey', mlb: 'baseball', nfl: 'football' };
 const PAGE_SIM = { nba: "simulateSeasonFair('nba', overall, NBA_GAMES, seed)", nfl: "simulateSeasonFair('nfl', overall, NFL_GAMES, seed)", nhl: 'simulateSeason(overall, NHL_GAMES, seed)', mlb: 'simulateSeason(overall, MLB_GAMES, seed)' };
 const registry = readSrc('src/data/gameRegistry.ts');
+const seoSrc = readSrc('src/data/seoMeta.ts');
 const whatsNew = stripComments(readSrc('src/pages/WhatsNew.tsx'));
 /* Wins at an overall through the real sim: [5th, 95th] percentile and mean. */
 const winBand = (s, o) => {
@@ -356,7 +362,10 @@ const winBand = (s, o) => {
   w.sort((a, c) => a - c);
   return { p5: w[1000], p95: w[19000], mean: w.reduce((t, v) => t + v, 0) / w.length };
 };
-const PROMISE = /chase (the )?perfect(ion| season)|chase \d+-0|run the table/i;
+/* The review of 2026-10-01 added the last shape: the NBA guide's intro said
+   "The goal is right there in the name: 82-0." while well played drafts go
+   82-0 about one run in 112,000. */
+const PROMISE = /chase (the )?perfect(ion| season)|chase \d+-0|run the table|the goal is[^.]*\d+-0/i;
 const IMPOSSIBLE = /(nearly|almost|basically|virtually) impossible/i;
 for (sport of SPORTS) {
   const route = `/perfect-season-${sport}`;
@@ -364,12 +373,17 @@ for (sport of SPORTS) {
   const guide = guideEntry(`src/data/gameContent/${GUIDE[sport]}.ts`, route);
   const tile = (registry.split('\n').find(l => l.includes(`path: '${route}'`)) || '');
   const tagline = odds.perfectSeasonTagline(sport);
+  /* The search result description, read from src/data/seoMeta.ts (the parts
+     folder is generated from it). */
+  const seoAt = seoSrc.indexOf(`'${route}': {`);
+  const seo = seoAt < 0 ? '' : seoSrc.slice(seoAt, seoSrc.indexOf('},', seoAt));
+  if (!seo) fail(`no seoMeta entry for ${route}`);
   const M = MEASURED[sport];
   const def = odds.PERFECT_SEASON_SPORTS[sport];
   const from = odds.realShotFrom(sport);
   if (!guide) fail(`no guide entry for ${route}`);
   if (!tile) fail(`no home tile for ${route}`);
-  const texts = { page, guide, tile, tagline };
+  const texts = { page, guide, tile, tagline, seoMeta: seo };
   /* a. */
   if (M.allDrafts < 1 / 1000) {
     for (const [where, t] of Object.entries(texts)) { const hit = PROMISE.exec(t); if (hit) fail(`the ${where} says "${hit[0]}", but well played runs go unbeaten about ${odds.formatOneIn(M.allDrafts)}`); }
@@ -388,6 +402,11 @@ for (sport of SPORTS) {
     need('guide', guide, 'a 99 about one in five');
     almostNever('guide', 95);
     if (from !== 95) fail(`the guide says a 95 is where 82-0 starts, the curve says ${from}`);
+    /* The worked example, rewritten by the review of 2026-10-01: it had an
+       88 roster closing 76-6, which the sim's 5th to 95th percentile at 88
+       (59 to 71 wins) never reaches. */
+    record('guide', guide, `At 88 an 82-0 comes about ${f('nba', 88)}`, 88, 69);
+    need('guide', guide, 'closes 69-13');
   }
   if (sport === 'nhl') {
     need('guide', guide, `An 88 lineup goes 82-0 about ${f('nhl', 88)}, a 90 about ${f('nhl', 90)} and a 93 about ${f('nhl', 93)}.`);
@@ -414,6 +433,9 @@ for (sport of SPORTS) {
     need("What's New", whatsNew, `a typical lineup rates about ${Math.round(M.median)}, averages 95 wins`);
     need("What's New", whatsNew, 'which about one draft in five reaches');
     need('tile', tile, `chase ${def.greatSeason.wins} wins`);
+    /* The review of 2026-10-01: the search description still asked "Can you
+       go unbeaten?" after the page moved the chase to 116 wins. */
+    need('seoMeta', seo, `Can you reach ${def.greatSeason.wins} wins?`);
   }
   if (sport === 'nfl') {
     topTenth('guide', 87);

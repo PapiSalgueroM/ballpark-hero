@@ -16,7 +16,7 @@ export const SEO_META_PART: Record<string, SeoMeta> = {
   },
   "/perfect-season-mlb": {
     title: "162-0 MLB Perfect Season: Baseball Draft Sim",
-    description: "Spin across a century of baseball, draft a cross era lineup from real team seasons and simulate all 162 games. Can you go unbeaten? Free MLB game.",
+    description: "Spin across a century of baseball, draft a cross era lineup from real team seasons and simulate all 162 games. Can you reach 116 wins? Free MLB game.",
   },
   "/baseball-career": {
     title: "MLB Career Path: Guess the Baseball Player",

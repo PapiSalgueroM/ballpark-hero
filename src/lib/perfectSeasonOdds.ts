@@ -36,8 +36,10 @@ import { perGameChance } from '@/lib/perfectSeasonExpansion';
  * (2025-08-17, espn.com/mlb/story/_/id/45981858), and Sports Illustrated,
  * "Teams with the most wins in an MLB season" (2025-06-19,
  * si.com/mlb/teams-with-the-most-wins-in-an-mlb-season). Our own lahman_teams
- * table agrees (2001 SEA and 1906 CHN at 116, the top two rows), and no
- * season since has come close (the 2026 leader won 98).
+ * table agrees (2001 SEA and 1906 CHN at 116, the top two rows, data to
+ * 2021). Nobody has matched it since: the 2026 Brewers set their franchise
+ * best at 103-59 (Wikipedia's and Baseball Reference's 2026 Brewers pages,
+ * checked 2026-10-01).
  */
 export const MLB_WINS_RECORD = 116;
 
