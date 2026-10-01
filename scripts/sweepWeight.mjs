@@ -119,6 +119,21 @@
  * chunk 0.6K, main already measured 225.9 on its 226, and 226.6 rounds to 227.
  * /leaderboard pays the same 0.6K and stays at 266.
  *
+ * ROUND 832: THE PAST SEASONS LOAD WITH THE SEASON. Every Club Manager era
+ * roster (2015-16, 2010-11, 2005-06) shipped inside the engine chunk, so the
+ * page carried all three past worlds for a player in today's game. Each is a
+ * dynamic import now, fetched when its era is picked or an era save opens.
+ * Measured 2026-10-01, a vite build of main (3fb92eea) against a build of the
+ * branch merged with main (51e7f87f), same machine:
+ *
+ *   clubManager chunk   759.9K raw 246.4K gz  to  650.8K raw 216.3K gz
+ *   era chunks          2015 14.0K, 2010 10.2K, 2005 9.5K gz, on demand
+ *   /club-manager       629K to 599.6K
+ *
+ * Every other route measured the same to the kilobyte. /club-manager's budget comes down to
+ * 604 (599.6 plus the 3.9K headroom it had on main, rounded up), so the
+ * 29.5K cannot be given back quietly; it is the room the next leagues use.
+ *
  * Run: npm run build && npx serve -s dist -l 4173, then
  *      ENGINES=chromium node scripts/sweepWeight.mjs
  */
@@ -141,7 +156,7 @@ const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
    the other five were over and spent it getting back under. */
 const BUDGETS = [
   ['/', 229], /* Round 700: 226.6K measured, 0.6K of it the seoMeta part loaders in the entry chunk, 225.9K on main; was 226 */
-  ['/club-manager', 633], /* Round 700: 629.1K measured with the seoMeta split, 637.4K on main; was 641 */ /* release K: 637K measured, the shootout order (782) and job applications (783) in the engine chunk; was 630 */ /* release H: 628K measured, the ticker's sport filter menu (711) in the entry chunk; release G: 626K with the match centre (714), the squad rows (715) and the double roster fix (742); was 622 */
+  ['/club-manager', 604], /* Round 832: 599.6K measured, the three era bakes out of the engine chunk into chunks of their own (engine chunk 246.4K to 216.3K gzipped), 629K before on the same machine; 3.9K headroom as on main; was 633 */ /* Round 700: 629.1K measured with the seoMeta split, 637.4K on main; was 641 */ /* release K: 637K measured, the shootout order (782) and job applications (783) in the engine chunk; was 630 */ /* release H: 628K measured, the ticker's sport filter menu (711) in the entry chunk; release G: 626K with the match centre (714), the squad rows (715) and the double roster fix (742); was 622 */
   ['/soccer-career', 706], /* Round 700: 702.0K measured with the seoMeta split, 709.9K on main; was 736 */
   ['/stadium-tycoon', 284], /* Round 700: 281.8K measured with the seoMeta split, 290.2K on main; was 290 */
   /* Round 216: the new idle game. Measured 243K on the day it shipped,
