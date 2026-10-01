@@ -1,5 +1,15 @@
 # Work board
 
+**2026-10-01, Codex831 CLAIMED: Guess The Nation feedback (spec97).**
+Own GuessTheNationBoard.tsx, local GuessTheNationFeedback.module.css,
+src/test/guessTheNationFeedback.test.tsx and scripts/simGuessTheNationFeedback.mjs.
+Add finite newly revealed clue/newest accepted answer feedback, truthful results,
+static reduced motion, wrapped names and44px owned actions. Preserve the hook,
+five modes, all12 clue rows, existing scores, aliases, saves, streaks and share.
+Codex828 remains active;829-830 are reserved for two disjoint agent scopes being
+recorded next. Claude819-827 held. Next free round832.
+
+
 **2026-10-01, Codex828 CLAIMED: Club Manager goal celebrations (spec44/97).**
 Add a finite scorer/team celebration to the existing committed goal animation,
 with a static reduced-motion finish and the viewer clock still owning pause.

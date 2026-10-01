@@ -1,5 +1,10 @@
 # Project state
 
+Codex831 adds committed clue/answer feedback to Guess The Nation;828 covers
+Club Manager celebrations.829-830 reserved while exact disjoint scopes are
+recorded on WORKBOARD. Claude819-827 held. Next free round832.
+
+
 ## CLAIMED 2026-10-01: Club Manager goal celebrations (828)
 
 Codex is extending the existing committed goal presentation with finite scorer
