@@ -15,7 +15,7 @@ import {
   developingPlayers, INTENSITY_INFO, FOCUS_INFO,
   brokenPromises, CM_ERAS, DEFAULT_ERA_ID, eraById, projectedXIAvg, CM_BASE_YEAR,
   worldSeasonLabel, pressOf, pressHeadline, preMatchRead,
-  nationOfferFor,
+  nationOfferFor, SHOOTOUT_MAX_ORDER, shootoutOrderOf,
 } from '@/lib/clubManager';
 import { FACILITY_IDS, facilitiesOf } from '@/lib/clubManagerFacilities';
 import { projectFinances } from '@/lib/clubManagerFinances';
@@ -145,6 +145,9 @@ const ClubManager = () => {
      window landing on the same tap) left this on, and the next quick sim
      animated ninety minutes at a player who had asked not to watch. */
   const [watchMode, setWatchMode] = useState(false);
+  /* Round 782: the pre match card's shortcut to the shootout order asks the
+     tactics tab to open that tile on arrival; the tab hands the request back. */
+  const [tacticsTile, setTacticsTile] = useState<'shootout' | null>(null);
   const panelRef = useRevealScroll<HTMLDivElement>(`hub:${hubPanel ?? ''}:${clubView ?? ''}`, { skipFirst: true });
 
   /* Round 154: clubDefFor, not clubByName, because a custom club has no
@@ -901,6 +904,17 @@ const ClubManager = () => {
                     📊 Match Centre: form, head to head, odds, team talk
                   </button>
                 )}
+                {/* Round 782: a knockout tie can end on penalties, so the
+                    shootout order is one tap from the pre match card. */}
+                {(fx.competition === 'cup' || fx.competition === 'uclKo') && (
+                  <button
+                    onClick={() => { setTacticsTile('shootout'); g.setActiveTab('tactics'); }}
+                    data-cm-shootout-link="1"
+                    className="mt-2 block mx-auto text-[11px] font-bold text-primary hover:underline"
+                  >
+                    🥅 Shootout order: {(() => { const n = shootoutOrderOf(c)?.length ?? 0; return n ? `${n} of ${SHOOTOUT_MAX_ORDER} listed` : 'not set, tap to pick your takers'; })()}
+                  </button>
+                )}
               </>
             )}
             {fx && fx.kind === 'window' && (
@@ -1296,6 +1310,9 @@ const ClubManager = () => {
             onDuty={g.setSlotDuty}
             onSetPiece={g.assignSetPiece}
             onAutoSetPieces={g.autoPickSetPieces}
+            onShootoutOrder={g.setShootoutOrder}
+            openTileRequest={tacticsTile}
+            onOpenTileRequestDone={() => setTacticsTile(null)}
           /></ScreenLoading>
         </TabsContent>
 

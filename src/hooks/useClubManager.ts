@@ -14,6 +14,7 @@ import {
   matchFacts,
   changeLive, startSecondHalf, startExtraTime, markLiveMinute,
   setDuty, dutyOptions, dutyLineOf, pitchLineOf, setSetPiece, autoSetPieces, startRetraining, stopRetraining,
+  setShootoutOrder,
   DEFAULT_ERA_ID,
   releasePlayer, signFreeAgent,
   doorRefusal, loanOutRefusal,
@@ -293,6 +294,11 @@ export function useClubManager() {
 
   const autoPickSetPieces = useCallback(() => {
     setCareer(prev => (prev ? autoSetPieces(prev) : prev));
+  }, []);
+
+  /** Round 782: the shootout order, player ids in kicking order; an empty list clears it. A bad id leaves the save alone. */
+  const setShootoutOrderIds = useCallback((ids: string[]) => {
+    setCareer(prev => (prev ? setShootoutOrder(prev, ids) ?? prev : prev));
   }, []);
 
   /** Put an outfielder to work on a second position. A refusal leaves the save alone; the screen prints why. */
@@ -790,7 +796,7 @@ export function useClubManager() {
     market, nextFx, tableRows, myPosition, facts,
     resume, startNew, chooseClub, confirmClub, confirmCustomClub,
     setFormationIndex, setMentality, setXiSlot, swapXiSlots, autoPick,
-    setSlotDuty, assignSetPiece, autoPickSetPieces, retrain, stopRetrain,
+    setSlotDuty, assignSetPiece, autoPickSetPieces, setShootoutOrder: setShootoutOrderIds, retrain, stopRetrain,
     play, quickPlay, continueFromReport, nextSeason,
     buy,
     negotiate, offer, walk, proposeTerms, buyLoanee, endLoanEarly, recallLoanee, answerApproach, setTickets, setConcessions, expandStadium, takeSponsor, pushSponsorOffer, buyFacility, waitAWeek, takeJob, acceptNation, resignNation, dismissNegotiation, clause, loan,
