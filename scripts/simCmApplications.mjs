@@ -312,10 +312,58 @@ for (const base of bases) {
 const rStanding = pearson(rows.map(r => r.standing), rows.map(r => r.accepted));
 const rTier = pearson(rows.map(r => r.tierUp), rows.map(r => r.accepted));
 const acceptedShare = pct(rows.filter(r => r.accepted).length, rows.length);
-console.log(`   ${rows.length} answered (${sackedWaiting} sacked while waiting): ${acceptedShare.toFixed(1)} percent yes; r vs standing ${isNum(rStanding) ? rStanding.toFixed(3) : 'NaN'}, r vs tiers up ${isNum(rTier) ? rTier.toFixed(3) : 'NaN'}; standing ${Math.min(...rows.map(r => r.standing)).toFixed(0)} to ${Math.max(...rows.map(r => r.standing)).toFixed(0)}; off schedule ${offSchedule}, quoted ${badCopy}, no message ${noMessage}, wrong options ${missingOptions}`);
+console.log(`   ${rows.length} answered (${sackedWaiting} sacked while waiting): ${acceptedShare.toFixed(1)} percent yes; r vs standing ${isNum(rStanding) ? rStanding.toFixed(3) : 'NaN'}, r vs tiers up ${isNum(rTier) ? rTier.toFixed(3) : 'NaN'} (reported, the paired gap below is the gate); standing ${Math.min(...rows.map(r => r.standing)).toFixed(0)} to ${Math.max(...rows.map(r => r.standing)).toFixed(0)}; off schedule ${offSchedule}, quoted ${badCopy}, no message ${noMessage}, wrong options ${missingOptions}`);
+{
+  const by = k => rows.filter(r => r.tierUp === k);
+  console.log(`   yes by tiers applied up: ${[0, 1, 2, 3].map(k => `${k}: ${by(k).filter(r => r.accepted).length} of ${by(k).length}`).join(', ')}`);
+}
+
+/* The tier gap, paired. Over the mixed rows above the tier signal is real but
+   thin (r between -0.19 and -0.38 over fourteen seeds, the standing spread
+   swamps it), so the gate is a paired measurement instead: the same manager,
+   the same record, the same roll and the same wait, writing once to a club at
+   his own tier and once to a club above it. The only thing that differs
+   between the two arms is the club, so the gap in yeses is the club's stature
+   and not the noise of who happened to apply. */
+const PAIR_LEVELS = 10;
+const pairs = [];
+let pairsLost = 0;
+for (const base of bases) {
+  const mine = myTier(base);
+  const targets = applyTargets(base);
+  const same = targets.filter(t => t.tier === mine);
+  const up = targets.filter(t => t.tier < mine);
+  if (!same.length || !up.length) continue;
+  for (let i = 0; i < PAIR_LEVELS; i++) {
+    const s0 = withRecord(base, i / (PAIR_LEVELS - 1));
+    const arms = [same[Math.floor(Math.random() * same.length)], up[Math.floor(Math.random() * up.length)]];
+    const roll = Math.random();
+    let wait = null;
+    const answers = [];
+    for (const t of arms) {
+      const applied = applyForJob(clone(s0), t.club);
+      if (!applied) { fail(`${base.clubName}: could not apply to ${t.club} for the paired tier check (${applyRefusal(s0, t.club)})`); break; }
+      applied.jobHunt.open.roll = roll;
+      if (wait === null) wait = applied.jobHunt.open.matchesLeft;
+      else applied.jobHunt.open.matchesLeft = wait;
+      const run = playUntilAnswered(applied);
+      if (run.outcome !== 'accepted' && run.outcome !== 'declined') break;
+      answers.push(run.outcome === 'accepted' ? 1 : 0);
+    }
+    if (answers.length === 2) pairs.push({ same: answers[0], up: answers[1], tierUp: mine - arms[1].tier });
+    else pairsLost += 1;
+  }
+}
+const sameYes = pct(pairs.filter(p => p.same).length, pairs.length);
+const upYes = pct(pairs.filter(p => p.up).length, pairs.length);
+const tierGap = sameYes - upYes;
+const upOnly = pairs.filter(p => p.up && !p.same).length;
+console.log(`   paired tier check: ${pairs.length} pairs (${pairsLost} lost to a sacking), yes at my tier ${sameYes.toFixed(1)} percent, yes above it ${upYes.toFixed(1)} percent, gap ${tierGap.toFixed(1)} points; pairs where only the bigger club said yes ${upOnly}`);
+
 if (rows.length < bases.length * PER_BASE * 0.9) fail(`only ${rows.length} of ${bases.length * PER_BASE} applications were answered`);
 if (!(rStanding >= 0.25)) fail(`acceptance does not rise with standing: r=${isNum(rStanding) ? rStanding.toFixed(3) : 'NaN'} (floor 0.25)`);
-if (!(rTier <= -0.2)) fail(`acceptance does not fall with the tiers applied up: r=${isNum(rTier) ? rTier.toFixed(3) : 'NaN'} (ceiling -0.20)`);
+if (pairs.length < 100) fail(`only ${pairs.length} paired tier checks were answered (floor 100)`);
+if (!(tierGap >= 10)) fail(`acceptance does not fall with the tiers applied up: the paired gap is ${isNum(tierGap) ? tierGap.toFixed(1) : 'NaN'} points (floor 10)`);
 if (!(acceptedShare >= 12 && acceptedShare <= 75)) fail(`${acceptedShare.toFixed(1)} percent of applications were accepted (band 12 to 75)`);
 if (offSchedule) fail(`${offSchedule} answers did not land on the match day the application fixed`);
 if (badCopy) fail(`${badCopy} answers carried quoted speech`);
