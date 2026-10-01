@@ -29,6 +29,12 @@ serialized resume/no false card. Root generated ownership remains the792/794 pag
 Also own scripts/simHarnessAnchors.mjs and, only if normalization changes are needed,
 scripts/simBuzzerPractice.mjs and scripts/simFreeKickPractice.mjs: preserve actual raw-byte
 checks and effective multi-line mutation controls on CRLF/LF, without weakening the fence.
+797 addendum: the incoming practice fixes pass; the two new794 wrappers' Buffer-array
+preservation reads confuse the existing conservative anchor scanner. Own only their
+raw-equality read representation and a direct normalized UTF8 control-text read in
+scripts/simNhlContributors.mjs and scripts/simNhlContributorsBoard.mjs. No scanner bypass,
+outcome/control/threshold change, engine/UI edit or filename allowlist. Recheck both
+positives, affected multiline controls and an effective removed-normalization fence control.
 Own only the missing nationality flag in BudgetBuilderBoard.tsx's selected-player preview
 and its existing focused outcome test if needed. Existing79xx mechanics/saves remain held.
 Investigate simTycoonPitch's two control runner errors in isolation; own that harness/test
