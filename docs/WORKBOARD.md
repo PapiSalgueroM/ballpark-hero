@@ -1,5 +1,34 @@
 # Work board
 
+**2026-09-30, Codex 764, 765 and 767 COMPLETE: training feedback, lineup targeting and roster safety.**
+764: twelve actual-panel tests and four asserted controls pass. Five settled shot/keeper outcomes
+and six completed session outcomes per width/motion produce 88 accepted browser cases. Exact
+scores (Cone60, Sprint96/0, Penalty60, GK80, Passing75), tier text, one Bank callback and immediate
+Back callback are preserved. Original 243-line handlers/timing/scoring slice is byte-identical.
+Effects are finite, clones do not replay, reduced motion is static, six zone nodes/focus/rects are
+stable, and page/dialog overflow and window scroll are zero. Phone screenshots inspected.
+Evidence: Temp/dukb-round764-training-audit/report.json. Parent career persistence, season
+progression and arcade gameplay are outside this controlled actual-panel audit.
+765: nine actual Board/hook/engine tests, three asserted controls and independent review pass.
+Twenty-four actual NBA/NHL/F1 config browser cases verify dimensions/name/reset/count/order,
+44px new controls, zero overflow/errors/save writes and stable filtering focus. F1 keyboard Load
+more reaches its 41st driver; generated 56-row tests verify larger pagination and exact later
+selection/scoring. Final Load more removal focuses the dialog; closing after a pick returns to
+BODY, the existing manual-open behavior. No return-focus claim. Evidence:
+Temp/dukb-round765-lineup-qa-codex/report.json. Completion is stubbed; full App sessions untested.
+767: the old in-place sort reproduces three frozen-roster failures before the fix. Ranking a copy
+passes all five actual voting tests, both asserted controls and independent review. Eight browser
+cases verify pointer/Enter vote callbacks once, unchanged original rosters, exact ranked MVP share
+payloads, stable focused controls and finite 420ms/static reduced winner cues. Cloned active and
+settled props plus the existing Copy acknowledgment timer do not replay the reveal. Zero overflow,
+scroll and page errors; 320px screenshot inspected. Evidence: Temp/dukb-round767-winner-audit/report.json.
+
+Exact app types and isolated 767 build pass; all fifteen built-site fences and eight scoped source
+harnesses pass. New tests total 26 for these three completed rounds. They await Claude's next
+publish. 766 has eight rendered tests green and final motion/browser acceptance running. 768
+pool targeting source is stable, with independent read-only review accepted; tests follow.
+Root dist/public, account writes, real data and release work remain untouched. Next free is **769**.
+
 **2026-09-30, Codex Round 768 CLAIMED: Fantasy Draft pool targeting (master H).**
 Own only `src/components/fantasy-draft/PlayerPool.tsx`, focused rendered tests and new sim wrapper.
 Use existing verified nationality and dominant_foot values for combined Country/Foot filters,
