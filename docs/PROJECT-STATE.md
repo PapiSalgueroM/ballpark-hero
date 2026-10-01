@@ -1,5 +1,59 @@
 # Project state
 
+## LIVE 2026-10-01: Release L (703 validators hold a refusal for the records, 722 NBA luxury tax), main `e052875a`
+
+Assembled by the desktop Claude lane in the gate clone (`release-l`). **douknowball.com is serving it:** deployment
+`f91f3933`, called only after `get_project` showed `latest_commit_sha` `e052875a`; the live entry moved from
+`index-DH__DSXe.js` to `index-dSiH_yGf.js`. Proof by content: the `x-deployment-id` header read `f91f3933` 45 seconds
+after the deploy; `/nba-front-office` names the luxury tax and the repeater schedule; `/whats-new` carries the line;
+the four US Connect 4 pages and `/soccer-grid` answer 200. **All nine edge functions are redeployed and equal the
+repo by sha256** (below), which was done after the site was live because the US Connect 4 pages only learn the new
+reason shape in this release.
+
+- **703, the AI validation cache that rejected true answers.** A stored refusal used to be served before our own
+  records were asked, so a true answer the model once got wrong stayed wrong. Now the four grid validators hold a
+  stored refusal until their records pass has run, and the five Connect 4 validators check our own tables before a
+  stored no; in the Connect 4 validators the model can no longer outvote a half the records proved. Fail closed is
+  untouched: every error path returns `valid:false, unverified:true` and caches nothing. The builder's own fence
+  (`simConnect4FranchiseCodes`: four hand typed franchise code maps against the boards, the grid libs and the live
+  tables; it found the Athletics under a 19th century code and fixed it on two sources) was not enough: the
+  independent review reverted the round's main rule with every gate green. `simValidatorRefusalHold` now runs all
+  nine real handlers against a fake database and a fake model (a stored yes is served, a held refusal falls to
+  records that prove the answer, three error modes fail closed, the model cannot outvote a proved half); against
+  `origin/main` before the round it reports 24 failures, and its four controls go red. The review also closed a
+  hole that predates the round: `.ilike()` treated a typed `%` or `*` as a pattern in the football and college grid
+  validators and cached a yes for it. Not fixed (minor): after records overturn a stored refusal in the four US
+  Connect 4 validators the old pair row stays, costing one extra read per repeat ask.
+- **Edge functions, redeployed 2026-10-01 and verified three ways** (the repo file, the deployed source fetched back
+  through the Supabase MCP, and the deploying agent's own report all hash the same): soccer-grid-validate v25,
+  football-grid-validate v13, college-grid-validate v17, validate-player v12, football-connect4-validate v14,
+  nba-connect4-validate v10, nfl-connect4-validate v4, nhl-connect4-validate v4, mlb-connect4-validate v4, all
+  `verify_jwt` true. `scripts/data/edgeDeployed.json` records all nine (five of them left the unverified list, which
+  is 13 now). One deploy call answered "version 12" for validate-player while production stayed on 11 (two deploys
+  landed within 300 ms of each other); a single redeploy from the unchanged file fixed it. **A deploy response is
+  not proof: fetch the source back and hash it.** Smoke tests: a nonsense guess returns 200 with `valid:false,
+  unverified:true` on all nine. The free model quota was used up when they ran, so the model verdict path was not
+  exercised; the records path was, by live traffic (7 new cache rows in the hour after).
+- **722, NBA Front Office luxury tax and roster minimum.** The real incremental brackets and the repeater schedule
+  (Hoops Rumors and SalarySwish cited in the engine), projected in the cap panel all season and charged at the
+  close; 14 men at tip off (minimum contract fillers with a warning for the GM's club) and 15 at most. The review
+  fixed four majors: hockey and baseball hubs showed a basketball tip off line; CPU clubs drained the free agent
+  pool at the first tip off, leaving the GM nobody to sign for a season; the all season projection could show the
+  standard bill to a repeater; the first apron rule had no check. It then went back once more: on the game's own
+  salaries 14 of 30 clubs started over the line and the richest owed 416.5 million in season one. The lines now
+  scale to the league's payrolls at creation (and at an old save's next summer; an old save plays out its current
+  season with no tax): 5 clubs over, the largest bill 189.6 million against a real record near 177 to 188.
+  `simNbaLuxuryTax` (351 checks, 9 controls). **Known and left for a decision:** five taxpayers is the bottom of the
+  real range, and the tax fades after two seasons because the cap rises 7 percent a year while salaries stay flat;
+  recalibrating every summer would fix it and changes the dynamics.
+
+**Gates.** Type gate 0 on the merged tree and after the last merge of main. Both rounds' fences green on the
+release tree (`simValidatorRefusalHold`, `simConnect4FranchiseCodes`, `simNbaLuxuryTax`, `simFoHub`), 23 snapshot
+and release fences green after the two pages this release changes were redrawn alone (`/nba-front-office`,
+`/whats-new`), `sweepWeight` green, `playRenderStability` green on those two routes. `simEdgeSync` was red on four
+functions between the publish and the redeploys, as expected, and is green with the ledger. Not run for this
+release: the full browser walk set (the changes are one engine, one hook and two saved pages).
+
 ## LIVE UPDATE 2026-10-01 and current help addendum
 
 The live 16:59 UTC sample now serves index-DH__DSXe.js and a 170-URL sitemap.
