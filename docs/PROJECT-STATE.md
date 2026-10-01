@@ -1,5 +1,20 @@
 # Project state
 
+## CHECKPOINT 2026-10-01: Free Kick practice accepted, combined CSS exposed two real gates
+
+777 adds fixed-input unrecorded practice with original physics, pre-play rules/help, native
+Kick and aim-only drag. Nine tests, thirteen asserted controls and eight native contexts with
+3503 assertions pass, preserving daily data and a later recorded Unlimited finish. Fresh app
+types0 and production build1m32 pass in a full physical/Git checkout. WORKBOARD holds exact
+proof and limits. Final CSS browser receipts and corrected74 failed-harness reruns continue.
+
+785 claims only the strict IndexNow floor correction for719's verified extra sitemap URL
+(166 to167, exactly /manager-hot-seat).774 also needs a measured narrow-dialog form fix and
+subsequent final JS rebuild. Other thirteen node snapshot fences and the separate actual
+prerender boot browser gate pass. Combined acceptance/publication remain pending. Claude781-784
+reservations stand,786 next free. The seven visitor reports were read and mapped; none was
+marked resolved by Codex. The AFL-manager request still needs verified research and a scope.
+
 ## CHECKPOINT 2026-10-01: Buzzer steady practice source and native acceptance passed
 
 778 is accepted as a source checkpoint: native fixed-power practice, aim-only drag, explicit

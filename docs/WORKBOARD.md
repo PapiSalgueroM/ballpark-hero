@@ -1,5 +1,50 @@
 # Work board
 
+**2026-10-01, Codex785 CLAIMED: restore the IndexNow coverage ratchet after719.**
+Root owns only scripts/simIndexNow.mjs and docs. The completed fresh build's fifteen fences
+find a real mismatch: public/sitemap.xml has167 URLs while the unchanged strict floor is166.
+Git4153becb's parent has166; its only added URL is /manager-hot-seat. Registry, App route,
+saved page and lastmod ledger all contain that actual game, and simSitemap accepts the ledger.
+Raise the literal floor to167, retain strict shrink/growth/key/host checks, and verify the
+positive plus an asserted copied old166 floor that fails only the growth check. No submission,
+indexing request, public/sitemap rewrite, routes or data change. Next free786.
+
+**774 final-CSS follow-up, root owned:** the final utility stylesheet correctly constrains the
+320px clue dialog to288px, exposing44px intrinsic form overflow that the earlier utility
+fixture hid. Root owns only the existing QuizBoard form minimum width and focused test/control
+acceptance. A DOM-only fix/control must prove the cause before editing; preserve native Dialog,
+exact original scores/clues/callbacks, focus and finite/static cues. Final JS must be rebuilt
+after the running74-harness rerun ends; no parallel build. This is an unresolved gate, not green.
+
+**2026-10-01, Codex777 source/browser checkpoint: steady Free Kick practice accepted.**
+Clearly unrecorded ten-kick practice uses fixed native Power/Bend and explicit Kick with
+the original setup/RNG/shot physics. Taps/drags only aim; delayed inputs keep power fixed.
+Initial rules/worked example precede play, active help pauses for manual Resume, native pitch
+Space and Kick Enter/Space work, and both slider Spaces keep the real scrollable guide steady.
+Daily restore bytes remain untouched and a later Unlimited completion records exactly once.
+Practice never records or shares a result. No shared physics/hook/page/data/routing changes.
+
+Nine actual Board/engine/lifecycle tests and thirteen asserted controls pass (one intended
+failure, one independent reduced-motion/cleanup outcome and seven explicit skips per control).
+Eight strengthened native320/390/430/1440 normal/reduced contexts pass3503 assertions, each
+playing30 actual practice shots and10 normal charged Unlimited shots. Real endpoints/totals,
+child-origin captured touch with two distinct moves, raw876/4 daily, later recorded finish,
+initial/help focus, finite/static feedback and quiet clones hold. All new targets44px or more,
+overflow0, no errors/external requests and ten source/engine/feedback/page bytes stay intact.
+Replay resets the actual inputs; it has no phase autofocus and observed focus is BODY, so
+no replay-focus claim is made. Two320px screenshots inspected, server/browser inputs cleaned.
+Evidence: TEMP/dukb-round777-free-kick-practice-audit/report.json,final-browser.log and
+TEMP/dukb-round777-final-controls. Fresh exact app types0 and production build pass,1m32,
+176 snapshots/11 stubs, CSS index-CkVI6dSo.css. Its final-CSS browser rereceipt is running.
+The IndexNow ratchet785 and774 final-JS follow-up remain required before combined acceptance.
+
+**Visitor queue read-only triage:** seven reports were open when read,58 fixed. Aggregate/
+added-time f3cd3431, all11 taker order7a3131f1 and proactive club jobs724c01e4 belong to
+Claude781/782/783. Player Bingo transfer2e3dc3dc and Lucas Herrington1bc9b2e5 belong to
+735-740/740. c825c6f0 has only Wrong info and /soccer-career, no reproducible player/stat/save.
+The new AFL manager request88fc0a2b remains unclaimed and needs verified sport rules/data
+before adapting an engine. No report was marked fixed and no DB data/status was changed.
+
 **2026-10-01, Codex778 source/browser checkpoint: steady Buzzer practice accepted.**
 Practice uses native fixed Power/Arc/Fade and explicit Shoot with the original seeded physics.
 Aim taps and continued child-to-SVG captured drags only aim; a17s delay leaves chosen power.27

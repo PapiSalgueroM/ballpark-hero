@@ -1,24 +1,25 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState, type KeyboardEvent as ReactKeyboardEvent } from 'react';
 import { Button } from '@/components/ui/button';
 import ShareButtons from '@/components/game/ShareButtons';
 import ArcadeShotFeedback from '@/components/arcade/ArcadeShotFeedback';
+import { Dialog, DialogContent, DialogDescription, DialogTitle } from '@/components/ui/dialog';
 import { CalendarDays, Infinity as InfinityIcon, RotateCcw, Target } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { useArcadeFlight } from '@/hooks/useArcadeFlight';
 import { getTodayET } from '@/lib/dateUtils';
-import { markRestoredFinish } from '@/lib/restoredFinish';
 import { readArcadeRun, writeArcadeRun } from '@/lib/arcadeRecord';
 import {
   buildRun, daySeed, lehmer, maxRunScore, takeShot, wallSpan,
   ROUNDS_PER_RUN, type KickSetup, type ShotResult,
 } from '@/lib/freeKick';
+import styles from './FreeKickPractice.module.css';
 
 const SLUG = 'free-kick';
 /* The field the count is stored under. It has been `goals` since Round 433 and
    renaming it would throw away the record of anyone who already played today. */
 const COUNT_FIELD = 'goals';
-type Mode = 'daily' | 'unlimited';
+type Mode = 'daily' | 'unlimited' | 'practice';
 type Phase = 'intro' | 'aiming' | 'flying' | 'kickEnd' | 'done';
 
 /* How long the ball is in the air, in milliseconds. One number, used by the
@@ -51,6 +52,10 @@ export default function FreeKickBoard() {
   const [score, setScore] = useState(restored?.score ?? 0);
   const [goals, setGoals] = useState(restored?.count ?? 0);
   const [result, setResult] = useState<ShotResult | null>(null);
+  const [practiceHelpOpen, setPracticeHelpOpen] = useState(false);
+  const practiceOpener = useRef<HTMLButtonElement | null>(null);
+  const practiceKick = useRef<HTMLButtonElement | null>(null);
+  const aimingRef = useRef(false);
   const { progress: flight, paused, launch, reset: resetFlight, pause, resume } = useArcadeFlight(FLIGHT_MS);
 
   /* Aim, power and curve: the three things the player actually controls. */
@@ -67,7 +72,11 @@ export default function FreeKickBoard() {
   const setup = kicks[kickIdx] ?? null;
   const isDone = phase === 'done';
   const bookedAlready = mode === 'daily' && restored !== null;
-  useGameCompletion(SLUG, isDone && !bookedAlready, score, goals);
+  useGameCompletion(SLUG, isDone && mode !== 'practice' && !bookedAlready, score, goals);
+
+  const practiceRangeKeyDown = (event: ReactKeyboardEvent<HTMLInputElement>) => {
+    if (mode === 'practice' && event.key === ' ') event.preventDefault();
+  };
 
   /* The power meter sweeps while the player holds, which is the timing part of
      the input: it is not a slider you set, it is a bar you stop. */
@@ -86,10 +95,11 @@ export default function FreeKickBoard() {
   }, [charging, paused]);
 
   const start = useCallback((m: Mode) => {
+    aimingRef.current = false;
     chargingRef.current = false;
     setCharging(false);
     if (m === 'daily' && restored) {
-      markRestoredFinish(SLUG);
+      savedRef.current = true;
       setMode('daily');
       setKicks(buildRun(daySeed(todayStr)));
       setScore(restored.score);
@@ -130,10 +140,11 @@ export default function FreeKickBoard() {
   }, [paused, phase, setup, aimX, aimY, power, curve, launch]);
 
   const beginCharge = useCallback(() => {
+    if (mode === 'practice') return;
     if (paused || phase !== 'aiming' || document.querySelector('[role="dialog"]')) return;
     chargingRef.current = true;
     setCharging(true);
-  }, [paused, phase]);
+  }, [mode, paused, phase]);
 
   const endCharge = useCallback(() => {
     if (!chargingRef.current) return;
@@ -143,6 +154,7 @@ export default function FreeKickBoard() {
   }, [paused, strike]);
 
   const togglePause = () => {
+    aimingRef.current = false;
     if (paused) resume();
     else {
       chargingRef.current = false;
@@ -152,6 +164,7 @@ export default function FreeKickBoard() {
   };
 
   const nextKick = useCallback(() => {
+    aimingRef.current = false;
     resetFlight();
     if (kickIdx + 1 >= ROUNDS_PER_RUN) { setPhase('done'); return; }
     setKickIdx(i => i + 1);
@@ -183,9 +196,10 @@ export default function FreeKickBoard() {
       else if (e.key === 'ArrowDown') { setAimY(y => Math.max(0, y - 0.05)); e.preventDefault(); }
       else if (e.key === 'q' || e.key === 'Q') setCurve(c => Math.max(-1, c - 0.12));
       else if (e.key === 'e' || e.key === 'E') setCurve(c => Math.min(1, c + 0.12));
-      else if (e.key === ' ' && !e.repeat) { beginCharge(); e.preventDefault(); }
+      else if (e.key === ' ' && !e.repeat) { if (mode === 'practice') strike(); else beginCharge(); e.preventDefault(); }
     };
     const up = (e: KeyboardEvent) => {
+      if (mode === 'practice') return;
       if (e.key !== ' ') return;
       if (isInteractive(e)) { chargingRef.current = false; setCharging(false); return; }
       endCharge();
@@ -194,7 +208,7 @@ export default function FreeKickBoard() {
     window.addEventListener('keydown', down);
     window.addEventListener('keyup', up);
     return () => { window.removeEventListener('keydown', down); window.removeEventListener('keyup', up); };
-  }, [paused, phase, beginCharge, endCharge]);
+  }, [mode, paused, phase, beginCharge, endCharge, strike]);
 
   /* Touch and mouse: drag anywhere on the pitch to aim, let go to strike. */
   const pitchRef = useRef<SVGSVGElement | null>(null);
@@ -214,6 +228,31 @@ export default function FreeKickBoard() {
     : null;
   const showKeeperDive = result && phase !== 'aiming' ? flight : 0;
   const best = kicks.length ? maxRunScore(kicks) : 0;
+  const openPracticeHelp = (node: HTMLButtonElement) => {
+    practiceOpener.current = node;
+    aimingRef.current = false;
+    if (mode === 'practice' && (phase === 'aiming' || phase === 'flying') && !paused) pause();
+    setPracticeHelpOpen(true);
+  };
+  const practiceHelp = (
+    <Dialog key="practice-help" open={practiceHelpOpen} onOpenChange={setPracticeHelpOpen}>
+      <DialogContent className={`${styles.rules} bg-card border-border rounded-2xl`}
+        onCloseAutoFocus={event => {
+          event.preventDefault();
+          const target = practiceOpener.current?.isConnected ? practiceOpener.current : practiceKick.current;
+          target?.focus({ preventScroll: true });
+        }}>
+        <DialogTitle className="pr-10 font-display text-xl font-black">Steady practice</DialogTitle>
+        <DialogDescription>Ten free kicks at your pace. This practice is unrecorded and leaves your daily score alone.</DialogDescription>
+        <p className="text-sm">Aim with the arrow keys or tap and drag the pitch. Choose Power and Bend with the sliders, then press Kick or Space. There is no moving power bar to stop.</p>
+        <p className="text-sm">The same wall, keeper, shot rules and points still apply. More power can spray the ball wide.</p>
+        <p className="text-sm">Example: aim toward a corner, choose 60 power and a little bend, then Kick when you are ready. Waiting does not change your chosen power.</p>
+        {paused && <p className="text-sm text-muted-foreground">The run is paused. Close this, then Resume when you are ready.</p>}
+        {mode !== 'practice' && <Button className="min-h-[44px]" onClick={() => { setPracticeHelpOpen(false); start('practice'); }}
+          onKeyDown={event => { if (event.repeat && (event.key === 'Enter' || event.key === ' ')) event.preventDefault(); }}>Start steady practice</Button>}
+      </DialogContent>
+    </Dialog>
+  );
 
   if (phase === 'intro') {
     return (
@@ -236,12 +275,19 @@ export default function FreeKickBoard() {
             <InfinityIcon className="h-4 w-4" /> Unlimited
           </Button>
         </div>
+        <Button variant="outline" className="mt-3 min-h-[44px]" onClick={event => openPracticeHelp(event.currentTarget)}>Steady practice</Button>
+        <p className="mt-2 text-xs text-muted-foreground">Choose your power, then Kick. Unrecorded practice with no release timing.</p>
+        {practiceHelp}
       </div>
     );
   }
 
   return (
-    <div className="space-y-3" data-arcade-phase={phase} data-arcade-paused={paused}>
+    <div className={cn('space-y-3', mode === 'practice' && styles.practice)} data-arcade-phase={phase} data-arcade-paused={paused} data-arcade-mode={mode}>
+      {mode === 'practice' && <div className="flex items-center justify-between gap-2">
+        <p className="text-sm font-semibold">Steady practice, unrecorded</p>
+        <Button variant="secondary" className="min-h-[44px] min-w-[44px]" aria-label="Steady practice rules" onClick={event => openPracticeHelp(event.currentTarget)}>?</Button>
+      </div>}
       <div className="flex flex-wrap items-center justify-between gap-2 text-sm">
         <span className="rounded-full border border-border bg-card px-3 py-1.5">
           Kick <b className="text-primary">{Math.min(kickIdx + 1, ROUNDS_PER_RUN)}</b>/{ROUNDS_PER_RUN}
@@ -270,10 +316,13 @@ export default function FreeKickBoard() {
         viewBox={`0 0 ${VIEW_W} ${VIEW_H}`}
         className="w-full touch-none select-none rounded-2xl border border-border bg-[hsl(140_35%_18%)]"
         role="img"
+        tabIndex={mode === 'practice' ? 0 : undefined}
         aria-label={setup ? `Free kick from ${setup.distance} metres with ${setup.wallSize} in the wall` : 'Free kick'}
-        onPointerDown={e => { if (!paused && phase === 'aiming') { pointerAim(e.clientX, e.clientY); beginCharge(); } }}
-        onPointerMove={e => { if (!paused && phase === 'aiming' && chargingRef.current) pointerAim(e.clientX, e.clientY); }}
-        onPointerUp={endCharge}
+        onPointerDown={e => { if (!paused && phase === 'aiming') { pointerAim(e.clientX, e.clientY); if (mode === 'practice') { aimingRef.current = true; e.currentTarget.setPointerCapture?.(e.pointerId); } else beginCharge(); } }}
+        onPointerMove={e => { if (!paused && phase === 'aiming' && (mode === 'practice' ? aimingRef.current : chargingRef.current)) pointerAim(e.clientX, e.clientY); }}
+        onPointerUp={e => { if (mode === 'practice') { aimingRef.current = false; if (e.currentTarget.hasPointerCapture?.(e.pointerId)) e.currentTarget.releasePointerCapture(e.pointerId); } else endCharge(); }}
+        onPointerCancel={() => { if (mode === 'practice') aimingRef.current = false; }}
+        onLostPointerCapture={e => { if (mode === 'practice' && e.target === e.currentTarget) aimingRef.current = false; }}
       >
         {/* grass stripes, so the pitch reads as a pitch */}
         {[0, 1, 2, 3, 4, 5].map(i => (
@@ -360,13 +409,15 @@ export default function FreeKickBoard() {
         <div className="space-y-2 rounded-2xl border border-border bg-card p-3">
           <div className="flex items-center gap-2 text-xs text-muted-foreground">
             <span className="w-14 shrink-0">Power</span>
-            <div className="h-3 flex-1 overflow-hidden rounded-full bg-background">
+            {mode === 'practice' ? <input type="range" min={0.25} max={1} step={0.01} value={power} disabled={paused}
+              onKeyDown={practiceRangeKeyDown}
+              onChange={event => { if (!paused) setPower(Number(event.target.value)); }} aria-label="Power" className="min-w-0 flex-1 accent-[hsl(var(--primary))]" /> : <div className="h-3 flex-1 overflow-hidden rounded-full bg-background">
               <div
                 className={cn('h-full rounded-full transition-none',
                   power > 0.85 ? 'bg-destructive' : power > 0.6 ? 'bg-gold' : 'bg-primary')}
                 style={{ width: `${power * 100}%` }}
               />
-            </div>
+            </div>}
             <span className="w-10 shrink-0 text-right tabular-nums">{Math.round(power * 100)}</span>
           </div>
           <div className="flex items-center gap-2 text-xs text-muted-foreground">
@@ -375,21 +426,24 @@ export default function FreeKickBoard() {
               type="range" min={-1} max={1} step={0.04} value={curve}
               disabled={paused}
               onChange={e => { if (!paused) setCurve(Number(e.target.value)); }}
+              onKeyDown={practiceRangeKeyDown}
               className="flex-1 accent-[hsl(var(--primary))]"
               aria-label="How much bend to put on the ball"
             />
             <span className="w-10 shrink-0 text-right tabular-nums">{curve > 0.05 ? 'out' : curve < -0.05 ? 'in' : 'none'}</span>
           </div>
           <div className="flex flex-wrap gap-2 pt-1">
-            <Button size="sm" className="flex-1" disabled={paused} onMouseDown={beginCharge} onMouseUp={endCharge}
+            {mode === 'practice' ? <Button ref={practiceKick} className="flex-1" disabled={paused} onClick={strike}
+              onKeyDown={event => { event.stopPropagation(); if (event.repeat && (event.key === 'Enter' || event.key === ' ')) event.preventDefault(); }}
+              onKeyUp={event => event.stopPropagation()}>Kick</Button> : <Button size="sm" className="flex-1" disabled={paused} onMouseDown={beginCharge} onMouseUp={endCharge}
               onTouchStart={e => { e.preventDefault(); beginCharge(); }} onTouchEnd={e => { e.preventDefault(); endCharge(); }}
               onKeyDown={e => { e.stopPropagation(); if ((e.key === ' ' || e.key === 'Enter') && !e.repeat) { e.preventDefault(); beginCharge(); } }}
               onKeyUp={e => { e.stopPropagation(); if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); endCharge(); } }}>
               Hold to strike
-            </Button>
+            </Button>}
           </div>
           <p className="text-center text-[11px] text-muted-foreground">
-            Arrow keys aim, Q and E bend it, hold space to charge. Or drag the pitch and let go.
+            {mode === 'practice' ? 'Aim with arrows or tap and drag. Choose Power and Bend, then Kick or press Space.' : 'Arrow keys aim, Q and E bend it, hold space to charge. Or drag the pitch and let go.'}
           </p>
         </div>
       )}
@@ -410,20 +464,28 @@ export default function FreeKickBoard() {
             {goals >= 8 ? ' Dead ball specialist.' : goals >= 5 ? ' You would take one in a final.' : goals >= 3 ? ' Keep hitting them.' : ' The wall says hello.'}
           </p>
           <div className="mt-4 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
-            {mode === 'unlimited' || !restored ? (
+            {mode === 'practice' ? (
+              <>
+                <Button onClick={() => start('practice')} className="gap-2"><RotateCcw className="h-4 w-4" /> Another steady ten</Button>
+                <Button variant="secondary" onClick={() => start('daily')}>Today's ten</Button>
+                <Button variant="secondary" onClick={() => start('unlimited')}>Unlimited</Button>
+              </>
+            ) : mode === 'unlimited' || !restored ? (
               <Button onClick={() => start('unlimited')} className="gap-2"><RotateCcw className="h-4 w-4" /> Another ten</Button>
             ) : (
               <p className="text-xs text-muted-foreground">Come back tomorrow for ten new kicks.</p>
             )}
-            <ShareButtons
+            {mode !== 'practice' && <ShareButtons
               gameName="Free Kick"
               gamePath="/free-kick"
               score={`${goals}/${ROUNDS_PER_RUN} free kicks for ${score} points`}
               customText={`Free Kick ⚽ ${goals}/${ROUNDS_PER_RUN} scored, ${score} points. douknowball.com/free-kick`}
-            />
+            />}
+            {mode !== 'practice' && <Button variant="outline" className="min-h-[44px]" onClick={event => openPracticeHelp(event.currentTarget)}>Steady practice</Button>}
           </div>
         </div>
       )}
+      {practiceHelp}
     </div>
   );
 }
