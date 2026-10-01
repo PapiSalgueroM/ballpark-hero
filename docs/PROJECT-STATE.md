@@ -1,5 +1,17 @@
 # Project state
 
+## IN PROGRESS 2026-10-01: Clue Auction claimed, corrected gate narrowed to eight failures
+
+787 owns Clue Auction's native suggestions/44px targets and committed finite/static feedback,
+preserving prices, real helpers, bank, best, completion and share. Exact four-file claim and
+actual-outcome acceptance are on WORKBOARD.786 Stat Detective continues. Next free788.
+
+The frozen physical/Git rerun finishes66 pass/eight fail across the74 previous failures.
+Four are explicit filter-test wall timeouts; the remaining driver/control/static-ratchet
+failures need diagnosis and truthful controls. Quiet unchanged reruns are in progress. This
+does not claim the full suite green. Final corrected Quiz JS/build/fifteen fences and live
+publication remain pending; the last independently verified live release is I.
+
 ## IN PROGRESS 2026-10-01: Stat Detective claimed, final-style source fixes accepted
 
 786 adds committed guess/clue/result feedback and native suggestion focus within the existing

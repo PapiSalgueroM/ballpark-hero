@@ -1,5 +1,32 @@
 # Work board
 
+**2026-10-01, Codex787 CLAIMED: Clue Auction committed feedback and native controls.**
+Own only src/pages/ClueAuction.tsx, new scoped ClueAuction.module.css, actual-page tests in
+src/test/clueAuctionFeedback.test.tsx and scripts/simClueAuctionFeedback.mjs. Claude718's
+Clue Auction half was explicitly retired on this board;718 retains Career Ladder. Preserve
+the real whoAmI/clueAuction helpers, original pool/objects/secret RNG, name comparison,
+prices, strict price >= bank refusal, scoring/best storage/completion/share. No data changes.
+Fix the existing mouse-only suggestions and delayed blur so native non-first Enter/Space
+selection commits once, preserve pointer selection, provide44px controls and stable purchase
+focus. Add finite cues only for committed clue purchases, wrong receipts and won/lost results,
+with static reduced motion and quiet resets/no-ops. Keep rules/example before play and help.
+Actual-page fixtures stay fictional at the fetch boundary, using real helpers/completion.
+Measure25+35 purchases leaving40, wrong guess leaving30 and winning30 recorded once, exact
+share/best bytes, unavailable/duplicate/unaffordable no-ops, zero floor, new-case100/later
+finish, native focus/node identity and eight320/390/430/1440 normal/reduced browser contexts.
+Assert actual copied mutations, intended failures and independent unchanged outcomes. Root
+owns docs/git/build. Next free788. All other Claude reservations stand.
+
+**Corrected full-gate rerun finished, not an all-green claim:** the physical/Git checkout
+at9b068b51 with frozen777/778 source overlay runs all74 previously failed harnesses:66 pass,
+eight fail. Four filter harnesses hit5000ms wall timeouts; First Team and Tycoon have control
+runner mismatches; Daily Reload's shared-lineup driver and Buzzer silent control need actual
+diagnosis; No Double Record's static ratchet rejects the two new practice exclusions. No
+timeout/import/control runner failure is counted as an outcome. The log is preserved at
+TEMP/dukb-round780-current-main-20261001/failed74-rerun.log. Quiet unchanged reruns and root
+cause review continue before any harness/source compatibility edit. Final corrected Quiz JS,
+all fifteen rebuilt-site fences and publication remain pending. No build ran with the suite.
+
 **2026-10-01, Codex786 CLAIMED: Stat Detective committed feedback and native search.**
 Own only src/pages/StatDetective.tsx, scoped StatDetective.module.css, new actual-page tests
 and scripts/simStatDetectiveMotion.mjs. The page has no separate Board/hook; use its actual
