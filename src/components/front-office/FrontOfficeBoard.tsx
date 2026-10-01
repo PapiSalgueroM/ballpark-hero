@@ -969,6 +969,18 @@ export default function FrontOfficeBoard() {
   /* Round 828: the opening rating of a man with no season behind him is his
      draft spot, and the roster says so until the first title is decided. */
   const noTape = (p: GmPlayer) => p.noSeason && league.champions.length === 0 ? ' · no 2025 season, rated on draft spot' : '';
+  /* Round 828 review: the same fact beside every other rating the board shows
+     (the depth chart, the market, both trade lists, the finder's offers and a
+     group tile's top man), so a number that is only his draft spot never
+     reads as measured anywhere. A "d" beside the number, explained by one line
+     under any list that carries one. */
+  const draftRated = (p?: { noSeason?: boolean } | null) => !!p?.noSeason && league.champions.length === 0;
+  const draftMark = (p?: { noSeason?: boolean } | null) => (draftRated(p)
+    ? <sup data-draft-rated title="No 2025 season to rate him on, so this number is where he was drafted" className="ml-0.5 text-[8px] font-bold text-muted-foreground">d</sup>
+    : null);
+  const draftLegend = (list: ({ noSeason?: boolean } | null | undefined)[]) => (list.some(draftRated)
+    ? <p data-draft-legend className="text-center text-[10px] text-muted-foreground">d: no 2025 season to rate him on, so that number is where he was drafted.</p>
+    : null);
   /* Round 828: the trade lists on a full roster, one group at a time, or the men the chart starts. */
   const tradeFilter = (team: typeof my, list: GmPlayer[]) => {
     if (team.rosterDepth !== 2) return list;
@@ -1209,11 +1221,12 @@ export default function FrontOfficeBoard() {
                       </span>
                       <span className="ml-2 flex shrink-0 items-center gap-1.5">
                         {starters.has(p.id) && <span data-depth-starter className="rounded-full bg-gold/20 px-2 py-0.5 text-[9px] font-bold text-foreground">starts</span>}
-                        <b className="text-primary">{p.ovr}</b>
+                        <b className="text-primary">{p.ovr}{draftMark(p)}</b>
                       </span>
                     </button>
                   ))}
                 </div>
+                {draftLegend(men)}
               </div>
             );
           })()}
@@ -1242,7 +1255,7 @@ export default function FrontOfficeBoard() {
                       <span className="block text-xs font-bold text-foreground">
                         {pos} <span className="font-normal text-muted-foreground">· {men.length}{hurt > 0 ? `, ${hurt} out` : ''}</span>
                       </span>
-                      <span className="block truncate text-[10px] text-muted-foreground">{top ? `${top.name} ${top.ovr}` : 'Nobody'}</span>
+                      <span className="block truncate text-[10px] text-muted-foreground">{top ? <>{top.name} {top.ovr}{draftMark(top)}</> : 'Nobody'}</span>
                     </button>
                   );
                 })}
@@ -1323,7 +1336,7 @@ export default function FrontOfficeBoard() {
                   {refusal && <span className="block text-[10px] text-destructive">{refusal}</span>}
                 </span>
                 <span className="ml-2 flex shrink-0 items-center gap-1.5">
-                  <b className="text-primary">{p.ovr}</b>
+                  <b className="text-primary">{p.ovr}{draftMark(p)}</b>
                   <button
                     onClick={() => doSign(p.id)}
                     disabled={p.salary > room || !!refusal || !!fullBlock}
@@ -1337,6 +1350,7 @@ export default function FrontOfficeBoard() {
               );
             })}
           </div>
+          {draftLegend([...league.freeAgents].sort((a, b) => b.ovr - a.ovr).slice(0, 24))}
         </div>
       )}
 
@@ -1350,10 +1364,11 @@ export default function FrontOfficeBoard() {
             <div className="grid grid-cols-2 gap-1">
               {tradeFilter(my, [...my.players]).sort((a, b) => b.ovr - a.ovr).map(p => (
                 <button key={p.id} onClick={() => { setMyTradePiece(p.id); setShopOffers([]); setShopTried(false); }} className={cn('flex items-center justify-between rounded-lg border px-2 py-1 text-[11px]', myTradePiece === p.id ? 'border-gold bg-gold/10' : 'border-border/60 bg-background')}>
-                  <span className="truncate text-foreground">{p.name} ({p.pos})</span><b className="text-primary">{p.ovr}</b>
+                  <span className="truncate text-foreground">{p.name} ({p.pos})</span><b className="text-primary">{p.ovr}{draftMark(p)}</b>
                 </button>
               ))}
             </div>
+            {draftLegend(tradeFilter(my, [...my.players]))}
             <button onClick={doShop} disabled={!myTradePiece} className="w-full rounded-full bg-primary px-4 py-1.5 text-[11px] font-bold text-primary-foreground disabled:opacity-40">
               Shop him around the league
             </button>
@@ -1363,7 +1378,7 @@ export default function FrontOfficeBoard() {
             {shopOffers.map(o => (
               <div key={o.teamId + o.playerId} className="flex items-center justify-between gap-1 rounded-lg border border-border/60 bg-background px-2 py-1.5 text-[11px]">
                 <span className="min-w-0">
-                  <span className="block truncate text-foreground"><b>{o.teamId}</b> offer: {o.playerName} ({o.playerPos}) <b className="text-primary">{o.playerOvr}</b></span>
+                  <span className="block truncate text-foreground"><b>{o.teamId}</b> offer: {o.playerName} ({o.playerPos}) <b className="text-primary">{o.playerOvr}{draftMark(league.teams[o.teamId]?.players.find(p => p.id === o.playerId))}</b></span>
                   <span className="block text-[9px] text-muted-foreground">age {o.playerAge} · ${o.playerSalary}M{o.sweeten ? ' · costs one of your picks' : ''}</span>
                 </span>
                 <button onClick={() => acceptShopOffer(o)} className="shrink-0 rounded-full bg-primary px-2.5 py-1 text-[9px] font-bold text-primary-foreground">Accept</button>
@@ -1414,7 +1429,7 @@ export default function FrontOfficeBoard() {
                         myTradePiece === p.id ? 'border-gold bg-gold/10' : 'border-border/60 bg-background',
                       )}
                     >
-                      <span className="truncate text-foreground">{p.name} ({p.pos})</span><b className="text-primary">{p.ovr}</b>
+                      <span className="truncate text-foreground">{p.name} ({p.pos})</span><b className="text-primary">{p.ovr}{draftMark(p)}</b>
                     </button>
                   ))}
                 </div>
@@ -1426,7 +1441,7 @@ export default function FrontOfficeBoard() {
                     return (
                     <div key={p.id} data-trade-row={p.id} className="flex items-center justify-between gap-1 rounded-lg border border-border/60 bg-background px-2 py-1 text-[11px]">
                       <span className="min-w-0">
-                        <span className="block truncate text-foreground">{p.name} ({p.pos}) <b className="text-primary">{p.ovr}</b></span>
+                        <span className="block truncate text-foreground">{p.name} ({p.pos}) <b className="text-primary">{p.ovr}{draftMark(p)}</b></span>
                         {back && <span className="block text-[9px] text-destructive">{back}</span>}
                       </span>
                       <button onClick={() => openTradeTalks(p.id)} disabled={!myTradePiece || !!back} title={back ?? undefined} className="shrink-0 rounded-full bg-primary px-2.5 py-0.5 text-[9px] font-bold text-primary-foreground disabled:opacity-40">Open talks</button>
@@ -1435,6 +1450,7 @@ export default function FrontOfficeBoard() {
                   })}
                 </div>
               </div>
+              {draftLegend([...tradeFilter(my, [...my.players]), ...tradeFilter(league.teams[tradePartner], [...league.teams[tradePartner].players])])}
             </>
           )}
         </div>

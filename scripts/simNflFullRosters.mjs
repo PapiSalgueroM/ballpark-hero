@@ -56,8 +56,9 @@
         FrontOfficeFullRoster.test.tsx): a full roster's Roster box opens on
         group tiles, a practice squad man is called up while there is a spot,
         the call up and every Sign are greyed with the reason at 53, a tapped
-        team starts a league with the whole club, and a fifteen man save keeps
-        its old list.
+        team starts a league with the whole club, a rating that is only a
+        draft spot carries its mark on the depth chart and both trade lists,
+        and a fifteen man save keeps its old list.
 
    MEASUREMENTS (2026-10-01, the bake of that day, the harness's own seeds):
      Section 1: active rosters 50 to 54 a club (1638 men), practice squads 15
@@ -861,6 +862,9 @@ console.log('7) an old save loads and plays as it did');
         if (Array.isArray(o)) o.forEach(walk);
         else if (o && typeof o === 'object') {
           if (typeof o.id === 'string' && !ids.has(o.id)) ids.set(o.id, `#${ids.size}`);
+          /* a dead money line outlives the man it names (he retires, the pool
+             is trimmed), and then its playerId is the only place his id is left */
+          if (typeof o.playerId === 'string' && !ids.has(o.playerId)) ids.set(o.playerId, `#${ids.size}`);
           Object.values(o).forEach(walk);
         }
       };
@@ -926,7 +930,7 @@ if (CONTROL) {
     const line = summary ? summary[1].trim() : 'no summary line';
     console.log(`   vitest exit ${r.status}, ${line}`);
     ok(8, 'vitest exited zero', r.status === 0, out.split('\n').filter(l => /×|FAIL|AssertionError|Unable to find/.test(l)).slice(0, 8).join(' | '));
-    ok(8, 'all four board tests ran and passed', /\b4 passed\b/.test(line) && !/failed/.test(line), line);
+    ok(8, 'all five board tests ran and passed', /\b5 passed\b/.test(line) && !/failed/.test(line), line);
   }
 }
 

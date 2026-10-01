@@ -107,6 +107,37 @@ describe('NFL Front Office: a full roster on the board', () => {
     expect(kc.practice.length).toBe(FO_DEPTH.KC.practice.length);
   });
 
+  /* Round 828 review: a man with no 2025 season is rated on his draft spot,
+     and every list that shows his number says so, not only the roster row. */
+  it('marks a rating that is only a draft spot on the depth chart and both trade lists', () => {
+    const league = initLeague(lehmer(7), { depth: FO_DEPTH });
+    const kc = league.teams.KC;
+    const pos = DEPTH_GROUPS.find(g => kc.players.some(p => p.pos === g && p.noSeason))!;
+    expect(pos).toBeTruthy();
+    const unrated = kc.players.filter(p => p.pos === pos && p.noSeason);
+    save(league, 'KC');
+    render(<FrontOfficeBoard />);
+    fireEvent.click(screen.getByText('Roster'));
+    fireEvent.click(el('[data-depth-open]'));
+    fireEvent.click(el(`[data-depth-group="${pos}"]`));
+    const marked = all('[data-depth-row]').filter(r => r.querySelector('[data-draft-rated]')).map(r => r.getAttribute('data-depth-row'));
+    expect(marked.sort()).toEqual(unrated.map(p => p.id).sort());
+    expect(el('[data-draft-legend]')).toBeTruthy();
+    cleanup();
+
+    /* the trade desk, one group at a time, both sides */
+    save(league, 'KC');
+    render(<FrontOfficeBoard />);
+    fireEvent.click(screen.getByText('Trades'));
+    fireEvent.click(all('[data-trade-groups] button').find(b => b.textContent === pos)!);
+    const partner = Object.keys(league.teams).find(a => a !== 'KC' && league.teams[a].players.some(p => p.pos === pos && p.noSeason))!;
+    fireEvent.click(all('button').find(b => b.textContent === partner)!);
+    const theirs = league.teams[partner].players.filter(p => p.pos === pos && p.noSeason).map(p => p.id).sort();
+    const theirMarked = all('[data-trade-row]').filter(r => r.querySelector('[data-draft-rated]')).map(r => r.getAttribute('data-trade-row')).sort();
+    expect(theirMarked).toEqual(theirs);
+    expect(all('[data-draft-legend]').length).toBeGreaterThan(0);
+  });
+
   it('keeps the old list on a fifteen man save', () => {
     const league = initLeague(lehmer(6));
     save(league, 'KC');
