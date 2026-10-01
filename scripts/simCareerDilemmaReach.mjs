@@ -37,8 +37,8 @@
  *      seasons. It holds c and d off the DOM itself, and this section holds
  *      the count of dilemmas drawn from 20 up to its own band.
  *
- * BANDS, from measured headroom (SIM_SEED reruns on 2026-10-01, the fixed
- * tree; see the MEASURED block next to each constant).
+ * BANDS, from measured headroom (reruns on 2026-10-01, the fixed tree; the
+ * MEASURED block next to each constant has the numbers).
  *
  * NEGATIVE CONTROLS, each proven to go red:
  *   DILEMMA_REACH_CONTROL=skip   puts the skipping transition back: the roll
@@ -47,6 +47,10 @@
  *   DILEMMA_REACH_CONTROL=twice  makes the first Continue after a choice put
  *                                the same dilemma back on screen. 1c, 1d and
  *                                section 2 go red.
+ *   DILEMMA_REACH_CONTROL=tworolls  rolls a second time in the season, when
+ *                                the player posts on the social media screen,
+ *                                the double offer a fix in the wrong place
+ *                                would make. 1c and section 2 go red.
  * The engine is rewritten in the bundle for section 1 and in a gitignored
  * copy (src/lib/__control_*.ts) that section 2 is pointed at through the
  * NO_DOUBLE_SWAP alias in vitest.config.ts. Each rewrite asserts the text it
@@ -68,7 +72,7 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const ROOT_URL = ROOT.replaceAll('\\', '/');
 const ENGINE_FILE = path.join(ROOT, 'src', 'lib', 'soccerCareerEngine.ts');
 const CONTROL = process.env.DILEMMA_REACH_CONTROL || '';
-const CONTROLS = ['skip', 'twice'];
+const CONTROLS = ['skip', 'twice', 'tworolls'];
 if (CONTROL && !CONTROLS.includes(CONTROL)) {
   console.error(`DILEMMA_REACH_CONTROL=${CONTROL} is not a control this harness knows (${CONTROLS.join(', ')})`);
   process.exit(1);
@@ -78,18 +82,28 @@ const CAREERS = Number(process.env.DILEMMA_REACH_HEADLESS || 160);
 
 /* ---------------- bands ---------------- */
 /* Section 1a: dilemmas shown per season closed, by the age at the close.
-   MEASURED (fixed tree, 160 careers, SIM_SEED unset and 1..5): see header
-   of the run log in the round report; the band sits well outside every
-   measured value and well clear of 0, the value on main. */
+   MEASURED 2026-10-01 on the fixed tree, 160 careers, nine streams (the
+   filename seed and SIM_SEED 0 to 7):
+     20-23  0.284 to 0.330   (about 620 seasons a run)
+     24-29  0.288 to 0.339   (about 925)
+     30+    0.286 to 0.333   (about 1010)
+   The engine's own roll is 30 percent a season, plus the two follow ups
+   that jump the queue. On main every band was 0. A second roll in the
+   season would put it near 0.51. The band is wide of every measured value
+   by five standard errors or more on both sides, and shut to both of
+   those. */
 const RATE_BANDS = {
-  '20-23': [0.10, 0.40],
-  '24-29': [0.10, 0.40],
-  '30+': [0.06, 0.40],
+  '20-23': [0.20, 0.42],
+  '24-29': [0.20, 0.42],
+  '30+': [0.20, 0.42],
 };
-/* Section 1e: rival dilemmas shown over the whole sample. */
-const RIVAL_FLOOR = 10;
-/* Section 2: dilemmas drawn on screen from 20 up, over the rendered sample. */
-const RENDERED_BAND = [4, 40];
+/* Section 1e: rival dilemmas shown over the whole sample. MEASURED over the
+   same nine streams: 84 to 116. On main: 0. The floor is half the lowest. */
+const RIVAL_FLOOR = 40;
+/* Section 2: dilemmas drawn on screen from 20 up, over the rendered sample
+   (about 85 seasons closed at 20 or older). MEASURED with DILEMMA_REACH_SEED
+   819, 1, 2, 3 and 4: 28, 33, 24, 22 and 24. On main: 0 (77 seasons). */
+const RENDERED_BAND = [10, 50];
 
 const TMP = fs.mkdtempSync(path.join(process.env.TEMP || os.tmpdir(), 'dilemmaReach-')).replaceAll('\\', '/');
 const readLF = f => fs.readFileSync(f, 'utf8').split('\r\n').join('\n');
@@ -103,7 +117,8 @@ const abort = m => { console.error(m); cleanup(); process.exit(1); };
 /* ---------------- the controls' rewrites ---------------- */
 const ROLL = '  if (tryTriggerMoralDilemma(s)) {\n    s.phase = "moral_dilemma";\n    return s;\n  }\n';
 const SOCIAL_HEAD = 'export function dismissSocialMediaPhase(prev: CareerState, clubs: ClubData[]): CareerState {\n';
-const DISMISS_HEAD = 'export function dismissMoralDilemma(prev: CareerState, clubs: ClubData[]): CareerState {\n  const s = { ...prev };\n  s.pendingMoralDilemma = null;\n';
+const ACTED = '  s.socialMediaActionUsedThisSeason = true;\n';
+const DISMISS_HEAD ='export function dismissMoralDilemma(prev: CareerState, clubs: ClubData[]): CareerState {\n  const s = { ...prev };\n  s.pendingMoralDilemma = null;\n';
 function count(src, needle) { return src.split(needle).length - 1; }
 function rewrite(src) {
   if (CONTROL === 'skip') {
@@ -113,6 +128,10 @@ function rewrite(src) {
     const body = src.slice(at, end);
     if (count(body, ROLL) !== 1) abort(`control skip cannot run: dismissSocialMediaPhase holds ${count(body, ROLL)} dilemma rolls, expected 1, so there is nothing to put back`);
     return src.slice(0, at) + body.replace(ROLL, '') + src.slice(end);
+  }
+  if (CONTROL === 'tworolls') {
+    if (count(src, ACTED) !== 1) abort(`control tworolls cannot run: applySocialMediaAction's used flag line is in the engine ${count(src, ACTED)} times, expected 1`);
+    return src.replace(ACTED, `${ACTED}  tryTriggerMoralDilemma(s);\n`);
   }
   if (CONTROL === 'twice') {
     if (count(src, DISMISS_HEAD) !== 1) abort(`control twice cannot run: dismissMoralDilemma's opening is not in the engine exactly once`);
