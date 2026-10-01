@@ -1,0 +1,108 @@
+{
+  "base": "https://douknowball.com",
+  "date": "2026-10-01T22:31:49.880Z",
+  "cases": [
+    {
+      "route": "/hockey-higher-lower",
+      "viewport": 320,
+      "steps": [
+        {
+          "round": 1,
+          "savedCount": 1,
+          "lastCorrect": false
+        },
+        {
+          "round": 2,
+          "savedCount": 2,
+          "lastCorrect": false
+        },
+        {
+          "round": 3,
+          "savedCount": 3,
+          "lastCorrect": false,
+          "savedBytesHeldOnImmediateReload": true
+        },
+        {
+          "round": 4,
+          "savedCount": 4,
+          "lastCorrect": false
+        },
+        {
+          "round": 5,
+          "savedCount": 5,
+          "lastCorrect": true
+        },
+        {
+          "round": 6,
+          "savedCount": 6,
+          "lastCorrect": false
+        },
+        {
+          "round": 7,
+          "savedCount": 7,
+          "lastCorrect": true
+        },
+        {
+          "round": 8,
+          "savedCount": 8,
+          "lastCorrect": false
+        },
+        {
+          "round": 9,
+          "savedCount": 9,
+          "lastCorrect": false
+        },
+        {
+          "round": 10,
+          "savedCount": 10,
+          "lastCorrect": true,
+          "savedBytesHeldOnImmediateReload": true
+        }
+      ],
+      "baselineErrors": [],
+      "deliberateSaveErrors": [
+        "TypeError: Cannot read properties of null (reading 'length')\n    at Se (https://douknowball.com/assets/HockeyHigherLower-CPKRcPBo.js:1:2585)\n    at os (https://douknowball.com/assets/HockeyHigherLower-CPKRcPBo.js:1:6071)\n    at sp (https://douknowball.com/assets/index-Bj5VrkKR.js:39:16998)\n    at xf",
+        "A page failed to render: TypeError: Cannot read properties of null (reading 'length')\n    at Se (https://douknowball.com/assets/HockeyHigherLower-CPKRcPBo.js:1:2585)\n    at os (https://douknowball.com/assets/HockeyHigherLower-CPKRcPBo.js:1:6071)\n    at sp (https://douknowball.com/assets/index-Bj5Vrk"
+      ],
+      "expectedScore": 30,
+      "finish": "Skip to main content DOUKNOWBALL Back Track stats 🏒 NHL HIGHER OR LOWER Which player has more career points? Daily Unlimited 😈 Hard Round: 10/10 Score: 30 How to play NHL · NOT THIS TIME ❄️ 3/10 Correct! Total Score: 30 (3×10 base + 0 streak bonus) 🏒 Hockey Higher or Lower: 30 pts (3/10) 🏒 Hockey Higher or Lower Oct 1, 2026 🏒 Hockey Higher or Lower: 30 pts (3/10) RESULT 30 points (3/10) on today's Hockey Higher or Lower DoUKnowBall douknowball.com/hockey-higher-lower Share result Copy challenge 📋 Copy Score Card 🖼️ Save Image SHARE YOUR RESULT Come back tomorrow for a new challenge! NHL Higher or Lower: Hockey Career Points Quiz Two hockey players, side by side. Which one has more career points? Daily challenge and unlimited mode with streak bonuses. Two players side by side, one question: who ended up with more career points? Ten quick rounds, a streak bonus that snowballs, and a daily set of matchups the whole site sweats together. It sounds easy until a pure sniper meets a quiet playmaker. How to play NHL Higher or Lower, a free hockey trivia comparison game Compare two players side by side Look at the two players: name, position, country and teams. Pick the higher career point total Tap the one you think has more career points, meaning goals plus assists. Watch the totals reveal before the next pair Both totals flash up for a couple of seconds, then the next pair skates in. SCORE POINTS AND BUILD A STREAK BONUS Correct picks pay 10 points each, and streaks pay extra on top. Finish ten rounds and share your score Ten rounds, then share your score. NHL Higher or Lower rules: scoring, streaks and the daily matchups Ten rounds worth ten points each 10 rounds per game and 10 points per correct answer. A growing streak bonus tops out at 325 The streak bonus grows: ",
+      "scoreMatched": true,
+      "finishedTenRounds": true,
+      "oldRevealQuietAfterHard": true,
+      "dailyHeldDuringUnlimited": true,
+      "dailyFinishRestored": true,
+      "corruptNullCrashes": true,
+      "recoveredByDeletingLocalSave": true
+    }
+  ],
+  "findings": [
+    {
+      "id": "QA847-DAILY-SAVE-SHAPE",
+      "url": "https://douknowball.com/hockey-higher-lower",
+      "game": "/hockey-higher-lower",
+      "severity": "P2",
+      "steps": [
+        "Create a real Daily save",
+        "Keep version/date/puzzle fields but change guesses to null",
+        "Refresh"
+      ],
+      "expected": "Reject malformed save and recover safely",
+      "actual": "This page broke error boundary replaces the game",
+      "possibleCause": "Shared useDailyPuzzle restore accepts null deserialized guesses",
+      "evidence": {
+        "key": "hockey-hl-daily-2026-10-01",
+        "baselineTenRoundScore": 30,
+        "errors": [
+          "TypeError: Cannot read properties of null (reading 'length')\n    at Se (https://douknowball.com/assets/HockeyHigherLower-CPKRcPBo.js:1:2585)\n    at os (https://douknowball.com/assets/HockeyHigherLower-CPKRcPBo.js:1:6071)\n    at sp (https://douknowball.com/assets/index-Bj5VrkKR.js:39:16998)\n    at xf",
+          "A page failed to render: TypeError: Cannot read properties of null (reading 'length')\n    at Se (https://douknowball.com/assets/HockeyHigherLower-CPKRcPBo.js:1:2585)\n    at os (https://douknowball.com/assets/HockeyHigherLower-CPKRcPBo.js:1:6071)\n    at sp (https://douknowball.com/assets/index-Bj5Vrk"
+        ]
+      }
+    }
+  ],
+  "blockedWrites": [
+    {
+      "route": "/hockey-higher-lower",
+      "path": "/rest/v1/game_completions"
+    }
+  ]
+}

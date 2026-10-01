@@ -1,0 +1,243 @@
+{
+  "base": "https://douknowball.com",
+  "date": "2026-10-01T22:18:35.683Z",
+  "observations": [
+    {
+      "name": "multi-tab save overwrite",
+      "pairsA": [
+        "🏉Harry VallenceCarlton · 1926-1938 Higher?",
+        "🏉Fraser GehrigWest Coast & St Kilda · 1995-2008 Higher?"
+      ],
+      "pairsB": [
+        "🏉Harry VallenceCarlton · 1926-1938 Higher?",
+        "🏉Fraser GehrigWest Coast & St Kilda · 1995-2008 Higher?"
+      ],
+      "first": {
+        "afl-hl-daily-2026-10-01": "{\"v\":1,\"date\":\"2026-10-01\",\"puzzleIndex\":0,\"guesses\":[{\"t\":\"result\",\"correct\":true}],\"gameStatus\":\"playing\"}"
+      },
+      "second": {
+        "afl-hl-daily-2026-10-01": "{\"v\":1,\"date\":\"2026-10-01\",\"puzzleIndex\":0,\"guesses\":[{\"t\":\"result\",\"correct\":true},{\"t\":\"result\",\"correct\":false}],\"gameStatus\":\"playing\"}"
+      },
+      "overwritten": {
+        "afl-hl-daily-2026-10-01": "{\"v\":1,\"date\":\"2026-10-01\",\"puzzleIndex\":0,\"guesses\":[{\"t\":\"result\",\"correct\":true}],\"gameStatus\":\"playing\"}"
+      },
+      "afterReload": "Skip to main content DOUKNOWBALL Back Track stats 🏉 AFL HIGHER OR LOWER Which legend kicked more career goals? Daily Unlimited 😈 Hard Round: 2/10 Score: 10 🏉 Dick Lee Collingwood · 1906-1922 Higher? 🏉 Matthew Lloyd Essendon · 1995-2009 Higher? AFL Higher or Lower: Aussie Rules Goals Quiz Two footy legends, side by side. Which one kicked more career goals? From Gordon Coventry in the 1920s to Buddy Franklin, the whole history of the game is in the pool. Footy's goal kicking arguments, settled 10 rounds at a time. Two VFL/AFL greats appear side by side and you pick the one who kicked more career goals. The pool is 60 retired legends, everyone from Gordon Coventry in the 1920s to Buddy Franklin, and only retired players make the list so no total ever moves under you. How to play AFL Higher or Lower, a free footy goal kicking trivia game Choosing Daily or Unlimited mode Choose Daily for the shared matchups or Unlimited for random pairs. Reading each player's card Each card shows the player's clubs and the years of their career. Picking the higher career goal kicker Tap the player you believe kicked more career goals. The real counts reveal, points land, and the next pair appears. Stacking a streak bonus Stack correct answers for streak bonuses. AFL Higher or Lower rules for rounds, streaks and hard mode Scoring ten rounds and a growing streak bonus 10 rounds, 10 points per correct answer, plus a streak bonus growing by 5 with each straight correct after the first. A perfect game is 325. How exact ties score Exact ties score as correct on either side, and this pool has real ones: Wayne Carey and Peter Hudson both finished on 727. Hard mode in Unlimited Hard mode lives in Unlimited only and pairs players with close goal counts. New matchups at midnight New daily matchups arrive at midnight Eastern. AFL Higher or Lower walkthrough: Lockett, Coventry and career totals Tony Lockett against Matthew Lloyd Round one gives you Tony Lockett against Matthew Lloyd, and the counts land 1,360 to 926 for Plugger, the only man in history past 1,300. Gordon Coventry against Jack Riewoldt Later it's Gordon Coventry against Jack Riewoldt. Recency pulls you toward Jack, but Coventry kicked 1,299 before World War Two. That's the trap this game sets over and over. Trusting eras over recency You stop trusting recency, start trusting eras, and grind out 7 of 10. AFL Higher or Lower tips for picking the higher goal kicker Memorizing the career goal podium Memorize the podium: Lockett 1,360, Coventry 1,299, Dunstall 1,254. THE EXCLUSIVE 1,000 GOAL CLUB Only five men have ever kicked 1,000: those three plus Doug Wade and Gary Ablett Sr, with Buddy Franklin's 1,066 among them. Weighing eras against each other Full forwards from the high scoring 80s stack huge numbers. A key forward from the 2010s on the same games usually sits lower. Trusting ties as free points Ties pay both ways, so identical-feeling pairs are free points, not landmines. AFL Higher or Lower FAQ: goal totals and the retired player pool Where do the goal totals come from? Career VFL/AFL regular season and finals goals as carried by the all time leading goalkicker records, cross-checked before shipping. Only retired players are included so the numbers are final. Why is a current star not in the pool? Active players are left out on purpose. Their totals move every week, and this site does not ship numbers that quietly go wrong. Is AFL Higher or Lower free to play? Yes. AFL Higher or Lower is free to play on DoUKnowBall, right in your browser. No download and no signup needed. More games to play 🏉 Aussie Rules Manager Pick a fictional club, manage the squad and call the quarters through a ten-round league 🔗 NASCAR Chain Build a chain of Cup champions 🏁 Guess The Driver Guess the mystery NASCAR driver from clues 📦 Mystery Box Open 15 packs, keep or bin, build the best XI your luck allows 🎟️ Fight Promoter Book the room, make the fights, pay the purses. Selling tonight and building a name pull against each other. 🎓 Sports Quiz Board Five categories, $200 to $1000. Wrong answers cost you Report PLAY NEXT 🏗️ Guess The Constructor Guess the mystery F1 team from clues Play Now 🏫 Guess The College Guess the D1 school from clues Play Now 🏀 Buzzer Beater Pick the arc, beat the hand, drop ten jump shots Play Now Next puzzle in 05:41:16 See all games → All team names, competition names, logos and trademarks are property of their respective owners. DoUKnowBall is an independent fan project and is not affiliated with, endorsed by or sponsored by the NFL, NBA, UFC, NHL, MLB, FIFA, UEFA, the Premier League, the English Football League, LaLiga, Serie A, the Bundesliga, Ligue 1, the Eredivisie, MLS, the Saudi Pro League, the IOC, the NCAA, F1, the PGA Tour, NASCAR, the ATP or the WTA. Player names and statistics are used for identification and commentary only. © 2026 DoUKnowBall Soccer · NBA · NHL · NFL · MLB · College Search Games · About · Contact · What's New · Record Books · Leaderboard · Privacy Policy · Terms of Service · Accessibility · Cookie choices · Light mode · Report a bug",
+      "errors": []
+    },
+    {
+      "kind": "null",
+      "inserted": {
+        "v": 1,
+        "date": "2026-10-01",
+        "puzzleIndex": 0,
+        "guesses": null,
+        "gameStatus": "playing"
+      },
+      "screen": "Skip to main content 😬 This page broke Something in this game went wrong and it stopped drawing. It is our fault, not anything you did. If you had a save going, it is still on this device. It is kept in your browser, and nothing here has touched it. Back to the games Try this page again Telling us what you were doing helps a lot. The report a bug button is at the bottom of this page. All team names, competition names, logos and trademarks are property of their respective owners. DoUKnowBall is an independent fan project and is not affiliated with, endorsed by or sponsored by the NFL, NBA, UFC, NHL, MLB, FIFA, UEFA, the Premier League, the English Football League, LaLiga, Serie A, the Bundesliga, Ligue 1, the Eredivisie, MLS, the Saudi Pro League, the IOC, the NCAA, F1, the PGA Tour, NASCAR, the ATP or the WTA. Player names and statistics are used for identification and commentary only. © 2026 DoUKnowBall Soccer · NBA · NHL · NFL · MLB · College Search Games · About · Contact · What's New · Record Books · Leaderboard · Privacy Policy · Terms of Service · Accessibility · Cookie choices · Light mode · Report a bug",
+      "errors": [
+        "TypeError: Cannot read properties of null (reading 'length')\n    at fe (https://douknowball.com/assets/AflHigherLower-DmMKtIWf.js:1:2276)\n    at Ke (https://douknowball.com/assets/AflHigherLower-DmMKtIWf.js:1:3885)\n    at sp (https://douknowball.com/assets/index-Bj5VrkKR.js:39:16998)\n    at xf (https://douknowball.com/assets/index-Bj5VrkKR.js:41:3139)\n    at cx (https://douknowball.com/assets/inde",
+        "A page failed to render: TypeError: Cannot read properties of null (reading 'length')\n    at fe (https://douknowball.com/assets/AflHigherLower-DmMKtIWf.js:1:2276)\n    at Ke (https://douknowball.com/assets/AflHigherLower-DmMKtIWf.js:1:3885)\n    at sp (https://douknowball.com/assets/index-Bj5VrkKR.js:39:16998)\n    at xf (https://douknowball.com/assets/index-Bj5VrkKR.js:41:3139)\n    at cx (https://do"
+      ],
+      "answerControls": 0,
+      "trapped": true,
+      "retryStillBroken": true,
+      "savedBytesHeldAfterRetry": true
+    },
+    {
+      "kind": "object",
+      "inserted": {
+        "v": 1,
+        "date": "2026-10-01",
+        "puzzleIndex": 0,
+        "guesses": {
+          "not": "a guess list"
+        },
+        "gameStatus": "playing"
+      },
+      "screen": "Skip to main content 😬 This page broke Something in this game went wrong and it stopped drawing. It is our fault, not anything you did. If you had a save going, it is still on this device. It is kept in your browser, and nothing here has touched it. Back to the games Try this page again Telling us what you were doing helps a lot. The report a bug button is at the bottom of this page. All team names, competition names, logos and trademarks are property of their respective owners. DoUKnowBall is an independent fan project and is not affiliated with, endorsed by or sponsored by the NFL, NBA, UFC, NHL, MLB, FIFA, UEFA, the Premier League, the English Football League, LaLiga, Serie A, the Bundesliga, Ligue 1, the Eredivisie, MLS, the Saudi Pro League, the IOC, the NCAA, F1, the PGA Tour, NASCAR, the ATP or the WTA. Player names and statistics are used for identification and commentary only. © 2026 DoUKnowBall Soccer · NBA · NHL · NFL · MLB · College Search Games · About · Contact · What's New · Record Books · Leaderboard · Privacy Policy · Terms of Service · Accessibility · Cookie choices · Light mode · Report a bug",
+      "errors": [
+        "TypeError: l.map is not a function\n    at https://douknowball.com/assets/AflHigherLower-DmMKtIWf.js:1:2309\n    at Object.Iw [as useMemo] (https://douknowball.com/assets/index-Bj5VrkKR.js:39:21375)\n    at oe.useMemo (https://douknowball.com/assets/index-Bj5VrkKR.js:10:6223)\n    at fe (https://douknowball.com/assets/AflHigherLower-DmMKtIWf.js:1:2295)\n    at Ke (https://douknowball.com/assets/AflHigh",
+        "A page failed to render: TypeError: l.map is not a function\n    at https://douknowball.com/assets/AflHigherLower-DmMKtIWf.js:1:2309\n    at Object.Iw [as useMemo] (https://douknowball.com/assets/index-Bj5VrkKR.js:39:21375)\n    at oe.useMemo (https://douknowball.com/assets/index-Bj5VrkKR.js:10:6223)\n    at fe (https://douknowball.com/assets/AflHigherLower-DmMKtIWf.js:1:2295)\n    at Ke (https://doukn"
+      ],
+      "answerControls": 0,
+      "trapped": true,
+      "retryStillBroken": false,
+      "savedBytesHeldAfterRetry": true
+    },
+    {
+      "kind": "invalid-item",
+      "inserted": {
+        "v": 1,
+        "date": "2026-10-01",
+        "puzzleIndex": 0,
+        "guesses": [
+          null
+        ],
+        "gameStatus": "playing"
+      },
+      "screen": "Skip to main content 😬 This page broke Something in this game went wrong and it stopped drawing. It is our fault, not anything you did. If you had a save going, it is still on this device. It is kept in your browser, and nothing here has touched it. Back to the games Try this page again Telling us what you were doing helps a lot. The report a bug button is at the bottom of this page. All team names, competition names, logos and trademarks are property of their respective owners. DoUKnowBall is an independent fan project and is not affiliated with, endorsed by or sponsored by the NFL, NBA, UFC, NHL, MLB, FIFA, UEFA, the Premier League, the English Football League, LaLiga, Serie A, the Bundesliga, Ligue 1, the Eredivisie, MLS, the Saudi Pro League, the IOC, the NCAA, F1, the PGA Tour, NASCAR, the ATP or the WTA. Player names and statistics are used for identification and commentary only. © 2026 DoUKnowBall Soccer · NBA · NHL · NFL · MLB · College Search Games · About · Contact · What's New · Record Books · Leaderboard · Privacy Policy · Terms of Service · Accessibility · Cookie choices · Light mode · Report a bug",
+      "errors": [
+        "TypeError: Cannot read properties of null (reading 'correct')\n    at https://douknowball.com/assets/AflHigherLower-DmMKtIWf.js:1:2432\n    at Array.map (<anonymous>)\n    at https://douknowball.com/assets/AflHigherLower-DmMKtIWf.js:1:2309\n    at Object.Iw [as useMemo] (https://douknowball.com/assets/index-Bj5VrkKR.js:39:21375)\n    at oe.useMemo (https://douknowball.com/assets/index-Bj5VrkKR.js:10:62",
+        "A page failed to render: TypeError: Cannot read properties of null (reading 'correct')\n    at https://douknowball.com/assets/AflHigherLower-DmMKtIWf.js:1:2432\n    at Array.map (<anonymous>)\n    at https://douknowball.com/assets/AflHigherLower-DmMKtIWf.js:1:2309\n    at Object.Iw [as useMemo] (https://douknowball.com/assets/index-Bj5VrkKR.js:39:21375)\n    at oe.useMemo (https://douknowball.com/asset"
+      ],
+      "answerControls": 0,
+      "trapped": true,
+      "retryStillBroken": false,
+      "savedBytesHeldAfterRetry": true
+    },
+    {
+      "name": "invalid JSON control",
+      "playable": 2,
+      "screen": "Skip to main content DOUKNOWBALL Back Track stats 🏉 AFL HIGHER OR LOWER Which legend kicked more career goals? Daily Unlimited 😈 Hard Round: 1/10 Score: 0 🏉 Harry Vallence Carlton · 1926-1938 Higher? 🏉 Fraser Gehrig West Coast & St Kilda · 1995-2008 Higher? AFL Higher or Lower: Aussie Rules Goals Quiz Two footy legends, side by side. Which one kicked more career goals? From Gordon Coventry in the 1920s to Buddy Franklin, the whole history of the game is in the pool. Footy's goal kicking arguments, settled 10 rounds at a time. Two VFL/AFL greats appear side by side and you pick the one who kicked more career goals. The pool is 60 retired legends, everyone from Gordon Coventry in the 1920s to Buddy Franklin, and only retired players make the list so no total ever moves under you. How to "
+    },
+    {
+      "name": "manual storage deletion recovery",
+      "playable": 2
+    }
+  ],
+  "findings": [
+    {
+      "id": "QA847-DAILY-TAB-OVERWRITE",
+      "url": "https://douknowball.com/afl-higher-lower",
+      "game": "AFL Higher or Lower",
+      "severity": "P2",
+      "steps": [
+        "Open the same Daily game in two tabs",
+        "Answer two rounds in the first tab",
+        "Answer round1 in the second stale tab",
+        "Refresh the first tab"
+      ],
+      "expected": "A stale tab should not overwrite newer completed rounds",
+      "actual": "Two saved rounds become one; refresh returns the first tab to round2",
+      "possibleCause": "useDailyPuzzle writes its own in-memory guess log without a storage conflict check or storage-event subscription",
+      "evidence": {
+        "pairsA": [
+          "🏉Harry VallenceCarlton · 1926-1938 Higher?",
+          "🏉Fraser GehrigWest Coast & St Kilda · 1995-2008 Higher?"
+        ],
+        "pairsB": [
+          "🏉Harry VallenceCarlton · 1926-1938 Higher?",
+          "🏉Fraser GehrigWest Coast & St Kilda · 1995-2008 Higher?"
+        ],
+        "first": {
+          "afl-hl-daily-2026-10-01": "{\"v\":1,\"date\":\"2026-10-01\",\"puzzleIndex\":0,\"guesses\":[{\"t\":\"result\",\"correct\":true}],\"gameStatus\":\"playing\"}"
+        },
+        "second": {
+          "afl-hl-daily-2026-10-01": "{\"v\":1,\"date\":\"2026-10-01\",\"puzzleIndex\":0,\"guesses\":[{\"t\":\"result\",\"correct\":true},{\"t\":\"result\",\"correct\":false}],\"gameStatus\":\"playing\"}"
+        },
+        "overwritten": {
+          "afl-hl-daily-2026-10-01": "{\"v\":1,\"date\":\"2026-10-01\",\"puzzleIndex\":0,\"guesses\":[{\"t\":\"result\",\"correct\":true}],\"gameStatus\":\"playing\"}"
+        },
+        "afterReload": "Skip to main content DOUKNOWBALL Back Track stats 🏉 AFL HIGHER OR LOWER Which legend kicked more career goals? Daily Unlimited 😈 Hard Round: 2/10 Score: 10 🏉 Dick Lee Collingwood · 1906-1922 Higher? 🏉 Matthew Lloyd Essendon · 1995-2009 Higher? AFL Higher or Lower: Aussie Rules Goals Quiz Two footy legends, side by side. Which one kicked more career goals? From Gordon Coventry in the 1920s to Buddy Franklin, the whole history of the game is in the pool. Footy's goal kicking arguments, settled 10 rounds at a time. Two VFL/AFL greats appear side by side and you pick the one who kicked more career goals. The pool is 60 retired legends, everyone from Gordon Coventry in the 1920s to Buddy Franklin, and only retired players make the list so no total ever moves under you. How to play AFL Higher or Lower, a free footy goal kicking trivia game Choosing Daily or Unlimited mode Choose Daily for the shared matchups or Unlimited for random pairs. Reading each player's card Each card shows the player's clubs and the years of their career. Picking the higher career goal kicker Tap the player you believe kicked more career goals. The real counts reveal, points land, and the next pair appears. Stacking a streak bonus Stack correct answers for streak bonuses. AFL Higher or Lower rules for rounds, streaks and hard mode Scoring ten rounds and a growing streak bonus 10 rounds, 10 points per correct answer, plus a streak bonus growing by 5 with each straight correct after the first. A perfect game is 325. How exact ties score Exact ties score as correct on either side, and this pool has real ones: Wayne Carey and Peter Hudson both finished on 727. Hard mode in Unlimited Hard mode lives in Unlimited only and pairs players with close goal counts. New matchups at midnight New daily matchups arrive at midnight Eastern. AFL Higher or Lower walkthrough: Lockett, Coventry and career totals Tony Lockett against Matthew Lloyd Round one gives you Tony Lockett against Matthew Lloyd, and the counts land 1,360 to 926 for Plugger, the only man in history past 1,300. Gordon Coventry against Jack Riewoldt Later it's Gordon Coventry against Jack Riewoldt. Recency pulls you toward Jack, but Coventry kicked 1,299 before World War Two. That's the trap this game sets over and over. Trusting eras over recency You stop trusting recency, start trusting eras, and grind out 7 of 10. AFL Higher or Lower tips for picking the higher goal kicker Memorizing the career goal podium Memorize the podium: Lockett 1,360, Coventry 1,299, Dunstall 1,254. THE EXCLUSIVE 1,000 GOAL CLUB Only five men have ever kicked 1,000: those three plus Doug Wade and Gary Ablett Sr, with Buddy Franklin's 1,066 among them. Weighing eras against each other Full forwards from the high scoring 80s stack huge numbers. A key forward from the 2010s on the same games usually sits lower. Trusting ties as free points Ties pay both ways, so identical-feeling pairs are free points, not landmines. AFL Higher or Lower FAQ: goal totals and the retired player pool Where do the goal totals come from? Career VFL/AFL regular season and finals goals as carried by the all time leading goalkicker records, cross-checked before shipping. Only retired players are included so the numbers are final. Why is a current star not in the pool? Active players are left out on purpose. Their totals move every week, and this site does not ship numbers that quietly go wrong. Is AFL Higher or Lower free to play? Yes. AFL Higher or Lower is free to play on DoUKnowBall, right in your browser. No download and no signup needed. More games to play 🏉 Aussie Rules Manager Pick a fictional club, manage the squad and call the quarters through a ten-round league 🔗 NASCAR Chain Build a chain of Cup champions 🏁 Guess The Driver Guess the mystery NASCAR driver from clues 📦 Mystery Box Open 15 packs, keep or bin, build the best XI your luck allows 🎟️ Fight Promoter Book the room, make the fights, pay the purses. Selling tonight and building a name pull against each other. 🎓 Sports Quiz Board Five categories, $200 to $1000. Wrong answers cost you Report PLAY NEXT 🏗️ Guess The Constructor Guess the mystery F1 team from clues Play Now 🏫 Guess The College Guess the D1 school from clues Play Now 🏀 Buzzer Beater Pick the arc, beat the hand, drop ten jump shots Play Now Next puzzle in 05:41:16 See all games → All team names, competition names, logos and trademarks are property of their respective owners. DoUKnowBall is an independent fan project and is not affiliated with, endorsed by or sponsored by the NFL, NBA, UFC, NHL, MLB, FIFA, UEFA, the Premier League, the English Football League, LaLiga, Serie A, the Bundesliga, Ligue 1, the Eredivisie, MLS, the Saudi Pro League, the IOC, the NCAA, F1, the PGA Tour, NASCAR, the ATP or the WTA. Player names and statistics are used for identification and commentary only. © 2026 DoUKnowBall Soccer · NBA · NHL · NFL · MLB · College Search Games · About · Contact · What's New · Record Books · Leaderboard · Privacy Policy · Terms of Service · Accessibility · Cookie choices · Light mode · Report a bug",
+        "errors": []
+      }
+    },
+    {
+      "id": "QA847-DAILY-SAVE-SHAPE",
+      "url": "https://douknowball.com/afl-higher-lower",
+      "game": "AFL Higher or Lower",
+      "severity": "P1",
+      "steps": [
+        "Create a real Daily save by answering",
+        "Keep its version, date and puzzleIndex",
+        "Replace guesses with null",
+        "Refresh"
+      ],
+      "expected": "Reject malformed save and start safely or offer recovery",
+      "actual": "Error boundary replaces gameplay; malformed save remains and reload repeats failure",
+      "possibleCause": "Shared restore accepts the deserializer type assertion without validating array/item shape",
+      "evidence": {
+        "kind": "null",
+        "inserted": {
+          "v": 1,
+          "date": "2026-10-01",
+          "puzzleIndex": 0,
+          "guesses": null,
+          "gameStatus": "playing"
+        },
+        "screen": "Skip to main content 😬 This page broke Something in this game went wrong and it stopped drawing. It is our fault, not anything you did. If you had a save going, it is still on this device. It is kept in your browser, and nothing here has touched it. Back to the games Try this page again Telling us what you were doing helps a lot. The report a bug button is at the bottom of this page. All team names, competition names, logos and trademarks are property of their respective owners. DoUKnowBall is an independent fan project and is not affiliated with, endorsed by or sponsored by the NFL, NBA, UFC, NHL, MLB, FIFA, UEFA, the Premier League, the English Football League, LaLiga, Serie A, the Bundesliga, Ligue 1, the Eredivisie, MLS, the Saudi Pro League, the IOC, the NCAA, F1, the PGA Tour, NASCAR, the ATP or the WTA. Player names and statistics are used for identification and commentary only. © 2026 DoUKnowBall Soccer · NBA · NHL · NFL · MLB · College Search Games · About · Contact · What's New · Record Books · Leaderboard · Privacy Policy · Terms of Service · Accessibility · Cookie choices · Light mode · Report a bug",
+        "errors": [
+          "TypeError: Cannot read properties of null (reading 'length')\n    at fe (https://douknowball.com/assets/AflHigherLower-DmMKtIWf.js:1:2276)\n    at Ke (https://douknowball.com/assets/AflHigherLower-DmMKtIWf.js:1:3885)\n    at sp (https://douknowball.com/assets/index-Bj5VrkKR.js:39:16998)\n    at xf (https://douknowball.com/assets/index-Bj5VrkKR.js:41:3139)\n    at cx (https://douknowball.com/assets/inde",
+          "A page failed to render: TypeError: Cannot read properties of null (reading 'length')\n    at fe (https://douknowball.com/assets/AflHigherLower-DmMKtIWf.js:1:2276)\n    at Ke (https://douknowball.com/assets/AflHigherLower-DmMKtIWf.js:1:3885)\n    at sp (https://douknowball.com/assets/index-Bj5VrkKR.js:39:16998)\n    at xf (https://douknowball.com/assets/index-Bj5VrkKR.js:41:3139)\n    at cx (https://do"
+        ],
+        "answerControls": 0,
+        "trapped": true,
+        "retryStillBroken": true,
+        "savedBytesHeldAfterRetry": true
+      }
+    },
+    {
+      "id": "QA847-DAILY-SAVE-SHAPE",
+      "url": "https://douknowball.com/afl-higher-lower",
+      "game": "AFL Higher or Lower",
+      "severity": "P1",
+      "steps": [
+        "Create a real Daily save by answering",
+        "Keep its version, date and puzzleIndex",
+        "Replace guesses with object",
+        "Refresh"
+      ],
+      "expected": "Reject malformed save and start safely or offer recovery",
+      "actual": "Error boundary replaces gameplay; malformed save remains and reload repeats failure",
+      "possibleCause": "Shared restore accepts the deserializer type assertion without validating array/item shape",
+      "evidence": {
+        "kind": "object",
+        "inserted": {
+          "v": 1,
+          "date": "2026-10-01",
+          "puzzleIndex": 0,
+          "guesses": {
+            "not": "a guess list"
+          },
+          "gameStatus": "playing"
+        },
+        "screen": "Skip to main content 😬 This page broke Something in this game went wrong and it stopped drawing. It is our fault, not anything you did. If you had a save going, it is still on this device. It is kept in your browser, and nothing here has touched it. Back to the games Try this page again Telling us what you were doing helps a lot. The report a bug button is at the bottom of this page. All team names, competition names, logos and trademarks are property of their respective owners. DoUKnowBall is an independent fan project and is not affiliated with, endorsed by or sponsored by the NFL, NBA, UFC, NHL, MLB, FIFA, UEFA, the Premier League, the English Football League, LaLiga, Serie A, the Bundesliga, Ligue 1, the Eredivisie, MLS, the Saudi Pro League, the IOC, the NCAA, F1, the PGA Tour, NASCAR, the ATP or the WTA. Player names and statistics are used for identification and commentary only. © 2026 DoUKnowBall Soccer · NBA · NHL · NFL · MLB · College Search Games · About · Contact · What's New · Record Books · Leaderboard · Privacy Policy · Terms of Service · Accessibility · Cookie choices · Light mode · Report a bug",
+        "errors": [
+          "TypeError: l.map is not a function\n    at https://douknowball.com/assets/AflHigherLower-DmMKtIWf.js:1:2309\n    at Object.Iw [as useMemo] (https://douknowball.com/assets/index-Bj5VrkKR.js:39:21375)\n    at oe.useMemo (https://douknowball.com/assets/index-Bj5VrkKR.js:10:6223)\n    at fe (https://douknowball.com/assets/AflHigherLower-DmMKtIWf.js:1:2295)\n    at Ke (https://douknowball.com/assets/AflHigh",
+          "A page failed to render: TypeError: l.map is not a function\n    at https://douknowball.com/assets/AflHigherLower-DmMKtIWf.js:1:2309\n    at Object.Iw [as useMemo] (https://douknowball.com/assets/index-Bj5VrkKR.js:39:21375)\n    at oe.useMemo (https://douknowball.com/assets/index-Bj5VrkKR.js:10:6223)\n    at fe (https://douknowball.com/assets/AflHigherLower-DmMKtIWf.js:1:2295)\n    at Ke (https://doukn"
+        ],
+        "answerControls": 0,
+        "trapped": true,
+        "retryStillBroken": false,
+        "savedBytesHeldAfterRetry": true
+      }
+    },
+    {
+      "id": "QA847-DAILY-SAVE-SHAPE",
+      "url": "https://douknowball.com/afl-higher-lower",
+      "game": "AFL Higher or Lower",
+      "severity": "P1",
+      "steps": [
+        "Create a real Daily save by answering",
+        "Keep its version, date and puzzleIndex",
+        "Replace guesses with invalid-item",
+        "Refresh"
+      ],
+      "expected": "Reject malformed save and start safely or offer recovery",
+      "actual": "Error boundary replaces gameplay; malformed save remains and reload repeats failure",
+      "possibleCause": "Shared restore accepts the deserializer type assertion without validating array/item shape",
+      "evidence": {
+        "kind": "invalid-item",
+        "inserted": {
+          "v": 1,
+          "date": "2026-10-01",
+          "puzzleIndex": 0,
+          "guesses": [
+            null
+          ],
+          "gameStatus": "playing"
+        },
+        "screen": "Skip to main content 😬 This page broke Something in this game went wrong and it stopped drawing. It is our fault, not anything you did. If you had a save going, it is still on this device. It is kept in your browser, and nothing here has touched it. Back to the games Try this page again Telling us what you were doing helps a lot. The report a bug button is at the bottom of this page. All team names, competition names, logos and trademarks are property of their respective owners. DoUKnowBall is an independent fan project and is not affiliated with, endorsed by or sponsored by the NFL, NBA, UFC, NHL, MLB, FIFA, UEFA, the Premier League, the English Football League, LaLiga, Serie A, the Bundesliga, Ligue 1, the Eredivisie, MLS, the Saudi Pro League, the IOC, the NCAA, F1, the PGA Tour, NASCAR, the ATP or the WTA. Player names and statistics are used for identification and commentary only. © 2026 DoUKnowBall Soccer · NBA · NHL · NFL · MLB · College Search Games · About · Contact · What's New · Record Books · Leaderboard · Privacy Policy · Terms of Service · Accessibility · Cookie choices · Light mode · Report a bug",
+        "errors": [
+          "TypeError: Cannot read properties of null (reading 'correct')\n    at https://douknowball.com/assets/AflHigherLower-DmMKtIWf.js:1:2432\n    at Array.map (<anonymous>)\n    at https://douknowball.com/assets/AflHigherLower-DmMKtIWf.js:1:2309\n    at Object.Iw [as useMemo] (https://douknowball.com/assets/index-Bj5VrkKR.js:39:21375)\n    at oe.useMemo (https://douknowball.com/assets/index-Bj5VrkKR.js:10:62",
+          "A page failed to render: TypeError: Cannot read properties of null (reading 'correct')\n    at https://douknowball.com/assets/AflHigherLower-DmMKtIWf.js:1:2432\n    at Array.map (<anonymous>)\n    at https://douknowball.com/assets/AflHigherLower-DmMKtIWf.js:1:2309\n    at Object.Iw [as useMemo] (https://douknowball.com/assets/index-Bj5VrkKR.js:39:21375)\n    at oe.useMemo (https://douknowball.com/asset"
+        ],
+        "answerControls": 0,
+        "trapped": true,
+        "retryStillBroken": false,
+        "savedBytesHeldAfterRetry": true
+      }
+    }
+  ],
+  "blockedWrites": []
+}

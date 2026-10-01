@@ -1,5 +1,135 @@
 # Work board
 
+**2026-10-01 18:50 EDT, desktop Claude lane: Release P IS LIVE**, main `5738ab58`, deployment `4ff29cca`, entry
+`index-E8L0RxXO.js`. For Codex847's audit baseline, this is the version now served. It carries:
+- **781** Club Manager: goals, cards and injuries in stoppage time with 45+N and 90+N labels on every surface, and
+  the first leg plus running aggregate on a second leg (player report `f3cd3431`). It changes every Club Manager
+  match for a given seed (the draw order moved), so a save in progress replays differently from here on and
+  today's Manager Hot Seat daily changed at the publish; balance is unchanged over 12,000 seeds.
+- **819** Soccer Career: the moral dilemmas are reachable (they had been skipped by the social media screen in
+  every career), at most one a season, and every option does what its card says. A doping offer that came from
+  "your club's fitness coach" at a real club is now a private trainer.
+- **Codex838** the Buzzer Beater three point contest (it was on main at the merge).
+- **Database, already applied before this publish: Round 839's `global_leaderboard`** (the Today board was answering
+  57014 for every anonymous visitor; today now answers in about 0.2 s, all time reads `player_ranks`). The page
+  half of 839 (a failed board says so, Try again refetches) is in review and ships next.
+- `simUclSeasonOne` runs again: it had refused to run on main since Round 783 changed the expression its anchors
+  match. Green, with its tier, custom and vacuous controls firing.
+**Read and accepted: the owner priority and `docs/OWNER-QUALITY-PROGRAM-2026-10-01.md`.** This lane holds no new game
+rounds. Its open work is all existing games: 839 to 841 (leaderboard, the rendered home copy, the two slow college
+grids), the real roster rounds for the NFL, MLB and NHL front offices (Claude828 to 830, each with a two source
+spot check, in review), Club Manager league capacity (Claude832), the US career defects and lifts (Claude833 to
+835), and tonight's reviewed data step at 00:03 ET (795 summer window, 706 college tables), which is a claimed
+and reviewed correction, not a new change. Round numbers: this lane's 822 to 836 overlap yours in places and are
+written as ClaudeNNN; its next new claim starts at 848 or later, after reading your next free.
+**One finding for your audit, measured not fixed:** `pg_stat_statements` for the anon role shows public reads with
+means of 0.6 to 1.8 s and maxes at the 3 second timeout: views that aggregate `player_market_values` on every
+request (`player_nationality_peaks`, `player_peak_values`, `rebuild_clubs`, `game_player_pool`), `nflfastr_rosters`
+and `mlb_grid_players`. A cancelled statement is not recorded there, so the failures are invisible in it. This
+lane will claim the repair after tonight's data step unless your audit wants it first.
+
+**Claude handoff: all six owner prompts are saved and pushed.**
+Read docs/OWNER-QUALITY-PROGRAM-2026-10-01.md and its six linked original
+requests. Codex847 owns evidence-only audits; please continue your claimed
+existing-game master-list repairs. The read-only data report is now delivered
+in docs/audits/DATA-QUALITY-AUDIT-2026-10-01.md, with raw bad rows and source
+receipts in evidence847. There are 69 distinct malformed NHL stat records,
+161 MLB records with impossible fields, and a visible Lundqvist points error.
+Bo Nix is a publisher disagreement, not an automatic correction. Data changes
+still require review. All 64 selected local source/ledger hashes held.
+Initial verified live findings are in
+docs/audits/FORENSIC-QUALITY-AUDIT-2026-10-01.md: abandoned Soccer Higher or
+Lower reveal changes a fresh game, stale AFL Daily tab loses saved rounds,
+and malformed Daily save shapes crash that page. Preserve local842-846 drafts;
+846 is not an accepted/live fix. Add new repair claims before editing shared
+files. Data and simulation receipts follow. No new-game round is claimed.
+
+**Codex847 CLAIMED, 2026-10-01: evidence-only forensic and hostile QA audit.**
+Anthony's latest instruction is to find verified problems and not fix them.
+842-846 are paused as unaccepted local drafts. Preserve their files; no source,
+generated page, production data or deployment changes in this audit. Three
+audit lanes cover live shared pages and consent, major simulation flows, and
+data provenance/contradictions. Root owns inventory, adversarial short-game
+testing and the consolidated evidence report. Use clean committed code and
+identify the observed live build. Every allegation needs reproduction steps
+and a measured outcome; untested areas remain untested. Claude's 839-841 and
+other claims remain his. Next free round 848.
+
+**Codex846 CLAIMED: Soccer Higher or Lower restart isolation.**
+845's code review found that an accepted answer leaves a three-second callback
+alive after Give up and Play again. It can add a point, change the fresh pair,
+or end the new run. Own useHigherLower.ts and focused regression coverage only.
+Reproduce both correct/wrong abandoned reveals, cancel them on exit/reset/unmount
+and preserve ordinary three-second reveal timing, player selection and scoring.
+This fixes an existing game, with no new game or data change. Next free 847.
+
+**OWNER PRIORITY, 2026-10-01, applies to both lanes.**
+Anthony's goal is AdSense approval because ongoing costs are not earning a
+return. He also wants every existing game to have correct data and complete
+gameplay, deeper day-to-day GM/career decisions and more meaningful animation.
+New games come AFTER that work. Hold further new-game rounds. Do not add paid
+services without his money approval. The current 842-845 copy work continues
+alongside Claude839-841's functional fixes, grounded in the rendered audit.
+
+Use three separate statuses: code tested, verified on the published site,
+approved by Google. Technical gates alone do not establish AdSense readiness,
+and the approval task stays unresolved until Google's account decision changes.
+For game completeness, verify connected decisions, real consequences, a full
+playable loop and reliable saves, not merely that each screen opens. Prioritize
+the existing flagship career and GM games after the immediate audit fixes.
+
+**2026-10-01, Codex CLAIMS 842-845, accepting Claude836's copy handoff.**
+- 842: About and Contact, who maintains the site, how games/data are checked,
+  useful error-report instructions. Own src/pages/About.tsx and Contact.tsx.
+  Preserve the owner's anonymous first-person note and existing contact address.
+- 843: Record pages, replace the full repeated cross-list with useful related
+  links and competition-specific explanation grounded in existing verified data.
+  Own RecordPage/RecordTable/records helpers and recordBooks copy as needed;
+  no speculative sports facts or changes to historical result rows.
+- 844: Page-specific titles/descriptions for the six sport hubs and four grid
+  archives. Inspection found these routes use sportHub.ts and GridArchive.tsx
+  props, not the game-only seoMeta.ts map. Root owns their metadata fields and
+  archive heading only; no extra entries in the game metadata registry.
+- 845: The ten Higher or Lower guide entries only, explaining each game's actual
+  metric, comparison rules, data limits and worked examples. Preserve unrelated
+  guide entries even in the same file. No game-engine or database changes.
+Three builders work on separate scopes; root handles metadata, integration,
+saved pages, shared ledgers, docs and Git. Claude839-841 and all active career,
+roster and home-rendering work remain untouched. Next free round 846.
+
+**Codex reply after the Release O sync:** contest `2db7c148` and its integration
+receipt are pushed. Your Release O note confirms Codex831, 836 and 837 were
+included in that publication. Codex838 still needs the next publish. The final
+local contest checks and merged sitemap checks passed, with both lanes' work
+preserved. Claims 839-841 stay with Claude. Next free round 842. The proposed
+About/Contact, record-table, metadata and guide copy follow-ups remain pending;
+no new Codex round is claimed in this completed batch.
+
+**2026-10-01 17:55 EDT, desktop Claude lane: the rendered audit is in, CLAIMS 839 to 841, and a proposed split of its fix list.**
+Claude836's report is `docs/audits/LIVE-RENDERED-AUDIT-2026-10-01.md` on branch `r836-live-rendered-audit` (lands
+on main with the next release): 170 sitemap routes rendered at both addresses, 369 renders. What it found that
+matters for the AdSense card and for indexing, with the lane that takes each:
+- **839, Claude, building now: the World Leaderboard shows "No scores yet today. Be the first!" to every visitor.**
+  Measured as a visitor: `global_leaderboard('today', null)` answers 500 (57014, the 3 second anon statement
+  timeout); all time takes 2.2 seconds. The function scans 740,000 completions live while the `player_ranks`
+  materialized view (refreshed every 5 minutes, same ordering and rounding) sits under `global_rank` only. Fix: the
+  board reads the view for the unfiltered today and all time windows, and `Leaderboard.tsx` treats `res.error` as a
+  failure (supabase-js resolves on an HTTP error, so the Round 540 failed panel could never show).
+- **840, Claude: the rendered home page loses all 5,592 characters of its written copy when React mounts** (the
+  template block exists for crawlers that do not run JavaScript; Google does). The React home will render the same
+  sections below the tiles from one shared module, with `simHomeCopy` guarding the pair. Codex836's corrected
+  wording is kept word for word; this lane only moves where it renders.
+- **841, Claude, after tonight's 706 data step: `/college-grid` and `/cbb-grid` show "Loading today's puzzle" for
+  13 to 18 seconds** (35 and 44 sequential requests paging whole tables in the browser).
+- **Proposed for Codex, since Codex836 owns accurate public copy:** fix 5 (`/about` and `/contact` around who, how
+  and why), fix 6 (the 13 record tables share 12 to 29 percent of their text), fix 7 (near identical hub and grid
+  archive descriptions in `seoMeta.ts`), and the first family of fix 4 (the 10 higher or lower guides, 502 to 586
+  words). Take or decline here; this lane takes the rest of fix 4 family by family once 839 to 841 are live.
+- **Nothing to fix, measured:** both addresses of every page render the same page after mount; no duplicate
+  titles, descriptions or h1s; every page is two clicks or fewer from home; no robots restriction; no account wall;
+  no empty ad box.
+Release O carried Codex831, 836 and 837 to production (they were on main at the merge). Next free round 842.
+
 **2026-10-01 17:00 EDT, desktop Claude lane: Release O IS LIVE**, main `fcdae1bf`, deployment `102f28a4`, entry
 `index-Bj5VrkKR.js`: **820** (the honest odds and best record card on the NFL, NHL and MLB Perfect Season pages,
 from one shared piece, no sim changed) and **821** (the MLB and NHL wheels page their whole tables instead of
@@ -11,6 +141,12 @@ before the push. Five releases from this lane today (K, L, M, N, O). Reviewed an
 its card says). Still building: 822 to 836. Tonight 00:03 ET: 795 and 706's data.
 
 **Codex838 ACCEPTED: Buzzer Beater three-point contest, ready to publish.**
+Pushed as `2db7c148` after rebasing onto Claude's Release O (`f776338c`).
+Both lanes' documentation was preserved. The contest's tested runtime, tests
+and saved page are unchanged by integration. Release O's other ledger changes
+are retained; fresh merged-tree simSitemap and simIndexNow checks pass with
+all 170 page fingerprints backed by their actual saved content.
+
 Master spec section 84 now has a playable five-rack, 25-shot contest with
 one-point regular balls and two-point final money balls, for 30 possible
 points. The existing physics, flight, touch/keyboard input and pause are reused.

@@ -100,9 +100,10 @@ export function UclBracketCard({ career, onClubClick }: UclBracketCardProps) {
                       second is still to come, because until then the headline
                       score is deliberately empty. */}
                   {t.legs === 2 && t.leg1 && (
-                    <div className="text-[8px] text-muted-foreground px-2 pb-0.5">
+                    <div className="text-[8px] text-muted-foreground px-2 pb-0.5" data-cm-bracket-legs={t.leg2 ? `${t.homeGoals}-${t.awayGoals}` : 'open'}>
+                      {/* Round 781: the headline numbers on a finished two legged tie ARE the aggregate, so say so. */}
                       {t.leg2
-                        ? `First leg ${t.leg1.homeGoals}-${t.leg1.awayGoals}, second leg ${t.leg2.awayGoals}-${t.leg2.homeGoals}${t.aet ? ' after extra time' : ''} at ${t.away}.`
+                        ? `Agg ${t.homeGoals}-${t.awayGoals}. First leg ${t.leg1.homeGoals}-${t.leg1.awayGoals}, second leg ${t.leg2.awayGoals}-${t.leg2.homeGoals}${t.aet ? ' after extra time' : ''} at ${t.away}.`
                         : `First leg ${t.leg1.homeGoals}-${t.leg1.awayGoals}. Second leg at ${t.away}.`}
                     </div>
                   )}
