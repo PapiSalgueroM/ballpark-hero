@@ -12,19 +12,6 @@
     ]
   },
   {
-    "name": "Hyun-seok Hong",
-    "row": "KAA Gent",
-    "claimed": "FC Midtjylland (loan from Mainz)",
-    "window": "2026-summer",
-    "kind": "one-source",
-    "reason": "bundesliga.com has Mainz taking him back from Gent and loaning him to Midtjylland, but ESPN lists him on BOTH the Mainz and the Midtjylland 2026-27 squad pages, so ESPN does not settle where he plays.",
-    "sources": [
-      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-summer-2026-37051",
-      "https://www.espn.com/soccer/team/squad/_/id/572/fc-midtjylland",
-      "https://www.espn.com/soccer/team/squad/_/id/2950"
-    ]
-  },
-  {
     "name": "Cleiton",
     "row": "Red Bull Bragantino",
     "claimed": "VfL Wolfsburg",
@@ -93,18 +80,6 @@
     "sources": [
       "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-summer-2026-37051",
       "https://www.espn.com/soccer/team/squad/_/id/132/ger.bayern_munich"
-    ]
-  },
-  {
-    "name": "Aarón Anselmino",
-    "row": "Borussia Dortmund",
-    "claimed": "Chelsea, after a January 2026 loan to Strasbourg",
-    "window": "2026-01",
-    "kind": "unresolved",
-    "reason": "Chelsea recalled him from Dortmund in January 2026 (bundesliga.com January list) and chelseafc.com announced a loan to Strasbourg for the rest of 2025-26. Where he plays in 2026-27 is not settled by two sources yet, so the stale Dortmund row is left for a follow up.",
-    "sources": [
-      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-winter-january-2026-35159",
-      "https://www.chelseafc.com/en/news/article/aaron-anselmino-completes-loan-switch"
     ]
   },
   {
