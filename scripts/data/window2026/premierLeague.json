@@ -1,0 +1,302 @@
+[
+  {
+    "name": "Jørgen Strand Larsen",
+    "to": "Crystal Palace",
+    "db": "Crystal Palace",
+    "sources": [
+      "https://www.cpfc.co.uk/news/announcement/crystal-palace-sign-jorgen-strand-larsen/",
+      "https://africa.espn.com/football/story/_/id/47480954/premier-league-january-2026-transfers-all-confirmed-ins-outs-deals-every-club"
+    ],
+    "window": "2026-01",
+    "checked": "2026-09-30",
+    "note": "Club record fee from Wolves, February 2026 (wolves.co.uk 2026-02-02). On neither Palace out list for the summer (ESPN, Sky)."
+  },
+  {
+    "name": "Lucas Paquetá",
+    "to": null,
+    "note": "Flamengo, permanent, announced by West Ham on 2026-01-28. Flamengo is not a club the engine models.",
+    "db": "CR Flamengo",
+    "sources": [
+      "https://www.whufc.com/en/news/lucas-paqueta-joins-flamengo",
+      "https://africa.espn.com/football/story/_/id/47480954/premier-league-january-2026-transfers-all-confirmed-ins-outs-deals-every-club"
+    ],
+    "window": "2026-01",
+    "checked": "2026-09-30"
+  },
+  {
+    "name": "João Gomes",
+    "to": "Aston Villa",
+    "db": "Aston Villa",
+    "sources": [
+      "https://www.avfc.co.uk/news/2026/july/20/signing-aston-villa-confirm-joao-gomes-signing/",
+      "https://www.espn.com/soccer/story/_/id/48955344/premier-league-2026-summer-transfers-all-confirmed-ins-outs-every-club"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "From Wolves, 2026-07-20; also on Sky's Villa list at 38m."
+  },
+  {
+    "name": "Mamadou Sarr",
+    "to": "Real Sociedad",
+    "db": "Real Sociedad",
+    "loan": true,
+    "sources": [
+      "https://www.chelseafc.com/en/news/article/mamadou-sarr-completes-loan-switch",
+      "https://www.skysports.com/football/news/11095/13546618/transfer-news-summer-transfer-window-2026-premier-league-deals-ins-and-outs"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "Season long loan from Chelsea; also on ESPN's Chelsea out list."
+  },
+  {
+    "name": "Filip Jørgensen",
+    "to": "Strasbourg",
+    "db": "RC Strasbourg Alsace",
+    "loan": true,
+    "sources": [
+      "https://www.chelseafc.com/en/news/article/chelsea-filip-jorgensen-completes-loan-switch",
+      "https://www.skysports.com/football/news/11095/13546618/transfer-news-summer-transfer-window-2026-premier-league-deals-ins-and-outs"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "Season long loan from Chelsea; rcstrasbourgalsace.fr announced it too."
+  },
+  {
+    "name": "Jean-Clair Todibo",
+    "to": "Lens",
+    "db": "RC Lens",
+    "loan": true,
+    "sources": [
+      "https://www.whufc.com/en/news/todibo-departs-on-loan",
+      "https://www.espn.com/soccer/player/_/id/277327/jean-clair-todibo"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "Season long loan from relegated West Ham; ESPN's player page lists him at Lens."
+  },
+  {
+    "name": "Tolu Arokodare",
+    "to": "Ajax",
+    "db": "Ajax Amsterdam",
+    "loan": true,
+    "sources": [
+      "https://www.wolves.co.uk/news/mens-first-team/20260729-arokodare-completes-loan-move-away/",
+      "https://www.espn.com/espn/story/_/id/49667285/nigeria-tolu-arokodare-puts-struggles-wolves-targets-goals-glory-ajax"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "Season long loan from relegated Wolves with an option to buy (english.ajax.nl too)."
+  },
+  {
+    "name": "Maxime Estève",
+    "to": "RB Leipzig",
+    "db": "RB Leipzig",
+    "sources": [
+      "https://www.burnleyfootballclub.com/media-article/esteve-joins-rb-leipzig",
+      "https://www.espn.co.uk/football/player/_/id/318316/maxime-esteve"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "Permanent from relegated Burnley, July 2026 (rbleipzig.com and bundesliga.com too); ESPN's player page lists him at RB Leipzig."
+  },
+  {
+    "name": "Quilindschy Hartman",
+    "to": "Espanyol",
+    "db": "RCD Espanyol Barcelona",
+    "loan": true,
+    "sources": [
+      "https://www.rcdespanyol.com/en/new/quilindschy-hartman-becomes-second-summer-signing/20434",
+      "https://www.espn.com/soccer/player/_/id/346210/quilindschy-hartman"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "One year loan from relegated Burnley (burnleyfootballclub.com too); ESPN's player page lists him at Espanyol."
+  },
+  {
+    "name": "Christos Mouzakitis",
+    "to": "Hull City",
+    "db": "Hull City",
+    "sources": [
+      "https://www.wearehullcity.co.uk/news/2026/september/01/mouzakitis-moves-to-hull-city/",
+      "https://www.espn.com/soccer/story/_/id/48955344/premier-league-2026-summer-transfers-all-confirmed-ins-outs-every-club"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "From Olympiacos, five year deal; also on Sky's Hull list."
+  },
+  {
+    "name": "Sidiki Chérif",
+    "to": "Coventry City",
+    "db": "Coventry City",
+    "sources": [
+      "https://www.ccfc.co.uk/news/2026/august/19/sidiki-cherif-joins-coventry-city-from-fenerbahce-sk/",
+      "https://www.skysports.com/football/news/11095/13546618/transfer-news-summer-transfer-window-2026-premier-league-deals-ins-and-outs"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "His 2026 row is at Angers; he went to Fenerbahce on loan with an obligation in February 2026 and Coventry bought him from Fenerbahce on 2026-08-19."
+  },
+  {
+    "name": "Emmanuel Agbadou",
+    "to": "Beşiktaş",
+    "db": "Besiktas JK",
+    "sources": [
+      "https://www.wolves.co.uk/news/mens-first-team/20260206-agbadou-completes-besiktas-move/",
+      "https://www.espn.com/soccer/player/_/id/308449/emmanuel-agbadou"
+    ],
+    "window": "2026-01",
+    "note": "Permanent, 2026-02-06 (the Turkish window was still open); ESPN player page lists him at Besiktas.",
+    "checked": "2026-09-30"
+  },
+  {
+    "name": "Jhon Arias",
+    "to": null,
+    "note": "Palmeiras, permanent, 2026-02-07 (the Brazilian window was still open). Palmeiras is not a club the engine models.",
+    "db": "Sociedade Esportiva Palmeiras",
+    "sources": [
+      "https://www.wolves.co.uk/news/mens-first-team/20260207-arias-makes-wolves-departure/",
+      "https://www.espn.com/soccer/player/_/id/239566/jhon-arias"
+    ],
+    "window": "2026-01",
+    "checked": "2026-09-30"
+  },
+  {
+    "name": "Angel Gomes",
+    "to": "Marseille",
+    "db": "Olympique Marseille",
+    "sources": [
+      "https://www.wolves.co.uk/news/club/20260606-wolves-confirm-2026-retained-list/",
+      "https://www.espn.com/soccer/player/_/id/256773/angel-gomes"
+    ],
+    "window": "2026-summer",
+    "note": "His 2026 row is the January loan at Wolves; the loan ended and he returned to Marseille (Wolves retained list, loan returnees); ESPN player page lists him at Marseille.",
+    "checked": "2026-09-30"
+  },
+  {
+    "name": "Hee-chan Hwang",
+    "to": "Schalke 04",
+    "db": "FC Schalke 04",
+    "loan": true,
+    "sources": [
+      "https://www.wolves.co.uk/news/mens-first-team/20260901-hwang-makes-deadline-day-move/",
+      "https://www.espn.com/soccer/player/_/id/237224/hwang-hee-chan"
+    ],
+    "window": "2026-summer",
+    "note": "Season long loan from relegated Wolves (schalke04.de too).",
+    "checked": "2026-09-30"
+  },
+  {
+    "name": "David Møller Wolfe",
+    "to": "Hamburg",
+    "db": "Hamburger SV",
+    "loan": true,
+    "sources": [
+      "https://www.wolves.co.uk/news/mens-first-team/20260901-wolfe-heads-to-the-bundesliga/",
+      "https://www.espn.com/soccer/player/_/id/313361/david-m%C3%B8ller-wolfe"
+    ],
+    "window": "2026-summer",
+    "note": "Season long loan with an option (hsv.de too).",
+    "checked": "2026-09-30"
+  },
+  {
+    "name": "Sam Johnstone",
+    "to": "Celtic",
+    "db": "Celtic FC",
+    "loan": true,
+    "sources": [
+      "https://www.wolves.co.uk/news/mens-first-team/20260901-johnstone-completes-loan-move/",
+      "https://www.espn.com/soccer/player/_/id/162338/sam-johnstone"
+    ],
+    "window": "2026-summer",
+    "note": "Season long loan (celticfc.com 2026-09-02 too).",
+    "checked": "2026-09-30"
+  },
+  {
+    "name": "Santiago Bueno",
+    "to": null,
+    "note": "Club America, season long loan with an option, 2026-09-11 (the Liga MX window was open). Not a club the engine models.",
+    "db": "CF América",
+    "loan": true,
+    "sources": [
+      "https://www.wolves.co.uk/news/mens-first-team/20260911-bueno-leaves-the-club-on-loan/",
+      "https://espn.com.mx/futbol/mexico/nota/_/id/17242750/america-anuncia-santiago-bueno-fichaje-refuerzo-uruguayo"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30"
+  },
+  {
+    "name": "Pedro Lima",
+    "to": null,
+    "note": "Sao Paulo, loan until summer 2027, 2026-09-12 (the Brazilian window was open). Not a club the engine models.",
+    "db": "São Paulo Futebol Clube",
+    "loan": true,
+    "sources": [
+      "https://www.wolves.co.uk/news/mens-first-team/20260912-lima-returns-to-brazil-on-loan/",
+      "https://www.espn.co.uk/football/player/_/id/376489/pedro-lima"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30"
+  },
+  {
+    "name": "Ki-Jana Hoever",
+    "to": null,
+    "note": "Sparta Prague, permanent, August 2026. His 2026 row is the January loan at Sheffield United. Sparta Prague is not a club the engine models.",
+    "db": "AC Sparta Prague",
+    "sources": [
+      "https://www.wolves.co.uk/news/mens-first-team/20260825-hoever-ends-wolves-stay/",
+      "https://www.espn.com/soccer/player/_/id/284591/ki-jana-hoever"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30"
+  },
+  {
+    "name": "Bertrand Traoré",
+    "to": "Wolves",
+    "db": "Wolverhampton Wanderers",
+    "sources": [
+      "https://www.wolves.co.uk/news/mens-first-team/20260907-traore-signs-to-bolster-peixotos-squad/",
+      "https://www.skysports.com/bertrand-traore"
+    ],
+    "window": "2026-summer",
+    "note": "Released by Sunderland (Sky and ESPN Sunderland out lists), then a one year deal at Wolves as a free agent on 2026-09-07; Sky Sports player profile lists him at Wolves.",
+    "checked": "2026-09-30"
+  },
+  {
+    "name": "Robinio Vaz",
+    "to": "Hull City",
+    "db": "Hull City",
+    "loan": true,
+    "sources": [
+      "https://www.wearehullcity.co.uk/news/2026/september/01/vaz-joins-hull-city-on-loan/",
+      "https://www.espn.com/soccer/story/_/id/49813003/hull-condemn-abhorrent-racist-abuse-directed-towards-deadline-day-signing-robinio-vaz"
+    ],
+    "window": "2026-summer",
+    "note": "Season long loan from Roma with an option (asroma.com too).",
+    "checked": "2026-09-30"
+  },
+  {
+    "name": "Promise David",
+    "to": "Brighton",
+    "db": "Brighton & Hove Albion",
+    "loan": true,
+    "sources": [
+      "https://www.brightonandhovealbion.com/media-article/mft-transfer-news-promise-david-royale-union-saint-gilloise-august-2026",
+      "https://www.espn.com/soccer/story/_/id/49651722/brighton-canada-promise-david-loan-union-st-gilloise"
+    ],
+    "window": "2026-summer",
+    "note": "Season long loan from Union Saint-Gilloise with a conditional obligation.",
+    "checked": "2026-09-30"
+  },
+  {
+    "name": "Brooke Norton-Cuffy",
+    "to": "Hull City",
+    "db": "Hull City",
+    "sources": [
+      "https://www.wearehullcity.co.uk/teams/first-team/brookenorton-cuffy",
+      "https://www.espn.com/soccer/story/_/id/48955344/premier-league-2026-summer-transfers-all-confirmed-ins-outs-every-club"
+    ],
+    "window": "2026-summer",
+    "note": "From Genoa on deadline day. Sky lists it as a loan and ESPN and Sky deadline day as undisclosed, so loan is not set; he plays for Hull either way (Hull first team page, ESPN player page).",
+    "checked": "2026-09-30"
+  }
+]
