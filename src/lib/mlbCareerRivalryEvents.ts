@@ -47,6 +47,8 @@ import {
   rollRivalryEvent, forcedRetirementEvent, applyRivalryEvent as applyRivalryEventFor,
 } from "./careerRivalryEvents";
 import type { RivalryEvent, RivalryEventDef } from "./careerRivalryEvents";
+import { rivalryChoiceTick, resolvePendingRivalryChoice, meterOption } from "./careerRivalryChoices";
+import type { RivalryChoiceDef, RivalryChoiceCard } from "./careerRivalryChoices";
 
 const clamp = (v: number, lo: number, hi: number) => Math.max(lo, Math.min(hi, v));
 
@@ -242,4 +244,178 @@ export function dismissMlbRivalryEvent(c: MlbCareerState, rng: () => number = Ma
   }
   s.pendingRivalryEvent = null;
   return { state: s, lines };
+}
+
+/* ─── Round 796: rivalry choices ─────────────────────────────────────────────
+
+   The MLB's half of what the NFL career got this round: the rival puts a
+   decision in front of you, on the shared engine careerRivalryChoices.ts.
+   Baseball words and baseball moments (the benches clearing, the All-Star
+   vote, the free agent deal), the same meters the NFL table moves, written
+   from plain numbers through meterOption so the button cannot promise one
+   thing and do another. Morale feeds simMlbSeason's form, so the morale
+   options are a real lever on the next stat line. Every line works for a
+   pitcher and a hitter alike, because the rival plays your position. One
+   card a season at most, and only in a season the beat roll came up empty. */
+
+/** The chance a season with no beat brings a choice instead. */
+export const MLB_RIVALRY_CHOICE_CHANCE = 0.45;
+
+const opt = (spec: Parameters<typeof meterOption>[0]) => meterOption<MlbCareerState, CareerRival>(spec);
+
+export const MLB_RIVALRY_CHOICES: RivalryChoiceDef<MlbCareerState, CareerRival>[] = [
+  {
+    id: "mlb_rival_benches_clear", emoji: "⚾", title: "BENCHES CLEARED",
+    description: (_s, r) => `Both benches emptied after a pitch up and in on Tuesday, and ${r.name} was the first one out of his dugout. Your clubhouse wants an answer the next time you two meet.`,
+    when: () => true,
+    choices: [
+      opt({
+        label: "Answer it on the field", emoji: "😈",
+        promise: { effect: { heat: 25 }, risk: { chance: 0.3, hit: { morale: -5, fanbase: -5, cash: -0.1 }, miss: { morale: 8 } } },
+        riskNote: "you're the one who gets tossed",
+        hitLine: r => `🚩 You went after ${r} in the next series and got tossed yourself. Fined, and the fans did not love it.`,
+        missLine: r => `😈 You answered ${r} the right way, on the field, and stared down his dugout after. The whole clubhouse lost it.`,
+      }),
+      opt({
+        label: "Play peacemaker on camera", emoji: "🕊️",
+        promise: { effect: { fanbase: 5, karma: 5, heat: -15 } },
+        line: r => `🕊️ You stepped between the benches and walked ${r} back. The grown up on the field, and the fans noticed.`,
+      }),
+      opt({
+        label: "Say nothing, watch the tape", emoji: "🎞️",
+        promise: { effect: { morale: 6, heat: 10 } },
+        line: r => `🎞️ Not a word. You watched the tape on loop and circled the next series against ${r}.`,
+      }),
+    ],
+  },
+  {
+    id: "mlb_rival_debate_show", emoji: "🎤", title: "THE DEBATE SHOW",
+    description: (_s, r) => `A sports network offers $2M for one live hour: you against a panel arguing ${r.name} is better. No script, one microphone.`,
+    when: s => s.ovr >= 85,
+    choices: [
+      opt({
+        label: "Go on and cook them", emoji: "🔥",
+        promise: { effect: { cash: 2 }, risk: { chance: 0.35, hit: { fanbase: -8 }, miss: { fanbase: 6 } } },
+        riskNote: "a clip goes viral for the wrong reasons",
+        hitLine: () => "🎤 You went on the show and one heated clip went viral for the wrong reasons. The check cleared anyway.",
+        missLine: () => "🔥 You cooked the whole panel live. The check cleared and the clip ends arguments.",
+      }),
+      opt({
+        label: "Post a highlight reel instead", emoji: "📼",
+        promise: { effect: { fanbase: 8 } },
+        line: () => "📼 You posted four minutes of tape and no caption. It out-rated the show.",
+      }),
+      opt({
+        label: "Decline. No debate.", emoji: "😎",
+        promise: { effect: { morale: 5, karma: 3 } },
+        line: r => `😎 You passed. Let them argue about you and ${r} without you.`,
+      }),
+    ],
+  },
+  {
+    id: "mlb_rival_youth_clinic", emoji: "💛", title: "TRUCE FOR ONE DAY",
+    description: (_s, r) => `${r.name}'s foundation asks you to co-host a free youth clinic. Same field, same cages, one day only. A photo of you two coaching side by side would be everywhere.`,
+    when: () => true,
+    choices: [
+      opt({
+        label: "Co-host and split the bill", emoji: "🤝",
+        promise: { effect: { cash: -1, fanbase: 10, karma: 8, heat: -20 } },
+        line: r => `💛 One day, one field, two hundred kids. You and ${r} split the bill and the feud took the day off.`,
+      }),
+      opt({
+        label: "Show up and talk trash all day", emoji: "😉",
+        promise: { effect: { fanbase: 12, heat: 5 } },
+        line: r => `😉 The clinic turned into a trash talk show between you and ${r}. The kids loved every second.`,
+      }),
+      opt({
+        label: "Send a check, skip it", emoji: "💸",
+        promise: { effect: { cash: -1, karma: 3 } },
+        line: () => "💸 You sent the check and skipped the cameras. The quiet kind of good.",
+      }),
+    ],
+  },
+  {
+    id: "mlb_rival_allstar_vote", emoji: "🗳️", title: "THE ALL-STAR VOTE",
+    description: (_s, r) => `All-Star fan voting is open and ${r.name}'s team is running ads for him everywhere. Your team's social people want to run one for you too.`,
+    when: (s, r) => s.ovr >= 80 && r.ovr >= 80,
+    choices: [
+      opt({
+        label: "Run the campaign", emoji: "📣",
+        promise: { effect: { cash: -0.2, fanbase: 6, morale: 2 } },
+        line: () => "📣 Your face went up on every board in the ballpark. Paid for it yourself, too.",
+      }),
+      opt({
+        label: "Let the numbers talk", emoji: "🧊",
+        promise: { effect: { morale: 4 } },
+        line: () => "🧊 No ads, no posts. Just the numbers.",
+      }),
+      opt({
+        label: "Call out the vote buying", emoji: "🎯",
+        promise: { effect: { heat: 15 }, risk: { chance: 0.4, hit: { fanbase: -6 }, miss: { fanbase: 8 } } },
+        riskNote: "it reads as sour grapes",
+        hitLine: r => `🍇 You called out ${r}'s ad money and it read as sour grapes. The replies were rough.`,
+        missLine: r => `🎯 You called out ${r}'s ad money and the fans ran with it. Your name trended all week.`,
+      }),
+    ],
+  },
+  {
+    id: "mlb_rival_big_deal", emoji: "💰", title: "THE BIGGER DEAL",
+    description: (_s, r) => `${r.name} just signed the biggest free agent deal anyone at your position has ever seen. Your phone has not stopped buzzing.`,
+    when: (s, r) => s.age >= 24 && r.ovr >= s.ovr - 3,
+    choices: [
+      opt({
+        label: "Congratulate him publicly", emoji: "👏",
+        promise: { effect: { fanbase: 4, karma: 5, heat: -10 } },
+        line: r => `👏 You posted a congrats for ${r}. Classy, and people noticed.`,
+      }),
+      opt({
+        label: "Use it as fuel", emoji: "🔥",
+        promise: { effect: { morale: 6, heat: 10 } },
+        line: r => `🔥 You screenshotted ${r}'s contract and made it your lock screen.`,
+      }),
+      opt({
+        label: "Complain to the press", emoji: "📰",
+        promise: { effect: { morale: 2, karma: -6 }, risk: { chance: 0.5, hit: { fanbase: -6 }, miss: { fanbase: 3 } } },
+        riskNote: "the fans side with him",
+        hitLine: r => `📰 You told reporters ${r}'s deal was a joke. The fans took his side.`,
+        missLine: () => "📰 You told reporters you are underpaid. Half the city agreed with you.",
+      }),
+    ],
+  },
+  {
+    id: "mlb_rival_reunion", emoji: "🎓", title: "ROOKIE CLASS REUNION",
+    description: (_s, r) => `A network is doing a five years later piece on your rookie class and wants you and ${r.name} on set together.`,
+    when: s => s.seasons.length >= 5,
+    choices: [
+      opt({
+        label: "Do it together", emoji: "🤝",
+        promise: { effect: { fanbase: 6, heat: -10 } },
+        line: r => `🤝 You and ${r} told minor league bus stories for an hour. Best thing the network aired all month.`,
+      }),
+      opt({
+        label: "Do it, but only your highlights", emoji: "🎬",
+        promise: { effect: { fanbase: 4, morale: 2, heat: 5 } },
+        line: () => "🎬 You did the piece and made sure the cut was all your plays.",
+      }),
+      opt({
+        label: "Skip it", emoji: "🙅",
+        promise: { effect: { morale: 1 } },
+        line: () => "🙅 You skipped it. Nostalgia can wait until you're done.",
+      }),
+    ],
+  },
+];
+
+/** One season's choice roll, after the beat roll in simMlbSeason, on the
+ *  shared tick: only when no beat came up and no choice is already waiting. */
+export function mlbRivalryChoiceTick(c: MlbCareerState, rng: () => number = Math.random): RivalryChoiceCard | null {
+  return rivalryChoiceTick(c, MLB_RIVALRY_CHOICES, MLB_RIVALRY_CHOICE_CHANCE, rng);
+}
+
+/** Answer the pending choice; null when nothing is pending or the option
+ *  does not exist (a double tap changes nothing). */
+export function resolveMlbRivalryChoice(
+  c: MlbCareerState, choiceIdx: number, rng: () => number = Math.random,
+): { state: MlbCareerState; line: string } | null {
+  return resolvePendingRivalryChoice(c, choiceIdx, MLB_RIVALRY_CHOICES, rng);
 }

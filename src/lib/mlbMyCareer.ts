@@ -37,7 +37,8 @@ import { mlbMoneySeasonTick } from './mlbCareerMoney';
 import type { InboxMessage } from './careerInbox';
 import { receiveMlbInboxTexts } from './mlbCareerInbox';
 import type { RivalryEvent } from './careerRivalryEvents';
-import { mlbRivalryTick } from './mlbCareerRivalryEvents';
+import { mlbRivalryTick, mlbRivalryChoiceTick } from './mlbCareerRivalryEvents';
+import type { RivalryChoiceCard } from './careerRivalryChoices';
 /* Round 422: the share of gross pay that actually reaches the bank, after tax,
    agent and living. It was already the number this file used to turn career
    earnings into net worth; it is named here so the yearly banking and the
@@ -217,6 +218,12 @@ export interface MlbCareerState {
   pendingRivalryEvent?: RivalryEvent | null;
   lastRivalryEventId?: number | null;
   rivalryIntensity?: number;
+  /** Round 796: a rival choice waiting on an answer (careerRivalryChoices.ts,
+      bound in mlbCareerRivalryEvents.ts), and every one this career has
+      seen. Absent on a pre-796 save, which reads as nothing pending and
+      nothing seen. */
+  pendingRivalryChoice?: RivalryChoiceCard | null;
+  rivalryChoicesSeen?: string[];
 }
 
 export interface MlbCareerEvent {
@@ -622,6 +629,9 @@ export function simMlbSeason(
      back stays the pure season sim it always was. */
   const rivalryEvent = mlbRivalryTick(c, rng);
   if (rivalryEvent) c.pendingRivalryEvent = rivalryEvent;
+  /* Round 796: a season the beat roll left empty can put a rival choice in
+     front of you instead, answered on the board, never applied here. */
+  else mlbRivalryChoiceTick(c, rng);
   c.seasons.push(line);
   return { line, notes };
 }
