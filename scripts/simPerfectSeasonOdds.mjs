@@ -1,89 +1,116 @@
-/* Round 784: the Perfect Season odds are measured, printed on the page, and honest.
+/* Rounds 784 and 820: the Perfect Season odds are measured, printed on every
+   page, and honest, in all four sports.
 
    A player reported on 2026-09-22: "I never get 82-0 and I have played 1312".
-   He was never going to. The NBA page's hero copy said "chase the perfect
-   season" and the title is 82-0, and the page kept no record of a player's
-   best run, so 1,312 seasons left nothing behind but the taunt.
+   He was never going to. Round 784 made the NBA card print the real odds of
+   an unbeaten season for the team you built and kept the best record. Its
+   review noted that the NHL, MLB and NFL pages still sold the perfect season.
+   Round 820 moved the odds, the best record and the hero line into one shared
+   module (src/lib/perfectSeasonOdds.ts), hook (src/hooks/usePerfectSeasonBest.ts)
+   and card (src/components/perfect-season/SeasonOdds.tsx) with a descriptor per
+   sport, and put all four pages on it. src/test/perfectSeasonResult.test.tsx
+   plays a whole run through each real page.
 
-   MEASURED 2026-10-01, 200,000 seasons per overall through the real
-   simulateSeasonFair('nba', overall, 82, seed):
-     overall  mean wins  sd    82-0
-       80       48.5     4.5   0 of 200,000
-       85       58.6     4.1   0 of 200,000
-       88       65.2     3.7   0 of 200,000
-       90       69.7     3.3   0 of 200,000  (closed form: one in about 530,000)
-       92       72.1     3.0   1             (closed form: one in about 33,000)
-       93       73.3     2.8   14            (closed form: one in about 8,600; the sample ran low)
-       94       74.5     2.6   86, one in 2,326
-       95       75.8     2.4   323, one in 619 (closed form: one in 615)
-       96       76.9     2.2   1,104, one in 181
-       97       78.0     2.0   3,571, one in 56
-       98       79.2     1.7   11,533, one in 17
-       99       80.3     1.3   37,093, one in 5
-   And what the wheel actually deals, read from bref_nba_player_seasons with
-   the adapter's own rating formula the same day: 18,150 rated player seasons
-   (500+ minutes), 3 of them a 99, 70 at 97 or better, 238 at 95 or better,
-   1,098 at 90 or better. Of the 1,616 wheel stops, 223 hold a 95 or better and
-   the median stop's best player is a 90. A six pick draft therefore lands
-   around 88 to 90 on an ordinary day, where an unbeaten season is rarer than
-   one run in 500,000, and the one in 10,000 line the task set for "effectively
-   zero" is crossed between 92 and 93 overall (closed form: 33,000 and 8,600).
+   MEASURED 2026-10-01 through each page's own adapter (fetchTeam...Index and
+   fetchSquad over every wheel stop the live tables give: NBA 1,615 squads,
+   NHL 222, MLB 2,572, NFL 828) and the real sims. The NHL and MLB rows were
+   measured again on the full wheels Round 821 opened (before it they were
+   built from the first 1,000 rows: NHL 194 stops, MLB 1,000 stops, 1901 to
+   1962). "Best" is the strongest lineup the whole wheel can build with
+   distinct names. "Well played" is 200,000 drafts: every spin random over the
+   wheel, the best draftable player at every stop into the first open slot he
+   fits, a reroll (two per run) when that player is under the sport's reroll
+   line (the median stop's best player minus 2: NBA 88, NHL 93, MLB 84, NFL
+   86). The NBA rerun reproduced Round 784 to the decimal (best 98.52, drafts
+   mean 87.80, one run in 112,033). Seasons are 200,000 per row through the
+   sim the page calls.
 
-   THE BEST TEAM THE GAME OFFERS, measured 2026-10-01 through the page's own
-   adapter (fetchTeamSeasonIndex and fetchSquad over all 1,615 squads the live
-   table gives): the strongest six the whole wheel can build with distinct
-   names is Westbrook 99, Harden 98, Baylor 98, Antetokounmpo 99, Chamberlain
-   99 and LeBron 98 at sixth man, a 98.52 overall (CEILING below). Through the
-   real sim 21,352 of 200,000 seasons went 82-0 there, one in 9.4. Nobody gets
-   that team: it needs six specific stops out of 1,615. Well played runs
-   (200,000 drafts, six picks and two rerolls, the best eligible player at
-   every stop, reroll a stop whose best is under 88) average 87.8 overall, nine
-   in ten finish under 91.2, and 0.027 percent reach 95. Averaged over that
-   spread one run in about 110,000 goes 82-0, so 1,312 runs come up empty
-   98.8 percent of the time. At the well played median (87.55) the real sim
-   went unbeaten 0 times in 200,000 (closed form one in 383 million). The
-   reporter's 1,312 runs without one are the expected result, not bad luck.
+     sport  best    unbeaten at best      drafts p10 / median / p90 / p99   unbeaten at the median    across all drafts
+     NBA    98.52   21,111, one in 9.5    84.31 / 87.86 / 91.24 / 93.31     0 (closed one in 161M)   one in 112,033 (2 seen)
+     NHL    98.27   74,256, one in 2.7    81.15 / 85.97 / 90.94 / 95.55     1 (closed one in 206,455) 1,508, one in 133
+     MLB    98.30   28,256, one in 7.1    76.26 / 79.59 / 83.00 / 85.82     0 (closed 1 in 2.7e35)   0 (closed one in 193M)
+     NFL    97.52   130,484, one in 1.5   77.60 / 81.89 / 86.20 / 89.45     184, one in 1,087        2,011, one in 99.5
+   On the capped wheels the NHL drafts ran 82.55 / 86.82 / 91.61 / 96.15 (one
+   in 89 across them) and the MLB drafts 75.10 / 78.80 / 82.52 / 85.56.
 
-   The fix is not a softer curve (the guide already states the 95 and 99 odds
-   correctly) but honesty in the page itself: perfectSeasonOdds computes the
-   exact chance from the same per game probability the sim uses, the result
-   card prints it for the overall just played, the hero copy says what the real
-   chase is, and the player's best record is kept per sport and shown on the
-   result card and the mode screen.
+   Wins (mean, sd, p10 to p90):
+     NBA  best 79.8 sd 1.5 (78 to 82); median draft 64.9 sd 3.7 (60 to 70); all drafts 64.6 sd 6.5 (56 to 73)
+     NHL  best 81.0 sd 1.0 (80 to 82); median draft 70.5 sd 3.2 (66 to 74); all drafts 68.7 sd 9.0 (56 to 78)
+     MLB  best 160.0 sd 1.4 (158 to 162); median draft 101.6 sd 6.2 (94 to 110); all drafts 100.6 sd 20.0 (74 to 126),
+          and 24.47 percent of those seasons reach 116 wins, the big league record (1906 Cubs, 2001 Mariners)
+     NFL  best 16.6 sd 0.6 (16 to 17); median draft 11.1 sd 2.0 (9 to 14); all drafts 11.2 sd 2.7 (8 to 15)
+   Closed form at whole overalls (one run in): NHL 88 3,857, 90 252, 92 38, 93 19, 95 7;
+   MLB 88 12.1 million, 90 55,055, 92 1,335, 93 331, 95 41, 99 7; NFL 85 88, 88 14, 90 4.
 
-   Sections:
-     1. THE CLOSED FORM IS THE ENGINE. 200,000 seasons at 90, 95, 99 and the
-        CEILING through the real sim; the unbeaten count must sit within five
-        binomial standard deviations of perfectSeasonOdds times N (at 90 the
-        expectation is 0.4, so the band tops out at 3.4). An unbeaten season is every game won, and the
-        momentum term after a win is a constant, so the form is exact, not a
-        fit; a sim change that the form does not follow goes red here.
-     2. THE NUMBERS THE COPY PRINTS. At 95 the odds sit between one in 750 and
-        one in 500 (measured one in 619), at 99 between one in 6 and one in 4,
-        at the CEILING between one in 11 and one in 8 (measured one in 9.4,
-        closed form 9.5), at 90 under one in 100,000. The guide in src/data/gameContent still
-        carries "one run in 600" and "one in five", so the words and the maths
-        agree, and perfectOddsLine and formatOneIn render the shapes the page
-        shows, with the odds worked out on the raw overall (a 94.5 prints its
-        own odds and the ceiling prints one in 9). A curve change that moves
-        the odds without moving the copy goes red here.
-     3. THE BEST RECORD STORE. Round trip, garbage fails closed, a worse run
-        never overwrites, an equal run keeps the first, the improved flag is
-        right.
+   What that means, sport by sport. NBA: 82-0 takes a 95 the wheel almost
+   never deals. NHL: a typical lineup is a long shot, but drafts vary so much
+   that one well played run in about 130 goes 82-0, so 82-0 stays a real (rare)
+   target and the page says it takes an 89 plus. MLB: a perfect 162 is not a
+   real target for anything the wheel deals, so the page and the guide chase
+   116 wins instead. NFL: 17-0 comes about one well played run in 100, the
+   friendliest of the four.
 
-   Negative controls (SIM_PS_ODDS_CONTROL=...), each a one line rewrite in a
-   copy of the module that refuses to run if the line is not found exactly once:
-     steep        the 95 anchor becomes 79 expected wins, so a 95 goes unbeaten
-                  about one run in 15. Section 2 goes red; section 1 stays green
-                  because the closed form follows the curve. This is the defect
-                  class: odds that drift away from what the copy promises.
-     nomomentum   the sim loses its streak term while the closed form keeps it.
-                  Section 1 goes red at 99 (about 18 percent against about 13).
-     rounded      the card line rounds the overall before working out the odds
-                  (the review's finding of 2026-10-01). Section 2 goes red: a
-                  94.5 prints a 95's one in 610 and the ceiling a 99's one in 5.
-   Exit 0 when a named control turned its sections red and nothing else, 1 when
-   it did not (a dead control), 2 for a control name this harness does not know.
+   One thing the rounds did not change and the lead should know. The NHL and
+   MLB pages play the old core sigmoid (winProbability), where a typical NHL
+   lineup averages 70 wins in 82 games against a real record of 65 (the
+   2022-23 Bruins), and a typical MLB lineup averages 102 wins with a quarter
+   of all well played seasons past the real record of 116: plainly richer than
+   either sport, but the brief was the copy, not the model.
+
+   Sections, each per sport (a failure names its sport):
+     1. THE CLOSED FORM IS THE ENGINE. 200,000 seasons at four overalls per
+        sport through the sim that sport's page calls (simulateSeason for NHL
+        and MLB, simulateSeasonFair for NBA and NFL); the unbeaten count must
+        sit within five binomial standard deviations of perfectSeasonOdds
+        times N. An unbeaten season is every game won and the momentum after
+        a win is a constant, so the form is exact, not a fit.
+     2. THE NUMBERS THE COPY PRINTS. The descriptor's season lengths match the
+        adapters; the odds climb with the overall; realShotFrom is the first
+        overall at one run in 1,000 and is still the one the hero named when
+        the table was measured (NBA 95, NHL 89, MLB 93, NFL 83); the odds at
+        the measured best and median
+        sit in bands around the table above; formatOneIn and perfectOddsLine
+        render the shapes the card shows, with each sport's own article and
+        long shot line, worked out on the raw overall (a half overall prints
+        its own odds).
+     3. THE BEST RECORD STORE. Per sport: round trip, garbage fails closed, a
+        worse run never overwrites, an equal run keeps the first, a better one
+        replaces it, and no sport leaks into another.
+     4. THE COPY MAKES NO PROMISE THE NUMBERS CONTRADICT. Read from the page
+        (comments stripped), its guide entry, its home tile, its search
+        description in src/data/seoMeta.ts and What's New:
+          a. where well played runs go unbeaten less than one in 1,000 (NBA,
+             MLB), nothing says chase the perfect season, chase perfection,
+             chase N-0 or run the table;
+          b. where the best team goes unbeaten more than one run in 100 (all
+             four), nothing calls it nearly or almost impossible;
+          c. every number the guide and What's New quote is the closed form at
+             the overall they name, every example record sits inside the sim's
+             5th to 95th percentile at its overall, and every "better than nine
+             drafts in ten" or "the wheel almost never deals" is true of the
+             measured spread;
+          d. the page renders the shared tagline, card and best line, plays the
+             sim section 1 measured, and keeps no copy of its own.
+
+   Negative controls (SIM_PS_ODDS_CONTROL=...). Each edits one line of an in
+   memory copy, refuses to run if that line is not found exactly once, and
+   must redden exactly its own section:sport labels:
+     steep           NBA curve: a 95 pays 79 expected wins            2:nba 4:nba
+     steepnfl        NFL curve: an 85 pays 15 expected wins           2:nfl 4:nfl
+     steepcore       core sigmoid centred at 74, not 77               2:nhl 4:nhl 2:mlb 4:mlb 4:nfl (football no longer the friendliest)
+     nomomentum      simulateSeasonFair loses its streak term         1:nba 1:nfl
+     nomomentumcore  simulateSeason loses its streak term             1:nhl 1:mlb
+     rounded         the card line works its odds on the rounded overall  2:all four
+     bestdown        any run, worse or not, replaces the stored best  3:all four
+     copynba         the NBA hero is typed out as "chase the perfect season"  4:nba
+     copynbaguide    the NBA guide intro says "The goal is ... 82-0" again    4:nba
+     copynhl         the NHL FAQ goes back to "Nearly impossible on purpose"  4:nhl
+     copymlb         the MLB home tile goes back to "chase perfection"        4:mlb
+     copymlbseo      the MLB search description asks "Can you go unbeaten?"  4:mlb
+     copynfl         the NFL tip goes back to "one time in ten"               4:nfl
+   Exit 0 when a named control turned exactly its labels red, 1 when it did not
+   (a dead control) or, with no control, on any failure, 2 for a control name
+   this harness does not know.
 
    Run: node scripts/simPerfectSeasonOdds.mjs [seasonsPerOverall] */
 import { build } from 'esbuild';
@@ -93,42 +120,61 @@ import path from 'node:path';
 import { pathToFileURL, fileURLToPath } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const ROOT_URL = ROOT.replaceAll('\\', '/');
+const SPORTS = ['nba', 'nhl', 'mlb', 'nfl'];
+const ALL = n => SPORTS.map(s => `${n}:${s}`);
 const CONTROL = process.env.SIM_PS_ODDS_CONTROL || '';
+/* file: the source the line lives in; module: true when it is bundled (the
+   control copy replaces it for every importer), false when the harness reads
+   it as text. */
 const CONTROLS = {
-  steep: {
-    from: '[90, 69.5], [95, 75.5], [99, 80],',
-    to: '[90, 69.5], [95, 79], [99, 80],',
-    note: 'the 95 anchor pays 79 expected wins, so a 95 goes unbeaten about one run in 15 while the copy still says one in 600',
-    sections: [2],
-  },
-  nomomentum: {
-    from: 'const momentum = i > 0 ? (results[i - 1] ? WIN_MOMENTUM : LOSS_MOMENTUM) : 0;',
-    to: 'const momentum = 0;',
-    note: 'the sim drops its streak term while the closed form keeps it',
-    sections: [1],
-  },
-  rounded: {
-    from: 'const odds = perfectSeasonOdds(sport, overall);',
-    to: 'const odds = perfectSeasonOdds(sport, Math.round(overall));',
-    note: 'the card line works its odds out on the rounded overall, so a 94.5 prints a 95\'s odds and the 98.5 ceiling a 99\'s',
-    sections: [2],
-  },
+  steep: { file: 'src/lib/perfectSeasonExpansion.ts', module: true, from: '[90, 69.5], [95, 75.5], [99, 80],', to: '[90, 69.5], [95, 79], [99, 80],', note: 'a 95 NBA roster pays 79 expected wins, so it goes unbeaten about one run in 15 while the guide still says one in 600', want: ['2:nba', '4:nba'] },
+  steepnfl: { file: 'src/lib/perfectSeasonExpansion.ts', module: true, from: '[75, 7.5], [80, 10], [85, 13],', to: '[75, 7.5], [80, 10], [85, 15],', note: 'an 85 NFL roster pays 15 expected wins, so every NFL number the copy quotes is stale', want: ['2:nfl', '4:nfl'] },
+  steepcore: { file: 'src/lib/perfectSeason.ts', module: true, from: 'const x = (overall - 77) / 5;', to: 'const x = (overall - 74) / 5;', note: 'the core sigmoid moves three points, so every NHL and MLB number the copy quotes is stale and the update log can no longer call football the friendliest', want: ['2:nhl', '4:nhl', '2:mlb', '4:mlb', '4:nfl'] },
+  nomomentum: { file: 'src/lib/perfectSeasonExpansion.ts', module: true, from: 'const momentum = i > 0 ? (results[i - 1] ? WIN_MOMENTUM : LOSS_MOMENTUM) : 0;', to: 'const momentum = 0;', note: 'simulateSeasonFair drops its streak term while the closed form keeps it', want: ['1:nba', '1:nfl'] },
+  nomomentumcore: { file: 'src/lib/perfectSeason.ts', module: true, from: 'const momentum = i > 0 ? (results[i - 1] ? WIN_MOMENTUM : LOSS_MOMENTUM) : 0;', to: 'const momentum = 0;', note: 'simulateSeason drops its streak term while the closed form keeps it', want: ['1:nhl', '1:mlb'] },
+  rounded: { file: 'src/lib/perfectSeasonOdds.ts', module: true, from: 'const odds = perfectSeasonOdds(sport, overall);', to: 'const odds = perfectSeasonOdds(sport, Math.round(overall));', note: 'the card line works its odds out on the rounded overall, so a half overall prints the next one\'s odds', want: ALL(2) },
+  bestdown: { file: 'src/lib/perfectSeason.ts', module: true, from: 'return best === null || run.wins > best.wins;', to: 'return true;', note: 'any finished run replaces the stored best, so a best can go down', want: ALL(3) },
+  copynba: { file: 'src/pages/PerfectSeasonNba.tsx', module: false, from: '{perfectSeasonTagline(SPORT_KEY)}', to: 'Spin the wheel of NBA history, draft one player per stop, and chase the perfect season.', note: 'the NBA hero is typed out again and sells the perfect season', want: ['4:nba'] },
+  copynbaguide: { file: 'src/data/gameContent/basketball.ts', module: false, from: 'The name says 82-0, but the real chase is the best record you can post, and every result prints your odds of going unbeaten.', to: 'The goal is right there in the name: 82-0.', note: 'the NBA guide intro calls 82-0 the goal again', want: ['4:nba'] },
+  copynhl: { file: 'src/data/gameContent/hockey.ts', module: false, from: 'a: "It depends on your overall, and the goalie counts most. An 88 lineup goes 82-0 about one run in 3,900, a 90 about one run in 250 and a 93 about one run in 19.', to: 'a: "Nearly impossible on purpose. Even a lineup full of 99s is capped below a 99 percent win chance per game, so most runs drop one somewhere.', note: 'the NHL FAQ calls 82-0 nearly impossible again', want: ['4:nhl'] },
+  copymlb: { file: 'src/data/gameRegistry.ts', module: false, from: "description: 'Spin, draft across eras, chase 116 wins'", to: "description: 'Spin, draft across eras, chase perfection'", note: 'the MLB home tile sells perfection again', want: ['4:mlb'] },
+  copymlbseo: { file: 'src/data/seoMeta.ts', module: false, from: 'simulate all 162 games. Can you reach 116 wins? Free MLB game.', to: 'simulate all 162 games. Can you go unbeaten? Free MLB game.', note: 'the MLB search description asks about going unbeaten again', want: ['4:mlb'] },
+  copynfl: { file: 'src/data/gameContent/football.ts', module: false, from: '"A typical well drafted roster, around 82, goes 17-0 about one run in 1,100, and even an 88 only about one run in 14, so treat 15 wins as a good day."', to: '"Even a stacked draft goes 17-0 only about one time in ten, so treat 15 wins as a good day."', note: 'the NFL tip goes back to a number nobody measured', want: ['4:nfl'] },
 };
 if (CONTROL && !CONTROLS[CONTROL]) { console.error(`SIM_PS_ODDS_CONTROL=${CONTROL} is not a control this harness knows (${Object.keys(CONTROLS).join(', ')})`); process.exit(2); }
 
-const TMP = (process.env.TEMP || process.env.TMP || os.tmpdir()).replaceAll('\\', '/');
-let EXPANSION = `${ROOT_URL}/src/lib/perfectSeasonExpansion.ts`;
-if (CONTROL) {
-  const c = CONTROLS[CONTROL];
-  const src = fs.readFileSync(path.join(ROOT, 'src/lib/perfectSeasonExpansion.ts'), 'utf8').replace(/\r\n/g, '\n');
-  const n = src.split(c.from).length - 1;
-  if (n !== 1) { console.error(`control ${CONTROL}: the anchor line appears ${n} times, refusing to run a dead control`); process.exit(1); }
-  EXPANSION = `${TMP}/perfectSeasonExpansion.odds-${CONTROL}-${process.pid}.ts`;
-  fs.writeFileSync(EXPANSION, src.replace(c.from, c.to));
-  console.log(`NEGATIVE CONTROL ON: ${c.note}`);
+const lf = s => s.replace(/\r\n/g, '\n');
+const control = CONTROL ? CONTROLS[CONTROL] : null;
+if (control) {
+  const src = lf(fs.readFileSync(path.join(ROOT, control.file), 'utf8'));
+  const n = src.split(control.from).length - 1;
+  if (n !== 1) { console.error(`control ${CONTROL}: the anchor line appears ${n} times in ${control.file}, refusing to run a dead control`); process.exit(1); }
+  console.log(`NEGATIVE CONTROL ON: ${control.note}`);
 }
+/* Every source the harness reads as text goes through here, so a text control
+   edits only the in memory copy. */
+const readSrc = rel => {
+  const src = lf(fs.readFileSync(path.join(ROOT, rel), 'utf8'));
+  return control && !control.module && control.file === rel ? src.replace(control.from, control.to) : src;
+};
 
+/* Bundle the three modules. '@/...' is resolved here rather than by an esbuild
+   alias so a module control's copy replaces the original for every importer. */
+const TMP = (process.env.TEMP || process.env.TMP || os.tmpdir()).replaceAll('\\', '/');
+const redirect = new Map();
+if (control && control.module) {
+  const copy = `${TMP}/ps-odds-control-${CONTROL}-${process.pid}${path.extname(control.file)}`;
+  fs.writeFileSync(copy, lf(fs.readFileSync(path.join(ROOT, control.file), 'utf8')).replace(control.from, control.to));
+  redirect.set(path.join(ROOT, control.file), copy);
+}
+const resolveAt = p => {
+  const base = path.join(ROOT, 'src', p.slice(2));
+  for (const ext of ['', '.ts', '.tsx', '/index.ts']) {
+    const full = base + ext;
+    if (fs.existsSync(full) && fs.statSync(full).isFile()) return redirect.get(full) || full;
+  }
+  return null;
+};
 const ENTRY = `${TMP}/ps-odds-entry-${process.pid}.mjs`;
 const OUT = `${TMP}/ps-odds-bundle-${process.pid}.mjs`;
 fs.writeFileSync(ENTRY, `
@@ -139,126 +185,288 @@ globalThis.localStorage = {
   removeItem: k => { store.delete(k); },
   clear: () => store.clear(),
 };
-export const core = await import('${ROOT_URL}/src/lib/perfectSeason.ts');
-export const exp = await import('${EXPANSION}');
+export const core = await import('@/lib/perfectSeason');
+export const exp = await import('@/lib/perfectSeasonExpansion');
+export const odds = await import('@/lib/perfectSeasonOdds');
 `);
-await build({ entryPoints: [ENTRY], bundle: true, format: 'esm', platform: 'node', outfile: OUT, logLevel: 'error', alias: { '@': path.join(ROOT, 'src') } });
-const { core, exp } = await import(pathToFileURL(OUT).href);
-try { fs.rmSync(ENTRY); fs.rmSync(OUT); if (CONTROL) fs.rmSync(EXPANSION); } catch { /* temp only */ }
+await build({
+  entryPoints: [ENTRY], bundle: true, format: 'esm', platform: 'node', outfile: OUT, logLevel: 'error',
+  plugins: [{ name: 'at-alias', setup(b) { b.onResolve({ filter: /^@\// }, args => { const r = resolveAt(args.path); return r ? { path: r } : undefined; }); } }],
+});
+const { core, exp, odds } = await import(pathToFileURL(OUT).href);
+try { fs.rmSync(ENTRY); fs.rmSync(OUT); for (const c of redirect.values()) fs.rmSync(c); } catch { /* temp only */ }
 
-for (const [k, v] of Object.entries({ simulateSeasonFair: exp.simulateSeasonFair, perfectSeasonOdds: exp.perfectSeasonOdds, perfectOddsLine: exp.perfectOddsLine, formatOneIn: exp.formatOneIn, loadBestRecord: core.loadBestRecord, saveBestRecord: core.saveBestRecord })) {
+for (const [k, v] of Object.entries({ simulateSeason: core.simulateSeason, simulateSeasonFair: exp.simulateSeasonFair, perfectSeasonOdds: odds.perfectSeasonOdds, perfectOddsLine: odds.perfectOddsLine, formatOneIn: odds.formatOneIn, realShotFrom: odds.realShotFrom, perfectSeasonTagline: odds.perfectSeasonTagline, loadBestRecord: core.loadBestRecord, saveBestRecord: core.saveBestRecord })) {
   if (typeof v !== 'function') { console.error(`export missing: ${k}, so nothing below measures anything`); process.exit(1); }
 }
 
 let failures = 0;
 let section = 0;
+let sport = '';
 const red = new Set();
-const fail = m => { failures += 1; red.add(section); console.error('  FAIL: ' + m); };
+const fail = m => { failures += 1; red.add(`${section}:${sport}`); console.error(`  FAIL [${sport}]: ${m}`); };
 const N = Number(process.argv[2] || 200000);
-/* The best six the whole wheel can build, measured 2026-10-01 (see the header). */
-const CEILING = 98.52;
+
+/* The measured table from the header. */
+const MEASURED = {
+  nba: { best: 98.52, median: 87.86, p10: 84.31, p90: 91.24, p99: 93.31, allDrafts: 1 / 112033 },
+  nhl: { best: 98.27, median: 85.97, p10: 81.15, p90: 90.94, p99: 95.55, allDrafts: 1508 / 200000 },
+  mlb: { best: 98.30, median: 79.59, p10: 76.26, p90: 83.00, p99: 85.82, allDrafts: 5.189e-9, recordShare: 0.2447 },
+  nfl: { best: 97.52, median: 81.89, p10: 77.60, p90: 86.20, p99: 89.45, allDrafts: 2011 / 200000 },
+};
+const SIM = {
+  nba: (o, seed) => exp.simulateSeasonFair('nba', o, 82, seed),
+  nfl: (o, seed) => exp.simulateSeasonFair('nfl', o, 17, seed),
+  nhl: (o, seed) => core.simulateSeason(o, 82, seed),
+  mlb: (o, seed) => core.simulateSeason(o, 162, seed),
+};
+const at = (s, o) => odds.perfectSeasonOdds(s, o);
+const f = (s, o) => odds.formatOneIn(at(s, o));
+const seedOf = (i, o) => (Math.imul(i + 1, 2654435761) ^ Math.round(o * 100) * 0x9e3779b9) >>> 0;
 
 section = 1;
-console.log(`1) the closed form is the engine: ${N.toLocaleString('en-US')} seasons at 90, 95, 99 and the ${CEILING} ceiling`);
-for (const ovr of [90, 95, 99, CEILING]) {
-  let perfect = 0;
-  let wins = 0;
-  for (let i = 0; i < N; i++) {
-    const seed = (Math.imul(i + 1, 2654435761) ^ (ovr * 0x9e3779b9)) >>> 0;
-    const r = exp.simulateSeasonFair('nba', ovr, 82, seed);
-    if (r.perfect) perfect += 1;
-    wins += r.wins;
+console.log(`1) the closed form is the engine: ${N.toLocaleString('en-US')} seasons per overall through each page's own sim`);
+const SECTION1 = { nba: [90, 95, 99, MEASURED.nba.best], nhl: [88, 90, 95, MEASURED.nhl.best], mlb: [92, 93, 95, MEASURED.mlb.best], nfl: [MEASURED.nfl.median, 85, 90, MEASURED.nfl.best] };
+for (sport of SPORTS) {
+  for (const ovr of SECTION1[sport]) {
+    let perfect = 0;
+    let wins = 0;
+    for (let i = 0; i < N; i++) {
+      const r = SIM[sport](ovr, seedOf(i, ovr));
+      if (r.perfect) perfect += 1;
+      wins += r.wins;
+    }
+    const p = at(sport, ovr);
+    const expected = p * N;
+    const sd = Math.sqrt(N * p * (1 - p));
+    const lo = Math.max(0, expected - 5 * sd);
+    const hi = expected + 5 * sd;
+    console.log(`   ${sport} ${ovr}: ${perfect} unbeaten of ${N} (mean ${(wins / N).toFixed(2)} wins); closed form ${odds.formatOneIn(p)} expects ${expected.toFixed(1)}, band ${lo.toFixed(1)} to ${hi.toFixed(1)}`);
+    if (perfect < lo || perfect > hi) fail(`${ovr}: ${perfect} unbeaten seasons against a closed form expectation of ${expected.toFixed(1)} (five sd band ${lo.toFixed(1)} to ${hi.toFixed(1)}); the sim and perfectSeasonOdds have come apart`);
   }
-  const p = exp.perfectSeasonOdds('nba', ovr);
-  const expected = p * N;
-  const sd = Math.sqrt(N * p * (1 - p));
-  const lo = Math.max(0, expected - 5 * sd);
-  const hi = expected + 5 * sd;
-  const oneIn = p > 0 ? Math.round(1 / p) : Infinity;
-  console.log(`   ${ovr}: ${perfect} unbeaten of ${N} (mean ${(wins / N).toFixed(2)} wins); closed form one in ${oneIn.toLocaleString('en-US')} expects ${expected.toFixed(1)}, band ${lo.toFixed(1)} to ${hi.toFixed(1)}`);
-  if (perfect < lo || perfect > hi) fail(`${ovr}: ${perfect} unbeaten seasons against a closed form expectation of ${expected.toFixed(1)} (five sd band ${lo.toFixed(1)} to ${hi.toFixed(1)}); the sim and perfectSeasonOdds have come apart`);
 }
 
 section = 2;
 console.log('2) the numbers the copy prints');
-{
-  const at = o => exp.perfectSeasonOdds('nba', o);
-  const oneIn = o => 1 / at(o);
-  console.log(`   odds: 90 one in ${Math.round(oneIn(90)).toLocaleString('en-US')}, 93 one in ${Math.round(oneIn(93)).toLocaleString('en-US')}, 95 one in ${Math.round(oneIn(95))}, ceiling ${CEILING} one in ${oneIn(CEILING).toFixed(2)}, 99 one in ${oneIn(99).toFixed(2)}`);
-  if (!(oneIn(95) >= 500 && oneIn(95) <= 750)) fail(`a 95 goes unbeaten one run in ${Math.round(oneIn(95))}; the copy says about one in 600 (band 500 to 750)`);
-  if (!(oneIn(99) >= 4 && oneIn(99) <= 6)) fail(`a 99 goes unbeaten one run in ${oneIn(99).toFixed(2)}; the copy says about one in five (band 4 to 6)`);
-  if (!(oneIn(CEILING) >= 8 && oneIn(CEILING) <= 11)) fail(`the best team the wheel can build (${CEILING}) goes unbeaten one run in ${oneIn(CEILING).toFixed(2)}; measured one in 9.4 (band 8 to 11)`);
-  if (!(oneIn(90) > 100000)) fail(`a 90 goes unbeaten one run in ${Math.round(oneIn(90))}; the honest line depends on that being over 100,000`);
-  if (!(at(92) < 1 / 10000 && at(93) > 1 / 10000)) fail(`the one in 10,000 line should fall between 92 and 93 overall (92: one in ${Math.round(oneIn(92))}, 93: one in ${Math.round(oneIn(93))})`);
+const ADAPTER_GAMES = { nba: ['perfectSeasonNba', 'NBA_GAMES'], nhl: ['perfectSeasonNhl', 'NHL_GAMES'], mlb: ['perfectSeasonMlb', 'MLB_GAMES'], nfl: ['perfectSeasonNfl', 'NFL_GAMES'] };
+/* Bands around the measured table: [lowest, highest] for one run in N. */
+const BANDS = {
+  nba: { best: [8, 11], median: [1e7, Infinity] },
+  nhl: { best: [2, 4], median: [150000, 300000] },
+  mlb: { best: [5, 10], median: [1e12, Infinity] },
+  nfl: { best: [1.2, 2], median: [800, 1600] },
+};
+const ARTICLE = { nba: 'an 82-0', nhl: 'an 82-0', mlb: 'a 162-0', nfl: 'a 17-0' };
+const REAL_SHOT = { nba: 95, nhl: 89, mlb: 93, nfl: 83 };
+const HALF = { nba: 94.5, nhl: 88.5, mlb: 92.5, nfl: 82.5 };
+for (sport of SPORTS) {
+  const def = odds.PERFECT_SEASON_SPORTS[sport];
+  const [file, name] = ADAPTER_GAMES[sport];
+  const m = new RegExp(`export const ${name} = (\\d+);`).exec(readSrc(`src/lib/${file}.ts`));
+  if (!m || Number(m[1]) !== def.games) fail(`the descriptor plays ${def.games} games but ${file}.ts says ${m ? m[1] : 'nothing'}`);
   let prev = 0;
-  for (let o = 60; o <= 99; o += 1) { const v = at(o); if (v < prev) fail(`perfectSeasonOdds is not monotone at ${o}`); prev = v; }
-  const guide = fs.readFileSync(path.join(ROOT, 'src/data/gameContent/basketball.ts'), 'utf8');
-  if (!guide.includes('A 95 goes 82-0 about one run in 600')) fail('the NBA guide no longer says a 95 goes 82-0 about one run in 600; the words and the maths must move together');
-  if (!guide.includes('a 99 about one in five')) fail('the NBA guide no longer says a 99 goes 82-0 about one in five');
-  const f = exp.formatOneIn;
-  const shapes = [[1 / 5.4, 'one run in 5'], [1 / 619, 'one run in 620'], [1 / 33190, 'one run in 33,000'], [1 / 525000, 'one run in 530,000'], [1 / 12e6, 'one run in 12 million'], [0, 'never']];
-  for (const [odds, want] of shapes) { const got = f(odds); if (got !== want) fail(`formatOneIn(${odds}) = "${got}", wanted "${want}"`); }
-  const low = exp.perfectOddsLine('nba', 88);
-  const high = exp.perfectOddsLine('nba', 99);
-  const mid = exp.perfectOddsLine('nba', 95);
-  console.log(`   88: ${low}`);
-  console.log(`   95: ${mid}`);
-  console.log(`   99: ${high}`);
-  if (!/At 88 overall an 82-0 season comes about one run in [\d,]+( million)?\./.test(low) || !low.includes('95 plus')) fail(`the low line does not print the odds and the 95 plus target: "${low}"`);
-  if (!high.startsWith('At 99 overall an 82-0 season comes about one run in 5.') || !high.includes('in the conversation')) fail(`the high line is wrong: "${high}"`);
-  const nfl = exp.perfectOddsLine('nfl', 90);
-  if (!nfl.startsWith('At 90 overall a 17-0 season')) fail(`the article in front of 17-0 is wrong: "${nfl}"`);
-  /* 615 exact, printed to two figures; the band is the copy's "about one in 600". */
-  if (!/one run in 6\d0\./.test(mid) || !mid.includes('Rare, not impossible')) fail(`the mid line is wrong: "${mid}"`);
-  /* The card is fed the raw overall the sim played, not the rounded one it
-     shows (review of 2026-10-01): a 94.5 is about one in 1,200, not a 95's
-     one in 610, and the 98.52 ceiling is What's New's one in nine, not a 99's
-     one in five. The line prints the overall to one decimal so the number and
-     the odds beside it agree. */
-  const half = exp.perfectOddsLine('nba', 94.5);
-  const ceil = exp.perfectOddsLine('nba', CEILING);
-  console.log(`   94.5: ${half}`);
-  console.log(`   ${CEILING}: ${ceil}`);
-  const halfOdds = exp.formatOneIn(exp.perfectSeasonOdds('nba', 94.5));
-  if (!half.startsWith(`At 94.5 overall an 82-0 season comes about ${halfOdds}.`) || halfOdds === exp.formatOneIn(exp.perfectSeasonOdds('nba', 95))) fail(`a 94.5 does not print its own odds (${halfOdds}): "${half}"`);
-  if (!ceil.startsWith('At 98.5 overall an 82-0 season comes about one run in 9.')) fail(`the ceiling line does not say one in nine, as What's New does: "${ceil}"`);
+  for (let o = 40; o <= 99; o += 1) { const v = at(sport, o); if (v < prev) fail(`perfectSeasonOdds is not monotone at ${o}`); prev = v; }
+  const from = odds.realShotFrom(sport);
+  if (from === null || !(at(sport, from) >= 1 / 1000) || !(at(sport, from - 1) < 1 / 1000)) fail(`realShotFrom says ${from}, which is not the first overall at one run in 1,000`);
+  /* The overall the hero names, as measured with the header's table. */
+  if (from !== REAL_SHOT[sport]) fail(`the hero now names ${from} as where unbeaten starts, the measurement was made at ${REAL_SHOT[sport]}; re-measure and update the header and the copy`);
+  const oneIn = o => 1 / at(sport, o);
+  const b = BANDS[sport];
+  const M = MEASURED[sport];
+  console.log(`   ${sport}: real shot from ${from}; best ${M.best} one in ${oneIn(M.best).toFixed(2)}, median draft ${M.median} one in ${Math.round(oneIn(M.median)).toLocaleString('en-US')}`);
+  if (!(oneIn(M.best) >= b.best[0] && oneIn(M.best) <= b.best[1])) fail(`the best team the wheel can build (${M.best}) goes unbeaten one run in ${oneIn(M.best).toFixed(2)}; measured band ${b.best[0]} to ${b.best[1]}`);
+  if (!(oneIn(M.median) >= b.median[0] && oneIn(M.median) <= b.median[1])) fail(`the median well played draft (${M.median}) goes unbeaten one run in ${Math.round(oneIn(M.median))}; measured band ${b.median[0]} to ${b.median[1]}`);
+  /* The line: its article, its tiers, its long shot words, and the raw overall. */
+  const longShot = def.greatSeason ? `${def.greatSeason.wins} wins` : `${odds.withArticle(String(from))} plus ${def.unit} is where unbeaten starts to be a real shot`;
+  const lowO = [60, 70, 80, 88].find(o => at(sport, o) < 1 / 1000);
+  const low = odds.perfectOddsLine(sport, lowO);
+  if (!low.startsWith(`At ${lowO} overall ${ARTICLE[sport]} season comes about ${f(sport, lowO)}.`) || !low.includes(longShot)) fail(`the long shot line is wrong: "${low}" (wanted ${ARTICLE[sport]} and "${longShot}")`);
+  const midO = [86, 88, 89, 90, 92, 93, 95].find(o => at(sport, o) >= 1 / 1000 && at(sport, o) < 1 / 20);
+  const mid = odds.perfectOddsLine(sport, midO);
+  if (!mid.endsWith('Rare, not impossible.') || !mid.includes(f(sport, midO))) fail(`the rare line is wrong at ${midO}: "${mid}"`);
+  const top = odds.perfectOddsLine(sport, 99);
+  if (!top.endsWith('You are in the conversation.')) fail(`the top line is wrong: "${top}"`);
+  const half = odds.perfectOddsLine(sport, HALF[sport]);
+  const halfOdds = f(sport, HALF[sport]);
+  console.log(`   ${sport} ${HALF[sport]}: ${half}`);
+  if (!half.startsWith(`At ${HALF[sport]} overall ${ARTICLE[sport]} season comes about ${halfOdds}.`) || halfOdds === f(sport, Math.round(HALF[sport]))) fail(`a ${HALF[sport]} does not print its own odds (${halfOdds}): "${half}"`);
+  if (sport === 'mlb' && (odds.MLB_WINS_RECORD !== 116 || def.greatSeason?.wins !== odds.MLB_WINS_RECORD)) fail(`the MLB target is ${def.greatSeason?.wins}, not the record of 116 cited in perfectSeasonOdds.ts`);
+  if (sport === 'nba') {
+    /* Round 784's own checks on the NBA numbers its copy quotes. */
+    if (!(oneIn(95) >= 500 && oneIn(95) <= 750)) fail(`a 95 goes unbeaten one run in ${Math.round(oneIn(95))}; the copy says about one in 600 (band 500 to 750)`);
+    if (!(oneIn(99) >= 4 && oneIn(99) <= 6)) fail(`a 99 goes unbeaten one run in ${oneIn(99).toFixed(2)}; the copy says about one in five (band 4 to 6)`);
+    if (!(oneIn(90) > 100000)) fail(`a 90 goes unbeaten one run in ${Math.round(oneIn(90))}; the honest line depends on that being over 100,000`);
+    if (!(at(sport, 92) < 1 / 10000 && at(sport, 93) > 1 / 10000)) fail(`the one in 10,000 line should fall between 92 and 93 overall`);
+    const ceil = odds.perfectOddsLine('nba', M.best);
+    if (!ceil.startsWith('At 98.5 overall an 82-0 season comes about one run in 9.')) fail(`the ceiling line does not say one in nine, as What's New does: "${ceil}"`);
+  }
+}
+sport = 'all';
+{
+  const shapes = [[0.7, '7 runs in 10'], [0.99, '9 runs in 10'], [1 / 5.4, 'one run in 5'], [1 / 619, 'one run in 620'], [1 / 33190, 'one run in 33,000'], [1 / 525000, 'one run in 530,000'], [1 / 12e6, 'one run in 12 million'], [1 / 2.7e10, 'one run in 27 billion'], [1e-13, 'one run in more than a trillion'], [0, 'never']];
+  for (const [o, want] of shapes) { const got = odds.formatOneIn(o); if (got !== want) { sport = 'nba'; fail(`formatOneIn(${o}) = "${got}", wanted "${want}"`); sport = 'all'; } }
 }
 
 section = 3;
-console.log('3) the best record store');
-{
-  const key = 'perfect-season-nba-best';
+console.log('3) the best record store, per sport');
+for (sport of SPORTS) {
+  const key = `perfect-season-${sport}-best`;
+  const G = odds.PERFECT_SEASON_SPORTS[sport].games;
   localStorage.clear();
-  if (core.loadBestRecord('nba') !== null) fail('an empty store loaded a record');
-  const first = core.saveBestRecord('nba', { wins: 60, losses: 22, overall: 86, date: '2026-10-01', mode: 'classic' });
-  if (!first.improved || first.best.wins !== 60) fail('the first run did not become the best');
-  const back = core.loadBestRecord('nba');
-  if (!back || back.wins !== 60 || back.losses !== 22 || back.overall !== 86 || back.date !== '2026-10-01' || back.mode !== 'classic') fail(`the round trip lost something: ${JSON.stringify(back)}`);
-  const worse = core.saveBestRecord('nba', { wins: 55, losses: 27, overall: 90, date: '2026-10-02', mode: 'hard' });
-  if (worse.improved || worse.best.wins !== 60 || core.loadBestRecord('nba').wins !== 60) fail('a worse run overwrote the best');
-  const equal = core.saveBestRecord('nba', { wins: 60, losses: 22, overall: 95, date: '2026-10-03', mode: 'daily' });
-  if (equal.improved || core.loadBestRecord('nba').date !== '2026-10-01') fail('an equal run moved the best sideways');
-  const better = core.saveBestRecord('nba', { wins: 77, losses: 5, overall: 92, date: '2026-10-04', mode: 'classic' });
-  if (!better.improved || core.loadBestRecord('nba').wins !== 77) fail('a better run did not replace the best');
-  if (core.loadBestRecord('nhl') !== null) fail('the NBA best leaked into another sport');
-  for (const garbage of ['not json {', JSON.stringify({ v: 999, wins: 82, losses: 0, overall: 99, date: 'x', mode: 'classic' }), JSON.stringify({ v: 1, wins: 'eighty', losses: 0, overall: 99, date: 'x', mode: 'classic' }), JSON.stringify({ v: 1, wins: -3, losses: 0, overall: 99, date: 'x', mode: 'classic' }), JSON.stringify({ v: 1, wins: 80, losses: 2, overall: 99 })]) {
+  if (core.loadBestRecord(sport) !== null) fail('an empty store loaded a record');
+  const w = x => Math.round(G * x);
+  const first = core.saveBestRecord(sport, { wins: w(0.6), losses: G - w(0.6), overall: 86, date: '2026-10-01', mode: 'classic' });
+  if (!first.improved || first.best.wins !== w(0.6)) fail('the first run did not become the best');
+  const back = core.loadBestRecord(sport);
+  if (!back || back.wins !== w(0.6) || back.losses !== G - w(0.6) || back.overall !== 86 || back.date !== '2026-10-01' || back.mode !== 'classic') fail(`the round trip lost something: ${JSON.stringify(back)}`);
+  const worse = core.saveBestRecord(sport, { wins: w(0.5), losses: G - w(0.5), overall: 90, date: '2026-10-02', mode: 'hard' });
+  if (worse.improved || worse.best.wins !== w(0.6) || core.loadBestRecord(sport).wins !== w(0.6)) fail('a worse run overwrote the best, so the best went down');
+  const equal = core.saveBestRecord(sport, { wins: w(0.6), losses: G - w(0.6), overall: 95, date: '2026-10-03', mode: 'daily' });
+  if (equal.improved || core.loadBestRecord(sport).date !== '2026-10-01') fail('an equal run moved the best sideways');
+  const better = core.saveBestRecord(sport, { wins: G - 1, losses: 1, overall: 92, date: '2026-10-04', mode: 'classic' });
+  if (!better.improved || core.loadBestRecord(sport).wins !== G - 1) fail('a better run did not replace the best');
+  for (const other of SPORTS.filter(o => o !== sport)) if (core.loadBestRecord(other) !== null) fail(`the ${sport} best leaked into ${other}`);
+  for (const garbage of ['not json {', JSON.stringify({ v: 999, wins: G, losses: 0, overall: 99, date: 'x', mode: 'classic' }), JSON.stringify({ v: 1, wins: 'eighty', losses: 0, overall: 99, date: 'x', mode: 'classic' }), JSON.stringify({ v: 1, wins: -3, losses: 0, overall: 99, date: 'x', mode: 'classic' }), JSON.stringify({ v: 1, wins: G - 2, losses: 2, overall: 99 })]) {
     localStorage.setItem(key, garbage);
-    if (core.loadBestRecord('nba') !== null) fail(`hostile stored value loaded as a record: ${garbage}`);
+    if (core.loadBestRecord(sport) !== null) fail(`hostile stored value loaded as a record: ${garbage}`);
   }
   localStorage.setItem(key, 'not json {');
-  const over = core.saveBestRecord('nba', { wins: 40, losses: 42, overall: 80, date: '2026-10-05', mode: 'classic' });
-  if (!over.improved || core.loadBestRecord('nba').wins !== 40) fail('a run after a corrupt store did not become the best');
-  console.log('   round trip, worse never overwrites, equal keeps the first, five hostile values fail closed');
+  const over = core.saveBestRecord(sport, { wins: w(0.4), losses: G - w(0.4), overall: 80, date: '2026-10-05', mode: 'classic' });
+  if (!over.improved || core.loadBestRecord(sport).wins !== w(0.4)) fail('a run after a corrupt store did not become the best');
+}
+console.log('   per sport: round trip, worse never overwrites, equal keeps the first, better replaces, no leak, five hostile values fail closed');
+
+section = 4;
+console.log('4) the copy makes no promise the numbers contradict');
+/* Comments are prose about the code, the one place a banned phrase is sure to
+   appear: strip them before matching. */
+const stripComments = s => s.replace(/\{\/\*[\s\S]*?\*\/\}/g, '').replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
+/* One guide entry, from its key to its closing brace, skipping strings. */
+function guideEntry(rel, route) {
+  const src = readSrc(rel);
+  const start = src.indexOf(`'${route}': {`);
+  if (start < 0) return '';
+  let depth = 0;
+  for (let i = src.indexOf('{', start); i < src.length; i += 1) {
+    const c = src[i];
+    if (c === '"' || c === "'" || c === '`') { const q = c; i += 1; while (i < src.length && src[i] !== q) { if (src[i] === '\\') i += 1; i += 1; } continue; }
+    if (c === '{') depth += 1;
+    if (c === '}') { depth -= 1; if (depth === 0) return src.slice(start, i + 1); }
+  }
+  return '';
+}
+const PAGE = { nba: 'PerfectSeasonNba', nhl: 'PerfectSeasonNhl', mlb: 'PerfectSeasonMlb', nfl: 'PerfectSeasonNfl' };
+const GUIDE = { nba: 'basketball', nhl: 'hockey', mlb: 'baseball', nfl: 'football' };
+const PAGE_SIM = { nba: "simulateSeasonFair('nba', overall, NBA_GAMES, seed)", nfl: "simulateSeasonFair('nfl', overall, NFL_GAMES, seed)", nhl: 'simulateSeason(overall, NHL_GAMES, seed)', mlb: 'simulateSeason(overall, MLB_GAMES, seed)' };
+const registry = readSrc('src/data/gameRegistry.ts');
+const seoSrc = readSrc('src/data/seoMeta.ts');
+const whatsNew = stripComments(readSrc('src/pages/WhatsNew.tsx'));
+/* Wins at an overall through the real sim: [5th, 95th] percentile and mean. */
+const winBand = (s, o) => {
+  const w = [];
+  for (let i = 0; i < 20000; i++) w.push(SIM[s](o, seedOf(i + 7, o + 0.37)).wins);
+  w.sort((a, c) => a - c);
+  return { p5: w[1000], p95: w[19000], mean: w.reduce((t, v) => t + v, 0) / w.length };
+};
+/* The review of 2026-10-01 added the last shape: the NBA guide's intro said
+   "The goal is right there in the name: 82-0." while well played drafts go
+   82-0 about one run in 112,000. */
+const PROMISE = /chase (the )?perfect(ion| season)|chase \d+-0|run the table|the goal is[^.]*\d+-0/i;
+const IMPOSSIBLE = /(nearly|almost|basically|virtually) impossible/i;
+for (sport of SPORTS) {
+  const route = `/perfect-season-${sport}`;
+  const page = stripComments(readSrc(`src/pages/${PAGE[sport]}.tsx`));
+  const guide = guideEntry(`src/data/gameContent/${GUIDE[sport]}.ts`, route);
+  const tile = (registry.split('\n').find(l => l.includes(`path: '${route}'`)) || '');
+  const tagline = odds.perfectSeasonTagline(sport);
+  /* The search result description, read from src/data/seoMeta.ts (the parts
+     folder is generated from it). */
+  const seoAt = seoSrc.indexOf(`'${route}': {`);
+  const seo = seoAt < 0 ? '' : seoSrc.slice(seoAt, seoSrc.indexOf('},', seoAt));
+  if (!seo) fail(`no seoMeta entry for ${route}`);
+  const M = MEASURED[sport];
+  const def = odds.PERFECT_SEASON_SPORTS[sport];
+  const from = odds.realShotFrom(sport);
+  if (!guide) fail(`no guide entry for ${route}`);
+  if (!tile) fail(`no home tile for ${route}`);
+  const texts = { page, guide, tile, tagline, seoMeta: seo };
+  /* a. */
+  if (M.allDrafts < 1 / 1000) {
+    for (const [where, t] of Object.entries(texts)) { const hit = PROMISE.exec(t); if (hit) fail(`the ${where} says "${hit[0]}", but well played runs go unbeaten about ${odds.formatOneIn(M.allDrafts)}`); }
+  }
+  /* b. */
+  if (at(sport, M.best) > 1 / 100) {
+    for (const [where, t] of Object.entries(texts)) { const hit = IMPOSSIBLE.exec(t); if (hit) fail(`the ${where} says "${hit[0]}", but the best team the wheel deals goes unbeaten ${odds.formatOneIn(at(sport, M.best))}`); }
+  }
+  /* c. Every number quoted, against the closed form or the sim. */
+  const need = (where, t, phrase) => { if (!t.includes(phrase)) fail(`the ${where} should say "${phrase}" (the numbers moved, or the words did)`); };
+  const record = (where, t, phrase, o, w) => { need(where, t, phrase); const b = winBand(sport, o); if (w < b.p5 || w > b.p95) fail(`the ${where} has a ${o} overall winning ${w}, outside the sim's 5th to 95th percentile (${b.p5} to ${b.p95})`); };
+  const topTenth = (where, o) => { if (!(o > M.p90)) fail(`the ${where} calls a ${o} better than nine drafts in ten, but the measured 90th percentile is ${M.p90}`); };
+  const almostNever = (where, o) => { if (!(M.p99 < o)) fail(`the ${where} says the wheel almost never deals a ${o}, but one well played draft in a hundred reaches ${M.p99}`); };
+  if (sport === 'nba') {
+    need('guide', guide, 'A 95 goes 82-0 about one run in 600');
+    need('guide', guide, 'a 99 about one in five');
+    almostNever('guide', 95);
+    if (from !== 95) fail(`the guide says a 95 is where 82-0 starts, the curve says ${from}`);
+    /* The worked example, rewritten by the review of 2026-10-01: it had an
+       88 roster closing 76-6, which the sim's 5th to 95th percentile at 88
+       (59 to 71 wins) never reaches. */
+    record('guide', guide, `At 88 an 82-0 comes about ${f('nba', 88)}`, 88, 69);
+    need('guide', guide, 'closes 69-13');
+  }
+  if (sport === 'nhl') {
+    need('guide', guide, `An 88 lineup goes 82-0 about ${f('nhl', 88)}, a 90 about ${f('nhl', 90)} and a 93 about ${f('nhl', 93)}.`);
+    need('guide', guide, `Most well drafted lineups land between ${Math.round(M.p10)} and ${Math.round(M.p90)}`);
+    record('guide', guide, `at 93 an 82-0 comes about ${f('nhl', 93)}`, 93, 80);
+    need('guide', guide, 'closes 80-2');
+    need("What's New", whatsNew, `a typical lineup (${Math.round(M.median)} overall) goes 82-0 about ${f('nhl', Math.round(M.median))}`);
+    need("What's New", whatsNew, `across all of them about one run in ${Math.round(1 / M.allDrafts / 10) * 10} goes unbeaten`);
+  }
+  if (sport === 'mlb') {
+    need('guide', guide, `A 95 lineup goes 162-0 about ${f('mlb', 95)}`);
+    need('guide', guide, `rated about ${Math.round(M.p99)}, where 162-0 comes about ${f('mlb', Math.round(M.p99))}`);
+    almostNever('tagline', from);
+    need('tagline', tagline, 'almost never deals');
+    need('guide', guide, 'the wheel almost never deals one');
+    if (!(M.recordShare >= 0.2 && M.recordShare <= 0.3)) fail(`the guide says about one well drafted lineup in four reaches 116, measured ${M.recordShare}`);
+    need('guide', guide, 'about one well drafted lineup in four gets there');
+    need('guide', guide, `The number to chase is ${def.greatSeason.wins} wins`);
+    topTenth('guide', 84);
+    record('guide', guide, `A perfect 162-0 at 84 comes about ${f('mlb', 84)}`, 84, 131);
+    need('guide', guide, 'the board reads 131-31');
+    const typical = winBand('mlb', M.median);
+    if (!(typical.mean >= 99 && typical.mean <= 105)) fail(`What's New says a typical lineup averages about 102 wins; the sim at ${M.median} averages ${typical.mean.toFixed(1)}`);
+    need("What's New", whatsNew, `a typical lineup rates about ${Math.round(M.median)}, averages about 102 wins`);
+    need("What's New", whatsNew, 'which about one draft in four reaches');
+    need('tile', tile, `chase ${def.greatSeason.wins} wins`);
+    /* The review of 2026-10-01: the search description still asked "Can you
+       go unbeaten?" after the page moved the chase to 116 wins. */
+    need('seoMeta', seo, `Can you reach ${def.greatSeason.wins} wins?`);
+  }
+  if (sport === 'nfl') {
+    topTenth('guide', 87);
+    record('guide', guide, `At 87 a 17-0 comes about ${f('nfl', 87)}`, 87, 15);
+    need('guide', guide, 'lands at 15-2');
+    need('guide', guide, `around ${Math.round(M.median)}, goes 17-0 about ${f('nfl', Math.round(M.median))}, and even an 88 only about ${f('nfl', 88)}`);
+    need("What's New", whatsNew, `a typical roster (${M.median.toFixed(1)}) goes 17-0 about ${f('nfl', M.median)}, ${f('nfl', 88)} at 88, and across all drafts about one run in ${Math.round(1 / M.allDrafts / 10) * 10}`);
+    /* What's New calls football the friendliest of the four. */
+    for (const other of ['nba', 'nhl', 'mlb']) if (!(M.allDrafts > MEASURED[other].allDrafts && at('nfl', M.median) > at(other, MEASURED[other].median))) fail(`What's New calls football the friendliest, but ${other} goes unbeaten as often`);
+  }
+  /* d. The page is wired to the shared pieces, and to the sim section 1 measured. */
+  const wiring = [`const SPORT_KEY = '${sport}';`, '{perfectSeasonTagline(SPORT_KEY)}', 'usePerfectSeasonBest(SPORT_KEY)', 'recordBest({', '<BestSoFar best={best} />', '<SeasonOddsLines sport={SPORT_KEY} overall={overall} perfect={sim.perfect} best={best} newBest={newBest} />', PAGE_SIM[sport]];
+  for (const w of wiring) if (!page.includes(w)) fail(`the page no longer has ${w}`);
+  for (const own of ['perfectOddsLine(', 'saveBestRecord(', 'loadBestRecord(', 'data-perfect-odds', 'data-best-record']) if (page.includes(own)) fail(`the page keeps its own copy of the odds card (${own}); it belongs to the shared component`);
+  console.log(`   ${sport}: ${tagline}`);
 }
 
 console.log('');
-if (CONTROL) {
-  const want = CONTROLS[CONTROL].sections;
+if (control) {
+  const want = new Set(control.want);
   const got = [...red].sort();
-  const same = got.length === want.length && want.every(w => red.has(w));
-  if (same) { console.log(`simPerfectSeasonOdds: control ${CONTROL} turned section(s) ${want.join(', ')} red and nothing else. The check works.`); process.exit(0); }
-  console.error(`simPerfectSeasonOdds: control ${CONTROL} should have reddened exactly section(s) ${want.join(', ')}, got [${got.join(', ') || 'none'}]. The control proves nothing.`);
+  const same = got.length === want.size && got.every(g => want.has(g));
+  if (same) { console.log(`simPerfectSeasonOdds: control ${CONTROL} turned ${control.want.join(', ')} red and nothing else. The check works.`); process.exit(0); }
+  console.error(`simPerfectSeasonOdds: control ${CONTROL} should have reddened exactly ${control.want.join(', ')}, got [${got.join(', ') || 'none'}]. The control proves nothing.`);
   process.exit(1);
 }
-if (failures) { console.error(`simPerfectSeasonOdds: ${failures} failure(s) in section(s) ${[...red].sort().join(', ')}`); process.exit(1); }
-console.log('simPerfectSeasonOdds: green. The odds on the card are the odds in the sim, the copy agrees with both, and the best record keeps.');
+if (failures) { console.error(`simPerfectSeasonOdds: ${failures} failure(s) in ${[...red].sort().join(', ')}`); process.exit(1); }
+console.log('simPerfectSeasonOdds: green. In all four sports the odds on the card are the odds in the sim, the copy agrees with both, and the best record keeps.');
