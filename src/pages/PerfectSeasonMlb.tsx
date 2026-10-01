@@ -14,7 +14,7 @@ import {
   teamOverall, simulateSeason, randomSeed, ratingTier, squadFillsAny,
   GAME_MODE_LABELS, GAME_MODE_BLURBS, HIDDEN_RATING_DISPLAY, isRatingHidden,
   getDailyDateET, makeDailyPicker, loadDailyAttempt, saveDailyAttempt,
-  msUntilNextDailyET, formatCountdown, DailyAttemptRecord,
+  msUntilNextDailyET, formatCountdown, DailyAttemptRecord, dailyUsesOldWheel,
 } from '@/lib/perfectSeason';
 import {
   MLB_SLOTS, MLB_GAMES, TeamSeasonIndexEntry,
@@ -24,6 +24,9 @@ import {
   PerfectSeasonTheme, getDailyTheme, applyTheme, buildVerificationLine, themesForSport,
 } from '@/lib/perfectSeasonThemes';
 import { recordCompletion, getCurrentPlayerName } from '@/lib/completions';
+import { perfectSeasonTagline, MLB_WINS_RECORD } from '@/lib/perfectSeasonOdds';
+import { usePerfectSeasonBest } from '@/hooks/usePerfectSeasonBest';
+import { BestSoFar, SeasonOddsLines } from '@/components/perfect-season/SeasonOdds';
 
 const SPORT_KEY = 'mlb';
 
@@ -68,6 +71,9 @@ const PerfectSeasonMlb = () => {
   const [revealed, setRevealed] = useState(0);
   const [countdown, setCountdown] = useState('');
   const [dailyTheme, setDailyTheme] = useState<PerfectSeasonTheme | null>(null);
+  /* Round 820: the best record this browser has posted in this sport, kept
+     by the hook all four Perfect Season pages share. */
+  const { best, newBest, record: recordBest, reset: resetBest } = usePerfectSeasonBest(SPORT_KEY);
   const wheelTimer = useRef<ReturnType<typeof setInterval> | null>(null);
   const simTimer = useRef<ReturnType<typeof setInterval> | null>(null);
   const countdownTimer = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -118,7 +124,8 @@ const PerfectSeasonMlb = () => {
     if (phase !== 'boot') return;
     let alive = true;
     (async () => {
-      const idx = await fetchTeamSeasonIndex();
+      // Round 821: a daily dated before the switch deals from the old wheel.
+      const idx = await fetchTeamSeasonIndex({ oldWheel: mode === 'daily' && dailyUsesOldWheel(todayStr) });
       if (!alive) return;
       if (idx) {
         if (mode === 'daily') {
@@ -251,12 +258,15 @@ const PerfectSeasonMlb = () => {
     if (phase !== 'done' || !sim || completionSaved.current) return;
     completionSaved.current = true;
     recordCompletion('/perfect-season-mlb', sim.wins, getCurrentPlayerName());
-  }, [phase, sim]);
+    // Round 820: every finished run, in any mode, is weighed against the best.
+    recordBest({ wins: sim.wins, losses: sim.losses, overall: Math.round(overall), date: todayStr, mode });
+  }, [phase, sim, overall, mode, todayStr, recordBest]);
 
   const skipSim = () => setRevealed(MLB_GAMES);
 
   const restart = () => {
     completionSaved.current = false;
+    resetBest();
     setPicks(Object.fromEntries(MLB_SLOTS.map(s => [s.key, null])));
     setUsedNames(new Set());
     setSelected(null);
@@ -324,7 +334,7 @@ const PerfectSeasonMlb = () => {
             <span className="block mt-1 text-sm md:text-base font-semibold tracking-[0.2em] uppercase text-muted-foreground">MLB Perfect Season</span>
           </h1>
           <p className="text-muted-foreground text-sm md:text-base max-w-xl mx-auto">
-            Spin the wheel of baseball history, draft one player per stop, and chase the perfect season.
+            {perfectSeasonTagline(SPORT_KEY)}
           </p>
           {phase !== 'mode-select' && (
             <div className="mt-3 inline-flex items-center gap-1.5 text-xs px-3 py-1 rounded-full bg-secondary text-muted-foreground font-semibold uppercase tracking-wider">
@@ -343,6 +353,7 @@ const PerfectSeasonMlb = () => {
         </header>
 
         {phase === 'mode-select' && (
+          <>
           <div className="grid sm:grid-cols-3 gap-3 max-w-2xl mx-auto">
             {(['classic', 'hard', 'daily'] as GameMode[]).map(m => {
               const Icon = MODE_ICONS[m];
@@ -359,6 +370,8 @@ const PerfectSeasonMlb = () => {
               );
             })}
           </div>
+          <div className="max-w-2xl mx-auto text-center"><BestSoFar best={best} /></div>
+          </>
         )}
 
         {phase === 'daily-locked' && lockedAttempt && (
@@ -604,14 +617,22 @@ const PerfectSeasonMlb = () => {
                     ? 'PERFECT SEASON!'
                     : sim.wins >= 155
                     ? `So close. ${sim.losses} bad night${sim.losses === 1 ? '' : 's'}.`
+                    : sim.wins > MLB_WINS_RECORD
+                    ? `Past ${MLB_WINS_RECORD}. You just beat the real record.`
+                    : sim.wins === MLB_WINS_RECORD
+                    ? `${MLB_WINS_RECORD} wins. That ties the real record.`
                     : sim.wins >= 110
-                    ? 'A juggernaut, but not perfect.'
+                    ? `A juggernaut, just shy of ${MLB_WINS_RECORD}.`
                     : 'The wheel giveth, the wheel taketh.'}
                 </h2>
                 <p className="text-sm text-muted-foreground mb-3">
                   {mode === 'daily' && `Daily · ${todayStr} · `}
                   Team overall {sim.overall} · drafted in {spins} spin{spins === 1 ? '' : 's'}
                 </p>
+                {/* Round 820: the odds of an unbeaten season for the lineup the sim
+                    just played (the raw overall, not the rounded one above), and
+                    the best record. Shared with the other three sports. */}
+                <SeasonOddsLines sport={SPORT_KEY} overall={overall} perfect={sim.perfect} best={best} newBest={newBest} />
                 {sim.perfect && (
                   <p className="text-sm text-correct font-semibold mb-2 inline-flex items-center gap-1.5">
                     <Trophy className="w-4 h-4" /> Share this. Nobody will believe you.
@@ -665,12 +686,12 @@ const PerfectSeasonMlb = () => {
             'Spin the wheel. It lands on a real team and season from baseball history.',
             'Draft one player from that squad into an open lineup slot. Ratings come from their real stats that year.',
             'Repeat until all 11 slots are filled: eight fielders, a DH, a starter, and a relief ace.',
-            'Simulate the 162 game season. Better lineups win more, but perfection takes luck.',
+            `Simulate the 162 game season. Better lineups win more, and ${MLB_WINS_RECORD} wins is the big league record to chase.`,
             'Two rerolls per run if a spin gives you nothing you like.',
           ]}
           examples={[
             'A 99 rated slugger from 1927 can bat next to a 2020s ace.',
-            'Going 158-4 hurts more than going 120-42. That is the point.',
+            'Going 117-45 beats the real record of 116 wins, and going 115-47 falls one short. That is the point.',
           ]}
         />
         <GameNav />

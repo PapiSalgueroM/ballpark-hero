@@ -5,7 +5,7 @@ export const HOCKEY_CONTENT: GameContentMap = {
   '/perfect-season-nhl': {
     intro: [
       "The wheel owns your draft. Every spin lands on a real NHL franchise and one decade of its history, and you take exactly one player before it moves on.",
-      "Fill six slots from a century of hockey, then the sim plays the 82 game season. Anything short of 82-0 stings.",
+      "Fill six slots from a century of hockey, then the sim plays the 82 game season. 82-0 does happen, but it takes a stacked lineup and some luck, and every result prints your odds.",
     ],
     headings: {
       howToPlay: "How to play 82-0 NHL Perfect Season, a free hockey wheel and draft game",
@@ -80,7 +80,7 @@ export const HOCKEY_CONTENT: GameContentMap = {
       {
         heading: "A 93 overall falls one win short of perfect",
         paragraphs: [
-          "You finish at 93 overall. The sim rips off 38 straight, drops game 39, and closes 80-2. The result card calls that a division winner. You wanted the banner.",
+          "You finish at 93 overall. The sim rips off 38 straight, drops game 39, and closes 80-2. The result card says so close, two bad nights, and reminds you that at 93 an 82-0 comes about one run in 19. You wanted the banner.",
         ],
       },
     ],
@@ -108,7 +108,7 @@ export const HOCKEY_CONTENT: GameContentMap = {
     faqs: [
       {
         q: "How realistic is an actual 82-0 run?",
-        a: "Nearly impossible on purpose. Even a lineup full of 99s is capped below a 99 percent win chance per game, so most runs drop one somewhere.",
+        a: "It depends on your overall, and the goalie counts most. An 88 lineup goes 82-0 about one run in 3,900, a 90 about one run in 250 and a 93 about one run in 19. Most well drafted lineups land between 81 and 91, and the result card prints the odds for the lineup you actually drafted.",
       },
       {
         q: "What does Hard mode change?",
