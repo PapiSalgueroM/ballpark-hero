@@ -6655,6 +6655,16 @@ export function dismissSummary(prev: CareerState, clubs: ClubData[]): CareerStat
 /* ─── Dismiss Social Media Action phase ─── */
 export function dismissSocialMediaPhase(prev: CareerState, clubs: ClubData[]): CareerState {
   const s = { ...prev };
+  /* Round 819: the moral dilemma comes next, the same order advanceToNextPhase
+     gives. From the day the dilemmas were added this went straight to the
+     random events, and since the social media screen opens every season from
+     18, the roll in advanceToNextPhase never ran again: no player saw a
+     dilemma after the youth years. Still one roll per season at most: the
+     roll in advanceToNextPhase only runs on a season that skips this screen. */
+  if (tryTriggerMoralDilemma(s)) {
+    s.phase = "moral_dilemma";
+    return s;
+  }
   // Continue to random events → transfer window
   const events = generateRandomEvents(s);
   if (events.length > 0) {

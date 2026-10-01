@@ -148,12 +148,16 @@ function makeSave(seed: number, startAge: number): CareerState | null {
   return null;
 }
 
-/* What a player taps, by what is on screen. The overlays all draw inside the
-   reveal area, the first child of the right hand panel; the season button is
-   in the action bar. Preferences are the browser walk's (playSoccerCareer),
-   minus the moves that would end the career early. */
-const PREFER = ['💪 Not Done Yet', 'Stay', 'Sign', 'Continue', 'Next', 'Accept', 'Confirm', 'Done', 'Close'];
-const revealArea = (root: HTMLElement) => root.querySelector('div.space-y-3.order-1')?.firstElementChild as HTMLElement | null;
+/* What a player taps, by what is on screen. The screen of the moment is the
+   first thing drawn in the reveal area (the first child of the right hand
+   panel); the season button is in the action bar. Preferences are the
+   browser walk's (playSoccerCareer), minus the moves that would end the
+   career early, and with nothing preferred the screen's LAST button, because
+   a card's own tiles come before its answers (a won tournament draws its
+   tiles, then the speeches, and a tile opens a sub screen whose way out is
+   Back). */
+const PREFER = ['← Back', '💪 Not Done Yet', 'Stay', 'Sign', 'Continue', 'Next', 'Accept', 'Confirm', 'Done', 'Close'];
+const screenCard = (root: HTMLElement) => root.querySelector('div.space-y-3.order-1')?.firstElementChild?.firstElementChild as HTMLElement | null;
 const dilemmaCard = (root: HTMLElement) => {
   const tag = Array.from(root.querySelectorAll('span')).find(s => (s.textContent ?? '').includes('MORAL DILEMMA'));
   return tag ? tag.closest('div.rounded-xl') as HTMLElement | null : null;
@@ -180,6 +184,7 @@ async function playOne(seed: number, startAge: number) {
     let known = (start.moralDilemmasTriggered || []).length;
     let lastSeasons = start.seasons.length;
     let onScreen: string | null = null;
+    let endedBy = 'steps';
     const titleOf = (id: string) => E.MORAL_DILEMMAS.find(d => d.id === id)?.title ?? id;
     for (let step = 0; step < 400; step++) {
       const s = readSave();
@@ -194,8 +199,8 @@ async function playOne(seed: number, startAge: number) {
       const isChoiceCard = !!title && choiceButtons.length > 0 && title !== 'Decision Made';
       if (isChoiceCard && onScreen !== title) shows.push({ title: title!, age: s.age, season: s.seasons.length });
       onScreen = isChoiceCard ? title : null;
-      if (s.retired) break;
-      if ((s.phase === 'playing' || s.phase === 'youth') && seasonsClosed >= SEASONS) break;
+      if (s.retired) { endedBy = `retired at ${s.age}`; break; }
+      if ((s.phase === 'playing' || s.phase === 'youth') && seasonsClosed >= SEASONS) { endedBy = 'seasons'; break; }
 
       let target: HTMLButtonElement | undefined;
       if (s.phase === 'playing' || s.phase === 'youth') {
@@ -203,16 +208,17 @@ async function playOne(seed: number, startAge: number) {
       } else if (isChoiceCard) {
         target = choiceButtons[seed % choiceButtons.length] as HTMLButtonElement;
       } else {
-        const area = revealArea(root);
+        const area = screenCard(root);
         const usable = area ? Array.from(area.querySelectorAll('button')).filter(b => !b.disabled && (b.textContent ?? '').trim()) : [];
         for (const p of PREFER) { target = usable.find(b => (b.textContent ?? '').trim().startsWith(p)); if (target) break; }
-        if (!target) target = usable[0];
+        if (!target) target = usable[usable.length - 1];
       }
-      if (!target) throw new Error(`dead end: phase ${s.phase} at ${s.age} draws no button a player can press (news ${s.pendingNews?.length}) ${(revealArea(root)?.outerHTML ?? 'no reveal area').slice(0, 600)}`);
+      if (!target) throw new Error(`dead end: phase ${s.phase} at ${s.age} draws no button a player can press`);
+      endedBy = `steps (phase ${s.phase} at ${s.age}, pressing "${(target.textContent ?? '').trim().slice(0, 40)}")`;
       await act(async () => { fireEvent.click(target!); });
       await tick();
     }
-    return { offers, shows, seasonsClosed, closedAt };
+    return { offers, shows, seasonsClosed, closedAt, endedBy, startPhase: start.phase };
   } finally {
     v?.unmount();
     Math.random = realRandom;
@@ -253,6 +259,8 @@ describe('Soccer Career: the moral dilemmas reach the player through the page', 
         seasons += r.seasonsClosed;
         adult += r.closedAt.filter(a => a >= 20).length;
         adultShows += r.shows.filter(x => x.age >= 20).length;
+        if (r.endedBy.startsWith('steps')) problems.push(`seed ${seed}: the walk ran out of steps after ${r.seasonsClosed} seasons, a screen it cannot leave`);
+        if (r.endedBy !== 'seasons') console.log(`SHORT start=${startAge} seed=${seed} startPhase=${r.startPhase} seasons=${r.seasonsClosed} ended=${r.endedBy}`);
         /* 1. every offer drawn, exactly once, in order */
         const offered = r.offers.map(o => o.title).join(' | ');
         const drawn = r.shows.map(x => x.title).join(' | ');
