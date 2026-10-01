@@ -117,6 +117,17 @@ describe('useDailyPuzzle: the save carries the puzzle id', () => {
     expect(rendered.result.current.guesses).toEqual(['old guess']);
   });
 
+  it('a game with no static pool and no getPuzzleId still finishes loading when its puzzle lands', () => {
+    const rendered = renderHook((props: { man: Man | null }) => useDailyPuzzle<Man, Guess>(options(props.man, NONE, false)), {
+      initialProps: { man: null },
+    });
+    expect(rendered.result.current.isLoading).toBe(true);
+    act(() => rendered.rerender({ man: A }));
+    expect(rendered.result.current.isLoading).toBe(false);
+    act(() => rendered.result.current.addGuess('a guess'));
+    expect(stored()!.guesses).toEqual(['a guess']);
+  });
+
   it('a static pool game without getPuzzleId saves and restores exactly as before, with no id', () => {
     const first = renderHook(() => useDailyPuzzle<Man, Guess>(options(null, STATIC, false)));
     expect(first.result.current.isLoading).toBe(false);

@@ -331,7 +331,10 @@ export function useDailyPuzzle<T, G>(
   const puzzleId = puzzle != null && getPuzzleId ? getPuzzleId(puzzle) : undefined;
   const puzzleIdRef = useRef<string | undefined>(puzzleId);
   puzzleIdRef.current = puzzleId;
-  const loadKey = `${puzzleIndex}:${puzzleId ?? ''}`;
+  /* '-' while there is no puzzle at all, so the key moves when one lands even
+     for a game that gives no id (the load below waits for it and would
+     otherwise never run again). */
+  const loadKey = `${puzzleIndex}:${puzzle == null ? '-' : puzzleId ?? ''}`;
 
   // Track which puzzle (index plus id) we have loaded state for.
   // Prevents re-loading on every render, but allows re-loading when

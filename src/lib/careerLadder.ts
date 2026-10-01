@@ -2,7 +2,7 @@
 // Data lives in Supabase: career_players (identity) + career_seasons (the ladder rows).
 import { foldSpecialLatin } from '@/lib/nameFold';
 import { supabase } from '@/integrations/supabase/client';
-import { dailyPrngSeed, dateSeed, dayNumber, getTodayET } from '@/lib/dateUtils';
+import { dailyPrngSeed, dateSeed, dayNumber } from '@/lib/dateUtils';
 import { storedSpelling, type PlayerEntity } from '@/lib/playerSearch';
 
 export interface CareerStint {
@@ -21,8 +21,6 @@ export interface CareerPlayer {
   nationality: string;
   position: string;
   seasons: CareerStint[];
-  /** Round 718 fix: career_players.created_at, so the daily rotation knows which cycle a man joined in. Absent on older shapes. */
-  addedAt?: string;
 }
 
 export const MAX_GUESSES = 6;
@@ -51,9 +49,12 @@ export type LadderAction =
  * Round 718: the first ET day the rotation deals. Every day before it keeps
  * the pick it always had (legacyDailyPick), so nobody's finished ladder turns
  * into another man on reload. Set after the day this shipped; if the release
- * slips past it, move it later, never earlier. scripts/simCareerLadderRotation.mjs
- * holds the days before it to the old pick and refuses a start before
- * 2026-10-15. Since the Round 718 fix the daily save also carries the
+ * slips past it, move it later, never earlier, and the roster's since dates
+ * with it. scripts/simCareerLadderRotation.mjs holds the days before it to the
+ * old pick, refuses a start before 2026-10-15, and goes red when the date
+ * arrives while origin/main does not carry it (a save the old code wrote that
+ * morning has no puzzle id, so the hook could not tell it was made against
+ * another man). Since the Round 718 fix the daily save also carries the
  * answer's id (useDailyPuzzle), so a day whose answer changed under a
  * player starts fresh instead of crediting his finished log to another man;
  * the date is the fence for the days already played, the id is the fence
@@ -62,27 +63,37 @@ export type LadderAction =
 export const ROTATION_START = '2026-10-15';
 
 /**
- * Round 718 fix: the daily's harder side is every eligible man whose peak
- * market value is at or under this (whole millions), the other side is
- * everyone above it. A fixed line rather than legendPool's median, because
- * the median moves with the count: every man added above it pushed one man
- * across, and that man landed in the middle of the other side's walk. On the
- * 2026-09-28 bake the median is 50 with 19 men tied on it, and this line puts
- * 125 of 244 eligible men on the harder side (legendPool takes 122). Legend
- * mode in Unlimited keeps legendPool; this is the daily's split only.
+ * Round 718 fix: the line between the daily's two sides, peak market value in
+ * whole millions: at or under it is the harder side, above it the easier one.
+ * A fixed line rather than legendPool's median, because the median moves with
+ * the count. It decides a man's side once, when scripts/genCareerLadderRoster.mjs
+ * first writes him into the roster; the walk reads the side from the roster
+ * and never from his seasons (see rotationPick). On the 2026-10-01 tables it
+ * puts 125 of 244 eligible men on the harder side. Legend mode in Unlimited
+ * keeps legendPool; this is the daily's split only.
  */
 export const ROTATION_SPLIT_VALUE = 50;
 
 /**
- * Today's Career Ladder player: same result for every user on the same ET
- * date. Eligibility mirrors startRound() in CareerLadder.tsx (>= MIN_STINTS
- * seasons) so the daily pool never differs from what unlimited mode
- * considers playable. Days before ROTATION_START use the old pick, every day
- * from it on uses the rotation (rotationPick).
+ * One line of the daily rotation's roster, src/data/careerLadderRoster.json:
+ * [career_players id, side, since, name]. Side is 'h' (the harder side), 'e'
+ * (the easier side) or 'x' (out). A line counts for every cycle of the walk
+ * that starts on or after `since` (an ET date), until a later line for the
+ * same man. A man keeps the side of his first line for good; a later 'h' or
+ * 'e' only brings him back in. The name is for people reading the file.
  */
-export function pickDailyPlayer(pool: CareerPlayer[], dateStr: string = getTodayET()): CareerPlayer | null {
+export type RosterEntry = ReadonlyArray<string>;
+
+/**
+ * Today's Career Ladder player: same result for every user on the same ET
+ * date. Days before ROTATION_START use the old pick (eligibility: at least
+ * MIN_STINTS seasons, as startRound() in CareerLadder.tsx), every day from it
+ * on uses the rotation over `roster` (rotationPick). The page passes the
+ * committed roster.
+ */
+export function pickDailyPlayer(pool: CareerPlayer[], dateStr: string, roster: ReadonlyArray<RosterEntry>): CareerPlayer | null {
   if (dayNumber(dateStr) < dayNumber(ROTATION_START)) return legacyDailyPick(pool, dateStr);
-  return rotationPick(pool, dateStr);
+  return rotationPick(pool, dateStr, roster);
 }
 
 /**
@@ -96,80 +107,148 @@ export function pickDailyPlayer(pool: CareerPlayer[], dateStr: string = getToday
  * ground it covered weeks ago.
  *
  * The owner's July lean stays exactly as the guide describes it: two days in
- * three come from the harder side of the pool (peak value at or under
- * ROTATION_SPLIT_VALUE), the third day from the other side. Each side is
- * walked in one fixed order, every man once, before anyone comes back. So a
- * harder side man returns only after the whole harder side has been dealt
- * (about a day and a half per man in it) and the other side only after all
- * of that side (three days per man). With the live pool (244 eligible, 125
- * and 119 a side, 2026-09-30) that is 187 days and 357 days.
+ * three come from the harder side, the third day from the other side. Each
+ * side is walked in one fixed order, every man once, before anyone comes
+ * back. So a harder side man returns only after the whole harder side has
+ * been dealt (about a day and a half per man in it) and the other side only
+ * after all of that side (three days per man). With the 2026-10-01 roster
+ * (244 men, 125 and 119 a side) that is 187 days and 357 days.
  *
- * THE POOL IS NOT FIXED, and the first version of this walk forgot it. It
- * indexed the live side with `position % side.length`, so the day a data
- * round added one man the modulus changed, the position jumped back by the
- * number of cycles walked so far, and the men dealt over the last few days
- * were dealt again (the Round 718 review measured a repeat gap of one day).
- * The fix is rotationWalk: each cycle deals the roster that existed when the
- * cycle began (career_players.created_at, carried as addedAt), so a newcomer
- * waits for the next cycle and nobody already in the walk moves. A man
- * removed from the table (a quarantine) shortens every cycle he was in, which
- * can only move the position forward: men get skipped for a cycle, never
- * dealt twice. The one gap left is a man whose peak crosses
- * ROTATION_SPLIT_VALUE through a season row added or removed later: he leaves
- * one side (a skip) and joins the other mid cycle at his hash position, and
- * the man after him there can be dealt again the next day. That needs a
- * career high row landing on a man already on the other side, and the
- * harness reports it rather than asserting on it.
+ * WHO IS IN THE WALK COMES FROM THE ROSTER, NEVER FROM THE LIVE TABLES. The
+ * walk is a pure function of the date, so it recomputes every past cycle each
+ * time it is asked, and a man who turns up in a past cycle he was not dealt
+ * in pushes today's position back onto men dealt days ago. The first version
+ * walked the live side, so a newcomer moved everybody (repeat gap: one day).
+ * The second froze each cycle on career_players.created_at, which a season
+ * row added to or removed from a man already in the table still got round:
+ * a 4th season making him eligible, a peak crossing the line, a quarantined
+ * row (the Round 718 review measured repeat gaps of one to three days). The
+ * tables keep no history, so the history lives in the roster: append only,
+ * written by scripts/genCareerLadderRoster.mjs with a since date after the
+ * release, so a change only ever reaches cycles that have not started yet.
+ *
+ * The live pool only decides whether today's man can be dealt. A man the
+ * roster has in but the pool has not (gone from the table, or under
+ * MIN_STINTS seasons now) stays in the walk, because dropping him would move
+ * everybody forward and his return would move them back. His day goes to a
+ * stand in, the man half a cycle round the easier side's walk (the point
+ * furthest from both of his own days, about 180 days either way), and nobody
+ * else moves. A man the pool has but the roster has not is never dealt until
+ * the generator writes him in. simCareerLadderRotation section 7 goes red
+ * while the roster and the live tables disagree, so neither state lasts.
  */
-function rotationPick(pool: CareerPlayer[], dateStr: string): CareerPlayer | null {
+function rotationPick(pool: CareerPlayer[], dateStr: string, roster: ReadonlyArray<RosterEntry>): CareerPlayer | null {
   const eligible = pool.filter(p => p.seasons.length >= MIN_STINTS);
   if (eligible.length === 0) return null;
-  const harder = eligible.filter(p => peakValue(p) <= ROTATION_SPLIT_VALUE);
-  const easier = eligible.filter(p => peakValue(p) > ROTATION_SPLIT_VALUE);
+  const available = new Map(eligible.map(p => [p.id, p]));
   const k = dayNumber(dateStr) - dayNumber(ROTATION_START);
-  // A pool all on one side of the line is one list, walked a day at a time.
-  if (harder.length === 0 || easier.length === 0) return rotationWalk(eligible, k, pos => pos);
-  // Day 0 and 1 of every three are the harder side's, day 2 the other side's.
-  if (k % 3 === 2) return rotationWalk(easier, Math.floor(k / 3), pos => 3 * pos + 2);
-  return rotationWalk(harder, k - Math.floor(k / 3), pos => 3 * Math.floor(pos / 2) + (pos % 2));
+  const { harder, easier } = rosterSides(roster);
+  let today: Walk, pos: number, spare: Walk, sparePos: number;
+  if (harder.length === 0 || easier.length === 0) {
+    // A roster all on one side is one list, walked a day at a time.
+    today = spare = { men: harder.length > 0 ? harder : easier, dayOf: p => p };
+    pos = sparePos = k;
+  } else {
+    // Day 0 and 1 of every three are the harder side's, day 2 the other side's.
+    spare = { men: easier, dayOf: p => 3 * p + 2 };
+    sparePos = Math.floor(k / 3);
+    if (k % 3 === 2) {
+      today = spare;
+      pos = sparePos;
+    } else {
+      today = { men: harder, dayOf: p => 3 * Math.floor(p / 2) + (p % 2) };
+      pos = k - Math.floor(k / 3);
+    }
+  }
+  if (today.men.length > 0) {
+    const { order, offset } = walkCycle(today, pos);
+    const man = available.get(order[offset]);
+    if (man) return man;
+    const stand = walkCycle(spare, sparePos);
+    const n = stand.order.length;
+    for (let j = Math.floor(n / 2); j < Math.floor(n / 2) + n; j++) {
+      const sub = available.get(stand.order[(stand.offset + j) % n]);
+      if (sub) return sub;
+    }
+  }
+  // The roster names nobody the pool holds (an empty roster, or a pool that
+  // is not the live table): one list in the same order, so the day still has
+  // a man. The live table never gets here while section 7 is green.
+  const ids = rotationOrder(eligible.map(p => p.id));
+  return available.get(ids[k % ids.length]) ?? null;
 }
 
+interface RosterMan { id: string; spans: Array<{ day: number; isIn: boolean }> }
+interface Walk { men: RosterMan[]; dayOf: (pos: number) => number }
+
 /**
- * The man at `pos` in one side's walk. `dayOf` turns a position in this
- * side's sequence into the day offset from ROTATION_START it is dealt on.
- *
- * Cycle after cycle from the start: a cycle's roster is every man of the side
- * who was in the table before the day the cycle began (joinDay, from
- * addedAt; a man with no addedAt has always been in), in rotationOrder, and
- * the cycle is as long as that roster. Nothing here reads how long the side
- * is today, so a man added mid cycle changes no position until the next
- * cycle starts. A side whose every man joined after a cycle's first day
- * (only possible if the whole side is new) is dealt in full so the day is
- * never empty.
+ * The cycle of a walk that holds position `pos`: its men in deal order, and
+ * pos's place among them. `dayOf` turns a position into the day offset from
+ * ROTATION_START it is dealt on. Cycle after cycle from the start, a cycle's
+ * men are the walk's men the roster has in on the cycle's first day, and the
+ * cycle is as long as that. Nothing here reads the live pool or how many men
+ * the side has today, so a roster line dated after a cycle began changes
+ * nothing before the next cycle. A walk with nobody in on a cycle's first day
+ * (only possible while every line is dated later) deals everyone it names,
+ * so the loop always moves on.
  */
-function rotationWalk(side: CareerPlayer[], pos: number, dayOf: (pos: number) => number): CareerPlayer | null {
-  if (side.length === 0) return null;
+function walkCycle(walk: Walk, pos: number): { order: string[]; offset: number } {
   const startDay = dayNumber(ROTATION_START);
   let cycleStart = 0;
   for (;;) {
-    const cycleDay = startDay + dayOf(cycleStart);
-    let roster = side.filter(p => joinDay(p) < cycleDay);
-    if (roster.length === 0) roster = side;
-    if (pos < cycleStart + roster.length) return rotationOrder(roster)[pos - cycleStart];
-    cycleStart += roster.length;
+    const cycleDay = startDay + walk.dayOf(cycleStart);
+    let men = walk.men.filter(m => inOn(m, cycleDay));
+    if (men.length === 0) men = walk.men;
+    if (pos < cycleStart + men.length) return { order: rotationOrder(men.map(m => m.id)), offset: pos - cycleStart };
+    cycleStart += men.length;
   }
 }
 
-/** The day number a man's table row was created, from career_players.created_at; always in when unknown. */
-function joinDay(p: CareerPlayer): number {
-  if (!p.addedAt || !/^\d{4}-\d{2}-\d{2}/.test(p.addedAt)) return Number.NEGATIVE_INFINITY;
-  return dayNumber(p.addedAt.slice(0, 10));
+/** Whether the roster has a man in on `day`: his last line dated on or before it says so. */
+function inOn(m: RosterMan, day: number): boolean {
+  let isIn = false;
+  for (const s of m.spans) {
+    if (s.day > day) break;
+    isIn = s.isIn;
+  }
+  return isIn;
 }
 
-/** One side in its fixed rotation order: by a hash of the id, ties by id. */
-function rotationOrder(players: CareerPlayer[]): CareerPlayer[] {
-  const key = new Map(players.map(p => [p.id, dailyPrngSeed(`career-ladder:${p.id}`)]));
-  return [...players].sort((a, b) => key.get(a.id)! - key.get(b.id)! || a.id.localeCompare(b.id));
+type RosterSides = { harder: RosterMan[]; easier: RosterMan[] };
+const parsedRosters = new WeakMap<ReadonlyArray<RosterEntry>, RosterSides>();
+
+/** The roster's men on each side, each with his lines in date order. A malformed line is skipped. */
+function rosterSides(roster: ReadonlyArray<RosterEntry>): RosterSides {
+  const known = parsedRosters.get(roster);
+  if (known) return known;
+  const men = new Map<string, { side: string; spans: RosterMan['spans'] }>();
+  for (const [id, side, since] of roster) {
+    if (!id || !(side === 'h' || side === 'e' || side === 'x') || !/^\d{4}-\d{2}-\d{2}$/.test(since ?? '')) continue;
+    let m = men.get(id);
+    if (!m) men.set(id, (m = { side: '', spans: [] }));
+    if (!m.side && side !== 'x') m.side = side;
+    m.spans.push({ day: dayNumber(since), isIn: side !== 'x' });
+  }
+  const sides: RosterSides = { harder: [], easier: [] };
+  for (const [id, m] of men) {
+    if (!m.side) continue;
+    m.spans.sort((a, b) => a.day - b.day);
+    (m.side === 'h' ? sides.harder : sides.easier).push({ id, spans: m.spans });
+  }
+  parsedRosters.set(roster, sides);
+  return sides;
+}
+
+const orderKeys = new Map<string, number>();
+
+/** Ids in the fixed rotation order: by a hash of the id, ties by id. */
+function rotationOrder(ids: string[]): string[] {
+  const key = (id: string) => {
+    let v = orderKeys.get(id);
+    if (v === undefined) orderKeys.set(id, (v = dailyPrngSeed(`career-ladder:${id}`)));
+    return v;
+  };
+  return [...ids].sort((a, b) => key(a) - key(b) || a.localeCompare(b));
 }
 
 /**
@@ -631,7 +710,7 @@ export async function fetchCareerPool(): Promise<CareerPlayer[] | null> {
   try {
     const { data: playerRows, error: playersError } = await supabase
       .from('career_players' as any)
-      .select('id, player_name, nationality, position, created_at');
+      .select('id, player_name, nationality, position');
     if (playersError) throw playersError;
 
     const seasonRows: any[] = [];
@@ -671,7 +750,6 @@ export async function fetchCareerPool(): Promise<CareerPlayer[] | null> {
         name: String(p.player_name ?? ''),
         nationality: String(p.nationality ?? ''),
         position: String(p.position ?? ''),
-        addedAt: p.created_at ? String(p.created_at) : undefined,
         seasons: (stintsByPlayer.get(String(p.id)) ?? []).sort(
           (a, b) => a.sortOrder - b.sortOrder,
         ),

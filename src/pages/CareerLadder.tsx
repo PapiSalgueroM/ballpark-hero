@@ -35,6 +35,7 @@ import {
   pickDailyPlayer,
 } from '@/lib/careerLadder';
 import { flagForClub } from '@/lib/careerLadder';
+import ladderRoster from '@/data/careerLadderRoster.json';
 import { searchPlayers, SOCCER_MARKET_VALUE_SOURCE, type PlayerEntity } from '@/lib/playerSearch';
 
 type Phase = 'boot' | 'error' | 'playing' | 'won' | 'lost';
@@ -80,7 +81,8 @@ const CareerLadder = () => {
      supabasePuzzle and the player needs the hook's day, so the player is
      state, set in the effect below the render after the pool lands; the hook
      re-selects when supabasePuzzle goes from null to a value, the transition
-     it already waits on. */
+     it already waits on. Who the rotation can deal comes from the committed
+     roster, never from the pool (see rotationPick in the lib). */
   const [dailyPlayer, setDailyPlayer] = useState<CareerPlayer | null>(null);
 
   // dailyPlayer resolves asynchronously (Supabase fetch via boot()), so it is
@@ -113,7 +115,7 @@ const CareerLadder = () => {
   });
 
   useEffect(() => {
-    setDailyPlayer(pool.length > 0 ? pickDailyPlayer(pool, dailyDate) : null);
+    setDailyPlayer(pool.length > 0 ? pickDailyPlayer(pool, dailyDate, ladderRoster.entries) : null);
   }, [pool, dailyDate]);
 
   const dailyRevealed = useMemo(
