@@ -82,8 +82,12 @@
  *               levels, is put back to the words it had before Release K
  *               reworded it on main; section 4 must catch the description at
  *               both levels, on that route alone. No browser.
- *   The two section 4 controls refuse to run unless the text they cut or
- *   replace occurs exactly once in each part text, and they edit the bytes
+ *   extraentry  the other direction: /deadline-day (new in Release K) is cut
+ *               out of main's table text, in memory, so the split serves a
+ *               route main does not have; section 4 must report it extra at
+ *               both levels, on that route alone. No browser.
+ *   The three section 4 controls refuse to run unless the text they cut or
+ *   replace occurs exactly once where they edit it, and they edit the bytes
  *   the section reads, never its parsed result.
  *
  * Run: vite build (or npm run build), then node scripts/simSeoMetaSplit.mjs
@@ -117,6 +121,7 @@ const CONTROLS = {
   savedcanon: { route: '/soccer', finding: 'canonical', section: 1 },
   lostentry: { route: '/nhl-gauntlet-draft', finding: 'missing', section: 4 },
   staledesc: { route: '/sports-bingo', finding: 'description', section: 4 },
+  extraentry: { route: '/deadline-day', finding: 'extra', section: 4 },
 };
 const CONTROL = process.env.SEO_SPLIT_CONTROL || '';
 const abort = m => { console.error(`simSeoMetaSplit: cannot run: ${m}`); process.exit(2); };
@@ -161,6 +166,15 @@ let mainRoutes = 0, mainLevels = [];
     mainText = execFileSync('git', ['show', `${BASE_REF}:src/data/seoMeta.ts`], { cwd: ROOT, encoding: 'utf8', maxBuffer: 1 << 24 });
   } catch (e) {
     abort(`git show ${BASE_REF}:src/data/seoMeta.ts failed (${String(e?.message ?? e).split('\n')[0]}); fetch origin or set SEO_SPLIT_BASE_REF`);
+  }
+  if (CONTROL === 'extraentry') {
+    const key = `\n  '${CONTROLS.extraentry.route}': {\n`;
+    mainText = lf(mainText);
+    const at = mainText.indexOf(key);
+    if (at < 0 || mainText.indexOf(key, at + 1) >= 0) abort(`control extraentry: ${BASE_REF}'s table does not carry ${CONTROLS.extraentry.route} exactly once in the written shape`);
+    const end = mainText.indexOf('\n  },\n', at);
+    mainText = mainText.slice(0, at) + mainText.slice(end + '\n  },'.length);
+    console.log(`CONTROL extraentry: ${CONTROLS.extraentry.route} is cut out of ${BASE_REF}'s table text, in memory; section 4 must go red on ${CONTROLS.extraentry.route} alone, served by the split and not on main`);
   }
   const MAIN = await evalSeoMeta(ROOT, mainText, `${BASE_REF}:src/data/seoMeta.ts`);
   mainRoutes = Object.keys(MAIN).length;
