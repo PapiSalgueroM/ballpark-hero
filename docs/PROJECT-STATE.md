@@ -21,6 +21,10 @@ with actual App/Footer acceptance still due. No full-green/publication claim. Ne
 Claude795/796 and incoming d99b58e4 stand. Merge his refreshed669 player data and both
 practice normalizations before further triage. Retain only our new Aussie metadata row
 across his700 metadata split. No Soccer Career engine or shared Front Office edits here.
+Incoming player-bake and practice checks are now green.797 also reserves only the two
+794 wrappers' raw-byte equality read representation plus directly normalized control
+text, to resolve a conservative scanner false positive while keeping an effective
+removed-normalization control. No product or scanner weakening is claimed.
 
 ## LIVE 2026-10-01: Release J (653 grid answer archives, the 669 Footle re-bake), main `2652f9fa`
 
