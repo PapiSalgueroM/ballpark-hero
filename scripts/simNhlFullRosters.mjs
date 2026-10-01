@@ -49,7 +49,7 @@
  *   partial   the stand in mark dropped at the deal                  -> 4
  *   ceiling   the full league's ceiling raised to 30                 -> 4, 5, 6
  *   refill    the offseason's full roster refill removed             -> 6
- *   legacy    the AI's signing ceiling read as 23 on every league    -> 7
+ *   legacy    the full roster refill run on every league, old saves too -> 7
  *   allmen    the strength read averaging every healthy forward      -> 7, 8
  *
  * Measured headroom (2026-10-01, this record):
@@ -116,7 +116,7 @@ const ENGINE_EDITS = {
   partial: [["if (partial?.has(`${abbr}:${s.pos}:${s.name}`)) p.partial = true;", 'void partial;']],
   ceiling: [['export const NHL_FULL_ROSTER_MAX = 23;', 'export const NHL_FULL_ROSTER_MAX = 30;']],
   refill: [['if (league.rosterDepth) replenishNhlRoster(t, rng, taken, NHL_FULL_FLOORS, nhlDepthSalaryFor);', 'void NHL_FULL_FLOORS;']],
-  legacy: [['const { max } = nhlRosterLimits(league);', 'const max = NHL_FULL_ROSTER_MAX;']],
+  legacy: [['if (league.rosterDepth) replenishNhlRoster(t, rng, taken, NHL_FULL_FLOORS, nhlDepthSalaryFor);', 'if (true) replenishNhlRoster(t, rng, taken, NHL_FULL_FLOORS, nhlDepthSalaryFor);']],
   allmen: [["healthy.filter(p => p.pos === 'C' || p.pos === 'W').sort((a, b) => b.ovr - a.ovr).slice(0, 6);", "healthy.filter(p => p.pos === 'C' || p.pos === 'W').sort((a, b) => b.ovr - a.ovr);"]],
 };
 const DATA_EDITS = {
