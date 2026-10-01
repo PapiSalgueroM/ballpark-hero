@@ -78,6 +78,7 @@
      nocut         the offseason never cuts and Play is never held   -> 6 and 9
      cutuser       the offseason cuts the GM's club behind his back  -> 9
      catchers      the refill without its two catchers               -> 6
+     indexkeyed    injury rolls keyed on the place in the list       -> 5
 
    The fixture: node scripts/simMlbFullRosters.mjs --write-legacy-fixture
    writes it with whatever engine is in src. It was written against the engine
@@ -104,7 +105,7 @@ const STATS = path.join(ROOT, 'scripts', 'data', 'mlbStats2026.json');
 const FIXTURE = path.join(ROOT, 'scripts', 'data', 'mlbLegacySaveFixture.json');
 const CONTROL = process.env.MLB_FULL_CONTROL || '';
 const WRITE_FIXTURE = process.argv.includes('--write-legacy-fixture');
-const EXPECT = { invented: [3, 4], benchread: [5], sharedstream: [5], fullprice: [4], legacylimits: [7], idkeyed: [5], onecatcher: ['3c'], namesake: ['3n'], nocut: [6, 9], cutuser: [9], catchers: [6] };
+const EXPECT = { invented: [3, 4], benchread: [5], sharedstream: [5], fullprice: [4], legacylimits: [7], idkeyed: [5], onecatcher: ['3c'], namesake: ['3n'], nocut: [6, 9], cutuser: [9], catchers: [6], indexkeyed: [5] };
 if (CONTROL && !EXPECT[CONTROL]) { console.error(`MLB_FULL_CONTROL=${CONTROL} is not a control this harness knows (${Object.keys(EXPECT).join(', ')})`); process.exit(1); }
 
 let checks = 0;
@@ -125,6 +126,7 @@ const ENGINE_SWAPS = {
   sharedstream: [['  if (deep) rollDepthInjuries(league, myTeam, rng, notes);\n  else {', '  {']],
   fullprice: [['salary: core.has(i) ? mlbSalaryFor(s.ovr) : MLB_DEPTH_SALARY,', 'salary: mlbSalaryFor(s.ovr),']],
   idkeyed: [['unitHash(roundSeed, p.name, 1)', 'unitHash(roundSeed, p.id, 1)'], ['unitHash(roundSeed, p.name, 2)', 'unitHash(roundSeed, p.id, 2)']],
+  indexkeyed: [['unitHash(roundSeed, p.name, 1)', 'unitHash(roundSeed, t.abbr + t.players.indexOf(p), 1)'], ['unitHash(roundSeed, p.name, 2)', 'unitHash(roundSeed, t.abbr + t.players.indexOf(p), 2)']],
   legacylimits: [['export const mlbRosterMax = (t: { depth?: number }): number => (t.depth ? MLB_ROSTER_MAX : MLB_LEGACY_ROSTER_MAX);', 'export const mlbRosterMax = (t: { depth?: number }): number => (t.depth || true ? MLB_ROSTER_MAX : MLB_LEGACY_ROSTER_MAX);']],
   /* the builder's state: the offseason never cuts, and nothing is held */
   nocut: [['  for (const t of Object.values(league.teams)) if (t.abbr !== userTeam) mlbCutDownToMax(t, league.freeAgents);\n', ''], ['  return t.depth ? Math.max(0, t.players.length - mlbRosterMax(t)) : 0;', '  return 0;'], ['  if (!t.depth) return out;\n  while', '  if (!t.depth || true) return out;\n  while']],
@@ -431,7 +433,7 @@ console.log('4) a new league: 26 real men a club, nobody invented, the payroll r
 console.log('5) the bench never moves a result');
 {
   const reads = t => new Set(E.mlbSimReads(t));
-  let compared = 0, total = 0, ilSame = 0, ilTotal = 0, strengthSame = 0, reproduced = 0;
+  let compared = 0, total = 0, ilSame = 0, ilTotal = 0, strengthSame = 0, reproduced = 0, orderFree = 0;
   const moved = [];
   for (const seed of SEEDS) {
     const A = E.initMlbLeague(lcg(seed));
@@ -476,6 +478,22 @@ console.log('5) the bench never moves a result');
     const rx = lcg(seed + 31), ry = lcg(seed + 31);
     for (let r = 1; r <= E.MLB_ROUNDS; r += 1) { E.simMlbRound(X, 'NYY', rx); E.simMlbRound(Y, 'NYY', ry); }
     if (GAME_TEAMS.every(a => X.teams[a].wins === Y.teams[a].wins && X.teams[a].losses === Y.teams[a].losses)) reproduced += 1;
+    /* (b3) Round 829 review: and wherever he sits on the list. A DFA splices
+       a man out and a trade appends one, so a roll keyed on the position in
+       the list would move every man behind him. Mutation testing found a
+       position key passed (b) and (b2), both of which only ever append. */
+    const P = E.initMlbLeague(lcg(seed)), Q = clone(P);
+    for (const a of GAME_TEAMS) Q.teams[a].players.reverse();
+    const rp = lcg(seed + 47), rq = lcg(seed + 47);
+    let orderSame = true;
+    for (let r = 1; r <= E.MLB_ROUNDS; r += 1) {
+      E.simMlbRound(P, 'NYY', rp); E.simMlbRound(Q, 'NYY', rq);
+      for (const a of GAME_TEAMS) {
+        const outs = new Map(Q.teams[a].players.map(p => [p.id, p.out]));
+        if (P.teams[a].players.some(p => outs.get(p.id) !== p.out) || P.teams[a].wins !== Q.teams[a].wins) orderSame = false;
+      }
+    }
+    if (orderSame) orderFree += 1;
     /* (c) printed, not asserted: against a 13 man twin, what moves and why */
     const A2 = E.initMlbLeague(lcg(seed));
     const C = clone(A2);
@@ -490,6 +508,7 @@ console.log('5) the bench never moves a result');
   ok(5, 'nearly every round is comparable (no twin depth man reached a read)', compared >= total * 0.95, `${compared} of ${total}`);
   ok(5, 'every comparable round ends with the same record for every club', moved.length === 0, moved.slice(0, 4).join(', '));
   ok(5, 'a seed plays the same season whatever ids the men were minted with', reproduced === SEEDS.length, `${reproduced} of ${SEEDS.length}`);
+  ok(5, 'a seed plays the same season, IL and all, whatever order each roster lists its men in', orderFree === SEEDS.length, `${orderFree} of ${SEEDS.length}`);
   console.log(`   ${compared} of ${total} twin rounds compared, ${moved.length} moved; IL identical on ${ilSame} of ${ilTotal} man rounds`);
 }
 
