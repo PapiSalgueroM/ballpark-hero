@@ -55,7 +55,10 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { TRANSFER_OVERLAY_2026 } from './transferOverlay2026.mjs';
+/* Round 795: the overlay now ends with this file's own accepted rows
+   (scripts/data/window2026/overlayAdditions.generated.mjs), so the repeat
+   check reads the hand list, the one these rows must not repeat. */
+import { TRANSFER_OVERLAY_2026_HAND as TRANSFER_OVERLAY_2026 } from './transferOverlay2026.mjs';
 import { DB_TO_ENGINE } from './lib/dbClubNames.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');

@@ -19,11 +19,23 @@
      4. NAMESAKES. No entry's name matches more than one 2026 row, because the
         migration keys on the name alone.
 
+   Round 795: the overlay ends with the generated window rows
+   (scripts/data/window2026/overlayAdditions.generated.mjs), which carry
+   `from`, the club on the player's 2026 row when the plan was measured. Their
+   migration (supabase/migrations/20261001170000_round_795_window_2026.sql) is
+   written UNAPPLIED, so for those rows section 2 accepts the row at `from`
+   (pending) or at `db` (applied), and fails on anything else and on a MIX:
+   the migration is one transaction, so some moved and some not is a partial
+   apply or a rollback, never a state it leaves.
+
    NEGATIVE CONTROLS (house rule: prove each check can fail):
      SIM_OVERLAY_CONTROL=stale   pretends Rodri's entry says Manchester City;
                                  section 2 must go red.
      SIM_OVERLAY_CONTROL=typo    misspells one db club in memory; section 3
                                  must go red.
+     SIM_OVERLAY_CONTROL=mixed   flips one generated row to the other state in
+                                 memory (pending to applied, or back); section
+                                 2 must go red.
    Each control refuses to run if what it rewrites is not there, and is
    judged on its own section only.
 
@@ -90,25 +102,45 @@ for (const e of overlay) {
   if (typeof e.db !== 'string' || !e.db.trim()) fail(`${e.name}: no db spelling, the table would never learn this move`);
 }
 
-/* one query for every overlay name: the 2026 rows */
+/* the 2026 rows for every overlay name. Round 795: 40 names a query, because
+   the overlay passed 600 names and one in() list that long is past what a URL
+   carries. */
 const names = overlay.map(e => e.name);
-const inList = names.map(n => `"${n.replace(/"/g, '\\"')}"`).join(',');
-const rows = await rest(`player_market_values?select=player_name,club,market_value_usd&year=eq.2026&player_name=in.(${encodeURIComponent(inList)})&limit=1000`);
+const rows = [];
+for (let i = 0; i < names.length; i += 40) {
+  const inList = names.slice(i, i + 40).map(n => `"${n.replace(/"/g, '\\"')}"`).join(',');
+  rows.push(...await rest(`player_market_values?select=player_name,club,market_value_usd&year=eq.2026&player_name=in.(${encodeURIComponent(inList)})&limit=1000`));
+}
 const byName = new Map();
 for (const r of rows) { if (!byName.has(r.player_name)) byName.set(r.player_name, []); byName.get(r.player_name).push(r); }
+
+if (CONTROL === 'mixed') {
+  /* One generated row whose plan moves it, flipped to the other state. */
+  const e = overlay.find(x => typeof x.from === 'string' && x.from !== x.db && (byName.get(x.name) || []).length === 1);
+  if (!e) abort('control cannot run: no generated row with a planned move and one 2026 row');
+  const r = byName.get(e.name)[0];
+  if (r.club !== e.from && r.club !== e.db) abort(`control cannot run: ${e.name}'s row is at neither end of its move`);
+  r.club = r.club === e.from ? e.db : e.from;
+  console.log(`   NEGATIVE CONTROL ON: ${e.name}'s 2026 row flipped to ${r.club}, so one generated move disagrees with the rest`);
+}
 
 section = 2;
 console.log('2) The table says what the overlay says, for every entry with a 2026 row');
 {
-  let checked = 0, missing = [];
+  let checked = 0, missing = [], pending = 0, applied = 0;
   for (const e of overlay) {
     const list = byName.get(e.name) || [];
     if (list.length === 0) { missing.push(e.name + (e.add ? ' (added at bake)' : '')); continue; }
     checked += 1;
+    const planned = typeof e.from === 'string' && e.from !== e.db;
     for (const r of list) {
+      if (planned && r.club === e.from) { pending += 1; continue; }
+      if (planned && r.club === e.db) applied += 1;
       if (r.club !== e.db) fail(`${e.name}: the 2026 row says ${r.club}, the verified move says ${e.db}`);
     }
   }
+  if (pending > 0 && applied > 0) fail(`the Round 795 migration is half there: ${applied} generated moves applied and ${pending} pending, which one transaction never leaves`);
+  console.log(`   generated window moves: ${pending} pending (migration unapplied), ${applied} applied`);
   /* Round 399: a floor, because an empty answer used to read as green. Round
      450: 240 of 241 entries have a 2026 row today (Griezmann is the one that
      does not). */
@@ -147,10 +179,10 @@ console.log('4) No entry name matches more than one 2026 row');
   console.log(`   ${overlay.length} names, none ambiguous`);
 }
 
-const own = { stale: 2, typo: 3 }[CONTROL];
+const own = { stale: 2, typo: 3, mixed: 2 }[CONTROL];
 const total = failures[1] + failures[2] + failures[3] + failures[4];
 if (CONTROL) {
-  if (!own) abort(`unknown control "${CONTROL}" (stale, typo)`);
+  if (!own) abort(`unknown control "${CONTROL}" (stale, typo, mixed)`);
   if (failures[own] > 0) { console.log(`\ncontrol "${CONTROL}": ${failures[own]} failure(s) fired in section ${own} as expected, the check works`); process.exit(0); }
   abort(`\ncontrol "${CONTROL}": changed NOTHING in section ${own}, the check is dead`);
 }
