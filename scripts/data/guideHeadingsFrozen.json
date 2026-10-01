@@ -2751,8 +2751,8 @@
       "howToPlay": [
         "Check the header for the sport and the stat, like NBA career assists or MLB career home runs.",
         "Tap the five names in order, starting with the player you think has the most.",
-        "Changed your mind? Hit Undo last any time before your fifth pick.",
-        "Your ranking submits automatically the moment the fifth player lands.",
+        "Changed your mind? Move a picked player up or down, remove a name, or use Undo last while you build your order.",
+        "Once all five players are in place, review the order and hit Lock order to submit it.",
         "The reveal shows the true order with each player's real career number beside it."
       ],
       "rules": [
@@ -2769,7 +2769,7 @@
         "Lock in the two ends first. First and fifth are usually the spots you actually know.",
         "Career totals reward longevity. A 20-year grinder often out-counts a shorter, brighter prime.",
         "Think era. Stats like three-pointers and stolen bases skew hard toward certain decades.",
-        "Use undo freely. Nothing counts until the fifth tap."
+        "Edit freely before you hit Lock order. Adding your fifth player leaves the order open for review."
       ]
     },
     "/rarity-round": {
