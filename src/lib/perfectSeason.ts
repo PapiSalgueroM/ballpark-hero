@@ -74,6 +74,14 @@ export function winProbability(overall: number): number {
   return Math.min(0.985, Math.max(0.05, p));
 }
 
+/** Momentum, shared by both season sims (this one and simulateSeasonFair):
+    a win yesterday lifts today a little, a loss drags it, and no game is ever
+    surer than GAME_CAP. Round 820 named them so the closed form odds in
+    perfectSeasonOdds.ts read the same numbers the sims play. */
+export const WIN_MOMENTUM = 0.004;
+export const LOSS_MOMENTUM = -0.006;
+export const GAME_CAP = 0.988;
+
 export function simulateSeason(overall: number, games: number, seed: number): SimResult {
   const rand = rng(seed);
   const p = winProbability(overall);
@@ -81,8 +89,8 @@ export function simulateSeason(overall: number, games: number, seed: number): Si
   let wins = 0;
   for (let i = 0; i < games; i++) {
     // A pinch of streakiness: losing yesterday stings today, winning helps
-    const momentum = i > 0 ? (results[i - 1] ? 0.004 : -0.006) : 0;
-    const win = rand() < Math.min(0.988, p + momentum);
+    const momentum = i > 0 ? (results[i - 1] ? WIN_MOMENTUM : LOSS_MOMENTUM) : 0;
+    const win = rand() < Math.min(GAME_CAP, p + momentum);
     results.push(win);
     if (win) wins++;
   }

@@ -15,7 +15,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import Page from '@/pages/PerfectSeasonNba';
 import { NBA_SLOTS, type NbaTeamSeasonEntry } from '@/lib/perfectSeasonNba';
 import { teamOverall, type DraftablePlayer, type SpinSquad } from '@/lib/perfectSeason';
-import { perfectOddsLine } from '@/lib/perfectSeasonExpansion';
+import { perfectOddsLine } from '@/lib/perfectSeasonOdds';
 
 vi.mock('@/lib/perfectSeasonNba', async original => ({
   ...await original<typeof import('@/lib/perfectSeasonNba')>(),
