@@ -6,6 +6,9 @@
  * to the answer, the decision model's direction (standing up, tier gap down,
  * trouble up) and its clamp, the words, and the two exits (join now, join in
  * the summer) including the rollover consuming a booked move exactly once.
+ * Since the Round 783 review also: no application beside a live approach or
+ * in the last league games, the busy state that keeps approaches away, the
+ * rollover keeping the cooldowns, a waiting yes, and the sack ending the hunt.
  * The engine side is measured by scripts/simCmApplications.mjs.
  */
 import { describe, it, expect } from 'vitest';
@@ -13,15 +16,17 @@ import {
   ANSWER_MAX_MATCHES, ANSWER_MIN_MATCHES, APPLICATIONS_PER_SEASON, COOLDOWN_SEASONS, ODDS_CEILING, ODDS_FLOOR,
   acceptanceOdds, applicationsLeft, applyRefusal, bookSummerMove, closeOnJoiningNow, consumeSummerMove, cooldownUntil,
   countDown, decideApplication, declineLine, acceptLine, leavingLine, employedProfile, jobHuntOf, oddsWord,
-  openApplication, recordDecision,
+  openApplication, recordDecision, huntBusy, rollOverHunt, waitingYes, dropOnSack,
 } from '@/lib/clubManagerJobHunt';
 import type { ApplicationInput, JobHunt } from '@/lib/clubManagerJobHunt';
+import type { Approach } from '@/lib/clubManager';
 import type { ManagerProfile } from '@/lib/managerOffers';
 
 type Stub = {
   season: number; week: number; clubName: string;
   pendingMove?: { club: string; blurb: string } | null;
   sacked: boolean; wilderness?: null | { weeksOut: number; formerClub: string; offers: never[]; seen: never[] };
+  approach?: Approach | null;
   jobHunt?: JobHunt;
 };
 
@@ -101,6 +106,71 @@ describe('sending one', () => {
     const next = { ...c, season: c.season + 1 };
     expect(applicationsLeft(next)).toBe(APPLICATIONS_PER_SEASON);
     expect(applyRefusal(next, 'Club 9')).toBeNull();
+  });
+
+  /* Round 783 review: the rules the review added to the state machine. */
+  const approach: Approach = { club: 'Suitor', leagueName: 'A League', tierLabel: 'Giant', blurb: '', week: 9, expiresWeek: 14 };
+
+  it('refuses while another club is waiting on your answer to its approach', () => {
+    expect(applyRefusal(career({ approach }), target.club)).toBe('approach');
+    expect(openApplication(career({ approach }), target)).toBeNull();
+    expect(applyRefusal(career({ approach: null }), target.club)).toBeNull();
+  });
+
+  it('refuses in the last league games, so every answer lands while the season is still on', () => {
+    expect(applyRefusal(career(), target.club, ANSWER_MAX_MATCHES)).toBeNull();
+    expect(applyRefusal(career(), target.club, ANSWER_MAX_MATCHES - 1)).toBe('late');
+    expect(applyRefusal(career(), target.club, 0)).toBe('late');
+    expect(openApplication(career(), target, Math.random, ANSWER_MAX_MATCHES - 1)).toBeNull();
+    /* Even the longest wait fits in what is left when it is allowed to go. */
+    expect(openApplication(career(), target, fixedRng(0.999), ANSWER_MAX_MATCHES)!.open!.matchesLeft).toBeLessThanOrEqual(ANSWER_MAX_MATCHES);
+  });
+
+  it('reads busy, the state in which no approach is made or committed to, only with one out or one booked', () => {
+    expect(huntBusy(career())).toBe(false);
+    const out = openApplication(career(), target)!;
+    expect(huntBusy(career({ jobHunt: out }))).toBe(true);
+    expect(huntBusy(career({ jobHunt: recordDecision(out, true, 12, 0.5) }))).toBe(true);
+    expect(huntBusy(career({ jobHunt: bookSummerMove(recordDecision(out, true, 12, 0.5), 'blurb')! }))).toBe(true);
+    expect(huntBusy(career({ jobHunt: recordDecision(out, false, 12, 0.2) }))).toBe(false);
+  });
+});
+
+describe('the season turning over, and the sack', () => {
+  it('the rollover clears the slot and the count but keeps every cooldown', () => {
+    const c = career();
+    const declined = recordDecision(openApplication(c, target)!, false, 12, 0.2);
+    const rolled = rollOverHunt(declined, c.season + 1);
+    expect(rolled.open).toBeNull();
+    expect(rolled.summerMove).toBeNull();
+    expect(rolled.sent).toBe(0);
+    expect(rolled.sentSeason).toBe(c.season + 1);
+    expect(rolled.cooldowns).toEqual(declined.cooldowns);
+    expect(applyRefusal({ ...c, season: c.season + 1, jobHunt: rolled }, target.club)).toBe('cooldown');
+    const twice = rollOverHunt(rolled, c.season + 2);
+    expect(applyRefusal({ ...c, season: c.season + 2, jobHunt: twice }, target.club)).toBeNull();
+  });
+
+  it('a yes nobody answered is still waiting at the season end, a pending one or a no is not', () => {
+    const out = openApplication(career(), target)!;
+    expect(waitingYes(out)).toBeNull();
+    expect(waitingYes(recordDecision(out, false, 12, 0.2))).toBeNull();
+    expect(waitingYes(recordDecision(out, true, 12, 0.5))).toBe(target.club);
+    expect(waitingYes(bookSummerMove(recordDecision(out, true, 12, 0.5), 'blurb')!)).toBeNull();
+  });
+
+  it('the sack ends the hunt: nothing open, nothing booked, the cooldowns and the count kept', () => {
+    const c = career();
+    const declined = recordDecision(openApplication(c, target)!, false, 12, 0.2);
+    const booked = bookSummerMove(recordDecision(openApplication({ ...c, jobHunt: declined }, { ...target, club: 'Third Club' })!, true, 14, 0.5), 'blurb')!;
+    expect(booked.summerMove).not.toBeNull();
+    const dropped = dropOnSack(booked);
+    expect(dropped.open).toBeNull();
+    expect(dropped.summerMove).toBeNull();
+    expect(dropped.cooldowns).toEqual(booked.cooldowns);
+    expect(dropped.sent).toBe(booked.sent);
+    expect(huntBusy(career({ jobHunt: dropped }))).toBe(false);
+    expect(dropOnSack(openApplication(c, target)!).open).toBeNull();
   });
 });
 
