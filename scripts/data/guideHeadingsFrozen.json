@@ -1,5 +1,5 @@
 {
-  "about": "Frozen by Round 638 before conversion. The flat guide text each converted game held before its sections were written. scripts/simGuideHeadings.mjs section 1 requires every sentence here to appear exactly once in the derived flat arrays of the same part. Add a route with: node scripts/simGuideHeadings.mjs --freeze /route (before converting it). Never edit an entry by hand.",
+  "about": "Guide text generated before section conversion or explicitly refreshed after a verified gameplay or factual correction. scripts/simGuideHeadings.mjs section 1 requires each sentence exactly once in its original part. Use --freeze /route before conversion, or --refresh /route after a verified change to an existing converted guide. Never edit sentence entries by hand.",
   "routes": {
     "/afl-higher-lower": {
       "howToPlay": [
@@ -719,7 +719,7 @@
       "example": [
         "Suppose clue one reads Iconic. Half the grid thinks that's them, so you wait. Clue two says Italy, and now it's a short list.",
         "Iconic plus Italy has one obvious owner. Ferrari on clue two banks 800 points.",
-        "Holding out for the championship clue, a count of 16 titles, would have confirmed it at 600. Some clues are worth skipping."
+        "Holding out for the championship clue, a count of 16 titles, would have confirmed it at 400. Some clues are worth skipping."
       ],
       "tips": [
         "Country is the power clue, but Britain won't save you: McLaren, Williams, Lotus and more are all UK based.",
@@ -2389,6 +2389,8 @@
         "Pick any of the 32 clubs and inherit its actual roster.",
         "Read the ownership mandate: a contender is told to win the Cup, a bubble club to make the bracket, a rebuild to hit an honest win number. It resets every offseason from where the roster really stands.",
         "Shape it: waive players, sign free agents, and work the phone on trades, where the other GM counters with pick demands and lesser returns instead of a flat yes or no.",
+        "Open Roster and choose your simulation contributors: six healthy forwards, four healthy defensemen and one healthy goalie. If a group has fewer available players, use all of them. Uncheck a selected forward or defenseman before choosing his replacement.",
+        "Stage your changes, then Apply contributors to save them. Use automatic goes back to the highest rated healthy players. These groups feed the rating model; they are not full lines, defensive pairs or ice time.",
         "Sim the season in 20 rounds of roughly four games each, with a live read on whether you are on pace.",
         "Qualify for the playoffs: top three per division plus two wild cards per conference.",
         "Win four best-of-7 rounds to lift the Stanley Cup, then draft and go again, as long as ownership keeps you."
@@ -2403,12 +2405,14 @@
         "Trust upstairs runs 0 to 100: beat the mandate and it climbs, miss it and it falls, a Cup fixes almost anything, and at zero you are fired and the save ends."
       ],
       "example": [
+        "For a fictional rating example, keep your forwards and defensemen unchanged and replace a healthy 80 rated goalie with a healthy 85 rated goalie. The goalie group has a 20 percent weight, so your simulation strength rises by one point. Apply commits that choice; it changes your odds, not a promised result.",
         "Say you take Buffalo. You waive a fading winger, sign a 79 rated defenseman, then package your third line center plus a pick for a younger blueliner. The AI takes the deal because the value clears its price.",
         "The season becomes a wild card sweat decided by overtime loser points. You sneak in, stun a division winner, then die in the division final. At the draft an 88 grade center turns out to be an 84."
       ],
       "tips": [
         "Overtime loser points decide races. A team hovering around .500 can still make the bracket on them.",
-        "Strength math: the top six forwards carry half your rating, the top four defensemen 30 percent, the starting goalie 20.",
+        "Strength math: your selected forwards carry half your rating, your defensemen 30 percent and your goalie 20 percent. Automatic selection uses the top six healthy forwards, top four healthy defensemen and best healthy goalie. An empty group uses a rating of 62 in this game's model.",
+        "If a selected player is injured or leaves your roster, the game keeps your other valid choices and fills the gap with the highest rated healthy option. A player who recovers needs to be selected again if you want him back in the group.",
         "Players 23 and under develop toward their potential every offseason. Hoard them."
       ]
     },

@@ -33,8 +33,12 @@ const controls = {
 assert.ok(!control || Object.hasOwn(controls, control), 'Unknown NHL contributors control');
 const normalize = source => source.replace(/\r\n/g, '\n');
 const preservedPaths = [enginePath, ...['src/data/nhlFoPlayers.ts', 'src/lib/frontOfficeCuts.ts', 'src/lib/entityIds.ts', 'src/lib/foNames.ts', 'src/lib/leagueCaps.ts'].map(file => path.join(root, file))];
-const preserved = await Promise.all(preservedPaths.map(file => readFile(file)));
-const engine = normalize(preserved[0].toString('utf8'));
+const verifyBytes = [];
+for (const file of preservedPaths) {
+  const bytes = await readFile(file);
+  verifyBytes.push(() => readFile(file).then(current => assert.deepEqual(current, bytes, 'Engine, roster data and original shared helpers must stay byte-held')));
+}
+const engine = normalize(await readFile(enginePath, 'utf8'));
 let folder;
 const copies = [];
 try {
@@ -79,7 +83,7 @@ try {
     assert.match(output, process.env.NHL_LEGACY_ENGINE ? /12 passed/ : /11 passed.*1 skipped/);
     console.log(`simNhlContributors: ${process.env.NHL_LEGACY_ENGINE ? 'twelve outcomes including the supplied physical original' : 'eleven outcomes; one optional physical-original comparison explicitly skipped'} passed.`);
   }
-  for (let index = 0; index < preservedPaths.length; index += 1) assert.deepEqual(await readFile(preservedPaths[index]), preserved[index], 'Engine, roster data and original shared helpers must stay byte-held');
+  await Promise.all(verifyBytes.map(verify => verify()));
   console.log('simNhlContributors: frozen original complete-season fingerprints/RNG counts, actual choices and roster lifecycle are exercised.');
   console.log('simNhlContributors: paired synthetic policy means and block headroom are printed; no new real NHL facts or booking are produced.');
   console.log('simNhlContributors: no Git history/network dependency; only owned source copies are written and removed.');
