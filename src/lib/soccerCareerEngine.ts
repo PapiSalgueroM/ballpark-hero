@@ -913,6 +913,9 @@ export interface CareerState {
   mafiaStage?: number;        // 0 none, 1 took the cup money, 2 arc closed
   bdorSnubFuel?: boolean;     // finished 2nd or 3rd last ceremony
   rivalryIntensity?: number;  // 0-100 heat of the feud, optional for old saves
+  /** Round 819 review: the club you said yes to on "THE ENEMY CALLS", moved
+   *  to when you press Continue on that dilemma. Optional, old saves lack it. */
+  pendingRivalMove?: string | null;
   /** Round 49 life layer. Optional so pre-R49 saves keep loading. */
   personality?: string | null; // showman | iceman | hothead | professor | enigma
   agentId?: string | null;     // cousin | shark | super | self
@@ -1311,7 +1314,7 @@ export const MORAL_DILEMMAS: MoralDilemma[] = [
     title: "MATCH FIXING",
     description: "A mysterious figure approaches you before a big match. He offers €5M to intentionally perform poorly. The money would be untraceable. No one would ever know... probably.",
     choices: [
-      { label: "Accept the money", emoji: "💰", consequence: "€5M added to your accounts", risk: "30% chance of investigation" },
+      { label: "Accept the money", emoji: "💰", consequence: "€5M added to your accounts", risk: "30% chance you are caught: banned for a season and the 5M taken back" },
       { label: "Refuse and report it", emoji: "🛡️", consequence: "Reputation +20, Legacy +10, Fair Play Award" },
       { label: "Refuse silently", emoji: "🤐", consequence: "Walk away. Nothing happens." },
     ],
@@ -1320,9 +1323,9 @@ export const MORAL_DILEMMAS: MoralDilemma[] = [
     id: "ped_offer",
     emoji: "💉",
     title: "PERFORMANCE ENHANCING DRUGS",
-    description: "Your fitness coach pulls you aside after training. He offers you an 'undetectable' substance that will boost all your stats by +5 for 3 seasons. \"Every top player does it,\" he whispers.",
+    description: "A private trainer you met over the summer, nobody from your club, gets you alone after a session. He offers you an 'undetectable' substance that will boost all your stats by +5 for 3 seasons. \"Nobody ever has to know,\" he whispers.",
     choices: [
-      { label: "Take the substance", emoji: "💊", consequence: "All stats +5 for 3 seasons", risk: "20% chance of failed test each season" },
+      { label: "Take the substance", emoji: "💊", consequence: "All stats +5 for 3 seasons", risk: "20% chance of a failed test each season: banned for a season" },
       { label: "Refuse", emoji: "✋", consequence: "Morale -5, but integrity +10 legacy bonus at retirement" },
     ],
   },
@@ -1333,7 +1336,7 @@ export const MORAL_DILEMMAS: MoralDilemma[] = [
     description: "You've developed a reputation for simulation. Journalists are running front-page stories about your theatrical falls in the box. Pundits are calling you 'the greatest actor in football.'",
     choices: [
       { label: "Embrace the dark arts", emoji: "🎭", consequence: "+2 goals per season from penalties, but reputation -15" },
-      { label: "Clean up your game", emoji: "🤝", consequence: "Reputation +10, eligible for Fair Play Award" },
+      { label: "Clean up your game", emoji: "🤝", consequence: "Reputation +10, integrity +5" },
       { label: "Ignore the noise", emoji: "🔇", consequence: "No change, let them talk" },
     ],
   },
@@ -1341,11 +1344,11 @@ export const MORAL_DILEMMAS: MoralDilemma[] = [
     id: "agent_corruption",
     emoji: "🕴️",
     title: "AGENT CORRUPTION",
-    description: "Your accountant discovers your agent has been taking 20% commission instead of the agreed 10% for the last 3 years. That's millions stolen from you. He's sitting in your living room, sweating.",
+    description: "Your accountant finds your agent has been skimming double the agreed commission for the last 3 years. That is real money stolen from you, and your agent is sitting in your living room, sweating.",
     choices: [
-      { label: "Fire him and sue", emoji: "⚖️", consequence: "Legal costs €500k, but recover the stolen money" },
-      { label: "Keep him: he gets results", emoji: "🤝", consequence: "Accept the loss, maintain relationship" },
-      { label: "Renegotiate to 12%", emoji: "📝", consequence: "Agent stays at 12%, partial money back" },
+      { label: "Fire your agent and sue", emoji: "⚖️", consequence: "Legal costs €500k, the stolen money back (up to €3M), and you negotiate your own deals from now on" },
+      { label: "Keep your agent: the results are real", emoji: "🤝", consequence: "Swallow the loss, morale -5" },
+      { label: "Make them pay some of it back", emoji: "📝", consequence: "Your agent stays, about a third of the money comes back" },
     ],
   },
   {
@@ -1362,10 +1365,10 @@ export const MORAL_DILEMMAS: MoralDilemma[] = [
   {
     id: "match_fixer_approach",
     emoji: "🎭",
-    title: "THE FIXER RETURNS",
-    description: "A different, smoother operator finds you at a hotel bar the night before a meaningless end-of-season game. \"Nobody cares about this one. Just miss a penalty if you get one. €2M, cash, tonight.\"",
+    title: "THE HOTEL BAR",
+    description: "A smooth operator finds you at a hotel bar the night before a meaningless end-of-season game. \"Nobody cares about this one. Just miss a penalty if you get one. €2M, cash, tonight.\"",
     choices: [
-      { label: "Take the deal", emoji: "💵", consequence: "€2M added instantly", risk: "25% chance of a leaked recording" },
+      { label: "Take the deal", emoji: "💵", consequence: "€2M added instantly", risk: "25% chance a recording leaks: banned for a season and the 2M taken back" },
       { label: "Film him and expose it", emoji: "🎥", consequence: "Hero status! Popularity +25, Fair Play recognition" },
       { label: "Politely decline, tell no one", emoji: "🚪", consequence: "Walk away clean. Nothing happens." },
     ],
@@ -1387,9 +1390,9 @@ export const MORAL_DILEMMAS: MoralDilemma[] = [
     title: "TUNNEL INCIDENT",
     description: "After a brutal derby loss, an opposition player shoves you in the tunnel and says something about your family. Cameras are everywhere. Your teammates are already grabbing your shirt to hold you back.",
     choices: [
-      { label: "Swing back", emoji: "👊", consequence: "3-match ban, popularity +5 with your ultras, -15 elsewhere" },
+      { label: "Swing back", emoji: "👊", consequence: "Fined two weeks' wages, popularity -10 (your ultras loved it, nobody else did)" },
       { label: "Walk away, report it", emoji: "🚶", consequence: "Federation fines the other player, your reputation +15" },
-      { label: "Trash talk, no contact", emoji: "🗣️", consequence: "Minor fine, clip goes viral either way" },
+      { label: "Trash talk, no contact", emoji: "🗣️", consequence: "Fined a week's wages, the clip goes viral either way" },
     ],
   },
   {
@@ -1406,12 +1409,12 @@ export const MORAL_DILEMMAS: MoralDilemma[] = [
   {
     id: "betting_ring_teammate",
     emoji: "🎲",
-    title: "TEAMMATE IN TROUBLE",
-    description: "Your roommate on away trips confesses he owes a betting syndicate a huge sum and they've started asking about your team's injury news. He's begging you not to tell the club.",
+    title: "AN OLD FRIEND IN TROUBLE",
+    description: "Your best mate from the academy, now playing a division below, confesses he owes a betting syndicate a huge sum and they've started asking him about your injury news. He's begging you not to tell anyone.",
     choices: [
-      { label: "Report it to the club", emoji: "📢", consequence: "Teammate suspended, integrity bonus +15, morale -5 in the dressing room" },
+      { label: "Report it to the federation", emoji: "📢", consequence: "He gets suspended, integrity +15, morale -5 (you lost a friend)" },
       { label: "Lend him the money quietly", emoji: "💶", consequence: "Net worth -1.5M, loyalty earned, risk buried" },
-      { label: "Tell him to fix it himself", emoji: "🤷", consequence: "Nothing happens immediately, but the situation lingers" },
+      { label: "Tell him to fix it himself", emoji: "🤷", consequence: "Nothing happens. You hope it stays that way" },
     ],
   },
   {
@@ -1420,8 +1423,8 @@ export const MORAL_DILEMMAS: MoralDilemma[] = [
     title: "THE NEW WONDERKID",
     description: "The club just paid a fortune for a hyped 18-year-old who plays your exact position. The manager is clearly grooming him to replace you. He's also incredibly likeable, which makes it worse.",
     choices: [
-      { label: "Mentor him openly", emoji: "🤝", consequence: "Popularity +15, but he develops faster and threatens your spot sooner" },
-      { label: "Freeze him out", emoji: "🧊", consequence: "Morale -10, dressing room tension, but you keep your place longer" },
+      { label: "Mentor him openly", emoji: "🤝", consequence: "Popularity +15, and the kid never forgets it" },
+      { label: "Freeze him out", emoji: "🧊", consequence: "Morale -10, the dressing room turns cold on you" },
       { label: "Focus on yourself, ignore it", emoji: "🎯", consequence: "No change, business as usual" },
     ],
   },
@@ -1432,7 +1435,7 @@ export const MORAL_DILEMMAS: MoralDilemma[] = [
     description: "A photo leaks of you out until 4am, three days before a huge cup final. It is blowing up online. Training is in six hours and the manager wants to see you immediately.",
     choices: [
       { label: "Own it, apologize publicly", emoji: "🙇", consequence: "Popularity +5 for honesty, morale -5, fined one week's wages" },
-      { label: "Deny everything", emoji: "🙅", consequence: "Story drags on, popularity -15 if it resurfaces later" },
+      { label: "Deny everything", emoji: "🙅", consequence: "Story drags on", risk: "35% chance it resurfaces: popularity -15" },
       { label: "Let your agent spin it", emoji: "🎙️", consequence: "Story dies down fast, small net worth cost for the PR team" },
     ],
   },
@@ -1454,7 +1457,7 @@ export const MORAL_DILEMMAS: MoralDilemma[] = [
     title: "AN OFFER FROM SERIOUS PEOPLE",
     description: "Two men in beautiful suits find you at a family restaurant. They know your order. They want next month's cup tie thrown. 8M, offshore, untouchable. A small favor between friends, they say.",
     choices: [
-      { label: "Take the money", emoji: "💰", consequence: "8M offshore. They now consider you a friend.", risk: "They ALWAYS come back" },
+      { label: "Take the money", emoji: "💰", consequence: "8M offshore, morale -5. They now consider you a friend.", risk: "They ALWAYS come back" },
       { label: "Refuse and go to the police", emoji: "🚔", consequence: "Federation protection, popularity +20, integrity +15" },
       { label: "Refuse, say nothing", emoji: "🤐", consequence: "They nod and leave. You sleep badly for a week." },
     ],
@@ -1465,9 +1468,9 @@ export const MORAL_DILEMMAS: MoralDilemma[] = [
     title: "THE FRIENDS RETURN",
     description: "Same restaurant. Same suits. This time it is the title decider they want, and the number is 15M. The smile is thinner now. Friends help friends twice, they say.",
     choices: [
-      { label: "Do it one last time", emoji: "💶", consequence: "15M offshore", risk: "50% chance the investigation lands: 3-season ban, legacy shattered" },
-      { label: "Refuse them", emoji: "✋", consequence: "They mention the first favor on the way out", risk: "40% chance the first fix leaks: 2-season ban" },
-      { label: "Go to the police, full confession", emoji: "🚔", consequence: "Immunity for testimony, forced move abroad, popularity +25, the arc ends" },
+      { label: "Do it one last time", emoji: "💶", consequence: "15M offshore", risk: "50% chance the investigation lands: banned for two seasons, legacy shattered" },
+      { label: "Refuse them", emoji: "✋", consequence: "Morale -10, and they mention the first favor on the way out", risk: "40% chance the first fix leaks: banned for a season" },
+      { label: "Go to the police, full confession", emoji: "🚔", consequence: "Immunity for testimony, popularity +25, integrity +10, the arc ends" },
     ],
   },
   {
@@ -1521,7 +1524,7 @@ export const MORAL_DILEMMAS: MoralDilemma[] = [
     description: "A hotel valet just reversed your hypercar into a fountain at 40 km/h. He is 19, shaking, and pretty sure his life is over. Forty phones are already filming.",
     choices: [
       { label: "Hug him, forgive publicly", emoji: "🤗", consequence: "The clip melts hearts. Popularity +12, the car costs 1.5M" },
-      { label: "Insurance war", emoji: "📋", consequence: "Recover 1.5M, popularity -8, he loses his job" },
+      { label: "Insurance war", emoji: "📋", consequence: "Insurance covers the 1.5M, popularity -8, he loses his job" },
       { label: "Gift him a bus pass and a smile", emoji: "🚌", consequence: "Perfect comedy. Popularity +15, the car still costs 1.5M" },
     ],
   },
@@ -1657,13 +1660,14 @@ export function applyMoralDilemmaChoice(prev: CareerState, choiceIndex: number):
         s.netWorth = Math.round((s.netWorth + 5) * 100) / 100;
         s.events = [...s.events, "🎰 Accepted €5M to fix a match..."];
         if (Math.random() < 0.30) {
-          // Caught!
+          // Caught! matchFixBanned counts down BEFORE advanceProSeason checks
+          // it, so 2 here is one season out, which is what the card says.
           s.matchFixBanned = 2;
           s.popularity = clamp(s.popularity - 40, 0, 100);
           s.morale = clamp(s.morale - 30, 0, 100);
           s.integrityBonus -= 30;
           s.netWorth = Math.round((s.netWorth - 5) * 100) / 100; // fine
-          s.events = [...s.events, "🚨 CAUGHT! Match-fixing investigation found you guilty. 2-season ban! Legacy -30, reputation destroyed."];
+          s.events = [...s.events, "🚨 CAUGHT! The match-fixing investigation found you guilty. Banned for next season, the 5M taken back, legacy -30, reputation destroyed."];
           s.socialMediaFollowers = Math.max(0, s.socialMediaFollowers - 5);
         } else {
           s.events = [...s.events, "💰 The money arrived. No one suspects a thing... for now."];
@@ -1709,7 +1713,7 @@ export function applyMoralDilemmaChoice(prev: CareerState, choiceIndex: number):
         // Clean up
         s.popularity = clamp(s.popularity + 10, 0, 100);
         s.integrityBonus += 5;
-        s.events = [...s.events, "🤝 Cleaned up your game. Reputation +10, Fair Play eligible."];
+        s.events = [...s.events, "🤝 Cleaned up your game. Reputation +10, integrity +5."];
       } else {
         // Ignore
         s.events = [...s.events, "🔇 Ignored the diving allegations. Business as usual."];
@@ -1722,16 +1726,19 @@ export function applyMoralDilemmaChoice(prev: CareerState, choiceIndex: number):
       if (choiceIndex === 0) {
         // Fire and sue
         s.netWorth = Math.round((s.netWorth - 0.5 + recoveredAmount) * 100) / 100;
-        s.events = [...s.events, `⚖️ Fired agent and sued! Legal costs €500k, recovered €${recoveredAmount.toFixed(1)}M.`];
+        /* Round 819 review: fired means fired. "self" is how the life layer
+           already records a player who sacked his agent. */
+        s.agentId = "self";
+        s.events = [...s.events, `⚖️ Fired your agent and sued! Legal costs €500k, recovered €${recoveredAmount.toFixed(1)}M. You read every contract yourself now.`];
         s.morale = clamp(s.morale + 5, 0, 100);
       } else if (choiceIndex === 1) {
-        // Keep him
-        s.events = [...s.events, "🤝 Kept the agent despite the theft. He does get results..."];
+        // Keep the agent
+        s.events = [...s.events, "🤝 Kept your agent despite the theft. The results are real, the trust is not."];
         s.morale = clamp(s.morale - 5, 0, 100);
       } else {
-        // Renegotiate
+        // Some of it back
         s.netWorth = Math.round((s.netWorth + recoveredAmount * 0.3) * 100) / 100;
-        s.events = [...s.events, `📝 Renegotiated agent deal to 12%. Recovered €${(recoveredAmount * 0.3).toFixed(1)}M.`];
+        s.events = [...s.events, `📝 Your agent stays and pays back €${(recoveredAmount * 0.3).toFixed(1)}M.`];
       }
       break;
     }
@@ -1759,7 +1766,7 @@ export function applyMoralDilemmaChoice(prev: CareerState, choiceIndex: number):
           s.morale = clamp(s.morale - 25, 0, 100);
           s.integrityBonus -= 25;
           s.netWorth = Math.round((s.netWorth - 2) * 100) / 100;
-          s.events = [...s.events, "🚨 A recording leaked! Caught match-fixing. 2-season ban, reputation in ruins."];
+          s.events = [...s.events, "🚨 A recording leaked! Caught match-fixing. Banned for next season, the 2M taken back, reputation in ruins."];
         } else {
           s.events = [...s.events, "🤐 The recording never surfaced. You got away with it, for now."];
         }
@@ -1775,6 +1782,15 @@ export function applyMoralDilemmaChoice(prev: CareerState, choiceIndex: number):
     }
     case "captain_armband_feud": {
       if (choiceIndex === 0) {
+        /* Round 819 review: accepting the armband gives you the armband, on
+           the same fields the Round 244 captaincy arc keeps, so the badge,
+           the stint counter and the cabinet line all follow it. The gate
+           never offers this to a player who is already captain. */
+        if (!(s.isClubCaptain ?? false) && !s.loan) {
+          s.isClubCaptain = true;
+          s.captainClub = s.currentClub;
+          s.captainSeasons = 0;
+        }
         s.isLeader = true;
         s.popularity = clamp(s.popularity + 10, 0, 100);
         s.morale = clamp(s.morale - 8, 0, 100);
@@ -1789,15 +1805,21 @@ export function applyMoralDilemmaChoice(prev: CareerState, choiceIndex: number):
       break;
     }
     case "tunnel_brawl": {
+      /* Round 819 review: the card promised a ban and a fine that never
+         landed. The season sim has no match bans, so the punishment is the
+         fine, in wages, the way the night out photo fines you. */
+      const weekFine = Math.max(0.02, s.weeklyWage / 1000000);
       if (choiceIndex === 0) {
         s.popularity = clamp(s.popularity - 10, 0, 100);
-        s.events = [...s.events, "👊 Swung back in the tunnel. 3-match ban handed down. Your ultras loved it, everyone else didn't."];
+        s.netWorth = Math.round((s.netWorth - weekFine * 2) * 100) / 100;
+        s.events = [...s.events, "👊 Swung back in the tunnel. Fined two weeks' wages. Your ultras loved it, everyone else didn't."];
       } else if (choiceIndex === 1) {
         s.popularity = clamp(s.popularity + 15, 0, 100);
         s.integrityBonus += 10;
         s.events = [...s.events, "🚶 Walked away and reported the incident. The federation fined the other player. Reputation +15."];
       } else {
-        s.events = [...s.events, "🗣️ Traded words but kept your hands to yourself. Minor fine, clip goes viral anyway."];
+        s.netWorth = Math.round((s.netWorth - weekFine) * 100) / 100;
+        s.events = [...s.events, "🗣️ Traded words but kept your hands to yourself. Fined a week's wages, and the clip went viral anyway."];
       }
       break;
     }
@@ -1823,23 +1845,23 @@ export function applyMoralDilemmaChoice(prev: CareerState, choiceIndex: number):
       if (choiceIndex === 0) {
         s.integrityBonus += 15;
         s.morale = clamp(s.morale - 5, 0, 100);
-        s.events = [...s.events, "📢 Reported your teammate's betting trouble to the club. He was suspended. Integrity +15."];
+        s.events = [...s.events, "📢 Reported your old friend's betting debt to the federation. He was suspended. Integrity +15."];
       } else if (choiceIndex === 1) {
         s.netWorth = Math.round((s.netWorth - 1.5) * 100) / 100;
         s.morale = clamp(s.morale + 5, 0, 100);
-        s.events = [...s.events, "💶 Quietly lent your teammate €1.5M to clear his debt. Loyalty earned."];
+        s.events = [...s.events, "💶 Quietly lent your old friend €1.5M to clear his debt. Loyalty earned."];
       } else {
-        s.events = [...s.events, "🤷 Told him to sort it out himself. The situation lingers unresolved."];
+        s.events = [...s.events, "🤷 Told him to sort it out himself. You have not heard from him since."];
       }
       break;
     }
     case "wonderkid_jealousy": {
       if (choiceIndex === 0) {
         s.popularity = clamp(s.popularity + 15, 0, 100);
-        s.events = [...s.events, "🤝 Mentored the wonderkid openly. Popularity +15, but he's developing fast."];
+        s.events = [...s.events, "🤝 Mentored the wonderkid openly. Popularity +15, and the kid will not forget it."];
       } else if (choiceIndex === 1) {
         s.morale = clamp(s.morale - 10, 0, 100);
-        s.events = [...s.events, "🧊 Froze out the wonderkid. Dressing room tension rises, but you keep your place longer."];
+        s.events = [...s.events, "🧊 Froze out the wonderkid. The dressing room noticed, and morale took the hit."];
       } else {
         s.events = [...s.events, "🎯 Ignored the drama and focused on your own game."];
       }
@@ -1908,7 +1930,7 @@ export function applyMoralDilemmaChoice(prev: CareerState, choiceIndex: number):
           s.matchFixBanned = 3;
           s.popularity = clamp(s.popularity - 40, 0, 100);
           s.integrityBonus -= 40;
-          s.events = [...s.events, "🚨 THE INVESTIGATION LANDED. Betting patterns, wiretaps, everything. 3-SEASON BAN. The 15M sits frozen while your name burns."];
+          s.events = [...s.events, "🚨 THE INVESTIGATION LANDED. Betting patterns, wiretaps, everything. BANNED FOR TWO SEASONS. You kept the 15M and lost your name."];
         } else {
           s.events = [...s.events, "💶 The title decider slipped away. 15M offshore. The suits toast you from a distance. You check the news every morning."];
         }
@@ -1918,7 +1940,7 @@ export function applyMoralDilemmaChoice(prev: CareerState, choiceIndex: number):
           s.matchFixBanned = 2;
           s.popularity = clamp(s.popularity - 30, 0, 100);
           s.integrityBonus -= 25;
-          s.events = [...s.events, "🗞️ You refused, and the first fix leaked within a month. 2-SEASON BAN. The money was never worth this."];
+          s.events = [...s.events, "🗞️ You refused, and the first fix leaked within a month. BANNED FOR A SEASON. The money was never worth this."];
         } else {
           s.morale = clamp(s.morale - 10, 0, 100);
           s.events = [...s.events, "✋ You refused. On the way out, one suit mentioned the cup tie by date. You have not slept properly since."];
@@ -1928,7 +1950,7 @@ export function applyMoralDilemmaChoice(prev: CareerState, choiceIndex: number):
         s.popularity = clamp(s.popularity + 25, 0, 100);
         s.integrityBonus += 10;
         s.transferSituation = s.transferSituation ?? null;
-        s.events = [...s.events, "🚔 Full confession, full cooperation, immunity for testimony. The network falls. You will need a new city soon, but you sleep like a baby. Popularity +25."];
+        s.events = [...s.events, "🚔 Full confession, full cooperation, immunity for testimony. The network falls, and you sleep like a baby. Popularity +25."];
       }
       break;
     }
@@ -1997,9 +2019,10 @@ export function applyMoralDilemmaChoice(prev: CareerState, choiceIndex: number):
         s.popularity = clamp(s.popularity + 12, 0, 100);
         s.events = [...s.events, "🤗 You hugged the shaking valet on camera. The clip melted hearts. Popularity +12, hypercar -1.5M."];
       } else if (choiceIndex === 1) {
-        s.netWorth = Math.round((s.netWorth + 1.5) * 100) / 100;
+        /* Round 819 review: the insurance covers the crash, it does not pay
+           you 1.5M on top of a car that cost you nothing. */
         s.popularity = clamp(s.popularity - 8, 0, 100);
-        s.events = [...s.events, "📋 Insurance recovered 1.5M. The valet lost his job and the internet chose his side. Popularity -8."];
+        s.events = [...s.events, "📋 Insurance covered the 1.5M. The valet lost his job and the internet chose his side. Popularity -8."];
       } else {
         s.netWorth = Math.round((s.netWorth - 1.5) * 100) / 100;
         s.popularity = clamp(s.popularity + 15, 0, 100);
@@ -2087,6 +2110,13 @@ export function applyMoralDilemmaChoice(prev: CareerState, choiceIndex: number):
       const idx = choiceIndex === 0 || choiceIndex === 1 ? choiceIndex : 2;
       const line = resolveRivalryChoice(s, s.rival, dilemma.id, idx, SOCCER_RIVALRY_CHOICES, Math.random);
       if (line !== null) s.events = [...s.events, line];
+      /* Round 819 review: "Join forces with your rival" promises the
+         transfer, and it used to bank the bonus and leave you where you
+         were. The move itself happens on Continue (dismissMoralDilemma),
+         which has the club list; the shared choice above is untouched. */
+      if (dilemma.id === "rival_club_offer" && idx === 0 && s.rival?.club && !s.rival.retired && s.rival.club !== s.currentClub) {
+        s.pendingRivalMove = s.rival.club;
+      }
       break;
     }
   }
@@ -2099,6 +2129,27 @@ export function applyMoralDilemmaChoice(prev: CareerState, choiceIndex: number):
 export function dismissMoralDilemma(prev: CareerState, clubs: ClubData[]): CareerState {
   const s = { ...prev };
   s.pendingMoralDilemma = null;
+  /* Round 819 review: you said yes to your rival's club, so you sign there
+     now, the way any accepted offer signs: a four year deal at their going
+     rate or your current wage if that is higher, their fee, your agent's
+     cut, and the armband stays behind. This summer's window is spent on
+     that move. */
+  if (s.pendingRivalMove) {
+    const name = s.pendingRivalMove;
+    s.pendingRivalMove = null;
+    const nextYear = (s.seasons[s.seasons.length - 1]?.year ?? 2024) + 1;
+    const club = adjustClubsForYear(clubs, nextYear).find(c => c.name === name) ?? clubs.find(c => c.name === name);
+    if (club && club.name !== s.currentClub) {
+      const moved = acceptOffer(s, {
+        club, contractYears: 4,
+        wage: Math.max(s.weeklyWage, wageForTier(club.tier, s.overall)),
+        transferFee: realisticTransferFee(s.overall, s.age),
+      });
+      moved.events = [...s.events, ...moved.events];
+      return moved;
+    }
+    s.events = [...s.events, "📞 The move to your rival's club fell through at the last minute. You stay put, bonus banked."];
+  }
   // Continue to random events → transfer window
   const events = generateRandomEvents(s);
   if (events.length > 0) {
@@ -2127,7 +2178,12 @@ function tryTriggerMoralDilemma(s: CareerState): boolean {
       return true;
     }
   }
-  if (s.bdorSnubFuel && !s.moralDilemmasTriggered.includes("bdor_snub")) {
+  /* Round 819 review: only on the close of the season the podium came in.
+     bdorSnubFuel is never cleared by anything but this dilemma, so before
+     this check every save with a 2nd or 3rd place years ago got "THE SNUB"
+     the first time the dilemmas could reach it. */
+  const closedRank = s.seasons[s.seasons.length - 1]?.ballonDorRank;
+  if (s.bdorSnubFuel && (closedRank === 2 || closedRank === 3) && !s.moralDilemmasTriggered.includes("bdor_snub")) {
     const snub = MORAL_DILEMMAS.find(d => d.id === "bdor_snub");
     if (snub) {
       s.pendingMoralDilemma = snub;
@@ -2147,10 +2203,11 @@ function tryTriggerMoralDilemma(s: CareerState): boolean {
     if (d.id === "match_fixer_approach" && s.currentClubTier > 3) return false;
     if (d.id === "ped_offer" && s.overall > 90) return false; // already elite
     if (d.id === "diving_reputation" && s.position === "GK") return false;
-    if (d.id === "agent_corruption" && s.totalEarnings < 5) return false; // need some earnings
+    if (d.id === "agent_corruption" && (s.totalEarnings < 5 || s.agentId === "self")) return false; // need some earnings, and an agent
     if (d.id === "betting_ring_teammate" && s.totalEarnings < 2) return false;
     if (d.id === "wonderkid_jealousy" && s.age < 24) return false; // need a few seasons in
-    if (d.id === "captain_armband_feud" && s.age < 23) return false;
+    if (d.id === "captain_armband_feud" && (s.age < 23 || (s.isClubCaptain ?? false))) return false;
+    if (d.id === "rival_club_offer" && (!s.rival?.club || s.rival.club === s.currentClub)) return false; // the move needs somewhere to go
     if (d.id === "sponsor_scandal" && !s.sponsorDeal && s.sponsorshipIncome <= 0) return false;
     // 2026-08-05 expansion rules
     if (d.id === "magazine_shoot" && (s.popularity < 50 || s.age < 21)) return false;
