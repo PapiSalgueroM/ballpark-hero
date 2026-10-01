@@ -71,13 +71,18 @@
    is not in the file. Under a control the harness exits 1 when exactly the
    expected sections went red (the control fired), 3 when they did not (the
    check is dead somewhere or bleeds), and 2 when the control could not be
-   bundled:
-     nosplit        the split drops its remainder               -> see EXPECT
-     extradraw      recording a game takes a draw from the league
-     mvpnowin       the MVP score ignores the club's record
-     noqualify      nobody needs games to qualify
-     sixthstarters  the sixth man race lets starters in
-     noreset        the summer does not start a clean sheet of lines
+   bundled or the harness threw. Each was run on 2026-10-01 and fired:
+     nosplit        the split drops its remainder                    -> 1
+     extradraw      recording a game takes a draw from the league    -> 2
+     mvpnowin       the MVP score ignores the club's record          -> 3
+     noqualify      nobody needs games to qualify                    -> 3 and 4
+     sixthstarters  the sixth man race lets starters in              -> 3
+     doubleclose    a second close names and writes its awards again -> 6
+     oldnever       a league saved before the round never keeps lines -> 2 and 7
+                    (section 2's no lines league is an old save's shape)
+   (A first draft carried "noreset", the summer keeping last season's lines;
+   it turned every section but the copy red, since nothing after the first
+   season had lines, so it proved nothing about any one check.)
 
    Run: node scripts/simNbaSeasonStats.mjs
    Measure on other seeds: NBA_STATS_SEED_BASE=10 node scripts/simNbaSeasonStats.mjs
@@ -92,6 +97,15 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const LIB = path.join(ROOT, 'src', 'lib');
 const CONTROL = process.env.NBA_STATS_CONTROL || '';
+/* A harness that throws measured nothing. Under a control exit 1 means "the
+   control fired", so a crash must never exit 1 there: it exits 2, and 1 when
+   no control is set (red either way). */
+const crashed = e => {
+  console.error(`FAIL: the harness threw before it finished: ${String(e && e.stack ? e.stack : e).slice(0, 600)}`);
+  process.exit(CONTROL ? 2 : 1);
+};
+process.on('uncaughtException', crashed);
+process.on('unhandledRejection', crashed);
 const SEED_BASE = Number(process.env.NBA_STATS_SEED_BASE || 0);
 const EXPECT = {
   nosplit: [1],
@@ -99,7 +113,8 @@ const EXPECT = {
   mvpnowin: [3],
   noqualify: [3, 4],
   sixthstarters: [3],
-  noreset: [6, 7],
+  doubleclose: [6],
+  oldnever: [2, 7],
 };
 if (CONTROL && !EXPECT[CONTROL]) {
   console.error(`NBA_STATS_CONTROL=${CONTROL} is not a control this harness knows (${Object.keys(EXPECT).join(', ')})`);
@@ -191,7 +206,8 @@ const CONTROL_FILE_SWAPS = {
   mvpnowin: { 'nbaSeasonStats.ts': [['export const NBA_MVP_WIN_WEIGHT = 20;', 'export const NBA_MVP_WIN_WEIGHT = 0;']] },
   noqualify: { 'nbaSeasonStats.ts': [['export const NBA_AWARD_GAMES_SHARE = 0.8;', 'export const NBA_AWARD_GAMES_SHARE = 0;']] },
   sixthstarters: { 'nbaSeasonStats.ts': [['qualified.filter(p => p.gs * 2 < p.g)', 'qualified.filter(p => p.g > 0)']] },
-  noreset: { 'nbaFrontOffice.ts': [['  league.stats = foNewSeasonStats(league.season);', '  void foNewSeasonStats;']] },
+  doubleclose: { 'nbaSeasonStats.ts': [['  if (done) return done;', '  void done;']] },
+  oldnever: { 'nbaFrontOffice.ts': [['  league.stats = foNewSeasonStats(league.season);', '  if (league.stats) league.stats = foNewSeasonStats(league.season);']] },
 };
 const NOTE = {
   nosplit: 'the split hands out the floors only, so the leftover points are lost',
@@ -199,7 +215,8 @@ const NOTE = {
   mvpnowin: "the MVP score ignores the club's record",
   noqualify: 'nobody needs any games to qualify for a table or an award',
   sixthstarters: 'the sixth man race lets starters in',
-  noreset: 'the summer keeps last season\'s lines instead of starting a clean sheet',
+  doubleclose: 'a second close of the same season names the awards again and writes them again',
+  oldnever: 'a league saved before the round never starts keeping lines',
 }[CONTROL];
 if (NOTE) console.log(`   control ${CONTROL}: ${NOTE}`);
 
@@ -371,6 +388,7 @@ console.log('2) The box takes nothing from the league generator: the same seed w
      later numbers than the first's. Each id is renamed by its first
      appearance, which is the same place in two leagues that played the same. */
   const canon = json => {
+    if (typeof json !== 'string') return String(json);
     const seen = new Map();
     /* ids sit in values, in cut ledgers and inside line keys ("BOS|<id>") */
     return json.replace(/n[0-9a-z]{4,}-\d+/g, m => { if (!seen.has(m)) seen.set(m, `#${seen.size}`); return seen.get(m); });
@@ -603,7 +621,7 @@ console.log('6) The close happens once and is kept');
   ok(6, 'every award is on exactly one card, written once', cards === closes.length, `${cards} of ${closes.length}`);
   const winnersCarry = closes.every(c => {
     const men = new Map([...Object.values(c.league.teams).flatMap(t => t.players), ...c.league.freeAgents].map(p => [p.id, p]));
-    return !c.closed.mvp || (men.get(c.closed.mvp.id)?.awards ?? []).includes(`${c.season} MVP`);
+    return !!c.closed && (!c.closed.mvp || (men.get(c.closed.mvp.id)?.awards ?? []).includes(`${c.season} MVP`));
   });
   ok(6, 'the MVP carries the MVP on his card', winnersCarry);
   const grew = histories.every(h => h.history.length === h.after && h.history.every((s, i) => s === 2026 + i));
