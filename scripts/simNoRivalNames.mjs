@@ -274,8 +274,12 @@ const SKIP_DIRS = new Set(['node_modules', 'dist', 'dist-ssr', '.git', '.playwri
    prose (every string is a name, a code or a rule the generator wrote), so
    it is skipped by name rather than line by line. scripts/.cache holds the
    downloaded nflverse files, gitignored, never shipped. Round 611: the
-   College Grid answer key is the same kind of file (it holds Maddens too). */
-const SKIP_FILES = new Set(['simNoRivalNames.mjs', 'nflGridPlayers.json', 'collegeGridPlayers.json']);
+   College Grid answer key is the same kind of file (it holds Maddens too).
+   Round 829: so is MLB's roster record, its league tables and its left out
+   list, pulled from MLB's Stats API (Detroit's Ty Madden is in all three).
+   The data file generated from them is in src and is not skipped: its one
+   such row carries the inline marker, written by the generator. */
+const SKIP_FILES = new Set(['simNoRivalNames.mjs', 'nflGridPlayers.json', 'collegeGridPlayers.json', 'mlbRosters2026.json', 'mlbStats2026.json', 'mlbRostersLeftOut2026.json']);
 const BINARY = /\.(png|jpe?g|gif|ico|webp|avif|svg|woff2?|ttf|eot|mp3|mp4|webm|pdf|zip|lockb)$/i;
 
 /* docs/ is deliberately NOT scanned. It holds competitor research whose entire

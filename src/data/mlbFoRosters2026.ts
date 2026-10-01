@@ -347,7 +347,7 @@ export const MLB_FO_ROSTERS_2026: Record<string, MlbFoRosterSeed[]> = {
     { name: "Drew Anderson", pos: "SP", age: 32, ovr: 77 },
     { name: "Jackson Jobe", pos: "SP", age: 24, ovr: 73 },
     { name: "Drew Sommers", pos: "RP", age: 26, ovr: 90 },
-    { name: "Ty Madden", pos: "RP", age: 26, ovr: 83 },
+    { name: "Ty Madden", pos: "RP", age: 26, ovr: 83 }, // a real player, not the football video game: rival-names-allow
     { name: "Tyler Holton", pos: "RP", age: 30, ovr: 76 },
     { name: "Kenley Jansen", pos: "CL", age: 38, ovr: 72 },
     { name: "Jacob Waguespack", pos: "RP", age: 32, ovr: 70 },
