@@ -1,5 +1,168 @@
 # Work board
 
+**2026-10-01, Codex785 CLAIMED: restore the IndexNow coverage ratchet after719.**
+Root owns only scripts/simIndexNow.mjs and docs. The completed fresh build's fifteen fences
+find a real mismatch: public/sitemap.xml has167 URLs while the unchanged strict floor is166.
+Git4153becb's parent has166; its only added URL is /manager-hot-seat. Registry, App route,
+saved page and lastmod ledger all contain that actual game, and simSitemap accepts the ledger.
+Raise the literal floor to167, retain strict shrink/growth/key/host checks, and verify the
+positive plus an asserted copied old166 floor that fails only the growth check. No submission,
+indexing request, public/sitemap rewrite, routes or data change. Next free786.
+
+**774 final-CSS follow-up, root owned:** the final utility stylesheet correctly constrains the
+320px clue dialog to288px, exposing44px intrinsic form overflow that the earlier utility
+fixture hid. Root owns only the existing QuizBoard form minimum width and focused test/control
+acceptance. A DOM-only fix/control must prove the cause before editing; preserve native Dialog,
+exact original scores/clues/callbacks, focus and finite/static cues. Final JS must be rebuilt
+after the running74-harness rerun ends; no parallel build. This is an unresolved gate, not green.
+
+**2026-10-01, Codex777 source/browser checkpoint: steady Free Kick practice accepted.**
+Clearly unrecorded ten-kick practice uses fixed native Power/Bend and explicit Kick with
+the original setup/RNG/shot physics. Taps/drags only aim; delayed inputs keep power fixed.
+Initial rules/worked example precede play, active help pauses for manual Resume, native pitch
+Space and Kick Enter/Space work, and both slider Spaces keep the real scrollable guide steady.
+Daily restore bytes remain untouched and a later Unlimited completion records exactly once.
+Practice never records or shares a result. No shared physics/hook/page/data/routing changes.
+
+Nine actual Board/engine/lifecycle tests and thirteen asserted controls pass (one intended
+failure, one independent reduced-motion/cleanup outcome and seven explicit skips per control).
+Eight strengthened native320/390/430/1440 normal/reduced contexts pass3503 assertions, each
+playing30 actual practice shots and10 normal charged Unlimited shots. Real endpoints/totals,
+child-origin captured touch with two distinct moves, raw876/4 daily, later recorded finish,
+initial/help focus, finite/static feedback and quiet clones hold. All new targets44px or more,
+overflow0, no errors/external requests and ten source/engine/feedback/page bytes stay intact.
+Replay resets the actual inputs; it has no phase autofocus and observed focus is BODY, so
+no replay-focus claim is made. Two320px screenshots inspected, server/browser inputs cleaned.
+Evidence: TEMP/dukb-round777-free-kick-practice-audit/report.json,final-browser.log and
+TEMP/dukb-round777-final-controls. Fresh exact app types0 and production build pass,1m32,
+176 snapshots/11 stubs, CSS index-CkVI6dSo.css. Its final-CSS browser rereceipt is running.
+The IndexNow ratchet785 and774 final-JS follow-up remain required before combined acceptance.
+
+**Visitor queue read-only triage:** seven reports were open when read,58 fixed. Aggregate/
+added-time f3cd3431, all11 taker order7a3131f1 and proactive club jobs724c01e4 belong to
+Claude781/782/783. Player Bingo transfer2e3dc3dc and Lucas Herrington1bc9b2e5 belong to
+735-740/740. c825c6f0 has only Wrong info and /soccer-career, no reproducible player/stat/save.
+The new AFL manager request88fc0a2b remains unclaimed and needs verified sport rules/data
+before adapting an engine. No report was marked fixed and no DB data/status was changed.
+
+**2026-10-01, Codex778 source/browser checkpoint: steady Buzzer practice accepted.**
+Practice uses native fixed Power/Arc/Fade and explicit Shoot with the original seeded physics.
+Aim taps and continued child-to-SVG captured drags only aim; a17s delay leaves chosen power.27
+unchanged. Practice-range Space preserves scroll; held Enter cannot activate the newly focused
+Next or Replay actions. Native arrow keys and ordinary Shoot Enter/Space still work. Ten-shot
+practice/replay, rules/pause/manual Resume and visible Power/Next/Replay/help focus are reachable.
+Practice makes no record/completion/share writes. Returning to saved daily preserves its bytes,
+and removes the unnecessary restore marker that otherwise suppressed a later recorded Unlimited
+finish. Daily/unlimited seeds, timing, exact engine paths and recorded outcomes remain paired.
+
+Nine actual Board/engine/flight/record/completion tests and thirteen asserted controls pass.
+Each control fails its named real outcome with one independent pass and seven explicit skips;
+the separate positive runs all nine. Eight native320/390/430/1440 normal/reduced contexts pass:
+167 points/one make matches real engine paths, verdicts and geometry; both practice runs retain
+raw876/4 daily data with no writes, and later Unlimited records its actual0/0 once.44px targets,
+overflow0, scroll0, trusted two-move touch capture, finite/static feedback and quiet clones hold.
+Inspected320px aim/result screenshots, reports and cleanup: TEMP/dukb-round778-buzzer-practice-audit.
+Positive/control logs: TEMP/dukb-round778-buzzer-final-positive.log and
+TEMP/dukb-round778-buzzer-final-controls. Native proof uses finished772 utilities. The final
+React keyboard type is aliased to preserve existing DOM listener types; runtime is unchanged.
+Fresh combined types/build/CSS/fifteen fences and publication remain pending. No shared engine,
+hook, parent/page, data, global style or routing edits. Next free785, honoring Claude781-784.
+
+**2026-10-01, Codex779 source/browser checkpoint: Budget Builder decisions accepted.**
+The real Board previews original candidate cost, exact replaced-player refund, remaining
+budget, XI rating/filled slots and honestly labeled current-condition status. Native Confirm
+submits that exact Player once. Preview/Cancel spends nothing; refused/no-op callbacks keep
+the shortlist and stay quiet. Committed signing/release returns to the stable labeled slot,
+with finite420ms feedback and static reduced motion. If a search removes the original row,
+Cancel focuses the connected Search input instead of a detached element. Search/Close are
+labeled, all new targets are at least44px in both dimensions and the existing60-match limit
+stays explicit. Hook/data/criteria, affordability/refunds and scoring are unchanged.
+
+Nine actual Board/real-hook tests and seven asserted source controls pass. Each control has
+one intended assertion failure, one independent outcome passing and seven tests explicitly
+skipped; the separate positive runs all nine. Eight native width/motion contexts pass944
+checks, including paired complete XI/series/score/share/completion, exact identity, the1000M
+replacement boundary, no-op, excluded-row Cancel, keyboard Close/Escape, focus and quiet clones.
+Overflow0; long names fit, reaction area40px, layout boxes and scroll stay stable, normal cues
+run once and disappear, reduced cues stay static. Six app/engine bytes stay unchanged during
+QA; no browser errors/external requests, browser/server and copied-control folders cleaned.
+Exact app types0. Report, controls-receipt.json, logs and inspected390px screenshot:
+TEMP/dukb-round779-budget-audit. Native proof uses finished772 utilities plus actual scoped
+CSS; final combined current-main build/CSS/fifteen fences and publication remain pending.
+Claude781-784 reservations stand; next free785.
+
+**2026-10-01, Codex780 COMPLETE: test-only lineup cap keys corrected.**
+The two mocked basketball fixtures now use existing perfect-lineup-nba key/path. All original
+nine picker and six focus/identity tests pass (15/15). Completion stays mocked; production
+schema, scoring and the guard stay untouched. The unchanged live cap fence passes:141 source
+keys,153 sane caps,139 real scored keys,0 uncovered and0 orphan rows after12 declared
+retirements. Its anonymous refusal probe returns401. The stale-list control catches exactly
+one fabricated missing key. Logs: TEMP/dukb-round780-lineup-tests.log and
+TEMP/dukb-round780-cap-key/healthy.log,stalelist.log. The earlier positive's one uncovered
+focus-fixture key is retained as healthy-before-focus.log. Next free:785, honoring Claude781-784.
+
+**Full suite receipt:** the392-node run has ended,318 pass and74 not green. Many failed before
+their assertions because the temporary isolation copy lacked historical script fixtures or
+Vitest could not resolve setup through its source junction; a Git-baseline check also lacked
+the repository. These failures are not credited as product controls or a green ship. Root is
+correcting the isolated inputs and auditing every failure before rerunning affected gates.
+Current full logs: TEMP/dukb-round772-full-node-sims.log. No build ran alongside that suite.
+
+**2026-10-01 00:45 EDT, desktop Claude lane: Rounds 781 to 784 CLAIMED, fifteen builders running at once.**
+Each is on its own branch from origin/main in a worktree under `.claude/worktrees/`; none touches the shared
+checkout or main. New from the report inbox: **781** Club Manager added time goals (45+N and 90+N labels, extra
+time minutes only on a level knockout tie) and the aggregate line on second legs (report of 2026-09-24), **782**
+Club Manager shootout taker order, all eleven in the order the manager picks (report of 2026-09-23), **783** Club
+Manager apply for a job at another club, accept or decline, join now or at the rollover (report of 2026-09-23),
+**784** re-verifying three reports closed on 2026-09-28 as "Fixed is a best guess": Soccer Career clean sheets for
+defenders plus keeper training, Perfect Season NBA's 82-0 odds, and Alisson's career path in the career quiz.
+Also running: the fences the held rounds promised and never shipped (**703** the four franchise code maps,
+**706** simCollegeTables, **718** simCareerLadderRotation, **733** simGolfMajors, **734** simF1Champions plus its
+false constructor notes), **739** Ligue 1 and **740** the players missing from the 2026 rows (the Player Bingo
+transfer reports), and master spec rounds **722** NBA Front Office luxury tax and roster minimum, **723** NFL Front
+Office franchise tag and depth chart, **725** Soccer Career life event cooldowns and new events, **727** Sports
+Bingo pass the device and custom restrictions. Publishing in parallel: Release J (653 grid answer archives and the
+669 Footle re-bake) from `r669-bake` in the gate clone. The four edge functions owed since Release H
+(soccer-grid-validate, football-connect4-validate, tennis-chain-validate, scores-poll) show new versions on the
+project as of about 22:10 EDT; this lane is verifying the deployed source against the repo files and settling the
+ledger. Codex: the next free number for anyone else is **785**; this lane's claims through 740 stand.
+
+**780 scope addendum:** the unchanged live cap fence also finds `focus-fixture` in the other
+mocked basketball test, `src/test/lineupPickerFocus.test.tsx`. Root owns only its gameId/gamePath
+literals too. Reuse perfect-lineup-nba, retain all six actual focus/identity assertions and the
+mocked completion hook. The live fence currently has142 source keys,153 caps, exactly this
+one uncovered key; all real played games are covered and the existing anonymous refusal probe
+answers401. Both fixture gates and the unchanged cap/stale-list guard will be accepted before
+this correction is done. No DB/schema or production guard change.
+
+**2026-10-01, Codex776 source/browser checkpoint: staff decisions accepted.**
+StaffScreen previews exact pure-helper fees, payroll and effects, confirms payoff separately,
+preserves no-op/refused and unrelated shortlists, and focuses the visible stable post only
+after verified hire/promotion/payoff/match/release truth. Academy copy correctly says staff
+member, since the generated candidate can also be a lead scout. Eleven actual-screen/real-
+helper tests pass. Four asserted copies fail their intended checks: unconfirm3/8, close2/9,
+uncued2/9, unfocus5/6. Two independent source reviews accepted.
+
+Eight native cases (320/390/430/1440, normal/reduced) pass against finished772 utilities and
+the actual scoped CSS. Exact helper state/callbacks and generated shortlist order/IDs hold;
+all actions meet44px, overflow0, full spaced/unbroken names and fees/effects fit. Committed
+focus is visible within the viewport with a2px green ring; Cancel returns to the payoff opener.
+The24.5px cue occupies normal flow, runs420ms once, retains the same native cue/animation on
+immediate cloned props, and is absent at550ms. Reduced motion is static. An insertion observer
+captures this finite cue without stretching product timing under CPU load. The asserted no-wrap
+copy restores293px phone overflow in both motion modes. Input bytes stay unchanged, no fixture
+writes/errors, and native server/browser inputs clean up. Report/log/control/screenshots:
+TEMP/dukb-round776-staff-qa-codex. Fixture is the actual screen with controlled local career and
+real pure helpers, outside account persistence. Final types/current-main build/CSS/fifteen fences
+remain owed behind the full392 suite.777/778/779 continue. Next free number:781.
+
+**777 old-pause runner addendum:** the unchanged16-case positive run hit three default5s wall
+timeouts while thirteen assertions passed under current CPU load. No outcome or import failed.
+Root authorizes the wrapper's runner-only `--testTimeout=60000` for these same16 tests. Keep
+every fake active-time duration, score, seed, sample count, lifecycle assertion and all eight
+control mutations/counts unchanged. Actual assertion failures remain mandatory for controls;
+timeout or worker-RPC errors earn no credit. No shared Vitest config/test baseline change.
+
 **2026-10-01, Codex Round 780 CLAIMED: lineup fixture cap-key correction.**
 Root owns only `src/test/lineupPickerFilters.test.tsx`'s fixture gameId/gamePath literals and
 docs. Its completion hook is mocked, so `fixture-lineup` never describes a real shipped game,

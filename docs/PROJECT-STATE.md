@@ -1,5 +1,57 @@
 # Project state
 
+## CHECKPOINT 2026-10-01: Free Kick practice accepted, combined CSS exposed two real gates
+
+777 adds fixed-input unrecorded practice with original physics, pre-play rules/help, native
+Kick and aim-only drag. Nine tests, thirteen asserted controls and eight native contexts with
+3503 assertions pass, preserving daily data and a later recorded Unlimited finish. Fresh app
+types0 and production build1m32 pass in a full physical/Git checkout. WORKBOARD holds exact
+proof and limits. Final CSS browser receipts and corrected74 failed-harness reruns continue.
+
+785 claims only the strict IndexNow floor correction for719's verified extra sitemap URL
+(166 to167, exactly /manager-hot-seat).774 also needs a measured narrow-dialog form fix and
+subsequent final JS rebuild. Other thirteen node snapshot fences and the separate actual
+prerender boot browser gate pass. Combined acceptance/publication remain pending. Claude781-784
+reservations stand,786 next free. The seven visitor reports were read and mapped; none was
+marked resolved by Codex. The AFL-manager request still needs verified research and a scope.
+
+## CHECKPOINT 2026-10-01: Buzzer steady practice source and native acceptance passed
+
+778 is accepted as a source checkpoint: native fixed-power practice, aim-only drag, explicit
+Shoot, help/pause and isolated records. Nine real lifecycle tests, thirteen asserted controls
+and eight width/motion browser contexts pass. Browser findings on slider Space scrolling and
+held Enter activating Next are fixed and measured. Saved daily stays byte-for-byte unchanged;
+later Unlimited still records once. WORKBOARD holds exact scores and fixture limits. Fresh
+combined type/build/fences/CSS and live publication remain pending;777 final native checks run.
+
+## CHECKPOINT 2026-10-01: Budget Builder source and native decisions accepted
+
+779 adds exact signing previews and confirmation, truthful finite/static feedback, and native
+picker focus, including Cancel when Search removes its opener. Nine real Board/hook tests,
+seven asserted controls, app types0 and eight native cases/944 checks pass. Completed XI,
+series, score/share/completion and original candidate identity remain paired with the existing
+hook. WORKBOARD carries receipts and the preliminary772-CSS boundary. Combined current-main
+build/fences and publication remain pending.777/778 final native keyboard checks continue.
+
+## CHECKPOINT 2026-10-01: lineup fixture cap correction accepted, full gate being repaired
+
+780 is complete: both test-only key/path corrections preserve all15 original outcomes; the
+unchanged live cap fence reports141 source keys,153 caps and0 uncovered. Its stale-list
+control catches one missing key and anonymous cap insertion is refused401. No schema/guard
+changes. The392-node temporary run ended318 pass/74 not green, including missing historical
+fixtures, setup resolution and Git context. Full failure triage and affected reruns remain
+required.777/778 native keyboard fixes and779 final controls are being accepted. Claude now
+owns781-784 for visitor requests, with785 next free. Detailed receipts are on WORKBOARD.
+
+## CHECKPOINT 2026-10-01: staff decision source and native acceptance passed
+
+776 passes eleven actual-screen/helper tests, four asserted source controls, two peer reviews
+and eight native width/motion contexts. It adds exact previews, payoff confirmation, truthful
+finite feedback and visible focus while preserving no-op and unrelated shortlists. Full proof,
+293px no-wrap control and fixture limits are on WORKBOARD. Current-main type/build/CSS/fifteen
+fences remain pending.777/778 practice and779 budget decisions continue;780 cap-key correction
+is being checked. Claude's live I block below supersedes older publication status. Next free:781.
+
 ## IN PROGRESS 2026-10-01: lineup fixture cap correction claimed
 
 780 replaces the mocked basketball test's fake fixture-lineup game key with the already capped
