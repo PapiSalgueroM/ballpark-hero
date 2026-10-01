@@ -1,0 +1,24 @@
+.practice button,
+.practice input[type="range"],
+.rules > button {
+  min-height: 44px;
+  min-width: 44px;
+}
+
+.practice input[type="range"]:focus-visible,
+.practice button:focus-visible,
+.practice svg:focus-visible {
+  outline: 2px solid #fbbf24;
+  outline-offset: 2px;
+}
+
+.rules {
+  width: calc(100% - 2rem);
+  max-height: calc(100dvh - 2rem);
+  overflow-y: auto;
+  overflow-wrap: anywhere;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rules { animation: none !important; }
+}

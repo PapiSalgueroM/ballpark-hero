@@ -14,7 +14,7 @@ How code gets from a session to douknowball.com. Every rule here was paid for.
 | Anthony's Windows folder | connected through the desktop bridge | not there at all |
 | Route to `main` | zip plus bat, he double-clicks it | commit, push, PR |
 | Zip, `RUNnn.bat`, `SHIPnn.bat` | required | **never build them** |
-| Which chapters below apply | all of them | this one, plus **Deploying** |
+| Which chapters below apply | all of them | this one, plus **The release build** and **Deploying** |
 
 **How to tell.** A claude.ai/code session is handed a branch name to develop on, has the GitHub
 tools, and `git ls-remote origin` succeeds. A Cowork session has the desktop bridge tools and
@@ -364,6 +364,30 @@ timeout /t 90
 **Every bat must log.** `call RUNnn.bat >> ship_log.txt 2>&1`, then read it back with
 `device_bash`. Without the log, a bat that failed and a bat that was never clicked look exactly
 the same from the cloud side, and you will waste a session guessing.
+
+---
+
+## The release build
+
+**Whoever assembles a release runs these, in this order, on the release tree before the push
+that deploys.** Both paths.
+
+1. **`npm run archive:grids`.** Regenerates `src/data/gridArchive.json`, the four grid answer
+   pages (`/nba-grid/archive`, `/mlb-grid/archive`, `/hockey-grid/archive`, `/cbb-grid/archive`),
+   through yesterday in America/New_York. It needs the database and only reads it. Commit the
+   file when it changed. It is deliberately in no build step, because a build must never need the
+   database, which means nothing runs it unless this list does: that is how all four pages froze
+   at 2026-08-30 for a month while they said "the last 14" (Round 653). It refuses to write if a
+   board it already published would roll off or change, and "change" covers the whole board: its
+   rows and columns, and every cell's count and listed names. It also refuses if the college
+   grid's live school pool has moved off the one the file records, and if any name it is about
+   to list would be refused by the game's own lookup. Every refusal is a finding, not a flake:
+   read the message, do not rerun it until it goes away. When a published count is meant to
+   move (the data was corrected, a duplicate row was deleted), rerun with `--republish`, which
+   writes and prints every cell that moved so the change is on the record.
+2. **`npm run build:seo`.** The prerender and the sitemap, which carry the new boards into the
+   saved pages and re-date the pages that changed.
+3. The gates, then the push, then **Deploying** below.
 
 ---
 

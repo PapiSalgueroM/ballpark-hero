@@ -1,5 +1,301 @@
 # Project state
 
+## LIVE 2026-10-01: Release J (653 grid answer archives, the 669 Footle re-bake), main `2652f9fa`
+
+Assembled by the desktop Claude lane in the gate clone (`r669-bake`) on top of Release I and Codex's commits as
+they stood at each merge, pushed to main as a merge. **douknowball.com is serving it:** deployment `546d0dc1`,
+called only after `get_project` showed `latest_commit_sha` `2652f9fa`; the live entry moved from
+`index--eNejDlV.js` to `index-jsexOB8y.js`. Proof by content: the `x-deployment-id` header read `546d0dc1` 45
+seconds after the deploy; the four archive pages answer 200 with 440 table rows each; `/whats-new/` carries
+"Grid answers for every past day"; the live chunk `footleEnrichment-BN7X1CZM.js` (the same name the gate build
+produced) contains Morten Hjulmand, who was not in the pool before the re-bake.
+
+- **653, grid answer archives.** Every past day's answers for the NBA, MLB, hockey and college basketball grids on
+  one archive page per sport (`/nba-grid/archive`, `/mlb-grid/archive`, `/hockey-grid/archive`, `/cbb-grid/archive`,
+  all four already in the sitemap). The pages had stuck on August 30 and kept calling themselves the last 14 days;
+  they now run from August 17 to today, generated from the same daily seed the game uses, with the namesake fix in
+  all four grids (a player who shares a name with another is keyed by id, not by display name) and the archive
+  regenerated with 0 names moved. `simGridArchive` holds the archive against the game's own picker day by day, with
+  controls `copyrange`, `isoh2` and `dedupe`.
+- **669, the Footle pool re-baked.** Round 669's data step ran at 00:03 ET today: the 2026 market table has its
+  Defensive Midfield rows back (412 rows, 5,862 in the season, from 46 and 5,496), two sources a row, and
+  `scripts/bakePlayers.mjs` regenerated `src/data/players.ts` from it: 538 to 553 players. The World XI report of
+  2026-09-21 is resolved on the shelf with the fix reference. `simPlayersPool` (controls `handedit`, `agezero`) and
+  `simWorldXiDefensiveMids` are green on the re-baked file.
+- **Data applied ahead of their branches (both fail closed, both verified after):** Round 733's golf majors
+  migration (526 rows to 504: the 25 dash placeholder rows gone, the three dagger marks off Francis Ouimet and Bobby
+  Jones so Jones is one golfer with 7 rows, the three 2026 champions in; end hash `8a97bd0b`), and Round 734's F1
+  standings migration (18 corrected rows such as 1976 Hunt 69, Lauda 68 and the champion spelled Juan Manuel Fangio,
+  plus the 11 scoreless 1952 and 1953 starters the import cut off; 3,106 rows). Their branches
+  (`r733-golf-majors-fix` `d746b2bf` with `simGolfMajors` and 14 controls, `r734-f1-standings-fix` `c1dca470` with
+  `simF1Champions` and 5 controls, the 16 false "drove for more than one team" notes rewritten from evidence) are
+  green, merged with main and ride the next release.
+- **The edge functions Release H owed are settled.** soccer-grid-validate v24, football-connect4-validate v13,
+  tennis-chain-validate v10 and scores-poll v10 were found deployed on 2026-09-30 evening; each deployed source was
+  fetched through the Supabase MCP and equals the repo file by sha256, so `scripts/data/edgeDeployed.json` records
+  them (main `21487709`) and the unverified ratchet dropped to 18.
+- **The session limit cut the fleet at about 01:45 ET.** Twenty one builders went out at 00:35; nineteen were still
+  running when the 5 hour window ran out. Nothing was lost: every worktree's files were committed and pushed to its
+  own branch as a work in progress save at 05:05, and a finishing workflow (six chains at a time, each a finisher,
+  one adversarial review and a fixer when the review finds a major) is running on 706, 718, 782, 722, 723, 725, 783,
+  727, 703, 726, 781, 784, 735 and 739. Branches and heads are on the board.
+- **Still held:** 703, 706, 718 (finishing now), the 735 to 740 transfer window data (one integration round folds
+  the league files into the overlay once 735 and 739 are filled out).
+
+**Gates.** Type gate 0 on the merged tree. `build:seo` on `r669-bake`: 173 routes prerendered, 0 failed, 13 lastmod
+dates rewritten, 167 URLs. Thirty harnesses in two lanes (the snapshot readers CLAUDE.md names plus
+`simGridArchive`, `simPlayersPool`, `simWorldXiDefensiveMids`, `simPrerenderTables`, `simRecordPages`, `simDaily`,
+`simRelatedGames`), all green on the merged tree once four reds were settled: `simIndexNow` (the floor had not
+moved for Manager Hot Seat in Release I; both lanes raised it to 167), `simEdgeSync` (the ledger above),
+`simLeaderboardCaps` (Codex's two fixture keys, fixed by its Round 780), `simSiteSearch` (a keystroke timing band
+read at 100 percent CPU with 21 builders running, green on a quiet machine). `simGridArchive`'s three controls
+fire. `simHarnessAnchors` went red on the last merge for Codex's `simBuzzerPractice` and `simFreeKickPractice`
+(raw reads searched with multi line anchors); both now fold line endings on the read itself and pass, with nothing
+they measure changed. Browser walks: `playHomeFold`, `playSoftFourOhFour` and `playSnapshotDrift` green;
+`sweepWeight` raised two budgets with the measured figure beside them (Footle 328K on 325K measured after the
+re-bake, Soccer Grid 308K on 304K, shared chunks); `playRenderStability` crashed its browser at 100 percent CPU on
+the first run and is being rerun on a quiet machine, so it is NOT yet a green and is recorded when it lands.
+
+## CHECKPOINT 2026-10-01: Search and Discard scroll correction frozen
+
+793 native QA reproduced a69px accepted-pick page jump. A scoped class on the existing
+GameShell content/guide container corrects Chromium anchoring without a global edit.
+Eight actual outcomes, six changed controls and exact types pass. Final native matrix,
+actual App Footer and combined production checks remain due.794 engine work is starting.
+
+## IN PROGRESS 2026-10-01: NHL simulation contributors claimed
+
+794 is a partial master63 slice: player-selected healthy forwards, defensemen and goalie
+feed the existing strength weights and persist in the existing local save. Exact file/API
+boundaries and acceptance are on WORKBOARD. Full lines, defensive pairs and ice time remain
+open. Automatic old saves, real roster data and shared transaction helpers stay held.
+793 native QA caught a real accepted-pick page jump and is correcting it before acceptance.
+792's frozen406-node suite is still running. Next795; all Claude reservations stand.
+
+## CHECKPOINT 2026-10-01: Search and Discard functional Page/module frozen
+
+793 passes eight actual Page/helper/booking/share outcomes and current app types0.
+Complete CPU/pass duels preserve original squads,44 discards, season/score and share;
+all22 slot nodes retain identity. Native-measured selected-name overflow is fixed locally.
+Twelve effective copied controls pass with independent outcomes; sixteen native duels and
+final combined production acceptance remain due.
+792's406-node frozen suite is still running. Exact scopes/proof on WORKBOARD; next794.
+
+## IN PROGRESS 2026-10-01: Search and Discard stable squads and feedback claimed
+
+793 owns only the Page, new module and focused actual-outcome tests/sim. Fix repeated
+squad remounts, infinite eligible-slot pulses and truncated names; add truthful finite
+committed keep/discard feedback, static reduced motion and reachable native focus.
+Original draft/season/score/share/completion helpers stay intact. Exact ownership and
+acceptance are on WORKBOARD.792 production native/full-node gates continue on a frozen
+clone; publication and Google approval remain separate. All Claude claims stand. Next794.
+
+## CHECKPOINT 2026-10-01: Aussie Rules source outcomes and controls pass
+
+792 passes14 real engine/hook tests with17 effective copied controls, plus ten actual
+Board/Page outcomes with ten copied controls. All30 matchday cohorts, exact ten-round
+replay and measured squad/tactic/recovery effects pass. Native acceptance and final
+combined production/artifact/full-node gates remain pending. Source stays unrouted until
+its saved page is ready. Proof and all Claude reservations are on WORKBOARD. Next free793.
+
+## CHECKPOINT 2026-10-01: Aussie Rules functional source, final acceptance pending
+
+792's five new engine/hook/Board/Page/module files are frozen for an unrouted checkpoint.
+Initial real-engine/hook13 and actual-Board10 tests pass, including a full ten-round season.
+Review fixed the opponent matchday23 boundary and lineup save coalescing;216 names are unique.
+Final controls/native seasons and the combined build/artifact/full-node gates remain due.
+The new route and saved page will land together. Exact scopes/proof are on WORKBOARD.
+Report88fc0a2b stays open; publication and Google approval are separate. Next free793.
+
+## CHECKPOINT 2026-10-01: Puck Detective and phone source/native accepted
+
+790 passes ten real-page outcomes/twelve effective controls/eight native contexts with831
+checks.791 passes twelve actual-panel outcomes/four controls/eight native contexts plus
+original-source reproduction. Current app types0. Detailed source/fixture limits are on
+WORKBOARD; final combined production build remains required.792's separate fictional Aussie
+Rules season is claimed, with verified match rules and clear fictional format. Next free793.
+Claude reservations, published deployment and Google approval remain separate.
+
+## IN PROGRESS 2026-10-01: Aussie Rules Manager visitor request claimed
+
+792 builds a separate playable fictional six-club/ten-round season with verified Aussie
+Rules scoring/teams, weekly squad/training choices, quarter tactics/break swaps, ladder and
+local resume. Exact engine/UI/registration/generated-file ownership is on WORKBOARD. All
+players/clubs are generated and labeled; actual2026 rosters/draw/finals are not claimed.
+Report88fc0a2b stays open.791 phone passes12 outcomes/four controls/eight native contexts
+and original-source reproduction;790's ten outcomes/twelve controls pass and full native
+matrix continues. Final combined build remains required. Next free793; Claude claims stand.
+
+## CHECKPOINT 2026-10-01: completed game rounds pass final production refresh
+
+786/787/788/789 now pass the frozen043c59bd type/build, limited two-page prerender,
+second build and all15 built-site fences. Independent actual-asset boots pass8 cases and
+an effective bootless control. Only Stat Detective's saved text and derived date change;
+Clue Auction and166 other ledger dates hold. Three generated files are pushed, not dist.
+Utility CSS remains the accepted215c948d bytes. Detailed proof/limits are on WORKBOARD.
+790 Puck Detective and791 Soccer Career phone source/test/native work continue outside
+this frozen build. No full current node-suite or publication/Google-approval claim.
+Next free792; all Claude reservations stand.
+
+## IN PROGRESS 2026-10-01: Puck Detective and Soccer Career phone claimed
+
+790 owns stable Puck Detective history, truthful committed feedback and readable controls.
+791 owns only Soccer Career PhonePanel modal keyboard/focus and44px local controls. Exact
+file scopes and actual-outcome/native acceptance are on WORKBOARD; all Claude reservations
+stand. Root claims only786/787's two generated snapshots and derived ledger/sitemap entries,
+with a fresh combined production build/fifteen fences/targeted boots before acceptance.
+788's missing combined private-store then later Unlimited path now passes22 tests, four
+effective copied controls and four native private flows. Only18 test lines changed; app
+source stays intact. The unchanged affected pause gate also passes16 cases. Next free792.
+Source commits update the preview; publication and Google approval remain separate.
+
+## CHECKPOINT 2026-10-01: durable Hot Seat pin accepted, private-path evidence supplemented
+
+789's two-line pin passes types,240 unchanged engine setups/24 replays, full Daily Reload
+and an asserted old-Memo copied control failing only the strict source fence. Source review
+is clean; final combined build refresh remains pending.788 needs a precise supplemental
+private-store -> later Unlimited proof: existing private returns and later normal-storage
+Unlimited paths pass separately, while source behavior is sound. Extend only two existing
+tests/four private native flows, no app change.786/787 final native acceptance passes; next
+free790 and all Claude reservations stand. Live at06:34:12UTC still serves Release I, with
+new features absent from actual chunks; raw game canonicals/indexability remain clean.
+
+## CHECKPOINT 2026-10-01: Clue Auction final native and visual acceptance passed
+
+787's native selection,44px targets, exact committed clue/guess/result feedback and static
+reduced motion pass nine actual tests/nine effective controls plus eight native contexts
+with813 checks. Its measured phone receipt column fix passes both copied controls and final
+normal/reduced screenshots. Bank/best/completion/share and real helpers stay unchanged.
+Source peer review is clean; WORKBOARD holds all proofs and scope limits. Source is pushed,
+final module rebuild and publication remain pending.786/788 acceptance also passes;789's
+types/engine/source-control and full reload pass. Next free790, scout is read-only.
+
+## CHECKPOINT 2026-10-01: fresh arcade dailies and Stat Detective native acceptance passed
+
+788 is accepted:22 actual tests,30 effective controls,16 native cases/four private-storage
+flows preserve newly earned dailies across practice, with no second write/record and a later
+Unlimited finish still booked once. The full unchanged Daily Reload gate passes107/107 and
+both controls after its test-only player selector repair and789's durable day pin.786's
+eight native cases also pass exact clues, shares, once-only completion sink, focus, finite/
+static motion and phone fit. WORKBOARD carries source boundaries, failed attempts and proofs.
+Current build/fifteen fences pass. The final787 mobile receipt correction and789 day pin
+still need their combined build refresh; live publication remains separate. Next free790.
+
+## IN PROGRESS 2026-10-01: final production build passes, day pin compatibility claimed
+
+Current combined types/build pass in the physical1729c27f checkout with frozen786/787/788
+overlays and corrected Quiz JS. Entry index-CnGiHcn2.js; utility CSS stays byte-identical to
+the accepted215c948d stylesheet. All14 rebuilt-site node fences pass; actual boot browser
+gate follows.789 claims only Hot Seat's two-line durable useRef day pin to match the existing
+strict guard; its previous Memo cache is not an observed runtime midnight failure. Full
+Daily Reload and native matrices continue.787's measured narrow mobile result receipts
+need a scoped layout fix and subsequent rebuild before visual acceptance. Next free790.
+
+## CHECKPOINT 2026-10-01: Stat Detective source and fresh daily regression accepted
+
+786's seven actual-page/helper checks and ten effective copied controls pass, with types0.
+It adds committed finite/static cues, native suggestion focus and accurate page-local clue
+instructions. Native eight-context/final-style acceptance is pending.788's minimal daily
+cache/booking fix passes22 real Board/engine/hook outcomes,30 effective controls and the
+strict67-row completion guard with eight static controls. Full receipts/limits are on
+WORKBOARD. Old source reproduced the daily return as aiming instead of finished.
+
+All six unrelated quiet harness reruns now pass unchanged, including Tycoon's six outcomes
+and eight controls. Buzzer silent reload's raw seven tests pass. Current combined production
+build runs in its own physical/Git checkout; full Daily Reload and rebuilt-site/native
+acceptance follow.787 source is frozen and its tests/controls continue. Publication is
+still pending and the last independently verified live release is I. Next free789.
+
+## IN PROGRESS 2026-10-01: fresh arcade daily replay guard claimed
+
+788 fixes the verified fresh-daily -> practice -> Today replay path in both arcade Boards,
+preserving the earned result and refusing a second write/completion. It also repairs the
+test-only shared lineup reload picker selecting Reset filters. Actual regression/control
+acceptance precedes any narrowly bound source-ratchet exception. Exact eight-file scope is
+on WORKBOARD. Five unchanged quiet gate reruns pass; Tycoon rerun and Buzzer control diagnosis
+continue.786 and787 implementation/native acceptance continue; next free789.
+
+## IN PROGRESS 2026-10-01: Clue Auction claimed, corrected gate narrowed to eight failures
+
+787 owns Clue Auction's native suggestions/44px targets and committed finite/static feedback,
+preserving prices, real helpers, bank, best, completion and share. Exact four-file claim and
+actual-outcome acceptance are on WORKBOARD.786 Stat Detective continues. Next free788.
+
+The frozen physical/Git rerun finishes66 pass/eight fail across the74 previous failures.
+Four are explicit filter-test wall timeouts; the remaining driver/control/static-ratchet
+failures need diagnosis and truthful controls. Quiet unchanged reruns are in progress. This
+does not claim the full suite green. Final corrected Quiz JS/build/fifteen fences and live
+publication remain pending; the last independently verified live release is I.
+
+## IN PROGRESS 2026-10-01: Stat Detective claimed, final-style source fixes accepted
+
+786 adds committed guess/clue/result feedback and native suggestion focus within the existing
+page and helpers. It also aligns this page's misleading next-hint/feedback copy with actual
+hint and franchise behavior, preserving game math/data/completion/share. Exact four-file scope
+and real-outcome acceptance are on WORKBOARD;787 next free. All Claude reservations stand.
+
+774's single form minimum-width fix passes seven unit/hook outcomes, eight final-CSS browser
+contexts and four copied geometry controls.771's portable harness now uses a deterministic
+refused-intent control; app behavior/healthy protocol/timings are unchanged, both native modes
+reject the false auto-resolution cue and no-wrap controls pass.136 healthy contexts across
+769-779 accept the exact215c948d final utility stylesheet. Corrected Quiz JS rebuild and the
+74-harness rerun remain pending. Uncached primary HTTP at05:41:50UTC still serves Release I;
+practice/signing source is not live, Quiz feedback is. No publication/Google approval claim.
+
+## CHECKPOINT 2026-10-01: verified IndexNow count fence accepted
+
+785's literal167 floor passes offline; the copied previous166 floor fails only intended growth.
+The page delta is exactly Manager Hot Seat. No URLs/data/public files changed or submissions
+made. Final utility CSS passes the Free Kick/Buzzer/First Touch/Constructor/Budget matrices,
+plus24 Soccer Lineup/Staff/Inbox contexts and four no-wrap controls so far.771's protocol-
+dependent scheduling control gets no credit and is being replaced by an asserted retained-
+intent copy, with healthy checks unchanged.774's measured single form minimum-width fix now
+passes its seven actual hook/unit outcomes; native8/control matrices run. Final JS rebuild
+waits behind the74-harness rerun. Full receipts/remaining gates are on WORKBOARD. Next free786.
+
+## CHECKPOINT 2026-10-01: Free Kick practice accepted, combined CSS exposed two real gates
+
+777 adds fixed-input unrecorded practice with original physics, pre-play rules/help, native
+Kick and aim-only drag. Nine tests, thirteen asserted controls and eight native contexts with
+3503 assertions pass, preserving daily data and a later recorded Unlimited finish. Fresh app
+types0 and production build1m32 pass in a full physical/Git checkout. WORKBOARD holds exact
+proof and limits. Final CSS browser receipts and corrected74 failed-harness reruns continue.
+
+785 claims only the strict IndexNow floor correction for719's verified extra sitemap URL
+(166 to167, exactly /manager-hot-seat).774 also needs a measured narrow-dialog form fix and
+subsequent final JS rebuild. Other thirteen node snapshot fences and the separate actual
+prerender boot browser gate pass. Combined acceptance/publication remain pending. Claude781-784
+reservations stand,786 next free. The seven visitor reports were read and mapped; none was
+marked resolved by Codex. The AFL-manager request still needs verified research and a scope.
+
+## CHECKPOINT 2026-10-01: Buzzer steady practice source and native acceptance passed
+
+778 is accepted as a source checkpoint: native fixed-power practice, aim-only drag, explicit
+Shoot, help/pause and isolated records. Nine real lifecycle tests, thirteen asserted controls
+and eight width/motion browser contexts pass. Browser findings on slider Space scrolling and
+held Enter activating Next are fixed and measured. Saved daily stays byte-for-byte unchanged;
+later Unlimited still records once. WORKBOARD holds exact scores and fixture limits. Fresh
+combined type/build/fences/CSS and live publication remain pending;777 final native checks run.
+
+## CHECKPOINT 2026-10-01: Budget Builder source and native decisions accepted
+
+779 adds exact signing previews and confirmation, truthful finite/static feedback, and native
+picker focus, including Cancel when Search removes its opener. Nine real Board/hook tests,
+seven asserted controls, app types0 and eight native cases/944 checks pass. Completed XI,
+series, score/share/completion and original candidate identity remain paired with the existing
+hook. WORKBOARD carries receipts and the preliminary772-CSS boundary. Combined current-main
+build/fences and publication remain pending.777/778 final native keyboard checks continue.
+
+## CHECKPOINT 2026-10-01: lineup fixture cap correction accepted, full gate being repaired
+
+780 is complete: both test-only key/path corrections preserve all15 original outcomes; the
+unchanged live cap fence reports141 source keys,153 caps and0 uncovered. Its stale-list
+control catches one missing key and anonymous cap insertion is refused401. No schema/guard
+changes. The392-node temporary run ended318 pass/74 not green, including missing historical
+fixtures, setup resolution and Git context. Full failure triage and affected reruns remain
+required.777/778 native keyboard fixes and779 final controls are being accepted. Claude now
+owns781-784 for visitor requests, with785 next free. Detailed receipts are on WORKBOARD.
+
 ## CHECKPOINT 2026-10-01: staff decision source and native acceptance passed
 
 776 passes eleven actual-screen/helper tests, four asserted source controls, two peer reviews
@@ -140,6 +436,96 @@ rounds are not yet published. Root is scouting the next unclaimed work in parall
 All earlier Codex754 through768 are LIVE in Claude Release H. The top Release H receipt below
 supersedes older historical blocks saying nine of them awaited publishing. Google approval
 and reindexing remain external pending outcomes from741. Next unclaimed number:773.
+## BUILT 2026-09-30: Round 653, the grid answer archives (branch `r653-grid-archives`, not on main)
+- **What was wrong.** The four grid answer pages (`/nba-grid/archive`, `/mlb-grid/archive`,
+  `/hockey-grid/archive`, `/cbb-grid/archive`) stopped at 2026-08-30 while saying "the last 14" and
+  "Today's board is not here": the generator ran by hand only and rolled boards off on every run.
+  The college page printed "_ Eldredge" as a Hofstra guard, listed 13 players twice in one cell
+  (Bradley Beal at Florida and Started 2010 or Later) and ran 76 counts high, because
+  `ncaa_player_stats` holds 1,600 players twice. No heading said "answers", every board heading
+  carried an ISO date.
+- **What changed.** `scripts/genGridArchive.mjs` accumulates: the window starts where the file
+  starts and ends yesterday in America/New_York, and it refuses to write if a published board
+  would roll off or change (rows, columns, and since the fix round every cell's count and names,
+  with `--republish` to write a deliberate recount and print what moved), or if the college
+  pool has moved off the recorded one. Players are
+  counted by the source's own id (each grid lib loads it only when asked, `withIds`, so the games
+  download nothing new); placeholder names still count, since the game accepts them, but never
+  print; ties break by name then id, so a rerun writes the same bytes (checked). Regenerated to
+  2026-09-29: 14 to 44 boards a sport, and the 42 franchise boards already published are byte for
+  byte unchanged. Headings "NBA Grid Answers: Past Daily Boards" and "NBA grid answers for August
+  30, 2026", copy stated from the data only, game page links "NBA grid answers for past days".
+- **The release step.** `npm run archive:grids`, then `build:seo`: the new "The release build"
+  section of `docs/SHIP-PIPELINE.md`. **This branch carries no rebuilt `public/` or
+  `scripts/data/lastmod.json`**, so whoever assembles the release runs both steps.
+  `simGridArchive` sections 6, 10 and 11 read `public/` and stay red until they do.
+- **The fence.** `simGridArchive` counts by id and adds sections 7 to 11 (freshness against the
+  file's own claim, no player twice in a cell, no malformed name, the saved copy's range and
+  counts, no ISO date in a board heading), with the controls `stale`, `repeat`, `malformed`,
+  `copyrange` and `isoh2`; every control, old and new, is now green only when its own section
+  goes red and no other one moves.
+- **For a later database round, reported and not touched (reads only).** The 1,600 extra rows
+  in `ncaa_player_stats` are ids 16201 to 17400 (copies of 15001 to 16200) and 23001 to 23400
+  (copies of 22601 to 23000): same slug, same rank, same stats, written seconds after the
+  originals in the 2026-05-09 load, so two batches of a ranked list were sent twice. The table's
+  only index is the id primary key. The three placeholder rows are 21867 "_ Johnston" (New
+  Hampshire, 1985-87), 32408 "_ Ford" (Maryland Eastern Shore, 1988-89) and 41595 "_ Eldredge"
+  (Hofstra, 1991-95); their slugs carry the underscore too, so the source had no first name. That
+  round should: (1) delete the extra ids after checking each row against its original column by
+  column; (2) add a unique index on `player_slug`; (3) find each placeholder's first name on two
+  sources or leave the row, never guess; (4) **first** give the archive a school pool per board.
+  Counted once per player, Marshall and Rutgers have 9 players with 700+ rebounds and UNC
+  Greensboro 9 with 350+ assists, under the pool's floor of 10, so today the live College Grid
+  can serve those crossings short of what the design promises (none is published yet). Deleting
+  the rows drops those three schools from the pool (106 to 103), which changes every future
+  college board. Without a per board pool, `archive:grids` then refuses to run and
+  `simGridArchive` section 5 goes red. The other three grid tables have no duplicate rows and no
+  placeholder names.
+- **The fix round (same branch, after review).** Three reviewers found the same blocker: the
+  page promised that anything listed would be accepted in the game, and 227 college answers were
+  not. The game resolved a typed name through `byNormalizedName`, which kept ONE player per
+  name (the last row loaded), and 1,697 college names belong to two or more players, so typing
+  "Danny Manning" for Kansas x 1,500+ Career Points was judged on a later Danny Manning with 59
+  games and refused. That was a live game bug since Round 368, not only an archive one. Fixed on
+  the game side, one engine many sports: `byNormalizedName` is `Map<string, P[]>` in
+  `gridEngine.ts` and `cbbGrid.ts`, and the new `pickNamesake` in `gridEngine.ts` judges the
+  namesake who fits the cell; all four grid pages and both grid hooks (`useFootballGrid`,
+  `useCollegeGrid`) read it through that. The generator resolves every name it lists through
+  the same path and refuses otherwise, and `simGridArchive` section 2 types every listed answer
+  into the game's own lookup (control `shadowed`). Also from the review: the generator now
+  compares published cells too and refuses unless `--republish` (the docs said it did and it did
+  not); section 9 carries its own name rule instead of importing the generator's (a broken
+  `malformedName` left it green, measured); section 12 checks "rarest by career games played"
+  (control `notrarest`, and flipping the sort had left every section green); `miscount` control
+  for the distinct id count; the subtitle says "Past boards from August 17, 2026" instead of
+  "Every past board" (the grids have run since July, the archive starts 08-17), fenced in
+  section 10; and the hub links now read "NBA grid answers" with `why` lines that promise the
+  count and the rarest names rather than "every answer". The archive file itself did not move
+  (only its note did): with the game accepting any fitting namesake, every listed name was
+  already one the game takes.
+- **Merged onto main's Release H head (`49be326e`), 2026-09-30, on the same branch.** The
+  branch was cut before Rounds 652 and 654 landed, so four files conflicted and both rounds
+  stand in each: `simGridArchive` section 6 walks the saved tables row by row (Round 652, one
+  `<tr>` per crossing) through the fix round's `snapshotOf`, and the `miscount` control now
+  patches the count in the row's own `<td>`; `sportHub.ts` keeps Round 654's "every change
+  since" labels on the format histories beside the "grid answers" labels; What's New and this
+  file keep both sides, newest first. `cbbGrid.ts` merged clean, main had not touched it.
+  Gates on the merged tree: tsc 0; the archive regenerated to 2026-09-29 (44 boards a sport,
+  0 published cells moved, the bytes equal to the branch's once line endings are folded, so
+  every listed name already goes through the game's lookup); `simGridArchive` sections 1 to 5,
+  7 to 9 and 12 green against the live database (cbb: 3,168 answers typed in, 0 refused, 392 of
+  them names shared by two or more players), sections 6, 10 and 11 red for the one reason above,
+  the saved pages in `public/` are the release build's; of the ten controls, `badanswer`,
+  `shadowed`, `miscount`, `stale`, `repeat`, `malformed` and `notrarest` each turn their own
+  section red (isolation waits on the same rebuild), `dedupe` takes section 6 from 5 findings
+  to 8, and `copyrange` and `isoh2` refuse to run on the old snapshots; `gridNamesakes`,
+  `noDoubleRecord` and `collegeGridOffline` green in vitest, and `dailyReload` is red by the
+  same 12 perfect lineup daily record tests on origin/main itself, so that red is main's;
+  `simCollegeGridKey` green with all 14 controls (run from a copy whose vitest path points at
+  the main tree, a worktree has no `node_modules`); `simNoRivalNames` 0 findings;
+  `simHarnessAnchors` green; no U+2013 or U+2014 in the diff.
+- **Follow ups.** The page's JSON grows by about 13K a day in one chunk (546K now): split it by
+  sport or by month well before a year.
 
 ## LIVE 2026-09-30: Release H (707, 708, 711, 730, 732), main `b8c77dce`
 
