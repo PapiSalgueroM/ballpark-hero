@@ -1,0 +1,24 @@
+{
+  "frozenAt": "2026-10-01T23:05:43.027Z",
+  "files": [
+    {
+      "name": "club-manager-audit.json",
+      "sha256": "18306d160a8ee977fd7615eaa3b8dcbaf932f70917d9ae98b47c4b1e6c350b42",
+      "bytes": 17346
+    },
+    {
+      "name": "club-manager-audit.md",
+      "sha256": "2b3c13a65a449fc079033da55d1893af7e238173370375f98e212048930881b5",
+      "bytes": 5244
+    },
+    {
+      "name": "club-manager-cleanup.json",
+      "sha256": "4f88e55a377727bda046809b2212f1bc34e8839b7c0c08bf28d4fa5c4137d66c",
+      "bytes": 761
+    }
+  ],
+  "findings": 0,
+  "flags": 1,
+  "allOwnedBrowsersStopped": true,
+  "originalDriverBytesHeld": true
+}

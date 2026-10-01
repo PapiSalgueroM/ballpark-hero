@@ -1,0 +1,22 @@
+{
+  "browserStopped": true,
+  "contextStopped": true,
+  "serverOwned": false,
+  "repositoryChanges": false,
+  "externalWritesAllowed": 0,
+  "originalDriverSha256": "321e7bba4813239c25774065120b011e138d4e6ee8fdbbb42c8825fd5bd71c65",
+  "transfer": {
+    "browserStopped": true,
+    "contextStopped": true,
+    "serverOwned": false,
+    "repositoryChanges": false,
+    "externalWritesAllowed": 0,
+    "originalDriverSha256": "321e7bba4813239c25774065120b011e138d4e6ee8fdbbb42c8825fd5bd71c65"
+  },
+  "corruptBrowserStopped": true,
+  "allOwnedBrowsersStopped": true,
+  "originalDriverSha256Now": "321e7bba4813239c25774065120b011e138d4e6ee8fdbbb42c8825fd5bd71c65",
+  "originalDriverBytesHeld": true,
+  "noProductOrDataEdits": true,
+  "rootServer4930Untouched": true
+}
