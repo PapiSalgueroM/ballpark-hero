@@ -32,7 +32,9 @@
         cover two 95s (printed below), so the payroll walk is provoked through
         the real offseason with salaries a corrupt save could carry, and
         chargePayroll is walked over every budget from -5 to 40 and every
-        pair of chairs (all hard);
+        pair of chairs (all hard). And the winner outscores the loser in
+        every game sections 2 to 4 played, regular season, rivalry night,
+        conference finals and bracket alike (hard);
      5) rivalry night: every school has exactly one rival; an in-state pair
         shares a state in src/data/colleges.ts, the audited college table;
         every other pair is marked generated; nobody meets his rival twice in
@@ -42,18 +44,25 @@
      6) strength of schedule: the engine's number equals the average strength
         of the opponents in the game log for every team after every season
         (hard); a constructed pair with the same record and roster ranks the
-        tougher schedule first (hard); and the schedule must decide at least
-        FIELDS_FLOOR March fields;
+        tougher schedule first (hard); the committee weighs the schedule the
+        same as the eye test, within 5% either way, which a constructed tie
+        broken by 0.05 points of schedule each way holds (hard); and against
+        the committee without the schedule (the engine's own pre-823 rule)
+        the schedule must decide at least FIELDS_FLOOR March fields;
      7) old saves: a pre-823 save plays exactly as it did. scripts/lib/
         cbbLegacyDigest.mjs walks five seeds through ten seasons on legacy
         states and must reproduce the digest the pre-823 engine produced
         (GOLDEN below, computed from origin/main at 29fea025 before any of this
         round's changes, twice), and a legacy save upgraded at its offseason
-        then completes nine more seasons with the layer on;
+        then completes nine more seasons with the layer on, its winners
+        always ahead on the scoreboard;
      8) the board, under vitest: src/components/cbb-dynasty/
-        CbbDynastyDepth.test.tsx (an old save loads and plays, a new dynasty
+        CbbDynastyDepth.test.tsx (an old save loads and plays, and the board
+        switches the layer on for it when its offseason closes, a new dynasty
         has its staff and a schedule, the hiring window refuses what it cannot
-        afford, a reload on the recap does not replay the season);
+        afford, a reload on the recap does not replay the season). The
+        upgrade test was proved by deleting the board's cbbEnableDepth call:
+        1 failed, 5 passed (expected undefined to be 1);
      9) league balance: AI staff are hired at each program's level, so the
         layer leans a little toward the strong. BAL_SEASONS seasons on the
         legacy engine and with the layer on, same seeds; the drift in the
@@ -79,15 +88,30 @@
        lowest prestige) regular season wins -0.00, -0.08, 0.02, -0.04, 0.06
        (spread 0.14); top six prestige programs' title share 96.7 to 98.7%
        legacy and 97.7 to 98.8% with the layer (printed, too few titles to band);
-     the schedule changed the March field in 108 of the 200 dynasty seasons
-       section 6 reads (those seeds do not move with the seed base; 0 with
-       the committee blind to the schedule, control rank);
+     the schedule changed the March field, against the committee without
+       the schedule, in 138, 122, 116, 104 and 110 of the 200 dynasty
+       seasons section 6 reads (the review's fix round, the dynasty seeds
+       moving with the base since then; base 0 is the same 200 seasons as
+       before). The first cut measured 108 against a committee that counted
+       the eye test twice instead (it emptied the logs, and an empty log
+       falls back to the team's own strength), so that number is retired.
+       At base 0, with the weight at 0.45 the count is 84, at 1.2 it is
+       166, with the schedule swapped for the team's own strength (control
+       rank) 93, and with the schedule term deleted (control nosos) 0, which
+       is what proves the counterfactual is the committee without it;
+     games where the winner did not outscore the loser: 0 of 1,767,400 in
+       a full run at base 0, and 0 of the 87,400 the section 4 dynasties
+       play at every base (3,688 of those with the clamp deleted, control
+       noclamp, about the 4% the review measured);
      the first run found 34 schools meeting their rival a second time on
        rivalry night, fixed in this round, 0 in every run since.
    Bands: uplift and drop inside [9, 13] (about 1.8 below and 1.7 above the
    measured range), every step at least STEP_FLOOR 0.5, WIN_BAND [1.9, 3.5]
    (about 0.65 either side of the measured range, so a halved or a doubled
-   effect fails, measured), FIELDS_FLOOR 50 of 200, UPSET_DRIFT_BAND
+   effect fails, measured), FIELDS_FLOOR 75 of 200 (about 30 under the
+   lowest batch; the weight itself is held by the hard probe in section 6,
+   not by this floor, which only proves the schedule decides real fields
+   in play), UPSET_DRIFT_BAND
    [-3, -0.5] and WEAK_DRIFT_BAND [-0.6, 0.5] (about 1.2 and 0.5 beyond the
    measured ranges). The bound itself is the hard cap in sections 1 and 2,
    not these bands: about 9 of the 11 points is the assistant's shift (1.5 a
@@ -103,12 +127,17 @@
      CBB_STAFF_CONTROL=doubled    their effect on it doubles            -> 1, 2, 3 red
      CBB_STAFF_CONTROL=halved     their effect on it halves             -> 1, 2, 3 red
      CBB_STAFF_CONTROL=raise      the winner is raised, not the loser   -> 2, 3 red
+     CBB_STAFF_CONTROL=noclamp    the loser is never brought down       -> 4, 7 red
      CBB_STAFF_CONTROL=overspend  hiring stops checking the pot         -> 4 red
      CBB_STAFF_CONTROL=nowalk     payroll never makes anyone walk       -> 4 red
      CBB_STAFF_CONTROL=swing      a blowout swings past the cap         -> 5 red
      CBB_STAFF_CONTROL=rematch    rivals can meet twice on rivalry night -> 5 red
      CBB_STAFF_CONTROL=sos        the log records the wrong team        -> 6 red
-     CBB_STAFF_CONTROL=rank       the committee ignores the schedule    -> 6 red
+     CBB_STAFF_CONTROL=rank       the committee reads its own strength
+                                  in place of the schedule              -> 6 red
+     CBB_STAFF_CONTROL=nosos      the schedule leaves the committee     -> 6 red
+     CBB_STAFF_CONTROL=sosweak    the schedule weighs 0.45, not 0.8     -> 6 red
+     CBB_STAFF_CONTROL=sosheavy   the schedule weighs 1.2, not 0.8      -> 6 red
      CBB_STAFF_CONTROL=legacy     rivalry night leaks into old saves    -> 7 red
 
    Run: node scripts/simCbbStaff.mjs
@@ -135,7 +164,7 @@ const LEVELS = [45, 55, 65, 70, 75, 85, 95];
 const STEP_FLOOR = 0.5;
 const UPLIFT_BAND = [9, 13];
 const WIN_BAND = [1.9, 3.5];
-const FIELDS_FLOOR = 50;
+const FIELDS_FLOOR = 75;
 const BAL_SEASONS = 600;
 const UPSET_DRIFT_BAND = [-3, -0.5];
 const WEAK_DRIFT_BAND = [-0.6, 0.5];
@@ -149,12 +178,16 @@ const CONTROLS = {
   halved: ['const staffPart = staff ? (staff.off + staff.def) / 2 : 0;', 'const staffPart = staff ? (staff.off + staff.def) / 4 : 0;'],
   raise: ['return homeWins ? [hs, Math.max(0, Math.min(as, hs - finish))] : [Math.max(0, Math.min(hs, as - finish)), as];',
     'return homeWins ? [hs <= as ? as + finish : hs, as] : [hs, as <= hs ? hs + finish : as];'],
+  noclamp: ['return homeWins ? [hs, Math.max(0, Math.min(as, hs - finish))] : [Math.max(0, Math.min(hs, as - finish)), as];', 'return [hs, as];'],
+  sosweak: ['var CBB_SOS_WEIGHT = 0.8;', 'var CBB_SOS_WEIGHT = 0.45;'],
+  sosheavy: ['var CBB_SOS_WEIGHT = 0.8;', 'var CBB_SOS_WEIGHT = 1.2;'],
   overspend: ['if (net > holder.nil) return false;', ''],
   nowalk: ['while (staffPayroll(staff) > pot) {', 'while (false) {'],
   swing: ['const share = Math.min(1, Math.max(0, margin) / fullMargin);', 'const share = Math.max(0, margin) / fullMargin;'],
   rematch: ['if (cbbRivalOf(a)?.rival !== b) continue;', 'continue;'],
   sos: ['(home.opps ??= []).push(g.away);', '(home.opps ??= []).push(g.home);'],
   rank: ['const sos = strengthOfSchedule(t.opps, (oid) => str.get(oid) ?? 60) ?? own;', 'const sos = own;'],
+  nosos: ['return [t.id, t.wins * 1.6 + own * 0.8 + sos * CBB_SOS_WEIGHT];', 'return [t.id, t.wins * 1.6 + own * 0.8];'],
   legacy: ['if (st.depth && st.round === CBB_RIVALRY_ROUND) {', 'if (st.round === CBB_RIVALRY_ROUND) {'],
 };
 if (CONTROL && !CONTROLS[CONTROL]) { console.error(`CBB_STAFF_CONTROL=${CONTROL} is not a control this harness knows`); process.exit(1); }
@@ -192,6 +225,27 @@ function lehmer(seed) {
 }
 const mean = xs => xs.reduce((a, b) => a + b, 0) / xs.length;
 const MY = 'PUR'; // a top fifteen program, so its games carry both outcomes
+
+/* The winner outscores the loser, every game. With the layer on each side's
+   points are shifted by the assistants, and depthScores brings the loser
+   down to a possession behind when the shift leaves him level or ahead.
+   With that clamp deleted, the review measured the winner on fewer or equal
+   points in 1610 of 40,000 games (NOVA 67-70 MARQ, NOVA the winner) while
+   every other check here stayed green. Every game this harness plays is read
+   (sections 2 to 4: regular seasons, rivalry nights, conference finals and
+   the bracket) and section 4 holds the count at zero; section 7 holds the
+   legacy and upgraded save to the same. Control noclamp. */
+const scores = { games: 0, depthGames: 0, broke: 0, first: null };
+function checkScore(g, depth, where) {
+  scores.games += 1;
+  if (depth) scores.depthGames += 1;
+  const w = g.winner === g.home ? g.hs : g.winner === g.away ? g.as : NaN;
+  const l = g.winner === g.home ? g.as : g.hs;
+  if (!(w > l)) {
+    scores.broke += 1;
+    if (!scores.first) scores.first = `${where}: ${g.home} ${g.hs}-${g.as} ${g.away}, winner ${g.winner}`;
+  }
+}
 
 console.log('1) the bound: an assistant moves his end of the floor at most 3 points, for any rating');
 {
@@ -250,7 +304,8 @@ function seasonWith(seed, role, rating) {
   st.teams[MY].staff[role] = { ...st.teams[MY].staff[role], rating };
   const games = [];
   for (let r = 1; r <= CBB_ROUNDS; r += 1) {
-    const { myGames } = cbb.simCbbRound(st, rng);
+    const { games: all, myGames } = cbb.simCbbRound(st, rng);
+    for (const g of all) checkScore(g, true, `${role} ${rating} seed ${seed} round ${r}`);
     for (const g of myGames) {
       const home = g.home === MY;
       games.push({ us: home ? g.hs : g.as, them: home ? g.as : g.hs, won: g.winner === MY });
@@ -326,7 +381,7 @@ function playSeason(st, rng, gameLog) {
     const night = st.depth && r === CBB_RIVALRY_ROUND;
     const before = night ? new Map(Object.values(st.teams).map(t => [t.id, cbb.cbbStrength(t)])) : null;
     const { games } = cbb.simCbbRound(st, rng);
-    for (const g of games) gameLog.push(g);
+    for (const g of games) { gameLog.push(g); checkScore(g, !!st.depth, `season ${st.season} round ${r}`); }
     if (night) {
       /* Rivalry night: every program plays exactly twice, once against its
          rival, and never meets the rival a second time. */
@@ -424,12 +479,21 @@ function runDynasty(st, rng, seasons, tag) {
     playSeason(st, rng, gameLog);
     if (st.depth) checkSos(st, gameLog);
     const march = cbb.runMarch(st, rng);
+    for (const g of [...march.confFinals, ...march.bracket]) checkScore(g, !!st.depth, `season ${st.season} March`);
     if (st.depth) {
       /* The field picked again off the same table, once as the engine does it
-         and once with the schedule taken out. The first must reproduce the
-         real field (or this measurement measures something else); the second
-         says how often the schedule decided who got in. March games do not
-         touch the records, so the table after March is the one it picked from. */
+         and once by the committee without the schedule. The first must
+         reproduce the real field (or this measurement measures something
+         else); the second says how often the schedule decided who got in.
+         The committee without the schedule is the engine's own pre-823 rule,
+         record plus the eye test once (wins * 1.6 + strength * 0.8), which is
+         the path cbbRankings takes for a save without the layer: the shadow
+         drops only the depth flag, so staff and morale stay on the teams and
+         every strength is the same number. (The first cut emptied the logs
+         instead, which made the schedule fall back to the team's own strength
+         and measured SOS against the eye test counted twice.) March games do
+         not touch the records, so the table after March is the one it
+         picked from. */
       const bids = new Set(march.autoBids);
       const pick = state => {
         const ranked = cbb.cbbRankings(state).map(t => t.id);
@@ -438,7 +502,7 @@ function runDynasty(st, rng, seasons, tag) {
       };
       if (pick(st).join() !== march.field.join()) fail(`season ${st.season}: picking the field again off the same table gave a different field`);
       const shadow = JSON.parse(JSON.stringify(st));
-      for (const t of Object.values(shadow.teams)) t.opps = [];
+      delete shadow.depth;
       if ([...pick(shadow)].sort().join() !== [...march.field].sort().join()) dyn.fieldsChanged += 1;
     }
     if (march.field.length !== DANCE_SIZE || new Set(march.field).size !== DANCE_SIZE) dyn.badField += 1;
@@ -460,7 +524,7 @@ function runDynasty(st, rng, seasons, tag) {
 console.log(`4) ten season dynasties over ${DYN_SEEDS} seeds complete, and the budget never goes negative`);
 {
   for (let seed = 1; seed <= DYN_SEEDS; seed += 1) {
-    const rng = lehmer(seed * 104729 + 7);
+    const rng = lehmer(SEED_BASE + seed * 104729 + 7);
     const myTeam = CBB_SCHOOLS[(seed * 7) % CBB_SCHOOLS.length].id;
     const st = cbb.initCbb(myTeam, rng, { depth: true });
     runDynasty(st, rng, DYN_SEASONS, `seed ${seed}`);
@@ -535,7 +599,11 @@ console.log(`4) ten season dynasties over ${DYN_SEEDS} seeds complete, and the b
   if (dyn.hires === 0) fail('nobody was ever hired, so the hiring path was never exercised');
   if (dyn.refusals === 0) fail('nothing was ever refused, so the refusal path was never exercised by the dynasties');
   if (dyn.emptyPoy || dyn.badField || dyn.badGames || dyn.holes || dyn.aiEmpty || dyn.staleLog) fail('a ten season dynasty did not complete cleanly (counts above)');
+  console.log(`   ${scores.games} games read so far (${scores.depthGames} with the layer on): winner on fewer or equal points ${scores.broke}`);
+  if (scores.depthGames === 0) fail('no game with the layer on was ever read, so the score rule was never checked');
+  if (scores.broke) fail(`${scores.broke} games where the winner did not outscore the loser, first: ${scores.first}`);
 }
+const brokeAtFour = scores.broke;
 
 console.log('5) rivalry night: one rival each, in-state pairs are real geography, no rematch, swings stay in range');
 {
@@ -619,6 +687,38 @@ console.log('6) strength of schedule: the number is the opponents actually playe
   const order = cbb.cbbRankings(st).map(t => t.id);
   if (order.indexOf(hard) > order.indexOf(soft)) fail(`same record, same roster: the tougher schedule (SOS ${sh?.toFixed(1)}) ranked below the softer one (${ss?.toFixed(1)})`);
   console.log(`   constructed pair: SOS ${sh?.toFixed(1)} vs ${ss?.toFixed(1)}, ranked ${order.indexOf(hard) + 1} and ${order.indexOf(soft) + 1}`);
+  /* The weight itself. The guide and the engine say the committee weighs the
+     schedule the same as the eye test, and a count of changed fields only
+     fences that loosely (the review cut the weight from 0.8 to 0.45 and the
+     count stayed over its floor). So: four copies of one team, A and B on
+     the same record, B one point stronger, A's twenty opponents (1 + d)
+     points stronger than B's. With equal weights A goes first exactly when d
+     is above zero, so d = +0.05 and d = -0.05 hold the schedule's weight
+     within 5% of the eye test's either way. Morale is the lever because it
+     adds straight onto strength (section 5 holds that to 1e-9). */
+  const wt = cbb.initCbb('DUKE', lehmer(78), { depth: true });
+  const [A, B, X, Y] = ['VCU', 'DUKE', 'BUT', 'DAY'];
+  for (const id of [A, X, Y]) {
+    wt.teams[id].players = JSON.parse(JSON.stringify(wt.teams[B].players));
+    wt.teams[id].staff = JSON.parse(JSON.stringify(wt.teams[B].staff));
+  }
+  for (const t of Object.values(wt.teams)) { t.wins = 0; t.losses = GAMES; t.morale = 0; t.opps = []; }
+  for (const id of [A, B]) { wt.teams[id].wins = 16; wt.teams[id].losses = 4; }
+  wt.teams[B].morale = 1;
+  wt.teams[A].opps = Array(20).fill(X);
+  wt.teams[B].opps = Array(20).fill(Y);
+  const weighOrder = d => {
+    wt.teams[X].morale = 1 + d;
+    const gap = cbb.cbbSos(wt, A) - cbb.cbbSos(wt, B);
+    const ids = cbb.cbbRankings(wt).map(t => t.id);
+    return { gap, aFirst: ids.indexOf(A) < ids.indexOf(B) };
+  };
+  const up = weighOrder(0.05); const down = weighOrder(-0.05);
+  const eyeGap = cbb.cbbStrength(wt.teams[B]) - cbb.cbbStrength(wt.teams[A]);
+  console.log(`   the weight: B ${eyeGap.toFixed(2)} stronger; A's schedule ${up.gap.toFixed(2)} tougher puts ${up.aFirst ? 'A' : 'B'} first, ${down.gap.toFixed(2)} tougher puts ${down.aFirst ? 'A' : 'B'} first`);
+  if (Math.abs(eyeGap - 1) > 1e-9 || Math.abs(up.gap - 1.05) > 1e-9 || Math.abs(down.gap - 0.95) > 1e-9) fail(`the weight probe is not the probe it says: eye gap ${eyeGap}, schedule gaps ${up.gap} and ${down.gap}`);
+  if (!up.aFirst) fail('a schedule 1.05 points tougher lost to a team 1 point stronger on the same record: the committee weighs the schedule less than the eye test');
+  if (down.aFirst) fail('a schedule 0.95 points tougher beat a team 1 point stronger on the same record: the committee weighs the schedule more than the eye test');
   console.log(`   the schedule changed the March field in ${dyn.fieldsChanged} of ${dyn.seasons} seasons (floor ${FIELDS_FLOOR})`);
   if (dyn.fieldsChanged < FIELDS_FLOOR) fail(`the schedule decided only ${dyn.fieldsChanged} March fields in ${dyn.seasons} seasons, floor ${FIELDS_FLOOR}: the committee is not reading it`);
 }
@@ -634,7 +734,8 @@ console.log('7) old saves: a pre-823 save plays exactly as it did, and upgrades 
   const gameLog = [];
   playSeason(st, rng, gameLog);
   if (gameLog.some(g => g.rivalry)) fail('a legacy season played a rivalry night');
-  cbb.runMarch(st, rng);
+  const legacyMarch = cbb.runMarch(st, rng);
+  for (const g of [...legacyMarch.confFinals, ...legacyMarch.bracket]) checkScore(g, false, 'legacy March');
   st.seasonsPlayed += 1;
   const before = dyn.seasons;
   if (cbb.cbbOpenOffseason(st, rng).length !== 0 || st.staffWindow) fail('a legacy offseason opened a hiring window');
@@ -646,12 +747,13 @@ console.log('7) old saves: a pre-823 save plays exactly as it did, and upgrades 
   if (dyn.seasons - before !== 9) fail(`the upgraded save played ${dyn.seasons - before} seasons, not nine`);
   console.log(`   upgraded save: ${st.seasonsPlayed} seasons played, staff on every program, rivalry night ${st.lastRivalry ? 'played' : 'never played'}`);
   if (!st.lastRivalry) fail('the upgraded save never played a rivalry night');
+  if (scores.broke !== brokeAtFour) fail(`${scores.broke - brokeAtFour} games in the legacy season or the upgraded save where the winner did not outscore the loser, first: ${scores.first}`);
 }
 
-console.log('8) the board: an old save loads, a new dynasty has its staff, the window refuses what it cannot afford');
+console.log('8) the board: an old save loads and upgrades at its offseason, a new dynasty has its staff, the window refuses what it cannot afford');
 {
   const TEST = 'src/components/cbb-dynasty/CbbDynastyDepth.test.tsx';
-  const WANT = 5;
+  const WANT = 6;
   const vitest = createRequire(import.meta.url).resolve('vitest/vitest.mjs');
   const r = spawnSync(process.execPath, [vitest, 'run', TEST],
     { cwd: ROOT, encoding: 'utf8', env: { ...process.env, CI: '1', FORCE_COLOR: '0', NO_COLOR: '1' }, maxBuffer: 64 * 1024 * 1024 });

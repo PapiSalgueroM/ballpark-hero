@@ -3,7 +3,8 @@
  *
  * Assistant coaches, rivalry night and strength of schedule are new save
  * fields, so the board has to carry a dynasty saved before them without
- * changing it, give a new dynasty its staff and a schedule, and run an
+ * changing it until its offseason closes, switch the layer on for it then,
+ * give a new dynasty its staff and a schedule, and run an
  * offseason hiring window that refuses what the pot cannot cover. It also
  * holds the recap fix ported from CFB's Round 426: a reload on the recap
  * must not play the season again. scripts/simCbbStaff.mjs runs this file
@@ -63,6 +64,39 @@ describe('CBB Dynasty: the program layer on the board', () => {
     expect(after.st.teams.UK.opps).toBeUndefined();
     fireEvent.click(screen.getByText('Schedule'));
     expect(screen.getByText(/started before the schedule log existed/)).toBeTruthy();
+  });
+
+  /* The board is the only thing that upgrades an old save: simCbbStaff
+     section 7 calls cbbEnableDepth itself, so without this a board that
+     never called it would leave every pre-823 dynasty without assistants,
+     rivalry night or a schedule for good, and stay green. */
+  it('gives a save from before assistant coaches existed the program layer when its offseason closes', () => {
+    const rng = lehmer(23);
+    const st = initCbb('UK', rng);
+    playRegularSeason(st, rng);
+    runMarch(st, rng);
+    st.seasonsPlayed = 1;
+    cbbOpenOffseason(st, rng);
+    expect(st.depth).toBeUndefined();
+    expect(st.staffWindow).toBeUndefined();
+    const season = st.season;
+    save({ st, phase: 'recruit', recruits: [], portal: [] });
+    render(<CbbDynastyBoard />);
+    fireEvent.click(screen.getByText(/Close the class, run it back/));
+    const after = read();
+    expect(after.phase).toBe('season');
+    expect(after.st.depth).toBe(1);
+    expect(after.st.season).toBe(season + 1);
+    expect(after.st.round).toBe(1);
+    expect(after.st.seasonsPlayed).toBe(1);
+    for (const t of Object.values(after.st.teams) as any[]) {
+      expect(t.staff.OC.name).toBeTruthy();
+      expect(t.staff.DC.name).toBeTruthy();
+    }
+    expect(screen.getByText(/New this season: assistant coaches, rivalry night and strength of schedule/)).toBeTruthy();
+    fireEvent.click(screen.getByText('Play'));
+    fireEvent.click(screen.getByText('Play Round 1'));
+    expect(read().st.mySlate).toHaveLength(2);
   });
 
   it('gives a new dynasty its assistants and a schedule with a strength', () => {
