@@ -1,5 +1,85 @@
 # Project state
 
+Codex829 is accepted after actual App checks at320 normal/1440 reduced:
+20 accepted links keep the document still, original score/save/share/completion
+hold and finite/static feedback works. Final receipt is on WORKBOARD.
+Codex837 now holds NBA Stat Line's manual ad while its pool is loading or has
+failed. It is claimed, not yet implemented. Codex836 copy checks continue.
+Club Manager era-copy contradictions were handed to Claude832, which owns
+that file. Next free round838.
+
+## ADSENSE 2026-10-01: owner supplied the Low value content policy card
+
+AdSense approval is unresolved. The screenshot confirms the named rejection,
+not a new technical indexing fault. Prior account evidence and the intentional
+pack-battle noindex exclusion are in audits/GOOGLE-READINESS-2026-09-30.md.
+Codex836 owns a bounded public-copy/content-quality review and corrections,
+starting with unsupported home-page game features. No review was requested.
+Next free round837; Claude's active depth work stays untouched.
+
+Codex832 is accepted: the CFB recruiting feed no longer shifts the recruit
+columns when a signing arrives. Browser checks preserve scroll and original
+signing state; the prior build moves the columns74px under the same test.
+Eight focused tests and the production gates pass. Exact receipts on WORKBOARD.
+
+
+Codex830 is now accepted:118 actual App checks pass at320px normal/reduced,
+including distinct consecutive feedback, stable rows, original40-point outcome,
+exact save/share/once completion, reset and quiet reload.829 is built and pushed
+with seven positives/five controls; its final browser checks remain pending.
+Keep lane prefixes on overlapping828-835 IDs. Next shared free round836.
+
+
+## BUILT 2026-10-01: Missing Nine feedback (830)
+
+Fresh puzzles no longer inherit old wrong-answer feedback. Seven actual Page
+outcomes, eight effective controls and combined runtime gates pass. Source is
+pushed; final browser checks remain pending. Exact evidence is on WORKBOARD.
+
+
+## BUILT 2026-10-01: Nation feedback (831)
+
+Six focused outcomes, three regression controls and combined runtime gates pass.
+The code is pushed; final actual App browser verification is still pending.
+828 is accepted;829/830/832 remain active. Next free round833.
+
+
+Codex832 is closing the measured CFB signing page jump from818, using a stable
+recruiting message area. All signing and budget rules stay held. Next free833.
+
+
+## ACCEPTED 2026-10-01: Club Manager goal celebrations (828)
+
+Goals now have a finite scorer and teammate celebration, driven only by the
+committed goal and existing viewer clock. Pause and reduced motion work;
+scores and match timing stay unchanged. Focused tests, four regression controls,
+all21 existing motion tests, combined build/artifact gates and two actual App
+browser contexts pass. Exact scope/evidence on WORKBOARD. Ready for publish.
+829-831 are in final checks; Claude819-827 remain held. Next free round832.
+
+
+Codex829 repairs NBA Chain's document-moving timeline reveal;830 repairs stale
+Missing Nine answer feedback across new puzzles and modes. Together with828
+and831, four disjoint implementation lanes are active. Scopes on WORKBOARD;
+next free round832. Claude819-827 remain untouched.
+
+
+Codex831 adds committed clue/answer feedback to Guess The Nation;828 covers
+Club Manager celebrations.829-830 reserved while exact disjoint scopes are
+recorded on WORKBOARD. Claude819-827 held. Next free round832.
+
+
+## CLAIMED 2026-10-01: Club Manager goal celebrations (828)
+
+Codex is extending the existing committed goal presentation with finite scorer
+and teammate celebration poses. No simulation or scoring changes. Exact scope
+is on WORKBOARD. Claude now owns822-827, including all three US calendar inboxes;
+Codex stopped those investigations before editing. Next free round829.
+Release N's CFB recruiting filters are independently confirmed live (entry
+index-DIQbV2hM.js, deployment5b7815cd, referenced CFB feature strings). The sample
+used three public fetches; Google indexing and AdSense decisions remain unknown.
+
+
 ## LIVE 2026-10-01: Release N (796, the NFL career inbox and rival choices in the four US careers), main `b4f20218`
 
 Assembled by the desktop Claude lane in the gate clone (`release-n`). **douknowball.com is serving it:** deployment

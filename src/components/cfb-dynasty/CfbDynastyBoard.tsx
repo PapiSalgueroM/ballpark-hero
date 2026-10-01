@@ -402,15 +402,14 @@ export default function CfbDynastyBoard() {
             Reset filters
           </button>
         </div>
-        {feed.length > 0 && (
-          <div className="overflow-hidden rounded-2xl border border-border bg-card p-3 text-xs text-muted-foreground">
+          <div aria-label="Recruiting updates" aria-live="polite" className="h-28 overflow-y-auto rounded-2xl border border-border bg-card p-3 text-xs text-muted-foreground [overflow-anchor:none]">
+            {feed.length === 0 && <p>Your signings and staff updates will show up here.</p>}
             {/* Round 530: a signing slams in at the top of the class feed; a
                 refused one ticks in. Older lines keep their key and stay put. */}
             {feed.slice(0, 4).map((n, i) => (
               <p key={feedSeq.current - i} className={i === 0 ? (n.startsWith('🖊️') ? 'cm-slam font-semibold text-foreground' : 'cm-tick-in') : undefined}>{n}</p>
             ))}
           </div>
-        )}
         {st.depth && st.staffWindow && my.staff && (
           <div className="rounded-2xl border border-border bg-card p-3">
             <p className="text-center text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Coaching staff · pay {cfbPayroll(st)} a season</p>
