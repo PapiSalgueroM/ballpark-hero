@@ -19,14 +19,20 @@
  *      at least two of them give exactly the value written. A value moved to
  *      null (assists only) says why, and no two of its sources agree on a number.
  *      An added season carries assists null and market value 0 (shown n/a). A row
- *      kept as it is has two sources that disagree, keeps one of their values and
- *      names the third sources tried. No long dash anywhere in the record.
+ *      kept as it is has two sources that disagree, each with a link, keeps one of
+ *      their values and names the third sources tried. Every row the record
+ *      rewrites says what happens to its assists: a recorded change, or an
+ *      assistsKept entry whose source gives exactly the kept number and none a
+ *      different one (the adversarial review found De Bruyne's Werder row rewritten
+ *      while keeping 10 assists both quoted sources put at 9). No long dash
+ *      anywhere in the record.
  *   2. THE MIGRATION AGAINST THE RECORD. The career writes are parsed out of the
  *      SQL file: every field a write changes, other than the sort order, is a
  *      record change (player id, season, club, field, from, to) or a recorded
  *      added season, every record row is written exactly once, the sort orders
  *      run 0 to n-1 in the record's path order, the after state the migration
- *      asserts is exactly the writes applied, and the row counts it guards add up.
+ *      asserts is exactly the writes applied, every assistsKept number is the one
+ *      the after state asserts, and the row counts it guards add up.
  *   3. THE BAKED POOL. src/data/careerPlayers.ts is the pool the record ends in
  *      (every to value, every added row, every recorded path), and each touched
  *      player's rows there are the rows the migration's after state asserts.
@@ -37,9 +43,12 @@
  * NEGATIVE CONTROLS (CAREER_ROWS_CONTROL), each refusing to run when its target
  * is missing:
  *   onesource  leaves Griezmann's 2009-10 appearances with one source (section 1)
+ *   assists    drops the Werder Bremen assists change from the record (section 1)
  *   untraced   writes Kane's Millwall goals as 10 in the parsed migration (section 2)
  *   dropped    drops the Werder Bremen write from the parsed migration (section 2)
  *   file       writes Haaland's 2019-20 Salzburg goals as 27 in the file text (section 3)
+ *   mixed      flips Griezmann's 2009-10 appearances in the live read, so the
+ *              tables are half way between the two states (section 4)
  *
  * Run: node scripts/simCareerRowsVerified.mjs
  */
@@ -54,8 +63,9 @@ import { MIGRATION_FILE, afterProblems, loadRecord, parseAfterRows, parseCareerW
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.CAREER_ROWS_CONTROL || '';
 const LOCAL_ONLY = process.env.CAREER_ROWS_LOCAL_ONLY === '1';
-const CONTROLS = { onesource: 1, untraced: 2, dropped: 2, file: 3 };
+const CONTROLS = { onesource: 1, assists: 1, untraced: 2, dropped: 2, file: 3, mixed: 4 };
 if (CONTROL && !CONTROLS[CONTROL]) { console.error(`CAREER_ROWS_CONTROL=${CONTROL} is not a control this harness knows`); process.exit(1); }
+if (CONTROL === 'mixed' && LOCAL_ONLY) { console.error('mixed control cannot run with CAREER_ROWS_LOCAL_ONLY=1: section 4 is the one it plants'); process.exit(1); }
 
 let failures = 0;
 const failedSections = new Set();
@@ -76,6 +86,12 @@ if (CONTROL === 'onesource') {
   if (!c || c.sources.length < 2) abort('onesource control cannot run: Griezmann 2009-10 appearances is not recorded with two sources');
   c.sources = c.sources.slice(0, 1);
   console.log('   NEGATIVE CONTROL ON: Griezmann 2009-10 appearances keeps one source');
+}
+if (CONTROL === 'assists') {
+  const i = record.changed.findIndex(x => x.player === 'Kevin De Bruyne' && x.club === 'Werder Bremen' && x.field === 'assists');
+  if (i < 0) abort('assists control cannot run: the record does not change the Werder Bremen assists');
+  record.changed.splice(i, 1);
+  console.log('   NEGATIVE CONTROL ON: the Werder Bremen assists change is dropped from the record');
 }
 
 console.log('1) the record: two sources for every value written, a reason for every n/a, a third tried for every row kept');
@@ -127,13 +143,32 @@ section = 1;
     if (new Set(vals).size < 2) fail(`${where}: the sources agree (${vals[0]}), so this is not a disagreement to keep`);
     if (!vals.includes(k.value)) fail(`${where}: keeps ${k.value}, which no source gives`);
     if (!Array.isArray(k.thirdTried) || !k.thirdTried.length) fail(`${where}: no third source tried`);
+    for (const s of k.sources) sourceOk(s, where);
     if (record.changed.some(c => c.player === k.player && c.season === k.season && c.club === k.club && c.field === k.field)) fail(`${where}: also recorded as changed`);
   }
+  /* every row the record rewrites says what happens to its assists */
+  const rewritten = new Map(record.changed.map(c => [rowKey(c.player, c.season, c.club), c]));
+  const assistsChanged = new Set(record.changed.filter(c => c.field === 'assists').map(c => rowKey(c.player, c.season, c.club)));
+  const assistsKept = new Map((record.assistsKept ?? []).map(k => [rowKey(k.player, k.season, k.club), k]));
+  for (const [key, c] of rewritten) {
+    const where = `${c.player} ${c.season} ${c.club}`;
+    const k = assistsKept.get(key);
+    if (assistsChanged.has(key) && k) fail(`${where}: assists recorded as both changed and kept`);
+    else if (!assistsChanged.has(key) && !k) fail(`${where}: the record rewrites the row and says nothing about its assists (change them, or keep them under assistsKept with the source that gives them)`);
+    else if (k) {
+      if (k.playerId !== c.playerId) fail(`${where}: assistsKept names ${k.playerId}, the change ${c.playerId}`);
+      const numbers = (k.sources ?? []).filter(s => sourceOk(s, `${where} assists kept`)).map(s => s.value).filter(v => typeof v === 'number');
+      if (!Number.isInteger(k.value) || !numbers.includes(k.value)) fail(`${where}: keeps ${k.value} assists, which no linked source gives`);
+      const other = numbers.find(v => v !== k.value);
+      if (other !== undefined) fail(`${where}: keeps ${k.value} assists while a source gives ${other}`);
+    }
+  }
+  for (const [key, k] of assistsKept) if (!rewritten.has(key)) fail(`${k.player} ${k.season} ${k.club}: assists kept on a row the record does not rewrite`);
   const dup = record.duplicate;
   if (!dup || dup.players?.length !== 2 || !dup.decision || !(dup.beforeRemoving066?.length >= 3)) fail('the duplicate is not recorded with both ids, a decision and what must change before a removal');
   if (/[–—]/.test(recordText)) fail('the record carries a long dash');
   for (const name of Object.keys(record.paths)) if (!ids.has(name)) fail(`a path is recorded for ${name}, who has no recorded change`);
-  console.log(`   ${record.changed.length} changed values and ${record.added.length} added seasons on ${ids.size} players, ${values} checked; ${record.keptAsIs.length} rows kept with the disagreement recorded`);
+  console.log(`   ${record.changed.length} changed values and ${record.added.length} added seasons on ${ids.size} players, ${values} checked; ${record.keptAsIs.length} rows kept with the disagreement recorded; assists addressed on ${rewritten.size} rewritten rows (${assistsChanged.size} changed, ${assistsKept.size} kept)`);
 }
 
 console.log('2) the migration against the record: every value written is a record row, every record row is written');
@@ -193,6 +228,10 @@ if (CONTROL === 'dropped') {
     const r = afterRows.find(x => x.playerId === w.playerId && x.sortOrder === w.now.sortOrder);
     if (!r || FIELDS.some(f => r[f] !== w.now[f])) fail(`${w.player} ${w.now.season} ${w.now.club}: the after state does not assert the row as written`);
   }
+  for (const k of record.assistsKept ?? []) {
+    const r = afterRows.find(x => x.playerId === k.playerId && x.season === k.season && x.club === k.club);
+    if (!r || r.assists !== k.value) fail(`${k.player} ${k.season} ${k.club}: the record keeps ${k.value} assists, the migration's after state asserts ${r ? r.assists : 'no such row'}`);
+  }
   const counts = parseCountGuards(sql);
   const inserts = writes.filter(w => !w.rowId).length;
   if (counts.seasonsBefore === null || counts.seasonsAfter === null || counts.players === null) fail('the migration does not guard the season and player counts');
@@ -243,6 +282,12 @@ else {
   let live;
   try { live = await fetchLiveCareerPlayers(supabaseFromClientTs(ROOT)); } catch (e) { abort('Supabase unreachable, section 4 was not checked: ' + e.message); }
   if (!live.players.length) abort('the live read came back empty; section 4 was not checked');
+  if (CONTROL === 'mixed') {
+    const row = live.players.find(p => p.name === 'Antoine Griezmann')?.career.find(s => s.season === '2009-2010' && s.club === 'Real Sociedad');
+    if (!row || ![10, 40].includes(row.appearances)) abort('mixed control cannot run: Griezmann 2009-10 reads neither 10 (before) nor 40 (after) appearances live');
+    row.appearances = row.appearances === 10 ? 40 : 10;
+    console.log(`   NEGATIVE CONTROL ON: the live read carries Griezmann's 2009-10 appearances as ${row.appearances} with the rest of the row untouched`);
+  }
   const state = recordState(live.players, record);
   if (state === 'mixed') {
     fail('the live tables are neither the state the record starts from nor the state it ends in');

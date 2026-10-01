@@ -5,7 +5,7 @@
 -- re-run the generator. scripts/simCareerRowsVerified.mjs fails when a value written
 -- here does not trace to a record row with two sources, or a record row is missing.
 --
---   changed: 18 values on 8 rows (Antoine Griezmann, Erling Haaland, Kevin De Bruyne, Harry Kane)
+--   changed: 21 values on 8 rows (Antoine Griezmann, Erling Haaland, Kevin De Bruyne, Harry Kane)
 --   added: 4 seasons (Erling Haaland 2019-2020 RB Salzburg; Harry Kane 2011-2012 Millwall; Harry Kane 2012-2013 Norwich City; Harry Kane 2012-2013 Leicester City)
 --   kept as they are, two sources apart and no third readable: 5 rows
 --   the duplicate Alisson stays (both ids are referenced); see the record
@@ -62,7 +62,7 @@ begin
   -- an insert (row_id null) first proves the season is not there
   for desired in
     select * from (values
-    ('fcc672a4-bbd6-4854-9bd2-e3b82dbf45b2'::uuid, 'a0000001-0000-0000-0000-000000000030'::uuid, 'Antoine Griezmann'::text, '2009-2010'::text, 'Real Sociedad'::text, 2::integer, 1::integer, 10::integer, 3::integer, 0::smallint, '2009-2010'::text, 'Real Sociedad'::text, 6::integer, 1::integer, 40::integer, 3::integer, 0::smallint),
+    ('fcc672a4-bbd6-4854-9bd2-e3b82dbf45b2'::uuid, 'a0000001-0000-0000-0000-000000000030'::uuid, 'Antoine Griezmann'::text, '2009-2010'::text, 'Real Sociedad'::text, 2::integer, 1::integer, 10::integer, 3::integer, 0::smallint, '2009-2010'::text, 'Real Sociedad'::text, 6::integer, null::integer, 40::integer, 3::integer, 0::smallint),
     ('c12c21b0-6417-4291-943c-f6a907c92024'::uuid, 'a0000001-0000-0000-0000-000000000006'::uuid, 'Erling Haaland'::text, '2018-2019'::text, 'RB Salzburg'::text, 17::integer, 6::integer, 27::integer, 10::integer, 3::smallint, '2018-2019'::text, 'RB Salzburg'::text, 1::integer, null::integer, 5::integer, 10::integer, 3::smallint),
     (null::uuid, 'a0000001-0000-0000-0000-000000000006'::uuid, 'Erling Haaland'::text, null::text, null::text, null::integer, null::integer, null::integer, null::integer, null::smallint, '2019-2020'::text, 'RB Salzburg'::text, 28::integer, null::integer, 22::integer, 0::integer, 4::smallint),
     ('98555671-d328-499b-b2ed-74934ef341ca'::uuid, 'a0000001-0000-0000-0000-000000000006'::uuid, 'Erling Haaland'::text, '2019-2020'::text, 'Borussia Dortmund'::text, 16::integer, 4::integer, 18::integer, 60::integer, 4::smallint, '2019-2020'::text, 'Borussia Dortmund'::text, 16::integer, 4::integer, 18::integer, 60::integer, 5::smallint),
@@ -76,7 +76,7 @@ begin
     ('6eaf906e-462c-4811-8d37-3bb329f85e7b'::uuid, 'a0000001-0000-0000-0000-000000000008'::uuid, 'Harry Kane'::text, '2012-2013'::text, 'Tottenham'::text, 2::integer, 0::integer, 14::integer, 2::integer, 2::smallint, '2012-2013'::text, 'Tottenham'::text, 0::integer, 0::integer, 1::integer, 2::integer, 3::smallint),
     (null::uuid, 'a0000001-0000-0000-0000-000000000008'::uuid, 'Harry Kane'::text, null::text, null::text, null::integer, null::integer, null::integer, null::integer, null::smallint, '2012-2013'::text, 'Norwich City'::text, 0::integer, null::integer, 5::integer, 0::integer, 4::smallint),
     (null::uuid, 'a0000001-0000-0000-0000-000000000008'::uuid, 'Harry Kane'::text, null::text, null::text, null::integer, null::integer, null::integer, null::integer, null::smallint, '2012-2013'::text, 'Leicester City'::text, 2::integer, null::integer, 15::integer, 0::integer, 5::smallint),
-    ('f3db5cd4-e570-4aad-aaeb-529e7277afea'::uuid, 'a0000001-0000-0000-0000-000000000008'::uuid, 'Harry Kane'::text, '2013-2014'::text, 'Tottenham'::text, 3::integer, 2::integer, 19::integer, 5::integer, 3::smallint, '2013-2014'::text, 'Tottenham'::text, 4::integer, 2::integer, 19::integer, 5::integer, 6::smallint),
+    ('f3db5cd4-e570-4aad-aaeb-529e7277afea'::uuid, 'a0000001-0000-0000-0000-000000000008'::uuid, 'Harry Kane'::text, '2013-2014'::text, 'Tottenham'::text, 3::integer, 2::integer, 19::integer, 5::integer, 3::smallint, '2013-2014'::text, 'Tottenham'::text, 4::integer, null::integer, 19::integer, 5::integer, 6::smallint),
     ('e6d60998-42c5-433d-8e29-12fa155954b9'::uuid, 'a0000001-0000-0000-0000-000000000008'::uuid, 'Harry Kane'::text, '2014-2015'::text, 'Tottenham'::text, 31::integer, 5::integer, 51::integer, 25::integer, 4::smallint, '2014-2015'::text, 'Tottenham'::text, 31::integer, 5::integer, 51::integer, 25::integer, 7::smallint),
     ('ed24e8cc-08ac-4a26-88c6-8e0101408706'::uuid, 'a0000001-0000-0000-0000-000000000008'::uuid, 'Harry Kane'::text, '2015-2016'::text, 'Tottenham'::text, 28::integer, 4::integer, 50::integer, 40::integer, 5::smallint, '2015-2016'::text, 'Tottenham'::text, 28::integer, 4::integer, 50::integer, 40::integer, 8::smallint),
     ('c06a9676-6ed5-461f-be19-ede2b6678e4c'::uuid, 'a0000001-0000-0000-0000-000000000008'::uuid, 'Harry Kane'::text, '2016-2017'::text, 'Tottenham'::text, 35::integer, 7::integer, 38::integer, 60::integer, 6::smallint, '2016-2017'::text, 'Tottenham'::text, 35::integer, 7::integer, 38::integer, 60::integer, 9::smallint),
@@ -88,7 +88,7 @@ begin
     ('f881ae1e-d019-442e-a542-27bb9222e2f4'::uuid, 'a0000001-0000-0000-0000-000000000008'::uuid, 'Harry Kane'::text, '2022-2023'::text, 'Tottenham'::text, 32::integer, 4::integer, 49::integer, 100::integer, 12::smallint, '2022-2023'::text, 'Tottenham'::text, 32::integer, 4::integer, 49::integer, 100::integer, 15::smallint),
     ('f7296742-a64c-4b3b-afad-f3ca18bcc9b6'::uuid, 'a0000001-0000-0000-0000-000000000008'::uuid, 'Harry Kane'::text, '2023-2024'::text, 'Bayern Munich'::text, 44::integer, 12::integer, 45::integer, 100::integer, 13::smallint, '2023-2024'::text, 'Bayern Munich'::text, 44::integer, 12::integer, 45::integer, 100::integer, 16::smallint),
     ('0a52bf8b-85b7-4b2a-8085-4fe89f04f03d'::uuid, 'a0000001-0000-0000-0000-000000000008'::uuid, 'Harry Kane'::text, '2024-2025'::text, 'Bayern Munich'::text, 23::integer, 7::integer, 30::integer, 75::integer, 14::smallint, '2024-2025'::text, 'Bayern Munich'::text, 23::integer, 7::integer, 30::integer, 75::integer, 17::smallint),
-    ('c8b8d6bb-959e-4fc6-976f-9fa437041e24'::uuid, 'a0000001-0000-0000-0000-000000000011'::uuid, 'Kevin De Bruyne'::text, '2012-2013'::text, 'Werder Bremen'::text, 3::integer, 10::integer, 33::integer, 10::integer, 5::smallint, '2012-2013'::text, 'Werder Bremen'::text, 10::integer, 10::integer, 34::integer, 10::integer, 4::smallint),
+    ('c8b8d6bb-959e-4fc6-976f-9fa437041e24'::uuid, 'a0000001-0000-0000-0000-000000000011'::uuid, 'Kevin De Bruyne'::text, '2012-2013'::text, 'Werder Bremen'::text, 3::integer, 10::integer, 33::integer, 10::integer, 5::smallint, '2012-2013'::text, 'Werder Bremen'::text, 10::integer, 9::integer, 34::integer, 10::integer, 4::smallint),
     ('c4df07be-dba7-40ff-9bf5-ebbc6699bce6'::uuid, 'a0000001-0000-0000-0000-000000000011'::uuid, 'Kevin De Bruyne'::text, '2012-2013'::text, 'Chelsea'::text, 0::integer, 0::integer, 3::integer, 7::integer, 4::smallint, '2013-2014'::text, 'Chelsea'::text, 0::integer, null::integer, 9::integer, 7::integer, 5::smallint),
     ('044f4d64-28f8-42ba-b145-9a7c39e15f2d'::uuid, 'a0000001-0000-0000-0000-000000000011'::uuid, 'Kevin De Bruyne'::text, '2013-2014'::text, 'VfL Wolfsburg'::text, 10::integer, 21::integer, 37::integer, 22::integer, 6::smallint, '2013-2014'::text, 'VfL Wolfsburg'::text, 3::integer, null::integer, 18::integer, 22::integer, 6::smallint)
     ) as rows(row_id, player_id, player_name, old_season, old_club, old_goals, old_assists, old_appearances, old_market_value, old_sort_order, season, club, goals, assists, appearances, market_value, sort_order)
@@ -116,7 +116,7 @@ begin
   -- the after state: every touched player's path, row for row
   for desired in
     select * from (values
-      ('a0000001-0000-0000-0000-000000000030'::uuid, 'Antoine Griezmann'::text, 0::smallint, '2009-2010'::text, 'Real Sociedad'::text, 6::integer, 1::integer, 40::integer, 3::integer),
+      ('a0000001-0000-0000-0000-000000000030'::uuid, 'Antoine Griezmann'::text, 0::smallint, '2009-2010'::text, 'Real Sociedad'::text, 6::integer, null::integer, 40::integer, 3::integer),
       ('a0000001-0000-0000-0000-000000000030'::uuid, 'Antoine Griezmann'::text, 1::smallint, '2010-2011'::text, 'Real Sociedad'::text, 7::integer, 4::integer, 37::integer, 8::integer),
       ('a0000001-0000-0000-0000-000000000030'::uuid, 'Antoine Griezmann'::text, 2::smallint, '2011-2012'::text, 'Real Sociedad'::text, 10::integer, 5::integer, 38::integer, 12::integer),
       ('a0000001-0000-0000-0000-000000000030'::uuid, 'Antoine Griezmann'::text, 3::smallint, '2012-2013'::text, 'Real Sociedad'::text, 10::integer, 6::integer, 44::integer, 20::integer),
@@ -149,7 +149,7 @@ begin
       ('a0000001-0000-0000-0000-000000000008'::uuid, 'Harry Kane'::text, 3::smallint, '2012-2013'::text, 'Tottenham'::text, 0::integer, 0::integer, 1::integer, 2::integer),
       ('a0000001-0000-0000-0000-000000000008'::uuid, 'Harry Kane'::text, 4::smallint, '2012-2013'::text, 'Norwich City'::text, 0::integer, null::integer, 5::integer, 0::integer),
       ('a0000001-0000-0000-0000-000000000008'::uuid, 'Harry Kane'::text, 5::smallint, '2012-2013'::text, 'Leicester City'::text, 2::integer, null::integer, 15::integer, 0::integer),
-      ('a0000001-0000-0000-0000-000000000008'::uuid, 'Harry Kane'::text, 6::smallint, '2013-2014'::text, 'Tottenham'::text, 4::integer, 2::integer, 19::integer, 5::integer),
+      ('a0000001-0000-0000-0000-000000000008'::uuid, 'Harry Kane'::text, 6::smallint, '2013-2014'::text, 'Tottenham'::text, 4::integer, null::integer, 19::integer, 5::integer),
       ('a0000001-0000-0000-0000-000000000008'::uuid, 'Harry Kane'::text, 7::smallint, '2014-2015'::text, 'Tottenham'::text, 31::integer, 5::integer, 51::integer, 25::integer),
       ('a0000001-0000-0000-0000-000000000008'::uuid, 'Harry Kane'::text, 8::smallint, '2015-2016'::text, 'Tottenham'::text, 28::integer, 4::integer, 50::integer, 40::integer),
       ('a0000001-0000-0000-0000-000000000008'::uuid, 'Harry Kane'::text, 9::smallint, '2016-2017'::text, 'Tottenham'::text, 35::integer, 7::integer, 38::integer, 60::integer),
@@ -165,7 +165,7 @@ begin
       ('a0000001-0000-0000-0000-000000000011'::uuid, 'Kevin De Bruyne'::text, 1::smallint, '2009-2010'::text, 'Genk'::text, 3::integer, null::integer, 40::integer, 0::integer),
       ('a0000001-0000-0000-0000-000000000011'::uuid, 'Kevin De Bruyne'::text, 2::smallint, '2010-2011'::text, 'Genk'::text, 6::integer, null::integer, 35::integer, 0::integer),
       ('a0000001-0000-0000-0000-000000000011'::uuid, 'Kevin De Bruyne'::text, 3::smallint, '2011-2012'::text, 'Genk'::text, 8::integer, null::integer, 36::integer, 0::integer),
-      ('a0000001-0000-0000-0000-000000000011'::uuid, 'Kevin De Bruyne'::text, 4::smallint, '2012-2013'::text, 'Werder Bremen'::text, 10::integer, 10::integer, 34::integer, 10::integer),
+      ('a0000001-0000-0000-0000-000000000011'::uuid, 'Kevin De Bruyne'::text, 4::smallint, '2012-2013'::text, 'Werder Bremen'::text, 10::integer, 9::integer, 34::integer, 10::integer),
       ('a0000001-0000-0000-0000-000000000011'::uuid, 'Kevin De Bruyne'::text, 5::smallint, '2013-2014'::text, 'Chelsea'::text, 0::integer, null::integer, 9::integer, 7::integer),
       ('a0000001-0000-0000-0000-000000000011'::uuid, 'Kevin De Bruyne'::text, 6::smallint, '2013-2014'::text, 'VfL Wolfsburg'::text, 3::integer, null::integer, 18::integer, 22::integer),
       ('a0000001-0000-0000-0000-000000000011'::uuid, 'Kevin De Bruyne'::text, 7::smallint, '2014-2015'::text, 'VfL Wolfsburg'::text, 16::integer, 28::integer, 51::integer, 40::integer),

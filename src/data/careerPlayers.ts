@@ -8,7 +8,7 @@
  * paged 1,000 at a time ordered by player id then sort_order, and assists left
  * null where the league did not record them (never coerced to 0).
  *
- * 253 players, 3644 season rows, 208 of them with null assists.
+ * 253 players, 3644 season rows, 210 of them with null assists.
  * scripts/simCareerFallback.mjs fails when this file differs from a fresh bake.
  * Regenerate with: node scripts/bakeCareerPlayers.mjs
  */
@@ -18,7 +18,7 @@ export const CAREER_FALLBACK_META = {
   generated: '2026-10-01',
   players: 253,
   seasons: 3644,
-  nullAssists: 208,
+  nullAssists: 210,
 };
 
 export const careerPlayers: CareerPlayer[] = [
@@ -423,7 +423,7 @@ export const careerPlayers: CareerPlayer[] = [
     nationality: "France",
     position: "CF",
     career: [
-      { season: "2009-2010", club: "Real Sociedad", goals: 6, assists: 1, appearances: 40, marketValue: 3 },
+      { season: "2009-2010", club: "Real Sociedad", goals: 6, assists: null, appearances: 40, marketValue: 3 },
       { season: "2010-2011", club: "Real Sociedad", goals: 7, assists: 4, appearances: 37, marketValue: 8 },
       { season: "2011-2012", club: "Real Sociedad", goals: 10, assists: 5, appearances: 38, marketValue: 12 },
       { season: "2012-2013", club: "Real Sociedad", goals: 10, assists: 6, appearances: 44, marketValue: 20 },
@@ -2073,7 +2073,7 @@ export const careerPlayers: CareerPlayer[] = [
       { season: "2012-2013", club: "Tottenham", goals: 0, assists: 0, appearances: 1, marketValue: 2 },
       { season: "2012-2013", club: "Norwich City", goals: 0, assists: null, appearances: 5, marketValue: 0 },
       { season: "2012-2013", club: "Leicester City", goals: 2, assists: null, appearances: 15, marketValue: 0 },
-      { season: "2013-2014", club: "Tottenham", goals: 4, assists: 2, appearances: 19, marketValue: 5 },
+      { season: "2013-2014", club: "Tottenham", goals: 4, assists: null, appearances: 19, marketValue: 5 },
       { season: "2014-2015", club: "Tottenham", goals: 31, assists: 5, appearances: 51, marketValue: 25 },
       { season: "2015-2016", club: "Tottenham", goals: 28, assists: 4, appearances: 50, marketValue: 40 },
       { season: "2016-2017", club: "Tottenham", goals: 35, assists: 7, appearances: 38, marketValue: 60 },
@@ -2710,7 +2710,7 @@ export const careerPlayers: CareerPlayer[] = [
       { season: "2009-2010", club: "Genk", goals: 3, assists: null, appearances: 40, marketValue: 0 },
       { season: "2010-2011", club: "Genk", goals: 6, assists: null, appearances: 35, marketValue: 0 },
       { season: "2011-2012", club: "Genk", goals: 8, assists: null, appearances: 36, marketValue: 0 },
-      { season: "2012-2013", club: "Werder Bremen", goals: 10, assists: 10, appearances: 34, marketValue: 10 },
+      { season: "2012-2013", club: "Werder Bremen", goals: 10, assists: 9, appearances: 34, marketValue: 10 },
       { season: "2013-2014", club: "Chelsea", goals: 0, assists: null, appearances: 9, marketValue: 7 },
       { season: "2013-2014", club: "VfL Wolfsburg", goals: 3, assists: null, appearances: 18, marketValue: 22 },
       { season: "2014-2015", club: "VfL Wolfsburg", goals: 16, assists: 28, appearances: 51, marketValue: 40 },

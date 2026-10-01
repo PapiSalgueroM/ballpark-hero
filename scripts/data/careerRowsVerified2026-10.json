@@ -3,7 +3,7 @@
   "round": 827,
   "follows": "scripts/data/careerFirstClubs.json (Round 784). Its seenNotFixed list is this round's brief: Griezmann's 2009-10, Haaland's Salzburg split, De Bruyne's Chelsea and Wolfsburg labels, Kane's missing loans, the three rows that store a lower bound, and Alisson twice.",
   "migration": "supabase/migrations/20261002120000_career_rows_verified.sql",
-  "rule": "A row is changed or added only when two independent sources give the same appearances and goals for the club and season, counted over all competitions as the pool already counts them. Wikipedia's club statistics table and footballdatabase.eu's club career table are the pair Round 784 used; every change below also names the club's or the league's own record (Tottenham Hotspur, the Bundesliga, UEFA) or a contemporary match report where one could be read, and says when none could. Transfermarkt, ogol, zerozero and BDFutbol refused every request (HTTP 403 or a bot wall), so none is cited. Assists move to null (shown n/a) where the figure on the row cannot belong to the corrected season and the sources do not agree on a new one. A new row carries assists null and market value 0 (shown n/a), the pool's convention since Round 784, because no second source publishes either. Market values on changed rows are not audited and are left as they are. Where two sources disagree and no third could be read, the row stays as it is and is listed under keptAsIs.",
+  "rule": "A row is changed or added only when two independent sources give the same appearances and goals for the club and season, counted over all competitions as the pool already counts them. Wikipedia's club statistics table and footballdatabase.eu's club career table are the pair Round 784 used; every change below also names the club's or the league's own record (Tottenham Hotspur, the Bundesliga, UEFA) or a contemporary match report where one could be read, and says when none could. Transfermarkt, ogol, zerozero and BDFutbol refused every request (HTTP 403 or a bot wall), so none is cited. Every row the record changes has its assists checked as well: they move to a new value where two sources agree on it, stay as they are where they match the one source that counts them (listed under assistsKept), and move to null (shown n/a) where the one source that counts them contradicts the row or two sources give different numbers. A new row carries assists null and market value 0 (shown n/a), the pool's convention since Round 784, because no second source publishes either. Market values on changed rows are not audited and are left as they are. Where two sources disagree and no third could be read, the row stays as it is and is listed under keptAsIs.",
   "sources": {
     "wikipedia": "en.wikipedia.org, the 'Appearances and goals by club, season and competition' table of each player's article, wikitext read through action=raw on 2026-10-01",
     "footballdatabase": "www.footballdatabase.eu/en/player/details/<id>, the club career table, competition rows summed per season, read 2026-10-01",
@@ -31,6 +31,15 @@
         { "name": "wikipedia", "url": "https://en.wikipedia.org/wiki/Antoine_Griezmann", "read": "2026-10-01", "value": 6, "says": "2009-10 total 40 apps 6 goals, all six in the league" },
         { "name": "footballdatabase", "url": "https://www.footballdatabase.eu/en/player/details/82457-antoine-griezmann", "read": "2026-10-01", "value": 6, "says": "2009/2010 Liga Adelante 6 goals, Copa del Rey 0" }
       ]
+    },
+    {
+      "player": "Antoine Griezmann", "playerId": "a0000001-0000-0000-0000-000000000030", "season": "2009-2010", "club": "Real Sociedad",
+      "field": "assists", "from": 1, "to": null,
+      "sources": [
+        { "name": "footballdatabase", "url": "https://www.footballdatabase.eu/en/player/details/82457-antoine-griezmann", "read": "2026-10-01", "value": 0, "says": "2009/2010 Liga Adelante 0 assists, Copa del Rey 0" },
+        { "name": "wikipedia", "url": "https://en.wikipedia.org/wiki/Antoine_Griezmann", "read": "2026-10-01", "value": null, "says": "the club table does not count assists" }
+      ],
+      "reason": "the 1 was written with the old 10 appearance line, and the one source that counts assists gives 0, so the row shows n/a"
     },
     {
       "player": "Erling Haaland", "playerId": "a0000001-0000-0000-0000-000000000006", "season": "2018-2019", "club": "RB Salzburg",
@@ -95,7 +104,7 @@
         { "name": "wikipedia", "url": "https://en.wikipedia.org/wiki/Kevin_De_Bruyne", "read": "2026-10-01", "value": 34, "says": "2012-13 Bundesliga 33 apps 10 goals, DFB-Pokal 1 app 0 goals, total 34 apps 10 goals" },
         { "name": "footballdatabase", "url": "https://www.footballdatabase.eu/en/player/details/69338-kevin-de_bruyne", "read": "2026-10-01", "value": 34, "says": "2012/2013 Bundesliga 33 games 10 goals 9 assists, DFB-Pokal 1 game" }
       ],
-      "note": "Found while relabelling the Chelsea row beside it: the row carried the league games only and 3 goals."
+      "note": "Found while relabelling the Chelsea row beside it: the row carried the league games only, 3 goals and 10 assists."
     },
     {
       "player": "Kevin De Bruyne", "playerId": "a0000001-0000-0000-0000-000000000011", "season": "2012-2013", "club": "Werder Bremen",
@@ -104,6 +113,14 @@
         { "name": "wikipedia", "url": "https://en.wikipedia.org/wiki/Kevin_De_Bruyne", "read": "2026-10-01", "value": 10, "says": "2012-13 total 34 apps 10 goals" },
         { "name": "footballdatabase", "url": "https://www.footballdatabase.eu/en/player/details/69338-kevin-de_bruyne", "read": "2026-10-01", "value": 10, "says": "2012/2013 Bundesliga 10 goals, DFB-Pokal 0" },
         { "name": "bundesliga_kdb", "url": "https://www.bundesliga.com/en/news/Bundesliga/kevin-de-bruyne-manchester-city-made-in-the-bundesliga-wolfsburg-guardiola-473776.jsp", "read": "2026-10-01", "value": 10, "says": "in his first year in Germany he registered 10 goals and nine assists" }
+      ]
+    },
+    {
+      "player": "Kevin De Bruyne", "playerId": "a0000001-0000-0000-0000-000000000011", "season": "2012-2013", "club": "Werder Bremen",
+      "field": "assists", "from": 10, "to": 9,
+      "sources": [
+        { "name": "footballdatabase", "url": "https://www.footballdatabase.eu/en/player/details/69338-kevin-de_bruyne", "read": "2026-10-01", "value": 9, "says": "2012/2013 Bundesliga 33 games 10 goals 9 assists, DFB-Pokal 1 game 0 assists, so 9 over all competitions" },
+        { "name": "bundesliga_kdb", "url": "https://www.bundesliga.com/en/news/Bundesliga/kevin-de-bruyne-manchester-city-made-in-the-bundesliga-wolfsburg-guardiola-473776.jsp", "read": "2026-10-01", "value": 9, "says": "in his first year in Germany he registered 10 goals and nine assists (the league season; his one cup game had none)" }
       ]
     },
     {
@@ -177,6 +194,31 @@
         { "name": "footballdatabase", "url": "https://www.footballdatabase.eu/en/player/details/128531-harry-kane", "read": "2026-10-01", "value": 4, "says": "2013/2014 Premier League 10 games 3 goals, Capital One Cup 2 games 1 goal, Europa League 7 games 0" }
       ],
       "note": "The row's 19 appearances already agree with both sources and with Tottenham's own '19 appearances in all competitions'; the League Cup goal was missing."
+    },
+    {
+      "player": "Harry Kane", "playerId": "a0000001-0000-0000-0000-000000000008", "season": "2013-2014", "club": "Tottenham",
+      "field": "assists", "from": 2, "to": null,
+      "sources": [
+        { "name": "footballdatabase", "url": "https://www.footballdatabase.eu/en/player/details/128531-harry-kane", "read": "2026-10-01", "value": 3, "says": "2013/2014 Premier League 1 assist, Europa League 2, Capital One Cup 0, so 3" },
+        { "name": "wikipedia", "url": "https://en.wikipedia.org/wiki/Harry_Kane", "read": "2026-10-01", "value": null, "says": "the club table does not count assists" }
+      ],
+      "reason": "the one source that counts assists gives 3, not the 2 on the row, and no second source counts them, so the row shows n/a"
+    }
+  ],
+  "assistsKept": [
+    {
+      "player": "Harry Kane", "playerId": "a0000001-0000-0000-0000-000000000008", "season": "2011-2012", "club": "Tottenham", "value": 0,
+      "sources": [
+        { "name": "footballdatabase", "url": "https://www.footballdatabase.eu/en/player/details/128531-harry-kane", "read": "2026-10-01", "value": 0, "says": "2011/2012 Tottenham Europa League 6 games 0 assists" }
+      ],
+      "why": "The row's appearances and goals change; its 0 assists already match the one source that counts them."
+    },
+    {
+      "player": "Harry Kane", "playerId": "a0000001-0000-0000-0000-000000000008", "season": "2012-2013", "club": "Tottenham", "value": 0,
+      "sources": [
+        { "name": "footballdatabase", "url": "https://www.footballdatabase.eu/en/player/details/128531-harry-kane", "read": "2026-10-01", "value": 0, "says": "2012/2013 Tottenham Premier League 1 game 0 assists" }
+      ],
+      "why": "The row's appearances and goals change; its 0 assists already match the one source that counts them."
     }
   ],
   "added": [
@@ -229,7 +271,7 @@
       "player": "Alisson", "playerId": "a0000001-0000-0000-0000-000000000040", "season": "2014", "club": "Internacional", "field": "appearances", "value": 14,
       "sources": [
         { "name": "wikipedia", "url": "https://en.wikipedia.org/wiki/Alisson_Becker", "read": "2026-10-01", "value": 14, "says": "2014 Serie A 11, state championship 3, total 14 apps" },
-        { "name": "footballdatabase", "read": "2026-10-01", "value": 15, "says": "15 apps, one of them the Recopa Gaucha, which Wikipedia does not count (Round 784's reading)" }
+        { "name": "footballdatabase", "url": "https://www.footballdatabase.eu/en/player/details/194820--alisson_becker", "read": "2026-10-01", "value": 15, "says": "2014 Internacional Serie A 11, Campeonato Gaucho 3, Recopa Gaucha 1, total 15 apps; the Recopa Gaucha is the game Wikipedia does not count (Round 784's reading, reread 2026-10-01)" }
       ],
       "thirdTried": ["ogol.com.br (HTTP 403)", "zerozero.pt (bot wall)", "transfermarkt.com (refused)"],
       "why": "The two differ only on whether the Recopa Gaucha counts. No third source could be read, so the row keeps the 14 both count."
@@ -238,7 +280,7 @@
       "player": "Alisson Becker", "playerId": "a0000001-0000-0000-0000-000000000066", "season": "2014", "club": "Internacional", "field": "appearances", "value": 14,
       "sources": [
         { "name": "wikipedia", "url": "https://en.wikipedia.org/wiki/Alisson_Becker", "read": "2026-10-01", "value": 14, "says": "2014 total 14 apps" },
-        { "name": "footballdatabase", "read": "2026-10-01", "value": 15, "says": "15 apps including the Recopa Gaucha (Round 784's reading)" }
+        { "name": "footballdatabase", "url": "https://www.footballdatabase.eu/en/player/details/194820--alisson_becker", "read": "2026-10-01", "value": 15, "says": "15 apps including the Recopa Gaucha (Round 784's reading, reread 2026-10-01)" }
       ],
       "thirdTried": ["ogol.com.br (HTTP 403)", "zerozero.pt (bot wall)", "transfermarkt.com (refused)"],
       "why": "The same man as the row above (see duplicate); same disagreement, same answer."
@@ -247,7 +289,7 @@
       "player": "Alisson", "playerId": "a0000001-0000-0000-0000-000000000040", "season": "2016", "club": "Internacional", "field": "appearances", "value": 20,
       "sources": [
         { "name": "wikipedia", "url": "https://en.wikipedia.org/wiki/Alisson_Becker", "read": "2026-10-01", "value": 21, "says": "2016 Serie A 1, state championship 17, Primeira Liga 3, total 21 apps" },
-        { "name": "footballdatabase", "read": "2026-10-01", "value": 20, "says": "20 apps (1 league, 16 state, 3 Primeira Liga), Round 784's reading" }
+        { "name": "footballdatabase", "url": "https://www.footballdatabase.eu/en/player/details/194820--alisson_becker", "read": "2026-10-01", "value": 20, "says": "2016 Internacional Serie A 1, Campeonato Gaucho 16, Primeira Liga 3, total 20 apps (Round 784's reading, reread 2026-10-01)" }
       ],
       "thirdTried": ["ogol.com.br (HTTP 403)", "zerozero.pt (bot wall)", "transfermarkt.com (refused)", "web search for the 2016 Gauchao appearance count (no per season figure found)"],
       "why": "One state championship game apart and no third source could be read, so the row keeps the 20 both record."
@@ -256,7 +298,7 @@
       "player": "Alisson Becker", "playerId": "a0000001-0000-0000-0000-000000000066", "season": "2016", "club": "Internacional", "field": "appearances", "value": 20,
       "sources": [
         { "name": "wikipedia", "url": "https://en.wikipedia.org/wiki/Alisson_Becker", "read": "2026-10-01", "value": 21, "says": "2016 total 21 apps" },
-        { "name": "footballdatabase", "read": "2026-10-01", "value": 20, "says": "20 apps, Round 784's reading" }
+        { "name": "footballdatabase", "url": "https://www.footballdatabase.eu/en/player/details/194820--alisson_becker", "read": "2026-10-01", "value": 20, "says": "20 apps (Round 784's reading, reread 2026-10-01)" }
       ],
       "thirdTried": ["ogol.com.br (HTTP 403)", "zerozero.pt (bot wall)", "transfermarkt.com (refused)"],
       "why": "The same man as the row above (see duplicate); same disagreement, same answer."
