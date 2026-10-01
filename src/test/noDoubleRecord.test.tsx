@@ -450,9 +450,10 @@ function career(
          the hub: a career one honest step from its end. */
       for (let i = 0; i < 6; i += 1) season(c, rng);
       c.retired = false;
-      /* A rivalry beat the sims left pending would stand in front of the
-         hub; it is not what this row is about. */
+      /* A rivalry beat or a rival choice (Round 796) the sims left pending
+         would stand in front of the hub; neither is what this row is about. */
       delete (c as { pendingRivalryEvent?: unknown }).pendingRivalryEvent;
+      delete (c as { pendingRivalryChoice?: unknown }).pendingRivalryChoice;
       name = c.name;
       localStorage.setItem(saveKey, JSON.stringify({ c, phase: 'season', teamQuality: 80, coach: null }));
     },

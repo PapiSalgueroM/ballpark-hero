@@ -43,6 +43,8 @@ import {
   rollRivalryEvent, forcedRetirementEvent, applyRivalryEvent as applyRivalryEventFor,
 } from "./careerRivalryEvents";
 import type { RivalryEvent, RivalryEventDef } from "./careerRivalryEvents";
+import { rivalryChoiceTick, resolvePendingRivalryChoice, meterOption } from "./careerRivalryChoices";
+import type { RivalryChoiceDef, RivalryChoiceCard } from "./careerRivalryChoices";
 
 const clamp = (v: number, lo: number, hi: number) => Math.max(lo, Math.min(hi, v));
 
@@ -238,4 +240,177 @@ export function dismissNbaRivalryEvent(c: NbaCareerState, rng: () => number = Ma
   }
   s.pendingRivalryEvent = null;
   return { state: s, lines };
+}
+
+/* ─── Round 796: rivalry choices ─────────────────────────────────────────────
+
+   The NBA's half of what the NFL career got this round: the rival puts a
+   decision in front of you, on the shared engine careerRivalryChoices.ts.
+   Basketball words and basketball moments (the flagrant, the All-Star vote,
+   the max deal), the same meters the NFL table moves, written from plain
+   numbers through meterOption so the button cannot promise one thing and do
+   another. Morale feeds simNbaSeason's form, so the morale options are a real
+   lever on the next stat line. One card a season at most, and only in a
+   season the beat roll above came up empty. */
+
+/** The chance a season with no beat brings a choice instead. */
+export const NBA_RIVALRY_CHOICE_CHANCE = 0.45;
+
+const opt = (spec: Parameters<typeof meterOption>[0]) => meterOption<NbaCareerState, CareerRival>(spec);
+
+export const NBA_RIVALRY_CHOICES: RivalryChoiceDef<NbaCareerState, CareerRival>[] = [
+  {
+    id: "nba_rival_flagrant", emoji: "💥", title: "THE FLAGRANT",
+    description: (_s, r) => `${r.name} took you out on a drive and the refs upgraded it to a flagrant at the monitor. Your bench wants him to feel it the next time you two meet.`,
+    when: () => true,
+    choices: [
+      opt({
+        label: "Give it right back", emoji: "😈",
+        promise: { effect: { heat: 25 }, risk: { chance: 0.3, hit: { morale: -5, fanbase: -5, cash: -0.1 }, miss: { morale: 8 } } },
+        riskNote: "you're the one who gets tossed",
+        hitLine: r => `🚩 You went looking for ${r} and picked up two techs yourself. Tossed, fined, and the fans did not love it.`,
+        missLine: r => `😈 You went right at ${r} the next time down and scored through the contact. The whole bench lost it.`,
+      }),
+      opt({
+        label: "Help him up on camera", emoji: "🕊️",
+        promise: { effect: { fanbase: 5, karma: 5, heat: -15 } },
+        line: r => `🕊️ You walked over and helped ${r} up. The grown up in the building, and the fans noticed.`,
+      }),
+      opt({
+        label: "Say nothing, watch the film", emoji: "🎞️",
+        promise: { effect: { morale: 6, heat: 10 } },
+        line: r => `🎞️ Not a word. You watched the play on loop and circled the next game against ${r}.`,
+      }),
+    ],
+  },
+  {
+    id: "nba_rival_debate_show", emoji: "🎤", title: "THE DEBATE SHOW",
+    description: (_s, r) => `A sports network offers $2M for one live hour: you against a panel arguing ${r.name} is better. No script, one microphone.`,
+    when: s => s.ovr >= 85,
+    choices: [
+      opt({
+        label: "Go on and cook them", emoji: "🔥",
+        promise: { effect: { cash: 2 }, risk: { chance: 0.35, hit: { fanbase: -8 }, miss: { fanbase: 6 } } },
+        riskNote: "a clip goes viral for the wrong reasons",
+        hitLine: () => "🎤 You went on the show and one heated clip went viral for the wrong reasons. The check cleared anyway.",
+        missLine: () => "🔥 You cooked the whole panel live. The check cleared and the clip ends arguments.",
+      }),
+      opt({
+        label: "Post a mixtape instead", emoji: "📼",
+        promise: { effect: { fanbase: 8 } },
+        line: () => "📼 You posted four minutes of buckets and no caption. It out-rated the show.",
+      }),
+      opt({
+        label: "Decline. No debate.", emoji: "😎",
+        promise: { effect: { morale: 5, karma: 3 } },
+        line: r => `😎 You passed. Let them argue about you and ${r} without you.`,
+      }),
+    ],
+  },
+  {
+    id: "nba_rival_youth_camp", emoji: "💛", title: "TRUCE FOR ONE DAY",
+    description: (_s, r) => `${r.name}'s foundation asks you to co-host a free youth camp. Same gym, same whistle, one day only. A photo of you two coaching side by side would be everywhere.`,
+    when: () => true,
+    choices: [
+      opt({
+        label: "Co-host and split the bill", emoji: "🤝",
+        promise: { effect: { cash: -1, fanbase: 10, karma: 8, heat: -20 } },
+        line: r => `💛 One day, one gym, two hundred kids. You and ${r} split the bill and the feud took the day off.`,
+      }),
+      opt({
+        label: "Show up and talk trash all day", emoji: "😉",
+        promise: { effect: { fanbase: 12, heat: 5 } },
+        line: r => `😉 The camp turned into a trash talk show between you and ${r}. The kids loved every second.`,
+      }),
+      opt({
+        label: "Send a check, skip it", emoji: "💸",
+        promise: { effect: { cash: -1, karma: 3 } },
+        line: () => "💸 You sent the check and skipped the cameras. The quiet kind of good.",
+      }),
+    ],
+  },
+  {
+    id: "nba_rival_allstar_vote", emoji: "🗳️", title: "THE ALL-STAR VOTE",
+    description: (_s, r) => `All-Star fan voting is open and ${r.name}'s team is running ads for him everywhere. Your team's social people want to run one for you too.`,
+    when: (s, r) => s.ovr >= 80 && r.ovr >= 80,
+    choices: [
+      opt({
+        label: "Run the campaign", emoji: "📣",
+        promise: { effect: { cash: -0.2, fanbase: 6, morale: 2 } },
+        line: () => "📣 Your face went up on every screen in the arena. Paid for it yourself, too.",
+      }),
+      opt({
+        label: "Let the box scores talk", emoji: "🧊",
+        promise: { effect: { morale: 4 } },
+        line: () => "🧊 No ads, no posts. Just the box scores.",
+      }),
+      opt({
+        label: "Call out the vote buying", emoji: "🎯",
+        promise: { effect: { heat: 15 }, risk: { chance: 0.4, hit: { fanbase: -6 }, miss: { fanbase: 8 } } },
+        riskNote: "it reads as sour grapes",
+        hitLine: r => `🍇 You called out ${r}'s ad money and it read as sour grapes. The replies were rough.`,
+        missLine: r => `🎯 You called out ${r}'s ad money and the fans ran with it. Your name trended all week.`,
+      }),
+    ],
+  },
+  {
+    id: "nba_rival_max_deal", emoji: "💰", title: "THE BIGGER DEAL",
+    description: (_s, r) => `${r.name} just signed a max extension bigger than anything at your position. Your phone has not stopped buzzing.`,
+    when: (s, r) => s.age >= 24 && r.ovr >= s.ovr - 3,
+    choices: [
+      opt({
+        label: "Congratulate him publicly", emoji: "👏",
+        promise: { effect: { fanbase: 4, karma: 5, heat: -10 } },
+        line: r => `👏 You posted a congrats for ${r}. Classy, and people noticed.`,
+      }),
+      opt({
+        label: "Use it as fuel", emoji: "🔥",
+        promise: { effect: { morale: 6, heat: 10 } },
+        line: r => `🔥 You screenshotted ${r}'s contract and made it your lock screen.`,
+      }),
+      opt({
+        label: "Complain to the press", emoji: "📰",
+        promise: { effect: { morale: 2, karma: -6 }, risk: { chance: 0.5, hit: { fanbase: -6 }, miss: { fanbase: 3 } } },
+        riskNote: "the fans side with him",
+        hitLine: r => `📰 You told reporters ${r}'s deal was a joke. The fans took his side.`,
+        missLine: () => "📰 You told reporters you are underpaid. Half the city agreed with you.",
+      }),
+    ],
+  },
+  {
+    id: "nba_rival_reunion", emoji: "🎓", title: "DRAFT CLASS REUNION",
+    description: (_s, r) => `A network is doing a five years later piece on your draft class and wants you and ${r.name} on set together.`,
+    when: s => s.seasons.length >= 5,
+    choices: [
+      opt({
+        label: "Do it together", emoji: "🤝",
+        promise: { effect: { fanbase: 6, heat: -10 } },
+        line: r => `🤝 You and ${r} told draft night stories for an hour. Best thing the network aired all month.`,
+      }),
+      opt({
+        label: "Do it, but only your highlights", emoji: "🎬",
+        promise: { effect: { fanbase: 4, morale: 2, heat: 5 } },
+        line: () => "🎬 You did the piece and made sure the cut was all your plays.",
+      }),
+      opt({
+        label: "Skip it", emoji: "🙅",
+        promise: { effect: { morale: 1 } },
+        line: () => "🙅 You skipped it. Nostalgia can wait until you're done.",
+      }),
+    ],
+  },
+];
+
+/** One season's choice roll, after the beat roll in simNbaSeason, on the
+ *  shared tick: only when no beat came up and no choice is already waiting. */
+export function nbaRivalryChoiceTick(c: NbaCareerState, rng?: () => number): RivalryChoiceCard | null {
+  return rivalryChoiceTick(c, NBA_RIVALRY_CHOICES, NBA_RIVALRY_CHOICE_CHANCE, rng);
+}
+
+/** Answer the pending choice; null when nothing is pending or the option
+ *  does not exist (a double tap changes nothing). */
+export function resolveNbaRivalryChoice(
+  c: NbaCareerState, choiceIdx: number, rng: () => number = Math.random,
+): { state: NbaCareerState; line: string } | null {
+  return resolvePendingRivalryChoice(c, choiceIdx, NBA_RIVALRY_CHOICES, rng);
 }

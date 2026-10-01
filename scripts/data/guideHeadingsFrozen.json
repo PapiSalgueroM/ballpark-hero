@@ -1865,7 +1865,8 @@
         "Check the lineup card. Top ten picks play from Opening Day; everyone else fights the veteran in spring, with bench bats and long-relief arms waiting on spot starts until the job flips. Relievers climb their own bullpen ladder instead.",
         "Handle the offseason event: winter training, surgery calls, trade rumors.",
         "When team control ends, hit the open market for real: competing offers from named clubs with their own money, length and roster quality, and one push for more on any of them.",
-        "Stack awards and rings, fight aging, and retire to a verdict."
+        "Stack awards and rings, fight aging, and retire to a verdict.",
+        "Some seasons your rival puts a decision on your plate instead of a story: benches clearing that you can answer or calm down, a debate show offering real money, a youth clinic his foundation wants you to co-host, an All-Star vote his club is buying ads for. Every button prints exactly what it moves, and a gamble prints its odds."
       ],
       "rules": [
         "You start at 21 in 2026 with 6 years of team control before free agency. The throwback starts in 2004 instead, inside a sealed 30 team league verified against the real season, with 2004 sized contracts.",
@@ -1876,11 +1877,13 @@
         "Retirement hits at 42, after 21 seasons, or when your rating collapses. You can walk away after season 6.",
         "Money has rules of its own. There is a 1% fee on both sides of every trade and a $100k floor in the account that cannot be invested away; a season that leaves you under the floor is covered out of savings first, then by a forced sale of holdings at whatever the price is that day. Cards win 42% of hands and a win pays 1.15x the stake, the most you can stake is $50k or 4% of your cash, and once you are $500k down for your career the guys stop dealing you in for good. Keep sitting in while you are losing and somebody at home notices, which costs morale and fanbase.",
         "The fans nag you for the thing your position is judged on and never the other way round: a starter hears go deeper into games, a closer hears shut the door, a catcher hears more pop from behind the plate. No arm is ever asked for home runs, no bat is ever asked for an ERA, and the three spots with no speed in them are never asked to run.",
-        "One career at a time, saved automatically in your browser."
+        "One career at a time, saved automatically in your browser.",
+        "Any season your rival stays out of the news carries a 45% chance of a rival choice instead, never both in one season, and you meet every choice once before one comes back. Each button moves exactly what it prints: morale, fanbase, net worth, karma or the heat of the feud. Morale goes straight into next season's numbers, at the plate or on the mound."
       ],
       "example": [
         "You build a Slugging Shortstop who goes 12th overall. Year two brings the breakout, year five a ring. When control ends, the hometown club offers a discount while the market whispers bigger money elsewhere.",
-        "You chase the money, the new fanbase starts cold, and the decline grinds. At 38 you retire with 430 homers, a ring and five All-Star nods. Verdict: Hall of Famer."
+        "You chase the money, the new fanbase starts cold, and the decline grinds. At 38 you retire with 430 homers, a ring and five All-Star nods. Verdict: Hall of Famer.",
+        "Both benches empty after a pitch up and in, your rival is first out of his dugout, and the card asks what you do about it. Answer it on the field heats the feud and usually pays Morale +8, but it carries a 30% chance you are the one who gets tossed (Morale -5, Fanbase -5, Net worth -$100k). Play peacemaker on camera is Fanbase +5, Karma +5 and the feud cools. You pick say nothing and watch the tape: Morale +6, the feud heats up, and those six points ride into next season's numbers."
       ],
       "tips": [
         "Durability wins careers. Steadier archetypes stay on the field while flashy builds collect injury notes.",
@@ -2163,7 +2166,8 @@
         "Sim each season for a full line: games, points, rebounds, assists, awards, team result.",
         "Handle the offseason event, one big decision per summer.",
         "When the contract runs out, work a real free agency window: competing offers from named franchises with their own money, length and roster quality, and one push for more on any of them.",
-        "Retire when the body or the fire quits, and face the legacy verdict."
+        "Retire when the body or the fire quits, and face the legacy verdict.",
+        "Some seasons your rival hands you a decision instead of a headline: a flagrant you can answer or let go, a debate show offering real money, a youth camp his foundation wants you to co-host, an All-Star vote his team is buying ads for. Every button prints exactly what it moves, and a gamble prints its odds."
       ],
       "rules": [
         "Archetypes shape the stat engine: Point Gods pile up assists, Paint Beasts eat rebounds, Bucket Getters score but break down more.",
@@ -2174,11 +2178,13 @@
         "Careers end at 41, after 21 seasons, or when the rating craters. You can also walk anytime.",
         "The 2003-04 throwback is a sealed 29 team world, verified against the real season: every draft, trade and signing stays inside it, and contracts pay 2003 money, about a third of today's.",
         "Money has rules of its own. There is a 1% fee on both sides of every trade and a $100k floor in the account that cannot be invested away; a season that leaves you under the floor is covered out of savings first, then by a forced sale of holdings at whatever the price is that day. Cards win 42% of hands and a win pays 1.15x the stake, the most you can stake is $50k or 4% of your cash, and once you are $500k down for your career the guys stop dealing you in for good. Keep sitting in while you are losing and somebody at home notices, which costs morale and fanbase.",
-        "The fans nag you for the thing your position is judged on and never the other way round: a point guard hears more assists, a center hears own the glass, and nobody hears about a three, a block or a steal, because the season line does not count one."
+        "The fans nag you for the thing your position is judged on and never the other way round: a point guard hears more assists, a center hears own the glass, and nobody hears about a three, a block or a steal, because the season line does not count one.",
+        "A season where your rival makes no headline has a 45% shot at a rival choice instead, never both in the same year, and every choice shows up once before any of them repeats. The buttons move only what they print: morale, fanbase, net worth, karma or the heat of the feud, and morale feeds straight into next season's box score."
       ],
       "example": [
         "You roll a Two-Way Menace guard, go 11th, and win Rookie of the Year on a bad team. Year three, morale craters and you demand a trade. Villain arc unlocked.",
-        "The new team contends. You take the discount at 28, win it all at 30, and grab Finals MVP. Decline arrives at 33, surgery buys two more years, and the verdict reads first ballot Hall of Famer. The GOAT tier stays out of reach. It usually does."
+        "The new team contends. You take the discount at 28, win it all at 30, and grab Finals MVP. Decline arrives at 33, surgery buys two more years, and the verdict reads first ballot Hall of Famer. The GOAT tier stays out of reach. It usually does.",
+        "Your rival takes you out on a drive and the refs upgrade it to a flagrant. Give it right back heats the feud and usually pays Morale +8, but it carries a 30% chance you are the one who gets tossed (Morale -5, Fanbase -5, Net worth -$100k). Help him up on camera is Fanbase +5, Karma +5 and the feud cools. You pick say nothing and watch the film: Morale +6, the feud heats up, and those six points ride into next season's box score."
       ],
       "tips": [
         "Pick the archetype for the career you want to live. Durability differences are real.",
@@ -2370,7 +2376,9 @@
         "Spend the money in 7 aisles: home, rides, investments, body, flex, family, and a shady aisle that only appears once you have something to hide.",
         "Read the News box. The paper writes up every season in your own position's stat, the SocialGram shows followers read off your fanbase with three fan comments under the latest post, and the rival's card keeps the head to head against the player drafted the same year as you.",
         "Collect badges in the Trophy Case: 25 of them, from a first ring and Rookie of the Year to 10,000 passing yards, a 20 sack season and $100M to your name, each lit the moment the facts of your career say so.",
-        "Retire, or get forced out, and face the legacy verdict."
+        "Retire, or get forced out, and face the legacy verdict.",
+        "Answer your phone. Texts from your agent, the head coach, the GM, a teammate or your mom land on the beats of the football year: draft night, camp, the bye, the trade deadline, the playoffs if you get there, the offseason, and the summer before the last year of your deal. Every text says which beat and which year it came in on, and how you answer moves your karma, morale, fanbase or bank.",
+        "Some seasons your rival puts a decision in front of you instead of a story: a late hit you can answer or let go, a debate show offering real money, a youth camp his foundation wants you to co-host. Every button prints exactly what it moves, and a gamble prints its odds."
       ],
       "rules": [
         "You start at 22 on a 4 year rookie deal. Growth is slow and honest, 1 to 2 rating points a year through age 26 with a late bloomer chance after that, and the last few points above 88 are the hardest in the game.",
@@ -2383,11 +2391,14 @@
         "The press reads your actual season: win it all and you take the podium, collapse and you face the accountability scrum, ride the bench and someone asks the role question. Every presser is three answers, safe, honest or fiery, and the fiery one genuinely gambles your fanbase.",
         "The 2005 throwback is a sealed world: all 32 franchises exactly as they stood that season, verified against the real records, and every draft, trade and signing stays inside it. Contracts pay 2005 money, about a third of today's.",
         "Money has rules of its own. There is a 1% fee on both sides of every trade and a $100k floor in the account that cannot be invested away; a season that leaves you under the floor is covered out of savings first, then by a forced sale of holdings at whatever the price is that day. Cards win 42% of hands and a win pays 1.15x the stake, the most you can stake is $50k or 4% of your cash, and once you are $500k down for your career the guys stop dealing you in for good. Keep sitting in while you are losing and somebody at home notices, which costs morale and fanbase.",
-        "The fans nag you for the thing your position is judged on and never the other way round: a quarterback hears touchdowns, a corner hears lock down that side, a kicker hears just make the kicks."
+        "The fans nag you for the thing your position is judged on and never the other way round: a quarterback hears touchdowns, a corner hears lock down that side, a kicker hears just make the kicks.",
+        "Texts only arrive on beats your season really had. No playoff texts in a year you went home in January, no contract year texts with years left on the deal, and draft night's text lands before you play a down. One text a beat, up to three a season, fewer while old ones sit unanswered, and the same text never comes twice in a career.",
+        "A season with no rival story has a 45% shot at a rival choice instead, never both in one year, and you see every choice once before any of them comes round again. A button does exactly what it says: morale, fanbase, net worth, karma or the heat of the feud. Morale carries straight into how well you play next season."
       ],
       "example": [
         "You make a Dual Threat quarterback and go 12th overall to a shaky roster. The leap comes at 25: 4,000 plus yards, an All-Pro nod, a run that dies in the Championship game. At contract time you take the discount.",
-        "At 28 the knee starts talking. You play through it, lose four games, and demand a trade. The ring comes at 31, you retire at 35 with one MVP, and the verdict reads Hall of Famer."
+        "At 28 the knee starts talking. You play through it, lose four games, and demand a trade. The ring comes at 31, you retire at 35 with one MVP, and the verdict reads Hall of Famer.",
+        "Your rival drills you a second after the whistle and the card asks what you do about it. Settle it next time heats the feud and usually pays Morale +8, but it carries a 30% chance you draw the flag yourself (Morale -5, Fanbase -5, Net worth -$100k). Shake it off on camera is Fanbase +5, Karma +5 and the feud cools. You pick say nothing and watch the film: Morale +6, the feud heats up, and those six points ride into next season's stat line."
       ],
       "tips": [
         "Running back careers are a sprint. Cash in early, because the cliff at 28 is real.",
@@ -2520,7 +2531,8 @@
         "Play each season: skaters post goals, assists and points, goalies post wins and save percentage.",
         "Face one big offseason decision each year: training, trade requests, media noise.",
         "When the deal expires, hit July 1 for real: competing offers from named clubs with their own money, length and roster quality, and one push for more on any of them.",
-        "Age, decline, retire, then read the legacy verdict."
+        "Age, decline, retire, then read the legacy verdict.",
+        "Some seasons your rival forces a decision instead of making a headline: a cheap shot after the whistle you can settle or shrug off, a debate show offering real money, a youth clinic his foundation wants you to co-host, an All-Star vote his club is buying ads for. Every button prints exactly what it moves, and a gamble prints its odds."
       ],
       "rules": [
         "Careers start in 2026 at age 18 or 19 and last up to 22 seasons. The throwback starts in 2006 instead, inside a sealed 30 team league verified against the real season, with 2006 sized contracts.",
@@ -2531,11 +2543,13 @@
         "The legacy score weighs Cups, majors (Hart, Norris or Vezina), Conn Smythes, All-Star nods, seasons and production; 500 or more means the Hall of Fame.",
         "Money has rules of its own. There is a 1% fee on both sides of every trade and a $100k floor in the account that cannot be invested away; a season that leaves you under the floor is covered out of savings first, then by a forced sale of holdings at whatever the price is that day. Cards win 42% of hands and a win pays 1.15x the stake, the most you can stake is $50k or 4% of your cash, and once you are $500k down for your career the boys stop dealing you in for good. Keep sitting in while you are losing and somebody at home notices, which costs morale and fanbase.",
         "The fans nag you for the thing your position is judged on and never the other way round: a center hears more points, a winger hears bury more chances, the man on the blue line hears move the puck and keep it out, and a goalie only ever hears make the saves.",
-        "One career saves automatically in your browser; a new one replaces it."
+        "One career saves automatically in your browser; a new one replaces it.",
+        "When your rival makes no headline in a season, there is a 45% chance he puts a choice in front of you instead, never both in one season, and each choice comes up once before any repeats. A button only moves what it prints: morale, fanbase, net worth, karma or the heat of the feud. Morale rides straight into next season's points or save percentage."
       ],
       "example": [
         "Say your Sniper winger goes 23rd overall to a rebuilding club. Year one is 24 goals and silence. At 23 you erupt for 47 with an All-Star nod, but the losing wrecks your morale, so you force a trade to a contender.",
-        "At 27 you win the Cup. The legs go at 33, you switch to maintenance summers, grab two more years and retire at 38: one Cup, six All-Star nods, a franchise icon verdict. The Hall says not quite."
+        "At 27 you win the Cup. The legs go at 33, you switch to maintenance summers, grab two more years and retire at 38: one Cup, six All-Star nods, a franchise icon verdict. The Hall says not quite.",
+        "Your rival gets away with a cheap shot after the whistle, no call, and the card asks what you do about it. Settle it next game heats the feud and usually pays Morale +8, but it carries a 30% chance you are the one who gets the penalty (Morale -5, Fanbase -5, Net worth -$100k). Shrug it off on camera is Fanbase +5, Karma +5 and the feud cools. You pick say nothing and watch the tape: Morale +6, the feud heats up, and those six points ride into next season's line."
       ],
       "tips": [
         "Durability is baked into the archetype. Power forwards break down; two-way types last.",

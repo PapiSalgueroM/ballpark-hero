@@ -879,6 +879,14 @@ export const HOCKEY_CONTENT: GameContentMap = {
           "Read the News box. The paper writes up every season in your own position's stat, the SocialGram shows followers read off your fanbase with three fan comments under the latest post, and the rival's card keeps the head to head against the player drafted the same year as you.",
           "Collect badges in the Trophy Case: 23 of them, from a first Cup and the Calder to 500 goals, a 50 goal season and $100M to your name, each lit the moment the facts of your career say so.",
         ],
+        subsections: [
+          {
+            heading: "Make the call when your rival forces one",
+            items: [
+              "Some seasons your rival forces a decision instead of making a headline: a cheap shot after the whistle you can settle or shrug off, a debate show offering real money, a youth clinic his foundation wants you to co-host, an All-Star vote his club is buying ads for. Every button prints exactly what it moves, and a gamble prints its odds.",
+            ],
+          },
+        ],
       },
       {
         heading: "Get drafted and win the lineup battle",
@@ -913,6 +921,12 @@ export const HOCKEY_CONTENT: GameContentMap = {
         ],
       },
       {
+        heading: "Your rival's choices and what they move",
+        items: [
+          "When your rival makes no headline in a season, there is a 45% chance he puts a choice in front of you instead, never both in one season, and each choice comes up once before any repeats. A button only moves what it prints: morale, fanbase, net worth, karma or the heat of the feud. Morale rides straight into next season's points or save percentage.",
+        ],
+      },
+      {
         heading: "Retirement and the legacy score",
         items: [
           "Retirement hits at 40 for skaters, 41 for goalies, or earlier if your rating collapses; you can walk away after 6 seasons.",
@@ -944,6 +958,12 @@ export const HOCKEY_CONTENT: GameContentMap = {
         heading: "A Cup, then a Hall of Fame near miss",
         paragraphs: [
           "At 27 you win the Cup. The legs go at 33, you switch to maintenance summers, grab two more years and retire at 38: one Cup, six All-Star nods, a franchise icon verdict. The Hall says not quite.",
+        ],
+      },
+      {
+        heading: "Answering a cheap shot after the whistle",
+        paragraphs: [
+          "Your rival gets away with a cheap shot after the whistle, no call, and the card asks what you do about it. Settle it next game heats the feud and usually pays Morale +8, but it carries a 30% chance you are the one who gets the penalty (Morale -5, Fanbase -5, Net worth -$100k). Shrug it off on camera is Fanbase +5, Karma +5 and the feud cools. You pick say nothing and watch the tape: Morale +6, the feud heats up, and those six points ride into next season's line.",
         ],
       },
     ],

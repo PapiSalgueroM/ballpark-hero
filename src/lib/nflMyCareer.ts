@@ -41,7 +41,8 @@ import { nflMoneySeasonTick } from './nflCareerMoney';
 import type { InboxMessage } from './careerInbox';
 import { receiveNflInboxTexts } from './nflCareerInbox';
 import type { RivalryEvent } from './careerRivalryEvents';
-import { nflRivalryTick } from './nflCareerRivalryEvents';
+import { nflRivalryTick, nflRivalryChoiceTick } from './nflCareerRivalryEvents';
+import type { RivalryChoiceCard } from './careerRivalryChoices';
 
 export type CareerPos = 'QB' | 'RB' | 'WR' | 'TE' | 'LB' | 'CB' | 'EDGE' | 'K';
 
@@ -277,6 +278,12 @@ export interface CareerState {
   pendingRivalryEvent?: RivalryEvent | null;
   lastRivalryEventId?: number | null;
   rivalryIntensity?: number;
+  /** Round 796: a rival choice waiting on an answer (careerRivalryChoices.ts,
+      bound in nflCareerRivalryEvents.ts), and every one this career has
+      seen. Absent on a pre-796 save, which reads as nothing pending and
+      nothing seen. */
+  pendingRivalryChoice?: RivalryChoiceCard | null;
+  rivalryChoicesSeen?: string[];
 }
 
 export interface CareerEvent {
@@ -610,6 +617,12 @@ export function simSeason(
      back stays the pure season sim it always was. */
   const rivalryEvent = nflRivalryTick(c, rng);
   if (rivalryEvent) c.pendingRivalryEvent = rivalryEvent;
+  /* Round 796: a season the beat roll left empty can put a rival choice in
+     front of you instead. Same rule as the beat: it waits on the save as a
+     card and is answered on the board, never applied here. It rolls on its
+     own seasonChoiceRng, never this season's stream, so every draw after it
+     is the draw it always was. */
+  else nflRivalryChoiceTick(c);
   c.seasons.push(line);
   return { line, notes };
 }
@@ -695,8 +708,11 @@ export function progress(c: CareerState, rng: () => number): string[] {
   for (const line of nflMoneySeasonTick(c).events) notes.push(line);
   /* Round 521: the inbox. Silent on purpose, the same way the flagship's
      phone never announces a new text in the season feed: the unread badge
-     on the Inbox box is the tell. */
-  receiveNflInboxTexts(c, rng);
+     on the Inbox box is the tell. Round 796: it draws from its own keyed
+     stream, never this season's rng, and it is told whether the career goes
+     on (the same shouldRetire the board asks right after this returns), so a
+     player who retires this summer is never sent a text about next season. */
+  receiveNflInboxTexts(c, !shouldRetire(c));
   return notes;
 }
 

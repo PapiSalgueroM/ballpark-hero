@@ -42,7 +42,20 @@
       text never arrives twice.
    5. Nothing here calls Math.random directly except through the `rng`
       parameter, which defaults to Math.random so a save that never passed
-      one behaves exactly as it always did. */
+      one behaves exactly as it always did.
+
+   Round 796: THE CALENDAR. A sport can hand in its own calendar (the NFL's
+   is draft night, camp, the bye, the trade deadline, the playoffs, a
+   contract year and the offseason) and tag each template with the beat it
+   belongs to. The season tick is then told which beats actually happened
+   (no playoff texts in a year the team missed them, no contract year texts
+   with three years left on the deal) and delivers on those, at most one text
+   a beat, a one-off beat first because it may not come round again, then
+   the rest at random, and back into calendar order so the inbox reads the
+   way the season went. Rules 1 to 4 hold unchanged on that path. A sport
+   that passes no beats (Soccer Career) takes the Round 80 path, line for
+   line: scripts/simCareerInboxBeats.mjs replays a fixture recorded before
+   this round touched the file and requires the soccer output to match. */
 
 /* ─── the pool ───────────────────────────────────────────────────────────── */
 
@@ -71,6 +84,26 @@ export interface InboxMessageDef {
   minAge?: number;
   maxAge?: number;
   choices: InboxChoiceDef[];
+  /** Round 796: the calendar beat this text belongs to, for a sport that
+   *  hands in a calendar. Absent means the Round 80 between-seasons pool. */
+  beat?: string;
+  /** Round 796: a text about a season still to come (the 6am offseason
+   *  sessions, a cleat deal, a documentary on next year). A sport never
+   *  sends one in a career's final season. */
+  ahead?: boolean;
+}
+
+/** Round 796: one beat on a sport's calendar. */
+export interface InboxBeat {
+  id: string;
+  label: string;
+  emoji: string;
+  /** A beat that may not come round again (draft night, a contract year, a
+   *  playoff run) is offered before the season's ordinary ones. */
+  oneOff?: boolean;
+  /** A beat about a season still to come (the summer before a contract
+   *  year): a career that ends this season never has it. */
+  ahead?: boolean;
 }
 
 /** One delivered message, sitting on the save. */
@@ -85,6 +118,9 @@ export interface InboxMessage {
   choices: InboxChoiceDef[];
   /** Index into choices once replied. */
   answered?: number;
+  /** Round 796: the beat it arrived on. Absent on every message delivered
+   *  before this round and on every Soccer Career text. */
+  beat?: string;
 }
 
 /* ─── what a save must carry ─────────────────────────────────────────────── */
@@ -119,6 +155,9 @@ export interface InboxSport<S extends InboxHost> {
   /** New messages a season tries to deliver, less however many are already
    *  sitting unanswered. */
   wantPerSeason: number;
+  /** Round 796: the sport's own calendar, in the order a season runs. Only a
+   *  sport that delivers on beats needs one. */
+  calendar?: InboxBeat[];
 }
 
 /* ─── picking, deterministic given the same rng ──────────────────────────── */
@@ -149,6 +188,35 @@ export function pickInboxTexts<M extends InboxMessageDef>(
   return out;
 }
 
+/**
+ * Round 796: which templates arrive on a season's beats. `beats` is what
+ * actually happened this season, by id; anything not on the sport's calendar
+ * is ignored. At most one text per beat; one-off beats first in calendar
+ * order, then the ordinary ones drawn at random; the result is put back into
+ * calendar order. Within a beat the template is drawn by pickInboxTexts, the
+ * same draw the Round 80 path uses.
+ */
+export function pickBeatTexts<M extends InboxMessageDef>(
+  pool: M[], calendar: InboxBeat[], beats: readonly string[], age: number, phase: "youth" | "pro",
+  usedIds: string[], count: number, rng: () => number = Math.random,
+): { def: M; beat: string }[] {
+  const atBeat = (b: InboxBeat) => pool.filter(t => t.beat === b.id);
+  /* A beat with nothing left that fits this player is skipped. The probe
+     draws with a constant, so it spends nothing from the real stream. */
+  const open = calendar.filter(b =>
+    beats.includes(b.id) && pickInboxTexts(atBeat(b), age, phase, usedIds, 1, () => 0).length > 0,
+  );
+  const chosen = open.filter(b => b.oneOff).slice(0, count);
+  const rest = open.filter(b => !b.oneOff);
+  while (chosen.length < count && rest.length > 0) {
+    const i = Math.floor(rng() * rest.length);
+    chosen.push(rest[i]);
+    rest.splice(i, 1);
+  }
+  chosen.sort((a, b) => calendar.indexOf(a) - calendar.indexOf(b));
+  return chosen.map(b => ({ def: pickInboxTexts(atBeat(b), age, phase, usedIds, 1, rng)[0], beat: b.id }));
+}
+
 /* ─── the season ─────────────────────────────────────────────────────────── */
 
 /**
@@ -157,10 +225,21 @@ export function pickInboxTexts<M extends InboxMessageDef>(
  * Returns the freshly delivered messages so a sport that mirrors them
  * somewhere else (the flagship's Round 130 threads) can do that on top,
  * without this function needing to know that system exists.
+ *
+ * Round 796: `beats`, when given, is the season's calendar beats that
+ * actually happened, and delivery goes through pickBeatTexts. Left out, this
+ * is the Round 80 tick exactly.
  */
 export function receiveInboxTexts<S extends InboxHost>(
   s: S, phase: "youth" | "pro", sport: InboxSport<S>, rng: () => number = Math.random,
+  beats?: readonly string[],
 ): InboxMessage[] {
+  driftInboxMood(s, sport);
+  return deliverInboxTexts(s, phase, sport, rng, beats);
+}
+
+/** Rule 1: the mood meter's season drift and its coupling at the extremes. */
+function driftInboxMood<S extends InboxHost>(s: S, sport: InboxSport<S>): void {
   const mood = sport.moodOf(s);
   const next = mood > 50 ? mood - 2 : mood < 50 ? Math.min(50, mood + 2) : mood;
   if (next >= 70) {
@@ -171,7 +250,18 @@ export function receiveInboxTexts<S extends InboxHost>(
     s.morale = clamp(s.morale - 1, 0, 100);
   }
   sport.setMood(s, next);
+}
 
+/**
+ * Rules 2 to 4: deliver up to `wantPerSeason` less whatever is unanswered,
+ * each template once a career, then trim the oldest answered past the cap.
+ * No mood drift, so a sport can also call it for a beat that is not a season
+ * end (the NFL's draft night, before a down has been played).
+ */
+export function deliverInboxTexts<S extends InboxHost>(
+  s: S, phase: "youth" | "pro", sport: InboxSport<S>, rng: () => number = Math.random,
+  beats?: readonly string[],
+): InboxMessage[] {
   const inbox = [...(s.phoneInbox ?? [])];
   const used = [...(s.phoneUsedIds ?? [])];
   const unanswered = inbox.filter(m => m.answered === undefined).length;
@@ -179,11 +269,20 @@ export function receiveInboxTexts<S extends InboxHost>(
   const year = sport.yearOf(s);
   const age = sport.ageOf(s);
   const fresh: InboxMessage[] = [];
-  for (const def of pickInboxTexts(sport.pool, age, phase, used, want, rng)) {
-    const msg: InboxMessage = { id: `${def.id}-${year}`, defId: def.id, from: def.from, emoji: def.emoji, text: def.text, year, choices: def.choices };
+  const deliver = (def: InboxMessageDef, beat?: string) => {
+    const msg: InboxMessage = { id: `${def.id}-${year}`, defId: def.id, from: def.from, emoji: def.emoji, text: def.text, year, choices: def.choices, ...(beat ? { beat } : {}) };
     inbox.push(msg);
     fresh.push(msg);
     used.push(def.id);
+  };
+  if (beats === undefined) {
+    for (const def of pickInboxTexts(sport.pool, age, phase, used, want, rng)) {
+      deliver(def);
+    }
+  } else {
+    for (const pick of pickBeatTexts(sport.pool, sport.calendar ?? [], beats, age, phase, used, want, rng)) {
+      deliver(pick.def, pick.beat);
+    }
   }
   while (inbox.length > sport.maxInbox) {
     const idx = inbox.findIndex(m => m.answered !== undefined);
@@ -202,6 +301,13 @@ export function receiveInboxTexts<S extends InboxHost>(
  *  and does not need to call this. */
 export function unreadInboxCount<S extends InboxHost>(s: S): number {
   return (s.phoneInbox ?? []).filter(m => m.answered === undefined).length;
+}
+
+/** Round 796: the "when" line for a text that arrived on a calendar beat
+ *  ("⏰ Trade deadline, 2027"), or null for one that did not. */
+export function inboxBeatLine(m: InboxMessage, calendar?: InboxBeat[]): string | null {
+  const beat = m.beat ? calendar?.find(b => b.id === m.beat) : undefined;
+  return beat ? `${beat.emoji} ${beat.label}, ${m.year}` : null;
 }
 
 /* ─── the answer flow ────────────────────────────────────────────────────── */

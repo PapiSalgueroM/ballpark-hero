@@ -1,5 +1,139 @@
 # Project state
 
+Codex829 is accepted after actual App checks at320 normal/1440 reduced:
+20 accepted links keep the document still, original score/save/share/completion
+hold and finite/static feedback works. Final receipt is on WORKBOARD.
+Codex837 now holds NBA Stat Line's manual ad while its pool is loading or has
+failed. It is claimed, not yet implemented. Codex836 copy checks continue.
+Club Manager era-copy contradictions were handed to Claude832, which owns
+that file. Next free round838.
+
+## ADSENSE 2026-10-01: owner supplied the Low value content policy card
+
+AdSense approval is unresolved. The screenshot confirms the named rejection,
+not a new technical indexing fault. Prior account evidence and the intentional
+pack-battle noindex exclusion are in audits/GOOGLE-READINESS-2026-09-30.md.
+Codex836 owns a bounded public-copy/content-quality review and corrections,
+starting with unsupported home-page game features. No review was requested.
+Next free round837; Claude's active depth work stays untouched.
+
+Codex832 is accepted: the CFB recruiting feed no longer shifts the recruit
+columns when a signing arrives. Browser checks preserve scroll and original
+signing state; the prior build moves the columns74px under the same test.
+Eight focused tests and the production gates pass. Exact receipts on WORKBOARD.
+
+
+Codex830 is now accepted:118 actual App checks pass at320px normal/reduced,
+including distinct consecutive feedback, stable rows, original40-point outcome,
+exact save/share/once completion, reset and quiet reload.829 is built and pushed
+with seven positives/five controls; its final browser checks remain pending.
+Keep lane prefixes on overlapping828-835 IDs. Next shared free round836.
+
+
+## BUILT 2026-10-01: Missing Nine feedback (830)
+
+Fresh puzzles no longer inherit old wrong-answer feedback. Seven actual Page
+outcomes, eight effective controls and combined runtime gates pass. Source is
+pushed; final browser checks remain pending. Exact evidence is on WORKBOARD.
+
+
+## BUILT 2026-10-01: Nation feedback (831)
+
+Six focused outcomes, three regression controls and combined runtime gates pass.
+The code is pushed; final actual App browser verification is still pending.
+828 is accepted;829/830/832 remain active. Next free round833.
+
+
+Codex832 is closing the measured CFB signing page jump from818, using a stable
+recruiting message area. All signing and budget rules stay held. Next free833.
+
+
+## ACCEPTED 2026-10-01: Club Manager goal celebrations (828)
+
+Goals now have a finite scorer and teammate celebration, driven only by the
+committed goal and existing viewer clock. Pause and reduced motion work;
+scores and match timing stay unchanged. Focused tests, four regression controls,
+all21 existing motion tests, combined build/artifact gates and two actual App
+browser contexts pass. Exact scope/evidence on WORKBOARD. Ready for publish.
+829-831 are in final checks; Claude819-827 remain held. Next free round832.
+
+
+Codex829 repairs NBA Chain's document-moving timeline reveal;830 repairs stale
+Missing Nine answer feedback across new puzzles and modes. Together with828
+and831, four disjoint implementation lanes are active. Scopes on WORKBOARD;
+next free round832. Claude819-827 remain untouched.
+
+
+Codex831 adds committed clue/answer feedback to Guess The Nation;828 covers
+Club Manager celebrations.829-830 reserved while exact disjoint scopes are
+recorded on WORKBOARD. Claude819-827 held. Next free round832.
+
+
+## CLAIMED 2026-10-01: Club Manager goal celebrations (828)
+
+Codex is extending the existing committed goal presentation with finite scorer
+and teammate celebration poses. No simulation or scoring changes. Exact scope
+is on WORKBOARD. Claude now owns822-827, including all three US calendar inboxes;
+Codex stopped those investigations before editing. Next free round829.
+Release N's CFB recruiting filters are independently confirmed live (entry
+index-DIQbV2hM.js, deployment5b7815cd, referenced CFB feature strings). The sample
+used three public fetches; Google indexing and AdSense decisions remain unknown.
+
+
+## LIVE 2026-10-01: Release N (796, the NFL career inbox and rival choices in the four US careers), main `b4f20218`
+
+Assembled by the desktop Claude lane in the gate clone (`release-n`). **douknowball.com is serving it:** deployment
+`5b7815cd`, called only after `get_project` showed `latest_commit_sha` `b4f20218`; the live entry moved from
+`index-LLYzwt9z.js` to `index-DIQbV2hM.js`. Proof by content: the x-deployment-id header read 5b7815cd 75 seconds after the deploy; the four career pages answer 200 and each guide names the rival choices; /whats-new carries the inbox line.
+
+- **796, from the owner's list ("bring the Soccer Career depth to the NFL career, then the other US careers").**
+  Soccer Career's inbox and rival choice logic were LIFTED into shared modules behind a sport descriptor, not copied:
+  Soccer Career now runs its four rival dilemmas through the shared module, and its inbox and dilemma output for a
+  seed is byte identical to a fixture recorded before any code moved (the reviewer re-recorded it against the
+  pre-lift commit and drove 60 careers end to end: the whole save hash equals main's at every step). The NFL career
+  has a calendar inbox (about two texts a season on the football calendar's own beats: the draft, camp, the bye,
+  the trade deadline, the playoffs, a contract year), every sender a role, and live rival choices with the generated
+  rival Round 469 gave it. NBA, MLB and NHL have the rival choices (six each, in their own sport's words); their
+  calendar inboxes are not built, and the hook point is the `beats` argument of `receiveInboxTextsFor`. Karma, which
+  the choice buttons print, is now a fourth meter on the My Player screen of all four boards.
+- **What the review changed.** Major: the "every button does what it says" check watched five meters and only
+  that a button's words contained the promise, so an option could quietly cut health or a button could promise
+  morale it never paid, with every gate green; the harness now compares each card's words with what 2,000 draws
+  really did on a real save of each sport and fails on any field outside the meters (controls `sidestat`,
+  `overpromise`). Then two leftovers closed on the lead's ask: the inbox and the choice roll draw from their own
+  generator keyed to the save (`src/lib/keyedRng.ts`), never from the season's stream, so a text can no longer
+  reshuffle a career (20 careers played with the inbox open and shut match line for line; control `inboxstream`);
+  and a player retiring that summer gets no text about a season to come (120 careers, control `aheadretire`).
+  `simCareerInboxBeats` carries 17 controls. `simAwards` for the NFL differs from the old main only because main's
+  own inbox drew from the season's stream; with that one call taken off the stream the two are byte identical.
+- **Found on the way and claimed as Round 819:** Soccer Career's moral dilemmas are unreachable in real play after
+  the social media screen is dismissed (60 careers, 943 social media screens, 0 dilemmas). Being reproduced and
+  fixed on its own branch.
+- **Left for later:** the calendar inbox for NBA, MLB and NHL; their non calendar inboxes still carry two or three
+  forward looking texts that a retiring player can get.
+
+**Gates.** Type gate 0. `simCareerInboxBeats` (17 controls), `simCareerParity`, `simCareerInbox`,
+`simCareerRivalryEvents`, `simInventedNames`, `simNoRivalNames` green on the release tree; 19 snapshot and release
+fences green after the four career pages and What's New were redrawn alone; `sweepWeight` green with the NFL career
+budget at 406K on 403K measured; `playRenderStability` green on the five redrawn pages. Builder, reviewer and
+fixer ran on Opus; the lead merged, built and gated here.
+
+## ACCEPTED 2026-10-01: CFB recruiting filters (818)
+
+CFB Dynasty now filters both recruiting pools by position and minimum stars,
+with counts, Reset and clear empty states. Portal stars are visible, names wrap
+and controls fit touch. Original signing, budgets, roster classes, coordinator
+controls and saves hold. Eight tests, two effective controls, independent review,
+the frozen production gates and two final App contexts pass. Filter actions keep
+scroll Y 180 and write no saves or RNG. Exact evidence is on WORKBOARD.
+
+818 awaits the next publish. 815-817 are confirmed live in Release M by its entry,
+deployment header and compiled Tennis/CBB feature strings. The earlier Release L
+crawl passed 170/170; M received a focused sample. Google indexing/AdSense account
+decisions remain unconfirmed. D92's targeting gap is closed in code; region,
+academics, interest and personality remain. Claude keeps 819/820 and all other
+reservations. No active Codex claim remains. Next free round: 821.
+
 ## LIVE 2026-10-01: Release M (700, the seoMeta split), main `efe1a8cd`
 
 Assembled by the desktop Claude lane in the gate clone (`release-m`) and shipped alone, because the round

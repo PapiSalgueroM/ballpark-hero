@@ -1,0 +1,22 @@
+.action { min-height: 44px; min-width: 44px; }
+.fullName { min-width: 0; max-width: 100%; overflow-wrap: anywhere; }
+.cue { position: absolute; inset: 0; pointer-events: none; }
+.miss { box-shadow: inset 0 0 0 1px hsl(var(--destructive) / 0.45); animation: nineMiss 420ms ease-out 1; }
+.found { animation: nineFound 420ms ease-out 1; }
+.reply, .hint { animation: nineReply 420ms ease-out 1; }
+@keyframes nineMiss {
+  20%, 60% { transform: translateX(-2px); }
+  40%, 80% { transform: translateX(2px); }
+  100% { transform: translateX(0); }
+}
+@keyframes nineFound {
+  0% { box-shadow: inset 0 0 0 2px hsl(var(--correct) / 0.65); }
+  100% { box-shadow: inset 0 0 0 0 transparent; }
+}
+@keyframes nineReply {
+  from { opacity: 0.5; }
+  to { opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .miss, .found, .reply, .hint { animation: none; }
+}

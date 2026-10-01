@@ -46,9 +46,13 @@
  *
  *   deaf     careerInbox.ts's receiveInboxTexts is patched to pick from an
  *            empty pool instead of the descriptor's own, which is exactly
- *            "the descriptor injection stripped": both soccer and the NFL
- *            must then deliver nothing, ever, which section 3 and 4 must
- *            report as a failure.
+ *            "the descriptor injection stripped": soccer must then deliver
+ *            nothing, ever, which section 3 must report as a failure.
+ *            Round 796: the NFL no longer takes this between-seasons path,
+ *            it delivers on its own calendar through pickBeatTexts, so
+ *            section 4 stays green under this control on purpose. The
+ *            calendar path has its own controls in
+ *            scripts/simCareerInboxBeats.mjs.
  *   nocap    the drop-oldest-answered trim is patched to a no-op. A soccer
  *            career played long enough must then carry more than six
  *            messages on the save, which section 3 must catch.
@@ -414,21 +418,22 @@ console.log('4) The NFL binding: messages actually arrive, are not always empty,
   /* everNonEmpty ("did a career ever show one message across 8 years") is a
      weak signal on its own: sport.wantPerSeason halved would still leave
      most careers showing a message eventually. The strong signal is the
-     DELIVERY RATE: nflCareerInbox.ts sets wantPerSeason = 2, so
+     DELIVERY RATE: nflCareerInbox.ts sets wantPerSeason (2 until Round
+     796, 3 since the inbox moved onto the football calendar), so
      phoneUsedIds.length (every distinct message ever delivered, tracked
      even after the 6-message inbox cap drops the oldest answered one) over
      8 seasons should sit well above one a season if the binding is
      healthy. Measured here rather than assumed. */
   const seasonsRun = careersRun * 8;
   const deliveryRate = totalDelivered / seasonsRun;
-  console.log(`   ${careersRun} NFL careers, ${everNonEmpty} delivered at least one message, ${totalDelivered} messages total over ${seasonsRun} career-seasons (rate ${deliveryRate.toFixed(3)} against a wantPerSeason of 2), ${capViolations} cap violations, ${answeredOk} answers accepted, ${refusedOk} double answers correctly refused`);
+  console.log(`   ${careersRun} NFL careers, ${everNonEmpty} delivered at least one message, ${totalDelivered} messages total over ${seasonsRun} career-seasons (rate ${deliveryRate.toFixed(3)} against a wantPerSeason of ${nflInbox.NFL_INBOX.wantPerSeason}), ${capViolations} cap violations, ${answeredOk} answers accepted, ${refusedOk} double answers correctly refused`);
   if (careersRun < 30) fail('fewer NFL careers completed than the loop should have run');
   if (everNonEmpty < careersRun * 0.8) fail(`only ${everNonEmpty} of ${careersRun} NFL careers ever showed a message, the binding may not actually be firing`);
   /* Measured over this exact run, the rate sits close to 1 (a message
      roughly every season). A floor of 0.5 sits well under every measured
      run and would still catch wantPerSeason being cut in half or the
      eligible pool silently emptying out for a chunk of a career. */
-  if (deliveryRate < 0.5) fail(`the message delivery rate is ${deliveryRate.toFixed(3)} per career-season against a wantPerSeason of 2, well under what a healthy binding should show`);
+  if (deliveryRate < 0.5) fail(`the message delivery rate is ${deliveryRate.toFixed(3)} per career-season against a wantPerSeason of ${nflInbox.NFL_INBOX.wantPerSeason}, well under what a healthy binding should show`);
   if (answeredOk === 0) fail('not one NFL inbox answer was accepted across 30 careers');
 
   /* 4b. Nobody signs a text with a real player's name, and the shape of
