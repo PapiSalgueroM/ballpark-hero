@@ -1,5 +1,26 @@
 # Work board
 
+**2026-10-01, Codex776 source/browser checkpoint: staff decisions accepted.**
+StaffScreen previews exact pure-helper fees, payroll and effects, confirms payoff separately,
+preserves no-op/refused and unrelated shortlists, and focuses the visible stable post only
+after verified hire/promotion/payoff/match/release truth. Academy copy correctly says staff
+member, since the generated candidate can also be a lead scout. Eleven actual-screen/real-
+helper tests pass. Four asserted copies fail their intended checks: unconfirm3/8, close2/9,
+uncued2/9, unfocus5/6. Two independent source reviews accepted.
+
+Eight native cases (320/390/430/1440, normal/reduced) pass against finished772 utilities and
+the actual scoped CSS. Exact helper state/callbacks and generated shortlist order/IDs hold;
+all actions meet44px, overflow0, full spaced/unbroken names and fees/effects fit. Committed
+focus is visible within the viewport with a2px green ring; Cancel returns to the payoff opener.
+The24.5px cue occupies normal flow, runs420ms once, retains the same native cue/animation on
+immediate cloned props, and is absent at550ms. Reduced motion is static. An insertion observer
+captures this finite cue without stretching product timing under CPU load. The asserted no-wrap
+copy restores293px phone overflow in both motion modes. Input bytes stay unchanged, no fixture
+writes/errors, and native server/browser inputs clean up. Report/log/control/screenshots:
+TEMP/dukb-round776-staff-qa-codex. Fixture is the actual screen with controlled local career and
+real pure helpers, outside account persistence. Final types/current-main build/CSS/fifteen fences
+remain owed behind the full392 suite.777/778/779 continue. Next free number:781.
+
 **777 old-pause runner addendum:** the unchanged16-case positive run hit three default5s wall
 timeouts while thirteen assertions passed under current CPU load. No outcome or import failed.
 Root authorizes the wrapper's runner-only `--testTimeout=60000` for these same16 tests. Keep

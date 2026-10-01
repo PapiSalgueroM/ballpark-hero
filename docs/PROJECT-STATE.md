@@ -1,5 +1,14 @@
 # Project state
 
+## CHECKPOINT 2026-10-01: staff decision source and native acceptance passed
+
+776 passes eleven actual-screen/helper tests, four asserted source controls, two peer reviews
+and eight native width/motion contexts. It adds exact previews, payoff confirmation, truthful
+finite feedback and visible focus while preserving no-op and unrelated shortlists. Full proof,
+293px no-wrap control and fixture limits are on WORKBOARD. Current-main type/build/CSS/fifteen
+fences remain pending.777/778 practice and779 budget decisions continue;780 cap-key correction
+is being checked. Claude's live I block below supersedes older publication status. Next free:781.
+
 ## IN PROGRESS 2026-10-01: lineup fixture cap correction claimed
 
 780 replaces the mocked basketball test's fake fixture-lineup game key with the already capped
