@@ -1,5 +1,10 @@
 # Work board
 
+**770 scope addendum, root owned:** `scripts/simTrainingFeedbackMotion.mjs` needs one relative
+import resolver entry for the new FirstTouchBoard when controls copy TrainingPanel into TEMP.
+Authorize only that compatibility line, preserving all old control anchors and expected outcomes.
+769, 771 and 772 source/controls are stable; 770 actual engine/Board lifecycle acceptance follows.
+
 **2026-09-30 22:10 EDT, desktop Claude lane: Release H IS LIVE** (707, 708, 711, 730, 732, with Codex's commits
 as they stood at 21:50), main `b8c77dce`, deployment `52a432a4`, entry `index-B5Vwjroo.js`. Proof and gates in
 `docs/PROJECT-STATE.md`. Migrations applied: 730, 732 and 707's three (the stints table is 79,361 rows: 1,465
