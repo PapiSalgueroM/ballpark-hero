@@ -12,7 +12,7 @@
    The outcome lives on the board, not here, because the board has already
    written the answer to the save by the time this card shows it: a reload
    on the outcome lands on the hub with the choice made, never asks twice. */
-import { CelebrationStyles } from '@/components/club-manager/Celebration';
+import { CelebrationStyles, revealDelay } from '@/components/club-manager/Celebration';
 import type { RivalryChoiceCard as Card } from '@/lib/careerRivalryChoices';
 import type { RivalryHeadToHead } from '@/components/us-career/RivalryEventCard';
 
@@ -70,7 +70,7 @@ export function RivalryChoiceCard({
               onClick={() => onChoose(i)}
               data-rivalry-option={i}
               className="cm-rise w-full rounded-xl border border-border bg-secondary px-3 py-2 text-left hover:border-primary/50"
-              style={{ animationDelay: `${0.9 + i * 0.1}s` }}
+              style={{ animationDelay: revealDelay(i, 0.9, 0.1) }}
             >
               <span className="block text-sm font-bold text-foreground">{c.emoji} {c.label}</span>
               <span className="block text-[11px] text-muted-foreground">{c.consequence}</span>
