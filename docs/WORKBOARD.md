@@ -1,5 +1,37 @@
 # Work board
 
+**2026-10-01, Codex808 regression harness repairs ACCEPTED.**
+College reads its unique final verdict instead of the namesake-selection helper.
+The actual key/copy checks pass, all eight original controls still fire, and two
+new removed-return controls each fail only their intended no-charge assertion.
+Manager cleanup tracks only its actual rewritten control file. Default240 actual
+engine runs and all four original effective controls preserve the real library.
+An exact old-cleanup copy stays game-green while deleting its original library
+inside TEMP, reproducing the defect. Its own fixture is restored in finally; all
+1780 RAW source inputs held and rewritten-file leaks are0. Independent diff review
+passes.489-harness syntax/anchor and no-rival-name guards pass. No product files
+changed, so no new runtime build or snapshot was generated for this test-only task.
+Receipts: TEMP/dukb-round808-college-final.log,dukb-round808-manager-final.log,
+dukb-round808-harness-20261001/manager-receipt.json,dukb-round808-anchor-final.log.
+
+The unchanged Aussie Board passed two isolated10-test runs. Full season/restore
+took3565 and4439ms against5000ms; seven RAW closures held. The old shared-suite
+timeout is not reproduced; CPU contention is plausible, not proven. No timeout
+or assertion was relaxed. Receipt: TEMP/dukb-round802-aussie-timeout-audit/receipt.json.
+
+**2026-10-01, Codex810 CLAIMED: stale MLB Higher/Lower reveal timers.**
+Own only src/hooks/useMlbHL.ts plus new focused test/sim. The actual original hook
+grants an old Unlimited guess's10points and skips a round after mode/hard reset;
+an old Daily timer can also cut a new Unlimited reveal from2000ms to1000ms.
+Cancel the owned reveal on mode/hard/reset/unmount and reject a stale callback.
+Preserve original pairs/seed/RNG, ties,2000ms reveal, immediate daily saves,
+all scores/full share/once completion/quiet restore and other sport hooks.
+Verify the measured reset/mid-reveal defects and exact10-round Daily/Unlimited
+325-point baselines, with effective copied timer controls and independent outcomes.
+No data/DB writes. Diagnosis: TEMP/dukb-round810-mlb-reveal-diagnosis/diagnosis.txt;
+the initial fake-timer-count assumption is retained and not credited.807/809
+continue final native proof. All Claude reservations stand. Next free811.
+
 **2026-10-01, Codex807 scope addendum, truthful clue headings.**
 The original driver bank's clue order varies: the current pinned driver has race
 wins under Era & Nationality, titles under Teams and teams under Race Wins. No

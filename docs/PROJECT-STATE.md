@@ -1,5 +1,20 @@
 # Project state
 
+## ACCEPTED 2026-10-01: regression harness repairs
+
+808 repairs College's final-verdict boundary and manager cleanup ownership, with
+all original controls plus effective new removed-return/destructive-cleanup
+copies. Default240 engine outcomes and1780 RAW source closures hold;489 syntax/
+anchor and no-rival-name guards pass. No frontend/runtime/snapshot changes.
+The old Aussie timeout does not reproduce in two unchanged10-test runs (season
+3565/4439ms against5000). No timeout was raised. Receipts are on WORKBOARD.
+
+810 claims only the MLB Higher/Lower hook plus focused tests/harness to cancel
+owned stale reveal timers. Actual reset wrongly grants old points/skips a round,
+and an old Daily timer truncates the new Unlimited reveal. Preserve all original
+game/save/share/completion rules and exact2000ms reveal. Claim before code edits.
+807/809 continue; all Claude reservations stand. Next free811.
+
 ## CLAIM ADDENDUM 2026-10-01: truthful Driver clue headings
 
 807 also replaces fixed clue categories with numbered headings: original bank
