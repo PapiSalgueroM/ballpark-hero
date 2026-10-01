@@ -323,7 +323,10 @@ function probeOldSaves(E) {
       } finally {
         Math.random = real;
       }
-      out.push({ tier, deal, steps: steps.join(' '), end: summary(s) });
+      /* Indexes into the two lists, not the values: the values are old save
+         strings, and one of them trips the rival names guard when it is
+         written in the clear in a data file. */
+      out.push({ tier: LEGACY_TIERS.indexOf(tier), deal: LEGACY_DEALS.indexOf(deal), steps: steps.join(' '), end: summary(s) });
     }
   }
   return out;

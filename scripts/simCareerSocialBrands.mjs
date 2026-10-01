@@ -70,7 +70,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { loadSoccerBrand, probeSoccerBrand, POST_IDS } from './lib/soccerBrandProbe835.mjs';
+import { loadSoccerBrand, probeSoccerBrand, POST_IDS, LEGACY_TIERS } from './lib/soccerBrandProbe835.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const FIXTURE = path.join(ROOT, 'scripts', 'data', 'soccerBrandFixture835.json');
@@ -197,7 +197,7 @@ if (SECTIONS.includes('1')) {
   const A = ['cousin', 'shark', 'super', 'self'];
   check(A.every(a => (agents[a] || 0) >= 3), `every agent was signed in at least 3 careers (${A.map(a => agents[a] || 0).join(', ')})`);
   check(coverYes >= 3 && coverNo >= 1, `the cover offer was taken ${coverYes} times and turned down ${coverNo}`);
-  const oldTiers = new Set(rec.oldSaves.map(o => o.tier));
+  const oldTiers = new Set(rec.oldSaves.map(o => LEGACY_TIERS[o.tier]));
   check(oldTiers.has('nike_adidas') && oldTiers.has('fifa_cover') && oldTiers.has(null), 'old saves carried the stored boot deal id, the renamed cover value and no tier at all');
 }
 
