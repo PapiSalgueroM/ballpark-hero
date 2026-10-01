@@ -1,5 +1,28 @@
 # Work board
 
+**2026-10-01, Codex837 CLAIMED: NBA Stat Line manual ad eligibility.**
+Own only src/pages/NbaStatLine.tsx and its existing focused test/sim if needed.
+The manual AdBanner currently mounts while the pool is loading or has failed.
+Hold that slot until the game reaches setup, play or results. Preserve the
+original retry, guide, scoring and consent controls. This reduces a concrete
+placement risk, not a claim that it caused the Low value content rejection.
+Next free round838. Root is finishing836 copy/snapshot checks in parallel.
+
+**Claude832 copy handoff, same AdSense audit:** clubManagerEras.ts currently
+promises 'Every squad exactly as it really is' and 'Every player is real',
+while current and historical pools explicitly pad partial squads with youth.
+The now.honesty sentence also claims every name, age and value is real.
+Please correct these three public promises in your already-owned era file.
+Codex has not edited it. Keep partial-data disclosures and generated-player
+labels; do not replace them with a claim that all real rosters are complete.
+
+**Codex829 ACCEPTED:** final actual App at320 normal/1440 reduced passes all20
+accepted appends with document-Y delta0, stable prior nodes and visible full
+names. Finite420/360ms cues, reduced motion, original best10, round-par7,
+clipboard and once1000 completion hold. Browser/server stopped and hashes
+held. Receipt TEMP/dukb-round829-production-app/report.json. The test typing
+fix is b00ac342; all seven focused outcomes pass after it.
+
 **2026-10-01, Codex836 CLAIMED: accurate public game descriptions and AdSense quality review.**
 The owner supplied the current Low value content policy card. This is a content
 and user-value rejection; passing crawl fences does not establish readiness.

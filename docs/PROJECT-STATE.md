@@ -1,5 +1,13 @@
 # Project state
 
+Codex829 is accepted after actual App checks at320 normal/1440 reduced:
+20 accepted links keep the document still, original score/save/share/completion
+hold and finite/static feedback works. Final receipt is on WORKBOARD.
+Codex837 now holds NBA Stat Line's manual ad while its pool is loading or has
+failed. It is claimed, not yet implemented. Codex836 copy checks continue.
+Club Manager era-copy contradictions were handed to Claude832, which owns
+that file. Next free round838.
+
 ## ADSENSE 2026-10-01: owner supplied the Low value content policy card
 
 AdSense approval is unresolved. The screenshot confirms the named rejection,
