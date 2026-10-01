@@ -11,7 +11,7 @@ import {
   mlbRelease, mlbSign, mlbTrade, mlbTradeValue, mlbAiMoves, AL, NL, MLB_DIVISIONS,
   MLB_ROUNDS,
   type MlbLeague, type MlbProspect, type MlbSeriesResult, mlbExecuteTalksTrade,
-  ensureMlbLeagueIds, mlbRosterMin, mlbRosterMax, mlbSimReads, isPitcher, mlbOverLimit,
+  ensureMlbLeagueIds, mlbRosterMin, mlbRosterMax, mlbSimReads, isPitcher, mlbOverLimit, mlbSalaryFor,
   type MlbGmPlayer,
 } from '@/lib/mlbFrontOffice';
 /* Round 631: a DFA costs dead money and the man cannot come back this season. */
@@ -774,6 +774,12 @@ export default function MlbFrontOfficeBoard() {
           <p className="mb-2 text-center text-[10px] text-muted-foreground" data-roster-count>
             {my.players.length} on the roster. The sim plays your best healthy 8 bats, 3 starters and 2 relievers.
           </p>
+          {/* Round 829 review: real men on made up money, said where the money
+              is shown, and the re-sign jump said before it lands. */}
+          <p className="mb-2 text-center text-[10px] text-muted-foreground" data-salary-note>
+            Salaries are the game&apos;s own, not real contracts.
+            {my.depth ? ' The men the sim plays opened at their rating\'s price and the rest on 0.7M depth deals. When any deal runs out he re-signs at his rating\'s price or walks, so a last year deal can cost a lot more next season.' : ''}
+          </p>
           {overLimit > 0 && (
             <p data-over-limit className="mb-2 text-center text-[10px] text-destructive">
               {overLimit} over the limit of {mlbRosterMax(my)}. DFA {overLimit === 1 ? 'one man' : `${overLimit} men`} before Round {league.round}.
@@ -804,6 +810,8 @@ export default function MlbFrontOfficeBoard() {
                   <span className={cn('block truncate font-bold', p.out > 0 ? 'text-destructive' : 'text-foreground')}>{p.name} {p.out > 0 ? `(IL ${p.out}r)` : ''}</span>
                   <span className="block text-[10px] text-muted-foreground">
                     {p.pos} · {p.age}y · ${p.salary}M x{p.years}
+                    {/* Round 829 review: the jump, on his row, a season before it lands */}
+                    {my.depth && p.years === 1 && mlbSalaryFor(p.ovr) > p.salary && <span data-last-year> (last year, his price is ${mlbSalaryFor(p.ovr)}M)</span>}
                     {' · '}<span data-sim-plays={plays.has(p.id) ? 'yes' : 'no'}>{plays.has(p.id) ? 'plays' : 'depth'}</span>
                     {p.partial && <span data-partial className="text-gold"> · thin 2026 data</span>}
                   </span>

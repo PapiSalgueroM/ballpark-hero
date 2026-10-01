@@ -1127,7 +1127,8 @@ export const BASEBALL_CONTENT: GameContentMap = {
       {
         heading: "Roster size and depth deals",
         items: [
-          "A new franchise carries 26 and can hold 22 to 28. The 13 men the sim plays earn their rating's price, the other 13 start on depth deals at 0.7 million until those deals run out, and then they re-sign at their rating's price like anybody else.",
+          "A new franchise carries 26 and can hold 22 to 28. The 13 men the sim plays earn their rating's price, the other 13 start on depth deals at 0.7 million until those deals run out, and then they re-sign at their rating's price like anybody else. The roster box flags a cheap deal in its last year with what he will cost, so the jump never lands by surprise.",
+          "If the draft takes you past 28, you DFA down to 28 before Round 1, dead money and all, and Play waits until you have. The CPU clubs cut their own lowest rated depth men the same way.",
           "A save started before the full rosters keeps its 13 man roster and its old limits of 9 to 16.",
         ],
       },

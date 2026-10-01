@@ -14,7 +14,7 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render, screen, fireEvent, cleanup } from '@testing-library/react';
 import fs from 'node:fs';
 import path from 'node:path';
-import { initMlbLeague, mlbSimReads, mlbDraftClass, mlbProspectToPlayer, MLB_ROSTER_MIN, MLB_ROSTER_MAX, MLB_LEGACY_ROSTER_MIN, MLB_LEGACY_ROSTER_MAX, type MlbLeague } from '@/lib/mlbFrontOffice';
+import { initMlbLeague, mlbSimReads, mlbDraftClass, mlbProspectToPlayer, mlbSalaryFor, MLB_DEPTH_SALARY, MLB_ROSTER_MIN, MLB_ROSTER_MAX, MLB_LEGACY_ROSTER_MIN, MLB_LEGACY_ROSTER_MAX, type MlbLeague } from '@/lib/mlbFrontOffice';
 import { leagueNames } from '@/lib/foNames';
 import { MLB_FO_PARTIAL } from '@/data/mlbFoRosters2026';
 import MlbFrontOfficeBoard from '@/components/mlb-front-office/MlbFrontOfficeBoard';
@@ -65,6 +65,26 @@ describe('MLB Front Office: full rosters on the board', () => {
     }
     /* nobody is at the floor, so every DFA is live */
     expect(document.querySelector('[data-cut-block]')).toBeNull();
+  });
+
+  /* Round 829 review: real men on made up money. The box says the salaries
+     are the game's own, and a depth deal in its last year says what he will
+     cost a season before it lands. */
+  it('says the salaries are the game\'s own and flags a depth deal in its last year', () => {
+    const league = initMlbLeague(lehmer(5));
+    const team = 'NYY';
+    const reads = new Set(mlbSimReads(league.teams[team]));
+    const man = league.teams[team].players.find(p => !reads.has(p.id) && mlbSalaryFor(p.ovr) > MLB_DEPTH_SALARY)!;
+    expect(man.salary).toBe(MLB_DEPTH_SALARY);
+    man.years = 1;
+    save(league, team);
+    render(<MlbFrontOfficeBoard />);
+    fireEvent.click(screen.getByText('Roster'));
+    expect(document.querySelector('[data-salary-note]')?.textContent).toContain('Salaries are the game\'s own, not real contracts.');
+    expect(document.querySelector('[data-salary-note]')?.textContent).toContain('0.7M depth deals');
+    const tags = [...document.querySelectorAll('[data-last-year]')];
+    expect(tags).toHaveLength(1);
+    expect(document.querySelector(`[data-roster-row="${man.id}"] [data-last-year]`)?.textContent).toContain(`$${mlbSalaryFor(man.ovr)}M`);
   });
 
   it('a thin data rating says so on its row', () => {
