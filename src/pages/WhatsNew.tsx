@@ -24,6 +24,12 @@ const WhatsNew = () => {
 
       <section className="space-y-8 text-sm leading-relaxed text-muted-foreground">
         <div>
+          <h2 className="text-lg font-semibold text-foreground mb-2">October 2026</h2>
+          <ul className="list-disc pl-5 space-y-2">
+            <li><strong className="text-foreground">Club Manager: pick who takes your penalties in a shootout.</strong> Straight from a footer report asking for a choice of all eleven. There is a Shootout order tile on the Tactics tab now, and a shortcut to it on the pre match card of any cup or Champions League tie: tap your players in the order you want them to step up, up to all eleven, tap one again to take him off. When a tie goes to penalties the shootout then plays kick by kick: your men go in your order (anyone subbed off or sent off is skipped, anyone you did not list follows by shirt number with the keeper last), the other side sends its best eleven on the pitch, each kick's odds start around the real world rate and move a touch with the taker's rating and the keeper facing him, five each then sudden death round the eleven. The live screen and the report list every kick, who took it, scored, saved or missed, and the count as it stood. Leave the order unset and the shootout is decided the way it always was. <Link to="/club-manager" className="text-primary hover:underline">Open Club Manager</Link>.</li>
+          </ul>
+        </div>
+        <div>
           <h2 className="text-lg font-semibold text-foreground mb-2">September 2026</h2>
           <ul className="list-disc pl-5 space-y-2">
             <li><strong className="text-foreground">New game: Manager Hot Seat, five games to save your job.</strong> You walk into a real club on a bad run, the board give you five league games and a points target, and you either hit it or you are gone. Pick a shape and a team talk before every match, handle the press, and watch the board, the fans and the dressing room react. It runs on the Club Manager engine, so every match is the full match sim from that game. There is a daily (same club and target for everyone) and a free play mode for any club you like. It records that you played but puts no points on the leaderboard for now.</li>

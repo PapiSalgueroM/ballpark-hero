@@ -1,0 +1,1211 @@
+{
+ "note": "Round 782: the pre round shootout outcome of one cup match, by seed, with no order set. Written from the engine named in writtenFrom. Replayed by scripts/simCmShootoutOrder.mjs section 4; regenerate only from an engine whose one draw path is known to be the pre 782 one.",
+ "writtenFrom": "clubManager.pre782.ts",
+ "writtenOn": "2026-10-01",
+ "club": "Real Madrid",
+ "baseSeed": 782001,
+ "cupWeek": 9,
+ "cupRound": "R16",
+ "rows": [
+  {
+   "seed": 782100,
+   "decidedBy": "regular",
+   "shootoutWon": null,
+   "homeGoals": 2,
+   "awayGoals": 0,
+   "next": 0.3186643812805414
+  },
+  {
+   "seed": 782101,
+   "decidedBy": "regular",
+   "shootoutWon": null,
+   "homeGoals": 2,
+   "awayGoals": 0,
+   "next": 0.8120479702483863
+  },
+  {
+   "seed": 782102,
+   "decidedBy": "pens",
+   "shootoutWon": true,
+   "homeGoals": 1,
+   "awayGoals": 1,
+   "next": 0.6264829533174634
+  },
+  {
+   "seed": 782103,
+   "decidedBy": "regular",
+   "shootoutWon": null,
+   "homeGoals": 3,
+   "awayGoals": 0,
+   "next": 0.7041766964830458
+  },
+  {
+   "seed": 782104,
+   "decidedBy": "regular",
+   "shootoutWon": null,
+   "homeGoals": 3,
+   "awayGoals": 0,
+   "next": 0.03532533464021981
+  },
+  {
+   "seed": 782105,
+   "decidedBy": "regular",
+   "shootoutWon": null,
+   "homeGoals": 0,
+   "awayGoals": 2,
+   "next": 0.3426259101834148
+  },
+  {
+   "seed": 782106,
+   "decidedBy": "regular",
+   "shootoutWon": null,
+   "homeGoals": 2,
+   "awayGoals": 1,
+   "next": 0.12238779943436384
+  },
+  {
+   "seed": 782107,
+   "decidedBy": "regular",
+   "shootoutWon": null,
+   "homeGoals": 2,
+   "awayGoals": 1,
+   "next": 0.7616313113830984
+  },
+  {
+   "seed": 782108,
+   "decidedBy": "regular",
+   "shootoutWon": null,
+   "homeGoals": 2,
+   "awayGoals": 0,
+   "next": 0.8513581068255007
+  },
+  {
+   "seed": 782109,
+   "decidedBy": "regular",
+   "shootoutWon": null,
+   "homeGoals": 3,
+   "awayGoals": 0,
+   "next": 0.2729747255798429
+  },
+  {
+   "seed": 782110,
+   "decidedBy": "regular",
+   "shootoutWon": null,
+   "homeGoals": 6,
+   "awayGoals": 0,
+   "next": 0.10956390877254307
+  },
+  {
+   "seed": 782111,
+   "decidedBy": "pens",
+   "shootoutWon": false,
+   "homeGoals": 1,
+   "awayGoals": 1,
+   "next": 0.9701103155966848
+  },
+  {
+   "seed": 782112,
+   "decidedBy": "pens",
+   "shootoutWon": false,
+   "homeGoals": 1,
+   "awayGoals": 1,
+   "next": 0.02318697958253324
+  },
+  {
+   "seed": 782113,
+   "decidedBy": "regular",
+   "shootoutWon": null,
+   "homeGoals": 1,
+   "awayGoals": 3,
+   "next": 0.24482746049761772
+  },
+  {
+   "seed": 782114,
+   "decidedBy": "regular",
+   "shootoutWon": null,
+   "homeGoals": 5,
+   "awayGoals": 1,
+   "next": 0.5944743850268424
+  },
+  {
+   "seed": 782115,
+   "decidedBy": "pens",
+   "shootoutWon": true,
+   "homeGoals": 1,
+   "awayGoals": 1,
+   "next": 0.22976797097362578
+  },
+  {
+   "seed": 782116,
+   "decidedBy": "regular",
+   "shootoutWon": null,
+   "homeGoals": 2,
+   "awayGoals": 1,
+   "next": 0.39926695567555726
+  },
+  {
+   "seed": 782117,
+   "decidedBy": "pens",
+   "shootoutWon": false,
+   "homeGoals": 1,
+   "awayGoals": 1,
+   "next": 0.609022161224857
+  },
+  {
+   "seed": 782118,
+   "decidedBy": "regular",
+   "shootoutWon": null,
+   "homeGoals": 2,
+   "awayGoals": 0,
+   "next": 0.5127372446004301
+  },
+  {
+   "seed": 782119,
+   "decidedBy": "regular",
+   "shootoutWon": null,
+   "homeGoals": 1,
+   "awayGoals": 0,
+   "next": 0.05592714576050639
+  },
+  {
+   "seed": 782120,
+   "decidedBy": "regular",
+   "shootoutWon": null,
+   "homeGoals": 1,
+   "awayGoals": 0,
+   "next": 0.5685935455840081
+  },
+  {
+   "seed": 782121,
+   "decidedBy": "regular",
+   "shootoutWon": null,
+   "homeGoals": 4,
+   "awayGoals": 0,
+   "next": 0.24389357515610754
+  },
+  {
+   "seed": 782122,
+   "decidedBy": "pens",
+   "shootoutWon": true,
+   "homeGoals": 1,
+   "awayGoals": 1,
+   "next": 0.7600500131957233
+  },
+  {
+   "seed": 782123,
+   "decidedBy": "pens",
+   "shootoutWon": false,
+   "homeGoals": 1,
+   "awayGoals": 1,
+   "next": 0.8585961584467441
+  },
+  {
+   "seed": 782124,
+   "decidedBy": "regular",
+   "shootoutWon": null,
+   "homeGoals": 2,
+   "awayGoals": 0,
+   "next": 0.42503840383142233
+  },
+  {
+   "seed": 782125,
+   "decidedBy": "regular",
+   "shootoutWon": null,
+   "homeGoals": 2,
+   "awayGoals": 1,
+   "next": 0.79657859262079
+  },
+  {
+   "seed": 782126,
+   "decidedBy": "pens",
+   "shootoutWon": false,
+   "homeGoals": 1,
+   "awayGoals": 1,
+   "next": 0.4200739075895399
+  },
+  {
+   "seed": 782127,
+   "decidedBy": "regular",
+   "shootoutWon": null,
+   "homeGoals": 4,
+   "awayGoals": 0,
+   "next": 0.5469650072045624
+  },
+  {
+   "seed": 782128,
+   "decidedBy": "regular",
+   "shootoutWon": null,
+   "homeGoals": 3,
+   "awayGoals": 0,
+   "next": 0.7849046494811773
+  },
+  {
+   "seed": 782129,
+   "decidedBy": "regular",
+   "shootoutWon": null,
+   "homeGoals": 2,
+   "awayGoals": 0,
+   "next": 0.6392133857589215
+  },
+  {
+   "seed": 782130,
+   "decidedBy": "regular",
+   "shootoutWon": null,
+   "homeGoals": 2,
+   "awayGoals": 1,
+   "next": 0.7640212941914797
+  },
+  {
+   "seed": 782131,
+   "decidedBy": "regular",
+   "shootoutWon": null,
+   "homeGoals": 4,
+   "awayGoals": 2,
+   "next": 0.5365406326018274
+  },
+  {
+   "seed": 782132,
+   "decidedBy": "regular",
+   "shootoutWon": null,
+   "homeGoals": 1,
+   "awayGoals": 0,
+   "next": 0.0589970990549773
+  },
+  {
+   "seed": 782133,
+   "decidedBy": "regular",
+   "shootoutWon": null,
+   "homeGoals": 1,
+   "awayGoals": 3,
+   "next": 0.6653028321452439
+  },
+  {
+   "seed": 782134,
+   "decidedBy": "regular",
+   "shootoutWon": null,
+   "homeGoals": 5,
+   "awayGoals": 0,
+   "next": 0.34168415516614914
+  },
+  {
+   "seed": 782135,
+   "decidedBy": "regular",
+   "shootoutWon": null,
+   "homeGoals": 3,
+   "awayGoals": 0,
+   "next": 0.0886989226564765
+  },
+  {
+   "seed": 782136,
+   "decidedBy": "regular",
+   "shootoutWon": null,
+   "homeGoals": 2,
+   "awayGoals": 0,
+   "next": 0.5670866121072322
+  },
+  {
+   "seed": 782137,
+   "decidedBy": "regular",
+   "shootoutWon": null,
+   "homeGoals": 1,
+   "awayGoals": 0,
+   "next": 0.00033804867416620255
+  },
+  {
+   "seed": 782138,
+   "decidedBy": "regular",
+   "shootoutWon": null,
+   "homeGoals": 2,
+   "awayGoals": 0,
+   "next": 0.028026855550706387
+  },
+  {
+   "seed": 782139,
+   "decidedBy": "regular",
+   "shootoutWon": null,
+   "homeGoals": 4,
+   "awayGoals": 1,
+   "next": 0.6129058329388499
+  },
+  {
+   "seed": 782140,
+   "decidedBy": "regular",
+   "shootoutWon": null,
+   "homeGoals": 1,
+   "awayGoals": 0,
+   "next": 0.20937120984308422
+  },
+  {
+   "seed": 782141,
+   "decidedBy": "pens",
+   "shootoutWon": false,
+   "homeGoals": 1,
+   "awayGoals": 1,
+   "next": 0.5815813424997032
+  },
+  {
+   "seed": 782142,
+   "decidedBy": "regular",
+   "shootoutWon": null,
+   "homeGoals": 1,
+   "awayGoals": 0,
+   "next": 0.2913702728692442
+  },
+  {
+   "seed": 782143,
+   "decidedBy": "regular",
+   "shootoutWon": null,
+   "homeGoals": 2,
+   "awayGoals": 0,
+   "next": 0.2696095211431384
+  },
+  {
+   "seed": 782144,
+   "decidedBy": "regular",
+   "shootoutWon": null,
+   "homeGoals": 0,
+   "awayGoals": 1,
+   "next": 0.416451723780483
+  },
+  {
+   "seed": 782145,
+   "decidedBy": "regular",
+   "shootoutWon": null,
+   "homeGoals": 2,
+   "awayGoals": 0,
+   "next": 0.387064574053511
+  },
+  {
+   "seed": 782146,
+   "decidedBy": "regular",
+   "shootoutWon": null,
+   "homeGoals": 3,
+   "awayGoals": 2,
+   "next": 0.11099635460413992
+  },
+  {
+   "seed": 782147,
+   "decidedBy": "pens",
+   "shootoutWon": false,
+   "homeGoals": 0,
+   "awayGoals": 0,
+   "next": 0.9663845999166369
+  },
+  {
+   "seed": 782148,
+   "decidedBy": "regular",
+   "shootoutWon": null,
+   "homeGoals": 5,
+   "awayGoals": 0,
+   "next": 0.47525728354230523
+  },
+  {
+   "seed": 782149,
+   "decidedBy": "regular",
+   "shootoutWon": null,
+   "homeGoals": 1,
+   "awayGoals": 0,
+   "next": 0.4093720910605043
+  },
+  {
+   "seed": 782150,
+   "decidedBy": "regular",
+   "shootoutWon": null,
+   "homeGoals": 0,
+   "awayGoals": 1,
+   "next": 0.24013439053669572
+  },
+  {
+   "seed": 782151,
+   "decidedBy": "regular",
+   "shootoutWon": null,
+   "homeGoals": 3,
+   "awayGoals": 0,
+   "next": 0.8752395263873041
+  },
+  {
+   "seed": 782152,
+   "decidedBy": "regular",
+   "shootoutWon": null,
+   "homeGoals": 2,
+   "awayGoals": 1,
+   "next": 0.26258741109631956
+  },
+  {
+   "seed": 782153,
+   "decidedBy": "pens",
+   "shootoutWon": false,
+   "homeGoals": 1,
+   "awayGoals": 1,
+   "next": 0.9205643171444535
+  },
+  {
+   "seed": 782154,
+   "decidedBy": "regular",
+   "shootoutWon": null,
+   "homeGoals": 2,
+   "awayGoals": 0,
+   "next": 0.5763953910209239
+  },
+  {
+   "seed": 782155,
+   "decidedBy": "regular",
+   "shootoutWon": null,
+   "homeGoals": 2,
+   "awayGoals": 1,
+   "next": 0.7838862703647465
+  },
+  {
+   "seed": 782156,
+   "decidedBy": "pens",
+   "shootoutWon": true,
+   "homeGoals": 1,
+   "awayGoals": 1,
+   "next": 0.3863526815548539
+  },
+  {
+   "seed": 782157,
+   "decidedBy": "regular",
+   "shootoutWon": null,
+   "homeGoals": 4,
+   "awayGoals": 0,
+   "next": 0.14898211392574012
+  },
+  {
+   "seed": 782158,
+   "decidedBy": "regular",
+   "shootoutWon": null,
+   "homeGoals": 2,
+   "awayGoals": 0,
+   "next": 0.8154282211326063
+  },
+  {
+   "seed": 782159,
+   "decidedBy": "regular",
+   "shootoutWon": null,
+   "homeGoals": 3,
+   "awayGoals": 0,
+   "next": 0.34584488277323544
+  },
+  {
+   "seed": 782160,
+   "decidedBy": "regular",
+   "shootoutWon": null,
+   "homeGoals": 1,
+   "awayGoals": 0,
+   "next": 0.5323379014153033
+  },
+  {
+   "seed": 782161,
+   "decidedBy": "regular",
+   "shootoutWon": null,
+   "homeGoals": 3,
+   "awayGoals": 0,
+   "next": 0.4170463893096894
+  },
+  {
+   "seed": 782162,
+   "decidedBy": "regular",
+   "shootoutWon": null,
+   "homeGoals": 3,
+   "awayGoals": 1,
+   "next": 0.4911435800604522
+  },
+  {
+   "seed": 782163,
+   "decidedBy": "regular",
+   "shootoutWon": null,
+   "homeGoals": 4,
+   "awayGoals": 0,
+   "next": 0.2260873829945922
+  },
+  {
+   "seed": 782164,
+   "decidedBy": "regular",
+   "shootoutWon": null,
+   "homeGoals": 3,
+   "awayGoals": 1,
+   "next": 0.6758821550756693
+  },
+  {
+   "seed": 782165,
+   "decidedBy": "regular",
+   "shootoutWon": null,
+   "homeGoals": 0,
+   "awayGoals": 1,
+   "next": 0.18480536784045398
+  },
+  {
+   "seed": 782166,
+   "decidedBy": "regular",
+   "shootoutWon": null,
+   "homeGoals": 3,
+   "awayGoals": 1,
+   "next": 0.4069666853174567
+  },
+  {
+   "seed": 782167,
+   "decidedBy": "regular",
+   "shootoutWon": null,
+   "homeGoals": 2,
+   "awayGoals": 0,
+   "next": 0.14787890575826168
+  },
+  {
+   "seed": 782168,
+   "decidedBy": "regular",
+   "shootoutWon": null,
+   "homeGoals": 2,
+   "awayGoals": 1,
+   "next": 0.8450006968341768
+  },
+  {
+   "seed": 782169,
+   "decidedBy": "regular",
+   "shootoutWon": null,
+   "homeGoals": 3,
+   "awayGoals": 1,
+   "next": 0.026269361143931746
+  },
+  {
+   "seed": 782170,
+   "decidedBy": "regular",
+   "shootoutWon": null,
+   "homeGoals": 1,
+   "awayGoals": 0,
+   "next": 0.4203069540672004
+  },
+  {
+   "seed": 782171,
+   "decidedBy": "pens",
+   "shootoutWon": false,
+   "homeGoals": 3,
+   "awayGoals": 3,
+   "next": 0.5582885129842907
+  },
+  {
+   "seed": 782172,
+   "decidedBy": "regular",
+   "shootoutWon": null,
+   "homeGoals": 1,
+   "awayGoals": 0,
+   "next": 0.565610162448138
+  },
+  {
+   "seed": 782173,
+   "decidedBy": "regular",
+   "shootoutWon": null,
+   "homeGoals": 5,
+   "awayGoals": 3,
+   "next": 0.4514437085017562
+  },
+  {
+   "seed": 782174,
+   "decidedBy": "regular",
+   "shootoutWon": null,
+   "homeGoals": 2,
+   "awayGoals": 0,
+   "next": 0.8440400613471866
+  },
+  {
+   "seed": 782175,
+   "decidedBy": "regular",
+   "shootoutWon": null,
+   "homeGoals": 2,
+   "awayGoals": 0,
+   "next": 0.0937460670247674
+  },
+  {
+   "seed": 782176,
+   "decidedBy": "regular",
+   "shootoutWon": null,
+   "homeGoals": 3,
+   "awayGoals": 1,
+   "next": 0.6377667172346264
+  },
+  {
+   "seed": 782177,
+   "decidedBy": "regular",
+   "shootoutWon": null,
+   "homeGoals": 2,
+   "awayGoals": 1,
+   "next": 0.3831435071770102
+  },
+  {
+   "seed": 782178,
+   "decidedBy": "pens",
+   "shootoutWon": false,
+   "homeGoals": 1,
+   "awayGoals": 1,
+   "next": 0.8906077432911843
+  },
+  {
+   "seed": 782179,
+   "decidedBy": "regular",
+   "shootoutWon": null,
+   "homeGoals": 1,
+   "awayGoals": 0,
+   "next": 0.8641694411635399
+  },
+  {
+   "seed": 782180,
+   "decidedBy": "regular",
+   "shootoutWon": null,
+   "homeGoals": 2,
+   "awayGoals": 0,
+   "next": 0.3659089838620275
+  },
+  {
+   "seed": 782181,
+   "decidedBy": "regular",
+   "shootoutWon": null,
+   "homeGoals": 3,
+   "awayGoals": 0,
+   "next": 0.6793677287641913
+  },
+  {
+   "seed": 782182,
+   "decidedBy": "regular",
+   "shootoutWon": null,
+   "homeGoals": 3,
+   "awayGoals": 0,
+   "next": 0.25105965696275234
+  },
+  {
+   "seed": 782183,
+   "decidedBy": "regular",
+   "shootoutWon": null,
+   "homeGoals": 3,
+   "awayGoals": 1,
+   "next": 0.7972433792892843
+  },
+  {
+   "seed": 782184,
+   "decidedBy": "regular",
+   "shootoutWon": null,
+   "homeGoals": 2,
+   "awayGoals": 0,
+   "next": 0.9114144593477249
+  },
+  {
+   "seed": 782185,
+   "decidedBy": "regular",
+   "shootoutWon": null,
+   "homeGoals": 4,
+   "awayGoals": 0,
+   "next": 0.3458879687823355
+  },
+  {
+   "seed": 782186,
+   "decidedBy": "pens",
+   "shootoutWon": true,
+   "homeGoals": 1,
+   "awayGoals": 1,
+   "next": 0.4737409350927919
+  },
+  {
+   "seed": 782187,
+   "decidedBy": "regular",
+   "shootoutWon": null,
+   "homeGoals": 2,
+   "awayGoals": 1,
+   "next": 0.8255385365337133
+  },
+  {
+   "seed": 782188,
+   "decidedBy": "regular",
+   "shootoutWon": null,
+   "homeGoals": 1,
+   "awayGoals": 0,
+   "next": 0.5675481886137277
+  },
+  {
+   "seed": 782189,
+   "decidedBy": "regular",
+   "shootoutWon": null,
+   "homeGoals": 1,
+   "awayGoals": 2,
+   "next": 0.9180449869018048
+  },
+  {
+   "seed": 782190,
+   "decidedBy": "regular",
+   "shootoutWon": null,
+   "homeGoals": 0,
+   "awayGoals": 1,
+   "next": 0.48740270896814764
+  },
+  {
+   "seed": 782191,
+   "decidedBy": "regular",
+   "shootoutWon": null,
+   "homeGoals": 3,
+   "awayGoals": 0,
+   "next": 0.9484499942045659
+  },
+  {
+   "seed": 782192,
+   "decidedBy": "regular",
+   "shootoutWon": null,
+   "homeGoals": 2,
+   "awayGoals": 1,
+   "next": 0.6615428433287889
+  },
+  {
+   "seed": 782193,
+   "decidedBy": "regular",
+   "shootoutWon": null,
+   "homeGoals": 4,
+   "awayGoals": 1,
+   "next": 0.5542127243243158
+  },
+  {
+   "seed": 782194,
+   "decidedBy": "regular",
+   "shootoutWon": null,
+   "homeGoals": 4,
+   "awayGoals": 0,
+   "next": 0.32647646334953606
+  },
+  {
+   "seed": 782195,
+   "decidedBy": "regular",
+   "shootoutWon": null,
+   "homeGoals": 1,
+   "awayGoals": 0,
+   "next": 0.04024791647680104
+  },
+  {
+   "seed": 782196,
+   "decidedBy": "regular",
+   "shootoutWon": null,
+   "homeGoals": 3,
+   "awayGoals": 0,
+   "next": 0.31908887857571244
+  },
+  {
+   "seed": 782197,
+   "decidedBy": "regular",
+   "shootoutWon": null,
+   "homeGoals": 2,
+   "awayGoals": 0,
+   "next": 0.8545592185109854
+  },
+  {
+   "seed": 782198,
+   "decidedBy": "pens",
+   "shootoutWon": false,
+   "homeGoals": 0,
+   "awayGoals": 0,
+   "next": 0.15526491426862776
+  },
+  {
+   "seed": 782199,
+   "decidedBy": "pens",
+   "shootoutWon": true,
+   "homeGoals": 1,
+   "awayGoals": 1,
+   "next": 0.8445062993559986
+  },
+  {
+   "seed": 782200,
+   "decidedBy": "regular",
+   "shootoutWon": null,
+   "homeGoals": 2,
+   "awayGoals": 0,
+   "next": 0.7496794871985912
+  },
+  {
+   "seed": 782201,
+   "decidedBy": "regular",
+   "shootoutWon": null,
+   "homeGoals": 1,
+   "awayGoals": 0,
+   "next": 0.34960753563791513
+  },
+  {
+   "seed": 782202,
+   "decidedBy": "pens",
+   "shootoutWon": true,
+   "homeGoals": 1,
+   "awayGoals": 1,
+   "next": 0.6949040805920959
+  },
+  {
+   "seed": 782203,
+   "decidedBy": "regular",
+   "shootoutWon": null,
+   "homeGoals": 3,
+   "awayGoals": 1,
+   "next": 0.2717229095287621
+  },
+  {
+   "seed": 782204,
+   "decidedBy": "regular",
+   "shootoutWon": null,
+   "homeGoals": 3,
+   "awayGoals": 1,
+   "next": 0.046798076247796416
+  },
+  {
+   "seed": 782205,
+   "decidedBy": "pens",
+   "shootoutWon": false,
+   "homeGoals": 2,
+   "awayGoals": 2,
+   "next": 0.7311555983033031
+  },
+  {
+   "seed": 782206,
+   "decidedBy": "regular",
+   "shootoutWon": null,
+   "homeGoals": 3,
+   "awayGoals": 2,
+   "next": 0.8315824442543089
+  },
+  {
+   "seed": 782207,
+   "decidedBy": "regular",
+   "shootoutWon": null,
+   "homeGoals": 1,
+   "awayGoals": 0,
+   "next": 0.05362916807644069
+  },
+  {
+   "seed": 782208,
+   "decidedBy": "pens",
+   "shootoutWon": false,
+   "homeGoals": 2,
+   "awayGoals": 2,
+   "next": 0.7421572164166719
+  },
+  {
+   "seed": 782209,
+   "decidedBy": "regular",
+   "shootoutWon": null,
+   "homeGoals": 1,
+   "awayGoals": 0,
+   "next": 0.3561467060353607
+  },
+  {
+   "seed": 782210,
+   "decidedBy": "regular",
+   "shootoutWon": null,
+   "homeGoals": 2,
+   "awayGoals": 1,
+   "next": 0.1394449886865914
+  },
+  {
+   "seed": 782211,
+   "decidedBy": "regular",
+   "shootoutWon": null,
+   "homeGoals": 2,
+   "awayGoals": 0,
+   "next": 0.09775030566379428
+  },
+  {
+   "seed": 782212,
+   "decidedBy": "regular",
+   "shootoutWon": null,
+   "homeGoals": 3,
+   "awayGoals": 1,
+   "next": 0.6157353383023292
+  },
+  {
+   "seed": 782213,
+   "decidedBy": "regular",
+   "shootoutWon": null,
+   "homeGoals": 2,
+   "awayGoals": 0,
+   "next": 0.47403637785464525
+  },
+  {
+   "seed": 782214,
+   "decidedBy": "regular",
+   "shootoutWon": null,
+   "homeGoals": 1,
+   "awayGoals": 0,
+   "next": 0.07000804436393082
+  },
+  {
+   "seed": 782215,
+   "decidedBy": "regular",
+   "shootoutWon": null,
+   "homeGoals": 0,
+   "awayGoals": 1,
+   "next": 0.47661668504588306
+  },
+  {
+   "seed": 782216,
+   "decidedBy": "pens",
+   "shootoutWon": true,
+   "homeGoals": 0,
+   "awayGoals": 0,
+   "next": 0.38510529207997024
+  },
+  {
+   "seed": 782217,
+   "decidedBy": "regular",
+   "shootoutWon": null,
+   "homeGoals": 3,
+   "awayGoals": 0,
+   "next": 0.24151933868415654
+  },
+  {
+   "seed": 782218,
+   "decidedBy": "regular",
+   "shootoutWon": null,
+   "homeGoals": 1,
+   "awayGoals": 2,
+   "next": 0.1310617751441896
+  },
+  {
+   "seed": 782219,
+   "decidedBy": "regular",
+   "shootoutWon": null,
+   "homeGoals": 5,
+   "awayGoals": 1,
+   "next": 0.017964090453460813
+  },
+  {
+   "seed": 782220,
+   "decidedBy": "regular",
+   "shootoutWon": null,
+   "homeGoals": 3,
+   "awayGoals": 1,
+   "next": 0.9556919441092759
+  },
+  {
+   "seed": 782221,
+   "decidedBy": "regular",
+   "shootoutWon": null,
+   "homeGoals": 2,
+   "awayGoals": 0,
+   "next": 0.41079095797613263
+  },
+  {
+   "seed": 782222,
+   "decidedBy": "regular",
+   "shootoutWon": null,
+   "homeGoals": 2,
+   "awayGoals": 0,
+   "next": 0.30584305454976857
+  },
+  {
+   "seed": 782223,
+   "decidedBy": "pens",
+   "shootoutWon": false,
+   "homeGoals": 1,
+   "awayGoals": 1,
+   "next": 0.31872320896945894
+  },
+  {
+   "seed": 782224,
+   "decidedBy": "regular",
+   "shootoutWon": null,
+   "homeGoals": 4,
+   "awayGoals": 0,
+   "next": 0.38961115456186235
+  },
+  {
+   "seed": 782225,
+   "decidedBy": "regular",
+   "shootoutWon": null,
+   "homeGoals": 2,
+   "awayGoals": 1,
+   "next": 0.43992190598510206
+  },
+  {
+   "seed": 782226,
+   "decidedBy": "pens",
+   "shootoutWon": true,
+   "homeGoals": 0,
+   "awayGoals": 0,
+   "next": 0.18527542613446712
+  },
+  {
+   "seed": 782227,
+   "decidedBy": "regular",
+   "shootoutWon": null,
+   "homeGoals": 2,
+   "awayGoals": 0,
+   "next": 0.4006823292002082
+  },
+  {
+   "seed": 782228,
+   "decidedBy": "pens",
+   "shootoutWon": false,
+   "homeGoals": 1,
+   "awayGoals": 1,
+   "next": 0.0024745722766965628
+  },
+  {
+   "seed": 782229,
+   "decidedBy": "regular",
+   "shootoutWon": null,
+   "homeGoals": 2,
+   "awayGoals": 0,
+   "next": 0.15497403708286583
+  },
+  {
+   "seed": 782230,
+   "decidedBy": "regular",
+   "shootoutWon": null,
+   "homeGoals": 2,
+   "awayGoals": 0,
+   "next": 0.13760211667977273
+  },
+  {
+   "seed": 782231,
+   "decidedBy": "regular",
+   "shootoutWon": null,
+   "homeGoals": 2,
+   "awayGoals": 0,
+   "next": 0.11597924632951617
+  },
+  {
+   "seed": 782232,
+   "decidedBy": "regular",
+   "shootoutWon": null,
+   "homeGoals": 1,
+   "awayGoals": 2,
+   "next": 0.12392353732138872
+  },
+  {
+   "seed": 782233,
+   "decidedBy": "regular",
+   "shootoutWon": null,
+   "homeGoals": 3,
+   "awayGoals": 1,
+   "next": 0.025127808330580592
+  },
+  {
+   "seed": 782234,
+   "decidedBy": "regular",
+   "shootoutWon": null,
+   "homeGoals": 3,
+   "awayGoals": 0,
+   "next": 0.868042622692883
+  },
+  {
+   "seed": 782235,
+   "decidedBy": "regular",
+   "shootoutWon": null,
+   "homeGoals": 1,
+   "awayGoals": 0,
+   "next": 0.8074314871337265
+  },
+  {
+   "seed": 782236,
+   "decidedBy": "regular",
+   "shootoutWon": null,
+   "homeGoals": 2,
+   "awayGoals": 1,
+   "next": 0.5128016436938196
+  },
+  {
+   "seed": 782237,
+   "decidedBy": "regular",
+   "shootoutWon": null,
+   "homeGoals": 1,
+   "awayGoals": 2,
+   "next": 0.427128468407318
+  },
+  {
+   "seed": 782238,
+   "decidedBy": "regular",
+   "shootoutWon": null,
+   "homeGoals": 2,
+   "awayGoals": 0,
+   "next": 0.34969255700707436
+  },
+  {
+   "seed": 782239,
+   "decidedBy": "pens",
+   "shootoutWon": false,
+   "homeGoals": 1,
+   "awayGoals": 1,
+   "next": 0.34168531093746424
+  },
+  {
+   "seed": 782240,
+   "decidedBy": "regular",
+   "shootoutWon": null,
+   "homeGoals": 2,
+   "awayGoals": 1,
+   "next": 0.0645383654627949
+  },
+  {
+   "seed": 782241,
+   "decidedBy": "pens",
+   "shootoutWon": true,
+   "homeGoals": 2,
+   "awayGoals": 2,
+   "next": 0.3547150115482509
+  },
+  {
+   "seed": 782242,
+   "decidedBy": "regular",
+   "shootoutWon": null,
+   "homeGoals": 6,
+   "awayGoals": 0,
+   "next": 0.458860092330724
+  },
+  {
+   "seed": 782243,
+   "decidedBy": "regular",
+   "shootoutWon": null,
+   "homeGoals": 2,
+   "awayGoals": 0,
+   "next": 0.4604150310624391
+  },
+  {
+   "seed": 782244,
+   "decidedBy": "pens",
+   "shootoutWon": true,
+   "homeGoals": 2,
+   "awayGoals": 2,
+   "next": 0.3377811573445797
+  },
+  {
+   "seed": 782245,
+   "decidedBy": "regular",
+   "shootoutWon": null,
+   "homeGoals": 2,
+   "awayGoals": 1,
+   "next": 0.48596782609820366
+  },
+  {
+   "seed": 782246,
+   "decidedBy": "regular",
+   "shootoutWon": null,
+   "homeGoals": 6,
+   "awayGoals": 0,
+   "next": 0.18291297974064946
+  },
+  {
+   "seed": 782247,
+   "decidedBy": "regular",
+   "shootoutWon": null,
+   "homeGoals": 0,
+   "awayGoals": 1,
+   "next": 0.7410426300484687
+  },
+  {
+   "seed": 782248,
+   "decidedBy": "pens",
+   "shootoutWon": false,
+   "homeGoals": 1,
+   "awayGoals": 1,
+   "next": 0.0038947269786149263
+  },
+  {
+   "seed": 782249,
+   "decidedBy": "regular",
+   "shootoutWon": null,
+   "homeGoals": 4,
+   "awayGoals": 0,
+   "next": 0.34368593990802765
+  }
+ ]
+}

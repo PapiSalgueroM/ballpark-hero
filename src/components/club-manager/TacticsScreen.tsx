@@ -1,12 +1,13 @@
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { cn } from '@/lib/utils';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { ChevronDown, Wand2, X } from 'lucide-react';
+import { ArrowLeft, ChevronDown, Wand2, X } from 'lucide-react';
 import {
   FORMATIONS, MENTALITIES, resolveXI, isAvailable, xiFitReport, fitGrade, FIT_PENALTY,
   slotPosition, defensiveLineY, lineLabel,
   benchFor, dutyOptions, slotDuty, DUTY_INFO,
   SET_PIECE_KEYS, SET_PIECE_INFO, setPieceCandidates,
+  SHOOTOUT_MAX_ORDER,
 } from '@/lib/clubManager';
 import type { CareerState, CMPlayer, Mentality, Duty, SetPieceKey, FitGrade } from '@/lib/clubManager';
 import { ratingTint, SecondPositionChips } from '@/components/club-manager/SquadScreen';
@@ -56,6 +57,12 @@ interface TacticsScreenProps {
   /** Round 505: the armband or a set piece job to a man. */
   onSetPiece: (key: SetPieceKey, playerId: string | null) => void;
   onAutoSetPieces: () => void;
+  /** Round 782: the shootout order, player ids in kicking order; an empty list clears it. */
+  onShootoutOrder: (ids: string[]) => void;
+  /** Round 782: the hub's pre match card can ask for the shootout tile to be
+   *  open on arrival; the screen opens it once and says so. */
+  openTileRequest?: 'shootout' | null;
+  onOpenTileRequestDone?: () => void;
 }
 
 /**
@@ -102,6 +109,7 @@ interface TacticsScreenProps {
  */
 export function TacticsScreen({
   career, onFormation, onMentality, onSlot, onSwap, onAutoPick, onDuty, onSetPiece, onAutoSetPieces,
+  onShootoutOrder, openTileRequest, onOpenTileRequestDone,
 }: TacticsScreenProps) {
   const [openSlot, setOpenSlot] = useState<number | null>(null);
   // A one-shot pitch flourish on top of the shape move, keyed so it replays.
@@ -125,7 +133,15 @@ export function TacticsScreen({
   /* Round 505 review: the bench and the set pieces are tiles under the pitch
      that open one at a time, so the tab is the pitch plus two headers rather
      than a long stack with a scroll list inside it. */
-  const [openTile, setOpenTile] = useState<'bench' | 'setpieces' | null>(null);
+  const [openTile, setOpenTile] = useState<'bench' | 'setpieces' | 'shootout' | null>(() => (openTileRequest === 'shootout' ? 'shootout' : null));
+
+  /* Round 782: the pre match card's shortcut lands here with the shootout
+     tile asked for; open it once and hand the request back. */
+  useEffect(() => {
+    if (openTileRequest !== 'shootout') return;
+    setOpenTile('shootout');
+    onOpenTileRequestDone?.();
+  }, [openTileRequest, onOpenTileRequestDone]);
 
   /* Round 505 review: a shape switch leaves nothing half tapped behind. The
      spot you picked, the bench man you held, the open duty sheet and an
@@ -157,6 +173,26 @@ export function TacticsScreen({
   const pitchWrapRef = useRevealScroll<HTMLDivElement>(`bench:${benchPick ?? ''}`, { enabled: benchPick !== null, skipFirst: false });
   const dutyRef = useRevealScroll<HTMLDivElement>(`duty:${dutySlot ?? ''}`, { enabled: dutySlot !== null, skipFirst: false });
   const spRef = useRevealScroll<HTMLDivElement>(`sp:${spKey ?? ''}`, { enabled: spKey !== null, skipFirst: false });
+  /* Round 782: the shootout order as the squad stands today. A man who has
+     left the club drops out of the list on screen, and the engine skips him
+     at the whistle, so a stale id never takes a kick. */
+  const shootoutOrder = useMemo(
+    () => (career.shootoutOrder ?? []).filter(id => career.squad.some(p => p.id === id && !p.onLoan)),
+    [career.shootoutOrder, career.squad],
+  );
+  /* Who can be listed: the eleven first in slot order, then the rest of the
+     squad by rating, nobody on loan. The keeper is fair game, the eleventh
+     kick is somebody's. */
+  const shootoutPool = useMemo(() => {
+    const xiIds = career.xiIds.filter((id): id is string => !!id);
+    const xiMen = xiIds.map(id => career.squad.find(p => p.id === id)).filter((p): p is CMPlayer => !!p && !p.onLoan);
+    const rest = career.squad.filter(p => !p.onLoan && !xiIds.includes(p.id)).sort((a, b) => b.rating - a.rating || a.name.localeCompare(b.name));
+    return [...xiMen, ...rest];
+  }, [career.squad, career.xiIds]);
+  const toggleShootout = (id: string) => {
+    if (shootoutOrder.includes(id)) onShootoutOrder(shootoutOrder.filter(x => x !== id));
+    else if (shootoutOrder.length < SHOOTOUT_MAX_ORDER) onShootoutOrder([...shootoutOrder, id]);
+  };
 
   useLayoutEffect(() => {
     const el = pitchRef.current;
@@ -813,6 +849,107 @@ export function TacticsScreen({
         <p className="text-[9px] text-muted-foreground mt-1">
           A corner goes to that flag's man while he is on the pitch, a penalty or a direct free kick is the taker's goal, and the armband takes a point off what a defeat costs the eleven.
         </p>
+        </div>
+        )}
+      </div>
+
+      {/* Round 782: the shootout order, a tile like the set pieces. The header
+          says how many are listed; inside are a back button, the order as
+          numbered chips (tap one to take him off) and the squad as small tiles
+          (tap one to add him next). The engine walks the order over whoever
+          finished the match; with nobody listed the shootout is settled the way
+          it always was, in one draw. */}
+      <div>
+        <button
+          type="button"
+          data-cm-tile-btn="shootout"
+          aria-expanded={openTile === 'shootout'}
+          onClick={() => setOpenTile(openTile === 'shootout' ? null : 'shootout')}
+          className={cn(
+            'w-full flex items-center justify-between gap-2 rounded-xl border bg-card px-3 min-h-[44px] text-left transition-colors',
+            openTile === 'shootout' ? 'border-primary rounded-b-none' : 'border-border hover:border-primary/50',
+          )}
+        >
+          <span className="text-[10px] text-muted-foreground uppercase tracking-wider min-w-0 truncate">
+            Shootout order <span className="text-foreground font-bold" data-cm-so-count={shootoutOrder.length}>{shootoutOrder.length}/{SHOOTOUT_MAX_ORDER}</span>
+            {shootoutOrder.length === 0 && <span className="normal-case"> not set, one draw decides it</span>}
+          </span>
+          <ChevronDown className={cn('w-4 h-4 shrink-0 text-muted-foreground transition-transform', openTile === 'shootout' && 'rotate-180')} />
+        </button>
+        {openTile === 'shootout' && (
+        <div className="bg-card border border-t-0 border-primary rounded-b-xl p-3" data-cm-shootout-order="1">
+          <div className="flex items-center justify-between mb-1">
+            <button
+              type="button"
+              data-cm-so-back="1"
+              onClick={() => setOpenTile(null)}
+              className="inline-flex items-center gap-1 text-[10px] font-semibold text-primary hover:opacity-80 min-h-[32px]"
+            >
+              <ArrowLeft className="w-3 h-3" /> Back
+            </button>
+            {shootoutOrder.length > 0 && (
+              <button
+                type="button"
+                data-cm-so-clear="1"
+                onClick={() => onShootoutOrder([])}
+                className="text-[10px] font-semibold text-muted-foreground hover:text-foreground min-h-[32px]"
+              >
+                Clear
+              </button>
+            )}
+          </div>
+          <p className="text-[9px] text-muted-foreground mb-2">
+            Tap a man to add him next, tap him again to take him off. At the whistle your men step up in this order, anyone off the pitch is skipped, anyone you left out follows by shirt number with the keeper last, and after five each it is sudden death round the eleven.
+          </p>
+          {shootoutOrder.length > 0 ? (
+            <div className="flex flex-wrap gap-1 mb-2" data-cm-so-list="1">
+              {shootoutOrder.map((id, i) => {
+                const p = byId(id);
+                if (!p) return null;
+                return (
+                  <button
+                    key={id}
+                    type="button"
+                    data-cm-so-pick={id}
+                    onClick={() => toggleShootout(id)}
+                    className="inline-flex items-center gap-1 rounded-lg border border-primary bg-primary/10 px-2 min-h-[36px] text-[11px] text-foreground"
+                  >
+                    <span className="font-bold font-display text-primary tabular-nums">{i + 1}</span> {lastName(p.name)} <X className="w-3 h-3 text-muted-foreground" />
+                  </button>
+                );
+              })}
+            </div>
+          ) : (
+            <p className="text-[10px] text-muted-foreground mb-2" data-cm-so-empty="1">Nobody listed yet.</p>
+          )}
+          <div className="grid grid-cols-2 gap-1" data-cm-so-pool="1">
+            {shootoutPool.map(p => {
+              const at = shootoutOrder.indexOf(p.id);
+              const full = at < 0 && shootoutOrder.length >= SHOOTOUT_MAX_ORDER;
+              return (
+                <button
+                  key={p.id}
+                  type="button"
+                  data-cm-so-opt={p.id}
+                  disabled={full}
+                  onClick={() => toggleShootout(p.id)}
+                  className={cn(
+                    'flex items-center gap-1.5 rounded-lg border px-2 min-h-[40px] text-left transition-colors',
+                    at >= 0 ? 'border-primary bg-primary/10' : 'border-border hover:border-primary/50',
+                    full && 'opacity-40',
+                  )}
+                >
+                  <span className="w-5 shrink-0 text-center text-[10px] font-bold font-display text-primary tabular-nums">{at >= 0 ? at + 1 : ''}</span>
+                  <span className="w-8 shrink-0 text-[9px] font-bold text-muted-foreground bg-secondary rounded px-1 py-0.5 text-center">{p.position}</span>
+                  <span className={cn('flex-1 min-w-0 text-[11px] truncate', p.isYouth ? 'text-muted-foreground italic' : 'text-foreground')}>
+                    {lastName(p.name)}
+                    {usedIds.has(p.id) && <span className="text-[8px] text-primary ml-1">XI</span>}
+                  </span>
+                  <span className={cn('text-xs font-bold font-display', ratingTint(p.rating))}>{p.rating}</span>
+                </button>
+              );
+            })}
+          </div>
         </div>
         )}
       </div>

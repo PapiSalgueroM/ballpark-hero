@@ -1216,7 +1216,27 @@ export interface MatchWeekReport {
    *  and whether my club went through. Absent on every other match and on
    *  every report written before this round. */
   tie?: { leg: 1 | 2; aggMine: number; aggTheirs: number; byAwayGoals?: boolean; through?: boolean };
+  /** Round 782: the shootout kick by kick, present only when the manager had
+   *  set a shootout order. `decidedBy` and `shootoutWon` carry the result
+   *  exactly as before, so nothing that reads them changes. */
+  shootout?: ShootoutDetail;
 }
+
+/** Round 782: one kick of a shootout played kick by kick. */
+export interface ShootoutKick {
+  side: 'me' | 'opp';
+  /** The taker's name. */
+  taker: string;
+  /** Theirs only: a man the game made up, tagged the way the ratings sheet tags him. */
+  gen?: boolean;
+  result: 'scored' | 'saved' | 'missed';
+  /** The running score once this kick is in, in my orientation. */
+  mine: number;
+  theirs: number;
+}
+
+/** Round 782: every kick in order and the final count, in my orientation. */
+export interface ShootoutDetail { kicks: ShootoutKick[]; mine: number; theirs: number; }
 
 /** Round 157: one past meeting with an opponent, kept across seasons. */
 export interface H2HEntry {
@@ -2154,6 +2174,12 @@ export interface CareerState {
    *  the slot's own line does not offer, so a shape change cannot leave a
    *  poacher's duty on a centre back. Absent on an older save. */
   xiDuties?: (Duty | null)[];
+  /** Round 782: the shootout order, player ids, up to eleven, set on the
+   *  tactics tab. Present only once the manager has set one: absent (every
+   *  save before this round, and a manager who never touched it) means the
+   *  shootout is settled the way it always was, in one draw. With an order
+   *  set the shootout goes kick by kick, see settleShootout. */
+  shootoutOrder?: string[];
 }
 
 /* ---------- Round 505: the armband and the set piece takers ---------- */
@@ -12230,9 +12256,170 @@ function assignedOnPitch(sp: SetPieces | null | undefined, key: SetPieceKey, on:
 }
 
 /** What the penalty taker's rating is worth in a shootout: 0.004 a point either side of 75, capped. Zero with nobody assigned. */
-export function shootoutTakerEdge(taker: CMPlayer | null | undefined): number {
+export function shootoutTakerEdge(taker: { rating: number } | null | undefined): number {
   if (!taker) return 0;
   return clamp((taker.rating - 75) * 0.004, -SHOOTOUT_TAKER_EDGE_CAP, SHOOTOUT_TAKER_EDGE_CAP);
+}
+
+/* ---------- Round 782: the shootout, kick by kick ---------- */
+
+/** The most men a shootout order can name: the eleven. */
+export const SHOOTOUT_MAX_ORDER = 11;
+/** A kick's odds before anybody's rating moves them. Real world shootouts
+ *  convert about 75 to 78 kicks in a hundred. */
+export const SHOOTOUT_BASE_RATE = 0.76;
+/** Of the kicks that do not go in, the share the keeper gets a hand to. */
+const SHOOTOUT_SAVE_SHARE = 0.65;
+/** Sudden death cannot run for ever: past this many rounds one draw settles it. */
+const SHOOTOUT_MAX_ROUNDS = 50;
+
+/** What the keeper facing the kick is worth: the taker's rule, the other way, same cap. Zero with no keeper. */
+export function shootoutKeeperEdge(keeperRating: number | null | undefined): number {
+  if (keeperRating === null || keeperRating === undefined) return 0;
+  return clamp((keeperRating - 75) * 0.004, -SHOOTOUT_TAKER_EDGE_CAP, SHOOTOUT_TAKER_EDGE_CAP);
+}
+
+/** The odds one kick goes in: the base rate, up with the taker, down with the keeper, each inside the cap. */
+export function shootoutKickChance(taker: { rating: number } | null | undefined, keeperRating: number | null | undefined): number {
+  return SHOOTOUT_BASE_RATE + shootoutTakerEdge(taker) - shootoutKeeperEdge(keeperRating);
+}
+
+/**
+ * Who steps up, in order: the men the manager listed who are still on the
+ * pitch, in his order (anyone subbed off or sent off is skipped, a name
+ * listed twice counts once), then everyone on the pitch he did not list in
+ * shirt order, which is slot order, with the keeper last of those. The list
+ * cycles: kick k goes to entry k mod length, so sudden death walks the
+ * eleven round again. Pure, and the vitest in src/test covers the walk.
+ */
+export function shootoutTakerOrder(order: readonly string[] | undefined, onPitch: readonly string[], keeperId: string | null): string[] {
+  const out: string[] = [];
+  const on = new Set(onPitch);
+  for (const id of order ?? []) {
+    if (on.has(id) && !out.includes(id)) out.push(id);
+  }
+  const rest = onPitch.filter(id => !out.includes(id));
+  for (const id of rest) if (id !== keeperId) out.push(id);
+  if (keeperId && rest.includes(keeperId)) out.push(keeperId);
+  return out;
+}
+
+/** One side of a shootout: its takers in kicking order and the rating of the keeper facing the other side. */
+export interface ShootoutSide {
+  takers: { name: string; rating: number; gen?: boolean }[];
+  keeperRating: number | null;
+}
+
+/**
+ * The shootout itself, kick by kick: five each, over early once a side
+ * cannot be caught, then sudden death a pair at a time. Each kick is one
+ * draw against shootoutKickChance (the taker against the other keeper), and
+ * the same draw says whether a miss was saved or wide. `myFirst` is drawn by
+ * the caller so this stays replayable from a fixed stream.
+ */
+export function runShootout(args: { mine: ShootoutSide; theirs: ShootoutSide; myFirst: boolean }): ShootoutDetail {
+  const kicks: ShootoutKick[] = [];
+  let mine = 0;
+  let theirs = 0;
+  let takenMine = 0;
+  let takenTheirs = 0;
+  const over = (): boolean => {
+    if (takenMine < 5 || takenTheirs < 5) return mine + (5 - takenMine) < theirs || theirs + (5 - takenTheirs) < mine;
+    return takenMine === takenTheirs && mine !== theirs;
+  };
+  const kick = (side: 'me' | 'opp'): void => {
+    const us = side === 'me' ? args.mine : args.theirs;
+    const them = side === 'me' ? args.theirs : args.mine;
+    const n = side === 'me' ? takenMine : takenTheirs;
+    const taker = us.takers.length ? us.takers[n % us.takers.length] : { name: 'Taker', rating: 75 };
+    const p = shootoutKickChance(taker, them.keeperRating);
+    const r = Math.random();
+    const scored = r < p;
+    const result: ShootoutKick['result'] = scored ? 'scored' : r < p + (1 - p) * SHOOTOUT_SAVE_SHARE ? 'saved' : 'missed';
+    if (side === 'me') { takenMine += 1; if (scored) mine += 1; } else { takenTheirs += 1; if (scored) theirs += 1; }
+    kicks.push({ side, taker: taker.name, ...(taker.gen ? { gen: true } : {}), result, mine, theirs });
+  };
+  const first: 'me' | 'opp' = args.myFirst ? 'me' : 'opp';
+  const second: 'me' | 'opp' = args.myFirst ? 'opp' : 'me';
+  for (let round = 0; round < SHOOTOUT_MAX_ROUNDS; round++) {
+    kick(first);
+    if (over()) break;
+    kick(second);
+    if (over()) break;
+  }
+  if (mine === theirs) {
+    /* Fifty rounds level is not a thing that happens; one draw ends it rather than looping. */
+    if (Math.random() < 0.5) mine += 1; else theirs += 1;
+  }
+  return { kicks, mine, theirs };
+}
+
+/** The order as the engine reads it: the saved list when it names anybody, else null and the old one draw shootout. */
+export function shootoutOrderOf(state: CareerState): string[] | null {
+  const o = state.shootoutOrder;
+  if (!Array.isArray(o)) return null;
+  const ids = o.filter((id): id is string => typeof id === 'string');
+  return ids.length ? ids : null;
+}
+
+/**
+ * Set the shootout order, or clear it with an empty list (the field goes,
+ * so the save is exactly what it was before an order was ever set). Null
+ * back when a name is not in the squad or is out on loan. Names listed
+ * twice count once, and the list is held to the eleven. Pure.
+ */
+export function setShootoutOrder(career: CareerState, ids: readonly string[]): CareerState | null {
+  const out: string[] = [];
+  for (const id of ids) {
+    const p = career.squad.find(x => x.id === id);
+    if (!p || p.onLoan) return null;
+    if (!out.includes(id)) out.push(id);
+    if (out.length >= SHOOTOUT_MAX_ORDER) break;
+  }
+  const state: CareerState = JSON.parse(JSON.stringify(career));
+  if (out.length) state.shootoutOrder = out; else delete state.shootoutOrder;
+  return state;
+}
+
+/**
+ * Settles a shootout at the whistle. With no order set this is the one draw
+ * it has always been, the same expression on the same stream, so a save
+ * without the field plays exactly as it did before Round 782 (the harness
+ * replays a frozen fixture to hold that). With an order set it goes kick by
+ * kick: my men in shootoutTakerOrder over the eleven that finished, theirs
+ * their best eleven on the pitch by rating with the keeper last, each kick
+ * read against the keeper facing it, and who kicks first is one draw.
+ */
+function settleShootout(
+  state: CareerState, live: LiveMatch, fx: MyFixture, finished: XiSlot[], mine: number, oppS: number, end: number,
+): { won: boolean; detail?: ShootoutDetail } {
+  const taker = assignedOnPitch(state.setPieces, 'penalties', men(finished));
+  const order = shootoutOrderOf(state);
+  if (!order) return { won: Math.random() < clamp(0.5 + (mine - oppS) * 0.012 + shootoutTakerEdge(taker), 0.2, 0.8) };
+  const myKeeper = finished.find(x => x.p.position === 'GK')?.p ?? finished[0]?.p ?? null;
+  const onIds = finished.map(x => x.p.id);
+  const myTakers = squadByIds(state, shootoutTakerOrder(order, onIds, myKeeper?.id ?? null))
+    .map(p => ({ name: p.name, rating: p.rating }));
+  /* Theirs: the eleven still out there, or the projected roster for a side
+     with no named eleven tonight; best first, the keeper last. */
+  const onPitch = oppAt(live, end);
+  const theirs: { n: string; p: Position; r: number; g?: boolean }[] = onPitch && onPitch.length
+    ? onPitch
+    : [...oppRosterFor(state, fx.opponent)].sort((a, b) => b.r - a.r).slice(0, SHOOTOUT_MAX_ORDER);
+  const oppKeeper = theirs.find(p => p.p === 'GK') ?? null;
+  const oppTakers = [...theirs.filter(p => p !== oppKeeper)].sort((a, b) => b.r - a.r);
+  if (oppKeeper) oppTakers.push(oppKeeper);
+  const detail = runShootout({
+    mine: { takers: myTakers, keeperRating: myKeeper?.rating ?? null },
+    theirs: {
+      takers: oppTakers.length
+        ? oppTakers.map(p => ({ name: p.n, rating: p.r, ...(p.g ? { gen: true } : {}) }))
+        : Array.from({ length: SHOOTOUT_MAX_ORDER }, (_, i) => ({ name: `Their taker ${i + 1}`, rating: oppS })),
+      keeperRating: oppKeeper?.r ?? (theirs.length ? null : oppS),
+    },
+    myFirst: Math.random() < 0.5,
+  });
+  return { won: detail.mine > detail.theirs, detail };
 }
 
 /**
@@ -13658,6 +13845,9 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
   let decidedBy: 'regular' | 'aet' | 'pens' = 'regular';
   /* Round 507: who won the shootout, kept apart from who won the night. */
   let shootoutWon: boolean | null = null;
+  /* Round 782: the kicks, only when the manager had set an order. */
+  let shootoutKicks: ShootoutDetail | undefined;
+  const lastMinute = live.et ? live.et.to : 90;
   let won = myGoals > oppGoals;
   let drawn = myGoals === oppGoals;
   let advanced = won;
@@ -13679,8 +13869,10 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
     };
     if (out.winner === null) {
       decidedBy = 'pens';
-      const taker = assignedOnPitch(state.setPieces, 'penalties', men(finished));
-      advanced = Math.random() < clamp(0.5 + (mine - oppS) * 0.012 + shootoutTakerEdge(taker), 0.2, 0.8);
+      /* Round 782: one draw as before, or kick by kick with an order set. */
+      const so = settleShootout(state, live, fx, finished, mine, oppS, lastMinute);
+      advanced = so.won;
+      shootoutKicks = so.detail;
       /* Round 507, corrected after the review of the first correction. The
          shootout's result is carried in its OWN field and `won` is left as the
          night's result, because on a two legged tie those are different things
@@ -13703,9 +13895,11 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
     tieLine = { ...tieLine, through: advanced };
   } else if (isKnockout && drawn) {
     decidedBy = 'pens';
-    /* Round 505: the assigned penalty taker, when he finished the match, moves the odds a bounded touch. */
-    const taker = assignedOnPitch(state.setPieces, 'penalties', men(finished));
-    const penWin = Math.random() < clamp(0.5 + (mine - oppS) * 0.012 + shootoutTakerEdge(taker), 0.2, 0.8);
+    /* Round 505: the assigned penalty taker, when he finished the match, moves the odds a bounded touch.
+       Round 782: or, with a shootout order set, it goes kick by kick. */
+    const so = settleShootout(state, live, fx, finished, mine, oppS, lastMinute);
+    const penWin = so.won;
+    shootoutKicks = so.detail;
     /* A single leg tie IS the match, so reclassifying the night here is right
        and is long standing behaviour: the game was drawn, and a shootout win
        counts as a win in the form guide and the record. */
@@ -13754,8 +13948,9 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
     events.push(tieLine ? `⏱️ Still level ${tieLine.aggMine}-${tieLine.aggTheirs} on aggregate after extra time.` : '⏱️ Still level after extra time.');
   }
   if (decidedBy === 'pens') {
-    /* The shootout, not the night. */
-    events.push((shootoutWon ?? won) ? '🥅 Nerves of steel. You win the shootout.' : '🥅 Heartbreak from the spot: shootout defeat.');
+    /* The shootout, not the night. Round 782: with the kicks played, the count. */
+    const count = shootoutKicks ? ` ${shootoutKicks.mine}-${shootoutKicks.theirs}` : '';
+    events.push((shootoutWon ?? won) ? `🥅 Nerves of steel. You win the shootout${count}.` : `🥅 Heartbreak from the spot: shootout defeat${count}.`);
   }
 
   /* ----- competition bookkeeping + other results ----- */
@@ -14459,6 +14654,7 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
     otherResults,
     detail,
     ...(tieLine ? { tie: tieLine } : {}),
+    ...(shootoutKicks ? { shootout: shootoutKicks } : {}),
   };
 }
 
