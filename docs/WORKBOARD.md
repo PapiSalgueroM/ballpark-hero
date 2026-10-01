@@ -1,5 +1,144 @@
 # Work board
 
+**2026-10-01, Codex811 scope addendum: fresh Nation hint count.**
+Actual Board inspection found that ResultScreen's Play Again calls resetGame,
+which clears the puzzle but leaves the Board's hintsUsed counter alive. A new
+round can therefore display the previous round's count. Extend only the already-
+owned Nation Board reset callback to clear its local counter with the original
+reset action, after reproducing the two-round behavior. Keep the hook, mode
+selection and scoring unchanged. Add the small lifecycle regression and effective
+old-callback control before the final combined capture. Next free 814.
+
+Full live raw-HTML audit completed: 167 of 168 planned routes pass canonical,
+response, content and indexability checks. Only /aussie-rules-manager still serves
+the home document because its accepted new route is not published. No unexpected
+noindex found in this audit, but this does not establish Google's index status.
+Receipt: C:/Users/antho/AppData/Local/Temp/dukb-live-all-indexability-20261001.log.
+
+**2026-10-01, Codex810 ACCEPTED: MLB reveal callbacks belong to their round.**
+Mode and Hard resets now cancel the owned reveal timer. A generation check rejects
+old callbacks, and unmount clears the timer. Restarting can no longer inherit an
+abandoned guess's points/round, or have a newer reveal cut short. Original pairs,
+RNG calls, ties, 2000ms reveal, immediate daily saves and scoring stay unchanged.
+
+Ten real-hook outcomes and eight effective copied controls pass, including exact
+ten-round Daily and Unlimited 325-point baselines and tracked timer cancellation.
+Independent review is clear. The merged type/build/all artifact gates and full
+NoDoubleRecord pass, resolving the prior MLB teardown symptom on this new scope.
+Two final production App contexts pass 263 checks with the original 55-player
+bank and untouched JS. Native picks, abandoned mode/Hard resets, overlapping old
+and new reveals, all ten exact saves, full share, one locally fulfilled guest POST,
+local plays 1/points 325 and quiet reload pass. No errors or observed overflow.
+Three exact SELECT-only RPC POSTs are locally fulfilled as reads; all unrelated
+POSTs remain rejected. Earlier selector/RPC-classification attempts are retained
+without acceptance credit. Source/assets held; browser/server stopped, screenshots
+inspected. Receipts: C:/Users/antho/AppData/Local/Temp/
+dukb-round810-mlb-reveal-diagnosis/builder-receipt.json, app-report.json,
+app-cleanup.json and app-final.txt. No publication claim.
+807/809/810 are accepted; 811-813 proceed. Next free 814.
+
+**2026-10-01, Codex809 ACCEPTED: truthful player-search failures.**
+Empty lookups with a failed applicable request now show a retry message instead
+of claiming no player exists. Useful direct, fallback and local results keep
+their original ranking and exact selection. Cleared or replaced searches cancel
+and invalidate pending requests, so stale rows cannot return. No database changes.
+
+All 11 new and 37 existing identity/interaction tests pass, with seven effective
+copied controls and independent original outcomes. Eight native contexts and
+three browser copies pass after strengthening current-response readiness. Two
+final production Puck Detective contexts use untouched JS and 220 fictional GET
+fixture rows satisfying the original pool floor. Each checks three failed lookup
+paths without spending a guess, then exact nonfirst selection/clue feedback/one
+daily save and quiet reload. Twelve actions have no Y change or overflow; retry
+text is fully visible in 44px rows. Errors and outward writes are zero. Sources,
+HTML and assets held; browser/server stopped and phone screenshot inspected.
+
+Combined types/build/all 15 artifact guards and affected regressions passed in
+the frozen 807 gate. Original 413-suite accented lookup failure remains historical
+with unknown HTTP cause; this fix addresses the independently reproduced hidden
+request failure. Receipts: C:/Users/antho/AppData/Local/Temp/
+dukb-round809-final-source-receipt.json, dukb-round809-native/report.json,
+dukb-round809-production-app/report.json and cleanup.json.
+810 acceptance follows; 811-813 continue. Next free 814.
+
+Publishing update: Lovable was found available but not installed in this session;
+installation was suggested without interrupting code work. The desktop Edge
+attempt could not reliably select the existing Lovable tab: first geometry was
+unavailable, then the refreshed element was missing from cached app state.
+No publish or account action occurred. Live still needs a verified publish.
+
+**2026-10-01, Codex807 ACCEPTED: accurate F1 Driver clues, hints and help.**
+Hint buttons show the original next payout, counters report the actual hint count,
+and numbered clue headings replace incorrect categories without changing a clue.
+The existing help dialog now returns focus to its 44px opener without scrolling
+and includes a fictional worked example using the original payout constants.
+All original gameplay, data, scoring, saves, full share and booking remain held.
+
+Ten focused outcomes, the ten original feedback outcomes and seven effective
+copied controls pass. Native checks cover eight contexts and four copies. The
+combined 807/809/810 physical gate passes real types, both builds, the F1 three-
+clock capture, all 24 selected node harnesses and boot, including all 15 artifact
+guards and the full NoDoubleRecord check. All 1800 raw source inputs held. All
+188 saved pages' content and all 168 URL hashes/dates held; only F1 HTML and sitemap
+line endings normalized inside the fixture, so no generated root files change.
+
+Two final production App contexts pass 119 checks using untouched JS and authored
+data. Phone one-hint win scores 800, reduced desktop mixed guesses/hints scores
+200. Exact save/full share, one locally fulfilled real guest POST, quiet reload,
+native Escape/Close focus return, finite/static feedback and no page movement pass.
+Phone help and win screenshots inspected. Browser/server stopped, source/assets
+held. No publication or Google decision claim. Receipts:
+C:/Users/antho/AppData/Local/Temp/dukb-round807-builder-receipt.json,
+dukb-round807-production-app/report.json and cleanup.json,
+dukb-round807-production-20261001/production807-preservation-receipt.json.
+Final entry index-LS2DIDXT.js, SHA256
+f013068e618fd3c8f9be0d4719bd3336f3395eb027b37fe8ab1d8836d79a86c3.
+809/810 finish App checks; 811/812/813 are claimed. Next free 814.
+
+**2026-10-01, Codex811 CLAIMED: accurate hint points in three clue games.**
+Own only F1ConstructorBoard.tsx, TennisPlayerBoard.tsx and GuessTheNationBoard.tsx,
+plus a focused test and sim. Constructor and Tennis still advertise a flat
+100-point hint cost despite their original 1000/800/600/400/200/100 ladder.
+Nation's button already calculates its varying cost, but its hint counter falsely
+multiplies every hint by 100. Show original next payout where needed and an honest
+hint count. Preserve all hooks, authored clue labels, data, scores and saves.
+This is a small copy correction; verify actual payouts and mixed hint/miss paths.
+No new animation or search changes belong to this claim.
+
+**2026-10-01, Codex812 CLAIMED: NASCAR committed answer feedback and hint points.**
+Own only NascarDriverBoard.tsx, one local feedback CSS module and focused test/sim.
+The Board currently schedules wrong feedback from the pre-guess playing state,
+including after a correct answer. Follow the accepted Driver outcome pattern:
+one finite response to an actual appended guess, quiet restores and resets,
+static reduced motion, full submitted names and truthful next hint payout.
+Keep the original NASCAR clue_labels beside their original clues. Preserve the
+original hook, bank, search, rules, scoring, daily save/share and completion.
+Verify actual success/miss/give-up/reset behavior and mobile result rendering.
+
+**2026-10-01, Codex813 CLAIMED: remaining Higher/Lower reveal timer ownership.**
+Inspect and reproduce the MLB reset defect in useAflHL.ts, useCfbHL.ts, useF1HL.ts,
+useGolfHL.ts, useHockeyHL.ts, useNbaHL.ts, useNflHL.ts and useTennisHL.ts before edits.
+Own only those hooks plus one table-driven focused test/sim. Each currently
+schedules an unowned reveal callback. Apply the small accepted MLB cancellation
+and generation check only where the actual original hook reproduces stale points,
+round skips, truncated newer reveals or a surviving unmount callback. Preserve
+each game's original data/pairs/RNG, ties, timing, scores, save/share and booking.
+No product abstraction, data or database changes. Measure independent full-game
+baselines per hook and effective copied controls for the changed behavior.
+
+Claims pushed before implementation. Root owns Git, docs and production builds;
+agents own disjoint files. 807/809/810 finish their frozen production App checks.
+All Claude reservations stand. Next free 814.
+
+Fresh live check at 2026-10-01 15:52 UTC: home, F1 Driver and Rank Em return 200,
+self canonicals and no noindex. They still serve index-jsexOB8y.js, the earlier
+published release; live sitemap has 167 URLs versus 168 in the repo. ads.txt has
+the expected publisher. Automated Lovable browser has no project access while
+logged out, and no deploy_project tool is available in this session. The user's
+desktop browser session has not been inspected. Git pushes are not publication
+or a Google approval/indexing decision. Receipt:
+C:/Users/antho/AppData/Local/Temp/dukb-live-index-check-20261001.json.
+
 **2026-10-01, Codex808 regression harness repairs ACCEPTED.**
 College reads its unique final verdict instead of the namesake-selection helper.
 The actual key/copy checks pass, all eight original controls still fire, and two

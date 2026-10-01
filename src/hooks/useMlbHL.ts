@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback } from 'react';
+import { useState, useMemo, useCallback, useEffect, useRef } from 'react';
 import { mlbHLPlayers, MlbHLPlayer } from '@/data/mlbHLPlayers';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { higherLowerScore } from '@/lib/higherLowerScore';
@@ -86,6 +86,14 @@ export function useMlbHL() {
 
   const [currentResult, setCurrentResult] = useState<RoundResult | null>(null);
   const [showingResult, setShowingResult] = useState(false);
+  const revealTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const revealVersion = useRef(0);
+  const cancelReveal = useCallback(() => {
+    revealVersion.current += 1;
+    if (revealTimer.current !== null) clearTimeout(revealTimer.current);
+    revealTimer.current = null;
+  }, []);
+  useEffect(() => cancelReveal, [cancelReveal]);
 
   const [unlimitedPairs, setUnlimitedPairs] = useState<[MlbHLPlayer, MlbHLPlayer][]>(
     () => buildPairs(Math.floor(Math.random() * 100000), hard),
@@ -159,7 +167,11 @@ export function useMlbHL() {
 
       if (mode === 'daily') addDailyAction({ t: 'result', correct });
 
-      setTimeout(() => {
+      cancelReveal();
+      const version = revealVersion.current;
+      revealTimer.current = setTimeout(() => {
+        if (version !== revealVersion.current) return;
+        revealTimer.current = null;
         if (mode !== 'daily') {
           setUnlimitedResults((prev) => [...prev, { player1: p1, player2: p2, correct }]);
           setUnlimitedRound((prev) => prev + 1);
@@ -168,10 +180,11 @@ export function useMlbHL() {
         setShowingResult(false);
       }, 2000);
     },
-    [currentPair, showingResult, gameStatus, mode, addDailyAction],
+    [currentPair, showingResult, gameStatus, mode, addDailyAction, cancelReveal],
   );
 
   const switchMode = useCallback((m: MlbHLMode) => {
+    cancelReveal();
     if (m === 'unlimited') {
       setUnlimitedPairs(buildPairs(Math.floor(Math.random() * 100000), hard));
       setUnlimitedResults([]);
@@ -180,9 +193,10 @@ export function useMlbHL() {
     setMode(m);
     setCurrentResult(null);
     setShowingResult(false);
-  }, [hard]);
+  }, [hard, cancelReveal]);
 
   const toggleHard = useCallback(() => {
+    cancelReveal();
     setHard((prev) => {
       const next = !prev;
       // Hard pairs are an unlimited-mode feature, switching keeps the
@@ -195,7 +209,7 @@ export function useMlbHL() {
       setShowingResult(false);
       return next;
     });
-  }, []);
+  }, [cancelReveal]);
 
   useGameCompletion('mlb-higher-lower', rawDailyStatus !== 'playing', dailyScore);
 
