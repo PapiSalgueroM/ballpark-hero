@@ -29,7 +29,7 @@
     "date": "2026-09-19"
   },
   "/baseball": {
-    "hash": "8be52ea4f5113286",
+    "hash": "99c4cd497d0938ad",
     "date": "2026-10-01"
   },
   "/baseball-career": {
@@ -37,8 +37,8 @@
     "date": "2026-10-01"
   },
   "/baseball-connections": {
-    "hash": "2904a008c5a5be25",
-    "date": "2026-09-30"
+    "hash": "8998a74929dd67c6",
+    "date": "2026-10-01"
   },
   "/budget-builder": {
     "hash": "7c578d5f75459bcd",
@@ -289,12 +289,12 @@
     "date": "2026-09-30"
   },
   "/missing-five": {
-    "hash": "ea46ccb9d1d8c4f3",
-    "date": "2026-09-30"
+    "hash": "72817b73a29dcf46",
+    "date": "2026-10-01"
   },
   "/missing-nine": {
-    "hash": "d35786a6a8afe8d4",
-    "date": "2026-09-30"
+    "hash": "b9c21e0cbc6b5daa",
+    "date": "2026-10-01"
   },
   "/missing-xi": {
     "hash": "b629f7790fb2c8d9",
@@ -305,8 +305,8 @@
     "date": "2026-09-30"
   },
   "/mlb-front-office": {
-    "hash": "60ea283fdc68f0f6",
-    "date": "2026-09-30"
+    "hash": "ff3910fe8e1a2d0c",
+    "date": "2026-10-01"
   },
   "/mlb-gauntlet-draft": {
     "hash": "6d7b1704a460571e",
@@ -349,8 +349,8 @@
     "date": "2026-09-30"
   },
   "/nba-connect-4": {
-    "hash": "5185e37f109887b7",
-    "date": "2026-09-30"
+    "hash": "a952582602b53965",
+    "date": "2026-10-01"
   },
   "/nba-connections": {
     "hash": "2f988d991a283e5e",
@@ -385,8 +385,8 @@
     "date": "2026-09-30"
   },
   "/nba-starting-5": {
-    "hash": "ac07ce147e75f75d",
-    "date": "2026-09-30"
+    "hash": "ad16a2506e03948a",
+    "date": "2026-10-01"
   },
   "/nba-stat-line": {
     "hash": "5e9ed5bd99ff174d",
@@ -461,20 +461,20 @@
     "date": "2026-10-01"
   },
   "/perfect-season-mlb": {
-    "hash": "484c1d3ed81e5e52",
-    "date": "2026-09-30"
+    "hash": "37a814f238fbf0ed",
+    "date": "2026-10-01"
   },
   "/perfect-season-nba": {
-    "hash": "22863800cf770255",
+    "hash": "0ee640b6dd5873b7",
     "date": "2026-10-01"
   },
   "/perfect-season-nfl": {
-    "hash": "c75606b9da743212",
-    "date": "2026-09-30"
+    "hash": "ff3676c24a1778cd",
+    "date": "2026-10-01"
   },
   "/perfect-season-nhl": {
-    "hash": "62c9774279b27a7d",
-    "date": "2026-09-30"
+    "hash": "40b6b5c47b36b0a6",
+    "date": "2026-10-01"
   },
   "/player-bingo": {
     "hash": "618b428c631226ce",
@@ -653,7 +653,7 @@
     "date": "2026-09-19"
   },
   "/whats-new": {
-    "hash": "1f28159ac69cca46",
+    "hash": "974423a47a0e4b71",
     "date": "2026-10-01"
   },
   "/who-am-i": {
