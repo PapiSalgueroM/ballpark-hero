@@ -1,5 +1,28 @@
 # Project state
 
+## IN PROGRESS 2026-10-01: guide records after verified gameplay corrections
+
+804 adds an explicit generated refresh for already converted/frozen guides, so
+accepted NHL control instructions and the corrected F1 score can update their
+original-text records without weakening the guide checks. Other entries stay held;
+802 refreshes only its own rank-em record when frozen. Whole guard/negative controls
+and invalid-route refusal remain required.801's types/build/all15 artifact gates
+pass and final native/App proof continues.802/803 build in parallel. The immutable
+413 run continues against its older captured records. Next free805.
+
+## ACCEPTED 2026-10-01: Emoji Guess feedback and keyboard flow
+
+800 adds truthful committed feedback, finite/static motion, full readable answers,
+44px owned controls and safe input/Next/Share handoffs. Original actual daily puzzles,
+scores/saves/share/completion stay held. Nine positives/thirteen unit controls,
+eight strengthened native contexts/four defect controls, real types/two builds,
+three-clock saved-page capture/all15 artifact fences and two actual App contexts
+pass. Exact receipts and the corrected isolated prerender run are on WORKBOARD.
+Only Emoji Guess's saved page/derived URL row changed;187 other raw saved pages
+and167 other URL hashes/dates stay held.801 production and802/803 builders continue;
+the frozen413 regression remains running. Publication/Google decisions remain due.
+Next free804; all Claude reservations stand.
+
 ## IN PROGRESS 2026-10-01: Name Them All readable feedback
 
 803 claims the isolated ListQuiz Page/module/test/harness. Replace color-only hit
