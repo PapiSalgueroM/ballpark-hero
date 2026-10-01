@@ -108,6 +108,15 @@
  *     handlabel  the shared board goes back to printing a label only for the
  *                decider, the way it did before this round, read in memory,
  *                and the screens check must fire.
+ *   Three more from the round's review, same rules:
+ *     oldpens    decidedNote keys the decider label on decidedIn instead of
+ *                wonOnPens, so every run played today still reads right and
+ *                every daily saved before the round loses its label; the
+ *                save check must fire.
+ *     soccerline the soccer result line (matchLine in gauntletDraft.ts)
+ *                works the note out and drops it; the words check must fire.
+ *     pageline   the soccer page builds its own result line again, without
+ *                the note, read in memory; the screens check must fire.
  * Every control refuses to run when the text it rewrites is not in the
  * source, so a control can never pass by changing nothing.
  *
@@ -126,7 +135,7 @@ const CONTROL = process.env.SIM_GAUNTLET_ENGINE_CONTROL || '';
 /* Round 724: the lineup law controls and the section 2 checks each must fire. */
 const LAW_CONTROLS = { anyfit: ['fit'], nogoalie: ['shape', 'fit'], wingonly: ['shape', 'reach'], narrowfit: ['reach'] };
 /* Round 826: the settled controls and the section 9 check each must fire. */
-const SETTLED_CONTROLS = { nolabel: ['label'], noline: ['words'], handlabel: ['screens'] };
+const SETTLED_CONTROLS = { nolabel: ['label'], noline: ['words'], handlabel: ['screens'], oldpens: ['save'], soccerline: ['words'], pageline: ['screens'] };
 if (CONTROL && !['flatdeal', 'blindload', 'badscore', 'invented', 'keepdefault', 'forkedsave', ...Object.keys(LAW_CONTROLS), ...Object.keys(SETTLED_CONTROLS)].includes(CONTROL)) {
   console.error(`SIM_GAUNTLET_ENGINE_CONTROL=${CONTROL} is not a control this harness knows`);
   process.exit(1);
@@ -190,6 +199,13 @@ function patchedEngineBundle(control) {
     needle = "  if (m.decidedIn === 'extra') return m.won ? config.extraTime.won : config.extraTime.lost;\n";
     replacement = '';
     describe = 'decidedNote drops the extra time words in a bundled copy of gauntletEngine.ts, and the section 9 words check must go red';
+  } else if (control === 'oldpens') {
+    /* Round 826 review. The tidy looking refactor that keys the decider label
+       on the new record instead of on wonOnPens: every run played today still
+       reads right, and every daily saved before this round loses its label. */
+    needle = '  if (m.wonOnPens !== null) return m.wonOnPens ? config.tiebreak.won : config.tiebreak.lost;\n';
+    replacement = "  if (m.decidedIn === 'decider') return m.wonOnPens ? config.tiebreak.won : config.tiebreak.lost;\n";
+    describe = 'decidedNote keys the decider label on decidedIn in a bundled copy of gauntletEngine.ts, so a daily saved before Round 826 loses it, and the section 9 save check must go red';
   } else {
     needle = 'if (!consistent) return null;';
     replacement = 'if (!consistent && false) return null;';
@@ -942,16 +958,20 @@ function poolSports(rows, nfl, mlb, nhl) {
               reference wrote down as it happened.
      words    the note every screen prints (decidedNote, and soccer's
               matchNote) is exactly the sport's words below for that phase
-              and that result, nothing for regulation; and for the four
-              shared board sports the result line ends with that note.
+              and that result, nothing for regulation; and in all five sports
+              the result line (the shared matchLine, soccer's own matchLine)
+              ends with that note.
      save     a daily with an extra time match reads back byte identical; a
               daily saved before this round (no decidedIn anywhere) loads as
-              it always did and prints no new label; a record whose decidedIn
-              is unknown or disagrees with its score is refused.
+              it always did and prints exactly what it printed before, the
+              decider's label where wonOnPens says so and no new one, on the
+              note and on the result line; a record whose decidedIn is unknown
+              or disagrees with its score is refused.
      screens  the soccer page and the shared board print the note through
-              the one function, read off their code with the comments
-              stripped, and neither keeps a hand written decider only label
-              (the shape that hid this bug).
+              the one function and the line through the imported matchLine,
+              read off their code with the comments stripped, and neither
+              keeps a hand written decider only label (the shape that hid
+              this bug) or a result line of its own.
 
    SETTLED_WORDS is each sport's language, written here by hand and never
    read off the config under test, the way LINEUP_LAW is: a check that read
@@ -979,7 +999,7 @@ const SETTLED_FLOOR = { extra: 40, decider: 80 };
 function settledSports(gd, POOL, playerRating, statics) {
   return [
     { label: 'Soccer', rounds: gd.GAUNTLET_ROUNDS, ratingOf: playerRating, nameOf: p => p.name,
-      draft: seed => gd.buildDraft(POOL, seed), run: squad => gd.runGauntlet(squad), noteOf: m => gd.matchNote(m), lineOf: null,
+      draft: seed => gd.buildDraft(POOL, seed), run: squad => gd.runGauntlet(squad), noteOf: m => gd.matchNote(m), lineOf: m => gd.matchLine(m),
       save: (date, run) => gd.saveDailyRun(date, run), load: date => gd.loadDailyRun(date), key: date => `gauntlet-draft-daily-${date}` },
     ...statics.map(([label, config]) => {
       const e = config.__engine;
@@ -1056,7 +1076,21 @@ function section9(sports) {
     else {
       if (JSON.stringify(old) !== JSON.stringify(withoutHow(sample.run))) note('save', `${sp.label}: a daily saved before Round 826 did not load as it was saved`);
       if (old.matches.some(m => 'decidedIn' in m)) note('save', `${sp.label}: a daily saved before Round 826 came back with a decidedIn it never had`);
-      if (old.matches.some(m => m.wonOnPens === null && sp.noteOf(m) !== null)) note('save', `${sp.label}: a daily saved before Round 826 prints a label for a match it has no record of`);
+      /* Round 826 review: an old daily prints exactly what it printed before
+         the round, the decider's label where wonOnPens says so and nothing
+         else, on the note and on the result line. Checking only the nothing
+         else half let a refactor that keys the decider label on decidedIn
+         strip it from every old daily with this section green (oldpens). */
+      let oldDeciders = 0;
+      for (const m of old.matches) {
+        const want = m.wonOnPens === null ? null : `${m.wonOnPens ? 'Won' : 'Lost'} ${words.decider}`;
+        if (want !== null) oldDeciders += 1;
+        const got = sp.noteOf(m);
+        if (got !== want) note('save', `${sp.label}: a daily saved before Round 826 prints ${JSON.stringify(got)} for ${m.round.name} ${m.yourGoals}-${m.theirGoals}, it printed ${JSON.stringify(want)} before the round`);
+        const tail = want === null ? `v ${m.round.opp}` : `v ${m.round.opp}, ${want.toLowerCase()}`;
+        if (!sp.lineOf(m).endsWith(tail)) note('save', `${sp.label}: a daily saved before Round 826 has the result line "${sp.lineOf(m)}", which does not end "${tail}"`);
+      }
+      if (oldDeciders === 0) fail(`${sp.label}: the old daily reached no decider, so the check that it keeps its decider label measured nothing`);
     }
     const ei = sample.extraIndex;
     const bad = [
@@ -1082,14 +1116,17 @@ function section9(sports) {
      wonOnPens is not read at all any more, which is the decider only label
      this round replaced. */
   /* The counts are the calls each file makes today: the soccer page twice on
-     its running card (the test and the text) and once in its own result
-     line; the board twice on its running card and matchLine twice (the share
-     grid and the result list). */
+     its running card (the test and the text) and matchLine twice (the share
+     grid and the result list); the board twice on its running card and
+     matchLine twice. The soccer page's matchLine must be the one imported
+     from src/lib/gauntletDraft.ts, which the words check above runs, never a
+     line the page builds itself where no runtime check can reach it
+     (pageline). */
   const screens = [
-    ['src/pages/GauntletDraft.tsx', [['matchNote(m)', 3]]],
-    ['src/components/gauntlet/GauntletBoard.tsx', [['decidedNote(config, m)', 2], ['matchLine(config, m)', 2]]],
+    ['src/pages/GauntletDraft.tsx', [['matchNote(m)', 2], ['matchLine(m)', 2]], 'gauntletDraft'],
+    ['src/components/gauntlet/GauntletBoard.tsx', [['decidedNote(config, m)', 2], ['matchLine(config, m)', 2]], 'gauntletEngine'],
   ];
-  for (const [file, calls] of screens) {
+  for (const [file, calls, lib] of screens) {
     let src = fs.readFileSync(`${ROOT}/${file}`, 'utf8').replace(/\r\n/g, '\n');
     if (CONTROL === 'handlabel' && file.endsWith('GauntletBoard.tsx')) {
       const from = '{decidedNote(config, m) && <p className="text-xs text-muted-foreground">{decidedNote(config, m)}</p>}';
@@ -1098,12 +1135,21 @@ function section9(sports) {
       src = src.replace(from, to);
       console.log('NEGATIVE CONTROL ON: the shared board prints a label for the decider only, read in memory, and the section 9 screens check must go red');
     }
+    if (CONTROL === 'pageline' && file.endsWith('GauntletDraft.tsx')) {
+      const from = "  const dailyDone = phase === 'setup' && loadDailyRun(todayStr) !== null;\n";
+      const to = from + "  const matchLine = (m: GauntletRun['matches'][number]) => `${m.round.name}: ${m.yourGoals}-${m.theirGoals} v ${m.round.opp}`;\n";
+      if (src.split(from).length - 1 !== 1) { console.error('control run: the pageline needle is not in GauntletDraft.tsx exactly once, refusing to run a dead control'); process.exit(1); }
+      src = src.replace(from, to);
+      console.log('NEGATIVE CONTROL ON: the soccer page builds its own result line again and leaves the note off, read in memory, and the section 9 screens check must go red');
+    }
     const code = codeOf(src);
     for (const [call, times] of calls) {
       const used = code.split(call).length - 1;
       if (used < times) note('screens', `${file} calls ${call} ${used} time(s), where the screens it draws need ${times}`);
     }
     if (/\bwonOnPens\b/.test(code)) note('screens', `${file} still reads wonOnPens itself, a decider only label beside the one function`);
+    if (/\b(?:const|let|var|function)\s+matchLine\b/.test(code)) note('screens', `${file} builds its own matchLine, which no runtime check here runs`);
+    if (!new RegExp(`import\\s*\\{[^}]*\\bmatchLine\\b[^}]*\\}\\s*from\\s*'@/lib/${lib}'`).test(code)) note('screens', `${file} does not import matchLine from src/lib/${lib}.ts, the line the words check runs`);
   }
 
   if (counts.outcome) fail(`${counts.outcome} run(s) moved or the references disagree, first: ${firsts.outcome}`);
@@ -1121,7 +1167,7 @@ async function main() {
   if (SETTLED_CONTROLS[CONTROL]) {
     const before = failures;
     let sportsMod, soccerMod;
-    if (CONTROL === 'handlabel') {
+    if (CONTROL === 'handlabel' || CONTROL === 'pageline' || CONTROL === 'soccerline') {
       sportsMod = await bundle(`
 export { NBA_GAUNTLET_CONFIG } from '${ROOT}/src/lib/gauntletDraftNba.ts';
 export { NFL_GAUNTLET_CONFIG } from '${ROOT}/src/lib/gauntletDraftNfl.ts';
@@ -1129,8 +1175,20 @@ export { MLB_GAUNTLET_CONFIG } from '${ROOT}/src/lib/gauntletDraftMlb.ts';
 export { NHL_GAUNTLET_CONFIG } from '${ROOT}/src/lib/gauntletDraftNhl.ts';
 export * as engine from '${ROOT}/src/lib/gauntletEngine.ts';
 `, CONTROL);
+      let soccerPath = `${ROOT}/src/lib/gauntletDraft.ts`;
+      if (CONTROL === 'soccerline') {
+        /* Round 826 review: the soccer result line works the note out and
+           then drops it, so the result list and the share text lose the label
+           while the running card keeps it. */
+        const src = fs.readFileSync(soccerPath, 'utf8').replace(/\r\n/g, '\n');
+        const needle = "+ (note ? `, ${note.toLowerCase()}` : '')";
+        if (src.split(needle).length - 1 !== 1) { console.error('control run: the soccerline needle is not in src/lib/gauntletDraft.ts exactly once, refusing to run a dead control'); process.exit(1); }
+        soccerPath = `${TMP}/gauntletDraft.${CONTROL}.ts`;
+        fs.writeFileSync(soccerPath, src.replace(needle, "+ (note ? '' : '')"));
+        console.log('NEGATIVE CONTROL ON: the soccer result line drops the note in a bundled copy of gauntletDraft.ts, and the section 9 words check must go red');
+      }
       soccerMod = await bundle(`
-export * as gd from '${ROOT}/src/lib/gauntletDraft.ts';
+export * as gd from '${soccerPath}';
 export { players as POOL } from '${ROOT}/src/data/players.ts';
 export { playerRating } from '${ROOT}/src/lib/squadDeal.ts';
 `, `${CONTROL}.soccer`);

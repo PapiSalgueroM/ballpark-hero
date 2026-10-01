@@ -16,7 +16,7 @@ import { FlagImg } from '@/components/FlagImg';
 import { Player } from '@/types/game';
 import {
   GAUNTLET_ROUNDS, GauntletDraft as DraftShape, GauntletRun,
-  buildDraft, dailyDraftSeed, loadDailyRun, matchNote, runGauntlet, saveDailyRun, squadRatingOf,
+  buildDraft, dailyDraftSeed, loadDailyRun, matchLine, matchNote, runGauntlet, saveDailyRun, squadRatingOf,
 } from '@/lib/gauntletDraft';
 
 /**
@@ -136,13 +136,6 @@ export default function GauntletDraft() {
 
   const pick = draft && phase === 'drafting' ? draft.picks[pickIndex] : null;
   const dailyDone = phase === 'setup' && loadDailyRun(todayStr) !== null;
-
-  /* Round 826: extra time gets its label too. Before, a game won by the one
-     extra time goal read as a plain 2-1 in ninety minutes. */
-  const matchLine = (m: GauntletRun['matches'][number]) => {
-    const note = matchNote(m);
-    return `${m.round.name}: ${m.yourGoals}-${m.theirGoals} v ${m.round.opp}` + (note ? `, ${note.toLowerCase()}` : '');
-  };
 
   return (
     <>

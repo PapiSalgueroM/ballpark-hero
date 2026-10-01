@@ -171,6 +171,15 @@ export function matchNote(m: GauntletMatch): string | null {
   return decidedNote(soccerConfig([]), m);
 }
 
+/** Round 826: one match as a line of text, for the soccer page's result list
+ *  and share grid: the goals as played plus how it was settled. It lives here
+ *  rather than in the page so scripts/simGauntletEngine.mjs runs the very
+ *  line the page prints, the way it runs the shared board's matchLine. */
+export function matchLine(m: GauntletMatch): string {
+  const note = matchNote(m);
+  return `${m.round.name}: ${m.yourGoals}-${m.theirGoals} v ${m.round.opp}` + (note ? `, ${note.toLowerCase()}` : '');
+}
+
 /**
  * Round 428: the one attempt a day, kept. The page saves the finished run
  * under `gauntlet-draft-daily-${date}` (src/lib/dailyRecord.ts) the moment
