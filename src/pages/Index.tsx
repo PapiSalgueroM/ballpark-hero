@@ -285,11 +285,14 @@ export default function Index() {
                     ("DoUKnowBall: free daily sports trivia, puzzles and career
                     sims", from src/data/homeCopy.ts) is read by screen readers
                     and renderers, so the one h1 Google indexes says what the
-                    site is. sr-only is absolutely positioned, so the row and
-                    every tile under it stay exactly where they were. */}
+                    site is. Hidden the visually hidden way but kept INLINE:
+                    the absolutely positioned sr-only made the browser read
+                    the h1 as "DoUKnowBall : free..." with a stray break, which
+                    is what a renderer's innerText saw. A 1px clipped inline
+                    box with its pixel given back moves nothing in the row. */}
                 <h1 className="font-display text-2xl font-bold leading-none tracking-tight text-primary md:text-[40px]">
                   {HOME_COPY.brand}
-                  <span className="sr-only">{HOME_COPY.h1.slice(HOME_COPY.brand.length)}</span>
+                  <span className="-mr-px inline-block h-px w-px overflow-hidden whitespace-nowrap [clip-path:inset(50%)]">{HOME_COPY.h1.slice(HOME_COPY.brand.length)}</span>
                 </h1>
                 {/* Stats: PERSONAL stats, signed-in only (owner 2026-08-05).
                     Streak = consecutive days, played = today's count, plus

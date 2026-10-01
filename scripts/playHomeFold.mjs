@@ -65,7 +65,10 @@ const FOLD_CONTROL = process.env.HOMEFOLD_CONTROL || '';
    appears (the second 6b goes red, and 6c with it, since the cards it reads
    are gone), favignored wipes the stored sport before the app reads it (only
    6e goes red). Measured 2026-09-30, each exactly that. */
-const FOLD_CONTROLS = ['notehome', 'notegone', 'h1text', 'continuepush', 'continuegone', 'favignored'];
+/* Round 840's h1shown: the moment the app draws its h1, every element inside
+   it loses its classes, so the hidden half of the h1 shows on screen; only
+   the "shows exactly the name" check in section 1 may go red. */
+const FOLD_CONTROLS = ['notehome', 'notegone', 'h1text', 'h1shown', 'continuepush', 'continuegone', 'favignored'];
 if (FOLD_CONTROL && !FOLD_CONTROLS.includes(FOLD_CONTROL)) {
   console.error(`HOMEFOLD_CONTROL=${FOLD_CONTROL} is not a control this harness knows (${FOLD_CONTROLS.join(', ')})`);
   process.exit(2);
@@ -88,6 +91,19 @@ async function look(width, height) {
       const mo = new MutationObserver(() => {
         const h = document.querySelector('#dukb-main h1');
         if (h && !h.dataset.controlled) { h.dataset.controlled = '1'; h.append(' Home'); mo.disconnect(); }
+      });
+      mo.observe(document, { childList: true, subtree: true });
+    });
+  }
+  if (FOLD_CONTROL === 'h1shown') {
+    await page.addInitScript(() => {
+      const mo = new MutationObserver(() => {
+        const h = document.querySelector('#dukb-main h1');
+        if (h && h.children.length && !h.dataset.controlled) {
+          h.dataset.controlled = '1';
+          for (const el of h.querySelectorAll('*')) el.removeAttribute('class');
+          mo.disconnect();
+        }
       });
       mo.observe(document, { childList: true, subtree: true });
     });
@@ -163,8 +179,29 @@ async function look(width, height) {
         return spans.length > 1 ? spans[spans.length - 1] : null;
       })
       .filter(t => t && t.length > 6);
-    /* Round 658: the h1, read as the page renders it. */
-    const h1s = [...document.querySelectorAll('h1')].map(h => (h.innerText || h.textContent || '').trim());
+    /* Round 658: the h1, read as the page renders it. Round 840: read twice,
+       whole (what a renderer and a screen reader get) and as SHOWN, the text
+       nodes whose box is not visually hidden. Hidden is a shape, not a class
+       name: a box at most 1 by 1 with its overflow hidden, or clipped away. */
+    const shownText = root => {
+      let out = '';
+      const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+      for (let node = walker.nextNode(); node; node = walker.nextNode()) {
+        let hidden = false;
+        for (let el = node.parentElement; el && el !== root.parentElement; el = el.parentElement) {
+          const cs = getComputedStyle(el);
+          const r = el.getBoundingClientRect();
+          if ((r.width <= 1 && r.height <= 1 && cs.overflow === 'hidden') || cs.clip === 'rect(0px, 0px, 0px, 0px)' || cs.clipPath === 'inset(50%)') { hidden = true; break; }
+        }
+        if (!hidden) out += node.nodeValue;
+      }
+      return out.replace(/\s+/g, ' ').trim();
+    };
+    const h1s = [...document.querySelectorAll('h1')].map(h => ({
+      text: (h.innerText || h.textContent || '').replace(/\s+/g, ' ').trim(),
+      shown: shownText(h),
+      inApp: !!h.closest('#dukb-main'),
+    }));
     return { first, prompts, subtitles, viewport: vh, tickerPresent, h1s };
   }, { nonGameSrc: NON_GAME.source, vh: height });
   await ctx.close();
@@ -188,9 +225,16 @@ console.log('1) a phone sees something to play, high enough to see it');
     `${r.prompts.length} place(s) above it ask for an account (max ${MAX_PROMPTS}) | ${r.prompts.join(' | ') || 'none'}`);
   /* Round 658: the redesign moved the h1 into a compact title row, and the
      owner's headline is the name, nothing else ("hero headline is too long",
-     2026-08-28). Exactly one h1, and its text is exactly the name. */
-  say(r.h1s.length === 1 && r.h1s[0] === 'DoUKnowBall',
-    `the page has one h1 and it reads exactly "DoUKnowBall" (${JSON.stringify(r.h1s)})`);
+     2026-08-28). Round 840: Google indexes the rendered page, and an h1 that
+     says only a name tells it nothing, so the h1 READS the template's
+     wording (src/data/homeCopy.ts) while it still SHOWS exactly the name.
+     Exactly one h1, drawn by the app, both halves held. */
+  const tplH1 = (fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8').match(/<h1>([^<]{20,200})<\/h1>/) ?? [])[1] ?? '';
+  if (tplH1.length < 20) say(false, 'could not read the h1 out of index.html, so the h1 check below would prove nothing');
+  say(r.h1s.length === 1 && r.h1s[0].inApp && r.h1s[0].text === tplH1,
+    `the page has one h1, drawn by the app, and it reads the template's ${JSON.stringify(tplH1)} (${JSON.stringify(r.h1s.map(h => h.text))})`);
+  say(r.h1s.length === 1 && r.h1s[0].shown === 'DoUKnowBall',
+    `on screen the h1 shows exactly "DoUKnowBall" (${JSON.stringify(r.h1s.map(h => h.shown))})`);
 }
 
 console.log('2) desktop, same rule');

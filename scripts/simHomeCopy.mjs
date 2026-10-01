@@ -101,7 +101,7 @@ const DRIFT_TO = 'international call-ups, the works.';
 const homeCopySrc = controlled('moduledrift', readFileSync(path.join(ROOT, 'src/data/homeCopy.ts'), 'utf8'), DRIFT_FROM, DRIFT_TO);
 let indexBundled = readFileSync(path.join(ROOT, 'src/pages/Index.tsx'), 'utf8');
 indexBundled = controlled('nosection', indexBundled, '<HomeAbout />', '');
-indexBundled = controlled('h1brand', indexBundled, '<span className="sr-only">{HOME_COPY.h1.slice(HOME_COPY.brand.length)}</span>', '');
+indexBundled = controlled('h1brand', indexBundled, '{HOME_COPY.h1.slice(HOME_COPY.brand.length)}', '');
 
 /* One bundle: the registry, the copy module, and a server render of the home
    page. The supabase client is a stub that answers every call with itself:
