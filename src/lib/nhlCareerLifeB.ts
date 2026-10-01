@@ -14,7 +14,7 @@
  */
 
 import type { NhlCareerState, NhlCareerEvent } from './nhlMyCareer';
-import { nhlTeamLabelOf, nhlEraTeamIds } from './nhlMyCareer';
+import { nhlTeamLabelOf, nhlEraTeamIds, nhlEraById } from './nhlMyCareer';
 
 /** Round 59 life fields are not on NhlCareerState yet, so read them through here. */
 type LifeState = NhlCareerState & {
@@ -30,6 +30,15 @@ const L = (c: NhlCareerState): LifeState => c as LifeState;
 const clamp = (n: number, lo: number, hi: number): number => Math.max(lo, Math.min(hi, n));
 const m1 = (n: number): number => Math.round(n * 10) / 10;
 const m2 = (n: number): number => Math.round(n * 100) / 100;
+/** Round 833: a fixed amount on a contract card (a deal, a floor, a pay cut,
+ *  an offer abroad), in the career's era money. A 2006-07 career was offered
+ *  2026 money on every one of these, and a "pay cut" with a 1M floor raised a
+ *  0.6M salary to 1M. Scale 1 in 2026, so a 2026 career reads the same
+ *  numbers. Era read inside the call, never at module scope. */
+const atEra = (c: NhlCareerState, amount: number): number => m1(nhlEraById(c.eraId).moneyScale * amount);
+/** A pay cut of `by`, floored at the era's 1M, and never a raise: the floor
+ *  used to lift a salary under it, so "down 0.4M" could pay more. */
+const payCut = (c: NhlCareerState, by: number): number => Math.min(c.salary, Math.max(atEra(c, 1), m1(c.salary - by)));
 
 function addNet(c: NhlCareerState, amt: number): number {
   const l = L(c);
@@ -151,7 +160,7 @@ export function getNhlLifeEventsB(c: NhlCareerState, rng: () => number): NhlCare
         {
           label: 'Hand him the whole file',
           effect: 'Blood over billing',
-          apply: (cc) => { const before = cc.salary; cc.salary = Math.max(1, m1(cc.salary - 0.4)); mood(cc, 8); return `He negotiated with his whole heart and left 0.4M on the table. Salary ${before}M down to ${cc.salary}M, morale +8, best Christmas of his life.`; },
+          apply: (cc) => { const before = cc.salary; const left = atEra(cc, 0.4); cc.salary = payCut(cc, left); mood(cc, 8); return `He negotiated with his whole heart and left ${left}M on the table. Salary ${before}M down to ${cc.salary}M, morale +8, best Christmas of his life.`; },
         },
         {
           label: 'Give him the marketing, keep the agent',
@@ -176,7 +185,7 @@ export function getNhlLifeEventsB(c: NhlCareerState, rng: () => number): NhlCare
         {
           label: 'Tell your agent: home or nothing',
           effect: 'Narrow the market',
-          apply: (cc) => { mood(cc, 7); cc.salary = Math.max(1, m1(cc.salary - 0.8)); flag(cc, 'homeList'); return `You cut your list to four teams within a four hour drive. Morale +7, projected salary down 0.8M to ${cc.salary}M.`; },
+          apply: (cc) => { mood(cc, 7); const cut = atEra(cc, 0.8); cc.salary = payCut(cc, cut); flag(cc, 'homeList'); return `You cut your list to four teams within a four hour drive. Morale +7, projected salary down ${cut}M to ${cc.salary}M.`; },
         },
         {
           label: 'Fly her out every month instead',
@@ -1079,8 +1088,8 @@ export function getNhlLifeEventsB(c: NhlCareerState, rng: () => number): NhlCare
   /* ================= 7. CONTRACT AND CAREER FORKS ================= */
 
   if (c.contractYears <= 1 && c.age <= 27 && yrs >= 2) {
-    const bridge = Math.max(1.2, m1((c.ovr - 66) * 0.42));
-    const long = Math.max(2, m1((c.ovr - 66) * 0.58));
+    const bridge = Math.max(atEra(c, 1.2), atEra(c, (c.ovr - 66) * 0.42));
+    const long = Math.max(atEra(c, 2), atEra(c, (c.ovr - 66) * 0.58));
     const mid = m1((bridge + long) / 2);
     deck.push({
       id: 'nhlB_bridgeOrEightYear',
@@ -1107,46 +1116,51 @@ export function getNhlLifeEventsB(c: NhlCareerState, rng: () => number): NhlCare
   }
 
   if (c.contractYears <= 1 && yrs >= 5) {
+    const noMove = atEra(c, 0.9);
+    const tenTeam = atEra(c, 0.3);
+    const noClause = atEra(c, 0.6);
     deck.push({
       id: 'nhlB_noTradeClause',
       title: 'The no trade clause fight',
-      body: 'They will give you the money or the clause, not both. A full no move costs you 0.9M a year. A ten team list costs 0.3M.',
+      body: `They will give you the money or the clause, not both. A full no move costs you ${noMove}M a year. A ten team list costs ${tenTeam}M.`,
       options: [
         {
           label: 'Full no move clause',
           effect: 'Control your life',
-          apply: (cc) => { cc.salary = Math.max(1, m1(cc.salary - 0.9)); cc.contractYears = 4; mood(cc, 9); flag(cc, 'noMove'); return `Signed 4 years at ${cc.salary}M with a full no move. Morale +9, and nobody moves your family without your signature.`; },
+          apply: (cc) => { cc.salary = payCut(cc, noMove); cc.contractYears = 4; mood(cc, 9); flag(cc, 'noMove'); return `Signed 4 years at ${cc.salary}M with a full no move. Morale +9, and nobody moves your family without your signature.`; },
         },
         {
           label: 'Ten team list, take the money',
           effect: 'Mostly protected',
-          apply: (cc) => { cc.salary = Math.max(1, m1(cc.salary - 0.3)); cc.contractYears = 4; mood(cc, 5); flag(cc, 'tenTeamList'); return `Signed 4 years at ${cc.salary}M with a ten team list. Morale +5, mostly safe, mostly.`; },
+          apply: (cc) => { cc.salary = payCut(cc, tenTeam); cc.contractYears = 4; mood(cc, 5); flag(cc, 'tenTeamList'); return `Signed 4 years at ${cc.salary}M with a ten team list. Morale +5, mostly safe, mostly.`; },
         },
         {
           label: 'No clause, maximum cash',
           effect: 'Pure money',
-          apply: (cc) => { cc.salary = m1(cc.salary + 0.6); cc.contractYears = 4; mood(cc, -3); return `Signed 4 years at ${cc.salary}M with zero protection. Morale -3, and a phone that could ring any deadline.`; },
+          apply: (cc) => { cc.salary = m1(cc.salary + noClause); cc.contractYears = 4; mood(cc, -3); return `Signed 4 years at ${cc.salary}M with zero protection. Morale -3, and a phone that could ring any deadline.`; },
         },
       ],
     });
   }
 
   if (c.contractYears <= 1 && c.age >= 28 && c.cups === 0) {
-    const market = Math.max(2, m1((c.ovr - 66) * 0.55));
+    const market = Math.max(atEra(c, 2), atEra(c, (c.ovr - 66) * 0.55));
+    const room = atEra(c, 4.5);
+    const rebuild = m1(market + atEra(c, 2));
     deck.push({
       id: 'nhlB_takeLessToChase',
       title: 'Take less to chase one',
-      body: `The contender has 4.5M of room and you are worth ${market}M. The rebuilding club offered ${m1(market + 2)}M and a letter on your jersey.`,
+      body: `The contender has ${room}M of room and you are worth ${market}M. The rebuilding club offered ${rebuild}M and a letter on your jersey.`,
       options: [
         {
           label: 'Take the discount, chase the Cup',
           effect: 'Ring hunting',
-          apply: (cc) => { cc.salary = 4.5; cc.contractYears = 3; mood(cc, 10); fans(cc, 10); flag(cc, 'hometownDiscount'); return `Signed 3 years at 4.5M and left ${m1(market - 4.5)}M a year on the table. Morale +10, fanbase +10.`; },
+          apply: (cc) => { cc.salary = room; cc.contractYears = 3; mood(cc, 10); fans(cc, 10); flag(cc, 'hometownDiscount'); return `Signed 3 years at ${room}M and left ${m1(market - room)}M a year on the table. Morale +10, fanbase +10.`; },
         },
         {
           label: 'Take the money and the letter',
           effect: 'Be the guy',
-          apply: (cc, r) => { const nt = otherTeam(cc, r); cc.team = nt; cc.salary = m1(market + 2); cc.contractYears = 4; mood(cc, 6); cc.fanbase = 42; return `Signed 4 years at ${cc.salary}M with ${nhlTeamLabelOf(nt)} and a letter. Morale +6, fanbase resets to 42, ${m1((market + 2) * 4)}M guaranteed.`; },
+          apply: (cc, r) => { const nt = otherTeam(cc, r); cc.team = nt; cc.salary = rebuild; cc.contractYears = 4; mood(cc, 6); cc.fanbase = 42; return `Signed 4 years at ${cc.salary}M with ${nhlTeamLabelOf(nt)} and a letter. Morale +6, fanbase resets to 42, ${m1(rebuild * 4)}M guaranteed.`; },
         },
         {
           label: 'One year prove it deal',
@@ -1158,6 +1172,8 @@ export function getNhlLifeEventsB(c: NhlCareerState, rng: () => number): NhlCare
   }
 
   if (c.age >= 32) {
+    const khl = atEra(c, 5.5);
+    const swiss = atEra(c, 3.2);
     deck.push({
       id: 'nhlB_overseasMegaOffer',
       title: 'The offer from overseas',
@@ -1166,17 +1182,17 @@ export function getNhlLifeEventsB(c: NhlCareerState, rng: () => number): NhlCare
         {
           label: 'Take the KHL money for a year',
           effect: 'Cash and a passport',
-          apply: (cc) => { const nw = addNet(cc, 5.5); cc.earnings = m1(cc.earnings + 5.5); cc.ovr = Math.max(60, cc.ovr - 3); hp(cc, 8); fans(cc, -10); flag(cc, 'playedOverseas'); return `5.5M tax free and an apartment with a view of a river you cannot pronounce. Net worth ${nw}M, rating -3 to ${cc.ovr}, health +8, fanbase -10.`; },
+          apply: (cc) => { const nw = addNet(cc, khl); cc.earnings = m1(cc.earnings + khl); cc.ovr = Math.max(60, cc.ovr - 3); hp(cc, 8); fans(cc, -10); flag(cc, 'playedOverseas'); return `${khl}M tax free and an apartment with a view of a river you cannot pronounce. Net worth ${nw}M, rating -3 to ${cc.ovr}, health +8, fanbase -10.`; },
         },
         {
           label: 'Take the Swiss deal, easier league',
           effect: 'Alps and paychecks',
-          apply: (cc) => { const nw = addNet(cc, 3.2); cc.earnings = m1(cc.earnings + 3.2); cc.ovr = Math.max(60, cc.ovr - 1); hp(cc, 12); mood(cc, 10); fans(cc, -6); flag(cc, 'playedOverseas', 2); return `3.2M, mountain air and 50 game seasons. Net worth ${nw}M, rating -1 to ${cc.ovr}, health +12, morale +10, fanbase -6.`; },
+          apply: (cc) => { const nw = addNet(cc, swiss); cc.earnings = m1(cc.earnings + swiss); cc.ovr = Math.max(60, cc.ovr - 1); hp(cc, 12); mood(cc, 10); fans(cc, -6); flag(cc, 'playedOverseas', 2); return `${swiss}M, mountain air and 50 game seasons. Net worth ${nw}M, rating -1 to ${cc.ovr}, health +12, morale +10, fanbase -6.`; },
         },
         {
           label: 'Stay, finish it in this league',
           effect: 'Legacy over cash',
-          apply: (cc) => { mood(cc, 7); fans(cc, 9); cc.salary = Math.max(1, m1(cc.salary * 0.7)); cc.contractYears = 2; return `Signed 2 more years at ${cc.salary}M to finish where people know your name. Morale +7, fanbase +9.`; },
+          apply: (cc) => { mood(cc, 7); fans(cc, 9); cc.salary = Math.min(cc.salary, Math.max(atEra(cc, 1), m1(cc.salary * 0.7))); cc.contractYears = 2; return `Signed 2 more years at ${cc.salary}M to finish where people know your name. Morale +7, fanbase +9.`; },
         },
       ],
     });
@@ -1201,7 +1217,7 @@ export function getNhlLifeEventsB(c: NhlCareerState, rng: () => number): NhlCare
         {
           label: 'Waive only if they extend you',
           effect: 'Leverage the favor',
-          apply: (cc) => { cc.contractYears += 2; cc.salary = m1(cc.salary + 0.4); mood(cc, 6); return `Two extra years and 0.4M more a year for one signature. Contract now ${cc.contractYears} years at ${cc.salary}M, morale +6.`; },
+          apply: (cc) => { const more = atEra(cc, 0.4); cc.contractYears += 2; cc.salary = m1(cc.salary + more); mood(cc, 6); return `Two extra years and ${more}M more a year for one signature. Contract now ${cc.contractYears} years at ${cc.salary}M, morale +6.`; },
         },
       ],
     });

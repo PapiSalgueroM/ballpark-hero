@@ -17,7 +17,7 @@
    module scope. nbaTeamLabelOf is only ever called inside a function body.
    ========================================================================== */
 import type { NbaCareerState, NbaCareerEvent } from './nbaMyCareer';
-import { nbaEraById, nbaEraTeamIds, nbaTeamLabelOf } from './nbaMyCareer';
+import { nbaEraById, nbaEraTeamIds, nbaTeamLabelOf, nbaMarketSalary } from './nbaMyCareer';
 
 /** Round 833: the first offseason the supermax could be offered (the 2017
  *  CBA; sources at the card below). Compared against the career's year when
@@ -43,6 +43,10 @@ const L = (c: NbaCareerState): LifeState => c as LifeState;
 
 const clamp = (v: number): number => Math.max(0, Math.min(100, v));
 const money = (x: number): number => Math.round(x * 10) / 10;
+/** Round 833: a fixed amount on a contract card (a pay floor, the minimum,
+ *  an offer), in the career's era money. Scale 1 in 2026. Era read inside the
+ *  call, never at load (import cycle). */
+const atEra = (c: NbaCareerState, amount: number): number => money(nbaEraById(c.eraId).moneyScale * amount);
 
 const flag = (c: NbaCareerState, k: string): number => (L(c).lifeFlags || {})[k] || 0;
 const setFlag = (c: NbaCareerState, k: string, v: number) => { L(c).lifeFlags = { ...(L(c).lifeFlags || {}), [k]: v }; };
@@ -1423,8 +1427,8 @@ export function getNbaLifeEventsB(c: NbaCareerState, rng: () => number): NbaCare
   }
 
   if (yrs >= 5 && c.contractYears <= 0 && c.rings === 0 && c.age >= 28 && flag(c, 'nb_ringChase') === 0) {
-    const discount = money(Math.max(2.5, c.salary * 0.55));
-    const bag = money(Math.max(4, c.salary * 1.3));
+    const discount = money(Math.max(atEra(c, 2.5), c.salary * 0.55));
+    const bag = money(Math.max(atEra(c, 4), c.salary * 1.3));
     deck.push({
       id: 'nbaB_contenderDiscount',
       title: 'One piece away, for a lot less money',
@@ -1450,7 +1454,7 @@ export function getNbaLifeEventsB(c: NbaCareerState, rng: () => number): NbaCare
           label: 'One year prove it with the contender', effect: 'Split the difference',
           apply: (cc, r) => {
             setFlag(cc, 'nb_ringChase', 3);
-            const nt = otherTeam(cc, r); cc.team = nt; cc.salary = money(Math.max(3, cc.salary * 0.8)); cc.contractYears = 1; cc.fanbase = 48; bumpMorale(cc, 8);
+            const nt = otherTeam(cc, r); cc.team = nt; cc.salary = money(Math.max(atEra(cc, 3), cc.salary * 0.8)); cc.contractYears = 1; cc.fanbase = 48; bumpMorale(cc, 8);
             return `One year, ${money(cc.salary)}M, with ${nbaTeamLabelOf(nt)}. Win in June and you get paid twice. Morale +8, fanbase reset to 48.`;
           },
         },
@@ -1459,8 +1463,12 @@ export function getNbaLifeEventsB(c: NbaCareerState, rng: () => number): NbaCare
   }
 
   if (yrs >= 3 && c.contractYears === 1 && flag(c, 'nb_option') === 0) {
-    const opt = money(Math.max(2.5, c.salary));
-    const market = money(Math.max(2.5, (c.ovr - 66) * 2.3 - 6));
+    /* Round 833: the market here is the engine's own (era money and the
+       position's pay), the one free agency pays; it was a private copy of it
+       in 2026 money, and the 2.5M floors were 2026 money too, so a 2003-04
+       career picking up a 1.2M option was handed 2.5M. */
+    const opt = money(Math.max(atEra(c, 2.5), c.salary));
+    const market = money(Math.max(atEra(c, 2.5), nbaMarketSalary(c)));
     deck.push({
       id: 'nbaB_playerOption',
       title: `The player option is ${opt}M`,
@@ -1478,7 +1486,7 @@ export function getNbaLifeEventsB(c: NbaCareerState, rng: () => number): NbaCare
           apply: (cc, r) => {
             setFlag(cc, 'nb_option', 2);
             if (r() < 0.55) { cc.salary = market; cc.contractYears = 4; bumpMorale(cc, 12); bumpFan(cc, 6); return `Four years at ${market}M within 40 hours of the market opening. Morale +12, fanbase +6.`; }
-            cc.salary = money(Math.max(2.5, market * 0.6)); cc.contractYears = 2; bumpMorale(cc, -9);
+            cc.salary = money(Math.max(atEra(cc, 2.5), market * 0.6)); cc.contractYears = 2; bumpMorale(cc, -9);
             return `The money dried up in one weekend. Two years at ${money(cc.salary)}M. Morale -9, and your agent stopped answering group texts.`;
           },
         },
@@ -1525,32 +1533,38 @@ export function getNbaLifeEventsB(c: NbaCareerState, rng: () => number): NbaCare
   }
 
   if (yrs >= 8 && (c.age >= 34 || c.ovr <= 72) && flag(c, 'nb_overseas') === 0) {
+    /* Round 833: the offer, the minimum and the leverage floor in the era's
+       money; a 2003-04 career was offered 12M of 2026 money abroad and paid a
+       2026 minimum at home. Scale 1 in 2026, the same numbers as before. */
+    const offer = atEra(c, 12);
+    const minimum = atEra(c, 2.5);
+    const leverage = atEra(c, 6);
     deck.push({
       id: 'nbaB_overseasMegaOffer',
-      title: '12M tax free to play in another hemisphere',
-      body: 'A club overseas offered 12M for one season, a private jet clause and a translator who is also, apparently, your driver. The NBA offers you the minimum and a locker by the door.',
+      title: `${offer}M tax free to play in another hemisphere`,
+      body: `A club overseas offered ${offer}M for one season, a private jet clause and a translator who is also, apparently, your driver. The NBA offers you the minimum and a locker by the door.`,
       options: [
         {
-          label: 'Take the 12M and go', effect: 'Money and passport stamps',
+          label: `Take the ${offer}M and go`, effect: 'Money and passport stamps',
           apply: (cc) => {
-            setFlag(cc, 'nb_overseas', 1); earn(cc, 12); bumpFan(cc, -9); bumpMorale(cc, 8); bumpHealth(cc, -3);
-            return '12M banked, 38 points a night in a league nobody at home watches, and 40 hours a month on planes. Fanbase -9, morale +8, health -3.';
+            setFlag(cc, 'nb_overseas', 1); earn(cc, offer); bumpFan(cc, -9); bumpMorale(cc, 8); bumpHealth(cc, -3);
+            return `${offer}M banked, 38 points a night in a league nobody at home watches, and 40 hours a month on planes. Fanbase -9, morale +8, health -3.`;
           },
         },
         {
           label: 'Stay for the minimum with a contender', effect: 'Ring over money',
           apply: (cc) => {
-            setFlag(cc, 'nb_overseas', 2); cc.salary = 2.5; cc.contractYears = 1; bumpMorale(cc, 11); bumpFan(cc, 9);
-            return 'You turned down 12M for 2.5M and 14 minutes a night on a team that can actually win. Morale +11, fanbase +9.';
+            setFlag(cc, 'nb_overseas', 2); cc.salary = minimum; cc.contractYears = 1; bumpMorale(cc, 11); bumpFan(cc, 9);
+            return `You turned down ${offer}M for ${minimum}M and 14 minutes a night on a team that can actually win. Morale +11, fanbase +9.`;
           },
         },
         {
           label: 'Use it as leverage with your agent', effect: 'Play both sides',
           apply: (cc, r) => {
             setFlag(cc, 'nb_overseas', 3);
-            if (r() < 0.45) { cc.salary = money(Math.max(6, cc.salary)); cc.contractYears = 2; bumpMorale(cc, 9); bumpFan(cc, 4); return `The offer got faxed around and somebody blinked. Two years at ${money(cc.salary)}M. Morale +9, fanbase +4.`; }
-            cc.salary = 2.5; cc.contractYears = 1; bumpMorale(cc, -7); bumpFan(cc, -2);
-            return 'Nobody blinked, the overseas club moved on, and you signed for 2.5M on the last day of August. Morale -7, fanbase -2.';
+            if (r() < 0.45) { cc.salary = money(Math.max(leverage, cc.salary)); cc.contractYears = 2; bumpMorale(cc, 9); bumpFan(cc, 4); return `The offer got faxed around and somebody blinked. Two years at ${money(cc.salary)}M. Morale +9, fanbase +4.`; }
+            cc.salary = minimum; cc.contractYears = 1; bumpMorale(cc, -7); bumpFan(cc, -2);
+            return `Nobody blinked, the overseas club moved on, and you signed for ${minimum}M on the last day of August. Morale -7, fanbase -2.`;
           },
         },
       ],

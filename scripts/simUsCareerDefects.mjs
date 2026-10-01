@@ -14,6 +14,12 @@
  *     and both, with the NFL franchise tag, pay the era's money.
  *   src/test/usCareerShopCap.test.ts     the five shop rating items stop at
  *     potential, forced at the ceiling and in 300 seeded careers a sport.
+ *   src/test/usCareerEraLifeMoney.test.ts (review) every contract card in
+ *     the eight life decks pays the career's era money: the same career in
+ *     2026 and in the throwback era draws the same cards, and every option on
+ *     both sides of every coin leaves the throwback's salary at the era scale
+ *     of the 2026 one (about 78,000 outcomes over 299 cards). The NFL tags
+ *     read the game's own pay by position.
  *
  * NEGATIVE CONTROLS, SIM_US_CAREER_CONTROL=...
  *
@@ -29,6 +35,10 @@
  *                the era's money scale.
  *   shoppot      the four engines with the old Math.min(99, ovr + n) put back
  *                in every rating item.
+ *   lifemoney    (review) the NFL and MLB decks with their private 2026 market
+ *                copies put back, the NBA and NHL decks with the era scale
+ *                taken out of their fixed amounts. Measured on the pre review
+ *                decks: all four sports red, and the kicker holdout red.
  *
  *   Each control writes a patched COPY under .sim-control (gitignored), after
  *   asserting that every string it rewrites occurs exactly once in the real
@@ -61,7 +71,7 @@ import { fileURLToPath } from 'node:url';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const control = process.env.SIM_US_CAREER_CONTROL || '';
-const CONTROLS = ['oldstatline', 'rpbatting', 'oldbullets', 'supermaxera', 'qoera', 'unscaled', 'shoppot'];
+const CONTROLS = ['oldstatline', 'rpbatting', 'oldbullets', 'supermaxera', 'qoera', 'unscaled', 'shoppot', 'lifemoney'];
 assert.ok(control === '' || CONTROLS.includes(control), `SIM_US_CAREER_CONTROL=${control} is not one of ${CONTROLS.join(', ')}`);
 
 /* vitest lives in the nearest node_modules up the tree, so this runs from the
@@ -81,6 +91,16 @@ function findVitest() {
 const STAT_TEST = 'src/test/usCareerStatLines.test.tsx';
 const ERA_TEST = 'src/test/usCareerEraCards.test.ts';
 const SHOP_TEST = 'src/test/usCareerShopCap.test.ts';
+const LIFE_MONEY_TEST = 'src/test/usCareerEraLifeMoney.test.ts';
+
+/* The private market copies the review replaced, verbatim, for lifemoney. */
+const OLD_NFL_MARKET = [
+  'const marketOf = (c: CareerState): number => {',
+  "  const mult = c.pos === 'QB' ? 1.9 : c.pos === 'WR' ? 1.15 : 0.9;",
+  '  return Math.max(1.2, Math.round(((c.ovr - 64) * 1.55 - 6) * mult * 10) / 10);',
+  '};',
+].join('\n');
+const OLD_MLB_MARKET = 'const marketOf = (c: MlbCareerState): number => Math.max(1, money((c.ovr - 64) * 1.5 - 6));';
 
 const norm = s => s.split('\r\n').join('\n');
 
@@ -160,6 +180,17 @@ const PLANS = {
     mustFail: [/waits for the 2017 offseason/, /waits for the offseason after the 2012 season/, /pays 2005 money in a 2005 career/],
     mustPass: [/never reaches a seeded 2003-04 career before 2017/],
   },
+  lifemoney: {
+    test: LIFE_MONEY_TEST,
+    files: {
+      'src/lib/nflCareerLifeA.ts': [['const marketOf = (c: CareerState): number => marketSalary(c);', OLD_NFL_MARKET]],
+      'src/lib/mlbCareerLifeB.ts': [['const marketOf = (c: MlbCareerState): number => mlbMarketSalary(c);', OLD_MLB_MARKET]],
+      'src/lib/nbaCareerLifeB.ts': [['money(nbaEraById(c.eraId).moneyScale * amount);', 'money(amount);']],
+      'src/lib/nhlCareerLifeB.ts': [['m1(nhlEraById(c.eraId).moneyScale * amount);', 'm1(amount);']],
+    },
+    mustFail: [/'nfl': same cards/, /'nba': same cards/, /'mlb': same cards/, /'nhl': same cards/, /never calls a kicker paid his market underpaid/],
+    mustPass: [/tags an 80 rated kicker on kicker money/],
+  },
   shoppot: {
     test: SHOP_TEST,
     files: {
@@ -211,7 +242,7 @@ try {
     env.NO_DOUBLE_SWAP = JSON.stringify(swap);
     console.log(`   NEGATIVE CONTROL ON: ${control} (${Object.keys(swap).join(', ')})`);
   }
-  const files = plan ? [plan.test] : [STAT_TEST, ERA_TEST, SHOP_TEST];
+  const files = plan ? [plan.test] : [STAT_TEST, ERA_TEST, SHOP_TEST, LIFE_MONEY_TEST];
   const run = spawnSync(process.execPath, [findVitest(), 'run', ...files, '--reporter=verbose'], {
     cwd: root, env, encoding: 'utf8', timeout: 600000, maxBuffer: 64 * 1024 * 1024,
   });
@@ -227,7 +258,7 @@ try {
     for (const line of output.split('\n')) if (/^\s*console\.log|drawable|seeded careers came/.test(line)) console.log('   ' + line.trim());
     assert.equal(run.status, 0, `the round's tests are red\n${tail}`);
     assert.equal(failed, 0);
-    assert.equal(passed, 151, `expected 151 tests (117 stat line, 9 era, 25 shop), saw ${passed}\n${tail}`);
+    assert.equal(passed, 157, `expected 157 tests (117 stat line, 9 era, 25 shop, 6 life money), saw ${passed}\n${tail}`);
     console.log(`simUsCareerDefects: ${passed} tests passed across the stat lines, the era cards and the shop cap.`);
   } else {
     for (const line of output.split('\n')) if (/drawable|seeded careers came/.test(line)) console.log('   ' + line.trim());

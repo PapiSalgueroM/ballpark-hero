@@ -111,11 +111,13 @@ describe('MLB qualifying offer', () => {
     const took = eligible('y2004', 2013);
     offered!.options[0].apply(took, mulberry32(3));
     expect(took.salary).toBe(9);
-    /* The market side of the card is the era's money too: the unscaled
-       extension came to 24.2M at this rating. */
+    /* The market side of the card is the era's money too, and since the
+       review it is the engine's own market (mlbMarketSalary: the shortstop's
+       1.2 and the 0.43 scale, 13.2M), so the extension is 13.2 * 0.95. The
+       unscaled copy it replaced paid 24.2M at this rating. */
     const extended = eligible('y2004', 2013);
     offered!.options[2].apply(extended, mulberry32(3));
-    expect(extended.salary).toBeLessThan(12);
+    expect(extended.salary).toBe(12.5);
   });
 
   it('is unchanged in a 2026 career', () => {
