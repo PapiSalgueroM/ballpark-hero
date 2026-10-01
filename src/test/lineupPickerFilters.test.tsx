@@ -9,7 +9,7 @@ vi.mock('@/hooks/useGameCompletion', () => ({ useGameCompletion: vi.fn() }));
 
 interface FixturePlayer { name: string; pos: string; rating: number; team: string; era: string; country: string }
 const configFor = (dimensionKeys = ['team', 'era', 'country']): LineupConfig<FixturePlayer> => ({
-  gameId: 'fixture-lineup', gameName: 'Fixture Lineup', gamePath: '/fixture-lineup',
+  gameId: 'perfect-lineup-nba', gameName: 'Fixture Lineup', gamePath: '/perfect-lineup-nba',
   formation: [{ label: 'Guard one', allowed: ['PG'] }, { label: 'Guard two', allowed: ['PG'] }],
   pool: Array.from({ length: 60 }, (_, index) => ({ name: index < 56 ? `Fixture Player ${String(index).padStart(2, '0')}` : `Ineligible Center ${index}`, pos: index < 56 ? 'PG' : 'C', rating: 100 - index, team: index % 2 ? 'Fixture Beta' : 'Fixture Alpha', era: Math.floor(index / 2) % 2 ? 'Fixture Present' : 'Fixture Past', country: Math.floor(index / 4) % 2 ? 'Fixture West' : 'Fixture East' })),
   nameOf: player => player.name, positionOf: player => player.pos, ratingOf: player => player.rating,

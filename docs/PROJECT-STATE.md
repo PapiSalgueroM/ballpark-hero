@@ -1,5 +1,15 @@
 # Project state
 
+## CHECKPOINT 2026-10-01: lineup fixture cap correction accepted, full gate being repaired
+
+780 is complete: both test-only key/path corrections preserve all15 original outcomes; the
+unchanged live cap fence reports141 source keys,153 caps and0 uncovered. Its stale-list
+control catches one missing key and anonymous cap insertion is refused401. No schema/guard
+changes. The392-node temporary run ended318 pass/74 not green, including missing historical
+fixtures, setup resolution and Git context. Full failure triage and affected reruns remain
+required.777/778 native keyboard fixes and779 final controls are being accepted. Claude now
+owns781-784 for visitor requests, with785 next free. Detailed receipts are on WORKBOARD.
+
 ## CHECKPOINT 2026-10-01: staff decision source and native acceptance passed
 
 776 passes eleven actual-screen/helper tests, four asserted source controls, two peer reviews
