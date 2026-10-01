@@ -32,8 +32,8 @@ export interface FoStatLine {
   rookie?: boolean;
 }
 
-/** A club's games and its points for and against. */
-export interface FoTeamTotals { g: number; pts: number; opp: number }
+/** A club's games, the ones its box score won, and its points for and against. */
+export interface FoTeamTotals { g: number; w: number; pts: number; opp: number }
 
 /** A season's lines, keyed `${team}|${id}`, and its club totals. */
 export interface FoSeasonStats {

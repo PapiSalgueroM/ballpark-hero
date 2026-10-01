@@ -1848,7 +1848,16 @@ export const BASKETBALL_CONTENT: GameContentMap = {
       {
         heading: "Cap room and roster size limits",
         items: [
-          "The cap starts at the real 2026-27 figure, just under 165 million, and rises 7 percent every season in the game. You can waive down to 8 players during the year, but the season cannot tip off with fewer than 14 or more than 15: short of 14 the league fills the gap with minimum deals at 2 million each and tells you who, and above 15 the first round waits until you waive down.",
+          "The cap starts at the real 2026-27 figure, just under 165 million, and rises 7 percent every season in the game. You can waive down to 8 players during the year, but the season cannot tip off with fewer than 14 or more than 15: short of 14 the league fills the gap with minimum deals (2 million each in a new league, rising with the cap) and tells you who, and above 15 the first round waits until you waive down.",
+          "New deals are priced in the money of the season they start in. Re-signings, rookie deals, the minimum and free agent asks all rise with the cap, so payrolls keep pace with the tax line. A contract already signed keeps its number until it runs out.",
+        ],
+      },
+      {
+        heading: "Season lines and the five awards",
+        items: [
+          "Every game the sim plays writes a box score off the result it already decided. The eight men who decide games (your best five healthy players start, the next three come off the bench) are the eight on the floor, their points always add up to the team's score, and the winner always outscored the loser. The names are real, but these are this save's sim seasons, not real NBA stats.",
+          "At season close the league names five awards by fixed rules, and a man needs four in five of an average team's games to qualify (about 64 of 80). MVP: points plus rebounds plus assists a game, plus 20 times his club's winning share. All-League First Team: the five best by the MVP score, any position. Rookie of the Year: points plus rebounds plus assists a game, among first year men drafted in this league, so a new league's first season has none. Defensive Player of the Year: steals plus blocks plus half his rebounds a game, among men whose club allowed fewer points than the league average. Sixth Man of the Year: points a game, among men who started fewer than half the games they played.",
+          "The close screen shows the awards, the points, rebounds and assists leaders and your own club's lines. Winners wear the award on their roster card, and the Standings box keeps every season's champion and awards. A save from before season lines plays out its current season without them and starts keeping them next season.",
         ],
       },
       {
@@ -1936,8 +1945,9 @@ export const BASKETBALL_CONTENT: GameContentMap = {
       { q: "Are the rosters real?", a: "The players are real, about ten curated per franchise. Contracts, salaries and ages in the sim are explicitly fictional." },
       { q: "Why did my trade get rejected?", a: "The engine values rating adjusted for age and wants to come out ahead. Offer youth, take back age, or add a pick." },
       { q: "Can I get fired?", a: "Yes. Ownership grades the mandate every season and tracks trust from 0 to 100. Losing the play-in when the ask was a banner costs real trust, a luxury tax bill costs a point per 6 million of it, and at zero the save ends and you take another job." },
-      { q: "What happens if I start the season with 12 players?", a: "The league fills you to 14 at tip off with the lowest rated free agents in the pool on one year minimum deals, 2 million each, and the feed names them. Sign who you actually want before you press play. With 16 or more you cannot start until you waive down to 15." },
+      { q: "What happens if I start the season with 12 players?", a: "The league fills you to 14 at tip off with the lowest rated free agents in the pool on one year minimum deals (2 million each in a new league, rising with the cap), and the feed names them. Sign who you actually want before you press play. With 16 or more you cannot start until you waive down to 15." },
       { q: "Does my save persist?", a: "Yes, the league auto saves in your browser across unlimited seasons. Clearing site data wipes the franchise." },
+      { q: "Are the season stats and awards real?", a: "No. The rosters use real names, but every line, leader and award comes from the games your save simulated. A star on a losing club can lose the MVP to a smaller line on a winner, because the rule counts his club's record." },
     ],
   },
 

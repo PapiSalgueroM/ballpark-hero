@@ -129,8 +129,9 @@ const blankLine = (m: NbaBoxMan, team: string): FoStatLine => ({
 /** Add one game to the season's lines and club totals. */
 export function nbaRecordBox(stats: FoSeasonStats, box: NbaBox): void {
   for (const [side, other] of [[box.home, box.away], [box.away, box.home]] as const) {
-    const club = stats.teams[side.team] ?? { g: 0, pts: 0, opp: 0 };
+    const club = stats.teams[side.team] ?? { g: 0, w: 0, pts: 0, opp: 0 };
     club.g += 1; club.pts += side.pts; club.opp += other.pts;
+    if (side.pts > other.pts) club.w += 1;
     stats.teams[side.team] = club;
     for (const m of side.men) {
       const key = `${side.team}|${m.id}`;
