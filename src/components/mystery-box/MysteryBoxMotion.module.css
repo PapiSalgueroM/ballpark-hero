@@ -1,0 +1,41 @@
+.drawn {
+  overflow-wrap: anywhere;
+  animation: drawnCard 360ms ease-out;
+}
+
+.compatible {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  box-shadow: inset 0 0 0 2px hsl(var(--gold));
+  opacity: 0;
+  animation: compatibleSlot 540ms ease-out;
+}
+
+.placed {
+  animation: placedSlot 600ms ease-out;
+}
+
+@keyframes drawnCard {
+  from { opacity: 0.75; transform: translateY(3px); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes compatibleSlot {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+@keyframes placedSlot {
+  from { box-shadow: inset 0 0 0 2px hsl(var(--primary)); }
+  to { box-shadow: inset 0 0 0 0 transparent; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .drawn, .compatible, .placed {
+    animation: none;
+    transition: none;
+    transform: none;
+  }
+}
