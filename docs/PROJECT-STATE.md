@@ -1,5 +1,21 @@
 # Project state
 
+## IN PROGRESS 2026-10-01: correct the F1 constructor guide's worked score
+
+799 fixes the actual guide's600-point promise at clue four to the unchanged hook's
+400-point first-correct-guess outcome. Only that sentence and the unused Page's verified
+McLaren10 source value are owned, plus focused actual-hook/rendered-guide checks.
+No gameplay/data/other guide changes. Root owns any necessary saved-page and derived
+keyword/ledger refresh. Full scope is on WORKBOARD.797/798 continue. Next free800.
+
+## ACCEPTED 2026-10-01: explicit NHL harness text normalization
+
+797 fixes only the two new wrappers' representation: exact raw Buffer equality checks
+stay separate from normalized control text. The unchanged anchor scanner passes, and
+removed-normalization copies fail exactly both wrappers. Both positives and eight
+affected multiline controls pass;794 product bytes remain unchanged. Tycoon final
+runner controls and798 native acceptance continue. This is not an all-node-suite claim.
+
 ## ACCEPTED 2026-10-01: Aussie registration, NHL contributors and draft production checks
 
 792 is registered with truthful saved-game resume, lazy metadata, generated search and
