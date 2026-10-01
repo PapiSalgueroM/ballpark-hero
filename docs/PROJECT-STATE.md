@@ -1,5 +1,13 @@
 # Project state
 
+## IN PROGRESS 2026-09-30: three independent game features 769 through 771
+
+769 Conquest Explore and 770 First Touch are building under separate agent ownership. 771 now
+claims the isolated Club Manager InboxCard: its four-message display can hide retained pending
+requests, so all recent messages and exact resolved outcomes will become reachable. Existing
+parent/engine/data/release claims remain untouched. Root handles independent review and final
+combined verification. Source rounds 760 through 768 still await Claude's publish. Next free: 772.
+
 ## IN PROGRESS 2026-09-30: Conquest exploration 769 and playable First Touch 770
 
 Both larger features have pushed exact claims and independent agent ownership. 769 uses a

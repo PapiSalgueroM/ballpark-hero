@@ -1,5 +1,18 @@
 # Work board
 
+**2026-09-30, Codex Round 771 CLAIMED: reachable Club Manager inbox and recent outcomes.**
+Own only `src/components/club-manager/InboxCard.tsx`, scoped CSS if needed, focused actual-card
+tests and a new sim wrapper. The component currently truncates to four while the engine retains
+eight and the badge counts every pending message. Add Pending/Resolved/All views with truthful
+counts, access to every retained message through bounded Load more, exact stored weeks and
+resolved outcome text. Keep useful search/filter controls compact and at least 44px. New committed
+outcomes may get finite feedback; restored history, view changes and identical props stay quiet,
+with static reduced motion. Preserve exact message IDs, option indices, reply callbacks, input
+order and all engine effects. No new messages, invented chosen options, permanent-history claim,
+parent ClubManager page, engine, save, data or first-screen design changes. Verify an older pending
+request is reachable, exact callbacks and stored outcomes, counts/load/reset/empty state, keyboard
+focus and phone fit with asserted controls. Root owns docs/commits. Next free round is **772**.
+
 **2026-09-30, Codex Round 770 CLAIMED: playable Soccer Career First Touch (master 50).**
 Own new `src/lib/firstTouchDrill.ts`, `src/components/soccer-career/FirstTouchBoard.tsx`,
 scoped CSS if needed, focused engine/Board tests and `scripts/simFirstTouchDrill.mjs`.
