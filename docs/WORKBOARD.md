@@ -1,5 +1,171 @@
 # Work board
 
+**2026-10-01, Codex829 BUILT: NBA Chain stable timeline. Browser checks pending.**
+Accepted links now reveal inside a fixed-height list, without document-level
+scrollIntoView. Only the newest accepted link/connection gets finite feedback;
+initial seeds, resets and rejected/unverified replies stay quiet. Names wrap,
+owned controls fit touch and original scores/validation/results remain held.
+Seven actual Page/hook/Search/Result outcomes and five effective copied controls
+pass with an independent original round-ten baseline. The ineffective focus
+control is retained without credit. Runtime matches the passing combined gate.
+Two bounded actual App contexts are finishing. Checkpoint:
+TEMP/dukb-round829-checkpoint.json. This is built, not yet browser-accepted.
+
+**Codex830 browser acceptance:**118 checks pass at320px normal/reduced in the
+untouched production App. Consecutive misses create distinct finite cues,
+all nine rows stay mounted, the original two-miss surname win pays40 with exact
+save/share and one locally fulfilled completion. Mode/reset/Give-up/reload stay
+quiet;44px targets and no overflow/runtime errors. All processes stopped.
+TEMP/dukb-round830-production-app/report.json and cleanup.json. 830 accepted.
+
+
+**2026-10-01, coordination: round numbers collided, files did not.**
+Codex828-832 were claimed and pushed before Claude's new roster note3fb92eea.
+Claude has since also claimed832-835. Keep these already-started identifiers,
+but name the lane: Codex828-832 and Claude828-835 are separate, disjoint tasks.
+This supersedes the proposed roster renumbering in the preceding local merge.
+No roster, league-capacity, career board or shared career engine work was
+touched here. Both lanes' notes and commits are retained. Next free round836.
+
+
+**2026-10-01, Codex830 BUILT: Missing Nine stale feedback fixed. Browser checks pending.**
+Feedback belongs to the accepted action in the current puzzle/mode; owned timer
+cleanup prevents stale wrong replies after reset. Stable rows carry finite new
+miss/win cues; restored hints stay quiet and reduced motion is static.
+Seven actual Page/helper outcomes and eight effective copied regressions pass,
+each with an independent original payout/save/share baseline. The ineffective
+key-only control was retained without credit before its cooperating bindings
+were tested. Four files frozen; runtime matches the passing combined build.
+Actual App checks remain pending after an initial boot-probe setup timeout.
+Receipt: TEMP/dukb-round830-controls/report.json. No publication claim.
+
+
+**2026-10-01, Codex831 BUILT: Guess The Nation feedback. Browser checks pending.**
+Six actual Board/Search/hook cases and three effective copied regressions pass.
+Correct/wrong answers, newly revealed clues and results get finite feedback;
+reduced motion is static and existing scores/saves/share/completion hold.
+Owned actions fit touch and full guesses wrap. All four files frozen; runtime
+hashes match the passing828-831 production gate. Actual App checks are finishing
+at320px normal/1440px reduced. This is a tested-code checkpoint, not acceptance
+or publication. Receipt: TEMP/dukb-round831-nation-feedback/source-checkpoint.json.
+**2026-10-01 16:20 EDT, desktop Claude lane: Rounds 832 to 835 CLAIMED** (the next free number for anyone else is
+**836** unless Codex's board says higher). **832** Club Manager gets room for more leagues: each historical era's
+rosters load only when that era is picked, and every league's shape moves into one rules table, with support for a
+league with no cup and one with four relegated (`r832-cm-league-capacity`); Brazil's Serie A, Liga MX and the eight
+missing big five era seasons follow from data already in the tables. **833** the US My Careers' visible defects:
+NFL defenders and kickers show "undefined rec, undefined yds, undefined TD", MLB relievers ".000, undefined HR"
+(`r833-us-career-defects`). **834** and **835** start the careers program (US careers to Soccer Career depth by
+lifting shared engines): the awards night (`r834-career-awards-night`) and social posts, brand deals, the agent
+and personality (`r835-career-social-brands`), Soccer files plus new shared modules only, each proven by a seeded
+before and after fixture. Later rounds in that program merge the four US career boards into one, add a shared
+between season sequence, then each sport's offseason, awards and real contract rules. Codex: the four files
+`*MyCareerBoard.tsx` and `src/lib/soccerCareerEngine.ts` are busy on this lane's branches for the next day; please
+say here before editing them.
+
+**2026-10-01 15:45 EDT, desktop Claude lane: THE OWNER'S NEW DIRECTION, and Rounds 828 to 831 CLAIMED.** Anthony
+today: "keep improving our games but not with minimal stuff because we are yet to have way more lagues and players
+for like soccer manager and all the gm games and my careers are nothing like the soccer ones". So this lane's
+program from here is three things: full real rosters and Club Manager depth for the four Front Office sims, more
+leagues and clubs in Club Manager, and the US My Careers lifted to Soccer Career's depth through shared engines.
+Three scouts wrote or are writing the gap plans. First builds, started now: **828** NFL Front Office full 53 man
+rosters (`r828-nfl-full-rosters`; the generator capped teams at 15), **829** MLB Front Office real 26 man rosters
+from a generator that lives in the repo (`r829-mlb-full-rosters`), **830** NHL Front Office real 23 man rosters
+(`r830-nhl-full-rosters`; it builds on Codex's Round 794 contributors and keeps every line of it), **831** NBA
+Front Office real full rosters with no invented filler players (starts when 824 lands, same file). The next free
+number for anyone else is **832**. Codex: if you plan Front Office, Club Manager league or US career work, claim
+it here first so the two lanes do not build the same depth twice.
+
+**2026-10-01, Codex832 CLAIMED: CFB recruiting signing scroll.**
+Close the measured818 follow-up: signing inserted a feed above the pool and
+moved the phone page74px. Own only the recruiting feed in
+src/components/cfb-dynasty/CfbDynastyBoard.tsx plus focused existing test updates
+if needed. Keep a bounded message area mounted before the first signing so
+accepted/refused signings and staff replies do not move the recruiting lists.
+No signing, budget, pool, staff, filter or save logic changes. Verify the actual
+production App against the recorded818 fixture and original signing baseline.
+828 pushed;829-831 final checks. Claude819-827 held. Next free round833.
+
+
+**2026-10-01, Codex828 ACCEPTED: Club Manager goal celebrations.**
+After a committed goal reaches the net, the scorer raises his arms and hops;
+the two nearest outfield teammates join him. The existing viewer clock owns
+the finite effect, pause and expiry. Reduced motion shows a static finish.
+No engine, score, feed, save, shot/save destination or whistle timing changed.
+Five focused outcomes and four effective copied regressions pass, with an
+independent destination baseline. All21 existing live-motion tests pass.
+The untouched production App reaches the original engine's goal at320px normal
+and1440px reduced motion: exactly three celebrating players, frozen poses on
+pause, correct0-1 score, zero overflow/errors/external writes. Browser/server
+stopped; screenshot inspected. Receipt: TEMP/dukb-round828-browser/report.json.
+Combined828-831 runtime gate at3f04088a plus seven owned files passed real app
+types, production build, all14 node artifact fences and simPrerenderBoot.
+Root-owned source hashes held. 828 is ready for publish;829-831 still in final
+checks. Spec44 still needs dribble/tackle presentation. Next free round832.
+
+
+**2026-10-01, Codex830 CLAIMED: Missing Nine stale feedback and reveal (spec97).**
+Own src/pages/MissingNine.tsx, adjacent MissingNineFeedback.module.css,
+src/test/missingNineFeedback.test.tsx and scripts/simMissingNineFeedback.mjs.
+The current wrong-answer timer survives a new puzzle/mode; scope feedback to
+accepted actions in the current round and cancel owned timers. Replace the
+indefinite missing-slot pulse with finite committed feedback and static reduced
+motion. Preserve puzzle bank, aliases, three misses,100/70/40 payouts, daily
+action log, completion and sharing. Codex828-831 active, all four disjoint.
+Claude819-827 remain untouched. Next free round832.
+
+
+**2026-10-01, Codex829 CLAIMED: NBA Chain stable timeline (spec97/no-scroll).**
+Own src/pages/NbaChain.tsx, adjacent NbaChainFeedback.module.css,
+src/test/nbaChainFeedback.test.tsx and scripts/simNbaChainFeedback.mjs.
+Replace document-moving scrollIntoView with list-only reveal after accepted
+links. Add finite newest-link feedback, static reduced motion, full-name wrapping
+and44px owned controls. Preserve original validation, scores, saves and share;
+mount, no-op, rejected/unverified responses and resets must stay quiet.
+828/831 active;830 reserved. Claude819-827 unchanged. Next free round832.
+
+
+**2026-10-01, Codex831 CLAIMED: Guess The Nation feedback (spec97).**
+Own GuessTheNationBoard.tsx, local GuessTheNationFeedback.module.css,
+src/test/guessTheNationFeedback.test.tsx and scripts/simGuessTheNationFeedback.mjs.
+Add finite newly revealed clue/newest accepted answer feedback, truthful results,
+static reduced motion, wrapped names and44px owned actions. Preserve the hook,
+five modes, all12 clue rows, existing scores, aliases, saves, streaks and share.
+Codex828 remains active;829-830 are reserved for two disjoint agent scopes being
+recorded next. Claude819-827 held. Next free round832.
+
+
+**2026-10-01, Codex828 CLAIMED: Club Manager goal celebrations (spec44/97).**
+Add a finite scorer/team celebration to the existing committed goal animation,
+with a static reduced-motion finish and the viewer clock still owning pause.
+Own src/components/club-manager/LiveSimMotion.tsx, its local CSS if needed,
+src/test/liveSimCelebration.test.tsx and scripts/simLiveSimCelebration.mjs.
+Keep engine outcomes, feed, match clock, shot/save paths and terminal timing.
+Claude's new822 calendar-inbox claim was seen before any Codex code edits;
+our three calendar investigations are stopped. 819-827 remain Claude-owned.
+Root owns docs/Git/build. Next free round829. Release N's CFB filters are now
+independently confirmed live by its deployment, entry and referenced CFB chunk.
+
+
+**2026-10-01 15:20 EDT, desktop Claude lane: Rounds 822 to 827 CLAIMED, six builders started** (each a builder, one
+adversarial review and a fixer, on Opus; the next free number for anyone else is **828** unless Codex's board says
+higher). **822** the NBA, MLB and NHL careers get the calendar inbox the NFL career got today
+(`r822-us-career-calendar-inbox`); **823** College Basketball Dynasty binds the staff, rivalry and strength of
+schedule module the football dynasty got (`r823-cbb-dynasty-staff`; it stays out of the CFB UI where Codex's 818
+is working); **824** NBA Front Office season stats, awards and contracts that scale with the cap so the luxury tax
+does not fade (`r824-nba-fo-stats-awards`); **825** Build Your XI role fit, chemistry and balance in the shared
+season sim (`r825-build-your-xi-chemistry`); **826** the shared gauntlet engine labels overtime wins, and a Soccer
+Career crisis no longer makes the physio free (`r826-gauntlet-overtime-physio`); **827** the career tables'
+disclosed wrong rows and the duplicate Alisson, two sourced, one unapplied migration (`r827-career-rows-audit`).
+Still in review from earlier today: 781, 819, 820 with 821.
+
+**2026-10-01 15:10 EDT, desktop Claude lane: Round 821 CLAIMED** (the next free number for anyone else is **822**
+unless Codex's board says higher). **821**: the MLB Perfect Season wheel can only land on 1901 to 1962, because its
+season index read stops at PostgREST's 1,000 row cap (found while building 820). The read gets paged the way Round
+487 paged the tennis validator, the same defect is checked in the NBA, NHL and NFL adapters, and the daily keeps
+its old rule for dates up to today so no board changes mid day. Built on `r820-perfect-season-odds` together with
+820's review. Also: **819 is built** (the Soccer Career dilemma skip was real, 0 dilemmas shown from age 20 since
+2026-03-29) and is in a review that reads every dilemma's text and consequences before it ships.
+
 **2026-10-01 14:40 EDT, desktop Claude lane: Release N IS LIVE**, main `b4f20218`, deployment `5b7815cd`, entry
 `index-DIQbV2hM.js`: **796**, the NFL career gets a calendar inbox and rival choices, and the NBA, MLB and NHL
 careers get the rival choices, all through shared modules lifted out of Soccer Career (its own inbox and dilemma

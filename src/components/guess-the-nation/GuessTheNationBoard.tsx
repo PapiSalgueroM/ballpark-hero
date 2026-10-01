@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useGuessTheNation } from '@/hooks/useGuessTheNation';
 import { useScrollToGame } from '@/hooks/useScrollToGame';
 import { NationSearch } from './NationSearch';
@@ -10,6 +10,8 @@ import { Button } from '@/components/ui/button';
 import { POINTS_BY_CLUE, CLUE_LABELS, MAX_CLUES } from '@/types/guessTheNation';
 import { Trophy, Loader2 } from 'lucide-react';
 import { FlagImg, FlagFromEmoji } from '@/components/FlagImg';
+import type { GuessTheNationState } from '@/types/guessTheNation';
+import feedbackStyles from './GuessTheNationFeedback.module.css';
 
 const CONTINENTS = ['Europe', 'Asia', 'North America', 'South America', 'Africa', 'Oceania'];
 const continentEmoji: Record<string, string> = {
@@ -27,13 +29,48 @@ export function GuessTheNationBoard() {
   const [difficulty, setDifficulty] = useState<'easy' | 'hard'>('easy');
   const [hintsUsed, setHintsUsed] = useState(0);
   const [showGiveUpConfirm, setShowGiveUpConfirm] = useState(false);
+  const pending = useRef<{ kind: 'guess' | 'hint' | 'giveup'; state: GuessTheNationState } | null>(null);
+  const [feedback, setFeedback] = useState<{ kind: 'correct' | 'wrong' | 'hint' | 'giveup'; state: GuessTheNationState } | null>(null);
+
+  useLayoutEffect(() => {
+    const request = pending.current;
+    if (!gameState) { pending.current = null; setFeedback(null); return; }
+    if (!request || request.state === gameState) return;
+    pending.current = null;
+    const before = request.state;
+    if (before.puzzle.id !== gameState.puzzle.id || before.mode !== gameState.mode || before.difficulty !== gameState.difficulty) return;
+    const appended = gameState.guesses.length === before.guesses.length + 1 && before.guesses.every((g, i) => gameState.guesses[i] === g);
+    if (request.kind === 'guess' && (appended || gameState.gameStatus === 'won')) {
+      setFeedback({ kind: gameState.gameStatus === 'won' ? 'correct' : 'wrong', state: gameState });
+    } else if (request.kind === 'hint' && gameState.gameStatus === 'playing' && gameState.guesses.length === before.guesses.length && gameState.revealedClues === before.revealedClues + 1) {
+      setFeedback({ kind: 'hint', state: gameState });
+    } else if (request.kind === 'giveup' && gameState.gameStatus === 'lost') {
+      setFeedback({ kind: 'giveup', state: gameState });
+    }
+  }, [gameState]);
+
+  useEffect(() => {
+    if (!feedback) return;
+    const timer = setTimeout(() => setFeedback(null), 600);
+    return () => clearTimeout(timer);
+  }, [feedback]);
+
+  const handleGuess = (name: string) => {
+    if (!gameState || gameState.gameStatus !== 'playing') return;
+    pending.current = { kind: 'guess', state: gameState };
+    makeGuess(name);
+  };
 
   const handleHint = () => {
+    if (!gameState || gameState.gameStatus !== 'playing' || gameState.revealedClues >= MAX_CLUES) return;
+    pending.current = { kind: 'hint', state: gameState };
     revealHint();
     setHintsUsed(h => h + 1);
   };
 
   const handleGiveUp = () => {
+    if (!gameState || gameState.gameStatus !== 'playing') return;
+    pending.current = { kind: 'giveup', state: gameState };
     giveUp();
     setShowGiveUpConfirm(false);
   };
@@ -168,6 +205,7 @@ export function GuessTheNationBoard() {
   const isPlaying = gameState.gameStatus === 'playing';
   const isWon = gameState.gameStatus === 'won';
   const isLost = gameState.gameStatus === 'lost';
+  const shownFeedback = feedback && feedback.state.puzzle.id === gameState.puzzle.id && feedback.state.mode === gameState.mode && feedback.state.difficulty === gameState.difficulty && feedback.state.gameStatus === gameState.gameStatus && feedback.state.revealedClues === gameState.revealedClues && feedback.state.guesses.length === gameState.guesses.length ? feedback : null;
 
   const getClueContent = (index: number): string => {
     const { clues } = gameState.puzzle;
@@ -229,7 +267,8 @@ export function GuessTheNationBoard() {
             return (
               <div
                 key={i}
-                className={`p-3 rounded-lg border transition-all duration-300 ${
+                data-nation-clue={i + 1}
+                className={`${shownFeedback && (shownFeedback.kind === 'hint' || shownFeedback.kind === 'wrong') && isPlaying && i === gameState.revealedClues - 1 ? feedbackStyles.clue : ''} p-3 rounded-lg border transition-all duration-300 ${
                   isRevealed
                     ? isFinal && (isWon || isLost)
                       ? 'bg-amber-500/10 border-amber-500/30'
@@ -271,16 +310,26 @@ export function GuessTheNationBoard() {
           })}
         </div>
 
+        <div role="status" aria-live="polite" className="min-h-[40px] text-center text-sm font-semibold" data-nation-feedback={shownFeedback?.kind}>
+          {shownFeedback && <p key={`${shownFeedback.kind}-${gameState.revealedClues}-${gameState.guesses.length}`} className={feedbackStyles.reply}>
+            {shownFeedback.kind === 'correct' ? `Correct guess. Nation found. ${gameState.score} points.`
+              : shownFeedback.kind === 'giveup' ? 'Answer revealed. You scored 0 points.'
+              : isLost ? 'Wrong guess. The answer is below.'
+              : shownFeedback.kind === 'hint' ? `Clue ${gameState.revealedClues} is open. ${pointsForCurrentClue} points available.`
+              : `Wrong guess. Clue ${gameState.revealedClues} is open.`}
+          </p>}
+        </div>
+
         {/* Playing state */}
         {isPlaying && (
           <div className="space-y-4">
-            <NationSearch countries={countries} usedGuesses={gameState.guesses} onGuess={makeGuess} />
+            <NationSearch countries={countries} usedGuesses={gameState.guesses} onGuess={handleGuess} />
 
             <div className="flex items-center justify-center gap-4">
               {gameState.revealedClues < MAX_CLUES && (
                 <button
                   onClick={handleHint}
-                  className="text-sm text-yellow-500/70 hover:text-yellow-400 transition-colors"
+                  className="min-h-[44px] px-2 text-sm text-yellow-500/70 hover:text-yellow-400 transition-colors"
                 >
                   💡 Hint (-{(POINTS_BY_CLUE[gameState.revealedClues - 1] ?? 0) - (POINTS_BY_CLUE[gameState.revealedClues] ?? 0)} pts)
                 </button>
@@ -288,7 +337,7 @@ export function GuessTheNationBoard() {
               {gameState.guesses.length > 0 && !showGiveUpConfirm && (
                 <button
                   onClick={() => setShowGiveUpConfirm(true)}
-                  className="text-sm text-muted-foreground hover:text-destructive transition-colors"
+                  className="min-h-[44px] px-2 text-sm text-muted-foreground hover:text-destructive transition-colors"
                 >
                   🏳️ Give Up
                 </button>
@@ -302,10 +351,10 @@ export function GuessTheNationBoard() {
               <div className="text-center space-y-2 p-3 rounded-xl border border-destructive/20 bg-card">
                 <p className="text-sm text-muted-foreground">Are you sure? You'll reveal the answer and score 0 points.</p>
                 <div className="flex justify-center gap-3">
-                  <button onClick={handleGiveUp} className="px-4 py-1.5 rounded-lg bg-destructive text-destructive-foreground text-sm font-semibold hover:opacity-90 transition-colors">
+                  <button onClick={handleGiveUp} className="min-h-[44px] px-4 py-1.5 rounded-lg bg-destructive text-destructive-foreground text-sm font-semibold hover:opacity-90 transition-colors">
                     Yes, Give Up
                   </button>
-                  <button onClick={() => setShowGiveUpConfirm(false)} className="px-4 py-1.5 rounded-lg border border-border text-muted-foreground text-sm hover:bg-accent transition-colors">
+                  <button onClick={() => setShowGiveUpConfirm(false)} className="min-h-[44px] px-4 py-1.5 rounded-lg border border-border text-muted-foreground text-sm hover:bg-accent transition-colors">
                     Cancel
                   </button>
                 </div>
@@ -317,7 +366,7 @@ export function GuessTheNationBoard() {
                 <p className="text-xs text-muted-foreground mb-2">Wrong guesses:</p>
                 <div className="flex flex-wrap justify-center gap-2">
                   {gameState.guesses.map((g, i) => (
-                    <span key={i} className="px-3 py-1 bg-destructive/15 text-destructive rounded-full text-sm">
+                    <span key={i} data-nation-guess={i} className={`${feedbackStyles.fullName} ${shownFeedback?.kind === 'wrong' && i === gameState.guesses.length - 1 ? feedbackStyles.reply : ''} px-3 py-1 bg-destructive/15 text-destructive rounded-full text-sm`}>
                       {g}
                     </span>
                   ))}
@@ -329,6 +378,7 @@ export function GuessTheNationBoard() {
 
         {/* Game over */}
         {(isWon || isLost) && (
+          <div data-nation-result={shownFeedback ? gameState.gameStatus : undefined} className={shownFeedback ? feedbackStyles.result : ''}>
           <ResultScreen
             won={isWon}
             outcomeEmoji={isWon ? '🎉' : '😞'}
@@ -346,6 +396,7 @@ export function GuessTheNationBoard() {
             playAgainLabel={gameState.mode === 'daily' ? 'Back to modes' : 'Play Again'}
             playNext={gameState.mode === 'daily' ? <p className="text-sm text-muted-foreground">Come back tomorrow for a new nation.</p> : undefined}
           />
+          </div>
         )}
 
         <GameNav />
