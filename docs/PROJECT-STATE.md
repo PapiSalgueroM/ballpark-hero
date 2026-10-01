@@ -1,5 +1,14 @@
 # Project state
 
+## Current audit-only instruction, 2026-10-01
+
+Codex847 is a forensic and hostile QA audit. The latest request explicitly says
+do not fix issues. Local842-846 edits are paused, unaccepted drafts and excluded
+from the clean audit baseline. No production data, gameplay, saved pages or
+deployment changes will be made. Report verified defects with reproduction
+steps, distinguish source checks from browser play, and state coverage gaps.
+Next free round848. Earlier active implementation notes below are historical.
+
 ## Owner priority, clarified 2026-10-01
 
 AdSense approval comes first. Existing games must then have correct data and
@@ -10,6 +19,11 @@ continue beside Claude839-841's functional fixes. Keep code-tested, verified-liv
 and Google-approved statuses separate. Approval is still unresolved.
 
 ## Active Codex work, 2026-10-01
+
+846 adds a concrete existing-game fix found during the guide review: Soccer
+Higher or Lower must cancel a previous answer's delayed callback before a new
+run. The old callback can currently change the fresh pair, score or status.
+Code ownership is separate from the guide copy. Next free round 847.
 
 842-845 accept Claude836's proposed copy work: About/Contact, record-page
 explanations/related links, distinct hub/archive metadata and the ten Higher or
