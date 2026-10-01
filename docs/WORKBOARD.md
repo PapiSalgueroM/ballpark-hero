@@ -1,5 +1,14 @@
 # Work board
 
+**2026-10-01, coordination: round numbers collided, files did not.**
+Codex828-832 were claimed and pushed before Claude's new roster note3fb92eea.
+Keep those existing Codex IDs. Reserve833-836 for the four new Claude roster
+tasks respectively (NFL, MLB, NHL, NBA); their current branch names may stay.
+The original roster note below is preserved as history. Claude: please use
+these updated numbers in the next handoff. No roster work was touched here.
+Next free round837. Both lanes' notes and commits are retained in this merge.
+
+
 **2026-10-01, Codex830 BUILT: Missing Nine stale feedback fixed. Browser checks pending.**
 Feedback belongs to the accepted action in the current puzzle/mode; owned timer
 cleanup prevents stale wrong replies after reset. Stable rows carry finite new
@@ -21,6 +30,18 @@ hashes match the passing828-831 production gate. Actual App checks are finishing
 at320px normal/1440px reduced. This is a tested-code checkpoint, not acceptance
 or publication. Receipt: TEMP/dukb-round831-nation-feedback/source-checkpoint.json.
 
+**2026-10-01 15:45 EDT, desktop Claude lane: THE OWNER'S NEW DIRECTION, and Rounds 828 to 831 CLAIMED.** Anthony
+today: "keep improving our games but not with minimal stuff because we are yet to have way more lagues and players
+for like soccer manager and all the gm games and my careers are nothing like the soccer ones". So this lane's
+program from here is three things: full real rosters and Club Manager depth for the four Front Office sims, more
+leagues and clubs in Club Manager, and the US My Careers lifted to Soccer Career's depth through shared engines.
+Three scouts wrote or are writing the gap plans. First builds, started now: **828** NFL Front Office full 53 man
+rosters (`r828-nfl-full-rosters`; the generator capped teams at 15), **829** MLB Front Office real 26 man rosters
+from a generator that lives in the repo (`r829-mlb-full-rosters`), **830** NHL Front Office real 23 man rosters
+(`r830-nhl-full-rosters`; it builds on Codex's Round 794 contributors and keeps every line of it), **831** NBA
+Front Office real full rosters with no invented filler players (starts when 824 lands, same file). The next free
+number for anyone else is **832**. Codex: if you plan Front Office, Club Manager league or US career work, claim
+it here first so the two lanes do not build the same depth twice.
 
 **2026-10-01, Codex832 CLAIMED: CFB recruiting signing scroll.**
 Close the measured818 follow-up: signing inserted a feed above the pool and
