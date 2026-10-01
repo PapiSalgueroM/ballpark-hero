@@ -81,6 +81,46 @@ export function leadersOf(rows: RecordRow[]): { leaders: Leader[]; once: number 
   return { leaders: multi, once: all.length - multi.length };
 }
 
+/** Round 656: an MVP column, counted by the same rule as the titles. */
+export interface MvpTally {
+  /** the column's own label, "MVP" or "Finals MVP" */
+  label: string;
+  /** first and latest year with a name in the column */
+  first: number;
+  latest: number;
+  leaders: Leader[];
+  once: number;
+  /** years with a row but nothing in the column, oldest first */
+  blankYears: number[];
+  /** lines that name more than one player, which count once, as written */
+  shared: { year: number; name: string }[];
+}
+
+/** The MVP column of a section, when it has one (the column keyed 'mvp'), counted
+ *  exactly as the titles are: one per line for the name as the line writes it,
+ *  by handing the column to leadersOf in the champion's place. Null when the
+ *  section has no such column or nothing is in it. */
+export function mvpTally(def: RecordSection, rows: RecordRow[]): MvpTally | null {
+  const col = def.columns.find(([k]) => k === 'mvp');
+  if (!col) return null;
+  const named = rows
+    .filter(r => (r.extra.mvp ?? '').trim() !== '')
+    .map(r => ({ year: r.year, champion: r.extra.mvp.trim(), extra: {} }));
+  if (!named.length) return null;
+  const years = named.map(r => r.year);
+  const withName = new Set(years);
+  const { leaders, once } = leadersOf(named);
+  return {
+    label: col[1],
+    first: Math.min(...years),
+    latest: Math.max(...years),
+    leaders,
+    once,
+    blankYears: [...new Set(rows.map(r => r.year))].filter(y => !withName.has(y)).sort((a, b) => a - b),
+    shared: named.filter(r => / & | and /.test(r.champion)).map(r => ({ year: r.year, name: r.champion })).sort((a, b) => a.year - b.year),
+  };
+}
+
 export interface Span {
   first: number;
   latest: number;

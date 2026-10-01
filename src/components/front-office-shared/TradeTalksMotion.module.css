@@ -1,0 +1,45 @@
+.card {
+  animation: callEnter 320ms ease-out;
+}
+
+.reply {
+  animation: replyEnter 340ms ease-out;
+}
+
+.agreed {
+  box-shadow: inset 2px 0 0 hsl(var(--correct) / 0.6);
+  animation: replyEnter 340ms ease-out, agreedSignal 520ms ease-out;
+}
+
+.ended {
+  box-shadow: inset 2px 0 0 hsl(var(--muted-foreground) / 0.5);
+  animation: replyEnter 340ms ease-out, endedSignal 280ms ease-out;
+}
+
+@keyframes callEnter {
+  0% { opacity: 0.75; }
+  100% { opacity: 1; }
+}
+
+@keyframes replyEnter {
+  0% { opacity: 0.75; transform: translateY(2px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes agreedSignal {
+  0%, 100% { box-shadow: inset 2px 0 0 hsl(var(--correct) / 0.6); }
+  35% { box-shadow: inset 2px 0 0 hsl(var(--correct) / 0.6), 0 0 0 2px hsl(var(--correct) / 0.25); }
+}
+
+@keyframes endedSignal {
+  0%, 100% { box-shadow: inset 2px 0 0 hsl(var(--muted-foreground) / 0.5); }
+  35% { box-shadow: inset 2px 0 0 hsl(var(--muted-foreground) / 0.5), 0 0 0 1px hsl(var(--muted-foreground) / 0.25); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card, .reply, .agreed, .ended {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+}

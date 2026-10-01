@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Check, Copy, Package, Trash2 } from 'lucide-react';
 import { FlagImg } from '@/components/FlagImg';
@@ -6,6 +6,7 @@ import { GameNav } from '@/components/game/GameNav';
 import { playerRating } from '@/lib/squadDeal';
 import { TOTAL_PACKS, useMysteryBox } from '@/hooks/useMysteryBox';
 import type { PackTier } from '@/lib/fetchPackPool';
+import motion from './MysteryBoxMotion.module.css';
 
 const TIER_STYLE: Record<PackTier, { label: string; cls: string }> = {
   superstar: { label: 'SUPERSTAR', cls: 'border-purple-500 bg-purple-500/15 text-purple-400' },
@@ -21,6 +22,16 @@ export function MysteryBoxBoard() {
     discards, finished, rating, filled, bestPull, openPack, place, discard, shareText,
   } = useMysteryBox();
   const [copied, setCopied] = useState(false);
+  const [placedSlot, setPlacedSlot] = useState<number | null>(null);
+  const previous = useRef({ packIndex, squad });
+
+  useEffect(() => {
+    if (packIndex !== previous.current.packIndex) {
+      const added = squad.findIndex((player, i) => player && !previous.current.squad[i]);
+      setPlacedSlot(packIndex > previous.current.packIndex && added >= 0 ? added : null);
+    }
+    previous.current = { packIndex, squad };
+  }, [packIndex, squad]);
 
   const copyShare = async () => {
     try {
@@ -121,6 +132,7 @@ export function MysteryBoxBoard() {
             </>
           ) : current ? (
             <>
+              <div key={`${packIndex}:${current.name}:${current.nationality}`} data-mystery-card={packIndex} data-pack-tier={current.tier} className={motion.drawn}>
               <span className={`inline-block rounded-full border-2 px-4 py-1 text-xs font-black uppercase tracking-wider ${TIER_STYLE[current.tier].cls}`}>
                 {TIER_STYLE[current.tier].label}
               </span>
@@ -145,10 +157,11 @@ export function MysteryBoxBoard() {
                   No compatible slot is open. Bin him to move on.
                 </p>
               )}
+              </div>
 
               <button
                 onClick={discard}
-                className="mt-3 inline-flex items-center gap-1.5 rounded-full border border-destructive/40 px-5 py-2 text-sm font-semibold text-destructive hover:bg-destructive/10"
+                className="mt-3 inline-flex min-h-[44px] items-center gap-1.5 rounded-full border border-destructive/40 px-5 py-2 text-sm font-semibold text-destructive hover:bg-destructive/10"
               >
                 <Trash2 className="h-4 w-4" /> Bin him
               </button>
@@ -168,22 +181,25 @@ export function MysteryBoxBoard() {
           return (
             <button
               key={i}
+              data-mystery-slot={i}
+              data-placement={p && placedSlot === i ? 'latest' : undefined}
               disabled={!highlight}
               onClick={() => place(i)}
-              className={`flex w-full items-center justify-between rounded-lg border px-3 py-2 text-left transition-all ${
+              className={`relative flex min-h-[44px] w-full items-center justify-between rounded-lg border px-3 py-2 text-left transition-all ${p && placedSlot === i ? motion.placed : ''} ${
                 highlight
-                  ? 'border-gold bg-gold/10 animate-pulse cursor-pointer'
+                  ? 'border-gold bg-gold/10 cursor-pointer'
                   : p
                     ? 'border-primary/40 bg-card'
                     : 'border-border bg-card opacity-70'
               }`}
             >
+              {highlight && <span key={`${packIndex}:${current.name}:${current.nationality}`} data-compatible-cue="" aria-hidden="true" className={motion.compatible} />}
               <span className="flex min-w-0 items-center gap-2">
                 <span className="w-10 shrink-0 text-[10px] font-bold text-muted-foreground">{slot.label}</span>
                 {p ? (
                   <>
                     <FlagImg name={p.nationality} size={14} />
-                    <span className="truncate text-sm font-medium text-foreground">{p.name}</span>
+                    <span title={p.name} className="truncate text-sm font-medium text-foreground">{p.name}</span>
                   </>
                 ) : (
                   <span className="text-sm italic text-muted-foreground">

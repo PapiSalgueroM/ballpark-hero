@@ -1,0 +1,43 @@
+.board {
+  container-type: inline-size;
+}
+
+.cell {
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.content {
+  width: 100%;
+  min-width: 0;
+  min-height: 0;
+}
+
+.content > .name {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  overflow-wrap: anywhere;
+}
+
+.content > span:not(:first-child) {
+  white-space: nowrap;
+}
+
+@container (max-width: 340px) {
+  .content {
+    gap: 1px;
+  }
+
+  .content > span {
+    font-size: 8px;
+    line-height: 10px;
+  }
+
+  .content > .name {
+    font-size: 9px;
+    line-height: 10px;
+  }
+}

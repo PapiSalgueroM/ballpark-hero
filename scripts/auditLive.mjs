@@ -27,6 +27,7 @@
  *   - a page with no canonical, or one pointing somewhere else;
  *   - more than one canonical or description, which a reader resolves by taking
  *     the first and which cost this site 126 pages in Round 276;
+ *   - a robots tag or HTTP header that prevents Google from indexing the page;
  *   - anything that is not a 200.
  *
  * Redirects are NOT followed, on purpose. Following them reports the
@@ -68,6 +69,7 @@ import { readFileSync, existsSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { request } from 'playwright';
+import { liveIndexabilityFindings } from './lib/liveIndexability.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const BASE = process.env.BASE || 'https://douknowball.com';
@@ -153,6 +155,7 @@ for (const r of routes) {
   else if (canons.length > 1) found.push(`has ${canons.length} canonicals, and a reader takes the first`);
   else if (canons[0] !== `${BASE}${r === '/' ? '/' : r}`) found.push(`canonicalises to ${canons[0].replace(BASE, '') || '/'}`);
   if (descs > 1) found.push(`has ${descs} descriptions`);
+  found.push(...liveIndexabilityFindings(body, res.headersArray()));
   pages.push({ r, found, text, thinEligible: r !== '/' && status === 200 && !identical });
 }
 

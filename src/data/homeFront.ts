@@ -160,6 +160,33 @@ export function justShipped(n: number): GameDef[] {
     .map(x => x.g);
 }
 
+/* ── Round 717 ─────────────────────────────────────────────────────────── */
+
+/** Where the home page remembers the visitor's favourite sport. A preference,
+    not a record: it only reorders the sport sections, in this browser. */
+export const FAVOURITE_SPORT_KEY = 'dukb-fav-sport';
+
+/** The stored pick, or null. Anything that is not a sport a category maps to
+    reads as no pick, so a stale or hand edited value can never hide a section. */
+export function readFavouriteSport(storage: Pick<Storage, 'getItem'> | null | undefined): SportKey | null {
+  if (!storage) return null;
+  let raw: string | null = null;
+  try { raw = storage.getItem(FAVOURITE_SPORT_KEY); } catch { return null; }
+  if (!raw) return null;
+  return (Object.values(CATEGORY_SPORT) as string[]).includes(raw) ? (raw as SportKey) : null;
+}
+
+/** The categories with the favourite sport's moved to the front and the rest
+    in registry order. Nothing is added or dropped, only the order changes. */
+export function favouriteFirst<T extends { title: CategoryTitle }>(categories: readonly T[], fav: SportKey | null): T[] {
+  const all = [...categories];
+  if (!fav) return all;
+  const at = all.findIndex(c => CATEGORY_SPORT[c.title] === fav);
+  if (at <= 0) return all;
+  const [pick] = all.splice(at, 1);
+  return [pick, ...all];
+}
+
 /** The short name a chip prints beside its glyph, so a sport is named in
     words wherever sports mix. */
 export const SPORT_NAME: Record<SportKey, string> = {

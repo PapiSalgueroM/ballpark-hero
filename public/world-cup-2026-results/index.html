@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Round 90: index.html must never be cached. The hashed asset files
+         under /assets are immutable and still cache normally; only this
+         document has to stay fresh so a returning player always gets the
+         newest chunk names. -->
+    
+    
+    
+    <title>2026 World Cup Results: Every Score and Final Standings</title>
+    <!-- Round 69: static AdSense account association. The ad script itself stays
+         consent gated below; this meta tag just makes the site-to-account link
+         visible to Google's crawler on the raw HTML, no consent needed. -->
+    <meta name="google-adsense-account" content="ca-pub-2929318086316376">
+    <meta name="msvalidate.01" content="9C0F485E90B6744EF88628240F61B9E1">
+    <meta name="yandex-verification" content="78b02f385cab3272">
+    
+    <!-- Round 265: the home page's canonical, in the template rather than in
+         the app. Every OTHER page carries one because the prerenderer captures
+         the head after React has drawn it, but the home page is deliberately
+         not prerendered (the host regenerates it every build), so its canonical
+         only existed once JavaScript ran. Measured on the live site with
+         JavaScript off and a Googlebot user agent: ten pages checked, ten
+         canonicals, and the one that was missing was the home page. It is also
+         the page most likely to collect tracking parameters from shares, which
+         is exactly what a self referencing canonical is for. -->
+    
+
+    <!-- Round 281: who this site is, in the template rather than at runtime.
+
+         Every other page ships as a snapshot whose head is copied verbatim from
+         the build, so a tag React adds survives. The home page is the one page
+         that cannot work that way, because vite regenerates it from THIS file on
+         whatever machine builds the site, so anything added at runtime never
+         reaches the raw HTML. Measured on 2026-08-24, the shipped home page
+         carried zero structured data blocks: the WebApplication object the app
+         has been generating since Round 53 had never been seen by a crawler,
+         only by a browser that runs JavaScript. Same trap that swallowed the
+         canonical in Round 265 and the readable copy in Round 257.
+
+         WebSite and Organization are the two things Google reads to work out
+         whose domain this is and what to call it, and WebApplication is what
+         says the thing at this address is a free browser game rather than a
+         shop or a blog. All three are claims about the SITE rather than about
+         whichever page is being served, and each carries an @id naming the site
+         root so none of them can be read as a claim about the current page.
+         Putting them here does exactly that: the snapshots copy this head, so
+         all 126 of them carry the pair and a crawler can tie 127 documents to
+         one entity. The page level object, whatever type that page is, is still
+         emitted by PageSeo on top of this.
+
+         KEEP THIS IN STEP WITH SITE_JSON_LD in src/lib/pageSchema.ts.
+         scripts/simSchema.mjs parses this block and compares it against that
+         export, so the two cannot drift apart quietly. -->
+    <script type="application/ld+json">[{"@context":"https://schema.org","@type":"WebSite","@id":"https://douknowball.com/#website","name":"DoUKnowBall","alternateName":"Do U Know Ball","url":"https://douknowball.com/","inLanguage":"en","publisher":{"@id":"https://douknowball.com/#org"}},{"@context":"https://schema.org","@type":"Organization","@id":"https://douknowball.com/#org","name":"DoUKnowBall","url":"https://douknowball.com/","logo":"https://douknowball.com/icon-512.png"},{"@context":"https://schema.org","@type":"WebApplication","@id":"https://douknowball.com/#webapp","name":"DoUKnowBall","url":"https://douknowball.com/","applicationCategory":"GameApplication","operatingSystem":"Web Browser","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"publisher":{"@id":"https://douknowball.com/#org"}}]</script><script type="application/ld+json" data-rh="true">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"DoUKnowBall","item":"https://douknowball.com"},{"@type":"ListItem","position":2,"name":"Soccer Games","item":"https://douknowball.com/soccer"},{"@type":"ListItem","position":3,"name":"2026 World Cup results","item":"https://douknowball.com/world-cup-2026-results"}]}</script><script type="application/ld+json" data-rh="true">{"@context":"https://schema.org","@type":"WebPage","name":"2026 World Cup Results: Every Score and Final Standings | DoUKnowBall","description":"Every 2026 World Cup result: Spain beat Argentina 1-0 after extra time in the final, all 12 groups in finishing order, every knockout score and the awards.","url":"https://douknowball.com/world-cup-2026-results","isPartOf":{"@id":"https://douknowball.com/#website"},"publisher":{"@id":"https://douknowball.com/#org"}}</script>
+    
+    
+    <!-- Round 286: the site's own social image, on its own domain. The old
+         one lived on the host's upload bucket, which is an external image host
+         (the legal rule allows exactly one, flagcdn.com), said "10+ games" on a
+         site with over a hundred, and had a line of garbled text at the bottom.
+         It is generated from the same source as the favicon and the header
+         mark: scripts/logo/gen_logo.py. -->
+    
+    
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="DoUKnowBall: free daily sports trivia, puzzles and career sims">
+    
+    
+    <!-- Round 286: icons. The SVG is the crisp one and modern browsers take it
+         first; the .ico carries 16, 32 and 48 for everything else; the touch
+         icon is what a phone shows when the site is added to a home screen. -->
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180">
+    <meta name="theme-color" content="#0b0d14">
+    <!-- Round 290: installable. The manifest names the same icons the tab and the home
+         screen already use, so Add to Home Screen on Android and desktop Chrome gets the
+         mark, the name and a standalone window. simBrand section 7 holds the file to the
+         icons on disk and this theme colour. -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="application-name" content="DoUKnowBall">
+    <meta name="apple-mobile-web-app-title" content="DoUKnowBall">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&amp;family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+    
+    <script>
+      // Owner 2026-08-05: no third-party editor badge should ever show on the
+      // live site. The host injects a floating "Edit with ..." badge into the
+      // published page after load; this watcher removes it (and anything like
+      // it) the moment it appears.
+      (function () {
+        var isBadge = function (el) {
+          if (!(el instanceof HTMLElement)) return false;
+          var idc = ((el.id || '') + ' ' + (el.className || '')).toString().toLowerCase();
+          if (idc.indexOf('lovable') !== -1 || idc.indexOf('gpt-engineer') !== -1 || idc.indexOf('gptengineer') !== -1) return true;
+          if (el.tagName === 'A') {
+            var href = (el.getAttribute('href') || '').toLowerCase();
+            if (href.indexOf('lovable.dev') !== -1 || href.indexOf('gptengineer.app') !== -1) return true;
+          }
+          return false;
+        };
+        var sweep = function () {
+          try {
+            var all = document.querySelectorAll('[id*="lovable" i], [class*="lovable" i], a[href*="lovable.dev"], a[href*="gptengineer"], [id*="gpt-engineer" i]');
+            for (var i = 0; i < all.length; i++) {
+              var el = all[i];
+              if (isBadge(el)) el.remove();
+            }
+          } catch (e) { /* never break the page over badge cleanup */ }
+        };
+        new MutationObserver(sweep).observe(document.documentElement, { childList: true, subtree: true });
+        document.addEventListener('DOMContentLoaded', sweep);
+        window.addEventListener('load', sweep);
+      })();
+    </script>
+    <script>
+      // Google Analytics loads only after Accept. AdSense is intentionally not
+      // global: direct visits to account, reset, fallback, and other screens
+      // without a deliberate slot do not load it. Auto Ads and Auto optimize
+      // stay off in the account. The static verification meta stays global.
+      (function () {
+        try {
+          if (localStorage.getItem('cookie-consent') === 'accepted') {
+            window.dataLayer = window.dataLayer || [];
+            window.gtag = function () { window.dataLayer.push(arguments); };
+            window.gtag('js', new Date());
+            window.gtag('config', 'G-KZQK2G68YC');
+            var g = document.createElement('script');
+            g.async = true;
+            g.src = 'https://www.googletagmanager.com/gtag/js?id=G-KZQK2G68YC';
+            document.head.appendChild(g);
+          }
+        } catch (e) { /* storage blocked: analytics stays off */ }
+      })();
+    </script>
+    
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <!-- Round 314: the moment before React mounts used to show this document's
+       full crawler copy as a wall of raw text (the owner filmed it). The block
+       stays completely in the DOM for crawlers and for no-JS visitors (the
+       noscript lifts the cap), but a browser that is about to boot the app
+       sees one dimmed screenful, which reads as the site loading rather than
+       a broken page. React replaces #root's children on mount, so the capped
+       wrapper lives exactly as long as the wait does. -->
+  <!-- Round 448: the dim was not enough. His words, with a screenshot: "that
+       thing still shows when u log in into douknowball with the balck screen
+       and all that text and i dont want taht". Every sign in with Google
+       comes back through a full reload of this document, so the wait before
+       React mounts is the first thing a player sees after choosing an
+       account, and a screenful of grey paragraphs is what it showed. The
+       copy stays exactly where it is for crawlers and for no-JS visitors; a
+       booting browser now sees the mark on the app's own background and
+       nothing else, because #dukb-boot sits over the copy inside #root and
+       React replaces #root's children on mount, so it vanishes at the exact
+       moment the app appears. The cap on the copy stays so the document
+       cannot scroll during the wait. -->
+  
+  <noscript></noscript>
+  
+  
+<link rel="canonical" href="https://douknowball.com/world-cup-2026-results" data-rh="true"><meta name="description" content="Every 2026 World Cup result: Spain beat Argentina 1-0 after extra time in the final, all 12 groups in finishing order, every knockout score and the awards." data-rh="true"><meta property="og:type" content="website" data-rh="true"><meta property="og:url" content="https://douknowball.com/world-cup-2026-results" data-rh="true"><meta property="og:title" content="2026 World Cup Results: Every Score and Final Standings | DoUKnowBall" data-rh="true"><meta property="og:description" content="Every 2026 World Cup result: Spain beat Argentina 1-0 after extra time in the final, all 12 groups in finishing order, every knockout score and the awards." data-rh="true"><meta property="og:image" content="https://douknowball.com/og-image.png" data-rh="true"><meta name="twitter:card" content="summary_large_image" data-rh="true"><meta name="twitter:title" content="2026 World Cup Results: Every Score and Final Standings | DoUKnowBall" data-rh="true"><meta name="twitter:description" content="Every 2026 World Cup result: Spain beat Argentina 1-0 after extra time in the final, all 12 groups in finishing order, every knockout score and the awards." data-rh="true"><meta name="twitter:image" content="https://douknowball.com/og-image.png" data-rh="true">
+<style>html,body{background:#0a0a0b;color:#fafafa;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;margin:0;padding:0}a{color:#7dd3fc}#dukb-snapshot{padding:16px}</style>
+<style>#dukb-boot{position:fixed;inset:0;z-index:2147483000;display:flex;align-items:center;justify-content:center;background:#0a0a0b}#dukb-boot img{width:72px;height:72px}#dukb-snapshot{max-height:100vh;overflow:hidden}</style>
+<noscript><style>#dukb-boot{display:none}#dukb-snapshot{max-height:none;overflow:visible}</style></noscript>
+<script src="/prerender-boot.js" defer></script>
+</head>
+<body>
+<div id="root">
+<div id="dukb-boot" aria-hidden="true"><img src="/logo-mark.svg" alt="" width="72" height="72" decoding="async"></div>
+<div id="dukb-snapshot">
+<a href="/soccer">Back to the soccer games</a>
+<h1>2026 World Cup results</h1>
+<p>Spain won the 2026 World Cup, beating Argentina 1-0 after extra time in the final on July 19, 2026. England beat France 6-4 for third place.</p>
+<p>The knockout rounds ran from June 28 to July 19, 2026. Below are all 32 knockout scores, how each one was settled, where all 12 groups finished and who took the individual awards.</p>
+<h2>The final: Spain 1-0 Argentina after extra time</h2>
+<table>
+<tr><th>Date</th><th>Match</th><th>Score</th><th>How it was decided</th></tr>
+<tr><td>July 19</td><td>Spain v Argentina</td><td>1-0</td><td>Spain won after extra time</td></tr>
+</table>
+<h2>Final group standings</h2>
+<p>Where every team finished in its group, first to fourth, and how far it got after that. These are finishing positions only, so there are no points or goal difference here. The top two in each group went through to the round of 32, along with the 8 best third placed teams.</p>
+<h3>Group A</h3>
+<table>
+<tr><th>Position</th><th>Team</th><th>How far they got</th></tr>
+<tr><td>1st</td><td>Mexico</td><td>Out in the round of 16</td></tr>
+<tr><td>2nd</td><td>South Africa</td><td>Out in the round of 32</td></tr>
+<tr><td>3rd</td><td>South Korea</td><td>Out in the group stage</td></tr>
+<tr><td>4th</td><td>Czech Republic</td><td>Out in the group stage</td></tr>
+</table>
+<h3>Group B</h3>
+<table>
+<tr><th>Position</th><th>Team</th><th>How far they got</th></tr>
+<tr><td>1st</td><td>Switzerland</td><td>Out in the quarter-finals</td></tr>
+<tr><td>2nd</td><td>Canada</td><td>Out in the round of 16</td></tr>
+<tr><td>3rd</td><td>Bosnia &amp; Herzegovina</td><td>Out in the round of 32</td></tr>
+<tr><td>4th</td><td>Qatar</td><td>Out in the group stage</td></tr>
+</table>
+<h3>Group C</h3>
+<table>
+<tr><th>Position</th><th>Team</th><th>How far they got</th></tr>
+<tr><td>1st</td><td>Brazil</td><td>Out in the round of 16</td></tr>
+<tr><td>2nd</td><td>Morocco</td><td>Out in the quarter-finals</td></tr>
+<tr><td>3rd</td><td>Scotland</td><td>Out in the group stage</td></tr>
+<tr><td>4th</td><td>Haiti</td><td>Out in the group stage</td></tr>
+</table>
+<h3>Group D</h3>
+<table>
+<tr><th>Position</th><th>Team</th><th>How far they got</th></tr>
+<tr><td>1st</td><td>USA</td><td>Out in the round of 16</td></tr>
+<tr><td>2nd</td><td>Australia</td><td>Out in the round of 32</td></tr>
+<tr><td>3rd</td><td>Paraguay</td><td>Out in the round of 16</td></tr>
+<tr><td>4th</td><td>Turkey</td><td>Out in the group stage</td></tr>
+</table>
+<h3>Group E</h3>
+<table>
+<tr><th>Position</th><th>Team</th><th>How far they got</th></tr>
+<tr><td>1st</td><td>Germany</td><td>Out in the round of 32</td></tr>
+<tr><td>2nd</td><td>Ivory Coast</td><td>Out in the round of 32</td></tr>
+<tr><td>3rd</td><td>Ecuador</td><td>Out in the round of 32</td></tr>
+<tr><td>4th</td><td>Curaçao</td><td>Out in the group stage</td></tr>
+</table>
+<h3>Group F</h3>
+<table>
+<tr><th>Position</th><th>Team</th><th>How far they got</th></tr>
+<tr><td>1st</td><td>Netherlands</td><td>Out in the round of 32</td></tr>
+<tr><td>2nd</td><td>Japan</td><td>Out in the round of 32</td></tr>
+<tr><td>3rd</td><td>Sweden</td><td>Out in the round of 32</td></tr>
+<tr><td>4th</td><td>Tunisia</td><td>Out in the group stage</td></tr>
+</table>
+<h3>Group G</h3>
+<table>
+<tr><th>Position</th><th>Team</th><th>How far they got</th></tr>
+<tr><td>1st</td><td>Belgium</td><td>Out in the quarter-finals</td></tr>
+<tr><td>2nd</td><td>Egypt</td><td>Out in the round of 16</td></tr>
+<tr><td>3rd</td><td>Iran</td><td>Out in the group stage</td></tr>
+<tr><td>4th</td><td>New Zealand</td><td>Out in the group stage</td></tr>
+</table>
+<h3>Group H</h3>
+<table>
+<tr><th>Position</th><th>Team</th><th>How far they got</th></tr>
+<tr><td>1st</td><td>Spain</td><td>Champions</td></tr>
+<tr><td>2nd</td><td>Cape Verde</td><td>Out in the round of 32</td></tr>
+<tr><td>3rd</td><td>Uruguay</td><td>Out in the group stage</td></tr>
+<tr><td>4th</td><td>Saudi Arabia</td><td>Out in the group stage</td></tr>
+</table>
+<h3>Group I</h3>
+<table>
+<tr><th>Position</th><th>Team</th><th>How far they got</th></tr>
+<tr><td>1st</td><td>France</td><td>Fourth place</td></tr>
+<tr><td>2nd</td><td>Norway</td><td>Out in the quarter-finals</td></tr>
+<tr><td>3rd</td><td>Senegal</td><td>Out in the round of 32</td></tr>
+<tr><td>4th</td><td>Iraq</td><td>Out in the group stage</td></tr>
+</table>
+<h3>Group J</h3>
+<table>
+<tr><th>Position</th><th>Team</th><th>How far they got</th></tr>
+<tr><td>1st</td><td>Argentina</td><td>Runners-up</td></tr>
+<tr><td>2nd</td><td>Austria</td><td>Out in the round of 32</td></tr>
+<tr><td>3rd</td><td>Algeria</td><td>Out in the round of 32</td></tr>
+<tr><td>4th</td><td>Jordan</td><td>Out in the group stage</td></tr>
+</table>
+<h3>Group K</h3>
+<table>
+<tr><th>Position</th><th>Team</th><th>How far they got</th></tr>
+<tr><td>1st</td><td>Colombia</td><td>Out in the round of 16</td></tr>
+<tr><td>2nd</td><td>Portugal</td><td>Out in the round of 16</td></tr>
+<tr><td>3rd</td><td>DR Congo</td><td>Out in the round of 32</td></tr>
+<tr><td>4th</td><td>Uzbekistan</td><td>Out in the group stage</td></tr>
+</table>
+<h3>Group L</h3>
+<table>
+<tr><th>Position</th><th>Team</th><th>How far they got</th></tr>
+<tr><td>1st</td><td>England</td><td>Third place</td></tr>
+<tr><td>2nd</td><td>Croatia</td><td>Out in the round of 32</td></tr>
+<tr><td>3rd</td><td>Ghana</td><td>Out in the round of 32</td></tr>
+<tr><td>4th</td><td>Panama</td><td>Out in the group stage</td></tr>
+</table>
+<h2>Round of 32</h2>
+<table>
+<tr><th>Date</th><th>Match</th><th>Score</th><th>How it was decided</th></tr>
+<tr><td>June 28</td><td>South Africa v Canada</td><td>0-1</td><td>Canada won in normal time</td></tr>
+<tr><td>June 29</td><td>Germany v Paraguay</td><td>1-1</td><td>Level after extra time, Paraguay won 4-3 on penalties</td></tr>
+<tr><td>June 29</td><td>Netherlands v Morocco</td><td>1-1</td><td>Level after extra time, Morocco won 3-2 on penalties</td></tr>
+<tr><td>June 29</td><td>Brazil v Japan</td><td>2-1</td><td>Brazil won in normal time</td></tr>
+<tr><td>June 30</td><td>France v Sweden</td><td>3-0</td><td>France won in normal time</td></tr>
+<tr><td>June 30</td><td>Ivory Coast v Norway</td><td>1-2</td><td>Norway won in normal time</td></tr>
+<tr><td>June 30</td><td>Mexico v Ecuador</td><td>2-0</td><td>Mexico won in normal time</td></tr>
+<tr><td>July 1</td><td>USA v Bosnia &amp; Herzegovina</td><td>2-0</td><td>USA won in normal time</td></tr>
+<tr><td>July 1</td><td>Belgium v Senegal</td><td>3-2</td><td>Belgium won after extra time</td></tr>
+<tr><td>July 1</td><td>England v DR Congo</td><td>2-1</td><td>England won in normal time</td></tr>
+<tr><td>July 2</td><td>Portugal v Croatia</td><td>2-1</td><td>Portugal won in normal time</td></tr>
+<tr><td>July 2</td><td>Spain v Austria</td><td>3-0</td><td>Spain won in normal time</td></tr>
+<tr><td>July 2</td><td>Switzerland v Algeria</td><td>2-0</td><td>Switzerland won in normal time</td></tr>
+<tr><td>July 3</td><td>Argentina v Cape Verde</td><td>3-2</td><td>Argentina won after extra time</td></tr>
+<tr><td>July 3</td><td>Australia v Egypt</td><td>1-1</td><td>Level after extra time, Egypt won 4-2 on penalties</td></tr>
+<tr><td>July 3</td><td>Colombia v Ghana</td><td>1-0</td><td>Colombia won in normal time</td></tr>
+</table>
+<h2>Round of 16</h2>
+<table>
+<tr><th>Date</th><th>Match</th><th>Score</th><th>How it was decided</th></tr>
+<tr><td>July 4</td><td>Paraguay v France</td><td>0-1</td><td>France won in normal time</td></tr>
+<tr><td>July 4</td><td>Canada v Morocco</td><td>0-3</td><td>Morocco won in normal time</td></tr>
+<tr><td>July 5</td><td>Brazil v Norway</td><td>1-2</td><td>Norway won in normal time</td></tr>
+<tr><td>July 5</td><td>Mexico v England</td><td>2-3</td><td>England won in normal time</td></tr>
+<tr><td>July 6</td><td>Portugal v Spain</td><td>0-1</td><td>Spain won in normal time</td></tr>
+<tr><td>July 6</td><td>USA v Belgium</td><td>1-4</td><td>Belgium won in normal time</td></tr>
+<tr><td>July 7</td><td>Argentina v Egypt</td><td>3-2</td><td>Argentina won in normal time</td></tr>
+<tr><td>July 7</td><td>Switzerland v Colombia</td><td>0-0</td><td>Level after extra time, Switzerland won 4-3 on penalties</td></tr>
+</table>
+<h2>Quarter-finals</h2>
+<table>
+<tr><th>Date</th><th>Match</th><th>Score</th><th>How it was decided</th></tr>
+<tr><td>July 9</td><td>France v Morocco</td><td>2-0</td><td>France won in normal time</td></tr>
+<tr><td>July 10</td><td>Spain v Belgium</td><td>2-1</td><td>Spain won in normal time</td></tr>
+<tr><td>July 11</td><td>Norway v England</td><td>1-2</td><td>England won after extra time</td></tr>
+<tr><td>July 11</td><td>Argentina v Switzerland</td><td>3-1</td><td>Argentina won after extra time</td></tr>
+</table>
+<h2>Semi-finals</h2>
+<table>
+<tr><th>Date</th><th>Match</th><th>Score</th><th>How it was decided</th></tr>
+<tr><td>July 14</td><td>France v Spain</td><td>0-2</td><td>Spain won in normal time</td></tr>
+<tr><td>July 15</td><td>England v Argentina</td><td>1-2</td><td>Argentina won in normal time</td></tr>
+</table>
+<h2>Third place</h2>
+<table>
+<tr><th>Date</th><th>Match</th><th>Score</th><th>How it was decided</th></tr>
+<tr><td>July 18</td><td>France v England</td><td>4-6</td><td>England won in normal time</td></tr>
+</table>
+<h2>2026 World Cup awards</h2>
+<table>
+<tr><th>Award</th><th>Player</th><th>Nation</th></tr>
+<tr><td>Golden Ball</td><td>Rodri</td><td>Spain</td></tr>
+<tr><td>Golden Boot</td><td>Kylian Mbappé, 10 goals</td><td>France</td></tr>
+<tr><td>Golden Glove</td><td>Unai Simón</td><td>Spain</td></tr>
+<tr><td>Best Young Player</td><td>Pau Cubarsí</td><td>Spain</td></tr>
+</table>
+<h2>Play with this history</h2>
+<li><a href="/world-cup-bracket">World Cup 2026 Bracket</a>: fill in a bracket and it gets scored against these results.</li>
+<li><a href="/guess-the-nation">Guess The Nation</a>: work out the mystery sporting nation from its clues.</li>
+<h2>Where this comes from</h2>
+<p>Every result here was checked against two independent sources before it went in: ESPN's scoreboard feed and Wikipedia's tournament pages, compared match by match, and all 32 knockout scores and winners agreed. Group positions come from the list of qualified teams and from standings worked out from every group game, and the two agreed in every group. The awards were checked against Wikipedia, plus The Athletic and FOX Sports. Spot something that looks wrong anyway? The Report a bug button below lands straight in our inbox.</p>
+<h2>More soccer</h2>
+<li><a href="/soccer">Every soccer game on the site</a></li>
+<li><a href="/champions-league-format-history">Champions League format history</a></li>
+<li><a href="/records">The Record Books, champions by year for every competition we keep</a></li>
+<div data-site-chrome>
+<p>All team names, competition names, logos and trademarks are property of their respective owners. DoUKnowBall is an independent fan project and is not affiliated with, endorsed by or sponsored by the NFL, NBA, UFC, NHL, MLB, FIFA, UEFA, the Premier League, the English Football League, LaLiga, Serie A, the Bundesliga, Ligue 1, the Eredivisie, MLS, the Saudi Pro League, the IOC, the NCAA, F1, the PGA Tour, NASCAR, the ATP or the WTA. Player names and statistics are used for identification and commentary only. © 2026 DoUKnowBall</p>
+<a href="/soccer">Soccer</a>
+<a href="/pro-basketball">NBA</a>
+<a href="/hockey">NHL</a>
+<a href="/pro-football">NFL</a>
+<a href="/baseball">MLB</a>
+<a href="/college">College</a>
+<a href="/search">Search Games</a>
+<a href="/about">About</a>
+<a href="/contact">Contact</a>
+<a href="/whats-new">What's New</a>
+<a href="/records">Record Books</a>
+<a href="/leaderboard">Leaderboard</a>
+<a href="/privacy">Privacy Policy</a>
+<a href="/terms">Terms of Service</a>
+<a href="/accessibility">Accessibility</a>
+<p>Ads and analytics only run if you press Accept. Essential only keeps them off and every game works the same. <a href="/privacy">Learn more</a></p>
+</div>
+</div>
+</div>
+</body>
+</html>

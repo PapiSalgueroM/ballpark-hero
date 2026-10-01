@@ -1,0 +1,55 @@
+.success {
+  animation: trainingSuccess 360ms ease-out;
+}
+
+.miss {
+  animation: trainingMiss 260ms ease-out;
+}
+
+.marker {
+  animation: trainingMarker 300ms ease-out;
+}
+
+.result {
+  animation: trainingResult 380ms ease-out;
+}
+
+.banked {
+  animation: trainingBanked 520ms ease-out;
+}
+
+@keyframes trainingSuccess {
+  from { opacity: 0.8; transform: scale(0.96); text-shadow: 0 0 8px rgba(52, 211, 153, 0.6); }
+  to { opacity: 1; transform: none; text-shadow: none; }
+}
+
+@keyframes trainingMiss {
+  0%, 100% { transform: none; }
+  25% { transform: translateX(-2px); }
+  65% { transform: translateX(2px); }
+}
+
+@keyframes trainingMarker {
+  from { opacity: 0.8; transform: scale(0.82); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes trainingResult {
+  from { opacity: 0.8; transform: translateY(4px); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes trainingBanked {
+  from { box-shadow: 0 0 0 2px rgba(52, 211, 153, 0.6); }
+  to { box-shadow: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .success, .miss, .marker, .result, .banked {
+    animation: none;
+    opacity: 1;
+    transform: none;
+    text-shadow: none;
+    box-shadow: none;
+  }
+}

@@ -337,7 +337,7 @@ const Index = () => {
                 gameSlug="footle"
                 userScore={footleScore(gameStatus === 'won', guesses.length)}
                 buckets={FOOTLE_SCORE_BUCKETS}
-                isVisible={true}
+                isVisible={mode === 'daily'}
               />
             </ResultScreen>
           </div>

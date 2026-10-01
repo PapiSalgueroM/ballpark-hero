@@ -268,6 +268,56 @@ serve(async (req) => {
 
   const only = url.searchParams.get("only");
   const feeds = only ? FEEDS.filter(f => only.split(",").includes(f.sport)) : FEEDS;
+  const bySport = await pollFeeds(feeds, date);
+  const summary: Record<string, unknown>[] = [];
+  for (const [sport, s] of Object.entries(bySport)) {
+    const note = s.notes.join("; ").slice(0, 300) || null;
+    await sb.from("live_scores_runs").insert({ sport, date, http_status: 200, rows: s.rows, note });
+    summary.push({ sport, rows: s.rows, note: note ?? undefined });
+  }
+  /* rows older than two days are nobody's business any more; future rows
+     (tomorrow's slate) are exactly the business and are kept */
+  await sb.from("live_scores").delete().lt("start_at", new Date(Date.now() - 2 * 86400000).toISOString());
+  /* Round 332: the watchdog rides the ordinary today run (the every 20
+     minutes cron), judging yesterday, which is complete by definition. The
+     day=1 and date= and only= variants skip it so one canonical caller owns
+     the check. */
+  const canonical = !only && !url.searchParams.get("date") && (!Number.isFinite(dayOffset) || dayOffset === 0);
+  let watchdogOut: Record<string, unknown> | undefined;
+  if (canonical) watchdogOut = await watchdog(nyDate(-1));
+  /* Round 711: yesterday's games that cross midnight. The today run asks the
+     feed for one New York date, so at 00:00 ET a West Coast game in the 7th
+     inning, or a late tennis match, is never asked about again: its row sat
+     live with an 11:40 PM stamp until the ticker's 12 hour lookback let go
+     of it, the strip showed it as "as of 11:40 PM" all morning, and no final
+     was ever written (measured 2026-09-30: Cubs at Padres, Canucks at
+     Oilers, Blackhawks at Golden Knights, all last stamped 03:40Z). So the
+     canonical run also polls yesterday's date until noon in New York, by
+     which time every such game has finished. It writes rows the same way
+     and nothing to the run ledger: the ledger is what the cron did FOR a
+     date, and the watchdog above must judge yesterday from yesterday's own
+     runs, not from this morning's rewrite of its finals. Runs after the
+     watchdog so the first run of the day judges a clean ledger. */
+  let yesterdayOut: Record<string, unknown> | undefined;
+  if (canonical && nyHour() < 12) {
+    const yesterday = nyDate(-1);
+    const by = await pollFeeds(FEEDS, yesterday);
+    yesterdayOut = { date: yesterday, summary: Object.entries(by).map(([sport, s]) => ({ sport, rows: s.rows, note: s.notes.join("; ").slice(0, 300) || undefined })) };
+  }
+  return new Response(JSON.stringify({ date, summary, ...(watchdogOut ? { watchdog: watchdogOut } : {}), ...(yesterdayOut ? { yesterday: yesterdayOut } : {}) }), { headers: { "content-type": "application/json" } });
+});
+
+/** The hour of the day in New York, 0 to 23. */
+function nyHour(): number {
+  const h = new Intl.DateTimeFormat("en-US", { timeZone: "America/New_York", hour: "numeric", hourCycle: "h23" }).formatToParts(new Date()).find(p => p.type === "hour")?.value;
+  const n = Number(h);
+  return Number.isFinite(n) ? n : 12;
+}
+
+/** Ask every given feed for one date and upsert what comes back, stamping
+ *  each row with the moment it was fetched. Answers what landed per sport;
+ *  the caller decides what to record about it. */
+async function pollFeeds(feeds: typeof FEEDS, date: string): Promise<Record<string, { rows: number; notes: string[] }>> {
   const bySport: Record<string, { rows: number; notes: string[] }> = {};
   for (const feed of feeds) {
     const r = await fetchFeed(feed.query, date);
@@ -306,22 +356,5 @@ serve(async (req) => {
     s.rows += written;
     if (note) s.notes.push(`${feed.idExtra ?? feed.sport}: ${note}`);
   }
-  const summary: Record<string, unknown>[] = [];
-  for (const [sport, s] of Object.entries(bySport)) {
-    const note = s.notes.join("; ").slice(0, 300) || null;
-    await sb.from("live_scores_runs").insert({ sport, date, http_status: 200, rows: s.rows, note });
-    summary.push({ sport, rows: s.rows, note: note ?? undefined });
-  }
-  /* rows older than two days are nobody's business any more; future rows
-     (tomorrow's slate) are exactly the business and are kept */
-  await sb.from("live_scores").delete().lt("start_at", new Date(Date.now() - 2 * 86400000).toISOString());
-  /* Round 332: the watchdog rides the ordinary today run (the every 20
-     minutes cron), judging yesterday, which is complete by definition. The
-     day=1 and date= and only= variants skip it so one canonical caller owns
-     the check. */
-  let watchdogOut: Record<string, unknown> | undefined;
-  if (!only && !url.searchParams.get("date") && (!Number.isFinite(dayOffset) || dayOffset === 0)) {
-    watchdogOut = await watchdog(nyDate(-1));
-  }
-  return new Response(JSON.stringify({ date, summary, ...(watchdogOut ? { watchdog: watchdogOut } : {}) }), { headers: { "content-type": "application/json" } });
-});
+  return bySport;
+}

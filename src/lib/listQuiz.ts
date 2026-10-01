@@ -1,5 +1,6 @@
 import { foldSpecialLatin } from '@/lib/nameFold';
 import { supabase } from '@/integrations/supabase/client';
+import { VERIFIED_SOCCER_AWARDS, dealableAwardWinners } from '@/lib/awardRowShape';
 
 export interface ListPuzzleDef {
   id: string;
@@ -116,39 +117,36 @@ function onlyNames(p: Promise<string[]>): Promise<string[]> {
 }
 
 /**
- * Strips the win-count suffix some source rows carry: "Lionel Messi (2)" ->
- * "Lionel Messi", "Real Madrid (34) †" -> "Real Madrid".
- *
- * cleanAnswers dedupes on the normalized string, so without this a repeat
- * winner shows up as TWO separate answers ("Mohamed Salah" and "Mohamed Salah
- * (2)") and the second is unguessable, nobody types the bracket.
- */
-function stripWinCount(s: string): string {
-  return (s ?? '').replace(/\s*\(\d+\)\s*†?\s*$/, '').trim();
-}
-
-/**
  * One award out of soccer_awards, by winner_name.
  *
- * ONLY use this for awards whose winner_name was verified to actually hold a
- * person's name (audit 2026-07-15). The table's columns are shifted differently
- * per award and several are unusable:
- *   - 'African Footballer of the Year' / 'South American Footballer of the Year':
- *     winner_name holds the literal string "1st" (a rank) and nationality holds
- *     the player. 70 rows each, 1 distinct "winner". DO NOT USE.
- *   - 'World Soccer Player of the Year': 116 distinct winners across 66 years,
- *     which is impossible for a one-per-year award. Unverified. DO NOT USE.
- * Verified good (winner_name is the player; later columns are shifted but we
- * don't read them): European Golden Shoe, MLS MVP, Premier League Player of the
- * Season.
+ * ONLY awards on VERIFIED_SOCCER_AWARDS (src/lib/awardRowShape.ts) can be read:
+ * European Golden Shoe, MLS MVP and Premier League Player of the Season, whose
+ * winner_name holds the player (later columns are shifted, but nothing reads
+ * them). Every other award in the table is DO NOT USE, with the measured reason
+ * beside it in DO_NOT_USE_SOCCER_AWARDS, and asking for one throws rather than
+ * dealing it. The World Cup awards are the worst of it: 393 rows of a scraped
+ * awards page, fixed by an unapplied Round 708 migration.
+ *
+ * Round 708: every row also has to pass awardRowProblem() first, whether or not
+ * that migration has landed. It drops a winner that is a number, a rank, a
+ * paper, a nation or several men, and a row whose club is a scoreline. In the
+ * three awards read today it drops the five 'Not awarded' Golden Shoe years,
+ * which used to be an answer the quiz expected, and cleanAwardWinner() takes
+ * the '(tie)' tag off Sanchez, Stoichkov, Forlan, Henry, Ronaldo and Suarez,
+ * which used to make each of them a second answer nobody could type.
  */
 async function awardWinners(awardName: string): Promise<string[]> {
-  const raw = await col('soccer_awards', 'winner_name', (q: any) => q.eq('award_name', awardName));
-  // onlyNames is belt-and-braces: the three awards used today are 0% bad, but
-  // the shift in this table varies BY AWARD, so anything added later that turns
-  // out to be shifted degrades to "fewer answers" instead of shipping "1st" as
-  // a guessable name.
-  return onlyNames(Promise.resolve(raw.map(stripWinCount)));
+  if (!VERIFIED_SOCCER_AWARDS.includes(awardName)) {
+    throw new Error(`soccer_awards: ${awardName} is not a verified award`);
+  }
+  const { data, error } = await supabase
+    .from('soccer_awards' as any)
+    .select('winner_name, club_or_team')
+    .eq('award_name', awardName)
+    .limit(5000);
+  if (error || !data) throw new Error('soccer_awards unavailable');
+  // onlyNames stays as the last net: the shift in this table varies BY AWARD.
+  return onlyNames(Promise.resolve(dealableAwardWinners(data as any[])));
 }
 
 /**

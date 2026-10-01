@@ -16,12 +16,14 @@ import { focusDialogOnMount, escapeCloses } from '@/lib/dialogA11y';
 import type { CareerState } from "@/lib/soccerCareerEngine";
 import type { TrainingDrill } from "@/lib/soccerCareerEngine";
 import DrillBoard from "./DrillBoard";
+import FirstTouchBoard from "./FirstTouchBoard";
 import { DRILL_META, drillForPosition, type DrillKind } from "@/lib/careerDrills";
+import feedback from "./TrainingFeedback.module.css";
 
 /* Round 468: "arcade" is the position drill, played on the shared arcade
    engine in DrillBoard. It sits beside the Round 81 tiles rather than
    replacing them, and it banks through its own rule (applyDrillResult). */
-type Screen = "menu" | "dribbling" | "pace" | "shooting" | "passing" | "result" | "arcade";
+type Screen = "menu" | "dribbling" | "pace" | "shooting" | "passing" | "result" | "arcade" | "firsttouch";
 
 const CONES = [
   { x: 50, y: 90 }, { x: 24, y: 78 }, { x: 68, y: 68 }, { x: 30, y: 56 },
@@ -306,6 +308,12 @@ export default function TrainingPanel({ career, available, onComplete, onDrill, 
                 </button>
               );
             })()}
+            <button onClick={() => setScreen("firsttouch")}
+              className="w-full flex items-center gap-3 rounded-xl border border-emerald-500/40 bg-emerald-500/10 hover:bg-emerald-500/20 p-3.5 text-left transition-colors">
+              <span className="text-3xl">👟</span>
+              <span className="flex-1"><span className="block text-sm font-black">First Touch</span><span className="block text-[10px] text-muted-foreground">Read the gate, time your control. Trains Dribbling. Practice is always open.</span></span>
+              <span className="text-muted-foreground">›</span>
+            </button>
             {!available ? (
               <div className="rounded-xl border border-border bg-muted/10 p-6 text-center space-y-1">
                 <div className="text-3xl">😮‍💨</div>
@@ -332,6 +340,8 @@ export default function TrainingPanel({ career, available, onComplete, onDrill, 
             )}
           </div>
         )}
+
+        {screen === "firsttouch" && <FirstTouchBoard career={career} canBank={available} onBank={onDrill} onBack={() => setScreen("menu")} />}
 
         {screen === "arcade" && (
           <DrillBoard career={career} canBank={available} onBank={onDrill} onBack={() => setScreen("menu")} />
@@ -403,12 +413,12 @@ export default function TrainingPanel({ career, available, onComplete, onDrill, 
               <div className="mx-auto w-full max-w-[320px] border-4 border-white/80 border-b-0 rounded-t-lg bg-black/20">
                 <div className="grid grid-cols-3 grid-rows-2 h-40">
                   {ZONES.map(z => (
-                    <button key={z.id} onClick={() => gkDive(z.id)}
+                    <button key={z.id} onClick={() => gkDive(z.id)} aria-label={`Dive ${z.label}`} data-training-zone={z.id}
                       className={`relative border border-white/15 transition-colors ${
                         gkTell === z.id ? "bg-amber-400/40 animate-pulse" : gkShot !== null && !gkLast ? "hover:bg-white/15" : ""
                       }`}>
-                      {gkLast?.shot === z.id && <span className="absolute inset-0 flex items-center justify-center text-2xl">⚽</span>}
-                      {gkLast?.dive === z.id && <span className="absolute inset-0 flex items-center justify-center text-3xl">🧤</span>}
+                      {gkLast?.shot === z.id && <span className="absolute inset-0 flex items-center justify-center text-2xl"><span className={feedback.marker} data-training-marker="ball">⚽</span></span>}
+                      {gkLast?.dive === z.id && <span className="absolute inset-0 flex items-center justify-center text-3xl"><span className={feedback.marker} data-training-marker="glove">🧤</span></span>}
                     </button>
                   ))}
                 </div>
@@ -416,7 +426,7 @@ export default function TrainingPanel({ career, available, onComplete, onDrill, 
               <div className="h-8 flex items-center justify-center">
                 {gkTell !== null && <span className="text-sm font-black text-amber-300">He is shaping up...</span>}
                 {gkShot !== null && !gkLast && <span className="text-sm font-black text-white">SHOT! Dive!</span>}
-                {gkLast && <span className={`text-sm font-black ${gkLast.saved ? "text-emerald-300" : "text-red-300"}`}>{gkLast.saved ? "SAVED! What a stop!" : "In the net. Wrong way."}</span>}
+                {gkLast && <span data-training-feedback={gkLast.saved ? "success" : "miss"} className={`text-sm font-black ${gkLast.saved ? "text-emerald-300" : "text-red-300"} ${gkLast.saved ? feedback.success : feedback.miss}`}>{gkLast.saved ? "SAVED! What a stop!" : "In the net. Wrong way."}</span>}
               </div>
             </div>
           </div>
@@ -468,29 +478,31 @@ export default function TrainingPanel({ career, available, onComplete, onDrill, 
               <div className="mx-auto w-full max-w-[320px] border-4 border-white/80 border-b-0 rounded-t-lg bg-black/20">
                 <div className="grid grid-cols-3 grid-rows-2 h-40">
                   {ZONES.map(z => (
-                    <button key={z.id} onClick={() => takePen(z.id)}
+                    <button key={z.id} onClick={() => takePen(z.id)} aria-label={`Shoot ${z.label}`} data-training-zone={z.id}
                       className={`relative border border-white/15 transition-colors ${lastPen ? "" : "hover:bg-white/15"}`}>
-                      {lastPen?.dive === z.id && <span className="absolute inset-0 flex items-center justify-center text-3xl">🧤</span>}
-                      {lastPen?.shot === z.id && <span className="absolute inset-0 flex items-center justify-center text-2xl">⚽</span>}
+                      {lastPen?.dive === z.id && <span className="absolute inset-0 flex items-center justify-center text-3xl"><span className={feedback.marker} data-training-marker="glove">🧤</span></span>}
+                      {lastPen?.shot === z.id && <span className="absolute inset-0 flex items-center justify-center text-2xl"><span className={feedback.marker} data-training-marker="ball">⚽</span></span>}
                     </button>
                   ))}
                 </div>
               </div>
               <div className="h-8 flex items-center justify-center">
-                {lastPen && <span className="text-sm font-black text-white">{lastPen.result}</span>}
+                {lastPen && <span data-training-feedback={lastPen.result === "GOAL!" ? "success" : "miss"} className={`text-sm font-black text-white ${lastPen.result === "GOAL!" ? feedback.success : feedback.miss}`}>{lastPen.result}</span>}
               </div>
             </div>
           </div>
         )}
 
         {screen === "result" && (
-          <div className="p-5 space-y-4 text-center">
-            <div className="text-4xl">{drillMeta[drill].emoji}</div>
-            <div>
-              <div className={`text-5xl font-black tabular-nums ${score >= 80 ? "text-emerald-400" : score >= 50 ? "text-sky-400" : "text-amber-400"}`}>{score}</div>
-              <div className="text-[10px] uppercase tracking-widest font-bold text-muted-foreground">session score</div>
+          <div className="p-5 space-y-4 text-center" data-training-result={drill}>
+            <div className={`space-y-4 ${feedback.result}`} data-training-summary>
+              <div className="text-4xl">{drillMeta[drill].emoji}</div>
+              <div>
+                <div data-training-score className={`text-5xl font-black tabular-nums ${score >= 80 ? "text-emerald-400" : score >= 50 ? "text-sky-400" : "text-amber-400"}`}>{score}</div>
+                <div className="text-[10px] uppercase tracking-widest font-bold text-muted-foreground">session score</div>
+              </div>
+              <p className="text-sm font-bold">{tierText}</p>
             </div>
-            <p className="text-sm font-bold">{tierText}</p>
             {!banked ? (
               <button
                 onClick={() => { setBanked(true); onComplete(drill, score); }}
@@ -498,7 +510,7 @@ export default function TrainingPanel({ career, available, onComplete, onDrill, 
                 Bank the session
               </button>
             ) : (
-              <button onClick={onClose} className="w-full h-11 rounded-lg bg-muted/40 hover:bg-muted/60 text-sm font-black">
+              <button onClick={onClose} data-training-banked className={`w-full h-11 rounded-lg bg-muted/40 hover:bg-muted/60 text-sm font-black ${feedback.banked}`}>
                 Back to your career
               </button>
             )}

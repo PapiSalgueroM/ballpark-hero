@@ -51,6 +51,7 @@ const STATIC_TYPES: Record<string, string> = {
   '/records/stanley-cup-winners': 'WebPage',
   '/records/wnba-champions': 'WebPage',
   '/records/college-football-national-champions': 'WebPage',
+  '/records/heisman-trophy-winners': 'WebPage',
   '/records/ncaa-basketball-champions': 'WebPage',
   '/records/english-football-champions': 'WebPage',
   '/records/afl-premiers': 'WebPage',
@@ -67,6 +68,9 @@ const STATIC_TYPES: Record<string, string> = {
   '/nba-playoff-format-history': 'WebPage',
   '/mlb-postseason-format-history': 'WebPage',
   '/nhl-playoff-format-history': 'WebPage',
+  /* Round 656: one tournament's results. A reference page, so WebPage, for the
+     same reason as the explainers: it claims nothing the page cannot back up. */
+  '/world-cup-2026-results': 'WebPage',
   '/leaderboard': 'WebPage',
   '/whats-new': 'CollectionPage',
   '/soccer': 'CollectionPage',
