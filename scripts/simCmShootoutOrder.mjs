@@ -59,6 +59,14 @@
  *      fall back into step: under unsetpath it came out the same on 17 of
  *      the 28 shootout rows, and 8 of them matched on every other field);
  *      the hash catches all 28.
+ *      Round 781 (the referee's board) moves every match's draws, so on the
+ *      merge the fixture was written again, from Round 781's own engine
+ *      before it met this round (the branch head 71df177e, an engine with
+ *      no Round 782 code at all), the deliberate act the note at the foot of
+ *      this header describes. The walk to the cup week runs on that engine
+ *      too, so the base save differs and 15 of the 150 rows are shootouts
+ *      now, still over the floor of 12; unsetpath still breaks all 15 (135
+ *      of 150 reproduced) and turns section 5 red with them.
  *   5) An old save loads. A career written without the field comes back
  *      with no order, plays the fixture's match the fixture's way, and an
  *      order set on it survives a save and a load; a bad id is refused, and
@@ -110,6 +118,8 @@
  *   biggest move off the base rate             0.120                                0.200 (nocap)                printed
  *   fixture rows reproduced                    150 of 150                           122 of 150 (unsetpath)       150
  *   fixture rows that are shootouts            28                                                                floor 12
+ *     (the fixture as written again for Round 781: 150 of 150, 15 shootouts,
+ *      135 of 150 under unsetpath)
  *
  * MEASURED, 2026-10-01, the keeper and their order (sections 1 and 6), the
  * same six runs, 4000 paired shootouts an arm in 6a:

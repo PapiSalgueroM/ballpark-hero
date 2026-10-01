@@ -1,6 +1,6 @@
 /** Round 603: rendered action triggers, saves versus goals, pause, player controls
  * and unchanged settlement. Controls rewrite temporary copies, never source.
- * LIVE_MOTION_CONTROL=trigger|save|pause|mutation|lineup|speed|reduced|terminal|redraw|whistle|banner must turn the corresponding
+ * LIVE_MOTION_CONTROL=trigger|save|pause|mutation|lineup|speed|reduced|terminal|redraw|whistle|banner|boardgoal|etclock must turn the corresponding
  * runtime check red. Every replacement is asserted before a control runs.
  * Round 670 review: whistle puts back the viewer deciding extra time off the
  * career it was rendered with rather than off the latest save, and the two
@@ -8,6 +8,10 @@
  * Round 670 polish: banner puts back the extra time banner's typed "Level
  * after 90 minutes", which is false beside a second leg that is level only on
  * aggregate, and the banner test must go red.
+ * Round 781 review: boardgoal prints a goal banner's bare minute (90' for a
+ * goal at 90+3), and etclock prints the extra time clock's bare minute (ET
+ * 120' all through its board); each must turn its own test red. Before the
+ * review both left every gate green.
  */
 import { readFile, writeFile, mkdtemp, realpath, rm } from 'node:fs/promises';
 import { spawnSync } from 'node:child_process';
@@ -17,7 +21,7 @@ import { fileURLToPath } from 'node:url';
 import assert from 'node:assert/strict';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const control = process.env.LIVE_MOTION_CONTROL || '';
-assert.ok(['', 'trigger', 'save', 'pause', 'mutation', 'lineup', 'speed', 'reduced', 'terminal', 'redraw', 'whistle', 'banner'].includes(control), 'Unknown live motion control');
+assert.ok(['', 'trigger', 'save', 'pause', 'mutation', 'lineup', 'speed', 'reduced', 'terminal', 'redraw', 'whistle', 'banner', 'boardgoal', 'etclock'].includes(control), 'Unknown live motion control');
 const folder = await mkdtemp(path.join(tmpdir(), 'cm-motion-'));
 const env = { ...process.env };
 try {
@@ -33,12 +37,14 @@ try {
     if (control === 'speed') viewer = replace(viewer, 'c + dt * BASE_RATE * speed', 'c + dt * BASE_RATE');
     if (control === 'reduced') motion = replace(motion, 'reduced ? 1.05 : clock - action.event.at', 'clock - action.event.at');
     if (control === 'terminal') viewer = replace(viewer, 'const terminalWindup = !!terminalAction && clock >= terminalMinute - 1.05 && clock < terminalMinute;', 'const terminalWindup = false;');
-    if (control === 'redraw') viewer = replace(viewer, 'const motionStillCommitted = !motionEvent || motionEvent.event.minute <= clock || feed.includes(motionEvent.event);', 'const motionStillCommitted = true;');
+    if (control === 'redraw') viewer = replace(viewer, 'const motionStillCommitted = !motionEvent || motionEvent.event.minute + (motionEvent.event.plus ?? 0) <= clock || feed.includes(motionEvent.event);', 'const motionStillCommitted = true;');
     if (control === 'whistle') {
       viewer = replace(viewer, '      if (liveNow?.et) {\n', '      if (isExtraTimeDue(career)) {\n');
       viewer = replace(viewer, '  liveFeed, liveStatsAt, myOnPitchAt, oppOnPitchAt, squadNumbers, benchFor, MAX_SUBS, liveGoneIds,\n', '  liveFeed, liveStatsAt, myOnPitchAt, oppOnPitchAt, squadNumbers, benchFor, MAX_SUBS, liveGoneIds, isExtraTimeDue,\n');
     }
     if (control === 'banner') viewer = replace(viewer, "club: extraTimeCall(career, liveNow), tone: 'none'", "club: 'Level after 90 minutes', tone: 'none'");
+    if (control === 'boardgoal') viewer = replace(viewer, "'GOAL! ' }, who, { t: ` ${minuteLabel(e)}` }]", "'GOAL! ' }, who, { t: ` ${e.minute}'` }]");
+    if (control === 'etclock') viewer = replace(viewer, "stage === 'extra' ? `ET ${minuteLabel({ minute, plus })}`", "stage === 'extra' ? `ET ${minute}'`");
     const componentPath = path.join(folder, 'LiveSimMotion.tsx').replaceAll('\\', '/');
     viewer = replace(viewer, "import { LivePitchPlayer, useLiveSimMotion } from '@/components/club-manager/LiveSimMotion';", "import { LivePitchPlayer, useLiveSimMotion } from './LiveSimMotion';");
     viewer = replace(viewer, "import type { MotionEvent } from '@/components/club-manager/LiveSimMotion';", "import type { MotionEvent } from './LiveSimMotion';");
@@ -57,7 +63,7 @@ try {
     await writeFile(path.join(folder, 'vitest.config.mjs'), `export default ${JSON.stringify(config)};\n`);
     console.log('Negative control changed temporary source:', control);
   }
-  const selected = { trigger: 'actual feed', save: 'committed action|actual feed', pause: 'pause freezes', mutation: 'settled results', lineup: 'substitution during', speed: 'speed changes', reduced: 'reduced motion', terminal: 'terminal goal and save contact', redraw: 'a tactics redraw cancels', whistle: 'the ninetieth minute asks the latest save', banner: 'the extra time banner says what is true' };
+  const selected = { trigger: 'actual feed', save: 'committed action|actual feed', pause: 'pause freezes', mutation: 'settled results', lineup: 'substitution during', speed: 'speed changes', reduced: 'reduced motion', terminal: 'terminal goal and save contact', redraw: 'a tactics redraw cancels', whistle: 'the ninetieth minute asks the latest save', banner: 'the extra time banner says what is true', boardgoal: 'a goal in the board is announced with its plus', etclock: 'the extra time clock runs into its own board' };
   const args = [path.join(root, 'node_modules/vitest/vitest.mjs'), 'run', 'src/test/liveSimMotion.test.tsx', '--reporter=verbose'];
   if (control) args.push('--config', path.join(folder, 'vitest.config.mjs'), '-t', selected[control]);
   const result = spawnSync(process.execPath, args, { cwd: root, env, stdio: 'inherit' });
