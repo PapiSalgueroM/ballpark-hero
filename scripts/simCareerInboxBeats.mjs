@@ -67,9 +67,8 @@
  *      7c the morale option reaches that sport's stat line, paired seasons on
  *      identical streams; 7d forty real careers, the same rules as 5d; 7e ten
  *      pre-796 saves of that sport play eight more seasons and meet choices.
- *      Their inboxes are NOT on a calendar yet: that needs a beat-tagged text
- *      bank and a season beat reader per sport, which this round leaves as
- *      the binding point (receiveInboxTextsFor's beats argument).
+ *      Their inboxes went onto calendars of their own in Round 822: section
+ *      10.
  *   8. The season stream, HARD. The choice roll runs inside each sport's
  *      season sim on seasonChoiceRng, a generator keyed to the save, never on
  *      the season's own stream. Twenty seeded careers a sport, played with
@@ -80,7 +79,8 @@
  *      NHL All-Star median, a gate that sits within two points of its line
  *      on main).
  *   9. The inbox stream, HARD. The NFL inbox draws from its own generator
- *      keyed to the save and the moment (nflInboxRng), never the season's.
+ *      keyed to the save and the moment (nflInboxRng, shared since Round 822
+ *      as careerInbox.ts's inboxStream), never the season's.
  *      Twenty seeded careers played with the inbox open (every text marked
  *      read the moment it lands, no effect applied, so it delivers every
  *      season) and shut (six unread texts on the save from draft night, so it
@@ -88,6 +88,24 @@
  *      must be identical. Before this section the inbox drew from the season
  *      stream, and simAwards' NFL figures moved with every text the bank
  *      gained.
+ *  10. Round 822: the NBA, MLB and NHL inboxes on their own calendars, held
+ *      to every rule the NFL is held to. For each sport: 10a the bank is whole
+ *      (every Round 525 template id still in it, so a save that used one is
+ *      never sent it again, every template on a beat of that calendar, every
+ *      beat with a text); 10b forty careers, every text on a beat its season
+ *      really had (judged from the result string and the save, not through
+ *      the sport's reader), and delivered exactly by the rule: as many as the
+ *      season wants or has open beats for, whichever is fewer, the one-off
+ *      beats first, in calendar order, and draft night's texts on draft night;
+ *      a suspended season reads as the offseason alone; 10c a hundred and
+ *      twenty careers to retirement, no forward looking text or beat in a
+ *      final season (careers that go on must still get them); 10d speakers
+ *      are roles and no delivered text names a real player; 10e the season
+ *      stream untouched, open against shut, the section 9 recipe; 10f a
+ *      pre-525 save (no inbox) and a pre-822 save (Round 525 texts with no
+ *      beat) play five more seasons, old texts answerable, no template sent
+ *      twice. Section 2 also fingerprints the final season gate and the stream
+ *      key, which moved from the NFL binding into careerInbox.ts.
  *
  * BANDS, measured with BEATS_SEED_BASE=0..5 (six seed sets, 40 careers each,
  * about 546 career-seasons a set):
@@ -124,6 +142,28 @@
  *     roll must fire at least once
  *   section 9: 20 of 20 careers identical in every seed set, the open inbox
  *     delivering 717 to 743 texts along the way (floor 200), the shut one 0
+ *   section 10, same six seed sets (Round 822, banks of 57 NBA, 59 MLB and
+ *   54 NHL texts):
+ *     texts per career-season    NBA 1.937 to 1.938 (draft night leaves two
+ *                                unread, so the rookie tick wants one), MLB
+ *                                2.000, NHL 2.000                floor 1.6
+ *     smallest ordinary beat share  NBA 14.0%, MLB 11.3%, NHL 11.3%
+ *                                                                floor 8%
+ *     seasons that had each season one-off  NBA summer 40, playoffs 300 or
+ *       more, contract 198 or more; MLB October 237 or more, arbitration 120,
+ *       free agency 160; NHL World Juniors 58 or more, playoffs 293 or more,
+ *       contract 240                                          floor 20 each
+ *     off-beat, untagged, doubled, over the want, off the rule, out of order
+ *                                0 in every sport and seed set     hard
+ *     final seasons, 120 careers  ending where a forward beat would have come
+ *                                NBA 38 to 50, MLB 55 to 63, NHL 68 to 77
+ *                                (floor 15); with a forward text still unsent
+ *                                NBA 120, MLB 120, NHL 67 to 84 (floor 30);
+ *                                carrying one 0 (hard)
+ *     stream, 20 careers a sport  20 of 20 identical, the open inbox sending
+ *                                NBA 766 to 787, MLB 816 to 820, NHL 790 to
+ *                                800 (floor 200), the shut one 0
+ *     old saves                  20 of 20 a sport play on, 0 sent twice
  *
  * NEGATIVE CONTROLS, BEATS_CONTROL=...
  *
@@ -158,12 +198,29 @@
  *   aheadretire  the NFL progress tells the inbox every career goes on, so a
  *                retiring player is sent texts about next season. Section 3c
  *                fails.
+ *   nobeatsnba   the NBA tick takes the old between-seasons path, so texts
+ *                arrive with no beat. Section 10b fails for the NBA.
+ *   allbeatsmlb  every MLB season claims October. Section 10b fails.
+ *   juniorsnhl   every NHL season claims the World Juniors, at any age.
+ *                Section 10b fails.
+ *   aheadretirenba, aheadretiremlb, aheadretirenhl
+ *                that sport's progress tells the inbox every career goes on.
+ *                Section 10c fails for that sport.
+ *   inboxstreamnba, inboxstreammlb, inboxstreamnhl
+ *                that sport's progress hands its own stream to the inbox.
+ *                Section 10e fails for that sport.
+ *   realnamemlb  the MLB draft day manager text is signed "Derek Jeter", a
+ *                real player in src/data. Section 10d fails.
+ *   oldidsnhl    one Round 525 NHL template is renamed, so a save that used
+ *                it could be sent it again. Section 10a fails.
  *
  *   Each control asserts the text it rewrites appears exactly once in the
  *   file first, so a control that rewrites nothing cannot pass for the
  *   wrong reason.
  *
  * Run: node scripts/simCareerInboxBeats.mjs
+ * A section 10 control can be scoped to its sport with BEATS_SPORTS=NBA (or
+ * MLB, NHL); such a run never prints the full green line.
  */
 import { build } from 'esbuild';
 import os from 'node:os';
@@ -175,6 +232,7 @@ import { probeSoccer, RIVAL_DILEMMA_IDS } from './lib/soccerInboxProbe796.mjs';
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.BEATS_CONTROL || '';
 const SEED_BASE = Number(process.env.BEATS_SEED_BASE || 0);
+const SPORT_FILTER = (process.env.BEATS_SPORTS || '').split(',').map(s => s.trim().toUpperCase()).filter(Boolean);
 
 /* A control is one [file, from, to] edit, or a list of them (Round 822: the
    nobeats controls swap a call AND the import it needs). */
@@ -1263,6 +1321,10 @@ function playCalCareer(cs, seed, { onDraft, onTick, years = 16 } = {}) {
 
 for (const cs of CAL_SPORTS) {
   const tag = cs.label;
+  /* BEATS_SPORTS=NHL runs section 10 for that sport alone, so a control aimed
+     at one sport stays inside the command time limit on a loaded machine. A
+     filtered run never prints the full green line. */
+  if (SPORT_FILTER.length > 0 && !SPORT_FILTER.includes(tag)) { console.log(`   ${tag}: skipped, BEATS_SPORTS=${SPORT_FILTER.join(',')}`); continue; }
   const S = cs.SPORT;
   const byId = new Map(S.pool.map(d => [d.id, d]));
   const calIdx = id => cs.CAL.findIndex(b => b.id === id);
@@ -1492,4 +1554,5 @@ if (failures > 0) {
   process.exit(1);
 }
 if (CONTROL) console.error(`simCareerInboxBeats: GREEN UNDER CONTROL ${CONTROL}. The control did not fire, so the check it guards proves nothing.`);
-else console.log('simCareerInboxBeats: green. Soccer is unchanged, the NFL inbox runs on the football calendar, and every rival choice does what it says.');
+else if (SPORT_FILTER.length > 0) console.log(`simCareerInboxBeats: green with section 10 limited to ${SPORT_FILTER.join(',')}. NOT a full run.`);
+else console.log('simCareerInboxBeats: green. Soccer is unchanged, the NFL, NBA, MLB and NHL inboxes each run on their own calendar, and every rival choice does what it says.');
