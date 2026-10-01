@@ -24,6 +24,12 @@ const WhatsNew = () => {
 
       <section className="space-y-8 text-sm leading-relaxed text-muted-foreground">
         <div>
+          <h2 className="text-lg font-semibold text-foreground mb-2">October 2026</h2>
+          <ul className="list-disc pl-5 space-y-2">
+            <li><strong className="text-foreground">Sports Bingo: pass the phone round the table, and pick what the squares are about.</strong> Two to four of you on one phone, each with your own card, all hearing the same ten packs. On every pack each seat takes a turn: the hand over screen shows only whose turn it is, you turn the pack up one player at a time and claim what matches before the clock runs out, then pass the phone. Play for the first line or the full card. Level on the goal, whoever got there having turned up fewer players takes it, then more squares, otherwise it's shared. Any seat can be one of the three CPU tempers instead. The same setup lets the group pick which families the squares come from (positions, ages, values, goals and assists, nationalities, leagues) and how long a pack stays open; a pick too thin to fill a card is topped up from the rest and the screen says so. A game left mid way is there when you come back. The daily card and the solo modes are exactly as they were. <Link to="/sports-bingo" className="text-primary hover:underline">Deal the cards</Link>.</li>
+          </ul>
+        </div>
+        <div>
           <h2 className="text-lg font-semibold text-foreground mb-2">September 2026</h2>
           <ul className="list-disc pl-5 space-y-2">
             <li><strong className="text-foreground">New game: Manager Hot Seat, five games to save your job.</strong> You walk into a real club on a bad run, the board give you five league games and a points target, and you either hit it or you are gone. Pick a shape and a team talk before every match, handle the press, and watch the board, the fans and the dressing room react. It runs on the Club Manager engine, so every match is the full match sim from that game. There is a daily (same club and target for everyone) and a free play mode for any club you like. It records that you played but puts no points on the leaderboard for now.</li>

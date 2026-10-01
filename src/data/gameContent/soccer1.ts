@@ -1363,7 +1363,7 @@ export const SOCCER_CONTENT_1: GameContentMap = {
     intro: [
       "Sports Bingo hands you a 5 by 5 card of football conditions, a goalkeeper, a Brazilian, someone worth 100M plus, and opens ten packs of real players on a timer. Your job is spotting which squares each pack can claim before it closes.",
       "The marking is the whole skill. Nothing is claimed for you: a pack sits open for fifteen seconds, you scan five real players and their real attributes, and every square you can justify, you tap. When the next pack opens, the old one is gone for good.",
-      "Play the shared daily card, run unlimited fresh cards, or race a CPU on the same card with the same packs and its own board.",
+      "Play the shared daily card, run unlimited fresh cards, race a CPU on the same card with the same packs and its own board, or pass one phone round a table of two to four, each with your own card, all hearing the same packs, with your own pick of what the squares can be.",
     ],
     headings: {
       howToPlay: "How to play Sports Bingo, a free daily football pack opening game",
@@ -1374,9 +1374,23 @@ export const SOCCER_CONTENT_1: GameContentMap = {
     },
     howToPlaySections: [
       {
-        heading: "Picking daily, unlimited or versus CPU mode",
+        heading: "Picking daily, unlimited, versus CPU or pass the device",
         items: [
-          "Pick a mode: the daily card (one shared card and pack run per day), unlimited, or versus the CPU at one of three levels.",
+          "Pick a mode: the daily card (one shared card and pack run per day), unlimited, versus the CPU at one of three levels, or pass the device for two to four of you on one phone.",
+        ],
+      },
+      {
+        heading: "Setting up a pass the device table",
+        items: [
+          "Choose two to four seats and name them. Any seat can be a CPU instead, at casual, sharp or ruthless. Then pick which families the squares may come from (positions, ages, values, goals and assists, nationalities, leagues), a difficulty (relaxed, standard or quick, which is how long a pack stays open), and what wins: first line or full card.",
+        ],
+        subsections: [
+          {
+            heading: "Taking turns and passing the phone",
+            items: [
+              "Everyone gets their own card and the same ten packs. On every pack each seat takes a turn in order: the hand over screen shows only whose turn is next, you tap ready, turn the pack up one player at a time, claim every square a player turned up satisfies before the clock runs out, then pass the phone. CPU seats take their turn on their own.",
+            ],
+          },
         ],
       },
       {
@@ -1423,7 +1437,20 @@ export const SOCCER_CONTENT_1: GameContentMap = {
       {
         heading: "Guaranteeing every card is completable",
         items: [
-          "Every card is completable: the pack run is checked at deal time so each condition on the card has at least one matching player somewhere in the ten packs.",
+          "Every card is completable: the pack run is checked at deal time so each condition on the card has at least one matching player somewhere in the ten packs. At a table that holds for every seat's card against the shared packs.",
+        ],
+      },
+      {
+        heading: "Winning at a pass the device table, and the tie rule",
+        items: [
+          "First line means a full row, column or diagonal, the free centre counting. Full card means most squares after pack ten, and a blackout ends it early. The game ends after the round in which somebody met the goal, so every seat has heard the same packs.",
+          "Level on the goal, the seat that got there having turned up fewer players wins. Still level, more squares wins. Still level, the win is shared. If nobody met the goal in ten packs, most squares wins, shared when level.",
+        ],
+      },
+      {
+        heading: "Custom cards and what happens when a pick is too thin",
+        items: [
+          "The bank holds 33 conditions in six families. Only a pick worth 24 or more can fill a card by itself, so you can drop nationalities, or leagues, or positions, or one or two of ages, values and goals and assists. A thinner pick fills what it can and tops every card up from the families you dropped, and both the setup screen and the turn screen say exactly how many squares that is. A card is never dealt short.",
         ],
       },
     ],
@@ -1438,6 +1465,13 @@ export const SOCCER_CONTENT_1: GameContentMap = {
         heading: "Missing one square and losing to the CPU",
         paragraphs: [
           "You tap four of them before the clock runs out, miss the goals square, and the pack closes. Seven packs later you finish on 19 squares and 4 lines: 65 points, and the ruthless CPU beat you by two squares.",
+        ],
+      },
+      {
+        heading: "Two seats, first line, and the fewer players rule",
+        paragraphs: [
+          "Sam and Ana set up a two seat table, first line, standard pace, with nationalities dropped: the five remaining families offer 25 conditions, so both cards fill without a top up. Pack four opens for Sam. She turns up three players and the third, a 31 year old Premier League centre back worth 25M, completes her top row through Age 30 or older. That is 18 players turned up in all, three full packs and three of this one, so her card is marked as done at 18.",
+          "Ana takes her turn on the same pack, turns up all five and completes a diagonal off the fifth: 20 players. The round is over and both have a line, so the game ends. Sam got there having turned up fewer players, so Sam wins. Had both needed all five, more squares would have decided it, and level on that too it would be shared.",
         ],
       },
     ],
@@ -1460,11 +1494,25 @@ export const SOCCER_CONTENT_1: GameContentMap = {
           "Do not close packs early while broad squares are still open. The timer is generous exactly so the scan is doable.",
         ],
       },
+      {
+        heading: "Claiming as you turn players up at a table",
+        items: [
+          "At a table, claim as you go rather than turning the whole pack up first: a line completed on the third player beats one completed on the fifth.",
+        ],
+      },
     ],
     faqs: [
       {
         q: "Is the daily card the same for everyone?",
         a: "Yes. One card and one pack sequence per Eastern Time date, shared worldwide, so daily scores compare fairly.",
+      },
+      {
+        q: "Can we play on one phone?",
+        a: "Yes. Pass the device seats two to four people on one phone, with CPU tempers filling any seat you like. Everyone gets their own card and hears the same ten packs, turns run seat by seat on every pack, and the hand over screen shows only whose turn is next. A game you leave mid way is offered again when you come back.",
+      },
+      {
+        q: "Can we choose what the squares are about?",
+        a: "Yes, at a pass the device table. Keep or drop any of the six families. A pick that cannot fill 24 squares is topped up from the dropped families and the screen says how many squares that is.",
       },
       {
         q: "Are the players real?",
