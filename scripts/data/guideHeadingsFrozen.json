@@ -2460,7 +2460,8 @@
     },
     "/nhl-front-office": {
       "howToPlay": [
-        "Pick any of the 32 clubs and inherit its actual roster: every forward, defenseman and goalie on the club's NHL roster when we read it on October 1, 2026, 22 or 23 players, with their real ages.",
+        "Pick any of the 32 clubs and inherit its real roster as the NHL listed it on October 1, 2026, 22 or 23 players with their real ages. A club that listed 23 or fewer keeps every one of them. A club still carrying extra bodies from training camp keeps 23: the two goalies, twelve forwards and six defensemen with the most NHL games in 2025-26, then the three skaters left with the most.",
+        "The roster is the NHL's own list for that day, so a player who was missing from it, usually one hurt in camp, is not in the game either.",
         "The Roster box splits them into forwards, defense and goalies. A rating with a star is a stand in: that player had no full 2025-26 NHL season (30 games for a skater, 15 for a goalie) to rate him on, so he starts on 68.",
         "Read the ownership mandate: a contender is told to win the Cup, a bubble club to make the bracket, a rebuild to hit an honest win number. It resets every offseason from where the roster really stands.",
         "Shape it: waive players, sign free agents, and work the phone on trades, where the other GM counters with pick demands and lesser returns instead of a flat yes or no.",
@@ -2475,7 +2476,7 @@
         "Salaries are fictional and follow the rating. On a full roster a star costs around 11M and a depth player sits near a 0.8M floor, so every club opens under the cap.",
         "Points are real: 2 for a win, 1 for an overtime loss, and roughly a quarter of losses go to overtime.",
         "Rosters run between 20 and 23 players, the real NHL numbers: 20 dresses twelve forwards, six defensemen and two goalies, and 23 is the active limit. You cannot waive below the floor or sign past the ceiling.",
-        "Draft picks still join your roster, so you can open a season above 23. You just cannot sign anyone until you are back under.",
+        "Draft picks join your roster, so the draft can take you past 23. If it does, Play waits until you waive down to 23 before puck drop, and every other club cuts its lowest rated spare player the same way over the summer.",
         "A franchise started before the full rosters arrived keeps its 13 player roster and the old 8 to 15 limits.",
         "Trades are player for player plus an optional pick, and the AI prices age, rating and position before saying yes.",
         "At the draft you make 2 picks, and scouting grades carry error; the true rating appears only after you commit.",

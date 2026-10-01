@@ -1027,7 +1027,7 @@ export const HOCKEY_CONTENT: GameContentMap = {
   '/nhl-front-office': {
     intro: [
       "Running an NHL club is a math problem with feelings, and now the math is yours.",
-      "You get a club's full 2026-27 roster, 22 or 23 real players straight from the NHL's own data and rated off real 2025-26 stats, plus a hard cap, a points race and the actual divisional bracket. Contracts and trades in the sim are fictional; the hockey logic is not.",
+      "You get a club's real 2026-27 roster, 22 or 23 players from the NHL's own data, rated off real 2025-26 stats, plus a hard cap, a points race and the actual divisional bracket. Contracts and trades in the sim are fictional; the hockey logic is not.",
     ],
     headings: {
       howToPlay: "How to play NHL Front Office, a free hockey GM simulation game",
@@ -1040,7 +1040,8 @@ export const HOCKEY_CONTENT: GameContentMap = {
       {
         heading: "Pick a club and inherit its roster",
         items: [
-          "Pick any of the 32 clubs and inherit its actual roster: every forward, defenseman and goalie on the club's NHL roster when we read it on October 1, 2026, 22 or 23 players, with their real ages.",
+          "Pick any of the 32 clubs and inherit its real roster as the NHL listed it on October 1, 2026, 22 or 23 players with their real ages. A club that listed 23 or fewer keeps every one of them. A club still carrying extra bodies from training camp keeps 23: the two goalies, twelve forwards and six defensemen with the most NHL games in 2025-26, then the three skaters left with the most.",
+          "The roster is the NHL's own list for that day, so a player who was missing from it, usually one hurt in camp, is not in the game either.",
           "The Roster box splits them into forwards, defense and goalies. A rating with a star is a stand in: that player had no full 2025-26 NHL season (30 games for a skater, 15 for a goalie) to rate him on, so he starts on 68.",
         ],
         subsections: [

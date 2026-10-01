@@ -598,10 +598,10 @@ export default function NhlFrontOfficeBoard() {
         <div className="rounded-2xl border border-border bg-card p-4 text-center">
           <p className="font-display text-lg font-bold text-foreground">Take over an NHL front office</p>
           <p className="mt-1 text-xs text-muted-foreground">
-            Every club&apos;s full 2026-27 roster, 22 or 23 real players, from the NHL&apos;s own data
-            as of {NHL_FO_FULL_READ}, rated off real 2025-26 stats. Work under the hard cap, chase
-            points in an 82-game-shaped season, then the divisional bracket: sixteen teams, four
-            best-of-7 rounds, one Cup. Saves automatically.
+            Every club&apos;s real 2026-27 roster, 22 or 23 players as the NHL listed them on
+            {' '}{NHL_FO_FULL_READ}, rated off real 2025-26 stats. Salaries and contracts are made up
+            for the game. Work under the hard cap, chase points in an 82-game-shaped season, then
+            the divisional bracket: sixteen teams, four best-of-7 rounds, one Cup. Saves automatically.
           </p>
         </div>
         <div className="grid grid-cols-2 gap-1.5 sm:grid-cols-4">
@@ -867,7 +867,8 @@ export default function NhlFrontOfficeBoard() {
             Cap hit ${nhlCapUsed(my)}M of the ${league.cap}M ceiling
             {dead > 0 && <> · dead money <b className="text-destructive">${dead}M</b></>}
           </p>
-          <p className="mb-2 text-center text-[10px] text-muted-foreground">{capNote()}</p>
+          {/* Round 830 review: real names beside a dollar figure read as real deals, so the box says they are not. */}
+          <p data-salary-note className="mb-2 text-center text-[10px] text-muted-foreground">{capNote()}. Player salaries and contract years are made up for the game, not their real deals.</p>
           {cutBlock && <p data-cut-block className="mb-2 text-center text-[10px] text-destructive">{cutBlock}</p>}
           {dropBlock && <p data-puckdrop-block className="mb-2 text-center text-[10px] text-destructive">{dropBlock}</p>}
           <div className="max-h-96 space-y-2 overflow-y-auto">

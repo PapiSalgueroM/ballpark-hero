@@ -49,6 +49,12 @@
  *      never the GM's own; and over sixteen franchise seasons no CPU club opens a
  *      season above 23 while the GM is refused exactly when he is above it and
  *      can always waive down.
+ *  10. What the page says is what the data is (Round 830 review). Real names sit
+ *      beside made up salaries, so the Roster box and the pick card say the money
+ *      is the game's own; the guide states the camp rule (who of a camp roster is
+ *      kept) and the stand in rule in the rules lib's own numbers; and no copy
+ *      claims every player is rated off real stats, because 97 are stand ins.
+ *      Read from the code with comments stripped.
  *
  * Controls (NHL_FULL_CONTROL=<name>), each served from memory, nothing on disk
  * changes; a control passes only when exactly its sections go red:
@@ -70,6 +76,9 @@
  *   trimall   the summer cuts the GM's own club too                  -> 9
  *   droplegacy the puck drop refusal fires on an older save too      -> 9
  *   flatfloor the CPU cut held at a flat 20 (a lopsided club opens at 24) -> 9
+ *   overclaim the page says every player is rated off real stats     -> 10
+ *   nosalary  the Roster box loses its made up salaries line         -> 10
+ *   camprule  the guide's camp rule says eleven forwards             -> 10
  *
  * Measured headroom (2026-10-01, this record):
  *   section 6: after every offseason 0 clubs short of 12/6/2 and 0 of 1600 club
@@ -96,13 +105,14 @@ const EXPECT = {
   invent: [2, 4, 9], age: [2], spot: [1], thirteen: [4, 5, 8, 9], paycurve: [4], partial: [4],
   ceiling: [4, 5, 6, 9], refill: [6], legacy: [7], allmen: [7, 8], dupname: [6],
   notrim: [9], nodrop: [9], trimfloor: [9], trimall: [9], droplegacy: [9], flatfloor: [9],
+  overclaim: [10], nosalary: [10], camprule: [10],
 };
 if (CONTROL && !EXPECT[CONTROL]) { console.error(`NHL_FULL_CONTROL=${CONTROL} is not a control this harness knows (${Object.keys(EXPECT).join(', ')})`); process.exit(1); }
 
 const SECTION_NAMES = {
   1: 'the record and the bake', 2: 'every man traces to the record', 3: 'the rule is the lost bake\'s rule',
   4: 'a new league', 5: 'the roster limits', 6: 'ten franchises, five seasons each', 7: 'an old save plays as it did',
-  8: 'what moved, and why', 9: 'the cut down before puck drop',
+  8: 'what moved, and why', 9: 'the cut down before puck drop', 10: 'what the page says is what the data is',
 };
 const bySection = new Map();
 const fails = [];
@@ -653,6 +663,51 @@ console.log('9) The cut down before puck drop');
   ok(9, 'the refusal fires exactly when a club is above 23', refusedWrong === 0 && refusedRight === clubSeasons, `${refusedWrong} wrong of ${clubSeasons}`);
   ok(9, 'the GM can always waive down to a legal roster', deadEnds === 0, `${deadEnds} dead ends`);
   ok(9, 'the draft really did carry the GM past 23 (the refusal was exercised)', mineOver > 0, String(mineOver));
+}
+
+/* ---------- 10. what the page says is what the data is ---------- */
+console.log('10) What the page says is what the data is');
+{
+  /* code, not comments: block comments and whole line // comments go before any match */
+  const code = f => eol(fs.readFileSync(path.join(ROOT, f), 'utf8')).replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
+  let board = code('src/components/nhl-front-office/NhlFrontOfficeBoard.tsx');
+  let page = code('src/pages/NhlFrontOffice.tsx');
+  const guideAll = code('src/data/gameContent/hockey.ts');
+  const gStart = guideAll.indexOf("'/nhl-front-office': {");
+  let guide = gStart < 0 ? '' : guideAll.slice(gStart, guideAll.indexOf("\n  '/", gStart + 5) > 0 ? guideAll.indexOf("\n  '/", gStart + 5) : undefined);
+  const news = code('src/pages/WhatsNew.tsx');
+  let entry = (news.split('<li>').find(li => li.includes('NHL Front Office: real rosters')) ?? '');
+  const rules = eol(fs.readFileSync(path.join(ROOT, 'scripts/lib/nhlFoRosterRules.mjs'), 'utf8'));
+  const bind = (label, text, from, to) => {
+    if (text.split(from).length !== 2) throw new Error(`control ${CONTROL}: ${JSON.stringify(from.slice(0, 60))} is not in ${label} exactly once. Refusing to run.`);
+    return text.replace(from, to);
+  };
+  if (CONTROL === 'overclaim') page = bind('the page', page, "22 or 23 real players from the league's own data, rated off real 2025-26 stats (a rookie or anyone without a full season gets a marked stand in rating)", "22 or 23 real players, every one rated off real 2025-26 stats");
+  if (CONTROL === 'nosalary') board = bind('the board', board, '. Player salaries and contract years are made up for the game, not their real deals.', '.');
+  if (CONTROL === 'camprule') guide = bind('the guide', guide, 'twelve forwards and six defensemen', 'eleven forwards and six defensemen');
+  ok(10, 'the guide entry and the What\'s New line were found', guide.length > 500 && entry.length > 200, `${guide.length} ${entry.length}`);
+  /* the money: real names sit beside made up salaries, so the box and the pick card say so */
+  const salaryNote = (board.match(/data-salary-note[^>]*>([^<]*)</) ?? [])[1] ?? '';
+  ok(10, 'the Roster box says the salaries and contract years are made up', /made up for the game/.test(salaryNote), salaryNote.slice(0, 80));
+  ok(10, 'the pick card says salaries and contracts are made up', /Salaries and contracts are made up/.test(board));
+  /* the camp rule, in the guide, in the rules lib's own numbers */
+  const keep = rules.match(/KEEP_AT_LEAST = \{ G: (\d+), F: (\d+), D: (\d+) \}/);
+  const limit = Number((rules.match(/ACTIVE_LIMIT = (\d+)/) ?? [])[1]);
+  const words = { 2: 'two', 3: 'three', 6: 'six', 12: 'twelve' };
+  const extra = keep ? limit - Number(keep[1]) - Number(keep[2]) - Number(keep[3]) : NaN;
+  const campLine = keep ? `keeps ${limit}: the ${words[keep[1]]} goalies, ${words[keep[2]]} forwards and ${words[keep[3]]} defensemen with the most NHL games in 2025-26, then the ${words[extra]} skaters left with the most` : '(rule not found)';
+  ok(10, 'the guide states the camp rule in the rules lib\'s numbers', guide.includes(campLine), campLine);
+  ok(10, 'the What\'s New line says camp clubs keep the 23 with the most games', /keep the 23 who played the most NHL games/.test(entry));
+  /* the stand in, in the rules lib's numbers */
+  /* the rules lib rates goalies first (under 15 games) and skaters second (under 30) */
+  const [gk, sk] = [...rules.matchAll(/s\.gp < (\d+)\) return \{ ovr: PARTIAL_RATING/g)].map(m => Number(m[1]));
+  const pr = Number((rules.match(/PARTIAL_RATING = (\d+)/) ?? [])[1]);
+  const flat = t => t.replace(/\s+/g, ' ');
+  ok(10, 'the guide and the Roster box give the stand in rule in the rules lib\'s numbers',
+    [guide, board].every(t => flat(t).includes(`(${sk} games for a skater, ${gk} for a goalie)`) && flat(t).includes(`starts on ${pr}`)), `${sk}/${gk}/${pr}`);
+  /* no copy claims every man is rated off real stats: 97 are stand ins */
+  const everyRated = /every (one|player|man)[^.]{0,40}rated off real/i;
+  ok(10, 'no copy says every player is rated off real stats', ![board, page, guide, entry].some(t => everyRated.test(flat(t))), [board, page, guide, entry].map(t => (flat(t).match(everyRated) ?? [''])[0]).join(' | '));
 }
 
 /* ---------- report ---------- */
