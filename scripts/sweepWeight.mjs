@@ -95,10 +95,10 @@ const BUDGETS = [
      mostly the shared index chunk. */
   ['/wonderkid-factory', 270],
   ['/minefield', 284], /* release G: 280K measured; the shared result moment (710), the native share sheet (744) and the hub trail (654) sit in chunks every game loads; was 276 */
-  ['/footle', 324], /* release G: 319K measured, same shared chunks as above; was 316 */
+  ['/footle', 328], /* release J: 325K measured after the Round 669 re-bake put 15 more players in the bundled pool (538 to 553); before that 324 at release G on 319K measured; was 316 */
   ['/nfl-my-career', 404], /* release H: 401K measured; the ticker's sport filter menu (711) and the share sheet (744) sit in the entry chunk every page loads; was 400 */
   ['/front-office', 304], /* release H: 302K measured, the entry chunk's ticker menu (711); was 300 */ /* release G: 299K measured, same shared chunks as above; was 296 */
-  ['/soccer-grid', 300],
+  ['/soccer-grid', 308], /* release J: 304K measured; this release changes no soccer grid code, the growth is in the shared chunks every route loads; was 300 */
   ['/leaderboard', 266],
 ];
 
