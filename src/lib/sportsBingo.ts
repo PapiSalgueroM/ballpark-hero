@@ -443,8 +443,10 @@ function withSeat(t: BingoTable, seat: BingoSeat): BingoTable {
 
 /* A CPU seat's stream is its own, keyed by the deal, the pack and the seat,
    so its luck can never move which packs the table sees and a resumed game
-   plays the same CPU turn it would have played before the refresh. */
-function cpuRng(t: BingoTable, seat: number): () => number {
+   plays the same CPU turn it would have played before the refresh.
+   Exported so scripts/simBingoSeats.mjs can replay a CPU turn on the
+   table's own open pack and hold the engine to it. */
+export function cpuRng(t: BingoTable, seat: number): () => number {
   return lehmer(((t.seed ^ (0x5bf03635 + t.packIndex * 7919 + seat * 104729)) >>> 0) || 7);
 }
 

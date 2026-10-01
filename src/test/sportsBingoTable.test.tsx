@@ -2,23 +2,25 @@
  * Round 727: the Sports Bingo pass the device table, walked through the real
  * page in jsdom. scripts/simBingoSeats.mjs proves the engine with no page;
  * this proves the page drives it: the setup screen deals, the hand over shows
- * a name and no card, a turn turns players up one at a time and claims only
- * what they satisfy, the phone moves seat to seat, the result names the
- * engine's winner and books one completion, a game left mid turn comes back
- * at the hand over, and a family pick too thin to fill a card says so on both
- * screens.
+ * a name and no card, a turn turns players up one at a time from the table's
+ * open pack and claims only what they satisfy, a CPU seat plays the same pack
+ * the people do, the phone moves seat to seat, the result names the engine's
+ * winner and books one completion, a game left mid turn comes back at the
+ * hand over, a family pick too thin to fill a card says so on both screens,
+ * the turn runs on the difficulty's clock and passes the phone at zero, and
+ * the page leaves no timer running after it is gone.
  *
  * Shares the daily reload mocks (signed out auth, a stub Supabase client, the
  * counted recorder, the pool loader fed the baked pool), imported first.
  */
 import './dailyReload/mocks';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { cleanup, waitFor } from '@testing-library/react';
+import { act, cleanup, waitFor } from '@testing-library/react';
 import { button, click, findButton, mountPage, type MountedPage } from './dailyReload/harness';
 import { recordCompletion, resetMocks, setPoolFixture } from './dailyReload/mocks';
 import { players } from '@/data/players';
 import {
-  CARD_SIZE, FREE_INDEX, PACK_SIZE, claimableSquares, declareWinner, loadBingoTable, seatGame, type BingoTable,
+  CARD_SIZE, FREE_INDEX, PACK_SIZE, claimableSquares, declareWinner, loadBingoTable, secondsFor, type BingoGame, type BingoTable,
 } from '@/lib/sportsBingo';
 import SportsBingo from '@/pages/SportsBingo';
 
@@ -30,7 +32,7 @@ beforeEach(() => {
   setPoolFixture('squad', players);
   vi.spyOn(Math, 'random').mockImplementation(lehmer(727));
 });
-afterEach(() => { cleanup(); vi.restoreAllMocks(); });
+afterEach(() => { cleanup(); vi.useRealTimers(); vi.restoreAllMocks(); });
 
 async function mountSetup(): Promise<MountedPage> {
   const m = mountPage(<SportsBingo />, '/sports-bingo');
@@ -49,16 +51,35 @@ const saved = (): BingoTable => {
 /** Every player name in the deal: none may be on screen at a hand over. */
 const dealNames = (t: BingoTable) => t.packs.flat().map(p => p.name);
 
+/** A seat's card over the table's packs, read straight off the saved table
+ *  rather than through the engine's own seat view, so a page or engine that
+ *  plays a seat on some other pack cannot agree with itself here. */
+const cardOf = (t: BingoTable, seat: number): BingoGame => ({ cardIds: t.cards[seat], packs: t.packs });
+
+/** The names face up on the turn screen's pack, top to bottom. A face down
+ *  slot is a button; a face up player is a row whose first span is the name. */
+function faceUp(m: MountedPage): string[] {
+  const list = button(m.container, /^Done with this pack, pass the phone$/).parentElement!.firstElementChild!;
+  return Array.from(list.children).filter(el => el.tagName === 'DIV').map(el => el.firstElementChild?.textContent ?? '');
+}
+
 /** The seat in the chair turns up `reveal` players and claims everything they satisfy. */
 async function playTurn(m: MountedPage, reveal: number) {
   await click(button(m.container, /show me the pack$/));
   expect(grid(m)).not.toBeNull();
-  for (let r = 0; r < reveal; r += 1) await click(button(m.container, /Tap to turn up$/));
+  expect(faceUp(m)).toEqual([]);
+  for (let r = 0; r < reveal; r += 1) {
+    await click(button(m.container, /Tap to turn up$/));
+    /* What the seat is shown is the table's open pack, in order: the one
+       every other seat hears and the one the engine judges claims against. */
+    const now = saved();
+    expect(faceUp(m)).toEqual(now.packs[now.packIndex].slice(0, r + 1).map(p => p.name));
+  }
   const t = saved();
   const seat = t.seats[t.turn];
   expect(t.revealed).toBe(reveal);
   const shown = t.packs[t.packIndex].slice(0, t.revealed);
-  const claim = claimableSquares(seatGame(t, seat.index), shown, seat.marked);
+  const claim = claimableSquares(cardOf(t, seat.index), shown, seat.marked);
   /* A square nothing turned up satisfies is refused, the board unchanged. */
   const dud = Array.from({ length: CARD_SIZE }, (_, i) => i).find(i => i !== FREE_INDEX && !seat.marked[i] && !claim.includes(i));
   if (dud !== undefined) {
@@ -72,27 +93,46 @@ async function playTurn(m: MountedPage, reveal: number) {
 }
 
 describe('Sports Bingo pass the device table', () => {
-  it('deals, hides every card at the hand over, plays seat by seat and declares the engine winner', async () => {
+  it('deals, hides every card at the hand over, plays seat by seat with a CPU on the same packs and declares the engine winner', async () => {
     const m = await mountSetup();
     await click(button(m.container, /^Pass the device/));
+    /* Three seats, the middle one a CPU, so the CPU's turn runs through the page between two people. */
+    await click(button(m.container, /^3 seats$/));
+    const toCpu = m.container.querySelector('button[aria-label="Seat 2, a person, tap to switch"]');
+    expect(toCpu).not.toBeNull();
+    await click(toCpu!);
     await click(button(m.container, /^Deal the cards$/));
+    expect(saved().seats.map(s => s.kind)).toEqual(['human', 'cpu', 'human']);
 
     let turns = 0;
+    let cpuMarks = 0;
     while (!m.container.querySelector('[role="status"]')) {
       if (++turns > 60) throw new Error('the table never finished');
       const t = saved();
       expect(t.phase).toBe('handover');
+      expect(t.seats[t.turn].kind).toBe('human');
       /* The hand over: the next name and a ready button, no card, no player. */
       expect(grid(m)).toBeNull();
       const text = m.container.textContent ?? '';
       expect(text).toContain(t.seats[t.turn].name);
       for (const name of dealNames(t)) expect(text).not.toContain(name);
-      /* Player 1 turns every player up and claims all; Player 2 turns up two. */
+      /* Player 1 turns every player up and claims all; Player 3 turns up two. */
       await playTurn(m, t.turn === 0 ? PACK_SIZE : 2);
+      /* The CPU in seat two plays straight after seat one, on the pack seat
+         one just had: every square it marks, a player in THAT pack satisfies
+         on the CPU's own card. */
+      if (t.turn === 0) {
+        const cpuBefore = t.seats[1].marked;
+        const could = claimableSquares(cardOf(t, 1), t.packs[t.packIndex], cpuBefore);
+        const fresh = saved().seats[1].marked.flatMap((on, sq) => (on && !cpuBefore[sq] ? [sq] : []));
+        for (const sq of fresh) expect(could).toContain(sq);
+        cpuMarks += fresh.length;
+      }
     }
 
-    /* Two seats, so at least one full round of hand overs happened. */
+    /* Three seats, so at least one full round of hand overs happened, and the CPU check above bit at least once. */
     expect(turns).toBeGreaterThanOrEqual(2);
+    expect(cpuMarks).toBeGreaterThan(0);
     const t = saved();
     expect(t.phase).toBe('done');
     const verdict = declareWinner(t);
@@ -102,7 +142,7 @@ describe('Sports Bingo pass the device table', () => {
     if (names.length === 1) expect(headline).toContain(`${names[0]} takes it`);
     else for (const n of names) expect(headline).toContain(n);
     expect(recordCompletion).toHaveBeenCalledTimes(1);
-  });
+  }, 30000);
 
   it('brings a game left mid turn back at the hand over for the same seat', async () => {
     const m = await mountSetup();
@@ -140,5 +180,58 @@ describe('Sports Bingo pass the device table', () => {
     expect(t.allowed).toBe(7);
     await click(button(m.container, /show me the pack$/));
     expect(m.container.textContent ?? '').toContain('Your families fill 7 of 24 squares, the rest came from the whole bank.');
+  });
+
+  it('runs every turn on the picked difficulty clock and passes the phone when it hits zero', async () => {
+    const m = await mountSetup();
+    await click(button(m.container, /^Pass the device/));
+    await click(button(m.container, /^Quick/));
+    await click(button(m.container, /^Deal the cards$/));
+    expect(saved().difficulty).toBe('quick');
+    const secs = secondsFor('quick');
+    /* A pace the default does not share, or a setting that does nothing would pass. */
+    expect(secs).not.toBe(secondsFor('standard'));
+
+    /* Fake clocks from here: the turn's interval starts when the seat takes the phone. */
+    vi.useFakeTimers({ toFake: ['setInterval', 'clearInterval', 'setTimeout', 'clearTimeout'] });
+    const clock = () => (m.container.querySelector('span.tabular-nums')?.textContent ?? '').trim();
+    const tick = async (n: number) => {
+      for (let i = 0; i < n; i += 1) await act(async () => { vi.advanceTimersByTime(1000); });
+    };
+
+    /* Seat one, then seat two, each on pack one; when seat two runs out the round is over and pack two opens for seat one. */
+    const after = [{ turn: 1, packIndex: 0 }, { turn: 0, packIndex: 1 }];
+    for (const [seat, next] of after.entries()) {
+      await click(button(m.container, /show me the pack$/));
+      expect(saved()).toMatchObject({ phase: 'turn', turn: seat, packIndex: 0 });
+      expect(clock()).toBe(`${secs}s`);
+      await tick(secs - 1);
+      expect(clock()).toBe('1s');
+      expect(saved().phase).toBe('turn');
+      await tick(1);
+      /* Out of time: nobody pressed done, the turn closed on its own and the phone moved on. */
+      expect(saved()).toMatchObject({ phase: 'handover', ...next });
+      expect(grid(m)).toBeNull();
+      expect(m.container.textContent ?? '').toContain(saved().seats[next.turn].name);
+    }
+  });
+
+  it('clears its shake timer when the page goes away, so it never fires after', async () => {
+    const m = await mountSetup();
+    await click(button(m.container, /^Pass the device/));
+    await click(button(m.container, /^Deal the cards$/));
+    await click(button(m.container, /show me the pack$/));
+    const set = vi.spyOn(window, 'setTimeout');
+    const clear = vi.spyOn(window, 'clearTimeout');
+    /* Nothing is turned up yet, so any square is a dud and shakes; square 0
+       is a corner, never the free centre. 450 ms is the shake's length in
+       SportsBingo.tsx; if it changes this finds no timer and fails, it does
+       not pass quietly. */
+    await click(squares(m)[0]);
+    const at = set.mock.calls.findIndex(c => c[1] === 450);
+    expect(at).toBeGreaterThanOrEqual(0);
+    const id = set.mock.results[at].value;
+    m.unmount();
+    expect(clear.mock.calls.some(c => c[0] === id)).toBe(true);
   });
 });

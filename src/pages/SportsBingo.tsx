@@ -81,6 +81,10 @@ export default function SportsBingo() {
   const [marked, setMarked] = useState<boolean[]>(dailyDone?.marked ?? []);
   const [cpuMarked, setCpuMarked] = useState<boolean[]>([]);
   const [wrongSquare, setWrongSquare] = useState<number | null>(null);
+  /* The shake's timer, cleared when the page goes away so it never fires
+     after it (in the page test it fired into a torn down window and threw). */
+  const shakeTimer = useRef<number | undefined>(undefined);
+  useEffect(() => () => window.clearTimeout(shakeTimer.current), []);
   /* The CPU's stream is separate from the board's build stream so its luck
      cannot change which packs everyone sees. */
   const cpuRngRef = useRef<() => number>(lehmer(1));
@@ -205,7 +209,8 @@ export default function SportsBingo() {
 
   const shake = (sq: number) => {
     setWrongSquare(sq);
-    window.setTimeout(() => setWrongSquare(w => (w === sq ? null : w)), 450);
+    window.clearTimeout(shakeTimer.current);
+    shakeTimer.current = window.setTimeout(() => setWrongSquare(w => (w === sq ? null : w)), 450);
   };
 
   const tapSquare = (sq: number) => {
