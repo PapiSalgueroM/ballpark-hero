@@ -1849,7 +1849,7 @@ export const BASKETBALL_CONTENT: GameContentMap = {
         heading: "Cap room and roster size limits",
         items: [
           "The cap starts at the real 2026-27 figure, just under 165 million, and rises 7 percent every season in the game. You can waive down to 8 players during the year, but the season cannot tip off with fewer than 14 or more than 15: short of 14 the league fills the gap with minimum deals (2 million each in a new league, rising with the cap) and tells you who, and above 15 the first round waits until you waive down.",
-          "New deals are priced in the money of the season they start in. Re-signings, rookie deals, the minimum and free agent asks all rise with the cap, so payrolls keep pace with the tax line. A contract already signed keeps its number until it runs out.",
+          "New deals are priced in the money of the season they start in. Re-signings, rookie deals, the minimum and free agent asks all rise with the cap, so payrolls stop falling seven percent a year behind the tax line. They still drop over the first couple of seasons, because computer teams let expiring depth walk (all of it when they face a bill) and refill only on minimum deals, so expect fewer taxpayers than a new league opens with; from about the third season payrolls hold steady against the line. A contract already signed keeps its number until it runs out.",
         ],
       },
       {

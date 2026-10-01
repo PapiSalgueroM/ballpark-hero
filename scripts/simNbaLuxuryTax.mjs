@@ -149,7 +149,14 @@
         only with minimum deals (league wide minimum deals ran from 121 to 237
         of about 423 men over ten seasons in one measured league), so nothing
         spends a computer club back up to the line. That is a free agency
-        decision for a later round, not a pay scale one.
+        decision for a later round, not a pay scale one. The allLate band
+        mostly measures the harness GM, who never lets a draftee go; cpuLate
+        is the one that reads the computer clubs alone.
+        Then the pool (review fix): after every summer each free agent must
+        ask his rating's price in the money of the season about to start, and
+        most asks must sit above the opening season's price for his rating.
+        Nothing above reads the pool, since nobody here signs from it, so
+        deleting the summer reprice once left every number identical.
 
    Controls, through NBA_TAX_CONTROL. None touches src: the rewritten source
    is served to the bundler from memory, and each refuses to run if its
@@ -173,6 +180,9 @@
      oldbill      an old save is billed for the season it was saved in -> 4
      flatpay      every new deal priced in opening season money        -> 8
                   (Round 824; run 2026-10-01 and fired)
+     noreprice    the pool's asks never repriced in the summer          -> 8
+                  (Round 824 review fix: before the asks check it left every
+                  number identical; run 2026-10-01 and fired)
    The last six rewrite nbaFrontOffice.ts or foHub.ts (in both bundles, so
    section 5 still compares like with like) and were added by the review.
 
@@ -211,6 +221,8 @@ const EXPECT = {
   oldbill: [4],
   /* Round 824: new deals priced in opening season money forever, the fade */
   flatpay: [8],
+  /* Round 824 review fix: the pool's asks never repriced, which moved no other number */
+  noreprice: [8],
 };
 if (CONTROL && !EXPECT[CONTROL]) {
   console.error(`NBA_TAX_CONTROL=${CONTROL} is not a control this harness knows (${Object.keys(EXPECT).join(', ')})`);
@@ -225,7 +237,7 @@ const SECTION_NAMES = {
   5: 'the tax binds: payers against their twins in a league with no tax',
   6: 'the shared descriptor says so',
   7: 'a league that looks like a real one: taxpayers, the biggest bill, the typical bill, a way under',
-  8: 'ten seasons: payrolls keep pace with the line and the league keeps taxpayers',
+  8: 'ten seasons: from season three payrolls hold against the line, the league keeps taxpayers, the pool asks in each season\'s money',
 };
 
 /* ---- the published table, typed here on purpose ------------------------- */
@@ -336,6 +348,7 @@ const CONTROL_FILE_SWAPS = {
   realline: { 'nbaFrontOffice.ts': [['  league.taxScale = nbaCalibrateTaxScale(payrolls, league.cap);', '  league.taxScale = 1;']] },
   oldbill: { 'nbaFrontOffice.ts': [['  if (scale == null) return out;', '  if (scale === -1) return out;']] },
   flatpay: { 'nbaFrontOffice.ts': [['  return cap / NBA_CAP_BASE;', '  return 1;']] },
+  noreprice: { 'nbaFrontOffice.ts': [[' fa.salary = nbaSalaryFor(fa.ovr, nextCap); }', ' }']] },
   hubfloor: { 'foHub.ts': [['const tooMany = f.rosterFloor != null && f.rosterMax != null ?', 'const tooMany = f.rosterMax != null ?']] },
 };
 const NOTE = {
@@ -349,6 +362,7 @@ const NOTE = {
   realline: 'every league keeps the real 200.4 line instead of one set from its own payrolls',
   oldbill: 'a league saved before the round is billed at the close of the season it was saved in',
   flatpay: 'every new deal priced in opening season money whatever the cap has risen to (before Round 824)',
+  noreprice: "the free agent pool's asks are never repriced in the summer, so they stay in the money of the season each man was priced in",
 }[CONTROL];
 if (NOTE) console.log(`   control ${CONTROL}: ${NOTE}`);
 
@@ -939,20 +953,37 @@ console.log('7) The league the lines are set from: taxpayers, the biggest bill a
 }
 
 /* ---- 8. the tax does not fade (Round 824) ---------------------------------- */
-console.log('8) Ten seasons: payrolls keep pace with the line and the league keeps taxpayers');
+console.log('8) Ten seasons: from season three payrolls hold against the line, the league keeps taxpayers, and the pool asks in each season\'s money');
 {
   const LONG = 10;
   const base = Number(process.env.NBA_TAX_LONG_SEED_BASE || 0);
   const ratioBySeason = Array.from({ length: LONG }, () => []);
   const cpuOverBySeason = Array.from({ length: LONG }, () => []);
   const allOverBySeason = Array.from({ length: LONG }, () => []);
+  /* Free agent asks (the review fix). Neither the harness GM nor a computer
+     club signs from the pool, so the numbers above cannot see an ask that
+     stayed in opening season money; a player browsing the pool would. After
+     every summer each man in the pool must ask his rating's price in the
+     money of the season about to start. */
+  let asks = 0, askWrong = 0, askRisen = 0;
+  const askBad = [];
   for (const s0 of SEEDS) {
     const seed = base + s0;
     const rng = lcg(seed * 7919 + 17);
     const lg = nba.initNbaLeague(rng);
     const me = Object.keys(lg.teams)[seed % 30];
     const log = freshLog();
-    for (let s = 0; s < LONG; s += 1) playSeason(nba, lg, me, rng, log);
+    for (let s = 0; s < LONG; s += 1) {
+      playSeason(nba, lg, me, rng, log);
+      for (const fa of lg.freeAgents) {
+        asks += 1;
+        const want = nba.nbaSalaryFor(fa.ovr, lg.cap);
+        if (!near(fa.salary, want)) {
+          askWrong += 1;
+          if (askBad.length < 4) askBad.push(`seed ${seed} ${lg.season}: ${fa.name} (${fa.ovr}) asks ${fa.salary} against ${want} on a cap of ${lg.cap}`);
+        } else if (fa.salary > nba.nbaSalaryFor(fa.ovr) + 0.05) askRisen += 1;
+      }
+    }
     log.closes.forEach((close, s) => {
       const rows = Object.entries(close);
       ratioBySeason[s].push(rows.reduce((x, [, c]) => x + c.ratio, 0) / rows.length);
@@ -968,9 +999,12 @@ console.log('8) Ten seasons: payrolls keep pace with the line and the league kee
   console.log(`   league payroll over the tax line, mean club, by season: ${ratio.map(r => r.toFixed(3)).join(' ')}`);
   console.log(`   season ten against season three: ${keep.toFixed(3)}; clubs over the line by season (mean of ten leagues): ${allOverBySeason.map(a => mean(a).toFixed(1)).join(' ')}`);
   console.log(`   seasons four to ten, clubs over the line a season: ${allLate.toFixed(2)} with the GM, ${cpuLate.toFixed(2)} computer clubs only`);
-  ok(8, `payrolls keep pace with the line: the mean club's payroll over the line in season ten is at least ${FADE_BAND.keep} of season three's`, keep >= FADE_BAND.keep, keep.toFixed(3));
+  console.log(`   free agent asks after a summer: ${asks} read, ${askWrong} off the new season's price, ${askRisen} above the opening season's price for the same rating`);
+  ok(8, `from season three payrolls hold their place against the line: the mean club's payroll over the line in season ten is at least ${FADE_BAND.keep} of season three's`, keep >= FADE_BAND.keep, keep.toFixed(3));
   ok(8, `computer clubs keep paying tax: seasons four to ten average at least ${FADE_BAND.cpuLate} clubs over the line a season`, cpuLate >= FADE_BAND.cpuLate, cpuLate.toFixed(2));
   ok(8, `and the league as a whole at least ${FADE_BAND.allLate} a season`, allLate >= FADE_BAND.allLate, allLate.toFixed(2));
+  ok(8, `after every summer every free agent asks his rating's price in the new season's money (${asks} asks over ${SEEDS.length * LONG} summers)`, asks > 0 && askWrong === 0, `${askWrong} wrong, e.g. ${askBad.join(' | ')}`);
+  ok(8, 'and that price has risen: most asks sit above the opening season price for the same rating', asks > 0 && askRisen > asks / 2, `${askRisen} of ${asks}`);
 }
 
 /* ---- report --------------------------------------------------------------- */
