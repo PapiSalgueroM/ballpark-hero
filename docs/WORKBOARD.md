@@ -1,5 +1,19 @@
 # Work board
 
+**2026-09-30, Codex Round 770 CLAIMED: playable Soccer Career First Touch (master 50).**
+Own new `src/lib/firstTouchDrill.ts`, `src/components/soccer-career/FirstTouchBoard.tsx`,
+scoped CSS if needed, focused engine/Board tests and `scripts/simFirstTouchDrill.mjs`.
+Only import/menu/screen/branch changes in TrainingPanel.tsx and kind/stat/metadata/salt/type
+changes in careerDrills.ts are authorized. Add PositionDrillKind for the unchanged three
+position drills and widen DrillKind only for banking. No SoccerCareer parent, existing
+DrillBoard, career/life engine, old seeds, reward formulas or data changes. The approved
+contract is `docs/design/round-770-first-touch-contract.md`: ten deterministic timing/direction
+rounds, real scored ball paths, 0 to 100 score, rules/example/reopen help, daily checkpoints,
+practice isolation, active-time pause and existing capped once-season Dribbling rewards.
+Verify skill versus swept fixed inputs, every round winnable and missable, actual persistence
+and one-bank events, copied asserted controls and four-width/two-motion browser play.
+Root owns docs/commits. 769 remains independently on map exploration. Next free is **771**.
+
 **2026-09-30, Codex Round 769 CLAIMED: Conquest map exploration (master D107).**
 Own `src/components/conquest/ConquestRegionMap.tsx`, new pure viewport helper,
 focused tests/harness, and only `exploreEnabled={!sceneActive}` at the map call in

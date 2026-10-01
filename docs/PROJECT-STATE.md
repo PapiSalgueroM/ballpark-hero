@@ -1,5 +1,14 @@
 # Project state
 
+## IN PROGRESS 2026-09-30: Conquest exploration 769 and playable First Touch 770
+
+Both larger features have pushed exact claims and independent agent ownership. 769 uses a
+manual bounded SVG viewport with search/filter/fit controls and scene-active gating. 770 has
+a saved design contract and a separate deterministic First Touch engine/Board integrated into
+Training Ground. It reuses existing capped daily training banking without parent/engine edits.
+Completed 754 through 768 receipts remain below; nine source rounds await Claude publishing.
+Next unclaimed number is 771. Claude's reserved lanes stay untouched.
+
 ## BUILT 2026-09-30: fifteen Codex rounds 754 through 768 complete; larger features continue
 
 Six rounds 754 through 759 are live in Release G. Nine rounds 760 through 768 are source-ready
