@@ -50,8 +50,12 @@ type Mode = 'daily' | 'unlimited' | 'cpu';
 
 const SLUG = 'sports-bingo';
 
-/** A saved table worth offering to resume: not finished, and never mid turn
- *  (a refresh mid turn restarts that turn from the hand over, so the clock is fair). */
+/** A saved table worth offering to resume: not finished, and never mid turn.
+ *  A refresh mid turn restarts that turn from the hand over with nothing
+ *  turned up and a full clock, and the squares it already claimed stand, so
+ *  the seat gets some scan time back on a pack it has partly seen. That is a
+ *  known give in a party mode on one phone: the other ways out (saving the
+ *  clock every second, or ending the turn on any reload) cost more than it. */
 function resumableTable(): BingoTable | null {
   const t = loadBingoTable();
   if (!t || t.phase === 'done') return null;

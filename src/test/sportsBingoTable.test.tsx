@@ -166,7 +166,8 @@ describe('Sports Bingo pass the device table', () => {
     expect(grid(again)).toBeNull();
     expect(again.container.textContent ?? '').toContain(before.seats[before.turn].name);
     await click(button(again.container, /show me the pack$/));
-    /* The turn restarts from nothing turned up, so the clock stays fair. */
+    /* The turn restarts on the same seat and pack with nothing turned up (and
+       a full clock, a known give recorded beside resumableTable in the page). */
     expect(saved().revealed).toBe(0);
     expect(saved().packIndex).toBe(before.packIndex);
     expect(saved().turn).toBe(before.turn);
