@@ -1,7 +1,49 @@
 # Work board
 
+**2026-10-01, Codex800 Emoji Guess feedback ACCEPTED.**
+Committed misses/hints, solved/failed answers, Next and final results now give
+truthful accessible feedback with360/420ms one-shot cues and static reduced motion.
+Native input/Next/Share handoffs use preventScroll and guard held Enter/Space;
+blank/typing/restored/clone/no-op paths stay quiet. Earlier guess/review nodes remain
+stable, full answers wrap, owned controls are44px, and transient status height stays
+reserved. The actual daily hook, bank/picker, dates, normalization, scoring, save,
+completion and share remain unchanged. No invented sports facts were added.
+
+Nine actual Page/hook outcomes and thirteen effective copied controls pass. Mixed
+first/second/third/missed/first outcomes remain290 points and4/5, with exact daily
+state/share and one final completion. Eight strengthened native width/motion contexts
+and four real browser defect controls pass, including live unbroken-name fit,
+strict clone node/animation identity,120 settled-Y observations all0 and full44px
+targets. Copied defects fail their real focus/repeat/text/motion findings while
+independent500-point hook/save/completion runs hold. One test-only HTMLElement
+generic fixes the type gate; its emitted JS remains byte-exact15362 bytes.
+
+The isolated production gate passes real app types, both builds, three-clock capture
+and all15 artifact fences. A wrong unscoped prerender flag was caught and stopped
+inside the scratch gate; all188 raw saved files/ledger/sitemap were verified restored
+before the corrected PRERENDER_ONLY run processed exactlyone route. Final capture
+changes only emoji-guess's saved page and derived ledger row, holding187 other raw
+pages,167 other URL hashes/dates and all168 sitemap URLs. Actual production App
+acceptance covers320 normal and1440 reduced with GameNavbar/ticker/global Footer,
+native focus/text/target/Y checks, exact15 saves/290/4of5/clipboard, one locally
+intercepted real guest completion and quiet reload. Only fictional authored-bank
+HTTP response data was substituted; all compiled behavior and on-disk assets hold.
+Root inspected the final phone image. Browser/server/copies stopped.
+
+Receipts: TEMP/dukb-round800-builder-receipt.json,
+TEMP/dukb-round800-native/report.json and cleanup.json,
+TEMP/dukb-round800-production-app/report.json and cleanup.json,
+TEMP/dukb-round800-production-20261001/production800-preservation-receipt.json,
+production800-restored-baseline.log, production800-prerender-scoped.log,
+production800-fourteen-artifact-fences.log and production800-boot-fence.log,
+TEMP/dukb-round800-owned-copy-receipt.json. Final entry index-BC84AufO.js,
+SHA0a3c2a3dc274f3214ad7af1b925024fd7e63bb403afb7fc286688e24eaf14b12.
+801's separate production gate and802/803 source work continue. The immutable413
+suite through799 plus798 remains running. This is accepted source/production proof,
+not complete-current-suite, Google approval/indexing or publication. Next free804.
+
 **2026-10-01, Codex803 CLAIMED: Name Them All answer feedback and readable reveals.**
-Master Build45/96/97 and historical roadmap45/116 playability slice. The current
+Master Build96/97 and historical roadmap45/116 playability slice. The current
 ListQuiz Page uses color alone for a hit, delayed focus can scroll the page, and
 revealed answer tiles truncate their text. Own only src/pages/ListQuiz.tsx, new
 src/pages/ListQuizFeedback.module.css, src/test/listQuizFeedback.test.tsx and
