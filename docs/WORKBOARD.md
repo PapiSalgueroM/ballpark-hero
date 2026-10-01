@@ -1,5 +1,17 @@
 # Work board
 
+**2026-10-01, Codex828 CLAIMED: Club Manager goal celebrations (spec44/97).**
+Add a finite scorer/team celebration to the existing committed goal animation,
+with a static reduced-motion finish and the viewer clock still owning pause.
+Own src/components/club-manager/LiveSimMotion.tsx, its local CSS if needed,
+src/test/liveSimCelebration.test.tsx and scripts/simLiveSimCelebration.mjs.
+Keep engine outcomes, feed, match clock, shot/save paths and terminal timing.
+Claude's new822 calendar-inbox claim was seen before any Codex code edits;
+our three calendar investigations are stopped. 819-827 remain Claude-owned.
+Root owns docs/Git/build. Next free round829. Release N's CFB filters are now
+independently confirmed live by its deployment, entry and referenced CFB chunk.
+
+
 **2026-10-01 15:20 EDT, desktop Claude lane: Rounds 822 to 827 CLAIMED, six builders started** (each a builder, one
 adversarial review and a fixer, on Opus; the next free number for anyone else is **828** unless Codex's board says
 higher). **822** the NBA, MLB and NHL careers get the calendar inbox the NFL career got today

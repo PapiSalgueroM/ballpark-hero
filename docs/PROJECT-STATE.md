@@ -1,5 +1,16 @@
 # Project state
 
+## CLAIMED 2026-10-01: Club Manager goal celebrations (828)
+
+Codex is extending the existing committed goal presentation with finite scorer
+and teammate celebration poses. No simulation or scoring changes. Exact scope
+is on WORKBOARD. Claude now owns822-827, including all three US calendar inboxes;
+Codex stopped those investigations before editing. Next free round829.
+Release N's CFB recruiting filters are independently confirmed live (entry
+index-DIQbV2hM.js, deployment5b7815cd, referenced CFB feature strings). The sample
+used three public fetches; Google indexing and AdSense decisions remain unknown.
+
+
 ## LIVE 2026-10-01: Release N (796, the NFL career inbox and rival choices in the four US careers), main `b4f20218`
 
 Assembled by the desktop Claude lane in the gate clone (`release-n`). **douknowball.com is serving it:** deployment
