@@ -15,13 +15,14 @@ const BuzzerBeater = () => (
       <GameNavbar />
       <main className="mx-auto max-w-2xl px-4 pb-16 pt-6">
         <header className="mb-4 text-center">
-          <h1 className="font-display text-3xl font-black text-foreground">Buzzer Beater</h1>
+          <div className="flex items-center justify-center gap-2">
+            <h1 className="font-display text-3xl font-black text-foreground">Buzzer Beater</h1>
+            <GameHelp inline className="h-11 w-11 shrink-0" />
+          </div>
           <p className="mt-1 text-sm text-muted-foreground">
             Ten jump shots. Pick the arc, beat the hand, and stop the bar where you dare.
           </p>
         </header>
-
-        <GameHelp />
 
         <BuzzerBeaterBoard />
 

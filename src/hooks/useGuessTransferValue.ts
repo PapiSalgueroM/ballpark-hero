@@ -5,6 +5,22 @@ import { dateSeed, getTodayET } from '@/lib/dateUtils';
 import { fetchTransferValuePool, TransferValuePlayer } from '@/lib/fetchTransferValuePool';
 
 export const MAX_GUESSES = 6;
+
+/** Round 716: the one daily score, which the record and the result's
+    standing panel both read (the panel used to be handed its own copy). */
+export function transferValueScore(won: boolean, guessCount: number): number {
+  return won ? Math.max(100, (MAX_GUESSES - guessCount + 1) * 150) : 0;
+}
+
+/** Its rows, on the scale it records: 900 for a first guess down to 150, and
+    0 for a miss. */
+export const TRANSFER_VALUE_SCORE_BUCKETS = [
+  { label: '900', min: 900, max: 900 },
+  { label: '600-750', min: 600, max: 899 },
+  { label: '300-450', min: 300, max: 599 },
+  { label: '150', min: 100, max: 299 },
+  { label: '0', min: 0, max: 99 },
+];
 /** Win threshold: guess within this fractional distance of true value. */
 export const WIN_THRESHOLD = 0.05;
 
@@ -124,9 +140,7 @@ export function useGuessTransferValue() {
   const switchMode = useCallback((m: Mode) => setMode(m), []);
 
   // Daily score: more remaining guesses = better
-  const dailyScore = dailyStatus === 'won'
-    ? Math.max(100, (MAX_GUESSES - dailyGuesses.length + 1) * 150)
-    : 0;
+  const dailyScore = transferValueScore(dailyStatus === 'won', dailyGuesses.length);
 
   useGameCompletion('guess-transfer-value', dailyStatus !== 'playing', dailyScore);
 

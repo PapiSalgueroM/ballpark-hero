@@ -34,8 +34,22 @@
  *      calls has_role, plus the owner's own access. That was measured, not
  *      guessed, and this section is what stops it being reintroduced.
  *
- * NEGATIVE CONTROL: ADMIN_CONTROL=norole checks a role name nothing grants, so
- * section 1 sees an empty admin table exactly as it was, and must go red.
+ *   4. Round 713: anon cannot read the report queue. Since that round each
+ *      report can carry the admin's own note and fix reference, so the queue
+ *      is no longer just what players typed. The read policy is admin only
+ *      and this holds it there. It also says, without failing, whether the
+ *      Round 713 migration has been applied yet, because the admin screen
+ *      runs in a reduced mode until it is.
+ *      Limit, stated rather than hidden: anon cannot count rows it may not
+ *      read, so an empty table would also read as zero. The table has held
+ *      reports since July 2026 and nothing deletes them.
+ *
+ * NEGATIVE CONTROLS, each must turn its OWN section red and no other:
+ *   ADMIN_CONTROL=norole     checks a role name nothing grants, so section 1
+ *                            sees an empty admin table exactly as it was.
+ *   ADMIN_CONTROL=openqueue  asks section 4's question of a table anon CAN
+ *                            read (daily_completions, which section 3 proves
+ *                            readable), so section 4 must see rows.
  *
  * Run: node scripts/simAdminAccess.mjs   (needs the database)
  */
@@ -45,13 +59,16 @@ import { fileURLToPath } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.ADMIN_CONTROL || '';
-if (CONTROL && CONTROL !== 'norole') {
+const CONTROL_SECTION = { norole: 1, openqueue: 4 };
+if (CONTROL && !(CONTROL in CONTROL_SECTION)) {
   console.error(`ADMIN_CONTROL=${CONTROL} is not a control this harness knows`);
   process.exit(1);
 }
 
 let failures = 0;
-const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
+let section = 0;
+const bySection = {};
+const fail = m => { failures += 1; bySection[section] = (bySection[section] || 0) + 1; console.error('  FAIL: ' + m); };
 
 const client = fs.readFileSync(path.join(ROOT, 'src', 'integrations', 'supabase', 'client.ts'), 'utf8');
 const URL_ = client.match(/SUPABASE_URL\s*=\s*["']([^"']+)["']/)[1];
@@ -64,7 +81,7 @@ async function get(pathAndQuery) {
     try {
       const r = await fetch(`${URL_}/rest/v1/${pathAndQuery}`, { headers: HEAD });
       if (r.ok) return { ok: true, body: await r.json() };
-      if (r.status === 401 || r.status === 403 || r.status === 404) return { ok: false, status: r.status, body: await r.text() };
+      if (r.status === 400 || r.status === 401 || r.status === 403 || r.status === 404) return { ok: false, status: r.status, body: await r.text() };
     } catch { /* retry */ }
   }
   return { ok: false, status: 0, body: 'no answer' };
@@ -74,6 +91,7 @@ async function get(pathAndQuery) {
    because user_roles is deliberately unreadable to anon and that is the point
    of section 2. The Supabase MCP is not available inside a harness, so this
    asks the one question anon IS allowed to ask: does the admin gate behave. */
+section = 1;
 console.log('1) at least one admin exists and has_role agrees');
 {
   const role = CONTROL === 'norole' ? 'superadmin' : 'admin';
@@ -92,6 +110,7 @@ console.log('1) at least one admin exists and has_role agrees');
   }
 }
 
+section = 2;
 console.log('2) anon cannot ask whether an account is an admin');
 {
   const r = await fetch(`${URL_}/rest/v1/rpc/has_role`, {
@@ -106,6 +125,7 @@ console.log('2) anon cannot ask whether an account is an admin');
   }
 }
 
+section = 3;
 console.log('3) closing that hole did not break ordinary anonymous reads');
 {
   /* THE GUARD ON THE FIX. Revoking EXECUTE from PUBLIC and stopping there
@@ -130,11 +150,41 @@ console.log('3) closing that hole did not break ordinary anonymous reads');
   console.log(`   ${checks.length - broken} of ${checks.length} anonymous reads still work`);
 }
 
+section = 4;
+console.log('4) anon cannot read the report queue or the notes on it');
+{
+  const target = CONTROL === 'openqueue'
+    ? 'daily_completions?select=game_slug&limit=5'
+    : 'question_reports?select=id,description,game_context&limit=5';
+  if (CONTROL === 'openqueue') console.log('   NEGATIVE CONTROL ON (openqueue): asking a table anon can read. Section 4 must go red.');
+  const res = await get(target);
+  if (res.ok && Array.isArray(res.body) && res.body.length > 0) {
+    fail(`anon read ${res.body.length} row(s) of ${target.split('?')[0]}. The report queue carries what players typed and, since Round 713, the admin's own notes; its read policy must stay admin only.`);
+  } else if (res.ok && Array.isArray(res.body)) {
+    console.log(`   anon reads 0 rows of ${target.split('?')[0]} (the admin only read policy holds)`);
+  } else if (res.status === 401 || res.status === 403) {
+    console.log(`   anon is refused outright (${res.status})`);
+  } else {
+    fail(`the queue read did not answer cleanly (${res.status}: ${String(res.body).slice(0, 90)}), so this section proved nothing`);
+  }
+
+  /* Printed, never failed: has the Round 713 migration run yet? A column
+     that does not exist is a 400 before the policy is even asked. */
+  const probe = await get('question_reports?select=id,status,priority,admin_note,fix_ref&limit=1');
+  if (probe.ok) console.log('   Round 713 triage columns: APPLIED (status, priority, admin_note, fix_ref exist)');
+  else if (/does not exist/i.test(String(probe.body))) console.log('   Round 713 triage columns: PENDING, supabase/migrations/20260930_round_713_report_triage.sql has not been applied; the admin screen saves open or closed only until it is');
+  else console.log(`   Round 713 triage columns: unknown (${probe.status})`);
+}
+
 console.log('');
 if (CONTROL) {
-  if (failures > 0) { console.log(`simAdminAccess control (${CONTROL}): green. The missing admin was caught (${failures} finding${failures === 1 ? '' : 's'}).`); process.exit(0); }
-  console.error(`simAdminAccess control (${CONTROL}): RED. A role nobody holds was reported as present.`);
+  const target = CONTROL_SECTION[CONTROL];
+  const fired = bySection[target] || 0;
+  const elsewhere = Object.keys(bySection).filter(s => Number(s) !== target && bySection[s] > 0);
+  if (fired > 0 && elsewhere.length === 0) { console.log(`simAdminAccess control (${CONTROL}): green. Section ${target} caught it (${fired} finding${fired === 1 ? '' : 's'}) and no other section moved.`); process.exit(0); }
+  if (!fired) { console.error(`simAdminAccess control (${CONTROL}): RED. Section ${target} did not notice, so its check is dead.`); process.exit(1); }
+  console.error(`simAdminAccess control (${CONTROL}): RED. Section ${target} fired but so did section ${elsewhere.join(', ')}, so the control does not isolate its own check.`);
   process.exit(1);
 }
 if (failures > 0) { console.error(`simAdminAccess: ${failures} failure${failures === 1 ? '' : 's'}`); process.exit(1); }
-console.log('simAdminAccess: green. The queue has a reader, and anon cannot ask who it is.');
+console.log('simAdminAccess: green. The queue has a reader, anon cannot ask who it is, and anon cannot read the queue.');

@@ -51,7 +51,7 @@ const NbaPlayoffFormatHistory = () => {
   return (
     <div className="min-h-screen flex flex-col bg-background">
       <PageSeo
-        title="NBA Playoff Format History: Every Change Since 1946-47 | DoUKnowBall"
+        title="NBA Playoff Format History and Draft Lottery | DoUKnowBall"
         description="Every NBA playoff format change since 1946-47, from six BAA teams to sixteen plus a play-in, and the draft lottery from the coin flip to the 3-2-1 lottery."
         path="/nba-playoff-format-history"
       />
@@ -106,7 +106,7 @@ const NbaPlayoffFormatHistory = () => {
         </section>
 
         <section className="mb-10">
-          <h2 className="text-lg font-display font-bold text-foreground mb-2">The draft lottery</h2>
+          <h2 className="text-lg font-display font-bold text-foreground mb-2">NBA draft lottery history: every format since 1966</h2>
           <p className="text-sm text-muted-foreground leading-relaxed mb-4">{NBA_LOTTERY.intro}</p>
           <div className="space-y-4">
             {NBA_LOTTERY.eras.map(e => (

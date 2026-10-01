@@ -1,10 +1,11 @@
-import { lazy, Suspense, useState } from 'react';
+import { lazy, Suspense, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Trophy, Star, Medal, Flame, ArrowLeft, UserPlus } from 'lucide-react';
 import { useGameNavbarStats } from '@/hooks/useGameNavbarStats';
 import { useDailyLegend } from '@/hooks/useDailyLegend';
 import { useAuth } from '@/contexts/AuthContext';
 import { AuthModal } from '@/components/auth/AuthModal';
+import SharedResultCard from '@/components/game/SharedResultCard';
 
 const DailyLegendOverlay = lazy(() => import('./DailyLegendOverlay').then(module => ({ default: module.DailyLegendOverlay })));
 
@@ -91,6 +92,7 @@ export function GameNavbar() {
   const navigate = useNavigate();
   const { user } = useAuth();
   const [authOpen, setAuthOpen] = useState(false);
+  const backRef = useRef<HTMLButtonElement>(null);
   const { gamesPlayedToday, totalPointsToday, dailyRank, currentStreak, totalGames, loading } = useGameNavbarStats();
   const { showCelebration, streakDays, dismissCelebration } = useDailyLegend();
 
@@ -124,6 +126,7 @@ export function GameNavbar() {
               on a phone it shares the top line with the logo instead of being
               stranded under the stats. */}
           <button
+            ref={backRef}
             onClick={() => navigate(-1)}
             aria-label="Go back"
             className="order-2 lg:order-3 shrink-0 inline-flex items-center gap-1.5 rounded-lg border-2 border-primary/60 bg-surface-1 px-3 py-1.5 min-h-[36px] text-xs sm:text-sm font-semibold text-primary hover:bg-primary hover:text-primary-foreground transition-colors shadow-sm lg:justify-self-end"
@@ -214,6 +217,8 @@ export function GameNavbar() {
           </div>
         </div>
       </nav>
+
+      <SharedResultCard returnFocusRef={backRef} />
 
       {showCelebration && (
         <Suspense fallback={null}>

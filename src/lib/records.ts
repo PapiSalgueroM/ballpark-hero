@@ -38,6 +38,11 @@ export interface RecordWords {
   seoTitle: (first: number) => string;
   /** the meta description around the span the rows cover, 120 to 160 characters once filled */
   seoDescription: (first: number, latest: number) => string;
+  /** Round 656: the award's name as a searcher types it ("Super Bowl MVP"), for a
+   *  section with a column keyed 'mvp'. Its page then counts that column into a
+   *  "Most Super Bowl MVP awards" table; simRecordPages check 11 fails if a
+   *  section has the column and not this, or this and not the column. */
+  mvp?: string;
 }
 
 /** Round 649: the format explainers, one list shared by /records and the section pages. */
@@ -128,6 +133,7 @@ export const RECORD_SECTIONS: RecordSection[] = [
       unit: ['title', 'titles'], who: ['team', 'teams'],
       seoTitle: f => `Super Bowl Winners by Year Since ${f} | DoUKnowBall`,
       seoDescription: (f, l) => `Every Super Bowl winner from ${f} to ${l}, with the runner-up, final score, MVP, stadium and host city, plus the most titles over those years.`,
+      mvp: 'Super Bowl MVP',
     },
     format: { path: '/nfl-playoff-format-history', heading: 'How the NFL playoffs work' },
     blurb: 'Every Super Bowl by the year it was played, with the final score, the MVP, the stadium as it was named that day and the host city as it was that day too: Miami until the Gardens incorporated, Stanford for XIX, Las Vegas for LVIII.',
@@ -160,6 +166,7 @@ export const RECORD_SECTIONS: RecordSection[] = [
       unit: ['title', 'titles'], who: ['team', 'teams'],
       seoTitle: f => `NBA Champions by Year Since ${f} | DoUKnowBall`,
       seoDescription: (f, l) => `Every NBA champion from ${f} to ${l}, the BAA years included, with the beaten finalist, the series score and the Finals MVP, plus the most titles in that span.`,
+      mvp: 'NBA Finals MVP',
     },
     format: { path: '/nba-playoff-format-history', heading: 'How the NBA playoffs work' },
     blurb: 'Every Finals back to the 1947 BAA with the beaten finalist, the series winner first, and every Finals MVP since the award began in 1969.',
@@ -220,6 +227,7 @@ export const RECORD_SECTIONS: RecordSection[] = [
       unit: ['title', 'titles'], who: ['team', 'teams'],
       seoTitle: f => `WNBA Champions by Year Since ${f} | DoUKnowBall`,
       seoDescription: (f, l) => `Every WNBA champion from ${f} to ${l}, with the beaten finalist, the series score and the Finals MVP, plus the most titles in that span.`,
+      mvp: 'WNBA Finals MVP',
     },
     blurb: 'Every WNBA Finals since the league began in 1997, with the beaten finalist and every Finals MVP from Cynthia Cooper on.',
     yearLabel: 'Year',
@@ -249,6 +257,31 @@ export const RECORD_SECTIONS: RecordSection[] = [
       { path: '/list-quiz', label: 'Name Them All' },
     ],
     fetch: () => rows('cfb_national_champions', 'year', 'champion', { selector: 'selector', record: 'record', coach: 'coach' }),
+  },
+  {
+    key: 'heisman', emoji: '🏆', title: 'Heisman Trophy Winners',
+    slug: 'heisman-trophy-winners',
+    words: {
+      many: 'Heisman Trophy winners', one: 'Heisman Trophy winner', most: 'Most Heisman Trophies',
+      unit: ['trophy', 'trophies'], who: ['player', 'players'],
+      seoTitle: f => `Heisman Trophy Winners by Year Since ${f} | DoUKnowBall`,
+      seoDescription: (f, l) => `Every Heisman Trophy winner from ${f} to ${l}, with the school and the position the Heisman Trust lists, plus anyone who won it more than once.`,
+    },
+    blurb: "College football's best known individual award, presented every year since 1935, with each winner's school and position as the Heisman Trust lists them.",
+    yearLabel: 'Year',
+    championLabel: 'Winner',
+    columns: [['school', 'School'], ['position', 'Position']],
+    note: 'Reggie Bush forfeited his 2005 award in 2010 and the Heisman Trust restored it in 2024, so 2005 lists him. Positions follow the Trust’s own list, which lists most early halfbacks as RB and the ends of 1936 and 1949 as TE.',
+    play: [
+      { path: '/college-grid', label: 'College Grid' },
+      { path: '/list-quiz', label: 'Name Them All' },
+    ],
+    /* cfb_heisman_winners: Round 729 verified all 91 rows, 1935 to 2025, against
+       heisman.com and ESPN (scripts/data/heismanVerified2026-09.json). The rows in
+       recordBooks.json are written from that record, not from this fetch, until the
+       table matches it (supabase/migrations/20260930_round_729_heisman.sql corrects
+       23 position codes); scripts/simHeisman.mjs holds the two together. */
+    fetch: () => rows('cfb_heisman_winners', 'year', 'winner', { school: 'school', position: 'position' }),
   },
   {
     key: 'cbb', emoji: '🏀', title: "Men's NCAA Basketball Champions",

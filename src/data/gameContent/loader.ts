@@ -131,6 +131,7 @@ export const PATH_BUNDLE: Record<string, ContentBundle> = {
   '/free-kick': 'soccer2',
   '/gauntlet-draft': 'soccer2',
   '/higher-lower': 'soccer2',
+  '/manager-hot-seat': 'soccer2',
   '/player-stock-market': 'soccer2',
   '/sign-the-player': 'soccer2',
   '/soccer-career': 'soccer2',
@@ -140,6 +141,7 @@ export const PATH_BUNDLE: Record<string, ContentBundle> = {
   '/squad-deal': 'soccer2',
   '/stadium-tycoon': 'stadiumManagement',
   '/wonderkid-factory': 'academyManagement',
+  '/contract-chaos': 'soccer2',
   '/transfer-path': 'soccer2',
   '/world-cup-bracket': 'soccer2',
   /* world */

@@ -422,8 +422,20 @@ async function draw(sample, route, url) {
         const st = window.getComputedStyle(el);
         return st.display !== 'none' && st.visibility !== 'hidden' && Number(st.opacity) > 0.05;
       };
-      const SEL = 'h1, h2, h3, h4, p, li, a[href], td, th, blockquote';
-      const BLOCK = 'h1, h2, h3, h4, p, li, td, th, blockquote';
+      /* ROUND 652: A TABLE IS ONE BLOCK, NOT A PILE OF CELLS. td and th used
+         to be captured one at a time and each written as its own <p>, so the
+         twelve Record Books pages, /records, the four grid answer archives and
+         the five format histories reached a crawler as one word lines with
+         nothing tying a row together: "2024", "Kansas City Chiefs", "San
+         Francisco 49ers", "25-22". Bing reads the raw HTML and sends this site
+         twice Google's search traffic. A table is now captured whole: one
+         <table>, a <tr> per row, a <th> or <td> per cell built with the same
+         inline() as every other block so links inside cells stay links, and
+         everything inside it is marked consumed so no cell is written twice.
+         The cells left this selector with that, because the only thing a
+         lone cell could still do here is come out as a paragraph again. */
+      const SEL = 'h1, h2, h3, h4, p, li, a[href], table, blockquote';
+      const BLOCK = 'h1, h2, h3, h4, p, li, table, blockquote';
 
       /* ROUND 269, TWO FIXES TO THIS LOOP, BOTH MEASURED FIRST.
 
@@ -488,9 +500,9 @@ async function draw(sample, route, url) {
         if (!text) continue;
         const tag = el.tagName.toLowerCase();
         const chrome = isChrome(el);
+        /* already written out inside the paragraph, list item or table it sits in */
+        if (consumed.has(el)) continue;
         if (tag === 'a') {
-          /* already written out inside the paragraph or list item it sits in */
-          if (consumed.has(el)) continue;
           const href = el.getAttribute('href') || '';
           if (!href.startsWith('/') && !href.startsWith('http')) continue;
           if (text.length > LEAF_CAP) continue;
@@ -500,36 +512,63 @@ async function draw(sample, route, url) {
           parts.push({ s: `<a href="${esc(href)}">${esc(text)}</a>`, chrome });
           continue;
         }
+        if (tag === 'table') {
+          /* NO CAP ON A TABLE. The wrapper cap below exists for an element that
+             happens to contain blocks and would otherwise dump the page; a
+             table contains cells because that is what a table is, and its
+             length is the size of the data. A row hidden on screen is left
+             out, the same as any other hidden block. */
+          const rows = [];
+          for (const row of Array.from(el.rows)) {
+            if (!visible(row)) continue;
+            const cells = Array.from(row.cells).map(c => {
+              const ct = c.tagName === 'TH' ? 'th' : 'td';
+              return `<${ct}>${inline(c)}</${ct}>`;
+            });
+            if (cells.length) rows.push(`<tr>${cells.join('')}</tr>`);
+          }
+          const caption = el.caption && visible(el.caption) ? inline(el.caption) : '';
+          for (const inner of Array.from(el.querySelectorAll(SEL))) consumed.add(inner);
+          if (!rows.length) continue;
+          /* ONE ROW PER LINE, so a row that changes is a one line diff in the
+             saved file and not a rewrite of the whole table. No <thead> or
+             <tbody> is written: a parser puts the implied tbody back, and the
+             <th> cells already say which row is the header.
+             THE CLOCK SAMPLES NOW COMPARE THE WHOLE TABLE AS ONE BLOCK. One
+             cell that changes with the date drops the entire table, where it
+             used to drop one paragraph. That is fine for the records, the
+             archives and the format histories, which are static data, and
+             playSnapshotDrift is the fence that would show a table being
+             dropped for that reason. */
+          const block = ['<table>', ...(caption ? [`<caption>${caption}</caption>`] : []), ...rows, '</table>'];
+          parts.push({ s: block.join('\n'), chrome });
+          continue;
+        }
         const cap = el.querySelector(BLOCK) ? WRAPPER_CAP : LEAF_CAP;
         if (text.length > cap) continue;
         const html = inline(el);
         if (!html) continue;
         /* ROUND 370: A REPEATED TABLE CELL IS DATA, NOT BOILERPLATE.
-           `seen` is one Set for the whole document, and it was applied to every
-           block including td and th. That is right for the link dedupe above,
-           where the same nav link really does appear on every page and shipping
-           it once is correct. It is wrong for a table: a count of 42 appearing
-           in five different crossings is five facts, and collapsing them makes
-           the page claim less than it knows.
+           `seen` is one Set for the whole document, and it used to be applied
+           to every block including td and th. That is right for the link dedupe
+           above, where the same nav link really does appear on every page and
+           shipping it once is correct. It was wrong for a table: a count of 42
+           appearing in five different crossings is five facts, and collapsing
+           them made the page claim less than it knew.
            MEASURED ON THE GRID ARCHIVES BEFORE THE FIX. Of 126 crossings on
            /nba-grid/archive, 35 reached a crawler intact, 70 lost their count
            and 21 lost their label outright, so an answer list appeared under the
            previous crossing with nothing naming it. MLB kept 62, NHL 49, CBB 59.
-           The page's own words promise "how many players in our data satisfy
-           both sides" and that number was absent from most of them.
-           This is the fourth time in this repo that correctly generated content
-           never reached a crawler, after the FAQ and breadcrumb markup in Round
-           281, the home page structured data in the same round, and the soft 404
-           marker in Round 282. The pattern each time is that the body is
-           reconstructed rather than copied, so anything the reconstruction drops
-           is invisible to every check that reads the source instead of the
-           output. simGridArchive section 6 reads the OUTPUT. */
+           Round 370 exempted cells from the dedupe; Round 652 moved them inside
+           the table block above, where this Set never sees a cell at all, so the
+           exemption went with them. simGridArchive section 6 still reads the
+           OUTPUT, which is the pattern that caught this: the body is
+           reconstructed rather than copied, and anything the reconstruction
+           drops is invisible to every check that reads the source instead. */
         const key = tag + '|' + html;
-        const repeatable = tag === 'td' || tag === 'th';
-        if (!repeatable && seen.has(key)) continue;
-        if (!repeatable) seen.add(key);
-        const out = tag === 'td' || tag === 'th' ? 'p' : tag === 'li' ? 'li' : tag;
-        parts.push({ s: `<${out}>${html}</${out}>`, chrome });
+        if (seen.has(key)) continue;
+        seen.add(key);
+        parts.push({ s: `<${tag}>${html}</${tag}>`, chrome });
       }
       /* the head is copied as built, minus the runtime-injected <style>
          blocks: they measured 29KB a page (four fifths of the file) and

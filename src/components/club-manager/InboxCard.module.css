@@ -1,0 +1,17 @@
+.card {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.committed {
+  animation: inboxResolved 420ms ease-out;
+}
+
+@keyframes inboxResolved {
+  0% { box-shadow: 0 0 0 2px hsl(var(--gold) / 0.55); }
+  100% { box-shadow: 0 0 0 0 transparent; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .committed { animation: none; }
+}

@@ -20,6 +20,7 @@ import { useStreaks } from '@/hooks/useStreaks';
 import { getLocalTodayCount } from '@/lib/completions';
 import { getBadgeState, BADGE_DEFS, type BadgeState } from '@/lib/badges';
 import AchievementCase from '@/components/profile/AchievementCase';
+import StreakHistory from '@/components/profile/StreakHistory';
 import { nameModerationError } from '@/lib/nameModeration';
 import { CATEGORIES } from '@/data/gameRegistry';
 
@@ -724,6 +725,11 @@ export default function Profile() {
               </CardContent>
             </Card>
           )}
+
+          {/* ═══════════════ 3c. STREAK HISTORY (Round 712) ═══════════════ */}
+          {/* Own profile only, like the streaks above it: the days come from
+              this browser's streak record and its play diary. */}
+          {isOwnProfile && <StreakHistory legacyLabels={GAME_LABELS} />}
 
           {/* ═══════════════ 4. BADGES ═══════════════ */}
           {/* Round 301, audit finding 10: own profile only. Badges are computed
