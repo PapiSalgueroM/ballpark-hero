@@ -1,5 +1,32 @@
 # Work board
 
+**2026-09-30, Codex769 source/browser checkpoint: five-sport Explore accepted.**
+Explicit Explore adds territory/team search, current-owner and availability filters, truthful
+counts, Fit/zoom/reset and bounded drag pan. Automatic scene camera hand-back is immediate
+on the first disabled render or sport change. The native touch test caught implicit capture
+moving from a hit path to the SVG; ignore the child's bubbling lost capture, stop on the SVG's
+own loss. Drag suppression consumes pointer clicks only, preserving Enter/Space/detail0.
+
+Ten new actual-map/helper tests and nine earlier details tests pass. Ten asserted copied
+controls detect owner, powerup, scene gate, sport change, camera, drag, keyboard, capture,
+bounds and fit regressions, with unaffected tests still green. Independent read-only review
+accepted. Forty native browser cases (five sports,320/390/430/1440,full/reduced) pass2362 checks,
+zero overflow/errors/external requests and44px targets. Every phone case proves two-move
+trusted touch dragging followed by a trusted actual-hit tap. SVG, camera group and every
+hit/fill path retain identity. Current owners/availability are exact. All five phone screenshots
+were inspected. Evidence: TEMP/dukb-round769-explore-audit/report.json and final-browser.log.
+
+Browser boundary is the actual compiled shared map with controlled ownership and finished772
+CSS. No engine/save/DB outcome is credited. Parent changes are exactly one exploreEnabled
+prop. No data, RNG, saves, scene timings or pinch change. Final combined build and15 fences
+remain pending behind the full392-node suite;769 is not published.773/774/775 continue in
+independent exact lanes. Next unclaimed number:776. Root owns docs/git/build/publish handoff.
+
+**774 scope addendum, root owned:** `src/test/scoreShown.test.tsx` needs its Quiz Board
+answerTile helper to find the actual dialog input in the document portal when absent from
+the fixture root. Authorize only that bounded query fallback. Preserve every shown/shared/
+recorded bank assertion and existing control, including the negative-score floor and2600 win.
+
 **2026-09-30, Codex Round 774 CLAIMED: Sports Quiz Board clue access and answer feedback (96,97).**
 Own only `src/components/quiz-board/QuizBoard.tsx`, scoped CSS, actual-component tests and a
 new sim wrapper. Replace the custom clue overlay with the existing Dialog for labeled clue

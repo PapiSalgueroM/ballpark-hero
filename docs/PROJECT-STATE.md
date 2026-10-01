@@ -1,5 +1,15 @@
 # Project state
 
+## CHECKPOINT 2026-09-30: all four 769 through772 have native browser acceptance
+
+Conquest769 now passes40 native browser cases and2362 checks across all five maps, including
+continuous trusted touch drag/tap, bounded viewport, exact filters/counts and immediate scene
+camera hand-back. Ten new tests, ten copied controls and independent review pass. Full proof
+and fixture limits are on WORKBOARD. First Touch770, Inbox771 and lineup focus772 receipts
+remain accepted. Final combined corrected-JS build and15 fences wait for the full392-node
+suite to finish. New773 Soccer picker,774 Quiz Board and775 F1 Constructor are in progress;
+their scopes exclude hooks/data and Claude's held claims. Next unclaimed number:776.
+
 ## IN PROGRESS 2026-09-30: Quiz Board and F1 Constructor follow the Soccer picker
 
 Codex774 claims the isolated Quiz Board clue overlay and committed answer feedback. Root775
