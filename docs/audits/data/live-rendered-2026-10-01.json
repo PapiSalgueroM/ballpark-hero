@@ -11,7 +11,7 @@
  },
  "rules": {
   "lossOnMount": "lost >= 300 saved page characters and >= 25% of the saved page text",
-  "clusterJaccard": 0.3
+  "clusterJaccard": 0.15
  },
  "linkGraph": {
   "/": {
@@ -1205,7 +1205,38 @@
    "rawDepth": 2
   }
  },
- "templateClusters": [],
+ "templateClusters": [
+  [
+   "/records/nba-champions",
+   "/records/wnba-champions",
+   "/records/heisman-trophy-winners",
+   "/records/english-football-champions",
+   "/records/afl-premiers",
+   "/records/brownlow-medal-winners",
+   "/records/dally-m-medal-winners",
+   "/records/nrl-premiers"
+  ],
+  [
+   "/nfl-my-career",
+   "/nba-my-career",
+   "/mlb-my-career",
+   "/nhl-my-career"
+  ],
+  [
+   "/soccer-conquest",
+   "/conquest-mlb",
+   "/conquest-nhl"
+  ],
+  [
+   "/gauntlet-draft",
+   "/nfl-gauntlet-draft",
+   "/nba-gauntlet-draft"
+  ],
+  [
+   "/mlb-gauntlet-draft",
+   "/nhl-gauntlet-draft"
+  ]
+ ],
  "pages": [
   {
    "route": "/about",
