@@ -74,6 +74,14 @@ export function winProbability(overall: number): number {
   return Math.min(0.985, Math.max(0.05, p));
 }
 
+/** Momentum, shared by both season sims (this one and simulateSeasonFair):
+    a win yesterday lifts today a little, a loss drags it, and no game is ever
+    surer than GAME_CAP. Round 820 named them so the closed form odds in
+    perfectSeasonOdds.ts read the same numbers the sims play. */
+export const WIN_MOMENTUM = 0.004;
+export const LOSS_MOMENTUM = -0.006;
+export const GAME_CAP = 0.988;
+
 export function simulateSeason(overall: number, games: number, seed: number): SimResult {
   const rand = rng(seed);
   const p = winProbability(overall);
@@ -81,8 +89,8 @@ export function simulateSeason(overall: number, games: number, seed: number): Si
   let wins = 0;
   for (let i = 0; i < games; i++) {
     // A pinch of streakiness: losing yesterday stings today, winning helps
-    const momentum = i > 0 ? (results[i - 1] ? 0.004 : -0.006) : 0;
-    const win = rand() < Math.min(0.988, p + momentum);
+    const momentum = i > 0 ? (results[i - 1] ? WIN_MOMENTUM : LOSS_MOMENTUM) : 0;
+    const win = rand() < Math.min(GAME_CAP, p + momentum);
     results.push(win);
     if (win) wins++;
   }
@@ -264,6 +272,31 @@ export function dailySportSeed(sportKey: string, dateStr: string = getDailyDateE
 export function makeDailyPicker(sportKey: string, dateStr: string = getDailyDateET()) {
   const rand = rng(dailySportSeed(sportKey, dateStr));
   return (len: number) => Math.floor(rand() * len);
+}
+
+/**
+ * Round 821: the first ET date whose daily deals from the whole wheel.
+ *
+ * Until Round 821 the MLB and NHL wheels were built from the first 1,000 rows
+ * the server returned (the MLB wheel only ever landed on 1901 to 1962), and
+ * the daily picks stops by position in that list and drops any theme with too
+ * few stops in it. A complete wheel is longer, so the same date would deal a
+ * different theme and different stops: a daily already played would change
+ * under the people who played it, and the day the release lands would change
+ * mid day. So a daily dated before this keeps dealing from the old wheel,
+ * rebuilt exactly (each index read is ordered by id, and its first 1,000 rows,
+ * 15,000 for the NBA, are the rows and the order the old read returned,
+ * checked 2026-10-01 for all four sports), and every daily from this date on
+ * deals from the full wheel. Classic and Hard use the full wheel at once.
+ * A week out on purpose: the release has to land before it, or that day's
+ * daily changes when it does. scripts/simPerfectSeasonWheel.mjs proves the
+ * old wheel is rebuilt exactly.
+ */
+export const FULL_WHEEL_DAILY_FROM = '2026-10-08';
+
+/** True when the daily for this ET date deals from the pre Round 821 wheel. */
+export function dailyUsesOldWheel(dateStr: string): boolean {
+  return dateStr < FULL_WHEEL_DAILY_FROM;
 }
 
 // --- One-attempt-per-day persistence ------------------------------------
