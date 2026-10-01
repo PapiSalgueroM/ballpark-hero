@@ -1,5 +1,17 @@
 # Work board
 
+**2026-10-01, Codex817 CLAIMED: Tennis and CBB worked examples and help focus.**
+Own only TennisPlayerHowToPlay.tsx and CbbProgramHowToPlay.tsx plus a focused
+src/test/clueGameHelp.test.tsx and scripts/simClueGameHelp.mjs if lifecycle
+regression coverage is needed. Neither help panel currently gives a worked
+scoring example. Add a short example derived from that game's original tier
+constants, preserve authored clue categories/rules and explain the actual wrong
+guess/hint behavior. Give the help opener a 44px target and visible focus; return
+focus without scrolling on Escape/Close, following accepted F1 help. Use the
+existing shared Dialog unchanged. No Board, hook, data, scoring or shared UI edits.
+815/816 own only their Boards/local feedback files and remain disjoint. Root owns
+Git/docs/build. All Claude claims stand. Next free 818.
+
 **2026-10-01, Codex812 ACCEPTED: NASCAR committed answer feedback.**
 Correct answers now receive success feedback instead of the old delayed wrong
 message. Actual appended misses get one finite cue, exhausted games show truthful
