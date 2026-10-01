@@ -17,10 +17,13 @@
 --
 -- Transfer Path plays on the same tables. The new seasons are new links (Kane and
 -- Vardy at Leicester City in 2012-2013, Haaland and Szoboszlai at RB Salzburg in
--- 2019-2020, De Bruyne's Chelsea season moving to 2013-2014), so the same transaction
--- rewrites the 8 entries they shorten, each over the value it replaces. Every
--- new value is deriveHint on the pool after this migration; simTransferPathHints
--- section 7 re-derives them all.
+-- 2019-2020, De Bruyne at Chelsea with Salah and Eto'o once his season reads 2013-2014),
+-- so the same transaction rewrites the 8 classic and Europe entries and the
+-- 1 active entry they shorten, each over the value it replaces. Every new value is
+-- deriveHint on the pool after this migration; simTransferPathHints section 7 re-derives
+-- them all. An active entry is written over the applied 2026-09-07 value or over the
+-- value the pending Round 531 refresh writes, so the two land in either order; the
+-- refresh fails closed on it if it comes second and must be regenerated first.
 --
 -- After applying: node scripts/bakeCareerPlayers.mjs must leave src/data/careerPlayers.ts
 -- unchanged except its date stamp.

@@ -267,10 +267,13 @@ export function renderMigration({ record, writes, afterRows, playersCount, seaso
   lines.push(`--`);
   lines.push(`-- Transfer Path plays on the same tables. The new seasons are new links (Kane and`);
   lines.push(`-- Vardy at Leicester City in 2012-2013, Haaland and Szoboszlai at RB Salzburg in`);
-  lines.push(`-- 2019-2020, De Bruyne's Chelsea season moving to 2013-2014), so the same transaction`);
-  lines.push(`-- rewrites the ${rewrites.length} entries they shorten, each over the value it replaces. Every`);
-  lines.push(`-- new value is deriveHint on the pool after this migration; simTransferPathHints`);
-  lines.push(`-- section 7 re-derives them all.`);
+  lines.push(`-- 2019-2020, De Bruyne at Chelsea with Salah and Eto'o once his season reads 2013-2014),`);
+  lines.push(`-- so the same transaction rewrites the ${rewrites.length} classic and Europe entries and the`);
+  lines.push(`-- ${activeRewrites.length} active entr${activeRewrites.length === 1 ? 'y' : 'ies'} they shorten, each over the value it replaces. Every new value is`);
+  lines.push(`-- deriveHint on the pool after this migration; simTransferPathHints section 7 re-derives`);
+  lines.push(`-- them all. An active entry is written over the applied 2026-09-07 value or over the`);
+  lines.push(`-- value the pending Round 531 refresh writes, so the two land in either order; the`);
+  lines.push(`-- refresh fails closed on it if it comes second and must be regenerated first.`);
   lines.push(`--`);
   lines.push(`-- After applying: node scripts/bakeCareerPlayers.mjs must leave src/data/careerPlayers.ts`);
   lines.push(`-- unchanged except its date stamp.`);
