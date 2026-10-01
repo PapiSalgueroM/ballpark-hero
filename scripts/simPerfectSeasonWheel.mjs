@@ -20,7 +20,7 @@
 
    MEASURED 2026-10-01 (live tables, read only):
      MLB  2,572 stops, 1901 to 2021 (was 1,000, 1901 to 1962)
-     NHL  stops counted from 5,180 rows (was 1,000 rows, 194 stops)
+     NHL  222 stops counted from 5,180 rows, 1960s to 2020s (was 1,000 rows, 194 stops)
      NFL  828 stops, 1999 to 2024 (unchanged)
      NBA  14,722 rows, 1951-52 to 2024-25 (unchanged)
    The old reads, replayed from main at 729b9f3b, return exactly the first
