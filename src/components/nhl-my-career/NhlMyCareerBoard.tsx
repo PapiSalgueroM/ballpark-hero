@@ -691,7 +691,10 @@ export default function NhlMyCareerBoard() {
   /* Round 179: freeagency joins event in the guard, so an open panel can
      never hide the market screen. */
   if (panel !== 'none' && phase !== 'event' && phase !== 'freeagency') {
-    const meters: [string, number][] = [['Morale', career.morale], ['Fanbase', career.fanbase], ['Health', career.health]];
+    /* Round 796: karma joins the meters. The inbox has moved it since Round 521
+       and the rival choice buttons now print it, so it has to be somewhere the
+       player can see it move. A save that never answered a text reads 50. */
+    const meters: [string, number][] = [['Morale', career.morale], ['Fanbase', career.fanbase], ['Health', career.health], ['Karma', career.karma ?? 50]];
     return (
       <div ref={panelRef} className="space-y-3">
         <HubPanelHeader
