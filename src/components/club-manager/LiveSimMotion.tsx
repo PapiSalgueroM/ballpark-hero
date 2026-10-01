@@ -6,7 +6,7 @@ interface Point { x: number; y: number; }
 export interface MotionPlayer extends Point { key: string; name?: string; keeper: boolean; }
 export interface MotionScene<T extends MotionPlayer> { mine: T[]; theirs: T[]; ball: Point; holderKey: string | null; }
 export interface MotionEvent { event: LiveFeedEvent; key: string; at: number; }
-interface Pose { kick?: number; dive?: number; catching?: number; }
+interface Pose { kick?: number; dive?: number; catching?: number; celebrate?: number; hop?: number; }
 export interface MotionFrame<T extends MotionPlayer> extends MotionScene<T> {
   poses: Record<string, Pose>;
   action: string;
@@ -42,10 +42,20 @@ export function actionFrame<T extends MotionPlayer>(scene: MotionScene<T>, actio
   const dive = smooth((flight - .1) / .9);
   const keeperEnd = event.kind === 'save' ? end : { x: 50 - wing * 5, y: mine ? 10 : 90 };
   const keeperPosition = keeper ? point(keeper, keeperEnd, dive) : null;
-  const patch = (players: T[]) => players.map(player => player.key === striker?.key ? { ...player, ...planted } : player.key === keeper?.key && keeperPosition ? { ...player, ...keeperPosition } : player);
+  // Only the committed scorer's side celebrates, after the ball reaches the net.
+  const celebration = event.kind === 'goal' && flight === 1 ? smooth(resolve / .55) : 0;
+  const teammates = celebration && striker ? attackers.filter(player => !player.keeper && player.key !== striker.key)
+    .sort((a, b) => Math.hypot(a.x - planted.x, a.y - planted.y) - Math.hypot(b.x - planted.x, b.y - planted.y)).slice(0, 2) : [];
+  const patch = (players: T[]) => players.map(player => player.key === striker?.key ? { ...player, ...planted }
+    : player.key === keeper?.key && keeperPosition ? { ...player, ...keeperPosition }
+    : teammates.some(teammate => teammate.key === player.key) ? { ...player, ...point(player, planted, celebration * .18) } : player);
   const poses: Record<string, Pose> = {};
   if (striker) poses[striker.key] = { kick: Math.sin(bounded((p - .12) / .24) * Math.PI) };
   if (keeper) poses[keeper.key] = { dive: (event.kind === 'save' ? wing : -wing) * dive * 68, catching: event.kind === 'save' ? dive : 0 };
+  if (celebration && striker) {
+    poses[striker.key] = { ...poses[striker.key], celebrate: celebration, hop: Math.sin(resolve * Math.PI) * 4 };
+    for (const teammate of teammates) poses[teammate.key] = { celebrate: celebration };
+  }
   return {
     ...scene, mine: patch(scene.mine), theirs: patch(scene.theirs), ball, holderKey: flight === 0 ? striker?.key ?? null : null,
     poses, action: event.kind, net: event.kind === 'goal' && flight === 1 ? (mine ? 'opp' : 'me') : null,
@@ -91,19 +101,24 @@ export function LivePitchPlayer({ color, keeper, pose, selected }: { color: stri
   const kick = pose?.kick ?? 0;
   const dive = pose?.dive ?? 0;
   const catching = pose?.catching ?? 0;
+  const celebrate = pose?.celebrate ?? 0;
+  const hop = pose?.hop ?? 0;
   // At full reach both gloves meet the ball's anchor, at (0, 8) in this view box.
   const reachX = -25 * Math.sin(dive * Math.PI / 180) * catching;
   const reachY = (3 + 25 * Math.cos(dive * Math.PI / 180)) * catching;
-  return <svg className="cm-pitch-player" viewBox="-18 -26 36 44" aria-hidden="true" focusable="false" data-cm-actor-pose={dive ? 'dive' : kick ? 'strike' : 'stand'}>
+  const handY = dive ? -20 : -3 - celebrate * 19;
+  const handX = dive ? 5 : 11 + celebrate * 2;
+  const armX = dive ? 5 : 10 + celebrate * 3;
+  return <svg className="cm-pitch-player" viewBox="-18 -26 36 44" aria-hidden="true" focusable="false" data-cm-actor-pose={celebrate ? 'celebrate' : dive ? 'dive' : kick ? 'strike' : 'stand'}>
     <ellipse cy="12" rx="10" ry="3" fill="#072d3470" />
     {selected && <ellipse cy="11" rx="14" ry="5" fill="none" stroke="#fff" strokeWidth="1.5" />}
-    <g transform={`translate(${reachX} ${reachY}) rotate(${dive} 0 5)`} strokeLinecap="round" strokeLinejoin="round">
+    <g transform={`translate(${reachX} ${reachY - hop}) rotate(${dive} 0 5)`} strokeLinecap="round" strokeLinejoin="round">
       <path d={`M-4 0-6 10M4 0 ${5 + kick * 10} ${10 - kick * 15}`} fill="none" stroke="#142b40" strokeWidth="5" />
       <path d={`M-6 10-9 11M${5 + kick * 10} ${10 - kick * 15} ${8 + kick * 10} ${11 - kick * 15}`} stroke="#e8eef2" strokeWidth="3" />
       <path d="M0-13V0" stroke={keeper ? '#f0b34b' : color} strokeWidth="12" />
-      <path d={dive ? 'M-5-12-5-20M5-12 5-20' : 'M-5-12-10-3M5-12 10-3'} fill="none" stroke={keeper ? '#f0b34b' : color} strokeWidth="4" />
-      <circle data-cm-glove={keeper && catching ? '1' : undefined} cx={dive ? -5 : -11} cy={dive ? -20 : -3} r="2.6" fill={keeper ? '#fff2d3' : '#bb8669'} />
-      <circle data-cm-glove={keeper && catching ? '1' : undefined} cx={dive ? 5 : 11} cy={dive ? -20 : -3} r="2.6" fill={keeper ? '#fff2d3' : '#bb8669'} />
+      <path d={`M-5-12 ${-armX} ${handY}M5-12 ${armX} ${handY}`} fill="none" stroke={keeper ? '#f0b34b' : color} strokeWidth="4" />
+      <circle data-cm-glove={keeper && catching ? '1' : undefined} cx={-handX} cy={handY} r="2.6" fill={keeper ? '#fff2d3' : '#bb8669'} />
+      <circle data-cm-glove={keeper && catching ? '1' : undefined} cx={handX} cy={handY} r="2.6" fill={keeper ? '#fff2d3' : '#bb8669'} />
       <ellipse cy="-20" rx="5" ry="5.5" fill="#bb8669" /><path d="M-4-23Q0-27 4-23" fill="#23313c" stroke="#23313c" strokeWidth="2" />
     </g>
   </svg>;
