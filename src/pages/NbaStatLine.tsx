@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { Loader2, Search, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { GameShell } from '@/components/game/GameShell';
@@ -12,8 +12,9 @@ import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { useNbaStatLine } from '@/hooks/useNbaStatLine';
 import {
   HIT_SCORE, PICK_COUNT, SPLIT_LABEL, STOCKS_FLOOR_YEAR, StatLineSeason,
-  StatTarget, per36,
+  StatTarget, normalizeSearch, per36,
 } from '@/lib/nbaStatLine';
+import pickerStyles from './NbaStatLinePicker.module.css';
 
 /**
  * NBA Stat Line (Round 336). A target per-36 line is shown; build it by
@@ -47,8 +48,47 @@ function seasonLine(s: StatLineSeason): string {
 }
 
 export default function NbaStatLine() {
-  const g = useNbaStatLine();
+  const [suggestionLimit, setSuggestionLimit] = useState(10);
+  const g = useNbaStatLine(suggestionLimit);
   const { phase, target, result } = g;
+  const playingRef = useRef<HTMLDivElement>(null);
+  const searchRef = useRef<HTMLInputElement>(null);
+  const scoreRef = useRef<HTMLButtonElement>(null);
+  const listRef = useRef<HTMLDivElement>(null);
+  const focusRequest = useRef<{ kind: 'pick' | 'remove'; key: string } | { kind: 'more'; count: number } | null>(null);
+
+  useLayoutEffect(() => { setSuggestionLimit(10); }, [g.query, phase]);
+  useLayoutEffect(() => {
+    const request = focusRequest.current;
+    if (!request) return;
+    const accepted = request.kind === 'more'
+      ? g.suggestions.length > request.count
+      : g.picks.some(p => p.key === request.key) === (request.kind === 'pick');
+    focusRequest.current = null;
+    if (!accepted || phase !== 'playing') return;
+    const active = document.activeElement;
+    if (active instanceof HTMLElement && active !== document.body && active.isConnected && !playingRef.current?.contains(active)) return;
+    const next = request.kind === 'more'
+      ? listRef.current?.querySelectorAll<HTMLButtonElement>('[data-nba-season-choice]')[request.count]
+      : searchRef.current ?? scoreRef.current;
+    next?.focus({ preventScroll: true });
+    if (request.kind === 'more' && next && listRef.current) {
+      const row = next.getBoundingClientRect(), list = listRef.current.getBoundingClientRect();
+      if (row.top < list.top + 1) listRef.current.scrollTop -= list.top + 1 - row.top;
+      if (row.bottom > list.bottom - 1) listRef.current.scrollTop += row.bottom - list.bottom + 1;
+    }
+  }, [g.picks, g.suggestions, phase]);
+
+  const chooseSeason = (season: StatLineSeason) => {
+    if (g.picks.length >= PICK_COUNT || g.picks.some(p => p.key === season.key)) return;
+    focusRequest.current = { kind: 'pick', key: season.key };
+    g.addPick(season);
+  };
+  const removeSeason = (key: string) => {
+    if (!g.picks.some(p => p.key === key)) return;
+    focusRequest.current = { kind: 'remove', key };
+    g.removePick(key);
+  };
 
   const isDone = phase === 'done';
   const score = result?.total ?? 0;
@@ -108,7 +148,7 @@ export default function NbaStatLine() {
         )}
 
         {phase === 'playing' && target && (
-          <div className="space-y-4">
+          <div ref={playingRef} className="space-y-4">
             {/* The target */}
             <div className="rounded-xl border border-primary/40 bg-surface-1 p-4">
               <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-2">
@@ -129,22 +169,91 @@ export default function NbaStatLine() {
               )}
             </div>
 
+            {/* Search */}
+            <div className={pickerStyles.searchArea}>
+            {g.picks.length < PICK_COUNT ? (
+              <div className="relative">
+                <div className="flex items-center gap-2 rounded-lg border border-border bg-background px-3 py-2">
+                  <Search className="w-4 h-4 text-muted-foreground shrink-0" />
+                  <input
+                    ref={searchRef}
+                    type="search"
+                    aria-label="Search NBA player seasons"
+                    data-nba-season-search
+                    value={g.query}
+                    onChange={e => g.setQuery(e.target.value)}
+                    placeholder="Search any NBA player..."
+                    className={cn('w-full bg-transparent text-sm text-foreground outline-none placeholder:text-muted-foreground', pickerStyles.search)}
+                  />
+                </div>
+                {normalizeSearch(g.query).length >= 2 && (
+                  <div className={cn('z-20 w-full rounded-lg border border-border bg-card shadow-lg overflow-hidden', pickerStyles.popup)}>
+                    <p data-nba-season-count aria-live="polite" className="px-3 py-2 text-xs text-muted-foreground">
+                      {g.suggestions.length > 0 ? `Showing ${g.suggestions.length} matching seasons${g.hasMoreSuggestions ? ', more available' : ''}.` : 'No eligible seasons match that name.'}
+                    </p>
+                    <div ref={listRef} data-nba-season-list className={pickerStyles.list}>
+                    {g.suggestions.map(s => (
+                      <button
+                        key={s.key}
+                        data-nba-season-choice={s.key}
+                        onClick={() => chooseSeason(s)}
+                        onKeyDown={e => { if (e.repeat && (e.key === 'Enter' || e.key === ' ')) e.preventDefault(); }}
+                        className={cn('w-full px-3 py-2 text-left hover:bg-primary/10 transition-colors border-b border-border/50 last:border-b-0', pickerStyles.choice)}
+                      >
+                        <span className={cn('block text-sm font-semibold text-foreground', pickerStyles.fullName)}>
+                          {s.player} <span className="text-muted-foreground font-normal">· {s.season} {s.team}</span>
+                        </span>
+                        <span className={cn('block text-[11px] text-muted-foreground', pickerStyles.fullName)}>{seasonLine(s)}</span>
+                      </button>
+                    ))}
+                    </div>
+                    <button
+                      data-nba-season-load
+                      disabled={!g.hasMoreSuggestions}
+                      onClick={() => { focusRequest.current = { kind: 'more', count: g.suggestions.length }; setSuggestionLimit(limit => limit + 10); }}
+                      onKeyDown={e => { if (e.repeat && (e.key === 'Enter' || e.key === ' ')) e.preventDefault(); }}
+                      className={cn('w-full text-sm font-semibold text-primary disabled:text-muted-foreground', pickerStyles.action)}
+                    >{g.hasMoreSuggestions ? 'Load more seasons' : 'All matching seasons shown'}</button>
+                  </div>
+                )}
+              </div>
+            ) : <p className="text-sm text-muted-foreground">Five seasons selected. Remove one below to change your line.</p>}
+            </div>
+
+            <button
+              ref={scoreRef}
+              data-nba-score
+              onClick={g.submit}
+              onKeyDown={e => { if (e.repeat && (e.key === 'Enter' || e.key === ' ')) e.preventDefault(); }}
+              disabled={!g.canSubmit}
+              className={cn(
+                'w-full rounded-full py-2.5 font-semibold transition-colors',
+                pickerStyles.action,
+                g.canSubmit
+                  ? 'bg-primary text-primary-foreground hover:bg-primary/90'
+                  : 'bg-muted text-muted-foreground cursor-not-allowed',
+              )}
+            >
+              {g.canSubmit ? 'Score my line' : `Pick ${PICK_COUNT - g.picks.length} more season${PICK_COUNT - g.picks.length === 1 ? '' : 's'}`}
+            </button>
+
             {/* The five slots */}
-            <div className="space-y-1.5">
+            <div data-nba-picked-list className={pickerStyles.picks}>
               {Array.from({ length: PICK_COUNT }, (_, i) => {
                 const p = g.picks[i];
                 return p ? (
-                  <div key={p.key} className="flex items-center justify-between gap-2 rounded-lg border border-border bg-surface-1 px-3 py-2">
+                  <div key={p.key} data-nba-picked-season={p.key} className="flex items-center justify-between gap-2 rounded-lg border border-border bg-surface-1 px-3 py-2">
                     <div className="min-w-0">
-                      <span className="block text-sm font-semibold text-foreground truncate">
+                      <span className={cn('block text-sm font-semibold text-foreground', pickerStyles.fullName)}>
                         {p.player} <span className="text-muted-foreground font-normal">· {p.season} {p.team}</span>
                       </span>
-                      <span className="block text-[11px] text-muted-foreground">{seasonLine(p)} · {p.minutes.toLocaleString()} min</span>
+                      <span className={cn('block text-[11px] text-muted-foreground', pickerStyles.fullName)}>{seasonLine(p)} · {p.minutes.toLocaleString()} min</span>
                     </div>
                     <button
-                      onClick={() => g.removePick(p.key)}
+                      onClick={() => removeSeason(p.key)}
+                      onKeyDown={e => { if (e.repeat && (e.key === 'Enter' || e.key === ' ')) e.preventDefault(); }}
                       aria-label={`Remove ${p.player} ${p.season}`}
-                      className="shrink-0 rounded-full p-1.5 text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors"
+                      className={cn('shrink-0 rounded-full p-1.5 text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors', pickerStyles.remove)}
                     >
                       <X className="w-4 h-4" />
                     </button>
@@ -174,49 +283,7 @@ export default function NbaStatLine() {
               </div>
             )}
 
-            {/* Search */}
-            {g.picks.length < PICK_COUNT && (
-              <div className="relative">
-                <div className="flex items-center gap-2 rounded-lg border border-border bg-background px-3 py-2">
-                  <Search className="w-4 h-4 text-muted-foreground shrink-0" />
-                  <input
-                    value={g.query}
-                    onChange={e => g.setQuery(e.target.value)}
-                    placeholder="Search any NBA player..."
-                    className="w-full bg-transparent text-sm text-foreground outline-none placeholder:text-muted-foreground"
-                  />
-                </div>
-                {g.suggestions.length > 0 && (
-                  <div className="absolute z-20 mt-1 w-full rounded-lg border border-border bg-card shadow-lg overflow-hidden">
-                    {g.suggestions.map(s => (
-                      <button
-                        key={s.key}
-                        onClick={() => g.addPick(s)}
-                        className="w-full px-3 py-2 text-left hover:bg-primary/10 transition-colors border-b border-border/50 last:border-b-0"
-                      >
-                        <span className="block text-sm font-semibold text-foreground">
-                          {s.player} <span className="text-muted-foreground font-normal">· {s.season} {s.team}</span>
-                        </span>
-                        <span className="block text-[11px] text-muted-foreground">{seasonLine(s)}</span>
-                      </button>
-                    ))}
-                  </div>
-                )}
-              </div>
-            )}
 
-            <button
-              onClick={g.submit}
-              disabled={!g.canSubmit}
-              className={cn(
-                'w-full rounded-full py-2.5 font-semibold transition-colors',
-                g.canSubmit
-                  ? 'bg-primary text-primary-foreground hover:bg-primary/90'
-                  : 'bg-muted text-muted-foreground cursor-not-allowed',
-              )}
-            >
-              {g.canSubmit ? 'Score my line' : `Pick ${PICK_COUNT - g.picks.length} more season${PICK_COUNT - g.picks.length === 1 ? '' : 's'}`}
-            </button>
           </div>
         )}
 
@@ -255,7 +322,7 @@ export default function NbaStatLine() {
                   </div>
                 ))}
               </div>
-              <p className="text-[11px] text-muted-foreground mt-2">
+              <p className={cn('text-[11px] text-muted-foreground mt-2', pickerStyles.fullName)}>
                 Your picks: {g.picks.map(p => `${p.player} ${p.season}`).join(', ')}
               </p>
             </div>
