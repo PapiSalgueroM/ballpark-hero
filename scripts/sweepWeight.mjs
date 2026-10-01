@@ -90,6 +90,13 @@
  * ceiling (226.0 against 226), so the next thing added to the entry chunk
  * has to pay for itself or raise that line in the open.
  *
+ * Measured again after merging main (5d1aa2bb, Aussie Rules Manager in the
+ * registry), three runs each, identical every run: every game page 7.8K to
+ * 8.4K lighter (/club-manager 630.7 to 622.6, /front-office 303.8 to 295.7,
+ * /aussie-rules-manager 259.0 to 250.6), / 225.6 to 226.2, /leaderboard
+ * 237.1 to 237.7. Every budget below still holds with the headroom it was set
+ * for, so none moved.
+ *
  * Run: npm run build && npx serve -s dist -l 4173, then
  *      ENGINES=chromium node scripts/sweepWeight.mjs
  */
@@ -212,7 +219,10 @@ console.log('3) Every guide is still reachable, one sport at a time');
   const loader = fs.readFileSync(path.join(dir, 'loader.ts'), 'utf-8');
   const mapped = new Map();
   for (const m of loader.matchAll(/^\s*'([^']+)': '([a-zA-Z0-9]+)',$/gm)) mapped.set(m[1], m[2]);
-  const BUNDLES = ['soccer1', 'soccer2', 'football', 'college', 'basketball', 'baseball', 'hockey', 'moreSports', 'world', 'clubManagement', 'stadiumManagement', 'academyManagement'];
+  /* Round 700: aussieRulesManagement joined the list when the merge of main
+     brought Aussie Rules Manager's guide file in (de094cc0), whose loader
+     entry this section read as an unknown bundle. */
+  const BUNDLES = ['soccer1', 'soccer2', 'football', 'college', 'basketball', 'baseball', 'hockey', 'moreSports', 'world', 'clubManagement', 'stadiumManagement', 'academyManagement', 'aussieRulesManagement'];
   let keys = 0;
   for (const b of BUNDLES) {
     const src = fs.readFileSync(path.join(dir, `${b}.ts`), 'utf-8');
