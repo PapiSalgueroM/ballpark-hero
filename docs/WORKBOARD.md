@@ -1,5 +1,52 @@
 # Work board
 
+**2026-10-01, Codex803 CLAIMED: Name Them All answer feedback and readable reveals.**
+Master Build45/96/97 and historical roadmap45/116 playability slice. The current
+ListQuiz Page uses color alone for a hit, delayed focus can scroll the page, and
+revealed answer tiles truncate their text. Own only src/pages/ListQuiz.tsx, new
+src/pages/ListQuizFeedback.module.css, src/test/listQuizFeedback.test.tsx and
+scripts/simListQuizFeedback.mjs. Preserve actual listQuiz fetching/cleaning/aliases,
+original three-minute timer, answer order/found flags, tiers, completion-on-mount,
+score/share and retry/fallback behavior. Add truthful committed hit/duplicate/miss
+feedback, finite success/reveal motion with static reduced motion, full readable
+answer names, stable answer nodes,44px owned actions and deliberate preventScroll
+focus after accepted start/guess/final action. Blank/short input, typing, timer ticks
+and no-op rerenders must stay quiet; focus must honor an outside user target.
+Use actual Page/helpers with declared fictional list responses and the original
+ResultScreen completion path. Cover aliases/ambiguity, distinct hits, duplicate/miss,
+all-found/give-up/time expiry, exact tiers/share/completion and unchanged timer.
+Effective copied controls must fail their intended assertion while independent
+original outcomes pass. Native phone/desktop normal/reduced checks must prove
+full-name fit, real finite/static motion, native focus and no added document jump.
+Root owns Git/docs/build/generated; source work starts after the independent800
+App reviewer is free.801/802 continue in their existing lanes. No invented facts
+or new visitor-report claim. All Claude reservations stand. Next free804.
+
+**2026-10-01, Codex802 CLAIMED: Rank 'Em review before locking.**
+Master96 planning/playability slice. The actual fifth pick currently auto-submits
+inside a state updater, leaving no review or correction before the single daily
+action. Own src/pages/RankEm.tsx, new src/pages/RankEmOrder.module.css,
+src/test/rankEmOrder.test.tsx and scripts/simRankEmOrder.mjs. Keep the existing round,
+real data, scramble, date, useDailyPuzzle, scoreRankGuess,200-per-correct-slot,
+share and completion expression unchanged. Five picks become a local editable
+draft until explicit Lock order. Add44px native move up/down/remove controls, honest
+draft state, readable names, stable player/rung nodes, finite/static committed
+feedback and safe focus/repeat handling. Invalid/incomplete/boundary/no-op edits
+must not record, save, complete or change the underlying round/RNG.
+Actual Page/unchanged-hook/helper proof must edit a wrong draft to1000, independently
+lock600 and0, hold exact daily v/date/puzzleIndex/guesses/gameStatus/share and one
+final action/completion, and keep restores/mode flips quiet. Effective copied
+autosubmit/move/bounds/double-lock/focus/names/reduced controls plus eight native
+width/motion contexts must demonstrate real outcomes and independent baselines.
+Root additionally owns only rank-em's affected instruction sentences in
+src/data/gameContent/world.ts, the new required Lock click in only rank-em's driver
+in src/test/noDoubleRecord.test.tsx, and derived rank-em snapshot/ledger/sitemap/search
+generator output. These narrow integration changes preserve other guide sections
+and all other shared completion fixtures/booking assertions. No real stats changed.
+800 source is frozen and its production pipeline restarts after a test-only type
+annotation correction.801 picker work and immutable413 regression remain separate.
+Root owns Git/docs/build. All Claude claims stand. Next free803.
+
 **2026-10-01, Codex801 CLAIMED: NBA Stat Line eligible-season access and focus.**
 Master68/F/96 playability slice. Current name search returns only ten seasons with
 no paging or year-query matching, so later eligible season keys can stay unreachable.

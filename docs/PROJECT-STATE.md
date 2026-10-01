@@ -1,5 +1,23 @@
 # Project state
 
+## IN PROGRESS 2026-10-01: Name Them All readable feedback
+
+803 claims the isolated ListQuiz Page/module/test/harness. Replace color-only hit
+feedback and truncated reveals with truthful announcements, finite/static motion,
+readable answers and safe native focus. Original answers/aliases, timed mode,
+tiers, completion and share stay held. Exact acceptance is on WORKBOARD.801/802
+continue;800's corrected app type gate passes and its isolated production pipeline
+continues. The immutable413 regression is still running. Next free804.
+
+## IN PROGRESS 2026-10-01: Rank 'Em editable draft and explicit lock
+
+802 replaces fifth-pick autosubmission with a reviewable local order and one
+explicit Lock order action. Original rounds, facts, daily log, score/share and
+completion stay held. Exact Page/module/tests/harness and narrow guide/completion
+fixture/generated ownership are on WORKBOARD.801 season picker continues;800's
+native/control proof is accepted and its test-only type fix is being checked before
+production restarts. The frozen413-node regression continues. Next free803.
+
 ## IN PROGRESS 2026-10-01: NBA Stat Line season access and keyboard flow
 
 801 claims the isolated Page/picker module and small hook suggestion-limit plumbing,
