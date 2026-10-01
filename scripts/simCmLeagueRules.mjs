@@ -24,7 +24,11 @@
       and next season's European places are hashed, plus the whole state.
       Every hash must equal the baseline in scripts/data/cmLeagueRulesDigest.json,
       which was taken on the tree BEFORE any code moved (origin/main at
-      3fb92eea, then re-taken on the merged main before the final gate).
+      3fb92eea), held unchanged through the merge of 51e7f87f (whose own
+      tree gave the same hashes), and re-taken from main's own tree at
+      f3b1ea14 when Release P changed the match engine (CM_RULES_ROOT pointed
+      at a git archive of main's src, nothing of this branch in it); the
+      branch then matched it hash for hash.
    2. DIGEST, ERAS (hard). The same for every league of every historic era,
       one career each.
    3. DIGEST, PURE (hard). For every modern and era league: the drop count,
