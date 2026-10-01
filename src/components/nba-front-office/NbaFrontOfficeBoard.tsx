@@ -268,7 +268,7 @@ export default function NbaFrontOfficeBoard() {
       const why = nbaTipOffRefusal(lg.teams[myTeam]);
       if (why) { setFeed(f => [why, ...f].slice(0, 6)); return; }
       const before = lg.teams[myTeam].players.length;
-      const tip = nbaTipOff(lg, Math.random);
+      const tip = nbaTipOff(lg, Math.random, myTeam);
       const mine = tip.filled[myTeam];
       if (mine?.length) tipLines.push(`📋 You tipped off with ${before} under contract, so the league filled you to ${NBA_TIPOFF_MIN} on minimum deals: ${mine.map(p => p.name).join(', ')}, $${NBA_MIN_CONTRACT}M each.`);
     }

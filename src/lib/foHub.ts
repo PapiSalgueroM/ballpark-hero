@@ -193,8 +193,11 @@ export function foHubTiles(f: FoHubFacts): FoTile[] {
     const star = best(f.roster);
     const starHurt = hurt.length > 0 ? [...hurt].sort((a, b) => b.ovr - a.ovr)[0] : null;
     /* Round 722: a roster the season cannot start with outranks a hurt star
-       on the second line, because it is the one roster fact with a deadline. */
-    const tooMany = f.rosterMax != null ? f.roster.length - f.rosterMax : 0;
+       on the second line, because it is the one roster fact with a deadline.
+       Only a sport that declares a tip off floor has that deadline: the NHL
+       and MLB boards pass rosterMax for their sign path, can draft above it
+       and have no tip off refusal, so they keep their old line. */
+    const tooMany = f.rosterFloor != null && f.rosterMax != null ? f.roster.length - f.rosterMax : 0;
     const tooFew = f.rosterFloor != null ? f.rosterFloor - f.roster.length : 0;
     out.push({
       key: 'team',

@@ -23,7 +23,12 @@
         nbaAssessTax on a club with such a history uses the repeater rates.
      2) a club a dollar over the line pays, the same club a dollar under pays
         nothing, a bigger overage always pays more, and a repeater always pays
-        more than a first time payer on the same payroll.
+        more than a first time payer on the same payroll. The all season
+        projection (nbaTaxView, which the cap panel, the hub and the Tax chip
+        draw) reads a repeater at repeater rates and quotes the bill the close
+        then charges. The first apron's rule: above it after the deal, 12 back
+        for 10 out is refused by nbaSalaryFits and invalid in nbaTrade, 10 for
+        10 is fine, and the same 12 for 10 under the cap goes through.
      3) ten seeded franchises, five seasons each, the board's own loop (tip
         off, twenty rounds, playoffs, assessment, a draft the GM and the CPU
         both pick in, the summer). At every tip off every roster holds 14 to
@@ -34,6 +39,10 @@
         brings him back under before the season starts. The path has to be
         exercised at least once or the section fails as vacuous. A GM short
         of fourteen is filled from the pool on one year minimum deals, named.
+        No CPU club fills its gap out of the pool: every man who leaves the
+        pool at tip off goes to the GM, checked at every tip off where a CPU
+        club was filled while the pool still had men (at least one, or the
+        check is vacuous).
      4) an old save. A fresh league stripped of every optional field this
         round and Round 631 added (taxHistory, taxDue, deadCap,
         releasedThisSeason) tips off, plays, closes, is assessed and goes
@@ -47,31 +56,50 @@
         measurement is paired instead: the same ten seeds run through the
         real engine and through a twin bundled with every rate at zero, and
         for every CPU club over the line at a season close the ratio of
-        payroll to tax line at the next tip off is read off both. Measured on
-        2026-10-01 over ten seeds and 243 club seasons: per seed mean
-        difference -0.032 to -0.065, pooled -0.049 (the real engine's payers
-        tip off about 5% of the line, roughly 10M, lighter than the same
-        clubs in a league with no tax). The band is a pooled mean under
-        -0.012, a quarter of the measured effect and well under the lightest
-        seed; under the zero tax control both bundles are the twin and the
-        difference is exactly zero. A second, blunter read is printed and
-        checked too: from season three on, fewer clubs sit over the line
-        with the tax than without it (measured 32 against 62 club seasons on
-        the merged tree, 2026-10-01; the GM's own club is in both counts).
+        payroll to tax line at the next tip off is read off both. The first
+        measurement (pooled -0.049, band -0.012) was taken while the first
+        tip off of every league handed the ten man free agent pool, men rated
+        72 to 81, to three CPU clubs on one year deals; re-signed at full
+        salary the next summer in the twin and walked by the real engine's
+        payers, they made up most of the gap. With the pool kept for the GM
+        (review fix, 2026-10-01) the effect was measured again over six seed
+        sets of ten, 1-10 through 51-60, 60 franchises and 1501 club
+        seasons: pooled -0.0140, -0.0161, -0.0198, -0.0175, -0.0191 and
+        -0.0192 (seeds 1-10, the ones run here, are the lightest set), every
+        one of the 60 per seed means negative, from -0.002 to -0.038. The
+        real engine's payers tip off about 1.5% of the line, roughly 3M,
+        lighter than the same clubs in a league with no tax. The band is a
+        pooled mean under -0.0035, a quarter of the lightest set; under the
+        zero tax control both bundles are the twin and the difference is
+        exactly zero, and with the CPU steer switched off by hand it read
+        0.0000 too. A second, blunter read is printed and checked too: from
+        season three on, fewer clubs sit over the line with the tax than
+        without it (measured 34 against 48 club seasons on seeds 1-10, and
+        lower with the tax on all six sets; the GM's own club is in both
+        counts).
      6) the shared descriptor. foHubTiles with a tax and a roster floor says
         so on the Trades and Roster boxes and is byte identical without them;
+        a sport that declares a roster ceiling but no tip off floor (the NHL
+        and MLB boards) draws its long roster's Roster box exactly as before;
         foCapLines writes the tax, apron and roster lines and nothing when
         passed neither.
 
    Controls, through NBA_TAX_CONTROL. None touches src: the rewritten source
    is served to the bundler from memory, and each refuses to run if its
-   anchor is not in the file. Under a control the harness exits non zero when
-   exactly the expected sections went red (the control fired), and with a
-   different code and a loud line when they did not (the check is dead):
+   anchor is not in the file. Under a control the harness exits 1 when
+   exactly the expected sections went red (the control fired), 3 and a loud
+   line when they did not (the check is dead), and 2 when the control could
+   not even be bundled:
      zerotax      every rate driven to zero              -> 1, 2 and 5
      tipoff12     the tip off floor dropped to twelve     -> 3 and 4 (the old
                   save section reads the fourteen too)
      norepeater   the repeater schedule made the standard one -> 1 and 2
+     cpupool      every club fills its tip off gap from the pool  -> 3
+     viewrepeater the projection never uses repeater rates        -> 2
+     noapron      the first apron never binds on a trade           -> 2
+     hubfloor     the hub's tip off line for any declared ceiling  -> 6
+   The last four rewrite nbaFrontOffice.ts or foHub.ts (in both bundles, so
+   section 5 still compares like with like) and were added by the review.
 
    Run: node scripts/simNbaLuxuryTax.mjs
 */
@@ -91,6 +119,11 @@ const EXPECT = {
   /* the old save section reads the fourteen too, so a lower floor reaches it */
   tipoff12: [3, 4],
   norepeater: [1, 2],
+  /* review fixes: each reaches only the one check written for it */
+  cpupool: [3],
+  viewrepeater: [2],
+  noapron: [2],
+  hubfloor: [6],
 };
 if (CONTROL && !EXPECT[CONTROL]) {
   console.error(`NBA_TAX_CONTROL=${CONTROL} is not a control this harness knows (${Object.keys(EXPECT).join(', ')})`);
@@ -190,10 +223,23 @@ const CONTROL_SWAPS = {
   tipoff12: [['export const NBA_TIPOFF_MIN = 14;', 'export const NBA_TIPOFF_MIN = 12;']],
   norepeater: [['export const NBA_TAX_RATES_REPEATER = [3.00, 3.25, 5.50, 6.75];', 'export const NBA_TAX_RATES_REPEATER = [1.00, 1.25, 3.50, 4.75];']],
 };
+/* Controls on the engine and hub files rather than the tax table. Applied to
+   both bundles, real and twin, so the twin still differs from the real engine
+   by the tax alone and section 5 measures what it always measured. */
+const CONTROL_FILE_SWAPS = {
+  cpupool: { 'nbaFrontOffice.ts': [['    const fromPool = t.abbr === myTeam;', '    const fromPool = true;']] },
+  viewrepeater: { 'nbaFrontOffice.ts': [['  const repeater = nbaIsRepeater(t.taxHistory, league.season);', '  const repeater = false;']] },
+  noapron: { 'nbaFrontOffice.ts': [['  if (after > nbaFirstApron(cap)) return incoming.salary <= outgoing.salary;', '  if (after > Infinity) return incoming.salary <= outgoing.salary;']] },
+  hubfloor: { 'foHub.ts': [['const tooMany = f.rosterFloor != null && f.rosterMax != null ?', 'const tooMany = f.rosterMax != null ?']] },
+};
 const NOTE = {
   zerotax: 'every tax rate driven to zero in the engine copy: nobody owes anything and no CPU club steers',
   tipoff12: 'the tip off floor dropped to twelve in the engine copy',
   norepeater: 'the repeater schedule replaced by the standard one in the engine copy',
+  cpupool: 'every club, not just the GM, fills its tip off gap out of the free agent pool',
+  viewrepeater: 'the all season projection never uses the repeater rates',
+  noapron: 'the first apron never binds on a trade',
+  hubfloor: 'the hub says "waive before tip off" for any sport that declares a roster ceiling',
 }[CONTROL];
 if (NOTE) console.log(`   control ${CONTROL}: ${NOTE}`);
 
@@ -203,6 +249,12 @@ let twin = null;
 let hub = null;
 try {
   const taxSrc = normaliseEol(fs.readFileSync(TAX_FILE, 'utf8'));
+  /* The engine and hub files a control rewrites, rewritten once up front so a
+     missing anchor refuses here, loudly, rather than inside the bundler. */
+  const fileTexts = {};
+  for (const [base, swaps] of Object.entries(CONTROL_FILE_SWAPS[CONTROL] ?? {})) {
+    fileTexts[base] = rewrite(base, normaliseEol(fs.readFileSync(path.join(LIB, base), 'utf8')), swaps);
+  }
   const esbuild = await import(pathToFileURL(req.resolve('esbuild')).href);
   const fwd = p => JSON.stringify(p.replaceAll('\\', '/'));
   const bundle = async (name, swaps) => {
@@ -211,6 +263,10 @@ try {
       name: `dukb-${name}`,
       setup(b) {
         b.onLoad({ filter: /nbaLuxuryTax\.ts$/ }, args => ({ contents: text, loader: 'ts', resolveDir: path.dirname(args.path) }));
+        b.onLoad({ filter: /(nbaFrontOffice|foHub)\.ts$/ }, args => {
+          const own = fileTexts[path.basename(args.path)];
+          return own === undefined ? undefined : { contents: own, loader: 'ts', resolveDir: path.dirname(args.path) };
+        });
       },
     };
     const entry = path.join(BUNDLE_DIR, `${name}.entry.mjs`);
@@ -234,7 +290,9 @@ try {
 } catch (e) {
   console.error(`FAIL: the engine could not be bundled and run: ${String(e && e.message ? e.message : e).slice(0, 260)}`);
   fs.rmSync(BUNDLE_DIR, { recursive: true, force: true });
-  process.exit(1);
+  /* Under a control, 1 means "the control fired". A control that could not
+     even be bundled measured nothing, so it must not read as fired. */
+  process.exit(CONTROL ? 2 : 1);
 } finally {
   fs.rmSync(BUNDLE_DIR, { recursive: true, force: true });
 }
@@ -347,6 +405,48 @@ console.log('2) A dollar over pays, a dollar under does not, more pays more, a r
   const roomBefore = nba.nbaCapRoom(f, fresh.cap);
   f.taxDue = 12.5;
   ok(2, 'last season\'s bill is held back from this season\'s room', near(nba.nbaCapRoom(f, fresh.cap), roomBefore - 12.5, 0.001), `${roomBefore} -> ${nba.nbaCapRoom(f, fresh.cap)}`);
+  /* Review fix: the projection the cap panel, the hub and the Tax chip show
+     all season is the bill the close will charge, repeater rates included.
+     Nothing read nbaTaxView on a repeater before, so it could quote a
+     repeater the standard bill all season and charge him triple at close. */
+  {
+    const plg = nba.initNbaLeague(lcg(5));
+    const p = plg.teams[Object.keys(plg.teams)[9]];
+    plg.season = 2030;
+    p.taxHistory = [2027, 2028, 2029].map(s => ({ season: s, payroll: 1, line: 0, bill: 1, repeater: false }));
+    p.players.forEach(x => { x.salary = 0; });
+    p.players[0].salary = round1(nba.nbaTaxLine(plg.cap) + 20);
+    const v = nba.nbaTaxView(p, plg);
+    const charged = nba.nbaAssessTax(plg).find(e => e.team === p.abbr);
+    ok(2, 'the projection reads a repeater as a repeater', v.repeater === true, JSON.stringify(v));
+    ok(2, 'and quotes the repeater bill, not the standard one', near(v.bill, expectBill(20, plg.cap, true)), `${v.bill} against ${expectBill(20, plg.cap, true)}`);
+    ok(2, 'and the close charges exactly what was projected', charged && charged.bill === v.bill, `${charged && charged.bill} vs ${v.bill}`);
+  }
+  /* Review fix: the first apron's matching rule. A club whose payroll after
+     the deal sits above the first apron takes back no more than it sends out;
+     the same deal is fine for a club under it. Nothing checked this before,
+     so the rule could be deleted with every harness green. */
+  {
+    const alg = nba.initNbaLeague(lcg(6));
+    const [aAbbr, bAbbr] = Object.keys(alg.teams).slice(10, 12);
+    const A = alg.teams[aAbbr], B = alg.teams[bAbbr];
+    A.players.forEach(x => { x.salary = 0; });
+    B.players.forEach(x => { x.salary = 1; });
+    const out = A.players[1], inc = B.players[1];
+    out.salary = 10;
+    const apron = nba.nbaFirstApron(alg.cap);
+    const setPayroll = total => { A.players[0].salary = round1(total - 10); };
+    setPayroll(apron + 5);
+    inc.salary = 12;
+    ok(2, 'above the first apron after the deal: 12 back for 10 out is refused', nba.nbaSalaryFits(A, out, inc, alg.cap) === false, `payroll ${nba.nbaCapUsed(A)}, apron ${apron}`);
+    ok(2, 'and the trade path refuses it as invalid', nba.nbaTrade(clone(A), clone(B), out.id, inc.id, false, alg.cap) === 'invalid');
+    inc.salary = 10;
+    ok(2, 'above the first apron: 10 back for 10 out is allowed', nba.nbaSalaryFits(A, out, inc, alg.cap) === true);
+    inc.salary = 12;
+    setPayroll(alg.cap - 30);
+    ok(2, 'under the cap the same 12 for 10 is allowed', nba.nbaSalaryFits(A, out, inc, alg.cap) === true, `payroll ${nba.nbaCapUsed(A)}`);
+    ok(2, 'and the trade path does not call it invalid', nba.nbaTrade(clone(A), clone(B), out.id, inc.id, false, alg.cap) !== 'invalid');
+  }
   /* the owner's reaction */
   const r0 = real.owner.ownerTaxReaction(0), r1 = real.owner.ownerTaxReaction(32.5), r2 = real.owner.ownerTaxReaction(400);
   ok(2, 'no bill, no reaction', r0.trustDelta === 0 && r0.line === null, JSON.stringify(r0));
@@ -369,7 +469,7 @@ function playSeason(E, lg, me, rng, log) {
   if (refusal) {
     /* nbaTipOff must refuse him and leave him alone */
     const probe = clone(lg);
-    const tp = E.nbaTipOff(probe, lcg(99));
+    const tp = E.nbaTipOff(probe, lcg(99), me);
     log.probes.push({ refused: tp.refused.includes(me), untouched: probe.teams[me].players.length === before, filledAnyway: !!tp.filled[me] });
     /* the shared cuts flow: waive the lowest rated until fifteen */
     const deadBefore = (lg.teams[me].deadCap ?? []).length;
@@ -380,9 +480,17 @@ function playSeason(E, lg, me, rng, log) {
     log.waivers.push({ down: lg.teams[me].players.length, deadGrew: (lg.teams[me].deadCap ?? []).length > deadBefore });
   }
   const poolBefore = lg.freeAgents.length;
-  const tip = E.nbaTipOff(lg, rng);
+  const poolIds = new Set(lg.freeAgents.map(p => p.id));
+  const tip = E.nbaTipOff(lg, rng, me);
   log.tipRefused.push(tip.refused.length);
   const mine = tip.filled[me] ?? [];
+  /* The pool is the GM's market: a man who left it at tip off went to the GM
+     and to nobody else. A leak is counted only where it could have happened,
+     a CPU club filled while the pool still held a man it could take. */
+  const mineIds = new Set(mine.map(p => p.id));
+  const cpuFilled = Object.keys(tip.filled).filter(a => a !== me);
+  log.poolLeaks.push([...poolIds].filter(id => !lg.freeAgents.some(p => p.id === id) && !mineIds.has(id)).length);
+  if (cpuFilled.length && poolBefore > mine.length) log.poolChances += 1;
   if (lg.teams[me].players.length - mine.length < FLOOR) {
     log.fills.push({
       short: FLOOR - (lg.teams[me].players.length - mine.length), got: mine.length,
@@ -418,7 +526,7 @@ function playSeason(E, lg, me, rng, log) {
   E.nbaOffseason(lg, rng, me);
   for (const t of Object.values(lg.teams)) if (t.abbr !== me) log.cpuAfterSummer.push(t.players.length);
 }
-const freshLog = () => ({ userBefore: [], refusals: [], probes: [], waivers: [], tipRefused: [], fills: [], rosters: [], tipRatios: [], closes: [], cpuAfterSummer: [] });
+const freshLog = () => ({ userBefore: [], refusals: [], probes: [], waivers: [], tipRefused: [], fills: [], rosters: [], tipRatios: [], closes: [], cpuAfterSummer: [], poolLeaks: [], poolChances: 0 });
 const runLeague = (E, seed) => {
   const rng = lcg(seed * 7919 + 17);
   const lg = E.initNbaLeague(rng);
@@ -432,7 +540,7 @@ const runLeague = (E, seed) => {
 console.log('3) Fourteen to fifteen men at every tip off, ten franchises, five seasons each');
 const realRuns = SEEDS.map(seed => ({ seed, ...runLeague(nba, seed) }));
 {
-  let overPath = 0, tipOffs = 0, fills = 0;
+  let overPath = 0, tipOffs = 0, fills = 0, poolChances = 0;
   for (const { seed, log } of realRuns) {
     tipOffs += log.rosters.length;
     const below = log.rosters.filter(n => n < FLOOR).length;
@@ -455,10 +563,15 @@ const realRuns = SEEDS.map(seed => ({ seed, ...runLeague(nba, seed) }));
       ok(3, `seed ${seed}: a GM ${f.short} short was handed exactly that many on one year minimum deals`, f.got === f.short && f.allMinimum, JSON.stringify(f));
     }
     ok(3, `seed ${seed}: the CPU clubs leave the summer at ${CEILING} or fewer`, log.cpuAfterSummer.every(n => n <= CEILING), `largest ${Math.max(...log.cpuAfterSummer)}`);
+    /* Review fix: the first tip off of every new league used to hand the whole
+       ten man pool to the first three clubs in table order on the minimum. */
+    ok(3, `seed ${seed}: no CPU club filled its tip off gap out of the free agent pool`, log.poolLeaks.every(n => n === 0), `pool men lost to CPU clubs by season: ${log.poolLeaks.join(',')}`);
+    poolChances += log.poolChances;
   }
   ok(3, 'the long roster path was exercised at least once across the seeds', overPath > 0, 'the GM never went above the ceiling, so the refusal was never tested');
   ok(3, 'the short roster fill was exercised at least once across the seeds', fills > 0, 'the GM was never short, so the fill was never tested');
-  console.log(`   ${tipOffs} tip offs, ${overPath} long roster refusals waived down, ${fills} short roster fills`);
+  ok(3, 'a CPU club was filled at tip off while the pool still had men, at least once', poolChances > 0, 'the pool check never had anything to catch');
+  console.log(`   ${tipOffs} tip offs, ${overPath} long roster refusals waived down, ${fills} short roster fills, ${poolChances} tip offs where a CPU club could have raided the pool`);
 }
 
 /* ---- 4. an old save ------------------------------------------------------- */
@@ -540,7 +653,7 @@ console.log('5) The tax binds: clubs over the line against the same clubs in a l
   const mean = a => a.length ? a.reduce((x, y) => x + y, 0) / a.length : NaN;
   console.log(`   per seed mean difference (real minus twin, ratio of payroll to line at the next tip off): ${perSeed.map(p => `${p.seed}:${p.mean.toFixed(3)}(${p.n})`).join(' ')}`);
   console.log(`   pooled ${pooled.toFixed(4)} over ${diffs.length} club seasons; the confounded payer gap reads ${mean(confReal).toFixed(3)} real and ${mean(confTwin).toFixed(3)} twin, which is why it is not the check`);
-  ok(5, 'payers tip off lighter than their twins in a league with no tax: pooled mean difference under -0.012', Number.isFinite(pooled) && pooled < -0.012, `pooled ${pooled.toFixed(4)}`);
+  ok(5, 'payers tip off lighter than their twins in a league with no tax: pooled mean difference under -0.0035', Number.isFinite(pooled) && pooled < -0.0035, `pooled ${pooled.toFixed(4)}`);
   const negative = perSeed.filter(p => p.mean < 0).length;
   ok(5, 'the difference is negative on at least eight of the ten seeds', negative >= 8, `${negative} of ${perSeed.length}`);
   /* and the CPU behaviour behind it is visible: payers that paid in season one are fewer by season three */
@@ -577,6 +690,14 @@ console.log('6) The shared hub and cap panel say so, and say nothing new without
   ok(6, 'two short of the floor: the Roster box says so and pulses', byKey(short, 'team').sub.includes('2 short of the 14 man floor') && byKey(short, 'team').accent === true, JSON.stringify(byKey(short, 'team')));
   const long = hub.foHubTiles(base({ rosterFloor: 14, roster: Array.from({ length: 16 }, (_, i) => man(`Man ${i + 1}`, 70 + i)) }));
   ok(6, 'one over the limit: the Roster box says so and pulses', byKey(long, 'team').sub.includes('1 over the 15 man limit') && byKey(long, 'team').accent === true, JSON.stringify(byKey(long, 'team')));
+  /* Review fix: the NHL and MLB boards pass rosterMax for their sign path and
+     can draft above it, but have no tip off. A ceiling with no floor declared
+     must draw the Roster box exactly as a board with neither does. */
+  const sixteen = Array.from({ length: 16 }, (_, i) => man(`Man ${i + 1}`, 70 + i));
+  const ceilingOnly = hub.foHubTiles(base({ roster: sixteen }));
+  const neither = hub.foHubTiles(base({ roster: sixteen, rosterMax: undefined }));
+  ok(6, 'a sport with a ceiling and no tip off floor draws the old Roster box when long', JSON.stringify(byKey(ceilingOnly, 'team')) === JSON.stringify(byKey(neither, 'team')) && !/tip off/i.test(byKey(ceilingOnly, 'team').sub),
+    JSON.stringify(byKey(ceilingOnly, 'team')));
   for (const tiles of [taxed, zeroBill, short, long]) {
     for (const t of tiles) ok(6, `${t.key}: no hole in the words`, !/undefined|NaN|null/.test(t.value + t.sub) && t.value.trim() && t.sub.trim(), `"${t.value}" / "${t.sub}"`);
   }

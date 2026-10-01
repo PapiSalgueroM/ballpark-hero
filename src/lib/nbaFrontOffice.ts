@@ -476,22 +476,28 @@ export interface NbaTipOff {
 
 /**
  * Round 722: the season cannot tip off below fourteen standard contracts.
- * Every club short of the floor is filled from the pool, lowest rated first
- * (the men nobody wanted), each signed for one year on the minimum; when
- * the pool runs dry the league generates the rest. A club above fifteen is
- * refused and left exactly as it was. Called by the board once, before the
- * first round of a season, and by the harness.
+ * The GM's club (myTeam) short of the floor is filled from the pool, lowest
+ * rated first (the men nobody wanted), each signed for one year on the
+ * minimum; when the pool runs dry the league generates the rest. Every other
+ * club short of the floor is handed generated minimum men, the same men the
+ * CPU summer fill signs in nbaOffseason, because the pool is the GM's market
+ * for the season: filling the CPU clubs from it handed the whole ten man pool
+ * of every new league to the first three clubs in table order on the minimum
+ * and left the GM nobody to sign. A club above fifteen is refused and left
+ * exactly as it was. Called by the board once, before the first round of a
+ * season, and by the harness.
  */
-export function nbaTipOff(league: NbaLeague, rng: () => number): NbaTipOff {
+export function nbaTipOff(league: NbaLeague, rng: () => number, myTeam?: string): NbaTipOff {
   const filled: Record<string, NbaGmPlayer[]> = {};
   const refused: string[] = [];
   const taken = leagueNames(league);
   for (const t of Object.values(league.teams)) {
     if (nbaTipOffRefusal(t)) { refused.push(t.abbr); continue; }
     const added: NbaGmPlayer[] = [];
+    const fromPool = t.abbr === myTeam;
     while (t.players.length < NBA_TIPOFF_MIN) {
       /* Round 631's rule holds here too: a man this club let go this season does not come back by the side door. */
-      const pool = league.freeAgents.filter(p => !signRefusal(t, p.id)).sort((a, b) => a.ovr - b.ovr);
+      const pool = fromPool ? league.freeAgents.filter(p => !signRefusal(t, p.id)).sort((a, b) => a.ovr - b.ovr) : [];
       let man: NbaGmPlayer;
       if (pool.length) {
         league.freeAgents.splice(league.freeAgents.indexOf(pool[0]), 1);
