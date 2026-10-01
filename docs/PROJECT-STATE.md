@@ -1,5 +1,11 @@
 # Project state
 
+831 is now accepted: final production browser checks show no document movement
+across all10 measured wrong/hint/result actions at320 normal/1440 reduced.
+Original score/save/share/completion and finite/static cues hold. Source and
+artifact gates pass; exact95-check receipt and cleanup are on WORKBOARD.
+828-832,836 and837 are ready in code;838 contest remains active. Next839.
+
 ## Current Codex handoff, 2026-10-01
 
 836 public-copy corrections and837 Stat Line manual ad eligibility are

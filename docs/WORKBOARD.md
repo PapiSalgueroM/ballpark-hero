@@ -1,5 +1,18 @@
 # Work board
 
+**Codex831 ACCEPTED: Nation feedback and stable document position.**
+The final two-line route-local anchoring fix stops the original expanding clue
+rows from moving the document. Actual production App at320 normal/1440 reduced
+passes all10 settled action samples with Y delta0 and visible results at429/
+428.5. Finite420ms normal cues and static reduced cues hold, as do exact1000
+daily score, save/share, once-only score insert/completion and quiet reload.
+95 checks including final preserved inputs; source/assets held and browser/
+server stopped. TEMP/dukb-round831-nation-feedback/native-final-report.json,
+native-final-cleanup.json and source-checkpoint.json. Six focused outcomes,
+three earlier effective controls and836's combined types/build/artifact/boot
+gate also pass. The earlier pre-fix10/-30px movements are retained as the
+causal comparison, not mislabeled as zero. Ready for Claude's next publish.
+
 **Codex836 and837 ACCEPTED, publish handoff to Claude.**
 836 corrects unsupported home and sport-hub feature promises, distinguishes
 real records from generated simulation data on About, and preserves the maker's
