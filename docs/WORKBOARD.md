@@ -1,5 +1,38 @@
 # Work board
 
+**2026-10-01, Codex792/793/794/797 production checkpoint ACCEPTED.**
+792's separate fictional Aussie game is registered, with a truthful generic Continue
+card for its actual initial/break/completed saved action logs, its own lazy metadata,
+130/130 generated search coverage and exhaustive generated-name collision coverage.
+797's four resume controls plus copied missing keyword/name-bank/metadata rows and the
+existing cold-row control all fail their intended real finding with independent checks
+still green. The final metadata fence compares all130 saved pages with zero skips.
+Budget's selected preview now shows its existing nationality flag; the nationality
+fence and nine original actual signing/score/save/share/refusal outcomes pass.
+
+Frozen physical e0882389 production clone plus exact accepted797 runtime files:
+types0, two builds, three routes at clocks0/5/11 days with zero failed/date-dependent
+blocks, all15 rebuilt-artifact fences green. Three owned raw saved files refreshed;
+185 other saved files held byte-exactly. Only the Aussie and NHL content fingerprints
+changed,166 other URL fingerprints/dates held,168 sitemap URLs remain. Both lanes'
+news stays present; its formatting refresh did not change its merged content hash.
+Receipt: TEMP/dukb-round797-production-20261001/final-preservation-receipt.json.
+
+Actual production App/global Header/Footer acceptance: NHL four320/1440 motion
+contexts with exact full saves, quiet stage/cancel, once Apply/Auto/no-ops and zero
+document movement. Search and Discard eight320/1440 motion/CPU/pass contexts preserve
+all22 original nodes, real keep placement, finite420ms/static feedback and zero scroll.
+Both outward-write counters remain zero; browser/server/input cleanup verified.
+Receipts: TEMP/dukb-round794-production/report.json and
+TEMP/dukb-round793-actual-route-audit/report.json. Earlier Page-fixture full campaigns,
+negative/native controls and original helper baselines remain independently accepted.
+
+Not a current all-node-suite or new live-deployment claim. The previous immutable
+406-node run's eight failures are being resolved against merged source: refreshed
+players and practice wrappers now pass; new NHL wrapper normalization and Tycoon
+runner-starvation corrections still need final controls.798 MLB access stays active.
+Claude795/796/700 and other reservations hold. Next free799.
+
 **2026-10-01, Codex798 CLAIMED: MLB trade desk whole-roster access.**
 Master62/96 simulation playability slice. All three existing trade lists currently hide
 players below the top eight, although the original helpers accept those player IDs.
@@ -29,6 +62,12 @@ serialized resume/no false card. Root generated ownership remains the792/794 pag
 Also own scripts/simHarnessAnchors.mjs and, only if normalization changes are needed,
 scripts/simBuzzerPractice.mjs and scripts/simFreeKickPractice.mjs: preserve actual raw-byte
 checks and effective multi-line mutation controls on CRLF/LF, without weakening the fence.
+797 addendum: the incoming practice fixes pass; the two new794 wrappers' Buffer-array
+preservation reads confuse the existing conservative anchor scanner. Own only their
+raw-equality read representation and a direct normalized UTF8 control-text read in
+scripts/simNhlContributors.mjs and scripts/simNhlContributorsBoard.mjs. No scanner bypass,
+outcome/control/threshold change, engine/UI edit or filename allowlist. Recheck both
+positives, affected multiline controls and an effective removed-normalization fence control.
 Own only the missing nationality flag in BudgetBuilderBoard.tsx's selected-player preview
 and its existing focused outcome test if needed. Existing79xx mechanics/saves remain held.
 Investigate simTycoonPitch's two control runner errors in isolation; own that harness/test
