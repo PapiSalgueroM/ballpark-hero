@@ -856,7 +856,7 @@ export function TacticsScreen({
           (tap one to add him next). The engine walks the order over whoever
           finished the match; with nobody listed the shootout is settled the way
           it always was, in one draw. */}
-      <div>
+      <div ref={openTile === 'shootout' ? tileRef : undefined} data-cm-tile="shootout" data-cm-tile-open={openTile === 'shootout' ? '1' : undefined}>
         <button
           type="button"
           data-cm-tile-btn="shootout"
