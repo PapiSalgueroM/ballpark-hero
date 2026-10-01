@@ -1,5 +1,31 @@
 # Work board
 
+**2026-10-01, Codex805 F1 Driver Search ACCEPTED.**
+Memoize the original driver options so ArrowDown keeps its selected row. Use
+accessible native suggestions with full names,44px actions, visible focus and
+local scrolling. The popup uses available viewport space, opening above a low
+phone input. Original matching, ordering, ten-result limit, guesses and callbacks
+stay held. Held activation keys and disabled/outside-focus paths stay quiet.
+
+Eleven actual outcomes/thirteen effective unit controls, eight standalone contexts
+plus five browser controls, eight original Board contexts plus two popup controls
+pass. A test-only type fix emits byte-identical JS. The combined frozen805/806
+production type/build/all15 artifact fences plus guide/site-search/anchors pass;
+1791 RAW inputs, all188 saved pages and all168 URL hashes/dates/sitemap stay held.
+The initial Board mode-selection1178 bytes are unchanged, so no snapshot refresh.
+Two actual App contexts load untouched JS and the original authored driver bank,
+Navbar/ticker/Footer. Phone input749..799 and tenth suggestion700..744 are visible
+and hit-tested. The original Kimi Antonelli guess then Max Verstappen win scores
+800, preserves the exact three daily writes/full clipboard and sends one locally
+intercepted real guest completion. Quiet reload,0Y changes/errors/overflow pass.
+Sources/HTML/assets held; browsers/servers stopped. No publication claim.
+Receipts: TEMP/dukb-round805-final-receipt.json,dukb-round805-test-type-fix.json,
+dukb-round805-production-app/report.json and cleanup.json,
+dukb-round805-production-20261001/production805-preservation-receipt.json.
+Final entry index-CpG6jSlL.js, SHAde17755024c5f9a3c92d2dffe5c24d878b2a7393bd92545f4c54ab53c1a379e4.
+802 actual App proof passes and its commit follows.806 finishes App proof.
+807/808 claims and all Claude reservations stand. Next free809.
+
 **2026-10-01, Codex807 CLAIMED: truthful F1 Driver hint points.**
 The existing hint says -100 and multiplies hints by100, while the real clue
 payouts are1000,800,600,400,200,100. Own Driver Board plus a focused new test and

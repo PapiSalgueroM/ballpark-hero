@@ -1,5 +1,17 @@
 # Project state
 
+## ACCEPTED 2026-10-01: F1 Driver Search keyboard and phone popup
+
+805 fixes ArrowDown resets and offscreen low-input suggestions, preserving the
+original authored bank/matching/order and all gameplay. Eleven outcomes/thirteen
+unit controls and native matrices pass. Combined805/806 types/build/all15 fences
+plus source guards pass;1791 RAW inputs/188 saved pages/168 URLs stay held. Two
+actual App contexts use untouched production JS, preserve the original800point
+daily win/full share/once completion and quiet reload, with0Y/error/overflow.
+The test type correction emits identical JS. Detailed receipts are on WORKBOARD.
+No publication claim.802 commit and806 App finish next;807/808 continue afterward.
+All Claude claims stand. Next free809.
+
 ## CLAIMED 2026-10-01: truthful Driver hints and regression repairs
 
 807 reserves Driver Board plus new focused test/sim after806 commits. The current
