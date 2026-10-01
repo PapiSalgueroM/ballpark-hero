@@ -6783,6 +6783,18 @@ export function applyEventChoice(prev: CareerState, choiceIndex: number, clubs: 
   const choice = fromCatalog?.choices[choiceIndex] ?? event.choices[choiceIndex];
   if (typeof choice?.apply !== "function") {
     const skipped: CareerState = { ...prev, lastEventId: event.id, pendingEvents: prev.pendingEvents.slice(1) };
+    /* Round 725: a card skipped here was never answered, so it hands back
+       the season it was stamped with when it was drawn. Otherwise a once a
+       career event behind a random gate (211, 217 and 219 roll 0.35 every
+       time the catalog is built) could be used up by a reload with its card
+       on screen. Any older stamp had already run out, or the event could not
+       have been drawn, so dropping the entry is the same as restoring it. */
+    const stampKey = eventLedgerKey(event);
+    if (skipped.eventLastFired?.[stampKey] === eventSeasonIndex(prev)) {
+      const ledger = { ...skipped.eventLastFired };
+      delete ledger[stampKey];
+      skipped.eventLastFired = ledger;
+    }
     if (skipped.pendingEvents.length > 0) { skipped.phase = "random_events"; return skipped; }
     enterTransferWindow(skipped, clubs);
     return skipped;

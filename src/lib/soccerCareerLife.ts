@@ -957,12 +957,18 @@ export function getLifeEvents(state: CareerState): RandomEvent[] {
       ] });
   }
 
+  /* 272's physio goes on the books once. The event can come round again at
+     37, and a second hire used to add a second €150k a year for good. */
+  const hasPhysio = flag(state, "privatePhysio") > 0;
   if (state.age >= 33) {
     push({ id: 272, cooldown: COOLDOWN.injury, emoji: "🪑", title: "The Body Talks",
       description: "The morning stiffness has a routine now. Twenty minutes to get down the stairs, a very specific chair, and a kit man who has stopped making jokes about it.",
       category: "negative", choices: [
-        { label: "Hire a private physio", emoji: "🧑‍⚕️", color: "bg-emerald-600", consequence: "Yearly costs +€150k, Physical +1 next season, Morale +3",
-          apply: s => { s.customYearlyCosts = Math.round(((s.customYearlyCosts || 0) + 0.15) * 100) / 100; bump(s, "physical", 1); s.morale = clamp(s.morale + 3, 0, 100); log(s, "🧑‍⚕️ Hired a private physio. The stairs are back to one minute"); return s; } },
+        hasPhysio
+          ? { label: "Book extra sessions with your physio", emoji: "🧑‍⚕️", color: "bg-emerald-600", consequence: "Physical +1 next season, Morale +2, the physio is already on the books",
+            apply: s => { bump(s, "physical", 1); s.morale = clamp(s.morale + 2, 0, 100); log(s, "🧑‍⚕️ Doubled up the sessions with your physio. The chair is getting less use"); return s; } }
+          : { label: "Hire a private physio", emoji: "🧑‍⚕️", color: "bg-emerald-600", consequence: "Yearly costs +€150k, Physical +1 next season, Morale +3",
+            apply: s => { s.customYearlyCosts = Math.round(((s.customYearlyCosts || 0) + 0.15) * 100) / 100; setFlag(s, "privatePhysio", 1); bump(s, "physical", 1); s.morale = clamp(s.morale + 3, 0, 100); log(s, "🧑‍⚕️ Hired a private physio. The stairs are back to one minute"); return s; } },
         { label: "Try the sports scientist's morning routine", emoji: "🧘", color: "bg-blue-600", consequence: "50%: Physical +1 next season. 50%: nothing, but the chair is comfortable",
           apply: s => { if (Math.random() < 0.5) { bump(s, "physical", 1); log(s, "🧘 The morning routine works. Forty minutes of stretching and a very smug sports scientist"); } else { log(s, "🧘 The morning routine is forty minutes you will not get back. The chair remains"); } return s; } },
         { label: "Ignore it, you have always been fine", emoji: "🤷", color: "bg-muted", consequence: "20%: a yard goes (Pace -1)",

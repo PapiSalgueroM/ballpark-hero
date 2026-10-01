@@ -275,6 +275,20 @@ const CONTROLS = {
     note: 'the comeback game is due after any serious injury, however long ago',
     breaks: '3b',
   },
+  skipkeepsstamp: {
+    file: 'src/lib/soccerCareerEngine.ts',
+    from: '    if (skipped.eventLastFired?.[stampKey] === eventSeasonIndex(prev)) {',
+    to: '    if (false && skipped.eventLastFired?.[stampKey] === eventSeasonIndex(prev)) {',
+    note: 'a card skipped on reload keeps the stamp it took when it was drawn',
+    breaks: '7',
+  },
+  physiostacks: {
+    file: 'src/lib/soccerCareerLife.ts',
+    from: '  const hasPhysio = flag(state, "privatePhysio") > 0;',
+    to: '  const hasPhysio = false;',
+    note: 'event 272 hires a second private physio on its second visit',
+    breaks: '5',
+  },
 };
 if (CONTROL && !CONTROLS[CONTROL]) {
   console.error(`SIM_CAREER_LIFE_COOLDOWNS_CONTROL=${CONTROL} is not a control this harness knows`);
@@ -797,6 +811,32 @@ console.log('5) Catalog shape: two real choices, a consequence each, an explicit
   }
   console.log(`   cooldown tables: ${tableProblems} problems against the pinned values; ${catalogById.size} events, ${drift} where the engine's cooldown or story key disagrees with this harness`);
   if (drift) fail(`${drift} events where the engine and this harness disagree on the cooldown or the story key`);
+
+  /* 272's private physio is a yearly cost, and the event can come round
+     again at 37: taking the first option twice must bill one physio, not
+     two forever. */
+  const physioBase = careers.find(c => c.midSave)?.midSave;
+  if (physioBase) {
+    const realRandom = Math.random;
+    Math.random = seeded(2720);
+    try {
+      const takeFirst = st => {
+        const ev = life.getLifeEvents(st).find(e => e.id === 272);
+        return ev ? ev.choices[0].apply(JSON.parse(JSON.stringify(st))) : null;
+      };
+      const s0 = { ...JSON.parse(JSON.stringify(physioBase)), age: 33, customYearlyCosts: 0, lifeFlags: {} };
+      const s1 = takeFirst(s0);
+      const s2 = s1 && takeFirst({ ...s1, age: 37 });
+      if (!s1 || !s2) fail('event 272 was not offered at 33 and 37, so the physio check measured nothing');
+      else {
+        console.log(`   272 at 33 then 37, first option both times: yearly costs ${s0.customYearlyCosts} then ${s1.customYearlyCosts} then ${s2.customYearlyCosts}`);
+        if (Math.abs(s1.customYearlyCosts - 0.15) > 1e-9) fail(`hiring the physio at 33 moved yearly costs to ${s1.customYearlyCosts}, not 0.15`);
+        if (s2.customYearlyCosts > s1.customYearlyCosts + 1e-9) fail(`the second visit of 272 billed a second physio: yearly costs ${s2.customYearlyCosts}`);
+      }
+    } finally {
+      Math.random = realRandom;
+    }
+  }
 }
 
 /* ─── 5b. across the whole picker ────────────────────────────────────────── */
@@ -1056,6 +1096,31 @@ console.log('7) A save with no ledger loads and plays; a corrupt ledger is dropp
     if (isEventOnCooldown({ ...probe, seasons: [{ year: 2027 }] }, ev)) fail('id 220 fired in 2024 with cooldown 2 should be free again in 2027');
     if (isEventOnCooldown({ ...probe, eventLastFired: undefined }, ev)) fail('an event with no ledger entry must never be on cooldown');
     console.log('   corrupt ledgers dropped, a good one kept, and the hold out rule answers 2024 + 2 correctly');
+
+    /* A card the catalog no longer carries when it is answered (a reload
+       with a random gated event on screen, Round 667's skip) hands back the
+       stamp it took this season and leaves older stamps alone, so a once a
+       career event is never used up unanswered. 211 is a Showman exclusive,
+       so for an Ice Cold career the catalog cannot carry it and the skip is
+       the path that runs. The card is what a reload brings back: choices
+       with labels and no apply. */
+    const realRandom = Math.random;
+    Math.random = seeded(4242);
+    try {
+      const season = base.seasons[base.seasons.length - 1].year;
+      const reloaded = { id: 211, cooldown: COOLDOWN.once, emoji: 'x', title: 'Trademark the Celebration', description: 'reloaded', category: 'life',
+        choices: [{ label: 'a', emoji: 'a', color: 'bg-muted', consequence: 'c' }, { label: 'b', emoji: 'b', color: 'bg-muted', consequence: 'd' }] };
+      const onScreen = { ...JSON.parse(JSON.stringify(base)), personality: 'iceman', phase: 'random_events',
+        pendingEvents: [reloaded], eventLastFired: { ...(base.eventLastFired || {}), 211: season, 9999: season - 5 } };
+      if (getAllEvents(onScreen).some(e => e.id === 211)) fail('the skip probe is broken: 211 is in the catalog of an Ice Cold career');
+      const after = applyEventChoice(onScreen, 0, clubs);
+      if (after.pendingEvents.length !== 0) fail('the skip probe did not move past the reloaded card');
+      if (after.eventLastFired?.['211'] !== undefined) fail('a card skipped on reload kept the stamp it took this season, so a once a career event was used up unanswered');
+      if (after.eventLastFired?.['9999'] !== season - 5) fail('skipping a card disturbed an older stamp it had nothing to do with');
+      console.log(`   a reloaded card the catalog no longer carries: its ${season} stamp ${after.eventLastFired?.['211'] === undefined ? 'was handed back' : 'WAS KEPT'}, an older stamp ${after.eventLastFired?.['9999'] === season - 5 ? 'untouched' : 'DISTURBED'}`);
+    } finally {
+      Math.random = realRandom;
+    }
   }
 }
 
