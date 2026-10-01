@@ -31,7 +31,21 @@ export interface GmPlayer extends FoPlayer {
   out: number;
   /** Hidden growth ceiling for young players. */
   pot: number;
+  /* Round 723: the franchise tag. All three absent on a man never tagged, so
+     every league saved before this round loads unchanged. */
+  /** The season the tag covers. */
+  tagSeason?: number;
+  /** Consecutive tags, 1 for the first. The second costs 120 percent of the first. */
+  tagCount?: number;
+  /** A fully guaranteed deal. frontOfficeCuts reads it: cutting him is dead money in full. */
+  guaranteed?: boolean;
 }
+
+/** Round 723: the position groups the depth chart is drawn in. The roster
+    bake carries these eight; it has no kicker or punter and does not split
+    DB into corner and safety, so neither does the chart. */
+export const DEPTH_GROUPS: GmPlayer['pos'][] = ['QB', 'RB', 'WR', 'TE', 'OL', 'DL', 'LB', 'DB'];
+export type DepthPos = GmPlayer['pos'];
 
 /** Round 631: what a cut still costs after the man has gone. See src/lib/frontOfficeCuts.ts. */
 export type GmDeadCap = DeadCapEntry;
@@ -46,6 +60,13 @@ export interface GmTeamState extends CutLedger {
   losses: number;
   /** Draft capital markers, one entry per round held this year. */
   picks: number[];
+  /* Round 723. Both optional: a team without them reads as a chart by rating
+     and a tag never used, which is exactly what every older save was. */
+  /** The depth chart: player ids in order, per position group. A group that
+      is absent, or any man a saved order does not name, falls in by rating. */
+  depth?: Partial<Record<DepthPos, string[]>>;
+  /** The season the franchise tag was last used for. One tag per offseason. */
+  tagUsedFor?: number;
 }
 
 export interface GmGame {
@@ -222,23 +243,120 @@ export const REPLACEMENT_OVR = 60;
    game outcomes read the GAP between two teams, so a uniform floor changes
    no result between them. */
 export function defenceRating(team: GmTeamState): number {
-  const best = team.players
-    .filter(p => p.out === 0 && DEF_POS.includes(p.pos))
-    .map(p => p.ovr)
-    .sort((a, b) => b - a)
-    .slice(0, DEF_SLOTS);
+  const best = unitStarters(team, DEF_POS, DEF_SLOTS).map(p => p.ovr);
   const filled = best.reduce((s, v) => s + v, 0);
   const empty = (DEF_SLOTS - best.length) * REPLACEMENT_OVR;
   return (filled + empty) / DEF_SLOTS;
 }
 
-/** Team strength: QB 30, skill 30, OL 12, DEF 28 (injured players excluded). */
+// ---------------------------------------------------------------------------
+// Round 723: the depth chart
+// ---------------------------------------------------------------------------
+
+/* THE CHART IS THE ORDER THE SIM ALREADY USED, WRITTEN DOWN. Before this round
+   team strength picked its men by rating inside each unit: the best healthy
+   quarterback, the five best healthy skill men across RB, WR and TE, every
+   healthy lineman, the six best healthy defenders across DL, LB and DB. That
+   is a depth chart nobody could see or touch. Now every team carries one per
+   position group, by rating until the GM reorders it, and the units read it.
+
+   HOW A UNIT READS EIGHT GROUP CHARTS. The skill and defence units cross
+   groups (five men from three groups, six from three), so a per group order
+   alone cannot say whether the third receiver or the second back is the fifth
+   skill starter. The rule: the unit's slots are shared out by rating (the top
+   five healthy skill men by rating decide how many slots RB, WR and TE each
+   earn), and each group's CHART ORDER decides who fills that group's slots.
+   With a chart by rating that is exactly the men the old code picked, for
+   every roster shape, which is what keeps every saved league's strength and
+   every seeded season's results unchanged (scripts/simNflTagDepth.mjs holds
+   the pre round formula as a fixture and checks the two agree on 32 clubs
+   over several seeds, injuries and uneven rosters). Reorder a group and the
+   men in its slots change but the slot count does not: bench your best
+   receiver behind two lesser ones and you are weaker, promote a better backup
+   over a starter and you are stronger, and the harness walks 200 such swaps.
+
+   Injured men are skipped before anything is counted, so the next man in the
+   chart order steps up on his own. The line reads up to five: the bake
+   carries two linemen a club, so every club that ever existed starts all of
+   them exactly as before, and a club that drafts a sixth no longer has him
+   pulling the average down from the bench. */
+export const SKILL_SLOTS = 5;
+export const OL_SLOTS = 5;
+
+/** A group's chart: the saved order, then any man it does not name by rating.
+    With nothing saved this is the order by rating the sim always used. */
+export function depthOrder(team: GmTeamState, pos: DepthPos): GmPlayer[] {
+  const group = team.players.filter(p => p.pos === pos);
+  const byRating = [...group].sort((a, b) => b.ovr - a.ovr);
+  const saved = team.depth?.[pos];
+  if (!saved || saved.length === 0) return byRating;
+  const byId = new Map(group.map(p => [p.id, p]));
+  const out: GmPlayer[] = [];
+  const seen = new Set<string>();
+  for (const id of saved) {
+    const p = byId.get(id);
+    if (p && !seen.has(id)) { out.push(p); seen.add(id); }
+  }
+  for (const p of byRating) if (!seen.has(p.id)) out.push(p);
+  return out;
+}
+
+/** The whole chart, every group in DEPTH_GROUPS order. */
+export function depthChart(team: GmTeamState): Record<DepthPos, GmPlayer[]> {
+  const out = {} as Record<DepthPos, GmPlayer[]>;
+  for (const pos of DEPTH_GROUPS) out[pos] = depthOrder(team, pos);
+  return out;
+}
+
+/** Write a group's order. Refuses unless the ids are exactly the group's men. */
+export function setDepthOrder(team: GmTeamState, pos: DepthPos, ids: string[]): boolean {
+  const group = team.players.filter(p => p.pos === pos).map(p => p.id).sort();
+  const given = [...ids].sort();
+  if (group.length !== given.length || group.some((id, i) => id !== given[i])) return false;
+  team.depth = { ...(team.depth ?? {}), [pos]: [...ids] };
+  return true;
+}
+
+/** Swap two men in a group's order. The board's tap to swap. */
+export function swapDepth(team: GmTeamState, pos: DepthPos, idA: string, idB: string): boolean {
+  const ids = depthOrder(team, pos).map(p => p.id);
+  const a = ids.indexOf(idA), b = ids.indexOf(idB);
+  if (a < 0 || b < 0 || a === b) return false;
+  [ids[a], ids[b]] = [ids[b], ids[a]];
+  return setDepthOrder(team, pos, ids);
+}
+
+/** The healthy men a unit starts: slots shared out by rating, filled by chart order. */
+export function unitStarters(team: GmTeamState, groups: DepthPos[], slots: number): GmPlayer[] {
+  const pool = team.players.filter(p => p.out === 0 && groups.includes(p.pos));
+  const top = [...pool].sort((a, b) => b.ovr - a.ovr).slice(0, slots);
+  const out: GmPlayer[] = [];
+  for (const g of groups) {
+    const share = top.filter(p => p.pos === g).length;
+    if (share === 0) continue;
+    const order = depthOrder(team, g);
+    out.push(...order.filter(p => p.out === 0).slice(0, share));
+  }
+  return out;
+}
+
+/** Every man the sim counts as a starter right now, for the chart screen's badges. */
+export function starterIds(team: GmTeamState): Set<string> {
+  return new Set([
+    ...unitStarters(team, ['QB'], 1),
+    ...unitStarters(team, SKILL_POS, SKILL_SLOTS),
+    ...unitStarters(team, ['OL'], OL_SLOTS),
+    ...unitStarters(team, DEF_POS, DEF_SLOTS),
+  ].map(p => p.id));
+}
+
+/** Team strength: QB 30, skill 30, OL 12, DEF 28, read off the depth chart (injured players excluded). */
 export function teamStrength(team: GmTeamState): number {
-  const healthy = team.players.filter(p => p.out === 0);
-  const qb = Math.max(64, ...healthy.filter(p => p.pos === 'QB').map(p => p.ovr));
-  const skill = healthy.filter(p => SKILL_POS.includes(p.pos)).sort((a, b) => b.ovr - a.ovr).slice(0, 5);
+  const [qb1] = unitStarters(team, ['QB'], 1);
+  const qb = Math.max(64, qb1 ? qb1.ovr : 0);
+  const skill = unitStarters(team, SKILL_POS, SKILL_SLOTS);
   const skillAvg = skill.length ? skill.reduce((s, p) => s + p.ovr, 0) / skill.length : 64;
-  const ol = healthy.filter(p => p.pos === 'OL');
+  const ol = unitStarters(team, ['OL'], OL_SLOTS);
   const olAvg = ol.length ? ol.reduce((s, p) => s + p.ovr, 0) / ol.length : 64;
   return qb * 0.30 + skillAvg * 0.30 + olAvg * 0.12 + defenceRating(team) * 0.28;
 }
@@ -556,7 +674,14 @@ export function runPlayoffs(
 export const NFL_ROSTER_MIN = 6;
 
 export function releasePlayer(team: GmTeamState, freeAgents: GmPlayer[], playerId: string): boolean {
-  return cutPlayer(team, freeAgents, playerId, NFL_ROSTER_MIN);
+  const done = cutPlayer(team, freeAgents, playerId, NFL_ROSTER_MIN);
+  /* Round 723: the guarantee was this club's promise and it has just been
+     paid as dead money. In the pool he is an ordinary man on one year. */
+  if (done) {
+    const fa = freeAgents.find(p => p.id === playerId);
+    if (fa) clearTag(fa);
+  }
+  return done;
 }
 
 export function signPlayer(team: GmTeamState, freeAgents: GmPlayer[], playerId: string, cap: number): boolean {
@@ -726,6 +851,123 @@ export function prospectToPlayer(pr: Prospect, rng: () => number): GmPlayer | nu
 }
 
 // ---------------------------------------------------------------------------
+// Round 723: the franchise tag
+// ---------------------------------------------------------------------------
+
+/* THE REAL RULE, as the 2020 CBA writes it (Article 10, Section 2), quoted by
+   the Pro Football Hall of Fame's release on the 2020 designations,
+   https://www.profootballhof.com/news/2020-franchise-and-transition-players-named
+   and by NFL Football Operations' annual designation notices: a club "can
+   designate one 'franchise' player ... among its veteran free agents"; the
+   exclusive tender is "the greater of (i) the average of the top five
+   salaries at the player's position for the current year ... or (ii) the
+   amount of the required tender for a 'non-exclusive' franchise player",
+   and that non-exclusive tender is "a one year NFL Player Contract for (A)
+   the average of the five largest Prior Year Salaries for players at the
+   position ... or (B) 120% of his Prior Year Salary, whichever is greater".
+   A tagged man is under contract for the year: he cannot leave in free
+   agency. The tender is fully guaranteed once signed.
+
+   WHAT THE SIM ENCODES. The exclusive shape, because the sim has the
+   contracts to compute it: the mean of the five largest salaries at his
+   position across the thirty two rosters this season, or 120 percent of his
+   own salary, whichever is greater, on one fully guaranteed year, once per
+   club per offseason, decided before free agency opens (the offseason step).
+   A man tagged in two straight offseasons therefore costs at least 120
+   percent of the first tag, because the first tag is his prior salary. The
+   league's real non-exclusive number averages five years of tag history
+   against five years of caps (the Cap Percentage Average); the sim has no
+   such history and does not pretend to.
+
+   WHAT IT DOES TO THE OFFSEASON. A tagged man never reaches the expiring
+   branch: he keeps his tag salary for one more year and stays. Everyone
+   else on his last year is read as before (role players walk half the
+   time) with one addition: an untagged star walks now and then too, so the
+   tag has something to protect and the pool reflects who was tagged. CPU
+   clubs tag their best expiring starter rated TAG_CPU_MIN_OVR or better
+   when the tender fits their room; scripts/simNflTagDepth.mjs measures the
+   rate. */
+export const TAG_TOP_N = 5;
+export const TAG_PRIOR_MULT = 1.2;
+/** The least a CPU club tags. Measured in the harness header. */
+export const TAG_CPU_MIN_OVR = 80;
+/** How often an untagged expiring star (76 plus) walks. Role players keep their coin flip. */
+export const STAR_WALK_CHANCE = 0.15;
+
+const round1 = (n: number): number => Math.round(n * 10) / 10;
+
+/** The mean of the five largest salaries at a position across the league's rosters this season. */
+export function topFiveSalary(league: LeagueState, pos: DepthPos): number {
+  const top = Object.values(league.teams)
+    .flatMap(t => t.players.filter(p => p.pos === pos).map(p => p.salary))
+    .sort((a, b) => b - a)
+    .slice(0, TAG_TOP_N);
+  return top.length ? round1(top.reduce((s, v) => s + v, 0) / top.length) : 0;
+}
+
+/** The tender: the top five mean at his position or 120 percent of his salary, whichever is greater. */
+export function franchiseTagSalary(league: LeagueState, p: Pick<GmPlayer, 'pos' | 'salary'>): number {
+  return Math.max(topFiveSalary(league, p.pos), round1(p.salary * TAG_PRIOR_MULT));
+}
+
+/** The men whose deals end at this offseason. */
+export function expiringPlayers(team: GmTeamState): GmPlayer[] {
+  return team.players.filter(p => p.years <= 1).sort((a, b) => b.ovr - a.ovr);
+}
+
+/** Why this team cannot tag this man right now, or null. The board shows the sentence beside a greyed button. */
+export function tagRefusal(league: LeagueState, team: GmTeamState, playerId: string): string | null {
+  const p = team.players.find(x => x.id === playerId);
+  if (!p) return 'He is not on your roster.';
+  if (team.tagUsedFor === league.season + 1) return 'One tag per offseason, and yours is used.';
+  if (p.years > 1) return `${p.name} has ${p.years} years left, so there is nothing to tag.`;
+  const salary = franchiseTagSalary(league, p);
+  const short = round1(salary - p.salary - capRoom(team, league.cap));
+  if (short > 0) return `The tag would put you $${short}M over the cap.`;
+  return null;
+}
+
+/** Tag him: one fully guaranteed year at the tender, the cap hit on the books now. */
+export function applyFranchiseTag(league: LeagueState, team: GmTeamState, playerId: string): { ok: true; salary: number; prior: number; count: number } | { ok: false; reason: string } {
+  const reason = tagRefusal(league, team, playerId);
+  if (reason) return { ok: false, reason };
+  const p = team.players.find(x => x.id === playerId)!;
+  const prior = p.salary;
+  const salary = franchiseTagSalary(league, p);
+  /* Tagged for the season just played and tagged again: the second in a row. */
+  const count = p.tagSeason === league.season ? (p.tagCount ?? 1) + 1 : 1;
+  p.salary = salary;
+  p.years = 1;
+  p.tagSeason = league.season + 1;
+  p.tagCount = count;
+  p.guaranteed = true;
+  team.tagUsedFor = league.season + 1;
+  return { ok: true, salary, prior, count };
+}
+
+/** The tag year is over and he was not tagged again: an ordinary contract from here. */
+function clearTag(p: GmPlayer): void {
+  delete p.tagSeason;
+  delete p.tagCount;
+  delete p.guaranteed;
+}
+
+/** CPU clubs tag their best expiring starter, TAG_CPU_MIN_OVR or better, when the tender fits. */
+export function cpuFranchiseTags(league: LeagueState, userTeam?: string): { team: string; player: string; salary: number }[] {
+  const out: { team: string; player: string; salary: number }[] = [];
+  for (const t of Object.values(league.teams)) {
+    if (t.abbr === userTeam || t.tagUsedFor === league.season + 1) continue;
+    const starters = starterIds(t);
+    const cands = expiringPlayers(t).filter(p => starters.has(p.id) && p.ovr >= TAG_CPU_MIN_OVR);
+    for (const p of cands) {
+      const res = applyFranchiseTag(league, t, p.id);
+      if (res.ok) { out.push({ team: t.abbr, player: p.name, salary: res.salary }); break; }
+    }
+  }
+  return out;
+}
+
+// ---------------------------------------------------------------------------
 // Offseason
 // ---------------------------------------------------------------------------
 
@@ -733,10 +975,16 @@ export interface OffseasonNews {
   retired: { team: string; player: string }[];
   expired: { team: string; player: string }[];
   developed: { team: string; player: string; from: number; to: number }[];
+  /** Round 723: the CPU clubs' franchise tags this offseason. */
+  tagged: { team: string; player: string; salary: number }[];
 }
 
-export function runOffseason(league: LeagueState, rng: () => number): OffseasonNews {
-  const news: OffseasonNews = { retired: [], expired: [], developed: [] };
+/* Round 723: userTeam is the club whose tag decision is the GM's own, so the
+   CPU policy skips it. Callers without one (the harnesses) run it everywhere. */
+export function runOffseason(league: LeagueState, rng: () => number, userTeam?: string): OffseasonNews {
+  const news: OffseasonNews = { retired: [], expired: [], developed: [], tagged: [] };
+  /* Round 723: the tags go on before free agency opens, which is this loop. */
+  news.tagged = cpuFranchiseTags(league, userTeam);
   for (const t of Object.values(league.teams)) {
     const keep: GmPlayer[] = [];
     for (const p of t.players) {
@@ -758,10 +1006,20 @@ export function runOffseason(league: LeagueState, rng: () => number): OffseasonN
       // contracts
       p.years -= 1;
       if (p.years <= 0) {
-        // AI teams re-sign their stars, let the rest walk; the user chooses in UI beforehand
+        /* Round 723: a tagged man is under contract for the coming season at
+           the tender already on his line. He never reaches the pool. */
+        if (p.tagSeason === league.season + 1) {
+          p.years = 1;
+          keep.push(p);
+          continue;
+        }
+        clearTag(p);
+        // AI teams re-sign their stars, let the rest walk; the user tags one man beforehand
         p.years = years0(p.age);
         p.salary = salaryFor(p.pos, p.ovr);
-        if (p.ovr < 76 && rng() < 0.5) {
+        /* Round 723: a star can walk too, now and then, unless he was tagged. */
+        const walks = p.ovr < 76 ? rng() < 0.5 : rng() < STAR_WALK_CHANCE;
+        if (walks) {
           news.expired.push({ team: t.abbr, player: p.name });
           league.freeAgents.push({ ...p, years: 1 });
           continue;
@@ -774,6 +1032,15 @@ export function runOffseason(league: LeagueState, rng: () => number): OffseasonN
     t.losses = 0;
     t.picks = [1, 2, 3];
     rollDeadCap(t);
+    /* Round 723: a saved chart order forgets the men who have gone. The
+       field is only ever written where a GM has reordered something. */
+    if (t.depth) {
+      const live = new Set(t.players.map(p => p.id));
+      for (const pos of DEPTH_GROUPS) {
+        const ids = t.depth[pos];
+        if (ids) t.depth[pos] = ids.filter(id => live.has(id));
+      }
+    }
     /* Round 418: team.defense NO LONGER REACHES THE SIM AT ALL. An earlier
        draft of that round kept it as defenceRating's empty roster fallback,
        and that fallback was the exploit (cutting your whole defence dropped
