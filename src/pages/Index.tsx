@@ -280,19 +280,16 @@ export default function Index() {
           <div className="pt-4 pb-3 md:flex md:items-end md:justify-between md:gap-8 md:pt-7 md:pb-6">
             <div className="min-w-0">
               <div className="flex h-8 items-center gap-3 md:h-11">
-                {/* Round 840: the owner's headline is still the name and
-                    nothing else on screen. The rest of the template's h1
-                    ("DoUKnowBall: free daily sports trivia, puzzles and career
-                    sims", from src/data/homeCopy.ts) is read by screen readers
-                    and renderers, so the one h1 Google indexes says what the
-                    site is. Hidden the visually hidden way but kept INLINE:
-                    the absolutely positioned sr-only made the browser read
-                    the h1 as "DoUKnowBall : free..." with a stray break, which
-                    is what a renderer's innerText saw. A 1px clipped inline
-                    box with its pixel given back moves nothing in the row. */}
+                {/* Round 840: the owner's headline, the name and nothing
+                    else ("hero headline is too long", 2026-08-28), read from
+                    src/data/homeCopy.ts so the template's h1 says the same.
+                    Every word of it is on screen: no hidden half for a
+                    renderer, which is hidden text however good the words.
+                    What the site is, in words, is the line under it and the
+                    About section below the tiles. simHomeCopy part 8 fails on
+                    any visually hidden text in this file or that section. */}
                 <h1 className="font-display text-2xl font-bold leading-none tracking-tight text-primary md:text-[40px]">
-                  {HOME_COPY.brand}
-                  <span className="-mr-px inline-block h-px w-px overflow-hidden whitespace-nowrap [clip-path:inset(50%)]">{HOME_COPY.h1.slice(HOME_COPY.brand.length)}</span>
+                  {HOME_COPY.h1}
                 </h1>
                 {/* Stats: PERSONAL stats, signed-in only (owner 2026-08-05).
                     Streak = consecutive days, played = today's count, plus

@@ -49,16 +49,29 @@
  *      the generator calls), line endings aside.
  *   7. THE RENDERED HOME CARRIES IT. Index renders through react-dom/server
  *      inside a MemoryRouter (supabase stubbed, effects do not run on the
- *      server, which is also true of the first paint): exactly one h1, reading
- *      the module's h1; every heading, paragraph and list item of the module in
- *      the About section in order, with every link; every paragraph of 120
- *      characters or more in the page's text; the section after the last game
- *      tile, and not hidden.
- * Controls, each must turn ONLY its own part red:
+ *      server, which is also true of the first paint): exactly one h1, whose
+ *      text is the module's h1 and the template's h1, with nothing inside it
+ *      hidden, so what a renderer reads is what a visitor sees; every heading,
+ *      paragraph and list item of the module in the About section in order,
+ *      with every link; every paragraph of 120 characters or more in the
+ *      page's text; the section after the last game tile, and not hidden.
+ *   8. NO HIDDEN TEXT IN THE HOME PAGE'S SOURCE. Google's spam policies name
+ *      hidden text (clipped, off screen, zero size or zero opacity) when it is
+ *      there for a search engine rather than a visitor, and the first draft of
+ *      this round put a clipped half sentence inside the h1 for exactly that
+ *      reason. src/pages/Index.tsx and src/components/home/HomeAbout.tsx, read
+ *      as code with comments stripped, may carry no visually hidden class or
+ *      style at all, except the one screen reader label that was there before
+ *      this round (the signed in stat chip's "Days in a row: "), held as a
+ *      ratchet: it may go, nothing may join it.
+ * Controls. Each must turn its own part(s) red and nothing else:
  *   moduledrift    one sentence of the module changes (part 6)
  *   templatedrift  the same sentence changes in the template only (part 6)
  *   nosection      the About section is taken out of Index.tsx (part 7)
- *   h1brand        the h1 says only the brand again (part 7)
+ *   hiddenh1       the first draft's clipped span goes back into the h1 (7, 8)
+ *   srabout        a screen reader only line goes into the About section (7, 8)
+ *   srsource       a screen reader only line goes into the hero, outside the
+ *                  h1 and the section, so only the source scan can see it (8)
  *
  * Run: node scripts/simHomeCopy.mjs
  */
@@ -77,7 +90,8 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.HOME_COPY_CONTROL || '';
 const HOME_CONTROLS = {
   descdrift: '4b', commentapp: '4b', commenttpl: '4b',
-  moduledrift: '6', templatedrift: '6', nosection: '7', h1brand: '7',
+  moduledrift: '6', templatedrift: '6', nosection: '7',
+  hiddenh1: ['7', '8'], srabout: ['7', '8'], srsource: '8',
 };
 if (CONTROL && !(CONTROL in HOME_CONTROLS)) {
   console.error(`HOME_COPY_CONTROL=${CONTROL} is not a control this harness knows (${Object.keys(HOME_CONTROLS).join(', ')})`);
@@ -101,7 +115,15 @@ const DRIFT_TO = 'international call-ups, the works.';
 const homeCopySrc = controlled('moduledrift', readFileSync(path.join(ROOT, 'src/data/homeCopy.ts'), 'utf8'), DRIFT_FROM, DRIFT_TO);
 let indexBundled = readFileSync(path.join(ROOT, 'src/pages/Index.tsx'), 'utf8');
 indexBundled = controlled('nosection', indexBundled, '<HomeAbout />', '');
-indexBundled = controlled('h1brand', indexBundled, '{HOME_COPY.h1.slice(HOME_COPY.brand.length)}', '');
+/* the first draft's h1, word for word: the name on screen and the rest of the
+   sentence in a one pixel clipped box, there for a renderer and not a person */
+indexBundled = controlled('hiddenh1', indexBundled, '{HOME_COPY.h1}',
+  '{HOME_COPY.h1}<span className="-mr-px inline-block h-px w-px overflow-hidden whitespace-nowrap [clip-path:inset(50%)]">: free daily sports trivia, puzzles and career sims</span>');
+indexBundled = controlled('srsource', indexBundled, 'All playable without an account.`}',
+  'All playable without an account.`}<span className="sr-only"> Free sports trivia, quizzes and career sims.</span>');
+let homeAboutSrc = readFileSync(path.join(ROOT, 'src/components/home/HomeAbout.tsx'), 'utf8');
+homeAboutSrc = controlled('srabout', homeAboutSrc, '<Line parts={HOME_COPY.intro} />',
+  '<Line parts={HOME_COPY.intro} /><span className="sr-only"> Free sports trivia games, sports quizzes and career sims.</span>');
 
 /* One bundle: the registry, the copy module, and a server render of the home
    page. The supabase client is a stub that answers every call with itself:
@@ -118,6 +140,7 @@ const SUPABASE_STUB = `
 const SWAPS = [
   [/[\\/]src[\\/]data[\\/]homeCopy\.ts$/, () => homeCopySrc, 'ts'],
   [/[\\/]src[\\/]pages[\\/]Index\.tsx$/, () => indexBundled, 'tsx'],
+  [/[\\/]src[\\/]components[\\/]home[\\/]HomeAbout\.tsx$/, () => homeAboutSrc, 'tsx'],
   [/[\\/]src[\\/]integrations[\\/]supabase[\\/]client\.ts$/, () => SUPABASE_STUB, 'ts'],
 ];
 try {
@@ -174,6 +197,47 @@ let failures = 0;
 let part = '1';
 const failedParts = new Set();
 const fail = m => { failures += 1; failedParts.add(part); console.error('  FAIL: ' + m); };
+/* the hidden text checks by name, so a control can prove the check it plants
+   for fired, and not merely some other check in the same part */
+const firedChecks = new Set();
+const CONTROL_CHECKS = { hiddenh1: ['h1hidden', 'sourceHidden'], srabout: ['aboutHidden', 'sourceHidden'], srsource: ['sourceHidden'] };
+
+/* Visually hidden, as a class list or a style can say it. A guard for a shape,
+   not a word list for one offender: screen reader only and invisible classes,
+   zero opacity, a one pixel or zero box, a clip or clip path, a font size of
+   zero, a text indent thrown off the page, a box pushed off screen, and
+   display none with no breakpoint showing it again (a "hidden md:block" line is
+   a layout for a wider screen, read and seen there, not hidden text). */
+function hidingClasses(classList) {
+  const toks = classList.split(/\s+/).filter(Boolean);
+  const bare = t => t.replace(/^(?:[a-z0-9-]+:)+/, '');
+  const shownAgain = toks.some(t => /^(?:sm|md|lg|xl|2xl):(?:block|inline|inline-block|flex|inline-flex|grid|table|contents|line-clamp-\d+)$/.test(t));
+  const out = [];
+  for (const t of toks) {
+    const b = bare(t);
+    if (/^(sr-only|invisible|collapse|opacity-0|size-px|size-0|text-\[0(px|em|rem)?\]|indent-\[-.*\]|-indent-.*)$/.test(b)) out.push(t);
+    else if (/^\[(clip|clip-path|text-indent|font-size|opacity|visibility|display):/.test(b)) out.push(t);
+    else if (/^(-(left|top|translate-x|translate-y)-\[\d{3,}px\]|(left|top|translate-x|translate-y)-\[-\d{3,}px\])$/.test(b)) out.push(t);
+    else if (b === 'hidden' && t === b && !shownAgain) out.push(t);
+  }
+  const has = re => toks.some(t => re.test(bare(t)));
+  if (has(/^(h-px|h-0|h-\[1px\]|h-\[0(px)?\])$/) && has(/^(w-px|w-0|w-\[1px\]|w-\[0(px)?\])$/)) out.push('a one pixel box');
+  return out;
+}
+function hidingStyle(style) {
+  const out = [];
+  const RULES = [
+    [/\bdisplay\s*:\s*['"]?none\b/i, 'display none'],
+    [/\bvisibility\s*:\s*['"]?(hidden|collapse)\b/i, 'visibility hidden'],
+    [/\bopacity\s*:\s*['"]?(0|0?\.0+)['"]?\s*(?:[,;}]|$)/i, 'opacity 0'],
+    [/\bclip(?:-path|Path)?\s*:/i, 'a clip'],
+    [/\btext-?[iI]ndent\s*:\s*['"]?-/i, 'a negative text indent'],
+    [/\bfont-?[sS]ize\s*:\s*['"]?0(?:px|em|rem)?['"]?\s*(?:[,;}]|$)/i, 'font size 0'],
+    [/\b(?:left|top)\s*:\s*['"]?-\d{3,}/i, 'pushed off screen'],
+  ];
+  for (const [re, what] of RULES) if (re.test(style)) out.push(what);
+  return out;
+}
 
 let html = readFileSync(path.join(ROOT, 'index.html'), 'utf8');
 html = controlled('templatedrift', html, DRIFT_FROM, DRIFT_TO);
@@ -458,9 +522,6 @@ console.log('6) the template block is exactly what scripts/genHomeCopy.mjs write
     const copyAt = lf.indexOf('<div id="dukb-home-copy">');
     if (copyAt < 0 || lf.indexOf(HOME_COPY_START) < copyAt) fail('the home-copy markers are not inside #dukb-home-copy');
   }
-  if (!HOME_COPY.h1.startsWith(HOME_COPY.brand)) {
-    fail(`the module's h1 ${JSON.stringify(HOME_COPY.h1)} does not start with its brand ${JSON.stringify(HOME_COPY.brand)}, and the app shows the brand and gives readers the rest`);
-  }
   if (!failedParts.has('6')) {
     /* the template has the h1 where the app has its About heading */
     console.log(`   the block between the markers is the module's: ${moduleBlocks.length} blocks with the h1, ${moduleLinks.length} links, ${longBlocks.length} paragraphs of 120+ characters`);
@@ -469,17 +530,39 @@ console.log('6) the template block is exactly what scripts/genHomeCopy.mjs write
 
 /* ── 7: the rendered home page carries the copy ───────────────────────── */
 part = '7';
-console.log('7) the home page as React renders it: one h1 that says what the site is, and every word of the copy below the tiles');
+console.log('7) the home page as React renders it: one h1, the template\'s, all of it visible, and every word of the copy below the tiles');
 {
   const decode = s => s.replace(/&#x27;|&#39;/g, "'").replace(/&quot;/g, '"').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&');
   const plain = s => decode(s.replace(/<[^>]+>/g, '')).replace(/\s+/g, ' ').trim();
   let markup = '';
   try { markup = bundled.renderHome(); } catch (e) { fail(`the home page did not render on the server: ${e && e.message}`); }
   if (markup) {
-    /* exactly one h1, and it reads the module's h1 */
-    const h1s = [...markup.matchAll(/<h1\b[^>]*>([\s\S]*?)<\/h1>/g)].map(m => plain(m[1]));
+    /* Hidden text, read off the markup: every class list and style inside a
+       stretch of rendered HTML, held to the shapes above. */
+    const hiddenIn = s => [
+      ...[...s.matchAll(/\bclass="([^"]*)"/g)].flatMap(m => hidingClasses(decode(m[1]))),
+      ...[...s.matchAll(/\bstyle="([^"]*)"/g)].flatMap(m => hidingStyle(decode(m[1]))),
+      ...(/<[a-z][^>]*\shidden(=|\s|>)/.test(s) ? ['the hidden attribute'] : []),
+    ];
+    /* exactly one h1; it says exactly the template's h1 and the module's; and
+       nothing in it is hidden, so the words a renderer reads are the words a
+       visitor sees */
+    const h1Tags = [...markup.matchAll(/<h1\b[^>]*>([\s\S]*?)<\/h1>/g)];
+    const h1s = h1Tags.map(m => plain(m[1]));
+    /* the template's own h1 is the one in the copy block (the 404 script
+       further down carries an h1 of its own inside a string) */
+    const tplBlock = splitAtMarkers(html.replace(/\r\n/g, '\n'))?.inner ?? '';
+    const tplH1s = [...tplBlock.matchAll(/<h1\b[^>]*>([\s\S]*?)<\/h1>/g)].map(m => plain(m[1]));
     if (h1s.length !== 1) fail(`the rendered home page has ${h1s.length} h1 elements, not one: ${JSON.stringify(h1s)}`);
-    else if (h1s[0] !== HOME_COPY.h1) fail(`the rendered h1 reads ${JSON.stringify(h1s[0])}, not ${JSON.stringify(HOME_COPY.h1)}, so a renderer reads a name and no description`);
+    else {
+      if (h1s[0] !== HOME_COPY.h1) fail(`the rendered h1 reads ${JSON.stringify(h1s[0])}, not the module's ${JSON.stringify(HOME_COPY.h1)}`);
+      if (tplH1s.length !== 1 || tplH1s[0] !== h1s[0]) fail(`the template's h1 ${JSON.stringify(tplH1s)} and the rendered h1 ${JSON.stringify(h1s[0])} differ, so a crawler reads one headline with JavaScript and another without`);
+      const hid = hiddenIn(h1Tags[0][0]);
+      if (hid.length) {
+        firedChecks.add('h1hidden');
+        fail(`the h1 carries visually hidden text (${JSON.stringify(hid)}), so a renderer reads "${h1s[0]}" while a visitor sees less: that is hidden text`);
+      }
+    }
 
     /* the outcome: every paragraph of 120 characters or more is in the page */
     const pageText = plain(markup);
@@ -509,11 +592,14 @@ console.log('7) the home page as React renders it: one h1 that says what the sit
       const tilesAfter = (markup.slice(at).match(/class="home-tile\b/g) ?? []).length;
       if (tiles < 50) fail(`only ${tiles} game tiles render above the About section, so it is not below the games`);
       if (tilesAfter > 0) fail(`${tilesAfter} game tiles render after the About section, which belongs below every tile`);
-      /* hidden in any of the ways a class or attribute can hide it */
-      const HIDES = /^(?:[a-z0-9-]+:)*(hidden|sr-only|invisible|collapse)$/;
-      const hiders = [...sec.matchAll(/\bclass="([^"]*)"/g)].flatMap(m => m[1].split(/\s+/)).filter(t => HIDES.test(t));
-      if (hiders.length) fail(`the About section carries ${JSON.stringify(hiders)}, which hides copy that is meant to be read`);
-      if (/\shidden(=|\s|>)|aria-hidden="true"|display:\s*none|<details\b/.test(sec)) fail('the About section is hidden or collapsed by an attribute, a style or a details element');
+      /* hidden in any of the ways a class, a style or an attribute can hide
+         it, and any of them anywhere in the section: copy meant to be read */
+      const hiders = hiddenIn(sec);
+      if (hiders.length) {
+        firedChecks.add('aboutHidden');
+        fail(`the About section carries ${JSON.stringify(hiders)}, which hides copy that is meant to be read`);
+      }
+      if (/aria-hidden="true"|<details\b/.test(sec)) fail('the About section is hidden from readers or collapsed behind a details element');
       if (!failedParts.has('7')) {
         console.log(`   one h1, ${JSON.stringify(h1s[0])}; the About section renders all ${got.length} blocks and ${links.length} links in order, after ${tiles} game tiles, nothing hiding it`);
         console.log(`   all ${longBlocks.length} paragraphs of 120+ characters are in the rendered text (${pageText.length} characters rendered on the server)`);
@@ -523,19 +609,58 @@ console.log('7) the home page as React renders it: one h1 that says what the sit
 }
 rmSync(temp, { recursive: true, force: true });
 
+/* ── 8: no hidden text in the home page's source ──────────────────────── */
+part = '8';
+console.log('8) no visually hidden text in src/pages/Index.tsx or src/components/home/HomeAbout.tsx');
+{
+  /* Code, not comments: the comments in both files explain why hidden text is
+     banned and name the shapes, which is exactly what a guard would trip on.
+     The one screen reader label that predates this round is taken out once,
+     by its exact text, before the scan; if it is gone, so much the better. */
+  const BASELINE = '<span className="sr-only">{label}: </span>';
+  const code = src => src.replace(/\{\s*\/\*[\s\S]*?\*\/\s*\}/g, ' ').replace(/\/\*[\s\S]*?\*\//g, ' ').replace(/(^|[^:'"`\\])\/\/[^\n]*/g, '$1');
+  const scan = (name, src, baseline) => {
+    let c = code(src);
+    if (baseline && c.includes(baseline)) c = c.replace(baseline, ' ');
+    const found = [];
+    /* class lists: plain attributes, and every string literal inside a
+       className expression (cn, template literals, conditionals) */
+    for (const m of c.matchAll(/className=(?:"([^"]*)"|'([^']*)'|\{([^{}]*(?:\{[^{}]*\}[^{}]*)*)\})/g)) {
+      const lists = m[1] ?? m[2] ?? [...(m[3] ?? '').matchAll(/(['"`])((?:(?!\1)[^\\]|\\.)*)\1/g)].map(x => x[2]).join(' ');
+      for (const h of hidingClasses(lists)) found.push(`class ${h}`);
+    }
+    for (const m of c.matchAll(/style=\{\{([\s\S]*?)\}\}/g)) for (const h of hidingStyle(m[1])) found.push(`style ${h}`);
+    if (/<[A-Za-z][^>]*\shidden(?=[\s>={])/.test(c)) found.push('the hidden attribute');
+    return found;
+  };
+  const inIndex = scan('src/pages/Index.tsx', indexBundled, BASELINE);
+  const inAbout = scan('src/components/home/HomeAbout.tsx', homeAboutSrc, null);
+  if (inIndex.length) fail(`src/pages/Index.tsx carries visually hidden text: ${JSON.stringify(inIndex)}`);
+  if (inAbout.length) fail(`src/components/home/HomeAbout.tsx carries visually hidden text: ${JSON.stringify(inAbout)}`);
+  if (inIndex.length || inAbout.length) firedChecks.add('sourceHidden');
+  /* and the scan must be able to see: the baseline label is a real sr-only
+     class in the file, so with it left in, the scan has to find it */
+  const probe = scan('probe', indexBundled, null);
+  if (indexBundled.includes(BASELINE) && !probe.some(f => f.includes('sr-only'))) fail('the scan cannot see the sr-only label it is told to allow, so it proves nothing');
+  if (!failedParts.has('8')) console.log(`   none: every class list and style in both files is visible text (the stat chip's screen reader label ${indexBundled.includes(BASELINE) ? 'is the one allowed exception' : 'is gone'})`);
+}
+
 console.log('');
 if (CONTROL) {
-  /* inverted: the break must be reported by its own part, and nothing else
+  /* inverted: the break must be reported by its own part(s), and nothing else
      may fail, or the red could have come from anywhere. Part 4b's controls
-     must be reported as the pair being apart specifically. */
-  const want = HOME_CONTROLS[CONTROL];
-  const caught = want === '4b' ? descDriftCaught : failedParts.has(want);
-  const elsewhere = [...failedParts].filter(p => p !== want);
+     must be reported as the pair being apart specifically, and the hidden text
+     controls by the hidden text checks themselves, not by a text mismatch. */
+  const want = [].concat(HOME_CONTROLS[CONTROL]);
+  const caught = want[0] === '4b'
+    ? descDriftCaught
+    : want.every(p => failedParts.has(p)) && (CONTROL_CHECKS[CONTROL] ?? []).every(c => firedChecks.has(c));
+  const elsewhere = [...failedParts].filter(p => !want.includes(p));
   if (caught && elsewhere.length === 0) {
-    console.log(`simHomeCopy control ${CONTROL}: green. The planted break was reported by part ${want} and nothing else failed.`);
+    console.log(`simHomeCopy control ${CONTROL}: green. The planted break was reported by part ${want.join(' and ')}${CONTROL_CHECKS[CONTROL] ? ` (${CONTROL_CHECKS[CONTROL].join(', ')})` : ''} and nothing else failed.`);
     process.exit(0);
   }
-  if (!caught) console.error(`simHomeCopy control ${CONTROL}: RED. The planted break went unreported, so part ${want} proves nothing.`);
+  if (!caught) console.error(`simHomeCopy control ${CONTROL}: RED. The planted break went unreported by part ${want.join(' and ')}${CONTROL_CHECKS[CONTROL] ? ` (needed ${CONTROL_CHECKS[CONTROL].join(', ')}, fired ${[...firedChecks].join(', ') || 'none'})` : ''}, so it proves nothing.`);
   if (elsewhere.length) console.error(`simHomeCopy control ${CONTROL}: RED. Part(s) ${elsewhere.join(', ')} failed too, which the control run must not hide.`);
   process.exit(1);
 }
