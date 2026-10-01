@@ -58,10 +58,11 @@
         and no swap changes how many men any group starts. An injured starter
         is skipped and the next man in the order steps up. A newcomer to a
         group with a saved order slots in at the rule's place: one who
-        outrates every starter in his group starts, and adds strength
-        whenever he moves no slot between groups; one rated below everyone
-        goes last. A swap and a swap back leaves no saved order, and a
-        better man signed after it starts and adds strength.
+        outrates his group and the man his unit would bench for him starts
+        and makes the team stronger, every time; one rated below everyone
+        goes last; one at any rating sits exactly where the rule puts him.
+        A swap and a swap back leaves no saved order, and a better man signed
+        after it starts and adds strength.
      4) the fixture: the pre round strength formula, frozen in this file, and
         the engine agree to 1e-9 on every club of several seeded leagues,
         fresh, after offseasons and drafts, and with a third of the clubs
@@ -77,10 +78,20 @@
 
    MEASUREMENTS (2026-10-01, the engine as shipped, the harness's six seeds
    unless stated):
+     Section 2: 411 tags; 297 men came off a tag without a second one, every
+     one with his marks cleared; a club the policy would tag was made the
+     GM's club 108 times (three an offseason) and passed over every time; in
+     the GM's 18 passing years the offseason named his club 0 times (3 under
+     the usertag control, which is why the 108 probes are the real check).
+     Floors: 100 and 60.
      Section 3: 200 swaps found in 1019 tries, 109 promotions and 91
      demotions, every one moving strength the right way; 159 injury cases, 8
      of them in a single group unit (all quarterbacks, since every healthy
-     lineman starts).
+     lineman starts). Newcomers: 579 saved groups (297 of the better
+     arrivals took a slot from another group), and 564 swap and swap back
+     groups. Floors: 300 each. Before the fix the review's probe benched a
+     97 in 1520 of 3200 such cases; newbottom puts that rule back and benches
+     292 of the 579 better arrivals here.
      Section 4: 960 club states compared, 54 of them carrying six or more
      linemen, and 8160 scheduled games, 0 mismatches. Why the line is every
      lineman: a probe of board like careers (eight seeds, fifteen seasons, the
@@ -108,8 +119,8 @@
      nochart     strength ignores the chart order         -> 3
      tagwalks    a tagged man reaches the expiring branch -> 1 and 2 (the copy
                  forgets the tag at the offseason, so section 1's second tag
-                 in a row reads as a first; measured 58 of 474 tagged men in
-                 the pool and 397 without their tender)
+                 in a row reads as a first; measured 57 of 456 tagged men in
+                 the pool and 381 without their tender)
      cheaptag    the 120 percent floor dropped            -> 1
      fixedslots  skill slots fixed at RB 1, WR 3, TE 1    -> 4
      olcap       the line cut to five starters            -> 4
@@ -559,7 +570,7 @@ const SEEDS = [723, 20261001, 61, 4242, 9, 1337];
   ok(2, 'enough tags happened for the check to mean anything', tags >= 60, `${tags} tags over ${seasonsRun} offseasons`);
   ok(2, 'no tagged man is in that year\'s free agent pool', inPool.length === 0, `${inPool.length} of ${tags}, e.g. ${inPool.slice(0, 3).join(' | ')}`);
   ok(2, 'every tagged man carries the tender into the season on one year', lostTender.length === 0, `${lostTender.length} of ${tags}, e.g. ${lostTender.slice(0, 3).join(' | ')}`);
-  console.log(`   tag year over: ${former} men came off a tag; the GM's club was put in front of the policy ${picked} times; the GM passed ${gmPassed} offseasons`);
+  console.log(`   tags: ${tags} over ${seasonsRun} offseasons; ${former} men came off a tag; the GM's club was put in front of the policy ${picked} times; the GM passed ${gmPassed} offseasons`);
   ok(2, 'enough men came off a tag for the check to mean anything', former >= 100, `${former}`);
   ok(2, 'a man whose tag year is over carries no tag marks and no guarantee, rostered or in the pool', marksKept.length === 0, `${marksKept.length}, e.g. ${marksKept.slice(0, 3).join(' | ')}`);
   ok(2, 'the GM\'s club was put in front of the policy often enough', picked >= 60, `${picked}`);
@@ -687,14 +698,20 @@ const SEEDS = [723, 20261001, 61, 4242, 9, 1337];
                saved order rated below him, and everyone else keeps the GM's
                order. */
   const newcomer = (team, pos, ovr, tag) => ({ id: `new-${tag}-${team.abbr}-${pos}`, name: `New ${tag} ${pos}`, pos, age: 25, ovr, salary: 1, years: 2, out: 0, pot: ovr });
-  /* one over the weakest man the unit starts when its slots are full, so a
+  /* One over the weakest man the unit starts when its slots are full, so a
      lineup picked by rating alone would start him too: a group that starts
      nobody (its unit's slots all held by better men of other groups) is not
-     a group a merely better man walks into */
+     a group a merely better man walks into. When the slots are not full
+     (the line always, a skill unit short of five men) everyone starts and
+     the unit averages the men it has, as the pre round formula did, so he
+     has to clear every man it starts: a man under that average pulls it
+     down whoever signs him. A league grown under the tagwalks control had
+     exactly that, a skill unit of four where a 76 receiver lowered it. */
   const unitFloor = (team, pos) => {
     const [groups, slots] = UNITS.find(([g]) => g.includes(pos));
-    const now = engine.unitStarters(team, groups, slots);
-    return now.length >= slots ? Math.min(...now.map(p => p.ovr)) + 1 : 0;
+    const now = engine.unitStarters(team, groups, slots).map(p => p.ovr);
+    if (now.length === 0) return 0;
+    return (now.length >= slots ? Math.min(...now) : Math.max(...now)) + 1;
   };
   const rngN = lcg(72302);
   let cases = 0, betterBad = [], weakBad = [], worseBad = [], ruleBad = [], slotMoves = 0;

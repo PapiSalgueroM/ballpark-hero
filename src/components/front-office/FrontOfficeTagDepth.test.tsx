@@ -4,11 +4,13 @@
  * The engine rules are fenced by scripts/simNflTagDepth.mjs. This is the
  * board: the chart opens from the Roster box as small tiles with a back
  * button at each level, two taps swap two men, the order lands on the save
- * and survives a reload, and team strength moves with it. The tag card sits
- * on the draft screen before the last pick, quotes the tender the engine
- * charges, greys a tag the room cannot cover with the reason, and a tagged
- * man is still on the roster on his tender after the last pick runs the
- * offseason.
+ * and survives a reload, and team strength moves with it; a swap back or
+ * Sort by rating leaves nothing saved. The tag card sits on the draft screen
+ * before the last pick, quotes the tender the engine charges, greys a tag
+ * the room cannot cover with the reason, and a tagged man is still on the
+ * roster on his tender after the last pick runs the offseason. When the GM
+ * passes, the CPU policy does not tag his club for him (the board hands the
+ * offseason his club's abbreviation; drop it and the last test goes red).
  *
  * Same setup as FrontOfficeCuts.test.tsx: a save from the real engine under a
  * seeded rng, the real board rendered on it, the save read back.
@@ -17,7 +19,7 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render, screen, fireEvent, cleanup, within } from '@testing-library/react';
 import FrontOfficeBoard from '@/components/front-office/FrontOfficeBoard';
 import {
-  initLeague, generateDraftClass, teamStrength, franchiseTagSalary, depthOrder, starterIds, capUsed,
+  initLeague, generateDraftClass, teamStrength, franchiseTagSalary, depthOrder, starterIds, capUsed, cpuFranchiseTags,
   DEPTH_GROUPS, type LeagueState, type GmTeamState,
 } from '@/lib/frontOffice';
 
@@ -105,9 +107,25 @@ describe('NFL Front Office: the depth chart and the franchise tag on the board',
     fireEvent.click(el(`[data-depth-group="${pos}"]`));
     expect(rowIds()).toEqual(swapped);
 
-    /* swapping back restores the strength exactly */
+    /* a saved order says so, with the way back to the ratings beside it */
+    expect(el('[data-depth-custom]')).toBeTruthy();
+
+    /* swapping back restores the strength exactly, and an order that reads
+       like the ratings again is handed back to the sim: nothing saved, so a
+       better man signed later slots in by his rating like on any club */
     fireEvent.click(el(`[data-depth-row="${bench}"]`));
     fireEvent.click(el(`[data-depth-row="${starter}"]`));
+    expect(teamStrength(read().league.teams[team])).toBeCloseTo(before, 9);
+    expect(read().league.teams[team].depth).toBeUndefined();
+    expect(el('[data-depth-custom]')).toBeNull();
+
+    /* Sort by rating does the same from any saved order */
+    fireEvent.click(el(`[data-depth-row="${starter}"]`));
+    fireEvent.click(el(`[data-depth-row="${bench}"]`));
+    expect(read().league.teams[team].depth[pos]).toEqual(swapped);
+    fireEvent.click(el('[data-depth-reset]'));
+    expect(read().league.teams[team].depth).toBeUndefined();
+    expect(rowIds()).toEqual(order);
     expect(teamStrength(read().league.teams[team])).toBeCloseTo(before, 9);
 
     /* the back buttons walk out a level at a time */
@@ -176,5 +194,32 @@ describe('NFL Front Office: the depth chart and the franchise tag on the board',
     if (still) expect(still).toMatchObject({ salary: price, years: 1, tagSeason: season + 1, guaranteed: true });
     else expect(man.age + 1).toBeGreaterThanOrEqual(34);
     expect(el('[data-franchise-tag]')).toBeNull();
+  });
+
+  it('leaves the GM\'s tag to the GM: when he passes, the CPU policy does not tag his club for him', () => {
+    const league = initLeague(lehmer(7));
+    league.cap += 1000;
+    const season = league.season;
+    /* a club whose expiring man the policy tags when nobody is the GM */
+    const wouldTag = cpuFranchiseTags(JSON.parse(JSON.stringify(league)));
+    expect(wouldTag.length).toBeGreaterThan(1);
+    const team = wouldTag[0].team;
+    save(league, team, { phase: 'draft', draftClass: generateDraftClass(lehmer(3), 40, new Set()), picksLeft: 3 });
+    render(<FrontOfficeBoard />);
+    expect(document.querySelectorAll('[data-tag-row]').length).toBeGreaterThan(0);
+
+    /* no tag, just the three picks; the last one runs the offseason */
+    for (let i = 0; i < 3; i += 1) {
+      const next = read().draftClass[0];
+      const btn = [...document.querySelectorAll('button')].find(x => x.textContent?.includes(next.name) && x.textContent.includes(String(next.grade)))!;
+      expect(btn, `pick ${i + 1}: no button for ${next.name}`).toBeTruthy();
+      fireEvent.click(btn);
+    }
+    const after = read();
+    expect(after.league.season).toBe(season + 1);
+    expect(after.league.teams[team].tagUsedFor).toBeUndefined();
+    expect(after.league.teams[team].players.filter((p: any) => p.tagSeason !== undefined).map((p: any) => p.name)).toEqual([]);
+    /* the policy did run, on everybody else */
+    expect(Object.values(after.league.teams).some((t: any) => t.tagUsedFor === season + 1)).toBe(true);
   });
 });
