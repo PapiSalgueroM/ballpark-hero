@@ -347,7 +347,11 @@ export function simNhlRound(league: NhlLeague, myTeam: string, rng: () => number
       if (p.out > 0) p.out -= 1;
       else if (rng() < 0.022) {
         p.out = 1 + Math.floor(rng() * 3);
-        if (t.abbr === myTeam) notes.push(`🚑 ${p.name} is out ${p.out} round${p.out === 1 ? '' : 's'}.`);
+        /* Round 830 review: Vancouver carries two real Elias Petterssons, a
+           centre and a defenseman, so a man who shares his name on the club
+           is told apart by his position. Everybody else reads as before. */
+        const twin = t.players.some(q => q !== p && q.name === p.name);
+        if (t.abbr === myTeam) notes.push(`🚑 ${p.name}${twin ? ` (${p.pos})` : ''} is out ${p.out} round${p.out === 1 ? '' : 's'}.`);
       }
     }
     repairNhlContributors(t);

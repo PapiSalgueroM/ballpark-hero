@@ -421,6 +421,18 @@ for (const seed of [1, 830]) {
   }
   ok(4, `seed ${seed}: the free agent pool is invented men only, none of them a real name`, lg.freeAgents.every(p => !recNames.has(p.name)));
 }
+{
+  /* Round 830 review: Vancouver's two real Elias Petterssons (a centre born 1998-11-12 and a
+     defenseman born 2004-02-16, both checked against ESPN and hockey-reference) stay two men */
+  let lg = E.initNhlFullLeague(mulberry(40));
+  const twins = () => lg.teams.VAN.players.filter(p => p.name === 'Elias Pettersson');
+  ok(4, 'Vancouver carries both Elias Petterssons, a C and a D, under two ids', twins().length === 2 && new Set(twins().map(p => p.id)).size === 2 && twins().map(p => p.pos).sort().join('') === 'CD', twins().map(p => `${p.pos} ${p.id}`).join(', '));
+  lg = JSON.parse(JSON.stringify(lg));
+  E.ensureNhlLeagueIds(lg, null);
+  ok(4, 'and still two men under two ids after a save and a load', twins().length === 2 && new Set(twins().map(p => p.id)).size === 2);
+  const notes = E.simNhlRound(lg, 'VAN', () => 0).notes.filter(n => n.includes('Elias Pettersson'));
+  ok(4, 'an injury note tells the two apart by position', notes.length === 2 && notes.some(n => n.includes('Elias Pettersson (C)')) && notes.some(n => n.includes('Elias Pettersson (D)')), notes.join(' | '));
+}
 
 /* ---------- 5. the limits ---------- */
 console.log('5) The roster limits');
