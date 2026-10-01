@@ -1,0 +1,1806 @@
+[
+  {
+    "name": "Maxime Estève",
+    "to": "RB Leipzig",
+    "db": "RB Leipzig",
+    "sources": [
+      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-summer-2026-37051",
+      "https://www.espn.com/soccer/team/squad/_/id/11420/ger.rb_leipzig"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "From Burnley (bundesliga.com Leipzig \"In\")."
+  },
+  {
+    "name": "Nathan De Cat",
+    "to": "Hoffenheim",
+    "db": "TSG 1899 Hoffenheim",
+    "sources": [
+      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-summer-2026-37051",
+      "https://www.espn.com/soccer/team/squad/_/id/7911"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "From Anderlecht."
+  },
+  {
+    "name": "Rocco Reitz",
+    "to": "RB Leipzig",
+    "db": "RB Leipzig",
+    "sources": [
+      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-summer-2026-37051",
+      "https://www.espn.com/soccer/team/squad/_/id/11420/ger.rb_leipzig"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "From Gladbach."
+  },
+  {
+    "name": "Noah Atubolu",
+    "to": "Eintracht Frankfurt",
+    "db": "Eintracht Frankfurt",
+    "loan": true,
+    "sources": [
+      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-summer-2026-37051",
+      "https://www.espn.com/soccer/team/squad/_/id/125"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "On loan from Freiburg."
+  },
+  {
+    "name": "Miguel Gutiérrez",
+    "to": "Bayer Leverkusen",
+    "db": "Bayer 04 Leverkusen",
+    "sources": [
+      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-summer-2026-37051",
+      "https://www.espn.com/soccer/team/squad/_/id/131/ger.leverkusen"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "From Napoli."
+  },
+  {
+    "name": "Abdoul Koné",
+    "to": "RB Leipzig",
+    "db": "RB Leipzig",
+    "sources": [
+      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-summer-2026-37051",
+      "https://www.espn.com/soccer/team/squad/_/id/11420/ger.rb_leipzig"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "Bought in January 2026 and loaned back to Reims (bundesliga.com January list); back at Leipzig when that loan ended this summer."
+  },
+  {
+    "name": "Sacha Boey",
+    "to": "Bayern Munich",
+    "db": "Bayern Munich",
+    "sources": [
+      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-summer-2026-37051",
+      "https://www.espn.com/soccer/team/squad/_/id/132/ger.bayern_munich"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "January 2026 loan to Galatasaray ended; back on the Bayern squad."
+  },
+  {
+    "name": "Patrick Wimmer",
+    "to": "Hoffenheim",
+    "db": "TSG 1899 Hoffenheim",
+    "sources": [
+      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-summer-2026-37051",
+      "https://www.espn.com/soccer/team/squad/_/id/7911"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "From Wolfsburg."
+  },
+  {
+    "name": "Zakaria El Ouahdi",
+    "to": "Hamburg",
+    "db": "Hamburger SV",
+    "sources": [
+      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-summer-2026-37051",
+      "https://www.espn.com/soccer/team/squad/_/id/127"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "From Genk."
+  },
+  {
+    "name": "Emmanuel Latte Lath",
+    "to": "Union Berlin",
+    "db": "1.FC Union Berlin",
+    "loan": true,
+    "sources": [
+      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-summer-2026-37051",
+      "https://www.espn.com/soccer/team/squad/_/id/598"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "On loan from Atlanta United."
+  },
+  {
+    "name": "Lilian Brassier",
+    "to": "Eintracht Frankfurt",
+    "db": "Eintracht Frankfurt",
+    "sources": [
+      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-summer-2026-37051",
+      "https://www.espn.com/soccer/team/squad/_/id/125"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "From Rennes."
+  },
+  {
+    "name": "Mio Backhaus",
+    "to": "Freiburg",
+    "db": "SC Freiburg",
+    "sources": [
+      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-summer-2026-37051",
+      "https://www.espn.com/soccer/team/squad/_/id/126"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "From Werder Bremen."
+  },
+  {
+    "name": "Thijs Dallinga",
+    "to": "Köln",
+    "db": "1.FC Köln",
+    "loan": true,
+    "sources": [
+      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-summer-2026-37051",
+      "https://www.espn.com/soccer/team/squad/_/id/122"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "On loan from Bologna."
+  },
+  {
+    "name": "Nicolas Kühn",
+    "to": "Gladbach",
+    "db": "Borussia Mönchengladbach",
+    "sources": [
+      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-summer-2026-37051",
+      "https://www.espn.com/soccer/team/squad/_/id/268"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "From Como."
+  },
+  {
+    "name": "Francis Onyeka",
+    "to": "Elversberg",
+    "db": "SV 07 Elversberg",
+    "loan": true,
+    "sources": [
+      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-summer-2026-37051",
+      "https://www.espn.com/soccer/team/squad/_/id/10388/sv-07-elversberg"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "Leverkusen player; his Bochum loan ended (bundesliga.com 2. Bundesliga list) and he went to Elversberg on loan. ESPN spells him Francis-Ikechukwu Onyeka."
+  },
+  {
+    "name": "Dennis Seimen",
+    "to": "Stuttgart",
+    "db": "VfB Stuttgart",
+    "sources": [
+      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-summer-2026-37051",
+      "https://www.espn.com/soccer/team/squad/_/id/134/ger.vfb_stuttgart"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "Paderborn loan ended; on the Stuttgart squad."
+  },
+  {
+    "name": "Juma Bah",
+    "to": "Augsburg",
+    "db": "FC Augsburg",
+    "loan": true,
+    "sources": [
+      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-summer-2026-37051",
+      "https://www.espn.com/soccer/team/squad/_/id/3841"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "On loan from Manchester City; his 2026 row sits at his previous loan club, Nice."
+  },
+  {
+    "name": "Ko Itakura",
+    "to": "Gladbach",
+    "db": "Borussia Mönchengladbach",
+    "sources": [
+      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-summer-2026-37051",
+      "https://www.espn.com/soccer/team/squad/_/id/268"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "From Ajax. ESPN spells him Kou Itakura."
+  },
+  {
+    "name": "Kauã Prates",
+    "to": "Borussia Dortmund",
+    "db": "Borussia Dortmund",
+    "sources": [
+      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-summer-2026-37051",
+      "https://www.espn.com/soccer/team/squad/_/id/124/ger.dortmund"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "From Cruzeiro."
+  },
+  {
+    "name": "Mats Rots",
+    "to": "Hoffenheim",
+    "db": "TSG 1899 Hoffenheim",
+    "sources": [
+      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-summer-2026-37051",
+      "https://www.espn.com/soccer/team/squad/_/id/7911"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "From Twente."
+  },
+  {
+    "name": "David Møller Wolfe",
+    "to": "Hamburg",
+    "db": "Hamburger SV",
+    "loan": true,
+    "sources": [
+      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-summer-2026-37051",
+      "https://www.espn.com/soccer/team/squad/_/id/127"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "On loan from Wolverhampton Wanderers."
+  },
+  {
+    "name": "Afonso Moreira",
+    "to": "Bayer Leverkusen",
+    "db": "Bayer 04 Leverkusen",
+    "sources": [
+      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-summer-2026-37051",
+      "https://www.espn.com/soccer/team/squad/_/id/131/ger.leverkusen"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "From Lyon."
+  },
+  {
+    "name": "Dzenan Pejcinovic",
+    "to": "Stuttgart",
+    "db": "VfB Stuttgart",
+    "sources": [
+      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-summer-2026-37051",
+      "https://www.espn.com/soccer/team/squad/_/id/134/ger.vfb_stuttgart"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "From Wolfsburg."
+  },
+  {
+    "name": "Terem Moffi",
+    "to": "Hamburg",
+    "db": "Hamburger SV",
+    "sources": [
+      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-summer-2026-37051",
+      "https://www.espn.com/soccer/team/squad/_/id/127"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "From Nice (bundesliga.com); his 2026 row sits at his previous loan club, Porto."
+  },
+  {
+    "name": "Bilal Nadir",
+    "to": "Hamburg",
+    "db": "Hamburger SV",
+    "sources": [
+      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-summer-2026-37051",
+      "https://www.espn.com/soccer/team/squad/_/id/127"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "From Marseille."
+  },
+  {
+    "name": "Keisuke Goto",
+    "to": "Freiburg",
+    "db": "SC Freiburg",
+    "sources": [
+      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-summer-2026-37051",
+      "https://www.espn.com/soccer/team/squad/_/id/126"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "From Anderlecht (bundesliga.com); his 2026 row sits at his loan club, Sint-Truiden."
+  },
+  {
+    "name": "Zeno Van Den Bosch",
+    "to": "Union Berlin",
+    "db": "1.FC Union Berlin",
+    "sources": [
+      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-summer-2026-37051",
+      "https://www.espn.com/soccer/team/squad/_/id/598"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "From Antwerp."
+  },
+  {
+    "name": "Adam Daghim",
+    "to": "Hoffenheim",
+    "db": "TSG 1899 Hoffenheim",
+    "sources": [
+      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-summer-2026-37051",
+      "https://www.espn.com/soccer/team/squad/_/id/7911"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "Salzburg player; his Wolfsburg loan ended (bundesliga.com 2. Bundesliga list) and Hoffenheim signed him from Salzburg."
+  },
+  {
+    "name": "Arthur",
+    "to": "Werder Bremen",
+    "db": "SV Werder Bremen",
+    "loan": true,
+    "sources": [
+      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-summer-2026-37051",
+      "https://www.espn.com/soccer/team/squad/_/id/137"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "On loan from Leverkusen."
+  },
+  {
+    "name": "Leo Sauer",
+    "to": "Stuttgart",
+    "db": "VfB Stuttgart",
+    "sources": [
+      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-summer-2026-37051",
+      "https://www.espn.com/soccer/team/squad/_/id/134/ger.vfb_stuttgart"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "From Feyenoord."
+  },
+  {
+    "name": "Alessandro Vogt",
+    "to": "Heidenheim",
+    "db": "1.FC Heidenheim 1846",
+    "loan": true,
+    "sources": [
+      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-summer-2026-37051",
+      "https://www.espn.com/soccer/team/squad/_/id/6418/1-fc-heidenheim"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "Hoffenheim signed him from St. Gallen and loaned him to Heidenheim (relegated to the 2. Bundesliga)."
+  },
+  {
+    "name": "Arijon Ibrahimovic",
+    "to": "Augsburg",
+    "db": "FC Augsburg",
+    "loan": true,
+    "sources": [
+      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-summer-2026-37051",
+      "https://www.espn.com/soccer/team/squad/_/id/3841"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "Bayern player; Heidenheim loan ended, now on loan at Augsburg."
+  },
+  {
+    "name": "Eren Dinkçi",
+    "to": "Werder Bremen",
+    "db": "SV Werder Bremen",
+    "loan": true,
+    "sources": [
+      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-summer-2026-37051",
+      "https://www.espn.com/soccer/team/squad/_/id/137"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "Freiburg player; January 2026 loan to Heidenheim ended, now on loan at Werder. ESPN spells him Eren Dinkci."
+  },
+  {
+    "name": "Junior Dina Ebimbe",
+    "to": "Schalke 04",
+    "db": "FC Schalke 04",
+    "sources": [
+      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-summer-2026-37051",
+      "https://www.espn.com/soccer/team/squad/_/id/133"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "From Eintracht Frankfurt; his 2026 row sits at his loan club, Brest."
+  },
+  {
+    "name": "Chuki",
+    "to": "Werder Bremen",
+    "db": "SV Werder Bremen",
+    "sources": [
+      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-summer-2026-37051",
+      "https://www.espn.com/soccer/team/squad/_/id/137"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "From Real Valladolid."
+  },
+  {
+    "name": "Robin Gosens",
+    "to": "Schalke 04",
+    "db": "FC Schalke 04",
+    "loan": true,
+    "sources": [
+      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-summer-2026-37051",
+      "https://www.espn.com/soccer/team/squad/_/id/133"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "On loan from Fiorentina."
+  },
+  {
+    "name": "Stefan Posch",
+    "to": "Mainz",
+    "db": "1.FSV Mainz 05",
+    "sources": [
+      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-summer-2026-37051",
+      "https://www.espn.com/soccer/team/squad/_/id/2950"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "January 2026 loan from Como made permanent."
+  },
+  {
+    "name": "Cole Campbell",
+    "to": "Elversberg",
+    "db": "SV 07 Elversberg",
+    "sources": [
+      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-summer-2026-37051",
+      "https://www.espn.com/soccer/team/squad/_/id/10388/sv-07-elversberg"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "From Dortmund; his January 2026 Hoffenheim loan had ended."
+  },
+  {
+    "name": "Niclas Füllkrug",
+    "to": "Werder Bremen",
+    "db": "SV Werder Bremen",
+    "loan": true,
+    "sources": [
+      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-summer-2026-37051",
+      "https://www.espn.com/soccer/team/squad/_/id/137"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "On loan from West Ham; his 2026 row sits at his previous loan club, AC Milan."
+  },
+  {
+    "name": "Isac Lidberg",
+    "to": "Gladbach",
+    "db": "Borussia Mönchengladbach",
+    "sources": [
+      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-summer-2026-37051",
+      "https://www.espn.com/soccer/team/squad/_/id/268"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "From Darmstadt."
+  },
+  {
+    "name": "Patson Daka",
+    "to": "Hamburg",
+    "db": "Hamburger SV",
+    "sources": [
+      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-summer-2026-37051",
+      "https://www.espn.com/soccer/team/squad/_/id/127"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "From Leicester City."
+  },
+  {
+    "name": "Noel Futkeu",
+    "to": "Elversberg",
+    "db": "SV 07 Elversberg",
+    "loan": true,
+    "sources": [
+      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-summer-2026-37051",
+      "https://www.espn.com/soccer/team/squad/_/id/10388/sv-07-elversberg"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "On loan from Eintracht Frankfurt."
+  },
+  {
+    "name": "Ludovit Reis",
+    "to": "Werder Bremen",
+    "db": "SV Werder Bremen",
+    "sources": [
+      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-summer-2026-37051",
+      "https://www.espn.com/soccer/team/squad/_/id/137"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "From Club Brugge."
+  },
+  {
+    "name": "Michel Aebischer",
+    "to": "Union Berlin",
+    "db": "1.FC Union Berlin",
+    "sources": [
+      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-summer-2026-37051",
+      "https://www.espn.com/soccer/team/squad/_/id/598"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "From Pisa."
+  },
+  {
+    "name": "Martin Adeline",
+    "to": "Hamburg",
+    "db": "Hamburger SV",
+    "sources": [
+      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-summer-2026-37051",
+      "https://www.espn.com/soccer/team/squad/_/id/127"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "From Troyes."
+  },
+  {
+    "name": "Junior Adamu",
+    "to": "Schalke 04",
+    "db": "FC Schalke 04",
+    "sources": [
+      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-summer-2026-37051",
+      "https://www.espn.com/soccer/team/squad/_/id/133"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "From Freiburg; his 2026 row sits at his January 2026 loan club, Celtic."
+  },
+  {
+    "name": "Ransford Königsdörffer",
+    "to": "Mainz",
+    "db": "1.FSV Mainz 05",
+    "sources": [
+      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-summer-2026-37051",
+      "https://www.espn.com/soccer/team/squad/_/id/2950"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "From Hamburg. bundesliga.com and ESPN spell him Ransford-Yeboah Königsdörffer."
+  },
+  {
+    "name": "Grischa Prömel",
+    "to": "Stuttgart",
+    "db": "VfB Stuttgart",
+    "sources": [
+      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-summer-2026-37051",
+      "https://www.espn.com/soccer/team/squad/_/id/134/ger.vfb_stuttgart"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "From Hoffenheim."
+  },
+  {
+    "name": "David Herold",
+    "to": "Gladbach",
+    "db": "Borussia Mönchengladbach",
+    "sources": [
+      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-summer-2026-37051",
+      "https://www.espn.com/soccer/team/squad/_/id/268"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "From Karlsruhe."
+  },
+  {
+    "name": "Borna Sosa",
+    "to": "Köln",
+    "db": "1.FC Köln",
+    "loan": true,
+    "sources": [
+      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-summer-2026-37051",
+      "https://www.espn.com/soccer/team/squad/_/id/122"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "On loan from Crystal Palace."
+  },
+  {
+    "name": "Gideon Mensah",
+    "to": "Köln",
+    "db": "1.FC Köln",
+    "sources": [
+      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-summer-2026-37051",
+      "https://www.espn.com/soccer/team/squad/_/id/122"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "From Auxerre."
+  },
+  {
+    "name": "Arthur Chaves",
+    "to": "Hoffenheim",
+    "db": "TSG 1899 Hoffenheim",
+    "sources": [
+      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-summer-2026-37051",
+      "https://www.espn.com/soccer/team/squad/_/id/7911"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "January 2026 loan to Augsburg ended; back on the Hoffenheim squad."
+  },
+  {
+    "name": "Maurice Krattenmacher",
+    "to": "Elversberg",
+    "db": "SV 07 Elversberg",
+    "sources": [
+      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-summer-2026-37051",
+      "https://www.espn.com/soccer/team/squad/_/id/10388/sv-07-elversberg"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "From Bayern; his 2026 row sits at his previous loan club, Hertha."
+  },
+  {
+    "name": "Marvin Pieringer",
+    "to": "Paderborn",
+    "db": "SC Paderborn 07",
+    "sources": [
+      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-summer-2026-37051",
+      "https://www.espn.com/soccer/team/squad/_/id/3307"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "From Heidenheim."
+  },
+  {
+    "name": "Rayan Philippe",
+    "to": "Paderborn",
+    "db": "SC Paderborn 07",
+    "loan": true,
+    "sources": [
+      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-summer-2026-37051",
+      "https://www.espn.com/soccer/team/squad/_/id/3307"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "On loan from Hamburg."
+  },
+  {
+    "name": "Alexander Schlager",
+    "to": "Werder Bremen",
+    "db": "SV Werder Bremen",
+    "sources": [
+      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-summer-2026-37051",
+      "https://www.espn.com/soccer/team/squad/_/id/137"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "From Red Bull Salzburg."
+  },
+  {
+    "name": "Noah Darvich",
+    "to": "Elversberg",
+    "db": "SV 07 Elversberg",
+    "loan": true,
+    "sources": [
+      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-summer-2026-37051",
+      "https://www.espn.com/soccer/team/squad/_/id/10388/sv-07-elversberg"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "On loan from Stuttgart."
+  },
+  {
+    "name": "Justin Lerma",
+    "to": "Borussia Dortmund",
+    "db": "Borussia Dortmund",
+    "sources": [
+      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-summer-2026-37051",
+      "https://www.espn.com/soccer/team/squad/_/id/124/ger.dortmund"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "From Independiente del Valle."
+  },
+  {
+    "name": "Deniz Zeitler",
+    "to": "Paderborn",
+    "db": "SC Paderborn 07",
+    "sources": [
+      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-summer-2026-37051",
+      "https://www.espn.com/soccer/team/squad/_/id/3307"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "bundesliga.com lists him as a loan under Hoffenheim and as a permanent signing under Paderborn; he plays for Paderborn either way, so the loan flag is left off."
+  },
+  {
+    "name": "Gabriel Vidovic",
+    "to": "Paderborn",
+    "db": "SC Paderborn 07",
+    "sources": [
+      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-summer-2026-37051",
+      "https://www.espn.com/soccer/team/squad/_/id/3307"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "From Dinamo Zagreb."
+  },
+  {
+    "name": "Bambasé Conté",
+    "to": "Hoffenheim",
+    "db": "TSG 1899 Hoffenheim",
+    "sources": [
+      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-summer-2026-37051",
+      "https://www.espn.com/soccer/team/squad/_/id/7911"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "Elversberg loan ended; back on the Hoffenheim squad."
+  },
+  {
+    "name": "Enzo Leopold",
+    "to": "Gladbach",
+    "db": "Borussia Mönchengladbach",
+    "sources": [
+      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-summer-2026-37051",
+      "https://www.espn.com/soccer/team/squad/_/id/268"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "From Hannover."
+  },
+  {
+    "name": "Laurin Ulrich",
+    "to": "Paderborn",
+    "db": "SC Paderborn 07",
+    "loan": true,
+    "sources": [
+      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-summer-2026-37051",
+      "https://www.espn.com/soccer/team/squad/_/id/3307"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "On loan from Stuttgart; his 2026 row sits at his previous loan club, Magdeburg."
+  },
+  {
+    "name": "Nahuel Noll",
+    "to": "Paderborn",
+    "db": "SC Paderborn 07",
+    "loan": true,
+    "sources": [
+      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-summer-2026-37051",
+      "https://www.espn.com/soccer/team/squad/_/id/3307"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "On loan from Hoffenheim; his 2026 row sits at his previous loan club, Hannover. ESPN spells him Nahuel Nicolas Noll."
+  },
+  {
+    "name": "Oliver Batista Meier",
+    "to": "Paderborn",
+    "db": "SC Paderborn 07",
+    "sources": [
+      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-summer-2026-37051",
+      "https://www.espn.com/soccer/team/squad/_/id/3307"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "From Preußen Münster."
+  },
+  {
+    "name": "Hennes Behrens",
+    "to": "Augsburg",
+    "db": "FC Augsburg",
+    "sources": [
+      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-summer-2026-37051",
+      "https://www.espn.com/soccer/team/squad/_/id/3841"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "From Hoffenheim; his 2026 row sits at his January 2026 loan club, Heidenheim."
+  },
+  {
+    "name": "Florent Muslija",
+    "to": "Freiburg",
+    "db": "SC Freiburg",
+    "sources": [
+      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-summer-2026-37051",
+      "https://www.espn.com/soccer/team/squad/_/id/126"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "Fortuna Düsseldorf loan ended; back on the Freiburg squad."
+  },
+  {
+    "name": "Rihito Yamamoto",
+    "to": "Freiburg",
+    "db": "SC Freiburg",
+    "sources": [
+      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-summer-2026-37051",
+      "https://www.espn.com/soccer/team/squad/_/id/126"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "From Sint-Truiden (bundesliga.com spells him Rihito Yamamota)."
+  },
+  {
+    "name": "Hee-chan Hwang",
+    "to": "Schalke 04",
+    "db": "FC Schalke 04",
+    "loan": true,
+    "sources": [
+      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-summer-2026-37051",
+      "https://www.espn.com/soccer/team/squad/_/id/133"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "On loan from Wolverhampton Wanderers. bundesliga.com and ESPN write him Hwang Hee-chan."
+  },
+  {
+    "name": "Young-woo Seol",
+    "to": "Augsburg",
+    "db": "FC Augsburg",
+    "sources": [
+      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-summer-2026-37051",
+      "https://www.espn.com/soccer/team/squad/_/id/3841"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "From Red Star Belgrade. bundesliga.com writes Youngwoo Seol, ESPN Seol Young-Woo."
+  },
+  {
+    "name": "Samuel Mbangula",
+    "to": "Bologna",
+    "db": "Bologna FC 1909",
+    "loan": true,
+    "sources": [
+      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-summer-2026-37051",
+      "https://www.espn.com/soccer/team/squad/_/id/107/bologna"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "On loan from Werder Bremen (bundesliga.com spells him Camuel Mbangula)."
+  },
+  {
+    "name": "Moussa Ndiaye",
+    "to": "Werder Bremen",
+    "db": "SV Werder Bremen",
+    "loan": true,
+    "sources": [
+      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-summer-2026-37051",
+      "https://www.espn.com/soccer/team/squad/_/id/137"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "On loan from Anderlecht; his January 2026 Schalke loan had ended. ESPN writes N'Diaye Moussa."
+  },
+  {
+    "name": "Joane Gadou",
+    "to": "Borussia Dortmund",
+    "db": "Borussia Dortmund",
+    "sources": [
+      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-summer-2026-37051",
+      "https://www.espn.com/soccer/team/squad/_/id/124/ger.dortmund"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "From Red Bull Salzburg. ESPN lists him as Kouakou Gadou."
+  },
+  {
+    "name": "Youssoupha Niang",
+    "to": "St. Pauli",
+    "db": "FC St. Pauli",
+    "loan": true,
+    "sources": [
+      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-summer-2026-37051",
+      "https://www.espn.com/soccer/team/squad/_/id/270"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "On loan from Köln to St. Pauli (relegated to the 2. Bundesliga)."
+  },
+  {
+    "name": "Ernest Poku",
+    "to": "Beşiktaş",
+    "db": "Besiktas JK",
+    "loan": true,
+    "sources": [
+      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-summer-2026-37051",
+      "https://www.espn.com/soccer/team/squad/_/id/1895/besiktas"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "On loan from Leverkusen."
+  },
+  {
+    "name": "Karim Coulibaly",
+    "to": "Strasbourg",
+    "db": "RC Strasbourg Alsace",
+    "sources": [
+      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-summer-2026-37051",
+      "https://www.espn.com/soccer/team/squad/_/id/180/strasbourg"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "From Werder Bremen."
+  },
+  {
+    "name": "Conrad Harder",
+    "to": "Strasbourg",
+    "db": "RC Strasbourg Alsace",
+    "loan": true,
+    "sources": [
+      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-summer-2026-37051",
+      "https://www.espn.com/soccer/team/squad/_/id/180/strasbourg"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "On loan from RB Leipzig."
+  },
+  {
+    "name": "Yan Couto",
+    "to": "Como",
+    "db": "Como 1907",
+    "loan": true,
+    "sources": [
+      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-summer-2026-37051",
+      "https://www.espn.com/soccer/team/squad/_/id/2572/como"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "On loan from Dortmund."
+  },
+  {
+    "name": "Arthur Theate",
+    "to": "Bologna",
+    "db": "Bologna FC 1909",
+    "loan": true,
+    "sources": [
+      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-summer-2026-37051",
+      "https://www.espn.com/soccer/team/squad/_/id/107/bologna"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "On loan from Eintracht Frankfurt."
+  },
+  {
+    "name": "Romano Schmid",
+    "to": "Frosinone",
+    "db": "Frosinone Calcio",
+    "sources": [
+      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-summer-2026-37051",
+      "https://www.espn.com/soccer/team/squad/_/id/4057/frosinone"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "From Werder Bremen."
+  },
+  {
+    "name": "El Chadaille Bitshiabu",
+    "to": "Galatasaray",
+    "db": "Galatasaray",
+    "loan": true,
+    "sources": [
+      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-summer-2026-37051",
+      "https://www.espn.com/soccer/team/squad/_/id/432/galatasaray"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "On loan from RB Leipzig."
+  },
+  {
+    "name": "Danilho Doekhi",
+    "to": "Lazio",
+    "db": "SS Lazio",
+    "sources": [
+      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-summer-2026-37051",
+      "https://www.espn.com/soccer/team/squad/_/id/112/lazio"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "From Union Berlin."
+  },
+  {
+    "name": "Alexander Nübel",
+    "to": "Beşiktaş",
+    "db": "Besiktas JK",
+    "sources": [
+      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-summer-2026-37051",
+      "https://www.espn.com/soccer/team/squad/_/id/1895/besiktas"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "Bayern player; his Stuttgart loan ended and Bayern sold him to Besiktas (both lines on bundesliga.com)."
+  },
+  {
+    "name": "Rasmus Kristensen",
+    "to": "FC Midtjylland",
+    "db": "FC Midtjylland",
+    "sources": [
+      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-summer-2026-37051",
+      "https://www.espn.com/soccer/team/squad/_/id/572/fc-midtjylland"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "From Eintracht Frankfurt."
+  },
+  {
+    "name": "Badredine Bouanani",
+    "to": "Rangers",
+    "db": "Rangers FC",
+    "loan": true,
+    "sources": [
+      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-summer-2026-37051",
+      "https://www.espn.com/soccer/team/squad/_/id/257/rangers"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "On loan from Stuttgart."
+  },
+  {
+    "name": "Jakub Kaminski",
+    "to": "Benfica",
+    "db": "SL Benfica",
+    "sources": [
+      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-summer-2026-37051",
+      "https://www.espn.com/soccer/team/squad/_/id/1929/benfica"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "Köln made his Wolfsburg loan permanent and then sold him to Benfica in the same window (both lines on bundesliga.com)."
+  },
+  {
+    "name": "Kerim Alajbegovic",
+    "to": "Juventus",
+    "db": "Juventus FC",
+    "sources": [
+      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-summer-2026-37051",
+      "https://www.espn.com/soccer/team/squad/_/id/111/juventus"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "bundesliga.com lists Leverkusen bringing him back from Red Bull Salzburg and selling him to Juventus in the same window."
+  },
+  {
+    "name": "Eljif Elmas",
+    "to": "Atalanta",
+    "db": "Atalanta BC",
+    "loan": true,
+    "sources": [
+      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-summer-2026-37051",
+      "https://www.espn.com/soccer/team/squad/_/id/105/atalanta"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "On loan from RB Leipzig; his 2026 row sits at his previous loan club, Napoli."
+  },
+  {
+    "name": "Bryan Zaragoza",
+    "to": "Espanyol",
+    "db": "RCD Espanyol Barcelona",
+    "loan": true,
+    "sources": [
+      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-summer-2026-37051",
+      "https://www.espn.com/soccer/team/squad/_/id/88/espanyol"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "On loan from Bayern; his January 2026 Roma loan had ended."
+  },
+  {
+    "name": "Axel Tape",
+    "to": "Levante",
+    "db": "Levante UD",
+    "loan": true,
+    "sources": [
+      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-summer-2026-37051",
+      "https://www.espn.com/soccer/team/squad/_/id/1538/levante"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "On loan from Leverkusen."
+  },
+  {
+    "name": "Péter Gulácsi",
+    "to": "Villarreal",
+    "db": "Villarreal CF",
+    "sources": [
+      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-summer-2026-37051",
+      "https://www.espn.com/soccer/team/squad/_/id/102/villarreal"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "From RB Leipzig."
+  },
+  {
+    "name": "Jonathan Asp Jensen",
+    "to": "Deportivo La Coruña",
+    "db": "Deportivo de La Coruña",
+    "sources": [
+      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-summer-2026-37051",
+      "https://www.espn.com/soccer/team/squad/_/id/90/deportivo-la-coruna"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "Bayern player; his 2026 row sits at his loan club, Grasshopper."
+  },
+  {
+    "name": "Nathan Ngoumou",
+    "to": "Nice",
+    "db": "OGC Nice",
+    "sources": [
+      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-summer-2026-37051",
+      "https://www.espn.com/soccer/team/squad/_/id/2502/nice"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "From Gladbach. ESPN spells him Nathan N'Goumou."
+  },
+  {
+    "name": "Niels Nkounkou",
+    "to": "Nice",
+    "db": "OGC Nice",
+    "loan": true,
+    "sources": [
+      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-summer-2026-37051",
+      "https://www.espn.com/soccer/team/squad/_/id/2502/nice"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "On loan from Eintracht Frankfurt; his 2026 row sits at his previous loan club, Torino."
+  },
+  {
+    "name": "Suleman Sani",
+    "to": "Al-Qadsiah",
+    "db": "Al-Qadsiah FC",
+    "sources": [
+      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-summer-2026-37051",
+      "https://www.espn.com/soccer/team/squad/_/id/22022/al-qadsiah"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "From RB Leipzig. ESPN lists him as Sani Suleiman."
+  },
+  {
+    "name": "Denis Huseinbasic",
+    "to": "Braga",
+    "db": "SC Braga",
+    "sources": [
+      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-summer-2026-37051",
+      "https://www.espn.com/soccer/team/squad/_/id/2994"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "From Köln."
+  },
+  {
+    "name": "Jovan Milosevic",
+    "to": "Braga",
+    "db": "SC Braga",
+    "sources": [
+      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-summer-2026-37051",
+      "https://www.espn.com/soccer/team/squad/_/id/2994"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "Stuttgart player; his January 2026 Werder loan ended and Stuttgart sold him to Braga (both lines on bundesliga.com)."
+  },
+  {
+    "name": "Kjell Wätjen",
+    "to": "FC Midtjylland",
+    "db": "FC Midtjylland",
+    "sources": [
+      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-summer-2026-37051",
+      "https://www.espn.com/soccer/team/squad/_/id/572/fc-midtjylland"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "Dortmund player; his Bochum loan ended (bundesliga.com 2. Bundesliga list) and Dortmund sold him to Midtjylland. ESPN writes Kjell-Arik Wätjen."
+  },
+  {
+    "name": "Mohamed Amoura",
+    "to": "Nice",
+    "db": "OGC Nice",
+    "loan": true,
+    "sources": [
+      "https://www.bundesliga.com/en/2bundesliga/news/official-bundesliga-2-second-division-transfer-centre-summer-2026-37052",
+      "https://www.espn.com/soccer/team/squad/_/id/2502/nice"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "On loan from Wolfsburg (relegated). bundesliga.com writes Mohammed Amoura."
+  },
+  {
+    "name": "Kamil Grabara",
+    "to": "Juventus",
+    "db": "Juventus FC",
+    "loan": true,
+    "sources": [
+      "https://www.bundesliga.com/en/2bundesliga/news/official-bundesliga-2-second-division-transfer-centre-summer-2026-37052",
+      "https://www.espn.com/soccer/team/squad/_/id/111/juventus"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "On loan from Wolfsburg (relegated)."
+  },
+  {
+    "name": "Lovro Majer",
+    "to": "AEK Athens",
+    "db": "AEK Athens",
+    "sources": [
+      "https://www.bundesliga.com/en/2bundesliga/news/official-bundesliga-2-second-division-transfer-centre-summer-2026-37052",
+      "https://www.espn.com/soccer/team/squad/_/id/887/aek-athens"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "From Wolfsburg (relegated)."
+  },
+  {
+    "name": "Jonas Wind",
+    "to": "Braga",
+    "db": "SC Braga",
+    "sources": [
+      "https://www.bundesliga.com/en/2bundesliga/news/official-bundesliga-2-second-division-transfer-centre-summer-2026-37052",
+      "https://www.espn.com/soccer/team/squad/_/id/2994"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "From Wolfsburg (relegated)."
+  },
+  {
+    "name": "Jonas Adjetey",
+    "to": "Wolfsburg",
+    "db": "VfL Wolfsburg",
+    "sources": [
+      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-winter-january-2026-35159",
+      "https://www.espn.com/soccer/team/squad/_/id/138"
+    ],
+    "window": "2026-01",
+    "checked": "2026-09-30",
+    "note": "From Basel in January 2026; Wolfsburg were relegated and he is on their 2026-27 squad."
+  },
+  {
+    "name": "Muhammed Damar",
+    "to": "Wolfsburg",
+    "db": "VfL Wolfsburg",
+    "sources": [
+      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-summer-2026-37051",
+      "https://www.espn.com/soccer/team/squad/_/id/138"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "From Hoffenheim to relegated Wolfsburg."
+  },
+  {
+    "name": "Elvis Rexhbecaj",
+    "to": "Wolfsburg",
+    "db": "VfL Wolfsburg",
+    "sources": [
+      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-summer-2026-37051",
+      "https://www.espn.com/soccer/team/squad/_/id/138"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "From Augsburg to relegated Wolfsburg."
+  },
+  {
+    "name": "Aster Vranckx",
+    "to": "Wolfsburg",
+    "db": "VfL Wolfsburg",
+    "sources": [
+      "https://www.bundesliga.com/en/2bundesliga/news/official-bundesliga-2-second-division-transfer-centre-summer-2026-37052",
+      "https://www.espn.com/soccer/team/squad/_/id/138"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "Sassuolo loan ended; back on the Wolfsburg squad (2. Bundesliga)."
+  },
+  {
+    "name": "Timon Wellenreuther",
+    "to": "Wolfsburg",
+    "db": "VfL Wolfsburg",
+    "sources": [
+      "https://www.bundesliga.com/en/2bundesliga/news/official-bundesliga-2-second-division-transfer-centre-summer-2026-37052",
+      "https://www.espn.com/soccer/team/squad/_/id/138"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "From Feyenoord to relegated Wolfsburg."
+  },
+  {
+    "name": "Fraser Hornby",
+    "to": "Wolfsburg",
+    "db": "VfL Wolfsburg",
+    "sources": [
+      "https://www.bundesliga.com/en/2bundesliga/news/official-bundesliga-2-second-division-transfer-centre-summer-2026-37052",
+      "https://www.espn.com/soccer/team/squad/_/id/138"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "From Darmstadt to relegated Wolfsburg."
+  },
+  {
+    "name": "Alexander Bernhardsson",
+    "to": "Wolfsburg",
+    "db": "VfL Wolfsburg",
+    "sources": [
+      "https://www.bundesliga.com/en/2bundesliga/news/official-bundesliga-2-second-division-transfer-centre-summer-2026-37052",
+      "https://www.espn.com/soccer/team/squad/_/id/138"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "From Holstein Kiel to relegated Wolfsburg."
+  },
+  {
+    "name": "Michael Heule",
+    "to": "Heidenheim",
+    "db": "1.FC Heidenheim 1846",
+    "sources": [
+      "https://www.bundesliga.com/en/2bundesliga/news/official-bundesliga-2-second-division-transfer-centre-summer-2026-37052",
+      "https://www.espn.com/soccer/team/squad/_/id/6418/1-fc-heidenheim"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "From Thun to relegated Heidenheim."
+  },
+  {
+    "name": "Keven Schlotterbeck",
+    "to": "Southampton",
+    "db": "Southampton FC",
+    "sources": [
+      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-summer-2026-37051",
+      "https://www.espn.com/soccer/team/squad/_/id/376"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "From Augsburg (bundesliga.com Augsburg \"Out\"); on ESPN's Southampton 2026-27 squad."
+  },
+  {
+    "name": "Cédric Zesiger",
+    "to": "Young Boys",
+    "db": "BSC Young Boys",
+    "sources": [
+      "https://www.fcaugsburg.de/en/article/cedric-zesiger-leaves-fca-to-return-to-bern-23223",
+      "https://www.nau.ch/sport/fussball/yb-holt-cedric-zesiger-zuruck-67145227"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "From Augsburg, 2026-07-03 (fcaugsburg.de and nau.ch; bundesliga.com lists it too). ESPN's Swiss squad pages still show 2025-26, so they are not used for Swiss clubs."
+  },
+  {
+    "name": "Elias Saad",
+    "to": "Nashville SC",
+    "db": "Nashville SC",
+    "loan": true,
+    "sources": [
+      "https://www.fcaugsburg.de/en/article/fca-verleiht-elias-saad-in-die-mls-23263",
+      "https://www.nashvillesc.com/news/nashville-sc-acquires-german-bundesliga-attacker-elias-saad"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Augsburg player on loan to Nashville, 2026-07-16; his 2026 row sits at his January 2026 loan club, Hannover 96."
+  },
+  {
+    "name": "Farid Alfa-Ruprecht",
+    "to": "Hertha BSC",
+    "db": "Hertha BSC",
+    "loan": true,
+    "sources": [
+      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-summer-2026-37051",
+      "https://www.espn.com/soccer/team/squad/_/id/129"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Leverkusen player on loan to Hertha; his 2026 row sits at his previous loan club, Bochum."
+  },
+  {
+    "name": "Jonas Omlin",
+    "to": "Basel",
+    "db": "FC Basel 1893",
+    "sources": [
+      "https://www.bluewin.ch/en/sport/football/jonas-omlin-returns-to-fc-basel-li.3265795",
+      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-summer-2026-37051"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Gladbach player; his January 2026 Leverkusen loan ended and Gladbach sold him to Basel (2026-06-05, contract to 2029). His 2026 row sits at Leverkusen."
+  },
+  {
+    "name": "Deniz Ofli",
+    "to": "Karlsruhe",
+    "db": "Karlsruher SC",
+    "loan": true,
+    "sources": [
+      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-summer-2026-37051",
+      "https://www.espn.com/soccer/team/squad/_/id/4471"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Bayern player on loan to Karlsruhe; his 2026 row sits at FC Bayern Munich II."
+  },
+  {
+    "name": "Almugera Kabar",
+    "to": "NEC Nijmegen",
+    "db": "NEC Nijmegen",
+    "loan": true,
+    "sources": [
+      "https://www.bvb.de/de/en/news/news-overview/news.html/2026/8/14/Almugera-Kabar-on-loan-to-NEC-Nijmegen.html",
+      "https://www.espn.com/soccer/team/squad/_/id/147"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Dortmund player on loan to NEC, 2026-08-14."
+  },
+  {
+    "name": "Diant Ramaj",
+    "to": "FC Copenhagen",
+    "db": "FC Copenhagen",
+    "loan": true,
+    "sources": [
+      "https://www.bvb.de/de/en/news/news-overview/news.html/2026/8/17/BVB-loans-Diant-Ramaj-to-FC-Copenhagen.html",
+      "https://www.fck.dk/en/node/57652"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Dortmund player; his Heidenheim loan ended and he went to Copenhagen on loan, 2026-08-17. His 2026 row sits at Heidenheim."
+  },
+  {
+    "name": "Tiago Pereira Cardoso",
+    "to": "La Louvière",
+    "db": "RAAL La Louvière",
+    "loan": true,
+    "sources": [
+      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-summer-2026-37051",
+      "https://www.espn.com/soccer/team/squad/_/id/131235"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Gladbach goalkeeper on loan to La Louvière; his 2026 row sits at Borussia Mönchengladbach II. ESPN spells him Tiago Pereira."
+  },
+  {
+    "name": "Noah Weißhaupt",
+    "to": "Darmstadt",
+    "db": "SV Darmstadt 98",
+    "sources": [
+      "https://www.scfreiburg.com/en/latest/news/first-team/2025-26/weisshaupt-completes-permanent-move-to-darmstadt",
+      "https://www.sv98.de/transfer-news-lilies-sign-weisshaupt/"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "From Freiburg, 2026-06-15; his 2026 row sits at his January 2026 loan club, Hannover 96."
+  },
+  {
+    "name": "William Mikelbrencis",
+    "to": "Darmstadt",
+    "db": "SV Darmstadt 98",
+    "sources": [
+      "https://www.sv98.de/transfer-news-mikelbrencis-strengthens-sv-98/",
+      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-summer-2026-37051"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "From Hamburg on a free after his contract ended, 2026-08-29."
+  },
+  {
+    "name": "Damion Downs",
+    "to": "St. Louis City",
+    "db": "St. Louis CITY SC",
+    "loan": true,
+    "sources": [
+      "https://www.stlcitysc.com/news/st-louis-city-sc-acquires-us-international-forward-damion-downs-on-loan-from-english-championship-side-southampton-fc",
+      "https://www.mlssoccer.com/news/st-louis-city-acquire-usmnt-forward-damion-downs"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Southampton player; his January 2026 Hamburg loan ended (bundesliga.com) and he went to St. Louis on loan with a purchase option. His 2026 row sits at Hamburg."
+  },
+  {
+    "name": "Umut Tohumcu",
+    "to": "RB Salzburg",
+    "db": "Red Bull Salzburg",
+    "loan": true,
+    "sources": [
+      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-summer-2026-37051",
+      "https://www.espn.com/soccer/team/squad/_/id/2790"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Hoffenheim player on loan to Salzburg; his 2026 row sits at his January 2026 loan club, Holstein Kiel."
+  },
+  {
+    "name": "Nikolas Veratschnig",
+    "to": "RB Salzburg",
+    "db": "Red Bull Salzburg",
+    "sources": [
+      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-summer-2026-37051",
+      "https://www.espn.com/soccer/team/squad/_/id/2790"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "From Mainz."
+  },
+  {
+    "name": "William Bøving",
+    "to": "Nürnberg",
+    "db": "1.FC Nuremberg",
+    "loan": true,
+    "sources": [
+      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-summer-2026-37051",
+      "https://www.espn.com/soccer/team/squad/_/id/269"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Mainz player on loan to Nuremberg."
+  },
+  {
+    "name": "Arnaud Nordin",
+    "to": "Rennes",
+    "db": "Stade Rennais FC",
+    "sources": [
+      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-summer-2026-37051",
+      "https://www.espn.com/soccer/team/squad/_/id/169"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Mainz loaned him to Rennes in January 2026 and the loan was made permanent this summer (both bundesliga.com lists). His 2026 row sits at Mainz."
+  },
+  {
+    "name": "Nelson Weiper",
+    "to": "Sturm Graz",
+    "db": "SK Sturm Graz",
+    "loan": true,
+    "sources": [
+      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-summer-2026-37051",
+      "https://www.espn.com/soccer/team/squad/_/id/3746"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Mainz player on loan to Sturm Graz."
+  },
+  {
+    "name": "Filip Bilbija",
+    "to": "Derby County",
+    "db": "Derby County",
+    "sources": [
+      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-summer-2026-37051",
+      "https://www.espn.com/soccer/team/squad/_/id/374"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "From Paderborn."
+  },
+  {
+    "name": "Mika Baur",
+    "to": "Celtic",
+    "db": "Celtic FC",
+    "sources": [
+      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-summer-2026-37051",
+      "https://www.espn.com/soccer/team/squad/_/id/256"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "From Paderborn."
+  },
+  {
+    "name": "László Bénes",
+    "to": "Gent",
+    "db": "KAA Gent",
+    "sources": [
+      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-summer-2026-37051",
+      "https://www.espn.com/soccer/team/squad/_/id/3611"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "From Union Berlin; his 2026 row sits at his previous loan club, Kayserispor."
+  },
+  {
+    "name": "Jeremy Arévalo",
+    "to": "Estrela Amadora",
+    "db": "CF Estrela da Amadora",
+    "loan": true,
+    "sources": [
+      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-summer-2026-37051",
+      "https://www.espn.com/soccer/team/squad/_/id/21610"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Stuttgart player (signed from Racing Santander in January 2026) on loan to Estrela Amadora. The table spells the club two ways in 2026 (CF Estrela da Amadora and CF Estrela Amadora, one row each); the fuller spelling is used here."
+  },
+  {
+    "name": "Florian Hellstern",
+    "to": "Greuther Fürth",
+    "db": "SpVgg Greuther Fürth",
+    "loan": true,
+    "sources": [
+      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-summer-2026-37051",
+      "https://www.espn.com/soccer/team/squad/_/id/3070"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Stuttgart goalkeeper on loan to Fürth."
+  },
+  {
+    "name": "Cameron Puertas",
+    "to": null,
+    "db": "Al-Wasl SC",
+    "sources": [
+      "https://www.alwaslsc.ae/en-gb/news-details/AlWasl-Signs-Spanish-Player-Cameron-Puertas",
+      "https://www.dhnet.be/dernieres-depeches/2026/09/09/cameron-puertas-quitte-larabie-saoudite-pour-les-emirats-arabes-unis-3SFV5RTMAREE3LR4ED6O5EWMQY/"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Al-Qadsiah player; his Werder loan ended (bundesliga.com) and Al Wasl announced his signing on 2026-09-09. Al Wasl and dhnet.be call it a transfer, one Saudi report called it a loan, so the loan flag is left off; he plays for Al Wasl either way. Club Manager does not model Al Wasl."
+  },
+  {
+    "name": "Yukinari Sugawara",
+    "to": "Cagliari",
+    "db": "Cagliari Calcio",
+    "loan": true,
+    "sources": [
+      "https://www.southamptonfc.com/en/news/article/sugawara-heads-to-cagliari-on-loan",
+      "https://cagliaricalcio.com/en/?p=26698"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Southampton player; his Werder loan ended (bundesliga.com) and he went to Cagliari on loan with an option, 2026-09-01. His 2026 row sits at Werder."
+  },
+  {
+    "name": "Nathanaël Mbuku",
+    "to": "Sint-Truiden",
+    "db": "Sint-Truidense VV",
+    "loan": true,
+    "sources": [
+      "https://www.fcaugsburg.de/en/article/fca-verlaengert-mit-nathanael-mbuku-leihe-nach-belgien-23409",
+      "https://www.espn.com/soccer/team/squad/_/id/936"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Augsburg player; his Montpellier loan ended (bundesliga.com) and Augsburg extended him and loaned him to Sint-Truiden, 2026-09-03. His 2026 row sits at Montpellier."
+  },
+  {
+    "name": "Hyun-seok Hong",
+    "to": "FC Midtjylland",
+    "db": "FC Midtjylland",
+    "loan": true,
+    "sources": [
+      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-summer-2026-37051",
+      "https://www.koreajoongangdaily.com/sports/hong-hyunseok-joins-midtjylland-teams-up-with-cho-guesung/12859487"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Mainz player; his Gent loan ended and Mainz loaned him to Midtjylland (both clubs announced it on 2026-09-02, Korea JoongAng Daily 2026-09-04). His 2026 row sits at KAA Gent. ESPN spells him Hong Hyun-Seok."
+  },
+  {
+    "name": "Jesper Lindstrøm",
+    "to": "RB Salzburg",
+    "db": "Red Bull Salzburg",
+    "loan": true,
+    "sources": [
+      "https://www.salzburg24.at/sport/fussball/europa-league-sieger-fuer-die-bullen-jesper-lindstroem-wechselt-zu-red-bull-salzburg-art-336734",
+      "https://www.espn.com/soccer/team/squad/_/id/2790"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Napoli player; his Wolfsburg loan ended (bundesliga.com 2. Bundesliga list) and Napoli loaned him to Salzburg, 2026-09-02. His 2026 row sits at Wolfsburg. ESPN spells him Jesper Lindstrom."
+  },
+  {
+    "name": "Moritz Jenz",
+    "to": "Young Boys",
+    "db": "BSC Young Boys",
+    "sources": [
+      "https://www.bscyb.ch/news?nid=17583",
+      "https://www.bundesliga.com/en/2bundesliga/news/official-bundesliga-2-second-division-transfer-centre-summer-2026-37052"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "From relegated Wolfsburg to Young Boys, 2026-09-08 (bscyb.ch \"Moritz Jenz verstärkt die YB-Abwehr\"; bluewin.ch reported it the same day). ESPN's Swiss squad pages still show 2025-26, so they are not used for Swiss clubs."
+  },
+  {
+    "name": "Isaac Schmidt",
+    "to": "Young Boys",
+    "db": "BSC Young Boys",
+    "sources": [
+      "https://www.bscyb.ch/news?nid=17473",
+      "https://www.plattformj.ch/artikel/244934/"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Leeds player; his Werder loan ended without the option (bundesliga.com) and Leeds sold him to Young Boys, 2026-07-16, contract to 2030 (bscyb.ch \"Isaac Schmidt verstärkt die Young Boys\"). His 2026 row sits at Werder."
+  },
+  {
+    "name": "Diogo Leite",
+    "to": "Lazio",
+    "db": "SS Lazio",
+    "sources": [
+      "https://www.sslazio.it/team/lazio/squadra",
+      "https://www.espn.com/soccer/team/squad/_/id/112"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Union Berlin let his contract run out (bundesliga.com: out of contract) and he signed for Lazio as a free agent; Lazio's own squad page and ESPN's Lazio 2026-27 squad both list him, beside Doekhi."
+  },
+  {
+    "name": "Gift Orban",
+    "to": "Amedspor",
+    "db": "Amed SFK",
+    "dbMissing": true,
+    "loan": true,
+    "sources": [
+      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-summer-2026-37051",
+      "https://www.espn.com/soccer/team/squad/_/id/132335"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Hoffenheim player on loan to Amed SFK (Süper Lig); his 2026 row sits at his previous loan club, Hellas Verona. The table has no Amed spelling yet, so db is ESPN's spelling and the entry is flagged dbMissing."
+  },
+  {
+    "name": "Kevin Paredes",
+    "to": "Utrecht",
+    "db": "FC Utrecht",
+    "sources": [
+      "https://www.bundesliga.com/en/2bundesliga/news/official-bundesliga-2-second-division-transfer-centre-summer-2026-37052",
+      "https://www.espn.com/soccer/team/squad/_/id/153"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "From relegated Wolfsburg."
+  },
+  {
+    "name": "Jan Bürger",
+    "to": "PEC Zwolle",
+    "db": "PEC Zwolle",
+    "sources": [
+      "https://www.bundesliga.com/en/2bundesliga/news/official-bundesliga-2-second-division-transfer-centre-summer-2026-37052",
+      "https://www.espn.com/soccer/team/squad/_/id/2565"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "From relegated Wolfsburg."
+  },
+  {
+    "name": "Andréas Hountondji",
+    "to": "Burnley",
+    "db": "Burnley FC",
+    "sources": [
+      "https://www.bundesliga.com/en/2bundesliga/news/official-bundesliga-2-second-division-transfer-centre-summer-2026-37052",
+      "https://www.espn.com/soccer/team/squad/_/id/379"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Burnley player; his St. Pauli loan ended and he is on ESPN's Burnley 2026-27 squad. His 2026 row sits at St. Pauli."
+  },
+  {
+    "name": "Manolis Saliakas",
+    "to": "Olympiacos",
+    "db": "Olympiacos Piraeus",
+    "sources": [
+      "https://www.bundesliga.com/en/2bundesliga/news/official-bundesliga-2-second-division-transfer-centre-summer-2026-37052",
+      "https://www.espn.com/soccer/team/squad/_/id/435"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "From relegated St. Pauli."
+  },
+  {
+    "name": "Aarón Anselmino",
+    "to": "Chelsea",
+    "db": "Chelsea FC",
+    "sources": [
+      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-winter-january-2026-35159",
+      "https://www.espn.com/soccer/team/squad/_/id/363"
+    ],
+    "window": "2026-01",
+    "checked": "2026-10-01",
+    "note": "Chelsea recalled him from Dortmund in January 2026 and loaned him to Strasbourg to the end of 2025-26 (chelseafc.com); ESPN's 2026-27 Chelsea squad lists him and ESPN's Strasbourg squad does not, so he is back at Chelsea. His 2026 row sits at Dortmund."
+  }
+]
