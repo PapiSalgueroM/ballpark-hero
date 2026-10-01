@@ -12,6 +12,15 @@ import { realJobOffers, allOfferClubs, invalidateOfferClubCache } from '@/lib/ma
    Career has used since Round 124, rather than a second thinner one. */
 import { runManagerSummer, NATION_CONFED } from '@/lib/soccerInternational';
 import type { JobOffer as MarketJobOffer, ManagerProfile, ClubTier } from '@/lib/managerOffers';
+/* Round 783: the job hunt's pure half. It imports nothing from here but
+   types, so there is no cycle; see its header. */
+import {
+  acceptLine, acceptanceOdds, applyRefusal, bookSummerMove, consumeSummerMove, countDown,
+  decideApplication, declineLine, employedStanding, jobHuntOf, leavingLine, openApplication, recordDecision,
+  dropOnSack, huntBusy, rollOverHunt, waitingYes,
+  LEAVING_BOARD_HIT,
+} from '@/lib/clubManagerJobHunt';
+import type { ApplicationInput, JobHunt } from '@/lib/clubManagerJobHunt';
 /* Round 633: the season score lives in its own pure module so a harness can
    drive it with synthetic inputs and no engine bundle. clubManagerScore
    imports nothing from here, so there is no cycle. */
@@ -703,7 +712,11 @@ export type MessageEffect = 'promise' | 'refuse' | 'listen' | 'fine' | 'support'
   | 'renewDeal' | 'letItRun'
   | 'setPlan' | 'holdPlan'
   | 'freezePrices' | 'holdPrices'
-  | 'backSquad' | 'deflect';
+  | 'backSquad' | 'deflect'
+  /* Round 783: the two answers to a club that said yes to your application.
+     joinSummer is settled in answerMessage; joinNow is the mid season takeover
+     in clubManagerCalendar.ts, so the hook routes it there. */
+  | 'joinNow' | 'joinSummer';
 
 /** Round 73: players slide into your DMs. Round 474: so does everyone else. */
 export interface PlayerMessage {
@@ -711,7 +724,9 @@ export interface PlayerMessage {
   playerName: string;
   playerId: string;
   kind: 'startMe' | 'wantMove' | 'drama' | 'praise' | 'roleTalk'
-    | 'boardChase' | 'agent' | 'coachTip' | 'fanGroup' | 'reporter';
+    | 'boardChase' | 'agent' | 'coachTip' | 'fanGroup' | 'reporter'
+    /* Round 783: the job hunt's post, from a club's board or your own. */
+    | 'jobApplication';
   text: string;
   options: { label: string; effect: MessageEffect }[];
   week: number;
@@ -1216,7 +1231,27 @@ export interface MatchWeekReport {
    *  and whether my club went through. Absent on every other match and on
    *  every report written before this round. */
   tie?: { leg: 1 | 2; aggMine: number; aggTheirs: number; byAwayGoals?: boolean; through?: boolean };
+  /** Round 782: the shootout kick by kick, present only when the manager had
+   *  set a shootout order. `decidedBy` and `shootoutWon` carry the result
+   *  exactly as before, so nothing that reads them changes. */
+  shootout?: ShootoutDetail;
 }
+
+/** Round 782: one kick of a shootout played kick by kick. */
+export interface ShootoutKick {
+  side: 'me' | 'opp';
+  /** The taker's name. */
+  taker: string;
+  /** Theirs only: a man the game made up, tagged the way the ratings sheet tags him. */
+  gen?: boolean;
+  result: 'scored' | 'saved' | 'missed';
+  /** The running score once this kick is in, in my orientation. */
+  mine: number;
+  theirs: number;
+}
+
+/** Round 782: every kick in order and the final count, in my orientation. */
+export interface ShootoutDetail { kicks: ShootoutKick[]; mine: number; theirs: number; }
 
 /** Round 157: one past meeting with an opponent, kept across seasons. */
 export interface H2HEntry {
@@ -1566,9 +1601,34 @@ export function wildernessProfile(career: CareerState): ManagerProfile {
 /** Open the wilderness. Called the moment the board pulls the trigger. */
 export function enterWilderness(career: CareerState): CareerState {
   if (career.wilderness) return career;
+  /* Round 783 review: the sack ends the job hunt. A move you had agreed to
+     (booked for the summer, or a yes still waiting on your answer) comes
+     onto this screen as the first offer, so it is still yours to take, and
+     whichever job you take here is the one you get. */
+  const hunt = career.jobHunt ? jobHuntOf(career) : null;
+  const agreed = hunt ? (hunt.summerMove?.club ?? waitingYes(hunt)) : null;
+  const offers = agreed ? [agreedJobOffer(career, agreed)] : [];
   return {
     ...career,
-    wilderness: { weeksOut: 0, formerClub: career.clubName, offers: [], seen: [] },
+    ...(hunt ? { jobHunt: dropOnSack(hunt) } : {}),
+    wilderness: { weeksOut: 0, formerClub: career.clubName, offers, seen: offers.map(o => o.club) },
+  };
+}
+
+/** The out of work screen's offer for a club that had already said yes. */
+function agreedJobOffer(career: CareerState, club: string): MarketJobOffer {
+  const eraHist = !!career.eraId && isHistoricEra(career.eraId);
+  const def = eraHist ? eraClubDefFor(club, career.eraId) : clubDefFor(club);
+  const league = (eraHist && eraLeagueOf(club, career.eraId)) || leagueOf(club);
+  return {
+    club,
+    country: allOfferClubs().find(c => c.name === club)?.country ?? '',
+    tier: def.tier as ClubTier,
+    league: league.name,
+    brief: 'Start in the summer, the way you agreed.',
+    reason: 'You agreed this move before the sack, and their board are still willing to go through with it.',
+    budget: def.budget,
+    keenness: 60,
   };
 }
 
@@ -1623,7 +1683,10 @@ export function wildernessWeek(career: CareerState, rng: () => number = Math.ran
 export function acceptWildernessJob(career: CareerState, club: string): CareerState | null {
   const w = career.wilderness;
   if (!w || !w.offers.some(o => o.club === club)) return null;
-  const next = startNextSeason({ ...career, sacked: false }, club);
+  /* Round 783 review: and nothing booked before the sack can outrank it at
+     the rollover, even on a path that skipped enterWilderness. */
+  const hunt = career.jobHunt ? { jobHunt: dropOnSack(jobHuntOf(career)) } : {};
+  const next = startNextSeason({ ...career, ...hunt, sacked: false }, club);
   return { ...next, sacked: false, wilderness: null };
 }
 
@@ -1999,6 +2062,10 @@ export interface CareerState {
   approach?: Approach | null;
   /** Round 168: the summer pre-agreement I shook hands on mid-season. */
   pendingMove?: { club: string; blurb: string } | null;
+  /** Round 783: the job hunt, applications you sent rather than calls you
+   *  took. Absent on every save from before the round, and jobHuntOf reads
+   *  absence as nothing in flight. See clubManagerJobHunt.ts. */
+  jobHunt?: JobHunt;
   /** Round 171: tickets, the gate and the ground. */
   finance?: ClubFinance;
   /** Round 200: the commercial deal, or none while the club is shopping. */
@@ -2154,6 +2221,12 @@ export interface CareerState {
    *  the slot's own line does not offer, so a shape change cannot leave a
    *  poacher's duty on a centre back. Absent on an older save. */
   xiDuties?: (Duty | null)[];
+  /** Round 782: the shootout order, player ids, up to eleven, set on the
+   *  tactics tab. Present only once the manager has set one: absent (every
+   *  save before this round, and a manager who never touched it) means the
+   *  shootout is settled the way it always was, in one draw. With an order
+   *  set the shootout goes kick by kick, see settleShootout. */
+  shootoutOrder?: string[];
 }
 
 /* ---------- Round 505: the armband and the set piece takers ---------- */
@@ -8116,6 +8189,14 @@ export function answerMessage(career: CareerState, messageId: string, optionIdx:
       press = press ? { ...press, mood: clamp(press.mood - 2, 0, 100) } : press;
       resolved = 'You gave him nothing. The piece ran anyway, and it was not kind.';
       break;
+
+    /* ---- Round 783: a club said yes to your application ---- */
+    case 'joinSummer':
+      return joinClubInSummer(career) ?? career;
+    case 'joinNow':
+      /* The takeover lives in clubManagerCalendar.ts and the hook routes this
+         answer there before it ever reaches this switch. Unchanged here. */
+      return career;
   }
 
   return {
@@ -12230,9 +12311,196 @@ function assignedOnPitch(sp: SetPieces | null | undefined, key: SetPieceKey, on:
 }
 
 /** What the penalty taker's rating is worth in a shootout: 0.004 a point either side of 75, capped. Zero with nobody assigned. */
-export function shootoutTakerEdge(taker: CMPlayer | null | undefined): number {
+export function shootoutTakerEdge(taker: { rating: number } | null | undefined): number {
   if (!taker) return 0;
   return clamp((taker.rating - 75) * 0.004, -SHOOTOUT_TAKER_EDGE_CAP, SHOOTOUT_TAKER_EDGE_CAP);
+}
+
+/* ---------- Round 782: the shootout, kick by kick ---------- */
+
+/** The most men a shootout order can name: the eleven. */
+export const SHOOTOUT_MAX_ORDER = 11;
+/** A kick's odds before anybody's rating moves them: about three in four.
+ *  A tuning value, not a sourced real world rate (published rates differ by
+ *  competition and era), so no copy should quote it as one. */
+export const SHOOTOUT_BASE_RATE = 0.76;
+/** Of the kicks that do not go in, the share the keeper gets a hand to. */
+const SHOOTOUT_SAVE_SHARE = 0.65;
+/** Sudden death cannot run for ever: past this many rounds one draw settles it. */
+const SHOOTOUT_MAX_ROUNDS = 50;
+
+/** What the keeper facing the kick is worth: the taker's rule, the other way, same cap. Zero with no keeper. */
+export function shootoutKeeperEdge(keeperRating: number | null | undefined): number {
+  if (keeperRating === null || keeperRating === undefined) return 0;
+  return clamp((keeperRating - 75) * 0.004, -SHOOTOUT_TAKER_EDGE_CAP, SHOOTOUT_TAKER_EDGE_CAP);
+}
+
+/** The odds one kick goes in: the base rate, up with the taker, down with the keeper, each inside the cap. */
+export function shootoutKickChance(taker: { rating: number } | null | undefined, keeperRating: number | null | undefined): number {
+  return SHOOTOUT_BASE_RATE + shootoutTakerEdge(taker) - shootoutKeeperEdge(keeperRating);
+}
+
+/**
+ * Who steps up, in order: the men the manager listed who are still on the
+ * pitch, in his order (anyone subbed off or sent off is skipped, a name
+ * listed twice counts once), then everyone on the pitch he did not list in
+ * shirt order, which is slot order, with the keeper last of those. The list
+ * cycles: kick k goes to entry k mod length, so sudden death walks the
+ * eleven round again. Pure, and the vitest in src/test covers the walk.
+ */
+export function shootoutTakerOrder(order: readonly string[] | undefined, onPitch: readonly string[], keeperId: string | null): string[] {
+  const out: string[] = [];
+  const on = new Set(onPitch);
+  for (const id of order ?? []) {
+    if (on.has(id) && !out.includes(id)) out.push(id);
+  }
+  const rest = onPitch.filter(id => !out.includes(id));
+  for (const id of rest) if (id !== keeperId) out.push(id);
+  if (keeperId && rest.includes(keeperId)) out.push(keeperId);
+  return out;
+}
+
+/** One side of a shootout: its takers in kicking order and the rating of the keeper facing the other side. */
+export interface ShootoutSide {
+  takers: { name: string; rating: number; gen?: boolean }[];
+  keeperRating: number | null;
+}
+
+/**
+ * The shootout itself, kick by kick: five each, over early once a side
+ * cannot be caught, then sudden death a pair at a time. Each kick is one
+ * draw against shootoutKickChance (the taker against the other keeper), and
+ * the same draw says whether a miss was saved or wide. `myFirst` is drawn by
+ * the caller so this stays replayable from a fixed stream.
+ */
+export function runShootout(args: { mine: ShootoutSide; theirs: ShootoutSide; myFirst: boolean }): ShootoutDetail {
+  const kicks: ShootoutKick[] = [];
+  let mine = 0;
+  let theirs = 0;
+  let takenMine = 0;
+  let takenTheirs = 0;
+  const over = (): boolean => {
+    if (takenMine < 5 || takenTheirs < 5) return mine + (5 - takenMine) < theirs || theirs + (5 - takenTheirs) < mine;
+    return takenMine === takenTheirs && mine !== theirs;
+  };
+  const kick = (side: 'me' | 'opp'): void => {
+    const us = side === 'me' ? args.mine : args.theirs;
+    const them = side === 'me' ? args.theirs : args.mine;
+    const n = side === 'me' ? takenMine : takenTheirs;
+    const taker = us.takers.length ? us.takers[n % us.takers.length] : { name: 'Taker', rating: 75 };
+    const p = shootoutKickChance(taker, them.keeperRating);
+    const r = Math.random();
+    const scored = r < p;
+    const result: ShootoutKick['result'] = scored ? 'scored' : r < p + (1 - p) * SHOOTOUT_SAVE_SHARE ? 'saved' : 'missed';
+    if (side === 'me') { takenMine += 1; if (scored) mine += 1; } else { takenTheirs += 1; if (scored) theirs += 1; }
+    kicks.push({ side, taker: taker.name, ...(taker.gen ? { gen: true } : {}), result, mine, theirs });
+  };
+  const first: 'me' | 'opp' = args.myFirst ? 'me' : 'opp';
+  const second: 'me' | 'opp' = args.myFirst ? 'opp' : 'me';
+  for (let round = 0; round < SHOOTOUT_MAX_ROUNDS; round++) {
+    kick(first);
+    if (over()) break;
+    kick(second);
+    if (over()) break;
+  }
+  if (mine === theirs) {
+    /* Fifty rounds level is not a thing that happens; one draw ends it rather than looping. */
+    if (Math.random() < 0.5) mine += 1; else theirs += 1;
+  }
+  return { kicks, mine, theirs };
+}
+
+/**
+ * The order as the engine and the screens read it: the listed men still in
+ * the squad, in the manager's order. A man sold or sent out on loan has left
+ * the squad (loanedOut holds him), so he drops out here; a loan signing
+ * (onLoan) is in the squad and plays, so he can be listed like anyone else.
+ * Null when that leaves nobody (never set, cleared, or every listed man has
+ * gone), and then the shootout is the old one draw, so what the tactics tab
+ * says and what the whistle does cannot disagree.
+ */
+export function shootoutOrderOf(state: CareerState): string[] | null {
+  const o = state.shootoutOrder;
+  if (!Array.isArray(o)) return null;
+  const ids = o.filter((id): id is string => typeof id === 'string' && state.squad.some(p => p.id === id));
+  return ids.length ? ids : null;
+}
+
+/**
+ * Set the shootout order, or clear it with an empty list (the field goes,
+ * so the save is exactly what it was before an order was ever set). Null
+ * back when a name is not in the squad. Names listed twice count once, and
+ * the list is held to the eleven. Pure.
+ */
+export function setShootoutOrder(career: CareerState, ids: readonly string[]): CareerState | null {
+  const out: string[] = [];
+  for (const id of ids) {
+    const p = career.squad.find(x => x.id === id);
+    if (!p) return null;
+    if (!out.includes(id)) out.push(id);
+    if (out.length >= SHOOTOUT_MAX_ORDER) break;
+  }
+  const state: CareerState = JSON.parse(JSON.stringify(career));
+  if (out.length) state.shootoutOrder = out; else delete state.shootoutOrder;
+  return state;
+}
+
+/**
+ * Settles a shootout at the whistle. With no order set this is the one draw
+ * it has always been, the same expression on the same stream, so a save
+ * without the field plays exactly as it did before Round 782 (the harness
+ * replays a frozen fixture to hold that). With an order set it goes kick by
+ * kick: my men in shootoutTakerOrder over the eleven that finished, theirs
+ * their best eleven on the pitch by rating with the keeper last, each kick
+ * read against the keeper facing it, and who kicks first is one draw.
+ */
+function settleShootout(
+  state: CareerState, live: LiveMatch, fx: MyFixture, finished: XiSlot[], mine: number, oppS: number, end: number,
+): { won: boolean; detail?: ShootoutDetail } {
+  const taker = assignedOnPitch(state.setPieces, 'penalties', men(finished));
+  const order = shootoutOrderOf(state);
+  if (!order) return { won: Math.random() < clamp(0.5 + (mine - oppS) * 0.012 + shootoutTakerEdge(taker), 0.2, 0.8) };
+  /* Theirs: the eleven still out there, or the projected roster for a side
+     with no named eleven tonight. */
+  const onPitch = oppAt(live, end);
+  const theirs: { n: string; p: Position; r: number; g?: boolean }[] = onPitch && onPitch.length
+    ? onPitch
+    : [...oppRosterFor(state, fx.opponent)].sort((a, b) => b.r - a.r).slice(0, SHOOTOUT_MAX_ORDER);
+  const detail = runShootout({ ...shootoutSides(state, order, finished, theirs, oppS), myFirst: Math.random() < 0.5 });
+  return { won: detail.mine > detail.theirs, detail };
+}
+
+/**
+ * The two sides of a kick by kick shootout, from the men out there at the
+ * whistle. Pure, and exported so the harness can hold each side to its
+ * keeper and its order (scripts/simCmShootoutOrder.mjs section 6).
+ */
+export function shootoutSides(
+  state: CareerState, order: readonly string[], finished: readonly XiSlot[],
+  theirs: readonly { n: string; p: Position; r: number; g?: boolean }[], oppS: number,
+): { mine: ShootoutSide; theirs: ShootoutSide } {
+  /* The man standing in goal at the whistle, read off the slot (an
+     outfielder put in goal is the keeper, a keeper played up front is not);
+     a save whose slots cannot be named falls back to a keeper by position,
+     and with nobody in goal there is no keeper edge either way. */
+  const myKeeper = finished.find(x => x.slot?.allowed.includes('GK'))?.p ?? finished.find(x => !x.slot && x.p.position === 'GK')?.p ?? null;
+  const onIds = finished.map(x => x.p.id);
+  const myTakers = squadByIds(state, shootoutTakerOrder(order, onIds, myKeeper?.id ?? null))
+    .map(p => ({ name: p.name, rating: p.rating }));
+  /* Theirs best first, the keeper last, read against their keeper; a side
+     with nobody to name kicks a generated eleven at the club's strength. */
+  const oppKeeper = theirs.find(p => p.p === 'GK') ?? null;
+  const oppTakers = [...theirs.filter(p => p !== oppKeeper)].sort((a, b) => b.r - a.r);
+  if (oppKeeper) oppTakers.push(oppKeeper);
+  return {
+    mine: { takers: myTakers, keeperRating: myKeeper?.rating ?? null },
+    theirs: {
+      takers: oppTakers.length
+        ? oppTakers.map(p => ({ name: p.n, rating: p.r, ...(p.g ? { gen: true } : {}) }))
+        : Array.from({ length: SHOOTOUT_MAX_ORDER }, (_, i) => ({ name: `Their taker ${i + 1}`, rating: oppS, gen: true })),
+      keeperRating: oppKeeper?.r ?? (theirs.length ? null : oppS),
+    },
+  };
 }
 
 /**
@@ -13658,6 +13926,9 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
   let decidedBy: 'regular' | 'aet' | 'pens' = 'regular';
   /* Round 507: who won the shootout, kept apart from who won the night. */
   let shootoutWon: boolean | null = null;
+  /* Round 782: the kicks, only when the manager had set an order. */
+  let shootoutKicks: ShootoutDetail | undefined;
+  const lastMinute = live.et ? live.et.to : 90;
   let won = myGoals > oppGoals;
   let drawn = myGoals === oppGoals;
   let advanced = won;
@@ -13679,8 +13950,10 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
     };
     if (out.winner === null) {
       decidedBy = 'pens';
-      const taker = assignedOnPitch(state.setPieces, 'penalties', men(finished));
-      advanced = Math.random() < clamp(0.5 + (mine - oppS) * 0.012 + shootoutTakerEdge(taker), 0.2, 0.8);
+      /* Round 782: one draw as before, or kick by kick with an order set. */
+      const so = settleShootout(state, live, fx, finished, mine, oppS, lastMinute);
+      advanced = so.won;
+      shootoutKicks = so.detail;
       /* Round 507, corrected after the review of the first correction. The
          shootout's result is carried in its OWN field and `won` is left as the
          night's result, because on a two legged tie those are different things
@@ -13703,9 +13976,11 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
     tieLine = { ...tieLine, through: advanced };
   } else if (isKnockout && drawn) {
     decidedBy = 'pens';
-    /* Round 505: the assigned penalty taker, when he finished the match, moves the odds a bounded touch. */
-    const taker = assignedOnPitch(state.setPieces, 'penalties', men(finished));
-    const penWin = Math.random() < clamp(0.5 + (mine - oppS) * 0.012 + shootoutTakerEdge(taker), 0.2, 0.8);
+    /* Round 505: the assigned penalty taker, when he finished the match, moves the odds a bounded touch.
+       Round 782: or, with a shootout order set, it goes kick by kick. */
+    const so = settleShootout(state, live, fx, finished, mine, oppS, lastMinute);
+    const penWin = so.won;
+    shootoutKicks = so.detail;
     /* A single leg tie IS the match, so reclassifying the night here is right
        and is long standing behaviour: the game was drawn, and a shootout win
        counts as a win in the form guide and the record. */
@@ -13754,8 +14029,9 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
     events.push(tieLine ? `⏱️ Still level ${tieLine.aggMine}-${tieLine.aggTheirs} on aggregate after extra time.` : '⏱️ Still level after extra time.');
   }
   if (decidedBy === 'pens') {
-    /* The shootout, not the night. */
-    events.push((shootoutWon ?? won) ? '🥅 Nerves of steel. You win the shootout.' : '🥅 Heartbreak from the spot: shootout defeat.');
+    /* The shootout, not the night. Round 782: with the kicks played, the count. */
+    const count = shootoutKicks ? ` ${shootoutKicks.mine}-${shootoutKicks.theirs}` : '';
+    events.push((shootoutWon ?? won) ? `🥅 Nerves of steel. You win the shootout${count}.` : `🥅 Heartbreak from the spot: shootout defeat${count}.`);
   }
 
   /* ----- competition bookkeeping + other results ----- */
@@ -14376,6 +14652,9 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
   // Round 168: and sometimes, when you are flying, the phone rings.
   const approachLine = maybeApproach(state);
   if (approachLine) events.push(approachLine);
+  // Round 783: and the club you wrote to answers, once it has had its match days.
+  const applicationLine = tickJobApplication(state);
+  if (applicationLine) events.push(applicationLine);
 
   /* Round 157: halftime substitutions, read off the live match the manager
      actually paused. On a quick sim or a fast forward nobody was in the
@@ -14459,6 +14738,7 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
     otherResults,
     detail,
     ...(tieLine ? { tie: tieLine } : {}),
+    ...(shootoutKicks ? { shootout: shootoutKicks } : {}),
   };
 }
 
@@ -14958,7 +15238,22 @@ export function developingPlayers(career: CareerState): CMPlayer[] {
     .sort((a, b) => ((b.potential ?? b.rating) - b.rating) - ((a.potential ?? a.rating) - a.rating));
 }
 
-export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID, custom?: CustomClubSpec, manager?: ManagerSpec): CareerState {
+/**
+ * Round 783: a season opened INSIDE a running save's world rather than at year
+ * one of its era. joinClubNow hands this to startCareer so the club you walk
+ * into mid season is built at the save's own world year (its squads aged the
+ * same years, its strengths read off the same aged world), in the save's own
+ * pyramid (its promotions and relegations kept registered), with this
+ * season's Champions League field. Absent on every other start, where the
+ * behaviour is exactly what it always was.
+ */
+export interface SeasonWorld {
+  yearsOn: number;
+  uclField: string[] | null;
+  keepLeagueOverrides: boolean;
+}
+
+export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID, custom?: CustomClubSpec, manager?: ManagerSpec, world?: SeasonWorld): CareerState {
   /* Round 132: the era decides what year season one is, and the year decides
      everything else: the squad you are handed, how good every other club is,
      and who is on the market. The default era is the current one and its
@@ -14992,10 +15287,10 @@ export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID, cu
   /* Round 310: and it starts on the static memberships for the same reason,
      custom or not: a NEW career has no promotions behind it, so a previous
      save's registered pyramid must never leak into its world. */
-  registerLeagueOverrides(null);
+  if (!world?.keepLeagueOverrides) registerLeagueOverrides(null);
   const club = custom ? clubDefFor(custom.name)
     : historic ? eraClubDefFor(clubName, era.id) : clubDefFor(clubName);
-  const startYearsOn = historic ? 0 : Math.max(0, era.startYear - CM_BASE_YEAR);
+  const startYearsOn = world ? world.yearsOn : historic ? 0 : Math.max(0, era.startYear - CM_BASE_YEAR);
   const squad = custom ? buildCustomSquad(custom, era.id) : buildSquad(club.name, startYearsOn, era.id);
   // Owner task 61: the league is the club's REAL league with its real clubs.
   const league = (custom && customLeagueDef(custom, era.id))
@@ -15014,10 +15309,15 @@ export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID, cu
      Round 612 review: my club is in only on a league place or as the holders,
      never through the fill, which tops up the AI field (see
      uclDirectQualifiersFromTables). Hoffenheim finished 5th and stay home. */
-  const seasonOneField = custom ? null : seasonOneUclField(era.id);
-  const qualifiedSeasonOne = seasonOneField && seasonOneTableOf(league.id)
-    ? uclDirectQualifiersFromTables(seasonOneTables(), CM_FINAL_TABLES_2025_26.holders).includes(club.name)
-    : club.tier <= 2 && league.euro;
+  /* Round 783: inside a running save the field is the save's own, derived at
+     its last rollover, and the club is in Europe exactly when that field
+     names it. */
+  const seasonOneField = custom ? null : world ? world.uclField : seasonOneUclField(era.id);
+  const qualifiedSeasonOne = world
+    ? (seasonOneField ? seasonOneField.includes(club.name) : club.tier <= 2 && league.euro)
+    : seasonOneField && seasonOneTableOf(league.id)
+      ? uclDirectQualifiersFromTables(seasonOneTables(), CM_FINAL_TABLES_2025_26.holders).includes(club.name)
+      : club.tier <= 2 && league.euro;
   const state: CareerState = {
     saveVersion: SAVE_VERSION,
     clubName: club.name,
@@ -15911,6 +16211,9 @@ function maybeApproach(state: CareerState): string | null {
     ].slice(0, 8);
   }
   if (state.approach || state.pendingMove || state.sacked) return null;
+  /* Round 783: and not while you are the one on the phone. A club does not
+     court a manager who has a summer move booked or an application out. */
+  if (huntBusy(state)) return null;
   const playedLeague = state.calendar.slice(0, state.week + 1).filter(e => e.type === 'league').length;
   if (playedLeague < 8) return null;
   const eraHist = !!state.eraId && isHistoricEra(state.eraId);
@@ -15945,6 +16248,10 @@ export function respondApproach(career: CareerState, commit: boolean): CareerSta
   const state: CareerState = { ...career };
   const app = state.approach;
   if (!app) return career;
+  /* Round 783 review: never promised to two clubs. With an application out
+     or a move booked, a handshake is refused and the approach stays live
+     (the card offers only the turn down). */
+  if (commit && huntBusy(career)) return career;
   state.approach = null;
   if (commit) {
     state.pendingMove = { club: app.club, blurb: app.blurb };
@@ -15961,6 +16268,266 @@ export function respondApproach(career: CareerState, commit: boolean): CareerSta
       ...state.aiHeadlines,
     ].slice(0, 8);
   }
+  return state;
+}
+
+/* ---------- Round 783: applying for a job yourself ----------
+
+   The pure half (the limits, the odds, the words) is clubManagerJobHunt.ts.
+   What lives here is the part that has to read a save: which clubs exist in
+   this world, how the club you wrote to is doing, what the manager's standing
+   is, and the weekly tick that delivers the answer. The mid season takeover
+   itself is joinClubNow in clubManagerCalendar.ts, beside startMidSeason,
+   because it plays the run-in through simToWeek. */
+
+export interface ApplyTarget {
+  club: string;
+  league: string;
+  leagueId: string;
+  tier: number;
+  budget: number;
+  /** Where they sit in their table right now, when this save tracks it. */
+  pos: number | null;
+  clubs: number | null;
+}
+
+function sortedRows(rows: TableRow[]): TableRow[] {
+  return [...rows].sort((a, b) => b.pts - a.pts || (b.gf - b.ga) - (a.gf - a.ga) || b.gf - a.gf);
+}
+
+/**
+ * How a club's season is going, read off this save: my own table for a club
+ * in my league, the world standings for everyone else. Null before a ball is
+ * kicked or for a club this save does not track.
+ */
+export function clubSeasonStanding(state: CareerState, club: string): { pos: number; clubs: number; expectation: number } | null {
+  const eraHist = !!state.eraId && isHistoricEra(state.eraId);
+  const def = eraHist ? eraClubDefFor(club, state.eraId) : clubDefFor(club);
+  let rows: TableRow[] | null = null;
+  if (state.table.some(r => r.club === club)) {
+    rows = sortedLeagueTable(state);
+  } else {
+    const league = (eraHist && eraLeagueOf(club, state.eraId)) || (clubByName(club) ? leagueOf(club) : null);
+    const w = league ? state.world?.[league.id] : undefined;
+    if (w && w.table.some(r => r.club === club)) rows = sortedRows(w.table);
+  }
+  if (!rows) return null;
+  const played = rows.reduce((n, r) => n + r.w + r.d + r.l, 0);
+  if (played === 0) return null;
+  const pos = rows.findIndex(r => r.club === club) + 1;
+  return pos > 0 ? { pos, clubs: rows.length, expectation: def.expectation } : null;
+}
+
+/**
+ * Every club you could write to: the same world the offers draw from (every
+ * real league of the era, the save's own memberships), minus your own club
+ * and the club a created club replaced. Sorted by league then stature.
+ */
+export function applyTargets(state: CareerState): ApplyTarget[] {
+  const eraHist = !!state.eraId && isHistoricEra(state.eraId);
+  const droppedClub = state.customClub && state.clubName === state.customClub.name
+    ? state.customClub.replacedClub
+    : null;
+  const leagues: LeagueDef[] = eraHist ? (ERA_LEAGUES[state.eraId!] ?? []) : REAL_LEAGUES;
+  const out: ApplyTarget[] = [];
+  for (const league of leagues) {
+    const defs = eraHist
+      ? league.clubs.map(c => eraClubDefFor(c, state.eraId))
+      : playableClubs(league.id);
+    for (const c of defs) {
+      if (c.name === state.clubName || c.name === droppedClub) continue;
+      const standing = clubSeasonStanding(state, c.name);
+      out.push({
+        club: c.name, league: league.name, leagueId: league.id, tier: c.tier, budget: c.budget,
+        pos: standing ? standing.pos : null, clubs: standing ? standing.clubs : null,
+      });
+    }
+  }
+  return out;
+}
+
+/** What the club you wrote to will weigh, read off this save. */
+export function applicationInputFor(state: CareerState, club: string): ApplicationInput {
+  const eraHist = !!state.eraId && isHistoricEra(state.eraId);
+  const mine = eraHist ? eraClubDefFor(state.clubName, state.eraId) : clubDefFor(state.clubName);
+  const theirs = eraHist ? eraClubDefFor(club, state.eraId) : clubDefFor(club);
+  const played = state.table.reduce((n, r) => n + r.w + r.d + r.l, 0);
+  const overshoot = played > 0 ? mine.expectation - leaguePosition(state) : 0;
+  const formWins = state.form.slice(-5).filter(r => r === 'W').length;
+  const standing = clubSeasonStanding(state, club);
+  let trouble = 0;
+  if (standing) {
+    trouble += clamp(standing.pos - standing.expectation, 0, 12);
+    if (standing.pos > standing.clubs - 3) trouble += 6;
+    const theirForm = state.clubForm?.[club] ?? [];
+    if (theirForm.length >= 3 && theirForm.filter(r => r === 'W').length <= 1) trouble += 2;
+  }
+  return {
+    standing: employedStanding(wildernessProfile(state)),
+    myTier: mine.tier,
+    targetTier: theirs.tier,
+    overshoot,
+    formWins,
+    targetTrouble: trouble,
+    targetPos: standing ? standing.pos : null,
+    targetClubs: standing ? standing.clubs : null,
+  };
+}
+
+/** The odds the club would work to today, for the confirm sheet. */
+export function applicationOdds(state: CareerState, club: string): number {
+  return acceptanceOdds(applicationInputFor(state, club));
+}
+
+/**
+ * Round 783 review: my league games still to play, counting the one paused
+ * at the interval. Every one of them is one of my match days, so it is the
+ * floor under how many answers the season has room for (cup and European
+ * nights only add to it).
+ */
+export function myLeagueMatchesLeft(state: CareerState): number {
+  let n = 0;
+  for (let w = state.week; w < state.calendar.length; w++) {
+    const entry = state.calendar[w];
+    if (entry.type === 'league' && fixtureFor(state, entry)) n += 1;
+  }
+  return n;
+}
+
+/** Why an application to `club` cannot go out today, every rule included. */
+export function jobApplyRefusal(state: CareerState, club: string) {
+  return applyRefusal(state, club, myLeagueMatchesLeft(state));
+}
+
+/**
+ * Send the application. Null when the pure rules refuse it or the club is not
+ * in this world. The answer's delay and roll are fixed here; the inbox gets a
+ * note so the status is readable from the day it went out.
+ */
+export function applyForJob(career: CareerState, club: string): CareerState | null {
+  const left = myLeagueMatchesLeft(career);
+  if (applyRefusal(career, club, left)) return null;
+  const target = applyTargets(career).find(t => t.club === club);
+  if (!target) return null;
+  const hunt = openApplication(career, { club: target.club, league: target.league, tier: target.tier }, Math.random, left);
+  if (!hunt) return null;
+  const state: CareerState = { ...career, jobHunt: hunt, inbox: [...(career.inbox ?? [])] };
+  pushMessage(state, {
+    playerName: 'Your agent',
+    from: 'Your agent',
+    playerId: '',
+    kind: 'jobApplication',
+    text: `Your application is in at ${club}. The board there will come back to you inside a few match days.`,
+    options: [],
+    resolved: 'Sent.',
+  });
+  state.aiHeadlines = [
+    `📨 You have put yourself forward for the ${club} job. Expect an answer within a few match days.`,
+    ...state.aiHeadlines,
+  ].slice(0, 8);
+  return state;
+}
+
+/**
+ * Once a week, after your match: the club you wrote to counts down and, when
+ * its time is up, answers. Mutates the working copy inside playNextEntry the
+ * way maybeApproach does, and returns the event line for the week's report.
+ */
+function tickJobApplication(state: CareerState): string | null {
+  const open = state.jobHunt?.open;
+  if (!open || open.status !== 'pending' || state.sacked) return null;
+  const hunt = jobHuntOf(state);
+  const ticked = countDown(hunt);
+  state.jobHunt = ticked.hunt;
+  if (!ticked.due) return null;
+  /* The club resolved when you applied (applyTargets only lists clubs that
+     do) and the world only changes clubs at the rollover or when you move,
+     and both clear the slot, so a due application always has a club to
+     answer it. */
+  const input = applicationInputFor(state, open.club);
+  const verdict = decideApplication(input, open.roll);
+  state.jobHunt = recordDecision(ticked.hunt, verdict.accepted, state.week, verdict.odds);
+  const from = `The ${open.club} board`;
+  if (verdict.accepted) {
+    pushMessage(state, {
+      playerName: from,
+      from,
+      playerId: '',
+      kind: 'jobApplication',
+      text: acceptLine(open.club, state.clubName),
+      options: [
+        { label: `Join ${open.club} now`, effect: 'joinNow' },
+        { label: 'Join them in the summer', effect: 'joinSummer' },
+      ],
+    });
+    state.aiHeadlines = [
+      `✅ ${open.club} have said yes. Decide from the inbox or the Manager panel: now, or in the summer.`,
+      ...state.aiHeadlines,
+    ].slice(0, 8);
+    return `✅ ${open.club} have said yes to your application. The choice is yours: join now, or in the summer.`;
+  }
+  pushMessage(state, {
+    playerName: from,
+    from,
+    playerId: '',
+    kind: 'jobApplication',
+    text: declineLine(input, open.club, state.clubName, state.form.slice(-5)),
+    options: [],
+    resolved: 'They will not take another call from you until next season is over.',
+  });
+  state.aiHeadlines = [
+    `❌ ${open.club} turned down your application.`,
+    ...state.aiHeadlines,
+  ].slice(0, 8);
+  return `❌ ${open.club} have turned you down. The reason is in your inbox.`;
+}
+
+/** How a club that said yes is described: the booked move and the summary's offer. */
+function hiredBlurb(career: CareerState, club: string, league: string): string {
+  const eraHist = !!career.eraId && isHistoricEra(career.eraId);
+  const def = eraHist ? eraClubDefFor(club, career.eraId) : clubDefFor(club);
+  return `${TIER_INFO[def.tier].emoji} ${TIER_INFO[def.tier].label} club · ${league} · ${money(def.budget)} budget`;
+}
+
+/** The generated name a club you leave puts in its dugout. Never a real person. */
+export function interimManagerName(from: string, season: number, week: number): string {
+  return makeGeneratedName(`interim|${from}|${season}|${week}`);
+}
+
+/**
+ * The summer answer to a club that said yes: the move is booked on the save
+ * and fires once at the rollover, your board hears today and goes cold by the
+ * same six points an approach's handshake costs, and the acceptance message
+ * in the inbox is resolved. Pure. Null when nothing is waiting on you.
+ */
+export function joinClubInSummer(career: CareerState): CareerState | null {
+  const hunt = jobHuntOf(career);
+  const open = hunt.open;
+  if (!open || open.status !== 'accepted') return null;
+  const booked = bookSummerMove(hunt, hiredBlurb(career, open.club, open.league));
+  if (!booked) return null;
+  const state: CareerState = {
+    ...career,
+    jobHunt: booked,
+    // Round 465's rule: to the last point, never to zero.
+    boardConfidence: clamp(career.boardConfidence - LEAVING_BOARD_HIT, 1, 100),
+    inbox: (career.inbox ?? []).map(m => (m.kind === 'jobApplication' && !m.resolved
+      ? { ...m, resolved: `You will join ${open.club} when the season ends.` }
+      : m)),
+  };
+  pushMessage(state, {
+    playerName: `The ${career.clubName} board`,
+    from: `The ${career.clubName} board`,
+    playerId: '',
+    kind: 'jobApplication',
+    text: leavingLine(career.clubName, open.club, 'summer', ''),
+    options: [],
+    resolved: 'Finish the job here first.',
+  });
+  state.aiHeadlines = [
+    `🧳 Agreed: you take over at ${open.club} when the season ends. The ${career.clubName} board heard it the same afternoon.`,
+    ...state.aiHeadlines,
+  ].slice(0, 8);
   return state;
 }
 
@@ -16033,6 +16600,22 @@ export function finishSeason(career: CareerState): { state: CareerState; summary
         blurb: `🤝 The pre-agreement you shook hands on mid-season · ${state.pendingMove.blurb}`,
       });
     }
+  }
+  /* Round 783 review: an application still out when the season ends is
+     answered now, on the roll it was sent with, and a yes nobody has answered
+     leads the offers the same way, so the rollover never throws one away.
+     Tapping Continue instead turns it down, because the rollover clears the
+     slot. A booked summer move is the rollover's own business. */
+  if (state.jobHunt?.open && state.jobHunt.open.status === 'pending' && !state.sacked) {
+    state.jobHunt = { ...state.jobHunt, open: { ...state.jobHunt.open, matchesLeft: 1 } };
+    tickJobApplication(state);
+  }
+  const yesClub = state.jobHunt ? waitingYes(jobHuntOf(state)) : null;
+  if (yesClub && !offers.some(o => o.club === yesClub)) {
+    offers.unshift({
+      club: yesClub,
+      blurb: `✅ They said yes to your application · ${hiredBlurb(state, yesClub, state.jobHunt?.open?.league ?? '')}`,
+    });
   }
   /* Round 309: the summer's sackings are decided HERE, before the offers,
      so a job you are offered is a chair that really empties and the
@@ -16479,11 +17062,16 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
      the move guard consults the era world before the modern one. */
   const eraId = career.eraId;
   const historic = !!eraId && isHistoricEra(eraId);
-  const validTarget = !!acceptOfferClub && (historic
-    ? !!eraLeagueOf(acceptOfferClub, eraId)
-    : !!clubByName(acceptOfferClub));
-  const moving = !!(acceptOfferClub && validTarget && acceptOfferClub !== career.clubName);
-  const clubName = moving && acceptOfferClub ? acceptOfferClub : career.clubName;
+  /* Round 783: a summer move booked through an application outranks whatever
+     the summary screen was tapped with. You agreed to it; the rollover keeps
+     the word. It is consumed below, so it fires exactly once. */
+  const summerMove = career.jobHunt?.summerMove ?? null;
+  const targetClub = summerMove ? summerMove.club : acceptOfferClub;
+  const validTarget = !!targetClub && (historic
+    ? !!eraLeagueOf(targetClub, eraId)
+    : !!clubByName(targetClub));
+  const moving = !!(targetClub && validTarget && targetClub !== career.clubName);
+  const clubName = moving && targetClub ? targetClub : career.clubName;
   /* Round 154: the custom club lives exactly as long as you manage it. Stay
      and it re-registers for the new season (its def re-measured against the
      aged world); walk to another job and the spec is dropped, so next season
@@ -16869,6 +17457,19 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
      it returns are prepended after generateHeadlines below, the Round 161
      rule, or that call would eat them. */
   const managerNews = runManagerMerryGoRound(career, state);
+  /* Round 783: the job hunt crosses the summer with its cooldowns, its season
+     count reset and the booked move taken: consumeSummerMove hands it back
+     with summerMove cleared, which is the whole of "fires exactly once". The
+     interim is read off the chair the merry-go-round just filled, before
+     ensureManagers prunes a club that is no longer in your league. */
+  if (career.jobHunt) {
+    const interim = moving
+      ? (state.managers?.[career.clubName]?.name ?? interimManagerName(career.clubName, state.season, 0))
+      : '';
+    state.jobHunt = summerMove && moving
+      ? consumeSummerMove(career.jobHunt, career.clubName, state.season, interim)
+      : rollOverHunt(jobHuntOf(career), state.season);
+  }
   ensureManagers(state);
   /* Round 135: a reputation follows you, so the press mood carries over the
      summer rather than resetting, but it fades most of the way back toward

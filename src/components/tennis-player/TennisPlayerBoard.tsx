@@ -1,31 +1,40 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useScrollToGame } from '@/hooks/useScrollToGame';
 import { useTennisPlayer } from '@/hooks/useTennisPlayer';
 import { TennisPlayerSearch } from './TennisPlayerSearch';
 import { TennisPlayerHowToPlay } from './TennisPlayerHowToPlay';
 import ShareButtons from '@/components/game/ShareButtons';
 import { GameNav } from '@/components/game/GameNav';
-import { MAX_CLUES } from '@/types/tennisPlayer';
+import { MAX_CLUES, POINTS_BY_CLUE } from '@/types/tennisPlayer';
+import feedbackStyles from './TennisPlayerFeedback.module.css';
 
 const CLUE_LABELS = ['Vibe', 'Nationality & Era', 'Tour', 'Grand Slam Wins', 'Slams Won', 'Famous Moment'];
 
 export function TennisPlayerBoard() {
   const { gameState, startGame, makeGuess, giveUp, revealHint, resetGame, pointsForCurrentClue, allPlayers, loading, status, reloadPlayers } = useTennisPlayer();
   const gameRef = useScrollToGame(gameState);
-  const [wrongFlash, setWrongFlash] = useState(false);
+  const [feedback, setFeedback] = useState<{ kind: 'correct' | 'wrong'; turn: number; status: 'playing' | 'won' | 'lost' } | null>(null);
+  const previous = useRef(gameState);
   const [hintsUsed, setHintsUsed] = useState(0);
   const [showGiveUpConfirm, setShowGiveUpConfirm] = useState(false);
 
-  const handleGuess = (name: string) => {
-    const prevClues = gameState?.revealedClues ?? 0;
-    makeGuess(name);
-    setTimeout(() => {
-      if (gameState?.revealedClues !== prevClues || gameState?.gameStatus === 'playing') {
-        setWrongFlash(true);
-        setTimeout(() => setWrongFlash(false), 500);
-      }
-    }, 50);
-  };
+  useEffect(() => {
+    const prior = previous.current;
+    previous.current = gameState;
+    if (!gameState || !prior || prior.puzzle.id !== gameState.puzzle.id || prior.mode !== gameState.mode || gameState.guesses.length < prior.guesses.length) {
+      setFeedback(null);
+    } else if (prior.gameStatus === 'playing' && gameState.guesses.length === prior.guesses.length + 1 && prior.guesses.every((guess, index) => gameState.guesses[index] === guess)) {
+      setFeedback({ kind: gameState.gameStatus === 'won' ? 'correct' : 'wrong', turn: gameState.guesses.length, status: gameState.gameStatus });
+    } else if (gameState.gameStatus !== prior.gameStatus) {
+      setFeedback(null);
+    }
+  }, [gameState]);
+
+  useEffect(() => {
+    if (!feedback) return;
+    const timer = window.setTimeout(() => setFeedback(null), 600);
+    return () => window.clearTimeout(timer);
+  }, [feedback]);
 
   const handleHint = () => {
     revealHint();
@@ -90,6 +99,8 @@ export function TennisPlayerBoard() {
   const isOver = gameStatus !== 'playing';
   const hasGuessed = guesses.length > 0;
   const canHint = revealedClues < MAX_CLUES;
+  const nextHintPoints = POINTS_BY_CLUE[revealedClues] ?? 0;
+  const shownFeedback = feedback && feedback.turn === guesses.length && feedback.status === gameStatus ? feedback : null;
 
   const shareScore = gameStatus === 'won'
     ? `I guessed today's Tennis Player in ${revealedClues} clue${revealedClues > 1 ? 's' : ''}!\nScore: ${score} 🎾`
@@ -103,6 +114,7 @@ export function TennisPlayerBoard() {
             <span className="text-green-400">Guess The</span>{' '}
             <span className="text-purple-400">Tennis Player</span>
           </h1>
+          <TennisPlayerHowToPlay />
           {!isOver && (
             <p className="text-sm text-green-400 mt-1">
               Clue {revealedClues}/{MAX_CLUES} · {pointsForCurrentClue} pts available
@@ -116,6 +128,7 @@ export function TennisPlayerBoard() {
             return (
               <div
                 key={i}
+                data-tennis-player-clue={i + 1}
                 className={`rounded-xl border px-4 py-3 transition-all duration-300 ${
                   isRevealed
                     ? 'border-purple-500/30 bg-green-900'
@@ -140,44 +153,46 @@ export function TennisPlayerBoard() {
           })}
         </div>
 
-        {wrongFlash && (
-          <p className="text-center text-red-400 text-sm font-semibold animate-pulse">Wrong guess! Try again...</p>
-        )}
+        <div role="status" className={feedbackStyles.status}>
+          {shownFeedback && <p key={`${shownFeedback.kind}-${shownFeedback.turn}`} data-tennis-player-feedback={shownFeedback.kind} className={`${feedbackStyles.reply} text-center text-sm font-semibold ${shownFeedback.kind === 'correct' ? 'text-emerald-400' : 'text-red-400'}`}>
+            {shownFeedback.kind === 'correct' ? 'Correct guess. Player found.' : isOver ? 'Wrong guess. The answer is below.' : 'Wrong guess! Try again...'}
+          </p>}
+        </div>
 
         {!isOver && (
           <>
-            <TennisPlayerSearch onGuess={handleGuess} guesses={guesses} players={allPlayers} />
+            <TennisPlayerSearch onGuess={makeGuess} guesses={guesses} players={allPlayers} />
 
             <div className="flex items-center justify-center gap-4">
               {canHint && (
                 <button
                   onClick={handleHint}
-                  className="text-sm text-yellow-500/70 hover:text-yellow-400 transition-colors"
+                  className={`${feedbackStyles.action} text-sm text-yellow-500/70 hover:text-yellow-400 transition-colors`}
                 >
-                  💡 Hint (-100 pts)
+                  💡 Hint ({nextHintPoints} pts next)
                 </button>
               )}
               {hasGuessed && !showGiveUpConfirm && (
                 <button
                   onClick={() => setShowGiveUpConfirm(true)}
-                  className="text-sm text-green-400 hover:text-red-400 transition-colors"
+                  className={`${feedbackStyles.action} text-sm text-green-400 hover:text-red-400 transition-colors`}
                 >
                   🏳️ Give Up
                 </button>
               )}
             </div>
             {hintsUsed > 0 && (
-              <p className="text-center text-xs text-yellow-600">{hintsUsed} hint{hintsUsed > 1 ? 's' : ''} used (-{hintsUsed * 100} pts)</p>
+              <p className="text-center text-xs text-yellow-600">{hintsUsed} hint{hintsUsed > 1 ? 's' : ''} used</p>
             )}
 
             {showGiveUpConfirm && (
               <div className="text-center space-y-2 p-3 rounded-xl border border-red-500/20 bg-green-900">
                 <p className="text-sm text-green-400">Are you sure? You'll reveal the answer and score 0 points.</p>
                 <div className="flex justify-center gap-3">
-                  <button onClick={handleGiveUp} className="px-4 py-1.5 rounded-lg bg-red-600 text-white text-sm font-semibold hover:bg-red-700 transition-colors">
+                  <button onClick={handleGiveUp} className={`${feedbackStyles.action} px-4 py-1.5 rounded-lg bg-red-600 text-white text-sm font-semibold hover:bg-red-700 transition-colors`}>
                     Yes, Give Up
                   </button>
-                  <button onClick={() => setShowGiveUpConfirm(false)} className="px-4 py-1.5 rounded-lg border border-green-800 text-green-400 text-sm hover:bg-green-900 transition-colors">
+                  <button onClick={() => setShowGiveUpConfirm(false)} className={`${feedbackStyles.action} px-4 py-1.5 rounded-lg border border-green-800 text-green-400 text-sm hover:bg-green-900 transition-colors`}>
                     Cancel
                   </button>
                 </div>
@@ -189,7 +204,7 @@ export function TennisPlayerBoard() {
         {guesses.length > 0 && !isOver && (
           <div className="flex flex-wrap gap-2 justify-center">
             {guesses.map((g, i) => (
-              <span key={i} className="px-3 py-1 rounded-full bg-green-900 text-green-600 text-xs line-through">
+              <span key={i} className={`${feedbackStyles.guessName} px-3 py-1 rounded-full bg-green-900 text-green-600 text-xs line-through`}>
                 {g}
               </span>
             ))}
@@ -197,7 +212,7 @@ export function TennisPlayerBoard() {
         )}
 
         {isOver && (
-          <div className="text-center space-y-4 rounded-2xl border border-purple-500/20 bg-green-900 p-6">
+          <div data-tennis-player-result={shownFeedback ? gameStatus : undefined} className={`text-center space-y-4 rounded-2xl border border-purple-500/20 bg-green-900 p-6 ${shownFeedback ? gameStatus === 'won' ? feedbackStyles.won : feedbackStyles.lost : ''}`}>
             {gameStatus === 'won' ? (
               <>
                 <p className="text-3xl">🏆</p>

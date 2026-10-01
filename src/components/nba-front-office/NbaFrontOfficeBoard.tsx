@@ -12,7 +12,10 @@ import {
   NBA_ROUNDS,
   type NbaLeague, type NbaProspect, type SeriesResult, nbaExecuteTalksTrade,
   ensureNbaLeagueIds, NBA_ROSTER_MIN, NBA_ROSTER_MAX,
+  /* Round 722: the luxury tax, the aprons and the fourteen man tip off floor. */
+  nbaTipOff, nbaTipOffRefusal, nbaAssessTax, nbaTaxView, nbaApronNote, NBA_TIPOFF_MIN, NBA_MIN_CONTRACT,
 } from '@/lib/nbaFrontOffice';
+import { FoCapPanel } from '@/components/front-office-shared/FoCapPanel';
 /* Round 631: waiving a man costs dead money and he cannot come back this season. */
 import { deadMoneyFor, deadCapUsed, signRefusal, cutRefusal, rosterFullRefusal, tradeRefusal } from '@/lib/frontOfficeCuts';
 /* Round 531: the cap on screen says which day its figure was read. */
@@ -29,7 +32,7 @@ import { cn } from '@/lib/utils';
 // Round 180: the owner upstairs, shared engine and card.
 import {
   buildOwnerMandate, strengthRank, mandatePace, gradeSeason, applyMandateResult,
-  firedLine, seriesPostseason, FO_TRUST_START, type OwnerMandate, type FoSportWords,
+  firedLine, seriesPostseason, FO_TRUST_START, ownerTaxReaction, type OwnerMandate, type FoSportWords,
 } from '@/lib/foOwnerMandate';
 import OwnerMandateCard from '@/components/front-office-shared/OwnerMandateCard';
 /* Round 187: the verdict curtain. stageVerdict decides the presentation
@@ -56,7 +59,13 @@ const CUT_SAID = 'You waived him this season.';
 
 const NBA_WORDS: FoSportWords = { title: 'the Finals', playoffs: 'the playoffs', round: 'a series', games: 80 };
 
-type Postseason = { series: SeriesResult[]; champion: string; gradeLine: string | null };
+/* Round 722: the tax at season close, drawn on the recap beside the results.
+   Optional on the postseason so a save written before the round draws without it. */
+type TaxClose = {
+  bill: number; payroll: number; line: number; over: number; repeater: boolean;
+  trustDelta: number; payers: number; biggest: { team: string; bill: number } | null;
+};
+type Postseason = { series: SeriesResult[]; champion: string; gradeLine: string | null; tax?: TaxClose | null };
 
 interface SaveShape {
   league: NbaLeague; myTeam: string; phase: Phase; titles: number; seasonsPlayed: number;
@@ -112,6 +121,8 @@ export default function NbaFrontOfficeBoard() {
   const [trust, setTrust] = useState(FO_TRUST_START);
   const [fired, setFired] = useState(false);
   const [gradeLine, setGradeLine] = useState<string | null>(null);
+  /* Round 722: the GM's tax line at the last close, persisted with the postseason. */
+  const [taxClose, setTaxClose] = useState<TaxClose | null>(null);
   /* Round 192: the room. Presser transient; tilt and trade line persist. */
   const [presser, setPresser] = useState<GmPresser | null>(null);
   const [pressTilt, setPressTilt] = useState<-1 | 0 | 1>(0);
@@ -155,7 +166,7 @@ export default function NbaFrontOfficeBoard() {
          now carries the postseason, so the recap is simply drawn again. A
          save from before this round has nothing to draw, so it opens on the
          draft, which is where the recap's only button leads. */
-      if (s.postseason) { setSeries(s.postseason.series); setChampion(s.postseason.champion); setGradeLine(s.postseason.gradeLine ?? null); }
+      if (s.postseason) { setSeries(s.postseason.series); setChampion(s.postseason.champion); setGradeLine(s.postseason.gradeLine ?? null); setTaxClose(s.postseason.tax ?? null); }
       if (s.fired) setPhase('fired');
       else if (s.phase !== 'recap') setPhase(s.phase);
       else if (s.postseason) setPhase('recap');
@@ -170,10 +181,10 @@ export default function NbaFrontOfficeBoard() {
       localStorage.setItem(SAVE_KEY, JSON.stringify({
         league: lg, myTeam: team, phase, titles, seasonsPlayed, draftClass, picksLeft,
         mandate, trust, fired, pressTilt, seasonTradeLine,
-        postseason: champion ? { series, champion, gradeLine } : null, ...patch,
+        postseason: champion ? { series, champion, gradeLine, tax: taxClose } : null, ...patch,
       } satisfies SaveShape));
     } catch { /* full */ }
-  }, [phase, titles, seasonsPlayed, draftClass, picksLeft, mandate, trust, fired, pressTilt, seasonTradeLine, champion, series, gradeLine]);
+  }, [phase, titles, seasonsPlayed, draftClass, picksLeft, mandate, trust, fired, pressTilt, seasonTradeLine, champion, series, gradeLine, taxClose]);
 
   const label = (abbr: string) => {
     const t = NBA_TEAM_MAP.get(abbr);
@@ -248,14 +259,40 @@ export default function NbaFrontOfficeBoard() {
        is to do nothing rather than play an extra round. */
     if (league.champions.some(c => c.season === league.season)) return;
     const lg: NbaLeague = JSON.parse(JSON.stringify(league));
+    /* Round 722: the first round of a season is tip off. A club above fifteen
+       cannot start (the Play button is greyed with the reason; this is the belt
+       to its braces), and every club short of fourteen is filled by the league
+       on minimum deals, which the feed reports so the GM knows who he is paying. */
+    const tipLines: string[] = [];
+    if (lg.round === 1) {
+      const why = nbaTipOffRefusal(lg.teams[myTeam]);
+      if (why) { setFeed(f => [why, ...f].slice(0, 6)); return; }
+      const before = lg.teams[myTeam].players.length;
+      const tip = nbaTipOff(lg, Math.random, myTeam);
+      const mine = tip.filled[myTeam];
+      if (mine?.length) tipLines.push(`📋 You tipped off with ${before} under contract, so the league filled you to ${NBA_TIPOFF_MIN} on minimum deals: ${mine.map(p => p.name).join(', ')}, $${NBA_MIN_CONTRACT}M each.`);
+    }
     const report = simRound(lg, myTeam, Math.random);
     const newFeed = [
       `Round ${lg.round}: you went ${report.myWins}-${report.myLosses}.`,
+      ...tipLines,
       ...report.notes,
     ];
     if (lg.round >= NBA_ROUNDS) {
       const { series: sr, champion: champ } = runNbaPlayoffs(lg, Math.random);
       lg.champions.push({ season: lg.season, team: champ });
+      /* Round 722: the tax is assessed on every club at close, once. The GM's
+         own bill moves trust upstairs and the recap draws it beside the results. */
+      const taxes = nbaAssessTax(lg);
+      const myTax = taxes.find(x => x.team === myTeam);
+      const reaction = ownerTaxReaction(myTax?.bill ?? 0);
+      const payers = taxes.filter(x => x.bill > 0).sort((a, b) => b.bill - a.bill);
+      const tax: TaxClose | null = myTax ? {
+        bill: myTax.bill, payroll: myTax.payroll, line: myTax.line, over: Math.round((myTax.payroll - myTax.line) * 10) / 10,
+        repeater: myTax.repeater, trustDelta: reaction.trustDelta, payers: payers.length,
+        biggest: payers[0] ? { team: payers[0].team, bill: payers[0].bill } : null,
+      } : null;
+      setTaxClose(tax);
       setSeries(sr);
       setChampion(champ);
       const won = champ === myTeam;
@@ -271,7 +308,8 @@ export default function NbaFrontOfficeBoard() {
       if (mandate) {
         const post = seriesPostseason(sr, myTeam, 'Play-In');
         const grade = gradeSeason(mandate, { wins: lg.teams[myTeam].wins, ...post, wonTitle: won });
-        const applied = applyMandateResult(trust, grade);
+        /* Round 722: the tax cheque lands on the same ledger as the mandate. */
+        const applied = applyMandateResult(trust, { ...grade, trustDelta: grade.trustDelta + reaction.trustDelta });
         newTrust = applied.trust; nowFired = applied.fired;
         gradeResult = grade.result;
         setTrust(applied.trust); setFired(applied.fired); setGradeLine(grade.verdict);
@@ -287,7 +325,7 @@ export default function NbaFrontOfficeBoard() {
       setPhase('recap');
       setLeague(lg);
       setFeed(newFeed); setFeedSlam(null);
-      persist({ phase: nowFired ? 'fired' : 'recap', titles: nt, seasonsPlayed: ns, trust: newTrust, fired: nowFired, postseason: { series: sr, champion: champ, gradeLine: gradeVerdict } }, lg, myTeam);
+      persist({ phase: nowFired ? 'fired' : 'recap', titles: nt, seasonsPlayed: ns, trust: newTrust, fired: nowFired, postseason: { series: sr, champion: champ, gradeLine: gradeVerdict, tax } }, lg, myTeam);
       return;
     }
     lg.round += 1;
@@ -348,7 +386,8 @@ export default function NbaFrontOfficeBoard() {
     setDraftClass(nextClass); setPicksLeft(nextPicks);
     setFeed(f => [`📥 Drafted ${pr.name} (${pr.pos}), true rating ${pr.trueOvr} vs scouted ${pr.grade}.`, ...f].slice(0, 6));
     if (nextPicks <= 0) {
-      const notes = nbaOffseason(lg, Math.random);
+      /* Round 722: the GM's club is named so the summer leaves it to him. */
+      const notes = nbaOffseason(lg, Math.random, myTeam);
       /* Round 180: ownership re-reads the roster and sets next season's ask. */
       /* Round 192: what you said at the podium tilts the ask, then the
          tilt is spent. */
@@ -361,7 +400,7 @@ export default function NbaFrontOfficeBoard() {
         ...notes,
       ].slice(0, 6));
       setPressTilt(0); setSeasonTradeLine(null);
-      setSeries([]); setChampion(''); setWonNow(false);
+      setSeries([]); setChampion(''); setWonNow(false); setTaxClose(null);
       /* Round 530: the phase stays 'draft' so the last pick's card is seen;
          leaveDraft moves it on. The save says 'hub' as it always did, so a
          reload skips the reveal and opens where it opened before. */
@@ -432,7 +471,7 @@ export default function NbaFrontOfficeBoard() {
     if (!league || !talks || !talks.state.pkg) return;
     const pkg = talks.state.pkg;
     const lg: NbaLeague = JSON.parse(JSON.stringify(league));
-    const res = nbaExecuteTalksTrade(lg.teams[myTeam], lg.teams[talks.partner], talks.myPieceId, pkg.theirPlayerId, pkg.addPick, lg.cap);
+    const res = nbaExecuteTalksTrade(lg.teams[myTeam], lg.teams[talks.partner], talks.myPieceId, pkg.theirPlayerId, pkg.addPick, lg.cap, lg.taxScale);
     if (res === 'done') {
       slamFeed(`🤝 Deal done with ${label(talks.partner)}: ${pkg.theirPlayerName} arrives${pkg.addPick ? ', and a pick goes the other way' : ''}.`);
       setMyTradePiece(''); setShopOffers([]); setShopTried(false);
@@ -449,13 +488,13 @@ export default function NbaFrontOfficeBoard() {
   // Round 82: shop a player league-wide with the real trade rules
   const doShop = () => {
     if (!league || !myTradePiece) return;
-    const offers = findTrades(league.teams, myTeam, myTradePiece, league.cap, nbaTrade, nbaTradeValue);
+    const offers = findTrades(league.teams, myTeam, myTradePiece, league.cap, (m, t, a, b, s, c) => nbaTrade(m, t, a, b, s, c, league.taxScale), nbaTradeValue);
     setShopOffers(offers); setShopTried(true);
   };
   const acceptShopOffer = (o: FinderOffer) => {
     if (!league || !myTradePiece) return;
     const lg: NbaLeague = JSON.parse(JSON.stringify(league));
-    const res = nbaTrade(lg.teams[myTeam], lg.teams[o.teamId], myTradePiece, o.playerId, o.sweeten, lg.cap);
+    const res = nbaTrade(lg.teams[myTeam], lg.teams[o.teamId], myTradePiece, o.playerId, o.sweeten, lg.cap, lg.taxScale);
     if (res === 'accepted') {
       slamFeed(`🤝 Trade finder deal done with ${label(o.teamId)}: ${o.playerName} arrives.`);
       setMyTradePiece(''); setShopOffers([]); setShopTried(false);
@@ -472,7 +511,7 @@ export default function NbaFrontOfficeBoard() {
   const reset = () => {
     localStorage.removeItem(SAVE_KEY);
     setPhase('pick'); setLeague(null); setMyTeam('');
-    setMandate(null); setTrust(FO_TRUST_START); setFired(false); setGradeLine(null);
+    setMandate(null); setTrust(FO_TRUST_START); setFired(false); setGradeLine(null); setTaxClose(null);
     setPresser(null); setPressTilt(0); setSeasonTradeLine(null);
   };
 
@@ -501,6 +540,8 @@ export default function NbaFrontOfficeBoard() {
 
   const room = nbaCapRoom(my, league.cap);
   const strength = Math.round(nbaStrength(my));
+  /* Round 722: the tax as it stands today, shown all season as a projection. */
+  const view = nbaTaxView(my, league);
 
   /* ---------------- Round 180: the reload path after a firing ---------------- */
   if (phase === 'fired') {
@@ -552,6 +593,18 @@ export default function NbaFrontOfficeBoard() {
           )}
           {mandate && !fired && (
             <p className="cm-rise mt-1 text-[11px] text-muted-foreground" style={{ animationDelay: '0.7s' }}>Trust upstairs: {trust} of 100{trust <= 25 ? '. The seat is hot.' : '.'}</p>
+          )}
+          {/* Round 722: the tax, assessed at close, beside the results. */}
+          {taxClose && (
+            <p data-tax-close className={cn('cm-rise mt-2 text-[11px]', taxClose.bill > 0 ? 'text-destructive' : 'text-muted-foreground')} style={{ animationDelay: '0.75s' }}>
+              {taxClose.bill > 0
+                ? `💸 Luxury tax $${taxClose.bill}M: your $${taxClose.payroll}M payroll sat $${taxClose.over}M over the $${taxClose.line}M line${taxClose.repeater ? ' at repeater rates' : ''}. Ownership wrote the cheque and trust fell ${Math.abs(taxClose.trustDelta)}.`
+                : `✅ Under the $${taxClose.line}M tax line by $${Math.abs(taxClose.over)}M. No cheque upstairs.`}
+              {' '}
+              {taxClose.payers > 0 && taxClose.biggest
+                ? `${taxClose.payers} ${taxClose.payers === 1 ? 'club' : 'clubs'} paid tax this season, the biggest bill $${taxClose.biggest.bill}M (${label(taxClose.biggest.team)}).`
+                : 'Nobody in the league paid tax this season.'}
+            </p>
           )}
           {finals && (
             <p className="cm-tick-in mt-2 text-xs text-muted-foreground" style={{ animationDelay: '0.8s' }}>
@@ -660,6 +713,9 @@ export default function NbaFrontOfficeBoard() {
     /* Round 631: the box offers only men the sign path would take. */
     ledger: my,
     rosterMax: NBA_ROSTER_MAX,
+    /* Round 722: the tax projection and the tip off floor, so the boxes can say so. */
+    tax: { bill: view.bill, over: view.over },
+    rosterFloor: NBA_TIPOFF_MIN,
     wins: my.wins,
     losses: my.losses,
     period: league.round,
@@ -682,6 +738,11 @@ export default function NbaFrontOfficeBoard() {
   /* Round 631: at the engine's floor every Waive waits, at its ceiling every Sign does, and both say why. */
   const cutBlock = cutRefusal(my, NBA_ROSTER_MIN);
   const fullBlock = rosterFullRefusal(my, NBA_ROSTER_MAX);
+  /* Round 722: the season tips off on fourteen to fifteen men. Above fifteen
+     the first round waits on a waiver; below fourteen the league fills in. */
+  const tipBlock = league.round === 1 ? nbaTipOffRefusal(my) : null;
+  const tipShort = league.round === 1 ? Math.max(0, NBA_TIPOFF_MIN - my.players.length) : 0;
+  const apronNote = nbaApronNote(my, league.cap, league.taxScale);
   const panelTitle = tiles.find(x => (x.key === 'play' ? 'round' : x.key) === tab)?.title ?? '';
 
   return (
@@ -693,6 +754,8 @@ export default function NbaFrontOfficeBoard() {
         <span className="rounded-full border border-border bg-card px-3 py-1 text-muted-foreground">Record <b className="text-foreground">{my.wins}-{my.losses}</b></span>
         <span className="rounded-full border border-border bg-card px-3 py-1 text-muted-foreground">Strength <b className="text-primary">{strength}</b></span>
         <span className={cn('rounded-full border border-border bg-card px-3 py-1', room < 5 ? 'text-destructive' : 'text-muted-foreground')}>Cap room <b>${room}M</b></span>
+        {/* Round 722: the projected bill, all season. */}
+        <span data-tax-chip className={cn('rounded-full border border-border bg-card px-3 py-1', view.bill > 0 ? 'text-destructive' : 'text-muted-foreground')}>Tax <b>{view.bill > 0 ? `$${view.bill}M` : 'none'}</b></span>
       </div>
 
       {/* Round 180: the owner card, always visible on the hub. */}
@@ -724,11 +787,14 @@ export default function NbaFrontOfficeBoard() {
 
       {tab === 'team' && (
         <div className="rounded-2xl border border-border bg-card p-3">
-          <p className="mb-2 text-center text-xs text-muted-foreground">
-            Payroll ${nbaCapUsed(my)}M of ${league.cap}M
-            {dead > 0 && <> · dead money <b className="text-destructive">${dead}M</b></>}
-          </p>
-          <p className="mb-2 text-center text-[10px] text-muted-foreground">{capNote()}</p>
+          {/* Round 722: the shared cap panel, the NBA's tax and tip off floor passed as its descriptor. */}
+          <FoCapPanel
+            headline={`Payroll $${nbaCapUsed(my)}M of $${league.cap}M`}
+            dead={dead}
+            note={capNote()}
+            tax={view}
+            roster={{ count: my.players.length, floor: NBA_TIPOFF_MIN, max: NBA_ROSTER_MAX, minContract: NBA_MIN_CONTRACT }}
+          />
           {cutBlock && <p data-cut-block className="mb-2 text-center text-[10px] text-destructive">{cutBlock}</p>}
           <div className="grid max-h-96 grid-cols-1 gap-1 overflow-y-auto sm:grid-cols-2">
             {[...my.players].sort((a, b) => b.ovr - a.ovr).map(p => {
@@ -813,6 +879,8 @@ export default function NbaFrontOfficeBoard() {
 
       {tab === 'trade' && (
         <div className="rounded-2xl border border-border bg-card p-3 space-y-2">
+          {/* Round 722: the apron rule, when it binds on this club. */}
+          {apronNote && <p data-apron-note className="text-center text-[10px] text-destructive">{apronNote}</p>}
           {/* Round 82: Trade Finder, shop a player and let the league bid */}
           <div className="rounded-xl border border-gold/30 bg-gold/5 p-2.5 space-y-2">
             <p className="text-center text-[11px] font-bold text-foreground">🔍 Trade Finder</p>
@@ -899,7 +967,14 @@ export default function NbaFrontOfficeBoard() {
       {tab === 'round' && (
         <div className="rounded-2xl border border-gold/40 bg-card p-4 text-center">
           <p className="mb-2 text-sm text-foreground">Each round simulates a stretch of games across the league.</p>
-          <button onClick={playRound} className="inline-flex items-center gap-2 rounded-full bg-primary px-8 py-2.5 text-sm font-bold text-primary-foreground hover:opacity-90">
+          {/* Round 722: tip off waits on a legal roster, and says what the league will do about a short one. */}
+          {tipBlock && <p data-tipoff-block className="mb-2 text-[11px] text-destructive">{tipBlock}</p>}
+          {!tipBlock && tipShort > 0 && (
+            <p data-tipoff-short className="mb-2 text-[11px] text-muted-foreground">
+              {tipShort} short of the {NBA_TIPOFF_MIN} man floor. At tip off the league fills the gap on minimum deals (${NBA_MIN_CONTRACT}M each), so sign who you want first.
+            </p>
+          )}
+          <button onClick={playRound} disabled={!!tipBlock} title={tipBlock ?? undefined} className="inline-flex items-center gap-2 rounded-full bg-primary px-8 py-2.5 text-sm font-bold text-primary-foreground hover:opacity-90 disabled:opacity-40">
             <ShieldHalf className="h-4 w-4" /> {league.round >= NBA_ROUNDS ? 'Final stretch + playoffs' : `Play Round ${league.round}`}
           </button>
           <p className="mt-2 text-[10px] text-muted-foreground">The season ends with the play-in for seeds 7 to 10, then best-of-7 rounds to the Finals.</p>

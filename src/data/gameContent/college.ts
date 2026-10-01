@@ -719,13 +719,16 @@ export const COLLEGE_CONTENT: GameContentMap = {
       {
         heading: "Playing one week of the season at a time",
         items: [
-          "Play one week at a time: 12 games, weeks 1 to 4 out of conference, the rest in it.",
+          "Play one week at a time: 12 games, weeks 1 to 4 out of conference, weeks 5 to 11 in it, and week 12 is rivalry week.",
+          "Week 12 is rivalry week, and every program plays its rival, even one from another conference. Your rival is a school from your own state when one is free to pair with you, otherwise a pairing the game made, and the game tells you which. Florida has three schools on the board, so Florida and Miami get each other and Florida State gets a pairing the game made.",
+          "The rivalry winner carries 0.5 to 1.5 points of extra strength into the title games and the Playoff, the loser drops the same, and a margin of 21 or more swings the full 1.5.",
         ],
       },
       {
         heading: "Reaching the conference title game",
         items: [
           "Finish top two in your conference to reach its title game; win it for an automatic Playoff bid.",
+          "The conference table goes by conference winning percentage, not raw wins, because not everyone plays the same number of league games: a program whose rival is in another conference spends week 12 outside the league.",
         ],
         subsections: [
           {
@@ -740,6 +743,10 @@ export const COLLEGE_CONTENT: GameContentMap = {
         heading: "Spending NIL points on recruits and the portal",
         items: [
           "Spend NIL points across an 18-player high school board and an 8-player portal, then start the next season.",
+          "The same offseason screen holds your two coordinators, one for the offense and one for the defense. Each moves his side of the ball by up to 3 rating points either way: 70 is neutral, 95 is the full plus 3, 45 the full minus 3, and an empty chair is called by a grad assistant who counts as a 50.",
+          "In a game each side scores 1.5 more points for every point its offensive coordinator's edge beats the other side's defensive coordinator's.",
+          "Keep your coordinators, let one go and get his pay back, or shop three candidates per chair, one rated below your program's level, one around it and one above it. A hire costs the difference between his pay and the pay of the man he replaces, and is refused if the pot cannot cover it.",
+          "A coordinator rated 85 or better can be hired away as a head coach after any season, and his chair stays empty until you fill it.",
         ],
       },
     ],
@@ -748,6 +755,7 @@ export const COLLEGE_CONTENT: GameContentMap = {
         heading: "Twelve teams make the Playoff field",
         items: [
           "The Playoff field is 12: the 5 conference champions plus 7 at-larges, seeded by ranking, byes for the top four.",
+          "On the same record the better resume ranks higher: strength of schedule, the average strength of every opponent actually played, title game included, plus the team's own strength. The 7 at-large spots and the seeds come off that ranking, and the Schedule tab shows your number and where it ranks.",
         ],
       },
       {
@@ -760,6 +768,8 @@ export const COLLEGE_CONTENT: GameContentMap = {
         heading: "How the NIL budget resets each offseason",
         items: [
           "NIL resets each offseason from prestige plus wins, and every signing spends against it.",
+          "Rivalry week moves that budget: a win adds 3 to 8 points and a loss takes 3 to 8 away, with a margin of 21 or more swinging the full 8.",
+          "Your two coordinators are paid first out of the same budget, from 3 points a season for a 45 to 16 for a 95, and what is left is your NIL money. If the budget cannot cover them, the dearest walks until it can.",
         ],
       },
       {
@@ -774,6 +784,7 @@ export const COLLEGE_CONTENT: GameContentMap = {
         heading: "Boise State runs the table for an automatic bid",
         paragraphs: [
           "You take Boise State, prestige 78. One September loss, then you run the league, finish 11-1, and win the conference title game for the automatic bid.",
+          "Week 12 is rivalry week against Tulane, a pairing the game made because no other Idaho school is on the board. You win it by 24, so Boise State carries 1.5 extra points of strength into the title game and the Playoff, and the trail opens with 8 more budget points.",
         ],
       },
       {

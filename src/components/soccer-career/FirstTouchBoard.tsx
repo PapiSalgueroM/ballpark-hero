@@ -3,7 +3,7 @@ import { Dialog, DialogContent, DialogDescription, DialogTitle, DialogTrigger } 
 import { useArcadeFlight } from '@/hooks/useArcadeFlight';
 import { getTodayET } from '@/lib/dateUtils';
 import { readDailyRecord, writeDailyRecord } from '@/lib/dailyRecord';
-import { DRILL_META, drillBoost, drillHeadroom, drillSeed, type DrillKind } from '@/lib/careerDrills';
+import { DRILL_META, drillBoost, drillHeadroom, drillSeed, drillStatFor, type DrillKind } from '@/lib/careerDrills';
 import { buildFirstTouchRun, firstTouchDeadline, incomingBallAt, outgoingBallAt, takeFirstTouch, TOUCH_CONTACT, TOUCH_DIRECTIONS, TOUCH_GATES, validateFirstTouchRecord, type FirstTouchRecord, type FirstTouchResult, type TouchDirection } from '@/lib/firstTouchDrill';
 import type { CareerState } from '@/lib/soccerCareerEngine';
 import motion from './FirstTouchBoard.module.css';
@@ -14,12 +14,12 @@ const EMPTY: FirstTouchRecord = { rounds: 0, count: 0, score: 0, banked: false }
 const titleCase = (value: string) => value[0].toUpperCase() + value.slice(1);
 const reducedMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-function Rules() {
+function Rules({ trains }: { trains: string }) {
   return <div className="space-y-2 text-xs text-muted-foreground">
     <p>Control ten incoming balls into the marked Left, Center or Right gate. Choose a direction, then Touch as the ball reaches the contact spot. Later contact windows get smaller.</p>
     <p>Each clean touch scores 10. An early, late or wrong-gate touch scores 0. The timer and contact window stay visible, including with reduced motion.</p>
     <p>Use the buttons, or focus the pitch and use Left/Right arrows and Space. Pause freezes the clock. Returning from another tab needs Resume.</p>
-    <p>Today&apos;s ten save after every touch and can bank once. Practice is unlimited and never banks. One career session per season: 50 earns +1 Dribbling, 80 earns +2, capped by your ceiling, with next season&apos;s growth.</p>
+    <p>Today&apos;s ten save after every touch and can bank once. Practice is unlimited and never banks. One career session per season: 50 earns +1 {trains}, 80 earns +2, capped by your ceiling, with next season&apos;s growth.</p>
     <p><strong className="text-foreground">Example:</strong> Right gate, arrival 1.50s, window 1.30s to 1.70s. Choose Right and Touch at 1.50s for 10. Left, or a press at 1.00s, misses.</p>
   </div>;
 }
@@ -29,6 +29,8 @@ export default function FirstTouchBoard({ career, canBank, onBank, onBack }: {
   onBank: (kind: DrillKind, count: number) => void; onBack: () => void;
 }) {
   const SLUG = DRILL_META.firsttouch.slug;
+  /* Round 784: in goal this trains Positioning, the stat the engine pays. */
+  const trains = drillStatFor('firsttouch', career.position).label;
   const today = useRef(getTodayET()).current;
   const [daily, setDaily] = useState(() => readDailyRecord(SLUG, today, validateFirstTouchRecord));
   const [mode, setMode] = useState<Mode>('daily');
@@ -201,12 +203,12 @@ export default function FirstTouchBoard({ career, canBank, onBank, onBack }: {
         <DialogContent className={`w-[calc(100%-24px)] max-w-sm max-h-[85vh] overflow-y-auto p-5 ${motion.rules}`} onKeyDown={event => { if (event.key === 'Escape') event.stopPropagation(); }}>
           <DialogTitle>First Touch rules</DialogTitle>
           <DialogDescription>Read the gate, then time the contact.</DialogDescription>
-          <Rules />
+          <Rules trains={trains} />
         </DialogContent>
       </Dialog>
     </div>
     {phase === 'intro' ? <div className="space-y-3">
-      <Rules />
+      <Rules trains={trains} />
       {daily && <p className="text-xs font-bold">Today: {daily.count} clean, {daily.rounds}/10 settled{daily.banked ? ', banked' : ''}.</p>}
       <button onClick={() => startRun('daily')} className="w-full rounded-lg bg-emerald-600 px-3 font-black text-black text-sm">{daily?.rounds === 10 ? 'View today’s result' : daily?.rounds ? 'Resume today’s ten' : 'Play today’s ten'}</button>
       <button onClick={() => startRun('practice')} className="w-full rounded-lg bg-muted/40 px-3 text-sm font-bold">Practice, no banking</button>
@@ -245,7 +247,7 @@ export default function FirstTouchBoard({ career, canBank, onBank, onBack }: {
       <div className="min-h-10 text-center text-xs font-bold" aria-live="polite">{result && <p data-touch-verdict={result.won ? 'clean' : 'miss'} className={`${motion.reply} ${result.won ? 'text-emerald-400' : 'text-amber-300'}`}>{result.verdict}</p>}</div>
       <div className="min-h-20 space-y-2 text-center text-xs">
         {phase === 'done' && <>
-          <p className="font-bold">{mode === 'practice' ? 'Practice complete. No career reward.' : record.banked ? 'Session banked.' : !canBank ? 'Already trained this season. Today’s result is saved.' : boost > 0 ? `+${boost} Dribbling with next season’s growth.` : record.score >= 50 ? 'At your ceiling. No extra Dribbling to add.' : 'Below 50. No stat gain this time.'}</p>
+          <p className="font-bold">{mode === 'practice' ? 'Practice complete. No career reward.' : record.banked ? 'Session banked.' : !canBank ? 'Already trained this season. Today’s result is saved.' : boost > 0 ? `+${boost} ${trains} with next season’s growth.` : record.score >= 50 ? `At your ceiling. No extra ${trains} to add.` : 'Below 50. No stat gain this time.'}</p>
           {mode === 'daily' && (canBank || record.banked) && <button data-touch-bank onClick={record.banked ? leave : bank} className="w-full rounded-lg bg-emerald-600 text-black text-sm font-black">{record.banked ? 'Back to drills' : 'Bank the session'}</button>}
           {mode === 'practice' && <button onClick={() => startRun('practice')} className="w-full rounded-lg bg-muted/40 text-sm font-bold">Another practice</button>}
         </>}

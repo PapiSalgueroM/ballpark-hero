@@ -1848,7 +1848,15 @@ export const BASKETBALL_CONTENT: GameContentMap = {
       {
         heading: "Cap room and roster size limits",
         items: [
-          "The cap starts at 155 million and rises 7 percent every season. Rosters hold 8 to 15 players.",
+          "The cap starts at the real 2026-27 figure, just under 165 million, and rises 7 percent every season in the game. You can waive down to 8 players during the year, but the season cannot tip off with fewer than 14 or more than 15: short of 14 the league fills the gap with minimum deals at 2 million each and tells you who, and above 15 the first round waits until you waive down.",
+        ],
+      },
+      {
+        heading: "The luxury tax, the aprons and the repeater rate",
+        items: [
+          "The real league put its 2026-27 tax line at 200.4 million, but the salaries here are the game's own and run richer at the top, so every new league sets its line from its own payrolls instead: enough clubs over it to look like a real season (eight paid tax in 2023-24), but nobody facing a bill above 190 million, about the most any club has ever been billed. A new league opens on a 226.7 million line with five clubs over it, and the line rises 7 percent a season with the cap.",
+          "Every dollar of payroll over the line, dead money included, is taxed at season close in brackets about 3 percent of the line wide (6.9 million in a new league), at the league's real rates: 1.00 and 1.25 on the first two brackets, 3.50 and 4.75 on the next two, then half a dollar more per bracket. Pay tax in three of the previous four seasons and you are a repeater, taxed at 3.00, 3.25, 5.50 and 6.75 on the same brackets.",
+          "The cap panel shows the projected bill all season. At close the bill is listed beside the results, ownership takes one point of trust per 6 million of it (never more than 20), and the money is held back from next season's cap room. Above the first apron (236.4 million in a new league) a trade has to send out at least the salary it brings back. Computer teams that pay tax let their expiring depth walk the next summer, so the line moves the whole league, not just you. A save from before the tax plays out its current season untaxed and gets its line that summer.",
         ],
       },
       {
@@ -1927,7 +1935,8 @@ export const BASKETBALL_CONTENT: GameContentMap = {
     faqs: [
       { q: "Are the rosters real?", a: "The players are real, about ten curated per franchise. Contracts, salaries and ages in the sim are explicitly fictional." },
       { q: "Why did my trade get rejected?", a: "The engine values rating adjusted for age and wants to come out ahead. Offer youth, take back age, or add a pick." },
-      { q: "Can I get fired?", a: "Yes. Ownership grades the mandate every season and tracks trust from 0 to 100. Losing the play-in when the ask was a banner costs real trust, and at zero the save ends and you take another job." },
+      { q: "Can I get fired?", a: "Yes. Ownership grades the mandate every season and tracks trust from 0 to 100. Losing the play-in when the ask was a banner costs real trust, a luxury tax bill costs a point per 6 million of it, and at zero the save ends and you take another job." },
+      { q: "What happens if I start the season with 12 players?", a: "The league fills you to 14 at tip off with the lowest rated free agents in the pool on one year minimum deals, 2 million each, and the feed names them. Sign who you actually want before you press play. With 16 or more you cannot start until you waive down to 15." },
       { q: "Does my save persist?", a: "Yes, the league auto saves in your browser across unlimited seasons. Clearing site data wipes the franchise." },
     ],
   },

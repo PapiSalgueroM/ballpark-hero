@@ -59,12 +59,17 @@ export interface CutPlayer {
   name: string;
   salary: number;
   years: number;
+  /** Round 723: a fully guaranteed deal (the NFL franchise tag). Cutting him
+      is dead money in full. Optional, and absent on every other sport's men. */
+  guaranteed?: boolean;
 }
 
 const round1 = (n: number): number => Math.round(n * 10) / 10;
 
 /** What cutting this man would cost, so a screen can say so before it happens. */
-export function deadMoneyFor(p: Pick<CutPlayer, 'salary' | 'years'>): { now: number; next: number } {
+export function deadMoneyFor(p: Pick<CutPlayer, 'salary' | 'years' | 'guaranteed'>): { now: number; next: number } {
+  /* Round 723: guaranteed money is owed whatever happens, all of it this season. */
+  if (p.guaranteed) return { now: round1(p.salary), next: 0 };
   const now = round1(p.salary * 0.5);
   const next = p.years > 1 ? round1(now / 2) : 0;
   return { now, next };

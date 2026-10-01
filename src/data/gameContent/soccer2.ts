@@ -158,6 +158,205 @@ export const SOCCER_CONTENT_2: GameContentMap = {
       { q: "Does it count on the leaderboard?", a: "Not yet. It records that you played, but it puts no points on the leaderboard for now." },
     ],
   },
+  '/deadline-day': {
+    intro: [
+      "Deadline Day puts you in charge of recruitment at a real club on the last day of the summer transfer window. The board have picked out three or four places in the side that need an upgrade, left you a budget, and the window shuts at 11pm.",
+      "It runs on the Club Manager transfer desk, so every asking price, counter, patience count, valuation read, rival bid and agent's demand is the same one the full game plays. What is new is the clock: twelve hours, and every bid costs one of them.",
+      "There is a daily, the same club, the same list and the same budget for everyone, and a free play mode at any club you like.",
+    ],
+    headings: {
+      howToPlay: "How to play Deadline Day, the free transfer window game",
+      rules: "Deadline Day rules: the clock, the fee table and the grade",
+      example: "A Deadline Day walkthrough, four signings before 11pm",
+      tips: "Deadline Day tips for beating the clock without overpaying",
+      faq: "Deadline Day FAQ: real players, the daily and the leaderboard",
+    },
+    howToPlaySections: [
+      {
+        heading: "Choosing the daily club or free play",
+        items: [
+          "Open today's window for the shared daily club, or pick any club in free play, or let the game pick one at random.",
+        ],
+      },
+      {
+        heading: "Reading the board's brief",
+        items: [
+          "Read the brief. Each need is a place in your current eleven, with who starts there now and the rating that would count as an upgrade.",
+          "Under each need are two or three real players who could fill it, cheapest first, each with what your recruitment desk thinks he is worth.",
+        ],
+      },
+      {
+        heading: "Working a deal",
+        items: [
+          "Tap a player to open his deal, then call his club. The call is free and their asking price comes straight back.",
+        ],
+        subsections: [
+          {
+            heading: "Bidding at the fee table",
+            items: ["Type a bid and watch the meter, or use the quick buttons to lowball, haggle or meet the ask. Sending it takes an hour."],
+          },
+          {
+            heading: "Agreeing personal terms",
+            items: ["Once the fee is agreed, his agent names a contract length, a weekly wage and a signing bonus. Offering terms takes an hour too."],
+          },
+        ],
+      },
+      {
+        heading: "Selling to raise money",
+        items: [
+          "Short of money? Sell one of your bench players to a club that has made an offer. Each sale takes an hour and the fee goes straight into the budget.",
+        ],
+      },
+      {
+        heading: "Finishing the day",
+        items: [
+          "Keep going until every need is filled, or shut the window yourself when you are done.",
+        ],
+      },
+    ],
+    ruleSections: [
+      {
+        heading: "The clock and the brief",
+        items: [
+          "The window opens at 11am and shuts at 11pm, so you have 12 hours.",
+          "Calling a club and walking away cost no time. Every bid, every offer of terms and every sale costs one hour.",
+          "The board want 3 or 4 places filled. A need is filled by a signing who can play that place and is rated at or above its line.",
+          "The budget is about what the cheapest man for each need would cost at his listed price plus the signing bonus his agent asks for. The dearest man for every need would cost more than you have.",
+          "Your desk gives a range for what each player is worth, and what he is really worth is always inside it.",
+        ],
+      },
+      {
+        heading: "How the selling club answers",
+        items: [
+          "Bid 97 percent of their ask or more and the fee is agreed.",
+          "Between 75 and 97 percent they counter: the ask comes 40 percent of the way down to your bid, and it costs one round of their patience.",
+          "Under 75 percent is an insult. The ask goes up 4 percent and it costs two rounds. Under 55 percent they end the talks on the spot.",
+          "A selling club starts with 4 or 5 rounds of patience. Run it out and the deal is dead.",
+        ],
+      },
+      {
+        heading: "The agent and the budget",
+        items: [
+          "His agent hears 3 offers at most. An offer that adds up to what he asked for signs him, a near miss gets a lower wage demand back, and a poor one costs two tries or ends the meeting.",
+          "The board will not go over the wage or the contract length he asks for, so you cannot pay him more a week to skip the signing bonus.",
+          "The signing bonus comes out of the same budget as the fee. A bid or an offer you cannot afford is refused before the hour is spent, so the budget never goes below zero.",
+        ],
+      },
+      {
+        heading: "Rival clubs moving in",
+        items: [
+          "Rival clubs move for players on your list. If a rival is in for a man and you do not push his deal that hour, there is a 30 percent chance they sign him.",
+          "If a rival is in at the fee table, your bid has to beat theirs. Bid at or under their number and there is a 30 percent chance they close the deal there and then.",
+          "Walk away from a deal with a rival circling and they usually take him.",
+        ],
+      },
+      {
+        heading: "When the window shuts",
+        items: [
+          "When the window shuts, any deal still in talks or at the terms table collapses, and none of its money is spent.",
+        ],
+        subsections: [
+          {
+            heading: "How the grade adds up",
+            items: [
+              "The grade is out of 100: 50 for needs filled, 30 for value for money and 20 for budget left.",
+              "Value for money is full for a fee at or under what the player is really worth and nothing at 1.5 times it, averaged over your signings.",
+              "Budget points are the share of the budget you kept times the share of needs you filled, so a window that signs nobody scores nothing.",
+              "The letters are A+ from 90, A from 80, B from 65, C from 50 and D from 35. Anything lower is an F.",
+            ],
+          },
+        ],
+      },
+      {
+        heading: "The daily and the leaderboard",
+        items: [
+          "The daily is the same club, the same list, the same budget and the same dice for everyone on an Eastern day. One go per day, and a refresh picks up where you left off.",
+          "Deadline Day records that you played but puts no points on the leaderboard for now, while the points system is being rebuilt.",
+        ],
+      },
+    ],
+    exampleSections: [
+      {
+        heading: "The board's shopping list",
+        paragraphs: [
+          "Say today's club needs a goalkeeper, a central midfielder, a right winger and a striker, and the board have left you £29m.",
+        ],
+      },
+      {
+        heading: "Haggling for the keeper",
+        paragraphs: [
+          "You start with the keeper. His club are asking £3.6m, your desk says he is worth £2.4m to £3.2m, and you bid £3.1m. That is a counter: they come down to £3.4m and one round of patience is gone. It is noon.",
+          "You bid £3.3m, inside 97 percent of their ask, and the fee is agreed. His agent wants 4 years at 10k a week and a £1.8m bonus. You offer exactly that and he signs. It is 2pm and you have £23.9m left.",
+        ],
+      },
+      {
+        heading: "A rival steals a target",
+        paragraphs: [
+          "While you were on the phone, a rival came in for the dearest keeper on your list at noon and signed him at 2pm. It did not matter this time, but the same thing can happen to the striker you were saving for last.",
+        ],
+      },
+      {
+        heading: "The striker with an hour to spare",
+        paragraphs: [
+          "By 8pm the midfielder and the winger are in, three hours each. The striker's club will not budge much and a rival is in for him, so you bid over the rival's number and inside 97 percent of the ask. Fee agreed at 9pm, terms signed at 10pm, an hour to spare.",
+        ],
+      },
+      {
+        heading: "Grading the window",
+        paragraphs: [
+          "Four needs out of four. The keeper cost £3.3m for a £3m player, 10 percent over his real worth, which keeps 80 percent of his share of the value points, and say the other three went about 10 percent over too. That is 50 for needs, 24 for value and, with £1m of the £29m left, 0.7 for budget: 75 out of 100, a B.",
+        ],
+      },
+    ],
+    tipSections: [
+      {
+        heading: "Using the free phone calls",
+        items: [
+          "Call every club on your list early. The call is free, and it puts every asking price in front of you before you spend an hour.",
+        ],
+      },
+      {
+        heading: "Pricing off your desk",
+        items: [
+          "Open around the middle of your desk's range, never under 75 percent of their ask, then come about half way up to their number each round. Every fee at or under his real worth keeps your value points whole.",
+          "A haggle costs an hour and a round of patience. With plenty of clock, pitch low and come up. With the window closing, pay near the ask and get it done.",
+          "Do not insult a club unless you mean it. Under 75 percent of the ask costs two rounds and pushes the price up.",
+        ],
+      },
+      {
+        heading: "Leaving room for the bonus",
+        items: [
+          "On a cheap player the signing bonus can be more than half the fee, so leave room for it before you agree the fee.",
+        ],
+      },
+      {
+        heading: "Seeing off the rivals",
+        items: [
+          "When a rival comes in, deal with that player next. Every hour you leave him alone they have a 30 percent shot at signing him.",
+        ],
+      },
+      {
+        heading: "Raising money from the bench",
+        items: [
+          "If the sums do not add up, sell a bench player early, so the money is there when the fee table needs it.",
+        ],
+      },
+      {
+        heading: "What the grade rewards",
+        items: [
+          "Money left only scores once the needs are filled, so a full window at a fair price beats a cheap half window.",
+          "Shutting the window early earns nothing for the hours you did not use. Unused money counts, unused time does not.",
+        ],
+      },
+    ],
+    faqs: [
+      { q: "Is Deadline Day the same as Club Manager?", a: "It runs on the same transfer desk. The clubs, squads, market, asking prices, patience, valuation desk, rival bids and personal terms all come from Club Manager unchanged. Deadline Day is one day of it against the clock." },
+      { q: "Are the players and the deals real?", a: "The players, their clubs, ratings, ages and values are the real ones Club Manager uses. The negotiations, the rival bids and the signings are simulated, so nothing that happens here is a claim about a real transfer." },
+      { q: "What happens to a deal at 11pm?", a: "If you are still haggling, or the fee is agreed but his terms are not signed, the deal collapses and none of the money is spent." },
+      { q: "Can I replay today's window?", a: "The daily is one go per day, and a refresh picks up where you left off. Free play has no limit, and every free play window is a fresh one." },
+      { q: "Does it count on the leaderboard?", a: "Not yet. It records that you played, but it puts no points on the leaderboard for now." },
+    ],
+  },
   '/sign-the-player': {
     intro: [
       "Three bidders, one billion pounds each: you, The Sheikh, and Moneyball Mike. Twenty two players go under the hammer across two passes, eleven journeymen wait to fill the gaps, and a simulated mini league decides who spent it best.",
@@ -1026,7 +1225,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
       },
       {
         q: "What does the rating look like?",
-        a: "A rating headline, a short written analysis of your picks, and your chemistry line. Under it comes a season report: a squad rating out of 100, where you finish in a 20 team league, points, trophies and a top scorer, plus how your defence, midfield and attack compare. Every player is judged at his peak, so retired greats are not marked down for being retired.",
+        a: "A rating headline, a short written analysis of your picks, and your chemistry line. Under it comes a season report: a squad rating out of 100, where you finish in a 20 team league, points, trophies and a top scorer, plus how your defence, midfield and attack compare. Two tabs open the season month by month and give every pick his appearances, goals, assists and average rating, and one line says what a different shape or a stronger pick in your weakest slot would have changed on the same rolls. Every player is judged at his peak, so retired greats are not marked down for being retired.",
       },
     ],
   },
@@ -1688,6 +1887,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
         heading: "Training sessions and steering growth events",
         items: [
           "The training ground is the dumbbell button, one session a season. The older sessions (cone slalom, sprint burst, passing gates, penalties or shot stopping) pay +1 at 50 and +2 at 80; the position drill pays the same but stops at your ceiling. Beyond that, growth follows your age curve, and you steer it through event choices, lifestyle purchases, and the social media detox, worth plus 2 to every stat next season.",
+          "In goal the same drills train keeper skills: the cone slalom is footwork and pays Positioning, the sprint burst pays Sweeping Speed, the passing gates pay Distribution and shot stopping pays Reflexes. Outfield players train Dribbling, Pace, Passing and Shooting from the same four tiles.",
         ],
       },
       {

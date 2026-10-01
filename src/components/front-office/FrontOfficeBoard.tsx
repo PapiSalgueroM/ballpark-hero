@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { Briefcase, Crown, RotateCcw, ShieldHalf } from 'lucide-react';
+import { Briefcase, ChevronLeft, Crown, RotateCcw, ShieldHalf } from 'lucide-react';
 import ShareButtons from '@/components/game/ShareButtons';
 import { FO_TEAMS, FO_TEAM_MAP } from '@/data/frontOfficePlayers';
 import { DraftNightCard } from '@/components/front-office-shared/DraftNightCard';
@@ -14,6 +14,9 @@ import {
   REGULAR_WEEKS,
   type LeagueState, type GmGame, type Prospect, type PlayoffRound,
   ensureFoLeagueIds, NFL_ROSTER_MIN,
+  /* Round 723: the depth chart the sim reads, and the franchise tag. */
+  DEPTH_GROUPS, depthChart, swapDepth, starterIds, hasSavedDepth, resetDepth, type DepthPos,
+  expiringPlayers, tagRefusal, applyFranchiseTag, franchiseTagSalary,
 } from '@/lib/frontOffice';
 /* Round 631: a cut costs dead money and the man cannot come back this season. */
 import { deadMoneyFor, deadCapUsed, signRefusal, cutRefusal, tradeRefusal } from '@/lib/frontOfficeCuts';
@@ -119,6 +122,12 @@ export default function FrontOfficeBoard() {
   /* Round 631: the man whose Cut button has been tapped once. The second tap
      is only offered once the dead money is on screen. Transient. */
   const [cutArmed, setCutArmed] = useState<string | null>(null);
+  /* Round 723: the depth chart inside the Roster box. null is the roster
+     list, 'groups' the eight group tiles, a position one group's order.
+     depthPick is the man tapped first, waiting for the man to swap with.
+     Both transient; the chart itself lives on the save. */
+  const [depthView, setDepthView] = useState<'groups' | DepthPos | null>(null);
+  const [depthPick, setDepthPick] = useState<string | null>(null);
   /* Round 190: the live phone call. Transient like the market window:
      never persisted, a reload simply ends the call. */
   const [talks, setTalks] = useState<{ state: TalksState; partner: string; myPieceId: string; wantId: string } | null>(null);
@@ -420,7 +429,10 @@ export default function FrontOfficeBoard() {
     ));
     setNewsFeed(f => [note, ...f].slice(0, 6));
     if (nextPicks <= 0) {
-      const news = runOffseason(lg, Math.random);
+      /* Round 723: the GM's own tag was decided on this screen; the CPU
+         clubs tag inside the offseason, skipping this club. */
+      const news = runOffseason(lg, Math.random, myTeam);
+      const myTagged = lg.teams[myTeam].players.find(p => p.tagSeason === lg.season);
       /* Round 180: ownership re-reads the roster after the offseason churn
          and sets next season's ask. A defending champ is never asked for
          less than a deep run. Round 192: what you said at the podium tilts
@@ -434,6 +446,8 @@ export default function FrontOfficeBoard() {
           : pressTilt === -1 ? ['🎙️ Your ask for patience was heard. The bar sits softer.'] : []),
         ...news.retired.filter(r => r.team === myTeam).map(r => `👋 ${r.player} retires.`),
         ...news.expired.filter(r => r.team === myTeam).map(r => `🚪 ${r.player} walks in free agency.`),
+        ...(myTagged ? [`🏷️ ${myTagged.name} plays the season on the tag, $${myTagged.salary}M guaranteed.`] : []),
+        ...(news.tagged.length > 0 ? [`🏷️ ${news.tagged.length} rival club${news.tagged.length === 1 ? '' : 's'} used the franchise tag.`] : []),
         ...news.developed.filter(r => r.team === myTeam).map(r => `📈 ${r.player} develops ${r.from} to ${r.to}.`),
       ];
       setNewsFeed(feed.slice(0, 8));
@@ -471,6 +485,47 @@ export default function FrontOfficeBoard() {
       setLeague(lg);
       persist({}, lg, myTeam);
     }
+  };
+
+  /* Round 723: the franchise tag, decided on the draft screen before the
+     last pick runs the offseason. The engine refuses a second tag, a man
+     with years left and a tender the room cannot cover; the button is greyed
+     for the same reasons. */
+  const doTag = (pid: string) => {
+    if (!league) return;
+    const lg: LeagueState = JSON.parse(JSON.stringify(league));
+    const res = applyFranchiseTag(lg, lg.teams[myTeam], pid);
+    if (!res.ok) return;
+    const man = lg.teams[myTeam].players.find(p => p.id === pid);
+    if (man) {
+      setNewsFeed(f => [`🏷️ ${man.name} is tagged: $${res.salary}M for one year, fully guaranteed${res.count > 1 ? ', his second tag in a row' : ''}.`, ...f].slice(0, 6));
+    }
+    setLeague(lg);
+    persist({}, lg, myTeam);
+  };
+
+  /* Round 723: tap to swap. The first tap picks a man, the second swaps the
+     two in that group's order and writes the chart to the save. */
+  const tapDepth = (pos: DepthPos, pid: string) => {
+    if (!league) return;
+    if (!depthPick) { setDepthPick(pid); return; }
+    if (depthPick === pid) { setDepthPick(null); return; }
+    const lg: LeagueState = JSON.parse(JSON.stringify(league));
+    if (swapDepth(lg.teams[myTeam], pos, depthPick, pid)) {
+      setLeague(lg);
+      persist({}, lg, myTeam);
+    }
+    setDepthPick(null);
+  };
+
+  /* Round 723: hand a group back to the sim, ordered by rating again. */
+  const sortDepth = (pos: DepthPos) => {
+    if (!league) return;
+    const lg: LeagueState = JSON.parse(JSON.stringify(league));
+    resetDepth(lg.teams[myTeam], pos);
+    setDepthPick(null);
+    setLeague(lg);
+    persist({}, lg, myTeam);
   };
 
   const doSign = (pid: string) => {
@@ -731,6 +786,55 @@ export default function FrontOfficeBoard() {
           )}
         </div>
         {draftNight && <DraftNightCard night={draftNight} onContinue={draftDone ? leaveDraft : undefined} />}
+        {/* Round 723: the franchise tag, before the last pick opens free agency. */}
+        {!draftDone && (() => {
+          const tagged = my.tagUsedFor === league.season + 1 ? my.players.find(p => p.tagSeason === league.season + 1) ?? null : null;
+          const expiring = expiringPlayers(my);
+          return (
+            <div data-franchise-tag className="rounded-2xl border border-gold/30 bg-card p-3 space-y-2">
+              <p className="text-center text-[11px] font-bold text-foreground">🏷️ Franchise tag</p>
+              <p className="text-center text-[10px] text-muted-foreground">
+                One tag per offseason, before free agency opens. It is a one year deal, fully guaranteed, at the top five average
+                at his position or 120 percent of his old salary, whichever is more. Untagged men on their last year can walk:
+                role players half the time, stars now and then.
+              </p>
+              {tagged ? (
+                <p data-tag-done className="text-center text-xs text-foreground">
+                  Tagged: <b>{tagged.name}</b> ({tagged.pos}), ${tagged.salary}M for one year, fully guaranteed.
+                </p>
+              ) : expiring.length === 0 ? (
+                <p className="text-center text-[10px] text-muted-foreground">Nobody on your roster is on his last year, so there is nothing to tag.</p>
+              ) : (
+                <div className="grid grid-cols-1 gap-1 sm:grid-cols-2">
+                  {expiring.map(p => {
+                    const refusal = tagRefusal(league, my, p.id);
+                    const price = franchiseTagSalary(league, p);
+                    return (
+                      <div key={p.id} data-tag-row={p.id} className="flex items-center justify-between rounded-lg border border-border/60 bg-background px-2.5 py-1.5 text-xs">
+                        <span className="min-w-0">
+                          <span className="block truncate font-bold text-foreground">{p.name}</span>
+                          <span className="block text-[10px] text-muted-foreground">{p.pos} · {p.age}y · ${p.salary}M now, tag ${price}M</span>
+                          {refusal && <span className="block text-[10px] text-destructive">{refusal}</span>}
+                        </span>
+                        <span className="ml-2 flex shrink-0 items-center gap-1.5">
+                          <b className="text-primary">{p.ovr}</b>
+                          <button
+                            onClick={() => doTag(p.id)}
+                            disabled={!!refusal}
+                            title={refusal ?? `Tag ${p.name} at $${price}M`}
+                            className="rounded-full bg-primary px-2.5 py-0.5 text-[10px] font-bold text-primary-foreground disabled:opacity-40"
+                          >
+                            Tag
+                          </button>
+                        </span>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+          );
+        })()}
         {!draftDone && <div className="grid max-h-96 grid-cols-1 gap-1.5 overflow-y-auto sm:grid-cols-2">
           {draftClass.slice(0, 18).map(pr => (
             <button
@@ -802,7 +906,10 @@ export default function FrontOfficeBoard() {
     tradeLine: seasonTradeLine,
     titles,
   });
-  const openPanel = (key: FoPanelKey) => { setCutArmed(null); setTab(key === 'play' ? 'week' : key); };
+  const openPanel = (key: FoPanelKey) => { setCutArmed(null); setDepthView(null); setDepthPick(null); setTab(key === 'play' ? 'week' : key); };
+  /* Round 723: the chart the sim reads, and who it counts as starting today. */
+  const chart = depthChart(my);
+  const starters = starterIds(my);
   /* Round 631: dead money on the cap line, only when there is any. */
   const dead = deadCapUsed(my);
   /* Round 631: at the roster floor the engine refuses every cut, so every Cut says why and waits. */
@@ -860,8 +967,106 @@ export default function FrontOfficeBoard() {
             {dead > 0 && <> · dead money <b className="text-destructive">${dead}M</b></>}
           </p>
           <p className="mb-2 text-center text-[10px] text-muted-foreground">{capNote()}</p>
-          {cutBlock && <p data-cut-block className="mb-2 text-center text-[10px] text-destructive">{cutBlock}</p>}
-          <div className="grid max-h-96 grid-cols-1 gap-1 overflow-y-auto sm:grid-cols-2">
+          {/* Round 723: the depth chart, small tiles and a back button at each level. */}
+          {depthView === null && (
+            <div className="mb-2 text-center">
+              <button
+                data-depth-open
+                onClick={() => { setDepthView('groups'); setDepthPick(null); setCutArmed(null); }}
+                className="rounded-full border border-gold/50 bg-gold/10 px-3 py-1 text-[11px] font-bold text-foreground hover:border-gold"
+              >
+                📋 Depth chart
+              </button>
+            </div>
+          )}
+          {depthView === 'groups' && (
+            <div data-depth-chart className="space-y-2">
+              <div className="flex items-center gap-2">
+                <button onClick={() => setDepthView(null)} className="inline-flex items-center gap-1 rounded-full border border-border bg-background px-3 py-2 text-xs font-semibold text-muted-foreground hover:border-primary hover:text-foreground">
+                  <ChevronLeft className="h-3.5 w-3.5" /> Roster
+                </button>
+                <span className="font-display text-sm font-bold text-foreground">Depth chart</span>
+              </div>
+              <p className="text-center text-[10px] text-muted-foreground">
+                The sim reads who starts off this chart. Tap a group to reorder it. Injured men are skipped and the next man steps up.
+              </p>
+              <div className="grid grid-cols-2 gap-1.5 sm:grid-cols-4">
+                {DEPTH_GROUPS.map(pos => {
+                  const men = chart[pos];
+                  const n = men.filter(p => starters.has(p.id)).length;
+                  return (
+                    <button
+                      key={pos}
+                      data-depth-group={pos}
+                      onClick={() => { setDepthView(pos); setDepthPick(null); }}
+                      className="rounded-lg border border-border/60 bg-background px-2 py-1.5 text-left hover:border-primary/60"
+                    >
+                      <span className="block text-xs font-bold text-foreground">
+                        {pos} <span className="font-normal text-muted-foreground">· {n} start{n === 1 ? 's' : ''}</span>
+                      </span>
+                      <span className="block truncate text-[10px] text-muted-foreground">
+                        {men.length === 0
+                          ? 'Nobody'
+                          : n > 0
+                            ? men.filter(p => starters.has(p.id)).map(p => p.name).join(', ')
+                            : men[0].out > 0 ? `${men[0].name} is out` : `${men[0].name}, not starting`}
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+          {depthView !== null && depthView !== 'groups' && (() => {
+            const pos = depthView;
+            const men = chart[pos];
+            const n = men.filter(p => starters.has(p.id)).length;
+            return (
+              <div data-depth-group-open={pos} className="space-y-2">
+                <div className="flex items-center gap-2">
+                  <button onClick={() => { setDepthView('groups'); setDepthPick(null); }} className="inline-flex items-center gap-1 rounded-full border border-border bg-background px-3 py-2 text-xs font-semibold text-muted-foreground hover:border-primary hover:text-foreground">
+                    <ChevronLeft className="h-3.5 w-3.5" /> Groups
+                  </button>
+                  <span className="font-display text-sm font-bold text-foreground">{pos} depth</span>
+                </div>
+                <p className="text-center text-[10px] text-muted-foreground">
+                  Tap a man, then tap the one to swap him with. {n === 0 ? 'Nobody in this group starts as the roster stands.' : `The first ${n} start${n === 1 ? 's' : ''}.`}{' '}
+                  {hasSavedDepth(my, pos) ? (
+                    <span data-depth-custom>
+                      This is your order, and anyone new slots in by his rating.{' '}
+                      <button data-depth-reset onClick={() => sortDepth(pos)} className="font-bold text-primary hover:underline">Sort by rating</button>
+                    </span>
+                  ) : 'Sorted by rating until you swap someone.'}
+                </p>
+                <div className="grid grid-cols-1 gap-1 sm:grid-cols-2">
+                  {men.map((p, i) => (
+                    <button
+                      key={p.id}
+                      data-depth-row={p.id}
+                      onClick={() => tapDepth(pos, p.id)}
+                      className={cn(
+                        'flex items-center justify-between rounded-lg border px-2.5 py-1.5 text-left text-xs',
+                        depthPick === p.id ? 'border-gold bg-gold/10' : 'border-border/60 bg-background hover:border-primary/60',
+                      )}
+                    >
+                      <span className="min-w-0">
+                        <span className={cn('block truncate font-bold', p.out > 0 ? 'text-destructive' : 'text-foreground')}>
+                          {i + 1}. {p.name}{p.out > 0 ? ` (out ${p.out}w)` : ''}
+                        </span>
+                        <span className="block text-[10px] text-muted-foreground">{p.age}y · ${p.salary}M</span>
+                      </span>
+                      <span className="ml-2 flex shrink-0 items-center gap-1.5">
+                        {starters.has(p.id) && <span data-depth-starter className="rounded-full bg-gold/20 px-2 py-0.5 text-[9px] font-bold text-foreground">starts</span>}
+                        <b className="text-primary">{p.ovr}</b>
+                      </span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            );
+          })()}
+          {cutBlock && depthView === null && <p data-cut-block className="mb-2 text-center text-[10px] text-destructive">{cutBlock}</p>}
+          {depthView === null && <div className="grid max-h-96 grid-cols-1 gap-1 overflow-y-auto sm:grid-cols-2">
             {[...my.players].sort((a, b) => b.ovr - a.ovr).map(p => {
               /* Round 631: the cost is on screen before the second tap. */
               const cost = deadMoneyFor(p);
@@ -873,7 +1078,7 @@ export default function FrontOfficeBoard() {
                   <span className={cn('block truncate font-bold', p.out > 0 ? 'text-destructive' : 'text-foreground')}>
                     {p.name} {p.out > 0 ? `(out ${p.out}w)` : ''}
                   </span>
-                  <span className="block text-[10px] text-muted-foreground">{p.pos} · {p.age}y · ${p.salary}M x{p.years}</span>
+                  <span className="block text-[10px] text-muted-foreground">{p.pos} · {p.age}y · ${p.salary}M x{p.years}{p.tagSeason === league.season ? ' · 🏷️ tagged' : ''}</span>
                 </span>
                 <span className="ml-2 flex shrink-0 items-center gap-1.5">
                   <b className="text-primary">{p.ovr}</b>
@@ -891,8 +1096,9 @@ export default function FrontOfficeBoard() {
                 {arming && (
                   <div className="mt-1.5 rounded-lg border border-destructive/50 bg-destructive/10 p-2 space-y-1.5" data-cut-confirm>
                     <p className="text-[10px] text-foreground">
-                      Cut {p.name}? ${cost.now}M of his ${p.salary}M stays on this season's cap as dead money
-                      {cost.next > 0 ? `, and $${cost.next}M lands on next season's` : ''}. He goes to the pool and you cannot sign him back until the offseason.
+                      Cut {p.name}? {p.guaranteed
+                        ? `His deal is fully guaranteed, so all $${cost.now}M stays on this season's cap as dead money`
+                        : `$${cost.now}M of his $${p.salary}M stays on this season's cap as dead money${cost.next > 0 ? `, and $${cost.next}M lands on next season's` : ''}`}. He goes to the pool and you cannot sign him back until the offseason.
                     </p>
                     <div className="flex gap-1.5">
                       <button
@@ -913,7 +1119,7 @@ export default function FrontOfficeBoard() {
               </div>
               );
             })}
-          </div>
+          </div>}
         </div>
       )}
 

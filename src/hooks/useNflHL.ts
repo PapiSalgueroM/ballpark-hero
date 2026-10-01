@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback } from 'react';
+import { useState, useMemo, useCallback, useEffect, useRef } from 'react';
 import { NFL_HL_CATEGORIES, type NflHLCategory, type NflHLCatPlayer } from '@/data/nflHLCategories';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { higherLowerScore } from '@/lib/higherLowerScore';
@@ -95,6 +95,14 @@ export function useNflHL() {
 
   const [currentResult, setCurrentResult] = useState<RoundResult | null>(null);
   const [showingResult, setShowingResult] = useState(false);
+  const revealTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const revealVersion = useRef(0);
+  const cancelReveal = useCallback(() => {
+    revealVersion.current += 1;
+    if (revealTimer.current !== null) clearTimeout(revealTimer.current);
+    revealTimer.current = null;
+  }, []);
+  useEffect(() => cancelReveal, [cancelReveal]);
 
   const [unlimitedRounds, setUnlimitedRounds] = useState<HLRound[]>(
     () => buildRounds(Math.floor(Math.random() * 100000), hard),
@@ -167,7 +175,11 @@ export function useNflHL() {
 
       if (mode === 'daily') addDailyAction({ t: 'result', correct });
 
-      setTimeout(() => {
+      cancelReveal();
+      const version = revealVersion.current;
+      revealTimer.current = setTimeout(() => {
+        if (version !== revealVersion.current) return;
+        revealTimer.current = null;
         if (mode !== 'daily') {
           setUnlimitedResults((prev) => [...prev, { ...activeRound, correct }]);
           setUnlimitedRound((prev) => prev + 1);
@@ -176,10 +188,11 @@ export function useNflHL() {
         setShowingResult(false);
       }, 2000);
     },
-    [activeRound, showingResult, gameStatus, mode, addDailyAction],
+    [activeRound, showingResult, gameStatus, mode, addDailyAction, cancelReveal],
   );
 
   const switchMode = useCallback((m: NflHLMode) => {
+    cancelReveal();
     if (m === 'unlimited') {
       setUnlimitedRounds(buildRounds(Math.floor(Math.random() * 100000), hard));
       setUnlimitedResults([]);
@@ -188,9 +201,10 @@ export function useNflHL() {
     setMode(m);
     setCurrentResult(null);
     setShowingResult(false);
-  }, [hard]);
+  }, [hard, cancelReveal]);
 
   const toggleHard = useCallback(() => {
+    cancelReveal();
     setHard((prev) => {
       const next = !prev;
       setMode('unlimited');
@@ -201,7 +215,7 @@ export function useNflHL() {
       setShowingResult(false);
       return next;
     });
-  }, []);
+  }, [cancelReveal]);
 
   useGameCompletion('nfl-higher-lower', rawDailyStatus !== 'playing', dailyScore);
 

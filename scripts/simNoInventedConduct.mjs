@@ -134,29 +134,46 @@ console.log('2) the real World XI engine never prints conduct beside a squad mem
       const names = Object.keys(mod).filter(k => /season|simulate/i.test(k));
       fail(`worldXi.ts exports no season simulator this harness recognises (saw: ${names.join(', ') || 'nothing matching'})`);
     } else {
-      /* Real, named footballers in the shape the engine reads. The names
-         matter: the check is that none of them ends up beside a conduct verb. */
-      const squad = [
+      /* Real, named footballers in the shape the engine reads (WxPlayer:
+         name, position, value, age) and a formation the eleven fit. The names
+         matter: the check is that none of them ends up beside a conduct verb.
+         Until Round 726 this squad carried marketValue instead of value and a
+         seed number where the formation goes, so every rating was NaN and all
+         400 "seasons" were one NaN season; the value now moves a little with
+         the seed so each season is a different one, and the count of distinct
+         seasons is printed and held below. */
+      const BASE_SQUAD = [
         ['Thibaut Courtois', 'GK', 20000000], ['Trent Alexander-Arnold', 'RB', 75000000], ['Virgil van Dijk', 'CB', 30000000],
         ['Ruben Dias', 'CB', 80000000], ['Theo Hernandez', 'LB', 50000000], ['Rodri', 'CDM', 120000000],
         ['Jude Bellingham', 'CAM', 180000000], ['Pedri', 'CM', 100000000], ['Bukayo Saka', 'RW', 140000000],
         ['Vinicius Junior', 'LW', 180000000], ['Erling Haaland', 'ST', 180000000],
-      ].map(([name, position, marketValue], i) => ({ id: `p${i}`, name, position, marketValue, nationality: 'x', club: 'x' }));
-      let lines = 0, named = 0, offenders = [];
+      ];
+      const squadFor = seed => BASE_SQUAD.map(([name, position, value], i) => ({
+        id: `p${i}`, name, position, value: value + ((seed * 7919 + i * 104729) % 997) * 50_000, age: 21 + ((seed + i) % 12), country: 'x', club: 'x',
+      }));
+      let lines = 0, named = 0, offenders = [], broken = [];
+      const seasons = new Set();
       for (let seed = 1; seed <= 400; seed += 1) {
+        const squad = squadFor(seed);
         let report;
-        try { report = simulate(squad, seed); } catch (e) { fail(`simulate threw on seed ${seed}: ${String(e.message).slice(0, 120)}`); break; }
+        try { report = simulate(squad, '4-3-3'); } catch (e) { fail(`simulate threw on seed ${seed}: ${String(e.message).slice(0, 120)}`); break; }
         const narrative = Array.isArray(report?.narrative) ? report.narrative : [];
-        for (const line of narrative) {
+        /* The month lines print on the page too, so they are read here as well. */
+        const moments = Array.isArray(report?.months) ? report.months.map(m => m.moment) : [];
+        seasons.add(narrative.join('\n'));
+        for (const line of [...narrative, ...moments]) {
           lines += 1;
+          if (/NaN|undefined|Infinity/.test(line)) broken.push(`seed ${seed}: "${line.slice(0, 90)}"`);
           const who = squad.find(p => line.includes(p.name));
           if (!who) continue;
           named += 1;
           if (CONDUCT.test(line)) offenders.push(`seed ${seed}: "${line.slice(0, 90)}"`);
         }
       }
-      console.log(`   400 seasons, ${lines} narrative lines, ${named} naming a squad member (goals and injuries are allowed to)`);
+      console.log(`   400 seasons (${seasons.size} distinct), ${lines} narrative and month lines, ${named} naming a squad member (goals and injuries are allowed to)`);
       if (lines === 0) fail('the engine produced no narrative at all, so this section measured nothing');
+      if (seasons.size < 300) fail(`only ${seasons.size} distinct seasons in 400, so this section read the same season over and over`);
+      if (broken.length) fail(`${broken.length} line(s) print NaN, undefined or Infinity, so the squad is not in the shape the engine reads: ${broken.slice(0, 2).join(' | ')}`);
       if (offenders.length) fail(`${offenders.length} line(s) put a real name beside conduct: ${offenders.slice(0, 2).join(' | ')}`);
       else if (lines > 0) console.log('   none of them beside a conduct verb');
     }

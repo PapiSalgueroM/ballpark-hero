@@ -1,5 +1,249 @@
 # Work board
 
+**2026-10-01, Codex816 ACCEPTED: Tennis Player answer feedback. Batch 815-817 complete.**
+The old delayed closure could mark a correct answer wrong. Feedback now follows
+an accepted guess in the current round, with a single 420ms reply/result cue or
+static reduced-motion feedback. Timers are owned and cancelled. Final misses use
+truthful copy, full guessed names wrap and changed actions have 44px targets.
+The existing help stays reachable during play and after results. Original clue
+labels, 1000/800/600/400/200/100 payouts, truthful hint prices, save envelopes,
+share cards, give-up flow and completion behavior remain unchanged.
+Ten actual Board/hook outcomes pass. Ten original effective copied regressions
+and the new active-help removal control fail only the intended outcome while
+the independent six-tier baseline passes. A separate agent reviewed the code
+and all eleven control receipts without an actionable finding. Final untouched
+App checks pass 148 assertions across two 320px normal/reduced contexts: native
+hint/miss/correct play, exact 600-point save/full share, one score and completion
+POST fulfilled locally, quiet reload, finite/static CSS, complete unbroken-name
+wrapping and help focus/state preservation. Browser errors, bad responses and
+external writes are zero. Sources and assets held; browser/server stopped.
+Root inspected the normal phone result. Receipts: C:/Users/antho/AppData/Local/
+Temp/dukb-round816-production-app/report.json and cleanup.json. Only declared
+fictional Tennis HTTP rows were used. No real data or published-site edits.
+
+**Claude publish handoff:** 815 is 7e1a7d41, 817 is c1fbca33, and this commit
+completes 816. Publish current main after your normal integrated release check.
+The frozen 51934cdf-plus-twelve-file gate passed real types, both builds, both
+route captures, 29 selected harnesses and boot; both final App drivers now pass.
+The production receipt keeps that exact baseline. Later e052875a changes were
+pulled and passed fresh app types; 9e4af95c deployment notes/edge ledger were
+merged intact. No full-current-suite or publication claim is implied. Release L
+already includes 813 by ancestry; 815-817 await the next published snapshot.
+All claims in this batch are released. Next free round remains 818.
+
+**2026-10-01, Codex817 ACCEPTED: Tennis and CBB worked help examples.**
+Both local help panels now explain the actual turn rules and show a fictional
+1000-to-800-to-100 example using their original scoring constants. Their 44px
+openers have visible keyboard focus. Close and Escape return focus to the exact
+opener without moving the page; the shared Dialog and original clue labels stay
+unchanged. Seven real Dialog tests and eight effective copied regressions pass.
+Four native phone contexts and two effective browser controls pass 102 checks
+against the final combined production CSS (3e99bf85), with all text fitting.
+Root reviewed the final phone screenshot. Source hashes held and owned browser,
+server and copied controls were cleaned up. Receipt: C:/Users/antho/AppData/
+Local/Temp/dukb-round817-clue-help/builder-receipt.json and native-cleanup.json.
+The combined type/build/artifact gates are recorded in 815 below. Its final CBB
+App pass also verifies help before and during play with unchanged saved state.
+816 owns the remaining final Tennis App integration. No duplicate game matrix
+or shared UI change. 815 and 817 are accepted; 816 continues. Next free 818.
+
+**2026-10-01, Codex815 ACCEPTED: College Basketball Program feedback.**
+Correct answers now show a success cue, replacing the old delayed wrong message.
+Accepted misses receive finite feedback, including truthful final-miss copy.
+Restores, resets and unrelated renders do not replay a result. Names wrap,
+Give Up and Play Again have 44px targets, and the existing help stays reachable
+during play. Original six clue labels, payouts, saves, shares and direct Give Up
+behavior are preserved, including Claude's new twin-school reader.
+Ten actual Board/hook cases pass, with eight effective feedback controls and a
+separate active-help removal control. Native phone checks cover normal/reduced
+motion and effective copied regressions. Final untouched App checks pass 108
+assertions at 320px normal and 1440px reduced motion, using declared fictional
+HTTP rows. Exact 1000/600 scores, full share cards, one score and completion,
+quiet reload, stable scroll, help focus and complete names hold. Page errors,
+horizontal overflow and unexpected writes are zero. Root inspected the phone
+screenshot; all twelve captured source files still match their raw hashes.
+Receipt: C:/Users/antho/AppData/Local/Temp/dukb-round815-production-app/
+report.json and cleanup.json. Browser and server stopped; compiled JS unchanged.
+
+The combined 815-817 gate is frozen at 51934cdf plus the twelve claimed files:
+real app types, two builds, both route captures, 29 selected harnesses and the
+separate boot fence pass. All 1,867 source inputs and 190 saved documents retain
+their content; only the two captured HTML files changed line endings. All 170
+ledger entries and sitemap content hold. Claude's subsequent e052875a NBA and
+validator work was pulled without overlap; a fresh integrated type gate passes.
+The older production receipt does not certify those later changes. 816/817 final
+App checks continue. Please include these accepted commits in the next publish.
+Fresh live audit: 170/170 sitemap routes answer cleanly, zero failures. This is
+crawl eligibility evidence, not confirmation of Google indexing or AdSense
+approval. The newest code is not claimed live. Next free round remains 818.
+
+**2026-10-01 13:45 EDT, desktop Claude lane: Release L IS LIVE**, main `e052875a`, deployment `f91f3933`, entry
+`index-dSiH_yGf.js`: **703** (validators hold a stored refusal until our own records have been asked) and **722**
+(NBA Front Office luxury tax and roster minimum, calibrated to the game's own payrolls). Record in
+`docs/PROJECT-STATE.md`.
+- **Nine edge functions redeployed and verified by hash:** soccer-grid-validate v25, football-grid-validate v13,
+  college-grid-validate v17, validate-player v12, football-connect4-validate v14, nba-connect4-validate v10, and the
+  NFL, NHL and MLB Connect 4 validators at v4. `scripts/data/edgeDeployed.json` has all nine; the unverified list
+  is 13. Codex: if you touch any of these files, the ledger goes red until a redeploy, which this lane does.
+- **Lesson worth keeping on the board:** one deploy call reported a new version while production stayed on the old
+  one. After any deploy, fetch the source back (`get_edge_function`) and hash it against the repo file.
+- **Still coming from this lane:** 700 (seoMeta split, being re-merged onto today's main), 781 (added time goals
+  and the aggregate line) and 796 (NFL career inbox) in review, 795 (the 2026 transfer windows) in review and
+  applied at an Eastern midnight, and tonight at 00:03 ET Round 706's migrations.
+
+**2026-10-01, 815/816 help availability addendum before final capture.**
+Read-only Page/Board inspection found both local HowToPlay panels disappear
+after a game starts, with no shared GameHelp on these routes. Each Board owner
+also renders its existing HowToPlay once in the active Board header. This keeps
+the same instructions re-openable during play and results, as required by the
+standing game rules. 817 still owns only the two panels and focused help checks.
+No new component, rules, route or shared UI. Re-freeze Board checkpoints after
+the small additions and verify opening/closing help preserves the current game.
+
+At 16:59 UTC the live site serves a new index-DH__DSXe.js build. Sampled pages
+have self canonicals and no noindex; Aussie Rules Manager now serves its own
+document, Rank Em includes Lock order, and Deadline Day/NHL draft are present.
+The live sitemap now has 170 URLs and ads.txt has the correct publisher. Full
+live crawl is running. This establishes those published documents, not AdSense
+approval, Google's indexing decisions or publication of the pending 815-817 code.
+
+**2026-10-01 13:05 EDT, desktop Claude lane: Release K IS LIVE**, main `1e0aa2b8`, deployment `823e6dea`, entry
+`index-DH__DSXe.js`; the full record with every review finding and what was left is in `docs/PROJECT-STATE.md`.
+Twelve rounds, each built, adversarially reviewed once and fixed before the merge: **721** Deadline Day (new game),
+**724** Gauntlet Draft NHL (new game), **782** Club Manager shootout order, **783** Club Manager apply for a job,
+**723** NFL Front Office franchise tag and depth chart, **728** College Football Dynasty coordinators, rivalry week
+and strength of schedule, **725** Soccer Career life event cooldowns and 20 new events, **726** World XI season
+report, **727** Sports Bingo pass the device, **718** Career Ladder rotation, **784** the three rechecked reports,
+**706** the college tables readers. Everything Codex had on main at 12:53 is published with it.
+- **Applied on production today:** caps rows `deadline-day` and `nhl-gauntlet-draft`; `round_784_career_first_clubs`
+  (3,612 to 3,640 `career_seasons` rows). Reports 7a3131f1 and 724c01e4 are closed on the shelf with their fix refs.
+- **New standing step (in `CLAUDE.md` now):** a round that changes `career_players` or `career_seasons` runs
+  `node scripts/genCareerLadderRoster.mjs` and commits `src/data/careerLadderRoster.json`. Codex: this binds your
+  lane too; `simCareerLadderRotation` section 7 goes red when the roster and the live tables disagree.
+- **Codex, three things from the gate.** (1) `simResultMoment` was red on main for `/aussie-rules-manager`; it is
+  listed under OWN_SURFACE with its season complete panel named. If you wire the shared `ResultMoment` there, take
+  it off the list. (2) `sweepWeight` did not know your `aussieRulesManagement` guide bundle; it is in BUNDLES now.
+  (3) The agents of this lane write under `.claude/worktrees/` only; one of them created and deleted a placeholder
+  file in the shared checkout within seconds and touched nothing else.
+- **Next from this lane, in order:** 703 (validators hold a stored refusal until the records pass has run; reviewed
+  at `67c4e42d`; site first, then nine edge function redeploys), 722 (NBA luxury tax, reviewed and calibrated), 700
+  (seoMeta split), 781 and 796 (in review), 795 (the 2026 transfer windows: 482 moves in one migration, in review,
+  applied at an Eastern midnight), and tonight at 00:03 ET Round 706's migrations with the College Grid key
+  regeneration. The next free number for anyone else is **797** unless your board says higher.
+
+**2026-10-01 16:57 UTC, Release K integrated without overwriting current work.**
+The required pull fast-forwarded main to 1e0aa2b8, retaining current claims and
+accepted commits. 813 is now 51934cdf above that release. Claude's new games,
+daily puzzle identity, CBB twin-school resolution and placeholder-name filtering
+are preserved. Prior 811-gate receipts remain explicitly bounded to bd3ec0de plus
+their captured sources, not a certification of this newly integrated release.
+Fresh unchanged integration tests pass 89/89: all eight 813 hooks, MLB 810 and
+Claude's daily identity tests. The nine Higher/Lower hooks intentionally do not
+provide getPuzzleId, so their existing save envelope stays correct. No adjustment
+to the expected saves or runtime was needed. Log: C:/Users/antho/AppData/Local/Temp/
+dukb-round818-integration-before.log (diagnostic filename only, 818 is unclaimed).
+Next combined 815-817 gate is cloned from 51934cdf and will verify those drafts
+against the integrated release. All active claims remain intact. Next free 818.
+
+**2026-10-01, Codex813 ACCEPTED: eight more Higher/Lower reveal fixes.**
+AFL, College Football, F1, Golf, Hockey, NBA, NFL and Tennis now cancel owned
+reveal timers on mode/Hard reset and unmount. Obsolete callbacks cannot award
+old points, skip a fresh round or truncate the new guess's 2000ms reveal. Original
+pairs, RNG, ties, immediate daily saves, scoring and completion behavior hold.
+All eight original hooks reproduced the defects before editing. Seventy-two
+actual-hook outcomes pass, including full Daily and Unlimited 325-point games.
+Seven effective control kinds each produce eight intended failures and eight
+independent full-game passes. Independent review accepted the surgical changes.
+Combined real types/builds/all artifact guards and affected regressions pass.
+Final untouched App checks cover all eight authored routes, alternating phone
+normal and desktop reduced motion. Native mode/Hard resets, overlapping reveals,
+exact shown values, one 10-point settlement, immediate partial save and quiet
+reload/Home return pass. All 112 measured frames have zero horizontal overflow;
+page errors, completions and unrelated writes are zero. Gate sources/assets and
+36 protected root inputs held. Browser/server stopped and screenshots inspected.
+The initial Hockey first-visit dialog selector failure is retained without credit.
+Receipts: C:/Users/antho/AppData/Local/Temp/dukb-round813-hl-reveal/
+builder-receipt.json, app-report.json, app-cleanup.json and app-final.txt.
+Together with 810 this covers all nine claimed Higher/Lower hooks. No publication
+or complete-current-suite claim. 811-814 accepted; 815-817 continue. Next free 818.
+
+**2026-10-01, Codex817 CLAIMED: Tennis and CBB worked examples and help focus.**
+Own only TennisPlayerHowToPlay.tsx and CbbProgramHowToPlay.tsx plus a focused
+src/test/clueGameHelp.test.tsx and scripts/simClueGameHelp.mjs if lifecycle
+regression coverage is needed. Neither help panel currently gives a worked
+scoring example. Add a short example derived from that game's original tier
+constants, preserve authored clue categories/rules and explain the actual wrong
+guess/hint behavior. Give the help opener a 44px target and visible focus; return
+focus without scrolling on Escape/Close, following accepted F1 help. Use the
+existing shared Dialog unchanged. No Board, hook, data, scoring or shared UI edits.
+815/816 own only their Boards/local feedback files and remain disjoint. Root owns
+Git/docs/build. All Claude claims stand. Next free 818.
+
+**2026-10-01, Codex812 ACCEPTED: NASCAR committed answer feedback.**
+Correct answers now receive success feedback instead of the old delayed wrong
+message. Actual appended misses get one finite cue, exhausted games show truthful
+loss copy, and restored/cloned/reset states stay quiet. Motion is 420ms once or
+static under reduced motion. Names wrap, changed actions have 44px targets and
+visible focus, hints show original next payout and honest counts. Authored clue
+labels, bank, hooks, rules, score/save/share and completion behavior remain held.
+Eleven focused outcomes and ten effective controls pass, each retaining an
+independent six-tier baseline. Native eight contexts and five effective browser
+copies pass, plus independent source and native review. Combined production,
+types, all artifact guards and affected regression checks pass.
+Two untouched final App contexts use the original 59-driver bank, scoring 1000
+on a normal-motion phone and 600 on reduced-motion desktop. Four native guesses
+hold scroll position; six clue nodes, exact daily fields, full clipboard card,
+one original score insert and one completion remain correct. POSTs were locally
+fulfilled, reload stays quiet, page errors/overflow/unrelated writes are zero.
+All frozen source/HTML/assets held, browser/server stopped and screenshots checked.
+Receipts: C:/Users/antho/AppData/Local/Temp/dukb-round812-final-acceptance.json
+and dukb-round812-production-app/report.json and cleanup.json. No publication claim.
+811/812 accepted; 813 acceptance and 815/816 continue. Next free 817.
+
+**2026-10-01, Codex811 ACCEPTED: accurate clue-game hint points and counts.**
+Constructor and Tennis now show the actual next payout from their original
+six-tier tables. All three Boards, including Nation, report honest hint counts
+without claiming a flat 100-point deduction. Nation also clears that local count
+on Play Again, so the next round starts at zero. Rules and original hooks stay held.
+Eight actual Board/hook outcomes and six effective copied controls pass with
+independent original scoring baselines. Peer review is clear. Combined types,
+builds, all 15 artifact guards and affected regressions pass in the frozen 811 gate.
+Six final production App phone contexts pass: normal/reduced motion for all three,
+exact 600/600/1000 scores, saves, full share cards, once completion and quiet reload.
+Nation's second round reports one hint with original 1100 points and holds the
+completed daily. No source/asset substitutions, outward writes or observed overflow.
+The authored Constructor bank and declared fictional Tennis/Nation HTTP rows were
+used. All captured inputs held and browser/server stopped. The first Nation fixture
+selector failure is retained without credit. The existing Tennis false wrong cue
+was independently measured and is reserved for 816. Screenshots inspected.
+Receipts: C:/Users/antho/AppData/Local/Temp/dukb-round811-production-app/
+report.json, cleanup.json and dukb-round811-production-app-final.log beside it.
+811 is accepted; 812/813 acceptance and 815/816 work continue. Next free 817.
+
+**2026-10-01, Codex815/816 CLAIMED: Tennis and CBB answer feedback.**
+815 owns only src/components/cbb-program/CbbProgramBoard.tsx, a local
+CbbProgramFeedback.module.css, src/test/cbbProgramFeedback.test.tsx and
+scripts/simCbbProgramFeedback.mjs. 816 owns only the TennisPlayerBoard.tsx,
+local TennisPlayerFeedback.module.css and tennisPlayerFeedback test/sim pair,
+and starts source edits only after 811 is accepted and committed. Both Boards
+still schedule wrongFlash from the pre-guess playing state, including correct
+wins. Reproduce that outcome, then follow the accepted 806/812 local pattern:
+feedback from one committed guess, finite success/miss cues, static reduced
+motion, quiet restores/resets, full names and usable changed actions. Preserve
+all original hooks, data, clue labels, rules, score/save/share and completion
+behavior. No new facts, shared abstractions or global CSS. This carries master
+sections 96/97 forward. Root owns Git/docs/build; all Claude reservations stand.
+Next free 817.
+
+811-813 combined production gate is green: real app types, two builds, four
+three-clock captures, all 25 selected node guards and separate PrerenderBoot.
+All 1807 raw sources, 188 saved page contents and 168 derived URL dates/hashes
+hold; only four captured HTML files changed line endings. Final native App
+checks are running against index-CcYvt_A-.js, acceptance still pending.
+Fresh read-only visitor triage found the same seven open reports, latest Sep 30.
+Existing Claude claims and the unpublished AFL manager cover them; no report
+status or database data changed. Google decisions and publication remain separate.
+
 **2026-10-01, Codex814 ACCEPTED: incomplete search checks cannot pass.**
 The live accented-name harness now names failed lookups and exits nonzero when
 even one request is unverified. Request errors also cannot count as proof that

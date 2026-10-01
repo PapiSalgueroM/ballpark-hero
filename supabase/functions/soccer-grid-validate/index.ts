@@ -591,6 +591,12 @@ serve(async (req) => {
     json({ valid: false, unverified: true, exhausted, reason: exhausted ? "Answer checking has used up its allowance for today, so this guess was not counted. Please come back tomorrow." : "Couldn't verify your answer right now, please try again.", fullName: null });
 
   const cacheKey = cacheKeyOf(sanitized.player, sanitized.row, sanitized.col);
+  /* ROUND 703: a stored YES answers at once. A stored NO is HELD until the
+     records pass below has had its say, and is returned only when the records
+     do not accept the answer and no verified move proved a half. The cache
+     keeps a verdict forever, the model's refusals are not always right, and
+     before this a cached "no" beat the stint table every time it was asked. */
+  let cachedRefusal: Record<string, unknown> | null = null;
   try {
     const { data: hit } = await sb.from("ai_validation_cache").select("verdict")
       .eq("game", CACHE_GAME).eq("cache_key", cacheKey).maybeSingle();
@@ -602,7 +608,14 @@ serve(async (req) => {
        records still say no, the same refusal is written back; if they now say
        yes it is replaced. Model verdicts and every acceptance are served as
        before, and nothing unverified is accepted either way. */
-    const cachedVerdict = hit?.verdict as Record<string, unknown> | undefined;
+    /* ROUND 703, on top of that: the MODEL's refusals are held too, not served.
+       Its knowledge predates the 2026 window, so a verified move in the overlay
+       would otherwise never reach a cell it had refused. A held refusal leaves
+       cachedVerdict empty here and is returned after the records pass below,
+       and only when nothing proved a half. A stored yes is served as before. */
+    const stored = hit?.verdict as Record<string, unknown> | undefined;
+    if (stored && stored.valid === false && !isRecomputedRefusal(stored)) cachedRefusal = stored;
+    const cachedVerdict = cachedRefusal ? undefined : stored;
     const recordsRefusal = isRecomputedRefusal(cachedVerdict);
     if (cachedVerdict && !recordsRefusal) return json({ ...cachedVerdict, cached: true });
   } catch { /* cache down -> continue */ }
@@ -702,6 +715,12 @@ serve(async (req) => {
     provedRow = byOverlay(rowCrit);
     provedCol = byOverlay(colCrit);
   } catch { /* deterministic pass unavailable -> AI */ }
+
+  /* ROUND 703: the records did not accept it and no verified move proved a
+     half, so a held refusal stands, exactly as it did before. With a half
+     proved, the model is asked the other half below and its verdict replaces
+     the stale one in the cache. */
+  if (cachedRefusal && !provedRow && !provedCol) return json({ ...cachedRefusal, cached: true });
 
   if (!AI_KEY) return unverified();
 
