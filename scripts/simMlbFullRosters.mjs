@@ -77,6 +77,7 @@
      namesake      José Fermin (2001) shipped without his year      -> 3n
      nocut         the offseason never cuts and Play is never held   -> 6 and 9
      cutuser       the offseason cuts the GM's club behind his back  -> 9
+     catchers      the refill without its two catchers               -> 6
 
    The fixture: node scripts/simMlbFullRosters.mjs --write-legacy-fixture
    writes it with whatever engine is in src. It was written against the engine
@@ -103,7 +104,7 @@ const STATS = path.join(ROOT, 'scripts', 'data', 'mlbStats2026.json');
 const FIXTURE = path.join(ROOT, 'scripts', 'data', 'mlbLegacySaveFixture.json');
 const CONTROL = process.env.MLB_FULL_CONTROL || '';
 const WRITE_FIXTURE = process.argv.includes('--write-legacy-fixture');
-const EXPECT = { invented: [3, 4], benchread: [5], sharedstream: [5], fullprice: [4], legacylimits: [7], idkeyed: [5], onecatcher: ['3c'], namesake: ['3n'], nocut: [6, 9], cutuser: [9] };
+const EXPECT = { invented: [3, 4], benchread: [5], sharedstream: [5], fullprice: [4], legacylimits: [7], idkeyed: [5], onecatcher: ['3c'], namesake: ['3n'], nocut: [6, 9], cutuser: [9], catchers: [6] };
 if (CONTROL && !EXPECT[CONTROL]) { console.error(`MLB_FULL_CONTROL=${CONTROL} is not a control this harness knows (${Object.keys(EXPECT).join(', ')})`); process.exit(1); }
 
 let checks = 0;
@@ -127,6 +128,8 @@ const ENGINE_SWAPS = {
   legacylimits: [['export const mlbRosterMax = (t: { depth?: number }): number => (t.depth ? MLB_ROSTER_MAX : MLB_LEGACY_ROSTER_MAX);', 'export const mlbRosterMax = (t: { depth?: number }): number => (t.depth || true ? MLB_ROSTER_MAX : MLB_LEGACY_ROSTER_MAX);']],
   /* the builder's state: the offseason never cuts, and nothing is held */
   nocut: [['  for (const t of Object.values(league.teams)) if (t.abbr !== userTeam) mlbCutDownToMax(t, league.freeAgents);\n', ''], ['  return t.depth ? Math.max(0, t.players.length - mlbRosterMax(t)) : 0;', '  return 0;'], ['  if (!t.depth) return out;\n  while', '  if (!t.depth || true) return out;\n  while']],
+  /* the refill before this review: catchers drain away over the seasons */
+  catchers: [['  if (t.depth) while (t.players.filter(p => p.pos === \'C\').length < 2) add(\'C\');\n', '']],
   /* the offseason cuts the GM's club behind his back */
   cutuser: [['if (t.abbr !== userTeam) mlbCutDownToMax(', 'if (t.abbr !== userTeam || true) mlbCutDownToMax(']],
 };
@@ -547,6 +550,9 @@ function userCutDown(lg, myTeam) {
           return t.players.filter(p => !isP(p)).length < 9 || t.players.filter(p => p.pos === 'SP').length < 5 || t.players.filter(p => p.pos === 'RP' || p.pos === 'CL').length < 5 || t.players.length < E.MLB_ROSTER_MIN;
         });
         ok(6, `seed ${seed} (${myTeam}) season ${s + 1}: every club fields nine hitters, five starters and five relievers`, shortClubs.length === 0, shortClubs.join(' '));
+        /* Round 829 review: catchers drained away (808 of 9,000 club seasons with none, 30 franchises by 10 seasons) */
+        const noPair = GAME_TEAMS.filter(a => lg.teams[a].players.filter(p => p.pos === 'C').length < 2);
+        ok(6, `seed ${seed} (${myTeam}) season ${s + 2}: every club enters the season with two catchers`, noPair.length === 0, noPair.join(' '));
         const all = [...Object.values(lg.teams).flatMap(t => t.players), ...lg.freeAgents];
         ok(6, `seed ${seed} season ${s + 1}: no name twice`, new Set(all.map(p => p.name)).size === all.length);
         ok(6, `seed ${seed} season ${s + 1}: no id twice`, new Set(all.map(p => p.id)).size === all.length);

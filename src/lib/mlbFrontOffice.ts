@@ -560,6 +560,10 @@ export function replenishMlbRoster(t: MlbGmTeam, rng: () => number, taken: Set<s
     });
   };
   const [bats, starters, pen, floor] = t.depth ? [9, 5, 5, MLB_ROSTER_MIN] : [6, 3, 2, 11];
+  /* Round 829 review: a full roster club carries two catchers, as it was
+     dealt. Measured before this line, 30 franchises by 10 seasons: 808 of
+     9,000 club seasons opened with no catcher at all and 3,158 with one. */
+  if (t.depth) while (t.players.filter(p => p.pos === 'C').length < 2) add('C');
   while (t.players.filter(p => !isPitcher(p)).length < bats) add(['C', '1B', 'SS', 'OF'][Math.floor(rng() * 4)]);
   while (t.players.filter(p => p.pos === 'SP').length < starters) add('SP');
   while (t.players.filter(p => p.pos === 'RP' || p.pos === 'CL').length < pen) add('RP');
