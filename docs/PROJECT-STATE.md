@@ -1,5 +1,94 @@
 # Project state
 
+## IN PROGRESS 2026-09-30: both standalone arcade practice lanes claimed
+
+778 root claims the separate BuzzerBeaterBoard for fixed-power unrecorded practice, alongside
+777 Free Kick. Both preserve the authoritative physics and existing recorded modes, with
+native explicit actions and no practice completion writes. Staff776 testing/browser acceptance
+continues. All scopes are on WORKBOARD. Full suite still runs; final build/fences and publication
+of769 onward remain pending. Next unclaimed number:779.
+
+## IN PROGRESS 2026-09-30: Free Kick steady-input practice claimed
+
+777 claims only FreeKickBoard and scoped tests/CSS for unrecorded power-range practice. Existing
+physics, daily/unlimited records and completion stay authoritative; practice is excluded from
+recording. Staff776 acceptance continues.774's complete older ScoreShown fence now passes16/16
+cases and unchanged40-career baselines, with its quiznegative control failing only the intended
+bank assertion. Full receipts are on WORKBOARD. Combined build/CSS/fifteen fences still wait
+behind the full392-node suite. No publication claim for769 onward. Next unclaimed number:778.
+
+## CHECKPOINT 2026-09-30: Quiz Board native acceptance joins seven source-ready rounds
+
+774 passes seven actual Board/hook tests, six copied controls and eight five-category native
+browser cases, with keyboard clue access, exact focus, scores/saved IDs and finite/static
+answer feedback. Phone heading overlap has a real copied-control proof and scoped fix. Full
+receipts and fixture limits are on WORKBOARD. The older two Quiz score tests pass; full old
+score fence/control compatibility is being checked.776 StaffScreen acceptance continues.
+769 through775 source is pushed as checkpoints; final corrected build/CSS/fifteen-fence
+acceptance and publication remain pending behind the full392-node suite. All754 through768
+remain live in H. Reserved names747 is correctly regraded done in the master reconciliation,
+which now counts52 done and216 partial. Next unclaimed number:777.
+
+## CHECKPOINT 2026-09-30: F1 Constructor truthful reactions accepted
+
+775 fixes a rendered winning-guess Wrong reaction and adds finite reply/result feedback with
+stable controls. Seven tests, three copied controls and eight native browser contexts pass660
+checks, exact scores/completion and daily-restore outcomes, with no overflow or feedback jump.
+Full proof and fixture limits are on WORKBOARD.774 Quiz Board native acceptance continues;
+its two older scoreShown tests pass after a bounded actual-dialog portal query fallback.
+776 StaffScreen source work continues independently. Full392-node suite is still running;
+final combined build and15 built-site fences remain pending. Next unclaimed number:777.
+
+## CHECKPOINT 2026-09-30: Soccer Classic accepted; staff decisions claimed
+
+773 adds full eligible reachability, existing League/Country targeting and exact picker focus,
+accepted by11 actual tests, three copied controls and eight native browser contexts. Details
+and fixture limits are on WORKBOARD. The next free agent takes claimed776 isolated StaffScreen
+decisions, preserving existing pure effects/IDs/payroll and no-op shortlist state, with safe
+payoff confirmation and finite truthful cues. Quiz Board774 and constructor775 browser proof
+continues. No rebuild while the full392-node suite runs. Next unclaimed number:777.
+
+## CHECKPOINT 2026-09-30: all four 769 through772 have native browser acceptance
+
+Conquest769 now passes40 native browser cases and2362 checks across all five maps, including
+continuous trusted touch drag/tap, bounded viewport, exact filters/counts and immediate scene
+camera hand-back. Ten new tests, ten copied controls and independent review pass. Full proof
+and fixture limits are on WORKBOARD. First Touch770, Inbox771 and lineup focus772 receipts
+remain accepted. Final combined corrected-JS build and15 fences wait for the full392-node
+suite to finish. New773 Soccer picker,774 Quiz Board and775 F1 Constructor are in progress;
+their scopes exclude hooks/data and Claude's held claims. Next unclaimed number:776.
+
+## IN PROGRESS 2026-09-30: Quiz Board and F1 Constructor follow the Soccer picker
+
+Codex774 claims the isolated Quiz Board clue overlay and committed answer feedback. Root775
+fixes a F1 Constructor reaction reading old state and showing Wrong guess after a win, then
+adds finite truthful feedback. The two boards, their scoped CSS/tests/harnesses have exact
+claims on WORKBOARD. No hooks, data, seeds, matching, scoring or Claude held lanes change.
+773 Soccer Classic targeting continues separately. Full suite still running; builds stay held.
+Next unclaimed number:776.
+
+## IN PROGRESS 2026-09-30: next independent game task 773
+
+Soccer Classic Perfect Lineup still caps its picker at forty and loses dismissal focus in its
+separate board. Codex773 claims only that board and focused tests/harness to add existing League
+and Country targeting, full eligible reachability and native focus return. This does not touch
+the shared NBA/NHL/F1 board from772, any hook/data or Claude's held lanes. The full392-node suite
+continues while agents handle independent source acceptance. Next unclaimed number:774.
+
+## CHECKPOINT 2026-09-30: First Touch, retained inbox and lineup focus accepted in browsers
+
+Codex770,771,772 have accepted actual-component tests, asserted controls and final772-CSS
+browser matrices. First Touch adds160 scored balls across eight contexts; Inbox exposes all
+retained messages and exact outcomes in eight contexts; NBA/NHL/F1 focus returns correctly in
+24 contexts. Detailed evidence and fixture limits are on WORKBOARD. Conquest769 is completing
+its forty-case map matrix after a native touch-capture fix. The full392-node suite is running.
+Final corrected-JS build and fifteen built-site fences are still pending. These four source
+rounds are not yet published. Root is scouting the next unclaimed work in parallel.
+
+All earlier Codex754 through768 are LIVE in Claude Release H. The top Release H receipt below
+supersedes older historical blocks saying nine of them awaited publishing. Google approval
+and reindexing remain external pending outcomes from741. Next unclaimed number:773.
+
 ## LIVE 2026-09-30: Release H (707, 708, 711, 730, 732), main `b8c77dce`
 
 Assembled by the desktop Claude lane in the gate clone (`release-h`), on top of Release G and

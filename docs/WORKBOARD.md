@@ -1,5 +1,211 @@
 # Work board
 
+**2026-09-30, Codex Round 778 CLAIMED: steady-input Buzzer Beater practice (D51).**
+Root owns only `src/components/buzzer-beater/BuzzerBeaterBoard.tsx`, scoped CSS if needed,
+new actual-board tests and a sim wrapper. Add clearly unrecorded practice with a native fixed
+Power range and Shoot button. Existing aim/fade/arc controls use the same explicit takeShot
+inputs, setup and RNG. Practice aim taps/drags do not shoot or sweep power; delayed input keeps
+the chosen strength. Ten-shot play, replay, pause and help remain reachable. Practice makes
+no completion/record writes and shares no recorded result. Daily/unlimited timing, seeds,
+scores, stores, share and callbacks stay unchanged. Verify paired exact-path/score outcomes,
+native power/Shoot access, pause/input isolation and untouched completed daily bytes with
+asserted controls and four-width/two-motion native browser proof. No shared engine/hook,
+parent/page, data, route/catalog or global-style edits. This is independent of777 Free Kick.
+No Vite build or shared dist/public writes while full392 suite runs. Next unclaimed number:779.
+
+**2026-09-30, Codex Round 777 CLAIMED: steady-input Free Kick practice (D51).**
+Own only `src/components/free-kick/FreeKickBoard.tsx`, its scoped CSS if needed, new actual-board
+tests and a sim wrapper. Add an explicitly unrecorded practice mode with a native power range
+and Kick button, so choosing power does not require releasing a moving bar. Pointer/keyboard
+aim and curve use existing exact takeShot inputs and seeded outcomes. Aim taps/drags in this
+mode do not fire. Preserve daily/unlimited modes, seeds, scores, records, share and completion;
+practice must make no record/completion writes. Verify delayed inputs, native range and Kick,
+ten-round play, pause/help, identical explicit-input outcomes and untouched daily records, with
+asserted copied controls and four-width/two-motion native browser proof. No shared engine,
+hook, parent, data, route/catalog or global-style changes. Root owns docs/git/build. No builds
+while full392 suite runs. Next unclaimed number:778.
+
+**774 compatibility receipt:** the complete older ScoreShown fence passes16/16 actual rendered
+cases with all unchanged40-career baselines. Its asserted quiznegative copy fails only the
+below-zero bank case (15 pass), shown-3000 versus recorded/shared0. Winning2600 and all other
+sections remain green; no import errors count as control credit. Original source bytes match,
+control scratch is empty, and all output stays in a fresh TEMP fence. Full logs/JSON/receipt:
+TEMP/dukb-round774-score-shown-f4beeb04f25046db945c846bb30bf678/receipts. No build or root dist writes.
+
+**2026-09-30, Codex774 source/browser checkpoint: native clue access and truthful answer cues.**
+Sports Quiz Board now uses the existing labeled/trapped Dialog. Native Close/Escape skips
+free and returns to the exact opener; submission returns to its stable labeled answered cell.
+Committed hook truth binds finite correct/wrong tile/score cues; restore, clones and skips
+stay quiet. Seven actual-board/real-hook tests and six asserted copies pass
+(tile3/4,score1/6,focus3/4,skip3/4,quiet4/3,cleanup1/6). Exact app types0 and independent review
+accepted. The two original scoreShown Quiz cases pass with exact shown/shared/recorded0/2600.
+Only their actual-dialog portal query and the old quiznegative copied CSS import are adapted;
+the complete old positive/control fence compatibility run is accepted above.
+
+Eight native browser contexts (320/390/430/1440,both motion settings) pass against actual Board/
+hook with five complete categories and25 fictional clues. Native Tab trap, Space/Enter play,
+Close/Escape and exact focus, +200/-400 saved clue IDs, cleared0 bank/share, stable grid
+rectangles, finite420/300/360ms cues and static reduced motion pass. All controls are44px and
+full clue/category text fits. A measured phone heading overlap was fixed only by the category
+span's min-width/overflow-wrap binding. Asserted no-wrap copies reproduce4.8 to12.36px overlap
+in both320 motion modes; production bytes stay unchanged. Phone screenshots inspected.
+TEMP/dukb-round774-quiz-audit/report.json and control-report.json carry evidence. Fictional
+clue/completion fixture is outside real data/account writes. Finished772 utilities plus scoped
+CSS are preliminary; final production CSS, combined build and15 fences remain owed.
+
+Reconciliation now correctly marks747 D53 done because its frontend is live in Release G/H
+and database enforcement was already applied. Counts:52 done,216 partial,361 total. Updated
+50,97,98,D32,D107,H retain their missing work and distinguish live earlier rounds from new
+accepted source. No blanket regrade or claim of Google approval/indexing.777 is claimed above.
+
+**774 scope addendum, root owned:** preserve `scripts/simScoreShown.mjs` quiznegative copy
+loading after QuizBoard imports scoped CSS. Resolve only that new relative CSS import inside
+the existing asserted copied-control rewrite, with swap's exact-one-anchor check. Keep its
+negative-bank mutation and every shown/shared/recorded assertion unchanged. The two existing
+actual Quiz Board scoreShown tests already pass (all wrong banks0, mixed board banks2600).
+
+**2026-09-30, Codex775 source/browser checkpoint: truthful constructor reactions accepted.**
+Baseline rendered test reproduced Wrong guess after an actual first-clue win. Reactions now
+follow committed guess count/status, with finite420ms reply/result motion, static reduced mode
+and a stable40px reaction area. Hooks, matcher, clues, scores, storage and share remain intact.
+Seven actual-board/real-hook tests pass. Three asserted binding copies fail their intended
+checks: wrong2/5, silent4/3, timer1/6. Initial/restored/hint/give-up/reset states stay quiet and
+pending timers clean up. Independent source review accepted. Eight native browser contexts
+(320/390/768/1440,both motion settings) pass660 checks using actual Board/Search/constructor,
+dailyRecord/restoredFinish and completion-hook lifecycle with outward account facades.
+Each records exact1000,600,0,0,1000 outcomes; completed daily restore records zero new callback
+and preserves its exact saved record. No overflow/errors/external requests or feedback-induced
+input geometry/scroll movement. Clue/search/input/hint/cue and reciprocal running animation
+identity remain stable on unchanged rerender. Six source hashes stay byte-identical. Phone
+win screenshot inspected. TEMP/dukb-round775-constructor-audit/report.json is the full receipt.
+Boundary is a fictional fixture pool with controlled Auth/completion/badge facade, not live
+data/account writes. Finished772 utilities plus directly compiled scoped CSS are accepted;
+final combined corrected-JS build/CSS receipt is still owed. Full392 suite continues.
+
+**2026-09-30, Codex Round 776 CLAIMED: committed Club Manager staff decisions (29,97).**
+Own only `src/components/club-manager/StaffScreen.tsx`, scoped CSS, actual-screen tests and a
+new sim wrapper. Preview exact existing-helper fees/payroll/effects and require a local second
+tap before a staff payoff. Preserve the open shortlist on a refused/no-op hire, close only on
+an actual committed hire/promotion, and restore focus to its labeled post when controls vanish.
+Add finite committed hire/promotion/payoff/match/let-go cues, quiet on restore, clones and
+unrelated state; static reduced motion and44px controls. Existing generated staff/portraits,
+shortlist order/IDs, severance, finances, matching limits and effects remain authoritative.
+No parent, engine, new roles/people, data, save, first-screen or shared-style changes. Verify
+real pure staff effects, no-op callbacks, cancellation/confirmation, exact focus and no UI-only
+writes, with asserted controls and four-width/two-motion native browser proof. Root owns
+docs/git/build; full suite still running, so no build or shared dist/public writes. Next free:777.
+
+**2026-09-30, Codex773 source/browser checkpoint: Soccer Classic picker accepted.**
+Eleven actual-board/real-hook/eligibility/simulation tests pass. Three asserted copies remove
+targeting (3 intended failures/8 passes), restore hard40cap (1/10) and remove actual focus
+(4/7). Eight native browser contexts pass using finished772 CSS:56 eligible choices reachable,
+combined14/search3 matching, exact older45 original-object selection, unchanged constraints/
+duplicates/order, all11 exact selections and original score (rating76,7-1,gradeB,chemistry100,
+squadValue1128M). Close/Escape/outside return to the opener, native Enter selects then focuses
+the stable slot, final disappearing Load more focuses the surviving dialog. New controls/rows
+are44px; full unbroken names/clubs wrap, max overflow0, no interaction writes/errors/input
+mutations. Independent review accepted and phone picker/result screenshots inspected.
+TEMP/dukb-round773-soccer-lineup-qa-codex/report.json carries the complete receipt. Fixture uses
+actual Board/hook/eligibility/simulation with a frozen fictional pool/deal and observed
+completion, outside fullApp/account/save. Source is stable; final build/CSS receipt still owed.
+
+**2026-09-30, Codex769 source/browser checkpoint: five-sport Explore accepted.**
+Explicit Explore adds territory/team search, current-owner and availability filters, truthful
+counts, Fit/zoom/reset and bounded drag pan. Automatic scene camera hand-back is immediate
+on the first disabled render or sport change. The native touch test caught implicit capture
+moving from a hit path to the SVG; ignore the child's bubbling lost capture, stop on the SVG's
+own loss. Drag suppression consumes pointer clicks only, preserving Enter/Space/detail0.
+
+Ten new actual-map/helper tests and nine earlier details tests pass. Ten asserted copied
+controls detect owner, powerup, scene gate, sport change, camera, drag, keyboard, capture,
+bounds and fit regressions, with unaffected tests still green. Independent read-only review
+accepted. Forty native browser cases (five sports,320/390/430/1440,full/reduced) pass2362 checks,
+zero overflow/errors/external requests and44px targets. Every phone case proves two-move
+trusted touch dragging followed by a trusted actual-hit tap. SVG, camera group and every
+hit/fill path retain identity. Current owners/availability are exact. All five phone screenshots
+were inspected. Evidence: TEMP/dukb-round769-explore-audit/report.json and final-browser.log.
+
+Browser boundary is the actual compiled shared map with controlled ownership and finished772
+CSS. No engine/save/DB outcome is credited. Parent changes are exactly one exploreEnabled
+prop. No data, RNG, saves, scene timings or pinch change. Final combined build and15 fences
+remain pending behind the full392-node suite;769 is not published.773/774/775 continue in
+independent exact lanes. Next unclaimed number:776. Root owns docs/git/build/publish handoff.
+
+**774 scope addendum, root owned:** `src/test/scoreShown.test.tsx` needs its Quiz Board
+answerTile helper to find the actual dialog input in the document portal when absent from
+the fixture root. Authorize only that bounded query fallback. Preserve every shown/shared/
+recorded bank assertion and existing control, including the negative-score floor and2600 win.
+
+**2026-09-30, Codex Round 774 CLAIMED: Sports Quiz Board clue access and answer feedback (96,97).**
+Own only `src/components/quiz-board/QuizBoard.tsx`, scoped CSS, actual-component tests and a
+new sim wrapper. Replace the custom clue overlay with the existing Dialog for labeled clue
+access, keyboard trapping, Escape/free skip,44px controls and exact opener/stable answered-cell
+focus return. Add finite committed correct/wrong tile and score emphasis from existing hook
+outcomes. Initial/restored boards, identical props, guesses and skips stay quiet; reduced
+motion is static. Preserve exact clue IDs/values, matching, score, daily storage, completion,
+share and all callbacks. No hook/fetch/data/route/catalog/shared Dialog or global style edits.
+Verify actual good/wrong/skip outcomes and focus with asserted controls and native browser
+cases at four widths/two motion settings. Root owns docs/git/build. Next unclaimed number:775.
+
+**2026-09-30, Codex Round 775 CLAIMED: truthful F1 Constructor guess reactions (97).**
+Root owns only `src/components/f1-constructor/F1ConstructorBoard.tsx`, scoped CSS, focused
+actual-board tests and a sim wrapper. Its delayed callback reads the old playing state, so even
+a winning guess schedules Wrong guess. Replace that with the committed hook outcome. Add
+finite correct/wrong feedback and settled result emphasis, quiet on restored/unchanged state,
+hint, skip, reset and stale work, with static reduced motion. Preserve guesses, revealed clues,
+hook seeds/matching/scoring, share, data and callbacks. Reserve a stable feedback area so
+reactions do not shift the controls. No hook/search/how-to/data/route/shared style edits. Verify
+the measured winning-guess defect, actual losing/final/restore outcomes and timer cleanup,
+asserted controls and four-width/two-motion browser acceptance. Next free number:776.
+
+**2026-09-30, Codex Round 773 CLAIMED: Soccer Classic lineup targeting and picker focus (master H, 96).**
+Own only `src/components/perfect-lineup/PerfectLineupBoard.tsx`, new focused actual-board tests
+and a new auto-discovered sim wrapper. This separate Classic board still hides eligible choices
+after forty and only searches names. Add League/Country targeting from existing eligible Player
+fields, exact eligible/matching/shown counts, reset and bounded Load more. Preserve the hook's
+position/constraint/duplicate eligibility, market-value order, exact Player object callbacks and
+existing scoring. Return native dismissal focus to the exact Pick opener or its stable labeled
+slot after selection removes the control. New controls must fit phones and meet44px targets.
+No parent, hook, data, engine, catalog, route, shared Generic board or style changes. Verify
+combined filtering, older eligible choice, exact selection and native keyboard/focus outcomes,
+asserted copied controls and four-width/two-motion browser play. Root owns docs/commits. The
+392-node suite is running, so no build or shared dist/public writes. Next free number:774.
+
+**2026-09-30, Codex checkpoint 770, 771 and 772: gameplay and native browser acceptance passed.**
+First Touch: 20 engine/Board tests, eight asserted copied controls and eight final-CSS browser
+contexts pass 160 scored balls. Actual TrainingPanel, the new Board and pure capped reward
+application use a controlled local career. Daily80/practice90 outcomes, saved checkpoints,
+reload, stale other-tab progress, one-bank identity, pause/help/hidden resume, native input,
+stable focus and finite/static motion are measured. Real account saves and annual growth
+application remain outside this fixture. One old training-control import resolver is updated.
+
+Inbox: ten actual-card tests and three source controls pass. The portable playInboxCard gate
+passes eight native browser contexts with the real pure answerMessage, all eight retained IDs,
+exact saved outcomes/effects, counts, search, Load more, both focus paths and complete long text.
+Asserted passive-hook copies reproduce the false later automatic-resolution cue; asserted
+no-wrap copies reproduce 378px phone overflow in both motion modes. The measured scheduling
+fix uses the layout effect only for reply-intent reconciliation. Full-route saves are untested.
+
+Lineups: six new actual-dialog tests and nine existing picker tests pass, with two asserted
+focus controls. Twenty-four final-CSS NBA/NHL/F1 browser contexts prove native Space open,
+Close/Escape/outside return, exact Enter pick, stable slot fallback and repeat opener. No pool,
+scoring, filters or hook changes. All three lanes measure zero interaction writes/errors and
+zero horizontal overflow; restored or unchanged results stay quiet.
+
+Conquest769 acceptance continues after a proven native touch-capture transfer fix. The full
+392-node discovered suite is running against an isolated finished772 artifact. Final corrected
+JS rebuild and all fifteen built-site fences remain pending, so this is a source checkpoint,
+not a completed ship. Shared dist/public and Claude-owned source remain untouched. All earlier
+754 through768 are now LIVE in Claude Release H, independently confirmed by its live entry.
+Next unclaimed number remains773. Root alone owns docs, commits and publish handoff.
+
+**771 scope addendum, regression gate:** authorize new portable `scripts/playInboxCard.mjs`.
+The actual native-browser matrix found a passive-effect race where a no-op reply's intent could
+survive until an unrelated automatic resolution and replay committed feedback. The two-line
+useLayoutEffect correction is proven on a TEMP copy and applied within the existing claim.
+Preserve the actual-card eight-context browser matrix as a discoverable harness, with asserted
+passive-hook and no-wrap copies reproducing that race and phone overflow. No parent/engine changes.
+
 **770 scope addendum, root owned:** `scripts/simTrainingFeedbackMotion.mjs` needs one relative
 import resolver entry for the new FirstTouchBoard when controls copy TrainingPanel into TEMP.
 Authorize only that compatibility line, preserving all old control anchors and expected outcomes.
