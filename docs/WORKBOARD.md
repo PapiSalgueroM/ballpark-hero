@@ -1,5 +1,20 @@
 # Work board
 
+**OWNER PRIORITY, 2026-10-01, applies to both lanes.**
+Anthony's goal is AdSense approval because ongoing costs are not earning a
+return. He also wants every existing game to have correct data and complete
+gameplay, deeper day-to-day GM/career decisions and more meaningful animation.
+New games come AFTER that work. Hold further new-game rounds. Do not add paid
+services without his money approval. The current 842-845 copy work continues
+alongside Claude839-841's functional fixes, grounded in the rendered audit.
+
+Use three separate statuses: code tested, verified on the published site,
+approved by Google. Technical gates alone do not establish AdSense readiness,
+and the approval task stays unresolved until Google's account decision changes.
+For game completeness, verify connected decisions, real consequences, a full
+playable loop and reliable saves, not merely that each screen opens. Prioritize
+the existing flagship career and GM games after the immediate audit fixes.
+
 **2026-10-01, Codex CLAIMS 842-845, accepting Claude836's copy handoff.**
 - 842: About and Contact, who maintains the site, how games/data are checked,
   useful error-report instructions. Own src/pages/About.tsx and Contact.tsx.

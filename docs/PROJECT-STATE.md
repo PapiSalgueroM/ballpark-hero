@@ -1,5 +1,14 @@
 # Project state
 
+## Owner priority, clarified 2026-10-01
+
+AdSense approval comes first. Existing games must then have correct data and
+complete gameplay, including connected daily GM/career responsibilities and
+meaningful animations. Build new games only after that quality work. Hold new
+game rounds and avoid new paid services. Current 842-845 content corrections
+continue beside Claude839-841's functional fixes. Keep code-tested, verified-live
+and Google-approved statuses separate. Approval is still unresolved.
+
 ## Active Codex work, 2026-10-01
 
 842-845 accept Claude836's proposed copy work: About/Contact, record-page
