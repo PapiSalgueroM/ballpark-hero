@@ -1,5 +1,6 @@
 import { NascarChainLink, getNascarChainMultiplier } from '@/types/nascarChain';
 import { ChevronRight } from 'lucide-react';
+import motion from '@/components/game/ChainLinkMotion.module.css';
 
 interface Props {
   chain: NascarChainLink[];
@@ -13,12 +14,12 @@ export function NascarChainTimeline({ chain, gameStatus }: Props) {
   const multiplier = getNascarChainMultiplier(chainLength);
 
   return (
-    <div className="w-full max-w-4xl mx-auto mb-8">
+    <div data-chain-timeline="nascar" className="w-full max-w-4xl mx-auto mb-8">
       <div className="flex flex-wrap items-center justify-center gap-2 p-4 bg-neutral-900 rounded-xl border border-red-600">
         {chain.map((link, index) => (
-          <div key={index} className="flex items-center">
-            <div className="text-center">
-              <div className={`px-3 py-2 rounded-lg ${
+          <div key={index} className="flex min-w-0 max-w-full flex-wrap items-center justify-center gap-y-1">
+            <div className={`min-w-0 max-w-full text-center ${motion.wrap}`}>
+              <div data-chain-link={index === chain.length - 1 ? (index > 0 ? 'latest' : 'seed') : 'earlier'} data-chain-link-index={index} className={`px-3 py-2 rounded-lg ${index > 0 && index === chain.length - 1 ? motion.latest : ''} ${
                 gameStatus === 'ended' && index === chain.length - 1
                   ? 'bg-red-700'
                   : 'bg-neutral-800 border border-red-500/30'
@@ -30,7 +31,7 @@ export function NascarChainTimeline({ chain, gameStatus }: Props) {
             {link.connection && (
               <>
                 <ChevronRight className="mx-1 w-4 h-4 text-red-400 flex-shrink-0" />
-                <div className="text-red-300 text-xs font-medium px-1 max-w-[140px] text-center leading-tight">
+                <div data-chain-connection={index === chain.length - 2 ? 'latest' : 'earlier'} className={`min-w-0 text-red-300 text-xs font-medium px-1 max-w-[140px] text-center leading-tight ${motion.wrap} ${index === chain.length - 2 ? motion.connection : ''}`}>
                   {link.connection}
                 </div>
                 <ChevronRight className="mx-1 w-4 h-4 text-red-400 flex-shrink-0" />

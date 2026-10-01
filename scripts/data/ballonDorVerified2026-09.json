@@ -1,0 +1,2336 @@
+{
+ "about": "Round 730. Every row of public.ballon_dor, read by SELECT on 2026-09-30 (76 rows: 69 Men and 7 Women, rank 1 only, points and nationality NULL on every row), checked field by field against the co-organiser's own list (uefa.com, UEFA has co-organised the Ballon d'Or with Groupe Amaury, owner of France Football, since 2024) and at least one independent source on another host. Wikipedia is never a source here. Winner, year, rank and club were right on all 76 rows, so nothing is corrected; nationality was NULL on all 76 and the migration fills it. club is the club at the time of the award, as the official list gives it. nationality is the nation the player represented at the time of the award, written the way the site's other tables write it (Czech Republic, United States). points stays NULL: no reader shows it and nothing here verifies it. scripts/simBallonDor.mjs holds the migration's end state to this record.",
+ "table": "public.ballon_dor",
+ "round": 730,
+ "checked": "2026-09-30",
+ "readAt": "2026-09-30",
+ "officialHosts": [
+  "uefa.com",
+  "ballondor.com",
+  "francefootball.fr"
+ ],
+ "definitions": {
+  "year": "The year of the ceremony (2024 is the award for 2023-24, Rodri).",
+  "club": "The club at the time of the award, as the official list gives it.",
+  "nationality": "The nation the player represented at the time of the award, in the site's spelling."
+ },
+ "counts": {
+  "read": 76,
+  "verified": 76,
+  "corrected": 0,
+  "filled": 0,
+  "dropped": 0,
+  "nationalityFilled": 76
+ },
+ "sources": {
+  "uefaLaureates": {
+   "url": "https://www.uefa.com/ballondor/news/0292-1c27056169a7-bc88d1fdba43-1000--ballon-d-or-laureates-who-has-won-football-s-most-prestig/",
+   "official": true,
+   "fields": [
+    "player_name",
+    "club",
+    "nationality"
+   ],
+   "covers": "Men 1956 to 2025, Women 2018 to 2025, each as \"YEAR: Name (Nation, Club)\"; 2020 \"Award not given\"",
+   "publisher": "UEFA, co-organiser of the Ballon d'Or with Groupe Amaury (France Football) since 2024",
+   "read": "2026-09-30",
+   "pageDate": "2025-09-22"
+  },
+  "uefaHistory": {
+   "url": "https://www.uefa.com/ballondor/news/0287-195e642735da-0594342b9554-1000--history-of-the-ballon-d-or-all-the-winners/",
+   "official": true,
+   "fields": [
+    "player_name"
+   ],
+   "covers": "Names only, Men 1956 to 2025 and Women 2018 to 2025; 2020 \"Cancelled\"",
+   "publisher": "UEFA",
+   "read": "2026-09-30",
+   "pageDate": "2025-09-22"
+  },
+  "uefa2025Men": {
+   "url": "https://www.uefa.com/uefachampionsleague/news/029d-1ec96c30aa3f-f6868c869cbd-1000--ousmane-dembele-wins-2025-men-s-ballon-d-or/",
+   "official": true,
+   "fields": [
+    "player_name",
+    "club",
+    "nationality"
+   ],
+   "covers": "2025 Men top ten: \"1. Ousmane Dembele (France, Paris Saint-Germain)\"",
+   "publisher": "UEFA",
+   "read": "2026-09-30",
+   "pageDate": "2025-09-22"
+  },
+  "uefa2025Women": {
+   "url": "https://www.uefa.com/womenschampionsleague/news/029d-1ec96b619751-1db5282da758-1000--aitana-bonmati-wins-2025-women-s-ballon-d-or/",
+   "official": true,
+   "fields": [
+    "player_name",
+    "club",
+    "nationality"
+   ],
+   "covers": "2025 Women top ten: \"1. Aitana Bonmati (Spain, Barcelona)\"",
+   "publisher": "UEFA",
+   "read": "2026-09-30",
+   "pageDate": "2025-09-22"
+  },
+  "rsssfEuropa": {
+   "url": "https://www.rsssf.org/miscellaneous/europa-poy.html",
+   "official": false,
+   "fields": [
+    "player_name",
+    "club",
+    "nationality"
+   ],
+   "covers": "Men 1956 to 2009 and 2016 to 2024 with club and nation; 2010 to 2015 say \"election incorporated into FIFA World Player of the Year\"",
+   "publisher": "RSSSF (Di Maggio, Moore, Stokkermans), last updated 18 Feb 2025",
+   "read": "2026-09-30"
+  },
+  "rsssfMerged": {
+   "url": "https://www.rsssf.org/miscellaneous/fifa-awards.html",
+   "official": false,
+   "fields": [
+    "player_name",
+    "nationality"
+   ],
+   "covers": "The merged award, 2010 to 2015, when the Ballon d'Or and the FIFA World Player of the Year were one prize: winner with nation and vote share, no club",
+   "publisher": "RSSSF, last updated 28 Jan 2016",
+   "read": "2026-09-30"
+  },
+  "topendsportsMen": {
+   "url": "https://www.topendsports.com/sport/soccer/list-player-of-the-year-ballondor.htm",
+   "official": false,
+   "fields": [
+    "player_name",
+    "club",
+    "nationality"
+   ],
+   "covers": "Men 1956 to 2025 with country and club",
+   "publisher": "Topend Sports",
+   "read": "2026-09-30"
+  },
+  "topendsportsWomen": {
+   "url": "https://www.topendsports.com/sport/soccer/awards/ballondor-women.htm",
+   "official": false,
+   "fields": [
+    "player_name",
+    "club",
+    "nationality"
+   ],
+   "covers": "Women 2018 to 2025 with country and club",
+   "publisher": "Topend Sports",
+   "read": "2026-09-30"
+  },
+  "espnList": {
+   "url": "https://www.espn.com/soccer/story/_/id/42055052/ballon-dor-winners-list-messi-ronaldo-ronaldinho-more",
+   "official": false,
+   "fields": [
+    "player_name",
+    "nationality"
+   ],
+   "covers": "Men 1956 to 2025 and Women 2018 to 2025, name and nation, no club",
+   "publisher": "ESPN, updated 2025-09-22",
+   "read": "2026-09-30"
+  },
+  "espn2025": {
+   "url": "https://www.espn.com/soccer/story/_/id/46344733/psg-ousmane-dembele-wins-ballon-dor-ahead-lamine-yamal",
+   "official": false,
+   "fields": [
+    "player_name",
+    "club"
+   ],
+   "covers": "2025 ceremony report: \"Paris Saint-Germain forward Ousmane Dembele\" and \"Barcelona and Spain star Aitana Bonmati\"",
+   "publisher": "ESPN, 2025-09-22",
+   "read": "2026-09-30"
+  }
+ },
+ "absent": [
+  {
+   "award_type": "Men",
+   "year": 2020,
+   "why": "Not awarded (the COVID-19 season); uefa.com: \"2020: Award not given\". No row, correctly."
+  },
+  {
+   "award_type": "Women",
+   "year": 2020,
+   "why": "Not awarded; uefa.com: \"2020: Award not given\". No row, correctly."
+  }
+ ],
+ "notShipped": [
+  {
+   "field": "points",
+   "why": "NULL on every row. No reader selects it except as an unused column, and this round verified no point totals, so it is left NULL rather than filled from one source."
+  },
+  {
+   "field": "podium (rank 2 and 3)",
+   "why": "The table holds winners only; every reader filters rank = 1. Adding podium rows is a feature, not a correction."
+  }
+ ],
+ "readers": [
+  {
+   "file": "src/lib/listQuiz.ts",
+   "uses": "player_name where rank = 1 and award_type = 'Men'"
+  },
+  {
+   "file": "src/lib/rarityRound.ts",
+   "uses": "player_name, year where rank = 1 and award_type = 'Men'; club, nationality and year as autocomplete meta"
+  },
+  {
+   "file": "src/lib/triviaQuestionBank.ts",
+   "uses": "year, rank, player_name, nationality, club, award_type; questions use rank 1 Men rows only"
+  },
+  {
+   "file": "src/lib/playerBingo.ts",
+   "uses": "player_name, rank, award_type; Men rank 1 (or unranked) names"
+  }
+ ],
+ "rows": [
+  {
+   "id": 2,
+   "award_type": "Men",
+   "year": 1956,
+   "rank": 1,
+   "player_name": "Stanley Matthews",
+   "club": "Blackpool",
+   "nationality": "England",
+   "read": {
+    "player_name": "Stanley Matthews",
+    "club": "Blackpool",
+    "nationality": null,
+    "points": null
+   },
+   "status": "verified",
+   "change": "nationality NULL -> England",
+   "sources": [
+    "https://www.uefa.com/ballondor/news/0292-1c27056169a7-bc88d1fdba43-1000--ballon-d-or-laureates-who-has-won-football-s-most-prestig/",
+    "https://www.rsssf.org/miscellaneous/europa-poy.html",
+    "https://www.espn.com/soccer/story/_/id/42055052/ballon-dor-winners-list-messi-ronaldo-ronaldinho-more"
+   ],
+   "sourceKeys": [
+    "uefaLaureates",
+    "rsssfEuropa",
+    "espnList"
+   ],
+   "checked": "2026-09-30"
+  },
+  {
+   "id": 3,
+   "award_type": "Men",
+   "year": 1957,
+   "rank": 1,
+   "player_name": "Alfredo Di Stéfano",
+   "club": "Real Madrid",
+   "nationality": "Spain",
+   "read": {
+    "player_name": "Alfredo Di Stéfano",
+    "club": "Real Madrid",
+    "nationality": null,
+    "points": null
+   },
+   "status": "verified",
+   "change": "nationality NULL -> Spain",
+   "sources": [
+    "https://www.uefa.com/ballondor/news/0292-1c27056169a7-bc88d1fdba43-1000--ballon-d-or-laureates-who-has-won-football-s-most-prestig/",
+    "https://www.rsssf.org/miscellaneous/europa-poy.html",
+    "https://www.espn.com/soccer/story/_/id/42055052/ballon-dor-winners-list-messi-ronaldo-ronaldinho-more"
+   ],
+   "sourceKeys": [
+    "uefaLaureates",
+    "rsssfEuropa",
+    "espnList"
+   ],
+   "checked": "2026-09-30",
+   "note": "ESPN writes Argentina, his birth nation. He had played for Spain since 1957 and UEFA and RSSSF both give Spain for the award, so Spain ships."
+  },
+  {
+   "id": 4,
+   "award_type": "Men",
+   "year": 1958,
+   "rank": 1,
+   "player_name": "Raymond Kopa",
+   "club": "Real Madrid",
+   "nationality": "France",
+   "read": {
+    "player_name": "Raymond Kopa",
+    "club": "Real Madrid",
+    "nationality": null,
+    "points": null
+   },
+   "status": "verified",
+   "change": "nationality NULL -> France",
+   "sources": [
+    "https://www.uefa.com/ballondor/news/0292-1c27056169a7-bc88d1fdba43-1000--ballon-d-or-laureates-who-has-won-football-s-most-prestig/",
+    "https://www.rsssf.org/miscellaneous/europa-poy.html",
+    "https://www.espn.com/soccer/story/_/id/42055052/ballon-dor-winners-list-messi-ronaldo-ronaldinho-more"
+   ],
+   "sourceKeys": [
+    "uefaLaureates",
+    "rsssfEuropa",
+    "espnList"
+   ],
+   "checked": "2026-09-30"
+  },
+  {
+   "id": 5,
+   "award_type": "Men",
+   "year": 1959,
+   "rank": 1,
+   "player_name": "Alfredo Di Stéfano",
+   "club": "Real Madrid",
+   "nationality": "Spain",
+   "read": {
+    "player_name": "Alfredo Di Stéfano",
+    "club": "Real Madrid",
+    "nationality": null,
+    "points": null
+   },
+   "status": "verified",
+   "change": "nationality NULL -> Spain",
+   "sources": [
+    "https://www.uefa.com/ballondor/news/0292-1c27056169a7-bc88d1fdba43-1000--ballon-d-or-laureates-who-has-won-football-s-most-prestig/",
+    "https://www.rsssf.org/miscellaneous/europa-poy.html",
+    "https://www.espn.com/soccer/story/_/id/42055052/ballon-dor-winners-list-messi-ronaldo-ronaldinho-more"
+   ],
+   "sourceKeys": [
+    "uefaLaureates",
+    "rsssfEuropa",
+    "espnList"
+   ],
+   "checked": "2026-09-30",
+   "note": "ESPN writes Argentina, his birth nation. UEFA and RSSSF both give Spain, so Spain ships."
+  },
+  {
+   "id": 6,
+   "award_type": "Men",
+   "year": 1960,
+   "rank": 1,
+   "player_name": "Luis Suárez",
+   "club": "Barcelona",
+   "nationality": "Spain",
+   "read": {
+    "player_name": "Luis Suárez",
+    "club": "Barcelona",
+    "nationality": null,
+    "points": null
+   },
+   "status": "verified",
+   "change": "nationality NULL -> Spain",
+   "sources": [
+    "https://www.uefa.com/ballondor/news/0292-1c27056169a7-bc88d1fdba43-1000--ballon-d-or-laureates-who-has-won-football-s-most-prestig/",
+    "https://www.rsssf.org/miscellaneous/europa-poy.html",
+    "https://www.espn.com/soccer/story/_/id/42055052/ballon-dor-winners-list-messi-ronaldo-ronaldinho-more"
+   ],
+   "sourceKeys": [
+    "uefaLaureates",
+    "rsssfEuropa",
+    "espnList"
+   ],
+   "checked": "2026-09-30",
+   "note": "Luis Suarez Miramontes of Spain, not the Uruguayan striker of the same name; a reader that matches winners by name alone can credit the wrong man."
+  },
+  {
+   "id": 7,
+   "award_type": "Men",
+   "year": 1961,
+   "rank": 1,
+   "player_name": "Omar Sívori",
+   "club": "Juventus",
+   "nationality": "Italy",
+   "read": {
+    "player_name": "Omar Sívori",
+    "club": "Juventus",
+    "nationality": null,
+    "points": null
+   },
+   "status": "verified",
+   "change": "nationality NULL -> Italy",
+   "sources": [
+    "https://www.uefa.com/ballondor/news/0292-1c27056169a7-bc88d1fdba43-1000--ballon-d-or-laureates-who-has-won-football-s-most-prestig/",
+    "https://www.rsssf.org/miscellaneous/europa-poy.html",
+    "https://www.espn.com/soccer/story/_/id/42055052/ballon-dor-winners-list-messi-ronaldo-ronaldinho-more"
+   ],
+   "sourceKeys": [
+    "uefaLaureates",
+    "rsssfEuropa",
+    "espnList"
+   ],
+   "checked": "2026-09-30"
+  },
+  {
+   "id": 8,
+   "award_type": "Men",
+   "year": 1962,
+   "rank": 1,
+   "player_name": "Josef Masopust",
+   "club": "Dukla Prague",
+   "nationality": "Czechoslovakia",
+   "read": {
+    "player_name": "Josef Masopust",
+    "club": "Dukla Prague",
+    "nationality": null,
+    "points": null
+   },
+   "status": "verified",
+   "change": "nationality NULL -> Czechoslovakia",
+   "sources": [
+    "https://www.uefa.com/ballondor/news/0292-1c27056169a7-bc88d1fdba43-1000--ballon-d-or-laureates-who-has-won-football-s-most-prestig/",
+    "https://www.rsssf.org/miscellaneous/europa-poy.html",
+    "https://www.espn.com/soccer/story/_/id/42055052/ballon-dor-winners-list-messi-ronaldo-ronaldinho-more"
+   ],
+   "sourceKeys": [
+    "uefaLaureates",
+    "rsssfEuropa",
+    "espnList"
+   ],
+   "checked": "2026-09-30",
+   "note": "UEFA and RSSSF write Dukla Praha, the same club."
+  },
+  {
+   "id": 9,
+   "award_type": "Men",
+   "year": 1963,
+   "rank": 1,
+   "player_name": "Lev Yashin",
+   "club": "Dynamo Moscow",
+   "nationality": "Soviet Union",
+   "read": {
+    "player_name": "Lev Yashin",
+    "club": "Dynamo Moscow",
+    "nationality": null,
+    "points": null
+   },
+   "status": "verified",
+   "change": "nationality NULL -> Soviet Union",
+   "sources": [
+    "https://www.uefa.com/ballondor/news/0292-1c27056169a7-bc88d1fdba43-1000--ballon-d-or-laureates-who-has-won-football-s-most-prestig/",
+    "https://www.rsssf.org/miscellaneous/europa-poy.html",
+    "https://www.espn.com/soccer/story/_/id/42055052/ballon-dor-winners-list-messi-ronaldo-ronaldinho-more"
+   ],
+   "sourceKeys": [
+    "uefaLaureates",
+    "rsssfEuropa",
+    "espnList"
+   ],
+   "checked": "2026-09-30"
+  },
+  {
+   "id": 10,
+   "award_type": "Men",
+   "year": 1964,
+   "rank": 1,
+   "player_name": "Denis Law",
+   "club": "Manchester United",
+   "nationality": "Scotland",
+   "read": {
+    "player_name": "Denis Law",
+    "club": "Manchester United",
+    "nationality": null,
+    "points": null
+   },
+   "status": "verified",
+   "change": "nationality NULL -> Scotland",
+   "sources": [
+    "https://www.uefa.com/ballondor/news/0292-1c27056169a7-bc88d1fdba43-1000--ballon-d-or-laureates-who-has-won-football-s-most-prestig/",
+    "https://www.rsssf.org/miscellaneous/europa-poy.html",
+    "https://www.espn.com/soccer/story/_/id/42055052/ballon-dor-winners-list-messi-ronaldo-ronaldinho-more"
+   ],
+   "sourceKeys": [
+    "uefaLaureates",
+    "rsssfEuropa",
+    "espnList"
+   ],
+   "checked": "2026-09-30"
+  },
+  {
+   "id": 11,
+   "award_type": "Men",
+   "year": 1965,
+   "rank": 1,
+   "player_name": "Eusébio",
+   "club": "Benfica",
+   "nationality": "Portugal",
+   "read": {
+    "player_name": "Eusébio",
+    "club": "Benfica",
+    "nationality": null,
+    "points": null
+   },
+   "status": "verified",
+   "change": "nationality NULL -> Portugal",
+   "sources": [
+    "https://www.uefa.com/ballondor/news/0292-1c27056169a7-bc88d1fdba43-1000--ballon-d-or-laureates-who-has-won-football-s-most-prestig/",
+    "https://www.rsssf.org/miscellaneous/europa-poy.html",
+    "https://www.espn.com/soccer/story/_/id/42055052/ballon-dor-winners-list-messi-ronaldo-ronaldinho-more"
+   ],
+   "sourceKeys": [
+    "uefaLaureates",
+    "rsssfEuropa",
+    "espnList"
+   ],
+   "checked": "2026-09-30"
+  },
+  {
+   "id": 12,
+   "award_type": "Men",
+   "year": 1966,
+   "rank": 1,
+   "player_name": "Bobby Charlton",
+   "club": "Manchester United",
+   "nationality": "England",
+   "read": {
+    "player_name": "Bobby Charlton",
+    "club": "Manchester United",
+    "nationality": null,
+    "points": null
+   },
+   "status": "verified",
+   "change": "nationality NULL -> England",
+   "sources": [
+    "https://www.uefa.com/ballondor/news/0292-1c27056169a7-bc88d1fdba43-1000--ballon-d-or-laureates-who-has-won-football-s-most-prestig/",
+    "https://www.rsssf.org/miscellaneous/europa-poy.html",
+    "https://www.espn.com/soccer/story/_/id/42055052/ballon-dor-winners-list-messi-ronaldo-ronaldinho-more"
+   ],
+   "sourceKeys": [
+    "uefaLaureates",
+    "rsssfEuropa",
+    "espnList"
+   ],
+   "checked": "2026-09-30"
+  },
+  {
+   "id": 13,
+   "award_type": "Men",
+   "year": 1967,
+   "rank": 1,
+   "player_name": "Flórián Albert",
+   "club": "Ferencváros",
+   "nationality": "Hungary",
+   "read": {
+    "player_name": "Flórián Albert",
+    "club": "Ferencváros",
+    "nationality": null,
+    "points": null
+   },
+   "status": "verified",
+   "change": "nationality NULL -> Hungary",
+   "sources": [
+    "https://www.uefa.com/ballondor/news/0292-1c27056169a7-bc88d1fdba43-1000--ballon-d-or-laureates-who-has-won-football-s-most-prestig/",
+    "https://www.rsssf.org/miscellaneous/europa-poy.html",
+    "https://www.espn.com/soccer/story/_/id/42055052/ballon-dor-winners-list-messi-ronaldo-ronaldinho-more"
+   ],
+   "sourceKeys": [
+    "uefaLaureates",
+    "rsssfEuropa",
+    "espnList"
+   ],
+   "checked": "2026-09-30"
+  },
+  {
+   "id": 14,
+   "award_type": "Men",
+   "year": 1968,
+   "rank": 1,
+   "player_name": "George Best",
+   "club": "Manchester United",
+   "nationality": "Northern Ireland",
+   "read": {
+    "player_name": "George Best",
+    "club": "Manchester United",
+    "nationality": null,
+    "points": null
+   },
+   "status": "verified",
+   "change": "nationality NULL -> Northern Ireland",
+   "sources": [
+    "https://www.uefa.com/ballondor/news/0292-1c27056169a7-bc88d1fdba43-1000--ballon-d-or-laureates-who-has-won-football-s-most-prestig/",
+    "https://www.rsssf.org/miscellaneous/europa-poy.html",
+    "https://www.espn.com/soccer/story/_/id/42055052/ballon-dor-winners-list-messi-ronaldo-ronaldinho-more"
+   ],
+   "sourceKeys": [
+    "uefaLaureates",
+    "rsssfEuropa",
+    "espnList"
+   ],
+   "checked": "2026-09-30"
+  },
+  {
+   "id": 15,
+   "award_type": "Men",
+   "year": 1969,
+   "rank": 1,
+   "player_name": "Gianni Rivera",
+   "club": "Milan",
+   "nationality": "Italy",
+   "read": {
+    "player_name": "Gianni Rivera",
+    "club": "Milan",
+    "nationality": null,
+    "points": null
+   },
+   "status": "verified",
+   "change": "nationality NULL -> Italy",
+   "sources": [
+    "https://www.uefa.com/ballondor/news/0292-1c27056169a7-bc88d1fdba43-1000--ballon-d-or-laureates-who-has-won-football-s-most-prestig/",
+    "https://www.rsssf.org/miscellaneous/europa-poy.html",
+    "https://www.espn.com/soccer/story/_/id/42055052/ballon-dor-winners-list-messi-ronaldo-ronaldinho-more"
+   ],
+   "sourceKeys": [
+    "uefaLaureates",
+    "rsssfEuropa",
+    "espnList"
+   ],
+   "checked": "2026-09-30",
+   "note": "UEFA writes AC Milan, the same club."
+  },
+  {
+   "id": 16,
+   "award_type": "Men",
+   "year": 1970,
+   "rank": 1,
+   "player_name": "Gerd Müller",
+   "club": "Bayern Munich",
+   "nationality": "West Germany",
+   "read": {
+    "player_name": "Gerd Müller",
+    "club": "Bayern Munich",
+    "nationality": null,
+    "points": null
+   },
+   "status": "verified",
+   "change": "nationality NULL -> West Germany",
+   "sources": [
+    "https://www.uefa.com/ballondor/news/0292-1c27056169a7-bc88d1fdba43-1000--ballon-d-or-laureates-who-has-won-football-s-most-prestig/",
+    "https://www.rsssf.org/miscellaneous/europa-poy.html",
+    "https://www.espn.com/soccer/story/_/id/42055052/ballon-dor-winners-list-messi-ronaldo-ronaldinho-more"
+   ],
+   "sourceKeys": [
+    "uefaLaureates",
+    "rsssfEuropa",
+    "espnList"
+   ],
+   "checked": "2026-09-30"
+  },
+  {
+   "id": 17,
+   "award_type": "Men",
+   "year": 1971,
+   "rank": 1,
+   "player_name": "Johan Cruyff",
+   "club": "Ajax",
+   "nationality": "Netherlands",
+   "read": {
+    "player_name": "Johan Cruyff",
+    "club": "Ajax",
+    "nationality": null,
+    "points": null
+   },
+   "status": "verified",
+   "change": "nationality NULL -> Netherlands",
+   "sources": [
+    "https://www.uefa.com/ballondor/news/0292-1c27056169a7-bc88d1fdba43-1000--ballon-d-or-laureates-who-has-won-football-s-most-prestig/",
+    "https://www.rsssf.org/miscellaneous/europa-poy.html",
+    "https://www.espn.com/soccer/story/_/id/42055052/ballon-dor-winners-list-messi-ronaldo-ronaldinho-more"
+   ],
+   "sourceKeys": [
+    "uefaLaureates",
+    "rsssfEuropa",
+    "espnList"
+   ],
+   "checked": "2026-09-30"
+  },
+  {
+   "id": 18,
+   "award_type": "Men",
+   "year": 1972,
+   "rank": 1,
+   "player_name": "Franz Beckenbauer",
+   "club": "Bayern Munich",
+   "nationality": "West Germany",
+   "read": {
+    "player_name": "Franz Beckenbauer",
+    "club": "Bayern Munich",
+    "nationality": null,
+    "points": null
+   },
+   "status": "verified",
+   "change": "nationality NULL -> West Germany",
+   "sources": [
+    "https://www.uefa.com/ballondor/news/0292-1c27056169a7-bc88d1fdba43-1000--ballon-d-or-laureates-who-has-won-football-s-most-prestig/",
+    "https://www.rsssf.org/miscellaneous/europa-poy.html",
+    "https://www.espn.com/soccer/story/_/id/42055052/ballon-dor-winners-list-messi-ronaldo-ronaldinho-more"
+   ],
+   "sourceKeys": [
+    "uefaLaureates",
+    "rsssfEuropa",
+    "espnList"
+   ],
+   "checked": "2026-09-30"
+  },
+  {
+   "id": 19,
+   "award_type": "Men",
+   "year": 1973,
+   "rank": 1,
+   "player_name": "Johan Cruyff",
+   "club": "Barcelona",
+   "nationality": "Netherlands",
+   "read": {
+    "player_name": "Johan Cruyff",
+    "club": "Barcelona",
+    "nationality": null,
+    "points": null
+   },
+   "status": "verified",
+   "change": "nationality NULL -> Netherlands",
+   "sources": [
+    "https://www.uefa.com/ballondor/news/0292-1c27056169a7-bc88d1fdba43-1000--ballon-d-or-laureates-who-has-won-football-s-most-prestig/",
+    "https://www.rsssf.org/miscellaneous/europa-poy.html",
+    "https://www.espn.com/soccer/story/_/id/42055052/ballon-dor-winners-list-messi-ronaldo-ronaldinho-more"
+   ],
+   "sourceKeys": [
+    "uefaLaureates",
+    "rsssfEuropa",
+    "espnList"
+   ],
+   "checked": "2026-09-30",
+   "note": "He joined Barcelona from Ajax in August 1973; every source gives Barcelona for the award."
+  },
+  {
+   "id": 20,
+   "award_type": "Men",
+   "year": 1974,
+   "rank": 1,
+   "player_name": "Johan Cruyff",
+   "club": "Barcelona",
+   "nationality": "Netherlands",
+   "read": {
+    "player_name": "Johan Cruyff",
+    "club": "Barcelona",
+    "nationality": null,
+    "points": null
+   },
+   "status": "verified",
+   "change": "nationality NULL -> Netherlands",
+   "sources": [
+    "https://www.uefa.com/ballondor/news/0292-1c27056169a7-bc88d1fdba43-1000--ballon-d-or-laureates-who-has-won-football-s-most-prestig/",
+    "https://www.rsssf.org/miscellaneous/europa-poy.html",
+    "https://www.espn.com/soccer/story/_/id/42055052/ballon-dor-winners-list-messi-ronaldo-ronaldinho-more"
+   ],
+   "sourceKeys": [
+    "uefaLaureates",
+    "rsssfEuropa",
+    "espnList"
+   ],
+   "checked": "2026-09-30"
+  },
+  {
+   "id": 21,
+   "award_type": "Men",
+   "year": 1975,
+   "rank": 1,
+   "player_name": "Oleg Blokhin",
+   "club": "Dynamo Kyiv",
+   "nationality": "Soviet Union",
+   "read": {
+    "player_name": "Oleg Blokhin",
+    "club": "Dynamo Kyiv",
+    "nationality": null,
+    "points": null
+   },
+   "status": "verified",
+   "change": "nationality NULL -> Soviet Union",
+   "sources": [
+    "https://www.uefa.com/ballondor/news/0292-1c27056169a7-bc88d1fdba43-1000--ballon-d-or-laureates-who-has-won-football-s-most-prestig/",
+    "https://www.rsssf.org/miscellaneous/europa-poy.html",
+    "https://www.espn.com/soccer/story/_/id/42055052/ballon-dor-winners-list-messi-ronaldo-ronaldinho-more"
+   ],
+   "sourceKeys": [
+    "uefaLaureates",
+    "rsssfEuropa",
+    "espnList"
+   ],
+   "checked": "2026-09-30",
+   "note": "UEFA's English pages spell him Oleh Blokhin; the same man."
+  },
+  {
+   "id": 22,
+   "award_type": "Men",
+   "year": 1976,
+   "rank": 1,
+   "player_name": "Franz Beckenbauer",
+   "club": "Bayern Munich",
+   "nationality": "West Germany",
+   "read": {
+    "player_name": "Franz Beckenbauer",
+    "club": "Bayern Munich",
+    "nationality": null,
+    "points": null
+   },
+   "status": "verified",
+   "change": "nationality NULL -> West Germany",
+   "sources": [
+    "https://www.uefa.com/ballondor/news/0292-1c27056169a7-bc88d1fdba43-1000--ballon-d-or-laureates-who-has-won-football-s-most-prestig/",
+    "https://www.rsssf.org/miscellaneous/europa-poy.html",
+    "https://www.espn.com/soccer/story/_/id/42055052/ballon-dor-winners-list-messi-ronaldo-ronaldinho-more"
+   ],
+   "sourceKeys": [
+    "uefaLaureates",
+    "rsssfEuropa",
+    "espnList"
+   ],
+   "checked": "2026-09-30"
+  },
+  {
+   "id": 23,
+   "award_type": "Men",
+   "year": 1977,
+   "rank": 1,
+   "player_name": "Allan Simonsen",
+   "club": "Borussia Mönchengladbach",
+   "nationality": "Denmark",
+   "read": {
+    "player_name": "Allan Simonsen",
+    "club": "Borussia Mönchengladbach",
+    "nationality": null,
+    "points": null
+   },
+   "status": "verified",
+   "change": "nationality NULL -> Denmark",
+   "sources": [
+    "https://www.uefa.com/ballondor/news/0292-1c27056169a7-bc88d1fdba43-1000--ballon-d-or-laureates-who-has-won-football-s-most-prestig/",
+    "https://www.rsssf.org/miscellaneous/europa-poy.html",
+    "https://www.espn.com/soccer/story/_/id/42055052/ballon-dor-winners-list-messi-ronaldo-ronaldinho-more"
+   ],
+   "sourceKeys": [
+    "uefaLaureates",
+    "rsssfEuropa",
+    "espnList"
+   ],
+   "checked": "2026-09-30"
+  },
+  {
+   "id": 24,
+   "award_type": "Men",
+   "year": 1978,
+   "rank": 1,
+   "player_name": "Kevin Keegan",
+   "club": "Hamburger SV",
+   "nationality": "England",
+   "read": {
+    "player_name": "Kevin Keegan",
+    "club": "Hamburger SV",
+    "nationality": null,
+    "points": null
+   },
+   "status": "verified",
+   "change": "nationality NULL -> England",
+   "sources": [
+    "https://www.uefa.com/ballondor/news/0292-1c27056169a7-bc88d1fdba43-1000--ballon-d-or-laureates-who-has-won-football-s-most-prestig/",
+    "https://www.rsssf.org/miscellaneous/europa-poy.html",
+    "https://www.espn.com/soccer/story/_/id/42055052/ballon-dor-winners-list-messi-ronaldo-ronaldinho-more"
+   ],
+   "sourceKeys": [
+    "uefaLaureates",
+    "rsssfEuropa",
+    "espnList"
+   ],
+   "checked": "2026-09-30",
+   "note": "UEFA writes Hamburg, the same club."
+  },
+  {
+   "id": 25,
+   "award_type": "Men",
+   "year": 1979,
+   "rank": 1,
+   "player_name": "Kevin Keegan",
+   "club": "Hamburger SV",
+   "nationality": "England",
+   "read": {
+    "player_name": "Kevin Keegan",
+    "club": "Hamburger SV",
+    "nationality": null,
+    "points": null
+   },
+   "status": "verified",
+   "change": "nationality NULL -> England",
+   "sources": [
+    "https://www.uefa.com/ballondor/news/0292-1c27056169a7-bc88d1fdba43-1000--ballon-d-or-laureates-who-has-won-football-s-most-prestig/",
+    "https://www.rsssf.org/miscellaneous/europa-poy.html",
+    "https://www.espn.com/soccer/story/_/id/42055052/ballon-dor-winners-list-messi-ronaldo-ronaldinho-more"
+   ],
+   "sourceKeys": [
+    "uefaLaureates",
+    "rsssfEuropa",
+    "espnList"
+   ],
+   "checked": "2026-09-30"
+  },
+  {
+   "id": 26,
+   "award_type": "Men",
+   "year": 1980,
+   "rank": 1,
+   "player_name": "Karl-Heinz Rummenigge",
+   "club": "Bayern Munich",
+   "nationality": "West Germany",
+   "read": {
+    "player_name": "Karl-Heinz Rummenigge",
+    "club": "Bayern Munich",
+    "nationality": null,
+    "points": null
+   },
+   "status": "verified",
+   "change": "nationality NULL -> West Germany",
+   "sources": [
+    "https://www.uefa.com/ballondor/news/0292-1c27056169a7-bc88d1fdba43-1000--ballon-d-or-laureates-who-has-won-football-s-most-prestig/",
+    "https://www.rsssf.org/miscellaneous/europa-poy.html",
+    "https://www.espn.com/soccer/story/_/id/42055052/ballon-dor-winners-list-messi-ronaldo-ronaldinho-more"
+   ],
+   "sourceKeys": [
+    "uefaLaureates",
+    "rsssfEuropa",
+    "espnList"
+   ],
+   "checked": "2026-09-30"
+  },
+  {
+   "id": 27,
+   "award_type": "Men",
+   "year": 1981,
+   "rank": 1,
+   "player_name": "Karl-Heinz Rummenigge",
+   "club": "Bayern Munich",
+   "nationality": "West Germany",
+   "read": {
+    "player_name": "Karl-Heinz Rummenigge",
+    "club": "Bayern Munich",
+    "nationality": null,
+    "points": null
+   },
+   "status": "verified",
+   "change": "nationality NULL -> West Germany",
+   "sources": [
+    "https://www.uefa.com/ballondor/news/0292-1c27056169a7-bc88d1fdba43-1000--ballon-d-or-laureates-who-has-won-football-s-most-prestig/",
+    "https://www.rsssf.org/miscellaneous/europa-poy.html",
+    "https://www.espn.com/soccer/story/_/id/42055052/ballon-dor-winners-list-messi-ronaldo-ronaldinho-more"
+   ],
+   "sourceKeys": [
+    "uefaLaureates",
+    "rsssfEuropa",
+    "espnList"
+   ],
+   "checked": "2026-09-30"
+  },
+  {
+   "id": 28,
+   "award_type": "Men",
+   "year": 1982,
+   "rank": 1,
+   "player_name": "Paolo Rossi",
+   "club": "Juventus",
+   "nationality": "Italy",
+   "read": {
+    "player_name": "Paolo Rossi",
+    "club": "Juventus",
+    "nationality": null,
+    "points": null
+   },
+   "status": "verified",
+   "change": "nationality NULL -> Italy",
+   "sources": [
+    "https://www.uefa.com/ballondor/news/0292-1c27056169a7-bc88d1fdba43-1000--ballon-d-or-laureates-who-has-won-football-s-most-prestig/",
+    "https://www.rsssf.org/miscellaneous/europa-poy.html",
+    "https://www.espn.com/soccer/story/_/id/42055052/ballon-dor-winners-list-messi-ronaldo-ronaldinho-more"
+   ],
+   "sourceKeys": [
+    "uefaLaureates",
+    "rsssfEuropa",
+    "espnList"
+   ],
+   "checked": "2026-09-30"
+  },
+  {
+   "id": 29,
+   "award_type": "Men",
+   "year": 1983,
+   "rank": 1,
+   "player_name": "Michel Platini",
+   "club": "Juventus",
+   "nationality": "France",
+   "read": {
+    "player_name": "Michel Platini",
+    "club": "Juventus",
+    "nationality": null,
+    "points": null
+   },
+   "status": "verified",
+   "change": "nationality NULL -> France",
+   "sources": [
+    "https://www.uefa.com/ballondor/news/0292-1c27056169a7-bc88d1fdba43-1000--ballon-d-or-laureates-who-has-won-football-s-most-prestig/",
+    "https://www.rsssf.org/miscellaneous/europa-poy.html",
+    "https://www.espn.com/soccer/story/_/id/42055052/ballon-dor-winners-list-messi-ronaldo-ronaldinho-more"
+   ],
+   "sourceKeys": [
+    "uefaLaureates",
+    "rsssfEuropa",
+    "espnList"
+   ],
+   "checked": "2026-09-30"
+  },
+  {
+   "id": 30,
+   "award_type": "Men",
+   "year": 1984,
+   "rank": 1,
+   "player_name": "Michel Platini",
+   "club": "Juventus",
+   "nationality": "France",
+   "read": {
+    "player_name": "Michel Platini",
+    "club": "Juventus",
+    "nationality": null,
+    "points": null
+   },
+   "status": "verified",
+   "change": "nationality NULL -> France",
+   "sources": [
+    "https://www.uefa.com/ballondor/news/0292-1c27056169a7-bc88d1fdba43-1000--ballon-d-or-laureates-who-has-won-football-s-most-prestig/",
+    "https://www.rsssf.org/miscellaneous/europa-poy.html",
+    "https://www.espn.com/soccer/story/_/id/42055052/ballon-dor-winners-list-messi-ronaldo-ronaldinho-more"
+   ],
+   "sourceKeys": [
+    "uefaLaureates",
+    "rsssfEuropa",
+    "espnList"
+   ],
+   "checked": "2026-09-30"
+  },
+  {
+   "id": 31,
+   "award_type": "Men",
+   "year": 1985,
+   "rank": 1,
+   "player_name": "Michel Platini",
+   "club": "Juventus",
+   "nationality": "France",
+   "read": {
+    "player_name": "Michel Platini",
+    "club": "Juventus",
+    "nationality": null,
+    "points": null
+   },
+   "status": "verified",
+   "change": "nationality NULL -> France",
+   "sources": [
+    "https://www.uefa.com/ballondor/news/0292-1c27056169a7-bc88d1fdba43-1000--ballon-d-or-laureates-who-has-won-football-s-most-prestig/",
+    "https://www.rsssf.org/miscellaneous/europa-poy.html",
+    "https://www.espn.com/soccer/story/_/id/42055052/ballon-dor-winners-list-messi-ronaldo-ronaldinho-more"
+   ],
+   "sourceKeys": [
+    "uefaLaureates",
+    "rsssfEuropa",
+    "espnList"
+   ],
+   "checked": "2026-09-30"
+  },
+  {
+   "id": 32,
+   "award_type": "Men",
+   "year": 1986,
+   "rank": 1,
+   "player_name": "Igor Belanov",
+   "club": "Dynamo Kyiv",
+   "nationality": "Soviet Union",
+   "read": {
+    "player_name": "Igor Belanov",
+    "club": "Dynamo Kyiv",
+    "nationality": null,
+    "points": null
+   },
+   "status": "verified",
+   "change": "nationality NULL -> Soviet Union",
+   "sources": [
+    "https://www.uefa.com/ballondor/news/0292-1c27056169a7-bc88d1fdba43-1000--ballon-d-or-laureates-who-has-won-football-s-most-prestig/",
+    "https://www.rsssf.org/miscellaneous/europa-poy.html",
+    "https://www.espn.com/soccer/story/_/id/42055052/ballon-dor-winners-list-messi-ronaldo-ronaldinho-more"
+   ],
+   "sourceKeys": [
+    "uefaLaureates",
+    "rsssfEuropa",
+    "espnList"
+   ],
+   "checked": "2026-09-30",
+   "note": "UEFA's English pages spell him Ihor Belanov; the same man."
+  },
+  {
+   "id": 33,
+   "award_type": "Men",
+   "year": 1987,
+   "rank": 1,
+   "player_name": "Ruud Gullit",
+   "club": "Milan",
+   "nationality": "Netherlands",
+   "read": {
+    "player_name": "Ruud Gullit",
+    "club": "Milan",
+    "nationality": null,
+    "points": null
+   },
+   "status": "verified",
+   "change": "nationality NULL -> Netherlands",
+   "sources": [
+    "https://www.uefa.com/ballondor/news/0292-1c27056169a7-bc88d1fdba43-1000--ballon-d-or-laureates-who-has-won-football-s-most-prestig/",
+    "https://www.rsssf.org/miscellaneous/europa-poy.html",
+    "https://www.espn.com/soccer/story/_/id/42055052/ballon-dor-winners-list-messi-ronaldo-ronaldinho-more"
+   ],
+   "sourceKeys": [
+    "uefaLaureates",
+    "rsssfEuropa",
+    "espnList"
+   ],
+   "checked": "2026-09-30"
+  },
+  {
+   "id": 34,
+   "award_type": "Men",
+   "year": 1988,
+   "rank": 1,
+   "player_name": "Marco van Basten",
+   "club": "Milan",
+   "nationality": "Netherlands",
+   "read": {
+    "player_name": "Marco van Basten",
+    "club": "Milan",
+    "nationality": null,
+    "points": null
+   },
+   "status": "verified",
+   "change": "nationality NULL -> Netherlands",
+   "sources": [
+    "https://www.uefa.com/ballondor/news/0292-1c27056169a7-bc88d1fdba43-1000--ballon-d-or-laureates-who-has-won-football-s-most-prestig/",
+    "https://www.rsssf.org/miscellaneous/europa-poy.html",
+    "https://www.espn.com/soccer/story/_/id/42055052/ballon-dor-winners-list-messi-ronaldo-ronaldinho-more"
+   ],
+   "sourceKeys": [
+    "uefaLaureates",
+    "rsssfEuropa",
+    "espnList"
+   ],
+   "checked": "2026-09-30"
+  },
+  {
+   "id": 35,
+   "award_type": "Men",
+   "year": 1989,
+   "rank": 1,
+   "player_name": "Marco van Basten",
+   "club": "Milan",
+   "nationality": "Netherlands",
+   "read": {
+    "player_name": "Marco van Basten",
+    "club": "Milan",
+    "nationality": null,
+    "points": null
+   },
+   "status": "verified",
+   "change": "nationality NULL -> Netherlands",
+   "sources": [
+    "https://www.uefa.com/ballondor/news/0292-1c27056169a7-bc88d1fdba43-1000--ballon-d-or-laureates-who-has-won-football-s-most-prestig/",
+    "https://www.rsssf.org/miscellaneous/europa-poy.html",
+    "https://www.espn.com/soccer/story/_/id/42055052/ballon-dor-winners-list-messi-ronaldo-ronaldinho-more"
+   ],
+   "sourceKeys": [
+    "uefaLaureates",
+    "rsssfEuropa",
+    "espnList"
+   ],
+   "checked": "2026-09-30"
+  },
+  {
+   "id": 36,
+   "award_type": "Men",
+   "year": 1990,
+   "rank": 1,
+   "player_name": "Lothar Matthäus",
+   "club": "Inter Milan",
+   "nationality": "Germany",
+   "read": {
+    "player_name": "Lothar Matthäus",
+    "club": "Inter Milan",
+    "nationality": null,
+    "points": null
+   },
+   "status": "verified",
+   "change": "nationality NULL -> Germany",
+   "sources": [
+    "https://www.uefa.com/ballondor/news/0292-1c27056169a7-bc88d1fdba43-1000--ballon-d-or-laureates-who-has-won-football-s-most-prestig/",
+    "https://www.espn.com/soccer/story/_/id/42055052/ballon-dor-winners-list-messi-ronaldo-ronaldinho-more",
+    "https://www.topendsports.com/sport/soccer/list-player-of-the-year-ballondor.htm"
+   ],
+   "sourceKeys": [
+    "uefaLaureates",
+    "espnList",
+    "topendsportsMen"
+   ],
+   "checked": "2026-09-30",
+   "note": "RSSSF writes West Germany, the side he captained to the 1990 World Cup. UEFA, ESPN and Topend Sports all write Germany, and the award was presented on 25 December 1990, after reunification, so Germany ships."
+  },
+  {
+   "id": 37,
+   "award_type": "Men",
+   "year": 1991,
+   "rank": 1,
+   "player_name": "Jean-Pierre Papin",
+   "club": "Marseille",
+   "nationality": "France",
+   "read": {
+    "player_name": "Jean-Pierre Papin",
+    "club": "Marseille",
+    "nationality": null,
+    "points": null
+   },
+   "status": "verified",
+   "change": "nationality NULL -> France",
+   "sources": [
+    "https://www.uefa.com/ballondor/news/0292-1c27056169a7-bc88d1fdba43-1000--ballon-d-or-laureates-who-has-won-football-s-most-prestig/",
+    "https://www.rsssf.org/miscellaneous/europa-poy.html",
+    "https://www.espn.com/soccer/story/_/id/42055052/ballon-dor-winners-list-messi-ronaldo-ronaldinho-more"
+   ],
+   "sourceKeys": [
+    "uefaLaureates",
+    "rsssfEuropa",
+    "espnList"
+   ],
+   "checked": "2026-09-30"
+  },
+  {
+   "id": 38,
+   "award_type": "Men",
+   "year": 1992,
+   "rank": 1,
+   "player_name": "Marco van Basten",
+   "club": "Milan",
+   "nationality": "Netherlands",
+   "read": {
+    "player_name": "Marco van Basten",
+    "club": "Milan",
+    "nationality": null,
+    "points": null
+   },
+   "status": "verified",
+   "change": "nationality NULL -> Netherlands",
+   "sources": [
+    "https://www.uefa.com/ballondor/news/0292-1c27056169a7-bc88d1fdba43-1000--ballon-d-or-laureates-who-has-won-football-s-most-prestig/",
+    "https://www.rsssf.org/miscellaneous/europa-poy.html",
+    "https://www.espn.com/soccer/story/_/id/42055052/ballon-dor-winners-list-messi-ronaldo-ronaldinho-more"
+   ],
+   "sourceKeys": [
+    "uefaLaureates",
+    "rsssfEuropa",
+    "espnList"
+   ],
+   "checked": "2026-09-30"
+  },
+  {
+   "id": 39,
+   "award_type": "Men",
+   "year": 1993,
+   "rank": 1,
+   "player_name": "Roberto Baggio",
+   "club": "Juventus",
+   "nationality": "Italy",
+   "read": {
+    "player_name": "Roberto Baggio",
+    "club": "Juventus",
+    "nationality": null,
+    "points": null
+   },
+   "status": "verified",
+   "change": "nationality NULL -> Italy",
+   "sources": [
+    "https://www.uefa.com/ballondor/news/0292-1c27056169a7-bc88d1fdba43-1000--ballon-d-or-laureates-who-has-won-football-s-most-prestig/",
+    "https://www.rsssf.org/miscellaneous/europa-poy.html",
+    "https://www.espn.com/soccer/story/_/id/42055052/ballon-dor-winners-list-messi-ronaldo-ronaldinho-more"
+   ],
+   "sourceKeys": [
+    "uefaLaureates",
+    "rsssfEuropa",
+    "espnList"
+   ],
+   "checked": "2026-09-30"
+  },
+  {
+   "id": 40,
+   "award_type": "Men",
+   "year": 1994,
+   "rank": 1,
+   "player_name": "Hristo Stoichkov",
+   "club": "Barcelona",
+   "nationality": "Bulgaria",
+   "read": {
+    "player_name": "Hristo Stoichkov",
+    "club": "Barcelona",
+    "nationality": null,
+    "points": null
+   },
+   "status": "verified",
+   "change": "nationality NULL -> Bulgaria",
+   "sources": [
+    "https://www.uefa.com/ballondor/news/0292-1c27056169a7-bc88d1fdba43-1000--ballon-d-or-laureates-who-has-won-football-s-most-prestig/",
+    "https://www.rsssf.org/miscellaneous/europa-poy.html",
+    "https://www.espn.com/soccer/story/_/id/42055052/ballon-dor-winners-list-messi-ronaldo-ronaldinho-more"
+   ],
+   "sourceKeys": [
+    "uefaLaureates",
+    "rsssfEuropa",
+    "espnList"
+   ],
+   "checked": "2026-09-30"
+  },
+  {
+   "id": 41,
+   "award_type": "Men",
+   "year": 1995,
+   "rank": 1,
+   "player_name": "George Weah",
+   "club": "Milan",
+   "nationality": "Liberia",
+   "read": {
+    "player_name": "George Weah",
+    "club": "Milan",
+    "nationality": null,
+    "points": null
+   },
+   "status": "verified",
+   "change": "nationality NULL -> Liberia",
+   "sources": [
+    "https://www.uefa.com/ballondor/news/0292-1c27056169a7-bc88d1fdba43-1000--ballon-d-or-laureates-who-has-won-football-s-most-prestig/",
+    "https://www.rsssf.org/miscellaneous/europa-poy.html",
+    "https://www.espn.com/soccer/story/_/id/42055052/ballon-dor-winners-list-messi-ronaldo-ronaldinho-more"
+   ],
+   "sourceKeys": [
+    "uefaLaureates",
+    "rsssfEuropa",
+    "espnList"
+   ],
+   "checked": "2026-09-30"
+  },
+  {
+   "id": 42,
+   "award_type": "Men",
+   "year": 1996,
+   "rank": 1,
+   "player_name": "Matthias Sammer",
+   "club": "Borussia Dortmund",
+   "nationality": "Germany",
+   "read": {
+    "player_name": "Matthias Sammer",
+    "club": "Borussia Dortmund",
+    "nationality": null,
+    "points": null
+   },
+   "status": "verified",
+   "change": "nationality NULL -> Germany",
+   "sources": [
+    "https://www.uefa.com/ballondor/news/0292-1c27056169a7-bc88d1fdba43-1000--ballon-d-or-laureates-who-has-won-football-s-most-prestig/",
+    "https://www.rsssf.org/miscellaneous/europa-poy.html",
+    "https://www.espn.com/soccer/story/_/id/42055052/ballon-dor-winners-list-messi-ronaldo-ronaldinho-more"
+   ],
+   "sourceKeys": [
+    "uefaLaureates",
+    "rsssfEuropa",
+    "espnList"
+   ],
+   "checked": "2026-09-30"
+  },
+  {
+   "id": 43,
+   "award_type": "Men",
+   "year": 1997,
+   "rank": 1,
+   "player_name": "Ronaldo",
+   "club": "Inter Milan",
+   "nationality": "Brazil",
+   "read": {
+    "player_name": "Ronaldo",
+    "club": "Inter Milan",
+    "nationality": null,
+    "points": null
+   },
+   "status": "verified",
+   "change": "nationality NULL -> Brazil",
+   "sources": [
+    "https://www.uefa.com/ballondor/news/0292-1c27056169a7-bc88d1fdba43-1000--ballon-d-or-laureates-who-has-won-football-s-most-prestig/",
+    "https://www.rsssf.org/miscellaneous/europa-poy.html",
+    "https://www.espn.com/soccer/story/_/id/42055052/ballon-dor-winners-list-messi-ronaldo-ronaldinho-more"
+   ],
+   "sourceKeys": [
+    "uefaLaureates",
+    "rsssfEuropa",
+    "espnList"
+   ],
+   "checked": "2026-09-30"
+  },
+  {
+   "id": 44,
+   "award_type": "Men",
+   "year": 1998,
+   "rank": 1,
+   "player_name": "Zinedine Zidane",
+   "club": "Juventus",
+   "nationality": "France",
+   "read": {
+    "player_name": "Zinedine Zidane",
+    "club": "Juventus",
+    "nationality": null,
+    "points": null
+   },
+   "status": "verified",
+   "change": "nationality NULL -> France",
+   "sources": [
+    "https://www.uefa.com/ballondor/news/0292-1c27056169a7-bc88d1fdba43-1000--ballon-d-or-laureates-who-has-won-football-s-most-prestig/",
+    "https://www.rsssf.org/miscellaneous/europa-poy.html",
+    "https://www.espn.com/soccer/story/_/id/42055052/ballon-dor-winners-list-messi-ronaldo-ronaldinho-more"
+   ],
+   "sourceKeys": [
+    "uefaLaureates",
+    "rsssfEuropa",
+    "espnList"
+   ],
+   "checked": "2026-09-30"
+  },
+  {
+   "id": 45,
+   "award_type": "Men",
+   "year": 1999,
+   "rank": 1,
+   "player_name": "Rivaldo",
+   "club": "Barcelona",
+   "nationality": "Brazil",
+   "read": {
+    "player_name": "Rivaldo",
+    "club": "Barcelona",
+    "nationality": null,
+    "points": null
+   },
+   "status": "verified",
+   "change": "nationality NULL -> Brazil",
+   "sources": [
+    "https://www.uefa.com/ballondor/news/0292-1c27056169a7-bc88d1fdba43-1000--ballon-d-or-laureates-who-has-won-football-s-most-prestig/",
+    "https://www.rsssf.org/miscellaneous/europa-poy.html",
+    "https://www.espn.com/soccer/story/_/id/42055052/ballon-dor-winners-list-messi-ronaldo-ronaldinho-more"
+   ],
+   "sourceKeys": [
+    "uefaLaureates",
+    "rsssfEuropa",
+    "espnList"
+   ],
+   "checked": "2026-09-30"
+  },
+  {
+   "id": 46,
+   "award_type": "Men",
+   "year": 2000,
+   "rank": 1,
+   "player_name": "Luís Figo",
+   "club": "Real Madrid",
+   "nationality": "Portugal",
+   "read": {
+    "player_name": "Luís Figo",
+    "club": "Real Madrid",
+    "nationality": null,
+    "points": null
+   },
+   "status": "verified",
+   "change": "nationality NULL -> Portugal",
+   "sources": [
+    "https://www.uefa.com/ballondor/news/0292-1c27056169a7-bc88d1fdba43-1000--ballon-d-or-laureates-who-has-won-football-s-most-prestig/",
+    "https://www.rsssf.org/miscellaneous/europa-poy.html",
+    "https://www.espn.com/soccer/story/_/id/42055052/ballon-dor-winners-list-messi-ronaldo-ronaldinho-more"
+   ],
+   "sourceKeys": [
+    "uefaLaureates",
+    "rsssfEuropa",
+    "espnList"
+   ],
+   "checked": "2026-09-30"
+  },
+  {
+   "id": 47,
+   "award_type": "Men",
+   "year": 2001,
+   "rank": 1,
+   "player_name": "Michael Owen",
+   "club": "Liverpool",
+   "nationality": "England",
+   "read": {
+    "player_name": "Michael Owen",
+    "club": "Liverpool",
+    "nationality": null,
+    "points": null
+   },
+   "status": "verified",
+   "change": "nationality NULL -> England",
+   "sources": [
+    "https://www.uefa.com/ballondor/news/0292-1c27056169a7-bc88d1fdba43-1000--ballon-d-or-laureates-who-has-won-football-s-most-prestig/",
+    "https://www.rsssf.org/miscellaneous/europa-poy.html",
+    "https://www.espn.com/soccer/story/_/id/42055052/ballon-dor-winners-list-messi-ronaldo-ronaldinho-more"
+   ],
+   "sourceKeys": [
+    "uefaLaureates",
+    "rsssfEuropa",
+    "espnList"
+   ],
+   "checked": "2026-09-30"
+  },
+  {
+   "id": 48,
+   "award_type": "Men",
+   "year": 2002,
+   "rank": 1,
+   "player_name": "Ronaldo",
+   "club": "Real Madrid",
+   "nationality": "Brazil",
+   "read": {
+    "player_name": "Ronaldo",
+    "club": "Real Madrid",
+    "nationality": null,
+    "points": null
+   },
+   "status": "verified",
+   "change": "nationality NULL -> Brazil",
+   "sources": [
+    "https://www.uefa.com/ballondor/news/0292-1c27056169a7-bc88d1fdba43-1000--ballon-d-or-laureates-who-has-won-football-s-most-prestig/",
+    "https://www.rsssf.org/miscellaneous/europa-poy.html",
+    "https://www.espn.com/soccer/story/_/id/42055052/ballon-dor-winners-list-messi-ronaldo-ronaldinho-more"
+   ],
+   "sourceKeys": [
+    "uefaLaureates",
+    "rsssfEuropa",
+    "espnList"
+   ],
+   "checked": "2026-09-30"
+  },
+  {
+   "id": 49,
+   "award_type": "Men",
+   "year": 2003,
+   "rank": 1,
+   "player_name": "Pavel Nedvěd",
+   "club": "Juventus",
+   "nationality": "Czech Republic",
+   "read": {
+    "player_name": "Pavel Nedvěd",
+    "club": "Juventus",
+    "nationality": null,
+    "points": null
+   },
+   "status": "verified",
+   "change": "nationality NULL -> Czech Republic",
+   "sources": [
+    "https://www.uefa.com/ballondor/news/0292-1c27056169a7-bc88d1fdba43-1000--ballon-d-or-laureates-who-has-won-football-s-most-prestig/",
+    "https://www.rsssf.org/miscellaneous/europa-poy.html",
+    "https://www.espn.com/soccer/story/_/id/42055052/ballon-dor-winners-list-messi-ronaldo-ronaldinho-more"
+   ],
+   "sourceKeys": [
+    "uefaLaureates",
+    "rsssfEuropa",
+    "espnList"
+   ],
+   "checked": "2026-09-30",
+   "note": "UEFA and ESPN write Czechia, RSSSF writes Czech Republic: the same country. Czech Republic is the spelling the site's other tables use."
+  },
+  {
+   "id": 50,
+   "award_type": "Men",
+   "year": 2004,
+   "rank": 1,
+   "player_name": "Andriy Shevchenko",
+   "club": "Milan",
+   "nationality": "Ukraine",
+   "read": {
+    "player_name": "Andriy Shevchenko",
+    "club": "Milan",
+    "nationality": null,
+    "points": null
+   },
+   "status": "verified",
+   "change": "nationality NULL -> Ukraine",
+   "sources": [
+    "https://www.uefa.com/ballondor/news/0292-1c27056169a7-bc88d1fdba43-1000--ballon-d-or-laureates-who-has-won-football-s-most-prestig/",
+    "https://www.rsssf.org/miscellaneous/europa-poy.html",
+    "https://www.espn.com/soccer/story/_/id/42055052/ballon-dor-winners-list-messi-ronaldo-ronaldinho-more"
+   ],
+   "sourceKeys": [
+    "uefaLaureates",
+    "rsssfEuropa",
+    "espnList"
+   ],
+   "checked": "2026-09-30"
+  },
+  {
+   "id": 51,
+   "award_type": "Men",
+   "year": 2005,
+   "rank": 1,
+   "player_name": "Ronaldinho",
+   "club": "Barcelona",
+   "nationality": "Brazil",
+   "read": {
+    "player_name": "Ronaldinho",
+    "club": "Barcelona",
+    "nationality": null,
+    "points": null
+   },
+   "status": "verified",
+   "change": "nationality NULL -> Brazil",
+   "sources": [
+    "https://www.uefa.com/ballondor/news/0292-1c27056169a7-bc88d1fdba43-1000--ballon-d-or-laureates-who-has-won-football-s-most-prestig/",
+    "https://www.rsssf.org/miscellaneous/europa-poy.html",
+    "https://www.espn.com/soccer/story/_/id/42055052/ballon-dor-winners-list-messi-ronaldo-ronaldinho-more"
+   ],
+   "sourceKeys": [
+    "uefaLaureates",
+    "rsssfEuropa",
+    "espnList"
+   ],
+   "checked": "2026-09-30"
+  },
+  {
+   "id": 52,
+   "award_type": "Men",
+   "year": 2006,
+   "rank": 1,
+   "player_name": "Fabio Cannavaro",
+   "club": "Real Madrid",
+   "nationality": "Italy",
+   "read": {
+    "player_name": "Fabio Cannavaro",
+    "club": "Real Madrid",
+    "nationality": null,
+    "points": null
+   },
+   "status": "verified",
+   "change": "nationality NULL -> Italy",
+   "sources": [
+    "https://www.uefa.com/ballondor/news/0292-1c27056169a7-bc88d1fdba43-1000--ballon-d-or-laureates-who-has-won-football-s-most-prestig/",
+    "https://www.rsssf.org/miscellaneous/europa-poy.html",
+    "https://www.espn.com/soccer/story/_/id/42055052/ballon-dor-winners-list-messi-ronaldo-ronaldinho-more"
+   ],
+   "sourceKeys": [
+    "uefaLaureates",
+    "rsssfEuropa",
+    "espnList"
+   ],
+   "checked": "2026-09-30"
+  },
+  {
+   "id": 53,
+   "award_type": "Men",
+   "year": 2007,
+   "rank": 1,
+   "player_name": "Kaká",
+   "club": "Milan",
+   "nationality": "Brazil",
+   "read": {
+    "player_name": "Kaká",
+    "club": "Milan",
+    "nationality": null,
+    "points": null
+   },
+   "status": "verified",
+   "change": "nationality NULL -> Brazil",
+   "sources": [
+    "https://www.uefa.com/ballondor/news/0292-1c27056169a7-bc88d1fdba43-1000--ballon-d-or-laureates-who-has-won-football-s-most-prestig/",
+    "https://www.rsssf.org/miscellaneous/europa-poy.html",
+    "https://www.espn.com/soccer/story/_/id/42055052/ballon-dor-winners-list-messi-ronaldo-ronaldinho-more"
+   ],
+   "sourceKeys": [
+    "uefaLaureates",
+    "rsssfEuropa",
+    "espnList"
+   ],
+   "checked": "2026-09-30"
+  },
+  {
+   "id": 54,
+   "award_type": "Men",
+   "year": 2008,
+   "rank": 1,
+   "player_name": "Cristiano Ronaldo",
+   "club": "Manchester United",
+   "nationality": "Portugal",
+   "read": {
+    "player_name": "Cristiano Ronaldo",
+    "club": "Manchester United",
+    "nationality": null,
+    "points": null
+   },
+   "status": "verified",
+   "change": "nationality NULL -> Portugal",
+   "sources": [
+    "https://www.uefa.com/ballondor/news/0292-1c27056169a7-bc88d1fdba43-1000--ballon-d-or-laureates-who-has-won-football-s-most-prestig/",
+    "https://www.rsssf.org/miscellaneous/europa-poy.html",
+    "https://www.espn.com/soccer/story/_/id/42055052/ballon-dor-winners-list-messi-ronaldo-ronaldinho-more"
+   ],
+   "sourceKeys": [
+    "uefaLaureates",
+    "rsssfEuropa",
+    "espnList"
+   ],
+   "checked": "2026-09-30"
+  },
+  {
+   "id": 55,
+   "award_type": "Men",
+   "year": 2009,
+   "rank": 1,
+   "player_name": "Lionel Messi",
+   "club": "Barcelona",
+   "nationality": "Argentina",
+   "read": {
+    "player_name": "Lionel Messi",
+    "club": "Barcelona",
+    "nationality": null,
+    "points": null
+   },
+   "status": "verified",
+   "change": "nationality NULL -> Argentina",
+   "sources": [
+    "https://www.uefa.com/ballondor/news/0292-1c27056169a7-bc88d1fdba43-1000--ballon-d-or-laureates-who-has-won-football-s-most-prestig/",
+    "https://www.rsssf.org/miscellaneous/europa-poy.html",
+    "https://www.espn.com/soccer/story/_/id/42055052/ballon-dor-winners-list-messi-ronaldo-ronaldinho-more"
+   ],
+   "sourceKeys": [
+    "uefaLaureates",
+    "rsssfEuropa",
+    "espnList"
+   ],
+   "checked": "2026-09-30"
+  },
+  {
+   "id": 56,
+   "award_type": "Men",
+   "year": 2010,
+   "rank": 1,
+   "player_name": "Lionel Messi",
+   "club": "Barcelona",
+   "nationality": "Argentina",
+   "read": {
+    "player_name": "Lionel Messi",
+    "club": "Barcelona",
+    "nationality": null,
+    "points": null
+   },
+   "status": "verified",
+   "change": "nationality NULL -> Argentina",
+   "sources": [
+    "https://www.uefa.com/ballondor/news/0292-1c27056169a7-bc88d1fdba43-1000--ballon-d-or-laureates-who-has-won-football-s-most-prestig/",
+    "https://www.rsssf.org/miscellaneous/fifa-awards.html",
+    "https://www.topendsports.com/sport/soccer/list-player-of-the-year-ballondor.htm"
+   ],
+   "sourceKeys": [
+    "uefaLaureates",
+    "rsssfMerged",
+    "topendsportsMen"
+   ],
+   "checked": "2026-09-30",
+   "note": "A merged award year (2010 to 2015, when the Ballon d'Or and the FIFA World Player of the Year were one prize); UEFA counts it in the Ballon d'Or list."
+  },
+  {
+   "id": 57,
+   "award_type": "Men",
+   "year": 2011,
+   "rank": 1,
+   "player_name": "Lionel Messi",
+   "club": "Barcelona",
+   "nationality": "Argentina",
+   "read": {
+    "player_name": "Lionel Messi",
+    "club": "Barcelona",
+    "nationality": null,
+    "points": null
+   },
+   "status": "verified",
+   "change": "nationality NULL -> Argentina",
+   "sources": [
+    "https://www.uefa.com/ballondor/news/0292-1c27056169a7-bc88d1fdba43-1000--ballon-d-or-laureates-who-has-won-football-s-most-prestig/",
+    "https://www.rsssf.org/miscellaneous/fifa-awards.html",
+    "https://www.topendsports.com/sport/soccer/list-player-of-the-year-ballondor.htm"
+   ],
+   "sourceKeys": [
+    "uefaLaureates",
+    "rsssfMerged",
+    "topendsportsMen"
+   ],
+   "checked": "2026-09-30"
+  },
+  {
+   "id": 58,
+   "award_type": "Men",
+   "year": 2012,
+   "rank": 1,
+   "player_name": "Lionel Messi",
+   "club": "Barcelona",
+   "nationality": "Argentina",
+   "read": {
+    "player_name": "Lionel Messi",
+    "club": "Barcelona",
+    "nationality": null,
+    "points": null
+   },
+   "status": "verified",
+   "change": "nationality NULL -> Argentina",
+   "sources": [
+    "https://www.uefa.com/ballondor/news/0292-1c27056169a7-bc88d1fdba43-1000--ballon-d-or-laureates-who-has-won-football-s-most-prestig/",
+    "https://www.rsssf.org/miscellaneous/fifa-awards.html",
+    "https://www.topendsports.com/sport/soccer/list-player-of-the-year-ballondor.htm"
+   ],
+   "sourceKeys": [
+    "uefaLaureates",
+    "rsssfMerged",
+    "topendsportsMen"
+   ],
+   "checked": "2026-09-30"
+  },
+  {
+   "id": 59,
+   "award_type": "Men",
+   "year": 2013,
+   "rank": 1,
+   "player_name": "Cristiano Ronaldo",
+   "club": "Real Madrid",
+   "nationality": "Portugal",
+   "read": {
+    "player_name": "Cristiano Ronaldo",
+    "club": "Real Madrid",
+    "nationality": null,
+    "points": null
+   },
+   "status": "verified",
+   "change": "nationality NULL -> Portugal",
+   "sources": [
+    "https://www.uefa.com/ballondor/news/0292-1c27056169a7-bc88d1fdba43-1000--ballon-d-or-laureates-who-has-won-football-s-most-prestig/",
+    "https://www.rsssf.org/miscellaneous/fifa-awards.html",
+    "https://www.topendsports.com/sport/soccer/list-player-of-the-year-ballondor.htm"
+   ],
+   "sourceKeys": [
+    "uefaLaureates",
+    "rsssfMerged",
+    "topendsportsMen"
+   ],
+   "checked": "2026-09-30"
+  },
+  {
+   "id": 60,
+   "award_type": "Men",
+   "year": 2014,
+   "rank": 1,
+   "player_name": "Cristiano Ronaldo",
+   "club": "Real Madrid",
+   "nationality": "Portugal",
+   "read": {
+    "player_name": "Cristiano Ronaldo",
+    "club": "Real Madrid",
+    "nationality": null,
+    "points": null
+   },
+   "status": "verified",
+   "change": "nationality NULL -> Portugal",
+   "sources": [
+    "https://www.uefa.com/ballondor/news/0292-1c27056169a7-bc88d1fdba43-1000--ballon-d-or-laureates-who-has-won-football-s-most-prestig/",
+    "https://www.rsssf.org/miscellaneous/fifa-awards.html",
+    "https://www.topendsports.com/sport/soccer/list-player-of-the-year-ballondor.htm"
+   ],
+   "sourceKeys": [
+    "uefaLaureates",
+    "rsssfMerged",
+    "topendsportsMen"
+   ],
+   "checked": "2026-09-30"
+  },
+  {
+   "id": 61,
+   "award_type": "Men",
+   "year": 2015,
+   "rank": 1,
+   "player_name": "Lionel Messi",
+   "club": "Barcelona",
+   "nationality": "Argentina",
+   "read": {
+    "player_name": "Lionel Messi",
+    "club": "Barcelona",
+    "nationality": null,
+    "points": null
+   },
+   "status": "verified",
+   "change": "nationality NULL -> Argentina",
+   "sources": [
+    "https://www.uefa.com/ballondor/news/0292-1c27056169a7-bc88d1fdba43-1000--ballon-d-or-laureates-who-has-won-football-s-most-prestig/",
+    "https://www.rsssf.org/miscellaneous/fifa-awards.html",
+    "https://www.topendsports.com/sport/soccer/list-player-of-the-year-ballondor.htm"
+   ],
+   "sourceKeys": [
+    "uefaLaureates",
+    "rsssfMerged",
+    "topendsportsMen"
+   ],
+   "checked": "2026-09-30"
+  },
+  {
+   "id": 62,
+   "award_type": "Men",
+   "year": 2016,
+   "rank": 1,
+   "player_name": "Cristiano Ronaldo",
+   "club": "Real Madrid",
+   "nationality": "Portugal",
+   "read": {
+    "player_name": "Cristiano Ronaldo",
+    "club": "Real Madrid",
+    "nationality": null,
+    "points": null
+   },
+   "status": "verified",
+   "change": "nationality NULL -> Portugal",
+   "sources": [
+    "https://www.uefa.com/ballondor/news/0292-1c27056169a7-bc88d1fdba43-1000--ballon-d-or-laureates-who-has-won-football-s-most-prestig/",
+    "https://www.rsssf.org/miscellaneous/europa-poy.html",
+    "https://www.espn.com/soccer/story/_/id/42055052/ballon-dor-winners-list-messi-ronaldo-ronaldinho-more"
+   ],
+   "sourceKeys": [
+    "uefaLaureates",
+    "rsssfEuropa",
+    "espnList"
+   ],
+   "checked": "2026-09-30"
+  },
+  {
+   "id": 63,
+   "award_type": "Men",
+   "year": 2017,
+   "rank": 1,
+   "player_name": "Cristiano Ronaldo",
+   "club": "Real Madrid",
+   "nationality": "Portugal",
+   "read": {
+    "player_name": "Cristiano Ronaldo",
+    "club": "Real Madrid",
+    "nationality": null,
+    "points": null
+   },
+   "status": "verified",
+   "change": "nationality NULL -> Portugal",
+   "sources": [
+    "https://www.uefa.com/ballondor/news/0292-1c27056169a7-bc88d1fdba43-1000--ballon-d-or-laureates-who-has-won-football-s-most-prestig/",
+    "https://www.rsssf.org/miscellaneous/europa-poy.html",
+    "https://www.espn.com/soccer/story/_/id/42055052/ballon-dor-winners-list-messi-ronaldo-ronaldinho-more"
+   ],
+   "sourceKeys": [
+    "uefaLaureates",
+    "rsssfEuropa",
+    "espnList"
+   ],
+   "checked": "2026-09-30"
+  },
+  {
+   "id": 64,
+   "award_type": "Men",
+   "year": 2018,
+   "rank": 1,
+   "player_name": "Luka Modrić",
+   "club": "Real Madrid",
+   "nationality": "Croatia",
+   "read": {
+    "player_name": "Luka Modrić",
+    "club": "Real Madrid",
+    "nationality": null,
+    "points": null
+   },
+   "status": "verified",
+   "change": "nationality NULL -> Croatia",
+   "sources": [
+    "https://www.uefa.com/ballondor/news/0292-1c27056169a7-bc88d1fdba43-1000--ballon-d-or-laureates-who-has-won-football-s-most-prestig/",
+    "https://www.rsssf.org/miscellaneous/europa-poy.html",
+    "https://www.espn.com/soccer/story/_/id/42055052/ballon-dor-winners-list-messi-ronaldo-ronaldinho-more"
+   ],
+   "sourceKeys": [
+    "uefaLaureates",
+    "rsssfEuropa",
+    "espnList"
+   ],
+   "checked": "2026-09-30"
+  },
+  {
+   "id": 66,
+   "award_type": "Men",
+   "year": 2019,
+   "rank": 1,
+   "player_name": "Lionel Messi",
+   "club": "Barcelona",
+   "nationality": "Argentina",
+   "read": {
+    "player_name": "Lionel Messi",
+    "club": "Barcelona",
+    "nationality": null,
+    "points": null
+   },
+   "status": "verified",
+   "change": "nationality NULL -> Argentina",
+   "sources": [
+    "https://www.uefa.com/ballondor/news/0292-1c27056169a7-bc88d1fdba43-1000--ballon-d-or-laureates-who-has-won-football-s-most-prestig/",
+    "https://www.rsssf.org/miscellaneous/europa-poy.html",
+    "https://www.espn.com/soccer/story/_/id/42055052/ballon-dor-winners-list-messi-ronaldo-ronaldinho-more"
+   ],
+   "sourceKeys": [
+    "uefaLaureates",
+    "rsssfEuropa",
+    "espnList"
+   ],
+   "checked": "2026-09-30"
+  },
+  {
+   "id": 68,
+   "award_type": "Men",
+   "year": 2021,
+   "rank": 1,
+   "player_name": "Lionel Messi",
+   "club": "Paris Saint-Germain",
+   "nationality": "Argentina",
+   "read": {
+    "player_name": "Lionel Messi",
+    "club": "Paris Saint-Germain",
+    "nationality": null,
+    "points": null
+   },
+   "status": "verified",
+   "change": "nationality NULL -> Argentina",
+   "sources": [
+    "https://www.uefa.com/ballondor/news/0292-1c27056169a7-bc88d1fdba43-1000--ballon-d-or-laureates-who-has-won-football-s-most-prestig/",
+    "https://www.rsssf.org/miscellaneous/europa-poy.html",
+    "https://www.espn.com/soccer/story/_/id/42055052/ballon-dor-winners-list-messi-ronaldo-ronaldinho-more"
+   ],
+   "sourceKeys": [
+    "uefaLaureates",
+    "rsssfEuropa",
+    "espnList"
+   ],
+   "checked": "2026-09-30",
+   "note": "He joined Paris Saint-Germain from Barcelona in August 2021; UEFA and RSSSF both give Paris Saint-Germain for the award."
+  },
+  {
+   "id": 70,
+   "award_type": "Men",
+   "year": 2022,
+   "rank": 1,
+   "player_name": "Karim Benzema",
+   "club": "Real Madrid",
+   "nationality": "France",
+   "read": {
+    "player_name": "Karim Benzema",
+    "club": "Real Madrid",
+    "nationality": null,
+    "points": null
+   },
+   "status": "verified",
+   "change": "nationality NULL -> France",
+   "sources": [
+    "https://www.uefa.com/ballondor/news/0292-1c27056169a7-bc88d1fdba43-1000--ballon-d-or-laureates-who-has-won-football-s-most-prestig/",
+    "https://www.rsssf.org/miscellaneous/europa-poy.html",
+    "https://www.espn.com/soccer/story/_/id/42055052/ballon-dor-winners-list-messi-ronaldo-ronaldinho-more"
+   ],
+   "sourceKeys": [
+    "uefaLaureates",
+    "rsssfEuropa",
+    "espnList"
+   ],
+   "checked": "2026-09-30"
+  },
+  {
+   "id": 72,
+   "award_type": "Men",
+   "year": 2023,
+   "rank": 1,
+   "player_name": "Lionel Messi",
+   "club": "Inter Miami",
+   "nationality": "Argentina",
+   "read": {
+    "player_name": "Lionel Messi",
+    "club": "Inter Miami",
+    "nationality": null,
+    "points": null
+   },
+   "status": "verified",
+   "change": "nationality NULL -> Argentina",
+   "sources": [
+    "https://www.uefa.com/ballondor/news/0292-1c27056169a7-bc88d1fdba43-1000--ballon-d-or-laureates-who-has-won-football-s-most-prestig/",
+    "https://www.rsssf.org/miscellaneous/europa-poy.html",
+    "https://www.espn.com/soccer/story/_/id/42055052/ballon-dor-winners-list-messi-ronaldo-ronaldinho-more"
+   ],
+   "sourceKeys": [
+    "uefaLaureates",
+    "rsssfEuropa",
+    "espnList"
+   ],
+   "checked": "2026-09-30",
+   "note": "Voted on 2022-23, most of it at Paris Saint-Germain; UEFA and RSSSF both give Inter Miami, his club at the ceremony."
+  },
+  {
+   "id": 74,
+   "award_type": "Men",
+   "year": 2024,
+   "rank": 1,
+   "player_name": "Rodri",
+   "club": "Manchester City",
+   "nationality": "Spain",
+   "read": {
+    "player_name": "Rodri",
+    "club": "Manchester City",
+    "nationality": null,
+    "points": null
+   },
+   "status": "verified",
+   "change": "nationality NULL -> Spain",
+   "sources": [
+    "https://www.uefa.com/ballondor/news/0292-1c27056169a7-bc88d1fdba43-1000--ballon-d-or-laureates-who-has-won-football-s-most-prestig/",
+    "https://www.rsssf.org/miscellaneous/europa-poy.html",
+    "https://www.espn.com/soccer/story/_/id/42055052/ballon-dor-winners-list-messi-ronaldo-ronaldinho-more"
+   ],
+   "sourceKeys": [
+    "uefaLaureates",
+    "rsssfEuropa",
+    "espnList"
+   ],
+   "checked": "2026-09-30"
+  },
+  {
+   "id": 76,
+   "award_type": "Men",
+   "year": 2025,
+   "rank": 1,
+   "player_name": "Ousmane Dembélé",
+   "club": "Paris Saint-Germain",
+   "nationality": "France",
+   "read": {
+    "player_name": "Ousmane Dembélé",
+    "club": "Paris Saint-Germain",
+    "nationality": null,
+    "points": null
+   },
+   "status": "verified",
+   "change": "nationality NULL -> France",
+   "sources": [
+    "https://www.uefa.com/ballondor/news/0292-1c27056169a7-bc88d1fdba43-1000--ballon-d-or-laureates-who-has-won-football-s-most-prestig/",
+    "https://www.uefa.com/uefachampionsleague/news/029d-1ec96c30aa3f-f6868c869cbd-1000--ousmane-dembele-wins-2025-men-s-ballon-d-or/",
+    "https://www.espn.com/soccer/story/_/id/46344733/psg-ousmane-dembele-wins-ballon-dor-ahead-lamine-yamal",
+    "https://www.espn.com/soccer/story/_/id/42055052/ballon-dor-winners-list-messi-ronaldo-ronaldinho-more"
+   ],
+   "sourceKeys": [
+    "uefaLaureates",
+    "uefa2025Men",
+    "espn2025",
+    "espnList"
+   ],
+   "checked": "2026-09-30"
+  },
+  {
+   "id": 65,
+   "award_type": "Women",
+   "year": 2018,
+   "rank": 1,
+   "player_name": "Ada Hegerberg",
+   "club": "Lyon",
+   "nationality": "Norway",
+   "read": {
+    "player_name": "Ada Hegerberg",
+    "club": "Lyon",
+    "nationality": null,
+    "points": null
+   },
+   "status": "verified",
+   "change": "nationality NULL -> Norway",
+   "sources": [
+    "https://www.uefa.com/ballondor/news/0292-1c27056169a7-bc88d1fdba43-1000--ballon-d-or-laureates-who-has-won-football-s-most-prestig/",
+    "https://www.espn.com/soccer/story/_/id/42055052/ballon-dor-winners-list-messi-ronaldo-ronaldinho-more",
+    "https://www.topendsports.com/sport/soccer/awards/ballondor-women.htm"
+   ],
+   "sourceKeys": [
+    "uefaLaureates",
+    "espnList",
+    "topendsportsWomen"
+   ],
+   "checked": "2026-09-30",
+   "note": "UEFA's names only history page misspells her Hegeberg; its laureates page and every other source write Hegerberg."
+  },
+  {
+   "id": 67,
+   "award_type": "Women",
+   "year": 2019,
+   "rank": 1,
+   "player_name": "Megan Rapinoe",
+   "club": "Reign FC",
+   "nationality": "United States",
+   "read": {
+    "player_name": "Megan Rapinoe",
+    "club": "Reign FC",
+    "nationality": null,
+    "points": null
+   },
+   "status": "verified",
+   "change": "nationality NULL -> United States",
+   "sources": [
+    "https://www.uefa.com/ballondor/news/0292-1c27056169a7-bc88d1fdba43-1000--ballon-d-or-laureates-who-has-won-football-s-most-prestig/",
+    "https://www.espn.com/soccer/story/_/id/42055052/ballon-dor-winners-list-messi-ronaldo-ronaldinho-more",
+    "https://www.topendsports.com/sport/soccer/awards/ballondor-women.htm"
+   ],
+   "sourceKeys": [
+    "uefaLaureates",
+    "espnList",
+    "topendsportsWomen"
+   ],
+   "checked": "2026-09-30",
+   "note": "UEFA and Topend Sports write USA, ESPN United States. The club played the 2019 season as Reign FC."
+  },
+  {
+   "id": 69,
+   "award_type": "Women",
+   "year": 2021,
+   "rank": 1,
+   "player_name": "Alexia Putellas",
+   "club": "Barcelona",
+   "nationality": "Spain",
+   "read": {
+    "player_name": "Alexia Putellas",
+    "club": "Barcelona",
+    "nationality": null,
+    "points": null
+   },
+   "status": "verified",
+   "change": "nationality NULL -> Spain",
+   "sources": [
+    "https://www.uefa.com/ballondor/news/0292-1c27056169a7-bc88d1fdba43-1000--ballon-d-or-laureates-who-has-won-football-s-most-prestig/",
+    "https://www.espn.com/soccer/story/_/id/42055052/ballon-dor-winners-list-messi-ronaldo-ronaldinho-more",
+    "https://www.topendsports.com/sport/soccer/awards/ballondor-women.htm"
+   ],
+   "sourceKeys": [
+    "uefaLaureates",
+    "espnList",
+    "topendsportsWomen"
+   ],
+   "checked": "2026-09-30"
+  },
+  {
+   "id": 71,
+   "award_type": "Women",
+   "year": 2022,
+   "rank": 1,
+   "player_name": "Alexia Putellas",
+   "club": "Barcelona",
+   "nationality": "Spain",
+   "read": {
+    "player_name": "Alexia Putellas",
+    "club": "Barcelona",
+    "nationality": null,
+    "points": null
+   },
+   "status": "verified",
+   "change": "nationality NULL -> Spain",
+   "sources": [
+    "https://www.uefa.com/ballondor/news/0292-1c27056169a7-bc88d1fdba43-1000--ballon-d-or-laureates-who-has-won-football-s-most-prestig/",
+    "https://www.espn.com/soccer/story/_/id/42055052/ballon-dor-winners-list-messi-ronaldo-ronaldinho-more",
+    "https://www.topendsports.com/sport/soccer/awards/ballondor-women.htm"
+   ],
+   "sourceKeys": [
+    "uefaLaureates",
+    "espnList",
+    "topendsportsWomen"
+   ],
+   "checked": "2026-09-30"
+  },
+  {
+   "id": 73,
+   "award_type": "Women",
+   "year": 2023,
+   "rank": 1,
+   "player_name": "Aitana Bonmatí",
+   "club": "Barcelona",
+   "nationality": "Spain",
+   "read": {
+    "player_name": "Aitana Bonmatí",
+    "club": "Barcelona",
+    "nationality": null,
+    "points": null
+   },
+   "status": "verified",
+   "change": "nationality NULL -> Spain",
+   "sources": [
+    "https://www.uefa.com/ballondor/news/0292-1c27056169a7-bc88d1fdba43-1000--ballon-d-or-laureates-who-has-won-football-s-most-prestig/",
+    "https://www.espn.com/soccer/story/_/id/42055052/ballon-dor-winners-list-messi-ronaldo-ronaldinho-more",
+    "https://www.topendsports.com/sport/soccer/awards/ballondor-women.htm"
+   ],
+   "sourceKeys": [
+    "uefaLaureates",
+    "espnList",
+    "topendsportsWomen"
+   ],
+   "checked": "2026-09-30"
+  },
+  {
+   "id": 75,
+   "award_type": "Women",
+   "year": 2024,
+   "rank": 1,
+   "player_name": "Aitana Bonmatí",
+   "club": "Barcelona",
+   "nationality": "Spain",
+   "read": {
+    "player_name": "Aitana Bonmatí",
+    "club": "Barcelona",
+    "nationality": null,
+    "points": null
+   },
+   "status": "verified",
+   "change": "nationality NULL -> Spain",
+   "sources": [
+    "https://www.uefa.com/ballondor/news/0292-1c27056169a7-bc88d1fdba43-1000--ballon-d-or-laureates-who-has-won-football-s-most-prestig/",
+    "https://www.espn.com/soccer/story/_/id/42055052/ballon-dor-winners-list-messi-ronaldo-ronaldinho-more",
+    "https://www.topendsports.com/sport/soccer/awards/ballondor-women.htm"
+   ],
+   "sourceKeys": [
+    "uefaLaureates",
+    "espnList",
+    "topendsportsWomen"
+   ],
+   "checked": "2026-09-30"
+  },
+  {
+   "id": 77,
+   "award_type": "Women",
+   "year": 2025,
+   "rank": 1,
+   "player_name": "Aitana Bonmatí",
+   "club": "Barcelona",
+   "nationality": "Spain",
+   "read": {
+    "player_name": "Aitana Bonmatí",
+    "club": "Barcelona",
+    "nationality": null,
+    "points": null
+   },
+   "status": "verified",
+   "change": "nationality NULL -> Spain",
+   "sources": [
+    "https://www.uefa.com/ballondor/news/0292-1c27056169a7-bc88d1fdba43-1000--ballon-d-or-laureates-who-has-won-football-s-most-prestig/",
+    "https://www.uefa.com/womenschampionsleague/news/029d-1ec96b619751-1db5282da758-1000--aitana-bonmati-wins-2025-women-s-ballon-d-or/",
+    "https://www.espn.com/soccer/story/_/id/46344733/psg-ousmane-dembele-wins-ballon-dor-ahead-lamine-yamal",
+    "https://www.espn.com/soccer/story/_/id/42055052/ballon-dor-winners-list-messi-ronaldo-ronaldinho-more"
+   ],
+   "sourceKeys": [
+    "uefaLaureates",
+    "uefa2025Women",
+    "espn2025",
+    "espnList"
+   ],
+   "checked": "2026-09-30"
+  }
+ ]
+}

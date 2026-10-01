@@ -2462,4 +2462,124 @@ export const SOCCER_CONTENT_2: GameContentMap = {
       { q: 'Why did my perfect corner go wide?', a: 'Because of how hard you hit it. Power sprays the ball off the spot you picked, and near the post there is no room to spray into.' },
     ],
   },
+  '/contract-chaos': {
+    intro: [
+      "Contract Chaos is a free soccer agent game. Your client's contract is up, his club wants him back, other clubs want him away, and you decide where he signs.",
+      "The offers pull against each other on purpose: the title chasers pay less and bench more, the rebuilds pay more and promise the shirt, and a release clause can turn a small club into a stepping stone. Then five seasons play out and show whether you got it right.",
+      "Every player and every club is generated. The offers run on the same contract market as the free agency window in the site's career games.",
+    ],
+    headings: {
+      howToPlay: "How to play Contract Chaos, a free soccer agent game",
+      rules: "Contract Chaos rules for offers, pushes and scoring",
+      example: "Contract Chaos walkthrough: one wonderkid, three offers",
+      tips: "Contract Chaos tips for picking the right deal",
+      faq: "Contract Chaos FAQ: generated players, the daily and scores",
+    },
+    howToPlaySections: [
+      {
+        heading: "Opening the daily deal or free play",
+        items: ["Open today's offers or deal yourself a client in free play."],
+      },
+      {
+        heading: "Reading your client's card",
+        items: ["Read your client first: his age, his rating, his potential and what he is worth a year."],
+      },
+      {
+        heading: "Comparing offers one tile at a time",
+        items: ["Tap each offer to read the full terms, then use the back button to compare the next one."],
+        subsections: [
+          { heading: "Pushing for a better wage", items: ["Push any offer for more money once, if you think he has the leverage."] },
+        ],
+      },
+      {
+        heading: "Signing and playing five seasons",
+        items: ["Sign one deal and play the five seasons one at a time, or skip straight to the verdict."],
+      },
+    ],
+    ruleSections: [
+      {
+        heading: "What every offer on the table carries",
+        items: ["Every offer shows the wage, the length, a signing bonus, a trophy bonus, a release clause if there is one, the promised role, how safe the manager is, home or abroad, the size of the city and how ambitious the club is."],
+      },
+      {
+        heading: "How each kind of club pays",
+        items: ["Title chasers pay below his market value, top half clubs pay about the market and rebuilds pay above it.", "A rebuild always promises the starting spot, while a title chaser's bench is crowded."],
+      },
+      {
+        heading: "Negotiation and walkouts",
+        items: ["A push works more often for a highly rated player and less often for a veteran past his peak.", "A failed push can make an outside club walk away, but your own club never walks and the last offer on the table never walks."],
+      },
+      {
+        heading: "Promises, sackings and settling abroad",
+        items: ["The promised role holds only while the manager who signed him keeps his job, and a hot seat manager is sacked half the time.", "Moving abroad costs a few games in the first season while he settles in."],
+      },
+      {
+        heading: "Release clauses and expiring deals",
+        items: ["If he outgrows his club and his contract has a release clause, a title chaser can pay it and take him.", "Every career is judged over five seasons. If his deal ends sooner he signs on somewhere at whatever he is worth by then."],
+      },
+      {
+        heading: "Scoring out of 100",
+        items: ["The score is out of 100: 30 for growth, 25 for minutes, 25 for trophies and 20 for money."],
+        subsections: [
+          { heading: "Growth measured against age", items: ["Growth is judged against his age, so a kid is measured on how close he got to his potential and a veteran on how well he held off the decline."] },
+          { heading: "When a medal counts", items: ["A trophy only counts if he played at least a fifth of the minutes that season."] },
+        ],
+      },
+      {
+        heading: "Streaks, points and generated names",
+        items: ["Plays count toward your streak and your games played, but there is no leaderboard score for this game yet.", "Every player and every club in the game is made up."],
+      },
+    ],
+    exampleSections: [
+      {
+        heading: "Meeting a nineteen year old winger",
+        paragraphs: ["Today's client is a 19 year old winger rated 74 with a potential of 88, worth about €1.6M a year."],
+      },
+      {
+        heading: "Three offers side by side",
+        paragraphs: ["His club offers €1.4M for three years. A title chaser offers €1.3M for two years as a rotation player at a squad strength of 91. A rebuild offers €1.9M for four years, the starting spot and a €1.1M signing bonus."],
+      },
+      {
+        heading: "The push and the release clause",
+        paragraphs: ["You push the rebuild and they come up to €2.1M. You sign. He plays nearly every minute, climbs to 84 by his third season, and a title chaser pays his release clause to take him on a much bigger wage."],
+      },
+      {
+        heading: "The verdict five seasons on",
+        paragraphs: ["Five seasons later he is rated 87 with a league title, about €26M earned and a score of 83, a Great call. The roads not taken show his old club would have scored far less."],
+      },
+    ],
+    tipSections: [
+      {
+        heading: "Minutes before badges for a kid",
+        items: ["For a young player, minutes matter more than the badge on the shirt. A kid on the bench at a giant grows slower than a kid starting every week."],
+      },
+      {
+        heading: "Money and minutes for a veteran",
+        items: ["For a veteran, the money and the minutes are most of the score, because growth is mostly about slowing the decline."],
+      },
+      {
+        heading: "Treating the clause as upside",
+        items: ["A release clause is upside, not a risk. If he outgrows the club, it is his ticket to a bigger one."],
+      },
+      {
+        heading: "Reading the manager's seat",
+        items: ["Check the manager's seat before you trust a promised role. A hot seat promise can be gone by season two."],
+      },
+      {
+        heading: "Choosing which offer to push",
+        items: ["Push the offers you would be happy to lose, and think twice before pushing the one you want."],
+      },
+      {
+        heading: "Short contracts as a growth bet",
+        items: ["Short deals are a bet on growth. If he improves, the next contract pays for it; if he gets hurt, it does not."],
+      },
+    ],
+    faqs: [
+      { q: 'Are the players and clubs real?', a: "No. Every player and club is generated, so no real footballer's contract is being guessed at." },
+      { q: 'Why is there no leaderboard score?', a: "Plays are recorded without a score while the site's points are rebuilt. Your best and average are kept on this device." },
+      { q: 'Is the daily the same for everyone?', a: 'Yes. Same client, same offers, same push results and the same five seasons for the same choice. You get one signature a day.' },
+      { q: 'Can I see what would have happened with another offer?', a: 'Yes. The verdict screen plays every offer out over the same five seasons and ranks them, with yours marked.' },
+      { q: 'Why did my promised starting spot disappear?', a: 'The manager who promised it got sacked. The new manager picks on form and rating, not on promises he never made.' },
+    ],
+  },
 };

@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import { Link } from "react-router-dom";
 import { Trophy, ChevronDown, ChevronUp } from "lucide-react";
 import { FlagImg } from "@/pages/WorldCupPredictor";
 import type { GroupSeed } from "./KnockoutBracket";
@@ -46,7 +47,9 @@ const BracketResults = ({ seeds, thirds, rounds, awards }: BracketResultsProps) 
         The real thing was played from June 11 to July 19, 2026. <FlagImg name="Spain" /> Spain beat <FlagImg name="Argentina" /> Argentina{" "}
         {final ? `${final.score1}-${final.score2}${final.extraTime ? " after extra time" : ""}` : ""} in the final at MetLife Stadium.
         Golden Ball {WC2026_AWARDS.goldenBall.player}, Golden Boot {WC2026_AWARDS.goldenBoot.player} with {WC2026_AWARDS.goldenBoot.goals} goals,
-        Golden Glove {WC2026_AWARDS.goldenGlove.player}.
+        Golden Glove {WC2026_AWARDS.goldenGlove.player}.{" "}
+        {/* Round 656: the whole tournament, groups included, on a page a crawler can read */}
+        <Link to="/world-cup-2026-results" className="text-[hsl(45,90%,55%)] hover:underline">Every 2026 World Cup result on one page</Link>.
       </p>
 
       {score.empty ? (

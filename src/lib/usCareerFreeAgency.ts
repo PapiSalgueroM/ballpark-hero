@@ -63,7 +63,9 @@ export interface FaWindow {
 }
 
 export interface FaBuildArgs {
-  sport: UsSport;
+  /* Round 720: Contract Chaos deals a soccer window off this same engine,
+     so the market rules stay in one place. Nothing below reads the sport. */
+  sport: UsSport | 'soccer';
   currentTeam: string;
   /** The whole era-aware league, current team included; filtered here. */
   pool: { id: string; label: string }[];

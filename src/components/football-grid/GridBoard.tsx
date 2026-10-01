@@ -1,5 +1,7 @@
 import { CellState, GridPuzzle } from '@/types/footballGrid';
 import { cn } from '@/lib/utils';
+import motion from '@/components/game/GridCellMotion.module.css';
+import layout from '@/components/game/GridCellLayout.module.css';
 
 interface Props {
   puzzle: GridPuzzle;
@@ -27,7 +29,7 @@ export function GridBoard({ puzzle, cells, activeCell, onCellClick, accentVar = 
   const headerBg = `hsl(var(${headerBgVar}))`;
 
   return (
-    <div className="w-full max-w-lg mx-auto">
+    <div className={cn('w-full max-w-lg mx-auto', layout.board)}>
       <div className="grid grid-cols-4 gap-1.5">
         <div />
 
@@ -62,10 +64,13 @@ export function GridBoard({ puzzle, cells, activeCell, onCellClick, accentVar = 
               return (
                 <button
                   key={`cell-${cellIndex}`}
+                  data-grid-cell-status={cell.status}
                   onClick={() => cell.status !== 'correct' && onCellClick(cellIndex)}
                   disabled={cell.status === 'correct'}
                   className={cn(
                     'aspect-square rounded-lg border-2 flex flex-col items-center justify-center p-1 transition-all text-center',
+                    layout.cell,
+                    cell.status === 'correct' && motion.correct,
                     cell.status === 'correct'
                       ? 'bg-correct/20 border-correct cursor-default'
                       : cell.status === 'wrong'
@@ -83,8 +88,8 @@ export function GridBoard({ puzzle, cells, activeCell, onCellClick, accentVar = 
                   }
                 >
                   {cell.status === 'correct' && cell.playerName ? (
-                    <div className="flex flex-col items-center gap-0.5">
-                      <span className="text-[11px] md:text-xs font-bold text-foreground leading-tight">
+                    <div className={cn('flex flex-col items-center gap-0.5', motion.correctContent, layout.content)}>
+                      <span title={cell.playerName} className={cn('text-[11px] md:text-xs font-bold text-foreground leading-tight', layout.name)}>
                         {cell.playerName}
                       </span>
                       {cell.rarity !== null && (
@@ -97,7 +102,7 @@ export function GridBoard({ puzzle, cells, activeCell, onCellClick, accentVar = 
                       )}
                     </div>
                   ) : cell.status === 'wrong' ? (
-                    <span className="text-xs text-destructive font-semibold">✗</span>
+                    <span className={cn('text-xs text-destructive font-semibold', motion.wrongContent)}>✗</span>
                   ) : (
                     <span className="text-lg text-muted-foreground/30">+</span>
                   )}

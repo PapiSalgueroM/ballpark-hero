@@ -1,0 +1,33 @@
+.correct {
+  animation: correctGlow 460ms ease-out;
+}
+
+.correctContent {
+  animation: correctLock 460ms ease-out;
+}
+
+.wrongContent {
+  animation: wrongShake 280ms ease-out;
+}
+
+@keyframes correctGlow {
+  0%, 100% { box-shadow: 0 0 0 0 hsl(var(--correct) / 0); }
+  35% { box-shadow: 0 0 0 2px hsl(var(--correct) / 0.45); }
+}
+
+@keyframes correctLock {
+  0% { transform: scale(0.96); }
+  100% { transform: scale(1); }
+}
+
+@keyframes wrongShake {
+  0%, 100% { transform: translateX(0); }
+  25%, 75% { transform: translateX(-2px); }
+  50% { transform: translateX(2px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .correct, .correctContent, .wrongContent {
+    animation: none;
+  }
+}

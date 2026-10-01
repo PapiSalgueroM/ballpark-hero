@@ -87,6 +87,7 @@ const ClubManager = lazy(() => import("./pages/ClubManager"));
 const ManagerHotSeat = lazy(() => import("./pages/ManagerHotSeat"));
 const StadiumTycoon = lazy(() => import("./pages/StadiumTycoon"));
 const WonderkidFactory = lazy(() => import("./pages/WonderkidFactory"));
+const ContractChaos = lazy(() => import("./pages/ContractChaos"));
 const ListQuiz = lazy(() => import("./pages/ListQuiz"));
 const PerfectSeasonMlb = lazy(() => import("./pages/PerfectSeasonMlb"));
 const HigherLowerTransfers = lazy(() => import("./pages/HigherLowerTransfers"));
@@ -162,6 +163,7 @@ const NflPlayoffFormatHistory = lazy(() => import("./pages/NflPlayoffFormatHisto
 const NbaPlayoffFormatHistory = lazy(() => import("./pages/NbaPlayoffFormatHistory"));
 const MlbPostseasonFormatHistory = lazy(() => import("./pages/MlbPostseasonFormatHistory"));
 const NhlPlayoffFormatHistory = lazy(() => import("./pages/NhlPlayoffFormatHistory"));
+const WorldCup2026Results = lazy(() => import("./pages/WorldCup2026Results"));
 const WhodTheyBeat = lazy(() => import("./pages/WhodTheyBeat"));
 const SilverwareSort = lazy(() => import("./pages/SilverwareSort"));
 const HallOfChampions = lazy(() => import("./pages/HallOfChampions"));
@@ -409,6 +411,7 @@ const AppContent = () => {
         <Route path="/manager-hot-seat" element={<ManagerHotSeat />} />
         <Route path="/stadium-tycoon" element={<StadiumTycoon />} />
         <Route path="/wonderkid-factory" element={<WonderkidFactory />} />
+        <Route path="/contract-chaos" element={<ContractChaos />} />
         <Route path="/list-quiz" element={<ListQuiz />} />
         <Route path="/perfect-season-mlb" element={<PerfectSeasonMlb />} />
         <Route path="/higher-lower-transfers" element={<HigherLowerTransfers />} />
@@ -505,6 +508,7 @@ const AppContent = () => {
         <Route path="/records/stanley-cup-winners" element={<RecordPage slug="stanley-cup-winners" />} />
         <Route path="/records/wnba-champions" element={<RecordPage slug="wnba-champions" />} />
         <Route path="/records/college-football-national-champions" element={<RecordPage slug="college-football-national-champions" />} />
+        <Route path="/records/heisman-trophy-winners" element={<RecordPage slug="heisman-trophy-winners" />} />
         <Route path="/records/ncaa-basketball-champions" element={<RecordPage slug="ncaa-basketball-champions" />} />
         <Route path="/records/english-football-champions" element={<RecordPage slug="english-football-champions" />} />
         <Route path="/records/afl-premiers" element={<RecordPage slug="afl-premiers" />} />
@@ -516,6 +520,8 @@ const AppContent = () => {
         <Route path="/nba-playoff-format-history" element={<NbaPlayoffFormatHistory />} />
         <Route path="/mlb-postseason-format-history" element={<MlbPostseasonFormatHistory />} />
         <Route path="/nhl-playoff-format-history" element={<NhlPlayoffFormatHistory />} />
+        {/* Round 656: the 2026 World Cup as played, read straight from src/data/wc2026Results.ts. */}
+        <Route path="/world-cup-2026-results" element={<WorldCup2026Results />} />
         <Route path="/whod-they-beat" element={<WhodTheyBeat />} />
         <Route path="/silverware-sort" element={<SilverwareSort />} />
         <Route path="/hall-of-champions" element={<HallOfChampions />} />

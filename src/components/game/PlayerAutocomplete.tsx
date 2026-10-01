@@ -274,17 +274,19 @@ export function PlayerAutocomplete({
 
   const commitSelection = useCallback(
     (entity: PlayerEntity) => {
+      if (disabled) return;
       onChange(entity.name);
       onSelect(entity);
       setOpen(false);
       setSuggestions([]);
       setHighlightedIndex(-1);
     },
-    [onChange, onSelect],
+    [disabled, onChange, onSelect],
   );
 
   const handleKeyDown = useCallback(
     (e: KeyboardEvent<HTMLInputElement>) => {
+      if (disabled) return;
       if (!open || suggestions.length === 0) {
         if (e.key === 'Enter' && !validateOnly && onSubmitFreeText && value.trim()) {
           onSubmitFreeText(value);
@@ -315,7 +317,7 @@ export function PlayerAutocomplete({
         setHighlightedIndex(-1);
       }
     },
-    [open, suggestions, highlightedIndex, validateOnly, onSubmitFreeText, value, commitSelection],
+    [disabled, open, suggestions, highlightedIndex, validateOnly, onSubmitFreeText, value, commitSelection],
   );
 
   const showDropdown = open && (loading || suggestions.length > 0 || normalizeName(value).length >= minChars);
@@ -389,6 +391,7 @@ export function PlayerAutocomplete({
                 key={entity.personKey ?? entity.key}
                 type="button"
                 role="option"
+                disabled={disabled}
                 aria-selected={i === highlightedIndex}
                 onMouseEnter={() => setHighlightedIndex(i)}
                 onPointerDown={e => {
@@ -396,6 +399,9 @@ export function PlayerAutocomplete({
                   // blur-driven outside-click handler can close the list first.
                   e.preventDefault();
                   commitSelection(entity);
+                }}
+                onClick={e => {
+                  if (e.detail === 0) commitSelection(entity);
                 }}
                 className={cn(
                   'w-full flex flex-col items-center justify-center gap-0.5 px-4 py-2.5 text-center transition-colors border-b border-border last:border-b-0',

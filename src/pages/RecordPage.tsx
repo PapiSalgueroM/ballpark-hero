@@ -5,7 +5,7 @@ import PageSeo from '@/components/seo/PageSeo';
 import RecordTable from '@/components/records/RecordTable';
 import NotFound from '@/pages/NotFound';
 import { FORMAT_PAGES, RECORD_SECTIONS, RECORD_SOURCING, type RecordRow } from '@/lib/records';
-import { capFirst, decadeHeading, decadesOf, firstYearOf, joinNames, leadersOf, sinceLabel, spanOf, yearNounOf, yearRanges } from '@/lib/recordPages';
+import { capFirst, decadeHeading, decadesOf, firstYearOf, joinNames, leadersOf, mvpTally, sinceLabel, spanOf, yearNounOf, yearRanges } from '@/lib/recordPages';
 import recordBooks from '@/data/recordBooks.json';
 
 /**
@@ -75,6 +75,10 @@ const RecordPage = ({ slug }: { slug: string }) => {
      so calling 1967 a season would name the wrong one. */
   const noun = yearNounOf(def);
   const oneOrMany = (n: number) => (n === 1 ? `that ${noun}` : `those ${noun}s`);
+
+  const mvp = mvpTally(def, rows);
+  const mvpTop = mvp ? mvp.leaders[0].count : 0;
+  const mvpTopNames = mvp ? mvp.leaders.filter(l => l.count === mvpTop).map(l => l.name) : [];
 
   return (
     <div id="dukb-main" tabIndex={-1} className="min-h-screen bg-background text-foreground px-4 py-12 max-w-3xl mx-auto">
@@ -166,6 +170,48 @@ const RecordPage = ({ slug }: { slug: string }) => {
           </p>
         )}
       </section>
+
+      {/* Round 656: the MVP column counted the way the titles are, for any section
+          whose table carries one. The span is the column's own: the NBA table starts
+          in 1947 and its Finals MVP column in 1969. */}
+      {mvp && w.mvp && (
+        <section className="mt-10 space-y-3" aria-labelledby="record-mvp">
+          <h2 id="record-mvp" className="text-xl font-semibold text-foreground">Most {w.mvp} awards, {mvp.first} to {mvp.latest}</h2>
+          <p className="text-sm text-muted-foreground leading-relaxed">
+            How we counted: each line in the {mvp.label} column counts for the player name exactly as the table writes it, so a player the table writes two ways counts separately under each.
+            {mvp.blankYears.length > 0 && ` Nothing is listed in that column for ${yearRanges(mvp.blankYears)}, so no award is counted for ${oneOrMany(mvp.blankYears.length)}.`}
+            {mvp.shared.map(s => ` The ${s.year} line names more than one player (${s.name}), so it counts once, under that line as written.`).join('')}
+          </p>
+          <p className="text-sm text-muted-foreground leading-relaxed">
+            Out in front: {joinNames(mvpTopNames)}, {mvpTop} {mvpTop === 1 ? 'award' : 'awards'}{mvpTopNames.length > 1 ? ' each' : ''}.
+          </p>
+          <div className="overflow-x-auto rounded-xl border border-border">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="bg-secondary/50 text-left">
+                  <th className="px-3 py-2 font-semibold text-foreground">Player</th>
+                  <th className="px-3 py-2 font-semibold text-foreground">Awards under this name</th>
+                  <th className="px-3 py-2 font-semibold text-foreground">Years</th>
+                </tr>
+              </thead>
+              <tbody>
+                {mvp.leaders.map(l => (
+                  <tr key={l.name} className="border-t border-border/60">
+                    <td className="px-3 py-1.5 font-medium text-foreground">{l.name}</td>
+                    <td className="px-3 py-1.5 text-foreground">{l.count}</td>
+                    <td className="px-3 py-1.5 text-muted-foreground">{l.years.join(', ')}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          {mvp.once > 0 && (
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              {mvp.once} more {mvp.once === 1 ? 'name appears' : 'names appear'} once in the {mvp.label} column.
+            </p>
+          )}
+        </section>
+      )}
 
       <section className="mt-10 space-y-2" aria-labelledby="record-play">
         <h2 id="record-play" className="text-lg font-semibold text-foreground">Play with this history</h2>

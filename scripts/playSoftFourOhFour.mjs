@@ -162,7 +162,9 @@ console.log('4) real routes are untouched, which is the half that must not fail'
      whose documents are stubs rather than full snapshots. */
   /* Round 649: one nested /records/<slug> page joined the spread, a real page two
      segments deep, so the marker is proved quiet on that shape too. */
-  const ROUTES = ['/soccer-career', '/soccer-grid', '/records', '/records/super-bowl-winners', '/about', '/leaderboard', '/soccer', '/privacy'];
+  /* Round 656: the new /world-cup-2026-results joined the spread, a real page that
+     arrived this round, so the marker is proved quiet on it before it ships. */
+  const ROUTES = ['/soccer-career', '/soccer-grid', '/records', '/records/super-bowl-winners', '/world-cup-2026-results', '/about', '/leaderboard', '/soccer', '/privacy'];
   let marked = 0, noSnapshot = 0, homeCopy = 0;
   for (const r of ROUTES) {
     /* The snapshot check reads the SERVER's answer, because the block lives

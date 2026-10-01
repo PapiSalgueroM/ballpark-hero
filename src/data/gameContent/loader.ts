@@ -141,6 +141,7 @@ export const PATH_BUNDLE: Record<string, ContentBundle> = {
   '/squad-deal': 'soccer2',
   '/stadium-tycoon': 'stadiumManagement',
   '/wonderkid-factory': 'academyManagement',
+  '/contract-chaos': 'soccer2',
   '/transfer-path': 'soccer2',
   '/world-cup-bracket': 'soccer2',
   /* world */
