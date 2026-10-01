@@ -1,5 +1,14 @@
 # Project state
 
+## IN PROGRESS 2026-10-01: fresh arcade daily replay guard claimed
+
+788 fixes the verified fresh-daily -> practice -> Today replay path in both arcade Boards,
+preserving the earned result and refusing a second write/completion. It also repairs the
+test-only shared lineup reload picker selecting Reset filters. Actual regression/control
+acceptance precedes any narrowly bound source-ratchet exception. Exact eight-file scope is
+on WORKBOARD. Five unchanged quiet gate reruns pass; Tycoon rerun and Buzzer control diagnosis
+continue.786 and787 implementation/native acceptance continue; next free789.
+
 ## IN PROGRESS 2026-10-01: Clue Auction claimed, corrected gate narrowed to eight failures
 
 787 owns Clue Auction's native suggestions/44px targets and committed finite/static feedback,

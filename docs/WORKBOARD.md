@@ -1,5 +1,25 @@
 # Work board
 
+**2026-10-01, Codex788 CLAIMED: protect freshly earned arcade dailies across practice.**
+The remaining gate review found a real product path: both Boards only remember the daily
+present at mount. Finish a new daily, finish practice, then Today's ten can deal that daily
+again and rearm completion/write. Own only both arcade Boards, existing freeKickPractice and
+buzzerPractice tests/wrappers, src/test/dailyReload/perfectLineupShared.tsx and
+scripts/simNoDoubleRecord.mjs. Root owns docs/git and the source ratchet; agent owns the seven
+Board/test/wrapper/driver files. No shared hook, physics, schema, data or public edits.
+Keep the immutable mount restore behavior/fresh result UI; retain the freshly earned daily
+in memory and return its exact bank/count without any second write or completion. A later
+Unlimited finish must still record once, including private storage refusal. First reproduce
+fresh daily -> practice -> Today and test exact raw save/result/record counts against both
+real engines and completion hook. Assert copied removal of the new guard, preserve independent
+outcomes and all existing practice controls. No mode-ratchet exception until outcomes pass;
+any new exception must bind the exact safe predicate and reject altered mode/booking gates.
+The shared lineup reload driver currently clicks disabled Reset filters as its first dialog
+button; select actual player rows while preserving first eligible order and every reload
+assertion/control. Quiet scoped Buzzer silent-control rerun is required before diagnosing
+or changing that gate. Five unchanged filter/First Team reruns already pass; full Tycoon
+positive/all controls rerun continues. Next free789. Other claims remain reserved.
+
 **2026-10-01, Codex787 CLAIMED: Clue Auction committed feedback and native controls.**
 Own only src/pages/ClueAuction.tsx, new scoped ClueAuction.module.css, actual-page tests in
 src/test/clueAuctionFeedback.test.tsx and scripts/simClueAuctionFeedback.mjs. Claude718's
