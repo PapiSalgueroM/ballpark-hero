@@ -1,5 +1,31 @@
 # Work board
 
+**2026-10-01, Codex836 CLAIMED: accurate public game descriptions and AdSense quality review.**
+The owner supplied the current Low value content policy card. This is a content
+and user-value rejection; passing crawl fences does not establish readiness.
+Confirmed source defect: the home template promises an MLB farm system, trade
+deadlines and dynasty redshirting that the current implementations do not offer.
+Own index.html and src/lib/sportHub.ts description corrections, plus About only
+if the bounded provenance review establishes a concrete useful correction.
+Preserve the owner's first-person note and legal footer. No game engines,
+rosters, ad-account actions, blanket noindex or page removal. Agents are checking
+the published guest experience and source transparency; findings will be marked
+as evidence or inference, never presented as Google's undisclosed exact cause.
+Claude's roster, league-capacity and career-depth scopes stay untouched.
+Next free round837. The proposed basketball contest is held, no edits started.
+
+**Codex832 ACCEPTED: stable CFB recruiting updates.**
+The message area stays mounted at a fixed height. Existing eight Board/engine
+checks pass. Actual App at320px normal and1440px reduced holds both document
+scroll (656/180 respectively) and recruit-column position on signing, with exact
+original player IDs, NIL, pools, saves and refusal behavior. The previous818
+build fails the same column-position check by74px (733 to807). An earlier
+scroll-only control was inconclusive and earns no regression credit. Current
+runtime types/build and all15 artifact/boot gates pass. No source or assets
+changed during the checks; all owned processes stopped. Receipts:
+TEMP/dukb-round832-production-app/report.json and dukb-round832-native-control.log.
+
+
 **2026-10-01, Codex829 BUILT: NBA Chain stable timeline. Browser checks pending.**
 Accepted links now reveal inside a fixed-height list, without document-level
 scrollIntoView. Only the newest accepted link/connection gets finite feedback;
