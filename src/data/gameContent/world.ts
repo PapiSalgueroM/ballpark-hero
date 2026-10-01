@@ -29,15 +29,15 @@ export const WORLD_CONTENT: GameContentMap = {
         ],
       },
       {
-        heading: "Undoing your last tap before the fifth pick",
+        heading: "Reviewing and editing your order",
         items: [
-          "Changed your mind? Hit Undo last any time before your fifth pick.",
+          "Changed your mind? Move a picked player up or down, remove a name, or use Undo last while you build your order.",
         ],
       },
       {
-        heading: "Submitting automatically on your fifth pick",
+        heading: "Locking your order of five players",
         items: [
-          "Your ranking submits automatically the moment the fifth player lands.",
+          "Once all five players are in place, review the order and hit Lock order to submit it.",
         ],
       },
       {
@@ -111,7 +111,7 @@ export const WORLD_CONTENT: GameContentMap = {
       {
         heading: "Using undo since nothing locks in early",
         items: [
-          "Use undo freely. Nothing counts until the fifth tap.",
+          "Edit freely before you hit Lock order. Adding your fifth player leaves the order open for review.",
         ],
       },
     ],
