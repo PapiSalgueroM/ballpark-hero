@@ -1,5 +1,17 @@
 # Project state
 
+## CLAIMED 2026-10-01: truthful Tennis and CBB answer feedback
+
+815 reserves the CBB Board and local feedback CSS/test/sim. 816 reserves the
+matching Tennis files only after 811 acceptance. Both still use stale delayed
+wrong-guess feedback. Reproduce and replace with committed-result cues, finite
+motion and static reduced motion while preserving rules/data/save/completion.
+Exact boundaries are on WORKBOARD. All Claude claims stand. Next free 817.
+
+811-813 combined production types/build/artifact/affected gates pass; actual-App
+checks are running. Fresh visitor triage still has the same seven open reports
+with existing ownership. No database or report-status changes.
+
 ## ACCEPTED 2026-10-01: fail-closed live search verification
 
 814 stops partial request failures from reporting a complete pass or satisfying
