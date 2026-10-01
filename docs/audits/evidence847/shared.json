@@ -1,0 +1,1605 @@
+{
+  "auditOnly": true,
+  "finished": "2026-10-01T22:28:36.491Z",
+  "liveBuild": {
+    "entry": "/assets/index-Bj5VrkKR.js",
+    "sha": "6eced98c8c90fd858df03d786ad4d821044e4849abd2b0bc5376bee437a55051",
+    "homeRawSha": "9c4871e97197a794cc12781c79acaf5717e10ce8fddf655425a1d9c5ffe4cc85",
+    "deployment": "psr2.102f28a4-cd2d-4486-af59-67ca17438c80.1791497619.GWZRHK9KYNOeYY6tJ2tVUThBBrm8_qA_zmTEW_yHr2U"
+  },
+  "localBaseline": {
+    "url": "http://127.0.0.1:4930",
+    "sourceCommit": "8542bf83",
+    "runtimeBaseline": "40947",
+    "owner": "root",
+    "draft842Excluded": true
+  },
+  "coverage": {
+    "liveSitemapRoutes": 170,
+    "extraRoutes": 4,
+    "totalMounted": 174,
+    "viewport": {
+      "width": 320,
+      "height": 844
+    },
+    "horizontalOverflow": 0,
+    "pageExceptions": 0,
+    "observedBadHttp": 0,
+    "observedLocalAssetFailures": 0,
+    "sitemapNoindex": [],
+    "rawMetadataAndSchema": [
+      {
+        "route": "/",
+        "schemaCount": 1,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/leaderboard",
+        "schemaCount": 2,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/college",
+        "schemaCount": 2,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/soccer",
+        "schemaCount": 2,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/pro-basketball",
+        "schemaCount": 2,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/pro-football",
+        "schemaCount": 2,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/baseball",
+        "schemaCount": 2,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/hockey",
+        "schemaCount": 2,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/whats-new",
+        "schemaCount": 2,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/records",
+        "schemaCount": 2,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/records/super-bowl-winners",
+        "schemaCount": 3,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/records/nba-champions",
+        "schemaCount": 3,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/records/world-series-winners",
+        "schemaCount": 3,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/records/stanley-cup-winners",
+        "schemaCount": 3,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/records/wnba-champions",
+        "schemaCount": 3,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/records/college-football-national-champions",
+        "schemaCount": 3,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/records/heisman-trophy-winners",
+        "schemaCount": 3,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/records/ncaa-basketball-champions",
+        "schemaCount": 3,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/records/english-football-champions",
+        "schemaCount": 3,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/records/afl-premiers",
+        "schemaCount": 3,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/records/brownlow-medal-winners",
+        "schemaCount": 3,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/records/dally-m-medal-winners",
+        "schemaCount": 3,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/records/nrl-premiers",
+        "schemaCount": 3,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/champions-league-format-history",
+        "schemaCount": 2,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/nfl-playoff-format-history",
+        "schemaCount": 2,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/nba-playoff-format-history",
+        "schemaCount": 2,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/mlb-postseason-format-history",
+        "schemaCount": 2,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/nhl-playoff-format-history",
+        "schemaCount": 2,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/world-cup-2026-results",
+        "schemaCount": 3,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/nba-grid/archive",
+        "schemaCount": 2,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/mlb-grid/archive",
+        "schemaCount": 2,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/hockey-grid/archive",
+        "schemaCount": 2,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/cbb-grid/archive",
+        "schemaCount": 2,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/about",
+        "schemaCount": 2,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/contact",
+        "schemaCount": 2,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/privacy",
+        "schemaCount": 2,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/terms",
+        "schemaCount": 2,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/accessibility",
+        "schemaCount": 2,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/budget-builder",
+        "schemaCount": 4,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/rebuild",
+        "schemaCount": 4,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/dart-draft",
+        "schemaCount": 4,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/career-ladder",
+        "schemaCount": 4,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/who-am-i",
+        "schemaCount": 4,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/club-manager",
+        "schemaCount": 4,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/manager-hot-seat",
+        "schemaCount": 4,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/deadline-day",
+        "schemaCount": 4,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/soccer-conquest",
+        "schemaCount": 4,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/stadium-tycoon",
+        "schemaCount": 4,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/wonderkid-factory",
+        "schemaCount": 4,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/contract-chaos",
+        "schemaCount": 4,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/world-xi",
+        "schemaCount": 4,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/player-bingo",
+        "schemaCount": 4,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/sports-bingo",
+        "schemaCount": 4,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/alphabet-sprint",
+        "schemaCount": 4,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/clue-auction",
+        "schemaCount": 4,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/rarity-round",
+        "schemaCount": 4,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/missing-xi",
+        "schemaCount": 4,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/sign-the-player",
+        "schemaCount": 4,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/footle",
+        "schemaCount": 4,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/career",
+        "schemaCount": 4,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/higher-lower",
+        "schemaCount": 4,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/connections",
+        "schemaCount": 4,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/build-your-xi",
+        "schemaCount": 4,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/football-connect-4",
+        "schemaCount": 4,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/free-kick",
+        "schemaCount": 4,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/soccer-grid",
+        "schemaCount": 4,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/world-cup-bracket",
+        "schemaCount": 4,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/soccer-career",
+        "schemaCount": 4,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/fantasy-draft",
+        "schemaCount": 4,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/transfer-path",
+        "schemaCount": 4,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/squad-deal",
+        "schemaCount": 4,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/search-and-discard",
+        "schemaCount": 4,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/gauntlet-draft",
+        "schemaCount": 4,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/player-stock-market",
+        "schemaCount": 4,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/perfect-season-nfl",
+        "schemaCount": 4,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/front-office",
+        "schemaCount": 4,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/nfl-my-career",
+        "schemaCount": 4,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/football-grid",
+        "schemaCount": 4,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/nfl-career",
+        "schemaCount": 4,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/nfl-higher-lower",
+        "schemaCount": 4,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/nfl-connections",
+        "schemaCount": 4,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/nfl-connect-4",
+        "schemaCount": 4,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/missing-eleven",
+        "schemaCount": 4,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/conquest",
+        "schemaCount": 4,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/nfl-gauntlet-draft",
+        "schemaCount": 4,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/college-grid",
+        "schemaCount": 4,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/guess-the-college",
+        "schemaCount": 4,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/guess-cbb-team",
+        "schemaCount": 4,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/cbb-grid",
+        "schemaCount": 4,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/cfb-higher-lower",
+        "schemaCount": 4,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/cfb-dynasty",
+        "schemaCount": 4,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/cbb-dynasty",
+        "schemaCount": 4,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/buzzer-beater",
+        "schemaCount": 4,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/perfect-season-nba",
+        "schemaCount": 4,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/stat-detective",
+        "schemaCount": 4,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/nba-stat-line",
+        "schemaCount": 4,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/nba-starting-5",
+        "schemaCount": 4,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/nba-connect-4",
+        "schemaCount": 4,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/nba-chain",
+        "schemaCount": 4,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/nba-higher-lower",
+        "schemaCount": 4,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/nba-grid",
+        "schemaCount": 4,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/nba-connections",
+        "schemaCount": 4,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/nba-career",
+        "schemaCount": 4,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/missing-five",
+        "schemaCount": 4,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/perfect-lineup-nba",
+        "schemaCount": 4,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/conquest-nba",
+        "schemaCount": 4,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/nba-front-office",
+        "schemaCount": 4,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/nba-my-career",
+        "schemaCount": 4,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/nba-gauntlet-draft",
+        "schemaCount": 4,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/perfect-season-mlb",
+        "schemaCount": 4,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/baseball-career",
+        "schemaCount": 4,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/mlb-higher-lower",
+        "schemaCount": 4,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/mlb-grid",
+        "schemaCount": 4,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/mlb-connect-4",
+        "schemaCount": 4,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/mlb-gauntlet-draft",
+        "schemaCount": 4,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/conquest-mlb",
+        "schemaCount": 4,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/mlb-my-career",
+        "schemaCount": 4,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/mlb-front-office",
+        "schemaCount": 4,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/missing-nine",
+        "schemaCount": 4,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/baseball-connections",
+        "schemaCount": 4,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/perfect-season-nhl",
+        "schemaCount": 4,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/puck-detective",
+        "schemaCount": 4,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/hockey-grid",
+        "schemaCount": 4,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/hockey-career",
+        "schemaCount": 4,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/hockey-higher-lower",
+        "schemaCount": 4,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/nhl-connections",
+        "schemaCount": 4,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/conquest-nhl",
+        "schemaCount": 4,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/nhl-my-career",
+        "schemaCount": 4,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/nhl-front-office",
+        "schemaCount": 4,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/nhl-connect-4",
+        "schemaCount": 4,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/perfect-lineup-nhl",
+        "schemaCount": 4,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/nhl-gauntlet-draft",
+        "schemaCount": 4,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/f1-driver",
+        "schemaCount": 4,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/f1-higher-lower",
+        "schemaCount": 4,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/f1-constructor",
+        "schemaCount": 4,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/perfect-lineup-f1",
+        "schemaCount": 4,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/guess-tennis-player",
+        "schemaCount": 4,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/tennis-chain",
+        "schemaCount": 4,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/tennis-higher-lower",
+        "schemaCount": 4,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/guess-the-golfer",
+        "schemaCount": 4,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/golf-higher-lower",
+        "schemaCount": 4,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/aussie-rules-manager",
+        "schemaCount": 4,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/afl-higher-lower",
+        "schemaCount": 4,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/guess-nascar-driver",
+        "schemaCount": 4,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/nascar-chain",
+        "schemaCount": 4,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/fight-career",
+        "schemaCount": 4,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/fight-promoter",
+        "schemaCount": 4,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/fight-gym",
+        "schemaCount": 4,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/ufc",
+        "schemaCount": 4,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/ufc-chain",
+        "schemaCount": 4,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/rank-em",
+        "schemaCount": 4,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/teammates",
+        "schemaCount": 4,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/olympics",
+        "schemaCount": 4,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/guess-the-year",
+        "schemaCount": 4,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/guess-the-nation",
+        "schemaCount": 4,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/hof-or-bust",
+        "schemaCount": 4,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/champ-or-not",
+        "schemaCount": 4,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/whod-they-beat",
+        "schemaCount": 4,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/silverware-sort",
+        "schemaCount": 4,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/hall-of-champions",
+        "schemaCount": 4,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/idle-arena",
+        "schemaCount": 4,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/face-off",
+        "schemaCount": 4,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/score-predictor",
+        "schemaCount": 4,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/list-quiz",
+        "schemaCount": 4,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/minefield",
+        "schemaCount": 4,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/sports-millionaire",
+        "schemaCount": 4,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/quiz-board",
+        "schemaCount": 4,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/ball-iq",
+        "schemaCount": 4,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/emoji-guess",
+        "schemaCount": 4,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/mystery-box",
+        "schemaCount": 4,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/search",
+        "schemaCount": 1,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/profile",
+        "schemaCount": 0,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 0
+      },
+      {
+        "route": "/reset-password",
+        "schemaCount": 1,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      },
+      {
+        "route": "/audit-missing-page-847",
+        "schemaCount": 1,
+        "schemaErrors": [],
+        "titleCount": 1,
+        "canonicalCount": 1,
+        "descriptionCount": 1
+      }
+    ]
+  },
+  "findings": [
+    {
+      "id": "shared-skip-target",
+      "severity": "P2",
+      "title": "Skip to main content has no destination on 19 routes",
+      "url": "https://douknowball.com/free-kick",
+      "affectedUrls": [
+        "https://douknowball.com/budget-builder",
+        "https://douknowball.com/rebuild",
+        "https://douknowball.com/free-kick",
+        "https://douknowball.com/guess-cbb-team",
+        "https://douknowball.com/buzzer-beater",
+        "https://douknowball.com/f1-driver",
+        "https://douknowball.com/f1-constructor",
+        "https://douknowball.com/guess-tennis-player",
+        "https://douknowball.com/tennis-chain",
+        "https://douknowball.com/guess-nascar-driver",
+        "https://douknowball.com/nascar-chain",
+        "https://douknowball.com/ufc-chain",
+        "https://douknowball.com/guess-the-nation",
+        "https://douknowball.com/quiz-board",
+        "https://douknowball.com/ball-iq",
+        "https://douknowball.com/emoji-guess",
+        "https://douknowball.com/mystery-box",
+        "https://douknowball.com/reset-password",
+        "https://douknowball.com/audit-missing-page-847"
+      ],
+      "steps": [
+        "Load /free-kick at 320px with Essential only.",
+        "Focus the first Skip to main content link and press Enter.",
+        "Press Tab and inspect focus."
+      ],
+      "expected": "Enter moves keyboard focus to the main content landmark.",
+      "actual": "No #dukb-main exists. Enter adds the hash but leaves focus on the skip link. Next Tab goes to the DoUKnowBall nav link. The same native path on /footle focuses MAIN#dukb-main.",
+      "possibleCause": "App.tsx mounts a global href=\"#dukb-main\", but these bespoke pages do not assign that ID to their main content.",
+      "sourcePaths": [
+        "src/App.tsx",
+        "src/pages/FreeKick.tsx"
+      ],
+      "evidence": [
+        "shared-coverage-final.json",
+        "shared-verified.json",
+        "shared-skip-live-free-kick.png"
+      ],
+      "reproducedOn": [
+        "live index-Bj5VrkKR.js",
+        "clean local 4930"
+      ],
+      "scopeNote": "17 public game routes, reset-password and the tested404 route. Only free-kick was keyboard replayed; target absence was measured on all 19."
+    },
+    {
+      "id": "shared-auth-return-focus",
+      "severity": "P2",
+      "title": "Closing account dialogs loses the keyboard opener",
+      "url": "https://douknowball.com/",
+      "steps": [
+        "Open Log In from the header.",
+        "Press Escape and wait 400ms for the dialog to unmount.",
+        "Repeat with Sign Up."
+      ],
+      "expected": "Closing returns focus to the connected Log In or Sign Up button that opened the dialog.",
+      "actual": "Both dialogs unmount, but document.activeElement becomes BODY instead of the opener. Footle help closes back onto its How to play control in the independent comparison.",
+      "possibleCause": "Header controls open AuthModal manually and AuthModal does not retain an opener or use a DialogTrigger return-focus target.",
+      "sourcePaths": [
+        "src/components/layout/Header.tsx",
+        "src/components/auth/AuthModal.tsx"
+      ],
+      "evidence": [
+        "shared-verified.json"
+      ],
+      "reproducedOn": [
+        "live index-Bj5VrkKR.js",
+        "clean local 4930"
+      ]
+    },
+    {
+      "id": "shared-auth-guest-copy",
+      "severity": "P2",
+      "title": "Signup incorrectly says guest points and rank do not count",
+      "url": "https://douknowball.com/",
+      "steps": [
+        "Visit while signed out.",
+        "Open Sign Up in the header.",
+        "Compare its description with /leaderboard while still signed out."
+      ],
+      "expected": "Account copy accurately distinguishes guest play and local progress from account-linked storage.",
+      "actual": "Signup says \"Streaks, points and world rank only count once you have an account.\" The live guest leaderboard instead explains that no account is needed and shows a generated guest handle. recordCompletion books the guest row and local streak before checking for an authenticated session.",
+      "possibleCause": "AuthModal description predates the guest-first completion and streak implementation.",
+      "sourcePaths": [
+        "src/components/auth/AuthModal.tsx",
+        "src/lib/completions.ts",
+        "src/hooks/useStreaks.ts",
+        "src/pages/Leaderboard.tsx"
+      ],
+      "evidence": [
+        "shared-verified.json",
+        "shared-controls.json",
+        "shared-signup-live.png"
+      ],
+      "reproducedOn": [
+        "live index-Bj5VrkKR.js",
+        "clean local 4930"
+      ],
+      "scopeNote": "No score was submitted. The accounting claim is corroborated by the actual helper source and live signed-out leaderboard wording."
+    },
+    {
+      "id": "shared-cookie-modal-keyboard",
+      "severity": "P3",
+      "title": "Visible cookie choices cannot receive Tab focus while initial help is open",
+      "url": "https://douknowball.com/footle",
+      "steps": [
+        "Use a fresh browser context with no cookie choice and open /footle.",
+        "Press Tab 12 times and Shift+Tab 6 times.",
+        "Dismiss help with Escape and observe the pending banner and next keyboard stops."
+      ],
+      "expected": "The visible cookie choice controls can be reached and operated from the keyboard in the initial page state.",
+      "actual": "Every tested Tab and Shift+Tab cycles between Let's Play and Close inside the help modal. Neither cookie button receives focus although both are pointer-hit-testable and not aria-hidden. After closing help, focus returns to game controls while the pending banner remains; it does not take focus again.",
+      "possibleCause": "The cookie region is a sibling portal outside the modal focus trap. Its initial focus is superseded by the help dialog; the aria-hidden/pointer workaround does not make it part of the trap.",
+      "sourcePaths": [
+        "src/components/CookieConsent.tsx",
+        "src/components/ui/dialog.tsx"
+      ],
+      "evidence": [
+        "shared-replays.json",
+        "shared-verified.json",
+        "shared-controls.json"
+      ],
+      "reproducedOn": [
+        "live index-Bj5VrkKR.js",
+        "clean local 4930"
+      ],
+      "scopeNote": "Escape closes the help, after which the banner remains available further along the normal tab order. This is a keyboard usability defect, not a proven Google consent-policy breach."
+    }
+  ],
+  "positiveChecks": {
+    "siteSearch": "Native ArrowDown/Enter opens an actual result; footer Search Games clears the URL query and field.",
+    "leaderboard": "Today, 7 Days, 30 Days and All-Time loaded through allowed actual read-only RPCs; no 500 observed.",
+    "consent": "Undecided/Essential only: no vendor attempts or ad slots. Accept on Footle: exactly one GA attempt, one AdSense attempt, one manual slot and one queued ad with nonpersonalized flag 1. Cookie choices reload plus Essential only removes scripts/slots/queue.",
+    "privateAdScreens": "Profile,reset,search and404 have no deliberate ad slot or AdSense script with stored Accept.",
+    "head": "All 170 sitemap pages have one raw and mounted canonical, no applicable noindex and no observed duplicate descriptions. All raw JSON-LD scripts parse.",
+    "render": "All 174 actual mounted pages had 0px horizontal overflow, no pageerror and no observed asset 404."
+  },
+  "limits": [
+    "Initial coverage blocked all non-GET methods except verified read-only global_leaderboard/global_rank RPCs. That also blocked the read-only most_played_today RPC on home; it is not classified as a mutation or site failure. No home popularity claim is credited.",
+    "Four first-pass DOMContentLoaded timeouts were healthy on sequential commit-ready retry. Two wrong-case TEMP locators were corrected and replayed. None is a defect.",
+    "Ad and analytics scripts were aborted before network transmission. Their attempted loads were counted. Actual ad rendering, account settings,regional CMP behavior and Google approval are not verified.",
+    "No account credentials, score, report, signup or reset-email submission. No games played to completion in this lane.",
+    "Unknown path returns 200 before React, then removes canonical and sets noindex. This known host fallback behavior is recorded rather than mislabeled as an indexable 404.",
+    "The signed-out /profile redirect to home is intentional and is not a canonical mismatch defect.",
+    "Raw home explanatory copy differs from the React catalog. The mounted home still has substantial original content; a word-count or difference alone is not a verified low-value-content violation."
+  ],
+  "evidence": {
+    "fullRouteCoverage": "C:/Users/antho/AppData/Local/Temp/dukb-hostile-audit-2026-10-01/shared-coverage-final.json",
+    "originalCoverage": "C:/Users/antho/AppData/Local/Temp/dukb-hostile-audit-2026-10-01/shared-coverage.json",
+    "timeoutRetry": "C:/Users/antho/AppData/Local/Temp/dukb-hostile-audit-2026-10-01/shared-coverage-retry.json",
+    "controls": "C:/Users/antho/AppData/Local/Temp/dukb-hostile-audit-2026-10-01/shared-controls.json",
+    "replays": "C:/Users/antho/AppData/Local/Temp/dukb-hostile-audit-2026-10-01/shared-replays.json",
+    "nativeVerification": "C:/Users/antho/AppData/Local/Temp/dukb-hostile-audit-2026-10-01/shared-verified.json"
+  },
+  "policyReferences": [
+    {
+      "url": "https://support.google.com/publisherpolicies/answer/11112688?hl=en",
+      "use": "Google disallows ads on screens without publisher content or with low-value content. No word-count cutoff or approval assurance is inferred."
+    },
+    {
+      "url": "https://developers.google.com/search/docs/crawling-indexing/javascript/javascript-seo-basics",
+      "use": "Raw and mounted metadata/content are distinguished; readable href links and consistent canonicals were checked."
+    },
+    {
+      "url": "https://www.google.com/about/company/user-consent-policy/",
+      "use": "Disclosure/consent/revocation duties inform the consent inspection. This audit does not establish regional legal compliance."
+    }
+  ],
+  "cleanup": {
+    "allOwnedBrowsersAndContextsClosed": true,
+    "noOwnedServer": true,
+    "rootServerUntouched": true,
+    "repositoryFilesUnchanged": true,
+    "tempOnly": true
+  }
+}

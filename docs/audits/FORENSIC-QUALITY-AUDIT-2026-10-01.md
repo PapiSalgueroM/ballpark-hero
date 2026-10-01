@@ -4,6 +4,10 @@ Status: in progress. Codex847 is evidence only. No fixes or production data
 changes are included. Original requests and lane ownership are saved in
 `docs/OWNER-QUALITY-PROGRAM-2026-10-01.md`.
 
+Current inventory: `evidence847/inventory-current.csv` and the JSON companion.
+The shared audit is `SHARED-PRODUCT-AUDIT-2026-10-01.md`. Fields marked untested
+or not established remain open; a successful initial render is not completion.
+
 ## Baselines and boundaries
 
 - Live entry: `/assets/index-Bj5VrkKR.js`, observed independently by two lanes.
@@ -75,9 +79,12 @@ after the second tab's answer.
 
 ### QA847-03, P2: well-formed but malformed Daily saves crash the page
 
-URL: `https://douknowball.com/afl-higher-lower`
+Verified URLs: `/nfl-higher-lower`, `/nba-higher-lower`, `/mlb-higher-lower`,
+`/hockey-higher-lower`, `/cfb-higher-lower`, `/f1-higher-lower`,
+`/tennis-higher-lower`, `/golf-higher-lower` and `/afl-higher-lower`, all on
+`https://douknowball.com`.
 
-Game: AFL Higher or Lower. This is a deliberate corrupt-save test, not a
+Game family: nine ten-round Higher or Lower games. This is a deliberate corrupt-save test, not a
 spontaneous ordinary-play crash or an exploit against another player.
 
 1. Answer a round to create a real save.
@@ -100,11 +107,58 @@ game's deserializer type assertion without validating the guess array/items.
 Evidence: `evidence847/daily-save.json`. This is one defect family, not three
 separate bugs merely because three corrupt values triggered it.
 
+All nine URLs also completed a real ten-round Daily through native buttons at
+320px. Scores matched an independent calculation from decided-round logs.
+Immediate refresh during rounds3 and10 kept exact saved bytes. Daily state held
+while Unlimited/Hard started and returned. Malformed-null saves then crashed
+each game, and manual key deletion restored play. Initial Hockey driver
+timeouts were a help-dialog locator race, resolved by closing its real dialog;
+they are not site findings. Receipts: `evidence847/hl-family.json` and
+`evidence847/hl-family-retry.json`.
+
+### QA847-04, P2: skip navigation has no target on19 routes
+
+The full URL list and native live/local replay are in the shared report.
+`/free-kick` demonstrates the failure: Enter on Skip to main content keeps
+focus on that link because no `#dukb-main` exists. `/footle` focuses its MAIN
+in the independent comparison. Target absence was measured on17 game routes,
+reset-password and the tested unknown route. Only free-kick was keyboard
+replayed. Recommended repair: give each affected actual main landmark the
+global skip target, without adding duplicate IDs.
+
+### QA847-05, P2: closing account dialogs loses opener focus
+
+URL: `https://douknowball.com/`, shared header Log In and Sign Up.
+Escape closes both dialogs, then focus becomes BODY instead of their opener.
+The live and clean local replay agree. Recommended repair: retain and restore
+the exact connected opener in Header/AuthModal. Footle's help correctly restores
+its own opener as an independent comparison.
+
+### QA847-06, P2: account copy contradicts guest scoring
+
+URL: `https://douknowball.com/`, Sign Up dialog.
+It says "Streaks, points and world rank only count once you have an account."
+The signed-out live leaderboard explains guest participation, and the recorder
+books guest completion/local streak before checking authentication. No test
+score was submitted. Recommended repair: describe account-linked persistence
+accurately in `src/components/auth/AuthModal.tsx`.
+
+### QA847-07, P3: initial help traps keyboard away from visible cookie choices
+
+URL: `https://douknowball.com/footle`, fresh context without a saved choice.
+Twelve Tab and six Shift+Tab presses cycle only inside the help modal, while
+cookie choices remain visible and pointer-hit-testable. Escape closes help and
+the banner becomes reachable later in the normal tab order. This is a keyboard
+usability defect with a workaround, not a verified consent-policy violation.
+Recommended repair: coordinate initial cookie/help focus in CookieConsent and
+the shared dialog without hiding or changing the user's consent choices.
+
 ## Pending consolidation
 
-The simulation lane has reproduced an NBA trade-roster restriction and the data
-lane has verified NHL import errors. Their final receipts and affected-route
-traces are still being assembled. All-site mobile render coverage is complete;
+The simulation lane has reproduced an NBA trade-roster restriction and unequal
+NBA/MLB season schedules affecting seeding. The data lane has verified NHL and
+MLB import errors. Final receipts and affected-route traces are still being
+assembled. All-site mobile render coverage is complete;
 four first-pass navigation timeouts passed sequential retries and are not
 reported as site defects. Search/auth locator mistakes also require corrected
 audit replay, not product fixes.
