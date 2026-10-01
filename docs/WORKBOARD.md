@@ -1,5 +1,20 @@
 # Work board
 
+**2026-10-01, Codex804 CLAIMED: explicit guide record refresh after verified changes.**
+The unchanged guide-heading guard found stale frozen instructions for accepted794
+NHL contributor controls and799's corrected F1 score. The same original-text fence
+also needs802's deliberately changed submit mechanics. Own scripts/simGuideHeadings.mjs
+and scripts/data/guideHeadingsFrozen.json, limited to a small explicit refresh option
+that requires an existing converted/frozen route and derives its text from the
+actual current guide. Do not hand-edit sentence entries or relax section checks.
+804 refreshes only F1 and NHL;802 owns its rank-em record after its final guide.
+Keep every other route/part unchanged. Verify the full guard and its existing five
+effective negative controls in a finished physical gate, plus invalid/unfrozen route
+refusals and exact semantic fixture preservation. Root owns this isolated integration
+work alongside801/802/803. Frozen413 still audits the older captured guard/records,
+so any expected stale-record failure there remains preserved and reported, never
+credited as current green. All Claude reservations stand. Next free805.
+
 **2026-10-01, Codex800 Emoji Guess feedback ACCEPTED.**
 Committed misses/hints, solved/failed answers, Next and final results now give
 truthful accessible feedback with360/420ms one-shot cues and static reduced motion.
