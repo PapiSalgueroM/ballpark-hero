@@ -1,5 +1,15 @@
 # Project state
 
+## IN PROGRESS 2026-10-01: NBA Stat Line season access and keyboard flow
+
+801 claims the isolated Page/picker module and small hook suggestion-limit plumbing,
+plus focused actual outcome tests/harness. Expose eligible seasons beyond the hidden
+first ten using the unchanged helper order/eligibility and preserve every original
+target, line calculation, score, save, share and completion. Exact scope/acceptance
+are on WORKBOARD.800 passes nine positives/thirteen unit controls/eight strengthened
+native contexts/four browser controls; its separate production pipeline is running.
+The frozen413-node regression continues unchanged. Next free802; Claude claims hold.
+
 ## ACCEPTED 2026-10-01: MLB trade desk exposes every roster player
 
 798's three trade lists now offer every original player with honest eight-player

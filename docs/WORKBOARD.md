@@ -1,5 +1,28 @@
 # Work board
 
+**2026-10-01, Codex801 CLAIMED: NBA Stat Line eligible-season access and focus.**
+Master68/F/96 playability slice. Current name search returns only ten seasons with
+no paging or year-query matching, so later eligible season keys can stay unreachable.
+Own only src/pages/NbaStatLine.tsx, src/hooks/useNbaStatLine.ts (suggestion-limit and
+one-extra hasMore plumbing only), new src/pages/NbaStatLinePicker.module.css,
+src/test/nbaStatLinePicker.test.tsx and scripts/simNbaStatLinePicker.mjs.
+Use the original suggestSeasons limit parameter, order, normalization, exclusions
+and eligiblePoolFor without editing src/lib/nbaStatLine.ts or any real season data.
+Add explicit ten-season expansions and truthful bounded counts, readable names,
+44px labeled owned controls, a local bounded list and stable earlier nodes. Focus
+returns to search after accepted selection/removal, or Score after the fifth pick,
+with no page movement or held-key bleed. Query changes/new runs reset visibility;
+typing/paging do not score, save, complete or change targets/RNG.
+Actual Page/hook/helper tests must reach beyond20 exact synthetic season keys and
+preserve original minutes-weighted/summed-makes line, score, share, daily saved keys,
+restore and once-only completion. Prove first-ten order/exclusion/era eligibility,
+quiet/no-op paths, effective copied cap/focus controls and narrow/wide normal/reduced
+native reachability/full-text/target-size/scroll checks. Fixtures are explicitly
+fictional, not new verified sports facts or a visitor report. Original NBA Stat Line
+fences remain required. Root owns Git/docs/build/generated.800 controls/native are
+accepted and its separate production pipeline runs; frozen413 regression continues.
+All Claude reservations stand. Next free802.
+
 **2026-10-01, Codex798 MLB whole-roster trade access ACCEPTED.**
 The Finder, send and receive lists now expose every original player through explicit
 eight-player expansions and honest visible/total counts. Original first-eight rating
