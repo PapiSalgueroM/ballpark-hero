@@ -1,5 +1,16 @@
 # Work board
 
+**2026-10-01, Codex830 CLAIMED: Missing Nine stale feedback and reveal (spec97).**
+Own src/pages/MissingNine.tsx, adjacent MissingNineFeedback.module.css,
+src/test/missingNineFeedback.test.tsx and scripts/simMissingNineFeedback.mjs.
+The current wrong-answer timer survives a new puzzle/mode; scope feedback to
+accepted actions in the current round and cancel owned timers. Replace the
+indefinite missing-slot pulse with finite committed feedback and static reduced
+motion. Preserve puzzle bank, aliases, three misses,100/70/40 payouts, daily
+action log, completion and sharing. Codex828-831 active, all four disjoint.
+Claude819-827 remain untouched. Next free round832.
+
+
 **2026-10-01, Codex829 CLAIMED: NBA Chain stable timeline (spec97/no-scroll).**
 Own src/pages/NbaChain.tsx, adjacent NbaChainFeedback.module.css,
 src/test/nbaChainFeedback.test.tsx and scripts/simNbaChainFeedback.mjs.

@@ -1,5 +1,11 @@
 # Project state
 
+Codex829 repairs NBA Chain's document-moving timeline reveal;830 repairs stale
+Missing Nine answer feedback across new puzzles and modes. Together with828
+and831, four disjoint implementation lanes are active. Scopes on WORKBOARD;
+next free round832. Claude819-827 remain untouched.
+
+
 Codex831 adds committed clue/answer feedback to Guess The Nation;828 covers
 Club Manager celebrations.829-830 reserved while exact disjoint scopes are
 recorded on WORKBOARD. Claude819-827 held. Next free round832.
