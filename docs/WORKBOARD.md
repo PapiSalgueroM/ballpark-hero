@@ -1,7 +1,169 @@
 # Work board
 
+**2026-10-01, Codex806 CLAIMED: F1 Driver committed guess feedback.**
+The actual Board captures the old playing state in a50ms timeout, so a winning
+answer still schedules Wrong guess. Own only src/components/f1-driver/F1DriverBoard.tsx,
+new adjacent F1DriverFeedback.module.css, src/test/f1DriverFeedback.test.tsx and
+scripts/simF1DriverFeedback.mjs. Derive feedback from the accepted new game state,
+keep correct wins free of wrong-guess feedback, and give actual misses one finite
+cue with static reduced motion and cleaned-up timers. Preserve every existing
+makeGuess/hint/give-up/reset action, original hook/data/clues/score/save/share and
+completion. No invented driver data or shared UI changes.805 owns Search separately.
+Verify actual Board and real-hook correct/incorrect/exhausted/hint/restored/reset
+outcomes, exact score/save/share/completion and quiet duplicate/clone paths. Prove
+an effective copied stale-closure control, plus cue/reduced-motion/cleanup controls
+with independent outcomes. Complete native phone/desktop and production App proof.
+Master build spec96/97. Root owns Git/docs/build outputs;803 builder picks this up
+after its final App acceptance.802 finishes measured native corrections in parallel.
+The older immutable413 regression remains pending. All Claude claims stand.
+Claim pushed before application implementation. Next free807.
+
+**2026-10-01, Codex805 CLAIMED: F1 Driver Search keyboard suggestions.**
+The actual search rebuilds its driver array on every render, causing the suggestion
+reset effect to undo ArrowDown. Own only src/components/f1-driver/F1DriverSearch.tsx,
+new F1DriverSearchNavigation.module.css beside it, src/test/f1DriverSearchNavigation.test.tsx
+and scripts/simF1DriverSearchNavigation.mjs. Memoize the existing names for the current
+puzzle, preserve the exact matching/order/ten-result limit/exclusions/raw-name fallback,
+and make keyboard selection visible in the local list with readable44px choices and
+correct combobox semantics. Keep held-key submits quiet and preserve native focus.
+No driver data, puzzle helper, hook, Board, Page, real stats or scoring changes.
+Verify actual component/helper ArrowDown to third choice plus Enter, ArrowUp/Escape,
+query/guessed resets, original ordered matches and exact callback names. Require
+an effective original-array reset control and offscreen-row control with independent
+matching/callback baselines, then320/390/430/1440 native motion contexts and final
+production App proof. Root owns Git/docs/isolated build outputs; builder owns four
+files. Master build spec96/97, original master list F1 game accessibility. Claude700
+metadata,718 rotation and733/734 data remain reserved.802 measured focus correction
+and803 final production acceptance continue. The older immutable413 run is pending.
+This claim is pushed before implementation. Next free806.
+
+**2026-10-01, Codex801 NBA season picker ACCEPTED.**
+Every eligible name-match season is now reachable through explicit ten-season
+expansions using the original helper's order, eligibility and exclusions. Counts
+truthfully distinguish more matches, all shown and no matches. Earlier choice nodes
+stay stable, full names wrap,44px targets have visible focus, and held keys cannot
+activate a newly focused choice. Paging focuses the first new choice with only local
+list scrolling; accepted selection/removal returns search, and pick five focuses
+Score. Search/Score stay near the target and selected rows scroll locally, correcting
+the measured original phone focus outside844px. Original target/RNG, minutes-weighted
+and summed-makes calculation, score, daily save, share and completion stay held.
+
+Ten actual Page/hook/helper outcomes and twelve effective copied unit controls pass.
+The final production CSS eight-context native matrix and eight effective browser
+controls pass, including exact later keys/score36/save/full clipboard/completion,
+strict earlier nodes and233 stationary-Y samples. The final containment guard checks
+both cards and glyphs inside their real list; original truncation and removed-wrap
+copies reproduce actual horizontal clipping, with independent outcome baselines held.
+Ineffective earlier name/outline proof attempts remain preserved and are not credited.
+
+Real app types, two builds, exactlyone-route three-clock capture, all15 artifact
+fences and original simNbaStatLine pass. All188 raw saved pages and all168 URL hashes,
+dates and sitemap rows remain unchanged by801. Two actual production App contexts
+(320 normal,1440 reduced) load untouched JS/CSS/GameNavbar/ticker/Footer/help/boot.
+The original25-page fetch and10000-row floor read10034 distinct fictional REST rows;
+no compiled JS is substituted. Later keys24/2/29/5/33 give the actual helper's59 score,
+exact full daily save/clipboard and one locally intercepted real guest completion.
+Forty-two App action-Y samples are0, new focused choices fit the viewport/local list,
+names/targets fit, and reload makes no save write or second completion. No errors,
+bad HTTP or outward writes. Root inspected the final phone screenshot. Source/HTML/
+assets held and browser/server/copies stopped. The first Copy selector failure is retained.
+
+Receipts: TEMP/dukb-round801-frozen-inputs.json,
+TEMP/dukb-round801-native/report.json and cleanup.json,
+TEMP/dukb-round801-production-app/report.json and cleanup.json,
+TEMP/dukb-round801-production-20261001/production801-preservation-receipt.json,
+production801-type.log, production801-build-final.log,
+production801-fourteen-artifact-and-original-fences.log and production801-boot-fence.log.
+Final entry index-RJY_rKnQ.js,
+SHAade2f40621cb01401fcaefe5a79b10b6ab27873b26765390fc3d252c3c92486d.
+802's separate captured production pipeline and803 final source/native acceptance
+continue;805 is being scouted read-only. Immutable413 still runs on its older scope.
+No complete-current-suite, publication or Google decision claim. Next free805.
+
+**2026-10-01, Codex804 guide record refresh ACCEPTED.**
+The small explicit --refresh /route mode requires an existing converted/frozen
+guide and nonempty actual text for all four parts. It derives only that route's
+record, leaving every section/outline/ratchet/saved-page assertion unchanged.
+Generated F1 refresh changes only the verified clue-four worked score600 to400.
+Generated NHL refresh adds the actual contributor instructions/fictional mechanic
+example and accurate selection tips from794; all original unrelated lines/rules
+remain. All127 other route records hold exactly; record metadata explains refresh.
+No sentence entry was hand edited and no application/data/asset changed.
+
+The full guide guard passes against the finished801 physical gate. All five
+existing effective controls fail exactly their intended section while the other
+sections remain green. Missing/unknown/unfrozen/conflicting-mode requests preserve
+fixture raw bytes and the existing cannot-run exit2 contract. The first TEMP
+verifier's wrong expected exit1 is retained; the corrected refusal receipts prove
+the actual guard contract. The anchor scanner parses485 harnesses and all94
+multiline anchor readers remain normalized. Receipts:
+TEMP/dukb-round804-preservation-receipt.json,
+TEMP/dukb-round804-controls-receipt.json and dukb-round804-anchor-fence.log,
+plus five individual control logs and four refusal-final logs.
+802 will generate only its own revised rank-em record inside its production gate;
+its whole-guide/saved-page gate remains due.801 App acceptance and802/803 native
+work continue. The immutable413 suite still evaluates the older captured records,
+so its result remains due and cannot inherit this repair. Next free805.
+
+**2026-10-01, Codex804 CLAIMED: explicit guide record refresh after verified changes.**
+The unchanged guide-heading guard found stale frozen instructions for accepted794
+NHL contributor controls and799's corrected F1 score. The same original-text fence
+also needs802's deliberately changed submit mechanics. Own scripts/simGuideHeadings.mjs
+and scripts/data/guideHeadingsFrozen.json, limited to a small explicit refresh option
+that requires an existing converted/frozen route and derives its text from the
+actual current guide. Do not hand-edit sentence entries or relax section checks.
+804 refreshes only F1 and NHL;802 owns its rank-em record after its final guide.
+Keep every other route/part unchanged. Verify the full guard and its existing five
+effective negative controls in a finished physical gate, plus invalid/unfrozen route
+refusals and exact semantic fixture preservation. Root owns this isolated integration
+work alongside801/802/803. Frozen413 still audits the older captured guard/records,
+so any expected stale-record failure there remains preserved and reported, never
+credited as current green. All Claude reservations stand. Next free805.
+
+**2026-10-01, Codex800 Emoji Guess feedback ACCEPTED.**
+Committed misses/hints, solved/failed answers, Next and final results now give
+truthful accessible feedback with360/420ms one-shot cues and static reduced motion.
+Native input/Next/Share handoffs use preventScroll and guard held Enter/Space;
+blank/typing/restored/clone/no-op paths stay quiet. Earlier guess/review nodes remain
+stable, full answers wrap, owned controls are44px, and transient status height stays
+reserved. The actual daily hook, bank/picker, dates, normalization, scoring, save,
+completion and share remain unchanged. No invented sports facts were added.
+
+Nine actual Page/hook outcomes and thirteen effective copied controls pass. Mixed
+first/second/third/missed/first outcomes remain290 points and4/5, with exact daily
+state/share and one final completion. Eight strengthened native width/motion contexts
+and four real browser defect controls pass, including live unbroken-name fit,
+strict clone node/animation identity,120 settled-Y observations all0 and full44px
+targets. Copied defects fail their real focus/repeat/text/motion findings while
+independent500-point hook/save/completion runs hold. One test-only HTMLElement
+generic fixes the type gate; its emitted JS remains byte-exact15362 bytes.
+
+The isolated production gate passes real app types, both builds, three-clock capture
+and all15 artifact fences. A wrong unscoped prerender flag was caught and stopped
+inside the scratch gate; all188 raw saved files/ledger/sitemap were verified restored
+before the corrected PRERENDER_ONLY run processed exactlyone route. Final capture
+changes only emoji-guess's saved page and derived ledger row, holding187 other raw
+pages,167 other URL hashes/dates and all168 sitemap URLs. Actual production App
+acceptance covers320 normal and1440 reduced with GameNavbar/ticker/global Footer,
+native focus/text/target/Y checks, exact15 saves/290/4of5/clipboard, one locally
+intercepted real guest completion and quiet reload. Only fictional authored-bank
+HTTP response data was substituted; all compiled behavior and on-disk assets hold.
+Root inspected the final phone image. Browser/server/copies stopped.
+
+Receipts: TEMP/dukb-round800-builder-receipt.json,
+TEMP/dukb-round800-native/report.json and cleanup.json,
+TEMP/dukb-round800-production-app/report.json and cleanup.json,
+TEMP/dukb-round800-production-20261001/production800-preservation-receipt.json,
+production800-restored-baseline.log, production800-prerender-scoped.log,
+production800-fourteen-artifact-fences.log and production800-boot-fence.log,
+TEMP/dukb-round800-owned-copy-receipt.json. Final entry index-BC84AufO.js,
+SHA0a3c2a3dc274f3214ad7af1b925024fd7e63bb403afb7fc286688e24eaf14b12.
+801's separate production gate and802/803 source work continue. The immutable413
+suite through799 plus798 remains running. This is accepted source/production proof,
+not complete-current-suite, Google approval/indexing or publication. Next free804.
+
 **2026-10-01, Codex803 CLAIMED: Name Them All answer feedback and readable reveals.**
-Master Build45/96/97 and historical roadmap45/116 playability slice. The current
+Master Build96/97 and historical roadmap45/116 playability slice. The current
 ListQuiz Page uses color alone for a hit, delayed focus can scroll the page, and
 revealed answer tiles truncate their text. Own only src/pages/ListQuiz.tsx, new
 src/pages/ListQuizFeedback.module.css, src/test/listQuizFeedback.test.tsx and

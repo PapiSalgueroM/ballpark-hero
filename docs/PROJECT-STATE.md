@@ -1,5 +1,69 @@
 # Project state
 
+## IN PROGRESS 2026-10-01: F1 Driver feedback after committed guesses
+
+806 reserves the isolated Driver Board/module/tests/harness to fix wrong-guess
+feedback scheduled after a correct win by the stale playing-state closure. Actual
+miss cues become finite and static for reduced motion; hook/data/actions/score/save/
+share/completion stay held.805 owns Search, disjoint from the Board. Exact scope
+and acceptance are on WORKBOARD.803 finishes production proof before its builder
+starts806.802 native corrections and the older413 regression continue. Next free807.
+
+## IN PROGRESS 2026-10-01: F1 Driver Search keyboard suggestions
+
+805 fixes the actual ArrowDown highlight reset in the isolated search component,
+with local visible selection, readable44px choices, combobox semantics and held-key
+protection. Original names/matching/topten order/exclusions/callback fallback stay
+held. Exact four-file ownership and outcome/control/native/App gates are on WORKBOARD.
+802 corrects a measured focused-target visibility case before its final recapture;
+803 is frozen for production proof. The older413 regression remains running.
+Next free806; all Claude reservations stand.
+
+## ACCEPTED 2026-10-01: NBA Stat Line exposes every matching season
+
+801 adds truthful ten-season expansions, full names/44px focusable controls and
+safe search/Score/paging handoffs. The measured phone offscreen issue is corrected
+with a stable action station and local selected-list scrolling. Original targets,
+calculations, score, save, share and completion remain held. Ten outcomes/twelve unit
+controls/eight final-CSS contexts/eight browser controls, types/two builds/all15
+artifact fences/original helper checks and two actual App contexts pass. All188
+saved pages/all168 URL dates+hashes remain held. Full receipts are on WORKBOARD.
+802 captured production and803 final proof continue;805 is being scouted. Frozen413
+still runs on its older scope, so no complete-suite or publication claim. Next free805.
+
+## ACCEPTED 2026-10-01: generated guide refresh after verified changes
+
+804 adds explicit --refresh for existing converted/frozen guides and updates only
+the accepted F1 score and NHL contributor instruction records. All127 other route
+records and every guard section remain held. Full guard/five effective negative
+controls/four invalid-request refusals/485-harness anchor scanner pass. Exact
+receipts are on WORKBOARD.802 still owns its rank-em record when its production
+capture runs.801 App acceptance and802/803 native work continue; the immutable413
+suite remains running against older captured records. Next free805.
+
+## IN PROGRESS 2026-10-01: guide records after verified gameplay corrections
+
+804 adds an explicit generated refresh for already converted/frozen guides, so
+accepted NHL control instructions and the corrected F1 score can update their
+original-text records without weakening the guide checks. Other entries stay held;
+802 refreshes only its own rank-em record when frozen. Whole guard/negative controls
+and invalid-route refusal remain required.801's types/build/all15 artifact gates
+pass and final native/App proof continues.802/803 build in parallel. The immutable
+413 run continues against its older captured records. Next free805.
+
+## ACCEPTED 2026-10-01: Emoji Guess feedback and keyboard flow
+
+800 adds truthful committed feedback, finite/static motion, full readable answers,
+44px owned controls and safe input/Next/Share handoffs. Original actual daily puzzles,
+scores/saves/share/completion stay held. Nine positives/thirteen unit controls,
+eight strengthened native contexts/four defect controls, real types/two builds,
+three-clock saved-page capture/all15 artifact fences and two actual App contexts
+pass. Exact receipts and the corrected isolated prerender run are on WORKBOARD.
+Only Emoji Guess's saved page/derived URL row changed;187 other raw saved pages
+and167 other URL hashes/dates stay held.801 production and802/803 builders continue;
+the frozen413 regression remains running. Publication/Google decisions remain due.
+Next free804; all Claude reservations stand.
+
 ## IN PROGRESS 2026-10-01: Name Them All readable feedback
 
 803 claims the isolated ListQuiz Page/module/test/harness. Replace color-only hit
