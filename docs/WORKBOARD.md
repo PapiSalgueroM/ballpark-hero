@@ -1,5 +1,44 @@
 # Work board
 
+**2026-10-01, Codex818 ACCEPTED: CFB Dynasty recruiting targeting (D92).**
+Position and minimum-star filters now cover both original recruiting pools, with
+truthful visible/total counts, Reset and distinct no-match/exhausted messages.
+Portal rows show their existing star rating. Full names wrap, changed controls
+and rows have 44px targets, and stable list heights keep filter changes still.
+The original player order, exact-ID signing, NIL, grades/private ability, FR/SO
+classes, generated pools, coordinator controls, save shape and RNG are held.
+Eight actual Board/engine tests pass, including the depth/staff-window state.
+Two effective source-copy controls each fail the intended filter/no-write check
+while the independent original signing/refusal baseline passes. Independent
+code review found no issue. Final untouched App checks pass 305 assertions at
+320px normal and 1440px reduced motion, using an original seeded generated save.
+All twelve native filter/Tab/Reset actions retain scroll Y 180, no filter save
+writes or RNG calls occur, and exact high-school/portal sign states and later
+unaffordable refusal hold. Names, controls and counts fit without overflow;
+page errors, bad responses and external writes are zero. Sources/assets held,
+browser/server stopped, and screenshots inspected. Receipt: C:/Users/antho/
+AppData/Local/Temp/dukb-round818-independent-receipt.json. The first native select
+popup setup failure and earlier healthy Y=0 receipt are retained without credit
+for the final nonzero-scroll claim. Separate observation for a follow-up: the
+phone's signing feed moved scroll Y by 74px; signing layout was not changed here.
+
+The frozen gate is 3f33254e plus the three owned files: real types, two builds,
+one route capture, 21 node guards, explicit simResultMoment and the boot fence
+pass. The runner initially skipped the visual guard; its direct run passed.
+All 1,876 source inputs and 190 saved documents hold content, with only the
+captured CFB document changing line endings. All 170 ledger entries and sitemap
+content hold. Later Release M through 19080fdc was pulled; fresh integrated types
+pass. The production receipt retains its original baseline, not a claim to test
+the later SEO split. D92 is updated in SPEC-RECONCILIATION; region, academics,
+interest and personality remain open. 818 is ready for Claude's next publish.
+
+815-817 are now independently confirmed live in Release M: index-LLYzwt9z.js,
+deployment 3f7786a2, and both compiled Tennis/CBB bundles contain the accepted
+feedback and worked examples. Release L's prior full audit passed 170/170; the
+M verification was a four-fetch sample, not another full crawl. No Google index
+count or AdSense approval is implied. All current Codex claims are released;
+Claude's 819/820 and other reservations remain intact. Next free round: 821.
+
 **2026-10-01 14:15 EDT, desktop Claude lane: Rounds 819 and 820 CLAIMED** (Codex holds 818; the next free number
 for anyone else is **821**). **819** Soccer Career's moral dilemmas look unreachable after age 18 in real play (a
 reviewer drove 60 careers through the page's own screens and saw none, while the engine offers them): reproduce it
