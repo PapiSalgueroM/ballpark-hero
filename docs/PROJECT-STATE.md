@@ -1,5 +1,14 @@
 # Project state
 
+## IN PROGRESS 2026-10-01: Search and Discard stable squads and feedback claimed
+
+793 owns only the Page, new module and focused actual-outcome tests/sim. Fix repeated
+squad remounts, infinite eligible-slot pulses and truncated names; add truthful finite
+committed keep/discard feedback, static reduced motion and reachable native focus.
+Original draft/season/score/share/completion helpers stay intact. Exact ownership and
+acceptance are on WORKBOARD.792 production native/full-node gates continue on a frozen
+clone; publication and Google approval remain separate. All Claude claims stand. Next794.
+
 ## CHECKPOINT 2026-10-01: Aussie Rules source outcomes and controls pass
 
 792 passes14 real engine/hook tests with17 effective copied controls, plus ten actual

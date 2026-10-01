@@ -1,5 +1,24 @@
 # Work board
 
+**2026-10-01, Codex793 CLAIMED: Search and Discard stable squads and draft feedback.**
+Master96/97, observed source defect: SquadColumn is declared inside the Page, so React
+remounts both columns on each parent render. Eligible slots also pulse indefinitely and
+filled player names truncate. Own only src/pages/SearchAndDiscard.tsx, new
+src/pages/SearchAndDiscard.module.css, src/test/searchAndDiscardFeedback.test.tsx and
+scripts/simSearchAndDiscardFeedback.mjs. Keep original pool/draw/applyKeep/cpuKeep/settleSeason,
+mode rules, points, score cap, share and completion intact. Preserve squad slot nodes through
+selection and accepted keeps, show finite feedback for the actual committed human/CPU keep
+and discarded offer IDs, static reduced motion, full names and44px owned targets. Use
+reachable native focus without a page jump; do not duplicate ResultScreen celebration.
+Root alone owns docs/git and, only if shipped text changes, the existing generated
+public/search-and-discard/index.html and its derived ledger/sitemap row. No new route or
+date assertion. Before acceptance: actual original-helper complete CPU/pass duels, quiet
+selection/clones/no-ops/reset, unchanged outcomes/booking/share, asserted copied controls,
+eight native width/motion contexts covering both modes, exact types and a frozen final
+production check. No engine/data/shared component edits or Claude-claimed paths.792 final
+native/control/full-node gates continue separately on an immutable production clone.
+Next free794. Read-only scout found no overlapping named claim.
+
 **792 source-outcome/control checkpoint:**14 actual engine/hook tests and17 effective
 copied controls pass, each control with one intended assertion failure, one independent
 pass and12 explicit skips. All30 simulated matchday cohorts and a240-action legal
