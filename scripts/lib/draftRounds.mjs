@@ -22,7 +22,20 @@
    same rows. The table holds placeholder rows for forfeited selections (their
    "player" is a sentence about the forfeit) and repeated imports of whole
    drafts (2024 and 2025 appear three times over). cleanDraftPicks drops the
-   forfeit rows, then keeps one row per (year, pick), the lowest id.
+   placeholder rows, then keeps one row per (year, pick), the lowest id.
+
+   Round 706. A placeholder is wider than the forfeit sentences: two more rows
+   are sentences about a pick ("Selection moved down 12 spots", 2017 pick 128;
+   a 1978 penalty note at pick 89). Every one of the 77 has no position and no
+   college, and no player row lacks both (measured 2026-09-30), so that is the
+   rule. Both extra rows sit above a real player's id in their slot, so the
+   cleaned rows do not change; the rule stops a placeholder with a lower id
+   from ever winning a slot. Migration 20260930120000 deletes all 77 with the
+   same rule. scripts/simCollegeTables.mjs section 3 holds the rule on the
+   shapes the migration deletes and on a player winning a slot a placeholder
+   holds at a lower id; on a live pull of 2026-10-01 the cleaned rows were
+   26,939 under the old forfeit rule and this one alike, and 26,926 with the
+   migration's deletes replayed (exactly its 13 invented 1977 rows gone).
 */
 
 /** A placeholder row for a forfeited selection, not a player. */
@@ -30,11 +43,18 @@ export function isForfeitRow(row) {
   return /forfeit/i.test(String(row?.player_name ?? ''));
 }
 
-/** Forfeit rows dropped, then one row per (year, pick): the lowest id wins. */
+const blank = v => String(v ?? '').trim() === '';
+
+/** A row that is not a player: a forfeit sentence, or a row with no position and no college. */
+export function isPlaceholderDraftRow(row) {
+  return isForfeitRow(row) || (blank(row?.position) && blank(row?.college));
+}
+
+/** Placeholder rows dropped, then one row per (year, pick): the lowest id wins. */
 export function cleanDraftPicks(rows) {
   const byKey = new Map();
   for (const r of rows) {
-    if (isForfeitRow(r)) continue;
+    if (isPlaceholderDraftRow(r)) continue;
     const year = Number(r.year);
     const pick = Number(r.pick);
     if (!Number.isInteger(year) || !Number.isInteger(pick) || pick <= 0) continue;
