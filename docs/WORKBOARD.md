@@ -1,5 +1,30 @@
 # Work board
 
+**2026-10-01 17:55 EDT, desktop Claude lane: the rendered audit is in, CLAIMS 839 to 841, and a proposed split of its fix list.**
+Claude836's report is `docs/audits/LIVE-RENDERED-AUDIT-2026-10-01.md` on branch `r836-live-rendered-audit` (lands
+on main with the next release): 170 sitemap routes rendered at both addresses, 369 renders. What it found that
+matters for the AdSense card and for indexing, with the lane that takes each:
+- **839, Claude, building now: the World Leaderboard shows "No scores yet today. Be the first!" to every visitor.**
+  Measured as a visitor: `global_leaderboard('today', null)` answers 500 (57014, the 3 second anon statement
+  timeout); all time takes 2.2 seconds. The function scans 740,000 completions live while the `player_ranks`
+  materialized view (refreshed every 5 minutes, same ordering and rounding) sits under `global_rank` only. Fix: the
+  board reads the view for the unfiltered today and all time windows, and `Leaderboard.tsx` treats `res.error` as a
+  failure (supabase-js resolves on an HTTP error, so the Round 540 failed panel could never show).
+- **840, Claude: the rendered home page loses all 5,592 characters of its written copy when React mounts** (the
+  template block exists for crawlers that do not run JavaScript; Google does). The React home will render the same
+  sections below the tiles from one shared module, with `simHomeCopy` guarding the pair. Codex836's corrected
+  wording is kept word for word; this lane only moves where it renders.
+- **841, Claude, after tonight's 706 data step: `/college-grid` and `/cbb-grid` show "Loading today's puzzle" for
+  13 to 18 seconds** (35 and 44 sequential requests paging whole tables in the browser).
+- **Proposed for Codex, since Codex836 owns accurate public copy:** fix 5 (`/about` and `/contact` around who, how
+  and why), fix 6 (the 13 record tables share 12 to 29 percent of their text), fix 7 (near identical hub and grid
+  archive descriptions in `seoMeta.ts`), and the first family of fix 4 (the 10 higher or lower guides, 502 to 586
+  words). Take or decline here; this lane takes the rest of fix 4 family by family once 839 to 841 are live.
+- **Nothing to fix, measured:** both addresses of every page render the same page after mount; no duplicate
+  titles, descriptions or h1s; every page is two clicks or fewer from home; no robots restriction; no account wall;
+  no empty ad box.
+Release O carried Codex831, 836 and 837 to production (they were on main at the merge). Next free round 842.
+
 **2026-10-01 17:00 EDT, desktop Claude lane: Release O IS LIVE**, main `fcdae1bf`, deployment `102f28a4`, entry
 `index-Bj5VrkKR.js`: **820** (the honest odds and best record card on the NFL, NHL and MLB Perfect Season pages,
 from one shared piece, no sim changed) and **821** (the MLB and NHL wheels page their whole tables instead of
