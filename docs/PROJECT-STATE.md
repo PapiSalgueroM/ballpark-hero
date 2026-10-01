@@ -1,5 +1,58 @@
 # Project state
 
+## IN PROGRESS 2026-09-30: four-agent Codex batch 764 through 767
+
+764 Soccer Career training feedback and 765 NBA/NHL/F1 lineup targeting have stable app source,
+with focused tests in progress. 766 adds finite Mystery Box card/slot feedback. Root's 767 fixes
+the draft voting panel mutating its supplied roster during MVP sorting, then adds a finite winner
+cue. All four tasks have pushed exact file ownership before edits. Existing engines, data and
+Claude's release work remain outside this batch. Completed 760 through 763 are source-ready on
+main, pending Claude's next publish. Next unclaimed number is 768.
+
+## IN PROGRESS 2026-09-30: Codex 764 and 765, next gameplay batch
+
+Four completed rounds 760 through 763 are pushed on main through `d8943be7`, ready for Claude's
+next release. Final 761 browser rerun passed all eight cases against the finished 763 artifact;
+its coverage audit finds all 128 registered challenge paths mounting the receiving common navbar.
+Bespoke result surfaces still keep broad D121 partial. Root continues with claimed 764 Soccer
+Career training feedback and 765 NBA/NHL/F1 Perfect Lineup picker targeting. Ownership and
+acceptance are recorded on WORKBOARD before source edits. No publication claim for this batch.
+
+## BUILT 2026-09-30: Codex rounds 760 through 763 complete, ready for Claude's next publish
+
+760: persistent territory inspection across all five Conquest maps. 761: public-score challenge
+URLs and dismissible receiving results. 762: active-time pause/resume in Free Kick and Buzzer
+Beater, with safe charging and keyboard routing. 763: finite committed Fantasy Draft pick feedback.
+These add game functionality and motion without new sports data, engine outcomes or account writes.
+
+Final isolated production build and exact app type gate pass. All fifteen built-site fences pass;
+thirteen scoped source harnesses plus the full existing simDrillMotion browser harness pass.
+Fifty-three rendered tests and all nineteen asserted controls pass for the four rounds. Browser
+receipts cover eighty five-sport map cases plus twenty final CSS checks, eight sharing cases,
+eight draft cases, sixteen full arcade contexts and eight final input-guard contexts. Paired daily
+runs preserve identical scores with exactly one save/completion. Full evidence/fixture limits are
+on WORKBOARD. Broader suite and release publishing stay with Claude. Source-only 760 through 763
+are queued for the next publish; 741 through 759 are already live in Release G. No root dist/public
+or personal browser interaction. Next unclaimed number: 764.
+
+## BUILT 2026-09-30: Codex gameplay rounds 760, 761 and 763, final 762 acceptance underway
+
+The six earlier Codex rounds 754 through 759 are now live in Release G. Root independently checked
+the live index-D1UqICV9.js entry and both 320px arcade help triggers: 44px, in the title header,
+clickable, and returning focus after dismissal. Earlier source-only notes below are historical.
+
+760 adds persistent touch/keyboard territory details across five Conquest maps (nine rendered
+tests, three controls, 80 browser combinations). 761 adds public-score challenge URLs and a
+dismissible receiving result (24 rendered tests, six controls, eight browser combinations).
+763 adds finite committed draft pick feedback, with quiet empty rows and static reduced motion
+(four rendered tests, two controls, eight browser combinations). Full per-round proof and fixture
+limits are on WORKBOARD. Exact app types, isolated production build and all fifteen built-site
+fences pass. The final rebuild will include the normalized shared-result lookup and a reviewed
+arcade keyboard guard. 762 pause/resume already passes 405 browser checks, 112 actual shots and
+four paired daily records with unchanged scores and one save/completion per run. Focused link and
+role-button keys are receiving the same input guard before final acceptance. 760 through 763
+are source-only until Claude publishes the next release. Root dist/public and accounts untouched.
+
 ## LIVE 2026-09-30: Release G (652, 654, 655, 656, 710, 712, 713, 714, 715, 716, 717, 720, 729, 731, 742, 743, 745), main `ee67e2e3`
 
 Assembled by the desktop Claude lane in the gate clone (`release-g`, the root checkout of

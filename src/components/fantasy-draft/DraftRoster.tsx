@@ -1,6 +1,7 @@
 import { cn } from '@/lib/utils';
 import { User, Bot } from 'lucide-react';
 import type { DraftPlayer } from './PlayerPool';
+import motion from './DraftRosterMotion.module.css';
 
 const POS_COLORS: Record<string, string> = {
   GK: 'text-amber-400',
@@ -42,8 +43,12 @@ const RosterColumn = ({
         return (
           <div
             key={i}
+            data-draft-slot={i + 1}
+            data-draft-pick={isLastPick ? 'latest' : p ? 'settled' : 'empty'}
             className={cn(
               'flex items-center gap-2 px-2 py-1.5 rounded-lg text-left transition-all duration-500',
+              motion.row,
+              isLastPick && motion.pick,
               p
                 ? isLastPick
                   ? 'bg-primary/20 border border-primary/40'
@@ -59,7 +64,7 @@ const RosterColumn = ({
                 <span className={cn('text-[9px] font-bold w-6 shrink-0', POS_COLORS[p.position])}>
                   {p.position}
                 </span>
-                <span className="text-xs sm:text-sm font-semibold text-foreground truncate flex-1">
+                <span className="text-xs sm:text-sm font-semibold text-foreground truncate flex-1" title={p.name}>
                   {p.name}
                 </span>
                 <span className="text-[10px] text-primary font-semibold shrink-0">
