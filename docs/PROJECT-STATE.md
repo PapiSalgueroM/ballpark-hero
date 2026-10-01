@@ -1,5 +1,36 @@
 # Project state
 
+## LIVE 2026-10-01: Release M (700, the seoMeta split), main `efe1a8cd`
+
+Assembled by the desktop Claude lane in the gate clone (`release-m`) and shipped alone, because the round
+restructures how every page gets its title and description. **douknowball.com is serving it:** deployment
+`3f7786a2`, called only after `get_project` showed `latest_commit_sha` `efe1a8cd`; the live entry moved from
+`index-dSiH_yGf.js` to `index-LLYzwt9z.js`. Proof by content: the x-deployment-id header read 3f7786a2 90 seconds after the deploy; the live entry chunk names 32 seoMetaPart chunks and the first answers 200 at 754 bytes; /club-manager, /deadline-day, /dart-draft and /soccer-career each serve their own title.
+
+- **700, a game page loads only its own SEO entry.** Every game page used to load the title and description table
+  for all 132 games. The table is now split into 32 parts with a loader, and `src/data/seoMeta.ts` stays the one file
+  anyone edits (the runtime never imports it; the build generates the parts from it). Measured on three builds
+  each, main against the branch, gzipped JavaScript: Club Manager 637.4K to 629.1K, Soccer Career 709.9K to 702.0K,
+  Stadium Tycoon 290.2K to 281.8K, NFL My Career 403.6K to 395.1K, Deadline Day 663.6K to 655.1K, about 8K off every
+  game page; the home page and the leaderboard pay 0.6K for the part loaders. Nothing a crawler reads changed:
+  `simSeoMetaSplit` draws 170 pages from the split build and compares every head field with the saved pages, and
+  its section 4 reads main's table and proves all 132 routes serve the same title and description from the parts
+  and from the built chunks (it went red on exactly `/deadline-day`, `/sports-bingo` and `/nhl-gauntlet-draft` when
+  run against a build made before Release K was merged in, which is the case it exists for). Controls `lostentry`,
+  `staledesc`, `extraentry`, `wrongpart`, `savedcanon`.
+- **Budgets came down** in `sweepWeight` to the measured figures plus 2K to 4K: Club Manager 633, Soccer Career 706,
+  Stadium Tycoon 284, Wonderkid Factory 263, Minefield 280, Footle 326, NFL My Career 398, NFL Front Office 304,
+  Soccer Grid 302. The home page rises to 229 (226.6K measured).
+- **One saved page redrawn:** `/dart-draft`, whose saved head had its tags in a different order from what every
+  build draws (same fields, same length; Release K's prerender flipped it, not this round).
+- **Known and left:** moving between pages inside the app shows the page's own title with no Game structured data
+  until its part has loaded; crawlers never see that state.
+
+**Gates.** Type gate 0. `simSeoMetaSplit` full (170 pages) and static (132 routes) green; 18 snapshot and release
+fences green; `sweepWeight` green on the lowered budgets; `playHomeFold` and `playSoftFourOhFour` green;
+`playRenderStability` green on `/dart-draft`. The round was built, reviewed (no majors, seven minors, five fixed)
+and re-merged onto today's main by agents; the lead merged, built and gated it here.
+
 ## CLAIMED 2026-10-01: CFB recruiting filters (818)
 
 Finish the CFB targeting part of D92 using the existing CBB pattern: position,
