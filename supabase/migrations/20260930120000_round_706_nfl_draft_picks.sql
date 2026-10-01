@@ -52,9 +52,11 @@
 --   inserts them from both sources (docs/audits/college-tables-2026-09-30.md has the record). The
 --   other 43 rows of the tail match both sources. Deleting the 13 leaves 1977's tail 43 rows for 56
 --   picks, so step 3's one row per pick condition fails for 1977 and its 43 rows get round NULL (known
---   not to be the first round, not guessed), the same treatment as 1982. Eight of the 13 sat in the
---   College Grid key as draft-only entries (scripts/data/collegeGridPlayers.json, "draft:1977-320" and
---   the rest), so that key and nfl_grid_players are both regenerated after this lands.
+--   not to be the first round, not guessed), the same treatment as 1982. All 13 sit in the College
+--   Grid key as draft-only entries (scripts/data/collegeGridPlayers.json, "draft:1977-280",
+--   "draft:1977-281" and "draft:1977-320" to "draft:1977-331", counted 2026-10-01), and the College
+--   Grid accepts them as answers until the key is reloaded, so that key and nfl_grid_players are both
+--   regenerated after this lands.
 --
 -- STEP 3, ROUNDS. The scrape saved an unparsed round as 1. Rounds 2 and later are internally
 --   consistent, so where round two starts is where round one ends, and a row filed round 1 at a pick
@@ -112,7 +114,8 @@
 -- AFTER THIS LANDS. cleanDraftPicks returns the same rows minus exactly the 13 invented ones, with the
 -- same round one boundaries (measured 2026-10-01 on a read only pull with steps 1, 2 and 2b replayed in
 -- memory: 26,939 cleaned rows before, 26,926 after, the 13 ids above lost, none gained, 0 boundaries
--- moved), so the College Grid key loses its eight 1977 draft-only entries and nothing else:
+-- moved), so the College Grid key should lose its 13 1977 draft-only entries (the 13 picks in step
+-- 2b) and nothing else; check the regenerated key's diff for exactly those 13 ids:
 -- regenerate scripts/data/collegeGridPlayers.json and reload public.college_grid_players from it.
 -- scripts/genNflGridData.mjs --check will differ: the triple loads defeated its "exactly one row" rule
 -- for 2024 and 2025 draftees, and the derived rounds change draft_round for the late picks it copied

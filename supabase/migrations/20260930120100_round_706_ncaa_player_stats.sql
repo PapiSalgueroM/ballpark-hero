@@ -28,11 +28,15 @@
 -- Marshall and Rutgers fall below 10 on some achievement (they reached 10 only through rows counted
 -- twice), so the pool goes from 106 schools to 103 and every daily board from the day this lands is
 -- dealt from the smaller pool. Step 2 alone moves nothing (measured).
---   APPLY AT 00:00 America/New_York, so no board changes in the middle of a day, and TOGETHER WITH
---   Round 653's regenerated grid archive: scripts/simGridArchive.mjs checks that every school in the
---   archive's recorded pool is still eligible, and it will list those three until the archive
---   records the pool this file leaves. The archive also lists "_ Eldredge" as an answer
---   (2026-08-24), which this file deletes.
+--   APPLY AT 00:00 America/New_York, so no board changes in the middle of a day. HOLD IT until a
+--   round owns the College Basketball Grid archive's side of it. Round 653's archive is already live
+--   (Release J, origin/main 84d81619) and records the 106 school pool; the pool is indexed by
+--   position, so from the day this lands the live game deals different boards for the dates that
+--   archive shows, and scripts/simGridArchive.mjs section 5 goes red listing UNC Greensboro, Marshall
+--   and Rutgers. Nothing on Round 706's branch regenerates or re-pins that recorded pool, so whoever
+--   applies this file regenerates or re-pins the archive in the same 00:00 step, or leaves this file
+--   unapplied. The archive also lists "_ Eldredge" as an answer (2026-08-24), which this file
+--   deletes. cbb_programs (20260930120400) does not depend on this file and can go first.
 --
 -- FAILS CLOSED. Every count is checked against the constant it was measured at; any difference
 -- raises, and the whole block changes nothing.

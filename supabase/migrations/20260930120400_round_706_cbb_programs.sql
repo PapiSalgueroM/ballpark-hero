@@ -33,7 +33,8 @@
 -- the rows it hides. The daily pick is pool[date % pool.length] over the rows ordered by id, and the
 -- page keeps that index over the rows as they arrive (a twin's slot deals its kept row), so the code
 -- moved no daily; this file shortens the pool from 281 to 278 and so moves the daily once, which is
--- why it is applied at 00:00 America/New_York, together with the ncaa migration and Round 653.
+-- why it is applied at 00:00 America/New_York. It touches cbb_programs only, so it does not wait for
+-- the ncaa migration (20260930120100) or the College Basketball Grid archive.
 --
 -- FAILS CLOSED. Every statement checks the value it replaces; any difference raises, and nothing
 -- changes.
