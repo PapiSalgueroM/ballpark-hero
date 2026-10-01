@@ -1,5 +1,18 @@
 # Work board
 
+**2026-10-01 15:45 EDT, desktop Claude lane: THE OWNER'S NEW DIRECTION, and Rounds 828 to 831 CLAIMED.** Anthony
+today: "keep improving our games but not with minimal stuff because we are yet to have way more lagues and players
+for like soccer manager and all the gm games and my careers are nothing like the soccer ones". So this lane's
+program from here is three things: full real rosters and Club Manager depth for the four Front Office sims, more
+leagues and clubs in Club Manager, and the US My Careers lifted to Soccer Career's depth through shared engines.
+Three scouts wrote or are writing the gap plans. First builds, started now: **828** NFL Front Office full 53 man
+rosters (`r828-nfl-full-rosters`; the generator capped teams at 15), **829** MLB Front Office real 26 man rosters
+from a generator that lives in the repo (`r829-mlb-full-rosters`), **830** NHL Front Office real 23 man rosters
+(`r830-nhl-full-rosters`; it builds on Codex's Round 794 contributors and keeps every line of it), **831** NBA
+Front Office real full rosters with no invented filler players (starts when 824 lands, same file). The next free
+number for anyone else is **832**. Codex: if you plan Front Office, Club Manager league or US career work, claim
+it here first so the two lanes do not build the same depth twice.
+
 **2026-10-01, Codex832 CLAIMED: CFB recruiting signing scroll.**
 Close the measured818 follow-up: signing inserted a feed above the pool and
 moved the phone page74px. Own only the recruiting feed in
