@@ -28,9 +28,12 @@
 import {
   playNextEntry, fixtureFor, entryInvolvesMe, careerLeagueOf, CUP_LABELS, UCL_LABELS,
   cupProgressRank, uclProgressRank, objectiveStatuses,
+  /* Round 783: the mid season takeover an accepted application walks into. */
+  startCareer, interimManagerName,
 } from '@/lib/clubManager';
-import type { CareerState, CalendarEntry, Competition, FormResult, MatchWeekReport } from '@/lib/clubManager';
-import { CM_BASE_YEAR } from '@/lib/clubManagerEras';
+import type { CareerState, CalendarEntry, Competition, FormResult, MatchWeekReport, PlayerMessage } from '@/lib/clubManager';
+import { CM_BASE_YEAR, DEFAULT_ERA_ID, eraById, isHistoricEra } from '@/lib/clubManagerEras';
+import { closeOnJoiningNow, jobHuntOf, leavingLine } from '@/lib/clubManagerJobHunt';
 
 /* ================================================================== */
 /* Dates                                                              */
@@ -679,16 +682,7 @@ export function startMidSeason(career: CareerState, entry: MidSeasonEntry): Care
   if (!total) return career;
   /* Never the very end: a takeover with nothing left to play is not a game. */
   const target = Math.max(1, Math.min(total - 3, Math.round(total * MIDSEASON_ENTRY[entry].fraction)));
-  let s = career;
-  let guard = 0;
-  while (s.week < target && guard < 400) {
-    guard += 1;
-    const before = s.week;
-    const run = simToWeek(s, target);
-    s = run.state;
-    if (run.halt === 'seasonOver') break;
-    if (s.week <= before) break;   /* no progress: stop rather than spin */
-  }
+  const s = playRunIn(career, target);
   /* The handover. Everything cleared here belonged to the manager before you. */
   return {
     ...s,
@@ -715,6 +709,140 @@ export function startMidSeason(career: CareerState, entry: MidSeasonEntry): Care
        clubManager cycle this file already lives with stays evaluation safe. */
     handover: handoverFrom(s),
   };
+}
+
+/**
+ * The run-in under the previous manager, to `target`. Shared by the Round 549
+ * takeover above and the Round 783 one below, so the two cannot drift apart.
+ */
+function playRunIn(career: CareerState, target: number): CareerState {
+  let s = career;
+  let guard = 0;
+  while (s.week < target && guard < 400) {
+    guard += 1;
+    const before = s.week;
+    const run = simToWeek(s, target);
+    s = run.state;
+    if (run.halt === 'seasonOver') break;
+    if (s.week <= before) break;   /* no progress: stop rather than spin */
+  }
+  return s;
+}
+
+/* ---------- Round 783: walking into the job you applied for, today ---------- */
+
+/**
+ * The club that said yes to your application, joined now. This is the Round
+ * 549 takeover run from inside a career rather than from the picker: the new
+ * club's season is opened in THIS save's world (same world year, same
+ * pyramid, this season's European field, see SeasonWorld) and played forward
+ * under the manager before you to the same point of the season you are
+ * leaving, then everything that is yours as a manager is carried across and
+ * everything that was the old club's stays behind.
+ *
+ * What is honestly NOT carried: the table you were watching. The new club's
+ * league to date is simulated, which includes your old club's results if it
+ * shares the league, and the copy on the Manager panel says so. Keeping the
+ * old table would have meant transplanting a club into a half played season
+ * it never played, which is the limit the wilderness header already names.
+ *
+ * Yours and carried: the season number and world year, the career record and
+ * the clubs managed, the trophies and the history, the created manager, the
+ * XP, the national team job, the start options, the head to head, the
+ * retired list, the save's league memberships. The club's and left behind:
+ * the squad, the money, the facilities, the staff, the books, the sponsor,
+ * the academy, the promises, the created club itself. Null when nothing is
+ * waiting on you or the club is not in this world.
+ */
+export function joinClubNow(career: CareerState): CareerState | null {
+  const hunt = jobHuntOf(career);
+  const open = hunt.open;
+  if (!open || open.status !== 'accepted' || career.sacked) return null;
+  const club = open.club;
+  const from = career.clubName;
+  const eraId = career.eraId ?? DEFAULT_ERA_ID;
+  const historic = isHistoricEra(eraId);
+  const eraBase = historic ? eraById(eraId).startYear : CM_BASE_YEAR;
+  const yearsOn = Math.max(0, (career.startYear ?? CM_BASE_YEAR) + career.season - 1 - eraBase);
+  let fresh: CareerState;
+  try {
+    fresh = startCareer(club, eraId, undefined, career.manager, {
+      yearsOn,
+      uclField: career.uclField ?? null,
+      keepLeagueOverrides: true,
+    });
+  } catch {
+    return null;
+  }
+  if (fresh.clubName !== club) return null;
+  /* The same point of the season, by share of the calendar: the two leagues
+     need not be the same length. Never the very end, the Round 549 rule. */
+  const total = fresh.calendar.length;
+  const frac = career.calendar.length ? career.week / career.calendar.length : 0;
+  const target = Math.max(1, Math.min(total - 3, Math.round(total * frac)));
+  const s = playRunIn(fresh, target);
+  const interim = interimManagerName(from, career.season, career.week);
+  const reaction: PlayerMessage = {
+    id: `msg-${career.season}-${s.week}-join783`,
+    playerName: `The ${from} board`,
+    from: `The ${from} board`,
+    playerId: '',
+    kind: 'jobApplication',
+    text: leavingLine(from, club, 'now', interim),
+    options: [],
+    week: s.week,
+    resolved: 'The door shut behind you.',
+  };
+  const managers = { ...(s.managers ?? {}) };
+  delete managers[club];
+  /* Your old club is in your new league: its dugout is the interim's now.
+     Anywhere else it has left the record, which only ever describes the
+     league you are in (Round 310). */
+  if (s.leagueClubs.includes(from)) managers[from] = { name: interim, since: career.season };
+  const managed = new Set(career.careerStats.clubsManaged ?? [from]);
+  managed.add(club);
+  const joined: CareerState = {
+    ...s,
+    sacked: false,
+    approach: null,
+    pendingMove: null,
+    wilderness: null,
+    live: undefined,
+    teamTalk: null,
+    pendingSummary: null,
+    promisedStarts: [],
+    /* A new appointment's mandate, the same opening the rollover gives a move. */
+    boardConfidence: 62,
+    season: career.season,
+    startYear: career.startYear,
+    eraId: career.eraId,
+    trophies: career.trophies,
+    history: career.history,
+    careerStats: { ...career.careerStats, clubsManaged: [...managed] },
+    manager: career.manager,
+    managerXp: career.managerXp,
+    nationJob: career.nationJob,
+    startOptions: career.startOptions,
+    h2h: career.h2h,
+    retiredNames: career.retiredNames,
+    retiredLastSummer: career.retiredLastSummer,
+    leagueOverrides: career.leagueOverrides,
+    managers,
+    inbox: [reaction],
+    aiHeadlines: [
+      `🧳 You have left ${from} for ${club} with the season still running. ${interim} takes charge at ${from} until the summer.`,
+      ...s.aiHeadlines,
+    ].slice(0, 8),
+    jobHunt: closeOnJoiningNow(hunt, from, interim, career.season, s.week),
+    /* Round 633's rule: what the manager before you had banked, frozen here
+       so the season score reads only the games you pick a team for. */
+    handover: handoverFrom(s),
+  };
+  /* The created club lived exactly as long as you managed it (Round 154). */
+  delete joined.customClub;
+  delete joined.customValues;
+  delete joined.founderWageRoom;
+  return joined;
 }
 
 /**
