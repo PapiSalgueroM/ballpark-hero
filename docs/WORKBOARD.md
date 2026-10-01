@@ -1,5 +1,48 @@
 # Work board
 
+**2026-10-01, Codex801 NBA season picker ACCEPTED.**
+Every eligible name-match season is now reachable through explicit ten-season
+expansions using the original helper's order, eligibility and exclusions. Counts
+truthfully distinguish more matches, all shown and no matches. Earlier choice nodes
+stay stable, full names wrap,44px targets have visible focus, and held keys cannot
+activate a newly focused choice. Paging focuses the first new choice with only local
+list scrolling; accepted selection/removal returns search, and pick five focuses
+Score. Search/Score stay near the target and selected rows scroll locally, correcting
+the measured original phone focus outside844px. Original target/RNG, minutes-weighted
+and summed-makes calculation, score, daily save, share and completion stay held.
+
+Ten actual Page/hook/helper outcomes and twelve effective copied unit controls pass.
+The final production CSS eight-context native matrix and eight effective browser
+controls pass, including exact later keys/score36/save/full clipboard/completion,
+strict earlier nodes and233 stationary-Y samples. The final containment guard checks
+both cards and glyphs inside their real list; original truncation and removed-wrap
+copies reproduce actual horizontal clipping, with independent outcome baselines held.
+Ineffective earlier name/outline proof attempts remain preserved and are not credited.
+
+Real app types, two builds, exactlyone-route three-clock capture, all15 artifact
+fences and original simNbaStatLine pass. All188 raw saved pages and all168 URL hashes,
+dates and sitemap rows remain unchanged by801. Two actual production App contexts
+(320 normal,1440 reduced) load untouched JS/CSS/GameNavbar/ticker/Footer/help/boot.
+The original25-page fetch and10000-row floor read10034 distinct fictional REST rows;
+no compiled JS is substituted. Later keys24/2/29/5/33 give the actual helper's59 score,
+exact full daily save/clipboard and one locally intercepted real guest completion.
+Forty-two App action-Y samples are0, new focused choices fit the viewport/local list,
+names/targets fit, and reload makes no save write or second completion. No errors,
+bad HTTP or outward writes. Root inspected the final phone screenshot. Source/HTML/
+assets held and browser/server/copies stopped. The first Copy selector failure is retained.
+
+Receipts: TEMP/dukb-round801-frozen-inputs.json,
+TEMP/dukb-round801-native/report.json and cleanup.json,
+TEMP/dukb-round801-production-app/report.json and cleanup.json,
+TEMP/dukb-round801-production-20261001/production801-preservation-receipt.json,
+production801-type.log, production801-build-final.log,
+production801-fourteen-artifact-and-original-fences.log and production801-boot-fence.log.
+Final entry index-RJY_rKnQ.js,
+SHAade2f40621cb01401fcaefe5a79b10b6ab27873b26765390fc3d252c3c92486d.
+802's separate captured production pipeline and803 final source/native acceptance
+continue;805 is being scouted read-only. Immutable413 still runs on its older scope.
+No complete-current-suite, publication or Google decision claim. Next free805.
+
 **2026-10-01, Codex804 guide record refresh ACCEPTED.**
 The small explicit --refresh /route mode requires an existing converted/frozen
 guide and nonempty actual text for all four parts. It derives only that route's
