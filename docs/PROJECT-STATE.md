@@ -1,5 +1,28 @@
 # Project state
 
+## ACCEPTED 2026-10-01: MLB reveal timer ownership
+
+810 prevents abandoned guesses from awarding points or skipping rounds after a
+reset, protects a newer reveal's full duration and clears timers on unmount.
+Original rules, pairs, RNG, timing and exact 325-point Daily/Unlimited games hold.
+Ten outcomes/eight effective controls and two production App contexts (263 checks)
+pass, including exact saves/full share/one completion/quiet reload. Combined types,
+build, all artifact guards and full NoDoubleRecord pass. Evidence is on WORKBOARD.
+807/809/810 are accepted. 811-813 continue; all Claude claims stand. Next free 814.
+
+## ACCEPTED 2026-10-01: player-search failures and stale requests
+
+809 exposes failed empty lookups with a retry message, preserves useful matches
+and invalidates cleared searches. All 48 focused/existing tests, seven effective
+controls, native checks and two untouched production Puck Detective contexts pass.
+Failed searches consume no guesses or saves; exact selection, clue feedback and
+quiet reload hold. Combined production and artifact gates pass. Receipts and
+limits are on WORKBOARD. 810 acceptance and 811-813 continue.
+
+Lovable is available but not installed here. Desktop tab selection failed after
+one recovery, so no publish occurred. The integration was suggested; code work
+continues independently. Live publication and Google decisions remain separate.
+
 ## ACCEPTED 2026-10-01: accurate F1 Driver clues, hints and help
 
 807 fixes misleading clue categories and hint costs, adds an actual-tier worked

@@ -184,6 +184,7 @@ export function PlayerAutocomplete({
 }: PlayerAutocompleteProps) {
   const [suggestions, setSuggestions] = useState<PlayerEntity[]>([]);
   const [loading, setLoading] = useState(false);
+  const [searchFailed, setSearchFailed] = useState(false);
   const [open, setOpen] = useState(false);
   const [highlightedIndex, setHighlightedIndex] = useState(-1);
 
@@ -202,6 +203,7 @@ export function PlayerAutocomplete({
 
   useEffect(() => {
     if (debounceRef.current) window.clearTimeout(debounceRef.current);
+    setSearchFailed(false);
 
     const normalized = normalizeName(value);
     if (normalized.length < minChars) {
@@ -229,25 +231,29 @@ export function PlayerAutocomplete({
       abortRef.current = controller;
 
       searchPlayers({ ...searchOptions, query: value, signal: controller.signal })
-        .then(({ results }) => {
+        .then(({ results, error }) => {
           // Stale-response guard: ignore results from a request that is no
           // longer the latest one fired (covers out-of-order network
           // resolution, not just cancellation).
           if (thisRequestId !== requestIdRef.current) return;
           setSuggestions(mergeLocal(results));
+          setSearchFailed(Boolean(error));
           setLoading(false);
           setHighlightedIndex(-1);
         })
-        .catch(() => {
+        .catch(error => {
           if (thisRequestId !== requestIdRef.current) return;
           // Remote search failed: the local pool is better than nothing.
           setSuggestions(mergeLocal([]));
+          setSearchFailed(!(error instanceof DOMException && error.name === 'AbortError'));
           setLoading(false);
         });
     }, debounceMs);
 
     return () => {
       if (debounceRef.current) window.clearTimeout(debounceRef.current);
+      ++requestIdRef.current;
+      abortRef.current?.abort();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value, optionsKey, minChars, debounceMs, localNames]);
@@ -373,10 +379,11 @@ export function PlayerAutocomplete({
 
           {!loading && suggestions.length === 0 && (
             <div
+              role="status"
               className="flex items-center justify-center px-4 text-sm text-muted-foreground"
               style={{ minHeight: MIN_ROW_HEIGHT_PX }}
             >
-              No players found
+              {searchFailed ? 'Could not load players. Try searching again.' : 'No players found'}
             </div>
           )}
 

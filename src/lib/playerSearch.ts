@@ -683,6 +683,8 @@ export async function searchPlayers(options: SearchPlayersOptions): Promise<Sear
       prominenceQuery ?? Promise.resolve({ data: [] as RawRow[], error: null }),
     ]);
 
+    if (signal?.aborted) return { results: [], error: null };
+
     if (ilikeRes.error && prominenceRes.error) {
       return { results: [], error: ilikeRes.error.message || 'Search failed' };
     }
@@ -693,7 +695,8 @@ export async function searchPlayers(options: SearchPlayersOptions): Promise<Sear
       normalizedQuery,
       { exclude, boostNames: options.boostNames, limit },
     );
-    return { results, error: null };
+    const error = ilikeRes.error || prominenceRes.error;
+    return { results, error: results.length === 0 && error ? error.message || 'Search failed' : null };
   } catch (err) {
     if (err instanceof DOMException && err.name === 'AbortError') {
       return { results: [], error: null };

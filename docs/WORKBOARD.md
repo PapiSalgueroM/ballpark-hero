@@ -1,5 +1,57 @@
 # Work board
 
+**2026-10-01, Codex810 ACCEPTED: MLB reveal callbacks belong to their round.**
+Mode and Hard resets now cancel the owned reveal timer. A generation check rejects
+old callbacks, and unmount clears the timer. Restarting can no longer inherit an
+abandoned guess's points/round, or have a newer reveal cut short. Original pairs,
+RNG calls, ties, 2000ms reveal, immediate daily saves and scoring stay unchanged.
+
+Ten real-hook outcomes and eight effective copied controls pass, including exact
+ten-round Daily and Unlimited 325-point baselines and tracked timer cancellation.
+Independent review is clear. The merged type/build/all artifact gates and full
+NoDoubleRecord pass, resolving the prior MLB teardown symptom on this new scope.
+Two final production App contexts pass 263 checks with the original 55-player
+bank and untouched JS. Native picks, abandoned mode/Hard resets, overlapping old
+and new reveals, all ten exact saves, full share, one locally fulfilled guest POST,
+local plays 1/points 325 and quiet reload pass. No errors or observed overflow.
+Three exact SELECT-only RPC POSTs are locally fulfilled as reads; all unrelated
+POSTs remain rejected. Earlier selector/RPC-classification attempts are retained
+without acceptance credit. Source/assets held; browser/server stopped, screenshots
+inspected. Receipts: C:/Users/antho/AppData/Local/Temp/
+dukb-round810-mlb-reveal-diagnosis/builder-receipt.json, app-report.json,
+app-cleanup.json and app-final.txt. No publication claim.
+807/809/810 are accepted; 811-813 proceed. Next free 814.
+
+**2026-10-01, Codex809 ACCEPTED: truthful player-search failures.**
+Empty lookups with a failed applicable request now show a retry message instead
+of claiming no player exists. Useful direct, fallback and local results keep
+their original ranking and exact selection. Cleared or replaced searches cancel
+and invalidate pending requests, so stale rows cannot return. No database changes.
+
+All 11 new and 37 existing identity/interaction tests pass, with seven effective
+copied controls and independent original outcomes. Eight native contexts and
+three browser copies pass after strengthening current-response readiness. Two
+final production Puck Detective contexts use untouched JS and 220 fictional GET
+fixture rows satisfying the original pool floor. Each checks three failed lookup
+paths without spending a guess, then exact nonfirst selection/clue feedback/one
+daily save and quiet reload. Twelve actions have no Y change or overflow; retry
+text is fully visible in 44px rows. Errors and outward writes are zero. Sources,
+HTML and assets held; browser/server stopped and phone screenshot inspected.
+
+Combined types/build/all 15 artifact guards and affected regressions passed in
+the frozen 807 gate. Original 413-suite accented lookup failure remains historical
+with unknown HTTP cause; this fix addresses the independently reproduced hidden
+request failure. Receipts: C:/Users/antho/AppData/Local/Temp/
+dukb-round809-final-source-receipt.json, dukb-round809-native/report.json,
+dukb-round809-production-app/report.json and cleanup.json.
+810 acceptance follows; 811-813 continue. Next free 814.
+
+Publishing update: Lovable was found available but not installed in this session;
+installation was suggested without interrupting code work. The desktop Edge
+attempt could not reliably select the existing Lovable tab: first geometry was
+unavailable, then the refreshed element was missing from cached app state.
+No publish or account action occurred. Live still needs a verified publish.
+
 **2026-10-01, Codex807 ACCEPTED: accurate F1 Driver clues, hints and help.**
 Hint buttons show the original next payout, counters report the actual hint count,
 and numbered clue headings replace incorrect categories without changing a clue.
