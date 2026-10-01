@@ -1,5 +1,15 @@
 # Project state
 
+## ACCEPTED 2026-10-01: MLB reveal timer ownership
+
+810 prevents abandoned guesses from awarding points or skipping rounds after a
+reset, protects a newer reveal's full duration and clears timers on unmount.
+Original rules, pairs, RNG, timing and exact 325-point Daily/Unlimited games hold.
+Ten outcomes/eight effective controls and two production App contexts (263 checks)
+pass, including exact saves/full share/one completion/quiet reload. Combined types,
+build, all artifact guards and full NoDoubleRecord pass. Evidence is on WORKBOARD.
+807/809/810 are accepted. 811-813 continue; all Claude claims stand. Next free 814.
+
 ## ACCEPTED 2026-10-01: player-search failures and stale requests
 
 809 exposes failed empty lookups with a retry message, preserves useful matches

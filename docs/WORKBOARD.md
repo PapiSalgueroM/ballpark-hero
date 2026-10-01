@@ -1,5 +1,27 @@
 # Work board
 
+**2026-10-01, Codex810 ACCEPTED: MLB reveal callbacks belong to their round.**
+Mode and Hard resets now cancel the owned reveal timer. A generation check rejects
+old callbacks, and unmount clears the timer. Restarting can no longer inherit an
+abandoned guess's points/round, or have a newer reveal cut short. Original pairs,
+RNG calls, ties, 2000ms reveal, immediate daily saves and scoring stay unchanged.
+
+Ten real-hook outcomes and eight effective copied controls pass, including exact
+ten-round Daily and Unlimited 325-point baselines and tracked timer cancellation.
+Independent review is clear. The merged type/build/all artifact gates and full
+NoDoubleRecord pass, resolving the prior MLB teardown symptom on this new scope.
+Two final production App contexts pass 263 checks with the original 55-player
+bank and untouched JS. Native picks, abandoned mode/Hard resets, overlapping old
+and new reveals, all ten exact saves, full share, one locally fulfilled guest POST,
+local plays 1/points 325 and quiet reload pass. No errors or observed overflow.
+Three exact SELECT-only RPC POSTs are locally fulfilled as reads; all unrelated
+POSTs remain rejected. Earlier selector/RPC-classification attempts are retained
+without acceptance credit. Source/assets held; browser/server stopped, screenshots
+inspected. Receipts: C:/Users/antho/AppData/Local/Temp/
+dukb-round810-mlb-reveal-diagnosis/builder-receipt.json, app-report.json,
+app-cleanup.json and app-final.txt. No publication claim.
+807/809/810 are accepted; 811-813 proceed. Next free 814.
+
 **2026-10-01, Codex809 ACCEPTED: truthful player-search failures.**
 Empty lookups with a failed applicable request now show a retry message instead
 of claiming no player exists. Useful direct, fallback and local results keep
