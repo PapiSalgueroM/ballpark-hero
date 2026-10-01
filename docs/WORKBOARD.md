@@ -1,5 +1,30 @@
 # Work board
 
+**2026-10-01, Codex802 CLAIMED: Rank 'Em review before locking.**
+Master96 planning/playability slice. The actual fifth pick currently auto-submits
+inside a state updater, leaving no review or correction before the single daily
+action. Own src/pages/RankEm.tsx, new src/pages/RankEmOrder.module.css,
+src/test/rankEmOrder.test.tsx and scripts/simRankEmOrder.mjs. Keep the existing round,
+real data, scramble, date, useDailyPuzzle, scoreRankGuess,200-per-correct-slot,
+share and completion expression unchanged. Five picks become a local editable
+draft until explicit Lock order. Add44px native move up/down/remove controls, honest
+draft state, readable names, stable player/rung nodes, finite/static committed
+feedback and safe focus/repeat handling. Invalid/incomplete/boundary/no-op edits
+must not record, save, complete or change the underlying round/RNG.
+Actual Page/unchanged-hook/helper proof must edit a wrong draft to1000, independently
+lock600 and0, hold exact daily v/date/puzzleIndex/guesses/gameStatus/share and one
+final action/completion, and keep restores/mode flips quiet. Effective copied
+autosubmit/move/bounds/double-lock/focus/names/reduced controls plus eight native
+width/motion contexts must demonstrate real outcomes and independent baselines.
+Root additionally owns only rank-em's affected instruction sentences in
+src/data/gameContent/world.ts, the new required Lock click in only rank-em's driver
+in src/test/noDoubleRecord.test.tsx, and derived rank-em snapshot/ledger/sitemap/search
+generator output. These narrow integration changes preserve other guide sections
+and all other shared completion fixtures/booking assertions. No real stats changed.
+800 source is frozen and its production pipeline restarts after a test-only type
+annotation correction.801 picker work and immutable413 regression remain separate.
+Root owns Git/docs/build. All Claude claims stand. Next free803.
+
 **2026-10-01, Codex801 CLAIMED: NBA Stat Line eligible-season access and focus.**
 Master68/F/96 playability slice. Current name search returns only ten seasons with
 no paging or year-query matching, so later eligible season keys can stay unreachable.
