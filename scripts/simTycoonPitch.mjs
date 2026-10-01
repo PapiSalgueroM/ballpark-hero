@@ -30,14 +30,13 @@
  *         state hashed, or the static formation
  *    with a control each (interval, random).
  *
- * Control copies go to dist/.tycoon-pitch-control-<name>/. Never run this while a
+ * Control copies stay in an owned ignored .sim-control folder. Never run this while a
  * build is running.
  *
  * Run: node scripts/simTycoonPitch.mjs
  */
 import { spawnSync } from 'node:child_process';
 import fs from 'node:fs';
-import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -54,7 +53,8 @@ const abort = m => { console.error(m); process.exit(1); };
 const read = f => fs.readFileSync(f, 'utf8').split('\r\n').join('\n');
 const stripComments = code => code.replace(/\/\*[\s\S]*?\*\//g, ' ').replace(/(^|[^:'"`])\/\/.*$/gm, '$1');
 
-const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'tycoonpitch-'));
+fs.mkdirSync(path.join(ROOT, '.sim-control'), { recursive: true });
+const tmp = fs.mkdtempSync(path.join(ROOT, '.sim-control', 'tycoon-pitch-'));
 const controlDirs = [];
 process.on('exit', () => {
   for (const d of controlDirs) { try { fs.rmSync(d, { recursive: true, force: true }); } catch { /* best effort */ } }
@@ -77,11 +77,19 @@ function runnerFailure(result, report, text, negative) {
   return null;
 }
 
+function intendedRedFailure(row) {
+  if (row.status !== 'failed') return 'the intended outcome did not fail';
+  if (/Test timed out|test timeout|Timeout calling|STACK_TRACE_ERROR|\bRPC\b|Failed to (?:resolve import|load)|Cannot find module|SyntaxError|Transform failed/i.test(row.messages))
+    return 'the intended row contains a runner, timeout or import error';
+  if (!/^\s*AssertionError:/m.test(row.messages)) return 'the intended row did not report an outcome assertion';
+  return null;
+}
+
 function runSuite(env, negative = false) {
   const out = path.join(tmp, `report-${Math.random().toString(36).slice(2)}.json`);
   const r = spawnSync(
     process.execPath,
-    ['node_modules/vitest/vitest.mjs', 'run', ...TESTS, '--reporter=json', `--outputFile.json=${out}`, '--reporter=default'],
+    ['node_modules/vitest/vitest.mjs', 'run', ...TESTS, '--reporter=json', `--outputFile.json=${out}`, '--reporter=default', '--maxWorkers=1', '--no-file-parallelism'],
     { cwd: ROOT, encoding: 'utf8', env: { ...process.env, ...env, CI: '1', FORCE_COLOR: '0', NO_COLOR: '1' }, maxBuffer: 64 * 1024 * 1024 },
   );
   const text = (r.stdout || '') + (r.stderr || '');
@@ -89,6 +97,7 @@ function runSuite(env, negative = false) {
   const report = JSON.parse(fs.readFileSync(out, 'utf8'));
   const rows = [];
   rows.runnerError = runnerFailure(r, report, text, negative);
+  if (rows.runnerError) console.error(text.slice(-6000));
   rows.notes = [...text.matchAll(/PITCH\| (.+)/g)].map(m => m[1].trim());
   rows.loadError = /Failed to load|Cannot find module|Failed to resolve import|SyntaxError|Transform failed/.test(text) ? text.slice(-1500) : null;
   for (const file of report.testResults || []) {
@@ -187,7 +196,7 @@ if (live.notes.length < TEST_COUNT) fail(`the suite printed ${live.notes.length}
 for (const control of CONTROLS) {
   console.log('');
   console.log(`A.${control.name}) negative control: ${control.why}`);
-  const dir = path.join(ROOT, 'dist', `.tycoon-pitch-control-${control.name}`);
+  const dir = path.join(tmp, `control-${control.name}`);
   controlDirs.push(dir);
   fs.mkdirSync(dir, { recursive: true });
   const file = path.join(dir, control.file);
@@ -205,7 +214,11 @@ for (const control of CONTROLS) {
     console.log(`   ${!graded ? '--  ' : row.status === want ? 'ok  ' : 'BAD '} ${row.status.padEnd(6)} ${row.title}`);
     if (control.red.includes(n)) {
       if (row.status !== 'failed') fail(`control ${control.name}: "${row.title}" stayed green, so that check is dead`);
-      else console.log(`         measured: ${detail(row.messages)}`);
+      else {
+        const error = intendedRedFailure(row);
+        if (error) fail(`control ${control.name}: ${error}`);
+        else console.log(`         measured: ${detail(row.messages)}`);
+      }
     }
     if (control.green.includes(n) && row.status !== 'passed') fail(`control ${control.name}: "${row.title}" went red too (${detail(row.messages)})`);
   }

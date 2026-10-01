@@ -293,7 +293,7 @@ export function BudgetBuilderBoard() {
           <p className="mb-3 text-xs text-muted-foreground">Showing {candidates.length} of up to 60 eligible matches, highest value first. Search to narrow the shortlist.</p>
           {choice && <div className={`${styles.wrap} mb-3 rounded-xl border border-primary/40 bg-primary/5 p-3`} data-budget-preview>
             <p className="text-sm font-bold text-foreground">{choice.name}</p>
-            <p className="text-xs text-muted-foreground">{choice.club} · {choice.position} · {choice.nationality}</p>
+            <p className="flex flex-wrap items-center gap-1 text-xs text-muted-foreground">{choice.club} · {choice.position} · <FlagImg name={choice.nationality} size={12} /> {choice.nationality}</p>
             <dl className="mt-2 grid grid-cols-2 gap-2 text-xs">
               <div><dt className="text-muted-foreground">Signing cost</dt><dd>${choice.marketValue}M</dd></div>
               <div><dt className="text-muted-foreground">Replacement refund</dt><dd>${current?.marketValue ?? 0}M</dd></div>
