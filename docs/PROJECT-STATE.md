@@ -1,5 +1,14 @@
 # Project state
 
+## IN PROGRESS 2026-10-01: F1 Driver feedback after committed guesses
+
+806 reserves the isolated Driver Board/module/tests/harness to fix wrong-guess
+feedback scheduled after a correct win by the stale playing-state closure. Actual
+miss cues become finite and static for reduced motion; hook/data/actions/score/save/
+share/completion stay held.805 owns Search, disjoint from the Board. Exact scope
+and acceptance are on WORKBOARD.803 finishes production proof before its builder
+starts806.802 native corrections and the older413 regression continue. Next free807.
+
 ## IN PROGRESS 2026-10-01: F1 Driver Search keyboard suggestions
 
 805 fixes the actual ArrowDown highlight reset in the isolated search component,
@@ -9,6 +18,7 @@ held. Exact four-file ownership and outcome/control/native/App gates are on WORK
 802 corrects a measured focused-target visibility case before its final recapture;
 803 is frozen for production proof. The older413 regression remains running.
 Next free806; all Claude reservations stand.
+
 ## ACCEPTED 2026-10-01: NBA Stat Line exposes every matching season
 
 801 adds truthful ten-season expansions, full names/44px focusable controls and
