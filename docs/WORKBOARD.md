@@ -1,5 +1,75 @@
 # Work board
 
+**2026-10-01, Codex790 source/native checkpoint ACCEPTED.**
+Ten actual-page/shared-autocomplete/helper/daily/completion/streak/storage/share outcomes
+pass. Twelve asserted copied controls each fail one intended assertion with one independent
+unchanged helper/boot/storage/completion pass and eight skips. Stable playerId cards keep
+old nodes, and accepted intent plus exact appended history controls420ms guess/360ms
+attribute cues with600ms cleanup/static reduced motion. Unknown jersey announcements say
+number unknown while the original helper/visual match semantics stay intact. Native AX
+confirms both committed and restored labels. Full names wrap and page-owned controls44px.
+
+Eight width/motion contexts pass831 checks on215c948d utilities and actual compiled module:
+pointer/input Enter/option Enter/Space, exact60 daily score/original saved IDs/share/once
+completion/reload, Unlimited best1 then2, Give Up, quiet restores/modes/difficulty/reset/
+unknown/duplicate/clones, stable nodes/focus/animation identity and finite/static cues.
+Overflow/errors/unexpected external requests0;12 inputs preserved, copies/browser/server
+cleaned and closed port refuses. Both320 screenshots inspected. The first help timing
+probe waited for visible DOM before actual focus settled, is retained and earns no credit;
+the corrected TEMP driver waits for real contained focus before native Escape. Test-only
+ES2020 compatibility fix preserves behavior; final positive/two affected controls/types0
+were rerun. Proof: TEMP/dukb-round790-puck-detective-audit/source-receipt.json,report.json,
+native-final.log and positive/control logs. Root final combined build remains required.
+Root's final current790/791 app type gate also exits0: TEMP/dukb-round791-source-types.log.
+
+**2026-10-01, Codex792 CLAIMED: playable fictional Aussie Rules Manager.**
+Visitor request88fc0a2b asks for an AFL manager. Build a separate Aussie Rules engine,
+not a Club Manager/Rugby League reskin: six clearly fictional clubs,36 generated players
+each, ten home-and-away rounds, eighteen starters/five interchange players, weekly
+training/rest, quarter tactics, break-time bench swaps, exact goals/behinds/totals/ladder
+and resumable local season saves. Finish with a league winner; this short fictional format
+does not claim to reproduce the actual2026 draw/final-ten competition. No real rosters,
+salaries/results/logos/quotes, new account pipeline or ranked-score cap. Record completed
+seasons through the existing hook with undefined score, once; restored finishes stay quiet.
+
+Engine owner: only new src/lib/aussieRulesManager.ts, src/hooks/useAussieRulesManager.ts,
+src/test/aussieRulesManager.test.ts and scripts/simAussieRulesManager.mjs. UI owner: only new
+src/components/aussie-rules-manager/AussieRulesManagerBoard.tsx and its module.css,
+src/pages/AussieRulesManager.tsx, src/test/aussieRulesManagerBoard.test.tsx and
+scripts/simAussieRulesManagerBoard.mjs. Root owns only the new lazy-route/registry entries
+in src/App.tsx and src/data/gameRegistry.ts; new src/data/gameContent/aussieRulesManagement.ts
+plus its exact index/loader registrations; Aussie Rules home link in index.html; one new
+WhatsNew entry; strict new-URL IndexNow floor/control in scripts/simIndexNow.mjs; and generated
+public/aussie-rules-manager/index.html, public/whats-new/index.html, public/sitemap.xml and
+their derived scripts/data/lastmod.json entries. All other files/Claude claims remain held.
+
+Verified match rules: four20 active-minute quarters,6goal/1behind,23 matchday/18 on field,
+five interchange with no substitute, centre throw-ups,4win/2draw ladder points/percentage.
+Changes at quarter breaks are exempt from the75 counted-interchange cap, so the quarter-only
+slice must not show a fake75 counter. Sources:2026 Laws/Regulations and AFL/AFLPA agreement,
+with official URLs/provenance in the new engine/guide. Fictional format/tactic/training math
+must be labeled game rules. Before editing, freeze engine/UI API. Acceptance: seeded replay,
+legal unique teams, exact event scores/schedule/ladder, paired stronger-squad/tactic/fatigue
+outcomes with measured headroom, real save/reload/finish isolation, changed negative controls,
+actual Board callbacks/help before play, eight native width/motion season finishes, phone
+fit/focus/finite-static feedback and final types/build/all15 artifact fences. Keep report open
+until the delivered fictional scope is explicit. No deployment or report write is implied.
+Next free793. Root handles docs/git/build; UI implementation follows791 acceptance.
+
+**791 source/native checkpoint ACCEPTED, final combined build pending:**12 actual-panel
+outcomes and four effective copied controls pass (one intended fail, one original money
+callback pass, ten skips). Original pre-791 code reproduces two exact Tab/return failures
+with one independent callback pass. A real hidden-footer endpoint defect was reproduced
+and fixed locally by checking ancestor visibility and disabled controls with tabindex.
+Eight native width/motion contexts preserve13 apps, original non-first thread/contact
+callbacks and actual helper output. Thread/contact/Market/Shop Back paths focus correctly;
+quiet clones retain nodes/focus. All owned Back/close/replies44px; three close paths return
+the exact opener without page scroll and close once. Overflow/errors/externalHTTP/writes0;
+seven inputs preserved, browser/server closed,320 normal/reduced screenshots inspected.
+Proof: TEMP/dukb-round791-native/report.json,cleanup.json and native.log; copied controls/
+positive/pre-source proof retain their exact source boundaries. The first outside-repo
+fixture resolver failure is preserved and earns no credit. No parent engine/account change.
+
 **2026-10-01, Codex786/787/788/789 final production refresh ACCEPTED.**
 Fresh physical/Git043c59bd checkout passes exact app types, both production builds and
 limited Stat Detective/Clue Auction prerender at all three original clock samples. All15

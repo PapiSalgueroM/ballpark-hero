@@ -1,5 +1,24 @@
 # Project state
 
+## CHECKPOINT 2026-10-01: Puck Detective and phone source/native accepted
+
+790 passes ten real-page outcomes/twelve effective controls/eight native contexts with831
+checks.791 passes twelve actual-panel outcomes/four controls/eight native contexts plus
+original-source reproduction. Current app types0. Detailed source/fixture limits are on
+WORKBOARD; final combined production build remains required.792's separate fictional Aussie
+Rules season is claimed, with verified match rules and clear fictional format. Next free793.
+Claude reservations, published deployment and Google approval remain separate.
+
+## IN PROGRESS 2026-10-01: Aussie Rules Manager visitor request claimed
+
+792 builds a separate playable fictional six-club/ten-round season with verified Aussie
+Rules scoring/teams, weekly squad/training choices, quarter tactics/break swaps, ladder and
+local resume. Exact engine/UI/registration/generated-file ownership is on WORKBOARD. All
+players/clubs are generated and labeled; actual2026 rosters/draw/finals are not claimed.
+Report88fc0a2b stays open.791 phone passes12 outcomes/four controls/eight native contexts
+and original-source reproduction;790's ten outcomes/twelve controls pass and full native
+matrix continues. Final combined build remains required. Next free793; Claude claims stand.
+
 ## CHECKPOINT 2026-10-01: completed game rounds pass final production refresh
 
 786/787/788/789 now pass the frozen043c59bd type/build, limited two-page prerender,
