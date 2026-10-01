@@ -155,23 +155,26 @@
         "Tap a position. The spinner shows which club or national team that slot is locked to.",
         "Type a player from that team who fits. The game verifies the answer before it counts.",
         "Hate an assignment? Reroll it for a different team.",
-        "Fill all 11 slots, review your chemistry links, then submit for the AI rating."
+        "Fill all 11 slots, check the role fit, chemistry and balance tiles under the pitch, then submit for the AI rating."
       ],
       "rules": [
         "Wrong answers are rejected with a reason but cost nothing. Retry until a valid name lands.",
         "A slot takes a player who plays there or right beside it: full backs and wing backs cover each other, wingers count on both flanks, CM covers CDM and CAM, strikers cover each other. A keeper only ever goes in goal.",
         "No duplicate players across your XI.",
-        "Chemistry: each pair sharing a club is worth 3 points, a league 2, a nationality 1, capped at 9 per player.",
-        "If the AI judge is unreachable, a built in offline judge grades you instead, so a run never dead ends."
+        "Chemistry: two players standing next to each other on the pitch who are at the same club on our data add +0.6 to the side, from the same country +0.2, up to +2 in all.",
+        "If the AI judge is unreachable, a built in offline judge grades you instead, so a run never dead ends.",
+        "Role fit: a player in a slot his recorded positions cover plays at full value. Next door, like a right back at left back, costs 2 rating points on him, another line 6, a keeper swap 14, averaged over the eleven.",
+        "Balance: no defensive midfielder in a CM or CDM slot costs the side 1, and a wide slot held by someone who is not a wide player, like a centre back at full back, costs 0.5 for that flank.",
+        "The season report says what role fit, chemistry and balance were each worth in league points, by replaying the same season without each one."
       ],
       "example": [
         "You take 4-3-3. Liverpool lands on the goalkeeper slot, so Alisson goes in. Arsenal on the right wing is Saka. Then the striker slot spins a national team, and you weigh Harry Kane against saving England for a harder slot.",
-        "The finished XI leans Premier League, chemistry pays you for it, and the verdict praises the spine while roasting your left back. You run it back in a 3-5-2."
+        "Two men from the same club end up side by side in your back line, so chemistry pays you for it, and the verdict praises the spine while roasting your left back. You run it back in a 3-5-2."
       ],
       "tips": [
         "Reroll thin assignments before typing, knowing the spin can land somewhere worse.",
         "Small club on the wheel? Goalkeepers are easy to name, elite wingers are not.",
-        "Stacking one league quietly adds chemistry points to the final screen.",
+        "Two players from the same club or country only link when they stand next to each other, so use your slot choice to put them side by side.",
         "If a right sounding name is rejected, let the search autocomplete the spelling for you."
       ]
     },

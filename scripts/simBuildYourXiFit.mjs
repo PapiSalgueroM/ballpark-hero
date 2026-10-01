@@ -30,8 +30,10 @@
         shuffled across the slots. Hard: a natural eleven pays no role fit, a
         shuffled one pays exactly when somebody stands outside his slot's set,
         and with only role fit applied the natural season never takes fewer
-        points (same rolls, never a lower rating). BANDS (from measurement,
-        see T): the mean points gap with role fit alone, and with all three.
+        points (same rolls, never a lower rating), nor with the keeper kept
+        in goal and the ten outfielders shuffled. BANDS (from measurement,
+        see T): the mean points gap with role fit alone, with all three, and
+        with role fit alone and the keeper kept.
      2) A chemistry link exists only where the data shows it (hard). Every
         link joins two pitch neighbours whose rows carry the same club (or
         the same first nationality) and says which; every neighbour pair that
@@ -60,10 +62,14 @@
         for full and half built elevens.
 
    MEASURED (2026-10-01, BYXI_SEED 0 to 5, 300 elevens each), points the
-   natural eleven took over the shuffled one, mean:
-     role fit only    see T.roleGap below
-     all three        see T.totalGap below
-   (the measured numbers and the floors are written next to T.)
+   natural eleven took over the shuffled one, mean per seed:
+     role fit only, all shuffled      10.42 10.54 10.69 10.59 10.67 10.69   floor 6
+     all three, all shuffled          11.80 11.95 12.37 12.17 12.45 12.15   floor 7
+     role fit only, keeper kept and
+       the ten outfielders shuffled    6.58  6.73  6.65  6.75  6.77  6.56   floor 4
+   A full shuffle nearly always moves the keeper (a 14 point swap both
+   ways), so the keeper kept row is the one that measures next door and
+   wrong line on their own. Floors at about 60 percent of the lowest seed.
 
    NEGATIVE CONTROLS, BYXI_CONTROL=<name>. Each rewrites one string in one
    source file at bundle time, refuses to run unless that string occurs
@@ -100,11 +106,13 @@ const lf = s => s.replaceAll('\r\n', '\n');
 const WORLD_XI_DIGEST = '2f8cca6578202d4b1ccf3dbc45be0908cef51bf5be50b91a6ff2365722ea6c6c';
 const WORLD_XI_SQUADS = 240;
 
-/* Floors set from measurement, see the header. */
+/* Floors set from measurement, see the header: about 60 percent of the
+   lowest of six seeds. */
 const T = {
   elevens: 300,
-  roleGap: 0,
-  totalGap: 0,
+  roleGap: 6,
+  totalGap: 7,
+  outfieldGap: 4,
 };
 
 /* The node_modules that holds react and esbuild, found by walking up, so a
@@ -354,6 +362,7 @@ const breakdownOf = (formationName, men) => {
 begin(1, `the same eleven in its natural slots against shuffled, ${T.elevens} elevens, BYXI_SEED ${SEED}`);
 const gapsRole = [];
 const gapsTotal = [];
+const gapsOutfield = [];
 const seasons = [];
 let shuffledOut = 0;
 for (let k = 0; k < T.elevens; k++) {
@@ -376,13 +385,25 @@ for (let k = 0; k < T.elevens; k++) {
   const shFull = wxi.simulateWorldXiSeason(squadOf(f, moved), f, fit.seasonAdjust(sh));
   gapsRole.push(natRole.points - shRole.points);
   gapsTotal.push(natFull.points - shFull.points);
+  /* The keeper kept in goal and the ten outfielders shuffled, so the gap is
+     next door and wrong line prices alone, without the keeper swap's 14. */
+  const gk = BY_FORMATIONS[f].findIndex(s => s.role === 'GK');
+  const outIdx = men.map((_, i) => i).filter(i => i !== gk);
+  const outPerm = shuffleOf(rand, outIdx.length);
+  const outMen = men.slice();
+  outIdx.forEach((slotIdx, k2) => { outMen[slotIdx] = men[outIdx[outPerm[k2]]]; });
+  const outRole = wxi.simulateWorldXiSeason(squadOf(f, outMen), f, roleOnly(breakdownOf(f, outMen)));
+  if (outRole.points > natRole.points) fail(`${f} eleven ${k}: outfield shuffle took ${outRole.points} points to the natural ${natRole.points} with role fit alone`);
+  gapsOutfield.push(natRole.points - outRole.points);
   seasons.push({ f, men, b: nat, report: natFull }, { f, men: moved, b: sh, report: shFull });
 }
 const roleGap = mean(gapsRole);
 const totalGap = mean(gapsTotal);
-console.log(`   ${shuffledOut} of ${T.elevens} shuffled elevens put somebody outside his slot's set; natural minus shuffled points, mean: role fit only ${roleGap.toFixed(2)} (floor ${T.roleGap}), all three ${totalGap.toFixed(2)} (floor ${T.totalGap})`);
+const outfieldGap = mean(gapsOutfield);
+console.log(`   ${shuffledOut} of ${T.elevens} shuffled elevens put somebody outside his slot's set; natural minus shuffled points, mean: role fit only ${roleGap.toFixed(2)} (floor ${T.roleGap}), all three ${totalGap.toFixed(2)} (floor ${T.totalGap}), keeper kept and outfield shuffled ${outfieldGap.toFixed(2)} (floor ${T.outfieldGap})`);
 if (!(roleGap >= T.roleGap)) fail(`role fit alone: the natural eleven's mean points edge ${roleGap.toFixed(2)} is under the floor ${T.roleGap}`);
 if (!(totalGap >= T.totalGap)) fail(`all three: the natural eleven's mean points edge ${totalGap.toFixed(2)} is under the floor ${T.totalGap}`);
+if (!(outfieldGap >= T.outfieldGap)) fail(`keeper kept: the natural eleven's mean points edge ${outfieldGap.toFixed(2)} is under the floor ${T.outfieldGap}`);
 
 /* Half built elevens, the way the page shows the tiles while you pick. */
 for (let k = 0; k < 120; k++) {
@@ -460,6 +481,9 @@ const { FIT_PENALTY, gradeFit } = pf;
 const { CHEMISTRY_CAP, CHEMISTRY_SCALE, HOLDING_PRICE, WIDTH_PRICE } = fit;
 const PENALTIES = new Set(Object.values(FIT_PENALTY));
 const BAL_FLOOR = -(HOLDING_PRICE + 2 * WIDTH_PRICE);
+let noHolding = 0;
+let narrowSeen = 0;
+let familySeen = 0;
 for (const { formationName, slots, b } of seen) {
   let sum = 0;
   slots.forEach((s, i) => {
@@ -484,6 +508,13 @@ for (const { formationName, slots, b } of seen) {
   const expectBal = round1(-(b.balance.holding === false ? HOLDING_PRICE : 0) - WIDTH_PRICE * b.balance.narrow.length);
   if (!(bal <= 0 && bal >= BAL_FLOOR) || bal !== expectBal) fail(`${formationName}: balance ${bal}, the rule says ${expectBal} (floor ${BAL_FLOOR})`);
   if (b.total !== round1(rf + ch + bal)) fail(`${formationName}: total ${b.total} is not ${rf} + ${ch} + ${bal}`);
+  if (b.balance.holding === false) noHolding += 1;
+  if (b.balance.narrow.length > 0) narrowSeen += 1;
+  if (b.roleFit.grades.includes('family')) familySeen += 1;
+}
+console.log(`   material: ${noHolding} elevens with no holding midfielder, ${narrowSeen} with a narrow flank, ${familySeen} with somebody next door`);
+for (const [what, n] of [['no holding midfielder', noHolding], ['a narrow flank', narrowSeen], ['somebody next door', familySeen]]) {
+  if (n < 50) fail(`only ${n} elevens with ${what}, too few for the bound on it to mean anything`);
 }
 /* An eleven of one club and one country: the cap has to bind. */
 {
@@ -492,6 +523,23 @@ for (const { formationName, slots, b } of seen) {
   if (!(b.chemistry.raw > CHEMISTRY_CAP)) fail(`an eleven of one club and country only raw ${b.chemistry.raw}, so the cap was never tested`);
   if (b.chemistry.value !== CHEMISTRY_CAP) fail(`an eleven of one club and country earns ${b.chemistry.value}, over or under the cap ${CHEMISTRY_CAP}`);
   console.log(`   one club, one country: links raw ${b.chemistry.raw}, paid ${b.chemistry.value} (cap ${CHEMISTRY_CAP})`);
+}
+/* The rules dialog's worked example, played through the engine: a 4-3-3 with
+   a right back at left back, the two centre backs at one club, three CMs and
+   no defensive mid. The dialog says -0.2, +0.6, -1, total -0.6. */
+{
+  const roles = BY_FORMATIONS['4-3-3'].map(s => s.role);
+  const men = roles.map((r, i) => ({
+    name: `Ex${i}`,
+    position: r === 'LB' ? 'RB' : r,
+    club: r === 'CB' ? 'Club Same' : `Club Own ${i}`,
+    nationality: `Country Own ${i}`,
+    value: 30e6,
+    age: 27,
+  }));
+  const b = breakdownOf('4-3-3', men);
+  const got = [b.roleFit.value, b.chemistry.value, b.balance.value, b.total];
+  if (J(got) !== J([-0.2, 0.6, -1, -0.6])) fail(`the rules dialog's worked example comes out ${J(got)}, the dialog says [-0.2,0.6,-1,-0.6]`);
 }
 /* The season: what each was worth replays to the number printed. */
 let worthMoved = 0;

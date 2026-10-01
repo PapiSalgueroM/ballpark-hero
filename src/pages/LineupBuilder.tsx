@@ -561,6 +561,7 @@ const LineupBuilder = () => {
             "Choose a formation for your starting eleven",
             "Spin to get a random team assignment for each position",
             "Name a player from that team who fits the position",
+            "Check the role fit, chemistry and balance tiles under the pitch: the season sim plays all three",
             "Submit your full XI for an AI-powered evaluation and rating",
           ]}
           examples={[
