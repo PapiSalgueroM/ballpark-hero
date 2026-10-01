@@ -40,7 +40,13 @@
  *      player's full name.
  *   5. Rival choices. 5a every NFL choice reachable and naming the rival;
  *      5b every option does what its button says, to the number, with the
- *      gamble landing at its printed odds (2,000 draws each); 5c the morale
+ *      gamble landing at its printed odds (2,000 draws each, on a real save
+ *      of the sport): the card's words are read on their own ("Morale +6",
+ *      "Net worth -$100k", "the feud cools") and held against what each draw
+ *      actually did, and every field of the save outside the five meters
+ *      must come out exactly as it went in (review fix: before it, an option
+ *      that also moved health, rating or salary, or a button that claimed a
+ *      stat it never paid, stayed green); 5c the morale
  *      an option promises really moves the next season's stat line, paired
  *      careers on identical random streams; 5d in 40 real careers the
  *      choice fires at a measured rate, never stacks with a beat, never
@@ -113,6 +119,12 @@
  *                fails.
  *   liar         the shared meter writer doubles every fanbase move, so the
  *                buttons stop doing what they say. Section 5b fails.
+ *   sidestat     every option also ages the player a year, a stat no button
+ *                names. Sections 5b and 7b fail (the whole save is watched,
+ *                not only the five meters).
+ *   overpromise  every button's words claim an extra Morale +1 the tap never
+ *                pays. Sections 5b and 7b fail (the words are read on their
+ *                own and held against each draw's outcome).
  *   nochoice     the NFL rival choice chance is zero. Section 5d fails.
  *   nochoicenba, nochoicemlb, nochoicenhl
  *                that sport's rival choice chance is zero. Section 7d and 7e
@@ -146,6 +158,8 @@ const PATCHES = {
   soccerdrift: ['src/lib/careerInbox.ts', 'const next = mood > 50 ? mood - 2 :', 'const next = mood > 50 ? mood - 3 :'],
   soccergate: ['src/lib/soccerCareerEngine.ts', 'when: s => s.age >= 24,', 'when: s => s.age >= 23,'],
   liar: ['src/lib/careerRivalryChoices.ts', 'if (e.fanbase) s.fanbase = clamp(s.fanbase + e.fanbase, 0, 100);', 'if (e.fanbase) s.fanbase = clamp(s.fanbase + e.fanbase * 2, 0, 100);'],
+  sidestat: ['src/lib/careerRivalryChoices.ts', 'applyMeterEffect(s, promise.effect);', 'applyMeterEffect(s, promise.effect); (s as unknown as { age: number }).age += 1;'],
+  overpromise: ['src/lib/careerRivalryChoices.ts', 'consequence: consequence.charAt(0).toUpperCase() + consequence.slice(1),', 'consequence: consequence.charAt(0).toUpperCase() + consequence.slice(1) + ", Morale +1",'],
   nochoice: ['src/lib/nflCareerRivalryEvents.ts', 'export const NFL_RIVALRY_CHOICE_CHANCE = 0.45;', 'export const NFL_RIVALRY_CHOICE_CHANCE = 0;'],
   nochoicenba: ['src/lib/nbaCareerRivalryEvents.ts', 'export const NBA_RIVALRY_CHOICE_CHANCE = 0.45;', 'export const NBA_RIVALRY_CHOICE_CHANCE = 0;'],
   nochoicemlb: ['src/lib/mlbCareerRivalryEvents.ts', 'export const MLB_RIVALRY_CHOICE_CHANCE = 0.45;', 'export const MLB_RIVALRY_CHOICE_CHANCE = 0;'],
@@ -529,9 +543,45 @@ const midState = over => ({
   morale: 50, fanbase: 50, netWorth: 10, karma: 50, rivalryIntensity: 50, ...over,
 });
 const midRival = over => ({ name: 'Rival Mid', pos: 'QB', team: 'DAL', ovr: 86, pot: 92, age: 27, rings: 0, hisYears: 0, myYears: 0, retired: false, lastLine: '', lastScore: 0, ...over });
-/** 5b and 7b: every option in a sport's table does what its button says. */
-function honestOptions(defs) {
-  let options = 0, exact = 0, risky = 0, worstMean = 0, worstOdds = 0;
+/* The save fields a rival choice is allowed to move, by the names the four
+   American saves use. Anything else that changes is a stat no button names. */
+const METER_FIELDS = ['morale', 'fanbase', 'netWorth', 'karma', 'rivalryIntensity'];
+const restOf = s => { const o = { ...s }; for (const k of METER_FIELDS) delete o[k]; return JSON.stringify(o); };
+/** What a piece of card text claims, read off the words alone, never off the
+ *  option's own numbers or the module's describer: "Morale +6", "Net worth
+ *  -$100k", "the feud heats up". A "<Word> +N" this reader does not know is
+ *  returned in `unknown`, because a button claiming a stat the harness cannot
+ *  watch cannot be called honest. */
+function claimsOf(text) {
+  const c = { morale: 0, fanbase: 0, karma: 0, cash: 0, heat: 0, unknown: [] };
+  if (!text) return c;
+  for (const m of text.matchAll(/\b(Morale|Fanbase|Karma) ([+-]\d+)\b/gi)) c[m[1].toLowerCase()] += Number(m[2]);
+  for (const m of text.matchAll(/\bNet worth ([+-])\$(\d+(?:\.\d+)?)(M|k)\b/gi)) c.cash += (m[1] === '-' ? -1 : 1) * Number(m[2]) * (m[3] === 'k' ? 0.001 : 1);
+  if (/feud heats up/i.test(text)) c.heat += 1;
+  if (/feud cools/i.test(text)) c.heat -= 1;
+  const stripped = text.replace(/\b(Morale|Fanbase|Karma) [+-]\d+\b/gi, '').replace(/\bNet worth [+-]\$\d+(?:\.\d+)?(M|k)\b/gi, '');
+  for (const m of stripped.matchAll(/\b[A-Za-z][A-Za-z ]{0,30}? [+-]\$?\d/g)) c.unknown.push(m[0]);
+  return c;
+}
+const addClaims = (a, b) => ({ morale: a.morale + b.morale, fanbase: a.fanbase + b.fanbase, karma: a.karma + b.karma, cash: a.cash + b.cash, heat: a.heat + b.heat });
+/** Measured against claimed: the four numbered meters to the number, the
+ *  feud by direction (the card says "heats up" or "cools", never a number). */
+function claimMismatch(claim, before, after) {
+  const d = {
+    morale: after.morale - before.morale, fanbase: after.fanbase - before.fanbase,
+    karma: (after.karma ?? 50) - (before.karma ?? 50), cash: (after.netWorth ?? 0) - (before.netWorth ?? 0),
+    heat: (after.rivalryIntensity ?? 0) - (before.rivalryIntensity ?? 0),
+  };
+  for (const k of ['morale', 'fanbase', 'karma']) if (d[k] !== claim[k]) return `${k} moved ${d[k]}, the words say ${claim[k]}`;
+  if (Math.abs(d.cash - claim.cash) > 1e-6) return `net worth moved ${d.cash.toFixed(3)}, the words say ${claim.cash}`;
+  if (Math.sign(d.heat) !== Math.sign(claim.heat)) return `the feud moved ${d.heat}, the words say ${claim.heat > 0 ? 'it heats up' : claim.heat < 0 ? 'it cools' : 'nothing'}`;
+  return null;
+}
+/** 5b and 7b: every option in a sport's table does what its button says.
+ *  `base` is a real save of that sport, at mid meters so nothing clamps. */
+function honestOptions(defs, base) {
+  let options = 0, exact = 0, risky = 0, worstMean = 0, worstOdds = 0, wordDraws = 0, watched = 0;
+  const baseJson = JSON.stringify({ ...base, morale: 50, fanbase: 50, netWorth: 10, karma: 50, rivalryIntensity: 50 });
   for (const def of defs) {
     def.choices.forEach((opt, idx) => {
       options += 1;
@@ -545,13 +595,26 @@ function honestOptions(defs) {
         const odds = `${Math.round(p.risk.chance * 100)}%`;
         if (!opt.risk || !opt.risk.includes(hitWords) || !opt.risk.startsWith(odds)) fail(`${def.id} option ${idx}: the gamble reads "${opt.risk}" but the numbers say ${odds} for ${hitWords}`);
       }
+      /* The words read on their own: what the button says always happens,
+         what it says happens otherwise, and the gamble with its printed odds. */
+      const parts = opt.consequence.split(/,?\s*otherwise\s+/i);
+      const alwaysClaim = claimsOf(parts[0]);
+      const missClaim = claimsOf(parts.slice(1).join(', '));
+      const riskM = /^(\d+)% chance [^:]*:\s*(.*)$/.exec(opt.risk ?? '');
+      const hitClaim = claimsOf(riskM ? riskM[2] : '');
+      const printedOdds = riskM ? Number(riskM[1]) / 100 : 0;
+      if (opt.risk && !riskM) fail(`${def.id} option ${idx}: the gamble "${opt.risk}" does not read as odds and an outcome`);
+      for (const u of [...alwaysClaim.unknown, ...missClaim.unknown, ...hitClaim.unknown]) fail(`${def.id} option ${idx}: the card claims "${u}", a stat this check cannot see move`);
       const expected = Object.fromEntries(METERS.map(k => [k, (p.effect[k] ?? 0) + (p.risk ? p.risk.chance * (p.risk.hit[k] ?? 0) + (1 - p.risk.chance) * (p.risk.miss[k] ?? 0) : 0)]));
       const N = 2000;
       const sum = Object.fromEntries(METERS.map(k => [k, 0]));
-      let hits = 0;
+      let hits = 0, wordsBroke = false, sideBroke = false;
       for (let t = 0; t < N; t += 1) {
-        const s = midState(), r = midRival();
+        const s = JSON.parse(baseJson), r = midRival();
         const before = meterOf(s);
+        const beforeSave = { ...s };
+        const beforeRest = restOf(s);
+        watched = Math.max(watched, Object.keys(JSON.parse(beforeRest)).length);
         const rng = mulberry32(SEED_BASE * 7919 + def.id.length * 1009 + idx * 131 + t);
         let firstDraw = null;
         const spy = () => { const v = rng(); if (firstDraw === null) firstDraw = v; return v; };
@@ -560,6 +623,21 @@ function honestOptions(defs) {
         if (p.risk && firstDraw !== null && firstDraw < p.risk.chance) hits += 1;
         const after = meterOf(s);
         for (const k of METERS) sum[k] += Math.round((after[k] - before[k]) * 1000) / 1000;
+        /* Nothing outside the five meters moves: no rating, no health, no
+           salary, no contract. A button names every stat it touches. */
+        if (!sideBroke && restOf(s) !== beforeRest) {
+          sideBroke = true;
+          const a = JSON.parse(beforeRest), b = JSON.parse(restOf(s));
+          const moved = [...new Set([...Object.keys(a), ...Object.keys(b)])].filter(k => JSON.stringify(a[k]) !== JSON.stringify(b[k]));
+          fail(`${def.id} option ${idx}: the tap moved ${moved.join(', ')}, which the button never names`);
+        }
+        /* The words against what happened on this draw. */
+        if (!wordsBroke) {
+          const branch = riskM ? (firstDraw !== null && firstDraw < printedOdds ? hitClaim : missClaim) : { morale: 0, fanbase: 0, karma: 0, cash: 0, heat: 0 };
+          const bad = claimMismatch(addClaims(alwaysClaim, branch), beforeSave, s);
+          wordDraws += 1;
+          if (bad) { wordsBroke = true; fail(`${def.id} option ${idx}: the card reads "${opt.consequence}"${opt.risk ? ` / "${opt.risk}"` : ''} but on a draw of ${firstDraw === null ? 'none' : firstDraw.toFixed(3)} ${bad}`); }
+        }
         if (!p.risk) {
           for (const k of METERS) {
             const d = Math.round((after[k] - before[k]) * 1000) / 1000;
@@ -579,7 +657,7 @@ function honestOptions(defs) {
       if (oddsGap > 0.04) fail(`${def.id} option ${idx}: the gamble came up ${(hits / N * 100).toFixed(1)}% of the time against printed odds of ${Math.round(p.risk.chance * 100)}%`);
     });
   }
-  return { options, exact, risky, worstMean, worstOdds };
+  return { options, exact, risky, worstMean, worstOdds, wordDraws, watched };
 }
 {
   /* 5a. Reachable, and the card names the rival. */
@@ -596,9 +674,11 @@ function honestOptions(defs) {
   console.log(`   5a: ${reachable} of ${CHOICES.length} choices reachable, each naming the rival`);
   if (CHOICES.length < 6) fail(`only ${CHOICES.length} NFL rival choices`);
 
-  /* 5b. Every option does what its button says. */
-  const { options, exact, risky, worstMean, worstOdds } = honestOptions(CHOICES);
-  console.log(`   5b: ${options} options, ${exact} exact to the number on every draw, ${risky} gambles within ${worstMean.toFixed(3)} of their promise on average and ${worstOdds.toFixed(4)} of their printed odds`);
+  /* 5b. Every option does what its button says, on a real NFL save. */
+  const nflBase = nfl.startCareer('Honest NFL', 'QB', nfl.ARCHETYPES.QB[0], mulberry32(SEED_BASE * 53 + 11), null);
+  const { options, exact, risky, worstMean, worstOdds, wordDraws, watched } = honestOptions(CHOICES, nflBase);
+  console.log(`   5b: ${options} options, ${exact} exact to the number on every draw, ${risky} gambles within ${worstMean.toFixed(3)} of their promise on average and ${worstOdds.toFixed(4)} of their printed odds; ${wordDraws} draws held against the card's own words, ${watched} other save fields watched for a stat no button names`);
+  if (wordDraws < options * 1000 || watched < 20) fail(`only ${wordDraws} draws read against the words and ${watched} save fields watched, so 5b checked less than it says`);
 
   /* 5c. Morale is a real lever: paired careers on identical streams. */
   const lateHit = CHOICES.find(d => d.id === 'nfl_rival_late_hit');
@@ -770,8 +850,9 @@ for (const sp of US_SPORTS) {
   }
   if (sp.defs.length < 6) fail(`only ${sp.defs.length} ${tag} rival choices`);
 
-  /* 7b. Honest to the number, the same check as 5b. */
-  const h = honestOptions(sp.defs);
+  /* 7b. Honest to the number, the same check as 5b, on a real save of this sport. */
+  const basePos = Object.keys(sp.arch)[0];
+  const h = honestOptions(sp.defs, sp.start(`Honest ${tag}`, basePos, sp.arch[basePos][0], mulberry32(SEED_BASE * 59 + 13), null));
 
   /* 7c. The morale option reaches the field: paired seasons, identical streams. */
   const lever = sp.defs.find(d => d.id === sp.lever);
@@ -845,7 +926,8 @@ for (const sp of US_SPORTS) {
     }
   }
 
-  console.log(`   ${tag}: ${reachable} of ${sp.defs.length} choices reachable; ${h.options} options, ${h.exact} exact, ${h.risky} gambles within ${h.worstMean.toFixed(3)} of their promise and ${h.worstOdds.toFixed(4)} of their odds; morale lever ${perPoint.toFixed(3)} a point, ahead in ${ahead} of ${pairs}; ${choiceSeasons} choices over ${seasonsRun} career-seasons (rate ${rate.toFixed(3)}), ${resolvedOk} answered, ${doubleRefused} double taps and ${badIdxRefused} bad options refused, ${stacked} stacked, ${repeatsEarly} early repeats; ${loaded} of 10 pre-796 saves played on with ${choicesAfter} choices after loading`);
+  console.log(`   ${tag}: ${reachable} of ${sp.defs.length} choices reachable; ${h.options} options, ${h.exact} exact, ${h.risky} gambles within ${h.worstMean.toFixed(3)} of their promise and ${h.worstOdds.toFixed(4)} of their odds, ${h.wordDraws} draws against the words, ${h.watched} other fields watched; morale lever ${perPoint.toFixed(3)} a point, ahead in ${ahead} of ${pairs}; ${choiceSeasons} choices over ${seasonsRun} career-seasons (rate ${rate.toFixed(3)}), ${resolvedOk} answered, ${doubleRefused} double taps and ${badIdxRefused} bad options refused, ${stacked} stacked, ${repeatsEarly} early repeats; ${loaded} of 10 pre-796 saves played on with ${choicesAfter} choices after loading`);
+  if (h.wordDraws < h.options * 1000 || h.watched < 20) fail(`${tag}: only ${h.wordDraws} draws read against the words and ${h.watched} save fields watched, so 7b checked less than it says`);
   if (rate < 0.12) fail(`${tag} rival choices fire ${rate.toFixed(3)} a career-season, under the 0.12 floor (measured 0.195 or more in every sport)`);
   if (perPoint < 0.05) fail(`${tag}: a morale point is worth ${perPoint.toFixed(3)} of stat score, under the 0.05 floor (measured 0.139 or more in every sport): the promise does not reach the field`);
   if (ahead < pairs * 0.6) fail(`${tag}: the morale option only came out ahead in ${ahead} of ${pairs} paired seasons`);
