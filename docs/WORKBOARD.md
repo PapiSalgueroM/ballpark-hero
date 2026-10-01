@@ -1,5 +1,32 @@
 # Work board
 
+**2026-09-30, Codex Round 776 CLAIMED: committed Club Manager staff decisions (29,97).**
+Own only `src/components/club-manager/StaffScreen.tsx`, scoped CSS, actual-screen tests and a
+new sim wrapper. Preview exact existing-helper fees/payroll/effects and require a local second
+tap before a staff payoff. Preserve the open shortlist on a refused/no-op hire, close only on
+an actual committed hire/promotion, and restore focus to its labeled post when controls vanish.
+Add finite committed hire/promotion/payoff/match/let-go cues, quiet on restore, clones and
+unrelated state; static reduced motion and44px controls. Existing generated staff/portraits,
+shortlist order/IDs, severance, finances, matching limits and effects remain authoritative.
+No parent, engine, new roles/people, data, save, first-screen or shared-style changes. Verify
+real pure staff effects, no-op callbacks, cancellation/confirmation, exact focus and no UI-only
+writes, with asserted controls and four-width/two-motion native browser proof. Root owns
+docs/git/build; full suite still running, so no build or shared dist/public writes. Next free:777.
+
+**2026-09-30, Codex773 source/browser checkpoint: Soccer Classic picker accepted.**
+Eleven actual-board/real-hook/eligibility/simulation tests pass. Three asserted copies remove
+targeting (3 intended failures/8 passes), restore hard40cap (1/10) and remove actual focus
+(4/7). Eight native browser contexts pass using finished772 CSS:56 eligible choices reachable,
+combined14/search3 matching, exact older45 original-object selection, unchanged constraints/
+duplicates/order, all11 exact selections and original score (rating76,7-1,gradeB,chemistry100,
+squadValue1128M). Close/Escape/outside return to the opener, native Enter selects then focuses
+the stable slot, final disappearing Load more focuses the surviving dialog. New controls/rows
+are44px; full unbroken names/clubs wrap, max overflow0, no interaction writes/errors/input
+mutations. Independent review accepted and phone picker/result screenshots inspected.
+TEMP/dukb-round773-soccer-lineup-qa-codex/report.json carries the complete receipt. Fixture uses
+actual Board/hook/eligibility/simulation with a frozen fictional pool/deal and observed
+completion, outside fullApp/account/save. Source is stable; final build/CSS receipt still owed.
+
 **2026-09-30, Codex769 source/browser checkpoint: five-sport Explore accepted.**
 Explicit Explore adds territory/team search, current-owner and availability filters, truthful
 counts, Fit/zoom/reset and bounded drag pan. Automatic scene camera hand-back is immediate

@@ -1,5 +1,14 @@
 # Project state
 
+## CHECKPOINT 2026-09-30: Soccer Classic accepted; staff decisions claimed
+
+773 adds full eligible reachability, existing League/Country targeting and exact picker focus,
+accepted by11 actual tests, three copied controls and eight native browser contexts. Details
+and fixture limits are on WORKBOARD. The next free agent takes claimed776 isolated StaffScreen
+decisions, preserving existing pure effects/IDs/payroll and no-op shortlist state, with safe
+payoff confirmation and finite truthful cues. Quiz Board774 and constructor775 browser proof
+continues. No rebuild while the full392-node suite runs. Next unclaimed number:777.
+
 ## CHECKPOINT 2026-09-30: all four 769 through772 have native browser acceptance
 
 Conquest769 now passes40 native browser cases and2362 checks across all five maps, including
