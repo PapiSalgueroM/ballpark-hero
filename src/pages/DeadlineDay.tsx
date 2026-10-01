@@ -27,7 +27,7 @@ const DeadlineDay = () => {
                 <ul className="list-disc pl-5 space-y-1">
                   <li>The day starts at {clockLabel(0)} and the window shuts at {clockLabel(DEADLINE_HOURS)}: {DEADLINE_HOURS} hours.</li>
                   <li>Calling a club to open talks is free. Every bid, every offer of personal terms and every sale of one of your own players takes an hour.</li>
-                  <li>A bid has to get close to their ask. The meter tells you how close, and every bid uses up some of their patience. Run it out and they stop talking.</li>
+                  <li>Bid 97 percent of their ask or more and the fee is agreed. Below that they come back with a lower ask and it costs a round of their patience. Under 75 percent is an insult (two rounds, and the ask goes up), and under 55 percent they end the talks. The meter shows where your number sits before you send it.</li>
                   <li>Once the fee is agreed, his agent wants a wage, a contract length and a signing bonus. The bonus comes out of the same budget.</li>
                   <li>Other clubs move for the same players. Leave a man alone for an hour while a rival is in and they can sign him from under you.</li>
                   <li>Anything not signed when the window shuts collapses. Nothing carries over.</li>
@@ -35,7 +35,7 @@ const DeadlineDay = () => {
                   <li>The daily is the same club, the same list and the same budget for everyone. Free play is any club you like.</li>
                 </ul>
                 <p className="font-semibold text-foreground">A quick example:</p>
-                <p>The board want a centre back and a striker, and you have £30m. You call about a £12m centre back, your desk says he is worth £10m to £13m, so you bid £10m. They come down to £11.4m and you agree at £11.2m. His agent asks for 4 years and a £1.1m bonus; you offer exactly that and he signs. That is three hours gone and £17.7m left for the striker, with nine hours to find him.</p>
+                <p>Say the board want a goalkeeper and a striker and leave you £29m. You call about a keeper listed at £3.3m and his club want £3.6m. Your desk says he is worth £2.4m to £3.2m, so you bid £3.1m. They come down to £3.4m, and that cost a round of their patience. You bid £3.3m, which is within 97 percent of their ask, and the fee is agreed. His agent wants 4 years at 10k a week and a £1.8m signing bonus. You offer exactly that and he signs. That is three hours gone and £23.9m left, with nine hours to find the striker.</p>
               </div>
             </RulesGate>
           </div>

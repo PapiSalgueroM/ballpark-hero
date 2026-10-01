@@ -203,7 +203,7 @@ function FeeTable({ run, i, hook }: { run: DeadlineRun; i: number; hook: Hook })
           {rival.club} are in at {money(rival.offer)}. Beat it or they close.
         </div>
       )}
-      {neg.note && <p className="text-xs italic text-muted-foreground">"{neg.note}"</p>}
+      {neg.note && <p className="text-xs italic text-muted-foreground">{neg.note}</p>}
       <div className="space-y-1.5 rounded-md bg-muted p-2">
         <div className="flex items-center justify-between text-xs">
           <span className="font-semibold uppercase tracking-wide text-muted-foreground">How close you are</span>
@@ -269,7 +269,7 @@ function TermsTable({ run, i, hook }: { run: DeadlineRun; i: number; hook: Hook 
           {t.rival.club} have put an offer to his agent. Leave him an hour and they could close.
         </div>
       )}
-      {t.neg?.terms?.note && <p className="text-xs italic text-muted-foreground">"{t.neg.terms.note}"</p>}
+      {t.neg?.terms?.note && <p className="text-xs italic text-muted-foreground">{t.neg.terms.note}</p>}
       <div className="space-y-2 rounded-md bg-muted p-2">
         <div className="flex items-center justify-between text-xs">
           <span className="font-semibold uppercase tracking-wide text-muted-foreground">How close you are</span>
