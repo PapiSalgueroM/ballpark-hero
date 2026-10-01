@@ -57,7 +57,7 @@ describe('NBA Chain local committed feedback', () => {
 
   it('keeps seed, rejected and deferred requests quiet without credit or list movement', async () => {
     const view = mount(); expect(cue(view)).toBeNull(); const panel = list(view); panel.scrollTop = 17;
-    const writes = vi.spyOn(Storage.prototype, 'setItem'); const random = Math.random as ReturnType<typeof vi.spyOn>; const draws = random.mock.calls.length;
+    const writes = vi.spyOn(Storage.prototype, 'setItem'); const random = vi.mocked(Math.random); const draws = random.mock.calls.length;
     for (const response of [{ valid: false, unverified: true, reason: 'Fixture retry' }, { valid: false, coverageGap: true, reason: 'Fixture coverage' }]) {
       fixture.response = response; await select(view, 'Fixture Deferred Guard'); expect(cue(view)).toBeNull(); expect(rows(view)).toHaveLength(1); expect(panel.scrollTop).toBe(17);
     }
