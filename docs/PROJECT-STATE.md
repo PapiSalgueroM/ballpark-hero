@@ -1,5 +1,26 @@
 # Project state
 
+## BUILT 2026-09-30: Codex 764, 765 and 767 complete; 766 and 768 acceptance continues
+
+Soccer Career training gains settled-shot, exact session-result and banked feedback, retaining
+all local mechanics (12 tests, four controls, 88 browser cases). NBA/NHL/F1 lineup pickers gain
+existing-dimension targeting and access beyond forty choices (nine tests, three controls, 24
+browser cases). Draft voting ranks an MVP copy instead of mutating rosters and gains finite winner
+feedback (five tests, two controls, eight browser cases). Detailed limits and evidence are on
+WORKBOARD, including the lineup dialog's existing return-to-BODY behavior. Original training
+handlers stay byte-identical; no pool/engine/data/account changes. Final 767 build/types, fifteen
+built-site fences and eight scoped source harnesses pass. These source rounds await Claude's
+publish. Mystery Box 766 and draft Country/Foot targeting 768 acceptance are still in progress.
+
+## IN PROGRESS 2026-09-30: Codex 768 pool targeting, following built 764 through 767
+
+The 764 through 767 combined production build and exact app types pass; all fifteen built-site
+fences pass. Three-sport lineup targeting passes all 24 final browser cases, with existing dialog
+dismissal to BODY recorded explicitly. Training, Mystery Box and draft winner final acceptance
+continues. The next free agent is taking claimed 768 Fantasy Draft Country/Foot targeting from
+master H, with existing shortlist/eligibility/order preserved. Exact ownership is on WORKBOARD.
+Next unclaimed number: 769. Claude retains release publishing and all its existing claims.
+
 ## IN PROGRESS 2026-09-30: four-agent Codex batch 764 through 767
 
 764 Soccer Career training feedback and 765 NBA/NHL/F1 lineup targeting have stable app source,
