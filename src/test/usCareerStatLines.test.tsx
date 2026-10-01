@@ -138,6 +138,8 @@ interface SportCase {
   bullets: (c: unknown) => string[];
   statBullet: (c: unknown) => string;
   soFar: (c: unknown) => string | null;
+  /** The big award the position chases, as the share text must name it. */
+  award: (pos: string) => { one: string; many: string };
 }
 
 function playOut<C extends { seasons: unknown[]; retired: boolean }>(
@@ -167,6 +169,7 @@ const SPORTS: SportCase[] = [
     bullets: c => legacyOf(c as never).bullets,
     statBullet: c => nflCareerStatBullet(careerTotals(c as never), (c as { pos: CareerPos }).pos),
     soFar: c => nflCareerSoFar(careerTotals(c as never), (c as { pos: CareerPos }).pos),
+    award: pos => (['LB', 'CB', 'EDGE'].includes(pos) ? { one: 'DPOY', many: 'DPOYs' } : { one: 'MVP', many: 'MVPs' }),
   },
   {
     sport: 'nba', label: 'NBA', saveKey: 'nba-my-career-save-v1', Board: NbaMyCareerBoard,
@@ -183,6 +186,7 @@ const SPORTS: SportCase[] = [
     bullets: c => nbaLegacyOf(c as never).bullets,
     statBullet: c => nbaLegacyOf(c as never).bullets[1],
     soFar: () => null,
+    award: () => ({ one: 'MVP', many: 'MVPs' }),
   },
   {
     sport: 'mlb', label: 'MLB', saveKey: 'mlb-my-career-save-v1', Board: MlbMyCareerBoard,
@@ -199,6 +203,7 @@ const SPORTS: SportCase[] = [
     bullets: c => mlbLegacyOf(c as never).bullets,
     statBullet: c => mlbCareerStatBullet(mlbCareerTotals(c as never), (c as { pos: MlbCareerPos }).pos),
     soFar: c => mlbCareerSoFar(mlbCareerTotals(c as never), (c as { pos: MlbCareerPos }).pos),
+    award: pos => (pos === 'SP' || pos === 'RP' ? { one: 'Cy Young', many: 'Cy Youngs' } : { one: 'MVP', many: 'MVPs' }),
   },
   {
     sport: 'nhl', label: 'NHL', saveKey: 'nhl-my-career-save-v1', Board: NhlMyCareerBoard,
@@ -218,15 +223,43 @@ const SPORTS: SportCase[] = [
       const t = nhlCareerTotals(c as never);
       return (c as { pos: string }).pos === 'G' ? `${t.wins} career wins` : `${t.points.toLocaleString()} career points`;
     },
+    award: pos => (pos === 'G' ? { one: 'Vezina', many: 'Vezinas' } : pos === 'D' ? { one: 'Norris Trophy', many: 'Norris Trophies' } : { one: 'Hart', many: 'Harts' }),
   },
 ];
 
 const ALL = SPORTS.flatMap(s => s.positions.map(pos => ({ ...s, pos })));
 const SEEDS_PER_POSITION = 6;
 
+/* Round 833 review: the count words these lines and boards print, singular and
+   plural. "1 DPOYs" sat in the NFL hub and "1 rings" in three share texts
+   while every check above was green, because a count regex takes either. */
+const COUNT_WORDS: [one: string, many: string][] = [
+  ['tackle', 'tackles'], ['sack', 'sacks'], ['interception', 'interceptions'],
+  ['pass defended', 'passes defended'], ['forced fumble', 'forced fumbles'],
+  ['save', 'saves'], ['hold', 'holds'], ['ring', 'rings'], ['Cup', 'Cups'],
+  ['MVP', 'MVPs'], ['DPOY', 'DPOYs'], ['Cy Young', 'Cy Youngs'], ['Hart', 'Harts'],
+  ['Vezina', 'Vezinas'], ['Norris Trophy', 'Norris Trophies'], ['All-Pro', 'All-Pros'],
+];
+const esc = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+function pluralFaults(text: string): string[] {
+  const bad: string[] = [];
+  for (const [one, many] of COUNT_WORDS) {
+    if (new RegExp(`(^|[^\\d.,])1 ${esc(many)}(?![\\w-])`).test(text)) bad.push(`"${text}" says 1 ${many}`);
+    /* "0 All-Pro nods": the word is an adjective there, the noun is nods. */
+    for (const m of text.matchAll(new RegExp(`(^|[^\\d.,])(\\d[\\d,.]*) ${esc(one)}(?![\\w-]| nods?\\b)`, 'g'))) {
+      if (m[2] !== '1') bad.push(`"${text}" says ${m[2]} ${one}`);
+    }
+  }
+  return bad;
+}
+/* Float noise from summing tenths: 41.300000000000004 sacks. */
+const FLOAT_NOISE = /\d\.\d{4,}/;
+
 function checkText(text: string, rule: PosRule, where: string, needOwn: boolean): string[] {
   const bad: string[] = [];
   if (BROKEN.test(text)) bad.push(`${where}: "${text}" prints a value that is not there`);
+  if (FLOAT_NOISE.test(text)) bad.push(`${where}: "${text}" prints float noise`);
+  for (const p of pluralFaults(text)) bad.push(`${where}: ${p}`);
   const never = rule.never.exec(text);
   if (never) bad.push(`${where}: "${text}" names "${never[0]}", a stat this position never records`);
   if (needOwn && !rule.own.test(text)) bad.push(`${where}: "${text}" shows none of this position's own stats`);
@@ -256,6 +289,14 @@ describe('every US career position prints its own stat line', () => {
     expect(bad).toEqual([]);
   });
 
+  it('the plural check itself sees a wrong count word and passes a right one', () => {
+    expect(pluralFaults('3 seasons, 1 rings, 1 DPOYs')).toHaveLength(2);
+    expect(pluralFaults('2 sack, 1 tackles')).toHaveLength(2);
+    expect(pluralFaults('1 ring, 2 DPOYs, 11 sacks, 0.5 sacks, 1 pass defended, 3 Norris Trophies')).toEqual([]);
+    expect(FLOAT_NOISE.test('41.300000000000004 sacks')).toBe(true);
+    expect(FLOAT_NOISE.test('2.45 ERA, .915 SV%')).toBe(false);
+  });
+
   it.each(ALL)('$label $pos: a suspended season says so, and a line with nothing recorded invents nothing', ({ pos, line }) => {
     const banned = { year: 2030, team: 'X', age: 27, ovr: 80, games: 0, awards: [], teamResult: 'SUSPENDED', salary: 0 };
     expect(line(banned, pos)).toBe(SUSPENDED_STAT_LINE);
@@ -283,6 +324,14 @@ function clearPending(c: Record<string, unknown>): void {
   delete c.pendingRivalryChoice;
 }
 
+/* Exactly one title and one big award on the save, so every count word the
+   boards print meets its singular. */
+function oneOfEach(sport: string, c: Record<string, unknown>): void {
+  if (sport === 'nhl') { c.cups = 1; c.harts = 1; return; }
+  c.rings = 1;
+  if (sport === 'mlb') c.mvpCys = 1; else c.mvps = 1;
+}
+
 beforeEach(() => {
   localStorage.clear();
   vi.stubGlobal('requestAnimationFrame', () => 1);
@@ -295,10 +344,11 @@ afterEach(() => {
 });
 
 describe('the boards print the position\'s own line everywhere', () => {
-  it.each(ALL)('$label $pos retirement screen: every season row, the bullets and the share text', async ({ pos, play, line, rule, bullets, saveKey, Board }) => {
+  it.each(ALL)('$label $pos retirement screen: every season row, the bullets and the share text', async ({ sport, pos, play, line, rule, bullets, saveKey, Board, award }) => {
     const { career } = play(pos, 8330 + pos.length * 11, 4);
     career.retired = true;
     clearPending(career);
+    oneOfEach(sport, career);
     localStorage.setItem(saveKey, JSON.stringify({ c: career, phase: 'retired', teamQuality: 80, coach: null }));
     render(<MemoryRouter><Board /></MemoryRouter>);
     expect(await screen.findByText(`${career.name} retires`, undefined, { timeout: BOARD_WAIT })).toBeInTheDocument();
@@ -308,12 +358,17 @@ describe('the boards print the position\'s own line everywhere', () => {
     for (const b of bullets(career)) expect(page).toContain(b);
     const share = screen.getByTestId('share-text').textContent ?? '';
     expect(checkText(share, rule(pos), 'share text', false)).toEqual([]);
+    /* One title and one big award on the save: the share text names both in
+       the singular, with the award this position actually wins. */
+    expect(share).toContain(`1 ${sport === 'nhl' ? 'Cup' : 'ring'},`);
+    expect(share).toContain(`1 ${award(pos).one}.`);
   }, BOARD_TEST_TIMEOUT);
 
-  it.each(ALL)('$label $pos hub: the last season and the career figure', async ({ pos, play, line, rule, soFar, saveKey, Board }) => {
+  it.each(ALL)('$label $pos hub: the last season and the career figure', async ({ sport, pos, play, line, rule, soFar, saveKey, Board, award }) => {
     const { career } = play(pos, 8331 + pos.length * 13, 3);
     career.retired = false;
     clearPending(career);
+    oneOfEach(sport, career);
     (career as { contractYears?: number }).contractYears = 3;
     localStorage.setItem(saveKey, JSON.stringify({ c: career, phase: 'season', teamQuality: 80, coach: null }));
     render(<MemoryRouter><Board /></MemoryRouter>);
@@ -326,5 +381,6 @@ describe('the boards print the position\'s own line everywhere', () => {
     const figure = soFar(career);
     if (figure !== null) expect(sofar).toContain(figure);
     expect(checkText(sofar, rule(pos), 'career so far', false)).toEqual([]);
+    expect(sofar).toContain(`1 ${sport === 'nhl' ? 'Cup' : 'ring'} · 1 ${award(pos).one} ·`);
   }, BOARD_TEST_TIMEOUT);
 });

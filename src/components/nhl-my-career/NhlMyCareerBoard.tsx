@@ -964,7 +964,7 @@ export default function NhlMyCareerBoard() {
             <Dumbbell className="h-4 w-4" /> Play the {career.year} season
           </button>
           <p className="mt-2 text-[10px] text-muted-foreground">
-            Career so far: {career.cups} Cups · {career.harts} majors · {career.allStars} All-Star ·{' '}
+            Career so far: {countOf(career.cups, 'Cup', 'Cups')} · {countOf(career.harts, nhlMajorAward(career.pos).one, nhlMajorAward(career.pos).many)} · {career.allStars} All-Star ·{' '}
             {career.pos === 'G' ? `${totals.wins} career wins` : `${totals.points.toLocaleString()} career points`}
           </p>
           {career.seasons.length >= 6 && (

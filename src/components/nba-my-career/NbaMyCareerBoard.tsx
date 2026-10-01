@@ -12,7 +12,7 @@ import { NBA_ERAS,
   getNbaSpendItem
 } from '@/lib/nbaMyCareer';
 /* Round 833: the stat line, shared with the other three careers. */
-import { nbaStatLine } from '@/lib/usCareerStatLine';
+import { countOf, nbaStatLine } from '@/lib/usCareerStatLine';
 // Round 179: real free agency, shared engine and shared screen.
 import { pushFaOffer, applyFaSigning } from '@/lib/usCareerFreeAgency';
 import type { FaWindow } from '@/lib/usCareerFreeAgency';
@@ -666,7 +666,7 @@ export default function NbaMyCareerBoard() {
               gameName="NBA My Career"
               gamePath="/nba-my-career"
               score={`legacy ${legacy.score}`}
-              customText={`NBA My Career 🏀 ${career.name}: ${career.seasons.length} seasons, ${career.rings} rings, ${career.mvps} MVPs. Verdict: ${legacy.verdict}. Legacy ${legacy.score}. douknowball.com/nba-my-career`}
+              customText={`NBA My Career 🏀 ${career.name}: ${career.seasons.length} seasons, ${countOf(career.rings, 'ring', 'rings')}, ${countOf(career.mvps, 'MVP', 'MVPs')}. Verdict: ${legacy.verdict}. Legacy ${legacy.score}. douknowball.com/nba-my-career`}
             />
           </div>
         </div>
@@ -962,7 +962,7 @@ export default function NbaMyCareerBoard() {
             <Dumbbell className="h-4 w-4" /> Play the {career.year} season
           </button>
           <p className="mt-2 text-[10px] text-muted-foreground">
-            Career so far: {career.rings} rings · {career.mvps} MVPs · {career.allNbas} All-NBA ·{' '}
+            Career so far: {countOf(career.rings, 'ring', 'rings')} · {countOf(career.mvps, 'MVP', 'MVPs')} · {career.allNbas} All-NBA ·{' '}
             {`${totals.pts.toLocaleString()} career points`}
           </p>
           {career.seasons.length >= 6 && (

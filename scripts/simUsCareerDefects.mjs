@@ -227,7 +227,7 @@ try {
     for (const line of output.split('\n')) if (/^\s*console\.log|drawable|seeded careers came/.test(line)) console.log('   ' + line.trim());
     assert.equal(run.status, 0, `the round's tests are red\n${tail}`);
     assert.equal(failed, 0);
-    assert.equal(passed, 150, `expected 150 tests (116 stat line, 9 era, 25 shop), saw ${passed}\n${tail}`);
+    assert.equal(passed, 151, `expected 151 tests (117 stat line, 9 era, 25 shop), saw ${passed}\n${tail}`);
     console.log(`simUsCareerDefects: ${passed} tests passed across the stat lines, the era cards and the shop cap.`);
   } else {
     for (const line of output.split('\n')) if (/drawable|seeded careers came/.test(line)) console.log('   ' + line.trim());

@@ -686,7 +686,7 @@ export default function NflMyCareerBoard() {
               gameName="NFL My Career"
               gamePath="/nfl-my-career"
               score={`legacy ${legacy.score}`}
-              customText={`NFL My Career 🏈 ${career.name}: ${career.seasons.length} seasons, ${career.rings} rings, ${countOf(career.mvps, nflMajorAward(career.pos).one, nflMajorAward(career.pos).many)}. Verdict: ${legacy.verdict}. Legacy ${legacy.score}. douknowball.com/nfl-my-career`}
+              customText={`NFL My Career 🏈 ${career.name}: ${career.seasons.length} seasons, ${countOf(career.rings, 'ring', 'rings')}, ${countOf(career.mvps, nflMajorAward(career.pos).one, nflMajorAward(career.pos).many)}. Verdict: ${legacy.verdict}. Legacy ${legacy.score}. douknowball.com/nfl-my-career`}
             />
           </div>
         </div>
@@ -982,7 +982,7 @@ export default function NflMyCareerBoard() {
             <Dumbbell className="h-4 w-4" /> Play the {career.year} season
           </button>
           <p className="mt-2 text-[10px] text-muted-foreground">
-            Career so far: {career.rings} rings · {career.mvps} {nflMajorAward(career.pos).many} · {career.allPros} All-Pros ·{' '}
+            Career so far: {countOf(career.rings, 'ring', 'rings')} · {countOf(career.mvps, nflMajorAward(career.pos).one, nflMajorAward(career.pos).many)} · {countOf(career.allPros, 'All-Pro', 'All-Pros')} ·{' '}
             {nflCareerSoFar(totals, career.pos)}
           </p>
           {career.seasons.length >= 6 && (

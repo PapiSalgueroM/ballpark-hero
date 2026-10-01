@@ -668,7 +668,7 @@ export default function MlbMyCareerBoard() {
               gameName="MLB My Career"
               gamePath="/mlb-my-career"
               score={`legacy ${legacy.score}`}
-              customText={`MLB My Career ⚾ ${career.name}: ${career.seasons.length} seasons, ${career.rings} rings, ${countOf(career.mvpCys, mlbMajorAward(career.pos).one, mlbMajorAward(career.pos).many)}. Verdict: ${legacy.verdict}. Legacy ${legacy.score}. douknowball.com/mlb-my-career`}
+              customText={`MLB My Career ⚾ ${career.name}: ${career.seasons.length} seasons, ${countOf(career.rings, 'ring', 'rings')}, ${countOf(career.mvpCys, mlbMajorAward(career.pos).one, mlbMajorAward(career.pos).many)}. Verdict: ${legacy.verdict}. Legacy ${legacy.score}. douknowball.com/mlb-my-career`}
             />
           </div>
         </div>
@@ -967,7 +967,7 @@ export default function MlbMyCareerBoard() {
             <Dumbbell className="h-4 w-4" /> Play the {career.year} season
           </button>
           <p className="mt-2 text-[10px] text-muted-foreground">
-            Career so far: {career.rings} rings · {career.mvpCys} majors · {career.allStars} All-Star ·{' '}
+            Career so far: {countOf(career.rings, 'ring', 'rings')} · {countOf(career.mvpCys, mlbMajorAward(career.pos).one, mlbMajorAward(career.pos).many)} · {career.allStars} All-Star ·{' '}
             {mlbCareerSoFar(totals, career.pos)}
           </p>
           {career.seasons.length >= 6 && (
