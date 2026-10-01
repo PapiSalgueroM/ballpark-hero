@@ -81,26 +81,30 @@
  *
  * NEGATIVE CONTROLS, each on an in memory copy of careerLadder.ts, nothing on
  * disk moves, each refusing to run if its anchor text is gone. Under a control
- * the harness exits non zero: 1 when the planted break was caught in the
- * sections it belongs to and nowhere else, 2 when it went unnoticed or failed
- * something it should not have. CAREER_LADDER_ROTATION_CONTROL=
- *   earlystart  ROTATION_START moved to 2026-06-01: the legacy year changes
- *               answer (1, 2), the committed roster's lines all date after
- *               the start so its first cycles run on the fallback (7), and the
+ * the harness exits non zero: 1 when the planted break was caught in EVERY
+ * section listed for it and nowhere else, 2 when a listed section missed it or
+ * another section failed. Measured 2026-10-01, CAREER_LADDER_ROTATION_CONTROL=
+ *   earlystart  ROTATION_START moved to 2026-06-01: 135 legacy days change
+ *               answer and the start is before main has it (1, 2), and the
  *               golden days move (9)
- *   reshuffle   each cycle deals its own permutation: gaps collapse (3, 6, 7, 9)
+ *   reshuffle   each cycle deals its own permutation: gaps fall to 7 and 12
+ *               days (3, 6, 7, 9)
  *   nofreeze    a cycle deals every man the roster ever has in, ignoring the
- *               since dates: a newcomer moves the walk back (6, 9)
+ *               since dates: a newcomer moves the walk back, gap 1 (6, 9)
  *   nohash      the order is a plain id sort: only the golden walk sees it (9)
  *   nofallback  a walk with nobody in on a cycle's first day loops for ever:
- *               the worker times out (5)
+ *               the worker is stopped after 20 seconds (5)
  *   liveside    the side comes from today's peak, not the roster: a peak
- *               crossing the line moves the walk back (6)
+ *               crossing the line moves the walk back, gap 1 (6), and the
+ *               golden walk's missing men change side (9)
  *   skipgone    a man the pool cannot deal is dropped from every cycle instead
  *               of stood in for: a deleted and restored man moves the walk
- *               back (6, 9)
+ *               back, gap 1 (6, 9)
  *   unledgered  an eligible man the roster does not name joins as if he had
- *               always been in: a 4th season moves the walk back (6, 9)
+ *               always been in: a 4th season moves the walk back, gap 2, and
+ *               the man is dealt before the roster has him (6), a pool the
+ *               roster does not name stops coming round in order (5), and the
+ *               golden walk's unrostered man is dealt (9)
  *
  * Run: node scripts/simCareerLadderRotation.mjs   (section 7 needs the network,
  * section 8's history check needs git and origin/main; each says when skipped)
@@ -120,14 +124,14 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.CAREER_LADDER_ROTATION_CONTROL || '';
 /* Which sections each control must turn red, measured (see the header). */
 const CONTROLS = {
-  earlystart: [1, 2, 7, 9],
+  earlystart: [1, 2, 9],
   reshuffle: [3, 6, 7, 9],
   nofreeze: [6, 9],
   nohash: [9],
   nofallback: [5],
-  liveside: [6],
+  liveside: [6, 9],
   skipgone: [6, 9],
-  unledgered: [6, 9],
+  unledgered: [5, 6, 9],
 };
 if (CONTROL && !CONTROLS[CONTROL]) {
   console.error(`CAREER_LADDER_ROTATION_CONTROL=${CONTROL} is not a control this harness knows`);
