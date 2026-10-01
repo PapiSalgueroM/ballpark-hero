@@ -11759,11 +11759,11 @@ const SECOND_YELLOW_CHANCE = 0.25;
  * (it cannot: 45 minutes, at most a handful of goals) the draw falls back to
  * a plain one rather than looping forever.
  */
-function distinctMinutes(count: number, lo: number, hi: number, taken: Set<number>): number[] {
+function distinctMinutes(count: number, lo: number, hi: number, taken: Set<number>, board?: BoardWeight): number[] {
   const span = hi - lo + 1;
   const out: number[] = [];
   for (let i = 0; i < count; i++) {
-    let m = ri(lo, hi);
+    let m = drawMinute(lo, hi, board);
     if (taken.size < span) {
       let steps = 0;
       while (taken.has(m) && steps < span) { m = m === hi ? lo : m + 1; steps += 1; }
@@ -11772,6 +11772,21 @@ function distinctMinutes(count: number, lo: number, hi: number, taken: Set<numbe
     out.push(m);
   }
   return out.sort((a, b) => a - b);
+}
+
+/** Round 781: the minutes of a stretch that closes its period run on into
+ *  its board, `to` + 1 to `hi`, and a goal is `w` times likelier in one of
+ *  those than in an ordinary minute (BOARD in drawSegment says why). */
+interface BoardWeight { to: number; w: number }
+
+/** One minute in lo..hi, a minute past board.to counting board.w times.
+ *  One draw either way, and with no weight (or a weight of 1) exactly ri. */
+function drawMinute(lo: number, hi: number, board?: BoardWeight): number {
+  if (!board || board.w === 1 || board.to < lo || board.to >= hi) return ri(lo, hi);
+  const regular = board.to - lo + 1;
+  const extra = hi - board.to;
+  const u = Math.random() * (regular + board.w * extra);
+  return u < regular ? lo + Math.floor(u) : board.to + 1 + Math.min(extra - 1, Math.floor((u - regular) / board.w));
 }
 
 function splitMinutes(goals: number, firstHalfGoals: number, taken: Set<number>): number[] {
@@ -11788,10 +11803,12 @@ function pickMyScorerLines(
   xi: CMPlayer[], count: number, minLo: number, minHi: number, taken: Set<number>,
   /** Round 505: the duty of a man in his slot, for the scorer weight. */
   dutyOf?: (p: CMPlayer) => Duty | null,
+  /** Round 781: the board this stretch runs into and how busy it is. */
+  board?: BoardWeight,
 ): MyGoalLine[] {
   /* Round 205: distinct, and sharing the match's minute book with the
      opposition so no two goals anywhere land on the same clock. */
-  const minutes = distinctMinutes(count, minLo, minHi, taken);
+  const minutes = distinctMinutes(count, minLo, minHi, taken, board);
   const lines: MyGoalLine[] = [];
   for (let g = 0; g < count; g++) {
     const scorer = weightedPick(xi, p => scorerWeight(p) * dutyScoringMult(dutyOf?.(p)));
@@ -11844,10 +11861,11 @@ function creditMyScorers(
   return { goalCounts, assistCounts, assistNames };
 }
 
-function generateOppScorers(opp: string, goals: number, firstHalfGoals: number, yearsOnNow = 0, eraId: string = 'now', taken: Set<number> = new Set(), window?: [number, number], exclude: ReadonlySet<string> = NO_NAMES): ScorerLine[] {
+function generateOppScorers(opp: string, goals: number, firstHalfGoals: number, yearsOnNow = 0, eraId: string = 'now', taken: Set<number> = new Set(), window?: [number, number], exclude: ReadonlySet<string> = NO_NAMES, board?: BoardWeight): ScorerLine[] {
   /* Round 504: a segment of a half asks for its own window; the whole match
-     shape splits at the interval as before. */
-  const minutes = window ? distinctMinutes(goals, window[0], window[1], taken) : splitMinutes(goals, firstHalfGoals, taken);
+     shape splits at the interval as before. Round 781: a window that runs
+     into a board weights it (BoardWeight). */
+  const minutes = window ? distinctMinutes(goals, window[0], window[1], taken, board) : splitMinutes(goals, firstHalfGoals, taken);
   // Round 70: opponent scorers are their real attackers from the baked
   // rosters, weighted toward the expensive ones, so "Semenyo 63'" instead of
   // "Bournemouth No. 9". Round 132: from the projected roster, so a 2036 match
@@ -12697,9 +12715,11 @@ function drawMySegment(
   maxYellows: number, taken: Set<number>, dutyOf?: (p: CMPlayer) => Duty | null,
   /** Round 781: the last minute anything can fall in, the board included. */
   hi: number = to,
+  /** Round 781: how busy the board is for a goal (BOARD weight). */
+  board?: BoardWeight,
 ): { goals: MyGoalLine[]; cards: CardLine[]; injuries: InjuryLine[] } {
   /* Round 781: the count is drawn by the caller (it sizes the board), the minutes here. */
-  const goals = pickMyScorerLines(xi, goalCount, from + 1, hi, taken, dutyOf);
+  const goals = pickMyScorerLines(xi, goalCount, from + 1, hi, taken, dutyOf, board);
   /* Round 505: from the spot or a free kick, credited to the taker, before
      the exits below are drawn so fixExits keeps him on past his goal. */
   markSetPieceGoals(state.setPieces, goals, xi);
@@ -12753,13 +12773,23 @@ function oppAt(live: LiveMatch, minute: number): OppXiLine[] | null {
  * stoppages already committed in the period plus the goal counts this
  * stretch is about to place (that is the board the events are placed
  * under), and once after, off everything now in the period, which can only
- * be more, so no event ever sits past the board the report prints. The
- * share of goals that land in the board follows from the maths rather than
- * a dial: minutes are uniform over the stretch plus its board, so a half
- * with k goals and roll r puts about (base + k + r) / (45 + base + k + r)
- * of them in added time, measured by scripts/simCmStoppageTime.mjs at about
- * five percent of first half goals and about nine percent of second half
- * goals, against roughly four and eight in the real game.
+ * be more, so no event ever sits past the board the report prints.
+ *
+ * How many goals land in the board. The stretch's goal count is sized to
+ * its own minutes, so the board adds no goals, it only moves some of them
+ * into added time: each goal's minute is drawn over the stretch plus its
+ * board, a minute of the board counting `weight` times an ordinary one. In
+ * the first half that is plain uniform (weight 1), and a half with k goals
+ * and roll r puts about (base + k + r) / (45 + base + k + r) of them in
+ * added time. The second half's board is busier than an average minute
+ * (weight 1.5): the side behind throws everything forward, and the boards
+ * here (two to eight minutes, the Round 472 formula) are the shorter ones
+ * of the older game, which took about the same late share with fewer
+ * minutes. Uniform, only about 5.6 percent of all goals came after the
+ * 90th. Measured by scripts/simCmStoppageTime.mjs (the numbers are in its
+ * header): MEASURED_SHARES, against roughly 4 and 7 to 9 percent in the
+ * real game. Cards, injuries and chances stay uniform over the stretch and
+ * its board.
  *
  * Extra time has one board, at 120, because Round 670 made it one thirty
  * minute stretch with no interval at 105. A change made inside a board is
@@ -12767,10 +12797,10 @@ function oppAt(live: LiveMatch, minute: number): OppXiLine[] | null {
  * or before that point of the board, and draws the rest of the board again
  * off the change (recutBoard); the board's length does not move.
  */
-const BOARD: Record<'h1' | 'h2' | 'et', { base: number; roll: number; lo: number; hi: number; from: number }> = {
-  h1: { base: 1, roll: 1, lo: 1, hi: 5, from: 0 },
-  h2: { base: 2, roll: 2, lo: 2, hi: 8, from: 45 },
-  et: { base: 1, roll: 1, lo: 1, hi: 3, from: 90 },
+const BOARD: Record<'h1' | 'h2' | 'et', { base: number; roll: number; lo: number; hi: number; from: number; weight: number }> = {
+  h1: { base: 1, roll: 1, lo: 1, hi: 5, from: 0, weight: 1 },
+  h2: { base: 2, roll: 2, lo: 2, hi: 8, from: 45, weight: 1.5 },
+  et: { base: 1, roll: 1, lo: 1, hi: 3, from: 90, weight: 1 },
 };
 
 /** Which period a stretch ending at `to` closes, or null for one that ends mid period. */
@@ -12846,7 +12876,9 @@ function drawSegment(
   const period = periodEnding(live, to);
   const roll = period ? ri(0, BOARD[period].roll) : 0;
   const hi = period ? to + boardOf(period, stoppagesIn(live, BOARD[period].from, to) + nMine + nOpp, roll) : to;
-  const me = drawMySegment(state, live, xi, from, to, nMine, maxYellows, taken, dutyOf, hi);
+  /* Round 781: and how busy a minute of that board is for a goal. */
+  const board: BoardWeight | undefined = period ? { to, w: BOARD[period].weight } : undefined;
+  const me = drawMySegment(state, live, xi, from, to, nMine, maxYellows, taken, dutyOf, hi, board);
   const oppStart = oppAt(live, from);
   const byMinute = clockOrder;
   if (half === 1) {
@@ -12861,7 +12893,7 @@ function drawSegment(
   let oppGoals: ScorerLine[];
   let oppCards: CardLine[] = [];
   if (!oppStart) {
-    oppGoals = generateOppScorers(fx.opponent, nOpp, 0, yearsOn(state), state.eraId, taken, [from + 1, hi], mySquadNames(state));
+    oppGoals = generateOppScorers(fx.opponent, nOpp, 0, yearsOn(state), state.eraId, taken, [from + 1, hi], mySquadNames(state), board);
     live.oppSubs = drawOppSubs(live, from, to, []);
   } else {
     /* Their goals' MINUTES first (the other dugout reads the score as it
@@ -12870,7 +12902,7 @@ function drawSegment(
        before a booking he took), and only then the scorers' names, off the
        eleven on the pitch at each goal's minute, so a man off their bench
        can score and a man who came off cannot. */
-    const oppGoalMinutes = distinctMinutes(nOpp, from + 1, hi, taken);
+    const oppGoalMinutes = distinctMinutes(nOpp, from + 1, hi, taken, board);
     const prior = allOppCards(live);
     oppCards = drawSegmentOppCards(m => oppAt(live, m) ?? [], from, to, maxYellows, bookedMapOf(prior, c => c.name), dismissedOf(prior, c => c.name), hi);
     if (half === 1) live.h1OppCards = [...(live.h1OppCards ?? []), ...oppCards];
@@ -13170,7 +13202,8 @@ function recutSecondHalf(state: CareerState, entry: CalendarEntry, live: LiveMat
  * move, the fourth official has already held it up. The stretch is drawn on
  * the extended clock, (to + p, to + board], at the period's own rate per
  * minute of board (a stretch of length L spreads its goals over L plus the
- * board, see BOARD), and folded back onto the period's last minute.
+ * board, a board minute counting the period's weight, see BOARD), and folded
+ * back onto the period's last minute.
  */
 function recutBoard(state: CareerState, entry: CalendarEntry, live: LiveMatch, period: 'h1' | 'h2' | 'et', p: number): void {
   const board = live.added?.[period];
@@ -13207,7 +13240,9 @@ function recutBoard(state: CareerState, entry: CalendarEntry, live: LiveMatch, p
   const first = period === 'h1' ? firstHalfLambdas(state, fx, xi, live.mentality) : null;
   const { lamMine, lamOpp } = first
     ?? secondHalfLambdas(state, fx, live, xi, live.myGoals + (live.h2My ?? []).length, live.oppGoals + (live.h2Opp ?? []).length);
-  const share = ((board - p) / 45) * (len / (len + board));
+  /* A minute of the board counts `weight` times an ordinary one (see BOARD). */
+  const w = BOARD[period].weight;
+  const share = ((board - p) / 45) * (len * w / (len + w * board));
   drawSegment(state, live, fx, period === 'h1' ? 1 : 2, to + p, to + board, lamMine * share, lamOpp * share);
   /* Everything just drawn sits past `to`: fold it into the board. */
   if (period === 'h1') {

@@ -391,13 +391,19 @@ const CAREERS = [
   ['Barcelona', 'era2010'], ['Real Madrid', 'era2010'], ['Chelsea', 'era2010'], ['Man United', 'era2010'],
   ['Barcelona', 'era2015'], ['Real Madrid', 'era2015'], ['Chelsea', 'era2015'], ['Juventus', 'era2015'],
 ];
-const S1 = { A: { matches: 0, goals90: 0, h1: 0, h2: 0, et: 0 }, B: { matches: 0, goals90: 0, h1: 0, h2: 0, et: 0 } };
+const S1 = {
+  A: { matches: 0, goals90: 0, h1: 0, h2: 0, et: 0, h1Goals: 0, boardH1: 0, boardH2: 0 },
+  B: { matches: 0, goals90: 0, h1: 0, h2: 0, et: 0, h1Goals: 0, boardH1: 0, boardH2: 0 },
+};
 function countGoals(arm, r) {
   const s = S1[arm];
   s.matches += 1;
+  s.boardH1 += r.detail?.added?.h1 ?? 0;
+  s.boardH2 += r.detail?.added?.h2 ?? 0;
   for (const g of [...r.myScorers, ...r.oppScorers]) {
     if (g.minute > 90 || (r.detail?.et && g.minute === r.detail.et.to && g.plus)) { s.et += 1; continue; }
     s.goals90 += 1;
+    if (g.minute <= 45) s.h1Goals += 1;
     if (g.plus && g.minute === 45) s.h1 += 1;
     else if (g.plus && g.minute === 90) s.h2 += 1;
   }
@@ -815,6 +821,7 @@ function readOldReport(r, club, ctx, oldHalves) {
   report(1, 'Goals land in the board at a measured share, and the board adds no goals', [
     `arm A: ${A.matches} matches, ${A.goals90} goals in the ninety and the boards (${A.et} more in extra time): ${A.h1} at 45+ (${pct(A.h1, A.goals90)} percent, band ${100 * T.h1Lo} to ${100 * T.h1Hi}), ${A.h2} at 90+ (${pct(A.h2, A.goals90)} percent, band ${100 * T.h2Lo} to ${100 * T.h2Hi})`,
     `goals per match: board open ${gpmA.toFixed(3)}, board closed ${gpmB.toFixed(3)} (${B.matches} matches), gap ${(gpmA - gpmB).toFixed(3)} (tolerance ${T.tolGpm})`,
+    `of each half's own goals: ${pct(A.h1, A.h1Goals)} percent of the first half's in its board, ${pct(A.h2, A.goals90 - A.h1Goals)} percent of the second half's; mean boards ${(A.boardH1 / A.matches).toFixed(2)} and ${(A.boardH2 / A.matches).toFixed(2)} minutes`,
   ]);
 }
 
