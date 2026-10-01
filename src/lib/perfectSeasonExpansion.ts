@@ -152,11 +152,15 @@ export function formatOneIn(odds: number): string {
 }
 
 /** The honest line under a final record: what an unbeaten season costs at
-    this overall, and what it takes to be in the conversation. */
+    this overall, and what it takes to be in the conversation. Pass the RAW
+    overall the sim played, never a rounded one: the odds are steep enough
+    that rounding 94.5 up to 95 halves them and 98.52 up to 99 doubles them,
+    so they are worked out on the raw value and the line prints it to one
+    decimal (an integer prints bare). */
 export function perfectOddsLine(sport: ExpansionSport, overall: number): string {
-  const ovr = Math.round(overall);
+  const ovr = String(Math.round(overall * 10) / 10);
   const games = SEASON_GAMES[sport];
-  const odds = perfectSeasonOdds(sport, ovr);
+  const odds = perfectSeasonOdds(sport, overall);
   /* "an 82-0", "an 18-0", "a 17-0": the article follows how the number is said. */
   const article = /^(8|11$|18$)/.test(String(games)) ? 'an' : 'a';
   const record = `${article} ${games}-0`;

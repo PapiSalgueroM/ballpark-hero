@@ -64,8 +64,9 @@
         closed form 9.5), at 90 under one in 100,000. The guide in src/data/gameContent still
         carries "one run in 600" and "one in five", so the words and the maths
         agree, and perfectOddsLine and formatOneIn render the shapes the page
-        shows. A curve change that moves the odds without moving the copy goes
-        red here.
+        shows, with the odds worked out on the raw overall (a 94.5 prints its
+        own odds and the ceiling prints one in 9). A curve change that moves
+        the odds without moving the copy goes red here.
      3. THE BEST RECORD STORE. Round trip, garbage fails closed, a worse run
         never overwrites, an equal run keeps the first, the improved flag is
         right.
@@ -78,6 +79,9 @@
                   class: odds that drift away from what the copy promises.
      nomomentum   the sim loses its streak term while the closed form keeps it.
                   Section 1 goes red at 99 (about 18 percent against about 13).
+     rounded      the card line rounds the overall before working out the odds
+                  (the review's finding of 2026-10-01). Section 2 goes red: a
+                  94.5 prints a 95's one in 610 and the ceiling a 99's one in 5.
    Exit 0 when a named control turned its sections red and nothing else, 1 when
    it did not (a dead control), 2 for a control name this harness does not know.
 
@@ -103,6 +107,12 @@ const CONTROLS = {
     to: 'const momentum = 0;',
     note: 'the sim drops its streak term while the closed form keeps it',
     sections: [1],
+  },
+  rounded: {
+    from: 'const odds = perfectSeasonOdds(sport, overall);',
+    to: 'const odds = perfectSeasonOdds(sport, Math.round(overall));',
+    note: 'the card line works its odds out on the rounded overall, so a 94.5 prints a 95\'s odds and the 98.5 ceiling a 99\'s',
+    sections: [2],
   },
 };
 if (CONTROL && !CONTROLS[CONTROL]) { console.error(`SIM_PS_ODDS_CONTROL=${CONTROL} is not a control this harness knows (${Object.keys(CONTROLS).join(', ')})`); process.exit(2); }
@@ -200,6 +210,18 @@ console.log('2) the numbers the copy prints');
   if (!nfl.startsWith('At 90 overall a 17-0 season')) fail(`the article in front of 17-0 is wrong: "${nfl}"`);
   /* 615 exact, printed to two figures; the band is the copy's "about one in 600". */
   if (!/one run in 6\d0\./.test(mid) || !mid.includes('Rare, not impossible')) fail(`the mid line is wrong: "${mid}"`);
+  /* The card is fed the raw overall the sim played, not the rounded one it
+     shows (review of 2026-10-01): a 94.5 is about one in 1,200, not a 95's
+     one in 610, and the 98.52 ceiling is What's New's one in nine, not a 99's
+     one in five. The line prints the overall to one decimal so the number and
+     the odds beside it agree. */
+  const half = exp.perfectOddsLine('nba', 94.5);
+  const ceil = exp.perfectOddsLine('nba', CEILING);
+  console.log(`   94.5: ${half}`);
+  console.log(`   ${CEILING}: ${ceil}`);
+  const halfOdds = exp.formatOneIn(exp.perfectSeasonOdds('nba', 94.5));
+  if (!half.startsWith(`At 94.5 overall an 82-0 season comes about ${halfOdds}.`) || halfOdds === exp.formatOneIn(exp.perfectSeasonOdds('nba', 95))) fail(`a 94.5 does not print its own odds (${halfOdds}): "${half}"`);
+  if (!ceil.startsWith('At 98.5 overall an 82-0 season comes about one run in 9.')) fail(`the ceiling line does not say one in nine, as What's New does: "${ceil}"`);
 }
 
 section = 3;

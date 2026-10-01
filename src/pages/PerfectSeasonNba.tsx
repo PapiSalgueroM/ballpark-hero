@@ -745,9 +745,10 @@ const PerfectSeasonNba = () => {
                   Team overall {sim.overall} · drafted in {spins} spin{spins === 1 ? '' : 's'}
                 </p>
                 {/* Round 784: the real target, in the page rather than the guide.
-                    The odds come from the same curve that produced the record. */}
+                    The odds come from the same curve that produced the record,
+                    at the raw overall the sim played (sim.overall is rounded). */}
                 {!sim.perfect && (
-                  <p className="text-xs text-muted-foreground mb-2" data-perfect-odds>{perfectOddsLine('nba', sim.overall)}</p>
+                  <p className="text-xs text-muted-foreground mb-2" data-perfect-odds>{perfectOddsLine('nba', overall)}</p>
                 )}
                 {best && (
                   <p className="text-xs mb-3" data-best-record>
