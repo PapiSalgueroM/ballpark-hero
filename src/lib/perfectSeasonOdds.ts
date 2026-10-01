@@ -12,15 +12,16 @@
  * so the card cannot print odds the sim does not play.
  *
  * MEASURED 2026-10-01 through each page's own adapter (every wheel stop the
- * live tables give) and the real sims, 200,000 drafts and 200,000 seasons per
- * figure; the full table is in the harness header:
+ * live tables give, on the full wheels Round 821 opened) and the real sims,
+ * 200,000 drafts and 200,000 seasons per figure; the full table is in the
+ * harness header:
  *   NBA  best team the wheel can build 98.5, 82-0 one run in 9.5. Well played
  *        drafts median 87.9, where 82-0 comes about one run in 160 million.
- *   NHL  best 98.3, one run in 2.7. Median well played draft 86.8, about one
- *        run in 33,000; across the whole spread of drafts one run in 89.
- *   MLB  best 98.0, one run in 7. Median well played draft 78.8, averaging 95
+ *   NHL  best 98.3, one run in 2.7. Median well played draft 86.0, about one
+ *        run in 210,000; across the whole spread of drafts one run in 133.
+ *   MLB  best 98.3, one run in 7. Median well played draft 79.6, averaging 102
  *        wins; across the spread no 162-0 in 200,000 (closed form one run in
- *        256 million) while 18 percent of seasons reach 116 wins.
+ *        193 million) while 24 percent of seasons reach 116 wins.
  *   NFL  best 97.5, two runs in three. Median well played draft 81.9, about
  *        one run in 1,200; across the spread one run in 99.
  */

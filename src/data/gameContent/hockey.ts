@@ -108,7 +108,7 @@ export const HOCKEY_CONTENT: GameContentMap = {
     faqs: [
       {
         q: "How realistic is an actual 82-0 run?",
-        a: "It depends on your overall, and the goalie counts most. An 88 lineup goes 82-0 about one run in 3,900, a 90 about one run in 250 and a 93 about one run in 19. Most well drafted lineups land between 83 and 92, and the result card prints the odds for the lineup you actually drafted.",
+        a: "It depends on your overall, and the goalie counts most. An 88 lineup goes 82-0 about one run in 3,900, a 90 about one run in 250 and a 93 about one run in 19. Most well drafted lineups land between 81 and 91, and the result card prints the odds for the lineup you actually drafted.",
       },
       {
         q: "What does Hard mode change?",

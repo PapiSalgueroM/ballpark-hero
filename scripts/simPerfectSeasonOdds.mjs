@@ -13,43 +13,49 @@
 
    MEASURED 2026-10-01 through each page's own adapter (fetchTeam...Index and
    fetchSquad over every wheel stop the live tables give: NBA 1,615 squads,
-   NHL 194, MLB 1,000, NFL 828) and the real sims. "Best" is the strongest
-   lineup the whole wheel can build with distinct names. "Well played" is
-   200,000 drafts: every spin random over the wheel, the best draftable player
-   at every stop into the first open slot he fits, a reroll (two per run) when
-   that player is under the sport's reroll line (the median stop's best player
-   minus 2: NBA 88, NHL 94, MLB 82, NFL 86). The NBA rerun reproduced Round
-   784 to the decimal (best 98.52, drafts mean 87.80, one run in 112,033).
-   Seasons are 200,000 per row through the sim the page calls.
+   NHL 222, MLB 2,572, NFL 828) and the real sims. The NHL and MLB rows were
+   measured again on the full wheels Round 821 opened (before it they were
+   built from the first 1,000 rows: NHL 194 stops, MLB 1,000 stops, 1901 to
+   1962). "Best" is the strongest lineup the whole wheel can build with
+   distinct names. "Well played" is 200,000 drafts: every spin random over the
+   wheel, the best draftable player at every stop into the first open slot he
+   fits, a reroll (two per run) when that player is under the sport's reroll
+   line (the median stop's best player minus 2: NBA 88, NHL 93, MLB 84, NFL
+   86). The NBA rerun reproduced Round 784 to the decimal (best 98.52, drafts
+   mean 87.80, one run in 112,033). Seasons are 200,000 per row through the
+   sim the page calls.
 
      sport  best    unbeaten at best      drafts p10 / median / p90 / p99   unbeaten at the median    across all drafts
      NBA    98.52   21,111, one in 9.5    84.31 / 87.86 / 91.24 / 93.31     0 (closed one in 161M)   one in 112,033 (2 seen)
-     NHL    98.27   74,256, one in 2.7    82.55 / 86.82 / 91.61 / 96.15     6, one in 33,333         2,256, one in 89
-     MLB    98.04   28,256, one in 7.1    75.10 / 78.80 / 82.52 / 85.56     0 (closed 1 in 5.8e36)   0 (closed one in 256M)
+     NHL    98.27   74,256, one in 2.7    81.15 / 85.97 / 90.94 / 95.55     1 (closed one in 206,455) 1,508, one in 133
+     MLB    98.30   28,256, one in 7.1    76.26 / 79.59 / 83.00 / 85.82     0 (closed 1 in 2.7e35)   0 (closed one in 193M)
      NFL    97.52   130,484, one in 1.5   77.60 / 81.89 / 86.20 / 89.45     184, one in 1,087        2,011, one in 99.5
+   On the capped wheels the NHL drafts ran 82.55 / 86.82 / 91.61 / 96.15 (one
+   in 89 across them) and the MLB drafts 75.10 / 78.80 / 82.52 / 85.56.
 
    Wins (mean, sd, p10 to p90):
      NBA  best 79.8 sd 1.5 (78 to 82); median draft 64.9 sd 3.7 (60 to 70); all drafts 64.6 sd 6.5 (56 to 73)
-     NHL  best 81.0 sd 1.0 (80 to 82); median draft 72.1 sd 3.0 (68 to 76); all drafts 70.8 sd 7.4 (61 to 79)
-     MLB  best 160.0 sd 1.4 (158 to 162); median draft 95.4 sd 6.3 (87 to 103); all drafts 94.4 sd 22.3 (64 to 123),
-          and 18.45 percent of those seasons reach 116 wins, the big league record (1906 Cubs, 2001 Mariners)
+     NHL  best 81.0 sd 1.0 (80 to 82); median draft 70.5 sd 3.2 (66 to 74); all drafts 68.7 sd 9.0 (56 to 78)
+     MLB  best 160.0 sd 1.4 (158 to 162); median draft 101.6 sd 6.2 (94 to 110); all drafts 100.6 sd 20.0 (74 to 126),
+          and 24.47 percent of those seasons reach 116 wins, the big league record (1906 Cubs, 2001 Mariners)
      NFL  best 16.6 sd 0.6 (16 to 17); median draft 11.1 sd 2.0 (9 to 14); all drafts 11.2 sd 2.7 (8 to 15)
    Closed form at whole overalls (one run in): NHL 88 3,857, 90 252, 92 38, 93 19, 95 7;
    MLB 88 12.1 million, 90 55,055, 92 1,335, 93 331, 95 41, 99 7; NFL 85 88, 88 14, 90 4.
 
    What that means, sport by sport. NBA: 82-0 takes a 95 the wheel almost
    never deals. NHL: a typical lineup is a long shot, but drafts vary so much
-   that one well played run in about 90 goes 82-0, so 82-0 stays a real (rare)
+   that one well played run in about 130 goes 82-0, so 82-0 stays a real (rare)
    target and the page says it takes an 89 plus. MLB: a perfect 162 is not a
    real target for anything the wheel deals, so the page and the guide chase
-   116 wins instead. NFL: 17-0 comes about one well played run in 100.
+   116 wins instead. NFL: 17-0 comes about one well played run in 100, the
+   friendliest of the four.
 
-   Two things the round did not change and the lead should know. The NHL and
+   One thing the rounds did not change and the lead should know. The NHL and
    MLB pages play the old core sigmoid (winProbability), where a typical NHL
-   lineup averages 72 wins in 82 games against a real record of 65, and an
-   MLB 82 averages 119 wins: plainly richer than either sport, but the brief
-   was the copy, not the model. And the MLB wheel index query hits the 1,000
-   row cap, so the wheel only ever lands on 1901 to 1962.
+   lineup averages 70 wins in 82 games against a real record of 65 (the
+   2022-23 Bruins), and a typical MLB lineup averages 102 wins with a quarter
+   of all well played seasons past the real record of 116: plainly richer than
+   either sport, but the brief was the copy, not the model.
 
    Sections, each per sport (a failure names its sport):
      1. THE CLOSED FORM IS THE ENGINE. 200,000 seasons at four overalls per
@@ -91,7 +97,7 @@
    must redden exactly its own section:sport labels:
      steep           NBA curve: a 95 pays 79 expected wins            2:nba 4:nba
      steepnfl        NFL curve: an 85 pays 15 expected wins           2:nfl 4:nfl
-     steepcore       core sigmoid centred at 74, not 77               2:nhl 4:nhl 2:mlb 4:mlb
+     steepcore       core sigmoid centred at 74, not 77               2:nhl 4:nhl 2:mlb 4:mlb 4:nfl (football no longer the friendliest)
      nomomentum      simulateSeasonFair loses its streak term         1:nba 1:nfl
      nomomentumcore  simulateSeason loses its streak term             1:nhl 1:mlb
      rounded         the card line works its odds on the rounded overall  2:all four
@@ -123,7 +129,7 @@ const CONTROL = process.env.SIM_PS_ODDS_CONTROL || '';
 const CONTROLS = {
   steep: { file: 'src/lib/perfectSeasonExpansion.ts', module: true, from: '[90, 69.5], [95, 75.5], [99, 80],', to: '[90, 69.5], [95, 79], [99, 80],', note: 'a 95 NBA roster pays 79 expected wins, so it goes unbeaten about one run in 15 while the guide still says one in 600', want: ['2:nba', '4:nba'] },
   steepnfl: { file: 'src/lib/perfectSeasonExpansion.ts', module: true, from: '[75, 7.5], [80, 10], [85, 13],', to: '[75, 7.5], [80, 10], [85, 15],', note: 'an 85 NFL roster pays 15 expected wins, so every NFL number the copy quotes is stale', want: ['2:nfl', '4:nfl'] },
-  steepcore: { file: 'src/lib/perfectSeason.ts', module: true, from: 'const x = (overall - 77) / 5;', to: 'const x = (overall - 74) / 5;', note: 'the core sigmoid moves three points, so every NHL and MLB number the copy quotes is stale', want: ['2:nhl', '4:nhl', '2:mlb', '4:mlb'] },
+  steepcore: { file: 'src/lib/perfectSeason.ts', module: true, from: 'const x = (overall - 77) / 5;', to: 'const x = (overall - 74) / 5;', note: 'the core sigmoid moves three points, so every NHL and MLB number the copy quotes is stale and the update log can no longer call football the friendliest', want: ['2:nhl', '4:nhl', '2:mlb', '4:mlb', '4:nfl'] },
   nomomentum: { file: 'src/lib/perfectSeasonExpansion.ts', module: true, from: 'const momentum = i > 0 ? (results[i - 1] ? WIN_MOMENTUM : LOSS_MOMENTUM) : 0;', to: 'const momentum = 0;', note: 'simulateSeasonFair drops its streak term while the closed form keeps it', want: ['1:nba', '1:nfl'] },
   nomomentumcore: { file: 'src/lib/perfectSeason.ts', module: true, from: 'const momentum = i > 0 ? (results[i - 1] ? WIN_MOMENTUM : LOSS_MOMENTUM) : 0;', to: 'const momentum = 0;', note: 'simulateSeason drops its streak term while the closed form keeps it', want: ['1:nhl', '1:mlb'] },
   rounded: { file: 'src/lib/perfectSeasonOdds.ts', module: true, from: 'const odds = perfectSeasonOdds(sport, overall);', to: 'const odds = perfectSeasonOdds(sport, Math.round(overall));', note: 'the card line works its odds out on the rounded overall, so a half overall prints the next one\'s odds', want: ALL(2) },
@@ -204,8 +210,8 @@ const N = Number(process.argv[2] || 200000);
 /* The measured table from the header. */
 const MEASURED = {
   nba: { best: 98.52, median: 87.86, p10: 84.31, p90: 91.24, p99: 93.31, allDrafts: 1 / 112033 },
-  nhl: { best: 98.27, median: 86.82, p10: 82.55, p90: 91.61, p99: 96.15, allDrafts: 2256 / 200000 },
-  mlb: { best: 98.04, median: 78.80, p10: 75.10, p90: 82.52, p99: 85.56, allDrafts: 3.905e-9, recordShare: 0.1845 },
+  nhl: { best: 98.27, median: 85.97, p10: 81.15, p90: 90.94, p99: 95.55, allDrafts: 1508 / 200000 },
+  mlb: { best: 98.30, median: 79.59, p10: 76.26, p90: 83.00, p99: 85.82, allDrafts: 5.189e-9, recordShare: 0.2447 },
   nfl: { best: 97.52, median: 81.89, p10: 77.60, p90: 86.20, p99: 89.45, allDrafts: 2011 / 200000 },
 };
 const SIM = {
@@ -246,7 +252,7 @@ const ADAPTER_GAMES = { nba: ['perfectSeasonNba', 'NBA_GAMES'], nhl: ['perfectSe
 /* Bands around the measured table: [lowest, highest] for one run in N. */
 const BANDS = {
   nba: { best: [8, 11], median: [1e7, Infinity] },
-  nhl: { best: [2, 4], median: [20000, 50000] },
+  nhl: { best: [2, 4], median: [150000, 300000] },
   mlb: { best: [5, 10], median: [1e12, Infinity] },
   nfl: { best: [1.2, 2], median: [800, 1600] },
 };
@@ -413,7 +419,7 @@ for (sport of SPORTS) {
     need('guide', guide, `Most well drafted lineups land between ${Math.round(M.p10)} and ${Math.round(M.p90)}`);
     record('guide', guide, `at 93 an 82-0 comes about ${f('nhl', 93)}`, 93, 80);
     need('guide', guide, 'closes 80-2');
-    need("What's New", whatsNew, `a typical lineup (${M.median.toFixed(1)} overall) goes 82-0 about ${f('nhl', M.median)}`);
+    need("What's New", whatsNew, `a typical lineup (${Math.round(M.median)} overall) goes 82-0 about ${f('nhl', Math.round(M.median))}`);
     need("What's New", whatsNew, `across all of them about one run in ${Math.round(1 / M.allDrafts / 10) * 10} goes unbeaten`);
   }
   if (sport === 'mlb') {
@@ -422,16 +428,16 @@ for (sport of SPORTS) {
     almostNever('tagline', from);
     need('tagline', tagline, 'almost never deals');
     need('guide', guide, 'the wheel almost never deals one');
-    if (!(M.recordShare >= 0.15 && M.recordShare <= 0.25)) fail(`the guide says about one well drafted lineup in five reaches 116, measured ${M.recordShare}`);
-    need('guide', guide, 'about one well drafted lineup in five gets there');
+    if (!(M.recordShare >= 0.2 && M.recordShare <= 0.3)) fail(`the guide says about one well drafted lineup in four reaches 116, measured ${M.recordShare}`);
+    need('guide', guide, 'about one well drafted lineup in four gets there');
     need('guide', guide, `The number to chase is ${def.greatSeason.wins} wins`);
-    topTenth('guide', 83);
-    record('guide', guide, `A perfect 162-0 at 83 comes about ${f('mlb', 83)}`, 83, 126);
-    need('guide', guide, 'the board reads 126-36');
+    topTenth('guide', 84);
+    record('guide', guide, `A perfect 162-0 at 84 comes about ${f('mlb', 84)}`, 84, 131);
+    need('guide', guide, 'the board reads 131-31');
     const typical = winBand('mlb', M.median);
-    if (!(typical.mean >= 93 && typical.mean <= 97)) fail(`What's New says a typical lineup averages 95 wins; the sim at ${M.median} averages ${typical.mean.toFixed(1)}`);
-    need("What's New", whatsNew, `a typical lineup rates about ${Math.round(M.median)}, averages 95 wins`);
-    need("What's New", whatsNew, 'which about one draft in five reaches');
+    if (!(typical.mean >= 99 && typical.mean <= 105)) fail(`What's New says a typical lineup averages about 102 wins; the sim at ${M.median} averages ${typical.mean.toFixed(1)}`);
+    need("What's New", whatsNew, `a typical lineup rates about ${Math.round(M.median)}, averages about 102 wins`);
+    need("What's New", whatsNew, 'which about one draft in four reaches');
     need('tile', tile, `chase ${def.greatSeason.wins} wins`);
     /* The review of 2026-10-01: the search description still asked "Can you
        go unbeaten?" after the page moved the chase to 116 wins. */
@@ -442,7 +448,9 @@ for (sport of SPORTS) {
     record('guide', guide, `At 87 a 17-0 comes about ${f('nfl', 87)}`, 87, 15);
     need('guide', guide, 'lands at 15-2');
     need('guide', guide, `around ${Math.round(M.median)}, goes 17-0 about ${f('nfl', Math.round(M.median))}, and even an 88 only about ${f('nfl', 88)}`);
-    need("What's New", whatsNew, `about ${f('nfl', M.median)} for a typical roster (${M.median.toFixed(1)}) and ${f('nfl', 88)} at 88`);
+    need("What's New", whatsNew, `a typical roster (${M.median.toFixed(1)}) goes 17-0 about ${f('nfl', M.median)}, ${f('nfl', 88)} at 88, and across all drafts about one run in ${Math.round(1 / M.allDrafts / 10) * 10}`);
+    /* What's New calls football the friendliest of the four. */
+    for (const other of ['nba', 'nhl', 'mlb']) if (!(M.allDrafts > MEASURED[other].allDrafts && at('nfl', M.median) > at(other, MEASURED[other].median))) fail(`What's New calls football the friendliest, but ${other} goes unbeaten as often`);
   }
   /* d. The page is wired to the shared pieces, and to the sim section 1 measured. */
   const wiring = [`const SPORT_KEY = '${sport}';`, '{perfectSeasonTagline(SPORT_KEY)}', 'usePerfectSeasonBest(SPORT_KEY)', 'recordBest({', '<BestSoFar best={best} />', '<SeasonOddsLines sport={SPORT_KEY} overall={overall} perfect={sim.perfect} best={best} newBest={newBest} />', PAGE_SIM[sport]];

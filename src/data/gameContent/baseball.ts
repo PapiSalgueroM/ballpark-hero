@@ -86,7 +86,7 @@ export const BASEBALL_CONTENT: GameContentMap = {
       {
         heading: "A strong draft takes a run at 116 wins",
         paragraphs: [
-          "The finished squad rates 83 overall, better than nine well drafted lineups in ten. The sim never cools off and the board reads 126-36, ten wins past the record. A perfect 162-0 at 83 comes about one run in more than a trillion, so 126 is the brag.",
+          "The finished squad rates 84 overall, better than nine well drafted lineups in ten. The sim never cools off and the board reads 131-31, fifteen wins past the record. A perfect 162-0 at 84 comes about one run in more than a trillion, so 131 is the brag.",
         ],
       },
     ],
@@ -111,7 +111,7 @@ export const BASEBALL_CONTENT: GameContentMap = {
       },
     ],
     faqs: [
-      { q: "Is 162-0 actually possible?", a: "On paper. A 95 lineup goes 162-0 about one run in 41, but the wheel almost never deals one: we drafted 200,000 lineups the way a good player would, and the best one in a hundred rated about 86, where 162-0 comes about one run in 27 billion. The real chase is 116 wins, and about one well drafted lineup in five gets there." },
+      { q: "Is 162-0 actually possible?", a: "On paper. A 95 lineup goes 162-0 about one run in 41, but the wheel almost never deals one: we drafted 200,000 lineups the way a good player would, and the best one in a hundred rated about 86, where 162-0 comes about one run in 27 billion. The real chase is 116 wins, and about one well drafted lineup in four gets there." },
       { q: "How does daily mode work?", a: "Everyone spins the same wheel under the same theme, one attempt per day, locked until midnight Eastern. Classic and Hard stay unlimited." },
     ],
   },
