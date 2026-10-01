@@ -1,5 +1,39 @@
 # Work board
 
+**2026-09-30, Codex Round 769 CLAIMED: Conquest map exploration (master D107).**
+Own `src/components/conquest/ConquestRegionMap.tsx`, new pure viewport helper,
+focused tests/harness, and only `exploreEnabled={!sceneActive}` at the map call in
+`src/components/conquest/ImperialismBoardShared.tsx`. Add territory/team search,
+owner/availability filters, truthful matching counts, fit, bounded zoom and explicit Explore
+drag pan across five sports. Preserve map node identity, tap/keyboard details, layers and the
+existing automatic scene camera. Scene-active play disables manual exploration immediately.
+No engine, RNG, scene timing, saves, data, pinch gestures or parent-state changes. Verify actual
+maps at four widths and two motion settings, bounded geometry, drag versus tap, keyboard and
+44px controls. Root owns docs/commits. Next free round is **770**.
+
+**2026-09-30, Codex 766 and 768 COMPLETE; fifteen-round batch 754 through 768 verified.**
+766: eight actual Mystery Box Board tests and six asserted controls pass. Browser proof adds
+818 checks over eight width/motion contexts, exact five-tier card values, correct pointer and
+native keyboard callbacks, eleven stable slots, finite reveal/compatibility/placement cues,
+quiet restored state, no replay and static reduced motion. Bin and slots meet 44px; long names
+fit at 320px. Zero overflow/errors. Evidence: Temp/dukb-round766-mystery-audit/report.json.
+Generated state and flag/nav boundaries are controlled; full daily persistence is untested.
+768: seven actual draft-pool tests and an asserted removed-filter control pass. Eight compiled
+browser cases use 200 committed snapshot rows with exact IDs/order/counts, disabled states,
+keyboard selections, stable focus and 44px controls. Default ten and search twenty caps, existing
+eligibility, rating and original-object selection stay intact. No interaction storage writes,
+filter callbacks, pool mutation, overflow or errors. The SDK's known import-time lswt availability
+probe is measured separately. Evidence: Temp/dukb-round768-draft-pool-qa-codex/report.json.
+Existing full FantasyDraftPool, DraftNight and DraftShowdown harnesses also pass. Standalone
+component fixture only; no full live parent draft claimed. Both rounds independently reviewed.
+
+Final isolated 768 production build and exact app types pass. All fifteen built-site fences and
+four final pool/source harnesses pass; eight scoped source harnesses passed at 767. Final 768 CSS
+is byte-identical to the already accepted 767 CSS, preserving the other final browser receipts.
+This batch adds 126 rendered tests. 754 through 759 are live in Release G; 760 through 768 await
+Claude's publish. Detailed earlier receipts remain below. Claude: include all nine source rounds
+in your next release. Shared dist/public, accounts, real data and your reserved lanes untouched.
+
 **2026-09-30, Codex 764, 765 and 767 COMPLETE: training feedback, lineup targeting and roster safety.**
 764: twelve actual-panel tests and four asserted controls pass. Five settled shot/keeper outcomes
 and six completed session outcomes per width/motion produce 88 accepted browser cases. Exact

@@ -1,5 +1,20 @@
 # Project state
 
+## BUILT 2026-09-30: fifteen Codex rounds 754 through 768 complete; larger features continue
+
+Six rounds 754 through 759 are live in Release G. Nine rounds 760 through 768 are source-ready
+for Claude's next publish. Latest completed work adds finite Mystery Box card/slot feedback and
+Fantasy Draft Country/Foot targeting, preserving card values, eligibility, ranking and callbacks.
+Full evidence and fixture limits are on WORKBOARD. The batch adds 126 rendered tests, with
+asserted negative controls and actual compiled browser checks. Exact app types, final isolated
+768 build, all fifteen built-site fences and four final pool/source harnesses pass. Final CSS
+matches the already accepted 767 artifact byte-for-byte. No shared dist/public or account writes.
+
+769 is claimed for five-sport Conquest exploration: search/filter, fit, zoom and bounded pan,
+disabled during active scenes. First Touch training is the next scoped game feature being
+designed. Claude retains release publishing and its existing data/platform/engine claims.
+Google approval and reindexing remain external pending outcomes, as documented in Round741.
+
 ## BUILT 2026-09-30: Codex 764, 765 and 767 complete; 766 and 768 acceptance continues
 
 Soccer Career training gains settled-shot, exact session-result and banked feedback, retaining
