@@ -227,6 +227,11 @@ export interface RandomEvent {
    *  category default in EVENT_COOLDOWN_DEFAULT. A career long story (a wax
    *  statue, a biopic) uses a number no career can outlive. */
   cooldown?: number;
+  /** Round 725: a few stories exist twice in different catalogs (the squad
+   *  group chat leak, the statue vote, starting a podcast). Events that share
+   *  a story share one entry in the cooldown ledger, so once any of them
+   *  fires, every one of them sits out its own cooldown. */
+  story?: string;
 }
 
 /* ─── World Cup Types ─── */
@@ -764,7 +769,8 @@ export interface CareerState {
   // Random events
   pendingEvents: RandomEvent[];
   lastEventId: number | null;
-  /** Round 725: the season index each event id last fired in, so the picker
+  /** Round 725: the season index each event last fired in, keyed by event id
+   *  (or by "story:" plus its story for events that share one), so the picker
    *  can hold an event out for its cooldown. Optional, absent on every save
    *  written before this round, and absent means nothing has fired yet. */
   eventLastFired?: Record<string, number>;
@@ -5792,7 +5798,8 @@ export function getAllEvents(state: CareerState): RandomEvent[] {
    same pigeon adopted twice. Every event now sits out a number of seasons
    after it fires: its own cooldown if the catalog gives one, otherwise the
    default for its category. The season an event fired in is written to
-   eventLastFired on the save, keyed by id, and an event is held out while
+   eventLastFired on the save, keyed by id (or by the story it shares with
+   an event in another catalog), and an event is held out while
    (this season minus that season) is at most its cooldown. Priority beats
    (200, 201, 500, 501) keep their place at the front of the queue but are
    held to the same rule. scripts/simCareerLifeCooldowns.mjs measures it. */
@@ -5815,8 +5822,13 @@ export function eventSeasonIndex(s: CareerState): number {
   return s.seasons[s.seasons.length - 1]?.year ?? 0;
 }
 
+/** The ledger key: the event id, or the shared story when it has one. */
+export function eventLedgerKey(e: Pick<RandomEvent, "id" | "story">): string {
+  return e.story ? `story:${e.story}` : String(e.id);
+}
+
 export function isEventOnCooldown(s: CareerState, e: RandomEvent, season: number = eventSeasonIndex(s)): boolean {
-  const last = s.eventLastFired?.[String(e.id)];
+  const last = s.eventLastFired?.[eventLedgerKey(e)];
   if (typeof last !== "number" || !Number.isFinite(last)) return false;
   return season - last <= eventCooldown(e);
 }
@@ -5893,7 +5905,7 @@ function generateRandomEvents(state: CareerState): RandomEvent[] {
      replaced rather than written into, so the previous state is untouched. */
   if (picked.length > 0) {
     const fired: Record<string, number> = { ...(state.eventLastFired || {}) };
-    for (const e of picked) fired[String(e.id)] = season;
+    for (const e of picked) fired[eventLedgerKey(e)] = season;
     state.eventLastFired = fired;
   }
   return picked;

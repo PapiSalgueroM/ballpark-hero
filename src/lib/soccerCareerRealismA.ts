@@ -20,6 +20,9 @@
    is no runtime cycle back into the engine.
    ──────────────────────────────────────────────────────────────────────────── */
 import type { CareerState, RandomEvent } from "./soccerCareerEngine";
+/* Round 725: the shared story keys. soccerCareerLife imports only types from
+   the engine as well, so this adds no cycle. */
+import { COOLDOWN, STORY } from "./soccerCareerLife";
 
 /* ─── tiny local helpers (duplicated on purpose: no runtime import cycle) ─── */
 const clamp = (v: number, min: number, max: number) => Math.max(min, Math.min(max, v));
@@ -336,7 +339,7 @@ export function getRealismEventsA(state: CareerState): RandomEvent[] {
   }
 
   if (pro >= 2 && state.socialMediaFollowers >= 0.3) {
-    push({ id: 422, emoji: "📱", title: "Somebody Screenshotted The Squad Group Chat",
+    push({ id: 422, story: STORY.squadChatLeak, cooldown: COOLDOWN.once, emoji: "📱", title: "Somebody Screenshotted The Squad Group Chat",
       description: "Two hundred messages are on a fan forum, including your detailed review of the manager's training drills and eleven voice notes you do not remember sending.",
       category: "negative", choices: [
         { label: "Own it: apologise to the group and the gaffer", emoji: "🙇", color: "bg-emerald-600", consequence: "Morale +4, Integrity +6, Popularity +2",

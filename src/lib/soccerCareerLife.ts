@@ -11,8 +11,10 @@
    Round 725: every event carries a cooldown (see COOLDOWN below), the eight
    one button events got a real second choice, and ids 253 to 272 are new:
    family, media, money, injuries, the dressing room, agents, the national
-   team, the fans and the late career. Every speaker is a role or a generated
-   person, never a real one. scripts/simCareerLifeCooldowns.mjs audits it.
+   team, the fans and the late career. Three stories this file shares with
+   other catalogs carry a STORY key so they happen once between them. Every
+   speaker is a role or a generated person, never a real one.
+   scripts/simCareerLifeCooldowns.mjs audits it.
    ──────────────────────────────────────────────────────────────────────────── */
 import type { CareerState, RandomEvent } from "./soccerCareerEngine";
 
@@ -54,6 +56,14 @@ export const COOLDOWN = {
   national: 2,
   late: 2,
   once: 99,
+} as const;
+
+/* Stories told by more than one catalog. Every event carrying one of these
+   shares a single cooldown entry, so the set behaves as one story. */
+export const STORY = {
+  squadChatLeak: "squadChatLeak",
+  statueVote: "statueVote",
+  podcastLaunch: "podcastLaunch",
 } as const;
 
 /* ─── Personalities ─── */
@@ -343,7 +353,10 @@ export function getLifeEvents(state: CareerState): RandomEvent[] {
   }
 
   /* ── wild general pool ── */
-  push({ id: 220, cooldown: COOLDOWN.dressingRoom, emoji: "💬", title: "The Group Chat Leak",
+  /* 220, 232 and 244 each tell a story another catalog tells too (eras 63
+     and realism 422, realism 462, eras 68), so the set shares one story key
+     and happens once a career between them. */
+  push({ id: 220, story: STORY.squadChatLeak, cooldown: COOLDOWN.once, emoji: "💬", title: "The Group Chat Leak",
     description: "Someone screenshots the squad group chat, including your message rating the manager's new haircut 'a 2, maybe a 3 in fog'.",
     category: "negative", choices: [
       { label: "Own it: it was funny", emoji: "😂", color: "bg-amber-600", consequence: "Followers +700k, Morale -5, manager side-eye",
@@ -464,7 +477,7 @@ export function getLifeEvents(state: CareerState): RandomEvent[] {
   }
 
   if (state.overall >= 84 && state.age >= 27) {
-    push({ id: 232, cooldown: COOLDOWN.once, emoji: "🗿", title: "The Statue Vote",
+    push({ id: 232, story: STORY.statueVote, cooldown: COOLDOWN.once, emoji: "🗿", title: "The Statue Vote",
       description: "Your hometown council is voting on a statue of you outside the stadium where you played as a kid.",
       category: "life", choices: [
         { label: "Attend the vote", emoji: "🗿", color: "bg-amber-600", consequence: "60%: it passes, Legacy +8. 40%: rejected 5 votes to 4, ouch",
@@ -588,7 +601,7 @@ export function getLifeEvents(state: CareerState): RandomEvent[] {
   }
 
   if (state.popularity >= 45 && !flag(state, "podcast")) {
-    push({ id: 244, cooldown: COOLDOWN.once, emoji: "🎙️", title: "Start a Podcast?",
+    push({ id: 244, story: STORY.podcastLaunch, cooldown: COOLDOWN.once, emoji: "🎙️", title: "Start a Podcast?",
       description: "Every player has a podcast now. Yours would be called whatever you want, and sponsors are already lining up.",
       category: "life", choices: [
         { label: "Launch it", emoji: "🎙️", color: "bg-emerald-600", consequence: "Sponsorship income +€200k/yr, occasional hot take backlash",
@@ -741,18 +754,16 @@ export function getLifeEvents(state: CareerState): RandomEvent[] {
       ] });
   }
 
-  if (state.netWorth >= 0.5 && !flag(state, "fiveASide")) {
-    push({ id: 258, cooldown: COOLDOWN.money, emoji: "🏗️", title: "Your First Coach's Pitch",
-      description: "The coach who first put you in boots wants €150k to turn the muddy pitch you learned on into a five a side centre. The business plan is a napkin, but it is a very sincere napkin.",
+  if (state.netWorth >= 1) {
+    push({ id: 258, cooldown: COOLDOWN.once, emoji: "🪴", title: "The Garden Centre Charge",
+      description: "Your bank has frozen your card over €80k spent at a garden centre at three on a Tuesday afternoon. You were at training. Your dad has gone very quiet in the family chat.",
       category: "life", choices: [
-        { label: "Fund it, name a pitch after him", emoji: "🏗️", color: "bg-emerald-600", consequence: "Net worth -€150k, Integrity +5, Popularity +3. 40%: it turns a profit (+€300k)",
-          apply: s => { setFlag(s, "fiveASide", 1); money(s, -0.15); s.integrityBonus += 5; s.popularity = clamp(s.popularity + 3, 0, 100); if (Math.random() < 0.4) { money(s, 0.3); log(s, "🏗️ The five a side centre is packed every night. It paid you back inside a season"); } else { log(s, "🏗️ The five a side centre opened. Pitch one has his name on it. It loses a little money and nobody minds"); } return s; } },
-        { label: "Fund it quietly, no name on anything", emoji: "🤫", color: "bg-blue-600", consequence: "Net worth -€150k, Integrity +4, Morale +4",
-          apply: s => { setFlag(s, "fiveASide", 1); money(s, -0.15); s.integrityBonus += 4; s.morale = clamp(s.morale + 4, 0, 100); log(s, "🤫 Paid for the pitch and told nobody. He knows. He always knows"); return s; } },
-        { label: "Offer a free camp there instead", emoji: "🧒", color: "bg-amber-600", consequence: "Integrity +2, Popularity +2, Physical -1 next season (your rest week is gone)",
-          apply: s => { setFlag(s, "fiveASide", 1); s.integrityBonus += 2; s.popularity = clamp(s.popularity + 2, 0, 100); bump(s, "physical", -1); log(s, "🧒 Ran a free camp on the mud instead. Sixty kids, one whistle, no rest week"); return s; } },
-        { label: "Say no", emoji: "✋", color: "bg-muted", consequence: "Morale -3, the napkin goes back in the drawer",
-          apply: s => { setFlag(s, "fiveASide", 1); s.morale = clamp(s.morale - 3, 0, 100); log(s, "✋ Said no to your first coach. He said he understood. He did not"); return s; } },
+        { label: "Report it as fraud", emoji: "🏦", color: "bg-blue-600", consequence: "50%: a real fraud, refunded in full (Morale +2). 50%: it was your dad, and now the bank wants a word with him (Net worth -€80k, Morale -5)",
+          apply: s => { if (Math.random() < 0.5) { s.morale = clamp(s.morale + 2, 0, 100); log(s, "🏦 The garden centre charge was a cloned card. Refunded by Friday"); } else { money(s, -0.08); s.morale = clamp(s.morale - 5, 0, 100); log(s, "🏦 Reported the garden centre charge as fraud. It was your dad. The bank rang him at dinner"); } return s; } },
+        { label: "Call home first", emoji: "📞", color: "bg-emerald-600", consequence: "Net worth -€80k, Morale +3, there is a pond now and one of the fish has your name",
+          apply: s => { money(s, -0.08); s.morale = clamp(s.morale + 3, 0, 100); log(s, "📞 Called home about the garden centre. Your dad built a pond. The biggest fish has your name"); return s; } },
+        { label: "Unfreeze the card and never mention it", emoji: "🤐", color: "bg-muted", consequence: "Net worth -€80k, Integrity +1, the pond goes in and nobody says a word",
+          apply: s => { money(s, -0.08); s.integrityBonus += 1; log(s, "🤐 Paid the garden centre bill and said nothing. The pond is lovely. Nobody has mentioned it"); return s; } },
       ] });
   }
 
@@ -771,15 +782,15 @@ export function getLifeEvents(state: CareerState): RandomEvent[] {
 
   /* ── injuries and recovery ── */
   if (state.age >= 20) {
-    push({ id: 260, cooldown: COOLDOWN.injury, emoji: "😴", title: "The Sleep Study",
-      description: "The club's sports scientist has your sleep data and he looks worried. Five hours a night, deep sleep he describes as 'basically a rumour', and a phone that lights up ninety four times before dawn.",
-      category: "life", choices: [
-        { label: "Blackout curtains, phone off at nine, do it properly", emoji: "😴", color: "bg-emerald-600", consequence: "Physical +1 next season, Morale -2, Followers -100k (the night posts stop)",
-          apply: s => { bump(s, "physical", 1); s.morale = clamp(s.morale - 2, 0, 100); followers(s, -0.1); log(s, "😴 Nine o'clock phone ban. Eight hours a night. You have never been so bored or so fast"); return s; } },
-        { label: "Buy the €40k mattress he keeps mentioning", emoji: "🛏️", color: "bg-amber-600", consequence: "Net worth -€40k. 50%: Physical +1 next season. 50%: it is a mattress",
-          apply: s => { money(s, -0.04); if (Math.random() < 0.5) { bump(s, "physical", 1); log(s, "🛏️ The €40k mattress worked. You will never admit how much it cost"); } else { log(s, "🛏️ The €40k mattress is a mattress. A very nice one. You still sleep five hours"); } return s; } },
-        { label: "Ignore it, you feel fine", emoji: "🤷", color: "bg-muted", consequence: "20%: a fatigue injury takes a yard off you (Pace -1)",
-          apply: s => { if (Math.random() < 0.2) { s.pace = clamp(s.pace - 1, 20, 99); log(s, "🤷 Ignored the sleep data. The calf went in training at 7am. Pace -1"); } else { log(s, "🤷 Ignored the sleep data. The sports scientist has stopped making eye contact"); } return s; } },
+    push({ id: 260, cooldown: COOLDOWN.injury, emoji: "🧠", title: "The Head Knock",
+      description: "An elbow caught you on the side of the head just before half time. You feel fine, mostly. The club doctor wants you off, and the gaffer is looking at the scoreboard.",
+      category: "negative", choices: [
+        { label: "Come off and do the full protocol", emoji: "🩺", color: "bg-blue-600", consequence: "Morale -1, Integrity +2, back in a week with a clear head",
+          apply: s => { s.morale = clamp(s.morale - 1, 0, 100); s.integrityBonus += 2; log(s, "🩺 Came off and did the full head injury protocol. Back a week later, clear as a bell"); return s; } },
+        { label: "Talk your way into the second half", emoji: "🤕", color: "bg-red-600", consequence: "65%: you were fine (Morale +2). 35%: the fog lasts a month (Passing -1, Morale -6)",
+          apply: s => { if (Math.random() < 0.65) { s.morale = clamp(s.morale + 2, 0, 100); log(s, "🤕 Talked the doctor round and played the second half. Got away with it this time"); } else { s.passing = clamp(s.passing - 1, 20, 99); s.morale = clamp(s.morale - 6, 0, 100); log(s, "🤕 Played on after the head knock. The fog took a month to lift. Passing -1"); } return s; } },
+        { label: "Come off, then talk about it publicly", emoji: "📣", color: "bg-emerald-600", consequence: "Morale -4 (a month of interviews about it), Integrity +3, Followers +200k",
+          apply: s => { s.morale = clamp(s.morale - 4, 0, 100); s.integrityBonus += 3; followers(s, 0.2); log(s, "📣 Came off with the head knock and said why on camera. Youth coaches keep sending you thank yous"); return s; } },
       ] });
   }
 
@@ -796,30 +807,36 @@ export function getLifeEvents(state: CareerState): RandomEvent[] {
       ] });
   }
 
-  if ((state.seriousInjuries?.length ?? 0) > 0 && !flag(state, "comebackGame")) {
+  /* Only while the comeback is actually news: the serious injury happened
+     this season or the one before. Gated on any injury ever, a 33 year old
+     could be told about his "first start since the long injury" of age 22.
+     The injury cooldown keeps it to one comeback per injury. */
+  const lastSerious = state.seriousInjuries?.[state.seriousInjuries.length - 1];
+  const seasonNow = state.seasons[state.seasons.length - 1]?.year ?? 0;
+  if (lastSerious && lastSerious.year >= seasonNow - 1) {
     push({ id: 262, cooldown: COOLDOWN.injury, emoji: "🏟️", title: "The Comeback Game",
       description: "First start since the long injury. The warm up felt like a trial. The stadium stood up when your name was read out and your mum is crying on the big screen.",
       category: "positive", choices: [
         { label: "Play it safe, get through ninety", emoji: "🧘", color: "bg-blue-600", consequence: "Morale +4, Integrity +1",
-          apply: s => { setFlag(s, "comebackGame", 1); s.morale = clamp(s.morale + 4, 0, 100); s.integrityBonus += 1; log(s, "🧘 Ninety careful minutes on the comeback. The leg held and so did you"); return s; } },
+          apply: s => { s.morale = clamp(s.morale + 4, 0, 100); s.integrityBonus += 1; log(s, "🧘 Ninety careful minutes on the comeback. The leg held and so did you"); return s; } },
         { label: "Go full throttle from the first whistle", emoji: "⚡", color: "bg-red-600", consequence: "65%: Morale +8, Shooting +1 and Pace +1 next season. 35%: the leg says no (Pace -1, Morale -6)",
-          apply: s => { setFlag(s, "comebackGame", 1); if (Math.random() < 0.65) { s.morale = clamp(s.morale + 8, 0, 100); bump(s, "shooting", 1); bump(s, "pace", 1); log(s, "⚡ Came back like you had never left. The physio watched through his fingers"); } else { s.pace = clamp(s.pace - 1, 20, 99); s.morale = clamp(s.morale - 6, 0, 100); log(s, "⚡ Went full throttle on the comeback and the leg said no. Pace -1"); } return s; } },
+          apply: s => { if (Math.random() < 0.65) { s.morale = clamp(s.morale + 8, 0, 100); bump(s, "shooting", 1); bump(s, "pace", 1); log(s, "⚡ Came back like you had never left. The physio watched through his fingers"); } else { s.pace = clamp(s.pace - 1, 20, 99); s.morale = clamp(s.morale - 6, 0, 100); log(s, "⚡ Went full throttle on the comeback and the leg said no. Pace -1"); } return s; } },
         { label: "Dedicate the night to the medical team", emoji: "🩺", color: "bg-emerald-600", consequence: "Integrity +3, Morale +5, the physios get a standing ovation",
-          apply: s => { setFlag(s, "comebackGame", 1); s.integrityBonus += 3; s.morale = clamp(s.morale + 5, 0, 100); log(s, "🩺 Brought the physios out at the end. The stadium clapped them longer than you"); return s; } },
+          apply: s => { s.integrityBonus += 3; s.morale = clamp(s.morale + 5, 0, 100); log(s, "🩺 Brought the physios out at the end. The stadium clapped them longer than you"); return s; } },
       ] });
   }
 
   /* ── teammates and the dressing room ── */
   if (state.age >= 22) {
-    push({ id: 263, cooldown: COOLDOWN.dressingRoom, emoji: "🫙", title: "The Fines Jar",
-      description: "You have been made keeper of the squad fines jar. The captain was eleven minutes late this morning, owes €3,000, and is currently pretending he has never met you.",
+    push({ id: 263, cooldown: COOLDOWN.dressingRoom, emoji: "🎁", title: "Secret Santa",
+      description: "The squad Secret Santa has a €20 limit, and you have drawn the one teammate who has not spoken to you since a training ground tackle in August.",
       category: "life", choices: [
-        { label: "Enforce it, no exceptions", emoji: "📋", color: "bg-emerald-600", consequence: "Integrity +2, Morale +3, the captain pays in coins",
-          apply: s => { s.integrityBonus += 2; s.morale = clamp(s.morale + 3, 0, 100); log(s, "📋 Fined the captain in full. He paid in a bin bag of coins"); return s; } },
-        { label: "Waive it, quietly", emoji: "🤫", color: "bg-muted", consequence: "50%: nobody notices. 50%: everybody notices (Morale -4)",
-          apply: s => { if (Math.random() < 0.5) { log(s, "🤫 Waived the captain's fine. Nobody noticed. Probably"); } else { s.morale = clamp(s.morale - 4, 0, 100); log(s, "🤫 Waived the captain's fine. Eleven players noticed at once"); } return s; } },
-        { label: "Double it and give the jar to charity", emoji: "💝", color: "bg-blue-600", consequence: "Integrity +4, Followers +300k, the captain claims it was his idea",
-          apply: s => { s.integrityBonus += 4; followers(s, 0.3); log(s, "💝 Doubled the fine and gave the whole jar to a food bank. The captain took the credit"); return s; } },
+        { label: "Find him something genuinely thoughtful", emoji: "🎁", color: "bg-emerald-600", consequence: "Morale +4. 60%: he thaws (Integrity +2)",
+          apply: s => { s.morale = clamp(s.morale + 4, 0, 100); if (Math.random() < 0.6) { s.integrityBonus += 2; log(s, "🎁 Got him a framed photo from his first club. He shook your hand at the Christmas do"); } else { log(s, "🎁 Got him something thoughtful. He said thanks. Just thanks"); } return s; } },
+        { label: "A joke gift about the tackle", emoji: "😂", color: "bg-amber-600", consequence: "50%: the room loses it (Morale +6). 50%: he does not laugh (Morale -4)",
+          apply: s => { if (Math.random() < 0.5) { s.morale = clamp(s.morale + 6, 0, 100); log(s, "😂 Gave him shin pads with August's date on them. Even he laughed"); } else { s.morale = clamp(s.morale - 4, 0, 100); log(s, "😂 Gave him shin pads with August's date on them. He did not laugh. Nobody did after that"); } return s; } },
+        { label: "Ignore the limit and buy him a watch", emoji: "⌚", color: "bg-red-600", consequence: "Net worth -€20k, Popularity +1, Integrity -1, every other €20 gift now looks worse",
+          apply: s => { money(s, -0.02); s.popularity = clamp(s.popularity + 1, 0, 100); s.integrityBonus -= 1; log(s, "⌚ Bought your Secret Santa a watch. The other nineteen gifts were socks"); return s; } },
       ] });
   }
 
@@ -865,15 +882,15 @@ export function getLifeEvents(state: CareerState): RandomEvent[] {
 
   /* ── national team ── */
   if (state.internationalCareer && !state.intStats.isRetired) {
-    push({ id: 267, cooldown: COOLDOWN.national, emoji: "🎼", title: "The Anthem Clip",
-      description: "A clip of you not singing the anthem is everywhere. You were concentrating. Nobody is interested in that explanation.",
+    push({ id: 267, cooldown: COOLDOWN.national, emoji: "🛏️", title: "The Camp Roommate",
+      description: "International camp has put you in a room with the centre back who has been kicking lumps out of you in league games for three seasons. He snores. He also, it turns out, does a perfect impression of the national coach.",
       category: "international", choices: [
-        { label: "Explain it once, calmly", emoji: "🎙️", color: "bg-blue-600", consequence: "Popularity +2, Integrity +1",
-          apply: s => { s.popularity = clamp(s.popularity + 2, 0, 100); s.integrityBonus += 1; log(s, "🎙️ Explained the anthem clip once and moved on. Most people did too"); return s; } },
-        { label: "Sing the loudest next time, badly", emoji: "🎤", color: "bg-emerald-600", consequence: "Followers +500k, Popularity +3, Morale +2",
-          apply: s => { followers(s, 0.5); s.popularity = clamp(s.popularity + 3, 0, 100); s.morale = clamp(s.morale + 2, 0, 100); log(s, "🎤 Belted the anthem out of tune the next game. The country forgave you instantly"); return s; } },
-        { label: "Ignore it", emoji: "🙄", color: "bg-muted", consequence: "30%: it grows legs (Popularity -5)",
-          apply: s => { if (Math.random() < 0.3) { s.popularity = clamp(s.popularity - 5, 0, 100); log(s, "🙄 Ignored the anthem clip. A talk show ran a segment on it. Then another"); } else { log(s, "🙄 Ignored the anthem clip. It was gone by Thursday"); } return s; } },
+        { label: "Make peace over room service", emoji: "🍝", color: "bg-emerald-600", consequence: "Morale +4, Integrity +1, the next league meeting is a lot more polite",
+          apply: s => { s.morale = clamp(s.morale + 4, 0, 100); s.integrityBonus += 1; log(s, "🍝 Made peace with your camp roommate over room service. He still kicks you, but he apologises now"); return s; } },
+        { label: "Ask the kit man for a room change", emoji: "🚪", color: "bg-muted", consequence: "Morale -2, Popularity -1, the whole squad knows within the hour",
+          apply: s => { s.morale = clamp(s.morale - 2, 0, 100); s.popularity = clamp(s.popularity - 1, 0, 100); log(s, "🚪 Asked to change rooms at camp. The squad chat had a poll on it by dinner"); return s; } },
+        { label: "Start a prank war", emoji: "🪥", color: "bg-amber-600", consequence: "50%: the best camp in years (Morale +6, Followers +300k). 50%: the national coach is not amused (Popularity -3)",
+          apply: s => { if (Math.random() < 0.5) { s.morale = clamp(s.morale + 6, 0, 100); followers(s, 0.3); log(s, "🪥 The camp prank war became the squad's favourite week in years. The clips did numbers"); } else { s.popularity = clamp(s.popularity - 3, 0, 100); log(s, "🪥 The camp prank war ended with the national coach's shoes in the hotel pool"); } return s; } },
       ] });
   }
 
@@ -892,7 +909,7 @@ export function getLifeEvents(state: CareerState): RandomEvent[] {
   }
 
   if (state.popularity >= 40) {
-    push({ id: 269, cooldown: COOLDOWN.fans, emoji: "🪧", title: "The Banner",
+    push({ id: 269, cooldown: COOLDOWN.fans, emoji: "🪧", title: "Forty Feet, One Typo",
       description: "The fans have unveiled a forty foot banner of your face behind the goal. It is magnificent. Your name is spelt wrong on it.",
       category: "life", choices: [
         { label: "Post it with love, typo and all", emoji: "❤️", color: "bg-emerald-600", consequence: "Followers +600k, Popularity +4",
@@ -918,16 +935,16 @@ export function getLifeEvents(state: CareerState): RandomEvent[] {
       ] });
   }
 
-  if (state.age >= 31) {
-    push({ id: 271, cooldown: COOLDOWN.late, emoji: "🎥", title: "The Kid Who Plays Your Position",
-      description: "The nineteen year old who plays your position has asked if you would watch his clips with him. He is very polite about it. He is also faster than you were at nineteen.",
+  if (state.age >= 31 && !flag(state, "screenTest")) {
+    push({ id: 271, cooldown: COOLDOWN.late, emoji: "📺", title: "The Screen Test",
+      description: "A broadcaster wants you to do a punditry screen test, for when the time comes. They keep saying 'when the time comes' in a very gentle voice.",
       category: "life", choices: [
-        { label: "Sit down with him every week", emoji: "🎥", color: "bg-emerald-600", consequence: "Integrity +4, Morale +3. 30%: he takes your place (Morale -5)",
-          apply: s => { s.integrityBonus += 4; s.morale = clamp(s.morale + 3, 0, 100); if (Math.random() < 0.3) { s.morale = clamp(s.morale - 5, 0, 100); log(s, "🎥 Coached the kid every week. He started ahead of you by March. You were proud and furious"); } else { log(s, "🎥 Coached the kid every week. He thanks you in every interview"); } return s; } },
-        { label: "Give him the basics, keep the rest", emoji: "📝", color: "bg-amber-600", consequence: "Integrity +1, Morale +1",
-          apply: s => { s.integrityBonus += 1; s.morale = clamp(s.morale + 1, 0, 100); log(s, "📝 Gave the kid the basics and kept the good stuff. He will work it out"); return s; } },
-        { label: "Tell him you are busy", emoji: "🚪", color: "bg-red-600", consequence: "Integrity -2, Morale -2, he learns it from your clips anyway",
-          apply: s => { s.integrityBonus -= 2; s.morale = clamp(s.morale - 2, 0, 100); log(s, "🚪 Told the kid you were busy. He studied your clips without you. He is still polite"); return s; } },
+        { label: "Do the screen test", emoji: "🎙️", color: "bg-emerald-600", consequence: "60%: a natural (Popularity +3, Followers +300k, Morale +3). 40%: you freeze on camera (Morale -4)",
+          apply: s => { setFlag(s, "screenTest", 1); if (Math.random() < 0.6) { s.popularity = clamp(s.popularity + 3, 0, 100); followers(s, 0.3); s.morale = clamp(s.morale + 3, 0, 100); log(s, "🎙️ Nailed the punditry screen test. The producer asked if you had done it before"); } else { s.morale = clamp(s.morale - 4, 0, 100); log(s, "🎙️ Froze on the punditry screen test. Eleven seconds of silence and one very long blink"); } return s; } },
+        { label: "Do it, but only talk tactics", emoji: "📋", color: "bg-blue-600", consequence: "Integrity +2, Passing +1 next season, the producer calls it very detailed",
+          apply: s => { setFlag(s, "screenTest", 1); s.integrityBonus += 2; bump(s, "passing", 1); log(s, "📋 Spent the whole screen test on pressing triggers. The producer called it very detailed"); return s; } },
+        { label: "Not yet, you are still a player", emoji: "⚽", color: "bg-muted", consequence: "Morale +2, they say they will ask again in a couple of years",
+          apply: s => { s.morale = clamp(s.morale + 2, 0, 100); log(s, "⚽ Told the broadcaster not yet. They said they would ask again. Gently"); return s; } },
       ] });
   }
 
