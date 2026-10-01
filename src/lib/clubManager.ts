@@ -13255,7 +13255,11 @@ function recutBoard(state: CareerState, entry: CalendarEntry, live: LiveMatch, p
     live.oppGoals = live.h1Opp.length;
     live.read = halftimeRead(state, men(xi), live.myGoals, live.oppGoals, first!.mine, first!.oppS);
   } else {
-    foldBoard(to, live.h2My ?? [], live.h2Opp ?? [], live.h2Play ?? [], live.h2Cards ?? [], live.h2OppCards ?? [], live.h2Injuries ?? []);
+    /* Round 781 review: the other dugout's changes too. Drawn over the
+       extended clock, a long board (eight minutes, a change at 90 on the dot)
+       can put one at 91 to 96, which the report printed as 94' in a match of
+       ninety minutes. Folded, it is 90+4' like everything else in the board. */
+    foldBoard(to, live.h2My ?? [], live.h2Opp ?? [], live.h2Play ?? [], live.h2Cards ?? [], live.h2OppCards ?? [], live.h2Injuries ?? [], live.oppSubs ?? []);
     live.h2My = [...(live.h2My ?? [])].sort(clockOrder);
     live.h2Opp = [...(live.h2Opp ?? [])].sort(clockOrder);
     live.h2Play = [...(live.h2Play ?? [])].sort((a, b) => clockOrder(a, b) || PLAY_ORDER[a.kind] - PLAY_ORDER[b.kind]);

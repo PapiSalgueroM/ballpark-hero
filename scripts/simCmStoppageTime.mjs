@@ -43,9 +43,13 @@
         45+N' or 90+N', the match centre timeline's goal rows read the same,
         and the live commentary (liveFeed, which the viewer's banner prints
         through the same label) carries exactly the report's goals with their
-        plus, on matches played through the live path. The viewer's own
-        clock in the board (LIVE 90+2') is held by the vitest
-        src/test/liveSimMotion.test.tsx.
+        plus, on matches played through the live path. A shape change made
+        inside the second half's board (at 90 plus 0, 1 or 2) keeps every
+        line the clock had reached and files everything it draws inside
+        the board, the other dugout's changes included, and the commentary
+        still equals the report after it. The viewer's own clock in the
+        board (LIVE 90+2', ET 120+1') and its goal banner (GOAL! ... 90+N')
+        are held by the vitest src/test/liveSimMotion.test.tsx.
      3) Extra time only on a level knockout tie. A report with extra time is
         a Champions League decider (a final, a one legged tie, a second leg)
         that was level after ninety minutes and their boards, on the night or
@@ -91,6 +95,9 @@
                to 120 and a second leg can turn).
      aggsum    secondLegContext forgets the first leg in its aggregate.
                Section 4 must go red.
+     subfold   a change made inside the board leaves the other dugout's
+               changes unfolded (the bug the review found). Section 2
+               must go red.
      oldsave   the whistle no longer rolls a board for a half drawn before
                this round. Section 5 must go red.
    Under a control the run exits 1 when the control fired on exactly its
@@ -161,6 +168,11 @@ const NM = modulesDir();
      board goal rows on the timeline (2) 340 to 444                  floor 150
      matches through the live path (2)   120 to 138                  floor 80
      board goals in the commentary (2)   35 to 53                    floor 15
+     changes inside the board (2)        475 to 479                  floor 300
+       of them in an eight minute
+       board (2)                         123 to 156                  floor 60
+       (measured in the review, same five samples; under subfold 7 to
+        11 of them leave a change of the other dugout's past 90)
      deciders read (3)                   325 to 455                  floor 150
      deciders to extra time (3)          33 to 66                    floor 15
      level matches that are not
@@ -182,6 +194,8 @@ const T = {
   minTimelineBoard: 150,
   minLiveCompared: 15,
   minLiveMatches: 80,
+  minBoardChanges: 300,
+  minBoardChangesLong: 60,
   minDeciders: 150,
   minEt: 15,
   minLevelOther: 75,
@@ -228,6 +242,14 @@ const CONTROLS = {
     must: [4], also: [], file: 'engine',
     edits: [['    aggMine: first.mine + mine,\n', '    aggMine: mine,\n']],
     note: 'secondLegContext forgets the first leg in its aggregate; section 4 must go red',
+  },
+  subfold: {
+    must: [2], also: [], file: 'engine',
+    edits: [[
+      ' live.h2Cards ?? [], live.h2OppCards ?? [], live.h2Injuries ?? [], live.oppSubs ?? []);\n',
+      ' live.h2Cards ?? [], live.h2OppCards ?? [], live.h2Injuries ?? []);\n',
+    ]],
+    note: "a change inside the board leaves the other dugout's changes unfolded; section 2 must go red",
   },
   oldsave: {
     must: [5], also: [], file: 'engine',
@@ -341,7 +363,7 @@ globalThis.localStorage = {
 const { cmA, cmB, timelineRows, MatchReportCard, UclBracketCard, LiveSimScreen, render } = require(BUNDLE);
 for (const [arm, cm] of [['A', cmA], ['B', cmB]]) {
   for (const name of ['startCareer', 'playNextEntry', 'resumeMatch', 'startSecondHalf', 'startExtraTime', 'isExtraTimeDue',
-    'markLiveMinute', 'liveFeed', 'uclTieOutcome', 'uclAwayGoalsApply', 'uclLegsFor', 'secondLegContext', 'matchFacts',
+    'markLiveMinute', 'changeLive', 'liveFeed', 'uclTieOutcome', 'uclAwayGoalsApply', 'uclLegsFor', 'secondLegContext', 'matchFacts',
     'saveCareer', 'loadCareer', 'minuteLabel']) {
     if (cm[name] === undefined) { console.error(`arm ${arm}: the engine does not export ${name}`); process.exit(2); }
   }
@@ -449,7 +471,7 @@ function countGoals(arm, r) {
 }
 
 /** Every match played is read the same way, whatever produced it. */
-const S2 = { lines: 0, boardLines: 0, boardGoals: 0, cardsChecked: 0, cardGoals: 0, timelineBoard: 0, liveMatches: 0, liveBoardGoals: 0 };
+const S2 = { lines: 0, boardLines: 0, boardGoals: 0, cardsChecked: 0, cardGoals: 0, timelineBoard: 0, liveMatches: 0, liveBoardGoals: 0, boardChanges: 0, boardChangesAt90: 0, boardChangesLong: 0 };
 const S3 = { deciders: 0, levelDeciders: 0, et: 0, other: 0, levelOther: 0 };
 const S4 = { secondLegs: 0, legCards: 0, brackets: 0, bracketTies: 0, liveHeaders: 0, away: 0, aet: 0, firstLegs: 0, quiet: 0 };
 const CARD_CAP = 400;
@@ -743,6 +765,48 @@ deciders.filter(d => d.second).slice(0, 40).forEach((f, i) => {
   for (let j = 0; j < 2; j++) readLive(f, 610001 + i * 37 + j, `${f.club} (${f.era}) second leg live ${i}.${j}`);
 });
 
+/* ---------- section 2, a change made inside the second half's board ----------
+   Round 781 review: the redraw of the rest of a board (recutBoard) had no
+   check, and a change at 90 on the dot with an eight minute board filed the
+   other dugout's change at 91 to 96, printed as 94' in a match of ninety
+   minutes. A shape change at 90 plus 0, 1 and 2 (whatever the board allows),
+   then the whistle: everything the clock had reached stays exactly as it
+   was, every line of the report sits at or before 90 with any plus inside
+   the board, and the commentary's goals are the report's. */
+const BOARD_PLUS = [0, 1, 2];
+const lineKey = x => `${x.kind}|${x.side}|${x.text}|${x.minute}|${x.plus ?? 0}`;
+function readBoardChange(f, seed, ctx) {
+  withSeed(seed, () => {
+    const r1 = cmA.playNextEntry(f.pre);
+    if (r1.kind !== 'halftime' || !r1.state.live) return;
+    const s2 = cmA.startSecondHalf(r1.state);
+    const board = s2.live?.added?.h2 ?? 0;
+    for (const p of BOARD_PLUS) {
+      if (p >= board) continue;
+      const at = cmA.markLiveMinute(s2, 90);
+      const kept = cmA.liveFeed(at.live).filter(x => x.kind !== 'halftime' && (x.minute < 90 || (x.minute === 90 && (x.plus ?? 0) <= p))).map(lineKey);
+      const mentality = at.live.mentality === 'attacking' ? 'defensive' : 'attacking';
+      const next = cmA.changeLive(at, 90, { kind: 'shape', mentality }, p);
+      if (!next?.live) { fail(2, `${ctx}: a shape change at 90+${p} was refused`); continue; }
+      S2.boardChanges += 1;
+      if (p === 0) S2.boardChangesAt90 += 1;
+      if (board === 8) S2.boardChangesLong += 1;
+      const now = new Set(cmA.liveFeed(next.live).map(lineKey));
+      const lost = kept.filter(k => !now.has(k));
+      if (lost.length) fail(2, `${ctx}: a change at 90+${p} redrew ${lost.length} line(s) the clock had already reached, first ${lost[0]}`);
+      const res = cmA.resumeMatch(next);
+      if (!res?.report) { fail(2, `${ctx}: no report after a change at 90+${p}`); continue; }
+      readLines(res.report, f.club, `${ctx} change at 90+${p} (board ${board})`);
+      const feed = cmA.liveFeed(next.live).filter(x => x.kind === 'goal' && x.minute <= 90).map(x => ({ side: x.side, name: x.text, minute: x.minute, plus: x.plus }));
+      const rep = [...res.report.myScorers.map(g => ({ ...g, side: 'me' })), ...res.report.oppScorers.map(g => ({ ...g, side: 'opp' }))].filter(g => g.minute <= 90);
+      if (J(goalKeys(feed)) !== J(goalKeys(rep))) fail(2, `${ctx}: after a change at 90+${p} the commentary's goals ${J(goalKeys(feed))} are not the report's ${J(goalKeys(rep))}`);
+    }
+  });
+}
+livePres.forEach((f, i) => {
+  for (let j = 0; j < 2; j++) readBoardChange(f, 620001 + i * 41 + j, `${f.club} board change ${i}.${j}`);
+});
+
 /* ---------- section 5: a save from before this round ---------- */
 const S5 = { saves: 0, stripped: 0, played: 0, rolledH1: 0, rolledH2: 0 };
 function stripToOld(state) {
@@ -872,9 +936,12 @@ function readOldReport(r, club, ctx, oldHalves) {
   if (S2.timelineBoard < T.minTimelineBoard) fail(2, `only ${S2.timelineBoard} board goals on the match centre timeline, under the floor of ${T.minTimelineBoard}`);
   if (S2.liveMatches < T.minLiveMatches) fail(2, `only ${S2.liveMatches} matches through the live path, under the floor of ${T.minLiveMatches}`);
   if (S2.liveBoardGoals < T.minLiveCompared) fail(2, `only ${S2.liveBoardGoals} board goals in the live commentary, under the floor of ${T.minLiveCompared}`);
+  if (S2.boardChanges < T.minBoardChanges) fail(2, `only ${S2.boardChanges} changes made inside the second half's board, under the floor of ${T.minBoardChanges}`);
+  if (S2.boardChangesLong < T.minBoardChangesLong) fail(2, `only ${S2.boardChangesLong} of them in an eight minute board, under the floor of ${T.minBoardChangesLong}`);
   report(2, 'Every line in a board says so, everywhere a minute is printed', [
     `${S2.lines} lines read, ${S2.boardLines} of them in a board, each within its board; ${S2.boardGoals} goals in a board`,
     `report card: ${S2.cardGoals} board goals printed with their plus on ${S2.cardsChecked} cards; match centre timeline: ${S2.timelineBoard} board goal rows; live commentary: ${S2.liveMatches} matches equal to their report, ${S2.liveBoardGoals} board goals with their plus`,
+    `changes inside the second half's board: ${S2.boardChanges} (${S2.boardChangesAt90} at 90 on the dot, ${S2.boardChangesLong} in an eight minute board), each keeping what the clock had reached and filing what it drew inside the board`,
   ]);
 }
 
