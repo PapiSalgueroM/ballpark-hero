@@ -12,8 +12,8 @@
  * listed men still on the pitch in the manager's order, then the unlisted
  * in shirt order with the keeper last; the other side sends its eleven on
  * the pitch best first, keeper last; every kick is one draw against
- * shootoutKickChance, the base rate (0.76, real world shootouts convert
- * about 75 to 78 in a hundred) up with the taker's edge and down with the
+ * shootoutKickChance, the base rate (0.76, about three in four, a tuning
+ * value and not a sourced real world rate) up with the taker's edge and down with the
  * keeper's, each inside SHOOTOUT_TAKER_EDGE_CAP; five each, over early once
  * a side cannot be caught, then sudden death round the list. The report
  * carries every kick (MatchWeekReport.shootout), decidedBy and shootoutWon
@@ -31,7 +31,12 @@
  *      shootouts were reached and a floor on how many of them needed the
  *      skip to get the first five right, so neither can pass on an empty
  *      set. The scored share across every kick is printed and held to a
- *      wide band around the base rate.
+ *      wide band around the base rate. Their side through the same match:
+ *      their first time round the list (every kick before a name comes up
+ *      again), rated off their projected roster (the eleven and the bench
+ *      are drawn from it, and every line of the report's own oppXi must
+ *      match it), must come best first with their keeper last. Every
+ *      shootout reached, with a floor.
  *   2) The order is worth something. The same eleven (ratings 90 down to
  *      62, a spread the cap bites on at both ends) against a copy of itself,
  *      on common random numbers: one arm kicks its five best first, the
@@ -59,6 +64,18 @@
  *      order set on it survives a save and a load; a bad id is refused, and
  *      a loan signing (onLoan, a man on loan TO the club, who can start) is
  *      listed like anyone else.
+ *   6) The keeper facing each kick. a) Through runShootout on common random
+ *      numbers: the same eleven both sides and the same two keepers, 95 and
+ *      55, one arm with the strong man behind me and one with him behind
+ *      them. Every kick is read against the keeper facing it, so the first
+ *      arm must win a far larger share, and in it my kicks must go in more
+ *      often than theirs, each by a floor set from measurement. b) Through
+ *      shootoutSides, which is what settleShootout hands to runShootout,
+ *      exactly: my side is read against the man in the keeper's slot (an
+ *      outfielder put in goal included), their side against their keeper,
+ *      their ten best first with the keeper last, a side with nobody to name
+ *      kicks eleven generated men at its strength against a keeper of that
+ *      strength, and a side whose keeper has gone is read against nobody.
  *
  * Negative controls (house rule: prove the checks can fail), each a rewrite
  * of a copy of src/lib/clubManager.ts that refuses to run if its anchor is
@@ -71,6 +88,14 @@
  *     Section 3 must go red.
  *   CM_SHOOTOUT_CONTROL=unsetpath    the one draw path takes one extra
  *     number off the stream first. Section 4 must go red (and 5 with it).
+ *   CM_SHOOTOUT_CONTROL=ownkeeper    runShootout reads each kick against
+ *     the kicking side's own keeper. Section 6a must go red.
+ *   CM_SHOOTOUT_CONTROL=wrongkeeper  shootoutSides takes the last man who
+ *     finished as my keeper. Section 6b must go red.
+ *   CM_SHOOTOUT_CONTROL=nooppkeeper  shootoutSides never reads their keeper.
+ *     Section 6b must go red.
+ *   CM_SHOOTOUT_CONTROL=oppworst     shootoutSides sends their worst first.
+ *     Sections 1 and 6b must go red.
  *
  * MEASURED, 2026-10-01, on the default seed and SIM_SEED=1 to 5 (six runs,
  * section 2 is 4000 paired shootouts an arm, 7 to 9 seconds a run):
@@ -85,6 +110,16 @@
  *   biggest move off the base rate             0.120                                0.200 (nocap)                printed
  *   fixture rows reproduced                    150 of 150                           122 of 150 (unsetpath)       150
  *   fixture rows that are shootouts            28                                                                floor 12
+ *
+ * MEASURED, 2026-10-01, the keeper and their order (sections 1 and 6), the
+ * same six runs, 4000 paired shootouts an arm in 6a:
+ *   their first time round, best first         22, 24, 26, 25, 24, 32 (every one)  3 of 22 (oppworst)           all, floor 12
+ *   strong keeper behind me minus behind them  44.2, 43.8, 44.4, 45.3, 44.4, 45.3  -44.2 (ownkeeper)            floor 30
+ *     (win share; seed 0: 71.7 against 27.6)
+ *   my kicks minus theirs, strong man behind me 11.7, 12.4, 11.9, 12.1, 12.4, 12.0 -12.3 (ownkeeper)            floor 8
+ *     (seed 0: 85.8 against 74.1; the two edges allow 12)
+ *   shootoutSides checks wrong                 0 of 6                               3 (wrongkeeper), 2           0
+ *                                                                                   (nooppkeeper), 1 (oppworst)
  *
  * Measured once and not asserted, because it is a design fact rather than
  * a check: on the same shootouts (1500 seeds of that cup match, the order
@@ -121,7 +156,7 @@ const BUNDLE = `${TMP}/${TAG}.bundle.mjs`;
 const FIXTURE = `${ROOT}/scripts/data/cmShootoutUnset782.json`;
 
 const CONTROL = process.env.CM_SHOOTOUT_CONTROL || '';
-const KNOWN = ['ignoreorder', 'noskip', 'nocap', 'unsetpath'];
+const KNOWN = ['ignoreorder', 'noskip', 'nocap', 'unsetpath', 'ownkeeper', 'wrongkeeper', 'nooppkeeper', 'oppworst'];
 if (CONTROL && !KNOWN.includes(CONTROL)) {
   console.error(`CM_SHOOTOUT_CONTROL=${CONTROL} is not a control this harness knows (${KNOWN.join(', ')})`);
   process.exit(1);
@@ -163,6 +198,26 @@ if (CONTROL) {
       '  if (!order) return { won: Math.random() < clamp(0.5 + (mine - oppS) * 0.012 + shootoutTakerEdge(taker), 0.2, 0.8) };\n',
       '  if (!order) { Math.random(); return { won: Math.random() < clamp(0.5 + (mine - oppS) * 0.012 + shootoutTakerEdge(taker), 0.2, 0.8) }; }\n',
       'settleShootout (the one draw path)');
+  } else if (CONTROL === 'ownkeeper') {
+    engine = swap(engine,
+      '    const p = shootoutKickChance(taker, them.keeperRating);\n',
+      '    const p = shootoutKickChance(taker, us.keeperRating);\n',
+      'runShootout (the keeper each kick is read against)');
+  } else if (CONTROL === 'wrongkeeper') {
+    engine = swap(engine,
+      "  const myKeeper = finished.find(x => x.slot?.allowed.includes('GK'))?.p ?? finished.find(x => !x.slot && x.p.position === 'GK')?.p ?? null;\n",
+      '  const myKeeper = finished[finished.length - 1]?.p ?? null;\n',
+      'shootoutSides (my keeper, read off the slot)');
+  } else if (CONTROL === 'nooppkeeper') {
+    engine = swap(engine,
+      '      keeperRating: oppKeeper?.r ?? (theirs.length ? null : oppS),\n',
+      '      keeperRating: null,\n',
+      'shootoutSides (their keeper)');
+  } else if (CONTROL === 'oppworst') {
+    engine = swap(engine,
+      '  const oppTakers = [...theirs.filter(p => p !== oppKeeper)].sort((a, b) => b.r - a.r);\n',
+      '  const oppTakers = [...theirs.filter(p => p !== oppKeeper)].sort((a, b) => a.r - b.r);\n',
+      'shootoutSides (their order, best first)');
   }
   const copy = `${TMP}/${TAG}.control.engine.ts`;
   fs.writeFileSync(copy, engine);
@@ -184,14 +239,14 @@ export const cm = await import('${enginePath}');
 buildSync({ entryPoints: [ENTRY], bundle: true, format: 'esm', platform: 'node', outfile: BUNDLE, logLevel: 'error', alias: { '@': `${ROOT_URL}/src` } });
 const { cm } = await import(pathToFileURL(BUNDLE).href);
 const {
-  startCareer, playNextEntry, saveCareer, loadCareer, resolveXI,
-  setShootoutOrder, shootoutOrderOf, runShootout, shootoutTakerOrder,
+  startCareer, playNextEntry, saveCareer, loadCareer, resolveXI, effectiveXIWithSlots, oppRosterFor,
+  setShootoutOrder, shootoutOrderOf, runShootout, shootoutTakerOrder, shootoutSides,
   shootoutKickChance, shootoutTakerEdge, shootoutKeeperEdge,
   SHOOTOUT_TAKER_EDGE_CAP, SHOOTOUT_BASE_RATE,
 } = cm;
 const needed = WRITE_FIXTURE
   ? { startCareer, playNextEntry }
-  : { startCareer, playNextEntry, saveCareer, loadCareer, resolveXI, setShootoutOrder, shootoutOrderOf, runShootout, shootoutTakerOrder, shootoutKickChance, shootoutTakerEdge, shootoutKeeperEdge };
+  : { startCareer, playNextEntry, saveCareer, loadCareer, resolveXI, effectiveXIWithSlots, oppRosterFor, setShootoutOrder, shootoutOrderOf, runShootout, shootoutTakerOrder, shootoutSides, shootoutKickChance, shootoutTakerEdge, shootoutKeeperEdge };
 for (const [name, fn] of Object.entries(needed)) {
   if (typeof fn !== 'function') abort(`the harness could not reach ${name}; the bundle is not the shape it expects`);
 }
@@ -293,6 +348,12 @@ if (WRITE_FIXTURE) {
 }
 
 const nameOf = new Map(atCup.squad.map(p => [p.id, p.name]));
+/** A club's projected roster by name (rating and position), as the base career sees it. */
+const rosters = new Map();
+const rosterOf = club => {
+  if (!rosters.has(club)) rosters.set(club, new Map(oppRosterFor(atCup, club).map(p => [p.n, p])));
+  return rosters.get(club);
+};
 const idsOfName = new Map();
 for (const p of atCup.squad) idsOfName.set(p.name, [...(idsOfName.get(p.name) ?? []), p.id]);
 
@@ -320,6 +381,9 @@ console.log('1) The walk, through the whole match: my first five kicks are the f
   let scoredAll = 0;
   let noDetail = 0;
   let skipsSeen = 0;
+  let oppChecked = 0;
+  let oppBestFirst = 0;
+  const OPP_CHECKED_FLOOR = 12;
   const N = 150;
   for (let i = 0; i < N; i++) {
     const seed = 782_500 + SIM_SEED * 1000 + i;
@@ -354,6 +418,31 @@ console.log('1) The walk, through the whole match: my first five kicks are the f
     const want = expected.slice(0, n);
     if (JSON.stringify(got) === JSON.stringify(want)) inOrder += 1;
     else fail(`seed ${seed}: my first kicks were ${got.join(', ')} but the order says ${want.join(', ')}`);
+    /* Their side, through the same match: their first time round the list
+       (every kick before a name comes up again), each man's rating and
+       position read off their projected roster, which is where the eleven
+       and the bench that came on are drawn from (the starters' lines match
+       the report's own oppXi; checked below). Best first, so never a man
+       rated above the one before him, and their keeper, if he got that far,
+       last. Counted when two or more of them kicked. */
+    const oppClub = [rep.home, rep.away].find(c => c !== CLUB);
+    const oppBy = rosterOf(oppClub);
+    for (const p of det.oppXi ?? []) {
+      const q = oppBy.get(p.n);
+      if (!q || q.r !== p.r || q.p !== p.p) { fail(`seed ${seed}: ${p.n} (${p.p} ${p.r}) on their sheet is not on their roster that way, so the roster cannot stand in for the ratings`); break; }
+    }
+    const theirKicks = d.kicks.filter(k => k.side === 'opp').map(k => k.taker);
+    const again = theirKicks.findIndex((t, j) => theirKicks.indexOf(t) !== j);
+    const round1 = again < 0 ? theirKicks : theirKicks.slice(0, again);
+    if (round1.length >= 2 && round1.every(t => oppBy.has(t))) {
+      oppChecked += 1;
+      const lines = round1.map(t => oppBy.get(t));
+      const outfield = lines.filter(p => p.p !== 'GK').map(p => p.r);
+      const gkAt = lines.findIndex(p => p.p === 'GK');
+      if (outfield.some((r, j) => j > 0 && r > outfield[j - 1])) fail(`seed ${seed}: their kicks went ${round1.map(t => `${t} ${oppBy.get(t).r}`).join(', ')}, not best first`);
+      else if (gkAt >= 0 && gkAt !== round1.length - 1) fail(`seed ${seed}: their keeper kicked ${gkAt + 1} of ${round1.length}, not last`);
+      else oppBestFirst += 1;
+    }
     /* The count on the report agrees with the kicks, and with who went through. */
     const last = d.kicks[d.kicks.length - 1];
     if (last.mine !== d.mine || last.theirs !== d.theirs) fail(`seed ${seed}: the final count ${d.mine}-${d.theirs} is not the last kick's ${last.mine}-${last.theirs}`);
@@ -370,7 +459,9 @@ console.log('1) The walk, through the whole match: my first five kicks are the f
   const scoredShare = kicksAll ? scoredAll / kicksAll : NaN;
   console.log(`   ${N} cup matches, ${reached} shootouts, ${inOrder} with my first kicks in the listed order, ${skipsSeen} where skipping a listed man off the pitch changed who took the first five`);
   console.log(`   ${kicksAll} kicks, scored share ${pct(scoredShare)} (base rate ${SHOOTOUT_BASE_RATE})`);
+  console.log(`   their first time round the list read off their roster in ${oppChecked} shootouts, best first with the keeper last in ${oppBestFirst}`);
   if (reached < 12) fail(`only ${reached} shootouts in ${N} matches, below the floor of 12, the assert has nothing to bite on`);
+  if (oppChecked < OPP_CHECKED_FLOOR) fail(`their order could be read in only ${oppChecked} shootouts, below the floor of ${OPP_CHECKED_FLOOR}`);
   if (skipsSeen < 12) fail(`the skip decided the first five in only ${skipsSeen} shootouts, below the floor of 12, so the skip is not being tested`);
   if (inOrder !== reached - noDetail) fail(`the first five kicks followed the order in ${inOrder} of ${reached} shootouts, not all of them`);
   if (!(scoredShare >= 0.62 && scoredShare <= 0.90)) fail(`scored share ${pct(scoredShare)} is outside 62 to 90 percent`);
@@ -506,6 +597,95 @@ console.log('5) An old save loads with no order, plays the old way, and an order
   const cleared = setShootoutOrder(set, []);
   if (!cleared || 'shootoutOrder' in cleared) fail('clearing the order left the field on the save');
   console.log(`   order of ${ids.length} kept through save and load, a stranger refused, a loan signing listed, an empty list takes the field off`);
+}
+
+/* ================================================================== */
+console.log('6) The keeper facing each kick, and the other side\'s order');
+/* ================================================================== */
+{
+  /* a) Through runShootout, on common random numbers: the same eleven on
+     both sides, best first, and the same two keepers, a strong one and a
+     weak one. One arm has the strong man behind me, the other has him
+     behind them. Every kick is read against the keeper FACING it, so my
+     kicks go in more often when theirs is the weak one, theirs less often,
+     and the first arm wins the larger share. */
+  const ratings = [90, 88, 86, 84, 82, 78, 74, 70, 66, 64, 62];
+  const eleven = ratings.map((r, i) => ({ name: `k${i}`, rating: r }));
+  const STRONG = 95;
+  const WEAK = 55;
+  const N = 4000;
+  const arm = (myKeeper, theirKeeper) => {
+    let wins = 0;
+    const kicks = { me: 0, opp: 0 };
+    const scored = { me: 0, opp: 0 };
+    for (let i = 0; i < N; i++) {
+      const seed = 782_960_000 + SIM_SEED * 10_000 + i;
+      const d = withSeed(seed, () => runShootout({
+        mine: { takers: eleven, keeperRating: myKeeper },
+        theirs: { takers: eleven.map(p => ({ ...p, name: `t${p.name}` })), keeperRating: theirKeeper },
+        myFirst: i % 2 === 0,
+      }));
+      if (d.mine > d.theirs) wins += 1;
+      for (const k of d.kicks) { kicks[k.side] += 1; if (k.result === 'scored') scored[k.side] += 1; }
+    }
+    return { win: wins / N, mine: scored.me / kicks.me, theirs: scored.opp / kicks.opp };
+  };
+  const behindMe = arm(STRONG, WEAK);
+  const behindThem = arm(WEAK, STRONG);
+  const winGap = behindMe.win - behindThem.win;
+  const kickGap = behindMe.mine - behindMe.theirs;
+  console.log(`   keeper ${STRONG} behind me and ${WEAK} behind them: won ${pct(behindMe.win)}, my kicks in ${pct(behindMe.mine)}, theirs ${pct(behindMe.theirs)}`);
+  console.log(`   the same two keepers swapped: won ${pct(behindThem.win)}, my kicks in ${pct(behindThem.mine)}, theirs ${pct(behindThem.theirs)}`);
+  console.log(`   ${N} shootouts an arm: win share gap ${(winGap * 100).toFixed(1)} points, my kicks minus theirs with the strong man behind me ${(kickGap * 100).toFixed(1)} points (the edges allow 2 x ${SHOOTOUT_TAKER_EDGE_CAP * 100} = ${2 * SHOOTOUT_TAKER_EDGE_CAP * 100})`);
+  /* Measured 2026-10-01 over the default seed and SIM_SEED 1..5: see the header. */
+  const WIN_FLOOR = 0.30;
+  const KICK_FLOOR = 0.08;
+  if (!(winGap >= WIN_FLOOR)) fail(`the strong keeper behind me wins only ${(winGap * 100).toFixed(1)} points more than behind them, under the floor of ${WIN_FLOOR * 100}`);
+  if (!(kickGap >= KICK_FLOOR)) fail(`with the strong keeper behind me my kicks go in only ${(kickGap * 100).toFixed(1)} points more often than theirs, under the floor of ${KICK_FLOOR * 100}`);
+
+  /* b) shootoutSides, which is what settleShootout hands to runShootout:
+     each side read against the right keeper, and their order best first
+     with the keeper last. Exact, on the real eleven with its slots. */
+  const finished = JSON.parse(JSON.stringify(effectiveXIWithSlots(atCup)));
+  const gkAt = finished.findIndex(x => x.slot?.allowed.includes('GK'));
+  if (finished.length !== 11 || gkAt < 0) abort(`the base eleven has ${finished.length} men and a keeper slot at ${gkAt}`);
+  /* The keeper moves to the middle of the list (the function reads the
+     slot, not the place), and he and one outfielder get ratings nobody else
+     in the eleven has, so a side read against the wrong man cannot match by
+     accident, whether it is the first, the last or anyone else. */
+  const [gkSlot] = finished.splice(gkAt, 1);
+  finished.splice(5, 0, gkSlot);
+  const taken = new Set(finished.map(x => x.p.rating));
+  const unique = () => { let r = 50; while (taken.has(r)) r += 1; taken.add(r); return r; };
+  gkSlot.p.rating = unique();
+  const outfielder = finished[8];
+  outfielder.p.rating = unique();
+  const listed = [finished[2].p.id, finished[9].p.id];
+  const oppEleven = [71, 84, 77, 90, 66, 80, 68, 86, 74, 79, 62].map((r, i) => ({ n: `Their man ${i}`, p: i === 4 ? 'GK' : 'CM', r }));
+  const oppS = 73;
+  const sides = shootoutSides(atCup, listed, finished, oppEleven, oppS);
+  let wrong = 0;
+  const check = (ok, m) => { if (!ok) { wrong += 1; fail(m); } };
+  check(sides.mine.keeperRating === gkSlot.p.rating, `my side is read against ${sides.mine.keeperRating}, not the man in the keeper's slot (${gkSlot.p.rating})`);
+  const myNames = sides.mine.takers.map(t => t.name);
+  check(myNames.length === 11 && myNames[0] === finished[2].p.name && myNames[1] === finished[9].p.name && myNames[10] === gkSlot.p.name,
+    `my takers ${myNames.join(', ')} are not the two listed men first and the keeper last`);
+  check(sides.theirs.keeperRating === 66, `their side is read against ${sides.theirs.keeperRating}, not their keeper (66)`);
+  const theirRatings = sides.theirs.takers.map(t => t.rating);
+  check(JSON.stringify(theirRatings) === JSON.stringify([90, 86, 84, 80, 79, 77, 74, 71, 68, 62, 66]), `their takers went ${theirRatings.join(', ')}, not best first with the keeper last`);
+  /* An outfielder put in goal is the keeper; the keeper he swapped with is not. */
+  const swapped = JSON.parse(JSON.stringify(finished));
+  [swapped[5].p, swapped[8].p] = [swapped[8].p, swapped[5].p];
+  const inGoal = shootoutSides(atCup, listed, swapped, oppEleven, oppS);
+  check(inGoal.mine.keeperRating === outfielder.p.rating, `with ${outfielder.p.name} put in goal my side is read against ${inGoal.mine.keeperRating}, not him (${outfielder.p.rating})`);
+  /* A side with nobody to name kicks eleven generated men at its strength, against a keeper of that strength. */
+  const blank = shootoutSides(atCup, listed, finished, [], oppS);
+  check(blank.theirs.keeperRating === oppS && blank.theirs.takers.length === 11 && blank.theirs.takers.every(t => t.rating === oppS && t.gen),
+    `a side with no names kicks ${blank.theirs.takers.length} men against keeper ${blank.theirs.keeperRating}, not eleven generated men at ${oppS}`);
+  /* A side whose keeper has gone (sent off) is read against nobody. */
+  const noKeeper = shootoutSides(atCup, listed, finished, oppEleven.filter(p => p.p !== 'GK'), oppS);
+  check(noKeeper.theirs.keeperRating === null && noKeeper.theirs.takers.length === 10, `a side with no keeper is read against ${noKeeper.theirs.keeperRating} with ${noKeeper.theirs.takers.length} takers`);
+  console.log(`   shootoutSides: my keeper off the slot (${gkSlot.p.rating}, then ${outfielder.p.rating} with an outfielder in goal), their keeper (66), their ten best first then the keeper, a blank side and a keeperless side: ${wrong} wrong`);
 }
 
 /* ================================================================== */

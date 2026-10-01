@@ -12265,8 +12265,9 @@ export function shootoutTakerEdge(taker: { rating: number } | null | undefined):
 
 /** The most men a shootout order can name: the eleven. */
 export const SHOOTOUT_MAX_ORDER = 11;
-/** A kick's odds before anybody's rating moves them. Real world shootouts
- *  convert about 75 to 78 kicks in a hundred. */
+/** A kick's odds before anybody's rating moves them: about three in four.
+ *  A tuning value, not a sourced real world rate (published rates differ by
+ *  competition and era), so no copy should quote it as one. */
 export const SHOOTOUT_BASE_RATE = 0.76;
 /** Of the kicks that do not go in, the share the keeper gets a hand to. */
 const SHOOTOUT_SAVE_SHARE = 0.65;
