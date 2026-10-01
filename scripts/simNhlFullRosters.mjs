@@ -52,7 +52,8 @@
  *  10. What the page says is what the data is (Round 830 review). Real names sit
  *      beside made up salaries, so the Roster box and the pick card say the money
  *      is the game's own; the guide states the camp rule (who of a camp roster is
- *      kept) and the stand in rule in the rules lib's own numbers; and no copy
+ *      kept) and the stand in rule in the rules lib's own numbers, and says the
+ *      starting free agents, the prospects and the summer fill ins are made up; and no copy
  *      claims every player is rated off real stats, because 97 are stand ins.
  *      Read from the code with comments stripped.
  *
@@ -79,6 +80,7 @@
  *   overclaim the page says every player is rated off real stats     -> 10
  *   nosalary  the Roster box loses its made up salaries line         -> 10
  *   camprule  the guide's camp rule says eleven forwards             -> 10
+ *   noinvented the guide stops saying the prospects are made up      -> 10
  *
  * Measured headroom (2026-10-01, this record):
  *   section 6: after every offseason 0 clubs short of 12/6/2 and 0 of 1600 club
@@ -105,7 +107,7 @@ const EXPECT = {
   invent: [2, 4, 9], age: [2], spot: [1], thirteen: [4, 5, 8, 9], paycurve: [4], partial: [4],
   ceiling: [4, 5, 6, 9], refill: [6], legacy: [7], allmen: [7, 8], dupname: [6],
   notrim: [9], nodrop: [9], trimfloor: [9], trimall: [9], droplegacy: [9], flatfloor: [9],
-  overclaim: [10], nosalary: [10], camprule: [10],
+  overclaim: [10], nosalary: [10], camprule: [10], noinvented: [10],
 };
 if (CONTROL && !EXPECT[CONTROL]) { console.error(`NHL_FULL_CONTROL=${CONTROL} is not a control this harness knows (${Object.keys(EXPECT).join(', ')})`); process.exit(1); }
 
@@ -697,11 +699,14 @@ console.log('10) What the page says is what the data is');
   if (CONTROL === 'overclaim') page = bind('the page', page, "22 or 23 real players from the league's own data, rated off real 2025-26 stats (a rookie or anyone without a full season gets a marked stand in rating)", "22 or 23 real players, every one rated off real 2025-26 stats");
   if (CONTROL === 'nosalary') board = bind('the board', board, '. Player salaries and contract years are made up for the game, not their real deals.', '.');
   if (CONTROL === 'camprule') guide = bind('the guide', guide, 'twelve forwards and six defensemen', 'eleven forwards and six defensemen');
+  if (CONTROL === 'noinvented') guide = bind('the guide', guide, 'The free agents you start with, every draft prospect', 'The free agents you start with');
   ok(10, 'the guide entry and the What\'s New line were found', guide.length > 500 && entry.length > 200, `${guide.length} ${entry.length}`);
   /* the money: real names sit beside made up salaries, so the box and the pick card say so */
   const salaryNote = (board.match(/data-salary-note[^>]*>([^<]*)</) ?? [])[1] ?? '';
   ok(10, 'the Roster box says the salaries and contract years are made up', /made up for the game/.test(salaryNote), salaryNote.slice(0, 80));
   ok(10, 'the pick card says salaries and contracts are made up', /Salaries and contracts are made up/.test(board));
+  /* who is real and who is invented: the opening rosters are real, the pool, the prospects and the summer fill ins are not */
+  ok(10, 'the guide says the starting free agents, the prospects and the summer fill ins are made up', /free agents you start with, every draft prospect and anyone who fills a short roster over the summer are made up/.test(guide.replace(/\s+/g, ' ')));
   /* the camp rule, in the guide, in the rules lib's own numbers */
   const keep = rules.match(/KEEP_AT_LEAST = \{ G: (\d+), F: (\d+), D: (\d+) \}/);
   const limit = Number((rules.match(/ACTIVE_LIMIT = (\d+)/) ?? [])[1]);

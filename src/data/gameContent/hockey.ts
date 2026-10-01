@@ -1042,6 +1042,7 @@ export const HOCKEY_CONTENT: GameContentMap = {
         items: [
           "Pick any of the 32 clubs and inherit its real roster as the NHL listed it on October 1, 2026, 22 or 23 players with their real ages. A club that listed 23 or fewer keeps every one of them. A club still carrying extra bodies from training camp keeps 23: the two goalies, twelve forwards and six defensemen with the most NHL games in 2025-26, then the three skaters left with the most.",
           "The roster is the NHL's own list for that day, so a player who was missing from it, usually one hurt in camp, is not in the game either.",
+          "The free agents you start with, every draft prospect and anyone who fills a short roster over the summer are made up for the game. A real player only reaches the free agent pool when a club lets him go.",
           "The Roster box splits them into forwards, defense and goalies. A rating with a star is a stand in: that player had no full 2025-26 NHL season (30 games for a skater, 15 for a goalie) to rate him on, so he starts on 68.",
         ],
         subsections: [
