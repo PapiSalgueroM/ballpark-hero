@@ -603,6 +603,45 @@
         "Playoff games transfer land too, so the eventual champion usually ends up owning most of the map."
       ]
     },
+    "/contract-chaos": {
+      "howToPlay": [
+        "Open today's offers or deal yourself a client in free play.",
+        "Read your client first: his age, his rating, his potential and what he is worth a year.",
+        "Tap each offer to read the full terms, then use the back button to compare the next one.",
+        "Push any offer for more money once, if you think he has the leverage.",
+        "Sign one deal and play the five seasons one at a time, or skip straight to the verdict."
+      ],
+      "rules": [
+        "Every offer shows the wage, the length, a signing bonus, a trophy bonus, a release clause if there is one, the promised role, how safe the manager is, home or abroad, the size of the city and how ambitious the club is.",
+        "Title chasers pay below his market value, top half clubs pay about the market and rebuilds pay above it.",
+        "A rebuild always promises the starting spot, while a title chaser's bench is crowded.",
+        "A push works more often for a highly rated player and less often for a veteran past his peak.",
+        "A failed push can make an outside club walk away, but your own club never walks and the last offer on the table never walks.",
+        "The promised role holds only while the manager who signed him keeps his job, and a hot seat manager is sacked half the time.",
+        "Moving abroad costs a few games in the first season while he settles in.",
+        "If he outgrows his club and his contract has a release clause, a title chaser can pay it and take him.",
+        "Every career is judged over five seasons. If his deal ends sooner he signs on somewhere at whatever he is worth by then.",
+        "The score is out of 100: 30 for growth, 25 for minutes, 25 for trophies and 20 for money.",
+        "Growth is judged against his age, so a kid is measured on how close he got to his potential and a veteran on how well he held off the decline.",
+        "A trophy only counts if he played at least a fifth of the minutes that season.",
+        "Plays count toward your streak and your games played, but there is no leaderboard score for this game yet.",
+        "Every player and every club in the game is made up."
+      ],
+      "example": [
+        "Today's client is a 19 year old winger rated 74 with a potential of 88, worth about €1.6M a year.",
+        "His club offers €1.4M for three years. A title chaser offers €1.3M for two years as a rotation player at a squad strength of 91. A rebuild offers €1.9M for four years, the starting spot and a €1.1M signing bonus.",
+        "You push the rebuild and they come up to €2.1M. You sign. He plays nearly every minute, climbs to 84 by his third season, and a title chaser pays his release clause to take him on a much bigger wage.",
+        "Five seasons later he is rated 87 with a league title, about €26M earned and a score of 83, a Great call. The roads not taken show his old club would have scored far less."
+      ],
+      "tips": [
+        "For a young player, minutes matter more than the badge on the shirt. A kid on the bench at a giant grows slower than a kid starting every week.",
+        "For a veteran, the money and the minutes are most of the score, because growth is mostly about slowing the decline.",
+        "A release clause is upside, not a risk. If he outgrows the club, it is his ticket to a bigger one.",
+        "Check the manager's seat before you trust a promised role. A hot seat promise can be gone by season two.",
+        "Push the offers you would be happy to lose, and think twice before pushing the one you want.",
+        "Short deals are a bet on growth. If he improves, the next contract pays for it; if he gets hurt, it does not."
+      ]
+    },
     "/dart-draft": {
       "howToPlay": [
         "Pick a mode: Current Stars, World Cup 2026 where only qualified nations count, or All Time with legends.",
@@ -1452,6 +1491,48 @@
         "Type surnames. They're faster, and the game only asks for full names when two answers share one.",
         "Work by decade. Walking through the years surfaces names that free recall won't.",
         "If a name flashes red, try the full version. Shared surnames need spelling out."
+      ]
+    },
+    "/manager-hot-seat": {
+      "howToPlay": [
+        "Pick today's hot seat for the shared daily club, or open free play and choose any club, or let the game pick one at random.",
+        "The engine plays the season up to the day the job opens, then shows you the table place, the recent form and the board's target.",
+        "Tap Take the job and the first match comes up with a read on the game from the dugout.",
+        "Pick a shape: defensive, balanced or attacking.",
+        "Pick a team talk: calm them, fire them up, demand more, the hairdryer, or say nothing at all.",
+        "Kick off. The result comes back with what it did to the board, the fans and the dressing room.",
+        "When the press have a question, answer it before the next match.",
+        "Keep going until you hit the target, run out of league games, or the board run out of patience."
+      ],
+      "rules": [
+        "The job opens after the worst run of form the simulated season produced between league weeks 6 and 14.",
+        "The board start on 30 out of 100, whatever they thought of the last manager.",
+        "The target is a number of points from your next 5 league games.",
+        "It is read off those five fixtures: more is asked at home and against weaker sides, less away and against stronger ones.",
+        "Cup and European ties still get played and still move the meters, but only league points count toward the target.",
+        "The dressing room meter is the average morale of the eleven the engine picks, and morale feeds straight into how well they play.",
+        "Hit the target and you keep the job straight away, even with games to spare.",
+        "Finish one point short with the fan meter at 65 or above and the fans save you.",
+        "If the board meter hits zero at any final whistle, you are sacked on the spot.",
+        "If even winning every league game left could not get you within a point of the target, the board do not wait for the last game.",
+        "The daily is the same club, the same takeover week and the same target for everyone, and every match on the day draws from the same seeded stream, so the difference between two players is the calls they made.",
+        "Manager Hot Seat records that you played but puts no points on the leaderboard for now, while the points system is being rebuilt."
+      ],
+      "example": [
+        "Say today's club is a mid table side that has taken two points from its last five. The job opens 15th after 11 games, the board expect 9th, and the target is 7 points from 5 league games.",
+        "Game one is at home to a weaker side. The read says the dressing room is flat, so you go balanced and say nothing. A 2 to 0 win puts 3 on the board and lifts the fans.",
+        "Game two is away at a stronger side. You sit deep with a defensive shape and take a 1 to 1 draw. That is 4. The press ask about the board and you back yourself.",
+        "A cup tie comes next. It does not count, but a bad defeat still costs board confidence, so you play it properly and go out on penalties.",
+        "Game three is at home and you need 3 points from 3 games. Balanced with a fire them up talk, and a 2 to 1 win makes it 7. Target hit, job kept, two league games to spare."
+      ],
+      "tips": [
+        "Read the line under the fixture before you pick a talk. It is the dugout's honest read of the mood and the odds.",
+        "Saying the same thing every week stops working, and after a few in a row it starts to grate.",
+        "Attacking means more goals at both ends. Chase with it when you need wins, not when a draw will do.",
+        "Defensive means fewer goals and more draws. It is the shape for protecting a point you can afford.",
+        "The press answers move morale and the board a little. Promising a win out loud fires the other lot up and costs you if you do not deliver.",
+        "Do not throw the cup games. They do not count toward the target, but a bad exit takes a chunk out of the board meter.",
+        "One point short is not always the end. Keep the fans onside with results and they can buy you the job."
       ]
     },
     "/minefield": {

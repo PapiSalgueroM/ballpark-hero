@@ -1,0 +1,22 @@
+.reply {
+  animation: replyEnter 320ms ease-out;
+}
+
+@keyframes replyEnter {
+  from {
+    opacity: 0.8;
+    transform: translateY(2px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reply {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+}

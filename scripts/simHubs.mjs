@@ -100,12 +100,13 @@ console.log(`1) registry: ${CATEGORIES.length} categories, ${ALL_GAMES.length} g
    last hub's h1 in memory and this check must go red. */
 {
   if (!Array.isArray(HUB_NAV) || HUB_NAV.length === 0) fail('src/lib/sportHubNav.ts exports no HUB_NAV entries');
-  const nav = (HUB_NAV || []).map(h => ({ route: h.route, h1: h.h1, titles: [...h.titles] }));
+  /* Round 654: navLabel too, the footer's word for each hub. */
+  const nav = (HUB_NAV || []).map(h => ({ route: h.route, h1: h.h1, titles: [...h.titles], navLabel: h.navLabel }));
   if (process.env.HUBS_CONTROL === 'navdrift' && nav.length) {
     nav[nav.length - 1].h1 += ' Drifted';
     console.log('   NEGATIVE CONTROL ON: the last HUB_NAV h1 renamed in memory, this check must go red');
   }
-  const shape = h => JSON.stringify([h.route, h.h1, h.titles]);
+  const shape = h => JSON.stringify([h.route, h.h1, h.titles, h.navLabel]);
   const want = SPORT_HUBS.map(shape);
   const got = nav.map(shape);
   for (let i = 0; i < Math.max(want.length, got.length); i++) {
@@ -237,7 +238,7 @@ console.log(`   ${chrome.size} chrome links, ${graded.length} games graded on bo
    bare link in memory, and this section must go red. */
 console.log('6) every game on a hub ships as an h3 holding its link, and every section heading names the sport');
 const CONTROL = process.env.HUBS_CONTROL || '';
-if (CONTROL && CONTROL !== 'cardlink' && CONTROL !== 'navdrift') { console.error(`HUBS_CONTROL=${CONTROL} is not a control this harness knows (cardlink, navdrift)`); process.exit(2); }
+if (CONTROL && !['cardlink', 'navdrift', 'bareslug'].includes(CONTROL)) { console.error(`HUBS_CONTROL=${CONTROL} is not a control this harness knows (cardlink, navdrift, bareslug)`); process.exit(2); }
 const H3_LINK = /<h3[^>]*>\s*<a href="([^"]+)"[^>]*>([^<]*)<\/a>\s*<\/h3>/g;
 const H2_TEXT = /<h2[^>]*>([\s\S]*?)<\/h2>/g;
 const clean = s => s.replace(/<[^>]+>/g, '').replace(/&amp;/g, '&').replace(/\s+/g, ' ').trim();
@@ -271,6 +272,43 @@ for (const h of SPORT_HUBS) {
   console.log(`   ${h.route}: ${want.length - notHeadings.length}/${want.length} games as h3 links, ${expected.length} section headings checked`);
 }
 if (CONTROL === 'cardlink' && controlFired === 0) { console.error('control cardlink: no hub carried an h3 link to rewrite, so it would prove nothing'); process.exit(1); }
+
+/* ── 7: no hub prints a bare path where a game's name should be ──────────
+   Round 654. The NBA and College hubs printed 33 game paths as plain text
+   ("/nba-grid, /nba-connections, /missing-five ... serve everyone the same
+   board"): a web address where a name belongs, and nothing to click. The
+   hub page now turns each one into the game's registry label, linked. This
+   reads the saved documents, because what a crawler and a reader get is the
+   question, and a path that is not a live game would stay bare there.
+   HUBS_CONTROL=bareslug turns the first link inside a paragraph on
+   /pro-basketball back into its bare path in memory, which is that page
+   before this round, and this section must go red. */
+console.log('7) no hub prints a bare "/route" where a game\'s name and link should be');
+{
+  const BARE = /(?:^|[\s(])(\/[a-z0-9][a-z0-9-]*)(?![a-z0-9/-])/g;
+  let slugControl = 0;
+  const before = failures;
+  for (const h of SPORT_HUBS) {
+    let html = byRoute.get(h.route);
+    if (!html) continue;
+    if (CONTROL === 'bareslug' && h.route === '/pro-basketball') {
+      const para = (html.match(/<p>[\s\S]*?<\/p>/g) || []).find(p => /<a href="\/[a-z0-9-]+">[^<]+<\/a>/.test(p));
+      if (para) {
+        const bared = para.replace(/<a href="(\/[a-z0-9-]+)">[^<]+<\/a>/, '$1');
+        if (bared !== para) { html = html.replace(para, bared); slugControl += 1; }
+      }
+    }
+    const bare = [...textOf(html).matchAll(BARE)].map(m => m[1]);
+    for (const b of [...new Set(bare)].slice(0, 6)) fail(`${h.route} prints the bare path ${b} as text, where the game's name should be, linked`);
+    console.log(`   ${h.route}: ${bare.length} bare paths in the saved page`);
+  }
+  if (CONTROL === 'bareslug') {
+    if (slugControl === 0) { console.error('control bareslug: /pro-basketball has no link inside a paragraph to turn back into a path, so it would prove nothing'); process.exit(1); }
+    console.log(failures > before
+      ? '   NEGATIVE CONTROL: the bare path put back on /pro-basketball was reported, as it must be'
+      : '   NEGATIVE CONTROL FAILED: a bare path was put back on /pro-basketball and nothing noticed');
+  }
+}
 
 console.log('');
 if (failures > 0) {

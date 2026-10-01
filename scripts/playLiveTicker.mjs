@@ -16,9 +16,19 @@
  *      time in the visitor's own zone and the final marked Final.
  *   3. EVERY WORD CLEARS THE CONTRAST BAR, alpha composited, 4.5 to 1.
  *   4. THE CARDS NEVER REACH A SNAPSHOT: data-no-prerender on every card.
- *   5. A DEAD FEED DEGRADES HONESTLY: chip still up, no cards, the quiet
- *      no-games line, and nothing about the site fills the gap.
+ *   5. A DEAD FEED DEGRADES HONESTLY: chip still up, no cards, and the line
+ *      that fits. Round 711 split the quiet line in two: a request that
+ *      FAILED says "Live scores temporarily unavailable" and a request that
+ *      answered with no games says "No games on the board right now", and
+ *      both are pinned here so neither can drift back into the other.
+ *      Nothing about the site fills the gap in either case.
  *   6. REDUCED MOTION GETS EVERYTHING AT ONCE: no cycling, every box open.
+ *
+ * Round 711 also stamps every mock row with the moment the harness starts,
+ * not the top of the current hour: the strip now judges a row against its
+ * updated_at, and a fulfilled route carries no Date header, so the browser
+ * clock stands in. Stamped at the top of the hour, the live soccer row went
+ * stale from minute 46 of every hour and section 1 lost its pulse.
  *
  * NEGATIVE CONTROL: TICKER_CONTROL=dim fades the card text to half alpha in
  * the browser; section 3 must go red. TICKER_CONTROL=noresume (Round 635)
@@ -57,14 +67,16 @@ const say = (ok, what) => { console.log(`  ${ok ? 'PASS ' : 'FAIL '} ${what}`); 
 const BAR = '[aria-label="Live scores ticker"]';
 const today = new Date();
 const at = (h, m = 0) => { const d = new Date(today); d.setHours(h, m, 0, 0); return d.toISOString(); };
+/* the poller's own stamp: fresh, so freshness is judged against a write that just happened */
+const STAMP = new Date().toISOString();
 const ROWS = [
-  { id: 'mlb:final', sport: 'mlb', league: 'MLB', home: 'Pittsburgh Pirates', away: 'Chicago Cubs', home_score: 3, away_score: 6, status_short: 'FT', status_long: 'Finished', start_at: at(today.getHours() - 3), live: false, finished: true, updated_at: at(today.getHours()) },
-  { id: 'soccer:live', sport: 'soccer', league: 'La Liga', home: 'Valencia', away: 'Real Betis', home_score: 1, away_score: 2, status_short: '2H', status_long: 'Second Half', start_at: at(today.getHours() - 1), live: true, finished: false, updated_at: at(today.getHours()) },
-  { id: 'mlb:next', sport: 'mlb', league: 'MLB', home: 'New York Yankees', away: 'Houston Astros', home_score: null, away_score: null, status_short: 'NS', status_long: 'Not Started', start_at: at(today.getHours() + 2, 5), live: false, finished: false, updated_at: at(today.getHours()) },
-  { id: 'nfl:next', sport: 'nfl', league: 'NFL', home: 'Buffalo Bills', away: 'Kansas City Chiefs', home_score: null, away_score: null, status_short: 'NS', status_long: 'Not Started', start_at: at(today.getHours() + 4), live: false, finished: false, updated_at: at(today.getHours()) },
-  { id: 'soccer:next', sport: 'soccer', league: 'Bundesliga', home: 'Borussia Monchengladbach', away: 'Bayern Munich', home_score: null, away_score: null, status_short: 'NS', status_long: 'Not Started', start_at: at(today.getHours() + 3), live: false, finished: false, updated_at: at(today.getHours()) },
+  { id: 'mlb:final', sport: 'mlb', league: 'MLB', home: 'Pittsburgh Pirates', away: 'Chicago Cubs', home_score: 3, away_score: 6, status_short: 'FT', status_long: 'Finished', start_at: at(today.getHours() - 3), live: false, finished: true, updated_at: STAMP },
+  { id: 'soccer:live', sport: 'soccer', league: 'La Liga', home: 'Valencia', away: 'Real Betis', home_score: 1, away_score: 2, status_short: '2H', status_long: 'Second Half', start_at: at(today.getHours() - 1), live: true, finished: false, updated_at: STAMP },
+  { id: 'mlb:next', sport: 'mlb', league: 'MLB', home: 'New York Yankees', away: 'Houston Astros', home_score: null, away_score: null, status_short: 'NS', status_long: 'Not Started', start_at: at(today.getHours() + 2, 5), live: false, finished: false, updated_at: STAMP },
+  { id: 'nfl:next', sport: 'nfl', league: 'NFL', home: 'Buffalo Bills', away: 'Kansas City Chiefs', home_score: null, away_score: null, status_short: 'NS', status_long: 'Not Started', start_at: at(today.getHours() + 4), live: false, finished: false, updated_at: STAMP },
+  { id: 'soccer:next', sport: 'soccer', league: 'Bundesliga', home: 'Borussia Monchengladbach', away: 'Bayern Munich', home_score: null, away_score: null, status_short: 'NS', status_long: 'Not Started', start_at: at(today.getHours() + 3), live: false, finished: false, updated_at: STAMP },
   /* a row that must not be shown: live with no score, dropped by the hook */
-  { id: 'nhl:broken', sport: 'nhl', league: 'NHL', home: 'Boston Bruins', away: 'Toronto Maple Leafs', home_score: null, away_score: null, status_short: 'P1', status_long: '1st Period', start_at: at(today.getHours()), live: true, finished: false, updated_at: at(today.getHours()) },
+  { id: 'nhl:broken', sport: 'nhl', league: 'NHL', home: 'Boston Bruins', away: 'Toronto Maple Leafs', home_score: null, away_score: null, status_short: 'P1', status_long: '1st Period', start_at: at(today.getHours()), live: true, finished: false, updated_at: STAMP },
 ];
 
 const browser = await pw.chromium.launch();
@@ -173,10 +185,9 @@ console.log('4) the cards never reach a snapshot');
 }
 await ctx.close();
 
-console.log('5) a dead feed degrades honestly: chip, quiet line, and nothing about the site');
+console.log('5) a dead feed degrades honestly: chip, the line that fits, and nothing about the site');
 {
-  const { ctx: c2, page: p2 } = await open(false);
-  const r = await p2.evaluate(sel => {
+  const readBar = (p) => p.evaluate(sel => {
     const bar = document.querySelector(sel);
     return bar ? {
       cards: bar.querySelectorAll('a[data-score-card]').length,
@@ -184,13 +195,33 @@ console.log('5) a dead feed degrades honestly: chip, quiet line, and nothing abo
       text: bar.innerText.replace(/\s+/g, ' ').trim(),
     } : null;
   }, BAR);
+  /* the request is aborted: a read that FAILED, so "unavailable" */
+  const { ctx: c2, page: p2 } = await open(false);
+  const r = await readBar(p2);
   say(!!r, 'the strip is still on the page with the feed dead');
   if (r) {
     say(r.cards === 0, `${r.cards} score cards (none, the request failed)`);
-    say(/No games on the board right now/.test(r.text), `the quiet line shows: "${r.text.slice(0, 60)}"`);
+    say(/Live scores temporarily unavailable/.test(r.text), `a failed read says unavailable, never "no games": "${r.text.slice(0, 60)}"`);
+    say(!/No games on the board/.test(r.text), 'a failed read does not claim there are no games');
     say(!/free games|Fresh daily|New stuff/.test(r.text), 'no site promo fills the gap');
   }
   await c2.close();
+  /* the request answers with an empty slate: a read that WORKED, so "no games" */
+  const c2b = await browser.newContext({ viewport: { width: 1440, height: 900 }, timezoneId: 'America/New_York' });
+  const p2b = await c2b.newPage();
+  await p2b.route('**://*.supabase.co/**', r => r.abort());
+  await p2b.route('**/rest/v1/live_scores*', r => r.fulfill({ status: 200, contentType: 'application/json', body: '[]' }));
+  await p2b.addInitScript(() => { try { localStorage.setItem('cookie-consent', 'essential'); } catch { /* fine */ } });
+  await p2b.goto(`${BASE}/`, { waitUntil: 'domcontentloaded', timeout: 30000 });
+  await p2b.waitForFunction(sel => !!document.querySelector(`${sel} [data-empty-line]`), BAR, { timeout: 20000 }).catch(() => {});
+  const q = await readBar(p2b);
+  say(!!q, 'the strip is on the page with an empty slate');
+  if (q) {
+    say(q.cards === 0, `${q.cards} score cards (none, the slate is empty)`);
+    say(/No games on the board right now/.test(q.text), `an answered empty read says no games: "${q.text.slice(0, 60)}"`);
+    say(!/temporarily unavailable/.test(q.text), 'an answered empty read does not claim the feed is down');
+  }
+  await c2b.close();
 }
 
 console.log('6) reduced motion gets every box open at once, no cycling');
@@ -218,11 +249,11 @@ console.log('7) a full slate GLIDES: the wire moves, every card passes, then han
     id: `mlb:fat${i}`, sport: 'mlb', league: 'MLB',
     home: `Home Club ${i + 1}`, away: `Away Club ${i + 1}`,
     home_score: null, away_score: null, status_short: 'NS', status_long: 'Not Started',
-    start_at: at(today.getHours() + 2, i % 60), live: false, finished: false, updated_at: at(today.getHours()),
+    start_at: at(today.getHours() + 2, i % 60), live: false, finished: false, updated_at: STAMP,
   })).concat([{
     id: 'soccer:fat', sport: 'soccer', league: 'La Liga', home: 'Valencia', away: 'Real Betis',
     home_score: 1, away_score: 2, status_short: '2H', status_long: 'Second Half',
-    start_at: at(today.getHours() - 1), live: true, finished: false, updated_at: at(today.getHours()),
+    start_at: at(today.getHours() - 1), live: true, finished: false, updated_at: STAMP,
   }]);
   const c4 = await browser.newContext({ viewport: { width: 1440, height: 900 }, timezoneId: 'America/New_York' });
   const p4 = await c4.newPage();
@@ -331,6 +362,26 @@ console.log('7) a full slate GLIDES: the wire moves, every card passes, then han
     if (afterTap) {
       say(afterTap.s1 > afterTap.s0 + 50, `a finger tap leaves the wire MOVING (${afterTap.s0.toFixed(0)} to ${afterTap.s1.toFixed(0)}px over 4s)`);
     }
+    /* Round 711 put a feed stamp and a filter button beside the wire. On a
+       390px phone the two of them, at their shipped sizes, left the viewport
+       narrower than one card (46px against a 229px card in a mock), so the
+       stamp is hidden below md and the filter wears a short name there. The
+       viewport must still hold at least one whole card, and the stamp must
+       be off the phone strip. */
+    const room = await p5.evaluate(sel => {
+      const strip = document.querySelector(sel);
+      const vp = strip.querySelector('[aria-live="off"]') || strip.querySelector('.flex-1.overflow-hidden');
+      const cards = [...strip.querySelectorAll('a[data-score-card]')].map(a => a.parentElement?.getBoundingClientRect().width || a.getBoundingClientRect().width);
+      const stamp = strip.querySelector('[data-feed-stamp]');
+      return {
+        viewport: vp ? vp.clientWidth : 0,
+        widestCard: cards.length ? Math.max(...cards) : 0,
+        stampShown: !!stamp && stamp.getBoundingClientRect().width > 0,
+        filter: (strip.querySelector('[data-sport-filter]')?.innerText || '').trim(),
+      };
+    }, BAR);
+    say(room.widestCard > 0 && room.viewport >= room.widestCard, `the phone wire holds a whole card: viewport ${room.viewport}px, widest card ${room.widestCard.toFixed(0)}px`);
+    say(!room.stampShown, `the feed stamp stays off the phone strip (filter button reads "${room.filter}")`);
     /* Playwright's page.mouse sends true mouse-pointer input even in a touch
        context, which is exactly the discrimination being tested. */
     const box = await p5.locator(BAR).boundingBox();

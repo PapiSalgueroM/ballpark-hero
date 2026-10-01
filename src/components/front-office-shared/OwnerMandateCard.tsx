@@ -7,6 +7,7 @@
 
 import { cn } from '@/lib/utils';
 import type { OwnerMandate } from '@/lib/foOwnerMandate';
+import motion from './OwnerMandateCard.module.css';
 
 interface Props {
   mandate: OwnerMandate;
@@ -26,18 +27,18 @@ export default function OwnerMandateCard({ mandate, trust, pace }: Props) {
       </div>
       <div className="mt-1.5 h-1.5 overflow-hidden rounded-full bg-secondary">
         <div
-          className={cn('h-full rounded-full transition-all duration-700', trust > 55 ? 'bg-emerald-400' : trust > 25 ? 'bg-gold' : 'bg-destructive')}
+          className={cn('h-full rounded-full', motion.trust, trust > 55 ? 'bg-emerald-400' : trust > 25 ? 'bg-gold' : 'bg-destructive')}
           style={{ width: `${trust}%` }}
         />
       </div>
       <p className="mt-1.5 text-[11px] leading-snug text-foreground">{mandate.text}</p>
       {pace && (
-        <p className={cn('mt-1 text-[11px] font-semibold', pace.onTrack ? 'text-emerald-400' : 'text-destructive')}>
+        <p key={`${mandate.season}-${pace.onTrack}-${pace.line}`} className={cn('mt-1 text-[11px] font-semibold', motion.pace, pace.onTrack ? 'text-emerald-400' : 'text-destructive')}>
           {pace.onTrack ? '📈 ' : '📉 '}{pace.line}
         </p>
       )}
       {trust <= 25 && (
-        <p className="mt-1 text-[11px] font-bold text-destructive">One more bad season ends this. The seat is hot.</p>
+        <p key={mandate.season} className={cn('mt-1 text-[11px] font-bold text-destructive', motion.warning)}>One more bad season ends this. The seat is hot.</p>
       )}
     </div>
   );

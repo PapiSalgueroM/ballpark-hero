@@ -1,6 +1,16 @@
 # AdSense re-application readiness
 
-## Current status: review requested September 15, 2026
+## Current status, September 30: Needs attention, Low value content
+
+Codex directly read the Sites row and policy card in the owner's browser. Ads.txt
+is Authorized; the displayed last status update is September 25, 2026 at 4:59 AM
+EDT. The policy card asks for original useful content or tools, ongoing curation
+and real user interest. It names no individual page. No new review was requested.
+The prior pending status below is historical. Current live checks, the reproduced
+trailing-slash guide defect assigned to Claude, and the audit repair are recorded
+in [the September 30 receipt](../audits/GOOGLE-READINESS-2026-09-30.md).
+
+## Historical status: review requested September 15, 2026
 
 **18:47 EDT publication follow-up:** the factual corrections to all five
 format guides, their phone-table improvements and the three save/account

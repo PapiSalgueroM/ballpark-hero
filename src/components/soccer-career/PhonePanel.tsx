@@ -20,7 +20,7 @@
    bottom of the handset and the message list scrolls itself to the newest line
    after every tap, so the answer you just got is already on screen. The page
    behind the overlay is never touched. */
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { focusDialogOnMount, escapeCloses } from '@/lib/dialogA11y';
 import type { CareerState, PhoneMessage } from "@/lib/soccerCareerEngine";
 import { karmaOf } from "@/lib/soccerCareerEngine";
@@ -79,7 +79,7 @@ function Meter({ value, color }: { value: number; color: string }) {
 function AppHeader({ title, backLabel, onBack }: { title: string; backLabel: string; onBack: () => void }) {
   return (
     <div className="flex items-center gap-1 px-2 py-2 border-b border-white/10 bg-zinc-950/95 backdrop-blur shrink-0">
-      <button onClick={onBack} className="text-sky-400 text-[11px] font-bold px-1.5 py-1 rounded hover:bg-white/5 shrink-0">‹ {backLabel}</button>
+      <button data-phone-back onClick={onBack} className="min-h-11 min-w-11 text-sky-400 text-[11px] font-bold px-1.5 py-1 rounded hover:bg-white/5 shrink-0">‹ {backLabel}</button>
       <div className="flex-1 text-center text-[13px] font-black truncate pr-8">{title}</div>
     </div>
   );
@@ -99,6 +99,51 @@ export default function PhonePanel({ career, onAnswer, onMoney, onBuyItem, onClo
   const [openContact, setOpenContact] = useState<string | null>(null);
   const [openAsset, setOpenAsset] = useState<string | null>(null);
   const [openCat, setOpenCat] = useState<SpendingCategory | null>(null);
+  const opener = useRef(document.activeElement instanceof HTMLElement ? document.activeElement : null);
+  const dialogRef = useRef<HTMLDivElement | null>(null);
+  const previousApp = useRef<AppId>("home");
+  const homeApp = useRef<AppId>("messages");
+  const mountDialog = useCallback((el: HTMLDivElement | null) => {
+    dialogRef.current = el;
+    focusDialogOnMount(el);
+  }, []);
+  useLayoutEffect(() => {
+    const dialog = dialogRef.current;
+    const openedFrom = opener.current;
+    return () => queueMicrotask(() => {
+      if (dialog && !dialog.isConnected && openedFrom?.isConnected) openedFrom.focus({ preventScroll: true });
+    });
+  }, []);
+  useLayoutEffect(() => {
+    const dialog = dialogRef.current;
+    if (!dialog || (previousApp.current === app && dialog.contains(document.activeElement))) return;
+    if (previousApp.current === "home" && app !== "home") homeApp.current = app;
+    previousApp.current = app;
+    const target = app === "home"
+      ? dialog.querySelector<HTMLElement>(`[data-phone-app="${homeApp.current}"]`)
+      : dialog.querySelector<HTMLElement>('[data-phone-back]') ?? dialog.querySelector<HTMLElement>('button');
+    target?.focus({ preventScroll: true });
+  }, [app, career, openThread, openContact, openAsset, openCat]);
+  const phoneKeys = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    if (event.key === 'Escape') {
+      event.preventDefault(); event.stopPropagation(); escapeCloses(onClose)(event); return;
+    }
+    if (event.key !== 'Tab') return;
+    const dialog = event.currentTarget;
+    const stops = [...dialog.querySelectorAll<HTMLElement>('button:not(:disabled), a[href], input:not(:disabled):not([type="hidden"]), select:not(:disabled), textarea:not(:disabled), [tabindex]:not([tabindex="-1"])')]
+      .filter(el => {
+        if (el.tabIndex < 0 || el.matches(':disabled') || el.closest('[hidden], [inert]')) return false;
+        for (let parent: HTMLElement | null = el; parent && dialog.contains(parent); parent = parent.parentElement) {
+          const style = getComputedStyle(parent);
+          if (style.display === 'none' || style.visibility === 'hidden') return false;
+        }
+        return true;
+      });
+    const first = stops[0], last = stops.at(-1);
+    if (!first || (event.shiftKey ? document.activeElement === first || document.activeElement === dialog : document.activeElement === last)) {
+      event.preventDefault(); (event.shiftKey ? last : first)?.focus({ preventScroll: true });
+    }
+  };
   const karma = karmaOf(career);
   const kt = karmaTier(karma);
   const phase: "youth" | "pro" = career.phase === "youth" ? "youth" : "pro";
@@ -173,8 +218,8 @@ export default function PhonePanel({ career, onAnswer, onMoney, onBuyItem, onClo
         aria-modal="true"
         aria-label="Your phone"
         tabIndex={-1}
-        ref={focusDialogOnMount}
-        onKeyDown={escapeCloses(onClose)}
+        ref={mountDialog}
+        onKeyDown={phoneKeys}
         className="w-[330px] max-w-[92vw] h-[640px] max-h-[86vh] rounded-[2.4rem] border-[6px] border-zinc-800 bg-zinc-950 text-white shadow-2xl overflow-hidden flex flex-col relative"
         onClick={e => e.stopPropagation()}
       >
@@ -200,7 +245,7 @@ export default function PhonePanel({ career, onAnswer, onMoney, onBuyItem, onClo
               </div>
               <div className="grid grid-cols-4 gap-2">
                 {APPS.map(a => (
-                  <button key={a.id} onClick={() => setApp(a.id)} className="relative flex flex-col items-center gap-0.5 group">
+                  <button key={a.id} data-phone-app={a.id} onClick={() => setApp(a.id)} className="relative flex flex-col items-center gap-0.5 group">
                     <div className="w-[52px] h-[52px] rounded-2xl bg-white/10 border border-white/10 flex items-center justify-center text-2xl group-hover:bg-white/20 transition-colors">
                       {a.emoji}
                     </div>
@@ -251,7 +296,7 @@ export default function PhonePanel({ career, onAnswer, onMoney, onBuyItem, onClo
                     <div className="space-y-1.5">
                       {m.choices.map((c, i) => (
                         <button key={i} onClick={() => onAnswer(m.id, i)}
-                          className="w-full text-left rounded-lg border border-sky-500/40 bg-sky-500/10 hover:bg-sky-500/25 px-2.5 py-1.5 text-[11px] font-bold transition-colors">
+                          className="min-h-11 w-full text-left rounded-lg border border-sky-500/40 bg-sky-500/10 hover:bg-sky-500/25 px-2.5 py-1.5 text-[11px] font-bold transition-colors">
                           {c.label}
                         </button>
                       ))}
@@ -493,7 +538,7 @@ export default function PhonePanel({ career, onAnswer, onMoney, onBuyItem, onClo
 
         {/* home indicator + close */}
         <div className="p-2 flex flex-col items-center gap-1.5 border-t border-white/5 shrink-0">
-          <button onClick={onClose} className="text-[10px] font-bold text-white/50 hover:text-white/90 px-3 py-1 rounded-full bg-white/5">Put phone away</button>
+          <button onClick={onClose} className="min-h-11 text-[10px] font-bold text-white/50 hover:text-white/90 px-3 py-1 rounded-full bg-white/5">Put phone away</button>
           <div className="w-24 h-1 rounded-full bg-white/25" />
         </div>
       </div>
@@ -550,7 +595,7 @@ function ThreadScreen({ career, thread, onBack, onPick }: {
         ) : (
           replies.map((r, i) => (
             <button key={i} onClick={() => onPick(i)}
-              className="w-full text-left rounded-xl border border-sky-500/40 bg-sky-500/10 hover:bg-sky-500/25 active:bg-sky-500/35 px-3 py-2 text-[11.5px] font-bold transition-colors">
+              className="min-h-11 w-full text-left rounded-xl border border-sky-500/40 bg-sky-500/10 hover:bg-sky-500/25 active:bg-sky-500/35 px-3 py-2 text-[11.5px] font-bold transition-colors">
               {r.label}
             </button>
           ))
@@ -590,7 +635,7 @@ function ContactScreen({ career, contactId, phase, thread, onBack, onOpenThread,
 
         {thread && thread.lines.length > 0 && (
           <button onClick={() => onOpenThread(thread.id)}
-            className="w-full rounded-xl border border-white/15 bg-white/5 hover:bg-white/10 px-3 py-2 text-[11px] font-bold transition-colors">
+            className="min-h-11 w-full rounded-xl border border-white/15 bg-white/5 hover:bg-white/10 px-3 py-2 text-[11px] font-bold transition-colors">
             Open the chat{busy ? " (they are waiting on you)" : ""}
           </button>
         )}
@@ -604,7 +649,7 @@ function ContactScreen({ career, contactId, phase, thread, onBack, onOpenThread,
             <div className="text-[10px] uppercase tracking-widest text-white/45 font-bold px-0.5">Message them about</div>
             {starters.map((c, i) => (
               <button key={c.id} onClick={() => onStart(i)}
-                className="w-full text-left rounded-xl border border-sky-500/40 bg-sky-500/10 hover:bg-sky-500/25 px-3 py-2 text-[11px] leading-snug font-semibold transition-colors">
+                className="min-h-11 w-full text-left rounded-xl border border-sky-500/40 bg-sky-500/10 hover:bg-sky-500/25 px-3 py-2 text-[11px] leading-snug font-semibold transition-colors">
                 {convoTopic(c)}
               </button>
             ))}

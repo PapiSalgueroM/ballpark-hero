@@ -1,0 +1,15 @@
+.winner {
+  animation: draftWinner 420ms ease-out;
+}
+
+@keyframes draftWinner {
+  from { opacity: 0.8; transform: translateY(2px); }
+  to { opacity: 1; transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .winner {
+    animation: none;
+    transform: none;
+  }
+}

@@ -36,9 +36,13 @@
  * Run: node scripts/runAllSims.mjs --browser
  *      or BASE=http://127.0.0.1:4173 node scripts/playHomeFold.mjs
  */
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import pw from './lib/playwrightLoader.mjs';
 
 const { chromium } = pw;
+const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const BASE = process.env.BASE ?? process.env.SWEEP_BASE ?? 'http://localhost:4173';
 
 /** Pixels from the top of the document, on a phone, that the first playable
@@ -56,8 +60,14 @@ const say = (ok, what) => {
 };
 
 const FOLD_CONTROL = process.env.HOMEFOLD_CONTROL || '';
-if (FOLD_CONTROL && !['notehome', 'notegone', 'h1text'].includes(FOLD_CONTROL)) {
-  console.error(`HOMEFOLD_CONTROL=${FOLD_CONTROL} is not a control this harness knows (notehome, notegone, h1text)`);
+/* Round 717's three: continuepush puts a tall box above the stage when saves
+   are planted (only 6a goes red), continuegone deletes the Continue row as it
+   appears (the second 6b goes red, and 6c with it, since the cards it reads
+   are gone), favignored wipes the stored sport before the app reads it (only
+   6e goes red). Measured 2026-09-30, each exactly that. */
+const FOLD_CONTROLS = ['notehome', 'notegone', 'h1text', 'continuepush', 'continuegone', 'favignored'];
+if (FOLD_CONTROL && !FOLD_CONTROLS.includes(FOLD_CONTROL)) {
+  console.error(`HOMEFOLD_CONTROL=${FOLD_CONTROL} is not a control this harness knows (${FOLD_CONTROLS.join(', ')})`);
   process.exit(2);
 }
 const NON_GAME = /^\/(login|signup|auth|privacy|terms|about|contact|leaderboard|records|whats-new|profile|reset-password|soccer|pro-football|pro-basketball|baseball|hockey|college)(\/|$)/;
@@ -316,6 +326,122 @@ console.log('5) the maker note lives on the About page, not on the home page');
   say(about.heading, 'the About page carries the note under "A note from the maker"');
   say(!about.asksForAccount, 'the note asks for nothing, no account language inside');
   await ctx.close();
+}
+
+console.log('6) a returning player: saves bring a Continue row under the stage, and a sport pick leads the list');
+{
+  /* The list of games and keys is read from the file the row reads, code
+     only, so this plants exactly what the page looks for. */
+  const listSrc = fs.readFileSync(path.join(ROOT, 'src/data/continueSaves.ts'), 'utf8')
+    .replace(/\/\*[\s\S]*?\*\//g, ' ').replace(/(^|[^:'"`])\/\/[^\n]*/g, '$1');
+  const SAVES = [...listSrc.matchAll(/\{\s*path:\s*'([^']+)',\s*saveKey:\s*'([^']+)'/g)].map(m => ({ path: m[1], key: m[2] }));
+  const SHAPED = {
+    'dukb-club-manager-save': { clubName: 'Planted FC', season: 3, sacked: false },
+    soccerCareerSave: { currentClub: 'Planted Town', age: 24, retired: false },
+  };
+  const WANT_LINES = { '/club-manager': 'Planted FC, season 3', '/soccer-career': 'Planted Town, age 24' };
+
+  const visit = async ({ saves = false, fav = null, click = null }) => {
+    const ctx = await browser.newContext({ viewport: { width: 390, height: 844 } });
+    const page = await ctx.newPage();
+    await page.route('**://*.supabase.co/**', r => r.abort());
+    await page.addInitScript(({ saves, list, shaped, fav, control }) => {
+      try {
+        if (saves) for (const s of list) localStorage.setItem(s.key, JSON.stringify(shaped[s.key] ?? {}));
+        if (fav) localStorage.setItem('dukb-fav-sport', fav);
+        if (control === 'favignored') localStorage.removeItem('dukb-fav-sport');
+      } catch { /* a blocked store plants nothing, and the checks below will say so */ }
+      if ((control === 'continuepush' && saves) || control === 'continuegone') {
+        const mo = new MutationObserver(() => {
+          if (control === 'continuepush') {
+            const stage = document.querySelector('[data-home-stage]');
+            if (stage && !document.querySelector('[data-control-push]')) {
+              const box = document.createElement('div');
+              box.setAttribute('data-control-push', '');
+              box.style.height = '240px';
+              stage.parentElement.insertBefore(box, stage);
+            }
+          } else {
+            document.querySelector('[data-home-continue]')?.remove();
+          }
+        });
+        mo.observe(document, { childList: true, subtree: true });
+      }
+    }, { saves, list: SAVES, shaped: SHAPED, fav, control: FOLD_CONTROL });
+    await page.goto(`${BASE}/`, { waitUntil: 'domcontentloaded', timeout: 30000 });
+    await page.waitForFunction(() => (document.body?.innerText ?? '').trim().length > 200, { timeout: 20000 }).catch(() => {});
+    await page.waitForTimeout(2000);
+    let clicked = null;
+    if (click) {
+      /* element.click(), never page.click(): Playwright scrolls before it
+         clicks, and whether the PAGE moves on a tap is what is measured */
+      clicked = await page.evaluate(async sport => {
+        const row = document.querySelector('[data-home-fav-sport]');
+        const btn = document.querySelector(`[data-fav-sport="${sport}"]`);
+        if (!row || !btn) return null;
+        const before = { y: window.scrollY, top: row.getBoundingClientRect().top + window.scrollY };
+        btn.click();
+        await new Promise(r => setTimeout(r, 400));
+        let stored = null;
+        try { stored = localStorage.getItem('dukb-fav-sport'); } catch { /* blocked */ }
+        return { before, after: { y: window.scrollY, top: row.getBoundingClientRect().top + window.scrollY }, stored };
+      }, click);
+    }
+    const r = await page.evaluate(nonGameSrc => {
+      const NON_GAME = new RegExp(nonGameSrc);
+      const first = [...document.querySelectorAll('a[href^="/"]')]
+        .filter(a => !a.closest('section[aria-label="Live scores ticker"]'))
+        .map(a => ({ p: a.getAttribute('href') || '', top: a.getBoundingClientRect().top + window.scrollY }))
+        .filter(x => x.p && x.p !== '/' && !NON_GAME.test(x.p) && x.top > 0)
+        .sort((a, b) => a.top - b.top)[0] ?? null;
+      const stage = document.querySelector('[data-home-stage]');
+      const row = document.querySelector('[data-home-continue]');
+      const cards = row ? [...row.querySelectorAll('[data-continue-card]')].map(a => {
+        const b = a.getBoundingClientRect();
+        return { p: a.getAttribute('href'), line: (a.querySelector('[data-continue-line]')?.textContent || '').trim(), h: b.height, w: b.width };
+      }) : [];
+      const chips = [...document.querySelectorAll('[data-fav-sport]')].map(b => {
+        const r = b.getBoundingClientRect();
+        return { s: b.getAttribute('data-fav-sport'), pressed: b.getAttribute('aria-pressed') === 'true', h: r.height, w: r.width };
+      });
+      return {
+        first,
+        stageBottom: stage ? stage.getBoundingClientRect().bottom + window.scrollY : null,
+        rowTop: row ? row.getBoundingClientRect().top + window.scrollY : null,
+        cards,
+        chips,
+        firstSport: document.querySelector('section[data-sport]')?.getAttribute('data-sport') ?? null,
+        pageWide: document.documentElement.scrollWidth,
+      };
+    }, NON_GAME.source);
+    await ctx.close();
+    return { ...r, clicked };
+  };
+
+  if (SAVES.length < 15) say(false, `only ${SAVES.length} saves read from src/data/continueSaves.ts, so this planted almost nothing`);
+  const fresh = await visit({});
+  const planted = await visit({ saves: true });
+  say(!!fresh.first && !!planted.first && Math.abs(planted.first.top - fresh.first.top) <= 2 && planted.first.top <= FOLD_CEILING,
+    `[6a] ${SAVES.length} planted saves leave the first tile where it was (fresh y=${Math.round(fresh.first?.top ?? -1)}, planted y=${Math.round(planted.first?.top ?? -1)}, ceiling ${FOLD_CEILING})`);
+  say(fresh.rowTop === null, '[6b] a visitor with no saves gets no Continue row at all');
+  say(planted.rowTop !== null && planted.stageBottom !== null && planted.rowTop >= planted.stageBottom - 1
+      && JSON.stringify(planted.cards.map(c => c.p)) === JSON.stringify(SAVES.map(s => s.path)),
+    `[6b] the row sits under the stage (stage ends y=${Math.round(planted.stageBottom ?? -1)}, row starts y=${Math.round(planted.rowTop ?? -1)}) with ${planted.cards.length} of ${SAVES.length} cards in list order`);
+  const lines = Object.entries(WANT_LINES).map(([p, want]) => ({ p, want, got: planted.cards.find(c => c.p === p)?.line ?? null }));
+  say(lines.every(l => l.got === l.want), `[6c] the cards read the saves: ${lines.map(l => `${l.p} "${l.got}"`).join(', ')}`);
+  const small = [...planted.cards.map(c => ({ what: c.p, h: c.h, w: c.w })), ...planted.chips.map(c => ({ what: `chip ${c.s}`, h: c.h, w: c.w }))]
+    .filter(x => x.h < 32 || x.w < 32);
+  say(planted.chips.length >= 10 && small.length === 0 && planted.pageWide <= 390,
+    `[6d] ${planted.cards.length} cards and ${planted.chips.length} chips, none under 32px (${small.map(s => s.what).join(', ') || 'none'}), page ${planted.pageWide}px wide`);
+  const hockey = await visit({ fav: 'hockey' });
+  say(fresh.firstSport === 'soccer' && hockey.firstSport === 'hockey' && hockey.chips.filter(c => c.pressed).map(c => c.s).join() === 'hockey',
+    `[6e] a stored hockey pick leads the sport sections (first section: fresh ${fresh.firstSport}, picked ${hockey.firstSport}) and its chip reads pressed`);
+  const junk = await visit({ fav: 'banana' });
+  say(junk.firstSport === 'soccer' && junk.chips.every(c => !c.pressed), `[6f] a stored value that is not a sport is ignored (first section ${junk.firstSport})`);
+  const tapped = await visit({ click: 'golf' });
+  const c = tapped.clicked;
+  say(!!c && tapped.firstSport === 'golf' && c.stored === 'golf' && c.before.y === c.after.y && Math.abs(c.before.top - c.after.top) <= 1,
+    `[6g] tapping Golf moves golf first (${tapped.firstSport}), remembers it (${c?.stored}), and the page does not move (scroll ${c?.before.y} to ${c?.after.y}, chips at ${Math.round(c?.before.top ?? -1)} to ${Math.round(c?.after.top ?? -1)})`);
 }
 
 await browser.close();

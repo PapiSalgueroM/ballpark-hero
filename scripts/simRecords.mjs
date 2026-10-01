@@ -48,7 +48,8 @@ const { RECORD_SECTIONS } = rec;
 let failures = 0;
 const fail = m => { failures += 1; console.error("  FAIL: " + m); };
 
-const FLOORS = { sb: 30, nba: 40, ws: 60, cup: 55, wnba: 14, cfb: 24, cbb: 40, epl: 60, afl: 64, nrl: 58, brownlow: 112, dallym: 47 };
+/* heisman: Round 729, all 91 winners 1935 to 2025, one per year (simHeisman pins them) */
+const FLOORS = { sb: 30, nba: 40, ws: 60, cup: 55, wnba: 14, cfb: 24, heisman: 91, cbb: 40, epl: 60, afl: 64, nrl: 58, brownlow: 112, dallym: 47 };
 /* columns the repairs made exactly complete: every row must carry them */
 const COMPLETE = {
   /* sb venue joined in Round 247 (era-accurate stadium names with the
@@ -70,10 +71,12 @@ const COMPLETE = {
   nrl: ["competition"],
   /* brownlow joined in Round 291: every medal carries the club and the vote count */
   brownlow: ["club", "votes"],
+  /* heisman joined in Round 729: every winner carries the school and the position */
+  heisman: ["school", "position"],
 };
 
 console.log(`1) the ${RECORD_SECTIONS.length} sections against the live tables`);
-if (RECORD_SECTIONS.length !== 12) fail(`${RECORD_SECTIONS.length} sections, the page promises 12`);
+if (RECORD_SECTIONS.length !== 13) fail(`${RECORD_SECTIONS.length} sections, the page promises 13`);
 
 const registryPaths = new Set(reg.ALL_GAMES.map(g => g.path));
 let reachable = true;

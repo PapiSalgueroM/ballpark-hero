@@ -67,6 +67,12 @@ export function poolShortlist(
 export const PlayerPool = ({ players, draftedIds, onSelect, disabled, isEligible, ineligibleReason }: PlayerPoolProps) => {
   const [search, setSearch] = useState('');
   const [posFilter, setPosFilter] = useState<string>('All');
+  const [country, setCountry] = useState('');
+  const [foot, setFoot] = useState('');
+  const targeted = useMemo(
+    () => players.filter(p => (!country || p.nationality === country) && (!foot || p.dominant_foot === foot)),
+    [players, country, foot],
+  );
 
   /* Round 326, off the owner's review ("too much scrolling"): the pool no
      longer renders as a 480px scroll of every player. It shows the BEST
@@ -74,9 +80,15 @@ export const PlayerPool = ({ players, draftedIds, onSelect, disabled, isEligible
      everyone else; a search shows up to twenty matches. The list is short
      enough to read whole, which is the point. */
   const filtered = useMemo(
-    () => poolShortlist(players, draftedIds, isEligible, posFilter, search),
-    [players, draftedIds, isEligible, posFilter, search],
+    () => poolShortlist(targeted, draftedIds, isEligible, posFilter, search),
+    [targeted, draftedIds, isEligible, posFilter, search],
   );
+  const searching = search.length >= 2;
+  const matchingCount = targeted.filter(p =>
+    (searching || (!draftedIds.has(p.id) && (!isEligible || isEligible(p)))) &&
+    (posFilter === 'All' || p.position === posFilter) &&
+    (!searching || p.name.toLowerCase().includes(search.toLowerCase())),
+  ).length;
 
   return (
     <div className="w-full max-w-2xl mx-auto rounded-2xl border border-border bg-card/70 backdrop-blur-md overflow-hidden">
@@ -93,7 +105,7 @@ export const PlayerPool = ({ players, draftedIds, onSelect, disabled, isEligible
             aria-label="Search players"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full pl-9 pr-3 py-2 rounded-lg bg-secondary/60 border border-border text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary"
+            className="w-full min-h-[44px] pl-9 pr-3 py-2 rounded-lg bg-secondary/60 border border-border text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary"
           />
         </div>
 
@@ -103,8 +115,9 @@ export const PlayerPool = ({ players, draftedIds, onSelect, disabled, isEligible
             <button
               key={pos}
               onClick={() => setPosFilter(pos)}
+              aria-pressed={posFilter === pos}
               className={cn(
-                'px-3 py-1 rounded-full text-xs font-semibold transition-colors',
+                'min-h-[44px] px-3 py-1 rounded-full text-xs font-semibold transition-colors',
                 posFilter === pos
                   ? 'bg-primary text-primary-foreground'
                   : 'bg-secondary/60 text-muted-foreground hover:text-foreground'
@@ -114,6 +127,26 @@ export const PlayerPool = ({ players, draftedIds, onSelect, disabled, isEligible
             </button>
           ))}
         </div>
+        <div className="mt-3 flex flex-wrap items-end gap-2">
+          <label className="min-w-0 flex-1 basis-32 text-xs font-semibold text-muted-foreground">
+            Country
+            <select value={country} onChange={e => setCountry(e.target.value)} className="mt-1 h-11 w-full rounded-lg border border-border bg-secondary/60 px-2 text-sm text-foreground">
+              <option value="">All</option>
+              {[...new Set(players.map(p => p.nationality))].filter(Boolean).sort((a, b) => a.localeCompare(b)).map(value => <option key={value} value={value}>{value}</option>)}
+            </select>
+          </label>
+          <label className="min-w-0 flex-1 basis-32 text-xs font-semibold text-muted-foreground">
+            Foot
+            <select value={foot} onChange={e => setFoot(e.target.value)} className="mt-1 h-11 w-full rounded-lg border border-border bg-secondary/60 px-2 text-sm text-foreground">
+              <option value="">All</option>
+              {[...new Set(players.map(p => p.dominant_foot))].filter(Boolean).sort((a, b) => a.localeCompare(b)).map(value => <option key={value} value={value}>{value}</option>)}
+            </select>
+          </label>
+          <button type="button" onClick={() => { setSearch(''); setPosFilter('All'); setCountry(''); setFoot(''); }} disabled={!search && posFilter === 'All' && !country && !foot} className="min-h-[44px] rounded-lg border border-border px-3 text-xs font-semibold hover:bg-accent disabled:opacity-40">
+            Reset filters
+          </button>
+        </div>
+        <p role="status" className="mt-3 text-xs text-muted-foreground">Showing {filtered.length} of {matchingCount} {searching ? 'matching' : 'available'} players.</p>
       </div>
 
       {/* Player list */}
@@ -170,7 +203,7 @@ export const PlayerPool = ({ players, draftedIds, onSelect, disabled, isEligible
       </div>
 
       <div className="px-4 py-2 border-t border-border text-center">
-        <p className="text-xs text-muted-foreground">Best available shown • search reaches the whole pool • {draftedIds.size} drafted</p>
+        <p className="text-xs text-muted-foreground">Best 10 available • search shows up to 20 matches • {draftedIds.size} drafted</p>
       </div>
     </div>
   );

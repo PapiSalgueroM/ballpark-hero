@@ -69,7 +69,7 @@ const say = (ok, what) => {
    every page, so one route would have caught the bug that prompted this; the
    spread is here for the ones that will not ride on every page. Nine routes at
    two loads each is about ninety seconds, which is affordable in the suite. */
-const ROUTES = [
+const DEFAULT_ROUTES = [
   '/',
   '/soccer-career',
   '/club-manager',
@@ -79,10 +79,21 @@ const ROUTES = [
   /* Round 649: the per competition record page shape, which counts its facts
      at render and must say the same thing on every date */
   '/records/super-bowl-winners',
+  /* Round 652: the prerenderer now compares a whole table as one block across
+     its clock samples, so one cell that moves with the date drops the entire
+     table from the saved page. The record pages above, a grid archive and a
+     format history are the three kinds of page built on tables, and this is
+     the harness that would show one of them drifting. */
+  '/nba-grid/archive',
+  '/nfl-playoff-format-history',
   '/leaderboard',
   '/whats-new',
   '/about',
 ];
+/* Round 653: ONLY=/a,/b runs just those routes, the way playRenderStability
+   takes it, so a round can put its own pages through this without editing the
+   spread above. */
+const ROUTES = process.env.ONLY ? process.env.ONLY.split(',').map(x => x.trim()).filter(Boolean) : DEFAULT_ROUTES;
 
 /* Exactly what scripts/prerender.mjs keeps, so this measures the thing that
    actually gets written rather than a rough approximation of it. Kept in step
