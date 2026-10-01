@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo, useRef, useCallback } from 'react';
+import { useState, useEffect, useLayoutEffect, useMemo, useRef, useCallback, type KeyboardEvent as ReactKeyboardEvent } from 'react';
 import { Link } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { Timer, Flag, Loader2, ListChecks } from 'lucide-react';
@@ -9,6 +9,7 @@ import AdBanner from '@/components/ads/AdBanner';
 import ReportQuestion from '@/components/game/ReportQuestion';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
+import feedback from './ListQuizFeedback.module.css';
 import {
   ListPuzzleDef, LIST_PUZZLES, OFFLINE_PUZZLE,
   loadPuzzleAnswers, buildAliasMap, normalize,
@@ -31,13 +32,26 @@ const ListQuiz = () => {
   const [secondsLeft, setSecondsLeft] = useState(TIMED_SECONDS);
   const [gaveUp, setGaveUp] = useState(false);
   const [loadFailedId, setLoadFailedId] = useState<string | null>(null);
+  const [hitIndex, setHitIndex] = useState<number | null>(null);
+  const [revealing, setRevealing] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
+  const doneActionRef = useRef<HTMLButtonElement>(null);
+  const focusRequest = useRef<HTMLElement | null>(null);
+  const previousPhase = useRef<Phase>('pick');
   const flashTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const revealTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const foundCount = found.filter(Boolean).length;
   const total = answers.length;
 
-  const startPuzzle = useCallback(async (def: ListPuzzleDef, useTimer: boolean) => {
+  const startPuzzle = useCallback(async (def: ListPuzzleDef, useTimer: boolean, opener?: HTMLElement) => {
+    const active = document.activeElement;
+    focusRequest.current = opener ?? (active === document.body ? document.body : null);
+    if (flashTimer.current) clearTimeout(flashTimer.current);
+    if (revealTimer.current) clearTimeout(revealTimer.current);
+    setFlash(null);
+    setHitIndex(null);
+    setRevealing(false);
     setPhase('loading');
     setLoadFailedId(null);
     let list = await loadPuzzleAnswers(def);
@@ -62,8 +76,24 @@ const ListQuiz = () => {
     setTimed(useTimer);
     setSecondsLeft(TIMED_SECONDS);
     setPhase('playing');
-    setTimeout(() => inputRef.current?.focus(), 50);
   }, []);
+
+  useLayoutEffect(() => {
+    const previous = previousPhase.current;
+    previousPhase.current = phase;
+    const origin = focusRequest.current;
+    const active = document.activeElement;
+    const canFocus = active === document.body || !(active instanceof HTMLElement) || !active.isConnected || active === origin;
+    if (phase === 'done' && previous === 'playing') {
+      setRevealing(true);
+      revealTimer.current = setTimeout(() => setRevealing(false), 600);
+      if (canFocus) doneActionRef.current?.focus({ preventScroll: true });
+      focusRequest.current = null;
+    } else if (phase === 'playing' && origin) {
+      if (canFocus) inputRef.current?.focus({ preventScroll: true });
+      focusRequest.current = null;
+    }
+  }, [phase, found, flash]);
 
   // countdown
   useEffect(() => {
@@ -81,7 +111,10 @@ const ListQuiz = () => {
     if (phase === 'playing' && total > 0 && foundCount === total) setPhase('done');
   }, [phase, foundCount, total]);
 
-  useEffect(() => () => { if (flashTimer.current) clearTimeout(flashTimer.current); }, []);
+  useEffect(() => () => {
+    if (flashTimer.current) clearTimeout(flashTimer.current);
+    if (revealTimer.current) clearTimeout(revealTimer.current);
+  }, []);
 
   const setFlashFor = (f: 'hit' | 'dupe' | 'miss') => {
     setFlash(f);
@@ -92,22 +125,30 @@ const ListQuiz = () => {
   const submit = () => {
     const guess = normalize(input);
     if (!guess || guess.length < 3) return;
+    const active = document.activeElement;
+    focusRequest.current = active instanceof HTMLElement && (active === document.body || inputRef.current?.closest('form')?.contains(active)) ? active : null;
     const idx = aliasMap.get(guess);
     if (idx == null) {
       setFlashFor('miss');
+      if (focusRequest.current) inputRef.current?.focus({ preventScroll: true });
+      focusRequest.current = null;
       return;
     }
     if (found[idx]) {
       setFlashFor('dupe');
       setInput('');
+      if (focusRequest.current) inputRef.current?.focus({ preventScroll: true });
+      focusRequest.current = null;
       return;
     }
     setFound(prev => prev.map((f, i) => (i === idx ? true : f)));
+    setHitIndex(idx);
     setInput('');
     setFlashFor('hit');
   };
 
-  const giveUp = () => {
+  const giveUp = (opener: HTMLElement) => {
+    focusRequest.current = opener;
     setGaveUp(true);
     setPhase('done');
   };
@@ -115,6 +156,10 @@ const ListQuiz = () => {
   const backToPicker = () => {
     setPhase('pick');
     setPuzzle(null);
+  };
+
+  const preventRepeat = (event: ReactKeyboardEvent<HTMLElement>) => {
+    if (event.repeat && (event.key === 'Enter' || event.key === ' ')) event.preventDefault();
   };
 
   const pct = total > 0 ? Math.round((foundCount / total) * 100) : 0;
@@ -163,14 +208,16 @@ const ListQuiz = () => {
                         )}
                         <div className="flex gap-2">
                           <button
-                            onClick={() => startPuzzle(p, false)}
-                            className="flex-1 px-3 py-1.5 bg-primary text-primary-foreground rounded-lg text-sm font-semibold hover:opacity-90 transition-opacity"
+                            onKeyDown={preventRepeat}
+                            onClick={e => startPuzzle(p, false, e.currentTarget)}
+                            className={cn(feedback.action, 'flex-1 px-3 py-1.5 bg-primary text-primary-foreground rounded-lg text-sm font-semibold hover:opacity-90 transition-opacity')}
                           >
                             Relaxed
                           </button>
                           <button
-                            onClick={() => startPuzzle(p, true)}
-                            className="flex-1 px-3 py-1.5 bg-secondary text-foreground rounded-lg text-sm font-semibold hover:bg-secondary/70 transition-colors inline-flex items-center justify-center gap-1"
+                            onKeyDown={preventRepeat}
+                            onClick={e => startPuzzle(p, true, e.currentTarget)}
+                            className={cn(feedback.action, 'flex-1 px-3 py-1.5 bg-secondary text-foreground rounded-lg text-sm font-semibold hover:bg-secondary/70 transition-colors inline-flex items-center justify-center gap-1')}
                           >
                             <Timer className="w-3.5 h-3.5" /> 3:00
                           </button>
@@ -194,7 +241,7 @@ const ListQuiz = () => {
           <div className="max-w-2xl mx-auto">
             <div className="bg-card border border-border rounded-2xl p-5 md:p-6 mb-4">
               <div className="flex items-center justify-between gap-3 mb-1">
-                <h2 className="font-bold text-foreground">{puzzle.emoji} {puzzle.title}</h2>
+                <h2 className={cn(feedback.fullName, 'font-bold text-foreground')}>{puzzle.emoji} {puzzle.title}</h2>
                 {timed && phase === 'playing' && (
                   <span className={cn(
                     'font-mono font-bold text-lg',
@@ -220,6 +267,7 @@ const ListQuiz = () => {
                 <>
                   <form
                     onSubmit={e => { e.preventDefault(); submit(); }}
+                    onKeyDown={e => { if (e.key === 'Enter' && e.repeat) e.preventDefault(); }}
                     className="flex gap-2"
                   >
                     <input
@@ -240,25 +288,47 @@ const ListQuiz = () => {
                       )}
                     />
                     <button
+                      onKeyDown={preventRepeat}
                       type="submit"
-                      className="px-5 py-3 bg-primary text-primary-foreground rounded-xl font-bold hover:opacity-90 transition-opacity"
+                      className={cn(feedback.action, 'px-5 py-3 bg-primary text-primary-foreground rounded-xl font-bold hover:opacity-90 transition-opacity')}
                     >
                       Guess
                     </button>
                   </form>
-                  <div className="min-h-[20px] text-center text-xs mt-2">
+                  <div role="status" aria-live="polite" aria-atomic="true" className={cn(feedback.fullName, 'min-h-[20px] text-center text-xs mt-2')} data-list-feedback={flash ?? undefined}>
+                    {flash === 'hit' && hitIndex != null && <span className="text-correct font-semibold">Found: {answers[hitIndex]}</span>}
                     {flash === 'dupe' && <span className="text-yellow-500 font-semibold">Already found that one</span>}
                     {flash === 'miss' && <span className="text-destructive font-semibold">Not on the list (or needs the full name)</span>}
                   </div>
                   <div className="flex justify-center mt-2">
                     <button
-                      onClick={giveUp}
-                      className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-destructive transition-colors"
+                      onKeyDown={preventRepeat}
+                      onClick={e => giveUp(e.currentTarget)}
+                      className={cn(feedback.action, 'inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-destructive transition-colors')}
                     >
                       <Flag className="w-3.5 h-3.5" /> Give up and reveal
                     </button>
                   </div>
                 </>
+              )}
+              {phase === 'done' && (
+                <div className="flex flex-wrap justify-center gap-2 mt-3">
+                  <button
+                    onKeyDown={preventRepeat}
+                    onClick={e => puzzle && startPuzzle(puzzle, timed, e.currentTarget)}
+                    className={cn(feedback.action, 'inline-flex items-center justify-center px-6 py-2.5 bg-primary text-primary-foreground rounded-full font-semibold hover:opacity-90 transition-opacity')}
+                  >
+                    Retry
+                  </button>
+                  <button
+                    ref={doneActionRef}
+                    onKeyDown={preventRepeat}
+                    onClick={backToPicker}
+                    className={cn(feedback.action, 'inline-flex items-center gap-2 px-6 py-2.5 bg-secondary text-foreground rounded-full font-semibold hover:bg-secondary/70 transition-colors')}
+                  >
+                    <ListChecks className="w-4 h-4" /> More lists
+                  </button>
+                </div>
               )}
             </div>
 
@@ -268,8 +338,14 @@ const ListQuiz = () => {
                 return (
                   <div
                     key={i}
+                    data-list-answer={i}
+                    data-list-found={found[i] ? 'true' : 'false'}
+                    data-list-cue={flash === 'hit' && hitIndex === i ? 'hit' : revealing && !found[i] ? 'reveal' : undefined}
                     className={cn(
-                      'px-2 py-1.5 rounded-md text-xs sm:text-sm text-center font-medium border truncate',
+                      feedback.fullName,
+                      flash === 'hit' && hitIndex === i && feedback.hit,
+                      revealing && !found[i] && feedback.reveal,
+                      'px-2 py-1.5 rounded-md text-xs sm:text-sm text-center font-medium border',
                       found[i]
                         ? 'bg-correct/15 border-correct/40 text-foreground'
                         : phase === 'done'
@@ -285,7 +361,7 @@ const ListQuiz = () => {
             </div>
 
             {phase === 'done' && (
-              <div className="mb-6">
+              <div className="mb-6" onKeyDown={preventRepeat}>
                 <ResultScreen
                   recordCompletionOnMount
                   completionScore={foundCount}
@@ -311,16 +387,6 @@ const ListQuiz = () => {
                     gameName: 'Name Them All',
                     gamePath: '/list-quiz',
                   }}
-                  onPlayAgain={() => puzzle && startPuzzle(puzzle, timed)}
-                  playAgainLabel="Retry"
-                  playNext={
-                    <button
-                      onClick={backToPicker}
-                      className="inline-flex items-center gap-2 px-6 py-2.5 bg-secondary text-foreground rounded-full font-semibold hover:bg-secondary/70 transition-colors"
-                    >
-                      <ListChecks className="w-4 h-4" /> More lists
-                    </button>
-                  }
                 />
               </div>
             )}

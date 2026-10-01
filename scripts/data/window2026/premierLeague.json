@@ -298,5 +298,966 @@
     "window": "2026-summer",
     "note": "From Genoa on deadline day. Sky lists it as a loan and ESPN and Sky deadline day as undisclosed, so loan is not set; he plays for Hull either way (Hull first team page, ESPN player page).",
     "checked": "2026-09-30"
+  },
+  {
+    "name": "Lucca Brughmans",
+    "to": "Genk",
+    "db": "KRC Genk",
+    "loan": true,
+    "sources": [
+      "https://www.liverpoolfc.com/news/liverpool-agree-deal-sign-goalkeeper-lucca-brughmans",
+      "https://www.skysports.com/football/news/11095/13546618/transfer-news-summer-transfer-window-2026-premier-league-deals-ins-and-outs"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Liverpool signed him from Genk on 2026-09-01 and loaned him straight back to Genk for the whole of 2026-27 (the Liverpool announcement says so). His 2026 row sits at Jong Genk, the reserve side; he is Genk's first choice keeper."
+  },
+  {
+    "name": "Modou Kéba Cissé",
+    "to": "Aston Villa",
+    "db": "Aston Villa",
+    "sources": [
+      "https://lask.at/en/m/news/cisse-to-join-premier-league-in-summer-2026",
+      "https://www.espn.com/soccer/story/_/id/48955344/premier-league-2026-summer-transfers-all-confirmed-ins-outs-every-club"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Pre contract agreed in July 2025, the move took effect on 2026-07-01 (LASK's announcement). Also on Sky's Villa list."
+  },
+  {
+    "name": "Manuel Ángel",
+    "to": "Fulham",
+    "db": "Fulham FC",
+    "sources": [
+      "https://www.fulhamfc.com/news/2026/september/01/manuel-angel-signs-for-fulham/",
+      "https://www.espn.com/soccer/story/_/id/48955344/premier-league-2026-summer-transfers-all-confirmed-ins-outs-every-club"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Permanent from Real Madrid, 2026-09-01. Also on Sky's Fulham list."
+  },
+  {
+    "name": "Ainsley Maitland-Niles",
+    "to": "Everton",
+    "db": "Everton FC",
+    "sources": [
+      "https://www.evertonfc.com/news/2026/september/02/Grealish---Maitland-Niles-Everton-Squad-Numbers-Confirmed",
+      "https://www.espn.com/soccer/story/_/id/48955344/premier-league-2026-summer-transfers-all-confirmed-ins-outs-every-club"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Permanent from Lyon on deadline day, contract to June 2029; Everton gave him the number 2 shirt. Also on Sky's Everton list."
+  },
+  {
+    "name": "Sorba Thomas",
+    "to": "Hull City",
+    "db": "Hull City",
+    "sources": [
+      "https://www.stokecityfc.com/news/2026/september/01/sorba-thomas-signs-for-hull-city/",
+      "https://www.espn.com/soccer/story/_/id/48955344/premier-league-2026-summer-transfers-all-confirmed-ins-outs-every-club"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Permanent from Stoke, 2026-09-01. Also on Sky's Hull list."
+  },
+  {
+    "name": "Elliot Stroud",
+    "to": "Hull City",
+    "db": "Hull City",
+    "sources": [
+      "https://www.wearehullcity.co.uk/news/2026/august/09/the-story-so-far-elliot-stroud/",
+      "https://www.espn.com/soccer/story/_/id/48955344/premier-league-2026-summer-transfers-all-confirmed-ins-outs-every-club"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "From Mjallby, Hull's seventh summer signing. Also on Sky's Hull list."
+  },
+  {
+    "name": "Jens Hjertø-Dahl",
+    "to": "Hull City",
+    "db": "Hull City",
+    "sources": [
+      "https://www.wearehullcity.co.uk/news/2026/august/07/the-story-so-far-jens-hjerto-dahl/",
+      "https://www.espn.com/soccer/story/_/id/48955344/premier-league-2026-summer-transfers-all-confirmed-ins-outs-every-club"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "From Tromso, Hull's sixth summer signing. Also on Sky's Hull list."
+  },
+  {
+    "name": "Kayne van Oevelen",
+    "to": "Valencia",
+    "db": "Valencia CF",
+    "loan": true,
+    "sources": [
+      "https://www.valenciacf.com/official-statement-kayne-van-oevelen",
+      "https://www.skysports.com/football/news/11095/13546618/transfer-news-summer-transfer-window-2026-premier-league-deals-ins-and-outs"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Ipswich bought him from Volendam in July 2026 (fcvolendam.nl, 2026-07-21) and loaned him to Valencia for the season; Sky lists both moves."
+  },
+  {
+    "name": "George Hirst",
+    "to": "Stoke City",
+    "db": "Stoke City",
+    "sources": [
+      "https://www.stokecityfc.com/news/2026/august/20/by-george-hirst-is-a-potter/",
+      "https://www.espn.com/soccer/story/_/id/48955344/premier-league-2026-summer-transfers-all-confirmed-ins-outs-every-club"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Permanent from Ipswich, 2026-08-20. Also on Sky's Ipswich out list."
+  },
+  {
+    "name": "Wes Burns",
+    "to": null,
+    "db": "Leicester City",
+    "sources": [
+      "https://www.lcfc.com/media-article/wes-burns-leicester-city-lcfc-transfer-ipswich-town-itfc",
+      "https://www.espn.com/soccer/story/_/id/48955344/premier-league-2026-summer-transfers-all-confirmed-ins-outs-every-club"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Leicester City, permanent from Ipswich on a three year deal. Leicester play in League One in 2026-27, not a league the engine models. Also on Sky's Ipswich out list."
+  },
+  {
+    "name": "Cody Drameh",
+    "to": "Genoa",
+    "db": "Genoa CFC",
+    "sources": [
+      "https://genoacfc.it/2026/09/01/cody-drameh-ha-firmato-per-il-genoa/",
+      "https://www.espn.com/soccer/story/_/id/48955344/premier-league-2026-summer-transfers-all-confirmed-ins-outs-every-club"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "From Hull, 2026-09-01. Genoa announced it as permanent and Sky lists a loan, so loan is not set; he plays for Genoa either way."
+  },
+  {
+    "name": "Andrés García",
+    "to": "Getafe",
+    "db": "Getafe CF",
+    "loan": true,
+    "sources": [
+      "https://www.getafecf.com/en/news/andres-garcia-new-reinforcement-for-the-flank",
+      "https://www.espn.com/soccer/story/_/id/48955344/premier-league-2026-summer-transfers-all-confirmed-ins-outs-every-club"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Season long loan from Aston Villa. Also on Sky's Villa out list."
+  },
+  {
+    "name": "Adam Aznou",
+    "to": "Málaga",
+    "db": "Málaga CF",
+    "loan": true,
+    "sources": [
+      "https://www.malagacf.com/noticias/el-malaga-cf-incorpora-a-su-plantilla-a-adam-aznou",
+      "https://www.espn.com/soccer/story/_/id/48955344/premier-league-2026-summer-transfers-all-confirmed-ins-outs-every-club"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Loan from Everton for 2026-27 (Malaga's sixth signing of the window)."
+  },
+  {
+    "name": "Souza",
+    "to": "Porto",
+    "db": "FC Porto",
+    "loan": true,
+    "sources": [
+      "https://www.tottenhamhotspur.com/news/1087836/fc-porto-loan-for-souza",
+      "https://www.espn.com/soccer/story/_/id/48955344/premier-league-2026-summer-transfers-all-confirmed-ins-outs-every-club"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Season long loan from Tottenham, who signed him from Santos in January 2026. Also on Sky's Tottenham out list."
+  },
+  {
+    "name": "Jesse Derry",
+    "to": "Sporting CP",
+    "db": "Sporting CP",
+    "loan": true,
+    "sources": [
+      "https://www.chelseafc.com/en/news/article/derry-joins-sporting-lisbon-on-loan",
+      "https://www.espn.com/soccer/story/_/id/48955344/premier-league-2026-summer-transfers-all-confirmed-ins-outs-every-club"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Season long loan from Chelsea after a new contract (sporting.pt announced it on 2026-07-12)."
+  },
+  {
+    "name": "Kosta Nedeljkovic",
+    "to": "Rangers",
+    "db": "Rangers FC",
+    "loan": true,
+    "sources": [
+      "https://www.rangers.co.uk/article/rangers-announce-signing-of-kosta-nedeljkovic/X8KGygxMTg6QaGBiHDWzt",
+      "https://www.espn.com/soccer/story/_/id/48955344/premier-league-2026-summer-transfers-all-confirmed-ins-outs-every-club"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Season long loan from Aston Villa with a conditional obligation. His 2026 row sits at RB Leipzig, where he was on loan in 2025-26."
+  },
+  {
+    "name": "Louie Barry",
+    "to": null,
+    "db": "Sheffield Wednesday",
+    "sources": [
+      "https://www.swfc.co.uk/news/2026/july/09/louie-barry-signs-for-wednesday/",
+      "https://www.espn.com/soccer/story/_/id/48955344/premier-league-2026-summer-transfers-all-confirmed-ins-outs-every-club"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Sheffield Wednesday, permanent from Aston Villa, 2026-07-09. His 2026 row is his Stockport loan. Wednesday play in League One in 2026-27, not a league the engine models."
+  },
+  {
+    "name": "Lewis Dobbin",
+    "to": "Southampton",
+    "db": "Southampton FC",
+    "sources": [
+      "https://www.southamptonfc.com/en/news/article/dobbin-arrives-to-boost-forward-line",
+      "https://www.espn.com/soccer/story/_/id/48955344/premier-league-2026-summer-transfers-all-confirmed-ins-outs-every-club"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Permanent from Aston Villa on a four year deal. His 2026 row is his Preston loan. Also on Sky's Villa out list."
+  },
+  {
+    "name": "Amario Cozier-Duberry",
+    "to": "Middlesbrough",
+    "db": "Middlesbrough FC",
+    "loan": true,
+    "sources": [
+      "https://www.brightonandhovealbion.com/media-article/mft-transfer-news-amario-cozier-duberry-millwall-september-2026",
+      "https://www.espn.com/soccer/story/_/id/48955344/premier-league-2026-summer-transfers-all-confirmed-ins-outs-every-club"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Season long loan from Brighton after a new contract. His 2026 row is his Bolton loan."
+  },
+  {
+    "name": "Romelle Donovan",
+    "to": "Sheffield United",
+    "db": "Sheffield United",
+    "loan": true,
+    "sources": [
+      "https://www.brentfordfc.com/en/news/article/first-team-romelle-donovan-sheffield-united-loan-transfer",
+      "https://www.espn.com/soccer/story/_/id/48955344/premier-league-2026-summer-transfers-all-confirmed-ins-outs-every-club"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Season long loan from Brentford. Also on Sky's Brentford out list."
+  },
+  {
+    "name": "Isaac Schmidt",
+    "to": "Young Boys",
+    "db": "BSC Young Boys",
+    "sources": [
+      "https://www.leedsunited.com/en/news/isaac-schmidt-completes-move-to-bsc-young-boys",
+      "https://www.espn.com/soccer/story/_/id/48955344/premier-league-2026-summer-transfers-all-confirmed-ins-outs-every-club"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Permanent from Leeds. His 2026 row is his Werder Bremen loan."
+  },
+  {
+    "name": "Christian McFarlane",
+    "to": null,
+    "db": "Leicester City",
+    "loan": true,
+    "sources": [
+      "https://www.lcfc.com/media-article/christian-mcfarlane-joins-leicester-city-loan-lcfc-transfer-manchester-city-defender",
+      "https://www.espn.com/soccer/story/_/id/48955344/premier-league-2026-summer-transfers-all-confirmed-ins-outs-every-club"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Leicester City, season long loan from Manchester City. Leicester play in League One in 2026-27, not a league the engine models."
+  },
+  {
+    "name": "Dastan Satpaev",
+    "to": "Burnley",
+    "db": "Burnley FC",
+    "loan": true,
+    "sources": [
+      "https://www.chelseafc.com/en/news/article/dastan-satpayev-completes-chelsea-transfer-and-seals-loan-switch",
+      "https://www.espn.com/soccer/story/_/id/48955344/premier-league-2026-summer-transfers-all-confirmed-ins-outs-every-club"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Chelsea signed him from Kairat in August 2026 and loaned him to Burnley for the season (burnleyfootballclub.com too). The clubs spell him Satpayev; the table spells him Satpaev."
+  },
+  {
+    "name": "David Datro Fofana",
+    "to": "Servette",
+    "db": "Servette FC",
+    "sources": [
+      "https://servettefc.ch/david-datro-fofana-rejoint-le-servette-fc/",
+      "https://www.espn.com/soccer/story/_/id/48955344/premier-league-2026-summer-transfers-all-confirmed-ins-outs-every-club"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Permanent from Chelsea, contract to 2030 (chelseafc.com too). His 2026 row is his Strasbourg loan."
+  },
+  {
+    "name": "Arthur Masuaku",
+    "to": "Konyaspor",
+    "db": "Konyaspor",
+    "sources": [
+      "https://www.konyaspor.org.tr/futbolcular",
+      "https://www.espn.com/soccer/story/_/id/48955344/premier-league-2026-summer-transfers-all-confirmed-ins-outs-every-club"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "From Sunderland, August 2026; Konyaspor's squad page lists him at number 26. His 2026 row is his Lens loan from the second half of 2025-26."
+  },
+  {
+    "name": "Anthony Patterson",
+    "to": "Wrexham",
+    "db": "Wrexham AFC",
+    "sources": [
+      "https://www.wrexhamafc.co.uk/news/2026/august/11/anthony-patterson-signs-for-wrexham-from-sunderland/",
+      "https://www.espn.com/soccer/story/_/id/48955344/premier-league-2026-summer-transfers-all-confirmed-ins-outs-every-club"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Permanent from Sunderland, 2026-08-11. His 2026 row is his Millwall loan. Also on Sky's Sunderland out list."
+  },
+  {
+    "name": "Leo Hjelde",
+    "to": "Mechelen",
+    "db": "KV Mechelen",
+    "sources": [
+      "https://kvmechelen.be/welkom-leohjelde/",
+      "https://www.espn.com/soccer/story/_/id/48955344/premier-league-2026-summer-transfers-all-confirmed-ins-outs-every-club"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "From Sunderland, 2026-08-11. Mechelen announced a contract to 2029 and ESPN lists a loan, so loan is not set; he plays for Mechelen either way. His 2026 row is his Sheffield United loan."
+  },
+  {
+    "name": "Sammie Szmodics",
+    "to": "Derby County",
+    "db": "Derby County",
+    "loan": true,
+    "sources": [
+      "https://www.dcfc.co.uk/news/2026/08/signing-sam-szmodics-rejoins-the-rams",
+      "https://www.espn.com/soccer/story/_/id/48955344/premier-league-2026-summer-transfers-all-confirmed-ins-outs-every-club"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Season long loan from Ipswich, his second Derby loan after the one in February 2026. Also on Sky's Ipswich out list."
+  },
+  {
+    "name": "Ato Ampah",
+    "to": "Stoke City",
+    "db": "Stoke City",
+    "sources": [
+      "https://www.chelseafc.com/en/news/article/ato-ampah-departs-chelsea-on-permanent-transfer",
+      "https://africa.espn.com/football/story/_/id/47480954/premier-league-january-2026-transfers-all-confirmed-ins-outs-deals-every-club"
+    ],
+    "window": "2026-01",
+    "checked": "2026-10-01",
+    "note": "Permanent from Chelsea, February 2026, on a three and a half year deal (stokecityfc.com too)."
+  },
+  {
+    "name": "Arne Engels",
+    "to": "West Ham",
+    "db": "West Ham United",
+    "sources": [
+      "https://www.whufc.com/en/news/west-ham-united-sign-arne-engels",
+      "https://www.espn.com/soccer/team/squad/_/id/371/west-ham-united"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Permanent from Celtic, 2026-08-15, five year deal; ESPN's West Ham 2026-27 squad page lists him."
+  },
+  {
+    "name": "Joël Veltman",
+    "to": "West Ham",
+    "db": "West Ham United",
+    "sources": [
+      "https://www.whufc.com/en/news/west-ham-united-sign-joel-veltman",
+      "https://www.skysports.com/football/news/11095/13546618/transfer-news-summer-transfer-window-2026-premier-league-deals-ins-and-outs"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Free after Brighton released him; West Ham announced him in August 2026. Sky's Brighton out list has him to West Ham and ESPN's West Ham 2026-27 squad page lists him; ESPN's summer list only has him as released."
+  },
+  {
+    "name": "Adama Boiro",
+    "to": "West Ham",
+    "db": "West Ham United",
+    "loan": true,
+    "sources": [
+      "https://www.whufc.com/en/news/west-ham-united-sign-adama-boiro-on-loan",
+      "https://www.espn.com/soccer/team/squad/_/id/371/west-ham-united"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Season long loan from Athletic Club with an option (athletic-club.eus, 2026-09-02, too)."
+  },
+  {
+    "name": "Edvin Austbø",
+    "to": "West Ham",
+    "db": "West Ham United",
+    "sources": [
+      "https://www.whufc.com/en/news/west-ham-united-sign-edvin-austbo",
+      "https://www.espn.com/soccer/team/squad/_/id/371/west-ham-united"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Permanent from Viking, August 2026."
+  },
+  {
+    "name": "Anel Ahmedhodzic",
+    "to": "Burnley",
+    "db": "Burnley FC",
+    "sources": [
+      "https://www.burnleyfootballclub.com/media-article/ahmedhodzic-is-a-claret",
+      "https://www.espn.com/soccer/team/squad/_/id/379/burnley"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Permanent from Feyenoord on a four year deal (feyenoord.com, 2026-08-20, too)."
+  },
+  {
+    "name": "Reo Hatate",
+    "to": "Burnley",
+    "db": "Burnley FC",
+    "sources": [
+      "https://www.burnleyfootballclub.com/media-article/burnley-secure-hatate-signature",
+      "https://www.espn.com/soccer/team/squad/_/id/379/burnley"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Permanent from Celtic, 2026-09-01 (celticfc.com 2026-09-02 too)."
+  },
+  {
+    "name": "Grégoire Coudert",
+    "to": "Burnley",
+    "db": "Burnley FC",
+    "sources": [
+      "https://www.burnleyfootballclub.com/media-article/clarets-capture-coudert",
+      "https://www.espn.com/soccer/team/squad/_/id/379/burnley"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Permanent from Brest on a four year deal."
+  },
+  {
+    "name": "Max Alleyne",
+    "to": "Burnley",
+    "db": "Burnley FC",
+    "loan": true,
+    "sources": [
+      "https://www.mancity.com/news/mens/max-alleyne-joins-burnley-on-season-long-loan-63922314",
+      "https://www.espn.com/soccer/team/squad/_/id/379/burnley"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Season long loan from Manchester City (burnleyfootballclub.com too)."
+  },
+  {
+    "name": "Aaron Ramsey",
+    "to": "Burnley",
+    "db": "Burnley FC",
+    "sources": [
+      "https://www.burnleyfootballclub.com/media-article/2026-27-squad-numbers-confirmed",
+      "https://www.espn.com/soccer/team/squad/_/id/379/burnley"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "The midfielder born in 2003, not the Wales captain. His 2026 row is his 2025-26 loan at Leicester; the loan ended and Burnley gave him the number 21 for 2026-27."
+  },
+  {
+    "name": "Andréas Hountondji",
+    "to": "Burnley",
+    "db": "Burnley FC",
+    "sources": [
+      "https://www.burnleyfootballclub.com/media-article/2026-27-squad-numbers-confirmed",
+      "https://www.espn.com/soccer/team/squad/_/id/379/burnley"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "His 2026 row is his 2025-26 loan at St Pauli; the loan ended and Burnley gave him the number 17 for 2026-27."
+  },
+  {
+    "name": "Shurandy Sambo",
+    "to": "Burnley",
+    "db": "Burnley FC",
+    "sources": [
+      "https://www.burnleyfootballclub.com/media-article/2026-27-squad-numbers-confirmed",
+      "https://www.espn.com/soccer/team/squad/_/id/379/burnley"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "His 2026 row is his 2025-26 loan at Sparta Rotterdam; the loan ended and Burnley gave him the number 20 for 2026-27."
+  },
+  {
+    "name": "Lyle Foster",
+    "to": "Houston Dynamo",
+    "db": "Houston Dynamo FC",
+    "loan": true,
+    "sources": [
+      "https://www.burnleyfootballclub.com/media-article/foster-makes-houston-dynamo-move",
+      "https://www.mlssoccer.com/news/houston-dynamo-acquire-lyle-foster-from-burnley"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Loan from Burnley to June 2027 with an option to buy, 2026-09-03 (the MLS window was still open; houstondynamofc.com too)."
+  },
+  {
+    "name": "James Ward-Prowse",
+    "to": "Southampton",
+    "db": "Southampton FC",
+    "sources": [
+      "https://www.southamptonfc.com/en/news/article/ward-prowse-returns-home",
+      "https://www.espn.com/soccer/team/squad/_/id/376/southampton"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Permanent from West Ham at the end of August 2026, two year deal. His 2026 row is his January 2026 loan at Burnley."
+  },
+  {
+    "name": "Jordan James",
+    "to": "Wolves",
+    "db": "Wolverhampton Wanderers",
+    "loan": true,
+    "sources": [
+      "https://www.wolves.co.uk/news/mens-first-team/20260819-james-becomes-new-wolves-signing/",
+      "https://www.espn.com/soccer/team/squad/_/id/380/wolverhampton-wanderers"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Season long loan from Rennes with an option to buy, 2026-08-19. His 2026 row is his 2025-26 loan at Leicester."
+  },
+  {
+    "name": "Ghislain Konan",
+    "to": "Wolves",
+    "db": "Wolverhampton Wanderers",
+    "sources": [
+      "https://www.wolves.co.uk/news/mens-first-team/20260902-konan-signs-to-bolster-defensive-options/",
+      "https://www.espn.com/soccer/team/squad/_/id/380/wolverhampton-wanderers"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "One year deal from Gil Vicente, 2026-09-02."
+  },
+  {
+    "name": "Rafiki Saïd",
+    "to": "Wolves",
+    "db": "Wolverhampton Wanderers",
+    "sources": [
+      "https://www.wolves.co.uk/news/mens-first-team/20260711-said-becomes-new-wolves-signing/",
+      "https://www.espn.com/soccer/team/squad/_/id/380/wolverhampton-wanderers"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Permanent from Standard Liege, 2026-07-11, three year deal (standard.be too)."
+  },
+  {
+    "name": "João Virgínia",
+    "to": "Wolves",
+    "db": "Wolverhampton Wanderers",
+    "sources": [
+      "https://www.wolves.co.uk/news/mens-first-team/20260827-virginia-added-to-goalkeeper-department/",
+      "https://www.espn.com/soccer/team/squad/_/id/380/wolverhampton-wanderers"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Permanent from Sporting CP, 2026-08-27, three year deal."
+  },
+  {
+    "name": "Marshall Munetsi",
+    "to": "Wolves",
+    "db": "Wolverhampton Wanderers",
+    "sources": [
+      "https://www.wolves.co.uk/teams/mens-first-team/",
+      "https://www.espn.com/soccer/team/squad/_/id/380/wolverhampton-wanderers"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "His 2026 row is his January 2026 loan at Paris FC; the loan ended and he is in the Wolves first team squad at number 5."
+  },
+  {
+    "name": "Tommy Doyle",
+    "to": "Wolves",
+    "db": "Wolverhampton Wanderers",
+    "sources": [
+      "https://www.wolves.co.uk/teams/mens-first-team/",
+      "https://www.espn.com/soccer/team/squad/_/id/380/wolverhampton-wanderers"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "His 2026 row is his 2025-26 loan at Birmingham; the loan ended and he is in the Wolves first team squad at number 20."
+  },
+  {
+    "name": "Nasser Djiga",
+    "to": "Wolves",
+    "db": "Wolverhampton Wanderers",
+    "sources": [
+      "https://www.wolves.co.uk/teams/mens-first-team/",
+      "https://www.espn.com/soccer/team/squad/_/id/380/wolverhampton-wanderers"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "His 2026 row is his 2025-26 loan at Rangers; the loan ended and he is in the Wolves first team squad at number 34."
+  },
+  {
+    "name": "Matt Doherty",
+    "to": "Sheffield United",
+    "db": "Sheffield United",
+    "sources": [
+      "https://www.beinsports.com/en-us/soccer/championship/articles/former-tottenham-and-atletico-madrid-defender-doherty-joins-sheff-utd-2026-07-21",
+      "https://www.espn.com/soccer/player/_/id/43575/matt-doherty"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "One year deal as a free agent, 2026-07-21, after his Wolves contract ran out (Wolves retained list, 2026-06-06). No Sheffield United announcement page could be found; ESPN's player page lists him at Sheffield United."
+  },
+  {
+    "name": "Liam Kitching",
+    "to": "Sheffield United",
+    "db": "Sheffield United",
+    "loan": true,
+    "sources": [
+      "https://www.ccfc.co.uk/news/2026/september/01/liam-kitching-joins-sheffield-united-on-season-long-loan",
+      "https://www.skysports.com/football/news/11095/13546618/transfer-news-summer-transfer-window-2026-premier-league-deals-ins-and-outs"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Season long loan from Coventry, 2026-09-01 (sufc.co.uk too)."
+  },
+  {
+    "name": "Reiss Nelson",
+    "to": "Feyenoord",
+    "db": "Feyenoord Rotterdam",
+    "sources": [
+      "https://www.feyenoord.com/en/news/reiss-nelson-returns-to-feyenoord-0209261",
+      "https://www.espn.com/soccer/player/_/id/227794/reiss-nelson"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Free agent after Arsenal ended his contract (arsenal.com), then a deal to the end of 2026-27 at Feyenoord, 2026-09-02. His 2026 row is his 2025-26 loan at Brentford. ESPN's player page lists him at Feyenoord."
+  },
+  {
+    "name": "Justin Devenny",
+    "to": "Stoke City",
+    "db": "Stoke City",
+    "sources": [
+      "https://www.cpfc.co.uk/news/announcement/justin-devenny-departs-crystal-palace/",
+      "https://www.skysports.com/football/news/11095/13546618/transfer-news-summer-transfer-window-2026-premier-league-deals-ins-and-outs"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "From Crystal Palace, September 2026. Palace announced it as permanent and Sky lists a loan, so loan is not set; he plays for Stoke either way."
+  },
+  {
+    "name": "Romain Esse",
+    "to": "Millwall",
+    "db": "Millwall FC",
+    "loan": true,
+    "sources": [
+      "https://www.cpfc.co.uk/news/announcement/romain-esse-returns-to-millwall-on-loan/",
+      "https://www.skysports.com/football/news/11095/13546618/transfer-news-summer-transfer-window-2026-premier-league-deals-ins-and-outs"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Season long loan from Crystal Palace back to his old club."
+  },
+  {
+    "name": "Borna Sosa",
+    "to": "Köln",
+    "db": "1.FC Köln",
+    "loan": true,
+    "sources": [
+      "https://www.cpfc.co.uk/news/announcement/borna-sosa-joins-fc-cologne-on-loan/",
+      "https://www.skysports.com/football/news/11095/13546618/transfer-news-summer-transfer-window-2026-premier-league-deals-ins-and-outs"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Season long loan from Crystal Palace."
+  },
+  {
+    "name": "Caleb Wiley",
+    "to": "Preston North End",
+    "db": "Preston North End",
+    "loan": true,
+    "sources": [
+      "https://www.chelseafc.com/en/news/article/caleb-wiley-seals-loan-switch",
+      "https://www.skysports.com/football/news/11095/13546618/transfer-news-summer-transfer-window-2026-premier-league-deals-ins-and-outs"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Season long loan from Chelsea."
+  },
+  {
+    "name": "Tom Watson",
+    "to": null,
+    "db": "Leicester City",
+    "loan": true,
+    "sources": [
+      "https://www.lcfc.com/media-article/leicester-city-lcfc-foxes-loan-signing-brighton-hove-albion-tommy-watson",
+      "https://www.skysports.com/football/news/11095/13546618/transfer-news-summer-transfer-window-2026-premier-league-deals-ins-and-outs"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Leicester City, season long loan from Brighton. Leicester play in League One in 2026-27, not a league the engine models. Leicester call him Tommy."
+  },
+  {
+    "name": "Harry Howell",
+    "to": null,
+    "db": "Leicester City",
+    "loan": true,
+    "sources": [
+      "https://www.brightonandhovealbion.com/media-article/harry-howell-signs-new-contract-and-joins-leicester-city-on-loan",
+      "https://www.skysports.com/football/news/11095/13546618/transfer-news-summer-transfer-window-2026-premier-league-deals-ins-and-outs"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Leicester City, season long loan from Brighton after a new contract to June 2029. Leicester play in League One in 2026-27, not a league the engine models."
+  },
+  {
+    "name": "Angus Gunn",
+    "to": "San Jose Earthquakes",
+    "db": "San Jose Earthquakes",
+    "sources": [
+      "https://www.sjearthquakes.com/news/san-jose-earthquakes-sign-scotland-world-cup-starting-goalkeeper-angus-gunn",
+      "https://www.skysports.com/football/news/11095/13546618/transfer-news-summer-transfer-window-2026-premier-league-deals-ins-and-outs"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Free agent after Nottingham Forest released him, signed through the 2029-30 MLS season."
+  },
+  {
+    "name": "Dennis Cirkin",
+    "to": "QPR",
+    "db": "Queens Park Rangers",
+    "sources": [
+      "https://www.qpr.co.uk/news/2026/august/12/dennis-cirkin/",
+      "https://www.skysports.com/football/news/11095/13546618/transfer-news-summer-transfer-window-2026-premier-league-deals-ins-and-outs"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Free after his Sunderland contract ran out, 2026-08-12."
+  },
+  {
+    "name": "Ibrahim Osman",
+    "to": "Brighton",
+    "db": "Brighton & Hove Albion",
+    "sources": [
+      "https://www.brightonandhovealbion.com/media-article/mft-news-kit-numbers-premier-league-2026-27-season-august-2026",
+      "https://www.espn.com/soccer/team/squad/_/id/331/brighton-hove-albion"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "His 2026 row is his 2025-26 loan at Auxerre (he finished the season on loan at Birmingham). Both loans ended and he is in Brighton's 2026-27 squad numbers (2026-08-20) and on ESPN's Brighton squad page."
+  },
+  {
+    "name": "Aarón Anselmino",
+    "to": "Chelsea",
+    "db": "Chelsea FC",
+    "sources": [
+      "https://www.chelseafc.com/en/news/article/chelsea-squad-numbers-confirmed-for-the-2026-27-season",
+      "https://www.espn.com/soccer/team/squad/_/id/363/chelsea"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "His 2026 row is his loan at Borussia Dortmund; Chelsea recalled him in January 2026 and loaned him to Strasbourg to the end of 2025-26. He has the number 30 for 2026-27 and is on ESPN's Chelsea squad page."
+  },
+  {
+    "name": "Eiran Cashin",
+    "to": "Derby County",
+    "db": "Derby County",
+    "loan": true,
+    "sources": [
+      "https://www.brightonandhovealbion.com/media-article/mft-transfer-news-eiran-cashin-derby-county-loan-september-2026",
+      "https://www.skysports.com/football/news/11095/13546618/transfer-news-summer-transfer-window-2026-premier-league-deals-ins-and-outs"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Season long loan from Brighton back to his old club (dcfc.co.uk too). His 2026 row is his loan at Blackburn from the second half of 2025-26."
+  },
+  {
+    "name": "Jayden Meghoma",
+    "to": "Portsmouth",
+    "db": "Portsmouth FC",
+    "loan": true,
+    "sources": [
+      "https://www.portsmouthfc.co.uk/news/2026/september/01/meghoma-signs-on-loan",
+      "https://www.espn.com/soccer/player/_/id/352820/jayden-meghoma"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Season long loan from Brentford on deadline day. His 2026 row is his 2025-26 loan at Rangers. ESPN's player page lists him at Portsmouth."
+  },
+  {
+    "name": "Liam Millar",
+    "to": "Birmingham City",
+    "db": "Birmingham City",
+    "loan": true,
+    "sources": [
+      "https://www.bcfc.com/pages/en/media-article/blues-complete-loan-signing-of-liam-millar",
+      "https://www.skysports.com/football/news/11095/13546618/transfer-news-summer-transfer-window-2026-premier-league-deals-ins-and-outs"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Season long loan from Hull, 2026-09-01."
+  },
+  {
+    "name": "Julián Araujo",
+    "to": "Bournemouth",
+    "db": "AFC Bournemouth",
+    "sources": [
+      "https://www.afcb.co.uk/news/2026/september/10/injury-news--updates-on-/",
+      "https://www.espn.com/soccer/team/squad/_/id/349/afc-bournemouth"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "His 2026 row is his January 2026 loan at Celtic; the loan ended and he is back in Bournemouth's squad (the club's own injury update of 2026-09-10, ESPN's Bournemouth squad page)."
+  },
+  {
+    "name": "Max Aarons",
+    "to": "Bournemouth",
+    "db": "AFC Bournemouth",
+    "sources": [
+      "https://www.afcb.co.uk/news/2026/september/15/cherries-squad-has-wealth-of-european-experience",
+      "https://www.espn.com/soccer/team/squad/_/id/349/afc-bournemouth"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "His 2026 row is his 2025-26 loan at Rangers; the loan ended and he is back in Bournemouth's squad for their 2026-27 European campaign."
+  },
+  {
+    "name": "Daniel Jebbison",
+    "to": "Bournemouth",
+    "db": "AFC Bournemouth",
+    "sources": [
+      "https://www.afcb.co.uk/news/2026/september/07/jebbison--i-can-help-the-team-this-season/",
+      "https://www.espn.com/soccer/team/squad/_/id/349/afc-bournemouth"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "His 2026 row is his 2025-26 loan at Preston; the loan ended and he is back in Bournemouth's squad."
+  },
+  {
+    "name": "Anis Mehmeti",
+    "to": "Ipswich Town",
+    "db": "Ipswich Town",
+    "sources": [
+      "https://www.bcfc.co.uk/city-men-news/mehmeti-joins-ipswich-town/",
+      "https://www.espn.com/soccer/team/squad/_/id/373/ipswich-town"
+    ],
+    "window": "2026-01",
+    "checked": "2026-10-01",
+    "note": "Permanent from Bristol City, 2026-01-23, while Ipswich were still in the Championship (so ESPN's Premier League January list does not carry it). ESPN's Ipswich 2026-27 squad page lists him."
+  },
+  {
+    "name": "Abdoul Ouattara",
+    "to": "Ipswich Town",
+    "db": "Ipswich Town",
+    "sources": [
+      "https://www.rcstrasbourgalsace.fr/en/abdoul-ouattara-leaves-racing/",
+      "https://www.espn.com/soccer/team/squad/_/id/373/ipswich-town"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Permanent from Strasbourg, 2026-08-17. ESPN's Ipswich 2026-27 squad page lists him."
+  },
+  {
+    "name": "Konstantinos Tsimikas",
+    "to": "Liverpool",
+    "db": "Liverpool FC",
+    "sources": [
+      "https://www.liverpoolfc.com/news/confirmed-liverpool-line-v-atletico-madrid-2",
+      "https://www.espn.com/soccer/team/squad/_/id/364/liverpool"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "His 2026 row is his 2025-26 loan at Roma; the loan ended and he was on Liverpool's bench against Atletico Madrid on 2026-09-09. The club spells him Kostas."
+  },
+  {
+    "name": "Lewis Koumas",
+    "to": "Liverpool",
+    "db": "Liverpool FC",
+    "sources": [
+      "https://www.liverpoolfc.com/news/confirmed-liverpool-line-v-atletico-madrid-2",
+      "https://www.espn.com/soccer/team/squad/_/id/364/liverpool"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "His 2026 row is his loan at Birmingham; he finished 2025-26 on loan at Hull (ESPN's January list) and was on Liverpool's bench against Atletico Madrid on 2026-09-09."
+  },
+  {
+    "name": "Aaron Ramsdale",
+    "to": "Southampton",
+    "db": "Southampton FC",
+    "sources": [
+      "https://www.southamptonfc.com/en/news/article/mens-squad-numbers-confirmed-for-2026-27",
+      "https://www.espn.com/soccer/team/squad/_/id/376/southampton"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "His 2026 row is his 2025-26 loan at Newcastle; the loan ended and Southampton gave him the number 32 for 2026-27 (2026-08-15)."
+  },
+  {
+    "name": "Yann Gboho",
+    "to": "Coventry City",
+    "db": "Coventry City",
+    "sources": [
+      "https://www.toulousefc.com/play/blog/2026/09/yann-gboho-quitte-le-toulouse-football-club-pour-coventry",
+      "https://www.espn.com/soccer/team/squad/_/id/388/coventry-city"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "From Toulouse, September 2026. ESPN's Coventry 2026-27 squad page lists him."
+  },
+  {
+    "name": "Samuel Chukwueze",
+    "to": "AC Milan",
+    "db": "AC Milan",
+    "sources": [
+      "https://www.acmilan.com/en/news/articles/training/2026-07-12/pre-season-2026-27-called-up-players",
+      "https://www.espn.com/soccer/team/squad/_/id/103/ac-milan"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "His 2026 row is his 2025-26 loan at Fulham; Fulham did not take up the option, he was in Milan's pre-season group on 2026-07-12 and is on ESPN's Milan 2026-27 squad page and not on Fulham's."
+  },
+  {
+    "name": "Christos Mandas",
+    "to": "Lazio",
+    "db": "SS Lazio",
+    "sources": [
+      "https://www.sslazio.it/en/team/lazio/squadra",
+      "https://www.espn.com/soccer/team/squad/_/id/112/lazio"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "His 2026 row is his January 2026 loan at Bournemouth (sslazio.it announced the loan with an option on 2026-01-27); the loan ended without the option and he is in Lazio's squad at number 35 and on ESPN's Lazio 2026-27 squad page, and not on Bournemouth's."
+  },
+  {
+    "name": "Abdülkadir Ömür",
+    "to": "Hull City",
+    "db": "Hull City",
+    "sources": [
+      "https://www.wearehullcity.co.uk/teams/first-team/abd%C3%BClkadir%C3%B6m%C3%BCr",
+      "https://www.espn.com/soccer/team/squad/_/id/306/hull-city"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "His 2026 row is his loan at Antalyaspor; the loan ended and he is in Hull's first team and on ESPN's Hull 2026-27 squad page."
+  },
+  {
+    "name": "Fer López",
+    "to": "Wolves",
+    "db": "Wolverhampton Wanderers",
+    "sources": [
+      "https://www.wolves.co.uk/teams/mens-first-team/",
+      "https://www.espn.com/soccer/team/squad/_/id/380/wolverhampton-wanderers"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "His 2026 row is his January 2026 loan back at Celta (wolves.co.uk, 2026-01-26); the loan ended and he is in the Wolves first team squad at number 28 and on ESPN's Wolves 2026-27 squad page (as Fernando Lopez)."
   }
 ]
