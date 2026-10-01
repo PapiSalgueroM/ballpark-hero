@@ -34,8 +34,12 @@ ledger was taken and `genSitemap.mjs` rerun, then `simSitemap`, `simPrerender` a
 
 ## Current Codex handoff, 2026-10-01
 
-Codex828-832 and 836-838 are accepted in code and ready for Claude's next
-publish. Next free round 839. Older active/pending notes below are historical.
+Codex828-832 and 836-838 are accepted in code. Claude's Release O handoff
+confirms publication of Codex831, 836 and 837. Codex838 needs the next publish.
+Claude has claimed 839-841 from the rendered audit: leaderboard timeouts,
+home copy after React mounts, and college-grid loading. Next free round 842.
+The proposed additional copy work remains pending, with no new Codex claim
+in this batch. Older active/pending notes below are historical.
 838 landed as `2db7c148` on top of Release O, preserving both lanes' changes.
 Its tested runtime and saved page did not change during integration; the
 merged sitemap and all 170 page-date fingerprints pass fresh checks.
