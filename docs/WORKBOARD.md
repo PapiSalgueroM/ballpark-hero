@@ -1,5 +1,60 @@
 # Work board
 
+**2026-10-01, Codex805 F1 Driver Search ACCEPTED.**
+Memoize the original driver options so ArrowDown keeps its selected row. Use
+accessible native suggestions with full names,44px actions, visible focus and
+local scrolling. The popup uses available viewport space, opening above a low
+phone input. Original matching, ordering, ten-result limit, guesses and callbacks
+stay held. Held activation keys and disabled/outside-focus paths stay quiet.
+
+Eleven actual outcomes/thirteen effective unit controls, eight standalone contexts
+plus five browser controls, eight original Board contexts plus two popup controls
+pass. A test-only type fix emits byte-identical JS. The combined frozen805/806
+production type/build/all15 artifact fences plus guide/site-search/anchors pass;
+1791 RAW inputs, all188 saved pages and all168 URL hashes/dates/sitemap stay held.
+The initial Board mode-selection1178 bytes are unchanged, so no snapshot refresh.
+Two actual App contexts load untouched JS and the original authored driver bank,
+Navbar/ticker/Footer. Phone input749..799 and tenth suggestion700..744 are visible
+and hit-tested. The original Kimi Antonelli guess then Max Verstappen win scores
+800, preserves the exact three daily writes/full clipboard and sends one locally
+intercepted real guest completion. Quiet reload,0Y changes/errors/overflow pass.
+Sources/HTML/assets held; browsers/servers stopped. No publication claim.
+Receipts: TEMP/dukb-round805-final-receipt.json,dukb-round805-test-type-fix.json,
+dukb-round805-production-app/report.json and cleanup.json,
+dukb-round805-production-20261001/production805-preservation-receipt.json.
+Final entry index-CpG6jSlL.js, SHAde17755024c5f9a3c92d2dffe5c24d878b2a7393bd92545f4c54ab53c1a379e4.
+802 actual App proof passes and its commit follows.806 finishes App proof.
+807/808 claims and all Claude reservations stand. Next free809.
+
+**2026-10-01, Codex807 CLAIMED: truthful F1 Driver hint points.**
+The existing hint says -100 and multiplies hints by100, while the real clue
+payouts are1000,800,600,400,200,100. Own Driver Board plus a focused new test and
+sim wrapper after806 is accepted and committed. Show the next available payout
+from the original POINTS_BY_CLUE and an honest hint count. Hold the hook, data,
+guess/hint handlers, payouts, save/share/completion and806 CSS. Verify all five
+hint stages, mixed miss/hint play, max-clue hiding and effective copy controls.
+No edits start before the pending806 production App receipt is accepted.
+
+**2026-10-01, Codex808 CLAIMED: two measured regression harness defects.**
+Root owns only scripts/simCollegeGridPage.mjs and scripts/simManagerHotSeat.mjs.
+The College guard mistakes the namesake selection's first judge call for the
+final verdict and falsely reports missing no-charge early returns. Preserve the
+namesake behavior and inspect the exact final verdict instead, proving controls
+for both removed early returns. The manager harness deletes its original source
+when the whole checkout lives inside TEMP because cleanup uses a prefix test.
+Track and delete only its own rewritten control file. Preserve the actual library
+and prove the destructive cleanup in a disposable physical fixture. No product
+files or assertions are weakened; exact source anchors and original controls hold.
+
+The completed older413 scope reports409 PASS and4 FAIL: Aussie Board5000ms timeout,
+College guard drift, guide records repaired later by804, and a live accented-name
+search miss under read-only diagnosis. Final closure found1779 held source files
+and the one library removed by the manager harness. The frozen gate is preserved;
+no whole-suite green or complete closure is claimed. Receipt:
+TEMP/dukb-round797-production-20261001/combined798799-final-suite-receipt.json.
+802 final native proof passes; its source-only NoDouble CSS-copy repair is being
+verified.805/806 production checks continue. All Claude claims stand. Next free809.
+
 **2026-10-01, Codex803 Name Them All feedback ACCEPTED.**
 Actual hits announce the accepted full name and show one420ms cue. Missed answers
 reveal with one360ms cue; reduced motion stays static. Full names wrap, owned actions

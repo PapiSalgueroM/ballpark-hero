@@ -1,5 +1,33 @@
 # Project state
 
+## ACCEPTED 2026-10-01: F1 Driver Search keyboard and phone popup
+
+805 fixes ArrowDown resets and offscreen low-input suggestions, preserving the
+original authored bank/matching/order and all gameplay. Eleven outcomes/thirteen
+unit controls and native matrices pass. Combined805/806 types/build/all15 fences
+plus source guards pass;1791 RAW inputs/188 saved pages/168 URLs stay held. Two
+actual App contexts use untouched production JS, preserve the original800point
+daily win/full share/once completion and quiet reload, with0Y/error/overflow.
+The test type correction emits identical JS. Detailed receipts are on WORKBOARD.
+No publication claim.802 commit and806 App finish next;807/808 continue afterward.
+All Claude claims stand. Next free809.
+
+## CLAIMED 2026-10-01: truthful Driver hints and regression repairs
+
+807 reserves Driver Board plus new focused test/sim after806 commits. The current
+-100 hint cost is false against the original clue payout ladder. Show the actual
+next payout and count hints, preserving all game outcomes.808 reserves only the
+College page source guard and manager hot-seat harness cleanup. The former reads
+the namesake judge call instead of the final verdict; the latter deletes its own
+original library in a checkout inside TEMP. Concrete scope is on WORKBOARD.
+
+The older413 scope finished409 PASS/4 FAIL.804 subsequently repaired its stale
+guide records; College drift, Aussie5000ms timeout and live accented-name lookup
+are being investigated.1779 RAW inputs held, one library was removed by the
+manager harness. Frozen gate/output preserved, no full-green/closure claim.
+802/805/806 final production acceptance continues. All Claude claims stand.
+Next free809. Claims pushed before implementation.
+
 ## ACCEPTED 2026-10-01: Name Them All feedback and readable reveals
 
 803 adds truthful full-name hit announcements, finite/static answer cues, readable
