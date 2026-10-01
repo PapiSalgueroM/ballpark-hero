@@ -1,5 +1,15 @@
 # Project state
 
+## IN PROGRESS 2026-10-01: fresh Nation counters and live crawl audit
+
+811 also clears Nation's local hint count on the original Play Again reset, after
+the builder found it survives between rounds. Same owned Board, focused lifecycle
+proof before capture. 812/813 continue. Next free 814.
+
+The full live audit passes 167 of 168 planned routes, with no unexpected noindex.
+Only the unpublished /aussie-rules-manager URL returns the home document. Google
+indexing and AdSense approval are still not established by these HTTP checks.
+
 ## ACCEPTED 2026-10-01: MLB reveal timer ownership
 
 810 prevents abandoned guesses from awarding points or skipping rounds after a

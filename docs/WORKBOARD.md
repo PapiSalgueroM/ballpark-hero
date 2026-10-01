@@ -1,5 +1,20 @@
 # Work board
 
+**2026-10-01, Codex811 scope addendum: fresh Nation hint count.**
+Actual Board inspection found that ResultScreen's Play Again calls resetGame,
+which clears the puzzle but leaves the Board's hintsUsed counter alive. A new
+round can therefore display the previous round's count. Extend only the already-
+owned Nation Board reset callback to clear its local counter with the original
+reset action, after reproducing the two-round behavior. Keep the hook, mode
+selection and scoring unchanged. Add the small lifecycle regression and effective
+old-callback control before the final combined capture. Next free 814.
+
+Full live raw-HTML audit completed: 167 of 168 planned routes pass canonical,
+response, content and indexability checks. Only /aussie-rules-manager still serves
+the home document because its accepted new route is not published. No unexpected
+noindex found in this audit, but this does not establish Google's index status.
+Receipt: C:/Users/antho/AppData/Local/Temp/dukb-live-all-indexability-20261001.log.
+
 **2026-10-01, Codex810 ACCEPTED: MLB reveal callbacks belong to their round.**
 Mode and Hard resets now cancel the owned reveal timer. A generation check rejects
 old callbacks, and unmount clears the timer. Restarting can no longer inherit an
