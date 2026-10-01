@@ -3210,12 +3210,19 @@ function MoralDilemmaCard({ career, onChoice, onDismiss }: {
      This used to wait on a local "chosen" flag as well, so a save reloaded
      between the choice and Continue drew nothing at all and could not move. */
   if (!dilemma) {
+    /* Round 819 review: say what the choice did, right here. Every option
+       writes its outcome as the last line of the season's events, and before
+       this a caught fixer or a failed test only showed in the log at the
+       bottom of the page. */
+    const outcome = career.events.length > 0 ? career.events[career.events.length - 1] : null;
     return (
       <div className="rounded-xl border-2 border-red-500/40 bg-gradient-to-b from-red-500/10 to-transparent p-6 space-y-4">
         <div className="text-center space-y-2">
           <div className="text-3xl">⚠️</div>
           <h3 className="text-lg font-black">Decision Made</h3>
-          <p className="text-xs text-muted-foreground">The consequences of your choice will unfold...</p>
+          {outcome
+            ? <p data-dilemma-outcome className="text-sm text-foreground/80 leading-relaxed max-w-md mx-auto"><TextWithFlags text={money(outcome)} size={14} /></p>
+            : <p className="text-xs text-muted-foreground">The consequences of your choice will unfold...</p>}
         </div>
         <Button onClick={onDismiss} className="w-full h-10 text-sm font-bold bg-red-600 hover:bg-red-500 text-black">
           Continue →
