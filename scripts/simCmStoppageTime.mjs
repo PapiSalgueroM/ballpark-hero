@@ -132,26 +132,64 @@ function modulesDir() {
 const NM = modulesDir();
 
 /* ---- THRESHOLDS, each from measured headroom ----
-   PROVISIONAL, to be replaced by the measurement. */
+   Measured 2026-10-01 on five samples, this harness's own seed and SIM_SEED
+   1 to 4 (each a different stream through the same twenty careers), with the
+   second half's board weighted 1.5 for a goal (BOARD in clubManager.ts):
+     matches of mine per arm (1)         824 to 860                  floor 600
+     goals in first half added time,
+       share of all goals (1)            2.87 to 4.21 percent        band 2 to 6
+       (about 2,350 goals a sample, so one sample's own SD is about
+        0.4 points; 2 is over two of them under the lowest seen and four
+        under the mean of 3.71; real football is about 4)
+     goals after the 90th minute (1)     7.25 to 8.60 percent        band 6 to 10
+       (SD about 0.55 points; 6 is over two under the lowest and three and
+        a half under the mean of 7.96; real football is about 7 to 9. With
+        the board uniform for a goal, weight 1, it measured 5.60 on this
+        seed, which is why the weight is there. The band is the realism
+        claim; it is not sharp enough to hold the weight itself, and does
+        not try to.)
+     of each half's own goals            first half 5.96 to 8.96 percent in its board, second half 13.96 to 16.48
+     mean boards                         3.63 to 3.71 and 6.15 to 6.28 minutes
+     goals per match, board open minus
+       closed (1)                        -0.004 to +0.001            tolerance 0.05
+       (the arms share every seed, so the gap is near zero by
+        construction; a board that added its own goals would add about a
+        third of a goal a match)
+     goals in a board read (2)           340 to 444                  floor 150
+     board goals checked on the card (2) 289 to 335                  floor 150
+     board goal rows on the timeline (2) 340 to 444                  floor 150
+     matches through the live path (2)   120 to 138                  floor 80
+     board goals in the commentary (2)   35 to 53                    floor 15
+     deciders read (3)                   325 to 455                  floor 150
+     deciders to extra time (3)          33 to 66                    floor 15
+     level matches that are not
+       deciders (3)                      151 to 171                  floor 75
+     second legs read (4)                260 to 377                  floor 130
+     second leg report cards (4)         260 to 377 (capped at 400)  floor 130
+     brackets read (4)                   120 every sample (the cap)  floor 60
+     second legs through the viewer (4)  40 to 58                    floor 20
+     settled on away goals (4)           13 to 33                    floor 5
+     settled in extra time (4)           5 to 25                     floor 2
+     old saves opened (5)                48 every sample             floor 30 */
 const T = {
   minMatches: 600,
-  h1Lo: 0.015, h1Hi: 0.08,
-  h2Lo: 0.04, h2Hi: 0.14,
-  tolGpm: 0.12,
-  minBoardGoals: 100,
-  minCardsChecked: 30,
-  minTimelineBoard: 50,
-  minLiveCompared: 10,
-  minLiveMatches: 60,
-  minDeciders: 50,
-  minEt: 5,
-  minLevelOther: 50,
-  minSecondLegs: 100,
-  minLegCards: 50,
-  minBrackets: 20,
+  h1Lo: 0.02, h1Hi: 0.06,
+  h2Lo: 0.06, h2Hi: 0.10,
+  tolGpm: 0.05,
+  minBoardGoals: 150,
+  minCardsChecked: 150,
+  minTimelineBoard: 150,
+  minLiveCompared: 15,
+  minLiveMatches: 80,
+  minDeciders: 150,
+  minEt: 15,
+  minLevelOther: 75,
+  minSecondLegs: 130,
+  minLegCards: 130,
+  minBrackets: 60,
   minLiveHeaders: 20,
-  minAwayGoals: 1,
-  minAetSecond: 1,
+  minAwayGoals: 5,
+  minAetSecond: 2,
   minOld: 30,
 };
 
@@ -178,7 +216,7 @@ const CONTROLS = {
     note: "the report's scorer lines lose their plus; section 2 must go red",
   },
   etleague: {
-    must: [3], also: [2, 4], file: 'engine',
+    must: [3], also: [], file: 'engine',
     edits: [[
       "  if (entry.type !== 'uclKo' || !entry.uclRound) return false;\n  /* A legacy week",
       "  if (entry.type !== 'uclKo' || !entry.uclRound) return entry.type !== 'window';\n  /* A legacy week",
@@ -312,7 +350,7 @@ for (const [arm, cm] of [['A', cmA], ['B', cmB]]) {
 let failures = 0;
 const failedIn = new Map();
 const failText = new Map();
-const PRINT_CAP = 8;
+const PRINT_CAP = Number(process.env.STOPPAGE_PRINT_CAP) || 8;
 const fail = (sec, m) => {
   failures += 1;
   const n = (failedIn.get(sec) ?? 0) + 1;
@@ -812,15 +850,16 @@ function readOldReport(r, club, ctx, oldHalves) {
   const B = S1.B;
   const h1 = A.h1 / A.goals90;
   const h2 = A.h2 / A.goals90;
-  const gpmA = (A.goals90 + A.et) / A.matches;
-  const gpmB = (B.goals90 + B.et) / B.matches;
+  /* The ninety and their boards only: extra time has goals of its own, and the claim is about the board. */
+  const gpmA = A.goals90 / A.matches;
+  const gpmB = B.goals90 / B.matches;
   if (A.matches < T.minMatches) fail(1, `only ${A.matches} matches of mine in arm A, under the floor of ${T.minMatches}`);
-  if (!(h1 >= T.h1Lo && h1 <= T.h1Hi)) fail(1, `${pct(A.h1, A.goals90)} percent of goals in first half added time, outside ${100 * T.h1Lo} to ${100 * T.h1Hi}`);
-  if (!(h2 >= T.h2Lo && h2 <= T.h2Hi)) fail(1, `${pct(A.h2, A.goals90)} percent of goals in second half added time, outside ${100 * T.h2Lo} to ${100 * T.h2Hi}`);
+  if (!(h1 >= T.h1Lo && h1 <= T.h1Hi)) fail(1, `${pct(A.h1, A.goals90)} percent of goals in first half added time, outside ${Math.round(100 * T.h1Lo)} to ${Math.round(100 * T.h1Hi)}`);
+  if (!(h2 >= T.h2Lo && h2 <= T.h2Hi)) fail(1, `${pct(A.h2, A.goals90)} percent of goals in second half added time, outside ${Math.round(100 * T.h2Lo)} to ${Math.round(100 * T.h2Hi)}`);
   if (!(Math.abs(gpmA - gpmB) <= T.tolGpm)) fail(1, `goals per match ${gpmA.toFixed(3)} with the board open and ${gpmB.toFixed(3)} with it closed, a gap over ${T.tolGpm}`);
   report(1, 'Goals land in the board at a measured share, and the board adds no goals', [
-    `arm A: ${A.matches} matches, ${A.goals90} goals in the ninety and the boards (${A.et} more in extra time): ${A.h1} at 45+ (${pct(A.h1, A.goals90)} percent, band ${100 * T.h1Lo} to ${100 * T.h1Hi}), ${A.h2} at 90+ (${pct(A.h2, A.goals90)} percent, band ${100 * T.h2Lo} to ${100 * T.h2Hi})`,
-    `goals per match: board open ${gpmA.toFixed(3)}, board closed ${gpmB.toFixed(3)} (${B.matches} matches), gap ${(gpmA - gpmB).toFixed(3)} (tolerance ${T.tolGpm})`,
+    `arm A: ${A.matches} matches, ${A.goals90} goals in the ninety and the boards (${A.et} more in extra time): ${A.h1} at 45+ (${pct(A.h1, A.goals90)} percent, band ${Math.round(100 * T.h1Lo)} to ${Math.round(100 * T.h1Hi)}), ${A.h2} at 90+ (${pct(A.h2, A.goals90)} percent, band ${Math.round(100 * T.h2Lo)} to ${Math.round(100 * T.h2Hi)})`,
+    `goals per match in the ninety and the boards: board open ${gpmA.toFixed(3)}, board closed ${gpmB.toFixed(3)} (${B.matches} matches), gap ${(gpmA - gpmB).toFixed(3)} (tolerance ${T.tolGpm})`,
     `of each half's own goals: ${pct(A.h1, A.h1Goals)} percent of the first half's in its board, ${pct(A.h2, A.goals90 - A.h1Goals)} percent of the second half's; mean boards ${(A.boardH1 / A.matches).toFixed(2)} and ${(A.boardH2 / A.matches).toFixed(2)} minutes`,
   ]);
 }
@@ -852,7 +891,7 @@ function readOldReport(r, club, ctx, oldHalves) {
 /* ================= 4 ================= */
 {
   if (S4.secondLegs < T.minSecondLegs) fail(4, `only ${S4.secondLegs} second legs read, under the floor of ${T.minSecondLegs}`);
-  if (S4.legCards < Math.min(T.minLegCards, S4.secondLegs)) fail(4, `only ${S4.legCards} second leg report cards read`);
+  if (S4.legCards < T.minLegCards) fail(4, `only ${S4.legCards} second leg report cards read, under the floor of ${T.minLegCards}`);
   if (S4.brackets < T.minBrackets) fail(4, `only ${S4.brackets} brackets read after a second leg, under the floor of ${T.minBrackets}`);
   if (S4.liveHeaders < T.minLiveHeaders) fail(4, `only ${S4.liveHeaders} second legs through the viewer, under the floor of ${T.minLiveHeaders}`);
   if (S4.away < T.minAwayGoals) fail(4, `only ${S4.away} second legs decided on away goals, under the floor of ${T.minAwayGoals}`);
