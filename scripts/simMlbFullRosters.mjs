@@ -71,7 +71,7 @@ import crypto from 'node:crypto';
 import { createRequire } from 'node:module';
 import { spawnSync } from 'node:child_process';
 import { fileURLToPath, pathToFileURL } from 'node:url';
-import { GAME_TEAMS, SPOT_TEAMS, SPOT_PER_TEAM, SPOT_LIMIT, selectTwentySix, spotSample, buildPools, rateMan, ageOn, onMajorLeagueRoster } from './lib/mlbFoRecord.mjs';
+import { GAME_TEAMS, SPOT_TEAMS, SPOT_PER_TEAM, SPOT_LIMIT, selectTwentySix, gameNames, spotSample, buildPools, rateMan, ageOn, onMajorLeagueRoster } from './lib/mlbFoRecord.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const ENGINE = path.join(ROOT, 'src', 'lib', 'mlbFrontOffice.ts');
@@ -295,12 +295,12 @@ let shipped = 0, partialN = 0;
   const seen = new Set();
   let dup = 0;
   const partialNames = [];
+  const selected = Object.fromEntries(GAME_TEAMS.map(a => [a, selectTwentySix(record.teams[a].players).men]));
+  const shownAs = gameNames(selected);
   for (const a of GAME_TEAMS) {
     const rows = R[a] ?? [];
     ok(3, `${a}: 26 men`, rows.length === 26, String(rows.length));
-    const rec = record.teams[a];
-    const { men } = selectTwentySix(rec.players);
-    const byName = new Map(men.map(m => [m.name, m]));
+    const byName = new Map(selected[a].map(m => [shownAs.get(m.id), m]));
     for (const row of rows) {
       shipped += 1;
       if (seen.has(row.name)) dup += 1;

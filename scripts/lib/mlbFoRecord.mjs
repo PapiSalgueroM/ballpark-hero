@@ -92,6 +92,26 @@ export function selectTwentySix(players) {
   return { men: men.map(m => ({ ...m, rotation: rotation.has(m.id) })), leftOut };
 }
 
+/* NAMESAKES. Two real men can share a name (2026 has two Max Muncys, the
+   Dodgers' born 1990 and the Athletics' born 2002), and the game keeps one
+   name to a man in a league. The older keeps the name exactly as the API
+   gives it; a younger namesake carries his birth year after it, the way the
+   reference books tell them apart. Nobody is renamed beyond that.
+   menByClub: { ABBR: men[] } as selectTwentySix returns them.
+   Returns Map of API id to the name the game shows. */
+export function gameNames(menByClub) {
+  const all = Object.values(menByClub).flat();
+  const groups = new Map();
+  for (const m of all) { const k = m.name; if (!groups.has(k)) groups.set(k, []); groups.get(k).push(m); }
+  const out = new Map();
+  for (const [name, list] of groups) {
+    list.sort((a, b) => (a.birthDate < b.birthDate ? -1 : a.birthDate > b.birthDate ? 1 : a.id - b.id));
+    list.forEach((m, i) => out.set(m.id, i === 0 ? name : `${name} (${m.birthDate.slice(0, 4)})`));
+  }
+  if (new Set(out.values()).size !== out.size) throw new Error('two namesakes share a birth year, the rule cannot tell them apart');
+  return out;
+}
+
 /* The spot check's ten: the 26 sorted by name, positions floor(i x 26 / 10). */
 export function spotSample(men) {
   const sorted = [...men].sort(byName);
