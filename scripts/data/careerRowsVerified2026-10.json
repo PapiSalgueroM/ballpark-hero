@@ -1,0 +1,295 @@
+{
+  "checked": "2026-10-01",
+  "round": 827,
+  "follows": "scripts/data/careerFirstClubs.json (Round 784). Its seenNotFixed list is this round's brief: Griezmann's 2009-10, Haaland's Salzburg split, De Bruyne's Chelsea and Wolfsburg labels, Kane's missing loans, the three rows that store a lower bound, and Alisson twice.",
+  "migration": "supabase/migrations/20261002120000_career_rows_verified.sql",
+  "rule": "A row is changed or added only when two independent sources give the same appearances and goals for the club and season, counted over all competitions as the pool already counts them. Wikipedia's club statistics table and footballdatabase.eu's club career table are the pair Round 784 used; every change below also names the club's or the league's own record (Tottenham Hotspur, the Bundesliga, UEFA) or a contemporary match report where one could be read, and says when none could. Transfermarkt, ogol, zerozero and BDFutbol refused every request (HTTP 403 or a bot wall), so none is cited. Assists move to null (shown n/a) where the figure on the row cannot belong to the corrected season and the sources do not agree on a new one. A new row carries assists null and market value 0 (shown n/a), the pool's convention since Round 784, because no second source publishes either. Market values on changed rows are not audited and are left as they are. Where two sources disagree and no third could be read, the row stays as it is and is listed under keptAsIs.",
+  "sources": {
+    "wikipedia": "en.wikipedia.org, the 'Appearances and goals by club, season and competition' table of each player's article, wikitext read through action=raw on 2026-10-01",
+    "footballdatabase": "www.footballdatabase.eu/en/player/details/<id>, the club career table, competition rows summed per season, read 2026-10-01",
+    "tottenham": "Tottenham Hotspur, 'Harry Kane', club history, legends (www.tottenhamhotspur.com/the-club/history/legends/harry-kane), read 2026-10-01",
+    "sportsmole": "Sports Mole, 'Leicester City 1-0 Watford, as it happened', live commentary of the Championship play-off semi-final first leg, 9 May 2013 (www.sportsmole.co.uk/football/leicester-city/live-commentary/leicester-city-1-0-watford-as-it-happened_83604.html), read 2026-10-01",
+    "bundesliga_kdb": "Bundesliga, 'Kevin De Bruyne: made in the Bundesliga', 24 May 2024 (www.bundesliga.com/en/news/Bundesliga/kevin-de-bruyne-manchester-city-made-in-the-bundesliga-wolfsburg-guardiola-473776.jsp), read 2026-10-01",
+    "uefa_haaland": "UEFA, 'Erling Braut Haaland: Dortmund's new signing by numbers', 29 December 2019 (www.uefa.com/uefachampionsleague/news/025a-0e9f8ba8ec7e-64c8a559c1e1-1000--erling-braut-haaland-dortmund-s-new-signing-by-numbers/), read 2026-10-01",
+    "bundesliga_haaland": "Bundesliga, 'Erling Haaland joins Borussia Dortmund from Red Bull Salzburg', 31 December 2019 (www.bundesliga.com/en/bundesliga/news/erling-haaland-joins-borussia-dortmund-from-red-bull-salzburg-8994), read 2026-10-01",
+    "tnt_haaland": "TNT Sports (Eurosport), 'Manchester United beaten to Erling Haaland signing as Dortmund confirm deal', 29 December 2019 (www.tntsports.co.uk/football/transfers/2019-2020/football-news-manchester-united-beaten-to-erling-haaland-signing-as-dortmund-confirm-deal_sto7590970/story.shtml), read 2026-10-01"
+  },
+  "changed": [
+    {
+      "player": "Antoine Griezmann", "playerId": "a0000001-0000-0000-0000-000000000030", "season": "2009-2010", "club": "Real Sociedad",
+      "field": "appearances", "from": 10, "to": 40,
+      "sources": [
+        { "name": "wikipedia", "url": "https://en.wikipedia.org/wiki/Antoine_Griezmann", "read": "2026-10-01", "value": 40, "says": "2009-10 Segunda Division 39 apps 6 goals, Copa del Rey 1 app 0 goals, total 40 apps 6 goals" },
+        { "name": "footballdatabase", "url": "https://www.footballdatabase.eu/en/player/details/82457-antoine-griezmann", "read": "2026-10-01", "value": 40, "says": "2009/2010 Liga Adelante 39 games 6 goals, Copa del Rey 1 game 0 goals" }
+      ],
+      "note": "No club or league record for the 2009-10 Segunda season could be read: the league's player pages carry recent seasons only and BDFutbol refused the request."
+    },
+    {
+      "player": "Antoine Griezmann", "playerId": "a0000001-0000-0000-0000-000000000030", "season": "2009-2010", "club": "Real Sociedad",
+      "field": "goals", "from": 2, "to": 6,
+      "sources": [
+        { "name": "wikipedia", "url": "https://en.wikipedia.org/wiki/Antoine_Griezmann", "read": "2026-10-01", "value": 6, "says": "2009-10 total 40 apps 6 goals, all six in the league" },
+        { "name": "footballdatabase", "url": "https://www.footballdatabase.eu/en/player/details/82457-antoine-griezmann", "read": "2026-10-01", "value": 6, "says": "2009/2010 Liga Adelante 6 goals, Copa del Rey 0" }
+      ]
+    },
+    {
+      "player": "Erling Haaland", "playerId": "a0000001-0000-0000-0000-000000000006", "season": "2018-2019", "club": "RB Salzburg",
+      "field": "appearances", "from": 27, "to": 5,
+      "sources": [
+        { "name": "wikipedia", "url": "https://en.wikipedia.org/wiki/Erling_Haaland", "read": "2026-10-01", "value": 5, "says": "2018-19 Austrian Bundesliga 2 apps 1 goal, cup 2 apps, Europe 1 app, total 5 apps 1 goal" },
+        { "name": "footballdatabase", "url": "https://www.footballdatabase.eu/en/player/details/294600-erling-braut_haaland", "read": "2026-10-01", "value": 5, "says": "2018/2019 Bundesliga 2 games 1 goal, OFB-Cup 2 games, Europa League 1 game" },
+        { "name": "uefa_haaland", "url": "https://www.uefa.com/uefachampionsleague/news/025a-0e9f8ba8ec7e-64c8a559c1e1-1000--erling-braut-haaland-dortmund-s-new-signing-by-numbers/", "read": "2026-10-01", "value": 5, "says": "Salzburg career 'Appearances: 27, Goals: 29', and 'Of those 29 goals, 28 have come this season'; with TNT's 22 appearances this season that leaves 5 appearances and 1 goal for 2018-19" }
+      ],
+      "note": "27 apps is his whole Salzburg spell (UEFA, Bundesliga), not the 2018-19 season."
+    },
+    {
+      "player": "Erling Haaland", "playerId": "a0000001-0000-0000-0000-000000000006", "season": "2018-2019", "club": "RB Salzburg",
+      "field": "goals", "from": 17, "to": 1,
+      "sources": [
+        { "name": "wikipedia", "url": "https://en.wikipedia.org/wiki/Erling_Haaland", "read": "2026-10-01", "value": 1, "says": "2018-19 total 5 apps 1 goal" },
+        { "name": "footballdatabase", "url": "https://www.footballdatabase.eu/en/player/details/294600-erling-braut_haaland", "read": "2026-10-01", "value": 1, "says": "2018/2019 Bundesliga 1 goal, cup and Europa League 0" },
+        { "name": "uefa_haaland", "url": "https://www.uefa.com/uefachampionsleague/news/025a-0e9f8ba8ec7e-64c8a559c1e1-1000--erling-braut-haaland-dortmund-s-new-signing-by-numbers/", "read": "2026-10-01", "value": 1, "says": "29 Salzburg goals, 28 of them in 2019-20, so 1 in 2018-19" }
+      ]
+    },
+    {
+      "player": "Erling Haaland", "playerId": "a0000001-0000-0000-0000-000000000006", "season": "2018-2019", "club": "RB Salzburg",
+      "field": "assists", "from": 6, "to": null,
+      "sources": [
+        { "name": "footballdatabase", "url": "https://www.footballdatabase.eu/en/player/details/294600-erling-braut_haaland", "read": "2026-10-01", "value": 1, "says": "2018/2019 Bundesliga 1 assist" },
+        { "name": "wikipedia", "url": "https://en.wikipedia.org/wiki/Erling_Haaland", "read": "2026-10-01", "value": null, "says": "the club table does not count assists" }
+      ],
+      "reason": "6 assists cannot sit on a 5 appearance season, and only one source counts assists, so the row shows n/a"
+    },
+    {
+      "player": "Kevin De Bruyne", "playerId": "a0000001-0000-0000-0000-000000000011", "season": "2013-2014", "club": "Chelsea",
+      "field": "season", "from": "2012-2013", "to": "2013-2014",
+      "sources": [
+        { "name": "wikipedia", "url": "https://en.wikipedia.org/wiki/Kevin_De_Bruyne", "read": "2026-10-01", "value": "2013-2014", "says": "Chelsea 2012-13 0 apps (on loan at Werder Bremen), 2013-14 9 apps 0 goals" },
+        { "name": "footballdatabase", "url": "https://www.footballdatabase.eu/en/player/details/69338-kevin-de_bruyne", "read": "2026-10-01", "value": "2013-2014", "says": "Chelsea appears only in 2013/2014; 2012/2013 is Werder Bremen alone" },
+        { "name": "bundesliga_kdb", "url": "https://www.bundesliga.com/en/news/Bundesliga/kevin-de-bruyne-manchester-city-made-in-the-bundesliga-wolfsburg-guardiola-473776.jsp", "read": "2026-10-01", "value": "2013-2014", "says": "after joining in January 2012 he stayed in Belgium for the rest of 2011-12, spent 2012-13 at Werder, and made just nine first team appearances for Chelsea before Wolfsburg" }
+      ],
+      "note": "The row moves after Werder Bremen 2012-2013 so the path runs in season order."
+    },
+    {
+      "player": "Kevin De Bruyne", "playerId": "a0000001-0000-0000-0000-000000000011", "season": "2013-2014", "club": "Chelsea",
+      "field": "appearances", "from": 3, "to": 9,
+      "sources": [
+        { "name": "wikipedia", "url": "https://en.wikipedia.org/wiki/Kevin_De_Bruyne", "read": "2026-10-01", "value": 9, "says": "2013-14 Premier League 3, League Cup 3, Europe 3, total 9 apps 0 goals" },
+        { "name": "footballdatabase", "url": "https://www.footballdatabase.eu/en/player/details/69338-kevin-de_bruyne", "read": "2026-10-01", "value": 9, "says": "2013/2014 Premier League 3, Capital One Cup 3, Champions League 3, no goals" },
+        { "name": "bundesliga_kdb", "url": "https://www.bundesliga.com/en/news/Bundesliga/kevin-de-bruyne-manchester-city-made-in-the-bundesliga-wolfsburg-guardiola-473776.jsp", "read": "2026-10-01", "value": 9, "says": "made just nine first-team appearances for Chelsea" }
+      ]
+    },
+    {
+      "player": "Kevin De Bruyne", "playerId": "a0000001-0000-0000-0000-000000000011", "season": "2013-2014", "club": "Chelsea",
+      "field": "assists", "from": 0, "to": null,
+      "sources": [
+        { "name": "footballdatabase", "url": "https://www.footballdatabase.eu/en/player/details/69338-kevin-de_bruyne", "read": "2026-10-01", "value": 1, "says": "2013/2014 Premier League 1 assist" },
+        { "name": "wikipedia", "url": "https://en.wikipedia.org/wiki/Kevin_De_Bruyne", "read": "2026-10-01", "value": null, "says": "the club table does not count assists" }
+      ],
+      "reason": "the 0 was written for a season he did not play for Chelsea and the one source that counts assists gives 1, so the row shows n/a"
+    },
+    {
+      "player": "Kevin De Bruyne", "playerId": "a0000001-0000-0000-0000-000000000011", "season": "2012-2013", "club": "Werder Bremen",
+      "field": "appearances", "from": 33, "to": 34,
+      "sources": [
+        { "name": "wikipedia", "url": "https://en.wikipedia.org/wiki/Kevin_De_Bruyne", "read": "2026-10-01", "value": 34, "says": "2012-13 Bundesliga 33 apps 10 goals, DFB-Pokal 1 app 0 goals, total 34 apps 10 goals" },
+        { "name": "footballdatabase", "url": "https://www.footballdatabase.eu/en/player/details/69338-kevin-de_bruyne", "read": "2026-10-01", "value": 34, "says": "2012/2013 Bundesliga 33 games 10 goals 9 assists, DFB-Pokal 1 game" }
+      ],
+      "note": "Found while relabelling the Chelsea row beside it: the row carried the league games only and 3 goals."
+    },
+    {
+      "player": "Kevin De Bruyne", "playerId": "a0000001-0000-0000-0000-000000000011", "season": "2012-2013", "club": "Werder Bremen",
+      "field": "goals", "from": 3, "to": 10,
+      "sources": [
+        { "name": "wikipedia", "url": "https://en.wikipedia.org/wiki/Kevin_De_Bruyne", "read": "2026-10-01", "value": 10, "says": "2012-13 total 34 apps 10 goals" },
+        { "name": "footballdatabase", "url": "https://www.footballdatabase.eu/en/player/details/69338-kevin-de_bruyne", "read": "2026-10-01", "value": 10, "says": "2012/2013 Bundesliga 10 goals, DFB-Pokal 0" },
+        { "name": "bundesliga_kdb", "url": "https://www.bundesliga.com/en/news/Bundesliga/kevin-de-bruyne-manchester-city-made-in-the-bundesliga-wolfsburg-guardiola-473776.jsp", "read": "2026-10-01", "value": 10, "says": "in his first year in Germany he registered 10 goals and nine assists" }
+      ]
+    },
+    {
+      "player": "Kevin De Bruyne", "playerId": "a0000001-0000-0000-0000-000000000011", "season": "2013-2014", "club": "VfL Wolfsburg",
+      "field": "appearances", "from": 37, "to": 18,
+      "sources": [
+        { "name": "wikipedia", "url": "https://en.wikipedia.org/wiki/Kevin_De_Bruyne", "read": "2026-10-01", "value": 18, "says": "2013-14 Bundesliga 16 apps 3 goals, DFB-Pokal 2 apps 0 goals, total 18 apps 3 goals" },
+        { "name": "footballdatabase", "url": "https://www.footballdatabase.eu/en/player/details/69338-kevin-de_bruyne", "read": "2026-10-01", "value": 18, "says": "2013/2014 Bundesliga 16 games 3 goals, DFB-Pokal 2 games" }
+      ],
+      "note": "37 apps 10 goals 21 assists is close to his 2014-15 league line (34 apps 10 goals), already counted in the 2014-2015 row; he joined Wolfsburg in January 2014."
+    },
+    {
+      "player": "Kevin De Bruyne", "playerId": "a0000001-0000-0000-0000-000000000011", "season": "2013-2014", "club": "VfL Wolfsburg",
+      "field": "goals", "from": 10, "to": 3,
+      "sources": [
+        { "name": "wikipedia", "url": "https://en.wikipedia.org/wiki/Kevin_De_Bruyne", "read": "2026-10-01", "value": 3, "says": "2013-14 total 18 apps 3 goals" },
+        { "name": "footballdatabase", "url": "https://www.footballdatabase.eu/en/player/details/69338-kevin-de_bruyne", "read": "2026-10-01", "value": 3, "says": "2013/2014 Bundesliga 3 goals, DFB-Pokal 0" },
+        { "name": "bundesliga_kdb", "url": "https://www.bundesliga.com/en/news/Bundesliga/kevin-de-bruyne-manchester-city-made-in-the-bundesliga-wolfsburg-guardiola-473776.jsp", "read": "2026-10-01", "value": 3, "says": "three goals and six assists during the second half of 2013/14" }
+      ]
+    },
+    {
+      "player": "Kevin De Bruyne", "playerId": "a0000001-0000-0000-0000-000000000011", "season": "2013-2014", "club": "VfL Wolfsburg",
+      "field": "assists", "from": 21, "to": null,
+      "sources": [
+        { "name": "footballdatabase", "url": "https://www.footballdatabase.eu/en/player/details/69338-kevin-de_bruyne", "read": "2026-10-01", "value": 5, "says": "2013/2014 Bundesliga 5 assists" },
+        { "name": "bundesliga_kdb", "url": "https://www.bundesliga.com/en/news/Bundesliga/kevin-de-bruyne-manchester-city-made-in-the-bundesliga-wolfsburg-guardiola-473776.jsp", "read": "2026-10-01", "value": 6, "says": "three goals and six assists during the second half of 2013/14" }
+      ],
+      "reason": "21 belongs to 2014-15 and the two sources that count the half season disagree (5 and 6), so the row shows n/a"
+    },
+    {
+      "player": "Harry Kane", "playerId": "a0000001-0000-0000-0000-000000000008", "season": "2011-2012", "club": "Tottenham",
+      "field": "appearances", "from": 1, "to": 6,
+      "sources": [
+        { "name": "wikipedia", "url": "https://en.wikipedia.org/wiki/Harry_Kane", "read": "2026-10-01", "value": 6, "says": "2011-12 Europe 6 apps 1 goal, nothing else, total 6 apps 1 goal" },
+        { "name": "footballdatabase", "url": "https://www.footballdatabase.eu/en/player/details/128531-harry-kane", "read": "2026-10-01", "value": 6, "says": "2011/2012 Tottenham Europa League 6 games 1 goal" },
+        { "name": "tottenham", "url": "https://www.tottenhamhotspur.com/the-club/history/legends/harry-kane", "read": "2026-10-01", "value": 6, "says": "2011/12 saw a debut against Hearts and six appearances in the Europa League, including his first goal in a victory at Shamrock Rovers" }
+      ]
+    },
+    {
+      "player": "Harry Kane", "playerId": "a0000001-0000-0000-0000-000000000008", "season": "2011-2012", "club": "Tottenham",
+      "field": "goals", "from": 0, "to": 1,
+      "sources": [
+        { "name": "wikipedia", "url": "https://en.wikipedia.org/wiki/Harry_Kane", "read": "2026-10-01", "value": 1, "says": "2011-12 total 6 apps 1 goal" },
+        { "name": "footballdatabase", "url": "https://www.footballdatabase.eu/en/player/details/128531-harry-kane", "read": "2026-10-01", "value": 1, "says": "2011/2012 Europa League 1 goal" },
+        { "name": "tottenham", "url": "https://www.tottenhamhotspur.com/the-club/history/legends/harry-kane", "read": "2026-10-01", "value": 1, "says": "his first goal in a victory at Shamrock Rovers" }
+      ]
+    },
+    {
+      "player": "Harry Kane", "playerId": "a0000001-0000-0000-0000-000000000008", "season": "2012-2013", "club": "Tottenham",
+      "field": "appearances", "from": 14, "to": 1,
+      "sources": [
+        { "name": "wikipedia", "url": "https://en.wikipedia.org/wiki/Harry_Kane", "read": "2026-10-01", "value": 1, "says": "2012-13 Premier League 1 app 0 goals, total 1 app" },
+        { "name": "footballdatabase", "url": "https://www.footballdatabase.eu/en/player/details/128531-harry-kane", "read": "2026-10-01", "value": 1, "says": "2012/2013 Tottenham Premier League 1 game" },
+        { "name": "tottenham", "url": "https://www.tottenhamhotspur.com/the-club/history/legends/harry-kane", "read": "2026-10-01", "value": 1, "says": "he made his Premier League debut on the opening day of 2012/13 before joining Norwich City on loan" }
+      ],
+      "note": "14 apps 2 goals is close to his Leicester loan (13 league apps 2 goals), which now has its own row."
+    },
+    {
+      "player": "Harry Kane", "playerId": "a0000001-0000-0000-0000-000000000008", "season": "2012-2013", "club": "Tottenham",
+      "field": "goals", "from": 2, "to": 0,
+      "sources": [
+        { "name": "wikipedia", "url": "https://en.wikipedia.org/wiki/Harry_Kane", "read": "2026-10-01", "value": 0, "says": "2012-13 total 1 app 0 goals" },
+        { "name": "footballdatabase", "url": "https://www.footballdatabase.eu/en/player/details/128531-harry-kane", "read": "2026-10-01", "value": 0, "says": "2012/2013 Tottenham Premier League 1 game, no goal" }
+      ]
+    },
+    {
+      "player": "Harry Kane", "playerId": "a0000001-0000-0000-0000-000000000008", "season": "2013-2014", "club": "Tottenham",
+      "field": "goals", "from": 3, "to": 4,
+      "sources": [
+        { "name": "wikipedia", "url": "https://en.wikipedia.org/wiki/Harry_Kane", "read": "2026-10-01", "value": 4, "says": "2013-14 Premier League 10 apps 3 goals, League Cup 2 apps 1 goal, Europe 7 apps 0, total 19 apps 4 goals" },
+        { "name": "footballdatabase", "url": "https://www.footballdatabase.eu/en/player/details/128531-harry-kane", "read": "2026-10-01", "value": 4, "says": "2013/2014 Premier League 10 games 3 goals, Capital One Cup 2 games 1 goal, Europa League 7 games 0" }
+      ],
+      "note": "The row's 19 appearances already agree with both sources and with Tottenham's own '19 appearances in all competitions'; the League Cup goal was missing."
+    }
+  ],
+  "added": [
+    {
+      "player": "Erling Haaland", "playerId": "a0000001-0000-0000-0000-000000000006", "season": "2019-2020", "club": "RB Salzburg",
+      "appearances": 22, "goals": 28, "assists": null, "marketValue": 0,
+      "sources": [
+        { "name": "wikipedia", "url": "https://en.wikipedia.org/wiki/Erling_Haaland", "read": "2026-10-01", "appearances": 22, "goals": 28, "says": "2019-20 Austrian Bundesliga 14 apps 16 goals, cup 2 apps 4 goals, Europe 6 apps 8 goals, total 22 apps 28 goals" },
+        { "name": "footballdatabase", "url": "https://www.footballdatabase.eu/en/player/details/294600-erling-braut_haaland", "read": "2026-10-01", "appearances": 22, "goals": 28, "says": "2019/2020 Salzburg Bundesliga 14 games 16 goals, OFB-Cup 2 games 4 goals, Champions League 6 games 8 goals" },
+        { "name": "tnt_haaland", "url": "https://www.tntsports.co.uk/football/transfers/2019-2020/football-news-manchester-united-beaten-to-erling-haaland-signing-as-dortmund-confirm-deal_sto7590970/story.shtml", "read": "2026-10-01", "appearances": 22, "goals": 28, "says": "in prolific form for Red Bull Salzburg this season, scoring 28 goals in 22 appearances" },
+        { "name": "bundesliga_haaland", "url": "https://www.bundesliga.com/en/bundesliga/news/erling-haaland-joins-borussia-dortmund-from-red-bull-salzburg-8994", "read": "2026-10-01", "appearances": 27, "goals": 29, "says": "29 goals in 27 appearances in a Salzburg shirt (both seasons), which the two Salzburg rows now add up to" }
+      ]
+    },
+    {
+      "player": "Harry Kane", "playerId": "a0000001-0000-0000-0000-000000000008", "season": "2011-2012", "club": "Millwall",
+      "appearances": 27, "goals": 9, "assists": null, "marketValue": 0,
+      "sources": [
+        { "name": "wikipedia", "url": "https://en.wikipedia.org/wiki/Harry_Kane", "read": "2026-10-01", "appearances": 27, "goals": 9, "says": "Millwall (loan) 2011-12 Championship 22 apps 7 goals, FA Cup 5 apps 2 goals, total 27 apps 9 goals" },
+        { "name": "footballdatabase", "url": "https://www.footballdatabase.eu/en/player/details/128531-harry-kane", "read": "2026-10-01", "appearances": 27, "goals": 9, "says": "2011/2012 Millwall Championship 22 games 7 goals, FA Cup 5 games 2 goals" },
+        { "name": "tottenham", "url": "https://www.tottenhamhotspur.com/the-club/history/legends/harry-kane", "read": "2026-10-01", "appearances": 27, "goals": 9, "says": "joined Millwall on loan in January 2012 and scored nine goals in 27 games for the Lions" }
+      ]
+    },
+    {
+      "player": "Harry Kane", "playerId": "a0000001-0000-0000-0000-000000000008", "season": "2012-2013", "club": "Norwich City",
+      "appearances": 5, "goals": 0, "assists": null, "marketValue": 0,
+      "sources": [
+        { "name": "wikipedia", "url": "https://en.wikipedia.org/wiki/Harry_Kane", "read": "2026-10-01", "appearances": 5, "goals": 0, "says": "Norwich City (loan) 2012-13 Premier League 3 apps, FA Cup 1, League Cup 1, total 5 apps 0 goals" },
+        { "name": "footballdatabase", "url": "https://www.footballdatabase.eu/en/player/details/128531-harry-kane", "read": "2026-10-01", "appearances": 5, "goals": 0, "says": "2012/2013 Norwich City Premier League 3 games, Capital One Cup 1, FA Cup 1, no goals" }
+      ],
+      "note": "Tottenham's page says a serious injury 'restricted him to four games at Carrow Road', Norwich's home ground; both tables count five across all competitions. Kept at the five both record."
+    },
+    {
+      "player": "Harry Kane", "playerId": "a0000001-0000-0000-0000-000000000008", "season": "2012-2013", "club": "Leicester City",
+      "appearances": 15, "goals": 2, "assists": null, "marketValue": 0,
+      "sources": [
+        { "name": "wikipedia", "url": "https://en.wikipedia.org/wiki/Harry_Kane", "read": "2026-10-01", "appearances": 15, "goals": 2, "says": "Leicester City (loan) 2012-13 Championship 13 apps 2 goals, play-offs 2 apps 0 goals, total 15 apps 2 goals" },
+        { "name": "footballdatabase", "url": "https://www.footballdatabase.eu/en/player/details/128531-harry-kane", "read": "2026-10-01", "appearances": 15, "goals": 2, "says": "2012/2013 Leicester Championship 13 games 2 goals, Championship Play-Off 2 games" },
+        { "name": "tottenham", "url": "https://www.tottenhamhotspur.com/the-club/history/legends/harry-kane", "read": "2026-10-01", "appearances": 13, "goals": 2, "says": "he made 13 appearances for the Foxes, scoring twice (the league games)" },
+        { "name": "sportsmole", "url": "https://www.sportsmole.co.uk/football/leicester-city/live-commentary/leicester-city-1-0-watford-as-it-happened_83604.html", "read": "2026-10-01", "appearances": 1, "goals": 0, "says": "65 min: Harry Kane replaces Wood, play-off semi-final first leg, 9 May 2013 (one of the two play-off games beyond the 13)" }
+      ]
+    }
+  ],
+  "paths": {
+    "Erling Haaland": ["2016 Bryne", "2017 Molde", "2018 Molde", "2018-2019 RB Salzburg", "2019-2020 RB Salzburg", "2019-2020 Borussia Dortmund", "2020-2021 Borussia Dortmund", "2021-2022 Borussia Dortmund", "2022-2023 Manchester City", "2023-2024 Manchester City", "2024-2025 Manchester City"],
+    "Kevin De Bruyne": ["2008-2009 Genk", "2009-2010 Genk", "2010-2011 Genk", "2011-2012 Genk", "2012-2013 Werder Bremen", "2013-2014 Chelsea", "2013-2014 VfL Wolfsburg", "2014-2015 VfL Wolfsburg", "2015-2016 Manchester City", "2016-2017 Manchester City", "2017-2018 Manchester City", "2018-2019 Manchester City", "2019-2020 Manchester City", "2020-2021 Manchester City", "2021-2022 Manchester City", "2022-2023 Manchester City", "2023-2024 Manchester City", "2024-2025 Manchester City"],
+    "Harry Kane": ["2010-2011 Leyton Orient", "2011-2012 Tottenham", "2011-2012 Millwall", "2012-2013 Tottenham", "2012-2013 Norwich City", "2012-2013 Leicester City", "2013-2014 Tottenham", "2014-2015 Tottenham", "2015-2016 Tottenham", "2016-2017 Tottenham", "2017-2018 Tottenham", "2018-2019 Tottenham", "2019-2020 Tottenham", "2020-2021 Tottenham", "2021-2022 Tottenham", "2022-2023 Tottenham", "2023-2024 Bayern Munich", "2024-2025 Bayern Munich"]
+  },
+  "keptAsIs": [
+    {
+      "player": "Alisson", "playerId": "a0000001-0000-0000-0000-000000000040", "season": "2014", "club": "Internacional", "field": "appearances", "value": 14,
+      "sources": [
+        { "name": "wikipedia", "url": "https://en.wikipedia.org/wiki/Alisson_Becker", "read": "2026-10-01", "value": 14, "says": "2014 Serie A 11, state championship 3, total 14 apps" },
+        { "name": "footballdatabase", "read": "2026-10-01", "value": 15, "says": "15 apps, one of them the Recopa Gaucha, which Wikipedia does not count (Round 784's reading)" }
+      ],
+      "thirdTried": ["ogol.com.br (HTTP 403)", "zerozero.pt (bot wall)", "transfermarkt.com (refused)"],
+      "why": "The two differ only on whether the Recopa Gaucha counts. No third source could be read, so the row keeps the 14 both count."
+    },
+    {
+      "player": "Alisson Becker", "playerId": "a0000001-0000-0000-0000-000000000066", "season": "2014", "club": "Internacional", "field": "appearances", "value": 14,
+      "sources": [
+        { "name": "wikipedia", "url": "https://en.wikipedia.org/wiki/Alisson_Becker", "read": "2026-10-01", "value": 14, "says": "2014 total 14 apps" },
+        { "name": "footballdatabase", "read": "2026-10-01", "value": 15, "says": "15 apps including the Recopa Gaucha (Round 784's reading)" }
+      ],
+      "thirdTried": ["ogol.com.br (HTTP 403)", "zerozero.pt (bot wall)", "transfermarkt.com (refused)"],
+      "why": "The same man as the row above (see duplicate); same disagreement, same answer."
+    },
+    {
+      "player": "Alisson", "playerId": "a0000001-0000-0000-0000-000000000040", "season": "2016", "club": "Internacional", "field": "appearances", "value": 20,
+      "sources": [
+        { "name": "wikipedia", "url": "https://en.wikipedia.org/wiki/Alisson_Becker", "read": "2026-10-01", "value": 21, "says": "2016 Serie A 1, state championship 17, Primeira Liga 3, total 21 apps" },
+        { "name": "footballdatabase", "read": "2026-10-01", "value": 20, "says": "20 apps (1 league, 16 state, 3 Primeira Liga), Round 784's reading" }
+      ],
+      "thirdTried": ["ogol.com.br (HTTP 403)", "zerozero.pt (bot wall)", "transfermarkt.com (refused)", "web search for the 2016 Gauchao appearance count (no per season figure found)"],
+      "why": "One state championship game apart and no third source could be read, so the row keeps the 20 both record."
+    },
+    {
+      "player": "Alisson Becker", "playerId": "a0000001-0000-0000-0000-000000000066", "season": "2016", "club": "Internacional", "field": "appearances", "value": 20,
+      "sources": [
+        { "name": "wikipedia", "url": "https://en.wikipedia.org/wiki/Alisson_Becker", "read": "2026-10-01", "value": 21, "says": "2016 total 21 apps" },
+        { "name": "footballdatabase", "read": "2026-10-01", "value": 20, "says": "20 apps, Round 784's reading" }
+      ],
+      "thirdTried": ["ogol.com.br (HTTP 403)", "zerozero.pt (bot wall)", "transfermarkt.com (refused)"],
+      "why": "The same man as the row above (see duplicate); same disagreement, same answer."
+    },
+    {
+      "player": "Mohamed Salah", "playerId": "a0000001-0000-0000-0000-000000000007", "season": "2009-2010", "club": "Al Mokawloon", "field": "appearances", "value": 5,
+      "sources": [
+        { "name": "wikipedia", "url": "https://en.wikipedia.org/wiki/Mohamed_Salah", "read": "2026-10-01", "value": 6, "says": "2009-10 Egyptian Premier League 4 apps, cup 2 apps, total 6 apps 0 goals" },
+        { "name": "footballdatabase", "url": "https://www.footballdatabase.eu/en/player/details/69529-mohamed-salah", "read": "2026-10-01", "value": 5, "says": "5 apps (3 league, 2 cup), Round 784's reading" }
+      ],
+      "thirdTried": ["transfermarkt.com (refused)", "web search for his 2009-10 league appearances (the debut on 3 May 2010 at El Mansoura is reported, no season count)"],
+      "why": "One league game apart and no third source could be read, so the row keeps the 5 both record."
+    }
+  ],
+  "duplicate": {
+    "players": [
+      { "id": "a0000001-0000-0000-0000-000000000040", "name": "Alisson", "seasonRows": 13, "transferPathPuzzles": ["tpa-29", "tpa-99", "tpa-164", "tpa-207", "tpa-257", "tpa-285", "tpa-296", "tpa-342", "tpa-397", "tpa-541", "tpa-547", "tpa-619", "tpa-641", "tpa-708", "tpa-841"], "careerLadderRoster": "line 12, side e, counts from 2026-10-15" },
+      { "id": "a0000001-0000-0000-0000-000000000066", "name": "Alisson Becker", "seasonRows": 13, "transferPathPuzzles": ["tpa-112", "tpa-392", "tpa-428", "tpa-429", "tpa-637", "tpa-639", "tpa-668", "tpa-680", "tpa-716", "tpa-740", "tpa-762", "tpa-779", "tpa-963"], "careerLadderRoster": "line 13, side e, counts from 2026-10-15" }
+    ],
+    "sameMan": "Same nationality, position and Internacional rows; Round 667 and Round 784 both recorded it. Their Roma and Liverpool rows differ (see seenNotFixed).",
+    "decision": "Both ids are referenced, so neither is removed here. 'Alisson' (040) is the one to keep: it carries more Transfer Path puzzles (15 to 13), the older id, and the name the Round 784 checks read. 'Alisson Becker' (066) is the duplicate.",
+    "beforeRemoving066": [
+      "Transfer Path: the 13 puzzles above name 'Alisson Becker' as an endpoint. Re-point each to 'Alisson' (no partner overlaps his 15) with min_steps and hints re-derived by scripts/genTransferPathHints.mjs on the pool without 066 (the hints name the player), or quarantine them; regenerate scripts/data/transferPathPull and src/data/transferPathPuzzles.ts, and move simTransferPathHints' companion floors with it.",
+      "Career Ladder: line 13 of src/data/careerLadderRoster.json deals 066. The file is append only, so 066 leaves through an appended 'x' line dated after that line is live, and simCareerLadderRotation section 7 must agree with the tables before the delete.",
+      "Then delete 066's 13 career_seasons rows and its career_players row in one guarded migration, re-bake src/data/careerPlayers.ts, and move the 253 player floor in scripts/bakeCareerPlayers.mjs and scripts/simCareerFallback.mjs to 252.",
+      "Decide which Roma and Liverpool rows the kept 040 should carry from two sources; neither copy is right today (seenNotFixed)."
+    ]
+  },
+  "seenNotFixed": [
+    "Alisson's Roma and Liverpool rows disagree with Wikipedia's club table on both ids: Roma 2016-17 is 15 apps there (040 has 40, 066 has 37), 2020-21 Liverpool is 42 apps (both have 44), 2021-22 is 54 (040 has 55, 066 has 46). Not checked against a second source this round.",
+    "Antoine Griezmann's Real Sociedad 2010-11 to 2013-14 rows differ from Wikipedia's club table (39/7, 38/8, 35/11, 50/20 there; 37/7, 38/10, 44/10, 39/20 in the pool). Not checked against a second source this round.",
+    "Mohamed Salah: Wikipedia has Basel 2012-13 at 50 apps 10 goals (pool 47/9), a Basel 2013-14 half season (29 apps 10 goals) and a Chelsea 2014-15 half season (8 apps 0 goals) that the pool lacks, and Chelsea 2013-14 at 11 apps (pool 13). Not checked against a second source this round.",
+    "Kevin De Bruyne's two VfL Wolfsburg games of 2015-16 (Wikipedia 4 apps 1 goal) have no row; Erling Haaland's Bryne 2 and Molde 2 reserve seasons are left out on purpose (Round 784's rule excludes reserve sides).",
+    "The 2024-2025 rows of several players look like snapshots taken partway through that season: Harry Kane's Bayern row reads 30 apps 23 goals where Wikipedia has 51 apps 41 goals. Worth a pool wide check against a finished season source."
+  ]
+}
