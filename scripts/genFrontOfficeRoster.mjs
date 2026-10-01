@@ -68,11 +68,16 @@
    kept fifteen men a club (SLOTS) out of a release that carries the whole
    53 and the practice squad. It now writes a second file beside the first:
      src/data/frontOfficePlayers.ts  the fifteen starters, chosen and rated
-                                     EXACTLY as before. Nothing about who is
-                                     picked or what he is worth changed, so
-                                     Gauntlet Draft: NFL (which reads this
-                                     file) and every saved league read the
-                                     same men at the same numbers.
+                                     by the same rules as before, with one
+                                     correction: the latest week only (see
+                                     below). The numbers still move with the
+                                     data: the 2026-10-01 bake (week 4)
+                                     swapped 11 of 480 starters against the
+                                     2026-09-02 bake and moved 132 ratings
+                                     by 1.4 on average, and Gauntlet Draft:
+                                     NFL reads this file, so its pool moves
+                                     with it. A saved league carries its own
+                                     men and never reads it again.
      src/data/frontOfficeDepth.ts    everybody else on the club: the rest of
                                      the active roster (the bench) and the
                                      practice squad, loaded by the board only
