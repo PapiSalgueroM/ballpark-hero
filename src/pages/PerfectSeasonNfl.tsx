@@ -14,7 +14,7 @@ import {
   teamOverall, randomSeed, ratingTier, squadFillsAny,
   GAME_MODE_LABELS, GAME_MODE_BLURBS, HIDDEN_RATING_DISPLAY, isRatingHidden,
   getDailyDateET, makeDailyPicker, loadDailyAttempt, saveDailyAttempt,
-  msUntilNextDailyET, formatCountdown, DailyAttemptRecord,
+  msUntilNextDailyET, formatCountdown, DailyAttemptRecord, dailyUsesOldWheel,
 } from '@/lib/perfectSeason';
 import {
   NFL_SLOTS, NFL_GAMES, TeamSeasonEntry,
@@ -29,6 +29,9 @@ import {
   PerfectSeasonTheme, getDailyTheme, applyTheme, buildVerificationLine, themesForSport,
 } from '@/lib/perfectSeasonThemes';
 import { recordCompletion, getCurrentPlayerName } from '@/lib/completions';
+import { perfectSeasonTagline } from '@/lib/perfectSeasonOdds';
+import { usePerfectSeasonBest } from '@/hooks/usePerfectSeasonBest';
+import { BestSoFar, SeasonOddsLines } from '@/components/perfect-season/SeasonOdds';
 
 const SPORT_KEY = 'nfl';
 
@@ -80,6 +83,9 @@ const PerfectSeasonNfl = () => {
   const [dailyTheme, setDailyTheme] = useState<PerfectSeasonTheme | null>(null);
   const [decade, setDecade] = useState<NflDecadeDef | null>(null);
   const [poSeed, setPoSeed] = useState<number | null>(null);
+  /* Round 820: the best record this browser has posted in this sport, kept
+     by the hook all four Perfect Season pages share. */
+  const { best, newBest, record: recordBest, reset: resetBest } = usePerfectSeasonBest(SPORT_KEY);
   const wheelTimer = useRef<ReturnType<typeof setInterval> | null>(null);
   const simTimer = useRef<ReturnType<typeof setInterval> | null>(null);
   const countdownTimer = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -130,7 +136,8 @@ const PerfectSeasonNfl = () => {
     if (phase !== 'boot') return;
     let alive = true;
     (async () => {
-      const idx = await fetchTeamSeasonIndex();
+      // Round 821: a daily dated before the switch deals from the old wheel.
+      const idx = await fetchTeamSeasonIndex({ oldWheel: mode === 'daily' && dailyUsesOldWheel(todayStr) });
       if (!alive) return;
       if (idx) {
         if (mode === 'daily') {
@@ -283,12 +290,15 @@ const PerfectSeasonNfl = () => {
     if (phase !== 'done' || !sim || completionSaved.current) return;
     completionSaved.current = true;
     recordCompletion('/perfect-season-nfl', sim.wins, getCurrentPlayerName());
-  }, [phase, sim]);
+    // Round 820: every finished run, in any mode, is weighed against the best.
+    recordBest({ wins: sim.wins, losses: sim.losses, overall: Math.round(overall), date: todayStr, mode });
+  }, [phase, sim, overall, mode, todayStr, recordBest]);
 
   const skipSim = () => setRevealed(NFL_GAMES);
 
   const restart = () => {
     completionSaved.current = false;
+    resetBest();
     setPicks(Object.fromEntries(NFL_SLOTS.map(s => [s.key, null])));
     setUsedNames(new Set());
     setSelected(null);
@@ -401,7 +411,7 @@ const PerfectSeasonNfl = () => {
             <span className="block mt-1 text-sm md:text-base font-semibold tracking-[0.2em] uppercase text-muted-foreground">NFL Perfect Season</span>
           </h1>
           <p className="text-muted-foreground text-sm md:text-base max-w-xl mx-auto">
-            Spin the wheel of NFL history, draft one player per stop, and chase the perfect season.
+            {perfectSeasonTagline(SPORT_KEY)}
           </p>
           {phase !== 'mode-select' && (
             <div className="mt-3 inline-flex items-center gap-1.5 text-xs px-3 py-1 rounded-full bg-secondary text-muted-foreground font-semibold uppercase tracking-wider">
@@ -465,6 +475,7 @@ const PerfectSeasonNfl = () => {
             <p className="text-[11px] text-muted-foreground mt-2">
               Decade Mode: pick an era and every spin lands inside it. Daily mode always uses the full wheel.
             </p>
+            <BestSoFar best={best} />
           </div>
           </>
         )}
@@ -728,6 +739,10 @@ const PerfectSeasonNfl = () => {
                   {mode === 'daily' && `Daily · ${todayStr} · `}
                   Team overall {ovrDisplay} · drafted in {spins} spin{spins === 1 ? '' : 's'}
                 </p>
+                {/* Round 820: the odds of an unbeaten season for the lineup the sim
+                    just played (the raw overall, not the rounded one above), and
+                    the best record. Shared with the other three sports. */}
+                <SeasonOddsLines sport={SPORT_KEY} overall={overall} perfect={sim.perfect} best={best} newBest={newBest} />
                 {sim.perfect && (
                   <p className="text-sm text-correct font-semibold mb-2 inline-flex items-center gap-1.5">
                     <Trophy className="w-4 h-4" /> Share this. Nobody will believe you.

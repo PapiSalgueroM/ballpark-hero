@@ -194,10 +194,10 @@ export const SPORT_HUBS: SportHub[] = [
     },
     aboutTitle: 'Free Basketball Games on DoUKnowBall',
     about:
-      'The basketball section gathers every pro hoops game on the site into one page: the franchise grid, progressive-clue career paths, connection puzzles, stat line detective work, lineup builders and two long sims, one from the general manager\'s chair and one from the player\'s. All free in a browser, no account, no download, and all of it on real players.',
+      'The basketball section gathers every pro hoops game on the site into one page: the franchise grid, progressive-clue career paths, connection puzzles, stat line detective work, lineup builders and two long sims, one from the general manager\'s chair and one from the player\'s. Trivia uses real player records; the sims also include generated players and fictional future seasons. All free in a browser, no account or download needed.',
     howToPlay: [
       'Short on time: the daily puzzles reset every day and take a couple of minutes each.',
-      'Want something deeper: the front office sim runs a full season with the cap and the trade deadline, and the career sim runs from the draft to the rafters.',
+      'Want something deeper: the front office sim has contracts, trades, a draft and a playoff run, while the career sim follows your created player from draft night.',
       'Every game explains itself before you play, and the "?" button reopens the rules at any point.',
     ],
   },
@@ -343,7 +343,7 @@ export const SPORT_HUBS: SportHub[] = [
     deep: {
       heading: '⏳ MLB career and front office sims',
       blurb:
-        'One is the front office: the tax line, the trade deadline and October. The other is one player from draft day toward Cooperstown.',
+        'One is the front office: payroll against the tax line, trades and the postseason. The other is one player from draft day toward Cooperstown.',
     },
     quick: {
       heading: '⏱️ Five minute MLB trivia and puzzle games',

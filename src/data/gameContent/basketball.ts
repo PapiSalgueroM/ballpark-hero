@@ -125,7 +125,7 @@ export const BASKETBALL_CONTENT: GameContentMap = {
   '/perfect-season-nba': {
     intro: [
       "The wheel owns your draft board. Every spin stops on a real NBA team season, 1950s to today, and you take exactly one player from that roster.",
-      "Six picks build a cross era starting five plus a sixth man, then the simulator plays all 82 games. The goal is right there in the name: 82-0.",
+      "Six picks build a cross era starting five plus a sixth man, then the simulator plays all 82 games. The name says 82-0, but the real chase is the best record you can post, and every result prints your odds of going unbeaten.",
     ],
     headings: {
       howToPlay: "How to play 82-0 NBA Perfect Season, a free online draft simulator",
@@ -204,7 +204,7 @@ export const BASKETBALL_CONTENT: GameContentMap = {
       {
         heading: "A hot start that stalls in the Conference Finals",
         paragraphs: [
-          "The sim opens 21-0, then drops three random games. You finish 76-6, sweep the First Round, and fall in the Conference Finals. Close only makes it worse.",
+          "You finish at 88 overall. The sim opens 14-0, cools off after the break and closes 69-13, then you sweep the First Round and fall in the Conference Finals. At 88 an 82-0 comes about one run in 110 million, so 69 wins is the brag.",
         ],
       },
     ],
