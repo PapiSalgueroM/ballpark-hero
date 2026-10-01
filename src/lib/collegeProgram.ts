@@ -22,6 +22,21 @@
  *
  * Every function here is pure over what it is handed, and nothing is
  * evaluated at module scope from another module.
+ *
+ * Bound so far: CFB Dynasty (src/lib/cfbDynasty.ts, Round 728). CBB Dynasty
+ * (src/lib/cbbDynasty.ts) is NOT bound yet; binding it means doing there what
+ * cfbDynasty.ts does, with basketball numbers and nothing copied out of here:
+ *   - optional staff, morale and opps on CbbTeam, and a depth flag on
+ *     CbbState so a save without it plays exactly as before;
+ *   - staffEdges in cbbStrength and in the score, an offensive and a defensive
+ *     assistant in the OC and DC chairs (the roles are the two sides of the
+ *     ball, not football titles, so the labels change on the board only);
+ *   - buildRivalries over CBB_SCHOOLS with each school's state, one rivalry
+ *     round, and rivalrySwing with a basketball fullMargin;
+ *   - strengthOfSchedule in seedScore, the way cfbRankings breaks ties;
+ *   - chargePayroll, staffCarousel and staffCandidates in the offseason
+ *     before NIL, and hireCoordinator and fireCoordinator behind the board.
+ * scripts/simCfbStaff.mjs is the shape its harness should take.
  */
 
 /* ---------------------------------------------------------------- staff */
