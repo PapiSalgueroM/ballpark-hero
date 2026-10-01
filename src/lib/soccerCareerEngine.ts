@@ -40,6 +40,12 @@ import { receiveInboxTexts, answerInboxMessage } from "./careerInbox";
 import type { InboxSport } from "./careerInbox";
 import { rollRivalryEvent, forcedRetirementEvent, applyRivalryEvent as applyRivalryEventShared } from "./careerRivalryEvents";
 import type { RivalryEventDef } from "./careerRivalryEvents";
+/* Round 796: the four rival dilemmas' gate and resolution moved into
+   careerRivalryChoices.ts, the engine the NFL career's rival choices run on.
+   The dilemmas stay four entries in MORAL_DILEMMAS, in the same places, so
+   the trigger draws exactly what it always drew. */
+import { rivalryChoiceOpen, resolveRivalryChoice } from "./careerRivalryChoices";
+import type { RivalryChoiceDef } from "./careerRivalryChoices";
 import { intlName, familyFor } from './intlNames';
 /* Round 258: display only. soccerCurrency imports nothing, so there is no
    cycle, and every amount inside the engine stays in euros forever. */
@@ -1132,6 +1138,172 @@ function answerLegacyText(s: CareerState, msgId: string, choiceIdx: number): Car
   return s;
 }
 
+/* ─── Round 796: the four rival dilemmas, on the shared choice engine ───
+   The 2026-08-05 rivalry expansion's four interactive beats, word for word
+   and number for number, written as careerRivalryChoices.ts definitions so
+   the NFL career's rival choices run on the same engine. The gate is
+   rivalryChoiceOpen (a rival on the save who is still playing, plus each
+   beat's own condition below) and the mutation is each option's apply, with
+   the same random draws in the same order. scripts/simCareerInboxBeats.mjs
+   replays a fixture recorded before the move and requires every outcome to
+   match. */
+export const SOCCER_RIVALRY_CHOICES: RivalryChoiceDef<CareerState, RivalPlayer>[] = [
+  {
+    id: "rival_club_offer",
+    emoji: "📞",
+    title: "THE ENEMY CALLS",
+    description: "Your great rival's club triggers your release clause. Their sporting director says one sentence: come win everything next to him instead of against him. Your fans are already burning shirts preemptively.",
+    when: s => s.age >= 24,
+    choices: [
+      {
+        label: "Join forces with your rival", emoji: "🤝", consequence: "The most talked-about transfer of the decade. Signing bonus 10M, old fans furious",
+        apply: (s, r) => {
+          s.netWorth = Math.round((s.netWorth + 10) * 100) / 100;
+          s.popularity = clamp(s.popularity - 10, 0, 100);
+          s.morale = clamp(s.morale + 5, 0, 100);
+          s.rivalryIntensity = clamp((s.rivalryIntensity ?? 0) - 30, 0, 100);
+          return `📞 You answered the enemy's call. 10M signing bonus banked, and the football world lost its mind. Old fans are furious, ${r?.name ?? "your rival"} posted a handshake emoji.`;
+        },
+      },
+      {
+        label: "Leak the offer and refuse", emoji: "📰", consequence: "Your fans crown you a legend of loyalty. Popularity +12, integrity +5",
+        apply: s => {
+          s.popularity = clamp(s.popularity + 12, 0, 100);
+          s.integrityBonus += 5;
+          s.rivalryIntensity = clamp((s.rivalryIntensity ?? 0) + 10, 0, 100);
+          return "📰 The leaked offer made the front page. Your fans crowned you a legend of loyalty. Popularity +12.";
+        },
+      },
+      {
+        label: "Refuse quietly", emoji: "🤐", consequence: "Nobody ever knows how close it came",
+        apply: () => "🤐 You refused quietly. Somewhere in a drawer sits the most explosive transfer that never happened.",
+      },
+    ],
+  },
+  {
+    id: "rival_bad_tackle",
+    emoji: "🦵",
+    title: "THE TACKLE",
+    description: "Your rival went through your ankle in the derby, studs up, no ball. The referee gave a yellow. Your physio says you are fine. Your teammates want blood. The rematch is in May.",
+    when: () => true,
+    choices: [
+      {
+        label: "Plot revenge for the rematch", emoji: "😈", consequence: "The feud goes nuclear", risk: "30% chance you see red doing it: popularity and morale -5",
+        apply: (s, r, rng) => {
+          s.rivalryIntensity = clamp((s.rivalryIntensity ?? 0) + 25, 0, 100);
+          if (rng() < 0.3) {
+            s.popularity = clamp(s.popularity - 5, 0, 100);
+            s.morale = clamp(s.morale - 5, 0, 100);
+            return `🟥 Revenge tasted sweet for four seconds, then the red card came out. Popularity and morale -5, and ${r?.name ?? "your rival"} smiled the whole time.`;
+          }
+          s.morale = clamp(s.morale + 8, 0, 100);
+          return `😈 You got him back, clean enough to escape a card. The derby now has its own documentary crew.`;
+        },
+      },
+      {
+        label: "Accept his apology publicly", emoji: "🕊️", consequence: "Integrity +8, popularity +5, the feud cools",
+        apply: s => {
+          s.integrityBonus += 8;
+          s.popularity = clamp(s.popularity + 5, 0, 100);
+          s.rivalryIntensity = clamp((s.rivalryIntensity ?? 0) - 15, 0, 100);
+          return "🕊️ You accepted the apology on camera. The adults in the room won today. Integrity +8.";
+        },
+      },
+      {
+        label: "Say nothing. Score twice in May.", emoji: "🥶", consequence: "+1 Shooting next season, ice in the veins",
+        apply: s => {
+          s.statBoostNextSeason = { ...s.statBoostNextSeason, shooting: (s.statBoostNextSeason.shooting || 0) + 1 };
+          s.rivalryIntensity = clamp((s.rivalryIntensity ?? 0) + 10, 0, 100);
+          return "🥶 You said nothing. May is circled on your calendar in red ink. +1 Shooting next season.";
+        },
+      },
+    ],
+  },
+  {
+    id: "goat_debate_show",
+    emoji: "🎤",
+    title: "THE DEBATE SHOW",
+    description: "A global sports network offers 2M for one live hour: you versus a panel of pundits arguing that your rival is better. No script, no edits, one microphone.",
+    when: s => s.overall >= 85,
+    choices: [
+      {
+        label: "Go on and cook them", emoji: "🔥", consequence: "2M fee", risk: "35% chance a clip goes viral badly: popularity -8",
+        apply: (s, _r, rng) => {
+          s.netWorth = Math.round((s.netWorth + 2) * 100) / 100;
+          if (rng() < 0.35) {
+            s.popularity = clamp(s.popularity - 8, 0, 100);
+            return "🎤 You went on the debate show and one heated clip went viral for the wrong reasons. 2M banked, popularity -8.";
+          }
+          s.popularity = clamp(s.popularity + 6, 0, 100);
+          return "🔥 You cooked the whole panel live on air. 2M banked and the clip is a permanent argument-ender. Popularity +6.";
+        },
+      },
+      {
+        label: "Send a highlight reel instead", emoji: "📼", consequence: "The reel does the talking. Popularity +8",
+        apply: s => {
+          s.popularity = clamp(s.popularity + 8, 0, 100);
+          return "📼 You sent a four-minute highlight reel with no caption. It out-rated the show. Popularity +8.";
+        },
+      },
+      {
+        label: "Decline. Legends do not debate.", emoji: "😎", consequence: "Integrity +5, the mystique grows",
+        apply: s => {
+          s.integrityBonus += 5;
+          return "😎 You declined. Legends do not debate. The mystique compounds like interest.";
+        },
+      },
+    ],
+  },
+  {
+    id: "rival_charity_match",
+    emoji: "💛",
+    title: "TRUCE FOR ONE NIGHT",
+    description: "Your rival's foundation asks you to co-headline a charity match for children's hospitals. Same pitch, same team, one night only. The photo of you two in the same shirt would break the internet.",
+    when: () => true,
+    choices: [
+      {
+        label: "Play, and split the donation", emoji: "🤝", consequence: "1M donated, popularity +10, integrity +8, the feud softens",
+        apply: (s, r) => {
+          s.netWorth = Math.round((s.netWorth - 1) * 100) / 100;
+          s.popularity = clamp(s.popularity + 10, 0, 100);
+          s.integrityBonus += 8;
+          s.rivalryIntensity = clamp((s.rivalryIntensity ?? 0) - 20, 0, 100);
+          return `💛 One night, one shirt, one cause. You and ${r?.name ?? "your rival"} raised millions for children's hospitals. The feud took the night off.`;
+        },
+      },
+      {
+        label: "Play, but start a playful nutmeg war", emoji: "😉", consequence: "The clips are legendary. Popularity +12",
+        apply: (s, r) => {
+          s.popularity = clamp(s.popularity + 12, 0, 100);
+          return `😉 The charity match turned into a nutmeg war with ${r?.name ?? "your rival"}. The kids loved it, the internet melted. Popularity +12.`;
+        },
+      },
+      {
+        label: "Send a check, skip the match", emoji: "💸", consequence: "1M donated quietly, integrity +3",
+        apply: s => {
+          s.netWorth = Math.round((s.netWorth - 1) * 100) / 100;
+          s.integrityBonus += 3;
+          return "💸 You sent the donation and skipped the cameras. The quiet kind of good. Integrity +3.";
+        },
+      },
+    ],
+  },
+];
+
+/** A rival choice as the dilemma card soccer has always drawn it. */
+function rivalChoiceDilemma(id: string): MoralDilemma {
+  const d = SOCCER_RIVALRY_CHOICES.find(c => c.id === id)!;
+  return {
+    id: d.id,
+    emoji: d.emoji,
+    title: d.title,
+    description: typeof d.description === "string" ? d.description : "",
+    choices: d.choices.map(c => (c.risk === undefined
+      ? { label: c.label, emoji: c.emoji, consequence: c.consequence }
+      : { label: c.label, emoji: c.emoji, consequence: c.consequence, risk: c.risk })),
+  };
+}
+
 export const MORAL_DILEMMAS: MoralDilemma[] = [
   {
     id: "match_fixing",
@@ -1397,51 +1569,13 @@ export const MORAL_DILEMMAS: MoralDilemma[] = [
       { label: "Blame a lookalike", emoji: "🥸", consequence: "Nobody believes you, popularity -5, it becomes a meme" },
     ],
   },
-  // 2026-08-05 rivalry expansion: the feud gets interactive
-  {
-    id: "rival_club_offer",
-    emoji: "📞",
-    title: "THE ENEMY CALLS",
-    description: "Your great rival's club triggers your release clause. Their sporting director says one sentence: come win everything next to him instead of against him. Your fans are already burning shirts preemptively.",
-    choices: [
-      { label: "Join forces with your rival", emoji: "🤝", consequence: "The most talked-about transfer of the decade. Signing bonus 10M, old fans furious" },
-      { label: "Leak the offer and refuse", emoji: "📰", consequence: "Your fans crown you a legend of loyalty. Popularity +12, integrity +5" },
-      { label: "Refuse quietly", emoji: "🤐", consequence: "Nobody ever knows how close it came" },
-    ],
-  },
-  {
-    id: "rival_bad_tackle",
-    emoji: "🦵",
-    title: "THE TACKLE",
-    description: "Your rival went through your ankle in the derby, studs up, no ball. The referee gave a yellow. Your physio says you are fine. Your teammates want blood. The rematch is in May.",
-    choices: [
-      { label: "Plot revenge for the rematch", emoji: "😈", consequence: "The feud goes nuclear", risk: "30% chance you see red doing it: popularity and morale -5" },
-      { label: "Accept his apology publicly", emoji: "🕊️", consequence: "Integrity +8, popularity +5, the feud cools" },
-      { label: "Say nothing. Score twice in May.", emoji: "🥶", consequence: "+1 Shooting next season, ice in the veins" },
-    ],
-  },
-  {
-    id: "goat_debate_show",
-    emoji: "🎤",
-    title: "THE DEBATE SHOW",
-    description: "A global sports network offers 2M for one live hour: you versus a panel of pundits arguing that your rival is better. No script, no edits, one microphone.",
-    choices: [
-      { label: "Go on and cook them", emoji: "🔥", consequence: "2M fee", risk: "35% chance a clip goes viral badly: popularity -8" },
-      { label: "Send a highlight reel instead", emoji: "📼", consequence: "The reel does the talking. Popularity +8" },
-      { label: "Decline. Legends do not debate.", emoji: "😎", consequence: "Integrity +5, the mystique grows" },
-    ],
-  },
-  {
-    id: "rival_charity_match",
-    emoji: "💛",
-    title: "TRUCE FOR ONE NIGHT",
-    description: "Your rival's foundation asks you to co-headline a charity match for children's hospitals. Same pitch, same team, one night only. The photo of you two in the same shirt would break the internet.",
-    choices: [
-      { label: "Play, and split the donation", emoji: "🤝", consequence: "1M donated, popularity +10, integrity +8, the feud softens" },
-      { label: "Play, but start a playful nutmeg war", emoji: "😉", consequence: "The clips are legendary. Popularity +12" },
-      { label: "Send a check, skip the match", emoji: "💸", consequence: "1M donated quietly, integrity +3" },
-    ],
-  },
+  // 2026-08-05 rivalry expansion: the feud gets interactive. Round 796: the
+  // four live in SOCCER_RIVALRY_CHOICES above and are drawn from there, in
+  // the same four places in this list.
+  rivalChoiceDilemma("rival_club_offer"),
+  rivalChoiceDilemma("rival_bad_tackle"),
+  rivalChoiceDilemma("goat_debate_show"),
+  rivalChoiceDilemma("rival_charity_match"),
 ];
 
 /**
@@ -1943,83 +2077,16 @@ export function applyMoralDilemmaChoice(prev: CareerState, choiceIndex: number):
       }
       break;
     }
-    case "rival_club_offer": {
-      const rivalName = s.rival?.name ?? "your rival";
-      if (choiceIndex === 0) {
-        s.netWorth = Math.round((s.netWorth + 10) * 100) / 100;
-        s.popularity = clamp(s.popularity - 10, 0, 100);
-        s.morale = clamp(s.morale + 5, 0, 100);
-        s.rivalryIntensity = clamp((s.rivalryIntensity ?? 0) - 30, 0, 100);
-        s.events = [...s.events, `📞 You answered the enemy's call. 10M signing bonus banked, and the football world lost its mind. Old fans are furious, ${rivalName} posted a handshake emoji.`];
-      } else if (choiceIndex === 1) {
-        s.popularity = clamp(s.popularity + 12, 0, 100);
-        s.integrityBonus += 5;
-        s.rivalryIntensity = clamp((s.rivalryIntensity ?? 0) + 10, 0, 100);
-        s.events = [...s.events, "📰 The leaked offer made the front page. Your fans crowned you a legend of loyalty. Popularity +12."];
-      } else {
-        s.events = [...s.events, "🤐 You refused quietly. Somewhere in a drawer sits the most explosive transfer that never happened."];
-      }
-      break;
-    }
-    case "rival_bad_tackle": {
-      const rivalName = s.rival?.name ?? "your rival";
-      if (choiceIndex === 0) {
-        s.rivalryIntensity = clamp((s.rivalryIntensity ?? 0) + 25, 0, 100);
-        if (Math.random() < 0.3) {
-          s.popularity = clamp(s.popularity - 5, 0, 100);
-          s.morale = clamp(s.morale - 5, 0, 100);
-          s.events = [...s.events, `🟥 Revenge tasted sweet for four seconds, then the red card came out. Popularity and morale -5, and ${rivalName} smiled the whole time.`];
-        } else {
-          s.morale = clamp(s.morale + 8, 0, 100);
-          s.events = [...s.events, `😈 You got him back, clean enough to escape a card. The derby now has its own documentary crew.`];
-        }
-      } else if (choiceIndex === 1) {
-        s.integrityBonus += 8;
-        s.popularity = clamp(s.popularity + 5, 0, 100);
-        s.rivalryIntensity = clamp((s.rivalryIntensity ?? 0) - 15, 0, 100);
-        s.events = [...s.events, "🕊️ You accepted the apology on camera. The adults in the room won today. Integrity +8."];
-      } else {
-        s.statBoostNextSeason = { ...s.statBoostNextSeason, shooting: (s.statBoostNextSeason.shooting || 0) + 1 };
-        s.rivalryIntensity = clamp((s.rivalryIntensity ?? 0) + 10, 0, 100);
-        s.events = [...s.events, "🥶 You said nothing. May is circled on your calendar in red ink. +1 Shooting next season."];
-      }
-      break;
-    }
-    case "goat_debate_show": {
-      if (choiceIndex === 0) {
-        s.netWorth = Math.round((s.netWorth + 2) * 100) / 100;
-        if (Math.random() < 0.35) {
-          s.popularity = clamp(s.popularity - 8, 0, 100);
-          s.events = [...s.events, "🎤 You went on the debate show and one heated clip went viral for the wrong reasons. 2M banked, popularity -8."];
-        } else {
-          s.popularity = clamp(s.popularity + 6, 0, 100);
-          s.events = [...s.events, "🔥 You cooked the whole panel live on air. 2M banked and the clip is a permanent argument-ender. Popularity +6."];
-        }
-      } else if (choiceIndex === 1) {
-        s.popularity = clamp(s.popularity + 8, 0, 100);
-        s.events = [...s.events, "📼 You sent a four-minute highlight reel with no caption. It out-rated the show. Popularity +8."];
-      } else {
-        s.integrityBonus += 5;
-        s.events = [...s.events, "😎 You declined. Legends do not debate. The mystique compounds like interest."];
-      }
-      break;
-    }
+    case "rival_club_offer":
+    case "rival_bad_tackle":
+    case "goat_debate_show":
     case "rival_charity_match": {
-      const rivalName = s.rival?.name ?? "your rival";
-      if (choiceIndex === 0) {
-        s.netWorth = Math.round((s.netWorth - 1) * 100) / 100;
-        s.popularity = clamp(s.popularity + 10, 0, 100);
-        s.integrityBonus += 8;
-        s.rivalryIntensity = clamp((s.rivalryIntensity ?? 0) - 20, 0, 100);
-        s.events = [...s.events, `💛 One night, one shirt, one cause. You and ${rivalName} raised millions for children's hospitals. The feud took the night off.`];
-      } else if (choiceIndex === 1) {
-        s.popularity = clamp(s.popularity + 12, 0, 100);
-        s.events = [...s.events, `😉 The charity match turned into a nutmeg war with ${rivalName}. The kids loved it, the internet melted. Popularity +12.`];
-      } else {
-        s.netWorth = Math.round((s.netWorth - 1) * 100) / 100;
-        s.integrityBonus += 3;
-        s.events = [...s.events, "💸 You sent the donation and skipped the cameras. The quiet kind of good. Integrity +3."];
-      }
+      /* Round 796: careerRivalryChoices.ts runs the option. Any index past
+         the second one lands on the third, the way the old if/else chain
+         always fell through to its last branch. */
+      const idx = choiceIndex === 0 || choiceIndex === 1 ? choiceIndex : 2;
+      const line = resolveRivalryChoice(s, s.rival, dilemma.id, idx, SOCCER_RIVALRY_CHOICES, Math.random);
+      if (line !== null) s.events = [...s.events, line];
       break;
     }
   }
@@ -2095,9 +2162,11 @@ function tryTriggerMoralDilemma(s: CareerState): boolean {
     if (d.id === "valet_crash" && !s.purchasedItems.some(i => i === "hypercar" || i === "sports_car" || i === "supercar_collection")) return false;
     if (d.id === "hometown_statue" && s.popularity < 70) return false;
     if (d.id === "biscuit_gate" && !s.sponsorDeal && s.sponsorshipIncome <= 0) return false;
-    if ((d.id === "rival_club_offer" || d.id === "rival_bad_tackle" || d.id === "goat_debate_show" || d.id === "rival_charity_match") && (!s.rival || s.rival.retired)) return false;
-    if (d.id === "rival_club_offer" && s.age < 24) return false;
-    if (d.id === "goat_debate_show" && s.overall < 85) return false;
+    /* Round 796: the four rival dilemmas gate through the shared engine: a
+       rival on the save who is still playing, plus each one's own condition
+       (24 or older for the enemy's call, 85 overall for the debate show). */
+    const rivalChoice = SOCCER_RIVALRY_CHOICES.find(c => c.id === d.id);
+    if (rivalChoice && !rivalryChoiceOpen(s, s.rival, rivalChoice)) return false;
     return true;
   });
   if (eligible.length === 0) return false;

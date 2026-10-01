@@ -383,6 +383,18 @@ export const FOOTBALL_CONTENT: GameContentMap = {
               "Collect badges in the Trophy Case: 25 of them, from a first ring and Rookie of the Year to 10,000 passing yards, a 20 sack season and $100M to your name, each lit the moment the facts of your career say so.",
             ],
           },
+          {
+            heading: "Answering your phone on the football calendar",
+            items: [
+              "Answer your phone. Texts from your agent, the head coach, the GM, a teammate or your mom land on the beats of the football year: draft night, camp, the bye, the trade deadline, the playoffs if you get there, the offseason, and the summer before the last year of your deal. Every text says which beat and which year it came in on, and how you answer moves your karma, morale, fanbase or bank.",
+            ],
+          },
+          {
+            heading: "Making the call when your rival forces one",
+            items: [
+              "Some seasons your rival puts a decision in front of you instead of a story: a late hit you can answer or let go, a debate show offering real money, a youth camp his foundation wants you to co-host. Every button prints exactly what it moves, and a gamble prints its odds.",
+            ],
+          },
         ],
       },
     ],
@@ -432,6 +444,13 @@ export const FOOTBALL_CONTENT: GameContentMap = {
         ],
       },
       {
+        heading: "The phone's calendar and your rival's choices",
+        items: [
+          "Texts only arrive on beats your season really had. No playoff texts in a year you went home in January, no contract year texts with years left on the deal, and draft night's text lands before you play a down. One text a beat, up to three a season, fewer while old ones sit unanswered, and the same text never comes twice in a career.",
+          "A season with no rival story has a 45% shot at a rival choice instead, never both in one year, and you see every choice once before any of them comes round again. A button does exactly what it says: morale, fanbase, net worth, karma or the heat of the feud. Morale carries straight into how well you play next season.",
+        ],
+      },
+      {
         heading: "Playing inside the 2005 sealed world",
         items: [
           "The 2005 throwback is a sealed world: all 32 franchises exactly as they stood that season, verified against the real records, and every draft, trade and signing stays inside it. Contracts pay 2005 money, about a third of today's.",
@@ -449,6 +468,12 @@ export const FOOTBALL_CONTENT: GameContentMap = {
         heading: "Playing through a knee injury to a ring",
         paragraphs: [
           "At 28 the knee starts talking. You play through it, lose four games, and demand a trade. The ring comes at 31, you retire at 35 with one MVP, and the verdict reads Hall of Famer.",
+        ],
+      },
+      {
+        heading: "Answering your rival's late hit",
+        paragraphs: [
+          "Your rival drills you a second after the whistle and the card asks what you do about it. Settle it next time heats the feud and usually pays Morale +8, but it carries a 30% chance you draw the flag yourself (Morale -5, Fanbase -5, Net worth -$100k). Shake it off on camera is Fanbase +5, Karma +5 and the feud cools. You pick say nothing and watch the film: Morale +6, the feud heats up, and those six points ride into next season's stat line.",
         ],
       },
     ],

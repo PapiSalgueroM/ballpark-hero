@@ -1,5 +1,59 @@
 # Project state
 
+## LIVE 2026-10-01: Release N (796, the NFL career inbox and rival choices in the four US careers), main `b4f20218`
+
+Assembled by the desktop Claude lane in the gate clone (`release-n`). **douknowball.com is serving it:** deployment
+`5b7815cd`, called only after `get_project` showed `latest_commit_sha` `b4f20218`; the live entry moved from
+`index-LLYzwt9z.js` to `index-DIQbV2hM.js`. Proof by content: the x-deployment-id header read 5b7815cd 75 seconds after the deploy; the four career pages answer 200 and each guide names the rival choices; /whats-new carries the inbox line.
+
+- **796, from the owner's list ("bring the Soccer Career depth to the NFL career, then the other US careers").**
+  Soccer Career's inbox and rival choice logic were LIFTED into shared modules behind a sport descriptor, not copied:
+  Soccer Career now runs its four rival dilemmas through the shared module, and its inbox and dilemma output for a
+  seed is byte identical to a fixture recorded before any code moved (the reviewer re-recorded it against the
+  pre-lift commit and drove 60 careers end to end: the whole save hash equals main's at every step). The NFL career
+  has a calendar inbox (about two texts a season on the football calendar's own beats: the draft, camp, the bye,
+  the trade deadline, the playoffs, a contract year), every sender a role, and live rival choices with the generated
+  rival Round 469 gave it. NBA, MLB and NHL have the rival choices (six each, in their own sport's words); their
+  calendar inboxes are not built, and the hook point is the `beats` argument of `receiveInboxTextsFor`. Karma, which
+  the choice buttons print, is now a fourth meter on the My Player screen of all four boards.
+- **What the review changed.** Major: the "every button does what it says" check watched five meters and only
+  that a button's words contained the promise, so an option could quietly cut health or a button could promise
+  morale it never paid, with every gate green; the harness now compares each card's words with what 2,000 draws
+  really did on a real save of each sport and fails on any field outside the meters (controls `sidestat`,
+  `overpromise`). Then two leftovers closed on the lead's ask: the inbox and the choice roll draw from their own
+  generator keyed to the save (`src/lib/keyedRng.ts`), never from the season's stream, so a text can no longer
+  reshuffle a career (20 careers played with the inbox open and shut match line for line; control `inboxstream`);
+  and a player retiring that summer gets no text about a season to come (120 careers, control `aheadretire`).
+  `simCareerInboxBeats` carries 17 controls. `simAwards` for the NFL differs from the old main only because main's
+  own inbox drew from the season's stream; with that one call taken off the stream the two are byte identical.
+- **Found on the way and claimed as Round 819:** Soccer Career's moral dilemmas are unreachable in real play after
+  the social media screen is dismissed (60 careers, 943 social media screens, 0 dilemmas). Being reproduced and
+  fixed on its own branch.
+- **Left for later:** the calendar inbox for NBA, MLB and NHL; their non calendar inboxes still carry two or three
+  forward looking texts that a retiring player can get.
+
+**Gates.** Type gate 0. `simCareerInboxBeats` (17 controls), `simCareerParity`, `simCareerInbox`,
+`simCareerRivalryEvents`, `simInventedNames`, `simNoRivalNames` green on the release tree; 19 snapshot and release
+fences green after the four career pages and What's New were redrawn alone; `sweepWeight` green with the NFL career
+budget at 406K on 403K measured; `playRenderStability` green on the five redrawn pages. Builder, reviewer and
+fixer ran on Opus; the lead merged, built and gated here.
+
+## ACCEPTED 2026-10-01: CFB recruiting filters (818)
+
+CFB Dynasty now filters both recruiting pools by position and minimum stars,
+with counts, Reset and clear empty states. Portal stars are visible, names wrap
+and controls fit touch. Original signing, budgets, roster classes, coordinator
+controls and saves hold. Eight tests, two effective controls, independent review,
+the frozen production gates and two final App contexts pass. Filter actions keep
+scroll Y 180 and write no saves or RNG. Exact evidence is on WORKBOARD.
+
+818 awaits the next publish. 815-817 are confirmed live in Release M by its entry,
+deployment header and compiled Tennis/CBB feature strings. The earlier Release L
+crawl passed 170/170; M received a focused sample. Google indexing/AdSense account
+decisions remain unconfirmed. D92's targeting gap is closed in code; region,
+academics, interest and personality remain. Claude keeps 819/820 and all other
+reservations. No active Codex claim remains. Next free round: 821.
+
 ## LIVE 2026-10-01: Release M (700, the seoMeta split), main `efe1a8cd`
 
 Assembled by the desktop Claude lane in the gate clone (`release-m`) and shipped alone, because the round

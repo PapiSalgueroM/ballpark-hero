@@ -37,7 +37,8 @@ import { nhlMoneySeasonTick } from './nhlCareerMoney';
 import type { InboxMessage } from './careerInbox';
 import { receiveNhlInboxTexts } from './nhlCareerInbox';
 import type { RivalryEvent } from './careerRivalryEvents';
-import { nhlRivalryTick } from './nhlCareerRivalryEvents';
+import { nhlRivalryTick, nhlRivalryChoiceTick } from './nhlCareerRivalryEvents';
+import type { RivalryChoiceCard } from './careerRivalryChoices';
 /* Round 422: the share of gross pay that actually reaches the bank, after tax,
    agent and living. It was already the number this file used to turn career
    earnings into net worth; it is named here so the yearly banking and the
@@ -178,6 +179,12 @@ export interface NhlCareerState {
   pendingRivalryEvent?: RivalryEvent | null;
   lastRivalryEventId?: number | null;
   rivalryIntensity?: number;
+  /** Round 796: a rival choice waiting on an answer (careerRivalryChoices.ts,
+      bound in nhlCareerRivalryEvents.ts), and every one this career has
+      seen. Absent on a pre-796 save, which reads as nothing pending and
+      nothing seen. */
+  pendingRivalryChoice?: RivalryChoiceCard | null;
+  rivalryChoicesSeen?: string[];
 }
 
 export interface NhlCareerEvent {
@@ -556,6 +563,10 @@ export function simNhlSeason(
      back stays the pure season sim it always was. */
   const rivalryEvent = nhlRivalryTick(c, rng);
   if (rivalryEvent) c.pendingRivalryEvent = rivalryEvent;
+  /* Round 796: a season the beat roll left empty can put a rival choice in
+     front of you instead, answered on the board, never applied here. It
+     rolls on its own seasonChoiceRng, never this season's stream. */
+  else nhlRivalryChoiceTick(c);
   c.seasons.push(line);
   return { line, notes };
 }

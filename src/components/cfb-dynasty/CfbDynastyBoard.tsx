@@ -65,6 +65,8 @@ export default function CfbDynastyBoard() {
   const [postseason, setPostseason] = useState<Postseason | null>(null);
   const [recruits, setRecruits] = useState<CfbRecruit[] | null>(null);
   const [portal, setPortal] = useState<CfbRecruit[] | null>(null);
+  const [positionFilter, setPositionFilter] = useState('');
+  const [starFilter, setStarFilter] = useState('');
   const [wonNow, setWonNow] = useState(false);
   /* Round 728: which chair's market is open in the hiring window, one at a
      time so the offseason screen stays short. */
@@ -369,6 +371,9 @@ export default function CfbDynastyBoard() {
   }
 
   if (phase === 'recruit' && (recruits || portal)) {
+    const matchesFilters = (r: CfbRecruit) => (!positionFilter || r.pos === positionFilter) && (!starFilter || r.stars >= Number(starFilter));
+    const visibleRecruits = (recruits ?? []).filter(matchesFilters);
+    const visiblePortal = (portal ?? []).filter(matchesFilters);
     return (
       <div className="space-y-4">
         <CelebrationStyles />
@@ -377,6 +382,25 @@ export default function CfbDynastyBoard() {
           <p className="mt-1 text-xs text-muted-foreground">
             NIL budget: <b className="text-gold">{st.nil}</b> points. High school grades carry scouting error; portal players have real tape.
           </p>
+        </div>
+        <div className="flex flex-wrap items-end gap-2 rounded-xl border border-border bg-card p-3">
+          <label className="min-w-32 flex-1 text-[11px] font-bold text-muted-foreground">
+            Position
+            <select value={positionFilter} onChange={e => setPositionFilter(e.target.value)} className="mt-1 block min-h-11 w-full rounded-lg border border-border bg-background px-2 text-xs text-foreground focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary">
+              <option value="">All positions</option>
+              {(['QB', 'RB', 'WR', 'TE', 'OL', 'DL', 'LB', 'DB', 'K'] as const).map(pos => <option key={pos} value={pos}>{pos}</option>)}
+            </select>
+          </label>
+          <label className="min-w-32 flex-1 text-[11px] font-bold text-muted-foreground">
+            Minimum stars
+            <select value={starFilter} onChange={e => setStarFilter(e.target.value)} className="mt-1 block min-h-11 w-full rounded-lg border border-border bg-background px-2 text-xs text-foreground focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary">
+              <option value="">Any stars</option>
+              {[2, 3, 4, 5].map(stars => <option key={stars} value={stars}>{stars}+ stars</option>)}
+            </select>
+          </label>
+          <button onClick={() => { setPositionFilter(''); setStarFilter(''); }} disabled={!positionFilter && !starFilter} className="min-h-11 rounded-lg border border-border px-3 text-xs font-bold text-foreground hover:bg-secondary disabled:opacity-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary">
+            Reset filters
+          </button>
         </div>
         {feed.length > 0 && (
           <div className="overflow-hidden rounded-2xl border border-border bg-card p-3 text-xs text-muted-foreground">
@@ -435,11 +459,13 @@ export default function CfbDynastyBoard() {
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
           <div>
             <p className="mb-1 text-center text-[10px] font-bold uppercase tracking-wider text-muted-foreground">High school board</p>
-            <div className="max-h-72 space-y-1 overflow-y-auto">
-              {(recruits ?? []).map(r => (
-                <button key={r.id} onClick={() => sign(r, false)} className="flex w-full items-center justify-between rounded-lg border border-border bg-card px-2.5 py-1.5 text-left text-xs hover:border-primary/60">
+            <p role="status" className="mb-2 text-center text-[11px] text-muted-foreground">Showing {visibleRecruits.length} of {recruits?.length ?? 0} high school recruits</p>
+            <div className="h-72 space-y-1 overflow-y-auto">
+              {visibleRecruits.length === 0 && <p className="rounded-lg bg-secondary p-3 text-center text-xs text-muted-foreground">{recruits?.length ? 'No high school recruits match those filters.' : 'No high school recruits left in this class.'}</p>}
+              {visibleRecruits.map(r => (
+                <button key={r.id} onClick={() => sign(r, false)} className="flex min-h-11 w-full items-center justify-between rounded-lg border border-border bg-card px-2.5 py-1.5 text-left text-xs hover:border-primary/60 focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary">
                   <span className="min-w-0">
-                    <span className="block truncate font-bold text-foreground">{'⭐'.repeat(r.stars)} {r.name}</span>
+                    <span className="block font-bold text-foreground [overflow-wrap:anywhere]">{'⭐'.repeat(r.stars)} {r.name}</span>
                     <span className="block text-[10px] text-muted-foreground">{r.pos} · scouted {r.grade} · asks {r.nilAsk} NIL</span>
                   </span>
                   <span className="ml-2 shrink-0 rounded-full bg-primary px-2.5 py-0.5 text-[10px] font-bold text-primary-foreground">Sign</span>
@@ -449,12 +475,14 @@ export default function CfbDynastyBoard() {
           </div>
           <div>
             <p className="mb-1 text-center text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Transfer portal</p>
-            <div className="max-h-72 space-y-1 overflow-y-auto">
-              {(portal ?? []).map(r => (
-                <button key={r.id} onClick={() => sign(r, true)} className="flex w-full items-center justify-between rounded-lg border border-border bg-card px-2.5 py-1.5 text-left text-xs hover:border-gold/60">
+            <p role="status" className="mb-2 text-center text-[11px] text-muted-foreground">Showing {visiblePortal.length} of {portal?.length ?? 0} portal players</p>
+            <div className="h-72 space-y-1 overflow-y-auto">
+              {visiblePortal.length === 0 && <p className="rounded-lg bg-secondary p-3 text-center text-xs text-muted-foreground">{portal?.length ? 'No portal players match those filters.' : 'No portal players left in this class.'}</p>}
+              {visiblePortal.map(r => (
+                <button key={r.id} onClick={() => sign(r, true)} className="flex min-h-11 w-full items-center justify-between rounded-lg border border-border bg-card px-2.5 py-1.5 text-left text-xs hover:border-gold/60 focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary">
                   <span className="min-w-0">
-                    <span className="block truncate font-bold text-foreground">{r.name}</span>
-                    <span className="block text-[10px] text-muted-foreground">{r.pos} · rated {r.grade} · asks {r.nilAsk} NIL</span>
+                    <span className="block font-bold text-foreground [overflow-wrap:anywhere]">{r.name}</span>
+                    <span className="block text-[10px] text-muted-foreground">{r.pos} · {r.stars}⭐ · rated {r.grade} · asks {r.nilAsk} NIL</span>
                   </span>
                   <span className="ml-2 shrink-0 rounded-full border border-gold px-2.5 py-0.5 text-[10px] font-bold text-gold">Sign</span>
                 </button>
