@@ -1,3 +1,5 @@
+.board { overflow-anchor: none; }
+
 .clue { animation: clueOpen 420ms ease-out 1; }
 .reply { animation: replyReveal 420ms ease-out 1; }
 .result { animation: resultReveal 420ms ease-out 1; }
