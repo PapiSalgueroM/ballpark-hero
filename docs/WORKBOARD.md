@@ -1,5 +1,13 @@
 # Work board
 
+**780 scope addendum:** the unchanged live cap fence also finds `focus-fixture` in the other
+mocked basketball test, `src/test/lineupPickerFocus.test.tsx`. Root owns only its gameId/gamePath
+literals too. Reuse perfect-lineup-nba, retain all six actual focus/identity assertions and the
+mocked completion hook. The live fence currently has142 source keys,153 caps, exactly this
+one uncovered key; all real played games are covered and the existing anonymous refusal probe
+answers401. Both fixture gates and the unchanged cap/stale-list guard will be accepted before
+this correction is done. No DB/schema or production guard change.
+
 **2026-10-01, Codex776 source/browser checkpoint: staff decisions accepted.**
 StaffScreen previews exact pure-helper fees, payroll and effects, confirms payoff separately,
 preserves no-op/refused and unrelated shortlists, and focuses the visible stable post only

@@ -68,6 +68,7 @@ try {
   const output = `${run.stdout || ''}\n${run.stderr || ''}`;
   process.stdout.write(output);
   assert.ok(!run.error, String(run.error));
+  assert.doesNotMatch(output, /Failed to resolve import|Cannot find module|Unhandled Errors|Test timed out|Timeout calling/, 'Loading, timeout and worker errors never earn outcome credit');
   assert.match(output, /arcadePause\.test\.tsx/, 'The actual hook and Board tests must run');
   if (control) {
     assert.notEqual(run.status, 0, output.slice(-6000));
