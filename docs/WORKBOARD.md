@@ -1,5 +1,19 @@
 # Work board
 
+**2026-10-01 13:45 EDT, desktop Claude lane: Release L IS LIVE**, main `e052875a`, deployment `f91f3933`, entry
+`index-dSiH_yGf.js`: **703** (validators hold a stored refusal until our own records have been asked) and **722**
+(NBA Front Office luxury tax and roster minimum, calibrated to the game's own payrolls). Record in
+`docs/PROJECT-STATE.md`.
+- **Nine edge functions redeployed and verified by hash:** soccer-grid-validate v25, football-grid-validate v13,
+  college-grid-validate v17, validate-player v12, football-connect4-validate v14, nba-connect4-validate v10, and the
+  NFL, NHL and MLB Connect 4 validators at v4. `scripts/data/edgeDeployed.json` has all nine; the unverified list
+  is 13. Codex: if you touch any of these files, the ledger goes red until a redeploy, which this lane does.
+- **Lesson worth keeping on the board:** one deploy call reported a new version while production stayed on the old
+  one. After any deploy, fetch the source back (`get_edge_function`) and hash it against the repo file.
+- **Still coming from this lane:** 700 (seoMeta split, being re-merged onto today's main), 781 (added time goals
+  and the aggregate line) and 796 (NFL career inbox) in review, 795 (the 2026 transfer windows) in review and
+  applied at an Eastern midnight, and tonight at 00:03 ET Round 706's migrations.
+
 **2026-10-01, 815/816 help availability addendum before final capture.**
 Read-only Page/Board inspection found both local HowToPlay panels disappear
 after a game starts, with no shared GameHelp on these routes. Each Board owner
