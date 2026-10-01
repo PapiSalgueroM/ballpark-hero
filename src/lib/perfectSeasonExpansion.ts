@@ -61,13 +61,6 @@ export function expectedWins(sport: ExpansionSport, overall: number): number {
   return curve[curve.length - 1][1];
 }
 
-/**
- * Season sim on the rebalanced curve. Same shape and flavor as the core
- * simulateSeason (deterministic seed, per-game booleans, light momentum so
- * the grid streaks) but the per-game win chance comes from the anchor
- * tables instead of the shared sigmoid. `overall` is the RAW drafted
- * overall, no NFL_OVERALL_ADJUST style offsets.
- */
 /** The per game win chance before momentum: the curve's expected wins spread
     over the season, clamped the way the sim has always clamped it. One
     function so the odds printed on the result card and the sim that produced
@@ -82,6 +75,13 @@ const WIN_MOMENTUM = 0.004;
 const LOSS_MOMENTUM = -0.006;
 const GAME_CAP = 0.988;
 
+/**
+ * Season sim on the rebalanced curve. Same shape and flavor as the core
+ * simulateSeason (deterministic seed, per-game booleans, light momentum so
+ * the grid streaks) but the per-game win chance comes from the anchor
+ * tables instead of the shared sigmoid. `overall` is the RAW drafted
+ * overall, no NFL_OVERALL_ADJUST style offsets.
+ */
 export function simulateSeasonFair(
   sport: ExpansionSport,
   overall: number,
@@ -116,8 +116,11 @@ export function simulateSeasonFair(
  * form below), 92 one in 33,000, 93 one in 8,600, 95 one in 615 and 99 one
  * in 5, while the live table rates only 238
  * of 18,150 player seasons at 95 or better and the median wheel stop's best
- * player is a 90. The page sold the perfect season and printed nothing about
- * that, so the odds are now computed here and shown on every result.
+ * player is a 90. The best six the whole wheel can build is a 98.52 and goes
+ * unbeaten one run in 9.4, but well played drafts average 87.8 and go 82-0
+ * about one run in 110,000. The page sold the perfect season and printed
+ * nothing about that, so the odds are now computed here and shown on every
+ * result.
  *
  * The only path to a perfect season is every game won, and after a win the
  * momentum term is always WIN_MOMENTUM, so the probability is exact:
@@ -154,10 +157,12 @@ export function perfectOddsLine(sport: ExpansionSport, overall: number): string 
   const ovr = Math.round(overall);
   const games = SEASON_GAMES[sport];
   const odds = perfectSeasonOdds(sport, ovr);
-  const record = `${games}-0`;
-  if (odds >= 1 / 20) return `At ${ovr} overall a ${record} season comes about ${formatOneIn(odds)}. You are in the conversation.`;
-  if (odds >= 1 / 1000) return `At ${ovr} overall a ${record} season comes about ${formatOneIn(odds)}. Rare, not impossible.`;
-  return `At ${ovr} overall a ${record} season comes about ${formatOneIn(odds)}. The chase is the win total; a 95 plus roster is where unbeaten starts to be a real shot.`;
+  /* "an 82-0", "an 18-0", "a 17-0": the article follows how the number is said. */
+  const article = /^(8|11$|18$)/.test(String(games)) ? 'an' : 'a';
+  const record = `${article} ${games}-0`;
+  if (odds >= 1 / 20) return `At ${ovr} overall ${record} season comes about ${formatOneIn(odds)}. You are in the conversation.`;
+  if (odds >= 1 / 1000) return `At ${ovr} overall ${record} season comes about ${formatOneIn(odds)}. Rare, not impossible.`;
+  return `At ${ovr} overall ${record} season comes about ${formatOneIn(odds)}. The chase is the win total; a 95 plus roster is where unbeaten starts to be a real shot.`;
 }
 
 // ---------------------------------------------------------------------------

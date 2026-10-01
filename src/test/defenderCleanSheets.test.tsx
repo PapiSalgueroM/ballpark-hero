@@ -99,7 +99,6 @@ function playSeasons(position: string, seed: number, proSeasons: number): Career
         case 'rivalry_event': s = E.dismissRivalryEvent(s, clubs); break;
         case 'ballon_dor': s = E.dismissBallonDor(s, clubs); break;
         case 'transfer_window': s = E.stayAtClub(s); break;
-        case 'contract_expiring': s = E.stayAtClub(s); break;
         default: throw new Error(`the test driver has no move for phase ${s.phase}`);
       }
     }

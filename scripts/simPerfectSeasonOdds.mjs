@@ -29,6 +29,21 @@
    one run in 500,000, and the one in 10,000 line the task set for "effectively
    zero" is crossed between 92 and 93 overall (closed form: 33,000 and 8,600).
 
+   THE BEST TEAM THE GAME OFFERS, measured 2026-10-01 through the page's own
+   adapter (fetchTeamSeasonIndex and fetchSquad over all 1,615 squads the live
+   table gives): the strongest six the whole wheel can build with distinct
+   names is Westbrook 99, Harden 98, Baylor 98, Antetokounmpo 99, Chamberlain
+   99 and LeBron 98 at sixth man, a 98.52 overall (CEILING below). Through the
+   real sim 21,352 of 200,000 seasons went 82-0 there, one in 9.4. Nobody gets
+   that team: it needs six specific stops out of 1,615. Well played runs
+   (200,000 drafts, six picks and two rerolls, the best eligible player at
+   every stop, reroll a stop whose best is under 88) average 87.8 overall, nine
+   in ten finish under 91.2, and 0.027 percent reach 95. Averaged over that
+   spread one run in about 110,000 goes 82-0, so 1,312 runs come up empty
+   98.8 percent of the time. At the well played median (87.55) the real sim
+   went unbeaten 0 times in 200,000 (closed form one in 383 million). The
+   reporter's 1,312 runs without one are the expected result, not bad luck.
+
    The fix is not a softer curve (the guide already states the 95 and 99 odds
    correctly) but honesty in the page itself: perfectSeasonOdds computes the
    exact chance from the same per game probability the sim uses, the result
@@ -37,15 +52,16 @@
    result card and the mode screen.
 
    Sections:
-     1. THE CLOSED FORM IS THE ENGINE. 200,000 seasons at 90, 95 and 99 through
-        the real sim; the unbeaten count must sit within five binomial standard
-        deviations of perfectSeasonOdds times N (at 90 the expectation is 0.4,
-        so the ceiling is 4). An unbeaten season is every game won, and the
+     1. THE CLOSED FORM IS THE ENGINE. 200,000 seasons at 90, 95, 99 and the
+        CEILING through the real sim; the unbeaten count must sit within five
+        binomial standard deviations of perfectSeasonOdds times N (at 90 the
+        expectation is 0.4, so the band tops out at 3.4). An unbeaten season is every game won, and the
         momentum term after a win is a constant, so the form is exact, not a
         fit; a sim change that the form does not follow goes red here.
      2. THE NUMBERS THE COPY PRINTS. At 95 the odds sit between one in 750 and
         one in 500 (measured one in 619), at 99 between one in 6 and one in 4,
-        at 90 under one in 100,000. The guide in src/data/gameContent still
+        at the CEILING between one in 11 and one in 8 (measured one in 9.4,
+        closed form 9.5), at 90 under one in 100,000. The guide in src/data/gameContent still
         carries "one run in 600" and "one in five", so the words and the maths
         agree, and perfectOddsLine and formatOneIn render the shapes the page
         shows. A curve change that moves the odds without moving the copy goes
@@ -57,7 +73,7 @@
    Negative controls (SIM_PS_ODDS_CONTROL=...), each a one line rewrite in a
    copy of the module that refuses to run if the line is not found exactly once:
      steep        the 95 anchor becomes 79 expected wins, so a 95 goes unbeaten
-                  about one run in 9. Section 2 goes red; section 1 stays green
+                  about one run in 15. Section 2 goes red; section 1 stays green
                   because the closed form follows the curve. This is the defect
                   class: odds that drift away from what the copy promises.
      nomomentum   the sim loses its streak term while the closed form keeps it.
@@ -79,7 +95,7 @@ const CONTROLS = {
   steep: {
     from: '[90, 69.5], [95, 75.5], [99, 80],',
     to: '[90, 69.5], [95, 79], [99, 80],',
-    note: 'the 95 anchor pays 79 expected wins, so a 95 goes unbeaten about one run in 9 while the copy still says one in 600',
+    note: 'the 95 anchor pays 79 expected wins, so a 95 goes unbeaten about one run in 15 while the copy still says one in 600',
     sections: [2],
   },
   nomomentum: {
@@ -129,10 +145,12 @@ let section = 0;
 const red = new Set();
 const fail = m => { failures += 1; red.add(section); console.error('  FAIL: ' + m); };
 const N = Number(process.argv[2] || 200000);
+/* The best six the whole wheel can build, measured 2026-10-01 (see the header). */
+const CEILING = 98.52;
 
 section = 1;
-console.log(`1) the closed form is the engine: ${N.toLocaleString('en-US')} seasons at 90, 95 and 99`);
-for (const ovr of [90, 95, 99]) {
+console.log(`1) the closed form is the engine: ${N.toLocaleString('en-US')} seasons at 90, 95, 99 and the ${CEILING} ceiling`);
+for (const ovr of [90, 95, 99, CEILING]) {
   let perfect = 0;
   let wins = 0;
   for (let i = 0; i < N; i++) {
@@ -156,9 +174,10 @@ console.log('2) the numbers the copy prints');
 {
   const at = o => exp.perfectSeasonOdds('nba', o);
   const oneIn = o => 1 / at(o);
-  console.log(`   odds: 90 one in ${Math.round(oneIn(90)).toLocaleString('en-US')}, 93 one in ${Math.round(oneIn(93)).toLocaleString('en-US')}, 95 one in ${Math.round(oneIn(95))}, 99 one in ${oneIn(99).toFixed(2)}`);
+  console.log(`   odds: 90 one in ${Math.round(oneIn(90)).toLocaleString('en-US')}, 93 one in ${Math.round(oneIn(93)).toLocaleString('en-US')}, 95 one in ${Math.round(oneIn(95))}, ceiling ${CEILING} one in ${oneIn(CEILING).toFixed(2)}, 99 one in ${oneIn(99).toFixed(2)}`);
   if (!(oneIn(95) >= 500 && oneIn(95) <= 750)) fail(`a 95 goes unbeaten one run in ${Math.round(oneIn(95))}; the copy says about one in 600 (band 500 to 750)`);
   if (!(oneIn(99) >= 4 && oneIn(99) <= 6)) fail(`a 99 goes unbeaten one run in ${oneIn(99).toFixed(2)}; the copy says about one in five (band 4 to 6)`);
+  if (!(oneIn(CEILING) >= 8 && oneIn(CEILING) <= 11)) fail(`the best team the wheel can build (${CEILING}) goes unbeaten one run in ${oneIn(CEILING).toFixed(2)}; measured one in 9.4 (band 8 to 11)`);
   if (!(oneIn(90) > 100000)) fail(`a 90 goes unbeaten one run in ${Math.round(oneIn(90))}; the honest line depends on that being over 100,000`);
   if (!(at(92) < 1 / 10000 && at(93) > 1 / 10000)) fail(`the one in 10,000 line should fall between 92 and 93 overall (92: one in ${Math.round(oneIn(92))}, 93: one in ${Math.round(oneIn(93))})`);
   let prev = 0;
@@ -175,8 +194,10 @@ console.log('2) the numbers the copy prints');
   console.log(`   88: ${low}`);
   console.log(`   95: ${mid}`);
   console.log(`   99: ${high}`);
-  if (!/At 88 overall a 82-0 season comes about one run in [\d,]+( million)?\./.test(low) || !low.includes('95 plus')) fail(`the low line does not print the odds and the 95 plus target: "${low}"`);
-  if (!high.startsWith('At 99 overall a 82-0 season comes about one run in 5.') || !high.includes('in the conversation')) fail(`the high line is wrong: "${high}"`);
+  if (!/At 88 overall an 82-0 season comes about one run in [\d,]+( million)?\./.test(low) || !low.includes('95 plus')) fail(`the low line does not print the odds and the 95 plus target: "${low}"`);
+  if (!high.startsWith('At 99 overall an 82-0 season comes about one run in 5.') || !high.includes('in the conversation')) fail(`the high line is wrong: "${high}"`);
+  const nfl = exp.perfectOddsLine('nfl', 90);
+  if (!nfl.startsWith('At 90 overall a 17-0 season')) fail(`the article in front of 17-0 is wrong: "${nfl}"`);
   /* 615 exact, printed to two figures; the band is the copy's "about one in 600". */
   if (!/one run in 6\d0\./.test(mid) || !mid.includes('Rare, not impossible')) fail(`the mid line is wrong: "${mid}"`);
 }
