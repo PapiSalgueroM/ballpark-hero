@@ -1,0 +1,40 @@
+{
+  "finishedAt": "2026-10-01T23:02:09.867Z",
+  "rows": [
+    {
+      "label": "null",
+      "input": "null",
+      "raw": "null",
+      "heading": "CLUB MANAGER",
+      "overflow": 0,
+      "entry": "/assets/index-E8L0RxXO.js",
+      "errors": [],
+      "writes": [],
+      "clubPickerReachable": true
+    },
+    {
+      "label": "invalid-json",
+      "input": "{",
+      "raw": "{",
+      "heading": "CLUB MANAGER",
+      "overflow": 0,
+      "entry": "/assets/index-E8L0RxXO.js",
+      "errors": [],
+      "writes": [],
+      "clubPickerReachable": true
+    },
+    {
+      "label": "empty-object",
+      "input": "{}",
+      "raw": "{}",
+      "heading": "CLUB MANAGER",
+      "overflow": 0,
+      "entry": "/assets/index-E8L0RxXO.js",
+      "errors": [],
+      "writes": [],
+      "clubPickerReachable": true
+    }
+  ],
+  "browserStopped": true,
+  "boundary": "Three fresh disposable contexts, corrupt primary save injected before initial app boot only; no valid career or gameplay state injected, all outward writes blocked."
+}

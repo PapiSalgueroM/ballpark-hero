@@ -1,0 +1,83 @@
+{
+  "cases": [
+    {
+      "sport": "NFL",
+      "route": "/front-office",
+      "site": "https://douknowball.com",
+      "kind": "zeroPeriod",
+      "inputHash": "9654da5611ed4abb35e0ba5108cb9f6c5f801004f711c5714400f0c7ac823b66",
+      "errors": [],
+      "blocked": [],
+      "text": "",
+      "buttons": [],
+      "rawHeld": true,
+      "broken": false
+    },
+    {
+      "sport": "NHL",
+      "route": "/nhl-front-office",
+      "site": "https://douknowball.com",
+      "kind": "missingFreeAgents",
+      "inputHash": "ed357ad8e2b11a64d850153f1bcf63623071c142a75c03d894b09589f1536ed5",
+      "errors": [],
+      "blocked": [],
+      "text": "",
+      "buttons": [
+        "Try this page again",
+        "Cookie choices",
+        "Light mode",
+        "Report a bug"
+      ],
+      "rawHeld": true,
+      "broken": true,
+      "retryStillBroken": true,
+      "retryRawHeld": true
+    },
+    {
+      "sport": "NFL",
+      "route": "/front-office",
+      "site": "http://127.0.0.1:4930",
+      "kind": "zeroPeriod",
+      "inputHash": "9654da5611ed4abb35e0ba5108cb9f6c5f801004f711c5714400f0c7ac823b66",
+      "errors": [],
+      "blocked": [],
+      "text": "",
+      "buttons": [
+        "Try this page again",
+        "Cookie choices",
+        "Light mode",
+        "Report a bug"
+      ],
+      "rawHeld": true,
+      "broken": true,
+      "retryStillBroken": true,
+      "retryRawHeld": true
+    },
+    {
+      "sport": "NHL",
+      "route": "/nhl-front-office",
+      "site": "http://127.0.0.1:4930",
+      "kind": "missingFreeAgents",
+      "inputHash": "ed357ad8e2b11a64d850153f1bcf63623071c142a75c03d894b09589f1536ed5",
+      "errors": [],
+      "blocked": [],
+      "text": "",
+      "buttons": [
+        "Try this page again",
+        "Cookie choices",
+        "Light mode",
+        "Report a bug"
+      ],
+      "rawHeld": true,
+      "broken": true,
+      "retryStillBroken": true,
+      "retryRawHeld": true
+    }
+  ],
+  "scope": "Actual live UI, disposable same-origin local saves deliberately corrupted. No runtime/engine substitution. Every non-GET request and vendor request blocked.",
+  "cleanup": {
+    "browserClosed": true,
+    "contextsClosed": true,
+    "ownedServer": false
+  }
+}

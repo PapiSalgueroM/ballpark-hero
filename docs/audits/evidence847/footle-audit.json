@@ -1,0 +1,520 @@
+{
+  "started": "2026-10-01T22:52:17.946Z",
+  "url": "https://douknowball.com/footle",
+  "boundary": "Actual live App in isolated Chromium. No target, pool, answer, engine or clock substitution. Native input only. Outward score/report/signup mutations and analytics/ads intercepted. Reads remain original.",
+  "coverage": [
+    {
+      "test": "Preplay help visible and native Escape closed it",
+      "width": 320,
+      "helpVisible": true
+    },
+    {
+      "test": "Invalid query and arrows with held Enter",
+      "width": 320,
+      "invalidGuesses": "Guesses: 0 / 8",
+      "selectedOption": "Morgan RogersChelsea FC · Premier League",
+      "after": "Guesses: 1 / 8"
+    },
+    {
+      "test": "Repeated same player is excluded, native touch second distinct guess, reload and Home return preserve Daily",
+      "width": 320,
+      "duplicateCount": "Guesses: 1 / 8",
+      "secondName": "Lionel Messi\nInter Miami CF · MLS",
+      "after": "Guesses: 2 / 8",
+      "refresh": "Guesses: 2 / 8",
+      "homeReturn": "Guesses: 2 / 8",
+      "rawHeld": true
+    },
+    {
+      "test": "Actual eight distinct Daily guesses to loss, rapid duplicate option click, finish and reload",
+      "width": 320,
+      "samples": [
+        {
+          "query": "Ronaldo",
+          "name": "Cristiano Ronaldo\nAl-Nassr FC · Saudi Pro League",
+          "before": "Guesses: 2 / 8",
+          "after": "Guesses: 3 / 8",
+          "overflow": 0,
+          "yDelta": 0
+        },
+        {
+          "query": "Bellingham",
+          "name": "Jude Bellingham\nReal Madrid · La Liga",
+          "before": "Guesses: 3 / 8",
+          "after": "Guesses: 4 / 8",
+          "overflow": 0,
+          "yDelta": 0
+        },
+        {
+          "query": "Mbapp",
+          "name": "Kylian Mbappé\nReal Madrid · La Liga",
+          "before": "Guesses: 4 / 8",
+          "after": "Guesses: 5 / 8",
+          "overflow": 0,
+          "yDelta": 0
+        },
+        {
+          "query": "Neymar",
+          "name": "Neymar\nSantos FC · Brazilian Série A",
+          "before": "Guesses: 5 / 8",
+          "after": "Guesses: 6 / 8",
+          "overflow": 0,
+          "yDelta": 0
+        },
+        {
+          "query": "Salah",
+          "name": "Maximiliano Salas\nCA River Plate · Argentine Primera División",
+          "before": "Guesses: 6 / 8",
+          "after": "Guesses: 7 / 8",
+          "overflow": 0,
+          "yDelta": 0
+        },
+        {
+          "query": "Benzema",
+          "name": "Karim Benzema\nAl-Ittihad Club · Saudi Pro League",
+          "before": "Guesses: 7 / 8",
+          "after": "Guesses: 8 / 8",
+          "overflow": 0,
+          "yDelta": 0
+        }
+      ],
+      "status": "lost",
+      "guessCount": 8,
+      "names": [
+        "Morgan Rogers",
+        "Lionel Messi",
+        "Cristiano Ronaldo",
+        "Jude Bellingham",
+        "Kylian Mbappé",
+        "Neymar",
+        "Maximiliano Salas",
+        "Karim Benzema"
+      ],
+      "unique": 8,
+      "result": "DOUKNOWBALL\nBack\nTrack stats\nFOOTLE\n\nGuess the soccer player in 8 tries. Each guess gives you club, nationality and stat clues.\n\n📅 Daily\n∞ Unlimited\nToday's Daily: EASY MODE\n\nGuesses: 8 / 8\n\n👤\nPLAYER\n🌍\nNAT\n🏟️\nCLUB\n⚽\nGOALS\n👟\nAST\n📍\nPOS\n👕\nKIT #\n📅\nAGE\n💰\nVALUE\nMorgan Rogers\nEngland\n, close\nChelsea FC\n, close\n7\n, wrong\n▲\nthe answer is higher\n7\n, close\n▼\nthe answer is lower\nCAM\n, wrong\n17\n, wrong\n▼\nthe answer is lower\n23\n, close\n▲\nthe answer is higher\n$86M\n, wrong\n▲\nthe answer is higher\nLionel Messi\nArgentina\n, wrong\nInter Miami CF\n, wrong\n0\n, wrong\n▲\nthe answer is higher\n0\n, wrong\n▲\nthe answer is higher\nRW\n, close\n10\n, close\n▼\nthe answer is lower\n39\n, wrong\n▼\nthe answer is lower\n$13M\n, wrong\n▲\nthe answer is higher\nCristiano Ronaldo\nPortugal\n, close\nAl-Nassr FC\n, wrong\n14\n, close\n▼\nthe answer is lower\n2\n, close\n▲\nthe answer is higher\nCF\n, correct\n7\n, close\n▲\nthe answer is higher\n40\n, wrong\n▼\nthe answer is lower\n$13M\n, wrong\n▲\nthe answer is higher\nJude Bellingham\nEngland\n, close\nReal Madrid\n, wrong\n2\n, wrong\n▲\nthe answer is higher\n1\n, wrong\n▲\nthe answer is higher\nCAM\n, wrong\n5\n, wrong\n▲\nthe answer is higher\n22\n, wrong\n▲\nthe answer is higher\n$151M\n, wrong\n▲\nthe answer is higher\nKylian Mbappé\nFrance\n, close\nReal Madrid\n, wrong\n12\n, correct\n2\n, close\n▲\nthe answer is higher\nCF\n, correct\n9\n, correct\n27\n, close\n▼\nthe answer is lower\n$216M\n, correct\nNeymar\nBrazil\n, wrong\nSantos FC\n, wrong\n6\n, wrong\n▲\nthe answer is higher\n4\n, close\n▲\nthe answer is higher\nCAM\n, wrong\n10\n, close\n▼\nthe answer is lower\n33\n, wrong\n▼\nthe answer is lower\n$11M\n, wrong\n▲\nthe answer is higher\nMaximiliano Salas\nArgentina\n, wrong\nCA River Plate\n, wrong\n2\n, wrong\n▲\nthe answer is higher\n0\n, wrong\n▲\nthe answer is higher\nCF\n, correct\n?\n, not on file\n28\n, wrong\n▼\nthe answer is lower\n$5M\n, wrong\n▲\nthe answer is higher\nKarim Benzema\nFrance\n, close\nAl-Ittihad Club\n, wrong\n13\n, close\n▼\nthe answer is lower\n5\n, correct\nCF\n, correct\n9\n, correct\n38\n, wrong\n▼\nthe answer is lower\n$6M\n, wrong\n▲\nthe answer is higher\n\nSOCCER\n·\nNOT THIS TIME\n\n😞\nGame Over\n\nThe player was Erling Haaland\nManchester City · Premier League\n\n💡 Did you know? Erling Haaland plays as a CF and is valued at €216M.\n\nFootle X/8\n🟨🟨⬜🟨⬜⬜🟨⬜\n⬜⬜⬜⬜🟨🟨⬜⬜\n🟨⬜🟨🟨🟩🟨⬜⬜\n🟨⬜⬜⬜⬜⬜⬜⬜\n🟨⬜🟩🟨🟩🟩🟨🟩\n⬜⬜⬜🟨⬜🟨⬜⬜\n⬜⬜⬜⬜🟩⬜⬜⬜\n🟨⬜🟨🟩🟩🟩⬜⬜\n🎯\nFootle\nOct 1, 2026\nFootle X/8\n🟨🟨⬜🟨⬜⬜🟨⬜\n⬜⬜⬜⬜🟨🟨⬜⬜\n🟨⬜🟨🟨🟩🟨⬜⬜\n🟨⬜⬜⬜⬜⬜⬜⬜\n🟨⬜🟩🟨🟩🟩🟨🟩\n⬜⬜⬜🟨⬜🟨⬜⬜\n⬜⬜⬜⬜🟩⬜⬜⬜\n🟨⬜🟨🟩🟩🟩⬜⬜\nRESULT\n0/8\nDoUKnowBall\ndouknowball.com/footle\nShare result\nCopy challenge\n📋 Copy Score Card\n🖼️ Save Image\n\nSHARE YOUR RESULT\n\nCome back tomorrow for a new puzzle!\n\nCorrect\nClose\nNot a match\n▲▼\nHigher / Lower hint\nReport\nFootle: Daily Soccer Player Guessing Game\n\nGuess the mystery soccer player in 8 tries. Each guess reveals clues about the player's club, league, nationality, position, and age. One of 100+ free sports games on DoUKnowBall.\n\nFootle gives you 8 guesses to name a mystery soccer player. Each guess is a real player, and colored tiles compare it to the answer across eight attributes, from club to kit number.\n\nYou get eight goes at one mystery player and every guess comes back colour coded: arrows say whether the answer is older, scores more, or wears a higher number. Everyone gets the same new player every day.\n\nHow to play Footle, a free daily soccer guessing game\nTyping a name from the suggestions\nType a player's name and pick him from the suggestions.\nReading the color coded tiles\nRead the tiles: green is an exact match, yellow is close, white is a miss.\nFollowing the up or down arrows\nFollow the arrows: up means the answer's value is higher than your guess.\nNarrowing by continent, league and position\nNarrow by continent, league, and position group before sweating exact numbers.\nSOLVING WITHIN YOUR EIGHT GUESSES\nGet the name within 8 guesses and share your emoji grid.\nFootle rules: guesses, yellow tiles and the difficulty tiers\nEight guesses in every mode\nYou get 8 guesses in both daily and unlimited mode.\nWhat counts as a close yellow tile\nYellow means close: same continent, same league, within 3 goals, assists, or kit number, within 2 years of age, within 5 million dollars of value, or the same position group.\nDaily difficulty split and unlimited choice\nThe daily tier is shared: about 40 percent of days are Easy, 55 Hard, 5 Insane.\nIn u",
+      "rawHeld": true,
+      "reloadStatus": "Guesses: 8 / 8",
+      "overflow": 0
+    },
+    {
+      "test": "Full Unlimited native run and Play Again replay",
+      "width": 320,
+      "start": "Guesses: 0 / 8",
+      "samples": [
+        {
+          "name": "Jude Bellingham\nReal Madrid · La Liga",
+          "before": "Guesses: 0 / 8",
+          "after": "Guesses: 1 / 8",
+          "overflow": 0,
+          "yDelta": 0
+        },
+        {
+          "name": "Lionel Messi\nInter Miami CF · MLS",
+          "before": "Guesses: 1 / 8",
+          "after": "Guesses: 2 / 8",
+          "overflow": 0,
+          "yDelta": 0
+        },
+        {
+          "name": "Cristiano Ronaldo\nAl-Nassr FC · Saudi Pro League",
+          "before": "Guesses: 2 / 8",
+          "after": "Guesses: 3 / 8",
+          "overflow": 0,
+          "yDelta": 0
+        },
+        {
+          "name": "Kylian Mbappé\nReal Madrid · La Liga",
+          "before": "Guesses: 3 / 8",
+          "after": "Guesses: 4 / 8",
+          "overflow": 0,
+          "yDelta": 0
+        },
+        {
+          "name": "Neymar\nSantos FC · Brazilian Série A",
+          "before": "Guesses: 4 / 8",
+          "after": "Guesses: 5 / 8",
+          "overflow": 0,
+          "yDelta": 0
+        },
+        {
+          "name": "Karim Benzema\nAl-Ittihad Club · Saudi Pro League",
+          "before": "Guesses: 5 / 8",
+          "after": "Guesses: 6 / 8",
+          "overflow": 0,
+          "yDelta": 0
+        },
+        {
+          "name": "Robert Lewandowski\nChicago Fire FC · MLS",
+          "before": "Guesses: 6 / 8",
+          "after": "Guesses: 7 / 8",
+          "overflow": 0,
+          "yDelta": 0
+        },
+        {
+          "name": "Maximiliano Salas\nCA River Plate · Argentine Primera División",
+          "before": "Guesses: 7 / 8",
+          "after": "Guesses: 8 / 8",
+          "overflow": 0,
+          "yDelta": 0
+        }
+      ],
+      "end": "Guesses: 8 / 8",
+      "resultText": "Game Over\n\nThe player was Cristian Romero\nAtlético de Madrid · La Liga\n\n💡 Did you know? Cristian Romero plays as a CB and is valued at €54M.\n\nFootle X/8\n⬜🟨🟨🟩⬜⬜⬜⬜\n🟩⬜🟨🟨⬜⬜⬜⬜\n⬜⬜⬜🟨⬜⬜⬜⬜\n⬜🟨⬜🟨⬜⬜🟩⬜\n🟨⬜🟨🟨⬜⬜⬜⬜\n⬜⬜⬜⬜⬜⬜⬜⬜\n⬜⬜⬜🟨⬜⬜⬜⬜\n🟩⬜🟨🟨⬜⬜🟨⬜\n🎯\nFo",
+      "reset": "Guesses: 0 / 8",
+      "dailyRawHeld": true,
+      "resetOverflow": 0
+    },
+    {
+      "test": "Desktop held Enter, give-up cancel and confirm, rapid replay, and completed Daily return",
+      "width": 1440,
+      "one": "Guesses: 1 / 8",
+      "cancel": "Guesses: 1 / 8",
+      "lost": "Guesses: 1 / 8",
+      "reset": "Guesses: 0 / 8",
+      "daily": "Guesses: 8 / 8",
+      "dailyRawHeld": true,
+      "unlimitedServerMutationDelta": 0,
+      "overflow": 0
+    }
+  ],
+  "findings": [
+    {
+      "id": "FOOTLE-01",
+      "severity": "P2",
+      "title": "Answer fact changes the value currency from dollars to euros",
+      "url": "https://douknowball.com/footle",
+      "steps": [
+        "Play the live Daily through eight distinct player selections.",
+        "Compare a value tile with the answer fact below Game Over."
+      ],
+      "expected": "The result uses the same currency as the value column and data field.",
+      "actual": "Value tiles show $ amounts and the source fetch reads market_value_usd, but the revealed Erling Haaland fact says valued at €216M.",
+      "cause": {
+        "files": [
+          "src/pages/Footle.tsx:320",
+          "src/lib/gameLogic.ts:112",
+          "src/lib/fetchFootlePlayerPool.ts:341"
+        ],
+        "binding": "The result prefixes a USD marketValue with euro without conversion."
+      },
+      "evidence": {
+        "fact": "💡 Did you know? Erling Haaland plays as a CF and is valued at €216M.",
+        "tilesDollarCount": 8,
+        "screenshot": "C:/Users/antho/AppData/Local/Temp/dukb-hostile-audit-2026-10-01/footle-daily-result-320.png"
+      },
+      "boundary": "Actual native live loss. No independent real-world valuation claim."
+    }
+  ],
+  "actions": [
+    {
+      "tag": "footle-initial-native",
+      "at": "2026-10-01T22:52:43.700Z",
+      "value": {
+        "entry": "/assets/index-E8L0RxXO.js",
+        "help": "How to Play Footle\n\nGuess the mystery soccer player in 8 tries!\n\n🎨 Color Guide\nGreen: Exact match!\nYellow: Close, see thresholds below.\nWhite: Not a match.\n📏 \"Close\" Thresholds\n🌍 Nationality: Same continent\n🏟️ Club: Same league = yellow\n⚽ Goals: Within 3\n👟 Assists: Within 3\n📍 Position: Same group (Def/Mid/Fwd)\n👕 Kit Number: Within 3\n📅 Age: Within 2 years\n💰 Market Value: Within $5M\n🔼 Arrow Hints\n\n▲ means the answer is higher, ▼ means it's lower.\n\n⚙️ Difficulty Modes\nEasy: The 80 most valuable players in the world right now, plus the all-time greats\nHard: Squad & rotation names from big clubs\nInsane: Genuinely obscure pros: second divisions, smaller leagues, deep squads\nLet's Play!\nClose",
+        "snap": {
+          "guessText": "Guesses: 0 / 8",
+          "raws": {},
+          "overflow": 0,
+          "scrollY": 0,
+          "focus": "<button type=\"button\" aria-label=\"How to play\" class=\"absolute top-0 left-0 p-2 text-muted-foreground hover:text-primary transition-colors rounded-full hover:bg-surface-2\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-circle-help w-5 h-5 md:w-6 md:h-6\"><circle cx=\"12\" cy=\"12\" r=\"10\"></circle><path d=\"M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3\"></path><path d=\"M12 17h.01\"></path></svg></button>"
+        },
+        "main": "DOUKNOWBALL\nBack\nTrack stats\nFOOTLE\n\nGuess the soccer player in 8 tries. Each guess gives you club, nationality and stat clues.\n\n📅 Daily\n∞ Unlimited\nToday's Daily: EASY MODE\n\nGuesses: 0 / 8\n\nGive up\n👤\nPLAYER\n🌍\nNAT\n🏟️\nCLUB\n⚽\nGOALS\n👟\nAST\n📍\nPOS\n👕\nKIT #\n📅\nAGE\n💰\nVALUE\nCorrect\nClose\nNot a match\n▲▼\nHigher / Lower hint\nReport\nFootle: Daily Soccer Player Guessing Game\n\nGuess the mystery soccer player in 8 tries. Each guess reveals clues about the player's club, league, nationality, position, and age. One of 100+ free sports games on DoUKnowBall.\n\nFootle gives you 8 guesses to name a mystery soccer player. Each guess is a real player, and colored tiles compare it to the answer across eight attributes, from club to kit number.\n\nYou get eight goes at one mystery player and every guess comes back colour coded: arrows say whether the answer is older, scores more, or wears a higher number. Everyone gets the same new player every day.\n\nHow to play Footle, a free daily soccer guessing game\nTyping a name from the suggestions\nType a player's name and pick him from the suggestions.\nReading the color coded tiles\nRead the tiles: green is an exact match, yellow is close, white is a miss.\nFollowing the up or down arrows\nFollow the arrows: up means the answer's value is higher than your guess.\nNarrowing by continent, league and position\nNarrow by continent, league, and position group before sw"
+      }
+    },
+    {
+      "tag": "footle-invalid-and-arrow-enter",
+      "at": "2026-10-01T22:53:31.334Z",
+      "value": {
+        "invalid": {
+          "guessText": "Guesses: 0 / 8",
+          "raws": {},
+          "overflow": 0,
+          "scrollY": 0,
+          "focus": "<input type=\"text\" placeholder=\"Search for a player...\" aria-label=\"Search for a player\" class=\"w-full bg-card border border-border text-foreground rounded-xl pl-12 pr-5 py-3.5 text-base focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary placeholder:text-muted-foreground transition-all\" autocomplete=\"off\" value=\"zzzznotaplayer\">"
+        },
+        "labels": [
+          "RodriFC Barcelona · La Liga",
+          "Morgan RogersChelsea FC · Premier League",
+          "Cristian RomeroAtlético de Madrid · La Liga",
+          "RodrygoReal Madrid · La Liga",
+          "Rodrigo MoraAS Roma · Serie A",
+          "Vitor RoqueSociedade Esportiva Palmeiras · Brazilian Série A",
+          "Cristiano RonaldoAl-Nassr FC · Saudi Pro League",
+          "Robert LewandowskiChicago Fire FC · MLS",
+          "Franco RomeroDeportivo Toluca · Liga MX",
+          "Leo RománRCD Mallorca · Segunda División"
+        ],
+        "after": {
+          "guessText": "Guesses: 1 / 8",
+          "raws": {
+            "footle-daily-2026-10-01": "{\"v\":1,\"date\":\"2026-10-01\",\"puzzleIndex\":0,\"puzzleId\":\"Erling Haaland\",\"guesses\":[{\"playerName\":\"Morgan Rogers\",\"isCorrect\":false,\"cells\":{\"nationality\":{\"value\":\"England\",\"status\":\"close\"},\"club\":{\"value\":\"Chelsea FC\",\"status\":\"close\"},\"goals\":{\"value\":\"7\",\"status\":\"incorrect\",\"arrow\":\"up\"},\"assists\":{\"value\":\"7\",\"status\":\"close\",\"arrow\":\"down\"},\"position\":{\"value\":\"CAM\",\"status\":\"incorrect\"},\"kitNumber\":{\"value\":\"17\",\"status\":\"incorrect\",\"arrow\":\"down\"},\"age\":{\"value\":\"23\",\"status\":\"close\",\"arrow\":\"up\"},\"marketValue\":{\"value\":\"$86M\",\"status\":\"incorrect\",\"arrow\":\"up\"}}}],\"gameStatus\":\"playing\"}"
+          },
+          "overflow": 0,
+          "scrollY": 0,
+          "focus": "<input type=\"text\" placeholder=\"Search for a player...\" aria-label=\"Search for a player\" class=\"w-full bg-card border border-border text-foreground rounded-xl pl-12 pr-5 py-3.5 text-base focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary placeholder:text-muted-foreground transition-all\" autocomplete=\"off\" value=\"\">"
+        },
+        "bundles": [
+          "https://douknowball.com/assets/Footle-DEmvcojY.js"
+        ]
+      }
+    },
+    {
+      "tag": "footle-duplicate-touch-reload",
+      "at": "2026-10-01T22:54:14.838Z",
+      "value": {
+        "duplicateCount": "Guesses: 1 / 8",
+        "candidate": "Lionel Messi\nInter Miami CF · MLS",
+        "before": "Guesses: 1 / 8",
+        "after": "Guesses: 2 / 8",
+        "refresh": "Guesses: 2 / 8",
+        "returned": "Guesses: 2 / 8",
+        "rawHeld": true,
+        "overflow": 0
+      }
+    },
+    {
+      "tag": "footle-daily-eight-native-completion",
+      "at": "2026-10-01T22:54:54.860Z",
+      "value": {
+        "samples": [
+          {
+            "query": "Ronaldo",
+            "name": "Cristiano Ronaldo\nAl-Nassr FC · Saudi Pro League",
+            "before": "Guesses: 2 / 8",
+            "after": "Guesses: 3 / 8",
+            "overflow": 0,
+            "yDelta": 0
+          },
+          {
+            "query": "Bellingham",
+            "name": "Jude Bellingham\nReal Madrid · La Liga",
+            "before": "Guesses: 3 / 8",
+            "after": "Guesses: 4 / 8",
+            "overflow": 0,
+            "yDelta": 0
+          },
+          {
+            "query": "Mbapp",
+            "name": "Kylian Mbappé\nReal Madrid · La Liga",
+            "before": "Guesses: 4 / 8",
+            "after": "Guesses: 5 / 8",
+            "overflow": 0,
+            "yDelta": 0
+          },
+          {
+            "query": "Neymar",
+            "name": "Neymar\nSantos FC · Brazilian Série A",
+            "before": "Guesses: 5 / 8",
+            "after": "Guesses: 6 / 8",
+            "overflow": 0,
+            "yDelta": 0
+          },
+          {
+            "query": "Salah",
+            "name": "Maximiliano Salas\nCA River Plate · Argentine Primera División",
+            "before": "Guesses: 6 / 8",
+            "after": "Guesses: 7 / 8",
+            "overflow": 0,
+            "yDelta": 0
+          },
+          {
+            "query": "Benzema",
+            "name": "Karim Benzema\nAl-Ittihad Club · Saudi Pro League",
+            "before": "Guesses: 7 / 8",
+            "after": "Guesses: 8 / 8",
+            "overflow": 0,
+            "yDelta": 0
+          }
+        ],
+        "status": "lost",
+        "guessCount": 8,
+        "names": [
+          "Morgan Rogers",
+          "Lionel Messi",
+          "Cristiano Ronaldo",
+          "Jude Bellingham",
+          "Kylian Mbappé",
+          "Neymar",
+          "Maximiliano Salas",
+          "Karim Benzema"
+        ],
+        "unique": 8,
+        "result": "DOUKNOWBALL\nBack\nTrack stats\nFOOTLE\n\nGuess the soccer player in 8 tries. Each guess gives you club, nationality and stat clues.\n\n📅 Daily\n∞ Unlimited\nToday's Daily: EASY MODE\n\nGuesses: 8 / 8\n\n👤\nPLAYER\n🌍\nNAT\n🏟️\nCLUB\n⚽\nGOALS\n👟\nAST\n📍\nPOS\n👕\nKIT #\n📅\nAGE\n💰\nVALUE\nMorgan Rogers\nEngland\n, close\nChelsea FC\n, close\n7\n, wrong\n▲\nthe answer is higher\n7\n, close\n▼\nthe answer is lower\nCAM\n, wrong\n17\n, wrong\n▼\nthe answer is lower\n23\n, close\n▲\nthe answer is higher\n$86M\n, wrong\n▲\nthe answer is higher\nLionel Messi\nArgentina\n, wrong\nInter Miami CF\n, wrong\n0\n, wrong\n▲\nthe answer is higher\n0\n, wrong\n▲\nthe answer is higher\nRW\n, close\n10\n, close\n▼\nthe answer is lower\n39\n, wrong\n▼\nthe answer is lower\n$13M\n, wrong\n▲\nthe answer is higher\nCristiano Ronaldo\nPortugal\n, close\nAl-Nassr FC\n, wrong\n14\n, close\n▼\nthe answer is lower\n2\n, close\n▲\nthe answer is higher\nCF\n, correct\n7\n, close\n▲\nthe answer is higher\n40\n, wrong\n▼\nthe answer is lower\n$13M\n, wrong\n▲\nthe answer is higher\nJude Bellingham\nEngland\n, close\nReal Madrid\n, wrong\n2\n, wrong\n▲\nthe answer is higher\n1\n, wrong\n▲\nthe answer is higher\nCAM\n, wrong\n5\n, wrong\n▲\nthe answer is higher\n22\n, wrong\n▲\nthe answer is higher\n$151M\n, wrong\n▲\nthe answer is higher\nKylian Mbappé\nFrance\n, close\nReal Madrid\n, wrong\n12\n, correct\n2\n, close\n▲\nthe answer is higher\nCF\n, correct\n9\n, correct\n27\n, close\n▼\nthe answer is lower\n$216M\n, correct\nNeymar\nBrazil\n, wrong\nSantos FC\n, wrong\n6\n, wrong\n▲\nthe answer is higher\n4\n, close\n▲\nthe answer is higher\nCAM\n, wrong\n10\n, close\n▼\nthe answer is lower\n33\n, wrong\n▼\nthe answer is lower\n$11M\n, wrong\n▲\nthe answer is higher\nMaximiliano Salas\nArgentina\n, wrong\nCA River Plate\n, wrong\n2\n, wrong\n▲\nthe answer is higher\n0\n, wrong\n▲\nthe answer is higher\nCF\n, correct\n?\n, not on file\n28\n, wrong\n▼\nthe answer is lower\n$5M\n, wrong\n▲\nthe answer is higher\nKarim Benzema\nFrance\n, close\nAl-Ittihad Club\n, wrong\n13\n, close\n▼\nthe answer is lower\n5\n, correct\nCF\n, correct\n9\n, correct\n38\n, wrong\n▼\nthe answer is lower\n$6M\n, wrong\n▲\nthe answer is higher\n\nSOCCER\n·\nNOT THIS TIME\n\n😞\nGame Over\n\nThe player was Erling Haaland\nManchester City · Premier League\n\n💡 Did you know? Erling Haaland plays as a CF and is valued at €216M.\n\nFootle X/8\n🟨🟨⬜🟨⬜⬜🟨⬜\n⬜⬜⬜⬜🟨🟨⬜⬜\n🟨⬜🟨🟨🟩🟨⬜⬜\n🟨⬜⬜⬜⬜⬜⬜⬜\n🟨⬜🟩🟨🟩🟩🟨🟩\n⬜⬜⬜🟨⬜🟨⬜⬜\n⬜⬜⬜⬜🟩⬜⬜⬜\n🟨⬜🟨🟩🟩🟩⬜⬜\n🎯\nFootle\nOct 1, 2026\nFootle X/8\n🟨🟨⬜🟨⬜⬜🟨⬜\n⬜⬜⬜⬜🟨🟨⬜⬜\n🟨⬜🟨🟨🟩🟨⬜⬜\n🟨⬜⬜⬜⬜⬜⬜⬜\n🟨⬜🟩🟨🟩🟩🟨🟩\n⬜⬜⬜🟨⬜🟨⬜⬜\n⬜⬜⬜⬜🟩⬜⬜⬜\n🟨⬜🟨🟩🟩🟩⬜⬜\nRESULT\n0/8\nDoUKnowBall\ndouknowball.com/footle\nShare result\nCopy challenge\n📋 Copy Score Card\n🖼️ Save Image\n\nSHARE YOUR RESULT\n\nCome back tomorrow for a new puzzle!\n\nCorrect\nClose\nNot a match\n▲▼\nHigher / Lower hint\nReport\nFootle: Daily Soccer Player Guessing Game\n\nGuess the mystery soccer player in 8 tries. Each guess reveals clues about the player's club, league, nationality, position, and age. One of 100+ free sports games on DoUKnowBall.\n\nFootle gives you 8 guesses to name a mystery soccer player. Each guess is a real player, and colored tiles compare it to the answer across eight attributes, from club to kit number.\n\nYou get eight goes at one mystery player and every guess comes back colour coded: arrows say whether the answer is older, scores more, or wears a higher number. Everyone gets the same new player every day.\n\nHow to play Footle, a free daily soccer guessing game\nTyping a name from the suggestions\nType a player's name and pick him from the suggestions.\nReading the color coded tiles\nRead the tiles: green is an exact match, yellow is close, white is a miss.\nFollowing the up or down arrows\nFollow the arrows: up means the answer's value is higher than your guess.\nNarrowing by continent, league and position\nNarrow by continent, league, and position group before sweating exact numbers.\nSOLVING WITHIN YOUR EIGHT GUESSES\nGet the name within 8 guesses and share your emoji grid.\nFootle rules: guesses, yellow tiles and the difficulty tiers\nEight guesses in every mode\nYou get 8 guesses in both daily and unlimited mode.\nWhat counts as a close yellow tile\nYellow means close: same continent, same league, within 3 goals, assists, or kit number, within 2 years of age, within 5 million dollars of value, or the same position group.\nDaily difficulty split and unlimited choice\nThe daily tier is shared: about 40 percent of days are Easy, 55 Hard, 5 Insane.\nIn u",
+        "rawHeld": true,
+        "reloadStatus": "Guesses: 8 / 8",
+        "overflow": 0
+      }
+    },
+    {
+      "tag": "footle-unlimited-native-fullgame",
+      "at": "2026-10-01T22:56:15.833Z",
+      "value": {
+        "start": "Guesses: 0 / 8",
+        "samples": [
+          {
+            "name": "Jude Bellingham\nReal Madrid · La Liga",
+            "before": "Guesses: 0 / 8",
+            "after": "Guesses: 1 / 8",
+            "overflow": 0,
+            "yDelta": 0
+          },
+          {
+            "name": "Lionel Messi\nInter Miami CF · MLS",
+            "before": "Guesses: 1 / 8",
+            "after": "Guesses: 2 / 8",
+            "overflow": 0,
+            "yDelta": 0
+          },
+          {
+            "name": "Cristiano Ronaldo\nAl-Nassr FC · Saudi Pro League",
+            "before": "Guesses: 2 / 8",
+            "after": "Guesses: 3 / 8",
+            "overflow": 0,
+            "yDelta": 0
+          },
+          {
+            "name": "Kylian Mbappé\nReal Madrid · La Liga",
+            "before": "Guesses: 3 / 8",
+            "after": "Guesses: 4 / 8",
+            "overflow": 0,
+            "yDelta": 0
+          },
+          {
+            "name": "Neymar\nSantos FC · Brazilian Série A",
+            "before": "Guesses: 4 / 8",
+            "after": "Guesses: 5 / 8",
+            "overflow": 0,
+            "yDelta": 0
+          },
+          {
+            "name": "Karim Benzema\nAl-Ittihad Club · Saudi Pro League",
+            "before": "Guesses: 5 / 8",
+            "after": "Guesses: 6 / 8",
+            "overflow": 0,
+            "yDelta": 0
+          },
+          {
+            "name": "Robert Lewandowski\nChicago Fire FC · MLS",
+            "before": "Guesses: 6 / 8",
+            "after": "Guesses: 7 / 8",
+            "overflow": 0,
+            "yDelta": 0
+          },
+          {
+            "name": "Maximiliano Salas\nCA River Plate · Argentine Primera División",
+            "before": "Guesses: 7 / 8",
+            "after": "Guesses: 8 / 8",
+            "overflow": 0,
+            "yDelta": 0
+          }
+        ],
+        "end": "Guesses: 8 / 8",
+        "resultText": "Game Over\n\nThe player was Cristian Romero\nAtlético de Madrid · La Liga\n\n💡 Did you know? Cristian Romero plays as a CB and is valued at €54M.\n\nFootle X/8\n⬜🟨🟨🟩⬜⬜⬜⬜\n🟩⬜🟨🟨⬜⬜⬜⬜\n⬜⬜⬜🟨⬜⬜⬜⬜\n⬜🟨⬜🟨⬜⬜🟩⬜\n🟨⬜🟨🟨⬜⬜⬜⬜\n⬜⬜⬜⬜⬜⬜⬜⬜\n⬜⬜⬜🟨⬜⬜⬜⬜\n🟩⬜🟨🟨⬜⬜🟨⬜\n🎯\nFo",
+        "reset": "Guesses: 0 / 8",
+        "dailyRawHeld": true,
+        "resetOverflow": 0
+      }
+    },
+    {
+      "tag": "footle-desktop-giveup-replay-mode",
+      "at": "2026-10-01T22:57:23.859Z",
+      "value": {
+        "out": {
+          "one": "Guesses: 1 / 8",
+          "cancel": "Guesses: 1 / 8",
+          "lost": "Guesses: 1 / 8",
+          "reset": "Guesses: 0 / 8",
+          "daily": "Guesses: 8 / 8",
+          "dailyRawHeld": true,
+          "unlimitedServerMutationDelta": 0,
+          "overflow": 0
+        },
+        "findings": [
+          {
+            "id": "FOOTLE-01",
+            "severity": "P2",
+            "title": "Answer fact changes the value currency from dollars to euros",
+            "url": "https://douknowball.com/footle",
+            "steps": [
+              "Play the live Daily through eight distinct player selections.",
+              "Compare a value tile with the answer fact below Game Over."
+            ],
+            "expected": "The result uses the same currency as the value column and data field.",
+            "actual": "Value tiles show $ amounts and the source fetch reads market_value_usd, but the revealed Erling Haaland fact says valued at €216M.",
+            "cause": {
+              "files": [
+                "src/pages/Footle.tsx:320",
+                "src/lib/gameLogic.ts:112",
+                "src/lib/fetchFootlePlayerPool.ts:341"
+              ],
+              "binding": "The result prefixes a USD marketValue with euro without conversion."
+            },
+            "evidence": {
+              "fact": "💡 Did you know? Erling Haaland plays as a CF and is valued at €216M.",
+              "tilesDollarCount": 8,
+              "screenshot": "C:/Users/antho/AppData/Local/Temp/dukb-hostile-audit-2026-10-01/footle-daily-result-320.png"
+            },
+            "boundary": "Actual native live loss. No independent real-world valuation claim."
+          }
+        ],
+        "blocked": [
+          {
+            "path": "/rest/v1/game_completions",
+            "method": "POST"
+          }
+        ],
+        "errors": []
+      }
+    },
+    {
+      "tag": "footle-finalize",
+      "at": "2026-10-01T22:59:04.694Z",
+      "value": {
+        "coverage": 6,
+        "findings": 1,
+        "nativeSelections": 17,
+        "blockedMutations": 1,
+        "errors": 0
+      }
+    }
+  ],
+  "runtimeErrors": [],
+  "blockedMutations": [
+    {
+      "path": "/rest/v1/game_completions",
+      "method": "POST"
+    }
+  ],
+  "liveEntry": "/assets/index-E8L0RxXO.js",
+  "limits": [
+    "Won-path scoring not exercised",
+    "Unlimited has no persisted progress by design; no exhaustive refresh policy test",
+    "No all-tier or every-pool-player coverage",
+    "No claim about actual market valuation accuracy",
+    "No target, answer, engine, clock or pool substitutions"
+  ],
+  "nativeSelections": 17,
+  "completedRuns": {
+    "daily": {
+      "width": 320,
+      "status": "lost",
+      "guesses": 8
+    },
+    "unlimited": {
+      "width": 320,
+      "status": "lost",
+      "guesses": 8
+    },
+    "desktopGiveUp": {
+      "width": 1440,
+      "guesses": 1,
+      "status": "lost"
+    }
+  },
+  "screenshotInspected": "C:/Users/antho/AppData/Local/Temp/dukb-hostile-audit-2026-10-01/footle-daily-result-320.png",
+  "cleanup": {
+    "browserStopped": true
+  },
+  "finished": "2026-10-01T22:59:06.440Z"
+}
