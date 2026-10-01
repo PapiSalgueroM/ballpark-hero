@@ -31,8 +31,9 @@
      5) the bench never moves a result: the strength of 26 equals the
         strength of the 13 it reads, and two leagues that differ only by
         extra depth men play the same season, round by round, with the same
-        injuries, under the same seed. Then, printed and not asserted, what
-        does move against a 13 man twin and why
+        injuries, under the same seed, and a seed plays the same season
+        whatever ids the men were minted with. Then, printed and not
+        asserted, what does move against a 13 man twin and why
      6) ten franchises, five seasons each, the board's own sequence (rounds,
         CPU moves, October, the draft, the offseason): no crash, every club
         still fields nine hitters, five starters and five relievers, no name
@@ -48,10 +49,11 @@
    MEASURED (2026-10-01, ten seeds): every club's opening payroll $119M to
    $230M against the $244M line (priced at the full scale, 26 men ran $134.7M
    to $300.3M and six clubs opened over it, which is why depth deals exist).
-   Section 5: 270 of 270 twin rounds comparable (27 a seed), none moved, the
-   IL identical on all 210,600 man rounds. Against a 13 man twin (seed 7919)
-   24 of 30 clubs end a season on a different win total, mean 1.5 wins, all
-   of it injured starters covered by a real next man instead of playing short.
+   Section 5: 270 of 270 twin rounds comparable (27 a seed; one run while the
+   rolls were keyed on ids saw 269), none moved, the IL identical on all
+   210,600 man rounds. Against a 13 man twin (seed 7919) 23 of 30 clubs end a
+   season on a different win total, mean 1.9 wins, all of it injured starters
+   covered by a real next man instead of the 13 man club playing short.
 
    Controls, through MLB_FULL_CONTROL. Each edits a bundled copy, refuses to
    run if its anchor is not in the file, and must turn its own section red:
@@ -60,6 +62,7 @@
      sharedstream  depth leagues roll injuries off the shared stream -> 5
      fullprice     no depth deals, everyone at the full price      -> 4
      legacylimits  an old save gets the new roster limits          -> 7
+     idkeyed       injury rolls keyed on the minted id, not the name -> 5
 
    The fixture: node scripts/simMlbFullRosters.mjs --write-legacy-fixture
    writes it with whatever engine is in src. It was written against the engine
@@ -86,7 +89,7 @@ const STATS = path.join(ROOT, 'scripts', 'data', 'mlbStats2026.json');
 const FIXTURE = path.join(ROOT, 'scripts', 'data', 'mlbLegacySaveFixture.json');
 const CONTROL = process.env.MLB_FULL_CONTROL || '';
 const WRITE_FIXTURE = process.argv.includes('--write-legacy-fixture');
-const EXPECT = { invented: [3, 4], benchread: [5], sharedstream: [5], fullprice: [4], legacylimits: [7] };
+const EXPECT = { invented: [3, 4], benchread: [5], sharedstream: [5], fullprice: [4], legacylimits: [7], idkeyed: [5] };
 if (CONTROL && !EXPECT[CONTROL]) { console.error(`MLB_FULL_CONTROL=${CONTROL} is not a control this harness knows (${Object.keys(EXPECT).join(', ')})`); process.exit(1); }
 
 let checks = 0;
@@ -106,6 +109,7 @@ const ENGINE_SWAPS = {
   benchread: [['.filter(p => !isPitcher(p)).sort((a, b) => b.ovr - a.ovr).slice(0, 8)', '.filter(p => !isPitcher(p)).sort((a, b) => b.ovr - a.ovr).slice(0, 99)']],
   sharedstream: [['  if (deep) rollDepthInjuries(league, myTeam, rng, notes);\n  else {', '  {']],
   fullprice: [['salary: core.has(i) ? mlbSalaryFor(s.ovr) : MLB_DEPTH_SALARY,', 'salary: mlbSalaryFor(s.ovr),']],
+  idkeyed: [['unitHash(roundSeed, p.name, 1)', 'unitHash(roundSeed, p.id, 1)'], ['unitHash(roundSeed, p.name, 2)', 'unitHash(roundSeed, p.id, 2)']],
   legacylimits: [['export const mlbRosterMax = (t: { depth?: number }): number => (t.depth ? MLB_ROSTER_MAX : MLB_LEGACY_ROSTER_MAX);', 'export const mlbRosterMax = (t: { depth?: number }): number => (t.depth || true ? MLB_ROSTER_MAX : MLB_LEGACY_ROSTER_MAX);']],
 };
 const DATA_SWAPS = { invented: [['  ATL: [\n    { name: ', '  ATL: [\n    { name: "Harness Inventedman" }, { name: ']] };
@@ -365,7 +369,7 @@ console.log('4) a new league: 26 real men a club, nobody invented, the payroll r
 console.log('5) the bench never moves a result');
 {
   const reads = t => new Set(E.mlbSimReads(t));
-  let compared = 0, total = 0, ilSame = 0, ilTotal = 0, strengthSame = 0;
+  let compared = 0, total = 0, ilSame = 0, ilTotal = 0, strengthSame = 0, reproduced = 0;
   const moved = [];
   for (const seed of SEEDS) {
     const A = E.initMlbLeague(lcg(seed));
@@ -404,6 +408,12 @@ console.log('5) the bench never moves a result');
       const same = GAME_TEAMS.every(a => A.teams[a].wins === B.teams[a].wins && A.teams[a].losses === B.teams[a].losses);
       if (!same) moved.push(`seed ${seed} round ${r}`);
     }
+    /* (b2) the same seed plays the same season in a second league dealt in
+       the same process, whose men carry different minted ids */
+    const X = E.initMlbLeague(lcg(seed)), Y = E.initMlbLeague(lcg(seed));
+    const rx = lcg(seed + 31), ry = lcg(seed + 31);
+    for (let r = 1; r <= E.MLB_ROUNDS; r += 1) { E.simMlbRound(X, 'NYY', rx); E.simMlbRound(Y, 'NYY', ry); }
+    if (GAME_TEAMS.every(a => X.teams[a].wins === Y.teams[a].wins && X.teams[a].losses === Y.teams[a].losses)) reproduced += 1;
     /* (c) printed, not asserted: against a 13 man twin, what moves and why */
     const A2 = E.initMlbLeague(lcg(seed));
     const C = clone(A2);
@@ -417,6 +427,7 @@ console.log('5) the bench never moves a result');
   ok(5, 'the depth twins put the same men on the IL every round', ilSame === ilTotal, `${ilTotal - ilSame} of ${ilTotal} differ`);
   ok(5, 'nearly every round is comparable (no twin depth man reached a read)', compared >= total * 0.95, `${compared} of ${total}`);
   ok(5, 'every comparable round ends with the same record for every club', moved.length === 0, moved.slice(0, 4).join(', '));
+  ok(5, 'a seed plays the same season whatever ids the men were minted with', reproduced === SEEDS.length, `${reproduced} of ${SEEDS.length}`);
   console.log(`   ${compared} of ${total} twin rounds compared, ${moved.length} moved; IL identical on ${ilSame} of ${ilTotal} man rounds`);
 }
 

@@ -238,11 +238,14 @@ export interface MlbRoundReport {
   notes: string[];
 }
 
-/* Round 829: a number in [0, 1) from a round's draw, a man's id and a salt,
-   so his injury roll is his own. murmur3's finaliser on an FNV style mix. */
-function unitHash(seed: number, id: string, salt: number): number {
+/* Round 829: a number in [0, 1) from a round's draw, a man's name and a salt,
+   so his injury roll is his own. murmur3's finaliser on an FNV style mix.
+   The name and not the id: an id carries a random per page load stamp
+   (entityIds.ts), so the same seed would roll different injuries on every
+   load, and a name is already one to a man in a league (Round 211). */
+function unitHash(seed: number, key: string, salt: number): number {
   let h = (seed ^ Math.imul(salt, 0x9e3779b1)) >>> 0;
-  for (let i = 0; i < id.length; i += 1) h = Math.imul(h ^ id.charCodeAt(i), 0x01000193) >>> 0;
+  for (let i = 0; i < key.length; i += 1) h = Math.imul(h ^ key.charCodeAt(i), 0x01000193) >>> 0;
   h ^= h >>> 16; h = Math.imul(h, 0x85ebca6b) >>> 0;
   h ^= h >>> 13; h = Math.imul(h, 0xc2b2ae35) >>> 0;
   h ^= h >>> 16;
@@ -253,7 +256,7 @@ function unitHash(seed: number, id: string, salt: number): number {
    drew from the shared stream once per man, so thirteen extra bench men
    shifted every roll after them and every game after that: adding a man
    who never plays changed results. Here the round takes one draw, and each
-   man's roll comes from that draw and his own id. Same odds as before
+   man's roll comes from that draw and his own name. Same odds as before
    (2.5 percent a round, out 1 to 4 rounds). Saves from before this round
    keep the old pass, so they play exactly as they did. */
 function rollDepthInjuries(league: MlbLeague, myTeam: string, rng: () => number, notes: string[]): void {
@@ -261,8 +264,8 @@ function rollDepthInjuries(league: MlbLeague, myTeam: string, rng: () => number,
   for (const t of Object.values(league.teams)) {
     for (const p of t.players) {
       if (p.out > 0) { p.out -= 1; continue; }
-      if (unitHash(roundSeed, p.id, 1) < 0.025) {
-        p.out = 1 + Math.floor(unitHash(roundSeed, p.id, 2) * 4);
+      if (unitHash(roundSeed, p.name, 1) < 0.025) {
+        p.out = 1 + Math.floor(unitHash(roundSeed, p.name, 2) * 4);
         if (t.abbr === myTeam) notes.push(`🚑 ${p.name} hits the IL for ${p.out} round${p.out === 1 ? '' : 's'}.`);
       }
     }
