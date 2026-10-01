@@ -533,3 +533,180 @@ export const MAX_HEADLINES = 12;
 export function pushHeadlines(prev: string[] | undefined, lines: string[]): string[] {
   return [...lines.slice().reverse(), ...(prev ?? [])].slice(0, MAX_HEADLINES);
 }
+
+/* ─── Round 835: the posts you make, one rule for every career ───────────────
+
+   Soccer Career has had a social media screen every season since 18: pick
+   one post, and it moves your followers, your reputation, or banks a quiet
+   season that pays off in the next one. The American careers only ever READ
+   a gram. The rules moved here so they can post too; soccerCareerBrand.ts
+   binds them for the flagship and its output did not change by a byte (the
+   Round 835 fixture holds every save hash of 48 careers against it).
+
+   WHAT A POST IS (SocialPostDef). Data. Its follower gain is a range, drawn
+   once when the ends differ and never drawn when they match, so a fixed post
+   costs no random number. Its reputation change is signed. Two posts are
+   special and the sport names them rather than this file knowing their ids:
+   the focus post gains nothing now and banks a boost the next season pays
+   out, and the rival post adds a line about the rival while there is one.
+
+   WHAT A SPORT HANDS IN (SocialPostSport). Where the meters live on its save
+   (followers in stored units, standing 0 to 100), the once a season flag, the
+   focus flag, the rival's name, how a line is logged, the random source, and
+   every word. Soccer reads Math.random at call time; a sport binding on the
+   keyed streams hands in its own.
+
+   THE RULES: one post a season, an unknown post does nothing, a post moves
+   exactly the meters it names (followers when its range is above zero,
+   standing when its change is not zero, the focus flag for the focus post)
+   and nothing else, standing stays inside 0 to 100, and followers are kept
+   to two decimals of the stored unit. */
+
+/** Read and write one number on a save. */
+export interface Meter<S> {
+  get: (s: S) => number;
+  set: (s: S, v: number) => void;
+}
+
+/** Read and write one switch on a save. */
+export interface Toggle<S> {
+  get: (s: S) => boolean;
+  set: (s: S, v: boolean) => void;
+}
+
+export interface SocialPostDef {
+  id: string;
+  label: string;
+  emoji: string;
+  description: string;
+  /** [min, max] in raw followers. Equal ends are a fixed gain. */
+  followerGain: [number, number];
+  /** Signed, on the 0 to 100 standing meter. */
+  reputationChange: number;
+  /** One more line the card prints under the post. */
+  extraEffect?: string;
+}
+
+export interface SocialPostWords<S> {
+  /** Logged when the focus post is made. */
+  focus: string;
+  /** Logged when a post lands, with the gain in stored units. */
+  gained: (post: SocialPostDef, gain: number) => string;
+  /** Logged when standing moves, with the signed change. */
+  standingUp: (change: number) => string;
+  standingDown: (change: number) => string;
+  /** Logged for the rival post while there is a rival. */
+  rival: (name: string, s: S) => string;
+  /** Logged when a banked focus boost pays out. */
+  focusPaid: string;
+}
+
+export interface SocialPostSport<S> {
+  posts: SocialPostDef[];
+  /** The post that banks next season's focus boost instead of gaining. */
+  focusPost: string;
+  /** The post aimed at the rival. */
+  rivalPost: string;
+  /** Raw followers per stored unit (soccer stores millions). */
+  followerUnit: number;
+  followers: Meter<S>;
+  standing: Meter<S>;
+  /** Set once a post has been made this season. */
+  posted: Toggle<S>;
+  /** Banked by the focus post, cleared when it pays out. */
+  focus: Toggle<S>;
+  /** What the focus boost does when it pays out: the sport's own stats. */
+  payFocus: (s: S) => void;
+  /** The rival's name while there is one still playing, else null. */
+  rivalName: (s: S) => string | null;
+  log: (s: S, line: string) => void;
+  /** Read at call time, so a seeded stream installed later is honoured. */
+  rng: () => number;
+  words: SocialPostWords<S>;
+}
+
+const r2 = (v: number) => Math.round(v * 100) / 100;
+const clamp100 = (v: number) => Math.max(0, Math.min(100, v));
+
+/** What one post gains in raw followers. A fixed post draws nothing. */
+export function postGain(post: SocialPostDef, rng: () => number): number {
+  const [lo, hi] = post.followerGain;
+  return lo === hi ? lo : Math.floor(rng() * (hi - lo + 1)) + lo;
+}
+
+/** The meters a post names, read off its data. The card and the rule both
+ *  come from this, so the words on a button cannot drift from what it does. */
+export function postMeters<S>(post: SocialPostDef, sport: SocialPostSport<S>): ("followers" | "standing" | "focus")[] {
+  if (post.id === sport.focusPost) return ["focus"];
+  const out: ("followers" | "standing" | "focus")[] = [];
+  if (post.followerGain[1] > 0) out.push("followers");
+  if (post.reputationChange !== 0) out.push("standing");
+  return out;
+}
+
+/**
+ * Make one post on the save in place. False, with nothing touched, when the
+ * post is unknown or the season's post has already been made.
+ */
+export function applySocialPost<S>(s: S, postId: string, sport: SocialPostSport<S>): boolean {
+  const post = sport.posts.find(p => p.id === postId);
+  if (!post || sport.posted.get(s)) return false;
+  sport.posted.set(s, true);
+  if (postId === sport.focusPost) {
+    sport.focus.set(s, true);
+    sport.log(s, sport.words.focus);
+    return true;
+  }
+  const gain = postGain(post, sport.rng);
+  sport.followers.set(s, r2(sport.followers.get(s) + gain / sport.followerUnit));
+  sport.log(s, sport.words.gained(post, gain / sport.followerUnit));
+  if (post.reputationChange !== 0) {
+    sport.standing.set(s, clamp100(sport.standing.get(s) + post.reputationChange));
+    sport.log(s, post.reputationChange > 0 ? sport.words.standingUp(post.reputationChange) : sport.words.standingDown(post.reputationChange));
+  }
+  if (postId === sport.rivalPost) {
+    const name = sport.rivalName(s);
+    if (name !== null) sport.log(s, sport.words.rival(name, s));
+  }
+  return true;
+}
+
+/** The new season: pay out a banked focus boost, once. True when it paid. */
+export function payFocusBoost<S>(s: S, sport: SocialPostSport<S>): boolean {
+  if (!sport.focus.get(s)) return false;
+  sport.payFocus(s);
+  sport.focus.set(s, false);
+  sport.log(s, sport.words.focusPaid);
+  return true;
+}
+
+/** How a season grows the following on its own, without a post. */
+export interface FollowerGrowth<S, R> {
+  /** What the season itself earned (goals, trophies, awards), stored units. */
+  buzz: (s: S, season: R) => number;
+  /** A multiplier for playing in front of a big home market, 1 otherwise. */
+  homeMarket: (s: S) => number;
+  standing: Meter<S>;
+  /** Stored units per point of standing. */
+  standingRate: number;
+  /** A viral moment: the chance a season has one, and the whole stored
+   *  units it adds, drawn between min and max. */
+  viral: { chance: number; min: number; max: number };
+  /** The personality's follower multiplier, already bounded. */
+  personality: (s: S) => number;
+  rng: () => number;
+}
+
+/**
+ * A season's organic follower growth, in stored units, two decimals. Draws
+ * one random number for the viral roll and a second only when it hits.
+ */
+export function seasonFollowerGrowth<S, R>(s: S, season: R, g: FollowerGrowth<S, R>): number {
+  let growth = g.buzz(s, season);
+  const home = g.homeMarket(s);
+  if (home !== 1) growth *= home;
+  growth += g.standing.get(s) * g.standingRate;
+  if (g.rng() < g.viral.chance) growth += Math.floor(g.rng() * (g.viral.max - g.viral.min + 1)) + g.viral.min;
+  growth *= g.personality(s);
+  return r2(growth);
+}

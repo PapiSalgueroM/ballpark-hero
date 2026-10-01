@@ -50,10 +50,12 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
  * Bundle the soccer engine and the life module out of `tree` (a checkout's
  * root) and import them. `rewrite(relPath, src)` may change a source file's
  * text in the bundle only, for the negative controls; the file on disk is
- * never touched. node_modules is found by walking up from this script, so a
- * worktree with none of its own still resolves.
+ * never touched. `extra` maps more export names to tree relative module
+ * paths, bundled in the same build so they share one module graph. node_modules
+ * is found by walking up from this script, so a worktree with none of its own
+ * still resolves.
  */
-export async function loadSoccerBrand(tree, rewrite = null) {
+export async function loadSoccerBrand(tree, rewrite = null, extra = {}) {
   const { build } = await import('esbuild');
   const here = path.dirname(fileURLToPath(import.meta.url));
   const nodePaths = [];
@@ -70,6 +72,7 @@ export async function loadSoccerBrand(tree, rewrite = null) {
 globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
 export const soccer = await import('${T}/src/lib/soccerCareerEngine.ts');
 export const life = await import('${T}/src/lib/soccerCareerLife.ts');
+${Object.entries(extra).map(([name, rel]) => `export const ${name} = await import('${T}/${rel}');`).join('\n')}
 `);
   const plugins = [];
   if (rewrite) {
