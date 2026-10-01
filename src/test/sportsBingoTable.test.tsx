@@ -20,7 +20,8 @@ import { button, click, findButton, mountPage, type MountedPage } from './dailyR
 import { recordCompletion, resetMocks, setPoolFixture } from './dailyReload/mocks';
 import { players } from '@/data/players';
 import {
-  CARD_SIZE, FREE_INDEX, PACK_SIZE, claimableSquares, declareWinner, loadBingoTable, secondsFor, type BingoGame, type BingoTable,
+  CARD_SIZE, FREE_INDEX, PACK_SIZE, claimableSquares, cpuClaims, cpuRng, declareWinner, loadBingoTable, secondsFor, squaresOf,
+  type BingoGame, type BingoTable,
 } from '@/lib/sportsBingo';
 import SportsBingo from '@/pages/SportsBingo';
 
@@ -96,13 +97,15 @@ describe('Sports Bingo pass the device table', () => {
   it('deals, hides every card at the hand over, plays seat by seat with a CPU on the same packs and declares the engine winner', async () => {
     const m = await mountSetup();
     await click(button(m.container, /^Pass the device/));
-    /* Three seats, the middle one a CPU, so the CPU's turn runs through the page between two people. */
+    /* Three seats, the middle one a Ruthless CPU (the temper that marks the
+       most), so the CPU's turn runs through the page between two people. */
     await click(button(m.container, /^3 seats$/));
     const toCpu = m.container.querySelector('button[aria-label="Seat 2, a person, tap to switch"]');
     expect(toCpu).not.toBeNull();
     await click(toCpu!);
+    await click(button(m.container, /^Ruthless$/));
     await click(button(m.container, /^Deal the cards$/));
-    expect(saved().seats.map(s => s.kind)).toEqual(['human', 'cpu', 'human']);
+    expect(saved().seats.map(s => `${s.kind} ${s.kind === 'cpu' ? s.level : ''}`.trim())).toEqual(['human', 'cpu ruthless', 'human']);
 
     let turns = 0;
     let cpuMarks = 0;
@@ -119,14 +122,16 @@ describe('Sports Bingo pass the device table', () => {
       /* Player 1 turns every player up and claims all; Player 3 turns up two. */
       await playTurn(m, t.turn === 0 ? PACK_SIZE : 2);
       /* The CPU in seat two plays straight after seat one, on the pack seat
-         one just had: every square it marks, a player in THAT pack satisfies
-         on the CPU's own card. */
+         one just had. Its turn is replayed here on THAT pack, its own card,
+         its temper and its own stream, and the board must match square for
+         square, so a CPU dealt any other pack cannot pass by luck. */
       if (t.turn === 0) {
-        const cpuBefore = t.seats[1].marked;
-        const could = claimableSquares(cardOf(t, 1), t.packs[t.packIndex], cpuBefore);
-        const fresh = saved().seats[1].marked.flatMap((on, sq) => (on && !cpuBefore[sq] ? [sq] : []));
-        for (const sq of fresh) expect(could).toContain(sq);
-        cpuMarks += fresh.length;
+        const cpu = t.seats[1];
+        const want = [...cpu.marked];
+        for (const sq of cpuClaims(cardOf(t, 1), t.packs[t.packIndex], cpu.marked, cpu.level, cpuRng(t, 1))) want[sq] = true;
+        const got = saved().seats[1].marked;
+        expect(got).toEqual(want);
+        cpuMarks += squaresOf(got) - squaresOf(cpu.marked);
       }
     }
 
