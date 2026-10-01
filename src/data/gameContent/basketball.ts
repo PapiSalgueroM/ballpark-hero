@@ -1997,6 +1997,12 @@ export const BASKETBALL_CONTENT: GameContentMap = {
             ],
           },
           {
+            heading: "Answering your phone on the basketball calendar",
+            items: [
+              "Answer your phone. Texts from your agent, the head coach, the GM, a teammate or your mom land on the beats of the basketball year: draft night and your first summer league, camp, the trade deadline, the All-Star break, the playoffs if you get there, the offseason, and the summer before the last year of your deal. Every text says which beat and which year it came in on, and how you answer moves your karma, morale, fanbase or bank.",
+            ],
+          },
+          {
             heading: "Making the call when your rival forces one",
             items: [
               "Some seasons your rival hands you a decision instead of a headline: a flagrant you can answer or let go, a debate show offering real money, a youth camp his foundation wants you to co-host, an All-Star vote his team is buying ads for. Every button prints exactly what it moves, and a gamble prints its odds.",
@@ -2086,6 +2092,13 @@ export const BASKETBALL_CONTENT: GameContentMap = {
         heading: "How your rival's choices work",
         items: [
           "A season where your rival makes no headline has a 45% shot at a rival choice instead, never both in the same year, and every choice shows up once before any of them repeats. The buttons move only what they print: morale, fanbase, net worth, karma or the heat of the feud, and morale feeds straight into next season's box score.",
+        ],
+      },
+      {
+        heading: "How the phone's calendar works",
+        items: [
+          "Texts only arrive on beats your season really had. No playoff texts in a year you went home in April, no contract year texts until one year is left on the deal, and draft night's texts land before you play a game. Summer league comes round twice at most: the July after draft night and the one after your rookie year. One text a beat, up to three a season, fewer while old ones sit unanswered, and the same text never comes twice in a career.",
+          "The season the game retires you (41, 21 seasons, or a rating that craters) sends nothing about a year you will not play: no summer runs, no early lifts, no extension talk.",
         ],
       },
     ],

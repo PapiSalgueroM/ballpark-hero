@@ -709,8 +709,12 @@ export function mlbProgress(c: MlbCareerState, rng: () => number): string[] {
   for (const line of mlbMoneySeasonTick(c).events) notes.push(line);
   /* Round 525: the inbox. Silent on purpose, the same way the flagship's
      phone and the NFL career never announce a new text in the season feed:
-     the unread badge on the Inbox box is the tell. */
-  receiveMlbInboxTexts(c, rng);
+     the unread badge on the Inbox box is the tell. Round 822: it delivers on
+     the baseball calendar and draws from its own keyed stream, never this
+     season's rng, and it is told whether the career goes on (the same
+     mlbShouldRetire the board asks right after this returns), so a player
+     who retires this winter is never sent a text about next season. */
+  receiveMlbInboxTexts(c, !mlbShouldRetire(c));
   return notes;
 }
 
