@@ -32,8 +32,10 @@
         before; and a window rebuilt from its seed and its actions matches
         the original in every status, fee, budget and grade.
      5) the budget never goes negative (hard), after every action of every
-        manager in sections 2 and 3, and the number of actions read is held
-        to a floor so the check cannot pass on nothing.
+        manager in sections 2 and 3 and of a reckless one who pays every ask
+        and every agent's full terms without looking at the budget. The
+        actions read and the reckless manager's overreaches (1693 on the
+        filename seed) are held to floors so the check cannot pass on nothing.
      6) Club Manager's module registrations come back. A custom club and a
         league override registered the way a Club Manager save registers
         them survive a start, every kind of action and a replay, and the
@@ -54,8 +56,12 @@
      DEADLINE_CONTROL=leak     Manager Hot Seat's onStaticWorld stops restoring
        registrations, its own leak control copied. Section 6 must go red.
 
-   Thresholds: see the THRESHOLDS block below for the measured runs and the
-   margins. Run: node scripts/simDeadlineDay.mjs
+   Thresholds: see the THRESHOLDS block in section 2 for the measured runs
+   and the margins. The hard sections (3 to 6) have no band: one breach is red.
+   Section 3's floor of held deals caught at the shut (one for every two
+   windows, so 100) measured 275 to 309 over 200 windows on the same six
+   streams.
+   Run: node scripts/simDeadlineDay.mjs (about 50 seconds)
 */
 /* Round 299: seeded stream, see scripts/lib/seedRandom.mjs. First import on purpose. */
 import './lib/seedRandom.mjs';
@@ -430,11 +436,21 @@ for (const arm of Object.keys(arms)) {
 const scoreGap = g('desk', 'score') - g('over', 'score');
 const valueGap = g('desk', 'valuePts') - g('over', 'valuePts');
 console.log(`   desk minus asking price: ${scoreGap >= 0 ? '+' : ''}${fmt(scoreGap)} score, ${valueGap >= 0 ? '+' : ''}${fmt(valueGap)} value points; desk wins ${deskWins}, asking price wins ${overWins}, level ${starts.length - deskWins - overWins}`);
+/* THRESHOLDS, measured on 2026-10-01 at the default 200 windows over six
+   streams (the filename seed, then SIM_SEED=1 to 5):
+     score gap        3.59, 3.30, 3.78, 3.78, 3.77, 3.80   (spread 0.5)
+     desk win share   85.8, 84.7, 85.9, 88.3, 86.8, 86.5 percent of decided pairs
+     value point gap  4.73, 4.60, 4.72, 4.86, 4.67, 4.65
+     desk fills all   89.0, 87.5, 88.0, 89.0, 87.5, 89.5 percent of windows
+     (the asking price manager fills every need in 97.5 to 100 percent)
+   Each floor sits under the lowest stream by more than the whole spread. The
+   blind control takes value and budget points to zero, which leaves the desk
+   behind on needs alone, so every one of the first three goes red under it. */
 const T = {
-  scoreGap: 3.0,
-  winShare: 60,
-  valueGap: 2.0,
-  deskFullLo: 35, deskFullHi: 97,
+  scoreGap: 2.5,
+  winShare: 75,
+  valueGap: 3.5,
+  deskFullLo: 75, deskFullHi: 97,
 };
 if (!(scoreGap >= T.scoreGap)) fail(`pricing off the desk is worth ${fmt(scoreGap)} points over paying the ask (floor +${T.scoreGap})`);
 if (!(pct(deskWins, deskWins + overWins) >= T.winShare)) fail(`the desk wins ${fmt(pct(deskWins, deskWins + overWins), 1)} percent of the decided pairs (floor ${T.winShare})`);
@@ -530,9 +546,50 @@ if (!failedSections.has(4)) ok('the same date is the same window, each new day i
 /* ---------- 5. the budget ---------- */
 section = 5;
 console.log('5) The budget never goes negative');
-console.log(`   ${actionsRead} actions read, ${negatives} left the budget below zero${firstNegative.length ? ` (${firstNegative.join('; ')})` : ''}`);
+/* The managers above never ask for money they do not have, so on their own
+   they would hold the fence whether or not it exists. The reckless manager
+   goes after the dearest man for every need and pays whatever is asked,
+   fee and full terms, without once looking at the budget, which is the
+   screen a player could build by typing a big number. Every one of those
+   asks the club cannot cover must be refused before it costs a penny. */
+let overAsks = 0;
+function reckless(start) {
+  let run = start;
+  const tag = `${start.setup.club} seed ${start.setup.seed} reckless`;
+  const order = run.targets.map((_, i) => i).sort((a, b) => sticker(run.targets[b].mp) - sticker(run.targets[a].mp) || a - b);
+  const refused = new Set();
+  let guard = 0;
+  while (!run.grade && guard++ < 200) {
+    const i = order.find(k => ['idle', 'talks', 'terms'].includes(run.targets[k].status) && !refused.has(k));
+    if (i === undefined) break;
+    const t = run.targets[i];
+    let next = run;
+    if (t.status === 'idle') next = openTalks(run, i);
+    else if (t.status === 'talks') {
+      const rival = rivalOn(t);
+      const bid = Math.round(Math.max(t.neg.theirAsk, rival ? rival.offer + 0.1 : 0) * 10) / 10;
+      if (bid > run.state.budget) overAsks += 1;
+      next = placeBid(run, i, bid);
+    } else {
+      const want = termsWanted(run, i);
+      if ((t.neg.agreedFee ?? 0) + want.bonus > run.state.budget) overAsks += 1;
+      next = offerPersonalTerms(run, i, { wage: want.wage, years: want.years, bonus: want.bonus });
+    }
+    if (next === run) {
+      refused.add(i);
+      if (t.status !== 'idle') run = watch(walkFrom(run, i), tag);
+      continue;
+    }
+    run = watch(next, tag);
+  }
+  if (!run.grade) run = watch(endDay(run), tag);
+  return run;
+}
+for (const start of starts) reckless(start);
+console.log(`   ${actionsRead} actions read, ${negatives} left the budget below zero${firstNegative.length ? ` (${firstNegative.join('; ')})` : ''}; the reckless manager asked for money the club did not have ${overAsks} times`);
 if (negatives) fail(`${negatives} actions left the budget below zero`);
 if (actionsRead < SETUPS * 10) fail(`only ${actionsRead} actions read (floor ${SETUPS * 10}), so the fence saw too little`);
+if (overAsks < SETUPS * 0.5) fail(`the reckless manager overreached only ${overAsks} times (floor ${SETUPS * 0.5}), so the fence was barely tested`);
 if (!failedSections.has(5)) ok('no action of any manager took the budget below zero');
 
 /* ---------- 6. the shared engine's session state comes back ---------- */
