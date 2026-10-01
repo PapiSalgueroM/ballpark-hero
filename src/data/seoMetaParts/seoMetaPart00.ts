@@ -2,7 +2,7 @@
    edit this folder: edit src/data/seoMeta.ts. Every vite build rewrites what
    has fallen behind, and simSeoTitles section 6 fails if the committed copy
    is not what the source makes. */
-/* Part 0 of 32: 2 entries. */
+/* Part 0 of 32: 3 entries. */
 import type { SeoMeta } from '../seoMeta';
 
 export const SEO_META_PART: Record<string, SeoMeta> = {
@@ -13,5 +13,9 @@ export const SEO_META_PART: Record<string, SeoMeta> = {
   "/conquest-mlb": {
     title: "MLB Conquest: Baseball Imperialism Map Game",
     description: "Every territory starts with its nearest MLB park, and every winner annexes the loser's whole empire. Two clubs start with nothing. Free baseball map game.",
+  },
+  "/aussie-rules-manager": {
+    title: "Aussie Rules Manager: Free Footy Management Game",
+    description: "Run a fictional Aussie rules club through ten rounds. Pick your squad, train or rest and change tactics between quarters. Free footy management game.",
   },
 };
