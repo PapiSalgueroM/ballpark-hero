@@ -156,10 +156,13 @@
  *      to a tenth, so a dog on a €24k rent made the bill nothing); after, it
  *      must be exactly the kept items plus every standing cost, each item
  *      must be sold or kept by its category, and the physio must still be on
- *      the save. Measured (N=120 and the default 200, every seed offset run):
- *      48 careers through a crisis, 0 seasons without one, physio, child and
- *      dog each tested in 27 or more, 0 problems of any kind; with the old
- *      rebuild (crisisdrops) every career with a standing cost fails after.
+ *      the save. Measured at the default N over seed offsets 0 to 4: 44, 46,
+ *      45, 44 and 47 of 48 careers reached the crisis (the rest retired that
+ *      season), physio, child and dog each tested in 24 to 27 of them, 106
+ *      to 116 items sold, 0 problems of any kind. Floors: 30 careers through
+ *      a crisis and 10 per standing cost. With the old rebuild (crisisdrops,
+ *      N=120) all 44 crisis careers fail after; with the dog rounding the
+ *      bill to a tenth (roundbill) 27 bills are wrong before and 24 after.
  *
  * NEGATIVE CONTROLS, one or more per section. Each puts a defect back into an
  * in memory copy of one source file (also written to the temp directory for
