@@ -1,5 +1,27 @@
 # Work board
 
+**2026-09-30, Codex Round 774 CLAIMED: Sports Quiz Board clue access and answer feedback (96,97).**
+Own only `src/components/quiz-board/QuizBoard.tsx`, scoped CSS, actual-component tests and a
+new sim wrapper. Replace the custom clue overlay with the existing Dialog for labeled clue
+access, keyboard trapping, Escape/free skip,44px controls and exact opener/stable answered-cell
+focus return. Add finite committed correct/wrong tile and score emphasis from existing hook
+outcomes. Initial/restored boards, identical props, guesses and skips stay quiet; reduced
+motion is static. Preserve exact clue IDs/values, matching, score, daily storage, completion,
+share and all callbacks. No hook/fetch/data/route/catalog/shared Dialog or global style edits.
+Verify actual good/wrong/skip outcomes and focus with asserted controls and native browser
+cases at four widths/two motion settings. Root owns docs/git/build. Next unclaimed number:775.
+
+**2026-09-30, Codex Round 775 CLAIMED: truthful F1 Constructor guess reactions (97).**
+Root owns only `src/components/f1-constructor/F1ConstructorBoard.tsx`, scoped CSS, focused
+actual-board tests and a sim wrapper. Its delayed callback reads the old playing state, so even
+a winning guess schedules Wrong guess. Replace that with the committed hook outcome. Add
+finite correct/wrong feedback and settled result emphasis, quiet on restored/unchanged state,
+hint, skip, reset and stale work, with static reduced motion. Preserve guesses, revealed clues,
+hook seeds/matching/scoring, share, data and callbacks. Reserve a stable feedback area so
+reactions do not shift the controls. No hook/search/how-to/data/route/shared style edits. Verify
+the measured winning-guess defect, actual losing/final/restore outcomes and timer cleanup,
+asserted controls and four-width/two-motion browser acceptance. Next free number:776.
+
 **2026-09-30, Codex Round 773 CLAIMED: Soccer Classic lineup targeting and picker focus (master H, 96).**
 Own only `src/components/perfect-lineup/PerfectLineupBoard.tsx`, new focused actual-board tests
 and a new auto-discovered sim wrapper. This separate Classic board still hides eligible choices

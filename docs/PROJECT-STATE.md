@@ -1,5 +1,14 @@
 # Project state
 
+## IN PROGRESS 2026-09-30: Quiz Board and F1 Constructor follow the Soccer picker
+
+Codex774 claims the isolated Quiz Board clue overlay and committed answer feedback. Root775
+fixes a F1 Constructor reaction reading old state and showing Wrong guess after a win, then
+adds finite truthful feedback. The two boards, their scoped CSS/tests/harnesses have exact
+claims on WORKBOARD. No hooks, data, seeds, matching, scoring or Claude held lanes change.
+773 Soccer Classic targeting continues separately. Full suite still running; builds stay held.
+Next unclaimed number:776.
+
 ## IN PROGRESS 2026-09-30: next independent game task 773
 
 Soccer Classic Perfect Lineup still caps its picker at forty and loses dismissal focus in its
