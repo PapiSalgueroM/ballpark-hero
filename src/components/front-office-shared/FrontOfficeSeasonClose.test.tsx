@@ -29,7 +29,8 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render, screen, fireEvent, cleanup } from '@testing-library/react';
 import type { ComponentType } from 'react';
-import { initLeague, simGame, REGULAR_WEEKS } from '@/lib/frontOffice';
+import { initLeague, simGame, REGULAR_WEEKS, DEEP_ROSTER_MAX } from '@/lib/frontOffice';
+import { FO_DEPTH } from '@/data/frontOfficeDepth';
 import { initNbaLeague, simRound, NBA_ROUNDS } from '@/lib/nbaFrontOffice';
 import { initMlbLeague, simMlbRound, MLB_ROUNDS } from '@/lib/mlbFrontOffice';
 import { initNhlLeague, simNhlRound, NHL_FO_ROUNDS } from '@/lib/nhlFrontOffice';
@@ -75,6 +76,22 @@ const CASES: BoardCase[] = [
     saveKey: 'front-office-save-v1',
     finalWeek: rng => {
       const lg = initLeague(rng);
+      for (let w = 1; w < REGULAR_WEEKS; w += 1) { lg.schedule[w - 1].forEach(g => simGame(g, lg.teams, rng)); lg.week += 1; }
+      return { league: lg, team: Object.keys(lg.teams)[0] };
+    },
+    tile: 'This week', finalButton: 'Play the final week + playoffs',
+    headline: /win the 2026 title/, draftHeading: 'The 2027 Draft',
+    picks: 3, firstButton: 'Play Week 1', periodKey: 'week',
+  },
+  /* Round 828: a new NFL league carries every club's real 53 and practice
+     squad, so the season close, the draft and the offseason (the refill and
+     the cut to 53) run here on the league a new player actually gets. */
+  {
+    name: 'NFL Front Office, full rosters', env: 'FO_BOARD_NFL',
+    load: () => import('@/components/front-office/FrontOfficeBoard'),
+    saveKey: 'front-office-save-v1',
+    finalWeek: rng => {
+      const lg = initLeague(rng, { depth: FO_DEPTH });
       for (let w = 1; w < REGULAR_WEEKS; w += 1) { lg.schedule[w - 1].forEach(g => simGame(g, lg.teams, rng)); lg.week += 1; }
       return { league: lg, team: Object.keys(lg.teams)[0] };
     },
@@ -232,6 +249,12 @@ for (const c of CASES) {
       for (let i = 0; i < c.picks; i += 1) fireEvent.click(screen.getAllByText(/· age \d+/)[0]);
       expect(read().phase).toBe('hub');
       expect(read().league.season).toBe(2027);
+      /* Round 828: on full rosters the offseason refilled every club and cut it to the 53. */
+      if (read().league.rosterDepth === 2) {
+        const sizes = Object.values(read().league.teams as Record<string, any>).map(t => t.players.length);
+        expect(Math.max(...sizes)).toBeLessThanOrEqual(DEEP_ROSTER_MAX);
+        expect(Math.min(...sizes)).toBeGreaterThanOrEqual(DEEP_ROSTER_MAX - 6);
+      }
       /* Round 530: the last pick is narrated, so the screen holds the draft
          with its card until Continue is pressed. The save already says hub,
          which is what the two lines above check; the hub itself is not drawn
