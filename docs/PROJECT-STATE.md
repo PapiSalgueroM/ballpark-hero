@@ -1,5 +1,17 @@
 # Project state
 
+## CHECKPOINT 2026-09-30: Quiz Board native acceptance joins the six source-ready rounds
+
+774 passes seven actual Board/hook tests, six copied controls and eight five-category native
+browser cases, with keyboard clue access, exact focus, scores/saved IDs and finite/static
+answer feedback. Phone heading overlap has a real copied-control proof and scoped fix. Full
+receipts and fixture limits are on WORKBOARD. The older two Quiz score tests pass; full old
+score fence/control compatibility is being checked.776 StaffScreen acceptance continues.
+769 through775 source is pushed as checkpoints; final corrected build/CSS/fifteen-fence
+acceptance and publication remain pending behind the full392-node suite. All754 through768
+remain live in H. Reserved names747 is correctly regraded done in the master reconciliation,
+which now counts52 done and216 partial. Next unclaimed number:777.
+
 ## CHECKPOINT 2026-09-30: F1 Constructor truthful reactions accepted
 
 775 fixes a rendered winning-guess Wrong reaction and adds finite reply/result feedback with

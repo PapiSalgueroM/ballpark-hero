@@ -1,5 +1,31 @@
 # Work board
 
+**2026-09-30, Codex774 source/browser checkpoint: native clue access and truthful answer cues.**
+Sports Quiz Board now uses the existing labeled/trapped Dialog. Native Close/Escape skips
+free and returns to the exact opener; submission returns to its stable labeled answered cell.
+Committed hook truth binds finite correct/wrong tile/score cues; restore, clones, skips and
+no-op reply intent stay quiet. Seven actual-board/real-hook tests and six asserted copies pass
+(tile3/4,score1/6,focus3/4,skip3/4,quiet4/3,cleanup1/6). Exact app types0 and independent review
+accepted. The two original scoreShown Quiz cases pass with exact shown/shared/recorded0/2600.
+Only their actual-dialog portal query and the old quiznegative copied CSS import are adapted;
+the complete old positive/control fence compatibility run is pending.
+
+Eight native browser contexts (320/390/430/1440,both motion settings) pass against actual Board/
+hook with five complete categories and25 fictional clues. Native Tab trap, Space/Enter play,
+Close/Escape and exact focus, +200/-400 saved clue IDs, cleared0 bank/share, stable grid
+rectangles, finite420/300/360ms cues and static reduced motion pass. All controls are44px and
+full clue/category text fits. A measured phone heading overlap was fixed only by the category
+span's min-width/overflow-wrap binding. Asserted no-wrap copies reproduce4.8 to12.36px overlap
+in both320 motion modes; production bytes stay unchanged. Phone screenshots inspected.
+TEMP/dukb-round774-quiz-audit/report.json and control-report.json carry evidence. Fictional
+clue/completion fixture is outside real data/account writes. Finished772 utilities plus scoped
+CSS are preliminary; final production CSS, combined build and15 fences remain owed.
+
+Reconciliation now correctly marks747 D53 done because its frontend is live in Release G/H
+and database enforcement was already applied. Counts:52 done,216 partial,361 total. Updated
+50,97,98,D32,D107,H retain their missing work and distinguish live earlier rounds from new
+accepted source. No blanket regrade or claim of Google approval/indexing. Next free stays777.
+
 **774 scope addendum, root owned:** preserve `scripts/simScoreShown.mjs` quiznegative copy
 loading after QuizBoard imports scoped CSS. Resolve only that new relative CSS import inside
 the existing asserted copied-control rewrite, with swap's exact-one-anchor check. Keep its
