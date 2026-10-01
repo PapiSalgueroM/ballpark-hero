@@ -1,0 +1,54 @@
+.page {
+  overflow-anchor: none;
+}
+
+.slot {
+  min-width: 0;
+  min-height: 44px;
+}
+
+.offer {
+  min-width: 0;
+  min-height: 44px;
+}
+
+.squad {
+  max-height: 352px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-gutter: stable;
+}
+
+.fullName {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.slot:focus-visible,
+.offer:focus-visible {
+  outline: 2px solid hsl(var(--primary));
+  outline-offset: 2px;
+}
+
+.kept {
+  animation: kept 420ms ease-out 1;
+}
+
+.discarded {
+  animation: discarded 360ms ease-out 1;
+}
+
+@keyframes kept {
+  0% { box-shadow: inset 0 0 0 2px hsl(var(--primary) / 0.85); }
+  100% { box-shadow: inset 0 0 0 0 hsl(var(--primary) / 0); }
+}
+
+@keyframes discarded {
+  0% { background-color: hsl(var(--primary) / 0.25); }
+  100% { background-color: transparent; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kept,
+  .discarded { animation: none; }
+}
