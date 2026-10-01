@@ -12354,11 +12354,17 @@ export function runShootout(args: { mine: ShootoutSide; theirs: ShootoutSide; my
   return { kicks, mine, theirs };
 }
 
-/** The order as the engine reads it: the saved list when it names anybody, else null and the old one draw shootout. */
+/**
+ * The order as the engine and the screens read it: the listed men still at
+ * the club and not out on loan, in the manager's order. Null when that
+ * leaves nobody (never set, cleared, or every listed man has gone), and then
+ * the shootout is the old one draw, so what the tactics tab says and what
+ * the whistle does cannot disagree.
+ */
 export function shootoutOrderOf(state: CareerState): string[] | null {
   const o = state.shootoutOrder;
   if (!Array.isArray(o)) return null;
-  const ids = o.filter((id): id is string => typeof id === 'string');
+  const ids = o.filter((id): id is string => typeof id === 'string' && state.squad.some(p => p.id === id && !p.onLoan));
   return ids.length ? ids : null;
 }
 
@@ -12396,7 +12402,11 @@ function settleShootout(
   const taker = assignedOnPitch(state.setPieces, 'penalties', men(finished));
   const order = shootoutOrderOf(state);
   if (!order) return { won: Math.random() < clamp(0.5 + (mine - oppS) * 0.012 + shootoutTakerEdge(taker), 0.2, 0.8) };
-  const myKeeper = finished.find(x => x.p.position === 'GK')?.p ?? finished[0]?.p ?? null;
+  /* The man standing in goal at the whistle, read off the slot (an
+     outfielder put in goal is the keeper, a keeper played up front is not);
+     a save whose slots cannot be named falls back to a keeper by position,
+     and with nobody in goal there is no keeper edge either way. */
+  const myKeeper = finished.find(x => x.slot?.allowed.includes('GK'))?.p ?? finished.find(x => !x.slot && x.p.position === 'GK')?.p ?? null;
   const onIds = finished.map(x => x.p.id);
   const myTakers = squadByIds(state, shootoutTakerOrder(order, onIds, myKeeper?.id ?? null))
     .map(p => ({ name: p.name, rating: p.rating }));
@@ -12414,7 +12424,7 @@ function settleShootout(
     theirs: {
       takers: oppTakers.length
         ? oppTakers.map(p => ({ name: p.n, rating: p.r, ...(p.g ? { gen: true } : {}) }))
-        : Array.from({ length: SHOOTOUT_MAX_ORDER }, (_, i) => ({ name: `Their taker ${i + 1}`, rating: oppS })),
+        : Array.from({ length: SHOOTOUT_MAX_ORDER }, (_, i) => ({ name: `Their taker ${i + 1}`, rating: oppS, gen: true })),
       keeperRating: oppKeeper?.r ?? (theirs.length ? null : oppS),
     },
     myFirst: Math.random() < 0.5,

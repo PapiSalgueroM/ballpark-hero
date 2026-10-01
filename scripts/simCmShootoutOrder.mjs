@@ -23,13 +23,15 @@
  *   1) The walk, through the whole match. One base career (Real Madrid,
  *      BASE_SEED) is simmed to its first cup week once; then N seeds play
  *      that cup match with a seven man order set (five men of the eleven
- *      and two bench men). For every match that reached a shootout, my first
- *      five kicks (or as many as were taken) must be the first five men of
- *      the order who finished the match, in that order, read off the
- *      report's own ratings sheet, subs, reds and injuries. 100 percent, a
- *      hard assert, and a floor on how many shootouts were reached so the
- *      assert cannot pass on an empty set. The scored share across every
- *      kick is printed and held to a wide band around the base rate.
+ *      and two bench men, listed second and fifth). For every match that
+ *      reached a shootout, my first five kicks (or as many as were taken)
+ *      must be the first five men of the order who finished the match, in
+ *      that order, read off the report's own ratings sheet, subs, reds and
+ *      injuries. 100 percent, a hard assert, with a floor on how many
+ *      shootouts were reached and a floor on how many of them needed the
+ *      skip to get the first five right, so neither can pass on an empty
+ *      set. The scored share across every kick is printed and held to a
+ *      wide band around the base rate.
  *   2) The order is worth something. The same eleven (ratings 90 down to
  *      62, a spread the cap bites on at both ends) against a copy of itself,
  *      on common random numbers: one arm kicks its five best first, the
@@ -42,11 +44,16 @@
  *      kick's odds stay inside twice the cap of the base rate.
  *   4) Unset means unchanged. scripts/data/cmShootoutUnset782.json holds,
  *      for 150 seeds of that same cup match with no order set, the result
- *      (how it was decided, who won the shootout, the score) and the next
- *      number off the stream after the match, written by the engine as it
- *      stood BEFORE this round (origin/main at 9136539b). The engine now
- *      must reproduce every row, so the unset path draws the same numbers
- *      in the same order, not merely the same winner.
+ *      (how it was decided, who won the shootout, the score), the next
+ *      number off the stream after the match, and a hash of the whole
+ *      report and the save after it, written by the engine as it stood
+ *      BEFORE this round (src/lib/clubManager.ts at origin/main 84d81619,
+ *      unchanged since the branch point 9136539b). The engine now must
+ *      reproduce every row. The next number alone is a weak witness (the
+ *      engine's later draws are conditional, so a stream shifted by one can
+ *      fall back into step: under unsetpath it came out the same on 17 of
+ *      the 28 shootout rows, and 8 of them matched on every other field);
+ *      the hash catches all 28.
  *   5) An old save loads. A career written without the field comes back
  *      with no order, plays the fixture's match the fixture's way, and an
  *      order set on it survives a save and a load; a bad id is refused.
@@ -56,30 +63,43 @@
  * not in the file:
  *   CM_SHOOTOUT_CONTROL=ignoreorder  settleShootout walks shirt order and
  *     ignores the manager's list. Section 1 must go red.
+ *   CM_SHOOTOUT_CONTROL=noskip       shootoutTakerOrder stops skipping a
+ *     listed man who is off the pitch. Section 1 must go red.
  *   CM_SHOOTOUT_CONTROL=nocap        shootoutKeeperEdge loses its clamp.
  *     Section 3 must go red.
  *   CM_SHOOTOUT_CONTROL=unsetpath    the one draw path takes one extra
  *     number off the stream first. Section 4 must go red (and 5 with it).
  *
- * MEASURED, 2026-10-01, default seed and SIM_SEED=1, 2, 3 (section 2 is
- * 4000 paired shootouts an arm, about 20 seconds a run):
- *   metric                                     fixed                   control                  floor / band
- *   shootouts reached in section 1             22, 24, 26, 25 of 150                            floor 12
- *   first five kicks in listed order           22/22, 24/24, 26/26, 25/25   0 of 22 (ignoreorder)  all
- *   a listed man off the pitch, of those       all (two bench men listed)                       printed
- *   scored share, all kicks                    80.6, 76.1, 75.1, 79.9 percent                   band 62 to 90
- *   best five first minus worst five first     9.7, 9.4, 10.4, 9.2 points                       floor 6
- *   Real Madrid's own eleven, same gap         2.3 points                                       printed
- *   edges and odds past the cap                0 of 3600 pairs         2355 (nocap)             0
- *   biggest move off the base rate             0.120                   0.200 (nocap)            twice the cap
- *   fixture rows reproduced                    150 of 150              130 of 150 (unsetpath)   150
- *   fixture rows that are shootouts            28                                               floor 12
+ * MEASURED, 2026-10-01, on the default seed and SIM_SEED=1 to 5 (six runs,
+ * section 2 is 4000 paired shootouts an arm, 7 to 9 seconds a run):
+ *   metric                                     fixed                                control                      floor / band
+ *   shootouts reached in section 1             22, 24, 26, 25, 24, 32 of 150                                     floor 12
+ *   first five kicks in listed order           all of them in every run             0 of 22 (ignoreorder, noskip) all
+ *   the skip decided who took the first five   22, 24, 26, 25, 24, 32 (every one)                                floor 12
+ *   scored share, all kicks                    80.6, 76.1, 75.9, 79.3, 72.9, 77.4 %                              band 62 to 90
+ *   best five first minus worst five first     9.7, 9.4, 10.4, 9.2, 9.5, 11.0 pts                                floor 6
+ *   Real Madrid's own eleven, same gap         2.3 points                                                        printed
+ *   edges and odds past the cap                0 of 3600 pairs                      2355 (nocap)                 0
+ *   biggest move off the base rate             0.120                                0.200 (nocap)                printed
+ *   fixture rows reproduced                    150 of 150                           122 of 150 (unsetpath)       150
+ *   fixture rows that are shootouts            28                                                                floor 12
+ *
+ * Measured once and not asserted, because it is a design fact rather than
+ * a check: on the same shootouts (1500 seeds of that cup match, the order
+ * changes nothing before the whistle) an order of the five best first won
+ * 61.3 percent for Real Madrid against 67.6 with no order, 58.2 against
+ * 64.3 for Burnley, and 45.9 against 42.9 for Getafe. The old one draw
+ * reads the whole eleven's strength gap (0.012 a point, up to 0.8); kick by
+ * kick reads only each taker and keeper inside the cap, so a strong side
+ * does a little worse with an order set and a weaker one a little better.
  *
  * Regenerating the fixture is a deliberate act and only ever from an engine
  * whose unset path is known to be the pre Round 782 one:
  *   CM_SHOOTOUT_WRITE_FIXTURE=<path to that clubManager.ts> node scripts/simCmShootoutOrder.mjs
  *
- * Nothing here reads dist or the clock, so it is safe to run between builds.
+ * Nothing here reads dist, and every match runs on a fixed clock (a few
+ * engine ids carry Date.now and the hash covers the save), so it is safe
+ * to run between builds and on any day.
  *
  * Run: node scripts/simCmShootoutOrder.mjs
  */
@@ -99,7 +119,7 @@ const BUNDLE = `${TMP}/${TAG}.bundle.mjs`;
 const FIXTURE = `${ROOT}/scripts/data/cmShootoutUnset782.json`;
 
 const CONTROL = process.env.CM_SHOOTOUT_CONTROL || '';
-const KNOWN = ['ignoreorder', 'nocap', 'unsetpath'];
+const KNOWN = ['ignoreorder', 'noskip', 'nocap', 'unsetpath'];
 if (CONTROL && !KNOWN.includes(CONTROL)) {
   console.error(`CM_SHOOTOUT_CONTROL=${CONTROL} is not a control this harness knows (${KNOWN.join(', ')})`);
   process.exit(1);
@@ -126,6 +146,11 @@ if (CONTROL) {
       'squadByIds(state, shootoutTakerOrder(order, onIds, myKeeper?.id ?? null))',
       'squadByIds(state, shootoutTakerOrder([], onIds, myKeeper?.id ?? null))',
       'settleShootout (the walk over the order)');
+  } else if (CONTROL === 'noskip') {
+    engine = swap(engine,
+      '    if (on.has(id) && !out.includes(id)) out.push(id);\n',
+      '    if (!out.includes(id)) out.push(id);\n',
+      'shootoutTakerOrder (the skip for a man off the pitch)');
   } else if (CONTROL === 'nocap') {
     engine = swap(engine,
       '  return clamp((keeperRating - 75) * 0.004, -SHOOTOUT_TAKER_EDGE_CAP, SHOOTOUT_TAKER_EDGE_CAP);\n',
@@ -180,10 +205,24 @@ function mulberry32(seed) {
     return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
   };
 }
+/* A fixed clock too: a few engine ids carry Date.now, and the fixture's
+   hash covers the whole save, so the replay must not read the real time. */
+const FIXED_NOW = Date.UTC(2026, 9, 1);
 function withSeed(seed, fn) {
   const saved = Math.random;
+  const savedNow = Date.now;
   Math.random = mulberry32(seed >>> 0);
-  try { return fn(); } finally { Math.random = saved; }
+  Date.now = () => FIXED_NOW;
+  try { return fn(); } finally { Math.random = saved; Date.now = savedNow; }
+}
+/** FNV-1a over a string, as hex: the witness that two runs drew the same numbers all the way through. */
+function fnv(s) {
+  let h = 0x811c9dc5 >>> 0;
+  for (let i = 0; i < s.length; i++) {
+    h ^= s.charCodeAt(i);
+    h = Math.imul(h, 0x01000193) >>> 0;
+  }
+  return h.toString(16).padStart(8, '0');
 }
 const SIM_SEED = Number.isFinite(Number(process.env.SIM_SEED)) ? Number(process.env.SIM_SEED) : 0;
 /* The base career and the fixture walk fixed seeds whatever SIM_SEED says,
@@ -224,11 +263,19 @@ function playCup(state, seed) {
     const rep = r.report;
     return {
       seed, decidedBy: rep.decidedBy, shootoutWon: rep.shootoutWon ?? null,
-      homeGoals: rep.homeGoals, awayGoals: rep.awayGoals, next: Math.random(), report: rep,
+      homeGoals: rep.homeGoals, awayGoals: rep.awayGoals, next: Math.random(),
+      /* Everything the match wrote, the report and the save after it. The
+         next number off the stream alone is a weak witness: the engine's
+         later draws are conditional, so a stream shifted by one can land on
+         the same count by the end (17 of the 28 shootout rows did, measured
+         under unsetpath). The other results, ratings and books drawn after
+         the shootout cannot all land the same. */
+      hash: fnv(JSON.stringify({ report: rep, state: r.state })),
+      report: rep,
     };
   });
 }
-const row = ({ seed, decidedBy, shootoutWon, homeGoals, awayGoals, next }) => ({ seed, decidedBy, shootoutWon, homeGoals, awayGoals, next });
+const row = ({ seed, decidedBy, shootoutWon, homeGoals, awayGoals, next, hash }) => ({ seed, decidedBy, shootoutWon, homeGoals, awayGoals, next, hash });
 
 /* ---------- fixture writing: a deliberate act, from a pre 782 engine ---------- */
 if (WRITE_FIXTURE) {
@@ -255,10 +302,11 @@ console.log('1) The walk, through the whole match: my first five kicks are the f
   const bench = atCup.squad.filter(p => !p.onLoan && !xi.some(x => x.id === p.id)).sort((a, b) => b.rating - a.rating);
   /* Five of the eleven (not the keeper, a mix of lines so the walk is not
      the rating order by accident) and two bench men who are off the pitch
-     unless a change brings one on. */
+     unless a change brings one on. The bench men sit second and fifth, so
+     every shootout has to skip them to get the first five right. */
   const outfield = xi.filter(p => p.position !== 'GK');
   const picks = [outfield[outfield.length - 1], outfield[0], outfield[Math.floor(outfield.length / 2)], outfield[1], outfield[outfield.length - 2]];
-  const order = [...picks.map(p => p.id), bench[0].id, bench[1].id];
+  const order = [picks[0].id, bench[0].id, picks[1].id, picks[2].id, bench[1].id, picks[3].id, picks[4].id];
   const ordered = setShootoutOrder(atCup, order);
   if (!ordered) abort('setShootoutOrder refused a list of seven men from the squad');
   if (JSON.stringify(ordered.shootoutOrder) !== JSON.stringify(order)) fail(`the order was not kept as given: ${JSON.stringify(ordered.shootoutOrder)}`);
@@ -296,7 +344,8 @@ console.log('1) The walk, through the whole match: my first five kicks are the f
     for (const inj of det.injuries) if (inj.id) off.add(inj.id);
     const finished = [...played].filter(id => !off.has(id));
     const expected = order.filter(id => finished.includes(id)).map(id => nameOf.get(id));
-    if (expected.length < order.length) skipsSeen += 1;
+    /* A shootout where the skip decided who took one of the first five. */
+    if (JSON.stringify(expected.slice(0, 5)) !== JSON.stringify(order.slice(0, 5).map(id => nameOf.get(id)))) skipsSeen += 1;
     const mineKicks = d.kicks.filter(k => k.side === 'me').map(k => k.taker);
     const n = Math.min(5, mineKicks.length, expected.length);
     const got = mineKicks.slice(0, n);
@@ -317,9 +366,10 @@ console.log('1) The walk, through the whole match: my first five kicks are the f
     scoredAll += d.kicks.filter(k => k.result === 'scored').length;
   }
   const scoredShare = kicksAll ? scoredAll / kicksAll : NaN;
-  console.log(`   ${N} cup matches, ${reached} shootouts, ${inOrder} with my first kicks in the listed order, ${skipsSeen} where a listed man was off the pitch`);
+  console.log(`   ${N} cup matches, ${reached} shootouts, ${inOrder} with my first kicks in the listed order, ${skipsSeen} where skipping a listed man off the pitch changed who took the first five`);
   console.log(`   ${kicksAll} kicks, scored share ${pct(scoredShare)} (base rate ${SHOOTOUT_BASE_RATE})`);
   if (reached < 12) fail(`only ${reached} shootouts in ${N} matches, below the floor of 12, the assert has nothing to bite on`);
+  if (skipsSeen < 12) fail(`the skip decided the first five in only ${skipsSeen} shootouts, below the floor of 12, so the skip is not being tested`);
   if (inOrder !== reached - noDetail) fail(`the first five kicks followed the order in ${inOrder} of ${reached} shootouts, not all of them`);
   if (!(scoredShare >= 0.62 && scoredShare <= 0.90)) fail(`scored share ${pct(scoredShare)} is outside 62 to 90 percent`);
 }

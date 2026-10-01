@@ -118,6 +118,18 @@ describe('setShootoutOrder', () => {
     expect('shootoutOrder' in cleared!).toBe(false);
   });
 
+  it('reads past a man who has left or gone out on loan, and with nobody left it is the old one draw again', () => {
+    const ids = base.squad.filter(p => !p.onLoan).slice(0, 3).map(p => p.id);
+    const set = setShootoutOrder(base, ids)!;
+    /* The middle man goes out on loan: the order skips him, in the same order otherwise. */
+    const loaned: CareerState = { ...set, squad: set.squad.map(p => (p.id === ids[1] ? { ...p, onLoan: true } as typeof p : p)) };
+    expect(shootoutOrderOf(loaned)).toEqual([ids[0], ids[2]]);
+    /* All three sold: the field is still on the save, but the whistle reads no order. */
+    const sold: CareerState = { ...set, squad: set.squad.filter(p => !ids.includes(p.id)) };
+    expect(sold.shootoutOrder).toEqual(ids);
+    expect(shootoutOrderOf(sold)).toBeNull();
+  });
+
   it('refuses a man who is not in the squad and leaves the save alone', () => {
     expect(setShootoutOrder(base, ['nobody-here'])).toBeNull();
     expect('shootoutOrder' in base).toBe(false);

@@ -1,6 +1,6 @@
 {
  "note": "Round 782: the pre round shootout outcome of one cup match, by seed, with no order set. Written from the engine named in writtenFrom. Replayed by scripts/simCmShootoutOrder.mjs section 4; regenerate only from an engine whose one draw path is known to be the pre 782 one.",
- "writtenFrom": "clubManager.pre782.ts",
+ "writtenFrom": "clubManager.origin-main-84d81619.ts",
  "writtenOn": "2026-10-01",
  "club": "Real Madrid",
  "baseSeed": 782001,
@@ -13,7 +13,8 @@
    "shootoutWon": null,
    "homeGoals": 2,
    "awayGoals": 0,
-   "next": 0.3186643812805414
+   "next": 0.3186643812805414,
+   "hash": "cddbb77f"
   },
   {
    "seed": 782101,
@@ -21,7 +22,8 @@
    "shootoutWon": null,
    "homeGoals": 2,
    "awayGoals": 0,
-   "next": 0.8120479702483863
+   "next": 0.8120479702483863,
+   "hash": "b25e2f77"
   },
   {
    "seed": 782102,
@@ -29,7 +31,8 @@
    "shootoutWon": true,
    "homeGoals": 1,
    "awayGoals": 1,
-   "next": 0.6264829533174634
+   "next": 0.6264829533174634,
+   "hash": "521d1a20"
   },
   {
    "seed": 782103,
@@ -37,7 +40,8 @@
    "shootoutWon": null,
    "homeGoals": 3,
    "awayGoals": 0,
-   "next": 0.7041766964830458
+   "next": 0.7041766964830458,
+   "hash": "06a642f3"
   },
   {
    "seed": 782104,
@@ -45,7 +49,8 @@
    "shootoutWon": null,
    "homeGoals": 3,
    "awayGoals": 0,
-   "next": 0.03532533464021981
+   "next": 0.03532533464021981,
+   "hash": "485807f9"
   },
   {
    "seed": 782105,
@@ -53,7 +58,8 @@
    "shootoutWon": null,
    "homeGoals": 0,
    "awayGoals": 2,
-   "next": 0.3426259101834148
+   "next": 0.3426259101834148,
+   "hash": "d1c214cd"
   },
   {
    "seed": 782106,
@@ -61,7 +67,8 @@
    "shootoutWon": null,
    "homeGoals": 2,
    "awayGoals": 1,
-   "next": 0.12238779943436384
+   "next": 0.12238779943436384,
+   "hash": "a2c5b2fe"
   },
   {
    "seed": 782107,
@@ -69,7 +76,8 @@
    "shootoutWon": null,
    "homeGoals": 2,
    "awayGoals": 1,
-   "next": 0.7616313113830984
+   "next": 0.7616313113830984,
+   "hash": "7eb6dcc6"
   },
   {
    "seed": 782108,
@@ -77,7 +85,8 @@
    "shootoutWon": null,
    "homeGoals": 2,
    "awayGoals": 0,
-   "next": 0.8513581068255007
+   "next": 0.8513581068255007,
+   "hash": "be4fc2bd"
   },
   {
    "seed": 782109,
@@ -85,7 +94,8 @@
    "shootoutWon": null,
    "homeGoals": 3,
    "awayGoals": 0,
-   "next": 0.2729747255798429
+   "next": 0.2729747255798429,
+   "hash": "9df0db49"
   },
   {
    "seed": 782110,
@@ -93,7 +103,8 @@
    "shootoutWon": null,
    "homeGoals": 6,
    "awayGoals": 0,
-   "next": 0.10956390877254307
+   "next": 0.10956390877254307,
+   "hash": "e0be75be"
   },
   {
    "seed": 782111,
@@ -101,7 +112,8 @@
    "shootoutWon": false,
    "homeGoals": 1,
    "awayGoals": 1,
-   "next": 0.9701103155966848
+   "next": 0.9701103155966848,
+   "hash": "507d0e02"
   },
   {
    "seed": 782112,
@@ -109,7 +121,8 @@
    "shootoutWon": false,
    "homeGoals": 1,
    "awayGoals": 1,
-   "next": 0.02318697958253324
+   "next": 0.02318697958253324,
+   "hash": "3f8beed8"
   },
   {
    "seed": 782113,
@@ -117,7 +130,8 @@
    "shootoutWon": null,
    "homeGoals": 1,
    "awayGoals": 3,
-   "next": 0.24482746049761772
+   "next": 0.24482746049761772,
+   "hash": "4f65572d"
   },
   {
    "seed": 782114,
@@ -125,7 +139,8 @@
    "shootoutWon": null,
    "homeGoals": 5,
    "awayGoals": 1,
-   "next": 0.5944743850268424
+   "next": 0.5944743850268424,
+   "hash": "1b5cd3da"
   },
   {
    "seed": 782115,
@@ -133,7 +148,8 @@
    "shootoutWon": true,
    "homeGoals": 1,
    "awayGoals": 1,
-   "next": 0.22976797097362578
+   "next": 0.22976797097362578,
+   "hash": "2d825b72"
   },
   {
    "seed": 782116,
@@ -141,7 +157,8 @@
    "shootoutWon": null,
    "homeGoals": 2,
    "awayGoals": 1,
-   "next": 0.39926695567555726
+   "next": 0.39926695567555726,
+   "hash": "2483c7d1"
   },
   {
    "seed": 782117,
@@ -149,7 +166,8 @@
    "shootoutWon": false,
    "homeGoals": 1,
    "awayGoals": 1,
-   "next": 0.609022161224857
+   "next": 0.609022161224857,
+   "hash": "3e9bad75"
   },
   {
    "seed": 782118,
@@ -157,7 +175,8 @@
    "shootoutWon": null,
    "homeGoals": 2,
    "awayGoals": 0,
-   "next": 0.5127372446004301
+   "next": 0.5127372446004301,
+   "hash": "66b15c13"
   },
   {
    "seed": 782119,
@@ -165,7 +184,8 @@
    "shootoutWon": null,
    "homeGoals": 1,
    "awayGoals": 0,
-   "next": 0.05592714576050639
+   "next": 0.05592714576050639,
+   "hash": "6370395d"
   },
   {
    "seed": 782120,
@@ -173,7 +193,8 @@
    "shootoutWon": null,
    "homeGoals": 1,
    "awayGoals": 0,
-   "next": 0.5685935455840081
+   "next": 0.5685935455840081,
+   "hash": "f159daf0"
   },
   {
    "seed": 782121,
@@ -181,7 +202,8 @@
    "shootoutWon": null,
    "homeGoals": 4,
    "awayGoals": 0,
-   "next": 0.24389357515610754
+   "next": 0.24389357515610754,
+   "hash": "d60ce9a5"
   },
   {
    "seed": 782122,
@@ -189,7 +211,8 @@
    "shootoutWon": true,
    "homeGoals": 1,
    "awayGoals": 1,
-   "next": 0.7600500131957233
+   "next": 0.7600500131957233,
+   "hash": "8c9f1d1d"
   },
   {
    "seed": 782123,
@@ -197,7 +220,8 @@
    "shootoutWon": false,
    "homeGoals": 1,
    "awayGoals": 1,
-   "next": 0.8585961584467441
+   "next": 0.8585961584467441,
+   "hash": "54f86156"
   },
   {
    "seed": 782124,
@@ -205,7 +229,8 @@
    "shootoutWon": null,
    "homeGoals": 2,
    "awayGoals": 0,
-   "next": 0.42503840383142233
+   "next": 0.42503840383142233,
+   "hash": "729270f0"
   },
   {
    "seed": 782125,
@@ -213,7 +238,8 @@
    "shootoutWon": null,
    "homeGoals": 2,
    "awayGoals": 1,
-   "next": 0.79657859262079
+   "next": 0.79657859262079,
+   "hash": "224f8e7f"
   },
   {
    "seed": 782126,
@@ -221,7 +247,8 @@
    "shootoutWon": false,
    "homeGoals": 1,
    "awayGoals": 1,
-   "next": 0.4200739075895399
+   "next": 0.4200739075895399,
+   "hash": "5371f481"
   },
   {
    "seed": 782127,
@@ -229,7 +256,8 @@
    "shootoutWon": null,
    "homeGoals": 4,
    "awayGoals": 0,
-   "next": 0.5469650072045624
+   "next": 0.5469650072045624,
+   "hash": "1453f003"
   },
   {
    "seed": 782128,
@@ -237,7 +265,8 @@
    "shootoutWon": null,
    "homeGoals": 3,
    "awayGoals": 0,
-   "next": 0.7849046494811773
+   "next": 0.7849046494811773,
+   "hash": "2e0e08d1"
   },
   {
    "seed": 782129,
@@ -245,7 +274,8 @@
    "shootoutWon": null,
    "homeGoals": 2,
    "awayGoals": 0,
-   "next": 0.6392133857589215
+   "next": 0.6392133857589215,
+   "hash": "994cb498"
   },
   {
    "seed": 782130,
@@ -253,7 +283,8 @@
    "shootoutWon": null,
    "homeGoals": 2,
    "awayGoals": 1,
-   "next": 0.7640212941914797
+   "next": 0.7640212941914797,
+   "hash": "c6d6564c"
   },
   {
    "seed": 782131,
@@ -261,7 +292,8 @@
    "shootoutWon": null,
    "homeGoals": 4,
    "awayGoals": 2,
-   "next": 0.5365406326018274
+   "next": 0.5365406326018274,
+   "hash": "66dd0349"
   },
   {
    "seed": 782132,
@@ -269,7 +301,8 @@
    "shootoutWon": null,
    "homeGoals": 1,
    "awayGoals": 0,
-   "next": 0.0589970990549773
+   "next": 0.0589970990549773,
+   "hash": "8b12093c"
   },
   {
    "seed": 782133,
@@ -277,7 +310,8 @@
    "shootoutWon": null,
    "homeGoals": 1,
    "awayGoals": 3,
-   "next": 0.6653028321452439
+   "next": 0.6653028321452439,
+   "hash": "752dc20f"
   },
   {
    "seed": 782134,
@@ -285,7 +319,8 @@
    "shootoutWon": null,
    "homeGoals": 5,
    "awayGoals": 0,
-   "next": 0.34168415516614914
+   "next": 0.34168415516614914,
+   "hash": "e4067554"
   },
   {
    "seed": 782135,
@@ -293,7 +328,8 @@
    "shootoutWon": null,
    "homeGoals": 3,
    "awayGoals": 0,
-   "next": 0.0886989226564765
+   "next": 0.0886989226564765,
+   "hash": "fac17648"
   },
   {
    "seed": 782136,
@@ -301,7 +337,8 @@
    "shootoutWon": null,
    "homeGoals": 2,
    "awayGoals": 0,
-   "next": 0.5670866121072322
+   "next": 0.5670866121072322,
+   "hash": "09aeff3a"
   },
   {
    "seed": 782137,
@@ -309,7 +346,8 @@
    "shootoutWon": null,
    "homeGoals": 1,
    "awayGoals": 0,
-   "next": 0.00033804867416620255
+   "next": 0.00033804867416620255,
+   "hash": "a29244bd"
   },
   {
    "seed": 782138,
@@ -317,7 +355,8 @@
    "shootoutWon": null,
    "homeGoals": 2,
    "awayGoals": 0,
-   "next": 0.028026855550706387
+   "next": 0.028026855550706387,
+   "hash": "9f1e13f0"
   },
   {
    "seed": 782139,
@@ -325,7 +364,8 @@
    "shootoutWon": null,
    "homeGoals": 4,
    "awayGoals": 1,
-   "next": 0.6129058329388499
+   "next": 0.6129058329388499,
+   "hash": "5e4b5753"
   },
   {
    "seed": 782140,
@@ -333,7 +373,8 @@
    "shootoutWon": null,
    "homeGoals": 1,
    "awayGoals": 0,
-   "next": 0.20937120984308422
+   "next": 0.20937120984308422,
+   "hash": "8b59d76e"
   },
   {
    "seed": 782141,
@@ -341,7 +382,8 @@
    "shootoutWon": false,
    "homeGoals": 1,
    "awayGoals": 1,
-   "next": 0.5815813424997032
+   "next": 0.5815813424997032,
+   "hash": "c177a982"
   },
   {
    "seed": 782142,
@@ -349,7 +391,8 @@
    "shootoutWon": null,
    "homeGoals": 1,
    "awayGoals": 0,
-   "next": 0.2913702728692442
+   "next": 0.2913702728692442,
+   "hash": "48741ca3"
   },
   {
    "seed": 782143,
@@ -357,7 +400,8 @@
    "shootoutWon": null,
    "homeGoals": 2,
    "awayGoals": 0,
-   "next": 0.2696095211431384
+   "next": 0.2696095211431384,
+   "hash": "66110478"
   },
   {
    "seed": 782144,
@@ -365,7 +409,8 @@
    "shootoutWon": null,
    "homeGoals": 0,
    "awayGoals": 1,
-   "next": 0.416451723780483
+   "next": 0.416451723780483,
+   "hash": "6570e803"
   },
   {
    "seed": 782145,
@@ -373,7 +418,8 @@
    "shootoutWon": null,
    "homeGoals": 2,
    "awayGoals": 0,
-   "next": 0.387064574053511
+   "next": 0.387064574053511,
+   "hash": "05c8ac8c"
   },
   {
    "seed": 782146,
@@ -381,7 +427,8 @@
    "shootoutWon": null,
    "homeGoals": 3,
    "awayGoals": 2,
-   "next": 0.11099635460413992
+   "next": 0.11099635460413992,
+   "hash": "1e94eb65"
   },
   {
    "seed": 782147,
@@ -389,7 +436,8 @@
    "shootoutWon": false,
    "homeGoals": 0,
    "awayGoals": 0,
-   "next": 0.9663845999166369
+   "next": 0.9663845999166369,
+   "hash": "47a3c1c4"
   },
   {
    "seed": 782148,
@@ -397,7 +445,8 @@
    "shootoutWon": null,
    "homeGoals": 5,
    "awayGoals": 0,
-   "next": 0.47525728354230523
+   "next": 0.47525728354230523,
+   "hash": "cae51f75"
   },
   {
    "seed": 782149,
@@ -405,7 +454,8 @@
    "shootoutWon": null,
    "homeGoals": 1,
    "awayGoals": 0,
-   "next": 0.4093720910605043
+   "next": 0.4093720910605043,
+   "hash": "ea203b56"
   },
   {
    "seed": 782150,
@@ -413,7 +463,8 @@
    "shootoutWon": null,
    "homeGoals": 0,
    "awayGoals": 1,
-   "next": 0.24013439053669572
+   "next": 0.24013439053669572,
+   "hash": "fd3a295c"
   },
   {
    "seed": 782151,
@@ -421,7 +472,8 @@
    "shootoutWon": null,
    "homeGoals": 3,
    "awayGoals": 0,
-   "next": 0.8752395263873041
+   "next": 0.8752395263873041,
+   "hash": "d57376ad"
   },
   {
    "seed": 782152,
@@ -429,7 +481,8 @@
    "shootoutWon": null,
    "homeGoals": 2,
    "awayGoals": 1,
-   "next": 0.26258741109631956
+   "next": 0.26258741109631956,
+   "hash": "98896a0f"
   },
   {
    "seed": 782153,
@@ -437,7 +490,8 @@
    "shootoutWon": false,
    "homeGoals": 1,
    "awayGoals": 1,
-   "next": 0.9205643171444535
+   "next": 0.9205643171444535,
+   "hash": "a116ca65"
   },
   {
    "seed": 782154,
@@ -445,7 +499,8 @@
    "shootoutWon": null,
    "homeGoals": 2,
    "awayGoals": 0,
-   "next": 0.5763953910209239
+   "next": 0.5763953910209239,
+   "hash": "cdeb46ae"
   },
   {
    "seed": 782155,
@@ -453,7 +508,8 @@
    "shootoutWon": null,
    "homeGoals": 2,
    "awayGoals": 1,
-   "next": 0.7838862703647465
+   "next": 0.7838862703647465,
+   "hash": "ee3987d2"
   },
   {
    "seed": 782156,
@@ -461,7 +517,8 @@
    "shootoutWon": true,
    "homeGoals": 1,
    "awayGoals": 1,
-   "next": 0.3863526815548539
+   "next": 0.3863526815548539,
+   "hash": "33558414"
   },
   {
    "seed": 782157,
@@ -469,7 +526,8 @@
    "shootoutWon": null,
    "homeGoals": 4,
    "awayGoals": 0,
-   "next": 0.14898211392574012
+   "next": 0.14898211392574012,
+   "hash": "1b35327e"
   },
   {
    "seed": 782158,
@@ -477,7 +535,8 @@
    "shootoutWon": null,
    "homeGoals": 2,
    "awayGoals": 0,
-   "next": 0.8154282211326063
+   "next": 0.8154282211326063,
+   "hash": "487f6dd0"
   },
   {
    "seed": 782159,
@@ -485,7 +544,8 @@
    "shootoutWon": null,
    "homeGoals": 3,
    "awayGoals": 0,
-   "next": 0.34584488277323544
+   "next": 0.34584488277323544,
+   "hash": "be049af3"
   },
   {
    "seed": 782160,
@@ -493,7 +553,8 @@
    "shootoutWon": null,
    "homeGoals": 1,
    "awayGoals": 0,
-   "next": 0.5323379014153033
+   "next": 0.5323379014153033,
+   "hash": "938bb864"
   },
   {
    "seed": 782161,
@@ -501,7 +562,8 @@
    "shootoutWon": null,
    "homeGoals": 3,
    "awayGoals": 0,
-   "next": 0.4170463893096894
+   "next": 0.4170463893096894,
+   "hash": "b94f301b"
   },
   {
    "seed": 782162,
@@ -509,7 +571,8 @@
    "shootoutWon": null,
    "homeGoals": 3,
    "awayGoals": 1,
-   "next": 0.4911435800604522
+   "next": 0.4911435800604522,
+   "hash": "7c103872"
   },
   {
    "seed": 782163,
@@ -517,7 +580,8 @@
    "shootoutWon": null,
    "homeGoals": 4,
    "awayGoals": 0,
-   "next": 0.2260873829945922
+   "next": 0.2260873829945922,
+   "hash": "a00f82a4"
   },
   {
    "seed": 782164,
@@ -525,7 +589,8 @@
    "shootoutWon": null,
    "homeGoals": 3,
    "awayGoals": 1,
-   "next": 0.6758821550756693
+   "next": 0.6758821550756693,
+   "hash": "32adcd9b"
   },
   {
    "seed": 782165,
@@ -533,7 +598,8 @@
    "shootoutWon": null,
    "homeGoals": 0,
    "awayGoals": 1,
-   "next": 0.18480536784045398
+   "next": 0.18480536784045398,
+   "hash": "cad0ed12"
   },
   {
    "seed": 782166,
@@ -541,7 +607,8 @@
    "shootoutWon": null,
    "homeGoals": 3,
    "awayGoals": 1,
-   "next": 0.4069666853174567
+   "next": 0.4069666853174567,
+   "hash": "1a14195b"
   },
   {
    "seed": 782167,
@@ -549,7 +616,8 @@
    "shootoutWon": null,
    "homeGoals": 2,
    "awayGoals": 0,
-   "next": 0.14787890575826168
+   "next": 0.14787890575826168,
+   "hash": "3b9f8a16"
   },
   {
    "seed": 782168,
@@ -557,7 +625,8 @@
    "shootoutWon": null,
    "homeGoals": 2,
    "awayGoals": 1,
-   "next": 0.8450006968341768
+   "next": 0.8450006968341768,
+   "hash": "7272bf1d"
   },
   {
    "seed": 782169,
@@ -565,7 +634,8 @@
    "shootoutWon": null,
    "homeGoals": 3,
    "awayGoals": 1,
-   "next": 0.026269361143931746
+   "next": 0.026269361143931746,
+   "hash": "af0896dc"
   },
   {
    "seed": 782170,
@@ -573,7 +643,8 @@
    "shootoutWon": null,
    "homeGoals": 1,
    "awayGoals": 0,
-   "next": 0.4203069540672004
+   "next": 0.4203069540672004,
+   "hash": "0c8e333d"
   },
   {
    "seed": 782171,
@@ -581,7 +652,8 @@
    "shootoutWon": false,
    "homeGoals": 3,
    "awayGoals": 3,
-   "next": 0.5582885129842907
+   "next": 0.5582885129842907,
+   "hash": "b3fcc31a"
   },
   {
    "seed": 782172,
@@ -589,7 +661,8 @@
    "shootoutWon": null,
    "homeGoals": 1,
    "awayGoals": 0,
-   "next": 0.565610162448138
+   "next": 0.565610162448138,
+   "hash": "15e5a5c8"
   },
   {
    "seed": 782173,
@@ -597,7 +670,8 @@
    "shootoutWon": null,
    "homeGoals": 5,
    "awayGoals": 3,
-   "next": 0.4514437085017562
+   "next": 0.4514437085017562,
+   "hash": "ae3afe52"
   },
   {
    "seed": 782174,
@@ -605,7 +679,8 @@
    "shootoutWon": null,
    "homeGoals": 2,
    "awayGoals": 0,
-   "next": 0.8440400613471866
+   "next": 0.8440400613471866,
+   "hash": "0de5b241"
   },
   {
    "seed": 782175,
@@ -613,7 +688,8 @@
    "shootoutWon": null,
    "homeGoals": 2,
    "awayGoals": 0,
-   "next": 0.0937460670247674
+   "next": 0.0937460670247674,
+   "hash": "a0b537f8"
   },
   {
    "seed": 782176,
@@ -621,7 +697,8 @@
    "shootoutWon": null,
    "homeGoals": 3,
    "awayGoals": 1,
-   "next": 0.6377667172346264
+   "next": 0.6377667172346264,
+   "hash": "5f9217c6"
   },
   {
    "seed": 782177,
@@ -629,7 +706,8 @@
    "shootoutWon": null,
    "homeGoals": 2,
    "awayGoals": 1,
-   "next": 0.3831435071770102
+   "next": 0.3831435071770102,
+   "hash": "4d656234"
   },
   {
    "seed": 782178,
@@ -637,7 +715,8 @@
    "shootoutWon": false,
    "homeGoals": 1,
    "awayGoals": 1,
-   "next": 0.8906077432911843
+   "next": 0.8906077432911843,
+   "hash": "824c3299"
   },
   {
    "seed": 782179,
@@ -645,7 +724,8 @@
    "shootoutWon": null,
    "homeGoals": 1,
    "awayGoals": 0,
-   "next": 0.8641694411635399
+   "next": 0.8641694411635399,
+   "hash": "4a53736e"
   },
   {
    "seed": 782180,
@@ -653,7 +733,8 @@
    "shootoutWon": null,
    "homeGoals": 2,
    "awayGoals": 0,
-   "next": 0.3659089838620275
+   "next": 0.3659089838620275,
+   "hash": "5b50a821"
   },
   {
    "seed": 782181,
@@ -661,7 +742,8 @@
    "shootoutWon": null,
    "homeGoals": 3,
    "awayGoals": 0,
-   "next": 0.6793677287641913
+   "next": 0.6793677287641913,
+   "hash": "59872091"
   },
   {
    "seed": 782182,
@@ -669,7 +751,8 @@
    "shootoutWon": null,
    "homeGoals": 3,
    "awayGoals": 0,
-   "next": 0.25105965696275234
+   "next": 0.25105965696275234,
+   "hash": "d1794171"
   },
   {
    "seed": 782183,
@@ -677,7 +760,8 @@
    "shootoutWon": null,
    "homeGoals": 3,
    "awayGoals": 1,
-   "next": 0.7972433792892843
+   "next": 0.7972433792892843,
+   "hash": "f9e58d2d"
   },
   {
    "seed": 782184,
@@ -685,7 +769,8 @@
    "shootoutWon": null,
    "homeGoals": 2,
    "awayGoals": 0,
-   "next": 0.9114144593477249
+   "next": 0.9114144593477249,
+   "hash": "e862da6a"
   },
   {
    "seed": 782185,
@@ -693,7 +778,8 @@
    "shootoutWon": null,
    "homeGoals": 4,
    "awayGoals": 0,
-   "next": 0.3458879687823355
+   "next": 0.3458879687823355,
+   "hash": "aa5c985d"
   },
   {
    "seed": 782186,
@@ -701,7 +787,8 @@
    "shootoutWon": true,
    "homeGoals": 1,
    "awayGoals": 1,
-   "next": 0.4737409350927919
+   "next": 0.4737409350927919,
+   "hash": "ff16be56"
   },
   {
    "seed": 782187,
@@ -709,7 +796,8 @@
    "shootoutWon": null,
    "homeGoals": 2,
    "awayGoals": 1,
-   "next": 0.8255385365337133
+   "next": 0.8255385365337133,
+   "hash": "3995aae4"
   },
   {
    "seed": 782188,
@@ -717,7 +805,8 @@
    "shootoutWon": null,
    "homeGoals": 1,
    "awayGoals": 0,
-   "next": 0.5675481886137277
+   "next": 0.5675481886137277,
+   "hash": "59a28b78"
   },
   {
    "seed": 782189,
@@ -725,7 +814,8 @@
    "shootoutWon": null,
    "homeGoals": 1,
    "awayGoals": 2,
-   "next": 0.9180449869018048
+   "next": 0.9180449869018048,
+   "hash": "cc4cd1a7"
   },
   {
    "seed": 782190,
@@ -733,7 +823,8 @@
    "shootoutWon": null,
    "homeGoals": 0,
    "awayGoals": 1,
-   "next": 0.48740270896814764
+   "next": 0.48740270896814764,
+   "hash": "1582da5a"
   },
   {
    "seed": 782191,
@@ -741,7 +832,8 @@
    "shootoutWon": null,
    "homeGoals": 3,
    "awayGoals": 0,
-   "next": 0.9484499942045659
+   "next": 0.9484499942045659,
+   "hash": "e63166e6"
   },
   {
    "seed": 782192,
@@ -749,7 +841,8 @@
    "shootoutWon": null,
    "homeGoals": 2,
    "awayGoals": 1,
-   "next": 0.6615428433287889
+   "next": 0.6615428433287889,
+   "hash": "50eae658"
   },
   {
    "seed": 782193,
@@ -757,7 +850,8 @@
    "shootoutWon": null,
    "homeGoals": 4,
    "awayGoals": 1,
-   "next": 0.5542127243243158
+   "next": 0.5542127243243158,
+   "hash": "246d9523"
   },
   {
    "seed": 782194,
@@ -765,7 +859,8 @@
    "shootoutWon": null,
    "homeGoals": 4,
    "awayGoals": 0,
-   "next": 0.32647646334953606
+   "next": 0.32647646334953606,
+   "hash": "68f1088e"
   },
   {
    "seed": 782195,
@@ -773,7 +868,8 @@
    "shootoutWon": null,
    "homeGoals": 1,
    "awayGoals": 0,
-   "next": 0.04024791647680104
+   "next": 0.04024791647680104,
+   "hash": "e3ddbcfd"
   },
   {
    "seed": 782196,
@@ -781,7 +877,8 @@
    "shootoutWon": null,
    "homeGoals": 3,
    "awayGoals": 0,
-   "next": 0.31908887857571244
+   "next": 0.31908887857571244,
+   "hash": "d99ba466"
   },
   {
    "seed": 782197,
@@ -789,7 +886,8 @@
    "shootoutWon": null,
    "homeGoals": 2,
    "awayGoals": 0,
-   "next": 0.8545592185109854
+   "next": 0.8545592185109854,
+   "hash": "a4b6c248"
   },
   {
    "seed": 782198,
@@ -797,7 +895,8 @@
    "shootoutWon": false,
    "homeGoals": 0,
    "awayGoals": 0,
-   "next": 0.15526491426862776
+   "next": 0.15526491426862776,
+   "hash": "ef7ab393"
   },
   {
    "seed": 782199,
@@ -805,7 +904,8 @@
    "shootoutWon": true,
    "homeGoals": 1,
    "awayGoals": 1,
-   "next": 0.8445062993559986
+   "next": 0.8445062993559986,
+   "hash": "0fc181c4"
   },
   {
    "seed": 782200,
@@ -813,7 +913,8 @@
    "shootoutWon": null,
    "homeGoals": 2,
    "awayGoals": 0,
-   "next": 0.7496794871985912
+   "next": 0.7496794871985912,
+   "hash": "6c645d3a"
   },
   {
    "seed": 782201,
@@ -821,7 +922,8 @@
    "shootoutWon": null,
    "homeGoals": 1,
    "awayGoals": 0,
-   "next": 0.34960753563791513
+   "next": 0.34960753563791513,
+   "hash": "ef63757e"
   },
   {
    "seed": 782202,
@@ -829,7 +931,8 @@
    "shootoutWon": true,
    "homeGoals": 1,
    "awayGoals": 1,
-   "next": 0.6949040805920959
+   "next": 0.6949040805920959,
+   "hash": "1dea0098"
   },
   {
    "seed": 782203,
@@ -837,7 +940,8 @@
    "shootoutWon": null,
    "homeGoals": 3,
    "awayGoals": 1,
-   "next": 0.2717229095287621
+   "next": 0.2717229095287621,
+   "hash": "03a5d5b2"
   },
   {
    "seed": 782204,
@@ -845,7 +949,8 @@
    "shootoutWon": null,
    "homeGoals": 3,
    "awayGoals": 1,
-   "next": 0.046798076247796416
+   "next": 0.046798076247796416,
+   "hash": "19c8e966"
   },
   {
    "seed": 782205,
@@ -853,7 +958,8 @@
    "shootoutWon": false,
    "homeGoals": 2,
    "awayGoals": 2,
-   "next": 0.7311555983033031
+   "next": 0.7311555983033031,
+   "hash": "7ed56766"
   },
   {
    "seed": 782206,
@@ -861,7 +967,8 @@
    "shootoutWon": null,
    "homeGoals": 3,
    "awayGoals": 2,
-   "next": 0.8315824442543089
+   "next": 0.8315824442543089,
+   "hash": "4c6c7a0f"
   },
   {
    "seed": 782207,
@@ -869,7 +976,8 @@
    "shootoutWon": null,
    "homeGoals": 1,
    "awayGoals": 0,
-   "next": 0.05362916807644069
+   "next": 0.05362916807644069,
+   "hash": "61bb8cbc"
   },
   {
    "seed": 782208,
@@ -877,7 +985,8 @@
    "shootoutWon": false,
    "homeGoals": 2,
    "awayGoals": 2,
-   "next": 0.7421572164166719
+   "next": 0.7421572164166719,
+   "hash": "00f254bd"
   },
   {
    "seed": 782209,
@@ -885,7 +994,8 @@
    "shootoutWon": null,
    "homeGoals": 1,
    "awayGoals": 0,
-   "next": 0.3561467060353607
+   "next": 0.3561467060353607,
+   "hash": "b358c2ed"
   },
   {
    "seed": 782210,
@@ -893,7 +1003,8 @@
    "shootoutWon": null,
    "homeGoals": 2,
    "awayGoals": 1,
-   "next": 0.1394449886865914
+   "next": 0.1394449886865914,
+   "hash": "670d364a"
   },
   {
    "seed": 782211,
@@ -901,7 +1012,8 @@
    "shootoutWon": null,
    "homeGoals": 2,
    "awayGoals": 0,
-   "next": 0.09775030566379428
+   "next": 0.09775030566379428,
+   "hash": "6139da25"
   },
   {
    "seed": 782212,
@@ -909,7 +1021,8 @@
    "shootoutWon": null,
    "homeGoals": 3,
    "awayGoals": 1,
-   "next": 0.6157353383023292
+   "next": 0.6157353383023292,
+   "hash": "b4baf6f9"
   },
   {
    "seed": 782213,
@@ -917,7 +1030,8 @@
    "shootoutWon": null,
    "homeGoals": 2,
    "awayGoals": 0,
-   "next": 0.47403637785464525
+   "next": 0.47403637785464525,
+   "hash": "1575f9e4"
   },
   {
    "seed": 782214,
@@ -925,7 +1039,8 @@
    "shootoutWon": null,
    "homeGoals": 1,
    "awayGoals": 0,
-   "next": 0.07000804436393082
+   "next": 0.07000804436393082,
+   "hash": "3b2cce18"
   },
   {
    "seed": 782215,
@@ -933,7 +1048,8 @@
    "shootoutWon": null,
    "homeGoals": 0,
    "awayGoals": 1,
-   "next": 0.47661668504588306
+   "next": 0.47661668504588306,
+   "hash": "3a263e63"
   },
   {
    "seed": 782216,
@@ -941,7 +1057,8 @@
    "shootoutWon": true,
    "homeGoals": 0,
    "awayGoals": 0,
-   "next": 0.38510529207997024
+   "next": 0.38510529207997024,
+   "hash": "c2f671b3"
   },
   {
    "seed": 782217,
@@ -949,7 +1066,8 @@
    "shootoutWon": null,
    "homeGoals": 3,
    "awayGoals": 0,
-   "next": 0.24151933868415654
+   "next": 0.24151933868415654,
+   "hash": "74348987"
   },
   {
    "seed": 782218,
@@ -957,7 +1075,8 @@
    "shootoutWon": null,
    "homeGoals": 1,
    "awayGoals": 2,
-   "next": 0.1310617751441896
+   "next": 0.1310617751441896,
+   "hash": "218ce9d6"
   },
   {
    "seed": 782219,
@@ -965,7 +1084,8 @@
    "shootoutWon": null,
    "homeGoals": 5,
    "awayGoals": 1,
-   "next": 0.017964090453460813
+   "next": 0.017964090453460813,
+   "hash": "4f4d1d6d"
   },
   {
    "seed": 782220,
@@ -973,7 +1093,8 @@
    "shootoutWon": null,
    "homeGoals": 3,
    "awayGoals": 1,
-   "next": 0.9556919441092759
+   "next": 0.9556919441092759,
+   "hash": "cc8e39ed"
   },
   {
    "seed": 782221,
@@ -981,7 +1102,8 @@
    "shootoutWon": null,
    "homeGoals": 2,
    "awayGoals": 0,
-   "next": 0.41079095797613263
+   "next": 0.41079095797613263,
+   "hash": "8d3ce200"
   },
   {
    "seed": 782222,
@@ -989,7 +1111,8 @@
    "shootoutWon": null,
    "homeGoals": 2,
    "awayGoals": 0,
-   "next": 0.30584305454976857
+   "next": 0.30584305454976857,
+   "hash": "7c993528"
   },
   {
    "seed": 782223,
@@ -997,7 +1120,8 @@
    "shootoutWon": false,
    "homeGoals": 1,
    "awayGoals": 1,
-   "next": 0.31872320896945894
+   "next": 0.31872320896945894,
+   "hash": "b79847f7"
   },
   {
    "seed": 782224,
@@ -1005,7 +1129,8 @@
    "shootoutWon": null,
    "homeGoals": 4,
    "awayGoals": 0,
-   "next": 0.38961115456186235
+   "next": 0.38961115456186235,
+   "hash": "f67baf1f"
   },
   {
    "seed": 782225,
@@ -1013,7 +1138,8 @@
    "shootoutWon": null,
    "homeGoals": 2,
    "awayGoals": 1,
-   "next": 0.43992190598510206
+   "next": 0.43992190598510206,
+   "hash": "e1d0a657"
   },
   {
    "seed": 782226,
@@ -1021,7 +1147,8 @@
    "shootoutWon": true,
    "homeGoals": 0,
    "awayGoals": 0,
-   "next": 0.18527542613446712
+   "next": 0.18527542613446712,
+   "hash": "5cd855a7"
   },
   {
    "seed": 782227,
@@ -1029,7 +1156,8 @@
    "shootoutWon": null,
    "homeGoals": 2,
    "awayGoals": 0,
-   "next": 0.4006823292002082
+   "next": 0.4006823292002082,
+   "hash": "dc4bae9e"
   },
   {
    "seed": 782228,
@@ -1037,7 +1165,8 @@
    "shootoutWon": false,
    "homeGoals": 1,
    "awayGoals": 1,
-   "next": 0.0024745722766965628
+   "next": 0.0024745722766965628,
+   "hash": "80586323"
   },
   {
    "seed": 782229,
@@ -1045,7 +1174,8 @@
    "shootoutWon": null,
    "homeGoals": 2,
    "awayGoals": 0,
-   "next": 0.15497403708286583
+   "next": 0.15497403708286583,
+   "hash": "fa55471b"
   },
   {
    "seed": 782230,
@@ -1053,7 +1183,8 @@
    "shootoutWon": null,
    "homeGoals": 2,
    "awayGoals": 0,
-   "next": 0.13760211667977273
+   "next": 0.13760211667977273,
+   "hash": "add22e7b"
   },
   {
    "seed": 782231,
@@ -1061,7 +1192,8 @@
    "shootoutWon": null,
    "homeGoals": 2,
    "awayGoals": 0,
-   "next": 0.11597924632951617
+   "next": 0.11597924632951617,
+   "hash": "ebc66acf"
   },
   {
    "seed": 782232,
@@ -1069,7 +1201,8 @@
    "shootoutWon": null,
    "homeGoals": 1,
    "awayGoals": 2,
-   "next": 0.12392353732138872
+   "next": 0.12392353732138872,
+   "hash": "603fecf2"
   },
   {
    "seed": 782233,
@@ -1077,7 +1210,8 @@
    "shootoutWon": null,
    "homeGoals": 3,
    "awayGoals": 1,
-   "next": 0.025127808330580592
+   "next": 0.025127808330580592,
+   "hash": "246daeac"
   },
   {
    "seed": 782234,
@@ -1085,7 +1219,8 @@
    "shootoutWon": null,
    "homeGoals": 3,
    "awayGoals": 0,
-   "next": 0.868042622692883
+   "next": 0.868042622692883,
+   "hash": "2977bb77"
   },
   {
    "seed": 782235,
@@ -1093,7 +1228,8 @@
    "shootoutWon": null,
    "homeGoals": 1,
    "awayGoals": 0,
-   "next": 0.8074314871337265
+   "next": 0.8074314871337265,
+   "hash": "d1fb6ddd"
   },
   {
    "seed": 782236,
@@ -1101,7 +1237,8 @@
    "shootoutWon": null,
    "homeGoals": 2,
    "awayGoals": 1,
-   "next": 0.5128016436938196
+   "next": 0.5128016436938196,
+   "hash": "efee9b34"
   },
   {
    "seed": 782237,
@@ -1109,7 +1246,8 @@
    "shootoutWon": null,
    "homeGoals": 1,
    "awayGoals": 2,
-   "next": 0.427128468407318
+   "next": 0.427128468407318,
+   "hash": "a632e360"
   },
   {
    "seed": 782238,
@@ -1117,7 +1255,8 @@
    "shootoutWon": null,
    "homeGoals": 2,
    "awayGoals": 0,
-   "next": 0.34969255700707436
+   "next": 0.34969255700707436,
+   "hash": "66297223"
   },
   {
    "seed": 782239,
@@ -1125,7 +1264,8 @@
    "shootoutWon": false,
    "homeGoals": 1,
    "awayGoals": 1,
-   "next": 0.34168531093746424
+   "next": 0.34168531093746424,
+   "hash": "921af6d0"
   },
   {
    "seed": 782240,
@@ -1133,7 +1273,8 @@
    "shootoutWon": null,
    "homeGoals": 2,
    "awayGoals": 1,
-   "next": 0.0645383654627949
+   "next": 0.0645383654627949,
+   "hash": "71db6ef3"
   },
   {
    "seed": 782241,
@@ -1141,7 +1282,8 @@
    "shootoutWon": true,
    "homeGoals": 2,
    "awayGoals": 2,
-   "next": 0.3547150115482509
+   "next": 0.3547150115482509,
+   "hash": "96e891e6"
   },
   {
    "seed": 782242,
@@ -1149,7 +1291,8 @@
    "shootoutWon": null,
    "homeGoals": 6,
    "awayGoals": 0,
-   "next": 0.458860092330724
+   "next": 0.458860092330724,
+   "hash": "a7c48848"
   },
   {
    "seed": 782243,
@@ -1157,7 +1300,8 @@
    "shootoutWon": null,
    "homeGoals": 2,
    "awayGoals": 0,
-   "next": 0.4604150310624391
+   "next": 0.4604150310624391,
+   "hash": "7790b117"
   },
   {
    "seed": 782244,
@@ -1165,7 +1309,8 @@
    "shootoutWon": true,
    "homeGoals": 2,
    "awayGoals": 2,
-   "next": 0.3377811573445797
+   "next": 0.3377811573445797,
+   "hash": "f5e0c84f"
   },
   {
    "seed": 782245,
@@ -1173,7 +1318,8 @@
    "shootoutWon": null,
    "homeGoals": 2,
    "awayGoals": 1,
-   "next": 0.48596782609820366
+   "next": 0.48596782609820366,
+   "hash": "5c42494f"
   },
   {
    "seed": 782246,
@@ -1181,7 +1327,8 @@
    "shootoutWon": null,
    "homeGoals": 6,
    "awayGoals": 0,
-   "next": 0.18291297974064946
+   "next": 0.18291297974064946,
+   "hash": "741d0e17"
   },
   {
    "seed": 782247,
@@ -1189,7 +1336,8 @@
    "shootoutWon": null,
    "homeGoals": 0,
    "awayGoals": 1,
-   "next": 0.7410426300484687
+   "next": 0.7410426300484687,
+   "hash": "8473b537"
   },
   {
    "seed": 782248,
@@ -1197,7 +1345,8 @@
    "shootoutWon": false,
    "homeGoals": 1,
    "awayGoals": 1,
-   "next": 0.0038947269786149263
+   "next": 0.0038947269786149263,
+   "hash": "447daac9"
   },
   {
    "seed": 782249,
@@ -1205,7 +1354,8 @@
    "shootoutWon": null,
    "homeGoals": 4,
    "awayGoals": 0,
-   "next": 0.34368593990802765
+   "next": 0.34368593990802765,
+   "hash": "6df53cd5"
   }
  ]
 }

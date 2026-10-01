@@ -7,7 +7,7 @@ import {
   slotPosition, defensiveLineY, lineLabel,
   benchFor, dutyOptions, slotDuty, DUTY_INFO,
   SET_PIECE_KEYS, SET_PIECE_INFO, setPieceCandidates,
-  SHOOTOUT_MAX_ORDER,
+  SHOOTOUT_MAX_ORDER, shootoutOrderOf,
 } from '@/lib/clubManager';
 import type { CareerState, CMPlayer, Mentality, Duty, SetPieceKey, FitGrade } from '@/lib/clubManager';
 import { ratingTint, SecondPositionChips } from '@/components/club-manager/SquadScreen';
@@ -173,13 +173,10 @@ export function TacticsScreen({
   const pitchWrapRef = useRevealScroll<HTMLDivElement>(`bench:${benchPick ?? ''}`, { enabled: benchPick !== null, skipFirst: false });
   const dutyRef = useRevealScroll<HTMLDivElement>(`duty:${dutySlot ?? ''}`, { enabled: dutySlot !== null, skipFirst: false });
   const spRef = useRevealScroll<HTMLDivElement>(`sp:${spKey ?? ''}`, { enabled: spKey !== null, skipFirst: false });
-  /* Round 782: the shootout order as the squad stands today. A man who has
-     left the club drops out of the list on screen, and the engine skips him
-     at the whistle, so a stale id never takes a kick. */
-  const shootoutOrder = useMemo(
-    () => (career.shootoutOrder ?? []).filter(id => career.squad.some(p => p.id === id && !p.onLoan)),
-    [career.shootoutOrder, career.squad],
-  );
+  /* Round 782: the shootout order as the squad stands today, read by the
+     same function the whistle reads, so a man who has left the club drops
+     out of the list here and never takes a kick there. */
+  const shootoutOrder = useMemo(() => shootoutOrderOf(career) ?? [], [career]);
   /* Who can be listed: the eleven first in slot order, then the rest of the
      squad by rating, nobody on loan. The keeper is fair game, the eleventh
      kick is somebody's. */

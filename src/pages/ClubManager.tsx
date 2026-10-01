@@ -15,7 +15,7 @@ import {
   developingPlayers, INTENSITY_INFO, FOCUS_INFO,
   brokenPromises, CM_ERAS, DEFAULT_ERA_ID, eraById, projectedXIAvg, CM_BASE_YEAR,
   worldSeasonLabel, pressOf, pressHeadline, preMatchRead,
-  nationOfferFor, SHOOTOUT_MAX_ORDER,
+  nationOfferFor, SHOOTOUT_MAX_ORDER, shootoutOrderOf,
 } from '@/lib/clubManager';
 import { FACILITY_IDS, facilitiesOf } from '@/lib/clubManagerFacilities';
 import { projectFinances } from '@/lib/clubManagerFinances';
@@ -912,7 +912,7 @@ const ClubManager = () => {
                     data-cm-shootout-link="1"
                     className="mt-2 block mx-auto text-[11px] font-bold text-primary hover:underline"
                   >
-                    🥅 Shootout order: {c.shootoutOrder?.length ? `${c.shootoutOrder.length} of ${SHOOTOUT_MAX_ORDER} listed` : 'not set, tap to pick your takers'}
+                    🥅 Shootout order: {(() => { const n = shootoutOrderOf(c)?.length ?? 0; return n ? `${n} of ${SHOOTOUT_MAX_ORDER} listed` : 'not set, tap to pick your takers'; })()}
                   </button>
                 )}
               </>
