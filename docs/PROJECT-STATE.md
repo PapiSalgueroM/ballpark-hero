@@ -1,5 +1,54 @@
 # Project state
 
+## LIVE 2026-09-30: Release H (707, 708, 711, 730, 732), main `b8c77dce`
+
+Assembled by the desktop Claude lane in the gate clone (`release-h`), on top of Release G and
+Codex's commits as they stood at the merge, pushed to main as a merge. **douknowball.com is serving
+it:** deployment `52a432a4-3df2-4981-b056-674db1d67c3e`, called only after `get_project` showed `latest_commit_sha` `b8c77dce`; the
+live entry moved from `index-D1UqICV9.js` to `index-B5Vwjroo.js`. Proof by content: /whats-new serves the three new lines (the tennis lists caught up with 2026, the ticker says when it last heard, Soccer Grid knows this summer's transfers) and the live entry chunk carries the ticker's Delayed and unavailable strings.
+
+These five are the branches the fixer fleet finished before it was stopped at 96 percent of the
+account's weekly meter (the fleet's briefs were the triage plus the adversarial review findings; the
+fixers closed every item or refuted it with evidence and pushed with their gates).
+
+- **707, soccer stints behind the verified overlay.** Soccer Grid and Soccer Connect 4 accept the
+  verified 2026 moves: the grid function held an overlay yes for a club criterion and a records
+  refusal re-evaluation, and the Connect 4 sibling now holds the same (one engine, many sports).
+  `simSoccerStints` holds the 241 entry list equal in four places (the overlay file, both functions,
+  the migration) and reads the live table. **Its three migrations are APPLIED** (2026-09-30 evening):
+  240 overlay stints inserted, 1,465 exact copy rows deleted (1,423 groups), the person key pass a
+  no op as measured; the table went from 80,586 rows to 79,361. **The two edge functions are NOT yet
+  redeployed** (soccer-grid-validate, football-connect4-validate): their source is 796 and 847 lines
+  and the deploy, plus the `scripts/data/edgeDeployed.json` update the fixer's notes spell out
+  (sha256 b795f236... version 24 and 173e874f... version 13, CRLF normalised), is the next session's
+  first step. Until then the live validators run the old code over the corrected table, which is
+  strictly better than before (the records pass now finds the 2026 stints).
+- **708, soccer awards shape.** `awardWinners()` deals only rows shaped like a winner (no outlets,
+  ranks, nations, scorelines or "nobody won" strings), `simSoccerAwardsShape` runs green on this tree
+  (its module scope reads are guarded, the rival name hits and the three dashes gone), and the three
+  verified awards get their record. The claim is soccer_awards only; national_team_squads and the AFL
+  goal kickers are open again.
+- **711, live ticker depth.** The strip says when it last heard, flags a late feed, filters by sport
+  and follows teams; `simTickerDepth` (seven controls) holds the freshness rules to the measured poll
+  cadence, the premise comment says what the table shows, the unreachable branch is gone, and
+  What's New says so. The scores-poll function also changed (it polls yesterday's date until noon ET)
+  and is **NOT yet redeployed** either; same next step.
+- **730, Ballon d'Or.** All 76 rows verified, `simBallonDor` (eight controls) holds the migration to
+  the record, 0 rival name findings. **APPLIED** 2026-09-30: every row carries a nationality.
+- **732, tennis Grand Slam winners.** 1,025 rows verified against the official lists and ESPN, the six
+  2026 champions confirmed on public pages, the dash gone from the regex, the score wipe reversible
+  from the record, a What's New line. **APPLIED** 2026-09-30: 1,015 rows, the 2026 champions filled,
+  the second 1977 Australian Open added, ten wartime placeholder rows gone, a unique index per
+  edition. Follow up: re-bake `src/data/tennisHLPlayers.ts` from the table (Sinner 5, Zverev 2).
+
+**Held with named defects, their partial fixes pushed as work in progress on their branches:** 653
+(the game side fix is on the branch, a grid guess is right when any namesake fits the cell, but the
+merge into H hit a four way conflict with 652 and 654 on simGridArchive, sportHub and the state doc),
+703, 706, 718, 719, 733, 734 (each a harness begun). The briefs are in the lane's scratchpad and the
+findings in the triage and review journals; the next session finishes them one at a time, inline.
+
+**Gates.** tsc 0 on the assembled tree and again after each of three merges of main (Codex's 750 to 759 and later commits). The 44 harness gate (the fifteen snapshot readers CLAUDE.md names plus every fence Release G shipped) ran on the built tree: 43 of 44, the one red being Codex's simSharedResultChallenge, which read its four production files raw and searched them with multi line anchors, so simHarnessAnchors was red on every Windows checkout since it landed; it folds line endings now and both are green. The five rounds' own fences green with their controls: simSoccerStints (sections 0 to 3 after the migrations: would insert 0, would delete 0, would update 0), simSoccerAwardsShape, simTickerDepth (seven controls, SIM_TICKER_DEPTH_CONTROL), simBallonDor (eight), simTennisSlams (twelve); plus simTicker, simLiveScores, simAccessibility, simSiteSearch, simCompletionSlugs, simScoringCoverage, simLeaderboardCaps, simGuideHeadings, simNoRivalNames. Browser, on a quiet machine with a host like server on 4173: playHomeFold green, playSoftFourOhFour green, playSnapshotDrift green, sweepWeight green after five budgets took the entry chunk's growth with their measured reasons (/club-manager 630K, /minefield 284K, /footle 324K, /nfl-my-career 404K, /front-office 304K; Round 711's sport filter menu and follow preferences load on every page, with the native share sheet of 744), one route timing out on page load each run (environmental, a different route each time). playRenderStability checked 150 of 172 routes stable and then the headless browser crashed at /ufc, leaving 22 unchecked, the same harness limit on this machine as in Release G; simPrerender section 16, the source side of that rule, is green. Migrations applied on production behind their own guards, get_advisors clean of error level items: 730, 732, and 707's three. Not run: the full runAllSims on this tree (the gate above is the evidence).
+
 ## IN PROGRESS 2026-09-30: four simultaneous Codex tasks 769 through 772
 
 Three agents implement Conquest Explore, First Touch and reachable Club Manager inbox outcomes.

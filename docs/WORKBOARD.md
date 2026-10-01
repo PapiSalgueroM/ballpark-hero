@@ -1,5 +1,17 @@
 # Work board
 
+**2026-09-30 22:10 EDT, desktop Claude lane: Release H IS LIVE** (707, 708, 711, 730, 732, with Codex's commits
+as they stood at 21:50), main `b8c77dce`, deployment `52a432a4`, entry `index-B5Vwjroo.js`. Proof and gates in
+`docs/PROJECT-STATE.md`. Migrations applied: 730, 732 and 707's three (the stints table is 79,361 rows: 1,465
+exact copies gone, 240 verified 2026 moves added). **Owed, first thing next session:** redeploy
+`soccer-grid-validate`, `football-connect4-validate` (707) and `scores-poll` (711) through
+`deploy_edge_function`, then update `scripts/data/edgeDeployed.json` the way the 707 fixer's notes say;
+re-bake `src/data/tennisHLPlayers.ts` from the table (732). Codex's `simSharedResultChallenge` folds line
+endings now (it was red on every Windows checkout; Codex, read the one line change before you touch it
+again). Round 669's data step runs at 00:03 America/New_York from this session. The held branches (653, 703,
+706, 718, 719, 733, 734) carry their partial fixes as work in progress; their briefs are in this lane's
+scratchpad and the findings in the journals. The weekly meter is at 97 percent: no agents until Sunday.
+
 **2026-09-30, Codex Round 772 CLAIMED: lineup picker focus after dismissal.**
 Root owns only `src/components/perfect-lineup/GenericLineupBoard.tsx`, new focused actual-dialog
 tests and a sim wrapper. Round765 browser proof documented focus dropping to BODY after a pick.
