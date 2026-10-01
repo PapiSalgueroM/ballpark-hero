@@ -17,7 +17,12 @@
    module scope. nbaTeamLabelOf is only ever called inside a function body.
    ========================================================================== */
 import type { NbaCareerState, NbaCareerEvent } from './nbaMyCareer';
-import { nbaEraTeamIds, nbaTeamLabelOf } from './nbaMyCareer';
+import { nbaEraById, nbaEraTeamIds, nbaTeamLabelOf } from './nbaMyCareer';
+
+/** Round 833: the first offseason the supermax could be offered (the 2017
+ *  CBA; sources at the card below). Compared against the career's year when
+ *  the offseason deck is drawn, which is the start year of the next season. */
+export const NBA_SUPERMAX_FIRST_YEAR = 2017;
 
 // Round 57 expanded the three position buckets into five. These keep the
 // original guard / wing / big flavour working across PG, SG, SF, PF and C.
@@ -1341,8 +1346,18 @@ export function getNbaLifeEventsB(c: NbaCareerState, rng: () => number): NbaCare
 
   /* ══════════ 7. CONTRACT AND CAREER FORKS ══════════ */
 
-  if (c.contractYears <= 1 && c.age >= 26 && (c.mvps >= 1 || c.allNbas >= 2 || c.ovr >= 88) && flag(c, 'nb_supermax') === 0) {
-    const smax = money(Math.max(38, (c.ovr - 62) * 1.95));
+  /* Round 833: the supermax (the designated veteran extension) did not exist
+     before the 2017 CBA. Hoops Rumors, "Players who have signed Designated
+     Veteran contracts" (2022): introduced in the 2017 CBA, Stephen Curry signed
+     the first, starting in 2017-18. ABC30, "Stephen Curry's supermax deal
+     becomes richest in NBA history" (July 1, 2017): the first supermax. So a
+     2003-04 throwback career is offered it from the 2017 offseason on (the
+     deck is drawn after progress has moved the year to the next season's
+     start), never before, and the amount is that era's money, the same scale
+     nbaMarketSalary and the draft deal already use. A 2026 career is
+     unchanged: its year never sits below the gate and its scale is 1. */
+  if (c.year >= NBA_SUPERMAX_FIRST_YEAR && c.contractYears <= 1 && c.age >= 26 && (c.mvps >= 1 || c.allNbas >= 2 || c.ovr >= 88) && flag(c, 'nb_supermax') === 0) {
+    const smax = money(Math.max(38, (c.ovr - 62) * 1.95) * nbaEraById(c.eraId).moneyScale);
     deck.push({
       id: 'nbaB_supermax',
       title: `The supermax is on the table at ${smax}M`,

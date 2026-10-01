@@ -11,6 +11,8 @@ import { NBA_ERAS,
   repairNetWorth,
   getNbaSpendItem
 } from '@/lib/nbaMyCareer';
+/* Round 833: the stat line, shared with the other three careers. */
+import { nbaStatLine } from '@/lib/usCareerStatLine';
 // Round 179: real free agency, shared engine and shared screen.
 import { pushFaOffer, applyFaSigning } from '@/lib/usCareerFreeAgency';
 import type { FaWindow } from '@/lib/usCareerFreeAgency';
@@ -475,8 +477,11 @@ export default function NbaMyCareerBoard() {
     persist(career, 'retired', teamQuality);
   };
 
-  const statLine = (s: NbaSeasonLine, _p: NbaCareerPos) =>
-    `${s.ppg} ppg, ${s.rpg} rpg, ${s.apg} apg`;
+  /* Round 833: the line lives in usCareerStatLine.ts with the other three
+     sports'. Every position records the same three averages; what changed is
+     a suspended season, which read "0 ppg, 0 rpg, 0 apg" here while the other
+     three games said it was a suspension. */
+  const statLine = (s: NbaSeasonLine, _p: NbaCareerPos) => nbaStatLine(s);
 
   /* ------------------------------ create ------------------------------ */
   if (phase === 'create' || !career) {

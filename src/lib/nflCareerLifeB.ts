@@ -1387,7 +1387,10 @@ export function getNflLifeEventsB(c: CareerState, rng: () => number): CareerEven
 
   if (c.contractYears <= 0 && c.ovr >= 80 && flag(c, 'b_tag') === 0) {
     const posMult = c.pos === 'QB' ? 1.9 : c.pos === 'WR' ? 1.15 : 0.9;
-    const tag = money(Math.max(4, (c.ovr - 64) * 1.55 * posMult));
+    /* Round 833: the tag was already in the rules in 2005, so no era gate, but
+       a 2005 throwback was tagged in 2026 money. It is scaled now, the way
+       marketSalary scales every other deal in the career (scale 1 in 2026). */
+    const tag = money(Math.max(4, (c.ovr - 64) * 1.55 * posMult) * nflEraById(c.eraId).moneyScale);
     deck.push({
       id: 'lifeB_franchiseTag',
       title: `Tagged at ${tag}M`,

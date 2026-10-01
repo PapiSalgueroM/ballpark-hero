@@ -11,6 +11,8 @@ import {
   repairNetWorth,
   getMlbSpendItem
 } from '@/lib/mlbMyCareer';
+/* Round 833: every position's own stat line, shared with the other three careers. */
+import { countOf, mlbCareerSoFar, mlbMajorAward, mlbStatLine } from '@/lib/usCareerStatLine';
 // Round 179: real free agency, shared engine and shared screen.
 import { pushFaOffer, applyFaSigning } from '@/lib/usCareerFreeAgency';
 import type { FaWindow } from '@/lib/usCareerFreeAgency';
@@ -475,11 +477,11 @@ export default function MlbMyCareerBoard() {
 
   /* Round 126: see the note in NflMyCareerBoard. A suspended season has no
      stat fields, so this printed "undefined HR, undefined RBI" on the
-     retirement screen. */
-  const statLine = (s: MlbSeasonLine, p: MlbCareerPos) =>
-    s.teamResult === 'SUSPENDED' ? 'Suspended, no season played'
-      : p === 'SP' ? `${s.wins}-${s.lossesP}, ${s.era?.toFixed(2)} ERA, ${s.so} K`
-      : `.${String(Math.round((s.avg ?? 0) * 1000)).padStart(3, '0')}, ${s.hr} HR, ${s.rbi} RBI`;
+     retirement screen.
+     Round 833: and a reliever was sent down the batting branch, so a closer
+     read ".000, undefined HR, undefined RBI". The line lives in
+     usCareerStatLine.ts now, with the bullpen's own saves, holds, ERA and K. */
+  const statLine: (s: MlbSeasonLine, p: MlbCareerPos) => string = mlbStatLine;
 
   /* ------------------------------ create ------------------------------ */
   if (phase === 'create' || !career) {
@@ -666,7 +668,7 @@ export default function MlbMyCareerBoard() {
               gameName="MLB My Career"
               gamePath="/mlb-my-career"
               score={`legacy ${legacy.score}`}
-              customText={`MLB My Career ⚾ ${career.name}: ${career.seasons.length} seasons, ${career.rings} rings, ${career.mvpCys} MVPs. Verdict: ${legacy.verdict}. Legacy ${legacy.score}. douknowball.com/mlb-my-career`}
+              customText={`MLB My Career ⚾ ${career.name}: ${career.seasons.length} seasons, ${career.rings} rings, ${countOf(career.mvpCys, mlbMajorAward(career.pos).one, mlbMajorAward(career.pos).many)}. Verdict: ${legacy.verdict}. Legacy ${legacy.score}. douknowball.com/mlb-my-career`}
             />
           </div>
         </div>
@@ -966,7 +968,7 @@ export default function MlbMyCareerBoard() {
           </button>
           <p className="mt-2 text-[10px] text-muted-foreground">
             Career so far: {career.rings} rings · {career.mvpCys} majors · {career.allStars} All-Star ·{' '}
-            {career.pos === 'SP' ? `${totals.wins} career wins` : `${totals.hr} career home runs`}
+            {mlbCareerSoFar(totals, career.pos)}
           </p>
           {career.seasons.length >= 6 && (
             <button onClick={retireNow} className="mt-2 text-[11px] text-muted-foreground hover:text-destructive">Hang them up now</button>

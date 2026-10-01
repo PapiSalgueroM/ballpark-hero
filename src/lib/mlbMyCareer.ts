@@ -39,6 +39,8 @@ import { receiveMlbInboxTexts } from './mlbCareerInbox';
 import type { RivalryEvent } from './careerRivalryEvents';
 import { mlbRivalryTick, mlbRivalryChoiceTick } from './mlbCareerRivalryEvents';
 import type { RivalryChoiceCard } from './careerRivalryChoices';
+import { countOf, mlbCareerStatBullet, mlbMajorAward, type MlbCareerSums } from './usCareerStatLine';
+import { raiseWithinPotential, ratingRaiseNote } from './careerHeadroom';
 /* Round 422: the share of gross pay that actually reaches the bank, after tax,
    agent and living. It was already the number this file used to turn career
    earnings into net worth; it is named here so the yearly banking and the
@@ -829,12 +831,14 @@ export function mlbShouldRetire(c: MlbCareerState): boolean {
 
 export interface MlbLegacy { score: number; verdict: string; hof: boolean; bullets: string[] }
 
-export function mlbCareerTotals(c: MlbCareerState) {
-  let hr = 0, rbi = 0, sb = 0, wins = 0, so = 0, games = 0;
+export function mlbCareerTotals(c: MlbCareerState): MlbCareerSums & { games: number } {
+  /* Round 833: saves join the sums, so a reliever's career reads as one. */
+  let hr = 0, rbi = 0, sb = 0, wins = 0, so = 0, games = 0, saves = 0;
   for (const s of c.seasons) {
     hr += s.hr ?? 0; rbi += s.rbi ?? 0; sb += s.sb ?? 0; wins += s.wins ?? 0; so += s.so ?? 0; games += s.games;
+    saves += s.saves ?? 0;
   }
-  return { hr, rbi, sb, wins, so, games };
+  return { hr, rbi, sb, wins, so, games, saves };
 }
 
 export function mlbLegacyOf(c: MlbCareerState): MlbLegacy {
@@ -864,9 +868,13 @@ export function mlbLegacyOf(c: MlbCareerState): MlbLegacy {
     : score >= 330 ? 'Franchise legend, Hall of Very Good'
     : score >= 230 ? 'A long, proud big-league career'
     : 'A September call-up story to tell forever';
+  /* Round 833: a reliever retired on "0 home runs, 0 RBI, 0 steals" and his
+     Cy Youngs were called MVPs. The bullet reads the position now; the score
+     above is untouched (a bullpen term in it is a balance call). */
+  const award = mlbMajorAward(c.pos);
   const bullets = [
-    `${c.seasons.length} seasons, ${c.rings} ring${c.rings === 1 ? '' : 's'}, ${c.mvpCys} ${c.pos === 'SP' ? 'Cy Young' : 'MVP'}${c.mvpCys === 1 ? '' : 's'}, ${c.allStars} All-Star nods`,
-    c.pos === 'SP' ? `${t.wins} wins, ${t.so.toLocaleString()} strikeouts` : `${t.hr} home runs, ${t.rbi.toLocaleString()} RBI, ${t.sb} steals`,
+    `${c.seasons.length} seasons, ${c.rings} ring${c.rings === 1 ? '' : 's'}, ${countOf(c.mvpCys, award.one, award.many)}, ${c.allStars} All-Star nods`,
+    mlbCareerStatBullet(t, c.pos),
     `${Math.round(c.earnings)}M career earnings, drafted pick ${c.draftPick}`,
   ];
   return { score, verdict, hof, bullets };
@@ -909,7 +917,7 @@ export const MLB_SPEND_ITEMS: MlbSpendItem[] = [
   { id: 'shot_doctor', name: 'Private Hitting Coach', emoji: '🎯', category: 'body', cost: 0, yearly: 0.2, desc: 'The guy who rebuilt three batting titles, 200k a year', oneTime: true, effect: 'Rating +1 a year while young' },
   { id: 'sleep_mlb', name: 'Sleep Program', emoji: '😴', category: 'body', cost: 0.7, desc: 'Turns out most of it is sleep, 700k', oneTime: true, effect: 'Health +8' },
   { id: 'psych_mlb', name: 'Sports Psychologist', emoji: '🧠', category: 'body', cost: 0, yearly: 0.12, desc: 'The part nobody used to talk about, 120k a year', oneTime: true, effect: 'Morale +8 on hire' },
-  { id: 'biomech_mlb', name: 'Biomechanics Team', emoji: '🔬', category: 'body', cost: 1.2, desc: 'They rebuilt your landing mechanics, 1.2M', oneTime: true, effect: 'Rating +2' },
+  { id: 'biomech_mlb', name: 'Biomechanics Team', emoji: '🔬', category: 'body', cost: 1.2, desc: 'They rebuilt your landing mechanics, 1.2M', oneTime: true, effect: 'Rating +2, up to your ceiling' },
   // Flex
   { id: 'chain_mlb', name: 'The Chain', emoji: '💎', category: 'flex', cost: 0.6, desc: 'Iced out, photographed in every tunnel, 600k', oneTime: false, minFanbase: 40 },
   { id: 'tunnel_fits', name: 'A Stylist And A Tunnel Budget', emoji: '🕶️', category: 'flex', cost: 0, yearly: 0.3, desc: 'The tunnel is a runway now, 300k a year', oneTime: true, minFanbase: 45, effect: 'Fanbase +5 a year' },
@@ -967,7 +975,7 @@ export function buyMlbItem(c: MlbCareerState, itemId: string): { state: MlbCaree
     case 'youth_academy_mlb': s.fanbase = Math.min(100, s.fanbase + 8); log = 'Your academy opened with 120 kids on day one.'; break;
     case 'team_stake': s.fanbase = Math.min(100, s.fanbase + 10); log = 'You own a piece of a franchise now. The other owners are still deciding how they feel about that.'; break;
     case 'sleep_mlb': s.health = Math.min(100, s.health + 8); log = 'Turns out it was mostly sleep the whole time. Health +8.'; break;
-    case 'biomech_mlb': s.ovr = Math.min(99, s.ovr + 2); log = 'They rebuilt how you land and everything got easier. Rating +2.'; break;
+    case 'biomech_mlb': s.ovr = raiseWithinPotential(s.ovr, s.pot, 2); log = `They rebuilt how you land and everything got easier. ${ratingRaiseNote(c.ovr, s.ovr, 2)}`; break;
     case 'psych_mlb': s.morale = Math.min(100, s.morale + 8); log = 'Best hire you ever made and the one you almost skipped. Morale +8.'; break;
     case 'mom_house_mlb': s.morale = Math.min(100, s.morale + 15); log = 'You handed your mother the keys and she did not say a word for a full minute. Morale +15.'; break;
     case 'siblings_mlb': s.morale = Math.min(100, s.morale + 10); log = 'Every sibling, all four years, paid in full. Morale +10.'; break;

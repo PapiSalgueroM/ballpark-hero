@@ -16,7 +16,13 @@
    ever called inside function bodies. Never hoist it into a constant.
    ========================================================================== */
 import type { MlbCareerState, MlbCareerEvent } from './mlbMyCareer';
-import { mlbTeamLabelOf, mlbEraTeamIds } from './mlbMyCareer';
+import { mlbTeamLabelOf, mlbEraTeamIds, mlbEraById } from './mlbMyCareer';
+
+/** Round 833: the career year from which the qualifying offer card can be
+ *  drawn: the offseason after the 2012 season, when the system began
+ *  (sources at the card below). The deck is drawn after progress, so the
+ *  year is already the next season's. */
+export const MLB_QO_FIRST_YEAR = 2013;
 
 /* Round 58 money and flag fields ride on the save object. Old saves predate
    them and the engine interface has not caught up yet, so every read goes
@@ -1329,9 +1335,21 @@ export function getMlbLifeEventsB(c: MlbCareerState, rng: () => number): MlbCare
 
   /* ========== 7. CONTRACT AND CAREER FORKS ========== */
 
-  if (c.contractYears <= 0 && c.ovr >= 78 && yrs >= 6 && flag(c, 'b_qo') === 0) {
-    const qo = money(21 + Math.max(0, c.year - 2026) * 0.4);
-    const mkt = marketOf(c);
+  /* Round 833: the qualifying offer did not exist before the 2012 labor deal,
+     which replaced the old Type A and Type B free agent compensation. Fox News
+     (AP), "Qualifying offer price for major league free agents set at $13.3
+     million" (October 24, 2012): the system began with that contract, first
+     price $13.3M. CBS News (AP), "Qualifying Offer For MLB Free Agents Rises
+     To $15.3M" (October 7, 2014): up from $13.3 million "after the 2012
+     season, the first of the new system". So a 2004 throwback career meets it
+     from the offseason after the 2012 season on (the deck is drawn once
+     progress has moved the year to 2013), never before, and every amount on
+     the card is that era's money, the scale mlbMarketSalary already uses. A
+     2026 career is unchanged: its year is past the gate and its scale is 1. */
+  if (c.year >= MLB_QO_FIRST_YEAR && c.contractYears <= 0 && c.ovr >= 78 && yrs >= 6 && flag(c, 'b_qo') === 0) {
+    const scale = mlbEraById(c.eraId).moneyScale;
+    const qo = money((21 + Math.max(0, c.year - 2026) * 0.4) * scale);
+    const mkt = money(marketOf(c) * scale);
     deck.push({
       id: 'mlbB_qualifyingOffer',
       title: `The qualifying offer is ${qo}M`,

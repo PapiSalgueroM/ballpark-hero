@@ -11,6 +11,8 @@ import { NFL_ERAS,
   repairNetWorth,
   getNflSpendItem
 } from '@/lib/nflMyCareer';
+/* Round 833: every position's own stat line, shared with the other three careers. */
+import { countOf, nflCareerSoFar, nflMajorAward, nflStatLine } from '@/lib/usCareerStatLine';
 // Round 179: real free agency, shared engine and shared screen.
 import { pushFaOffer, applyFaSigning } from '@/lib/usCareerFreeAgency';
 import type { FaWindow } from '@/lib/usCareerFreeAgency';
@@ -485,12 +487,12 @@ export default function NflMyCareerBoard() {
   /* Round 126: a suspended season carries no stat fields at all, so this used
      to print "undefined yds, undefined TD, undefined INT" straight onto the
      retirement screen. Caught by the browser sweep for this round. It was
-     already there before the coaching career was, in three of the four games. */
-  const statLine = (s: SeasonLine, p: CareerPos) =>
-    s.teamResult === 'SUSPENDED' ? 'Suspended, no season played'
-      : p === 'QB' ? `${s.passYds} yds, ${s.passTd} TD, ${s.ints} INT`
-      : p === 'RB' ? `${s.rushYds} rush yds, ${s.rushTd} TD, ${s.rec} rec`
-      : `${s.rec} rec, ${s.recYds} yds, ${s.recTd} TD`;
+     already there before the coaching career was, in three of the four games.
+     Round 833: and a linebacker, corner, edge rusher or kicker fell through to
+     the receiver's line here and read "undefined rec, undefined yds, undefined
+     TD" in all four places this prints. The line lives in usCareerStatLine.ts
+     now, one branch per position the career deals. */
+  const statLine: (s: SeasonLine, p: CareerPos) => string = nflStatLine;
 
   /* ------------------------------ create ------------------------------ */
   if (phase === 'create' || !career) {
@@ -684,7 +686,7 @@ export default function NflMyCareerBoard() {
               gameName="NFL My Career"
               gamePath="/nfl-my-career"
               score={`legacy ${legacy.score}`}
-              customText={`NFL My Career 🏈 ${career.name}: ${career.seasons.length} seasons, ${career.rings} rings, ${career.mvps} MVPs. Verdict: ${legacy.verdict}. Legacy ${legacy.score}. douknowball.com/nfl-my-career`}
+              customText={`NFL My Career 🏈 ${career.name}: ${career.seasons.length} seasons, ${career.rings} rings, ${countOf(career.mvps, nflMajorAward(career.pos).one, nflMajorAward(career.pos).many)}. Verdict: ${legacy.verdict}. Legacy ${legacy.score}. douknowball.com/nfl-my-career`}
             />
           </div>
         </div>
@@ -865,7 +867,7 @@ export default function NflMyCareerBoard() {
       : null,
     rings: career.rings,
     ringWord: 'ring',
-    honours: [{ label: 'MVPs', n: career.mvps }, { label: 'All-Pros', n: career.allPros }],
+    honours: [{ label: nflMajorAward(career.pos).many, n: career.mvps }, { label: 'All-Pros', n: career.allPros }],
     /* The week's feed while there is one; after a reload, the paper kept on
        the save, so the box does not forget the career. */
     headlines: feed.length ? feed : (career.headlines ?? []),
@@ -980,8 +982,8 @@ export default function NflMyCareerBoard() {
             <Dumbbell className="h-4 w-4" /> Play the {career.year} season
           </button>
           <p className="mt-2 text-[10px] text-muted-foreground">
-            Career so far: {career.rings} rings · {career.mvps} MVPs · {career.allPros} All-Pros ·{' '}
-            {career.pos === 'QB' ? `${totals.passYds.toLocaleString()} pass yds` : career.pos === 'RB' ? `${totals.rushYds.toLocaleString()} rush yds` : `${totals.recYds.toLocaleString()} rec yds`}
+            Career so far: {career.rings} rings · {career.mvps} {nflMajorAward(career.pos).many} · {career.allPros} All-Pros ·{' '}
+            {nflCareerSoFar(totals, career.pos)}
           </p>
           {career.seasons.length >= 6 && (
             <button onClick={retireNow} className="mt-2 text-[11px] text-muted-foreground hover:text-destructive">Hang them up now</button>

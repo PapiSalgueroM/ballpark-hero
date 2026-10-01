@@ -43,6 +43,8 @@ import { receiveNflInboxTexts } from './nflCareerInbox';
 import type { RivalryEvent } from './careerRivalryEvents';
 import { nflRivalryTick, nflRivalryChoiceTick } from './nflCareerRivalryEvents';
 import type { RivalryChoiceCard } from './careerRivalryChoices';
+import { countOf, nflCareerStatBullet, nflMajorAward, type NflCareerSums } from './usCareerStatLine';
+import { raiseWithinPotential, ratingRaiseNote } from './careerHeadroom';
 
 export type CareerPos = 'QB' | 'RB' | 'WR' | 'TE' | 'LB' | 'CB' | 'EDGE' | 'K';
 
@@ -563,7 +565,13 @@ export function simSeason(
     } else {
       const tk = Math.max(0, Math.round((95 + (pf - 62) * 2.4) * per));
       const sk = Math.max(0, Math.round((3 + (pf - 62) * 0.35) * per * 10) / 10);
-      line.poLine = `${tk} tackles, ${sk} sacks`;
+      /* Round 833: a corner records no sacks in the regular season, so his
+         January line is passes defended, on the regular season's own curve at
+         its average draw. Derived, no extra rng call, so no draw moves. */
+      const pd = Math.max(0, Math.round((11.5 + (pf - 62) * 0.5) * per));
+      line.poLine = c.pos === 'CB'
+        ? `${countOf(tk, 'tackle', 'tackles')}, ${countOf(pd, 'pass defended', 'passes defended')}`
+        : `${tk} tackles, ${sk} sacks`;
     }
     notes.push(`📊 Playoffs: ${poG} game${poG === 1 ? '' : 's'}, ${line.poLine}.`);
     const cn = clutchNote(clutch, depth, 'nfl');
@@ -768,7 +776,7 @@ export const NFL_SPEND_ITEMS: NflSpendItem[] = [
   { id: 'speed_coach', name: 'Private Speed Coach', emoji: '⚡', category: 'body', cost: 0, yearly: 0.15, desc: 'The guy who fixes everyone, 150k a year', oneTime: true, effect: 'Rating +1 a year while young' },
   { id: 'sleep_lab', name: 'Sleep Program', emoji: '😴', category: 'body', cost: 0.6, desc: 'Turns out most of it is sleep, 600k', oneTime: true, effect: 'Health +8' },
   { id: 'sports_psych', name: 'Sports Psychologist', emoji: '🧠', category: 'body', cost: 0, yearly: 0.1, desc: 'The part nobody used to talk about, 100k a year', oneTime: true, effect: 'Morale +8 on hire' },
-  { id: 'vision_training', name: 'Vision Training', emoji: '👁️', category: 'body', cost: 0.8, desc: 'Read the field a quarter second sooner, 800k', oneTime: true, effect: 'Rating +2' },
+  { id: 'vision_training', name: 'Vision Training', emoji: '👁️', category: 'body', cost: 0.8, desc: 'Read the field a quarter second sooner, 800k', oneTime: true, effect: 'Rating +2, up to your ceiling' },
   // ── Flex ──
   { id: 'chain', name: 'The Chain', emoji: '💎', category: 'flex', cost: 0.5, desc: 'Iced out, photographed constantly, 500k', oneTime: false, minFanbase: 40 },
   { id: 'grill', name: 'Diamond Grill', emoji: '😬', category: 'flex', cost: 0.2, desc: 'Your mother has opinions, 200k', oneTime: true, minFanbase: 45 },
@@ -820,7 +828,7 @@ export function buyNflItem(c: CareerState, itemId: string): { state: CareerState
     case 'training_academy': s.fanbase = Math.min(100, s.fanbase + 8); log = 'Your academy opened with 90 kids on the first day.'; break;
     case 'minority_stake': s.fanbase = Math.min(100, s.fanbase + 10); log = 'You own a piece of a franchise now. The other owners are still deciding how they feel.'; break;
     case 'sleep_lab': s.health = Math.min(100, s.health + 8); log = 'Turns out it was mostly sleep the whole time. Health +8.'; break;
-    case 'vision_training': s.ovr = Math.min(99, s.ovr + 2); log = 'The game slowed down a quarter second. Rating +2.'; break;
+    case 'vision_training': s.ovr = raiseWithinPotential(s.ovr, s.pot, 2); log = `The game slowed down a quarter second. ${ratingRaiseNote(c.ovr, s.ovr, 2)}`; break;
     case 'sports_psych': s.morale = Math.min(100, s.morale + 8); log = 'Best hire you ever made and the one you almost skipped. Morale +8.'; break;
     case 'mom_house': s.morale = Math.min(100, s.morale + 15); log = 'You handed your mother the keys and she did not say anything for a full minute. Morale +15.'; break;
     case 'siblings_college': s.morale = Math.min(100, s.morale + 10); log = 'Every sibling, all four years, paid in full. Morale +10.'; break;
@@ -1015,23 +1023,36 @@ export function legacyOf(c: CareerState): Legacy {
     : score >= 340 ? 'Ring of Honor type, Canton borderline'
     : score >= 180 ? 'A long, proud career'
     : 'A cup of coffee in the league';
+  /* Round 833: the stat bullet reads the position. Before this every
+     defender and kicker retired on "0 catches for 0 yards, 0 touchdowns",
+     and a defender's Defensive Player of the Year awards were called MVPs.
+     The score above is untouched: a defensive term in it is a balance call. */
+  const award = nflMajorAward(c.pos);
   const bullets = [
-    `${c.seasons.length} seasons, ${c.rings} ring${c.rings === 1 ? '' : 's'}, ${c.mvps} MVP${c.mvps === 1 ? '' : 's'}, ${c.allPros} All-Pro nod${c.allPros === 1 ? '' : 's'}`,
-    c.pos === 'QB' ? `${totals.passYds.toLocaleString()} passing yards, ${totals.passTd} touchdowns`
-      : c.pos === 'RB' ? `${totals.rushYds.toLocaleString()} rushing yards, ${totals.rushTd} touchdowns`
-      : `${totals.rec} catches for ${totals.recYds.toLocaleString()} yards, ${totals.recTd} touchdowns`,
+    `${c.seasons.length} seasons, ${c.rings} ring${c.rings === 1 ? '' : 's'}, ${countOf(c.mvps, award.one, award.many)}, ${c.allPros} All-Pro nod${c.allPros === 1 ? '' : 's'}`,
+    nflCareerStatBullet(totals, c.pos),
     `${Math.round(c.earnings)}M career earnings, drafted pick ${c.draftPick}`,
   ];
   return { score, verdict, hof, bullets };
 }
 
-export function careerTotals(c: CareerState) {
-  const t = { passYds: 0, passTd: 0, ints: 0, rushYds: 0, rushTd: 0, rec: 0, recYds: 0, recTd: 0 };
+export function careerTotals(c: CareerState): NflCareerSums {
+  const t: NflCareerSums = {
+    passYds: 0, passTd: 0, ints: 0, rushYds: 0, rushTd: 0, rec: 0, recYds: 0, recTd: 0,
+    /* Round 833: the defence and the kicker, which this never summed. */
+    tackles: 0, sacks: 0, picks: 0, passDef: 0, forcedFum: 0, fgMade: 0, fgAtt: 0,
+  };
   for (const s of c.seasons) {
     t.passYds += s.passYds ?? 0; t.passTd += s.passTd ?? 0; t.ints += s.ints ?? 0;
     t.rushYds += s.rushYds ?? 0; t.rushTd += s.rushTd ?? 0;
     t.rec += s.rec ?? 0; t.recYds += s.recYds ?? 0; t.recTd += s.recTd ?? 0;
+    t.tackles += s.tackles ?? 0; t.sacks += s.sacks ?? 0; t.picks += s.picks ?? 0;
+    t.passDef += s.passDef ?? 0; t.forcedFum += s.forcedFum ?? 0;
+    t.fgMade += s.fgMade ?? 0; t.fgAtt += s.fgAtt ?? 0;
   }
+  /* Half sacks are tenths in this engine, so the sum is rounded the way
+     nflBadgeFacts already rounds it, never printed as 41.300000000000004. */
+  t.sacks = Math.round(t.sacks * 10) / 10;
   return t;
 }
 
