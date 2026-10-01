@@ -500,7 +500,10 @@ if (runs(7)) {
   head(7, 'simTransferOverlay still passes');
   const r = spawnSync(process.execPath, [path.join(ROOT, 'scripts', 'simTransferOverlay.mjs')], { cwd: ROOT, encoding: 'utf8', env: { ...process.env, SIM_OVERLAY_CONTROL: '' }, maxBuffer: 32 * 1024 * 1024 });
   const out = (r.stdout || '') + (r.stderr || '');
-  const closing = out.trim().split('\n').pop();
+  /* The closing line is the last line it prints to stdout; stderr carries
+     its failures (and, under scripts/lib/window2026AsApplied.mjs, that
+     preload's own exit line). */
+  const closing = (r.stdout || '').trim().split('\n').pop();
   if (r.status !== 0 || !/^simTransferOverlay: all green$/.test(closing)) fail(`simTransferOverlay exit ${r.status}, closing line "${closing}"`);
   const gen = out.match(/generated window moves: (\d+) pending \(migration unapplied\), (\d+) applied/);
   console.log(`   exit ${r.status}, "${closing}"${gen ? `; it sees ${gen[1]} generated moves pending, ${gen[2]} applied` : ''}`);

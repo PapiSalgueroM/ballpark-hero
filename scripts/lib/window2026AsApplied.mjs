@@ -306,32 +306,54 @@ async function serve(table, T, url, method, headers) {
        changes, re-sort, merge the rows that now match, and answer only what
        is certain. */
     served.wide += 1;
-    /* id breaks every tie, in the real read and in the merge alike, so a
-       read that spans two real pages cannot lose or repeat a row. */
-    const wideOrder = !order ? 'id.asc' : /(^|,)id\./.test(order) ? order : `${order},id.asc`;
-    base.searchParams.set('order', wideOrder);
-    const wcmp = comparator(wideOrder);
-    const need = offset + limit + T.changes.length + 10;
-    const pre = [];
-    let complete = false;
-    for (let from = 0; from < need; from += CAP) {
-      const n = Math.min(CAP, need - from);
-      const r = await realPage(from, n, from === 0 && wantCount);
-      if (from === 0) realTotal = r.total;
-      pre.push(...r.rows);
-      if (r.rows.length < n) { complete = true; break; }
+    const slack = T.changes.length + 10;
+    /* One real read, merged: changed rows take their new values, rows that
+       no longer match go, rows that now match come in, and the list is
+       sorted with a real row keeping its place among its ties and a new row
+       going after them. Past the end of an incomplete read nothing is
+       certain, so the answer stops at the last unchanged real row; null when
+       that is short of the page. */
+    const merge = (pre, complete, cmpFn) => {
+      const lastUnchanged = [...pre].reverse().find(r => !postBy.has(r.id));
+      const keyed = pre.map((r, i) => ({ r: postBy.has(r.id) ? { ...postBy.get(r.id) } : r, i })).filter(x => matches(x.r));
+      const have = new Set(keyed.map(x => x.r.id));
+      for (const c of T.changes) if (!have.has(c.post.id) && matches(c.post)) { keyed.push({ r: { ...c.post }, i: Infinity }); have.add(c.post.id); }
+      if (cmpFn) keyed.sort((a, b) => cmpFn(a.r, b.r) || (a.i === b.i ? a.r.id - b.r.id : a.i < b.i ? -1 : 1));
+      let rows = keyed.map(x => x.r);
+      if (!complete) {
+        if (!cmpFn || !lastUnchanged) return null;
+        rows = rows.slice(0, rows.findIndex(r => r.id === lastUnchanged.id) + 1);
+        if (rows.length < offset + limit) return null;
+      }
+      return rows.slice(offset, offset + limit);
+    };
+    let got = null;
+    if (offset + limit <= CAP) {
+      /* The read's own order, in one request, as the page itself asks. */
+      const n = Math.min(CAP, offset + limit + slack);
+      const r = await realPage(0, n, wantCount);
+      realTotal = r.total;
+      got = merge(r.rows, r.rows.length < n, comparator(order));
     }
-    const lastUnchanged = [...pre].reverse().find(r => !postBy.has(r.id));
-    let rows = pre.map(r => (postBy.has(r.id) ? { ...postBy.get(r.id) } : r)).filter(matches);
-    const have = new Set(rows.map(r => r.id));
-    for (const c of T.changes) if (!have.has(c.post.id) && matches(c.post)) { rows.push({ ...c.post }); have.add(c.post.id); }
-    rows.sort(wcmp);
-    if (!complete) {
-      if (!lastUnchanged) throw new Error(`window2026AsApplied: no unchanged row bounds the read of ${table}`);
-      rows = rows.filter(r => wcmp(r, lastUnchanged) <= 0);
-      if (rows.length < offset + limit) throw new Error(`window2026AsApplied: cannot answer rows ${offset} to ${offset + limit - 1} of ${table} exactly (${rows.length} certain)`);
+    if (!got) {
+      /* Past one request: id breaks every tie, in the real reads and in the
+         merge alike, so two real pages cannot lose or repeat a row. */
+      const wideOrder = !order ? 'id.asc' : /(^|,)id\./.test(order) ? order : `${order},id.asc`;
+      base.searchParams.set('order', wideOrder);
+      const need = offset + limit + slack;
+      const pre = [];
+      let complete = false;
+      for (let from = 0; from < need; from += CAP) {
+        const n = Math.min(CAP, need - from);
+        const r = await realPage(from, n, from === 0 && wantCount);
+        if (from === 0 && wantCount) realTotal = r.total;
+        pre.push(...r.rows);
+        if (r.rows.length < n) { complete = true; break; }
+      }
+      got = merge(pre, complete, comparator(wideOrder));
+      if (!got) throw new Error(`window2026AsApplied: cannot answer rows ${offset} to ${offset + limit - 1} of ${table} exactly`);
     }
-    page = rows.slice(offset, offset + limit);
+    page = got;
   }
 
   const out = project(page, select);
