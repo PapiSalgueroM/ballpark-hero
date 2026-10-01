@@ -12404,6 +12404,25 @@ function settleShootout(
   const taker = assignedOnPitch(state.setPieces, 'penalties', men(finished));
   const order = shootoutOrderOf(state);
   if (!order) return { won: Math.random() < clamp(0.5 + (mine - oppS) * 0.012 + shootoutTakerEdge(taker), 0.2, 0.8) };
+  /* Theirs: the eleven still out there, or the projected roster for a side
+     with no named eleven tonight. */
+  const onPitch = oppAt(live, end);
+  const theirs: { n: string; p: Position; r: number; g?: boolean }[] = onPitch && onPitch.length
+    ? onPitch
+    : [...oppRosterFor(state, fx.opponent)].sort((a, b) => b.r - a.r).slice(0, SHOOTOUT_MAX_ORDER);
+  const detail = runShootout({ ...shootoutSides(state, order, finished, theirs, oppS), myFirst: Math.random() < 0.5 });
+  return { won: detail.mine > detail.theirs, detail };
+}
+
+/**
+ * The two sides of a kick by kick shootout, from the men out there at the
+ * whistle. Pure, and exported so the harness can hold each side to its
+ * keeper and its order (scripts/simCmShootoutOrder.mjs section 6).
+ */
+export function shootoutSides(
+  state: CareerState, order: readonly string[], finished: readonly XiSlot[],
+  theirs: readonly { n: string; p: Position; r: number; g?: boolean }[], oppS: number,
+): { mine: ShootoutSide; theirs: ShootoutSide } {
   /* The man standing in goal at the whistle, read off the slot (an
      outfielder put in goal is the keeper, a keeper played up front is not);
      a save whose slots cannot be named falls back to a keeper by position,
@@ -12412,16 +12431,12 @@ function settleShootout(
   const onIds = finished.map(x => x.p.id);
   const myTakers = squadByIds(state, shootoutTakerOrder(order, onIds, myKeeper?.id ?? null))
     .map(p => ({ name: p.name, rating: p.rating }));
-  /* Theirs: the eleven still out there, or the projected roster for a side
-     with no named eleven tonight; best first, the keeper last. */
-  const onPitch = oppAt(live, end);
-  const theirs: { n: string; p: Position; r: number; g?: boolean }[] = onPitch && onPitch.length
-    ? onPitch
-    : [...oppRosterFor(state, fx.opponent)].sort((a, b) => b.r - a.r).slice(0, SHOOTOUT_MAX_ORDER);
+  /* Theirs best first, the keeper last, read against their keeper; a side
+     with nobody to name kicks a generated eleven at the club's strength. */
   const oppKeeper = theirs.find(p => p.p === 'GK') ?? null;
   const oppTakers = [...theirs.filter(p => p !== oppKeeper)].sort((a, b) => b.r - a.r);
   if (oppKeeper) oppTakers.push(oppKeeper);
-  const detail = runShootout({
+  return {
     mine: { takers: myTakers, keeperRating: myKeeper?.rating ?? null },
     theirs: {
       takers: oppTakers.length
@@ -12429,9 +12444,7 @@ function settleShootout(
         : Array.from({ length: SHOOTOUT_MAX_ORDER }, (_, i) => ({ name: `Their taker ${i + 1}`, rating: oppS, gen: true })),
       keeperRating: oppKeeper?.r ?? (theirs.length ? null : oppS),
     },
-    myFirst: Math.random() < 0.5,
-  });
-  return { won: detail.mine > detail.theirs, detail };
+  };
 }
 
 /**
