@@ -1,5 +1,29 @@
 # Work board
 
+**2026-10-01, Codex815/816 CLAIMED: Tennis and CBB answer feedback.**
+815 owns only src/components/cbb-program/CbbProgramBoard.tsx, a local
+CbbProgramFeedback.module.css, src/test/cbbProgramFeedback.test.tsx and
+scripts/simCbbProgramFeedback.mjs. 816 owns only the TennisPlayerBoard.tsx,
+local TennisPlayerFeedback.module.css and tennisPlayerFeedback test/sim pair,
+and starts source edits only after 811 is accepted and committed. Both Boards
+still schedule wrongFlash from the pre-guess playing state, including correct
+wins. Reproduce that outcome, then follow the accepted 806/812 local pattern:
+feedback from one committed guess, finite success/miss cues, static reduced
+motion, quiet restores/resets, full names and usable changed actions. Preserve
+all original hooks, data, clue labels, rules, score/save/share and completion
+behavior. No new facts, shared abstractions or global CSS. This carries master
+sections 96/97 forward. Root owns Git/docs/build; all Claude reservations stand.
+Next free 817.
+
+811-813 combined production gate is green: real app types, two builds, four
+three-clock captures, all 25 selected node guards and separate PrerenderBoot.
+All 1807 raw sources, 188 saved page contents and 168 derived URL dates/hashes
+hold; only four captured HTML files changed line endings. Final native App
+checks are running against index-CcYvt_A-.js, acceptance still pending.
+Fresh read-only visitor triage found the same seven open reports, latest Sep 30.
+Existing Claude claims and the unpublished AFL manager cover them; no report
+status or database data changed. Google decisions and publication remain separate.
+
 **2026-10-01, Codex814 ACCEPTED: incomplete search checks cannot pass.**
 The live accented-name harness now names failed lookups and exits nonzero when
 even one request is unverified. Request errors also cannot count as proof that
