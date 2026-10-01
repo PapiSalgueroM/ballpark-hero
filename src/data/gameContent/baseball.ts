@@ -889,6 +889,12 @@ export const BASEBALL_CONTENT: GameContentMap = {
             ],
           },
           {
+            heading: "Answering your phone on the baseball calendar",
+            items: [
+              "Answer your phone. Texts from your agent, the manager, the GM, a teammate or your mom land on the beats of the baseball year: draft day, spring training, the All-Star break, the trade deadline, September, October if you get there, the offseason, an arbitration winter and the winter you hit free agency. Every text says which beat and which year it came in on, and how you answer moves your karma, morale, fanbase or bank.",
+            ],
+          },
+          {
             heading: "Making the call when your rival forces one",
             items: [
               "Some seasons your rival puts a decision on your plate instead of a story: benches clearing that you can answer or calm down, a debate show offering real money, a youth clinic his foundation wants you to co-host, an All-Star vote his club is buying ads for. Every button prints exactly what it moves, and a gamble prints its odds.",
@@ -941,6 +947,13 @@ export const BASEBALL_CONTENT: GameContentMap = {
         heading: "How your rival's choices work",
         items: [
           "Any season your rival stays out of the news carries a 45% chance of a rival choice instead, never both in one season, and you meet every choice once before one comes back. Each button moves exactly what it prints: morale, fanbase, net worth, karma or the heat of the feud. Morale goes straight into next season's numbers, at the plate or on the mound.",
+        ],
+      },
+      {
+        heading: "How the phone's calendar works",
+        items: [
+          "Texts only arrive on beats your season really had. No October texts in a year your club went home in September, arbitration only in the winters after your third, fourth and fifth seasons while your deal still has years on it, free agency only the winter your deal runs out, and draft day's text lands before you see a pitch. One text a beat, up to three a season, fewer while old ones sit unanswered, and the same text never comes twice in a career.",
+          "The season the game retires you (42, 21 seasons, or a rating that craters) sends nothing about a year you will not play: no winter ball offer, no bat and glove deal, no arbitration or free agency talk.",
         ],
       },
       {
