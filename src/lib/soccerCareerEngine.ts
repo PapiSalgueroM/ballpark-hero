@@ -1444,7 +1444,7 @@ export const MORAL_DILEMMAS: MoralDilemma[] = [
     id: "magazine_shoot",
     emoji: "📸",
     title: "THE MAGAZINE CALL",
-    description: "A famous magazine wants you on the cover. The tasteful version pays well. The artistic version, wearing nothing but a strategically held football, pays absurdly. Your agent is already laughing.",
+    description: "A famous magazine wants you on the cover. The tasteful version pays well. The bold version, shirt off with a football under your arm, pays absurdly. Your agent is already laughing.",
     choices: [
       { label: "Tasteful calendar shoot", emoji: "😎", consequence: "2M fee, popularity +10" },
       { label: "The full artistic cover", emoji: "🙈", consequence: "6M fee, popularity +18", risk: "25% chance a sponsor drops you for 2M" },
@@ -1899,7 +1899,7 @@ export function applyMoralDilemmaChoice(prev: CareerState, choiceIndex: number):
           s.netWorth = Math.round((s.netWorth - 2) * 100) / 100;
           s.events = [...s.events, "🙈 The artistic cover breaks the internet. 6M earned, popularity +18... and a family-brand sponsor quietly walked, costing 2M."];
         } else {
-          s.events = [...s.events, "🙈 The artistic cover breaks the internet. 6M earned, popularity +18. The football was held VERY strategically."];
+          s.events = [...s.events, "🙈 The artistic cover breaks the internet. 6M earned, popularity +18. Your agent has the cover framed in his office."];
         }
       } else {
         s.events = [...s.events, "🚪 Declined the shoot. Your grandmother frames the polite refusal letter."];
