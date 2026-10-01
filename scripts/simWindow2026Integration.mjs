@@ -44,12 +44,15 @@
      7. simTransferOverlay still passes (run as a child; its closing line and
         its exit code are both required).
      8. FOOTLE FALLBACK BAKE (scripts/bakePlayers.mjs, src/data/players.ts).
-        The committed file equals a fresh bake; every window player in it
-        sits at his verified club while the table row still says the old one
-        (the bake reads the overlay); and a bake over the table with the
-        migration applied (a stand in: the live rows plus the plan's moves and
-        inserts) agrees with it on every club, so the overlay and the
-        migration say the same thing. Only the inserted names may differ.
+        A fresh bake, in memory, puts every window player in the pool at his
+        verified club while the table row still says the old one (the bake
+        reads the overlay); a bake over the table with the migration applied
+        (a stand in: the live rows plus the plan's moves and inserts) agrees
+        with it on every club, so the overlay and the migration say the same
+        thing (only the inserted names may join). The committed file is not
+        re-baked on this branch: the lead re-bakes it once the migration has
+        landed, so it may sit behind the fresh bake, but only on window
+        players; a club that differs for any other name fails here.
      9. FOOTLE LIVE POOL (src/lib/fetchFootlePlayerPool.ts, the real code,
         bundled). Served the migrated table, every window player in the pool
         sits at his verified club; served the table as it is, they do not.
@@ -82,9 +85,14 @@
    FLOORS, measured 2026-10-01 with the table PENDING (deterministic counts,
    not samples; each floor sits near two thirds of the measure so a shrinking
    pool cannot read as green while an empty answer still fails):
-     entries traced 396 (floor 300); window players in the Footle fallback
-     pool 23 (floor 15); in the Footle live pool, with the stand in, 34
-     (floor 22); in the Player Bingo pool, with the stand in, 61 (floor 40).
+     entries traced 396 (floor 264); window players in the Footle fallback
+     pool 27 (floor 18); in the Footle live pool, with the stand in, 90
+     (floor 60); in the Player Bingo pool, with the stand in, 10 of 482
+     (floor 7). Bingo's pool is the top of the value ranking, where the hand
+     list already carries most of the big moves, so the window rows reach
+     only ten of it; seven of those ten sit at the old club in the table as
+     it is, which is what the stale control fires on. Two full runs gave the
+     same counts.
 
    NEGATIVE CONTROLS (SIM_WINDOW_CONTROL=<name>), each judged on its own
    section and refusing to run when what it rewrites is not there:
@@ -135,7 +143,7 @@ const runs = s => !CONTROL || OWN[CONTROL].includes(s);
    evidence, by identity key, measured 2026-10-01. See section 11. */
 const TP_HELD = ['alvaro morata|spain'];
 
-const FLOOR = { traced: 300, footleFallback: 15, footleLive: 22, bingo: 40 };
+const FLOOR = { traced: 264, footleFallback: 18, footleLive: 60, bingo: 7 };
 const WINDOWS = new Set(['2026-01', '2026-summer']);
 
 const failures = {};
@@ -652,9 +660,17 @@ const windowByName = new Map(entries.map(e => [e.name, e]));
 /* ------------------------------------------------------------------ */
 if (runs(8)) {
   head(8, 'The Footle fallback bake puts every window player at his verified club');
+  /* The committed file's clubs, by name. The file is the lead's to re-bake
+     once the migration has landed (the bake then reads the moved rows and
+     says "0 rows moved at bake time"), so until then it may sit behind the
+     overlay, but only on window players: anything else behind is the table
+     moving under it, which simPlayersPool owns. */
+  const committedText = lf(fs.readFileSync(path.join(ROOT, 'src', 'data', 'players.ts'), 'utf8'));
+  const committedClub = new Map([...committedText.matchAll(/^\s*\{ name: ("(?:[^"\\]|\\.)*"), club: ("(?:[^"\\]|\\.)*"),/gm)]
+    .map(m => [JSON.parse(m[1]), JSON.parse(m[2])]));
+  if (committedClub.size < 400) abort(`src/data/players.ts parsed to ${committedClub.size} rows, the reader is broken`);
   if (CONTROL === 'footle') {
-    const committed = lf(fs.readFileSync(path.join(ROOT, 'src', 'data', 'players.ts'), 'utf8'));
-    const e = movers.find(x => committed.includes(`{ name: ${JSON.stringify(x.name)}, club: ${JSON.stringify(x.db)},`));
+    const e = movers.find(x => committedClub.get(x.name) === x.from || committedClub.get(x.name) === x.db);
     const at = e ? TRANSFER_OVERLAY_2026.findIndex(x => x.name === e.name && x.db === e.db) : -1;
     if (at < 0) abort('control cannot run: no window mover of the Footle pool is in the overlay');
     TRANSFER_OVERLAY_2026.splice(at, 1);
@@ -662,8 +678,15 @@ if (runs(8)) {
   }
   const rows = await fetchRows2026();
   const fresh = await bake({ rows: clone(rows) });
-  const committed = lf(fs.readFileSync(path.join(ROOT, 'src', 'data', 'players.ts'), 'utf8'));
-  if (fresh.text !== committed) fail('src/data/players.ts is not a fresh bake of the table and the overlay; run node scripts/bakePlayers.mjs');
+  const freshClub = new Map(fresh.pool.map(x => [x.player.name, x.player.club]));
+  const behind = [];
+  for (const n of new Set([...committedClub.keys(), ...freshClub.keys()])) {
+    if (committedClub.get(n) === freshClub.get(n)) continue;
+    if (windowByName.has(n)) { behind.push(n); continue; }
+    fail(`${n}: src/data/players.ts says ${committedClub.get(n) ?? 'nothing'}, a fresh bake says ${freshClub.get(n) ?? 'nothing'}, and no window row explains it`);
+  }
+  if (fresh.text === committedText) console.log('   src/data/players.ts is the fresh bake');
+  else console.log(`   src/data/players.ts sits behind a fresh bake on ${behind.length} window player(s) and nothing else: the re-bake (node scripts/bakePlayers.mjs) is owed after the migration lands`);
   const rowBy = groupBy(rows, r => r.player_name);
   let inPool = 0, staleInTable = 0;
   for (const { player } of fresh.pool) {
@@ -747,9 +770,21 @@ if (runs(9)) {
 if (runs(10)) {
   head(10, 'Player Bingo, served the migrated table, has every window player at his verified club');
   const app = await loadApp();
-  inexact.pages = 0;
-  const before = STATE === 'PENDING' ? await app.fetchBingoData() : null;
-  const after = await underPost(() => app.fetchBingoData());
+  /* fetchBingoData answers null on any failed read, a transient 500 included
+     (the page offers a retry), so a null is retried twice. A stand in that
+     cannot serve a read throws every time and stays null. */
+  const bingo = async (label, fn) => {
+    for (let attempt = 1; attempt <= 3; attempt += 1) {
+      inexact.pages = 0;
+      const d = await fn();
+      if (d) { if (attempt > 1) console.log(`   ${label}: fetchBingoData needed ${attempt} attempts`); return d; }
+      if (attempt < 3) await new Promise(r => setTimeout(r, 2000 * attempt));
+    }
+    return null;
+  };
+  const before = STATE === 'PENDING' ? await bingo('the table as it is', () => app.fetchBingoData()) : null;
+  if (STATE === 'PENDING' && !before) fail('fetchBingoData returned null three times on the table as it is');
+  const after = await bingo('the stand in', () => underPost(() => app.fetchBingoData()));
   if (!after) fail('fetchBingoData returned null (the board would show its error state)');
   if (inexact.pages) fail(`the stand in could not serve ${inexact.pages} page(s) exactly`);
   let inPool = 0, staleBefore = 0, noHistory = 0;
