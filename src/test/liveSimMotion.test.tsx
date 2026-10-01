@@ -456,4 +456,30 @@ describe('Live simcast motion', () => {
     expect(text).toContain(`Level ${aggMine}-${aggTheirs} on aggregate`);
     expect(text).not.toContain('Level after 90 minutes');
   }, 30000);
+
+  /* Round 781: the clock runs on into the board and says so, LIVE 90+1' and
+     never 91', and on a second leg the line under the score is the tie as it
+     stands at that point of the board: the first leg plus every goal the
+     clock has reached. The material is the same real decider as above. */
+  it('the clock runs into the board as 90 plus, with the running aggregate under the score', async () => {
+    const { notDue } = findWhistleMaterial();
+    const career = structuredClone(notDue);
+    const entry = career.calendar[career.live!.week];
+    expect(entry.uclLeg === 2 && uclLegsFor(career.eraId, entry.uclRound!) === 2, 'the decider this walk reached is a second leg').toBe(true);
+    expect(boardAt(career, 90), 'the second half board').toBeGreaterThanOrEqual(2);
+    const mounted = mount(career);
+    const root = () => mounted.container.querySelector('[data-cm-live-stage]')!;
+    for (let t = 0; t < 8000 && root().getAttribute('data-cm-live-plus') !== '1'; t += 100) await step(100);
+    expect(root().getAttribute('data-cm-live-stage')).toBe('second');
+    expect(root().getAttribute('data-cm-live-minute')).toBe('90');
+    expect(root().getAttribute('data-cm-live-plus')).toBe('1');
+    const text = mounted.container.textContent!;
+    expect(text).toContain("LIVE 90+1'");
+    expect(text).not.toContain("LIVE 91'");
+    const tie = career.uclBracket!.find(t => t.round === entry.uclRound && t.mine)!;
+    const iAmHome = tie.home === career.clubName;
+    const [mine, opp] = scoreBy(career, 91).split(' - ').map(Number);
+    const agg = `${(iAmHome ? tie.leg1!.homeGoals : tie.leg1!.awayGoals) + mine}-${(iAmHome ? tie.leg1!.awayGoals : tie.leg1!.homeGoals) + opp}`;
+    expect(mounted.container.querySelector('[data-cm-live-agg]')!.getAttribute('data-cm-live-agg')).toBe(agg);
+  }, 30000);
 });
