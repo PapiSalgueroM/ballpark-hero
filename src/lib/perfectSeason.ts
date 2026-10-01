@@ -312,6 +312,74 @@ export function saveDailyAttempt(
   }
 }
 
+// --- Best record ---------------------------------------------------------
+//
+// Round 784. A player who had run the NBA game 1,312 times without an 82-0
+// had nothing to show for any of it: the page kept no record of his best
+// run. The best record is the honest target, so it is kept per sport in this
+// browser and printed on the result card and the mode screen.
+
+const BEST_RECORD_VERSION = 1 as const;
+
+export interface BestRecord {
+  v: typeof BEST_RECORD_VERSION;
+  wins: number;
+  losses: number;
+  overall: number;
+  date: string;      // ET date of the run
+  mode: GameMode;
+}
+
+/** Namespaced localStorage key: `perfect-season-{sport}-best`. */
+function bestRecordKey(sportKey: string): string {
+  return `perfect-season-${sportKey}-best`;
+}
+
+function isFiniteCount(v: unknown): v is number {
+  return typeof v === 'number' && Number.isFinite(v) && v >= 0;
+}
+
+/** The stored best, or null when there is none or it is not shaped like one. */
+export function loadBestRecord(sportKey: string): BestRecord | null {
+  try {
+    const raw = localStorage.getItem(bestRecordKey(sportKey));
+    if (!raw) return null;
+    const parsed = JSON.parse(raw) as Partial<BestRecord>;
+    if (parsed.v !== BEST_RECORD_VERSION) return null;
+    if (!isFiniteCount(parsed.wins) || !isFiniteCount(parsed.losses) || !isFiniteCount(parsed.overall)) return null;
+    if (typeof parsed.date !== 'string' || typeof parsed.mode !== 'string') return null;
+    return parsed as BestRecord;
+  } catch {
+    return null;
+  }
+}
+
+/** More wins is better. On equal wins the first run keeps the record, so a
+    best never moves sideways. */
+export function isBetterRecord(run: { wins: number }, best: BestRecord | null): boolean {
+  return best === null || run.wins > best.wins;
+}
+
+/**
+ * Compares a finished run with the stored best and keeps the better one.
+ * Returns what is now stored and whether this run set it. Storage failures
+ * leave the run as the answer for this session only.
+ */
+export function saveBestRecord(
+  sportKey: string,
+  run: Omit<BestRecord, 'v'>,
+): { best: BestRecord; improved: boolean } {
+  const current = loadBestRecord(sportKey);
+  if (!isBetterRecord(run, current)) return { best: current as BestRecord, improved: false };
+  const best: BestRecord = { v: BEST_RECORD_VERSION, ...run };
+  try {
+    localStorage.setItem(bestRecordKey(sportKey), JSON.stringify(best));
+  } catch {
+    // localStorage unavailable: the run still counts for this screen.
+  }
+  return { best, improved: true };
+}
+
 /** Milliseconds until the next ET midnight, for a "next puzzle in" countdown. */
 export function msUntilNextDailyET(): number {
   const now = new Date();

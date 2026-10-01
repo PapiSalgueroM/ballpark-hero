@@ -14,10 +14,10 @@
 import { useEffect, useRef, useState } from "react";
 import { focusDialogOnMount, escapeCloses } from '@/lib/dialogA11y';
 import type { CareerState } from "@/lib/soccerCareerEngine";
-import type { TrainingDrill } from "@/lib/soccerCareerEngine";
+import { trainingStatFor, type TrainingDrill } from "@/lib/soccerCareerEngine";
 import DrillBoard from "./DrillBoard";
 import FirstTouchBoard from "./FirstTouchBoard";
-import { DRILL_META, drillForPosition, type DrillKind } from "@/lib/careerDrills";
+import { DRILL_META, drillForPosition, drillStatFor, type DrillKind } from "@/lib/careerDrills";
 import feedback from "./TrainingFeedback.module.css";
 
 /* Round 468: "arcade" is the position drill, played on the shared arcade
@@ -259,13 +259,17 @@ export default function TrainingPanel({ career, available, onComplete, onDrill, 
     lightGate(0);
   };
 
+  /* Round 784: the stat each drill trains comes from the engine's own mapping,
+     so a keeper reads Positioning, Sweeping Speed, Distribution and Reflexes
+     here, the same words his attribute screen uses, and the panel can never
+     promise a stat the engine does not pay. */
   const drillMeta: Record<TrainingDrill, { emoji: string; name: string; stat: string }> = {
-    dribbling: { emoji: "🌀", name: "Cone Slalom", stat: "Dribbling" },
-    pace: { emoji: "⚡", name: "Sprint Burst", stat: "Pace" },
+    dribbling: { emoji: "🌀", name: "Cone Slalom", stat: trainingStatFor(career.position, "dribbling").label },
+    pace: { emoji: "⚡", name: "Sprint Burst", stat: trainingStatFor(career.position, "pace").label },
     shooting: isGK
-      ? { emoji: "🧤", name: "Shot Stopping", stat: "Reflexes" }
-      : { emoji: "🎯", name: "Penalty Placement", stat: "Shooting" },
-    passing: { emoji: "🚩", name: "Passing Gates", stat: "Passing" },
+      ? { emoji: "🧤", name: "Shot Stopping", stat: trainingStatFor(career.position, "shooting").label }
+      : { emoji: "🎯", name: "Penalty Placement", stat: trainingStatFor(career.position, "shooting").label },
+    passing: { emoji: "🚩", name: "Passing Gates", stat: trainingStatFor(career.position, "passing").label },
   };
 
   /* The keeper's first shot arrives shortly after the drill opens. */
@@ -311,7 +315,7 @@ export default function TrainingPanel({ career, available, onComplete, onDrill, 
             <button onClick={() => setScreen("firsttouch")}
               className="w-full flex items-center gap-3 rounded-xl border border-emerald-500/40 bg-emerald-500/10 hover:bg-emerald-500/20 p-3.5 text-left transition-colors">
               <span className="text-3xl">👟</span>
-              <span className="flex-1"><span className="block text-sm font-black">First Touch</span><span className="block text-[10px] text-muted-foreground">Read the gate, time your control. Trains Dribbling. Practice is always open.</span></span>
+              <span className="flex-1"><span className="block text-sm font-black">First Touch</span><span className="block text-[10px] text-muted-foreground" data-first-touch-trains>Read the gate, time your control. Trains {drillStatFor("firsttouch", career.position).label}. Practice is always open.</span></span>
               <span className="text-muted-foreground">›</span>
             </button>
             {!available ? (
@@ -323,6 +327,11 @@ export default function TrainingPanel({ career, available, onComplete, onDrill, 
             ) : (
               <>
                 <p className="text-[11px] text-muted-foreground text-center">One session per season. Score 50+ for a +1, 80+ for a +2 to that stat with next season's growth.</p>
+                {isGK && (
+                  <p className="text-[11px] text-muted-foreground text-center" data-training-keeper-rule>
+                    You are in goal, so these train keeper skills: the slalom and First Touch are footwork for your Positioning, the sprint is your Sweeping Speed, the gates are your Distribution, and shot stopping is your Reflexes.
+                  </p>
+                )}
                 <div className="grid grid-cols-1 gap-2.5">
                   {(Object.keys(drillMeta) as TrainingDrill[]).map(d => (
                     <button key={d} onClick={() => openDrill(d)}

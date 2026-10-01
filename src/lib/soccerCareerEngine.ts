@@ -1000,6 +1000,36 @@ export function receivePhoneTexts(s: CareerState, phase: "youth" | "pro"): void 
    position aware in the panel: keepers face shots instead of taking them,
    feeding the same reflexes stat this mapping always sent them to. */
 export type TrainingDrill = "dribbling" | "pace" | "shooting" | "passing";
+export type TrainingStat = "pace" | "shooting" | "passing" | "dribbling" | "defending" | "reflexes";
+
+/* Round 784: what each drill moves depends on who is doing it. The drills
+   were mapped by name alone, so a keeper's Cone Slalom paid dribbling, which
+   on his own attribute screen is Penalty Saving, while the panel told him it
+   trained Dribbling. A player asked on 2026-09-23 for the keeper's drills to
+   train keeper skills. The drill names stay; the attribute moves: footwork
+   round the cones is how a keeper trains his positioning, the sprint is his
+   sweeping speed, the gates are his distribution, and shot stopping was always
+   his reflexes. The labels are the keeper tree's family names from
+   soccerCareerAttributes, so the panel, the event line and the attribute
+   screen all say the same word (src/test/keeperTraining.test.ts holds the
+   mapping, src/test/keeperTrainingPanel.test.tsx holds the panel's words
+   against what the engine pays). First Touch follows this mapping through
+   drillStatFor in careerDrills. */
+const OUTFIELD_TRAINING: Record<TrainingDrill, { stat: TrainingStat; label: string }> = {
+  dribbling: { stat: "dribbling", label: "Dribbling" },
+  pace: { stat: "pace", label: "Pace" },
+  passing: { stat: "passing", label: "Passing" },
+  shooting: { stat: "shooting", label: "Shooting" },
+};
+const KEEPER_TRAINING: Record<TrainingDrill, { stat: TrainingStat; label: string }> = {
+  dribbling: { stat: "defending", label: "Positioning" },
+  pace: { stat: "pace", label: "Sweeping Speed" },
+  passing: { stat: "passing", label: "Distribution" },
+  shooting: { stat: "reflexes", label: "Reflexes" },
+};
+export function trainingStatFor(position: string, drill: TrainingDrill): { stat: TrainingStat; label: string } {
+  return (position === "GK" ? KEEPER_TRAINING : OUTFIELD_TRAINING)[drill];
+}
 
 export function trainingAvailable(s: CareerState): boolean {
   if (s.retired) return false;
@@ -1013,14 +1043,9 @@ export function applyTrainingResult(prev: CareerState, drill: TrainingDrill, sco
   const year = s.seasons[s.seasons.length - 1]?.year ?? 0;
   if (s.trainingSeasonYear === year) return prev; // one session per season
   const sc = clamp(Math.round(score), 0, 100);
-  const stat: keyof CareerState["statBoostNextSeason"] =
-    drill === "pace" ? "pace"
-    : drill === "dribbling" ? "dribbling"
-    : drill === "passing" ? "passing"
-    : (s.position === "GK" ? "reflexes" : "shooting");
+  const { stat, label } = trainingStatFor(s.position, drill);
   const boost = sc >= 80 ? 2 : sc >= 50 ? 1 : 0;
   s.trainingSeasonYear = year;
-  const label = stat === "reflexes" ? "Reflexes" : stat === "pace" ? "Pace" : stat === "dribbling" ? "Dribbling" : stat === "passing" ? "Passing" : "Shooting";
   if (boost > 0) {
     s.statBoostNextSeason = { ...s.statBoostNextSeason, [stat]: (s.statBoostNextSeason[stat] || 0) + boost };
     s.morale = clamp(s.morale + 2, 0, 100);

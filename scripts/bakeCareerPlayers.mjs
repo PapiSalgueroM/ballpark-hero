@@ -21,8 +21,9 @@
  *
  * FAILS CLOSED, nothing written, when the read comes back short or malformed:
  * fewer players or seasons than the previous bake, a player with no seasons,
- * two players sharing a name, a stat below zero, or a string the plain row
- * format cannot carry.
+ * two players sharing a name, a stat below zero, a string the plain row
+ * format cannot carry, or (since Round 784) a table that does not yet carry a
+ * correction recorded in one of the CORRECTION_LEDGERS.
  *
  * The exports are shared with scripts/simCareerFallback.mjs, which renders a
  * fresh bake in memory and fails when the committed file differs from it.
@@ -40,9 +41,38 @@ export const BAKE_SCRIPT = 'scripts/bakeCareerPlayers.mjs';
 /* the same page size as src/lib/fetchAllRows.ts, PostgREST's hard cap */
 const PAGE_SIZE = 1000;
 /* the counts of the previous bake; a read that comes back below them is a
-   short read, not a smaller table, until somebody moves these on purpose */
+   short read, not a smaller table, until somebody moves these on purpose.
+   Round 784 baked 3,640 seasons: the 3,612 in the table plus the 28 first club
+   rows its migration adds. Until that migration is applied the table reads
+   3,612 and a bake would put Alisson back at Roma, so it fails closed here
+   (and on CORRECTION_LEDGERS below) instead of writing. */
 const PLAYER_FLOOR = 253;
-const SEASON_FLOOR = 3608;
+const SEASON_FLOOR = 3640;
+
+/* Corrections recorded in a ledger, each with a migration that writes it to
+   the tables. The file is baked from the tables, so a correction lives in the
+   table or nowhere: this is not an overlay, it never writes a row the table
+   does not have. It refuses to bake from a table that does not yet carry a
+   recorded correction, because the bake would silently undo it. */
+export const CORRECTION_LEDGERS = [
+  { file: 'scripts/data/careerFirstClubs.json', migration: 'supabase/migrations/20261001120000_career_first_clubs.sql' },
+];
+
+/** Every recorded correction the pool does not carry. Empty when it carries them all. */
+export function correctionProblems(players, ledger) {
+  const problems = [];
+  const byName = new Map(players.map(p => [p.name, p]));
+  for (const r of ledger.added ?? []) {
+    const p = byName.get(r.player);
+    const has = p?.career.some(s => s.season === r.season && s.club === r.club && s.goals === r.goals && s.appearances === r.appearances);
+    if (!has) problems.push(`${r.player} ${r.season} ${r.club} (${r.appearances} apps, ${r.goals} goals) is recorded as added and is not in the read`);
+  }
+  for (const c of ledger.changed ?? []) {
+    const row = byName.get(c.player)?.career.find(s => s.season === c.season && s.club === c.club);
+    if (!row || row[c.field] !== c.to) problems.push(`${c.player} ${c.season} ${c.club}: ${c.field} reads ${row ? row[c.field] : '(no row)'}, recorded as corrected to ${c.to}`);
+  }
+  return problems;
+}
 
 /* ------------------------------------------------------------------ */
 /* Supabase client from the app's own hardcoded values                */
@@ -198,6 +228,10 @@ if (invokedDirectly) {
   const errors = poolProblems(players);
   if (players.length < PLAYER_FLOOR) errors.push(`only ${players.length} players read (floor ${PLAYER_FLOOR}); a short read, or move the floor on purpose`);
   if (seasonRows.length < SEASON_FLOOR) errors.push(`only ${seasonRows.length} seasons read (floor ${SEASON_FLOOR}); a short read, or move the floor on purpose`);
+  for (const { file, migration } of CORRECTION_LEDGERS) {
+    const ledger = JSON.parse(fs.readFileSync(path.join(ROOT, file), 'utf8'));
+    for (const p of correctionProblems(players, ledger)) errors.push(`${p}; apply ${migration} before baking (ledger ${file})`);
+  }
   if (errors.length) {
     console.error('FAILED CLOSED, nothing written. Problems:');
     for (const e of errors.slice(0, 40)) console.error('  - ' + e);

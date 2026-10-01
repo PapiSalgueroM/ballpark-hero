@@ -1688,6 +1688,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
         heading: "Training sessions and steering growth events",
         items: [
           "The training ground is the dumbbell button, one session a season. The older sessions (cone slalom, sprint burst, passing gates, penalties or shot stopping) pay +1 at 50 and +2 at 80; the position drill pays the same but stops at your ceiling. Beyond that, growth follows your age curve, and you steer it through event choices, lifestyle purchases, and the social media detox, worth plus 2 to every stat next season.",
+          "In goal the same drills train keeper skills: the cone slalom is footwork and pays Positioning, the sprint burst pays Sweeping Speed, the passing gates pay Distribution and shot stopping pays Reflexes. Outfield players train Dribbling, Pace, Passing and Shooting from the same four tiles.",
         ],
       },
       {

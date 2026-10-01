@@ -61,6 +61,20 @@ export function expectedWins(sport: ExpansionSport, overall: number): number {
   return curve[curve.length - 1][1];
 }
 
+/** The per game win chance before momentum: the curve's expected wins spread
+    over the season, clamped the way the sim has always clamped it. One
+    function so the odds printed on the result card and the sim that produced
+    the result cannot drift apart. */
+export function perGameChance(sport: ExpansionSport, overall: number, games: number): number {
+  const target = expectedWins(sport, overall);
+  return Math.min(0.985, Math.max(0.03, target / games));
+}
+
+/** Momentum: a win yesterday lifts today a little, a loss drags it. */
+const WIN_MOMENTUM = 0.004;
+const LOSS_MOMENTUM = -0.006;
+const GAME_CAP = 0.988;
+
 /**
  * Season sim on the rebalanced curve. Same shape and flavor as the core
  * simulateSeason (deterministic seed, per-game booleans, light momentum so
@@ -75,13 +89,12 @@ export function simulateSeasonFair(
   seed: number,
 ): SimResult {
   const rand = rng(seed);
-  const target = expectedWins(sport, overall);
-  const p = Math.min(0.985, Math.max(0.03, target / games));
+  const p = perGameChance(sport, overall, games);
   const results: boolean[] = [];
   let wins = 0;
   for (let i = 0; i < games; i++) {
-    const momentum = i > 0 ? (results[i - 1] ? 0.004 : -0.006) : 0;
-    const win = rand() < Math.min(0.988, p + momentum);
+    const momentum = i > 0 ? (results[i - 1] ? WIN_MOMENTUM : LOSS_MOMENTUM) : 0;
+    const win = rand() < Math.min(GAME_CAP, p + momentum);
     results.push(win);
     if (win) wins++;
   }
@@ -92,6 +105,68 @@ export function simulateSeasonFair(
     perfect: wins === games,
     overall: Math.round(overall),
   };
+}
+
+/**
+ * Round 784: the exact chance this engine goes unbeaten at a given overall.
+ *
+ * A player who had run the NBA game 1,312 times without an 82-0 reported it
+ * on 2026-09-22, and he was never going to get one: measured over 200,000
+ * seasons an overall of 90 went unbeaten zero times (one in 530,000 by the
+ * form below), 92 one in 33,000, 93 one in 8,600, 95 one in 615 and 99 one
+ * in 5, while the live table rates only 238
+ * of 18,150 player seasons at 95 or better and the median wheel stop's best
+ * player is a 90. The best six the whole wheel can build is a 98.52 and goes
+ * unbeaten one run in 9.4, but well played drafts average 87.8 and go 82-0
+ * about one run in 110,000. The page sold the perfect season and printed
+ * nothing about that, so the odds are now computed here and shown on every
+ * result.
+ *
+ * The only path to a perfect season is every game won, and after a win the
+ * momentum term is always WIN_MOMENTUM, so the probability is exact:
+ *   p(first game) * p(every later game) ^ (games - 1)
+ * with the same clamps the sim applies. scripts/simPerfectSeasonOdds.mjs
+ * holds this against the sim itself over 200,000 seasons.
+ */
+export function perfectSeasonOdds(sport: ExpansionSport, overall: number): number {
+  const games = SEASON_GAMES[sport];
+  const p = perGameChance(sport, overall, games);
+  const first = Math.min(GAME_CAP, p);
+  const later = Math.min(GAME_CAP, p + WIN_MOMENTUM);
+  return first * Math.pow(later, games - 1);
+}
+
+/** "one run in 5", "one run in 620", "one run in 33,000", "one run in 12 million". */
+export function formatOneIn(odds: number): string {
+  if (!(odds > 0)) return 'never';
+  const n = 1 / odds;
+  if (n < 10) return `one run in ${Math.round(n)}`;
+  if (n < 1e6) {
+    const digits = Math.floor(Math.log10(n)) - 1;
+    const unit = Math.pow(10, digits);
+    return `one run in ${(Math.round(n / unit) * unit).toLocaleString('en-US')}`;
+  }
+  if (n < 1e9) return `one run in ${Math.round(n / 1e6)} million`;
+  if (n < 1e12) return `one run in ${Math.round(n / 1e9)} billion`;
+  return 'one run in more than a trillion';
+}
+
+/** The honest line under a final record: what an unbeaten season costs at
+    this overall, and what it takes to be in the conversation. Pass the RAW
+    overall the sim played, never a rounded one: the odds are steep enough
+    that rounding 94.5 up to 95 halves them and 98.52 up to 99 doubles them,
+    so they are worked out on the raw value and the line prints it to one
+    decimal (an integer prints bare). */
+export function perfectOddsLine(sport: ExpansionSport, overall: number): string {
+  const ovr = String(Math.round(overall * 10) / 10);
+  const games = SEASON_GAMES[sport];
+  const odds = perfectSeasonOdds(sport, overall);
+  /* "an 82-0", "an 18-0", "a 17-0": the article follows how the number is said. */
+  const article = /^(8|11$|18$)/.test(String(games)) ? 'an' : 'a';
+  const record = `${article} ${games}-0`;
+  if (odds >= 1 / 20) return `At ${ovr} overall ${record} season comes about ${formatOneIn(odds)}. You are in the conversation.`;
+  if (odds >= 1 / 1000) return `At ${ovr} overall ${record} season comes about ${formatOneIn(odds)}. Rare, not impossible.`;
+  return `At ${ovr} overall ${record} season comes about ${formatOneIn(odds)}. The chase is the win total; a 95 plus roster is where unbeaten starts to be a real shot.`;
 }
 
 // ---------------------------------------------------------------------------
