@@ -360,7 +360,7 @@ const walk = dir => fs.readdirSync(dir, { withFileTypes: true }).flatMap(e => {
 section = 4;
 console.log('\n4) Only the Soccer engine may rank real people');
 {
-  const files = walk(path.join(ROOT, 'src')).map(f => ({ rel: path.relative(ROOT, f).replaceAll('\\', '/'), text: fs.readFileSync(f, 'utf8') }));
+  const files = walk(path.join(ROOT, 'src')).map(f => ({ rel: path.relative(ROOT, f).replaceAll('\\', '/'), text: fs.readFileSync(f, 'utf8').replace(/\r\n/g, '\n') }));
   if (CONTROL === 'legacyreal') files.push({ rel: 'src/lib/controlCareerSport.ts', text: 'export const X = { award: { rivals: "legacy-real-era-stars" } };\n' });
   const declare = /rivals\s*:\s*["'`]legacy-real-era-stars["'`]/;
   const declaring = files.filter(f => declare.test(stripComments(f.text))).map(f => f.rel);
@@ -373,7 +373,7 @@ console.log('\n4) Only the Soccer engine may rank real people');
 section = 5;
 console.log('\n5) One awards night: no second copy beside the shared one');
 {
-  const read = rel => stripComments(fs.readFileSync(path.join(ROOT, rel), 'utf8'));
+  const read = rel => stripComments(fs.readFileSync(path.join(ROOT, rel), 'utf8').replace(/\r\n/g, '\n'));
   let engine = read('src/lib/soccerCareerEngine.ts');
   if (CONTROL === 'secondcopy') engine += '\nconst extendedRank = Math.max(11, better + 1);\n';
   const page = read('src/pages/SoccerCareer.tsx');
