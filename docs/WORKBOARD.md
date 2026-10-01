@@ -1,5 +1,27 @@
 # Work board
 
+**2026-10-01, Codex787 accepted: Clue Auction native controls and readable feedback.**
+Nine actual-page/real-helper/completion/local-storage/share outcomes and nine copied controls
+pass. Each copy fails one intended assertion with one independent pass/seven explicit skips.
+Native eight-context final matrix passes813 checks on exact215c948d utilities: keyboard
+purchase/non-first Enter/Space/Escape, original pointer-before-blur, exact bank/completion
+totals20/0/100, best/custom clipboard/social share, quiet clones/resets, finite420/360/420ms
+cues and static reduced motion. Owned targets44px, overflow/errors/external requests0,
+status area40px throughout and actual focus/node/animation identities stable. Prices, strict
+price>=bank refusal, helpers/pool/RNG/original guess objects/completion/share stay unchanged.
+
+The initial frozen799-check functional matrix exposed a real phone readability issue: the
+result's full value/name column was36.92px wide. Scoped mobile-only receipt rows now provide
+212/282/322px values at320/390/430 without changing nodes/text/math; desktop stays unchanged.
+Both copied old-layout controls visibly fail that width fence while exact20-point bank/
+completion holds. Before images/reports are preserved; final320 normal/reduced images were
+inspected and readable. Peer source review is clean. Nine input bytes preserved, copied
+folders/browser/server cleaned, port49693 refused. Full evidence/limits:
+TEMP/dukb-round787-clue-auction-audit/report.json,source-receipt.json,positive-final.log,
+control-*-final.log and report-control-receipts-320-reduce.json. Existing shared help warning
+was left visible, not suppressed. Final module rebuild remains required before production
+acceptance/publication. No shared guide, engine, data, route or global-style changes.
+
 **2026-10-01, Codex788 COMPLETE acceptance: newly earned daily stays booked.**
 Both Boards cache the first finished daily before its save and return that exact snapshot
 with booked state in the same batch. The immutable mount restore and original fresh result

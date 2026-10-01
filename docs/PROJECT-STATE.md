@@ -1,5 +1,15 @@
 # Project state
 
+## CHECKPOINT 2026-10-01: Clue Auction final native and visual acceptance passed
+
+787's native selection,44px targets, exact committed clue/guess/result feedback and static
+reduced motion pass nine actual tests/nine effective controls plus eight native contexts
+with813 checks. Its measured phone receipt column fix passes both copied controls and final
+normal/reduced screenshots. Bank/best/completion/share and real helpers stay unchanged.
+Source peer review is clean; WORKBOARD holds all proofs and scope limits. Source is pushed,
+final module rebuild and publication remain pending.786/788 acceptance also passes;789's
+types/engine/source-control and full reload pass. Next free790, scout is read-only.
+
 ## CHECKPOINT 2026-10-01: fresh arcade dailies and Stat Detective native acceptance passed
 
 788 is accepted:22 actual tests,30 effective controls,16 native cases/four private-storage
