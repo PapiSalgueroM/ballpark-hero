@@ -98,6 +98,8 @@
      deepold      every club reads its units the full roster way -> 7
      bigbench     every bench salary six times larger            -> 6
      sharedcopy   the finder's probe copy is the club itself     -> 6
+     promoteover  a call up ignores the 53                        -> 6
+     declinefloor a decline lifts a 61 back to the old floor 62    -> 6
      recordedit   the record moves one KC bench man to DEN        -> 1
      noheld       the bake ignores the spot check's held out list -> 1
    Under a control the process exits non zero whether or not the expected
@@ -124,6 +126,8 @@ const EXPECT = {
   nocutdown: [6],
   deepold: [7],
   sharedcopy: [6],
+  promoteover: [6],
+  declinefloor: [6],
   bigbench: [6],
   recordedit: [1],
   noheld: [1],
@@ -146,6 +150,14 @@ const ENGINE_SWAPS = {
     '  while (t.players.length > DEEP_ROSTER_MAX) {',
     '  while (false) {',
   ]],
+  promoteover: [[
+    '  if (idx < 0 || deepRosterRefusal(team)) return false;',
+    '  if (idx < 0) return false;',
+  ]],
+  declinefloor: [[
+    'const declined = (ovr: number, by: number): number => Math.max(Math.min(62, ovr), ovr - by);',
+    'const declined = (ovr: number, by: number): number => Math.max(62, ovr - by);',
+  ]],
   sharedcopy: [[
     '  return { ...t, players: [...t.players], picks: [...t.picks] };',
     '  return t;',
@@ -162,6 +174,8 @@ const NOTE = {
   nocutdown: 'the engine copy never cuts a full club down to 53',
   deepold: 'the engine copy reads every club the full roster way, old saves included',
   sharedcopy: 'the engine copy hands the Trade Finder the clubs themselves instead of a copy',
+  promoteover: 'the engine copy lets a call up through at 53',
+  declinefloor: 'the engine copy lifts any man under 62 back to 62 when he declines',
   bigbench: 'the depth data copy pays every bench man six times his salary',
   recordedit: 'the record moves one KC bench man to DEN, in memory',
   noheld: 'the bake ignores the spot check\'s held out list',
@@ -694,6 +708,37 @@ const CLUBS = data.FO_TEAMS.map(t => t.abbr);
       ok(6, 'the refill calls up the practice squad before inventing anybody',
         called >= 1 && called === Math.min(psQb, engine.DEEP_GROUP_TARGET.QB - 1), `${t.abbr}: ${psQb} on the squad, ${called} called up`);
     }
+  }
+
+  /* Round 828 review: two engine rules nothing else here would notice break.
+     The call up holds the 53 (the franchise loop below only calls men up
+     under it), and a decline never raises a man (a real backup can sit at 61,
+     under the old floor of 62, and getting older must not lift him). Controls
+     promoteover and declinefloor break each one. */
+  {
+    const lg = deepLeague(SEEDS[2]);
+    const t = lg.teams.KC;
+    while (t.players.length < engine.DEEP_ROSTER_MAX && t.practice.length) engine.promoteFromPractice(t, t.practice[0].id);
+    const psBefore = t.practice.length;
+    const called = t.practice.length ? engine.promoteFromPractice(t, t.practice[0].id) : null;
+    ok(6, 'a call up is refused at 53, and the roster and the squad stay as they were',
+      called === false && t.players.length === engine.DEEP_ROSTER_MAX && t.practice.length === psBefore,
+      `call up ${called}, roster ${t.players.length}, squad ${psBefore} to ${t.practice.length}`);
+    const lg2 = deepLeague(SEEDS[3]);
+    const vets = [];
+    for (const abbr of ['KC', 'PHI', 'SF', 'DET']) {
+      const club = lg2.teams[abbr];
+      const bench = [...club.players].filter(p => !engine.starterIds(club).has(p.id)).sort((a, b) => a.ovr - b.ovr)[0];
+      const squad = club.practice[0];
+      for (const p of [bench, squad]) { if (p) { p.age = 32; p.ovr = 61; p.pot = 61; vets.push(p.id); } }
+    }
+    const fa = lg2.freeAgents[0];
+    fa.age = 32; fa.ovr = 61; fa.pot = 61; vets.push(fa.id);
+    engine.runOffseason(lg2, lcg(77), 'KC');
+    const everyone = [...Object.values(lg2.teams).flatMap(c => [...c.players, ...c.practice]), ...lg2.freeAgents];
+    const raised = vets.map(id => everyone.find(p => p.id === id)).filter(p => p && p.ovr > 61);
+    ok(6, 'a decline never lifts a man under the old floor of 62 (bench, practice squad and pool)', vets.length === 9 && raised.length === 0,
+      `${vets.length} men set to 61 at 32; raised: ${raised.map(p => `${p.name} ${p.ovr}`).join(', ')}`);
   }
 
   /* the Trade Finder's cheap probe copy finds the deep copy's offers and leaves the league alone */
