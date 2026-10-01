@@ -1,5 +1,15 @@
 # Work board
 
+**2026-10-01, Codex831 BUILT: Guess The Nation feedback. Browser checks pending.**
+Six actual Board/Search/hook cases and three effective copied regressions pass.
+Correct/wrong answers, newly revealed clues and results get finite feedback;
+reduced motion is static and existing scores/saves/share/completion hold.
+Owned actions fit touch and full guesses wrap. All four files frozen; runtime
+hashes match the passing828-831 production gate. Actual App checks are finishing
+at320px normal/1440px reduced. This is a tested-code checkpoint, not acceptance
+or publication. Receipt: TEMP/dukb-round831-nation-feedback/source-checkpoint.json.
+
+
 **2026-10-01, Codex832 CLAIMED: CFB recruiting signing scroll.**
 Close the measured818 follow-up: signing inserted a feed above the pool and
 moved the phone page74px. Own only the recruiting feed in

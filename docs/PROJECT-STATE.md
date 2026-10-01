@@ -1,5 +1,12 @@
 # Project state
 
+## BUILT 2026-10-01: Nation feedback (831)
+
+Six focused outcomes, three regression controls and combined runtime gates pass.
+The code is pushed; final actual App browser verification is still pending.
+828 is accepted;829/830/832 remain active. Next free round833.
+
+
 Codex832 is closing the measured CFB signing page jump from818, using a stable
 recruiting message area. All signing and budget rules stay held. Next free833.
 
