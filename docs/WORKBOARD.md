@@ -1,5 +1,18 @@
 # Work board
 
+**2026-09-30, Codex Round 773 CLAIMED: Soccer Classic lineup targeting and picker focus (master H, 96).**
+Own only `src/components/perfect-lineup/PerfectLineupBoard.tsx`, new focused actual-board tests
+and a new auto-discovered sim wrapper. This separate Classic board still hides eligible choices
+after forty and only searches names. Add League/Country targeting from existing eligible Player
+fields, exact eligible/matching/shown counts, reset and bounded Load more. Preserve the hook's
+position/constraint/duplicate eligibility, market-value order, exact Player object callbacks and
+existing scoring. Return native dismissal focus to the exact Pick opener or its stable labeled
+slot after selection removes the control. New controls must fit phones and meet44px targets.
+No parent, hook, data, engine, catalog, route, shared Generic board or style changes. Verify
+combined filtering, older eligible choice, exact selection and native keyboard/focus outcomes,
+asserted copied controls and four-width/two-motion browser play. Root owns docs/commits. The
+392-node suite is running, so no build or shared dist/public writes. Next free number:774.
+
 **2026-09-30, Codex checkpoint 770, 771 and 772: gameplay and native browser acceptance passed.**
 First Touch: 20 engine/Board tests, eight asserted copied controls and eight final-CSS browser
 contexts pass 160 scored balls. Actual TrainingPanel, the new Board and pure capped reward

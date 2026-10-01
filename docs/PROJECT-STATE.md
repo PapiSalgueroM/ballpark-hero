@@ -1,5 +1,13 @@
 # Project state
 
+## IN PROGRESS 2026-09-30: next independent game task 773
+
+Soccer Classic Perfect Lineup still caps its picker at forty and loses dismissal focus in its
+separate board. Codex773 claims only that board and focused tests/harness to add existing League
+and Country targeting, full eligible reachability and native focus return. This does not touch
+the shared NBA/NHL/F1 board from772, any hook/data or Claude's held lanes. The full392-node suite
+continues while agents handle independent source acceptance. Next unclaimed number:774.
+
 ## CHECKPOINT 2026-09-30: First Touch, retained inbox and lineup focus accepted in browsers
 
 Codex770,771,772 have accepted actual-component tests, asserted controls and final772-CSS
