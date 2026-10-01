@@ -1,5 +1,18 @@
 # Project state
 
+## IN PROGRESS 2026-10-01: catalog and release integration repairs claimed
+
+797 addresses four Aussie Rules catalog/resume/name-guard omissions exposed by the frozen
+406-node run (398 pass, eight fail, seventy browser harnesses excluded). It also investigates
+the CRLF anchor fence, selected Budget nationality flag and two old Tycoon control errors.
+Player-pool duplicate/stale-bake triage is read-only; Claude669's data work stays reserved.
+Exact files/evidence are on WORKBOARD.794 source outcomes/controls/types pass; native and
+final production remain due.79316 native duels/eight controls pass within the Page fixture,
+with actual App/Footer acceptance still due. No full-green/publication claim. Next798.
+Claude795/796 and incoming d99b58e4 stand. Merge his refreshed669 player data and both
+practice normalizations before further triage. Retain only our new Aussie metadata row
+across his700 metadata split. No Soccer Career engine or shared Front Office edits here.
+
 ## CHECKPOINT 2026-10-01: Search and Discard scroll correction frozen
 
 793 native QA reproduced a69px accepted-pick page jump. A scoped class on the existing

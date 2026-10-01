@@ -1,5 +1,34 @@
 # Work board
 
+**2026-10-01, Codex797 CLAIMED: finish catalog integration and repair release fences.**
+The immutable792 production node run finished398 PASS and8 FAIL, with70 browser harnesses
+explicitly excluded. No full-green claim. New Aussie Rules registration gaps: Continue
+playing, seoMeta title, search keyword regeneration and exhaustive generated-name coverage.
+Own only the new game's src/data/continueSaves.ts and src/data/seoMeta.ts rows,
+src/data/searchKeywords.json as the generator's full derived output, the Aussie row in
+scripts/simInventedNames.mjs, and focused additions in scripts/simHomeFront.mjs proving real
+serialized resume/no false card. Root generated ownership remains the792/794 pages/ledger.
+
+Also own scripts/simHarnessAnchors.mjs and, only if normalization changes are needed,
+scripts/simBuzzerPractice.mjs and scripts/simFreeKickPractice.mjs: preserve actual raw-byte
+checks and effective multi-line mutation controls on CRLF/LF, without weakening the fence.
+Own only the missing nationality flag in BudgetBuilderBoard.tsx's selected-player preview
+and its existing focused outcome test if needed. Existing79xx mechanics/saves remain held.
+Investigate simTycoonPitch's two control runner errors in isolation; own that harness/test
+only for a reproduced runner/fixture correction, never credit unhandled or stack errors.
+Read-only simPlayersPool/live-row/bake triage first: existing Claude669 bake/migration and
+all other data claims remain reserved. Do not remove a legitimate namesake, regenerate
+facts blindly or change that guard to hide duplicate/stale data. Document any required
+Claude data handoff with exact rows/evidence. No database write claimed here.
+Before acceptance, affected original outcomes and asserted controls, exact current types,
+frozen production rebuild/all15 artifact fences, and explicit remaining full-suite limits.
+794 passes twelve physical-original engine outcomes/eighteen controls and nine Board
+outcomes/eleven controls/types0; native remains underway.79316-duel/eight-control native
+receipt is accepted within its Page fixture, with actual App/Footer still pending. Next798.
+Claude795/796 stand. Incoming d99b58e4 includes the669 refreshed pool and both practice
+normalizations; merge and recheck before further edits. Claude700 owns the metadata split,
+so this lane reserves only the single new Aussie metadata row for it to retain and migrate.
+
 **793 native scroll correction checkpoint:** accepted keeps shrank the offer/instruction
 panel and Chromium anchored the page69px upward, with pointer and native Enter. The existing
 GameShell className now disables anchoring only inside this Page's content/guide container.
