@@ -276,12 +276,19 @@ export function defenceRating(team: GmTeamState): number {
    over a starter and you are stronger, and the harness walks 200 such swaps.
 
    Injured men are skipped before anything is counted, so the next man in the
-   chart order steps up on his own. The line reads up to five: the bake
-   carries two linemen a club, so every club that ever existed starts all of
-   them exactly as before, and a club that drafts a sixth no longer has him
-   pulling the average down from the bench. */
+   chart order steps up on his own.
+
+   THE LINE IS EVERY HEALTHY LINEMAN, as it always was here, and that is on
+   purpose. A first draft of this round started five, which matches every
+   club the bake ships (two linemen each) but not every saved league: a probe
+   of board like careers (the GM taking the best graded prospect, eight seeds,
+   fifteen seasons) found six or more linemen on 43 of 3840 club seasons and
+   on 23 of the GM's own 120. Every one of those saves would have opened on a
+   different strength and played different results from the same seed, which
+   is the one thing this round promised not to do. So the line's order is on
+   the chart for the GM to see, and every healthy man on it plays. */
 export const SKILL_SLOTS = 5;
-export const OL_SLOTS = 5;
+export const OL_SLOTS = Number.POSITIVE_INFINITY;
 
 /** A group's chart: the saved order, then any man it does not name by rating.
     With nothing saved this is the order by rating the sim always used. */
@@ -857,7 +864,9 @@ export function prospectToPlayer(pr: Prospect, rng: () => number): GmPlayer | nu
 /* THE REAL RULE, as the 2020 CBA writes it (Article 10, Section 2), quoted by
    the Pro Football Hall of Fame's release on the 2020 designations,
    https://www.profootballhof.com/news/2020-franchise-and-transition-players-named
-   and by NFL Football Operations' annual designation notices: a club "can
+   and by the Buffalo Bills' explainer on the tag,
+   https://www.buffalobills.com/news/a-closer-look-what-is-the-franchise-tag-12632897
+   (both read 2026-10-01, and both carry the same wording): a club "can
    designate one 'franchise' player ... among its veteran free agents"; the
    exclusive tender is "the greater of (i) the average of the top five
    salaries at the player's position for the current year ... or (ii) the

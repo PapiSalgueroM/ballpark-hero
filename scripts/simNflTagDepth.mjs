@@ -18,7 +18,13 @@
    healthy skill men decide how many slots RB, WR and TE each earn), and each
    group's chart order decides who fills that group's slots. With a chart by
    rating that is exactly the men the pre round code picked, which is what
-   keeps every saved league and every seeded season unchanged.
+   keeps every saved league and every seeded season unchanged. The line is
+   every healthy lineman, as it was before the round, so a save carrying six
+   or more of them reads exactly as it did too.
+
+   One more rule rides along: an untagged star (76 plus) on his last year now
+   walks STAR_WALK_CHANCE of the time, where before he always stayed, so the
+   tag has something to protect. Role players keep their coin flip.
 
    Everything here runs the REAL engine, bundled with esbuild. Nothing reads
    dist or the clock. Sections:
@@ -39,26 +45,43 @@
         is skipped and the next man in the order steps up.
      4) the fixture: the pre round strength formula, frozen in this file, and
         the engine agree to 1e-9 on every club of several seeded leagues,
-        fresh and after offseasons and drafts, under random injuries, with
-        no chart saved; a chartless chart is the order by rating; every
+        fresh, after offseasons and drafts, and with a third of the clubs
+        handed four or five extra linemen, under random injuries, with no
+        chart saved; a chartless chart is the order by rating; every
         scheduled game's win probability matches; a reordered chart survives
         a save round trip.
      5) the CPU tag rate, pooled over six seeds and six offseasons, sits in a
         band set from the measurements below.
-     6) the engine cites the rule's source.
+     6) the engine cites the rule's sources, two of them, by URL.
+     7) untagged men on their last year walk at the rule's rates: stars
+        STAR_WALK_CHANCE of the time, role players half the time.
 
-   MEASUREMENTS (2026-10-01, the engine as shipped, eight seeds times six
-   offseasons unless stated):
-     Fixture agreement: 1152 club states compared, 0 mismatches. Rosters in
-     those states carried 2 to 5 linemen, never more.
-     CPU tag rate with the top five rule: pooled mean 0.353 of clubs an
-     offseason; per seed means 0.328 to 0.385; the first offseason, which is
-     the same for every seed because the bake fixes who is expiring, 0.094;
-     later offseasons 0.094 to 0.594 one at a time. The two policies this one
-     replaced: any expiring starter rated 80, pooled 0.917 and 1.000 every
-     offseason from the third; the same with repeats banned, 0.839 to 0.917.
-     Band for section 5: pooled mean in [0.25, 0.48]. The nearest broken
-     policy measured sits at 0.62 and no tags at all at 0.
+   MEASUREMENTS (2026-10-01, the engine as shipped, the harness's six seeds
+   unless stated):
+     Section 3: 200 swaps found in 1019 tries, 109 promotions and 91
+     demotions, every one moving strength the right way; 159 injury cases, 8
+     of them in a single group unit (all quarterbacks, since every healthy
+     lineman starts).
+     Section 4: 960 club states compared, 54 of them carrying six or more
+     linemen, and 8160 scheduled games, 0 mismatches. Why the line is every
+     lineman: a probe of board like careers (eight seeds, fifteen seasons, the
+     GM taking the best graded prospect) found six or more linemen on 43 of
+     3840 club seasons and on 23 of the GM's own 120, so a five man line
+     would have changed those saves.
+     Section 5, the CPU tag rate with the top five rule: pooled 0.349 of
+     clubs an offseason (402 of 1152); the first offseason, the same for
+     every seed because the bake fixes who is expiring, 0.094; later
+     offseasons 0.094 to 0.594 one at a time. The same pooled statistic over
+     30 other six seed sets: 0.329 to 0.356, median 0.341. The two policies
+     this one replaced: any expiring starter rated 80, pooled 0.917 and 1.000
+     every offseason from the third; the same with repeats banned, 0.839 to
+     0.917. Band: pooled in [0.25, 0.48], about 0.08 clear of the lowest set
+     measured and well under the nearest broken policy; no tags at all is 0.
+     Section 7: stars 316 of 2070 walked, 0.153 (per seed 0.122 to 0.168);
+     role players 414 of 810, 0.511. Over 30 other six seed sets the pooled
+     star rate ran 0.130 to 0.167 and the role rate 0.460 to 0.541. Bands:
+     stars [0.10, 0.20], role players [0.42, 0.58]; the pre round rule keeps
+     every star, which is 0.
 
    CONTROLS, through NFL_TAG_DEPTH_CONTROL. Each rewrites a copy of the engine
    in OS temp (src is never touched), refuses to run if its anchor is not in
@@ -70,6 +93,8 @@
                  the pool and 397 without their tender)
      cheaptag    the 120 percent floor dropped            -> 1
      fixedslots  skill slots fixed at RB 1, WR 3, TE 1    -> 4
+     olcap       the line cut to five starters            -> 4
+     nostarwalk  every untagged star stays, the old rule  -> 7
    Under a control the process exits non zero whether or not the expected
    sections went red, and says which it was.
 
@@ -90,6 +115,8 @@ const EXPECT = {
   tagwalks: [1, 2],
   cheaptag: [1],
   fixedslots: [4],
+  olcap: [4],
+  nostarwalk: [7],
 };
 if (CONTROL && !EXPECT[CONTROL]) {
   console.error(`NFL_TAG_DEPTH_CONTROL=${CONTROL} is not a control this harness knows (${Object.keys(EXPECT).join(', ')})`);
@@ -112,12 +139,22 @@ const SWAPS = {
     '    const share = top.filter(p => p.pos === g).length;',
     "    const share = g === 'WR' ? 3 : g === 'RB' || g === 'TE' ? 1 : top.filter(p => p.pos === g).length;",
   ]],
+  olcap: [[
+    'export const OL_SLOTS = Number.POSITIVE_INFINITY;',
+    'export const OL_SLOTS = 5;',
+  ]],
+  nostarwalk: [[
+    '        const walks = p.ovr < 76 ? rng() < 0.5 : rng() < STAR_WALK_CHANCE;',
+    '        const walks = p.ovr < 76 ? rng() < 0.5 : (rng(), false);',
+  ]],
 };
 const NOTE = {
   nochart: 'the engine copy fills every unit by rating, the chart order ignored',
   tagwalks: 'the engine copy sends a tagged man through the ordinary expiring branch',
   cheaptag: 'the engine copy charges the top five mean alone, never 120 percent',
   fixedslots: 'the engine copy starts RB 1, WR 3, TE 1 whatever the ratings say',
+  olcap: 'the engine copy starts five linemen, not every healthy one',
+  nostarwalk: 'the engine copy keeps every untagged star, the pre round rule',
 };
 
 const SECTION_NAMES = {
@@ -127,6 +164,7 @@ const SECTION_NAMES = {
   4: 'the fixture: the pre round formula and the engine agree',
   5: 'the CPU tag rate',
   6: 'the engine cites the rule',
+  7: 'untagged men on their last year walk at the rule\'s rates',
 };
 
 let checks = 0;
@@ -201,8 +239,11 @@ for (const k of ['DEPTH_GROUPS', 'SKILL_POS', 'DEF_POS', 'DEF_SLOTS', 'REPLACEME
   if (engine[k] === undefined) { console.error(`FAIL: frontOffice.ts does not export ${k}`); process.exit(1); }
 }
 if (typeof cuts.deadMoneyFor !== 'function') { console.error('FAIL: frontOfficeCuts.ts does not export deadMoneyFor'); process.exit(1); }
-if (engine.SKILL_SLOTS !== 5 || engine.DEF_SLOTS !== 6 || engine.OL_SLOTS !== 5 || engine.REPLACEMENT_OVR !== 60) {
-  console.error(`FAIL: the unit shape changed (skill ${engine.SKILL_SLOTS}, OL ${engine.OL_SLOTS}, DEF ${engine.DEF_SLOTS}, replacement ${engine.REPLACEMENT_OVR}); the frozen formula below encodes 5, 5, 6, 60`);
+/* OL_SLOTS is left out of this guard on purpose: the olcap control sets it
+   to five, and section 4's fixture with six and seven linemen is what has to
+   catch that, not a refusal to run. */
+if (engine.SKILL_SLOTS !== 5 || engine.DEF_SLOTS !== 6 || engine.REPLACEMENT_OVR !== 60) {
+  console.error(`FAIL: the unit shape changed (skill ${engine.SKILL_SLOTS}, DEF ${engine.DEF_SLOTS}, replacement ${engine.REPLACEMENT_OVR}); the frozen formula below encodes 5, 6, 60 and every healthy lineman`);
   process.exit(1);
 }
 
@@ -437,6 +478,7 @@ const SEEDS = [723, 20261001, 61, 4242, 9, 1337];
     engine.swapDepth(team, pos, a.id, b.id);
     if (!near(engine.teamStrength(team), base)) notRestored.push(`${team.abbr} ${pos}: ${base} -> ${engine.teamStrength(team)}`);
   }
+  console.log(`   swaps: ${swaps} in ${tries} tries, ${promoted} promotions and ${demoted} demotions`);
   ok(3, 'two hundred starter and backup swaps were found', swaps === 200, `${swaps} in ${tries} tries`);
   ok(3, 'both directions were exercised', promoted >= 40 && demoted >= 40, `${promoted} promotions, ${demoted} demotions`);
   ok(3, 'a better backup promoted raises strength and a worse one benched lowers it, every time', wrong.length === 0, `${wrong.length} of ${swaps}, e.g. ${wrong.slice(0, 3).join(' | ')}`);
@@ -483,20 +525,39 @@ const SEEDS = [723, 20261001, 61, 4242, 9, 1337];
       }
     }
   }
-  /* measured 159 and 8: clubs carry one quarterback and two or three linemen,
-     so a single group unit with a man behind its starters is rare */
+  /* measured 159 and 8: every healthy lineman starts, so the line never has
+     a man behind its starters, and most clubs carry one quarterback, so a
+     single group unit with a bench is rare (all 8 are quarterbacks) */
+  console.log(`   injury cases: ${stepUps}, ${singleGroup} of them at QB or OL`);
   ok(3, 'injury cases were found, some in single group units', stepUps >= 100 && singleGroup >= 4, `${stepUps}, ${singleGroup} at QB or OL`);
   ok(3, 'an injured starter is skipped and the next man steps up', stuck.length === 0, `${stuck.length} of ${stepUps}, e.g. ${stuck.slice(0, 3).join(' | ')}`);
 }
 
 /* ======================================================================= 4 */
 {
-  let compared = 0, mismatch = [], orderBad = [], olMax = 0, probBad = 0, games = 0;
+  let compared = 0, mismatch = [], orderBad = [], probBad = 0, games = 0, bigLine = 0;
+  /* A save can carry six or more linemen (a probe of board like careers found
+     it on 23 of the GM's 120 seasons), and the pre round formula read every
+     healthy one. The last stage hands a third of the clubs four or five extra
+     generated linemen (clubs carry two or three) so the fixture covers that
+     shape too. */
+  const extraLinemen = (lg, rng) => {
+    let n = 0;
+    for (const t of Object.values(lg.teams)) {
+      if (rng() >= 1 / 3) continue;
+      const add = 4 + Math.floor(rng() * 2);
+      for (let k = 0; k < add; k += 1) {
+        const ovr = 62 + Math.floor(rng() * 24);
+        t.players.push({ id: `ol-extra-${n++}-${t.abbr}`, name: `Extra Lineman ${n}`, pos: 'OL', age: 25, ovr, salary: 2, years: 2, out: 0, pot: ovr });
+      }
+    }
+  };
   for (const seed of SEEDS) {
     const rng = lcg(seed * 3 + 1);
     const lg = engine.initLeague(lcg(seed));
-    for (let stage = 0; stage < 4; stage += 1) {
-      if (stage > 0) advance(lg, rng, 1);
+    for (let stage = 0; stage < 5; stage += 1) {
+      if (stage > 0 && stage < 4) advance(lg, rng, 1);
+      if (stage === 4) extraLinemen(lg, rng);
       injure(lg, rng, stage === 0 ? 0 : 0.12);
       for (const t of Object.values(lg.teams)) {
         if (t.depth !== undefined) { mismatch.push(`${t.abbr}: a chart was written where nobody reordered anything`); continue; }
@@ -504,7 +565,7 @@ const SEEDS = [723, 20261001, 61, 4242, 9, 1337];
         const a = engine.teamStrength(t), b = oldStrength(t);
         if (!near(a, b)) mismatch.push(`${t.abbr} seed ${seed} stage ${stage}: engine ${a} vs frozen ${b}`);
         if (!near(engine.defenceRating(t), oldDefence(t))) mismatch.push(`${t.abbr} seed ${seed} stage ${stage}: defence ${engine.defenceRating(t)} vs ${oldDefence(t)}`);
-        olMax = Math.max(olMax, t.players.filter(p => p.pos === 'OL').length);
+        if (t.players.filter(p => p.pos === 'OL').length >= 6) bigLine += 1;
         for (const pos of engine.DEPTH_GROUPS) {
           const want = t.players.filter(p => p.pos === pos).sort((x, y) => y.ovr - x.ovr).map(p => p.id).join(',');
           const got = engine.depthOrder(t, pos).map(p => p.id).join(',');
@@ -519,11 +580,12 @@ const SEEDS = [723, 20261001, 61, 4242, 9, 1337];
       heal(lg);
     }
   }
+  console.log(`   fixture: ${compared} club states, ${bigLine} of them with six or more linemen, ${games} scheduled games`);
   ok(4, 'a real number of club states were compared', compared >= 700, `${compared}`);
   ok(4, 'the engine and the frozen pre round formula agree on every chartless club', mismatch.length === 0, `${mismatch.length} of ${compared}, e.g. ${mismatch.slice(0, 3).join(' | ')}`);
   ok(4, 'a chartless chart is the order by rating', orderBad.length === 0, `${orderBad.length}, e.g. ${orderBad.slice(0, 3).join(' | ')}`);
   ok(4, 'every scheduled game reads the same win probability', probBad === 0 && games > 1000, `${probBad} of ${games} games differ`);
-  ok(4, 'the fixtures stayed inside the line the formula covers (five linemen or fewer)', olMax <= 5, `a club carried ${olMax} linemen`);
+  ok(4, 'the fixtures include clubs carrying six or more linemen', bigLine >= 30, `${bigLine} club states`);
 
   /* a reordered chart survives a save round trip, and a chart that names men
      who have gone still reads */
@@ -569,6 +631,42 @@ const SEEDS = [723, 20261001, 61, 4242, 9, 1337];
   const src = normaliseEol(fs.readFileSync(ENGINE, 'utf8'));
   ok(6, 'the engine cites the rule\'s source by URL', src.includes('https://www.profootballhof.com/news/2020-franchise-and-transition-players-named'));
   ok(6, 'the engine names the CBA article', /Article 10, Section 2/.test(src));
+  ok(6, 'the engine cites a second source by URL', src.includes('https://www.buffalobills.com/news/a-closer-look-what-is-the-franchise-tag-12632897'));
+}
+
+/* ======================================================================= 7 */
+{
+  /* Every man put on his last year at 26, so nobody develops, declines or
+     retires and the contract branch is the only way off a roster, and every
+     club's tag marked used, so nobody is tagged. What walks is then exactly
+     the rule: role players (under 76) half the time, stars STAR_WALK_CHANCE
+     of the time. news.expired names each man who walked; names are unique in
+     a league, so team and name find his rating. */
+  let stars = 0, starsWalked = 0, role = 0, roleWalked = 0;
+  const perSeed = [];
+  for (const seed of SEEDS) {
+    const lg = engine.initLeague(lcg(seed));
+    const rng = lcg(seed * 13 + 3);
+    const before = new Map();
+    for (const t of Object.values(lg.teams)) {
+      t.tagUsedFor = lg.season + 1;
+      for (const p of t.players) { p.age = 26; p.pot = p.ovr; p.years = 1; before.set(`${t.abbr}|${p.name}`, p.ovr); }
+    }
+    const news = engine.runOffseason(lg, rng);
+    const walked = new Set(news.expired.map(e => `${e.team}|${e.player}`));
+    let s = 0, sw = 0;
+    for (const [key, ovr] of before) {
+      const w = walked.has(key);
+      if (ovr >= 76) { stars += 1; s += 1; if (w) { starsWalked += 1; sw += 1; } }
+      else { role += 1; if (w) roleWalked += 1; }
+    }
+    perSeed.push(sw / s);
+    ok(7, `seed ${seed}: nobody was tagged and nobody retired`, news.tagged.length === 0 && news.retired.length === 0, `${news.tagged.length} tagged, ${news.retired.length} retired`);
+  }
+  const starRate = starsWalked / stars, roleRate = roleWalked / role;
+  console.log(`   walk rates: stars ${starsWalked}/${stars} = ${starRate.toFixed(3)} (per seed ${Math.min(...perSeed).toFixed(3)} to ${Math.max(...perSeed).toFixed(3)}), role players ${roleWalked}/${role} = ${roleRate.toFixed(3)}`);
+  ok(7, 'untagged stars walk at the rule rate, pooled in [0.10, 0.20]', starRate >= 0.10 && starRate <= 0.20, `${starRate.toFixed(3)} with STAR_WALK_CHANCE ${engine.STAR_WALK_CHANCE}`);
+  ok(7, 'role players walk half the time, pooled in [0.42, 0.58]', roleRate >= 0.42 && roleRate <= 0.58, roleRate.toFixed(3));
 }
 
 /* ---- the verdict ---------------------------------------------------------- */

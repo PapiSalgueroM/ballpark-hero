@@ -228,7 +228,7 @@ export const FOOTBALL_CONTENT: GameContentMap = {
       {
         heading: "How the depth chart sets team strength",
         items: [
-          "Team strength reads starters off the depth chart: 1 quarterback, 5 skill men across RB, WR and TE, up to 5 linemen and 6 defenders across DL, LB and DB. Rating decides how many of a unit's slots each position group gets; your order decides who fills them. A chart you have not touched is the order by rating, so a save from before the chart plays exactly as it did.",
+          "Team strength reads starters off the depth chart: 1 quarterback, 5 skill men across RB, WR and TE, every healthy lineman and 6 defenders across DL, LB and DB. Rating decides how many of a unit's slots each position group gets; your order decides who fills them. A chart you have not touched is the order by rating, so a save from before the chart plays exactly as it did.",
         ],
       },
       {
