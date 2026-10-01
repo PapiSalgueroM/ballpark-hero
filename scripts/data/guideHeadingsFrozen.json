@@ -689,6 +689,7 @@
         "Under 75 percent is an insult. The ask goes up 4 percent and it costs two rounds. Under 55 percent they end the talks on the spot.",
         "A selling club starts with 4 or 5 rounds of patience. Run it out and the deal is dead.",
         "His agent hears 3 offers at most. An offer that adds up to what he asked for signs him, a near miss gets a lower wage demand back, and a poor one costs two tries or ends the meeting.",
+        "The board will not go over the wage or the contract length he asks for, so you cannot pay him more a week to skip the signing bonus.",
         "The signing bonus comes out of the same budget as the fee. A bid or an offer you cannot afford is refused before the hour is spent, so the budget never goes below zero.",
         "Rival clubs move for players on your list. If a rival is in for a man and you do not push his deal that hour, there is a 30 percent chance they sign him.",
         "If a rival is in at the fee table, your bid has to beat theirs. Bid at or under their number and there is a 30 percent chance they close the deal there and then.",
@@ -705,9 +706,9 @@
         "Say today's club needs a goalkeeper, a central midfielder, a right winger and a striker, and the board have left you £29m.",
         "You start with the keeper. His club are asking £3.6m, your desk says he is worth £2.4m to £3.2m, and you bid £3.1m. That is a counter: they come down to £3.4m and one round of patience is gone. It is noon.",
         "You bid £3.3m, inside 97 percent of their ask, and the fee is agreed. His agent wants 4 years at 10k a week and a £1.8m bonus. You offer exactly that and he signs. It is 2pm and you have £23.9m left.",
-        "While you were on the phone, a rival came in for the dearest keeper on your list and signed him an hour later. It did not matter this time, but the same thing can happen to the striker you were saving for last.",
+        "While you were on the phone, a rival came in for the dearest keeper on your list at noon and signed him at 2pm. It did not matter this time, but the same thing can happen to the striker you were saving for last.",
         "By 8pm the midfielder and the winger are in, three hours each. The striker's club will not budge much and a rival is in for him, so you bid over the rival's number and inside 97 percent of the ask. Fee agreed at 9pm, terms signed at 10pm, an hour to spare.",
-        "Four needs out of four, every fee at or under what the player was worth, and £3m of the £29m left. That is 50 for needs, 30 for value and 2.1 for budget: 82 out of 100, an A."
+        "Four needs out of four. The keeper cost £3.3m for a £3m player, 10 percent over his real worth, which keeps 80 percent of his share of the value points, and say the other three went about 10 percent over too. That is 50 for needs, 24 for value and, with £1m of the £29m left, 0.7 for budget: 75 out of 100, a B."
       ],
       "tips": [
         "Call every club on your list early. The call is free, and it puts every asking price in front of you before you spend an hour.",

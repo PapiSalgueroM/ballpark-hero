@@ -46,7 +46,17 @@ close now.
 - Deal panel: their ask, patience dots, the rival line, the typed bid with the
   engine's closeness meter above it, quick buttons (haggle, meet the ask, beat
   the rival), walk away. At the terms table: what he is asking, length
-  buttons, wage and bonus inputs and the terms meter.
+  buttons, wage and bonus inputs and the terms meter. The board will not go
+  over his asking wage or length (`boardTerms`): in a one day game neither
+  costs anything, and the engine's terms score lets either stand in for the
+  signing bonus, so without the cap a zero bonus on a bigger wage signed
+  every man and the bonus, the one term the budget pays, never had to be
+  paid (found by the adversarial review, held by simDeadlineDay section 8).
+- Walking away with a rival circling usually loses him, at either table: at
+  the terms table the frame's rival is seated where the engine's walk away
+  rule looks.
+- Going back to the menu mid daily and reopening it continues the same
+  window from the stored actions (src/test/dailyMenuResume.test.tsx).
 - Every button 44px high. No hover only mechanic. Results land in view through
   `useRevealScroll`.
 
