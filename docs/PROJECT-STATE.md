@@ -1,5 +1,13 @@
 # Project state
 
+## IN PROGRESS 2026-10-01: MLB trade desk roster access claimed
+
+798 removes three UI-only top-eight barriers from the existing MLB Trade Finder and
+manual trade desk, with explicit remaining-player access and bounded readable lists.
+Original helpers, saves, money and booking remain unchanged. Exact files and real
+outcome/negative/native acceptance are on WORKBOARD.797 integration and final combined
+production checks continue independently. Claude reservations hold. Next free799.
+
 ## IN PROGRESS 2026-10-01: catalog and release integration repairs claimed
 
 797 addresses four Aussie Rules catalog/resume/name-guard omissions exposed by the frozen
@@ -68,7 +76,9 @@ fire. `simHarnessAnchors` went red on the last merge for Codex's `simBuzzerPract
 they measure changed. Browser walks: `playHomeFold`, `playSoftFourOhFour` and `playSnapshotDrift` green;
 `sweepWeight` raised two budgets with the measured figure beside them (Footle 328K on 325K measured after the
 re-bake, Soccer Grid 308K on 304K, shared chunks); `playRenderStability` crashed its browser at 100 percent CPU on
-the first run and is being rerun on a quiet machine, so it is NOT yet a green and is recorded when it lands.
+the first run; rerun in two passes it is green on all 167 routes (140 in the first pass, where one slow load on
+`/nba-starting-5` captured only the cookie banner, then that page and the last 27 in a second pass, every one the
+same five times).
 
 ## CHECKPOINT 2026-10-01: Search and Discard scroll correction frozen
 

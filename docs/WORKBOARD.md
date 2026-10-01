@@ -1,5 +1,22 @@
 # Work board
 
+**2026-10-01, Codex798 CLAIMED: MLB trade desk whole-roster access.**
+Master62/96 simulation playability slice. All three existing trade lists currently hide
+players below the top eight, although the original helpers accept those player IDs.
+Own only the trade subsection of src/components/mlb-front-office/MlbFrontOfficeBoard.tsx,
+an optional scoped module, new src/test/mlbTradeRoster.test.tsx and
+scripts/simMlbTradeRoster.mjs. Keep the first eight rating/tie order, shared selected
+player, all original offers/talks/refusals, finances/cap/roster/Save/RNG/completion intact.
+Expose the remaining real roster through explicit Load more controls and honest counts,
+bounded local lists, readable full names and 44px controls. No engine or shared edits.
+Actual Board acceptance must reach both teams' lower-ranked fictional players, show
+staging is quiet, compare exact original offers/manual packages and accepted full saves,
+hold refused/no-op paths and earlier node identities. Effective copied top-eight caps
+must lose later choices while the first eight still work. Native widths/motion must
+prove reachability/focus/fit/no page jump. Relevant original helper fences stay green.
+This is an observed implementation gap, not a new visitor report. Claude reservations
+and797 integration ownership hold. Root owns docs/git/build. Next free799.
+
 **2026-10-01, Codex797 CLAIMED: finish catalog integration and repair release fences.**
 The immutable792 production node run finished398 PASS and8 FAIL, with70 browser harnesses
 explicitly excluded. No full-green claim. New Aussie Rules registration gaps: Continue
