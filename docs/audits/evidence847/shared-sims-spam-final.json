@@ -1,0 +1,1150 @@
+{
+  "cases": [
+    {
+      "sport": "NFL",
+      "route": "/front-office",
+      "errors": [],
+      "blocked": [],
+      "auditError": "page.waitForFunction: Timeout 20000ms exceeded.\n    at C:\\Users\\antho\\AppData\\Local\\Temp\\dukb-hostile-audit-2026-10-01\\shared-sims-spam-final.mjs:10:689"
+    },
+    {
+      "sport": "NHL",
+      "route": "/nhl-front-office",
+      "errors": [],
+      "blocked": [
+        {
+          "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/game_completions",
+          "method": "POST"
+        }
+      ],
+      "initial": {
+        "phase": "hub",
+        "season": 2026,
+        "period": 20,
+        "seasonsPlayed": 0,
+        "titles": 0,
+        "picksLeft": 0,
+        "champions": [],
+        "roster": [
+          {
+            "id": "h1k3fn2k1y5q4do-144",
+            "name": "Matthew Tkachuk"
+          },
+          {
+            "id": "h1k3fn2k1y5q4do-145",
+            "name": "Brad Marchand"
+          },
+          {
+            "id": "h1k3fn2k1y5q4do-146",
+            "name": "Brady Tkachuk"
+          },
+          {
+            "id": "h1k3fn2k1y5q4do-147",
+            "name": "Sam Reinhart"
+          },
+          {
+            "id": "h1k3fn2k1y5q4do-148",
+            "name": "Sam Bennett"
+          },
+          {
+            "id": "h1k3fn2k1y5q4do-149",
+            "name": "Carter Verhaeghe"
+          },
+          {
+            "id": "h1k3fn2k1y5q4do-150",
+            "name": "Anton Lundell"
+          },
+          {
+            "id": "h1k3fn2k1y5q4do-151",
+            "name": "Seth Jones"
+          },
+          {
+            "id": "h1k3fn2k1y5q4do-152",
+            "name": "Aaron Ekblad"
+          },
+          {
+            "id": "h1k3fn2k1y5q4do-153",
+            "name": "Gustav Forsling"
+          },
+          {
+            "id": "h1k3fn2k1y5q4do-154",
+            "name": "Uvis Balinskis"
+          },
+          {
+            "id": "h1k3fn2k1y5q4do-155",
+            "name": "Akira Schmid"
+          },
+          {
+            "id": "h1k3fn2k1y5q4do-156",
+            "name": "Jacob Markstrom"
+          }
+        ],
+        "record": {
+          "wins": 40,
+          "losses": 23,
+          "otLosses": 15
+        },
+        "postseason": null
+      },
+      "beforeFinal": {
+        "phase": "hub",
+        "season": 2026,
+        "period": 20,
+        "seasonsPlayed": 0,
+        "titles": 0,
+        "picksLeft": 0,
+        "champions": [],
+        "roster": [
+          {
+            "id": "h1k3fn2k1y5q4do-144",
+            "name": "Matthew Tkachuk"
+          },
+          {
+            "id": "h1k3fn2k1y5q4do-145",
+            "name": "Brad Marchand"
+          },
+          {
+            "id": "h1k3fn2k1y5q4do-146",
+            "name": "Brady Tkachuk"
+          },
+          {
+            "id": "h1k3fn2k1y5q4do-147",
+            "name": "Sam Reinhart"
+          },
+          {
+            "id": "h1k3fn2k1y5q4do-148",
+            "name": "Sam Bennett"
+          },
+          {
+            "id": "h1k3fn2k1y5q4do-149",
+            "name": "Carter Verhaeghe"
+          },
+          {
+            "id": "h1k3fn2k1y5q4do-150",
+            "name": "Anton Lundell"
+          },
+          {
+            "id": "h1k3fn2k1y5q4do-151",
+            "name": "Seth Jones"
+          },
+          {
+            "id": "h1k3fn2k1y5q4do-152",
+            "name": "Aaron Ekblad"
+          },
+          {
+            "id": "h1k3fn2k1y5q4do-153",
+            "name": "Gustav Forsling"
+          },
+          {
+            "id": "h1k3fn2k1y5q4do-154",
+            "name": "Uvis Balinskis"
+          },
+          {
+            "id": "h1k3fn2k1y5q4do-155",
+            "name": "Akira Schmid"
+          },
+          {
+            "id": "h1k3fn2k1y5q4do-156",
+            "name": "Jacob Markstrom"
+          }
+        ],
+        "record": {
+          "wins": 40,
+          "losses": 23,
+          "otLosses": 15
+        },
+        "postseason": null
+      },
+      "afterFinalSpam": {
+        "phase": "recap",
+        "season": 2026,
+        "period": 20,
+        "seasonsPlayed": 1,
+        "titles": 0,
+        "picksLeft": 0,
+        "champions": [
+          {
+            "season": 2026,
+            "team": "TBL"
+          }
+        ],
+        "roster": [
+          {
+            "id": "h1k3fn2k1y5q4do-144",
+            "name": "Matthew Tkachuk"
+          },
+          {
+            "id": "h1k3fn2k1y5q4do-145",
+            "name": "Brad Marchand"
+          },
+          {
+            "id": "h1k3fn2k1y5q4do-146",
+            "name": "Brady Tkachuk"
+          },
+          {
+            "id": "h1k3fn2k1y5q4do-147",
+            "name": "Sam Reinhart"
+          },
+          {
+            "id": "h1k3fn2k1y5q4do-148",
+            "name": "Sam Bennett"
+          },
+          {
+            "id": "h1k3fn2k1y5q4do-149",
+            "name": "Carter Verhaeghe"
+          },
+          {
+            "id": "h1k3fn2k1y5q4do-150",
+            "name": "Anton Lundell"
+          },
+          {
+            "id": "h1k3fn2k1y5q4do-151",
+            "name": "Seth Jones"
+          },
+          {
+            "id": "h1k3fn2k1y5q4do-152",
+            "name": "Aaron Ekblad"
+          },
+          {
+            "id": "h1k3fn2k1y5q4do-153",
+            "name": "Gustav Forsling"
+          },
+          {
+            "id": "h1k3fn2k1y5q4do-154",
+            "name": "Uvis Balinskis"
+          },
+          {
+            "id": "h1k3fn2k1y5q4do-155",
+            "name": "Akira Schmid"
+          },
+          {
+            "id": "h1k3fn2k1y5q4do-156",
+            "name": "Jacob Markstrom"
+          }
+        ],
+        "record": {
+          "wins": 43,
+          "losses": 24,
+          "otLosses": 16
+        },
+        "postseason": {
+          "series": [
+            {
+              "name": "Atlantic Semi",
+              "home": "TBL",
+              "away": "MTL",
+              "homeWins": 4,
+              "awayWins": 2,
+              "winner": "TBL"
+            },
+            {
+              "name": "Atlantic Semi",
+              "home": "FLA",
+              "away": "DET",
+              "homeWins": 3,
+              "awayWins": 4,
+              "winner": "DET"
+            },
+            {
+              "name": "Atlantic Final",
+              "home": "TBL",
+              "away": "DET",
+              "homeWins": 4,
+              "awayWins": 3,
+              "winner": "TBL"
+            },
+            {
+              "name": "Metropolitan Semi",
+              "home": "WSH",
+              "away": "PHI",
+              "homeWins": 4,
+              "awayWins": 1,
+              "winner": "WSH"
+            },
+            {
+              "name": "Metropolitan Semi",
+              "home": "CBJ",
+              "away": "NYR",
+              "homeWins": 4,
+              "awayWins": 3,
+              "winner": "CBJ"
+            },
+            {
+              "name": "Metropolitan Final",
+              "home": "WSH",
+              "away": "CBJ",
+              "homeWins": 4,
+              "awayWins": 3,
+              "winner": "WSH"
+            },
+            {
+              "name": "Eastern Final",
+              "home": "TBL",
+              "away": "WSH",
+              "homeWins": 4,
+              "awayWins": 3,
+              "winner": "TBL"
+            },
+            {
+              "name": "Central Semi",
+              "home": "COL",
+              "away": "STL",
+              "homeWins": 3,
+              "awayWins": 4,
+              "winner": "STL"
+            },
+            {
+              "name": "Central Semi",
+              "home": "UTA",
+              "away": "DAL",
+              "homeWins": 4,
+              "awayWins": 2,
+              "winner": "UTA"
+            },
+            {
+              "name": "Central Final",
+              "home": "STL",
+              "away": "UTA",
+              "homeWins": 4,
+              "awayWins": 2,
+              "winner": "STL"
+            },
+            {
+              "name": "Pacific Semi",
+              "home": "VGK",
+              "away": "MIN",
+              "homeWins": 1,
+              "awayWins": 4,
+              "winner": "MIN"
+            },
+            {
+              "name": "Pacific Semi",
+              "home": "SJS",
+              "away": "SEA",
+              "homeWins": 4,
+              "awayWins": 2,
+              "winner": "SJS"
+            },
+            {
+              "name": "Pacific Final",
+              "home": "MIN",
+              "away": "SJS",
+              "homeWins": 4,
+              "awayWins": 3,
+              "winner": "MIN"
+            },
+            {
+              "name": "Western Final",
+              "home": "STL",
+              "away": "MIN",
+              "homeWins": 1,
+              "awayWins": 4,
+              "winner": "MIN"
+            },
+            {
+              "name": "Stanley Cup Final",
+              "home": "TBL",
+              "away": "MIN",
+              "homeWins": 4,
+              "awayWins": 1,
+              "winner": "TBL"
+            }
+          ],
+          "champion": "TBL",
+          "gradeLine": "✅ Mandate met. The seat stays comfortable."
+        }
+      },
+      "afterFinalReload": {
+        "phase": "recap",
+        "season": 2026,
+        "period": 20,
+        "seasonsPlayed": 1,
+        "titles": 0,
+        "picksLeft": 0,
+        "champions": [
+          {
+            "season": 2026,
+            "team": "TBL"
+          }
+        ],
+        "roster": [
+          {
+            "id": "h1k3fn2k1y5q4do-144",
+            "name": "Matthew Tkachuk"
+          },
+          {
+            "id": "h1k3fn2k1y5q4do-145",
+            "name": "Brad Marchand"
+          },
+          {
+            "id": "h1k3fn2k1y5q4do-146",
+            "name": "Brady Tkachuk"
+          },
+          {
+            "id": "h1k3fn2k1y5q4do-147",
+            "name": "Sam Reinhart"
+          },
+          {
+            "id": "h1k3fn2k1y5q4do-148",
+            "name": "Sam Bennett"
+          },
+          {
+            "id": "h1k3fn2k1y5q4do-149",
+            "name": "Carter Verhaeghe"
+          },
+          {
+            "id": "h1k3fn2k1y5q4do-150",
+            "name": "Anton Lundell"
+          },
+          {
+            "id": "h1k3fn2k1y5q4do-151",
+            "name": "Seth Jones"
+          },
+          {
+            "id": "h1k3fn2k1y5q4do-152",
+            "name": "Aaron Ekblad"
+          },
+          {
+            "id": "h1k3fn2k1y5q4do-153",
+            "name": "Gustav Forsling"
+          },
+          {
+            "id": "h1k3fn2k1y5q4do-154",
+            "name": "Uvis Balinskis"
+          },
+          {
+            "id": "h1k3fn2k1y5q4do-155",
+            "name": "Akira Schmid"
+          },
+          {
+            "id": "h1k3fn2k1y5q4do-156",
+            "name": "Jacob Markstrom"
+          }
+        ],
+        "record": {
+          "wins": 43,
+          "losses": 24,
+          "otLosses": 16
+        },
+        "postseason": {
+          "series": [
+            {
+              "name": "Atlantic Semi",
+              "home": "TBL",
+              "away": "MTL",
+              "homeWins": 4,
+              "awayWins": 2,
+              "winner": "TBL"
+            },
+            {
+              "name": "Atlantic Semi",
+              "home": "FLA",
+              "away": "DET",
+              "homeWins": 3,
+              "awayWins": 4,
+              "winner": "DET"
+            },
+            {
+              "name": "Atlantic Final",
+              "home": "TBL",
+              "away": "DET",
+              "homeWins": 4,
+              "awayWins": 3,
+              "winner": "TBL"
+            },
+            {
+              "name": "Metropolitan Semi",
+              "home": "WSH",
+              "away": "PHI",
+              "homeWins": 4,
+              "awayWins": 1,
+              "winner": "WSH"
+            },
+            {
+              "name": "Metropolitan Semi",
+              "home": "CBJ",
+              "away": "NYR",
+              "homeWins": 4,
+              "awayWins": 3,
+              "winner": "CBJ"
+            },
+            {
+              "name": "Metropolitan Final",
+              "home": "WSH",
+              "away": "CBJ",
+              "homeWins": 4,
+              "awayWins": 3,
+              "winner": "WSH"
+            },
+            {
+              "name": "Eastern Final",
+              "home": "TBL",
+              "away": "WSH",
+              "homeWins": 4,
+              "awayWins": 3,
+              "winner": "TBL"
+            },
+            {
+              "name": "Central Semi",
+              "home": "COL",
+              "away": "STL",
+              "homeWins": 3,
+              "awayWins": 4,
+              "winner": "STL"
+            },
+            {
+              "name": "Central Semi",
+              "home": "UTA",
+              "away": "DAL",
+              "homeWins": 4,
+              "awayWins": 2,
+              "winner": "UTA"
+            },
+            {
+              "name": "Central Final",
+              "home": "STL",
+              "away": "UTA",
+              "homeWins": 4,
+              "awayWins": 2,
+              "winner": "STL"
+            },
+            {
+              "name": "Pacific Semi",
+              "home": "VGK",
+              "away": "MIN",
+              "homeWins": 1,
+              "awayWins": 4,
+              "winner": "MIN"
+            },
+            {
+              "name": "Pacific Semi",
+              "home": "SJS",
+              "away": "SEA",
+              "homeWins": 4,
+              "awayWins": 2,
+              "winner": "SJS"
+            },
+            {
+              "name": "Pacific Final",
+              "home": "MIN",
+              "away": "SJS",
+              "homeWins": 4,
+              "awayWins": 3,
+              "winner": "MIN"
+            },
+            {
+              "name": "Western Final",
+              "home": "STL",
+              "away": "MIN",
+              "homeWins": 1,
+              "awayWins": 4,
+              "winner": "MIN"
+            },
+            {
+              "name": "Stanley Cup Final",
+              "home": "TBL",
+              "away": "MIN",
+              "homeWins": 4,
+              "awayWins": 1,
+              "winner": "TBL"
+            }
+          ],
+          "champion": "TBL",
+          "gradeLine": "✅ Mandate met. The seat stays comfortable."
+        }
+      },
+      "finalReloadQuiet": true,
+      "beforeDraft": {
+        "phase": "draft",
+        "season": 2026,
+        "period": 20,
+        "seasonsPlayed": 1,
+        "titles": 0,
+        "picksLeft": 2,
+        "champions": [
+          {
+            "season": 2026,
+            "team": "TBL"
+          }
+        ],
+        "roster": [
+          {
+            "id": "h1k3fn2k1y5q4do-144",
+            "name": "Matthew Tkachuk"
+          },
+          {
+            "id": "h1k3fn2k1y5q4do-145",
+            "name": "Brad Marchand"
+          },
+          {
+            "id": "h1k3fn2k1y5q4do-146",
+            "name": "Brady Tkachuk"
+          },
+          {
+            "id": "h1k3fn2k1y5q4do-147",
+            "name": "Sam Reinhart"
+          },
+          {
+            "id": "h1k3fn2k1y5q4do-148",
+            "name": "Sam Bennett"
+          },
+          {
+            "id": "h1k3fn2k1y5q4do-149",
+            "name": "Carter Verhaeghe"
+          },
+          {
+            "id": "h1k3fn2k1y5q4do-150",
+            "name": "Anton Lundell"
+          },
+          {
+            "id": "h1k3fn2k1y5q4do-151",
+            "name": "Seth Jones"
+          },
+          {
+            "id": "h1k3fn2k1y5q4do-152",
+            "name": "Aaron Ekblad"
+          },
+          {
+            "id": "h1k3fn2k1y5q4do-153",
+            "name": "Gustav Forsling"
+          },
+          {
+            "id": "h1k3fn2k1y5q4do-154",
+            "name": "Uvis Balinskis"
+          },
+          {
+            "id": "h1k3fn2k1y5q4do-155",
+            "name": "Akira Schmid"
+          },
+          {
+            "id": "h1k3fn2k1y5q4do-156",
+            "name": "Jacob Markstrom"
+          }
+        ],
+        "record": {
+          "wins": 43,
+          "losses": 24,
+          "otLosses": 16
+        },
+        "postseason": {
+          "series": [
+            {
+              "name": "Atlantic Semi",
+              "home": "TBL",
+              "away": "MTL",
+              "homeWins": 4,
+              "awayWins": 2,
+              "winner": "TBL"
+            },
+            {
+              "name": "Atlantic Semi",
+              "home": "FLA",
+              "away": "DET",
+              "homeWins": 3,
+              "awayWins": 4,
+              "winner": "DET"
+            },
+            {
+              "name": "Atlantic Final",
+              "home": "TBL",
+              "away": "DET",
+              "homeWins": 4,
+              "awayWins": 3,
+              "winner": "TBL"
+            },
+            {
+              "name": "Metropolitan Semi",
+              "home": "WSH",
+              "away": "PHI",
+              "homeWins": 4,
+              "awayWins": 1,
+              "winner": "WSH"
+            },
+            {
+              "name": "Metropolitan Semi",
+              "home": "CBJ",
+              "away": "NYR",
+              "homeWins": 4,
+              "awayWins": 3,
+              "winner": "CBJ"
+            },
+            {
+              "name": "Metropolitan Final",
+              "home": "WSH",
+              "away": "CBJ",
+              "homeWins": 4,
+              "awayWins": 3,
+              "winner": "WSH"
+            },
+            {
+              "name": "Eastern Final",
+              "home": "TBL",
+              "away": "WSH",
+              "homeWins": 4,
+              "awayWins": 3,
+              "winner": "TBL"
+            },
+            {
+              "name": "Central Semi",
+              "home": "COL",
+              "away": "STL",
+              "homeWins": 3,
+              "awayWins": 4,
+              "winner": "STL"
+            },
+            {
+              "name": "Central Semi",
+              "home": "UTA",
+              "away": "DAL",
+              "homeWins": 4,
+              "awayWins": 2,
+              "winner": "UTA"
+            },
+            {
+              "name": "Central Final",
+              "home": "STL",
+              "away": "UTA",
+              "homeWins": 4,
+              "awayWins": 2,
+              "winner": "STL"
+            },
+            {
+              "name": "Pacific Semi",
+              "home": "VGK",
+              "away": "MIN",
+              "homeWins": 1,
+              "awayWins": 4,
+              "winner": "MIN"
+            },
+            {
+              "name": "Pacific Semi",
+              "home": "SJS",
+              "away": "SEA",
+              "homeWins": 4,
+              "awayWins": 2,
+              "winner": "SJS"
+            },
+            {
+              "name": "Pacific Final",
+              "home": "MIN",
+              "away": "SJS",
+              "homeWins": 4,
+              "awayWins": 3,
+              "winner": "MIN"
+            },
+            {
+              "name": "Western Final",
+              "home": "STL",
+              "away": "MIN",
+              "homeWins": 1,
+              "awayWins": 4,
+              "winner": "MIN"
+            },
+            {
+              "name": "Stanley Cup Final",
+              "home": "TBL",
+              "away": "MIN",
+              "homeWins": 4,
+              "awayWins": 1,
+              "winner": "TBL"
+            }
+          ],
+          "champion": "TBL",
+          "gradeLine": "✅ Mandate met. The seat stays comfortable."
+        }
+      },
+      "draftNames": [
+        "Sten Byfield",
+        "Dmitri Lehtinen",
+        "Dmitri Halonen",
+        "Brady Grahn",
+        "Emil Nyholm",
+        "Eino Vasko",
+        "Nolan Mikkola",
+        "Juuso Byfield",
+        "Sten Vasko",
+        "Miro Mikkola",
+        "Lucas Forsell",
+        "Tuukka Fedorov",
+        "Emil Mikkola",
+        "Oskar Brannstrom",
+        "Emil Sjodin",
+        "Ulf Novak",
+        "Juuso Novak",
+        "Petteri Gallagher",
+        "Nikita Eklund",
+        "Marek Jokela",
+        "Ilya Lehtinen",
+        "Cole Grahn",
+        "Valter Ivarsson",
+        "Ilya Bergeron"
+      ],
+      "afterHeldDraft": {
+        "phase": "draft",
+        "season": 2026,
+        "period": 20,
+        "seasonsPlayed": 1,
+        "titles": 0,
+        "picksLeft": 1,
+        "champions": [
+          {
+            "season": 2026,
+            "team": "TBL"
+          }
+        ],
+        "roster": [
+          {
+            "id": "h1k3fn2k1y5q4do-144",
+            "name": "Matthew Tkachuk"
+          },
+          {
+            "id": "h1k3fn2k1y5q4do-145",
+            "name": "Brad Marchand"
+          },
+          {
+            "id": "h1k3fn2k1y5q4do-146",
+            "name": "Brady Tkachuk"
+          },
+          {
+            "id": "h1k3fn2k1y5q4do-147",
+            "name": "Sam Reinhart"
+          },
+          {
+            "id": "h1k3fn2k1y5q4do-148",
+            "name": "Sam Bennett"
+          },
+          {
+            "id": "h1k3fn2k1y5q4do-149",
+            "name": "Carter Verhaeghe"
+          },
+          {
+            "id": "h1k3fn2k1y5q4do-150",
+            "name": "Anton Lundell"
+          },
+          {
+            "id": "h1k3fn2k1y5q4do-151",
+            "name": "Seth Jones"
+          },
+          {
+            "id": "h1k3fn2k1y5q4do-152",
+            "name": "Aaron Ekblad"
+          },
+          {
+            "id": "h1k3fn2k1y5q4do-153",
+            "name": "Gustav Forsling"
+          },
+          {
+            "id": "h1k3fn2k1y5q4do-154",
+            "name": "Uvis Balinskis"
+          },
+          {
+            "id": "h1k3fn2k1y5q4do-155",
+            "name": "Akira Schmid"
+          },
+          {
+            "id": "h1k3fn2k1y5q4do-156",
+            "name": "Jacob Markstrom"
+          },
+          {
+            "id": "h1q11qpplzr4s7-25",
+            "name": "Sten Byfield"
+          }
+        ],
+        "record": {
+          "wins": 43,
+          "losses": 24,
+          "otLosses": 16
+        },
+        "postseason": {
+          "series": [
+            {
+              "name": "Atlantic Semi",
+              "home": "TBL",
+              "away": "MTL",
+              "homeWins": 4,
+              "awayWins": 2,
+              "winner": "TBL"
+            },
+            {
+              "name": "Atlantic Semi",
+              "home": "FLA",
+              "away": "DET",
+              "homeWins": 3,
+              "awayWins": 4,
+              "winner": "DET"
+            },
+            {
+              "name": "Atlantic Final",
+              "home": "TBL",
+              "away": "DET",
+              "homeWins": 4,
+              "awayWins": 3,
+              "winner": "TBL"
+            },
+            {
+              "name": "Metropolitan Semi",
+              "home": "WSH",
+              "away": "PHI",
+              "homeWins": 4,
+              "awayWins": 1,
+              "winner": "WSH"
+            },
+            {
+              "name": "Metropolitan Semi",
+              "home": "CBJ",
+              "away": "NYR",
+              "homeWins": 4,
+              "awayWins": 3,
+              "winner": "CBJ"
+            },
+            {
+              "name": "Metropolitan Final",
+              "home": "WSH",
+              "away": "CBJ",
+              "homeWins": 4,
+              "awayWins": 3,
+              "winner": "WSH"
+            },
+            {
+              "name": "Eastern Final",
+              "home": "TBL",
+              "away": "WSH",
+              "homeWins": 4,
+              "awayWins": 3,
+              "winner": "TBL"
+            },
+            {
+              "name": "Central Semi",
+              "home": "COL",
+              "away": "STL",
+              "homeWins": 3,
+              "awayWins": 4,
+              "winner": "STL"
+            },
+            {
+              "name": "Central Semi",
+              "home": "UTA",
+              "away": "DAL",
+              "homeWins": 4,
+              "awayWins": 2,
+              "winner": "UTA"
+            },
+            {
+              "name": "Central Final",
+              "home": "STL",
+              "away": "UTA",
+              "homeWins": 4,
+              "awayWins": 2,
+              "winner": "STL"
+            },
+            {
+              "name": "Pacific Semi",
+              "home": "VGK",
+              "away": "MIN",
+              "homeWins": 1,
+              "awayWins": 4,
+              "winner": "MIN"
+            },
+            {
+              "name": "Pacific Semi",
+              "home": "SJS",
+              "away": "SEA",
+              "homeWins": 4,
+              "awayWins": 2,
+              "winner": "SJS"
+            },
+            {
+              "name": "Pacific Final",
+              "home": "MIN",
+              "away": "SJS",
+              "homeWins": 4,
+              "awayWins": 3,
+              "winner": "MIN"
+            },
+            {
+              "name": "Western Final",
+              "home": "STL",
+              "away": "MIN",
+              "homeWins": 1,
+              "awayWins": 4,
+              "winner": "MIN"
+            },
+            {
+              "name": "Stanley Cup Final",
+              "home": "TBL",
+              "away": "MIN",
+              "homeWins": 4,
+              "awayWins": 1,
+              "winner": "TBL"
+            }
+          ],
+          "champion": "TBL",
+          "gradeLine": "✅ Mandate met. The seat stays comfortable."
+        }
+      },
+      "afterDoubleDraft": {
+        "phase": "hub",
+        "season": 2027,
+        "period": 1,
+        "seasonsPlayed": 1,
+        "titles": 0,
+        "picksLeft": 0,
+        "champions": [
+          {
+            "season": 2026,
+            "team": "TBL"
+          }
+        ],
+        "roster": [
+          {
+            "id": "h1k3fn2k1y5q4do-144",
+            "name": "Matthew Tkachuk"
+          },
+          {
+            "id": "h1k3fn2k1y5q4do-146",
+            "name": "Brady Tkachuk"
+          },
+          {
+            "id": "h1k3fn2k1y5q4do-147",
+            "name": "Sam Reinhart"
+          },
+          {
+            "id": "h1k3fn2k1y5q4do-148",
+            "name": "Sam Bennett"
+          },
+          {
+            "id": "h1k3fn2k1y5q4do-149",
+            "name": "Carter Verhaeghe"
+          },
+          {
+            "id": "h1k3fn2k1y5q4do-150",
+            "name": "Anton Lundell"
+          },
+          {
+            "id": "h1k3fn2k1y5q4do-151",
+            "name": "Seth Jones"
+          },
+          {
+            "id": "h1k3fn2k1y5q4do-152",
+            "name": "Aaron Ekblad"
+          },
+          {
+            "id": "h1k3fn2k1y5q4do-153",
+            "name": "Gustav Forsling"
+          },
+          {
+            "id": "h1k3fn2k1y5q4do-154",
+            "name": "Uvis Balinskis"
+          },
+          {
+            "id": "h1k3fn2k1y5q4do-155",
+            "name": "Akira Schmid"
+          },
+          {
+            "id": "h1k3fn2k1y5q4do-156",
+            "name": "Jacob Markstrom"
+          },
+          {
+            "id": "h1q11qpplzr4s7-25",
+            "name": "Sten Byfield"
+          },
+          {
+            "id": "h1q11qpplzr4s7-31",
+            "name": "Nolan Mikkola"
+          }
+        ],
+        "record": {
+          "wins": 0,
+          "losses": 0,
+          "otLosses": 0
+        },
+        "postseason": null
+      },
+      "offseason": {
+        "phase": "hub",
+        "season": 2027,
+        "period": 1,
+        "seasonsPlayed": 1,
+        "titles": 0,
+        "picksLeft": 0,
+        "champions": [
+          {
+            "season": 2026,
+            "team": "TBL"
+          }
+        ],
+        "roster": [
+          {
+            "id": "h1k3fn2k1y5q4do-144",
+            "name": "Matthew Tkachuk"
+          },
+          {
+            "id": "h1k3fn2k1y5q4do-146",
+            "name": "Brady Tkachuk"
+          },
+          {
+            "id": "h1k3fn2k1y5q4do-147",
+            "name": "Sam Reinhart"
+          },
+          {
+            "id": "h1k3fn2k1y5q4do-148",
+            "name": "Sam Bennett"
+          },
+          {
+            "id": "h1k3fn2k1y5q4do-149",
+            "name": "Carter Verhaeghe"
+          },
+          {
+            "id": "h1k3fn2k1y5q4do-150",
+            "name": "Anton Lundell"
+          },
+          {
+            "id": "h1k3fn2k1y5q4do-151",
+            "name": "Seth Jones"
+          },
+          {
+            "id": "h1k3fn2k1y5q4do-152",
+            "name": "Aaron Ekblad"
+          },
+          {
+            "id": "h1k3fn2k1y5q4do-153",
+            "name": "Gustav Forsling"
+          },
+          {
+            "id": "h1k3fn2k1y5q4do-154",
+            "name": "Uvis Balinskis"
+          },
+          {
+            "id": "h1k3fn2k1y5q4do-155",
+            "name": "Akira Schmid"
+          },
+          {
+            "id": "h1k3fn2k1y5q4do-156",
+            "name": "Jacob Markstrom"
+          },
+          {
+            "id": "h1q11qpplzr4s7-25",
+            "name": "Sten Byfield"
+          },
+          {
+            "id": "h1q11qpplzr4s7-31",
+            "name": "Nolan Mikkola"
+          }
+        ],
+        "record": {
+          "wins": 0,
+          "losses": 0,
+          "otLosses": 0
+        },
+        "postseason": null
+      },
+      "uniqueIds": true
+    }
+  ],
+  "scope": "Actual live saved campaigns resumed from earlier native club selection; native double click and repeated Enter. All vendor/non-GET requests blocked. No simulation substitutions or account mutations.",
+  "cleanup": {
+    "browserClosed": true,
+    "contextsClosed": true,
+    "ownedServer": false
+  }
+}

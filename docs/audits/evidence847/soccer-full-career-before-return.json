@@ -1,0 +1,3456 @@
+{
+  "base": "https://douknowball.com",
+  "started": "2026-10-01T22:48:20.899Z",
+  "scope": "Native UI single unseeded disposable guest career, no game engine or clock override, no injected progression. Read-only saved-state observation. Ads, analytics and account/score/report writes blocked.",
+  "actions": [
+    {
+      "step": 0,
+      "phase": "youth",
+      "age": 16,
+      "action": "Next Year",
+      "afterPhase": "contract_offer",
+      "afterAge": 17,
+      "seasonCount": 2,
+      "team": "Brentford Youth",
+      "retired": false,
+      "visibleError": false
+    },
+    {
+      "step": 1,
+      "phase": "contract_offer",
+      "age": 17,
+      "action": "Sign Contract ✍️",
+      "afterPhase": "playing",
+      "afterAge": 17,
+      "seasonCount": 2,
+      "team": "Brentford",
+      "retired": false,
+      "visibleError": false
+    },
+    {
+      "step": 2,
+      "phase": "playing",
+      "age": 17,
+      "action": "Next Season",
+      "afterPhase": "newspaper",
+      "afterAge": 18,
+      "seasonCount": 3,
+      "team": "Brentford",
+      "retired": false,
+      "visibleError": false
+    },
+    {
+      "step": 3,
+      "phase": "newspaper",
+      "age": 18,
+      "action": "Continue to Season Summary →",
+      "afterPhase": "season_summary",
+      "afterAge": 18,
+      "seasonCount": 3,
+      "team": "Brentford",
+      "retired": false,
+      "visibleError": false
+    },
+    {
+      "step": 4,
+      "phase": "season_summary",
+      "age": 18,
+      "action": "Continue →",
+      "afterPhase": "ballon_dor",
+      "afterAge": 18,
+      "seasonCount": 3,
+      "team": "Brentford",
+      "retired": false,
+      "visibleError": false
+    },
+    {
+      "step": 5,
+      "phase": "ballon_dor",
+      "age": 18,
+      "action": "Continue →",
+      "afterPhase": "social_media_action",
+      "afterAge": 18,
+      "seasonCount": 3,
+      "team": "Brentford",
+      "retired": false,
+      "visibleError": false
+    },
+    {
+      "step": 6,
+      "phase": "social_media_action",
+      "age": 18,
+      "action": "🏋️\nPost training video\nShow off your skills in the gym\n+0.1-0.2M followers",
+      "afterPhase": "social_media_action",
+      "afterAge": 18,
+      "seasonCount": 3,
+      "team": "Brentford",
+      "retired": false,
+      "visibleError": false
+    },
+    {
+      "step": 7,
+      "phase": "social_media_action",
+      "age": 18,
+      "action": "Continue →",
+      "afterPhase": "random_events",
+      "afterAge": 18,
+      "seasonCount": 3,
+      "team": "Brentford",
+      "retired": false,
+      "visibleError": false
+    },
+    {
+      "step": 8,
+      "phase": "random_events",
+      "age": 18,
+      "action": "🎭\nThe Showman\nFame comes easy: followers grow 60% faster, sponsors pay 25% more, scandals sting",
+      "afterPhase": "random_events",
+      "afterAge": 18,
+      "seasonCount": 3,
+      "team": "Brentford",
+      "retired": false,
+      "visibleError": false
+    },
+    {
+      "step": 9,
+      "phase": "random_events",
+      "age": 18,
+      "action": "🤳\nDo every appearance and every clinic\nFollowers +1.5M, Popularity +6, sponsor income +€300k, Morale -4",
+      "afterPhase": "random_events",
+      "afterAge": 18,
+      "seasonCount": 3,
+      "team": "Brentford",
+      "retired": false,
+      "visibleError": false
+    },
+    {
+      "step": 10,
+      "phase": "random_events",
+      "age": 18,
+      "action": "🤝\nAccept lower wage, stay loyal\nWage -15%, Morale +5",
+      "afterPhase": "random_events",
+      "afterAge": 18,
+      "seasonCount": 3,
+      "team": "Brentford",
+      "retired": false,
+      "visibleError": false
+    },
+    {
+      "step": 11,
+      "phase": "random_events",
+      "age": 18,
+      "action": "💪\nWear it with pride\nShooting +2, Dribbling +2",
+      "afterPhase": "random_events",
+      "afterAge": 18,
+      "seasonCount": 3,
+      "team": "Brentford",
+      "retired": false,
+      "visibleError": false
+    },
+    {
+      "step": 12,
+      "phase": "random_events",
+      "age": 18,
+      "action": "😎\nRock it with full confidence\nFollowers +600k, confidence is a haircut",
+      "afterPhase": "transfer_window",
+      "afterAge": 18,
+      "seasonCount": 3,
+      "team": "Brentford",
+      "retired": false,
+      "visibleError": false
+    },
+    {
+      "step": 13,
+      "phase": "transfer_window",
+      "age": 18,
+      "action": "Request transfer 📤",
+      "afterPhase": "transfer_window",
+      "afterAge": 18,
+      "seasonCount": 3,
+      "team": "Brentford",
+      "retired": false,
+      "visibleError": false
+    },
+    {
+      "step": 14,
+      "phase": "transfer_window",
+      "age": 18,
+      "action": "Sign Contract ✍️",
+      "afterPhase": "playing",
+      "afterAge": 18,
+      "seasonCount": 3,
+      "team": "Urawa Red Diamonds",
+      "retired": false,
+      "visibleError": false
+    },
+    {
+      "step": 15,
+      "phase": "playing",
+      "age": 18,
+      "action": "Next Season",
+      "afterPhase": "newspaper",
+      "afterAge": 19,
+      "seasonCount": 4,
+      "team": "Urawa Red Diamonds",
+      "retired": false,
+      "visibleError": false
+    },
+    {
+      "step": 16,
+      "phase": "newspaper",
+      "age": 19,
+      "action": "Continue to Season Summary →",
+      "afterPhase": "season_summary",
+      "afterAge": 19,
+      "seasonCount": 4,
+      "team": "Urawa Red Diamonds",
+      "retired": false,
+      "visibleError": false
+    },
+    {
+      "step": 17,
+      "phase": "season_summary",
+      "age": 19,
+      "action": "Continue →",
+      "afterPhase": "ballon_dor",
+      "afterAge": 19,
+      "seasonCount": 4,
+      "team": "Urawa Red Diamonds",
+      "retired": false,
+      "visibleError": false
+    },
+    {
+      "step": 18,
+      "phase": "ballon_dor",
+      "age": 19,
+      "action": "Continue →",
+      "afterPhase": "social_media_action",
+      "afterAge": 19,
+      "seasonCount": 4,
+      "team": "Urawa Red Diamonds",
+      "retired": false,
+      "visibleError": false
+    },
+    {
+      "step": 19,
+      "phase": "social_media_action",
+      "age": 19,
+      "action": "🏋️\nPost training video\nShow off your skills in the gym\n+0.1-0.2M followers",
+      "afterPhase": "social_media_action",
+      "afterAge": 19,
+      "seasonCount": 4,
+      "team": "Urawa Red Diamonds",
+      "retired": false,
+      "visibleError": false
+    },
+    {
+      "step": 20,
+      "phase": "social_media_action",
+      "age": 19,
+      "action": "Continue →",
+      "afterPhase": "random_events",
+      "afterAge": 19,
+      "seasonCount": 4,
+      "team": "Urawa Red Diamonds",
+      "retired": false,
+      "visibleError": false
+    },
+    {
+      "step": 21,
+      "phase": "random_events",
+      "age": 19,
+      "action": "🧢\nCousin Ricky\nFamily rates: tiny 3% transfer cut, zero income cut, slightly weak contracts, chaos guaranteed",
+      "afterPhase": "random_events",
+      "afterAge": 19,
+      "seasonCount": 4,
+      "team": "Urawa Red Diamonds",
+      "retired": false,
+      "visibleError": false
+    },
+    {
+      "step": 22,
+      "phase": "random_events",
+      "age": 19,
+      "action": "🛋️\nTake three weeks off anyway to be safe\nPhysical +1 next season, Morale +6, Popularity -2 for the games missed",
+      "afterPhase": "random_events",
+      "afterAge": 19,
+      "seasonCount": 4,
+      "team": "Urawa Red Diamonds",
+      "retired": false,
+      "visibleError": false
+    },
+    {
+      "step": 23,
+      "phase": "random_events",
+      "age": 19,
+      "action": "🏥\nFocus on recovery\nPace -2 permanently, miss apps next season",
+      "afterPhase": "transfer_window",
+      "afterAge": 19,
+      "seasonCount": 4,
+      "team": "Urawa Red Diamonds",
+      "retired": false,
+      "visibleError": false
+    },
+    {
+      "step": 24,
+      "phase": "transfer_window",
+      "age": 19,
+      "action": "Request transfer 📤",
+      "afterPhase": "transfer_window",
+      "afterAge": 19,
+      "seasonCount": 4,
+      "team": "Urawa Red Diamonds",
+      "retired": false,
+      "visibleError": false
+    },
+    {
+      "step": 25,
+      "phase": "transfer_window",
+      "age": 19,
+      "action": "Sign Contract ✍️",
+      "afterPhase": "playing",
+      "afterAge": 19,
+      "seasonCount": 4,
+      "team": "Saint George",
+      "retired": false,
+      "visibleError": false
+    },
+    {
+      "step": 26,
+      "phase": "playing",
+      "age": 19,
+      "action": "Next Season",
+      "afterPhase": "newspaper",
+      "afterAge": 20,
+      "seasonCount": 5,
+      "team": "Saint George",
+      "retired": false,
+      "visibleError": false
+    },
+    {
+      "step": 27,
+      "phase": "newspaper",
+      "age": 20,
+      "action": "Continue to Season Summary →",
+      "afterPhase": "season_summary",
+      "afterAge": 20,
+      "seasonCount": 5,
+      "team": "Saint George",
+      "retired": false,
+      "visibleError": false
+    },
+    {
+      "step": 28,
+      "phase": "season_summary",
+      "age": 20,
+      "action": "Continue →",
+      "afterPhase": "ballon_dor",
+      "afterAge": 20,
+      "seasonCount": 5,
+      "team": "Saint George",
+      "retired": false,
+      "visibleError": false
+    },
+    {
+      "step": 29,
+      "phase": "ballon_dor",
+      "age": 20,
+      "action": "Continue →",
+      "afterPhase": "rivalry_event",
+      "afterAge": 20,
+      "seasonCount": 5,
+      "team": "Saint George",
+      "retired": false,
+      "visibleError": false
+    },
+    {
+      "step": 30,
+      "phase": "rivalry_event",
+      "age": 20,
+      "action": "Continue →",
+      "afterPhase": "social_media_action",
+      "afterAge": 20,
+      "seasonCount": 5,
+      "team": "Saint George",
+      "retired": false,
+      "visibleError": false
+    },
+    {
+      "step": 31,
+      "phase": "social_media_action",
+      "age": 20,
+      "action": "🏋️\nPost training video\nShow off your skills in the gym\n+0.1-0.2M followers",
+      "afterPhase": "social_media_action",
+      "afterAge": 20,
+      "seasonCount": 5,
+      "team": "Saint George",
+      "retired": false,
+      "visibleError": false
+    },
+    {
+      "step": 32,
+      "phase": "social_media_action",
+      "age": 20,
+      "action": "Continue →",
+      "afterPhase": "random_events",
+      "afterAge": 20,
+      "seasonCount": 5,
+      "team": "Saint George",
+      "retired": false,
+      "visibleError": false
+    },
+    {
+      "step": 33,
+      "phase": "random_events",
+      "age": 20,
+      "action": "🎤\nAnswer him, on the record, in the mixed zone\n55%: the room is with you (Popularity +8, Morale +6). 45%: it reads as rattled (Popularity -10, Morale -6). Either way he is invested now, and every season after this counts harder with him",
+      "afterPhase": "random_events",
+      "afterAge": 20,
+      "seasonCount": 5,
+      "team": "Saint George",
+      "retired": false,
+      "visibleError": false
+    },
+    {
+      "step": 34,
+      "phase": "random_events",
+      "age": 20,
+      "action": "🧮\nFire him, hire the teammate's\nNet worth +€200k (the overcharge clawed back), Morale +3",
+      "afterPhase": "random_events",
+      "afterAge": 20,
+      "seasonCount": 5,
+      "team": "Saint George",
+      "retired": false,
+      "visibleError": false
+    },
+    {
+      "step": 35,
+      "phase": "random_events",
+      "age": 20,
+      "action": "🏦\nReport it as fraud\n50%: a real fraud, refunded in full (Morale +2). 50%: it was your dad, and now the bank wants a word with him (Net worth -€80k, Morale -5)",
+      "afterPhase": "transfer_window",
+      "afterAge": 20,
+      "seasonCount": 5,
+      "team": "Saint George",
+      "retired": false,
+      "visibleError": false
+    },
+    {
+      "step": 36,
+      "phase": "transfer_window",
+      "age": 20,
+      "action": "Accept Offer ✍️",
+      "afterPhase": "playing",
+      "afterAge": 20,
+      "seasonCount": 5,
+      "team": "Nice",
+      "retired": false,
+      "visibleError": false
+    },
+    {
+      "step": 37,
+      "phase": "playing",
+      "age": 20,
+      "action": "Next Season",
+      "afterPhase": "newspaper",
+      "afterAge": 21,
+      "seasonCount": 6,
+      "team": "Nice",
+      "retired": false,
+      "visibleError": false
+    },
+    {
+      "step": 38,
+      "phase": "newspaper",
+      "age": 21,
+      "action": "Continue to Season Summary →",
+      "afterPhase": "season_summary",
+      "afterAge": 21,
+      "seasonCount": 6,
+      "team": "Nice",
+      "retired": false,
+      "visibleError": false
+    },
+    {
+      "step": 39,
+      "phase": "season_summary",
+      "age": 21,
+      "action": "Continue →",
+      "afterPhase": "ballon_dor",
+      "afterAge": 21,
+      "seasonCount": 6,
+      "team": "Nice",
+      "retired": false,
+      "visibleError": false
+    },
+    {
+      "step": 40,
+      "phase": "ballon_dor",
+      "age": 21,
+      "action": "Continue →",
+      "afterPhase": "social_media_action",
+      "afterAge": 21,
+      "seasonCount": 6,
+      "team": "Nice",
+      "retired": false,
+      "visibleError": false
+    },
+    {
+      "step": 41,
+      "phase": "social_media_action",
+      "age": 21,
+      "action": "🏋️\nPost training video\nShow off your skills in the gym\n+0.1-0.2M followers",
+      "afterPhase": "social_media_action",
+      "afterAge": 21,
+      "seasonCount": 6,
+      "team": "Nice",
+      "retired": false,
+      "visibleError": false
+    },
+    {
+      "step": 42,
+      "phase": "social_media_action",
+      "age": 21,
+      "action": "Continue →",
+      "afterPhase": "random_events",
+      "afterAge": 21,
+      "seasonCount": 6,
+      "team": "Nice",
+      "retired": false,
+      "visibleError": false
+    },
+    {
+      "step": 43,
+      "phase": "random_events",
+      "age": 21,
+      "action": "🏦\nInvest €1M\nSteady returns: +€150k/year",
+      "afterPhase": "random_events",
+      "afterAge": 21,
+      "seasonCount": 6,
+      "team": "Nice",
+      "retired": false,
+      "visibleError": false
+    },
+    {
+      "step": 44,
+      "phase": "random_events",
+      "age": 21,
+      "action": "🧤\nBuy the squad proper cold weather kit: €60k\nNet worth -€60k, Morale +8, you lead the room",
+      "afterPhase": "transfer_window",
+      "afterAge": 21,
+      "seasonCount": 6,
+      "team": "Nice",
+      "retired": false,
+      "visibleError": false
+    },
+    {
+      "step": 45,
+      "phase": "transfer_window",
+      "age": 21,
+      "action": "Accept Offer ✍️",
+      "afterPhase": "playing",
+      "afterAge": 21,
+      "seasonCount": 6,
+      "team": "Qarabag",
+      "retired": false,
+      "visibleError": false
+    },
+    {
+      "step": 46,
+      "phase": "playing",
+      "age": 21,
+      "action": "Next Season",
+      "afterPhase": "newspaper",
+      "afterAge": 22,
+      "seasonCount": 7,
+      "team": "Qarabag",
+      "retired": false,
+      "visibleError": false
+    },
+    {
+      "step": 47,
+      "phase": "newspaper",
+      "age": 22,
+      "action": "Continue to Season Summary →",
+      "afterPhase": "season_summary",
+      "afterAge": 22,
+      "seasonCount": 7,
+      "team": "Qarabag",
+      "retired": false,
+      "visibleError": false
+    },
+    {
+      "step": 48,
+      "phase": "season_summary",
+      "age": 22,
+      "action": "Continue →",
+      "afterPhase": "ballon_dor",
+      "afterAge": 22,
+      "seasonCount": 7,
+      "team": "Qarabag",
+      "retired": false,
+      "visibleError": false
+    },
+    {
+      "step": 49,
+      "phase": "ballon_dor",
+      "age": 22,
+      "action": "Continue →",
+      "afterPhase": "rivalry_event",
+      "afterAge": 22,
+      "seasonCount": 7,
+      "team": "Qarabag",
+      "retired": false,
+      "visibleError": false
+    },
+    {
+      "step": 50,
+      "phase": "rivalry_event",
+      "age": 22,
+      "action": "Continue →",
+      "afterPhase": "social_media_action",
+      "afterAge": 22,
+      "seasonCount": 7,
+      "team": "Qarabag",
+      "retired": false,
+      "visibleError": false
+    },
+    {
+      "step": 51,
+      "phase": "social_media_action",
+      "age": 22,
+      "action": "🏋️\nPost training video\nShow off your skills in the gym\n+0.1-0.2M followers",
+      "afterPhase": "social_media_action",
+      "afterAge": 22,
+      "seasonCount": 7,
+      "team": "Qarabag",
+      "retired": false,
+      "visibleError": false
+    },
+    {
+      "step": 52,
+      "phase": "social_media_action",
+      "age": 22,
+      "action": "Continue →",
+      "afterPhase": "random_events",
+      "afterAge": 22,
+      "seasonCount": 7,
+      "team": "Qarabag",
+      "retired": false,
+      "visibleError": false
+    },
+    {
+      "step": 53,
+      "phase": "random_events",
+      "age": 22,
+      "action": "🥤\nSign the deal\nSponsorship +€250k/yr. 25%: a product recall (Popularity -5, Morale -3, no deal)",
+      "afterPhase": "random_events",
+      "afterAge": 22,
+      "seasonCount": 7,
+      "team": "Qarabag",
+      "retired": false,
+      "visibleError": false
+    },
+    {
+      "step": 54,
+      "phase": "random_events",
+      "age": 22,
+      "action": "🔥\nClap back online\nFollowers +2M, Popularity -3",
+      "afterPhase": "transfer_window",
+      "afterAge": 22,
+      "seasonCount": 7,
+      "team": "Qarabag",
+      "retired": false,
+      "visibleError": false
+    },
+    {
+      "step": 55,
+      "phase": "transfer_window",
+      "age": 22,
+      "action": "Accept Offer ✍️",
+      "afterPhase": "playing",
+      "afterAge": 22,
+      "seasonCount": 7,
+      "team": "Legia Warsaw",
+      "retired": false,
+      "visibleError": false
+    },
+    {
+      "step": 56,
+      "phase": "playing",
+      "age": 22,
+      "action": "Next Season",
+      "afterPhase": "newspaper",
+      "afterAge": 23,
+      "seasonCount": 8,
+      "team": "Legia Warsaw",
+      "retired": false,
+      "visibleError": false
+    },
+    {
+      "step": 57,
+      "phase": "newspaper",
+      "age": 23,
+      "action": "Continue to Season Summary →",
+      "afterPhase": "season_summary",
+      "afterAge": 23,
+      "seasonCount": 8,
+      "team": "Legia Warsaw",
+      "retired": false,
+      "visibleError": false
+    },
+    {
+      "step": 58,
+      "phase": "season_summary",
+      "age": 23,
+      "action": "Continue →",
+      "afterPhase": "ballon_dor",
+      "afterAge": 23,
+      "seasonCount": 8,
+      "team": "Legia Warsaw",
+      "retired": false,
+      "visibleError": false
+    },
+    {
+      "step": 59,
+      "phase": "ballon_dor",
+      "age": 23,
+      "action": "Continue →",
+      "afterPhase": "international_debut",
+      "afterAge": 23,
+      "seasonCount": 8,
+      "team": "Legia Warsaw",
+      "retired": false,
+      "visibleError": false
+    },
+    {
+      "step": 60,
+      "phase": "international_debut",
+      "age": 23,
+      "action": "Continue →",
+      "afterPhase": "world_cup",
+      "afterAge": 23,
+      "seasonCount": 8,
+      "team": "Legia Warsaw",
+      "retired": false,
+      "visibleError": false
+    },
+    {
+      "step": 61,
+      "phase": "world_cup",
+      "age": 23,
+      "action": "Continue →",
+      "afterPhase": "social_media_action",
+      "afterAge": 23,
+      "seasonCount": 8,
+      "team": "Legia Warsaw",
+      "retired": false,
+      "visibleError": false
+    },
+    {
+      "step": 62,
+      "phase": "social_media_action",
+      "age": 23,
+      "action": "🏋️\nPost training video\nShow off your skills in the gym\n+0.1-0.2M followers",
+      "afterPhase": "social_media_action",
+      "afterAge": 23,
+      "seasonCount": 8,
+      "team": "Legia Warsaw",
+      "retired": false,
+      "visibleError": false
+    },
+    {
+      "step": 63,
+      "phase": "social_media_action",
+      "age": 23,
+      "action": "Continue →",
+      "afterPhase": "random_events",
+      "afterAge": 23,
+      "seasonCount": 8,
+      "team": "Legia Warsaw",
+      "retired": false,
+      "visibleError": false
+    },
+    {
+      "step": 64,
+      "phase": "random_events",
+      "age": 23,
+      "action": "🤫\nPay €250k for a friendly whistle\nHeat +18, next season the calls go your way",
+      "afterPhase": "random_events",
+      "afterAge": 23,
+      "seasonCount": 8,
+      "team": "Legia Warsaw",
+      "retired": false,
+      "visibleError": false
+    },
+    {
+      "step": 65,
+      "phase": "random_events",
+      "age": 23,
+      "action": "🍝\nMake peace over room service\nMorale +4, Integrity +1, the next league meeting is a lot more polite",
+      "afterPhase": "transfer_window",
+      "afterAge": 23,
+      "seasonCount": 8,
+      "team": "Legia Warsaw",
+      "retired": false,
+      "visibleError": false
+    },
+    {
+      "step": 66,
+      "phase": "transfer_window",
+      "age": 23,
+      "action": "Leave on free transfer ✍️",
+      "afterPhase": "playing",
+      "afterAge": 23,
+      "seasonCount": 8,
+      "team": "Basel",
+      "retired": false,
+      "visibleError": false
+    },
+    {
+      "step": 67,
+      "phase": "playing",
+      "age": 23,
+      "action": "Next Season",
+      "afterPhase": "newspaper",
+      "afterAge": 24,
+      "seasonCount": 9,
+      "team": "Basel",
+      "retired": false,
+      "visibleError": false
+    },
+    {
+      "step": 68,
+      "phase": "newspaper",
+      "age": 24,
+      "action": "Continue to Season Summary →",
+      "afterPhase": "season_summary",
+      "afterAge": 24,
+      "seasonCount": 9,
+      "team": "Basel",
+      "retired": false,
+      "visibleError": false
+    },
+    {
+      "step": 69,
+      "phase": "season_summary",
+      "age": 24,
+      "action": "Continue →",
+      "afterPhase": "ballon_dor",
+      "afterAge": 24,
+      "seasonCount": 9,
+      "team": "Basel",
+      "retired": false,
+      "visibleError": false
+    },
+    {
+      "step": 70,
+      "phase": "ballon_dor",
+      "age": 24,
+      "action": "Continue →",
+      "afterPhase": "social_media_action",
+      "afterAge": 24,
+      "seasonCount": 9,
+      "team": "Basel",
+      "retired": false,
+      "visibleError": false
+    },
+    {
+      "step": 71,
+      "phase": "social_media_action",
+      "age": 24,
+      "action": "🏋️\nPost training video\nShow off your skills in the gym\n+0.1-0.2M followers",
+      "afterPhase": "social_media_action",
+      "afterAge": 24,
+      "seasonCount": 9,
+      "team": "Basel",
+      "retired": false,
+      "visibleError": false
+    },
+    {
+      "step": 72,
+      "phase": "social_media_action",
+      "age": 24,
+      "action": "Continue →",
+      "afterPhase": "random_events",
+      "afterAge": 24,
+      "seasonCount": 9,
+      "team": "Basel",
+      "retired": false,
+      "visibleError": false
+    },
+    {
+      "step": 73,
+      "phase": "random_events",
+      "age": 24,
+      "action": "😂\nOwn it: it was funny\nFollowers +700k, Morale -5, manager side-eye",
+      "afterPhase": "random_events",
+      "afterAge": 24,
+      "seasonCount": 9,
+      "team": "Basel",
+      "retired": false,
+      "visibleError": false
+    },
+    {
+      "step": 74,
+      "phase": "random_events",
+      "age": 24,
+      "action": "🤝\nAccept lower wage, stay loyal\nWage -15%, Morale +5",
+      "afterPhase": "transfer_window",
+      "afterAge": 24,
+      "seasonCount": 9,
+      "team": "Basel",
+      "retired": false,
+      "visibleError": false
+    },
+    {
+      "step": 75,
+      "phase": "transfer_window",
+      "age": 24,
+      "action": "Accept Offer ✍️",
+      "afterPhase": "playing",
+      "afterAge": 24,
+      "seasonCount": 9,
+      "team": "Zenit",
+      "retired": false,
+      "visibleError": false
+    },
+    {
+      "step": 76,
+      "phase": "playing",
+      "age": 24,
+      "action": "Next Season",
+      "afterPhase": "newspaper",
+      "afterAge": 25,
+      "seasonCount": 10,
+      "team": "Zenit",
+      "retired": false,
+      "visibleError": false
+    },
+    {
+      "step": 77,
+      "phase": "newspaper",
+      "age": 25,
+      "action": "Continue to Season Summary →",
+      "afterPhase": "season_summary",
+      "afterAge": 25,
+      "seasonCount": 10,
+      "team": "Zenit",
+      "retired": false,
+      "visibleError": false
+    },
+    {
+      "step": 78,
+      "phase": "season_summary",
+      "age": 25,
+      "action": "Continue →",
+      "afterPhase": "ballon_dor",
+      "afterAge": 25,
+      "seasonCount": 10,
+      "team": "Zenit",
+      "retired": false,
+      "visibleError": false
+    },
+    {
+      "step": 79,
+      "phase": "ballon_dor",
+      "age": 25,
+      "action": "Continue →",
+      "afterPhase": "world_cup",
+      "afterAge": 25,
+      "seasonCount": 10,
+      "team": "Zenit",
+      "retired": false,
+      "visibleError": false
+    },
+    {
+      "step": 80,
+      "phase": "world_cup",
+      "age": 25,
+      "action": "📊\nGroup Stage\n1st of 4",
+      "afterPhase": "world_cup",
+      "afterAge": 25,
+      "seasonCount": 10,
+      "team": "Zenit",
+      "retired": false,
+      "visibleError": false
+    },
+    {
+      "step": 81,
+      "phase": "world_cup",
+      "age": 25,
+      "action": "Group stage",
+      "afterPhase": "world_cup",
+      "afterAge": 25,
+      "seasonCount": 10,
+      "team": "Zenit",
+      "retired": false,
+      "visibleError": false
+    },
+    {
+      "step": 82,
+      "phase": "world_cup",
+      "age": 25,
+      "action": "Group stage",
+      "afterPhase": "world_cup",
+      "afterAge": 25,
+      "seasonCount": 10,
+      "team": "Zenit",
+      "retired": false,
+      "visibleError": false
+    },
+    {
+      "step": 83,
+      "phase": "world_cup",
+      "age": 25,
+      "action": "Group stage",
+      "afterPhase": "world_cup",
+      "afterAge": 25,
+      "seasonCount": 10,
+      "team": "Zenit",
+      "retired": false,
+      "visibleError": false
+    },
+    {
+      "step": 84,
+      "phase": "world_cup",
+      "age": 25,
+      "action": "Group stage",
+      "afterPhase": "world_cup",
+      "afterAge": 25,
+      "seasonCount": 10,
+      "team": "Zenit",
+      "retired": false,
+      "visibleError": false
+    },
+    {
+      "step": 85,
+      "phase": "world_cup",
+      "age": 25,
+      "action": "Group stage",
+      "afterPhase": "world_cup",
+      "afterAge": 25,
+      "seasonCount": 10,
+      "team": "Zenit",
+      "retired": false,
+      "visibleError": false
+    },
+    {
+      "step": 86,
+      "phase": "world_cup",
+      "age": 25,
+      "action": "Group stage",
+      "afterPhase": "world_cup",
+      "afterAge": 25,
+      "seasonCount": 10,
+      "team": "Zenit",
+      "retired": false,
+      "visibleError": false
+    },
+    {
+      "step": 87,
+      "phase": "world_cup",
+      "age": 25,
+      "action": "Group stage",
+      "afterPhase": "world_cup",
+      "afterAge": 25,
+      "seasonCount": 10,
+      "team": "Zenit",
+      "retired": false,
+      "visibleError": false
+    },
+    {
+      "step": 88,
+      "phase": "world_cup",
+      "age": 25,
+      "action": "Group stage",
+      "afterPhase": "world_cup",
+      "afterAge": 25,
+      "seasonCount": 10,
+      "team": "Zenit",
+      "retired": false,
+      "visibleError": false
+    }
+  ],
+  "refresh": [
+    {
+      "step": 10,
+      "held": true,
+      "phase": "random_events",
+      "age": 18
+    },
+    {
+      "step": 60,
+      "held": true,
+      "phase": "world_cup",
+      "age": 23
+    }
+  ],
+  "errors": [],
+  "blocked": [
+    {
+      "path": "/rest/v1/game_completions",
+      "method": "POST"
+    },
+    {
+      "path": "/rest/v1/game_completions",
+      "method": "POST"
+    },
+    {
+      "path": "/rest/v1/game_completions",
+      "method": "POST"
+    },
+    {
+      "path": "/rest/v1/game_completions",
+      "method": "POST"
+    },
+    {
+      "path": "/rest/v1/game_completions",
+      "method": "POST"
+    },
+    {
+      "path": "/rest/v1/game_completions",
+      "method": "POST"
+    },
+    {
+      "path": "/rest/v1/game_completions",
+      "method": "POST"
+    },
+    {
+      "path": "/rest/v1/game_completions",
+      "method": "POST"
+    },
+    {
+      "path": "/rest/v1/game_completions",
+      "method": "POST"
+    }
+  ],
+  "phases": [
+    "youth",
+    "contract_offer",
+    "playing",
+    "newspaper",
+    "season_summary",
+    "ballon_dor",
+    "social_media_action",
+    "random_events",
+    "transfer_window",
+    "rivalry_event",
+    "international_debut",
+    "world_cup"
+  ],
+  "findings": [],
+  "entry": "/assets/index-Bj5VrkKR.js",
+  "limit": {
+    "step": 88,
+    "reason": "Repeated action did not advance save",
+    "action": "Group stage",
+    "choices": [
+      {
+        "index": 71,
+        "label": "Group stage",
+        "enabled": true,
+        "visible": true,
+        "insideMain": true
+      },
+      {
+        "index": 72,
+        "label": "Qualifying",
+        "enabled": true,
+        "visible": true,
+        "insideMain": true
+      },
+      {
+        "index": 73,
+        "label": "← Back",
+        "enabled": true,
+        "visible": true,
+        "insideMain": true
+      },
+      {
+        "index": 75,
+        "label": "🗂️\nTournaments\n4 played out",
+        "enabled": true,
+        "visible": true,
+        "insideMain": true
+      },
+      {
+        "index": 76,
+        "label": "🏆\nWorld Cup 2034\nEngland won it",
+        "enabled": true,
+        "visible": true,
+        "insideMain": true
+      }
+    ],
+    "text": "Skip to main content DOUKNOWBALL Back Track stats Audit Tester ST · Age 25 · England 🚪 Retire 🔄 New Career 81 OVR POT 85 €19.9M Net Worth €38k/wk Wage €62M Value CAREER TIMELINE A 16y Brentford Youth Youth Academy A 17y Brentford Youth Youth Academy 27 18y Brentford 24A · 2G · 2As 28 19y Urawa Red Diamonds 31A · 5G · 5As 29 20y Saint George 28A · 5G · 5As 30 21y Nice 30A · 6G · 3As 31 22y Qarabag 35A · 5G · 3As 32 23y Legia Warsaw 35A · 7G · 5As 33 24y Basel 31A · 5G · 6As 34 25y Zenit 28A · 10G · 2As 🌍 GROUP K Group stage Qualifying Group K at the finals, one game against each side. Top two go through, plus the 8 best third placed sides. England finished 1st of 4. GROUP K Team P GD Pts 1 England 3 +10 9 2 Nigeria 3 +2 4 3 Czech Republic 3 -5 3 4 Iran 3 -7 1 ← Back ATTRIBUTES Pace Sprint Speed 80 80 Shooting Heading 89 88 Passing Vision 77 77 Dribbling Ball Control 93 93 Defending Marking 62 62 Physical Strength 89 88 Full attributes 183 cm · 78 kg · every number under the six CAREER STATS 263 Apps 51 Goals 31 Assists 3 Hat Tricks 1 Trophies TROPHY CABINET 🏆 0 Leagues 🏆 0 Cups ⭐ 0 UCL 🌍 1 World Cup 🌐 0 Continental 🏅 0 Ballon d'Or 🏆 AWARDS 🏆 Player of the Month ×5 🌟 World Cup Best Player 👟 World Cup Golden Boot INTERNATIONAL CAREER 22 Caps 20 Goals 5 Assists 🌍 1 World Cup, won 1 📋 Left out of 1 squad 🗂️ Tournaments 4 played out 🏆 World Cup 2034 England won it Retire from International Football 🚶 😤 RIVALRY Audit Tester vs Bukayo Silva Fiorentina · OVR 73 · Age 26 81 Overall 73 51 Career Goals 58 31 Career Assists 28 0 League Titles 0 0 UCL 0 0 Ballon d'Or 0 €62M Market Value €20M ✅ You're ahead! LATEST EVENTS › 🏆 WORLD CUP WINNER with England! › 🌟 Named Best Player of the World Cup! › 👟 Won the World Cup Golden Boot with 14 goals! 25 AGE 🏋️ 📱 3 Soccer Career: Free Football Career Simulator Live out your soccer dream in a season by season career simulator. Create a player, join a youth academy, develop skills, sign contracts, win trophies, and compete for the Ballon d'Or. Every soccer career simulator promises the same fantasy: start as a nobody, retire as a legend. This one makes the middle the good part. You begin at 16 in a youth academy and live season by season through contracts, transfers, injuries, feuds, trophies, and increasingly questionable purchases, until the game hands down a legacy verdict. It is the most played game on DoUKnowBall, and it sits closer to a life sim than to a match engine. You never dribble anyone. You make decisions, and the sim turns them into a story that is different every run. Your save lives in your browser, one career at a time, so choices carry weight into the years that follow them. You build your player's actual face before kickoff: skin tone, hairstyle and colour, facial hair, a boot line, an accessory, and a signature celebration that gets described every time you score. That look follows you onto the Ballon d'Or stage and into your retirement send off. There is a dirty side too. Bent officials, betting syndicates, kickbacks, offshore accounts and laundering fronts all sit there waiting, each one heating up a hidden investigation meter. Take enough envelopes and the dawn raid comes, then the trial, then a season inside and a comeback from nothing. How to play Soccer Career, a free football career simulation game Creating your player and building your look Create your player: name, one of 50 nationalities, one of 10 positions, and a starting era from the 1990s to the 2020s. Build your look in the appearance editor: 12 skin tones, 23 hairstyles, 16 hair colours, 14 beard styles, 16 accessories, 18 boot lines, and 19 signature celebrations, or hit Surprise me. Rolling potential and customizing your build Roll your starting potential, somewhere in the mid 50s to high 60s, and reroll as many times as you like. Rerolls are free and there is no limit on them. Open Customize your build to set your starting overall anywhere from 40 to 99, move points between the six attribute families, shape the specifics under each family, and set your height and weight. Starting in the academy and turning pro Begin in an academy matched to your nationality and talent. Pro contract offers arrive from age 17. Advancing seasons through the training ground Advance season by season through simulated stats, newspaper headlines, random events, and decisions. Open the training ground (the dumbbell button, bottom right) once a season. Your position picks a drill you actually play: keepers hold and drag a glove save dive, centre backs, full backs and defensive midfielders time a tackle on a moving ball, and everyone else times a wall shot through a gap that opens and closes. Today's ten rounds are the same for everyone at your position and count once; practice is unlimited and banks nothing. Working transfer windows and the shop aisles Work the transfer windows: stay, extend, request a move, or weigh rival offers and dream club pay cuts. Spend the money in 8 shop aisles: propert"
+  },
+  "lastSave": {
+    "playerName": "Audit Tester",
+    "nationality": "England",
+    "position": "ST",
+    "era": "2025",
+    "age": 25,
+    "potential": 85,
+    "potentialEarned": 0,
+    "eliteStreak": 0,
+    "startingOverall": 51,
+    "physique": {
+      "heightCm": 183,
+      "weightKg": 78
+    },
+    "attrShape": {},
+    "karma": 50,
+    "phoneUsedIds": [
+      "youth_poach",
+      "matchday_nerves"
+    ],
+    "phoneInbox": [
+      {
+        "id": "youth_poach-2025",
+        "defId": "youth_poach",
+        "from": "Stranger",
+        "emoji": "🕶️",
+        "text": "I represent players. Ditch the academy's advisor, sign with me quietly, I'll get your family paid NOW.",
+        "year": 2025,
+        "choices": [
+          {
+            "label": "Tell the academy",
+            "reply": "Reported you to the club. Don't message me again",
+            "karma": 8
+          },
+          {
+            "label": "Meet him in secret",
+            "reply": "Where and when?",
+            "karma": -8,
+            "cash": 0.05
+          }
+        ]
+      },
+      {
+        "id": "matchday_nerves-2025",
+        "defId": "matchday_nerves",
+        "from": "Sports psych",
+        "emoji": "🧠",
+        "text": "Noticed you've been quiet before big games. My door is open Thursday if you want to talk it through.",
+        "year": 2025,
+        "choices": [
+          {
+            "label": "Book the session",
+            "reply": "Thursday works. Cheers doc",
+            "karma": 5,
+            "morale": 5
+          },
+          {
+            "label": "Tough it out",
+            "reply": "I'm fine. Just focused",
+            "karma": -2
+          }
+        ]
+      }
+    ],
+    "currentClub": "Zenit",
+    "currentClubCountry": "Russia",
+    "currentClubTier": 2,
+    "currentClubColor": "#009FDF",
+    "currentLeague": "Russian Premier League",
+    "contractYearsLeft": 3,
+    "weeklyWage": 37944,
+    "marketValue": 62.4,
+    "pace": 80,
+    "shooting": 88,
+    "passing": 77,
+    "dribbling": 93,
+    "defending": 62,
+    "physical": 88,
+    "reflexes": 69,
+    "overall": 81,
+    "seasons": [
+      {
+        "year": 2025,
+        "age": 16,
+        "club": "Brentford Youth",
+        "clubCountry": "England",
+        "clubTier": 4,
+        "apps": 0,
+        "goals": 0,
+        "assists": 0,
+        "cleanSheets": 0,
+        "yellowCards": 0,
+        "redCards": 0,
+        "rating": 0,
+        "leagueTitle": false,
+        "domesticCup": false,
+        "championsLeague": false,
+        "worldCup": false,
+        "ballonDor": false,
+        "ballonDorRank": null,
+        "type": "youth",
+        "intApps": 0,
+        "intGoals": 0,
+        "intAssists": 0,
+        "intRating": 0,
+        "tournament": null,
+        "tournamentResult": null
+      },
+      {
+        "year": 2026,
+        "age": 17,
+        "club": "Brentford Youth",
+        "clubCountry": "England",
+        "clubTier": 4,
+        "apps": 21,
+        "goals": 6,
+        "assists": 0,
+        "cleanSheets": 0,
+        "yellowCards": 1,
+        "redCards": 0,
+        "rating": 0,
+        "leagueTitle": false,
+        "domesticCup": false,
+        "championsLeague": false,
+        "worldCup": false,
+        "ballonDor": false,
+        "ballonDorRank": null,
+        "type": "youth",
+        "intApps": 0,
+        "intGoals": 0,
+        "intAssists": 0,
+        "intRating": 0,
+        "tournament": null,
+        "tournamentResult": null
+      },
+      {
+        "year": 2027,
+        "age": 18,
+        "club": "Brentford",
+        "clubCountry": "England",
+        "clubTier": 4,
+        "apps": 24,
+        "leagueApps": 19,
+        "goals": 2,
+        "assists": 2,
+        "cleanSheets": 0,
+        "yellowCards": 0,
+        "redCards": 0,
+        "rating": 5.9,
+        "injury": null,
+        "injuryWeeks": 0,
+        "injurySevere": false,
+        "leagueTitle": false,
+        "domesticCup": false,
+        "championsLeague": false,
+        "worldCup": false,
+        "ballonDor": false,
+        "ballonDorRank": null,
+        "type": "playing",
+        "intApps": 0,
+        "intGoals": 0,
+        "intAssists": 0,
+        "intRating": 0,
+        "tournament": null,
+        "tournamentResult": null
+      },
+      {
+        "year": 2028,
+        "age": 19,
+        "club": "Urawa Red Diamonds",
+        "clubCountry": "Japan",
+        "clubTier": 4,
+        "apps": 31,
+        "leagueApps": 27,
+        "goals": 5,
+        "assists": 5,
+        "cleanSheets": 0,
+        "yellowCards": 6,
+        "redCards": 0,
+        "rating": 6.4,
+        "injury": null,
+        "injuryWeeks": 0,
+        "injurySevere": false,
+        "leagueTitle": false,
+        "domesticCup": false,
+        "championsLeague": false,
+        "worldCup": false,
+        "ballonDor": false,
+        "ballonDorRank": null,
+        "type": "playing",
+        "intApps": 0,
+        "intGoals": 0,
+        "intAssists": 0,
+        "intRating": 0,
+        "tournament": "European Championship",
+        "tournamentResult": null
+      },
+      {
+        "year": 2029,
+        "age": 20,
+        "club": "Saint George",
+        "clubCountry": "Ethiopia",
+        "clubTier": 4,
+        "apps": 28,
+        "leagueApps": 27,
+        "goals": 5,
+        "assists": 5,
+        "cleanSheets": 0,
+        "yellowCards": 0,
+        "redCards": 0,
+        "rating": 6.6,
+        "injury": "MCL sprain",
+        "injuryWeeks": 6,
+        "injurySevere": false,
+        "leagueTitle": false,
+        "domesticCup": false,
+        "championsLeague": false,
+        "worldCup": false,
+        "ballonDor": false,
+        "ballonDorRank": null,
+        "type": "playing",
+        "intApps": 0,
+        "intGoals": 0,
+        "intAssists": 0,
+        "intRating": 0,
+        "tournament": null,
+        "tournamentResult": null
+      },
+      {
+        "year": 2030,
+        "age": 21,
+        "club": "Nice",
+        "clubCountry": "France",
+        "clubTier": 3,
+        "apps": 30,
+        "leagueApps": 26,
+        "goals": 6,
+        "assists": 3,
+        "cleanSheets": 0,
+        "yellowCards": 3,
+        "redCards": 0,
+        "rating": 6.9,
+        "injury": null,
+        "injuryWeeks": 0,
+        "injurySevere": false,
+        "leagueTitle": false,
+        "domesticCup": false,
+        "championsLeague": false,
+        "worldCup": false,
+        "ballonDor": false,
+        "ballonDorRank": null,
+        "type": "playing",
+        "intApps": 0,
+        "intGoals": 0,
+        "intAssists": 0,
+        "intRating": 0,
+        "tournament": "World Cup",
+        "tournamentResult": null
+      },
+      {
+        "year": 2031,
+        "age": 22,
+        "club": "Qarabag",
+        "clubCountry": "Azerbaijan",
+        "clubTier": 4,
+        "apps": 35,
+        "leagueApps": 28,
+        "goals": 5,
+        "assists": 3,
+        "cleanSheets": 0,
+        "yellowCards": 7,
+        "redCards": 0,
+        "rating": 6.7,
+        "injury": null,
+        "injuryWeeks": 0,
+        "injurySevere": false,
+        "leagueTitle": false,
+        "domesticCup": false,
+        "championsLeague": false,
+        "worldCup": false,
+        "ballonDor": false,
+        "ballonDorRank": null,
+        "type": "playing",
+        "intApps": 0,
+        "intGoals": 0,
+        "intAssists": 0,
+        "intRating": 0,
+        "tournament": null,
+        "tournamentResult": null
+      },
+      {
+        "year": 2032,
+        "age": 23,
+        "club": "Legia Warsaw",
+        "clubCountry": "Poland",
+        "clubTier": 3,
+        "apps": 35,
+        "leagueApps": 30,
+        "goals": 7,
+        "assists": 5,
+        "cleanSheets": 0,
+        "yellowCards": 7,
+        "redCards": 0,
+        "rating": 7.5,
+        "injury": null,
+        "injuryWeeks": 0,
+        "injurySevere": false,
+        "leagueTitle": false,
+        "domesticCup": false,
+        "championsLeague": false,
+        "worldCup": false,
+        "ballonDor": false,
+        "ballonDorRank": null,
+        "type": "playing",
+        "intApps": 0,
+        "intGoals": 0,
+        "intAssists": 0,
+        "intRating": 0,
+        "tournament": "European Championship",
+        "tournamentResult": "Not Selected"
+      },
+      {
+        "year": 2033,
+        "age": 24,
+        "club": "Basel",
+        "clubCountry": "Switzerland",
+        "clubTier": 3,
+        "apps": 31,
+        "leagueApps": 26,
+        "goals": 5,
+        "assists": 6,
+        "cleanSheets": 0,
+        "yellowCards": 7,
+        "redCards": 0,
+        "rating": 7.4,
+        "injury": "Twisted ankle",
+        "injuryWeeks": 2,
+        "injurySevere": false,
+        "leagueTitle": false,
+        "domesticCup": false,
+        "championsLeague": false,
+        "worldCup": false,
+        "ballonDor": false,
+        "ballonDorRank": null,
+        "type": "playing",
+        "intApps": 9,
+        "intGoals": 3,
+        "intAssists": 1,
+        "intRating": 7.3,
+        "tournament": null,
+        "tournamentResult": null
+      },
+      {
+        "year": 2034,
+        "age": 25,
+        "club": "Zenit",
+        "clubCountry": "Russia",
+        "clubTier": 2,
+        "apps": 28,
+        "leagueApps": 29,
+        "goals": 10,
+        "assists": 2,
+        "cleanSheets": 0,
+        "yellowCards": 2,
+        "redCards": 0,
+        "rating": 6.8,
+        "injury": "Dislocated shoulder",
+        "injuryWeeks": 8,
+        "injurySevere": false,
+        "leagueTitle": false,
+        "domesticCup": false,
+        "championsLeague": false,
+        "worldCup": true,
+        "ballonDor": false,
+        "ballonDorRank": 11,
+        "type": "playing",
+        "intApps": 13,
+        "intGoals": 17,
+        "intAssists": 4,
+        "intRating": 7.1,
+        "tournament": "World Cup",
+        "tournamentResult": "Winner"
+      }
+    ],
+    "events": [
+      "🚑 Injury: Dislocated shoulder, out 8 weeks, missed matches",
+      "🏆 Won Player of the Month (November 2034)!",
+      "🏆 Won Player of the Month (January 2034)!",
+      "🏆 WORLD CUP WINNER with England!",
+      "🌟 Named Best Player of the World Cup!",
+      "👟 Won the World Cup Golden Boot with 14 goals!"
+    ],
+    "retired": false,
+    "phase": "world_cup",
+    "pendingOffers": [],
+    "pendingSummary": null,
+    "transferSituation": null,
+    "loan": null,
+    "pendingLoanOffers": null,
+    "pendingEvents": [],
+    "lastEventId": 16,
+    "statBoostNextSeason": {},
+    "pendingNews": [],
+    "internationalCareer": true,
+    "sponsorDeal": null,
+    "totalEarnings": 22.66,
+    "popularity": 49,
+    "morale": 80,
+    "isLeader": true,
+    "hasRelationship": false,
+    "intStats": {
+      "caps": 22,
+      "goals": 20,
+      "assists": 5,
+      "tournaments": 1,
+      "worldCups": 1,
+      "continentals": 0,
+      "worldCupWins": 1,
+      "continentalWins": 0,
+      "isCaptain": false,
+      "isRetired": false,
+      "debutYear": -1,
+      "debutAge": 23,
+      "worldCupResults": [],
+      "squadSnubs": 1,
+      "failedQualifications": 0
+    },
+    "pendingWorldCup": null,
+    "pendingTournament": {
+      "year": 2034,
+      "name": "World Cup",
+      "short": "World Cup",
+      "kind": "World Cup",
+      "confederation": null,
+      "nation": "England",
+      "teams": 48,
+      "qualifying": {
+        "confederation": "UEFA",
+        "table": [
+          {
+            "nation": "England",
+            "played": 10,
+            "won": 9,
+            "drawn": 1,
+            "lost": 0,
+            "gf": 33,
+            "ga": 7,
+            "points": 28
+          },
+          {
+            "nation": "Serbia",
+            "played": 10,
+            "won": 5,
+            "drawn": 1,
+            "lost": 4,
+            "gf": 17,
+            "ga": 12,
+            "points": 16
+          },
+          {
+            "nation": "Luxembourg",
+            "played": 10,
+            "won": 4,
+            "drawn": 2,
+            "lost": 4,
+            "gf": 13,
+            "ga": 22,
+            "points": 14
+          },
+          {
+            "nation": "Austria",
+            "played": 10,
+            "won": 3,
+            "drawn": 3,
+            "lost": 4,
+            "gf": 17,
+            "ga": 15,
+            "points": 12
+          },
+          {
+            "nation": "Latvia",
+            "played": 10,
+            "won": 3,
+            "drawn": 2,
+            "lost": 5,
+            "gf": 12,
+            "ga": 20,
+            "points": 11
+          },
+          {
+            "nation": "Kosovo",
+            "played": 10,
+            "won": 1,
+            "drawn": 1,
+            "lost": 8,
+            "gf": 8,
+            "ga": 24,
+            "points": 4
+          }
+        ],
+        "myPosition": 1,
+        "through": 2,
+        "qualified": true,
+        "automatic": false
+      },
+      "qualified": true,
+      "squad": {
+        "called": true,
+        "role": "Squad player",
+        "reason": "You made it as number 5 of 6 in your position.",
+        "myRank": 5,
+        "poolSize": 14,
+        "places": 6,
+        "myScore": 82,
+        "cutScore": 78,
+        "xi": {
+          "formation": "4-3-3",
+          "gk": [
+            {
+              "slot": "GK",
+              "name": "Warren Whitlock",
+              "ovr": 86,
+              "me": false
+            }
+          ],
+          "def": [
+            {
+              "slot": "LB",
+              "name": "Ross Dunmore",
+              "ovr": 81,
+              "me": false
+            },
+            {
+              "slot": "CB",
+              "name": "Eddie Kingsley",
+              "ovr": 86,
+              "me": false
+            },
+            {
+              "slot": "CB",
+              "name": "Shane Baxter",
+              "ovr": 85,
+              "me": false
+            },
+            {
+              "slot": "RB",
+              "name": "Craig Prescott",
+              "ovr": 83,
+              "me": false
+            }
+          ],
+          "mid": [
+            {
+              "slot": "CM",
+              "name": "Wesley Stanhope",
+              "ovr": 85,
+              "me": false
+            },
+            {
+              "slot": "CDM",
+              "name": "Stuart Ashcroft",
+              "ovr": 82,
+              "me": false
+            },
+            {
+              "slot": "CM",
+              "name": "Grant Hollis",
+              "ovr": 84,
+              "me": false
+            }
+          ],
+          "att": [
+            {
+              "slot": "LW",
+              "name": "Adam Radlett",
+              "ovr": 83,
+              "me": false
+            },
+            {
+              "slot": "ST",
+              "name": "Dean Marlowe",
+              "ovr": 87,
+              "me": false
+            },
+            {
+              "slot": "RW",
+              "name": "Scott Chadwick",
+              "ovr": 83,
+              "me": false
+            }
+          ],
+          "mySlot": null,
+          "aheadOfMe": "Adam Radlett"
+        }
+      },
+      "groupTable": [
+        {
+          "nation": "England",
+          "played": 3,
+          "won": 3,
+          "drawn": 0,
+          "lost": 0,
+          "gf": 10,
+          "ga": 0,
+          "points": 9
+        },
+        {
+          "nation": "Nigeria",
+          "played": 3,
+          "won": 1,
+          "drawn": 1,
+          "lost": 1,
+          "gf": 6,
+          "ga": 4,
+          "points": 4
+        },
+        {
+          "nation": "Czech Republic",
+          "played": 3,
+          "won": 1,
+          "drawn": 0,
+          "lost": 2,
+          "gf": 3,
+          "ga": 8,
+          "points": 3
+        },
+        {
+          "nation": "Iran",
+          "played": 3,
+          "won": 0,
+          "drawn": 1,
+          "lost": 2,
+          "gf": 2,
+          "ga": 9,
+          "points": 1
+        }
+      ],
+      "bracket": [
+        {
+          "round": "R32",
+          "slot": 0,
+          "home": "Australia",
+          "away": "Belgium",
+          "homeGoals": 1,
+          "awayGoals": 0,
+          "pens": false,
+          "winner": "Australia",
+          "mine": false
+        },
+        {
+          "round": "R32",
+          "slot": 1,
+          "home": "Brazil",
+          "away": "Japan",
+          "homeGoals": 4,
+          "awayGoals": 0,
+          "pens": false,
+          "winner": "Brazil",
+          "mine": false
+        },
+        {
+          "round": "R32",
+          "slot": 2,
+          "home": "Switzerland",
+          "away": "Netherlands",
+          "homeGoals": 2,
+          "awayGoals": 1,
+          "pens": false,
+          "winner": "Switzerland",
+          "mine": false
+        },
+        {
+          "round": "R32",
+          "slot": 3,
+          "home": "Jamaica",
+          "away": "Cameroon",
+          "homeGoals": 1,
+          "awayGoals": 0,
+          "pens": false,
+          "winner": "Jamaica",
+          "mine": false
+        },
+        {
+          "round": "R32",
+          "slot": 4,
+          "home": "North Korea",
+          "away": "Canada",
+          "homeGoals": 2,
+          "awayGoals": 3,
+          "pens": false,
+          "winner": "Canada",
+          "mine": false
+        },
+        {
+          "round": "R32",
+          "slot": 5,
+          "home": "Germany",
+          "away": "Ecuador",
+          "homeGoals": 1,
+          "awayGoals": 2,
+          "pens": false,
+          "winner": "Ecuador",
+          "mine": false
+        },
+        {
+          "round": "R32",
+          "slot": 6,
+          "home": "England",
+          "away": "Austria",
+          "homeGoals": 1,
+          "awayGoals": 0,
+          "pens": false,
+          "winner": "England",
+          "mine": true
+        },
+        {
+          "round": "R32",
+          "slot": 7,
+          "home": "Venezuela",
+          "away": "Ivory Coast",
+          "homeGoals": 0,
+          "awayGoals": 2,
+          "pens": false,
+          "winner": "Ivory Coast",
+          "mine": false
+        },
+        {
+          "round": "R32",
+          "slot": 8,
+          "home": "Turkey",
+          "away": "United Arab Emirates",
+          "homeGoals": 1,
+          "awayGoals": 2,
+          "pens": false,
+          "winner": "United Arab Emirates",
+          "mine": false
+        },
+        {
+          "round": "R32",
+          "slot": 9,
+          "home": "Uruguay",
+          "away": "Portugal",
+          "homeGoals": 1,
+          "awayGoals": 2,
+          "pens": false,
+          "winner": "Portugal",
+          "mine": false
+        },
+        {
+          "round": "R32",
+          "slot": 10,
+          "home": "Morocco",
+          "away": "Italy",
+          "homeGoals": 0,
+          "awayGoals": 1,
+          "pens": false,
+          "winner": "Italy",
+          "mine": false
+        },
+        {
+          "round": "R32",
+          "slot": 11,
+          "home": "France",
+          "away": "South Korea",
+          "homeGoals": 1,
+          "awayGoals": 2,
+          "pens": false,
+          "winner": "South Korea",
+          "mine": false
+        },
+        {
+          "round": "R32",
+          "slot": 12,
+          "home": "Algeria",
+          "away": "Argentina",
+          "homeGoals": 2,
+          "awayGoals": 4,
+          "pens": false,
+          "winner": "Argentina",
+          "mine": false
+        },
+        {
+          "round": "R32",
+          "slot": 13,
+          "home": "Senegal",
+          "away": "Norway",
+          "homeGoals": 1,
+          "awayGoals": 1,
+          "pens": true,
+          "winner": "Senegal",
+          "mine": false
+        },
+        {
+          "round": "R32",
+          "slot": 14,
+          "home": "Denmark",
+          "away": "Mexico",
+          "homeGoals": 0,
+          "awayGoals": 0,
+          "pens": true,
+          "winner": "Denmark",
+          "mine": false
+        },
+        {
+          "round": "R32",
+          "slot": 15,
+          "home": "Spain",
+          "away": "Nigeria",
+          "homeGoals": 2,
+          "awayGoals": 1,
+          "pens": false,
+          "winner": "Spain",
+          "mine": false
+        },
+        {
+          "round": "R16",
+          "slot": 0,
+          "home": "Australia",
+          "away": "Brazil",
+          "homeGoals": 1,
+          "awayGoals": 2,
+          "pens": false,
+          "winner": "Brazil",
+          "mine": false
+        },
+        {
+          "round": "R16",
+          "slot": 1,
+          "home": "Switzerland",
+          "away": "Jamaica",
+          "homeGoals": 2,
+          "awayGoals": 1,
+          "pens": false,
+          "winner": "Switzerland",
+          "mine": false
+        },
+        {
+          "round": "R16",
+          "slot": 2,
+          "home": "Canada",
+          "away": "Ecuador",
+          "homeGoals": 1,
+          "awayGoals": 2,
+          "pens": false,
+          "winner": "Ecuador",
+          "mine": false
+        },
+        {
+          "round": "R16",
+          "slot": 3,
+          "home": "England",
+          "away": "Ivory Coast",
+          "homeGoals": 1,
+          "awayGoals": 1,
+          "pens": true,
+          "winner": "England",
+          "mine": true
+        },
+        {
+          "round": "R16",
+          "slot": 4,
+          "home": "United Arab Emirates",
+          "away": "Portugal",
+          "homeGoals": 0,
+          "awayGoals": 2,
+          "pens": false,
+          "winner": "Portugal",
+          "mine": false
+        },
+        {
+          "round": "R16",
+          "slot": 5,
+          "home": "Italy",
+          "away": "South Korea",
+          "homeGoals": 0,
+          "awayGoals": 2,
+          "pens": false,
+          "winner": "South Korea",
+          "mine": false
+        },
+        {
+          "round": "R16",
+          "slot": 6,
+          "home": "Argentina",
+          "away": "Senegal",
+          "homeGoals": 2,
+          "awayGoals": 3,
+          "pens": false,
+          "winner": "Senegal",
+          "mine": false
+        },
+        {
+          "round": "R16",
+          "slot": 7,
+          "home": "Denmark",
+          "away": "Spain",
+          "homeGoals": 0,
+          "awayGoals": 2,
+          "pens": false,
+          "winner": "Spain",
+          "mine": false
+        },
+        {
+          "round": "QF",
+          "slot": 0,
+          "home": "Brazil",
+          "away": "Switzerland",
+          "homeGoals": 0,
+          "awayGoals": 2,
+          "pens": false,
+          "winner": "Switzerland",
+          "mine": false
+        },
+        {
+          "round": "QF",
+          "slot": 1,
+          "home": "Ecuador",
+          "away": "England",
+          "homeGoals": 1,
+          "awayGoals": 3,
+          "pens": false,
+          "winner": "England",
+          "mine": true
+        },
+        {
+          "round": "QF",
+          "slot": 2,
+          "home": "Portugal",
+          "away": "South Korea",
+          "homeGoals": 3,
+          "awayGoals": 0,
+          "pens": false,
+          "winner": "Portugal",
+          "mine": false
+        },
+        {
+          "round": "QF",
+          "slot": 3,
+          "home": "Senegal",
+          "away": "Spain",
+          "homeGoals": 1,
+          "awayGoals": 3,
+          "pens": false,
+          "winner": "Spain",
+          "mine": false
+        },
+        {
+          "round": "SF",
+          "slot": 0,
+          "home": "Switzerland",
+          "away": "England",
+          "homeGoals": 0,
+          "awayGoals": 5,
+          "pens": false,
+          "winner": "England",
+          "mine": true
+        },
+        {
+          "round": "SF",
+          "slot": 1,
+          "home": "Portugal",
+          "away": "Spain",
+          "homeGoals": 1,
+          "awayGoals": 1,
+          "pens": true,
+          "winner": "Spain",
+          "mine": false
+        },
+        {
+          "round": "F",
+          "slot": 0,
+          "home": "England",
+          "away": "Spain",
+          "homeGoals": 2,
+          "awayGoals": 1,
+          "pens": false,
+          "winner": "England",
+          "mine": true
+        }
+      ],
+      "champion": "England",
+      "runnerUp": "Spain",
+      "groupLabel": "Group K",
+      "thirdsThrough": 8,
+      "myResult": "Winner",
+      "matches": [
+        {
+          "round": "Group K",
+          "home": "England",
+          "away": "Iran",
+          "homeGoals": 6,
+          "awayGoals": 0,
+          "pens": false,
+          "playerGoals": 3,
+          "playerAssists": 0,
+          "playerRating": 8.4
+        },
+        {
+          "round": "Group K",
+          "home": "England",
+          "away": "Nigeria",
+          "homeGoals": 2,
+          "awayGoals": 0,
+          "pens": false,
+          "playerGoals": 2,
+          "playerAssists": 0,
+          "playerRating": 8
+        },
+        {
+          "round": "Group K",
+          "home": "England",
+          "away": "Czech Republic",
+          "homeGoals": 2,
+          "awayGoals": 0,
+          "pens": false,
+          "playerGoals": 2,
+          "playerAssists": 0,
+          "playerRating": 7.6
+        },
+        {
+          "round": "R32",
+          "home": "England",
+          "away": "Austria",
+          "homeGoals": 1,
+          "awayGoals": 0,
+          "pens": false,
+          "playerGoals": 1,
+          "playerAssists": 0,
+          "playerRating": 7.3
+        },
+        {
+          "round": "R16",
+          "home": "England",
+          "away": "Ivory Coast",
+          "homeGoals": 1,
+          "awayGoals": 1,
+          "pens": true,
+          "playerGoals": 1,
+          "playerAssists": 0,
+          "playerRating": 7.7
+        },
+        {
+          "round": "QF",
+          "home": "Ecuador",
+          "away": "England",
+          "homeGoals": 1,
+          "awayGoals": 3,
+          "pens": false,
+          "playerGoals": 1,
+          "playerAssists": 1,
+          "playerRating": 7.8
+        },
+        {
+          "round": "SF",
+          "home": "Switzerland",
+          "away": "England",
+          "homeGoals": 0,
+          "awayGoals": 5,
+          "pens": false,
+          "playerGoals": 2,
+          "playerAssists": 2,
+          "playerRating": 8.1
+        },
+        {
+          "round": "F",
+          "home": "England",
+          "away": "Spain",
+          "homeGoals": 2,
+          "awayGoals": 1,
+          "pens": false,
+          "playerGoals": 2,
+          "playerAssists": 0,
+          "playerRating": 8.3
+        }
+      ],
+      "playerApps": 8,
+      "playerGoals": 14,
+      "playerAssists": 3,
+      "playerAvgRating": 7.9,
+      "goldenBoot": true,
+      "bestPlayer": true
+    },
+    "lastTournament": {
+      "year": 2034,
+      "name": "World Cup",
+      "short": "World Cup",
+      "kind": "World Cup",
+      "confederation": null,
+      "nation": "England",
+      "teams": 48,
+      "qualifying": {
+        "confederation": "UEFA",
+        "table": [
+          {
+            "nation": "England",
+            "played": 10,
+            "won": 9,
+            "drawn": 1,
+            "lost": 0,
+            "gf": 33,
+            "ga": 7,
+            "points": 28
+          },
+          {
+            "nation": "Serbia",
+            "played": 10,
+            "won": 5,
+            "drawn": 1,
+            "lost": 4,
+            "gf": 17,
+            "ga": 12,
+            "points": 16
+          },
+          {
+            "nation": "Luxembourg",
+            "played": 10,
+            "won": 4,
+            "drawn": 2,
+            "lost": 4,
+            "gf": 13,
+            "ga": 22,
+            "points": 14
+          },
+          {
+            "nation": "Austria",
+            "played": 10,
+            "won": 3,
+            "drawn": 3,
+            "lost": 4,
+            "gf": 17,
+            "ga": 15,
+            "points": 12
+          },
+          {
+            "nation": "Latvia",
+            "played": 10,
+            "won": 3,
+            "drawn": 2,
+            "lost": 5,
+            "gf": 12,
+            "ga": 20,
+            "points": 11
+          },
+          {
+            "nation": "Kosovo",
+            "played": 10,
+            "won": 1,
+            "drawn": 1,
+            "lost": 8,
+            "gf": 8,
+            "ga": 24,
+            "points": 4
+          }
+        ],
+        "myPosition": 1,
+        "through": 2,
+        "qualified": true,
+        "automatic": false
+      },
+      "qualified": true,
+      "squad": {
+        "called": true,
+        "role": "Squad player",
+        "reason": "You made it as number 5 of 6 in your position.",
+        "myRank": 5,
+        "poolSize": 14,
+        "places": 6,
+        "myScore": 82,
+        "cutScore": 78,
+        "xi": {
+          "formation": "4-3-3",
+          "gk": [
+            {
+              "slot": "GK",
+              "name": "Warren Whitlock",
+              "ovr": 86,
+              "me": false
+            }
+          ],
+          "def": [
+            {
+              "slot": "LB",
+              "name": "Ross Dunmore",
+              "ovr": 81,
+              "me": false
+            },
+            {
+              "slot": "CB",
+              "name": "Eddie Kingsley",
+              "ovr": 86,
+              "me": false
+            },
+            {
+              "slot": "CB",
+              "name": "Shane Baxter",
+              "ovr": 85,
+              "me": false
+            },
+            {
+              "slot": "RB",
+              "name": "Craig Prescott",
+              "ovr": 83,
+              "me": false
+            }
+          ],
+          "mid": [
+            {
+              "slot": "CM",
+              "name": "Wesley Stanhope",
+              "ovr": 85,
+              "me": false
+            },
+            {
+              "slot": "CDM",
+              "name": "Stuart Ashcroft",
+              "ovr": 82,
+              "me": false
+            },
+            {
+              "slot": "CM",
+              "name": "Grant Hollis",
+              "ovr": 84,
+              "me": false
+            }
+          ],
+          "att": [
+            {
+              "slot": "LW",
+              "name": "Adam Radlett",
+              "ovr": 83,
+              "me": false
+            },
+            {
+              "slot": "ST",
+              "name": "Dean Marlowe",
+              "ovr": 87,
+              "me": false
+            },
+            {
+              "slot": "RW",
+              "name": "Scott Chadwick",
+              "ovr": 83,
+              "me": false
+            }
+          ],
+          "mySlot": null,
+          "aheadOfMe": "Adam Radlett"
+        }
+      },
+      "groupTable": [
+        {
+          "nation": "England",
+          "played": 3,
+          "won": 3,
+          "drawn": 0,
+          "lost": 0,
+          "gf": 10,
+          "ga": 0,
+          "points": 9
+        },
+        {
+          "nation": "Nigeria",
+          "played": 3,
+          "won": 1,
+          "drawn": 1,
+          "lost": 1,
+          "gf": 6,
+          "ga": 4,
+          "points": 4
+        },
+        {
+          "nation": "Czech Republic",
+          "played": 3,
+          "won": 1,
+          "drawn": 0,
+          "lost": 2,
+          "gf": 3,
+          "ga": 8,
+          "points": 3
+        },
+        {
+          "nation": "Iran",
+          "played": 3,
+          "won": 0,
+          "drawn": 1,
+          "lost": 2,
+          "gf": 2,
+          "ga": 9,
+          "points": 1
+        }
+      ],
+      "bracket": [
+        {
+          "round": "R32",
+          "slot": 0,
+          "home": "Australia",
+          "away": "Belgium",
+          "homeGoals": 1,
+          "awayGoals": 0,
+          "pens": false,
+          "winner": "Australia",
+          "mine": false
+        },
+        {
+          "round": "R32",
+          "slot": 1,
+          "home": "Brazil",
+          "away": "Japan",
+          "homeGoals": 4,
+          "awayGoals": 0,
+          "pens": false,
+          "winner": "Brazil",
+          "mine": false
+        },
+        {
+          "round": "R32",
+          "slot": 2,
+          "home": "Switzerland",
+          "away": "Netherlands",
+          "homeGoals": 2,
+          "awayGoals": 1,
+          "pens": false,
+          "winner": "Switzerland",
+          "mine": false
+        },
+        {
+          "round": "R32",
+          "slot": 3,
+          "home": "Jamaica",
+          "away": "Cameroon",
+          "homeGoals": 1,
+          "awayGoals": 0,
+          "pens": false,
+          "winner": "Jamaica",
+          "mine": false
+        },
+        {
+          "round": "R32",
+          "slot": 4,
+          "home": "North Korea",
+          "away": "Canada",
+          "homeGoals": 2,
+          "awayGoals": 3,
+          "pens": false,
+          "winner": "Canada",
+          "mine": false
+        },
+        {
+          "round": "R32",
+          "slot": 5,
+          "home": "Germany",
+          "away": "Ecuador",
+          "homeGoals": 1,
+          "awayGoals": 2,
+          "pens": false,
+          "winner": "Ecuador",
+          "mine": false
+        },
+        {
+          "round": "R32",
+          "slot": 6,
+          "home": "England",
+          "away": "Austria",
+          "homeGoals": 1,
+          "awayGoals": 0,
+          "pens": false,
+          "winner": "England",
+          "mine": true
+        },
+        {
+          "round": "R32",
+          "slot": 7,
+          "home": "Venezuela",
+          "away": "Ivory Coast",
+          "homeGoals": 0,
+          "awayGoals": 2,
+          "pens": false,
+          "winner": "Ivory Coast",
+          "mine": false
+        },
+        {
+          "round": "R32",
+          "slot": 8,
+          "home": "Turkey",
+          "away": "United Arab Emirates",
+          "homeGoals": 1,
+          "awayGoals": 2,
+          "pens": false,
+          "winner": "United Arab Emirates",
+          "mine": false
+        },
+        {
+          "round": "R32",
+          "slot": 9,
+          "home": "Uruguay",
+          "away": "Portugal",
+          "homeGoals": 1,
+          "awayGoals": 2,
+          "pens": false,
+          "winner": "Portugal",
+          "mine": false
+        },
+        {
+          "round": "R32",
+          "slot": 10,
+          "home": "Morocco",
+          "away": "Italy",
+          "homeGoals": 0,
+          "awayGoals": 1,
+          "pens": false,
+          "winner": "Italy",
+          "mine": false
+        },
+        {
+          "round": "R32",
+          "slot": 11,
+          "home": "France",
+          "away": "South Korea",
+          "homeGoals": 1,
+          "awayGoals": 2,
+          "pens": false,
+          "winner": "South Korea",
+          "mine": false
+        },
+        {
+          "round": "R32",
+          "slot": 12,
+          "home": "Algeria",
+          "away": "Argentina",
+          "homeGoals": 2,
+          "awayGoals": 4,
+          "pens": false,
+          "winner": "Argentina",
+          "mine": false
+        },
+        {
+          "round": "R32",
+          "slot": 13,
+          "home": "Senegal",
+          "away": "Norway",
+          "homeGoals": 1,
+          "awayGoals": 1,
+          "pens": true,
+          "winner": "Senegal",
+          "mine": false
+        },
+        {
+          "round": "R32",
+          "slot": 14,
+          "home": "Denmark",
+          "away": "Mexico",
+          "homeGoals": 0,
+          "awayGoals": 0,
+          "pens": true,
+          "winner": "Denmark",
+          "mine": false
+        },
+        {
+          "round": "R32",
+          "slot": 15,
+          "home": "Spain",
+          "away": "Nigeria",
+          "homeGoals": 2,
+          "awayGoals": 1,
+          "pens": false,
+          "winner": "Spain",
+          "mine": false
+        },
+        {
+          "round": "R16",
+          "slot": 0,
+          "home": "Australia",
+          "away": "Brazil",
+          "homeGoals": 1,
+          "awayGoals": 2,
+          "pens": false,
+          "winner": "Brazil",
+          "mine": false
+        },
+        {
+          "round": "R16",
+          "slot": 1,
+          "home": "Switzerland",
+          "away": "Jamaica",
+          "homeGoals": 2,
+          "awayGoals": 1,
+          "pens": false,
+          "winner": "Switzerland",
+          "mine": false
+        },
+        {
+          "round": "R16",
+          "slot": 2,
+          "home": "Canada",
+          "away": "Ecuador",
+          "homeGoals": 1,
+          "awayGoals": 2,
+          "pens": false,
+          "winner": "Ecuador",
+          "mine": false
+        },
+        {
+          "round": "R16",
+          "slot": 3,
+          "home": "England",
+          "away": "Ivory Coast",
+          "homeGoals": 1,
+          "awayGoals": 1,
+          "pens": true,
+          "winner": "England",
+          "mine": true
+        },
+        {
+          "round": "R16",
+          "slot": 4,
+          "home": "United Arab Emirates",
+          "away": "Portugal",
+          "homeGoals": 0,
+          "awayGoals": 2,
+          "pens": false,
+          "winner": "Portugal",
+          "mine": false
+        },
+        {
+          "round": "R16",
+          "slot": 5,
+          "home": "Italy",
+          "away": "South Korea",
+          "homeGoals": 0,
+          "awayGoals": 2,
+          "pens": false,
+          "winner": "South Korea",
+          "mine": false
+        },
+        {
+          "round": "R16",
+          "slot": 6,
+          "home": "Argentina",
+          "away": "Senegal",
+          "homeGoals": 2,
+          "awayGoals": 3,
+          "pens": false,
+          "winner": "Senegal",
+          "mine": false
+        },
+        {
+          "round": "R16",
+          "slot": 7,
+          "home": "Denmark",
+          "away": "Spain",
+          "homeGoals": 0,
+          "awayGoals": 2,
+          "pens": false,
+          "winner": "Spain",
+          "mine": false
+        },
+        {
+          "round": "QF",
+          "slot": 0,
+          "home": "Brazil",
+          "away": "Switzerland",
+          "homeGoals": 0,
+          "awayGoals": 2,
+          "pens": false,
+          "winner": "Switzerland",
+          "mine": false
+        },
+        {
+          "round": "QF",
+          "slot": 1,
+          "home": "Ecuador",
+          "away": "England",
+          "homeGoals": 1,
+          "awayGoals": 3,
+          "pens": false,
+          "winner": "England",
+          "mine": true
+        },
+        {
+          "round": "QF",
+          "slot": 2,
+          "home": "Portugal",
+          "away": "South Korea",
+          "homeGoals": 3,
+          "awayGoals": 0,
+          "pens": false,
+          "winner": "Portugal",
+          "mine": false
+        },
+        {
+          "round": "QF",
+          "slot": 3,
+          "home": "Senegal",
+          "away": "Spain",
+          "homeGoals": 1,
+          "awayGoals": 3,
+          "pens": false,
+          "winner": "Spain",
+          "mine": false
+        },
+        {
+          "round": "SF",
+          "slot": 0,
+          "home": "Switzerland",
+          "away": "England",
+          "homeGoals": 0,
+          "awayGoals": 5,
+          "pens": false,
+          "winner": "England",
+          "mine": true
+        },
+        {
+          "round": "SF",
+          "slot": 1,
+          "home": "Portugal",
+          "away": "Spain",
+          "homeGoals": 1,
+          "awayGoals": 1,
+          "pens": true,
+          "winner": "Spain",
+          "mine": false
+        },
+        {
+          "round": "F",
+          "slot": 0,
+          "home": "England",
+          "away": "Spain",
+          "homeGoals": 2,
+          "awayGoals": 1,
+          "pens": false,
+          "winner": "England",
+          "mine": true
+        }
+      ],
+      "champion": "England",
+      "runnerUp": "Spain",
+      "groupLabel": "Group K",
+      "thirdsThrough": 8,
+      "myResult": "Winner",
+      "matches": [
+        {
+          "round": "Group K",
+          "home": "England",
+          "away": "Iran",
+          "homeGoals": 6,
+          "awayGoals": 0,
+          "pens": false,
+          "playerGoals": 3,
+          "playerAssists": 0,
+          "playerRating": 8.4
+        },
+        {
+          "round": "Group K",
+          "home": "England",
+          "away": "Nigeria",
+          "homeGoals": 2,
+          "awayGoals": 0,
+          "pens": false,
+          "playerGoals": 2,
+          "playerAssists": 0,
+          "playerRating": 8
+        },
+        {
+          "round": "Group K",
+          "home": "England",
+          "away": "Czech Republic",
+          "homeGoals": 2,
+          "awayGoals": 0,
+          "pens": false,
+          "playerGoals": 2,
+          "playerAssists": 0,
+          "playerRating": 7.6
+        },
+        {
+          "round": "R32",
+          "home": "England",
+          "away": "Austria",
+          "homeGoals": 1,
+          "awayGoals": 0,
+          "pens": false,
+          "playerGoals": 1,
+          "playerAssists": 0,
+          "playerRating": 7.3
+        },
+        {
+          "round": "R16",
+          "home": "England",
+          "away": "Ivory Coast",
+          "homeGoals": 1,
+          "awayGoals": 1,
+          "pens": true,
+          "playerGoals": 1,
+          "playerAssists": 0,
+          "playerRating": 7.7
+        },
+        {
+          "round": "QF",
+          "home": "Ecuador",
+          "away": "England",
+          "homeGoals": 1,
+          "awayGoals": 3,
+          "pens": false,
+          "playerGoals": 1,
+          "playerAssists": 1,
+          "playerRating": 7.8
+        },
+        {
+          "round": "SF",
+          "home": "Switzerland",
+          "away": "England",
+          "homeGoals": 0,
+          "awayGoals": 5,
+          "pens": false,
+          "playerGoals": 2,
+          "playerAssists": 2,
+          "playerRating": 8.1
+        },
+        {
+          "round": "F",
+          "home": "England",
+          "away": "Spain",
+          "homeGoals": 2,
+          "awayGoals": 1,
+          "pens": false,
+          "playerGoals": 2,
+          "playerAssists": 0,
+          "playerRating": 8.3
+        }
+      ],
+      "playerApps": 8,
+      "playerGoals": 14,
+      "playerAssists": 3,
+      "playerAvgRating": 7.9,
+      "goldenBoot": true,
+      "bestPlayer": true
+    },
+    "intlHistory": [
+      {
+        "year": 2028,
+        "short": "Euros",
+        "nation": "England",
+        "champion": "Spain",
+        "myResult": "",
+        "apps": 0,
+        "goals": 0
+      },
+      {
+        "year": 2030,
+        "short": "World Cup",
+        "nation": "England",
+        "champion": "Mexico",
+        "myResult": "",
+        "apps": 0,
+        "goals": 0
+      },
+      {
+        "year": 2032,
+        "short": "Euros",
+        "nation": "England",
+        "champion": "Sweden",
+        "myResult": "Not Selected",
+        "apps": 0,
+        "goals": 0
+      },
+      {
+        "year": 2034,
+        "short": "World Cup",
+        "nation": "England",
+        "champion": "England",
+        "myResult": "Winner",
+        "apps": 8,
+        "goals": 14
+      }
+    ],
+    "rival": {
+      "name": "Bukayo Silva",
+      "nationality": "Mali",
+      "position": "ST",
+      "club": "Fiorentina",
+      "clubTier": 3,
+      "overall": 73,
+      "careerGoals": 58,
+      "careerAssists": 28,
+      "careerApps": 165,
+      "leagueTitles": 0,
+      "championsLeagues": 0,
+      "worldCups": 0,
+      "ballonDors": 0,
+      "intCaps": 6,
+      "intGoals": 3,
+      "marketValue": 20.2,
+      "age": 26,
+      "retired": false
+    },
+    "rivalCreated": true,
+    "pendingRivalryEvent": {
+      "id": 102,
+      "emoji": "🏠",
+      "title": "Transfer Battle",
+      "description": "You and Bukayo Silva both want to sign for the same club. The club chose your rival.",
+      "consequence": "Morale -5"
+    },
+    "lastRivalryEventId": 103,
+    "rivalrySummary": null,
+    "netWorth": 19.95,
+    "lifestyleLevel": "Wealthy",
+    "lifestyleCostPerYear": 0.8,
+    "socialMediaFollowers": 9.9,
+    "sponsorshipIncome": 5.09,
+    "properties": [],
+    "investments": [
+      "Real Estate Fund"
+    ],
+    "consecutiveDeficitYears": 0,
+    "agentFeesPaid": 1.58,
+    "family": {
+      "isMarried": false,
+      "marriedAge": null,
+      "children": 0,
+      "isDivorced": false,
+      "divorceAge": null
+    },
+    "purchasedItems": [],
+    "investmentHoldings": [],
+    "totalAssetValue": 0,
+    "customYearlyCosts": 0,
+    "awards": [
+      {
+        "year": 2031,
+        "name": "Player of the Month",
+        "emoji": "🏆"
+      },
+      {
+        "year": 2031,
+        "name": "Player of the Month",
+        "emoji": "🏆"
+      },
+      {
+        "year": 2033,
+        "name": "Player of the Month",
+        "emoji": "🏆"
+      },
+      {
+        "year": 2034,
+        "name": "Player of the Month",
+        "emoji": "🏆"
+      },
+      {
+        "year": 2034,
+        "name": "Player of the Month",
+        "emoji": "🏆"
+      },
+      {
+        "year": 2034,
+        "name": "World Cup Best Player",
+        "emoji": "🌟"
+      },
+      {
+        "year": 2034,
+        "name": "World Cup Golden Boot",
+        "emoji": "👟"
+      }
+    ],
+    "pendingBallonDor": null,
+    "lastUCLResult": {
+      "qualified": false,
+      "matches": [],
+      "result": "N/A",
+      "playerGoals": 0,
+      "isTopScorer": false
+    },
+    "legacy": null,
+    "postRetirementChoice": null,
+    "managerState": null,
+    "isFinalSeason": false,
+    "isPundit": false,
+    "punditEvents": [],
+    "primeType": "early",
+    "socialMediaActionUsedThisSeason": false,
+    "socialMediaFocusBoost": false,
+    "pendingCoverAthleteEvent": false,
+    "coverAthleteAccepted": false,
+    "activeSponsorship": "nike_adidas",
+    "personality": "showman",
+    "agentId": "cousin",
+    "lifeFlags": {
+      "criticAnswered": 1,
+      "energyDrink": 1,
+      "refArc": 1
+    },
+    "appearance": {
+      "skinTone": "olive",
+      "hairstyle": "fade",
+      "hairColor": "black",
+      "facialHair": "none",
+      "celebration": "knee_slide",
+      "boots": "vortex_strike",
+      "accessory": "none"
+    },
+    "corruptionHeat": 2,
+    "dirtyMoney": 0,
+    "prisonSeasons": 0,
+    "academyClubName": "Brentford",
+    "moralDilemmasTriggered": [],
+    "pendingMoralDilemma": null,
+    "pedSeasonsRemaining": 0,
+    "pedActive": false,
+    "matchFixBanned": 0,
+    "divingActive": false,
+    "integrityBonus": -11,
+    "pendingAppealResult": null,
+    "childEventsSeen": [],
+    "pregnancyAnnounced": false,
+    "punditState": null,
+    "ownerState": null,
+    "peakOverall": 79,
+    "retirementSuggested": false,
+    "phone": {
+      "threads": [
+        {
+          "id": "th_x_stranger",
+          "c": "other",
+          "name": "Stranger",
+          "emoji": "💬",
+          "lines": [
+            {
+              "w": 0,
+              "t": "I represent players. Ditch the academy's advisor, sign with me quietly, I'll get your family paid NOW.",
+              "y": 2025
+            },
+            {
+              "w": 0,
+              "t": "Chasing this one. Let me know either way.",
+              "y": 2026
+            },
+            {
+              "w": 0,
+              "t": "Wow. I see how it is.",
+              "y": 2027
+            },
+            {
+              "w": 0,
+              "t": "The fame has really gotten to you.",
+              "y": 2028
+            }
+          ],
+          "rel": 22,
+          "pending": {
+            "kind": "legacy",
+            "msgId": "youth_poach-2025"
+          },
+          "waiting": 2033,
+          "cold": 3,
+          "seen": [],
+          "lastReplyYear": null
+        },
+        {
+          "id": "th_grandad",
+          "c": "grandad",
+          "name": "Grandad",
+          "emoji": "🧓",
+          "lines": [
+            {
+              "w": 0,
+              "t": "Your father says you are worrying too much. He worries too much. Runs in the family.",
+              "y": 2025
+            },
+            {
+              "w": 0,
+              "t": "Did you get my last one? No rush.",
+              "y": 2026
+            },
+            {
+              "w": 0,
+              "t": "Cool. Glad we are close.",
+              "y": 2027
+            },
+            {
+              "w": 0,
+              "t": "I will stop texting. You clearly have people for that now.",
+              "y": 2028
+            }
+          ],
+          "rel": 22,
+          "pending": {
+            "kind": "convo",
+            "convo": "grandad_advice",
+            "beat": 0
+          },
+          "waiting": 2033,
+          "cold": 3,
+          "seen": [
+            "grandad_advice"
+          ],
+          "lastReplyYear": null
+        },
+        {
+          "id": "th_physio",
+          "c": "physio",
+          "name": "Club physio",
+          "emoji": "🩹",
+          "lines": [
+            {
+              "w": 0,
+              "t": "Noticed you've been quiet before big games. My door is open Thursday if you want to talk it through.",
+              "y": 2025
+            },
+            {
+              "w": 0,
+              "t": "Still need an answer on that when you get a sec.",
+              "y": 2026
+            },
+            {
+              "w": 0,
+              "t": "Wow. I see how it is.",
+              "y": 2027
+            },
+            {
+              "w": 0,
+              "t": "The fame has really gotten to you.",
+              "y": 2028
+            }
+          ],
+          "rel": 22,
+          "pending": {
+            "kind": "legacy",
+            "msgId": "matchday_nerves-2025"
+          },
+          "waiting": 2033,
+          "cold": 3,
+          "seen": [],
+          "lastReplyYear": null
+        }
+      ],
+      "feed": [
+        "🏆 Man City win the Premier League.",
+        "🏆 Athletic Bilbao win La Liga.",
+        "🥅 Rasmus Müller finished top scorer in the Bundesliga on 12.",
+        "🔄 DONE DEAL. Lamine Johansson joins Inter Milan from Seattle Sounders. Fee around 80m.",
+        "🔄 DONE DEAL. Erling Andersen joins Leverkusen from Seattle Sounders. Fee around 105m.",
+        "🔄 DONE DEAL. Kobbie Kovač joins Barcelona from Rangers. Fee around 85m.",
+        "🔄 DONE DEAL. Lamine Diallo joins Barcelona from Columbus Crew. Fee around 85m.",
+        "⭐ Leverkusen are champions of Europe.",
+        "🏆 Man United win the Premier League.",
+        "🏆 Real Madrid win La Liga.",
+        "🥅 Lamine Johansson finished top scorer in Serie A on 16.",
+        "🌍 England win the World Cup."
+      ],
+      "world": {
+        "year": 2034,
+        "ucl": "Leverkusen",
+        "leagues": {
+          "Premier League": "Man United",
+          "La Liga": "Real Madrid",
+          "Bundesliga": "Leipzig",
+          "Serie A": "Atalanta",
+          "Ligue 1": "Lille",
+          "Primeira Liga": "Sporting CP",
+          "Eredivisie": "PSV",
+          "Scottish Premiership": "Aberdeen",
+          "Brasileirao": "Flamengo",
+          "Saudi Pro League": "Al Ittihad",
+          "MLS": "Columbus Crew",
+          "K League 1": "Jeonbuk Motors"
+        },
+        "cups": {
+          "Premier League": "Man City",
+          "La Liga": "Athletic Bilbao",
+          "Bundesliga": "Leipzig",
+          "Serie A": "Atalanta",
+          "Ligue 1": "Monaco",
+          "Primeira Liga": "Benfica",
+          "Eredivisie": "Feyenoord",
+          "Scottish Premiership": "Rangers",
+          "Brasileirao": "Flamengo",
+          "Saudi Pro League": "Al Hilal",
+          "MLS": "Inter Miami",
+          "K League 1": "Pohang Steelers"
+        },
+        "moves": [
+          {
+            "who": "Lamine Johansson",
+            "from": "Seattle Sounders",
+            "to": "Inter Milan",
+            "fee": 80
+          },
+          {
+            "who": "Erling Andersen",
+            "from": "Seattle Sounders",
+            "to": "Leverkusen",
+            "fee": 105
+          },
+          {
+            "who": "Kobbie Kovač",
+            "from": "Rangers",
+            "to": "Barcelona",
+            "fee": 85
+          },
+          {
+            "who": "Lamine Diallo",
+            "from": "Columbus Crew",
+            "to": "Barcelona",
+            "fee": 85
+          }
+        ],
+        "topScorer": {
+          "who": "Lamine Johansson",
+          "club": "Inter Milan",
+          "goals": 16,
+          "league": "Serie A"
+        },
+        "intl": {
+          "name": "World Cup",
+          "champion": "England"
+        }
+      },
+      "clubs": {
+        "Rodri": "Man City",
+        "Federico Valverde": "Inter Milan",
+        "Harry Kane": "Real Madrid",
+        "Mohamed Salah": "Leverkusen",
+        "Phil Foden": "Man City",
+        "Declan Rice": "Arsenal",
+        "Raphinha": "Barcelona",
+        "Endrick": "Real Madrid",
+        "Nico Williams": "Athletic Bilbao",
+        "Désiré Doué": "Al Nassr",
+        "Kobbie Mainoo": "Benfica",
+        "Gianluigi Donnarumma": "Atalanta",
+        "Jamal Ferreira": "Aberdeen",
+        "Alejandro Fernández": "PSV",
+        "Pablo Diallo": "Ulsan HD",
+        "Endrick Hernández": "Rangers",
+        "Kylian Santos": "Aberdeen",
+        "Kenan Diallo": "Celtic",
+        "Xavi Dubois": "Porto",
+        "Rasmus Müller": "Bayern Munich",
+        "Aurélien Diallo": "Jeonbuk Motors",
+        "Kobbie van den Berg": "Marseille",
+        "Kobbie Kovač": "Barcelona",
+        "Lamine Diallo": "Barcelona",
+        "Lamine Moreno": "Girona",
+        "Lamine Johansson": "Inter Milan",
+        "Bukayo van den Berg": "Dortmund",
+        "Erling Andersen": "Leverkusen"
+      },
+      "rivalClub": "Fiorentina",
+      "seed": 1685845187,
+      "offers": 0,
+      "perksTaken": 0
+    },
+    "frozenOut": 0,
+    "badSeasonStreak": 0,
+    "sponsorBonus": 0.15,
+    "money": {
+      "seed": 3727909807,
+      "vault": 0,
+      "hold": {
+        "ladder": 0,
+        "bricks": 0,
+        "cleats": 0,
+        "screens": 0,
+        "spark": 0
+      },
+      "cost": {
+        "ladder": 0,
+        "bricks": 0,
+        "cleats": 0,
+        "screens": 0,
+        "spark": 0
+      },
+      "price": {
+        "ladder": 150.59,
+        "bricks": 139.6,
+        "cleats": 97.81,
+        "screens": 107.52,
+        "spark": 306.15
+      },
+      "hist": {
+        "ladder": [
+          105.31,
+          111.31,
+          116.93,
+          124.59,
+          129.06,
+          139.03,
+          149.81,
+          150.59
+        ],
+        "bricks": [
+          99.65,
+          113.15,
+          106.09,
+          113.43,
+          124.86,
+          124.6,
+          133.17,
+          139.6
+        ],
+        "cleats": [
+          114.77,
+          107.62,
+          125.48,
+          130.88,
+          123.75,
+          120.68,
+          108.19,
+          97.81
+        ],
+        "screens": [
+          123.69,
+          136.52,
+          127.06,
+          91.99,
+          96.03,
+          103.26,
+          122.02,
+          107.52
+        ],
+        "spark": [
+          98.69,
+          83.81,
+          87.01,
+          153.14,
+          139.34,
+          191.37,
+          203.01,
+          306.15
+        ]
+      },
+      "log": [],
+      "year": 2034,
+      "age": 9,
+      "won": 0,
+      "lost": 0,
+      "cPlays": 0,
+      "cNet": 0,
+      "cYear": 0,
+      "cShut": false,
+      "aYear": 0,
+      "aBest": 0,
+      "aPlays": 0
+    },
+    "eventLastFired": {
+      "8": 2027,
+      "11": 2028,
+      "16": 2033,
+      "28": 2030,
+      "55": 2031,
+      "200": 2027,
+      "201": 2028,
+      "240": 2027,
+      "257": 2031,
+      "258": 2029,
+      "259": 2029,
+      "267": 2032,
+      "305": 2032,
+      "425": 2027,
+      "426": 2030,
+      "433": 2028,
+      "500": 2029,
+      "story:squadChatLeak": 2033
+    }
+  },
+  "lastText": "Skip to main content\nDOUKNOWBALL\nBack\nTrack stats\nAudit Tester\n\nST · Age 25 · \nEngland\n\n🚪 Retire\n🔄 New Career\n81\nOVR\nPOT 85\n€19.9M\nNet Worth\n€38k/wk\nWage\n€62M\nValue\nCAREER TIMELINE\nA\n16y\nBrentford Youth\nYouth Academy\nA\n17y\nBrentford Youth\nYouth Academy\n27\n18y\nBrentford\n24A · 2G · 2As\n28\n19y\nUrawa Red Diamonds\n31A · 5G · 5As\n29\n20y\nSaint George\n28A · 5G · 5As\n30\n21y\nNice\n30A · 6G · 3As\n31\n22y\nQarabag\n35A · 5G · 3As\n32\n23y\nLegia Warsaw\n35A · 7G · 5As\n33\n24y\nBasel\n31A · 5G · 6As\n34\n25y\nZenit\n28A · 10G · 2As\n🌍\nGROUP K\nGroup stage\nQualifying\n\nGroup K at the finals, one game against each side. Top two go through, plus the 8 best third placed sides. England finished 1st of 4.\n\nGROUP K\nTeam\nP\nGD\nPts\n1\nEngland\n3\n+10\n9\n2\nNigeria\n3\n+2\n4\n3\nCzech Republic\n3\n-5\n3\n4\nIran\n3\n-7\n1\n← Back\nATTRIBUTES\nPace\nSprint Speed 80\n80\nShooting\nHeading 89\n88\nPassing\nVision 77\n77\nDribbling\nBall Control 93\n93\nDefending\nMarking 62\n62\nPhysical\nStrength 89\n88\nFull attributes\n183 cm · 78 kg · every number under the six\nCAREER STATS\n263\nApps\n51\nGoals\n31\nAssists\n3\nHat Tricks\n1\nTrophies\nTROPHY CABINET\n🏆\n0\nLeagues\n🏆\n0\nCups\n⭐\n0\nUCL\n🌍\n1\nWorld Cup\n🌐\n0\nContinental\n🏅\n0\nBallon d'Or\n🏆 AWARDS\n🏆 Player of the Month ×5\n🌟 World Cup Best Player\n👟 World Cup Golden Boot\n INTERNATIONAL CAREER\n22\nCaps\n20\nGoals\n5\nAssists\n🌍 1 World Cup, won 1\n📋 Left out of 1 squad\n🗂️\nTournaments\n4 played out\n🏆\nWorld Cup 2034\nEngland won it\nRetire from International Football 🚶\n😤 RIVALRY\nAudit Tester\nvs\nBukayo Silva\nFiorentina · OVR 73 · Age 26\n81\nOverall\n73\n51\nCareer Goals\n58\n31\nCareer Assists\n28\n0\nLeague Titles\n0\n0\nUCL\n0\n0\nBallon d'Or\n0\n€62M\nMarket Value\n€20M\n✅ You're ahead!\nLATEST EVENTS\n›\n🏆 WORLD CUP WINNER with England!\n›\n🌟 Named Best Player of the World Cup!\n›\n👟 Won the World Cup Golden Boot with 14 goals!\n25\nAGE\n🏋️\n📱\n3\nSoccer Career: Free Football Career Simulator\n\nLive out your soccer dream in a season by season career simulator. Create a player, join a youth academy, develop skills, sign contracts, win trophies, and compete for the Ballon d'Or.\n\nEvery soccer career simulator promises the same fantasy: start as a nobody, retire as a legend. This one makes the middle the good part. You begin at 16 in a youth academy and live season by season through contracts, transfers, injuries, feuds, trophies, and increasingly questionable purchases, until the game hands down a legacy verdict.\n\nIt is the most played game on DoUKnowBall, and it sits closer to a life sim than to a match engine. You never dribble anyone. You make decisions, and the sim turns them into a story that is different every run.\n\nYour save lives in your browser, one career at a time, so choices carry weight into the years that follow them.\n\nYou build your player's actual face before kickoff: skin tone, hairstyle and colour, facial hair, a boot line, an accessory, and a signature celebration that gets described every time you score. That look follows you onto the Ballon d'Or stage and into your retirement send off.\n\nThere is a dirty side too. Bent officials, betting syndicates, kickbacks, offshore accounts and laundering fronts all sit there waiting, each one heating up a hidden investigation meter. Take enough envelopes and the dawn raid comes, then the trial, then a season inside and a comeback from nothing.\n\nHow to play Soccer Career, a free football career simulation game\nCreating your player and building your look\nCreate your player: name, one of 50 nationalities, one of 10 positions, and a starting era from the 1990s to the 2020s.\nBuild your look in the appearance editor: 12 skin tones, 23 hairstyles, 16 hair colours, 14 beard styles, 16 accessories, 18 boot lines, and 19 signature celebrations, or hit Surprise me.\nRolling potential and customizing your build\nRoll your starting potential, somewhere in the mid 50s to high 60s, and reroll as many times as you like. Rerolls are free and there is no limit on them.\nOpen Customize your build to set your starting overall anywhere from 40 to 99, move points between the six attribute families, shape the specifics under each family, and set your height and weight.\nStarting in the academy and turning pro\nBegin in an academy matched to your nationality and talent. Pro contract offers arrive from age 17.\nAdvancing seasons through the training ground\nAdvance season by season through simulated stats, newspaper headlines, random events, and decisions.\nOpen the training ground (the dumbbell button, bottom right) once a season. Your position picks a drill you actually play: keepers hold and drag a glove save dive, centre backs, full backs and defensive midfielders time a tackle on a moving ball, and everyone else times a wall shot through a gap that opens and closes. Today's ten rounds are the same for everyone at your position and count once; practice is unlimited and banks nothing.\nWorking transfer windows and the shop aisles\nWork the transfer windows: stay, extend, request a move, or weigh rival offers and dream club pay cuts.\nSpend the money in 8 shop aisles: property, vehicles, investments, lifestyle, performance, flex, family, and a shady aisle that only appears once you have something to hide.\nRETIRING INTO MANAGEMENT, PUNDITRY OR OWNERSHIP\nRetire, on your terms or your body's, collect the legacy verdict, then carry on as a manager, pundit, or owner if you want.\nSoccer Career rules: growth, legacy and the corruption meter\nHow stats grow through your prime\nStats grow slowly and honestly: 1 to 3 points a year through the academy and your prime, less once you pass 86, and barely at all above 90. Reaching world class is a decade of work, not three good seasons.\nGrowth fades once your hidden prime type (early, normal, late, or extended) ends, with decline turning brutal from 38.\nYour boyhood club and retirement age\nThe club that raised you always offers you a first team deal when you turn pro, so you can spend a whole career at your boyhood club, and it can call you home again from 27.\nRetirement is suggested from age 30 once you drop 10 off your peak or hit 75 overall, forced below 50 overall at 33 or older, and automatic at 45.\nThe World Cup cycle and your legacy score\nThe World Cup comes every 4 years. Top nations qualify about 90 percent of the time, while a small nation mostly needs a world class you.\nLegacy runs 0 to 100: 90 is GOAT, 80 LEGEND, 70 GREAT, 60 SOLID PRO, and less is JOURNEYMAN. The verdict also knows the overall you started at, so climbing from 54 to 91 scores better than being handed 91 on the creation screen.\nStarting overall and your growth ceiling\nThere is no cap on your starting overall, but a high start eats the room you had to grow into, and if you are already world class as a teenager you pick up far more injuries before you turn 24.\nYour ceiling is not welded shut. Two seasons in a row that are both elite and decorated, while you are already pressed against it, buy one point back at a time. 99 is the hard wall and nothing gets past it.\nHOW A POSITION DRILL TRAINS YOUR ATTRIBUTES\nA position drill is ten rounds and its session score is wins times ten. 50 pays +1 to the drill's attribute with next season's growth (shooting for the wall shot, defending for the tackle, reflexes for the glove save) and 80 pays +2, capped at the room between your overall and your ceiling, so a drill never lifts you past it. It shares the one training session a season with the cone slalom, sprint burst, passing gates and penalty sessions.\nPhysical stats, morale and integrity\nHeight and weight are real numbers, not decoration: a tall heavy player wins more in the air and is stronger, and is slower off the mark and less agile for it.\nMorale runs 0 to 100 and moves with events and choices, while scandals feed an integrity ledger worth minus 30 to plus 20 legacy points at the end.\nA PAY CUT, AN INJURY AND A RIVAL'S BALLON D'OR\nA statistically dominant season cannot be snubbed at the Ballon d'Or. Outscore the whole shortlist while winning a major and the trophy is yours, and any 45 goal or 55 goal involvement season finishes on the podium at worst.\nCORRUPTION HEAT AND DIRTY MONEY\nCorruption heat runs 0 to 100 and cools 8 a year when you stay clean. Past 70 the financial crimes unit can raid you, and past 90 comes a conviction, seized money, and a season in prison that wrecks your stats.\nUnexplained money keeps generating heat every season until you wash it through a shady business or declare it and eat the tax.\nSoccer Career walkthrough: a striker's rise to a Ballon d'Or revenge arc\nA Nigerian striker breaks out as a teenager\n\nTake a Nigerian striker rolled at 63, a Gifted start. Two academy years push him past 70, and at 18 a bidding war breaks out. He takes minutes over money, bags 20 league goals, and the papers crown him the next superstar.\n\nA dream transfer and a torn hamstring\n\nAt 22 a dream club calls with a pay cut, and he signs anyway. A league title lands in year two, then a torn hamstring eats half a season, and a moral dilemma offers a shady shortcut back to fitness. He refuses, banking integrity, while the rival the game spawned at his debut, a preening Brazilian winger, lifts the Ballon d'Or. The snub becomes fuel.\n\nA revenge arc ends in LEGEND tier retirement\n\nThe revenge arc peaks at 26: a Champions League, a World Cup semifinal carrying Nigeria, then the Ballon d'Or, where he thanks the rival from the stage. An extended prime runs to 36, the fortune buys his boyhood club, and he retires at 38 with a legacy of 84, LEGEND tier, one Champions League short of GOAT talk.\n\nSoccer Career tips for growing stats and building your legacy\nRerolling your potential before you start\nReroll your potential to 62 or better. The gap between a Promising start and a Gifted one echoes for a decade.\nTraining sessions and steering growth events\nThe training ground is the dumbbell button, one session a season. The older sessions (cone slalom, sprint burst, passing gates, penalties or shot stopping) pay +1 at 50 and +2 at 80; the position drill pays the same but stops at your ceiling. Beyond that, growth follows your age curve, and you steer it through event choices, lifestyle purchases, and the social media detox, worth plus 2 to every stat next season.\nIn goal the same drills train keeper skills: the cone slalom is footwork and pays Positioning, the sprint burst pays Sweeping Speed, the passing gates pay Distribution and shot stopping pays Reflexes. Outfield players train Dribbling, Pace, Passing and Shooting from the same four tiles.\nPaying for a trainer and the recovery clinic\nMoney matters: a personal trainer adds a stat point per season, and the recovery clinic halves injury layoffs.\nWeighing the doping risk, your agent and loyalty\nThe doping storyline boosts every stat but risks a 20 percent failed test each season it runs, and failing means a 1 season ban and a wrecked reputation.\nYour personality and your agent shape the whole run. The Showman grows followers 60 percent faster, The Professor earns brand trust, and super agent Zara Blackwood opens dream club doors for a 10 percent cut.\nLoyalty pays: a decade at one club is worth about as much legacy as two and a half league titles.\nSoccer Career FAQ: saves, the Ballon d'Or and corruption mode\nHow do I save my career?\n\nAutomatically, in your browser, after every decision. There is one career per browser, and starting fresh permanently deletes the old save. An optional account adds site stats and leaderboards, but the career lives on your device.\n\nHow do I win the Ballon d'Or?\n\nPost the best season in the world and the voters have to give it to you. If you outscore every player on the shortlist and win a league, Champions League, or World Cup, you win it outright, and any season of 45 goals or 55 goal involvements finishes top 3 at worst. Trophies still decide the close years, and a second place finish becomes next season's fuel.\n\nWhat happens after retirement?\n\nFour paths: read your legacy breakdown and walk away, farm controversy as a TV pundit, chase trophies as a manager, or buy a lower league club and run it as owner.\n\nWhat is the highest legacy score?\n\n100, with GOAT starting at 90. Expect to need multiple Ballon d'Ors and Champions Leagues, a World Cup, huge totals, and a clean record, since one scandal can separate GOAT from LEGEND.\n\nCan I play for the club I came through as a youth player?\n\nYes. The senior side of your academy club always puts a contract on the table when you turn pro, usually on slightly lower wages because they know you would sign for free. Staying gives you a popularity and morale boost and unlocks the homegrown legend storylines. From 27 they can also call you back for a homecoming transfer.\n\nWhat is corruption mode and can it end my career?\n\nIt is the dirty half of the game and yes, it absolutely can. Taking envelopes from a betting syndicate, paying a referee's brother in law, buying Ballon d'Or votes, or laundering cash through your own nightclub all raise a hidden heat meter. Stay hot too long and you get raided, then convicted, then you serve a season in prison while your stats rot. There is always a way out: confess, take the tax amnesty, or just stop, and heat cools every clean season.\n\nIs this a football career sim game or a management game?\n\nA career sim first: you steer one player's life and story, not tactics. The manager and owner modes afterward add a taste of the other side.\n\nIs Soccer Career free to play?\n\nYes. Soccer Career is free to play on DoUKnowBall, right in your browser. No download and no signup needed.\n\nMore games to play\n🧑‍💼\nFantasy Draft\nDraft your ultimate XI against an AI opponent\n🔄\nTransfer Path\nConnect two players through shared clubs\n🏟️\nSquad Deal\nBuild an XI out of mystery boxes\n💼\nClub Manager\nManage any of 330 real clubs across 20 leagues, today or in a real past season: negotiations, board objectives, trophies and the sack race\n🗺️\nNFL Conquest\nThe imperialism map: winners annex whole empires until one team rules America\n📊\nScore Predictor\nPredict the final score ",
+  "finished": "2026-10-01T22:50:39.247Z",
+  "cleanup": {
+    "browserStopped": true
+  }
+}

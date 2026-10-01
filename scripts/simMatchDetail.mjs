@@ -79,11 +79,15 @@ function checkDetail(report, ctx, { viaHalftime, subsMade }) {
      live viewer's preset first half. Checked here rather than in one
      section so it covers the quick sim AND the halftime path. */
   {
-    const goalMins = d.timeline.filter(e => e.kind === 'goal').map(e => e.minute);
+    /* Round 781: a goal in the referee's board carries minute 90 plus 3, so
+       the clock position is the minute and the plus together (90+1 and 90+6
+       are two different minutes on the scoreboard). */
+    const clockOf = e => `${e.minute}+${e.plus ?? 0}`;
+    const goalMins = d.timeline.filter(e => e.kind === 'goal').map(clockOf);
     if (new Set(goalMins).size !== goalMins.length) {
       const seen = new Set();
       const dupe = goalMins.find(m => seen.has(m) || (seen.add(m), false));
-      fail(`${ctx}: two goals share the ${dupe}th minute: ${JSON.stringify(d.timeline.filter(e => e.kind === 'goal' && e.minute === dupe))}`);
+      fail(`${ctx}: two goals share the clock ${dupe}: ${JSON.stringify(d.timeline.filter(e => e.kind === 'goal' && clockOf(e) === dupe))}`);
     }
   }
 
@@ -560,7 +564,7 @@ console.log('7) Two yellows is a red, and nobody leaves before his own last goal
   {
     const card = fs.readFileSync(path.join(ROOT, 'src/components/club-manager/MatchReportCard.tsx'), 'utf-8');
     if (!/c\.kind === 'red'/.test(card)) fail('the match report card no longer distinguishes a red card');
-    if (!/\{c\.name\} \{c\.minute\}/.test(card)) fail('the match report card stopped printing card minutes');
+    if (!/\{c\.name\} \{(c\.minute|minuteLabel\(c\))\}/.test(card)) fail('the match report card stopped printing card minutes');
     if (!/r\.events\.map/.test(card)) fail('the match report card stopped printing the match events, where the second yellow line lives');
   }
   console.log(`   ${matches} matches: ${secondYellows} second yellows (${(syRate * 100).toFixed(1)}%), ${straightReds} straight reds, ${(redRate * 100).toFixed(1)}% of matches ended a man short`);

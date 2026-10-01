@@ -1,0 +1,802 @@
+{
+  "base": "https://douknowball.com",
+  "date": "2026-10-01T22:25:41.833Z",
+  "cases": [
+    {
+      "route": "/nfl-higher-lower",
+      "viewport": 320,
+      "steps": [
+        {
+          "round": 1,
+          "savedCount": 1,
+          "lastCorrect": false
+        },
+        {
+          "round": 2,
+          "savedCount": 2,
+          "lastCorrect": true
+        },
+        {
+          "round": 3,
+          "savedCount": 3,
+          "lastCorrect": true,
+          "savedBytesHeldOnImmediateReload": true
+        },
+        {
+          "round": 4,
+          "savedCount": 4,
+          "lastCorrect": true
+        },
+        {
+          "round": 5,
+          "savedCount": 5,
+          "lastCorrect": true
+        },
+        {
+          "round": 6,
+          "savedCount": 6,
+          "lastCorrect": false
+        },
+        {
+          "round": 7,
+          "savedCount": 7,
+          "lastCorrect": false
+        },
+        {
+          "round": 8,
+          "savedCount": 8,
+          "lastCorrect": false
+        },
+        {
+          "round": 9,
+          "savedCount": 9,
+          "lastCorrect": false
+        },
+        {
+          "round": 10,
+          "savedCount": 10,
+          "lastCorrect": false,
+          "savedBytesHeldOnImmediateReload": true
+        }
+      ],
+      "baselineErrors": [],
+      "deliberateSaveErrors": [
+        "TypeError: Cannot read properties of null (reading 'length')\n    at xe (https://douknowball.com/assets/NflHigherLower-CKbbVyVb.js:1:2328)\n    at Ke (https://douknowball.com/assets/NflHigherLower-CKbbVyVb.js:1:3878)\n    at sp (https://douknowball.com/assets/index-Bj5VrkKR.js:39:16998)\n    at xf (http",
+        "A page failed to render: TypeError: Cannot read properties of null (reading 'length')\n    at xe (https://douknowball.com/assets/NflHigherLower-CKbbVyVb.js:1:2328)\n    at Ke (https://douknowball.com/assets/NflHigherLower-CKbbVyVb.js:1:3878)\n    at sp (https://douknowball.com/assets/index-Bj5VrkKR.js:"
+      ],
+      "expectedScore": 70,
+      "finish": "Skip to main content DOUKNOWBALL Back Track stats 🏈 NFL HIGHER OR LOWER A new stat every round. Who has the bigger career number? Daily Unlimited 😈 Hard Round: 10/10 Score: 70 NFL · NOT THIS TIME 🥴 4/10 Correct! Total Score: 70 (4×10 base + 30 streak bonus) 🏈 NFL Higher or Lower: 70 pts (4/10) 📊 NFL Higher or Lower Oct 1, 2026 🏈 NFL Higher or Lower: 70 pts (4/10) RESULT 70 points (4/10) on today's NFL Higher or Lower DoUKnowBall douknowball.com/nfl-higher-lower Share result Copy challenge 📋 Copy Score Card 🖼️ Save Image SHARE YOUR RESULT Come back tomorrow for a new challenge! NFL Higher or Lower: Football Stats Game A different stat every round: passing yards, passing TDs, rushing yards, receiving yards, receptions and touchdowns scored. Which NFL star has the bigger career number? Two players, one stat, one tap. A pair of pros sit side by side under a question like who threw for more career yards, and your gut answers before your brain finishes the math. The category rotates every round: touchdowns, then receptions, then rushing yards. Ten rounds later you find out how well you really know the record book. How to play NFL Higher or Lower, a free online NFL stats game Reading the rotating stat category Read the stat question at the top. Rounds rotate through touchdowns scored, passing yards, passing touchdowns, rushing yards, receiving yards, and receptions. Checking each player before you tap Check each player's position, teams, and final season, then tap the one with the bigger career number. Revealing totals round by round Watch both totals reveal, then roll into the next round. Finishing all ten rounds Finish all 10 rounds and post your score. NFL Higher or Lower rules: scoring, streaks and the player pool Scoring points and the streak bonus Each correct an",
+      "scoreMatched": true,
+      "finishedTenRounds": true,
+      "oldRevealQuietAfterHard": true,
+      "dailyHeldDuringUnlimited": true,
+      "dailyFinishRestored": true,
+      "corruptNullCrashes": true,
+      "recoveredByDeletingLocalSave": true
+    },
+    {
+      "route": "/nba-higher-lower",
+      "viewport": 320,
+      "steps": [
+        {
+          "round": 1,
+          "savedCount": 1,
+          "lastCorrect": true
+        },
+        {
+          "round": 2,
+          "savedCount": 2,
+          "lastCorrect": true
+        },
+        {
+          "round": 3,
+          "savedCount": 3,
+          "lastCorrect": true,
+          "savedBytesHeldOnImmediateReload": true
+        },
+        {
+          "round": 4,
+          "savedCount": 4,
+          "lastCorrect": false
+        },
+        {
+          "round": 5,
+          "savedCount": 5,
+          "lastCorrect": false
+        },
+        {
+          "round": 6,
+          "savedCount": 6,
+          "lastCorrect": false
+        },
+        {
+          "round": 7,
+          "savedCount": 7,
+          "lastCorrect": true
+        },
+        {
+          "round": 8,
+          "savedCount": 8,
+          "lastCorrect": true
+        },
+        {
+          "round": 9,
+          "savedCount": 9,
+          "lastCorrect": true
+        },
+        {
+          "round": 10,
+          "savedCount": 10,
+          "lastCorrect": true,
+          "savedBytesHeldOnImmediateReload": true
+        }
+      ],
+      "baselineErrors": [],
+      "deliberateSaveErrors": [
+        "TypeError: Cannot read properties of null (reading 'length')\n    at fe (https://douknowball.com/assets/NbaHigherLower-Bve0UkwB.js:1:2288)\n    at Ke (https://douknowball.com/assets/NbaHigherLower-Bve0UkwB.js:1:3925)\n    at sp (https://douknowball.com/assets/index-Bj5VrkKR.js:39:16998)\n    at xf (http",
+        "A page failed to render: TypeError: Cannot read properties of null (reading 'length')\n    at fe (https://douknowball.com/assets/NbaHigherLower-Bve0UkwB.js:1:2288)\n    at Ke (https://douknowball.com/assets/NbaHigherLower-Bve0UkwB.js:1:3925)\n    at sp (https://douknowball.com/assets/index-Bj5VrkKR.js:"
+      ],
+      "expectedScore": 115,
+      "finish": "Skip to main content DOUKNOWBALL Back Track stats 🏀 NBA HIGHER OR LOWER Which player scored more career points? Daily Unlimited 😈 Hard Round: 10/10 Score: 115 4🔥 NBA · NAILED IT 🏀 7/10 Correct! Total Score: 115 (7×10 base + 45 streak bonus) 🏀 NBA Higher or Lower: 115 pts (7/10) 📊 NBA Higher or Lower Oct 1, 2026 🏀 NBA Higher or Lower: 115 pts (7/10) RESULT 115 points (7/10) on today's NBA Higher or Lower DoUKnowBall douknowball.com/nba-higher-lower Share result Copy challenge 📋 Copy Score Card 🖼️ Save Image SHARE YOUR RESULT Come back tomorrow for a new challenge! NBA Higher or Lower: Basketball Points Quiz Two NBA players, side by side. Which one scored more career points? Daily challenge and unlimited mode with streak bonuses, drawn from the all-time top 80 scorers. Two legends, one question: who scored more career points? That is the entire game, and it is much harder than it sounds. The pool is the top 80 scorers in NBA history, so there are no easy outs. Everyone on screen scored a mountain of points. You are just deciding whose mountain is taller. How to play NBA Higher or Lower, a daily scoring trivia game Reading the two player cards Look at the two player cards: name, position, franchises and final season. Tapping the player with more career points Tap the player you think finished with more career points. Watching the totals flip and the next pair load The totals flip over, your answer gets marked, and the next pair loads. Surviving all ten rounds Survive all 10 rounds and post your score. Playing Daily then switching to Unlimited Play the Daily, then switch to Unlimited if you want more. NBA Higher or Lower rules for rounds, streaks and ties Ten rounds worth ten points each Each game is 10 rounds, and every correct answer is worth 10 points. How the s",
+      "scoreMatched": true,
+      "finishedTenRounds": true,
+      "oldRevealQuietAfterHard": true,
+      "dailyHeldDuringUnlimited": true,
+      "dailyFinishRestored": true,
+      "corruptNullCrashes": true,
+      "recoveredByDeletingLocalSave": true
+    },
+    {
+      "route": "/mlb-higher-lower",
+      "viewport": 320,
+      "steps": [
+        {
+          "round": 1,
+          "savedCount": 1,
+          "lastCorrect": false
+        },
+        {
+          "round": 2,
+          "savedCount": 2,
+          "lastCorrect": false
+        },
+        {
+          "round": 3,
+          "savedCount": 3,
+          "lastCorrect": false,
+          "savedBytesHeldOnImmediateReload": true
+        },
+        {
+          "round": 4,
+          "savedCount": 4,
+          "lastCorrect": false
+        },
+        {
+          "round": 5,
+          "savedCount": 5,
+          "lastCorrect": true
+        },
+        {
+          "round": 6,
+          "savedCount": 6,
+          "lastCorrect": false
+        },
+        {
+          "round": 7,
+          "savedCount": 7,
+          "lastCorrect": false
+        },
+        {
+          "round": 8,
+          "savedCount": 8,
+          "lastCorrect": false
+        },
+        {
+          "round": 9,
+          "savedCount": 9,
+          "lastCorrect": true
+        },
+        {
+          "round": 10,
+          "savedCount": 10,
+          "lastCorrect": true,
+          "savedBytesHeldOnImmediateReload": true
+        }
+      ],
+      "baselineErrors": [],
+      "deliberateSaveErrors": [
+        "TypeError: Cannot read properties of null (reading 'length')\n    at fe (https://douknowball.com/assets/MlbHigherLower-DZ_sIBWN.js:1:2282)\n    at _e (https://douknowball.com/assets/MlbHigherLower-DZ_sIBWN.js:1:3907)\n    at sp (https://douknowball.com/assets/index-Bj5VrkKR.js:39:16998)\n    at xf (http",
+        "A page failed to render: TypeError: Cannot read properties of null (reading 'length')\n    at fe (https://douknowball.com/assets/MlbHigherLower-DZ_sIBWN.js:1:2282)\n    at _e (https://douknowball.com/assets/MlbHigherLower-DZ_sIBWN.js:1:3907)\n    at sp (https://douknowball.com/assets/index-Bj5VrkKR.js:"
+      ],
+      "expectedScore": 35,
+      "finish": "Skip to main content DOUKNOWBALL Back Track stats ⚾ MLB HIGHER OR LOWER Which legend hit more career home runs? Daily Unlimited 😈 Hard Round: 10/10 Score: 35 2🔥 MLB · NOT THIS TIME 🧢 3/10 Correct! Total Score: 35 (3×10 base + 5 streak bonus) ⚾ MLB Higher or Lower: 35 pts (3/10) 📊 MLB Higher or Lower Oct 1, 2026 ⚾ MLB Higher or Lower: 35 pts (3/10) RESULT 35 points (3/10) on today's MLB Higher or Lower DoUKnowBall douknowball.com/mlb-higher-lower Share result Copy challenge 📋 Copy Score Card 🖼️ Save Image SHARE YOUR RESULT Come back tomorrow for a new challenge! MLB Higher or Lower: Home Run Baseball Quiz Two baseball legends, side by side. Which one hit more career home runs? Every 399+ HR career that finished by 2019, from Babe Ruth to David Ortiz. Two legends side by side, one question: who hit more career home runs? Easy, right up until Frank Robinson is staring at Mark McGwire and the real gap is three homers. The pool is finished careers only, Ruth through Ortiz, so every number is final. No active stars with totals still moving. How to play MLB Higher or Lower, a free daily home run trivia game Reading two players with no totals shown Each round shows two players with their era and seasons played, but no totals. Tapping the player with more home runs Tap the one you think finished with more career home runs. Watching the reveal and the next pair load The real numbers flash, your score updates, and the next pair rolls in. Surviving all ten rounds Survive all 10 rounds, then share your score. CHOOSING DAILY OR UNLIMITED PAIRS Play Daily for the same 10 pairs as everyone else, or Unlimited for random pairs. MLB Higher or Lower rules for rounds, streaks and ties Ten rounds worth ten points each 10 rounds per game and 10 points for every correct answer. Stacking ",
+      "scoreMatched": true,
+      "finishedTenRounds": true,
+      "oldRevealQuietAfterHard": true,
+      "dailyHeldDuringUnlimited": true,
+      "dailyFinishRestored": true,
+      "corruptNullCrashes": true,
+      "recoveredByDeletingLocalSave": true
+    },
+    {
+      "route": "/hockey-higher-lower",
+      "viewport": 320,
+      "steps": [],
+      "baselineErrors": [],
+      "deliberateSaveErrors": [],
+      "auditLimitation": "TimeoutError: locator.waitFor: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: /Higher\\?/ }).first() to be visible\u001b[22m\n"
+    },
+    {
+      "route": "/cfb-higher-lower",
+      "viewport": 320,
+      "steps": [
+        {
+          "round": 1,
+          "savedCount": 1,
+          "lastCorrect": true
+        },
+        {
+          "round": 2,
+          "savedCount": 2,
+          "lastCorrect": true
+        },
+        {
+          "round": 3,
+          "savedCount": 3,
+          "lastCorrect": true,
+          "savedBytesHeldOnImmediateReload": true
+        },
+        {
+          "round": 4,
+          "savedCount": 4,
+          "lastCorrect": false
+        },
+        {
+          "round": 5,
+          "savedCount": 5,
+          "lastCorrect": true
+        },
+        {
+          "round": 6,
+          "savedCount": 6,
+          "lastCorrect": true
+        },
+        {
+          "round": 7,
+          "savedCount": 7,
+          "lastCorrect": true
+        },
+        {
+          "round": 8,
+          "savedCount": 8,
+          "lastCorrect": false
+        },
+        {
+          "round": 9,
+          "savedCount": 9,
+          "lastCorrect": false
+        },
+        {
+          "round": 10,
+          "savedCount": 10,
+          "lastCorrect": false,
+          "savedBytesHeldOnImmediateReload": true
+        }
+      ],
+      "baselineErrors": [],
+      "deliberateSaveErrors": [
+        "TypeError: Cannot read properties of null (reading 'length')\n    at fe (https://douknowball.com/assets/CfbHigherLower-BQOlm8bX.js:1:2290)\n    at Ie (https://douknowball.com/assets/CfbHigherLower-BQOlm8bX.js:1:3931)\n    at sp (https://douknowball.com/assets/index-Bj5VrkKR.js:39:16998)\n    at xf (http",
+        "A page failed to render: TypeError: Cannot read properties of null (reading 'length')\n    at fe (https://douknowball.com/assets/CfbHigherLower-BQOlm8bX.js:1:2290)\n    at Ie (https://douknowball.com/assets/CfbHigherLower-BQOlm8bX.js:1:3931)\n    at sp (https://douknowball.com/assets/index-Bj5VrkKR.js:"
+      ],
+      "expectedScore": 90,
+      "finish": "Skip to main content DOUKNOWBALL Back Track stats 🎓 CFB HIGHER OR LOWER Which QB threw for more career college yards? Daily Unlimited 😈 Hard Round: 10/10 Score: 90 COLLEGE · NAILED IT 🎓 6/10 Correct! Total Score: 90 (6×10 base + 30 streak bonus) 🎓 CFB Higher or Lower: 90 pts (6/10) 📊 CFB Higher or Lower Oct 1, 2026 🎓 CFB Higher or Lower: 90 pts (6/10) RESULT 90 points (6/10) on today's CFB Higher or Lower DoUKnowBall douknowball.com/cfb-higher-lower Share result Copy challenge 📋 Copy Score Card 🖼️ Save Image SHARE YOUR RESULT Come back tomorrow for a new challenge! CFB Higher or Lower: College Football QB Quiz Two college QBs, side by side. Which one threw for more career yards? Record-book legends against famous NFL names with surprising college totals. Two quarterbacks, one question: who threw for more career passing yards in college? Not the NFL, college. That flip is the whole game, because the record books belong to four-year starters in pass-happy systems, not the legends you watched on Sundays. Tom Brady left Michigan with 4,773 yards. Case Keenum left Houston with 19,217, the record. Every pair is a little logic puzzle about eras, offenses, and who actually held the job. How to play CFB Higher or Lower, a free college football trivia game Reading each quarterback pair Look at the two quarterbacks, their schools, and the years they played. Tapping the higher passing total Tap the one you think threw for more career college passing yards. Seeing both totals before the next pair Both totals flash for a couple of seconds, then the next pair loads. PROTECTING A STREAK ACROSS TEN ROUNDS Play all 10 rounds and protect your streak for bonus points. Daily pairs versus Unlimited and Hard mode Daily gives everyone the same 10 pairs. Unlimited deals random pairs; it",
+      "scoreMatched": true,
+      "finishedTenRounds": true,
+      "oldRevealQuietAfterHard": true,
+      "dailyHeldDuringUnlimited": true,
+      "dailyFinishRestored": true,
+      "corruptNullCrashes": true,
+      "recoveredByDeletingLocalSave": true
+    },
+    {
+      "route": "/f1-higher-lower",
+      "viewport": 320,
+      "steps": [
+        {
+          "round": 1,
+          "savedCount": 1,
+          "lastCorrect": false
+        },
+        {
+          "round": 2,
+          "savedCount": 2,
+          "lastCorrect": false
+        },
+        {
+          "round": 3,
+          "savedCount": 3,
+          "lastCorrect": true,
+          "savedBytesHeldOnImmediateReload": true
+        },
+        {
+          "round": 4,
+          "savedCount": 4,
+          "lastCorrect": true
+        },
+        {
+          "round": 5,
+          "savedCount": 5,
+          "lastCorrect": false
+        },
+        {
+          "round": 6,
+          "savedCount": 6,
+          "lastCorrect": false
+        },
+        {
+          "round": 7,
+          "savedCount": 7,
+          "lastCorrect": true
+        },
+        {
+          "round": 8,
+          "savedCount": 8,
+          "lastCorrect": true
+        },
+        {
+          "round": 9,
+          "savedCount": 9,
+          "lastCorrect": true
+        },
+        {
+          "round": 10,
+          "savedCount": 10,
+          "lastCorrect": false,
+          "savedBytesHeldOnImmediateReload": true
+        }
+      ],
+      "baselineErrors": [],
+      "deliberateSaveErrors": [
+        "TypeError: Cannot read properties of null (reading 'length')\n    at fe (https://douknowball.com/assets/F1HigherLower-BErZ5e-T.js:1:2280)\n    at Ve (https://douknowball.com/assets/F1HigherLower-BErZ5e-T.js:1:3908)\n    at sp (https://douknowball.com/assets/index-Bj5VrkKR.js:39:16998)\n    at xf (https:",
+        "A page failed to render: TypeError: Cannot read properties of null (reading 'length')\n    at fe (https://douknowball.com/assets/F1HigherLower-BErZ5e-T.js:1:2280)\n    at Ve (https://douknowball.com/assets/F1HigherLower-BErZ5e-T.js:1:3908)\n    at sp (https://douknowball.com/assets/index-Bj5VrkKR.js:39"
+      ],
+      "expectedScore": 70,
+      "finish": "Skip to main content DOUKNOWBALL Back Track stats 🏎️ F1 HIGHER OR LOWER Which driver won more Grands Prix? Daily Unlimited 😈 Hard Round: 10/10 Score: 70 F1 · NAILED IT 🏎️ 5/10 Correct! Total Score: 70 (5×10 base + 20 streak bonus) 🏎️ F1 Higher or Lower: 70 pts (5/10) 📊 F1 Higher or Lower Oct 1, 2026 🏎️ F1 Higher or Lower: 70 pts (5/10) RESULT 70 points (5/10) on today's F1 Higher or Lower DoUKnowBall douknowball.com/f1-higher-lower Share result Copy challenge 📋 Copy Score Card 🖼️ Save Image SHARE YOUR RESULT Come back tomorrow for a new challenge! F1 Higher or Lower: Formula 1 Race Wins Quiz Two Formula 1 drivers, side by side. Which one won more Grands Prix? Every driver with 8+ career wins, from Fangio and Moss to Hamilton and Verstappen. Two drivers, one question: who won more Grands Prix? Simple, until the pairings leave the obvious names behind. The pool is every driver in F1 history with at least 8 career wins, 42 of them, from the 1950s through 2025. Points systems changed too much across eras to compare fairly, so the game runs on race wins, a stat that travels. How to play F1 Higher or Lower, a daily Formula 1 trivia game Picking Daily or Unlimited matchups Pick Daily for today's shared matchups or Unlimited for endless random pairs. Reading both driver cards Read both cards: each shows the seasons raced, title count, and teams. Tapping the driver with more wins Tap the driver you think won more Grands Prix. Watching the real totals flash up The real totals flash up, then the next pair rolls in after a couple of seconds. STRINGING WINS TOGETHER FOR A STREAK BONUS String correct answers together to grow the streak bonus. F1 Higher or Lower rules for rounds, streaks and ties Ten rounds worth ten points each 10 rounds per game, 10 points per correct answer",
+      "scoreMatched": true,
+      "finishedTenRounds": true,
+      "oldRevealQuietAfterHard": true,
+      "dailyHeldDuringUnlimited": true,
+      "dailyFinishRestored": true,
+      "corruptNullCrashes": true,
+      "recoveredByDeletingLocalSave": true
+    },
+    {
+      "route": "/tennis-higher-lower",
+      "viewport": 320,
+      "steps": [
+        {
+          "round": 1,
+          "savedCount": 1,
+          "lastCorrect": false
+        },
+        {
+          "round": 2,
+          "savedCount": 2,
+          "lastCorrect": false
+        },
+        {
+          "round": 3,
+          "savedCount": 3,
+          "lastCorrect": false,
+          "savedBytesHeldOnImmediateReload": true
+        },
+        {
+          "round": 4,
+          "savedCount": 4,
+          "lastCorrect": true
+        },
+        {
+          "round": 5,
+          "savedCount": 5,
+          "lastCorrect": false
+        },
+        {
+          "round": 6,
+          "savedCount": 6,
+          "lastCorrect": false
+        },
+        {
+          "round": 7,
+          "savedCount": 7,
+          "lastCorrect": true
+        },
+        {
+          "round": 8,
+          "savedCount": 8,
+          "lastCorrect": false
+        },
+        {
+          "round": 9,
+          "savedCount": 9,
+          "lastCorrect": true
+        },
+        {
+          "round": 10,
+          "savedCount": 10,
+          "lastCorrect": false,
+          "savedBytesHeldOnImmediateReload": true
+        }
+      ],
+      "baselineErrors": [],
+      "deliberateSaveErrors": [
+        "TypeError: Cannot read properties of null (reading 'length')\n    at fe (https://douknowball.com/assets/TennisHigherLower-DYXP4A3U.js:1:2286)\n    at _e (https://douknowball.com/assets/TennisHigherLower-DYXP4A3U.js:1:3898)\n    at sp (https://douknowball.com/assets/index-Bj5VrkKR.js:39:16998)\n    at xf",
+        "A page failed to render: TypeError: Cannot read properties of null (reading 'length')\n    at fe (https://douknowball.com/assets/TennisHigherLower-DYXP4A3U.js:1:2286)\n    at _e (https://douknowball.com/assets/TennisHigherLower-DYXP4A3U.js:1:3898)\n    at sp (https://douknowball.com/assets/index-Bj5Vrk"
+      ],
+      "expectedScore": 30,
+      "finish": "Skip to main content DOUKNOWBALL Back Track stats 🎾 TENNIS HIGHER OR LOWER Which legend won more Grand Slam singles titles? Daily Unlimited 😈 Hard Round: 10/10 Score: 30 TENNIS · NOT THIS TIME 🥎 3/10 Correct! Total Score: 30 (3×10 base + 0 streak bonus) 🎾 Tennis Higher or Lower: 30 pts (3/10) 📊 Tennis Higher or Lower Oct 1, 2026 🎾 Tennis Higher or Lower: 30 pts (3/10) RESULT 30 points (3/10) on today's Tennis Higher or Lower DoUKnowBall douknowball.com/tennis-higher-lower Share result Copy challenge 📋 Copy Score Card 🖼️ Save Image SHARE YOUR RESULT Come back tomorrow for a new challenge! Tennis Higher or Lower: Grand Slam Titles Quiz Two tennis greats, side by side. Which one won more Grand Slam singles titles? Men's and women's legends in one pool, from Bill Tilden to Carlos Alcaraz. Serena or Federer: who won more Grand Slam singles titles? This game asks that kind of question 10 times, and it mixes both tours in one pool on purpose, because cross-tour matchups are where the arguments live. The pool holds 44 champions, from the pioneers of the 1920s to active stars, with title counts frozen through the 2026 Australian Open. How to play Tennis Higher or Lower, a daily Grand Slam trivia game Choosing Daily or Unlimited matchups Choose Daily for the shared matchups or Unlimited for random ones. Reading each player's title years and tour Read both cards: each shows the years of the player's first and last major and their tour. Tapping the player with more Grand Slams Tap the player you think won more Grand Slam singles titles. Watching the real numbers reveal Watch the real numbers reveal, then roll into the next round. CHAINING CORRECT PICKS INTO A STREAK Chain correct answers to build the streak bonus. Tennis Higher or Lower rules for rounds, ties and streaks Te",
+      "scoreMatched": true,
+      "finishedTenRounds": true,
+      "oldRevealQuietAfterHard": true,
+      "dailyHeldDuringUnlimited": true,
+      "dailyFinishRestored": true,
+      "corruptNullCrashes": true,
+      "recoveredByDeletingLocalSave": true
+    },
+    {
+      "route": "/golf-higher-lower",
+      "viewport": 320,
+      "steps": [
+        {
+          "round": 1,
+          "savedCount": 1,
+          "lastCorrect": true
+        },
+        {
+          "round": 2,
+          "savedCount": 2,
+          "lastCorrect": true
+        },
+        {
+          "round": 3,
+          "savedCount": 3,
+          "lastCorrect": true,
+          "savedBytesHeldOnImmediateReload": true
+        },
+        {
+          "round": 4,
+          "savedCount": 4,
+          "lastCorrect": true
+        },
+        {
+          "round": 5,
+          "savedCount": 5,
+          "lastCorrect": true
+        },
+        {
+          "round": 6,
+          "savedCount": 6,
+          "lastCorrect": false
+        },
+        {
+          "round": 7,
+          "savedCount": 7,
+          "lastCorrect": true
+        },
+        {
+          "round": 8,
+          "savedCount": 8,
+          "lastCorrect": true
+        },
+        {
+          "round": 9,
+          "savedCount": 9,
+          "lastCorrect": true
+        },
+        {
+          "round": 10,
+          "savedCount": 10,
+          "lastCorrect": true,
+          "savedBytesHeldOnImmediateReload": true
+        }
+      ],
+      "baselineErrors": [],
+      "deliberateSaveErrors": [
+        "TypeError: Cannot read properties of null (reading 'length')\n    at xe (https://douknowball.com/assets/GolfHigherLower-_6Qrp5q-.js:1:2321)\n    at Ve (https://douknowball.com/assets/GolfHigherLower-_6Qrp5q-.js:1:3935)\n    at sp (https://douknowball.com/assets/index-Bj5VrkKR.js:39:16998)\n    at xf (ht",
+        "A page failed to render: TypeError: Cannot read properties of null (reading 'length')\n    at xe (https://douknowball.com/assets/GolfHigherLower-_6Qrp5q-.js:1:2321)\n    at Ve (https://douknowball.com/assets/GolfHigherLower-_6Qrp5q-.js:1:3935)\n    at sp (https://douknowball.com/assets/index-Bj5VrkKR.j"
+      ],
+      "expectedScore": 170,
+      "finish": "Skip to main content DOUKNOWBALL Back Track stats ⛳ GOLF HIGHER OR LOWER Which golfer won more major championships? Daily Unlimited 😈 Hard Round: 10/10 Score: 170 4🔥 GOLF · NAILED IT 🏆 9/10 Correct! Total Score: 170 (9×10 base + 80 streak bonus) ⛳ Golf Higher or Lower: 170 pts (9/10) 📊 Golf Higher or Lower Oct 1, 2026 ⛳ Golf Higher or Lower: 170 pts (9/10) RESULT 170 points (9/10) on today's Golf Higher or Lower DoUKnowBall douknowball.com/golf-higher-lower Share result Copy challenge 📋 Copy Score Card 🖼️ Save Image SHARE YOUR RESULT Come back tomorrow for a new challenge! Golf Higher or Lower: Major Championships Quiz Two major champions, side by side. Which one won more majors? From Old Tom Morris to Scottie Scheffler, the whole history of championship golf is in the pool. Golf's major-count arguments, settled 10 rounds at a time. Two champions appear side by side and you pick the one with more career majors. The pool runs the entire history of championship golf: 61 players, everyone with at least 2 majors, from Old Tom Morris in the 1860s to Scottie Scheffler. How to play Golf Higher or Lower, a daily major championship trivia game Choosing Daily or Unlimited pairs Choose Daily for the shared matchups or Unlimited for random pairs. Reading each golfer's country and win years Each card shows the golfer's country and the years of their first and last major win. Tapping the golfer with more majors Tap the golfer you believe won more majors. Watching the real counts reveal The real counts reveal, points land, and the next pair appears. STACKING CORRECT PICKS FOR STREAK BONUSES Stack correct answers for streak bonuses. Golf Higher or Lower rules for rounds, ties and streak bonuses Ten rounds and a growing streak bonus 10 rounds, 10 points per correct answer, plus a ",
+      "scoreMatched": true,
+      "finishedTenRounds": true,
+      "oldRevealQuietAfterHard": true,
+      "dailyHeldDuringUnlimited": true,
+      "dailyFinishRestored": true,
+      "corruptNullCrashes": true,
+      "recoveredByDeletingLocalSave": true
+    },
+    {
+      "route": "/afl-higher-lower",
+      "viewport": 320,
+      "steps": [
+        {
+          "round": 1,
+          "savedCount": 1,
+          "lastCorrect": true
+        },
+        {
+          "round": 2,
+          "savedCount": 2,
+          "lastCorrect": true
+        },
+        {
+          "round": 3,
+          "savedCount": 3,
+          "lastCorrect": true,
+          "savedBytesHeldOnImmediateReload": true
+        },
+        {
+          "round": 4,
+          "savedCount": 4,
+          "lastCorrect": true
+        },
+        {
+          "round": 5,
+          "savedCount": 5,
+          "lastCorrect": true
+        },
+        {
+          "round": 6,
+          "savedCount": 6,
+          "lastCorrect": false
+        },
+        {
+          "round": 7,
+          "savedCount": 7,
+          "lastCorrect": false
+        },
+        {
+          "round": 8,
+          "savedCount": 8,
+          "lastCorrect": false
+        },
+        {
+          "round": 9,
+          "savedCount": 9,
+          "lastCorrect": false
+        },
+        {
+          "round": 10,
+          "savedCount": 10,
+          "lastCorrect": false,
+          "savedBytesHeldOnImmediateReload": true
+        }
+      ],
+      "baselineErrors": [],
+      "deliberateSaveErrors": [
+        "TypeError: Cannot read properties of null (reading 'length')\n    at fe (https://douknowball.com/assets/AflHigherLower-DmMKtIWf.js:1:2276)\n    at Ke (https://douknowball.com/assets/AflHigherLower-DmMKtIWf.js:1:3885)\n    at sp (https://douknowball.com/assets/index-Bj5VrkKR.js:39:16998)\n    at xf (http",
+        "A page failed to render: TypeError: Cannot read properties of null (reading 'length')\n    at fe (https://douknowball.com/assets/AflHigherLower-DmMKtIWf.js:1:2276)\n    at Ke (https://douknowball.com/assets/AflHigherLower-DmMKtIWf.js:1:3885)\n    at sp (https://douknowball.com/assets/index-Bj5VrkKR.js:"
+      ],
+      "expectedScore": 100,
+      "finish": "Skip to main content DOUKNOWBALL Back Track stats 🏉 AFL HIGHER OR LOWER Which legend kicked more career goals? Daily Unlimited 😈 Hard Round: 10/10 Score: 100 AFL · NAILED IT 🏉 5/10 Correct! Total Score: 100 (5×10 base + 50 streak bonus) 🏉 AFL Higher or Lower: 100 pts (5/10) 📊 AFL Higher or Lower Oct 1, 2026 🏉 AFL Higher or Lower: 100 pts (5/10) RESULT 100 points (5/10) on today's AFL Higher or Lower DoUKnowBall douknowball.com/afl-higher-lower Share result Copy challenge 📋 Copy Score Card 🖼️ Save Image SHARE YOUR RESULT Come back tomorrow for a new challenge! AFL Higher or Lower: Aussie Rules Goals Quiz Two footy legends, side by side. Which one kicked more career goals? From Gordon Coventry in the 1920s to Buddy Franklin, the whole history of the game is in the pool. Footy's goal kicking arguments, settled 10 rounds at a time. Two VFL/AFL greats appear side by side and you pick the one who kicked more career goals. The pool is 60 retired legends, everyone from Gordon Coventry in the 1920s to Buddy Franklin, and only retired players make the list so no total ever moves under you. How to play AFL Higher or Lower, a free footy goal kicking trivia game Choosing Daily or Unlimited mode Choose Daily for the shared matchups or Unlimited for random pairs. Reading each player's card Each card shows the player's clubs and the years of their career. Picking the higher career goal kicker Tap the player you believe kicked more career goals. The real counts reveal, points land, and the next pair appears. Stacking a streak bonus Stack correct answers for streak bonuses. AFL Higher or Lower rules for rounds, streaks and hard mode Scoring ten rounds and a growing streak bonus 10 rounds, 10 points per correct answer, plus a streak bonus growing by 5 with each straight correct af",
+      "scoreMatched": true,
+      "finishedTenRounds": true,
+      "oldRevealQuietAfterHard": true,
+      "dailyHeldDuringUnlimited": true,
+      "dailyFinishRestored": true,
+      "corruptNullCrashes": true,
+      "recoveredByDeletingLocalSave": true
+    }
+  ],
+  "findings": [
+    {
+      "id": "QA847-DAILY-SAVE-SHAPE",
+      "url": "https://douknowball.com/mlb-higher-lower",
+      "game": "/mlb-higher-lower",
+      "severity": "P2",
+      "steps": [
+        "Create a real Daily save",
+        "Keep version/date/puzzle fields but change guesses to null",
+        "Refresh"
+      ],
+      "expected": "Reject malformed save and recover safely",
+      "actual": "This page broke error boundary replaces the game",
+      "possibleCause": "Shared useDailyPuzzle restore accepts null deserialized guesses",
+      "evidence": {
+        "key": "mlb-hl-daily-2026-10-01",
+        "baselineTenRoundScore": 35,
+        "errors": [
+          "TypeError: Cannot read properties of null (reading 'length')\n    at fe (https://douknowball.com/assets/MlbHigherLower-DZ_sIBWN.js:1:2282)\n    at _e (https://douknowball.com/assets/MlbHigherLower-DZ_sIBWN.js:1:3907)\n    at sp (https://douknowball.com/assets/index-Bj5VrkKR.js:39:16998)\n    at xf (http",
+          "A page failed to render: TypeError: Cannot read properties of null (reading 'length')\n    at fe (https://douknowball.com/assets/MlbHigherLower-DZ_sIBWN.js:1:2282)\n    at _e (https://douknowball.com/assets/MlbHigherLower-DZ_sIBWN.js:1:3907)\n    at sp (https://douknowball.com/assets/index-Bj5VrkKR.js:"
+        ]
+      }
+    },
+    {
+      "id": "QA847-DAILY-SAVE-SHAPE",
+      "url": "https://douknowball.com/nfl-higher-lower",
+      "game": "/nfl-higher-lower",
+      "severity": "P2",
+      "steps": [
+        "Create a real Daily save",
+        "Keep version/date/puzzle fields but change guesses to null",
+        "Refresh"
+      ],
+      "expected": "Reject malformed save and recover safely",
+      "actual": "This page broke error boundary replaces the game",
+      "possibleCause": "Shared useDailyPuzzle restore accepts null deserialized guesses",
+      "evidence": {
+        "key": "nfl-hl-daily-2026-10-01",
+        "baselineTenRoundScore": 70,
+        "errors": [
+          "TypeError: Cannot read properties of null (reading 'length')\n    at xe (https://douknowball.com/assets/NflHigherLower-CKbbVyVb.js:1:2328)\n    at Ke (https://douknowball.com/assets/NflHigherLower-CKbbVyVb.js:1:3878)\n    at sp (https://douknowball.com/assets/index-Bj5VrkKR.js:39:16998)\n    at xf (http",
+          "A page failed to render: TypeError: Cannot read properties of null (reading 'length')\n    at xe (https://douknowball.com/assets/NflHigherLower-CKbbVyVb.js:1:2328)\n    at Ke (https://douknowball.com/assets/NflHigherLower-CKbbVyVb.js:1:3878)\n    at sp (https://douknowball.com/assets/index-Bj5VrkKR.js:"
+        ]
+      }
+    },
+    {
+      "id": "QA847-DAILY-SAVE-SHAPE",
+      "url": "https://douknowball.com/nba-higher-lower",
+      "game": "/nba-higher-lower",
+      "severity": "P2",
+      "steps": [
+        "Create a real Daily save",
+        "Keep version/date/puzzle fields but change guesses to null",
+        "Refresh"
+      ],
+      "expected": "Reject malformed save and recover safely",
+      "actual": "This page broke error boundary replaces the game",
+      "possibleCause": "Shared useDailyPuzzle restore accepts null deserialized guesses",
+      "evidence": {
+        "key": "nba-hl-daily-2026-10-01",
+        "baselineTenRoundScore": 115,
+        "errors": [
+          "TypeError: Cannot read properties of null (reading 'length')\n    at fe (https://douknowball.com/assets/NbaHigherLower-Bve0UkwB.js:1:2288)\n    at Ke (https://douknowball.com/assets/NbaHigherLower-Bve0UkwB.js:1:3925)\n    at sp (https://douknowball.com/assets/index-Bj5VrkKR.js:39:16998)\n    at xf (http",
+          "A page failed to render: TypeError: Cannot read properties of null (reading 'length')\n    at fe (https://douknowball.com/assets/NbaHigherLower-Bve0UkwB.js:1:2288)\n    at Ke (https://douknowball.com/assets/NbaHigherLower-Bve0UkwB.js:1:3925)\n    at sp (https://douknowball.com/assets/index-Bj5VrkKR.js:"
+        ]
+      }
+    },
+    {
+      "id": "QA847-DAILY-SAVE-SHAPE",
+      "url": "https://douknowball.com/cfb-higher-lower",
+      "game": "/cfb-higher-lower",
+      "severity": "P2",
+      "steps": [
+        "Create a real Daily save",
+        "Keep version/date/puzzle fields but change guesses to null",
+        "Refresh"
+      ],
+      "expected": "Reject malformed save and recover safely",
+      "actual": "This page broke error boundary replaces the game",
+      "possibleCause": "Shared useDailyPuzzle restore accepts null deserialized guesses",
+      "evidence": {
+        "key": "cfb-hl-daily-2026-10-01",
+        "baselineTenRoundScore": 90,
+        "errors": [
+          "TypeError: Cannot read properties of null (reading 'length')\n    at fe (https://douknowball.com/assets/CfbHigherLower-BQOlm8bX.js:1:2290)\n    at Ie (https://douknowball.com/assets/CfbHigherLower-BQOlm8bX.js:1:3931)\n    at sp (https://douknowball.com/assets/index-Bj5VrkKR.js:39:16998)\n    at xf (http",
+          "A page failed to render: TypeError: Cannot read properties of null (reading 'length')\n    at fe (https://douknowball.com/assets/CfbHigherLower-BQOlm8bX.js:1:2290)\n    at Ie (https://douknowball.com/assets/CfbHigherLower-BQOlm8bX.js:1:3931)\n    at sp (https://douknowball.com/assets/index-Bj5VrkKR.js:"
+        ]
+      }
+    },
+    {
+      "id": "QA847-DAILY-SAVE-SHAPE",
+      "url": "https://douknowball.com/f1-higher-lower",
+      "game": "/f1-higher-lower",
+      "severity": "P2",
+      "steps": [
+        "Create a real Daily save",
+        "Keep version/date/puzzle fields but change guesses to null",
+        "Refresh"
+      ],
+      "expected": "Reject malformed save and recover safely",
+      "actual": "This page broke error boundary replaces the game",
+      "possibleCause": "Shared useDailyPuzzle restore accepts null deserialized guesses",
+      "evidence": {
+        "key": "f1-hl-daily-2026-10-01",
+        "baselineTenRoundScore": 70,
+        "errors": [
+          "TypeError: Cannot read properties of null (reading 'length')\n    at fe (https://douknowball.com/assets/F1HigherLower-BErZ5e-T.js:1:2280)\n    at Ve (https://douknowball.com/assets/F1HigherLower-BErZ5e-T.js:1:3908)\n    at sp (https://douknowball.com/assets/index-Bj5VrkKR.js:39:16998)\n    at xf (https:",
+          "A page failed to render: TypeError: Cannot read properties of null (reading 'length')\n    at fe (https://douknowball.com/assets/F1HigherLower-BErZ5e-T.js:1:2280)\n    at Ve (https://douknowball.com/assets/F1HigherLower-BErZ5e-T.js:1:3908)\n    at sp (https://douknowball.com/assets/index-Bj5VrkKR.js:39"
+        ]
+      }
+    },
+    {
+      "id": "QA847-DAILY-SAVE-SHAPE",
+      "url": "https://douknowball.com/tennis-higher-lower",
+      "game": "/tennis-higher-lower",
+      "severity": "P2",
+      "steps": [
+        "Create a real Daily save",
+        "Keep version/date/puzzle fields but change guesses to null",
+        "Refresh"
+      ],
+      "expected": "Reject malformed save and recover safely",
+      "actual": "This page broke error boundary replaces the game",
+      "possibleCause": "Shared useDailyPuzzle restore accepts null deserialized guesses",
+      "evidence": {
+        "key": "tennis-hl-daily-2026-10-01",
+        "baselineTenRoundScore": 30,
+        "errors": [
+          "TypeError: Cannot read properties of null (reading 'length')\n    at fe (https://douknowball.com/assets/TennisHigherLower-DYXP4A3U.js:1:2286)\n    at _e (https://douknowball.com/assets/TennisHigherLower-DYXP4A3U.js:1:3898)\n    at sp (https://douknowball.com/assets/index-Bj5VrkKR.js:39:16998)\n    at xf",
+          "A page failed to render: TypeError: Cannot read properties of null (reading 'length')\n    at fe (https://douknowball.com/assets/TennisHigherLower-DYXP4A3U.js:1:2286)\n    at _e (https://douknowball.com/assets/TennisHigherLower-DYXP4A3U.js:1:3898)\n    at sp (https://douknowball.com/assets/index-Bj5Vrk"
+        ]
+      }
+    },
+    {
+      "id": "QA847-DAILY-SAVE-SHAPE",
+      "url": "https://douknowball.com/golf-higher-lower",
+      "game": "/golf-higher-lower",
+      "severity": "P2",
+      "steps": [
+        "Create a real Daily save",
+        "Keep version/date/puzzle fields but change guesses to null",
+        "Refresh"
+      ],
+      "expected": "Reject malformed save and recover safely",
+      "actual": "This page broke error boundary replaces the game",
+      "possibleCause": "Shared useDailyPuzzle restore accepts null deserialized guesses",
+      "evidence": {
+        "key": "golf-hl-daily-2026-10-01",
+        "baselineTenRoundScore": 170,
+        "errors": [
+          "TypeError: Cannot read properties of null (reading 'length')\n    at xe (https://douknowball.com/assets/GolfHigherLower-_6Qrp5q-.js:1:2321)\n    at Ve (https://douknowball.com/assets/GolfHigherLower-_6Qrp5q-.js:1:3935)\n    at sp (https://douknowball.com/assets/index-Bj5VrkKR.js:39:16998)\n    at xf (ht",
+          "A page failed to render: TypeError: Cannot read properties of null (reading 'length')\n    at xe (https://douknowball.com/assets/GolfHigherLower-_6Qrp5q-.js:1:2321)\n    at Ve (https://douknowball.com/assets/GolfHigherLower-_6Qrp5q-.js:1:3935)\n    at sp (https://douknowball.com/assets/index-Bj5VrkKR.j"
+        ]
+      }
+    },
+    {
+      "id": "QA847-DAILY-SAVE-SHAPE",
+      "url": "https://douknowball.com/afl-higher-lower",
+      "game": "/afl-higher-lower",
+      "severity": "P2",
+      "steps": [
+        "Create a real Daily save",
+        "Keep version/date/puzzle fields but change guesses to null",
+        "Refresh"
+      ],
+      "expected": "Reject malformed save and recover safely",
+      "actual": "This page broke error boundary replaces the game",
+      "possibleCause": "Shared useDailyPuzzle restore accepts null deserialized guesses",
+      "evidence": {
+        "key": "afl-hl-daily-2026-10-01",
+        "baselineTenRoundScore": 100,
+        "errors": [
+          "TypeError: Cannot read properties of null (reading 'length')\n    at fe (https://douknowball.com/assets/AflHigherLower-DmMKtIWf.js:1:2276)\n    at Ke (https://douknowball.com/assets/AflHigherLower-DmMKtIWf.js:1:3885)\n    at sp (https://douknowball.com/assets/index-Bj5VrkKR.js:39:16998)\n    at xf (http",
+          "A page failed to render: TypeError: Cannot read properties of null (reading 'length')\n    at fe (https://douknowball.com/assets/AflHigherLower-DmMKtIWf.js:1:2276)\n    at Ke (https://douknowball.com/assets/AflHigherLower-DmMKtIWf.js:1:3885)\n    at sp (https://douknowball.com/assets/index-Bj5VrkKR.js:"
+        ]
+      }
+    }
+  ],
+  "blockedWrites": [
+    {
+      "route": "/mlb-higher-lower",
+      "path": "/rest/v1/game_completions"
+    },
+    {
+      "route": "/nfl-higher-lower",
+      "path": "/rest/v1/game_completions"
+    },
+    {
+      "route": "/nba-higher-lower",
+      "path": "/rest/v1/game_completions"
+    },
+    {
+      "route": "/cfb-higher-lower",
+      "path": "/rest/v1/game_completions"
+    },
+    {
+      "route": "/f1-higher-lower",
+      "path": "/rest/v1/game_completions"
+    },
+    {
+      "route": "/tennis-higher-lower",
+      "path": "/rest/v1/game_completions"
+    },
+    {
+      "route": "/golf-higher-lower",
+      "path": "/rest/v1/game_completions"
+    },
+    {
+      "route": "/afl-higher-lower",
+      "path": "/rest/v1/game_completions"
+    }
+  ]
+}
