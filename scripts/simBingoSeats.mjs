@@ -29,20 +29,42 @@
  *      doneAt bookkeeping matches the harness's own count, and the table
  *      stops after the round the goal was first met in
  *   5) the three tempers keep their order at a table, by margins set from
- *      measured runs, so filling seats with CPUs does not flatten them
+ *      measured runs, so filling seats with CPUs does not flatten them, and
+ *      each plays within a band of its own solo rate
  *   6) saves: a Round 428 daily record loads unchanged, a table survives a
- *      round trip, and six kinds of wreckage load as nothing
+ *      round trip, and eight kinds of wreckage load as nothing
  *   7) the hand over hides every card: the component the phone changes
  *      hands on reads nothing of the deal, and the page hands it a name and
  *      a pack number and nothing else
  *   8) one seed, one table: a replay is byte identical, another seed differs
+ *   9) the solo deal did not move: buildGame (the daily, unlimited and CPU
+ *      deal) equals the Round 428 engine, read out of git at the last commit
+ *      before this round, card and packs, over two years of daily seeds and
+ *      300 more. A saved daily keeps only the marked board and the card comes
+ *      back from the seed, so this is what makes an old daily load as the
+ *      card it was played on. No history to read fails closed.
+ *
+ * MEASURED (2026-10-01, the baked pool of 553). SIM_BINGO_SEATS_SALT moves
+ * every seed this harness deals (0, the default, is the committed run) so
+ * the bands below come from five seed sets, salts 0 to 4:
+ *   section 4  tables decided by the square count       57, 55, 53, 58, 55
+ *              finishers on different counts           124, 128, 116, 121, 129
+ *              of those, fewest count had fewer squares  77, 78, 67, 85, 85
+ *              floors 25, 50 and 30, under half the lowest of each
+ *   section 5  casual 9.3 to 9.4, sharp 17.6 to 17.9, ruthless 22.1 to 22.3
+ *              squares; the smaller gap ran 4.4 to 4.6, the floor is 2; each
+ *              within 0.3 of its solo rate, the band is 1.5
  *
  * NEGATIVE CONTROLS, each patching a copy of a file after normalising CRLF,
  * asserting the text it rewrites is present exactly once, and refusing to
  * run otherwise:
  *   SIM_BINGO_SEATS_CONTROL=split      rotates the packs per seat, so seat two
- *                                      hears pack two first: sections 1 and
- *                                      3 must FAIL
+ *                                      hears pack two first: section 1 (the
+ *                                      deal) and section 4 (the order each
+ *                                      seat is shown players in play) must
+ *                                      FAIL. Section 3 stays green on purpose:
+ *                                      a rotation holds the same players, so
+ *                                      every card is still completable.
  *   SIM_BINGO_SEATS_CONTROL=anyfamily  ignores the family pick when dealing:
  *                                      section 2 must FAIL
  *   SIM_BINGO_SEATS_CONTROL=tiebreak   drops the fewest players rule from the
@@ -50,9 +72,18 @@
  *   SIM_BINGO_SEATS_CONTROL=peek       makes the hand over print a card and
  *                                      the page hand it one: section 7 must
  *                                      FAIL
+ *   SIM_BINGO_SEATS_CONTROL=redeal     seeds the deal one off: section 9 must
+ *                                      FAIL
+ *   SIM_BINGO_SEATS_CONTROL=temper     every CPU seat at a table plays sharp
+ *                                      whatever it was given: section 5 must
+ *                                      FAIL
+ *
+ * A control passes only when it produced failures in the sections it is
+ * aimed at, not merely somewhere in the run.
  *
  * Run: node scripts/simBingoSeats.mjs
  */
+import { execFileSync } from 'node:child_process';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
@@ -65,14 +96,20 @@ import * as esbuild from 'esbuild';
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..').replace(/\\/g, '/');
 const TMP = os.tmpdir().replace(/\\/g, '/');
 let failures = 0;
-const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
+/* Which section a failure came from, so a control can be held to the sections it aims at. */
+let section = 0;
+const failedSections = new Set();
+const fail = m => { failures += 1; failedSections.add(section); console.error('  FAIL: ' + m); };
 
-const CONTROLS = ['split', 'anyfamily', 'tiebreak', 'peek'];
+const CONTROLS = ['split', 'anyfamily', 'tiebreak', 'peek', 'redeal', 'temper'];
 const CONTROL = process.env.SIM_BINGO_SEATS_CONTROL || '';
 if (CONTROL && !CONTROLS.includes(CONTROL)) {
   console.error(`SIM_BINGO_SEATS_CONTROL=${CONTROL} is not a control this harness knows (${CONTROLS.join(', ')})`);
   process.exit(1);
 }
+/* Salt 0 is the committed run; other salts are how the header's bands were measured. */
+const SALT = Number(process.env.SIM_BINGO_SEATS_SALT || 0);
+if (!Number.isInteger(SALT) || SALT < 0) { console.error(`SIM_BINGO_SEATS_SALT=${process.env.SIM_BINGO_SEATS_SALT} is not a whole number`); process.exit(1); }
 
 /* ---------- module paths, patched in place for a control ---------- */
 
@@ -142,6 +179,35 @@ if (CONTROL === 'peek') {
   ]]);
   console.log('NEGATIVE CONTROL ON: the hand over prints the card and the page hands it one');
 }
+if (CONTROL === 'redeal') {
+  libPath = patchedCopy(LIB_SRC, [[
+    'const rng = lehmer(seed);',
+    'const rng = lehmer(seed + 1);',
+  ]], 'simBingoSeats.control.sportsBingo.ts');
+  console.log('NEGATIVE CONTROL ON: the deal is seeded one off');
+}
+if (CONTROL === 'temper') {
+  libPath = patchedCopy(LIB_SRC, [[
+    'marked, seat.level, cpuRng(cur, seat.index)',
+    "marked, 'sharp', cpuRng(cur, seat.index)",
+  ]], 'simBingoSeats.control.sportsBingo.ts');
+  console.log('NEGATIVE CONTROL ON: every CPU seat at a table plays sharp whatever temper it was given');
+}
+
+/* ---------- the Round 428 engine, for section 9 ---------- */
+
+/* The last commit to touch the engine before Round 727. Read out of git, not
+   copied into this file, so the reference is the code that dealt every daily
+   up to this round rather than somebody's memory of it. */
+const R428 = 'd1032ac3df4b1bf9699049390d56d8477687a8e2';
+const OLD_LIB = `${TMP}/bingoSeats.r428.sportsBingo.ts`;
+let oldLibOk = false;
+try {
+  fs.writeFileSync(OLD_LIB, execFileSync('git', ['show', `${R428}:src/lib/sportsBingo.ts`], { cwd: ROOT, encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] }));
+  oldLibOk = true;
+} catch {
+  fs.writeFileSync(OLD_LIB, 'export {};\n');
+}
 
 /* ---------- bundle the real module ---------- */
 
@@ -149,6 +215,7 @@ const ENTRY = `${TMP}/bingoSeats.entry.mjs`;
 const BUNDLE = `${TMP}/bingoSeats.bundle.mjs`;
 fs.writeFileSync(ENTRY, `
 export * as bingo from '${libPath}';
+export * as r428 from '${OLD_LIB}';
 export { players as POOL } from '${ROOT}/src/data/players.ts';
 `);
 try {
@@ -165,11 +232,11 @@ globalThis.localStorage = {
   key: i => [...store.keys()][i] ?? null,
   get length() { return store.size; },
 };
-const { bingo, POOL } = await import(pathToFileURL(BUNDLE).href);
+const { bingo, r428, POOL } = await import(pathToFileURL(BUNDLE).href);
 const {
   ALL_FAMILIES, CARD_SIZE, CONDITIONS, CPU_LEVELS, DIFFICULTIES, FREE_INDEX, PACK_COUNT, PACK_SIZE, PACK_SECONDS,
-  allowedConditions, claimSquare, claimableSquares, closeTurn, conditionById, createTable, dealCards, declareWinner,
-  goalMet, lehmer, lineCount, loadBingoTable, loadDailyBingo, openTurn, parseBingoTable, revealNext, saveBingoTable,
+  buildGame, claimSquare, claimableSquares, closeTurn, conditionById, cpuClaims, createTable, dailySeed, dealCards, declareWinner,
+  goalMet, lehmer, loadBingoTable, loadDailyBingo, openTurn, parseBingoTable, revealNext, saveBingoTable,
   seatGame, squaresOf,
 } = bingo;
 
@@ -177,7 +244,7 @@ const mean = a => a.reduce((x, y) => x + y, 0) / a.length;
 const packPrint = packs => packs.flat().map(p => p.name).join(',');
 const sameSet = (a, b) => a.length === b.length && [...a].sort().join() === [...b].sort().join();
 
-console.log(`Sports Bingo seats: pool ${POOL.length}, ${CONDITIONS.length} conditions in ${ALL_FAMILIES.length} families${CONTROL ? `  [CONTROL=${CONTROL}]` : ''}`);
+console.log(`Sports Bingo seats: pool ${POOL.length}, ${CONDITIONS.length} conditions in ${ALL_FAMILIES.length} families${process.env.SIM_BINGO_SEATS_SALT ? `, seed salt ${SALT}` : ''}${CONTROL ? `  [CONTROL=${CONTROL}]` : ''}`);
 
 /* ---------- the driver ---------- */
 
@@ -287,7 +354,7 @@ function ruleVerdict(t, myDoneAt) {
 }
 
 const SEEDS = Number(process.env.SIM_BINGO_SEATS_SEEDS || 60);
-const seedAt = k => 7919 * (k + 1) + 13;
+const seedAt = k => 7919 * (k + 1 + SALT * 1000) + 13;
 const NO_NATIONALITY = ALL_FAMILIES.filter(f => f !== 'nationality');
 const LEAGUES_AND_POSITIONS = ['league', 'position'];
 const PICKS = [['all', ALL_FAMILIES], ['no nationality', NO_NATIONALITY], ['leagues and positions', LEAGUES_AND_POSITIONS]];
@@ -296,6 +363,7 @@ const seatsOf = (kinds) => kinds.map((k, i) => (k === 'cpu'
   : { kind: 'human', name: `Seat ${i}`, level: 'casual' }));
 
 /* ================= 1. one call, every card ================= */
+section = 1;
 console.log('\n1. EVERY SEAT HEARS THE SAME PACKS');
 const dealt = [];
 {
@@ -320,6 +388,7 @@ const dealt = [];
 }
 
 /* ================= 2. the families mean what they say ================= */
+section = 2;
 console.log('\n2. THE FAMILIES MEAN WHAT THEY SAY');
 {
   const subsets = [];
@@ -362,6 +431,7 @@ console.log('\n2. THE FAMILIES MEAN WHAT THEY SAY');
 }
 
 /* ================= 3. every card is completable from the shared packs ================= */
+section = 3;
 console.log('\n3. EVERY CARD IS COMPLETABLE FROM THE SHARED PACKS');
 {
   let cards = 0;
@@ -384,6 +454,7 @@ console.log('\n3. EVERY CARD IS COMPLETABLE FROM THE SHARED PACKS');
 }
 
 /* ================= 4. the verdict is the rule ================= */
+section = 4;
 console.log('\n4. THE VERDICT IS THE RULE');
 {
   const LINEUPS = [
@@ -468,22 +539,24 @@ console.log('\n4. THE VERDICT IS THE RULE');
   if (shownOff > 0) fail(`${shownOff} seats were shown players out of the shared order`);
   /* Coverage: every branch of the rule has to have been exercised, or the
      tiebreak control has nothing to bite and a dead branch would read green.
-     Measured 2026-10-01 over 720 tables on these fixed seeds: 123 tables
-     with finishers on different counts, 79 of them where the fewest count
-     seat had fewer squares than another finisher, and 54 decided by the
-     square count after ten packs. The floors sit at about half of each. */
+     Measured 2026-10-01 over 720 tables at each of salts 0 to 4: 124, 128,
+     116, 121 and 129 tables with finishers on different counts; 77, 78, 67,
+     85 and 85 of them where the fewest count seat had fewer squares than
+     another finisher; 57, 55, 53, 58 and 55 decided by the square count
+     after ten packs. Each floor sits under half the lowest of its five. */
   if (revealsDecided < 50) fail(`only ${revealsDecided} tables had finishers on different counts, too few to exercise the tie rule`);
-  if (revealsOverSquares < 35) fail(`only ${revealsOverSquares} tables set the fewest count against the most squares, too few to tell the rule from a square count`);
+  if (revealsOverSquares < 30) fail(`only ${revealsOverSquares} tables set the fewest count against the most squares, too few to tell the rule from a square count`);
   if (bySquares < 25) fail(`only ${bySquares} tables were decided by the square count, too few to exercise the no finisher branch`);
 }
 
 /* ================= 5. the tempers keep their order at a table ================= */
+section = 5;
 console.log('\n5. THE TEMPERS KEEP THEIR ORDER AT A TABLE');
 {
   const GAMES = 120;
   const totals = { casual: [], sharp: [], ruthless: [] };
   for (let k = 0; k < GAMES; k += 1) {
-    const seed = 104729 * (k + 1);
+    const seed = 104729 * (k + 1 + SALT * 1000);
     const seats = [
       { kind: 'human', name: 'Idle', level: 'casual' },
       { kind: 'cpu', name: 'Casual CPU', level: 'casual' },
@@ -503,19 +576,45 @@ console.log('\n5. THE TEMPERS KEEP THEIR ORDER AT A TABLE');
   const sharp = mean(totals.sharp);
   const ruthless = mean(totals.ruthless);
   console.log(`  over ${GAMES} four seat tables on the full card goal: casual ${casual.toFixed(1)}, sharp ${sharp.toFixed(1)}, ruthless ${ruthless.toFixed(1)} squares`);
-  /* simSportsBingo section 5 pins the solo run at about 9.4, 17.9 and 22.1
-     (gaps 8.5 and 4.2) and demands 2. At the table a ruthless blackout ends
-     the game early for everyone, so the table numbers sit at or near the
-     solo ones; measured 2026-10-01 over these 120 seeds: 9.5, 17.9, 22.3,
-     gaps of 8.4 and 4.4. Same floor of 2, under half the smaller gap. */
+  /* simSportsBingo section 5 pins the solo run (casual 9.4, sharp 17.9,
+     ruthless 22.3 on 2026-10-01) and demands gaps of 2. At the table a
+     ruthless blackout ends the game early for everyone, so the table numbers
+     sit at or a shade under the solo ones; measured 2026-10-01 at salts 0 to
+     4: casual 9.4, 9.3, 9.3, 9.4, 9.3; sharp 17.6, 17.7, 17.9, 17.7, 17.8;
+     ruthless 22.2, 22.2, 22.3, 22.1, 22.2. Gaps 8.2 to 8.6 and 4.4 to 4.6, so
+     the same floor of 2 sits under half the smaller gap. */
   if (!(sharp >= casual + 2)) fail(`sharp (${sharp.toFixed(1)}) does not clearly out-mark casual (${casual.toFixed(1)}) at a table`);
   if (!(ruthless >= sharp + 2)) fail(`ruthless (${ruthless.toFixed(1)}) does not clearly out-mark sharp (${sharp.toFixed(1)}) at a table`);
+  /* And each temper plays at the table the way it plays solo: the solo run
+     recomputed here on simSportsBingo's own recipe (same seeds, same CPU
+     stream), each table mean within 1.5 squares of it. Measured gaps at
+     salts 0 to 4 were 0.3 or less for every temper, so 1.5 is five times
+     the largest seen and still well under the 4.4 that separates two
+     tempers, which is what a seat quietly playing the wrong temper costs. */
+  const solo = {};
+  for (const { id } of CPU_LEVELS) {
+    let total = 0;
+    for (let s = 1; s <= GAMES; s += 1) {
+      const g = buildGame(POOL, s * 104729);
+      const rng = lehmer(s * 31 + 7);
+      const marked = new Array(CARD_SIZE).fill(false);
+      for (const pack of g.packs) for (const sq of cpuClaims(g, pack, marked, id, rng)) marked[sq] = true;
+      total += squaresOf(marked);
+    }
+    solo[id] = total / GAMES;
+  }
+  const table = { casual, sharp, ruthless };
+  console.log(`  the same tempers solo, on simSportsBingo's recipe: casual ${solo.casual.toFixed(1)}, sharp ${solo.sharp.toFixed(1)}, ruthless ${solo.ruthless.toFixed(1)}`);
+  for (const { id } of CPU_LEVELS) {
+    if (Math.abs(table[id] - solo[id]) > 1.5) fail(`${id} marks ${table[id].toFixed(1)} at a table against ${solo[id].toFixed(1)} solo, the temper does not hold when it fills a seat`);
+  }
   const secs = DIFFICULTIES.map(d => d.seconds);
   if (!(secs[0] > secs[1] && secs[1] > secs[2]) || secs[1] !== PACK_SECONDS) fail(`the difficulties run ${secs.join(', ')} seconds, not strictly slower to faster through the solo pace`);
   else console.log(`  difficulties run ${secs.join(', ')} seconds a pack, the middle one the solo pace`);
 }
 
 /* ================= 6. saves ================= */
+section = 6;
 console.log('\n6. SAVES LOAD UNCHANGED, WRECKAGE LOADS AS NOTHING');
 {
   store.clear();
@@ -565,6 +664,7 @@ console.log('\n6. SAVES LOAD UNCHANGED, WRECKAGE LOADS AS NOTHING');
 }
 
 /* ================= 7. the hand over hides every card ================= */
+section = 7;
 console.log('\n7. THE HAND OVER HIDES EVERY CARD');
 {
   const READINGS = /\b(marked|cards|packs|squareCondition|claimable|revealed|seatGame|BingoCardGrid|BingoPackList|Player)\b/;
@@ -588,6 +688,7 @@ console.log('\n7. THE HAND OVER HIDES EVERY CARD');
 }
 
 /* ================= 8. one seed, one table ================= */
+section = 8;
 console.log('\n8. ONE SEED, ONE TABLE');
 {
   const setup = { seats: seatsOf(['human', 'cpu', 'human']), families: NO_NATIONALITY, difficulty: 'standard', goal: 'line' };
@@ -604,11 +705,37 @@ console.log('\n8. ONE SEED, ONE TABLE');
   }
 }
 
+/* ================= 9. the solo deal did not move ================= */
+section = 9;
+console.log('\n9. THE SOLO DEAL IS THE ROUND 428 DEAL');
+if (!oldLibOk || typeof r428.buildGame !== 'function') {
+  fail(`could not read the Round 428 engine out of git (${R428}); this check needs the repo history, it does not pass without it`);
+} else {
+  const fp = g => g.cardIds.join(',') + '|' + g.packs.flat().map(p => p.name).join(',');
+  let compared = 0;
+  let moved = 0;
+  const d0 = Date.UTC(2026, 0, 1);
+  for (let i = 0; i < 730; i += 1) {
+    const s = dailySeed(new Date(d0 + i * 86400000).toISOString().slice(0, 10));
+    compared += 1;
+    if (fp(buildGame(POOL, s)) !== fp(r428.buildGame(POOL, s))) moved += 1;
+  }
+  for (let k = 1; k <= 300; k += 1) {
+    compared += 1;
+    if (fp(buildGame(POOL, k * 7919)) !== fp(r428.buildGame(POOL, k * 7919))) moved += 1;
+  }
+  console.log(`  ${compared} solo deals (730 daily dates from 2026-01-01, 300 more seeds) against the engine at ${R428.slice(0, 8)}: moved ${moved}`);
+  if (moved > 0) fail(`${moved} of ${compared} solo deals differ from the Round 428 engine, so an old daily would reopen on a different card`);
+}
+
 /* ================= verdict ================= */
 console.log('');
 if (CONTROL) {
-  if (failures > 0) { console.log(`control "${CONTROL}": ${failures} failure(s) fired as expected, the check works`); process.exit(0); }
-  console.error(`control "${CONTROL}": changed NOTHING, the check is dead`);
+  const AIMED = { split: [1, 4], anyfamily: [2], tiebreak: [4], peek: [7], redeal: [9], temper: [5] }[CONTROL];
+  const missed = AIMED.filter(n => !failedSections.has(n));
+  const where = [...failedSections].sort((a, b) => a - b).join(', ') || 'none';
+  if (missed.length === 0) { console.log(`control "${CONTROL}": ${failures} failure(s) in sections ${where}, every aimed section (${AIMED.join(', ')}) fired, the checks work`); process.exit(0); }
+  console.error(`control "${CONTROL}": section(s) ${missed.join(', ')} did not fire (failures came from ${where}), so that check is dead`);
   process.exit(1);
 }
 if (failures > 0) {
