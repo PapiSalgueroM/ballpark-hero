@@ -1,0 +1,39 @@
+.panel {
+  min-width: 0;
+  overflow-anchor: none;
+}
+
+.action { min-height: 44px; }
+
+.choices {
+  max-height: 176px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.choice {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 4px;
+}
+
+.choice input { flex-shrink: 0; }
+.name { min-width: 0; overflow-wrap: anywhere; font-size: 12px; }
+.choice:focus-within, .action:focus-visible, .receipt:focus-visible {
+  outline: 2px solid hsl(var(--primary));
+  outline-offset: 2px;
+}
+
+.receipt { min-height: 40px; padding-top: 8px; font-size: 12px; }
+.committed { display: block; animation: applied 420ms ease-out 1; }
+
+@keyframes applied {
+  from { opacity: 0.4; }
+  to { opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .committed { animation: none; }
+}
