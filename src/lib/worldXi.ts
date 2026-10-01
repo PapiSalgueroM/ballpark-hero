@@ -711,15 +711,24 @@ const ASSIST_WEIGHT: Record<string, number> = {
 };
 
 /* Role voices only. The month and its numbers are the only things filled in,
-   so no real name can end up as the speaker of any of these. A pool is
-   picked by the month's record, and within a season a line is not used twice
-   until its pool has run out. */
+   so no real name can end up as the speaker of any of these, and none of
+   them carries a quote mark or an apostrophe (the harness holds both). A
+   pool is picked by the month's record. Every pool holds more lines than a
+   season has months, so no line is used twice in a season; the harness fails
+   a season that repeats one. */
 const MONTH_UNBEATEN = [
   'Your assistant said the shape finally made sense in {month}. {p} games, not one of them lost.',
   'The fans sang through {month}. {p} games, no defeats, and the noise carried into the car park.',
   'Unbeaten in {month}. The coaching staff let the dressing room enjoy it for exactly one night.',
   'The board sent a short note after {month}. It said well done and nothing else, which from them is a lot.',
   'Nobody beat you in {month}, and your assistant started pinning the table to the dressing room wall.',
+  '{month} went by without a defeat. The physio spent most of it with his feet up.',
+  'Not beaten once in {month}. The analysts had a hard time finding anything for the bad tape.',
+  'The away end travelled all {month} and never once went home beaten.',
+  'A clean {month}: {w}W {d}D, no defeats. The coaching staff did not change a thing.',
+  'The groundsman said the pitch looked better in {month}. So did the results, unbeaten in {p}.',
+  'Your assistant stopped writing notes on the bus home in {month}. There was nothing to fix.',
+  'The kit man called {month} the quietest month of the year in the dressing room. Nobody had a defeat to sulk about.',
 ];
 const MONTH_WINLESS = [
   'A winless {month}. The door stayed shut after the last one and the press got nothing.',
@@ -727,6 +736,13 @@ const MONTH_WINLESS = [
   'The fans let {month} have it. No wins in {p} games will do that.',
   'Not a win all {month}. The dressing room went quiet and the board went quieter.',
   'The coaching staff went back through every tape from {month}, twice.',
+  'No wins in {month}. The analysts sat through the tapes until the lights went off.',
+  '{month} brought {p} games and no wins. The board asked for a meeting and got one.',
+  'The kit man packed the bags in silence after every game in {month}. No wins in {p}.',
+  'A winless {month}, and the fans let the coaching staff know about it on the way out.',
+  'Your assistant tore up the plan for {month} halfway through. It did not help.',
+  'The local paper ran out of ways to say it in {month}. {p} games, no win.',
+  'The training ground was a quiet place in {month}. Nobody needs telling after a month without a win.',
 ];
 /* More wins than defeats, at least one defeat. */
 const MONTH_GOOD = [
@@ -734,6 +750,14 @@ const MONTH_GOOD = [
   '{wins} from {p} in {month}. The fans went home happy more often than not.',
   'A decent {month}, {wins} from {p}. The coaching staff picked holes in it anyway.',
   'The board liked {month}. {wins} from {p}, and nobody upstairs asked any questions.',
+  'More wins than defeats in {month}. Your assistant called it progress and moved on.',
+  'The dressing room was loud more often than not in {month}. {wins} from {p}.',
+  '{month} was a solid month at {w}W {d}D {l}L. The analysts found one bad half and played it twice.',
+  'The kit man noticed the bus home got noisier in {month}. {wins} from {p} will do that.',
+  'A good {month} with a scare in it. The coaching staff took the {wins} and the lesson.',
+  'The fans left happy most weeks in {month}, {w}W {d}D {l}L.',
+  'The board approved of {month}. {wins} from {p}, and {defeats} nobody upstairs mentioned.',
+  'Your assistant marked {month} as a pass. {wins} from {p}, with room to be better.',
 ];
 /* At least one win, but no more wins than defeats. */
 const MONTH_UNEVEN = [
@@ -741,6 +765,14 @@ const MONTH_UNEVEN = [
   'The fans left {month} unsure what they were watching. {wins}, {defeats}, no pattern.',
   'A month of two halves in {month}: the good games were very good and the rest were not.',
   'Your assistant called {month} uneven, which was generous. {wins} from {p}.',
+  'One step forward and one back in {month}, {w}W {d}D {l}L.',
+  '{month} could not make up its mind. {wins}, {defeats}, and the coaching staff no wiser.',
+  'The fans saw the best and the worst of the side in {month}. {wins} from {p} is not enough.',
+  'The analysts split {month} into what worked and what did not, and both lists were long.',
+  'A win here, a defeat there in {month}. The board noticed the pattern, or the lack of one.',
+  'The mood on the bus changed every week in {month}, the kit man said. {w}W {d}D {l}L tells you why.',
+  'Your assistant wanted more from {month} than {wins} from {p}, and said so on the training ground.',
+  'The dressing room could not find a rhythm in {month}. {wins}, {defeats}.',
 ];
 /* Only ever the month that holds the season's biggest win, and only when it
    was by four or more, so it is said once a season at most. */
@@ -748,6 +780,8 @@ const MONTH_BIG_WIN = [
   'The {gf}-{ga} in {month} is the one the fans will still be bringing up in ten years.',
   'A {gf}-{ga} in {month}. Your assistant kept the team sheet from that one.',
 ];
+/** The month pools by the record that picks them, read by simWorldXiSeasonReport. */
+export const MONTH_LINES = { unbeaten: MONTH_UNBEATEN, winless: MONTH_WINLESS, good: MONTH_GOOD, uneven: MONTH_UNEVEN, bigWin: MONTH_BIG_WIN };
 
 const GOAL_DESCRIPTIONS: Record<string, string[]> = {
   GK: ['a clearance from his own half that bounced over everyone'],
@@ -855,11 +889,36 @@ function buildSeasonExtras(
   const { results, rivalPoints, points, tablePosition } = league;
   const ratingFactor = ratings.map(r => 0.4 + r / 100);
 
+  /* Who played which match. An injury is one unbroken spell of the weeks the
+     report prints (a week is a match here) and a rest is one match off, so
+     the appearances, the clean sheets and every goal and assist below are
+     all read off the same 38 games, and nobody scores in a match he missed. */
+  const injuredWeeks = new Map(injuries.map(inj => [inj.name, inj.weeksOut]));
+  const played = players.map(p => {
+    const on = new Array<boolean>(results.length).fill(true);
+    const weeks = Math.min(results.length - 1, injuredWeeks.get(p.name) ?? 0);
+    if (weeks > 0) {
+      const start = Math.floor(rand() * (results.length - weeks + 1));
+      for (let m = start; m < start + weeks; m++) on[m] = false;
+    }
+    const rests = p.position === 'GK' ? (rand() < 0.3 ? 1 : 0) : Math.floor(rand() * 4);
+    for (let k = 0; k < rests; k++) {
+      const open = on.map((v, m) => (v ? m : -1)).filter(m => m >= 0);
+      if (open.length <= 1) break;
+      on[open[Math.floor(rand() * open.length)]] = false;
+    }
+    return on;
+  });
+  const appearances = played.map(on => on.filter(Boolean).length);
+  /* A man who missed eleven weeks gets the goals and assists of the games he
+     played, not of a full season. */
+  const availability = appearances.map(a => a / Math.max(1, results.length));
+
   /* Goals per player. The top scorer is fixed at the number already printed;
      everyone else is capped one below him so he stays the top scorer. */
   const topIdx = topScorer ? players.findIndex(p => p.name === topScorer.name) : -1;
   const topGoals = topScorer ? topScorer.goals : 0;
-  const goalWeights = players.map((p, i) => (i === topIdx ? 0 : (GOAL_WEIGHT[p.position] ?? 1) * ratingFactor[i]));
+  const goalWeights = players.map((p, i) => (i === topIdx ? 0 : (GOAL_WEIGHT[p.position] ?? 1) * ratingFactor[i] * availability[i]));
   /* The side's goals follow its points (a real top flight runs close to a
      goal a point), and the top scorer's printed tally never comes to more
      than about half of them. Measured over 300 squads a tier: sides on 77
@@ -880,18 +939,43 @@ function buildSeasonExtras(
 
   /* Assists for the season, about two thirds of the goals. */
   const assistTotal = Math.round(goalsFor * (0.62 + rand() * 0.18));
-  const assistWeights = players.map((p, i) => (ASSIST_WEIGHT[p.position] ?? 1) * ratingFactor[i]);
+  const assistWeights = players.map((p, i) => (ASSIST_WEIGHT[p.position] ?? 1) * ratingFactor[i] * availability[i]);
   const playerAssistsTarget = allocateByWeight(assistTotal, assistWeights);
 
   /* Fixtures: every rival home and away, in a seeded order. */
   const fixtureDeck = shuffleWith(rand, rivalPoints.flatMap((_, r) => [{ rival: r, home: true }, { rival: r, home: false }]));
   const fixtures = results.map((_, i) => fixtureDeck[i % Math.max(1, fixtureDeck.length)] ?? { rival: 0, home: true });
 
-  /* Scorelines consistent with the result: a win starts at one goal, the rest
-     of the season's goals land match by match, wins first. */
-  const gf = results.map(r => (r === 'W' ? 1 : 0));
+  /* Scorelines consistent with the result, built from the scorers. Every win
+     first gets one goal from a man who played in it, then each man's other
+     goals land in matches he played, wins first. */
+  const gf = results.map(() => 0);
   const matchWeight = results.map(r => (r === 'W' ? 3 : r === 'D' ? 1.2 : 0.8));
-  for (let left = goalsFor - league.wins; left > 0; left--) gf[pickWeighted(rand, matchWeight)] += 1;
+  const goals: { match: number; scorer: number; assister: number | null }[] = [];
+  const tokensLeft = [...playerGoals];
+  const winOrder = shuffleWith(rand, results.map((_, m) => m)).filter(m => results[m] === 'W');
+  for (const m of winOrder) {
+    const onPitch = tokensLeft.map((left, i) => (played[i][m] ? left : 0));
+    /* Only if every goal left belongs to men who missed this win does the
+       goal go to whoever still has one. With a side scoring well over a goal
+       a win it has not happened in any season the harness plays, and the
+       harness fails the day it does (every goal is checked against who
+       played). */
+    const i = pickWeighted(rand, onPitch.some(left => left > 0) ? onPitch : tokensLeft);
+    if (tokensLeft[i] <= 0) break;
+    tokensLeft[i] -= 1;
+    gf[m] += 1;
+    goals.push({ match: m, scorer: i, assister: null });
+  }
+  tokensLeft.forEach((left, i) => {
+    const where = matchWeight.map((w, m) => (played[i][m] ? w : 0));
+    for (let k = 0; k < left; k++) {
+      const m = pickWeighted(rand, where);
+      gf[m] += 1;
+      goals.push({ match: m, scorer: i, assister: null });
+    }
+  });
+  goals.sort((a, b) => a.match - b.match);
   /* A win concedes a little (none, one, now and then two, never as many as
      it scored), so a 5-0 does not turn into a 5-3; a defeat loses by one,
      two or three. Measured before this split, a 110 point side conceded 40
@@ -905,31 +989,25 @@ function buildSeasonExtras(
   const goalsAgainst = ga.reduce((s, g) => s + g, 0);
   const cleanSheets = ga.filter(g => g === 0).length;
 
-  /* Place every goal in a match, then every assist on a goal. */
-  const scorerTokens = shuffleWith(rand, playerGoals.flatMap((g, i) => new Array<number>(g).fill(i)));
-  const goals: { match: number; scorer: number; assister: number | null }[] = [];
-  let t = 0;
-  gf.forEach((g, m) => { for (let k = 0; k < g; k++) goals.push({ match: m, scorer: scorerTokens[t++], assister: null }); });
+  /* Every assist on a goal by somebody else, in a match the assister played.
+     An assist with no such goal left is not given, so the assists the page
+     prints are exactly the ones placed. */
   const assistTokens = shuffleWith(rand, playerAssistsTarget.flatMap((a, i) => new Array<number>(a).fill(i)));
   const goalOrder = shuffleWith(rand, goals.map((_, i) => i));
   for (const a of assistTokens) {
-    let placed = goalOrder.find(gi => goals[gi].assister === null && goals[gi].scorer !== a);
-    if (placed === undefined) placed = goalOrder.find(gi => goals[gi].assister === null);
-    if (placed === undefined) break;
-    goals[placed].assister = a;
+    const placed = goalOrder.find(gi => goals[gi].assister === null && goals[gi].scorer !== a && played[a][goals[gi].match]);
+    if (placed !== undefined) goals[placed].assister = a;
   }
   const playerAssists = players.map((_, i) => goals.filter(g => g.assister === i).length);
   const assists = playerAssists.reduce((s, a) => s + a, 0);
 
-  /* Appearances: 38 less the weeks an injury cost, less a rest or two. */
-  const injuredWeeks = new Map(injuries.map(inj => [inj.name, inj.weeksOut]));
-  const appearances = players.map(p => {
-    const rests = p.position === 'GK' ? (rand() < 0.3 ? 1 : 0) : Math.floor(rand() * 4);
-    return Math.max(1, LEAGUE_MATCHES - (injuredWeeks.get(p.name) ?? 0) - rests);
-  });
+  /* A man's clean sheets are the shutouts in the games he played, so the
+     keeper and the back four each count their own and never the team's. */
   const keepsSheets = (pos: Position) => pos === 'GK' || DEF_SET.has(pos);
+  const sheetsIn = (i: number, matches: number[]) => matches.filter(m => played[i][m] && ga[m] === 0).length;
+  const allMatches = results.map((_, m) => m);
   const playerStats: PlayerSeasonStats[] = players.map((p, i) => {
-    const cs = keepsSheets(p.position) ? Math.min(appearances[i], Math.round((cleanSheets * appearances[i]) / LEAGUE_MATCHES)) : null;
+    const cs = keepsSheets(p.position) ? sheetsIn(i, allMatches) : null;
     const avg = 5.8 + (ratings[i] - 55) / 18 + 0.012 * (playerGoals[i] + playerAssists[i]) + 0.01 * (cs ?? 0);
     return {
       name: p.name,
@@ -965,7 +1043,6 @@ function buildSeasonExtras(
     const l = idx.filter(i => results[i] === 'L').length;
     const mgf = idx.reduce((s, i) => s + gf[i], 0);
     const mga = idx.reduce((s, i) => s + ga[i], 0);
-    const monthCs = idx.filter(i => ga[i] === 0).length;
     const inv = players.map((_, pi) => ({
       pi,
       goals: goals.filter(g => idx.includes(g.match) && g.scorer === pi).length,
@@ -976,11 +1053,15 @@ function buildSeasonExtras(
     let standout: MonthReport['standout'] = null;
     if (scored.length) {
       const s = scored[0];
-      standout = { name: players[s.pi].name, goals: s.goals, assists: s.assists, cleanSheets: keepsSheets(players[s.pi].position) ? monthCs : 0 };
+      standout = { name: players[s.pi].name, goals: s.goals, assists: s.assists, cleanSheets: keepsSheets(players[s.pi].position) ? sheetsIn(s.pi, idx) : 0 };
     } else if (n > 0) {
-      const gk = players.findIndex(p => p.position === 'GK');
-      const pi = monthCs > 0 && gk >= 0 ? gk : ratings.indexOf(Math.max(...ratings));
-      standout = { name: players[pi].name, goals: 0, assists: 0, cleanSheets: keepsSheets(players[pi].position) ? monthCs : 0 };
+      /* A month nobody scored in goes to the keeper if he kept a clean sheet
+         in it, otherwise to the best rated man who played in it at all. */
+      const onPitch = players.map((_, pi) => pi).filter(pi => idx.some(m => played[pi][m]));
+      const candidates = onPitch.length ? onPitch : players.map((_, pi) => pi);
+      const gk = candidates.find(pi => players[pi].position === 'GK');
+      const pi = gk !== undefined && sheetsIn(gk, idx) > 0 ? gk : candidates.reduce((best, c) => (ratings[c] > ratings[best] ? c : best), candidates[0]);
+      standout = { name: players[pi].name, goals: 0, assists: 0, cleanSheets: keepsSheets(players[pi].position) ? sheetsIn(pi, idx) : 0 };
     }
     const pool = mi === bigWinMonth
       ? MONTH_BIG_WIN
