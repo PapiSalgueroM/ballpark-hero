@@ -1,5 +1,6 @@
 import { supabase } from '@/integrations/supabase/client';
 import { DraftablePlayer, SeasonSlot, SpinSquad } from '@/lib/perfectSeason';
+import { fetchAllRowsParallel } from '@/lib/fetchAllRows';
 
 /**
  * NHL adapter for the Perfect Season engine.
@@ -92,19 +93,35 @@ export interface TeamEraIndexEntry {
   eraLabel: string;
 }
 
-/** One light query, cached by the page: every franchise-decade pair with
- *  enough skaters to draft from. Roughly 220 wheel entries. */
-export async function fetchTeamEraIndex(): Promise<TeamEraIndexEntry[] | null> {
+/* The wheel reads about 5,200 skater rows; six pages at once covers them. */
+const INDEX_PAGES = 6;
+/* What the old single read got back: the server's 1,000 row cap. */
+const OLD_WHEEL_ROWS = 1000;
+
+/**
+ * Every franchise-decade pair with enough skaters to draft from, cached by
+ * the page.
+ *
+ * Round 821: this was one request with .limit(6000), which the server caps at
+ * 1,000 rows, so the wheel was counted from about a fifth of the table and
+ * franchise decades with fewer than 14 skaters in those rows never made it. It
+ * now pages through the whole table in id order. `oldWheel` (a daily dated
+ * before FULL_WHEEL_DAILY_FROM) keeps the first 1,000 rows, which build the
+ * same stops in the same order the old read did, so a daily already dealt
+ * never changes.
+ */
+export async function fetchTeamEraIndex(opts: { oldWheel?: boolean } = {}): Promise<TeamEraIndexEntry[] | null> {
   try {
-    const { data, error } = await supabase
+    const { data, error } = await fetchAllRowsParallel<any>((from, to) => supabase
       .from('nhl_player_stats' as any)
       .select('teams, year_from, year_to')
       .gte('games', MIN_GAMES)
-      .limit(6000);
+      .order('id', { ascending: true })
+      .range(from, to), INDEX_PAGES);
     if (error || !data) return null;
 
     const counts = new Map<string, number>();
-    for (const r of data as any[]) {
+    for (const r of (opts.oldWheel ? data.slice(0, OLD_WHEEL_ROWS) : data) as any[]) {
       const yf = parseInt(String(r.year_from), 10);
       const yt = parseInt(String(r.year_to), 10);
       if (!Number.isFinite(yf) || !Number.isFinite(yt) || yf < 1900 || yt < yf) continue;
