@@ -21,16 +21,16 @@ const NhlFrontOffice = () => {
           <div className="text-center mb-4">
             <h1 className="text-2xl font-display font-bold text-primary">NHL Front Office</h1>
             <p className="text-xs text-muted-foreground mt-1">
-              Real 2026-27 rosters. A hard cap with no mercy. Sixteen teams, one Cup.
+              Every club&apos;s full 2026-27 roster. A hard cap with no mercy. Sixteen teams, one Cup.
             </p>
           </div>
           <NhlFrontOfficeBoard />
           <GameSeoContent
           pageHasOwnH1
             title="NHL Front Office: the GM Sim"
-            description="Take over a real NHL club with its actual 2026-27 roster, every player rated off real 2025-26 stats pulled from the league's own data. Work under the hard salary cap, waive contracts, sign free agents, swing trades the AI weighs on age, position and rating, then chase points through an 82-game-shaped season where overtime losses still pay. Make the real divisional bracket: top three per division plus two wild cards per conference, four best-of-7 rounds, the Stanley Cup at the end. Draft prospects whose scouting grades can lie, manage aging curves where goalies last longer, and stack Cups across unlimited saved seasons."
+            description="Take over a real NHL club with its full 2026-27 roster, 22 or 23 real players, every one rated off real 2025-26 stats pulled from the league's own data. Work under the hard salary cap, waive contracts, sign free agents, swing trades the AI weighs on age, position and rating, then chase points through an 82-game-shaped season where overtime losses still pay. Make the real divisional bracket: top three per division plus two wild cards per conference, four best-of-7 rounds, the Stanley Cup at the end. Draft prospects whose scouting grades can lie, manage aging curves where goalies last longer, and stack Cups across unlimited saved seasons."
             howToPlay={[
-              'Pick a franchise and inherit its real 2026-27 top-six, blue line and crease.',
+              'Pick a franchise and inherit its full real 2026-27 roster: every forward, the blue line and the crease.',
               'Work the cap: waive contracts, sign free agents, swing trades with pick sweeteners.',
               'Play the season in stretches; wins are two points, OT losses one.',
               'Finish top three in the division or grab a wild card to make the bracket.',

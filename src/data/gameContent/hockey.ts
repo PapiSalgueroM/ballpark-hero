@@ -1027,7 +1027,7 @@ export const HOCKEY_CONTENT: GameContentMap = {
   '/nhl-front-office': {
     intro: [
       "Running an NHL club is a math problem with feelings, and now the math is yours.",
-      "You get a real 2026-27 roster rated off real 2025-26 stats, a hard cap, a points race and the actual divisional bracket. Contracts and trades in the sim are fictional; the hockey logic is not.",
+      "You get a club's full 2026-27 roster, 22 or 23 real players straight from the NHL's own data and rated off real 2025-26 stats, plus a hard cap, a points race and the actual divisional bracket. Contracts and trades in the sim are fictional; the hockey logic is not.",
     ],
     headings: {
       howToPlay: "How to play NHL Front Office, a free hockey GM simulation game",
@@ -1040,7 +1040,8 @@ export const HOCKEY_CONTENT: GameContentMap = {
       {
         heading: "Pick a club and inherit its roster",
         items: [
-          "Pick any of the 32 clubs and inherit its actual roster.",
+          "Pick any of the 32 clubs and inherit its actual roster: every forward, defenseman and goalie on the club's NHL roster when we read it on October 1, 2026, 22 or 23 players, with their real ages.",
+          "The Roster box splits them into forwards, defense and goalies. A rating with a star is a stand in: that player had no full 2025-26 NHL season (30 games for a skater, 15 for a goalie) to rate him on, so he starts on 68.",
         ],
         subsections: [
           {
@@ -1083,13 +1084,16 @@ export const HOCKEY_CONTENT: GameContentMap = {
         heading: "A hard cap that rises every season",
         items: [
           "The hard cap starts at 104M and rises about 9 percent a season; every move must fit.",
+          "Salaries are fictional and follow the rating. On a full roster a star costs around 11M and a depth player sits near a 0.8M floor, so every club opens under the cap.",
         ],
       },
       {
         heading: "Real points and a roster floor and ceiling",
         items: [
           "Points are real: 2 for a win, 1 for an overtime loss, and roughly a quarter of losses go to overtime.",
-          "Rosters run between 8 and 15 players, floor and ceiling both enforced.",
+          "Rosters run between 20 and 23 players, the real NHL numbers: 20 dresses twelve forwards, six defensemen and two goalies, and 23 is the active limit. You cannot waive below the floor or sign past the ceiling.",
+          "Draft picks still join your roster, so you can open a season above 23. You just cannot sign anyone until you are back under.",
+          "A franchise started before the full rosters arrived keeps its 13 player roster and the old 8 to 15 limits.",
         ],
       },
       {
@@ -1144,6 +1148,7 @@ export const HOCKEY_CONTENT: GameContentMap = {
         items: [
           "Strength math: your selected forwards carry half your rating, your defensemen 30 percent and your goalie 20 percent. Automatic selection uses the top six healthy forwards, top four healthy defensemen and best healthy goalie. An empty group uses a rating of 62 in this game's model.",
           "If a selected player is injured or leaves your roster, the game keeps your other valid choices and fills the gap with the highest rated healthy option. A player who recovers needs to be selected again if you want him back in the group.",
+          "Depth is insurance. When a top six forward, a top four defenseman or your starter gets hurt, your next best healthy player at that spot steps into the rating, so your seventh best forward and fifth best defenseman matter.",
         ],
       },
       {
