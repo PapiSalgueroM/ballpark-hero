@@ -1,5 +1,13 @@
 # Project state
 
+## CHECKPOINT 2026-10-01: Aussie Rules source outcomes and controls pass
+
+792 passes14 real engine/hook tests with17 effective copied controls, plus ten actual
+Board/Page outcomes with ten copied controls. All30 matchday cohorts, exact ten-round
+replay and measured squad/tactic/recovery effects pass. Native acceptance and final
+combined production/artifact/full-node gates remain pending. Source stays unrouted until
+its saved page is ready. Proof and all Claude reservations are on WORKBOARD. Next free793.
+
 ## CHECKPOINT 2026-10-01: Aussie Rules functional source, final acceptance pending
 
 792's five new engine/hook/Board/Page/module files are frozen for an unrouted checkpoint.

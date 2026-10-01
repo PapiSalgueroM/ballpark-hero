@@ -1,5 +1,18 @@
 # Work board
 
+**792 source-outcome/control checkpoint:**14 actual engine/hook tests and17 effective
+copied controls pass, each control with one intended assertion failure, one independent
+pass and12 explicit skips. All30 simulated matchday cohorts and a240-action legal
+maximum-swap replay pass. Paired96-seed mean score gaps are25.625 for stronger squads,
+20.698 for counter tactics and16.323 for rested readiness; all32-seed blocks hold measured
+conservative floors. The small extra-key and otherwise-valid oversized save now independently
+prove rejection. Earlier ineffective fixtures/matcher errors are retained without credit.
+Ten actual Board/Page outcomes and ten effective copied controls also pass. Test-only DOM
+typing fixes preserve the full positive and affected swap control. Original inputs are
+byte-held and disposable copies cleaned. Proof: TEMP/dukb-round792-engine and
+TEMP/dukb-round792-board-initial.log with owner control receipts. Native season acceptance
+and final combined production/artifact/current-suite gates remain pending. No route yet.
+
 **2026-10-01, Codex792 functional source checkpoint, final acceptance pending.**
 The separate engine/hook and Board/Page/module are frozen for an unrouted source commit.
 Initial real-engine/hook tests pass13 cases; initial actual Board/Page tests pass10 cases,
