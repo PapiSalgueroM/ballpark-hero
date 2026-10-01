@@ -330,6 +330,12 @@ function scoreFor(win: boolean, rng: () => number): number {
  * program layer on, each side's points move by CFB_POINTS_PER_EDGE for every
  * point its offensive coordinator's edge beats the other side's defensive
  * coordinator's, and the winner always has more points than the loser.
+ *
+ * When the shifted scores would leave the loser level or ahead, the LOSER
+ * comes down to a field goal behind, never the winner up. Raising the winner
+ * looked equivalent and is not: a better coordinator could then score fewer
+ * points in a game he won (his side lands one point clear instead of being
+ * lifted three clear), which simCfbStaff caught in 17 of 42,000 games.
  */
 function resolveScores(st: CfbState, home: CfbTeam, away: CfbTeam, homeWins: boolean, rng: () => number): [number, number] {
   if (!st.depth) {
@@ -340,11 +346,9 @@ function resolveScores(st: CfbState, home: CfbTeam, away: CfbTeam, homeWins: boo
   }
   const h = staffEdges(home.staff);
   const a = staffEdges(away.staff);
-  let hs = Math.max(0, Math.round(scoreFor(homeWins, rng) + CFB_POINTS_PER_EDGE * (h.off - a.def)));
-  let as = Math.max(0, Math.round(scoreFor(!homeWins, rng) + CFB_POINTS_PER_EDGE * (a.off - h.def)));
-  if (homeWins && hs <= as) hs = as + 3;
-  if (!homeWins && as <= hs) as = hs + 3;
-  return [hs, as];
+  const hs = Math.max(0, Math.round(scoreFor(homeWins, rng) + CFB_POINTS_PER_EDGE * (h.off - a.def)));
+  const as = Math.max(0, Math.round(scoreFor(!homeWins, rng) + CFB_POINTS_PER_EDGE * (a.off - h.def)));
+  return homeWins ? [hs, Math.max(0, Math.min(as, hs - 3))] : [Math.max(0, Math.min(hs, as - 3)), as];
 }
 
 function playCfbGame(st: CfbState, homeId: string, awayId: string, rng: () => number): { hs: number; as: number; winner: string } {

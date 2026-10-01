@@ -44,16 +44,24 @@
         has its staff, the hiring window refuses what it cannot afford).
 
    MEASURED HEADROOM, written down before the bands were set (Round 728,
-   2026-10-01, 300 seeds a batch, five batches at seed bases 0, 1000, 2000,
-   3000, 4000; see the numbers printed by section 2 and 3):
-     offense, mean points per game at OC 45 / 95: about 25.4 / 37.6 across the
-       batches, uplift 11.9 to 12.4; smallest single step of the mean
-       (65 to 70, half a step) 1.07 to 1.25;
-     defense, mean points allowed at DC 45 / 95: about 34.2 / 22.6, drop 11.4
-       to 11.8; smallest step 1.04 to 1.23.
-   Bands: uplift and drop inside [8, 16], every step at least STEP_FLOOR 0.5.
-   Both are a long way from the measured range on both sides, and the cap in
-   section 2 is the hard bound, not these.
+   2026-10-01, 300 seeds a batch, five batches at CFB_STAFF_SEED_BASE 0, 1000,
+   2000, 3000 and 4000):
+     offense, mean points scored per game at OC 45 / 70 / 95: 28.1 to 28.7 /
+       33.6 to 34.0 / 39.0 to 39.5; the 45 to 95 uplift 10.70, 10.71, 10.88,
+       10.91, 10.84; smallest step of the mean 1.06 to 1.09;
+     defense, mean points allowed at DC 45 / 70 / 95: 25.7 to 26.4 / 20.1 to
+       21.0 / 14.9 to 15.7; the drop 10.66, 10.64, 10.71, 10.77, 10.80;
+       smallest step 1.06 to 1.16;
+     seeds where a better coordinator made his unit worse: 0 in all ten runs;
+     cap breaks: 0 in all ten runs (17 before the scoring fix in this round);
+     the schedule changed the Playoff field in 23 of the 200 dynasty seasons
+       (those seeds do not move with the seed base).
+   Bands: uplift and drop inside [8.5, 13.5] (about 2.1 below and 2.6 above
+   the measured spread of 0.27), every step at least STEP_FLOOR 0.5, and the
+   schedule must decide at least FIELDS_FLOOR 5 fields in 200 seasons. The
+   bound itself is the hard cap in sections 1 and 2, not these bands: about
+   9 of the 10.8 points is the coordinator's shift (1.5 a point of edge times
+   6 points of edge), the rest is games his edge turned from losses to wins.
 
    Negative controls (house rule: prove each check can fail). Each patches the
    BUNDLE, never the source, and refuses to run unless its target string is
@@ -88,7 +96,8 @@ const DYN_SEEDS = 20;
 const DYN_SEASONS = 10;
 const LEVELS = [45, 55, 65, 70, 75, 85, 95];
 const STEP_FLOOR = 0.5;
-const UPLIFT_BAND = [8, 16];
+const UPLIFT_BAND = [8.5, 13.5];
+const FIELDS_FLOOR = 5;
 
 /* Each control: the exact bundled text it rewrites and what it becomes. */
 const CONTROLS = {
@@ -312,13 +321,25 @@ function runDynasty(st, rng, seasons, tag) {
     const gameLog = [];
     playSeason(st, rng, gameLog);
     if (st.depth) checkSos(st, gameLog);
-    const shadow = st.depth ? JSON.parse(JSON.stringify(st)) : null;
     const post = cfb.runCfbPostseason(st, rng);
-    if (shadow) {
-      /* The same season with the schedule taken out of the tiebreak: did it change the field? */
+    if (st.depth) {
+      /* The field picked again off the same post title game table, once as
+         the engine does it and once with the schedule taken out of the
+         tiebreak. The first must reproduce the real field (or this
+         measurement is measuring something else); the second says how often
+         the schedule decided who got in. Playoff games do not touch the
+         records, so the table after the postseason is the one it picked from. */
+      const champs = new Set(post.ccgs.map(g => g.winner));
+      const pick = state => {
+        const ranked = cfb.cfbRankings(state).map(t => t.id);
+        const atLarge = ranked.filter(id => !champs.has(id)).slice(0, 7);
+        return ranked.filter(id => champs.has(id) || atLarge.includes(id)).slice(0, 12);
+      };
+      const again = pick(st);
+      if (again.join() !== post.field.join()) fail(`season ${st.season}: picking the field again off the same table gave a different field`);
+      const shadow = JSON.parse(JSON.stringify(st));
       for (const t of Object.values(shadow.teams)) t.opps = [];
-      const alt = cfb.runCfbPostseason(shadow, lehmer(1));
-      if ([...alt.field].sort().join() !== [...post.field].sort().join()) dyn.fieldsChanged += 1;
+      if ([...pick(shadow)].sort().join() !== [...post.field].sort().join()) dyn.fieldsChanged += 1;
     }
     if (post.field.length !== 12 || new Set(post.field).size !== 12) dyn.badField += 1;
     const race = cfb.heismanRace(st, rng);
@@ -348,12 +369,16 @@ console.log(`4) ten season dynasties over ${DYN_SEEDS} seeds complete, and the b
   const st = cfb.initCfb('UNLV', lehmer(99), { depth: true });
   for (let r = 1; r <= CFB_ROUNDS; r += 1) { cfb.simCfbRound(st, lehmer(r)); if (r < CFB_ROUNDS) st.round += 1; }
   cfb.cfbOpenOffseason(st, lehmer(3));
+  /* An empty chair, so the hire costs his whole salary (at least 3). */
+  st.teams.UNLV.staff.OC = null;
   const cand = [...st.staffWindow.market].filter(c => c.role === 'OC').sort((a, b) => b.salary - a.salary)[0];
-  const net = cand.salary - (st.teams.UNLV.staff.OC?.salary ?? 0);
-  st.nil = Math.max(0, net - 1);
+  const net = cand.salary;
+  st.nil = net - 1;
   const before = JSON.stringify(st.teams.UNLV.staff);
   const ok = cfb.cfbHireCoordinator(st, cand.id);
-  if (net > 0 && (ok || st.nil !== Math.max(0, net - 1) || JSON.stringify(st.teams.UNLV.staff) !== before)) fail(`a hire costing ${net} went through on a pot of ${net - 1}`);
+  console.log(`   provoked: a ${net} point hire on a ${net - 1} point pot was ${ok ? 'ALLOWED' : 'refused'}`);
+  if (!(net >= 3)) fail(`the provoked refusal was not provoked: the hire cost ${net}`);
+  if (ok || st.nil !== net - 1 || JSON.stringify(st.teams.UNLV.staff) !== before) fail(`a hire costing ${net} went through on a pot of ${net - 1}, or a refusal changed something`);
   if (ok) checkNil(st, 'provoked refusal');
   console.log(`   ${dyn.seasons} seasons: budget negative ${dyn.negatives} time(s), hires ${dyn.hires}, refused ${dyn.refusals} (broken refusals ${dyn.refusalBroke}), walked on payroll ${dyn.walked}`);
   console.log(`   empty Heisman races ${dyn.emptyHeisman}, bad fields ${dyn.badField}, teams off twelve games ${dyn.badGames}, skill holes ${dyn.holes}, empty AI chairs ${dyn.aiEmpty}`);
@@ -437,6 +462,7 @@ console.log('6) strength of schedule: the number is the opponents actually playe
   if (order.indexOf(hard) > order.indexOf(soft)) fail(`same record, same roster: the tougher schedule (SOS ${sh?.toFixed(1)}) ranked below the softer one (${ss?.toFixed(1)})`);
   console.log(`   constructed pair: SOS ${sh?.toFixed(1)} vs ${ss?.toFixed(1)}, ranked ${order.indexOf(hard) + 1} and ${order.indexOf(soft) + 1}`);
   console.log(`   the schedule changed the Playoff field in ${dyn.fieldsChanged} of ${dyn.seasons} seasons`);
+  if (dyn.fieldsChanged < FIELDS_FLOOR) fail(`the schedule decided only ${dyn.fieldsChanged} Playoff fields in ${dyn.seasons} seasons, floor ${FIELDS_FLOOR}: the selection is not reading it`);
 }
 
 console.log('7) old saves: a pre-728 save plays exactly as it did, and upgrades at its offseason');
