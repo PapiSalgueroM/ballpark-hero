@@ -571,7 +571,7 @@ export function simSeason(
       const pd = Math.max(0, Math.round((11.5 + (pf - 62) * 0.5) * per));
       line.poLine = c.pos === 'CB'
         ? `${countOf(tk, 'tackle', 'tackles')}, ${countOf(pd, 'pass defended', 'passes defended')}`
-        : `${tk} tackles, ${sk} sacks`;
+        : `${countOf(tk, 'tackle', 'tackles')}, ${countOf(sk, 'sack', 'sacks')}`;
     }
     notes.push(`📊 Playoffs: ${poG} game${poG === 1 ? '' : 's'}, ${line.poLine}.`);
     const cn = clutchNote(clutch, depth, 'nfl');

@@ -100,7 +100,7 @@ const NFL_RULES: Record<CareerPos, PosRule> = {
   LB: { own: /\d+ tackles?/, never: /\b(rec|yds|yards|TD|touchdowns?|catch(es)?|FG|field goals?|rush|rushing|passing|passe?s? defended|MVPs?)\b/i },
   CB: { own: /\d+ INT/, never: /\b(rec|yds|yards|TD|touchdowns?|catch(es)?|FG|field goals?|rush|rushing|passing|sacks?|forced fumbles?|MVPs?)\b/i },
   EDGE: { own: /[\d.]+ sacks?/, never: /\b(rec|yds|yards|TD|touchdowns?|catch(es)?|FG|field goals?|rush|rushing|passing|INT|interceptions?|passe?s? defended|MVPs?)\b/i },
-  K: { own: /\d+ of \d+ (FG|field goals)/, never: /\b(rec|yds|yards|TD|touchdowns?|catch(es)?|rush|rushing|passing|INT|interceptions?|tackles?|sacks?|passe?s? defended|forced fumbles?|DPOYs?)\b/i },
+  K: { own: /\d+ of \d+ (FG, long of \d+|field goals)/, never: /\b(rec|yds|yards|TD|touchdowns?|catch(es)?|rush|rushing|passing|INT|interceptions?|tackles?|sacks?|passe?s? defended|forced fumbles?|DPOYs?)\b/i },
 };
 
 const NBA_RULE: PosRule = { own: /[\d.]+ ppg/, never: /\b(threes?|blocks?|steals?)\b/i };
@@ -109,7 +109,8 @@ const ARM_NEVER = /\b(HR|RBI|home runs?|steals?|MVPs?)\b|(^|\s)\.\d{3}\b/i;
 const BAT: PosRule = { own: /(^|\s)\.\d{3}, \d+ HR/, never: /\b(ERA|saves?|holds?|strikeouts?|K|wins|Cy Youngs?)\b/ };
 const MLB_RULES: Record<MlbCareerPos, PosRule> = {
   SP: { own: /\d+-\d+, [\d.]+ ERA/, never: new RegExp(`${ARM_NEVER.source}|\\b(saves?|holds?)\\b`, 'i') },
-  RP: { own: /\d+ saves?.*[\d.]+ ERA/, never: ARM_NEVER },
+  /* Review: a setup man's season is holds, so the line shows both. */
+  RP: { own: /\d+ saves?, \d+ holds?, [\d.]+ ERA/, never: ARM_NEVER },
   C: BAT, '1B': BAT, '2B': BAT, '3B': BAT, SS: BAT, LF: BAT, CF: BAT, RF: BAT, DH: BAT,
 };
 
@@ -140,6 +141,22 @@ interface SportCase {
   soFar: (c: unknown) => string | null;
   /** The big award the position chases, as the share text must name it. */
   award: (pos: string) => { one: string; many: string };
+  /** The engine's career totals, so each can be checked against its seasons. */
+  totals?: (c: unknown) => Record<string, number>;
+}
+
+/* Review: every career total the engine hands the retirement card and the hub
+   is the sum of that field over the seasons, field by field. A total that
+   dropped a field (attempts) or folded one into another (holds into saves)
+   still printed a plausible number before this. */
+function totalsFaults(c: { seasons: unknown[] }, totals: Record<string, number>): string[] {
+  const bad: string[] = [];
+  for (const [k, v] of Object.entries(totals)) {
+    let sum = 0;
+    for (const s of c.seasons as Record<string, unknown>[]) sum += typeof s[k] === 'number' ? (s[k] as number) : 0;
+    if (Math.abs(Math.round(sum * 10) / 10 - v) > 1e-9) bad.push(`career total ${k} is ${v}, its seasons add up to ${Math.round(sum * 10) / 10}`);
+  }
+  return bad;
 }
 
 function playOut<C extends { seasons: unknown[]; retired: boolean }>(
@@ -170,6 +187,7 @@ const SPORTS: SportCase[] = [
     statBullet: c => nflCareerStatBullet(careerTotals(c as never), (c as { pos: CareerPos }).pos),
     soFar: c => nflCareerSoFar(careerTotals(c as never), (c as { pos: CareerPos }).pos),
     award: pos => (['LB', 'CB', 'EDGE'].includes(pos) ? { one: 'DPOY', many: 'DPOYs' } : { one: 'MVP', many: 'MVPs' }),
+    totals: c => careerTotals(c as never) as unknown as Record<string, number>,
   },
   {
     sport: 'nba', label: 'NBA', saveKey: 'nba-my-career-save-v1', Board: NbaMyCareerBoard,
@@ -204,6 +222,7 @@ const SPORTS: SportCase[] = [
     statBullet: c => mlbCareerStatBullet(mlbCareerTotals(c as never), (c as { pos: MlbCareerPos }).pos),
     soFar: c => mlbCareerSoFar(mlbCareerTotals(c as never), (c as { pos: MlbCareerPos }).pos),
     award: pos => (pos === 'SP' || pos === 'RP' ? { one: 'Cy Young', many: 'Cy Youngs' } : { one: 'MVP', many: 'MVPs' }),
+    totals: c => mlbCareerTotals(c as never) as unknown as Record<string, number>,
   },
   {
     sport: 'nhl', label: 'NHL', saveKey: 'nhl-my-career-save-v1', Board: NhlMyCareerBoard,
@@ -267,7 +286,7 @@ function checkText(text: string, rule: PosRule, where: string, needOwn: boolean)
 }
 
 describe('every US career position prints its own stat line', () => {
-  it.each(ALL)('$label $pos: seasons, retirement bullets and career figure from seeded careers', ({ pos, play, line, rule, bullets, statBullet, soFar }) => {
+  it.each(ALL)('$label $pos: seasons, retirement bullets and career figure from seeded careers', ({ pos, play, line, rule, bullets, statBullet, soFar, totals }) => {
     const bad: string[] = [];
     let seasonsChecked = 0;
     for (let k = 0; k < SEEDS_PER_POSITION; k++) {
@@ -275,7 +294,12 @@ describe('every US career position prints its own stat line', () => {
       for (const s of lines) {
         seasonsChecked += 1;
         bad.push(...checkText(line(s, pos), rule(pos), `season ${(s as { year: number }).year}`, true));
+        /* Review: the playoff note is a stat line too (a corner's read
+           "sacks" before this round, a stat he never records). */
+        const po = (s as { poLine?: string }).poLine;
+        if (typeof po === 'string') bad.push(...checkText(po, rule(pos), `playoffs ${(s as { year: number }).year}`, false));
       }
+      if (totals) bad.push(...totalsFaults(career, totals(career)));
       const b = bullets(career);
       const own = statBullet(career);
       bad.push(...checkText(own, rule(pos), 'stat bullet', false));

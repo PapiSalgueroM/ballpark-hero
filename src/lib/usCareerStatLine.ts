@@ -147,19 +147,21 @@ export function mlbStatLine(s: MlbSeasonLine, p: MlbCareerPos): string {
   return seasonLine(s.teamResult, [[s.avg, avg3], [s.hr, n => `${n} HR`], [s.rbi, n => `${n} RBI`]]);
 }
 
-export interface MlbCareerSums { hr: number; rbi: number; sb: number; wins: number; so: number; saves: number }
+export interface MlbCareerSums { hr: number; rbi: number; sb: number; wins: number; so: number; saves: number; holds: number }
 
-/** The retirement card's stat bullet for an MLB career. */
+/** The retirement card's stat bullet for an MLB career. A setup man's job
+ *  is holds (simMlbSeason gives him a handful of saves and up to 41 holds a
+ *  year), so a reliever's career carries both, never saves alone. */
 export function mlbCareerStatBullet(t: MlbCareerSums, p: MlbCareerPos): string {
   if (p === 'SP') return `${t.wins} wins, ${t.so.toLocaleString()} strikeouts`;
-  if (p === 'RP') return `${countOf(t.saves, 'save', 'saves')}, ${t.so.toLocaleString()} strikeouts`;
+  if (p === 'RP') return `${countOf(t.saves, 'save', 'saves')}, ${countOf(t.holds, 'hold', 'holds')}, ${t.so.toLocaleString()} strikeouts`;
   return `${t.hr} home runs, ${t.rbi.toLocaleString()} RBI, ${t.sb} steals`;
 }
 
 /** The hub's "career so far" figure for an MLB career. */
 export function mlbCareerSoFar(t: MlbCareerSums, p: MlbCareerPos): string {
   if (p === 'SP') return `${t.wins} career wins`;
-  if (p === 'RP') return `${t.saves} career saves`;
+  if (p === 'RP') return `${countOf(t.saves, 'save', 'saves')} and ${countOf(t.holds, 'hold', 'holds')}`;
   return `${t.hr} career home runs`;
 }
 

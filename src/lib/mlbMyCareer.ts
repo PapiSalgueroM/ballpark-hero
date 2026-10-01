@@ -832,13 +832,14 @@ export function mlbShouldRetire(c: MlbCareerState): boolean {
 export interface MlbLegacy { score: number; verdict: string; hof: boolean; bullets: string[] }
 
 export function mlbCareerTotals(c: MlbCareerState): MlbCareerSums & { games: number } {
-  /* Round 833: saves join the sums, so a reliever's career reads as one. */
-  let hr = 0, rbi = 0, sb = 0, wins = 0, so = 0, games = 0, saves = 0;
+  /* Round 833: saves and holds join the sums, so a reliever's career reads
+     as one, a setup man's included. */
+  let hr = 0, rbi = 0, sb = 0, wins = 0, so = 0, games = 0, saves = 0, holds = 0;
   for (const s of c.seasons) {
     hr += s.hr ?? 0; rbi += s.rbi ?? 0; sb += s.sb ?? 0; wins += s.wins ?? 0; so += s.so ?? 0; games += s.games;
-    saves += s.saves ?? 0;
+    saves += s.saves ?? 0; holds += s.holds ?? 0;
   }
-  return { hr, rbi, sb, wins, so, games, saves };
+  return { hr, rbi, sb, wins, so, games, saves, holds };
 }
 
 export function mlbLegacyOf(c: MlbCareerState): MlbLegacy {
