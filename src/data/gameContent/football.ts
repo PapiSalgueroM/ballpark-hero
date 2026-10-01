@@ -166,7 +166,7 @@ export const FOOTBALL_CONTENT: GameContentMap = {
       {
         heading: "Setting the depth chart from the roster",
         items: [
-          "Open the depth chart from the Roster box: 8 position groups (QB, RB, WR, TE, OL, DL, LB, DB), each in the order the sim reads. Tap a man, then tap the one to swap him with. The men marked starts are the ones team strength counts, so benching a better man costs you and promoting a hidden gem pays. Injured men are skipped and the next man steps up.",
+          "Open the depth chart from the Roster box: 8 position groups (QB, RB, WR, TE, OL, DL, LB, DB), each in the order the sim reads. Tap a man, then tap the one to swap him with. The men marked starts are the ones team strength counts, so benching a better man costs you and promoting a hidden gem pays. Injured men are skipped and the next man steps up. Anyone who joins later (a signing, a pick, a trade) slots in by his rating, so a better newcomer starts right away, and Sort by rating hands a group back to the sim.",
         ],
       },
       {
@@ -222,13 +222,13 @@ export const FOOTBALL_CONTENT: GameContentMap = {
       {
         heading: "The franchise tag and who walks",
         items: [
-          "One franchise tag per offseason, the real rule: a one year, fully guaranteed deal at the average of the 5 largest salaries at his position across the league or 120 percent of his current salary, whichever is more. A man tagged two years running costs at least 120 percent of the first tag. A tagged man cannot leave in free agency. Rival clubs tag too, roughly a third of them each offseason. Untagged men whose deals are up can walk: role players rated under 76 half the time, stars 15 percent of the time.",
+          "One franchise tag per offseason, built on the real NFL rule: a one year, fully guaranteed deal at the average of the 5 largest salaries at his position across the league or 120 percent of his current salary, whichever is more. A man tagged two years running costs at least 120 percent of the first tag. A tagged man cannot leave in free agency. Rival clubs tag too, roughly a third of them each offseason. Untagged men whose deals are up can walk: role players rated under 76 half the time, stars 15 percent of the time.",
         ],
       },
       {
         heading: "How the depth chart sets team strength",
         items: [
-          "Team strength reads starters off the depth chart: 1 quarterback, 5 skill men across RB, WR and TE, every healthy lineman and 6 defenders across DL, LB and DB. Rating decides how many of a unit's slots each position group gets; your order decides who fills them. A chart you have not touched is the order by rating, so a save from before the chart plays exactly as it did.",
+          "Team strength reads starters off the depth chart: 1 quarterback, 5 skill men across RB, WR and TE, every healthy lineman and 6 defenders across DL, LB and DB. Rating decides how many of a unit's slots each position group gets; your order decides who fills them. A chart you have not touched is the order by rating, so a save from before the chart opens with the same starters and the same team strength. From its next offseason on, the tags and the walks apply to it like any other.",
         ],
       },
       {
