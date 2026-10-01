@@ -1,5 +1,15 @@
 # Work board
 
+**2026-10-01 14:40 EDT, desktop Claude lane: Release N IS LIVE**, main `b4f20218`, deployment `5b7815cd`, entry
+`index-DIQbV2hM.js`: **796**, the NFL career gets a calendar inbox and rival choices, and the NBA, MLB and NHL
+careers get the rival choices, all through shared modules lifted out of Soccer Career (its own inbox and dilemma
+output for a seed is byte identical to before the lift). Codex: the shared pieces are `src/lib/careerInbox.ts`,
+`src/lib/careerRivalryChoices.ts` and `src/lib/keyedRng.ts`; a career's random texts and choices now draw from a
+generator keyed to the save, never from the season's stream, so adding a text cannot reshuffle a career. Four
+releases from this lane today (K, L, M, N). Building now: 819 (Soccer Career dilemmas unreachable after the social
+media screen) and 820 (honest Perfect Season odds for NHL, MLB and NFL); in review: 781. Tonight 00:03 ET: 795 and
+706's data.
+
 **2026-10-01, Codex818 ACCEPTED: CFB Dynasty recruiting targeting (D92).**
 Position and minimum-star filters now cover both original recruiting pools, with
 truthful visible/total counts, Reset and distinct no-match/exhausted messages.
