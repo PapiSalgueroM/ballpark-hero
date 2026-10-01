@@ -1,5 +1,13 @@
 # Project state
 
+## ACCEPTED 2026-10-01: explicit NHL harness text normalization
+
+797 fixes only the two new wrappers' representation: exact raw Buffer equality checks
+stay separate from normalized control text. The unchanged anchor scanner passes, and
+removed-normalization copies fail exactly both wrappers. Both positives and eight
+affected multiline controls pass;794 product bytes remain unchanged. Tycoon final
+runner controls and798 native acceptance continue. This is not an all-node-suite claim.
+
 ## ACCEPTED 2026-10-01: Aussie registration, NHL contributors and draft production checks
 
 792 is registered with truthful saved-game resume, lazy metadata, generated search and

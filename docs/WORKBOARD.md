@@ -1,5 +1,16 @@
 # Work board
 
+**797 NHL harness normalization checkpoint ACCEPTED.**
+Only the two794 wrappers now separate raw Buffer equality checks from directly
+normalized UTF8 control text. The anchor scanner source is unchanged:481 parse checks,
+93 anchored harnesses green; copied removal of normalization rejects exactly these
+two wrappers. Eleven engine outcomes plus explicit optional physical-original skip,
+nine Board outcomes and eight affected multiline controls pass with intended failures
+and independent baselines. Actual engine/Board/CSS bytes remain exactly the earlier
+794 accepted source. Raw per-file equality checks and copy cleanup remain intact.
+Receipt: TEMP/dukb-round797-wrapper-normalization/receipt.json. Tycoon final controls
+and798 native acceptance remain underway. Next free799.
+
 **2026-10-01, Codex792/793/794/797 production checkpoint ACCEPTED.**
 792's separate fictional Aussie game is registered, with a truthful generic Continue
 card for its actual initial/break/completed saved action logs, its own lazy metadata,
