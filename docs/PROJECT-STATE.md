@@ -1,5 +1,81 @@
 # Project state
 
+## ACCEPTED 2026-10-01: MLB trade desk exposes every roster player
+
+798's three trade lists now offer every original player with honest eight-player
+expansions, fixed local height, full names,44px controls and safe keyboard handoffs.
+Original offers/talks/transactions/saves/money/picks/RNG/completion stay unchanged.
+Nine real outcomes/twelve source controls, eight native contexts/seven copied controls
+and two actual App/GameNavbar/ticker/Footer contexts pass. Final native QA fixed
+measured focus clipping and grid-name overlap; zero page movement and full-text
+containment hold. Types/build/all15 artifact fences pass. Receipts are on WORKBOARD.
+The frozen413-node regression is running,70 browser harnesses explicitly excluded;
+no complete-green or new-live claim.800's Emoji Guess nine outcomes pass and its
+controls/native work continues separately. Next free801; Claude claims stay held.
+
+## IN PROGRESS 2026-10-01: Emoji Guess feedback and keyboard flow
+
+800 claims the isolated Board, scoped CSS and focused test/harness. Add truthful
+committed feedback/finite motion, stable readable answers and deliberate native
+keyboard handoffs without changing actual daily puzzles, scoring, saves, completion
+or share. Exact ownership and acceptance are on WORKBOARD.798 final row-bound fix
+is frozen with an effective clipping control; its production rebuild/native matrix
+continue.799 is committed/pushed. Next free801; all Claude reservations hold.
+
+## ACCEPTED 2026-10-01: F1 guide score and saved-page agreement
+
+799's championship example now correctly promises400 at clue four. Three actual
+hook/guide outcomes and both effective changed-copy controls pass; all other clue
+scores stay unchanged. The unused McLaren prop says the independently verified10.
+Types0, two production builds, three-clock saved-page capture, all15 artifact fences
+and focused F1/search/metadata checks pass. Only F1's current saved page/ledger row
+and derived search source hash changed here; all167 other current URL ledger rows
+hold. Exact receipts and primary source links are on WORKBOARD.798's real narrow
+focused-row clipping correction and native checks continue before its final rebuild.
+Full-node regression and publication remain due. Next free800; Claude claims stand.
+
+## ACCEPTED 2026-10-01: Tycoon replay checks without worker starvation
+
+797's six actual gameplay outcomes and all eight original negative controls pass.
+Real Node yields let worker updates run while every fake-frame observation, score,
+baseline metric and threshold stays held. Worker/import/timeout errors cannot count
+as an intended failed outcome. Tycoon product source remains byte-exactly unchanged.
+Final reports and cleanup are on WORKBOARD.798/799 combined types and production
+builds pass; native/artifact acceptance and current full-node regression remain due.
+Next free800; all Claude reservations remain held.
+
+## IN PROGRESS 2026-10-01: correct the F1 constructor guide's worked score
+
+799 fixes the actual guide's600-point promise at clue four to the unchanged hook's
+400-point first-correct-guess outcome. Only that sentence and the unused Page's verified
+McLaren10 source value are owned, plus focused actual-hook/rendered-guide checks.
+No gameplay/data/other guide changes. Root owns any necessary saved-page and derived
+keyword/ledger refresh. Full scope is on WORKBOARD.797/798 continue. Next free800.
+
+## ACCEPTED 2026-10-01: explicit NHL harness text normalization
+
+797 fixes only the two new wrappers' representation: exact raw Buffer equality checks
+stay separate from normalized control text. The unchanged anchor scanner passes, and
+removed-normalization copies fail exactly both wrappers. Both positives and eight
+affected multiline controls pass;794 product bytes remain unchanged. Tycoon final
+runner controls and798 native acceptance continue. This is not an all-node-suite claim.
+
+## ACCEPTED 2026-10-01: Aussie registration, NHL contributors and draft production checks
+
+792 is registered with truthful saved-game resume, lazy metadata, generated search and
+exhaustive fictional-name coverage.797's copied missing/wrong/false-field controls fail
+their real findings while independent outcomes stay green. Budget's selected preview
+has its nationality flag, with nine original actual signing outcomes held.
+The fresh merged production clone has types0/two builds/three-clock saved pages and
+all15 artifact fences green. Only three owned raw files changed,185 other saved files
+held, and only Aussie/NHL content fingerprints changed;166 other URL dates/hashes held.
+Actual App/GameNavbar/Footer checks pass four NHL and eight draft contexts, exact saves/
+placement/original22 nodes, finite/static feedback and zero document movement or
+outward writes. Full receipts and boundaries are on WORKBOARD. Live publication is
+still Release J below; no new deployment or current all-node-green claim is made.
+797's new NHL harness read representation and Tycoon runner controls remain underway.
+798 MLB roster access continues. Other Claude claims hold. Next free799.
+
 ## IN PROGRESS 2026-10-01: MLB trade desk roster access claimed
 
 798 removes three UI-only top-eight barriers from the existing MLB Trade Finder and
@@ -21,6 +97,10 @@ with actual App/Footer acceptance still due. No full-green/publication claim. Ne
 Claude795/796 and incoming d99b58e4 stand. Merge his refreshed669 player data and both
 practice normalizations before further triage. Retain only our new Aussie metadata row
 across his700 metadata split. No Soccer Career engine or shared Front Office edits here.
+Incoming player-bake and practice checks are now green.797 also reserves only the two
+794 wrappers' raw-byte equality read representation plus directly normalized control
+text, to resolve a conservative scanner false positive while keeping an effective
+removed-normalization control. No product or scanner weakening is claimed.
 
 ## LIVE 2026-10-01: Release J (653 grid answer archives, the 669 Footle re-bake), main `2652f9fa`
 

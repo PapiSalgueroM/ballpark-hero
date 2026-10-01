@@ -25,14 +25,19 @@ const controls = {
 assert.ok(!control || Object.hasOwn(controls, control), 'Unknown NHL contributors Board control');
 const boardPath = path.join(root, 'src/components/nhl-front-office/NhlFrontOfficeBoard.tsx');
 const preservedPaths = [boardPath, path.join(root, 'src/components/nhl-front-office/NhlContributors.module.css'), path.join(root, 'src/lib/nhlFrontOffice.ts'), path.join(root, 'src/hooks/useGameCompletion.ts'), path.join(root, 'src/lib/frontOfficeCuts.ts'), path.join(root, 'src/data/nhlFoPlayers.ts')];
-const original = await Promise.all(preservedPaths.map(file => readFile(file)));
+const verifyBytes = [];
+for (const file of preservedPaths) {
+  const bytes = await readFile(file);
+  verifyBytes.push(() => readFile(file).then(current => assert.deepEqual(current, bytes, 'Only disposable copies may change during the Board wrapper')));
+}
+const originalSource = (await readFile(boardPath, 'utf8')).replace(/\r\n/g, '\n');
 let folder, copy;
 try {
   const env = { ...process.env, FORCE_COLOR: '0', DEBUG_PRINT_LIMIT: '900' };
   delete env.NO_DOUBLE_SWAP;
   const args = [path.join(root, 'node_modules/vitest/vitest.mjs'), 'run', 'src/test/nhlContributorsBoard.test.tsx', '--reporter=verbose', '--testTimeout=60000', '--maxWorkers=1', '--no-file-parallelism'];
   if (control) {
-    let changed = original[0].toString().replace(/\r\n/g, '\n');
+    let changed = originalSource;
     for (const [anchor, replacement] of [...controls[control].edits, ["import contributorsStyles from './NhlContributors.module.css';", "import contributorsStyles from '@/components/nhl-front-office/NhlContributors.module.css';"]]) {
       assert.equal(changed.split(anchor).length - 1, 1, 'Each control anchor must bind one actual statement');
       const before = changed; changed = changed.replace(anchor, replacement); assert.notEqual(changed, before);
@@ -63,5 +68,5 @@ try {
 } finally {
   if (copy) await rm(copy, { force: true });
   if (folder) await rmdir(folder);
-  for (let i = 0; i < preservedPaths.length; i += 1) assert.deepEqual(await readFile(preservedPaths[i]), original[i], 'Only disposable copies may change during the Board wrapper');
+  await Promise.all(verifyBytes.map(verify => verify()));
 }
