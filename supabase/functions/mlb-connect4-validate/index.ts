@@ -41,8 +41,9 @@ const attrKeyOf = (player: string, attribute: string) => `attr|${attrNorm(player
    LAD, the New York Giants SFG, the Expos WSN, the St. Louis Browns BAL), so
    each label needs exactly one code. The Athletics are OAK in every year,
    Philadelphia and Kansas City included (Ty Cobb's A's seasons are stored as
-   DET,OAK). ATH is NOT this club: in Lahman it is the 1871 to 1876
-   Philadelphia Athletics of the National Association, active N, and in this
+   DET,OAK). ATH is NOT this club: in Lahman it is the 1876
+   National League Philadelphia Athletics (one season, team PHN, active N; the
+   same club's 1871 to 1875 National Association years are PNA), and in this
    table it reaches five careers that all ended by 1890. Round 703 first
    shipped it beside OAK on the belief that the 2025 season was filed under
    it; this table ends in 2019 and has no such row, and with ATH in the list

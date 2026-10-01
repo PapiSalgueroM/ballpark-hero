@@ -9,8 +9,9 @@
  * missing can refuse nothing, but a code that names the WRONG franchise
  * accepts a false answer and caches it as a proved fact forever. The MLB map
  * shipped with exactly that: "athletics": ["ATH", "OAK"], and ATH in Lahman is
- * the 1871 to 1876 Philadelphia Athletics of the National Association (active
- * N, five careers in mlb_grid_players, none past 1890), not the modern club,
+ * the 1876 National League Philadelphia Athletics (one season, team PHN, active
+ * N; its 1871 to 1875 National Association years are PNA; five careers in
+ * mlb_grid_players, none past 1890), not the modern club,
  * which is OAK in every year including Philadelphia and Kansas City. A map
  * that is real world lineage data ships with a fence, and this is it.
  *
