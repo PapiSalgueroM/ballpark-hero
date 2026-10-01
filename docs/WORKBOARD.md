@@ -1,5 +1,26 @@
 # Work board
 
+**2026-10-01, Codex812 ACCEPTED: NASCAR committed answer feedback.**
+Correct answers now receive success feedback instead of the old delayed wrong
+message. Actual appended misses get one finite cue, exhausted games show truthful
+loss copy, and restored/cloned/reset states stay quiet. Motion is 420ms once or
+static under reduced motion. Names wrap, changed actions have 44px targets and
+visible focus, hints show original next payout and honest counts. Authored clue
+labels, bank, hooks, rules, score/save/share and completion behavior remain held.
+Eleven focused outcomes and ten effective controls pass, each retaining an
+independent six-tier baseline. Native eight contexts and five effective browser
+copies pass, plus independent source and native review. Combined production,
+types, all artifact guards and affected regression checks pass.
+Two untouched final App contexts use the original 59-driver bank, scoring 1000
+on a normal-motion phone and 600 on reduced-motion desktop. Four native guesses
+hold scroll position; six clue nodes, exact daily fields, full clipboard card,
+one original score insert and one completion remain correct. POSTs were locally
+fulfilled, reload stays quiet, page errors/overflow/unrelated writes are zero.
+All frozen source/HTML/assets held, browser/server stopped and screenshots checked.
+Receipts: C:/Users/antho/AppData/Local/Temp/dukb-round812-final-acceptance.json
+and dukb-round812-production-app/report.json and cleanup.json. No publication claim.
+811/812 accepted; 813 acceptance and 815/816 continue. Next free 817.
+
 **2026-10-01, Codex811 ACCEPTED: accurate clue-game hint points and counts.**
 Constructor and Tennis now show the actual next payout from their original
 six-tier tables. All three Boards, including Nation, report honest hint counts

@@ -1,5 +1,15 @@
 # Project state
 
+## ACCEPTED 2026-10-01: NASCAR answer feedback and hint points
+
+812 removes wrong feedback after correct wins, adds finite/static result cues,
+keeps restores quiet and makes names/actions readable and usable. Hint copy now
+uses original payouts. Eleven outcomes, ten effective controls, native checks,
+independent review and combined production/artifact gates pass. Two untouched
+App contexts verify original-bank 1000/600 results, exact saves/share/once booking,
+quiet reload and stable scroll. All evidence and boundaries are on WORKBOARD.
+811/812 accepted; 813 acceptance and 815/816 continue. Next free 817.
+
 ## ACCEPTED 2026-10-01: accurate clue-game hint points and counts
 
 811 fixes Constructor/Tennis next-payout copy and all three hint counters, with
