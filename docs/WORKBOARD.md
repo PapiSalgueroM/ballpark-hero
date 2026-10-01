@@ -1,5 +1,12 @@
 # Work board
 
+**771 scope addendum, regression gate:** authorize new portable `scripts/playInboxCard.mjs`.
+The actual native-browser matrix found a passive-effect race where a no-op reply's intent could
+survive until an unrelated automatic resolution and replay committed feedback. The two-line
+useLayoutEffect correction is proven on a TEMP copy and applied within the existing claim.
+Preserve the actual-card eight-context browser matrix as a discoverable harness, with asserted
+passive-hook and no-wrap copies reproducing that race and phone overflow. No parent/engine changes.
+
 **770 scope addendum, root owned:** `scripts/simTrainingFeedbackMotion.mjs` needs one relative
 import resolver entry for the new FirstTouchBoard when controls copy TrainingPanel into TEMP.
 Authorize only that compatibility line, preserving all old control anchors and expected outcomes.
