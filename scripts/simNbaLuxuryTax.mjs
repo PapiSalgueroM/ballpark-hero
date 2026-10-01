@@ -125,6 +125,31 @@
         guide and What's New quote the opening league (line 226.7, brackets
         6.859, first apron 236.4, 10M over pays 10.8 or 30.8 as a repeater)
         and are read here against the engine, so they cannot drift from it.
+     8) the tax does not fade (Round 824). The round 722 review measured clubs
+        over the line by season running 5, then 3 or 4, then 0 to 2, then 0 or
+        1, because the cap and the line rose 7% a season while every new deal
+        was priced in opening season money. Round 824 prices every new deal
+        (re-signs, rookie deals, the minimum, free agent asks) in the money of
+        the season it starts in (nbaPayScale). Ten leagues, ten seasons each,
+        the board's loop. Measured 2026-10-01 over three seed sets of ten
+        (1-10, 11-20 and 21-30, NBA_TAX_LONG_SEED_BASE moves this section
+        only):
+          the mean club's payroll over the line, season ten over season three:
+            0.952, 0.986, 0.985; with flat pay (the flatpay control) 0.588,
+            the ratio falling every season from 0.863 to 0.399
+          computer clubs over the line a season, seasons four to ten: 0.27,
+            0.31, 0.39; with flat pay 0.00 on every set
+          every club, the harness GM included (he keeps everyone he drafts):
+            1.16, 1.13, 1.20; with flat pay 0.74
+        Bands: at least 0.85, 0.12 and 0.95. WHAT IS NOT FIXED, printed so it
+        is not forgotten: the ratio no longer decays from season three on, but
+        it settles near 0.67 against 0.86 at the opening, and computer clubs
+        over the line settle near one season in three. The second cause is the
+        computer clubs' summer: they re-sign or walk their own men and refill
+        only with minimum deals (league wide minimum deals ran from 121 to 237
+        of about 423 men over ten seasons in one measured league), so nothing
+        spends a computer club back up to the line. That is a free agency
+        decision for a later round, not a pay scale one.
 
    Controls, through NBA_TAX_CONTROL. None touches src: the rewritten source
    is served to the bundler from memory, and each refuses to run if its
@@ -146,6 +171,8 @@
      hubfloor     the hub's tip off line for any declared ceiling  -> 6
      realline     every league keeps the real 200.4 line          -> 7
      oldbill      an old save is billed for the season it was saved in -> 4
+     flatpay      every new deal priced in opening season money        -> 8
+                  (Round 824; run 2026-10-01 and fired)
    The last six rewrite nbaFrontOffice.ts or foHub.ts (in both bundles, so
    section 5 still compares like with like) and were added by the review.
 
@@ -182,6 +209,8 @@ const EXPECT = {
   /* the calibration fix: the line back at the real 200.4, and an old save billed for its own season */
   realline: [7],
   oldbill: [4],
+  /* Round 824: new deals priced in opening season money forever, the fade */
+  flatpay: [8],
 };
 if (CONTROL && !EXPECT[CONTROL]) {
   console.error(`NBA_TAX_CONTROL=${CONTROL} is not a control this harness knows (${Object.keys(EXPECT).join(', ')})`);
@@ -196,6 +225,7 @@ const SECTION_NAMES = {
   5: 'the tax binds: payers against their twins in a league with no tax',
   6: 'the shared descriptor says so',
   7: 'a league that looks like a real one: taxpayers, the biggest bill, the typical bill, a way under',
+  8: 'ten seasons: payrolls keep pace with the line and the league keeps taxpayers',
 };
 
 /* ---- the published table, typed here on purpose ------------------------- */
@@ -234,6 +264,8 @@ const MEDIAN_BAND = [15, 70];
    (The first draft of this table put 20M over in three brackets and both
    formulas disagreed with it, which is the whole point of typing it.) */
 const HAND = [[10, false, 11.0], [10, true, 31.0], [20, false, 43.5], [20, true, 83.5]];
+/* Section 8 bands, set from the measurement in the header (Round 824). */
+const FADE_BAND = { keep: 0.85, cpuLate: 0.12, allLate: 0.95 };
 
 const round1 = n => Math.round(n * 10) / 10;
 const near = (a, b, eps = 0.051) => Math.abs(a - b) <= eps;
@@ -303,6 +335,7 @@ const CONTROL_FILE_SWAPS = {
   noapron: { 'nbaFrontOffice.ts': [['  if (taxScale != null && after > nbaFirstApron(cap, taxScale)) return incoming.salary <= outgoing.salary;', '  if (taxScale != null && after > Infinity) return incoming.salary <= outgoing.salary;']] },
   realline: { 'nbaFrontOffice.ts': [['  league.taxScale = nbaCalibrateTaxScale(payrolls, league.cap);', '  league.taxScale = 1;']] },
   oldbill: { 'nbaFrontOffice.ts': [['  if (scale == null) return out;', '  if (scale === -1) return out;']] },
+  flatpay: { 'nbaFrontOffice.ts': [['  return cap / NBA_CAP_BASE;', '  return 1;']] },
   hubfloor: { 'foHub.ts': [['const tooMany = f.rosterFloor != null && f.rosterMax != null ?', 'const tooMany = f.rosterMax != null ?']] },
 };
 const NOTE = {
@@ -315,6 +348,7 @@ const NOTE = {
   hubfloor: 'the hub says "waive before tip off" for any sport that declares a roster ceiling',
   realline: 'every league keeps the real 200.4 line instead of one set from its own payrolls',
   oldbill: 'a league saved before the round is billed at the close of the season it was saved in',
+  flatpay: 'every new deal priced in opening season money whatever the cap has risen to (before Round 824)',
 }[CONTROL];
 if (NOTE) console.log(`   control ${CONTROL}: ${NOTE}`);
 
@@ -902,6 +936,41 @@ console.log('7) The league the lines are set from: taxpayers, the biggest bill a
   console.log(`   clubs over the line at the first tip off by seed: ${firstTip.join(' ')}; season one payers ${payerCounts.join(' ')}`);
   console.log(`   largest season one bill by seed: ${topBills.map(b => b.toFixed(1)).join(' ')}; median taxpayer bill by seed: ${medians.map(m => (Number.isFinite(m) ? m.toFixed(1) : String(m))).join(' ')}`);
   console.log(`   CPU payers that shed under the line while their twin stayed over: ${perSeed.join(' ')} (${shedUnder} in all, ${carried} more under in both leagues)`);
+}
+
+/* ---- 8. the tax does not fade (Round 824) ---------------------------------- */
+console.log('8) Ten seasons: payrolls keep pace with the line and the league keeps taxpayers');
+{
+  const LONG = 10;
+  const base = Number(process.env.NBA_TAX_LONG_SEED_BASE || 0);
+  const ratioBySeason = Array.from({ length: LONG }, () => []);
+  const cpuOverBySeason = Array.from({ length: LONG }, () => []);
+  const allOverBySeason = Array.from({ length: LONG }, () => []);
+  for (const s0 of SEEDS) {
+    const seed = base + s0;
+    const rng = lcg(seed * 7919 + 17);
+    const lg = nba.initNbaLeague(rng);
+    const me = Object.keys(lg.teams)[seed % 30];
+    const log = freshLog();
+    for (let s = 0; s < LONG; s += 1) playSeason(nba, lg, me, rng, log);
+    log.closes.forEach((close, s) => {
+      const rows = Object.entries(close);
+      ratioBySeason[s].push(rows.reduce((x, [, c]) => x + c.ratio, 0) / rows.length);
+      cpuOverBySeason[s].push(rows.filter(([a, c]) => a !== me && c.over).length);
+      allOverBySeason[s].push(rows.filter(([, c]) => c.over).length);
+    });
+  }
+  const mean = a => a.reduce((x, y) => x + y, 0) / a.length;
+  const ratio = ratioBySeason.map(mean);
+  const late = a => mean(a.slice(3).flat());
+  const cpuLate = late(cpuOverBySeason), allLate = late(allOverBySeason);
+  const keep = ratio[LONG - 1] / ratio[2];
+  console.log(`   league payroll over the tax line, mean club, by season: ${ratio.map(r => r.toFixed(3)).join(' ')}`);
+  console.log(`   season ten against season three: ${keep.toFixed(3)}; clubs over the line by season (mean of ten leagues): ${allOverBySeason.map(a => mean(a).toFixed(1)).join(' ')}`);
+  console.log(`   seasons four to ten, clubs over the line a season: ${allLate.toFixed(2)} with the GM, ${cpuLate.toFixed(2)} computer clubs only`);
+  ok(8, `payrolls keep pace with the line: the mean club's payroll over the line in season ten is at least ${FADE_BAND.keep} of season three's`, keep >= FADE_BAND.keep, keep.toFixed(3));
+  ok(8, `computer clubs keep paying tax: seasons four to ten average at least ${FADE_BAND.cpuLate} clubs over the line a season`, cpuLate >= FADE_BAND.cpuLate, cpuLate.toFixed(2));
+  ok(8, `and the league as a whole at least ${FADE_BAND.allLate} a season`, allLate >= FADE_BAND.allLate, allLate.toFixed(2));
 }
 
 /* ---- report --------------------------------------------------------------- */
