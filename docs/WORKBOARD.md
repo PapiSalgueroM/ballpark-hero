@@ -1,5 +1,33 @@
 # Work board
 
+**2026-10-01, Codex807 ACCEPTED: accurate F1 Driver clues, hints and help.**
+Hint buttons show the original next payout, counters report the actual hint count,
+and numbered clue headings replace incorrect categories without changing a clue.
+The existing help dialog now returns focus to its 44px opener without scrolling
+and includes a fictional worked example using the original payout constants.
+All original gameplay, data, scoring, saves, full share and booking remain held.
+
+Ten focused outcomes, the ten original feedback outcomes and seven effective
+copied controls pass. Native checks cover eight contexts and four copies. The
+combined 807/809/810 physical gate passes real types, both builds, the F1 three-
+clock capture, all 24 selected node harnesses and boot, including all 15 artifact
+guards and the full NoDoubleRecord check. All 1800 raw source inputs held. All
+188 saved pages' content and all 168 URL hashes/dates held; only F1 HTML and sitemap
+line endings normalized inside the fixture, so no generated root files change.
+
+Two final production App contexts pass 119 checks using untouched JS and authored
+data. Phone one-hint win scores 800, reduced desktop mixed guesses/hints scores
+200. Exact save/full share, one locally fulfilled real guest POST, quiet reload,
+native Escape/Close focus return, finite/static feedback and no page movement pass.
+Phone help and win screenshots inspected. Browser/server stopped, source/assets
+held. No publication or Google decision claim. Receipts:
+C:/Users/antho/AppData/Local/Temp/dukb-round807-builder-receipt.json,
+dukb-round807-production-app/report.json and cleanup.json,
+dukb-round807-production-20261001/production807-preservation-receipt.json.
+Final entry index-LS2DIDXT.js, SHA256
+f013068e618fd3c8f9be0d4719bd3336f3395eb027b37fe8ab1d8836d79a86c3.
+809/810 finish App checks; 811/812/813 are claimed. Next free 814.
+
 **2026-10-01, Codex811 CLAIMED: accurate hint points in three clue games.**
 Own only F1ConstructorBoard.tsx, TennisPlayerBoard.tsx and GuessTheNationBoard.tsx,
 plus a focused test and sim. Constructor and Tennis still advertise a flat

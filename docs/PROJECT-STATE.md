@@ -1,5 +1,16 @@
 # Project state
 
+## ACCEPTED 2026-10-01: accurate F1 Driver clues, hints and help
+
+807 fixes misleading clue categories and hint costs, adds an actual-tier worked
+example and restores help focus without scrolling. Original game outcomes hold.
+Ten focused tests, ten existing feedback tests, seven effective controls and native
+checks pass. Combined 807/809/810 types, builds, all 15 artifact guards, full
+NoDoubleRecord and other affected guards pass. All 1800 raw sources and saved
+page/URL content hold. Two untouched production App contexts score 800 and 200
+with exact save/share/once completion and 119 checks. Detailed evidence is on
+WORKBOARD. No publication claim. 809/810 App checks and 811-813 continue.
+
 ## CLAIMED 2026-10-01: clue copy, NASCAR feedback and reveal timers
 
 811 owns only Constructor, Tennis and Nation Boards' inaccurate hint copy plus
