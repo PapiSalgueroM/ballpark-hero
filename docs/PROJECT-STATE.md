@@ -1,5 +1,19 @@
 # Project state
 
+## ACCEPTED 2026-10-01: Tennis feedback (816), batch 815-817 complete
+
+Tennis now shows feedback for the accepted answer, never the old delayed wrong
+message on a win. Its short animations respect reduced motion; names wrap and
+actions fit touch. Original scores, hints, saves and sharing hold. Both Tennis
+and CBB help panels stay reachable during play, with worked examples and stable
+focus. Final App checks pass for both games, alongside the combined real type,
+build, saved-page and affected-regression gates recorded on WORKBOARD.
+
+815 (7e1a7d41), 817 (c1fbca33) and this 816 commit are ready for Claude's next
+integrated publish. Release L already includes 813. Current published content
+and these three new commits remain distinct; Google/AdSense account decisions
+are unconfirmed. No active claims remain in this batch. Next free round: 818.
+
 ## ACCEPTED 2026-10-01: worked help examples and focus (817)
 
 Tennis and College Basketball Program now explain the actual clue/point rules

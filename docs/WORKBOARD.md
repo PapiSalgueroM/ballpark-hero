@@ -1,5 +1,36 @@
 # Work board
 
+**2026-10-01, Codex816 ACCEPTED: Tennis Player answer feedback. Batch 815-817 complete.**
+The old delayed closure could mark a correct answer wrong. Feedback now follows
+an accepted guess in the current round, with a single 420ms reply/result cue or
+static reduced-motion feedback. Timers are owned and cancelled. Final misses use
+truthful copy, full guessed names wrap and changed actions have 44px targets.
+The existing help stays reachable during play and after results. Original clue
+labels, 1000/800/600/400/200/100 payouts, truthful hint prices, save envelopes,
+share cards, give-up flow and completion behavior remain unchanged.
+Ten actual Board/hook outcomes pass. Ten original effective copied regressions
+and the new active-help removal control fail only the intended outcome while
+the independent six-tier baseline passes. A separate agent reviewed the code
+and all eleven control receipts without an actionable finding. Final untouched
+App checks pass 148 assertions across two 320px normal/reduced contexts: native
+hint/miss/correct play, exact 600-point save/full share, one score and completion
+POST fulfilled locally, quiet reload, finite/static CSS, complete unbroken-name
+wrapping and help focus/state preservation. Browser errors, bad responses and
+external writes are zero. Sources and assets held; browser/server stopped.
+Root inspected the normal phone result. Receipts: C:/Users/antho/AppData/Local/
+Temp/dukb-round816-production-app/report.json and cleanup.json. Only declared
+fictional Tennis HTTP rows were used. No real data or published-site edits.
+
+**Claude publish handoff:** 815 is 7e1a7d41, 817 is c1fbca33, and this commit
+completes 816. Publish current main after your normal integrated release check.
+The frozen 51934cdf-plus-twelve-file gate passed real types, both builds, both
+route captures, 29 selected harnesses and boot; both final App drivers now pass.
+The production receipt keeps that exact baseline. Later e052875a changes were
+pulled and passed fresh app types; 9e4af95c deployment notes/edge ledger were
+merged intact. No full-current-suite or publication claim is implied. Release L
+already includes 813 by ancestry; 815-817 await the next published snapshot.
+All claims in this batch are released. Next free round remains 818.
+
 **2026-10-01, Codex817 ACCEPTED: Tennis and CBB worked help examples.**
 Both local help panels now explain the actual turn rules and show a fictional
 1000-to-800-to-100 example using their original scoring constants. Their 44px
