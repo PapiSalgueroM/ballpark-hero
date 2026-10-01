@@ -238,6 +238,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
         heading: "The agent and the budget",
         items: [
           "His agent hears 3 offers at most. An offer that adds up to what he asked for signs him, a near miss gets a lower wage demand back, and a poor one costs two tries or ends the meeting.",
+          "The board will not go over the wage or the contract length he asks for, so you cannot pay him more a week to skip the signing bonus.",
           "The signing bonus comes out of the same budget as the fee. A bid or an offer you cannot afford is refused before the hour is spent, so the budget never goes below zero.",
         ],
       },
@@ -291,7 +292,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
       {
         heading: "A rival steals a target",
         paragraphs: [
-          "While you were on the phone, a rival came in for the dearest keeper on your list and signed him an hour later. It did not matter this time, but the same thing can happen to the striker you were saving for last.",
+          "While you were on the phone, a rival came in for the dearest keeper on your list at noon and signed him at 2pm. It did not matter this time, but the same thing can happen to the striker you were saving for last.",
         ],
       },
       {
@@ -303,7 +304,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
       {
         heading: "Grading the window",
         paragraphs: [
-          "Four needs out of four, every fee at or under what the player was worth, and £3m of the £29m left. That is 50 for needs, 30 for value and 2.1 for budget: 82 out of 100, an A.",
+          "Four needs out of four. The keeper cost £3.3m for a £3m player, 10 percent over his real worth, which keeps 80 percent of his share of the value points, and say the other three went about 10 percent over too. That is 50 for needs, 24 for value and, with £1m of the £29m left, 0.7 for budget: 75 out of 100, a B.",
         ],
       },
     ],

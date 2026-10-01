@@ -6,7 +6,7 @@ import { useRevealScroll } from '@/hooks/useRevealScroll';
 import { useDeadlineDay } from '@/hooks/useDeadlineDay';
 import { hotSeatLeagues, hotSeatPool } from '@/lib/managerHotSeat';
 import { money } from '@/lib/clubManager';
-import { MAX_TERMS_YEARS, MIN_TERMS_YEARS, termsVerdict } from '@/lib/clubManagerDeals';
+import { MIN_TERMS_YEARS, termsVerdict } from '@/lib/clubManagerDeals';
 import { cn } from '@/lib/utils';
 import {
   BUDGET_POINTS,
@@ -14,6 +14,7 @@ import {
   NEEDS_POINTS,
   VALUE_POINTS,
   bidMeter,
+  boardTerms,
   clockLabel,
   deskRead,
   hoursLeft,
@@ -243,9 +244,10 @@ function TermsTable({ run, i, hook }: { run: DeadlineRun; i: number; hook: Hook 
   const [years, setYears] = useState(want.years);
   const [wageText, setWageText] = useState(String(want.wage));
   const [bonusText, setBonusText] = useState(String(want.bonus));
-  const wage = Math.max(1, Math.round(parseFloat(wageText) || 0));
-  const bonus = Math.max(0, round1(parseFloat(bonusText) || 0));
-  const offer = { years, wage, bonus, role: want.role };
+  /* The board will not go over his asking wage or length (boardTerms), so the
+     meter, the verdict and the offer all read the same capped numbers. */
+  const offer = boardTerms(want, { years, wage: parseFloat(wageText) || 0, bonus: parseFloat(bonusText) || 0 });
+  const { wage, bonus } = offer;
   const close = termsMeter(run, i, offer) ?? 0;
   const verdict = termsVerdict(want, offer);
   const room = round1(run.state.budget - fee);
@@ -263,7 +265,7 @@ function TermsTable({ run, i, hook }: { run: DeadlineRun; i: number; hook: Hook 
         <span className="text-xs" title="Offers his agent will hear before walking."><Dots left={t.neg?.terms?.patience ?? 0} of={3} /></span>
       </div>
       <div className="rounded-md bg-muted px-2 py-1.5 text-xs">
-        His agent wants <span className="font-semibold">{want.years} years at {want.wage}k a week</span> and a <span className="font-semibold">{money(want.bonus)}</span> signing bonus. The bonus comes out of the same budget as the fee.
+        His agent wants <span className="font-semibold">{want.years} years at {want.wage}k a week</span> and a <span className="font-semibold">{money(want.bonus)}</span> signing bonus. The bonus comes out of the same budget as the fee, and the board will not go over the wage or the length he is asking for.
       </div>
       {t.rival && (
         <div className="rounded-md border border-red-500/40 bg-red-500/10 px-2 py-1.5 text-xs font-semibold text-red-700 dark:text-red-300">
@@ -282,7 +284,7 @@ function TermsTable({ run, i, hook }: { run: DeadlineRun; i: number; hook: Hook 
         </div>
         <div className="flex flex-wrap items-center gap-1.5">
           <span className="w-14 shrink-0 text-xs font-semibold text-muted-foreground">Length</span>
-          {Array.from({ length: MAX_TERMS_YEARS - MIN_TERMS_YEARS + 1 }, (_, k) => MIN_TERMS_YEARS + k).map(y => (
+          {Array.from({ length: Math.max(1, want.years - MIN_TERMS_YEARS + 1) }, (_, k) => MIN_TERMS_YEARS + k).map(y => (
             <button key={y} type="button" aria-pressed={years === y} onClick={() => setYears(y)}
               className={cn('min-h-[36px] min-w-[40px] rounded-md border px-2 text-xs font-semibold', years === y ? 'border-primary bg-primary/10 text-primary' : 'border-border')}>
               {y}y
@@ -291,9 +293,10 @@ function TermsTable({ run, i, hook }: { run: DeadlineRun; i: number; hook: Hook 
         </div>
         <div className="flex items-center gap-2">
           <label htmlFor="deadline-wage" className="w-14 shrink-0 text-xs font-semibold text-muted-foreground">Wage</label>
-          <Input id="deadline-wage" type="number" inputMode="numeric" min={1} step={5} value={wageText} onChange={e => setWageText(e.target.value)} className="h-10 flex-1" />
+          <Input id="deadline-wage" type="number" inputMode="numeric" min={1} max={want.wage} step={1} value={wageText} onChange={e => setWageText(e.target.value)} className="h-10 flex-1" />
           <span className="text-xs text-muted-foreground">k a week</span>
         </div>
+        {(parseFloat(wageText) || 0) > want.wage && <div className="text-xs text-muted-foreground">The board will pay {want.wage}k a week at most.</div>}
         <div className="flex items-center gap-2">
           <label htmlFor="deadline-bonus" className="w-14 shrink-0 text-xs font-semibold text-muted-foreground">Bonus</label>
           <Input id="deadline-bonus" type="number" inputMode="decimal" min={0} step={0.1} value={bonusText} onChange={e => setBonusText(e.target.value)} className="h-10 flex-1" />
@@ -303,7 +306,7 @@ function TermsTable({ run, i, hook }: { run: DeadlineRun; i: number; hook: Hook 
       </div>
       <div className="grid grid-cols-2 gap-2">
         <button type="button" onClick={() => hook.walk(i)} className="min-h-[48px] rounded-md border border-border px-3 py-2 text-sm font-semibold">Walk away</button>
-        <button type="button" disabled={tooBig || full} onClick={() => hook.terms(i, { wage, years, bonus })}
+        <button type="button" disabled={tooBig || full} onClick={() => hook.terms(i, { wage, years: offer.years, bonus })}
           className="min-h-[48px] rounded-md bg-primary px-3 py-2 text-sm font-semibold text-primary-foreground disabled:opacity-50">
           Offer terms (1 hour)
         </button>

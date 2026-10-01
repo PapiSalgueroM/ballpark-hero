@@ -75,7 +75,7 @@ import {
   type MarketPlayer,
   type Negotiation,
 } from '@/lib/clubManager';
-import { askingTerms, dealCloseness, offerVerdict, termsCloseness, valuationBand, type PersonalTerms, type ValuationRead } from '@/lib/clubManagerDeals';
+import { MIN_TERMS_YEARS, askingTerms, dealCloseness, offerVerdict, termsCloseness, valuationBand, type PersonalTerms, type ValuationRead } from '@/lib/clubManagerDeals';
 import { hotSeatPool, mixSeed, onStaticWorld, withSeed } from '@/lib/managerHotSeat';
 import { mulberry32 } from '@/lib/leagueCore';
 import { dailyIndex, dailyPrngSeed } from '@/lib/dateUtils';
@@ -393,9 +393,27 @@ export function termsWanted(run: DeadlineRun, i: number): PersonalTerms | null {
   return t?.status === 'terms' ? t.neg?.terms?.want ?? null : null;
 }
 
-export function termsMeter(run: DeadlineRun, i: number, offer: PersonalTerms): number | null {
+/**
+ * The terms the board will put to his agent. The wage and the length cost
+ * nothing in a one day game (there is no wage bill and no season after it),
+ * and the engine's termsScore lets either stand in for the signing bonus, so
+ * before this a zero bonus on a bigger wage signed every man first time and
+ * the bonus, the one term the budget pays, never had to be paid. Neither may
+ * go above what his agent is asking now. The bonus is not capped, because it
+ * is paid for.
+ */
+export function boardTerms(want: PersonalTerms, offer: { wage: number; years: number; bonus: number }): PersonalTerms {
+  return {
+    years: Math.max(MIN_TERMS_YEARS, Math.min(want.years, Math.round(offer.years))),
+    wage: Math.max(1, Math.min(want.wage, Math.round(offer.wage))),
+    bonus: Math.max(0, Math.round(offer.bonus * 10) / 10),
+    role: want.role,
+  };
+}
+
+export function termsMeter(run: DeadlineRun, i: number, offer: { wage: number; years: number; bonus: number }): number | null {
   const want = termsWanted(run, i);
-  return want ? termsCloseness(want, offer) : null;
+  return want ? termsCloseness(want, boardTerms(want, offer)) : null;
 }
 
 /** Why the selling club would not pick up for this man right now, in the engine's own words, or null. */
@@ -582,7 +600,8 @@ export function offerPersonalTerms(prev: DeadlineRun, i: number, offer: { wage: 
   const t0 = prev.targets[i];
   if (prev.grade || !t0 || t0.status !== 'terms' || !t0.neg?.terms) return prev;
   const fee = t0.neg.agreedFee ?? 0;
-  const bonus = Math.max(0, Math.round(offer.bonus * 10) / 10);
+  const terms = boardTerms(t0.neg.terms.want, offer);
+  const bonus = terms.bonus;
   /* The fee and the bonus come out of one budget; refused before the hour. */
   if (fee + bonus > prev.state.budget) return prev;
   if (prev.state.squad.length >= 30) return prev;
@@ -591,7 +610,6 @@ export function offerPersonalTerms(prev: DeadlineRun, i: number, offer: { wage: 
     const t = run.targets[i];
     const want = t.neg!.terms!.want;
     const patienceBefore = t.neg!.terms!.patience;
-    const terms: PersonalTerms = { years: offer.years, wage: offer.wage, bonus, role: want.role };
     const neg = atTable(run, t, mixSeed(run.setup.seed, SEED_TERMS + i * 64 + (3 - patienceBefore)), s => offerTerms(s, terms));
     if (!neg) return prev;
     /* Nothing moved (an engine refusal with a note): no hour, no action. */
@@ -631,6 +649,10 @@ export function walkFrom(prev: DeadlineRun, i: number): DeadlineRun {
     const run = cloneRun(prev);
     const t = run.targets[i];
     const goneBefore = run.state.goneNames.length;
+    /* At the terms table the rival lives on the frame (the fee table's rival
+       was beaten when the fee was agreed), so he is seated where the engine's
+       walkAway looks for him, and the same rule holds at both tables. */
+    if (t.status === 'terms' && t.rival && t.neg) t.neg = { ...t.neg, rivalBidder: t.rival.club, rivalOffer: t.rival.offer };
     atTable(run, t, mixSeed(run.setup.seed, SEED_WALK + i), s => walkAway(s));
     run.actions.push({ t: 'walk', i });
     const rival = rivalOn(t);
