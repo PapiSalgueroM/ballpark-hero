@@ -1,5 +1,25 @@
 # Work board
 
+**2026-10-01, Codex811 ACCEPTED: accurate clue-game hint points and counts.**
+Constructor and Tennis now show the actual next payout from their original
+six-tier tables. All three Boards, including Nation, report honest hint counts
+without claiming a flat 100-point deduction. Nation also clears that local count
+on Play Again, so the next round starts at zero. Rules and original hooks stay held.
+Eight actual Board/hook outcomes and six effective copied controls pass with
+independent original scoring baselines. Peer review is clear. Combined types,
+builds, all 15 artifact guards and affected regressions pass in the frozen 811 gate.
+Six final production App phone contexts pass: normal/reduced motion for all three,
+exact 600/600/1000 scores, saves, full share cards, once completion and quiet reload.
+Nation's second round reports one hint with original 1100 points and holds the
+completed daily. No source/asset substitutions, outward writes or observed overflow.
+The authored Constructor bank and declared fictional Tennis/Nation HTTP rows were
+used. All captured inputs held and browser/server stopped. The first Nation fixture
+selector failure is retained without credit. The existing Tennis false wrong cue
+was independently measured and is reserved for 816. Screenshots inspected.
+Receipts: C:/Users/antho/AppData/Local/Temp/dukb-round811-production-app/
+report.json, cleanup.json and dukb-round811-production-app-final.log beside it.
+811 is accepted; 812/813 acceptance and 815/816 work continue. Next free 817.
+
 **2026-10-01, Codex815/816 CLAIMED: Tennis and CBB answer feedback.**
 815 owns only src/components/cbb-program/CbbProgramBoard.tsx, a local
 CbbProgramFeedback.module.css, src/test/cbbProgramFeedback.test.tsx and

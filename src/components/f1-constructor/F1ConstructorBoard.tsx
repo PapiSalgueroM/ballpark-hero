@@ -5,7 +5,7 @@ import { F1ConstructorSearch } from './F1ConstructorSearch';
 import { F1ConstructorHowToPlay } from './F1ConstructorHowToPlay';
 import ShareButtons from '@/components/game/ShareButtons';
 import { GameNav } from '@/components/game/GameNav';
-import { MAX_CLUES } from '@/types/f1Constructor';
+import { MAX_CLUES, POINTS_BY_CLUE } from '@/types/f1Constructor';
 import motion from './ConstructorFeedback.module.css';
 
 const CLUE_LABELS = ['Vibe', 'Country', 'Era', 'Championships', 'Livery', 'Famous Driver'];
@@ -84,6 +84,7 @@ export function F1ConstructorBoard() {
   const isOver = gameStatus !== 'playing';
   const hasGuessed = guesses.length > 0;
   const canHint = revealedClues < MAX_CLUES;
+  const nextHintPoints = POINTS_BY_CLUE[revealedClues] ?? 0;
 
   const shareScore = gameStatus === 'won'
     ? `I guessed today's F1 Constructor in ${revealedClues} clue${revealedClues > 1 ? 's' : ''}!\nScore: ${score} 🏎️`
@@ -147,7 +148,7 @@ export function F1ConstructorBoard() {
                   onClick={handleHint}
                   className="text-sm text-yellow-500/70 hover:text-yellow-400 transition-colors"
                 >
-                  💡 Hint (-100 pts)
+                  💡 Hint ({nextHintPoints} pts next)
                 </button>
               )}
               {hasGuessed && !showGiveUpConfirm && (
@@ -160,7 +161,7 @@ export function F1ConstructorBoard() {
               )}
             </div>
             {hintsUsed > 0 && (
-              <p className="text-center text-xs text-yellow-600">{hintsUsed} hint{hintsUsed > 1 ? 's' : ''} used (-{hintsUsed * 100} pts)</p>
+              <p className="text-center text-xs text-yellow-600">{hintsUsed} hint{hintsUsed > 1 ? 's' : ''} used</p>
             )}
 
             {showGiveUpConfirm && (

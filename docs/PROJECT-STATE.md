@@ -1,5 +1,15 @@
 # Project state
 
+## ACCEPTED 2026-10-01: accurate clue-game hint points and counts
+
+811 fixes Constructor/Tennis next-payout copy and all three hint counters, with
+Nation resetting its count for a new round. Eight focused outcomes, six effective
+controls, independent review and combined production/artifact gates pass. Six
+final App phone contexts preserve exact scores/saves/share/once completion and
+quiet reload. Nation's new-round count is verified. Evidence is on WORKBOARD.
+Tennis's separate old wrong cue is reproduced and remains assigned to 816.
+812/813 acceptance and 815/816 continue. No publication claim. Next free 817.
+
 ## CLAIMED 2026-10-01: truthful Tennis and CBB answer feedback
 
 815 reserves the CBB Board and local feedback CSS/test/sim. 816 reserves the
