@@ -1,12 +1,12 @@
 {
   "__version": 3,
   "/": {
-    "hash": "74fd1747b2d1ddea",
+    "hash": "a4fa4e7733ac9013",
     "date": "2026-10-01"
   },
   "/about": {
-    "hash": "e9b17eb973aac3d9",
-    "date": "2026-09-16"
+    "hash": "74a425d771c0b5e1",
+    "date": "2026-10-01"
   },
   "/accessibility": {
     "hash": "be624390c0098085",
@@ -29,7 +29,7 @@
     "date": "2026-09-19"
   },
   "/baseball": {
-    "hash": "99c4cd497d0938ad",
+    "hash": "3c25ca9e3a4944f9",
     "date": "2026-10-01"
   },
   "/baseball-career": {
@@ -489,7 +489,7 @@
     "date": "2026-09-16"
   },
   "/pro-basketball": {
-    "hash": "c312885609b99d15",
+    "hash": "125bf0bbac94bbfa",
     "date": "2026-10-01"
   },
   "/pro-football": {
