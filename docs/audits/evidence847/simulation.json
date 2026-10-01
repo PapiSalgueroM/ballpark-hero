@@ -1,0 +1,4172 @@
+{
+  "started": "2026-10-01T22:04:31.361Z",
+  "boundary": "Read-only hostile QA in an isolated headless Chromium context at 390x844, reduced motion. Actual live App plus independently built clean baseline at http://127.0.0.1:4930. Original UI, pools, engines and clocks. Local saves belong only to this disposable browser. Supabase reads allowed; all server mutations, analytics and ads intercepted. No gameplay source edits, no engine-only results credited as UI play.",
+  "coverage": [
+    {
+      "game": "NBA Front Office",
+      "environment": "live",
+      "tested": "Boston start, first round auto-fills10to14 roster, midseason refresh",
+      "round": 2,
+      "rawHeld": true
+    },
+    {
+      "game": "NBA Front Office",
+      "environment": "live",
+      "tested": "Native double click round action",
+      "beforeRound": 2,
+      "afterRound": 3
+    },
+    {
+      "game": "NBA Front Office",
+      "environment": "live",
+      "tested": "Actual native season rounds to playoff report",
+      "rounds": [
+        {
+          "before": 3,
+          "after": 4,
+          "phase": "hub",
+          "record": [
+            11,
+            2
+          ]
+        },
+        {
+          "before": 4,
+          "after": 5,
+          "phase": "hub",
+          "record": [
+            13,
+            2
+          ]
+        },
+        {
+          "before": 5,
+          "after": 6,
+          "phase": "hub",
+          "record": [
+            16,
+            3
+          ]
+        },
+        {
+          "before": 6,
+          "after": 7,
+          "phase": "hub",
+          "record": [
+            19,
+            3
+          ]
+        },
+        {
+          "before": 7,
+          "after": 8,
+          "phase": "hub",
+          "record": [
+            24,
+            4
+          ]
+        },
+        {
+          "before": 8,
+          "after": 9,
+          "phase": "hub",
+          "record": [
+            26,
+            4
+          ]
+        },
+        {
+          "before": 9,
+          "after": 10,
+          "phase": "hub",
+          "record": [
+            28,
+            5
+          ]
+        },
+        {
+          "before": 10,
+          "after": 11,
+          "phase": "hub",
+          "record": [
+            31,
+            7
+          ]
+        },
+        {
+          "before": 11,
+          "after": 12,
+          "phase": "hub",
+          "record": [
+            33,
+            9
+          ]
+        },
+        {
+          "before": 12,
+          "after": 13,
+          "phase": "hub",
+          "record": [
+            35,
+            10
+          ]
+        },
+        {
+          "before": 13,
+          "after": 14,
+          "phase": "hub",
+          "record": [
+            36,
+            12
+          ]
+        },
+        {
+          "before": 14,
+          "after": 15,
+          "phase": "hub",
+          "record": [
+            38,
+            13
+          ]
+        },
+        {
+          "before": 15,
+          "after": 16,
+          "phase": "hub",
+          "record": [
+            40,
+            15
+          ]
+        },
+        {
+          "before": 16,
+          "after": 17,
+          "phase": "hub",
+          "record": [
+            42,
+            16
+          ]
+        },
+        {
+          "before": 17,
+          "after": 18,
+          "phase": "hub",
+          "record": [
+            46,
+            18
+          ]
+        },
+        {
+          "before": 18,
+          "after": 19,
+          "phase": "hub",
+          "record": [
+            50,
+            21
+          ]
+        },
+        {
+          "before": 19,
+          "after": 20,
+          "phase": "hub",
+          "record": [
+            55,
+            24
+          ]
+        },
+        {
+          "before": 20,
+          "after": 20,
+          "phase": "recap",
+          "record": [
+            57,
+            26
+          ]
+        }
+      ]
+    },
+    {
+      "game": "NBA Front Office",
+      "environment": "live",
+      "tested": "Native two draft picks and offseason transition",
+      "pickRounds": [
+        {
+          "picked": "Jaylen Coltrane",
+          "picksLeft": 1,
+          "season": 2026,
+          "round": 20,
+          "roster": 15
+        },
+        {
+          "picked": "Corey Quinn",
+          "picksLeft": 0,
+          "season": 2027,
+          "round": 1,
+          "roster": 13
+        }
+      ]
+    },
+    {
+      "game": "NBA Front Office",
+      "environment": "live",
+      "tested": "Native shop and rapid double accept",
+      "beforePicks": [
+        1,
+        2
+      ],
+      "afterPicks": [
+        1
+      ],
+      "uniquePlayerIds": true,
+      "ownCount": 13
+    },
+    {
+      "game": "NBA Front Office",
+      "environment": "live",
+      "tested": "Unknown team in otherwise valid JSON save safely returns franchise picker",
+      "result": "No page crash"
+    },
+    {
+      "game": "Soccer Career",
+      "environment": "live",
+      "tested": "Native create SpainStrikerCurrentera, randomstartingroll, Begin",
+      "phase": "youth",
+      "age": 16,
+      "overall": 48
+    },
+    {
+      "game": "Soccer Career",
+      "environment": "live",
+      "tested": "NextYear native doubleclick after toast expires plus refresh",
+      "age": 17,
+      "phase": "contract_offer",
+      "seasons": 2,
+      "semanticSaveHeld": true
+    },
+    {
+      "game": "Soccer Career",
+      "environment": "live",
+      "tested": "First native contract offer doubleclick",
+      "beforePhase": "contract_offer",
+      "afterPhase": "playing",
+      "club": "Real Sociedad",
+      "wage": 7424,
+      "years": 5
+    },
+    {
+      "game": "Soccer Career",
+      "environment": "live",
+      "tested": "First original professional season advance",
+      "age": 18,
+      "phase": "newspaper",
+      "seasons": 3
+    },
+    {
+      "game": "Soccer Career",
+      "environment": "live",
+      "tested": "Youth to firstcontract, one full professional season through newspaper/summary/awards and refresh",
+      "age": 18,
+      "seasonRows": 3,
+      "phase": "social_media_action",
+      "club": "Real Sociedad",
+      "wage": 7424,
+      "wageLabel": "€7k/wk Wage",
+      "saveHeld": true,
+      "fullRetirementCareer": "not tested"
+    },
+    {
+      "game": "Soccer Career",
+      "environment": "live",
+      "tested": "NewCareer Cancel preserves save and syntactically corrupt JSON returns creator",
+      "cancelHeld": true,
+      "corruptRecovered": true
+    },
+    {
+      "game": "Soccer Career",
+      "environment": "live",
+      "tested": "Reached postseason social choice screen; did not activate the optional choice",
+      "year": null,
+      "latestSeasonYear": 2027,
+      "age": 18,
+      "phase": "social_media_action"
+    },
+    {
+      "game": "Soccer Career",
+      "environment": "live",
+      "tested": "Native confirmed NewCareer returnscreator and clears localcareer",
+      "saveAbsent": true
+    },
+    {
+      "game": "MLB Front Office",
+      "environment": "live",
+      "tested": "Original native Dodgers start and first26 rounds, lastbutton October label stillpending",
+      "rounds": [
+        {
+          "before": 1,
+          "after": 2,
+          "phase": "hub",
+          "record": [
+            5,
+            2
+          ]
+        },
+        {
+          "before": 2,
+          "after": 3,
+          "phase": "hub",
+          "record": [
+            7,
+            3
+          ]
+        },
+        {
+          "before": 3,
+          "after": 4,
+          "phase": "hub",
+          "record": [
+            12,
+            6
+          ]
+        },
+        {
+          "before": 4,
+          "after": 5,
+          "phase": "hub",
+          "record": [
+            15,
+            8
+          ]
+        },
+        {
+          "before": 5,
+          "after": 6,
+          "phase": "hub",
+          "record": [
+            22,
+            10
+          ]
+        },
+        {
+          "before": 6,
+          "after": 7,
+          "phase": "hub",
+          "record": [
+            27,
+            11
+          ]
+        },
+        {
+          "before": 7,
+          "after": 8,
+          "phase": "hub",
+          "record": [
+            31,
+            15
+          ]
+        },
+        {
+          "before": 8,
+          "after": 9,
+          "phase": "hub",
+          "record": [
+            39,
+            17
+          ]
+        },
+        {
+          "before": 9,
+          "after": 10,
+          "phase": "hub",
+          "record": [
+            42,
+            18
+          ]
+        },
+        {
+          "before": 10,
+          "after": 11,
+          "phase": "hub",
+          "record": [
+            45,
+            20
+          ]
+        },
+        {
+          "before": 11,
+          "after": 12,
+          "phase": "hub",
+          "record": [
+            46,
+            23
+          ]
+        },
+        {
+          "before": 12,
+          "after": 13,
+          "phase": "hub",
+          "record": [
+            50,
+            26
+          ]
+        },
+        {
+          "before": 13,
+          "after": 14,
+          "phase": "hub",
+          "record": [
+            57,
+            27
+          ]
+        },
+        {
+          "before": 14,
+          "after": 15,
+          "phase": "hub",
+          "record": [
+            63,
+            29
+          ]
+        },
+        {
+          "before": 15,
+          "after": 16,
+          "phase": "hub",
+          "record": [
+            68,
+            30
+          ]
+        },
+        {
+          "before": 16,
+          "after": 17,
+          "phase": "hub",
+          "record": [
+            69,
+            33
+          ]
+        },
+        {
+          "before": 17,
+          "after": 18,
+          "phase": "hub",
+          "record": [
+            75,
+            38
+          ]
+        },
+        {
+          "before": 18,
+          "after": 19,
+          "phase": "hub",
+          "record": [
+            76,
+            40
+          ]
+        },
+        {
+          "before": 19,
+          "after": 20,
+          "phase": "hub",
+          "record": [
+            78,
+            42
+          ]
+        },
+        {
+          "before": 20,
+          "after": 21,
+          "phase": "hub",
+          "record": [
+            83,
+            45
+          ]
+        },
+        {
+          "before": 21,
+          "after": 22,
+          "phase": "hub",
+          "record": [
+            88,
+            46
+          ]
+        },
+        {
+          "before": 22,
+          "after": 23,
+          "phase": "hub",
+          "record": [
+            90,
+            49
+          ]
+        },
+        {
+          "before": 23,
+          "after": 24,
+          "phase": "hub",
+          "record": [
+            93,
+            51
+          ]
+        },
+        {
+          "before": 24,
+          "after": 25,
+          "phase": "hub",
+          "record": [
+            94,
+            53
+          ]
+        },
+        {
+          "before": 25,
+          "after": 26,
+          "phase": "hub",
+          "record": [
+            98,
+            55
+          ]
+        },
+        {
+          "before": 26,
+          "after": 27,
+          "phase": "hub",
+          "record": [
+            103,
+            59
+          ]
+        }
+      ],
+      "phase": "hub",
+      "season": 2026,
+      "record": [
+        103,
+        59
+      ],
+      "championEntries": 0
+    },
+    {
+      "game": "MLB Front Office",
+      "environment": "live",
+      "tested": "Actual round27 and fullplayoffs",
+      "phase": "recap",
+      "season": 2026,
+      "record": [
+        103,
+        59
+      ],
+      "champion": "LAD",
+      "championEntries": 1,
+      "seasonsPlayed": 1,
+      "titles": 1,
+      "teamGameTotals": [
+        {
+          "team": "ARI",
+          "games": 160
+        },
+        {
+          "team": "ATH",
+          "games": 160
+        },
+        {
+          "team": "ATL",
+          "games": 163
+        },
+        {
+          "team": "BAL",
+          "games": 148
+        },
+        {
+          "team": "BOS",
+          "games": 165
+        },
+        {
+          "team": "CHC",
+          "games": 165
+        },
+        {
+          "team": "CHW",
+          "games": 162
+        },
+        {
+          "team": "CIN",
+          "games": 155
+        },
+        {
+          "team": "CLE",
+          "games": 175
+        },
+        {
+          "team": "COL",
+          "games": 168
+        },
+        {
+          "team": "DET",
+          "games": 175
+        },
+        {
+          "team": "HOU",
+          "games": 172
+        },
+        {
+          "team": "KCR",
+          "games": 174
+        },
+        {
+          "team": "LAA",
+          "games": 161
+        },
+        {
+          "team": "LAD",
+          "games": 162
+        },
+        {
+          "team": "MIA",
+          "games": 169
+        },
+        {
+          "team": "MIL",
+          "games": 157
+        },
+        {
+          "team": "MIN",
+          "games": 171
+        },
+        {
+          "team": "NYM",
+          "games": 157
+        },
+        {
+          "team": "NYY",
+          "games": 151
+        },
+        {
+          "team": "PHI",
+          "games": 151
+        },
+        {
+          "team": "PIT",
+          "games": 165
+        },
+        {
+          "team": "SDP",
+          "games": 150
+        },
+        {
+          "team": "SEA",
+          "games": 159
+        },
+        {
+          "team": "SFG",
+          "games": 161
+        },
+        {
+          "team": "STL",
+          "games": 162
+        },
+        {
+          "team": "TBR",
+          "games": 175
+        },
+        {
+          "team": "TEX",
+          "games": 162
+        },
+        {
+          "team": "TOR",
+          "games": 171
+        },
+        {
+          "team": "WSN",
+          "games": 152
+        }
+      ]
+    },
+    {
+      "game": "NBA Front Office",
+      "environment": "live",
+      "tested": "Actual firstseason end regularstandings totals",
+      "record": [
+        57,
+        26
+      ],
+      "eastRank": 1,
+      "totals": [
+        {
+          "team": "DEN",
+          "wins": 46,
+          "losses": 37,
+          "games": 83
+        },
+        {
+          "team": "OKC",
+          "wins": 50,
+          "losses": 41,
+          "games": 91
+        },
+        {
+          "team": "BOS",
+          "wins": 57,
+          "losses": 26,
+          "games": 83
+        },
+        {
+          "team": "NYK",
+          "wins": 45,
+          "losses": 26,
+          "games": 71
+        },
+        {
+          "team": "LAL",
+          "wins": 39,
+          "losses": 39,
+          "games": 78
+        },
+        {
+          "team": "MIL",
+          "wins": 41,
+          "losses": 39,
+          "games": 80
+        },
+        {
+          "team": "MIN",
+          "wins": 39,
+          "losses": 36,
+          "games": 75
+        },
+        {
+          "team": "HOU",
+          "wins": 31,
+          "losses": 36,
+          "games": 67
+        },
+        {
+          "team": "CLE",
+          "wins": 46,
+          "losses": 32,
+          "games": 78
+        },
+        {
+          "team": "IND",
+          "wins": 50,
+          "losses": 34,
+          "games": 84
+        },
+        {
+          "team": "GSW",
+          "wins": 46,
+          "losses": 38,
+          "games": 84
+        },
+        {
+          "team": "DAL",
+          "wins": 44,
+          "losses": 29,
+          "games": 73
+        },
+        {
+          "team": "MEM",
+          "wins": 40,
+          "losses": 51,
+          "games": 91
+        },
+        {
+          "team": "PHI",
+          "wins": 57,
+          "losses": 36,
+          "games": 93
+        },
+        {
+          "team": "MIA",
+          "wins": 30,
+          "losses": 58,
+          "games": 88
+        },
+        {
+          "team": "LAC",
+          "wins": 53,
+          "losses": 32,
+          "games": 85
+        },
+        {
+          "team": "PHX",
+          "wins": 40,
+          "losses": 51,
+          "games": 91
+        },
+        {
+          "team": "SAC",
+          "wins": 44,
+          "losses": 40,
+          "games": 84
+        },
+        {
+          "team": "ATL",
+          "wins": 42,
+          "losses": 43,
+          "games": 85
+        },
+        {
+          "team": "NOP",
+          "wins": 32,
+          "losses": 32,
+          "games": 64
+        },
+        {
+          "team": "TOR",
+          "wins": 32,
+          "losses": 45,
+          "games": 77
+        },
+        {
+          "team": "SAS",
+          "wins": 44,
+          "losses": 40,
+          "games": 84
+        },
+        {
+          "team": "ORL",
+          "wins": 33,
+          "losses": 47,
+          "games": 80
+        },
+        {
+          "team": "UTA",
+          "wins": 32,
+          "losses": 41,
+          "games": 73
+        },
+        {
+          "team": "CHA",
+          "wins": 31,
+          "losses": 39,
+          "games": 70
+        },
+        {
+          "team": "DET",
+          "wins": 32,
+          "losses": 55,
+          "games": 87
+        },
+        {
+          "team": "BKN",
+          "wins": 24,
+          "losses": 52,
+          "games": 76
+        },
+        {
+          "team": "WAS",
+          "wins": 33,
+          "losses": 51,
+          "games": 84
+        },
+        {
+          "team": "POR",
+          "wins": 36,
+          "losses": 34,
+          "games": 70
+        },
+        {
+          "team": "CHI",
+          "wins": 34,
+          "losses": 43,
+          "games": 77
+        }
+      ]
+    },
+    {
+      "game": "MLB Front Office",
+      "environment": "live",
+      "tested": "Two originalnative draft picks/offseason/returnhub",
+      "rounds": [
+        {
+          "picked": "Brooks Bingham",
+          "picksLeft": 1,
+          "season": 2026,
+          "round": 27,
+          "roster": 14
+        },
+        {
+          "picked": "Tomas Prieto",
+          "picksLeft": 0,
+          "season": 2027,
+          "round": 1,
+          "roster": 15
+        }
+      ],
+      "season": 2027,
+      "round": 1
+    },
+    {
+      "game": "NBA Front Office",
+      "environment": "cleanlocal4930",
+      "tested": "Independent actual20round season replay",
+      "entry": "/assets/index-4ldJKi6e.js",
+      "samples": [
+        {
+          "beforeRound": 1,
+          "afterRound": 2,
+          "phase": "hub",
+          "record": [
+            2,
+            2
+          ]
+        },
+        {
+          "beforeRound": 2,
+          "afterRound": 3,
+          "phase": "hub",
+          "record": [
+            4,
+            6
+          ]
+        },
+        {
+          "beforeRound": 3,
+          "afterRound": 4,
+          "phase": "hub",
+          "record": [
+            7,
+            7
+          ]
+        },
+        {
+          "beforeRound": 4,
+          "afterRound": 5,
+          "phase": "hub",
+          "record": [
+            7,
+            11
+          ]
+        },
+        {
+          "beforeRound": 5,
+          "afterRound": 6,
+          "phase": "hub",
+          "record": [
+            13,
+            12
+          ]
+        },
+        {
+          "beforeRound": 6,
+          "afterRound": 7,
+          "phase": "hub",
+          "record": [
+            13,
+            15
+          ]
+        },
+        {
+          "beforeRound": 7,
+          "afterRound": 8,
+          "phase": "hub",
+          "record": [
+            15,
+            15
+          ]
+        },
+        {
+          "beforeRound": 8,
+          "afterRound": 9,
+          "phase": "hub",
+          "record": [
+            15,
+            17
+          ]
+        },
+        {
+          "beforeRound": 9,
+          "afterRound": 10,
+          "phase": "hub",
+          "record": [
+            17,
+            17
+          ]
+        },
+        {
+          "beforeRound": 10,
+          "afterRound": 11,
+          "phase": "hub",
+          "record": [
+            21,
+            17
+          ]
+        },
+        {
+          "beforeRound": 11,
+          "afterRound": 12,
+          "phase": "hub",
+          "record": [
+            22,
+            18
+          ]
+        },
+        {
+          "beforeRound": 12,
+          "afterRound": 13,
+          "phase": "hub",
+          "record": [
+            22,
+            18
+          ]
+        },
+        {
+          "beforeRound": 13,
+          "afterRound": 14,
+          "phase": "hub",
+          "record": [
+            25,
+            20
+          ]
+        },
+        {
+          "beforeRound": 14,
+          "afterRound": 15,
+          "phase": "hub",
+          "record": [
+            28,
+            23
+          ]
+        },
+        {
+          "beforeRound": 15,
+          "afterRound": 16,
+          "phase": "hub",
+          "record": [
+            30,
+            25
+          ]
+        },
+        {
+          "beforeRound": 16,
+          "afterRound": 17,
+          "phase": "hub",
+          "record": [
+            32,
+            27
+          ]
+        },
+        {
+          "beforeRound": 17,
+          "afterRound": 18,
+          "phase": "hub",
+          "record": [
+            35,
+            30
+          ]
+        },
+        {
+          "beforeRound": 18,
+          "afterRound": 19,
+          "phase": "hub",
+          "record": [
+            37,
+            31
+          ]
+        },
+        {
+          "beforeRound": 19,
+          "afterRound": 20,
+          "phase": "hub",
+          "record": [
+            41,
+            35
+          ]
+        },
+        {
+          "beforeRound": 20,
+          "afterRound": 20,
+          "phase": "recap",
+          "record": [
+            43,
+            37
+          ]
+        }
+      ],
+      "totals": [
+        {
+          "team": "DEN",
+          "wins": 48,
+          "losses": 25,
+          "games": 73
+        },
+        {
+          "team": "OKC",
+          "wins": 57,
+          "losses": 19,
+          "games": 76
+        },
+        {
+          "team": "BOS",
+          "wins": 43,
+          "losses": 37,
+          "games": 80
+        },
+        {
+          "team": "NYK",
+          "wins": 56,
+          "losses": 36,
+          "games": 92
+        },
+        {
+          "team": "LAL",
+          "wins": 42,
+          "losses": 42,
+          "games": 84
+        },
+        {
+          "team": "MIL",
+          "wins": 40,
+          "losses": 50,
+          "games": 90
+        },
+        {
+          "team": "MIN",
+          "wins": 40,
+          "losses": 35,
+          "games": 75
+        },
+        {
+          "team": "HOU",
+          "wins": 56,
+          "losses": 34,
+          "games": 90
+        },
+        {
+          "team": "CLE",
+          "wins": 43,
+          "losses": 47,
+          "games": 90
+        },
+        {
+          "team": "IND",
+          "wins": 51,
+          "losses": 34,
+          "games": 85
+        },
+        {
+          "team": "GSW",
+          "wins": 55,
+          "losses": 36,
+          "games": 91
+        },
+        {
+          "team": "DAL",
+          "wins": 37,
+          "losses": 36,
+          "games": 73
+        },
+        {
+          "team": "MEM",
+          "wins": 41,
+          "losses": 47,
+          "games": 88
+        },
+        {
+          "team": "PHI",
+          "wins": 53,
+          "losses": 33,
+          "games": 86
+        },
+        {
+          "team": "MIA",
+          "wins": 28,
+          "losses": 49,
+          "games": 77
+        },
+        {
+          "team": "LAC",
+          "wins": 36,
+          "losses": 36,
+          "games": 72
+        },
+        {
+          "team": "PHX",
+          "wins": 39,
+          "losses": 43,
+          "games": 82
+        },
+        {
+          "team": "SAC",
+          "wins": 34,
+          "losses": 39,
+          "games": 73
+        },
+        {
+          "team": "ATL",
+          "wins": 41,
+          "losses": 42,
+          "games": 83
+        },
+        {
+          "team": "NOP",
+          "wins": 37,
+          "losses": 44,
+          "games": 81
+        },
+        {
+          "team": "TOR",
+          "wins": 28,
+          "losses": 48,
+          "games": 76
+        },
+        {
+          "team": "SAS",
+          "wins": 39,
+          "losses": 31,
+          "games": 70
+        },
+        {
+          "team": "ORL",
+          "wins": 44,
+          "losses": 36,
+          "games": 80
+        },
+        {
+          "team": "UTA",
+          "wins": 42,
+          "losses": 51,
+          "games": 93
+        },
+        {
+          "team": "CHA",
+          "wins": 29,
+          "losses": 39,
+          "games": 68
+        },
+        {
+          "team": "DET",
+          "wins": 32,
+          "losses": 44,
+          "games": 76
+        },
+        {
+          "team": "BKN",
+          "wins": 25,
+          "losses": 58,
+          "games": 83
+        },
+        {
+          "team": "WAS",
+          "wins": 36,
+          "losses": 58,
+          "games": 94
+        },
+        {
+          "team": "POR",
+          "wins": 45,
+          "losses": 44,
+          "games": 89
+        },
+        {
+          "team": "CHI",
+          "wins": 31,
+          "losses": 55,
+          "games": 86
+        }
+      ],
+      "regularRecord": [
+        43,
+        37
+      ]
+    },
+    {
+      "game": "NBA Front Office",
+      "environment": "cleanlocal4930",
+      "tested": "NativefreshBoston top8 trade reproduction and Abandonrestart",
+      "missing": [
+        "Jordan Walsh",
+        "Luka Garza"
+      ],
+      "saveAbsent": true
+    },
+    {
+      "game": "Soccer Career",
+      "environment": "cleanlocal4930",
+      "tested": "Previouslyplayed save restored; optional socialchoice not activated before corruptprobe",
+      "phase": "social_media_action",
+      "age": 18,
+      "seasonRows": 3
+    },
+    {
+      "game": "MLB Front Office",
+      "environment": "live",
+      "tested": "DFA six highest-rated contributors, firstconfirm doubleclick, nine-player floor native disabledclick",
+      "cuts": [
+        {
+          "name": "Shohei Ohtani",
+          "id": "m1w5awbaoh62vf-183",
+          "salary": 22.7,
+          "years": 1,
+          "ownCount": 14,
+          "dead": {
+            "playerId": "m1w5awbaoh62vf-183",
+            "name": "Shohei Ohtani",
+            "amount": 11.4,
+            "seasonsLeft": 1
+          },
+          "faCount": 1
+        },
+        {
+          "name": "Will Smith",
+          "id": "m1w5awbaoh62vf-184",
+          "salary": 21.8,
+          "years": 1,
+          "ownCount": 13,
+          "dead": {
+            "playerId": "m1w5awbaoh62vf-184",
+            "name": "Will Smith",
+            "amount": 10.9,
+            "seasonsLeft": 1
+          },
+          "faCount": 1
+        },
+        {
+          "name": "Tarik Skubal",
+          "id": "m1w5awbaoh62vf-191",
+          "salary": 21.8,
+          "years": 2,
+          "ownCount": 12,
+          "dead": {
+            "playerId": "m1w5awbaoh62vf-191",
+            "name": "Tarik Skubal",
+            "amount": 10.9,
+            "seasonsLeft": 2
+          },
+          "faCount": 1
+        },
+        {
+          "name": "Kris Bubic",
+          "id": "m1w5awbaoh62vf-192",
+          "salary": 20.2,
+          "years": 2,
+          "ownCount": 11,
+          "dead": {
+            "playerId": "m1w5awbaoh62vf-192",
+            "name": "Kris Bubic",
+            "amount": 10.1,
+            "seasonsLeft": 2
+          },
+          "faCount": 1
+        },
+        {
+          "name": "Kyle Tucker",
+          "id": "m1w5awbaoh62vf-187",
+          "salary": 19.3,
+          "years": 2,
+          "ownCount": 10,
+          "dead": {
+            "playerId": "m1w5awbaoh62vf-187",
+            "name": "Kyle Tucker",
+            "amount": 9.7,
+            "seasonsLeft": 2
+          },
+          "faCount": 1
+        },
+        {
+          "name": "Yoshinobu Yamamoto",
+          "id": "m1w5awbaoh62vf-193",
+          "salary": 19.3,
+          "years": 2,
+          "ownCount": 9,
+          "dead": {
+            "playerId": "m1w5awbaoh62vf-193",
+            "name": "Yoshinobu Yamamoto",
+            "amount": 9.7,
+            "seasonsLeft": 2
+          },
+          "faCount": 1
+        }
+      ],
+      "allDfaDisabled": true,
+      "blockedSaveHeld": true,
+      "payroll": 191.10000000000002,
+      "cap": 251
+    },
+    {
+      "game": "MLB Front Office",
+      "environment": "live",
+      "tested": "Released player signing refusal, one native replacement signing with rapid double click, and exact refresh preservation",
+      "cutDisabled": true,
+      "releasedHeld": true,
+      "signed": [
+        {
+          "name": "Tomas Whitfield",
+          "id": "m1w5awbaoh62vf-400",
+          "salary": 5,
+          "before": 9,
+          "after": 10,
+          "idCopies": 1
+        }
+      ],
+      "allSignDisabled": true,
+      "blockedHeld": true,
+      "payroll": 196.10000000000002,
+      "cap": 251,
+      "roster": 10,
+      "reloadHeld": true,
+      "maxRosterBoundaryTested": false,
+      "allSignDisabledReason": "Only six released players remained in the free-agent pool, all correctly refused for this season. No hidden affordable candidate was found."
+    },
+    {
+      "game": "MLB Front Office",
+      "result": {
+        "boundary": "Restored exact native-played 2027 draft-completed save in disposable browser only, no edited money or player fields",
+        "rows": [
+          {
+            "id": "m1w5awbaoh62vf-400",
+            "text": "Tomas Whitfield\nDH · 32y · wants $5M\n76\nSign",
+            "disabled": true
+          }
+        ],
+        "main": "MLB Front Office\n\nReal 2026 rosters. Real tax-line pain. October does not forgive.\n\nLos Angeles Dodgers\n2027 · Round 1/27\nRecord 0-0\nStrength 92\nTax room $-2.5M\n🏛️ OWNERSHIP\nTrust 100\n\nWin the World Series. Anything less is a failed season upstairs.\n\nHub\nFree agency\n\nFree agents (tax room $-2.5M). A man you designated for assignment waits until next season.\n\nTomas Whitfield\nDH · 32y · wants $5M\n76\nSign\nAbandon franchise and restart\nMLB Front Office: Baseball GM Simulator\n\nTake over a real MLB club with its actual 2026 roster, every player rated off real 2025 stats pulled from the league's own data. Manage the payroll against the luxury tax line, DFA dead weight, sign free agents, swing trades the AI weighs on age, position and rating, then grind the 162 in simulated stretches. Win your division for a bye, survive the best-of-3 Wild Card round, the Division Series, the LCS and the World Series. Draft prospects whose scouting grades can lie, ride aging curves and retirements, and stack ",
+        "rawHeld": true
+      },
+      "environment": "live",
+      "tested": "Native over-budget signing refusal and reload"
+    },
+    {
+      "game": "MLB Front Office",
+      "environment": "Live actual App",
+      "tested": "Broken JSON recovery and native franchise restart",
+      "result": {
+        "brokenJsonReturnedPicker": true,
+        "nativeRestartRemovedSave": true,
+        "picker": 1
+      }
+    }
+  ],
+  "findings": [
+    {
+      "id": "SIM-01",
+      "severity": "P1",
+      "game": "NBA Front Office",
+      "url": "https://douknowball.com/nba-front-office",
+      "title": "Depth players are unreachable in both trade paths",
+      "steps": [
+        "Start Boston Celtics. Open Trades.",
+        "After first tipoff or offseason, compare Roster names with Trade Finder.",
+        "Select DET. Compare You send and You get choices with both saved rosters."
+      ],
+      "expected": "Every under-contract player eligible under trade rules can be selected or reached through paging or search.",
+      "actual": "Boston has 13 under-contract players, but each own-player trade list shows only 8. Five saved players cannot be reached, with no paging or search. The opponent list is also capped at 8.",
+      "evidence": {
+        "missing": [
+          {
+            "id": "nct23hmeo1umw-26",
+            "name": "Baylor Scheierman",
+            "ovr": 78
+          },
+          {
+            "id": "nct23hmeo1umw-27",
+            "name": "Jordan Walsh",
+            "ovr": 73
+          },
+          {
+            "id": "nct23hmeo1umw-29",
+            "name": "Luka Garza",
+            "ovr": 75
+          },
+          {
+            "id": "nct23hmeo1umw-30",
+            "name": "Sam Hauser",
+            "ovr": 77
+          },
+          {
+            "id": "nct23hmeo1umw-310",
+            "name": "Omari Maplewood",
+            "ovr": 74
+          }
+        ],
+        "screenshot": "C:/Users/antho/AppData/Local/Temp/dukb-hostile-audit-2026-10-01/nba-trade-hidden-players-live.png",
+        "cleanReplay": {
+          "ownCount": 10,
+          "missing": [
+            "Jordan Walsh",
+            "Luka Garza"
+          ],
+          "sizes": [
+            {
+              "label": "Jayson Tatum (F)96",
+              "height": 26.5,
+              "width": 153
+            },
+            {
+              "label": "Jayson Tatum (F)96",
+              "height": 26.5,
+              "width": 162
+            }
+          ]
+        }
+      },
+      "cause": {
+        "file": "src/components/nba-front-office/NbaFrontOfficeBoard.tsx",
+        "lines": [
+          889,
+          939,
+          947
+        ],
+        "binding": "rating-sort.slice(0,8)"
+      },
+      "boundary": "Actual live App UI and original generated save. No engine substitution or server mutation."
+    },
+    {
+      "id": "SIM-02",
+      "severity": "P2",
+      "game": "Soccer Career",
+      "url": "https://douknowball.com/soccer-career",
+      "title": "Academy toast intercepts the main advance button on a narrow pointer viewport",
+      "steps": [
+        "Use a 390x844 pointer viewport. Create a player and click Begin Career.",
+        "Keep the pointer at the bottom advance area where the Joined toast appears.",
+        "Try Next Year while the toast remains hovered, then move the pointer away and wait."
+      ],
+      "expected": "The primary career advance action remains reachable while success notifications show.",
+      "actual": "Next Year rectangle (12, 778.25, 225.17, 48) is covered by the Joined Real Sociedad Youth toast. Native pointer clicks remained blocked for 5 and 12 seconds. Moving away cleared the toast within 4.6 seconds.",
+      "evidence": {
+        "screenshot": "C:/Users/antho/AppData/Local/Temp/dukb-hostile-audit-2026-10-01/soccer-toast-blocked-live.png"
+      },
+      "cause": {
+        "files": [
+          "src/pages/SoccerCareer.tsx:770",
+          "src/pages/SoccerCareer.tsx:4200",
+          "src/components/ui/sonner.tsx:10"
+        ],
+        "possible": "Bottom-right Sonner toast overlays fixed bottom career actionbar; hover pauses dismissal."
+      },
+      "boundary": "Actual live App with mouse or pointer at a narrow 390px viewport. Native touchscreen hover persistence was not verified."
+    },
+    {
+      "id": "SIM-03",
+      "severity": "P1",
+      "game": "NBA and MLB Front Office",
+      "url": "https://douknowball.com/nba-front-office and https://douknowball.com/mlb-front-office",
+      "title": "Completed regular seasons have unequal game counts, but standings rank raw wins",
+      "steps": [
+        "Start Boston in NBA Front Office and play all 20 rounds through the recap.",
+        "Read final regular-season wins and losses for all 30 clubs in the original save.",
+        "Repeat on the clean local NBA build. Separately play all 27 MLB rounds from a Dodgers start."
+      ],
+      "expected": "Comparable complete regular seasons before playoff seeding: 82 NBA games and 162 MLB games, or an explicitly different fair game format.",
+      "actual": "Live NBA Boston finished 57-26 (83 games), with clubs ranging from 64 to 93 games. Clean NBA Boston finished 43-37 (80), with clubs ranging from 68 to 94. Live MLB clubs ranged from 148 to 175 despite the 162-game copy. Standings use raw wins, so clubs have unequal win opportunities.",
+      "evidence": {
+        "nbaLive": [
+          {
+            "team": "DEN",
+            "wins": 46,
+            "losses": 37,
+            "games": 83
+          },
+          {
+            "team": "OKC",
+            "wins": 50,
+            "losses": 41,
+            "games": 91
+          },
+          {
+            "team": "BOS",
+            "wins": 57,
+            "losses": 26,
+            "games": 83
+          },
+          {
+            "team": "NYK",
+            "wins": 45,
+            "losses": 26,
+            "games": 71
+          },
+          {
+            "team": "LAL",
+            "wins": 39,
+            "losses": 39,
+            "games": 78
+          },
+          {
+            "team": "MIL",
+            "wins": 41,
+            "losses": 39,
+            "games": 80
+          },
+          {
+            "team": "MIN",
+            "wins": 39,
+            "losses": 36,
+            "games": 75
+          },
+          {
+            "team": "HOU",
+            "wins": 31,
+            "losses": 36,
+            "games": 67
+          },
+          {
+            "team": "CLE",
+            "wins": 46,
+            "losses": 32,
+            "games": 78
+          },
+          {
+            "team": "IND",
+            "wins": 50,
+            "losses": 34,
+            "games": 84
+          },
+          {
+            "team": "GSW",
+            "wins": 46,
+            "losses": 38,
+            "games": 84
+          },
+          {
+            "team": "DAL",
+            "wins": 44,
+            "losses": 29,
+            "games": 73
+          },
+          {
+            "team": "MEM",
+            "wins": 40,
+            "losses": 51,
+            "games": 91
+          },
+          {
+            "team": "PHI",
+            "wins": 57,
+            "losses": 36,
+            "games": 93
+          },
+          {
+            "team": "MIA",
+            "wins": 30,
+            "losses": 58,
+            "games": 88
+          },
+          {
+            "team": "LAC",
+            "wins": 53,
+            "losses": 32,
+            "games": 85
+          },
+          {
+            "team": "PHX",
+            "wins": 40,
+            "losses": 51,
+            "games": 91
+          },
+          {
+            "team": "SAC",
+            "wins": 44,
+            "losses": 40,
+            "games": 84
+          },
+          {
+            "team": "ATL",
+            "wins": 42,
+            "losses": 43,
+            "games": 85
+          },
+          {
+            "team": "NOP",
+            "wins": 32,
+            "losses": 32,
+            "games": 64
+          },
+          {
+            "team": "TOR",
+            "wins": 32,
+            "losses": 45,
+            "games": 77
+          },
+          {
+            "team": "SAS",
+            "wins": 44,
+            "losses": 40,
+            "games": 84
+          },
+          {
+            "team": "ORL",
+            "wins": 33,
+            "losses": 47,
+            "games": 80
+          },
+          {
+            "team": "UTA",
+            "wins": 32,
+            "losses": 41,
+            "games": 73
+          },
+          {
+            "team": "CHA",
+            "wins": 31,
+            "losses": 39,
+            "games": 70
+          },
+          {
+            "team": "DET",
+            "wins": 32,
+            "losses": 55,
+            "games": 87
+          },
+          {
+            "team": "BKN",
+            "wins": 24,
+            "losses": 52,
+            "games": 76
+          },
+          {
+            "team": "WAS",
+            "wins": 33,
+            "losses": 51,
+            "games": 84
+          },
+          {
+            "team": "POR",
+            "wins": 36,
+            "losses": 34,
+            "games": 70
+          },
+          {
+            "team": "CHI",
+            "wins": 34,
+            "losses": 43,
+            "games": 77
+          }
+        ],
+        "nbaClean": [
+          {
+            "team": "DEN",
+            "wins": 48,
+            "losses": 25,
+            "games": 73
+          },
+          {
+            "team": "OKC",
+            "wins": 57,
+            "losses": 19,
+            "games": 76
+          },
+          {
+            "team": "BOS",
+            "wins": 43,
+            "losses": 37,
+            "games": 80
+          },
+          {
+            "team": "NYK",
+            "wins": 56,
+            "losses": 36,
+            "games": 92
+          },
+          {
+            "team": "LAL",
+            "wins": 42,
+            "losses": 42,
+            "games": 84
+          },
+          {
+            "team": "MIL",
+            "wins": 40,
+            "losses": 50,
+            "games": 90
+          },
+          {
+            "team": "MIN",
+            "wins": 40,
+            "losses": 35,
+            "games": 75
+          },
+          {
+            "team": "HOU",
+            "wins": 56,
+            "losses": 34,
+            "games": 90
+          },
+          {
+            "team": "CLE",
+            "wins": 43,
+            "losses": 47,
+            "games": 90
+          },
+          {
+            "team": "IND",
+            "wins": 51,
+            "losses": 34,
+            "games": 85
+          },
+          {
+            "team": "GSW",
+            "wins": 55,
+            "losses": 36,
+            "games": 91
+          },
+          {
+            "team": "DAL",
+            "wins": 37,
+            "losses": 36,
+            "games": 73
+          },
+          {
+            "team": "MEM",
+            "wins": 41,
+            "losses": 47,
+            "games": 88
+          },
+          {
+            "team": "PHI",
+            "wins": 53,
+            "losses": 33,
+            "games": 86
+          },
+          {
+            "team": "MIA",
+            "wins": 28,
+            "losses": 49,
+            "games": 77
+          },
+          {
+            "team": "LAC",
+            "wins": 36,
+            "losses": 36,
+            "games": 72
+          },
+          {
+            "team": "PHX",
+            "wins": 39,
+            "losses": 43,
+            "games": 82
+          },
+          {
+            "team": "SAC",
+            "wins": 34,
+            "losses": 39,
+            "games": 73
+          },
+          {
+            "team": "ATL",
+            "wins": 41,
+            "losses": 42,
+            "games": 83
+          },
+          {
+            "team": "NOP",
+            "wins": 37,
+            "losses": 44,
+            "games": 81
+          },
+          {
+            "team": "TOR",
+            "wins": 28,
+            "losses": 48,
+            "games": 76
+          },
+          {
+            "team": "SAS",
+            "wins": 39,
+            "losses": 31,
+            "games": 70
+          },
+          {
+            "team": "ORL",
+            "wins": 44,
+            "losses": 36,
+            "games": 80
+          },
+          {
+            "team": "UTA",
+            "wins": 42,
+            "losses": 51,
+            "games": 93
+          },
+          {
+            "team": "CHA",
+            "wins": 29,
+            "losses": 39,
+            "games": 68
+          },
+          {
+            "team": "DET",
+            "wins": 32,
+            "losses": 44,
+            "games": 76
+          },
+          {
+            "team": "BKN",
+            "wins": 25,
+            "losses": 58,
+            "games": 83
+          },
+          {
+            "team": "WAS",
+            "wins": 36,
+            "losses": 58,
+            "games": 94
+          },
+          {
+            "team": "POR",
+            "wins": 45,
+            "losses": 44,
+            "games": 89
+          },
+          {
+            "team": "CHI",
+            "wins": 31,
+            "losses": 55,
+            "games": 86
+          }
+        ],
+        "mlbLive": [
+          {
+            "team": "ARI",
+            "games": 160
+          },
+          {
+            "team": "ATH",
+            "games": 160
+          },
+          {
+            "team": "ATL",
+            "games": 163
+          },
+          {
+            "team": "BAL",
+            "games": 148
+          },
+          {
+            "team": "BOS",
+            "games": 165
+          },
+          {
+            "team": "CHC",
+            "games": 165
+          },
+          {
+            "team": "CHW",
+            "games": 162
+          },
+          {
+            "team": "CIN",
+            "games": 155
+          },
+          {
+            "team": "CLE",
+            "games": 175
+          },
+          {
+            "team": "COL",
+            "games": 168
+          },
+          {
+            "team": "DET",
+            "games": 175
+          },
+          {
+            "team": "HOU",
+            "games": 172
+          },
+          {
+            "team": "KCR",
+            "games": 174
+          },
+          {
+            "team": "LAA",
+            "games": 161
+          },
+          {
+            "team": "LAD",
+            "games": 162
+          },
+          {
+            "team": "MIA",
+            "games": 169
+          },
+          {
+            "team": "MIL",
+            "games": 157
+          },
+          {
+            "team": "MIN",
+            "games": 171
+          },
+          {
+            "team": "NYM",
+            "games": 157
+          },
+          {
+            "team": "NYY",
+            "games": 151
+          },
+          {
+            "team": "PHI",
+            "games": 151
+          },
+          {
+            "team": "PIT",
+            "games": 165
+          },
+          {
+            "team": "SDP",
+            "games": 150
+          },
+          {
+            "team": "SEA",
+            "games": 159
+          },
+          {
+            "team": "SFG",
+            "games": 161
+          },
+          {
+            "team": "STL",
+            "games": 162
+          },
+          {
+            "team": "TBR",
+            "games": 175
+          },
+          {
+            "team": "TEX",
+            "games": 162
+          },
+          {
+            "team": "TOR",
+            "games": 171
+          },
+          {
+            "team": "WSN",
+            "games": 152
+          }
+        ],
+        "screenshots": [
+          "C:/Users/antho/AppData/Local/Temp/dukb-hostile-audit-2026-10-01/nba-season-end-live.png",
+          "C:/Users/antho/AppData/Local/Temp/dukb-hostile-audit-2026-10-01/nba-season-end-clean.png",
+          "C:/Users/antho/AppData/Local/Temp/dukb-hostile-audit-2026-10-01/mlb-playoff-recap-live.png"
+        ],
+        "primaryReferences": [
+          "https://pr.nba.com/2026-27-nba-regular-season-schedule",
+          "https://www.mlb.com/amp/press-release/colorado-rockies-announce-2026-regular-season-schedule.html"
+        ]
+      },
+      "cause": {
+        "files": [
+          "src/lib/nbaFrontOffice.ts:299",
+          "src/lib/nbaFrontOffice.ts:311",
+          "src/lib/mlbFrontOffice.ts:218",
+          "src/lib/mlbFrontOffice.ts:229"
+        ],
+        "binding": "Random opponent selection with a 50 percent per-team skip, without a fixed balanced schedule. Standings compare raw wins.",
+        "sourceBoundary": "Read from the frozen clean audit baseline"
+      },
+      "boundary": "Actual native fullseasonUI observations. Source explains the measured result; no engine-only run credited. Postseason series do not mutate regularseason wins/losses."
+    },
+    {
+      "id": "SIM-04",
+      "severity": "P2",
+      "game": "Soccer Career",
+      "url": "http://127.0.0.1:4930/soccer-career",
+      "title": "A structurally corrupt career save traps the route in repeatable crash recovery",
+      "steps": [
+        "Create and play a career. Preserve an original valid save.",
+        "Change only soccerCareerSave.seasons to null in localStorage.",
+        "Reload, then click Try this page again."
+      ],
+      "expected": "Reject or recover malformed saved state into a usable creator or explicit local-reset path.",
+      "actual": "Both loads render This page broke. The corrupt save is retained, so Try this page again repeats the failure. New Career and local reset controls cannot be reached.",
+      "evidence": {
+        "broke": true,
+        "brokeAgain": true,
+        "corruptBytesHeld": true,
+        "text": "Skip to main content\n😬\nThis page broke\n\nSomething in this game went wrong and it stopped drawing. It is our fault, not anything you did.\n\nIf you had a save going, it is still on this device. It is kept in your browser, and nothing here has touched it.\n\nBack to the games\nTry this page again\n\nTelling us what you were doing helps a lot. The report a bug button is at the bottom of this page.\n\nAll team names, competition names, logos and trademarks are property of their respective owners. DoUKnowBall is an independent fan project and is not affiliated with, endorsed by or sponsored by the NFL, NBA, UFC, NHL, MLB, FIFA, UEFA, the Premier League, the English Football League, LaLiga, Serie A, the Bundesliga, Ligue 1, the Eredivisie, MLS, the Saudi Pro League, the IOC, the NCAA, F1, the PGA Tour, NASCAR, the ATP or the WTA. Player names and statistics are used for identification and commentary only. © 2026 DoUKnowBall\n\nSoccer\n·\nNBA\n·\nNHL\n·\nNFL\n·\nMLB\n·\nCollege\nSearch Games\n·\nAbout\n·\nContact\n·\nWhat's New\n·\nRecord Books\n·\nLeaderboard\n·\nPrivacy Policy\n·\nTerms of Service\n·\nAccessibility\n·\nCookie choices\n·\nLight mode\n·\nReport a bug",
+        "screenshot": "C:/Users/antho/AppData/Local/Temp/dukb-hostile-audit-2026-10-01/soccer-corrupt-save-clean.png"
+      },
+      "cause": {
+        "files": [
+          "src/pages/SoccerCareer.tsx:660",
+          "src/pages/SoccerCareer.tsx:762",
+          "src/lib/soccerCareerEngine.ts:2481"
+        ],
+        "possible": "repairCareer returns the unchecked seasons field; render accesses career.seasons.length."
+      },
+      "boundary": "Clean actual App; manually malformed only a disposable local save. Ordinary valid save and syntactically bad JSON recovery passed."
+    }
+  ],
+  "actions": [
+    {
+      "tag": "live-nba-boot",
+      "at": "2026-10-01T22:05:01.371Z",
+      "value": {
+        "url": "https://douknowball.com/nba-front-office",
+        "title": "NBA Front Office: Basketball GM Simulator | DoUKnowBall",
+        "buttons": [
+          "Back",
+          "Sign up to track your statsTrack stats",
+          "",
+          "Denver NuggetsWest",
+          "Oklahoma City ThunderWest",
+          "Boston CelticsEast",
+          "New York KnicksEast",
+          "Los Angeles LakersWest",
+          "Milwaukee BucksEast",
+          "Minnesota TimberwolvesWest",
+          "Houston RocketsWest",
+          "Cleveland CavaliersEast",
+          "Indiana PacersEast",
+          "Golden State WarriorsWest",
+          "Dallas MavericksWest",
+          "Memphis GrizzliesWest",
+          "Philadelphia 76ersEast",
+          "Miami HeatEast",
+          "LA ClippersWest",
+          "Phoenix SunsWest",
+          "Sacramento KingsWest",
+          "Atlanta HawksEast",
+          "New Orleans PelicansWest",
+          "Toronto RaptorsEast",
+          "San Antonio SpursWest",
+          "Orlando MagicEast",
+          "Utah JazzWest",
+          "Charlotte HornetsEast",
+          "Detroit PistonsEast",
+          "Brooklyn NetsEast",
+          "Washington WizardsEast",
+          "Portland Trail BlazersWest",
+          "Chicago BullsEast",
+          "Cookie choices",
+          "Light mode",
+          "Report a bug"
+        ],
+        "body": "NBA Front Office\n\nReal rosters. Real cap pain. The play-in is waiting for your mistakes.\n\nTake over a front office\n\nReal rosters from the curated NBA Conquest data. Run the cap, work the phones, survive the play-in, win best-of-seven wars, draft the future. Saves automatically.\n\nDenver Nuggets\nWest\nOklahoma City Thunder\nWest\nBoston Celtics\nEast\nNew York Knicks\nEast\nLos Angeles Lakers\nWest\nMilwaukee Bucks\nEast\nMinnesota Timberwolves\nWest\nHouston Rockets\nWest\nCleveland Cavaliers\nEast\nIndiana Pacers\nEast\nGolden State Warriors\nWest\nDallas Mavericks\nWest\nMemphis Grizzlies\nWest\nPhiladelphia 76ers\nEast\nMiami Heat\nEast\nLA Clippers\nWest\nPhoenix Suns\nWest\nSacramento Kings\nWest\nAtlanta Hawks\nEast\nNew Orleans Pelicans\nWest\nToronto Raptors\nEast\nSan Antonio Spurs\nWest\nOrlando Magic\nEast\nUtah Jazz\nWest\nCharlotte Hornets\nEast\nDetroit Pistons\nEast\nBrooklyn Nets\nEast\nWashington Wizards\nEast\nPortland Trail Blazers\nWest\nChicago Bulls\nEast\nNBA Front Office: Basketball GM Simulator\n\nTake over a real NBA franchise with its actual curated roster. Manage the cap, waive and sign, propose trades the AI weighs on age and rating, play the season in stretches, survive the modern play-in for seeds 7 to 10, win four best-of-seven rounds, then hit a draft where the scouting grades can lie. Aging, breakouts, retirements and rising caps across unlimited saved seasons.\n\nRunning an NBA franchise looks easy from the couch. This sim hands you a real rotation, a cap sheet and 29 rivals so you can find out.\n\nWaive the deadweight, sign the bargains, swing trades the computer actually weighs, and steer the season toward the bracket and maybe a banner. Dynasties are the real scoreboard.\n\nHow to play NBA Front Office, a free NBA GM simulator\nInheriting a real 30 team rotation\nPick any of the 30 franchises and inherit its real rotation, rated player by player.\nReading the ownership mandate\nRead the ownership mandate: a loaded roster is told to win the Finals, a mid one to make the playoffs, a thin one to hit an honest win number. It resets every offseason.\nWorking the roster with waivers and trades\nWork the roster. Waive contracts, sign free agents with your cap room, and propose trades.\nSimming the season in 20 stretches\nSim the season in 20 short stretches, watching the conference standings tighten and the mandate's live pace read.\nMaking the playoffs, then chasing a repeat\nFinish top 6 for a direct playoff seed, or 7th through 10th for the play-in.\nWin four best of 7 rounds, then draft and rebuild for the repeat, as long as ownership keeps you.\nNBA Front Office rules: the cap, trades and the play in\nCap room and roster size limits\nThe cap starts at the real 2026-27 figure, just under 165 million, and rises 7 percent every season in the game. You can waive down to 8 players during the year, but the season cannot tip off with fewer than 14 or more than 15: short of 14 the league fills the gap with minimum deals at 2 million each and tells you who, and above 15 the first round waits until you waive down.\nThe luxury tax, the aprons and the repeater rate\nThe real league put its 2026-27 tax line at 200.4 million, but the salaries here are the game's own and run richer at the top, so every n",
+        "entry": "/assets/index-Bj5VrkKR.js"
+      }
+    },
+    {
+      "tag": "live-nba-start",
+      "at": "2026-10-01T22:05:56.243Z",
+      "driverError": "locator.waitFor: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: 'Play Round 1', exact: true }) to be visible\u001b[22m\n"
+    },
+    {
+      "tag": "live-nba-hub-inspect",
+      "at": "2026-10-01T22:06:25.708Z",
+      "driverError": "Cannot read properties of undefined (reading 'length')"
+    },
+    {
+      "tag": "live-nba-hub",
+      "at": "2026-10-01T22:07:02.528Z",
+      "value": {
+        "buttons": [
+          "Back",
+          "Sign up to track your statsTrack stats",
+          "",
+          "Process, patience, all the safe wordsMeasuredNobody clips it. That is the point",
+          "Name the roster holes out loudCandidCandor plays upstairs, usually · a real gamble",
+          "Say the Finals is the only barBoldThe clip will outlive you, either way · a real gamble",
+          "👔Roster10 under contract4 short of the 14 man floor. Filled on minimum deals at tip off.",
+          "💼Free agency-$70M overMarcus Beaudry wants $21M, out of reach",
+          "🤝TradesTax bill $8.8M$8.4M over the tax line. Shed salary or pay it.",
+          "🏟️PlayRound 1 of 200-0 with 20 rounds to play",
+          "📊Standings#2 in the EastInside the top 10 with 20 to play",
+          " Abandon franchise and restart",
+          "Cookie choices",
+          "Light mode",
+          "Report a bug"
+        ],
+        "body": "NBA Front Office\n\nReal rosters. Real cap pain. The play-in is waiting for your mistakes.\n\nBoston Celtics\n2026 · Round 1/20\nRecord 0-0\nStrength 84\nCap room $-70.1M\nTax $8.8M\n🏛️ OWNERSHIP\nTrust 60\n\nMake the playoffs and win a series. This roster is built for it.\n\n🎙️ PRESS CONFERENCE\n\nThe introduction\n\nFirst day, full room. The Boston Celtics beat writers want to know what kind of front office this is going to be.\n\nProcess, patience, all the safe words\nMEASURED\nNobody clips it. That is the point\nName the roster holes out loud\nCANDID\nCandor plays upstairs, usually · a real gamble\nSay the Finals is the only bar\nBOLD\nThe clip will outlive you, either way · a real gamble\n👔\nROSTER\n10 under contract\n4 short of the 14 man floor. Filled on minimum deals at tip off.\n💼\nFREE AGENCY\n-$70M over\nMarcus Beaudry wants $21M, out of reach\n🤝\nTRADES\nTax bill $8.8M\n$8.4M over the tax line. Shed salary or pay it.\n🏟️\nPLAY\nRound 1 of 20\n0-0 with 20 rounds to play\n📊\nSTANDINGS\n#2 in the East\nInside the top 10 with 20 to play\n\nWelcome to the Boston Celtics front office. The 2026 season tips off now.\n\n🏛️ The ownership mandate: Make the playoffs and win a series. This roster is built for it.\n\nAbandon franchise and restart\nNBA Front Office: Basketball GM Simulator\n\nTake over a real NBA franchise with its actual curated roster. Manage the cap, waive and sign, propose trades the AI weighs on age and rating, play the season in stretches, survive the modern play-in for seeds 7 to 10, win four best-of-seven rounds, then hit a draft where the scouting grades can lie. Aging, breakouts, retirements and rising caps across unlimited saved seasons.\n\nRunning an NBA franchise looks easy from the couch. This sim hands you a real rotation, a cap sheet and 29 rivals so you can find out.\n\nWaive the deadweight, sign the bargains, swing trades the computer actually weighs, and steer the season toward the bracke",
+        "save": {
+          "key": "nba-front-office-save-v1",
+          "team": "BOS",
+          "leagueKeys": [
+            "season",
+            "cap",
+            "teams",
+            "freeAgents",
+            "round",
+            "champions",
+            "taxScale"
+          ],
+          "teamKeys": [
+            "abbr",
+            "players",
+            "wins",
+            "losses",
+            "picks"
+          ],
+          "round": 1
+        },
+        "errors": []
+      }
+    },
+    {
+      "tag": "live-nba-round-refresh",
+      "at": "2026-10-01T22:07:34.842Z",
+      "value": {
+        "round": 2,
+        "roster": 14,
+        "record": [
+          5,
+          1
+        ],
+        "rawHeld": true,
+        "buttons": [
+          "💼Free agency-$78M overMarcus Beaudry wants $21M, out of reach",
+          "🤝TradesTax bill $25M$16M over the tax line. Shed salary or pay it.",
+          "🏟️PlayRound 2 of 205-1 with 19 rounds to play",
+          "📊Standings#1 in the EastTop seed as it stands",
+          " Abandon franchise and restart",
+          "Cookie choices",
+          "Light mode",
+          "Report a bug"
+        ],
+        "errors": []
+      }
+    },
+    {
+      "tag": "nba-doubleclick-round",
+      "at": "2026-10-01T22:10:50.181Z",
+      "value": {
+        "beforeRound": 2,
+        "afterRound": 3,
+        "body": "er finished. Contracts expire, and some role players walk every summer.\nNBA Front Office FAQ: rosters, trades and getting fired\nAre the rosters real?\n\nThe players are real, about ten curated per franchise. Contracts, salaries and ages in the sim are explicitly fictional.\n\nWhy did my trade get rejected?\n\nThe engine values rating adjusted for age and wants to come out ahead. Offer youth, take back age, or add a pick.\n\nCan I get fired?\n\nYes. Ownership grades the mandate every season and tracks trust from 0 to 100. Losing the play-in when the ask was a banner costs real trust, a luxury tax bill costs a point per 6 million of it, and at zero the save ends and you take another job.\n\nWhat happens if I start the season with 12 players?\n\nThe league fills you to 14 at tip off with the lowest rated free agents in the pool on one year minimum deals, 2 million each, and the feed names them. Sign who you actually want before you press play. With 16 or more you cannot start until you waive down to 15.\n\nDoes my save persist?\n\nYes, the league auto saves in your browser across unlimited seasons. Clearing site data wipes the franchise.\n\nIs NBA Front Office free to play?\n\nYes. NBA Front Office is free to play on DoUKnowBall, right in your browser. No download and no signup needed.\n\nMore games to play\n🌟\nNBA My Career\nDraft night to the rafters. 5 positions, 100+ crossroads, and one very tempting phone call\n⚔️\nGauntlet Draft: NBA\nPick your five, five cards at a time, then survive a five round cup\n🏀\nBuzzer Beater\nPick the arc, beat the hand, drop ten jump shots\n🗺️\nMLB Conquest\nImperialism at the ballpark: winners annex whole empires, two invaders start landless\n👆\nIdle Arena\nTap to score, sign a squad that scores for you, lift trophies, earn while you are away\n🏢\nNFL Front Office\nFull GM sim with real rosters: cap, trades, drafts, dynasties\n\nNBA playoff format history and the rules this game uses\n\nPLAY NEXT\n\n🏁\nGuess The Driver\n\nGuess the mystery NASCAR driver from clues\n\nPlay Now\n📅\nGuess The Year\n\nWhat year did these happen?\n\nPlay Now\n🗺️\nNFL Conquest\n\nThe imperialism map: winners annex whole empires until one team rules America\n\nPlay Now\n\nNext puzzle in 05:49:11\n\nSee all games →",
+        "buttons": [
+          "Back",
+          "Sign up to track your statsTrack stats",
+          "",
+          " Hub",
+          " Play Round 3",
+          " Abandon franchise and restart",
+          "Cookie choices",
+          "Light mode",
+          "Report a bug"
+        ]
+      }
+    },
+    {
+      "tag": "nba-season-native",
+      "at": "2026-10-01T22:11:10.718Z",
+      "value": {
+        "rounds": [
+          {
+            "before": 3,
+            "after": 4,
+            "phase": "hub",
+            "record": [
+              11,
+              2
+            ]
+          },
+          {
+            "before": 4,
+            "after": 5,
+            "phase": "hub",
+            "record": [
+              13,
+              2
+            ]
+          },
+          {
+            "before": 5,
+            "after": 6,
+            "phase": "hub",
+            "record": [
+              16,
+              3
+            ]
+          },
+          {
+            "before": 6,
+            "after": 7,
+            "phase": "hub",
+            "record": [
+              19,
+              3
+            ]
+          },
+          {
+            "before": 7,
+            "after": 8,
+            "phase": "hub",
+            "record": [
+              24,
+              4
+            ]
+          },
+          {
+            "before": 8,
+            "after": 9,
+            "phase": "hub",
+            "record": [
+              26,
+              4
+            ]
+          },
+          {
+            "before": 9,
+            "after": 10,
+            "phase": "hub",
+            "record": [
+              28,
+              5
+            ]
+          },
+          {
+            "before": 10,
+            "after": 11,
+            "phase": "hub",
+            "record": [
+              31,
+              7
+            ]
+          },
+          {
+            "before": 11,
+            "after": 12,
+            "phase": "hub",
+            "record": [
+              33,
+              9
+            ]
+          },
+          {
+            "before": 12,
+            "after": 13,
+            "phase": "hub",
+            "record": [
+              35,
+              10
+            ]
+          },
+          {
+            "before": 13,
+            "after": 14,
+            "phase": "hub",
+            "record": [
+              36,
+              12
+            ]
+          },
+          {
+            "before": 14,
+            "after": 15,
+            "phase": "hub",
+            "record": [
+              38,
+              13
+            ]
+          },
+          {
+            "before": 15,
+            "after": 16,
+            "phase": "hub",
+            "record": [
+              40,
+              15
+            ]
+          },
+          {
+            "before": 16,
+            "after": 17,
+            "phase": "hub",
+            "record": [
+              42,
+              16
+            ]
+          },
+          {
+            "before": 17,
+            "after": 18,
+            "phase": "hub",
+            "record": [
+              46,
+              18
+            ]
+          },
+          {
+            "before": 18,
+            "after": 19,
+            "phase": "hub",
+            "record": [
+              50,
+              21
+            ]
+          },
+          {
+            "before": 19,
+            "after": 20,
+            "phase": "hub",
+            "record": [
+              55,
+              24
+            ]
+          },
+          {
+            "before": 20,
+            "after": 20,
+            "phase": "recap",
+            "record": [
+              57,
+              26
+            ]
+          }
+        ],
+        "phase": "recap",
+        "body": "NBA Front Office\n\nReal rosters. Real cap pain. The play-in is waiting for your mistakes.\n\nDenver Nuggets win the 2026 title\n\nYour Boston Celtics finished 57-26, No. 1 in the East.\n\n✅ Mandate met. The seat stays comfortable.\n\nTrust upstairs: 70 of 100.\n\n💸 Luxury tax $24.8M: your $243.1M payroll sat $16.4M over the $226.7M line. Ownership wrote the cheque and trust fell 4. 5 clubs paid tax this season, the biggest bill $189.6M (Denver Nuggets).\n\nFinals: Denver Nuggets beat Indiana Pacers 4-2\n\nEast Play-In 7v8: Milwaukee Bucks 1-0\n\nEast Play-In 9v10: Orlando Magic 1-0\n\nEast Play-In final: Orlando Magic 1-0\n\nEast R1: Boston Celtics 4-3\n\nEast R1: Cleveland Cavaliers 4-0\n\nEast R1: Indiana Pacers 4-0\n\nEast R1: Milwaukee Bucks 4-2\n\nEast Semis: Cleveland Cavaliers 4-3\n\nEast Semis: Indiana Pacers 4-3\n\nEast Finals: Indiana Pacers 4-2\n\nWest Play-In 7v8: Phoenix Suns 1-0\n\nWest Play-In 9v10: Minnesota Timberwolves 1-0\n\nWest Play-In final: Minnesota Timberwolves 1-0\n\nWest R1: Minnesota Timberwolves 4-0\n\nWest R1: Golden State Warriors 4-0\n\nWest R1: Denver Nuggets 4-0\n\nWest R1: Oklahoma City Thunder 4-2\n\nWest Semis: Golden State Warriors 4-1\n\nWest Semis: Denver Nuggets 4-2\n\nWest Finals: Denver Nuggets 4-1\n\nTitles 0\nSeasons 1\nGo to the draft\n🏢\nNBA Front Office\nOct 1, 2026\nRESULT\n0 titles in 1 seasons\nDoUKnowBall\ndouknowball.com/nba-front-office\nShare result\nCopy challenge\n📋 Copy Score Card\n🖼️ Save Image\n\nSHARE YOUR RESULT\n\nNBA Front Office: Basketball GM Simulator\n\nTake over a real NBA franchise with its actual curated roster. Manage the cap, waive and sign, propose trades the AI weighs on age and rating, play the season in stretches, survive the modern play-in for seeds 7 to 10, win four best-of-seven rounds, then hit a draft where the scouting grades can lie. Aging, breakouts, retirements and rising caps across unlimited saved seasons.\n\nRunning an NBA franchise looks easy from the couch. This sim hands you a real rotation, a cap sheet and 29 rivals so you can find out.\n\nWaive the deadweight, sign the bargains, swing trades the computer actually weighs, and steer the season toward the bracket and maybe a banner. Dynasties are the real scoreboard.\n\nHow to play NBA Front Office, a free NBA GM simulator\nInheriting a real 30 team rotation\nPick any of the 30 franchises and inherit its real rotation, rated player by player.\nReading the ownership mandate\nRead the ownership mandate: a loaded roster is told to win the Finals, a mid one to make the playoffs, a thin one to hit an honest win number. It resets every offseason.\nWorking the roster with waivers and trades\nWork the roster. Waive contracts, sign free agents with your cap room, and propose trades.\nSimming the season in 20 stretches\nSim the season in 20 short stretches, watching the conference standings tighten and the mandate's live pace read.\nMaking the playoffs, then chasing a repeat\nFinish top 6 for a direct playoff seed, or 7th through 10th for the play-in.\nWin four best of 7 rounds, then draft and rebuild for the repeat, as long as ownership keeps you.\nNBA Front Office rules: the cap, trades and the play in\nCap room and roster size limits\nThe cap starts at the real 2026-27 figure, just under 165 million, and rises 7 percent every season in the game. You can waive down to 8 players during the year, but the season cannot tip off with fewer than 14 or more than 15: short of 14 the league fills the gap with minimum deals at 2 million each and tells you who, and above 15 the first round waits until you waive down.\nThe luxury tax, the aprons and the repeater rate\nThe real league put its 2026-27 tax line at 200.4 million, but the salaries here are the game's own and run richer at the top, so every new league sets its line from its own payrolls instead: enough clubs over it to look like a real season (eight paid tax in 2023-24), but nobody facing a bill above 190 million, about the most any club has ever been billed. A new league opens on a 226.7 million line with five clubs over it, and the line rises 7 percent a season with the cap.\nEvery dollar of payroll over the line, dead money included, is taxed at season close in brackets about 3 percent of the line wide (6.9 million in a new league",
+        "buttons": [
+          "Back",
+          "Sign up to track your statsTrack stats",
+          "",
+          " Go to the draft",
+          "Share result",
+          "Copy challenge",
+          "📋 Copy Score Card",
+          "🖼️ Save Image",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "Cookie choices",
+          "Light mode",
+          "Report a bug"
+        ],
+        "errors": []
+      }
+    },
+    {
+      "tag": "nba-postseason-draft",
+      "at": "2026-10-01T22:12:01.199Z",
+      "value": {
+        "recapRefreshHeld": true,
+        "phase": "draft",
+        "picksLeft": 2,
+        "buttons": [
+          "Back",
+          "Sign up to track your statsTrack stats",
+          "Jaylen ColtraneF · age 1987",
+          "Marquis LockridgeG · age 2086",
+          "Kobi KingmanG · age 2185",
+          "Naz DanforthF · age 1985",
+          "Trey FairweatherF · age 1984",
+          "Devon StallworthF · age 2083",
+          "Corey QuinnG · age 2082",
+          "Jalen PembertonG · age 2182",
+          "Bryce RidgewayG · age 2181",
+          "Marquis HalversonG · age 1980",
+          "Jalen StrotherC · age 2180",
+          "Dashawn HalversonF · age 2078",
+          "Malik NorthcuttG · age 2078",
+          "Omari GrissomC · age 2178",
+          "Cookie choices",
+          "Light mode",
+          "Report a bug"
+        ],
+        "body": "NBA Front Office\n\nReal rosters. Real cap pain. The play-in is waiting for your mistakes.\n\nThe 2027 Draft\n\nYou hold 2 picks. Scout grades carry error.\n\nJaylen Coltrane\nF · age 19\n87\nMarquis Lockridge\nG · age 20\n86\nKobi Kingman\nG · age 21\n85\nNaz Danforth\nF · age 19\n85\nTrey Fairweather\nF · age 19\n84\nDevon Stallworth\nF · age 20\n83\nCorey Quinn\nG · age 20\n82\nJalen Pemberton\nG · age 21\n82\nBryce Ridgeway\nG · age 21\n81\nMarquis Halverson\nG · age 19\n80\nJalen Strother\nC · age 21\n80\nDashawn Halverson\nF · age 20\n78\nMalik Northcutt\nG · age 20\n78\nOmari Grissom\nC · age 21\n78\nNBA Front Office: Basketball GM Simulator\n\nTake over a real NBA franchise with its actual curated roster. Manage the cap, waive and sign, propose trades the AI weighs on age and rating, play the season in stretches, survive the modern play-in for seeds 7 to 10, win four best-of-seven rounds, then hit a draft where the scouting grades can lie. Aging, breakouts, retirements and rising caps across unlimited saved seasons.\n\nRunning an "
+      }
+    },
+    {
+      "tag": "nba-draft-season-transition",
+      "at": "2026-10-01T22:12:40.397Z",
+      "value": {
+        "pickRounds": [
+          {
+            "picked": "Jaylen Coltrane",
+            "picksLeft": 1,
+            "season": 2026,
+            "round": 20,
+            "roster": 15
+          },
+          {
+            "picked": "Corey Quinn",
+            "picksLeft": 0,
+            "season": 2027,
+            "round": 1,
+            "roster": 13
+          }
+        ],
+        "buttons": [
+          "Back",
+          "Sign up to track your statsTrack stats",
+          "",
+          "Continue to the hub",
+          "Cookie choices",
+          "Light mode",
+          "Report a bug"
+        ],
+        "body": "NBA Front Office\n\nReal rosters. Real cap pain. The play-in is waiting for your mistakes.\n\nThe 2027 Draft\n\nThat is your draft done. The offseason has run and the new season is set up on the hub.\n\nON THE CLOCK\n\nYour pick is in, and 5 more went off the board.\n\n1. BOS select Corey Quinn\nG · your pick\n82\n2. BKN take Jalen Pemberton\nG\n82\n3. MIA take Bryce Ridgeway\nG\n81\n4. CHA take Marquis Halverson\nG\n80\n5. HOU take Jalen Strother\nC\n80\n6. DET take Dashawn Halverson\nF\n78\nContinue to the hub\n\n🏛️ The new mandate: Win the Finals. Anything less is a failed season upstairs.\n\nNBA Front Office: Basketball GM Simulator\n\nTake over a real NBA franchise with its actual curated roster. Manage the cap, waive and sign, propose trades the AI weighs on age and rating, play the season in stretches, survive the modern play-in for seeds 7 to 10, win four best-of-seven rounds, then hit a draft where the scouting grades can lie. Aging, breakouts, retirements and rising caps across unlimited saved seasons.\n\nRunning an NBA franchise looks easy from the couch. This sim hands you a real rotation, a cap sheet and 29",
+        "errors": []
+      }
+    },
+    {
+      "tag": "nba-trade-native",
+      "at": "2026-10-01T22:13:27.993Z",
+      "driverError": "locator.click: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: /TradesTax bill/ })\u001b[22m\n"
+    },
+    {
+      "tag": "nba-current-hub",
+      "at": "2026-10-01T22:13:58.891Z",
+      "value": {
+        "buttons": [
+          "Back",
+          "Sign up to track your statsTrack stats",
+          "",
+          "👔Roster13 under contract1 short of the 14 man floor. Filled on minimum deals at tip off.",
+          "💼Free agency-$110M overMarcus Beaudry wants $21M, out of reach",
+          "🤝TradesTax bill $31M$19M over the tax line. Shed salary or pay it.",
+          "🏟️PlayRound 1 of 200-0 with 20 rounds to play",
+          "📊Standings#1 in the EastTop seed as it stands",
+          " Abandon franchise and restart",
+          "Cookie choices",
+          "Light mode",
+          "Report a bug"
+        ],
+        "body": "NBA Front Office\n\nReal rosters. Real cap pain. The play-in is waiting for your mistakes.\n\nBoston Celtics\n2027 · Round 1/20\nRecord 0-0\nStrength 86\nCap room $-109.9M\nTax $31.2M\n🏛️ OWNERSHIP\nTrust 70\n\nWin the Finals. Anything less is a failed season upstairs.\n\n👔\nROSTER\n13 under contract\n1 short of the 14 man floor. Filled on minimum deals at tip off.\n💼\nFREE AGENCY\n-$110M over\nMarcus Beaudry wants $21M, out of reach\n🤝\nTRADES\nTax bill $31M\n$19M over the tax line. Shed salary or pay it.\n🏟️\nPLAY\nRound 1 of 20\n0-0 with 20 rounds to play\n📊\nSTANDINGS\n#1 in the East\nTop seed as it stands\n\n🏛️ The new mandate: Win the Finals. Anything less is a failed season upstairs.\n\nAbandon franchise and restart\nNBA Front Office: Basketball GM Simulator\n\nTake over a real NBA franchise with its actual curated roster. Manage the cap, waive and sign, propose trades the AI weighs on age and rating, play the season in stretches, survive the modern play-in for seeds 7 to 10, win four best-of-seven rounds, then hit a draft where the scouting grades can lie. Aging, breakouts, retirements and rising caps across "
+      }
+    },
+    {
+      "tag": "nba-open-trades",
+      "at": "2026-10-01T22:14:09.211Z",
+      "value": {
+        "buttons": [
+          "Back",
+          "Sign up to track your statsTrack stats",
+          "",
+          " Hub",
+          "Jayson Tatum (F)96",
+          "Jaylen Coltrane (F)88",
+          "Derrick White (G)86",
+          "Corey Quinn (G)85",
+          "Payton Pritchard (G)83",
+          "Nikola Vucevic (C)83",
+          "Paul George (F)82",
+          "Neemias Queta (C)78",
+          "Shop him around the league",
+          "DEN",
+          "OKC",
+          "NYK",
+          "LAL",
+          "MIL",
+          "MIN",
+          "HOU",
+          "CLE",
+          "IND",
+          "GSW",
+          "DAL",
+          "MEM",
+          "PHI",
+          "MIA",
+          "LAC",
+          "PHX",
+          "SAC",
+          "ATL",
+          "NOP",
+          "TOR",
+          "SAS",
+          "ORL",
+          "UTA",
+          "CHA",
+          "DET",
+          "BKN",
+          "WAS",
+          "POR",
+          "CHI",
+          " Abandon franchise and restart",
+          "Cookie choices",
+          "Light mode",
+          "Report a bug"
+        ],
+        "body": "NBA Front Office\n\nReal rosters. Real cap pain. The play-in is waiting for your mistakes.\n\nBoston Celtics\n2027 · Round 1/20\nRecord 0-0\nStrength 86\nCap room $-109.9M\nTax $31.2M\n🏛️ OWNERSHIP\nTrust 70\n\nWin the Finals. Anything less is a failed season upstairs.\n\nHub\nTrades\n\n🏛️ The new mandate: Win the Finals. Anything less is a failed season upstairs.\n\nOver the first apron ($253.7M): any trade must send out at least as much salary as it brings back.\n\n🔍 Trade Finder\n\nPick one of your players and shop him. Only deals the AI genuinely accepts show up, cap checked.\n\nJayson Tatum (F)\n96\nJaylen Coltrane (F)\n88\nDerrick White (G)\n86\nCorey Quinn (G)\n85\nPayton Pritchard (G)\n83\nNikola Vucevic (C)\n83\nPaul George (F)\n82\nNeemias Queta (C)\n78\nShop him around the league\n\nOR BUILD YOUR OWN DEAL\n\nDEN\nOKC\nNYK\nLAL\nMIL\nMIN\nHOU\nCLE\nIND\nGSW\nDAL\nMEM\nPHI\nMIA\nLAC\nPHX\nSAC\nATL\nNOP\nTOR\nSAS\nORL\nUTA\nCHA\nDET\nBKN\nWAS\nPOR\nCHI\nAbandon franchise and restart\nNBA Front Office: Basketball GM Simulator\n\nTake over a real NBA franchise with its actual curated roster. Manage the cap, waive and sign, propose trades the AI weighs on age and rating, play the season in stretches, survive the modern play-in for seeds 7 to 10, win four best-of-seven rounds, then hit a draft where the scouting grades can lie. Aging, breakouts, retirements and rising caps across unlimited saved seasons.\n\nRunning an NBA franchise looks easy from the couch. This sim hands you a real rotation, a cap sheet and 29 rivals so you can find out.\n\nWaive the deadweight, sign the bargains, swing trades the computer actually weighs, and steer the season toward the bracket and maybe a banner. Dynasties are the real scoreboard.\n\nHow to play NBA Front Office, a free NBA GM simulator\nInheriting a real 30 team rotation\nPick any of the 30 franchises and inherit its real rotation, rated player by player.\nReading the ownership mandate\nRead the ownership mandate: a loaded roster is told to win the Finals, a mid one to make the playoffs, a thin one to hit an honest win number. It resets every offseason.\nWorking the roster with waivers and trades\nWork the roster. Waive contracts, sign free agents with your cap room, and propose trades.\nSimming the season in 20 stretches\nSim the season in 20 short stretches, watching the conference standings tighten and the mandate's live pace read.\nMaking the playoffs, then chasing a repeat\nFinish top 6 for a direct playoff seed, or 7th through 10th for the play-in.\nWin four best of 7 rounds, then draft and rebuild for the repeat, as long as ownership keeps you.\nNBA Front Office rules: the cap, trades and the play in\nCap room and roster size limits\nThe cap starts at the real 2026-27 figure, just under 165 million, and rises 7 percent every season in the game. You can waive down to 8 players during the year, but the season cannot tip off with fewer than 14 or more than 15: short of 14 the league fills the gap with minimum deals at 2 million each and tells you who, and above 15 the first round waits until you waive down.\nThe luxury tax, the aprons and the repeater rate\nThe real league put its 2026-27 tax line at 200.4 million, but the salaries here are the game's own and run richer at the top, so every new league sets its line from its own payrolls instead: enough clubs over it to look like a real season (eight paid tax in 2023-24), but nobody facing a bill above 190 million, about the most any club"
+      }
+    },
+    {
+      "tag": "nba-trade-full-roster-check",
+      "at": "2026-10-01T22:14:29.177Z",
+      "value": {
+        "roster": 13,
+        "missing": [
+          {
+            "id": "nct23hmeo1umw-26",
+            "name": "Baylor Scheierman",
+            "ovr": 78
+          },
+          {
+            "id": "nct23hmeo1umw-27",
+            "name": "Jordan Walsh",
+            "ovr": 73
+          },
+          {
+            "id": "nct23hmeo1umw-29",
+            "name": "Luka Garza",
+            "ovr": 75
+          },
+          {
+            "id": "nct23hmeo1umw-30",
+            "name": "Sam Hauser",
+            "ovr": 77
+          },
+          {
+            "id": "nct23hmeo1umw-310",
+            "name": "Omari Maplewood",
+            "ovr": 74
+          }
+        ],
+        "ownButtons": [
+          "Jayson Tatum (F)96",
+          "Jaylen Coltrane (F)88",
+          "Derrick White (G)86",
+          "Corey Quinn (G)85",
+          "Payton Pritchard (G)83",
+          "Nikola Vucevic (C)83",
+          "Paul George (F)82",
+          "Neemias Queta (C)78",
+          "Jayson Tatum (F)96",
+          "Jaylen Coltrane (F)88",
+          "Derrick White (G)86",
+          "Corey Quinn (G)85",
+          "Payton Pritchard (G)83",
+          "Nikola Vucevic (C)83",
+          "Paul George (F)82",
+          "Neemias Queta (C)78"
+        ],
+        "body": "NBA Front Office\n\nReal rosters. Real cap pain. The play-in is waiting for your mistakes.\n\nBoston Celtics\n2027 · Round 1/20\nRecord 0-0\nStrength 86\nCap room $-109.9M\nTax $31.2M\n🏛️ OWNERSHIP\nTrust 70\n\nWin the Finals. Anything less is a failed season upstairs.\n\nHub\nTrades\n\n🏛️ The new mandate: Win the Finals. Anything less is a failed season upstairs.\n\nOver the first apron ($253.7M): any trade must send out at least as much salary as it brings back.\n\n🔍 Trade Finder\n\nPick one of your players and shop him. Only deals the AI genuinely accepts show up, cap checked.\n\nJayson Tatum (F)\n96\nJaylen Coltrane (F)\n88\nDerrick White (G)\n86\nCorey Quinn (G)\n85\nPayton Pritchard (G)\n83\nNikola Vucevic (C)\n83\nPaul George (F)\n82\nNeemias Queta (C)\n78\nShop him around the league\n\nOR BUILD YOUR OWN DEAL\n\nDEN\nOKC\nNYK\nLAL\nMIL\nMIN\nHOU\nCLE\nIND\nGSW\nDAL\nMEM\nPHI\nMIA\nLAC\nPHX\nSAC\nATL\nNOP\nTOR\nSAS\nORL\nUTA\nCHA\nDET\nBKN\nWAS\nPOR\nCHI\n\n1. Pick who YOU send. 2. Tap who you want back and open talks. The other GM counters like a person: a pick to close the gap, a lesser man instead, or the dial tone.\n\nYOU SEND\n\nJayson Tatum (F)\n96\nJaylen Coltrane (F)\n88\nDerrick White (G)\n86\nCorey Quinn (G)\n85\nPayton Pritchard (G)\n83\nNikola Vucevic (C)\n83\nPaul George (F)\n82\nNeemias Queta (C)\n78\n\nYOU GET (DET)\n\nCade Cunningham (G) 88\nOpen talks\nDevon Stallworth (F) 85\nOpen talks\nDashawn Halverson (F) 85\nOpen talks\nJalen Duren (C) 80\nOpen talks\nAusar Thompson (F) 79\nOpen talks\nTobias Harris (F) 77\nOpen talks\nDuncan Robinson (G) 76\nOpen talks\nCaris LeVert (G) 76\nOpen talks\nAbandon franchise and restart\nNBA Front Office: Basketball GM Simulator\n\nTake over a real NBA franchise with its actual curated roster. Manage the cap, waive and sign, propose trades the AI weighs on age and rating, play the season in stretches, survive the modern play-in for seeds 7 to 10, win four best-of-seven rounds, then hit a draft where the scouting grades can lie. Aging, breakouts, retirements and rising caps across unlimited saved seasons.\n\nRunning an NBA franchise looks easy from the couch. This sim hands you a real rotation, a cap sheet and 29 rivals so you can find out.\n\nWaive the deadweight, sign the bargains, swing trades the computer actually weighs, and steer the season toward the bracket and maybe a banner. Dynasties are the real scoreboard.\n\nHow to play NBA Front Office, a free NBA GM simulator\nInheriting a real 30 team rotation\nPick any of the 30 franchises and inherit its real rotation, rated player by player.\nReading the ownership mandate\nRead the ownership mandate: a loaded roster is told to win the Finals, a mid one to make the playoffs, a thin one to hit an honest win number. It resets every offseason.\nWorking the roster with waivers and trades\nWork the roster. Waive contracts, sign free agents with your cap room, and propose trades.\nSimming the season in 20 stretches\nSim the season in 20 short stretches, watching the conference standings tighten and the mandate's live pace read.\nMaking the playoffs, then chasing a repeat\nFinish top 6 for a direct playoff seed, or 7th through 10th for the play-in.\nWin four best of 7 rounds, then draft and rebuild for the repeat, as long as ownership keeps you.\nNBA Front Office rules: the cap, trades and the play in\nCap room and roster size limits\nThe cap starts at the real 2026-27 figure, just under 165 million, and rises 7 percent every season in the game. You can waive down to 8 players during the year, but the season cannot tip off with fewer than 14 or more than 15: short of 14 the league fills the gap with minimum deals at 2 million each and tells you who, and above 15 the first round waits until you waive down.\nThe luxury tax, the aprons and the repeater rate\nThe real league put its 2026-27 tax line at 200.4 million, but the salaries here are the game's own and run richer at the top, so every new league sets its line from its own payrolls instead: enough clubs over it to look like a real season (eight paid tax in 2023-24), but nobody facing a bill above 190 million, about the most any club has ever been billed. A new league opens on a 226.7 million line with five clubs over it, and the line rises 7 percent a season with the cap.\nEvery dollar of payroll over the line, dead money included, is taxed at season close in brackets about 3 percent of the line wide "
+      }
+    },
+    {
+      "tag": "nba-finding-trade-depth",
+      "at": "2026-10-01T22:15:40.932Z",
+      "driverError": "locator.click: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: 'Jayson Tatum (F)96', exact: true }).first()\u001b[22m\n"
+    },
+    {
+      "tag": "nba-shop-player",
+      "at": "2026-10-01T22:16:23.006Z",
+      "value": {
+        "accepts": 4,
+        "buttons": [
+          "Back",
+          "Sign up to track your statsTrack stats",
+          "",
+          " Hub",
+          "Jayson Tatum (F)96",
+          "Jaylen Coltrane (F)88",
+          "Derrick White (G)86",
+          "Corey Quinn (G)85",
+          "Payton Pritchard (G)83",
+          "Nikola Vucevic (C)83",
+          "Paul George (F)82",
+          "Neemias Queta (C)78",
+          "Shop him around the league",
+          "Accept",
+          "Accept",
+          "Accept",
+          "Accept",
+          "DEN",
+          "OKC",
+          "NYK",
+          "LAL",
+          "MIL",
+          "MIN",
+          "HOU",
+          "CLE",
+          "IND",
+          "GSW",
+          "DAL",
+          "MEM",
+          "PHI",
+          "MIA",
+          "LAC",
+          "PHX",
+          "SAC",
+          "ATL",
+          "NOP",
+          "TOR",
+          "SAS",
+          "ORL",
+          "UTA",
+          "CHA",
+          "DET",
+          "BKN",
+          "WAS",
+          "POR",
+          "CHI",
+          "Jayson Tatum (F)96",
+          "Jaylen Coltrane (F)88",
+          "Derrick White (G)86",
+          "Corey Quinn (G)85",
+          "Payton Pritchard (G)83",
+          "Nikola Vucevic (C)83",
+          "Paul George (F)82",
+          "Neemias Queta (C)78",
+          "Open talks",
+          "Open talks",
+          "Open talks",
+          "Open talks",
+          "Open talks",
+          "Open talks",
+          "Open talks",
+          "Open talks",
+          " Abandon franchise and restart",
+          "Cookie choices",
+          "Light mode",
+          "Report a bug"
+        ],
+        "body": "\n\n🔍 Trade Finder\n\nPick one of your players and shop him. Only deals the AI genuinely accepts show up, cap checked.\n\nJayson Tatum (F)\n96\nJaylen Coltrane (F)\n88\nDerrick White (G)\n86\nCorey Quinn (G)\n85\nPayton Pritchard (G)\n83\nNikola Vucevic (C)\n83\nPaul George (F)\n82\nNeemias Queta (C)\n78\nShop him around the league\nGSW offer: Stephen Curry (G) 93\nage 29 · $48.5M · costs one of your picks\nAccept\nIND offer: Pascal Siakam (F) 88\nage 28 · $38M · costs one of your picks\nAccept\nBKN offer: Keon Johnson (G) 72\nage 23 · $2.3M · costs one of your picks\nAccept\nWAS offer: Anthony Davis (F) 88\nage 30 · $38M\nAccept\n\nOR BUILD YOUR OWN DEAL\n\nDEN\nOKC\nNYK\nLAL\nMIL\nMIN\nHOU\nCLE\nIND\nGSW\nDAL\nMEM\nPHI\nMIA\nLAC\nPHX\nSAC\nATL\nNOP\nTOR\nSAS\nORL\nUTA\nCHA\nDET\nBKN\nWAS\nPOR\nCHI\n\n1. Pick who YOU send. 2. Tap who you want back and open talks. The other GM counters like a person: a pick to close the gap, a lesser man instead, or the dial tone.\n\nYOU SEND\n\nJayson Tatum (F)\n96\nJaylen Coltrane (F)\n88\nDerrick White (G)\n86\nCorey Quinn (G)\n85\nPayton Pritchard (G)\n83\nNikola Vucevic (C)\n83\nPaul George (F)\n82\nNeemias Queta (C)\n78\n\nYOU GET (DET)\n\nCade Cunningham (G) 88\nOpen talks\nDevon Stallworth (F) 85\nOpen talks\nDashawn Halverson (F) 85\nOpen talks\nJalen Duren (C) 80\nOpen talks\nAusar Thompson (F) 79\nOpen talks\nTobias Harris (F) 77\nOpen talks\nDuncan Robinson (G) 76\nOpen talks\nCaris LeVert (G) 76\nOpen talks\nAbandon franchise and restart\nNBA Front Office: Basketball GM Simulator\n\nTake over a real NBA franchise with its actual curated roster. Manage the cap, waive and sign, propose t"
+      }
+    },
+    {
+      "tag": "nba-accept-duplicate-and-corrupt",
+      "at": "2026-10-01T22:16:45.174Z",
+      "value": {
+        "beforePicks": [
+          1,
+          2
+        ],
+        "afterPicks": [
+          1
+        ],
+        "uniqueIds": true,
+        "broken": 0,
+        "brokenAgain": 0,
+        "text": "Skip to main content\nDOUKNOWBALL\nBack\nTrack stats\nNBA Front Office\n\nReal rosters. Real cap pain. The play-in is waiting for your mistakes.\n\nTake over a front office\n\nReal rosters from the curated NBA Conquest data. Run the cap, work the phones, survive the play-in, win best-of-seven wars, draft the future. Saves automatically.\n\nDenver Nuggets\nWest\nOklahoma City Thunder\nWest\nBoston Celtics\nEast\nNew York Knicks\nEast\nLos Angeles Lakers\nWest\nMilwaukee Bucks\nEast\nMinnesota Timberwolves\nWest\nHouston Rockets\nWest\nCleveland Cavaliers\nEast\nIndiana Pacers\nEast\nGolden State Warriors\nWest\nDallas Mavericks\nWest\nMemphis Grizzlies\nWest\nPhiladelphia 76ers\nEast\nMiami Heat\nEast\nLA Clippers\nWest\nPhoenix Suns\nWest\nSacramento Kings\nWest\nAtlanta Hawks\nEast\nNew Orleans Pelicans\nWest\nToronto Raptors\nEast\nSan Antonio Spurs\nWest\nOrlando Magic\nEast\nUtah Jazz\nWest\nCharlotte Hornets\nEast\nDetroit Pistons\nEast\nBrooklyn Nets\nEast\nWashington Wizards\nEast\nPortland Trail Blazers\nWest\nChicago Bulls\nEast\nNBA Front Office: Basketball GM Simulator\n\nTake over a real NBA franchise with its actual curated roster. Manage the cap, waive and sign, propose trades the AI weighs on age and rating, play the season in stretches, survive the modern play-in for seeds 7 to 10, win four best-of-seven rounds, then hit a draft where the scouting grades can lie. Aging, breakouts, retirements and rising caps across unlimited saved sea"
+      }
+    },
+    {
+      "tag": "nba-restore-and-soccer-create",
+      "at": "2026-10-01T22:17:30.812Z",
+      "value": {
+        "buttons": [
+          "Back",
+          "Sign up to track your statsTrack stats",
+          "",
+          "🎲 Surprise me",
+          "🧑Skin",
+          "💇Hair",
+          "🧔Beard",
+          "👟Boots",
+          "💍Extras",
+          "🎉Celebration",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "⚽ Begin Career",
+          "Cookie choices",
+          "Light mode",
+          "Report a bug"
+        ],
+        "combos": [
+          "Choose nationality",
+          "Choose position",
+          "Choose era"
+        ],
+        "body": "⚽ Soccer Career\n\nCreate your player. Build your legend.\n\nCreate Your Player\nPlayer Name\nNationality\nChoose nationality\nPosition\nChoose position\nStarting Era\nChoose era\nCreate Your Look\n🎲 Surprise me\nVortex Strike\n\nThe volume seller. Red, loud, everywhere.\n\n🛝 Knee Slide\nEvery goal, you tear off toward the corner flag and slide across the grass on your knees.\n🧑\nSkin\n💇\nHair\n🧔\nBeard\n👟\nBoots\n💍\nExtras\n🎉\nCelebration\n⚽ Begin Career\n\nYour career saves in this browser. No account needed."
+      }
+    },
+    {
+      "tag": "soccer-native-fields",
+      "at": "2026-10-01T22:18:02.981Z",
+      "value": {
+        "positions": [
+          "Goalkeeper (GK)",
+          "Centre Back (CB)",
+          "Left Back (LB)",
+          "Right Back (RB)",
+          "Defensive Mid (CDM)",
+          "Central Mid (CM)",
+          "Attacking Mid (CAM)",
+          "Left Wing (LW)",
+          "Right Wing (RW)",
+          "Striker (ST)"
+        ]
+      }
+    },
+    {
+      "tag": "soccer-native-start",
+      "at": "2026-10-01T22:18:37.157Z",
+      "value": {
+        "phase": "youth",
+        "age": 16,
+        "overall": 48,
+        "seasons": 1,
+        "buttons": [
+          "Back",
+          "Sign up to track your statsTrack stats",
+          "",
+          "🚪 Retire",
+          "🔄 New Career",
+          "Full attributes183 cm · 78 kg · every number under the six",
+          "Next Year ",
+          "Retire",
+          "🏋️",
+          "📱2",
+          "Cookie choices",
+          "Light mode",
+          "Report a bug"
+        ],
+        "body": "🇪🇸\nAudit Test Player\n\nST · Age 16 · \n🇪🇸\nSpain\n\n🚪 Retire\n🔄 New Career\n48\nOVR\nPOT 73\n€0k\nNet Worth\n€500/wk\nWage\n€0.1M\nValue\nCAREER TIMELINE\nA\n16y\n🇪🇸\nReal Sociedad Youth\nYouth Academy\nYA\n🇪🇸\nReal Sociedad Youth\nYouth Academy\nST\n2025/26\n💰 FINANCES & LIFESTYLE\n€0k\nNet Worth\n🏚️ Humble\nLifestyle\n0\n📱 Followers\n€500/wk\nWeekly Wage\nShow money in\n€ EUR\n£ GBP\n$ USD\nR$ BRL\nMX$ MXN\n¥ JPY\n₹ INR\nA$ AUD\n💸 Costs: €0.0M/yr\nMorale\n70\nPopularity\n10\nATTRIBUTES\nPace\nSprint Speed 53\n53\nShooting\nHeading 57\n56\nPassing\nVision 45\n45\nDribbling\nBall Control 50\n50\nDefending\nMarking 38\n38\nPhysical\nStrength 52\n51\nFull attributes\n183 cm · 78 kg · every number under the six\nCAREER STATS\n0\nApps\n0\nGoals\n0\nAssists\n0\nHat Tricks\n0\nTrophies\nTROPHY CABINET\n🏆\n0\nLeagues\n🏆\n0\nCups\n⭐\n0\nUCL\n🌍\n0\nWorld Cup\n🌐\n0\nContinental\n🏅\n0\nBallon d'Or\nLATEST EVENTS\n›\n📋 Joined Real Sociedad Youth Academy aged 16\nNext Year\nRetire\n16\nAGE",
+        "errors": []
+      }
+    },
+    {
+      "tag": "soccer-progress-refresh",
+      "at": "2026-10-01T22:19:18.412Z",
+      "driverError": "locator.dblclick: Timeout 5000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: 'Next Year', exact: true })\u001b[22m\n\u001b[2m    - locator resolved to <button class=\"inline-flex items-center justify-center whitespace-nowrap rounded-md ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 px-4 py-2 flex-1 h-12 text-base font-bold bg-emerald-600 hover:bg-emerald-500 text-black gap-2\">…</button>\u001b[22m\n\u001b[2m  - attempting dblclick action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <div class=\"\" data-title=\"\">Joined Real Sociedad Youth!</div> from <section tabindex=\"-1\" aria-live=\"polite\" aria-atomic=\"false\" aria-relevant=\"additions text\" aria-label=\"Notifications alt+T\">…</section> subtree intercepts pointer events\u001b[22m\n\u001b[2m    - retrying dblclick action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <div class=\"\" data-title=\"\">Joined Real Sociedad Youth!</div> from <section tabindex=\"-1\" aria-live=\"polite\" aria-atomic=\"false\" aria-relevant=\"additions text\" aria-label=\"Notifications alt+T\">…</section> subtree intercepts pointer events\u001b[22m\n\u001b[2m    - retrying dblclick action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    9 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <div class=\"\" data-title=\"\">Joined Real Sociedad Youth!</div> from <section tabindex=\"-1\" aria-live=\"polite\" aria-atomic=\"false\" aria-relevant=\"additions text\" aria-label=\"Notifications alt+T\">…</section> subtree intercepts pointer events\u001b[22m\n\u001b[2m    - retrying dblclick action\u001b[22m\n\u001b[2m      - waiting 500ms\u001b[22m\n"
+    },
+    {
+      "tag": "soccer-toast-and-year",
+      "at": "2026-10-01T22:20:11.780Z",
+      "driverError": "locator.dblclick: Timeout 12000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: 'Next Year', exact: true })\u001b[22m\n\u001b[2m    - locator resolved to <button class=\"inline-flex items-center justify-center whitespace-nowrap rounded-md ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 px-4 py-2 flex-1 h-12 text-base font-bold bg-emerald-600 hover:bg-emerald-500 text-black gap-2\">…</button>\u001b[22m\n\u001b[2m  - attempting dblclick action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <div class=\"\" data-title=\"\">Joined Real Sociedad Youth!</div> from <section tabindex=\"-1\" aria-live=\"polite\" aria-atomic=\"false\" aria-relevant=\"additions text\" aria-label=\"Notifications alt+T\">…</section> subtree intercepts pointer events\u001b[22m\n\u001b[2m    - retrying dblclick action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <div class=\"\" data-title=\"\">Joined Real Sociedad Youth!</div> from <section tabindex=\"-1\" aria-live=\"polite\" aria-atomic=\"false\" aria-relevant=\"additions text\" aria-label=\"Notifications alt+T\">…</section> subtree intercepts pointer events\u001b[22m\n\u001b[2m    - retrying dblclick action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    22 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m       - element is visible, enabled and stable\u001b[22m\n\u001b[2m       - scrolling into view if needed\u001b[22m\n\u001b[2m       - done scrolling\u001b[22m\n\u001b[2m       - <div class=\"\" data-title=\"\">Joined Real Sociedad Youth!</div> from <section tabindex=\"-1\" aria-live=\"polite\" aria-atomic=\"false\" aria-relevant=\"additions text\" aria-label=\"Notifications alt+T\">…</section> subtree intercepts pointer events\u001b[22m\n\u001b[2m     - retrying dblclick action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n"
+    },
+    {
+      "tag": "soccer-toast-occlusion",
+      "at": "2026-10-01T22:21:00.281Z",
+      "value": {
+        "hit": {
+          "rect": {
+            "x": 12,
+            "y": 778.25,
+            "w": 225.171875,
+            "h": 48
+          },
+          "hit": "<div data-title=\"\" class=\"\">Joined Real Sociedad Youth!</div>",
+          "toast": "<li tabindex=\"0\" class=\"group toast group-[.toaster]:bg-background group-[.toaster]:text-foreground group-[.toaster]:border-border group-[.toaster]:shadow-lg\" data-sonner-toast=\"\" data-styled=\"true\" data-mounted=\"true\" data-promise=\"false\" data-swiped=\"false\" data-removed=\"false\" data-visible=\"true\" data-y-position=\"bottom\" data-x-position=\"right\" data-index=\"0\" data-front=\"true\" data-swiping=\"false\" data-dismissible=\"true\" data-type=\"success\" data-swipe-out=\"false\" data-expanded=\"true\" style=\"--index: 0; --toasts-before: 0; --z-index: 1; --offset: 0px; --initial-height: 53.5px;\"><div data-icon=\"\" class=\"\"><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\" fill=\"currentColor\" height=\"20\" width=\"20\"><path fill-rule=\"evenodd\" d=\"M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z\" clip-rule=\"evenodd\"></path></svg></div><div data-content=\"\" class=\"\"><div data-title=\"\" class=\"\">Joined Real Sociedad Youth!</div></div></li>"
+        },
+        "afterMouseLeaves": 0
+      }
+    },
+    {
+      "tag": "soccer-year-native-after-toast",
+      "at": "2026-10-01T22:21:51.057Z",
+      "value": {
+        "age": 17,
+        "phase": "contract_offer",
+        "seasons": 2,
+        "rawHeld": true,
+        "buttons": [
+          "Back",
+          "Sign up to track your statsTrack stats",
+          "",
+          "🚪 Retire",
+          "🔄 New Career",
+          "Sign Contract ✍️",
+          "Sign Contract ✍️",
+          "Sign Contract ✍️",
+          "Sign Contract ✍️",
+          "Full attributes183 cm · 78 kg · every number under the six",
+          "🏋️",
+          "📱3",
+          "Cookie choices",
+          "Light mode",
+          "Report a bug"
+        ],
+        "body": "🇪🇸\nAudit Test Player\n\nST · Age 17 · \n🇪🇸\nSpain\n\n🚪 Retire\n🔄 New Career\n52\nOVR\nPOT 73\n€0k\nNet Worth\n€500/wk\nWage\n€0.6M\nValue\nCAREER TIMELINE\nA\n16y\n🇪🇸\nReal Sociedad Youth\nYouth Academy\nA\n17y\n🇪🇸\nReal Sociedad Youth\nYouth Academy\n📩 Contract Offers\n\nChoose a club to start your professional career\n\nRE\n🇪🇸\nReal Sociedad\nLa Liga\n📋 5yr\n💰 €7k/wk\nFree transfer\nTier 3\nSign Contract ✍️\nRE\n🇦🇹\nRed Bull Salzburg\nAustrian Bundesliga\n📋 2yr\n💰 €10k/wk\nFree transfer\nTier 3\nSign Contract ✍️\nBR\nBrentford\nPremier League\n📋 2yr\n💰 €5k/wk\nFree transfer\nTier 4\nSign Contract ✍️\nPY\n🇦🇲\nPyunik\nArmenian Premier League\n📋 2yr\n💰 €4k/wk\nFree transfer\nTier 4\nSign Contract ✍️\nATTRIBUTES\nPace\nSprint Speed 55\n55\nShooting\nHeading 61\n60\nPassing\nVision 47\n47\nDribbling\nBall Control 52\n52\nDefending\nMarking 42\n42\nPhysical\nStrength 58\n57\nFull attributes\n183 cm · 78 kg · every number under the six\nCAREER STATS\n17\nApps\n1\nGoals\n3\nAssists\n0\nHat Tricks\n0\nTrophies\nTROPHY CABINET\n🏆\n0\nLeagues\n🏆\n0\nCups\n⭐\n0\nUCL\n🌍\n0\nWorld Cup\n🌐\n0\nContinental\n🏅\n0\nBallon d'Or\nLATEST EVENTS\n›\n📈 Stats improved during youth development (OVR 52)\n›\n📩 Professional contract offers received!\n17\nAGE"
+      }
+    },
+    {
+      "tag": "soccer-contract-native",
+      "at": "2026-10-01T22:22:44.955Z",
+      "value": {
+        "phase": "playing",
+        "age": 17,
+        "club": "Real Sociedad",
+        "wage": 7424,
+        "years": 5,
+        "buttons": [
+          "Back",
+          "Sign up to track your statsTrack stats",
+          "",
+          "🚪 Retire",
+          "🔄 New Career",
+          "Open your phoneBank, market, everything you can buy, and the card school",
+          "Full attributes183 cm · 78 kg · every number under the six",
+          "Next Season ",
+          "Retire",
+          "🏋️",
+          "📱3",
+          "Cookie choices",
+          "Light mode",
+          "Report a bug"
+        ],
+        "body": "🇪🇸\nAudit Test Player\n\nST · Age 17 · \n🇪🇸\nSpain\n\n🚪 Retire\n🔄 New Career\n52\nOVR\nPOT 73\n€0k\nNet Worth\n€7k/wk\nWage\n€0.6M\nValue\nCAREER TIMELINE\nA\n16y\n🇪🇸\nReal Sociedad Youth\nYouth Academy\nA\n17y\n🇪🇸\nReal Sociedad Youth\nYouth Academy\n✍️ Signed with Real Sociedad\n5 years at €7k/wk\nRE\n🇪🇸\nReal Sociedad\nLa Liga · 5yr left · €7k/wk · €0.6M\nST\n2026/27\n💰 FINANCES & LIFESTYLE\n€0k\nNet Worth\n🏚️ Humble\nLifestyle\n0\n📱 Followers\n€7k/wk\nWeekly Wage\nShow money in\n€ EUR\n£ GBP\n$ USD\nR$ BRL\nMX$ MXN\n¥ JPY\n₹ INR\nA$ AUD\n💸 Costs: €0.0M/yr\nMorale\n75\nPopularity\n20\n🏠 MY LIFE & MONEY\n0 things owned\n€0k\nin the account\n€0k\nsavings\n€0k\ninvested\nOpen your phone\nBank, market, everything you can buy, and the card school\nATTRIBUTES\nPace\nSprint Speed 55\n55\nShooting\nHeading 61\n60\nPassing\nVision 47\n47\nDribbling\nBall Control 52\n52\nDefending\nMarking 42\n42\nPhysical\nStrength 58\n57\nFull attributes\n183 cm · 78 kg · every number under the six\nCAREER STATS\n17\nApps\n1\nGoals\n3\nAssists\n0\nHat Tricks\n0\nTrophies\nTROPHY CABINET\n🏆\n0\nLeagues\n🏆\n0\nCups\n⭐\n0\nUCL\n🌍\n0\nWorld Cup\n🌐\n0\nContinental\n🏅\n0\nBallon d'Or\nLATEST EVENTS\n›\n✍️ Signed with Real Sociedad (5yr, €7k/wk)\n›\n🏠 One of our own! The Real Sociedad academy kid signs a first-team deal. The ultras already have a chant ready.\nNext Season\nRetire\n17\nAGE"
+      }
+    },
+    {
+      "tag": "soccer-first-pro-season",
+      "at": "2026-10-01T22:23:09.861Z",
+      "value": {
+        "phase": "newspaper",
+        "age": 18,
+        "seasons": 3,
+        "latest": {
+          "year": 2027,
+          "age": 18,
+          "club": "Real Sociedad",
+          "clubCountry": "Spain",
+          "clubTier": 3,
+          "apps": 15,
+          "leagueApps": 11,
+          "goals": 1,
+          "assists": 1,
+          "cleanSheets": 0,
+          "yellowCards": 4,
+          "redCards": 0,
+          "rating": 5.1,
+          "injury": null,
+          "injuryWeeks": 0,
+          "injurySevere": false,
+          "leagueTitle": false,
+          "domesticCup": false,
+          "championsLeague": false,
+          "worldCup": false,
+          "ballonDor": false,
+          "ballonDorRank": null,
+          "type": "playing",
+          "intApps": 0,
+          "intGoals": 0,
+          "intAssists": 0,
+          "intRating": 0,
+          "tournament": null,
+          "tournamentResult": null
+        },
+        "buttons": [
+          "Back",
+          "Sign up to track your statsTrack stats",
+          "",
+          "🚪 Retire",
+          "🔄 New Career",
+          "Continue to Season Summary →",
+          "Full attributes183 cm · 78 kg · every number under the six",
+          "🏋️",
+          "📱3",
+          "Cookie choices",
+          "Light mode",
+          "Report a bug"
+        ],
+        "body": "🇪🇸\nAudit Test Player\n\nST · Age 18 · \n🇪🇸\nSpain\n\n🚪 Retire\n🔄 New Career\n53\nOVR\nPOT 73\n€340k\nNet Worth\n€7k/wk\nWage\n€2M\nValue\nCAREER TIMELINE\nA\n16y\n🇪🇸\nReal Sociedad Youth\nYouth Academy\nA\n17y\n🇪🇸\nReal Sociedad Youth\nYouth Academy\n27\n18y\n🇪🇸\nReal Sociedad\n15A · 1G · 1As\n📰 IN THE HEADLINES\nSOCCER TIMES\n⚠️\nTHE COLUMN: Desmond Ashcombe Says The Argument About Audit Test Player Is Over\n\n1 goals and 1 assists in 15 games. Desmond Ashcombe has stopped asking questions about it. That is worse.\n\nTACKLE WEEKLY\n⚠️\nCRISIS AT REAL SOCIEDAD: Audit Test Player Dropped From Squad After Poor Run Of Form\n\nSources inside the dressing room confirm that Audit Test Player has been left out of the matchday squad following a disappointing spell. With just 15 appearances and a 5.1 average rating, questions are mounting.\n\nContinue to Season Summary →\nATTRIBUTES\nPace\nSprint Speed 57\n57\nShooting\nHeading 62\n61\nPassing\nVision 48\n48\nDribbling\nBall Control 53\n53\nDefending\nMarking 43\n43\nPhysical\nStrength 58\n57\nFull attributes\n183 cm · 78 kg · every number under the six\nCAREER STATS\n32\nApps\n2\nGoals\n4\nAssists\n0\nHat Tricks\n0\nTrophies\nTROPHY CABINET\n🏆\n0\nLeagues\n🏆\n0\nCups\n⭐\n0\nUCL\n🌍\n0\nWorld Cup\n🌐\n0\nContinental\n🏅\n0\nBallon d'Or\nLATEST EVENTS\n›\n⚽ Solid season at Real Sociedad\n18\nAGE"
+      }
+    },
+    {
+      "tag": "soccer-summary-native",
+      "at": "2026-10-01T22:24:25.067Z",
+      "value": {
+        "phase": "season_summary",
+        "age": 18,
+        "buttons": [
+          "Back",
+          "Sign up to track your statsTrack stats",
+          "",
+          "🚪 Retire",
+          "🔄 New Career",
+          "Continue →",
+          "Full attributes183 cm · 78 kg · every number under the six",
+          "🏋️",
+          "📱3",
+          "Cookie choices",
+          "Light mode",
+          "Report a bug"
+        ],
+        "body": "🇪🇸\nAudit Test Player\n\nST · Age 18 · \n🇪🇸\nSpain\n\n🚪 Retire\n🔄 New Career\n53\nOVR\nPOT 73\n€340k\nNet Worth\n€7k/wk\nWage\n€2M\nValue\nCAREER TIMELINE\nA\n16y\n🇪🇸\nReal Sociedad Youth\nYouth Academy\nA\n17y\n🇪🇸\nReal Sociedad Youth\nYouth Academy\n27\n18y\n🇪🇸\nReal Sociedad\n15A · 1G · 1As\nSeason Summary\n\n🇪🇸\nReal Sociedad · 2027/28\n\n15\nApps\n1\nGoals\n1\nAssists\nAvg Rating: 5.1\n🟨 4 🟥 0\n\n🛝 One goal this season, and you tear off toward the corner flag and slide across the grass on your knees.\n\nContinue →\nATTRIBUTES\nPace\nSprint Speed 57\n57\nShooting\nHeading 62\n61\nPassing\nVision 48\n48\nDribbling\nBall Control 53\n53\nDefending\nMarking 43\n43\nPhysical\nStrength 58\n57\nFull attributes\n183 cm · 78 kg · every number under the six\nCAREER STATS\n32\nApps\n2\nGoals\n4\nAssists\n0\nHat Tricks\n0\nTrophies\nTROPHY CABINET\n🏆\n0\nLeagues\n🏆\n0\nCups\n⭐\n0\nUCL\n🌍\n0\nWorld Cup\n🌐\n0\nContinental\n🏅\n0\nBallon d'Or\nLATEST EVENTS\n›\n⚽ Solid season at Real Sociedad\n18\nAGE"
+      }
+    },
+    {
+      "tag": "soccer-season-settle",
+      "at": "2026-10-01T22:24:51.588Z",
+      "value": {
+        "phase": "ballon_dor",
+        "age": 18,
+        "pending": [],
+        "buttons": [
+          "Back",
+          "Sign up to track your statsTrack stats",
+          "",
+          "🚪 Retire",
+          "🔄 New Career",
+          "Continue →",
+          "Full attributes183 cm · 78 kg · every number under the six",
+          "🏋️",
+          "📱3",
+          "Cookie choices",
+          "Light mode",
+          "Report a bug"
+        ],
+        "body": "🇪🇸\nAudit Test Player\n\nST · Age 18 · \n🇪🇸\nSpain\n\n🚪 Retire\n🔄 New Career\n53\nOVR\nPOT 73\n€340k\nNet Worth\n€7k/wk\nWage\n€2M\nValue\nCAREER TIMELINE\nA\n16y\n🇪🇸\nReal Sociedad Youth\nYouth Academy\nA\n17y\n🇪🇸\nReal Sociedad Youth\nYouth Academy\n27\n18y\n🇪🇸\nReal Sociedad\n15A · 1G · 1As\n⭐\nBallon d'Or 2027\n\nYou were not nominated this year\n\n🥇\n🇪🇬\nMohamed Salah\nRW · Liverpool\n88pts\n26G · UCL, League\n🥈\n🇳🇴\nErling Haaland\nST · Man City\n75pts\n33G · Cup\n🥉\n🇩🇪\nFlorian Wirtz\nCAM · Liverpool\n67pts\n14G · UCL, League\n4.\nHarry Kane\nST · Bayern Munich\n67pts\n34G · League, Cup\n5.\n🇩🇪\nJamal Musiala\nCAM · Bayern Munich\n63pts\n20G · League, Cup\n6.\n🇫🇷\nKylian Mbappé\nST · Real Madrid\n51pts\n43G\n7.\n🇪🇸\nRodri\nCDM · Man City\n47pts\n5G · Cup\n8.\n🇫🇷\nDésiré Doué\nLW · PSG\n45pts\n16G · Cup\n9.\nBukayo Saka\nRW · Arsenal\n44pts\n17G\n10.\n🇧🇷\nRaphinha\nRW · Barcelona\n44pts\n17G · Cup\nContinue →\nATTRIBUTES\nPace\nSprint Speed 57\n57\nShooting\nHeading 62\n61\nPassing\nVision 48\n48\nDribbling\nBall Control 53\n53\nDefending\nMarking 43\n43\nPhysical\nStrength 58\n57\nFull attributes\n183 cm · 78 kg · every number under the six\nCAREER STATS\n32\nApps\n2\nGoals\n4\nAssists\n0\nHat Tricks\n0\nTrophies\nTROPHY CABINET\n🏆\n0\nLeagues\n🏆\n0\nCups\n⭐\n0\nUCL\n🌍\n0\nWorld Cup\n🌐\n0\nContinental\n🏅\n0\nBallon d'Or\nLATEST EVENTS\n›\n⚽ Solid season at Real Sociedad\n18\nAGE"
+      }
+    },
+    {
+      "tag": "soccer-first-pro-complete-recovery",
+      "at": "2026-10-01T22:25:24.133Z",
+      "value": {
+        "age": 18,
+        "phase": "social_media_action",
+        "seasonRows": 3,
+        "held": true,
+        "cancelHeld": true,
+        "corruptCreator": 1,
+        "buttons": [
+          "Back",
+          "Sign up to track your statsTrack stats",
+          "",
+          "🎲 Surprise me",
+          "🧑Skin",
+          "💇Hair",
+          "🧔Beard",
+          "👟Boots",
+          "💍Extras",
+          "🎉Celebration"
+        ],
+        "summary": "🇪🇸\nAudit Test Player\n\nST · Age 18 · \n🇪🇸\nSpain\n\n🚪 Retire\n🔄 New Career\n53\nOVR\nPOT 73\n€340k\nNet Worth\n€7k/wk\nWage\n€2M\nValue\nCAREER TIMELINE\nA\n16y\n🇪🇸\nReal Sociedad Youth\nYouth Academy\nA\n17y\n🇪🇸\nReal Sociedad Youth\nYouth Academy\n27\n18y\n🇪🇸\nReal Sociedad\n15A · 1G · 1As\n📱\nSocial Media\n\nChoose one action this season to manage your online presence\n\n130k followers\nNext unlock: 🏪 Local Brand Deal at 1M followers\n🏪 1M\n👟 5M\n🌍 15M\n👕 30M\n🎮 50M\n🏋️\nPost training video\nShow off your skills in the gym\n+0.1-0.2M followers\n🎬\nGo viral with celebration clip\nPost an iconic goal celebration\n+0.5-2.0M followers\n🔥\nPost controversial opinion\nShare a hot take about football\n+1.0M followers\n⚡ Reputati"
+      }
+    },
+    {
+      "tag": "soccer-settle-restart-and-mlb-boot",
+      "at": "2026-10-01T22:26:19.795Z",
+      "value": {
+        "soccerActions": [
+          "Back",
+          "Sign up to track your statsTrack stats",
+          "",
+          "🚪 Retire",
+          "🔄 New Career",
+          "🏋️Post training videoShow off your skills in the gym+0.1-0.2M followers",
+          "🎬Go viral with celebration clipPost an iconic goal celebration+0.5-2.0M followers",
+          "🔥Post controversial opinionShare a hot take about football+1.0M followers⚡ Reputation -10",
+          "❤️Announce charity workHighlight your philanthropic efforts+0.2M followers⚡ Reputation +15",
+          "📸Post about personal lifeShare a glimpse into your life off the pitch+0.3M followers",
+          "😈Troll your rival on social mediaTake a shot at your rival online+0.8M followers⚡ Rivalry intensity increases",
+          "🧘Stay off social mediaFocus on football, no distractions⚡ +2 to all stats next season",
+          "Full attributes183 cm · 78 kg · every number under the six",
+          "🏋️",
+          "📱3",
+          "Cookie choices",
+          "Light mode",
+          "Report a bug"
+        ],
+        "mlbButtons": [
+          "Back",
+          "Sign up to track your statsTrack stats",
+          "",
+          "New York YankeesAmerican League",
+          "Boston Red SoxAmerican League",
+          "Toronto Blue JaysAmerican League",
+          "Tampa Bay RaysAmerican League",
+          "Baltimore OriolesAmerican League",
+          "Cleveland GuardiansAmerican League",
+          "Detroit TigersAmerican League",
+          "Kansas City RoyalsAmerican League",
+          "Minnesota TwinsAmerican League",
+          "Chicago White SoxAmerican League",
+          "Houston AstrosAmerican League",
+          "Seattle MarinersAmerican League",
+          "Texas RangersAmerican League",
+          "Los Angeles AngelsAmerican League",
+          "Sacramento AthleticsAmerican League",
+          "Atlanta BravesNational League",
+          "Philadelphia PhilliesNational League",
+          "New York MetsNational League",
+          "Miami MarlinsNational League",
+          "Washington NationalsNational League",
+          "Milwaukee BrewersNational League",
+          "Chicago CubsNational League",
+          "St. Louis CardinalsNational League",
+          "Cincinnati RedsNational League",
+          "Pittsburgh PiratesNational League",
+          "Los Angeles DodgersNational League",
+          "San Diego PadresNational League",
+          "San Francisco GiantsNational League",
+          "Arizona DiamondbacksNational League",
+          "Colorado RockiesNational League",
+          "Cookie choices",
+          "Light mode",
+          "Report a bug"
+        ],
+        "entry": "/assets/index-Bj5VrkKR.js"
+      }
+    },
+    {
+      "tag": "mlb-native-full-season",
+      "at": "2026-10-01T22:27:43.524Z",
+      "value": {
+        "roundCount": 26,
+        "phase": "hub",
+        "record": [
+          103,
+          59
+        ],
+        "titles": 0,
+        "seasonsPlayed": 0,
+        "buttons": [
+          "Back",
+          "Sign up to track your statsTrack stats",
+          "",
+          "Process, patience, all the safe wordsMeasuredNobody clips it. That is the point",
+          "Name the roster holes out loudCandidCandor plays upstairs, usually · a real gamble",
+          "Say the World Series is the only barBoldThe clip will outlive you, either way · a real gamble",
+          " Hub",
+          " Final stretch + October",
+          " Abandon franchise and restart",
+          "Cookie choices",
+          "Light mode",
+          "Report a bug"
+        ],
+        "body": "MLB Front Office\n\nReal 2026 rosters. Real tax-line pain. October does not forgive.\n\nLos Angeles Dodgers\n2026 · Round 27/27\nRecord 103-59\nStrength 93\nTax room $0.3M\n🏛️ OWNERSHIP\nTrust 60\n\nWin the World Series. Anything less is a failed season upstairs.\n\n📈 In the postseason picture. Hold it.\n\n🎙️ PRESS CONFERENCE\n\nThe introduction\n\nFirst day, full room. The Los Angeles Dodgers beat writers want to know what kind of front office this is going to be.\n\nProcess, patience, all the safe words\nMEASURED\nNobody clips it. That is the point\nName the roster holes out loud\nCANDID\nCandor plays upstairs, usually · a real gamble\nSay the World Series is the only bar\nBOLD\nThe clip will outlive you, either way · a real gamble\nHub\nPlay\n\nRound 26: you went 5-4.\n\n🚑 Tarik Skubal hits the IL for 3 rounds.\n\nEach round simulates a week and a half of baseball across the league.\n\nFinal stretch + October\n\nDivision winners seed 1-3, wild cards 4-6. Top two seeds skip the best-of-3 Wild Card round.\n\nAbandon franchise and restart\nMLB Front Office: Baseball GM Simulator\n\nTake over a real MLB club with its actual 2026 roster, every player rated off real 2025 stats pulled from the league's own data. Manage the payroll against the luxury tax line, DFA dead weight, sign free agents, swing trades the AI weighs on age, position and rating, then grind the 162 in simulated stretches. Win your division for a bye, survive the best-of-3 Wild Card round, the Division Series, the LCS and the World Series. Draft prospects whose scouting grades can lie, ride aging curves and retirements, and stack rings across unlimited saved seasons.\n\nRunning a front office sounds fun until the payroll page loads. This is a full GM sim of the real 30 team league, every player rated off real 2025 stats.\n\nThe problems are real: a tax line that will not move, aging veterans, scouts who lie, and 29 rivals that never stop churning.\n\nHow to play MLB Front Office, a free MLB general manager simulation\nInheriting a franchise's lineup and bullpen\nChoose a franchise and inherit its actual lineup, rotation and bullpen.\nReading the ownership mandate each offseason\nRead the ownership mandate: a stacked roster is told to win the World Series, a mid one to make October, a thin one to hit an honest win number. It resets every offseason.\nWORKING TRADES, FREE AGENTS AND DFAS\nWork the roster: DFA dead weight, sign free agents, and take trades to the phone, where the other GM counters with pick demands and lesser returns instead of a flat yes or no.\nPlaying the season in weekly stretches\nPlay the 162 in stretches: each round simulates about a week and a half of baseball, 27 rounds total, with a live read on whether you are on pace.\nM",
+        "errors": []
+      }
+    },
+    {
+      "tag": "mlb-final-round-and-refresh",
+      "at": "2026-10-01T22:29:02.424Z",
+      "value": {
+        "phase": "recap",
+        "record": [
+          103,
+          59
+        ],
+        "champion": "LAD",
+        "championEntries": 1,
+        "seasonsPlayed": 1,
+        "titles": 1,
+        "refreshRawHeld": true,
+        "buttons": [
+          "Back",
+          "Sign up to track your statsTrack stats",
+          "",
+          " Go to the draft",
+          "Share result",
+          "Copy challenge",
+          "📋 Copy Score Card",
+          "🖼️ Save Image",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "Cookie choices",
+          "Light mode",
+          "Report a bug"
+        ],
+        "body": "MLB Front Office\n\nReal 2026 rosters. Real tax-line pain. October does not forgive.\n\nLos Angeles Dodgers win the 2026 World Series\n\nYour roster. Your rings. Raise the trophy.\n\n🏆 A parade. Upstairs belongs to you for a while.\n\nTrust upstairs: 100 of 100.\n\nWorld Series: Los Angeles Dodgers beat Detroit Tigers 4-0\n\nAL Wild Card 3v6: Boston Red Sox 2-1\n\nAL Wild Card 4v5: Detroit Tigers 2-1\n\nALDS: Detroit Tigers 3-0\n\nALDS: Boston Red Sox 3-1\n\nALCS: Detroit Tigers 4-3\n\nNL Wild Card 3v6: Milwaukee Brewers 2-1\n\nNL Wild Card 4v5: Philadelphia Phillies 2-0\n\nNLDS: Los Angeles Dodgers 3-0\n\nNLDS: Milwaukee Brewers 3-1\n\nNLCS: Los Angeles Dodgers 4-0\n\nRings 1\nSeasons 1\nGo to the draft\n🏢\nMLB Front Office\nOct 1, 2026\nRESULT\n1 rings in 1 seasons\nDoUKnowBall\ndouknowball.com/mlb-front-office\nShare result\nCopy challenge\n📋 Copy Score Card\n🖼️ Save Image\n\nSHARE YOUR RESULT\n\nMLB Front Office: Baseball GM Simulator\n\nTake over a real MLB club with its actual 2026 roster, every player rated off real 2025 stats pulled from the league's own data. Manage the payroll against the luxury tax line, DFA dead weight, sign free agents, swing trades the AI weighs on age, position and rating, then grind the 162 in simulated stretches. Win your division for a bye, survive the best-of-3 Wild Card round, the Division Series, the LCS and the World Series. Draft prospects whose scouting grades can lie, ride aging curves and retirements, and stack rings across unlimited saved seasons.\n\nRunning a front office sounds fun until the payroll page loads. This is a full GM sim of the real 30 team league, every player rated off real 2025 stats.\n\nThe problems are real: a tax line that will not move, aging veterans, scouts who lie, and 29 rivals that never stop churning.\n\nHow to play MLB Front Office, a free MLB general manager simulation\nInheriting a franchise's lineup and bullpen\nChoose a franchise and inherit its actual lineup, rotation and bullpen.\nReading the ownership mandate each offseason\nRead the ownership mandate: a stacked roster is told to win the World Series, a mid one to make October, a thin one to hit an honest win number. It resets every offseason.\nWORKING TRADES, FREE AGENTS AND DFAS\nWork the roster: DFA dead weight, sign free agents, and take trades to the phone, where the other GM counters with pick demands and lesser returns instead of a flat yes or no.\nPlaying the season in weekly stretch"
+      }
+    },
+    {
+      "tag": "nba-game-count-receipt-and-mlb-draft",
+      "at": "2026-10-01T22:30:24.137Z",
+      "value": {
+        "nbaTotals": [
+          {
+            "team": "DEN",
+            "wins": 46,
+            "losses": 37,
+            "games": 83
+          },
+          {
+            "team": "OKC",
+            "wins": 50,
+            "losses": 41,
+            "games": 91
+          },
+          {
+            "team": "BOS",
+            "wins": 57,
+            "losses": 26,
+            "games": 83
+          },
+          {
+            "team": "NYK",
+            "wins": 45,
+            "losses": 26,
+            "games": 71
+          },
+          {
+            "team": "LAL",
+            "wins": 39,
+            "losses": 39,
+            "games": 78
+          },
+          {
+            "team": "MIL",
+            "wins": 41,
+            "losses": 39,
+            "games": 80
+          },
+          {
+            "team": "MIN",
+            "wins": 39,
+            "losses": 36,
+            "games": 75
+          },
+          {
+            "team": "HOU",
+            "wins": 31,
+            "losses": 36,
+            "games": 67
+          },
+          {
+            "team": "CLE",
+            "wins": 46,
+            "losses": 32,
+            "games": 78
+          },
+          {
+            "team": "IND",
+            "wins": 50,
+            "losses": 34,
+            "games": 84
+          },
+          {
+            "team": "GSW",
+            "wins": 46,
+            "losses": 38,
+            "games": 84
+          },
+          {
+            "team": "DAL",
+            "wins": 44,
+            "losses": 29,
+            "games": 73
+          },
+          {
+            "team": "MEM",
+            "wins": 40,
+            "losses": 51,
+            "games": 91
+          },
+          {
+            "team": "PHI",
+            "wins": 57,
+            "losses": 36,
+            "games": 93
+          },
+          {
+            "team": "MIA",
+            "wins": 30,
+            "losses": 58,
+            "games": 88
+          },
+          {
+            "team": "LAC",
+            "wins": 53,
+            "losses": 32,
+            "games": 85
+          },
+          {
+            "team": "PHX",
+            "wins": 40,
+            "losses": 51,
+            "games": 91
+          },
+          {
+            "team": "SAC",
+            "wins": 44,
+            "losses": 40,
+            "games": 84
+          },
+          {
+            "team": "ATL",
+            "wins": 42,
+            "losses": 43,
+            "games": 85
+          },
+          {
+            "team": "NOP",
+            "wins": 32,
+            "losses": 32,
+            "games": 64
+          },
+          {
+            "team": "TOR",
+            "wins": 32,
+            "losses": 45,
+            "games": 77
+          },
+          {
+            "team": "SAS",
+            "wins": 44,
+            "losses": 40,
+            "games": 84
+          },
+          {
+            "team": "ORL",
+            "wins": 33,
+            "losses": 47,
+            "games": 80
+          },
+          {
+            "team": "UTA",
+            "wins": 32,
+            "losses": 41,
+            "games": 73
+          },
+          {
+            "team": "CHA",
+            "wins": 31,
+            "losses": 39,
+            "games": 70
+          },
+          {
+            "team": "DET",
+            "wins": 32,
+            "losses": 55,
+            "games": 87
+          },
+          {
+            "team": "BKN",
+            "wins": 24,
+            "losses": 52,
+            "games": 76
+          },
+          {
+            "team": "WAS",
+            "wins": 33,
+            "losses": 51,
+            "games": 84
+          },
+          {
+            "team": "POR",
+            "wins": 36,
+            "losses": 34,
+            "games": 70
+          },
+          {
+            "team": "CHI",
+            "wins": 34,
+            "losses": 43,
+            "games": 77
+          }
+        ],
+        "mlbDraft": [
+          {
+            "picked": "Brooks Bingham",
+            "picksLeft": 1,
+            "season": 2026,
+            "round": 27,
+            "roster": 14
+          },
+          {
+            "picked": "Tomas Prieto",
+            "picksLeft": 0,
+            "season": 2027,
+            "round": 1,
+            "roster": 15
+          }
+        ],
+        "buttons": [
+          "Back",
+          "Sign up to track your statsTrack stats",
+          "",
+          "👔Roster15 under contractShohei Ohtani leads them at 96",
+          "💼Free agency-$2.5M overTomas Whitfield wants $5M, out of reach",
+          "🤝Trades-$2.5M to shedMove salary or the owner will",
+          "🏟️PlayRound 1 of 270-0 with 27 rounds to play",
+          "📊Standings#1 in the NLTop seed as it stands",
+          " Abandon franchise and restart",
+          "Cookie choices",
+          "Light mode",
+          "Report a bug"
+        ],
+        "body": "MLB Front Office\n\nReal 2026 rosters. Real tax-line pain. October does not forgive.\n\nLos Angeles Dodgers\n2027 · Round 1/27\nRecord 0-0\nStrength 92\nTax room $-2.5M\n🏛️ OWNERSHIP\nTrust 100\n\nWin the World Series. Anything less is a failed season upstairs.\n\n👔\nROSTER\n15 under contract\nShohei Ohtani leads them at 96\n💼\nFREE AGENCY\n-$2.5M over\nTomas Whitfield wants $5M, out of reach\n🤝\nTRADES\n-$2.5M to shed\nMove salary or the owner will\n🏟️\nPLAY\nRound 1 of 27\n0-0 with 27 rounds to play\n📊\nSTANDINGS\n#1 in the NL\nTop seed as it stands\n\n🏛️ The new mandate: Win the World Series. Anything less is a failed season upstairs.\n\n👋 Merrill Kelly retires.\n\n👋 Chris Bassitt retires.\n\n👋 Jose Quintana retires.\n\n👋 Justin Verlander retires.\n\nAbandon franchise and restart\nMLB Front Office: Baseball GM Simulator\n\nTake over a real MLB club with its actual 2026 roster, every player rated off real 2025 stats pulle"
+      }
+    },
+    {
+      "tag": "nba-clean-full-season-replay",
+      "at": "2026-10-01T22:31:32.520Z",
+      "value": {
+        "nativeRounds": 20,
+        "entry": "/assets/index-4ldJKi6e.js",
+        "phase": "recap",
+        "regularRecord": [
+          43,
+          37
+        ],
+        "minGames": 68,
+        "maxGames": 94,
+        "body": "NBA Front Office\n\nReal rosters. Real cap pain. The play-in is waiting for your mistakes.\n\nBoston Celtics win the 2026 title\n\nYour roster. Your banner. Raise it.\n\n🏆 A parade. Upstairs belongs to you for a while.\n\nTrust upstairs: 96 of 100.\n\n💸 Luxury tax $24.8M: your $243.1M payroll sat $16.4M over the $226.7M line. Ownership wrote the cheque and trust fell 4. 5 clubs paid tax this season, the biggest bill $189.6M (Denver Nuggets).\n\nFinals: Boston Celtics beat Denver Nuggets 4-1\n\nEast Play-In 7v8: Atlanta Hawks 1-0\n\nEast Play-In 9v10: Washington Wizards 1-0\n\nEast Play-In final: Washington Wizards 1-0\n\nEast R1: New York Knicks 4-0\n\nEast R1: Boston Celtics 4-0\n\nEast R1: Indiana Pacers 4-3\n\nEast R1: Atlanta Hawks 4-3\n\nEast Semis: Boston Celtics 4-0\n\nEast Semis: Indiana Pacers 4-2\n\nEast Finals: Boston Celtics 4-1\n\nWest Play-In 7v8: Utah Jazz 1-0\n\nWest Play-In 9v10: San Antonio Spurs 1-0\n\nWest Play-In final: San Antonio Spurs 1-0\n\nWest R1: San Antonio Spurs 4-0\n\nWest R1: Denver Nuggets 4-1\n\nWest R1: Los Angeles Lakers 4-3\n\nWest R1: Utah Jazz 4-3\n\nWest Semis: Denver Nuggets 4-3\n\nWest Semis: Los Angeles Lakers 4-3\n\nWest Finals: Denver Nuggets 4-3\n\nTitles 1\nSeasons 1\n\n🎙️ PRESS CONFERENCE\n\nThe podium\n\nConfetti still on the floor and the room wants the architect. Every question is the same question: was this the plan, and does it hold?\n\nCredit the coaches and the room\nMEASURED\nClassy, forgettable, safe\nCool the dynasty talk yourself\nCANDID\nNext season breathes easier for it · next ask softens\nPromise the repeat, on the record\nBOLD\nUpstairs loves it or owns you with it · a real gamble · next ask gets HARDER\nNBA Front Office: Basketball GM Simulator\n\nTake over a real NBA franchise with its actual curated roster. Manage the cap, waive and sign, propose trades the AI weighs on age and rating, play the season in stretches, survive the modern play-in for seeds 7 to 10, win four best-of-seven rounds, then hit a draft where the scouting grades can lie. Aging, breakouts, retirements and rising caps across unlimited saved seasons.\n\nRunning an NBA franchise looks easy from the couch. This sim hands you a real rotation, a cap sheet and 29 rivals so you can find out.\n\nWaive the deadweight, sign the bargains, swing trades the computer actually weighs, and steer the season toward the",
+        "errors": []
+      }
+    },
+    {
+      "tag": "nba-unequal-schedule-finding",
+      "at": "2026-10-01T22:32:58.731Z",
+      "value": {
+        "nbaLiveRange": [
+          64,
+          93
+        ],
+        "nbaCleanRange": [
+          68,
+          94
+        ],
+        "mlbRange": [
+          148,
+          175
+        ]
+      }
+    },
+    {
+      "tag": "clean-nba-trade-depth-and-restart",
+      "at": "2026-10-01T22:33:37.893Z",
+      "value": {
+        "ownCount": 10,
+        "missing": [
+          "Jordan Walsh",
+          "Luka Garza"
+        ],
+        "sizes": [
+          {
+            "label": "Jayson Tatum (F)96",
+            "height": 26.5,
+            "width": 153
+          },
+          {
+            "label": "Jayson Tatum (F)96",
+            "height": 26.5,
+            "width": 162
+          }
+        ],
+        "saveAbsent": true,
+        "picker": 1
+      }
+    },
+    {
+      "tag": "soccer-clean-restore-corrupt-repro",
+      "at": "2026-10-01T22:35:13.336Z",
+      "value": {
+        "broke": 0,
+        "brokeAgain": 1,
+        "corruptBytesHeld": true,
+        "text": "Skip to main content",
+        "phaseBefore": "social_media_action",
+        "age": 18,
+        "errors": []
+      }
+    },
+    {
+      "tag": "soccer-corrupt-save-confirm",
+      "at": "2026-10-01T22:36:35.291Z",
+      "value": {
+        "soccerRecovery": {
+          "broke": true,
+          "brokeAgain": true,
+          "corruptBytesHeld": true,
+          "text": "Skip to main content\n😬\nThis page broke\n\nSomething in this game went wrong and it stopped drawing. It is our fault, not anything you did.\n\nIf you had a save going, it is still on this device. It is kept in your browser, and nothing here has touched it.\n\nBack to the games\nTry this page again\n\nTelling us what you were doing helps a lot. The report a bug button is at the bottom of this page.\n\nAll team names, competition names, logos and trademarks are property of their respective owners. DoUKnowBall is an independent fan project and is not affiliated with, endorsed by or sponsored by the NFL, NBA, UFC, NHL, MLB, FIFA, UEFA, the Premier League, the English Football League, LaLiga, Serie A, the Bundesliga, Ligue 1, the Eredivisie, MLS, the Saudi Pro League, the IOC, the NCAA, F1, the PGA Tour, NASCAR, the ATP or the WTA. Player names and statistics are used for identification and commentary only. © 2026 DoUKnowBall\n\nSoccer\n·\nNBA\n·\nNHL\n·\nNFL\n·\nMLB\n·\nCollege\nSearch Games\n·\nAbout\n·\nContact\n·\nWhat's New\n·\nRecord Books\n·\nLeaderboard\n·\nPrivacy Policy\n·\nTerms of Service\n·\nAccessibility\n·\nCookie choices\n·\nLight mode\n·\nReport a bug"
+        },
+        "mlbButtons": [
+          "Back",
+          "Sign up to track your statsTrack stats",
+          "",
+          " Hub",
+          "DFA, $11.4M dead",
+          "DFA, $10.9M dead",
+          "DFA, $10.9M dead",
+          "DFA, $10.1M dead",
+          "DFA, $9.7M dead",
+          "DFA, $9.7M dead",
+          "DFA, $10.1M dead",
+          "DFA, $10.1M dead",
+          "DFA, $10.5M dead",
+          "DFA, $2.5M dead",
+          "DFA, $7.6M dead",
+          "DFA, $8M dead",
+          "DFA, $7.2M dead",
+          "DFA, $2.4M dead",
+          "DFA, $5.9M dead",
+          " Abandon franchise and restart",
+          "Cookie choices",
+          "Light mode",
+          "Report a bug"
+        ],
+        "body": "MLB Front Office\n\nReal 2026 rosters. Real tax-line pain. October does not forgive.\n\nLos Angeles Dodgers\n2027 · Round 1/27\nRecord 0-0\nStrength 92\nTax room $-2.5M\n🏛️ OWNERSHIP\nTrust 100\n\nWin the World Series. Anything less is a failed season upstairs.\n\nHub\nRoster\n\nPayroll $253.5M against the $251M tax line\n\nCap figures as of September 2026\n\nShohei Ohtani\nDH · 33y · $22.7M x1\n96\nDFA, $11.4M dead\nWill Smith\nC · 32y · $21.8M x1\n96\nDFA, $10.9M dead\nTarik Skubal\nSP · 30y · $21.8M x2\n96\nDFA, $10.9M dead\nKris Bubic\nSP · 29y · $20.2M x2\n94\nDFA, $10.1M dead\nKyle Tucker\nRF · 30y · $19.3M x2\n93\nDFA, $9.7M dead\nYoshinobu Yamamoto\nSP · 28y · $19.3M x2\n93\nDFA, $9.7M dead\nEdwin Díaz\nCL · 33y · $20.2M x1\n93\nDFA, $10.1M dead\nMax Muncy\n3B · 36y · $20.2M x1\n92\nDFA, $10.1M dead\nFreddie Freeman\n1B · 37y · $21M x1\n91\nDFA, $10.5M dead\nBrooks Bingham\nSP · 22y · $5M x3\n89\nDFA, $2.5M dead\nDalton Rushing\nC · 26y · $15.1M x3\n88\nDFA, $7.6M dead\nBlake Snell\nRP · 34y · $16M x1\n88\nDFA, $8M dead\nAndy Pages\nCF · 26y · $14.3M x3\n87\nDFA, $7.2M dead\nTomas Prieto\n1B · 19y · $4.8M x3\n86\nDFA, $2.4M dead\nAlex Call\nLF · 32y · $11.8M x1\n84\nDFA, $5.9M dead\nAbandon franchise and restart\nMLB Front Office: Baseball GM Simulator\n\nTake over a real MLB club with its actual 2026 roster, every player rated off real 2025 stats pulled from the league's own data. Manage the payroll against the luxury tax line, DFA dead weight, sign free agents, swing trades the AI weighs on age, position and rating, then grind the 162 in simulated stretches. Win your division for a bye, survive the best-of-3 Wild Card round, the Division Series, the LCS and the World Series. Draft prospects whose scouting grades can lie, ride aging curves and retirements, and stack rings across unlimited saved seasons.\n\nRunning a front office sounds fun until the payroll page loads. This is a full GM sim of the real 30 team league, every player rated off real 2025 stats.\n\nThe problems are real: a tax line that will not move, aging veterans, scouts who lie, and 29 rivals that never stop churning.\n\nHow to play MLB Front Office, a free MLB general manager simulation\nInheriting a franchise's lineup and bullpen\nChoose a franchise and inherit its actual lineup, rotation and bullpen.\nReading the ownership mandate each offseason\nRead the ownership mandate:"
+      }
+    },
+    {
+      "tag": "mlb-native-cut-floor",
+      "at": "2026-10-01T22:37:43.756Z",
+      "value": {
+        "cuts": [
+          {
+            "name": "Shohei Ohtani",
+            "id": "m1w5awbaoh62vf-183",
+            "salary": 22.7,
+            "years": 1,
+            "ownCount": 14,
+            "dead": {
+              "playerId": "m1w5awbaoh62vf-183",
+              "name": "Shohei Ohtani",
+              "amount": 11.4,
+              "seasonsLeft": 1
+            },
+            "faCount": 1
+          },
+          {
+            "name": "Will Smith",
+            "id": "m1w5awbaoh62vf-184",
+            "salary": 21.8,
+            "years": 1,
+            "ownCount": 13,
+            "dead": {
+              "playerId": "m1w5awbaoh62vf-184",
+              "name": "Will Smith",
+              "amount": 10.9,
+              "seasonsLeft": 1
+            },
+            "faCount": 1
+          },
+          {
+            "name": "Tarik Skubal",
+            "id": "m1w5awbaoh62vf-191",
+            "salary": 21.8,
+            "years": 2,
+            "ownCount": 12,
+            "dead": {
+              "playerId": "m1w5awbaoh62vf-191",
+              "name": "Tarik Skubal",
+              "amount": 10.9,
+              "seasonsLeft": 2
+            },
+            "faCount": 1
+          },
+          {
+            "name": "Kris Bubic",
+            "id": "m1w5awbaoh62vf-192",
+            "salary": 20.2,
+            "years": 2,
+            "ownCount": 11,
+            "dead": {
+              "playerId": "m1w5awbaoh62vf-192",
+              "name": "Kris Bubic",
+              "amount": 10.1,
+              "seasonsLeft": 2
+            },
+            "faCount": 1
+          },
+          {
+            "name": "Kyle Tucker",
+            "id": "m1w5awbaoh62vf-187",
+            "salary": 19.3,
+            "years": 2,
+            "ownCount": 10,
+            "dead": {
+              "playerId": "m1w5awbaoh62vf-187",
+              "name": "Kyle Tucker",
+              "amount": 9.7,
+              "seasonsLeft": 2
+            },
+            "faCount": 1
+          },
+          {
+            "name": "Yoshinobu Yamamoto",
+            "id": "m1w5awbaoh62vf-193",
+            "salary": 19.3,
+            "years": 2,
+            "ownCount": 9,
+            "dead": {
+              "playerId": "m1w5awbaoh62vf-193",
+              "name": "Yoshinobu Yamamoto",
+              "amount": 9.7,
+              "seasonsLeft": 2
+            },
+            "faCount": 1
+          }
+        ],
+        "allDfaDisabled": true,
+        "blockedSaveHeld": true,
+        "payroll": 191.10000000000002,
+        "cap": 251,
+        "body": "MLB Front Office\n\nReal 2026 rosters. Real tax-line pain. October does not forgive.\n\nLos Angeles Dodgers\n2027 · Round 1/27\nRecord 0-0\nStrength 89\nTax room $59.9M\n🏛️ OWNERSHIP\nTrust 100\n\nWin the World Series. Anything less is a failed season upstairs.\n\nHub\nRoster\n\nPayroll $191.1M against the $251M tax line · dead money $62.7M\n\nCap figures as of September 2026\n\nYour roster is at the minimum of 9, so nobody else can go.\n\nEdwin Díaz\nCL · 33y · $20.2M x1\n93\nDFA, $10.1M dead\nMax Muncy\n3B · 36y · $20.2M x1\n92\nDFA, $10.1M dead\nFreddie Freeman\n1B · 37y · $21M x1\n91\nDFA, $10.5M dead\nBrooks Bingham\nSP · 22y · $5M x3\n89\nDFA, $2.5M dead\nDalton Rushing\nC · 26y · $15.1M x3\n88\nDFA, $7.6M dead\nBlake Snell\nRP · 34y · $16M x1\n88\nDFA, $8M dead\nAndy Pages\nCF · 26y · $14.3M x3\n87\nDFA, $7.2M dead\nTomas Prieto\n1B · 19y · $4.8M x3\n86\nDFA, $2.4M dead\nAlex Call\nLF · 32y · $11.8M x1\n84\nDFA, $5.9M dead\nAbandon franchise and restart\nMLB Front Office: Baseball GM Simulator\n\nTake over a real MLB club with its actual "
+      }
+    },
+    {
+      "tag": "mlb-native-sign-boundaries",
+      "at": "2026-10-01T22:39:14.365Z",
+      "value": {
+        "cutDisabled": true,
+        "releasedHeld": true,
+        "signed": [
+          {
+            "name": "Tomas Whitfield",
+            "id": "m1w5awbaoh62vf-400",
+            "salary": 5,
+            "before": 9,
+            "after": 10,
+            "idCopies": 1
+          }
+        ],
+        "allSignDisabled": true,
+        "blockedHeld": true,
+        "payroll": 196.10000000000002,
+        "cap": 251,
+        "roster": 10,
+        "reloadHeld": true,
+        "errors": []
+      }
+    },
+    {
+      "tag": "mlb-fa-disabled-diagnosis",
+      "at": "2026-10-01T22:42:57.571Z",
+      "driverError": "Cannot read properties of undefined (reading 'find')"
+    },
+    {
+      "tag": "mlb-fa-disabled-diagnosis-shape",
+      "at": "2026-10-01T22:43:20.318Z",
+      "value": {
+        "keys": [
+          "league",
+          "myTeam",
+          "phase",
+          "titles",
+          "seasonsPlayed",
+          "draftClass",
+          "picksLeft",
+          "mandate",
+          "trust",
+          "fired",
+          "pressTilt",
+          "seasonTradeLine",
+          "postseason"
+        ],
+        "leagueKeys": [
+          "season",
+          "cap",
+          "teams",
+          "freeAgents",
+          "round",
+          "champions"
+        ],
+        "team": "LAD",
+        "own": {
+          "size": 10,
+          "releasedThisSeason": [
+            "m1w5awbaoh62vf-183",
+            "m1w5awbaoh62vf-184",
+            "m1w5awbaoh62vf-191",
+            "m1w5awbaoh62vf-192",
+            "m1w5awbaoh62vf-187",
+            "m1w5awbaoh62vf-193"
+          ]
+        },
+        "fa": [
+          {
+            "id": "m1w5awbaoh62vf-183",
+            "name": "Shohei Ohtani",
+            "salary": 22.7,
+            "ovr": 96
+          },
+          {
+            "id": "m1w5awbaoh62vf-184",
+            "name": "Will Smith",
+            "salary": 21.8,
+            "ovr": 96
+          },
+          {
+            "id": "m1w5awbaoh62vf-191",
+            "name": "Tarik Skubal",
+            "salary": 21.8,
+            "ovr": 96
+          },
+          {
+            "id": "m1w5awbaoh62vf-192",
+            "name": "Kris Bubic",
+            "salary": 20.2,
+            "ovr": 94
+          },
+          {
+            "id": "m1w5awbaoh62vf-187",
+            "name": "Kyle Tucker",
+            "salary": 19.3,
+            "ovr": 93
+          },
+          {
+            "id": "m1w5awbaoh62vf-193",
+            "name": "Yoshinobu Yamamoto",
+            "salary": 19.3,
+            "ovr": 93
+          }
+        ],
+        "rows": [],
+        "main": "ecord 0-0\nStrength 88\nTax room $54.9M\n🏛️ OWNERSHIP\nTrust 100\n\nWin the World Series. Anything less is a failed season upstairs.\n\n👔\nROSTER\n10 under contract\nEdwin Díaz leads them at 93\n💼\nFREE AGENCY\n$55M of room\nThe market is empty\n🤝\nTRADES\n10 to offer\nYour biggest chip is Edwin Díaz\n🏟️\nPLAY\nRound 1 of 27\n0-0 with 27 rounds to play\n📊\nSTANDINGS\n#4 in the NL\nInside the top 6 with 27 to play\nAbandon franchise and restart\nMLB Front Office: Baseball GM Simulator\n\nTake over a real MLB club with its actual 2026 roster, every player rated off real 2025 stats pulled from the league's own data. Manage the payroll against the luxury tax line, DFA dead weight, sign free agents, swing trades the AI weighs on age, position and rating, then grind the 162 in simulated stretches. Win your division for a bye, survive the best-of-3 Wild Card round, the Division Series, the LCS and the World Series. Draft prospects whose scouting grades can lie, ride aging curves and retirements, and stack rings across unlimited saved seasons.\n\nRunning a front office sounds fun until the payroll page loads. This is a full GM sim of the real 30 team league, every player rated off real 2025 stats.\n\nThe problems are real: a tax line that will not move, aging veterans, scouts who lie, and 29 rivals that never stop churning.\n\nHow to play MLB Front Office, a free MLB general manager simulation\nInheriting a franchise's lineup and bullpen\nChoose a franchise and inherit its actual lineup, rotation and bullpen.\nReading the ownership mandate each offseason\nRead the ownership mandate: a stacked roster is told to win the World Series, a mid one to make October, a thin one to hit an honest win number. It resets every offseason.\nWORKING TRADES, FREE AGENTS AND DFAS\nWork the roster: DFA dead weight, sign free agents, and take trades to the phone, where the other GM counters with pick demands and lesser returns instead of a flat yes or no.\nPlaying the season in weekly stretches\nPlay the 162 in stretches: each round simulates about a week and a half of baseball, 27 rounds total, with a live read on whether you are on pace.\nMaking October and seeding the bracket\nMake October. Division winners seed 1 to 3, three wild cards follow, and the top two seeds skip the Wild Card round.\nMLB Front Office rules for the tax line, trades and trust\nThe tax line and its hard cap\nThe tax line starts at 244 million, matching the real 2026 threshold, and it is a hard cap, rising 3 percent a season.\nHow the playoff format is seeded\nPlayoffs use the real format: best-of-3 Wild Card, best-of-5 Division Series, best-of-7 LCS and World Series.\nWhat trades weigh most\nTrades weigh rating, age and position, with premiums on aces, shortstops and catchers.\nDRAFT PICKS AND SCOUTING ERROR\nYou hold 2 picks a year, and scout grades carry error. True ratings show only after you pick.\nInjuries and automatic franchise saves\nInjuries cost one to four rounds on the IL, and your franchise saves automatically.\nDesignating a player and the dead money\nA DFA is not free. Half the man's salary stays on this season's payroll as dead money, a quarter lands on next season's if he had years left, and you cannot sign him back until the offseason.\nTrust upstairs and getting fired\nTrust upstairs runs 0 to 100: beat the mandate and it climbs, miss it and it falls, a ring fixes almost anything, and at zero you are fired and the save ends.\nMLB Front Office walkthrough: a division title, then a scouting miss\nTrading an aging ace for a young shortstop\n\nYou take a club 8 million under the line. A DFA clears a bloated deal, the savings sign a 79 rated reliever, and your aging ace becomes a 26 year old shortstop.\n\nWinning the division, losing the LCS in six\n\nYou win the division, take the bye, and still lose the LCS in six. Next spring your 84 grade pick arrives as an 80. Scouts, man.\n\nMLB Front Office tips for payroll, age and October depth\nTreating payroll room as a roster spot\nPayroll room is a roster spot. One dumped albatross often buys two useful arms.\nWhy age drives value\nAge drives value. A decent 24 year old can outpull a 33 year old star, so sell veterans early.\nSpending on lineup first, then pitching\nThe sim weighs your lineup most, then rotation, then bullpen. Spend in that order.\nBuilding for repeat October trips\nOctober is a variance machine, so build for repeat trips, not one all-in year.\nMLB Front Office FAQ: contracts, the tax line and trades\nAre the contracts real?\n\nRosters and ratings come from real data, but every salary, contract and transaction in the sim is fictional.\n\nCan I go over the tax line?\n\nNo. Moves that break the line do not go through. That squeeze is most of the job.\n\nWhy did my trade get rejected?\n\nThe AI wants a premium on rating, age and position. Add one of your 2 picks, or offer someone younger.\n\nCan I get fired?\n\nYes. Ownership grades the mandate every season and tracks trust from 0 to 100. A 70 win season on a win-the-World-Series payroll costs real trust, and at zero the save ends and you take another job.\n\nIs MLB Front Office free to play?\n\nYes. MLB Front Office is free to play on DoUKnowBall, right in your browser. No download and no signup needed.\n\nMore games to play\n🕵️\nMissing Nine\nName the missing starter from a famous World Series batting order\n⚾\nMLB Connections\nGroup baseball players\n🏆\n162-0 MLB Perfect Season\nSpin, draft across eras, chase 116 wins\n🌟\nMLB My Career\nDraft day to Cooperstown. 11 positions, 100+ crossroads, and a camera in center field\n🌟\nNHL My Career\nDraft day to the rafters. 5 positions, 100+ crossroads, and an envelope on the bench\n🤝\nTeammates or Not?\nWere they ever teammates?\n\nMLB postseason format history and the rules this game uses\n\nPLAY NEXT\n\n🏁\nGuess The Driver\n\nGuess the mystery NASCAR driver from clues\n\nPlay Now\n🎫\nSports Bingo\n\nOpen packs of real players on a timer, mark the squares they satisfy\n\nPlay Now\n📊\nAFL Higher or Lower\n\nWhich legend kicked more career goals?\n\nPlay Now\n\nNext puzzle in 05:16:41\n\nSee all games →"
+      }
+    },
+    {
+      "tag": "mlb-state-and-overbudget-prep",
+      "at": "2026-10-01T22:43:36.852Z",
+      "value": {
+        "url": "https://douknowball.com/mlb-front-office",
+        "keys": [
+          "dir",
+          "nbaKey",
+          "nbaStart",
+          "nbaRound2Raw",
+          "nbaEnd",
+          "nbaEndRaw",
+          "nbaDraftBefore",
+          "nbaNewYearRaw",
+          "nbaClean2027",
+          "nbaTradeMissing",
+          "nbaAfterTradeRaw",
+          "soccerKey",
+          "soccerStartRaw",
+          "soccerCurrentRaw",
+          "soccerSignedRaw",
+          "soccerCompleteRaw",
+          "soccerSeasonActions",
+          "mlbKey",
+          "mlbStartRaw",
+          "mlbEndRaw",
+          "mlbFinalRaw",
+          "nbaFinalTotals",
+          "mlbNewYearRaw",
+          "cleanEntry",
+          "nbaCleanEndRaw",
+          "soccerCleanValidRaw",
+          "soccerCorruptRaw",
+          "soccerCorruptEvidence",
+          "mlbCuts"
+        ],
+        "rawTypes": {
+          "mlbKey": {
+            "type": "string",
+            "len": 24
+          },
+          "mlbStartRaw": {
+            "type": "string",
+            "len": 50389
+          },
+          "mlbEndRaw": {
+            "type": "string",
+            "len": 50454
+          },
+          "mlbFinalRaw": {
+            "type": "string",
+            "len": 51545
+          },
+          "mlbNewYearRaw": {
+            "type": "string",
+            "len": 52943
+          },
+          "mlbCuts": {
+            "type": "object"
+          }
+        }
+      }
+    },
+    {
+      "tag": "mlb-overbudget-original-history-native",
+      "at": "2026-10-01T22:43:58.363Z",
+      "driverError": "locator.click: Timeout 5000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: /FREE AGENCY/ })\u001b[22m\n"
+    },
+    {
+      "tag": "mlb-overbudget-navigation-observe",
+      "at": "2026-10-01T22:44:09.756Z",
+      "value": {
+        "url": "https://douknowball.com/mlb-front-office",
+        "text": "MLB Front Office\n\nReal 2026 rosters. Real tax-line pain. October does not forgive.\n\nLos Angeles Dodgers\n2027 · Round 1/27\nRecord 0-0\nStrength 92\nTax room $-2.5M\n🏛️ OWNERSHIP\nTrust 100\n\nWin the World Series. Anything less is a failed season upstairs.\n\n👔\nROSTER\n15 under contract\nShohei Ohtani leads them at 96\n💼\nFREE AGENCY\n-$2.5M over\nTomas Whitfield wants $5M, out of reach\n🤝\nTRADES\n-$2.5M to shed\nMove salary or the owner will\n🏟️\nPLAY\nRound 1 of 27\n0-0 with 27 rounds to play\n📊\nSTANDINGS\n#1 in the NL\nTop seed as it stands\nAbandon franchise and restart\nMLB Front Office: Baseball GM Simulator\n\nTake over a real MLB club with its actual 2026 roster, every player rated off real 2025 stats pulled from the league's own data. Manage the payroll against the luxury tax line, DFA dead weight, sign free agents, swing trades the AI weighs on age, position and rating, then grind the 162 in simulated stretches. Win your division for a bye, survive the best-of-3 Wild Card round, the Division Series, the LCS and the World Series. Draft prospects whose scouting grades can lie, ride aging curves and retirements, and stack rings across unlimited saved seasons.\n\nRunning a front office sounds fun until the payroll page loads. This is a full GM sim of the real 30 team league, every player rated off real 2025 stats.\n\nThe problems are real: a tax line that will not move, aging veterans, scouts who lie, and 29 rivals that never stop churning.\n\nHow to play MLB Front Office, a free MLB general manager simulation\nInheriting a franchise's lineup and bullpen\nChoose a franchise and inherit its actual lineup, rotation and bullpen.\nReading the ownership mandate each offseason\nRead the ownership mandate: a stacked roster is told to win the World Series, a mid one to make October, a thin one to hit an honest win number. It resets every offseason.\nWORKING TRADES, FREE AGENTS AND DFAS\nWork the roster: DFA dead weight, sign free agents, and take trades to the phone, where the other GM counters with pick demands and lesser returns instead of a flat yes or no.\nPlaying the season in weekly stretches\nPlay the 162 in stretches: each round simulates about a week and a half of baseball, 27 rounds total, with a live read on whether you are on pace.\nMaking October and seeding the bracket\nMake October. Division winners seed 1 to 3, three wild cards follow, and the top two seeds skip the Wild Card round.\nMLB Front Office rules for the tax line, trades and trust\nThe tax line and its hard cap\nThe tax line starts at 244 million, matching the real 2026 threshold, and it is a hard cap, rising 3 percent a ",
+        "buttons": [
+          "Back",
+          "Sign up to track your statsTrack stats",
+          "",
+          "👔Roster15 under contractShohei Ohtani leads them at 96",
+          "💼Free agency-$2.5M overTomas Whitfield wants $5M, out of reach",
+          "🤝Trades-$2.5M to shedMove salary or the owner will",
+          "🏟️PlayRound 1 of 270-0 with 27 rounds to play",
+          "📊Standings#1 in the NLTop seed as it stands",
+          " Abandon franchise and restart",
+          "Cookie choices",
+          "Light mode",
+          "Report a bug"
+        ]
+      }
+    },
+    {
+      "tag": "mlb-overbudget-original-history-native-final",
+      "at": "2026-10-01T22:44:34.187Z",
+      "value": {
+        "boundary": "Restored exact native-played 2027 draft-completed save in disposable browser only, no edited money or player fields",
+        "rows": [
+          {
+            "id": "m1w5awbaoh62vf-400",
+            "text": "Tomas Whitfield\nDH · 32y · wants $5M\n76\nSign",
+            "disabled": true
+          }
+        ],
+        "main": "MLB Front Office\n\nReal 2026 rosters. Real tax-line pain. October does not forgive.\n\nLos Angeles Dodgers\n2027 · Round 1/27\nRecord 0-0\nStrength 92\nTax room $-2.5M\n🏛️ OWNERSHIP\nTrust 100\n\nWin the World Series. Anything less is a failed season upstairs.\n\nHub\nFree agency\n\nFree agents (tax room $-2.5M). A man you designated for assignment waits until next season.\n\nTomas Whitfield\nDH · 32y · wants $5M\n76\nSign\nAbandon franchise and restart\nMLB Front Office: Baseball GM Simulator\n\nTake over a real MLB club with its actual 2026 roster, every player rated off real 2025 stats pulled from the league's own data. Manage the payroll against the luxury tax line, DFA dead weight, sign free agents, swing trades the AI weighs on age, position and rating, then grind the 162 in simulated stretches. Win your division for a bye, survive the best-of-3 Wild Card round, the Division Series, the LCS and the World Series. Draft prospects whose scouting grades can lie, ride aging curves and retirements, and stack ",
+        "rawHeld": true
+      }
+    },
+    {
+      "tag": "mlb-corrupt-json-and-native-restart",
+      "at": "2026-10-01T22:45:10.105Z",
+      "value": {
+        "brokenJsonReturnedPicker": true,
+        "nativeRestartRemovedSave": true,
+        "picker": 1
+      }
+    },
+    {
+      "tag": "final-report-classification",
+      "at": "2026-10-01T22:46:58.144Z",
+      "value": {
+        "findings": [
+          {
+            "id": "SIM-01",
+            "severity": "P1",
+            "title": "Depth players are unreachable in both trade paths"
+          },
+          {
+            "id": "SIM-02",
+            "severity": "P2",
+            "title": "Academy toast intercepts the main advance button on a narrow pointer viewport"
+          },
+          {
+            "id": "SIM-03",
+            "severity": "P1",
+            "title": "Completed regular seasons have unequal game counts, but standings rank raw wins"
+          },
+          {
+            "id": "SIM-04",
+            "severity": "P2",
+            "title": "A structurally corrupt career save traps the route in repeatable crash recovery"
+          }
+        ],
+        "coverage": 25,
+        "blockedMutationRequests": 71,
+        "uncaughtPageErrors": 0
+      }
+    }
+  ],
+  "runtimeErrors": [],
+  "blockedMutations": [
+    {
+      "path": "/rest/v1/game_completions",
+      "method": "POST"
+    },
+    {
+      "path": "/rest/v1/game_completions",
+      "method": "POST"
+    },
+    {
+      "path": "/rest/v1/game_completions",
+      "method": "POST"
+    },
+    {
+      "path": "/rest/v1/game_completions",
+      "method": "POST"
+    },
+    {
+      "path": "/rest/v1/game_completions",
+      "method": "POST"
+    },
+    {
+      "path": "/rest/v1/game_completions",
+      "method": "POST"
+    },
+    {
+      "path": "/rest/v1/game_completions",
+      "method": "POST"
+    },
+    {
+      "path": "/rest/v1/game_completions",
+      "method": "POST"
+    },
+    {
+      "path": "/rest/v1/game_completions",
+      "method": "POST"
+    },
+    {
+      "path": "/rest/v1/game_completions",
+      "method": "POST"
+    },
+    {
+      "path": "/rest/v1/game_completions",
+      "method": "POST"
+    },
+    {
+      "path": "/rest/v1/game_completions",
+      "method": "POST"
+    },
+    {
+      "path": "/rest/v1/game_completions",
+      "method": "POST"
+    },
+    {
+      "path": "/rest/v1/game_completions",
+      "method": "POST"
+    },
+    {
+      "path": "/rest/v1/game_completions",
+      "method": "POST"
+    },
+    {
+      "path": "/rest/v1/game_completions",
+      "method": "POST"
+    },
+    {
+      "path": "/rest/v1/game_completions",
+      "method": "POST"
+    },
+    {
+      "path": "/rest/v1/game_completions",
+      "method": "POST"
+    },
+    {
+      "path": "/rest/v1/game_completions",
+      "method": "POST"
+    },
+    {
+      "path": "/rest/v1/game_completions",
+      "method": "POST"
+    },
+    {
+      "path": "/rest/v1/game_completions",
+      "method": "POST"
+    },
+    {
+      "path": "/rest/v1/game_completions",
+      "method": "POST"
+    },
+    {
+      "path": "/rest/v1/game_completions",
+      "method": "POST"
+    },
+    {
+      "path": "/rest/v1/game_completions",
+      "method": "POST"
+    },
+    {
+      "path": "/rest/v1/game_completions",
+      "method": "POST"
+    },
+    {
+      "path": "/rest/v1/game_completions",
+      "method": "POST"
+    },
+    {
+      "path": "/rest/v1/game_completions",
+      "method": "POST"
+    },
+    {
+      "path": "/rest/v1/game_completions",
+      "method": "POST"
+    },
+    {
+      "path": "/rest/v1/game_completions",
+      "method": "POST"
+    },
+    {
+      "path": "/rest/v1/game_completions",
+      "method": "POST"
+    },
+    {
+      "path": "/rest/v1/game_completions",
+      "method": "POST"
+    },
+    {
+      "path": "/rest/v1/game_completions",
+      "method": "POST"
+    },
+    {
+      "path": "/rest/v1/game_completions",
+      "method": "POST"
+    },
+    {
+      "path": "/rest/v1/game_completions",
+      "method": "POST"
+    },
+    {
+      "path": "/rest/v1/game_completions",
+      "method": "POST"
+    },
+    {
+      "path": "/rest/v1/game_completions",
+      "method": "POST"
+    },
+    {
+      "path": "/rest/v1/game_completions",
+      "method": "POST"
+    },
+    {
+      "path": "/rest/v1/game_completions",
+      "method": "POST"
+    },
+    {
+      "path": "/rest/v1/game_completions",
+      "method": "POST"
+    },
+    {
+      "path": "/rest/v1/game_completions",
+      "method": "POST"
+    },
+    {
+      "path": "/rest/v1/game_completions",
+      "method": "POST"
+    },
+    {
+      "path": "/rest/v1/game_completions",
+      "method": "POST"
+    },
+    {
+      "path": "/rest/v1/game_completions",
+      "method": "POST"
+    },
+    {
+      "path": "/rest/v1/game_completions",
+      "method": "POST"
+    },
+    {
+      "path": "/rest/v1/game_completions",
+      "method": "POST"
+    },
+    {
+      "path": "/rest/v1/game_completions",
+      "method": "POST"
+    },
+    {
+      "path": "/rest/v1/game_completions",
+      "method": "POST"
+    },
+    {
+      "path": "/rest/v1/game_completions",
+      "method": "POST"
+    },
+    {
+      "path": "/rest/v1/game_completions",
+      "method": "POST"
+    },
+    {
+      "path": "/rest/v1/game_completions",
+      "method": "POST"
+    },
+    {
+      "path": "/rest/v1/game_completions",
+      "method": "POST"
+    },
+    {
+      "path": "/rest/v1/game_completions",
+      "method": "POST"
+    },
+    {
+      "path": "/rest/v1/game_completions",
+      "method": "POST"
+    },
+    {
+      "path": "/rest/v1/game_completions",
+      "method": "POST"
+    },
+    {
+      "path": "/rest/v1/game_completions",
+      "method": "POST"
+    },
+    {
+      "path": "/rest/v1/game_completions",
+      "method": "POST"
+    },
+    {
+      "path": "/rest/v1/game_completions",
+      "method": "POST"
+    },
+    {
+      "path": "/rest/v1/game_completions",
+      "method": "POST"
+    },
+    {
+      "path": "/rest/v1/game_completions",
+      "method": "POST"
+    },
+    {
+      "path": "/rest/v1/game_completions",
+      "method": "POST"
+    },
+    {
+      "path": "/rest/v1/game_completions",
+      "method": "POST"
+    },
+    {
+      "path": "/rest/v1/game_completions",
+      "method": "POST"
+    },
+    {
+      "path": "/rest/v1/game_completions",
+      "method": "POST"
+    },
+    {
+      "path": "/rest/v1/game_completions",
+      "method": "POST"
+    },
+    {
+      "path": "/rest/v1/game_completions",
+      "method": "POST"
+    },
+    {
+      "path": "/rest/v1/game_completions",
+      "method": "POST"
+    },
+    {
+      "path": "/rest/v1/game_completions",
+      "method": "POST"
+    },
+    {
+      "path": "/rest/v1/game_completions",
+      "method": "POST"
+    },
+    {
+      "path": "/rest/v1/game_completions",
+      "method": "POST"
+    },
+    {
+      "path": "/rest/v1/game_completions",
+      "method": "POST"
+    },
+    {
+      "path": "/rest/v1/game_completions",
+      "method": "POST"
+    }
+  ],
+  "finalCoverage": {
+    "completedNativeRegularSeasons": 3,
+    "seasonBreakdown": {
+      "nbaLive": 1,
+      "nbaClean": 1,
+      "mlbLive": 1
+    },
+    "draftPicks": 4,
+    "soccerCareer": {
+      "ageFrom": 16,
+      "ageTo": 18,
+      "initialYouthRow": true,
+      "youthAdvance": 1,
+      "professionalSeasonsCompleted": 1,
+      "seasonRows": 3,
+      "wageLabel": "€7k/wk Wage",
+      "salaryBoundary": "Generated simulation salary, not a claim about the real player or club"
+    },
+    "worstCaseMlb": {
+      "releasedContributors": 6,
+      "floor": 9,
+      "oneReplacementSigned": true,
+      "overBudgetSignBlocked": true,
+      "rawRefreshHeld": true
+    },
+    "notTested": [
+      "Club Manager",
+      "NFL Front Office",
+      "NHL Front Office",
+      "Full Soccer Career retirement",
+      "Soccer optional social choice",
+      "MLB maximum roster",
+      "MLB trade negotiations",
+      "Exhaustive cap or transaction exploits",
+      "Native touch toast hover behavior"
+    ],
+    "inspectedScreenshots": [
+      "soccer-toast-blocked-live.png",
+      "soccer-corrupt-save-clean.png",
+      "nba-season-end-clean.png",
+      "mlb-playoff-recap-live.png"
+    ]
+  },
+  "finished": "2026-10-01T22:46:58.144Z",
+  "cleanup": {
+    "browserStopped": true
+  }
+}

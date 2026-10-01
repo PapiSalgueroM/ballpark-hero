@@ -1,0 +1,5988 @@
+{
+  "started": "2026-10-01T22:43:32.105Z",
+  "site": "https://douknowball.com",
+  "scope": "Actual live games, native club/trade/week/round/draft controls. No account credentials. Vendor requests and non-GET writes intercepted. Local game saves remain in isolated disposable contexts.",
+  "cases": [
+    {
+      "sport": "NFL",
+      "route": "/front-office",
+      "width": 1440,
+      "motion": "reduce",
+      "actions": [
+        {
+          "kind": "period",
+          "before": 1,
+          "after": 2,
+          "phase": "hub",
+          "wins": 0,
+          "losses": 1,
+          "overflow": 0
+        },
+        {
+          "kind": "period",
+          "before": 2,
+          "after": 3,
+          "phase": "hub",
+          "wins": 1,
+          "losses": 1,
+          "overflow": 0
+        },
+        {
+          "kind": "period",
+          "before": 3,
+          "after": 4,
+          "phase": "hub",
+          "wins": 2,
+          "losses": 1,
+          "overflow": 0
+        },
+        {
+          "kind": "period",
+          "before": 4,
+          "after": 5,
+          "phase": "hub",
+          "wins": 2,
+          "losses": 2,
+          "overflow": 0
+        },
+        {
+          "kind": "period",
+          "before": 5,
+          "after": 6,
+          "phase": "hub",
+          "wins": 2,
+          "losses": 3,
+          "overflow": 0
+        },
+        {
+          "kind": "period",
+          "before": 6,
+          "after": 7,
+          "phase": "hub",
+          "wins": 3,
+          "losses": 3,
+          "overflow": 0
+        },
+        {
+          "kind": "period",
+          "before": 7,
+          "after": 8,
+          "phase": "hub",
+          "wins": 4,
+          "losses": 3,
+          "overflow": 0
+        },
+        {
+          "kind": "period",
+          "before": 8,
+          "after": 9,
+          "phase": "hub",
+          "wins": 4,
+          "losses": 4,
+          "overflow": 0
+        },
+        {
+          "kind": "period",
+          "before": 9,
+          "after": 10,
+          "phase": "hub",
+          "wins": 4,
+          "losses": 5,
+          "overflow": 0
+        },
+        {
+          "kind": "period",
+          "before": 10,
+          "after": 11,
+          "phase": "hub",
+          "wins": 5,
+          "losses": 5,
+          "overflow": 0
+        },
+        {
+          "kind": "period",
+          "before": 11,
+          "after": 12,
+          "phase": "hub",
+          "wins": 6,
+          "losses": 5,
+          "overflow": 0
+        },
+        {
+          "kind": "period",
+          "before": 12,
+          "after": 13,
+          "phase": "hub",
+          "wins": 7,
+          "losses": 5,
+          "overflow": 0
+        },
+        {
+          "kind": "period",
+          "before": 13,
+          "after": 14,
+          "phase": "hub",
+          "wins": 8,
+          "losses": 5,
+          "overflow": 0
+        },
+        {
+          "kind": "period",
+          "before": 14,
+          "after": 15,
+          "phase": "hub",
+          "wins": 8,
+          "losses": 6,
+          "overflow": 0
+        },
+        {
+          "kind": "period",
+          "before": 15,
+          "after": 16,
+          "phase": "hub",
+          "wins": 9,
+          "losses": 6,
+          "overflow": 0
+        },
+        {
+          "kind": "period",
+          "before": 16,
+          "after": 17,
+          "phase": "hub",
+          "wins": 10,
+          "losses": 6,
+          "overflow": 0
+        },
+        {
+          "kind": "period",
+          "before": 17,
+          "after": 17,
+          "phase": "recap",
+          "wins": 11,
+          "losses": 6,
+          "overflow": 0
+        },
+        {
+          "kind": "draft",
+          "prospect": "pcqeamwpr03rn-8",
+          "name": "Zion Zimmerman",
+          "after": {
+            "rawHash": "02d6ab2585ad937f008635c964925b46c27570b7cc6a55841fde94ee0e097d4c",
+            "phase": "draft",
+            "season": 2026,
+            "period": 17,
+            "titles": 0,
+            "seasonsPlayed": 1,
+            "picksLeft": 2,
+            "champions": [
+              {
+                "season": 2026,
+                "team": "DAL"
+              }
+            ],
+            "postseason": true,
+            "team": "KC",
+            "roster": [
+              {
+                "id": "p13i06081mcfvru-226",
+                "name": "Patrick Mahomes",
+                "pos": "QB",
+                "ovr": 95,
+                "salary": 34.2,
+                "years": 2
+              },
+              {
+                "id": "p13i06081mcfvru-227",
+                "name": "Kenneth Walker III",
+                "pos": "RB",
+                "ovr": 89,
+                "salary": 14.5,
+                "years": 4
+              },
+              {
+                "id": "p13i06081mcfvru-228",
+                "name": "Brashard Smith",
+                "pos": "RB",
+                "ovr": 69,
+                "salary": 1,
+                "years": 3
+              },
+              {
+                "id": "p13i06081mcfvru-229",
+                "name": "Rashee Rice",
+                "pos": "WR",
+                "ovr": 96,
+                "salary": 22.5,
+                "years": 3
+              },
+              {
+                "id": "p13i06081mcfvru-230",
+                "name": "Xavier Worthy",
+                "pos": "WR",
+                "ovr": 77,
+                "salary": 1,
+                "years": 3
+              },
+              {
+                "id": "p13i06081mcfvru-231",
+                "name": "Tyquan Thornton",
+                "pos": "WR",
+                "ovr": 75,
+                "salary": 1,
+                "years": 3
+              },
+              {
+                "id": "p13i06081mcfvru-232",
+                "name": "Travis Kelce",
+                "pos": "TE",
+                "ovr": 88,
+                "salary": 13.3,
+                "years": 1
+              },
+              {
+                "id": "p13i06081mcfvru-233",
+                "name": "Josh Simmons",
+                "pos": "OL",
+                "ovr": 81,
+                "salary": 5.3,
+                "years": 4
+              },
+              {
+                "id": "p13i06081mcfvru-234",
+                "name": "Creed Humphrey",
+                "pos": "OL",
+                "ovr": 80,
+                "salary": 4.1,
+                "years": 2
+              },
+              {
+                "id": "p13i06081mcfvru-235",
+                "name": "Chris Jones",
+                "pos": "DL",
+                "ovr": 92,
+                "salary": 17.9,
+                "years": 2
+              },
+              {
+                "id": "p13i06081mcfvru-236",
+                "name": "George Karlaftis",
+                "pos": "DL",
+                "ovr": 78,
+                "salary": 1.8,
+                "years": 3
+              },
+              {
+                "id": "p13i06081mcfvru-237",
+                "name": "Nick Bolton",
+                "pos": "LB",
+                "ovr": 83,
+                "salary": 7.5,
+                "years": 3
+              },
+              {
+                "id": "p13i06081mcfvru-238",
+                "name": "Drue Tranquill",
+                "pos": "LB",
+                "ovr": 67,
+                "salary": 1,
+                "years": 1
+              },
+              {
+                "id": "p13i06081mcfvru-239",
+                "name": "Chamarri Conner",
+                "pos": "DB",
+                "ovr": 76,
+                "salary": 1,
+                "years": 3
+              },
+              {
+                "id": "p13i06081mcfvru-240",
+                "name": "Kristian Fulton",
+                "pos": "DB",
+                "ovr": 69,
+                "salary": 1,
+                "years": 2
+              },
+              {
+                "id": "pcqeamwpr03rn-41",
+                "name": "Zion Zimmerman",
+                "pos": "QB",
+                "ovr": 86,
+                "salary": 9.1,
+                "years": 4
+              }
+            ],
+            "record": {
+              "wins": 11,
+              "losses": 6
+            },
+            "overflow": 0
+          }
+        },
+        {
+          "kind": "draft",
+          "prospect": "pcqeamwpr03rn-13",
+          "name": "Xavier Chesterton",
+          "after": {
+            "rawHash": "9ffa9a73e76fe91c4cf242e04f63fb042aeaea45766f8d4b35deabe6f42ff603",
+            "phase": "draft",
+            "season": 2026,
+            "period": 17,
+            "titles": 0,
+            "seasonsPlayed": 1,
+            "picksLeft": 1,
+            "champions": [
+              {
+                "season": 2026,
+                "team": "DAL"
+              }
+            ],
+            "postseason": true,
+            "team": "KC",
+            "roster": [
+              {
+                "id": "p13i06081mcfvru-226",
+                "name": "Patrick Mahomes",
+                "pos": "QB",
+                "ovr": 95,
+                "salary": 34.2,
+                "years": 2
+              },
+              {
+                "id": "p13i06081mcfvru-227",
+                "name": "Kenneth Walker III",
+                "pos": "RB",
+                "ovr": 89,
+                "salary": 14.5,
+                "years": 4
+              },
+              {
+                "id": "p13i06081mcfvru-228",
+                "name": "Brashard Smith",
+                "pos": "RB",
+                "ovr": 69,
+                "salary": 1,
+                "years": 3
+              },
+              {
+                "id": "p13i06081mcfvru-229",
+                "name": "Rashee Rice",
+                "pos": "WR",
+                "ovr": 96,
+                "salary": 22.5,
+                "years": 3
+              },
+              {
+                "id": "p13i06081mcfvru-230",
+                "name": "Xavier Worthy",
+                "pos": "WR",
+                "ovr": 77,
+                "salary": 1,
+                "years": 3
+              },
+              {
+                "id": "p13i06081mcfvru-231",
+                "name": "Tyquan Thornton",
+                "pos": "WR",
+                "ovr": 75,
+                "salary": 1,
+                "years": 3
+              },
+              {
+                "id": "p13i06081mcfvru-232",
+                "name": "Travis Kelce",
+                "pos": "TE",
+                "ovr": 88,
+                "salary": 13.3,
+                "years": 1
+              },
+              {
+                "id": "p13i06081mcfvru-233",
+                "name": "Josh Simmons",
+                "pos": "OL",
+                "ovr": 81,
+                "salary": 5.3,
+                "years": 4
+              },
+              {
+                "id": "p13i06081mcfvru-234",
+                "name": "Creed Humphrey",
+                "pos": "OL",
+                "ovr": 80,
+                "salary": 4.1,
+                "years": 2
+              },
+              {
+                "id": "p13i06081mcfvru-235",
+                "name": "Chris Jones",
+                "pos": "DL",
+                "ovr": 92,
+                "salary": 17.9,
+                "years": 2
+              },
+              {
+                "id": "p13i06081mcfvru-236",
+                "name": "George Karlaftis",
+                "pos": "DL",
+                "ovr": 78,
+                "salary": 1.8,
+                "years": 3
+              },
+              {
+                "id": "p13i06081mcfvru-237",
+                "name": "Nick Bolton",
+                "pos": "LB",
+                "ovr": 83,
+                "salary": 7.5,
+                "years": 3
+              },
+              {
+                "id": "p13i06081mcfvru-238",
+                "name": "Drue Tranquill",
+                "pos": "LB",
+                "ovr": 67,
+                "salary": 1,
+                "years": 1
+              },
+              {
+                "id": "p13i06081mcfvru-239",
+                "name": "Chamarri Conner",
+                "pos": "DB",
+                "ovr": 76,
+                "salary": 1,
+                "years": 3
+              },
+              {
+                "id": "p13i06081mcfvru-240",
+                "name": "Kristian Fulton",
+                "pos": "DB",
+                "ovr": 69,
+                "salary": 1,
+                "years": 2
+              },
+              {
+                "id": "pcqeamwpr03rn-41",
+                "name": "Zion Zimmerman",
+                "pos": "QB",
+                "ovr": 86,
+                "salary": 9.1,
+                "years": 4
+              },
+              {
+                "id": "pcqeamwpr03rn-48",
+                "name": "Xavier Chesterton",
+                "pos": "DL",
+                "ovr": 79,
+                "salary": 6.7,
+                "years": 4
+              }
+            ],
+            "record": {
+              "wins": 11,
+              "losses": 6
+            },
+            "overflow": 0
+          }
+        },
+        {
+          "kind": "draft",
+          "prospect": "pcqeamwpr03rn-37",
+          "name": "Cooper Kingsley",
+          "after": {
+            "rawHash": "70fdb644077c47b6a1cf97017161097566a3cc5d427bd14a05dca2b0e151b4a3",
+            "phase": "hub",
+            "season": 2027,
+            "period": 1,
+            "titles": 0,
+            "seasonsPlayed": 1,
+            "picksLeft": 0,
+            "champions": [
+              {
+                "season": 2026,
+                "team": "DAL"
+              }
+            ],
+            "postseason": false,
+            "team": "KC",
+            "roster": [
+              {
+                "id": "p13i06081mcfvru-226",
+                "name": "Patrick Mahomes",
+                "pos": "QB",
+                "ovr": 93,
+                "salary": 34.2,
+                "years": 1
+              },
+              {
+                "id": "p13i06081mcfvru-227",
+                "name": "Kenneth Walker III",
+                "pos": "RB",
+                "ovr": 89,
+                "salary": 14.5,
+                "years": 3
+              },
+              {
+                "id": "p13i06081mcfvru-228",
+                "name": "Brashard Smith",
+                "pos": "RB",
+                "ovr": 70,
+                "salary": 1,
+                "years": 2
+              },
+              {
+                "id": "p13i06081mcfvru-229",
+                "name": "Rashee Rice",
+                "pos": "WR",
+                "ovr": 96,
+                "salary": 22.5,
+                "years": 2
+              },
+              {
+                "id": "p13i06081mcfvru-230",
+                "name": "Xavier Worthy",
+                "pos": "WR",
+                "ovr": 78,
+                "salary": 1,
+                "years": 2
+              },
+              {
+                "id": "p13i06081mcfvru-231",
+                "name": "Tyquan Thornton",
+                "pos": "WR",
+                "ovr": 75,
+                "salary": 1,
+                "years": 2
+              },
+              {
+                "id": "p13i06081mcfvru-233",
+                "name": "Josh Simmons",
+                "pos": "OL",
+                "ovr": 83,
+                "salary": 5.3,
+                "years": 3
+              },
+              {
+                "id": "p13i06081mcfvru-234",
+                "name": "Creed Humphrey",
+                "pos": "OL",
+                "ovr": 80,
+                "salary": 4.1,
+                "years": 1
+              },
+              {
+                "id": "p13i06081mcfvru-235",
+                "name": "Chris Jones",
+                "pos": "DL",
+                "ovr": 91,
+                "salary": 17.9,
+                "years": 1
+              },
+              {
+                "id": "p13i06081mcfvru-236",
+                "name": "George Karlaftis",
+                "pos": "DL",
+                "ovr": 78,
+                "salary": 1.8,
+                "years": 2
+              },
+              {
+                "id": "p13i06081mcfvru-237",
+                "name": "Nick Bolton",
+                "pos": "LB",
+                "ovr": 83,
+                "salary": 7.5,
+                "years": 2
+              },
+              {
+                "id": "p13i06081mcfvru-239",
+                "name": "Chamarri Conner",
+                "pos": "DB",
+                "ovr": 76,
+                "salary": 1,
+                "years": 2
+              },
+              {
+                "id": "p13i06081mcfvru-240",
+                "name": "Kristian Fulton",
+                "pos": "DB",
+                "ovr": 69,
+                "salary": 1,
+                "years": 1
+              },
+              {
+                "id": "pcqeamwpr03rn-41",
+                "name": "Zion Zimmerman",
+                "pos": "QB",
+                "ovr": 88,
+                "salary": 9.1,
+                "years": 3
+              },
+              {
+                "id": "pcqeamwpr03rn-48",
+                "name": "Xavier Chesterton",
+                "pos": "DL",
+                "ovr": 81,
+                "salary": 6.7,
+                "years": 3
+              },
+              {
+                "id": "pcqeamwpr03rn-55",
+                "name": "Cooper Kingsley",
+                "pos": "WR",
+                "ovr": 76,
+                "salary": 5.3,
+                "years": 3
+              },
+              {
+                "id": "pcqeamwpr03rn-69",
+                "name": "Caden Chesterton",
+                "pos": "LB",
+                "ovr": 71,
+                "salary": 1,
+                "years": 2
+              }
+            ],
+            "record": {
+              "wins": 0,
+              "losses": 0
+            },
+            "overflow": 0
+          }
+        }
+      ],
+      "events": {
+        "blocked": [
+          {
+            "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/game_completions",
+            "method": "POST"
+          },
+          {
+            "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/game_completions",
+            "method": "POST"
+          },
+          {
+            "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/game_completions",
+            "method": "POST"
+          },
+          {
+            "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/game_completions",
+            "method": "POST"
+          },
+          {
+            "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/game_completions",
+            "method": "POST"
+          },
+          {
+            "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/game_completions",
+            "method": "POST"
+          },
+          {
+            "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/game_completions",
+            "method": "POST"
+          },
+          {
+            "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/game_completions",
+            "method": "POST"
+          },
+          {
+            "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/game_completions",
+            "method": "POST"
+          },
+          {
+            "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/game_completions",
+            "method": "POST"
+          },
+          {
+            "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/game_completions",
+            "method": "POST"
+          },
+          {
+            "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/game_completions",
+            "method": "POST"
+          },
+          {
+            "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/game_completions",
+            "method": "POST"
+          },
+          {
+            "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/game_completions",
+            "method": "POST"
+          },
+          {
+            "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/game_completions",
+            "method": "POST"
+          },
+          {
+            "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/game_completions",
+            "method": "POST"
+          },
+          {
+            "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/game_completions",
+            "method": "POST"
+          }
+        ],
+        "errors": [],
+        "badHttp": []
+      },
+      "initial": {
+        "rawHash": "c3c78d12dd7521aecb494d56f0758acc2b596724180ba68a4f4645bcfbb88720",
+        "phase": "hub",
+        "season": 2026,
+        "period": 1,
+        "titles": 0,
+        "seasonsPlayed": 0,
+        "picksLeft": 0,
+        "champions": [],
+        "postseason": false,
+        "team": "KC",
+        "roster": [
+          {
+            "id": "p13i06081mcfvru-226",
+            "name": "Patrick Mahomes",
+            "pos": "QB",
+            "ovr": 95,
+            "salary": 34.2,
+            "years": 2
+          },
+          {
+            "id": "p13i06081mcfvru-227",
+            "name": "Kenneth Walker III",
+            "pos": "RB",
+            "ovr": 89,
+            "salary": 14.5,
+            "years": 4
+          },
+          {
+            "id": "p13i06081mcfvru-228",
+            "name": "Brashard Smith",
+            "pos": "RB",
+            "ovr": 69,
+            "salary": 1,
+            "years": 3
+          },
+          {
+            "id": "p13i06081mcfvru-229",
+            "name": "Rashee Rice",
+            "pos": "WR",
+            "ovr": 96,
+            "salary": 22.5,
+            "years": 3
+          },
+          {
+            "id": "p13i06081mcfvru-230",
+            "name": "Xavier Worthy",
+            "pos": "WR",
+            "ovr": 77,
+            "salary": 1,
+            "years": 3
+          },
+          {
+            "id": "p13i06081mcfvru-231",
+            "name": "Tyquan Thornton",
+            "pos": "WR",
+            "ovr": 75,
+            "salary": 1,
+            "years": 3
+          },
+          {
+            "id": "p13i06081mcfvru-232",
+            "name": "Travis Kelce",
+            "pos": "TE",
+            "ovr": 88,
+            "salary": 13.3,
+            "years": 1
+          },
+          {
+            "id": "p13i06081mcfvru-233",
+            "name": "Josh Simmons",
+            "pos": "OL",
+            "ovr": 81,
+            "salary": 5.3,
+            "years": 4
+          },
+          {
+            "id": "p13i06081mcfvru-234",
+            "name": "Creed Humphrey",
+            "pos": "OL",
+            "ovr": 80,
+            "salary": 4.1,
+            "years": 2
+          },
+          {
+            "id": "p13i06081mcfvru-235",
+            "name": "Chris Jones",
+            "pos": "DL",
+            "ovr": 92,
+            "salary": 17.9,
+            "years": 2
+          },
+          {
+            "id": "p13i06081mcfvru-236",
+            "name": "George Karlaftis",
+            "pos": "DL",
+            "ovr": 78,
+            "salary": 1.8,
+            "years": 3
+          },
+          {
+            "id": "p13i06081mcfvru-237",
+            "name": "Nick Bolton",
+            "pos": "LB",
+            "ovr": 83,
+            "salary": 7.5,
+            "years": 3
+          },
+          {
+            "id": "p13i06081mcfvru-238",
+            "name": "Drue Tranquill",
+            "pos": "LB",
+            "ovr": 67,
+            "salary": 1,
+            "years": 1
+          },
+          {
+            "id": "p13i06081mcfvru-239",
+            "name": "Chamarri Conner",
+            "pos": "DB",
+            "ovr": 76,
+            "salary": 1,
+            "years": 3
+          },
+          {
+            "id": "p13i06081mcfvru-240",
+            "name": "Kristian Fulton",
+            "pos": "DB",
+            "ovr": 69,
+            "salary": 1,
+            "years": 2
+          }
+        ],
+        "record": {
+          "wins": 0,
+          "losses": 0
+        },
+        "overflow": 0
+      },
+      "trade": {
+        "ownRoster": 15,
+        "finderChoices": [
+          "Rashee Rice (WR)96",
+          "Patrick Mahomes (QB)95",
+          "Chris Jones (DL)92",
+          "Kenneth Walker III (RB)89",
+          "Travis Kelce (TE)88",
+          "Nick Bolton (LB)83",
+          "Josh Simmons (OL)81",
+          "Creed Humphrey (OL)80",
+          "George Karlaftis (DL)78",
+          "Xavier Worthy (WR)77",
+          "Chamarri Conner (DB)76",
+          "Tyquan Thornton (WR)75",
+          "Brashard Smith (RB)69",
+          "Kristian Fulton (DB)69",
+          "Drue Tranquill (LB)67",
+          "Shop him around the league"
+        ],
+        "missingOwn": [],
+        "manualChoices": [
+          "☆",
+          "☆",
+          "☆",
+          "☆",
+          "☆",
+          "☆",
+          "☆",
+          "☆",
+          "☆",
+          "☆",
+          "☆",
+          "☆",
+          "☆",
+          "☆",
+          "☆",
+          "☆",
+          "☆",
+          "☆",
+          "☆",
+          "☆",
+          "☆",
+          "☆",
+          "☆",
+          "☆",
+          "☆",
+          "☆",
+          "☆",
+          "☆",
+          "☆",
+          "☆",
+          "☆",
+          "☆",
+          "☆",
+          "☆",
+          "☆",
+          "☆",
+          "☆",
+          "☆",
+          "☆",
+          "☆",
+          "☆",
+          "☆",
+          "☆",
+          "☆",
+          "☆",
+          "☆",
+          "☆",
+          "☆",
+          "☆",
+          "☆",
+          "☆",
+          "☆",
+          "☆",
+          "☆",
+          "☆",
+          "☆",
+          "☆",
+          "☆",
+          "☆",
+          "☆",
+          "☆",
+          "☆",
+          "☆",
+          "☆",
+          "☆",
+          "AllAll▾",
+          "Back",
+          "Sign up to track your statsTrack stats",
+          "",
+          " Hub",
+          "Rashee Rice (WR)96",
+          "Patrick Mahomes (QB)95",
+          "Chris Jones (DL)92",
+          "Kenneth Walker III (RB)89",
+          "Travis Kelce (TE)88",
+          "Nick Bolton (LB)83",
+          "Josh Simmons (OL)81",
+          "Creed Humphrey (OL)80",
+          "George Karlaftis (DL)78",
+          "Xavier Worthy (WR)77",
+          "Chamarri Conner (DB)76",
+          "Tyquan Thornton (WR)75",
+          "Brashard Smith (RB)69",
+          "Kristian Fulton (DB)69",
+          "Drue Tranquill (LB)67",
+          "Shop him around the league",
+          "ARI",
+          "ATL",
+          "BAL",
+          "BUF",
+          "CAR",
+          "CHI",
+          "CIN",
+          "CLE",
+          "DAL",
+          "DEN",
+          "DET",
+          "GB",
+          "HOU",
+          "IND",
+          "JAX",
+          "LA",
+          "LAC",
+          "LV",
+          "MIA",
+          "MIN",
+          "NE",
+          "NO",
+          "NYG",
+          "NYJ",
+          "PHI",
+          "PIT",
+          "SEA",
+          "SF",
+          "TB",
+          "TEN",
+          "WAS",
+          "Rashee Rice (WR)96",
+          "Patrick Mahomes (QB)95",
+          "Chris Jones (DL)92",
+          "Kenneth Walker III (RB)89",
+          "Travis Kelce (TE)88",
+          "Nick Bolton (LB)83",
+          "Josh Simmons (OL)81",
+          "Creed Humphrey (OL)80",
+          "George Karlaftis (DL)78",
+          "Xavier Worthy (WR)77",
+          "Chamarri Conner (DB)76",
+          "Tyquan Thornton (WR)75",
+          "Brashard Smith (RB)69",
+          "Kristian Fulton (DB)69",
+          "Drue Tranquill (LB)67",
+          "Open talks",
+          "Open talks",
+          "Open talks",
+          "Open talks",
+          "Open talks",
+          "Open talks",
+          "Open talks",
+          "Open talks",
+          "Open talks",
+          "Open talks",
+          "Open talks",
+          "Open talks",
+          "Open talks",
+          "Open talks",
+          "Open talks",
+          " Abandon franchise and restart",
+          "Cookie choices",
+          "Light mode",
+          "Report a bug"
+        ],
+        "lowestPlayer": {
+          "name": "Drue Tranquill",
+          "pos": "LB",
+          "age": 31,
+          "ovr": 67,
+          "salary": 1,
+          "years": 1,
+          "id": "p13i06081mcfvru-238",
+          "out": 0,
+          "pot": 67
+        },
+        "lowestSelectable": true,
+        "lowerSelectionSavedQuiet": true,
+        "partnerId": "ARI",
+        "partnerRoster": 15,
+        "receiveRows": 15,
+        "receiveIds": [
+          "p13i06081mcfvru-7",
+          "p13i06081mcfvru-4",
+          "p13i06081mcfvru-10",
+          "p13i06081mcfvru-8",
+          "p13i06081mcfvru-5",
+          "p13i06081mcfvru-14",
+          "p13i06081mcfvru-1",
+          "p13i06081mcfvru-9",
+          "p13i06081mcfvru-12",
+          "p13i06081mcfvru-13",
+          "p13i06081mcfvru-2",
+          "p13i06081mcfvru-3",
+          "p13i06081mcfvru-6",
+          "p13i06081mcfvru-11",
+          "p13i06081mcfvru-15"
+        ],
+        "bounds": [
+          {
+            "text": "Rashee Rice (WR)96",
+            "height": 26.5,
+            "width": 294
+          },
+          {
+            "text": "Patrick Mahomes (QB)95",
+            "height": 26.5,
+            "width": 294
+          },
+          {
+            "text": "Chris Jones (DL)92",
+            "height": 26.5,
+            "width": 294
+          },
+          {
+            "text": "Kenneth Walker III (RB)89",
+            "height": 26.5,
+            "width": 294
+          },
+          {
+            "text": "Travis Kelce (TE)88",
+            "height": 26.5,
+            "width": 294
+          },
+          {
+            "text": "Nick Bolton (LB)83",
+            "height": 26.5,
+            "width": 294
+          },
+          {
+            "text": "Josh Simmons (OL)81",
+            "height": 26.5,
+            "width": 294
+          },
+          {
+            "text": "Creed Humphrey (OL)80",
+            "height": 26.5,
+            "width": 294
+          },
+          {
+            "text": "George Karlaftis (DL)78",
+            "height": 26.5,
+            "width": 294
+          },
+          {
+            "text": "Xavier Worthy (WR)77",
+            "height": 26.5,
+            "width": 294
+          },
+          {
+            "text": "Chamarri Conner (DB)76",
+            "height": 26.5,
+            "width": 294
+          },
+          {
+            "text": "Tyquan Thornton (WR)75",
+            "height": 26.5,
+            "width": 294
+          },
+          {
+            "text": "Brashard Smith (RB)69",
+            "height": 26.5,
+            "width": 294
+          },
+          {
+            "text": "Kristian Fulton (DB)69",
+            "height": 26.5,
+            "width": 294
+          },
+          {
+            "text": "Drue Tranquill (LB)67",
+            "height": 26.5,
+            "width": 294
+          },
+          {
+            "text": "Shop him around the league",
+            "height": 28.5,
+            "width": 592
+          }
+        ]
+      },
+      "reloadInitial": {
+        "bytesHeld": true,
+        "facts": {
+          "rawHash": "c3c78d12dd7521aecb494d56f0758acc2b596724180ba68a4f4645bcfbb88720",
+          "phase": "hub",
+          "season": 2026,
+          "period": 1,
+          "titles": 0,
+          "seasonsPlayed": 0,
+          "picksLeft": 0,
+          "champions": [],
+          "postseason": false,
+          "team": "KC",
+          "roster": [
+            {
+              "id": "p13i06081mcfvru-226",
+              "name": "Patrick Mahomes",
+              "pos": "QB",
+              "ovr": 95,
+              "salary": 34.2,
+              "years": 2
+            },
+            {
+              "id": "p13i06081mcfvru-227",
+              "name": "Kenneth Walker III",
+              "pos": "RB",
+              "ovr": 89,
+              "salary": 14.5,
+              "years": 4
+            },
+            {
+              "id": "p13i06081mcfvru-228",
+              "name": "Brashard Smith",
+              "pos": "RB",
+              "ovr": 69,
+              "salary": 1,
+              "years": 3
+            },
+            {
+              "id": "p13i06081mcfvru-229",
+              "name": "Rashee Rice",
+              "pos": "WR",
+              "ovr": 96,
+              "salary": 22.5,
+              "years": 3
+            },
+            {
+              "id": "p13i06081mcfvru-230",
+              "name": "Xavier Worthy",
+              "pos": "WR",
+              "ovr": 77,
+              "salary": 1,
+              "years": 3
+            },
+            {
+              "id": "p13i06081mcfvru-231",
+              "name": "Tyquan Thornton",
+              "pos": "WR",
+              "ovr": 75,
+              "salary": 1,
+              "years": 3
+            },
+            {
+              "id": "p13i06081mcfvru-232",
+              "name": "Travis Kelce",
+              "pos": "TE",
+              "ovr": 88,
+              "salary": 13.3,
+              "years": 1
+            },
+            {
+              "id": "p13i06081mcfvru-233",
+              "name": "Josh Simmons",
+              "pos": "OL",
+              "ovr": 81,
+              "salary": 5.3,
+              "years": 4
+            },
+            {
+              "id": "p13i06081mcfvru-234",
+              "name": "Creed Humphrey",
+              "pos": "OL",
+              "ovr": 80,
+              "salary": 4.1,
+              "years": 2
+            },
+            {
+              "id": "p13i06081mcfvru-235",
+              "name": "Chris Jones",
+              "pos": "DL",
+              "ovr": 92,
+              "salary": 17.9,
+              "years": 2
+            },
+            {
+              "id": "p13i06081mcfvru-236",
+              "name": "George Karlaftis",
+              "pos": "DL",
+              "ovr": 78,
+              "salary": 1.8,
+              "years": 3
+            },
+            {
+              "id": "p13i06081mcfvru-237",
+              "name": "Nick Bolton",
+              "pos": "LB",
+              "ovr": 83,
+              "salary": 7.5,
+              "years": 3
+            },
+            {
+              "id": "p13i06081mcfvru-238",
+              "name": "Drue Tranquill",
+              "pos": "LB",
+              "ovr": 67,
+              "salary": 1,
+              "years": 1
+            },
+            {
+              "id": "p13i06081mcfvru-239",
+              "name": "Chamarri Conner",
+              "pos": "DB",
+              "ovr": 76,
+              "salary": 1,
+              "years": 3
+            },
+            {
+              "id": "p13i06081mcfvru-240",
+              "name": "Kristian Fulton",
+              "pos": "DB",
+              "ovr": 69,
+              "salary": 1,
+              "years": 2
+            }
+          ],
+          "record": {
+            "wins": 0,
+            "losses": 0
+          },
+          "overflow": 0
+        }
+      },
+      "finishedSeason": {
+        "rawHash": "7aedb4c4e18166b8bc048994dea8695b918638f7c102c4b997cad7e6151d095a",
+        "phase": "recap",
+        "season": 2026,
+        "period": 17,
+        "titles": 0,
+        "seasonsPlayed": 1,
+        "picksLeft": 0,
+        "champions": [
+          {
+            "season": 2026,
+            "team": "DAL"
+          }
+        ],
+        "postseason": true,
+        "team": "KC",
+        "roster": [
+          {
+            "id": "p13i06081mcfvru-226",
+            "name": "Patrick Mahomes",
+            "pos": "QB",
+            "ovr": 95,
+            "salary": 34.2,
+            "years": 2
+          },
+          {
+            "id": "p13i06081mcfvru-227",
+            "name": "Kenneth Walker III",
+            "pos": "RB",
+            "ovr": 89,
+            "salary": 14.5,
+            "years": 4
+          },
+          {
+            "id": "p13i06081mcfvru-228",
+            "name": "Brashard Smith",
+            "pos": "RB",
+            "ovr": 69,
+            "salary": 1,
+            "years": 3
+          },
+          {
+            "id": "p13i06081mcfvru-229",
+            "name": "Rashee Rice",
+            "pos": "WR",
+            "ovr": 96,
+            "salary": 22.5,
+            "years": 3
+          },
+          {
+            "id": "p13i06081mcfvru-230",
+            "name": "Xavier Worthy",
+            "pos": "WR",
+            "ovr": 77,
+            "salary": 1,
+            "years": 3
+          },
+          {
+            "id": "p13i06081mcfvru-231",
+            "name": "Tyquan Thornton",
+            "pos": "WR",
+            "ovr": 75,
+            "salary": 1,
+            "years": 3
+          },
+          {
+            "id": "p13i06081mcfvru-232",
+            "name": "Travis Kelce",
+            "pos": "TE",
+            "ovr": 88,
+            "salary": 13.3,
+            "years": 1
+          },
+          {
+            "id": "p13i06081mcfvru-233",
+            "name": "Josh Simmons",
+            "pos": "OL",
+            "ovr": 81,
+            "salary": 5.3,
+            "years": 4
+          },
+          {
+            "id": "p13i06081mcfvru-234",
+            "name": "Creed Humphrey",
+            "pos": "OL",
+            "ovr": 80,
+            "salary": 4.1,
+            "years": 2
+          },
+          {
+            "id": "p13i06081mcfvru-235",
+            "name": "Chris Jones",
+            "pos": "DL",
+            "ovr": 92,
+            "salary": 17.9,
+            "years": 2
+          },
+          {
+            "id": "p13i06081mcfvru-236",
+            "name": "George Karlaftis",
+            "pos": "DL",
+            "ovr": 78,
+            "salary": 1.8,
+            "years": 3
+          },
+          {
+            "id": "p13i06081mcfvru-237",
+            "name": "Nick Bolton",
+            "pos": "LB",
+            "ovr": 83,
+            "salary": 7.5,
+            "years": 3
+          },
+          {
+            "id": "p13i06081mcfvru-238",
+            "name": "Drue Tranquill",
+            "pos": "LB",
+            "ovr": 67,
+            "salary": 1,
+            "years": 1
+          },
+          {
+            "id": "p13i06081mcfvru-239",
+            "name": "Chamarri Conner",
+            "pos": "DB",
+            "ovr": 76,
+            "salary": 1,
+            "years": 3
+          },
+          {
+            "id": "p13i06081mcfvru-240",
+            "name": "Kristian Fulton",
+            "pos": "DB",
+            "ovr": 69,
+            "salary": 1,
+            "years": 2
+          }
+        ],
+        "record": {
+          "wins": 11,
+          "losses": 6
+        },
+        "overflow": 0
+      },
+      "reloadRecap": {
+        "bytesHeld": true,
+        "facts": {
+          "rawHash": "7aedb4c4e18166b8bc048994dea8695b918638f7c102c4b997cad7e6151d095a",
+          "phase": "recap",
+          "season": 2026,
+          "period": 17,
+          "titles": 0,
+          "seasonsPlayed": 1,
+          "picksLeft": 0,
+          "champions": [
+            {
+              "season": 2026,
+              "team": "DAL"
+            }
+          ],
+          "postseason": true,
+          "team": "KC",
+          "roster": [
+            {
+              "id": "p13i06081mcfvru-226",
+              "name": "Patrick Mahomes",
+              "pos": "QB",
+              "ovr": 95,
+              "salary": 34.2,
+              "years": 2
+            },
+            {
+              "id": "p13i06081mcfvru-227",
+              "name": "Kenneth Walker III",
+              "pos": "RB",
+              "ovr": 89,
+              "salary": 14.5,
+              "years": 4
+            },
+            {
+              "id": "p13i06081mcfvru-228",
+              "name": "Brashard Smith",
+              "pos": "RB",
+              "ovr": 69,
+              "salary": 1,
+              "years": 3
+            },
+            {
+              "id": "p13i06081mcfvru-229",
+              "name": "Rashee Rice",
+              "pos": "WR",
+              "ovr": 96,
+              "salary": 22.5,
+              "years": 3
+            },
+            {
+              "id": "p13i06081mcfvru-230",
+              "name": "Xavier Worthy",
+              "pos": "WR",
+              "ovr": 77,
+              "salary": 1,
+              "years": 3
+            },
+            {
+              "id": "p13i06081mcfvru-231",
+              "name": "Tyquan Thornton",
+              "pos": "WR",
+              "ovr": 75,
+              "salary": 1,
+              "years": 3
+            },
+            {
+              "id": "p13i06081mcfvru-232",
+              "name": "Travis Kelce",
+              "pos": "TE",
+              "ovr": 88,
+              "salary": 13.3,
+              "years": 1
+            },
+            {
+              "id": "p13i06081mcfvru-233",
+              "name": "Josh Simmons",
+              "pos": "OL",
+              "ovr": 81,
+              "salary": 5.3,
+              "years": 4
+            },
+            {
+              "id": "p13i06081mcfvru-234",
+              "name": "Creed Humphrey",
+              "pos": "OL",
+              "ovr": 80,
+              "salary": 4.1,
+              "years": 2
+            },
+            {
+              "id": "p13i06081mcfvru-235",
+              "name": "Chris Jones",
+              "pos": "DL",
+              "ovr": 92,
+              "salary": 17.9,
+              "years": 2
+            },
+            {
+              "id": "p13i06081mcfvru-236",
+              "name": "George Karlaftis",
+              "pos": "DL",
+              "ovr": 78,
+              "salary": 1.8,
+              "years": 3
+            },
+            {
+              "id": "p13i06081mcfvru-237",
+              "name": "Nick Bolton",
+              "pos": "LB",
+              "ovr": 83,
+              "salary": 7.5,
+              "years": 3
+            },
+            {
+              "id": "p13i06081mcfvru-238",
+              "name": "Drue Tranquill",
+              "pos": "LB",
+              "ovr": 67,
+              "salary": 1,
+              "years": 1
+            },
+            {
+              "id": "p13i06081mcfvru-239",
+              "name": "Chamarri Conner",
+              "pos": "DB",
+              "ovr": 76,
+              "salary": 1,
+              "years": 3
+            },
+            {
+              "id": "p13i06081mcfvru-240",
+              "name": "Kristian Fulton",
+              "pos": "DB",
+              "ovr": 69,
+              "salary": 1,
+              "years": 2
+            }
+          ],
+          "record": {
+            "wins": 11,
+            "losses": 6
+          },
+          "overflow": 0
+        }
+      },
+      "draftStart": {
+        "rawHash": "04b7d5e48f386ad498708a9d593a858bb2f2d3b84ffc0d7957c961afd5202f90",
+        "phase": "draft",
+        "season": 2026,
+        "period": 17,
+        "titles": 0,
+        "seasonsPlayed": 1,
+        "picksLeft": 3,
+        "champions": [
+          {
+            "season": 2026,
+            "team": "DAL"
+          }
+        ],
+        "postseason": true,
+        "team": "KC",
+        "roster": [
+          {
+            "id": "p13i06081mcfvru-226",
+            "name": "Patrick Mahomes",
+            "pos": "QB",
+            "ovr": 95,
+            "salary": 34.2,
+            "years": 2
+          },
+          {
+            "id": "p13i06081mcfvru-227",
+            "name": "Kenneth Walker III",
+            "pos": "RB",
+            "ovr": 89,
+            "salary": 14.5,
+            "years": 4
+          },
+          {
+            "id": "p13i06081mcfvru-228",
+            "name": "Brashard Smith",
+            "pos": "RB",
+            "ovr": 69,
+            "salary": 1,
+            "years": 3
+          },
+          {
+            "id": "p13i06081mcfvru-229",
+            "name": "Rashee Rice",
+            "pos": "WR",
+            "ovr": 96,
+            "salary": 22.5,
+            "years": 3
+          },
+          {
+            "id": "p13i06081mcfvru-230",
+            "name": "Xavier Worthy",
+            "pos": "WR",
+            "ovr": 77,
+            "salary": 1,
+            "years": 3
+          },
+          {
+            "id": "p13i06081mcfvru-231",
+            "name": "Tyquan Thornton",
+            "pos": "WR",
+            "ovr": 75,
+            "salary": 1,
+            "years": 3
+          },
+          {
+            "id": "p13i06081mcfvru-232",
+            "name": "Travis Kelce",
+            "pos": "TE",
+            "ovr": 88,
+            "salary": 13.3,
+            "years": 1
+          },
+          {
+            "id": "p13i06081mcfvru-233",
+            "name": "Josh Simmons",
+            "pos": "OL",
+            "ovr": 81,
+            "salary": 5.3,
+            "years": 4
+          },
+          {
+            "id": "p13i06081mcfvru-234",
+            "name": "Creed Humphrey",
+            "pos": "OL",
+            "ovr": 80,
+            "salary": 4.1,
+            "years": 2
+          },
+          {
+            "id": "p13i06081mcfvru-235",
+            "name": "Chris Jones",
+            "pos": "DL",
+            "ovr": 92,
+            "salary": 17.9,
+            "years": 2
+          },
+          {
+            "id": "p13i06081mcfvru-236",
+            "name": "George Karlaftis",
+            "pos": "DL",
+            "ovr": 78,
+            "salary": 1.8,
+            "years": 3
+          },
+          {
+            "id": "p13i06081mcfvru-237",
+            "name": "Nick Bolton",
+            "pos": "LB",
+            "ovr": 83,
+            "salary": 7.5,
+            "years": 3
+          },
+          {
+            "id": "p13i06081mcfvru-238",
+            "name": "Drue Tranquill",
+            "pos": "LB",
+            "ovr": 67,
+            "salary": 1,
+            "years": 1
+          },
+          {
+            "id": "p13i06081mcfvru-239",
+            "name": "Chamarri Conner",
+            "pos": "DB",
+            "ovr": 76,
+            "salary": 1,
+            "years": 3
+          },
+          {
+            "id": "p13i06081mcfvru-240",
+            "name": "Kristian Fulton",
+            "pos": "DB",
+            "ovr": 69,
+            "salary": 1,
+            "years": 2
+          }
+        ],
+        "record": {
+          "wins": 11,
+          "losses": 6
+        },
+        "overflow": 0
+      },
+      "afterDraft": {
+        "rawHash": "70fdb644077c47b6a1cf97017161097566a3cc5d427bd14a05dca2b0e151b4a3",
+        "phase": "hub",
+        "season": 2027,
+        "period": 1,
+        "titles": 0,
+        "seasonsPlayed": 1,
+        "picksLeft": 0,
+        "champions": [
+          {
+            "season": 2026,
+            "team": "DAL"
+          }
+        ],
+        "postseason": false,
+        "team": "KC",
+        "roster": [
+          {
+            "id": "p13i06081mcfvru-226",
+            "name": "Patrick Mahomes",
+            "pos": "QB",
+            "ovr": 93,
+            "salary": 34.2,
+            "years": 1
+          },
+          {
+            "id": "p13i06081mcfvru-227",
+            "name": "Kenneth Walker III",
+            "pos": "RB",
+            "ovr": 89,
+            "salary": 14.5,
+            "years": 3
+          },
+          {
+            "id": "p13i06081mcfvru-228",
+            "name": "Brashard Smith",
+            "pos": "RB",
+            "ovr": 70,
+            "salary": 1,
+            "years": 2
+          },
+          {
+            "id": "p13i06081mcfvru-229",
+            "name": "Rashee Rice",
+            "pos": "WR",
+            "ovr": 96,
+            "salary": 22.5,
+            "years": 2
+          },
+          {
+            "id": "p13i06081mcfvru-230",
+            "name": "Xavier Worthy",
+            "pos": "WR",
+            "ovr": 78,
+            "salary": 1,
+            "years": 2
+          },
+          {
+            "id": "p13i06081mcfvru-231",
+            "name": "Tyquan Thornton",
+            "pos": "WR",
+            "ovr": 75,
+            "salary": 1,
+            "years": 2
+          },
+          {
+            "id": "p13i06081mcfvru-233",
+            "name": "Josh Simmons",
+            "pos": "OL",
+            "ovr": 83,
+            "salary": 5.3,
+            "years": 3
+          },
+          {
+            "id": "p13i06081mcfvru-234",
+            "name": "Creed Humphrey",
+            "pos": "OL",
+            "ovr": 80,
+            "salary": 4.1,
+            "years": 1
+          },
+          {
+            "id": "p13i06081mcfvru-235",
+            "name": "Chris Jones",
+            "pos": "DL",
+            "ovr": 91,
+            "salary": 17.9,
+            "years": 1
+          },
+          {
+            "id": "p13i06081mcfvru-236",
+            "name": "George Karlaftis",
+            "pos": "DL",
+            "ovr": 78,
+            "salary": 1.8,
+            "years": 2
+          },
+          {
+            "id": "p13i06081mcfvru-237",
+            "name": "Nick Bolton",
+            "pos": "LB",
+            "ovr": 83,
+            "salary": 7.5,
+            "years": 2
+          },
+          {
+            "id": "p13i06081mcfvru-239",
+            "name": "Chamarri Conner",
+            "pos": "DB",
+            "ovr": 76,
+            "salary": 1,
+            "years": 2
+          },
+          {
+            "id": "p13i06081mcfvru-240",
+            "name": "Kristian Fulton",
+            "pos": "DB",
+            "ovr": 69,
+            "salary": 1,
+            "years": 1
+          },
+          {
+            "id": "pcqeamwpr03rn-41",
+            "name": "Zion Zimmerman",
+            "pos": "QB",
+            "ovr": 88,
+            "salary": 9.1,
+            "years": 3
+          },
+          {
+            "id": "pcqeamwpr03rn-48",
+            "name": "Xavier Chesterton",
+            "pos": "DL",
+            "ovr": 81,
+            "salary": 6.7,
+            "years": 3
+          },
+          {
+            "id": "pcqeamwpr03rn-55",
+            "name": "Cooper Kingsley",
+            "pos": "WR",
+            "ovr": 76,
+            "salary": 5.3,
+            "years": 3
+          },
+          {
+            "id": "pcqeamwpr03rn-69",
+            "name": "Caden Chesterton",
+            "pos": "LB",
+            "ovr": 71,
+            "salary": 1,
+            "years": 2
+          }
+        ],
+        "record": {
+          "wins": 0,
+          "losses": 0
+        },
+        "overflow": 0
+      },
+      "nextSeason": {
+        "rawHash": "70fdb644077c47b6a1cf97017161097566a3cc5d427bd14a05dca2b0e151b4a3",
+        "phase": "hub",
+        "season": 2027,
+        "period": 1,
+        "titles": 0,
+        "seasonsPlayed": 1,
+        "picksLeft": 0,
+        "champions": [
+          {
+            "season": 2026,
+            "team": "DAL"
+          }
+        ],
+        "postseason": false,
+        "team": "KC",
+        "roster": [
+          {
+            "id": "p13i06081mcfvru-226",
+            "name": "Patrick Mahomes",
+            "pos": "QB",
+            "ovr": 93,
+            "salary": 34.2,
+            "years": 1
+          },
+          {
+            "id": "p13i06081mcfvru-227",
+            "name": "Kenneth Walker III",
+            "pos": "RB",
+            "ovr": 89,
+            "salary": 14.5,
+            "years": 3
+          },
+          {
+            "id": "p13i06081mcfvru-228",
+            "name": "Brashard Smith",
+            "pos": "RB",
+            "ovr": 70,
+            "salary": 1,
+            "years": 2
+          },
+          {
+            "id": "p13i06081mcfvru-229",
+            "name": "Rashee Rice",
+            "pos": "WR",
+            "ovr": 96,
+            "salary": 22.5,
+            "years": 2
+          },
+          {
+            "id": "p13i06081mcfvru-230",
+            "name": "Xavier Worthy",
+            "pos": "WR",
+            "ovr": 78,
+            "salary": 1,
+            "years": 2
+          },
+          {
+            "id": "p13i06081mcfvru-231",
+            "name": "Tyquan Thornton",
+            "pos": "WR",
+            "ovr": 75,
+            "salary": 1,
+            "years": 2
+          },
+          {
+            "id": "p13i06081mcfvru-233",
+            "name": "Josh Simmons",
+            "pos": "OL",
+            "ovr": 83,
+            "salary": 5.3,
+            "years": 3
+          },
+          {
+            "id": "p13i06081mcfvru-234",
+            "name": "Creed Humphrey",
+            "pos": "OL",
+            "ovr": 80,
+            "salary": 4.1,
+            "years": 1
+          },
+          {
+            "id": "p13i06081mcfvru-235",
+            "name": "Chris Jones",
+            "pos": "DL",
+            "ovr": 91,
+            "salary": 17.9,
+            "years": 1
+          },
+          {
+            "id": "p13i06081mcfvru-236",
+            "name": "George Karlaftis",
+            "pos": "DL",
+            "ovr": 78,
+            "salary": 1.8,
+            "years": 2
+          },
+          {
+            "id": "p13i06081mcfvru-237",
+            "name": "Nick Bolton",
+            "pos": "LB",
+            "ovr": 83,
+            "salary": 7.5,
+            "years": 2
+          },
+          {
+            "id": "p13i06081mcfvru-239",
+            "name": "Chamarri Conner",
+            "pos": "DB",
+            "ovr": 76,
+            "salary": 1,
+            "years": 2
+          },
+          {
+            "id": "p13i06081mcfvru-240",
+            "name": "Kristian Fulton",
+            "pos": "DB",
+            "ovr": 69,
+            "salary": 1,
+            "years": 1
+          },
+          {
+            "id": "pcqeamwpr03rn-41",
+            "name": "Zion Zimmerman",
+            "pos": "QB",
+            "ovr": 88,
+            "salary": 9.1,
+            "years": 3
+          },
+          {
+            "id": "pcqeamwpr03rn-48",
+            "name": "Xavier Chesterton",
+            "pos": "DL",
+            "ovr": 81,
+            "salary": 6.7,
+            "years": 3
+          },
+          {
+            "id": "pcqeamwpr03rn-55",
+            "name": "Cooper Kingsley",
+            "pos": "WR",
+            "ovr": 76,
+            "salary": 5.3,
+            "years": 3
+          },
+          {
+            "id": "pcqeamwpr03rn-69",
+            "name": "Caden Chesterton",
+            "pos": "LB",
+            "ovr": 71,
+            "salary": 1,
+            "years": 2
+          }
+        ],
+        "record": {
+          "wins": 0,
+          "losses": 0
+        },
+        "overflow": 0
+      },
+      "reloadNextSeason": {
+        "bytesHeld": true,
+        "facts": {
+          "rawHash": "70fdb644077c47b6a1cf97017161097566a3cc5d427bd14a05dca2b0e151b4a3",
+          "phase": "hub",
+          "season": 2027,
+          "period": 1,
+          "titles": 0,
+          "seasonsPlayed": 1,
+          "picksLeft": 0,
+          "champions": [
+            {
+              "season": 2026,
+              "team": "DAL"
+            }
+          ],
+          "postseason": false,
+          "team": "KC",
+          "roster": [
+            {
+              "id": "p13i06081mcfvru-226",
+              "name": "Patrick Mahomes",
+              "pos": "QB",
+              "ovr": 93,
+              "salary": 34.2,
+              "years": 1
+            },
+            {
+              "id": "p13i06081mcfvru-227",
+              "name": "Kenneth Walker III",
+              "pos": "RB",
+              "ovr": 89,
+              "salary": 14.5,
+              "years": 3
+            },
+            {
+              "id": "p13i06081mcfvru-228",
+              "name": "Brashard Smith",
+              "pos": "RB",
+              "ovr": 70,
+              "salary": 1,
+              "years": 2
+            },
+            {
+              "id": "p13i06081mcfvru-229",
+              "name": "Rashee Rice",
+              "pos": "WR",
+              "ovr": 96,
+              "salary": 22.5,
+              "years": 2
+            },
+            {
+              "id": "p13i06081mcfvru-230",
+              "name": "Xavier Worthy",
+              "pos": "WR",
+              "ovr": 78,
+              "salary": 1,
+              "years": 2
+            },
+            {
+              "id": "p13i06081mcfvru-231",
+              "name": "Tyquan Thornton",
+              "pos": "WR",
+              "ovr": 75,
+              "salary": 1,
+              "years": 2
+            },
+            {
+              "id": "p13i06081mcfvru-233",
+              "name": "Josh Simmons",
+              "pos": "OL",
+              "ovr": 83,
+              "salary": 5.3,
+              "years": 3
+            },
+            {
+              "id": "p13i06081mcfvru-234",
+              "name": "Creed Humphrey",
+              "pos": "OL",
+              "ovr": 80,
+              "salary": 4.1,
+              "years": 1
+            },
+            {
+              "id": "p13i06081mcfvru-235",
+              "name": "Chris Jones",
+              "pos": "DL",
+              "ovr": 91,
+              "salary": 17.9,
+              "years": 1
+            },
+            {
+              "id": "p13i06081mcfvru-236",
+              "name": "George Karlaftis",
+              "pos": "DL",
+              "ovr": 78,
+              "salary": 1.8,
+              "years": 2
+            },
+            {
+              "id": "p13i06081mcfvru-237",
+              "name": "Nick Bolton",
+              "pos": "LB",
+              "ovr": 83,
+              "salary": 7.5,
+              "years": 2
+            },
+            {
+              "id": "p13i06081mcfvru-239",
+              "name": "Chamarri Conner",
+              "pos": "DB",
+              "ovr": 76,
+              "salary": 1,
+              "years": 2
+            },
+            {
+              "id": "p13i06081mcfvru-240",
+              "name": "Kristian Fulton",
+              "pos": "DB",
+              "ovr": 69,
+              "salary": 1,
+              "years": 1
+            },
+            {
+              "id": "pcqeamwpr03rn-41",
+              "name": "Zion Zimmerman",
+              "pos": "QB",
+              "ovr": 88,
+              "salary": 9.1,
+              "years": 3
+            },
+            {
+              "id": "pcqeamwpr03rn-48",
+              "name": "Xavier Chesterton",
+              "pos": "DL",
+              "ovr": 81,
+              "salary": 6.7,
+              "years": 3
+            },
+            {
+              "id": "pcqeamwpr03rn-55",
+              "name": "Cooper Kingsley",
+              "pos": "WR",
+              "ovr": 76,
+              "salary": 5.3,
+              "years": 3
+            },
+            {
+              "id": "pcqeamwpr03rn-69",
+              "name": "Caden Chesterton",
+              "pos": "LB",
+              "ovr": 71,
+              "salary": 1,
+              "years": 2
+            }
+          ],
+          "record": {
+            "wins": 0,
+            "losses": 0
+          },
+          "overflow": 0
+        }
+      }
+    },
+    {
+      "sport": "NHL",
+      "route": "/nhl-front-office",
+      "width": 320,
+      "motion": "no-preference",
+      "actions": [
+        {
+          "kind": "period",
+          "before": 1,
+          "after": 2,
+          "phase": "hub",
+          "wins": 2,
+          "losses": 0,
+          "otLosses": 1,
+          "overflow": 0
+        },
+        {
+          "kind": "period",
+          "before": 2,
+          "after": 3,
+          "phase": "hub",
+          "wins": 5,
+          "losses": 3,
+          "otLosses": 1,
+          "overflow": 0
+        },
+        {
+          "kind": "period",
+          "before": 3,
+          "after": 4,
+          "phase": "hub",
+          "wins": 8,
+          "losses": 4,
+          "otLosses": 1,
+          "overflow": 0
+        },
+        {
+          "kind": "period",
+          "before": 4,
+          "after": 5,
+          "phase": "hub",
+          "wins": 12,
+          "losses": 5,
+          "otLosses": 1,
+          "overflow": 0
+        },
+        {
+          "kind": "period",
+          "before": 5,
+          "after": 6,
+          "phase": "hub",
+          "wins": 16,
+          "losses": 9,
+          "otLosses": 1,
+          "overflow": 0
+        },
+        {
+          "kind": "period",
+          "before": 6,
+          "after": 7,
+          "phase": "hub",
+          "wins": 19,
+          "losses": 11,
+          "otLosses": 2,
+          "overflow": 0
+        },
+        {
+          "kind": "period",
+          "before": 7,
+          "after": 8,
+          "phase": "hub",
+          "wins": 19,
+          "losses": 11,
+          "otLosses": 3,
+          "overflow": 0
+        },
+        {
+          "kind": "period",
+          "before": 8,
+          "after": 9,
+          "phase": "hub",
+          "wins": 21,
+          "losses": 13,
+          "otLosses": 3,
+          "overflow": 0
+        },
+        {
+          "kind": "period",
+          "before": 9,
+          "after": 10,
+          "phase": "hub",
+          "wins": 22,
+          "losses": 14,
+          "otLosses": 4,
+          "overflow": 0
+        },
+        {
+          "kind": "period",
+          "before": 10,
+          "after": 11,
+          "phase": "hub",
+          "wins": 25,
+          "losses": 15,
+          "otLosses": 4,
+          "overflow": 0
+        },
+        {
+          "kind": "period",
+          "before": 11,
+          "after": 12,
+          "phase": "hub",
+          "wins": 29,
+          "losses": 16,
+          "otLosses": 4,
+          "overflow": 0
+        },
+        {
+          "kind": "period",
+          "before": 12,
+          "after": 13,
+          "phase": "hub",
+          "wins": 32,
+          "losses": 18,
+          "otLosses": 4,
+          "overflow": 0
+        },
+        {
+          "kind": "period",
+          "before": 13,
+          "after": 14,
+          "phase": "hub",
+          "wins": 34,
+          "losses": 20,
+          "otLosses": 5,
+          "overflow": 0
+        },
+        {
+          "kind": "period",
+          "before": 14,
+          "after": 15,
+          "phase": "hub",
+          "wins": 38,
+          "losses": 20,
+          "otLosses": 5,
+          "overflow": 0
+        },
+        {
+          "kind": "period",
+          "before": 15,
+          "after": 16,
+          "phase": "hub",
+          "wins": 41,
+          "losses": 23,
+          "otLosses": 6,
+          "overflow": 0
+        },
+        {
+          "kind": "period",
+          "before": 16,
+          "after": 17,
+          "phase": "hub",
+          "wins": 44,
+          "losses": 26,
+          "otLosses": 7,
+          "overflow": 0
+        },
+        {
+          "kind": "period",
+          "before": 17,
+          "after": 18,
+          "phase": "hub",
+          "wins": 50,
+          "losses": 28,
+          "otLosses": 7,
+          "overflow": 0
+        },
+        {
+          "kind": "period",
+          "before": 18,
+          "after": 19,
+          "phase": "hub",
+          "wins": 52,
+          "losses": 29,
+          "otLosses": 7,
+          "overflow": 0
+        },
+        {
+          "kind": "period",
+          "before": 19,
+          "after": 20,
+          "phase": "hub",
+          "wins": 52,
+          "losses": 29,
+          "otLosses": 7,
+          "overflow": 0
+        },
+        {
+          "kind": "period",
+          "before": 20,
+          "after": 20,
+          "phase": "recap",
+          "wins": 53,
+          "losses": 32,
+          "otLosses": 8,
+          "overflow": 0
+        },
+        {
+          "kind": "draft",
+          "prospect": "hpz5jmditq0d5-21",
+          "name": "Nikita Lehtinen",
+          "after": {
+            "rawHash": "6057b0140001148821006adf2ae7f4a4757460dc6b10383c1c18d8da8615c6a3",
+            "phase": "draft",
+            "season": 2026,
+            "period": 20,
+            "titles": 0,
+            "seasonsPlayed": 1,
+            "picksLeft": 1,
+            "champions": [
+              {
+                "season": 2026,
+                "team": "COL"
+              }
+            ],
+            "postseason": true,
+            "team": "FLA",
+            "roster": [
+              {
+                "id": "h14sksybzg8yvu-144",
+                "name": "Matthew Tkachuk",
+                "pos": "W",
+                "ovr": 96,
+                "salary": 10.4,
+                "years": 3
+              },
+              {
+                "id": "h14sksybzg8yvu-145",
+                "name": "Brad Marchand",
+                "pos": "W",
+                "ovr": 95,
+                "salary": 10,
+                "years": 2
+              },
+              {
+                "id": "h14sksybzg8yvu-146",
+                "name": "Brady Tkachuk",
+                "pos": "W",
+                "ovr": 95,
+                "salary": 10,
+                "years": 3
+              },
+              {
+                "id": "h14sksybzg8yvu-147",
+                "name": "Sam Reinhart",
+                "pos": "C",
+                "ovr": 94,
+                "salary": 9.6,
+                "years": 2
+              },
+              {
+                "id": "h14sksybzg8yvu-148",
+                "name": "Sam Bennett",
+                "pos": "C",
+                "ovr": 91,
+                "salary": 8.4,
+                "years": 2
+              },
+              {
+                "id": "h14sksybzg8yvu-149",
+                "name": "Carter Verhaeghe",
+                "pos": "C",
+                "ovr": 90,
+                "salary": 8,
+                "years": 2
+              },
+              {
+                "id": "h14sksybzg8yvu-150",
+                "name": "Anton Lundell",
+                "pos": "C",
+                "ovr": 89,
+                "salary": 7.6,
+                "years": 4
+              },
+              {
+                "id": "h14sksybzg8yvu-151",
+                "name": "Seth Jones",
+                "pos": "D",
+                "ovr": 92,
+                "salary": 8.8,
+                "years": 2
+              },
+              {
+                "id": "h14sksybzg8yvu-152",
+                "name": "Aaron Ekblad",
+                "pos": "D",
+                "ovr": 85,
+                "salary": 6,
+                "years": 2
+              },
+              {
+                "id": "h14sksybzg8yvu-153",
+                "name": "Gustav Forsling",
+                "pos": "D",
+                "ovr": 84,
+                "salary": 5.6,
+                "years": 2
+              },
+              {
+                "id": "h14sksybzg8yvu-154",
+                "name": "Uvis Balinskis",
+                "pos": "D",
+                "ovr": 80,
+                "salary": 4,
+                "years": 2
+              },
+              {
+                "id": "h14sksybzg8yvu-155",
+                "name": "Akira Schmid",
+                "pos": "G",
+                "ovr": 78,
+                "salary": 3.2,
+                "years": 3
+              },
+              {
+                "id": "h14sksybzg8yvu-156",
+                "name": "Jacob Markstrom",
+                "pos": "G",
+                "ovr": 77,
+                "salary": 2.8,
+                "years": 2
+              },
+              {
+                "id": "hpz5jmditq0d5-25",
+                "name": "Nikita Lehtinen",
+                "pos": "W",
+                "ovr": 86,
+                "salary": 3,
+                "years": 3
+              }
+            ],
+            "record": {
+              "wins": 53,
+              "losses": 32,
+              "otLosses": 8
+            },
+            "overflow": 0
+          }
+        },
+        {
+          "kind": "draft",
+          "prospect": "hpz5jmditq0d5-10",
+          "name": "Tuukka Ostberg",
+          "after": {
+            "rawHash": "c11080870c1754508cb345fa78f39b3a589077271fddd45287f049a412e062e5",
+            "phase": "hub",
+            "season": 2027,
+            "period": 1,
+            "titles": 0,
+            "seasonsPlayed": 1,
+            "picksLeft": 0,
+            "champions": [
+              {
+                "season": 2026,
+                "team": "COL"
+              }
+            ],
+            "postseason": false,
+            "team": "FLA",
+            "roster": [
+              {
+                "id": "h14sksybzg8yvu-144",
+                "name": "Matthew Tkachuk",
+                "pos": "W",
+                "ovr": 96,
+                "salary": 10.4,
+                "years": 2
+              },
+              {
+                "id": "h14sksybzg8yvu-145",
+                "name": "Brad Marchand",
+                "pos": "W",
+                "ovr": 91,
+                "salary": 10,
+                "years": 1
+              },
+              {
+                "id": "h14sksybzg8yvu-146",
+                "name": "Brady Tkachuk",
+                "pos": "W",
+                "ovr": 95,
+                "salary": 10,
+                "years": 2
+              },
+              {
+                "id": "h14sksybzg8yvu-147",
+                "name": "Sam Reinhart",
+                "pos": "C",
+                "ovr": 92,
+                "salary": 9.6,
+                "years": 1
+              },
+              {
+                "id": "h14sksybzg8yvu-148",
+                "name": "Sam Bennett",
+                "pos": "C",
+                "ovr": 89,
+                "salary": 8.4,
+                "years": 1
+              },
+              {
+                "id": "h14sksybzg8yvu-149",
+                "name": "Carter Verhaeghe",
+                "pos": "C",
+                "ovr": 88,
+                "salary": 8,
+                "years": 1
+              },
+              {
+                "id": "h14sksybzg8yvu-150",
+                "name": "Anton Lundell",
+                "pos": "C",
+                "ovr": 89,
+                "salary": 7.6,
+                "years": 3
+              },
+              {
+                "id": "h14sksybzg8yvu-151",
+                "name": "Seth Jones",
+                "pos": "D",
+                "ovr": 90,
+                "salary": 8.8,
+                "years": 1
+              },
+              {
+                "id": "h14sksybzg8yvu-152",
+                "name": "Aaron Ekblad",
+                "pos": "D",
+                "ovr": 83,
+                "salary": 6,
+                "years": 1
+              },
+              {
+                "id": "h14sksybzg8yvu-153",
+                "name": "Gustav Forsling",
+                "pos": "D",
+                "ovr": 83,
+                "salary": 5.6,
+                "years": 1
+              },
+              {
+                "id": "h14sksybzg8yvu-154",
+                "name": "Uvis Balinskis",
+                "pos": "D",
+                "ovr": 78,
+                "salary": 4,
+                "years": 1
+              },
+              {
+                "id": "h14sksybzg8yvu-155",
+                "name": "Akira Schmid",
+                "pos": "G",
+                "ovr": 78,
+                "salary": 3.2,
+                "years": 2
+              },
+              {
+                "id": "h14sksybzg8yvu-156",
+                "name": "Jacob Markstrom",
+                "pos": "G",
+                "ovr": 74,
+                "salary": 2.8,
+                "years": 1
+              },
+              {
+                "id": "hpz5jmditq0d5-25",
+                "name": "Nikita Lehtinen",
+                "pos": "W",
+                "ovr": 88,
+                "salary": 3,
+                "years": 2
+              },
+              {
+                "id": "hpz5jmditq0d5-31",
+                "name": "Tuukka Ostberg",
+                "pos": "G",
+                "ovr": 87,
+                "salary": 2.7,
+                "years": 2
+              }
+            ],
+            "record": {
+              "wins": 0,
+              "losses": 0,
+              "otLosses": 0
+            },
+            "overflow": 0
+          }
+        }
+      ],
+      "events": {
+        "blocked": [
+          {
+            "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/game_completions",
+            "method": "POST"
+          },
+          {
+            "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/game_completions",
+            "method": "POST"
+          },
+          {
+            "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/game_completions",
+            "method": "POST"
+          },
+          {
+            "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/game_completions",
+            "method": "POST"
+          },
+          {
+            "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/game_completions",
+            "method": "POST"
+          },
+          {
+            "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/game_completions",
+            "method": "POST"
+          },
+          {
+            "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/game_completions",
+            "method": "POST"
+          },
+          {
+            "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/game_completions",
+            "method": "POST"
+          },
+          {
+            "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/game_completions",
+            "method": "POST"
+          },
+          {
+            "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/game_completions",
+            "method": "POST"
+          },
+          {
+            "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/game_completions",
+            "method": "POST"
+          },
+          {
+            "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/game_completions",
+            "method": "POST"
+          },
+          {
+            "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/game_completions",
+            "method": "POST"
+          },
+          {
+            "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/game_completions",
+            "method": "POST"
+          },
+          {
+            "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/game_completions",
+            "method": "POST"
+          },
+          {
+            "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/game_completions",
+            "method": "POST"
+          },
+          {
+            "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/game_completions",
+            "method": "POST"
+          },
+          {
+            "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/game_completions",
+            "method": "POST"
+          },
+          {
+            "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/game_completions",
+            "method": "POST"
+          },
+          {
+            "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/game_completions",
+            "method": "POST"
+          }
+        ],
+        "errors": [],
+        "badHttp": []
+      },
+      "initial": {
+        "rawHash": "2be1f64c50ade34955ef93101499e4f3deb70314a0770064adcda82774d4d0ed",
+        "phase": "hub",
+        "season": 2026,
+        "period": 1,
+        "titles": 0,
+        "seasonsPlayed": 0,
+        "picksLeft": 0,
+        "champions": [],
+        "postseason": false,
+        "team": "FLA",
+        "roster": [
+          {
+            "id": "h14sksybzg8yvu-144",
+            "name": "Matthew Tkachuk",
+            "pos": "W",
+            "ovr": 96,
+            "salary": 10.4,
+            "years": 3
+          },
+          {
+            "id": "h14sksybzg8yvu-145",
+            "name": "Brad Marchand",
+            "pos": "W",
+            "ovr": 95,
+            "salary": 10,
+            "years": 2
+          },
+          {
+            "id": "h14sksybzg8yvu-146",
+            "name": "Brady Tkachuk",
+            "pos": "W",
+            "ovr": 95,
+            "salary": 10,
+            "years": 3
+          },
+          {
+            "id": "h14sksybzg8yvu-147",
+            "name": "Sam Reinhart",
+            "pos": "C",
+            "ovr": 94,
+            "salary": 9.6,
+            "years": 2
+          },
+          {
+            "id": "h14sksybzg8yvu-148",
+            "name": "Sam Bennett",
+            "pos": "C",
+            "ovr": 91,
+            "salary": 8.4,
+            "years": 2
+          },
+          {
+            "id": "h14sksybzg8yvu-149",
+            "name": "Carter Verhaeghe",
+            "pos": "C",
+            "ovr": 90,
+            "salary": 8,
+            "years": 2
+          },
+          {
+            "id": "h14sksybzg8yvu-150",
+            "name": "Anton Lundell",
+            "pos": "C",
+            "ovr": 89,
+            "salary": 7.6,
+            "years": 4
+          },
+          {
+            "id": "h14sksybzg8yvu-151",
+            "name": "Seth Jones",
+            "pos": "D",
+            "ovr": 92,
+            "salary": 8.8,
+            "years": 2
+          },
+          {
+            "id": "h14sksybzg8yvu-152",
+            "name": "Aaron Ekblad",
+            "pos": "D",
+            "ovr": 85,
+            "salary": 6,
+            "years": 2
+          },
+          {
+            "id": "h14sksybzg8yvu-153",
+            "name": "Gustav Forsling",
+            "pos": "D",
+            "ovr": 84,
+            "salary": 5.6,
+            "years": 2
+          },
+          {
+            "id": "h14sksybzg8yvu-154",
+            "name": "Uvis Balinskis",
+            "pos": "D",
+            "ovr": 80,
+            "salary": 4,
+            "years": 2
+          },
+          {
+            "id": "h14sksybzg8yvu-155",
+            "name": "Akira Schmid",
+            "pos": "G",
+            "ovr": 78,
+            "salary": 3.2,
+            "years": 3
+          },
+          {
+            "id": "h14sksybzg8yvu-156",
+            "name": "Jacob Markstrom",
+            "pos": "G",
+            "ovr": 77,
+            "salary": 2.8,
+            "years": 2
+          }
+        ],
+        "record": {
+          "wins": 0,
+          "losses": 0,
+          "otLosses": 0
+        },
+        "overflow": 0
+      },
+      "trade": {
+        "ownRoster": 13,
+        "finderChoices": [
+          "Matthew Tkachuk (W)96",
+          "Brad Marchand (W)95",
+          "Brady Tkachuk (W)95",
+          "Sam Reinhart (C)94",
+          "Seth Jones (D)92",
+          "Sam Bennett (C)91",
+          "Carter Verhaeghe (C)90",
+          "Anton Lundell (C)89",
+          "Shop him around the league"
+        ],
+        "missingOwn": [
+          {
+            "id": "h14sksybzg8yvu-152",
+            "name": "Aaron Ekblad",
+            "pos": "D",
+            "ovr": 85
+          },
+          {
+            "id": "h14sksybzg8yvu-153",
+            "name": "Gustav Forsling",
+            "pos": "D",
+            "ovr": 84
+          },
+          {
+            "id": "h14sksybzg8yvu-154",
+            "name": "Uvis Balinskis",
+            "pos": "D",
+            "ovr": 80
+          },
+          {
+            "id": "h14sksybzg8yvu-155",
+            "name": "Akira Schmid",
+            "pos": "G",
+            "ovr": 78
+          },
+          {
+            "id": "h14sksybzg8yvu-156",
+            "name": "Jacob Markstrom",
+            "pos": "G",
+            "ovr": 77
+          }
+        ],
+        "manualChoices": [
+          "Back",
+          "Sign up to track your statsTrack stats",
+          "",
+          " Hub",
+          "Matthew Tkachuk (W)96",
+          "Brad Marchand (W)95",
+          "Brady Tkachuk (W)95",
+          "Sam Reinhart (C)94",
+          "Seth Jones (D)92",
+          "Sam Bennett (C)91",
+          "Carter Verhaeghe (C)90",
+          "Anton Lundell (C)89",
+          "Shop him around the league",
+          "BOS",
+          "BUF",
+          "DET",
+          "MTL",
+          "OTT",
+          "TBL",
+          "TOR",
+          "CAR",
+          "CBJ",
+          "NJD",
+          "NYI",
+          "NYR",
+          "PHI",
+          "PIT",
+          "WSH",
+          "CHI",
+          "COL",
+          "DAL",
+          "MIN",
+          "NSH",
+          "STL",
+          "UTA",
+          "WPG",
+          "ANA",
+          "CGY",
+          "EDM",
+          "LAK",
+          "SJS",
+          "SEA",
+          "VAN",
+          "VGK",
+          "Matthew Tkachuk (W)96",
+          "Brad Marchand (W)95",
+          "Brady Tkachuk (W)95",
+          "Sam Reinhart (C)94",
+          "Seth Jones (D)92",
+          "Sam Bennett (C)91",
+          "Carter Verhaeghe (C)90",
+          "Anton Lundell (C)89",
+          "Open talks",
+          "Open talks",
+          "Open talks",
+          "Open talks",
+          "Open talks",
+          "Open talks",
+          "Open talks",
+          "Open talks",
+          " Abandon franchise and restart",
+          "Cookie choices",
+          "Light mode",
+          "Report a bug"
+        ],
+        "lowestPlayer": {
+          "id": "h14sksybzg8yvu-156",
+          "name": "Jacob Markstrom",
+          "pos": "G",
+          "age": 36,
+          "ovr": 77,
+          "salary": 2.8,
+          "years": 2,
+          "out": 0,
+          "pot": 77
+        },
+        "lowestSelectable": false,
+        "partnerId": "ANA",
+        "partnerRoster": 13,
+        "receiveRows": 8,
+        "receiveIds": [
+          "h14sksybzg8yvu-1",
+          "h14sksybzg8yvu-2",
+          "h14sksybzg8yvu-3",
+          "h14sksybzg8yvu-8",
+          "h14sksybzg8yvu-4",
+          "h14sksybzg8yvu-5",
+          "h14sksybzg8yvu-6",
+          "h14sksybzg8yvu-7"
+        ],
+        "bounds": [
+          {
+            "text": "Matthew Tkachuk (W)96",
+            "height": 26.5,
+            "width": 118
+          },
+          {
+            "text": "Brad Marchand (W)95",
+            "height": 26.5,
+            "width": 118
+          },
+          {
+            "text": "Brady Tkachuk (W)95",
+            "height": 26.5,
+            "width": 118
+          },
+          {
+            "text": "Sam Reinhart (C)94",
+            "height": 26.5,
+            "width": 118
+          },
+          {
+            "text": "Seth Jones (D)92",
+            "height": 26.5,
+            "width": 118
+          },
+          {
+            "text": "Sam Bennett (C)91",
+            "height": 26.5,
+            "width": 118
+          },
+          {
+            "text": "Carter Verhaeghe (C)90",
+            "height": 26.5,
+            "width": 118
+          },
+          {
+            "text": "Anton Lundell (C)89",
+            "height": 26.5,
+            "width": 118
+          },
+          {
+            "text": "Shop him around the league",
+            "height": 28.5,
+            "width": 240
+          }
+        ]
+      },
+      "reloadInitial": {
+        "bytesHeld": true,
+        "facts": {
+          "rawHash": "2be1f64c50ade34955ef93101499e4f3deb70314a0770064adcda82774d4d0ed",
+          "phase": "hub",
+          "season": 2026,
+          "period": 1,
+          "titles": 0,
+          "seasonsPlayed": 0,
+          "picksLeft": 0,
+          "champions": [],
+          "postseason": false,
+          "team": "FLA",
+          "roster": [
+            {
+              "id": "h14sksybzg8yvu-144",
+              "name": "Matthew Tkachuk",
+              "pos": "W",
+              "ovr": 96,
+              "salary": 10.4,
+              "years": 3
+            },
+            {
+              "id": "h14sksybzg8yvu-145",
+              "name": "Brad Marchand",
+              "pos": "W",
+              "ovr": 95,
+              "salary": 10,
+              "years": 2
+            },
+            {
+              "id": "h14sksybzg8yvu-146",
+              "name": "Brady Tkachuk",
+              "pos": "W",
+              "ovr": 95,
+              "salary": 10,
+              "years": 3
+            },
+            {
+              "id": "h14sksybzg8yvu-147",
+              "name": "Sam Reinhart",
+              "pos": "C",
+              "ovr": 94,
+              "salary": 9.6,
+              "years": 2
+            },
+            {
+              "id": "h14sksybzg8yvu-148",
+              "name": "Sam Bennett",
+              "pos": "C",
+              "ovr": 91,
+              "salary": 8.4,
+              "years": 2
+            },
+            {
+              "id": "h14sksybzg8yvu-149",
+              "name": "Carter Verhaeghe",
+              "pos": "C",
+              "ovr": 90,
+              "salary": 8,
+              "years": 2
+            },
+            {
+              "id": "h14sksybzg8yvu-150",
+              "name": "Anton Lundell",
+              "pos": "C",
+              "ovr": 89,
+              "salary": 7.6,
+              "years": 4
+            },
+            {
+              "id": "h14sksybzg8yvu-151",
+              "name": "Seth Jones",
+              "pos": "D",
+              "ovr": 92,
+              "salary": 8.8,
+              "years": 2
+            },
+            {
+              "id": "h14sksybzg8yvu-152",
+              "name": "Aaron Ekblad",
+              "pos": "D",
+              "ovr": 85,
+              "salary": 6,
+              "years": 2
+            },
+            {
+              "id": "h14sksybzg8yvu-153",
+              "name": "Gustav Forsling",
+              "pos": "D",
+              "ovr": 84,
+              "salary": 5.6,
+              "years": 2
+            },
+            {
+              "id": "h14sksybzg8yvu-154",
+              "name": "Uvis Balinskis",
+              "pos": "D",
+              "ovr": 80,
+              "salary": 4,
+              "years": 2
+            },
+            {
+              "id": "h14sksybzg8yvu-155",
+              "name": "Akira Schmid",
+              "pos": "G",
+              "ovr": 78,
+              "salary": 3.2,
+              "years": 3
+            },
+            {
+              "id": "h14sksybzg8yvu-156",
+              "name": "Jacob Markstrom",
+              "pos": "G",
+              "ovr": 77,
+              "salary": 2.8,
+              "years": 2
+            }
+          ],
+          "record": {
+            "wins": 0,
+            "losses": 0,
+            "otLosses": 0
+          },
+          "overflow": 0
+        }
+      },
+      "finishedSeason": {
+        "rawHash": "15f5a1fd93d5f225e947d05e8a9022da7cfbb7c3f007c341cc049eb7af6ffe59",
+        "phase": "recap",
+        "season": 2026,
+        "period": 20,
+        "titles": 0,
+        "seasonsPlayed": 1,
+        "picksLeft": 0,
+        "champions": [
+          {
+            "season": 2026,
+            "team": "COL"
+          }
+        ],
+        "postseason": true,
+        "team": "FLA",
+        "roster": [
+          {
+            "id": "h14sksybzg8yvu-144",
+            "name": "Matthew Tkachuk",
+            "pos": "W",
+            "ovr": 96,
+            "salary": 10.4,
+            "years": 3
+          },
+          {
+            "id": "h14sksybzg8yvu-145",
+            "name": "Brad Marchand",
+            "pos": "W",
+            "ovr": 95,
+            "salary": 10,
+            "years": 2
+          },
+          {
+            "id": "h14sksybzg8yvu-146",
+            "name": "Brady Tkachuk",
+            "pos": "W",
+            "ovr": 95,
+            "salary": 10,
+            "years": 3
+          },
+          {
+            "id": "h14sksybzg8yvu-147",
+            "name": "Sam Reinhart",
+            "pos": "C",
+            "ovr": 94,
+            "salary": 9.6,
+            "years": 2
+          },
+          {
+            "id": "h14sksybzg8yvu-148",
+            "name": "Sam Bennett",
+            "pos": "C",
+            "ovr": 91,
+            "salary": 8.4,
+            "years": 2
+          },
+          {
+            "id": "h14sksybzg8yvu-149",
+            "name": "Carter Verhaeghe",
+            "pos": "C",
+            "ovr": 90,
+            "salary": 8,
+            "years": 2
+          },
+          {
+            "id": "h14sksybzg8yvu-150",
+            "name": "Anton Lundell",
+            "pos": "C",
+            "ovr": 89,
+            "salary": 7.6,
+            "years": 4
+          },
+          {
+            "id": "h14sksybzg8yvu-151",
+            "name": "Seth Jones",
+            "pos": "D",
+            "ovr": 92,
+            "salary": 8.8,
+            "years": 2
+          },
+          {
+            "id": "h14sksybzg8yvu-152",
+            "name": "Aaron Ekblad",
+            "pos": "D",
+            "ovr": 85,
+            "salary": 6,
+            "years": 2
+          },
+          {
+            "id": "h14sksybzg8yvu-153",
+            "name": "Gustav Forsling",
+            "pos": "D",
+            "ovr": 84,
+            "salary": 5.6,
+            "years": 2
+          },
+          {
+            "id": "h14sksybzg8yvu-154",
+            "name": "Uvis Balinskis",
+            "pos": "D",
+            "ovr": 80,
+            "salary": 4,
+            "years": 2
+          },
+          {
+            "id": "h14sksybzg8yvu-155",
+            "name": "Akira Schmid",
+            "pos": "G",
+            "ovr": 78,
+            "salary": 3.2,
+            "years": 3
+          },
+          {
+            "id": "h14sksybzg8yvu-156",
+            "name": "Jacob Markstrom",
+            "pos": "G",
+            "ovr": 77,
+            "salary": 2.8,
+            "years": 2
+          }
+        ],
+        "record": {
+          "wins": 53,
+          "losses": 32,
+          "otLosses": 8
+        },
+        "overflow": 0
+      },
+      "reloadRecap": {
+        "bytesHeld": true,
+        "facts": {
+          "rawHash": "15f5a1fd93d5f225e947d05e8a9022da7cfbb7c3f007c341cc049eb7af6ffe59",
+          "phase": "recap",
+          "season": 2026,
+          "period": 20,
+          "titles": 0,
+          "seasonsPlayed": 1,
+          "picksLeft": 0,
+          "champions": [
+            {
+              "season": 2026,
+              "team": "COL"
+            }
+          ],
+          "postseason": true,
+          "team": "FLA",
+          "roster": [
+            {
+              "id": "h14sksybzg8yvu-144",
+              "name": "Matthew Tkachuk",
+              "pos": "W",
+              "ovr": 96,
+              "salary": 10.4,
+              "years": 3
+            },
+            {
+              "id": "h14sksybzg8yvu-145",
+              "name": "Brad Marchand",
+              "pos": "W",
+              "ovr": 95,
+              "salary": 10,
+              "years": 2
+            },
+            {
+              "id": "h14sksybzg8yvu-146",
+              "name": "Brady Tkachuk",
+              "pos": "W",
+              "ovr": 95,
+              "salary": 10,
+              "years": 3
+            },
+            {
+              "id": "h14sksybzg8yvu-147",
+              "name": "Sam Reinhart",
+              "pos": "C",
+              "ovr": 94,
+              "salary": 9.6,
+              "years": 2
+            },
+            {
+              "id": "h14sksybzg8yvu-148",
+              "name": "Sam Bennett",
+              "pos": "C",
+              "ovr": 91,
+              "salary": 8.4,
+              "years": 2
+            },
+            {
+              "id": "h14sksybzg8yvu-149",
+              "name": "Carter Verhaeghe",
+              "pos": "C",
+              "ovr": 90,
+              "salary": 8,
+              "years": 2
+            },
+            {
+              "id": "h14sksybzg8yvu-150",
+              "name": "Anton Lundell",
+              "pos": "C",
+              "ovr": 89,
+              "salary": 7.6,
+              "years": 4
+            },
+            {
+              "id": "h14sksybzg8yvu-151",
+              "name": "Seth Jones",
+              "pos": "D",
+              "ovr": 92,
+              "salary": 8.8,
+              "years": 2
+            },
+            {
+              "id": "h14sksybzg8yvu-152",
+              "name": "Aaron Ekblad",
+              "pos": "D",
+              "ovr": 85,
+              "salary": 6,
+              "years": 2
+            },
+            {
+              "id": "h14sksybzg8yvu-153",
+              "name": "Gustav Forsling",
+              "pos": "D",
+              "ovr": 84,
+              "salary": 5.6,
+              "years": 2
+            },
+            {
+              "id": "h14sksybzg8yvu-154",
+              "name": "Uvis Balinskis",
+              "pos": "D",
+              "ovr": 80,
+              "salary": 4,
+              "years": 2
+            },
+            {
+              "id": "h14sksybzg8yvu-155",
+              "name": "Akira Schmid",
+              "pos": "G",
+              "ovr": 78,
+              "salary": 3.2,
+              "years": 3
+            },
+            {
+              "id": "h14sksybzg8yvu-156",
+              "name": "Jacob Markstrom",
+              "pos": "G",
+              "ovr": 77,
+              "salary": 2.8,
+              "years": 2
+            }
+          ],
+          "record": {
+            "wins": 53,
+            "losses": 32,
+            "otLosses": 8
+          },
+          "overflow": 0
+        }
+      },
+      "draftStart": {
+        "rawHash": "a5233c6fe57d672626ceccc36fa25ce5792beb12203e25f490a90f6892d251e3",
+        "phase": "draft",
+        "season": 2026,
+        "period": 20,
+        "titles": 0,
+        "seasonsPlayed": 1,
+        "picksLeft": 2,
+        "champions": [
+          {
+            "season": 2026,
+            "team": "COL"
+          }
+        ],
+        "postseason": true,
+        "team": "FLA",
+        "roster": [
+          {
+            "id": "h14sksybzg8yvu-144",
+            "name": "Matthew Tkachuk",
+            "pos": "W",
+            "ovr": 96,
+            "salary": 10.4,
+            "years": 3
+          },
+          {
+            "id": "h14sksybzg8yvu-145",
+            "name": "Brad Marchand",
+            "pos": "W",
+            "ovr": 95,
+            "salary": 10,
+            "years": 2
+          },
+          {
+            "id": "h14sksybzg8yvu-146",
+            "name": "Brady Tkachuk",
+            "pos": "W",
+            "ovr": 95,
+            "salary": 10,
+            "years": 3
+          },
+          {
+            "id": "h14sksybzg8yvu-147",
+            "name": "Sam Reinhart",
+            "pos": "C",
+            "ovr": 94,
+            "salary": 9.6,
+            "years": 2
+          },
+          {
+            "id": "h14sksybzg8yvu-148",
+            "name": "Sam Bennett",
+            "pos": "C",
+            "ovr": 91,
+            "salary": 8.4,
+            "years": 2
+          },
+          {
+            "id": "h14sksybzg8yvu-149",
+            "name": "Carter Verhaeghe",
+            "pos": "C",
+            "ovr": 90,
+            "salary": 8,
+            "years": 2
+          },
+          {
+            "id": "h14sksybzg8yvu-150",
+            "name": "Anton Lundell",
+            "pos": "C",
+            "ovr": 89,
+            "salary": 7.6,
+            "years": 4
+          },
+          {
+            "id": "h14sksybzg8yvu-151",
+            "name": "Seth Jones",
+            "pos": "D",
+            "ovr": 92,
+            "salary": 8.8,
+            "years": 2
+          },
+          {
+            "id": "h14sksybzg8yvu-152",
+            "name": "Aaron Ekblad",
+            "pos": "D",
+            "ovr": 85,
+            "salary": 6,
+            "years": 2
+          },
+          {
+            "id": "h14sksybzg8yvu-153",
+            "name": "Gustav Forsling",
+            "pos": "D",
+            "ovr": 84,
+            "salary": 5.6,
+            "years": 2
+          },
+          {
+            "id": "h14sksybzg8yvu-154",
+            "name": "Uvis Balinskis",
+            "pos": "D",
+            "ovr": 80,
+            "salary": 4,
+            "years": 2
+          },
+          {
+            "id": "h14sksybzg8yvu-155",
+            "name": "Akira Schmid",
+            "pos": "G",
+            "ovr": 78,
+            "salary": 3.2,
+            "years": 3
+          },
+          {
+            "id": "h14sksybzg8yvu-156",
+            "name": "Jacob Markstrom",
+            "pos": "G",
+            "ovr": 77,
+            "salary": 2.8,
+            "years": 2
+          }
+        ],
+        "record": {
+          "wins": 53,
+          "losses": 32,
+          "otLosses": 8
+        },
+        "overflow": 0
+      },
+      "afterDraft": {
+        "rawHash": "c11080870c1754508cb345fa78f39b3a589077271fddd45287f049a412e062e5",
+        "phase": "hub",
+        "season": 2027,
+        "period": 1,
+        "titles": 0,
+        "seasonsPlayed": 1,
+        "picksLeft": 0,
+        "champions": [
+          {
+            "season": 2026,
+            "team": "COL"
+          }
+        ],
+        "postseason": false,
+        "team": "FLA",
+        "roster": [
+          {
+            "id": "h14sksybzg8yvu-144",
+            "name": "Matthew Tkachuk",
+            "pos": "W",
+            "ovr": 96,
+            "salary": 10.4,
+            "years": 2
+          },
+          {
+            "id": "h14sksybzg8yvu-145",
+            "name": "Brad Marchand",
+            "pos": "W",
+            "ovr": 91,
+            "salary": 10,
+            "years": 1
+          },
+          {
+            "id": "h14sksybzg8yvu-146",
+            "name": "Brady Tkachuk",
+            "pos": "W",
+            "ovr": 95,
+            "salary": 10,
+            "years": 2
+          },
+          {
+            "id": "h14sksybzg8yvu-147",
+            "name": "Sam Reinhart",
+            "pos": "C",
+            "ovr": 92,
+            "salary": 9.6,
+            "years": 1
+          },
+          {
+            "id": "h14sksybzg8yvu-148",
+            "name": "Sam Bennett",
+            "pos": "C",
+            "ovr": 89,
+            "salary": 8.4,
+            "years": 1
+          },
+          {
+            "id": "h14sksybzg8yvu-149",
+            "name": "Carter Verhaeghe",
+            "pos": "C",
+            "ovr": 88,
+            "salary": 8,
+            "years": 1
+          },
+          {
+            "id": "h14sksybzg8yvu-150",
+            "name": "Anton Lundell",
+            "pos": "C",
+            "ovr": 89,
+            "salary": 7.6,
+            "years": 3
+          },
+          {
+            "id": "h14sksybzg8yvu-151",
+            "name": "Seth Jones",
+            "pos": "D",
+            "ovr": 90,
+            "salary": 8.8,
+            "years": 1
+          },
+          {
+            "id": "h14sksybzg8yvu-152",
+            "name": "Aaron Ekblad",
+            "pos": "D",
+            "ovr": 83,
+            "salary": 6,
+            "years": 1
+          },
+          {
+            "id": "h14sksybzg8yvu-153",
+            "name": "Gustav Forsling",
+            "pos": "D",
+            "ovr": 83,
+            "salary": 5.6,
+            "years": 1
+          },
+          {
+            "id": "h14sksybzg8yvu-154",
+            "name": "Uvis Balinskis",
+            "pos": "D",
+            "ovr": 78,
+            "salary": 4,
+            "years": 1
+          },
+          {
+            "id": "h14sksybzg8yvu-155",
+            "name": "Akira Schmid",
+            "pos": "G",
+            "ovr": 78,
+            "salary": 3.2,
+            "years": 2
+          },
+          {
+            "id": "h14sksybzg8yvu-156",
+            "name": "Jacob Markstrom",
+            "pos": "G",
+            "ovr": 74,
+            "salary": 2.8,
+            "years": 1
+          },
+          {
+            "id": "hpz5jmditq0d5-25",
+            "name": "Nikita Lehtinen",
+            "pos": "W",
+            "ovr": 88,
+            "salary": 3,
+            "years": 2
+          },
+          {
+            "id": "hpz5jmditq0d5-31",
+            "name": "Tuukka Ostberg",
+            "pos": "G",
+            "ovr": 87,
+            "salary": 2.7,
+            "years": 2
+          }
+        ],
+        "record": {
+          "wins": 0,
+          "losses": 0,
+          "otLosses": 0
+        },
+        "overflow": 0
+      },
+      "nextSeason": {
+        "rawHash": "c11080870c1754508cb345fa78f39b3a589077271fddd45287f049a412e062e5",
+        "phase": "hub",
+        "season": 2027,
+        "period": 1,
+        "titles": 0,
+        "seasonsPlayed": 1,
+        "picksLeft": 0,
+        "champions": [
+          {
+            "season": 2026,
+            "team": "COL"
+          }
+        ],
+        "postseason": false,
+        "team": "FLA",
+        "roster": [
+          {
+            "id": "h14sksybzg8yvu-144",
+            "name": "Matthew Tkachuk",
+            "pos": "W",
+            "ovr": 96,
+            "salary": 10.4,
+            "years": 2
+          },
+          {
+            "id": "h14sksybzg8yvu-145",
+            "name": "Brad Marchand",
+            "pos": "W",
+            "ovr": 91,
+            "salary": 10,
+            "years": 1
+          },
+          {
+            "id": "h14sksybzg8yvu-146",
+            "name": "Brady Tkachuk",
+            "pos": "W",
+            "ovr": 95,
+            "salary": 10,
+            "years": 2
+          },
+          {
+            "id": "h14sksybzg8yvu-147",
+            "name": "Sam Reinhart",
+            "pos": "C",
+            "ovr": 92,
+            "salary": 9.6,
+            "years": 1
+          },
+          {
+            "id": "h14sksybzg8yvu-148",
+            "name": "Sam Bennett",
+            "pos": "C",
+            "ovr": 89,
+            "salary": 8.4,
+            "years": 1
+          },
+          {
+            "id": "h14sksybzg8yvu-149",
+            "name": "Carter Verhaeghe",
+            "pos": "C",
+            "ovr": 88,
+            "salary": 8,
+            "years": 1
+          },
+          {
+            "id": "h14sksybzg8yvu-150",
+            "name": "Anton Lundell",
+            "pos": "C",
+            "ovr": 89,
+            "salary": 7.6,
+            "years": 3
+          },
+          {
+            "id": "h14sksybzg8yvu-151",
+            "name": "Seth Jones",
+            "pos": "D",
+            "ovr": 90,
+            "salary": 8.8,
+            "years": 1
+          },
+          {
+            "id": "h14sksybzg8yvu-152",
+            "name": "Aaron Ekblad",
+            "pos": "D",
+            "ovr": 83,
+            "salary": 6,
+            "years": 1
+          },
+          {
+            "id": "h14sksybzg8yvu-153",
+            "name": "Gustav Forsling",
+            "pos": "D",
+            "ovr": 83,
+            "salary": 5.6,
+            "years": 1
+          },
+          {
+            "id": "h14sksybzg8yvu-154",
+            "name": "Uvis Balinskis",
+            "pos": "D",
+            "ovr": 78,
+            "salary": 4,
+            "years": 1
+          },
+          {
+            "id": "h14sksybzg8yvu-155",
+            "name": "Akira Schmid",
+            "pos": "G",
+            "ovr": 78,
+            "salary": 3.2,
+            "years": 2
+          },
+          {
+            "id": "h14sksybzg8yvu-156",
+            "name": "Jacob Markstrom",
+            "pos": "G",
+            "ovr": 74,
+            "salary": 2.8,
+            "years": 1
+          },
+          {
+            "id": "hpz5jmditq0d5-25",
+            "name": "Nikita Lehtinen",
+            "pos": "W",
+            "ovr": 88,
+            "salary": 3,
+            "years": 2
+          },
+          {
+            "id": "hpz5jmditq0d5-31",
+            "name": "Tuukka Ostberg",
+            "pos": "G",
+            "ovr": 87,
+            "salary": 2.7,
+            "years": 2
+          }
+        ],
+        "record": {
+          "wins": 0,
+          "losses": 0,
+          "otLosses": 0
+        },
+        "overflow": 0
+      },
+      "reloadNextSeason": {
+        "bytesHeld": true,
+        "facts": {
+          "rawHash": "c11080870c1754508cb345fa78f39b3a589077271fddd45287f049a412e062e5",
+          "phase": "hub",
+          "season": 2027,
+          "period": 1,
+          "titles": 0,
+          "seasonsPlayed": 1,
+          "picksLeft": 0,
+          "champions": [
+            {
+              "season": 2026,
+              "team": "COL"
+            }
+          ],
+          "postseason": false,
+          "team": "FLA",
+          "roster": [
+            {
+              "id": "h14sksybzg8yvu-144",
+              "name": "Matthew Tkachuk",
+              "pos": "W",
+              "ovr": 96,
+              "salary": 10.4,
+              "years": 2
+            },
+            {
+              "id": "h14sksybzg8yvu-145",
+              "name": "Brad Marchand",
+              "pos": "W",
+              "ovr": 91,
+              "salary": 10,
+              "years": 1
+            },
+            {
+              "id": "h14sksybzg8yvu-146",
+              "name": "Brady Tkachuk",
+              "pos": "W",
+              "ovr": 95,
+              "salary": 10,
+              "years": 2
+            },
+            {
+              "id": "h14sksybzg8yvu-147",
+              "name": "Sam Reinhart",
+              "pos": "C",
+              "ovr": 92,
+              "salary": 9.6,
+              "years": 1
+            },
+            {
+              "id": "h14sksybzg8yvu-148",
+              "name": "Sam Bennett",
+              "pos": "C",
+              "ovr": 89,
+              "salary": 8.4,
+              "years": 1
+            },
+            {
+              "id": "h14sksybzg8yvu-149",
+              "name": "Carter Verhaeghe",
+              "pos": "C",
+              "ovr": 88,
+              "salary": 8,
+              "years": 1
+            },
+            {
+              "id": "h14sksybzg8yvu-150",
+              "name": "Anton Lundell",
+              "pos": "C",
+              "ovr": 89,
+              "salary": 7.6,
+              "years": 3
+            },
+            {
+              "id": "h14sksybzg8yvu-151",
+              "name": "Seth Jones",
+              "pos": "D",
+              "ovr": 90,
+              "salary": 8.8,
+              "years": 1
+            },
+            {
+              "id": "h14sksybzg8yvu-152",
+              "name": "Aaron Ekblad",
+              "pos": "D",
+              "ovr": 83,
+              "salary": 6,
+              "years": 1
+            },
+            {
+              "id": "h14sksybzg8yvu-153",
+              "name": "Gustav Forsling",
+              "pos": "D",
+              "ovr": 83,
+              "salary": 5.6,
+              "years": 1
+            },
+            {
+              "id": "h14sksybzg8yvu-154",
+              "name": "Uvis Balinskis",
+              "pos": "D",
+              "ovr": 78,
+              "salary": 4,
+              "years": 1
+            },
+            {
+              "id": "h14sksybzg8yvu-155",
+              "name": "Akira Schmid",
+              "pos": "G",
+              "ovr": 78,
+              "salary": 3.2,
+              "years": 2
+            },
+            {
+              "id": "h14sksybzg8yvu-156",
+              "name": "Jacob Markstrom",
+              "pos": "G",
+              "ovr": 74,
+              "salary": 2.8,
+              "years": 1
+            },
+            {
+              "id": "hpz5jmditq0d5-25",
+              "name": "Nikita Lehtinen",
+              "pos": "W",
+              "ovr": 88,
+              "salary": 3,
+              "years": 2
+            },
+            {
+              "id": "hpz5jmditq0d5-31",
+              "name": "Tuukka Ostberg",
+              "pos": "G",
+              "ovr": 87,
+              "salary": 2.7,
+              "years": 2
+            }
+          ],
+          "record": {
+            "wins": 0,
+            "losses": 0,
+            "otLosses": 0
+          },
+          "overflow": 0
+        }
+      }
+    },
+    {
+      "sport": "NHL",
+      "route": "/nhl-front-office",
+      "width": 1440,
+      "motion": "reduce",
+      "actions": [
+        {
+          "kind": "period",
+          "before": 1,
+          "after": 2,
+          "phase": "hub",
+          "wins": 0,
+          "losses": 4,
+          "otLosses": 1,
+          "overflow": 0
+        },
+        {
+          "kind": "period",
+          "before": 2,
+          "after": 3,
+          "phase": "hub",
+          "wins": 2,
+          "losses": 5,
+          "otLosses": 2,
+          "overflow": 0
+        },
+        {
+          "kind": "period",
+          "before": 3,
+          "after": 4,
+          "phase": "hub",
+          "wins": 4,
+          "losses": 5,
+          "otLosses": 3,
+          "overflow": 0
+        },
+        {
+          "kind": "period",
+          "before": 4,
+          "after": 5,
+          "phase": "hub",
+          "wins": 5,
+          "losses": 6,
+          "otLosses": 3,
+          "overflow": 0
+        },
+        {
+          "kind": "period",
+          "before": 5,
+          "after": 6,
+          "phase": "hub",
+          "wins": 7,
+          "losses": 6,
+          "otLosses": 3,
+          "overflow": 0
+        },
+        {
+          "kind": "period",
+          "before": 6,
+          "after": 7,
+          "phase": "hub",
+          "wins": 10,
+          "losses": 9,
+          "otLosses": 5,
+          "overflow": 0
+        },
+        {
+          "kind": "period",
+          "before": 7,
+          "after": 8,
+          "phase": "hub",
+          "wins": 13,
+          "losses": 11,
+          "otLosses": 5,
+          "overflow": 0
+        },
+        {
+          "kind": "period",
+          "before": 8,
+          "after": 9,
+          "phase": "hub",
+          "wins": 15,
+          "losses": 12,
+          "otLosses": 5,
+          "overflow": 0
+        },
+        {
+          "kind": "period",
+          "before": 9,
+          "after": 10,
+          "phase": "hub",
+          "wins": 17,
+          "losses": 13,
+          "otLosses": 5,
+          "overflow": 0
+        },
+        {
+          "kind": "period",
+          "before": 10,
+          "after": 11,
+          "phase": "hub",
+          "wins": 19,
+          "losses": 17,
+          "otLosses": 5,
+          "overflow": 0
+        },
+        {
+          "kind": "period",
+          "before": 11,
+          "after": 12,
+          "phase": "hub",
+          "wins": 22,
+          "losses": 18,
+          "otLosses": 6,
+          "overflow": 0
+        },
+        {
+          "kind": "period",
+          "before": 12,
+          "after": 13,
+          "phase": "hub",
+          "wins": 25,
+          "losses": 19,
+          "otLosses": 6,
+          "overflow": 0
+        },
+        {
+          "kind": "period",
+          "before": 13,
+          "after": 14,
+          "phase": "hub",
+          "wins": 27,
+          "losses": 22,
+          "otLosses": 6,
+          "overflow": 0
+        },
+        {
+          "kind": "period",
+          "before": 14,
+          "after": 15,
+          "phase": "hub",
+          "wins": 27,
+          "losses": 22,
+          "otLosses": 6,
+          "overflow": 0
+        },
+        {
+          "kind": "period",
+          "before": 15,
+          "after": 16,
+          "phase": "hub",
+          "wins": 30,
+          "losses": 24,
+          "otLosses": 6,
+          "overflow": 0
+        },
+        {
+          "kind": "period",
+          "before": 16,
+          "after": 17,
+          "phase": "hub",
+          "wins": 31,
+          "losses": 26,
+          "otLosses": 6,
+          "overflow": 0
+        },
+        {
+          "kind": "period",
+          "before": 17,
+          "after": 18,
+          "phase": "hub",
+          "wins": 31,
+          "losses": 29,
+          "otLosses": 6,
+          "overflow": 0
+        },
+        {
+          "kind": "period",
+          "before": 18,
+          "after": 19,
+          "phase": "hub",
+          "wins": 34,
+          "losses": 31,
+          "otLosses": 6,
+          "overflow": 0
+        },
+        {
+          "kind": "period",
+          "before": 19,
+          "after": 20,
+          "phase": "hub",
+          "wins": 39,
+          "losses": 32,
+          "otLosses": 6,
+          "overflow": 0
+        },
+        {
+          "kind": "period",
+          "before": 20,
+          "after": 20,
+          "phase": "recap",
+          "wins": 43,
+          "losses": 34,
+          "otLosses": 6,
+          "overflow": 0
+        },
+        {
+          "kind": "draft",
+          "prospect": "h1y07e6l1fwhomn-18",
+          "name": "Oskar Vasko",
+          "after": {
+            "rawHash": "fb82a28fbde34713180cd89a146c98781e6f015911952900744af5b127291d7c",
+            "phase": "draft",
+            "season": 2026,
+            "period": 20,
+            "titles": 0,
+            "seasonsPlayed": 1,
+            "picksLeft": 1,
+            "champions": [
+              {
+                "season": 2026,
+                "team": "DAL"
+              }
+            ],
+            "postseason": true,
+            "team": "FLA",
+            "roster": [
+              {
+                "id": "h1jhteb51c03bj0-144",
+                "name": "Matthew Tkachuk",
+                "pos": "W",
+                "ovr": 96,
+                "salary": 10.4,
+                "years": 3
+              },
+              {
+                "id": "h1jhteb51c03bj0-145",
+                "name": "Brad Marchand",
+                "pos": "W",
+                "ovr": 95,
+                "salary": 10,
+                "years": 2
+              },
+              {
+                "id": "h1jhteb51c03bj0-146",
+                "name": "Brady Tkachuk",
+                "pos": "W",
+                "ovr": 95,
+                "salary": 10,
+                "years": 3
+              },
+              {
+                "id": "h1jhteb51c03bj0-147",
+                "name": "Sam Reinhart",
+                "pos": "C",
+                "ovr": 94,
+                "salary": 9.6,
+                "years": 2
+              },
+              {
+                "id": "h1jhteb51c03bj0-148",
+                "name": "Sam Bennett",
+                "pos": "C",
+                "ovr": 91,
+                "salary": 8.4,
+                "years": 2
+              },
+              {
+                "id": "h1jhteb51c03bj0-149",
+                "name": "Carter Verhaeghe",
+                "pos": "C",
+                "ovr": 90,
+                "salary": 8,
+                "years": 2
+              },
+              {
+                "id": "h1jhteb51c03bj0-150",
+                "name": "Anton Lundell",
+                "pos": "C",
+                "ovr": 89,
+                "salary": 7.6,
+                "years": 4
+              },
+              {
+                "id": "h1jhteb51c03bj0-151",
+                "name": "Seth Jones",
+                "pos": "D",
+                "ovr": 92,
+                "salary": 8.8,
+                "years": 2
+              },
+              {
+                "id": "h1jhteb51c03bj0-152",
+                "name": "Aaron Ekblad",
+                "pos": "D",
+                "ovr": 85,
+                "salary": 6,
+                "years": 2
+              },
+              {
+                "id": "h1jhteb51c03bj0-153",
+                "name": "Gustav Forsling",
+                "pos": "D",
+                "ovr": 84,
+                "salary": 5.6,
+                "years": 2
+              },
+              {
+                "id": "h1jhteb51c03bj0-154",
+                "name": "Uvis Balinskis",
+                "pos": "D",
+                "ovr": 80,
+                "salary": 4,
+                "years": 2
+              },
+              {
+                "id": "h1jhteb51c03bj0-155",
+                "name": "Akira Schmid",
+                "pos": "G",
+                "ovr": 78,
+                "salary": 3.2,
+                "years": 3
+              },
+              {
+                "id": "h1jhteb51c03bj0-156",
+                "name": "Jacob Markstrom",
+                "pos": "G",
+                "ovr": 77,
+                "salary": 2.8,
+                "years": 2
+              },
+              {
+                "id": "h1y07e6l1fwhomn-25",
+                "name": "Oskar Vasko",
+                "pos": "C",
+                "ovr": 83,
+                "salary": 2.6,
+                "years": 3
+              }
+            ],
+            "record": {
+              "wins": 43,
+              "losses": 34,
+              "otLosses": 6
+            },
+            "overflow": 0
+          }
+        },
+        {
+          "kind": "draft",
+          "prospect": "h1y07e6l1fwhomn-17",
+          "name": "Juuso Lindqvist",
+          "after": {
+            "rawHash": "2dba8ec9e9871a707cda9398755e49616e279e17d82ca813b3306e8254a34afe",
+            "phase": "hub",
+            "season": 2027,
+            "period": 1,
+            "titles": 0,
+            "seasonsPlayed": 1,
+            "picksLeft": 0,
+            "champions": [
+              {
+                "season": 2026,
+                "team": "DAL"
+              }
+            ],
+            "postseason": false,
+            "team": "FLA",
+            "roster": [
+              {
+                "id": "h1jhteb51c03bj0-144",
+                "name": "Matthew Tkachuk",
+                "pos": "W",
+                "ovr": 96,
+                "salary": 10.4,
+                "years": 2
+              },
+              {
+                "id": "h1jhteb51c03bj0-145",
+                "name": "Brad Marchand",
+                "pos": "W",
+                "ovr": 91,
+                "salary": 10,
+                "years": 1
+              },
+              {
+                "id": "h1jhteb51c03bj0-146",
+                "name": "Brady Tkachuk",
+                "pos": "W",
+                "ovr": 95,
+                "salary": 10,
+                "years": 2
+              },
+              {
+                "id": "h1jhteb51c03bj0-147",
+                "name": "Sam Reinhart",
+                "pos": "C",
+                "ovr": 92,
+                "salary": 9.6,
+                "years": 1
+              },
+              {
+                "id": "h1jhteb51c03bj0-148",
+                "name": "Sam Bennett",
+                "pos": "C",
+                "ovr": 89,
+                "salary": 8.4,
+                "years": 1
+              },
+              {
+                "id": "h1jhteb51c03bj0-149",
+                "name": "Carter Verhaeghe",
+                "pos": "C",
+                "ovr": 88,
+                "salary": 8,
+                "years": 1
+              },
+              {
+                "id": "h1jhteb51c03bj0-150",
+                "name": "Anton Lundell",
+                "pos": "C",
+                "ovr": 89,
+                "salary": 7.6,
+                "years": 3
+              },
+              {
+                "id": "h1jhteb51c03bj0-151",
+                "name": "Seth Jones",
+                "pos": "D",
+                "ovr": 91,
+                "salary": 8.8,
+                "years": 1
+              },
+              {
+                "id": "h1jhteb51c03bj0-152",
+                "name": "Aaron Ekblad",
+                "pos": "D",
+                "ovr": 83,
+                "salary": 6,
+                "years": 1
+              },
+              {
+                "id": "h1jhteb51c03bj0-153",
+                "name": "Gustav Forsling",
+                "pos": "D",
+                "ovr": 83,
+                "salary": 5.6,
+                "years": 1
+              },
+              {
+                "id": "h1jhteb51c03bj0-154",
+                "name": "Uvis Balinskis",
+                "pos": "D",
+                "ovr": 78,
+                "salary": 4,
+                "years": 1
+              },
+              {
+                "id": "h1jhteb51c03bj0-155",
+                "name": "Akira Schmid",
+                "pos": "G",
+                "ovr": 78,
+                "salary": 3.2,
+                "years": 2
+              },
+              {
+                "id": "h1jhteb51c03bj0-156",
+                "name": "Jacob Markstrom",
+                "pos": "G",
+                "ovr": 73,
+                "salary": 2.8,
+                "years": 1
+              },
+              {
+                "id": "h1y07e6l1fwhomn-25",
+                "name": "Oskar Vasko",
+                "pos": "C",
+                "ovr": 84,
+                "salary": 2.6,
+                "years": 2
+              },
+              {
+                "id": "h1y07e6l1fwhomn-31",
+                "name": "Juuso Lindqvist",
+                "pos": "C",
+                "ovr": 79,
+                "salary": 1.5,
+                "years": 2
+              }
+            ],
+            "record": {
+              "wins": 0,
+              "losses": 0,
+              "otLosses": 0
+            },
+            "overflow": 0
+          }
+        }
+      ],
+      "events": {
+        "blocked": [
+          {
+            "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/game_completions",
+            "method": "POST"
+          },
+          {
+            "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/game_completions",
+            "method": "POST"
+          },
+          {
+            "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/game_completions",
+            "method": "POST"
+          },
+          {
+            "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/game_completions",
+            "method": "POST"
+          },
+          {
+            "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/game_completions",
+            "method": "POST"
+          },
+          {
+            "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/game_completions",
+            "method": "POST"
+          },
+          {
+            "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/game_completions",
+            "method": "POST"
+          },
+          {
+            "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/game_completions",
+            "method": "POST"
+          },
+          {
+            "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/game_completions",
+            "method": "POST"
+          },
+          {
+            "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/game_completions",
+            "method": "POST"
+          },
+          {
+            "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/game_completions",
+            "method": "POST"
+          },
+          {
+            "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/game_completions",
+            "method": "POST"
+          },
+          {
+            "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/game_completions",
+            "method": "POST"
+          },
+          {
+            "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/game_completions",
+            "method": "POST"
+          },
+          {
+            "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/game_completions",
+            "method": "POST"
+          },
+          {
+            "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/game_completions",
+            "method": "POST"
+          },
+          {
+            "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/game_completions",
+            "method": "POST"
+          },
+          {
+            "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/game_completions",
+            "method": "POST"
+          },
+          {
+            "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/game_completions",
+            "method": "POST"
+          },
+          {
+            "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/game_completions",
+            "method": "POST"
+          }
+        ],
+        "errors": [],
+        "badHttp": []
+      },
+      "initial": {
+        "rawHash": "a464f74723ef673d07947da07e6e37ca339fbd8f272708a6a779f2dae8023b66",
+        "phase": "hub",
+        "season": 2026,
+        "period": 1,
+        "titles": 0,
+        "seasonsPlayed": 0,
+        "picksLeft": 0,
+        "champions": [],
+        "postseason": false,
+        "team": "FLA",
+        "roster": [
+          {
+            "id": "h1jhteb51c03bj0-144",
+            "name": "Matthew Tkachuk",
+            "pos": "W",
+            "ovr": 96,
+            "salary": 10.4,
+            "years": 3
+          },
+          {
+            "id": "h1jhteb51c03bj0-145",
+            "name": "Brad Marchand",
+            "pos": "W",
+            "ovr": 95,
+            "salary": 10,
+            "years": 2
+          },
+          {
+            "id": "h1jhteb51c03bj0-146",
+            "name": "Brady Tkachuk",
+            "pos": "W",
+            "ovr": 95,
+            "salary": 10,
+            "years": 3
+          },
+          {
+            "id": "h1jhteb51c03bj0-147",
+            "name": "Sam Reinhart",
+            "pos": "C",
+            "ovr": 94,
+            "salary": 9.6,
+            "years": 2
+          },
+          {
+            "id": "h1jhteb51c03bj0-148",
+            "name": "Sam Bennett",
+            "pos": "C",
+            "ovr": 91,
+            "salary": 8.4,
+            "years": 2
+          },
+          {
+            "id": "h1jhteb51c03bj0-149",
+            "name": "Carter Verhaeghe",
+            "pos": "C",
+            "ovr": 90,
+            "salary": 8,
+            "years": 2
+          },
+          {
+            "id": "h1jhteb51c03bj0-150",
+            "name": "Anton Lundell",
+            "pos": "C",
+            "ovr": 89,
+            "salary": 7.6,
+            "years": 4
+          },
+          {
+            "id": "h1jhteb51c03bj0-151",
+            "name": "Seth Jones",
+            "pos": "D",
+            "ovr": 92,
+            "salary": 8.8,
+            "years": 2
+          },
+          {
+            "id": "h1jhteb51c03bj0-152",
+            "name": "Aaron Ekblad",
+            "pos": "D",
+            "ovr": 85,
+            "salary": 6,
+            "years": 2
+          },
+          {
+            "id": "h1jhteb51c03bj0-153",
+            "name": "Gustav Forsling",
+            "pos": "D",
+            "ovr": 84,
+            "salary": 5.6,
+            "years": 2
+          },
+          {
+            "id": "h1jhteb51c03bj0-154",
+            "name": "Uvis Balinskis",
+            "pos": "D",
+            "ovr": 80,
+            "salary": 4,
+            "years": 2
+          },
+          {
+            "id": "h1jhteb51c03bj0-155",
+            "name": "Akira Schmid",
+            "pos": "G",
+            "ovr": 78,
+            "salary": 3.2,
+            "years": 3
+          },
+          {
+            "id": "h1jhteb51c03bj0-156",
+            "name": "Jacob Markstrom",
+            "pos": "G",
+            "ovr": 77,
+            "salary": 2.8,
+            "years": 2
+          }
+        ],
+        "record": {
+          "wins": 0,
+          "losses": 0,
+          "otLosses": 0
+        },
+        "overflow": 0
+      },
+      "trade": {
+        "ownRoster": 13,
+        "finderChoices": [
+          "Matthew Tkachuk (W)96",
+          "Brad Marchand (W)95",
+          "Brady Tkachuk (W)95",
+          "Sam Reinhart (C)94",
+          "Seth Jones (D)92",
+          "Sam Bennett (C)91",
+          "Carter Verhaeghe (C)90",
+          "Anton Lundell (C)89",
+          "Shop him around the league"
+        ],
+        "missingOwn": [
+          {
+            "id": "h1jhteb51c03bj0-152",
+            "name": "Aaron Ekblad",
+            "pos": "D",
+            "ovr": 85
+          },
+          {
+            "id": "h1jhteb51c03bj0-153",
+            "name": "Gustav Forsling",
+            "pos": "D",
+            "ovr": 84
+          },
+          {
+            "id": "h1jhteb51c03bj0-154",
+            "name": "Uvis Balinskis",
+            "pos": "D",
+            "ovr": 80
+          },
+          {
+            "id": "h1jhteb51c03bj0-155",
+            "name": "Akira Schmid",
+            "pos": "G",
+            "ovr": 78
+          },
+          {
+            "id": "h1jhteb51c03bj0-156",
+            "name": "Jacob Markstrom",
+            "pos": "G",
+            "ovr": 77
+          }
+        ],
+        "manualChoices": [
+          "☆",
+          "☆",
+          "☆",
+          "☆",
+          "☆",
+          "☆",
+          "☆",
+          "☆",
+          "☆",
+          "☆",
+          "☆",
+          "☆",
+          "☆",
+          "☆",
+          "☆",
+          "☆",
+          "☆",
+          "☆",
+          "☆",
+          "☆",
+          "☆",
+          "☆",
+          "☆",
+          "☆",
+          "☆",
+          "☆",
+          "☆",
+          "☆",
+          "☆",
+          "☆",
+          "☆",
+          "☆",
+          "☆",
+          "☆",
+          "☆",
+          "☆",
+          "☆",
+          "☆",
+          "☆",
+          "☆",
+          "☆",
+          "☆",
+          "☆",
+          "☆",
+          "☆",
+          "☆",
+          "☆",
+          "☆",
+          "☆",
+          "☆",
+          "☆",
+          "☆",
+          "☆",
+          "☆",
+          "☆",
+          "☆",
+          "☆",
+          "☆",
+          "☆",
+          "☆",
+          "☆",
+          "☆",
+          "☆",
+          "☆",
+          "☆",
+          "AllAll▾",
+          "Back",
+          "Sign up to track your statsTrack stats",
+          "",
+          " Hub",
+          "Matthew Tkachuk (W)96",
+          "Brad Marchand (W)95",
+          "Brady Tkachuk (W)95",
+          "Sam Reinhart (C)94",
+          "Seth Jones (D)92",
+          "Sam Bennett (C)91",
+          "Carter Verhaeghe (C)90",
+          "Anton Lundell (C)89",
+          "Shop him around the league",
+          "BOS",
+          "BUF",
+          "DET",
+          "MTL",
+          "OTT",
+          "TBL",
+          "TOR",
+          "CAR",
+          "CBJ",
+          "NJD",
+          "NYI",
+          "NYR",
+          "PHI",
+          "PIT",
+          "WSH",
+          "CHI",
+          "COL",
+          "DAL",
+          "MIN",
+          "NSH",
+          "STL",
+          "UTA",
+          "WPG",
+          "ANA",
+          "CGY",
+          "EDM",
+          "LAK",
+          "SJS",
+          "SEA",
+          "VAN",
+          "VGK",
+          "Matthew Tkachuk (W)96",
+          "Brad Marchand (W)95",
+          "Brady Tkachuk (W)95",
+          "Sam Reinhart (C)94",
+          "Seth Jones (D)92",
+          "Sam Bennett (C)91",
+          "Carter Verhaeghe (C)90",
+          "Anton Lundell (C)89",
+          "Open talks",
+          "Open talks",
+          "Open talks",
+          "Open talks",
+          "Open talks",
+          "Open talks",
+          "Open talks",
+          "Open talks",
+          " Abandon franchise and restart",
+          "Cookie choices",
+          "Light mode",
+          "Report a bug"
+        ],
+        "lowestPlayer": {
+          "id": "h1jhteb51c03bj0-156",
+          "name": "Jacob Markstrom",
+          "pos": "G",
+          "age": 36,
+          "ovr": 77,
+          "salary": 2.8,
+          "years": 2,
+          "out": 0,
+          "pot": 77
+        },
+        "lowestSelectable": false,
+        "partnerId": "ANA",
+        "partnerRoster": 13,
+        "receiveRows": 8,
+        "receiveIds": [
+          "h1jhteb51c03bj0-1",
+          "h1jhteb51c03bj0-2",
+          "h1jhteb51c03bj0-3",
+          "h1jhteb51c03bj0-8",
+          "h1jhteb51c03bj0-4",
+          "h1jhteb51c03bj0-5",
+          "h1jhteb51c03bj0-6",
+          "h1jhteb51c03bj0-7"
+        ],
+        "bounds": [
+          {
+            "text": "Matthew Tkachuk (W)96",
+            "height": 26.5,
+            "width": 294
+          },
+          {
+            "text": "Brad Marchand (W)95",
+            "height": 26.5,
+            "width": 294
+          },
+          {
+            "text": "Brady Tkachuk (W)95",
+            "height": 26.5,
+            "width": 294
+          },
+          {
+            "text": "Sam Reinhart (C)94",
+            "height": 26.5,
+            "width": 294
+          },
+          {
+            "text": "Seth Jones (D)92",
+            "height": 26.5,
+            "width": 294
+          },
+          {
+            "text": "Sam Bennett (C)91",
+            "height": 26.5,
+            "width": 294
+          },
+          {
+            "text": "Carter Verhaeghe (C)90",
+            "height": 26.5,
+            "width": 294
+          },
+          {
+            "text": "Anton Lundell (C)89",
+            "height": 26.5,
+            "width": 294
+          },
+          {
+            "text": "Shop him around the league",
+            "height": 28.5,
+            "width": 592
+          }
+        ]
+      },
+      "reloadInitial": {
+        "bytesHeld": true,
+        "facts": {
+          "rawHash": "a464f74723ef673d07947da07e6e37ca339fbd8f272708a6a779f2dae8023b66",
+          "phase": "hub",
+          "season": 2026,
+          "period": 1,
+          "titles": 0,
+          "seasonsPlayed": 0,
+          "picksLeft": 0,
+          "champions": [],
+          "postseason": false,
+          "team": "FLA",
+          "roster": [
+            {
+              "id": "h1jhteb51c03bj0-144",
+              "name": "Matthew Tkachuk",
+              "pos": "W",
+              "ovr": 96,
+              "salary": 10.4,
+              "years": 3
+            },
+            {
+              "id": "h1jhteb51c03bj0-145",
+              "name": "Brad Marchand",
+              "pos": "W",
+              "ovr": 95,
+              "salary": 10,
+              "years": 2
+            },
+            {
+              "id": "h1jhteb51c03bj0-146",
+              "name": "Brady Tkachuk",
+              "pos": "W",
+              "ovr": 95,
+              "salary": 10,
+              "years": 3
+            },
+            {
+              "id": "h1jhteb51c03bj0-147",
+              "name": "Sam Reinhart",
+              "pos": "C",
+              "ovr": 94,
+              "salary": 9.6,
+              "years": 2
+            },
+            {
+              "id": "h1jhteb51c03bj0-148",
+              "name": "Sam Bennett",
+              "pos": "C",
+              "ovr": 91,
+              "salary": 8.4,
+              "years": 2
+            },
+            {
+              "id": "h1jhteb51c03bj0-149",
+              "name": "Carter Verhaeghe",
+              "pos": "C",
+              "ovr": 90,
+              "salary": 8,
+              "years": 2
+            },
+            {
+              "id": "h1jhteb51c03bj0-150",
+              "name": "Anton Lundell",
+              "pos": "C",
+              "ovr": 89,
+              "salary": 7.6,
+              "years": 4
+            },
+            {
+              "id": "h1jhteb51c03bj0-151",
+              "name": "Seth Jones",
+              "pos": "D",
+              "ovr": 92,
+              "salary": 8.8,
+              "years": 2
+            },
+            {
+              "id": "h1jhteb51c03bj0-152",
+              "name": "Aaron Ekblad",
+              "pos": "D",
+              "ovr": 85,
+              "salary": 6,
+              "years": 2
+            },
+            {
+              "id": "h1jhteb51c03bj0-153",
+              "name": "Gustav Forsling",
+              "pos": "D",
+              "ovr": 84,
+              "salary": 5.6,
+              "years": 2
+            },
+            {
+              "id": "h1jhteb51c03bj0-154",
+              "name": "Uvis Balinskis",
+              "pos": "D",
+              "ovr": 80,
+              "salary": 4,
+              "years": 2
+            },
+            {
+              "id": "h1jhteb51c03bj0-155",
+              "name": "Akira Schmid",
+              "pos": "G",
+              "ovr": 78,
+              "salary": 3.2,
+              "years": 3
+            },
+            {
+              "id": "h1jhteb51c03bj0-156",
+              "name": "Jacob Markstrom",
+              "pos": "G",
+              "ovr": 77,
+              "salary": 2.8,
+              "years": 2
+            }
+          ],
+          "record": {
+            "wins": 0,
+            "losses": 0,
+            "otLosses": 0
+          },
+          "overflow": 0
+        }
+      },
+      "finishedSeason": {
+        "rawHash": "beff486dc9d7b6af3bc700f1f889b2f77ccd27af6ad2c9709ab705d005cdf400",
+        "phase": "recap",
+        "season": 2026,
+        "period": 20,
+        "titles": 0,
+        "seasonsPlayed": 1,
+        "picksLeft": 0,
+        "champions": [
+          {
+            "season": 2026,
+            "team": "DAL"
+          }
+        ],
+        "postseason": true,
+        "team": "FLA",
+        "roster": [
+          {
+            "id": "h1jhteb51c03bj0-144",
+            "name": "Matthew Tkachuk",
+            "pos": "W",
+            "ovr": 96,
+            "salary": 10.4,
+            "years": 3
+          },
+          {
+            "id": "h1jhteb51c03bj0-145",
+            "name": "Brad Marchand",
+            "pos": "W",
+            "ovr": 95,
+            "salary": 10,
+            "years": 2
+          },
+          {
+            "id": "h1jhteb51c03bj0-146",
+            "name": "Brady Tkachuk",
+            "pos": "W",
+            "ovr": 95,
+            "salary": 10,
+            "years": 3
+          },
+          {
+            "id": "h1jhteb51c03bj0-147",
+            "name": "Sam Reinhart",
+            "pos": "C",
+            "ovr": 94,
+            "salary": 9.6,
+            "years": 2
+          },
+          {
+            "id": "h1jhteb51c03bj0-148",
+            "name": "Sam Bennett",
+            "pos": "C",
+            "ovr": 91,
+            "salary": 8.4,
+            "years": 2
+          },
+          {
+            "id": "h1jhteb51c03bj0-149",
+            "name": "Carter Verhaeghe",
+            "pos": "C",
+            "ovr": 90,
+            "salary": 8,
+            "years": 2
+          },
+          {
+            "id": "h1jhteb51c03bj0-150",
+            "name": "Anton Lundell",
+            "pos": "C",
+            "ovr": 89,
+            "salary": 7.6,
+            "years": 4
+          },
+          {
+            "id": "h1jhteb51c03bj0-151",
+            "name": "Seth Jones",
+            "pos": "D",
+            "ovr": 92,
+            "salary": 8.8,
+            "years": 2
+          },
+          {
+            "id": "h1jhteb51c03bj0-152",
+            "name": "Aaron Ekblad",
+            "pos": "D",
+            "ovr": 85,
+            "salary": 6,
+            "years": 2
+          },
+          {
+            "id": "h1jhteb51c03bj0-153",
+            "name": "Gustav Forsling",
+            "pos": "D",
+            "ovr": 84,
+            "salary": 5.6,
+            "years": 2
+          },
+          {
+            "id": "h1jhteb51c03bj0-154",
+            "name": "Uvis Balinskis",
+            "pos": "D",
+            "ovr": 80,
+            "salary": 4,
+            "years": 2
+          },
+          {
+            "id": "h1jhteb51c03bj0-155",
+            "name": "Akira Schmid",
+            "pos": "G",
+            "ovr": 78,
+            "salary": 3.2,
+            "years": 3
+          },
+          {
+            "id": "h1jhteb51c03bj0-156",
+            "name": "Jacob Markstrom",
+            "pos": "G",
+            "ovr": 77,
+            "salary": 2.8,
+            "years": 2
+          }
+        ],
+        "record": {
+          "wins": 43,
+          "losses": 34,
+          "otLosses": 6
+        },
+        "overflow": 0
+      },
+      "reloadRecap": {
+        "bytesHeld": true,
+        "facts": {
+          "rawHash": "beff486dc9d7b6af3bc700f1f889b2f77ccd27af6ad2c9709ab705d005cdf400",
+          "phase": "recap",
+          "season": 2026,
+          "period": 20,
+          "titles": 0,
+          "seasonsPlayed": 1,
+          "picksLeft": 0,
+          "champions": [
+            {
+              "season": 2026,
+              "team": "DAL"
+            }
+          ],
+          "postseason": true,
+          "team": "FLA",
+          "roster": [
+            {
+              "id": "h1jhteb51c03bj0-144",
+              "name": "Matthew Tkachuk",
+              "pos": "W",
+              "ovr": 96,
+              "salary": 10.4,
+              "years": 3
+            },
+            {
+              "id": "h1jhteb51c03bj0-145",
+              "name": "Brad Marchand",
+              "pos": "W",
+              "ovr": 95,
+              "salary": 10,
+              "years": 2
+            },
+            {
+              "id": "h1jhteb51c03bj0-146",
+              "name": "Brady Tkachuk",
+              "pos": "W",
+              "ovr": 95,
+              "salary": 10,
+              "years": 3
+            },
+            {
+              "id": "h1jhteb51c03bj0-147",
+              "name": "Sam Reinhart",
+              "pos": "C",
+              "ovr": 94,
+              "salary": 9.6,
+              "years": 2
+            },
+            {
+              "id": "h1jhteb51c03bj0-148",
+              "name": "Sam Bennett",
+              "pos": "C",
+              "ovr": 91,
+              "salary": 8.4,
+              "years": 2
+            },
+            {
+              "id": "h1jhteb51c03bj0-149",
+              "name": "Carter Verhaeghe",
+              "pos": "C",
+              "ovr": 90,
+              "salary": 8,
+              "years": 2
+            },
+            {
+              "id": "h1jhteb51c03bj0-150",
+              "name": "Anton Lundell",
+              "pos": "C",
+              "ovr": 89,
+              "salary": 7.6,
+              "years": 4
+            },
+            {
+              "id": "h1jhteb51c03bj0-151",
+              "name": "Seth Jones",
+              "pos": "D",
+              "ovr": 92,
+              "salary": 8.8,
+              "years": 2
+            },
+            {
+              "id": "h1jhteb51c03bj0-152",
+              "name": "Aaron Ekblad",
+              "pos": "D",
+              "ovr": 85,
+              "salary": 6,
+              "years": 2
+            },
+            {
+              "id": "h1jhteb51c03bj0-153",
+              "name": "Gustav Forsling",
+              "pos": "D",
+              "ovr": 84,
+              "salary": 5.6,
+              "years": 2
+            },
+            {
+              "id": "h1jhteb51c03bj0-154",
+              "name": "Uvis Balinskis",
+              "pos": "D",
+              "ovr": 80,
+              "salary": 4,
+              "years": 2
+            },
+            {
+              "id": "h1jhteb51c03bj0-155",
+              "name": "Akira Schmid",
+              "pos": "G",
+              "ovr": 78,
+              "salary": 3.2,
+              "years": 3
+            },
+            {
+              "id": "h1jhteb51c03bj0-156",
+              "name": "Jacob Markstrom",
+              "pos": "G",
+              "ovr": 77,
+              "salary": 2.8,
+              "years": 2
+            }
+          ],
+          "record": {
+            "wins": 43,
+            "losses": 34,
+            "otLosses": 6
+          },
+          "overflow": 0
+        }
+      },
+      "draftStart": {
+        "rawHash": "76fc79d659946fd2fd3131877bdc0e6c08fd12e9469a3a73b4b3da31a86bd153",
+        "phase": "draft",
+        "season": 2026,
+        "period": 20,
+        "titles": 0,
+        "seasonsPlayed": 1,
+        "picksLeft": 2,
+        "champions": [
+          {
+            "season": 2026,
+            "team": "DAL"
+          }
+        ],
+        "postseason": true,
+        "team": "FLA",
+        "roster": [
+          {
+            "id": "h1jhteb51c03bj0-144",
+            "name": "Matthew Tkachuk",
+            "pos": "W",
+            "ovr": 96,
+            "salary": 10.4,
+            "years": 3
+          },
+          {
+            "id": "h1jhteb51c03bj0-145",
+            "name": "Brad Marchand",
+            "pos": "W",
+            "ovr": 95,
+            "salary": 10,
+            "years": 2
+          },
+          {
+            "id": "h1jhteb51c03bj0-146",
+            "name": "Brady Tkachuk",
+            "pos": "W",
+            "ovr": 95,
+            "salary": 10,
+            "years": 3
+          },
+          {
+            "id": "h1jhteb51c03bj0-147",
+            "name": "Sam Reinhart",
+            "pos": "C",
+            "ovr": 94,
+            "salary": 9.6,
+            "years": 2
+          },
+          {
+            "id": "h1jhteb51c03bj0-148",
+            "name": "Sam Bennett",
+            "pos": "C",
+            "ovr": 91,
+            "salary": 8.4,
+            "years": 2
+          },
+          {
+            "id": "h1jhteb51c03bj0-149",
+            "name": "Carter Verhaeghe",
+            "pos": "C",
+            "ovr": 90,
+            "salary": 8,
+            "years": 2
+          },
+          {
+            "id": "h1jhteb51c03bj0-150",
+            "name": "Anton Lundell",
+            "pos": "C",
+            "ovr": 89,
+            "salary": 7.6,
+            "years": 4
+          },
+          {
+            "id": "h1jhteb51c03bj0-151",
+            "name": "Seth Jones",
+            "pos": "D",
+            "ovr": 92,
+            "salary": 8.8,
+            "years": 2
+          },
+          {
+            "id": "h1jhteb51c03bj0-152",
+            "name": "Aaron Ekblad",
+            "pos": "D",
+            "ovr": 85,
+            "salary": 6,
+            "years": 2
+          },
+          {
+            "id": "h1jhteb51c03bj0-153",
+            "name": "Gustav Forsling",
+            "pos": "D",
+            "ovr": 84,
+            "salary": 5.6,
+            "years": 2
+          },
+          {
+            "id": "h1jhteb51c03bj0-154",
+            "name": "Uvis Balinskis",
+            "pos": "D",
+            "ovr": 80,
+            "salary": 4,
+            "years": 2
+          },
+          {
+            "id": "h1jhteb51c03bj0-155",
+            "name": "Akira Schmid",
+            "pos": "G",
+            "ovr": 78,
+            "salary": 3.2,
+            "years": 3
+          },
+          {
+            "id": "h1jhteb51c03bj0-156",
+            "name": "Jacob Markstrom",
+            "pos": "G",
+            "ovr": 77,
+            "salary": 2.8,
+            "years": 2
+          }
+        ],
+        "record": {
+          "wins": 43,
+          "losses": 34,
+          "otLosses": 6
+        },
+        "overflow": 0
+      },
+      "afterDraft": {
+        "rawHash": "2dba8ec9e9871a707cda9398755e49616e279e17d82ca813b3306e8254a34afe",
+        "phase": "hub",
+        "season": 2027,
+        "period": 1,
+        "titles": 0,
+        "seasonsPlayed": 1,
+        "picksLeft": 0,
+        "champions": [
+          {
+            "season": 2026,
+            "team": "DAL"
+          }
+        ],
+        "postseason": false,
+        "team": "FLA",
+        "roster": [
+          {
+            "id": "h1jhteb51c03bj0-144",
+            "name": "Matthew Tkachuk",
+            "pos": "W",
+            "ovr": 96,
+            "salary": 10.4,
+            "years": 2
+          },
+          {
+            "id": "h1jhteb51c03bj0-145",
+            "name": "Brad Marchand",
+            "pos": "W",
+            "ovr": 91,
+            "salary": 10,
+            "years": 1
+          },
+          {
+            "id": "h1jhteb51c03bj0-146",
+            "name": "Brady Tkachuk",
+            "pos": "W",
+            "ovr": 95,
+            "salary": 10,
+            "years": 2
+          },
+          {
+            "id": "h1jhteb51c03bj0-147",
+            "name": "Sam Reinhart",
+            "pos": "C",
+            "ovr": 92,
+            "salary": 9.6,
+            "years": 1
+          },
+          {
+            "id": "h1jhteb51c03bj0-148",
+            "name": "Sam Bennett",
+            "pos": "C",
+            "ovr": 89,
+            "salary": 8.4,
+            "years": 1
+          },
+          {
+            "id": "h1jhteb51c03bj0-149",
+            "name": "Carter Verhaeghe",
+            "pos": "C",
+            "ovr": 88,
+            "salary": 8,
+            "years": 1
+          },
+          {
+            "id": "h1jhteb51c03bj0-150",
+            "name": "Anton Lundell",
+            "pos": "C",
+            "ovr": 89,
+            "salary": 7.6,
+            "years": 3
+          },
+          {
+            "id": "h1jhteb51c03bj0-151",
+            "name": "Seth Jones",
+            "pos": "D",
+            "ovr": 91,
+            "salary": 8.8,
+            "years": 1
+          },
+          {
+            "id": "h1jhteb51c03bj0-152",
+            "name": "Aaron Ekblad",
+            "pos": "D",
+            "ovr": 83,
+            "salary": 6,
+            "years": 1
+          },
+          {
+            "id": "h1jhteb51c03bj0-153",
+            "name": "Gustav Forsling",
+            "pos": "D",
+            "ovr": 83,
+            "salary": 5.6,
+            "years": 1
+          },
+          {
+            "id": "h1jhteb51c03bj0-154",
+            "name": "Uvis Balinskis",
+            "pos": "D",
+            "ovr": 78,
+            "salary": 4,
+            "years": 1
+          },
+          {
+            "id": "h1jhteb51c03bj0-155",
+            "name": "Akira Schmid",
+            "pos": "G",
+            "ovr": 78,
+            "salary": 3.2,
+            "years": 2
+          },
+          {
+            "id": "h1jhteb51c03bj0-156",
+            "name": "Jacob Markstrom",
+            "pos": "G",
+            "ovr": 73,
+            "salary": 2.8,
+            "years": 1
+          },
+          {
+            "id": "h1y07e6l1fwhomn-25",
+            "name": "Oskar Vasko",
+            "pos": "C",
+            "ovr": 84,
+            "salary": 2.6,
+            "years": 2
+          },
+          {
+            "id": "h1y07e6l1fwhomn-31",
+            "name": "Juuso Lindqvist",
+            "pos": "C",
+            "ovr": 79,
+            "salary": 1.5,
+            "years": 2
+          }
+        ],
+        "record": {
+          "wins": 0,
+          "losses": 0,
+          "otLosses": 0
+        },
+        "overflow": 0
+      },
+      "nextSeason": {
+        "rawHash": "2dba8ec9e9871a707cda9398755e49616e279e17d82ca813b3306e8254a34afe",
+        "phase": "hub",
+        "season": 2027,
+        "period": 1,
+        "titles": 0,
+        "seasonsPlayed": 1,
+        "picksLeft": 0,
+        "champions": [
+          {
+            "season": 2026,
+            "team": "DAL"
+          }
+        ],
+        "postseason": false,
+        "team": "FLA",
+        "roster": [
+          {
+            "id": "h1jhteb51c03bj0-144",
+            "name": "Matthew Tkachuk",
+            "pos": "W",
+            "ovr": 96,
+            "salary": 10.4,
+            "years": 2
+          },
+          {
+            "id": "h1jhteb51c03bj0-145",
+            "name": "Brad Marchand",
+            "pos": "W",
+            "ovr": 91,
+            "salary": 10,
+            "years": 1
+          },
+          {
+            "id": "h1jhteb51c03bj0-146",
+            "name": "Brady Tkachuk",
+            "pos": "W",
+            "ovr": 95,
+            "salary": 10,
+            "years": 2
+          },
+          {
+            "id": "h1jhteb51c03bj0-147",
+            "name": "Sam Reinhart",
+            "pos": "C",
+            "ovr": 92,
+            "salary": 9.6,
+            "years": 1
+          },
+          {
+            "id": "h1jhteb51c03bj0-148",
+            "name": "Sam Bennett",
+            "pos": "C",
+            "ovr": 89,
+            "salary": 8.4,
+            "years": 1
+          },
+          {
+            "id": "h1jhteb51c03bj0-149",
+            "name": "Carter Verhaeghe",
+            "pos": "C",
+            "ovr": 88,
+            "salary": 8,
+            "years": 1
+          },
+          {
+            "id": "h1jhteb51c03bj0-150",
+            "name": "Anton Lundell",
+            "pos": "C",
+            "ovr": 89,
+            "salary": 7.6,
+            "years": 3
+          },
+          {
+            "id": "h1jhteb51c03bj0-151",
+            "name": "Seth Jones",
+            "pos": "D",
+            "ovr": 91,
+            "salary": 8.8,
+            "years": 1
+          },
+          {
+            "id": "h1jhteb51c03bj0-152",
+            "name": "Aaron Ekblad",
+            "pos": "D",
+            "ovr": 83,
+            "salary": 6,
+            "years": 1
+          },
+          {
+            "id": "h1jhteb51c03bj0-153",
+            "name": "Gustav Forsling",
+            "pos": "D",
+            "ovr": 83,
+            "salary": 5.6,
+            "years": 1
+          },
+          {
+            "id": "h1jhteb51c03bj0-154",
+            "name": "Uvis Balinskis",
+            "pos": "D",
+            "ovr": 78,
+            "salary": 4,
+            "years": 1
+          },
+          {
+            "id": "h1jhteb51c03bj0-155",
+            "name": "Akira Schmid",
+            "pos": "G",
+            "ovr": 78,
+            "salary": 3.2,
+            "years": 2
+          },
+          {
+            "id": "h1jhteb51c03bj0-156",
+            "name": "Jacob Markstrom",
+            "pos": "G",
+            "ovr": 73,
+            "salary": 2.8,
+            "years": 1
+          },
+          {
+            "id": "h1y07e6l1fwhomn-25",
+            "name": "Oskar Vasko",
+            "pos": "C",
+            "ovr": 84,
+            "salary": 2.6,
+            "years": 2
+          },
+          {
+            "id": "h1y07e6l1fwhomn-31",
+            "name": "Juuso Lindqvist",
+            "pos": "C",
+            "ovr": 79,
+            "salary": 1.5,
+            "years": 2
+          }
+        ],
+        "record": {
+          "wins": 0,
+          "losses": 0,
+          "otLosses": 0
+        },
+        "overflow": 0
+      },
+      "reloadNextSeason": {
+        "bytesHeld": true,
+        "facts": {
+          "rawHash": "2dba8ec9e9871a707cda9398755e49616e279e17d82ca813b3306e8254a34afe",
+          "phase": "hub",
+          "season": 2027,
+          "period": 1,
+          "titles": 0,
+          "seasonsPlayed": 1,
+          "picksLeft": 0,
+          "champions": [
+            {
+              "season": 2026,
+              "team": "DAL"
+            }
+          ],
+          "postseason": false,
+          "team": "FLA",
+          "roster": [
+            {
+              "id": "h1jhteb51c03bj0-144",
+              "name": "Matthew Tkachuk",
+              "pos": "W",
+              "ovr": 96,
+              "salary": 10.4,
+              "years": 2
+            },
+            {
+              "id": "h1jhteb51c03bj0-145",
+              "name": "Brad Marchand",
+              "pos": "W",
+              "ovr": 91,
+              "salary": 10,
+              "years": 1
+            },
+            {
+              "id": "h1jhteb51c03bj0-146",
+              "name": "Brady Tkachuk",
+              "pos": "W",
+              "ovr": 95,
+              "salary": 10,
+              "years": 2
+            },
+            {
+              "id": "h1jhteb51c03bj0-147",
+              "name": "Sam Reinhart",
+              "pos": "C",
+              "ovr": 92,
+              "salary": 9.6,
+              "years": 1
+            },
+            {
+              "id": "h1jhteb51c03bj0-148",
+              "name": "Sam Bennett",
+              "pos": "C",
+              "ovr": 89,
+              "salary": 8.4,
+              "years": 1
+            },
+            {
+              "id": "h1jhteb51c03bj0-149",
+              "name": "Carter Verhaeghe",
+              "pos": "C",
+              "ovr": 88,
+              "salary": 8,
+              "years": 1
+            },
+            {
+              "id": "h1jhteb51c03bj0-150",
+              "name": "Anton Lundell",
+              "pos": "C",
+              "ovr": 89,
+              "salary": 7.6,
+              "years": 3
+            },
+            {
+              "id": "h1jhteb51c03bj0-151",
+              "name": "Seth Jones",
+              "pos": "D",
+              "ovr": 91,
+              "salary": 8.8,
+              "years": 1
+            },
+            {
+              "id": "h1jhteb51c03bj0-152",
+              "name": "Aaron Ekblad",
+              "pos": "D",
+              "ovr": 83,
+              "salary": 6,
+              "years": 1
+            },
+            {
+              "id": "h1jhteb51c03bj0-153",
+              "name": "Gustav Forsling",
+              "pos": "D",
+              "ovr": 83,
+              "salary": 5.6,
+              "years": 1
+            },
+            {
+              "id": "h1jhteb51c03bj0-154",
+              "name": "Uvis Balinskis",
+              "pos": "D",
+              "ovr": 78,
+              "salary": 4,
+              "years": 1
+            },
+            {
+              "id": "h1jhteb51c03bj0-155",
+              "name": "Akira Schmid",
+              "pos": "G",
+              "ovr": 78,
+              "salary": 3.2,
+              "years": 2
+            },
+            {
+              "id": "h1jhteb51c03bj0-156",
+              "name": "Jacob Markstrom",
+              "pos": "G",
+              "ovr": 73,
+              "salary": 2.8,
+              "years": 1
+            },
+            {
+              "id": "h1y07e6l1fwhomn-25",
+              "name": "Oskar Vasko",
+              "pos": "C",
+              "ovr": 84,
+              "salary": 2.6,
+              "years": 2
+            },
+            {
+              "id": "h1y07e6l1fwhomn-31",
+              "name": "Juuso Lindqvist",
+              "pos": "C",
+              "ovr": 79,
+              "salary": 1.5,
+              "years": 2
+            }
+          ],
+          "record": {
+            "wins": 0,
+            "losses": 0,
+            "otLosses": 0
+          },
+          "overflow": 0
+        }
+      }
+    }
+  ],
+  "cleanup": {
+    "browserClosed": true,
+    "contextsClosed": true,
+    "ownedServer": false
+  },
+  "finished": "2026-10-01T22:44:28.422Z"
+}

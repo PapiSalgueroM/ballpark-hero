@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { cn } from '@/lib/utils';
 import { ChevronRight, ChevronDown } from 'lucide-react';
-import { confidenceLabel } from '@/lib/clubManager';
+import { confidenceLabel, minuteLabel } from '@/lib/clubManager';
 import type { MatchWeekReport, MatchStats } from '@/lib/clubManager';
 import { ConfettiBurst, CelebrationStyles, revealDelay } from '@/components/club-manager/Celebration';
 import { MadeUpTag } from '@/components/club-manager/SquadScreen';
@@ -160,6 +160,21 @@ export function MatchReportCard({ report, clubName, onContinue }: MatchReportCar
      aggregate that is still level, not the night printed under it. */
   const etPensLead = !r.detail?.et ? ''
     : r.tie?.leg === 2 ? `Still level ${r.tie.aggMine}-${r.tie.aggTheirs} on aggregate after extra time. ` : 'Still level after extra time. ';
+  /* Round 781, a player's report: "show the aggregate score so the player
+     knows what the score is after 2 legs". A second leg settled in ninety
+     minutes had no line at all, so a 1-2 defeat that put you through 4-3 read
+     as a defeat. Every second leg now says where the tie ended, and both legs
+     print the first leg beside the night. */
+  const aggLine = r.tie?.leg === 2 && r.decidedBy === 'regular'
+    ? (r.tie.byAwayGoals
+      ? `Level ${r.tie.aggMine}-${r.tie.aggTheirs} on aggregate, ${r.tie.through ? 'through' : 'out'} on away goals`
+      : `${r.tie.through ? 'Through' : 'Out'} ${r.tie.aggMine}-${r.tie.aggTheirs} on aggregate`)
+    : '';
+  const legLine = r.tie?.leg === 2 && r.tie.leg1Mine !== undefined && r.tie.leg1Theirs !== undefined
+    ? `First leg ${r.tie.leg1Mine}-${r.tie.leg1Theirs} ${r.tie.leg1Home ? 'at home' : 'away'} · Agg ${r.tie.aggMine}-${r.tie.aggTheirs}`
+    : r.tie?.leg === 1
+      ? `First leg. The tie is settled ${r.home === clubName ? 'at their ground' : 'at your ground'} next time.`
+      : '';
   /* Round 157: the ratings list folds away because ten rows of numbers is a
      lot of card, but the man of the match is always on show. */
   const [showRatings, setShowRatings] = useState(false);
@@ -238,7 +253,7 @@ export function MatchReportCard({ report, clubName, onContinue }: MatchReportCar
             {/* Round 670: and the thirty minutes after it, when they were played. */}
             {detail.et && (
               <span className="rounded-full bg-secondary px-2 py-0.5 tabular-nums font-bold text-foreground" data-cm-added="et">
-                AET {detail.et.to}&apos;
+                AET {detail.et.to}{detail.added.et ? `+${detail.added.et}` : ''}&apos;
               </span>
             )}
           </div>
@@ -257,6 +272,11 @@ export function MatchReportCard({ report, clubName, onContinue }: MatchReportCar
             {aetLine}
           </div>
         )}
+        {aggLine && (
+          <div data-cm-agg-line className={cn('text-[11px] font-bold mb-2', r.tie?.through ? 'text-correct' : 'text-destructive')}>
+            {aggLine}
+          </div>
+        )}
 
         {/* Round 472: both names sit centred over their own half of the
             scoreboard. They used to be pushed in against the score, which left
@@ -273,6 +293,11 @@ export function MatchReportCard({ report, clubName, onContinue }: MatchReportCar
             <div className={cn('text-sm font-bold truncate', r.away === clubName ? 'text-primary' : 'text-foreground')}>{r.away}</div>
           </div>
         </div>
+        {legLine && (
+          <div className="mt-1.5 text-[10px] text-muted-foreground tabular-nums" data-cm-leg-line={r.tie?.leg === 2 ? `${r.tie.aggMine}-${r.tie.aggTheirs}` : 'first'}>
+            {legLine}
+          </div>
+        )}
 
         {(r.myScorers.length > 0 || r.oppScorers.length > 0) && (
           <div className="grid grid-cols-2 gap-3 mt-4">
@@ -281,7 +306,7 @@ export function MatchReportCard({ report, clubName, onContinue }: MatchReportCar
               {r.myScorers.length === 0 && <p className="text-[10px] text-muted-foreground">-</p>}
               {r.myScorers.map((sc, i) => (
                 <p key={i} className="text-[11px] text-foreground cm-rise" style={{ animationDelay: revealDelay(i, 0.35, 0.14) }}>
-                  ⚽ {sc.name} {sc.minute}'
+                  ⚽ {sc.name} {minuteLabel(sc)}
                   {sc.assist && <span className="text-[9px] text-muted-foreground"> · 🅰️ {sc.assist}</span>}
                 </p>
               ))}
@@ -290,7 +315,7 @@ export function MatchReportCard({ report, clubName, onContinue }: MatchReportCar
               <div className="text-[9px] text-muted-foreground uppercase tracking-wider mb-1 truncate">{opponent}</div>
               {r.oppScorers.length === 0 && <p className="text-[10px] text-muted-foreground">-</p>}
               {r.oppScorers.map((sc, i) => (
-                <p key={i} className="text-[11px] text-muted-foreground cm-rise" style={{ animationDelay: revealDelay(i, 0.45, 0.14) }}>⚽ {sc.name} {sc.minute}'</p>
+                <p key={i} className="text-[11px] text-muted-foreground cm-rise" style={{ animationDelay: revealDelay(i, 0.45, 0.14) }}>⚽ {sc.name} {minuteLabel(sc)}</p>
               ))}
             </div>
           </div>
@@ -315,17 +340,17 @@ export function MatchReportCard({ report, clubName, onContinue }: MatchReportCar
                 'cm-tick-in text-[10px] rounded-full px-2 py-0.5 border',
                 c.kind === 'red' ? 'bg-red-500/10 border-red-500/40 text-red-400' : 'bg-yellow-500/10 border-yellow-500/40 text-yellow-500',
               )}>
-                {c.kind === 'red' ? '🟥' : '🟨'} {c.name} {c.minute}'
+                {c.kind === 'red' ? '🟥' : '🟨'} {c.name} {minuteLabel(c)}
               </span>
             ))}
             {detail.injuries.map((inj, i) => (
               <span key={`i${i}`} style={chipIn()} className="cm-tick-in text-[10px] rounded-full px-2 py-0.5 border bg-secondary border-border text-foreground">
-                🩹 {inj.name} {inj.minute}' ({inj.weeks}w)
+                🩹 {inj.name} {minuteLabel(inj)} ({inj.weeks}w)
               </span>
             ))}
             {detail.subs.map((s, i) => (
               <span key={`s${i}`} style={chipIn()} className="cm-tick-in text-[10px] rounded-full px-2 py-0.5 border bg-secondary border-border text-muted-foreground">
-                <span className="text-emerald-400">▲ {s.on}</span> <span className="text-red-400">▼ {s.off}</span> {s.minute}'
+                <span className="text-emerald-400">▲ {s.on}</span> <span className="text-red-400">▼ {s.off}</span> {minuteLabel(s)}
               </span>
             ))}
             {oppCards.map((c, i) => (
@@ -333,12 +358,12 @@ export function MatchReportCard({ report, clubName, onContinue }: MatchReportCar
                 'cm-tick-in text-[10px] rounded-full px-2 py-0.5 border',
                 c.kind === 'red' ? 'bg-red-500/10 border-red-500/30 text-red-400/80' : 'bg-yellow-500/10 border-yellow-500/30 text-yellow-500/80',
               )}>
-                <span className="text-[8px] uppercase tracking-wider text-muted-foreground/70">{oppTag}</span> {c.kind === 'red' ? '🟥' : '🟨'} {c.name}{c.gen && <MadeUpTag className="ml-1" />} {c.minute}'
+                <span className="text-[8px] uppercase tracking-wider text-muted-foreground/70">{oppTag}</span> {c.kind === 'red' ? '🟥' : '🟨'} {c.name}{c.gen && <MadeUpTag className="ml-1" />} {minuteLabel(c)}
               </span>
             ))}
             {oppSubs.map((s, i) => (
               <span key={`os${i}`} data-cm-opp-chip="sub" style={chipIn()} className="cm-tick-in text-[10px] rounded-full px-2 py-0.5 border bg-secondary/60 border-border/60 text-muted-foreground">
-                <span className="text-[8px] uppercase tracking-wider text-muted-foreground/70">{oppTag}</span> <span className="text-emerald-400/80">▲ {s.on}</span>{s.onGen && <MadeUpTag className="ml-1" />} <span className="text-red-400/80">▼ {s.off}</span>{s.offGen && <MadeUpTag className="ml-1" />} {s.minute}'
+                <span className="text-[8px] uppercase tracking-wider text-muted-foreground/70">{oppTag}</span> <span className="text-emerald-400/80">▲ {s.on}</span>{s.onGen && <MadeUpTag className="ml-1" />} <span className="text-red-400/80">▼ {s.off}</span>{s.offGen && <MadeUpTag className="ml-1" />} {minuteLabel(s)}
               </span>
             ))}
           </div>

@@ -88,6 +88,13 @@ export function MatchCentre({
         <div className="text-[10px] text-muted-foreground mt-1.5">
           {venue} · their strength ~{f.oppStrength} · your XI ~{f.myStrength}
         </div>
+        {/* Round 781: the first leg before a second leg, so you know what tonight has to do. */}
+        {f.firstLeg && (
+          <div className="text-[10px] text-foreground mt-1 tabular-nums" data-cm-first-leg={`${f.firstLeg.mine}-${f.firstLeg.theirs}`}>
+            First leg {f.firstLeg.mine}-{f.firstLeg.theirs} {f.firstLeg.home ? 'at home' : 'away'}.{' '}
+            {f.firstLeg.mine > f.firstLeg.theirs ? 'You lead on aggregate going in.' : f.firstLeg.mine < f.firstLeg.theirs ? 'You trail on aggregate going in.' : 'Level on aggregate going in.'}
+          </div>
+        )}
 
         {/* Form, both dugouts */}
         <div className="flex items-center justify-between mt-3 px-1">
