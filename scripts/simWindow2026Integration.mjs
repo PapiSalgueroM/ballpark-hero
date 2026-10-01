@@ -114,7 +114,8 @@
      unguarded  adds an update with no row count check before the final notice -> 5
      moved      moves one planned row's live club to a third club in memory   -> 6
      footle     takes a window row that is in the Footle pool out of the
-                overlay before the bake                                        -> 8
+                overlay before the bake (on an APPLIED table his row also
+                goes back to the old club in the bake's input)                 -> 8
      stale      judges sections 9 and 10 on the table as it is instead of the
                 stand in (needs a PENDING table)                               -> 9 and 10
      tpheld     empties TP_HELD                                               -> 11
@@ -683,15 +684,27 @@ if (runs(8)) {
   const committedClub = new Map([...committedText.matchAll(/^\s*\{ name: ("(?:[^"\\]|\\.)*"), club: ("(?:[^"\\]|\\.)*"),/gm)]
     .map(m => [JSON.parse(m[1]), JSON.parse(m[2])]));
   if (committedClub.size < 400) abort(`src/data/players.ts parsed to ${committedClub.size} rows, the reader is broken`);
+  let footleVictim = null;
   if (CONTROL === 'footle') {
     const e = movers.find(x => committedClub.get(x.name) === x.from || committedClub.get(x.name) === x.db);
     const at = e ? TRANSFER_OVERLAY_2026.findIndex(x => x.name === e.name && x.db === e.db) : -1;
     if (at < 0) abort('control cannot run: no window mover of the Footle pool is in the overlay');
     TRANSFER_OVERLAY_2026.splice(at, 1);
+    footleVictim = e;
     console.log(`   NEGATIVE CONTROL ON: ${e.name} taken out of the overlay before the bake`);
   }
   const rows = await fetchRows2026();
-  const fresh = await bake({ rows: clone(rows) });
+  const bakeInput = clone(rows);
+  if (footleVictim && STATE === 'APPLIED') {
+    /* Applied, the table itself carries the move, so the overlay entry alone
+       changes nothing: his row goes back to the old club as well, the one
+       state where only the overlay could put him right. */
+    const r = bakeInput.find(x => x.player_name === footleVictim.name && x.club === footleVictim.db);
+    if (!r) abort(`control cannot run: ${footleVictim.name} has no 2026 row at ${footleVictim.db} in the applied table`);
+    r.club = footleVictim.from;
+    console.log(`   NEGATIVE CONTROL ON: the table is APPLIED, so ${footleVictim.name}'s row goes back to ${footleVictim.from} for the bake as well`);
+  }
+  const fresh = await bake({ rows: bakeInput });
   const freshClub = new Map(fresh.pool.map(x => [x.player.name, x.player.club]));
   const behind = [];
   for (const n of new Set([...committedClub.keys(), ...freshClub.keys()])) {
