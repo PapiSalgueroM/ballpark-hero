@@ -43,7 +43,9 @@
  *      rk list is as long as its constant, the cbb pairs match its deletes, the
  *      nfl header's per year breakdown sums to the constants its block declares,
  *      and the rounds the nfl block reads back after step 3 agree with the picks
- *      docs/audits/college-tables-2026-09-30.md pins from two organisations.
+ *      docs/audits/college-tables-2026-09-30.md pins from two organisations,
+ *      every pin on a round step 3 derives is read back (the pins marked parsed,
+ *      rounds the scrape already had, are not owed one).
  *   5. THE COLLEGE GRID KEY BUILDER (scripts/genCollegeGridData.mjs) refuses a
  *      placeholder: a "_ Name" cfb stats row that would otherwise join a career
  *      joins nobody and adds no school.
@@ -95,6 +97,7 @@
  *   cleaner      draftRounds.mjs back to the forfeit rule -> 3 (the moved row wins a slot)
  *   constants    the nfl SQL's rows after is off by one  -> 4
  *   pins         the record's McNeil pin says round 16   -> 4 (read back disagrees)
+ *   unread       the Dzierzak read back loses its round  -> 4 (a derived pin is never read back)
  *   keyguard     the key builder loses its placeholder skip -> 5 (the placeholder joins)
  *   searchcall   rowToRaw loses its isPlaceholderName line   -> 6 (the search offers "_ Johnston")
  *   offered      the hook offers rows.map, not programs.map  -> 6 (the search lists both twins)
@@ -153,7 +156,7 @@ const CALL_SITE_SOURCES = { search: read(SEARCH_TS_PATH), hook: read(HOOK_TS_PAT
 const FIXTURE = JSON.parse(read(path.join(SCRIPTS, 'data', 'cbbProgramTwins.json')));
 
 const CONTROLS = {
-  placeholder: 1, archive: 1, twin: 2, names: 2, generic: 2, cleaner: 3, constants: 4, pins: 4, keyguard: 5,
+  placeholder: 1, archive: 1, twin: 2, names: 2, generic: 2, cleaner: 3, constants: 4, pins: 4, unread: 4, keyguard: 5,
   searchcall: 6, offered: 6, pool: 6, slot: 6, dailytwin: 6, early: 6,
 };
 const ONLY = process.env.SIM_COLLEGE_TABLES_CONTROL || '';
@@ -357,17 +360,21 @@ function sectionDraft({ lib }) {
 /* ------------------------------------------------------------------ */
 /* 4. The migrations                                                    */
 /* ------------------------------------------------------------------ */
-/** The record's pins: (year|pick) to round, every "pin: yes" row of the audit's derivation table. */
+/** The record's pins: (year|pick) to round, every "pin: yes" row of the audit's derivation table,
+ *  and the ones marked parsed (a round the scrape already had, which step 3 never touches). */
 function readAuditPins(md) {
   const pins = new Map();
+  const parsed = new Set();
   for (const line of M.lf(md).split('\n')) {
     const cells = line.split('|').map(c => c.trim());
     if (cells.length < 8) continue;
     const [, year, pick, , round, , , pin] = cells;
     if (!/^\d{4}$/.test(year) || !/^\d+$/.test(pick) || !/^\d+$/.test(round)) continue;
-    if (/^yes\b/.test(pin)) pins.set(`${year}|${pick}`, Number(round));
+    if (!/^yes\b/.test(pin)) continue;
+    pins.set(`${year}|${pick}`, Number(round));
+    if (/\bparsed\b/.test(pin)) parsed.add(`${year}|${pick}`);
   }
-  return pins;
+  return { pins, parsed };
 }
 function sectionSql({ files, audit }) {
   const out = [];
@@ -418,7 +425,7 @@ function sectionSql({ files, audit }) {
   if (mig.pairs.length !== mig.deletes.size) out.push(`cbb: ${mig.pairs.length} pairs allowed, ${mig.deletes.size} rows deleted`);
 
   // The rounds the nfl block reads back after step 3, against the record's pins.
-  const pins = readAuditPins(audit);
+  const { pins, parsed } = readAuditPins(audit);
   const backs = M.readNflReadBacks(files.nfl);
   if (pins.size === 0) out.push('the audit record pins no row');
   if (backs.length === 0) out.push('the nfl block reads back no sample round');
@@ -430,7 +437,12 @@ function sectionSql({ files, audit }) {
     else agreed += 1;
   }
   if (agreed === 0) out.push('no read back sample is pinned by the record, so the two cannot be compared');
-  return { out, table, info: `5 files, one DO block each; ${pins.size} record pins, ${backs.length} read backs, ${agreed} compared` };
+  /* Every pin the record holds on a derived round is read back when the block runs; a parsed pin
+     (a round the scrape already had) proves nothing about step 3, so it is not owed one. */
+  const readBack = new Set(backs.map(([y, p]) => `${y}|${p}`));
+  const owed = [...pins.keys()].filter(k => !parsed.has(k));
+  for (const k of owed) if (!readBack.has(k)) out.push(`nfl: the record pins ${k.replace('|', ' pick ')} at round ${pins.get(k)} and the block never reads it back`);
+  return { out, table, info: `5 files, one DO block each; ${pins.size} record pins (${parsed.size} parsed, ${owed.length} on derived rounds, every one read back), ${backs.length} read backs, ${agreed} compared` };
 }
 
 /* ------------------------------------------------------------------ */
@@ -847,6 +859,13 @@ const controls = {
     const old = '| 1976 | 472 | Pat McNeil, Chiefs, Baylor | 17 |';
     need(AUDIT.includes(old), 'the McNeil pin row is not in the audit record');
     return { ...inp, sql: { ...inp.sql, audit: AUDIT.replace(old, '| 1976 | 472 | Pat McNeil, Chiefs, Baylor | 16 |') } };
+  },
+  unread: inp => {
+    const old = "where year = 1976 and pick = 404 and player_name = 'Bob Dzierzak' and round = 15;";
+    need(M.sqlCode(SQL.nfl).split(old).length === 2, 'the Dzierzak read back is not in the nfl SQL code exactly once');
+    const sql = SQL.nfl.replace(old, "where year = 1976 and pick = 404 and player_name = 'Bob Dzierzak';");
+    need(M.sqlCode(sql) !== M.sqlCode(SQL.nfl), 'the mutation changed no code');
+    return { ...inp, sql: { ...inp.sql, files: { ...inp.sql.files, nfl: sql } } };
   },
   keyguard: async inp => {
     const lib = await importMutated(KEY_MJS_PATH, 'if (isPlaceholderName(s.player_name)) continue;', '');

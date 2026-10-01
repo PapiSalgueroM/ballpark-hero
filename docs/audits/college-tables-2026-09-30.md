@@ -63,16 +63,24 @@ derivation gives that round.
 | 1970 | 313 | Billy Main, Steelers, Oregon State | 13 | Billy Main, Steelers, RB, Oregon State, round 13 | Billy Main, RB, Oregon State, Steelers, round 13 | yes |
 | 1970 | 442 | Rayford Jenkins, Chiefs, Alcorn A&M | 17 | Rayford Jenkins, Chiefs, DB, Alcorn State, round 17 (17 rounds, 442 picks) | Rayford Jenkins, DB, Alcorn State, Chiefs, round 17 (17 rounds, 442 picks) | yes |
 | 1971 | 442 | Charles Hill, Raiders, Sam Houston State | 17 | Charles Hill, Raiders, WR, Sam Houston State, round 17 (17 rounds, 442 picks) | Chuck Hill, WR, Sam Houston State, Raiders, round 17 (17 rounds, 442 picks) | yes |
-| 1972 | 150 | Curt Watson (stored mirrored, "Watson, CurtCurt Watson"), Saints, Tennessee | 6 | Curt Watson, Saints, RB, Tennessee, round 6 | Curt Watson, RB, Tennessee, Saints, round 6 | yes |
+| 1972 | 150 | Curt Watson (stored mirrored, "Watson, CurtCurt Watson"), Saints, Tennessee | 6 | Curt Watson, Saints, RB, Tennessee, round 6 | Curt Watson, RB, Tennessee, Saints, round 6 | yes, parsed (the scrape already filed it round 6) |
 | 1972 | 250 | Mike Franks, Cardinals, Eastern New Mexico | 10 | Mike Franks, Cardinals, QB, Eastern New Mexico, round 10 | Mike Franks, QB, Eastern New Mexico, Cardinals, round 10 | yes |
 | 1973 | 330 | Alan Kelso, 49ers, Washington | 13 | Alan Kelso, 49ers, C, Washington, round 13 | Al Kelso, C, Washington, 49ers, round 13 | yes |
 | 1973 | 400 | Ken Muhlbeier, Broncos, Idaho | 16 | Ken Muhlbeier, Broncos, C, Idaho, round 16 | Ken Muhlbeier, C, Idaho, Broncos, round 16 | yes |
-| 1974 | 100 | Jimmy Allen, Steelers, UCLA | 4 | Jimmy Allen, Steelers, DB, UCLA, round 4 | Jimmy Allen, DB, UCLA, Steelers, round 4 | yes |
+| 1974 | 100 | Jimmy Allen, Steelers, UCLA | 4 | Jimmy Allen, Steelers, DB, UCLA, round 4 | Jimmy Allen, DB, UCLA, Steelers, round 4 | yes, parsed (the scrape already filed it round 4) |
 | 1975 | 240 | Hank Englehardt, Broncos, Pacific | 10 | Hank Englehardt, Broncos, C, Pacific, round 10 | Hank Englehardt, C, Pacific, Broncos, round 10 | yes |
 | 1975 | 300 | Andre Roundtree, Lions, Iowa State | 12 | Andre Roundtree, Lions, LB, Iowa State, round 12 | Andre Roundtree, LB, Iowa State, Lions, round 12 | yes |
 | 1946 | 280 | Jay Perrin, Rams, USC | 29 | Jay Perrin, Rams, T, USC, round 29 (32 rounds, 300 picks) | Jay Perrin, Rams, T, Southern California, round 29 (32 rounds, 300 picks) | yes |
-| 1946 | 281 | Jim LaRue, Cardinals, Duke | 30 | Jim LaRue, Cardinals, B, Duke, round 30 | Jim LaRue, Cardinals, B, round 30 (college read as Maryland) | yes, on the round |
+| 1946 | 281 | Jim LaRue, Cardinals, Duke | 30 | Jim LaRue, Cardinals, B, Duke, round 30 | Jim LaRue, Cardinals, B, round 30 (college read as Maryland) | yes, on the round; parsed (the scrape already filed it round 30) |
 | 1950 | 391 | Dud Parker, Eagles, Baylor | 30 | Dud Parker, Eagles, B, Baylor, round 30 (30 rounds, 391 picks) | Dud Parker, Eagles, B, Baylor, round 30 (30 rounds, 391 picks) | yes |
+
+Three of the 15 pins are marked parsed: the scrape already filed those rows in
+their right round, step 3 never touches them, and they say nothing about the
+derivation. The migration reads back every other pin (12 picks) by pick, player
+and round after step 3, and scripts/simCollegeTables.mjs section 4 fails if a
+pin not marked parsed has no read back or a read back disagrees with its pin.
+On 2026-10-01 dacec5fe's `deriveRounds` mirror was rerun over the same
+2026-09-30 pull and agreed at all 15 picks.
 
 Read but NOT used as pins, because the two pages did not come back agreeing:
 

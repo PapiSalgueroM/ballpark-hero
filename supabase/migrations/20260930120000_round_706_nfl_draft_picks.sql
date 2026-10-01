@@ -96,6 +96,11 @@
 --       306 (27 picks) and round 12 at 307 to 334, so a flat 28 per round would have filed 307 to 334
 --       one round early. Its 83 rows are set NULL here; those three blocks can be written once a second
 --       source agrees.
+--   The block reads back, by pick, player and round, every pick the audit record pins from two
+--   organisations where step 3 derives the round (12 picks: 1976 472 and 404, 1970 313 and 442, 1971
+--   442, 1972 250, 1973 330 and 400, 1975 240 and 300, 1946 280, 1950 391), plus 1950 pick 93. The
+--   record's other three pins (1972 150, 1974 100, 1946 281) are rows the scrape already filed in their
+--   right round, so step 3 never touches them and they say nothing about it.
 --
 -- LEFT ALONE, on purpose:
 --   * 23 drafts with no parsed round 2 at all (1942 to 1945, 1949, 1951 to 1955, 1957 to 1969; 7,567
@@ -241,6 +246,22 @@ begin
   -- The sample checks, read back.
   select count(*) into n from public.nfl_draft_picks where year = 1976 and pick = 472 and player_name = 'Pat McNeil' and round = 17;
   if n <> 1 then raise exception 'Round 706: 1976 pick 472 (Pat McNeil) is not round 17. Nothing was changed.'; end if;
+  select count(*) into n from public.nfl_draft_picks where year = 1976 and pick = 404 and player_name = 'Bob Dzierzak' and round = 15;
+  if n <> 1 then raise exception 'Round 706: 1976 pick 404 (Bob Dzierzak) is not round 15. Nothing was changed.'; end if;
+  select count(*) into n from public.nfl_draft_picks where year = 1971 and pick = 442 and player_name = 'Charles Hill' and round = 17;
+  if n <> 1 then raise exception 'Round 706: 1971 pick 442 (Charles Hill) is not round 17. Nothing was changed.'; end if;
+  select count(*) into n from public.nfl_draft_picks where year = 1972 and pick = 250 and player_name = 'Mike Franks' and round = 10;
+  if n <> 1 then raise exception 'Round 706: 1972 pick 250 (Mike Franks) is not round 10. Nothing was changed.'; end if;
+  select count(*) into n from public.nfl_draft_picks where year = 1973 and pick = 330 and player_name = 'Alan Kelso' and round = 13;
+  if n <> 1 then raise exception 'Round 706: 1973 pick 330 (Alan Kelso) is not round 13. Nothing was changed.'; end if;
+  select count(*) into n from public.nfl_draft_picks where year = 1973 and pick = 400 and player_name = 'Ken Muhlbeier' and round = 16;
+  if n <> 1 then raise exception 'Round 706: 1973 pick 400 (Ken Muhlbeier) is not round 16. Nothing was changed.'; end if;
+  select count(*) into n from public.nfl_draft_picks where year = 1975 and pick = 240 and player_name = 'Hank Englehardt' and round = 10;
+  if n <> 1 then raise exception 'Round 706: 1975 pick 240 (Hank Englehardt) is not round 10. Nothing was changed.'; end if;
+  select count(*) into n from public.nfl_draft_picks where year = 1975 and pick = 300 and player_name = 'Andre Roundtree' and round = 12;
+  if n <> 1 then raise exception 'Round 706: 1975 pick 300 (Andre Roundtree) is not round 12. Nothing was changed.'; end if;
+  select count(*) into n from public.nfl_draft_picks where year = 1946 and pick = 280 and player_name = 'Jay Perrin' and round = 29;
+  if n <> 1 then raise exception 'Round 706: 1946 pick 280 (Jay Perrin) is not round 29. Nothing was changed.'; end if;
   select count(*) into n from public.nfl_draft_picks where year = 1970 and ((pick = 313 and round = 13) or (pick = 442 and round = 17));
   if n <> 2 then raise exception 'Round 706: 1970 picks 313 and 442 are not rounds 13 and 17. Nothing was changed.'; end if;
   select count(*) into n from public.nfl_draft_picks where year = 1950 and ((pick = 93 and round = 8) or (pick = 391 and round = 30));
