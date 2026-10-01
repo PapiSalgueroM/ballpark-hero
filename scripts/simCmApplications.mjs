@@ -80,16 +80,19 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const ROOT_URL = ROOT.replaceAll('\\', '/');
 const TMP = os.tmpdir().replaceAll('\\', '/');
 const CONTROL = process.env.CM_APPLICATIONS_CONTROL || '';
-if (CONTROL && !['deaf', 'twice', 'nocooldown'].includes(CONTROL)) {
+if (CONTROL && !['deaf', 'tierblind', 'twice', 'nocooldown'].includes(CONTROL)) {
   console.error(`CM_APPLICATIONS_CONTROL=${CONTROL} is not a control this harness knows`);
   process.exit(1);
 }
 const BASES = Math.max(4, Number(process.env.CM_APPLICATIONS_BASES) || 24);
-const PER_BASE = 10;
+const PER_BASE = 20;
 
 let failures = 0;
 const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
-const ok = m => console.log('   ok  ' + m);
+/* A section's ok line prints only when the section added no failure. */
+let sectionStart = 0;
+const section = title => { sectionStart = failures; console.log(title); };
+const ok = m => { if (failures === sectionStart) console.log('   ok  ' + m); };
 const lf = s => s.replaceAll('\r\n', '\n');
 const isNum = v => typeof v === 'number' && Number.isFinite(v);
 const mean = a => (a.length ? a.reduce((x, y) => x + y, 0) / a.length : NaN);
@@ -139,6 +142,13 @@ if (CONTROL === 'deaf') {
   libPath = rewrite(LIB, [['export const STANDING_WEIGHT = 0.05;\n', 'export const STANDING_WEIGHT = 0;\n']], 'clubManagerJobHunt.deaf.ts', 'the standing weight');
   console.log('NEGATIVE CONTROL ON: the club ignores the manager\'s standing; section 1 must go red');
 }
+if (CONTROL === 'tierblind') {
+  libPath = rewrite(LIB, [
+    ['export const TIER_UP_WEIGHT = 0.9;\n', 'export const TIER_UP_WEIGHT = 0;\n'],
+    ['export const TIER_DOWN_WEIGHT = 0.35;\n', 'export const TIER_DOWN_WEIGHT = 0;\n'],
+  ], 'clubManagerJobHunt.tierblind.ts', 'the tier weights');
+  console.log('NEGATIVE CONTROL ON: the club ignores the gap in stature; section 1 must go red');
+}
 if (CONTROL === 'twice') {
   libPath = rewrite(LIB, [['    summerMove: null,\n    sentSeason: season,\n', '    summerMove: hunt.summerMove,\n    sentSeason: season,\n']], 'clubManagerJobHunt.twice.ts', 'the rollover\'s clearing of the booked move');
   console.log('NEGATIVE CONTROL ON: the booked move survives the rollover; section 3 must go red');
@@ -175,6 +185,7 @@ const { simToWeek, joinClubNow } = cal;
 const { applyRefusal, jobHuntOf, STANDING_WEIGHT, ANSWER_MIN_MATCHES, ANSWER_MAX_MATCHES, APPLICATIONS_PER_SEASON, LEAVING_BOARD_HIT } = jh;
 
 if (CONTROL === 'deaf' && STANDING_WEIGHT !== 0) { console.error('the deaf control did not reach the bundled engine'); process.exit(1); }
+if (CONTROL === 'tierblind' && (jh.TIER_UP_WEIGHT !== 0 || jh.TIER_DOWN_WEIGHT !== 0)) { console.error('the tierblind control did not reach the bundled engine'); process.exit(1); }
 
 /* ---------- helpers that drive the engine ---------- */
 
@@ -250,7 +261,7 @@ if (bases.length < Math.min(BASES, 8)) fail(`only ${bases.length} usable bases o
 console.log(`   ${bases.length} bases, tiers ${[...new Set(bases.map(myTier))].sort().join(', ')}, weeks ${Math.min(...bases.map(b => b.week))} to ${Math.max(...bases.map(b => b.week))}`);
 
 /* ---------- 1. the answer is the manager's to earn ---------- */
-console.log(`1) Acceptance against standing and tier gap over ${bases.length * PER_BASE} applications`);
+section(`1) Acceptance against standing and tier gap over ${bases.length * PER_BASE} applications`);
 const rows = [];
 let offSchedule = 0, badCopy = 0, noMessage = 0, missingOptions = 0, sackedWaiting = 0;
 for (const base of bases) {
@@ -313,7 +324,7 @@ if (missingOptions) fail(`${missingOptions} answers carried the wrong options (a
 ok(`acceptance rises with standing and falls with the tiers applied up, every answer on its fixed match day, every answer in the inbox from the club's board`);
 
 /* ---------- 2. the limits ---------- */
-console.log('2) One at a time, a season long cooldown, three a season');
+section('2) One at a time, a season long cooldown, three a season');
 {
   const base = bases[0];
   const targets = applyTargets(base).filter(t => t.tier >= myTier(base));
@@ -354,7 +365,7 @@ console.log('2) One at a time, a season long cooldown, three a season');
 }
 
 /* ---------- 3. a summer move fires exactly once ---------- */
-console.log('3) A yes answered with the summer moves the manager at the rollover, once');
+section('3) A yes answered with the summer moves the manager at the rollover, once');
 {
   let probes = 0;
   for (let i = 0; i < Math.min(4, bases.length); i++) {
@@ -390,12 +401,14 @@ console.log('3) A yes answered with the summer moves the manager at the rollover
     if ((booked.inbox ?? []).some(m => m.kind === 'jobApplication' && !m.resolved)) fail(`probe ${i}: the acceptance message was left unresolved`);
     if (applyRefusal(booked, other.club) !== 'committed') fail(`probe ${i}: another application was not refused as committed`);
     if (joinClubNow(booked) !== null) fail(`probe ${i}: joinClubNow still ran after the summer was chosen`);
-    /* Play the season out. The board is warmed so the probe measures the
-       rollover and not a sacking; the hit above was measured already. */
-    let s = { ...booked, boardConfidence: 90 };
+    /* Play the season out. The board is warmed before every entry so the
+       probe measures the rollover and not a sacking (the engine sacks only
+       when confidence reaches zero, and no week costs ninety); the hit above
+       was measured already. */
+    let s = booked;
     let guard = 0;
     while (s.week < s.calendar.length && guard++ < 120) {
-      const r = playNextEntry(s, { skipHalftime: true });
+      const r = playNextEntry({ ...s, boardConfidence: 90 }, { skipHalftime: true });
       s = r.state;
       if (r.kind === 'seasonOver') break;
       if (s.sacked) break;
@@ -425,7 +438,7 @@ console.log('3) A yes answered with the summer moves the manager at the rollover
 }
 
 /* ---------- 4. joining now ---------- */
-console.log('4) A yes answered with now moves the manager that week');
+section('4) A yes answered with now moves the manager that week');
 {
   let sameLeague = 0, crossLeague = 0;
   for (let i = 0; i < Math.min(6, bases.length) && (sameLeague < 2 || crossLeague < 2); i++) {
@@ -483,7 +496,7 @@ console.log('4) A yes answered with now moves the manager that week');
 }
 
 /* ---------- 5. an old save loads unchanged ---------- */
-console.log('5) A save from before the round opens and plays with nothing in flight');
+section('5) A save from before the round opens and plays with nothing in flight');
 {
   const base = clone(bases[2] ?? bases[0]);
   delete base.jobHunt;
