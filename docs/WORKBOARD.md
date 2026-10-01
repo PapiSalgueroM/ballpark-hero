@@ -1,5 +1,25 @@
 # Work board
 
+**2026-10-01, Codex789 source compatibility accepted: durable Hot Seat day pin.**
+Only React's useRef import and the existing day initializer change. Exact app types0 and
+unchanged simManagerHotSeat pass240 seeded takeovers,720 compared result arms,24 exact
+replays and preserved Club Manager registrations. Full Daily Reload now accepts all24 day
+pins along with its107 actual cases and both original controls. A unique asserted copy of
+the new Ref line changed back to Memo produces exactly one source-fence failure while
+actual Buzzer reload/clear/silent outcomes pass; gate source is restored byte-for-byte.
+Proof: TEMP/dukb-round789-types.log,dukb-round789-hot-seat-engine.log and
+TEMP/dukb-round788-combined-20261001/hot-seat-copied-memo-control.log. Source peer review is
+clean. This hardens the pin and matches the existing fence; no observed midnight loss was
+claimed. The final combined production refresh/publication remains pending.
+
+**788 peer evidence addendum:** source review found no defect, but the claimed private-store
+then later Unlimited combination was only measured as separate paths. Keep the accepted22
+tests/16 contexts/four refused-store returns; extend only the two existing private tests and
+four320 native private flows to prove the second exact Unlimited completion with one refused
+daily write and no raw daily record. App source and test counts stay unchanged. No credit for
+that combined private path until the supplemental proof passes. Owner788 retains both test
+files; other six source/driver/wrapper/guard paths are already pushed4d291c05.
+
 **2026-10-01, Codex787 accepted: Clue Auction native controls and readable feedback.**
 Nine actual-page/real-helper/completion/local-storage/share outcomes and nine copied controls
 pass. Each copy fails one intended assertion with one independent pass/seven explicit skips.

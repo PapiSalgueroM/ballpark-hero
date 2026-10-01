@@ -1,5 +1,16 @@
 # Project state
 
+## CHECKPOINT 2026-10-01: durable Hot Seat pin accepted, private-path evidence supplemented
+
+789's two-line pin passes types,240 unchanged engine setups/24 replays, full Daily Reload
+and an asserted old-Memo copied control failing only the strict source fence. Source review
+is clean; final combined build refresh remains pending.788 needs a precise supplemental
+private-store -> later Unlimited proof: existing private returns and later normal-storage
+Unlimited paths pass separately, while source behavior is sound. Extend only two existing
+tests/four private native flows, no app change.786/787 final native acceptance passes; next
+free790 and all Claude reservations stand. Live at06:34:12UTC still serves Release I, with
+new features absent from actual chunks; raw game canonicals/indexability remain clean.
+
 ## CHECKPOINT 2026-10-01: Clue Auction final native and visual acceptance passed
 
 787's native selection,44px targets, exact committed clue/guess/result feedback and static
