@@ -1,0 +1,3452 @@
+{
+  "audit": "Read-only hostile data-quality audit",
+  "retrievedOn": "2026-10-01",
+  "finishedAt": "2026-10-01T22:41:27.092Z",
+  "boundary": {
+    "localGate": "C:/Users/antho/AppData/Local/Temp/dukb-round842-845-production",
+    "gitHead": "8542bf8383a6c5b7ab024245cb7ef885ee97b4ba",
+    "draft845Excluded": true,
+    "productionRead": "Live Supabase public sports tables, SELECT only, Oct1UTC",
+    "publication": "This does not establish that the clean local gate is the latest published site or prove Google indexing/AdSense status.",
+    "mutations": "No product, repository, database, settings, deploy or submission writes. Audit artifacts only in TEMP."
+  },
+  "findings": [
+    {
+      "id": "DQ01",
+      "priority": "P1",
+      "classification": "confirmed systemic structural corruption plus two-source factual sample",
+      "dataset": "public.nhl_player_stats",
+      "currentValue": {
+        "rows": 6353,
+        "malformedFirstSeason": 68,
+        "pointsNotGoalsPlusAssists": 64,
+        "negativeTotal": 1,
+        "distinctFlaggedRows": 69,
+        "bothMalformedAndArithmetic": 63,
+        "malformedWithZeroPoints": 59,
+        "sample": {
+          "player": "Bobby Robins",
+          "games": 33,
+          "year_from": "3",
+          "year_to": "2014-15",
+          "goals": 3,
+          "assists": 0,
+          "points": 0
+        },
+        "negativeSample": {
+          "player": "Tyson Gross",
+          "games": 1,
+          "goals": 0,
+          "assists": 1,
+          "points": -2,
+          "year_from": "2025-26",
+          "year_to": "2025-26"
+        }
+      },
+      "correctValue": {
+        "sample": {
+          "player": "Bobby Robins",
+          "games": 3,
+          "year_from": "2014-15",
+          "year_to": "2014-15",
+          "goals": 0,
+          "assists": 0,
+          "points": 0
+        },
+        "allOtherRows": "Unknown until individual adjudication. Tyson Gross correct total not asserted."
+      },
+      "reason": "A start season of 3 is invalid; 64 rows violate points = goals + assists. The Robins sample agrees between official NHL career data and Hockey Reference and is consistent with shifted columns, but the importer cause has not been proven.",
+      "consumers": [
+        {
+          "route": "/hockey-grid",
+          "file": "src/lib/hockeyGrid.ts",
+          "line": 130,
+          "fields": [
+            "points",
+            "goals",
+            "assists",
+            "games"
+          ],
+          "boundary": "Full index accepts numeric fields without arithmetic validation. These low-total examples do not meet its 500 points / 300 goals / 1000 GP achievement thresholds, so no changed verdict demonstrated."
+        },
+        {
+          "route": "/perfect-season-nhl",
+          "file": "src/lib/perfectSeasonNhl.ts",
+          "line": 229,
+          "fields": [
+            "year_from",
+            "year_to",
+            "games",
+            "points",
+            "goals",
+            "assists"
+          ],
+          "boundary": "Wheel rejects first years below1900. Draft fetch uses text date filters and later finite parse/overlap checks without the same lower bound.49 malformed rows satisfy broad2010s date/GP/position filters; franchise, top24/12 and actual wheel coverage further restrict admission. No corrupted player actually drafted by a browser claimed."
+        },
+        {
+          "route": "/puck-detective",
+          "file": "src/lib/puckDetective.ts",
+          "line": 227,
+          "fields": [
+            "points"
+          ],
+          "boundary": "Exact-name points map sets difficulty only. Join against nhl_players finds David Spacek0 and Tyson Gross-2 before the additional position/country/DOB normalization filters. Both totals are below the75-point Hard threshold; actual normalized admission and any tier inversion were not replayed."
+        },
+        {
+          "route": "/nhl-connect-4",
+          "file": "src/pages/NhlConnect4.tsx",
+          "line": 258,
+          "fields": [
+            "player_name",
+            "position"
+          ],
+          "boundary": "Autocomplete comes from stats; deployed-source validator consults teams. Corrupt numeric/date fields do not directly decide franchise confirmation."
+        },
+        {
+          "route": null,
+          "file": "public.eligible_nhl_players",
+          "boundary": "Database view has no quality filter. No active source consumer located outside generated Supabase types."
+        }
+      ],
+      "sql": "SELECT player_name,games,year_from,year_to,goals,assists,points FROM public.nhl_player_stats WHERE year_from !~ '^[12][0-9]{3}-[0-9]{2}$' OR goals+assists<>points OR games<0 OR goals<0 OR assists<0 OR points<0;",
+      "sources": [
+        {
+          "role": "primary",
+          "url": "https://api.nhle.com/stats/rest/en/skater/summary?isAggregate=true&isGame=false&cayenneExp=skaterFullName%3D%22Bobby%20Robins%22",
+          "retrievedAt": "2026-10-01T22:14:51.462Z"
+        },
+        {
+          "role": "independent",
+          "url": "https://www.hockey-reference.com/players/r/robinbo01.html",
+          "retrievedOn": "2026-10-01"
+        }
+      ],
+      "retrievedOn": "2026-10-01",
+      "recommendation": "Flag69 distinct records and adjudicate importer mapping in a separate authorized repair. Do not combine68+64 as132 independent records or fill unknown values. No change made.",
+      "evidence": [
+        "nhl-malformed-rows.json",
+        "database-read-receipt-coverage.json",
+        "primary-api-receipt.json"
+      ]
+    },
+    {
+      "id": "DQ02",
+      "priority": "P1",
+      "classification": "confirmed systemic structural corruption plus two-source factual sample",
+      "dataset": "public.mlb_batting_stats",
+      "currentValue": {
+        "rows": 2000,
+        "malformedFirstYear": 147,
+        "backwardsYears": 53,
+        "totalBasesMismatch": 161,
+        "distinctFlaggedRows": 161,
+        "sample": {
+          "player": "Al Bridwell",
+          "games": null,
+          "year_from": "1252",
+          "year_to": "1905",
+          "hits": 457,
+          "doubles": 935,
+          "triples": 95,
+          "hr": 32,
+          "tb": 90
+        }
+      },
+      "correctValue": {
+        "sample": {
+          "player": "Al Bridwell",
+          "year_from": "1905",
+          "hits": 1064,
+          "doubles": 95,
+          "triples": 32,
+          "hr": 2,
+          "tb": 1229
+        },
+        "unresolved": {
+          "games": "MLB career API1253 versus Baseball Reference1252.",
+          "year_to": "MLB bio lastPlayed1913 versus Baseball Reference1915, including Federal League. Do not resolve that convention automatically."
+        },
+        "other160": "Not individually adjudicated."
+      },
+      "reason": "161 rows violate total bases = hits + doubles +2*triples +3*home runs. The sample has clear shifted fields. Two independent publishers agree on the listed corrected batting counts, while GP and final-year conventions remain unresolved.",
+      "consumers": [
+        {
+          "route": "/mlb-higher-lower",
+          "file": "src/data/mlbHLPlayers.ts",
+          "boundary": "Baked55-player record compares selected career HR values, not a runtime read of all2,000 rows. None of these161 exact names intersects that pool."
+        },
+        {
+          "route": "/rank-em",
+          "file": "src/lib/orderTheList.ts",
+          "line": 93,
+          "boundary": "Handpicked baked HR/hits/SB values cite this table. No exact-name intersection with161 flagged rows. No current wrong player-facing result established."
+        },
+        {
+          "route": null,
+          "file": "src/lib/perfectSeasonMlb.ts",
+          "boundary": "Reads Lahman tables, not mlb_batting_stats, so not affected by this corruption path."
+        }
+      ],
+      "sql": "SELECT player_name,year_from,year_to,hits,doubles,triples,hr,tb FROM public.mlb_batting_stats WHERE year_from !~ '^[12][0-9]{3}$' OR year_from<'1871' OR year_from>year_to OR tb<>hits+doubles+2*triples+3*hr;",
+      "sources": [
+        {
+          "role": "primary",
+          "url": "https://statsapi.mlb.com/api/v1/people/111459/stats?stats=career&group=hitting",
+          "retrievedAt": "2026-10-01T22:29:10.849Z"
+        },
+        {
+          "role": "primary-bio",
+          "url": "https://statsapi.mlb.com/api/v1/people/search?names=Al%20Bridwell",
+          "retrievedAt": "2026-10-01T22:29:10.849Z"
+        },
+        {
+          "role": "independent",
+          "url": "https://www.baseball-reference.com/players/b/bridwal01.shtml",
+          "retrievedOn": "2026-10-01"
+        },
+        {
+          "role": "metric-definition",
+          "url": "https://www.mlb.com/glossary/standard-stats/total-bases",
+          "retrievedOn": "2026-10-01"
+        }
+      ],
+      "retrievedOn": "2026-10-01",
+      "recommendation": "Flag161 records and audit parser column mapping before future use or rebake. Do not sum overlapping147/53/161counts. Preserve the explicitly unresolved GP/final-year discrepancy. No change made.",
+      "evidence": [
+        "mlb-malformed-rows.json",
+        "mlb-primary-api-receipt.json"
+      ]
+    },
+    {
+      "id": "DQ03",
+      "priority": "P2",
+      "classification": "confirmed wrong visible numeric value, already marked unverified",
+      "dataset": "src/data/hockeyHLPlayers.ts:32",
+      "currentValue": {
+        "player": "Henrik Lundqvist",
+        "careerPoints": 46,
+        "lastSeason": "unverified"
+      },
+      "correctValue": {
+        "careerPoints": 27,
+        "careerLastSeason": "2019-20"
+      },
+      "reason": "NHL career goalie summary and an independent season-total table agree on27, all assists. The game displays46 and uses it in comparisons. Existing unverified labeling is honest but does not make the numeric value accurate.",
+      "consumers": [
+        {
+          "route": "/hockey-higher-lower",
+          "file": "src/pages/HockeyHigherLower.tsx",
+          "line": 122,
+          "fields": [
+            "careerPoints"
+          ]
+        },
+        {
+          "route": "/hockey-higher-lower",
+          "file": "src/hooks/useHockeyHL.ts",
+          "line": 179,
+          "boundary": "All45 players can be paired. No comparison outcome inversion from46to27 exists in this current pool: other goalie18 and all skaters above400."
+        }
+      ],
+      "sources": [
+        {
+          "role": "primary",
+          "url": "https://api.nhle.com/stats/rest/en/goalie/summary?isAggregate=true&isGame=false&cayenneExp=goalieFullName%3D%22Henrik%20Lundqvist%22%20and%20gameTypeId%3D2",
+          "retrievedAt": "2026-10-01T22:14:51.418Z"
+        },
+        {
+          "role": "primary-readable",
+          "url": "https://www.nhl.com/news/henrik-lundqvist-retires-326000932",
+          "retrievedOn": "2026-10-01"
+        },
+        {
+          "role": "independent",
+          "url": "https://www.statmuse.com/nhl/ask/has-henrik-lundqvist-scored-a-assist",
+          "retrievedOn": "2026-10-01"
+        }
+      ],
+      "retrievedOn": "2026-10-01",
+      "recommendation": "Separately authorize correcting46to27 with provenance. Keep the other goalie unverified until independently checked. No change made.",
+      "evidence": [
+        "primary-api-receipt.json"
+      ]
+    },
+    {
+      "id": "DQ04",
+      "priority": "P2",
+      "classification": "source disagreement, not automatic correction",
+      "dataset": "src/data/cfbHLPlayers.ts:41 and public.cfb_qb_stats",
+      "currentValue": {
+        "player": "Bo Nix",
+        "careerPassYds": 15351,
+        "firstYear": 2019,
+        "lastYear": 2023
+      },
+      "correctValue": {
+        "officialProfileConvention": 15352,
+        "originalPublisherConvention": 15351
+      },
+      "reason": "Oregon and Denver profiles report15352. Independent season values2542+2415+2294+3593+4508 sum15352. Sports Reference and the source table carry15351. This one-yard disagreement requires an explicit source convention rather than silently treating the old publisher as universally authoritative.",
+      "consumers": [
+        {
+          "route": "/cfb-higher-lower",
+          "file": "src/data/cfbHLPlayers.ts",
+          "line": 41,
+          "boundary": "Visible numeric discrepancy. No existing pair ordering inversion demonstrated."
+        }
+      ],
+      "sources": [
+        {
+          "role": "primary",
+          "url": "https://goducks.com/sports/football/roster/bo-nix/16140",
+          "retrievedOn": "2026-10-01",
+          "boundary": "Search-returned official bio; full web open unavailable."
+        },
+        {
+          "role": "primary",
+          "url": "https://www.denverbroncos.com/team/players-roster/bo-nix/",
+          "retrievedOn": "2026-10-01"
+        },
+        {
+          "role": "independent",
+          "url": "https://www.statmuse.com/cfb/ask/boe-nix-passing-yard-stats",
+          "retrievedOn": "2026-10-01"
+        },
+        {
+          "role": "disagreeing-original-publisher",
+          "url": "https://www.sports-reference.com/cfb/players/bo-nix-1.html",
+          "retrievedOn": "2026-10-01"
+        }
+      ],
+      "retrievedOn": "2026-10-01",
+      "recommendation": "Flag and adjudicate the one-yard discrepancy using official convention. Preserve disagreement in provenance if corrected later. No change made."
+    },
+    {
+      "id": "DQ05",
+      "priority": "P2",
+      "classification": "documented provenance gaps, not newly proven false numbers",
+      "dataset": "Soccer and CFB Higher or Lower plus five NFL categories",
+      "currentValue": {
+        "soccerPlayers": 199,
+        "soccerUnverifiedClubTotals": 398,
+        "soccerTwoPublisherCaps": 70,
+        "soccerSinglePublisherCaps": 129,
+        "cfbPlayers": 65,
+        "cfbExactDatabaseNameCoverage": 65,
+        "cfbMatchedDatabaseRows": 66,
+        "nflOtherCategoryEntries": 160
+      },
+      "correctValue": "Unknown for unverified cells; no invented replacements.",
+      "reason": "Soccer club appearances/goals are explicitly unverified and caps coverage is partial. All65CFB file rows now match a current database record by name, years and yardage, but that is the same publisher and not independent verification. The legacy32-of65comment is stale. The existing HL facts fence covers the NFL60TD-scored pool, not the other160category entries.",
+      "consumers": [
+        {
+          "route": "/higher-lower",
+          "file": "src/data/higherLowerPlayers.ts",
+          "line": 77
+        },
+        {
+          "route": "/face-off",
+          "file": "src/data/higherLowerPlayers.ts",
+          "boundary": "Three soccer categories consume the same numbers."
+        },
+        {
+          "route": "/cfb-higher-lower",
+          "file": "scripts/simHigherLowerFacts.mjs",
+          "line": 83
+        },
+        {
+          "route": "/nfl-higher-lower",
+          "file": "src/data/nflHLCategories.ts"
+        }
+      ],
+      "sources": [
+        {
+          "role": "existing-audit",
+          "url": null,
+          "reference": "docs/audits/higher-lower-verification-2026-09-12.md",
+          "retrievedOn": "2026-10-01"
+        },
+        {
+          "role": "existing-parity-records",
+          "url": null,
+          "reference": "scripts/data/*HigherLowerVerified2026-09.json",
+          "retrievedOn": "2026-10-01"
+        }
+      ],
+      "retrievedOn": "2026-10-01",
+      "recommendation": "Prioritize verified coverage instead of claiming green fences prove all facts. The CFB comment can be corrected separately without game logic changes;65database matches are not65two-source facts. No change made."
+    },
+    {
+      "id": "DQ06",
+      "priority": "P3",
+      "classification": "ambiguous source metadata needing adjudication",
+      "dataset": "public.mlb_players",
+      "currentValue": {
+        "rows": 2280,
+        "distinctPlayerIds": 1122,
+        "idsWithConflictingTeams": 17,
+        "conflictingNames": 0,
+        "conflictingPositions": 0,
+        "conflictingBirthdates": 0
+      },
+      "correctValue": "Unknown. No dated snapshot or lastVerified column exists in inspected schema.",
+      "reason": "Multiple team fields exist under the same stable ID without an effective date. These may be accumulated snapshots or transfers; the data cannot distinguish them. Repeated identities alone are not distinct people or necessarily errors.",
+      "consumers": [
+        {
+          "route": null,
+          "file": "src/lib/playerSearch.ts",
+          "line": 856,
+          "boundary": "MLB source configuration selects team. No active source import of MLB_PLAYER_SOURCE located in this baseline; no visitor-facing incorrect club attributed to these17records."
+        }
+      ],
+      "sources": [
+        {
+          "role": "production SELECT",
+          "reference": "database-read-receipt-coverage.json:mlbTeamConflicts",
+          "url": null,
+          "retrievedOn": "2026-10-01"
+        }
+      ],
+      "retrievedOn": "2026-10-01",
+      "recommendation": "Flag17identity groups and establish snapshot/current-team convention before deduplication or future consumer use. No real roster correction asserted or made."
+    },
+    {
+      "id": "DQ07",
+      "priority": "P3",
+      "classification": "incomplete displayed career metadata, list completeness is unspecified",
+      "dataset": "hockeyHLPlayers.teams and f1HLDrivers.constructors",
+      "currentValue": {
+        "JaromirJagr": "Pittsburgh, Washington, New York Rangers, Florida",
+        "FernandoAlonso": "Renault, Ferrari, McLaren, Aston Martin"
+      },
+      "correctValue": {
+        "JaromirJagrAdditionalVerifiedTeams": [
+          "Philadelphia",
+          "Dallas",
+          "Boston",
+          "New Jersey",
+          "Calgary"
+        ],
+        "FernandoAlonsoAdditionalVerifiedTeam": "Minardi in2001"
+      },
+      "reason": "Bare card team lists omit confirmed career teams. Neither field explicitly says the list is complete, so this is a metadata clarification finding, not a proven wrong performance total. Renault/Alpine naming needs a declared lineage convention.",
+      "consumers": [
+        {
+          "route": "/hockey-higher-lower",
+          "file": "src/pages/HockeyHigherLower.tsx",
+          "line": 117
+        },
+        {
+          "route": "/f1-higher-lower",
+          "file": "src/pages/F1HigherLower.tsx",
+          "line": 104
+        }
+      ],
+      "sources": [
+        {
+          "role": "primary",
+          "url": "https://www.nhl.com/news/jaromir-jagr-talks-love-of-pittsburgh-number-retirement-nhl-com-interview",
+          "retrievedOn": "2026-10-01"
+        },
+        {
+          "role": "independent",
+          "url": "https://www.espn.com/nhl/player/bio/_/id/405/jaromir-jagr",
+          "retrievedOn": "2026-10-01"
+        },
+        {
+          "role": "primary",
+          "url": "https://www.formula1.com/en/information/drivers-hall-of-fame-fernando-alonso.2Ig4mBh2FaPMgAMjI0bBF9",
+          "retrievedOn": "2026-10-01"
+        },
+        {
+          "role": "primary-team",
+          "url": "https://www.minardi.it/auto-e-piloti-del-minardi-team/fernando-alonso/",
+          "retrievedOn": "2026-10-01"
+        },
+        {
+          "role": "independent",
+          "url": "https://www.espn.com/rpm/f1/2001/0227/1113540.html",
+          "retrievedOn": "2026-10-01"
+        }
+      ],
+      "retrievedOn": "2026-10-01",
+      "recommendation": "Clarify selected-teams intent or verify and complete the lists in a new scoped task. No change made."
+    }
+  ],
+  "databaseInventory": [
+    {
+      "dataset": "cfb_qb_stats",
+      "rows": 5800,
+      "min_season": "1980",
+      "max_season": "2025",
+      "sourceReference": "Sports Reference career leaderboard; src/data/cfbHLPlayers.ts",
+      "retrievedOn": "2026-10-01",
+      "snapshotSeason": "1980..2025",
+      "lastVerified": "2026-07-21 declared source check",
+      "status": "65file identities covered in current DB; two-source coverage incomplete; Bo Nix conflict"
+    },
+    {
+      "dataset": "nba_player_stats",
+      "rows": 3227,
+      "min_season": "1965-66",
+      "max_season": "2025-26",
+      "sourceReference": "Basketball Reference derived career totals; scripts/data/nbaHigherLowerVerified2026-09.json",
+      "retrievedOn": "2026-10-01",
+      "snapshotSeason": "1965-66..2025-26",
+      "lastVerified": "2026-09-22 (stored DB parity record)",
+      "status": "Structural season/negative/name checks clean; external all-row facts not reverified"
+    },
+    {
+      "dataset": "nhl_player_stats",
+      "rows": 6353,
+      "min_season": "1",
+      "max_season": "2025-26",
+      "sourceReference": "public table; external sources checked for Bobby Robins only",
+      "retrievedOn": "2026-10-01",
+      "snapshotSeason": "1..2025-26",
+      "lastVerified": null,
+      "status": "Invalid first-season values; union69 flagged rows"
+    },
+    {
+      "dataset": "world_cup_players",
+      "rows": 9613,
+      "min_season": "1970",
+      "max_season": "2026",
+      "sourceReference": "Snapshot tournament squads;2026 migration cited by rosterConfirmation2026.json",
+      "retrievedOn": "2026-10-01",
+      "snapshotSeason": "1970..2026",
+      "lastVerified": "2026-09-01 declared2026snapshot verification",
+      "status": "9613historical squad rows; no all-row factual validation in this audit"
+    },
+    {
+      "dataset": "world_cup_player_stats",
+      "rows": 0,
+      "min_season": null,
+      "max_season": null,
+      "sourceReference": "Empty public table",
+      "retrievedOn": "2026-10-01",
+      "snapshotSeason": null,
+      "lastVerified": null,
+      "status": "No current consumer identified; empty does not establish broken game"
+    },
+    {
+      "dataset": "nflfastr_rosters",
+      "rows": 60350,
+      "min_season": "2002",
+      "max_season": "2025",
+      "sourceReference": "nflverse/nflfastr roster snapshots; src/lib/playerSearch.ts",
+      "retrievedOn": "2026-10-01",
+      "snapshotSeason": "2002..2025",
+      "lastVerified": null,
+      "status": "2002..2025 historical snapshots, not proof of current2026rosters"
+    },
+    {
+      "dataset": "nhl_players",
+      "rows": 1752,
+      "missing_dob": 0,
+      "sourceReference": "Public roster snapshot; src/lib/puckDetective.ts and playerSearch.ts",
+      "retrievedOn": "2026-10-01",
+      "snapshotSeason": null,
+      "lastVerified": "2026-07-02 declared source check",
+      "status": "876IDs, duplicates agree on names/team/position/DOB",
+      "distinctIdentityCount": 876,
+      "identityDefinition": "Distinct stored player IDs."
+    },
+    {
+      "dataset": "mlb_players",
+      "rows": 2280,
+      "missing_dob": 0,
+      "sourceReference": "Public roster snapshot; src/lib/playerSearch.ts",
+      "retrievedOn": "2026-10-01",
+      "snapshotSeason": null,
+      "lastVerified": "2026-07-02 declared source check",
+      "status": "17stable IDs have conflicting undated team values",
+      "distinctIdentityCount": 1122,
+      "identityDefinition": "Distinct stored player IDs."
+    },
+    {
+      "dataset": "career_players",
+      "rows": 253,
+      "missing_dob": null,
+      "sourceReference": "Public career table; src/lib/fetchCareerPlayers.ts",
+      "retrievedOn": "2026-10-01",
+      "snapshotSeason": null,
+      "lastVerified": "2026-10-01 fallback bake parity",
+      "status": "253IDs; individual facts not reverified",
+      "distinctIdentityCount": 253,
+      "identityDefinition": "Distinct stored player IDs."
+    },
+    {
+      "dataset": "career_seasons",
+      "rows": 3640,
+      "missing_dob": null,
+      "sourceReference": "Public career seasons; src/data/careerPlayers.ts",
+      "retrievedOn": "2026-10-01",
+      "snapshotSeason": null,
+      "lastVerified": "2026-10-01 fallback bake parity",
+      "status": "3640seasons;201null assists preserved; individual facts not reverified",
+      "distinctIdentityCount": 253,
+      "identityDefinition": "Distinct stored player IDs."
+    },
+    {
+      "dataset": "player_market_values_dedup",
+      "rows": 136542,
+      "missing_dob": null,
+      "sourceReference": "Declared Transfermarkt-derived snapshots and overlay; scripts/bakeClubManagerRosters.mjs",
+      "retrievedOn": "2026-10-01",
+      "snapshotSeason": null,
+      "lastVerified": null,
+      "status": "Latest2026subset basic checks clean; rosters/provenance require adjudication",
+      "distinctIdentityCount": 28049,
+      "identityDefinition": "Distinct player_name strings, not adjudicated people."
+    },
+    {
+      "dataset": "player_verified_positions",
+      "rows": 134,
+      "missing_dob": null,
+      "sourceReference": "Public curated position corrections",
+      "retrievedOn": "2026-10-01",
+      "snapshotSeason": null,
+      "lastVerified": null,
+      "status": "134names inventoried; not all positions reverified",
+      "distinctIdentityCount": 134,
+      "identityDefinition": "Distinct name strings."
+    },
+    {
+      "dataset": "f1_driver_standings",
+      "rows": 3106,
+      "first_season": "1950",
+      "last_season": "2025",
+      "sourceReference": "Jolpica/Ergast-style standings; scripts/data/f1ChampionsVerified2026-09.json",
+      "retrievedOn": "2026-10-01",
+      "snapshotSeason": "1950..2025",
+      "lastVerified": "2026-09-30 stored official+second-source record",
+      "status": "3106season standings; record contents inventoried, not all primary pages refetched"
+    },
+    {
+      "dataset": "golf_majors",
+      "rows": 504,
+      "first_season": "1860",
+      "last_season": "2026",
+      "sourceReference": "scripts/data/golfMajorsVerified2026-09.json",
+      "retrievedOn": "2026-10-01",
+      "snapshotSeason": "1860..2026",
+      "lastVerified": "2026-09-30 stored official+second-source record",
+      "status": "504records; no new all-row external validation"
+    },
+    {
+      "dataset": "tennis_grand_slam_winners",
+      "rows": 1015,
+      "first_season": "1877",
+      "last_season": "2026",
+      "sourceReference": "scripts/data/tennisSlamsVerified2026-09.json",
+      "retrievedOn": "2026-10-01",
+      "snapshotSeason": "1877..2026",
+      "lastVerified": "2026-09-30 stored official+second-source record",
+      "status": "1015records; maiden/married aliases documented; no new all-row external validation"
+    },
+    {
+      "dataset": "lahman_batting",
+      "rows": 110495,
+      "first_season": "1871",
+      "last_season": "2021",
+      "sourceReference": "Lahman database, source comments in mlbHLPlayers/perfectSeasonMlb",
+      "retrievedOn": "2026-10-01",
+      "snapshotSeason": "1871..2021",
+      "lastVerified": null,
+      "status": "1871..2021 intentionally historical; do not call it outdated for historical games"
+    },
+    {
+      "dataset": "world_cup_players_2026",
+      "rows": 1236,
+      "first_season": "2026",
+      "last_season": "2026",
+      "sourceReference": "2026squad snapshot, public table",
+      "retrievedOn": "2026-10-01",
+      "snapshotSeason": "2026..2026",
+      "lastVerified": "2026-09-01 declared migration verification",
+      "status": "1236distinct country/shirt keys,48countries, zero future DOB/negativecaps/goals"
+    },
+    {
+      "dataset": "nflfastr_player_stats",
+      "rows": 134470,
+      "max_season": "2024",
+      "min_season": "1999",
+      "min_reg_season": "1999",
+      "distinct_player_ids": 4137,
+      "sourceReference": "nflverse/nflfastr weekly stats; nflHLCategories.ts",
+      "retrievedOn": "2026-10-01",
+      "snapshotSeason": "1999..2024",
+      "lastVerified": null,
+      "status": "1999..2024; intentionally snapshot career metrics, no two-source review of all134470rows."
+    },
+    {
+      "dataset": "bref_nba_player_seasons",
+      "rows": 30462,
+      "max_season": "2024-25",
+      "min_season": "1949-50",
+      "null_games": 30462,
+      "null_minutes": 577,
+      "negative_points_or_minutes": 0,
+      "sourceReference": "Basketball Reference season totals; src/lib/nbaStatLine.ts",
+      "retrievedOn": "2026-10-01",
+      "snapshotSeason": "1949-50..2024-25",
+      "lastVerified": null,
+      "status": "All30462games NULL, consistent with intentional per36display;577minutes NULL; no negative points/minutes. No whole-table factual review."
+    },
+    {
+      "dataset": "nba_players_extended_v2",
+      "rows": 5135,
+      "missing_source": 0,
+      "distinct_player_ids": 5135,
+      "sourceReference": "source column: balldontlie for all5135rows; NBA shared player search",
+      "retrievedOn": "2026-10-01",
+      "snapshotSeason": null,
+      "lastVerified": null,
+      "status": "5135unique stableIDs, no missing publisher marker; no row-level dates or factual all-player review."
+    },
+    {
+      "dataset": "mlb_batting_stats",
+      "rows": 2000,
+      "sourceReference": "Sports Reference derived career table; MLB HL stored parity record",
+      "retrievedOn": "2026-10-01",
+      "snapshotSeason": "Malformed first-year fields; lastyear maximum2026",
+      "lastVerified": "2026-09-28 stored55-player parity record only",
+      "status": "161distinct structural violations; see DQ02; allcreated_at2026-04-11 does not verify fact dates."
+    },
+    {
+      "dataset": "soccer_player_facts",
+      "rows": 96,
+      "sourceReference": "wiki_url on96rows",
+      "retrievedOn": "2026-10-01",
+      "snapshotSeason": null,
+      "lastVerified": null,
+      "status": "Two DOB missing; no missing source URL; no independent second publisher per row established."
+    }
+  ],
+  "specialSourceInventory": [
+    {
+      "dataset": "Soccer HL",
+      "rows": 199,
+      "sourceReference": "docs/audits/higher-lower-verification-2026-09-12.md",
+      "retrievedOn": "2026-10-01",
+      "snapshotSeason": "Per-row mixed career snapshots",
+      "lastVerified": "2026-09-12 partial verification",
+      "status": "398club-stat cells unverified;70caps two-publisher,129caps single-publisher"
+    },
+    {
+      "dataset": "NBA HL",
+      "rows": 80,
+      "sourceReference": "scripts/data/nbaHigherLowerVerified2026-09.json",
+      "retrievedOn": "2026-10-01",
+      "snapshotSeason": "Per-row lastSeason, active totals through2025-26",
+      "lastVerified": "2026-09-22 DB parity record",
+      "status": "68source-record verified,12held from file; no fresh independent review of all80"
+    },
+    {
+      "dataset": "NFL HL",
+      "rows": 60,
+      "sourceReference": "scripts/data/nflHigherLowerVerified2026-09.json",
+      "retrievedOn": "2026-10-01",
+      "snapshotSeason": "REG career totals through2024 source maximum",
+      "lastVerified": "2026-09-28 DB parity record",
+      "status": "Stable playerID, career start2000+; fiveadditional categories160entries outside this fence"
+    },
+    {
+      "dataset": "MLB HL",
+      "rows": 55,
+      "sourceReference": "scripts/data/mlbHigherLowerVerified2026-09.json",
+      "retrievedOn": "2026-10-01",
+      "snapshotSeason": "Retired careers finished2019or earlier",
+      "lastVerified": "2026-09-28 DB parity record",
+      "status": "All55record matches;0intersections with161malformed current table names"
+    },
+    {
+      "dataset": "NHL HL",
+      "rows": 45,
+      "sourceReference": "scripts/data/nhlHigherLowerVerified2026-09.json",
+      "retrievedOn": "2026-10-01",
+      "snapshotSeason": "Per-row lastSeason; two goalies unverified",
+      "lastVerified": "2026-09-21 DB parity record",
+      "status": "42source-record verified, Gordie Howe held, two goalies unverified; DQ03"
+    },
+    {
+      "dataset": "CFB HL",
+      "rows": 65,
+      "sourceReference": "cfb_qb_stats plus cfbHLPlayers.ts",
+      "retrievedOn": "2026-10-01",
+      "snapshotSeason": "Career starts1981+; source seasons through2025",
+      "lastVerified": "2026-07-21 declared source check, not independent record",
+      "status": "Current same-source coverage65names; Josh Allen Maryland excluded by years/yards; DQ04/05"
+    },
+    {
+      "dataset": "Tennis HL",
+      "rows": 44,
+      "sourceReference": "scripts/data/tennisHigherLowerVerified2026-09.json",
+      "retrievedOn": "2026-10-01",
+      "snapshotSeason": "Per-row lastYear, counts through explicit tournament snapshot",
+      "lastVerified": "2026-09-28 DB parity record",
+      "status": "44record matches; maiden/married alias merges recorded; no active-total automatic error"
+    },
+    {
+      "dataset": "F1 HL",
+      "rows": 42,
+      "sourceReference": "sportsFactsVerified2026-09.json and f1_driver_standings",
+      "retrievedOn": "2026-10-01",
+      "snapshotSeason": "1950..2025",
+      "lastVerified": "2026-09-19..28 stored two-source sports record",
+      "status": "Existing full facts fence passed; constructor lists lack completeness convention"
+    },
+    {
+      "dataset": "Golf HL",
+      "rows": 61,
+      "sourceReference": "sportsFactsVerified2026-09.json",
+      "retrievedOn": "2026-10-01",
+      "snapshotSeason": "Major title totals through declared2026snapshot",
+      "lastVerified": "2026-09-19 stored two-source record",
+      "status": "Sports facts fence passed; not primary-page rechecked in this audit"
+    },
+    {
+      "dataset": "AFL HL",
+      "rows": 60,
+      "sourceReference": "aflGoalKickers.ts header names aflonline and cross-check, no per-row source ledger identified",
+      "retrievedOn": "2026-10-01",
+      "snapshotSeason": "Retired-only VFL/AFL careers",
+      "lastVerified": "2026-08-20 declared two-source check",
+      "status": "Static structural scan only; all60not externally reverified"
+    },
+    {
+      "dataset": "Club Manager now",
+      "rows": 3658,
+      "clubs": 330,
+      "partialClubs": 138,
+      "sourceReference": "clubManagerRosters.ts + rosterConfirmation2026.json + summer transfer overlay",
+      "retrievedOn": "2026-10-01",
+      "snapshotSeason": "August2026rosters;2026market rows with2025fallback",
+      "lastVerified": "2026-09-11/15 partial roster adjudication",
+      "status": "356fallback candidates:16confirmed,18moved,4outsideclub,4notcurrent,314pending. CM_PARTIAL is preserved. Derived ratings/future rosters are game fiction."
+    },
+    {
+      "dataset": "Club Manager historical",
+      "rowsByWorld": {
+        "2005": 747,
+        "2010": 802,
+        "2015": 1098
+      },
+      "clubsByWorld": {
+        "2005": 40,
+        "2010": 40,
+        "2015": 60
+      },
+      "sourceReference": "clubManagerEra{2005,2010,2015}.ts source headers and bake scripts",
+      "retrievedOn": "2026-10-01",
+      "snapshotSeason": "2005-06/2010-11/2015-16",
+      "lastVerified": null,
+      "status": "Historical value snapshots/verified overlay declarations preserved; not compared to current rosters"
+    },
+    {
+      "dataset": "Soccer international pools",
+      "nationSeasons": 533,
+      "encodedPlayerRows": 12703,
+      "sourceReference": "nationalPools.ts declared player_market_values_dedup",
+      "retrievedOn": "2026-10-01",
+      "snapshotSeason": "2016..2026",
+      "lastVerified": "2026-08-21 bake, not independent fact review",
+      "status": "String-encoded pools not parsed by the literal duplicate scanner; missing thin nations intentionally generated"
+    },
+    {
+      "dataset": "Soccer fallback pools",
+      "footlePlayers": 553,
+      "careerPlayers": 253,
+      "careerSeasons": 3640,
+      "nullAssists": 201,
+      "sourceReference": "players.ts/careerPlayers.ts bake metadata",
+      "retrievedOn": "2026-10-01",
+      "snapshotSeason": "Footle2026market rows retain autumn2025counts; career historical rows",
+      "lastVerified": "2026-10-01 bake parity, not fresh external sports facts",
+      "status": "Date/cell convention recorded; no unsupported null-to-zero or current-season reinterpretation"
+    },
+    {
+      "dataset": "NFL Front Office",
+      "rows": 480,
+      "teams": 32,
+      "sourceReference": "frontOfficePlayers.ts and scripts/genFrontOfficeRoster.mjs",
+      "retrievedOn": "2026-10-01",
+      "snapshotSeason": "2026external nflverse rosters,2025rating production",
+      "lastVerified": "2026-09-02 bake",
+      "status": "Uses external2026release separately from older DBrosters. Ratings and contracts model assumptions; no current mismatch claimed"
+    },
+    {
+      "dataset": "MLB Front Office",
+      "rows": 390,
+      "teams": 30,
+      "sourceReference": "mlbFoPlayers.ts declared MLB StatsAPI",
+      "retrievedOn": "2026-10-01",
+      "snapshotSeason": "August5,2026rosters,2025stats and2026rookie fallback",
+      "lastVerified": "2026-08-05 bake",
+      "status": "13sample players per team, derived ratings and fictional game contracts; all390facts not reverified"
+    },
+    {
+      "dataset": "NHL Front Office",
+      "rows": 416,
+      "teams": 32,
+      "sourceReference": "nhlFoPlayers.ts declared NHL API",
+      "retrievedOn": "2026-10-01",
+      "snapshotSeason": "August5,2026rosters,2025-26performance",
+      "lastVerified": "2026-08-05 bake",
+      "status": "13sample players per team; prospects default68, derived ratings and fictional contracts; all416facts not reverified"
+    }
+  ],
+  "sourceInventory": [
+    {
+      "file": "src/data/higherLowerPlayers.ts",
+      "sha256": "bc322c038d2737f977e6a8c58a51943937fe9381431b0934bb896026cc7db4cb",
+      "datasets": [
+        {
+          "export": "HL_PRE1985_CLUB",
+          "rows": 9,
+          "groups": null,
+          "duplicateIds": 0,
+          "duplicateNamesWithinGroup": [],
+          "structuralFlags": []
+        },
+        {
+          "export": "HL_CAPS_VERIFIED",
+          "rows": 70,
+          "groups": null,
+          "duplicateIds": 0,
+          "duplicateNamesWithinGroup": [],
+          "structuralFlags": []
+        },
+        {
+          "export": "higherLowerPlayers",
+          "rows": 199,
+          "groups": null,
+          "duplicateIds": 0,
+          "duplicateNamesWithinGroup": [],
+          "structuralFlags": []
+        }
+      ],
+      "sourceReferences": [
+        "https://www.rsssf.org/miscellaneous/duit-recintlp.html",
+        "https://www.rsssf.org/miscellaneous/braz-recintlp.html",
+        "https://www.rsssf.org/miscellaneous/nil-recintlp.html",
+        "https://www.rsssf.org/miscellaneous/fran-recintlp.html",
+        "https://www.rsssf.org/miscellaneous/ned-recintlp.html",
+        "https://www.rsssf.org/miscellaneous/century.html",
+        "https://www.rsssf.org/miscellaneous/wal-recintlp.html",
+        "https://www.rsssf.org/miscellaneous/ier-recintlp.html",
+        "https://www.rsssf.org/miscellaneous/port-recintlp.html",
+        "https://www.rsssf.org/miscellaneous/arg-recintlp.html",
+        "https://www.rsssf.org/miscellaneous/noo-recintlp.html",
+        "https://www.rsssf.org/miscellaneous/belg-recintlp.html",
+        "https://www.rsssf.org/miscellaneous/kroa-recintlp.html",
+        "https://www.rsssf.org/miscellaneous/uru-recintlp.html",
+        "https://www.rsssf.org/miscellaneous/gab-recintlp.html",
+        "https://www.rsssf.org/miscellaneous/eng-recintlp.html",
+        "https://www.rsssf.org/miscellaneous/span-recintlp.html",
+        "https://www.rsssf.org/miscellaneous/slov-recintlp.html",
+        "https://www.rsssf.org/miscellaneous/maro-recintlp.html",
+        "https://www.rsssf.org/miscellaneous/scot-recintlp.html",
+        "https://en.wikipedia.org/wiki/James_Maddison",
+        "https://en.wikipedia.org/wiki/Cole_Palmer",
+        "https://www.rsssf.org/miscellaneous/skor-recintlp.html",
+        "https://en.wikipedia.org/wiki/Mauro_Icardi",
+        "https://www.rsssf.org/miscellaneous/zwed-recintlp.html",
+        "https://en.wikipedia.org/wiki/Ollie_Watkins",
+        "https://www.rsssf.org/miscellaneous/geor-recintlp.html",
+        "https://www.rsssf.org/miscellaneous/ussr-recintlp.html",
+        "https://www.rsssf.org/miscellaneous/bulg-recintlp.html",
+        "https://www.rsssf.org/miscellaneous/tur-recintlp.html",
+        "https://en.wikipedia.org/wiki/Alejandro_Grimaldo",
+        "https://www.rsssf.org/miscellaneous/joeg-recintlp.html",
+        "https://www.rsssf.org/miscellaneous/nig-recintlp.html",
+        "https://www.rsssf.org/miscellaneous/ecua-recintlp.html",
+        "https://en.wikipedia.org/wiki/Kobbie_Mainoo",
+        "https://en.wikipedia.org/wiki/Warren_Za%C3%AFre-Emery",
+        "https://en.wikipedia.org/wiki/Mathys_Tel",
+        "https://en.wikipedia.org/wiki/Alejandro_Garnacho",
+        "https://en.wikipedia.org/wiki/Iker_Muniain",
+        "https://en.wikipedia.org/wiki/Jamie_Vardy"
+      ],
+      "declaredDates": [
+        "2026-09-12"
+      ],
+      "retrievedOn": "2026-10-01",
+      "lastVerified": null,
+      "status": "Literal/schema inventory only unless separately noted; declared bake date is not independent verification date."
+    },
+    {
+      "file": "src/data/nflHLPlayers.ts",
+      "sha256": "27ffba291a32253cca09d150ec87df0deaebf5456ed03d87c3924f8dfe361ea4",
+      "datasets": [
+        {
+          "export": "nflHLPlayers",
+          "rows": 60,
+          "groups": null,
+          "duplicateIds": 0,
+          "duplicateNamesWithinGroup": [],
+          "structuralFlags": []
+        }
+      ],
+      "sourceReferences": [],
+      "declaredDates": [
+        "2026-07-22"
+      ],
+      "retrievedOn": "2026-10-01",
+      "lastVerified": null,
+      "status": "Literal/schema inventory only unless separately noted; declared bake date is not independent verification date."
+    },
+    {
+      "file": "src/data/nflHLCategories.ts",
+      "sha256": "3761b86a57bc14aa46a8147f4a1a9f27e96e18980a634267c4d57ee5e194e364",
+      "datasets": [
+        {
+          "export": "NFL_HL_CATEGORIES",
+          "rows": 6,
+          "groups": null,
+          "duplicateIds": 0,
+          "duplicateNamesWithinGroup": [],
+          "structuralFlags": []
+        }
+      ],
+      "sourceReferences": [],
+      "declaredDates": [
+        "2026-08-05"
+      ],
+      "retrievedOn": "2026-10-01",
+      "lastVerified": null,
+      "status": "Literal/schema inventory only unless separately noted; declared bake date is not independent verification date."
+    },
+    {
+      "file": "src/data/cfbHLPlayers.ts",
+      "sha256": "d1359ac8314c754f52d73bc25e259a63402b0087cd64b82825e65d322184fef1",
+      "datasets": [
+        {
+          "export": "cfbHLPlayers",
+          "rows": 65,
+          "groups": null,
+          "duplicateIds": 0,
+          "duplicateNamesWithinGroup": [],
+          "structuralFlags": []
+        }
+      ],
+      "sourceReferences": [],
+      "declaredDates": [
+        "2026-07-21"
+      ],
+      "retrievedOn": "2026-10-01",
+      "lastVerified": null,
+      "status": "Literal/schema inventory only unless separately noted; declared bake date is not independent verification date."
+    },
+    {
+      "file": "src/data/nbaHLPlayers.ts",
+      "sha256": "dcb54a10650ef18885347c53c1e459d3f2045707c917970e64de1e003329ca86",
+      "datasets": [
+        {
+          "export": "nbaHLPlayers",
+          "rows": 80,
+          "groups": null,
+          "duplicateIds": 0,
+          "duplicateNamesWithinGroup": [],
+          "structuralFlags": []
+        }
+      ],
+      "sourceReferences": [],
+      "declaredDates": [
+        "2026-07-22"
+      ],
+      "retrievedOn": "2026-10-01",
+      "lastVerified": null,
+      "status": "Literal/schema inventory only unless separately noted; declared bake date is not independent verification date."
+    },
+    {
+      "file": "src/data/mlbHLPlayers.ts",
+      "sha256": "d94aea0990934cccaca9bcc8b0ea34eeb7a144e36aa6dbe208e5b9714cc9a607",
+      "datasets": [
+        {
+          "export": "mlbHLPlayers",
+          "rows": 55,
+          "groups": null,
+          "duplicateIds": 0,
+          "duplicateNamesWithinGroup": [],
+          "structuralFlags": []
+        }
+      ],
+      "sourceReferences": [],
+      "declaredDates": [
+        "2026-07-22"
+      ],
+      "retrievedOn": "2026-10-01",
+      "lastVerified": null,
+      "status": "Literal/schema inventory only unless separately noted; declared bake date is not independent verification date."
+    },
+    {
+      "file": "src/data/hockeyHLPlayers.ts",
+      "sha256": "3100aa396b0e0679c7100bcca25299c8e471a4e270ec7b9f67914e8fb8c0dafa",
+      "datasets": [
+        {
+          "export": "hockeyHLPlayers",
+          "rows": 45,
+          "groups": null,
+          "duplicateIds": 0,
+          "duplicateNamesWithinGroup": [],
+          "structuralFlags": []
+        }
+      ],
+      "sourceReferences": [],
+      "declaredDates": [],
+      "retrievedOn": "2026-10-01",
+      "lastVerified": null,
+      "status": "Literal/schema inventory only unless separately noted; declared bake date is not independent verification date."
+    },
+    {
+      "file": "src/data/f1HLDrivers.ts",
+      "sha256": "5e9e80606dc025e75be122218a29278b9e8dc7cad3ffab0df30f08ef6ed09b3d",
+      "datasets": [
+        {
+          "export": "f1HLDrivers",
+          "rows": 42,
+          "groups": null,
+          "duplicateIds": 0,
+          "duplicateNamesWithinGroup": [],
+          "structuralFlags": []
+        }
+      ],
+      "sourceReferences": [],
+      "declaredDates": [
+        "2026-07-22",
+        "2026-07-15"
+      ],
+      "retrievedOn": "2026-10-01",
+      "lastVerified": null,
+      "status": "Literal/schema inventory only unless separately noted; declared bake date is not independent verification date."
+    },
+    {
+      "file": "src/data/tennisHLPlayers.ts",
+      "sha256": "b0421159be5b994109d2131552ab59cae6483a45aebd73c926e466ce40f98e23",
+      "datasets": [
+        {
+          "export": "tennisHLPlayers",
+          "rows": 44,
+          "groups": null,
+          "duplicateIds": 0,
+          "duplicateNamesWithinGroup": [],
+          "structuralFlags": []
+        }
+      ],
+      "sourceReferences": [],
+      "declaredDates": [
+        "2026-07-21"
+      ],
+      "retrievedOn": "2026-10-01",
+      "lastVerified": null,
+      "status": "Literal/schema inventory only unless separately noted; declared bake date is not independent verification date."
+    },
+    {
+      "file": "src/data/golfLegends.ts",
+      "sha256": "6be125ae891a35ac51896bae9a47f128c0ce181981f31ec46394c8db330ea47c",
+      "datasets": [
+        {
+          "export": "golfLegends",
+          "rows": 61,
+          "groups": null,
+          "duplicateIds": 0,
+          "duplicateNamesWithinGroup": [],
+          "structuralFlags": []
+        }
+      ],
+      "sourceReferences": [],
+      "declaredDates": [
+        "2026-08-05",
+        "2026-09-19"
+      ],
+      "retrievedOn": "2026-10-01",
+      "lastVerified": null,
+      "status": "Literal/schema inventory only unless separately noted; declared bake date is not independent verification date."
+    },
+    {
+      "file": "src/data/aflGoalKickers.ts",
+      "sha256": "456d2fcb8ab8d946dbf7c572f05403011cb5874a6ef033f9f90ee25df16439ae",
+      "datasets": [
+        {
+          "export": "aflGoalKickers",
+          "rows": 60,
+          "groups": null,
+          "duplicateIds": 0,
+          "duplicateNamesWithinGroup": [],
+          "structuralFlags": []
+        }
+      ],
+      "sourceReferences": [],
+      "declaredDates": [
+        "2026-08-20"
+      ],
+      "retrievedOn": "2026-10-01",
+      "lastVerified": null,
+      "status": "Literal/schema inventory only unless separately noted; declared bake date is not independent verification date."
+    },
+    {
+      "file": "src/data/ufcFighters.ts",
+      "sha256": "6fce9eda0453fefcfc60ae96141e7f9ec156c7146d67c5bff6de6ad84c54b41d",
+      "datasets": [
+        {
+          "export": "ufcFighters",
+          "rows": 90,
+          "groups": null,
+          "duplicateIds": 0,
+          "duplicateNamesWithinGroup": [],
+          "structuralFlags": []
+        }
+      ],
+      "sourceReferences": [],
+      "declaredDates": [
+        "2026-09-19",
+        "2026-09-28"
+      ],
+      "retrievedOn": "2026-10-01",
+      "lastVerified": null,
+      "status": "Literal/schema inventory only unless separately noted; declared bake date is not independent verification date."
+    },
+    {
+      "file": "src/data/ufcChainData.ts",
+      "sha256": "dc29baa9cfbccf1536d9877ba9eeaeb35abf5c01a64540e11125fe01d1ba74bf",
+      "datasets": [
+        {
+          "export": "UFC_FIGHTERS",
+          "rows": 62,
+          "groups": null,
+          "duplicateIds": 0,
+          "duplicateNamesWithinGroup": [],
+          "structuralFlags": []
+        },
+        {
+          "export": "FIGHT_RESULTS",
+          "rows": 59,
+          "groups": null,
+          "duplicateIds": 0,
+          "duplicateNamesWithinGroup": [],
+          "structuralFlags": []
+        }
+      ],
+      "sourceReferences": [],
+      "declaredDates": [
+        "2026-09-19",
+        "2026-09-28"
+      ],
+      "retrievedOn": "2026-10-01",
+      "lastVerified": null,
+      "status": "Literal/schema inventory only unless separately noted; declared bake date is not independent verification date."
+    },
+    {
+      "file": "src/data/f1Drivers.ts",
+      "sha256": "42a8d3b07b89034999fcdd2d878502c0dd6c40312a0460b388c13b1b101ba1c2",
+      "datasets": [
+        {
+          "export": "F1_DRIVERS",
+          "rows": 20,
+          "groups": null,
+          "duplicateIds": 0,
+          "duplicateNamesWithinGroup": [],
+          "structuralFlags": []
+        }
+      ],
+      "sourceReferences": [],
+      "declaredDates": [],
+      "retrievedOn": "2026-10-01",
+      "lastVerified": null,
+      "status": "Literal/schema inventory only unless separately noted; declared bake date is not independent verification date."
+    },
+    {
+      "file": "src/data/f1Constructors.ts",
+      "sha256": "7db9251baddc579fad099383931fd24640937f0bf9d48fda63baacdd8cb77b7f",
+      "datasets": [
+        {
+          "export": "F1_CONSTRUCTORS",
+          "rows": 31,
+          "groups": null,
+          "duplicateIds": 0,
+          "duplicateNamesWithinGroup": [],
+          "structuralFlags": []
+        }
+      ],
+      "sourceReferences": [],
+      "declaredDates": [],
+      "retrievedOn": "2026-10-01",
+      "lastVerified": null,
+      "status": "Literal/schema inventory only unless separately noted; declared bake date is not independent verification date."
+    },
+    {
+      "file": "src/data/olympicsAthletes.ts",
+      "sha256": "b54526c744a859878aa776ebae3dcbe0161de96dd9899cd6b6477f211af8b4bd",
+      "datasets": [
+        {
+          "export": "olympicAthletes",
+          "rows": 43,
+          "groups": null,
+          "duplicateIds": 0,
+          "duplicateNamesWithinGroup": [],
+          "structuralFlags": []
+        }
+      ],
+      "sourceReferences": [],
+      "declaredDates": [
+        "2026-09-19",
+        "2026-09-28"
+      ],
+      "retrievedOn": "2026-10-01",
+      "lastVerified": null,
+      "status": "Literal/schema inventory only unless separately noted; declared bake date is not independent verification date."
+    },
+    {
+      "file": "src/data/clubManagerRosters.ts",
+      "sha256": "bb6807b2aa74722685be21f5ccc9dd04ecb53edda1407f689af2741fc613a045",
+      "datasets": [
+        {
+          "export": "CM_PARTIAL",
+          "rows": 138,
+          "groups": null,
+          "duplicateIds": 0,
+          "duplicateNamesWithinGroup": [],
+          "structuralFlags": []
+        },
+        {
+          "export": "CM_ROSTERS",
+          "rows": 3658,
+          "groups": 330,
+          "duplicateIds": 0,
+          "duplicateNamesWithinGroup": [],
+          "structuralFlags": []
+        }
+      ],
+      "sourceReferences": [],
+      "declaredDates": [
+        "2026-09-05",
+        "2026-09-15"
+      ],
+      "retrievedOn": "2026-10-01",
+      "lastVerified": null,
+      "status": "Literal/schema inventory only unless separately noted; declared bake date is not independent verification date."
+    },
+    {
+      "file": "src/data/clubManagerEra2005.ts",
+      "sha256": "7164d8aecff644a920dc4f787477eba0cadb466a4b3cc9feebd0f27e2803d77b",
+      "datasets": [
+        {
+          "export": "ERA2005_ROSTERS",
+          "rows": 747,
+          "groups": 40,
+          "duplicateIds": 0,
+          "duplicateNamesWithinGroup": [],
+          "structuralFlags": []
+        }
+      ],
+      "sourceReferences": [],
+      "declaredDates": [],
+      "retrievedOn": "2026-10-01",
+      "lastVerified": null,
+      "status": "Literal/schema inventory only unless separately noted; declared bake date is not independent verification date."
+    },
+    {
+      "file": "src/data/clubManagerEra2010.ts",
+      "sha256": "54391da1e9f68c8358173f93657b839f9de922be4c64ee4a5a041bfdeaf9d864",
+      "datasets": [
+        {
+          "export": "ERA2010_ROSTERS",
+          "rows": 802,
+          "groups": 40,
+          "duplicateIds": 0,
+          "duplicateNamesWithinGroup": [],
+          "structuralFlags": []
+        }
+      ],
+      "sourceReferences": [],
+      "declaredDates": [],
+      "retrievedOn": "2026-10-01",
+      "lastVerified": null,
+      "status": "Literal/schema inventory only unless separately noted; declared bake date is not independent verification date."
+    },
+    {
+      "file": "src/data/clubManagerEra2015.ts",
+      "sha256": "18552838864b9f5aa190f37b13cee008a9b578f0906e07d8cdf46e5160c1f76f",
+      "datasets": [
+        {
+          "export": "ERA2015_ROSTERS",
+          "rows": 1098,
+          "groups": 60,
+          "duplicateIds": 0,
+          "duplicateNamesWithinGroup": [],
+          "structuralFlags": []
+        }
+      ],
+      "sourceReferences": [],
+      "declaredDates": [
+        "2026-08-20"
+      ],
+      "retrievedOn": "2026-10-01",
+      "lastVerified": null,
+      "status": "Literal/schema inventory only unless separately noted; declared bake date is not independent verification date."
+    },
+    {
+      "file": "src/data/clubManagerFinalTables2025_26.ts",
+      "sha256": "5389301e300019a665f0122ce2a978d7ff951cc1e029cc5126a4ef09f8b98e13",
+      "datasets": [],
+      "sourceReferences": [
+        "https://match.uefa.com/v5/matches?competitionId=1&seasonYear=2026&offset=0&limit=3&order=DESC",
+        "https://www.uefa.com/uefachampionsleague/news/02a5-20c02e59f219-15e92acdc717-1000--paris-retain-champions-league-holders-edge-arsenal-on-pena/",
+        "https://www.espn.com/soccer/story/_/id/48920506/psg-arsenal-champions-league-final-penalty-shootout",
+        "https://www.cbssports.com/soccer/news/psg-arsenal-live-updates-champions-league-final-2026-score/live/",
+        "https://sdp-prem-prod.premier-league-prod.pulselive.com/api/v5/competitions/8/seasons/2025/standings",
+        "https://www.uefa.com/uefachampionsleague/news/02a8-2171a88881a0-c70193b972c6-1000--meet-the-2026-27-champions-league-league-phase-teams/",
+        "https://www.espn.com/soccer/standings/_/league/eng.1/season/2025",
+        "https://www.nbcsports.com/premier-league-table-2025-26-season-standings",
+        "https://apim.laliga.com/public-service/api/v1/",
+        "https://www.espn.com/soccer/standings/_/league/esp.1/season/2025",
+        "https://www.sportinglife.com/football/league-tables/spanish-la-liga/74/seasons/2025-2026/107",
+        "https://api-sdp.legaseriea.it/v1/serie-a/football/seasons/serie-a::Football_Season::5f0e080fc3a44073984b75b3a8e06a8a/standings",
+        "https://www.espn.com/soccer/standings/_/league/ita.1/season/2025",
+        "https://www.sportinglife.com/football/league-tables/serie-a/6/seasons/2025-2026/107",
+        "https://www.bundesliga.com/en/bundesliga/table/2025-2026",
+        "https://www.espn.com/soccer/standings/_/league/ger.1/season/2025",
+        "https://www.sportinglife.com/football/league-tables/german-bundesliga/11/seasons/2025-2026/107",
+        "https://ma-api.ligue1.fr/championship-standings/1/general?season=2025",
+        "https://match.uefa.com/v5/matches?competitionId=1&seasonYear=2027&offset=0&limit=200&order=ASC",
+        "https://www.sportinglife.com/football/league-tables/french-ligue-1/8/seasons/2025-2026/107",
+        "https://www.besoccer.com/competition/table/ligue_1/2026",
+        "https://www.footmercato.net/a206742058948473313-commission-de-discipline-nantes-sanctionne-mais-le-0-0-enterine-contre-toulouse",
+        "https://eredivisie.nl/nieuws/deze-momenten-uit-2025-26-mogen-niet-worden-vergeten/",
+        "https://www.espn.com/soccer/standings/_/league/ned.1/season/2025",
+        "https://www.sportinglife.com/football/league-tables/dutch-eredivisie/46/seasons/2025-2026/107",
+        "https://www.vi.nl/competities/eredivisie/2025-2026/stand",
+        "https://en.wikipedia.org/wiki/2025%E2%80%9326_Eredivisie",
+        "https://www.ligaportugal.pt/competition/854/liga-portugal-betclic/round/20252026?tab=standings",
+        "https://www.espn.com/soccer/standings/_/league/por.1/season/2025",
+        "https://www.sportinglife.com/football/league-tables/portuguese-primeira-liga/14/seasons/2025-2026/107",
+        "https://spfl.co.uk/league/premiership/archive/390",
+        "https://spfl.co.uk/news/celtic-clinch-the-title-51235",
+        "https://www.espn.com/soccer/standings/_/league/sco.1/season/2025",
+        "https://www.sportinglife.com/football/league-tables/scottish-premiership/62/seasons/2025-2026/107",
+        "https://www.tff.org/default.aspx?pageID=1768",
+        "https://www.espn.com/soccer/standings/_/league/tur.1/season/2025",
+        "https://www.sportinglife.com/football/league-tables/turkish-super-lig/15/seasons/2025-2026/107",
+        "https://www.proleague.be/nieuws/club-brugge-na-ijzersterke-play-offs-voor-de-twintigste-keer-landskampioen",
+        "https://www.espn.com/soccer/standings/_/league/bel.1/season/2025",
+        "https://www.sportinglife.com/football/league-tables/belgian-jupiler-pro-league/78/seasons/2025-2026/107",
+        "https://www.voetbalexpress.be/seizoen2025-2026/championsplayoff2026.html",
+        "https://www.voetbalexpress.be/seizoen2025-2026/europaleagueplayoff2026.html",
+        "https://en.wikipedia.org/wiki/2025%E2%80%9326_Belgian_Pro_League",
+        "https://www.bundesliga.at/de/tabelle/saison-2025-2026",
+        "https://www.espn.com/soccer/standings/_/league/aut.1/season/2025",
+        "https://www.sportinglife.com/football/league-tables/austrian-bundesliga/40/seasons/2025-2026/107",
+        "https://www.slgr.gr/en/scoreboard/24/",
+        "https://www.espn.com/soccer/standings/_/league/gre.1/season/2025",
+        "https://www.sportinglife.com/football/league-tables/greek-super-league/41/seasons/2025-2026/107",
+        "https://www.protothema.gr/sports/article/1820097/stin-5i-thesi-o-aris-7os-o-ofi-i-teliki-vathmologia-ton-playoffs/",
+        "https://api.superliga.dk/tournaments/46/standings?seasonId=27018",
+        "https://www.espn.com/soccer/standings/_/league/den.1/season/2025",
+        "https://www.sportinglife.com/football/league-tables/danish-superligaen/73/seasons/2025-2026/107",
+        "https://sfl.ch/de/superleague-tabelle",
+        "https://origins-widgets-orchestrator.origins-digital.com/api/ranking?competitionId=undefined&tournamentCalendarId=d5ju52a9misru35821zuqysd0",
+        "https://www.tntsports.co.uk/football/swiss-super-league/2025-2026/standings.shtml",
+        "https://www.sportinglife.com/football/league-tables/swiss-super-league/36/seasons/2025-2026/107",
+        "https://hnl.hr/povijest/rezultati-i-poretci/?sid=35",
+        "https://www.besoccer.com/competition/table/1_hnl/2026",
+        "https://zgnogomet.com/natjecanje/supersport-hnl-sezona-2025-2026/"
+      ],
+      "declaredDates": [
+        "2026-09-10",
+        "2026-09-15"
+      ],
+      "retrievedOn": "2026-10-01",
+      "lastVerified": null,
+      "status": "Literal/schema inventory only unless separately noted; declared bake date is not independent verification date."
+    },
+    {
+      "file": "src/data/frontOfficePlayers.ts",
+      "sha256": "c87d0a4dcc72e439ec0c82e9df0ebefbe2d938ac03c2bcbbcfd5d3ad37b4d2e3",
+      "datasets": [
+        {
+          "export": "FO_TEAMS",
+          "rows": 32,
+          "groups": null,
+          "duplicateIds": 0,
+          "duplicateNamesWithinGroup": [],
+          "structuralFlags": []
+        }
+      ],
+      "sourceReferences": [],
+      "declaredDates": [
+        "2026-09-02"
+      ],
+      "retrievedOn": "2026-10-01",
+      "lastVerified": null,
+      "status": "Literal/schema inventory only unless separately noted; declared bake date is not independent verification date."
+    },
+    {
+      "file": "src/data/mlbFoPlayers.ts",
+      "sha256": "3fd674a943145e90ea0e8b45012160448dfde4d0bf4eaaffa51d74ff5bbec35c",
+      "datasets": [
+        {
+          "export": "MLB_FO_ROSTERS",
+          "rows": 390,
+          "groups": 30,
+          "duplicateIds": 0,
+          "duplicateNamesWithinGroup": [],
+          "structuralFlags": []
+        }
+      ],
+      "sourceReferences": [],
+      "declaredDates": [
+        "2026-08-05"
+      ],
+      "retrievedOn": "2026-10-01",
+      "lastVerified": null,
+      "status": "Literal/schema inventory only unless separately noted; declared bake date is not independent verification date."
+    },
+    {
+      "file": "src/data/nhlFoPlayers.ts",
+      "sha256": "18ef7111bdcee110a575e2ba5f76698ff6d4f4c1bfb81d36ebfaedabac5e9929",
+      "datasets": [
+        {
+          "export": "NHL_FO_ROSTERS",
+          "rows": 416,
+          "groups": 32,
+          "duplicateIds": 0,
+          "duplicateNamesWithinGroup": [],
+          "structuralFlags": []
+        }
+      ],
+      "sourceReferences": [],
+      "declaredDates": [
+        "2026-08-05"
+      ],
+      "retrievedOn": "2026-10-01",
+      "lastVerified": null,
+      "status": "Literal/schema inventory only unless separately noted; declared bake date is not independent verification date."
+    },
+    {
+      "file": "src/data/nbaStats.ts",
+      "sha256": "2c605a1d13faad92a166b1cf2ba57393599c075080cc2a06ca75bca33ff94962",
+      "datasets": [],
+      "sourceReferences": [],
+      "declaredDates": [],
+      "retrievedOn": "2026-10-01",
+      "lastVerified": null,
+      "status": "Literal/schema inventory only unless separately noted; declared bake date is not independent verification date."
+    },
+    {
+      "file": "src/data/players.ts",
+      "sha256": "fec7c1bf3c20f971e9f1d55481e71fad14fd3de69f9b7d5159333233afddff75",
+      "datasets": [
+        {
+          "export": "players",
+          "rows": 553,
+          "groups": null,
+          "duplicateIds": 0,
+          "duplicateNamesWithinGroup": [],
+          "structuralFlags": []
+        }
+      ],
+      "sourceReferences": [],
+      "declaredDates": [
+        "2026-10-01"
+      ],
+      "retrievedOn": "2026-10-01",
+      "lastVerified": null,
+      "status": "Literal/schema inventory only unless separately noted; declared bake date is not independent verification date."
+    },
+    {
+      "file": "src/data/careerPlayers.ts",
+      "sha256": "3de59c238092c08a848fb95b5aedd804d737b06a7cdb1210e6163c9077ff5bda",
+      "datasets": [
+        {
+          "export": "careerPlayers",
+          "rows": 253,
+          "groups": null,
+          "duplicateIds": 0,
+          "duplicateNamesWithinGroup": [],
+          "structuralFlags": []
+        }
+      ],
+      "sourceReferences": [],
+      "declaredDates": [
+        "2026-10-01"
+      ],
+      "retrievedOn": "2026-10-01",
+      "lastVerified": null,
+      "status": "Literal/schema inventory only unless separately noted; declared bake date is not independent verification date."
+    },
+    {
+      "file": "src/data/baseballCareerPlayers.ts",
+      "sha256": "36936b289c4a48af94789e312b7833ad3ea857f52bd6f0837f27417f5c6f9cc5",
+      "datasets": [
+        {
+          "export": "baseballCareerPuzzles",
+          "rows": 35,
+          "groups": null,
+          "duplicateIds": 0,
+          "duplicateNamesWithinGroup": [],
+          "structuralFlags": []
+        }
+      ],
+      "sourceReferences": [],
+      "declaredDates": [],
+      "retrievedOn": "2026-10-01",
+      "lastVerified": null,
+      "status": "Literal/schema inventory only unless separately noted; declared bake date is not independent verification date."
+    },
+    {
+      "file": "src/data/hockeyCareerPlayers.ts",
+      "sha256": "42517a4e745650126539f048b2843a6d14d38c334d0fe11d451754d758acdd5f",
+      "datasets": [
+        {
+          "export": "hockeyCareerPuzzles",
+          "rows": 38,
+          "groups": null,
+          "duplicateIds": 0,
+          "duplicateNamesWithinGroup": [],
+          "structuralFlags": []
+        }
+      ],
+      "sourceReferences": [],
+      "declaredDates": [],
+      "retrievedOn": "2026-10-01",
+      "lastVerified": null,
+      "status": "Literal/schema inventory only unless separately noted; declared bake date is not independent verification date."
+    },
+    {
+      "file": "src/data/nbaCareerPlayers.ts",
+      "sha256": "07cb63fe3a6afff5e489b231de075918eeae9a90709ad45a200d6a7ef40a6bd1",
+      "datasets": [
+        {
+          "export": "nbaCareerPuzzles",
+          "rows": 20,
+          "groups": null,
+          "duplicateIds": 0,
+          "duplicateNamesWithinGroup": [],
+          "structuralFlags": []
+        }
+      ],
+      "sourceReferences": [],
+      "declaredDates": [
+        "2026-07-22"
+      ],
+      "retrievedOn": "2026-10-01",
+      "lastVerified": null,
+      "status": "Literal/schema inventory only unless separately noted; declared bake date is not independent verification date."
+    },
+    {
+      "file": "src/data/nflCareerPlayers.ts",
+      "sha256": "943468b27f85d6b31f3e17d9d760f685ae869fe0caf56d675d8ee8f80c394c12",
+      "datasets": [
+        {
+          "export": "nflCareerPlayers",
+          "rows": 78,
+          "groups": null,
+          "duplicateIds": 0,
+          "duplicateNamesWithinGroup": [],
+          "structuralFlags": []
+        }
+      ],
+      "sourceReferences": [],
+      "declaredDates": [],
+      "retrievedOn": "2026-10-01",
+      "lastVerified": null,
+      "status": "Literal/schema inventory only unless separately noted; declared bake date is not independent verification date."
+    },
+    {
+      "file": "src/data/transferPathPuzzles.ts",
+      "sha256": "bafed3a4bea6ecf6131ecd6d71bff5cff955cb6faa585d6d07032bc670b39122",
+      "datasets": [],
+      "sourceReferences": [],
+      "declaredDates": [],
+      "retrievedOn": "2026-10-01",
+      "lastVerified": null,
+      "status": "Literal/schema inventory only unless separately noted; declared bake date is not independent verification date."
+    },
+    {
+      "file": "src/data/transferPathVerifiedActive.ts",
+      "sha256": "cac501009c3ae53f34a0fb78a072c44a20915798d23157f9855361a6f3d8970d",
+      "datasets": [
+        {
+          "export": "VERIFIED_ACTIVE_IDENTITY_KEYS",
+          "rows": 90,
+          "groups": null,
+          "duplicateIds": 0,
+          "duplicateNamesWithinGroup": [],
+          "structuralFlags": []
+        }
+      ],
+      "sourceReferences": [],
+      "declaredDates": [],
+      "retrievedOn": "2026-10-01",
+      "lastVerified": null,
+      "status": "Literal/schema inventory only unless separately noted; declared bake date is not independent verification date."
+    },
+    {
+      "file": "src/data/timelinePlayers.ts",
+      "sha256": "be465eb8101a163f94839e2ffd388e584c46ccc2c74063d3bb34d2a207a6bd88",
+      "datasets": [
+        {
+          "export": "timelinePuzzles",
+          "rows": 15,
+          "groups": null,
+          "duplicateIds": 0,
+          "duplicateNamesWithinGroup": [],
+          "structuralFlags": []
+        }
+      ],
+      "sourceReferences": [],
+      "declaredDates": [],
+      "retrievedOn": "2026-10-01",
+      "lastVerified": null,
+      "status": "Literal/schema inventory only unless separately noted; declared bake date is not independent verification date."
+    },
+    {
+      "file": "src/data/nationalPools.ts",
+      "sha256": "53cf961cfdd218435bd1bb1e3a753c668c16d6c3dfcd5474c98f3d814b43788a",
+      "datasets": [],
+      "sourceReferences": [],
+      "declaredDates": [
+        "2026-08-21"
+      ],
+      "retrievedOn": "2026-10-01",
+      "lastVerified": null,
+      "status": "Literal/schema inventory only unless separately noted; declared bake date is not independent verification date."
+    },
+    {
+      "file": "src/data/hofPlayers.ts",
+      "sha256": "5ea70152432890a47635d1a0239701ffc3b7e9484d2e9d4f4a4d9c7f92511570",
+      "datasets": [],
+      "sourceReferences": [],
+      "declaredDates": [
+        "2026-09-28"
+      ],
+      "retrievedOn": "2026-10-01",
+      "lastVerified": null,
+      "status": "Literal/schema inventory only unless separately noted; declared bake date is not independent verification date."
+    },
+    {
+      "file": "src/data/nflCoaches.ts",
+      "sha256": "120d296fb849e115b5bcbd98fc0e22198c5bb6fc9f29fbfcb8581e4eed4a49e3",
+      "datasets": [
+        {
+          "export": "NFL_COACH_STINTS",
+          "rows": 78,
+          "groups": null,
+          "duplicateIds": 0,
+          "duplicateNamesWithinGroup": [],
+          "structuralFlags": []
+        }
+      ],
+      "sourceReferences": [],
+      "declaredDates": [
+        "2026-08-05"
+      ],
+      "retrievedOn": "2026-10-01",
+      "lastVerified": null,
+      "status": "Literal/schema inventory only unless separately noted; declared bake date is not independent verification date."
+    },
+    {
+      "file": "src/data/nflTeamFacts.ts",
+      "sha256": "2154ac1ffd0800a70bb0a0e2793859a5bfb9b58bf031a19901e481fa1ca47dfc",
+      "datasets": [
+        {
+          "export": "nflTeamFacts",
+          "rows": 128,
+          "groups": 32,
+          "duplicateIds": 0,
+          "duplicateNamesWithinGroup": [],
+          "structuralFlags": []
+        }
+      ],
+      "sourceReferences": [],
+      "declaredDates": [],
+      "retrievedOn": "2026-10-01",
+      "lastVerified": null,
+      "status": "Literal/schema inventory only unless separately noted; declared bake date is not independent verification date."
+    },
+    {
+      "file": "src/data/playerNationalities.ts",
+      "sha256": "f3c0093b642707d147acc2256b5e0cacce64c1a00cad755afd287649b5b85938",
+      "datasets": [],
+      "sourceReferences": [],
+      "declaredDates": [],
+      "retrievedOn": "2026-10-01",
+      "lastVerified": null,
+      "status": "Literal/schema inventory only unless separately noted; declared bake date is not independent verification date."
+    },
+    {
+      "file": "src/data/nbaPerfectLineupPool.ts",
+      "sha256": "b82ec2cae74ecc4f522fc6c7d72d98ecadc795bfb18524d6f9b645be51ae5894",
+      "datasets": [
+        {
+          "export": "NBA_POOL",
+          "rows": 66,
+          "groups": null,
+          "duplicateIds": 0,
+          "duplicateNamesWithinGroup": [],
+          "structuralFlags": []
+        }
+      ],
+      "sourceReferences": [],
+      "declaredDates": [],
+      "retrievedOn": "2026-10-01",
+      "lastVerified": null,
+      "status": "Literal/schema inventory only unless separately noted; declared bake date is not independent verification date."
+    },
+    {
+      "file": "src/data/nhlPerfectLineupPool.ts",
+      "sha256": "1db2f47001d42aea677c53abb9e55b5b99ca2e37cf1c6074e1dc0ae66d8bd4d6",
+      "datasets": [
+        {
+          "export": "NHL_POOL",
+          "rows": 57,
+          "groups": null,
+          "duplicateIds": 0,
+          "duplicateNamesWithinGroup": [],
+          "structuralFlags": []
+        }
+      ],
+      "sourceReferences": [],
+      "declaredDates": [],
+      "retrievedOn": "2026-10-01",
+      "lastVerified": null,
+      "status": "Literal/schema inventory only unless separately noted; declared bake date is not independent verification date."
+    },
+    {
+      "file": "src/data/f1PerfectLineupPool.ts",
+      "sha256": "49d99072f7ca5516c6ae09fb7c25a80d9e9f2ddc56a327df13d3e2d449453929",
+      "datasets": [
+        {
+          "export": "F1_POOL",
+          "rows": 41,
+          "groups": null,
+          "duplicateIds": 0,
+          "duplicateNamesWithinGroup": [],
+          "structuralFlags": []
+        }
+      ],
+      "sourceReferences": [],
+      "declaredDates": [],
+      "retrievedOn": "2026-10-01",
+      "lastVerified": null,
+      "status": "Literal/schema inventory only unless separately noted; declared bake date is not independent verification date."
+    },
+    {
+      "file": "src/data/conquestData.ts",
+      "sha256": "00239f46a9a403c35e566d239245d0fd905a43ea2071f8d2d1009861e5e668de",
+      "datasets": [
+        {
+          "export": "STATE_POSITIONS",
+          "rows": 60,
+          "groups": null,
+          "duplicateIds": 0,
+          "duplicateNamesWithinGroup": [],
+          "structuralFlags": []
+        },
+        {
+          "export": "NFL_TEAMS",
+          "rows": 32,
+          "groups": null,
+          "duplicateIds": 0,
+          "duplicateNamesWithinGroup": [],
+          "structuralFlags": []
+        },
+        {
+          "export": "DIRECTIONS",
+          "rows": 8,
+          "groups": null,
+          "duplicateIds": 0,
+          "duplicateNamesWithinGroup": [],
+          "structuralFlags": []
+        },
+        {
+          "export": "CONQUEST_FREE_AGENCY_POOL",
+          "rows": 14,
+          "groups": null,
+          "duplicateIds": 0,
+          "duplicateNamesWithinGroup": [],
+          "structuralFlags": []
+        }
+      ],
+      "sourceReferences": [],
+      "declaredDates": [],
+      "retrievedOn": "2026-10-01",
+      "lastVerified": null,
+      "status": "Literal/schema inventory only unless separately noted; declared bake date is not independent verification date."
+    },
+    {
+      "file": "src/data/conquestDataNba.ts",
+      "sha256": "89117a08d182fe4f92da71f442883be8a6fa7985630d74a41d1f1131560d7ef5",
+      "datasets": [
+        {
+          "export": "NBA_TEAMS",
+          "rows": 30,
+          "groups": null,
+          "duplicateIds": 0,
+          "duplicateNamesWithinGroup": [],
+          "structuralFlags": []
+        },
+        {
+          "export": "CONQUEST_FREE_AGENCY_POOL_NBA",
+          "rows": 12,
+          "groups": null,
+          "duplicateIds": 0,
+          "duplicateNamesWithinGroup": [],
+          "structuralFlags": []
+        }
+      ],
+      "sourceReferences": [],
+      "declaredDates": [
+        "2026-07-10"
+      ],
+      "retrievedOn": "2026-10-01",
+      "lastVerified": null,
+      "status": "Literal/schema inventory only unless separately noted; declared bake date is not independent verification date."
+    },
+    {
+      "file": "src/data/conquestDataMlb.ts",
+      "sha256": "b29a4344b521a370f44b0991acd53be484a45432afefa65cdafe475afdb8511c",
+      "datasets": [
+        {
+          "export": "MLB_TEAMS",
+          "rows": 30,
+          "groups": null,
+          "duplicateIds": 0,
+          "duplicateNamesWithinGroup": [],
+          "structuralFlags": []
+        }
+      ],
+      "sourceReferences": [],
+      "declaredDates": [
+        "2026-08-05"
+      ],
+      "retrievedOn": "2026-10-01",
+      "lastVerified": null,
+      "status": "Literal/schema inventory only unless separately noted; declared bake date is not independent verification date."
+    },
+    {
+      "file": "src/data/conquestDataNhl.ts",
+      "sha256": "d309d3b31ac2acfe6ef5965e878de2e0dc7463140ff87c147b60bf3ee9d02681",
+      "datasets": [
+        {
+          "export": "NHL_TEAMS",
+          "rows": 32,
+          "groups": null,
+          "duplicateIds": 0,
+          "duplicateNamesWithinGroup": [],
+          "structuralFlags": []
+        },
+        {
+          "export": "NHL_INVADERS",
+          "rows": 5,
+          "groups": null,
+          "duplicateIds": 0,
+          "duplicateNamesWithinGroup": [],
+          "structuralFlags": []
+        }
+      ],
+      "sourceReferences": [],
+      "declaredDates": [
+        "2026-08-05"
+      ],
+      "retrievedOn": "2026-10-01",
+      "lastVerified": null,
+      "status": "Literal/schema inventory only unless separately noted; declared bake date is not independent verification date."
+    },
+    {
+      "file": "src/data/notCurrentPlayers.ts",
+      "sha256": "254a39991e9c1254b4fcf56058d99c144e6bf763099c61eb9bc60325e1a7317e",
+      "datasets": [],
+      "sourceReferences": [],
+      "declaredDates": [],
+      "retrievedOn": "2026-10-01",
+      "lastVerified": null,
+      "status": "Literal/schema inventory only unless separately noted; declared bake date is not independent verification date."
+    },
+    {
+      "file": "src/data/wc2026Results.ts",
+      "sha256": "1cc371a2c2460b6b9d838a0f63335a47482744adab776aa9946723534b10cc97",
+      "datasets": [
+        {
+          "export": "WC2026_GROUPS",
+          "rows": 12,
+          "groups": null,
+          "duplicateIds": 0,
+          "duplicateNamesWithinGroup": [],
+          "structuralFlags": []
+        },
+        {
+          "export": "WC2026_KNOCKOUT",
+          "rows": 32,
+          "groups": null,
+          "duplicateIds": 0,
+          "duplicateNamesWithinGroup": [],
+          "structuralFlags": []
+        }
+      ],
+      "sourceReferences": [],
+      "declaredDates": [
+        "2026-09-01"
+      ],
+      "retrievedOn": "2026-10-01",
+      "lastVerified": null,
+      "status": "Literal/schema inventory only unless separately noted; declared bake date is not independent verification date."
+    }
+  ],
+  "verificationLedgers": [
+    {
+      "file": "scripts/data/ballonDorVerified2026-09.json",
+      "sha256": "5ae3c460d57ffabb514c333f7b81b894b62badc9f26545461ac191398c91a0f8",
+      "metadata": {
+        "about": "Round 730. Every row of public.ballon_dor, read by SELECT on 2026-09-30 (76 rows: 69 Men and 7 Women, rank 1 only, points and nationality NULL on every row), checked field by field against the co-organiser's own list (uefa.com, UEFA has co-organised the Ballon d'Or with Groupe Amaury, owner of France Football, since 2024) and at least one independent source on another host. Wikipedia is never a source here. Winner, year, rank and club were right on all 76 rows, so nothing is corrected; nationality was NULL on all 76 and the migration fills it. club is the club at the time of the award, as the official list gives it. nationality is the nation the player represented at the time of the award, written the way the site's other tables write it (Czech Republic, United States). points stays NULL: no reader shows it and nothing here verifies it. scripts/simBallonDor.mjs holds the migration's end state to this record.",
+        "table": "public.ballon_dor",
+        "round": 730,
+        "checked": "2026-09-30",
+        "readAt": "2026-09-30"
+      },
+      "sourceDates": [],
+      "sourceUrlCount": 9,
+      "status": "Existing record inventoried, not full external refetch. The HL parity records themselves have0external URLs."
+    },
+    {
+      "file": "scripts/data/f1ChampionsVerified2026-09.json",
+      "sha256": "93fda500c21a876c4b43e716241652d90ffbd3efd89a3e97e5b03a3c7b8f85f7",
+      "metadata": {
+        "round": 734,
+        "table": "f1_driver_standings",
+        "checked": "2026-09-30",
+        "migration": "supabase/migrations/20260930_round_734_f1_standings.sql"
+      },
+      "sourceDates": [],
+      "sourceUrlCount": 163,
+      "status": "Existing record inventoried, not full external refetch. The HL parity records themselves have0external URLs."
+    },
+    {
+      "file": "scripts/data/golfMajorsVerified2026-09.json",
+      "sha256": "79a1b78dbe1ff18d00340f61d1bc487daef99a43f1327eba061018d165623566",
+      "metadata": {
+        "about": "Round 733: every row of public.golf_majors checked against the championship's own champions list plus a second, independent list. The table was read with SELECT through the Supabase MCP on the check date (526 rows; the read hash below is md5 of id|year|tournament|player_name ordered by id, joined by newlines). The fix is supabase/migrations/20260930_round_733_golf_majors.sql, UNAPPLIED, and scripts/simGolfMajors.mjs holds that migration's end state to this record.",
+        "round": 733,
+        "table": "public.golf_majors",
+        "checkedOn": "2026-09-30",
+        "shownBy": "src/lib/listQuiz.ts reads golf_majors four times (masters-champs, pga-champs, theopen-champs, usopen-golf-champs), each the player_name column only. year and tournament identify the row. No other file under src, supabase or the database functions reads the table."
+      },
+      "sourceDates": [
+        "2026-09-30"
+      ],
+      "sourceUrlCount": 103,
+      "status": "Existing record inventoried, not full external refetch. The HL parity records themselves have0external URLs."
+    },
+    {
+      "file": "scripts/data/heismanVerified2026-09.json",
+      "sha256": "e32872e6cd919547bbdfa8b10e5c5e701b96d53e42434df197e4fddb1e4acd1d",
+      "metadata": {
+        "table": "cfb_heisman_winners",
+        "round": 729,
+        "checkedOn": "2026-09-30",
+        "method": "Every row read from the live table with a SELECT on 2026-09-30 (md5 of id|year|winner|school|position|class over all 91 rows, ordered by id: 673fbd5b7f866475520cd118bc3de8dc). Each row checked against the award body (heisman.com/heisman-winners/, read from the raw page's per winner data attributes) and ESPN's all time list with positions. Year, winner and school were also read against ESPN's winners list. A value ships only where both sources agree; where they print the same person, school or role two ways, the note on the row says which form is kept and why. Wikipedia was not used.",
+        "positionRule": "The award body's position code, which ESPN matches on 88 rows and prints as the same role on the other 3 (HB against RB for 1937 and 1944, CB/WR against WR/CB for 2024). Both sources list the running backs of every era as RB (two fullbacks as FB, two halfbacks as HB on heisman.com), the two way ends of 1936 and 1949 as TE, and give no second role to Kinnick, Horvath or Janowicz, so the table's era codes HB, E, HB/QB and HB/P were corrected to what both print.",
+        "classRule": "class is not one of the verified fields. The 10 rows that carry one agree with heisman.com and are kept; the 81 empty ones stay empty rather than filled from one source."
+      },
+      "sourceDates": [],
+      "sourceUrlCount": 93,
+      "status": "Existing record inventoried, not full external refetch. The HL parity records themselves have0external URLs."
+    },
+    {
+      "file": "scripts/data/mlbHigherLowerVerified2026-09.json",
+      "sha256": "ebe6ca79db8a5c536460ebabc3e769cecc1ab35dfbeaac12e8e885358afd91cc",
+      "metadata": {
+        "about": "MLB Higher or Lower career home runs, Round 664. Values come from public.mlb_batting_stats (hr) read on 2026-09-28, through year_to. scripts/simHigherLowerFacts.mjs holds the shipped file to this record.",
+        "read": "2026-09-28",
+        "source": "public.mlb_batting_stats",
+        "note": "The file was already right on all 55: the audit found 0 values differing and 0 of 1,475 matchups inverted. The record exists so it stays that way. Hank Aaron is stored as Henry Aaron in the table and matched by alias."
+      },
+      "sourceDates": [],
+      "sourceUrlCount": 0,
+      "status": "Existing record inventoried, not full external refetch. The HL parity records themselves have0external URLs."
+    },
+    {
+      "file": "scripts/data/nascarChampionsVerified2026-09.json",
+      "sha256": "9358f2b2bef86137ddcf77cf1e12e030f8f49fd5c20fba60f39df333d1735a8c",
+      "metadata": {
+        "round": 731,
+        "table": "public.nascar_champions",
+        "checked": "2026-09-30",
+        "read": "SELECT through the Supabase MCP on 2026-09-30: 77 rows, one per season 1949 to 2025, no duplicate years, no constraints, RLS on.",
+        "team_convention": "The column mixes car owner names (Rick Hendrick, Joe Gibbs, Roger Penske) and team names (Joe Gibbs Racing, Team Penske, Stewart-Haas Racing, Furniture Row). Both are true of the same organisation and this round keeps the stored form wherever it is true; only a spelling found in neither source was corrected."
+      },
+      "sourceDates": [],
+      "sourceUrlCount": 80,
+      "status": "Existing record inventoried, not full external refetch. The HL parity records themselves have0external URLs."
+    },
+    {
+      "file": "scripts/data/nbaHigherLowerVerified2026-09.json",
+      "sha256": "82bbb6516379c1e281fdb6cdb82efbe04ce22a85c2617a113cc183bc05c1eb0d",
+      "metadata": {
+        "about": "NBA Higher or Lower career points, Round 663. Values come from public.nba_player_stats read on 2026-09-22, through the year_to recorded per player. scripts/simHigherLowerFacts.mjs holds the shipped file to this record.",
+        "read": "2026-09-22",
+        "source": "public.nba_player_stats",
+        "note": "The table holds no career that began before 1965-66, so twelve players are absent from it entirely and are listed under heldFromFile with the values the file already carried, which are correct. This is the same shape as Gordie Howe in the NHL record, where the table truncates rather than omits."
+      },
+      "sourceDates": [],
+      "sourceUrlCount": 0,
+      "status": "Existing record inventoried, not full external refetch. The HL parity records themselves have0external URLs."
+    },
+    {
+      "file": "scripts/data/nflHigherLowerVerified2026-09.json",
+      "sha256": "290a5da35426775fc99e7a7401ae15a6fdfc1165ef01872b8da9ae0fa18251ae",
+      "metadata": {
+        "about": "NFL Higher or Lower career rushing plus receiving touchdowns, regular season, Round 666. Values come from public.nflfastr_player_stats summed over season_type REG per player_id, read on 2026-09-28. scripts/simHigherLowerFacts.mjs holds the shipped file to this record.",
+        "read": "2026-09-28",
+        "source": "public.nflfastr_player_stats",
+        "note": "Built per player_id, never per display name: grouped by name, nflfastr adds a second Adrian Peterson (a Bears back, 2002 to 2009, 8 touchdowns) onto the famous one and a second Steve Smith (the Giants receiver, 12) onto Steve Smith Sr., and the fence caught both because the file was right. Two other NFL tables (nfl_rb_stats, nfl_wr_te_stats) were rejected as the source because their touchdown columns include playoff games: Emmitt Smith shows 183 there against a regular season 164. nflfastr begins with the 1999 season, so any player whose first season in it is 1999 may have earlier seasons missing and is held from the file rather than corrected, and any player absent from it retired before 1999 and is held from the file too. Those held values are the file's own and are not independently verified here."
+      },
+      "sourceDates": [],
+      "sourceUrlCount": 0,
+      "status": "Existing record inventoried, not full external refetch. The HL parity records themselves have0external URLs."
+    },
+    {
+      "file": "scripts/data/nhlHigherLowerVerified2026-09.json",
+      "sha256": "dab0b54d8e6c22f105d443a27cb1ae048bf1a59887c2445cad461fcebcf594be",
+      "metadata": {
+        "about": "NHL Higher or Lower career points, Round 662. Values for skaters come from public.nhl_player_stats (goals plus assists) read on 2026-09-21, through the year_to recorded per player. scripts/simHockeyHigherLower.mjs holds the shipped file to this record.",
+        "read": "2026-09-21",
+        "source": "public.nhl_player_stats",
+        "note": "The table truncates careers that began before 1967-68. Gordie Howe is the proven case: it reports 349 points against a real 1,850, so his row is held from the file, not the table, and is listed under heldFromFile. No goalie exists in this table, so the two goalies are listed under unverified and their shipped values were not touched."
+      },
+      "sourceDates": [],
+      "sourceUrlCount": 0,
+      "status": "Existing record inventoried, not full external refetch. The HL parity records themselves have0external URLs."
+    },
+    {
+      "file": "scripts/data/rosterConfirmation2026.json",
+      "sha256": "f2b48f7142b4b6336a9cfb9c595c25c427de462f86c76878f1ed38b8ea2dbde4",
+      "metadata": {
+        "measuredOn": "2026-09-11",
+        "rule": "A baked Club Manager player whose newest row in public.player_market_values_dedup is year 2025, with no year-2026 row at any club the game models and none anywhere else either. The bake falls back to the 2025 row for these, which carries the 2025 CLUB, so the player ships at last season's club with nothing saying so.",
+        "population": 356,
+        "source": "public.player_market_values_dedup, read through the Supabase MCP on 2026-09-11.",
+        "adjudicator": "public.world_cup_players where world_cup_year = 2026: the 2026 World Cup squads of all 48 nations, applied Round 389 (supabase/migrations/20260901_round_389_world_cup_2026_squads.sql). Every row there is a player two independent sources agree on, Wikipedia squad templates read through the API and Al Jazeera 2026-06-02, with Yahoo Sports 2026-06-11 as the third voice where they differed. Clubs are Wikipedia's. It covers only players picked for the World Cup, which is why it resolves 23 of the 356 and no more.",
+        "adjudicatorWeb2026_09_15": "Web adjudication, 2026-09-15, for the 18 pending Premier League rows. Two independent source families were read with WebFetch and WebSearch only: A, official (the premierleague.com squad data feed for season 2026, which lists a loaned-out player at his loan club and not at his parent, plus club, league and UEFA pages) and B, independent press (Sky Sports, ESPN, Sports Illustrated and others; Sky Sport Deutschland never counted as independent of Sky Sports UK). A row moved out of pending only where both families agreed on status and club. Each row carries its own URLs and read dates.",
+        "loanPolicy": "A baked roster row has no loan concept: BakedPlayer is {n,p,a,v,r} and bakedToCMPlayer never sets onLoan or loanFrom, which exist on CMPlayer only for loans a manager makes inside a career (Rounds 71 and 506). The convention the repo already uses is to place a season-long loanee at the club he plays for: scripts/transferOverlay2026.mjs documents its loan field as informational, lists the club a player is playing for (Marmoush at Tottenham, ter Stegen at Ajax), and writes a loan that ended with the parent keeping the player as the parent club. The Premier League feed does the same (Mudryk absent from Chelsea 2026/27, present at Tottenham with loan 1). So Mudryk is movedTo Tottenham, with informational loan: true and loanFrom: Chelsea on the ledger row. The bake and harness read only name, from and to, so no code change is needed. The honest limit to record: in game he is a normal Tottenham player, who can be sold and does not go back to Chelsea at season end. A baked loan flag would be its own round (BakedPlayer, the bake emit and bakedToCMPlayer), not part of this data fix. A loan from a modelled club to an unmodelled one would be removedClubNotModelled with realClub naming both, for example 'X, on loan from Y'."
+      },
+      "sourceDates": [
+        "2026-09-15"
+      ],
+      "sourceUrlCount": 80,
+      "status": "Existing record inventoried, not full external refetch. The HL parity records themselves have0external URLs."
+    },
+    {
+      "file": "scripts/data/soccerAwardsVerified2026-09.json",
+      "sha256": "b8d4373c61c43c8445818b14bd53ce8b831e8f95bd0551a8c322d990c401066a",
+      "metadata": {
+        "about": "Round 708. The soccer_awards rows a game may read, winner by winner, checked on 2026-09-30 against at least two sources on two different organisations, the award's organiser wherever its page renders text. Wikipedia and other wikis are never a source here. scripts/simSoccerAwardsShape.mjs section 5 holds the live table to this record: every row of a verified award that passes the shape test must be a winner recorded here, every winner recorded here must be in the table unless it sits in knownGaps, and the List Quiz must deal exactly these names. year follows the table's own convention for each award, stated in yearMeans, and winner is the spelling the table holds (accents kept); the harness compares after folding accents and punctuation, so a source that drops an accent still agrees. shared marks a season two men won together. notAwarded lists seasons the organiser presented no award; the table holds a 'Not awarded' row for each and the shape test drops it, so the quiz deals nothing for those seasons. knownGaps lists seasons the sources have decided and the table does not hold yet: a migration adds them, and until it lands the quiz simply deals one fewer season. worldCupAwards is empty on purpose: the three World Cup awards stay on the DO NOT USE list until their record and migration ship in a later round.",
+        "checked": "2026-09-30"
+      },
+      "sourceDates": [],
+      "sourceUrlCount": 13,
+      "status": "Existing record inventoried, not full external refetch. The HL parity records themselves have0external URLs."
+    },
+    {
+      "file": "scripts/data/sportsFactsVerified2026-09.json",
+      "sha256": "ee678703612b873b93231a860cc72a1693c0edaf28a62251ac0a341a17a05b97",
+      "metadata": {
+        "about": "Round 660. Every fact the seven hand typed sports files show a player, checked between 2026-09-19 and 2026-09-28 (each node carries its own date) against two independent sources, one of them official wherever the official source would answer. scripts/simSportsFacts.mjs holds the shipped files to this record and fails if either side moves. Wikipedia is never a source here. A fact that carries \"noOfficial\" stands on two independent sources because the official one was unreachable, silent or wrong, and says which.",
+        "checked": "2026-09-28"
+      },
+      "sourceDates": [
+        "2026-09-19",
+        "2026-09-28"
+      ],
+      "sourceUrlCount": 1394,
+      "status": "Existing record inventoried, not full external refetch. The HL parity records themselves have0external URLs."
+    },
+    {
+      "file": "scripts/data/staleSweep2026.json",
+      "sha256": "b3ac3566724cff7d9f44c88153ce018a7de2b19c39cb649a52bd1f49ed1d140b",
+      "metadata": {
+        "sweptOn": "2026-08-29",
+        "eurUsdRate": 1.08
+      },
+      "sourceDates": [],
+      "sourceUrlCount": 0,
+      "status": "Existing record inventoried, not full external refetch. The HL parity records themselves have0external URLs."
+    },
+    {
+      "file": "scripts/data/tennisHigherLowerVerified2026-09.json",
+      "sha256": "8487b0a44525d60a7eb50abfc9af5115dde327cee9b7b94a450330d06e1c7e76",
+      "metadata": {
+        "about": "Tennis Higher or Lower Grand Slam singles titles, Round 665. Each count is the number of rows in public.tennis_grand_slam_winners where the player is champion in a singles category, read on 2026-09-28. scripts/simHigherLowerFacts.mjs holds the shipped file to this record.",
+        "read": "2026-09-28",
+        "source": "public.tennis_grand_slam_winners",
+        "note": "The table records a champion under the name she used that year, so four players are split across maiden and married names and are summed here: Margaret Court (13 as Court, 11 as Smith), Helen Wills (9 as Wills, 5 as Moody, 5 as Wills Moody), Molla Mallory (4 as Bjurstedt, 4 as Mallory) and Margaret Osborne duPont (4 as Osborne, 2 as Osborne duPont). Every one of the 44 agreed with the file once merged: 0 values differing, 0 of 867 matchups inverted. Active players are through the last slam in the table: Alcaraz 7 (2026), Sinner 4 (2025), Swiatek 6 (2025), Sabalenka 4 (2025)."
+      },
+      "sourceDates": [],
+      "sourceUrlCount": 0,
+      "status": "Existing record inventoried, not full external refetch. The HL parity records themselves have0external URLs."
+    },
+    {
+      "file": "scripts/data/tennisSlamsVerified2026-09.json",
+      "sha256": "2d1c80e0b1cc0a747c9aadd6c41c658b1ace529e321ce21a92aa9ee1b14dbc9d",
+      "metadata": {
+        "about": "Round 732. Every row of public.tennis_grand_slam_winners, read with SELECT through the Supabase MCP on 2026-09-30, checked champion by champion against the event's official champions list and ESPN's Grand Slam history tables. scripts/simTennisSlams.mjs holds supabase/migrations/20260930_round_732_tennis_slams.sql to this record.",
+        "read": "2026-09-30",
+        "source": "public.tennis_grand_slam_winners",
+        "method": "A row is verified when the official list and the second source name the same player for that year, allowing the married and maiden names of one player (listed under nameVariants). The printed field keeps what each source prints, in source order. Where the two disagreed a third source settled it and the note says which.",
+        "usOpenFeed": "https://www.usopen.org/en_US/json/man/past_champions.json is one feed for every US Open event despite the \"man\" in its path: fetched 2026-09-30 it carries 19 sections, among them ms (Men's Singles Champions 1881-2026, 147 rows) and ws (Women's Singles Champions 1887-2026, 140 rows), each row a year, champion, runner-up and score. There is no separate women's feed (json/woman/ and json/women/ both answer 404). The 140 US Open Women's Singles rows and the 2026 Rybakina fill were checked against the ws section of this feed, so the URL on those rows is the page that lists them. The ws section prints 2026 as champion Elena Rybakina, runner-up Aryna Sabalenka, 64 57 62; the ms section prints 2026 as champion Alexander Zverev, runner-up Ben Shelton, 63 76(2) 57 62.",
+        "nameVariants": "The table stores some players under the name used that year and some under a later name: Margaret Smith and Margaret Court, Helen Wills, Helen Wills Moody and Helen Moody, Margaret Osborne and Margaret Osborne duPont, Molla Bjurstedt and Molla Mallory, Blanche Bingley and Blanche Hillyard, Charlotte Cooper and Charlotte Sterry, Dorothea Douglass and Dorothea Lambert Chambers, Kitty McKane and Kitty Godfree, Hazel Hotchkiss Wightman, Ann Haydon and Ann Haydon Jones and Ann Jones, Evonne Goolagong (Cawley), Chris Evert (Lloyd), Justine Henin (Hardenne). Each is the right player; the split is recorded here and left for a round that decides one display name per player.",
+        "score": "The score column held no score on any row: 1,010 rows carried a three letter nation code (apparently the runner-up's, from a shifted scrape), 7 carried footnote debris such as \"[ h ]\" or \"Peru\", and 2 were NULL. No reader selects it. The migration sets every score without a digit to NULL. Every stored value is kept below under scores, keyed by id, read through the public REST API on 2026-09-30 from the same 1,019 rows the snapshot md5 covers, so the wipe can be reversed from this file alone.",
+        "notInScope": "runner_up is NULL on every row, so Tennis Chain still cannot check a defeat; the official sources used here carry the runner-up and could fill it in a later round."
+      },
+      "sourceDates": [],
+      "sourceUrlCount": 26,
+      "status": "Existing record inventoried, not full external refetch. The HL parity records themselves have0external URLs."
+    },
+    {
+      "file": "scripts/data/triviaFactsVerified2026-09.json",
+      "sha256": "850ba42deac0f0dcd557efb2b4b084e451830f8c0fcd77d7b3e4d714ba0e620c",
+      "metadata": {
+        "about": "Round 661. Every fact the three hand typed trivia banks show a player (Hall of Fame or Bust, Guess the Year, Score Predictor), checked on 2026-09-28 against at least two sources on two different hosts, one of them the sport's governing body, league or hall of fame wherever that page would answer, and at least one that is not. scripts/simTriviaFacts.mjs holds the shipped files to this record word for word and fails if either side moves. Wikipedia and other wikis are never a source here. A fact that carries \"noOfficial\" stands on independent sources and says why the official page is missing. An entry marked \"editorial\" is a flavour line with no checkable claim (a Hall of Fame or Bust verdict label, a Score Predictor teaser hint) and says so. For Score Predictor, homeTeam is the side listed first: where one side really was at home it is that side, and \"neutral\" marks a final at a neutral ground, where the order is not a claim. Guess the Year uses the calendar year an event happened in, so a Super Bowl or bowl game played in January belongs to the new year. Round 661 fix: every Hall of Fame or Bust card also carries its real Hall of Fame record (hall), sourced like any other fact, with asOf on every 'not in' because that can change; a count on a card for a player still playing is a floor or carries asOf, the date it was last checked. www.fifa.com article pages turned out to be script shells with no text, so they count as no source and were replaced by readable inside.fifa.com pages. listQuizUclTopScorers holds the List Quiz's Champions League joint top scorers.",
+        "checked": "2026-09-28"
+      },
+      "sourceDates": [
+        "2026-09-28"
+      ],
+      "sourceUrlCount": 680,
+      "status": "Existing record inventoried, not full external refetch. The HL parity records themselves have0external URLs."
+    }
+  ],
+  "validation": {
+    "existing": [
+      {
+        "command": "node scripts/simHigherLowerFacts.mjs",
+        "exit": 0,
+        "checks": 31,
+        "scope": "Five fenced games; record parity, not live all-sports fact validation.",
+        "log": "higher-lower-facts.log"
+      },
+      {
+        "command": "node scripts/simSportsFacts.mjs",
+        "exit": 0,
+        "sections": 10,
+        "scope": "Seven hand-typed sports files held to stored sportsFacts record, source independence metadata and placeholder behavior.",
+        "log": "sports-facts.log"
+      }
+    ],
+    "literalScan": {
+      "files": 48,
+      "arraysOrGroupedArrays": 51,
+      "totalEntriesIncludingMarkerAndTeamArrays": 10101,
+      "zeroDuplicateIdGroups": true,
+      "zeroNormalizedDuplicateNameGroups": true,
+      "zeroSimpleNegativeOrImpossibleYearFlags": true,
+      "boundary": "Does not flatten all nested team/player objects, execute derived functions or parse string-encoded pools. Not10101distinct verified people."
+    },
+    "cfbComparison": {
+      "fileRows": 65,
+      "databaseMatchedRows": 66,
+      "distinctDatabaseNames": 65,
+      "exactNameYearYardMatches": 65,
+      "missing": []
+    },
+    "databaseChecks": {
+      "nbaCareer": [
+        {
+          "total": 3227,
+          "bad_first_seasons": 0,
+          "bad_last_seasons": 0,
+          "negative_totals": 0,
+          "extra_exact_names": 0
+        }
+      ],
+      "rosterIdentities": [
+        {
+          "dataset": "nhl_players",
+          "player_ids": 876,
+          "repeated_ids": 876,
+          "conflicting_names": 0,
+          "conflicting_teams": 0,
+          "conflicting_positions": 0,
+          "conflicting_birthdates": 0
+        },
+        {
+          "dataset": "mlb_players",
+          "player_ids": 1122,
+          "repeated_ids": 1122,
+          "conflicting_names": 0,
+          "conflicting_teams": 17,
+          "conflicting_positions": 0,
+          "conflicting_birthdates": 0
+        }
+      ],
+      "latestSoccerMarket": [
+        {
+          "latest_rows": 5861,
+          "latest_year": 2026,
+          "implausible_age": 0,
+          "nonpositive_values": 0,
+          "missing_club": 0,
+          "missing_nationality": 0
+        }
+      ],
+      "worldCup2026": [
+        {
+          "total": 1236,
+          "countries": 48,
+          "distinct_shirt_keys": 1236,
+          "future_birthdates": 0,
+          "negative_stats": 0
+        }
+      ],
+      "nhlCurrentBirthdates": [
+        {
+          "total": 1752,
+          "future_birthdates": 0,
+          "born_before_1960": 0
+        }
+      ],
+      "nhlIdentity": [
+        {
+          "total": 6353,
+          "null_person_keys": 6353,
+          "extra_exact_names": 0
+        }
+      ],
+      "nhlAffected": [
+        {
+          "result": {
+            "overlap": {
+              "distinct_flagged": 69,
+              "malformed_zero_points": 59,
+              "malformed_and_arithmetic": 63
+            },
+            "exact_current_name_join": [
+              {
+                "team": "CGY",
+                "points": -2,
+                "full_name": "Tyson Gross",
+                "player_id": 8486056
+              },
+              {
+                "team": "MIN",
+                "points": 0,
+                "full_name": "David Spacek",
+                "player_id": 8483766
+              }
+            ],
+            "potential_2010s_draft_rows": [
+              {
+                "games": 22,
+                "goals": 1,
+                "teams": "ARI",
+                "points": 1,
+                "assists": 0,
+                "year_to": "2023-24",
+                "position": "RW",
+                "year_from": "1",
+                "player_name": "Aku Raty"
+              },
+              {
+                "games": 21,
+                "goals": 1,
+                "teams": "OTT",
+                "points": 0,
+                "assists": 0,
+                "year_to": "2011-12",
+                "position": "RW",
+                "year_from": "1",
+                "player_name": "Andre Petersson"
+              },
+              {
+                "games": 26,
+                "goals": 1,
+                "teams": "MTL",
+                "points": 0,
+                "assists": 0,
+                "year_to": "2021-22",
+                "position": "LW",
+                "year_from": "1",
+                "player_name": "Brandon Baddock"
+              },
+              {
+                "games": 24,
+                "goals": 1,
+                "teams": "NYR",
+                "points": 0,
+                "assists": 0,
+                "year_to": "2023-24",
+                "position": "D",
+                "year_from": "1",
+                "player_name": "Brandon Scanlin"
+              },
+              {
+                "games": 22,
+                "goals": 1,
+                "teams": "DAL",
+                "points": 0,
+                "assists": 0,
+                "year_to": "2014-15",
+                "position": "LW",
+                "year_from": "1",
+                "player_name": "Brendan Ranford"
+              },
+              {
+                "games": 21,
+                "goals": 1,
+                "teams": "CBJ",
+                "points": 0,
+                "assists": 0,
+                "year_to": "2023-24",
+                "position": "F",
+                "year_from": "1",
+                "player_name": "Cameron Butler"
+              },
+              {
+                "games": 24,
+                "goals": 1,
+                "teams": "PIT",
+                "points": 1,
+                "assists": 0,
+                "year_to": "2011-12",
+                "position": "D",
+                "year_from": "1",
+                "player_name": "Carl Sneep"
+              },
+              {
+                "games": 23,
+                "goals": 2,
+                "teams": "CGY",
+                "points": 0,
+                "assists": 0,
+                "year_to": "2012-13",
+                "position": "LW",
+                "year_from": "2",
+                "player_name": "Carter Bancks"
+              },
+              {
+                "games": 23,
+                "goals": 2,
+                "teams": "COL",
+                "points": 0,
+                "assists": 0,
+                "year_to": "2024-25",
+                "position": "LW",
+                "year_from": "2",
+                "player_name": "Chase Bradley"
+              },
+              {
+                "games": 23,
+                "goals": 1,
+                "teams": "EDM",
+                "points": 0,
+                "assists": 0,
+                "year_to": "2014-15",
+                "position": "LW",
+                "year_from": "1",
+                "player_name": "Curtis Hamilton"
+              },
+              {
+                "games": 27,
+                "goals": 1,
+                "teams": "BUF",
+                "points": 0,
+                "assists": 0,
+                "year_to": "2019-20",
+                "position": "LW",
+                "year_from": "1",
+                "player_name": "Dalton Smith"
+              },
+              {
+                "games": 24,
+                "goals": 1,
+                "teams": "NJD",
+                "points": 0,
+                "assists": 0,
+                "year_to": "2024-25",
+                "position": "D",
+                "year_from": "1",
+                "player_name": "Daniil Misyul"
+              },
+              {
+                "games": 22,
+                "goals": 2,
+                "teams": "MIN",
+                "points": 0,
+                "assists": 0,
+                "year_to": "2025-26",
+                "position": "D",
+                "year_from": "2",
+                "player_name": "David Spacek"
+              },
+              {
+                "games": 21,
+                "goals": 1,
+                "teams": "PHI",
+                "points": 0,
+                "assists": 0,
+                "year_to": "2024-25",
+                "position": "RW",
+                "year_from": "1",
+                "player_name": "Devin Kaplan"
+              },
+              {
+                "games": 22,
+                "goals": 2,
+                "teams": "PIT",
+                "points": 0,
+                "assists": 0,
+                "year_to": "2014-15",
+                "position": "C",
+                "year_from": "2",
+                "player_name": "Dominik Uher"
+              },
+              {
+                "games": 22,
+                "goals": 1,
+                "teams": "LAK",
+                "points": 0,
+                "assists": 0,
+                "year_to": "2020-21",
+                "position": "C",
+                "year_from": "1",
+                "player_name": "Drake Rymsha"
+              },
+              {
+                "games": 21,
+                "goals": 1,
+                "teams": "ANA",
+                "points": 0,
+                "assists": 0,
+                "year_to": "2017-18",
+                "position": "LW",
+                "year_from": "1",
+                "player_name": "Giovanni Fiore"
+              },
+              {
+                "games": 23,
+                "goals": 2,
+                "teams": "ANA",
+                "points": 0,
+                "assists": 0,
+                "year_to": "2021-22",
+                "position": "D",
+                "year_from": "2",
+                "player_name": "Hunter Drew"
+              },
+              {
+                "games": 24,
+                "goals": 1,
+                "teams": "STL",
+                "points": 0,
+                "assists": 0,
+                "year_to": "2025-26",
+                "position": "D",
+                "year_from": "1",
+                "player_name": "Hunter Skinner"
+              },
+              {
+                "games": 19,
+                "goals": 1,
+                "teams": "ANA",
+                "points": 0,
+                "assists": 0,
+                "year_to": "2021-22",
+                "position": "RW",
+                "year_from": "1",
+                "player_name": "Jacob Perreault"
+              },
+              {
+                "games": 23,
+                "goals": 1,
+                "teams": "ANA",
+                "points": 0,
+                "assists": 0,
+                "year_to": "2014-15",
+                "position": "D",
+                "year_from": "1",
+                "player_name": "Jesse Blacker"
+              },
+              {
+                "games": 20,
+                "goals": 1,
+                "teams": "FLA",
+                "points": 0,
+                "assists": 0,
+                "year_to": "2013-14",
+                "position": "D",
+                "year_from": "1",
+                "player_name": "Jonathan Racine"
+              },
+              {
+                "games": 22,
+                "goals": 2,
+                "teams": "NSH",
+                "points": 1,
+                "assists": 0,
+                "year_to": "2012-13",
+                "position": "C",
+                "year_from": "2",
+                "player_name": "Joonas Rask"
+              },
+              {
+                "games": 23,
+                "goals": 1,
+                "teams": "VAN",
+                "points": 0,
+                "assists": 0,
+                "year_to": "2018-19",
+                "position": "D",
+                "year_from": "1",
+                "player_name": "Josh Teves"
+              },
+              {
+                "games": 32,
+                "goals": 2,
+                "teams": "NYI",
+                "points": 0,
+                "assists": 0,
+                "year_to": "2013-14",
+                "position": "RW",
+                "year_from": "2",
+                "player_name": "Justin Johnson"
+              },
+              {
+                "games": 21,
+                "goals": 2,
+                "teams": "PHI",
+                "points": 0,
+                "assists": 0,
+                "year_to": "2020-21",
+                "position": "RW",
+                "year_from": "2",
+                "player_name": "Maksim Sushko"
+              },
+              {
+                "games": 30,
+                "goals": 2,
+                "teams": "NJD",
+                "points": 1,
+                "assists": 0,
+                "year_to": "2012-13",
+                "position": "RW",
+                "year_from": "2",
+                "player_name": "Matt Anderson"
+              },
+              {
+                "games": 22,
+                "goals": 1,
+                "teams": "NYI",
+                "points": 0,
+                "assists": 0,
+                "year_to": "2010-11",
+                "position": "D",
+                "year_from": "1",
+                "player_name": "Matt Campanale"
+              },
+              {
+                "games": 22,
+                "goals": 1,
+                "teams": "BOS",
+                "points": 0,
+                "assists": 0,
+                "year_to": "2011-12",
+                "position": "C",
+                "year_from": "1",
+                "player_name": "Max Sauve"
+              },
+              {
+                "games": 24,
+                "goals": 2,
+                "teams": "FLA",
+                "points": 0,
+                "assists": 0,
+                "year_to": "2012-13",
+                "position": "D",
+                "year_from": "2",
+                "player_name": "Michael Caruso"
+              },
+              {
+                "games": 26,
+                "goals": 1,
+                "teams": "MIN",
+                "points": 0,
+                "assists": 0,
+                "year_to": "2015-16",
+                "position": "C",
+                "year_from": "1",
+                "player_name": "Michael Keränen"
+              },
+              {
+                "games": 22,
+                "goals": 1,
+                "teams": "MIN",
+                "points": 0,
+                "assists": 0,
+                "year_to": "2024-25",
+                "position": "LW",
+                "year_from": "1",
+                "player_name": "Michael Milne"
+              },
+              {
+                "games": 22,
+                "goals": 1,
+                "teams": "CGY",
+                "points": 0,
+                "assists": 0,
+                "year_to": "2017-18",
+                "position": "LW",
+                "year_from": "1",
+                "player_name": "Morgan Klimchuk"
+              },
+              {
+                "games": 23,
+                "goals": 1,
+                "teams": "SJS",
+                "points": 0,
+                "assists": 0,
+                "year_to": "2012-13",
+                "position": "D",
+                "year_from": "1",
+                "player_name": "Nicholas Petrecki"
+              },
+              {
+                "games": 25,
+                "goals": 1,
+                "teams": "MIN",
+                "points": 0,
+                "assists": 0,
+                "year_to": "2022-23",
+                "position": "RW",
+                "year_from": "1",
+                "player_name": "Nick Swaney"
+              },
+              {
+                "games": 25,
+                "goals": 1,
+                "teams": "WSH",
+                "points": 0,
+                "assists": 0,
+                "year_to": "2013-14",
+                "position": "C",
+                "year_from": "1",
+                "player_name": "Peter LeBlanc"
+              },
+              {
+                "games": 26,
+                "goals": 1,
+                "teams": "VAN",
+                "points": 0,
+                "assists": 0,
+                "year_to": "2017-18",
+                "position": "D",
+                "year_from": "1",
+                "player_name": "Philip Holm"
+              },
+              {
+                "games": 24,
+                "goals": 1,
+                "teams": "EDM",
+                "points": 0,
+                "assists": 0,
+                "year_to": "2023-24",
+                "position": "D",
+                "year_from": "1",
+                "player_name": "Philip Kemp"
+              },
+              {
+                "games": 21,
+                "goals": 2,
+                "teams": "EDM",
+                "points": 1,
+                "assists": 0,
+                "year_to": "2011-12",
+                "position": "LW",
+                "year_from": "2",
+                "player_name": "Philippe Cornet"
+              },
+              {
+                "games": 22,
+                "goals": 1,
+                "teams": "NJD",
+                "points": 0,
+                "assists": 0,
+                "year_to": "2014-15",
+                "position": "D",
+                "year_from": "1",
+                "player_name": "Raman Hrabarenka"
+              },
+              {
+                "games": 24,
+                "goals": 1,
+                "teams": "NSH",
+                "points": 0,
+                "assists": 0,
+                "year_to": "2011-12",
+                "position": "LW",
+                "year_from": "1",
+                "player_name": "Ryan Thang"
+              },
+              {
+                "games": 20,
+                "goals": 2,
+                "teams": "CBJ",
+                "points": 0,
+                "assists": 0,
+                "year_to": "2022-23",
+                "position": "D",
+                "year_from": "2",
+                "player_name": "Samuel Kňažko"
+              },
+              {
+                "games": 26,
+                "goals": 2,
+                "teams": "NJD",
+                "points": 0,
+                "assists": 0,
+                "year_to": "2023-24",
+                "position": "W",
+                "year_from": "2",
+                "player_name": "Samuel Laberge"
+              },
+              {
+                "games": 20,
+                "goals": 1,
+                "teams": "DAL",
+                "points": 0,
+                "assists": 0,
+                "year_to": "2011-12",
+                "position": "RW",
+                "year_from": "1",
+                "player_name": "Scott Glennie"
+              },
+              {
+                "games": 22,
+                "goals": 1,
+                "teams": "TOR",
+                "points": 0,
+                "assists": 0,
+                "year_to": "2022-23",
+                "position": "C",
+                "year_from": "1",
+                "player_name": "Semyon Der-Arguchintsev"
+              },
+              {
+                "games": 22,
+                "goals": 1,
+                "teams": "NYI",
+                "points": 0,
+                "assists": 0,
+                "year_to": "2010-11",
+                "position": "D",
+                "year_from": "1",
+                "player_name": "Shane Sims"
+              },
+              {
+                "games": 22,
+                "goals": 1,
+                "teams": "CHI",
+                "points": 0,
+                "assists": 0,
+                "year_to": "2012-13",
+                "position": "D",
+                "year_from": "1",
+                "player_name": "Shawn Lalonde"
+              },
+              {
+                "games": 24,
+                "goals": 1,
+                "teams": "BUF",
+                "points": 0,
+                "assists": 0,
+                "year_to": "2025-26",
+                "position": "C",
+                "year_from": "1",
+                "player_name": "Trevor Kuntar"
+              },
+              {
+                "games": 22,
+                "goals": 1,
+                "teams": "MIN",
+                "points": 0,
+                "assists": 0,
+                "year_to": "2011-12",
+                "position": "D",
+                "year_from": "1",
+                "player_name": "Tyler Cuma"
+              }
+            ]
+          }
+        }
+      ],
+      "mlbStructural": [
+        {
+          "result": {
+            "counts": {
+              "rows": 2000,
+              "bad_last_year": 0,
+              "bad_first_year": 147,
+              "backwards_years": 53,
+              "total_bases_inconsistency": 161
+            },
+            "samples": [
+              {
+                "hr": 32,
+                "tb": 90,
+                "hits": 457,
+                "games": null,
+                "teams": "BSN,CHC,CIN,NYG,SLM",
+                "doubles": 935,
+                "triples": 95,
+                "year_to": "1905",
+                "year_from": "1252",
+                "player_name": "Al Bridwell"
+              },
+              {
+                "hr": 57,
+                "tb": 109,
+                "hits": 603,
+                "games": null,
+                "teams": "BSN,NYG",
+                "doubles": 954,
+                "triples": 164,
+                "year_to": "1904",
+                "year_from": "1313",
+                "player_name": "Art Devlin"
+              },
+              {
+                "hr": 77,
+                "tb": 100,
+                "hits": 684,
+                "games": null,
+                "teams": "NYG,PHI",
+                "doubles": 1187,
+                "triples": 238,
+                "year_to": "1909",
+                "year_from": "1533",
+                "player_name": "Art Fletcher"
+              },
+              {
+                "hr": 43,
+                "tb": 113,
+                "hits": 368,
+                "games": null,
+                "teams": "BSN,CIN,NYG,PHI,PIT",
+                "doubles": 561,
+                "triples": 114,
+                "year_to": "1908",
+                "year_from": "876",
+                "player_name": "Beals Becker"
+              },
+              {
+                "hr": 57,
+                "tb": 149,
+                "hits": 521,
+                "games": null,
+                "teams": "BTT,IND,NYG,NYY",
+                "doubles": 686,
+                "triples": 169,
+                "year_to": "1912",
+                "year_from": "859",
+                "player_name": "Benny Kauff"
+              },
+              {
+                "hr": 21,
+                "tb": 21,
+                "hits": 138,
+                "games": null,
+                "teams": "BRO,CIN",
+                "doubles": 448,
+                "triples": 45,
+                "year_to": "1901",
+                "year_from": "947",
+                "player_name": "Bill Bergen"
+              },
+              {
+                "hr": 83,
+                "tb": 107,
+                "hits": 728,
+                "games": null,
+                "teams": "BTT,CHC,CLE,KCP",
+                "doubles": 1047,
+                "triples": 269,
+                "year_to": "1900",
+                "year_from": "1426",
+                "player_name": "Bill Bradley"
+              },
+              {
+                "hr": 38,
+                "tb": 88,
+                "hits": 479,
+                "games": null,
+                "teams": "DET,WSH",
+                "doubles": 783,
+                "triples": 133,
+                "year_to": "1901",
+                "year_from": "1043",
+                "player_name": "Bill Coughlin"
+              },
+              {
+                "hr": 50,
+                "tb": 96,
+                "hits": 606,
+                "games": null,
+                "teams": "BRO,BSN,NYG",
+                "doubles": 909,
+                "triples": 188,
+                "year_to": "1900",
+                "year_from": "1336",
+                "player_name": "Bill Dahlen"
+              },
+              {
+                "hr": 69,
+                "tb": 118,
+                "hits": 364,
+                "games": null,
+                "teams": "CIN,CLE,PIT",
+                "doubles": 576,
+                "triples": 128,
+                "year_to": "1905",
+                "year_from": "908",
+                "player_name": "Bill Hinchman"
+              },
+              {
+                "hr": 21,
+                "tb": 63,
+                "hits": 237,
+                "games": null,
+                "teams": "CHC,PHI,SLB",
+                "doubles": 640,
+                "triples": 86,
+                "year_to": "1909",
+                "year_from": "1035",
+                "player_name": "Bill Killefer"
+              },
+              {
+                "hr": 33,
+                "tb": 78,
+                "hits": 319,
+                "games": null,
+                "teams": "BSN,CIN,IND,NEW,NYG,NYY,PIT",
+                "doubles": 586,
+                "triples": 86,
+                "year_to": "1907",
+                "year_from": "846",
+                "player_name": "Bill McKechnie"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "limits": [
+      "No exhaustive primary-page verification for48datafiles or all production rows.",
+      "No all-game validator/database relation replay or retired/current membership audit.",
+      "Awards/F1/golf/tennis detailed ledgers inventoried only, outside the two positive source fences.",
+      "Unresolved NHL/MLB import mapping, historical GP/league conventions and undated roster conflicts remain flagged.",
+      "No data changes, permanent harnesses or negative-control repairs introduced.",
+      "Zero world_cup_player_stats rows is a counted unused table, not automatically a defect."
+    ]
+  },
+  "preservation": {
+    "files": [
+      {
+        "file": "src/data/higherLowerPlayers.ts",
+        "before": "bc322c038d2737f977e6a8c58a51943937fe9381431b0934bb896026cc7db4cb",
+        "after": "bc322c038d2737f977e6a8c58a51943937fe9381431b0934bb896026cc7db4cb",
+        "held": true
+      },
+      {
+        "file": "src/data/nflHLPlayers.ts",
+        "before": "27ffba291a32253cca09d150ec87df0deaebf5456ed03d87c3924f8dfe361ea4",
+        "after": "27ffba291a32253cca09d150ec87df0deaebf5456ed03d87c3924f8dfe361ea4",
+        "held": true
+      },
+      {
+        "file": "src/data/nflHLCategories.ts",
+        "before": "3761b86a57bc14aa46a8147f4a1a9f27e96e18980a634267c4d57ee5e194e364",
+        "after": "3761b86a57bc14aa46a8147f4a1a9f27e96e18980a634267c4d57ee5e194e364",
+        "held": true
+      },
+      {
+        "file": "src/data/cfbHLPlayers.ts",
+        "before": "d1359ac8314c754f52d73bc25e259a63402b0087cd64b82825e65d322184fef1",
+        "after": "d1359ac8314c754f52d73bc25e259a63402b0087cd64b82825e65d322184fef1",
+        "held": true
+      },
+      {
+        "file": "src/data/nbaHLPlayers.ts",
+        "before": "dcb54a10650ef18885347c53c1e459d3f2045707c917970e64de1e003329ca86",
+        "after": "dcb54a10650ef18885347c53c1e459d3f2045707c917970e64de1e003329ca86",
+        "held": true
+      },
+      {
+        "file": "src/data/mlbHLPlayers.ts",
+        "before": "d94aea0990934cccaca9bcc8b0ea34eeb7a144e36aa6dbe208e5b9714cc9a607",
+        "after": "d94aea0990934cccaca9bcc8b0ea34eeb7a144e36aa6dbe208e5b9714cc9a607",
+        "held": true
+      },
+      {
+        "file": "src/data/hockeyHLPlayers.ts",
+        "before": "3100aa396b0e0679c7100bcca25299c8e471a4e270ec7b9f67914e8fb8c0dafa",
+        "after": "3100aa396b0e0679c7100bcca25299c8e471a4e270ec7b9f67914e8fb8c0dafa",
+        "held": true
+      },
+      {
+        "file": "src/data/f1HLDrivers.ts",
+        "before": "5e9e80606dc025e75be122218a29278b9e8dc7cad3ffab0df30f08ef6ed09b3d",
+        "after": "5e9e80606dc025e75be122218a29278b9e8dc7cad3ffab0df30f08ef6ed09b3d",
+        "held": true
+      },
+      {
+        "file": "src/data/tennisHLPlayers.ts",
+        "before": "b0421159be5b994109d2131552ab59cae6483a45aebd73c926e466ce40f98e23",
+        "after": "b0421159be5b994109d2131552ab59cae6483a45aebd73c926e466ce40f98e23",
+        "held": true
+      },
+      {
+        "file": "src/data/golfLegends.ts",
+        "before": "6be125ae891a35ac51896bae9a47f128c0ce181981f31ec46394c8db330ea47c",
+        "after": "6be125ae891a35ac51896bae9a47f128c0ce181981f31ec46394c8db330ea47c",
+        "held": true
+      },
+      {
+        "file": "src/data/aflGoalKickers.ts",
+        "before": "456d2fcb8ab8d946dbf7c572f05403011cb5874a6ef033f9f90ee25df16439ae",
+        "after": "456d2fcb8ab8d946dbf7c572f05403011cb5874a6ef033f9f90ee25df16439ae",
+        "held": true
+      },
+      {
+        "file": "src/data/ufcFighters.ts",
+        "before": "6fce9eda0453fefcfc60ae96141e7f9ec156c7146d67c5bff6de6ad84c54b41d",
+        "after": "6fce9eda0453fefcfc60ae96141e7f9ec156c7146d67c5bff6de6ad84c54b41d",
+        "held": true
+      },
+      {
+        "file": "src/data/ufcChainData.ts",
+        "before": "dc29baa9cfbccf1536d9877ba9eeaeb35abf5c01a64540e11125fe01d1ba74bf",
+        "after": "dc29baa9cfbccf1536d9877ba9eeaeb35abf5c01a64540e11125fe01d1ba74bf",
+        "held": true
+      },
+      {
+        "file": "src/data/f1Drivers.ts",
+        "before": "42a8d3b07b89034999fcdd2d878502c0dd6c40312a0460b388c13b1b101ba1c2",
+        "after": "42a8d3b07b89034999fcdd2d878502c0dd6c40312a0460b388c13b1b101ba1c2",
+        "held": true
+      },
+      {
+        "file": "src/data/f1Constructors.ts",
+        "before": "7db9251baddc579fad099383931fd24640937f0bf9d48fda63baacdd8cb77b7f",
+        "after": "7db9251baddc579fad099383931fd24640937f0bf9d48fda63baacdd8cb77b7f",
+        "held": true
+      },
+      {
+        "file": "src/data/olympicsAthletes.ts",
+        "before": "b54526c744a859878aa776ebae3dcbe0161de96dd9899cd6b6477f211af8b4bd",
+        "after": "b54526c744a859878aa776ebae3dcbe0161de96dd9899cd6b6477f211af8b4bd",
+        "held": true
+      },
+      {
+        "file": "src/data/clubManagerRosters.ts",
+        "before": "bb6807b2aa74722685be21f5ccc9dd04ecb53edda1407f689af2741fc613a045",
+        "after": "bb6807b2aa74722685be21f5ccc9dd04ecb53edda1407f689af2741fc613a045",
+        "held": true
+      },
+      {
+        "file": "src/data/clubManagerEra2005.ts",
+        "before": "7164d8aecff644a920dc4f787477eba0cadb466a4b3cc9feebd0f27e2803d77b",
+        "after": "7164d8aecff644a920dc4f787477eba0cadb466a4b3cc9feebd0f27e2803d77b",
+        "held": true
+      },
+      {
+        "file": "src/data/clubManagerEra2010.ts",
+        "before": "54391da1e9f68c8358173f93657b839f9de922be4c64ee4a5a041bfdeaf9d864",
+        "after": "54391da1e9f68c8358173f93657b839f9de922be4c64ee4a5a041bfdeaf9d864",
+        "held": true
+      },
+      {
+        "file": "src/data/clubManagerEra2015.ts",
+        "before": "18552838864b9f5aa190f37b13cee008a9b578f0906e07d8cdf46e5160c1f76f",
+        "after": "18552838864b9f5aa190f37b13cee008a9b578f0906e07d8cdf46e5160c1f76f",
+        "held": true
+      },
+      {
+        "file": "src/data/clubManagerFinalTables2025_26.ts",
+        "before": "5389301e300019a665f0122ce2a978d7ff951cc1e029cc5126a4ef09f8b98e13",
+        "after": "5389301e300019a665f0122ce2a978d7ff951cc1e029cc5126a4ef09f8b98e13",
+        "held": true
+      },
+      {
+        "file": "src/data/frontOfficePlayers.ts",
+        "before": "c87d0a4dcc72e439ec0c82e9df0ebefbe2d938ac03c2bcbbcfd5d3ad37b4d2e3",
+        "after": "c87d0a4dcc72e439ec0c82e9df0ebefbe2d938ac03c2bcbbcfd5d3ad37b4d2e3",
+        "held": true
+      },
+      {
+        "file": "src/data/mlbFoPlayers.ts",
+        "before": "3fd674a943145e90ea0e8b45012160448dfde4d0bf4eaaffa51d74ff5bbec35c",
+        "after": "3fd674a943145e90ea0e8b45012160448dfde4d0bf4eaaffa51d74ff5bbec35c",
+        "held": true
+      },
+      {
+        "file": "src/data/nhlFoPlayers.ts",
+        "before": "18ef7111bdcee110a575e2ba5f76698ff6d4f4c1bfb81d36ebfaedabac5e9929",
+        "after": "18ef7111bdcee110a575e2ba5f76698ff6d4f4c1bfb81d36ebfaedabac5e9929",
+        "held": true
+      },
+      {
+        "file": "src/data/nbaStats.ts",
+        "before": "2c605a1d13faad92a166b1cf2ba57393599c075080cc2a06ca75bca33ff94962",
+        "after": "2c605a1d13faad92a166b1cf2ba57393599c075080cc2a06ca75bca33ff94962",
+        "held": true
+      },
+      {
+        "file": "src/data/players.ts",
+        "before": "fec7c1bf3c20f971e9f1d55481e71fad14fd3de69f9b7d5159333233afddff75",
+        "after": "fec7c1bf3c20f971e9f1d55481e71fad14fd3de69f9b7d5159333233afddff75",
+        "held": true
+      },
+      {
+        "file": "src/data/careerPlayers.ts",
+        "before": "3de59c238092c08a848fb95b5aedd804d737b06a7cdb1210e6163c9077ff5bda",
+        "after": "3de59c238092c08a848fb95b5aedd804d737b06a7cdb1210e6163c9077ff5bda",
+        "held": true
+      },
+      {
+        "file": "src/data/baseballCareerPlayers.ts",
+        "before": "36936b289c4a48af94789e312b7833ad3ea857f52bd6f0837f27417f5c6f9cc5",
+        "after": "36936b289c4a48af94789e312b7833ad3ea857f52bd6f0837f27417f5c6f9cc5",
+        "held": true
+      },
+      {
+        "file": "src/data/hockeyCareerPlayers.ts",
+        "before": "42517a4e745650126539f048b2843a6d14d38c334d0fe11d451754d758acdd5f",
+        "after": "42517a4e745650126539f048b2843a6d14d38c334d0fe11d451754d758acdd5f",
+        "held": true
+      },
+      {
+        "file": "src/data/nbaCareerPlayers.ts",
+        "before": "07cb63fe3a6afff5e489b231de075918eeae9a90709ad45a200d6a7ef40a6bd1",
+        "after": "07cb63fe3a6afff5e489b231de075918eeae9a90709ad45a200d6a7ef40a6bd1",
+        "held": true
+      },
+      {
+        "file": "src/data/nflCareerPlayers.ts",
+        "before": "943468b27f85d6b31f3e17d9d760f685ae869fe0caf56d675d8ee8f80c394c12",
+        "after": "943468b27f85d6b31f3e17d9d760f685ae869fe0caf56d675d8ee8f80c394c12",
+        "held": true
+      },
+      {
+        "file": "src/data/transferPathPuzzles.ts",
+        "before": "bafed3a4bea6ecf6131ecd6d71bff5cff955cb6faa585d6d07032bc670b39122",
+        "after": "bafed3a4bea6ecf6131ecd6d71bff5cff955cb6faa585d6d07032bc670b39122",
+        "held": true
+      },
+      {
+        "file": "src/data/transferPathVerifiedActive.ts",
+        "before": "cac501009c3ae53f34a0fb78a072c44a20915798d23157f9855361a6f3d8970d",
+        "after": "cac501009c3ae53f34a0fb78a072c44a20915798d23157f9855361a6f3d8970d",
+        "held": true
+      },
+      {
+        "file": "src/data/timelinePlayers.ts",
+        "before": "be465eb8101a163f94839e2ffd388e584c46ccc2c74063d3bb34d2a207a6bd88",
+        "after": "be465eb8101a163f94839e2ffd388e584c46ccc2c74063d3bb34d2a207a6bd88",
+        "held": true
+      },
+      {
+        "file": "src/data/nationalPools.ts",
+        "before": "53cf961cfdd218435bd1bb1e3a753c668c16d6c3dfcd5474c98f3d814b43788a",
+        "after": "53cf961cfdd218435bd1bb1e3a753c668c16d6c3dfcd5474c98f3d814b43788a",
+        "held": true
+      },
+      {
+        "file": "src/data/hofPlayers.ts",
+        "before": "5ea70152432890a47635d1a0239701ffc3b7e9484d2e9d4f4a4d9c7f92511570",
+        "after": "5ea70152432890a47635d1a0239701ffc3b7e9484d2e9d4f4a4d9c7f92511570",
+        "held": true
+      },
+      {
+        "file": "src/data/nflCoaches.ts",
+        "before": "120d296fb849e115b5bcbd98fc0e22198c5bb6fc9f29fbfcb8581e4eed4a49e3",
+        "after": "120d296fb849e115b5bcbd98fc0e22198c5bb6fc9f29fbfcb8581e4eed4a49e3",
+        "held": true
+      },
+      {
+        "file": "src/data/nflTeamFacts.ts",
+        "before": "2154ac1ffd0800a70bb0a0e2793859a5bfb9b58bf031a19901e481fa1ca47dfc",
+        "after": "2154ac1ffd0800a70bb0a0e2793859a5bfb9b58bf031a19901e481fa1ca47dfc",
+        "held": true
+      },
+      {
+        "file": "src/data/playerNationalities.ts",
+        "before": "f3c0093b642707d147acc2256b5e0cacce64c1a00cad755afd287649b5b85938",
+        "after": "f3c0093b642707d147acc2256b5e0cacce64c1a00cad755afd287649b5b85938",
+        "held": true
+      },
+      {
+        "file": "src/data/nbaPerfectLineupPool.ts",
+        "before": "b82ec2cae74ecc4f522fc6c7d72d98ecadc795bfb18524d6f9b645be51ae5894",
+        "after": "b82ec2cae74ecc4f522fc6c7d72d98ecadc795bfb18524d6f9b645be51ae5894",
+        "held": true
+      },
+      {
+        "file": "src/data/nhlPerfectLineupPool.ts",
+        "before": "1db2f47001d42aea677c53abb9e55b5b99ca2e37cf1c6074e1dc0ae66d8bd4d6",
+        "after": "1db2f47001d42aea677c53abb9e55b5b99ca2e37cf1c6074e1dc0ae66d8bd4d6",
+        "held": true
+      },
+      {
+        "file": "src/data/f1PerfectLineupPool.ts",
+        "before": "49d99072f7ca5516c6ae09fb7c25a80d9e9f2ddc56a327df13d3e2d449453929",
+        "after": "49d99072f7ca5516c6ae09fb7c25a80d9e9f2ddc56a327df13d3e2d449453929",
+        "held": true
+      },
+      {
+        "file": "src/data/conquestData.ts",
+        "before": "00239f46a9a403c35e566d239245d0fd905a43ea2071f8d2d1009861e5e668de",
+        "after": "00239f46a9a403c35e566d239245d0fd905a43ea2071f8d2d1009861e5e668de",
+        "held": true
+      },
+      {
+        "file": "src/data/conquestDataNba.ts",
+        "before": "89117a08d182fe4f92da71f442883be8a6fa7985630d74a41d1f1131560d7ef5",
+        "after": "89117a08d182fe4f92da71f442883be8a6fa7985630d74a41d1f1131560d7ef5",
+        "held": true
+      },
+      {
+        "file": "src/data/conquestDataMlb.ts",
+        "before": "b29a4344b521a370f44b0991acd53be484a45432afefa65cdafe475afdb8511c",
+        "after": "b29a4344b521a370f44b0991acd53be484a45432afefa65cdafe475afdb8511c",
+        "held": true
+      },
+      {
+        "file": "src/data/conquestDataNhl.ts",
+        "before": "d309d3b31ac2acfe6ef5965e878de2e0dc7463140ff87c147b60bf3ee9d02681",
+        "after": "d309d3b31ac2acfe6ef5965e878de2e0dc7463140ff87c147b60bf3ee9d02681",
+        "held": true
+      },
+      {
+        "file": "src/data/notCurrentPlayers.ts",
+        "before": "254a39991e9c1254b4fcf56058d99c144e6bf763099c61eb9bc60325e1a7317e",
+        "after": "254a39991e9c1254b4fcf56058d99c144e6bf763099c61eb9bc60325e1a7317e",
+        "held": true
+      },
+      {
+        "file": "src/data/wc2026Results.ts",
+        "before": "1cc371a2c2460b6b9d838a0f63335a47482744adab776aa9946723534b10cc97",
+        "after": "1cc371a2c2460b6b9d838a0f63335a47482744adab776aa9946723534b10cc97",
+        "held": true
+      }
+    ],
+    "ledgers": [
+      {
+        "file": "scripts/data/ballonDorVerified2026-09.json",
+        "before": "5ae3c460d57ffabb514c333f7b81b894b62badc9f26545461ac191398c91a0f8",
+        "after": "5ae3c460d57ffabb514c333f7b81b894b62badc9f26545461ac191398c91a0f8",
+        "held": true
+      },
+      {
+        "file": "scripts/data/f1ChampionsVerified2026-09.json",
+        "before": "93fda500c21a876c4b43e716241652d90ffbd3efd89a3e97e5b03a3c7b8f85f7",
+        "after": "93fda500c21a876c4b43e716241652d90ffbd3efd89a3e97e5b03a3c7b8f85f7",
+        "held": true
+      },
+      {
+        "file": "scripts/data/golfMajorsVerified2026-09.json",
+        "before": "79a1b78dbe1ff18d00340f61d1bc487daef99a43f1327eba061018d165623566",
+        "after": "79a1b78dbe1ff18d00340f61d1bc487daef99a43f1327eba061018d165623566",
+        "held": true
+      },
+      {
+        "file": "scripts/data/heismanVerified2026-09.json",
+        "before": "e32872e6cd919547bbdfa8b10e5c5e701b96d53e42434df197e4fddb1e4acd1d",
+        "after": "e32872e6cd919547bbdfa8b10e5c5e701b96d53e42434df197e4fddb1e4acd1d",
+        "held": true
+      },
+      {
+        "file": "scripts/data/mlbHigherLowerVerified2026-09.json",
+        "before": "ebe6ca79db8a5c536460ebabc3e769cecc1ab35dfbeaac12e8e885358afd91cc",
+        "after": "ebe6ca79db8a5c536460ebabc3e769cecc1ab35dfbeaac12e8e885358afd91cc",
+        "held": true
+      },
+      {
+        "file": "scripts/data/nascarChampionsVerified2026-09.json",
+        "before": "9358f2b2bef86137ddcf77cf1e12e030f8f49fd5c20fba60f39df333d1735a8c",
+        "after": "9358f2b2bef86137ddcf77cf1e12e030f8f49fd5c20fba60f39df333d1735a8c",
+        "held": true
+      },
+      {
+        "file": "scripts/data/nbaHigherLowerVerified2026-09.json",
+        "before": "82bbb6516379c1e281fdb6cdb82efbe04ce22a85c2617a113cc183bc05c1eb0d",
+        "after": "82bbb6516379c1e281fdb6cdb82efbe04ce22a85c2617a113cc183bc05c1eb0d",
+        "held": true
+      },
+      {
+        "file": "scripts/data/nflHigherLowerVerified2026-09.json",
+        "before": "290a5da35426775fc99e7a7401ae15a6fdfc1165ef01872b8da9ae0fa18251ae",
+        "after": "290a5da35426775fc99e7a7401ae15a6fdfc1165ef01872b8da9ae0fa18251ae",
+        "held": true
+      },
+      {
+        "file": "scripts/data/nhlHigherLowerVerified2026-09.json",
+        "before": "dab0b54d8e6c22f105d443a27cb1ae048bf1a59887c2445cad461fcebcf594be",
+        "after": "dab0b54d8e6c22f105d443a27cb1ae048bf1a59887c2445cad461fcebcf594be",
+        "held": true
+      },
+      {
+        "file": "scripts/data/rosterConfirmation2026.json",
+        "before": "f2b48f7142b4b6336a9cfb9c595c25c427de462f86c76878f1ed38b8ea2dbde4",
+        "after": "f2b48f7142b4b6336a9cfb9c595c25c427de462f86c76878f1ed38b8ea2dbde4",
+        "held": true
+      },
+      {
+        "file": "scripts/data/soccerAwardsVerified2026-09.json",
+        "before": "b8d4373c61c43c8445818b14bd53ce8b831e8f95bd0551a8c322d990c401066a",
+        "after": "b8d4373c61c43c8445818b14bd53ce8b831e8f95bd0551a8c322d990c401066a",
+        "held": true
+      },
+      {
+        "file": "scripts/data/sportsFactsVerified2026-09.json",
+        "before": "ee678703612b873b93231a860cc72a1693c0edaf28a62251ac0a341a17a05b97",
+        "after": "ee678703612b873b93231a860cc72a1693c0edaf28a62251ac0a341a17a05b97",
+        "held": true
+      },
+      {
+        "file": "scripts/data/staleSweep2026.json",
+        "before": "b3ac3566724cff7d9f44c88153ce018a7de2b19c39cb649a52bd1f49ed1d140b",
+        "after": "b3ac3566724cff7d9f44c88153ce018a7de2b19c39cb649a52bd1f49ed1d140b",
+        "held": true
+      },
+      {
+        "file": "scripts/data/tennisHigherLowerVerified2026-09.json",
+        "before": "8487b0a44525d60a7eb50abfc9af5115dde327cee9b7b94a450330d06e1c7e76",
+        "after": "8487b0a44525d60a7eb50abfc9af5115dde327cee9b7b94a450330d06e1c7e76",
+        "held": true
+      },
+      {
+        "file": "scripts/data/tennisSlamsVerified2026-09.json",
+        "before": "2d1c80e0b1cc0a747c9aadd6c41c658b1ace529e321ce21a92aa9ee1b14dbc9d",
+        "after": "2d1c80e0b1cc0a747c9aadd6c41c658b1ace529e321ce21a92aa9ee1b14dbc9d",
+        "held": true
+      },
+      {
+        "file": "scripts/data/triviaFactsVerified2026-09.json",
+        "before": "850ba42deac0f0dcd557efb2b4b084e451830f8c0fcd77d7b3e4d714ba0e620c",
+        "after": "850ba42deac0f0dcd557efb2b4b084e451830f8c0fcd77d7b3e4d714ba0e620c",
+        "held": true
+      }
+    ],
+    "allHeld": true
+  },
+  "evidence": [
+    "local-inventory.json",
+    "local-rows.json",
+    "database-read-receipt-coverage.json",
+    "nhl-malformed-rows.json",
+    "mlb-malformed-rows.json",
+    "primary-api-receipt.json",
+    "mlb-primary-api-receipt.json"
+  ]
+}

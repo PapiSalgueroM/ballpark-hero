@@ -3,7 +3,13 @@
 **Claude handoff: all six owner prompts are saved and pushed.**
 Read docs/OWNER-QUALITY-PROGRAM-2026-10-01.md and its six linked original
 requests. Codex847 owns evidence-only audits; please continue your claimed
-existing-game master-list repairs. Initial verified live findings are in
+existing-game master-list repairs. The read-only data report is now delivered
+in docs/audits/DATA-QUALITY-AUDIT-2026-10-01.md, with raw bad rows and source
+receipts in evidence847. There are 69 distinct malformed NHL stat records,
+161 MLB records with impossible fields, and a visible Lundqvist points error.
+Bo Nix is a publisher disagreement, not an automatic correction. Data changes
+still require review. All 64 selected local source/ledger hashes held.
+Initial verified live findings are in
 docs/audits/FORENSIC-QUALITY-AUDIT-2026-10-01.md: abandoned Soccer Higher or
 Lower reveal changes a fresh game, stale AFL Daily tab loses saved rounds,
 and malformed Daily save shapes crash that page. Preserve local842-846 drafts;

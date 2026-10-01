@@ -9,6 +9,17 @@ deployment changes will be made. Report verified defects with reproduction
 steps, distinguish source checks from browser play, and state coverage gaps.
 Next free round848. Earlier active implementation notes below are historical.
 
+Evidence delivered: 174 mounted live pages at 320px, the full 193-row route
+inventory, nine actual ten-round Daily completions, four shared UX defects,
+and the read-only data-quality report. The data lane found 69 overlapping NHL
+structural corruption records, 161 MLB corruption records and Lundqvist's
+displayed 46 points versus two-source 27. Bo Nix remains a source disagreement.
+22 production datasets, 48 local data files and 16 ledgers were inventoried;
+all 64 selected local RAW hashes held. Existing 31 Higher or Lower checks and
+10 sports-facts sections passed, but those do not verify every sports fact.
+No permanent tests or production data corrections were added. Simulation and
+broader gameplay evidence are still in progress, not credited as complete.
+
 ## Owner priority, clarified 2026-10-01
 
 AdSense approval comes first. Existing games must then have correct data and
