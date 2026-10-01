@@ -1,5 +1,14 @@
 # Project state
 
+## IN PROGRESS 2026-10-01: F1 Driver Search keyboard suggestions
+
+805 fixes the actual ArrowDown highlight reset in the isolated search component,
+with local visible selection, readable44px choices, combobox semantics and held-key
+protection. Original names/matching/topten order/exclusions/callback fallback stay
+held. Exact four-file ownership and outcome/control/native/App gates are on WORKBOARD.
+802 corrects a measured focused-target visibility case before its final recapture;
+803 is frozen for production proof. The older413 regression remains running.
+Next free806; all Claude reservations stand.
 ## ACCEPTED 2026-10-01: NBA Stat Line exposes every matching season
 
 801 adds truthful ten-season expansions, full names/44px focusable controls and

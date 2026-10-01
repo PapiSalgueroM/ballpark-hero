@@ -1,5 +1,23 @@
 # Work board
 
+**2026-10-01, Codex805 CLAIMED: F1 Driver Search keyboard suggestions.**
+The actual search rebuilds its driver array on every render, causing the suggestion
+reset effect to undo ArrowDown. Own only src/components/f1-driver/F1DriverSearch.tsx,
+new F1DriverSearchNavigation.module.css beside it, src/test/f1DriverSearchNavigation.test.tsx
+and scripts/simF1DriverSearchNavigation.mjs. Memoize the existing names for the current
+puzzle, preserve the exact matching/order/ten-result limit/exclusions/raw-name fallback,
+and make keyboard selection visible in the local list with readable44px choices and
+correct combobox semantics. Keep held-key submits quiet and preserve native focus.
+No driver data, puzzle helper, hook, Board, Page, real stats or scoring changes.
+Verify actual component/helper ArrowDown to third choice plus Enter, ArrowUp/Escape,
+query/guessed resets, original ordered matches and exact callback names. Require
+an effective original-array reset control and offscreen-row control with independent
+matching/callback baselines, then320/390/430/1440 native motion contexts and final
+production App proof. Root owns Git/docs/isolated build outputs; builder owns four
+files. Master build spec96/97, original master list F1 game accessibility. Claude700
+metadata,718 rotation and733/734 data remain reserved.802 measured focus correction
+and803 final production acceptance continue. The older immutable413 run is pending.
+This claim is pushed before implementation. Next free806.
 **2026-10-01, Codex801 NBA season picker ACCEPTED.**
 Every eligible name-match season is now reachable through explicit ten-season
 expansions using the original helper's order, eligibility and exclusions. Counts
