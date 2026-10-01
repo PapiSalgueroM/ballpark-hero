@@ -1,0 +1,2526 @@
+{
+ "read": "2026-10-01",
+ "week": 4,
+ "what": "Every man on an NFL club's active, reserve or practice squad list on the record (scripts/data/nflRosters2026.json) who is not in NFL Front Office, and why. Written by scripts/genFrontOfficeRoster.mjs.",
+ "count": 359,
+ "byReason": {
+  "a kicker, punter or long snapper": 105,
+  "on a reserve list and not one of the club's fifteen starters": 246,
+  "no usable birth date in the release, so no real age": 8
+ },
+ "leftOut": [
+  {
+   "team": "ARI",
+   "name": "Blake Gillikin",
+   "pos": "P",
+   "status": "ACT",
+   "reason": "a kicker, punter or long snapper: the game has no position for them yet"
+  },
+  {
+   "team": "ARI",
+   "name": "Casey Kreiter",
+   "pos": "LS",
+   "status": "ACT",
+   "reason": "a kicker, punter or long snapper: the game has no position for them yet"
+  },
+  {
+   "team": "ARI",
+   "name": "Chad Ryland",
+   "pos": "K",
+   "status": "ACT",
+   "reason": "a kicker, punter or long snapper: the game has no position for them yet"
+  },
+  {
+   "team": "ARI",
+   "name": "Chase Bisontis",
+   "pos": "OL",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "ARI",
+   "name": "Jameson Geers",
+   "pos": "TE",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "ARI",
+   "name": "Joey Blount",
+   "pos": "DB",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "ARI",
+   "name": "Kaleb Proctor",
+   "pos": "DL",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "ARI",
+   "name": "Kitan Crawford",
+   "pos": "DB",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "ARI",
+   "name": "Tip Reiman",
+   "pos": "TE",
+   "status": "RES",
+   "reason": "on a reserve list (R04) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "ARI",
+   "name": "James Conner",
+   "pos": "RB",
+   "status": "RES",
+   "reason": "on a reserve list (R48) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "ARI",
+   "name": "Zachary Carter",
+   "pos": "DL",
+   "status": "RES",
+   "reason": "on a reserve list (R48) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "ATL",
+   "name": "Jake Bailey",
+   "pos": "P",
+   "status": "ACT",
+   "reason": "a kicker, punter or long snapper: the game has no position for them yet"
+  },
+  {
+   "team": "ATL",
+   "name": "Liam McCullough",
+   "pos": "LS",
+   "status": "ACT",
+   "reason": "a kicker, punter or long snapper: the game has no position for them yet"
+  },
+  {
+   "team": "ATL",
+   "name": "Nick Folk",
+   "pos": "K",
+   "status": "ACT",
+   "reason": "a kicker, punter or long snapper: the game has no position for them yet"
+  },
+  {
+   "team": "ATL",
+   "name": "Cameron Williams",
+   "pos": "OL",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "ATL",
+   "name": "Da'Shawn Hand",
+   "pos": "DL",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "ATL",
+   "name": "JD Bertrand",
+   "pos": "LB",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "ATL",
+   "name": "Trey Sermon",
+   "pos": "RB",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "ATL",
+   "name": "DeAngelo Malone",
+   "pos": "LB",
+   "status": "RES",
+   "reason": "on a reserve list (R04) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "ATL",
+   "name": "Storm Norton",
+   "pos": "OL",
+   "status": "RES",
+   "reason": "on a reserve list (R04) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "ATL",
+   "name": "Anterio Thompson",
+   "pos": "DL",
+   "status": "RES",
+   "reason": "on a reserve list (R05) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "ATL",
+   "name": "Beaux Collins",
+   "pos": "WR",
+   "status": "RES",
+   "reason": "on a reserve list (R48) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "BAL",
+   "name": "Nick Moore",
+   "pos": "LS",
+   "status": "ACT",
+   "reason": "a kicker, punter or long snapper: the game has no position for them yet"
+  },
+  {
+   "team": "BAL",
+   "name": "Ryan Eckley",
+   "pos": "P",
+   "status": "ACT",
+   "reason": "a kicker, punter or long snapper: the game has no position for them yet"
+  },
+  {
+   "team": "BAL",
+   "name": "Tyler Loop",
+   "pos": "K",
+   "status": "ACT",
+   "reason": "a kicker, punter or long snapper: the game has no position for them yet"
+  },
+  {
+   "team": "BAL",
+   "name": "Danny Pinter",
+   "pos": "OL",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "BAL",
+   "name": "Ja'Kobi Lane",
+   "pos": "WR",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "BAL",
+   "name": "Jahquez Robinson",
+   "pos": "DB",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "BAL",
+   "name": "Skylar Thompson",
+   "pos": "QB",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "BAL",
+   "name": "T.J. Tampa",
+   "pos": "DB",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "BAL",
+   "name": "Adam Randall",
+   "pos": "RB",
+   "status": "RES",
+   "reason": "on a reserve list (R48) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "BAL",
+   "name": "Bilhal Kone",
+   "pos": "DB",
+   "status": "RES",
+   "reason": "on a reserve list (R48) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "BUF",
+   "name": "Reid Ferguson",
+   "pos": "LS",
+   "status": "ACT",
+   "reason": "a kicker, punter or long snapper: the game has no position for them yet"
+  },
+  {
+   "team": "BUF",
+   "name": "Tommy Doman Jr.",
+   "pos": "P",
+   "status": "ACT",
+   "reason": "a kicker, punter or long snapper: the game has no position for them yet"
+  },
+  {
+   "team": "BUF",
+   "name": "Tyler Bass",
+   "pos": "K",
+   "status": "ACT",
+   "reason": "a kicker, punter or long snapper: the game has no position for them yet"
+  },
+  {
+   "team": "BUF",
+   "name": "Jordan Hancock",
+   "pos": "DB",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "BUF",
+   "name": "Tyrell Shavers",
+   "pos": "WR",
+   "status": "RES",
+   "reason": "on a reserve list (R04) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "BUF",
+   "name": "Dorian Strong",
+   "pos": "DB",
+   "status": "RES",
+   "reason": "on a reserve list (R05) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "BUF",
+   "name": "Zane Durant",
+   "pos": "DL",
+   "status": "RES",
+   "reason": "on a reserve list (R48) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "CAR",
+   "name": "J.J. Jansen",
+   "pos": "LS",
+   "status": "ACT",
+   "reason": "a kicker, punter or long snapper: the game has no position for them yet"
+  },
+  {
+   "team": "CAR",
+   "name": "Ryan Fitzgerald",
+   "pos": "K",
+   "status": "ACT",
+   "reason": "a kicker, punter or long snapper: the game has no position for them yet"
+  },
+  {
+   "team": "CAR",
+   "name": "Sam Martin",
+   "pos": "P",
+   "status": "ACT",
+   "reason": "a kicker, punter or long snapper: the game has no position for them yet"
+  },
+  {
+   "team": "CAR",
+   "name": "Brady Christensen",
+   "pos": "OL",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "CAR",
+   "name": "Chris Brazzell II",
+   "pos": "WR",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "CAR",
+   "name": "Jonathon Brooks",
+   "pos": "RB",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "CAR",
+   "name": "Mike Jackson",
+   "pos": "DB",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "CAR",
+   "name": "Nic Scourton",
+   "pos": "LB",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "CAR",
+   "name": "Taylor Moton",
+   "pos": "OL",
+   "status": "RES",
+   "reason": "on a reserve list (R27) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "CAR",
+   "name": "Bam Martin-Scott",
+   "pos": "LB",
+   "status": "RES",
+   "reason": "on a reserve list (R48) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "CAR",
+   "name": "Trevor Etienne",
+   "pos": "RB",
+   "status": "RES",
+   "reason": "on a reserve list (R48) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "CHI",
+   "name": "Beau Gardner",
+   "pos": "LS",
+   "status": "DEV",
+   "reason": "a kicker, punter or long snapper: the game has no position for them yet"
+  },
+  {
+   "team": "CHI",
+   "name": "Cairo Santos",
+   "pos": "K",
+   "status": "ACT",
+   "reason": "a kicker, punter or long snapper: the game has no position for them yet"
+  },
+  {
+   "team": "CHI",
+   "name": "Scott Daly",
+   "pos": "LS",
+   "status": "ACT",
+   "reason": "a kicker, punter or long snapper: the game has no position for them yet"
+  },
+  {
+   "team": "CHI",
+   "name": "Tory Taylor",
+   "pos": "P",
+   "status": "ACT",
+   "reason": "a kicker, punter or long snapper: the game has no position for them yet"
+  },
+  {
+   "team": "CHI",
+   "name": "Brittain Brown",
+   "pos": "RB",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "CHI",
+   "name": "Coby Bryant",
+   "pos": "DB",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "CHI",
+   "name": "Dallis Flowers",
+   "pos": "DB",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "CHI",
+   "name": "Hayden Large",
+   "pos": "TE",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "CHI",
+   "name": "Jonathan Garvin",
+   "pos": "LB",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "CHI",
+   "name": "Nephi Sewell",
+   "pos": "LB",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "CHI",
+   "name": "Nikola Kalinic",
+   "pos": "TE",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "CHI",
+   "name": "Ruben Hyppolite II",
+   "pos": "LB",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "CHI",
+   "name": "Tony Fields II",
+   "pos": "LB",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "CHI",
+   "name": "Noah Sewell",
+   "pos": "LB",
+   "status": "RES",
+   "reason": "on a reserve list (R04) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "CHI",
+   "name": "Shemar Turner",
+   "pos": "DL",
+   "status": "RES",
+   "reason": "on a reserve list (R04) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "CIN",
+   "name": "Evan McPherson",
+   "pos": "K",
+   "status": "ACT",
+   "reason": "a kicker, punter or long snapper: the game has no position for them yet"
+  },
+  {
+   "team": "CIN",
+   "name": "Ryan Rehkow",
+   "pos": "P",
+   "status": "ACT",
+   "reason": "a kicker, punter or long snapper: the game has no position for them yet"
+  },
+  {
+   "team": "CIN",
+   "name": "William Wagner",
+   "pos": "LS",
+   "status": "ACT",
+   "reason": "a kicker, punter or long snapper: the game has no position for them yet"
+  },
+  {
+   "team": "CIN",
+   "name": "Jalen Davis",
+   "pos": "DB",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "CIN",
+   "name": "Brian Parker II",
+   "pos": "OL",
+   "status": "RES",
+   "reason": "on a reserve list (R48) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "CIN",
+   "name": "Ja'Sir Taylor",
+   "pos": "DB",
+   "status": "RES",
+   "reason": "on a reserve list (R48) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "CLE",
+   "name": "Andre Szmyt",
+   "pos": "K",
+   "status": "ACT",
+   "reason": "a kicker, punter or long snapper: the game has no position for them yet"
+  },
+  {
+   "team": "CLE",
+   "name": "Corey Bojorquez",
+   "pos": "P",
+   "status": "ACT",
+   "reason": "a kicker, punter or long snapper: the game has no position for them yet"
+  },
+  {
+   "team": "CLE",
+   "name": "Rex Sunahara",
+   "pos": "LS",
+   "status": "ACT",
+   "reason": "a kicker, punter or long snapper: the game has no position for them yet"
+  },
+  {
+   "team": "CLE",
+   "name": "Wes Pahl",
+   "pos": "P",
+   "status": "DEV",
+   "reason": "a kicker, punter or long snapper: the game has no position for them yet"
+  },
+  {
+   "team": "CLE",
+   "name": "Alex Wright",
+   "pos": "DL",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "CLE",
+   "name": "Damarri Mathis",
+   "pos": "DB",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "CLE",
+   "name": "Edefuan Ulofoshio",
+   "pos": "LB",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "CLE",
+   "name": "Elijah Chatman",
+   "pos": "DL",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "CLE",
+   "name": "Kalia Davis",
+   "pos": "DL",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "CLE",
+   "name": "Jeremiah Owusu-Koramoah",
+   "pos": "LB",
+   "status": "RES",
+   "reason": "on a reserve list (R04) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "CLE",
+   "name": "Dillon Gabriel",
+   "pos": "QB",
+   "status": "RES",
+   "reason": "on a reserve list (R48) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "CLE",
+   "name": "Joe Royer",
+   "pos": "TE",
+   "status": "RES",
+   "reason": "on a reserve list (R49) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "DAL",
+   "name": "Brandon Aubrey",
+   "pos": "K",
+   "status": "ACT",
+   "reason": "a kicker, punter or long snapper: the game has no position for them yet"
+  },
+  {
+   "team": "DAL",
+   "name": "Bryan Anger",
+   "pos": "P",
+   "status": "ACT",
+   "reason": "a kicker, punter or long snapper: the game has no position for them yet"
+  },
+  {
+   "team": "DAL",
+   "name": "Trent Sieg",
+   "pos": "LS",
+   "status": "ACT",
+   "reason": "a kicker, punter or long snapper: the game has no position for them yet"
+  },
+  {
+   "team": "DAL",
+   "name": "DJ Rogers",
+   "pos": "TE",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "DAL",
+   "name": "Jonathan Bullard",
+   "pos": "DL",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "DAL",
+   "name": "Kelvin Gilliam",
+   "pos": "DL",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "DAL",
+   "name": "Malik Davis",
+   "pos": "RB",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "DAL",
+   "name": "Matt Hennessy",
+   "pos": "OL",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "DAL",
+   "name": "P.J. Locke",
+   "pos": "DB",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "DAL",
+   "name": "Princeton Fant",
+   "pos": "TE",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "DAL",
+   "name": "Tyler Smith",
+   "pos": "OL",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "DAL",
+   "name": "Devin Moore",
+   "pos": "DB",
+   "status": "RES",
+   "reason": "on a reserve list (R48) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "DAL",
+   "name": "Marist Liufau",
+   "pos": "LB",
+   "status": "RES",
+   "reason": "on a reserve list (R48) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "DEN",
+   "name": "Jeremy Crawshaw",
+   "pos": "P",
+   "status": "ACT",
+   "reason": "a kicker, punter or long snapper: the game has no position for them yet"
+  },
+  {
+   "team": "DEN",
+   "name": "Mitchell Fraboni",
+   "pos": "LS",
+   "status": "ACT",
+   "reason": "a kicker, punter or long snapper: the game has no position for them yet"
+  },
+  {
+   "team": "DEN",
+   "name": "Wil Lutz",
+   "pos": "K",
+   "status": "ACT",
+   "reason": "a kicker, punter or long snapper: the game has no position for them yet"
+  },
+  {
+   "team": "DEN",
+   "name": "Jonah Coleman",
+   "pos": "RB",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "DEN",
+   "name": "Levelle Bailey",
+   "pos": "LB",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "DEN",
+   "name": "Matt Henningsen",
+   "pos": "DL",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "DEN",
+   "name": "Michael Deiter",
+   "pos": "OL",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "DEN",
+   "name": "Nick Gargiulo",
+   "pos": "OL",
+   "status": "RES",
+   "reason": "on a reserve list (R04) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "DEN",
+   "name": "Caleb Lohner",
+   "pos": "TE",
+   "status": "RES",
+   "reason": "on a reserve list (R48) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "DEN",
+   "name": "Frank Crum",
+   "pos": "OL",
+   "status": "RES",
+   "reason": "on a reserve list (R48) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "DET",
+   "name": "Hogan Hatten",
+   "pos": "LS",
+   "status": "ACT",
+   "reason": "a kicker, punter or long snapper: the game has no position for them yet"
+  },
+  {
+   "team": "DET",
+   "name": "Jack Fox",
+   "pos": "P",
+   "status": "ACT",
+   "reason": "a kicker, punter or long snapper: the game has no position for them yet"
+  },
+  {
+   "team": "DET",
+   "name": "Jake Bates",
+   "pos": "K",
+   "status": "ACT",
+   "reason": "a kicker, punter or long snapper: the game has no position for them yet"
+  },
+  {
+   "team": "DET",
+   "name": "Lawrence Keys",
+   "pos": "WR",
+   "status": "DEV",
+   "reason": "no usable birth date in the release, so no real age"
+  },
+  {
+   "team": "DET",
+   "name": "Avonte Maddox",
+   "pos": "DB",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "DET",
+   "name": "Damone Clark",
+   "pos": "LB",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "DET",
+   "name": "Kendrick Law",
+   "pos": "WR",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "DET",
+   "name": "Payton Turner",
+   "pos": "DL",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "DET",
+   "name": "Thomas Harper",
+   "pos": "DB",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "DET",
+   "name": "Giovanni Manu",
+   "pos": "OL",
+   "status": "RES",
+   "reason": "on a reserve list (R05) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "DET",
+   "name": "Cade Mays",
+   "pos": "OL",
+   "status": "RES",
+   "reason": "on a reserve list (R48) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "GB",
+   "name": "Daniel Whelan",
+   "pos": "P",
+   "status": "ACT",
+   "reason": "a kicker, punter or long snapper: the game has no position for them yet"
+  },
+  {
+   "team": "GB",
+   "name": "Lenny Krieg",
+   "pos": "K",
+   "status": "DEV",
+   "reason": "a kicker, punter or long snapper: the game has no position for them yet"
+  },
+  {
+   "team": "GB",
+   "name": "Matthew Orzech",
+   "pos": "LS",
+   "status": "ACT",
+   "reason": "a kicker, punter or long snapper: the game has no position for them yet"
+  },
+  {
+   "team": "GB",
+   "name": "Trey Smack",
+   "pos": "K",
+   "status": "ACT",
+   "reason": "a kicker, punter or long snapper: the game has no position for them yet"
+  },
+  {
+   "team": "GB",
+   "name": "David Blay",
+   "pos": "DL",
+   "status": "DEV",
+   "reason": "no usable birth date in the release, so no real age"
+  },
+  {
+   "team": "GB",
+   "name": "Johnathan Baldwin",
+   "pos": "DB",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "GB",
+   "name": "Marlon Jones",
+   "pos": "DB",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "GB",
+   "name": "Thomas Yassmin",
+   "pos": "TE",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "GB",
+   "name": "Zach Bako-Bewele",
+   "pos": "OL",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "GB",
+   "name": "Jordon Riley",
+   "pos": "DL",
+   "status": "RES",
+   "reason": "on a reserve list (R04) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "GB",
+   "name": "Luke Musgrave",
+   "pos": "TE",
+   "status": "RES",
+   "reason": "on a reserve list (R04) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "GB",
+   "name": "Collin Oliver",
+   "pos": "LB",
+   "status": "RES",
+   "reason": "on a reserve list (R48) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "GB",
+   "name": "Savion Williams",
+   "pos": "WR",
+   "status": "RES",
+   "reason": "on a reserve list (R48) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "HOU",
+   "name": "Austin Brinkman",
+   "pos": "LS",
+   "status": "ACT",
+   "reason": "a kicker, punter or long snapper: the game has no position for them yet"
+  },
+  {
+   "team": "HOU",
+   "name": "Ka'imi Fairbairn",
+   "pos": "K",
+   "status": "ACT",
+   "reason": "a kicker, punter or long snapper: the game has no position for them yet"
+  },
+  {
+   "team": "HOU",
+   "name": "Kai Kroeger",
+   "pos": "P",
+   "status": "ACT",
+   "reason": "a kicker, punter or long snapper: the game has no position for them yet"
+  },
+  {
+   "team": "HOU",
+   "name": "Aaron Graves",
+   "pos": "DL",
+   "status": "DEV",
+   "reason": "no usable birth date in the release, so no real age"
+  },
+  {
+   "team": "HOU",
+   "name": "Treyvhon Saunders",
+   "pos": "WR",
+   "status": "DEV",
+   "reason": "no usable birth date in the release, so no real age"
+  },
+  {
+   "team": "HOU",
+   "name": "Ali Gaye",
+   "pos": "DL",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "HOU",
+   "name": "Dylan Horton",
+   "pos": "DL",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "HOU",
+   "name": "Graham Mertz",
+   "pos": "QB",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "HOU",
+   "name": "Jacob Hummel",
+   "pos": "LB",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "HOU",
+   "name": "K.C. Ossai",
+   "pos": "LB",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "HOU",
+   "name": "Kayden McDonald",
+   "pos": "DL",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "HOU",
+   "name": "Mario Edwards",
+   "pos": "DL",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "HOU",
+   "name": "Sam Hagen",
+   "pos": "OL",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "HOU",
+   "name": "Solomon Byrd",
+   "pos": "DL",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "HOU",
+   "name": "E.J. Speed",
+   "pos": "LB",
+   "status": "RES",
+   "reason": "on a reserve list (R04) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "HOU",
+   "name": "M.J. Stewart",
+   "pos": "DB",
+   "status": "RES",
+   "reason": "on a reserve list (R04) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "HOU",
+   "name": "Ja'Marcus Ingram",
+   "pos": "DB",
+   "status": "RES",
+   "reason": "on a reserve list (R48) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "HOU",
+   "name": "Tank Dell",
+   "pos": "WR",
+   "status": "RES",
+   "reason": "on a reserve list (R48) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "IND",
+   "name": "Luke Rhodes",
+   "pos": "LS",
+   "status": "ACT",
+   "reason": "a kicker, punter or long snapper: the game has no position for them yet"
+  },
+  {
+   "team": "IND",
+   "name": "Rigoberto Sanchez",
+   "pos": "P",
+   "status": "ACT",
+   "reason": "a kicker, punter or long snapper: the game has no position for them yet"
+  },
+  {
+   "team": "IND",
+   "name": "Spencer Shrader",
+   "pos": "K",
+   "status": "ACT",
+   "reason": "a kicker, punter or long snapper: the game has no position for them yet"
+  },
+  {
+   "team": "IND",
+   "name": "Cameron Mitchell",
+   "pos": "DB",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "IND",
+   "name": "Carson Towt",
+   "pos": "TE",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "IND",
+   "name": "D.J. Montgomery",
+   "pos": "WR",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "IND",
+   "name": "Micheal Clemons",
+   "pos": "DL",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "IND",
+   "name": "Will Mallory",
+   "pos": "TE",
+   "status": "RES",
+   "reason": "on a reserve list (R48) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "JAX",
+   "name": "Cam Little",
+   "pos": "K",
+   "status": "ACT",
+   "reason": "a kicker, punter or long snapper: the game has no position for them yet"
+  },
+  {
+   "team": "JAX",
+   "name": "Logan Cooke",
+   "pos": "P",
+   "status": "ACT",
+   "reason": "a kicker, punter or long snapper: the game has no position for them yet"
+  },
+  {
+   "team": "JAX",
+   "name": "Ross Matiscik",
+   "pos": "LS",
+   "status": "ACT",
+   "reason": "a kicker, punter or long snapper: the game has no position for them yet"
+  },
+  {
+   "team": "JAX",
+   "name": "BJ Green II",
+   "pos": "DL",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "JAX",
+   "name": "Garrett DiGiorgio",
+   "pos": "OL",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "JAX",
+   "name": "Jared Bartlett",
+   "pos": "LB",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "JAX",
+   "name": "Parker Hughes",
+   "pos": "LB",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "JAX",
+   "name": "Sam Mustipher",
+   "pos": "OL",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "JAX",
+   "name": "Patrick Mekari",
+   "pos": "OL",
+   "status": "RES",
+   "reason": "on a reserve list (R48) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "JAX",
+   "name": "Zach Durfee",
+   "pos": "DL",
+   "status": "RES",
+   "reason": "on a reserve list (R48) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "KC",
+   "name": "Harrison Butker",
+   "pos": "K",
+   "status": "ACT",
+   "reason": "a kicker, punter or long snapper: the game has no position for them yet"
+  },
+  {
+   "team": "KC",
+   "name": "James Winchester",
+   "pos": "LS",
+   "status": "ACT",
+   "reason": "a kicker, punter or long snapper: the game has no position for them yet"
+  },
+  {
+   "team": "KC",
+   "name": "Matt Araiza",
+   "pos": "P",
+   "status": "ACT",
+   "reason": "a kicker, punter or long snapper: the game has no position for them yet"
+  },
+  {
+   "team": "KC",
+   "name": "Cooper McDonald",
+   "pos": "LB",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "KC",
+   "name": "Ethan Downs",
+   "pos": "LB",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "KC",
+   "name": "Jeff Caldwell",
+   "pos": "WR",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "KC",
+   "name": "Jimmy Holiday",
+   "pos": "WR",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "KC",
+   "name": "John Michael Gyllenborg",
+   "pos": "TE",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "KC",
+   "name": "Matt Waletzko",
+   "pos": "OL",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "KC",
+   "name": "Omarr Norman-Lott",
+   "pos": "DL",
+   "status": "RES",
+   "reason": "on a reserve list (R04) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "LA",
+   "name": "Ethan Evans",
+   "pos": "P",
+   "status": "ACT",
+   "reason": "a kicker, punter or long snapper: the game has no position for them yet"
+  },
+  {
+   "team": "LA",
+   "name": "Harrison Mevis",
+   "pos": "K",
+   "status": "ACT",
+   "reason": "a kicker, punter or long snapper: the game has no position for them yet"
+  },
+  {
+   "team": "LA",
+   "name": "Jack Bouwmeester",
+   "pos": "P",
+   "status": "DEV",
+   "reason": "a kicker, punter or long snapper: the game has no position for them yet"
+  },
+  {
+   "team": "LA",
+   "name": "Joe Cardona",
+   "pos": "LS",
+   "status": "ACT",
+   "reason": "a kicker, punter or long snapper: the game has no position for them yet"
+  },
+  {
+   "team": "LA",
+   "name": "Daniel Rickert",
+   "pos": "LB",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "LA",
+   "name": "Eddie Walls III",
+   "pos": "LB",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "LA",
+   "name": "Keir Thomas",
+   "pos": "LB",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "LA",
+   "name": "Matthew Caldwell",
+   "pos": "QB",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "LA",
+   "name": "Ronnie Rivers",
+   "pos": "RB",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "LA",
+   "name": "Justin Dedich",
+   "pos": "OL",
+   "status": "RES",
+   "reason": "on a reserve list (R48) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "LA",
+   "name": "Keagen Trost",
+   "pos": "OL",
+   "status": "RES",
+   "reason": "on a reserve list (R48) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "LAC",
+   "name": "Cameron Dicker",
+   "pos": "K",
+   "status": "ACT",
+   "reason": "a kicker, punter or long snapper: the game has no position for them yet"
+  },
+  {
+   "team": "LAC",
+   "name": "J.K. Scott",
+   "pos": "P",
+   "status": "ACT",
+   "reason": "a kicker, punter or long snapper: the game has no position for them yet"
+  },
+  {
+   "team": "LAC",
+   "name": "Josh Harris",
+   "pos": "LS",
+   "status": "ACT",
+   "reason": "a kicker, punter or long snapper: the game has no position for them yet"
+  },
+  {
+   "team": "LAC",
+   "name": "David Njoku",
+   "pos": "TE",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "LAC",
+   "name": "Denzel Perryman",
+   "pos": "LB",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "LAC",
+   "name": "KeAndre Lambert-Smith",
+   "pos": "WR",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "LAC",
+   "name": "Trey Pipkins",
+   "pos": "OL",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "LAC",
+   "name": "Tyler Biadasz",
+   "pos": "OL",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "LAC",
+   "name": "Isaiah World",
+   "pos": "OL",
+   "status": "RES",
+   "reason": "on a reserve list (R05) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "LAC",
+   "name": "Branson Taylor",
+   "pos": "OL",
+   "status": "RES",
+   "reason": "on a reserve list (R48) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "LAC",
+   "name": "Scott Matlock",
+   "pos": "RB",
+   "status": "RES",
+   "reason": "on a reserve list (R48) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "LV",
+   "name": "AJ Cole",
+   "pos": "P",
+   "status": "ACT",
+   "reason": "a kicker, punter or long snapper: the game has no position for them yet"
+  },
+  {
+   "team": "LV",
+   "name": "Alex Ward",
+   "pos": "LS",
+   "status": "ACT",
+   "reason": "a kicker, punter or long snapper: the game has no position for them yet"
+  },
+  {
+   "team": "LV",
+   "name": "Kansei Matsuzawa",
+   "pos": "K",
+   "status": "DEV",
+   "reason": "a kicker, punter or long snapper: the game has no position for them yet"
+  },
+  {
+   "team": "LV",
+   "name": "Matt Gay",
+   "pos": "K",
+   "status": "ACT",
+   "reason": "a kicker, punter or long snapper: the game has no position for them yet"
+  },
+  {
+   "team": "LV",
+   "name": "Brennan Jackson",
+   "pos": "LB",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "LV",
+   "name": "Chigozie Anusiem",
+   "pos": "DB",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "LV",
+   "name": "Chris Collier",
+   "pos": "RB",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "LV",
+   "name": "Corey Rucker",
+   "pos": "WR",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "LV",
+   "name": "Dont'e Thornton Jr.",
+   "pos": "WR",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "LV",
+   "name": "Justin Pickett",
+   "pos": "OL",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "LV",
+   "name": "Keyron Crawford",
+   "pos": "LB",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "LV",
+   "name": "Carter Runyon",
+   "pos": "TE",
+   "status": "RES",
+   "reason": "on a reserve list (R48) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "MIA",
+   "name": "Bradley Pinion",
+   "pos": "P",
+   "status": "ACT",
+   "reason": "a kicker, punter or long snapper: the game has no position for them yet"
+  },
+  {
+   "team": "MIA",
+   "name": "Riley Patterson",
+   "pos": "K",
+   "status": "ACT",
+   "reason": "a kicker, punter or long snapper: the game has no position for them yet"
+  },
+  {
+   "team": "MIA",
+   "name": "Tucker Addington",
+   "pos": "LS",
+   "status": "ACT",
+   "reason": "a kicker, punter or long snapper: the game has no position for them yet"
+  },
+  {
+   "team": "MIA",
+   "name": "Cole Turner",
+   "pos": "TE",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "MIA",
+   "name": "Kyle Louis",
+   "pos": "LB",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "MIA",
+   "name": "Rene Konga",
+   "pos": "DL",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "MIA",
+   "name": "Ronnie Harrison",
+   "pos": "LB",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "MIA",
+   "name": "Darrell Baker Jr.",
+   "pos": "DB",
+   "status": "RES",
+   "reason": "on a reserve list (R04) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "MIA",
+   "name": "Storm Duck",
+   "pos": "DB",
+   "status": "RES",
+   "reason": "on a reserve list (R04) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "MIA",
+   "name": "Trey Moore",
+   "pos": "LB",
+   "status": "RES",
+   "reason": "on a reserve list (R48) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "MIN",
+   "name": "Andrew DePaola",
+   "pos": "LS",
+   "status": "ACT",
+   "reason": "a kicker, punter or long snapper: the game has no position for them yet"
+  },
+  {
+   "team": "MIN",
+   "name": "Brett Thorson",
+   "pos": "P",
+   "status": "ACT",
+   "reason": "a kicker, punter or long snapper: the game has no position for them yet"
+  },
+  {
+   "team": "MIN",
+   "name": "Johnny Hekker",
+   "pos": "P",
+   "status": "DEV",
+   "reason": "a kicker, punter or long snapper: the game has no position for them yet"
+  },
+  {
+   "team": "MIN",
+   "name": "Will Reichard",
+   "pos": "K",
+   "status": "ACT",
+   "reason": "a kicker, punter or long snapper: the game has no position for them yet"
+  },
+  {
+   "team": "MIN",
+   "name": "Maceo Beard",
+   "pos": "DB",
+   "status": "DEV",
+   "reason": "no usable birth date in the release, so no real age"
+  },
+  {
+   "team": "MIN",
+   "name": "Ben Yurosek",
+   "pos": "TE",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "MIN",
+   "name": "Jamal Adams",
+   "pos": "LB",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "MIN",
+   "name": "Josh Oliver",
+   "pos": "TE",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "MIN",
+   "name": "Nick Samac",
+   "pos": "OL",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "MIN",
+   "name": "Tyler Batty",
+   "pos": "LB",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "MIN",
+   "name": "Tyreek Chappell",
+   "pos": "DB",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "MIN",
+   "name": "Michael Jurgens",
+   "pos": "OL",
+   "status": "RES",
+   "reason": "on a reserve list (R48) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "NE",
+   "name": "Andy Borregales",
+   "pos": "K",
+   "status": "ACT",
+   "reason": "a kicker, punter or long snapper: the game has no position for them yet"
+  },
+  {
+   "team": "NE",
+   "name": "Bryce Baringer",
+   "pos": "P",
+   "status": "RES",
+   "reason": "a kicker, punter or long snapper: the game has no position for them yet"
+  },
+  {
+   "team": "NE",
+   "name": "Julian Ashby",
+   "pos": "LS",
+   "status": "ACT",
+   "reason": "a kicker, punter or long snapper: the game has no position for them yet"
+  },
+  {
+   "team": "NE",
+   "name": "Mitch Wishnowsky",
+   "pos": "P",
+   "status": "ACT",
+   "reason": "a kicker, punter or long snapper: the game has no position for them yet"
+  },
+  {
+   "team": "NE",
+   "name": "Da'Metrius Weatherspoon",
+   "pos": "OL",
+   "status": "DEV",
+   "reason": "no usable birth date in the release, so no real age"
+  },
+  {
+   "team": "NE",
+   "name": "Dell Pettus",
+   "pos": "DB",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "NE",
+   "name": "Greg Van Roten",
+   "pos": "OL",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "NE",
+   "name": "Jeremiah Webb",
+   "pos": "WR",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "NE",
+   "name": "Julian Hill",
+   "pos": "TE",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "NE",
+   "name": "Khalil Jacobs",
+   "pos": "LB",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "NE",
+   "name": "Mike Onwenu",
+   "pos": "OL",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "NE",
+   "name": "Myles Montgomery",
+   "pos": "RB",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "NE",
+   "name": "Quintayvious Hutchins",
+   "pos": "LB",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "NE",
+   "name": "Brenden Schooler",
+   "pos": "DB",
+   "status": "RES",
+   "reason": "on a reserve list (R05) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "NE",
+   "name": "Marcus Bryant",
+   "pos": "OL",
+   "status": "RES",
+   "reason": "on a reserve list (R48) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "NO",
+   "name": "Cal Adomitis",
+   "pos": "LS",
+   "status": "ACT",
+   "reason": "a kicker, punter or long snapper: the game has no position for them yet"
+  },
+  {
+   "team": "NO",
+   "name": "Charlie Smyth",
+   "pos": "K",
+   "status": "DEV",
+   "reason": "a kicker, punter or long snapper: the game has no position for them yet"
+  },
+  {
+   "team": "NO",
+   "name": "Daniel Carlson",
+   "pos": "K",
+   "status": "ACT",
+   "reason": "a kicker, punter or long snapper: the game has no position for them yet"
+  },
+  {
+   "team": "NO",
+   "name": "Ryan Wright",
+   "pos": "P",
+   "status": "ACT",
+   "reason": "a kicker, punter or long snapper: the game has no position for them yet"
+  },
+  {
+   "team": "NO",
+   "name": "Zach Wood",
+   "pos": "LS",
+   "status": "RES",
+   "reason": "a kicker, punter or long snapper: the game has no position for them yet"
+  },
+  {
+   "team": "NO",
+   "name": "David Long",
+   "pos": "DB",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "NO",
+   "name": "Dillon Radunz",
+   "pos": "OL",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "NO",
+   "name": "Lorenzo Styles Jr.",
+   "pos": "DB",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "NO",
+   "name": "Moliki Matavao",
+   "pos": "TE",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "NO",
+   "name": "Rejzohn Wright",
+   "pos": "DB",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "NO",
+   "name": "Ty Chandler",
+   "pos": "RB",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "NO",
+   "name": "Nick Saldiveri",
+   "pos": "OL",
+   "status": "RES",
+   "reason": "on a reserve list (R04) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "NO",
+   "name": "Brock Rechsteiner",
+   "pos": "WR",
+   "status": "RES",
+   "reason": "on a reserve list (R40) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "NO",
+   "name": "Jaylan Ford",
+   "pos": "LB",
+   "status": "RES",
+   "reason": "on a reserve list (R48) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "NO",
+   "name": "Jordyn Tyson",
+   "pos": "WR",
+   "status": "RES",
+   "reason": "on a reserve list (R48) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "NYG",
+   "name": "Ben Mann",
+   "pos": "LS",
+   "status": "ACT",
+   "reason": "a kicker, punter or long snapper: the game has no position for them yet"
+  },
+  {
+   "team": "NYG",
+   "name": "Dominic Zvada",
+   "pos": "K",
+   "status": "ACT",
+   "reason": "a kicker, punter or long snapper: the game has no position for them yet"
+  },
+  {
+   "team": "NYG",
+   "name": "Jordan Stout",
+   "pos": "P",
+   "status": "ACT",
+   "reason": "a kicker, punter or long snapper: the game has no position for them yet"
+  },
+  {
+   "team": "NYG",
+   "name": "Gunner Olszewski",
+   "pos": "WR",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "NYG",
+   "name": "Jarrick Bernard-Converse",
+   "pos": "DB",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "NYG",
+   "name": "Rico Payton",
+   "pos": "DB",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "NYG",
+   "name": "Roy Robertson-Harris",
+   "pos": "DL",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "NYG",
+   "name": "Thaddeus Dixon",
+   "pos": "DB",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "NYG",
+   "name": "Korie Black",
+   "pos": "DB",
+   "status": "RES",
+   "reason": "on a reserve list (R48) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "NYJ",
+   "name": "Austin McNamara",
+   "pos": "P",
+   "status": "ACT",
+   "reason": "a kicker, punter or long snapper: the game has no position for them yet"
+  },
+  {
+   "team": "NYJ",
+   "name": "Jason Sanders",
+   "pos": "K",
+   "status": "ACT",
+   "reason": "a kicker, punter or long snapper: the game has no position for them yet"
+  },
+  {
+   "team": "NYJ",
+   "name": "Thomas Hennessy",
+   "pos": "LS",
+   "status": "ACT",
+   "reason": "a kicker, punter or long snapper: the game has no position for them yet"
+  },
+  {
+   "team": "NYJ",
+   "name": "Al-Jay Henderson",
+   "pos": "RB",
+   "status": "DEV",
+   "reason": "no usable birth date in the release, so no real age"
+  },
+  {
+   "team": "NYJ",
+   "name": "Arian Smith",
+   "pos": "WR",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "NYJ",
+   "name": "Chip Trayanum",
+   "pos": "RB",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "NYJ",
+   "name": "David Onyemata",
+   "pos": "DL",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "NYJ",
+   "name": "Kingsley Jonathan",
+   "pos": "DL",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "NYJ",
+   "name": "Marcelino McCrary-Ball",
+   "pos": "LB",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "NYJ",
+   "name": "Omar Cooper Jr.",
+   "pos": "WR",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "NYJ",
+   "name": "Tre Brown",
+   "pos": "DB",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "NYJ",
+   "name": "Tyler Baron",
+   "pos": "LB",
+   "status": "RES",
+   "reason": "on a reserve list (R04) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "NYJ",
+   "name": "Anez Cooper",
+   "pos": "OL",
+   "status": "RES",
+   "reason": "on a reserve list (R48) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "NYJ",
+   "name": "VJ Payne",
+   "pos": "DB",
+   "status": "RES",
+   "reason": "on a reserve list (R48) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "PHI",
+   "name": "Braden Mann",
+   "pos": "P",
+   "status": "ACT",
+   "reason": "a kicker, punter or long snapper: the game has no position for them yet"
+  },
+  {
+   "team": "PHI",
+   "name": "Jake Elliott",
+   "pos": "K",
+   "status": "ACT",
+   "reason": "a kicker, punter or long snapper: the game has no position for them yet"
+  },
+  {
+   "team": "PHI",
+   "name": "Rocco Underwood",
+   "pos": "LS",
+   "status": "ACT",
+   "reason": "a kicker, punter or long snapper: the game has no position for them yet"
+  },
+  {
+   "team": "PHI",
+   "name": "Andre' Sam",
+   "pos": "DB",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "PHI",
+   "name": "Eli Stowers",
+   "pos": "TE",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "PHI",
+   "name": "Johnny Wilson",
+   "pos": "WR",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "PHI",
+   "name": "Tucker Large",
+   "pos": "DB",
+   "status": "RES",
+   "reason": "on a reserve list (R05) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "PHI",
+   "name": "Grant Calcaterra",
+   "pos": "TE",
+   "status": "RES",
+   "reason": "on a reserve list (R48) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "PHI",
+   "name": "Jakorian Bennett",
+   "pos": "DB",
+   "status": "RES",
+   "reason": "on a reserve list (R48) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "PIT",
+   "name": "Cameron Johnston",
+   "pos": "P",
+   "status": "ACT",
+   "reason": "a kicker, punter or long snapper: the game has no position for them yet"
+  },
+  {
+   "team": "PIT",
+   "name": "Chris Boswell",
+   "pos": "K",
+   "status": "ACT",
+   "reason": "a kicker, punter or long snapper: the game has no position for them yet"
+  },
+  {
+   "team": "PIT",
+   "name": "Christian Kuntz",
+   "pos": "LS",
+   "status": "ACT",
+   "reason": "a kicker, punter or long snapper: the game has no position for them yet"
+  },
+  {
+   "team": "PIT",
+   "name": "Cole Burgess",
+   "pos": "WR",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "PIT",
+   "name": "Daequan Hardy",
+   "pos": "DB",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "PIT",
+   "name": "Gennings Dunker",
+   "pos": "OL",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "PIT",
+   "name": "Logan Lee",
+   "pos": "DL",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "PIT",
+   "name": "Donte Kent",
+   "pos": "DB",
+   "status": "RES",
+   "reason": "on a reserve list (R04) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "PIT",
+   "name": "DeShon Elliott",
+   "pos": "DB",
+   "status": "RES",
+   "reason": "on a reserve list (R48) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "PIT",
+   "name": "Jack Driscoll",
+   "pos": "OL",
+   "status": "RES",
+   "reason": "on a reserve list (R48) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "SEA",
+   "name": "Chris Stoll",
+   "pos": "LS",
+   "status": "ACT",
+   "reason": "a kicker, punter or long snapper: the game has no position for them yet"
+  },
+  {
+   "team": "SEA",
+   "name": "Jason Myers",
+   "pos": "K",
+   "status": "ACT",
+   "reason": "a kicker, punter or long snapper: the game has no position for them yet"
+  },
+  {
+   "team": "SEA",
+   "name": "Michael Dickson",
+   "pos": "P",
+   "status": "ACT",
+   "reason": "a kicker, punter or long snapper: the game has no position for them yet"
+  },
+  {
+   "team": "SEA",
+   "name": "Gary Smith",
+   "pos": "DL",
+   "status": "DEV",
+   "reason": "no usable birth date in the release, so no real age"
+  },
+  {
+   "team": "SEA",
+   "name": "Anthony Bradford",
+   "pos": "OL",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "SEA",
+   "name": "Bud Clark",
+   "pos": "DB",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "SEA",
+   "name": "Jake Bobo",
+   "pos": "WR",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "SEA",
+   "name": "Mason Richman",
+   "pos": "OL",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "SEA",
+   "name": "Robbie Ouzts",
+   "pos": "RB",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "SEA",
+   "name": "Irvin Charles",
+   "pos": "WR",
+   "status": "RES",
+   "reason": "on a reserve list (R48) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "SF",
+   "name": "Corliss Waitman",
+   "pos": "P",
+   "status": "ACT",
+   "reason": "a kicker, punter or long snapper: the game has no position for them yet"
+  },
+  {
+   "team": "SF",
+   "name": "Eddy Pineiro",
+   "pos": "K",
+   "status": "ACT",
+   "reason": "a kicker, punter or long snapper: the game has no position for them yet"
+  },
+  {
+   "team": "SF",
+   "name": "Jon Weeks",
+   "pos": "LS",
+   "status": "ACT",
+   "reason": "a kicker, punter or long snapper: the game has no position for them yet"
+  },
+  {
+   "team": "SF",
+   "name": "Alfred Collins",
+   "pos": "DL",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "SF",
+   "name": "Andrew Farmer II",
+   "pos": "LB",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "SF",
+   "name": "Brett Toth",
+   "pos": "OL",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "SF",
+   "name": "C.J. West",
+   "pos": "DL",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "SF",
+   "name": "Darrick Forrest",
+   "pos": "DB",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "SF",
+   "name": "De'Zhaun Stribling",
+   "pos": "WR",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "SF",
+   "name": "Demarcus Robinson",
+   "pos": "WR",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "SF",
+   "name": "Jake Tonges",
+   "pos": "TE",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "SF",
+   "name": "Mikail Kamara",
+   "pos": "DL",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "SF",
+   "name": "Nate Hobbs",
+   "pos": "DB",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "SF",
+   "name": "Nick Martin",
+   "pos": "LB",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "SF",
+   "name": "Nick Zakelj",
+   "pos": "OL",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "SF",
+   "name": "Sam Okuayinonu",
+   "pos": "DL",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "SF",
+   "name": "Isaac Guerendo",
+   "pos": "RB",
+   "status": "RES",
+   "reason": "on a reserve list (R04) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "SF",
+   "name": "Austen Pleasants",
+   "pos": "OL",
+   "status": "RES",
+   "reason": "on a reserve list (R48) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "SF",
+   "name": "Christian Kirk",
+   "pos": "WR",
+   "status": "RES",
+   "reason": "on a reserve list (R48) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "TB",
+   "name": "Chase McLaughlin",
+   "pos": "K",
+   "status": "ACT",
+   "reason": "a kicker, punter or long snapper: the game has no position for them yet"
+  },
+  {
+   "team": "TB",
+   "name": "Evan Deckers",
+   "pos": "LS",
+   "status": "ACT",
+   "reason": "a kicker, punter or long snapper: the game has no position for them yet"
+  },
+  {
+   "team": "TB",
+   "name": "Riley Dixon",
+   "pos": "P",
+   "status": "ACT",
+   "reason": "a kicker, punter or long snapper: the game has no position for them yet"
+  },
+  {
+   "team": "TB",
+   "name": "Mohamed Kamara",
+   "pos": "LB",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "TB",
+   "name": "David Sills",
+   "pos": "WR",
+   "status": "RES",
+   "reason": "on a reserve list (R48) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "TB",
+   "name": "Josh Hayes",
+   "pos": "DB",
+   "status": "RES",
+   "reason": "on a reserve list (R48) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "TEN",
+   "name": "Joey Slye",
+   "pos": "K",
+   "status": "ACT",
+   "reason": "a kicker, punter or long snapper: the game has no position for them yet"
+  },
+  {
+   "team": "TEN",
+   "name": "Morgan Cox",
+   "pos": "LS",
+   "status": "ACT",
+   "reason": "a kicker, punter or long snapper: the game has no position for them yet"
+  },
+  {
+   "team": "TEN",
+   "name": "Tommy Townsend",
+   "pos": "P",
+   "status": "ACT",
+   "reason": "a kicker, punter or long snapper: the game has no position for them yet"
+  },
+  {
+   "team": "TEN",
+   "name": "Fernando Carmona",
+   "pos": "OL",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "TEN",
+   "name": "Jackson Slater",
+   "pos": "OL",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "TEN",
+   "name": "Jaren Kanak",
+   "pos": "TE",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "TEN",
+   "name": "Jaylen Harrell",
+   "pos": "LB",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "TEN",
+   "name": "Kendell Brooks",
+   "pos": "DB",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "TEN",
+   "name": "Milo Eifler",
+   "pos": "LB",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "TEN",
+   "name": "Tanoh Kpassagnon",
+   "pos": "DL",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "TEN",
+   "name": "Dorian Mausi",
+   "pos": "LB",
+   "status": "RES",
+   "reason": "on a reserve list (R48) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "TEN",
+   "name": "Joshua Williams",
+   "pos": "DB",
+   "status": "RES",
+   "reason": "on a reserve list (R48) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "WAS",
+   "name": "Drew Stevens",
+   "pos": "K",
+   "status": "ACT",
+   "reason": "a kicker, punter or long snapper: the game has no position for them yet"
+  },
+  {
+   "team": "WAS",
+   "name": "Tress Way",
+   "pos": "P",
+   "status": "ACT",
+   "reason": "a kicker, punter or long snapper: the game has no position for them yet"
+  },
+  {
+   "team": "WAS",
+   "name": "Tyler Ott",
+   "pos": "LS",
+   "status": "ACT",
+   "reason": "a kicker, punter or long snapper: the game has no position for them yet"
+  },
+  {
+   "team": "WAS",
+   "name": "Jordan Magee",
+   "pos": "LB",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "WAS",
+   "name": "Leo Chenal",
+   "pos": "LB",
+   "status": "RES",
+   "reason": "on a reserve list (R01) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "WAS",
+   "name": "Deatrich Wise",
+   "pos": "DL",
+   "status": "RES",
+   "reason": "on a reserve list (R04) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "WAS",
+   "name": "Jeremy McNichols",
+   "pos": "RB",
+   "status": "RES",
+   "reason": "on a reserve list (R48) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "WAS",
+   "name": "Trey Amos",
+   "pos": "DB",
+   "status": "RES",
+   "reason": "on a reserve list (R48) and not one of the club's fifteen starters: a reserve list is not the 53"
+  }
+ ]
+}

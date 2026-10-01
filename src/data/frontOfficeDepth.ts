@@ -1,4 +1,4 @@
-// GENERATED 2026-10-01 by scripts/genFrontOfficeRoster.mjs (do not hand-edit).
+// GENERATED 2026-10-01 by scripts/genFrontOfficeRoster.mjs from scripts/data/nflRosters2026.json (do not hand-edit).
 // Round 828. The rest of every club beside the fifteen starters in
 // frontOfficePlayers.ts: 1158 bench men (the active roster) and 526 practice squad men.
 // Roster: nflverse rosters release, season 2026, week 4, the latest week

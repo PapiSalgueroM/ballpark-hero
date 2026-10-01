@@ -8,10 +8,12 @@
 
      1) THE DATA. Every club carries its real active roster in the eight
         groups the game knows (the 53 less kickers, punters and long snappers,
-        plus starters back from a reserve list) and its practice squad. When
-        the nflverse cache the bake read is on disk, every bench and practice
-        squad man is matched to a row of that club with that status on the
-        release's latest week, so nobody is invented. The second source record
+        plus starters back from a reserve list) and its practice squad. Every
+        bench and practice squad man is matched to a row of that club with
+        that status on the committed record of the release (scripts/data/
+        nflRosters2026.json), so nobody is invented, and the bake is redone
+        from that record and must match the three committed files (the two
+        data files and the left out list) byte for byte. The second source record
         (scripts/data/nflRosterSecondSource.json: three clubs, ten men each,
         checked against the club's own site and ESPN) must agree with the
         bake. The engine's constants agree with the generator's: the starter
@@ -92,6 +94,7 @@
      deepold      every club reads its units the full roster way -> 7
      bigbench     every bench salary six times larger            -> 6
      sharedcopy   the finder's probe copy is the club itself     -> 6
+     recordedit   the record moves one KC bench man to DEN        -> 1
    Under a control the process exits non zero whether or not the expected
    sections went red, and says which it was.
 
@@ -117,6 +120,7 @@ const EXPECT = {
   deepold: [7],
   sharedcopy: [6],
   bigbench: [6],
+  recordedit: [1],
 };
 if (CONTROL && !EXPECT[CONTROL]) {
   console.error(`NFL_FULL_CONTROL=${CONTROL} is not a control this harness knows (${Object.keys(EXPECT).join(', ')})`);
@@ -153,6 +157,7 @@ const NOTE = {
   deepold: 'the engine copy reads every club the full roster way, old saves included',
   sharedcopy: 'the engine copy hands the Trade Finder the clubs themselves instead of a copy',
   bigbench: 'the depth data copy pays every bench man six times his salary',
+  recordedit: 'the record moves one KC bench man to DEN, in memory',
 };
 const SECTION_NAMES = {
   1: 'the data: real, current, second sourced, and agreeing with the engine',
@@ -311,14 +316,29 @@ console.log('1) the data: real, current, second sourced, and agreeing with the e
     `engine ${JSON.stringify(engine.DEEP_GROUP_TARGET)}, data ${JSON.stringify(medians)}`);
   ok(1, 'a full roster fits under the real limit', Object.values(engine.DEEP_GROUP_TARGET).reduce((a, b) => a + b, 0) <= engine.DEEP_ROSTER_MAX);
 
-  /* membership against the release itself, when the bake's cache is here */
-  const cache = path.join(ROOT, 'scripts', '.cache', 'nflverse', 'roster_2026.csv');
-  if (fs.existsSync(cache)) {
-    const { parseCsv } = await import(pathToFileURL(path.join(ROOT, 'scripts', 'lib', 'nflverseRosters.mjs')).href);
-    const rows = gen.currentRows(parseCsv(fs.readFileSync(cache, 'utf8')));
-    const week = gen.latestWeek(rows);
+  /* MEMBERSHIP AGAINST THE COMMITTED RECORD, every run (Round 828 review).
+     This used to read the gitignored nflverse cache and skip itself when the
+     cache was missing, which is every machine but the one that baked. The
+     record (scripts/data/nflRosters2026.json) is committed, so the match
+     always runs, and the bake is redone from it here and compared with the
+     three committed files: a hand edited club, age or rating, or a record
+     refreshed without a rebake, goes red. Control recordedit moves one bench
+     man to another club in the record, in memory only. */
+  const record = JSON.parse(fs.readFileSync(path.join(ROOT, 'scripts', 'data', 'nflRosters2026.json'), 'utf8'));
+  if (CONTROL === 'recordedit') {
+    const iTeam = record.rosterColumns.indexOf('team');
+    const iName = record.rosterColumns.indexOf('full_name');
+    const victim = data.FO_DEPTH.KC.bench[0].name;
+    const row = record.roster.find(r => r[iTeam] === 'KC' && r[iName] === victim);
+    if (!row) throw new Error(`control recordedit: ${victim} is not a KC row of the record, so it would change nothing. Refusing to run.`);
+    row[iTeam] = 'DEN';
+    console.log(`   control recordedit: the record moves ${victim} from KC to DEN`);
+  }
+  const { roster: recRows } = gen.recordRows(record);
+  ok(1, 'the record is the week the depth file was baked from', record.week === data.week, `record week ${record.week}, file week ${data.week}`);
+  {
     const key = (team, name, status) => `${team}|${name}|${status}`;
-    const have = new Set(rows.map(r => key(String(r.team).toUpperCase(), String(r.full_name).trim(), r.status)));
+    const have = new Set(recRows.map(r => key(String(r.team).toUpperCase(), String(r.full_name).trim(), r.status)));
     let matched = 0;
     const missing = [];
     for (const t of teams) {
@@ -329,25 +349,36 @@ console.log('1) the data: real, current, second sourced, and agreeing with the e
         }
       }
     }
-    console.log(`   the cache is week ${week}; ${matched} of ${matched + missing.length} bench and practice squad men found on their club with their status`);
-    if (week === data.week) {
-      ok(1, 'every bench and practice squad man is a real row of his club, his status, the latest week', missing.length === 0, missing.slice(0, 4).join(', '));
-    } else {
-      console.log(`   the cache (week ${week}) is not the week the file was baked from (${data.week}); rerun the generator to compare like with like`);
-    }
-  } else {
-    console.log('   the nflverse cache is not on this machine, so the row by row match is not run here (node scripts/genFrontOfficeRoster.mjs --check fetches it)');
+    console.log(`   the record (read ${record.read}, week ${record.week}): ${matched} of ${matched + missing.length} bench and practice squad men found on their club with their status`);
+    ok(1, 'every bench and practice squad man is a real row of his club, his status, the latest week', missing.length === 0, missing.slice(0, 4).join(', '));
+  }
+  {
+    const norm = t => t.split('\r\n').join('\n');
+    const starterSrc = norm(fs.readFileSync(path.join(ROOT, 'src', 'data', 'frontOfficePlayers.ts'), 'utf8'));
+    const baked = gen.bakeFromRecord(record, gen.readTeamMeta(starterSrc));
+    const files = [
+      ['src/data/frontOfficePlayers.ts', baked.text],
+      ['src/data/frontOfficeDepth.ts', baked.depthText],
+      ['scripts/data/nflRosters2026LeftOut.json', baked.leftJson],
+    ];
+    const stale = files.filter(([f, want]) => norm(fs.readFileSync(path.join(ROOT, f), 'utf8')) !== want).map(([f]) => f);
+    console.log(`   a fresh bake of the record: ${files.length - stale.length} of ${files.length} committed files match it byte for byte; ${baked.leftOut.length} men left out with a reason`);
+    ok(1, 'the committed data files are the bake of the committed record', stale.length === 0, stale.join(', '));
+    /* every man on a club's active, reserve or practice squad list is either in the game or in the left out list */
+    const inGame = teams.reduce((n, t) => n + t.players.length + data.FO_DEPTH[t.abbr].bench.length + data.FO_DEPTH[t.abbr].practice.length, 0);
+    ok(1, 'every man on the record is in the game or left out with a reason', inGame + baked.leftOut.length === recRows.length,
+      `${inGame} in the game + ${baked.leftOut.length} left out against ${recRows.length} rows`);
   }
 
   /* the second source record */
-  const record = JSON.parse(fs.readFileSync(path.join(ROOT, 'scripts', 'data', 'nflRosterSecondSource.json'), 'utf8'));
+  const second = JSON.parse(fs.readFileSync(path.join(ROOT, 'scripts', 'data', 'nflRosterSecondSource.json'), 'utf8'));
   /* Where the two sources agree with each other they settle the fact, and
      the bake must say the same. Where they disagree (an elevated practice
      squad man, a signing one site has not caught) the man is reported and
      not counted. Measured 2026-10-01: 28 settled, 28 agreeing, 2 split. */
   let settled = 0, total = 0;
   const off = [], split = [];
-  for (const club of record.clubs) {
+  for (const club of second.clubs) {
     const roster = new Set([...teams.find(t => t.abbr === club.abbr).players, ...data.FO_DEPTH[club.abbr].bench].map(p => p.name));
     const squad = new Set(data.FO_DEPTH[club.abbr].practice.map(p => p.name));
     for (const m of club.men) {
@@ -359,8 +390,8 @@ console.log('1) the data: real, current, second sourced, and agreeing with the e
       if (m.clubSite !== where) off.push(`${club.abbr} ${m.name}: both sources say ${m.clubSite}, the bake says ${where}`);
     }
   }
-  console.log(`   second source (${record.checked}): ${settled} of ${total} men settled by both sources, ${split.length} split: ${split.join('; ')}`);
-  ok(1, 'the second source record covers three clubs and thirty men', record.clubs.length === 3 && total === 30, `${record.clubs.length} clubs, ${total} men`);
+  console.log(`   second source (${second.checked}): ${settled} of ${total} men settled by both sources, ${split.length} split: ${split.join('; ')}`);
+  ok(1, 'the second source record covers three clubs and thirty men', second.clubs.length === 3 && total === 30, `${second.clubs.length} clubs, ${total} men`);
   ok(1, 'at least 25 of the 30 are settled by both sources', settled >= 25, `${settled} settled`);
   ok(1, 'where both sources agree, the bake agrees with them', off.length === 0, off.slice(0, 3).join(' | '));
 }

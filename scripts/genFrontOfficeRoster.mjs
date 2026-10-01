@@ -102,24 +102,46 @@
    engine's replacement level (60, a man off the street), so a real backup is
    always worth more than an empty slot.
 
-   Output: src/data/frontOfficePlayers.ts and src/data/frontOfficeDepth.ts,
-   both committed.
-   Fence: scripts/simFrontOfficeRoster.mjs (the starters) and
-   scripts/simNflFullRosters.mjs (the bench, the practice squad and the deep
-   league engine).
+   THE BAKE READS A COMMITTED RECORD, NOT THE NETWORK (Round 828 review).
+   The release is a moving target: it adds a week every week and keeps each
+   man's latest row only, so a bake that read it straight off GitHub could
+   never be checked again a week later, and the cache it read sits in
+   scripts/.cache/, which git ignores. So the pull and the bake are two steps:
+     --record  reads the release (through scripts/.cache/nflverse, so delete
+               that folder first for a fresh pull) and writes
+               scripts/data/nflRosters2026.json: every row of the latest week
+               on the active, reserve or practice squad list with the columns
+               the rules read (plus the ESPN and Pro Football Reference ids, so
+               a second source check can find each man), and every 2025 stats
+               row those men join to. Nothing is chosen or rated in it.
+     (none)    bakes offline from that record and writes the two data files
+               and scripts/data/nflRosters2026LeftOut.json, every man on a
+               club's list who is not in the game and why.
+     --check   bakes from the record and compares all three files byte for
+               byte, writing nothing. The same record always bakes the same
+               bytes: the date on line 1 is the day the record was read.
 
-   Run: node scripts/genFrontOfficeRoster.mjs
-        node scripts/genFrontOfficeRoster.mjs --check   (rebuild, compare, write nothing)
+   Output: src/data/frontOfficePlayers.ts and src/data/frontOfficeDepth.ts,
+   both committed, plus the record and the left out list in scripts/data.
+   Fence: scripts/simFrontOfficeRoster.mjs (the starters) and
+   scripts/simNflFullRosters.mjs (the bench, the practice squad, the record,
+   the left out list and the deep league engine).
+
+   Run: node scripts/genFrontOfficeRoster.mjs --record  (pull the release, then bake)
+        node scripts/genFrontOfficeRoster.mjs           (bake from the record)
+        node scripts/genFrontOfficeRoster.mjs --check   (bake, compare, write nothing)
 */
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { fetchSeasonRoster } from './lib/nflverseRosters.mjs';
-import { fetchSeasonStats } from './lib/nflverseStats.mjs';
+import { fetchSeasonRoster, RELEASE_URL } from './lib/nflverseRosters.mjs';
+import { fetchSeasonStats, STATS_RELEASE_URL } from './lib/nflverseStats.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const OUT = path.join(ROOT, 'src', 'data', 'frontOfficePlayers.ts');
 const OUT_DEPTH = path.join(ROOT, 'src', 'data', 'frontOfficeDepth.ts');
+export const RECORD = path.join(ROOT, 'scripts', 'data', 'nflRosters2026.json');
+export const LEFT_OUT = path.join(ROOT, 'scripts', 'data', 'nflRosters2026LeftOut.json');
 export const ROSTER_SEASON = 2026;
 export const STATS_SEASON = 2025;
 /** On the roster: active, or held on a reserve list. Cut and practice squad are not. */
@@ -693,7 +715,7 @@ export function renderDepthFile(depth, sources) {
   const bench = depth.reduce((n, t) => n + t.bench.length, 0);
   const practice = depth.reduce((n, t) => n + t.practice.length, 0);
   const lines = [];
-  lines.push(`// GENERATED ${new Date().toISOString().slice(0, 10)} by scripts/genFrontOfficeRoster.mjs (do not hand-edit).`);
+  lines.push(`// GENERATED ${sources.read} by scripts/genFrontOfficeRoster.mjs from scripts/data/nflRosters2026.json (do not hand-edit).`);
   lines.push(`// Round 828. The rest of every club beside the fifteen starters in`);
   lines.push(`// frontOfficePlayers.ts: ${bench} bench men (the active roster) and ${practice} practice squad men.`);
   lines.push(`// Roster: nflverse rosters release, season ${ROSTER_SEASON}, week ${sources.week}, the latest week`);
@@ -750,8 +772,8 @@ export function renderDepthFile(depth, sources) {
 export function renderFile(teams, sources) {
   const q = s => `'${String(s).replace(/\\/g, '\\\\').replace(/'/g, "\\'")}'`;
   const lines = [];
-  lines.push(`// GENERATED ${new Date().toISOString().slice(0, 10)} by scripts/genFrontOfficeRoster.mjs (do not hand-edit).`);
-  lines.push(`// Roster: nflverse rosters release, season ${ROSTER_SEASON}, players on the`);
+  lines.push(`// GENERATED ${sources.read} by scripts/genFrontOfficeRoster.mjs from scripts/data/nflRosters2026.json (do not hand-edit).`);
+  lines.push(`// Roster: nflverse rosters release, season ${ROSTER_SEASON}, week ${sources.week} as read on ${sources.read}, players on the`);
   lines.push(`// active or reserve list (${sources.rosterRows} rows read).`);
   lines.push(`// Ratings: nflverse stats_player regular plus post season ${STATS_SEASON}`);
   lines.push(`// (${sources.statRows} rows). Skill players on the fantasy basis, because for`);
@@ -804,50 +826,166 @@ export function renderFile(teams, sources) {
   return lines.join('\n');
 }
 
+/* ---------------------------------------------------------------- the record
+   Round 828 review. Exactly the rows and columns the rules read, so the bake
+   can be rerun and checked offline for as long as the repo exists. */
+export const RECORD_ROSTER_COLUMNS = [
+  'team', 'position', 'depth_chart_position', 'status', 'status_description_abbr', 'full_name', 'birth_date',
+  'gsis_id', 'espn_id', 'pfr_id', 'years_exp', 'draft_number', 'week',
+];
+export const RECORD_STAT_COLUMNS = [
+  'player_id', 'player_display_name', 'position', 'games',
+  'passing_yards', 'passing_tds', 'rushing_yards', 'rushing_tds', 'receptions', 'receiving_yards', 'receiving_tds',
+  'def_sacks', 'def_tackles_for_loss', 'def_qb_hits', 'def_interceptions', 'def_pass_defended', 'def_fumbles_forced',
+  'def_tackles_solo', 'def_tackle_assists',
+];
+/** Every status the bake reads: the starters' active and reserve lists and the practice squad. */
+const RECORD_STATUSES = [...new Set([...ROSTER_STATUSES, ...BENCH_STATUSES, ...PRACTICE_STATUSES])];
+
+/** The release, cut down to what the rules read. `read` is the day it was pulled. */
+export function makeRecord({ rawRoster, stats, read }) {
+  const week = latestWeek(rawRoster);
+  const rows = currentRows(rawRoster).filter(r => RECORD_STATUSES.includes(r.status));
+  const ids = new Set(rows.map(r => r.gsis_id).filter(Boolean));
+  const joined = stats.filter(s => ids.has(s.player_id));
+  return {
+    what: 'The NFL Front Office bake\'s raw record, written by scripts/genFrontOfficeRoster.mjs --record. Every row of the nflverse rosters release\'s latest week on the active, reserve or practice squad list, and every 2025 stats_player row those men join to (by gsis_id), with only the columns the rules read plus the ESPN and Pro Football Reference ids for a second source check. Nothing in it is chosen or rated.',
+    read,
+    rosterSeason: ROSTER_SEASON,
+    statsSeason: STATS_SEASON,
+    week,
+    source: { roster: `${RELEASE_URL}/roster_${ROSTER_SEASON}.csv`, stats: `${STATS_RELEASE_URL}/stats_player_regpost_${STATS_SEASON}.csv` },
+    rosterRowsInRelease: rawRoster.length,
+    statRowsInRelease: stats.length,
+    rosterColumns: RECORD_ROSTER_COLUMNS,
+    roster: rows.map(r => RECORD_ROSTER_COLUMNS.map(c => String(r[c] ?? ''))),
+    statColumns: RECORD_STAT_COLUMNS,
+    stats: joined.map(s => RECORD_STAT_COLUMNS.map(c => String(s[c] ?? ''))),
+  };
+}
+
+/** The record as JSON with one row per line, so a refresh reads as a diff of men. */
+export function renderRecord(rec) {
+  const head = Object.fromEntries(Object.entries(rec).filter(([k]) => k !== 'roster' && k !== 'stats'));
+  const lines = ['{'];
+  for (const [k, v] of Object.entries(head)) lines.push(` ${JSON.stringify(k)}: ${JSON.stringify(v)},`);
+  for (const k of ['roster', 'stats']) {
+    lines.push(` ${JSON.stringify(k)}: [`);
+    rec[k].forEach((r, i) => lines.push(`  ${JSON.stringify(r)}${i < rec[k].length - 1 ? ',' : ''}`));
+    lines.push(k === 'roster' ? ' ],' : ' ]');
+  }
+  lines.push('}');
+  return `${lines.join('\n')}\n`;
+}
+
+/** The record's rows back as the objects the rules read. */
+export function recordRows(rec) {
+  const obj = (cols, a) => Object.fromEntries(cols.map((c, i) => [c, a[i]]));
+  return { roster: rec.roster.map(a => obj(rec.rosterColumns, a)), stats: rec.stats.map(a => obj(rec.statColumns, a)) };
+}
+
+/* Every man on a club's list on the record who is not in the game, and why.
+   It walks the record rather than trusting the bake's own counters, so a
+   man who falls out for a reason nobody wrote down stops the bake. */
+export function leftOutList(rec, teams, depth, teamMeta) {
+  const { roster, stats } = recordRows(rec);
+  const statsById = new Map(stats.map(s => [s.player_id, s]));
+  const abbrs = new Set(teamMeta.map(t => t.abbr));
+  const inGame = new Set();
+  for (const t of teams) for (const p of t.players) inGame.add(`${t.abbr}|${p.name}|${p.pos}`);
+  for (const d of depth) for (const p of [...d.bench, ...d.practice]) inGame.add(`${d.abbr}|${p.name}|${p.pos}`);
+  const seen = new Set();
+  const out = [];
+  for (const r of roster) {
+    const team = String(r.team || '').toUpperCase();
+    const name = String(r.full_name || '').trim();
+    const pos = String(r.position || '').toUpperCase();
+    const row = { team, name, pos, status: r.status };
+    const p = personFrom(r, statsById, abbrs, true);
+    if (p && inGame.has(p.key) && !seen.has(p.key)) { seen.add(p.key); continue; }
+    let reason;
+    if (['K', 'P', 'LS'].includes(pos)) reason = 'a kicker, punter or long snapper: the game has no position for them yet';
+    else if (!group(pos)) reason = `position ${pos || 'blank'} is not one of the eight the game has`;
+    else if (!abbrs.has(team)) reason = `club ${team || 'blank'} is not one of the 32`;
+    else if (!name) reason = 'no name in the release';
+    else if (ageOf(r.birth_date) == null) reason = 'no usable birth date in the release, so no real age';
+    else if (p && seen.has(p.key)) reason = 'a second row for a man already in the game';
+    else if (r.status === 'RES') reason = `on a reserve list (${r.status_description_abbr || 'RES'}) and not one of the club's fifteen starters: a reserve list is not the 53`;
+    else throw new Error(`${team} ${name} (${pos}, ${r.status}) is on the record, not in the game, and has no reason written down`);
+    out.push({ ...row, reason });
+  }
+  out.sort((a, b) => a.team.localeCompare(b.team) || a.reason.localeCompare(b.reason) || a.name.localeCompare(b.name));
+  return out;
+}
+
+/** The whole bake from a record, as strings, so --check and the fence can compare without writing. */
+export function bakeFromRecord(rec, teamMeta) {
+  const { roster, stats } = recordRows(rec);
+  const teams = buildRoster({ roster, stats, teamMeta });
+  const join = buildRoster.lastJoin;
+  const depth = buildDepth({ roster, stats, teamMeta, core: teams });
+  const held = buildDepth.lastHeld;
+  const text = renderFile(teams, { read: rec.read, week: rec.week, rosterRows: rec.rosterRowsInRelease, statRows: rec.statRowsInRelease });
+  const depthText = renderDepthFile(depth, { read: rec.read, rosterRows: rec.rosterRowsInRelease, week: rec.week, held });
+  const leftOut = leftOutList(rec, teams, depth, teamMeta);
+  const byReason = {};
+  for (const m of leftOut) {
+    const k = m.reason.split(':')[0].replace(/ \(.*\)/, '');
+    byReason[k] = (byReason[k] ?? 0) + 1;
+  }
+  const leftJson = `${JSON.stringify({
+    read: rec.read,
+    week: rec.week,
+    what: 'Every man on an NFL club\'s active, reserve or practice squad list on the record (scripts/data/nflRosters2026.json) who is not in NFL Front Office, and why. Written by scripts/genFrontOfficeRoster.mjs.',
+    count: leftOut.length,
+    byReason,
+    leftOut,
+  }, null, 1)}\n`;
+  return { teams, depth, held, join, text, depthText, leftOut, leftJson };
+}
+
 const isMain = process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
 if (isMain) {
   const log = m => console.log('   ' + m);
+  const norm = t => t.split('\r\n').join('\n');
   const existing = fs.readFileSync(OUT, 'utf8');
-  const existingDepth = fs.existsSync(OUT_DEPTH) ? fs.readFileSync(OUT_DEPTH, 'utf8') : '';
-  const teamMeta = readTeamMeta(existing.split('\r\n').join('\n'));
+  const teamMeta = readTeamMeta(norm(existing));
   if (teamMeta.length !== 32) throw new Error(`read ${teamMeta.length} teams from the existing file, expected 32`);
-  const { rows: rawRoster } = await fetchSeasonRoster(ROSTER_SEASON, { log });
-  const { rows: stats } = await fetchSeasonStats(STATS_SEASON, { log });
-  /* Round 828: only the latest week is the roster as it stands today */
-  const week = latestWeek(rawRoster);
-  const roster = currentRows(rawRoster);
-  log(`roster ${rawRoster.length} rows (${roster.length} on the latest week, ${week}), stats ${stats.length} rows, ${teamMeta.length} teams`);
-  const teams = buildRoster({ roster, stats, teamMeta });
+  if (process.argv.includes('--record')) {
+    const { rows: rawRoster, file } = await fetchSeasonRoster(ROSTER_SEASON, { log });
+    const { rows: stats } = await fetchSeasonStats(STATS_SEASON, { log });
+    /* the day the release was pulled is the day its cached copy was written */
+    const read = fs.statSync(file).mtime.toISOString().slice(0, 10);
+    const rec = makeRecord({ rawRoster, stats, read });
+    fs.writeFileSync(RECORD, renderRecord(rec));
+    log(`wrote ${path.relative(ROOT, RECORD)}: week ${rec.week} read ${read}, ${rec.roster.length} roster rows of ${rawRoster.length}, ${rec.stats.length} stats rows of ${stats.length}`);
+  }
+  if (!fs.existsSync(RECORD)) throw new Error(`${path.relative(ROOT, RECORD)} is missing; run with --record to pull the release`);
+  const rec = JSON.parse(fs.readFileSync(RECORD, 'utf8'));
+  const out = bakeFromRecord(rec, teamMeta);
+  log(`record read ${rec.read}, week ${rec.week}: ${rec.roster.length} roster rows (${rec.rosterRowsInRelease} in the release), ${rec.stats.length} stats rows (${rec.statRowsInRelease} in the release)`);
   /* say the join out loud: a silent join is how the whole league got rated on
      draft position once already */
-  const j = buildRoster.lastJoin;
+  const j = out.join;
   if (j) log(`join: ${j.matched} of ${j.considered} roster rows found a stats row (${(j.matched / j.considered * 100).toFixed(1)} percent), ${j.rated} of them cleared ${MIN_GAMES} games`);
-  const text = renderFile(teams, { rosterRows: rawRoster.length, statRows: stats.length });
-  const depth = buildDepth({ roster, stats, teamMeta, core: teams });
-  const held = buildDepth.lastHeld;
-  const depthText = renderDepthFile(depth, { rosterRows: rawRoster.length, week, held });
   const counts = {};
-  for (const t of teams) for (const p of t.players) counts[p.pos] = (counts[p.pos] ?? 0) + 1;
-  console.log(`${teams.length} teams, ${Object.values(counts).reduce((a, b) => a + b, 0)} starters: ${Object.entries(counts).map(([k, v]) => `${k} ${v}`).join(', ')}`);
-  const active = teams.map(t => t.players.length + depth.find(d => d.abbr === t.abbr).bench.length);
-  const ps = depth.map(d => d.practice.length);
-  console.log(`active roster per club ${Math.min(...active)} to ${Math.max(...active)} (${active.reduce((a, b) => a + b, 0)} in all), practice squad ${Math.min(...ps)} to ${Math.max(...ps)} (${ps.reduce((a, b) => a + b, 0)}); held out ${held.specialists} specialists, ${held.reserve} reserve list men, ${held.duplicate} duplicates`);
+  for (const t of out.teams) for (const p of t.players) counts[p.pos] = (counts[p.pos] ?? 0) + 1;
+  console.log(`${out.teams.length} teams, ${Object.values(counts).reduce((a, b) => a + b, 0)} starters: ${Object.entries(counts).map(([k, v]) => `${k} ${v}`).join(', ')}`);
+  const active = out.teams.map(t => t.players.length + out.depth.find(d => d.abbr === t.abbr).bench.length);
+  const ps = out.depth.map(d => d.practice.length);
+  const held = out.held;
+  console.log(`active roster per club ${Math.min(...active)} to ${Math.max(...active)} (${active.reduce((a, b) => a + b, 0)} in all), practice squad ${Math.min(...ps)} to ${Math.max(...ps)} (${ps.reduce((a, b) => a + b, 0)}); held out ${held.specialists} specialists, ${held.reserve} reserve list men, ${held.duplicate} duplicates; ${out.leftOut.length} men in the left out list`);
+  const files = [[OUT, out.text], [OUT_DEPTH, out.depthText], [LEFT_OUT, out.leftJson]];
   if (process.argv.includes('--check')) {
-    /* Compare the DERIVATION, not the day it was written. Line 1 carries the
-       bake date, and it was inside the comparison, so from the day after a
-       bake --check reported STALE on a file where all 480 rows were
-       identical. The documented staleness signal was a permanent false
-       alarm that could not tell a genuinely stale file from a perfect one. */
-    const dropStamp = t => t.split('\n').slice(1).join('\n');
-    const same = dropStamp(existing.split('\r\n').join('\n')) === dropStamp(text);
-    const sameDepth = dropStamp(existingDepth.split('\r\n').join('\n')) === dropStamp(depthText);
-    console.log(same ? 'up to date: the starters file matches the derivation' : 'STALE: the starters file differs from the derivation');
-    console.log(sameDepth ? 'up to date: the depth file matches the derivation' : 'STALE: the depth file differs from the derivation');
-    process.exit(same && sameDepth ? 0 : 1);
+    /* The whole file, line 1 included: the stamp is the record's read date,
+       not the day the bake ran, so the same record always bakes the same bytes. */
+    const stale = files.filter(([f, want]) => !fs.existsSync(f) || norm(fs.readFileSync(f, 'utf8')) !== want);
+    for (const [f] of files) console.log(`${stale.some(([g]) => g === f) ? 'STALE' : 'up to date'}: ${path.relative(ROOT, f)}`);
+    process.exit(stale.length ? 1 : 0);
   }
   const eol = existing.includes('\r\n') ? '\r\n' : '\n';
-  fs.writeFileSync(OUT, text.split('\n').join(eol));
-  console.log(`wrote ${path.relative(ROOT, OUT)}`);
-  fs.writeFileSync(OUT_DEPTH, depthText.split('\n').join(eol));
-  console.log(`wrote ${path.relative(ROOT, OUT_DEPTH)}`);
+  for (const [f, text] of files) {
+    fs.writeFileSync(f, f === LEFT_OUT ? text : text.split('\n').join(eol));
+    console.log(`wrote ${path.relative(ROOT, f)}`);
+  }
 }

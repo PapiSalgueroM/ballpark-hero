@@ -1,5 +1,5 @@
-// GENERATED 2026-10-01 by scripts/genFrontOfficeRoster.mjs (do not hand-edit).
-// Roster: nflverse rosters release, season 2026, players on the
+// GENERATED 2026-10-01 by scripts/genFrontOfficeRoster.mjs from scripts/data/nflRosters2026.json (do not hand-edit).
+// Roster: nflverse rosters release, season 2026, week 4 as read on 2026-10-01, players on the
 // active or reserve list (3018 rows read).
 // Ratings: nflverse stats_player regular plus post season 2025
 // (2025 rows). Skill players on the fantasy basis, because for
