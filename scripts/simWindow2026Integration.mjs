@@ -82,17 +82,28 @@
    fails the section, so a green here never rests on a guess. Once APPLIED
    the live table is served as it is.
 
-   FLOORS, measured 2026-10-01 with the table PENDING (deterministic counts,
-   not samples; each floor sits near two thirds of the measure so a shrinking
-   pool cannot read as green while an empty answer still fails):
-     entries traced 396 (floor 264); window players in the Footle fallback
-     pool 27 (floor 18); in the Footle live pool, with the stand in, 90
-     (floor 60); in the Player Bingo pool, with the stand in, 10 of 482
-     (floor 7). Bingo's pool is the top of the value ranking, where the hand
-     list already carries most of the big moves, so the window rows reach
-     only ten of it; seven of those ten sit at the old club in the table as
-     it is, which is what the stale control fires on. Two full runs gave the
-     same counts.
+   FLOORS, measured 2026-10-01 over the 102 row Premier League and 78 row
+   Ligue 1 files (deterministic counts, not samples; each floor sits near two
+   thirds of the measure so a shrinking pool cannot read as green while an
+   empty answer still fails):
+     entries traced 503 (floor 335); window players in the Footle fallback
+     pool 35 with the table PENDING and 36 once APPLIED (Serge Gnabry's
+     inserted row joins) (floor 23); in the Footle live pool, with the stand
+     in or applied, 107 (floor 71); in the Player Bingo pool, with the stand
+     in or applied, 11 of 482 (floor 7). Bingo's pool is the top of the value
+     ranking, where the hand list already carries most of the big moves, so
+     the window rows reach only eleven of it; eight of those sit at the old
+     club in the table as it is, which is what the stale control fires on.
+     Measured once PENDING and once on the after state that
+     scripts/lib/window2026AsApplied.mjs serves; the counts agree. (The
+     first measure, over the 24 and 39 row files: 396, 27, 90, 10.)
+
+   AFTER THE APPLY. Every section is written for both states, and the after
+   state can be tried before anyone applies it:
+     NODE_OPTIONS="--import=<file URL of scripts/lib/window2026AsApplied.mjs>"
+       node scripts/simWindow2026Integration.mjs
+   serves the two tables as the migration leaves them; the harness must then
+   say APPLIED and all green.
 
    NEGATIVE CONTROLS (SIM_WINDOW_CONTROL=<name>), each judged on its own
    section and refusing to run when what it rewrites is not there:
@@ -143,7 +154,7 @@ const runs = s => !CONTROL || OWN[CONTROL].includes(s);
    evidence, by identity key, measured 2026-10-01. See section 11. */
 const TP_HELD = ['alvaro morata|spain'];
 
-const FLOOR = { traced: 264, footleFallback: 18, footleLive: 60, bingo: 7 };
+const FLOOR = { traced: 335, footleFallback: 23, footleLive: 71, bingo: 7 };
 const WINDOWS = new Set(['2026-01', '2026-summer']);
 
 const failures = {};
