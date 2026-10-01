@@ -37,7 +37,8 @@ import { nbaMoneySeasonTick } from './nbaCareerMoney';
 import type { InboxMessage } from './careerInbox';
 import { receiveNbaInboxTexts } from './nbaCareerInbox';
 import type { RivalryEvent } from './careerRivalryEvents';
-import { nbaRivalryTick } from './nbaCareerRivalryEvents';
+import { nbaRivalryTick, nbaRivalryChoiceTick } from './nbaCareerRivalryEvents';
+import type { RivalryChoiceCard } from './careerRivalryChoices';
 /* Round 422: the share of gross pay that actually reaches the bank, after tax,
    agent and living. It was already the number this file used to turn career
    earnings into net worth; it is named here so the yearly banking and the
@@ -177,6 +178,12 @@ export interface NbaCareerState {
   pendingRivalryEvent?: RivalryEvent | null;
   lastRivalryEventId?: number | null;
   rivalryIntensity?: number;
+  /** Round 796: a rival choice waiting on an answer (careerRivalryChoices.ts,
+      bound in nbaCareerRivalryEvents.ts), and every one this career has
+      seen. Absent on a pre-796 save, which reads as nothing pending and
+      nothing seen. */
+  pendingRivalryChoice?: RivalryChoiceCard | null;
+  rivalryChoicesSeen?: string[];
 }
 
 export interface NbaCareerEvent {
@@ -637,6 +644,9 @@ export function simNbaSeason(
      back stays the pure season sim it always was. */
   const rivalryEvent = nbaRivalryTick(c, rng);
   if (rivalryEvent) c.pendingRivalryEvent = rivalryEvent;
+  /* Round 796: a season the beat roll left empty can put a rival choice in
+     front of you instead, answered on the board, never applied here. */
+  else nbaRivalryChoiceTick(c, rng);
   c.seasons.push(line);
   return { line, notes };
 }
