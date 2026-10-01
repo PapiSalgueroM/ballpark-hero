@@ -1,5 +1,19 @@
 # Project state
 
+## CHECKPOINT 2026-09-30: First Touch, retained inbox and lineup focus accepted in browsers
+
+Codex770,771,772 have accepted actual-component tests, asserted controls and final772-CSS
+browser matrices. First Touch adds160 scored balls across eight contexts; Inbox exposes all
+retained messages and exact outcomes in eight contexts; NBA/NHL/F1 focus returns correctly in
+24 contexts. Detailed evidence and fixture limits are on WORKBOARD. Conquest769 is completing
+its forty-case map matrix after a native touch-capture fix. The full392-node suite is running.
+Final corrected-JS build and fifteen built-site fences are still pending. These four source
+rounds are not yet published. Root is scouting the next unclaimed work in parallel.
+
+All earlier Codex754 through768 are LIVE in Claude Release H. The top Release H receipt below
+supersedes older historical blocks saying nine of them awaited publishing. Google approval
+and reindexing remain external pending outcomes from741. Next unclaimed number:773.
+
 ## LIVE 2026-09-30: Release H (707, 708, 711, 730, 732), main `b8c77dce`
 
 Assembled by the desktop Claude lane in the gate clone (`release-h`), on top of Release G and

@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import { RotateCcw, X, Sparkles } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
@@ -35,6 +35,7 @@ function GenericLineupBoard<P>({ config }: Props<P>) {
   const [query, setQuery] = useState('');
   const [filters, setFilters] = useState<Record<string, string>>({});
   const [visibleLimit, setVisibleLimit] = useState(40);
+  const pickerOpener = useRef<{ trigger: HTMLButtonElement; slot: HTMLElement } | null>(null);
 
   const chemistry = useMemo(
     () => computeChemistry(Object.values(game.picks).map((p) => toChemistryPlayer(p as unknown as MaybeChemFields))),
@@ -111,6 +112,10 @@ function GenericLineupBoard<P>({ config }: Props<P>) {
           return (
             <div
               key={slot.id}
+              data-lineup-slot={slot.id}
+              role="group"
+              aria-label={`${slot.label} lineup slot`}
+              tabIndex={-1}
               className={`relative w-[150px] rounded-xl border p-3 text-center transition-colors ${
                 picked ? 'bg-card border-primary/40' : 'bg-card/60 border-border border-dashed'
               }`}
@@ -144,7 +149,8 @@ function GenericLineupBoard<P>({ config }: Props<P>) {
               ) : (
                 game.phase === 'picking' && (
                   <button
-                    onClick={() => {
+                    onClick={event => {
+                      pickerOpener.current = { trigger: event.currentTarget, slot: event.currentTarget.parentElement! };
                       setOpenSlot(slot.id);
                       resetFilters();
                     }}
@@ -221,7 +227,12 @@ function GenericLineupBoard<P>({ config }: Props<P>) {
       )}
 
       <Dialog open={openSlot !== null} onOpenChange={(o) => !o && setOpenSlot(null)}>
-        <DialogContent className="max-w-md max-h-[calc(100dvh-2rem)] overflow-y-auto bg-card border-border text-foreground">
+        <DialogContent onCloseAutoFocus={event => {
+          event.preventDefault();
+          const opener = pickerOpener.current;
+          const target = opener?.trigger.isConnected ? opener.trigger : opener?.slot;
+          if (target?.isConnected) target.focus({ preventScroll: true });
+        }} className="max-w-md max-h-[calc(100dvh-2rem)] overflow-y-auto bg-card border-border text-foreground">
           <DialogHeader>
             <DialogTitle className="text-base">
               Pick a {activeSlot?.label}

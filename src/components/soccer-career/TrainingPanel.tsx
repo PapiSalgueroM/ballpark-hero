@@ -16,13 +16,14 @@ import { focusDialogOnMount, escapeCloses } from '@/lib/dialogA11y';
 import type { CareerState } from "@/lib/soccerCareerEngine";
 import type { TrainingDrill } from "@/lib/soccerCareerEngine";
 import DrillBoard from "./DrillBoard";
+import FirstTouchBoard from "./FirstTouchBoard";
 import { DRILL_META, drillForPosition, type DrillKind } from "@/lib/careerDrills";
 import feedback from "./TrainingFeedback.module.css";
 
 /* Round 468: "arcade" is the position drill, played on the shared arcade
    engine in DrillBoard. It sits beside the Round 81 tiles rather than
    replacing them, and it banks through its own rule (applyDrillResult). */
-type Screen = "menu" | "dribbling" | "pace" | "shooting" | "passing" | "result" | "arcade";
+type Screen = "menu" | "dribbling" | "pace" | "shooting" | "passing" | "result" | "arcade" | "firsttouch";
 
 const CONES = [
   { x: 50, y: 90 }, { x: 24, y: 78 }, { x: 68, y: 68 }, { x: 30, y: 56 },
@@ -307,6 +308,12 @@ export default function TrainingPanel({ career, available, onComplete, onDrill, 
                 </button>
               );
             })()}
+            <button onClick={() => setScreen("firsttouch")}
+              className="w-full flex items-center gap-3 rounded-xl border border-emerald-500/40 bg-emerald-500/10 hover:bg-emerald-500/20 p-3.5 text-left transition-colors">
+              <span className="text-3xl">👟</span>
+              <span className="flex-1"><span className="block text-sm font-black">First Touch</span><span className="block text-[10px] text-muted-foreground">Read the gate, time your control. Trains Dribbling. Practice is always open.</span></span>
+              <span className="text-muted-foreground">›</span>
+            </button>
             {!available ? (
               <div className="rounded-xl border border-border bg-muted/10 p-6 text-center space-y-1">
                 <div className="text-3xl">😮‍💨</div>
@@ -333,6 +340,8 @@ export default function TrainingPanel({ career, available, onComplete, onDrill, 
             )}
           </div>
         )}
+
+        {screen === "firsttouch" && <FirstTouchBoard career={career} canBank={available} onBank={onDrill} onBack={() => setScreen("menu")} />}
 
         {screen === "arcade" && (
           <DrillBoard career={career} canBank={available} onBank={onDrill} onBack={() => setScreen("menu")} />

@@ -1,5 +1,33 @@
 # Work board
 
+**2026-09-30, Codex checkpoint 770, 771 and 772: gameplay and native browser acceptance passed.**
+First Touch: 20 engine/Board tests, eight asserted copied controls and eight final-CSS browser
+contexts pass 160 scored balls. Actual TrainingPanel, the new Board and pure capped reward
+application use a controlled local career. Daily80/practice90 outcomes, saved checkpoints,
+reload, stale other-tab progress, one-bank identity, pause/help/hidden resume, native input,
+stable focus and finite/static motion are measured. Real account saves and annual growth
+application remain outside this fixture. One old training-control import resolver is updated.
+
+Inbox: ten actual-card tests and three source controls pass. The portable playInboxCard gate
+passes eight native browser contexts with the real pure answerMessage, all eight retained IDs,
+exact saved outcomes/effects, counts, search, Load more, both focus paths and complete long text.
+Asserted passive-hook copies reproduce the false later automatic-resolution cue; asserted
+no-wrap copies reproduce 378px phone overflow in both motion modes. The measured scheduling
+fix uses the layout effect only for reply-intent reconciliation. Full-route saves are untested.
+
+Lineups: six new actual-dialog tests and nine existing picker tests pass, with two asserted
+focus controls. Twenty-four final-CSS NBA/NHL/F1 browser contexts prove native Space open,
+Close/Escape/outside return, exact Enter pick, stable slot fallback and repeat opener. No pool,
+scoring, filters or hook changes. All three lanes measure zero interaction writes/errors and
+zero horizontal overflow; restored or unchanged results stay quiet.
+
+Conquest769 acceptance continues after a proven native touch-capture transfer fix. The full
+392-node discovered suite is running against an isolated finished772 artifact. Final corrected
+JS rebuild and all fifteen built-site fences remain pending, so this is a source checkpoint,
+not a completed ship. Shared dist/public and Claude-owned source remain untouched. All earlier
+754 through768 are now LIVE in Claude Release H, independently confirmed by its live entry.
+Next unclaimed number remains773. Root alone owns docs, commits and publish handoff.
+
 **771 scope addendum, regression gate:** authorize new portable `scripts/playInboxCard.mjs`.
 The actual native-browser matrix found a passive-effect race where a no-op reply's intent could
 survive until an unrelated automatic resolution and replay committed feedback. The two-line

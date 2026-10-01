@@ -31,6 +31,7 @@ try {
     assert.notEqual(changed, original, 'Control must actually change the component');
     for (const [anchor, replacement] of [
       ['"./DrillBoard"', '"@/components/soccer-career/DrillBoard"'],
+      ['"./FirstTouchBoard"', '"@/components/soccer-career/FirstTouchBoard"'],
       ['"./TrainingFeedback.module.css"', '"@/components/soccer-career/TrainingFeedback.module.css"'],
     ]) {
       assert.equal(changed.split(anchor).length - 1, 1, 'Relative import must be rewritten once for the copy');
