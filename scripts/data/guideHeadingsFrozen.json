@@ -1982,13 +1982,15 @@
         "Win four best of 7 rounds, then draft and rebuild for the repeat, as long as ownership keeps you."
       ],
       "rules": [
-        "The cap starts at 155 million and rises 7 percent every season. Rosters hold 8 to 15 players.",
+        "The cap starts at the real 2026-27 figure, just under 165 million, and rises 7 percent every season in the game. You can waive down to 8 players during the year, but the season cannot tip off with fewer than 14 or more than 15: short of 14 the league fills the gap with minimum deals at 2 million each and tells you who, and above 15 the first round waits until you waive down.",
+        "The luxury tax line sits 21.5 percent above the cap (200.4 million in 2026-27, from the league's own figures). Every dollar of payroll over it, dead money included, is taxed at season close in brackets about 6 million wide: 1.00 and 1.25 on the first two, 3.50 and 4.75 on the next two, then half a dollar more per bracket. Pay tax in three of the previous four seasons and you are a repeater, taxed at 3.00, 3.25, 5.50 and 6.75 on the same brackets.",
+        "The cap panel shows the projected bill all season. At close the bill is listed beside the results, ownership takes one point of trust per 6 million of it (never more than 20), and the money is held back from next season's cap room. Above the first apron (about 209 million) a trade has to send out at least the salary it brings back. Computer teams that pay tax let their expiring depth walk the next summer, so the line moves the whole league, not just you.",
         "Trades are a negotiation now: open talks and the other GM answers with a handshake, a pick demand, a lesser man, or the dial tone. You can stand firm exactly once per call, and it genuinely gambles: they blink and the price drops, or they dig in and it rises.",
         "The play-in covers seeds 7 through 10, with one last game deciding the 8 seed.",
         "Draft classes have 24 prospects, you pick twice, and scouting grades can miss the truth by a few points either way.",
         "Everyone ages each summer: young players develop toward potential, decline starts at 32, veterans retire.",
-        "Waiving a man is not free. Half his salary stays on this season's cap as dead money, a quarter lands on next season's if he had years left, and you cannot sign him back until the offseason.",
-        "Trust upstairs runs 0 to 100: beat the mandate and it climbs, miss it and it falls, a banner fixes almost anything, and at zero you are fired and the save ends."
+        "Trust upstairs runs 0 to 100: beat the mandate and it climbs, miss it and it falls, a banner fixes almost anything, and at zero you are fired and the save ends.",
+        "Waiving a man is not free. Half his salary stays on this season's cap as dead money, a quarter lands on next season's if he had years left, and you cannot sign him back until the offseason."
       ],
       "example": [
         "You take a bubble team and ship an aging star for a 24 year old, pick attached. The season starts ugly.",
