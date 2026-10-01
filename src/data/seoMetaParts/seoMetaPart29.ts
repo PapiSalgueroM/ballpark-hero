@@ -2,10 +2,14 @@
    edit this folder: edit src/data/seoMeta.ts. Every vite build rewrites what
    has fallen behind, and simSeoTitles section 6 fails if the committed copy
    is not what the source makes. */
-/* Part 29 of 32: 5 entries. */
+/* Part 29 of 32: 6 entries. */
 import type { SeoMeta } from '../seoMeta';
 
 export const SEO_META_PART: Record<string, SeoMeta> = {
+  "/contract-chaos": {
+    title: "Contract Chaos: Soccer Agent Contract Game",
+    description: "Be the agent for a generated footballer. Compare wages, role, bonuses and release clauses, sign one deal and watch five seasons play out. Free soccer game.",
+  },
   "/football-connect-4": {
     title: "Soccer Connect 4: Football Trivia Grid Game",
     description: "Classic four in a row where every disc costs a soccer answer. Name a player who fits the column and the row to claim the cell. Free two player trivia game.",
