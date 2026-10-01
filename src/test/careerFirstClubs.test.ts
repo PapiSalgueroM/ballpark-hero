@@ -77,6 +77,33 @@ describe('the 25 best known paths open at the first senior club', () => {
   }
 });
 
+/** "14 apps 0 goals", "1 app 0 goals", "21 apps (1 league, ...)" -> the counts
+    the source string states, so a row can be held against what was read. */
+function sourceCount(s: string): { apps: number; goals: number | null; bare: boolean } {
+  const m = s.match(/^(\d+) apps?(?: (\d+) goals?)?/);
+  if (!m) throw new Error(`cannot read a source figure from "${s}"`);
+  return { apps: Number(m[1]), goals: m[2] === undefined ? null : Number(m[2]), bare: s === m[0] };
+}
+
+/** The ledger's rule: the row carries the matches both sources record, so
+    where they agree it is that figure, and where they differ it is the lower
+    one and at least one source says what the extra games were. The review of
+    2026-10-01 found the old check only asked for the shape "<n> apps": giving
+    Kane's two sources 25 and 31 against his row's 18 stayed green. */
+function expectRowFromSources(label: string, row: { apps: number; goals?: number }, wikipedia: string, footballdatabase: string) {
+  const w = sourceCount(wikipedia);
+  const f = sourceCount(footballdatabase);
+  expect(row.apps, `${label}: appearances against Wikipedia ${w.apps} and footballdatabase ${f.apps}`).toBe(Math.min(w.apps, f.apps));
+  if (row.goals !== undefined) {
+    expect(w.goals, `${label}: Wikipedia gives no goals figure`).not.toBeNull();
+    expect(f.goals, `${label}: footballdatabase gives no goals figure`).not.toBeNull();
+    expect(row.goals, `${label}: goals against Wikipedia ${w.goals} and footballdatabase ${f.goals}`).toBe(Math.min(w.goals!, f.goals!));
+  }
+  if (w.apps !== f.apps || w.goals !== f.goals) {
+    expect(w.bare && f.bare, `${label}: the sources disagree (${w.apps} and ${f.apps}) and neither says what the extra games were`).toBe(false);
+  }
+}
+
 describe('every added row is in the pool exactly as both sources agree', () => {
   const players = [...new Set(ledger.added.map(r => r.player))];
   for (const name of players) {
@@ -84,10 +111,7 @@ describe('every added row is in the pool exactly as both sources agree', () => {
       const rows = ledger.added.filter(r => r.player === name);
       const head = player(name).career.slice(0, rows.length);
       expect(head).toEqual(rows.map(r => ({ season: r.season, club: r.club, goals: r.goals, assists: null, appearances: r.appearances, marketValue: 0 })));
-      for (const r of rows) {
-        expect(r.wikipedia, `${name} ${r.season}: no Wikipedia figure`).toMatch(/\d+ apps?/);
-        expect(r.footballdatabase, `${name} ${r.season}: no second source figure`).toMatch(/\d+ apps?/);
-      }
+      for (const r of rows) expectRowFromSources(`${name} ${r.season} ${r.club}`, { apps: r.appearances, goals: r.goals }, r.wikipedia, r.footballdatabase);
     });
   }
 
@@ -118,8 +142,8 @@ describe('every added row is in the pool exactly as both sources agree', () => {
     for (const c of ledger.changed) {
       const row = player(c.player).career.find(s => s.season === c.season && s.club === c.club);
       expect(row?.[c.field], `${c.player} ${c.season} ${c.club}`).toBe(c.to);
-      expect(c.wikipedia).toMatch(/\d+ apps/);
-      expect(c.footballdatabase).toMatch(/\d+ apps/);
+      expect(c.from, `${c.player} ${c.season}: a change that changes nothing`).not.toBe(c.to);
+      expectRowFromSources(`${c.player} ${c.season} ${c.club}`, { apps: c.to }, c.wikipedia, c.footballdatabase);
     }
   });
 });
