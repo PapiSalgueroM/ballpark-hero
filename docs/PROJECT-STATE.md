@@ -1,5 +1,14 @@
 # Project state
 
+## IN PROGRESS 2026-10-01: Name Them All readable feedback
+
+803 claims the isolated ListQuiz Page/module/test/harness. Replace color-only hit
+feedback and truncated reveals with truthful announcements, finite/static motion,
+readable answers and safe native focus. Original answers/aliases, timed mode,
+tiers, completion and share stay held. Exact acceptance is on WORKBOARD.801/802
+continue;800's corrected app type gate passes and its isolated production pipeline
+continues. The immutable413 regression is still running. Next free804.
+
 ## IN PROGRESS 2026-10-01: Rank 'Em editable draft and explicit lock
 
 802 replaces fifth-pick autosubmission with a reviewable local order and one
