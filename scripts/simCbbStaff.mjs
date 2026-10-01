@@ -60,8 +60,38 @@
         upset rate and in the weakest program's wins must sit in its band.
 
    MEASURED HEADROOM, written down before the bands were set (Round 823,
-   2026-10-01, five batches at CBB_STAFF_SEED_BASE 0, 1000, 2000, 3000, 4000):
-     MEASURED_BLOCK
+   2026-10-01, 300 seeds a batch, five batches at CBB_STAFF_SEED_BASE 0, 1000,
+   2000, 3000 and 4000):
+     offense, mean points scored per game at assistant 45 / 70 / 95: 69.4 to
+       69.9 / 75.0 to 75.5 / 80.6 to 81.1; the 45 to 95 uplift 11.06, 11.15,
+       11.21, 11.32, 11.11; smallest step of the mean 1.07 to 1.16;
+     defense, mean points allowed at 45 / 70 / 95: 73.7 to 74.0 / 68.3 to
+       68.5 / 62.9 to 63.2; the drop 10.80, 10.84, 10.85, 10.99, 10.80;
+       smallest step 1.06 to 1.10;
+     wins a season (of twenty) a 95 adds over a 45: offense 2.557, 2.683,
+       2.743, 2.850, 2.643; defense 2.583, 2.673, 2.683, 2.797, 2.583 (spread
+       0.29). With the assistants' effect on the win model doubled it is 4.94
+       and 4.92, halved 1.31 and 1.34 (controls doubled and halved, base 0);
+     seeds where a better assistant made his end worse: 0 in all ten runs;
+       cap breaks: 0 in all ten runs;
+     league balance, 600 seasons a base, layer minus legacy: upset rate
+       -1.56, -1.77, -1.66, -1.57, -1.70 points (spread 0.21), Butler (the
+       lowest prestige) regular season wins -0.00, -0.08, 0.02, -0.04, 0.06
+       (spread 0.14); top six prestige programs' title share 96.7 to 98.7%
+       legacy and 97.7 to 98.8% with the layer (printed, too few titles to band);
+     the schedule changed the March field in 109 of 209 dynasty seasons
+       (those seeds do not move with the seed base);
+     the first run found 34 schools meeting their rival a second time on
+       rivalry night, fixed in this round, 0 in every run since.
+   Bands: uplift and drop inside [9, 13] (about 1.8 below and 1.7 above the
+   measured range), every step at least STEP_FLOOR 0.5, WIN_BAND [1.9, 3.5]
+   (about 0.65 either side of the measured range, so a halved or a doubled
+   effect fails, measured), FIELDS_FLOOR 50 of 209, UPSET_DRIFT_BAND
+   [-3, -0.5] and WEAK_DRIFT_BAND [-0.6, 0.5] (about 1.2 and 0.5 beyond the
+   measured ranges). The bound itself is the hard cap in sections 1 and 2,
+   not these bands: about 9 of the 11 points is the assistant's shift (1.5 a
+   point of edge times 6 points of edge), the rest is games his edge turned
+   from losses into wins.
 
    Negative controls (house rule: prove each check can fail). Each patches the
    BUNDLE, never the source, and refuses to run unless its target string is
@@ -70,6 +100,7 @@
      CBB_STAFF_CONTROL=inverted   a better rating is worse              -> 1, 2, 3 red
      CBB_STAFF_CONTROL=nostaff    assistants leave the win model        -> 1, 2, 3 red
      CBB_STAFF_CONTROL=doubled    their effect on it doubles            -> 1, 2, 3 red
+     CBB_STAFF_CONTROL=halved     their effect on it halves             -> 1, 2, 3 red
      CBB_STAFF_CONTROL=raise      the winner is raised, not the loser   -> 2, 3 red
      CBB_STAFF_CONTROL=overspend  hiring stops checking the pot         -> 4 red
      CBB_STAFF_CONTROL=nowalk     payroll never makes anyone walk       -> 4 red
@@ -101,12 +132,12 @@ const DYN_SEEDS = 20;
 const DYN_SEASONS = 10;
 const LEVELS = [45, 55, 65, 70, 75, 85, 95];
 const STEP_FLOOR = 0.5;
-const UPLIFT_BAND = [6, 12];
-const WIN_BAND = [0.6, 2.4];
-const FIELDS_FLOOR = 10;
+const UPLIFT_BAND = [9, 13];
+const WIN_BAND = [1.9, 3.5];
+const FIELDS_FLOOR = 50;
 const BAL_SEASONS = 600;
-const UPSET_DRIFT_BAND = [-4, 0];
-const WEAK_DRIFT_BAND = [-1.5, 0.5];
+const UPSET_DRIFT_BAND = [-3, -0.5];
+const WEAK_DRIFT_BAND = [-0.6, 0.5];
 
 /* Each control: the exact bundled text it rewrites and what it becomes. */
 const CONTROLS = {
@@ -114,6 +145,7 @@ const CONTROLS = {
   inverted: ['const raw = (rating - STAFF_NEUTRAL) * STAFF_EDGE_PER_POINT;', 'const raw = (STAFF_NEUTRAL - rating) * STAFF_EDGE_PER_POINT;'],
   nostaff: ['const staffPart = staff ? (staff.off + staff.def) / 2 : 0;', 'const staffPart = 0;'],
   doubled: ['const staffPart = staff ? (staff.off + staff.def) / 2 : 0;', 'const staffPart = staff ? staff.off + staff.def : 0;'],
+  halved: ['const staffPart = staff ? (staff.off + staff.def) / 2 : 0;', 'const staffPart = staff ? (staff.off + staff.def) / 4 : 0;'],
   raise: ['return homeWins ? [hs, Math.max(0, Math.min(as, hs - finish))] : [Math.max(0, Math.min(hs, as - finish)), as];',
     'return homeWins ? [hs <= as ? as + finish : hs, as] : [hs, as <= hs ? hs + finish : as];'],
   overspend: ['if (net > holder.nil) return false;', ''],
