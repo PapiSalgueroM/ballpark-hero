@@ -36,7 +36,7 @@ const controls = {
   booked: { changes: [['setBookedDaily(completedDaily !== null);', 'setBookedDaily(false);', 1]], failure: /keeps a newly finished daily in memory when private storage refuses its write/ },
 };
 assert.ok(!control || control in controls, 'Unknown Free Kick practice control');
-const original = await readFile(source, 'utf8');
+const original = (await readFile(source, 'utf8')).replace(/\r\n/g, '\n');
 let folder;
 let copy;
 try {
@@ -76,5 +76,5 @@ try {
     assert.equal(run.status, 0, output.slice(-6000)); assert.match(output, /11 passed/);
     console.log('simFreeKickPractice: eleven actual Board/engine checks passed for explicit inputs, exact geometry, native key routing, pause/help, ten-shot practice, fresh daily roundtrips and private storage refusal.');
   }
-  assert.equal(await readFile(source, 'utf8'), original, 'Controls must preserve shared production source');
+  assert.equal((await readFile(source, 'utf8')).replace(/\r\n/g, '\n'), original, 'Controls must preserve shared production source');
 } finally { if (copy) await rm(copy, { force: true }); if (folder) await rmdir(folder); }
