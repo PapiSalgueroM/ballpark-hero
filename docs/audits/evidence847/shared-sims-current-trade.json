@@ -1,0 +1,309 @@
+{
+  "started": "2026-10-01T22:58:25.588Z",
+  "cases": [
+    {
+      "sport": "NHL",
+      "url": "https://douknowball.com/nhl-front-office",
+      "errors": [],
+      "badHttp": [],
+      "blocked": [],
+      "kind": "tradeAccess",
+      "finderButtons": [
+        "Matthew Tkachuk (W)96",
+        "Brad Marchand (W)95",
+        "Brady Tkachuk (W)95",
+        "Sam Reinhart (C)94",
+        "Seth Jones (D)92",
+        "Sam Bennett (C)91",
+        "Carter Verhaeghe (C)90",
+        "Anton Lundell (C)89",
+        "Shop him around the league"
+      ],
+      "ownRoster": [
+        {
+          "id": "h1k3fn2k1y5q4do-144",
+          "name": "Matthew Tkachuk",
+          "ovr": 96,
+          "pos": "W"
+        },
+        {
+          "id": "h1k3fn2k1y5q4do-145",
+          "name": "Brad Marchand",
+          "ovr": 95,
+          "pos": "W"
+        },
+        {
+          "id": "h1k3fn2k1y5q4do-146",
+          "name": "Brady Tkachuk",
+          "ovr": 95,
+          "pos": "W"
+        },
+        {
+          "id": "h1k3fn2k1y5q4do-147",
+          "name": "Sam Reinhart",
+          "ovr": 94,
+          "pos": "C"
+        },
+        {
+          "id": "h1k3fn2k1y5q4do-148",
+          "name": "Sam Bennett",
+          "ovr": 91,
+          "pos": "C"
+        },
+        {
+          "id": "h1k3fn2k1y5q4do-149",
+          "name": "Carter Verhaeghe",
+          "ovr": 90,
+          "pos": "C"
+        },
+        {
+          "id": "h1k3fn2k1y5q4do-150",
+          "name": "Anton Lundell",
+          "ovr": 89,
+          "pos": "C"
+        },
+        {
+          "id": "h1k3fn2k1y5q4do-151",
+          "name": "Seth Jones",
+          "ovr": 92,
+          "pos": "D"
+        },
+        {
+          "id": "h1k3fn2k1y5q4do-152",
+          "name": "Aaron Ekblad",
+          "ovr": 85,
+          "pos": "D"
+        },
+        {
+          "id": "h1k3fn2k1y5q4do-153",
+          "name": "Gustav Forsling",
+          "ovr": 84,
+          "pos": "D"
+        },
+        {
+          "id": "h1k3fn2k1y5q4do-154",
+          "name": "Uvis Balinskis",
+          "ovr": 80,
+          "pos": "D"
+        },
+        {
+          "id": "h1k3fn2k1y5q4do-155",
+          "name": "Akira Schmid",
+          "ovr": 78,
+          "pos": "G"
+        },
+        {
+          "id": "h1k3fn2k1y5q4do-156",
+          "name": "Jacob Markstrom",
+          "ovr": 77,
+          "pos": "G"
+        }
+      ],
+      "missingOwn": [
+        {
+          "id": "h1k3fn2k1y5q4do-152",
+          "name": "Aaron Ekblad",
+          "ovr": 85,
+          "pos": "D"
+        },
+        {
+          "id": "h1k3fn2k1y5q4do-153",
+          "name": "Gustav Forsling",
+          "ovr": 84,
+          "pos": "D"
+        },
+        {
+          "id": "h1k3fn2k1y5q4do-154",
+          "name": "Uvis Balinskis",
+          "ovr": 80,
+          "pos": "D"
+        },
+        {
+          "id": "h1k3fn2k1y5q4do-155",
+          "name": "Akira Schmid",
+          "ovr": 78,
+          "pos": "G"
+        },
+        {
+          "id": "h1k3fn2k1y5q4do-156",
+          "name": "Jacob Markstrom",
+          "ovr": 77,
+          "pos": "G"
+        }
+      ],
+      "partnerRoster": [
+        {
+          "id": "h1k3fn2k1y5q4do-1",
+          "name": "Leo Carlsson",
+          "ovr": 94,
+          "pos": "C"
+        },
+        {
+          "id": "h1k3fn2k1y5q4do-2",
+          "name": "Cutter Gauthier",
+          "ovr": 94,
+          "pos": "W"
+        },
+        {
+          "id": "h1k3fn2k1y5q4do-3",
+          "name": "Troy Terry",
+          "ovr": 94,
+          "pos": "W"
+        },
+        {
+          "id": "h1k3fn2k1y5q4do-4",
+          "name": "Beckett Sennecke",
+          "ovr": 90,
+          "pos": "W"
+        },
+        {
+          "id": "h1k3fn2k1y5q4do-5",
+          "name": "Mikael Granlund",
+          "ovr": 89,
+          "pos": "C"
+        },
+        {
+          "id": "h1k3fn2k1y5q4do-6",
+          "name": "Chris Kreider",
+          "ovr": 88,
+          "pos": "W"
+        },
+        {
+          "id": "h1k3fn2k1y5q4do-7",
+          "name": "Ryan Poehling",
+          "ovr": 83,
+          "pos": "C"
+        },
+        {
+          "id": "h1k3fn2k1y5q4do-8",
+          "name": "Jackson LaCombe",
+          "ovr": 92,
+          "pos": "D"
+        },
+        {
+          "id": "h1k3fn2k1y5q4do-9",
+          "name": "Pavel Mintyukov",
+          "ovr": 82,
+          "pos": "D"
+        },
+        {
+          "id": "h1k3fn2k1y5q4do-10",
+          "name": "Nick Jensen",
+          "ovr": 81,
+          "pos": "D"
+        },
+        {
+          "id": "h1k3fn2k1y5q4do-11",
+          "name": "Drew Helleson",
+          "ovr": 79,
+          "pos": "D"
+        },
+        {
+          "id": "h1k3fn2k1y5q4do-12",
+          "name": "Lukas Dostal",
+          "ovr": 82,
+          "pos": "G"
+        },
+        {
+          "id": "h1k3fn2k1y5q4do-13",
+          "name": "Ville Husso",
+          "ovr": 73,
+          "pos": "G"
+        }
+      ],
+      "receiveIds": [
+        "h1k3fn2k1y5q4do-1",
+        "h1k3fn2k1y5q4do-2",
+        "h1k3fn2k1y5q4do-3",
+        "h1k3fn2k1y5q4do-8",
+        "h1k3fn2k1y5q4do-4",
+        "h1k3fn2k1y5q4do-5",
+        "h1k3fn2k1y5q4do-6",
+        "h1k3fn2k1y5q4do-7"
+      ],
+      "buttons": [
+        "Back",
+        "Sign up to track your statsTrack stats",
+        "",
+        " Hub",
+        "Matthew Tkachuk (W)96",
+        "Brad Marchand (W)95",
+        "Brady Tkachuk (W)95",
+        "Sam Reinhart (C)94",
+        "Seth Jones (D)92",
+        "Sam Bennett (C)91",
+        "Carter Verhaeghe (C)90",
+        "Anton Lundell (C)89",
+        "Shop him around the league",
+        "BOS",
+        "BUF",
+        "DET",
+        "MTL",
+        "OTT",
+        "TBL",
+        "TOR",
+        "CAR",
+        "CBJ",
+        "NJD",
+        "NYI",
+        "NYR",
+        "PHI",
+        "PIT",
+        "WSH",
+        "CHI",
+        "COL",
+        "DAL",
+        "MIN",
+        "NSH",
+        "STL",
+        "UTA",
+        "WPG",
+        "ANA",
+        "CGY",
+        "EDM",
+        "LAK",
+        "SJS",
+        "SEA",
+        "VAN",
+        "VGK",
+        "Matthew Tkachuk (W)96",
+        "Brad Marchand (W)95",
+        "Brady Tkachuk (W)95",
+        "Sam Reinhart (C)94",
+        "Seth Jones (D)92",
+        "Sam Bennett (C)91",
+        "Carter Verhaeghe (C)90",
+        "Anton Lundell (C)89",
+        "Open talks",
+        "Open talks",
+        "Open talks",
+        "Open talks",
+        "Open talks",
+        "Open talks",
+        "Open talks",
+        "Open talks",
+        " Abandon franchise and restart",
+        "Cookie choices",
+        "Light mode",
+        "Report a bug"
+      ],
+      "rawHeld": true,
+      "overflow": 0,
+      "entries": [
+        {
+          "url": "https://douknowball.com/assets/index-E8L0RxXO.js",
+          "status": 200,
+          "sha256": "640820ed3b9ead81190861c4b061326a372e9c942067b3440d16e5e8cdea2e0b"
+        }
+      ],
+      "body": "Skip to main content\nDOUKNOWBALL\nBack\nTrack stats\nNHL Front Office\n\nReal 2026-27 rosters. A hard cap with no mercy. Sixteen teams, one Cup.\n\nFlorida Panthers\n2026-27 · Round 1/20\nRecord 0-0-0 · 0 pts\nStrength 88\nCap space $9.6M\n🏛️ OWNERSHIP\nTrust 60\n\nMake the playoffs. Ownership thinks this roster belongs there.\n\nHub\nTrades\n\n🔍 Trade Finder\n\nPick one of your players and shop him. Only deals the AI genuinely accepts show up, cap checked.\n\nMatthew Tkachuk (W)\n96\nBrad Marchand (W)\n95\nBrady Tkachuk (W)\n95\nSam Reinhart (C)\n94\nSeth Jones (D)\n92\nSam Bennett (C)\n91\nCarter Verhaeghe (C)\n90\nAnton Lundell (C)\n89\nShop him around the league\n\nOR BUILD YOUR OWN DEAL\n\nBOS\nBUF\nDET\nMTL\nOTT\nTBL\nTOR\nCAR\nCBJ\nNJD\nNYI\nNYR\nPHI\nPIT\nWSH\nCHI\nCOL\nDAL\nMIN\nNSH\nSTL\nUTA\nWPG\nANA\nCGY\nEDM\nLAK\nSJS\nSEA\nVAN\nVGK\n\n1. Pick who YOU send. 2. Tap who you want back and open talks. The other GM counters like a person: a pick to close the gap, a lesser man instead, or the dial tone.\n\nYOU SEND\n\nMatthew Tkachuk (W)\n96\nBrad Marchand (W)\n95\nBrady Tkachuk (W)\n95\nSam Reinhart (C)\n94\nSeth Jones (D)\n92\nSam Bennett (C)\n91\nCarter Verhaeghe (C)\n90\nAnton Lundell (C)\n89\n\nYOU GET (ANA)\n\nLeo Carlsson (C) 94\nOpen talks\nCutter Gauthier (W) 94\nOpen talks\nTroy Terry (W) 94\nOpen talks\nJackson LaCombe (D) 92\nOpen talks\nBeckett Sennecke (W) 90\nOpen talks\nMikael Granlund (C) 89\nOpen talks\nChris Kreider (W) 88\nOpen talks\nRyan Poehling (C) 83\nOpen talks\nAbandon franchise and restart\nNHL Front Office: Hockey GM Simulator\n\nTake over a real NHL club with its actual 2026-27 roster, every player rated off real 2025-26 stats pulled from the league's own data. Work under the hard salary cap, waive contracts, sign free agents, swing trades the AI weighs on age, position and rating, then chase points through an 82-game-shaped season where overtime "
+    }
+  ],
+  "boundary": "Current actual live App, native actions, one-time copied native save injection, all vendor and non-GET requests aborted. No engine or JS substitutions.",
+  "finished": "2026-10-01T22:58:44.302Z",
+  "cleanup": {
+    "browserClosed": true,
+    "contextsClosed": true,
+    "ownedServer": false
+  }
+}

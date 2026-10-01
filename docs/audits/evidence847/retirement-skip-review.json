@@ -1,0 +1,375 @@
+{
+  "reviewed": "2026-10-01T23:08:31.473Z",
+  "id": "SIM-05",
+  "severity": "P1",
+  "title": "Declining retirement consumes an age year without playing or recording the deferred season",
+  "url": "https://douknowball.com/soccer-career",
+  "liveEntry": "/assets/index-E8L0RxXO.js",
+  "verdict": "Verified from the original native UI trail and explained by the source",
+  "boundary": "Independent read-only review of the parent agent native receipts. Same unseeded native-created career, exact previously observed age25 save restored in a new browser, then175 additional native clicks. No new replay, engine probe, fixture or game modification in this review.",
+  "reproduction": [
+    "Play a real native career until Next Season shows the retirement suggestion.",
+    "Select Not Done Yet: Keep Playing.",
+    "Select Next Season again, then compare age and the timeline season rows."
+  ],
+  "expected": "Declining retirement continues the already-started season without silently spending another age year. If a year is deliberately skipped, the calendar and timeline should record it explicitly.",
+  "actual": {
+    "missingPlayingAges": [
+      33,
+      37,
+      41,
+      42,
+      43,
+      44
+    ],
+    "promptDeclinePairs": [
+      {
+        "prompt": {
+          "step": 95,
+          "phase": "playing",
+          "age": 32,
+          "action": "Next Season",
+          "afterPhase": "retirement_suggestion",
+          "afterAge": 33,
+          "seasonCount": 17,
+          "team": "Chelsea",
+          "retired": false,
+          "visibleError": false
+        },
+        "decline": {
+          "step": 96,
+          "phase": "retirement_suggestion",
+          "age": 33,
+          "action": "💪 Not Done Yet: Keep Playing",
+          "afterPhase": "playing",
+          "afterAge": 33,
+          "seasonCount": 17,
+          "team": "Chelsea",
+          "retired": false,
+          "visibleError": false
+        }
+      },
+      {
+        "prompt": {
+          "step": 132,
+          "phase": "playing",
+          "age": 36,
+          "action": "Next Season",
+          "afterPhase": "retirement_suggestion",
+          "afterAge": 37,
+          "seasonCount": 20,
+          "team": "Flora Tallinn",
+          "retired": false,
+          "visibleError": false
+        },
+        "decline": {
+          "step": 133,
+          "phase": "retirement_suggestion",
+          "age": 37,
+          "action": "💪 Not Done Yet: Keep Playing",
+          "afterPhase": "playing",
+          "afterAge": 37,
+          "seasonCount": 20,
+          "team": "Flora Tallinn",
+          "retired": false,
+          "visibleError": false
+        }
+      },
+      {
+        "prompt": {
+          "step": 166,
+          "phase": "playing",
+          "age": 40,
+          "action": "Next Season",
+          "afterPhase": "retirement_suggestion",
+          "afterAge": 41,
+          "seasonCount": 23,
+          "team": "Young Africans",
+          "retired": false,
+          "visibleError": false
+        },
+        "decline": {
+          "step": 167,
+          "phase": "retirement_suggestion",
+          "age": 41,
+          "action": "💪 Not Done Yet: Keep Playing",
+          "afterPhase": "playing",
+          "afterAge": 41,
+          "seasonCount": 23,
+          "team": "Young Africans",
+          "retired": false,
+          "visibleError": false
+        }
+      },
+      {
+        "prompt": {
+          "step": 168,
+          "phase": "playing",
+          "age": 41,
+          "action": "Next Season",
+          "afterPhase": "retirement_suggestion",
+          "afterAge": 42,
+          "seasonCount": 23,
+          "team": "Young Africans",
+          "retired": false,
+          "visibleError": false
+        },
+        "decline": {
+          "step": 169,
+          "phase": "retirement_suggestion",
+          "age": 42,
+          "action": "💪 Not Done Yet: Keep Playing",
+          "afterPhase": "playing",
+          "afterAge": 42,
+          "seasonCount": 23,
+          "team": "Young Africans",
+          "retired": false,
+          "visibleError": false
+        }
+      },
+      {
+        "prompt": {
+          "step": 170,
+          "phase": "playing",
+          "age": 42,
+          "action": "Next Season",
+          "afterPhase": "retirement_suggestion",
+          "afterAge": 43,
+          "seasonCount": 23,
+          "team": "Young Africans",
+          "retired": false,
+          "visibleError": false
+        },
+        "decline": {
+          "step": 171,
+          "phase": "retirement_suggestion",
+          "age": 43,
+          "action": "💪 Not Done Yet: Keep Playing",
+          "afterPhase": "playing",
+          "afterAge": 43,
+          "seasonCount": 23,
+          "team": "Young Africans",
+          "retired": false,
+          "visibleError": false
+        }
+      },
+      {
+        "prompt": {
+          "step": 172,
+          "phase": "playing",
+          "age": 43,
+          "action": "Next Season",
+          "afterPhase": "retirement_suggestion",
+          "afterAge": 44,
+          "seasonCount": 23,
+          "team": "Young Africans",
+          "retired": false,
+          "visibleError": false
+        },
+        "decline": {
+          "step": 173,
+          "phase": "retirement_suggestion",
+          "age": 44,
+          "action": "💪 Not Done Yet: Keep Playing",
+          "afterPhase": "playing",
+          "afterAge": 44,
+          "seasonCount": 23,
+          "team": "Young Africans",
+          "retired": false,
+          "visibleError": false
+        }
+      }
+    ],
+    "lateTrail": [
+      {
+        "step": 166,
+        "phase": "playing",
+        "age": 40,
+        "action": "Next Season",
+        "afterPhase": "retirement_suggestion",
+        "afterAge": 41,
+        "seasonCount": 23,
+        "team": "Young Africans",
+        "retired": false,
+        "visibleError": false
+      },
+      {
+        "step": 167,
+        "phase": "retirement_suggestion",
+        "age": 41,
+        "action": "💪 Not Done Yet: Keep Playing",
+        "afterPhase": "playing",
+        "afterAge": 41,
+        "seasonCount": 23,
+        "team": "Young Africans",
+        "retired": false,
+        "visibleError": false
+      },
+      {
+        "step": 168,
+        "phase": "playing",
+        "age": 41,
+        "action": "Next Season",
+        "afterPhase": "retirement_suggestion",
+        "afterAge": 42,
+        "seasonCount": 23,
+        "team": "Young Africans",
+        "retired": false,
+        "visibleError": false
+      },
+      {
+        "step": 169,
+        "phase": "retirement_suggestion",
+        "age": 42,
+        "action": "💪 Not Done Yet: Keep Playing",
+        "afterPhase": "playing",
+        "afterAge": 42,
+        "seasonCount": 23,
+        "team": "Young Africans",
+        "retired": false,
+        "visibleError": false
+      },
+      {
+        "step": 170,
+        "phase": "playing",
+        "age": 42,
+        "action": "Next Season",
+        "afterPhase": "retirement_suggestion",
+        "afterAge": 43,
+        "seasonCount": 23,
+        "team": "Young Africans",
+        "retired": false,
+        "visibleError": false
+      },
+      {
+        "step": 171,
+        "phase": "retirement_suggestion",
+        "age": 43,
+        "action": "💪 Not Done Yet: Keep Playing",
+        "afterPhase": "playing",
+        "afterAge": 43,
+        "seasonCount": 23,
+        "team": "Young Africans",
+        "retired": false,
+        "visibleError": false
+      },
+      {
+        "step": 172,
+        "phase": "playing",
+        "age": 43,
+        "action": "Next Season",
+        "afterPhase": "retirement_suggestion",
+        "afterAge": 44,
+        "seasonCount": 23,
+        "team": "Young Africans",
+        "retired": false,
+        "visibleError": false
+      },
+      {
+        "step": 173,
+        "phase": "retirement_suggestion",
+        "age": 44,
+        "action": "💪 Not Done Yet: Keep Playing",
+        "afterPhase": "playing",
+        "afterAge": 44,
+        "seasonCount": 23,
+        "team": "Young Africans",
+        "retired": false,
+        "visibleError": false
+      },
+      {
+        "step": 174,
+        "phase": "playing",
+        "age": 44,
+        "action": "Next Season",
+        "afterPhase": "retirement_ceremony",
+        "afterAge": 45,
+        "seasonCount": 24,
+        "team": "Young Africans",
+        "retired": true,
+        "visibleError": false
+      }
+    ],
+    "calendar": {
+      "startYear": 2025,
+      "startAge": 16,
+      "finalAge": 45,
+      "lastRecordedYear": 2048,
+      "expectedContinuousYear": 2054,
+      "driftYears": 6
+    },
+    "finalSeasonRows": 24,
+    "finalPhase": "retirement_ceremony",
+    "finalRetired": true,
+    "youngAfricansRows": [
+      {
+        "age": 45,
+        "year": 2048,
+        "type": "retired",
+        "apps": 0
+      }
+    ]
+  },
+  "sources": [
+    {
+      "file": "src/lib/soccerCareerEngine.ts",
+      "line": 4720,
+      "reason": "Increments age before deciding whether to offer retirement."
+    },
+    {
+      "file": "src/lib/soccerCareerEngine.ts",
+      "line": 4905,
+      "reason": "First suggestion returns before generating the season."
+    },
+    {
+      "file": "src/lib/soccerCareerEngine.ts",
+      "line": 4911,
+      "reason": "Repeated suggestion also returns before generating the season."
+    },
+    {
+      "file": "src/lib/soccerCareerEngine.ts",
+      "line": 4915,
+      "reason": "Normal season generation lies after both returns."
+    },
+    {
+      "file": "src/lib/soccerCareerEngine.ts",
+      "line": 5224,
+      "reason": "Normal season record append is skipped by those returns."
+    },
+    {
+      "file": "src/lib/soccerCareerEngine.ts",
+      "line": 7672,
+      "reason": "Decline only changes phase to playing and appends a decision event; it does not resume the deferred season or undo the age increment."
+    },
+    {
+      "file": "src/pages/SoccerCareer.tsx",
+      "line": 1011,
+      "reason": "Native decline callback delegates directly to declineRetirementSuggestion."
+    },
+    {
+      "file": "src/lib/soccerCareerEngine.ts",
+      "line": 3850,
+      "reason": "Next recorded year is based on last recorded year plus one, independently of the already incremented age."
+    }
+  ],
+  "exclusions": [
+    "Age39 PED ban is an intentional recorded zero-appearance season, not a missing season.",
+    "Age45 forced retirement and its retired row are intentional; the lost continuing years before it are the defect.",
+    "The earlier malformed Striker selector and World Cup panel ping-pong were driver limitations and receive no finding credit.",
+    "The number and exact timing of repeated retirement prompts are random. Six losses were actually observed here; this review does not assert every career loses six seasons.",
+    "Specific lost salary, injury, training or match totals were not measured and are not claimed."
+  ],
+  "whyNotAnInjuryOmission": "Every missing age matches retirement_suggestion followed by a native decline. The timeline lacks a row entirely. The observed intentional ban instead has a zero-app row. There is no recorded rehab or ban path explaining these six absent ages.",
+  "hashes": {
+    "C:/Users/antho/AppData/Local/Temp/dukb-hostile-audit-2026-10-01/soccer-full-career-before-return.json": "9421cfeb1760a716877ec96c7f72938dad5755edb44a8aaabe0da3c3214c8f72",
+    "C:/Users/antho/AppData/Local/Temp/dukb-hostile-audit-2026-10-01/soccer-full-career-final.json": "b78bb40b8b18762066df393b388c236a9d37d0e1dfdcd256f3571a3d7b2d68f3",
+    "C:/Users/antho/ballpark-hero/src/lib/soccerCareerEngine.ts": "a380892b19777b51a08cb3caa02cff607b15b017a226676144848d375a2c1ecc",
+    "C:/Users/antho/ballpark-hero/src/pages/SoccerCareer.tsx": "e6723d9f8420604e74de6321f8d4215c5813d98139abbd1e1a648bd3ec8f5227"
+  },
+  "sourceAndReceiptBytesHeld": true,
+  "cleanup": {
+    "reviewOnly": true,
+    "noBrowserStarted": true,
+    "noProductWrites": true
+  }
+}

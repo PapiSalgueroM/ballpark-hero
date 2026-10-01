@@ -52,7 +52,8 @@ do not fix issues. Local842-846 edits are paused, unaccepted drafts and excluded
 from the clean audit baseline. No production data, gameplay, saved pages or
 deployment changes will be made. Report verified defects with reproduction
 steps, distinguish source checks from browser play, and state coverage gaps.
-Next free round848. Earlier active implementation notes below are historical.
+Next free round850 after Claude848's shared-code repair claim and his reserved
+849 data review. Earlier active implementation notes below are historical.
 
 Evidence delivered: 174 mounted live pages at 320px, the full 193-row route
 inventory, nine actual ten-round Daily completions, four shared UX defects,
@@ -64,6 +65,18 @@ all 64 selected local RAW hashes held. Existing 31 Higher or Lower checks and
 10 sports-facts sections passed, but those do not verify every sports fact.
 No permanent tests or production data corrections were added. Simulation and
 broader gameplay evidence are still in progress, not credited as complete.
+
+Further audit evidence: seven full Front Office regular-season UI runs and
+14 original draft picks, one Club Manager season into its second, Footle Daily
+and Unlimited completions,111 exploratory short-game routes, and Soccer Career
+creation16 through retirement45. Retirement declines lost six seasons and
+desynchronized age/calendar. NBA/MLB schedules give unequal win opportunities;
+NBA/NHL trade screens omit roster depth. Current-live save/crash and Footle
+currency receipts are delivered. These are findings, not repairs or proof of
+whole-game completeness. Claude's Release P was merged and published during
+the audit; current observed entry is E8L0RxXO, while the clean gate remains old.
+The remaining audit work is the four American career flows, complete reserved
+ad-slot inventory and final recommendations/coverage matrix.
 
 ## Owner priority, clarified 2026-10-01
 
