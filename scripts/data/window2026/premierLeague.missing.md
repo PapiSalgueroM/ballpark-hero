@@ -55,11 +55,16 @@ Alex Palmer, David Button, Matthew Charles Compton.
 
 ## Moves whose destination club the table does not carry
 
+Also recorded in `premierLeague.left-out.json`, so the harness's left-out
+section keeps him out of the data file.
+
 | Player | Move | Sources | Why not in the data file |
 |---|---|---|---|
 | Sverre Nypan | Manchester City to Lommel SK, season long loan, 2026-07-11 | https://www.sportsmole.co.uk/football/man-city/transfer-talk/news/man-city-midfielder-completes-loan-exit-that-will-be-viewed-as-step-back_601041.html for the Lommel loan, and https://www.mancity.com/news/mens/sverre-nypan-middlesbrough-loan-63905621 for his return from Middlesbrough in February 2026 | No 2026 row is spelled for Lommel, so there is no `db` to write, and the Lommel loan has one source (the Manchester City loan list page refused the fetch on 2026-10-01). His row still sits at Middlesbrough. |
 
 ## Stale rows that are not 2026 window moves
+
+Also recorded in `premierLeague.left-out.json`, for the same reason.
 
 | Player | Row sits at | Where he plays | Why not in the data file |
 |---|---|---|---|
