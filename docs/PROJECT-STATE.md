@@ -1,5 +1,26 @@
 # Project state
 
+## IN PROGRESS 2026-10-01: F1 Driver Search keyboard suggestions
+
+805 fixes the actual ArrowDown highlight reset in the isolated search component,
+with local visible selection, readable44px choices, combobox semantics and held-key
+protection. Original names/matching/topten order/exclusions/callback fallback stay
+held. Exact four-file ownership and outcome/control/native/App gates are on WORKBOARD.
+802 corrects a measured focused-target visibility case before its final recapture;
+803 is frozen for production proof. The older413 regression remains running.
+Next free806; all Claude reservations stand.
+## ACCEPTED 2026-10-01: NBA Stat Line exposes every matching season
+
+801 adds truthful ten-season expansions, full names/44px focusable controls and
+safe search/Score/paging handoffs. The measured phone offscreen issue is corrected
+with a stable action station and local selected-list scrolling. Original targets,
+calculations, score, save, share and completion remain held. Ten outcomes/twelve unit
+controls/eight final-CSS contexts/eight browser controls, types/two builds/all15
+artifact fences/original helper checks and two actual App contexts pass. All188
+saved pages/all168 URL dates+hashes remain held. Full receipts are on WORKBOARD.
+802 captured production and803 final proof continue;805 is being scouted. Frozen413
+still runs on its older scope, so no complete-suite or publication claim. Next free805.
+
 ## ACCEPTED 2026-10-01: generated guide refresh after verified changes
 
 804 adds explicit --refresh for existing converted/frozen guides and updates only
