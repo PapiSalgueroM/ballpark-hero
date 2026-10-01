@@ -609,10 +609,13 @@ function playLeague(rand: () => number, winP: number): LeagueRun {
   return { results, points, wins, draws, losses, unbeatenRun, rivalPoints, tablePosition };
 }
 
-/** The shared age-aware card rating for each man, the number the whole site shows. */
+/** The shared age-aware card rating for each man, the number the whole site shows.
+    A value that is not a number reads as no value at all, the way both pages
+    already read a missing one (Number(...) || 0 and pick.value ?? 0), so a bad
+    row rates at the floor instead of turning the whole season into NaN. */
 function ratingsFor(players: WxPlayer[]): number[] {
   return players.map(p =>
-    playerRating({ marketValue: Math.max(1, p.value / 1_000_000), age: p.age ?? 27 } as Parameters<typeof playerRating>[0]),
+    playerRating({ marketValue: Math.max(1, (Number.isFinite(p.value) ? p.value : 0) / 1_000_000), age: p.age ?? 27 } as Parameters<typeof playerRating>[0]),
   );
 }
 
