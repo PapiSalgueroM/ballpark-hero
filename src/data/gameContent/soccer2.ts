@@ -1026,7 +1026,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
       },
       {
         q: "What does the rating look like?",
-        a: "A rating headline, a short written analysis of your picks, and your chemistry line. Under it comes a season report: a squad rating out of 100, where you finish in a 20 team league, points, trophies and a top scorer, plus how your defence, midfield and attack compare. Every player is judged at his peak, so retired greats are not marked down for being retired.",
+        a: "A rating headline, a short written analysis of your picks, and your chemistry line. Under it comes a season report: a squad rating out of 100, where you finish in a 20 team league, points, trophies and a top scorer, plus how your defence, midfield and attack compare. Two tabs open the season month by month and give every pick his appearances, goals, assists and average rating, and one line says what a different shape or a stronger pick in your weakest slot would have changed on the same rolls. Every player is judged at his peak, so retired greats are not marked down for being retired.",
       },
     ],
   },
