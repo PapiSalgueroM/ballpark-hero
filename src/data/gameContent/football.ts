@@ -140,7 +140,7 @@ export const FOOTBALL_CONTENT: GameContentMap = {
       {
         heading: "Picking a franchise under the salary cap",
         items: [
-          "Pick a franchise. Its players carry fictional contracts against a 260 million dollar cap that rises 5 percent each season.",
+          "Pick a franchise and you get the whole club: every man on its real 53 (kickers, punters and long snappers sit out for now) plus its practice squad. Every player carries a fictional contract, and all 53 fit under a 301.2 million dollar cap that rises 5 percent each season.",
         ],
       },
       {
@@ -167,6 +167,12 @@ export const FOOTBALL_CONTENT: GameContentMap = {
         heading: "Setting the depth chart from the roster",
         items: [
           "Open the depth chart from the Roster box: 8 position groups (QB, RB, WR, TE, OL, DL, LB, DB), each in the order the sim reads. Tap a man, then tap the one to swap him with. The men marked starts are the ones team strength counts, so benching a better man costs you and promoting a hidden gem pays. Injured men are skipped and the next man steps up. Anyone who joins later (a signing, a pick, a trade) slots in by his rating, so a better newcomer starts right away, and Sort by rating hands a group back to the sim.",
+        ],
+      },
+      {
+        heading: "Working a 53 man roster and the practice squad",
+        items: [
+          "The Roster box opens on one tile per position group plus one for the practice squad, so fifty men never turn into one long list. The men at the top of each group's depth chart start, the bench steps in when a starter gets hurt, and the practice squad sits off the cap until you call a man up. The roster holds 53: at the limit you cut or trade before you can sign anybody.",
         ],
       },
       {
@@ -228,7 +234,14 @@ export const FOOTBALL_CONTENT: GameContentMap = {
       {
         heading: "How your starters set team strength",
         items: [
-          "Team strength reads starters off the depth chart: 1 quarterback, 5 skill men across RB, WR and TE, every healthy lineman and 6 defenders across DL, LB and DB. Rating decides how many of a unit's slots each position group gets; your order decides who fills them. A chart you have not touched is the order by rating, so a save from before the chart opens with the same starters and the same team strength. From its next offseason on, the tags and the walks apply to it like any other.",
+          "Team strength reads starters off the depth chart. Each group puts up the men at the top of its order (1 quarterback, 2 backs, 3 receivers, 1 tight end, 2 linemen, and 2 each of DL, LB and DB), and the sim counts the quarterback, the best 5 of those 6 skill men, both linemen and all 6 defenders. Rating decides how many of the skill slots each group gets; your order decides who fills them. A chart you have not touched is the order by rating. The bench only plays when a starter is hurt or you move a backup up the chart, so carrying the whole 53 changes nobody's strength. A five man line and real formations are still to come.",
+          "A save started before full rosters keeps its fifteen men and reads every healthy lineman, exactly as it always did. It is never topped up: start a new front office to get the whole club.",
+        ],
+      },
+      {
+        heading: "The 53 man limit and the offseason refill",
+        items: [
+          "Every offseason each position group is refilled to its real size. The club calls up its own practice squad first and only signs a generated depth man when the squad has nobody left at that spot. If the draft takes you over 53, the lowest rated men who do not start go down to the practice squad, never a starter.",
         ],
       },
       {
@@ -275,7 +288,7 @@ export const FOOTBALL_CONTENT: GameContentMap = {
     faqs: [
       {
         q: "Are the players real?",
-        a: "Yes, the real 2026 rosters, rated from the 2025 season. Quarterbacks, backs, receivers and tight ends are rated on what they produced per game, so a man who missed half the year is not punished for missing it. Defenders blend that production with where they were drafted, because the public numbers count tackles and sacks but carry no coverage figures at all, and rating a corner on tackles alone would mark the best ones down for the fact that nobody throws at them. Linemen have no counting stats either, so they go on draft position and years played. Contracts, trades, and draft prospects are all fictional.",
+        a: "Yes, the real 2026 rosters, rated from the 2025 season. Quarterbacks, backs, receivers and tight ends are rated on what they produced per game, so a man who missed half the year is not punished for missing it. Defenders blend that production with where they were drafted, because the public numbers count tackles and sacks but carry no coverage figures at all, and rating a corner on tackles alone would mark the best ones down for the fact that nobody throws at them. Linemen have no counting stats either, so they go on draft position and years played. Backups and practice squad men go by the same rules, ranked against the other backups on a band just under the starters, and a man with no 2025 season behind him (a rookie, or a man hurt all year) is rated on where he was drafted, which the roster says beside his name. Contracts, trades, and draft prospects are all fictional.",
       },
       {
         q: "Can I get fired?",
