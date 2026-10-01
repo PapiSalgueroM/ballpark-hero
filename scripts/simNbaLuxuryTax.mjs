@@ -42,18 +42,21 @@
         are exactly that old shape.
      5) the tax binds. "Payers shed more than non payers" is true but
         confounded: a high payroll loses more when its deals expire whether
-        or not a tax exists, and measured with the rates zeroed that gap was
-        still -0.018 to -0.049 against -0.037 to -0.073 with them on. So the
+        or not a tax exists, and measured with every rate at zero that gap
+        still reads -0.056 against -0.073 with the rates on. So the
         measurement is paired instead: the same ten seeds run through the
         real engine and through a twin bundled with every rate at zero, and
         for every CPU club over the line at a season close the ratio of
         payroll to tax line at the next tip off is read off both. Measured on
-        2026-10-01 over ten seeds: per seed mean difference -0.018 to -0.049,
-        pooled -0.037 (the real engine's payers tip off about 3.7% of the
-        line, roughly 7.5M, lighter than the same clubs in a league with no
-        tax). The band is a pooled mean under -0.012, a third of the measured
-        effect; under the zero tax control both bundles are the twin and the
-        difference is exactly zero.
+        2026-10-01 over ten seeds and 243 club seasons: per seed mean
+        difference -0.032 to -0.065, pooled -0.049 (the real engine's payers
+        tip off about 5% of the line, roughly 10M, lighter than the same
+        clubs in a league with no tax). The band is a pooled mean under
+        -0.012, a quarter of the measured effect and well under the lightest
+        seed; under the zero tax control both bundles are the twin and the
+        difference is exactly zero. A second, blunter read is printed and
+        checked too: from season three on, fewer clubs sit over the line
+        with the tax than without it (measured 29 against 48).
      6) the shared descriptor. foHubTiles with a tax and a roster floor says
         so on the Trades and Roster boxes and is byte identical without them;
         foCapLines writes the tax, apron and roster lines and nothing when
@@ -65,7 +68,8 @@
    exactly the expected sections went red (the control fired), and with a
    different code and a loud line when they did not (the check is dead):
      zerotax      every rate driven to zero              -> 1, 2 and 5
-     tipoff12     the tip off floor dropped to twelve     -> 3
+     tipoff12     the tip off floor dropped to twelve     -> 3 and 4 (the old
+                  save section reads the fourteen too)
      norepeater   the repeater schedule made the standard one -> 1 and 2
 
    Run: node scripts/simNbaLuxuryTax.mjs
@@ -83,7 +87,8 @@ const TAX_FILE = path.join(LIB, 'nbaLuxuryTax.ts');
 const CONTROL = process.env.NBA_TAX_CONTROL || '';
 const EXPECT = {
   zerotax: [1, 2, 5],
-  tipoff12: [3],
+  /* the old save section reads the fourteen too, so a lower floor reaches it */
+  tipoff12: [3, 4],
   norepeater: [1, 2],
 };
 if (CONTROL && !EXPECT[CONTROL]) {
@@ -115,12 +120,15 @@ const STEP = 0.50;
 /* the roster rule, hoopsrumors glossary and slamonline */
 const FLOOR = 14;
 const CEILING = 15;
-/* four bills worked by hand from the numbers above at the 2026-27 cap:
+/* four bills worked by hand from the numbers above at the 2026-27 cap. The
+   brackets end at 6.064, 12.128 and 18.192, so 20M over reaches a fourth one:
    10M over, standard: 6.064 x 1.00 + 3.936 x 1.25 = 10.984 -> 11.0
    10M over, repeater: 6.064 x 3.00 + 3.936 x 3.25 = 30.984 -> 31.0
-   20M over, standard: 6.064 + 7.580 + 7.872 x 3.50 = 41.196 -> 41.2
-   20M over, repeater: 18.192 + 19.708 + 7.872 x 5.50 = 81.196 -> 81.2 */
-const HAND = [[10, false, 11.0], [10, true, 31.0], [20, false, 41.2], [20, true, 81.2]];
+   20M over, standard: 6.064 + 7.580 + 6.064 x 3.50 + 1.808 x 4.75 = 43.456 -> 43.5
+   20M over, repeater: 18.192 + 19.708 + 6.064 x 5.50 + 1.808 x 6.75 = 83.456 -> 83.5
+   (The first draft of this table put 20M over in three brackets and both
+   formulas disagreed with it, which is the whole point of typing it.) */
+const HAND = [[10, false, 11.0], [10, true, 31.0], [20, false, 43.5], [20, true, 83.5]];
 
 const round1 = n => Math.round(n * 10) / 10;
 const near = (a, b, eps = 0.051) => Math.abs(a - b) <= eps;
