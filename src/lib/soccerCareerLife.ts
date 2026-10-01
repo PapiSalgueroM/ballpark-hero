@@ -937,7 +937,7 @@ export function getLifeEvents(state: CareerState): RandomEvent[] {
       category: "life", choices: [
         { label: "Start the badges", emoji: "📚", color: "bg-emerald-600", consequence: "Passing +1 next season, Integrity +2, the academy kids start calling you Coach",
           apply: s => { setFlag(s, "coachingBadges", 1); bump(s, "passing", 1); s.integrityBonus += 2; log(s, "📚 Started the coaching badges. You now see the game in arrows"); return s; } },
-        { label: "Not yet, still a player", emoji: "⚽", color: "bg-muted", consequence: "Morale +2, the offer stays open",
+        { label: "Not yet, still a player", emoji: "⚽", color: "bg-muted", consequence: "Morale +2, the gaffer writes the date down",
           apply: s => { setFlag(s, "coachingBadges", 2); s.morale = clamp(s.morale + 2, 0, 100); log(s, "⚽ Turned down the coaching course. For now. The gaffer wrote the date down"); return s; } },
         { label: "Suggest the captain instead", emoji: "🤝", color: "bg-blue-600", consequence: "Integrity +1, Morale +1",
           apply: s => { setFlag(s, "coachingBadges", 2); s.integrityBonus += 1; s.morale = clamp(s.morale + 1, 0, 100); log(s, "🤝 Pointed the coaching course at the captain. He is already correcting the gaffer"); return s; } },

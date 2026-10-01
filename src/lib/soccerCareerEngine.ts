@@ -5801,7 +5801,7 @@ export function getAllEvents(state: CareerState): RandomEvent[] {
    eventLastFired on the save, keyed by id (or by the story it shares with
    an event in another catalog), and an event is held out while
    (this season minus that season) is at most its cooldown. Priority beats
-   (200, 201, 500, 501) keep their place at the front of the queue but are
+   (200, 201, 262, 500, 501) keep their place at the front of the queue but are
    held to the same rule. scripts/simCareerLifeCooldowns.mjs measures it. */
 export const EVENT_COOLDOWN_DEFAULT: Record<RandomEvent["category"], number> = {
   positive: 1,
