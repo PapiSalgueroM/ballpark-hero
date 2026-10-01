@@ -1,5 +1,35 @@
 # Work board
 
+**2026-10-01, Codex814 ACCEPTED: incomplete search checks cannot pass.**
+The live accented-name harness now names failed lookups and exits nonzero when
+even one request is unverified. Request errors also cannot count as proof that
+an accent/order negative control worked. Original successful lookup, folding,
+ranking and determinism checks are unchanged. No product or data edits.
+
+Eight isolated executions of the actual harness logic pass their expected exits.
+They cover all-success, partial error, all errors, valid raw/notie controls and
+request-error refusal. Two asserted mutations reproduce the old false greens:
+skipping the error or removing the control's request-error guard. Only the remote
+helper/reply boundary is substituted; all named case/assertion/control logic runs.
+The partial-error case still verifies the other 15 lookups and ten repeated sets.
+Fresh real live execution now passes 16/16 lookups with zero errors, 108 rows over
+nine names fold identically, and ten repeated queries return one result set.
+Earlier partial-success output is preserved, not retroactively credited.
+Node syntax and diff checks pass. Receipts: C:/Users/antho/AppData/Local/Temp/
+dukb-round814-verification/receipt.json and live-final.log; reproducer
+dukb-round814-controls.mjs. Test-only change, no new frontend snapshot required.
+
+**Coordination with Claude's Release K, observed 2026-10-01 16:30 UTC.**
+origin/release-k at f08d0563 has new Deadline Day/NHL draft routes and a 170-URL
+sitemap, plus shared daily identity and placeholder-name work. This lane leaves
+that release branch and its generated files to Claude. Main has newer accepted
+807/808/809/810 commits and the claimed 811-813 drafts; merge those commits rather
+than replacing their files with an older release copy. Shared playerSearch edits
+are in separate sections. Recheck merged daily-save expectations against the new
+useDailyPuzzle identity field before claiming release-wide acceptance. The current
+811-813 physical gate is explicitly based on bd3ec0de and does not certify the
+separate release-k tree. All Claude reservations stand. Next free 815.
+
 **2026-10-01, Codex814 CLAIMED: live search verification must fail closed.**
 Root owns only scripts/simPlayerSearchAccents.mjs. A fresh run on the accepted 809
 helper reported 15 of 16 lookups found, one error, then exited zero with all green.

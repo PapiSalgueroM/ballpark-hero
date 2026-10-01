@@ -1,5 +1,17 @@
 # Project state
 
+## ACCEPTED 2026-10-01: fail-closed live search verification
+
+814 stops partial request failures from reporting a complete pass or satisfying
+a negative control. Eight isolated actual-harness cases prove the new checks and
+two old false-green mutations. Fresh live verification passes all 16 lookups with
+zero errors and stable repeated results. Product/data files are unchanged.
+
+Claude's separate release-k advanced to f08d0563 with new routes and shared daily
+identity work. Main's newer accepted commits and 811-813 drafts must be preserved
+when integrated. Current physical gate bd3ec0de plus those drafts certifies only
+that captured tree, not release-k. Detailed handoff is on WORKBOARD. Next free 815.
+
 ## CLAIMED 2026-10-01: truthful live search verification
 
 814 reserves only the live accented-name harness after a measured 15/16 lookup
