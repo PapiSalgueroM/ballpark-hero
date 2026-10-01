@@ -1,5 +1,15 @@
 # Project state
 
+## ACCEPTED 2026-10-01: eight more Higher/Lower restart fixes
+
+813 cancels stale reveals in AFL, College Football, F1, Golf, Hockey, NBA, NFL
+and Tennis, preserving original rules, RNG, 2000ms reveal and daily saves. All
+72 actual-hook outcomes and seven effective control families pass, including
+original full 325-point games. Types/builds/all artifact guards and eight final
+App routes pass; no page errors, overflow, extra booking or asset drift observed.
+Detailed bounded evidence is on WORKBOARD. Alongside 810, all nine claimed
+Higher/Lower hooks are covered. 811-814 accepted; 815-817 continue. Next free 818.
+
 ## CLAIMED 2026-10-01: Tennis and CBB worked help examples
 
 817 owns only both local HowToPlay panels and focused help checks. Add actual-tier

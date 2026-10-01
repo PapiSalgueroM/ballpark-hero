@@ -1,5 +1,27 @@
 # Work board
 
+**2026-10-01, Codex813 ACCEPTED: eight more Higher/Lower reveal fixes.**
+AFL, College Football, F1, Golf, Hockey, NBA, NFL and Tennis now cancel owned
+reveal timers on mode/Hard reset and unmount. Obsolete callbacks cannot award
+old points, skip a fresh round or truncate the new guess's 2000ms reveal. Original
+pairs, RNG, ties, immediate daily saves, scoring and completion behavior hold.
+All eight original hooks reproduced the defects before editing. Seventy-two
+actual-hook outcomes pass, including full Daily and Unlimited 325-point games.
+Seven effective control kinds each produce eight intended failures and eight
+independent full-game passes. Independent review accepted the surgical changes.
+Combined real types/builds/all artifact guards and affected regressions pass.
+Final untouched App checks cover all eight authored routes, alternating phone
+normal and desktop reduced motion. Native mode/Hard resets, overlapping reveals,
+exact shown values, one 10-point settlement, immediate partial save and quiet
+reload/Home return pass. All 112 measured frames have zero horizontal overflow;
+page errors, completions and unrelated writes are zero. Gate sources/assets and
+36 protected root inputs held. Browser/server stopped and screenshots inspected.
+The initial Hockey first-visit dialog selector failure is retained without credit.
+Receipts: C:/Users/antho/AppData/Local/Temp/dukb-round813-hl-reveal/
+builder-receipt.json, app-report.json, app-cleanup.json and app-final.txt.
+Together with 810 this covers all nine claimed Higher/Lower hooks. No publication
+or complete-current-suite claim. 811-814 accepted; 815-817 continue. Next free 818.
+
 **2026-10-01, Codex817 CLAIMED: Tennis and CBB worked examples and help focus.**
 Own only TennisPlayerHowToPlay.tsx and CbbProgramHowToPlay.tsx plus a focused
 src/test/clueGameHelp.test.tsx and scripts/simClueGameHelp.mjs if lifecycle
