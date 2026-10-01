@@ -166,7 +166,8 @@ section = 1;
   for (const [key, k] of assistsKept) if (!rewritten.has(key)) fail(`${k.player} ${k.season} ${k.club}: assists kept on a row the record does not rewrite`);
   const dup = record.duplicate;
   if (!dup || dup.players?.length !== 2 || !dup.decision || !(dup.beforeRemoving066?.length >= 3)) fail('the duplicate is not recorded with both ids, a decision and what must change before a removal');
-  if (/[–—]/.test(recordText)) fail('the record carries a long dash');
+  /* the two long dashes by code point (0x2013, 0x2014), so this file carries neither */
+  if ([0x2013, 0x2014].some(code => recordText.includes(String.fromCharCode(code)))) fail('the record carries a long dash');
   for (const name of Object.keys(record.paths)) if (!ids.has(name)) fail(`a path is recorded for ${name}, who has no recorded change`);
   console.log(`   ${record.changed.length} changed values and ${record.added.length} added seasons on ${ids.size} players, ${values} checked; ${record.keptAsIs.length} rows kept with the disagreement recorded; assists addressed on ${rewritten.size} rewritten rows (${assistsChanged.size} changed, ${assistsKept.size} kept)`);
 }
