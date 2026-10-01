@@ -1,5 +1,16 @@
 # Work board
 
+**Codex837 IMPLEMENTED: NBA Stat Line manual slot waits for usable play.**
+The explicit phase gate allows setup, playing and done; boot/error stay ad-free.
+Twelve actual Page/hook/real-AdBanner outcomes pass, including null/rejected
+pool, unchanged retry/guide, zero ad queue writes during failure, one stable
+consented slot through a full game, original saves/share and essential consent.
+Three copied controls each fail the intended check and retain an independent
+original weighted-score baseline. TEMP/dukb-round837-checkpoint.json records
+the frozen three-file scope; positive/control logs sit beside it. Combined
+types are green; the production build/artifact gates are still running.
+No live publication or AdSense approval is claimed.
+
 **2026-10-01, Codex838 CLAIMED: playable Buzzer Beater three-point contest.**
 Master build spec84 explicitly lists this mode. Own BuzzerBeaterBoard.tsx,
 a small threePointContest helper and focused test/sim files if needed, plus

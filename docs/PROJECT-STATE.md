@@ -1,5 +1,10 @@
 # Project state
 
+Codex837 is implemented with12 focused outcomes and three effective copied
+regression checks. NBA Stat Line no longer requests a manual ad during loading
+or pool failure. Consent, gameplay and original scores/saves/share hold.
+Combined app types pass; production build/artifact verification is pending.
+
 Codex838 is claimed from master spec84: a complete Buzzer Beater three-point
 contest mode using the existing physics and flight controls. Original daily
 scores and saves stay held. Codex836/837 and831's final scroll correction are
