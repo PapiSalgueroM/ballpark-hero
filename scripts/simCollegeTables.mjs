@@ -1,490 +1,561 @@
-/* College tables harness: the five Round 706 migrations, held against the live tables.
-
-   Round 706 wrote five migrations for the college tables (nfl_draft_picks,
-   ncaa_player_stats, cfb_qb_stats, cfb_rb_stats, cbb_programs) and changed the
-   readers so the games are right before the migrations land and unchanged
-   after. Every one of those files names this harness as its fence. It pulls
-   the five tables, works out for each whether its migration has landed (the
-   row count equals the constant measured before, or the one expected after,
-   both read out of the SQL file), and holds:
-
-     1. nfl_draft_picks. BEFORE: scripts/lib/collegeTablesMirror.mjs replays
-        every step over the pull and its counts equal the SQL's constants
-        (exact copies, placeholder rows, the 13 invented 1977 rows, rounds
-        derived, rounds left unknown, rows after). AFTER: no exact copy, no
-        placeholder row, no invented row, no row filed round 1 past its year's
-        parsed first round remains. In both states the derived rounds equal the
-        record at the fifteen picks docs/audits/college-tables-2026-09-30.md
-        pins from two organisations (Pat McNeil 1976 pick 472 round 17, Billy
-        Main 1970 pick 313 round 13, ...), 1977's tail and 1982's late rounds
-        carry no round, and 2024 and 2025 hold one row per pick, 257 each.
-        cleanDraftPicks (the College Grid key's reader) returns the same rows
-        under the old forfeit rule and the new placeholder rule, and the rows it
-        returns after the migration are the rows it returned before minus
-        exactly the 13 invented ones, with every year's first round boundary
-        unchanged.
-     2. ncaa_player_stats. BEFORE: every slug held twice is identical column
-        for column (the 33 columns the SQL compares), the twin rows and the "_"
-        names count what the SQL says, and the sample rows the SQL reads back
-        are kept or gone as it says. AFTER: no twin slug, no "_" name. In both
-        states the two copies of isPlaceholderName (scripts/lib for the offline
-        scripts, src/lib for the app) agree on every live name in the three
-        stats tables, and their code carries the same rule.
-     3. cfb_qb_stats and cfb_rb_stats. BEFORE: the "_" names are exactly the rk
-        each SQL lists, no more. AFTER: none remains.
-     4. cbb_programs. BEFORE: the game's own dedupePrograms (src/lib/cbbPrograms.ts,
-        bundled here) hides exactly the ids the SQL deletes, the kept rows the SQL
-        updates carry exactly the common_names arrays it writes, every other kept
-        row is untouched, and no cbb_daily row points at a hidden id. AFTER: 278
-        rows, dedupePrograms hides nothing, the updated rows carry the arrays. In
-        both states the home court guard holds: two programs in one city whose
-        mascot hints have no "plays at" phrase are never folded into one.
-     5. THE CONSTANTS ADD UP. For each SQL file, rows before minus every delete
-        equals rows after, read from the file, not typed here.
-
-   FAILS CLOSED. When a table cannot be read the harness exits 1 and says
-   nothing was checked; a table whose count is neither the before nor the after
-   constant is a failure, not a skip.
-
-   NEGATIVE CONTROLS. Every one runs on EVERY invocation, in memory over a copy
-   of the pulled rows or the SQL text, and the harness is red unless each one
-   fires (the section it targets goes red). A control refuses to run, and the
-   harness is red, if the row or text it mutates is not there, so a control can
-   never pass by changing nothing. SIM_COLLEGE_TABLES_CONTROL=<name> runs just
-   that control and exits 0 only if it fired.
-     copy       1990 pick 2 becomes an exact copy of pick 1 -> section 1 (copies count)
-     blank      a real 2020 first rounder loses position and college -> section 1 (placeholders)
-     blocks     1976's round 2 block overlaps round 3      -> section 1 (derived count, the McNeil pin)
-     invented   id 14619 is not "Jakob Cepon" any more     -> section 1 (invented count)
-     twin       row 23233's points change                  -> section 2 (twins that differ)
-     underscore a named cfb_qb row becomes "_ Test"         -> section 3 (unlisted placeholder)
-     agree      the app's copy says no name is a placeholder -> section 2 (the copies disagree)
-     regex      the app's source carries a different regex -> section 2 (the code differs)
-     court      a second Philadelphia program is given La Salle's home court -> section 4 (hidden set)
-     generic    the two generic hint programs say where they play -> section 4 (the guard test merges)
-     names      the SQL's Seattle array loses "Seattle U"  -> section 4 (arrays differ)
-     constants  the nfl SQL's rows after is off by one    -> section 5
-
-   Run: node scripts/simCollegeTables.mjs
-   Measured 2026-09-30 on the live tables (all five migrations unapplied):
-   nfl_draft_picks 28015 rows, 1000 copies, 71 placeholders, 13 invented, 1653
-   derived, 270 unknown; ncaa_player_stats 43800, 1600 twins, 3 placeholders;
-   cfb_qb_stats 5800, 3; cfb_rb_stats 14800, 13; cbb_programs 281, 3 hidden,
-   cbb_daily 0 rows. Every threshold here is an equality with a constant the
-   SQL carries, so there is no margin to set. */
+/* College tables fence: Round 706's five migrations and the readers that mirror them.
+ *
+ * Round 706 wrote five migrations for the college tables (nfl_draft_picks,
+ * ncaa_player_stats, cfb_qb_stats, cfb_rb_stats, cbb_programs) and changed the
+ * readers so the games are right before the migrations land and unchanged
+ * after: a name starting with "_" is a placeholder and no search offers it, a
+ * draft row with no position and no college is a sentence about a pick and not
+ * a player, and the three cbb programs filed twice are one program each. Every
+ * one of those files names this harness as its fence. It runs offline, from
+ * the branch's own files, and is deterministic:
+ *
+ *   1. THE PLACEHOLDER RULE has two copies (src/lib/placeholderName.ts for the
+ *      app, scripts/lib/placeholderName.mjs for the offline scripts). Both are
+ *      run over a table of names: leading underscore refused, real names kept,
+ *      names with accents and other scripts kept, an underscore anywhere else
+ *      kept. And the two files carry the same regex in their CODE (comments
+ *      stripped first).
+ *   2. CBB_PROGRAMS. The game's own dedupePrograms (src/lib/cbbPrograms.ts,
+ *      bundled here) runs over scripts/data/cbbProgramTwins.json, the eight live
+ *      rows the migration's three pairs and two Philadelphia programs with
+ *      different courts. The fixture must carry every value the migration's
+ *      WHERE clauses pin (the kept rows' names and arrays, the deleted rows'
+ *      names, the dashed spelling as the SQL's U& constant decodes), and the rule
+ *      must hide exactly the ids the SQL deletes, keep the partner the SQL pairs
+ *      each with, and write exactly the common_names arrays the SQL writes. A
+ *      hidden twin's own name stays a correct guess on its kept row, nothing but
+ *      common_names changes on a kept row, and the home court guard holds: two
+ *      programs in one city whose hints have no "plays at" never fold into one.
+ *   3. THE DRAFT CLEANER (scripts/lib/draftRounds.mjs, the College Grid key's
+ *      reader). A forfeit sentence, a "Selection moved down 12 spots" row and a
+ *      row with blank position and college are placeholders; a player, a row with
+ *      only a position and a row with only a college are kept; a pick 0 row is
+ *      dropped; and the player wins a slot a placeholder holds at a lower id.
+ *   4. THE MIGRATIONS. Each file is exactly one DO block, declares every
+ *      constant once and checks every constant it declares, and its counts add
+ *      up: rows before minus every delete equals rows after (the SQL states no
+ *      inserts), the invented list holds as many rows as it declares, each cfb
+ *      rk list is as long as its constant, the cbb pairs match its deletes, the
+ *      nfl header's per year breakdown sums to the constants its block declares,
+ *      and the rounds the nfl block reads back after step 3 agree with the picks
+ *      docs/audits/college-tables-2026-09-30.md pins from two organisations.
+ *   5. THE COLLEGE GRID KEY BUILDER (scripts/genCollegeGridData.mjs) refuses a
+ *      placeholder: a "_ Name" cfb stats row that would otherwise join a career
+ *      joins nobody and adds no school.
+ *   6. THE LIVE COUNTS, optional. One HEAD request per table with a count header
+ *      (Prefer: count=exact, one key column selected, limit 1; nothing but the
+ *      count comes back), the URL and key read from the literals in
+ *      src/integrations/supabase/client.ts (never the VITE env vars). Each count
+ *      must be the one its migration was measured at or the one it leaves. When
+ *      the host cannot be reached the section prints "skipped: offline" and
+ *      checks nothing; SIM_COLLEGE_TABLES_LIVE=off forces that. A reachable host
+ *      answering anything else is a failure, not a skip.
+ *
+ * NEGATIVE CONTROLS. Every control runs on EVERY invocation, in memory over a
+ * copy of its inputs, and the harness is red unless each one fires (the section
+ * it targets goes red). A control refuses to run, and the harness is red, if
+ * the string it mutates is not in the code it mutates, so a control can never
+ * pass by changing nothing. SIM_COLLEGE_TABLES_CONTROL=<name> applies that one
+ * mutation to the real run instead: exit 1 when it fired (the mutated tree is
+ * rightly red), exit 2 when it did not (the check is dead). A control run never
+ * exits 0.
+ *   placeholder  the app's regex becomes /^\s*__/        -> 1 (copies disagree, regexes differ)
+ *   twin         Loyola (LA)'s home court is renamed      -> 2 (dedupe misses the pair the SQL deletes)
+ *   names        the SQL's Seattle array loses Seattle U -> 2 (arrays differ)
+ *   generic      the generic pair says where it plays    -> 2 (the guard test merges them)
+ *   cleaner      draftRounds.mjs back to the forfeit rule -> 3 (the moved row wins a slot)
+ *   constants    the nfl SQL's rows after is off by one  -> 4
+ *   pins         the record's McNeil pin says round 16   -> 4 (read back disagrees)
+ *   keyguard     the key builder loses its placeholder skip -> 5 (the placeholder joins)
+ *
+ * Run: node scripts/simCollegeTables.mjs
+ * Every threshold here is an equality with a value read from the SQL or the
+ * fixture, so there is no margin to set. Measured 2026-09-30 on the live tables
+ * (all five migrations unapplied): nfl_draft_picks 28015, ncaa_player_stats
+ * 43800, cfb_qb_stats 5800, cfb_rb_stats 14800, cbb_programs 281.
+ */
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-import { spawnSync } from 'node:child_process';
 import { fileURLToPath, pathToFileURL } from 'node:url';
-import { pullAll } from './genNflGridData.mjs';
-import { cleanDraftPicks, firstRoundEnds, isForfeitRow } from './lib/draftRounds.mjs';
+import { build } from 'esbuild';
+import * as draftLibReal from './lib/draftRounds.mjs';
 import { isPlaceholderName as isPlaceholderNameScripts } from './lib/placeholderName.mjs';
 import * as M from './lib/collegeTablesMirror.mjs';
+import * as keyLibReal from './genCollegeGridData.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const SCRIPTS = path.join(ROOT, 'scripts');
 const MIG = path.join(ROOT, 'supabase', 'migrations');
-const SQL = {
-  nfl: fs.readFileSync(path.join(MIG, '20260930120000_round_706_nfl_draft_picks.sql'), 'utf8'),
-  ncaa: fs.readFileSync(path.join(MIG, '20260930120100_round_706_ncaa_player_stats.sql'), 'utf8'),
-  qb: fs.readFileSync(path.join(MIG, '20260930120200_round_706_cfb_qb_stats.sql'), 'utf8'),
-  rb: fs.readFileSync(path.join(MIG, '20260930120300_round_706_cfb_rb_stats.sql'), 'utf8'),
-  cbb: fs.readFileSync(path.join(MIG, '20260930120400_round_706_cbb_programs.sql'), 'utf8'),
+const read = f => fs.readFileSync(f, 'utf8');
+const SQL_FILES = {
+  nfl: '20260930120000_round_706_nfl_draft_picks.sql',
+  ncaa: '20260930120100_round_706_ncaa_player_stats.sql',
+  qb: '20260930120200_round_706_cfb_qb_stats.sql',
+  rb: '20260930120300_round_706_cfb_rb_stats.sql',
+  cbb: '20260930120400_round_706_cbb_programs.sql',
 };
+const SQL = Object.fromEntries(Object.entries(SQL_FILES).map(([k, f]) => [k, read(path.join(MIG, f))]));
+const AUDIT = read(path.join(ROOT, 'docs', 'audits', 'college-tables-2026-09-30.md'));
+const PH_TS_PATH = path.join(ROOT, 'src', 'lib', 'placeholderName.ts');
+const CBB_TS_PATH = path.join(ROOT, 'src', 'lib', 'cbbPrograms.ts');
+const CLIENT_TS_PATH = path.join(ROOT, 'src', 'integrations', 'supabase', 'client.ts');
+const PH_TS = read(PH_TS_PATH);
+const PH_MJS = read(path.join(SCRIPTS, 'lib', 'placeholderName.mjs'));
+const DRAFT_MJS_PATH = path.join(SCRIPTS, 'lib', 'draftRounds.mjs');
+const KEY_MJS_PATH = path.join(SCRIPTS, 'genCollegeGridData.mjs');
+const FIXTURE = JSON.parse(read(path.join(SCRIPTS, 'data', 'cbbProgramTwins.json')));
 
-const CONTROLS = { copy: 1, blank: 1, blocks: 1, invented: 1, twin: 2, underscore: 3, agree: 2, regex: 2, court: 4, generic: 4, names: 4, constants: 5 };
+const CONTROLS = { placeholder: 1, twin: 2, names: 2, generic: 2, cleaner: 3, constants: 4, pins: 4, keyguard: 5 };
 const ONLY = process.env.SIM_COLLEGE_TABLES_CONTROL || '';
 if (ONLY && !CONTROLS[ONLY]) {
   console.error(`SIM_COLLEGE_TABLES_CONTROL=${ONLY} is not a control this harness knows (${Object.keys(CONTROLS).join(', ')})`);
   process.exit(1);
 }
 const abort = m => { console.error(m); process.exit(1); };
-
-/* The record's pins: two organisations agree on the player and the round at these picks
-   (docs/audits/college-tables-2026-09-30.md section 2, the "pin: yes" rows). */
-const RECORD_PINS = [
-  [1976, 472, 'Pat McNeil', 17], [1976, 404, 'Bob Dzierzak', 15],
-  [1970, 313, 'Billy Main', 13], [1970, 442, 'Rayford Jenkins', 17],
-  [1971, 442, 'Charles Hill', 17],
-  [1972, 150, 'Curt Watson', 6], [1972, 250, 'Mike Franks', 10],
-  [1973, 330, 'Alan Kelso', 13], [1973, 400, 'Ken Muhlbeier', 16],
-  [1974, 100, 'Jimmy Allen', 4],
-  [1975, 240, 'Hank Englehardt', 10], [1975, 300, 'Andre Roundtree', 12],
-  [1946, 280, 'Jay Perrin', 29], [1946, 281, 'Jim LaRue', 30],
-  [1950, 391, 'Dud Parker', 30],
-];
-const NCAA_KEPT = [22833, 15491, 22955, 22887];
-const NCAA_GONE = [23233, 16691, 23355, 23287, 21867, 32408, 41595];
-
-/* ------------------------------------------------------------------ */
-/* The app's modules, bundled                                          */
-/* ------------------------------------------------------------------ */
-const TMP = fs.mkdtempSync(path.join(os.tmpdir(), 'simCollegeTables-'));
-process.on('exit', () => { try { fs.rmSync(TMP, { recursive: true, force: true }); } catch { /* best effort */ } });
-async function loadApp() {
-  const entry = path.join(TMP, 'entry.mjs');
-  const bundle = path.join(TMP, 'bundle.mjs');
-  const abs = f => path.join(ROOT, f).replaceAll('\\', '/');
-  fs.writeFileSync(entry, `export * as cbb from '${abs('src/lib/cbbPrograms.ts')}';\nexport * as ph from '${abs('src/lib/placeholderName.ts')}';\n`);
-  const r = spawnSync(`"${path.join(ROOT, 'node_modules', '.bin', 'esbuild')}" "${entry}" --bundle --format=esm --platform=node --outfile="${bundle}" --log-level=error`, { shell: true, encoding: 'utf8' });
-  if (r.status !== 0) abort(`esbuild could not bundle the app's college modules:\n${r.stderr || r.stdout}`);
-  return import(pathToFileURL(bundle).href);
-}
-const app = await loadApp();
+const need = (cond, what) => { if (!cond) abort(`control cannot run: ${what}. NOTHING WAS CHECKED.`); };
+const sameArray = (a, b) => JSON.stringify(a ?? null) === JSON.stringify(b ?? null);
+const sameSet = (a, b) => a.length === b.length && a.every(x => b.includes(x));
+const short = id => String(id).slice(0, 8);
+const show = v => (v === undefined ? 'undefined' : JSON.stringify(v));
 
 /** A file's code with its comments removed, so a guard reads the rule and not the prose about it. */
 const codeOnly = src => src.replace(/\r\n/g, '\n').replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
-const placeholderRegexIn = src => {
-  const m = codeOnly(src).match(/return\s+(\/[^/\n]+\/[a-z]*)\.test\(/);
-  return m ? m[1] : null;
-};
-const PH_TS = fs.readFileSync(path.join(ROOT, 'src', 'lib', 'placeholderName.ts'), 'utf8');
-const PH_MJS = fs.readFileSync(path.join(ROOT, 'scripts', 'lib', 'placeholderName.mjs'), 'utf8');
+const placeholderRegexIn = src => codeOnly(src).match(/return\s+(\/[^/\n]+\/[a-z]*)\.test\(/)?.[1] ?? null;
 
 /* ------------------------------------------------------------------ */
-/* The pull                                                            */
+/* The app's modules, bundled; a script copied with one line changed    */
 /* ------------------------------------------------------------------ */
-console.log('simCollegeTables: pulling the five tables');
-let live;
-try {
-  const [nfl, ncaa, qb, rb, cbb, daily] = await Promise.all([
-    pullAll('nfl_draft_picks', 'id,year,round,pick,player_name,position,team,college', 'id'),
-    pullAll('ncaa_player_stats', '*', 'id'),
-    pullAll('cfb_qb_stats', 'rk,player_name,player_slug,schools', 'rk'),
-    pullAll('cfb_rb_stats', 'rk,player_name,player_slug,schools', 'rk'),
-    pullAll('cbb_programs', '*', 'id'),
-    pullAll('cbb_daily', 'program_id,puzzle_date', 'puzzle_date'),
-  ]);
-  live = { nfl, ncaa, qb, rb, cbb, daily };
-} catch (err) {
-  abort(`simCollegeTables: ${err.message}\nNOTHING WAS CHECKED.`);
+const TMP = fs.mkdtempSync(path.join(os.tmpdir(), 'simCollegeTables-'));
+process.on('exit', () => { try { fs.rmSync(TMP, { recursive: true, force: true }); } catch { /* best effort */ } });
+let made = 0;
+async function bundleApp(phPath) {
+  made += 1;
+  const entry = path.join(TMP, `entry${made}.mjs`);
+  const outfile = path.join(TMP, `bundle${made}.mjs`);
+  const abs = f => f.replaceAll('\\', '/');
+  fs.writeFileSync(entry, `export * as cbb from '${abs(CBB_TS_PATH)}';\nexport * as ph from '${abs(phPath)}';\n`);
+  await build({ entryPoints: [entry], bundle: true, format: 'esm', platform: 'node', outfile, logLevel: 'silent' });
+  return import(pathToFileURL(outfile).href);
 }
-console.log(`   nfl_draft_picks ${live.nfl.length}, ncaa_player_stats ${live.ncaa.length}, cfb_qb_stats ${live.qb.length}, cfb_rb_stats ${live.rb.length}, cbb_programs ${live.cbb.length}, cbb_daily ${live.daily.length}`);
-
-const clone = rows => rows.map(r => ({ ...r }));
-const sameSet = (a, b) => a.length === b.length && a.every(x => b.includes(x));
-const sameArray = (a, b) => JSON.stringify(a ?? null) === JSON.stringify(b ?? null);
-
-/** 'before' when the table holds the SQL's measured count, 'after' when it holds the expected end count, else null. */
-function stateOf(n, C) {
-  if (n === C.expected_rows_before) return 'before';
-  if (n === C.expected_rows_after) return 'after';
-  return null;
+/** A scripts/ module copied into TMP with its relative imports pinned and one string of its CODE replaced. */
+async function importMutated(file, old, replacement) {
+  const src = read(file);
+  const code = codeOnly(src);
+  need(code.includes(old), `${path.basename(file)} code does not contain ${JSON.stringify(old)}`);
+  need(code.split(old).length === 2, `${path.basename(file)} code contains ${JSON.stringify(old)} more than once`);
+  const pinned = src.replace(/from '\.\/([^']+)'/g, (_, rel) => `from '${pathToFileURL(path.join(SCRIPTS, rel)).href}'`);
+  const mutated = pinned.replaceAll(old, replacement);
+  need(codeOnly(mutated) !== codeOnly(pinned), `the mutation of ${path.basename(file)} changed no code`);
+  made += 1;
+  const out = path.join(TMP, `${path.basename(file, '.mjs')}.control${made}.mjs`);
+  fs.writeFileSync(out, mutated);
+  return import(pathToFileURL(out).href);
 }
+const app = await bundleApp(PH_TS_PATH);
 
 /* ------------------------------------------------------------------ */
-/* Section 1: nfl_draft_picks                                          */
+/* 1. The placeholder rule, both copies                                 */
 /* ------------------------------------------------------------------ */
-function sectionOne(rows, sql) {
+/* [name, refused, why]. The refused names are the rows the migrations delete
+   plus the shapes the rule must also refuse; the kept names are real players
+   the tables hold (plain, mirrored, marked) and real names with accents and
+   other scripts, plus the shapes an underscore elsewhere must not trip. */
+const PROBES = [
+  ['_ Johnston', true, 'ncaa_player_stats 21867'], ['_ Ford', true, 'ncaa_player_stats 32408'], ['_ Eldredge', true, 'ncaa_player_stats 41595'],
+  ['_ Sullivan', true, 'cfb_qb_stats 4151'], ['_ Gonzalez', true, 'cfb_qb_stats 4749'], ['_ Hawkins', true, 'cfb_qb_stats 4770'],
+  ['_ Debacco', true, 'cfb_rb_stats 11565'], ['_ Delancellotti', true, 'cfb_rb_stats 11574'], ['_ Eonte', true, 'cfb_rb_stats 11864'],
+  ['_ Green', true, 'cfb_rb_stats 12048'], ['_ Lowe', true, 'cfb_rb_stats 13117'], ['_ Murphy', true, 'cfb_rb_stats 13514'],
+  ['_ Oduah', true, 'cfb_rb_stats 13602'], ['_ Ordione', true, 'cfb_rb_stats 13612'], ['_ Polamalu', true, 'cfb_rb_stats 13700'],
+  ['_ Ratliff', true, 'cfb_rb_stats 13760'], ['_ Reese', true, 'cfb_rb_stats 13778'],
+  ['  _ Padded', true, 'leading spaces then an underscore'], ['\t_ Tabbed', true, 'a tab then an underscore'],
+  ['_', true, 'an underscore alone'], ['_Nospace', true, 'no space after the underscore'], ['__ Doubled', true, 'two underscores'],
+  ['Zion Williamson', false, 'ncaa_player_stats 15491'], ['Aamir McCleary', false, 'ncaa_player_stats 22833'],
+  ['Bradley Beal', false, 'ncaa_player_stats 22955'], ['Ignas Brazdeikis', false, 'ncaa_player_stats 22887'],
+  ['Pat McNeil', false, 'nfl_draft_picks 1976 pick 472'], ['Billy Main', false, 'nfl_draft_picks 1970 pick 313'],
+  ['Rayford Jenkins', false, 'nfl_draft_picks 1970 pick 442'], ['Watson, CurtCurt Watson', false, 'a mirrored draft name'],
+  ['Paul Warfield HOF', false, 'a Hall of Fame marker'], ['I.V. Wilson', false, 'initials with periods'],
+  ["Da'Quan Bowers", false, 'an apostrophe'], ['Nikola Jokić', false, 'a c with acute'], ['Luka Dončić', false, 'a c with caron'],
+  ['Kristaps Porziņģis', false, 'Latvian letters'], ['Jonas Valančiūnas', false, 'Lithuanian letters'],
+  ['Bojan Bogdanović', false, 'Croatian letters'], ['Manu Ginóbili', false, 'an o with acute'], ['José Calderón', false, 'Spanish accents'],
+  ['Ömer Aşık', false, 'Turkish letters'], ['Dāvis Bertāns', false, 'long a marks'], ['Álvaro Morata', false, 'a leading accented capital'],
+  ['Not_A Placeholder', false, 'an underscore inside a word'], ['Trailing underscore_', false, 'an underscore at the end'],
+  ['', false, 'the empty string'], [null, false, 'null'], [undefined, false, 'undefined'],
+];
+function sectionPlaceholder({ tsFn, tsSrc }) {
   const out = [];
-  const C = M.readMigrationConstants(sql);
-  const invented = M.readInventedRows(sql);
-  if (invented.length !== C.expected_invented) out.push(`the SQL lists ${invented.length} invented rows and says ${C.expected_invented}`);
-  const state = stateOf(rows.length, C);
-  if (!state) { out.push(`nfl_draft_picks holds ${rows.length} rows, neither the measured ${C.expected_rows_before} nor the expected ${C.expected_rows_after} after the migration`); return { out, state }; }
-
-  const rep = M.mirrorNflDraftPicks(rows, invented);
-  const final = state === 'before' ? rep.result : rows;
-  if (state === 'before') {
-    for (const [k, v] of [['copies', C.expected_exact_copies], ['placeholders', C.expected_placeholders], ['invented', C.expected_invented], ['derived', C.expected_rounds_derived], ['unknown', C.expected_rounds_unknown]]) {
-      if (rep[k] !== v) out.push(`step ${k}: the mirror counts ${rep[k]}, the SQL says ${v}`);
-    }
-    if (rep.result.length !== C.expected_rows_after) out.push(`the mirror leaves ${rep.result.length} rows, the SQL expects ${C.expected_rows_after}`);
-  } else {
-    if (rep.copies !== 0) out.push(`${rep.copies} exact copies remain after the migration`);
-    if (rep.placeholders !== 0) out.push(`${rep.placeholders} placeholder rows remain after the migration`);
-    if (rep.invented !== 0) out.push(`${rep.invented} invented 1977 rows remain after the migration`);
-    const past = M.roundOnePastBoundary(rows);
-    if (past.length !== 0) out.push(`${past.length} rows are still round 1 past their first round after the migration`);
+  if (PROBES.length < 30) out.push(`only ${PROBES.length} probe names, the table must hold at least 30`);
+  let refused = 0;
+  for (const [name, expected, why] of PROBES) {
+    if (expected) refused += 1;
+    const a = isPlaceholderNameScripts(name);
+    const b = tsFn(name);
+    if (a !== expected) out.push(`scripts copy ${a ? 'refuses' : 'keeps'} ${show(name)}, expected ${expected ? 'refused' : 'kept'} (${why})`);
+    if (b !== expected) out.push(`app copy ${b ? 'refuses' : 'keeps'} ${show(name)}, expected ${expected ? 'refused' : 'kept'} (${why})`);
   }
-
-  // The record's pins, on the rows the migration leaves (derived here before it lands, read back after).
-  // A name the scrape mirrored ("Watson, CurtCurt Watson") is read as the readers read it, "Curt Watson".
-  const readName = s => { const m = String(s).match(/^([^,]+), (\S+)\2 (.+)$/); return m && m[3] === m[1] ? `${m[2]} ${m[1]}` : String(s); };
-  for (const [year, pick, name, round] of RECORD_PINS) {
-    const r = final.find(x => x.year === year && x.pick === pick);
-    if (!r) { out.push(`${year} pick ${pick}: no row`); continue; }
-    if (readName(r.player_name) !== name || r.round !== round) out.push(`${year} pick ${pick}: ${r.player_name} round ${r.round}, the record says ${name} round ${round}`);
-  }
-  const tail77 = final.filter(r => r.year === 1977 && r.pick >= 280 && r.pick <= 335);
-  if (tail77.length !== 43) out.push(`1977 picks 280 to 335 hold ${tail77.length} rows, expected 43 once the invented rows are gone`);
-  if (tail77.some(r => r.round !== null)) out.push(`1977's tail still carries a round`);
-  if (final.some(r => r.year === 1982 && r.pick >= 252 && r.pick <= 334 && r.round !== null)) out.push(`1982 picks 252 to 334 carry a round`);
-  if (final.some(r => r.team === 'Baltimore Fatsos')) out.push(`a Baltimore Fatsos row survives`);
-  for (const y of [2024, 2025]) {
-    const n = final.filter(r => r.year === y).length;
-    if (n !== 257) out.push(`${y} holds ${n} rows, expected 257`);
-  }
-
-  // cleanDraftPicks, the College Grid key's reader: the same under the old rule and the new one,
-  // and the same before and after the migration but for the invented rows.
-  const ids = list => list.map(r => r.id);
-  const oldRule = list => {
-    const byKey = new Map();
-    for (const r of list) {
-      if (isForfeitRow(r)) continue;
-      const key = `${r.year}|${r.pick}`;
-      if (!(r.pick > 0)) continue;
-      const have = byKey.get(key);
-      if (!have || r.id < have.id) byKey.set(key, r);
-    }
-    return [...byKey.values()].sort((a, b) => a.year - b.year || a.pick - b.pick);
-  };
-  const cleanedNow = cleanDraftPicks(rows);
-  if (!sameArray(ids(cleanedNow), ids(oldRule(rows)))) out.push('cleanDraftPicks differs between the forfeit rule and the placeholder rule on the live rows');
-  if (state === 'before') {
-    const cleanedAfter = cleanDraftPicks(rep.result);
-    const inventedIds = new Set(invented.map(x => x.id));
-    const expected = cleanedNow.filter(r => !inventedIds.has(r.id));
-    if (!sameArray(ids(cleanedAfter), ids(expected))) out.push(`cleanDraftPicks after the migration is not the rows before minus the ${invented.length} invented ones (${cleanedAfter.length} against ${expected.length})`);
-    const endsNow = firstRoundEnds(cleanedNow), endsAfter = firstRoundEnds(cleanedAfter);
-    const moved = [...endsNow].filter(([y, e]) => endsAfter.get(y) !== e).map(([y]) => y);
-    if (moved.length) out.push(`the first round boundary moves in ${moved.join(', ')}`);
-  }
-  return { out, state, rep };
-}
-
-/* ------------------------------------------------------------------ */
-/* Section 2: ncaa_player_stats and the placeholder rule               */
-/* ------------------------------------------------------------------ */
-function sectionTwo(rows, sql, { qb, rb, tsFn = app.ph.isPlaceholderName, tsSrc = PH_TS }) {
-  const out = [];
-  const C = M.readMigrationConstants(sql);
-  const state = stateOf(rows.length, C);
-  if (!state) { out.push(`ncaa_player_stats holds ${rows.length} rows, neither ${C.expected_rows_before} nor ${C.expected_rows_after}`); return { out, state }; }
-  const rep = M.mirrorNcaaPlayerStats(rows);
-  if (rep.noSlug !== 0) out.push(`${rep.noSlug} rows have no player_slug`);
-  if (rep.differing !== 0) out.push(`${rep.differing} twin slugs hold rows that differ, so they are not copies`);
-  const final = state === 'before' ? rep.result : rows;
-  if (state === 'before') {
-    if (rep.twins !== C.expected_twin_rows) out.push(`twin rows: the mirror counts ${rep.twins}, the SQL says ${C.expected_twin_rows}`);
-    if (rep.placeholders !== C.expected_placeholders) out.push(`placeholder names: the mirror counts ${rep.placeholders}, the SQL says ${C.expected_placeholders}`);
-    if (rep.result.length !== C.expected_rows_after) out.push(`the mirror leaves ${rep.result.length} rows, the SQL expects ${C.expected_rows_after}`);
-  } else {
-    if (rep.twins !== 0) out.push(`${rep.twins} twin rows remain after the migration`);
-    if (rep.placeholders !== 0) out.push(`${rep.placeholders} placeholder names remain after the migration`);
-  }
-  const finalIds = new Set(final.map(r => r.id));
-  for (const id of NCAA_KEPT) if (!finalIds.has(id)) out.push(`kept sample row ${id} is gone`);
-  for (const id of NCAA_GONE) if (finalIds.has(id)) out.push(`deleted sample row ${id} is still there`);
-
-  // The two copies of the rule agree on every live name, and their code is the same rule.
-  const names = [...rows, ...qb, ...rb].map(r => r.player_name);
-  const disagree = names.filter(n => isPlaceholderNameScripts(n) !== tsFn(n));
-  if (disagree.length) out.push(`the two isPlaceholderName copies disagree on ${disagree.length} live names (${disagree.slice(0, 3).join(', ')})`);
-  const flagged = names.filter(n => isPlaceholderNameScripts(n)).length;
-  if (state === 'before' && flagged !== C.expected_placeholders + M.readRkList(SQL.qb).length + M.readRkList(SQL.rb).length) out.push(`the rule flags ${flagged} live names across the three tables, the SQL files list ${C.expected_placeholders + M.readRkList(SQL.qb).length + M.readRkList(SQL.rb).length}`);
-  const reTs = placeholderRegexIn(tsSrc), reMjs = placeholderRegexIn(PH_MJS);
-  if (!reTs || !reMjs) out.push(`could not read the regex out of the code (ts ${reTs}, mjs ${reMjs})`);
+  const reTs = placeholderRegexIn(tsSrc);
+  const reMjs = placeholderRegexIn(PH_MJS);
+  if (!reTs || !reMjs) out.push(`could not read the regex out of the code (app ${reTs}, scripts ${reMjs})`);
   else if (reTs !== reMjs) out.push(`src/lib/placeholderName.ts tests ${reTs} and scripts/lib/placeholderName.mjs tests ${reMjs}`);
-  return { out, state, rep };
+  return { out, info: `${PROBES.length} names (${refused} refused, ${PROBES.length - refused} kept), both copies test ${reMjs}` };
 }
 
 /* ------------------------------------------------------------------ */
-/* Section 3: cfb_qb_stats and cfb_rb_stats                            */
-/* ------------------------------------------------------------------ */
-function sectionThree(rows, sql, label) {
-  const out = [];
-  const C = M.readMigrationConstants(sql);
-  const rk = M.readRkList(sql);
-  const state = stateOf(rows.length, C);
-  if (!state) { out.push(`${label} holds ${rows.length} rows, neither ${C.expected_rows_before} nor ${C.expected_rows_after}`); return { out, state }; }
-  const rep = M.mirrorCfbStats(rows, rk);
-  if (state === 'before') {
-    if (rk.length !== C.expected_placeholders) out.push(`${label}: the SQL lists ${rk.length} rk and says ${C.expected_placeholders}`);
-    if (rep.placeholders !== C.expected_placeholders) out.push(`${label}: ${rep.placeholders} placeholder names live, the SQL says ${C.expected_placeholders}`);
-    if (rep.unlisted.length) out.push(`${label}: ${rep.unlisted.length} placeholder names the SQL does not list (rk ${rep.unlisted.map(r => r.rk).join(', ')})`);
-    if (rep.listed !== rk.length) out.push(`${label}: the SQL lists ${rk.length} rk but only ${rep.listed} hold a placeholder name`);
-    if (rep.result.length !== C.expected_rows_after) out.push(`${label}: the mirror leaves ${rep.result.length} rows, the SQL expects ${C.expected_rows_after}`);
-  } else if (rep.placeholders !== 0) out.push(`${label}: ${rep.placeholders} placeholder names remain after the migration`);
-  return { out, state };
-}
-
-/* ------------------------------------------------------------------ */
-/* Section 4: cbb_programs                                             */
+/* 2. cbb_programs                                                      */
 /* ------------------------------------------------------------------ */
 const GENERIC_PAIR = [
-  { id: 'g1', school_name: 'Alpha College', common_names: ['Alpha'], region_hint: 'Philadelphia, Pennsylvania (Northeast)', mascot_hint: 'The Hawks, whose mascot never stops flapping its wings', created_at: '2026-01-01T00:00:00Z' },
-  { id: 'g2', school_name: 'Beta University', common_names: ['Beta'], region_hint: 'Philadelphia, Pennsylvania (Northeast)', mascot_hint: 'The Hawks, whose mascot never stops flapping its wings', created_at: '2026-01-02T00:00:00Z' },
+  { id: 'generic-1', school_name: 'Alpha College', common_names: ['Alpha'], region_hint: 'Philadelphia, Pennsylvania (Northeast)', mascot_hint: 'The Hawks, whose mascot never stops flapping its wings', created_at: '2026-01-01T00:00:00Z' },
+  { id: 'generic-2', school_name: 'Beta University', common_names: ['Beta'], region_hint: 'Philadelphia, Pennsylvania (Northeast)', mascot_hint: 'The Hawks, whose mascot never stops flapping its wings', created_at: '2026-01-02T00:00:00Z' },
 ];
-function sectionFour(rows, sql, daily, genericPair = GENERIC_PAIR) {
+function sectionCbb({ rows, sql, generic }) {
   const out = [];
-  const C = M.readMigrationConstants(sql);
   const mig = M.readCbbMigration(sql);
-  const state = stateOf(rows.length, C);
-  if (!state) { out.push(`cbb_programs holds ${rows.length} rows, neither ${C.expected_rows_before} nor ${C.expected_rows_after}`); return { out, state }; }
+  const byId = new Map(rows.map(r => [r.id, r]));
+  if (mig.pairs.length === 0) out.push('the SQL names no pairs');
+  if (mig.updates.size === 0 || mig.deletes.size === 0) out.push(`the SQL has ${mig.updates.size} UPDATE and ${mig.deletes.size} DELETE statements to read`);
+
+  // The fixture carries what the SQL's WHERE clauses pin.
+  const pinned = (id, where, what) => {
+    const r = byId.get(id);
+    if (!r) { out.push(`the SQL ${what} ${short(id)}, which is not in the fixture`); return; }
+    if (where.school_name !== undefined && r.school_name !== where.school_name) out.push(`${short(id)}: the fixture says ${show(r.school_name)}, the SQL's WHERE says ${show(where.school_name)}`);
+    if (where.common_names !== undefined && !sameArray(r.common_names, where.common_names)) out.push(`${short(id)}: the fixture's common_names ${show(r.common_names)} are not the ${show(where.common_names)} the SQL's WHERE demands`);
+    if (where.championships_hint !== undefined && r.championships_hint !== where.championships_hint) out.push(`${short(id)}: championships_hint ${show(r.championships_hint)} against the SQL's ${show(where.championships_hint)}`);
+  };
+  for (const [id, u] of mig.updates) pinned(id, u.where, 'updates');
+  for (const [id, d] of mig.deletes) pinned(id, d.where, 'deletes');
+  for (const [x, y] of mig.pairs) {
+    if (!byId.has(x) || !byId.has(y)) out.push(`pair ${short(x)}/${short(y)}: not both in the fixture`);
+    const del = [x, y].filter(i => mig.deletes.has(i));
+    if (del.length !== 1) out.push(`pair ${short(x)}/${short(y)}: the SQL deletes ${del.length} of its two rows, expected exactly one`);
+  }
+
+  // The rule over the fixture: hides what the SQL deletes, keeps the partner, writes the SQL's arrays.
   const { programs, replacedBy } = app.cbb.dedupePrograms(rows);
   const hidden = [...replacedBy.keys()];
-  const liveById = new Map(rows.map(r => [r.id, r]));
-  if (state === 'before') {
-    if (!sameSet(hidden, mig.deletes)) out.push(`dedupePrograms hides ${hidden.length} rows (${hidden.map(h => h.slice(0, 8)).join(', ')}), the SQL deletes ${mig.deletes.length} (${mig.deletes.map(h => h.slice(0, 8)).join(', ')})`);
-    if (programs.length !== C.expected_rows_after) out.push(`dedupePrograms keeps ${programs.length} programs, the SQL expects ${C.expected_rows_after} rows`);
-    for (const p of programs) {
-      const want = mig.updates.has(p.id) ? mig.updates.get(p.id) : liveById.get(p.id)?.common_names;
-      if (!sameArray(p.common_names, want)) out.push(`${p.school_name} (${p.id.slice(0, 8)}) ends with ${JSON.stringify(p.common_names)}, the SQL leaves ${JSON.stringify(want)}`);
-    }
-    for (const id of mig.updates.keys()) if (!programs.some(p => p.id === id)) out.push(`the SQL updates ${id.slice(0, 8)} but dedupePrograms does not keep it`);
-    // Every hidden twin's own name is still a correct guess on its kept row.
-    for (const id of hidden) {
-      const kept = replacedBy.get(id);
-      const twinName = app.cbb.foldProgramText(liveById.get(id).school_name);
-      const names = [kept.school_name, ...(kept.common_names ?? [])].map(app.cbb.foldProgramText);
-      if (!names.includes(twinName)) out.push(`"${liveById.get(id).school_name}" is no longer a correct guess on ${kept.school_name}`);
-    }
-    const pointed = daily.filter(d => hidden.includes(d.program_id));
-    if (pointed.length) out.push(`cbb_daily points at a hidden row on ${pointed.map(d => d.puzzle_date).join(', ')}`);
-  } else {
-    if (hidden.length) out.push(`dedupePrograms still hides ${hidden.length} rows after the migration`);
-    for (const [id, arr] of mig.updates) {
-      const row = liveById.get(id);
-      if (!row) out.push(`updated row ${id.slice(0, 8)} is gone`);
-      else if (!sameArray(row.common_names, arr)) out.push(`${row.school_name} carries ${JSON.stringify(row.common_names)}, the SQL wrote ${JSON.stringify(arr)}`);
-    }
-    for (const id of mig.deletes) if (liveById.has(id)) out.push(`deleted row ${id.slice(0, 8)} is still there`);
+  const wantHidden = [...mig.deletes.keys()];
+  if (!sameSet(hidden, wantHidden)) out.push(`dedupePrograms hides ${hidden.length} rows (${hidden.map(short).join(', ') || 'none'}), the SQL deletes ${wantHidden.length} (${wantHidden.map(short).join(', ')})`);
+  for (const [x, y] of mig.pairs) {
+    const h = hidden.find(i => i === x || i === y);
+    if (!h) continue;
+    const other = h === x ? y : x;
+    if (replacedBy.get(h).id !== other) out.push(`${short(h)} is replaced by ${short(replacedBy.get(h).id)}, the SQL pairs it with ${short(other)}`);
   }
+  if (programs.length !== rows.length - mig.deletes.size) out.push(`dedupePrograms keeps ${programs.length} of ${rows.length} rows, the SQL deletes ${mig.deletes.size}`);
+  for (const p of programs) {
+    const live = byId.get(p.id);
+    if (!live) { out.push(`a kept program ${short(p.id)} is not a fixture row`); continue; }
+    const want = mig.updates.has(p.id) ? mig.updates.get(p.id).after : live.common_names;
+    if (!sameArray(p.common_names, want)) out.push(`${p.school_name} (${short(p.id)}) ends with ${show(p.common_names)}, the SQL leaves ${show(want)}`);
+    for (const k of Object.keys(live)) if (k !== 'common_names' && live[k] !== p[k]) out.push(`${p.school_name}: ${k} changed from ${show(live[k])} to ${show(p[k])}`);
+  }
+  for (const id of mig.updates.keys()) if (!programs.some(p => p.id === id)) out.push(`the SQL updates ${short(id)} but dedupePrograms does not keep it`);
+  for (const id of hidden) {
+    const kept = replacedBy.get(id);
+    const twin = byId.get(id);
+    const names = [kept.school_name, ...(kept.common_names ?? [])].map(app.cbb.foldProgramText);
+    if (!names.includes(app.cbb.foldProgramText(twin.school_name))) out.push(`${show(twin.school_name)} is no longer a correct guess on ${kept.school_name}`);
+  }
+
   // The home court guard: one city, one generic hint, two programs.
-  const g = app.cbb.dedupePrograms(genericPair);
+  const g = app.cbb.dedupePrograms(generic);
   if (g.replacedBy.size !== 0) out.push(`two programs in one city with a generic mascot hint were folded into one (${[...g.replacedBy.keys()].join(', ')})`);
-  for (const r of genericPair) if (app.cbb.programKeys(r).some(k => k.startsWith('court:')) && !/\bplays? at\s+/i.test(r.mascot_hint)) out.push(`${r.school_name} gets a court key from a hint with no "plays at"`);
-  return { out, state };
+  for (const r of generic) if (app.cbb.programKeys(r).some(k => k.startsWith('court:')) && !/\bplays? at\s+/i.test(r.mascot_hint)) out.push(`${r.school_name} gets a court key from a hint with no "plays at"`);
+  return { out, info: `${rows.length} fixture rows, ${hidden.length} hidden (${hidden.map(short).join(', ')}), ${mig.updates.size} arrays rewritten as the SQL writes them, the generic pair stays two programs` };
 }
 
 /* ------------------------------------------------------------------ */
-/* Section 5: the constants add up                                     */
+/* 3. The draft cleaner                                                 */
 /* ------------------------------------------------------------------ */
-function sectionFive(sqls) {
+function sectionDraft({ lib }) {
   const out = [];
-  const nfl = M.readMigrationConstants(sqls.nfl);
-  if (nfl.expected_rows_before - nfl.expected_exact_copies - nfl.expected_placeholders - nfl.expected_invented !== nfl.expected_rows_after) out.push(`nfl_draft_picks: ${nfl.expected_rows_before} - ${nfl.expected_exact_copies} - ${nfl.expected_placeholders} - ${nfl.expected_invented} is not ${nfl.expected_rows_after}`);
-  const ncaa = M.readMigrationConstants(sqls.ncaa);
-  if (ncaa.expected_rows_before - ncaa.expected_twin_rows - ncaa.expected_placeholders !== ncaa.expected_rows_after) out.push(`ncaa_player_stats: the constants do not add up`);
-  for (const k of ['qb', 'rb']) {
-    const c = M.readMigrationConstants(sqls[k]);
-    if (c.expected_rows_before - c.expected_placeholders !== c.expected_rows_after) out.push(`cfb_${k}_stats: the constants do not add up`);
+  const row = (id, year, pick, player_name, position, college, round = null) => ({ id, year, round, pick, player_name, position, team: null, college });
+  /* The sentences are the table's own (the nfl migration's step 2); the players are probe shapes. */
+  const forfeit = row(30, 2024, 85, 'Selection forfeited', null, null);
+  const moved = row(10, 2017, 128, 'Selection moved down 12 spots', null, null);
+  const penalty = row(11, 1978, 89, 'no pick, penalized by NFL for staging illegal workouts', '', '   ');
+  const forfeitNamed = row(23, 2017, 131, 'Selection forfeited by the club', 'Guard', 'Probe State');
+  const player = row(20, 2017, 128, 'Probe Receiver', 'Wide Receiver', 'Probe State');
+  const noCollege = row(21, 2017, 129, 'Probe Lineman', 'Guard', null);
+  const noPosition = row(22, 2017, 130, 'Probe Back', null, 'Probe Tech');
+  const zero = row(40, 1990, 0, 'Probe Zero', 'Guard', 'Probe State');
+  const tackle = row(31, 2024, 85, 'Probe Tackle', 'Offensive Tackle', 'Probe Tech');
+  const second = row(50, 2017, 33, 'Probe Second', 'Guard', 'Probe Tech', 2);
+  const judge = (r, want, why) => { if (lib.isPlaceholderDraftRow(r) !== want) out.push(`${show(r.player_name)} is ${want ? 'kept, expected refused' : 'refused, expected kept'} (${why})`); };
+  judge(forfeit, true, 'a forfeit sentence');
+  judge(moved, true, 'no position and no college');
+  judge(penalty, true, 'blank position and blank college');
+  judge(forfeitNamed, true, 'a forfeit sentence is refused whatever else the row carries');
+  judge(player, false, 'a player');
+  judge(noCollege, false, 'a position alone keeps a row');
+  judge(noPosition, false, 'a college alone keeps a row');
+  if (lib.isForfeitRow(moved)) out.push('the forfeit rule alone already refuses "Selection moved down 12 spots", so the widening measures nothing');
+  const all = [moved, player, forfeit, tackle, noCollege, noPosition, forfeitNamed, zero, penalty, second];
+  const cleaned = lib.cleanDraftPicks(all);
+  const ids = cleaned.map(r => r.id);
+  const wantIds = [50, 20, 21, 22, 31];
+  if (!sameArray(ids, wantIds)) out.push(`cleanDraftPicks returns ids ${ids.join(', ')}, expected ${wantIds.join(', ')} (placeholders and pick 0 dropped, one row per slot in year and pick order)`);
+  const slot = cleaned.find(r => r.year === 2017 && r.pick === 128);
+  if (!slot || slot.id !== 20) out.push(`2017 pick 128 goes to id ${slot?.id ?? 'nobody'}, expected the player (20) although the placeholder holds the lower id (10)`);
+  const ends = lib.firstRoundEnds(cleaned);
+  if (ends.get(2017) !== 32) out.push(`2017's first round ends at ${ends.get(2017)}, expected 32 (round two starts at pick 33)`);
+  if (ends.get(2024) !== null) out.push(`2024 has no round two row and should have no boundary, got ${ends.get(2024)}`);
+  return { out, info: `7 shapes judged, ${cleaned.length} of ${all.length} rows kept, 2017 pick 128 goes to the player over the lower id placeholder` };
+}
+
+/* ------------------------------------------------------------------ */
+/* 4. The migrations                                                    */
+/* ------------------------------------------------------------------ */
+/** The record's pins: (year|pick) to round, every "pin: yes" row of the audit's derivation table. */
+function readAuditPins(md) {
+  const pins = new Map();
+  for (const line of M.lf(md).split('\n')) {
+    const cells = line.split('|').map(c => c.trim());
+    if (cells.length < 8) continue;
+    const [, year, pick, , round, , , pin] = cells;
+    if (!/^\d{4}$/.test(year) || !/^\d+$/.test(pick) || !/^\d+$/.test(round)) continue;
+    if (/^yes\b/.test(pin)) pins.set(`${year}|${pick}`, Number(round));
   }
-  const cbb = M.readMigrationConstants(sqls.cbb);
-  const del = M.readCbbMigration(sqls.cbb).deletes.length;
-  if (cbb.expected_rows_before - del !== cbb.expected_rows_after) out.push(`cbb_programs: ${cbb.expected_rows_before} - ${del} deletes is not ${cbb.expected_rows_after}`);
-  return { out };
+  return pins;
+}
+function sectionSql({ files, audit }) {
+  const out = [];
+  const table = [];
+  for (const [k, sql] of Object.entries(files)) {
+    const blocks = M.readDoBlocks(sql);
+    if (blocks.opens !== 1 || blocks.closes !== 1) out.push(`${k}: ${blocks.opens} DO block(s) opened and ${blocks.closes} closed, expected exactly one`);
+    const decls = M.readConstantDeclarations(sql);
+    if (decls.length === 0) out.push(`${k}: no constant declared`);
+    const seen = new Map();
+    for (const d of decls) seen.set(d.name, (seen.get(d.name) ?? 0) + 1);
+    for (const [name, n] of seen) if (n !== 1) out.push(`${k}: ${name} is declared ${n} times`);
+    for (const d of decls) if (M.countUses(sql, d.name) < 2) out.push(`${k}: ${d.name} is declared and never checked`);
+    const C = M.readMigrationConstants(sql);
+    if (!Number.isInteger(C.expected_rows_before) || !Number.isInteger(C.expected_rows_after)) out.push(`${k}: no rows before and after constants`);
+    table.push(`${SQL_FILES[k].replace(/^\d+_round_706_/, '').replace(/\.sql$/, '')}: ${decls.filter(d => d.type === 'integer').map(d => `${d.name.replace(/^expected_/, '')} ${d.value}`).join(', ')}`);
+  }
+
+  const nfl = M.readMigrationConstants(files.nfl);
+  const nflDeletes = nfl.expected_exact_copies + nfl.expected_placeholders + nfl.expected_invented;
+  if (nfl.expected_rows_before - nflDeletes !== nfl.expected_rows_after) out.push(`nfl: ${nfl.expected_rows_before} - ${nfl.expected_exact_copies} - ${nfl.expected_placeholders} - ${nfl.expected_invented} is not ${nfl.expected_rows_after}`);
+  const invented = M.readInventedRows(files.nfl);
+  if (invented.length !== nfl.expected_invented) out.push(`nfl: the SQL lists ${invented.length} invented rows and declares ${nfl.expected_invented}`);
+  if (new Set(invented.map(r => r.id)).size !== invented.length) out.push('nfl: an invented id is listed twice');
+  const bd = M.readNflBreakdown(files.nfl);
+  if (!bd) out.push('nfl: the header does not state its measured per year breakdown');
+  else {
+    const sum = l => l.reduce((s, x) => s + x.count, 0);
+    if (bd.derived !== nfl.expected_rounds_derived || sum(bd.derivedByYear) !== nfl.expected_rounds_derived) out.push(`nfl: the header says ${bd.derived} derived and its years add up to ${sum(bd.derivedByYear)}, the block declares ${nfl.expected_rounds_derived}`);
+    if (bd.unknown !== nfl.expected_rounds_unknown || sum(bd.unknownByYear) !== nfl.expected_rounds_unknown) out.push(`nfl: the header says ${bd.unknown} set NULL and its years add up to ${sum(bd.unknownByYear)}, the block declares ${nfl.expected_rounds_unknown}`);
+    if (bd.pastBoundary - nfl.expected_invented !== nfl.expected_rounds_derived + nfl.expected_rounds_unknown) out.push(`nfl: ${bd.pastBoundary} rows past their boundary minus the ${nfl.expected_invented} invented is not ${nfl.expected_rounds_derived} derived plus ${nfl.expected_rounds_unknown} unknown`);
+    const years = new Set([...bd.derivedByYear, ...bd.unknownByYear].map(x => x.year));
+    if (years.size !== bd.drafts) out.push(`nfl: the header's lists name ${years.size} drafts and it says ${bd.drafts}`);
+  }
+
+  const ncaa = M.readMigrationConstants(files.ncaa);
+  if (ncaa.expected_rows_before - ncaa.expected_twin_rows - ncaa.expected_placeholders !== ncaa.expected_rows_after) out.push(`ncaa: ${ncaa.expected_rows_before} - ${ncaa.expected_twin_rows} - ${ncaa.expected_placeholders} is not ${ncaa.expected_rows_after}`);
+  for (const k of ['qb', 'rb']) {
+    const c = M.readMigrationConstants(files[k]);
+    const rk = M.readRkList(files[k]);
+    if (c.expected_rows_before - c.expected_placeholders !== c.expected_rows_after) out.push(`cfb_${k}_stats: ${c.expected_rows_before} - ${c.expected_placeholders} is not ${c.expected_rows_after}`);
+    if (rk.length !== c.expected_placeholders) out.push(`cfb_${k}_stats: the SQL lists ${rk.length} rk and declares ${c.expected_placeholders}`);
+    if (new Set(rk).size !== rk.length) out.push(`cfb_${k}_stats: an rk is listed twice`);
+  }
+  const cbb = M.readMigrationConstants(files.cbb);
+  const mig = M.readCbbMigration(files.cbb);
+  if (cbb.expected_rows_before - mig.deletes.size !== cbb.expected_rows_after) out.push(`cbb: ${cbb.expected_rows_before} - ${mig.deletes.size} deletes is not ${cbb.expected_rows_after}`);
+  if (mig.pairs.length !== mig.deletes.size) out.push(`cbb: ${mig.pairs.length} pairs allowed, ${mig.deletes.size} rows deleted`);
+
+  // The rounds the nfl block reads back after step 3, against the record's pins.
+  const pins = readAuditPins(audit);
+  const backs = M.readNflReadBacks(files.nfl);
+  if (pins.size === 0) out.push('the audit record pins no row');
+  if (backs.length === 0) out.push('the nfl block reads back no sample round');
+  let agreed = 0;
+  for (const [year, pick, round] of backs) {
+    const pin = pins.get(`${year}|${pick}`);
+    if (pin === undefined) continue;
+    if (pin !== round) out.push(`nfl: the block reads back ${year} pick ${pick} as round ${round}, the record pins round ${pin}`);
+    else agreed += 1;
+  }
+  if (agreed === 0) out.push('no read back sample is pinned by the record, so the two cannot be compared');
+  return { out, table, info: `5 files, one DO block each; ${pins.size} record pins, ${backs.length} read backs, ${agreed} compared` };
 }
 
 /* ------------------------------------------------------------------ */
-/* The real run                                                        */
+/* 5. The College Grid key builder                                      */
 /* ------------------------------------------------------------------ */
-let failures = 0;
-const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
-function report(n, title, res) {
-  console.log(`${n}. ${title}${res.state ? ` (${res.state} the migration)` : ''}`);
-  if (res.out.length === 0) console.log('   ok'); else res.out.forEach(fail);
-}
-if (!ONLY) {
-  const s1 = sectionOne(live.nfl, SQL.nfl);
-  report(1, 'nfl_draft_picks', s1);
-  if (s1.rep) console.log(`   copies ${s1.rep.copies}, placeholders ${s1.rep.placeholders}, invented ${s1.rep.invented}, derived ${s1.rep.derived}, unknown ${s1.rep.unknown}, ${s1.rep.result.length} rows left; ${RECORD_PINS.length} record pins`);
-  const s2 = sectionTwo(live.ncaa, SQL.ncaa, { qb: live.qb, rb: live.rb });
-  report(2, 'ncaa_player_stats and the placeholder rule', s2);
-  if (s2.rep) console.log(`   twins ${s2.rep.twins}, differing ${s2.rep.differing}, placeholders ${s2.rep.placeholders}, ${s2.rep.result.length} rows left`);
-  const s3a = sectionThree(live.qb, SQL.qb, 'cfb_qb_stats');
-  const s3b = sectionThree(live.rb, SQL.rb, 'cfb_rb_stats');
-  report(3, 'cfb_qb_stats and cfb_rb_stats', { out: [...s3a.out, ...s3b.out], state: s3a.state === s3b.state ? s3a.state : `qb ${s3a.state}, rb ${s3b.state}` });
-  report(4, 'cbb_programs', sectionFour(live.cbb, SQL.cbb, live.daily));
-  report(5, 'the constants add up', sectionFive(SQL));
+function sectionKey({ build: buildKey, positionGroups }) {
+  const out = [];
+  /* A probe world: one career, its draft row, and two cfb stats rows that both
+     fit it by name, school and season. One of them is a placeholder. */
+  const career = { id: 'probe-1', name: 'Probe Passer', teams: ['PRB'], seasons: [2013, 2016], pos: ['QB'], college: 'Probe State', draft: { year: 2013, round: 3, pick: 70 } };
+  const picks = [
+    { id: 1, year: 2013, round: 1, pick: 1, player_name: 'Probe Opener', position: 'Quarterback', college: 'Probe Tech' },
+    { id: 2, year: 2013, round: 2, pick: 33, player_name: 'Probe Second', position: 'Guard', college: 'Probe Tech' },
+    { id: 3, year: 2013, round: 3, pick: 70, player_name: 'Probe Passer', position: 'Quarterback', college: 'Probe State' },
+  ];
+  const qb = [
+    { player_name: '_ Probe Passer', player_slug: 'probe-passer-1', year_max: 2012, schools: 'Probe State, Ghost College', pos: 'QB' },
+    { player_name: 'Probe Passer', player_slug: 'probe-passer-2', year_max: 2012, schools: 'Probe State', pos: 'QB' },
+  ];
+  let res;
+  try { res = buildKey({ careers: [career], picks, rosters: [], heisman: [], qb, rb: [], positionGroups }); }
+  catch (err) { out.push(`buildCollegeKey threw: ${err.message}`); return { out, info: 'threw' }; }
+  const p = res.players.find(x => x.id === 'probe-1');
+  if (!p) { out.push('the probe career is not in the key'); return { out, info: 'no career' }; }
+  if (res.stats.cfb.rows !== 2) out.push(`the builder counted ${res.stats.cfb.rows} cfb rows, expected 2`);
+  if (res.stats.cfb.joined !== 1) out.push(`${res.stats.cfb.joined} cfb rows joined the career, expected 1: the "_ Probe Passer" placeholder must join nobody`);
+  if (p.colleges.includes('Ghost College')) out.push('the placeholder row\'s school reached the career');
+  if (!sameArray(p.proof.cfb_schools, ['Probe State'])) out.push(`cfb schools ${show(p.proof.cfb_schools)}, expected ["Probe State"]`);
+  if (!sameArray(p.colleges, ['Probe State'])) out.push(`colleges ${show(p.colleges)}, expected ["Probe State"]`);
+  return { out, info: `${res.players.length} entries; cfb rows ${res.stats.cfb.rows}, joined ${res.stats.cfb.joined}; colleges ${show(p.colleges)}` };
 }
 
 /* ------------------------------------------------------------------ */
-/* The controls                                                        */
+/* 6. The live counts, optional                                         */
 /* ------------------------------------------------------------------ */
-const fired = [];
-const control = (name, fn) => {
-  if (ONLY && ONLY !== name) return;
-  const res = fn();
-  const ok = res.out.length > 0;
-  if (ok) { fired.push(name); console.log(`   fired: ${name} -> ${res.out[0]}`); }
-  else fail(`control ${name} changed nothing it should have`);
+async function sectionLive(files) {
+  if (process.env.SIM_COLLEGE_TABLES_LIVE === 'off') return { out: [], lines: [], skipped: 'offline (SIM_COLLEGE_TABLES_LIVE=off)' };
+  const client = codeOnly(read(CLIENT_TS_PATH));
+  const url = client.match(/SUPABASE_URL\s*=\s*["']([^"']+)["']/)?.[1];
+  const key = client.match(/SUPABASE_PUBLISHABLE_KEY\s*=\s*["']([^"']+)["']/)?.[1];
+  if (!url || !key) return { out: ['src/integrations/supabase/client.ts does not carry SUPABASE_URL and SUPABASE_PUBLISHABLE_KEY as literals'], lines: [] };
+  /* table, its migration, and its key column (the cfb tables have no id; rk is their key). */
+  const TABLES = [['nfl_draft_picks', 'nfl', 'id'], ['ncaa_player_stats', 'ncaa', 'id'], ['cfb_qb_stats', 'qb', 'rk'], ['cfb_rb_stats', 'rb', 'rk'], ['cbb_programs', 'cbb', 'id']];
+  const out = [];
+  const lines = [];
+  for (const [table, k, column] of TABLES) {
+    const C = M.readMigrationConstants(files[k]);
+    let res;
+    try {
+      res = await fetch(`${url}/rest/v1/${table}?select=${column}&limit=1`, {
+        method: 'HEAD',
+        headers: { apikey: key, Authorization: `Bearer ${key}`, Prefer: 'count=exact' },
+        signal: AbortSignal.timeout(15000),
+      });
+    } catch (err) {
+      return { out: [], lines, skipped: `offline (${err.name}: ${String(err.message).slice(0, 80)})` };
+    }
+    if (!res.ok) { out.push(`${table}: HTTP ${res.status} from a reachable host`); continue; }
+    const range = res.headers.get('content-range') ?? '';
+    const count = Number(range.match(/\/(\d+)\s*$/)?.[1]);
+    if (!Number.isInteger(count)) { out.push(`${table}: no count in content-range ${show(range)}`); continue; }
+    const state = count === C.expected_rows_before ? 'before' : count === C.expected_rows_after ? 'after' : null;
+    if (!state) out.push(`${table} holds ${count} rows, neither the ${C.expected_rows_before} its migration was measured at nor the ${C.expected_rows_after} it leaves`);
+    lines.push(`${table} ${count} rows (${state ?? 'neither side of'} the migration)`);
+  }
+  return { out, lines };
+}
+
+/* ------------------------------------------------------------------ */
+/* The run                                                              */
+/* ------------------------------------------------------------------ */
+const inputs = {
+  ph: { tsFn: app.ph.isPlaceholderName, tsSrc: PH_TS },
+  cbb: { rows: FIXTURE.rows, sql: SQL.cbb, generic: GENERIC_PAIR },
+  draft: { lib: draftLibReal },
+  sql: { files: { ...SQL }, audit: AUDIT },
+  key: { build: keyLibReal.buildCollegeKey, positionGroups: keyLibReal.readPositionGroups() },
 };
-const need = (cond, what) => { if (!cond) abort(`control cannot run: ${what} is not there. NOTHING WAS CHECKED.`); };
-console.log('controls');
-control('copy', () => {
-  const rows = clone(live.nfl);
-  const a = rows.find(x => x.year === 1990 && x.pick === 1);
-  const b = rows.find(x => x.year === 1990 && x.pick === 2);
-  need(a && b && b.id > a.id, '1990 picks 1 and 2, pick 2 the higher id');
-  Object.assign(b, { ...a, id: b.id });
-  return sectionOne(rows, SQL.nfl);
-});
-control('blank', () => {
-  const rows = clone(live.nfl);
-  const r = rows.find(x => x.year === 2020 && x.round === 1 && x.position && x.college);
-  need(r, 'a 2020 first rounder with a position and a college');
-  r.position = ''; r.college = null;
-  return sectionOne(rows, SQL.nfl);
-});
-control('blocks', () => {
-  const rows = clone(live.nfl);
-  const r = rows.find(x => x.year === 1976 && x.pick === 60 && x.round === 2);
-  need(r, '1976 pick 60 in round 2');
-  r.round = 4;
-  return sectionOne(rows, SQL.nfl);
-});
-control('invented', () => {
-  const rows = clone(live.nfl);
-  const r = rows.find(x => x.id === 14619 && x.player_name === 'Jakob Cepon');
-  need(r, 'id 14619 "Jakob Cepon"');
-  r.player_name = 'Someone Else';
-  return sectionOne(rows, SQL.nfl);
-});
-control('twin', () => {
-  const rows = clone(live.ncaa);
-  const r = rows.find(x => x.id === 23233);
-  need(r, 'ncaa row 23233');
-  r.points = Number(r.points ?? 0) + 1;
-  return sectionTwo(rows, SQL.ncaa, { qb: live.qb, rb: live.rb });
-});
-control('underscore', () => {
-  const rows = clone(live.qb);
-  const r = rows.find(x => !isPlaceholderNameScripts(x.player_name));
-  need(r, 'a named cfb_qb row');
-  r.player_name = '_ Test';
-  return sectionThree(rows, SQL.qb, 'cfb_qb_stats');
-});
-control('agree', () => sectionTwo(live.ncaa, SQL.ncaa, { qb: live.qb, rb: live.rb, tsFn: () => false }));
-control('regex', () => {
-  need(placeholderRegexIn(PH_TS) === '/^\\s*_/', 'the regex /^\\s*_/ in src/lib/placeholderName.ts code');
-  const src = codeOnly(PH_TS).replace('/^\\s*_/', '/^\\s*__/');
-  need(src !== codeOnly(PH_TS), 'a changed source');
-  return sectionTwo(live.ncaa, SQL.ncaa, { qb: live.qb, rb: live.rb, tsSrc: src });
-});
-control('court', () => {
-  const rows = clone(live.cbb);
-  const a = rows.find(x => x.school_name === 'La Salle' && /\bplays? at\s+/i.test(x.mascot_hint ?? ''));
-  const b = rows.find(x => x.school_name === 'Temple');
-  need(a && b && app.cbb.foldProgramText(a.region_hint) === app.cbb.foldProgramText(b.region_hint), 'La Salle (with a "plays at" hint) and Temple in one city');
-  b.mascot_hint = a.mascot_hint;
-  return sectionFour(rows, SQL.cbb, live.daily);
-});
-control('generic', () => {
-  const pair = GENERIC_PAIR.map(r => ({ ...r, mascot_hint: 'The Hawks, who play at Hagan Arena' }));
-  return sectionFour(live.cbb, SQL.cbb, live.daily, pair);
-});
-control('names', () => {
-  need(SQL.cbb.includes("'Seattle', 'Redhawks', 'SU', 'Seattle U', 'Seattle University'"), "the Seattle array in the cbb SQL");
-  const sql = SQL.cbb.replace("'Seattle', 'Redhawks', 'SU', 'Seattle U', 'Seattle University'", "'Seattle', 'Redhawks', 'SU', 'Seattle University'");
-  return sectionFour(live.cbb, sql, live.daily);
-});
-control('constants', () => {
-  const m = SQL.nfl.match(/expected_rows_after\s+constant integer := (\d+);/);
-  need(m, 'expected_rows_after in the nfl SQL');
-  const sql = SQL.nfl.replace(m[0], m[0].replace(m[1], String(Number(m[1]) + 1)));
-  return sectionFive({ ...SQL, nfl: sql });
-});
+const SECTIONS = [
+  [1, 'the placeholder rule, both copies, over a table of names', inp => sectionPlaceholder(inp.ph)],
+  [2, 'cbb_programs: dedupePrograms against the migration', inp => sectionCbb(inp.cbb)],
+  [3, 'nfl_draft_picks: the draft cleaner', inp => sectionDraft(inp.draft)],
+  [4, 'the five migrations: one block each, constants that add up, read backs that match the record', inp => sectionSql(inp.sql)],
+  [5, 'the College Grid key builder refuses a placeholder', inp => sectionKey(inp.key)],
+];
+const controls = {
+  placeholder: async inp => {
+    const old = '/^\\s*_/';
+    need(codeOnly(PH_TS).includes(old), `the regex ${old} is not in src/lib/placeholderName.ts code`);
+    const mutated = PH_TS.replace(old, '/^\\s*__/');
+    need(codeOnly(mutated) !== codeOnly(PH_TS), 'the mutation changed no code');
+    const f = path.join(TMP, 'placeholderName.control.ts');
+    fs.writeFileSync(f, mutated);
+    const m = await bundleApp(f);
+    return { ...inp, ph: { tsFn: m.ph.isPlaceholderName, tsSrc: mutated } };
+  },
+  twin: inp => {
+    const rows = inp.cbb.rows.map(r => ({ ...r }));
+    const r = rows.find(x => x.school_name === 'Loyola (LA)' && /play at Gersten Pavilion$/.test(x.mascot_hint));
+    need(r, 'the fixture has no Loyola (LA) row playing at Gersten Pavilion');
+    r.mascot_hint = r.mascot_hint.replace('Gersten Pavilion', 'Albert Gersten Pavilion');
+    return { ...inp, cbb: { ...inp.cbb, rows } };
+  },
+  names: inp => {
+    const old = "'Seattle', 'Redhawks', 'SU', 'Seattle U', 'Seattle University'";
+    need(M.sqlCode(SQL.cbb).includes(old), 'the Seattle array is not in the cbb SQL code');
+    return { ...inp, cbb: { ...inp.cbb, sql: SQL.cbb.replace(old, "'Seattle', 'Redhawks', 'SU', 'Seattle University'") } };
+  },
+  generic: inp => ({ ...inp, cbb: { ...inp.cbb, generic: GENERIC_PAIR.map(r => ({ ...r, mascot_hint: 'The Hawks, who play at Hagan Arena' })) } }),
+  cleaner: async inp => ({ ...inp, draft: { lib: await importMutated(DRAFT_MJS_PATH, 'isForfeitRow(row) || (blank(row?.position) && blank(row?.college))', 'isForfeitRow(row)') } }),
+  constants: inp => {
+    const m = M.sqlCode(SQL.nfl).match(/expected_rows_after\s+constant integer := (\d+);/);
+    need(m, 'expected_rows_after is not declared in the nfl SQL code');
+    const sql = SQL.nfl.replace(m[0], m[0].replace(m[1], String(Number(m[1]) + 1)));
+    need(sql !== SQL.nfl, 'the mutation changed nothing');
+    return { ...inp, sql: { ...inp.sql, files: { ...inp.sql.files, nfl: sql } } };
+  },
+  pins: inp => {
+    const old = '| 1976 | 472 | Pat McNeil, Chiefs, Baylor | 17 |';
+    need(AUDIT.includes(old), 'the McNeil pin row is not in the audit record');
+    return { ...inp, sql: { ...inp.sql, audit: AUDIT.replace(old, '| 1976 | 472 | Pat McNeil, Chiefs, Baylor | 16 |') } };
+  },
+  keyguard: async inp => {
+    const lib = await importMutated(KEY_MJS_PATH, 'if (isPlaceholderName(s.player_name)) continue;', '');
+    return { ...inp, key: { ...inp.key, build: lib.buildCollegeKey } };
+  },
+};
+
+let failures = 0;
+const perSection = {};
+function runSections(inp) {
+  for (const [n, title, fn] of SECTIONS) {
+    const res = fn(inp);
+    perSection[n] = res.out.length;
+    console.log(`${n}) ${title}`);
+    for (const t of res.table ?? []) console.log(`   ${t}`);
+    if (res.out.length === 0) console.log(`   ok${res.info ? `: ${res.info}` : ''}`);
+    else for (const m of res.out) { failures += 1; console.error(`  FAIL: ${m}`); }
+  }
+}
 
 if (ONLY) {
-  if (fired.length === 1) { console.log(`control "${ONLY}": fired in section ${CONTROLS[ONLY]} as expected, the check works`); process.exit(0); }
-  console.error(`control "${ONLY}" did not fire`);
-  process.exit(1);
+  const mutated = await controls[ONLY](inputs);
+  console.log(`NEGATIVE CONTROL ON: ${ONLY} (section ${CONTROLS[ONLY]} must go red)`);
+  runSections(mutated);
+  const n = perSection[CONTROLS[ONLY]];
+  if (n > 0) {
+    console.log(`\nsimCollegeTables control ${ONLY}: fired, section ${CONTROLS[ONLY]} went red (${n} finding${n === 1 ? '' : 's'}). Exit 1 is the expected result under a control.`);
+    process.exit(1);
+  }
+  console.error(`\nsimCollegeTables control ${ONLY}: DID NOT FIRE, section ${CONTROLS[ONLY]} stayed green. The check is dead.`);
+  process.exit(2);
 }
+
+runSections(inputs);
+
+console.log('6) the live counts, read only, one count header per table');
+const live = await sectionLive(inputs.sql.files);
+if (live.skipped) console.log(`   skipped: ${live.skipped}`);
+else {
+  for (const l of live.lines) console.log(`   ${l}`);
+  if (live.out.length === 0) console.log('   ok');
+  else for (const m of live.out) { failures += 1; console.error(`  FAIL: ${m}`); }
+}
+
+console.log('controls (each applied to a copy of its inputs; the section it targets must go red)');
+const fired = [];
+for (const [name, section] of Object.entries(CONTROLS)) {
+  const mutated = await controls[name](inputs);
+  const res = SECTIONS.find(s => s[0] === section)[2](mutated);
+  if (res.out.length > 0) { fired.push(name); console.log(`   fired: ${name} -> ${res.out[0]}`); }
+  else { failures += 1; console.error(`  FAIL: control ${name} changed nothing in section ${section}; the check is dead`); }
+}
+
 if (failures) {
-  console.error(`simCollegeTables: RED, ${failures} failure${failures === 1 ? '' : 's'}.`);
+  console.error(`\nsimCollegeTables: RED, ${failures} failure${failures === 1 ? '' : 's'}.`);
   process.exit(1);
 }
-console.log(`simCollegeTables: green. The five tables agree with their migrations (or with their end state), the readers agree with the SQL, the derived rounds match the record, and all ${fired.length} controls fired.`);
+console.log(`\nsimCollegeTables: green. Both placeholder copies agree on ${PROBES.length} names, dedupePrograms hides what the cbb migration deletes and writes what it writes, the draft cleaner refuses the three placeholder shapes, the five migrations are one block each with constants that add up, the key builder skips a placeholder, and all ${fired.length} controls fired.${live.skipped ? ` Section 6 skipped: ${live.skipped}.` : ''}`);

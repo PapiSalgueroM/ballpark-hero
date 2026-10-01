@@ -1,0 +1,79 @@
+{
+  "pulledOn": "2026-09-30",
+  "table": "public.cbb_programs",
+  "note": "Round 706. The eight live rows scripts/simCollegeTables.mjs runs the game's dedupePrograms over: the three twin pairs migration 20260930120400 folds (both Loyola Chicago spellings, Loyola (LA) with Loyola Marymount, Seattle with Seattle University) and two Philadelphia programs with different home courts that must stay apart. Columns the rule reads only. The harness checks every value the migration's WHERE clauses pin against these rows, so an edit here that disagrees with the SQL goes red. The second Loyola Chicago spelling carries its dash as a JSON escape, never as the character.",
+  "rows": [
+    {
+      "id": "2d8a7d56-1444-4c95-b40f-53e04d6dc86b",
+      "school_name": "La Salle",
+      "common_names": ["La Salle", "Explorers"],
+      "region_hint": "Philadelphia, Pennsylvania (Northeast)",
+      "championships_hint": "1 national title (1954)",
+      "mascot_hint": "The Explorers, who play at Tom Gola Arena",
+      "created_at": "2026-06-23T02:13:54.883708+00:00"
+    },
+    {
+      "id": "552b6e84-4916-4785-bc15-7dd7fd05c7dd",
+      "school_name": "Temple",
+      "common_names": ["Temple", "Owls"],
+      "region_hint": "Philadelphia, Pennsylvania (Northeast)",
+      "championships_hint": "0 national titles, but multiple Elite Eights and over 1,900 wins",
+      "mascot_hint": "The Owls, who play at the Liacouras Center",
+      "created_at": "2026-06-23T02:12:10.222901+00:00"
+    },
+    {
+      "id": "58952bad-10c4-415c-8ec3-30dc25012c7f",
+      "school_name": "Loyola (LA)",
+      "common_names": ["Loyola Marymount", "Lions", "LMU"],
+      "region_hint": "Los Angeles, California (West)",
+      "championships_hint": "0 national titles through 2025",
+      "mascot_hint": "The Lions, who play at Gersten Pavilion",
+      "created_at": "2026-07-03T03:23:24.757924+00:00"
+    },
+    {
+      "id": "5a1ce2ab-d589-449b-b1ba-4b22f6e2ab36",
+      "school_name": "Loyola Marymount",
+      "common_names": ["Loyola Marymount", "LMU", "Lions"],
+      "region_hint": "Los Angeles, California (West)",
+      "championships_hint": "0 national titles through 2025",
+      "mascot_hint": "The Lions, who play at Gersten Pavilion",
+      "created_at": "2026-07-04T11:57:56.720827+00:00"
+    },
+    {
+      "id": "996c65ec-0c78-4b26-be7a-60528dba07e7",
+      "school_name": "Loyola\u2013Chicago",
+      "common_names": ["Loyola Chicago", "Ramblers", "Sister Jean's Ramblers"],
+      "region_hint": "Chicago, Illinois (Midwest)",
+      "championships_hint": "0 national titles through 2025",
+      "mascot_hint": "The Ramblers, who play at Gentile Arena",
+      "created_at": "2026-07-03T03:23:24.757924+00:00"
+    },
+    {
+      "id": "aa3cc051-60f8-42f8-afad-7174afb58416",
+      "school_name": "Seattle University",
+      "common_names": ["Seattle U", "Seattle University", "Redhawks"],
+      "region_hint": "Seattle, Washington (West)",
+      "championships_hint": "0 national titles through 2025",
+      "mascot_hint": "The Redhawks, who play at the Redhawk Center",
+      "created_at": "2026-07-04T12:02:54.776087+00:00"
+    },
+    {
+      "id": "c8187d90-638d-4a1a-b6de-5222eb277e5e",
+      "school_name": "Seattle",
+      "common_names": ["Seattle", "Redhawks", "SU"],
+      "region_hint": "Seattle, Washington (West)",
+      "championships_hint": "0 national titles through 2025",
+      "mascot_hint": "The Redhawks, who play at Redhawk Center",
+      "created_at": "2026-07-03T03:23:24.757924+00:00"
+    },
+    {
+      "id": "fc98aa58-42a1-405e-b722-d61938832ae1",
+      "school_name": "Loyola Chicago",
+      "common_names": ["Loyola Chicago", "Loyola-Chicago", "Ramblers", "Loyola"],
+      "region_hint": "Chicago, Illinois (Midwest)",
+      "championships_hint": "1 national title (1963)",
+      "mascot_hint": "The Ramblers, who play at Gentile Arena",
+      "created_at": "2026-06-23T02:12:10.222901+00:00"
+    }
+  ]
+}

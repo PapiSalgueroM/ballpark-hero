@@ -48,9 +48,11 @@ round 12 is 308 to 335.
 
 Step 3 derives a round for 1,653 rows the scrape filed as round 1 past their
 year's parsed first round, and sets 270 to NULL (1941, 1977, 1982). The
-derivation was run in code (`scripts/lib/collegeTablesMirror.mjs deriveRounds`)
-over the live pull on 2026-09-30 and the rows below were read at the picks the
-migration's own sample list names. A pick counts as a pin only when both
+derivation was run in code (a `deriveRounds` mirror of the SQL's step 3, in
+`scripts/lib/collegeTablesMirror.mjs` as of commit dacec5fe; the fence that
+followed is offline, so that function is no longer in the tree) over the live
+pull on 2026-09-30 and the rows below were read at the picks the migration's
+own sample list names. A pick counts as a pin only when both
 organisations give the same player at that pick in the same round, and the
 derivation gives that round.
 
@@ -93,9 +95,12 @@ Draft shapes both organisations agree on: 1970 to 1975 are 17 rounds of 26,
 442 picks; 1976 is 17 rounds, 487 picks, round 15 from 404 and round 17 from
 460 to 487; 1946 is 32 rounds, 300 picks; 1950 is 30 rounds, 391 picks.
 
-`scripts/simCollegeTables.mjs` section 1 holds the "pin: yes" rows above
-against the derivation: before the migration lands it derives those rounds
-from the live table, and after it lands it reads them back from the rows.
+`scripts/simCollegeTables.mjs` section 4 holds the "pin: yes" rows above
+against the rounds the migration's own block reads back after step 3 (Pat
+McNeil 1976 pick 472 round 17, 1970 picks 313 and 442, 1950 pick 391): a
+read back the record pins must agree with the pin, and at least one must be
+compared. The derivation itself is proven at apply time, by the block raising
+on any read back that disagrees; the harness runs offline and pulls no rows.
 
 ## 3. The other four tables
 
