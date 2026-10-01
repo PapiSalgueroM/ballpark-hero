@@ -1046,7 +1046,7 @@ export const BASEBALL_CONTENT: GameContentMap = {
 
   '/mlb-front-office': {
     intro: [
-      "Running a front office sounds fun until the payroll page loads. This is a full GM sim of the real 30 team league, every player rated off real 2025 stats.",
+      "Running a front office sounds fun until the payroll page loads. This is a full GM sim of the real 30 team league, every club carrying its real 26 man roster and every player rated off his real 2026 numbers.",
       "The problems are real: a tax line that will not move, aging veterans, scouts who lie, and 29 rivals that never stop churning.",
     ],
     headings: {
@@ -1060,7 +1060,8 @@ export const BASEBALL_CONTENT: GameContentMap = {
       {
         heading: "Inheriting a franchise's lineup and bullpen",
         items: [
-          "Choose a franchise and inherit its actual lineup, rotation and bullpen.",
+          "Choose a franchise and inherit its real 26: the lineup and bench, a five man rotation and the bullpen, as the club stood on the last day of the 2026 regular season.",
+          "The roster box shows who the sim plays: your best healthy 8 bats, 3 starters and 2 relievers. Everyone else is depth, and depth is who plays the day a starter hits the IL.",
         ],
       },
       {
@@ -1124,6 +1125,13 @@ export const BASEBALL_CONTENT: GameContentMap = {
         ],
       },
       {
+        heading: "Roster size and depth deals",
+        items: [
+          "A new franchise carries 26 and can hold 22 to 28. The 13 men the sim plays earn their rating's price, the other 13 start on depth deals at 0.7 million until those deals run out, and then they re-sign at their rating's price like anybody else.",
+          "A save started before the full rosters keeps its 13 man roster and its old limits of 9 to 16.",
+        ],
+      },
+      {
         heading: "Designating a player and the dead money",
         items: [
           "A DFA is not free. Half the man's salary stays on this season's payroll as dead money, a quarter lands on next season's if he had years left, and you cannot sign him back until the offseason.",
@@ -1178,6 +1186,7 @@ export const BASEBALL_CONTENT: GameContentMap = {
     ],
     faqs: [
       { q: "Are the contracts real?", a: "Rosters and ratings come from real data, but every salary, contract and transaction in the sim is fictional." },
+      { q: "Where do the rosters come from?", a: "MLB's own data: each club's major league roster on September 27, 2026, the last day of the regular season. The 26 are the 13 hitters and 13 pitchers who carried the most of that club's season. Hitters are rated off their 2026 OPS and pitchers off a number built from strikeouts, walks and homers, and a rating built on very few games says thin 2026 data next to it." },
       { q: "Can I go over the tax line?", a: "No. Moves that break the line do not go through. That squeeze is most of the job." },
       { q: "Why did my trade get rejected?", a: "The AI wants a premium on rating, age and position. Add one of your 2 picks, or offer someone younger." },
       { q: "Can I get fired?", a: "Yes. Ownership grades the mandate every season and tracks trust from 0 to 100. A 70 win season on a win-the-World-Series payroll costs real trust, and at zero the save ends and you take another job." },
