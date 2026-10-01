@@ -76,25 +76,36 @@
  *   1  Careers driven, batches recorded as the engine queued them.
  *   2  HARD. No event fires twice inside its cooldown, in any career. The gap
  *      is recomputed here from the season years on the raw save, and the
- *      cooldown read off the engine's own eventCooldown. Measured: 1,906 to
- *      2,022 repeat firings checked per run, 0 inside a cooldown; with the
- *      picker blind to the ledger (nocooldown) 589 of 2,481 were inside one.
+ *      cooldown read off the engine's own eventCooldown. Also HARD: no batch
+ *      carries two events of one story. Measured over seed offsets 0 to 4:
+ *      1,975, 2,012, 1,944, 1,969 and 1,990 repeat firings checked, 0 inside
+ *      a cooldown, 0 doubled batches; with the picker blind to the ledger
+ *      (nocooldown, seed 0) 740 of 2,639 were inside one, 141 of those a
+ *      shared story.
  *   3  HARD. Every id in the life catalog is reachable (turned up in some
  *      state's catalog), and every new id actually FIRED in at least one
  *      career. A gate nobody can pass is dead words.
- *   4  The rate. Mean events per batch and batches per playing season, inside
- *      a band set from measurement, so the new events did not flood the game
- *      and the cooldowns did not starve it. Measured over seed offsets 0, 1
- *      and 2 at N=200 (500 careers, about 8,200 playing seasons each):
- *      events per batch 3.23, 3.21, 3.21 (the draw is 2 to 4, plus the four
- *      priority beats); batches per playing season 0.91 in all three (a
- *      career's final season draws none, and so does a season in prison);
- *      share of batch slots taken by the life catalog 0.25 in all three.
- *      With the cooldowns switched off (the nocooldown control) the same
- *      three numbers were 3.23, 0.91 and 0.25, so the cooldowns change WHICH
- *      events are drawn and not how many. Bands sit well outside the
- *      measured values: batch mean in [2.6, 3.7], batches per season in
- *      [0.8, 1.02], life share in [0.15, 0.45].
+ *   4  The rate. Four numbers, each inside a band set from measurement, so
+ *      the new events did not flood the game and the cooldowns did not starve
+ *      it. All at N=200 (500 careers, about 8,200 playing seasons a run).
+ *        before this round (56d77a6f^, the same drive, seed offsets 0, 1, 2):
+ *          life events per playing season 0.54, 0.55, 0.56; life share of
+ *          batch slots 0.19; events per batch 3.22, 3.21, 3.22; batches per
+ *          playing season 0.91.
+ *        after it (seed offsets 0 to 4):
+ *          life events per playing season 0.76, 0.77, 0.76, 0.76, 0.76;
+ *          life share 0.26 in all five; events per batch 3.24, 3.25, 3.23,
+ *          3.26, 3.25 (the draw is 2 to 4, plus the priority beats); batches
+ *          per playing season 0.91 in all five (a career's final season
+ *          draws none, and so does a season in prison).
+ *        cooldowns off (nocooldown, seed 0): 0.77, 0.26, 3.25, 0.91. The
+ *          cooldowns change WHICH events are drawn and not how many.
+ *      Bands: life per season [0.66, 0.88], life share [0.22, 0.31], events
+ *      per batch [2.9, 3.5], batches per season [0.85, 0.97]. The life bands
+ *      exclude the values from before this round, so they fail if the new
+ *      events stop being drawn (nonew: 0.51 and 0.17), and leave about a
+ *      seventh on top before calling it a flood (flood: 5.25 a batch, 1.14
+ *      life events a season). Run to run noise is about 0.01.
  *   5  HARD. Catalog shape: every life event has at least two choices, every
  *      choice a non empty consequence and an apply function, every life event
  *      an explicit cooldown, no id used twice anywhere in the full catalog,
@@ -108,15 +119,31 @@
  *   7  A save with no eventLastFired loads, plays, and gets its ledger on the
  *      next batch; a save with a corrupt ledger has it dropped on load.
  *
- * NEGATIVE CONTROLS. Each puts a defect back into an in memory copy of one
- * source file (also written to the temp directory for inspection), bundled in
- * place of the real one for EVERY importer. A control that changes nothing
- * refuses to run, and a control that fires nothing fails.
- *   SIM_CAREER_LIFE_COOLDOWNS_CONTROL=nocooldown  the picker stops reading the
- *                                        ledger: section 2 must fail.
- *   SIM_CAREER_LIFE_COOLDOWNS_CONTROL=oneoption   an option is removed from
- *                                        event 221 in the catalog copy, leaving
- *                                        it one button: section 5 must fail.
+ * NEGATIVE CONTROLS, one or more per section. Each puts a defect back into an
+ * in memory copy of one source file (also written to the temp directory for
+ * inspection), bundled in place of the real one for EVERY importer. A control
+ * whose text is not in the file exactly once refuses to run, and a control
+ * whose section stays green fails. Set SIM_CAREER_LIFE_COOLDOWNS_CONTROL to:
+ *   nocooldown   the picker stops reading the ledger: section 2 fails (740
+ *                of 2,639 repeats inside a cooldown at seed 0).
+ *   sharedbatch  the draw stops skipping a second event of a story already in
+ *                the batch: section 2 fails (5, 2, 3, 4 and 3 doubled
+ *                batches over seed offsets 0 to 4; rare, because only seven
+ *                events carry a story key, which is why it is counted over
+ *                every career rather than sampled).
+ *   neverfires   event 272 is gated at age 330: section 3 fails.
+ *   nonew        getLifeEvents drops ids 253 to 272: section 4 fails (and 3
+ *                and 5b with it, as they should).
+ *   flood        every batch draws 4 to 6 events: section 4 fails.
+ *   oneoption    an option is removed from event 221, leaving it one button:
+ *                section 5 fails.
+ *   nostory      realism 462 loses the statue vote's story key: section 5b
+ *                fails.
+ *   dupetitle    263 takes the title of realism event 419: section 5b
+ *                fails (and 6, as the new title is not on the cast list).
+ *   dash         an en dash in event 261's title: section 6 fails.
+ *   keepcorrupt  repairCareer stops dropping a ledger that is not a plain
+ *                object: section 7 fails.
  *
  * Run: node scripts/simCareerLifeCooldowns.mjs [careers]
  *      SEED_OFFSET=1 node scripts/simCareerLifeCooldowns.mjs   another draw
@@ -160,6 +187,34 @@ const CONTROLS = {
     note: 'event 221 is back to one button',
     breaks: '5',
   },
+  sharedbatch: {
+    file: 'src/lib/soccerCareerEngine.ts',
+    from: '    if (drawnKeys.has(key)) continue;',
+    to: '    if (false && drawnKeys.has(key)) continue;',
+    note: 'the draw can take two events of one story into the same batch',
+    breaks: '2',
+  },
+  neverfires: {
+    file: 'src/lib/soccerCareerLife.ts',
+    from: '  if (state.age >= 33) {\n    push({ id: 272,',
+    to: '  if (state.age >= 330) {\n    push({ id: 272,',
+    note: 'event 272 is gated at an age no career reaches',
+    breaks: '3',
+  },
+  nonew: {
+    file: 'src/lib/soccerCareerLife.ts',
+    from: 'const push = (e: RandomEvent) => events.push(e);',
+    to: 'const push = (e: RandomEvent) => { if (e.id < 253 || e.id > 272) events.push(e); };',
+    note: 'the twenty new events are never offered, the catalog is back to its old size',
+    breaks: '4',
+  },
+  flood: {
+    file: 'src/lib/soccerCareerEngine.ts',
+    from: '  const count = rand(2, 4);',
+    to: '  const count = rand(4, 6);',
+    note: 'every batch draws 4 to 6 events instead of 2 to 4',
+    breaks: '4',
+  },
   nostory: {
     file: 'src/lib/soccerCareerRealismB.ts',
     from: 'push({ id: 462, story: STORY.statueVote, cooldown: COOLDOWN.once, ',
@@ -173,6 +228,21 @@ const CONTROLS = {
     to: 'emoji: "🎁", title: "The Fines Committee",',
     note: 'a new event takes the title of an event in another catalog',
     breaks: '5b',
+  },
+  /* the en dash spelt by code point, so this file does not carry it */
+  dash: {
+    file: 'src/lib/soccerCareerLife.ts',
+    from: 'title: "The Niggle",',
+    to: `title: "The Niggle ${String.fromCharCode(0x2013)} Again",`,
+    note: 'an en dash in the title of event 261',
+    breaks: '6',
+  },
+  keepcorrupt: {
+    file: 'src/lib/soccerCareerEngine.ts',
+    from: '  if (s.eventLastFired !== undefined && (typeof s.eventLastFired !== "object"',
+    to: '  if (false && s.eventLastFired !== undefined && (typeof s.eventLastFired !== "object"',
+    note: 'repairCareer keeps a ledger that is not a plain object',
+    breaks: '7',
   },
 };
 if (CONTROL && !CONTROLS[CONTROL]) {
@@ -255,16 +325,16 @@ const { COOLDOWN, STORY } = life;
 /* ─── 1. drive the careers ───────────────────────────────────────────────── */
 
 /* Default and floor from measured rarity: the rarest new event (272, age 33
-   and up) fired 7, 8 and 11 times in 500 careers over three seeds, so at the
-   default 200 (500 careers) the chance section 3 misses it by luck is under
-   one in a thousand. The floor of 120 (300 careers) is for a run by hand and
-   is not the default. */
+   and up) fired 17, 17, 9, 19 and 13 times in 500 careers over seed offsets
+   0 to 4, so at the default 200 (500 careers) the chance section 3 misses it
+   by luck is under one in a thousand. The floor of 120 (300 careers) is for a
+   run by hand and is not the default. */
 const N = Math.max(120, Number(process.argv[2] || 200));
 /* Section 4's bands. Measurement in the header: before this round the life
    file gave 0.54 to 0.56 events per playing season, after it 0.76 to 0.77,
    with run to run noise about 0.01. The band excludes the old value, so it
-   fails if the new events stop being drawn, and a fifth more than measured
-   on top, so it fails on a flood. */
+   fails if the new events stop being drawn, and leaves about a seventh more
+   than measured on top, so it fails on a flood. */
 const LIFE_PER_SEASON_BAND = [0.66, 0.88];
 const LIFE_SHARE_BAND = [0.22, 0.31];
 const BATCH_MEAN_BAND = [2.9, 3.5];
@@ -798,7 +868,6 @@ console.log('7) A save with no ledger loads and plays; a corrupt ledger is dropp
           const ev = s.pendingEvents[0];
           if (!ev) { s.pendingEvents = []; s.phase = 'playing'; continue; }
           s = applyEventChoice(s, 0, clubs);
-          if (s.phase !== 'random_events' && s.pendingEvents.length === 0) sawBatch = sawBatch || false;
           continue;
         }
         if (s.phase === 'playing') { if (played > withMid.length * 2) break; s = advanceProSeason(s, clubs); played += 1; continue; }
