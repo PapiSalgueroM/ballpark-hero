@@ -24,7 +24,7 @@
  * really draws, and it is on the timeline.
  */
 import type { CardLine, LiveMatch, MatchDetail, SubLine, TimelineKind } from './clubManager';
-import { minuteLabel, playedBy } from './clubManagerClock';
+import { minuteLabel, playedBy } from '@/lib/clubManagerClock';
 
 export interface CardsAndSubs {
   yellows: number; oppYellows: number;

@@ -1019,7 +1019,7 @@ export interface ScorerLine {
 /* Round 781: the clock with the board in it (minuteLabel, clockOrder,
    playedBy), kept in its own small file and re-exported here, so every
    screen that already imports the engine reads it from one place. */
-export { minuteLabel, clockOrder, playedBy } from './clubManagerClock';
+export { minuteLabel, clockOrder, playedBy } from '@/lib/clubManagerClock';
 
 export interface OtherResult { home: string; away: string; hg: number; ag: number; }
 
