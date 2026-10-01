@@ -147,6 +147,11 @@ serve(async (req) => {
   } catch { /* cache down */ }
 
   try {
+    /* ROUND 703 review: ilike reads the typed name as a PATTERN. "%" (or "*",
+       which PostgREST turns into one) reached 26 different players on
+       2026-10-01, and the records pass then said yes on their careers. No real
+       name carries a wildcard, so one that does skips the records. */
+    if (/[%_*\\]/.test(sanitized.player)) throw new Error("a wildcard is not a name");
     const { data } = await sb.from("nfl_player_team_stints")
       .select("player_name, team, position, college, first_season, last_season, debut_season, debut_age")
       .ilike("player_name", sanitized.player).limit(40);

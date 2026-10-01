@@ -41,15 +41,20 @@
  *      and an award half only the model can answer, the model's "no" on the
  *      proved half does not win (6a), and a bare "no" that never says which
  *      half it meant comes back unverified rather than as a refusal (6b).
+ *   7. football-grid and college-grid only, the two that read the typed name
+ *      with ilike: a name carrying a wildcard ("%", "*", "T_st Player") is not
+ *      confirmed by the records. Read only on 2026-10-01, an ilike of "%" on
+ *      nfl_player_team_stints reached 26 players across 26 teams in its first
+ *      40 rows, enough to say yes to "Bears" by "Packers" on strangers' careers.
  *
  * Everything is deterministic: no seeds, no bands, no network. It asserts what
  * the functions return, never how their source reads.
  *
  * BASELINE, measured 2026-10-01 with REFUSAL_HOLD_REF=origin/main (61f85133,
- * the functions production ran before this round): 18 failures. Step 2 fails
+ * the functions production ran before this round): 24 failures. Step 2 fails
  * in eight of the nine (football-connect4 already re-checked its club halves
- * in Round 707), and 6a and 6b fail in all five Connect 4 validators. On the
- * Round 703 branch: green.
+ * in Round 707), 6a and 6b fail in all five Connect 4 validators, and 7 fails
+ * three times in each of the two ilike readers. On the Round 703 branch: green.
  *
  * NEGATIVE CONTROLS, REFUSAL_HOLD_CONTROL=<case>. Each edits one source in
  * memory after asserting the text it edits is there exactly once; the run must
@@ -116,6 +121,7 @@ const SUBJECTS = [
   {
     fn: 'football-grid-validate',
     body: { playerName: PLAYER, rowAttribute: 'Played for Bears', colAttribute: 'Played for Packers' },
+    wildcard: true,
     rows(table, hit) {
       /* A miss keeps the Packers half unknown: an early career is not complete,
          so a missing team is not a no. */
@@ -130,6 +136,7 @@ const SUBJECTS = [
   {
     fn: 'college-grid-validate',
     body: { playerName: PLAYER, rowAttribute: 'Alabama', colAttribute: 'Quarterback' },
+    wildcard: true,
     rows(table, hit) {
       if (table === 'nfl_player_team_stints') return [{ player_name: PLAYER, position: 'QB', college: hit ? 'Alabama' : 'Auburn' }];
       return undefined;
@@ -306,6 +313,15 @@ for (const desc of SUBJECTS) {
       (r) => (world.aiCalls !== 1 ? 'the unproved half never reached the model' : r.valid !== true ? 'the model\'s no on the proved half beat the records' : ''), desc.half);
     await step('6b a bare no beside a proved half is unverified, not a refusal', { hit: true, ai: 'bare' },
       (r) => (r.valid === true ? 'a bare no was turned into a yes' : r.unverified !== true ? 'a no that never said which half it meant was served as a refusal' : ''), desc.half);
+  }
+  if (desc.wildcard) {
+    /* The fake tables answer any read with the hit rows, which is what a real
+       ilike does with "%": every name matches. Only a records pass that never
+       runs the pattern can keep this from being a yes. */
+    for (const name of ['%', '*', 'T_st Player']) {
+      await step(`7 a typed wildcard "${name}" is not a name the records can confirm`, { hit: true, ai: 'no' },
+        (r) => (r.valid === true ? 'a wildcard reached other players\' careers and was accepted' : ''), { playerName: name });
+    }
   }
   if (failures === before) ok(`${desc.fn}: stored yes served; held refusal overturned by records and kept without them, no model call either way; a miss reaches the model; three failure modes all valid:false, unverified:true${desc.half ? '; a proved half is not outvoted by the model' : ''}`);
 }
