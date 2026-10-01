@@ -732,8 +732,9 @@ export function useClubManager() {
   /* Round 504: a sub or a shape change at any minute of a live match. The
      engine keeps everything at or before that minute and redraws the rest of
      the half off the eleven and the shape you just chose. */
-  const changeAt = useCallback((minute: number, change: LiveChange) => {
-    setCareer(prev => (prev ? changeLive(prev, minute, change) ?? prev : prev));
+  const changeAt = useCallback((minute: number, change: LiveChange, plus?: number) => {
+    /* Round 781: and how far into the board it was made, for the line's label. */
+    setCareer(prev => (prev ? changeLive(prev, minute, change, plus) ?? prev : prev));
   }, []);
 
   /* Round 504: where the clock stands, so a save closed in the 30th minute

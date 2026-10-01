@@ -24,6 +24,12 @@ const WhatsNew = () => {
 
       <section className="space-y-8 text-sm leading-relaxed text-muted-foreground">
         <div>
+          <h2 className="text-lg font-semibold text-foreground mb-2">October 2026</h2>
+          <ul className="list-disc pl-5 space-y-2">
+            <li><strong className="text-foreground">Club Manager: goals in stoppage time, and the aggregate on a second leg.</strong> A player asked for both. Nothing could happen past the 45th or the 90th minute before, the board on the clock was just a caption. Now the clock runs on to 45+2' or 90+5' in the live match, and goals, cards and injuries land in it with the right label everywhere (the banner, the timeline, the report), about one goal in twenty in first half stoppage time and nearly one in ten after the 90th, which is about what the real game does. Extra time still only comes when a Champions League decider is level after ninety, and now it wears its own board at 120. On the second leg of a two legged tie the first leg and the running aggregate sit under the score while you play, the match centre tells you going in whether you lead or trail, the report says where the tie ended whatever the night's score was, and the bracket labels its headline numbers as the aggregate.</li>
+          </ul>
+        </div>
+        <div>
           <h2 className="text-lg font-semibold text-foreground mb-2">September 2026</h2>
           <ul className="list-disc pl-5 space-y-2">
             <li><strong className="text-foreground">New game: Manager Hot Seat, five games to save your job.</strong> You walk into a real club on a bad run, the board give you five league games and a points target, and you either hit it or you are gone. Pick a shape and a team talk before every match, handle the press, and watch the board, the fans and the dressing room react. It runs on the Club Manager engine, so every match is the full match sim from that game. There is a daily (same club and target for everyone) and a free play mode for any club you like. It records that you played but puts no points on the leaderboard for now.</li>

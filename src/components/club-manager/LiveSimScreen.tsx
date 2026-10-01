@@ -9,6 +9,8 @@ import type {
   CareerState, CMPlayer, LiveMatch, MatchWeekReport, MatchStats, Mentality, TalkTone,
   LiveChange, LiveFeedEvent, FormationSlot, PitchLine,
 } from '@/lib/clubManager';
+/* Round 781: the clock label, the board aware "has it happened", and the tie on a second leg. */
+import { minuteLabel, playedBy, secondLegContext } from '@/lib/clubManager';
 import { HalftimeScreen } from '@/components/club-manager/HalftimeScreen';
 import { MadeUpTag } from '@/components/club-manager/SquadScreen';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
@@ -51,6 +53,13 @@ import type { MotionEvent } from '@/components/club-manager/LiveSimMotion';
  * the latest save when they are due (never decided here), and the viewer
  * reads the answer off live.et: extra time runs the clock on to 120 before
  * onSecondHalf, and no extra time finishes the match at 90.
+ *
+ * Round 781: the board is football. Each period's clock runs on past its
+ * last minute by the board the engine drew for it (live.added), reading
+ * 45+2' and 90+4', and a line in the board (minute 90, plus 3) fires when the
+ * clock reaches 90+3, not at 90. The whistle, the interval and the question
+ * at the end of the ninety all move to the end of the board. A change made in
+ * the board is filed at the period's last minute with its plus.
  *
  * The choreography between events (who is carrying the ball, the shape
  * pushing up and dropping back, the drift) is theatre, drawn only inside the
@@ -101,8 +110,9 @@ interface LiveSimScreenProps {
    *  time on the LATEST save when it is due and leaves the save alone when it
    *  is not; the viewer then reads live.et to know which it was. */
   onStartExtraTime: () => void;
-  /** Round 504: a sub or a shape change at a minute of the half being played. */
-  onChange: (minute: number, change: LiveChange) => void;
+  /** Round 504: a sub or a shape change at a minute of the half being played.
+   *  Round 781: with how far into the board it was made, when it was. */
+  onChange: (minute: number, change: LiveChange, plus?: number) => void;
   /** Round 504: tells the save where the clock stands (the interval, the
    *  page going hidden), so a reload resumes from there rather than from
    *  the last change. Never called on a tick. */
@@ -140,7 +150,9 @@ function initialStage(live: LiveMatch | null, report: MatchWeekReport | null): S
  * off, or down injured and not yet replaced, is not on it. After a sub the
  * new man is (that was the bug this round fixed: the dots never changed).
  */
-function menAt(career: CareerState, live: LiveMatch | null, report: MatchWeekReport | null, minute: number): { mine: Man[]; theirs: Man[] } {
+function menAt(career: CareerState, live: LiveMatch | null, report: MatchWeekReport | null, minute: number, plus?: number): { mine: Man[]; theirs: Man[] } {
+  /* Round 781: a red or an injury in the board takes its man off at its own plus, not at the minute's start. */
+  const gone = playedBy(minute, plus);
   const mine: Man[] = [];
   const theirs: Man[] = [];
   /* The shape the eleven kicked off in, whatever the tactics tab says now. */
@@ -157,12 +169,12 @@ function menAt(career: CareerState, live: LiveMatch | null, report: MatchWeekRep
        change a minute before it happens. */
     const ids = myOnPitchAt(live, minute + 1);
     const numbers = squadNumbers(career, live);
-    const gone = new Set<string>();
-    for (const c of [...(live.h1Cards ?? []), ...(live.h2Cards ?? [])]) if (c.kind === 'red' && c.id && c.minute <= minute) gone.add(c.id);
-    for (const inj of [...(live.h1Injuries ?? []), ...(live.h2Injuries ?? [])]) if (inj.id && inj.minute <= minute) gone.add(inj.id);
+    const goneIds = new Set<string>();
+    for (const c of [...(live.h1Cards ?? []), ...(live.h2Cards ?? [])]) if (c.kind === 'red' && c.id && gone(c)) goneIds.add(c.id);
+    for (const inj of [...(live.h1Injuries ?? []), ...(live.h2Injuries ?? [])]) if (inj.id && gone(inj)) goneIds.add(inj.id);
     ids.forEach((id, i) => {
       const slot = myFormation.slots[i];
-      if (!slot || gone.has(id)) return;
+      if (!slot || goneIds.has(id)) return;
       const p = career.squad.find(q => q.id === id);
       mine.push({ key: `m${i}`, slot, label: p ? lastName(p.name) : slot.label, name: p?.name, number: numbers.get(id) ?? i + 1, id, side: 'me' });
     });
@@ -170,7 +182,7 @@ function menAt(career: CareerState, live: LiveMatch | null, report: MatchWeekRep
     if (live.oppXi) {
       const on = oppOnPitchAt(live, minute);
       const sentOff = new Set<string>();
-      for (const c of [...(live.h1OppCards ?? []), ...(live.h2OppCards ?? [])]) if (c.kind === 'red' && c.minute <= minute) sentOff.add(c.name);
+      for (const c of [...(live.h1OppCards ?? []), ...(live.h2OppCards ?? [])]) if (c.kind === 'red' && gone(c)) sentOff.add(c.name);
       on.forEach((p, i) => {
         const slot = oppFormation.slots[i];
         if (!slot || sentOff.has(p.n)) return;
@@ -349,8 +361,17 @@ export function LiveSimScreen({
   /* Round 670: where the stage being played ends on the clock, and where the
      match ended: 120 when there was extra time, 90 otherwise. */
   const stageEnd = stage === 'first' ? 45 : stage === 'extra' ? liveNow?.et?.to ?? 120 : 90;
+  /* Round 781: the board on the period being played, and where its clock
+     stops. A live match drawn before this round carries no board and stops
+     on the minute, as it always did. */
+  const board = stage === 'first' ? liveNow?.added?.h1 ?? 0 : stage === 'second' ? liveNow?.added?.h2 ?? 0 : stage === 'extra' ? liveNow?.added?.et ?? 0 : 0;
+  const stageStop = stageEnd + board;
   const endMinute = report?.detail?.et?.to ?? 90;
   const minute = stage === 'done' ? endMinute : stage === 'interval' ? 45 : Math.min(stageEnd, Math.floor(clock));
+  /* Round 781: how far into the board the clock stands while a period is
+     being played; undefined at the break and the end, where the whole minute
+     counts, board included. */
+  const plus = stage === 'first' || stage === 'second' || stage === 'extra' ? Math.max(0, Math.min(stageStop, Math.floor(clock)) - stageEnd) : undefined;
   const mentality: Mentality = liveNow?.mentality ?? career.mentality;
   const opponent = liveNow?.opponent ?? (report ? (report.home === career.clubName ? report.away : report.home) : '');
   const compLabel = liveNow?.compLabel ?? report?.compLabel ?? '';
@@ -362,11 +383,12 @@ export function LiveSimScreen({
 
   /* ---- the truth this walk goes through ---- */
   const feed: LiveFeedEvent[] = useMemo(() => (liveNow ? liveFeed(liveNow) : []), [liveNow]);
-  const terminalMinute = stageEnd;
+  /* Round 781: the whistle goes at the end of the board, and the last action is the one deepest in it. */
+  const terminalMinute = stageStop;
   // The last action at the whistle gets its wind-up before the clock reaches it.
   // Feed order gives a goal priority over another chance at the same minute.
-  const terminalAction = useMemo(() => [...feed].reverse().find(e => e.minute === terminalMinute
-    && (e.kind === 'goal' || e.kind === 'shot' || e.kind === 'save')), [feed, terminalMinute]);
+  const terminalAction = useMemo(() => [...feed].reverse().find(e => e.minute === stageEnd && (e.plus ?? 0) === board
+    && (e.kind === 'goal' || e.kind === 'shot' || e.kind === 'save')), [feed, stageEnd, board]);
   const terminalWindup = !!terminalAction && clock >= terminalMinute - 1.05 && clock < terminalMinute;
   useEffect(() => {
     if (!running || finished || !terminalWindup || !terminalAction) return;
@@ -407,16 +429,35 @@ export function LiveSimScreen({
   }, [stage, canAnimateH1]);
 
   /* ---- score on the clock ---- */
-  const goalsAt = (side: Side, m: number) => feed.filter(e => e.kind === 'goal' && e.side === side && e.minute <= m).length;
-  const myGoalsNow = stage === 'done' && finalMy !== null ? finalMy : goalsAt('me', stage === 'interval' ? 45 : clock);
-  const oppGoalsNow = stage === 'done' && finalOpp !== null ? finalOpp : goalsAt('opp', stage === 'interval' ? 45 : clock);
+  /* Round 781: a line has happened when its period is over, or when its clock
+     position (its minute plus how far into the board it sits) is behind the
+     clock, so a goal at 90+3 lands at 90+3 and not at 90. */
+  const STAGE_RANK: Record<Stage, number> = { first: 0, interval: 0.5, second: 1, extra: 2, done: 3 };
+  const periodRank = (m: number): number => (m <= 45 ? 0 : m <= 90 ? 1 : 2);
+  const happened = (e: { minute: number; plus?: number }): boolean => {
+    const r = periodRank(e.minute);
+    return r < STAGE_RANK[stage] || (r === STAGE_RANK[stage] && e.minute + (e.plus ?? 0) <= clock);
+  };
+  const goalsAt = (side: Side) => feed.filter(e => e.kind === 'goal' && e.side === side && happened(e)).length;
+  const myGoalsNow = stage === 'done' && finalMy !== null ? finalMy : goalsAt('me');
+  const oppGoalsNow = stage === 'done' && finalOpp !== null ? finalOpp : goalsAt('opp');
+  /* Round 781: on the second leg of a two legged tie, the first leg and the
+     running aggregate in my orientation, off the engine (secondLegContext)
+     while it is on and off the report's own tie line once it is over. */
+  const legCtx = useMemo(() => {
+    const t = report?.tie;
+    if (t && t.leg === 2 && t.leg1Mine !== undefined && t.leg1Theirs !== undefined) {
+      return { leg1Mine: t.leg1Mine, leg1Theirs: t.leg1Theirs, leg1Home: !!t.leg1Home, aggMine: t.aggMine, aggTheirs: t.aggTheirs };
+    }
+    return liveNow ? secondLegContext(career, liveNow.week, myGoalsNow, oppGoalsNow) : null;
+  }, [report, career, liveNow, myGoalsNow, oppGoalsNow]);
 
   /* ---- stats at this minute, the report's own function ---- */
   const stats: MatchStats | null = useMemo(() => {
     if (stage === 'done' && report?.detail) return report.detail.stats;
-    if (liveNow) return liveStatsAt(liveNow, minute);
+    if (liveNow) return liveStatsAt(liveNow, minute, plus);
     return report?.detail?.stats ?? null;
-  }, [stage, report, liveNow, minute]);
+  }, [stage, report, liveNow, minute, plus]);
   const possMine = (stats?.possession ?? 50) / 100;
   /* Round 714: bookings and changes at this minute, off the committed lines. */
   const counts: CardsAndSubs | null = useMemo(() => {
@@ -424,14 +465,14 @@ export function LiveSimScreen({
       const lines = reportLines(report.detail);
       return lines ? cardsAndSubsAt(lines, endMinute) : null;
     }
-    if (liveNow) return cardsAndSubsAt(liveLines(liveNow), minute);
+    if (liveNow) return cardsAndSubsAt(liveLines(liveNow), minute, plus);
     return null;
-  }, [stage, report, liveNow, minute, endMinute]);
+  }, [stage, report, liveNow, minute, plus, endMinute]);
 
   /* ---- the clock: BASE_RATE sim minutes per real second, times speed ---- */
   useEffect(() => {
     if (paused || !running || finished) { lastTs.current = null; return; }
-    const cap = stageEnd;
+    const cap = stageStop;
     const step = (ts: number) => {
       if (lastTs.current === null) lastTs.current = ts;
       const dt = Math.min(0.25, (ts - lastTs.current) / 1000);
@@ -441,11 +482,12 @@ export function LiveSimScreen({
     };
     rafRef.current = requestAnimationFrame(step);
     return () => { if (rafRef.current) cancelAnimationFrame(rafRef.current); };
-  }, [paused, running, finished, stage, speed, stageEnd]);
+  }, [paused, running, finished, stage, speed, stageStop]);
 
-  /* Stage transitions off the clock. The whistle is called exactly once. */
+  /* Stage transitions off the clock. The whistle is called exactly once.
+     Round 781: at the end of each period's board, not on its last minute. */
   useEffect(() => {
-    if (stage === 'first' && clock >= 45) {
+    if (stage === 'first' && clock >= stageStop) {
       setClock(45);
       setStage('interval');
       setPicking(null);
@@ -453,7 +495,7 @@ export function LiveSimScreen({
       /* The save stands at the break now, so a reload opens the dressing room. */
       onMark(45);
     }
-    if (stage === 'second' && clock >= 90 && !finishedRef.current) {
+    if (stage === 'second' && clock >= stageStop && !finishedRef.current) {
       /* Round 670: the engine says whether a level decider goes on, and the
          page never decides football.
          Round 670 review: it is asked on the LATEST save, not on the career
@@ -465,7 +507,7 @@ export function LiveSimScreen({
          time on the latest save, or leaves it alone), and the render that
          follows, which carries that answer, reads it off live.et. */
       if (!askedAt90) {
-        setClock(90);
+        setClock(stageStop);
         setPicking(null);
         setAskedAt90(true);
         onStartExtraTime();
@@ -473,6 +515,8 @@ export function LiveSimScreen({
       }
       if (liveNow?.et) {
         setStage('extra');
+        /* Round 781: extra time's clock starts at 90, past the second half's board. */
+        setClock(90);
         /* Round 670 polish: a second leg is level on the aggregate, and the
            night's score beside the banner often is not, so the engine says
            which (and gives the aggregate) rather than a line typed here. */
@@ -485,21 +529,24 @@ export function LiveSimScreen({
       setFinished(true);
       onSecondHalf();
     }
-    if (stage === 'extra' && clock >= stageEnd && !finishedRef.current) {
+    if (stage === 'extra' && clock >= stageStop && !finishedRef.current) {
       finishedRef.current = true;
       setFinished(true);
-      setClock(stageEnd);
+      setClock(stageStop);
       setPicking(null);
       onSecondHalf();
     }
-  }, [clock, stage, stageEnd, askedAt90, liveNow, career, onSecondHalf, onStartExtraTime, onMark]);
+  }, [clock, stage, stageStop, askedAt90, liveNow, career, onSecondHalf, onStartExtraTime, onMark]);
 
   /* Where the clock stands goes to the save when the page is hidden or
      leaves (a tab switch, the app going to the background, a reload), never
      on a tick: every career write is a localStorage write. The ref keeps the
      listener off the clock's own dependency list. */
   const clockRef = useRef(clock);
-  useEffect(() => { clockRef.current = clock; }, [clock]);
+  /* Round 781: capped at the period's last minute, so a save hidden at 90+2
+     stands at 90 and resumes through its board, and the save's own clock
+     stays in minutes the engine knows. */
+  useEffect(() => { clockRef.current = Math.min(stageEnd, clock); }, [clock, stageEnd]);
   useEffect(() => {
     if (!running || finished || !live) return;
     const mark = () => onMark(Math.floor(clockRef.current));
@@ -560,7 +607,7 @@ export function LiveSimScreen({
   }, [live]);
 
   /* ---- who is on the grass at this minute ---- */
-  const men = useMemo(() => menAt(career, liveNow, report, minute), [career, liveNow, report, minute]);
+  const men = useMemo(() => menAt(career, liveNow, report, minute, plus), [career, liveNow, report, minute, plus]);
   const menRef = useRef(men);
   useEffect(() => { menRef.current = men; }, [men]);
   const possRef = useRef(possMine);
@@ -596,11 +643,13 @@ export function LiveSimScreen({
     let small: Seg[] | null = null;
     let ballAt: { x: number; y: number } | null = null;
     for (const e of feed) {
-      if (e.kind === 'halftime' || e.minute < lo || e.minute > hi || e.minute > clock) continue;
-      const key = `${e.kind}:${e.side}:${e.minute}:${e.text}`;
+      /* Round 781: a line in the board fires when the clock reaches its plus. */
+      if (e.kind === 'halftime' || e.minute < lo || e.minute > hi || e.minute + (e.plus ?? 0) > clock) continue;
+      const key = `${e.kind}:${e.side}:${e.minute}${e.plus ? `+${e.plus}` : ''}:${e.text}`;
       if (firedRef.current.has(key)) continue;
       firedRef.current.add(key);
-      if (!terminalWindup && e.minute !== hi && e.minute >= openedAt.current && (e.kind === 'goal' || e.kind === 'shot' || e.kind === 'save')) setMotionEvent({ event: e, key, at: clock });
+      const terminal = e.minute === hi && (e.plus ?? 0) === board;
+      if (!terminalWindup && !terminal && e.minute >= openedAt.current && (e.kind === 'goal' || e.kind === 'shot' || e.kind === 'save')) setMotionEvent({ event: e, key, at: clock });
       const club = e.side === 'me' ? career.clubName : opponent;
       const side: Side = e.side === 'me' ? 'me' : 'opp';
       const who: Seg = e.text ? named(side, e.text) : { t: club };
@@ -615,15 +664,15 @@ export function LiveSimScreen({
       switch (e.kind) {
         case 'goal':
           big = {
-            segs: [{ t: x?.penalty ? 'GOAL! Penalty, ' : x?.freeKick ? 'GOAL! Free kick, ' : 'GOAL! ' }, who, { t: ` ${m}'` }],
+            segs: [{ t: x?.penalty ? 'GOAL! Penalty, ' : x?.freeKick ? 'GOAL! Free kick, ' : 'GOAL! ' }, who, { t: ` ${minuteLabel(e)}` }],
             club,
             tone: e.side === 'me' ? 'me' : 'opp',
           };
           ballAt = { x: 50, y: e.side === 'me' ? 1.5 : 98.5 };
           break;
-        case 'yellow': big = { segs: [{ t: 'Booked: ' }, who, { t: ` ${m}'` }], club, tone: 'none' }; break;
-        case 'red': big = { segs: [{ t: 'RED CARD! ' }, who, { t: ` ${m}'` }], club, tone: 'none' }; break;
-        case 'injury': big = { segs: [{ t: 'Injury: ' }, who, { t: ` ${m}'` }], club, tone: 'none' }; break;
+        case 'yellow': big = { segs: [{ t: 'Booked: ' }, who, { t: ` ${minuteLabel(e)}` }], club, tone: 'none' }; break;
+        case 'red': big = { segs: [{ t: 'RED CARD! ' }, who, { t: ` ${minuteLabel(e)}` }], club, tone: 'none' }; break;
+        case 'injury': big = { segs: [{ t: 'Injury: ' }, who, { t: ` ${minuteLabel(e)}` }], club, tone: 'none' }; break;
         case 'sub': {
           /* The feed writes a sub as "X on for Y"; each name is tagged on its own. */
           const at = e.text.indexOf(' on for ');
@@ -665,7 +714,7 @@ export function LiveSimScreen({
     }
     // The feed, its extras and the clock are the inputs; the rest are stable per render.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [clock, stage, stageEnd, feed, extras, running, finished, terminalWindup]);
+  }, [clock, stage, stageEnd, board, feed, extras, running, finished, terminalWindup]);
   useEffect(() => () => { if (bannerTimer.current) clearTimeout(bannerTimer.current); }, []);
 
   /* ---- the beat: who has the ball, and the drift. The only place this file draws. ---- */
@@ -746,12 +795,12 @@ export function LiveSimScreen({
   }, [picking, running, liveNow, minute]);
   const doSub = (inId: string) => {
     if (!picking || !liveNow) return;
-    onChange(changeMinute, { kind: 'sub', outId: picking, inId });
+    onChange(changeMinute, { kind: 'sub', outId: picking, inId }, plus);
     closeSheet();
   };
   const doShape = (m: Mentality) => {
     if (!liveNow) return;
-    onChange(changeMinute, { kind: 'shape', mentality: m });
+    onChange(changeMinute, { kind: 'shape', mentality: m }, plus);
   };
   const subsLeft = liveNow ? Math.max(0, MAX_SUBS - liveNow.subsUsed) : 0;
   const picked = picking ? career.squad.find(p => p.id === picking) ?? null : null;
@@ -803,6 +852,11 @@ export function LiveSimScreen({
             {myGoalsNow} - {oppGoalsNow}
           </div>
           <div className="text-[10px] text-muted-foreground">{career.clubName} vs {opponent}</div>
+          {legCtx && (
+            <div className="mt-1 text-[10px] text-muted-foreground tabular-nums" data-cm-live-agg={`${legCtx.aggMine}-${legCtx.aggTheirs}`}>
+              First leg {legCtx.leg1Mine}-{legCtx.leg1Theirs} {legCtx.leg1Home ? 'at home' : 'away'} · Agg {legCtx.aggMine}-{legCtx.aggTheirs}
+            </div>
+          )}
         </div>
         <LiveStats stats={stats} counts={counts} clubName={career.clubName} opponent={opponent} />
         <HalftimeScreen
@@ -824,10 +878,10 @@ export function LiveSimScreen({
   /* Round 670: a match that went to extra time ends AET, and its clock reads ET while it runs. */
   const badge = stage === 'done'
     ? (report?.detail?.et ? 'AET' : report?.detail?.added ? `FT 90+${report.detail.added.h2}'` : 'FT')
-    : finished ? 'Full time' : stage === 'extra' ? `ET ${minute}'` : `LIVE ${minute}'`;
+    : finished ? 'Full time' : stage === 'extra' ? `ET ${minuteLabel({ minute, plus })}` : `LIVE ${minuteLabel({ minute, plus })}`;
 
   return (
-    <div className="max-w-md mx-auto space-y-2.5" data-cm-live-stage={stage} data-cm-live-minute={minute}>
+    <div className="max-w-md mx-auto space-y-2.5" data-cm-live-stage={stage} data-cm-live-minute={minute} data-cm-live-plus={plus ?? 0}>
       {/* Scoreboard */}
       <div className="bg-card border border-border rounded-2xl p-3">
         <div className="flex items-center justify-between">
@@ -848,6 +902,12 @@ export function LiveSimScreen({
           </div>
           <div className="flex-1 text-left text-sm font-bold text-foreground truncate">{opponent}</div>
         </div>
+        {/* Round 781: the tie on a second leg, so the night's score is never read alone. */}
+        {legCtx && (
+          <div className="mt-1 text-center text-[10px] text-muted-foreground tabular-nums" data-cm-live-agg={`${legCtx.aggMine}-${legCtx.aggTheirs}`}>
+            First leg {legCtx.leg1Mine}-{legCtx.leg1Theirs} {legCtx.leg1Home ? 'at home' : 'away'} · Agg {legCtx.aggMine}-{legCtx.aggTheirs}
+          </div>
+        )}
         {/* The small stuff: chances, saves, corners, throw ins, fouls, at their minutes. */}
         <div className="min-h-[14px] mt-1 text-center text-[10px] text-muted-foreground truncate" data-cm-live-event="1">
           {running && !finished && eventLine ? eventLine.map((sg, i) => (
@@ -1010,7 +1070,7 @@ export function LiveSimScreen({
           </button>
         ) : finished ? null : (
           <button
-            onClick={() => setClock(stageEnd)}
+            onClick={() => setClock(stageStop)}
             className="min-h-[44px] rounded-lg border border-border bg-card px-2.5 text-[11px] font-bold text-foreground hover:border-primary/60 transition-colors inline-flex items-center gap-1"
           >
             <FastForward className="w-3.5 h-3.5" /> Skip
@@ -1023,7 +1083,7 @@ export function LiveSimScreen({
         <div ref={sheetRef} className="bg-card border border-border rounded-xl p-3" data-cm-live-sheet={picking ?? ''}>
           <div className="flex items-center justify-between">
             <div className="text-[10px] text-muted-foreground uppercase tracking-wider flex items-center gap-1">
-              <ArrowLeftRight className="w-3 h-3" /> Change at {changeMinute}' · Subs left: {subsLeft}
+              <ArrowLeftRight className="w-3 h-3" /> Change at {minuteLabel({ minute: changeMinute, plus })} · Subs left: {subsLeft}
             </div>
             <button
               onClick={closeSheet}
