@@ -1,0 +1,58 @@
+{
+  "findings": [],
+  "skipped": [
+    {
+      "game": "/list-quiz",
+      "detail": "played 13 presses then ran out of controls with an answer box still open, so the way on is a real answer the harness cannot invent"
+    },
+    {
+      "game": "/score-predictor",
+      "detail": "played 6 presses then ran out of controls with an answer box still open, so the way on is a real answer the harness cannot invent"
+    }
+  ],
+  "routes": [
+    "/ball-iq",
+    "/build-your-xi",
+    "/cfb-higher-lower",
+    "/college-grid",
+    "/conquest-mlb",
+    "/contract-chaos",
+    "/emoji-guess",
+    "/f1-higher-lower",
+    "/fight-gym",
+    "/football-grid",
+    "/gauntlet-draft",
+    "/guess-nascar-driver",
+    "/guess-the-golfer",
+    "/hall-of-champions",
+    "/hockey-higher-lower",
+    "/list-quiz",
+    "/missing-five",
+    "/mlb-connect-4",
+    "/mlb-higher-lower",
+    "/nba-chain",
+    "/nba-gauntlet-draft",
+    "/nba-starting-5",
+    "/nfl-connections",
+    "/nhl-connect-4",
+    "/olympics",
+    "/perfect-lineup-nhl",
+    "/perfect-season-nfl",
+    "/player-stock-market",
+    "/rank-em",
+    "/score-predictor",
+    "/silverware-sort",
+    "/sports-bingo",
+    "/stadium-tycoon",
+    "/tennis-chain",
+    "/ufc",
+    "/whod-they-beat",
+    "/world-xi"
+  ],
+  "steps": 14,
+  "viewport": [
+    320,
+    900
+  ],
+  "limitation": "Exploratory UI path only; blocked mutations and unverified validators do not establish game completeness."
+}

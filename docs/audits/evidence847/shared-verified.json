@@ -1,0 +1,357 @@
+{
+  "results": [
+    {
+      "site": "https://douknowball.com",
+      "route": "/free-kick",
+      "name": "native skip link target and next Tab",
+      "result": {
+        "targetCount": 0,
+        "afterEnter": {
+          "tag": "A",
+          "text": "Skip to main content",
+          "id": "",
+          "href": "#dukb-main",
+          "label": null,
+          "connected": true,
+          "dialog": false,
+          "cookie": false,
+          "scrollY": 0
+        },
+        "afterTab": {
+          "tag": "A",
+          "text": "DoUKnowBall",
+          "id": "",
+          "href": "/",
+          "label": null,
+          "connected": true,
+          "dialog": false,
+          "cookie": false,
+          "scrollY": 0
+        },
+        "hash": "#dukb-main"
+      },
+      "events": {
+        "vendors": [],
+        "writes": [],
+        "errors": []
+      }
+    },
+    {
+      "site": "https://douknowball.com",
+      "route": "/footle",
+      "name": "native skip link target and next Tab",
+      "result": {
+        "targetCount": 1,
+        "afterEnter": {
+          "tag": "MAIN",
+          "text": "DoUKnowBallBackSign up to track your statsTrack statsFOOTLEGuess the soccer player in 8 tries. Each ",
+          "id": "dukb-main",
+          "href": null,
+          "label": null,
+          "connected": true,
+          "dialog": false,
+          "cookie": false,
+          "scrollY": 0
+        },
+        "afterTab": {
+          "tag": "A",
+          "text": "DoUKnowBall",
+          "id": "",
+          "href": "/",
+          "label": null,
+          "connected": true,
+          "dialog": false,
+          "cookie": false,
+          "scrollY": 0
+        },
+        "hash": "#dukb-main"
+      },
+      "events": {
+        "vendors": [],
+        "writes": [],
+        "errors": []
+      }
+    },
+    {
+      "site": "http://127.0.0.1:4930",
+      "route": "/free-kick",
+      "name": "native skip link target and next Tab",
+      "result": {
+        "targetCount": 0,
+        "afterEnter": {
+          "tag": "A",
+          "text": "Skip to main content",
+          "id": "",
+          "href": "#dukb-main",
+          "label": null,
+          "connected": true,
+          "dialog": false,
+          "cookie": false,
+          "scrollY": 0
+        },
+        "afterTab": {
+          "tag": "A",
+          "text": "DoUKnowBall",
+          "id": "",
+          "href": "/",
+          "label": null,
+          "connected": true,
+          "dialog": false,
+          "cookie": false,
+          "scrollY": 0
+        },
+        "hash": "#dukb-main"
+      },
+      "events": {
+        "vendors": [],
+        "writes": [],
+        "errors": []
+      }
+    },
+    {
+      "site": "http://127.0.0.1:4930",
+      "route": "/footle",
+      "name": "native skip link target and next Tab",
+      "result": {
+        "targetCount": 1,
+        "afterEnter": {
+          "tag": "MAIN",
+          "text": "DoUKnowBallBackSign up to track your statsTrack statsFOOTLEGuess the soccer player in 8 tries. Each ",
+          "id": "dukb-main",
+          "href": null,
+          "label": null,
+          "connected": true,
+          "dialog": false,
+          "cookie": false,
+          "scrollY": 0
+        },
+        "afterTab": {
+          "tag": "A",
+          "text": "DoUKnowBall",
+          "id": "",
+          "href": "/",
+          "label": null,
+          "connected": true,
+          "dialog": false,
+          "cookie": false,
+          "scrollY": 0
+        },
+        "hash": "#dukb-main"
+      },
+      "events": {
+        "vendors": [],
+        "writes": [],
+        "errors": []
+      }
+    },
+    {
+      "site": "https://douknowball.com",
+      "route": "/",
+      "name": "auth settled escape return and guest claim",
+      "result": {
+        "loginClose": {
+          "tag": "BODY",
+          "text": "Skip to main contentLive⏸SOCCERSeattle Sounders FCvSporting Kansas Ci.9:30 PM☆MLBNFLNHLWNBATENNISUpd",
+          "id": "",
+          "href": null,
+          "label": null,
+          "connected": true,
+          "dialog": false,
+          "cookie": false,
+          "scrollY": 0
+        },
+        "loginDialogCount": 0,
+        "signup": "Join DoUKnowBall\n\nFirst time here? It's free and takes 10 seconds. Streaks, points and world rank only count once you have an account.\n\nEmail\nPassword\n\nAt least 6 characters\n\nI am 13 or older, and I agree to the Terms and Privacy Policy.\nCreate Account\n\nAlready have an account? Sign in\n\nClose",
+        "signupClose": {
+          "tag": "BODY",
+          "text": "Skip to main contentLive⏸SOCCERSeattle Sounders FCvSporting Kansas Ci.9:30 PM☆MLBNFLNHLWNBATENNISUpd",
+          "id": "",
+          "href": null,
+          "label": null,
+          "connected": true,
+          "dialog": false,
+          "cookie": false,
+          "scrollY": 0
+        },
+        "signupDialogCount": 0
+      },
+      "events": {
+        "vendors": [],
+        "writes": [
+          "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/rpc/most_played_today"
+        ],
+        "errors": []
+      }
+    },
+    {
+      "site": "http://127.0.0.1:4930",
+      "route": "/",
+      "name": "auth settled escape return and guest claim",
+      "result": {
+        "loginClose": {
+          "tag": "BODY",
+          "text": "Skip to main contentLive⏸SOCCERSeattle Sounders FCvSporting Kansas Ci.9:30 PM☆MLBNFLNHLWNBATENNISUpd",
+          "id": "",
+          "href": null,
+          "label": null,
+          "connected": true,
+          "dialog": false,
+          "cookie": false,
+          "scrollY": 0
+        },
+        "loginDialogCount": 0,
+        "signup": "Join DoUKnowBall\n\nFirst time here? It's free and takes 10 seconds. Streaks, points and world rank only count once you have an account.\n\nEmail\nPassword\n\nAt least 6 characters\n\nI am 13 or older, and I agree to the Terms and Privacy Policy.\nCreate Account\n\nAlready have an account? Sign in\n\nClose",
+        "signupClose": {
+          "tag": "BODY",
+          "text": "Skip to main contentLive⏸SOCCERSeattle Sounders FCvSporting Kansas Ci.9:30 PM☆MLBNFLNHLWNBATENNISUpd",
+          "id": "",
+          "href": null,
+          "label": null,
+          "connected": true,
+          "dialog": false,
+          "cookie": false,
+          "scrollY": 0
+        },
+        "signupDialogCount": 0
+      },
+      "events": {
+        "vendors": [],
+        "writes": [
+          "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/rpc/most_played_today"
+        ],
+        "errors": []
+      }
+    },
+    {
+      "site": "https://douknowball.com",
+      "route": "/footle",
+      "name": "pending consent focus after help closes",
+      "result": {
+        "before": {
+          "tag": "BUTTON",
+          "text": "Let's Play!",
+          "id": "",
+          "href": null,
+          "label": null,
+          "connected": true,
+          "dialog": true,
+          "cookie": false,
+          "scrollY": 0
+        },
+        "afterEscape": {
+          "tag": "BUTTON",
+          "text": "",
+          "id": "",
+          "href": null,
+          "label": "How to play",
+          "connected": true,
+          "dialog": false,
+          "cookie": false,
+          "scrollY": 0
+        },
+        "trace": [
+          {
+            "tag": "BUTTON",
+            "text": "📅 Daily",
+            "id": "",
+            "href": null,
+            "label": null,
+            "connected": true,
+            "dialog": false,
+            "cookie": false,
+            "scrollY": 0
+          },
+          {
+            "tag": "BUTTON",
+            "text": "∞ Unlimited",
+            "id": "",
+            "href": null,
+            "label": null,
+            "connected": true,
+            "dialog": false,
+            "cookie": false,
+            "scrollY": 0
+          },
+          {
+            "tag": "INPUT",
+            "text": "",
+            "id": "",
+            "href": null,
+            "label": "Search for a player",
+            "connected": true,
+            "dialog": false,
+            "cookie": false,
+            "scrollY": 0
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Give up",
+            "id": "",
+            "href": null,
+            "label": null,
+            "connected": true,
+            "dialog": false,
+            "cookie": false,
+            "scrollY": 0
+          },
+          {
+            "tag": "DIV",
+            "text": "👤PLAYER🌍NAT🏟️CLUB⚽GOALS👟AST📍POS👕KIT #📅AGE💰VALUE",
+            "id": "",
+            "href": null,
+            "label": null,
+            "connected": true,
+            "dialog": false,
+            "cookie": false,
+            "scrollY": 318
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Report",
+            "id": "",
+            "href": null,
+            "label": null,
+            "connected": true,
+            "dialog": false,
+            "cookie": false,
+            "scrollY": 868
+          },
+          {
+            "tag": "A",
+            "text": "📜Career QuizGuess from career history",
+            "id": "",
+            "href": "/career",
+            "label": null,
+            "connected": true,
+            "dialog": false,
+            "cookie": false,
+            "scrollY": 4453
+          },
+          {
+            "tag": "A",
+            "text": "📊Soccer Higher or LowerCompare all-time career stats",
+            "id": "",
+            "href": "/higher-lower",
+            "label": null,
+            "connected": true,
+            "dialog": false,
+            "cookie": false,
+            "scrollY": 4453
+          }
+        ],
+        "dialogCount": 0,
+        "cookieRegion": true
+      },
+      "events": {
+        "vendors": [],
+        "writes": [],
+        "errors": []
+      }
+    }
+  ],
+  "cleanup": {
+    "browserClosed": true,
+    "contextsClosed": true,
+    "ownedServer": false
+  }
+}

@@ -24,6 +24,7 @@
  * really draws, and it is on the timeline.
  */
 import type { CardLine, LiveMatch, MatchDetail, SubLine, TimelineKind } from './clubManager';
+import { minuteLabel, playedBy } from '@/lib/clubManagerClock';
 
 export interface CardsAndSubs {
   yellows: number; oppYellows: number;
@@ -37,9 +38,10 @@ export interface CommittedLines {
   subs: SubLine[]; oppSubs: SubLine[];
 }
 
-/** Bookings and changes up to and including a minute. A second yellow is a red card line, as the engine writes it. */
-export function cardsAndSubsAt(lines: CommittedLines, minute: number): CardsAndSubs {
-  const upTo = <T extends { minute: number }>(xs: T[]): T[] => xs.filter(x => x.minute <= minute);
+/** Bookings and changes up to and including a minute. A second yellow is a red card line, as the engine writes it.
+ *  Round 781: with `plus` the clock stands inside the board of `minute` and a line deeper into it has not happened yet. */
+export function cardsAndSubsAt(lines: CommittedLines, minute: number, plus?: number): CardsAndSubs {
+  const upTo = <T extends { minute: number; plus?: number }>(xs: T[]): T[] => xs.filter(playedBy(minute, plus));
   const cards = upTo(lines.cards);
   const oppCards = upTo(lines.oppCards);
   return {
@@ -114,12 +116,15 @@ export function timelineRows(d: MatchDetail, view: TimelineView): TimelineRow[] 
   const genOf = (side: string, name: string): boolean => side === 'opp' && !!name && made.has(name);
   const addedH1 = d.added ? `45+${d.added.h1}'` : "45'";
   const addedH2 = d.added ? `90+${d.added.h2}'` : "90'";
+  /* Round 781: the whistle after extra time wears its own board when one was drawn. */
+  const addedEt = d.et ? (d.added?.et ? `${d.et.to}+${d.added.et}'` : `${d.et.to}'`) : addedH2;
   const stripBoard = (t: string): string => t.replace(/ \(\+\d+'\)/, '');
   const out: TimelineRow[] = [];
   d.timeline.forEach((e, i) => {
     if (view === 'key' && ALL_VIEW_ONLY.includes(e.kind)) return;
     const base = { key: `${i}:${e.kind}:${e.side}:${e.minute}`, kind: e.kind, side: e.side, icon: ICON[e.kind] ?? '•' };
-    const at = `${e.minute}'`;
+    /* Round 781: a row in the board reads 45+2' or 90+5', off the line's own plus. */
+    const at = minuteLabel(e);
     switch (e.kind) {
       case 'kickoff':
         out.push({ ...base, clock: "0'", label: 'Kick off', name: '' });
@@ -131,7 +136,7 @@ export function timelineRows(d: MatchDetail, view: TimelineView): TimelineRow[] 
         out.push({ ...base, clock: addedH2, label: stripBoard(e.text), name: '' });
         return;
       case 'fulltime':
-        out.push({ ...base, clock: d.et ? `${d.et.to}'` : addedH2, label: stripBoard(e.text), name: '' });
+        out.push({ ...base, clock: addedEt, label: stripBoard(e.text), name: '' });
         return;
       case 'pens':
         out.push({ ...base, clock: 'Pens', label: e.side === 'me' ? 'Won the shootout' : 'Lost the shootout', name: '' });

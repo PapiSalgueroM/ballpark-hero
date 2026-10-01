@@ -928,7 +928,10 @@ const visible = html => html.replace(/<[^>]*>/g, ' ').replace(/&#x27;|&#39;/g, "
     const card = r => visible(render(MatchReportCard, { report: r.report, clubName: r.f.club, onContinue: () => {} }));
     const a = card(aetC);
     if (!a.includes('(AET)')) fail(6, `the report card of an aet match does not print (AET): ${a.slice(0, 120)}`);
-    if (!a.includes(`AET ${90 + cmA.ET_MINUTES}'`)) fail(6, 'the report card of an aet match has no AET chip');
+    /* Round 781: the chip carries the extra time board too (AET 120+1'). */
+    const etBoard = aetC.report.detail?.added?.et;
+    const chip = `AET ${90 + cmA.ET_MINUTES}${etBoard ? `+${etBoard}` : ''}'`;
+    if (!a.includes(chip)) fail(6, `the report card of an aet match has no ${chip} chip`);
     if (!/in extra time|after extra time/.test(a)) fail(6, 'the report card of an aet match has no extra time line');
     if (!/on aggregate after extra time/.test(card(aet2C))) fail(6, 'the report card of an aet second leg does not give the aggregate after extra time');
     const p = card(pensEtC);
@@ -957,7 +960,7 @@ const visible = html => html.replace(/<[^>]*>/g, ' ').replace(/&#x27;|&#39;/g, "
     const o = visible(render(UclBracketCard, { career: old }));
     if (o.includes('extra time')) fail(6, 'a bracket with no aet flag printed an extra time line');
     if (!/Level after 90\.|Level over two legs\./.test(o)) fail(6, 'a bracket with no aet flag lost its old penalties line');
-    lines.push(`report card: (AET), the AET ${90 + cmA.ET_MINUTES}' chip, the extra time line, the aggregate after it, the shootout after it, none of it on a regular match; viewer ET 97' and AET at the end; bracket aet line and the old line on an old tie`);
+    lines.push(`report card: (AET), the ${chip} chip, the extra time line, the aggregate after it, the shootout after it, none of it on a regular match; viewer ET 97' and AET at the end; bracket aet line and the old line on an old tie`);
   }
   report(6, 'The report card, the viewer and the bracket say that extra time happened', lines);
 }
