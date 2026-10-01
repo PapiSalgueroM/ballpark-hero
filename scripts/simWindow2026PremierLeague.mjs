@@ -46,7 +46,12 @@
                   when the engine does not model the club).
      7. ROWS      a name without add matches exactly one 2026 row (the
                   migration keys on the name alone) and that row is not
-                  already at db; a name with add matches none.
+                  already at db; a name with add matches none. Round 795:
+                  a row at db that the Round 795 migration moved there
+                  (its move list sends him to db) is the migration's own
+                  after state and is satisfied, so this stays green once
+                  the lead applies it; a row at db the migration did not
+                  move still fails.
      8. LEFT OUT  the left-out file has its shape and names nobody the main
                   file carries.
 
@@ -68,7 +73,10 @@
                                   Juventus
      WINDOW2026_CONTROL=rows      an entry with a 2026 row gains add data
      WINDOW2026_CONTROL=current   an entry claims the club its 2026 row
-                                  already sits at
+                                  already sits at, and the Round 795
+                                  migration is taken not to have moved it
+                                  (before the apply both halves are
+                                  planted; after it only the second)
      WINDOW2026_CONTROL=leftout   the left-out file names a player the main
                                   file carries
 
@@ -80,8 +88,12 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { TRANSFER_OVERLAY_2026 } from './transferOverlay2026.mjs';
+/* Round 795: the overlay now ends with this file's own accepted rows
+   (scripts/data/window2026/overlayAdditions.generated.mjs), so the repeat
+   check reads the hand list, the one these rows must not repeat. */
+import { TRANSFER_OVERLAY_2026_HAND as TRANSFER_OVERLAY_2026 } from './transferOverlay2026.mjs';
 import { DB_TO_ENGINE } from './lib/dbClubNames.mjs';
+import { round795Destinations } from './buildWindow2026.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const FILE = path.join(ROOT, 'scripts', 'data', 'window2026', 'premierLeague.json');
@@ -271,26 +283,33 @@ console.log('7) One 2026 row per name, not already at db; none when the entry ad
       byName.get(r.player_name).push(r.club);
     }
   }
+  /* Round 795: where its migration sends each name. A row already at db is
+     the migration's own after state when this sends him there. */
+  const moved795 = round795Destinations();
   if (CONTROL === 'current') {
     const clubs = byName.get(plain.name) || [];
     if (clubs.length !== 1) abort(`control cannot run: ${plain.name} has ${clubs.length} 2026 rows`);
-    if (clubs[0] === plain.db) abort('control cannot run: the plain entry already fails the current check');
+    if (clubs[0] === plain.db && moved795.get(plain.name) !== plain.db) abort('control cannot run: the plain entry already fails the current check');
+    if (!moved795.has(plain.name)) abort(`control cannot run: the Round 795 migration does not move ${plain.name}, so there is nothing to forget`);
     plain.db = clubs[0];
+    moved795.delete(plain.name);
   }
   let checked = 0;
   let stale = 0;
+  let applied = 0;
   for (const e of entries) {
     const clubs = byName.get(e.name) || [];
     if (e.add && clubs.length > 0) fail(`${e.name}: has ${clubs.length} 2026 row(s), so it must not carry add data`);
     if (!e.add && clubs.length !== 1) fail(`${e.name}: ${clubs.length} rows for 2026, the migration keys on the name alone and needs exactly one`);
     if (!e.add && clubs.length === 1) {
-      if (clubs[0] === e.db) fail(`${e.name}: his 2026 row already sits at "${e.db}", the table has this move`);
-      else stale += 1;
+      if (clubs[0] !== e.db) stale += 1;
+      else if (moved795.get(e.name) === e.db) applied += 1;
+      else fail(`${e.name}: his 2026 row already sits at "${e.db}" and the Round 795 migration did not move it there, the table has this move`);
     }
     checked += 1;
   }
   if (checked !== entries.length) fail(`checked ${checked} of ${entries.length} entries`);
-  console.log(`   ${checked} entries checked against the 2026 rows, ${stale} rows the table has stale`);
+  console.log(`   ${checked} entries checked against the 2026 rows, ${stale} rows the table has stale, ${applied} already moved by the Round 795 migration`);
 }
 
 section = 8;

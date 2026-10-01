@@ -30,6 +30,8 @@
         migration keys on the name alone), and an entry with a club and no
         add data names a player the bake can find (a 2026 or 2025 row at a
         club it models), or the bake fails with "not found and no add data".
+        An entry with add data has no 2026 row at a modeled club, unless
+        the Round 795 migration moved it to db there (its after state).
      7. LEFT OUT. Every left out row names the player and says why, and no
         player is both applied and left out.
      8. DASHES. No em or en dash in either file (house style).
@@ -44,6 +46,9 @@
      WINDOW2026_CONTROL=engine      db Real Betis Balompié with to Sevilla
      WINDOW2026_CONTROL=unreachable a player no row carries, with no add
      WINDOW2026_CONTROL=namesake    a name two 2026 rows carry
+     WINDOW2026_CONTROL=addmodeled  an add entry's 2026 row at its modeled db,
+                                    with the Round 795 migration taken not to
+                                    have moved it there (Round 795)
      WINDOW2026_CONTROL=leftout     an applied name also in the left out file
      WINDOW2026_CONTROL=dash        an en dash planted in a note
 
@@ -60,12 +65,13 @@ import { fileURLToPath } from 'node:url';
    check reads the hand list, the one these rows must not repeat. */
 import { TRANSFER_OVERLAY_2026_HAND as TRANSFER_OVERLAY_2026 } from './transferOverlay2026.mjs';
 import { DB_TO_ENGINE } from './lib/dbClubNames.mjs';
+import { round795Destinations } from './buildWindow2026.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const FILE = path.join(ROOT, 'scripts', 'data', 'window2026', 'laLiga.json');
 const LEFT_FILE = path.join(ROOT, 'scripts', 'data', 'window2026', 'laLiga.left-out.json');
 const CONTROL = process.env.WINDOW2026_CONTROL || '';
-const CONTROL_SECTION = { shape: 1, onehost: 2, dupe: 3, spelling: 4, engine: 5, unreachable: 6, namesake: 6, leftout: 7, dash: 8 };
+const CONTROL_SECTION = { shape: 1, onehost: 2, dupe: 3, spelling: 4, engine: 5, unreachable: 6, namesake: 6, addmodeled: 6, leftout: 7, dash: 8 };
 const SECTIONS = [1, 2, 3, 4, 5, 6, 7, 8];
 const failures = Object.fromEntries(SECTIONS.map(s => [s, 0]));
 let section = 1;
@@ -154,6 +160,9 @@ function plantControl(entries, left) {
       return;
     case 'namesake':
       /* filled in by main() once the table has named a real namesake */
+      return;
+    case 'addmodeled':
+      /* planted in section 6, once the table has said where the row sits */
       return;
     case 'leftout':
       left.push({ name: base.name, move: 'planted', reason: 'planted by the leftout control' });
@@ -280,7 +289,23 @@ async function main() {
     const rows = await rowsFor(db, names, [2025, 2026]);
     const by = new Map();
     for (const r of rows) { if (!by.has(r.player_name)) by.set(r.player_name, []); by.get(r.player_name).push(r); }
-    let with2026 = 0, alreadyThere = 0;
+    /* Round 795: an add entry whose 2026 row sat at a club the bake does not
+       model has that row moved to db by the Round 795 migration, so once the
+       lead applies it the row sits at a modeled club. That is the
+       migration's own after state and is satisfied; a row at a modeled club
+       the migration did not put there still fails. */
+    const moved795 = round795Destinations();
+    if (CONTROL === 'addmodeled') {
+      const e = entries.find(x => x.add && moved795.get(x.name) === x.db && DB_TO_ENGINE[x.db] !== undefined);
+      if (!e) abort('control cannot run: no add entry the Round 795 migration moves to a modeled club');
+      const own = by.get(e.name) || [];
+      const r26 = own.filter(r => r.year === 2026);
+      if (r26.length !== 1) abort(`control cannot run: ${e.name} has ${r26.length} 2026 rows`);
+      r26[0].club = e.db;
+      moved795.delete(e.name);
+      console.log(`   NEGATIVE CONTROL ON: ${e.name}'s 2026 row sits at ${e.db} and the Round 795 migration is taken not to have moved it, in memory`);
+    }
+    let with2026 = 0, alreadyThere = 0, applied795 = 0;
     for (const e of entries) {
       const list = by.get(e.name) || [];
       const r26 = list.filter(r => r.year === 2026);
@@ -289,11 +314,13 @@ async function main() {
       if (r26.length === 1 && r26[0].club === e.db) alreadyThere += 1;
       const bakeFinds = list.some(r => DB_TO_ENGINE[r.club] !== undefined);
       if (e.to !== null && !e.add && !bakeFinds) fail(`${e.name}: no 2025 or 2026 row at a club the bake models and no add data, the bake would stop`);
-      if (e.add && r26.some(r => DB_TO_ENGINE[r.club] !== undefined)) fail(`${e.name}: has add data but a 2026 row at a modeled club, add is for players the bake cannot find`);
+      const movedHere = r => r.club === e.db && moved795.get(e.name) === e.db;
+      if (e.add && r26.some(r => DB_TO_ENGINE[r.club] !== undefined && !movedHere(r))) fail(`${e.name}: has add data but a 2026 row at a modeled club, add is for players the bake cannot find`);
+      else if (e.add && r26.some(r => DB_TO_ENGINE[r.club] !== undefined)) applied795 += 1;
     }
     /* a floor, because an empty answer used to read as green (Round 399) */
     if (entries.length && rows.length === 0) fail('the table answered with no rows at all for these names');
-    console.log(`   ${with2026} of ${entries.length} entries have a 2026 row; ${alreadyThere} already say the entry's club`);
+    console.log(`   ${with2026} of ${entries.length} entries have a 2026 row; ${alreadyThere} already say the entry's club; ${applied795} add entries already moved to a modeled club by the Round 795 migration`);
   }
 
   section = 7;

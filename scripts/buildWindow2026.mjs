@@ -705,6 +705,19 @@ export function parseMigration(sql) {
   };
 }
 
+/** name to the club the committed migration moves his 2026 row to. A league
+    harness that finds a research row's 2026 row already at its db reads that
+    as satisfied when this says the migration put it there (the migration's
+    own after state, once the lead has applied it), and as a failure when it
+    does not (the table had the move before the research did). */
+export function round795Destinations() {
+  const p = path.join(ROOT, MIGRATION_REL);
+  if (!fs.existsSync(p)) return new Map();
+  const mig = parseMigration(fs.readFileSync(p, 'utf8'));
+  if (!mig.moves.length || mig.expectedMoves !== mig.moves.length) throw new Error(`buildWindow2026: ${MIGRATION_REL} did not parse (${mig.moves.length} moves read, expected_moves ${mig.expectedMoves})`);
+  return new Map(mig.moves.map(m => [m.name, m.to]));
+}
+
 /** PENDING (the table is the plan's before state), APPLIED (its after state), or MOVED. */
 export async function liveState(mig) {
   const names = [...new Set([...mig.moves.map(m => m.name), ...mig.inserts.map(i => i.name)])];
