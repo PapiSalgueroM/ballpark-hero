@@ -90,6 +90,8 @@
    Section 3's floor of held deals caught at the shut (one for every two
    windows, so 100) measured 275 to 309 over 200 windows on the same six
    streams.
+   Section 7's bands and floor are in the same block, measured on the same
+   streams. Sections 8 and 9 are hard: one breach is red.
    Run: node scripts/simDeadlineDay.mjs (about 50 seconds)
 */
 /* Round 299: seeded stream, see scripts/lib/seedRandom.mjs. First import on purpose. */
@@ -495,16 +497,28 @@ for (const arm of Object.keys(arms)) {
 const scoreGap = g('desk', 'score') - g('over', 'score');
 const valueGap = g('desk', 'valuePts') - g('over', 'valuePts');
 console.log(`   desk minus asking price: ${scoreGap >= 0 ? '+' : ''}${fmt(scoreGap)} score, ${valueGap >= 0 ? '+' : ''}${fmt(valueGap)} value points; desk wins ${deskWins}, asking price wins ${overWins}, level ${starts.length - deskWins - overWins}`);
-/* THRESHOLDS, measured on 2026-10-01 at the default 200 windows over six
-   streams (the filename seed, then SIM_SEED=1 to 5):
-     score gap        3.59, 3.30, 3.78, 3.78, 3.77, 3.80   (spread 0.5)
-     desk win share   85.8, 84.7, 85.9, 88.3, 86.8, 86.5 percent of decided pairs
-     value point gap  4.73, 4.60, 4.72, 4.86, 4.67, 4.65
-     desk fills all   89.0, 87.5, 88.0, 89.0, 87.5, 89.5 percent of windows
-     (the asking price manager fills every need in 97.5 to 100 percent)
-   Each floor sits under the lowest stream by more than the whole spread. The
-   blind control takes value and budget points to zero, which leaves the desk
-   behind on needs alone, so every one of the first three goes red under it. */
+/* THRESHOLDS, measured again on 2026-10-01 after the review fix (the bonus
+   can no longer be traded for wage, so a manager who cannot fit it sells or
+   walks), at the default 200 windows over six streams (the filename seed,
+   then SIM_SEED=1 to 5):
+     score gap        3.96, 3.64, 4.10, 4.08, 4.06, 4.11   (spread 0.47)
+     desk win share   90.1, 87.8, 88.5, 90.8, 90.0, 88.6 percent of decided pairs
+     value point gap  4.70, 4.59, 4.66, 4.85, 4.67, 4.58
+     desk fills all   87.0, 87.0, 87.0, 88.5, 86.0, 89.5 percent of windows
+     (the asking price manager fills every need in 92.0 to 94.5 percent)
+   Before the fix: score gap 3.30 to 3.80, win share 84.7 to 88.3, value gap
+   4.60 to 4.86, desk fills 87.5 to 89.5. Each floor sits under the lowest
+   stream by more than the whole spread. The blind control takes value and
+   budget points to zero, which leaves the desk behind on needs alone, so
+   every one of the first three goes red under it.
+   Section 7, same six streams:
+     rival hours exposed   2197, 2043, 2289, 2147, 2249, 2190
+     closed on them        29.2, 28.2, 28.8, 28.6, 29.0, 31.4 percent (rule 30)
+     walk with a rival     55.5, 62.0, 66.5, 63.0, 61.5, 62.0 percent of 200
+   The close band 24 to 36 is about five standard errors of a 2000 hour
+   sample either side of 30; the walk band 45 to 78 is four to five of a 200
+   table sample either side of the engine's 60. The norivals and walkfree
+   controls take each to zero. */
 const T = {
   scoreGap: 2.5,
   winShare: 75,
@@ -786,7 +800,7 @@ const walkRate = walkTables ? walkLost / walkTables : NaN;
 console.log(`   walking away from ${walkTables} terms tables with a rival circling lost the man ${walkLost} times (${fmt(100 * walkRate, 1)} percent; the engine's walk away rule is 60)`);
 /* THRESHOLDS for section 7, see the THRESHOLDS block in section 2 for the
    streams. */
-const T7 = { exposedFloor: 600, closeLo: 0.24, closeHi: 0.36, walkLo: 0.45, walkHi: 0.75 };
+const T7 = { exposedFloor: 1000, closeLo: 0.24, closeHi: 0.36, walkLo: 0.45, walkHi: 0.78 };
 if (!(exposed >= T7.exposedFloor)) fail(`only ${exposed} rival hours were exposed (floor ${T7.exposedFloor}), so rivals barely move`);
 if (!(closeRate >= T7.closeLo && closeRate <= T7.closeHi)) fail(`a rival closed ${fmt(100 * closeRate, 1)} percent of the hours he was in for a man left alone (band ${100 * T7.closeLo} to ${100 * T7.closeHi}); the rules say ${fmt(100 * RIVAL_CLOSE, 0)}`);
 if (wrongClub) fail(`${wrongClub} players went to a club other than the rival who was in for them`);
