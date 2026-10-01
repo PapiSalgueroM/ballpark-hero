@@ -1,5 +1,21 @@
 # Work board
 
+**2026-10-01, Codex792 functional source checkpoint, final acceptance pending.**
+The separate engine/hook and Board/Page/module are frozen for an unrouted source commit.
+Initial real-engine/hook tests pass13 cases; initial actual Board/Page tests pass10 cases,
+including a ten-round season, exact squads/scores/replay and one undefined-score finish.
+Review found and fixed opponents selecting reserves outside their original matchday23;
+both own and other matches now pin that group. Generated names are unique across216 players,
+and consecutive lineup edits that return to the original team leave a valid save.
+Paired96-seed measurements support stronger squads, counter tactics and recovery with
+observed headroom; final margins and effective controls still require acceptance.
+The guide declares fictional roles/swaps/tactic/training math and the final exact-tie rule.
+Only the five new, currently unrouted source files land at this checkpoint. Registration,
+guide, final tests/wrappers and the new saved page stay pending together, so no public route
+is added before its indexable snapshot exists. Full native seasons, exact types, final
+production builds/fifteen artifact fences and the coherent current node suite remain due.
+All Claude reservations and report88fc0a2b's open status hold. Next free793.
+
 **2026-10-01, Codex790 source/native checkpoint ACCEPTED.**
 Ten actual-page/shared-autocomplete/helper/daily/completion/streak/storage/share outcomes
 pass. Twelve asserted copied controls each fail one intended assertion with one independent

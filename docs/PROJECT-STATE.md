@@ -1,5 +1,14 @@
 # Project state
 
+## CHECKPOINT 2026-10-01: Aussie Rules functional source, final acceptance pending
+
+792's five new engine/hook/Board/Page/module files are frozen for an unrouted checkpoint.
+Initial real-engine/hook13 and actual-Board10 tests pass, including a full ten-round season.
+Review fixed the opponent matchday23 boundary and lineup save coalescing;216 names are unique.
+Final controls/native seasons and the combined build/artifact/full-node gates remain due.
+The new route and saved page will land together. Exact scopes/proof are on WORKBOARD.
+Report88fc0a2b stays open; publication and Google approval are separate. Next free793.
+
 ## CHECKPOINT 2026-10-01: Puck Detective and phone source/native accepted
 
 790 passes ten real-page outcomes/twelve effective controls/eight native contexts with831
