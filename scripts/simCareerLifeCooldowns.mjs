@@ -244,6 +244,37 @@ const CONTROLS = {
     note: 'repairCareer keeps a ledger that is not a plain object',
     breaks: '7',
   },
+  /* The next three break the engine's own helpers, the ones section 2 used
+     to read its answers from, so they prove section 2 now judges the engine
+     by rules written here and not by the engine's opinion of itself. */
+  keynostory: {
+    file: 'src/lib/soccerCareerEngine.ts',
+    from: '  return e.story ? `story:${e.story}` : String(e.id);',
+    to: '  return String(e.id);',
+    note: 'the ledger key ignores the shared story, so a story can be told once per catalog',
+    breaks: '2',
+  },
+  zerokinds: {
+    file: 'src/lib/soccerCareerLife.ts',
+    from: '  agent: 2,\n  personality: 2,\n  dressingRoom: 2,\n  media: 1,\n  money: 2,\n  family: 2,\n  injury: 3,\n  fans: 2,\n  national: 2,\n  late: 2,\n',
+    to: '  agent: 0,\n  personality: 0,\n  dressingRoom: 0,\n  media: 0,\n  money: 0,\n  family: 0,\n  injury: 0,\n  fans: 0,\n  national: 0,\n  late: 0,\n',
+    note: 'every cooldown kind in the life file except once is zero',
+    breaks: '2',
+  },
+  zerodefaults: {
+    file: 'src/lib/soccerCareerEngine.ts',
+    from: '  positive: 1,\n  negative: 1,\n  international: 1,\n  life: 2,\n};',
+    to: '  positive: 0,\n  negative: 0,\n  international: 0,\n  life: 0,\n};',
+    note: 'the category defaults the other catalogs fall back on are all zero',
+    breaks: '2',
+  },
+  comebackany: {
+    file: 'src/lib/soccerCareerLife.ts',
+    from: '  return lastSerious.year >= seasonNow - 1;',
+    to: '  return true;',
+    note: 'the comeback game is due after any serious injury, however long ago',
+    breaks: '3b',
+  },
 };
 if (CONTROL && !CONTROLS[CONTROL]) {
   console.error(`SIM_CAREER_LIFE_COOLDOWNS_CONTROL=${CONTROL} is not a control this harness knows`);
@@ -317,8 +348,8 @@ const {
   dismissRivalryEvent, dismissBallonDor, applyEventChoice, dismissMoralDilemma,
   dismissSocialMediaPhase, dismissAppealResult, applyBdorSpeech, applyWorldCupSpeech,
   acceptRetirementSuggestion, stayAtClub, signExtension, applyRehabChoice, applySocialMediaAction,
-  FALLBACK_CLUBS, repairCareer, getAllEvents, eventCooldown, isEventOnCooldown, eventSeasonIndex,
-  eventLedgerKey,
+  FALLBACK_CLUBS, repairCareer, getAllEvents, eventCooldown, isEventOnCooldown,
+  eventLedgerKey, EVENT_COOLDOWN_DEFAULT,
 } = engine;
 const { COOLDOWN, STORY } = life;
 
@@ -358,13 +389,58 @@ const seeded = seed => {
 
 /* The life file's own id range. Read off the catalog, not typed here, so a
    new id joins the audit the moment it exists. */
-const LIFE_IDS_IN_SOURCE = (() => {
-  const src = fs.readFileSync(path.join(ROOT, 'src/lib/soccerCareerLife.ts'), 'utf8')
-    .replace(/\/\*[\s\S]*?\*\//g, '').replace(/(^|[^:])\/\/.*$/gm, '$1');
-  return [...src.matchAll(/\{ id: (\d+), /g)].map(m => Number(m[1]));
-})();
+const LIFE_SRC = fs.readFileSync(path.join(ROOT, 'src/lib/soccerCareerLife.ts'), 'utf8')
+  .replace(/\/\*[\s\S]*?\*\//g, '').replace(/(^|[^:])\/\/.*$/gm, '$1');
+const LIFE_IDS_IN_SOURCE = [...LIFE_SRC.matchAll(/\{ id: (\d+), /g)].map(m => Number(m[1]));
 const NEW_IDS = LIFE_IDS_IN_SOURCE.filter(id => id >= 253 && id <= 272);
 const isLife = id => LIFE_IDS_IN_SOURCE.includes(id);
+/* Which kind of cooldown each life event is declared with, read off the
+   catalog's code (comments stripped). The kind is a design choice made in the
+   catalog; how many seasons a kind means is pinned below. */
+const LIFE_KIND_BY_ID = new Map([...LIFE_SRC.matchAll(/\{ id: (\d+), (?:story: STORY\.\w+, )?cooldown: COOLDOWN\.(\w+), /g)]
+  .map(m => [Number(m[1]), m[2]]));
+
+/* ─── the rules, written here and not read off the engine ─────────────────
+   A review of this harness found that section 2 asked the engine both
+   questions it was meant to check: which firings are the same story
+   (eventLedgerKey) and how long each one must sit out (eventCooldown). Make
+   the ledger key ignore the story, or zero every cooldown, and the engine and
+   the harness changed their minds together and every section stayed green
+   while one story fired twice in 73 careers and the comeback game came back
+   in consecutive seasons 216 times. So the answers live here:
+
+   PINNED_COOLDOWN  seasons per kind, a copy of COOLDOWN in soccerCareerLife.ts.
+   PINNED_DEFAULT   seasons per category for an event with no cooldown of its
+                    own, a copy of EVENT_COOLDOWN_DEFAULT in the engine.
+   STORY_SETS       the stories told by more than one catalog.
+
+   Section 5 fails when the engine's tables or helpers disagree with these,
+   and section 2 judges every repeat against these, so a cooldown cannot
+   shrink and a story cannot split without somebody changing this file and
+   writing down why. Every value is at least one season: nothing in the
+   picker is meant to come round in back to back seasons. */
+const PINNED_COOLDOWN = {
+  agent: 2, personality: 2, dressingRoom: 2, media: 1, money: 2, family: 2,
+  injury: 3, fans: 2, national: 2, late: 2, once: 99,
+};
+const PINNED_DEFAULT = { positive: 1, negative: 1, international: 1, life: 2 };
+const STORY_SETS = {
+  squadChatLeak: [220, 63, 422],
+  statueVote: [232, 462],
+  podcastLaunch: [244, 68],
+};
+const STORY_OF_ID = new Map(Object.entries(STORY_SETS).flatMap(([story, ids]) => ids.map(id => [id, story])));
+/* The same story is the same entry, whatever catalog told it. */
+const harnessKey = id => (STORY_OF_ID.has(id) ? `story:${STORY_OF_ID.get(id)}` : String(id));
+/* Seasons an event must sit out. Unknown kinds and categories fall to one
+   season, the floor, and section 5 fails on them separately. */
+const expectedCooldown = (id, category) => {
+  if (STORY_OF_ID.has(id)) return PINNED_COOLDOWN.once;
+  if (LIFE_KIND_BY_ID.has(id)) return PINNED_COOLDOWN[LIFE_KIND_BY_ID.get(id)] ?? 1;
+  return PINNED_DEFAULT[category] ?? 1;
+};
+/* The season a batch belongs to: the year of the season just played. */
+const seasonOf = s => s.seasons[s.seasons.length - 1]?.year ?? 0;
 
 let crashes = 0;
 const careers = [];
@@ -403,8 +479,12 @@ function drive(seed, mode) {
 
     while (!s.retired && guard++ < 400) {
       if (s.phase === 'random_events' && prevPhase !== 'random_events') {
-        const season = eventSeasonIndex(s);
-        batches.push({ season, events: s.pendingEvents.map(e => ({ id: e.id, key: eventLedgerKey(e), category: e.category, cooldown: eventCooldown(e) })) });
+        const injuryYears = (s.seriousInjuries || []).map(i => i.year).filter(y => Number.isFinite(y));
+        batches.push({
+          season: seasonOf(s),
+          lastInjury: injuryYears.length ? Math.max(...injuryYears) : null,
+          events: s.pendingEvents.map(e => ({ id: e.id, category: e.category })),
+        });
         for (const e of getAllEvents(s)) if (!catalogById.has(e.id)) catalogById.set(e.id, e);
         for (const e of s.pendingEvents) if (isLife(e.id)) lifeFireCount.set(e.id, (lifeFireCount.get(e.id) || 0) + 1);
         if (!midSave && playingSeasons >= 3 && playingSeasons <= 6) midSave = JSON.parse(JSON.stringify(s));
@@ -506,14 +586,17 @@ if (totalFired < 1000) fail(`only ${totalFired} events were shown across the sam
 SECTION = '2';
 console.log('2) No event fires twice inside its cooldown');
 {
-  /* Grouped by ledger key: the event id, or the story it shares with events
-     in other catalogs, so a statue vote from the realism file inside the
-     cooldown of the life one counts as the same story told twice. The gap
-     is judged by the LATER event's cooldown, which is the rule the picker
-     applies when it decides whether that later event may be drawn. */
+  /* Grouped by this harness's own key: the event id, or the story in
+     STORY_SETS it belongs to, so a statue vote from the realism file inside
+     the cooldown of the life one counts as the same story told twice. The
+     gap is judged by the LATER event's cooldown as written in this file
+     (PINNED_COOLDOWN, PINNED_DEFAULT), which is the rule the picker is meant
+     to apply when it decides whether that later event may be drawn. Nothing
+     here asks the engine what the key or the cooldown is. */
   let pairs = 0;
   let storyPairs = 0;
   let violations = 0;
+  let backToBack = 0;
   let sameBatch = 0;
   const examples = [];
   for (const c of careers) {
@@ -521,10 +604,14 @@ console.log('2) No event fires twice inside its cooldown');
     for (const b of c.batches) {
       const seen = new Set();
       for (const e of b.events) {
-        if (seen.has(e.key)) sameBatch += 1;
-        seen.add(e.key);
-        if (!firings.has(e.key)) firings.set(e.key, []);
-        firings.get(e.key).push({ id: e.id, season: b.season, cooldown: e.cooldown });
+        const key = harnessKey(e.id);
+        if (seen.has(key)) {
+          sameBatch += 1;
+          if (examples.length < 4) examples.push(`${key} drawn twice in one batch in ${b.season} (${c.mode} ${c.seed})`);
+        }
+        seen.add(key);
+        if (!firings.has(key)) firings.set(key, []);
+        firings.get(key).push({ id: e.id, season: b.season, cooldown: expectedCooldown(e.id, e.category) });
       }
     }
     for (const [key, list] of firings) {
@@ -533,6 +620,8 @@ console.log('2) No event fires twice inside its cooldown');
         pairs += 1;
         if (key.startsWith('story:')) storyPairs += 1;
         const gap = list[i].season - list[i - 1].season;
+        /* the floor, true of every event whatever its table says */
+        if (gap <= 1) backToBack += 1;
         if (gap <= list[i].cooldown) {
           violations += 1;
           if (examples.length < 4) examples.push(`${key} (ids ${list[i - 1].id} then ${list[i].id}) fired in ${list[i - 1].season} and again in ${list[i].season} (cooldown ${list[i].cooldown}, ${c.mode} ${c.seed})`);
@@ -540,11 +629,12 @@ console.log('2) No event fires twice inside its cooldown');
       }
     }
   }
-  console.log(`   ${pairs} repeat firings of the same event or story in the same career checked (${storyPairs} of them a shared story), ${violations} inside the cooldown, ${sameBatch} duplicated inside one batch`);
+  console.log(`   ${pairs} repeat firings of the same event or story in the same career checked (${storyPairs} of them a shared story), ${violations} inside the cooldown, ${backToBack} in back to back seasons, ${sameBatch} duplicated inside one batch`);
   for (const ex of examples) console.error(`   ${ex}`);
   if (pairs === 0) fail('no event ever fired twice in any career, so this section measured nothing');
   if (violations > 0) fail(`${violations} firings landed inside the event's cooldown`);
-  if (sameBatch > 0) fail(`${sameBatch} batches carried the same event twice`);
+  if (backToBack > 0) fail(`${backToBack} events or stories fired in back to back seasons`);
+  if (sameBatch > 0) fail(`${sameBatch} batches carried the same event or story twice`);
 
   /* The ledger itself, read off the finished saves. */
   let ledgers = 0;
@@ -575,6 +665,38 @@ console.log('3) Every life event is reachable, every new one fired');
   if (NEW_IDS.length < 15) fail(`only ${NEW_IDS.length} new ids in the 253 to 272 range, the round promised 15 to 20`);
   if (unreachable.length) fail(`life events no state in ${careers.length} careers could reach: ${unreachable.join(', ')}`);
   if (neverFired.length) fail(`new events that never fired in any career: ${neverFired.join(', ')}`);
+}
+
+/* ─── 3b. the comeback game follows a recent injury ──────────────────────── */
+
+/* 262 is a priority beat, so a loose gate would not be thinned out by the
+   draw: it would turn up every time its cooldown let it. The rule is that it
+   fires only while the latest serious injury is this season's or last
+   season's, judged here from the injury years on the save, so a layoff at 22
+   is never the news at 26. */
+SECTION = '3b';
+console.log('3b) The comeback game only follows a recent serious injury');
+{
+  const gaps = {};
+  let comebacks = 0;
+  let stale = 0;
+  const examples = [];
+  for (const c of careers) {
+    for (const b of c.batches) {
+      if (!b.events.some(e => e.id === 262)) continue;
+      comebacks += 1;
+      const gap = b.lastInjury === null ? 'none' : b.season - b.lastInjury;
+      gaps[gap] = (gaps[gap] || 0) + 1;
+      if (gap === 'none' || gap < 0 || gap > 1) {
+        stale += 1;
+        if (examples.length < 3) examples.push(`262 fired in ${b.season} with the latest serious injury in ${b.lastInjury ?? 'no season at all'} (${c.mode} ${c.seed})`);
+      }
+    }
+  }
+  console.log(`   ${comebacks} comeback games, seasons since the latest serious injury: ${Object.entries(gaps).map(([g, n]) => `${g}:${n}`).join(' ')}`);
+  for (const ex of examples) console.error(`   ${ex}`);
+  if (comebacks === 0) fail('the comeback game never fired, so this section measured nothing');
+  if (stale) fail(`${stale} comeback games fired more than a season after the injury they were about`);
 }
 
 /* ─── 4. the rate ────────────────────────────────────────────────────────── */
@@ -645,12 +767,36 @@ console.log('5) Catalog shape: two real choices, a consequence each, an explicit
   if (sameSet) fail(`${sameSet} pairs of life events have identical consequence sets`);
   if (closest.score > 0.5) fail(`life events ${closest.a} and ${closest.b} overlap at ${r2(closest.score)}, which is one event written twice`);
 
-  /* the cooldown table itself: every value in COOLDOWN is a whole number of
-     seasons, and the kinds the audit names all exist */
-  for (const k of ['agent', 'personality', 'dressingRoom', 'media', 'money', 'family', 'injury', 'fans', 'national', 'late', 'once']) {
-    if (!Number.isInteger(COOLDOWN[k]) || COOLDOWN[k] < 0) fail(`COOLDOWN.${k} is ${COOLDOWN[k]}, not a whole number of seasons`);
+  /* The cooldown tables, pinned. COOLDOWN and EVENT_COOLDOWN_DEFAULT must
+     say exactly what PINNED_COOLDOWN and PINNED_DEFAULT say, every pinned
+     value is a whole number of at least one season, and once outlives any
+     career. A deliberate retune changes both places and the header. */
+  let tableProblems = 0;
+  const pinTable = (name, actual, pinned) => {
+    for (const [k, v] of Object.entries(pinned)) {
+      if (!Number.isInteger(v) || v < 1) { tableProblems += 1; fail(`this harness pins ${name}.${k} at ${v}, below the one season floor`); }
+      if (actual[k] !== v) { tableProblems += 1; fail(`${name}.${k} is ${actual[k]}, this harness pins it at ${v}`); }
+    }
+    for (const k of Object.keys(actual)) {
+      if (!(k in pinned)) { tableProblems += 1; fail(`${name}.${k} is a kind this harness has not pinned, add it to the table here`); }
+    }
+  };
+  pinTable('COOLDOWN', COOLDOWN, PINNED_COOLDOWN);
+  pinTable('EVENT_COOLDOWN_DEFAULT', EVENT_COOLDOWN_DEFAULT, PINNED_DEFAULT);
+  if (!(PINNED_COOLDOWN.once >= 60)) { tableProblems += 1; fail(`once is pinned at ${PINNED_COOLDOWN.once}, which a long career can outlive`); }
+  const unkinded = LIFE_IDS_IN_SOURCE.filter(id => !LIFE_KIND_BY_ID.has(id));
+  if (unkinded.length) { tableProblems += unkinded.length; fail(`life events whose cooldown is not a COOLDOWN kind: ${unkinded.join(', ')}`); }
+
+  /* And the engine's helpers against the rules here, over every event any
+     career was offered: the same cooldown, the same story key. */
+  let drift = 0;
+  for (const e of catalogById.values()) {
+    const want = expectedCooldown(e.id, e.category);
+    if (eventCooldown(e) !== want) { drift += 1; if (drift <= 3) console.error(`   id ${e.id}: the engine gives cooldown ${eventCooldown(e)}, this harness ${want}`); }
+    if (eventLedgerKey(e) !== harnessKey(e.id)) { drift += 1; if (drift <= 3) console.error(`   id ${e.id}: the engine keys it ${eventLedgerKey(e)}, this harness ${harnessKey(e.id)}`); }
   }
-  if (!(COOLDOWN.once >= 60)) fail(`COOLDOWN.once is ${COOLDOWN.once}, which a long career can outlive`);
+  console.log(`   cooldown tables: ${tableProblems} problems against the pinned values; ${catalogById.size} events, ${drift} where the engine's cooldown or story key disagrees with this harness`);
+  if (drift) fail(`${drift} events where the engine and this harness disagree on the cooldown or the story key`);
 }
 
 /* ─── 5b. across the whole picker ────────────────────────────────────────── */
@@ -661,18 +807,14 @@ console.log('5) Catalog shape: two real choices, a consequence each, an explicit
    anthem, a teenager at your position, your boyhood coach's fundraiser),
    while section 5 above, which only compares the life file with itself,
    stayed green. Two checks close that:
-     STORY_SETS  the stories known to exist in more than one catalog, each
+     STORY_SETS  (defined above section 1, section 2 groups by it) the
+                 stories known to exist in more than one catalog, each
                  required to share one story key and to be once a career, so
                  the picker treats them as one story.
      REVIEWED    every pair of a life event and an event elsewhere whose
                  titles share a content word has been read and judged a
                  different story, with the reason. A pair nobody has read
                  fails, so the next retold story cannot arrive unread. */
-const STORY_SETS = {
-  squadChatLeak: [220, 63, 422],
-  statueVote: [232, 462],
-  podcastLaunch: [244, 68],
-};
 const REVIEWED = new Map([
   ['220:46', 'a squad chat message about the manager, against photos from a nightclub before a match'],
   ['220:473', 'the squad chat, against the FAMILY chat with your father\'s opinions and your baby photos'],
