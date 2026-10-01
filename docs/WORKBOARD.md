@@ -1,5 +1,22 @@
 # Work board
 
+**2026-10-01, Codex780 COMPLETE: test-only lineup cap keys corrected.**
+The two mocked basketball fixtures now use existing perfect-lineup-nba key/path. All original
+nine picker and six focus/identity tests pass (15/15). Completion stays mocked; production
+schema, scoring and the guard stay untouched. The unchanged live cap fence passes:141 source
+keys,153 sane caps,139 real scored keys,0 uncovered and0 orphan rows after12 declared
+retirements. Its anonymous refusal probe returns401. The stale-list control catches exactly
+one fabricated missing key. Logs: TEMP/dukb-round780-lineup-tests.log and
+TEMP/dukb-round780-cap-key/healthy.log,stalelist.log. The earlier positive's one uncovered
+focus-fixture key is retained as healthy-before-focus.log. Next free:785, honoring Claude781-784.
+
+**Full suite receipt:** the392-node run has ended,318 pass and74 not green. Many failed before
+their assertions because the temporary isolation copy lacked historical script fixtures or
+Vitest could not resolve setup through its source junction; a Git-baseline check also lacked
+the repository. These failures are not credited as product controls or a green ship. Root is
+correcting the isolated inputs and auditing every failure before rerunning affected gates.
+Current full logs: TEMP/dukb-round772-full-node-sims.log. No build ran alongside that suite.
+
 **2026-10-01 00:45 EDT, desktop Claude lane: Rounds 781 to 784 CLAIMED, fifteen builders running at once.**
 Each is on its own branch from origin/main in a worktree under `.claude/worktrees/`; none touches the shared
 checkout or main. New from the report inbox: **781** Club Manager added time goals (45+N and 90+N labels, extra
