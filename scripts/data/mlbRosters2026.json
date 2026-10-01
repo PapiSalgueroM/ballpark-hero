@@ -1609,5 +1609,115 @@
         {"id":813349,"name":"Connelly Early","pos":"P","status":"A","birthDate":"2002-04-03","bats":"L","throws":"L","hit":null,"pit":{"g":18,"gs":18,"outs":284,"hr":15,"bb":34,"k":94,"sv":0}}
       ]
     }
+  },
+  "spotCheck": {
+    "rule": "The five clubs at positions 6, 12, 18, 24 and 30 of the 30 game abbreviations sorted alphabetically (CHC, HOU, MIN, SEA, WSN). In each, the shipped 26 sorted by name and the men at positions floor(i x 26 / 10) for i = 0 to 9. Each is compared with ESPN's roster for that club: on it at all, birth date, bats, throws (names compared without accents or case; ESPN's B for a switch hitter is the API's S). A man on the 60 day injured list is off the 40 man list by rule and so off ESPN's roster page, and for him ESPN's own player record is read instead, which must name the same club.",
+    "compared": "membership, birth date, bats, throws",
+    "limit": "the generator refuses to write the data file when more than 3 percent of the checked men disagree",
+    "read": "2026-10-01",
+    "checkedMen": 50,
+    "mismatches": 0,
+    "teams": [
+      {
+        "team": "CHC",
+        "espnPage": "https://www.espn.com/mlb/team/roster/_/name/chc",
+        "espnData": "https://site.api.espn.com/apis/site/v2/sports/baseball/mlb/teams/chc/roster",
+        "espnRosterSize": 40,
+        "espnSeasonLabel": "Postseason",
+        "read": "2026-10-01",
+        "checked": [
+          {"id":650644,"name":"Aaron Civale","status":"A","birthDate":"1995-06-12","bats":"R","throws":"R","espn":{"name":"Aaron Civale","where":"roster page","birthDate":"1995-06-12","bats":"R","throws":"R"},"result":"agrees"},
+          {"id":676962,"name":"Ben Brown","status":"D60","birthDate":"1999-09-09","bats":"R","throws":"R","espn":{"name":"Ben Brown","where":"player record (Injured/60), https://www.espn.com/mlb/player/_/id/41516","birthDate":"1999-09-09","bats":"R","throws":"R"},"result":"agrees"},
+          {"id":605280,"name":"Clay Holmes","status":"A","birthDate":"1993-03-27","bats":"R","throws":"R","espn":{"name":"Clay Holmes","where":"roster page","birthDate":"1993-03-27","bats":"R","throws":"R"},"result":"agrees"},
+          {"id":621020,"name":"Dansby Swanson","status":"A","birthDate":"1994-02-11","bats":"R","throws":"R","espn":{"name":"Dansby Swanson","where":"roster page","birthDate":"1994-02-11","bats":"R","throws":"R"},"result":"agrees"},
+          {"id":657097,"name":"Jacob Webb","status":"A","birthDate":"1993-08-15","bats":"R","throws":"R","espn":{"name":"Jacob Webb","where":"roster page","birthDate":"1993-08-15","bats":"R","throws":"R"},"result":"agrees"},
+          {"id":807713,"name":"Matt Shaw","status":"A","birthDate":"2001-11-06","bats":"R","throws":"R","espn":{"name":"Matt Shaw","where":"roster page","birthDate":"2001-11-06","bats":"R","throws":"R"},"result":"agrees"},
+          {"id":683737,"name":"Michael Busch","status":"A","birthDate":"1997-11-09","bats":"L","throws":"R","espn":{"name":"Michael Busch","where":"roster page","birthDate":"1997-11-09","bats":"L","throws":"R"},"result":"agrees"},
+          {"id":663538,"name":"Nico Hoerner","status":"A","birthDate":"1997-05-13","bats":"R","throws":"R","espn":{"name":"Nico Hoerner","where":"roster page","birthDate":"1997-05-13","bats":"R","throws":"R"},"result":"agrees"},
+          {"id":691718,"name":"Pete Crow-Armstrong","status":"A","birthDate":"2002-03-25","bats":"L","throws":"L","espn":{"name":"Pete Crow-Armstrong","where":"roster page","birthDate":"2002-03-25","bats":"L","throws":"L"},"result":"agrees"},
+          {"id":673548,"name":"Seiya Suzuki","status":"A","birthDate":"1994-08-18","bats":"R","throws":"R","espn":{"name":"Seiya Suzuki","where":"roster page","birthDate":"1994-08-18","bats":"R","throws":"R"},"result":"agrees"}
+        ]
+      },
+      {
+        "team": "HOU",
+        "espnPage": "https://www.espn.com/mlb/team/roster/_/name/hou",
+        "espnData": "https://site.api.espn.com/apis/site/v2/sports/baseball/mlb/teams/hou/roster",
+        "espnRosterSize": 40,
+        "espnSeasonLabel": "Postseason",
+        "read": "2026-10-01",
+        "checked": [
+          {"id":805123,"name":"AJ Blubaugh","status":"A","birthDate":"2000-07-04","bats":"R","throws":"R","espn":{"name":"AJ Blubaugh","where":"roster page","birthDate":"2000-07-04","bats":"R","throws":"R"},"result":"agrees"},
+          {"id":650556,"name":"Bryan Abreu","status":"A","birthDate":"1997-04-22","bats":"R","throws":"R","espn":{"name":"Bryan Abreu","where":"roster page","birthDate":"1997-04-22","bats":"R","throws":"R"},"result":"agrees"},
+          {"id":543877,"name":"Christian Vázquez","status":"A","birthDate":"1990-08-21","bats":"R","throws":"R","espn":{"name":"Christian Vazquez","where":"roster page","birthDate":"1990-08-21","bats":"R","throws":"R"},"result":"agrees"},
+          {"id":664299,"name":"Cristian Javier","status":"D15","birthDate":"1997-03-26","bats":"R","throws":"R","espn":{"name":"Cristian Javier","where":"roster page","birthDate":"1997-03-26","bats":"R","throws":"R"},"result":"agrees"},
+          {"id":814490,"name":"Ethan Pecko","status":"A","birthDate":"2002-08-25","bats":"R","throws":"R","espn":{"name":"Ethan Pecko","where":"roster page","birthDate":"2002-08-25","bats":"R","throws":"R"},"result":"agrees"},
+          {"id":670623,"name":"Isaac Paredes","status":"A","birthDate":"1999-02-18","bats":"R","throws":"R","espn":{"name":"Isaac Paredes","where":"roster page","birthDate":"1999-02-18","bats":"R","throws":"R"},"result":"agrees"},
+          {"id":678489,"name":"Jorge Barrosa","status":"A","birthDate":"2001-02-17","bats":"S","throws":"L","espn":{"name":"Jorge Barrosa","where":"roster page","birthDate":"2001-02-17","bats":"S","throws":"L"},"result":"agrees"},
+          {"id":681347,"name":"Mike Burrows","status":"D60","birthDate":"1999-11-08","bats":"R","throws":"R","espn":{"name":"Mike Burrows","where":"player record (Injured/60), https://www.espn.com/mlb/player/_/id/4918155","birthDate":"1999-11-08","bats":"R","throws":"R"},"result":"agrees"},
+          {"id":663567,"name":"Peter Lambert","status":"A","birthDate":"1997-04-18","bats":"R","throws":"R","espn":{"name":"Peter Lambert","where":"roster page","birthDate":"1997-04-18","bats":"R","throws":"R"},"result":"agrees"},
+          {"id":666211,"name":"Taylor Trammell","status":"A","birthDate":"1997-09-13","bats":"L","throws":"L","espn":{"name":"Taylor Trammell","where":"roster page","birthDate":"1997-09-13","bats":"L","throws":"L"},"result":"agrees"}
+        ]
+      },
+      {
+        "team": "MIN",
+        "espnPage": "https://www.espn.com/mlb/team/roster/_/name/min",
+        "espnData": "https://site.api.espn.com/apis/site/v2/sports/baseball/mlb/teams/min/roster",
+        "espnRosterSize": 39,
+        "espnSeasonLabel": "Postseason",
+        "read": "2026-10-01",
+        "checked": [
+          {"id":702176,"name":"Alan Roden","status":"A","birthDate":"1999-12-22","bats":"L","throws":"R","espn":{"name":"Alan Roden","where":"roster page","birthDate":"1999-12-22","bats":"L","throws":"R"},"result":"agrees"},
+          {"id":668885,"name":"Austin Martin","status":"A","birthDate":"1999-03-23","bats":"R","throws":"R","espn":{"name":"Austin Martin","where":"roster page","birthDate":"1999-03-23","bats":"R","throws":"R"},"result":"agrees"},
+          {"id":621439,"name":"Byron Buxton","status":"D10","birthDate":"1993-12-18","bats":"R","throws":"R","espn":{"name":"Byron Buxton","where":"roster page","birthDate":"1993-12-18","bats":"R","throws":"R"},"result":"agrees"},
+          {"id":665152,"name":"Dean Kremer","status":"A","birthDate":"1996-01-07","bats":"R","throws":"R","espn":{"name":"Dean Kremer","where":"roster page","birthDate":"1996-01-07","bats":"R","throws":"R"},"result":"agrees"},
+          {"id":605137,"name":"Josh Bell","status":"A","birthDate":"1992-08-14","bats":"S","throws":"R","espn":{"name":"Josh Bell","where":"roster page","birthDate":"1992-08-14","bats":"S","throws":"R"},"result":"agrees"},
+          {"id":681892,"name":"Kody Funderburk","status":"A","birthDate":"1996-11-27","bats":"L","throws":"L","espn":{"name":"Kody Funderburk","where":"roster page","birthDate":"1996-11-27","bats":"L","throws":"L"},"result":"agrees"},
+          {"id":668904,"name":"Royce Lewis","status":"A","birthDate":"1999-06-05","bats":"R","throws":"R","espn":{"name":"Royce Lewis","where":"roster page","birthDate":"1999-06-05","bats":"R","throws":"R"},"result":"agrees"},
+          {"id":671737,"name":"Taj Bradley","status":"A","birthDate":"2001-03-20","bats":"R","throws":"R","espn":{"name":"Taj Bradley","where":"roster page","birthDate":"2001-03-20","bats":"R","throws":"R"},"result":"agrees"},
+          {"id":667297,"name":"Tommy Nance","status":"A","birthDate":"1991-03-19","bats":"R","throws":"R","espn":{"name":"Tommy Nance","where":"roster page","birthDate":"1991-03-19","bats":"R","throws":"R"},"result":"agrees"},
+          {"id":605170,"name":"Victor Caratini","status":"A","birthDate":"1993-08-17","bats":"S","throws":"R","espn":{"name":"Victor Caratini","where":"roster page","birthDate":"1993-08-17","bats":"S","throws":"R"},"result":"agrees"}
+        ]
+      },
+      {
+        "team": "SEA",
+        "espnPage": "https://www.espn.com/mlb/team/roster/_/name/sea",
+        "espnData": "https://site.api.espn.com/apis/site/v2/sports/baseball/mlb/teams/sea/roster",
+        "espnRosterSize": 39,
+        "espnSeasonLabel": "Postseason",
+        "read": "2026-10-01",
+        "checked": [
+          {"id":662253,"name":"Andrés Muñoz","status":"D15","birthDate":"1999-01-16","bats":"R","throws":"R","espn":{"name":"Andres Munoz","where":"roster page","birthDate":"1999-01-16","bats":"R","throws":"R"},"result":"agrees"},
+          {"id":693433,"name":"Bryan Woo","status":"A","birthDate":"2000-01-30","bats":"R","throws":"R","espn":{"name":"Bryan Woo","where":"roster page","birthDate":"2000-01-30","bats":"R","throws":"R"},"result":"agrees"},
+          {"id":702284,"name":"Cole Young","status":"A","birthDate":"2003-07-29","bats":"L","throws":"R","espn":{"name":"Cole Young","where":"roster page","birthDate":"2003-07-29","bats":"L","throws":"R"},"result":"agrees"},
+          {"id":681867,"name":"Cooper Criswell","status":"A","birthDate":"1996-07-24","bats":"R","throws":"R","espn":{"name":"Cooper Criswell","where":"roster page","birthDate":"1996-07-24","bats":"R","throws":"R"},"result":"agrees"},
+          {"id":676106,"name":"Emerson Hancock","status":"D15","birthDate":"1999-05-31","bats":"R","throws":"R","espn":{"name":"Emerson Hancock","where":"roster page","birthDate":"1999-05-31","bats":"R","throws":"R"},"result":"agrees"},
+          {"id":571948,"name":"Hoby Milner","status":"A","birthDate":"1991-01-13","bats":"L","throws":"L","espn":{"name":"Hoby Milner","where":"roster page","birthDate":"1991-01-13","bats":"L","throws":"L"},"result":"agrees"},
+          {"id":640902,"name":"Jhonny Pereda","status":"A","birthDate":"1996-04-18","bats":"R","throws":"R","espn":{"name":"Jhonny Pereda","where":"roster page","birthDate":"1996-04-18","bats":"R","throws":"R"},"result":"agrees"},
+          {"id":677594,"name":"Julio Rodríguez","status":"A","birthDate":"2000-12-29","bats":"R","throws":"R","espn":{"name":"Julio Rodriguez","where":"roster page","birthDate":"2000-12-29","bats":"R","throws":"R"},"result":"agrees"},
+          {"id":670042,"name":"Luke Raley","status":"D60","birthDate":"1994-09-19","bats":"L","throws":"R","espn":{"name":"Luke Raley","where":"player record (Injured/60), https://www.espn.com/mlb/player/_/id/40422","birthDate":"1994-09-19","bats":"L","throws":"R"},"result":"agrees"},
+          {"id":622554,"name":"Seranthony Domínguez","status":"A","birthDate":"1994-11-25","bats":"R","throws":"R","espn":{"name":"Seranthony Dominguez","where":"roster page","birthDate":"1994-11-25","bats":"R","throws":"R"},"result":"agrees"}
+        ]
+      },
+      {
+        "team": "WSN",
+        "espnPage": "https://www.espn.com/mlb/team/roster/_/name/wsh",
+        "espnData": "https://site.api.espn.com/apis/site/v2/sports/baseball/mlb/teams/wsh/roster",
+        "espnRosterSize": 40,
+        "espnSeasonLabel": "Postseason",
+        "read": "2026-10-01",
+        "checked": [
+          {"id":694673,"name":"Abimelec Ortiz","status":"A","birthDate":"2002-02-22","bats":"L","throws":"L","espn":{"name":"Abimelec Ortiz","where":"roster page","birthDate":"2002-02-22","bats":"L","throws":"L"},"result":"agrees"},
+          {"id":665953,"name":"Andrés Chaparro","status":"A","birthDate":"1999-05-04","bats":"R","throws":"R","espn":{"name":"Andres Chaparro","where":"roster page","birthDate":"1999-05-04","bats":"R","throws":"R"},"result":"agrees"},
+          {"id":682928,"name":"CJ Abrams","status":"A","birthDate":"2000-10-03","bats":"L","throws":"R","espn":{"name":"CJ Abrams","where":"roster page","birthDate":"2000-10-03","bats":"L","throws":"R"},"result":"agrees"},
+          {"id":813349,"name":"Connelly Early","status":"A","birthDate":"2002-04-03","bats":"L","throws":"L","espn":{"name":"Connelly Early","where":"roster page","birthDate":"2002-04-03","bats":"L","throws":"L"},"result":"agrees"},
+          {"id":686611,"name":"Dylan Crews","status":"A","birthDate":"2002-02-26","bats":"R","throws":"R","espn":{"name":"Dylan Crews","where":"roster page","birthDate":"2002-02-26","bats":"R","throws":"R"},"result":"agrees"},
+          {"id":663623,"name":"Jake Irvin","status":"A","birthDate":"1997-02-18","bats":"R","throws":"R","espn":{"name":"Jake Irvin","where":"roster page","birthDate":"1997-02-18","bats":"R","throws":"R"},"result":"agrees"},
+          {"id":678391,"name":"Jorbit Vivas","status":"A","birthDate":"2001-03-09","bats":"L","throws":"R","espn":{"name":"Jorbit Vivas","where":"roster page","birthDate":"2001-03-09","bats":"L","throws":"R"},"result":"agrees"},
+          {"id":663362,"name":"Matt Waldron","status":"D60","birthDate":"1996-09-26","bats":"R","throws":"R","espn":{"name":"Matt Waldron","where":"player record (Injured/60), https://www.espn.com/mlb/player/_/id/4020158","birthDate":"1996-09-26","bats":"R","throws":"R"},"result":"agrees"},
+          {"id":683083,"name":"Nasim Nuñez","status":"A","birthDate":"2000-08-18","bats":"S","throws":"R","espn":{"name":"Nasim Nunez","where":"roster page","birthDate":"2000-08-18","bats":"S","throws":"R"},"result":"agrees"},
+          {"id":663992,"name":"Richard Lovelady","status":"A","birthDate":"1995-07-07","bats":"L","throws":"L","espn":{"name":"Richard Lovelady","where":"roster page","birthDate":"1995-07-07","bats":"L","throws":"L"},"result":"agrees"}
+        ]
+      }
+    ]
   }
 }

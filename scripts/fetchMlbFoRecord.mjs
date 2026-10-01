@@ -168,6 +168,30 @@ async function fetchStats() {
 }
 
 const ymd = s => (s ? String(s).slice(0, 10) : null);
+/* ESPN writes a switch hitter as B (both); the Stats API writes S. Same fact. */
+const hand = s => { const c = s ? String(s)[0].toUpperCase() : null; return c === 'B' ? 'S' : c; };
+/* ESPN's player record writes the birth date as day/month/year. */
+const dmy = s => { const m = s && String(s).match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/); return m ? `${m[3]}-${m[2].padStart(2, '0')}-${m[1].padStart(2, '0')}` : null; };
+
+/* A man on the 60 day injured list is off the 40 man list by rule, so ESPN's
+   roster page does not show him. His own ESPN player record still names his
+   club, so the check reads that instead: ESPN's player search for the name,
+   the result whose club line is this club, then that player's record. */
+async function espnPlayerRecord(name, clubName) {
+  const search = await getJson(`https://site.web.api.espn.com/apis/search/v2?query=${encodeURIComponent(name)}&limit=10`);
+  const players = (search.results || []).filter(r => r.type === 'player').flatMap(r => r.contents || []);
+  const hit = players.find(p => p.description === 'MLB' && p.subtitle === clubName && normName(p.displayName) === normName(name));
+  if (!hit) return null;
+  const id = String(hit.link && hit.link.web || '').match(/\/id\/(\d+)/);
+  if (!id) return null;
+  const j = await getJson(`https://site.web.api.espn.com/apis/common/v3/sports/baseball/mlb/athletes/${id[1]}`);
+  const a = j.athlete;
+  const [b, t] = String(a.displayBatsThrows || '').split('/');
+  return {
+    name: a.fullName, club: a.team ? a.team.displayName : null, list: a.status ? a.status.name : null,
+    birthDate: dmy(a.displayDOB), bats: hand(b), throws: hand(t), page: `https://www.espn.com/mlb/player/_/id/${id[1]}`,
+  };
+}
 
 async function spotCheck() {
   const record = readJson(ROSTERS, null);
@@ -186,18 +210,25 @@ async function spotCheck() {
     const espnMen = (j.athletes || []).flatMap(g => g.items || []);
     const byName = new Map(espnMen.map(a => [normName(a.fullName), a]));
     const chosen = spotSample(selectTwentySix(rec.players).men);
-    const checked = chosen.map(m => {
+    const checked = [];
+    for (const m of chosen) {
       const a = byName.get(normName(m.name));
-      const espnFacts = a ? { name: a.fullName, birthDate: ymd(a.dateOfBirth), bats: a.bats ? a.bats.abbreviation : null, throws: a.throws ? a.throws.abbreviation : null } : null;
+      let espnFacts = a
+        ? { name: a.fullName, where: 'roster page', birthDate: ymd(a.dateOfBirth), bats: hand(a.bats && a.bats.abbreviation), throws: hand(a.throws && a.throws.abbreviation) }
+        : null;
+      if (!espnFacts) {
+        const r = await espnPlayerRecord(m.name, rec.club);
+        if (r) espnFacts = { name: r.name, where: `player record (${r.list || 'no list status'}), ${r.page}`, birthDate: r.birthDate, bats: r.bats, throws: r.throws };
+      }
       const problems = [];
-      if (!a) problems.push('not on the ESPN roster');
+      if (!espnFacts) problems.push(`neither ESPN's roster nor an ESPN player record puts him with ${rec.club}`);
       else {
         if (espnFacts.birthDate !== m.birthDate) problems.push(`birth date ${m.birthDate} vs ${espnFacts.birthDate}`);
-        if (espnFacts.bats && m.bats && espnFacts.bats[0] !== m.bats[0]) problems.push(`bats ${m.bats} vs ${espnFacts.bats}`);
-        if (espnFacts.throws && m.throws && espnFacts.throws[0] !== m.throws[0]) problems.push(`throws ${m.throws} vs ${espnFacts.throws}`);
+        if (espnFacts.bats && m.bats && espnFacts.bats !== hand(m.bats)) problems.push(`bats ${m.bats} vs ${espnFacts.bats}`);
+        if (espnFacts.throws && m.throws && espnFacts.throws !== hand(m.throws)) problems.push(`throws ${m.throws} vs ${espnFacts.throws}`);
       }
-      return { id: m.id, name: m.name, birthDate: m.birthDate, bats: m.bats, throws: m.throws, espn: espnFacts, result: problems.length ? `MISMATCH: ${problems.join('; ')}` : 'agrees' };
-    });
+      checked.push({ id: m.id, name: m.name, status: m.status, birthDate: m.birthDate, bats: m.bats, throws: m.throws, espn: espnFacts, result: problems.length ? `MISMATCH: ${problems.join('; ')}` : 'agrees' });
+    }
     checkedN += checked.length;
     mismatchN += checked.filter(c => c.result !== 'agrees').length;
     teams.push({ team: abbr, espnPage: pageUrl, espnData: jsonUrl, espnRosterSize: espnMen.length, espnSeasonLabel: j.season ? j.season.name : null, read: today(), checked });
@@ -205,7 +236,7 @@ async function spotCheck() {
     for (const c of checked) if (c.result !== 'agrees') console.log(`   ${c.name}: ${c.result}`);
   }
   record.spotCheck = {
-    rule: `The five clubs at positions 6, 12, 18, 24 and 30 of the 30 game abbreviations sorted alphabetically (${SPOT_TEAMS.join(', ')}). In each, the shipped 26 sorted by name and the men at positions floor(i x 26 / ${SPOT_PER_TEAM}) for i = 0 to ${SPOT_PER_TEAM - 1}. Each is compared with ESPN's roster for that club: on it at all, birth date, bats, throws (names compared without accents or case).`,
+    rule: `The five clubs at positions 6, 12, 18, 24 and 30 of the 30 game abbreviations sorted alphabetically (${SPOT_TEAMS.join(', ')}). In each, the shipped 26 sorted by name and the men at positions floor(i x 26 / ${SPOT_PER_TEAM}) for i = 0 to ${SPOT_PER_TEAM - 1}. Each is compared with ESPN's roster for that club: on it at all, birth date, bats, throws (names compared without accents or case; ESPN's B for a switch hitter is the API's S). A man on the 60 day injured list is off the 40 man list by rule and so off ESPN's roster page, and for him ESPN's own player record is read instead, which must name the same club.`,
     compared: 'membership, birth date, bats, throws',
     limit: 'the generator refuses to write the data file when more than 3 percent of the checked men disagree',
     read: today(),
