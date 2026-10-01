@@ -1,5 +1,17 @@
 # Work board
 
+**2026-10-01 15:20 EDT, desktop Claude lane: Rounds 822 to 827 CLAIMED, six builders started** (each a builder, one
+adversarial review and a fixer, on Opus; the next free number for anyone else is **828** unless Codex's board says
+higher). **822** the NBA, MLB and NHL careers get the calendar inbox the NFL career got today
+(`r822-us-career-calendar-inbox`); **823** College Basketball Dynasty binds the staff, rivalry and strength of
+schedule module the football dynasty got (`r823-cbb-dynasty-staff`; it stays out of the CFB UI where Codex's 818
+is working); **824** NBA Front Office season stats, awards and contracts that scale with the cap so the luxury tax
+does not fade (`r824-nba-fo-stats-awards`); **825** Build Your XI role fit, chemistry and balance in the shared
+season sim (`r825-build-your-xi-chemistry`); **826** the shared gauntlet engine labels overtime wins, and a Soccer
+Career crisis no longer makes the physio free (`r826-gauntlet-overtime-physio`); **827** the career tables'
+disclosed wrong rows and the duplicate Alisson, two sourced, one unapplied migration (`r827-career-rows-audit`).
+Still in review from earlier today: 781, 819, 820 with 821.
+
 **2026-10-01 15:10 EDT, desktop Claude lane: Round 821 CLAIMED** (the next free number for anyone else is **822**
 unless Codex's board says higher). **821**: the MLB Perfect Season wheel can only land on 1901 to 1962, because its
 season index read stops at PostgREST's 1,000 row cap (found while building 820). The read gets paged the way Round
