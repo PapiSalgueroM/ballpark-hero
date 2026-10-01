@@ -1854,7 +1854,7 @@ export const BASKETBALL_CONTENT: GameContentMap = {
       {
         heading: "The luxury tax, the aprons and the repeater rate",
         items: [
-          "The luxury tax line sits about 21 percent above the cap (200.4 million in 2026-27, from the league's own figures). Every dollar of payroll over it, dead money included, is taxed at season close in brackets about 6 million wide: 1.00 and 1.25 on the first two, 3.50 and 4.75 on the next two, then half a dollar more per bracket. Pay tax in three of the previous four seasons and you are a repeater, taxed at 3.00, 3.25, 5.50 and 6.75 on the same brackets.",
+          "The luxury tax line sits 21.5 percent above the cap (200.4 million in 2026-27, from the league's own figures). Every dollar of payroll over it, dead money included, is taxed at season close in brackets about 6 million wide: 1.00 and 1.25 on the first two, 3.50 and 4.75 on the next two, then half a dollar more per bracket. Pay tax in three of the previous four seasons and you are a repeater, taxed at 3.00, 3.25, 5.50 and 6.75 on the same brackets.",
           "The cap panel shows the projected bill all season. At close the bill is listed beside the results, ownership takes one point of trust per 6 million of it (never more than 20), and the money is held back from next season's cap room. Above the first apron (about 209 million) a trade has to send out at least the salary it brings back. Computer teams that pay tax let their expiring depth walk the next summer, so the line moves the whole league, not just you.",
         ],
       },

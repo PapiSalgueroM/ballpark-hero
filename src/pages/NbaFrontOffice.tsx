@@ -42,6 +42,7 @@ const NbaFrontOffice = () => {
               'Trade an aging star for a rising guard before the deadline',
               'Sneak from the 9 seed through the play-in to a Finals run',
               'Draft a 90-grade prospect who turns out to be a 78',
+              'Close the season $10M over the $200.4M tax line and pay $11M (the first $6.064M at 1.00, the rest at 1.25), or $31M as a repeater',
               'Build back-to-back champions and chase a dynasty',
             ]}
           />

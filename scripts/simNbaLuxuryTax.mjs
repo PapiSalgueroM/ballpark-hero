@@ -56,7 +56,8 @@
         seed; under the zero tax control both bundles are the twin and the
         difference is exactly zero. A second, blunter read is printed and
         checked too: from season three on, fewer clubs sit over the line
-        with the tax than without it (measured 29 against 48).
+        with the tax than without it (measured 32 against 62 club seasons on
+        the merged tree, 2026-10-01; the GM's own club is in both counts).
      6) the shared descriptor. foHubTiles with a tax and a roster floor says
         so on the Trades and Roster boxes and is byte identical without them;
         foCapLines writes the tax, apron and roster lines and nothing when
@@ -549,6 +550,7 @@ console.log('5) The tax binds: clubs over the line against the same clubs in a l
   const realLate = payersBySeason.reduce((x, s) => x + late(s), 0), twinLate = twinPayers.reduce((x, s) => x + late(s), 0);
   console.log(`   clubs over the line by season, real: ${payersBySeason.map(s => s.join('/')).join(' ')}`);
   console.log(`   clubs over the line by season, twin: ${twinPayers.map(s => s.join('/')).join(' ')}`);
+  console.log(`   club seasons over the line from season three on: ${realLate} with the tax, ${twinLate} without it`);
   ok(5, 'from season three on, fewer clubs sit over the line with the tax than without it', realLate < twinLate, `${realLate} real vs ${twinLate} twin`);
 }
 
