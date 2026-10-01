@@ -60,7 +60,10 @@ import { fmtFollowers, pushHeadlines } from '@/lib/careerSocial';
 import { InboxPanel } from '@/components/us-career/InboxPanel';
 import { RivalryEventCard } from '@/components/us-career/RivalryEventCard';
 import { nbaUnreadInboxCount, answerNbaInboxMessage } from '@/lib/nbaCareerInbox';
-import { dismissNbaRivalryEvent } from '@/lib/nbaCareerRivalryEvents';
+import { dismissNbaRivalryEvent, resolveNbaRivalryChoice } from '@/lib/nbaCareerRivalryEvents';
+/* Round 796: the rival choice card, the same one the NFL board draws. */
+import { RivalryChoiceCard } from '@/components/us-career/RivalryChoiceCard';
+import type { RivalryChoiceCard as RivalryChoice } from '@/lib/careerRivalryChoices';
 import { cn } from '@/lib/utils';
 
 /* Round 126: 'coach' is new. Retirement used to be the last screen in the
@@ -122,6 +125,10 @@ export default function NbaMyCareerBoard() {
      inbox tab is open, so a set inside it started empty on every open and
      replayed the whole list with nothing new in it. */
   const inboxSeenRef = useRef<Set<string>>(new Set());
+  /* Round 796: what a rival choice did, shown on the card until Continue.
+     Transient like the curtain: the answer is already on the save, so a
+     reload lands on the hub with the choice made. */
+  const [rivalryOutcome, setRivalryOutcome] = useState<{ card: RivalryChoice; choiceIdx: number; line: string } | null>(null);
   /* Round 126: the coaching career. It lives in a ref as well as in state so
      persist can always write the current one without every existing call site
      having to learn about it. */
@@ -400,6 +407,20 @@ export default function NbaMyCareerBoard() {
     persist(state, phase, teamQuality);
   };
 
+  /* Round 796: answering a rival choice writes it to the save at once and
+     keeps the card up to show what happened. A second tap finds nothing
+     pending and changes nothing. */
+  const chooseRivalry = (choiceIdx: number) => {
+    if (!career?.pendingRivalryChoice) return;
+    const card = career.pendingRivalryChoice;
+    const res = resolveNbaRivalryChoice(career, choiceIdx, Math.random);
+    if (!res) return;
+    setCareer(res.state);
+    setFeed(f => [res.line, ...f].slice(0, 8));
+    setRivalryOutcome({ card, choiceIdx, line: res.line });
+    persist(res.state, phase, teamQuality);
+  };
+
   const retireNow = () => {
     if (!career) return;
     const c: NbaCareerState = JSON.parse(JSON.stringify(career));
@@ -419,6 +440,7 @@ export default function NbaMyCareerBoard() {
     setFaWindow(null);
     setTalkLine(null);
     setDraftDay(null);
+    setRivalryOutcome(null);
     setPanel('none');
     coachRef.current = null;
     setCoach(null);
@@ -566,6 +588,28 @@ export default function NbaMyCareerBoard() {
     );
   }
 
+  /* ------------------- Round 796: a rival choice -------------------
+     Same place in the flow as the beat card above, which a season never
+     stacks with this one. Persisted on the save while unanswered, so a
+     reload mid-choice still asks. */
+  const rivalryChoice = career.pendingRivalryChoice ?? rivalryOutcome?.card ?? null;
+  if (rivalryChoice) {
+    return (
+      <div ref={revealRef}>
+        <RivalryChoiceCard
+          card={rivalryChoice}
+          onChoose={chooseRivalry}
+          outcome={career.pendingRivalryChoice ? null : rivalryOutcome}
+          onContinue={() => setRivalryOutcome(null)}
+          headToHead={career.rival ? {
+            myName: career.name, myRating: career.ovr,
+            rivalName: career.rival.name, rivalRating: career.rival.ovr,
+          } : undefined}
+        />
+      </div>
+    );
+  }
+
   /* ------------------- Round 126: the coaching career ------------------- */
   if (phase === 'coach' && coach) {
     return (
@@ -642,7 +686,10 @@ export default function NbaMyCareerBoard() {
      Round 179: freeagency joins event in the guard, so an open panel can
      never hide the market screen. */
   if (panel !== 'none' && phase !== 'event' && phase !== 'freeagency') {
-    const meters: [string, number][] = [['Morale', career.morale], ['Fanbase', career.fanbase], ['Health', career.health]];
+    /* Round 796: karma joins the meters. The inbox has moved it since Round 521
+       and the rival choice buttons now print it, so it has to be somewhere the
+       player can see it move. A save that never answered a text reads 50. */
+    const meters: [string, number][] = [['Morale', career.morale], ['Fanbase', career.fanbase], ['Health', career.health], ['Karma', career.karma ?? 50]];
     return (
       <div ref={panelRef} className="space-y-3">
         <HubPanelHeader
