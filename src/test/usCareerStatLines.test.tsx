@@ -268,6 +268,14 @@ describe('every US career position prints its own stat line', () => {
 
 /* ─── the real boards ─────────────────────────────────────────────────────── */
 
+/* Round 833 review: the first board a run renders pays for every lazy panel
+   it pulls in. Measured: with one engine file swapped for a byte identical
+   copy, 'NFL QB retirement screen' ran past vitest's 5 second default and
+   failed while every assertion in it held. A run that is slow is not a board
+   that is broken, so the board tests wait longer than the cold start takes. */
+const BOARD_WAIT = 20_000;
+const BOARD_TEST_TIMEOUT = 60_000;
+
 /* A rivalry beat or a rival choice the seeded seasons left waiting is drawn
    ahead of every screen, so the saves under test are taken past it. */
 function clearPending(c: Record<string, unknown>): void {
@@ -293,14 +301,14 @@ describe('the boards print the position\'s own line everywhere', () => {
     clearPending(career);
     localStorage.setItem(saveKey, JSON.stringify({ c: career, phase: 'retired', teamQuality: 80, coach: null }));
     render(<MemoryRouter><Board /></MemoryRouter>);
-    expect(await screen.findByText(`${career.name} retires`)).toBeInTheDocument();
+    expect(await screen.findByText(`${career.name} retires`, undefined, { timeout: BOARD_WAIT })).toBeInTheDocument();
     const page = document.body.textContent ?? '';
     expect(page).not.toMatch(/undefined|NaN/);
     for (const s of career.seasons) expect(page).toContain(line(s, pos));
     for (const b of bullets(career)) expect(page).toContain(b);
     const share = screen.getByTestId('share-text').textContent ?? '';
     expect(checkText(share, rule(pos), 'share text', false)).toEqual([]);
-  });
+  }, BOARD_TEST_TIMEOUT);
 
   it.each(ALL)('$label $pos hub: the last season and the career figure', async ({ pos, play, line, rule, soFar, saveKey, Board }) => {
     const { career } = play(pos, 8331 + pos.length * 13, 3);
@@ -309,7 +317,7 @@ describe('the boards print the position\'s own line everywhere', () => {
     (career as { contractYears?: number }).contractYears = 3;
     localStorage.setItem(saveKey, JSON.stringify({ c: career, phase: 'season', teamQuality: 80, coach: null }));
     render(<MemoryRouter><Board /></MemoryRouter>);
-    expect(await screen.findByText(/Career so far/)).toBeInTheDocument();
+    expect(await screen.findByText(/Career so far/, undefined, { timeout: BOARD_WAIT })).toBeInTheDocument();
     const page = document.body.textContent ?? '';
     expect(page).not.toMatch(/undefined|NaN/);
     const last = career.seasons[career.seasons.length - 1];
@@ -318,5 +326,5 @@ describe('the boards print the position\'s own line everywhere', () => {
     const figure = soFar(career);
     if (figure !== null) expect(sofar).toContain(figure);
     expect(checkText(sofar, rule(pos), 'career so far', false)).toEqual([]);
-  });
+  }, BOARD_TEST_TIMEOUT);
 });
