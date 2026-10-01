@@ -20,23 +20,20 @@
  *   3. Strength of schedule: the average strength of the opponents a team
  *      actually played.
  *
- * Every function here is pure over what it is handed, and nothing is
- * evaluated at module scope from another module.
+ * Every function here works on what it is handed, and nothing is evaluated
+ * at module scope from another module.
  *
- * Bound so far: CFB Dynasty (src/lib/cfbDynasty.ts, Round 728). CBB Dynasty
- * (src/lib/cbbDynasty.ts) is NOT bound yet; binding it means doing there what
- * cfbDynasty.ts does, with basketball numbers and nothing copied out of here:
- *   - optional staff, morale and opps on CbbTeam, and a depth flag on
- *     CbbState so a save without it plays exactly as before;
- *   - staffEdges in cbbStrength and in the score, an offensive and a defensive
- *     assistant in the OC and DC chairs (the roles are the two sides of the
- *     ball, not football titles, so the labels change on the board only);
- *   - buildRivalries over CBB_SCHOOLS with each school's state, one rivalry
- *     round, and rivalrySwing with a basketball fullMargin;
- *   - strengthOfSchedule in seedScore, the way cfbRankings breaks ties;
- *   - chargePayroll, staffCarousel and staffCandidates in the offseason
- *     before NIL, and hireCoordinator and fireCoordinator behind the board.
- * scripts/simCfbStaff.mjs is the shape its harness should take.
+ * Bound: CFB Dynasty (src/lib/cfbDynasty.ts, Round 728) and CBB Dynasty
+ * (src/lib/cbbDynasty.ts, Round 823). Round 823 also lifted the glue the
+ * football engine had written for itself (switching the layer on, the season
+ * log, the schedule table, opening the offseason, the hiring window) into the
+ * bottom of this file, so both engines run ONE copy of it and differ only in
+ * a ProgramSport descriptor: their schools, their blowout margin, their
+ * rivalry table and what the two chairs are called. What stays in each engine
+ * is what is genuinely the sport's: how a coordinator's edge reaches the
+ * score, which round is rivalry week, and how the ranking reads the
+ * schedule. scripts/simCfbStaff.mjs and scripts/simCbbStaff.mjs hold each
+ * binding to the same promises.
  */
 
 /* ---------------------------------------------------------------- staff */
@@ -312,4 +309,218 @@ export function rivalrySwing(margin: number, fullMargin: number): { morale: numb
 export function strengthOfSchedule(opps: string[] | null | undefined, strengthOf: (id: string) => number): number | null {
   if (!opps || opps.length === 0) return null;
   return opps.reduce((s, id) => s + strengthOf(id), 0) / opps.length;
+}
+
+/* ------------------------------------------------------ the shared glue */
+
+/* Round 823: lifted out of cfbDynasty.ts word for word, so the football and
+   basketball dynasties run one copy. Each engine hands in a ProgramSport and
+   its own state; nothing below knows which sport it is running. */
+
+/** What a team carries for the program layer. All optional on a save from
+ *  before the layer, which then plays exactly as it did. */
+export interface ProgramTeam {
+  id: string;
+  wins: number;
+  losses: number;
+  staff?: ProgramStaff;
+  /** Strength points carried out of rivalry week into the postseason, reset each offseason. */
+  morale?: number;
+  /** Everyone this team has played this season, in the order played. */
+  opps?: string[];
+}
+
+/** A finished game, the way both engines report one. */
+export interface ProgramGame { home: string; away: string; hs: number; as: number; winner: string; rivalry?: boolean }
+
+/** My rivalry result, kept until the offseason spends its recruiting swing. */
+export interface RivalryResult {
+  season: number;
+  opp: string;
+  us: number;
+  them: number;
+  won: boolean;
+  kind: RivalKind;
+  state?: string;
+  /** Signed: plus for the winner, minus for the loser. */
+  morale: number;
+  recruit: number;
+}
+
+/** One line of my schedule. */
+export interface SlateGame {
+  round: number;
+  opp: string;
+  home: boolean;
+  us: number;
+  them: number;
+  won: boolean;
+  conference: boolean;
+  rivalry: boolean;
+}
+
+/** The offseason hiring window, open for one season's offseason. */
+export interface StaffWindow {
+  season: number;
+  /** The whole program budget for the cycle, before the staff were paid. */
+  budget: number;
+  market: Coordinator[];
+}
+
+export interface ProgramLeague<T extends ProgramTeam = ProgramTeam> {
+  season: number;
+  round: number;
+  myTeam: string;
+  nil: number;
+  teams: Record<string, T>;
+  /** Present once the program layer is on. Absent means the game as it was. */
+  depth?: number;
+  lastRivalry?: RivalryResult | null;
+  mySlate?: SlateGame[];
+  staffWindow?: StaffWindow | null;
+}
+
+/** Everything that differs between the dynasties, and nothing else. */
+export interface ProgramSport {
+  schools: readonly { id: string; name: string; prestige: number; conf: string }[];
+  /** A rivalry won by this many points or more swings the most. */
+  rivalFullMargin: number;
+  rivalOf: (id: string) => { rival: string; kind: RivalKind; state?: string } | null;
+  /** What the notes call the man in each chair ("offensive coordinator"). */
+  roleTitle: Record<StaffRole, string>;
+  /** What the notes call the chair itself ("OC"). */
+  chairName: Record<StaffRole, string>;
+}
+
+/**
+ * Switch the program layer on: every program gets its two coaches at its own
+ * level, and the season log starts. A new dynasty does this at the start; a
+ * save from before the layer does it when its offseason closes, so the
+ * season it was in the middle of finishes exactly as it would have.
+ */
+export function enableProgramLayer(st: ProgramLeague, sport: ProgramSport, rng: () => number): void {
+  if (st.depth) return;
+  for (const s of sport.schools) {
+    const t = st.teams[s.id];
+    if (!t) continue;
+    if (!t.staff) t.staff = genStaff(rng, s.prestige, s.id, st.season);
+    t.morale = 0;
+    t.opps = [];
+  }
+  st.depth = 1;
+  st.mySlate = [];
+  st.lastRivalry = null;
+  st.staffWindow = null;
+}
+
+/** The season log (who played whom, for strength of schedule, and my own
+ *  slate) plus the swing every rivalry result carries. Runs once a round. */
+export function recordProgramRound(st: ProgramLeague, games: ProgramGame[], sport: ProgramSport): void {
+  const confOf = new Map(sport.schools.map(s => [s.id, s.conf]));
+  for (const g of games) {
+    const home = st.teams[g.home];
+    const away = st.teams[g.away];
+    (home.opps ??= []).push(g.away);
+    (away.opps ??= []).push(g.home);
+    let swing: { morale: number; recruit: number } | null = null;
+    if (g.rivalry) {
+      swing = rivalrySwing(Math.abs(g.hs - g.as), sport.rivalFullMargin);
+      st.teams[g.winner].morale = swing.morale;
+      st.teams[g.winner === g.home ? g.away : g.home].morale = -swing.morale;
+    }
+    if (g.home !== st.myTeam && g.away !== st.myTeam) continue;
+    const home_ = g.home === st.myTeam;
+    const us = home_ ? g.hs : g.as;
+    const them = home_ ? g.as : g.hs;
+    const opp = home_ ? g.away : g.home;
+    const won = g.winner === st.myTeam;
+    const conference = confOf.get(g.home) === confOf.get(g.away);
+    (st.mySlate ??= []).push({ round: st.round, opp, home: home_, us, them, won, conference, rivalry: !!g.rivalry });
+    if (swing) {
+      const rival = sport.rivalOf(st.myTeam);
+      st.lastRivalry = {
+        season: st.season, opp, us, them, won,
+        kind: rival?.kind ?? 'generated', state: rival?.state,
+        morale: won ? swing.morale : -swing.morale,
+        recruit: won ? swing.recruit : -swing.recruit,
+      };
+    }
+  }
+}
+
+/** Every team's strength of schedule and where it ranks, hardest first.
+ *  A team that has not played yet is left out. */
+export function sosTable<T extends ProgramTeam>(st: ProgramLeague<T>, strength: (t: T) => number): Map<string, { sos: number; rank: number }> {
+  const str = new Map(Object.values(st.teams).map(t => [t.id, strength(t)]));
+  const rows = Object.values(st.teams)
+    .map(t => ({ id: t.id, sos: strengthOfSchedule(t.opps, oid => str.get(oid) ?? 60) }))
+    .filter((r): r is { id: string; sos: number } => r.sos !== null)
+    .sort((a, b) => b.sos - a.sos);
+  return new Map(rows.map((r, i) => [r.id, { sos: r.sos, rank: i + 1 }]));
+}
+
+/**
+ * The offseason opens. The program budget for the cycle is the engine's own
+ * formula (`base`, prestige plus last season's wins) plus whatever rivalry
+ * week swung it by. The coaching carousel turns (AI programs refill their
+ * chairs; a chair of mine that empties stays empty for me to fill), the
+ * staff are paid off the top, and what is left is the NIL pot for the class.
+ * A save from before the layer just gets `base`. Runs once per offseason: a
+ * second call for the same season changes nothing.
+ */
+export function openProgramOffseason(st: ProgramLeague, rng: () => number, sport: ProgramSport, base: number): string[] {
+  if (!st.depth) { st.nil = base; return []; }
+  if (st.staffWindow && st.staffWindow.season === st.season) return [];
+  const nameOf = (id: string) => sport.schools.find(s => s.id === id)?.name ?? id;
+  const notes: string[] = [];
+  const rivalry = st.lastRivalry && st.lastRivalry.season === st.season ? st.lastRivalry : null;
+  const budget = Math.max(0, base + (rivalry?.recruit ?? 0));
+  if (rivalry) {
+    notes.push(rivalry.won
+      ? `🔥 Beating ${nameOf(rivalry.opp)} is worth ${rivalry.recruit} more budget points on the trail.`
+      : `🧊 Losing to ${nameOf(rivalry.opp)} costs ${-rivalry.recruit} budget points on the trail.`);
+  }
+  for (const s of sport.schools) {
+    const t = st.teams[s.id];
+    if (!t) continue;
+    if (!t.staff) t.staff = genStaff(rng, s.prestige, s.id, st.season);
+    const mine = s.id === st.myTeam;
+    const gone = staffCarousel(rng, t.staff, { prestige: s.prestige, wins: t.wins, losses: t.losses, mine, season: st.season, idPrefix: s.id });
+    if (!mine) continue;
+    for (const g of gone) {
+      notes.push(g.why === 'poached'
+        ? `📋 Your ${sport.roleTitle[g.role]} ${g.who.name} (${g.who.rating}) took a head coaching job. The chair is open.`
+        : `📋 ${g.who.name} is gone. The ${sport.chairName[g.role]} chair is open.`);
+    }
+  }
+  const myStaff = st.teams[st.myTeam].staff!;
+  const { left, walked } = chargePayroll(budget, myStaff);
+  for (const w of walked) {
+    notes.push(`💸 The budget could not cover ${w.name} (${sport.chairName[w.role]}, ${w.salary} a season), so he walked.`);
+  }
+  st.nil = left;
+  const prestige = sport.schools.find(s => s.id === st.myTeam)!.prestige;
+  st.staffWindow = { season: st.season, budget, market: staffCandidates(rng, prestige, st.season) };
+  return notes;
+}
+
+/** Hire off the offseason market, only while its window is open. The man
+ *  already in that chair goes and his money comes back first. */
+export function windowHire(st: ProgramLeague, candidateId: string): boolean {
+  const win = st.staffWindow;
+  const staff = st.teams[st.myTeam]?.staff;
+  if (!st.depth || !win || win.season !== st.season || !staff) return false;
+  const cand = win.market.find(c => c.id === candidateId);
+  if (!cand) return false;
+  if (!hireCoordinator(st, staff, cand)) return false;
+  win.market = win.market.filter(c => c.id !== candidateId);
+  return true;
+}
+
+/** Let a coach go while the window is open. His salary goes back into the pot. */
+export function windowFire(st: ProgramLeague, role: StaffRole): Coordinator | null {
+  const win = st.staffWindow;
+  const staff = st.teams[st.myTeam]?.staff;
+  if (!st.depth || !win || win.season !== st.season || !staff) return null;
+  return fireCoordinator(st, staff, role);
 }
