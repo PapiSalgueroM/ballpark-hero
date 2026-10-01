@@ -1,5 +1,22 @@
 # Work board
 
+**2026-10-01, Codex828 ACCEPTED: Club Manager goal celebrations.**
+After a committed goal reaches the net, the scorer raises his arms and hops;
+the two nearest outfield teammates join him. The existing viewer clock owns
+the finite effect, pause and expiry. Reduced motion shows a static finish.
+No engine, score, feed, save, shot/save destination or whistle timing changed.
+Five focused outcomes and four effective copied regressions pass, with an
+independent destination baseline. All21 existing live-motion tests pass.
+The untouched production App reaches the original engine's goal at320px normal
+and1440px reduced motion: exactly three celebrating players, frozen poses on
+pause, correct0-1 score, zero overflow/errors/external writes. Browser/server
+stopped; screenshot inspected. Receipt: TEMP/dukb-round828-browser/report.json.
+Combined828-831 runtime gate at3f04088a plus seven owned files passed real app
+types, production build, all14 node artifact fences and simPrerenderBoot.
+Root-owned source hashes held. 828 is ready for publish;829-831 still in final
+checks. Spec44 still needs dribble/tackle presentation. Next free round832.
+
+
 **2026-10-01, Codex830 CLAIMED: Missing Nine stale feedback and reveal (spec97).**
 Own src/pages/MissingNine.tsx, adjacent MissingNineFeedback.module.css,
 src/test/missingNineFeedback.test.tsx and scripts/simMissingNineFeedback.mjs.

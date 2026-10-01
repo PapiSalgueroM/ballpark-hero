@@ -1,5 +1,15 @@
 # Project state
 
+## ACCEPTED 2026-10-01: Club Manager goal celebrations (828)
+
+Goals now have a finite scorer and teammate celebration, driven only by the
+committed goal and existing viewer clock. Pause and reduced motion work;
+scores and match timing stay unchanged. Focused tests, four regression controls,
+all21 existing motion tests, combined build/artifact gates and two actual App
+browser contexts pass. Exact scope/evidence on WORKBOARD. Ready for publish.
+829-831 are in final checks; Claude819-827 remain held. Next free round832.
+
+
 Codex829 repairs NBA Chain's document-moving timeline reveal;830 repairs stale
 Missing Nine answer feedback across new puzzles and modes. Together with828
 and831, four disjoint implementation lanes are active. Scopes on WORKBOARD;
