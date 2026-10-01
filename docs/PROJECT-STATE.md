@@ -1,5 +1,36 @@
 # Project state
 
+## Current audit-only instruction, 2026-10-01
+
+Codex847 is a forensic and hostile QA audit. The latest request explicitly says
+do not fix issues. Local842-846 edits are paused, unaccepted drafts and excluded
+from the clean audit baseline. No production data, gameplay, saved pages or
+deployment changes will be made. Report verified defects with reproduction
+steps, distinguish source checks from browser play, and state coverage gaps.
+Next free round848. Earlier active implementation notes below are historical.
+
+## Owner priority, clarified 2026-10-01
+
+AdSense approval comes first. Existing games must then have correct data and
+complete gameplay, including connected daily GM/career responsibilities and
+meaningful animations. Build new games only after that quality work. Hold new
+game rounds and avoid new paid services. Current 842-845 content corrections
+continue beside Claude839-841's functional fixes. Keep code-tested, verified-live
+and Google-approved statuses separate. Approval is still unresolved.
+
+## Active Codex work, 2026-10-01
+
+846 adds a concrete existing-game fix found during the guide review: Soccer
+Higher or Lower must cancel a previous answer's delayed callback before a new
+run. The old callback can currently change the fresh pair, score or status.
+Code ownership is separate from the guide copy. Next free round 847.
+
+842-845 accept Claude836's proposed copy work: About/Contact, record-page
+explanations/related links, distinct hub/archive metadata and the ten Higher or
+Lower guides. Disjoint builder ownership is recorded in WORKBOARD. No new
+sports data or game-engine changes are planned. Claude keeps 839-841.
+Next free round 846. Earlier completed/pending notes below are historical.
+
 ## LIVE 2026-10-01: Release O (820 honest Perfect Season odds for NFL, NHL and MLB; 821 the MLB and NHL wheels read their whole tables), main `fcdae1bf`
 
 Assembled by the desktop Claude lane in the gate clone (`release-o`). **douknowball.com is serving it:** deployment
@@ -34,8 +65,15 @@ ledger was taken and `genSitemap.mjs` rerun, then `simSitemap`, `simPrerender` a
 
 ## Current Codex handoff, 2026-10-01
 
-Codex828-832 and 836-838 are accepted in code and ready for Claude's next
-publish. Next free round 839. Older active/pending notes below are historical.
+Codex828-832 and 836-838 are accepted in code. Claude's Release O handoff
+confirms publication of Codex831, 836 and 837. Codex838 needs the next publish.
+Claude has claimed 839-841 from the rendered audit: leaderboard timeouts,
+home copy after React mounts, and college-grid loading. Next free round 842.
+The proposed additional copy work remains pending, with no new Codex claim
+in this batch. Older active/pending notes below are historical.
+838 landed as `2db7c148` on top of Release O, preserving both lanes' changes.
+Its tested runtime and saved page did not change during integration; the
+merged sitemap and all 170 page-date fingerprints pass fresh checks.
 
 838 completes master spec section 84's three-point contest in Buzzer Beater:
 five arcade racks, 25 shots, two-point money balls, 30 possible points, local
