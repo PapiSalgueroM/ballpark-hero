@@ -467,7 +467,49 @@ export function mlbProspectToPlayer(pr: MlbProspect, rng: () => number): MlbGmPl
   };
 }
 
-export function mlbOffseason(league: MlbLeague, rng: () => number): string[] {
+/* Round 829 review: THE CUT DOWN TO 28, the shape Round 828 gave the NFL's
+   53. A full roster club the draft took over MLB_ROSTER_MAX releases, before
+   the season starts, its lowest rated men the sim does not play until it is
+   at 28. A real cut, through cutPlayer like every other: the man goes to the
+   pool, half his salary stays on the line as dead money, and he cannot come
+   back this season. The side carrying more than its 13 (hitters or pitchers)
+   gives a man up before the other loses any, and the cut never takes a club
+   below two catchers, nine hitters, five starters or five relievers. A save
+   from before this round has no depth mark and is never cut. */
+const MLB_SIDE_SHARE = 13;
+export function mlbCutDownToMax(t: MlbGmTeam, freeAgents: MlbGmPlayer[]): { team: string; player: string; pos: string }[] {
+  const out: { team: string; player: string; pos: string }[] = [];
+  if (!t.depth) return out;
+  while (t.players.length > mlbRosterMax(t)) {
+    const roster = [...t.players];
+    const reads = new Set(mlbSimReads(t));
+    const n = (f: (p: MlbGmPlayer) => boolean) => roster.reduce((s, p) => s + (f(p) ? 1 : 0), 0);
+    const isRp = (p: MlbGmPlayer) => p.pos === 'RP' || p.pos === 'CL';
+    const counts = { c: n(p => p.pos === 'C'), bats: n(p => !isPitcher(p)), sp: n(p => p.pos === 'SP'), pen: n(isRp) };
+    const keepsSpine = (p: MlbGmPlayer) =>
+      !(p.pos === 'C' && counts.c <= 2) && !(!isPitcher(p) && counts.bats <= 9)
+      && !(p.pos === 'SP' && counts.sp <= 5) && !(isRp(p) && counts.pen <= 5);
+    const spare = roster.filter(p => !reads.has(p.id) && keepsSpine(p));
+    const pitchersOver = roster.length - counts.bats > MLB_SIDE_SHARE;
+    const hittersOver = counts.bats > MLB_SIDE_SHARE;
+    const crowded = spare.filter(p => (isPitcher(p) ? pitchersOver : hittersOver));
+    const down = (crowded.length ? crowded : spare)
+      .sort((a, b) => a.ovr - b.ovr || b.age - a.age || a.name.localeCompare(b.name))[0];
+    if (!down || !cutPlayer(t, freeAgents, down.id, mlbRosterMin(t))) break;
+    out.push({ team: t.abbr, player: down.name, pos: down.pos });
+  }
+  return out;
+}
+
+/** Round 829 review: how many men a full roster club must DFA before it may
+    play, 0 when it is at or under its ceiling. The board holds Play on it. */
+export function mlbOverLimit(t: MlbGmTeam): number {
+  return t.depth ? Math.max(0, t.players.length - mlbRosterMax(t)) : 0;
+}
+
+/* userTeam: the club whose cut down is the GM's own. The board passes it and
+   holds Play until he has DFA'd to 28 himself; every other club is cut here. */
+export function mlbOffseason(league: MlbLeague, rng: () => number, userTeam?: string): string[] {
   const notes: string[] = [];
   /* Round 211: one name book for the whole offseason, so the men who
      arrive to fill rosters cannot duplicate each other or anybody left. */
@@ -493,6 +535,10 @@ export function mlbOffseason(league: MlbLeague, rng: () => number): string[] {
     rollDeadCap(t);
     replenishMlbRoster(t, rng, taken);
   }
+  /* Round 829 review: the cut down to 28, last, once the draft, the
+     departures and the refill have all landed. The pool is trimmed after it,
+     so the men cut compete for its 30 places like everybody else. */
+  for (const t of Object.values(league.teams)) if (t.abbr !== userTeam) mlbCutDownToMax(t, league.freeAgents);
   league.freeAgents = league.freeAgents.sort((a, b) => b.ovr - a.ovr).slice(0, 30);
   for (const fa of league.freeAgents) { fa.age += 1; if (fa.age >= 33) fa.ovr = Math.max(63, fa.ovr - 1); }
   league.cap = Math.round(league.cap * 1.03);

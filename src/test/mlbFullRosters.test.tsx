@@ -14,7 +14,8 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render, screen, fireEvent, cleanup } from '@testing-library/react';
 import fs from 'node:fs';
 import path from 'node:path';
-import { initMlbLeague, mlbSimReads, MLB_ROSTER_MIN, MLB_ROSTER_MAX, MLB_LEGACY_ROSTER_MIN, MLB_LEGACY_ROSTER_MAX, type MlbLeague } from '@/lib/mlbFrontOffice';
+import { initMlbLeague, mlbSimReads, mlbDraftClass, mlbProspectToPlayer, MLB_ROSTER_MIN, MLB_ROSTER_MAX, MLB_LEGACY_ROSTER_MIN, MLB_LEGACY_ROSTER_MAX, type MlbLeague } from '@/lib/mlbFrontOffice';
+import { leagueNames } from '@/lib/foNames';
 import { MLB_FO_PARTIAL } from '@/data/mlbFoRosters2026';
 import MlbFrontOfficeBoard from '@/components/mlb-front-office/MlbFrontOfficeBoard';
 
@@ -87,6 +88,46 @@ describe('MLB Front Office: full rosters on the board', () => {
     fireEvent.click(screen.getByText('Roster'));
     expect(document.querySelector('[data-cut-block]')?.textContent).toBe(`Your roster is at the minimum of ${MLB_ROSTER_MIN}, so nobody else can go.`);
     expect(MLB_ROSTER_MAX).toBe(28);
+  });
+
+  /* Round 829 review: the draft can take a full roster club past 28. Every
+     CPU club is cut in the offseason; yours waits for you, and Play waits
+     until you have DFA'd down through the same two taps as any other cut. */
+  it('a club the draft took past 28 must DFA down before it plays', () => {
+    const league = initMlbLeague(lehmer(5));
+    const team = 'NYY';
+    const cls = mlbDraftClass(lehmer(9), 24, leagueNames(league));
+    for (const pr of cls.slice(0, 4)) league.teams[team].players.push(mlbProspectToPlayer(pr, lehmer(3)));
+    expect(league.teams[team].players).toHaveLength(MLB_ROSTER_MAX + 2);
+    save(league, team);
+    render(<MlbFrontOfficeBoard />);
+    fireEvent.click(screen.getByText('Play'));
+    expect(document.querySelector('[data-over-limit]')?.textContent).toContain('2 over the limit of 28');
+    expect((screen.getByText('Play Round 1').closest('button') as HTMLButtonElement).disabled).toBe(true);
+    fireEvent.click(screen.getByText('Play Round 1'));
+    expect(JSON.parse(localStorage.getItem(SAVE_KEY)!).league.round).toBe(1);
+    cleanup();
+
+    render(<MlbFrontOfficeBoard />);
+    fireEvent.click(screen.getByText('Roster'));
+    expect(document.querySelector('[data-over-limit]')).toBeTruthy();
+    const reads = new Set(mlbSimReads(league.teams[team]));
+    const depth = rows().filter(r => !reads.has(r.getAttribute('data-roster-row')!)).slice(0, 2);
+    for (const r of depth) {
+      fireEvent.click(r.querySelector('button')!);
+      fireEvent.click(screen.getByText('DFA him'));
+    }
+    const after = JSON.parse(localStorage.getItem(SAVE_KEY)!).league.teams[team];
+    expect(after.players).toHaveLength(MLB_ROSTER_MAX);
+    expect(after.deadCap).toHaveLength(2);
+    expect(document.querySelector('[data-over-limit]')).toBeNull();
+    cleanup();
+
+    render(<MlbFrontOfficeBoard />);
+    fireEvent.click(screen.getByText('Play'));
+    expect((screen.getByText('Play Round 1').closest('button') as HTMLButtonElement).disabled).toBe(false);
+    fireEvent.click(screen.getByText('Play Round 1'));
+    expect(JSON.parse(localStorage.getItem(SAVE_KEY)!).league.round).toBe(2);
   });
 
   it('a save from before the round opens its 13 men on the old limits', () => {

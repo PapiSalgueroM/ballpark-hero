@@ -39,16 +39,22 @@
         whatever ids the men were minted with. Then, printed and not
         asserted, what does move against a 13 man twin and why
      6) ten franchises, five seasons each, the board's own sequence (rounds,
-        CPU moves, October, the draft, the offseason): no crash, every club
-        still fields nine hitters, five starters and five relievers, no name
-        twice, no id twice
+        CPU moves, October, the draft, the offseason, the GM's DFAs down to
+        28): no crash, every club still fields nine hitters, five starters and
+        five relievers and enters every season with 22 to 28, no name twice,
+        no id twice
      7) an old save: two leagues written by the engine as it stood before this
         round (scripts/data/mlbLegacySaveFixture.json) replay a scripted
         stretch (signings to the old ceiling, DFAs to the old floor, a season,
         October, a draft, an offseason and five rounds) to the same result,
         byte for byte on everything but the minted ids
      8) the board under vitest: the season close test for all four sims and
-        the MLB board's own full roster test
+        the MLB board's own full roster test (which holds Play while the GM's
+        club is over 28 and frees it after his DFAs)
+     9) the cut down to 28: a CPU club the draft took over is cut by the
+        offseason through cutPlayer, never a man the sim plays, never below
+        the spine; the GM's club is left to him and mlbOverLimit says how
+        many he owes; an old save's club is never cut or held
 
    MEASURED (2026-10-01, ten seeds): every club's opening payroll $119M to
    $230M against the $244M line (priced at the full scale, 26 men ran $134.7M
@@ -69,6 +75,8 @@
      idkeyed       injury rolls keyed on the minted id, not the name -> 5
      onecatcher    Detroit's backup catcher left out, as first cut  -> 3c
      namesake      José Fermin (2001) shipped without his year      -> 3n
+     nocut         the offseason never cuts and Play is never held   -> 6 and 9
+     cutuser       the offseason cuts the GM's club behind his back  -> 9
 
    The fixture: node scripts/simMlbFullRosters.mjs --write-legacy-fixture
    writes it with whatever engine is in src. It was written against the engine
@@ -95,7 +103,7 @@ const STATS = path.join(ROOT, 'scripts', 'data', 'mlbStats2026.json');
 const FIXTURE = path.join(ROOT, 'scripts', 'data', 'mlbLegacySaveFixture.json');
 const CONTROL = process.env.MLB_FULL_CONTROL || '';
 const WRITE_FIXTURE = process.argv.includes('--write-legacy-fixture');
-const EXPECT = { invented: [3, 4], benchread: [5], sharedstream: [5], fullprice: [4], legacylimits: [7], idkeyed: [5], onecatcher: ['3c'], namesake: ['3n'] };
+const EXPECT = { invented: [3, 4], benchread: [5], sharedstream: [5], fullprice: [4], legacylimits: [7], idkeyed: [5], onecatcher: ['3c'], namesake: ['3n'], nocut: [6, 9], cutuser: [9] };
 if (CONTROL && !EXPECT[CONTROL]) { console.error(`MLB_FULL_CONTROL=${CONTROL} is not a control this harness knows (${Object.keys(EXPECT).join(', ')})`); process.exit(1); }
 
 let checks = 0;
@@ -117,6 +125,10 @@ const ENGINE_SWAPS = {
   fullprice: [['salary: core.has(i) ? mlbSalaryFor(s.ovr) : MLB_DEPTH_SALARY,', 'salary: mlbSalaryFor(s.ovr),']],
   idkeyed: [['unitHash(roundSeed, p.name, 1)', 'unitHash(roundSeed, p.id, 1)'], ['unitHash(roundSeed, p.name, 2)', 'unitHash(roundSeed, p.id, 2)']],
   legacylimits: [['export const mlbRosterMax = (t: { depth?: number }): number => (t.depth ? MLB_ROSTER_MAX : MLB_LEGACY_ROSTER_MAX);', 'export const mlbRosterMax = (t: { depth?: number }): number => (t.depth || true ? MLB_ROSTER_MAX : MLB_LEGACY_ROSTER_MAX);']],
+  /* the builder's state: the offseason never cuts, and nothing is held */
+  nocut: [['  for (const t of Object.values(league.teams)) if (t.abbr !== userTeam) mlbCutDownToMax(t, league.freeAgents);\n', ''], ['  return t.depth ? Math.max(0, t.players.length - mlbRosterMax(t)) : 0;', '  return 0;'], ['  if (!t.depth) return out;\n  while', '  if (!t.depth || true) return out;\n  while']],
+  /* the offseason cuts the GM's club behind his back */
+  cutuser: [['if (t.abbr !== userTeam) mlbCutDownToMax(', 'if (t.abbr !== userTeam || true) mlbCutDownToMax(']],
 };
 const DATA_SWAPS = {
   invented: [['  ATL: [\n    { name: ', '  ATL: [\n    { name: "Harness Inventedman" }, { name: ']],
@@ -499,10 +511,21 @@ function playSeason(lg, myTeam, rng) {
     ai.forEach((p, i) => lg.teams[order[i % order.length]].players.push(E.mlbProspectToPlayer(p, rng)));
     cls = remaining.filter(p => !ai.includes(p));
   }
-  E.mlbOffseason(lg, rng);
+  /* the board passes the GM's club, which the offseason does not cut; Play
+     then waits while he DFAs his lowest rated men the sim does not play */
+  E.mlbOffseason(lg, rng, myTeam);
+  return userCutDown(lg, myTeam);
+}
+/* the GM here DFAs the men the CPU rule would (a GM may DFA anybody down to
+   22, and one who breaks his own rotation that way has chosen to) */
+function userCutDown(lg, myTeam) {
+  const my = lg.teams[myTeam];
+  const owed = E.mlbOverLimit(my);
+  const done = owed > 0 ? E.mlbCutDownToMax(my, lg.freeAgents).length : 0;
+  return { owed, done };
 }
 {
-  let seasons = 0;
+  let seasons = 0, userOwed = 0;
   for (let i = 0; i < SEEDS.length; i += 1) {
     const seed = SEEDS[i];
     const myTeam = GAME_TEAMS[(i * 3) % 30];
@@ -511,8 +534,14 @@ function playSeason(lg, myTeam, rng) {
     try {
       lg = E.initMlbLeague(rng);
       for (let s = 0; s < 5; s += 1) {
-        playSeason(lg, myTeam, rng);
+        const cut = playSeason(lg, myTeam, rng);
+        userOwed += cut.owed;
         seasons += 1;
+        /* Round 829 review: the draft used to leave clubs at up to 33 */
+        const outside = GAME_TEAMS.filter(a => lg.teams[a].players.length > E.MLB_ROSTER_MAX || lg.teams[a].players.length < E.MLB_ROSTER_MIN)
+          .map(a => `${a} ${lg.teams[a].players.length}`);
+        ok(6, `seed ${seed} (${myTeam}) season ${s + 2}: every club enters the season with 22 to 28`, outside.length === 0, outside.join(' '));
+        ok(6, `seed ${seed} (${myTeam}) season ${s + 2}: the GM DFA'd all he owed`, cut.done === cut.owed, `${cut.done} of ${cut.owed}`);
         const shortClubs = GAME_TEAMS.filter(a => {
           const t = lg.teams[a];
           return t.players.filter(p => !isP(p)).length < 9 || t.players.filter(p => p.pos === 'SP').length < 5 || t.players.filter(p => p.pos === 'RP' || p.pos === 'CL').length < 5 || t.players.length < E.MLB_ROSTER_MIN;
@@ -527,7 +556,50 @@ function playSeason(lg, myTeam, rng) {
       ok(6, `seed ${seed} (${myTeam}): five seasons without a crash`, false, String(e && e.stack ? e.stack : e).slice(0, 300));
     }
   }
-  console.log(`   ${seasons} seasons played across ${SEEDS.length} franchises`);
+  console.log(`   ${seasons} seasons played across ${SEEDS.length} franchises; the GM's club owed ${userOwed} DFAs after its drafts`);
+}
+
+/* ---- 9. the cut down to 28 ------------------------------------------------ */
+/* Round 829 review. The builder left it open: two picks a summer for the GM
+   and two for each of the five worst CPU clubs pushed full roster clubs to 33
+   (measured, 30 franchises by 10 seasons: 104 of 9,000 club seasons opened
+   over 28, 55 of them the GM's). Round 828's shape for the NFL: the offseason
+   releases a CPU club's lowest rated men the sim does not play, through
+   cutPlayer, the crowded side first, never below the spine; the GM's own club
+   is his call, and the board holds Play until he is at 28. */
+console.log('9) the cut down to 28');
+{
+  for (const seed of SEEDS.slice(0, 3)) {
+    const lg = E.initMlbLeague(lcg(seed));
+    const cpu = lg.teams.BOS, mine = lg.teams.NYY;
+    const cls = E.mlbDraftClass(lcg(seed + 1), 24, names(lg));
+    for (const pr of cls.slice(0, 5)) cpu.players.push(E.mlbProspectToPlayer(pr, lcg(seed + 2)));
+    for (const pr of cls.slice(5, 10)) mine.players.push(E.mlbProspectToPlayer(pr, lcg(seed + 3)));
+    /* (a) the engine cut, on a CPU club three over (26 plus five draftees) */
+    const t = clone(cpu);
+    const fas = [];
+    const owed = t.players.length - E.MLB_ROSTER_MAX;
+    const readsBefore = [...E.mlbSimReads(t)].sort();
+    const strength = E.mlbStrength(t);
+    const gone = E.mlbCutDownToMax(t, fas);
+    ok(9, `seed ${seed}: a CPU club ${owed} over is cut to 28`, owed === 3 && t.players.length === E.MLB_ROSTER_MAX && gone.length === owed, `${t.players.length} after ${gone.length} cuts`);
+    ok(9, `seed ${seed}: nobody the sim plays is cut, so the strength holds`, JSON.stringify([...E.mlbSimReads(t)].sort()) === JSON.stringify(readsBefore) && Math.abs(E.mlbStrength(t) - strength) < 1e-9);
+    ok(9, `seed ${seed}: each cut is a real cut (pool, dead money, no way back)`, fas.length === owed && (t.deadCap ?? []).length === owed && (t.releasedThisSeason ?? []).length === owed);
+    const isRp = p => p.pos === 'RP' || p.pos === 'CL';
+    ok(9, `seed ${seed}: the cut keeps two catchers, nine hitters, five starters and five relievers`,
+      t.players.filter(p => p.pos === 'C').length >= Math.min(2, cpu.players.filter(p => p.pos === 'C').length)
+      && t.players.filter(p => !isP(p)).length >= 9 && t.players.filter(p => p.pos === 'SP').length >= 5 && t.players.filter(isRp).length >= 5);
+    /* (b) the offseason cuts every CPU club and leaves the GM's to him */
+    const lg2 = clone(lg);
+    E.mlbOffseason(lg2, lcg(seed + 4), 'NYY');
+    const over = GAME_TEAMS.filter(a => a !== 'NYY' && lg2.teams[a].players.length > E.MLB_ROSTER_MAX);
+    ok(9, `seed ${seed}: the offseason leaves no CPU club over 28`, over.length === 0, over.join(' '));
+    ok(9, `seed ${seed}: the offseason leaves the GM's club for him to cut, and says how many`, E.mlbOverLimit(lg2.teams.NYY) === lg2.teams.NYY.players.length - E.MLB_ROSTER_MAX && E.mlbOverLimit(lg2.teams.NYY) > 0, `${lg2.teams.NYY.players.length} men, over by ${E.mlbOverLimit(lg2.teams.NYY)}`);
+    /* (c) a save from before this round is never cut and never held */
+    const old = clone(cpu);
+    delete old.depth;
+    ok(9, `seed ${seed}: an old save's club is never cut and never held`, E.mlbCutDownToMax(old, []).length === 0 && E.mlbOverLimit(old) === 0 && old.players.length === cpu.players.length);
+  }
 }
 
 /* ---- 7. an old save ------------------------------------------------------ */

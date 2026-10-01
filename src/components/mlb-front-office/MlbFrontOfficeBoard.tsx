@@ -11,7 +11,7 @@ import {
   mlbRelease, mlbSign, mlbTrade, mlbTradeValue, mlbAiMoves, AL, NL, MLB_DIVISIONS,
   MLB_ROUNDS,
   type MlbLeague, type MlbProspect, type MlbSeriesResult, mlbExecuteTalksTrade,
-  ensureMlbLeagueIds, mlbRosterMin, mlbRosterMax, mlbSimReads, isPitcher,
+  ensureMlbLeagueIds, mlbRosterMin, mlbRosterMax, mlbSimReads, isPitcher, mlbOverLimit,
   type MlbGmPlayer,
 } from '@/lib/mlbFrontOffice';
 /* Round 631: a DFA costs dead money and the man cannot come back this season. */
@@ -252,6 +252,9 @@ export default function MlbFrontOfficeBoard() {
        already has one is a closed season being clicked again, and the answer
        is to do nothing rather than play an extra round. */
     if (league.champions.some(c => c.season === league.season)) return;
+    /* Round 829 review: a full roster club the draft took past 28 DFAs down
+       before it plays, through the same two tap DFA as any other cut. */
+    if (mlbOverLimit(my) > 0) return;
     const lg: MlbLeague = JSON.parse(JSON.stringify(league));
     const report = simMlbRound(lg, myTeam, Math.random);
     mlbAiMoves(lg, myTeam, Math.random);
@@ -353,13 +356,17 @@ export default function MlbFrontOfficeBoard() {
     setDraftClass(nextClass); setPicksLeft(nextPicks);
     setFeed(f => [`📥 Drafted ${pr.name} (${pr.pos}), true rating ${pr.trueOvr} vs scouted ${pr.grade}.`, ...f].slice(0, 6));
     if (nextPicks <= 0) {
-      const notes = mlbOffseason(lg, Math.random);
+      /* Round 829 review: every CPU club is cut down to 28 in here; yours is
+         your own call, on the roster box, before Round 1. */
+      const notes = mlbOffseason(lg, Math.random, myTeam);
       /* Round 180: ownership re-reads the roster and sets next season's ask. */
       /* Round 192: what you said at the podium tilts the ask, then the
          tilt is spent. */
       const m = mandateFor(lg, myTeam, champion === myTeam, pressTilt);
       setMandate(m);
+      const over = mlbOverLimit(lg.teams[myTeam]);
       setFeed([
+        ...(over > 0 ? [`✂️ You are carrying ${lg.teams[myTeam].players.length}, ${over} over the limit of ${mlbRosterMax(lg.teams[myTeam])}. DFA ${over === 1 ? 'one man' : `${over} men`} on the roster box before Round 1.`] : []),
         `🏛️ The new mandate: ${m.text}`,
         ...(pressTilt === 1 ? ['🎙️ Your season-end answer raised the bar upstairs.']
           : pressTilt === -1 ? ['🎙️ Your ask for patience was heard. The bar sits softer.'] : []),
@@ -628,6 +635,8 @@ export default function MlbFrontOfficeBoard() {
           ) : (
             <p className="mt-1 text-xs text-muted-foreground">
               You hold <b className="text-gold">{picksLeft}</b> pick{picksLeft === 1 ? '' : 's'}. Scout grades carry error.
+              {/* Round 829 review: said before the pick, not after it. */}
+              {my?.depth ? ` The roster limit is ${mlbRosterMax(my)}: if your picks take you over it, you DFA down before Round 1, dead money and all.` : ''}
             </p>
           )}
         </div>
@@ -692,6 +701,8 @@ export default function MlbFrontOfficeBoard() {
   /* Round 631: at the engine's floor every DFA waits, at its ceiling every Sign does, and both say why. */
   const cutBlock = cutRefusal(my, mlbRosterMin(my));
   const fullBlock = rosterFullRefusal(my, mlbRosterMax(my));
+  /* Round 829 review: men to DFA before Play, 0 unless the draft took a full roster club past 28. */
+  const overLimit = mlbOverLimit(my);
   const panelTitle = tiles.find(x => (x.key === 'play' ? 'round' : x.key) === tab)?.title ?? '';
   const tradeOwnPlayers = [...my.players].sort((a, b) => b.ovr - a.ovr);
   const tradePartnerPlayers = tradePartner ? [...league.teams[tradePartner].players].sort((a, b) => b.ovr - a.ovr) : [];
@@ -763,6 +774,11 @@ export default function MlbFrontOfficeBoard() {
           <p className="mb-2 text-center text-[10px] text-muted-foreground" data-roster-count>
             {my.players.length} on the roster. The sim plays your best healthy 8 bats, 3 starters and 2 relievers.
           </p>
+          {overLimit > 0 && (
+            <p data-over-limit className="mb-2 text-center text-[10px] text-destructive">
+              {overLimit} over the limit of {mlbRosterMax(my)}. DFA {overLimit === 1 ? 'one man' : `${overLimit} men`} before Round {league.round}.
+            </p>
+          )}
           {/* Round 829: 26 men, so three small groups inside the one box. Every
               row is still drawn, and the box scrolls, never the page. */}
           <div className="grid max-h-96 grid-cols-1 gap-1 overflow-y-auto sm:grid-cols-2">
@@ -961,7 +977,12 @@ export default function MlbFrontOfficeBoard() {
       {tab === 'round' && (
         <div className="rounded-2xl border border-gold/40 bg-card p-4 text-center">
           <p className="mb-2 text-sm text-foreground">Each round simulates a week and a half of baseball across the league.</p>
-          <button onClick={playRound} className="inline-flex items-center gap-2 rounded-full bg-primary px-8 py-2.5 text-sm font-bold text-primary-foreground hover:opacity-90">
+          {overLimit > 0 && (
+            <p data-over-limit className="mb-2 text-xs text-destructive">
+              You are carrying {my.players.length}, {overLimit} over the limit of {mlbRosterMax(my)}. DFA {overLimit === 1 ? 'one man' : `${overLimit} men`} on the roster box before you play.
+            </p>
+          )}
+          <button onClick={playRound} disabled={overLimit > 0} className="inline-flex items-center gap-2 rounded-full bg-primary px-8 py-2.5 text-sm font-bold text-primary-foreground hover:opacity-90 disabled:opacity-40">
             <ShieldHalf className="h-4 w-4" /> {league.round >= MLB_ROUNDS ? 'Final stretch + October' : `Play Round ${league.round}`}
           </button>
           <p className="mt-2 text-[10px] text-muted-foreground">Division winners seed 1-3, wild cards 4-6. Top two seeds skip the best-of-3 Wild Card round.</p>
