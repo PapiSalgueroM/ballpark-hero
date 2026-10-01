@@ -1,5 +1,13 @@
 # Project state
 
+## IN PROGRESS 2026-10-01: Budget Builder decisions claimed in the third implementation lane
+
+779 owns only BudgetBuilderBoard and focused tests/CSS for exact signing previews, confirmation,
+truthful committed feedback and picker focus. Existing affordability/refund/scoring stays in its
+real hook; the current top60 bound remains explicit.776 Staff native proof and777/778 arcade
+practice tests continue. Scope and the bounded777 old-pause CSS resolver are on WORKBOARD.
+Full392 suite still runs. Combined build/fences and publication remain pending. Next free:780.
+
 ## IN PROGRESS 2026-09-30: both standalone arcade practice lanes claimed
 
 778 root claims the separate BuzzerBeaterBoard for fixed-power unrecorded practice, alongside
