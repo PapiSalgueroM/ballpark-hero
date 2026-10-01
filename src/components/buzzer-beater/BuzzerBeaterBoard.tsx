@@ -1,13 +1,13 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState, type KeyboardEvent as ReactKeyboardEvent } from 'react';
 import { Button } from '@/components/ui/button';
 import ShareButtons from '@/components/game/ShareButtons';
 import ArcadeShotFeedback from '@/components/arcade/ArcadeShotFeedback';
+import { HowToPlayPopover } from '@/components/game/HowToPlayPopover';
 import { CalendarDays, Infinity as InfinityIcon, RotateCcw, Target } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { useArcadeFlight } from '@/hooks/useArcadeFlight';
 import { getTodayET } from '@/lib/dateUtils';
-import { markRestoredFinish } from '@/lib/restoredFinish';
 import { readArcadeRun, writeArcadeRun } from '@/lib/arcadeRecord';
 import {
   buildRun, daySeed, lehmer, launchDegFor, maxRunScore, takeShot,
@@ -20,7 +20,7 @@ const SLUG = 'buzzer-beater';
    `made`. The shape is shared (src/lib/arcadeRecord.ts), the word is the
    sport's. */
 const COUNT_FIELD = 'made';
-type Mode = 'daily' | 'unlimited';
+type Mode = 'daily' | 'unlimited' | 'practice';
 type Phase = 'intro' | 'aiming' | 'flying' | 'shotEnd' | 'done';
 
 /* How long the ball is in the air, in milliseconds. One number, used by the
@@ -72,6 +72,10 @@ export default function BuzzerBeaterBoard() {
   const [power, setPower] = useState(0.4);
   const [charging, setCharging] = useState(false);
   const chargingRef = useRef(false);
+  const aimingRef = useRef(false);
+  const practicePowerRef = useRef<HTMLInputElement | null>(null);
+  const practiceActionRef = useRef<HTMLButtonElement | null>(null);
+  const [practiceHelp, setPracticeHelp] = useState(false);
 
   const rngRef = useRef<() => number>(lehmer(1));
   const savedRef = useRef(restored !== null);
@@ -79,7 +83,19 @@ export default function BuzzerBeaterBoard() {
   const setup = shots[shotIdx] ?? null;
   const isDone = phase === 'done';
   const bookedAlready = mode === 'daily' && restored !== null;
-  useGameCompletion(SLUG, isDone && !bookedAlready, score, made);
+  useGameCompletion(SLUG, isDone && !bookedAlready && mode !== 'practice', score, made);
+
+  useEffect(() => {
+    if (mode !== 'practice') return;
+    const target = phase === 'aiming' ? practicePowerRef.current : practiceActionRef.current;
+    target?.focus({ preventScroll: true });
+  }, [phase, mode]);
+
+  const practiceKeyDown = (event: ReactKeyboardEvent<HTMLElement>) => {
+    if (mode !== 'practice') return;
+    if ((event.key === ' ' && event.currentTarget.tagName === 'INPUT')
+      || (event.repeat && (event.key === 'Enter' || event.key === ' '))) event.preventDefault();
+  };
 
   /* The strength bar sweeps while the player holds, which is the timing part of
      the input: it is not a slider you set, it is a bar you stop. It is absolute
@@ -100,10 +116,12 @@ export default function BuzzerBeaterBoard() {
   }, [charging, paused]);
 
   const start = useCallback((m: Mode) => {
+    setPracticeHelp(false);
+    aimingRef.current = false;
     chargingRef.current = false;
     setCharging(false);
     if (m === 'daily' && restored) {
-      markRestoredFinish(SLUG);
+      savedRef.current = true;
       setMode('daily');
       setShots(buildRun(daySeed(todayStr)));
       setScore(restored.score);
@@ -143,10 +161,10 @@ export default function BuzzerBeaterBoard() {
   }, [paused, phase, setup, fade, arc, power, launch]);
 
   const beginCharge = useCallback(() => {
-    if (paused || phase !== 'aiming' || document.querySelector('[role="dialog"]')) return;
+    if (mode === 'practice' || paused || phase !== 'aiming' || document.querySelector('[role="dialog"]')) return;
     chargingRef.current = true;
     setCharging(true);
-  }, [paused, phase]);
+  }, [mode, paused, phase]);
 
   const endCharge = useCallback(() => {
     if (!chargingRef.current) return;
@@ -158,6 +176,7 @@ export default function BuzzerBeaterBoard() {
   const togglePause = () => {
     if (paused) resume();
     else {
+      aimingRef.current = false;
       chargingRef.current = false;
       setCharging(false);
       pause();
@@ -165,6 +184,7 @@ export default function BuzzerBeaterBoard() {
   };
 
   const nextShot = useCallback(() => {
+    aimingRef.current = false;
     resetFlight();
     if (shotIdx + 1 >= ROUNDS_PER_RUN) { setPhase('done'); return; }
     setShotIdx(i => i + 1);
@@ -222,6 +242,11 @@ export default function BuzzerBeaterBoard() {
   };
 
   const best = shots.length ? maxRunScore(shots) : 0;
+  const practiceRules = <>
+    <p>Steady practice gives you ten shots with the usual physics and points. Nothing is saved or added to your records.</p>
+    <p>Set Power, Arc and Fade with the sliders, or drag the court to aim. Your power stays where you put it. Tap Shoot when ready; dragging does not shoot.</p>
+    <p>Try Power 40, Arc 60 and Fade square. The dashed line previews the flight. Change power to see the path change, then tap Shoot. You can pause or reopen these rules any time.</p>
+  </>;
   const ball = result && phase !== 'aiming'
     ? result.path[Math.min(result.path.length - 1, Math.round(flight * (result.path.length - 1)))]
     : null;
@@ -254,13 +279,24 @@ export default function BuzzerBeaterBoard() {
           <Button variant="secondary" onClick={() => start('unlimited')} className="gap-2">
             <InfinityIcon className="h-4 w-4" /> Unlimited
           </Button>
+          <Button variant="outline" onClick={() => start('practice')} className="min-h-[44px]">Steady practice</Button>
         </div>
+        <div className="mt-3 space-y-2 text-xs text-muted-foreground">{practiceRules}</div>
       </div>
     );
   }
 
   return (
     <div className="space-y-3" data-arcade-phase={phase} data-arcade-paused={paused}>
+      {mode === 'practice' && <div className="flex items-center justify-between gap-2">
+        <p className="text-sm text-muted-foreground">Steady practice. Unrecorded. Set power, then tap Shoot. Nothing is saved.</p>
+        <HowToPlayPopover title="Steady practice rules" triggerLabel="Steady practice rules" floatingTrigger={false}
+          className="min-h-[44px] min-w-[44px] shrink-0" open={practiceHelp}
+          onOpenChange={open => {
+            setPracticeHelp(open);
+            if (open) { aimingRef.current = false; if (phase === 'aiming' || phase === 'flying') pause(); }
+          }}>{practiceRules}</HowToPlayPopover>
+      </div>}
       <div className="flex flex-wrap items-center justify-between gap-2 text-sm">
         <span className="rounded-full border border-border bg-card px-3 py-1.5">
           Shot <b className="text-primary">{Math.min(shotIdx + 1, ROUNDS_PER_RUN)}</b>/{ROUNDS_PER_RUN}
@@ -290,9 +326,21 @@ export default function BuzzerBeaterBoard() {
         className="w-full touch-none select-none rounded-2xl border border-border bg-[hsl(28_35%_16%)]"
         role="img"
         aria-label={setup ? `Jump shot from ${setup.distance} metres with a ${setup.contestReach ? `${setup.contestReach} metre` : 'no'} contest` : 'Jump shot'}
-        onPointerDown={e => { if (!paused && phase === 'aiming') { pointerAim(e.clientX, e.clientY); beginCharge(); } }}
-        onPointerMove={e => { if (!paused && phase === 'aiming' && chargingRef.current) pointerAim(e.clientX, e.clientY); }}
-        onPointerUp={endCharge}
+        onPointerDown={e => {
+          if (paused || phase !== 'aiming') return;
+          pointerAim(e.clientX, e.clientY);
+          if (mode === 'practice') { aimingRef.current = true; e.currentTarget.setPointerCapture(e.pointerId); }
+          else beginCharge();
+        }}
+        onPointerMove={e => { if (!paused && phase === 'aiming' && (chargingRef.current || (mode === 'practice' && aimingRef.current))) pointerAim(e.clientX, e.clientY); }}
+        onPointerUp={e => {
+          if (mode === 'practice') {
+            aimingRef.current = false;
+            if (e.currentTarget.hasPointerCapture(e.pointerId)) e.currentTarget.releasePointerCapture(e.pointerId);
+          } else endCharge();
+        }}
+        onPointerCancel={() => { aimingRef.current = false; }}
+        onLostPointerCapture={e => { if (e.target === e.currentTarget) aimingRef.current = false; }}
       >
         {/* the floor, with a metre tick every two metres so distance reads */}
         <rect x={0} y={FLOOR_Y} width={VIEW_W} height={VIEW_H - FLOOR_Y} fill="hsl(28 40% 22%)" />
@@ -402,14 +450,19 @@ export default function BuzzerBeaterBoard() {
       {phase === 'aiming' && (
         <div className="space-y-2 rounded-2xl border border-border bg-card p-3">
           <div className="flex items-center gap-2 text-xs text-muted-foreground">
-            <span className="w-14 shrink-0">Strength</span>
-            <div className="h-3 flex-1 overflow-hidden rounded-full bg-background">
+            <span className="w-14 shrink-0">{mode === 'practice' ? 'Power' : 'Strength'}</span>
+            {mode === 'practice' ? (
+              <input ref={practicePowerRef} type="range" min={0} max={1} step={0.01} value={power}
+                disabled={paused} onChange={e => { if (!paused) setPower(Number(e.target.value)); }}
+                onKeyDown={practiceKeyDown}
+                className="h-11 min-w-0 flex-1 accent-[hsl(var(--primary))]" aria-label="Power" />
+            ) : <div className="h-3 flex-1 overflow-hidden rounded-full bg-background">
               <div
                 className={cn('h-full rounded-full transition-none',
                   power > 0.82 ? 'bg-destructive' : power > 0.55 ? 'bg-gold' : 'bg-primary')}
                 style={{ width: `${power * 100}%` }}
               />
-            </div>
+            </div>}
             <span className="w-10 shrink-0 text-right tabular-nums">{Math.round(power * 100)}</span>
           </div>
           <div className="flex items-center gap-2 text-xs text-muted-foreground">
@@ -418,7 +471,8 @@ export default function BuzzerBeaterBoard() {
               type="range" min={0} max={1} step={0.02} value={arc}
               disabled={paused}
               onChange={e => { if (!paused) setArc(Number(e.target.value)); }}
-              className="flex-1 accent-[hsl(var(--primary))]"
+              onKeyDown={practiceKeyDown}
+              className={cn('flex-1 accent-[hsl(var(--primary))]', mode === 'practice' && 'h-11 min-w-0')}
               aria-label="How high to put the arc on the shot"
             />
             <span className="w-10 shrink-0 text-right tabular-nums">{Math.round(launchDegFor(arc))}&deg;</span>
@@ -429,21 +483,24 @@ export default function BuzzerBeaterBoard() {
               type="range" min={-1} max={1} step={0.04} value={fade}
               disabled={paused}
               onChange={e => { if (!paused) setFade(Number(e.target.value)); }}
-              className="flex-1 accent-[hsl(var(--primary))]"
+              onKeyDown={practiceKeyDown}
+              className={cn('flex-1 accent-[hsl(var(--primary))]', mode === 'practice' && 'h-11 min-w-0')}
               aria-label="How far to fade off the closeout"
             />
             <span className="w-10 shrink-0 text-right tabular-nums">{fade > 0.05 ? 'right' : fade < -0.05 ? 'left' : 'square'}</span>
           </div>
           <div className="flex flex-wrap gap-2 pt-1">
-            <Button size="sm" className="flex-1" disabled={paused} onMouseDown={beginCharge} onMouseUp={endCharge}
+            {mode === 'practice' ? (
+              <Button ref={practiceActionRef} className="min-h-[44px] flex-1" disabled={paused} onClick={release} onKeyDown={practiceKeyDown}>Shoot</Button>
+            ) : <Button size="sm" className="flex-1" disabled={paused} onMouseDown={beginCharge} onMouseUp={endCharge}
               onTouchStart={e => { e.preventDefault(); beginCharge(); }} onTouchEnd={e => { e.preventDefault(); endCharge(); }}
               onKeyDown={e => { e.stopPropagation(); if ((e.key === ' ' || e.key === 'Enter') && !e.repeat) { e.preventDefault(); beginCharge(); } }}
               onKeyUp={e => { e.stopPropagation(); if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); endCharge(); } }}>
               Hold to shoot
-            </Button>
+            </Button>}
           </div>
           <p className="text-center text-[11px] text-muted-foreground">
-            Up and down set the arc, left and right fade off the hand, hold space to load it. Or drag the court and let go.
+            {mode === 'practice' ? 'Set Power, Arc and Fade at your own pace. Drag the court to aim, then tap Shoot.' : 'Up and down set the arc, left and right fade off the hand, hold space to load it. Or drag the court and let go.'}
           </p>
         </div>
       )}
@@ -455,7 +512,7 @@ export default function BuzzerBeaterBoard() {
               ? `, so you had ${Math.round(result.depthWindow * 100)} cm of room short or long.`
               : ', which is too flat for the ball to fit through at all.'}
           </p>}>
-          <Button className="mt-3 gap-2" onClick={nextShot}>
+          <Button ref={mode === 'practice' ? practiceActionRef : undefined} className={cn('mt-3 gap-2', mode === 'practice' && 'min-h-[44px]')} onClick={nextShot} onKeyDown={practiceKeyDown}>
             {shotIdx + 1 >= ROUNDS_PER_RUN ? 'See the run' : 'Next shot'}
           </Button>
         </ArcadeShotFeedback>
@@ -468,18 +525,26 @@ export default function BuzzerBeaterBoard() {
             {score} points{best ? ` out of a possible ${best}` : ''}.
             {made >= 8 ? ' Cold blooded.' : made >= 6 ? ' You would take that shot again.' : made >= 3 ? ' Keep firing.' : ' Long night at the office.'}
           </p>
+          {mode !== 'practice' && <div className="mt-3 space-y-2 text-xs text-muted-foreground">{practiceRules}</div>}
           <div className="mt-4 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
-            {mode === 'unlimited' || !restored ? (
+            {mode === 'practice' ? (
+              <>
+                <Button ref={practiceActionRef} onClick={() => start('practice')} onKeyDown={practiceKeyDown} className="min-h-[44px]">Another practice run</Button>
+                <Button variant="secondary" onClick={() => start('daily')} onKeyDown={practiceKeyDown} className="min-h-[44px]">Today's ten</Button>
+                <Button variant="secondary" onClick={() => start('unlimited')} onKeyDown={practiceKeyDown} className="min-h-[44px]">Unlimited</Button>
+              </>
+            ) : mode === 'unlimited' || !restored ? (
               <Button onClick={() => start('unlimited')} className="gap-2"><RotateCcw className="h-4 w-4" /> Another ten</Button>
             ) : (
               <p className="text-xs text-muted-foreground">Come back tomorrow for ten new shots.</p>
             )}
-            <ShareButtons
+            {mode !== 'practice' && <Button variant="outline" onClick={() => start('practice')} className="min-h-[44px]">Steady practice</Button>}
+            {mode !== 'practice' && <ShareButtons
               gameName="Buzzer Beater"
               gamePath="/buzzer-beater"
               score={`${made}/${ROUNDS_PER_RUN} shots for ${score} points`}
               customText={`Buzzer Beater 🏀 ${made}/${ROUNDS_PER_RUN} made, ${score} points. douknowball.com/buzzer-beater`}
-            />
+            />}
           </div>
         </div>
       )}

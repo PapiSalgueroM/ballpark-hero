@@ -1,5 +1,28 @@
 # Work board
 
+**2026-10-01, Codex778 source/browser checkpoint: steady Buzzer practice accepted.**
+Practice uses native fixed Power/Arc/Fade and explicit Shoot with the original seeded physics.
+Aim taps and continued child-to-SVG captured drags only aim; a17s delay leaves chosen power.27
+unchanged. Practice-range Space preserves scroll; held Enter cannot activate the newly focused
+Next or Replay actions. Native arrow keys and ordinary Shoot Enter/Space still work. Ten-shot
+practice/replay, rules/pause/manual Resume and visible Power/Next/Replay/help focus are reachable.
+Practice makes no record/completion/share writes. Returning to saved daily preserves its bytes,
+and removes the unnecessary restore marker that otherwise suppressed a later recorded Unlimited
+finish. Daily/unlimited seeds, timing, exact engine paths and recorded outcomes remain paired.
+
+Nine actual Board/engine/flight/record/completion tests and thirteen asserted controls pass.
+Each control fails its named real outcome with one independent pass and seven explicit skips;
+the separate positive runs all nine. Eight native320/390/430/1440 normal/reduced contexts pass:
+167 points/one make matches real engine paths, verdicts and geometry; both practice runs retain
+raw876/4 daily data with no writes, and later Unlimited records its actual0/0 once.44px targets,
+overflow0, scroll0, trusted two-move touch capture, finite/static feedback and quiet clones hold.
+Inspected320px aim/result screenshots, reports and cleanup: TEMP/dukb-round778-buzzer-practice-audit.
+Positive/control logs: TEMP/dukb-round778-buzzer-final-positive.log and
+TEMP/dukb-round778-buzzer-final-controls. Native proof uses finished772 utilities. The final
+React keyboard type is aliased to preserve existing DOM listener types; runtime is unchanged.
+Fresh combined types/build/CSS/fifteen fences and publication remain pending. No shared engine,
+hook, parent/page, data, global style or routing edits. Next free785, honoring Claude781-784.
+
 **2026-10-01, Codex779 source/browser checkpoint: Budget Builder decisions accepted.**
 The real Board previews original candidate cost, exact replaced-player refund, remaining
 budget, XI rating/filled slots and honestly labeled current-condition status. Native Confirm

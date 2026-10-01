@@ -1,5 +1,14 @@
 # Project state
 
+## CHECKPOINT 2026-10-01: Buzzer steady practice source and native acceptance passed
+
+778 is accepted as a source checkpoint: native fixed-power practice, aim-only drag, explicit
+Shoot, help/pause and isolated records. Nine real lifecycle tests, thirteen asserted controls
+and eight width/motion browser contexts pass. Browser findings on slider Space scrolling and
+held Enter activating Next are fixed and measured. Saved daily stays byte-for-byte unchanged;
+later Unlimited still records once. WORKBOARD holds exact scores and fixture limits. Fresh
+combined type/build/fences/CSS and live publication remain pending;777 final native checks run.
+
 ## CHECKPOINT 2026-10-01: Budget Builder source and native decisions accepted
 
 779 adds exact signing previews and confirmation, truthful finite/static feedback, and native
