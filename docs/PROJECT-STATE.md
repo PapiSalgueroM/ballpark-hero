@@ -1,5 +1,25 @@
 # Project state
 
+## ACCEPTED 2026-10-01: generated guide refresh after verified changes
+
+804 adds explicit --refresh for existing converted/frozen guides and updates only
+the accepted F1 score and NHL contributor instruction records. All127 other route
+records and every guard section remain held. Full guard/five effective negative
+controls/four invalid-request refusals/485-harness anchor scanner pass. Exact
+receipts are on WORKBOARD.802 still owns its rank-em record when its production
+capture runs.801 App acceptance and802/803 native work continue; the immutable413
+suite remains running against older captured records. Next free805.
+
+## IN PROGRESS 2026-10-01: guide records after verified gameplay corrections
+
+804 adds an explicit generated refresh for already converted/frozen guides, so
+accepted NHL control instructions and the corrected F1 score can update their
+original-text records without weakening the guide checks. Other entries stay held;
+802 refreshes only its own rank-em record when frozen. Whole guard/negative controls
+and invalid-route refusal remain required.801's types/build/all15 artifact gates
+pass and final native/App proof continues.802/803 build in parallel. The immutable
+413 run continues against its older captured records. Next free805.
+
 ## ACCEPTED 2026-10-01: Emoji Guess feedback and keyboard flow
 
 800 adds truthful committed feedback, finite/static motion, full readable answers,
