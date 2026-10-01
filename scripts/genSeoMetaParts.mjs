@@ -22,6 +22,10 @@
  *   32 parts by hash     the entry carries 32 short loaders, about 0.35K, and
  *                        a game page fetches a part of 1 to 9 entries, 0.2K to
  *                        1.0K
+ * (Built and measured afterwards: the entry chunk grew 0.53K gzipped, not
+ * 0.35K, because the 32 hashed file names do not compress, and the game pages
+ * sweepWeight measures came out 7.7K to 8.4K lighter. scripts/sweepWeight.mjs
+ * has the per route figures.)
  * The hash is FNV-1a over the path, so a part depends on nothing but the path:
  * adding a game or reordering the registry moves no other game, and changes
  * one part file.
