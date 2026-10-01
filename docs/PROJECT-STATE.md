@@ -1,5 +1,18 @@
 # Project state
 
+## ACCEPTED 2026-10-01: MLB trade desk exposes every roster player
+
+798's three trade lists now offer every original player with honest eight-player
+expansions, fixed local height, full names,44px controls and safe keyboard handoffs.
+Original offers/talks/transactions/saves/money/picks/RNG/completion stay unchanged.
+Nine real outcomes/twelve source controls, eight native contexts/seven copied controls
+and two actual App/GameNavbar/ticker/Footer contexts pass. Final native QA fixed
+measured focus clipping and grid-name overlap; zero page movement and full-text
+containment hold. Types/build/all15 artifact fences pass. Receipts are on WORKBOARD.
+The frozen413-node regression is running,70 browser harnesses explicitly excluded;
+no complete-green or new-live claim.800's Emoji Guess nine outcomes pass and its
+controls/native work continues separately. Next free801; Claude claims stay held.
+
 ## IN PROGRESS 2026-10-01: Emoji Guess feedback and keyboard flow
 
 800 claims the isolated Board, scoped CSS and focused test/harness. Add truthful
@@ -56,7 +69,7 @@ has its nationality flag, with nine original actual signing outcomes held.
 The fresh merged production clone has types0/two builds/three-clock saved pages and
 all15 artifact fences green. Only three owned raw files changed,185 other saved files
 held, and only Aussie/NHL content fingerprints changed;166 other URL dates/hashes held.
-Actual App/Header/Footer checks pass four NHL and eight draft contexts, exact saves/
+Actual App/GameNavbar/Footer checks pass four NHL and eight draft contexts, exact saves/
 placement/original22 nodes, finite/static feedback and zero document movement or
 outward writes. Full receipts and boundaries are on WORKBOARD. Live publication is
 still Release J below; no new deployment or current all-node-green claim is made.

@@ -1,5 +1,43 @@
 # Work board
 
+**2026-10-01, Codex798 MLB whole-roster trade access ACCEPTED.**
+The Finder, send and receive lists now expose every original player through explicit
+eight-player expansions and honest visible/total counts. Original first-eight rating
+and tie order, shared own-player selection, offers, packages, acceptance/refusals,
+salary/picks/full saves, RNG and completion remain held. The local272px lists retain
+44px controls, full names and stable earlier nodes. Load more focuses the first new
+choice without page movement; held Enter/Space cannot activate a newly focused choice.
+Native QA reproduced and fixed two concrete defects: a received row clipped4.5px
+after focusing its button, and expanded grid-name text overlapping by9.5px. The
+scoped helper now scrolls the enclosing row; two local CSS declarations keep grid
+rows at their content height without changing the outer list. Copied old behaviors
+reproduce the real clipping/overlap while original trade helpers and quiet saves hold.
+
+Nine actual Page/Board outcomes, twelve effective source controls and the rechecked
+focus control pass. Native acceptance covers eight widths/motion contexts and seven
+asserted source/CSS controls,112 settled action-Y samples all0, no document overflow,
+full-text containment before/after8/16/23 rows and all owned targets at least44px.
+The four original transaction/restore/Finder/talks fences remain green.
+Bounded actual production App acceptance adds320 normal and1440 reduced contexts:
+all23 choices, exact later BOS22/BOS21/NYY22 IDs reach original callbacks,12 document-Y
+samples all0,234 full-name measurements within cards with at least6.5px clearance,
+zero Save writes/removals/outward writes/errors/bad responses. This route loads its
+actual GameNavbar, ticker and global Footer; the global Header is correctly absent.
+Earlier root Header shorthand for the game-route probes below is corrected accordingly.
+Root inspected the final phone screenshot. Browser/server/copies stopped and source
+preservation verified. App types0 and final intrinsic-row production build pass;
+all15 rebuilt-artifact fences pass with existing snapshots and derived ledger held.
+Receipts: TEMP/dukb-round798-native/report.json and cleanup.json,
+TEMP/dukb-round798-production-app/report.json and cleanup.json,
+TEMP/dukb-round798-controls/report.json and the retained row/overlap before-controls;
+TEMP/dukb-round797-production-20261001/combined798-intrinsic-preservation-receipt.json,
+combined798-intrinsic-fourteen-artifact-fences.log and combined798-intrinsic-boot-fence.log.
+
+The frozen413-node regression started11:50 UTC against1780 captured inputs through
+799 plus final798, with70 browser harnesses explicitly excluded. It is still running,
+so no all-green/current-live claim.800's separate Emoji Guess source has nine passing
+actual outcomes; copied controls/native acceptance remain due. Next free801.
+
 **2026-10-01, Codex800 CLAIMED: Emoji Guess committed feedback and keyboard flow.**
 Master96/97 interaction/animation slice. The actual five-puzzle Board has no committed
 guess/hint/result feedback announcement, removes the completed input without handing
@@ -114,7 +152,7 @@ changed,166 other URL fingerprints/dates held,168 sitemap URLs remain. Both lane
 news stays present; its formatting refresh did not change its merged content hash.
 Receipt: TEMP/dukb-round797-production-20261001/final-preservation-receipt.json.
 
-Actual production App/global Header/Footer acceptance: NHL four320/1440 motion
+Actual production App/GameNavbar/Footer acceptance: NHL four320/1440 motion
 contexts with exact full saves, quiet stage/cancel, once Apply/Auto/no-ops and zero
 document movement. Search and Discard eight320/1440 motion/CPU/pass contexts preserve
 all22 original nodes, real keep placement, finite420ms/static feedback and zero scroll.
