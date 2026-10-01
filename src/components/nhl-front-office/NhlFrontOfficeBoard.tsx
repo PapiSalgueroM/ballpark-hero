@@ -6,15 +6,20 @@ import { Briefcase, Crown, RotateCcw, ShieldHalf } from 'lucide-react';
 import ShareButtons from '@/components/game/ShareButtons';
 import { NHL_TEAMS, NHL_TEAM_MAP } from '@/data/conquestDataNhl';
 import {
-  initNhlLeague, simNhlRound, nhlFoStandings, runNhlFoPlayoffs, nhlOffseason,
+  simNhlRound, nhlFoStandings, runNhlFoPlayoffs, nhlOffseason,
   nhlDraftClass, nhlProspectToPlayer, nhlStrength, nhlCapUsed, nhlCapRoom,
   nhlRelease, nhlSign, nhlTrade, nhlTradeValue, nhlAiMoves, nhlPoints, EASTERN, WESTERN, NHL_FO_DIVISIONS,
   NHL_FO_ROUNDS,
   type NhlLeague, type NhlProspect, type NhlSeriesResult, nhlExecuteTalksTrade,
-  ensureNhlLeagueIds, NHL_ROSTER_MIN, NHL_ROSTER_MAX,
+  ensureNhlLeagueIds,
   nhlContributors, nhlSetContributors, nhlResetContributors, repairNhlContributors,
   type NhlContributors, type NhlGmTeam,
+  /* Round 830: new leagues start on the full real rosters, and each league
+     carries its own roster floor and ceiling (20 to 23, or 8 to 15 on an
+     older save). */
+  initNhlFullLeague, nhlRosterLimits,
 } from '@/lib/nhlFrontOffice';
+import { NHL_FO_FULL_READ } from '@/data/nhlFoRosters2026';
 /* Round 631: waiving a man costs dead money and he cannot come back this season. */
 import { deadMoneyFor, deadCapUsed, signRefusal, cutRefusal, rosterFullRefusal, tradeRefusal } from '@/lib/frontOfficeCuts';
 /* Round 531: the cap on screen says which day its figure was read. */
@@ -137,7 +142,7 @@ function ContributorPicker({ team, onApply, onAuto, onBack }: {
                 const checked = selected.includes(player.id);
                 return <label key={player.id} className={contributorsStyles.choice}>
                   <input type={group.key === 'goalie' ? 'radio' : 'checkbox'} name={group.key === 'goalie' ? 'nhl-contributor-goalie' : undefined} checked={checked} disabled={group.key !== 'goalie' && !checked && selected.length >= required} onChange={() => toggle(group.key, player.id, required)} data-nhl-contributor={player.id} />
-                  <span className={contributorsStyles.name}>{player.name}<span className="block text-[10px] text-muted-foreground">{player.pos} · rating {player.ovr}</span></span>
+                  <span className={contributorsStyles.name}>{player.name}<span className="block text-[10px] text-muted-foreground">{player.pos} · rating {player.ovr}{player.partial ? ' (stand in)' : ''}</span></span>
                 </label>;
               })}
               {group.players.length === 0 && <p className="py-2 text-xs text-muted-foreground">No healthy {group.label.toLowerCase()}.</p>}
@@ -272,7 +277,7 @@ export default function NhlFrontOfficeBoard() {
   };
 
   const start = (abbr: string) => {
-    const lg = initNhlLeague();
+    const lg = initNhlFullLeague();
     const m = mandateFor(lg, abbr, false);
     setLeague(lg); setMyTeam(abbr); setPhase('hub'); setTab(null);
     setFeed([
@@ -476,7 +481,7 @@ export default function NhlFrontOfficeBoard() {
     if (!league) return;
     setCutArmed(null);
     const lg: NhlLeague = JSON.parse(JSON.stringify(league));
-    if (nhlRelease(lg.teams[myTeam], lg.freeAgents, pid)) { setLeague(lg); persist({}, lg, myTeam); }
+    if (nhlRelease(lg.teams[myTeam], lg.freeAgents, pid, nhlRosterLimits(lg).min)) { setLeague(lg); persist({}, lg, myTeam); }
   };
   const changeContributors = (value: NhlContributors | null): boolean => {
     if (!league || contributorCommit.current === league) return false;
@@ -490,7 +495,7 @@ export default function NhlFrontOfficeBoard() {
   const doSign = (pid: string) => {
     if (!league) return;
     const lg: NhlLeague = JSON.parse(JSON.stringify(league));
-    if (nhlSign(lg.teams[myTeam], lg.freeAgents, pid, lg.cap)) {
+    if (nhlSign(lg.teams[myTeam], lg.freeAgents, pid, lg.cap, nhlRosterLimits(lg).max)) {
       /* Round 530: the signing lands in the feed as a slam. The man and the
          number are read off the roster he just joined, so the line can only
          say what the engine did. */
@@ -582,9 +587,10 @@ export default function NhlFrontOfficeBoard() {
         <div className="rounded-2xl border border-border bg-card p-4 text-center">
           <p className="font-display text-lg font-bold text-foreground">Take over an NHL front office</p>
           <p className="mt-1 text-xs text-muted-foreground">
-            Real 2026-27 rosters from the NHL&apos;s own data, rated off real 2025-26 stats. Work
-            under the hard cap, chase points in an 82-game-shaped season, then the divisional
-            bracket: sixteen teams, four best-of-7 rounds, one Cup. Saves automatically.
+            Every club&apos;s full 2026-27 roster, 22 or 23 real players, from the NHL&apos;s own data
+            as of {NHL_FO_FULL_READ}, rated off real 2025-26 stats. Work under the hard cap, chase
+            points in an 82-game-shaped season, then the divisional bracket: sixteen teams, four
+            best-of-7 rounds, one Cup. Saves automatically.
           </p>
         </div>
         <div className="grid grid-cols-2 gap-1.5 sm:grid-cols-4">
@@ -602,6 +608,8 @@ export default function NhlFrontOfficeBoard() {
 
   const room = nhlCapRoom(my, league.cap);
   const strength = Math.round(nhlStrength(my));
+  /* Round 830: this league's own floor and ceiling. */
+  const limits = nhlRosterLimits(league);
 
   /* ---------------- Round 180: the reload path after a firing ---------------- */
   if (phase === 'fired') {
@@ -762,7 +770,7 @@ export default function NhlFrontOfficeBoard() {
     capRoom: room,
     /* Round 631: the box offers only men the sign path would take. */
     ledger: my,
-    rosterMax: NHL_ROSTER_MAX,
+    rosterMax: limits.max,
     wins: my.wins,
     losses: my.losses,
     period: league.round,
@@ -783,8 +791,16 @@ export default function NhlFrontOfficeBoard() {
   /* Round 631: dead money on the cap line, only when there is any. */
   const dead = deadCapUsed(my);
   /* Round 631: at the engine's floor every Waive waits, at its ceiling every Sign does, and both say why. */
-  const cutBlock = cutRefusal(my, NHL_ROSTER_MIN);
-  const fullBlock = rosterFullRefusal(my, NHL_ROSTER_MAX);
+  const cutBlock = cutRefusal(my, limits.min);
+  const fullBlock = rosterFullRefusal(my, limits.max);
+  /* Round 830: 23 men read as one long list, so the roster box splits them
+     the way a hockey fan counts them. Every row is still on screen at once. */
+  const rosterGroups = [
+    { key: 'forwards', label: 'Forwards', players: my.players.filter(p => p.pos === 'C' || p.pos === 'W') },
+    { key: 'defense', label: 'Defense', players: my.players.filter(p => p.pos === 'D') },
+    { key: 'goalies', label: 'Goalies', players: my.players.filter(p => p.pos === 'G') },
+  ].filter(g => g.players.length > 0);
+  const anyPartial = my.players.some(p => p.partial);
   const panelTitle = tiles.find(x => (x.key === 'play' ? 'round' : x.key) === tab)?.title ?? '';
 
   return (
@@ -836,8 +852,12 @@ export default function NhlFrontOfficeBoard() {
           </p>
           <p className="mb-2 text-center text-[10px] text-muted-foreground">{capNote()}</p>
           {cutBlock && <p data-cut-block className="mb-2 text-center text-[10px] text-destructive">{cutBlock}</p>}
-          <div className="grid max-h-96 grid-cols-1 gap-1 overflow-y-auto sm:grid-cols-2">
-            {[...my.players].sort((a, b) => b.ovr - a.ovr).map(p => {
+          <div className="max-h-96 space-y-2 overflow-y-auto">
+            {rosterGroups.map(g => (
+            <div key={g.key} data-roster-group={g.key}>
+            <p className="mb-1 text-[10px] font-bold uppercase tracking-wider text-muted-foreground">{g.label} · {g.players.length}</p>
+            <div className="grid grid-cols-1 gap-1 sm:grid-cols-2">
+            {[...g.players].sort((a, b) => b.ovr - a.ovr).map(p => {
               /* Round 631: the cost is on screen before the second tap. */
               const cost = deadMoneyFor(p);
               const arming = cutArmed === p.id;
@@ -849,7 +869,7 @@ export default function NhlFrontOfficeBoard() {
                   <span className="block text-[10px] text-muted-foreground">{p.pos} · {p.age}y · ${p.salary}M x{p.years}</span>
                 </span>
                 <span className="ml-2 flex shrink-0 items-center gap-1.5">
-                  <b className="text-primary">{p.ovr}</b>
+                  <b className="text-primary">{p.ovr}{p.partial ? '*' : ''}</b>
                   <button
                     onClick={() => setCutArmed(arming ? null : p.id)}
                     disabled={!!cutBlock}
@@ -886,7 +906,16 @@ export default function NhlFrontOfficeBoard() {
               </div>
               );
             })}
+            </div>
+            </div>
+            ))}
           </div>
+          {anyPartial && (
+            <p data-partial-note className="mt-2 text-[10px] text-muted-foreground">
+              * Stand in rating. He had no full 2025-26 NHL season to rate him on (30 games for a skater, 15 for a
+              goalie), so he starts on 68 rather than a number we made up.
+            </p>
+          )}
           </>}
         </div>
       )}
