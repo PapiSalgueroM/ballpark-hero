@@ -1,5 +1,23 @@
 # Work board
 
+**2026-10-01, Codex799 CLAIMED: F1 constructor worked-example accuracy.**
+Actual rendered guide/saved page promises600 after the championship clue, but the
+unchanged game's fourth-clue first-guess result is400. Own only that worked-example
+sentence in src/data/gameContent/moreSports.ts, the obsolete unrendered McLaren8
+example value in src/pages/F1Constructor.tsx (data already correctly says10), new
+src/test/f1ConstructorGuideScore.test.tsx and scripts/simF1ConstructorGuideScore.mjs.
+Use the actual unchanged hook/scoring path and rendered shared guide to demonstrate
+the fourth-clue correct result and guide agreement, with effective copied wrong-score
+controls and independent earlier/later clue outcomes. Do not edit hooks, data, types,
+real championship facts beyond the verified Page value or Claude733/734 work.
+McLaren10 is verified Oct1 against Formula1's current team profile and FIA's Oct5,2025
+Singapore transcript; both URLs/research receipts belong in the round's documentation.
+Root alone owns the F1-constructor saved page and its derived ledger/sitemap row, plus
+the search generator's full derived output if the changed guide hash requires it.
+All other guides/pages/Claudelanes stay held. Exact types/build/affected native or
+real-hook outcome and final artifact fences required. Root owns Git/docs/build.
+797 Tycoon runner and798 MLB roster access continue independently. Next free800.
+
 **797 NHL harness normalization checkpoint ACCEPTED.**
 Only the two794 wrappers now separate raw Buffer equality checks from directly
 normalized UTF8 control text. The anchor scanner source is unchanged:481 parse checks,
