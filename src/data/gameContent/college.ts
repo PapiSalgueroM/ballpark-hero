@@ -853,6 +853,8 @@ export const COLLEGE_CONTENT: GameContentMap = {
         heading: "Playing two games in every round",
         items: [
           "Play 10 rounds of two games each, one league matchup and one cross-country test.",
+          "Round 10's league night is rivalry night, and every program plays its rival, even one from another league. Your rival is a school from your own state when one is free to pair with you, otherwise a pairing the game made, and the game tells you which. Duke and North Carolina, Kentucky and Louisville, and Purdue and Indiana are in-state games; UConn has no state on file here, so its rival is a pairing the game made.",
+          "The rivalry winner carries 0.5 to 1.5 points of extra strength into the conference tournament and March, the loser drops the same, and a margin of 25 or more swings the full 1.5.",
         ],
       },
       {
@@ -873,6 +875,12 @@ export const COLLEGE_CONTENT: GameContentMap = {
         heading: "Recruiting each spring from two boards",
         items: [
           "Recruit each spring from a 14-player high school board and a 7-player portal, then run it back.",
+          "The same offseason screen holds your two assistant coaches, one for the offense and one for the defense. Each moves his end of the floor by up to 3 rating points either way: 70 is neutral, 95 is the full plus 3, 45 the full minus 3, and an empty chair is covered by a grad assistant who counts as a 50.",
+          "In a game each side scores 1.5 more points for every point its offensive assistant's edge beats the other side's defensive assistant's.",
+          "Keep your assistants, let one go and get his pay back, or shop three candidates per chair, one rated below your program's level, one around it and one above it. A hire costs the difference between his pay and the pay of the man he replaces, and is refused if the pot cannot cover it.",
+          "An assistant rated 85 or better can be hired away as a head coach after any season, and his chair stays empty until you fill it.",
+          "Your NIL budget each spring comes from prestige plus wins, and rivalry night moves it: a win adds 3 to 8 points and a loss takes 3 to 8 away, with a margin of 25 or more swinging the full 8.",
+          "Your two assistants are paid first out of that budget, from 3 points a season for a 45 to 16 for a 95, and what is left is your NIL money. If the budget cannot cover them, the dearest walks until it can.",
         ],
       },
     ],
@@ -881,6 +889,7 @@ export const COLLEGE_CONTENT: GameContentMap = {
         heading: "Thirty two teams make the March field",
         items: [
           "The field is 32 teams: six tournament champions plus 26 at-larges, seeded 1 through 32 by record first, strength second.",
+          "The committee also reads strength of schedule, the average strength of every regular season opponent you actually played, and weighs it the same as the eye test, so on the same record and the same strength the tougher schedule ranks higher. The 26 at-large bids and the seeds come off that ranking, and the Schedule tab shows your number and where it ranks.",
         ],
       },
       {
@@ -907,6 +916,7 @@ export const COLLEGE_CONTENT: GameContentMap = {
         heading: "VCU sneaks into the conference tournament",
         paragraphs: [
           "You take VCU, prestige 79. The season is bumpy, but you sneak into the league's top four, win both tournament games, and grab the automatic bid.",
+          "Round 10's league night is rivalry night against Dayton, a pairing the game made since the board has no state on file for either school. You win it by 27, so VCU carries 1.5 extra points of strength into the league tournament and March, and the trail opens with 8 more budget points.",
         ],
       },
       {
