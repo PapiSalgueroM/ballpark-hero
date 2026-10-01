@@ -1337,7 +1337,8 @@ export function refillDeepRoster(t: GmTeamState, taken: Set<string>, rng: () => 
   const promoted: { team: string; player: string; pos: string }[] = [];
   for (const g of DEPTH_GROUPS) {
     let have = t.players.filter(p => p.pos === g).length;
-    while (have < DEEP_GROUP_TARGET[g]) {
+    /* a club already at 53 fills only what it needs to start */
+    while (have < DEEP_GROUP_TARGET[g] && (t.players.length < DEEP_ROSTER_MAX || have < STARTER_SLOTS[g])) {
       const up = (t.practice ?? []).filter(p => p.pos === g).sort((a, b) => b.ovr - a.ovr)[0];
       if (up) {
         t.practice = (t.practice ?? []).filter(p => p.id !== up.id);
@@ -1375,9 +1376,12 @@ export function cutDownToMax(t: GmTeamState): { team: string; player: string; po
   if (t.rosterDepth !== 2) return out;
   while (t.players.length > DEEP_ROSTER_MAX) {
     const starting = starterIds(t);
-    /* a guaranteed deal is a promise to the active roster, so it never goes down */
-    const down = t.players
-      .filter(p => !starting.has(p.id) && !p.guaranteed)
+    /* a guaranteed deal is a promise to the active roster, so it never goes
+       down; and a group carrying more than its share goes first, so the cut
+       never leaves one group thin to keep another deep */
+    const spare = t.players.filter(p => !starting.has(p.id) && !p.guaranteed);
+    const crowded = spare.filter(p => t.players.filter(q => q.pos === p.pos).length > DEEP_GROUP_TARGET[p.pos]);
+    const down = (crowded.length ? crowded : spare)
       .sort((a, b) => a.ovr - b.ovr || b.age - a.age || a.name.localeCompare(b.name))[0];
     if (!down) break;
     t.players = t.players.filter(p => p.id !== down.id);

@@ -49,7 +49,28 @@
         the old save never grows a bench: it is not topped up.
 
    MEASUREMENTS (2026-10-01, the bake of that day, the harness's own seeds):
-     filled in below each section's checks once measured.
+     Section 1: active rosters 50 to 54 a club (1638 men), practice squads 15
+     to 18 (526); 1684 of 1684 bench and practice squad men found on their
+     club, with their status, on the release's week 4; second source 28 of
+     30 settled by both sources, 28 of 28 agreeing with the bake, 2 split
+     (an elevated practice squad tight end, a fresh signing).
+     Section 4: 192 clubs, fit and with 3363 bench men hurt, 0 strength
+     differences; 1632 games replayed, 0 different.
+     Section 5, over four sets of forty seasons (NFL_FULL_SEED_BASE 5000,
+     100, 900, 3000): a backup in a starting unit in 22.0 to 23.4 percent of
+     club weeks; rank correlation of mean wins per club 0.959 to 0.972; mean
+     gap 0.29 to 0.42 wins a club; spread of wins inside a season 2.81 to
+     2.94 full against 2.83 to 2.90 fifteen man. Bands: share above 0.05
+     (the bench does play), correlation at least 0.90, gap at most 0.6.
+     Section 6: 50 seasons, 50 cuts with the rule's dead money, 49 signings
+     refused at 53, 50 tags, 1050 draftees all on their clubs; 4486 men
+     called up and 6570 depth men invented over 500 club offseasons, none of
+     them while a practice squad man at his position waited; 46 sent down in
+     the cut to 53; biggest practice squad 20; biggest save 297K (budget
+     700K); highest payroll 91.6 percent of the cap; real men still 62 to 65
+     percent of the active rosters after five seasons.
+     Section 7: 162 league states over three seeds and three seasons, 0
+     different from the engine at 1d2e5d96.
 
    CONTROLS, through NFL_FULL_CONTROL. Each rewrites a copy of the engine or
    the depth data in OS temp (src is never touched), refuses to run if its
@@ -220,6 +241,8 @@ for (const fn of ['initLeague', 'runOffseason', 'teamStrength', 'unitStarters', 
 }
 
 const SEEDS = [828, 20261001, 53, 4242, 9, 1337];
+/* NFL_FULL_SEED_BASE re-measures section 5 on another forty seasons on purpose */
+const SECTION5_BASE = Number(process.env.NFL_FULL_SEED_BASE || 5000);
 const GROUPS = engine.DEPTH_GROUPS;
 const deepLeague = seed => engine.initLeague(lcg(seed), { depth: data.FO_DEPTH });
 const plainLeague = seed => engine.initLeague(lcg(seed));
@@ -439,6 +462,293 @@ console.log('4) the bench moves no result');
   ok(4, 'every club is as strong as its fifteen man self, bench fit or hurt', strengthBad.length === 0, `${strengthBad.length}: ${strengthBad.slice(0, 3).join(' | ')}`);
   ok(4, 'a full club is exactly as strong as itself cut back to the men the chart starts', cutBackBad.length === 0, cutBackBad.slice(0, 3).join(' | '));
   ok(4, 'every game of a season scores the same with the bench as without it', gameBad.length === 0, `${gameBad.length} of ${games}: ${gameBad.slice(0, 2).join(' | ')}`);
+}
+
+/* The board's week: injuries, the CPU's signings, then the games. */
+const playWeek = (lg, myTeam, rng) => {
+  engine.injuryPass(lg.teams, rng);
+  engine.aiWeeklyMoves(lg, myTeam, rng);
+  for (const g of lg.schedule[lg.week - 1]) engine.simGame(g, lg.teams, rng);
+  lg.week += 1;
+};
+
+/* ======================================================================= 5 */
+console.log('5) what does move, measured');
+{
+  const N = 40;
+  let clubWeeks = 0, benchStarting = 0;
+  const winsDeep = {}, winsPlain = {};
+  const sd = a => { const m = a.reduce((s, x) => s + x, 0) / a.length; return Math.sqrt(a.reduce((s, x) => s + (x - m) ** 2, 0) / a.length); };
+  const spreadDeep = [], spreadPlain = [];
+  for (let i = 0; i < N; i += 1) {
+    const seed = SECTION5_BASE + i;
+    const deep = deepLeague(seed), plain = plainLeague(seed);
+    const benchIds = new Set(Object.values(deep.teams).flatMap(t => {
+      const starters = new Set(data.FO_TEAMS.find(x => x.abbr === t.abbr).players.map(p => p.name));
+      return t.players.filter(p => !starters.has(p.name)).map(p => p.id);
+    }));
+    const rd = lcg(seed * 3 + 1), rp = lcg(seed * 3 + 1);
+    for (let w = 0; w < engine.REGULAR_WEEKS; w += 1) {
+      playWeek(deep, 'KC', rd);
+      playWeek(plain, 'KC', rp);
+      for (const t of Object.values(deep.teams)) {
+        clubWeeks += 1;
+        if ([...engine.starterIds(t)].some(id => benchIds.has(id))) benchStarting += 1;
+      }
+    }
+    for (const t of Object.values(deep.teams)) (winsDeep[t.abbr] ||= []).push(t.wins);
+    for (const t of Object.values(plain.teams)) (winsPlain[t.abbr] ||= []).push(t.wins);
+    spreadDeep.push(sd(Object.values(deep.teams).map(t => t.wins)));
+    spreadPlain.push(sd(Object.values(plain.teams).map(t => t.wins)));
+  }
+  const mean = a => a.reduce((s, x) => s + x, 0) / a.length;
+  const clubs = Object.keys(winsDeep);
+  const md = clubs.map(c => mean(winsDeep[c])), mp = clubs.map(c => mean(winsPlain[c]));
+  const rank = a => { const idx = a.map((v, i) => [v, i]).sort((x, y) => x[0] - y[0]); const r = new Array(a.length); idx.forEach(([, i], k) => { r[i] = k; }); return r; };
+  const ra = rank(md), rb = rank(mp);
+  const n = clubs.length;
+  const rho = 1 - (6 * ra.reduce((s, v, i) => s + (v - rb[i]) ** 2, 0)) / (n * (n * n - 1));
+  const gap = mean(clubs.map((c, i) => Math.abs(md[i] - mp[i])));
+  const share = benchStarting / clubWeeks;
+  console.log(`   over ${N} seeded seasons: a backup started in ${benchStarting} of ${clubWeeks} club weeks (${(share * 100).toFixed(1)} percent)`);
+  console.log(`   mean wins per club, full league against fifteen man league: rank correlation ${rho.toFixed(3)}, mean gap ${gap.toFixed(2)} wins`);
+  console.log(`   spread of wins inside a season (sd): full ${mean(spreadDeep).toFixed(2)}, fifteen man ${mean(spreadPlain).toFixed(2)}`);
+  ok(5, 'a backup steps in for a hurt starter, so the bench does play some weeks', share > 0.05, `${(share * 100).toFixed(1)} percent`);
+  ok(5, 'the clubs finish in the same order in both leagues, near enough', rho >= 0.9, `rank correlation ${rho.toFixed(3)}`);
+  ok(5, 'no club\'s expected season moves by much', gap <= 0.6, `mean gap ${gap.toFixed(2)} wins`);
+}
+
+/* ======================================================================= 6 */
+console.log('6) ten franchises, five seasons each');
+const CLUBS = data.FO_TEAMS.map(t => t.abbr);
+{
+  /* the cut down, directly: three men too many, none of them starters */
+  {
+    const lg = deepLeague(SEEDS[0]);
+    const t = lg.teams.KC;
+    const rng = lcg(91);
+    for (let i = 0; i < 6; i += 1) {
+      t.players.push({ id: `extra-${i}`, name: `Extra Man ${i}`, pos: engine.DEPTH_GROUPS[i % 8], age: 22, ovr: 60 + Math.floor(rng() * 3), salary: 1, years: 4, out: 0, pot: 70 });
+    }
+    const before = t.players.length;
+    const startersBefore = engine.starterIds(t);
+    const psBefore = t.practice.length;
+    const countsBefore = Object.fromEntries(GROUPS.map(g => [g, t.players.filter(p => p.pos === g).length]));
+    const down = engine.cutDownToMax(t);
+    ok(6, 'the cut down leaves a full club at 53', t.players.length === engine.DEEP_ROSTER_MAX, `${before} to ${t.players.length}`);
+    ok(6, 'the cut down sends the extra men to the practice squad', t.practice.length === psBefore + (before - engine.DEEP_ROSTER_MAX) && down.length === before - engine.DEEP_ROSTER_MAX,
+      `practice ${psBefore} to ${t.practice.length}, ${down.length} sent`);
+    const sentIds = down.map(d => t.practice.find(p => p.name === d.player)?.id);
+    ok(6, 'the cut down never sends a starter', sentIds.every(id => id && !startersBefore.has(id)));
+    /* a crowded group gives men up before a thin one loses any */
+    const thinned = GROUPS.filter(g => countsBefore[g] <= engine.DEEP_GROUP_TARGET[g] && t.players.filter(p => p.pos === g).length < countsBefore[g]);
+    ok(6, 'the cut down takes from crowded groups and leaves thin ones alone', thinned.length === 0, thinned.join(', '));
+  }
+  /* the refill, directly: a short group calls up its practice squad man first */
+  {
+    const lg = deepLeague(SEEDS[1]);
+    /* a club with a quarterback on its practice squad, so the call up has somebody to call */
+    const t = Object.values(lg.teams).find(x => x.practice.some(p => p.pos === 'QB'));
+    ok(6, 'the fixture has a club with a quarterback on its practice squad', !!t);
+    if (t) {
+      const qbs = t.players.filter(p => p.pos === 'QB');
+      t.players = t.players.filter(p => p.pos !== 'QB' || p === qbs[0]);
+      const psQb = t.practice.filter(p => p.pos === 'QB').length;
+      const promoted = engine.refillDeepRoster(t, new Set(), lcg(5));
+      const qbNow = t.players.filter(p => p.pos === 'QB').length;
+      const called = promoted.filter(p => p.pos === 'QB').length;
+      ok(6, 'a short group is refilled to its target', qbNow === engine.DEEP_GROUP_TARGET.QB, `${t.abbr}: ${qbNow} quarterbacks`);
+      ok(6, 'the refill calls up the practice squad before inventing anybody',
+        called >= 1 && called === Math.min(psQb, engine.DEEP_GROUP_TARGET.QB - 1), `${t.abbr}: ${psQb} on the squad, ${called} called up`);
+    }
+  }
+
+  const stats = { seasons: 0, cuts: 0, deadOk: 0, signs: 0, fullRefused: 0, tags: 0, drafted: 0, cutDowns: 0, promoted: 0, invented: 0, maxSave: 0, maxPs: 0, maxCapShare: 0, realLeft: [] };
+  const bad = { size: [], groups: [], dead: [], tagPool: [], drafted: [], invent: [], ids: [], cap: [], full: [] };
+  for (let f = 0; f < 10; f += 1) {
+    const seed = 8280 + f;
+    const rng = lcg(seed);
+    const my = CLUBS[(f * 7) % CLUBS.length];
+    const lg = deepLeague(seed);
+    for (const t of Object.values(lg.teams)) {
+      if (engine.capUsed(t) > lg.cap) bad.cap.push(`${seed} ${t.abbr} opens at ${engine.capUsed(t)} of ${lg.cap}`);
+    }
+    for (let s = 0; s < 5; s += 1) {
+      stats.seasons += 1;
+      const me = () => lg.teams[my];
+      for (let w = 0; w < engine.REGULAR_WEEKS; w += 1) {
+        playWeek(lg, my, rng);
+        if (w === 4) {
+          /* a cut: his lowest rated bench man */
+          const starting = engine.starterIds(me());
+          const man = [...me().players].filter(p => !starting.has(p.id)).sort((a, b) => a.ovr - b.ovr)[0];
+          if (man) {
+            const want = cuts.deadMoneyFor(man);
+            const deadBefore = cuts.deadCapUsed(me());
+            if (engine.releasePlayer(me(), lg.freeAgents, man.id)) {
+              stats.cuts += 1;
+              const got = Math.round((cuts.deadCapUsed(me()) - deadBefore) * 10) / 10;
+              if (Math.abs(got - want.now) < 1e-9) stats.deadOk += 1;
+              else bad.dead.push(`${seed} ${man.name}: ${got} on the cap, the rule says ${want.now}`);
+            }
+          }
+          /* fill to 53 off the practice squad, then a signing must be refused */
+          while (me().players.length < engine.DEEP_ROSTER_MAX && me().practice.length) engine.promoteFromPractice(me(), me().practice[0].id);
+          const fa = [...lg.freeAgents].filter(p => !cuts.signRefusal(me(), p.id)).sort((a, b) => b.ovr - a.ovr)[0];
+          if (me().players.length >= engine.DEEP_ROSTER_MAX && fa) {
+            if (!engine.signPlayer(me(), lg.freeAgents, fa.id, lg.cap) && engine.deepRosterRefusal(me())) stats.fullRefused += 1;
+            else bad.full.push(`${seed} signed a man at ${me().players.length}`);
+          }
+          /* then make room the honest way and sign him */
+          const starting2 = engine.starterIds(me());
+          const spare = [...me().players].filter(p => !starting2.has(p.id)).sort((a, b) => a.ovr - b.ovr)[0];
+          if (fa && spare && engine.releasePlayer(me(), lg.freeAgents, spare.id) && engine.signPlayer(me(), lg.freeAgents, fa.id, lg.cap)) stats.signs += 1;
+        }
+      }
+      engine.runPlayoffs(lg.teams, rng);
+      /* the draft, the board's way: three picks for the GM, six for the league between each */
+      const cls = engine.generateDraftClass(rng, 40, new Set(Object.values(lg.teams).flatMap(t => [...t.players, ...t.practice].map(p => p.name))));
+      const order = engine.draftOrder(lg.teams).filter(a => a !== my);
+      const draftedIds = [];
+      let pool = cls;
+      for (let pick = 0; pick < 3; pick += 1) {
+        const pr = pool[0];
+        const pl = engine.prospectToPlayer(pr, rng);
+        me().players.push(pl);
+        draftedIds.push([my, pl.id]);
+        const rest = pool.slice(1);
+        const ai = rest.slice(0, 6);
+        ai.forEach((x, i) => { const p = engine.prospectToPlayer(x, rng); lg.teams[order[i % order.length]].players.push(p); draftedIds.push([order[i % order.length], p.id]); });
+        pool = rest.slice(6);
+        if (pick === 1) {
+          const tagMe = engine.expiringPlayers(me()).find(p => !engine.tagRefusal(lg, me(), p.id));
+          if (tagMe && engine.applyFranchiseTag(lg, me(), tagMe.id).ok) stats.tags += 1;
+        }
+      }
+      stats.drafted += draftedIds.length;
+      const idsBefore = new Set([...Object.values(lg.teams).flatMap(t => [...t.players, ...t.practice]), ...lg.freeAgents].map(p => p.id));
+      const tagged = me().players.find(p => p.tagSeason === lg.season + 1);
+      const news = engine.runOffseason(lg, rng, my);
+      stats.cutDowns += news.cutDown.length;
+      stats.promoted += news.promoted.length;
+      /* every club at or under 53, every group able to start */
+      for (const t of Object.values(lg.teams)) {
+        if (t.players.length > engine.DEEP_ROSTER_MAX) bad.size.push(`${seed} season ${s} ${t.abbr} ${t.players.length}`);
+        stats.maxPs = Math.max(stats.maxPs, t.practice.length);
+        stats.maxCapShare = Math.max(stats.maxCapShare, engine.capUsed(t) / lg.cap);
+        if (engine.capUsed(t) > lg.cap) bad.cap.push(`${seed} season ${s} ${t.abbr} ${engine.capUsed(t)} of ${lg.cap}`);
+        /* a man the refill invented is new this offseason; his club had nobody at his position left on the squad */
+        /* the men the cut to 53 sent down came after the refill, so they do not count */
+        const sentDown = new Set(news.cutDown.filter(d => d.team === t.abbr).map(d => d.player));
+        for (const p of t.players) {
+          if (idsBefore.has(p.id)) continue;
+          stats.invented += 1;
+          const waiting = t.practice.filter(q => q.pos === p.pos && !sentDown.has(q.name));
+          if (waiting.length) bad.invent.push(`${seed} ${t.abbr} invented a ${p.pos} with ${waiting.length} on the squad`);
+        }
+      }
+      bad.groups.push(...fieldsStarters(lg, `${seed} season ${s}`));
+      if (tagged && lg.freeAgents.some(p => p.id === tagged.id)) bad.tagPool.push(`${seed} ${tagged.name}`);
+      for (const [abbr, id] of draftedIds) {
+        const t = lg.teams[abbr];
+        if (!t.players.some(p => p.id === id) && !t.practice.some(p => p.id === id)) bad.drafted.push(`${seed} ${abbr} ${id}`);
+      }
+      const ids = [...Object.values(lg.teams).flatMap(t => [...t.players, ...t.practice]), ...lg.freeAgents].map(p => p.id);
+      if (new Set(ids).size !== ids.length) bad.ids.push(`${seed} season ${s}: ${ids.length - new Set(ids).size} repeated ids`);
+      stats.maxSave = Math.max(stats.maxSave, JSON.stringify({ league: lg, myTeam: my }).length);
+    }
+    const realNames = new Set([...data.FO_TEAMS.flatMap(t => t.players), ...Object.values(data.FO_DEPTH).flatMap(d => [...d.bench, ...d.practice])].map(p => p.name));
+    const onRosters = Object.values(lg.teams).flatMap(t => t.players);
+    stats.realLeft.push(onRosters.filter(p => realNames.has(p.name)).length / onRosters.length);
+  }
+  console.log(`   ${stats.seasons} seasons: ${stats.cuts} cuts (${stats.deadOk} with the rule's dead money), ${stats.fullRefused} signings refused at 53, ${stats.signs} signings after making room, ${stats.tags} tags, ${stats.drafted} draftees`);
+  console.log(`   offseasons: ${stats.promoted} called up off the practice squad, ${stats.invented} depth men invented, ${stats.cutDowns} sent down in the cut to 53; biggest practice squad ${stats.maxPs}; biggest save ${(stats.maxSave / 1024).toFixed(0)}K; highest payroll ${(stats.maxCapShare * 100).toFixed(1)} percent of the cap`);
+  console.log(`   real men still on the active rosters after five seasons: ${stats.realLeft.map(x => (x * 100).toFixed(0)).join(", ")} percent by franchise`);
+  ok(6, 'every club is at or under 53 after every offseason', bad.size.length === 0, bad.size.slice(0, 3).join(', '));
+  ok(6, 'every club fields every group\'s starters after every offseason', bad.groups.length === 0, bad.groups.slice(0, 3).join(', '));
+  ok(6, 'every cut costs the dead money the cuts module says', bad.dead.length === 0 && stats.cuts >= 40, `${stats.cuts} cuts; ${bad.dead.slice(0, 2).join(' | ')}`);
+  ok(6, 'a full roster refuses a signing at 53', bad.full.length === 0 && stats.fullRefused >= 40, `${stats.fullRefused} refusals; ${bad.full.slice(0, 2).join(' | ')}`);
+  ok(6, 'a tagged man never reaches the pool', bad.tagPool.length === 0 && stats.tags >= 10, `${stats.tags} tags; ${bad.tagPool.slice(0, 2).join(', ')}`);
+  ok(6, 'every drafted man is on his club after the offseason', bad.drafted.length === 0, `${bad.drafted.length} of ${stats.drafted}: ${bad.drafted.slice(0, 2).join(', ')}`);
+  ok(6, 'the refill calls up the practice squad before it invents anybody', bad.invent.length === 0, bad.invent.slice(0, 3).join(' | '));
+  ok(6, 'ids stay unique across rosters, squads and the pool', bad.ids.length === 0, bad.ids.slice(0, 2).join(' | '));
+  ok(6, 'every club fits under the cap, at the start and after every offseason', bad.cap.length === 0, bad.cap.slice(0, 3).join(' | '));
+  ok(6, 'the save stays inside its budget', stats.maxSave <= 700 * 1024, `${(stats.maxSave / 1024).toFixed(0)}K`);
+}
+
+/* ======================================================================= 7 */
+console.log('7) an old save loads and plays as it did');
+{
+  /* the engine as it stood before this round, from git */
+  let ready = false;
+  try {
+    const dir = path.join(BUNDLE_DIR, 'base');
+    fs.mkdirSync(dir, { recursive: true });
+    for (const f of ['frontOffice.ts', 'foNames.ts', 'leagueCaps.ts', 'entityIds.ts', 'frontOfficeCuts.ts']) {
+      const text = execSync(`git show ${BASE}:src/lib/${f}`, { cwd: ROOT, encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] });
+      fs.writeFileSync(path.join(dir, f), text);
+    }
+    base = await bundle(`export * from ${JSON.stringify(fwd(path.join(dir, 'frontOffice.ts')))};`, 'base');
+    ready = typeof base.initLeague === 'function';
+  } catch (e) {
+    console.log(`   the engine at ${BASE} could not be read from git: ${String(e && e.message ? e.message : e).slice(0, 160)}`);
+  }
+  ok(7, `the engine as it stood before this round (${BASE}) can be read from git`, ready);
+  if (ready) {
+    /* ids carry a per page load stamp, so two bundles mint different strings
+       for the same man; each id is renamed by its first appearance */
+    const canon = lg => {
+      const ids = new Map();
+      const walk = o => {
+        if (Array.isArray(o)) o.forEach(walk);
+        else if (o && typeof o === 'object') {
+          if (typeof o.id === 'string' && !ids.has(o.id)) ids.set(o.id, `#${ids.size}`);
+          Object.values(o).forEach(walk);
+        }
+      };
+      walk(lg);
+      return JSON.stringify(lg, (k, v) => (typeof v === 'string' && ids.has(v) ? ids.get(v) : v));
+    };
+    let states = 0;
+    const diverged = [];
+    for (const seed of SEEDS.slice(0, 3)) {
+      const play = (eng) => {
+        const lg = eng.initLeague(lcg(seed));
+        const rng = lcg(seed + 17);
+        const snaps = [];
+        for (let s = 0; s < 3; s += 1) {
+          for (let w = 0; w < eng.REGULAR_WEEKS; w += 1) {
+            eng.injuryPass(lg.teams, rng);
+            eng.aiWeeklyMoves(lg, 'DAL', rng);
+            for (const g of lg.schedule[lg.week - 1]) eng.simGame(g, lg.teams, rng);
+            lg.week += 1;
+            snaps.push(canon(lg));
+          }
+          eng.runPlayoffs(lg.teams, rng);
+          const cls = eng.generateDraftClass(rng, 40, new Set());
+          let i = 0;
+          for (const abbr of eng.draftOrder(lg.teams)) lg.teams[abbr].players.push(eng.prospectToPlayer(cls[i++ % cls.length], rng));
+          eng.runOffseason(lg, rng, 'DAL');
+          snaps.push(canon(lg));
+        }
+        return { lg, snaps };
+      };
+      const now = play(engine), then = play(base);
+      for (let i = 0; i < Math.max(now.snaps.length, then.snaps.length); i += 1) {
+        states += 1;
+        if (now.snaps[i] !== then.snaps[i]) { diverged.push(`seed ${seed} state ${i}`); break; }
+      }
+      /* the old save loads: a JSON round trip and the id repair change nothing */
+      const saved = JSON.parse(JSON.stringify(now.lg));
+      const repaired = engine.ensureFoLeagueIds(saved);
+      ok(7, `seed ${seed}: a fifteen man save reloads with nothing to repair`, repaired === 0 && JSON.stringify(saved) === JSON.stringify(now.lg), `${repaired} ids repaired`);
+      const grew = Object.values(now.lg.teams).filter(t => t.rosterDepth || t.practice || t.players.length > 25);
+      ok(7, `seed ${seed}: the old save is never topped up to a full roster`, grew.length === 0 && !now.lg.rosterDepth,
+        grew.slice(0, 3).map(t => `${t.abbr} ${t.players.length}`).join(', '));
+    }
+    console.log(`   ${states} league states compared over three seeds and three seasons each`);
+    ok(7, 'a fifteen man league plays exactly as it did before this round', diverged.length === 0, diverged.join(', '));
+  }
 }
 
 /* ------------------------------------------------------------------ verdict */
