@@ -28,6 +28,117 @@ const cacheKeyOf = (p: string, row: string, col: string) =>
 const attrNorm = (t: string) => t.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").trim();
 const attrKeyOf = (player: string, attribute: string) => `attr|${attrNorm(player)}|${attrNorm(attribute)}`;
 
+/* ROUND 703: A STORED "NO" NEVER OUTRANKS OUR OWN RECORDS.
+   The same fix as nba-connect4-validate, for the same reason: the cache keeps
+   every verdict forever and a wrong "never played for" in it was final. The
+   2026-09-19 audit found Isaac TeSlaa refused for the Lions while
+   nfl_grid_players has him at DET in 2025, the table the NFL Grid reads.
+   So a team attribute is checked against that table BEFORE any stored refusal
+   is believed. CONFIRM ONLY: a hit proves the half, a miss proves nothing (the
+   table starts in 1970) and falls through to the cache and the model exactly
+   as before.
+   The codes are nflverse franchise codes, already folded across moves (the
+   Oilers are TEN, the Oakland and LA Raiders are LV, the St. Louis Rams are
+   LA), so each label needs one code. The Browns stay in Cleveland and the
+   Ravens start in 1996, which is what the prompt below says too.
+   The lookup reads the plain name column, not display_name and not the indexed
+   name_norm: 1,584 rows share a name with another player, and both of those
+   columns carry the years that tell namesakes apart ("mike williams 1989
+   1995"), so an equality on either would hide every one of them. The imatch
+   prefilter over name is the price of seeing them. */
+const RECORDS_TABLE = "nfl_grid_players";
+const RECORDS_NAME = "name";
+const RECORDS_TEAMS = "teams";
+const TEAM_CODES: Record<string, string[]> = {
+  "49ers": ["SF"],
+  "bears": ["CHI"],
+  "bengals": ["CIN"],
+  "bills": ["BUF"],
+  "broncos": ["DEN"],
+  "browns": ["CLE"],
+  "buccaneers": ["TB"],
+  "cardinals": ["ARI"],
+  "chargers": ["LAC"],
+  "chiefs": ["KC"],
+  "colts": ["IND"],
+  "commanders": ["WAS"],
+  "cowboys": ["DAL"],
+  "dolphins": ["MIA"],
+  "eagles": ["PHI"],
+  "falcons": ["ATL"],
+  "giants": ["NYG"],
+  "jaguars": ["JAX"],
+  "jets": ["NYJ"],
+  "lions": ["DET"],
+  "packers": ["GB"],
+  "panthers": ["CAR"],
+  "patriots": ["NE"],
+  "raiders": ["LV"],
+  "rams": ["LA"],
+  "ravens": ["BAL"],
+  "saints": ["NO"],
+  "seahawks": ["SEA"],
+  "steelers": ["PIT"],
+  "texans": ["HOU"],
+  "titans": ["TEN"],
+  "vikings": ["MIN"],
+};
+
+/* The same fold the other validators use (Round 486 and Round 498): lowercase,
+   unaccented, punctuation flattened. Letters with no canonical decomposition
+   are transliterated first, or "Ömer Aşık" can never be reached. */
+const TRANSLIT: Record<string, string> = {
+  "ı": "i", "ß": "ss", "ø": "o", "ł": "l", "đ": "d", "æ": "ae", "œ": "oe", "þ": "th", "ð": "d",
+};
+const foldName = (s: string) =>
+  (s || "").toLowerCase().replace(/[ıßøłđæœþð]/g, (c) => TRANSLIT[c] ?? c)
+    .normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[^a-z0-9 ]+/g, " ")
+    .replace(/\s+/g, " ").trim();
+
+/* This table has no folded name column, so "Nikola Jokic" would never reach
+   "Nikola Jokić" by an equality. The prefilter lets every letter carry any
+   accent and lets a space be any run of spaces, dots, hyphens or apostrophes.
+   It is ONLY a prefilter: a row it returns counts only when its stored name
+   folds to exactly the typed one. */
+const LETTER_VARIANTS: Record<string, string> = {
+  a: "aáàâäãåāăą", c: "cçćč", d: "dďđ", e: "eéèêëēėęě", g: "gğģ", i: "iíìîïīįı",
+  k: "kķ", l: "lĺļľł", n: "nñńņň", o: "oóòôöõøōő", r: "rŕř", s: "sśşšș",
+  t: "tţťț", u: "uúùûüūůűų", y: "yýÿ", z: "zźżž",
+};
+const namePattern = (folded: string) =>
+  "^[ .'’-]*" + [...folded].map((ch) => {
+    if (ch === " ") return "[ .'’-]+";
+    const v = LETTER_VARIANTS[ch];
+    return v ? `[${v}${v.toUpperCase()}]` : ch;
+  }).join("") + "[ .'’-]*$";
+
+/* Returns the stored name when our table PROVES the player played for the
+   franchise the attribute names, and null in every other case including every
+   error. Null means "ask the cache and the model", never "no". */
+async function confirmTeamAttribute(playerName: string, attribute: string): Promise<string | null> {
+  const want = TEAM_CODES[attrNorm(attribute)];
+  if (!want) return null;
+  const folded = foldName(playerName);
+  if (!folded) return null;
+  try {
+    const { data } = await sb.from(RECORDS_TABLE).select(`${RECORDS_NAME}, ${RECORDS_TEAMS}`)
+      .filter(RECORDS_NAME, "imatch", namePattern(folded)).limit(50);
+    /* A full page may not be every row, and "every row" is the whole rule. */
+    if ((data ?? []).length >= 50) return null;
+    const rows = ((data ?? []) as Record<string, unknown>[])
+      .filter((r) => foldName(String(r[RECORDS_NAME] ?? "")) === folded);
+    if (rows.length === 0) return null;
+    /* One name can be two people. Only when EVERY row the name reaches carries
+       the franchise is the answer a yes whoever was meant. */
+    const played = (r: Record<string, unknown>) => {
+      const raw = r[RECORDS_TEAMS];
+      const codes = Array.isArray(raw) ? raw.map(String) : String(raw ?? "").split(",");
+      return codes.some((c) => want.includes(c.trim().toUpperCase()));
+    };
+    return rows.every(played) ? String(rows[0][RECORDS_NAME]) : null;
+  } catch { return null; }
+}
+
 const allowedOrigins = [
   "https://douknowball.com",
   "https://www.douknowball.com",
@@ -107,40 +218,90 @@ serve(async (req) => {
     }
 
     const cacheKey = cacheKeyOf(playerName, rowAttribute, columnAttribute);
+    const rowKey = attrKeyOf(playerName, rowAttribute);
+    const colKey = attrKeyOf(playerName, columnAttribute);
+
+    /* The pair verdict is still read first. A stored YES answers at once, as it
+       always did. A stored NO is HELD rather than returned (Round 703): our own
+       records get their say before it is believed. */
+    let pairRefusal: Record<string, unknown> | null = null;
     try {
       const { data: hit } = await sb.from("ai_validation_cache").select("verdict")
         .eq("game", CACHE_GAME).eq("cache_key", cacheKey).maybeSingle();
       if (hit?.verdict) {
-        return new Response(JSON.stringify({ ...(hit.verdict as Record<string, unknown>), cached: true }), {
-          headers: { ...corsHeaders, "Content-Type": "application/json" },
-        });
+        const stored = hit.verdict as Record<string, unknown>;
+        if (stored.valid === true) {
+          return new Response(JSON.stringify({ ...stored, cached: true }), {
+            headers: { ...corsHeaders, "Content-Type": "application/json" },
+          });
+        }
+        pairRefusal = stored;
       }
     } catch { /* cache down -> fall through to AI */ }
 
-    const rowKey = attrKeyOf(playerName, rowAttribute);
-    const colKey = attrKeyOf(playerName, columnAttribute);
-    /* Then the two single attribute facts. If BOTH are known this answers with
-       no AI call at all, which is the whole point. */
+    /* Then the two single attribute facts. If BOTH halves end up known this
+       answers with no AI call at all, which is the whole point. */
+    let rowKnown: boolean | null = null;
+    let colKnown: boolean | null = null;
+    let knownFullName = playerName;
     try {
       const { data: facts } = await sb.from("ai_validation_cache").select("cache_key, verdict")
         .eq("game", CACHE_GAME).in("cache_key", [rowKey, colKey]);
       const byKey = new Map((facts ?? []).map((f: { cache_key: string; verdict: unknown }) => [f.cache_key, f.verdict as Record<string, unknown>]));
       const rowFact = byKey.get(rowKey);
       const colFact = byKey.get(colKey);
-      if (rowFact && colFact) {
-        const rowOk = rowFact.match === true;
-        const colOk = colFact.match === true;
-        return new Response(JSON.stringify({
-          valid: rowOk && colOk,
-          reason: {
-            [rowAttribute]: rowOk ? "Verified previously." : "This player does not match this attribute.",
-            [columnAttribute]: colOk ? "Verified previously." : "This player does not match this attribute.",
-          },
-          fullName: (rowFact.fullName as string) || (colFact.fullName as string) || playerName,
-          cached: true,
-        }), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
-      }
+      if (rowFact) rowKnown = rowFact.match === true;
+      if (colFact) colKnown = colFact.match === true;
+      knownFullName = (rowFact?.fullName as string) || (colFact?.fullName as string) || playerName;
     } catch { /* cache down -> fall through to AI */ }
+
+    /* ROUND 703: our records, before any stored "no" is believed. A half the
+       facts already call a yes needs no check, unless a stored pair refusal is
+       waiting, because that refusal may rest on exactly the half a record
+       overturns. */
+    const recheck = (known: boolean | null) => pairRefusal !== null || known !== true;
+    const rowProved = recheck(rowKnown) ? await confirmTeamAttribute(playerName, rowAttribute) : null;
+    const colProved = recheck(colKnown) ? await confirmTeamAttribute(playerName, columnAttribute) : null;
+    if (pairRefusal && !rowProved && !colProved) {
+      /* A refusal our records do not touch is kept, exactly as before. */
+      return new Response(JSON.stringify({ ...pairRefusal, cached: true }), {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+    const determined: Array<{ game: string; cache_key: string; verdict: unknown }> = [];
+    if (rowProved) {
+      if (rowKnown !== true) determined.push({ game: CACHE_GAME, cache_key: rowKey, verdict: { match: true, fullName: rowProved } });
+      rowKnown = true;
+      knownFullName = rowProved;
+    }
+    if (colProved) {
+      if (colKnown !== true) determined.push({ game: CACHE_GAME, cache_key: colKey, verdict: { match: true, fullName: colProved } });
+      colKnown = true;
+      knownFullName = colProved;
+    }
+    if (pairRefusal) {
+      /* The refusal can now only stand on a half the records did not overturn.
+         Its own per-half answers fill whatever the facts do not know. */
+      if (rowKnown === null && typeof pairRefusal.matchesRow === "boolean") rowKnown = pairRefusal.matchesRow;
+      if (colKnown === null && typeof pairRefusal.matchesColumn === "boolean") colKnown = pairRefusal.matchesColumn;
+    }
+    if (determined.length > 0) {
+      try { await sb.from("ai_validation_cache").upsert(determined); } catch { /* non-fatal */ }
+    }
+    if (rowKnown !== null && colKnown !== null) {
+      const fromRecords = rowProved !== null || colProved !== null;
+      const halfReason = (proved: string | null, known: boolean) =>
+        proved ? "Verified from our own records." : known ? "Verified previously." : "This player does not match this attribute.";
+      return new Response(JSON.stringify({
+        valid: rowKnown && colKnown,
+        reason: {
+          [rowAttribute]: halfReason(rowProved, rowKnown),
+          [columnAttribute]: halfReason(colProved, colKnown),
+        },
+        fullName: knownFullName,
+        ...(fromRecords ? { source: "records" } : { cached: true }),
+      }), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
+    }
 
     const AI_KEY = __GEMINI_KEY || Deno.env.get("LOVABLE_API_KEY");
     if (!AI_KEY) throw new Error("No AI key configured");
@@ -258,6 +419,26 @@ times over.`,
       aiVerdict = true;
     } catch {
       parsed = { valid: false, unverified: true, reason: "Couldn't verify your answer right now, please try again." };
+    }
+
+    /* ROUND 703: the model never outvotes our records on a half they proved. */
+    if (aiVerdict && (rowProved || colProved) && parsed && typeof parsed === "object") {
+      const rec = parsed as Record<string, unknown>;
+      if (rowProved) rec.matchesRow = true;
+      if (colProved) rec.matchesColumn = true;
+      if (typeof rec.matchesRow === "boolean" && typeof rec.matchesColumn === "boolean") {
+        rec.valid = rec.matchesRow && rec.matchesColumn;
+        rec.reason = {
+          [rowAttribute]: rowProved ? "Verified from our own records." : rec.matchesRow ? "Verified." : "This player does not match this attribute.",
+          [columnAttribute]: colProved ? "Verified from our own records." : rec.matchesColumn ? "Verified." : "This player does not match this attribute.",
+        };
+      } else if (rec.valid !== true) {
+        /* A bare "no" that never says which half it meant cannot be read
+           against a half our records proved. Fail closed: unverified, and
+           nothing is cached. */
+        aiVerdict = false;
+        parsed = { valid: false, unverified: true, reason: "Couldn't verify your answer right now, please try again." };
+      }
     }
 
     // cache VERIFIED verdicts only, never the fail-open fallbacks
