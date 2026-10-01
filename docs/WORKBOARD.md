@@ -1,5 +1,24 @@
 # Work board
 
+**2026-10-01, Codex Round 779 CLAIMED: Budget Builder signing decisions (H,93,96,97).**
+Own only `src/components/budget-builder/BudgetBuilderBoard.tsx`, scoped CSS if needed, new
+actual-board tests and a sim wrapper. Preview the chosen original candidate's existing cost,
+replaced-player refund, exact post-signing remaining budget, filled count, projected XI rating
+and clearly labeled current condition status. Native Confirm signing submits the exact original
+Player once; selecting/previewing/canceling spends nothing. Preserve the shortlist on a refused/
+no-op callback, close/cue only after committed slot truth. Make search/Close labeled,44px and
+fit phones; return Close/Escape/sign/release focus to the exact opener or stable labeled slot.
+Keep the hook's top60 eligible-match bound truthful; no fake all-pool claim. Verify real-hook
+replacement/budget boundaries, unchanged completed XI/score/share, no-op and finite/static
+feedback with controls and four-width/two-motion native proof. No hook/data/scoring/criterion,
+parent/page, route/catalog/global-style changes. Root owns docs/git/build. Next free number:780.
+
+**777 compatibility scope addendum, root owned:** adapt only `scripts/simArcadePause.mjs`
+FreeKickBoard copied controls to resolve its new `./FreeKickPractice.module.css` import to the
+original module via @ alias. Assert exactly one live import before replacement. Keep all16
+existing outcome assertions, eight negative mutations and baselines unchanged; rerun the
+complete old positive/control gate. No import failure earns control credit.
+
 **2026-09-30, Codex Round 778 CLAIMED: steady-input Buzzer Beater practice (D51).**
 Root owns only `src/components/buzzer-beater/BuzzerBeaterBoard.tsx`, scoped CSS if needed,
 new actual-board tests and a sim wrapper. Add clearly unrecorded practice with a native fixed
