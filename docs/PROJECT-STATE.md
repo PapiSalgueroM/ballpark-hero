@@ -1,5 +1,13 @@
 # Project state
 
+## IN PROGRESS 2026-10-01: MLB trade desk roster access claimed
+
+798 removes three UI-only top-eight barriers from the existing MLB Trade Finder and
+manual trade desk, with explicit remaining-player access and bounded readable lists.
+Original helpers, saves, money and booking remain unchanged. Exact files and real
+outcome/negative/native acceptance are on WORKBOARD.797 integration and final combined
+production checks continue independently. Claude reservations hold. Next free799.
+
 ## IN PROGRESS 2026-10-01: catalog and release integration repairs claimed
 
 797 addresses four Aussie Rules catalog/resume/name-guard omissions exposed by the frozen
