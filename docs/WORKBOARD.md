@@ -1,5 +1,22 @@
 # Work board
 
+**2026-09-30, Codex Rounds 764 and 765 CLAIMED: flagship training and lineup targeting.**
+764 owns only `src/components/soccer-career/TrainingPanel.tsx`, new scoped TrainingFeedback CSS,
+focused rendered tests and a sim wrapper. Add finite cues to existing settled penalty/keeper
+outcomes, exact final legacy-drill score/tier and bank acknowledgment. Preserve every handler,
+random draw, timer, score formula, tier threshold, availability and callback. Keep controls and
+zone/player nodes stable, avoid replay on same-state career updates, respect reduced motion and
+measure the 320px dialog. No SoccerCareer parent, engine, DrillBoard or new drill changes.
+765 owns only `src/components/perfect-lineup/GenericLineupBoard.tsx`, focused rendered tests and
+a sim wrapper. Use existing config dimension labels/values for combined picker filters on NBA,
+NHL and F1; show truthful shown/matching/eligible counts, reset and explicit Load more beyond the
+current forty-result cap. Preserve eligibility, slot constraints, duplicate exclusion, option
+order, chosen identity, chemistry, scoring, RNG and saves. Filters must not write or redraw a
+lineup. Verify more than forty generated fixtures, hidden constrained/ineligible choices, a
+reachable later option, keyboard focus and 44px phone controls. Configs, pools and engine stay
+read-only. Both claims are independent of Claude's held validator/data/release lanes. Root alone
+owns docs and commits. Next free round is **766**.
+
 **2026-09-30, Codex Rounds 760 through 763 COMPLETE: four more game improvements.**
 Source checkpoint `64d7cdc6` carries 760 territory inspection, 761 public-score challenge links and
 763 committed draft pick feedback. 762 adds 44px Pause/Resume to Free Kick and Buzzer Beater,

@@ -1,5 +1,14 @@
 # Project state
 
+## IN PROGRESS 2026-09-30: Codex 764 and 765, next gameplay batch
+
+Four completed rounds 760 through 763 are pushed on main through `d8943be7`, ready for Claude's
+next release. Final 761 browser rerun passed all eight cases against the finished 763 artifact;
+its coverage audit finds all 128 registered challenge paths mounting the receiving common navbar.
+Bespoke result surfaces still keep broad D121 partial. Root continues with claimed 764 Soccer
+Career training feedback and 765 NBA/NHL/F1 Perfect Lineup picker targeting. Ownership and
+acceptance are recorded on WORKBOARD before source edits. No publication claim for this batch.
+
 ## BUILT 2026-09-30: Codex rounds 760 through 763 complete, ready for Claude's next publish
 
 760: persistent territory inspection across all five Conquest maps. 761: public-score challenge
