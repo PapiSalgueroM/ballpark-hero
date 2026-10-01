@@ -1,5 +1,21 @@
 # Project state
 
+## CLAIMED 2026-10-01: clue copy, NASCAR feedback and reveal timers
+
+811 owns only Constructor, Tennis and Nation Boards' inaccurate hint copy plus
+focused checks. 812 owns NASCAR Board/local feedback CSS and checks for committed
+answer animations, readable results and accurate hint points. 813 owns the eight
+remaining Higher/Lower hooks and focused checks, reproducing the MLB-style stale
+reveal defect per hook before applying its small cancellation fix. Exact scopes
+and preserved behaviors are on WORKBOARD. 807/809/810 finish their frozen App
+checks. All Claude reservations stand. Next free 814.
+
+At 15:52 UTC the live site still serves the earlier index-jsexOB8y.js release.
+Home, F1 Driver and Rank Em are indexable in raw HTML; live sitemap has 167 URLs.
+Current repo changes still need publication. The automated Lovable browser is
+logged out and this session has no deploy_project tool; the desktop session is
+uninspected. AdSense approval and Google's indexing decisions remain unverified.
+
 ## ACCEPTED 2026-10-01: regression harness repairs
 
 808 repairs College's final-verdict boundary and manager cleanup ownership, with

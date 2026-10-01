@@ -1,5 +1,49 @@
 # Work board
 
+**2026-10-01, Codex811 CLAIMED: accurate hint points in three clue games.**
+Own only F1ConstructorBoard.tsx, TennisPlayerBoard.tsx and GuessTheNationBoard.tsx,
+plus a focused test and sim. Constructor and Tennis still advertise a flat
+100-point hint cost despite their original 1000/800/600/400/200/100 ladder.
+Nation's button already calculates its varying cost, but its hint counter falsely
+multiplies every hint by 100. Show original next payout where needed and an honest
+hint count. Preserve all hooks, authored clue labels, data, scores and saves.
+This is a small copy correction; verify actual payouts and mixed hint/miss paths.
+No new animation or search changes belong to this claim.
+
+**2026-10-01, Codex812 CLAIMED: NASCAR committed answer feedback and hint points.**
+Own only NascarDriverBoard.tsx, one local feedback CSS module and focused test/sim.
+The Board currently schedules wrong feedback from the pre-guess playing state,
+including after a correct answer. Follow the accepted Driver outcome pattern:
+one finite response to an actual appended guess, quiet restores and resets,
+static reduced motion, full submitted names and truthful next hint payout.
+Keep the original NASCAR clue_labels beside their original clues. Preserve the
+original hook, bank, search, rules, scoring, daily save/share and completion.
+Verify actual success/miss/give-up/reset behavior and mobile result rendering.
+
+**2026-10-01, Codex813 CLAIMED: remaining Higher/Lower reveal timer ownership.**
+Inspect and reproduce the MLB reset defect in useAflHL.ts, useCfbHL.ts, useF1HL.ts,
+useGolfHL.ts, useHockeyHL.ts, useNbaHL.ts, useNflHL.ts and useTennisHL.ts before edits.
+Own only those hooks plus one table-driven focused test/sim. Each currently
+schedules an unowned reveal callback. Apply the small accepted MLB cancellation
+and generation check only where the actual original hook reproduces stale points,
+round skips, truncated newer reveals or a surviving unmount callback. Preserve
+each game's original data/pairs/RNG, ties, timing, scores, save/share and booking.
+No product abstraction, data or database changes. Measure independent full-game
+baselines per hook and effective copied controls for the changed behavior.
+
+Claims pushed before implementation. Root owns Git, docs and production builds;
+agents own disjoint files. 807/809/810 finish their frozen production App checks.
+All Claude reservations stand. Next free 814.
+
+Fresh live check at 2026-10-01 15:52 UTC: home, F1 Driver and Rank Em return 200,
+self canonicals and no noindex. They still serve index-jsexOB8y.js, the earlier
+published release; live sitemap has 167 URLs versus 168 in the repo. ads.txt has
+the expected publisher. Automated Lovable browser has no project access while
+logged out, and no deploy_project tool is available in this session. The user's
+desktop browser session has not been inspected. Git pushes are not publication
+or a Google approval/indexing decision. Receipt:
+C:/Users/antho/AppData/Local/Temp/dukb-live-index-check-20261001.json.
+
 **2026-10-01, Codex808 regression harness repairs ACCEPTED.**
 College reads its unique final verdict instead of the namesake-selection helper.
 The actual key/copy checks pass, all eight original controls still fire, and two
