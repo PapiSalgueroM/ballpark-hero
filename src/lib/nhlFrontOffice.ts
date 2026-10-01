@@ -1,4 +1,7 @@
-import { NHL_FO_ROSTERS } from '@/data/nhlFoPlayers';
+import { NHL_FO_ROSTERS, type NhlFoSeed } from '@/data/nhlFoPlayers';
+/* Round 830: the full 2026-27 rosters, 22 to 23 real men a club, baked by
+   scripts/genNhlFrontOfficeRoster.mjs. Every new league starts from these. */
+import { NHL_FO_FULL_ROSTERS, NHL_FO_PARTIAL } from '@/data/nhlFoRosters2026';
 /* Round 211: no two men in one league share a name. */
 import { leagueNames, uniqueName } from './foNames';
 /* Round 531: the cap comes from one sourced file, never a bare literal here. */
@@ -22,6 +25,13 @@ import { type CutLedger, cutPlayer, payrollWithDeadCap, rollDeadCap, rosterFullR
  *
  * The cap is modeled on the real announced 2026-27 upper limit ($104M),
  * rising about 9% per season as in the current CBA memo.
+ *
+ * Round 830: a new league starts from every club's full roster (22 to 23
+ * real men, src/data/nhlFoRosters2026.ts) and carries rosterDepth, which sets
+ * the real limits (20 to 23 men), refills to a dressable twelve forwards, six
+ * defensemen and two goalies in the offseason, and pays on a curve rescaled
+ * for 23 men. A league saved before this round has no rosterDepth and keeps
+ * every rule it had: 13 men, 8 to 15, the old salary line, the same draws.
  */
 
 export const NHL_CAP_BASE = NHL_UPPER_LIMIT_2026_27; // $M, the published 2026-27 upper limit; the 9% rise per season in game is the game's own assumption, see leagueCaps.ts
@@ -53,6 +63,10 @@ export interface NhlGmPlayer {
   years: number;
   out: number; // rounds remaining injured
   pot: number;
+  /* Round 830: his rating is the stand in for a man with no qualifying
+     2025-26 NHL season (NHL_FO_PARTIAL), not a number his stats produced.
+     Absent on everyone else and on every save written before this round. */
+  partial?: true;
 }
 
 /** Selected ratings for this simulation, not full NHL lines or ice time. */
@@ -81,6 +95,10 @@ export interface NhlLeague {
   freeAgents: NhlGmPlayer[];
   round: number; // 1..NHL_FO_ROUNDS
   champions: { season: number; team: string }[];
+  /* Round 830: present (23, the NHL's active limit) only on a league started
+     from the full rosters. Optional, so every older save loads as it was and
+     keeps the 13 man rules. */
+  rosterDepth?: number;
 }
 
 /* Round 568: this counter used to live at module scope, which restarts on
@@ -105,20 +123,49 @@ export function nhlSalaryFor(ovr: number): number {
   return Math.round(Math.max(0.7, (ovr - 70) * 0.4) * 10) / 10;
 }
 
-export function initNhlLeague(rng: () => number = Math.random): NhlLeague {
+/* Round 830: the pay line for a full roster. nhlSalaryFor was drawn for 13
+   men: put on the 23 real men of 2026-10-01 it sent 15 of 32 clubs over the
+   104M upper limit before a puck dropped (Tampa Bay at 128.1M). This line
+   keeps the same idea, the rating sets the fictional pay, but bends it the
+   way a real cap sheet bends, stars dear and depth near a 0.8M floor:
+   97 earns 11.1M, 90 6.6M, 85 4.0M, 80 1.9M, 75 and under 0.8M. Measured
+   on that roster record, the dearest club opens at 102.3M (Tampa Bay), the
+   middle one at 79.6M and the cheapest at 47.4M, so all 32 start under the
+   cap. scripts/simNhlFullRosters.mjs holds it. Only rosterDepth leagues use
+   it; an older save keeps the line above. */
+export function nhlDepthSalaryFor(ovr: number): number {
+  return Math.round(Math.max(0.8, 0.8 + 0.1 * Math.pow(Math.max(0, ovr - 75), 1.5)) * 10) / 10;
+}
+
+/** The pay line this league was started on. */
+export function nhlLeagueSalaryFor(lg: Pick<NhlLeague, 'rosterDepth'>): (ovr: number) => number {
+  return lg.rosterDepth ? nhlDepthSalaryFor : nhlSalaryFor;
+}
+
+/* One body for both starts, so the 13 man start keeps its exact draws and
+   key order (Round 794's frozen fingerprints read it) and the full start is
+   the same loop over more men. */
+function seedNhlLeague(
+  rosters: Record<string, NhlFoSeed[]>, rng: () => number,
+  salaryFor: (ovr: number) => number, partial: Set<string> | null,
+): NhlLeague {
   const teams: Record<string, NhlGmTeam> = {};
-  for (const [abbr, seeds] of Object.entries(NHL_FO_ROSTERS)) {
-    const players: NhlGmPlayer[] = seeds.map(s => ({
-      id: fid(),
-      name: s.name,
-      pos: s.pos as NhlPos,
-      age: s.age,
-      ovr: s.ovr,
-      salary: nhlSalaryFor(s.ovr),
-      years: s.age <= 24 ? 4 : s.age <= 29 ? 3 : 2,
-      out: 0,
-      pot: s.age <= 23 ? Math.min(99, s.ovr + 3 + Math.floor(rng() * 6)) : s.ovr,
-    }));
+  for (const [abbr, seeds] of Object.entries(rosters)) {
+    const players: NhlGmPlayer[] = seeds.map(s => {
+      const p: NhlGmPlayer = {
+        id: fid(),
+        name: s.name,
+        pos: s.pos as NhlPos,
+        age: s.age,
+        ovr: s.ovr,
+        salary: salaryFor(s.ovr),
+        years: s.age <= 24 ? 4 : s.age <= 29 ? 3 : 2,
+        out: 0,
+        pot: s.age <= 23 ? Math.min(99, s.ovr + 3 + Math.floor(rng() * 6)) : s.ovr,
+      };
+      if (partial?.has(`${abbr}:${s.pos}:${s.name}`)) p.partial = true;
+      return p;
+    });
     teams[abbr] = { abbr, players, wins: 0, losses: 0, otLosses: 0, picks: [1, 2] };
   }
   return {
@@ -126,10 +173,24 @@ export function initNhlLeague(rng: () => number = Math.random): NhlLeague {
     cap: NHL_CAP_BASE,
     teams,
     /* Round 211: dealt against the names already on the rosters. */
-    freeAgents: initialFaPool(rng, leagueNames({ teams, freeAgents: [] })),
+    freeAgents: initialFaPool(rng, leagueNames({ teams, freeAgents: [] }), salaryFor),
     round: 1,
     champions: [],
   };
+}
+
+/** The 13 man start of the Aug 5 2026 bake (src/data/nhlFoPlayers.ts). Kept
+    as it was: it is the shape every pre-830 save was dealt from, and the
+    fixture Round 794's frozen fingerprints are taken over. */
+export function initNhlLeague(rng: () => number = Math.random): NhlLeague {
+  return seedNhlLeague(NHL_FO_ROSTERS, rng, nhlSalaryFor, null);
+}
+
+/** Round 830: a new league on the full real rosters (22 to 23 a club). */
+export function initNhlFullLeague(rng: () => number = Math.random): NhlLeague {
+  const league = seedNhlLeague(NHL_FO_FULL_ROSTERS, rng, nhlDepthSalaryFor, new Set(NHL_FO_PARTIAL));
+  league.rosterDepth = NHL_FULL_ROSTER_MAX;
+  return league;
 }
 
 /* Round 211: widened from 10x10 to 28x28. A hundred possible people is
@@ -159,14 +220,14 @@ export function nhlGenName(rng: () => number, taken?: Set<string>): string {
   return `${FA_FIRST[Math.floor(rng() * FA_FIRST.length)]} ${FA_LAST[Math.floor(rng() * FA_LAST.length)]}`;
 }
 
-function initialFaPool(rng: () => number, taken: Set<string>): NhlGmPlayer[] {
+function initialFaPool(rng: () => number, taken: Set<string>, salaryFor: (ovr: number) => number = nhlSalaryFor): NhlGmPlayer[] {
   const out: NhlGmPlayer[] = [];
   const POS: NhlPos[] = ['C', 'W', 'W', 'D', 'D', 'G', 'C', 'W', 'D', 'W'];
   for (let i = 0; i < 10; i++) {
     const ovr = 72 + Math.floor(rng() * 9);
     out.push({
       id: fid(), name: nhlGenName(rng, taken), pos: POS[i % POS.length],
-      age: 26 + Math.floor(rng() * 8), ovr, salary: nhlSalaryFor(ovr),
+      age: 26 + Math.floor(rng() * 8), ovr, salary: salaryFor(ovr),
       years: 1 + Math.floor(rng() * 2), out: 0, pot: ovr,
     });
   }
@@ -382,16 +443,30 @@ export function runNhlFoPlayoffs(league: NhlLeague, rng: () => number): { series
 /** Round 631: the roster floor and ceiling. The board greys Waive and Sign at them. */
 export const NHL_ROSTER_MIN = 8;
 export const NHL_ROSTER_MAX = 15;
+/* Round 830: a full roster league plays to the real numbers. 23 is the NHL's
+   active roster limit, and 20 is the twelve forwards, six defensemen and two
+   goalies a club has to dress, so a GM cannot waive below a lineup. */
+export const NHL_FULL_ROSTER_MIN = 20;
+export const NHL_FULL_ROSTER_MAX = 23;
+/* The floors the offseason refills a full roster league to, invented men only
+   where real ones have left, the same as the 13 man refill below has always done. */
+const NHL_FULL_FLOORS = { forwards: 12, defense: 6, goalies: 2, total: NHL_FULL_ROSTER_MIN };
+const NHL_CLASSIC_FLOORS = { forwards: 5, defense: 3, goalies: 1, total: 10 };
 
-export function nhlRelease(t: NhlGmTeam, fas: NhlGmPlayer[], id: string): boolean {
-  const released = cutPlayer(t, fas, id, NHL_ROSTER_MIN);
+/** This league's roster floor and ceiling: the real 20 to 23 on a full roster league, 8 to 15 on an older save. */
+export function nhlRosterLimits(lg: Pick<NhlLeague, 'rosterDepth'>): { min: number; max: number } {
+  return lg.rosterDepth ? { min: NHL_FULL_ROSTER_MIN, max: NHL_FULL_ROSTER_MAX } : { min: NHL_ROSTER_MIN, max: NHL_ROSTER_MAX };
+}
+
+export function nhlRelease(t: NhlGmTeam, fas: NhlGmPlayer[], id: string, min: number = NHL_ROSTER_MIN): boolean {
+  const released = cutPlayer(t, fas, id, min);
   if (released) repairNhlContributors(t);
   return released;
 }
 
-export function nhlSign(t: NhlGmTeam, fas: NhlGmPlayer[], id: string, cap: number): boolean {
+export function nhlSign(t: NhlGmTeam, fas: NhlGmPlayer[], id: string, cap: number, max: number = NHL_ROSTER_MAX): boolean {
   const i = fas.findIndex(p => p.id === id);
-  if (i < 0 || rosterFullRefusal(t, NHL_ROSTER_MAX)) return false;
+  if (i < 0 || rosterFullRefusal(t, max)) return false;
   /* Round 631: the same refusal the board shows beside the greyed button. */
   if (signRefusal(t, id)) return false;
   const p = fas[i];
@@ -486,6 +561,7 @@ export function nhlOffseason(league: NhlLeague, rng: () => number): string[] {
   const notes: string[] = [];
   /* Round 211: one name book for the whole offseason. */
   const taken = leagueNames(league);
+  const salaryFor = nhlLeagueSalaryFor(league);
   for (const t of Object.values(league.teams)) {
     const keep: NhlGmPlayer[] = [];
     for (const p of t.players) {
@@ -498,7 +574,7 @@ export function nhlOffseason(league: NhlLeague, rng: () => number): string[] {
       p.years -= 1;
       if (p.years <= 0) {
         p.years = p.age <= 25 ? 4 : p.age <= 29 ? 3 : 2;
-        p.salary = nhlSalaryFor(p.ovr);
+        p.salary = salaryFor(p.ovr);
         if (p.ovr < 80 && rng() < 0.45) { league.freeAgents.push({ ...p, years: 1 }); continue; }
       }
       keep.push(p);
@@ -506,6 +582,9 @@ export function nhlOffseason(league: NhlLeague, rng: () => number): string[] {
     t.players = keep;
     t.wins = 0; t.losses = 0; t.otLosses = 0; t.picks = [1, 2];
     rollDeadCap(t);
+    /* Round 830: a full roster league refills to a dressable lineup first,
+       which leaves the 13 man refill below nothing to do. */
+    if (league.rosterDepth) replenishNhlRoster(t, rng, taken, NHL_FULL_FLOORS, nhlDepthSalaryFor);
     replenishNhlRoster(t, rng, taken);
     repairNhlContributors(t);
   }
@@ -517,30 +596,36 @@ export function nhlOffseason(league: NhlLeague, rng: () => number): string[] {
   return notes;
 }
 
-/** Keep every club playable: at least 5 forwards, 3 D, 1 goalie, 10 players. */
-export function replenishNhlRoster(t: NhlGmTeam, rng: () => number, taken: Set<string> = new Set()): void {
+/** Keep every club playable: at least 5 forwards, 3 D, 1 goalie, 10 players.
+    Round 830: a full roster league passes its own floors and pay line. */
+export function replenishNhlRoster(
+  t: NhlGmTeam, rng: () => number, taken: Set<string> = new Set(),
+  floors: typeof NHL_CLASSIC_FLOORS = NHL_CLASSIC_FLOORS, salaryFor: (ovr: number) => number = nhlSalaryFor,
+): void {
   const add = (pos: NhlPos) => {
     const ovr = 69 + Math.floor(rng() * 7);
     t.players.push({
       id: fid(), name: nhlGenName(rng, taken), pos,
-      age: 23 + Math.floor(rng() * 8), ovr, salary: nhlSalaryFor(ovr),
+      age: 23 + Math.floor(rng() * 8), ovr, salary: salaryFor(ovr),
       years: 1 + Math.floor(rng() * 2), out: 0, pot: ovr,
     });
   };
-  while (t.players.filter(p => p.pos === 'C' || p.pos === 'W').length < 5) add(rng() < 0.4 ? 'C' : 'W');
-  while (t.players.filter(p => p.pos === 'D').length < 3) add('D');
-  while (t.players.filter(p => p.pos === 'G').length < 1) add('G');
-  while (t.players.length < 10) add('W');
+  while (t.players.filter(p => p.pos === 'C' || p.pos === 'W').length < floors.forwards) add(rng() < 0.4 ? 'C' : 'W');
+  while (t.players.filter(p => p.pos === 'D').length < floors.defense) add('D');
+  while (t.players.filter(p => p.pos === 'G').length < floors.goalies) add('G');
+  while (t.players.length < floors.total) add('W');
 }
 
 /** Light AI roster churn for the 31 CPU clubs. */
 export function nhlAiMoves(league: NhlLeague, myTeam: string, rng: () => number): void {
   const cpu = Object.values(league.teams).filter(t => t.abbr !== myTeam);
+  /* Round 830: the ceiling is this league's, 15 on an older save as it always was. */
+  const { max } = nhlRosterLimits(league);
   for (const t of cpu) {
     if (rng() > 0.25 || !league.freeAgents.length) continue;
     const best = [...league.freeAgents].sort((a, b) => b.ovr - a.ovr)[0];
-    if (best && nhlCapRoom(t, league.cap) >= best.salary && t.players.length < 15) {
-      nhlSign(t, league.freeAgents, best.id, league.cap);
+    if (best && nhlCapRoom(t, league.cap) >= best.salary && t.players.length < max) {
+      nhlSign(t, league.freeAgents, best.id, league.cap, max);
     }
   }
 }
