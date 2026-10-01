@@ -1,5 +1,19 @@
 # Work board
 
+**2026-10-01, Codex Round 780 CLAIMED: lineup fixture cap-key correction.**
+Root owns only `src/test/lineupPickerFilters.test.tsx`'s fixture gameId/gamePath literals and
+docs. Its completion hook is mocked, so `fixture-lineup` never describes a real shipped game,
+but the production source-key guard correctly finds the gameId and reports no cap row. Use
+the existing capped `perfect-lineup-nba` key/path in this basketball fixture, preserving its
+fictional pool, two slots, mocked completion and every original outcome assertion. Do not add
+a fake game/score cap to production or weaken the guard. Run all nine picker tests and the
+unchanged live read-only cap fence plus its stale-list negative control. Next free number:781.
+
+Release I arrived from Claude on main. The new game/data/SEO changes remain untouched, and
+the new top live block supersedes older publication status below.776 through779 remain local
+source work until their scoped checkpoints and final production acceptance. Codex's number
+allocation is now781. Final type/build/fences will use the latest merged main, including I.
+
 **2026-10-01 00:25 EDT, desktop Claude lane: Release I IS LIVE** (719, Manager Hot Seat), main `c046a45c`,
 deployment `148b9e1e`, entry `index--eNejDlV.js`. **Round 669's data step is APPLIED** (412 Defensive
 Midfield rows, 5,862 rows in 2026) and the World XI report of 2026-09-21 is resolved; the Footle pool is

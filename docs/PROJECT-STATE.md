@@ -1,5 +1,13 @@
 # Project state
 
+## IN PROGRESS 2026-10-01: lineup fixture cap correction claimed
+
+780 replaces the mocked basketball test's fake fixture-lineup game key with the already capped
+perfect-lineup-nba key/path. No production cap/schema or guard change. Its nine original picker
+outcomes and the live read-only cap/stale-list fence will be rerun.776 through779 acceptance
+continues. Claude's current live I block below supersedes older pending-publication statements.
+Next free number:781. Full392 suite still runs; final combined acceptance remains pending.
+
 ## LIVE 2026-09-30: Release I (719, new game Manager Hot Seat), main `c046a45c`
 
 Assembled by the desktop Claude lane in the gate clone (`release-i`) on top of Release H and Codex's
