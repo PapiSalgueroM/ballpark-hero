@@ -1,5 +1,42 @@
 # Work board
 
+**2026-10-01, Codex806 CLAIMED: F1 Driver committed guess feedback.**
+The actual Board captures the old playing state in a50ms timeout, so a winning
+answer still schedules Wrong guess. Own only src/components/f1-driver/F1DriverBoard.tsx,
+new adjacent F1DriverFeedback.module.css, src/test/f1DriverFeedback.test.tsx and
+scripts/simF1DriverFeedback.mjs. Derive feedback from the accepted new game state,
+keep correct wins free of wrong-guess feedback, and give actual misses one finite
+cue with static reduced motion and cleaned-up timers. Preserve every existing
+makeGuess/hint/give-up/reset action, original hook/data/clues/score/save/share and
+completion. No invented driver data or shared UI changes.805 owns Search separately.
+Verify actual Board and real-hook correct/incorrect/exhausted/hint/restored/reset
+outcomes, exact score/save/share/completion and quiet duplicate/clone paths. Prove
+an effective copied stale-closure control, plus cue/reduced-motion/cleanup controls
+with independent outcomes. Complete native phone/desktop and production App proof.
+Master build spec96/97. Root owns Git/docs/build outputs;803 builder picks this up
+after its final App acceptance.802 finishes measured native corrections in parallel.
+The older immutable413 regression remains pending. All Claude claims stand.
+Claim pushed before application implementation. Next free807.
+
+**2026-10-01, Codex805 CLAIMED: F1 Driver Search keyboard suggestions.**
+The actual search rebuilds its driver array on every render, causing the suggestion
+reset effect to undo ArrowDown. Own only src/components/f1-driver/F1DriverSearch.tsx,
+new F1DriverSearchNavigation.module.css beside it, src/test/f1DriverSearchNavigation.test.tsx
+and scripts/simF1DriverSearchNavigation.mjs. Memoize the existing names for the current
+puzzle, preserve the exact matching/order/ten-result limit/exclusions/raw-name fallback,
+and make keyboard selection visible in the local list with readable44px choices and
+correct combobox semantics. Keep held-key submits quiet and preserve native focus.
+No driver data, puzzle helper, hook, Board, Page, real stats or scoring changes.
+Verify actual component/helper ArrowDown to third choice plus Enter, ArrowUp/Escape,
+query/guessed resets, original ordered matches and exact callback names. Require
+an effective original-array reset control and offscreen-row control with independent
+matching/callback baselines, then320/390/430/1440 native motion contexts and final
+production App proof. Root owns Git/docs/isolated build outputs; builder owns four
+files. Master build spec96/97, original master list F1 game accessibility. Claude700
+metadata,718 rotation and733/734 data remain reserved.802 measured focus correction
+and803 final production acceptance continue. The older immutable413 run is pending.
+This claim is pushed before implementation. Next free806.
+
 **2026-10-01, Codex801 NBA season picker ACCEPTED.**
 Every eligible name-match season is now reachable through explicit ten-season
 expansions using the original helper's order, eligibility and exclusions. Counts
