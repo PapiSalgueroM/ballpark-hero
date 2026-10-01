@@ -45,8 +45,13 @@
      8) the board under vitest: the season close test for all four sims and
         the MLB board's own full roster test
 
-   MEASURED (2026-10-01, ten seeds): every club's opening payroll 120 to 230
-   against the 244 line; section 5's twin rounds compared 270 of 270 per seed.
+   MEASURED (2026-10-01, ten seeds): every club's opening payroll $119M to
+   $230M against the $244M line (priced at the full scale, 26 men ran $134.7M
+   to $300.3M and six clubs opened over it, which is why depth deals exist).
+   Section 5: 270 of 270 twin rounds comparable (27 a seed), none moved, the
+   IL identical on all 210,600 man rounds. Against a 13 man twin (seed 7919)
+   24 of 30 clubs end a season on a different win total, mean 1.5 wins, all
+   of it injured starters covered by a real next man instead of playing short.
 
    Controls, through MLB_FULL_CONTROL. Each edits a bundled copy, refuses to
    run if its anchor is not in the file, and must turn its own section red:
@@ -246,6 +251,10 @@ const pools = buildPools(stats);
 const PITCH = new Set(['SP', 'RP', 'CL']);
 const isP = p => PITCH.has(p.pos);
 const SEEDS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(i => i * 7919);
+/* every club's 26 by the rule, and the name the game shows each of them */
+const selected = Object.fromEntries(GAME_TEAMS.map(a => [a, selectTwentySix(record.teams[a].players).men]));
+const shownAs = gameNames(selected);
+const recordNames = Object.fromEntries(GAME_TEAMS.map(a => [a, new Set(selected[a].map(m => shownAs.get(m.id)))]));
 
 /* ---- 1. the record ------------------------------------------------------ */
 console.log('1) the record: 30 clubs from the API on the record date, and the spot check');
@@ -295,8 +304,6 @@ let shipped = 0, partialN = 0;
   const seen = new Set();
   let dup = 0;
   const partialNames = [];
-  const selected = Object.fromEntries(GAME_TEAMS.map(a => [a, selectTwentySix(record.teams[a].players).men]));
-  const shownAs = gameNames(selected);
   for (const a of GAME_TEAMS) {
     const rows = R[a] ?? [];
     ok(3, `${a}: 26 men`, rows.length === 26, String(rows.length));
@@ -336,7 +343,11 @@ console.log('4) a new league: 26 real men a club, nobody invented, the payroll r
     for (const a of GAME_TEAMS) {
       const t = lg.teams[a];
       const data = new Map((R[a] ?? []).map(s => [s.name, s]));
-      ok(4, `seed ${seed} ${a}: 26 men, all from the data file`, t.players.length === 26 && t.players.every(p => data.has(p.name)), `${t.players.length}, ${t.players.filter(p => !data.has(p.name)).map(p => p.name).join(' ')}`);
+      ok(4, `seed ${seed} ${a}: 26 men`, t.players.length === 26, String(t.players.length));
+      /* read against the record, not the data file, so a name the data file
+         invented cannot vouch for itself */
+      const stray = t.players.filter(p => !recordNames[a].has(p.name)).map(p => p.name);
+      ok(4, `seed ${seed} ${a}: nobody invented, every man is one of the club's 26 in the record`, stray.length === 0, stray.join(' '));
       ok(4, `seed ${seed} ${a}: dealt as a depth club`, t.depth === E.MLB_DEPTH);
       const core = new Set(E.mlbSimReads(t));
       const priced = t.players.every(p => (core.has(p.id) ? p.salary === E.mlbSalaryFor(p.ovr) : p.salary === E.MLB_DEPTH_SALARY));
@@ -494,7 +505,8 @@ else {
   if (vitest) {
     const files = ['src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx', 'src/test/mlbFullRosters.test.tsx'];
     const r = spawnSync(process.execPath, [vitest, 'run', ...files], { cwd: ROOT, encoding: 'utf8', timeout: 200000 });
-    const outText = `${r.stdout}\n${r.stderr}`;
+    /* vitest colours its summary, so the colour codes go before any match */
+    const outText = `${r.stdout}\n${r.stderr}`.replace(/\u001b\[[0-9;]*m/g, '');
     const passed = /Test Files\s+\d+ passed/.test(outText) && !/failed/.test(outText.split('Test Files').pop());
     ok(8, 'the season close test and the MLB full roster test pass', r.status === 0 && passed, outText.split('\n').filter(l => /Test Files|Tests|FAIL|failed/.test(l)).slice(0, 6).join(' | '));
   }
