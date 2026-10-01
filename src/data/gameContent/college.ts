@@ -719,8 +719,8 @@ export const COLLEGE_CONTENT: GameContentMap = {
       {
         heading: "Playing one week of the season at a time",
         items: [
-          "Play one week at a time: 12 games, weeks 1 to 4 out of conference, the rest in it.",
-          "Week 12 is rivalry week, and every program plays its rival, even one from another conference. Your rival is a school from your own state when the board has one to pair you with, otherwise a pairing the game made, and the game tells you which.",
+          "Play one week at a time: 12 games, weeks 1 to 4 out of conference, weeks 5 to 11 in it, and week 12 is rivalry week.",
+          "Week 12 is rivalry week, and every program plays its rival, even one from another conference. Your rival is a school from your own state when one is free to pair with you, otherwise a pairing the game made, and the game tells you which. Florida has three schools on the board, so Florida and Miami get each other and Florida State gets a pairing the game made.",
           "The rivalry winner carries 0.5 to 1.5 points of extra strength into the title games and the Playoff, the loser drops the same, and a margin of 21 or more swings the full 1.5.",
         ],
       },
@@ -728,6 +728,7 @@ export const COLLEGE_CONTENT: GameContentMap = {
         heading: "Reaching the conference title game",
         items: [
           "Finish top two in your conference to reach its title game; win it for an automatic Playoff bid.",
+          "The conference table goes by conference winning percentage, not raw wins, because not everyone plays the same number of league games: a program whose rival is in another conference spends week 12 outside the league.",
         ],
         subsections: [
           {

@@ -489,7 +489,7 @@ export default function CfbDynastyBoard() {
           ['rankings', 'Top 25', ListOrdered],
           ['standings', 'Conferences', Trophy],
         ] as [Tab, string, typeof Users][]).map(([key, lbl, Icon]) => (
-          <button key={key} onClick={() => setTab(key)} className={cn('inline-flex items-center gap-1 rounded-full px-2 py-1.5 font-semibold transition-all sm:px-3', tab === key ? 'bg-background text-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground')}>
+          <button key={key} onClick={() => setTab(key)} className={cn('inline-flex items-center gap-1 rounded-full px-1.5 py-1.5 font-semibold transition-all min-[360px]:px-2 sm:px-3', tab === key ? 'bg-background text-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground')}>
             <Icon className="hidden h-3.5 w-3.5 sm:inline" /> {lbl}
           </button>
         ))}
@@ -544,7 +544,11 @@ export default function CfbDynastyBoard() {
       {tab === 'play' && (
         <div className="space-y-3">
           <div className="rounded-2xl border border-gold/40 bg-card p-4 text-center">
-            <p className="mb-2 text-sm text-foreground">Weeks 1-4 are the non-conference gauntlet, 5-12 decide the conference race.</p>
+            <p className="mb-2 text-sm text-foreground">
+              {st.depth
+                ? 'Weeks 1-4 are the non-conference gauntlet, 5-11 decide the conference race, and week 12 is rivalry week.'
+                : 'Weeks 1-4 are the non-conference gauntlet, 5-12 decide the conference race.'}
+            </p>
             {st.depth && (
               <p className={cn('mb-2 text-xs', st.round === CFB_RIVALRY_ROUND ? 'font-bold text-amber-300' : 'text-muted-foreground')}>
                 🔥 {st.round === CFB_RIVALRY_ROUND ? 'This is rivalry week' : `Week ${CFB_RIVALRY_ROUND} is rivalry week`}: {rivalryNote(st.myTeam)}.
@@ -650,7 +654,10 @@ export default function CfbDynastyBoard() {
               </div>
             ))}
           </div>
-          <p className="mt-2 text-center text-[10px] text-muted-foreground">Top two in each conference meet in the championship game; the winner books a Playoff spot.</p>
+          <p className="mt-2 text-center text-[10px] text-muted-foreground">
+            {st.depth ? 'Ranked by conference win percentage, since rivalry week takes a league game off some teams. ' : ''}
+            Top two in each conference meet in the championship game; the winner books a Playoff spot.
+          </p>
         </div>
       )}
 
