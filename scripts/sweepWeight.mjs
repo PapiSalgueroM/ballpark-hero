@@ -97,6 +97,28 @@
  * 237.1 to 237.7. Every budget below still holds with the headroom it was set
  * for, so none moved.
  *
+ * AND AGAIN AFTER RELEASE K (main e289ac66, which raised four budgets for
+ * its own growth), a build of main against a build of the merged branch,
+ * three runs each, identical every run:
+ *
+ *   /club-manager      637.4 to 629.1   /footle          329.8 to 322.0
+ *   /soccer-career     709.9 to 702.0   /nfl-my-career   403.6 to 395.1
+ *   /stadium-tycoon    290.2 to 281.8   /front-office    307.7 to 299.5
+ *   /wonderkid-factory 269.1 to 260.9   /soccer-grid     308.0 to 299.7
+ *   /minefield         285.1 to 276.8   /deadline-day    663.6 to 655.1
+ *   /                  225.9 to 226.6   /leaderboard     237.5 to 238.1
+ *
+ * Every game page 7.8K to 8.4K lighter again. Every game route's budget, and
+ * the home page's, was set afresh from these figures by one rule: the
+ * branch's measured figure plus the
+ * headroom the route had on main, held between 2K and 4K, rounded up. That
+ * is what main's own release raises leave (3K to 4K over the measured
+ * figure), and it takes /soccer-career from 736, 26K over main's figure, to
+ * 706, so its ceiling is a ceiling again. / is the one that RISES, 226 to
+ * 229, in the open: the 32 part loaders and the part function cost the entry
+ * chunk 0.6K, main already measured 225.9 on its 226, and 226.6 rounds to 227.
+ * /leaderboard pays the same 0.6K and stays at 266.
+ *
  * Run: npm run build && npx serve -s dist -l 4173, then
  *      ENGINES=chromium node scripts/sweepWeight.mjs
  */
@@ -118,18 +140,18 @@ const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
    part of the 14.6K the hub prose cut took off every route (see the header);
    the other five were over and spent it getting back under. */
 const BUDGETS = [
-  ['/', 226],
-  ['/club-manager', 641], /* release K: 637K measured, the shootout order (782) and job applications (783) in the engine chunk; was 630 */ /* release H: 628K measured, the ticker's sport filter menu (711) in the entry chunk; release G: 626K with the match centre (714), the squad rows (715) and the double roster fix (742); was 622 */
-  ['/soccer-career', 736],
-  ['/stadium-tycoon', 290],
+  ['/', 229], /* Round 700: 226.6K measured, 0.6K of it the seoMeta part loaders in the entry chunk, 225.9K on main; was 226 */
+  ['/club-manager', 633], /* Round 700: 629.1K measured with the seoMeta split, 637.4K on main; was 641 */ /* release K: 637K measured, the shootout order (782) and job applications (783) in the engine chunk; was 630 */ /* release H: 628K measured, the ticker's sport filter menu (711) in the entry chunk; release G: 626K with the match centre (714), the squad rows (715) and the double roster fix (742); was 622 */
+  ['/soccer-career', 706], /* Round 700: 702.0K measured with the seoMeta split, 709.9K on main; was 736 */
+  ['/stadium-tycoon', 284], /* Round 700: 281.8K measured with the seoMeta split, 290.2K on main; was 290 */
   /* Round 216: the new idle game. Measured 243K on the day it shipped,
      mostly the shared index chunk. */
-  ['/wonderkid-factory', 270],
-  ['/minefield', 288], /* release K: 285K measured, two new games in the registry and the What's New entries in the shared chunks; was 284 */ /* release G: 280K measured; the shared result moment (710), the native share sheet (744) and the hub trail (654) sit in chunks every game loads; was 276 */
-  ['/footle', 333], /* release K: 330K measured, the same shared chunk growth as /minefield; was 328 */ /* release J: 325K measured after the Round 669 re-bake put 15 more players in the bundled pool (538 to 553); before that 324 at release G on 319K measured; was 316 */
-  ['/nfl-my-career', 404], /* release H: 401K measured; the ticker's sport filter menu (711) and the share sheet (744) sit in the entry chunk every page loads; was 400 */
-  ['/front-office', 312], /* release K: 308K measured, the franchise tag and the depth chart (723); was 304 */ /* release H: 302K measured, the entry chunk's ticker menu (711); was 300 */ /* release G: 299K measured, same shared chunks as above; was 296 */
-  ['/soccer-grid', 308], /* release J: 304K measured; this release changes no soccer grid code, the growth is in the shared chunks every route loads; was 300 */
+  ['/wonderkid-factory', 263], /* Round 700: 260.9K measured with the seoMeta split, 269.1K on main; was 270 */
+  ['/minefield', 280], /* Round 700: 276.8K measured with the seoMeta split, 285.1K on main; was 288 */ /* release K: 285K measured, two new games in the registry and the What's New entries in the shared chunks; was 284 */ /* release G: 280K measured; the shared result moment (710), the native share sheet (744) and the hub trail (654) sit in chunks every game loads; was 276 */
+  ['/footle', 326], /* Round 700: 322.0K measured with the seoMeta split, 329.8K on main; was 333 */ /* release K: 330K measured, the same shared chunk growth as /minefield; was 328 */ /* release J: 325K measured after the Round 669 re-bake put 15 more players in the bundled pool (538 to 553); before that 324 at release G on 319K measured; was 316 */
+  ['/nfl-my-career', 398], /* Round 700: 395.1K measured with the seoMeta split, 403.6K on main; was 404 */ /* release H: 401K measured; the ticker's sport filter menu (711) and the share sheet (744) sit in the entry chunk every page loads; was 400 */
+  ['/front-office', 304], /* Round 700: 299.5K measured with the seoMeta split, 307.7K on main; was 312 */ /* release K: 308K measured, the franchise tag and the depth chart (723); was 304 */ /* release H: 302K measured, the entry chunk's ticker menu (711); was 300 */ /* release G: 299K measured, same shared chunks as above; was 296 */
+  ['/soccer-grid', 302], /* Round 700: 299.7K measured with the seoMeta split, 308.0K on main; was 308 */ /* release J: 304K measured; this release changes no soccer grid code, the growth is in the shared chunks every route loads; was 300 */
   ['/leaderboard', 266],
 ];
 
