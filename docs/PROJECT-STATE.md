@@ -1,5 +1,20 @@
 # Project state
 
+## CHECKPOINT 2026-10-01: Stat Detective source and fresh daily regression accepted
+
+786's seven actual-page/helper checks and ten effective copied controls pass, with types0.
+It adds committed finite/static cues, native suggestion focus and accurate page-local clue
+instructions. Native eight-context/final-style acceptance is pending.788's minimal daily
+cache/booking fix passes22 real Board/engine/hook outcomes,30 effective controls and the
+strict67-row completion guard with eight static controls. Full receipts/limits are on
+WORKBOARD. Old source reproduced the daily return as aiming instead of finished.
+
+All six unrelated quiet harness reruns now pass unchanged, including Tycoon's six outcomes
+and eight controls. Buzzer silent reload's raw seven tests pass. Current combined production
+build runs in its own physical/Git checkout; full Daily Reload and rebuilt-site/native
+acceptance follow.787 source is frozen and its tests/controls continue. Publication is
+still pending and the last independently verified live release is I. Next free789.
+
 ## IN PROGRESS 2026-10-01: fresh arcade daily replay guard claimed
 
 788 fixes the verified fresh-daily -> practice -> Today replay path in both arcade Boards,

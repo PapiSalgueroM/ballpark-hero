@@ -1,5 +1,37 @@
 # Work board
 
+**2026-10-01, Codex786 source checkpoint accepted: Stat Detective.**
+Seven actual-page tests and ten asserted copied controls pass with real matching, stats,
+profile-backed/sparse hint helpers and share construction. The unchanged completion effect
+calls its test sink once with undefined score for a win or eight-miss loss; no real-account
+pipeline claim. Older guess nodes stay mounted while only committed newest guess/new clues/
+result cue, then clear at500ms. Native option focus transfer, input Enter-first, reset,
+difficulty, duplicate refusal and timer cleanup hold. Page-local preplay/help/pointer/fallback
+copy now follows actual hints and franchise feedback; shared SEO guide/schema stays intact.
+App types0. Copied failure/pass counts: guess2/5, clue1/6, result2/5, keys1/6, keyboard1/6,
+pointer2/5, focus3/4, quiet2/5, cleanup1/6, guide1/6, all seven outcomes executed per copy.
+Ineffective batched-focus and CRLF-anchor attempts are preserved and earn no credit. Logs:
+TEMP/dukb-round786-controls. Native eight-context acceptance and combined final CSS remain
+pending. This is a source checkpoint, not a completed round/publication claim.
+
+**788 accepted source outcomes, final native/gate pending:** both old-source reproductions
+fail at the real daily return (done expected, aiming received). The minimal in-memory result
+plus booking state now passes22 actual Board/engine/completion-hook outcomes, including
+refused private-storage writes and later Unlimited completion. Both eleven-test wrappers
+and all30 asserted controls pass; all26 original controls remain, and four new cached/booking
+copies each fail one intended outcome with one independent pass/nine explicit skips. Logs:
+TEMP/dukb-round788-practice-controls; old-source-repro.log and positive.log remain in TEMP.
+Root's No Double Record guard binds each new practice exception to its exact recorder,
+bookedAlready and isDone expressions. All67 historical rows/checks, six new in-memory drift
+controls and the two original static controls pass; altered predicate/booking/phase is refused.
+Proof: TEMP/dukb-round788-combined-20261001/no-double-*.log. No shared completion hook changed.
+
+The unchanged Tycoon quiet rerun also passes its six real engine outcomes and all eight
+effective controls. Together with five earlier quiet reruns, this resolves six noise failures
+without editing their checks. Raw silent Buzzer rerun passes7/7, including all five reload
+cases and the no-op mark probe; the previous failure is uncredited. The remaining full Daily
+Reload driver check follows the current combined build, with every old assertion unchanged.
+
 **2026-10-01, Codex788 CLAIMED: protect freshly earned arcade dailies across practice.**
 The remaining gate review found a real product path: both Boards only remember the daily
 present at mount. Finish a new daily, finish practice, then Today's ten can deal that daily
