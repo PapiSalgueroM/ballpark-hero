@@ -18,6 +18,7 @@ import './dailyReload/mocks';
 import { resetMocks } from './dailyReload/mocks';
 import { describe, it, expect, beforeAll, beforeEach, afterEach, vi } from 'vitest';
 import { act, cleanup, fireEvent } from '@testing-library/react';
+import { setImmediate as yieldTurn } from 'node:timers/promises';
 import { mountPage } from './dailyReload/harness';
 import type { TickEvent, TycoonState } from '@/lib/stadiumTycoon';
 
@@ -63,7 +64,7 @@ type Seen = { id: string; at: string; minute: number; frame: number; landed: boo
 type Log = { seen: Map<string, Seen>; commits: number[]; n: number };
 const newLog = (): Log => ({ seen: new Map(), commits: [], n: 0 });
 /** Advance in 200ms frames and write down every replay the ball shows. */
-function play(ms: number, log?: Log) {
+async function play(ms: number, log?: Log) {
   const n = Math.round(ms / FRAME_MS);
   for (let i = 0; i < n; i += 1) {
     const k = recorded.events.length;
@@ -74,10 +75,13 @@ function play(ms: number, log?: Log) {
       frames.clear();
       for (const cb of due) cb(vnow);
     });
-    if (!log) continue;
-    log.n += 1;
-    for (const e of recorded.events.slice(k)) if (e.kind === 'goal' || e.kind === 'conceded') log.commits.push(log.n);
-    sample(log);
+    if (log) {
+      log.n += 1;
+      for (const e of recorded.events.slice(k)) if (e.kind === 'goal' || e.kind === 'conceded') log.commits.push(log.n);
+      sample(log);
+    }
+    // Let Vitest report progress without advancing the fake clock or queued frames.
+    if (Math.round(vnow / FRAME_MS) % 64 === 0) await yieldTurn();
   }
 }
 function sample(log: Log) {
@@ -137,10 +141,10 @@ afterEach(() => {
 });
 
 describe('the pitch plays the engine\'s match', () => {
-  it('1 over 30 matches every goal the engine commits is replayed once, at its end, stamped with its minute', () => {
+  it('1 over 30 matches every goal the engine commits is replayed once, at its end, stamped with its minute', async () => {
     mountWith(scoringClub());
     const log = newLog();
-    play(30 * MATCH_SEC * 1000 + 2000, log);
+    await play(30 * MATCH_SEC * 1000 + 2000, log);
     const committed = goalsOf(recorded.events);
     const shown = shownOf(log).map(r => `${r.at} ${r.minute}'`);
     const matches = recorded.last?.totalMatches ?? 0;
@@ -164,11 +168,11 @@ describe('the pitch plays the engine\'s match', () => {
 
   it('2 goals scored while you are in another room are on the scoreboard when you come back, and never replayed late', async () => {
     mountWith(scoringClub());
-    play(20 * 1000);
+    await play(20 * 1000);
     const tab = (room: string) => document.querySelector(`[data-room="${room}"]`) as HTMLElement;
     await act(async () => { fireEvent.click(tab('league')); });
     const before = recorded.events.length;
-    play(3 * MATCH_SEC * 1000);
+    await play(3 * MATCH_SEC * 1000);
     const away = goalsOf(recorded.events.slice(before));
     expect(away.length, 'nobody scored while the League tab was showing, so there was no backlog to test').toBeGreaterThan(3);
     expect(document.querySelector('[data-ball]'), 'the pitch rendered under the League tab').toBeNull();
@@ -179,14 +183,14 @@ describe('the pitch plays the engine\'s match', () => {
     const board = document.querySelector('[data-tycoon-pitch]')?.textContent ?? '';
     const last = recorded.last as TycoonState;
     expect(board, 'the scoreboard does not show the score the engine is holding').toContain(`YOU ${last.goalsFor}`);
-    play(MATCH_SEC * 1000, log);
+    await play(MATCH_SEC * 1000, log);
     const after = goalsOf(recorded.events.slice(back));
     const shown = shownOf(log).map(r => `${r.at} ${r.minute}'`);
     expect(shown, `coming back replayed ${shown.length} goals for the ${after.length} scored after the return`).toEqual(after);
     measured(`${away.length} goals while the League tab showed, 0 replayed on return; the scoreboard read YOU ${last.goalsFor}; the ${after.length} goals after the return replayed one for one`);
   }, TEST_MS);
 
-  it('3 under reduced motion no replay runs and no spark or pop is drawn, while the score and the floaters still land', () => {
+  it('3 under reduced motion no replay runs and no spark or pop is drawn, while the score and the floaters still land', async () => {
     const real = window.matchMedia;
     window.matchMedia = ((query: string) => ({
       matches: /prefers-reduced-motion:\s*reduce/.test(query),
@@ -199,11 +203,11 @@ describe('the pitch plays the engine\'s match', () => {
       let floaters = 0;
       const n = Math.round((5 * MATCH_SEC * 1000) / FRAME_MS);
       for (let i = 0; i < n; i += 1) {
-        play(FRAME_MS);
+        await play(FRAME_MS);
         if (document.querySelector('[data-ball]')?.getAttribute('data-ball-at') !== 'play') moved += 1;
         floaters = Math.max(floaters, document.querySelectorAll('.st-float').length);
       }
-      for (let i = 0; i < 8; i += 1) { act(() => { fireEvent.click(pitch(), { clientX: 10, clientY: 10 }); }); play(FRAME_MS); }
+      for (let i = 0; i < 8; i += 1) { act(() => { fireEvent.click(pitch(), { clientX: 10, clientY: 10 }); }); await play(FRAME_MS); }
       const goals = goalsOf(recorded.events).length;
       expect(goals, 'nobody scored, so there was nothing to hold still').toBeGreaterThan(5);
       expect(moved, `the ball left play on ${moved} frames under reduced motion`).toBe(0);
@@ -261,16 +265,16 @@ describe('the pitch plays the engine\'s match', () => {
     measured('five tiles: Upgrades open on arrival, and Payroll, Legacy, Badges and Records each replaced it with their own panel');
   }, TEST_MS);
 
-  it('6 in a goal storm the older replays land on their final frame, so the pitch never falls behind the match', () => {
+  it('6 in a goal storm the older replays land on their final frame, so the pitch never falls behind the match', async () => {
     mountWith(scoringClub());
     /* Every roll lands: both sides score every minute, far faster than a replay runs. */
     vi.mocked(Math.random).mockImplementation(() => 0.001);
     const log = newLog();
-    play(2 * MATCH_SEC * 1000, log);
+    await play(2 * MATCH_SEC * 1000, log);
     /* Then nobody scores, and the queue gets five seconds to drain: the last two
        replays run in full, 2.6s, after the older ones land. */
     vi.mocked(Math.random).mockImplementation(() => 0.999);
-    play(5000, log);
+    await play(5000, log);
     const committed = goalsOf(recorded.events);
     const shown = shownOf(log);
     const landed = shown.filter(r => r.landed).length;

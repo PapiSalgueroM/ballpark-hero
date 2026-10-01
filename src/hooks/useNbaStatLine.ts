@@ -37,7 +37,7 @@ function loadDailySave(raw: string | null): DailySave | null {
   }
 }
 
-export function useNbaStatLine() {
+export function useNbaStatLine(suggestionLimit = 10) {
   const [phase, setPhase] = useState<Phase>('boot');
   const [pool, setPool] = useState<StatLineSeason[]>([]);
   const [mode, setMode] = useState<Mode>('daily');
@@ -100,10 +100,12 @@ export function useNbaStatLine() {
 
   const pickedKeys = useMemo(() => new Set(picks.map(p => p.key)), [picks]);
 
-  const suggestions = useMemo(
-    () => (phase === 'playing' && picks.length < PICK_COUNT ? suggestSeasons(eligible, query, pickedKeys) : []),
-    [phase, eligible, query, pickedKeys, picks.length],
+  const suggestionMatches = useMemo(
+    () => (phase === 'playing' && picks.length < PICK_COUNT ? suggestSeasons(eligible, query, pickedKeys, suggestionLimit + 1) : []),
+    [phase, eligible, query, pickedKeys, picks.length, suggestionLimit],
   );
+  const suggestions = suggestionMatches.slice(0, suggestionLimit);
+  const hasMoreSuggestions = suggestionMatches.length > suggestionLimit;
 
   const addPick = useCallback((season: StatLineSeason) => {
     setPicks(prev => {
@@ -152,7 +154,7 @@ export function useNbaStatLine() {
 
   return {
     phase, mode, target, picks, query, setQuery, suggestions, addPick,
-    removePick, combined, canSubmit, submit, start, backToSetup, result,
+    removePick, combined, canSubmit, submit, start, backToSetup, result, hasMoreSuggestions,
     alreadyPlayed, poolSize: pool.length, eligibleSize: eligible.length,
   };
 }

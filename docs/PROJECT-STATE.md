@@ -1,5 +1,262 @@
 # Project state
 
+## ACCEPTED 2026-10-01: accurate F1 Driver clues, hints and help
+
+807 fixes misleading clue categories and hint costs, adds an actual-tier worked
+example and restores help focus without scrolling. Original game outcomes hold.
+Ten focused tests, ten existing feedback tests, seven effective controls and native
+checks pass. Combined 807/809/810 types, builds, all 15 artifact guards, full
+NoDoubleRecord and other affected guards pass. All 1800 raw sources and saved
+page/URL content hold. Two untouched production App contexts score 800 and 200
+with exact save/share/once completion and 119 checks. Detailed evidence is on
+WORKBOARD. No publication claim. 809/810 App checks and 811-813 continue.
+
+## CLAIMED 2026-10-01: clue copy, NASCAR feedback and reveal timers
+
+811 owns only Constructor, Tennis and Nation Boards' inaccurate hint copy plus
+focused checks. 812 owns NASCAR Board/local feedback CSS and checks for committed
+answer animations, readable results and accurate hint points. 813 owns the eight
+remaining Higher/Lower hooks and focused checks, reproducing the MLB-style stale
+reveal defect per hook before applying its small cancellation fix. Exact scopes
+and preserved behaviors are on WORKBOARD. 807/809/810 finish their frozen App
+checks. All Claude reservations stand. Next free 814.
+
+At 15:52 UTC the live site still serves the earlier index-jsexOB8y.js release.
+Home, F1 Driver and Rank Em are indexable in raw HTML; live sitemap has 167 URLs.
+Current repo changes still need publication. The automated Lovable browser is
+logged out and this session has no deploy_project tool; the desktop session is
+uninspected. AdSense approval and Google's indexing decisions remain unverified.
+
+## ACCEPTED 2026-10-01: regression harness repairs
+
+808 repairs College's final-verdict boundary and manager cleanup ownership, with
+all original controls plus effective new removed-return/destructive-cleanup
+copies. Default240 engine outcomes and1780 RAW source closures hold;489 syntax/
+anchor and no-rival-name guards pass. No frontend/runtime/snapshot changes.
+The old Aussie timeout does not reproduce in two unchanged10-test runs (season
+3565/4439ms against5000). No timeout was raised. Receipts are on WORKBOARD.
+
+810 claims only the MLB Higher/Lower hook plus focused tests/harness to cancel
+owned stale reveal timers. Actual reset wrongly grants old points/skips a round,
+and an old Daily timer truncates the new Unlimited reveal. Preserve all original
+game/save/share/completion rules and exact2000ms reveal. Claim before code edits.
+807/809 continue; all Claude reservations stand. Next free811.
+
+## CLAIM ADDENDUM 2026-10-01: truthful Driver clue headings
+
+807 also replaces fixed clue categories with numbered headings: original bank
+orders vary and several actual clues appear under wrong headings. Preserve every
+existing clue/data/order/payout; no invented categories or facts. Same owned Board
+scope, explicit claim before implementation. Evidence and checks are on WORKBOARD.
+
+## ACCEPTED 2026-10-01: F1 Driver committed feedback
+
+806 removes stale wrong feedback after correct wins, binds finite420/static cues
+to actual committed turns/status and prevents give-up from borrowing a prior miss.
+Full guesses wrap; hook/actions/data/all payouts/save/share/completion hold. Ten
+outcomes/nineunit controls/8native+4copies (994checks), combined805/806 type/build/
+all15 fences and two actual App contexts (1000/600,84checks) pass with no Y changes/
+errors/overflow/extra writes.1791 inputs/188 saved pages/168 URLs held. No publish.
+The measured original help Escape-to-BODY focus gap is deferred to807, whose scope
+now also includes the isolated HowToPlay opener/close-focus and fictional hint
+example.807/808/809 proceed; all Claude reservations stand. Next free810.
+Full receipts and boundaries are on WORKBOARD.
+
+## ACCEPTED 2026-10-01: Rank Em editable order
+
+802 adds editable five-pick drafts and one explicit Lock, preserving original
+rounds/scoring/save/share/completion. Finite/static cues,44px full-name controls
+and visible focus pass10 outcomes/15unit controls/8native+6copies and two actual
+App contexts (1000/600,229checks,0Y/errors/overflow). Types/final build/all15fences
+plus source guards pass. Only Rank snapshot/derived URL/guide record change,
+187 other saved pages/167 URLs/128 guide records hold. NoDouble copied CSS import
+support and Rank result detection pass targeted proofs; two separate whole-test
+positives refuse an existing MLB timer teardown error and are not credited.
+Detailed receipts/limits are on WORKBOARD. No publication claim.
+
+809 claims shared playerSearch/PlayerAutocomplete plus focused test/sim: failed
+empty lookups must offer retry instead of a false No players found, preserving
+useful partial results, ordering and stale-response guards. No data/DB writes.
+The historical413 accent failure's root cause remains unproven.806 is ready for
+commit;807/808 follow. All Claude reservations stand. Next free810.
+
+## ACCEPTED 2026-10-01: F1 Driver Search keyboard and phone popup
+
+805 fixes ArrowDown resets and offscreen low-input suggestions, preserving the
+original authored bank/matching/order and all gameplay. Eleven outcomes/thirteen
+unit controls and native matrices pass. Combined805/806 types/build/all15 fences
+plus source guards pass;1791 RAW inputs/188 saved pages/168 URLs stay held. Two
+actual App contexts use untouched production JS, preserve the original800point
+daily win/full share/once completion and quiet reload, with0Y/error/overflow.
+The test type correction emits identical JS. Detailed receipts are on WORKBOARD.
+No publication claim.802 commit and806 App finish next;807/808 continue afterward.
+All Claude claims stand. Next free809.
+
+## CLAIMED 2026-10-01: truthful Driver hints and regression repairs
+
+807 reserves Driver Board plus new focused test/sim after806 commits. The current
+-100 hint cost is false against the original clue payout ladder. Show the actual
+next payout and count hints, preserving all game outcomes.808 reserves only the
+College page source guard and manager hot-seat harness cleanup. The former reads
+the namesake judge call instead of the final verdict; the latter deletes its own
+original library in a checkout inside TEMP. Concrete scope is on WORKBOARD.
+
+The older413 scope finished409 PASS/4 FAIL.804 subsequently repaired its stale
+guide records; College drift, Aussie5000ms timeout and live accented-name lookup
+are being investigated.1779 RAW inputs held, one library was removed by the
+manager harness. Frozen gate/output preserved, no full-green/closure claim.
+802/805/806 final production acceptance continues. All Claude claims stand.
+Next free809. Claims pushed before implementation.
+
+## ACCEPTED 2026-10-01: Name Them All feedback and readable reveals
+
+803 adds truthful full-name hit announcements, finite/static answer cues, readable
+answers and44px actions. Retry/More lists now stay in the finished top card, fixing
+the measured phone focus and Retry jump. Original catalog/helpers/180-second timer/
+score/share/completion stay held. Nine outcomes/thirteen unit controls/eight final-CSS
+contexts/three effective browser copies, types/two builds/all15 artifact fences plus
+guide/search/anchor guards and two actual App contexts pass. All1784 source files,
+188 saved pages and168 URL hashes/dates stay held. Full receipts are on WORKBOARD;
+the weaker placeholder control is preserved and not credited. No publication claim.
+802 measured native corrections,805 Search and806 feedback continue. The older413
+regression is still running. All Claude reservations stand. Next free807.
+
+## IN PROGRESS 2026-10-01: F1 Driver feedback after committed guesses
+
+806 reserves the isolated Driver Board/module/tests/harness to fix wrong-guess
+feedback scheduled after a correct win by the stale playing-state closure. Actual
+miss cues become finite and static for reduced motion; hook/data/actions/score/save/
+share/completion stay held.805 owns Search, disjoint from the Board. Exact scope
+and acceptance are on WORKBOARD.803 finishes production proof before its builder
+starts806.802 native corrections and the older413 regression continue. Next free807.
+
+## IN PROGRESS 2026-10-01: F1 Driver Search keyboard suggestions
+
+805 fixes the actual ArrowDown highlight reset in the isolated search component,
+with local visible selection, readable44px choices, combobox semantics and held-key
+protection. Original names/matching/topten order/exclusions/callback fallback stay
+held. Exact four-file ownership and outcome/control/native/App gates are on WORKBOARD.
+802 corrects a measured focused-target visibility case before its final recapture;
+803 is frozen for production proof. The older413 regression remains running.
+Next free806; all Claude reservations stand.
+
+## ACCEPTED 2026-10-01: NBA Stat Line exposes every matching season
+
+801 adds truthful ten-season expansions, full names/44px focusable controls and
+safe search/Score/paging handoffs. The measured phone offscreen issue is corrected
+with a stable action station and local selected-list scrolling. Original targets,
+calculations, score, save, share and completion remain held. Ten outcomes/twelve unit
+controls/eight final-CSS contexts/eight browser controls, types/two builds/all15
+artifact fences/original helper checks and two actual App contexts pass. All188
+saved pages/all168 URL dates+hashes remain held. Full receipts are on WORKBOARD.
+802 captured production and803 final proof continue;805 is being scouted. Frozen413
+still runs on its older scope, so no complete-suite or publication claim. Next free805.
+
+## ACCEPTED 2026-10-01: generated guide refresh after verified changes
+
+804 adds explicit --refresh for existing converted/frozen guides and updates only
+the accepted F1 score and NHL contributor instruction records. All127 other route
+records and every guard section remain held. Full guard/five effective negative
+controls/four invalid-request refusals/485-harness anchor scanner pass. Exact
+receipts are on WORKBOARD.802 still owns its rank-em record when its production
+capture runs.801 App acceptance and802/803 native work continue; the immutable413
+suite remains running against older captured records. Next free805.
+
+## IN PROGRESS 2026-10-01: guide records after verified gameplay corrections
+
+804 adds an explicit generated refresh for already converted/frozen guides, so
+accepted NHL control instructions and the corrected F1 score can update their
+original-text records without weakening the guide checks. Other entries stay held;
+802 refreshes only its own rank-em record when frozen. Whole guard/negative controls
+and invalid-route refusal remain required.801's types/build/all15 artifact gates
+pass and final native/App proof continues.802/803 build in parallel. The immutable
+413 run continues against its older captured records. Next free805.
+
+## ACCEPTED 2026-10-01: Emoji Guess feedback and keyboard flow
+
+800 adds truthful committed feedback, finite/static motion, full readable answers,
+44px owned controls and safe input/Next/Share handoffs. Original actual daily puzzles,
+scores/saves/share/completion stay held. Nine positives/thirteen unit controls,
+eight strengthened native contexts/four defect controls, real types/two builds,
+three-clock saved-page capture/all15 artifact fences and two actual App contexts
+pass. Exact receipts and the corrected isolated prerender run are on WORKBOARD.
+Only Emoji Guess's saved page/derived URL row changed;187 other raw saved pages
+and167 other URL hashes/dates stay held.801 production and802/803 builders continue;
+the frozen413 regression remains running. Publication/Google decisions remain due.
+Next free804; all Claude reservations stand.
+
+## IN PROGRESS 2026-10-01: Name Them All readable feedback
+
+803 claims the isolated ListQuiz Page/module/test/harness. Replace color-only hit
+feedback and truncated reveals with truthful announcements, finite/static motion,
+readable answers and safe native focus. Original answers/aliases, timed mode,
+tiers, completion and share stay held. Exact acceptance is on WORKBOARD.801/802
+continue;800's corrected app type gate passes and its isolated production pipeline
+continues. The immutable413 regression is still running. Next free804.
+
+## IN PROGRESS 2026-10-01: Rank 'Em editable draft and explicit lock
+
+802 replaces fifth-pick autosubmission with a reviewable local order and one
+explicit Lock order action. Original rounds, facts, daily log, score/share and
+completion stay held. Exact Page/module/tests/harness and narrow guide/completion
+fixture/generated ownership are on WORKBOARD.801 season picker continues;800's
+native/control proof is accepted and its test-only type fix is being checked before
+production restarts. The frozen413-node regression continues. Next free803.
+
+## IN PROGRESS 2026-10-01: NBA Stat Line season access and keyboard flow
+
+801 claims the isolated Page/picker module and small hook suggestion-limit plumbing,
+plus focused actual outcome tests/harness. Expose eligible seasons beyond the hidden
+first ten using the unchanged helper order/eligibility and preserve every original
+target, line calculation, score, save, share and completion. Exact scope/acceptance
+are on WORKBOARD.800 passes nine positives/thirteen unit controls/eight strengthened
+native contexts/four browser controls; its separate production pipeline is running.
+The frozen413-node regression continues unchanged. Next free802; Claude claims hold.
+
+## ACCEPTED 2026-10-01: MLB trade desk exposes every roster player
+
+798's three trade lists now offer every original player with honest eight-player
+expansions, fixed local height, full names,44px controls and safe keyboard handoffs.
+Original offers/talks/transactions/saves/money/picks/RNG/completion stay unchanged.
+Nine real outcomes/twelve source controls, eight native contexts/seven copied controls
+and two actual App/GameNavbar/ticker/Footer contexts pass. Final native QA fixed
+measured focus clipping and grid-name overlap; zero page movement and full-text
+containment hold. Types/build/all15 artifact fences pass. Receipts are on WORKBOARD.
+The frozen413-node regression is running,70 browser harnesses explicitly excluded;
+no complete-green or new-live claim.800's Emoji Guess nine outcomes pass and its
+controls/native work continues separately. Next free801; Claude claims stay held.
+
+## IN PROGRESS 2026-10-01: Emoji Guess feedback and keyboard flow
+
+800 claims the isolated Board, scoped CSS and focused test/harness. Add truthful
+committed feedback/finite motion, stable readable answers and deliberate native
+keyboard handoffs without changing actual daily puzzles, scoring, saves, completion
+or share. Exact ownership and acceptance are on WORKBOARD.798 final row-bound fix
+is frozen with an effective clipping control; its production rebuild/native matrix
+continue.799 is committed/pushed. Next free801; all Claude reservations hold.
+
+## ACCEPTED 2026-10-01: F1 guide score and saved-page agreement
+
+799's championship example now correctly promises400 at clue four. Three actual
+hook/guide outcomes and both effective changed-copy controls pass; all other clue
+scores stay unchanged. The unused McLaren prop says the independently verified10.
+Types0, two production builds, three-clock saved-page capture, all15 artifact fences
+and focused F1/search/metadata checks pass. Only F1's current saved page/ledger row
+and derived search source hash changed here; all167 other current URL ledger rows
+hold. Exact receipts and primary source links are on WORKBOARD.798's real narrow
+focused-row clipping correction and native checks continue before its final rebuild.
+Full-node regression and publication remain due. Next free800; Claude claims stand.
+
+## ACCEPTED 2026-10-01: Tycoon replay checks without worker starvation
+
+797's six actual gameplay outcomes and all eight original negative controls pass.
+Real Node yields let worker updates run while every fake-frame observation, score,
+baseline metric and threshold stays held. Worker/import/timeout errors cannot count
+as an intended failed outcome. Tycoon product source remains byte-exactly unchanged.
+Final reports and cleanup are on WORKBOARD.798/799 combined types and production
+builds pass; native/artifact acceptance and current full-node regression remain due.
+Next free800; all Claude reservations remain held.
+
 ## IN PROGRESS 2026-10-01: correct the F1 constructor guide's worked score
 
 799 fixes the actual guide's600-point promise at clue four to the unchanged hook's
@@ -25,7 +282,7 @@ has its nationality flag, with nine original actual signing outcomes held.
 The fresh merged production clone has types0/two builds/three-clock saved pages and
 all15 artifact fences green. Only three owned raw files changed,185 other saved files
 held, and only Aussie/NHL content fingerprints changed;166 other URL dates/hashes held.
-Actual App/Header/Footer checks pass four NHL and eight draft contexts, exact saves/
+Actual App/GameNavbar/Footer checks pass four NHL and eight draft contexts, exact saves/
 placement/original22 nodes, finite/static feedback and zero document movement or
 outward writes. Full receipts and boundaries are on WORKBOARD. Live publication is
 still Release J below; no new deployment or current all-node-green claim is made.
