@@ -72,6 +72,9 @@
  *   srabout        a screen reader only line goes into the About section (7, 8)
  *   srsource       a screen reader only line goes into the hero, outside the
  *                  h1 and the section, so only the source scan can see it (8)
+ *   retiredlink    one link goes to a retired route (a Navigate in App.tsx)
+ *                  in the module and the template alike (part 3, which since
+ *                  Round 840 refuses a link to a route that only redirects)
  *
  * Run: node scripts/simHomeCopy.mjs
  */
@@ -91,7 +94,7 @@ const CONTROL = process.env.HOME_COPY_CONTROL || '';
 const HOME_CONTROLS = {
   descdrift: '4b', commentapp: '4b', commenttpl: '4b',
   moduledrift: '6', templatedrift: '6', nosection: '7',
-  hiddenh1: ['7', '8'], srabout: ['7', '8'], srsource: '8',
+  hiddenh1: ['7', '8'], srabout: ['7', '8'], srsource: '8', retiredlink: '3',
 };
 if (CONTROL && !(CONTROL in HOME_CONTROLS)) {
   console.error(`HOME_COPY_CONTROL=${CONTROL} is not a control this harness knows (${Object.keys(HOME_CONTROLS).join(', ')})`);
@@ -112,7 +115,12 @@ function controlled(name, src, from, to) {
 
 const DRIFT_FROM = 'international call-ups, the lot.';
 const DRIFT_TO = 'international call-ups, the works.';
-const homeCopySrc = controlled('moduledrift', readFileSync(path.join(ROOT, 'src/data/homeCopy.ts'), 'utf8'), DRIFT_FROM, DRIFT_TO);
+let homeCopySrc = controlled('moduledrift', readFileSync(path.join(ROOT, 'src/data/homeCopy.ts'), 'utf8'), DRIFT_FROM, DRIFT_TO);
+/* retiredlink: one link points at a retired route in the module AND the
+   template alike, so the pair still agrees and only part 3 can object */
+const RETIRED_FROM = "a('/minefield', 'Minefield')";
+const RETIRED_TO = "a('/world-cup', 'Minefield')";
+homeCopySrc = controlled('retiredlink', homeCopySrc, RETIRED_FROM, RETIRED_TO);
 let indexBundled = readFileSync(path.join(ROOT, 'src/pages/Index.tsx'), 'utf8');
 indexBundled = controlled('nosection', indexBundled, '<HomeAbout />', '');
 /* the first draft's h1, word for word: the name on screen and the rest of the
@@ -241,6 +249,7 @@ function hidingStyle(style) {
 
 let html = readFileSync(path.join(ROOT, 'index.html'), 'utf8');
 html = controlled('templatedrift', html, DRIFT_FROM, DRIFT_TO);
+html = controlled('retiredlink', html, 'href="/minefield"', 'href="/world-cup"');
 let indexPage = readFileSync(path.join(ROOT, 'src/pages/Index.tsx'), 'utf8');
 /* commenttpl: the template's real description says something else, and the
    right one survives only inside an HTML comment placed first. A reader that
@@ -355,9 +364,14 @@ console.log(`   ${bare.length} numbers in the prose, all of them floors and all 
 /* ── 3: every link is real ────────────────────────────────────────────── */
 part = '3';
 console.log('3) every link in the block');
-const routes = new Set(
-  [...readFileSync(path.join(ROOT, 'src/App.tsx'), 'utf8').matchAll(/path="([^"]+)"/g)].map(m => m[1]),
-);
+const appSrc = readFileSync(path.join(ROOT, 'src/App.tsx'), 'utf8');
+const routes = new Set([...appSrc.matchAll(/path="([^"]+)"/g)].map(m => m[1]));
+/* Round 840: a retired route is still a path in App.tsx, it just answers with
+   a redirect, and since the same links now render on the page itself as well
+   as in the template, a link to one would send every reader somewhere else.
+   A route whose element is a Navigate is not somewhere to link. */
+const redirects = new Set([...appSrc.matchAll(/<Route\s+path="([^"]+)"\s+element=\{\s*<Navigate\b/g)].map(m => m[1]));
+if (redirects.size < 5) fail(`only ${redirects.size} redirect routes read out of App.tsx, so the retired link check below could not see one`);
 const hrefs = [...block.matchAll(/href="([^"]+)"/g)].map(m => m[1]);
 if (hrefs.length < 8) fail(`only ${hrefs.length} links in the block, which is thin for a home page a crawler reads`);
 const gamePaths = new Set(ALL_GAMES.map(g => g.path));
@@ -365,9 +379,10 @@ let gameLinks = 0;
 for (const h of hrefs) {
   if (!h.startsWith('/')) { fail(`${h} is not an internal link`); continue; }
   if (!routes.has(h)) fail(`${h} is not a route in App.tsx`);
+  else if (redirects.has(h)) fail(`${h} is a retired route in App.tsx that only redirects, so the link sends a reader somewhere else`);
   if (gamePaths.has(h)) gameLinks += 1;
 }
-console.log(`   ${hrefs.length} links, ${gameLinks} of them games, every one a real route`);
+console.log(`   ${hrefs.length} links, ${gameLinks} of them games, every one a real route and none of them one of the ${redirects.size} that only redirect`);
 if (gameLinks < 6) fail(`only ${gameLinks} of the links go to a game, which is the point of the block`);
 
 /* ── 5: nothing dated ─────────────────────────────────────────────────── */
