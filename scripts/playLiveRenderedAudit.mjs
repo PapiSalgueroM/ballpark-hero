@@ -36,7 +36,8 @@
  * first commit, and both the snapshot and the home template carry that
  * element). Then it waits until the non chrome text has not changed for two
  * seconds with no request in flight (or four seconds of no change while
- * something long lived stays open), capped at fifteen seconds. Then, the way
+ * something long lived stays open; or eight seconds while a spinner outside
+ * the chrome is still showing), capped at fifteen seconds. Then, the way
  * Google's renderer does, it stretches the viewport to the page's full height
  * so anything waiting to scroll into view renders, waits again, and measures.
  *
@@ -98,6 +99,7 @@ const PORT = Number(process.env.PORT || 4836);
 const SETTLE_MAX_MS = 15000;
 const QUIET_MS = 2000;
 const QUIET_BUSY_MS = 4000;
+const SPINNER_QUIET_MS = 8000;
 const URL_BUDGET_MS = 90000;
 const AD_HOSTS = /(^|\.)(googlesyndication\.com|doubleclick\.net|googletagmanager\.com|google-analytics\.com|googleadservices\.com|adservice\.google\.com|adtrafficquality\.google)$/i;
 
@@ -184,10 +186,19 @@ const CTX_OPTS = {
 
 /* The sitemap the site serves, not the committed one: the question is what the
    live site asks Google to index today. */
+/* Retried, because one stalled connection on 2026-10-01 timed out a request
+   that curl answered in 0.2 seconds a moment later. */
+const getWithRetry = async (req, url, opts, tries = 3) => {
+  let last;
+  for (let i = 0; i < tries; i++) {
+    try { return await req.get(url, opts); } catch (e) { last = e; }
+  }
+  throw last;
+};
 let sitemapXml;
 try {
   const ctx = await browser.newContext({ userAgent: UA.desktop });
-  const res = await ctx.request.get(`${BASE}/sitemap.xml`, { timeout: 30000 });
+  const res = await getWithRetry(ctx.request, `${BASE}/sitemap.xml`, { timeout: 20000 });
   sitemapXml = await res.text();
   await ctx.close();
 } catch (e) {
@@ -354,7 +365,7 @@ async function auditOne(u) {
   const rpcPosts = [];
   try {
     /* raw first, with no JavaScript and no redirect following */
-    const res = await ctx.request.get(url, { maxRedirects: 0, timeout: 30000 });
+    const res = await getWithRetry(ctx.request, url, { maxRedirects: 0, timeout: 20000 }, 2);
     const rawHtml = await res.text();
     const headers = res.headersArray();
     rec.rawStatus = res.status();
@@ -411,11 +422,22 @@ async function auditOne(u) {
     page.on('response', r => { if (r.status() >= 400 && bad.length < 20) bad.push(`${r.status()} ${r.url().replace(/\?.*$/, '').slice(0, 160)}`); });
 
     const t0 = Date.now();
+    /* Three tries with a pause: on 2026-10-01 two navigations in the first
+       chunk landed on Chromium's network error page and a single retry fired
+       straight into the same stall. A URL that fails three times is recorded
+       as an error, never as a page. */
     let resp;
-    try {
-      resp = await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 45000 });
-    } catch {
-      resp = await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 45000 });
+    rec.navAttempts = 0;
+    for (;;) {
+      rec.navAttempts += 1;
+      try {
+        resp = await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 30000 });
+        if (page.url().startsWith('chrome-error:')) throw new Error('landed on the browser network error page');
+        break;
+      } catch (e) {
+        if (rec.navAttempts >= 3) throw e;
+        await page.waitForTimeout(2000);
+      }
     }
     rec.status = resp ? resp.status() : null;
     rec.redirects = [];
@@ -427,10 +449,16 @@ async function auditOne(u) {
     rec.mounted = mounted;
     rec.mountMs = Date.now() - t0;
 
+    /* A visible spinner outside the chrome holds the settle open: on
+       2026-10-01 /connections sat on a bare spinner with nothing in flight and
+       was measured as a settled empty page after six seconds. Now a spinner
+       has to stay put for SPINNER_QUIET_MS before the page is taken as it is. */
     const sig = () => page.evaluate(() => {
       const b = document.body ? document.body.innerText.length : 0;
       const c = [...document.querySelectorAll('[data-site-chrome]')].reduce((s, el) => s + (el.innerText || '').length, 0);
-      return `${b - c}:${document.querySelectorAll('[data-seo-content="loading"]').length}:${document.querySelectorAll('a[href]').length}`;
+      const spin = [...document.querySelectorAll('.animate-spin, [aria-busy="true"], [role="progressbar"]')]
+        .filter(el => !el.closest('[data-site-chrome]') && (typeof el.checkVisibility !== 'function' || el.checkVisibility())).length;
+      return { s: `${b - c}:${document.querySelectorAll('[data-seo-content="loading"]').length}:${document.querySelectorAll('a[href]').length}:${spin}`, spin };
     });
     const settle = async (maxMs) => {
       const start = Date.now();
@@ -438,9 +466,10 @@ async function auditOne(u) {
       let since = Date.now();
       while (Date.now() - start < maxMs) {
         await page.waitForTimeout(500);
-        const s = await sig();
+        const { s, spin } = await sig();
         if (s !== last) { last = s; since = Date.now(); continue; }
         const quiet = Date.now() - since;
+        if (spin > 0) { if (quiet >= SPINNER_QUIET_MS) return true; continue; }
         if ((quiet >= QUIET_MS && inflight === 0) || quiet >= QUIET_BUSY_MS) return true;
       }
       return false;
