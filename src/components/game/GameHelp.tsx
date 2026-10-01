@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useRoutePath } from '@/hooks/useRoutePath';
 import { HowToPlayPopover } from '@/components/game/HowToPlayPopover';
 import { loadGameContent } from '@/data/gameContent/loader';
 import type { GameContent } from '@/data/gameContent/types';
@@ -28,7 +28,7 @@ interface GameHelpProps {
 }
 
 export function GameHelp({ side = 'left', inline = false, className }: GameHelpProps = {}) {
-  const { pathname } = useLocation();
+  const pathname = useRoutePath();
   const [content, setContent] = useState<GameContent | null>(null);
 
   useEffect(() => {

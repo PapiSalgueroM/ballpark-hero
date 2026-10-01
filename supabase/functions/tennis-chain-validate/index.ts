@@ -109,7 +109,8 @@ serve(async (req) => {
     const supabase = createClient(url, key);
     /* ROUND 487: PAGED, and that is the whole fix.
        PostgREST caps a select at 1,000 rows and says nothing about it, and
-       tennis_grand_slam_winners holds 1,019. The unbounded select above read
+       tennis_grand_slam_winners held 1,019 that day (1,015 once Round 732's
+       migration lands, still over the cap). The unbounded select above read
        the first thousand and silently never saw the last nineteen, which are
        every women's US Open champion from 2007 to 2025. Measured against
        production on 2026-09-06: Emma Raducanu, Bianca Andreescu and Sloane

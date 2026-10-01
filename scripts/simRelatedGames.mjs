@@ -147,6 +147,43 @@ console.log('6) Registering one more game leaves nearly every page\'s links alon
   console.log(`   the newcomer is linked from ${inbound} page(s) straight away`);
 }
 
+/* ---------- 7. Every career sim and its front office link each other ---------- */
+console.log('7) Each big sim links its other half, both ways');
+{
+  /* Round 654. Soccer Career and Club Manager are the two biggest ways into the
+     site from search, and neither related block named the other. The pairs are
+     typed here rather than read from COMPANIONS, so a pair dropped from that map
+     is a failure rather than a smaller list to agree with.
+     RELATED_CONTROL=nocompanion runs the picker with no companions at all, which
+     is the site before this round, and this section must go red for it. */
+  const CONTROL = process.env.RELATED_CONTROL || '';
+  if (CONTROL && CONTROL !== 'nocompanion') { console.error(`RELATED_CONTROL=${CONTROL} is not a control this harness knows (nocompanion)`); process.exit(2); }
+  const PAIRS = [
+    ['/soccer-career', '/club-manager'],
+    ['/nba-my-career', '/nba-front-office'],
+    ['/nfl-my-career', '/front-office'],
+    ['/mlb-my-career', '/mlb-front-office'],
+    ['/nhl-my-career', '/nhl-front-office'],
+  ];
+  const before = failures;
+  const pick = p => (CONTROL === 'nocompanion' ? relatedGamesFor(p, CATEGORIES, {}) : relatedGamesFor(p)).map(x => x.path);
+  let held = 0;
+  for (const [a, b] of PAIRS) {
+    for (const [from, to] of [[a, b], [b, a]]) {
+      if (!pathSet.has(from) || !pathSet.has(to)) { fail(`${from} or ${to} is not a registered game, so this pair cannot hold`); continue; }
+      if (pick(from).includes(to)) held += 1;
+      else fail(`${from} does not link ${to} in its related games`);
+    }
+  }
+  console.log(`   ${held} of ${PAIRS.length * 2} directions hold${CONTROL ? ' (NEGATIVE CONTROL ON: no companions)' : ''}`);
+  if (CONTROL === 'nocompanion') {
+    const caught = failures - before;
+    if (caught > 0) { console.log(`\nsimRelatedGames control: green. With no companions ${caught} direction(s) went unlinked and were reported.`); process.exit(0); }
+    console.error('\nsimRelatedGames control: RED. With no companions every pair still linked, so section 7 proves nothing.');
+    process.exit(1);
+  }
+}
+
 /* ---------- verdict ---------- */
 if (failures > 0) {
   console.error(`\n${failures} RELATED GAMES CHECK${failures === 1 ? '' : 'S'} FAILED`);

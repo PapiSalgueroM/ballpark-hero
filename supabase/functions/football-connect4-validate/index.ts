@@ -90,7 +90,10 @@ const foldName = (s: string) =>
 const C4_CLUB_STRINGS: Record<string, string[]> = {
   "ac milan": ["AC Milan"],
   "arsenal": ["Arsenal FC"],
-  "atletico madrid": ["Atlético Madrid"],
+  /* Round 707: the table stores 204 rows at "Atlético de Madrid" and one hand
+     written row (Luis Suarez) at "Atlético Madrid", measured 2026-09-30, so
+     with one string this label proved nobody but him. Exact strings still. */
+  "atletico madrid": ["Atlético Madrid", "Atlético de Madrid"],
   "barcelona": ["Barcelona", "FC Barcelona"],
   "bayern munich": ["Bayern Munich", "FC Bayern Munich"],
   "chelsea": ["Chelsea FC"],
@@ -119,9 +122,287 @@ const C4_CLUB_STRINGS: Record<string, string[]> = {
   "wolfsburg": ["VfL Wolfsburg"],
 };
 
+/* ROUND 707: THE VERIFIED 2026 MOVES COUNT AS STINTS HERE TOO. The same list
+   soccer-grid-validate carries, under the same name, for the same reason: the
+   stint table never learned the moves in scripts/transferOverlay2026.mjs, and
+   on 2026-09-30 this game's cache held the model saying Tonali "has never played
+   for Tottenham Hotspur" and Rashford "never played for Barcelona". Confirm
+   only, like the table pass it sits behind: it can prove a club, never deny
+   one. Keyed by foldName() of the name. scripts/simSoccerStints.mjs section 0
+   fails if this copy, the grid's copy and the overlay file ever differ; when
+   the overlay grows, add the same line in both functions. */
+const TRANSFER_OVERLAY_2026: Record<string, { name: string; clubs: string[] }> = {
+  "morgan rogers": { name: "Morgan Rogers", clubs: ["Chelsea FC"] },
+  "elliot anderson": { name: "Elliot Anderson", clubs: ["Manchester City"] },
+  "sandro tonali": { name: "Sandro Tonali", clubs: ["Tottenham Hotspur"] },
+  "mateus fernandes": { name: "Mateus Fernandes", clubs: ["Tottenham Hotspur"] },
+  "bruno guimaraes": { name: "Bruno Guimarães", clubs: ["Arsenal FC"] },
+  "anthony gordon": { name: "Anthony Gordon", clubs: ["FC Barcelona"] },
+  "crysencio summerville": { name: "Crysencio Summerville", clubs: ["Al-Hilal SFC"] },
+  "jeremy jacquet": { name: "Jérémy Jacquet", clubs: ["Liverpool FC"] },
+  "jan paul van hecke": { name: "Jan Paul van Hecke", clubs: ["Tottenham Hotspur"] },
+  "maxence lacroix": { name: "Maxence Lacroix", clubs: ["Chelsea FC"] },
+  "johan manzambi": { name: "Johan Manzambi", clubs: ["Aston Villa"] },
+  "andrey santos": { name: "Andrey Santos", clubs: ["Manchester United"] },
+  "marco palestra": { name: "Marco Palestra", clubs: ["Chelsea FC"] },
+  "luka vuskovic": { name: "Luka Vuskovic", clubs: ["Brighton & Hove Albion"] },
+  "geovany quenda": { name: "Geovany Quenda", clubs: ["Chelsea FC"] },
+  "christos tzolis": { name: "Christos Tzolis", clubs: ["Arsenal FC"] },
+  "antoine semenyo": { name: "Antoine Semenyo", clubs: ["Manchester City"] },
+  "marc guehi": { name: "Marc Guéhi", clubs: ["Manchester City"] },
+  "bradley barcola": { name: "Bradley Barcola", clubs: ["Liverpool FC"] },
+  "omar marmoush": { name: "Omar Marmoush", clubs: ["Tottenham Hotspur"] },
+  "nick woltemade": { name: "Nick Woltemade", clubs: ["Juventus FC"] },
+  "tijjani reijnders": { name: "Tijjani Reijnders", clubs: ["Al-Qadsiah FC"] },
+  "yan diomande": { name: "Yan Diomande", clubs: ["Real Madrid"] },
+  "marc cucurella": { name: "Marc Cucurella", clubs: ["Real Madrid"] },
+  "bernardo silva": { name: "Bernardo Silva", clubs: ["Real Madrid"] },
+  "denzel dumfries": { name: "Denzel Dumfries", clubs: ["Real Madrid"] },
+  "karim adeyemi": { name: "Karim Adeyemi", clubs: ["FC Barcelona"] },
+  "rodri": { name: "Rodri", clubs: ["FC Barcelona"] },
+  "goncalo ramos": { name: "Gonçalo Ramos", clubs: ["AC Milan"] },
+  "rafael leao": { name: "Rafael Leão", clubs: ["Galatasaray"] },
+  "ismael saibari": { name: "Ismael Saibari", clubs: ["Bayern Munich"] },
+  "nathaniel brown": { name: "Nathaniel Brown", clubs: ["Bayern Munich"] },
+  "marc andre ter stegen": { name: "Marc-André ter Stegen", clubs: ["Ajax Amsterdam"] },
+  "julian brandt": { name: "Julian Brandt", clubs: ["Ajax Amsterdam"] },
+  "francisco trincao": { name: "Francisco Trincão", clubs: ["Al-Ahli SFC"] },
+  "eduard spertsyan": { name: "Eduard Spertsyan", clubs: ["Al-Ahli SFC"] },
+  "jan carlo simic": { name: "Jan-Carlo Simić", clubs: ["Al-Ittihad Club"] },
+  "malang sarr": { name: "Malang Sarr", clubs: ["NEOM SC"] },
+  "souffian el karouani": { name: "Souffian El Karouani", clubs: ["SL Benfica"] },
+  "angelo fulgini": { name: "Angelo Fulgini", clubs: ["Al-Khaleej FC"] },
+  "abdou diallo": { name: "Abdou Diallo", clubs: ["Abha Club"] },
+  "robert lewandowski": { name: "Robert Lewandowski", clubs: ["Chicago Fire FC"] },
+  "antoine griezmann": { name: "Antoine Griezmann", clubs: ["Orlando City SC"] },
+  "allan saint maximin": { name: "Allan Saint-Maximin", clubs: ["Charlotte FC"] },
+  "brais mendez": { name: "Brais Méndez", clubs: ["Columbus Crew"] },
+  "gabriel pec": { name: "Gabriel Pec", clubs: ["Cruzeiro Esporte Clube"] },
+  "enzo fernandez": { name: "Enzo Fernández", clubs: ["Manchester City"] },
+  "iliman ndiaye": { name: "Iliman Ndiaye", clubs: ["Manchester City"] },
+  "ayyoub bouaddi": { name: "Ayyoub Bouaddi", clubs: ["Manchester City"] },
+  "geronimo rulli": { name: "Gerónimo Rulli", clubs: ["Manchester City"] },
+  "vitor reis": { name: "Vitor Reis", clubs: ["Manchester City"] },
+  "john stones": { name: "John Stones", clubs: ["Inter Milan"] },
+  "nathan ake": { name: "Nathan Aké", clubs: ["Fenerbahce"] },
+  "james trafford": { name: "James Trafford", clubs: ["Leeds United"] },
+  "savinho": { name: "Savinho", clubs: ["Tottenham Hotspur"] },
+  "jeremy monga": { name: "Jeremy Monga", clubs: ["Swansea City"] },
+  "mathys detourbet": { name: "Mathys Detourbet", clubs: ["AS Monaco"] },
+  "claudio echeverri": { name: "Claudio Echeverri", clubs: ["SL Benfica"] },
+  "divine mukasa": { name: "Divine Mukasa", clubs: ["West Ham United"] },
+  "cristian romero": { name: "Cristian Romero", clubs: ["Atlético de Madrid"] },
+  "djed spence": { name: "Djed Spence", clubs: ["Inter Milan"] },
+  "guglielmo vicario": { name: "Guglielmo Vicario", clubs: ["Juventus FC"] },
+  "pape matar sarr": { name: "Pape Matar Sarr", clubs: ["Juventus FC"] },
+  "randal kolo muani": { name: "Randal Kolo Muani", clubs: ["Juventus FC"] },
+  "kevin danso": { name: "Kevin Danso", clubs: ["Sunderland AFC"] },
+  "radu dragusin": { name: "Radu Drăgușin", clubs: ["ACF Fiorentina"] },
+  "andrew robertson": { name: "Andrew Robertson", clubs: ["Tottenham Hotspur"] },
+  "marcos senesi": { name: "Marcos Senesi", clubs: ["Tottenham Hotspur"] },
+  "tosin adarabioyo": { name: "Tosin Adarabioyo", clubs: ["Tottenham Hotspur"] },
+  "ibrahima konate": { name: "Ibrahima Konaté", clubs: ["Real Madrid"] },
+  "curtis jones": { name: "Curtis Jones", clubs: ["Inter Milan"] },
+  "mohamed salah": { name: "Mohamed Salah", clubs: ["Trabzonspor"] },
+  "harvey elliott": { name: "Harvey Elliott", clubs: ["Valencia CF"] },
+  "ronald araujo": { name: "Ronald Araujo", clubs: ["Liverpool FC"] },
+  "victor munoz": { name: "Víctor Muñoz", clubs: ["Liverpool FC"] },
+  "gabriel martinelli": { name: "Gabriel Martinelli", clubs: ["Al-Hilal SFC"] },
+  "gabriel jesus": { name: "Gabriel Jesus", clubs: ["FC Barcelona"] },
+  "ezri konsa": { name: "Ezri Konsa", clubs: ["Arsenal FC"] },
+  "illan meslier": { name: "Illan Meslier", clubs: ["Arsenal FC"] },
+  "leandro trossard": { name: "Leandro Trossard", clubs: ["Besiktas JK"] },
+  "ethan nwaneri": { name: "Ethan Nwaneri", clubs: ["Borussia Dortmund"] },
+  "alejandro garnacho": { name: "Alejandro Garnacho", clubs: ["Aston Villa"] },
+  "nicolas jackson": { name: "Nicolas Jackson", clubs: ["Aston Villa"] },
+  "youri tielemans": { name: "Youri Tielemans", clubs: ["Manchester United"] },
+  "ollie watkins": { name: "Ollie Watkins", clubs: ["Al-Hilal SFC"] },
+  "leon bailey": { name: "Leon Bailey", clubs: ["Olympiacos Piraeus"] },
+  "evann guessand": { name: "Evann Guessand", clubs: ["Crystal Palace"] },
+  "ibrahim mbaye": { name: "Ibrahim Mbaye", clubs: ["Aston Villa"] },
+  "zion suzuki": { name: "Zion Suzuki", clubs: ["Aston Villa"] },
+  "matteo ruggeri": { name: "Matteo Ruggeri", clubs: ["Aston Villa"] },
+  "taylor harwood bellis": { name: "Taylor Harwood-Bellis", clubs: ["Aston Villa"] },
+  "leon goretzka": { name: "Leon Goretzka", clubs: ["Aston Villa"] },
+  "aaron wan bissaka": { name: "Aaron Wan-Bissaka", clubs: ["Aston Villa"] },
+  "lucas digne": { name: "Lucas Digne", clubs: ["Paris Saint-Germain"] },
+  "emiliano martinez": { name: "Emiliano Martínez", clubs: ["Chelsea FC"] },
+  "trevoh chalobah": { name: "Trevoh Chalobah", clubs: ["Como 1907"] },
+  "liam delap": { name: "Liam Delap", clubs: ["Nottingham Forest"] },
+  "benoit badiashile": { name: "Benoît Badiashile", clubs: ["SSC Napoli"] },
+  "axel disasi": { name: "Axel Disasi", clubs: ["Crystal Palace"] },
+  "marc guiu": { name: "Marc Guiu", clubs: ["RB Leipzig"] },
+  "robert sanchez": { name: "Robert Sánchez", clubs: ["Como 1907"] },
+  "valentin barco": { name: "Valentín Barco", clubs: ["Chelsea FC"] },
+  "pep chavarria": { name: "Pep Chavarría", clubs: ["Chelsea FC"] },
+  "emmanuel emegha": { name: "Emmanuel Emegha", clubs: ["Chelsea FC"] },
+  "danny welbeck": { name: "Danny Welbeck", clubs: ["Chelsea FC"] },
+  "honest ahanor": { name: "Honest Ahanor", clubs: ["Crystal Palace"] },
+  "brennan johnson": { name: "Brennan Johnson", clubs: ["Everton FC"] },
+  "dwight mcneil": { name: "Dwight McNeil", clubs: ["Crystal Palace"] },
+  "beto": { name: "Beto", clubs: ["ACF Fiorentina"] },
+  "nathan patterson": { name: "Nathan Patterson", clubs: ["Torino FC"] },
+  "tim iroegbunam": { name: "Tim Iroegbunam", clubs: ["Hull City"] },
+  "quinten timber": { name: "Quinten Timber", clubs: ["Crystal Palace"] },
+  "takehiro tomiyasu": { name: "Takehiro Tomiyasu", clubs: ["Crystal Palace"] },
+  "oscar mingueza": { name: "Óscar Mingueza", clubs: ["Crystal Palace"] },
+  "ben chilwell": { name: "Ben Chilwell", clubs: ["Crystal Palace"] },
+  "anan khalaili": { name: "Anan Khalaili", clubs: ["Crystal Palace"] },
+  "zavier gozo": { name: "Zavier Gozo", clubs: ["Crystal Palace"] },
+  "dario osorio": { name: "Darío Osorio", clubs: ["Crystal Palace"] },
+  "daniel munoz": { name: "Daniel Muñoz", clubs: ["Nottingham Forest"] },
+  "ousmane diomande": { name: "Ousmane Diomande", clubs: ["Nottingham Forest"] },
+  "xaver schlager": { name: "Xaver Schlager", clubs: ["Nottingham Forest"] },
+  "omari hutchinson": { name: "Omari Hutchinson", clubs: ["AC Milan"] },
+  "dilane bakwa": { name: "Dilane Bakwa", clubs: ["LOSC Lille"] },
+  "taiwo awoniyi": { name: "Taiwo Awoniyi", clubs: ["Coventry City"] },
+  "morato": { name: "Morato", clubs: ["West Ham United"] },
+  "bazoumana toure": { name: "Bazoumana Touré", clubs: ["Newcastle United"] },
+  "matias fernandez pardo": { name: "Matias Fernandez-Pardo", clubs: ["Newcastle United"] },
+  "sean steur": { name: "Sean Steur", clubs: ["Newcastle United"] },
+  "lukas hornicek": { name: "Lukas Hornicek", clubs: ["Newcastle United"] },
+  "amar dedic": { name: "Amar Dedić", clubs: ["Newcastle United"] },
+  "ewen jaouen": { name: "Ewen Jaouen", clubs: ["Newcastle United"] },
+  "kieran trippier": { name: "Kieran Trippier", clubs: ["Wolverhampton Wanderers"] },
+  "hugo larsson": { name: "Hugo Larsson", clubs: ["Fulham FC"] },
+  "gonzalo garcia": { name: "Gonzalo García", clubs: ["Fulham FC"] },
+  "cesar palacios": { name: "César Palacios", clubs: ["Fulham FC"] },
+  "david affengruber": { name: "David Affengruber", clubs: ["Fulham FC"] },
+  "harry wilson": { name: "Harry Wilson", clubs: ["Leeds United"] },
+  "raul jimenez": { name: "Raúl Jiménez", clubs: ["Wolverhampton Wanderers"] },
+  "sasa lukic": { name: "Saša Lukić", clubs: ["Ipswich Town"] },
+  "issa diop": { name: "Issa Diop", clubs: ["Ipswich Town"] },
+  "exequiel palacios": { name: "Exequiel Palacios", clubs: ["Ipswich Town"] },
+  "abdul fatawu": { name: "Abdul Fatawu", clubs: ["Ipswich Town"] },
+  "emersonn": { name: "Emersonn", clubs: ["Ipswich Town"] },
+  "daizen maeda": { name: "Daizen Maeda", clubs: ["Ipswich Town"] },
+  "kjell scherpen": { name: "Kjell Scherpen", clubs: ["Ipswich Town"] },
+  "zian flemming": { name: "Zian Flemming", clubs: ["Ipswich Town"] },
+  "malick fofana": { name: "Malick Fofana", clubs: ["Sunderland AFC"] },
+  "thomas meunier": { name: "Thomas Meunier", clubs: ["Sunderland AFC"] },
+  "dayann methalie": { name: "Dayann Methalie", clubs: ["Sunderland AFC"] },
+  "simon adingra": { name: "Simon Adingra", clubs: ["Ajax Amsterdam"] },
+  "eliezer mayenda": { name: "Eliezer Mayenda", clubs: ["Stade Rennais FC"] },
+  "dan neil": { name: "Dan Neil", clubs: ["Rangers FC"] },
+  "mamadou sangare": { name: "Mamadou Sangaré", clubs: ["Brentford FC"] },
+  "el hadji malick diouf": { name: "El Hadji Malick Diouf", clubs: ["Brentford FC"] },
+  "jaidon anthony": { name: "Jaidon Anthony", clubs: ["Brentford FC"] },
+  "callum wilson": { name: "Callum Wilson", clubs: ["Brentford FC"] },
+  "pascal struijk": { name: "Pascal Struijk", clubs: ["Brighton & Hove Albion"] },
+  "costinha": { name: "Costinha", clubs: ["Brighton & Hove Albion"] },
+  "jaouen hadjam": { name: "Jaouen Hadjam", clubs: ["Brighton & Hove Albion"] },
+  "femi azeez": { name: "Femi Azeez", clubs: ["Brighton & Hove Albion"] },
+  "evan ferguson": { name: "Evan Ferguson", clubs: ["Brighton & Hove Albion"] },
+  "brajan gruda": { name: "Brajan Gruda", clubs: ["RB Leipzig"] },
+  "igor julio": { name: "Igor Julio", clubs: ["Burnley FC"] },
+  "antonio silva": { name: "António Silva", clubs: ["AFC Bournemouth"] },
+  "juanlu sanchez": { name: "Juanlu Sánchez", clubs: ["AFC Bournemouth"] },
+  "alvaro rodriguez": { name: "Álvaro Rodríguez", clubs: ["AFC Bournemouth"] },
+  "michele di gregorio": { name: "Michele Di Gregorio", clubs: ["AFC Bournemouth"] },
+  "alex jimenez": { name: "Álex Jiménez", clubs: ["ACF Fiorentina"] },
+  "enes unal": { name: "Enes Ünal", clubs: ["Getafe CF"] },
+  "joel piroe": { name: "Joël Piroe", clubs: ["West Ham United"] },
+  "manor solomon": { name: "Manor Solomon", clubs: ["West Ham United"] },
+  "michael zetterer": { name: "Michael Zetterer", clubs: ["Leeds United"] },
+  "nico elvedi": { name: "Nico Elvedi", clubs: ["Leeds United"] },
+  "tarik muharemovic": { name: "Tarik Muharemović", clubs: ["Leeds United"] },
+  "jean matteo bahoya": { name: "Jean-Mattéo Bahoya", clubs: ["Leeds United"] },
+  "melvin bard": { name: "Melvin Bard", clubs: ["Leeds United"] },
+  "sebastiaan bornauw": { name: "Sebastiaan Bornauw", clubs: ["Hamburger SV"] },
+  "lucas perri": { name: "Lucas Perri", clubs: ["Torino FC"] },
+  "wilfried gnonto": { name: "Wilfried Gnonto", clubs: ["ACF Fiorentina"] },
+  "facundo buonanotte": { name: "Facundo Buonanotte", clubs: ["Elche CF"] },
+  "largie ramazani": { name: "Largie Ramazani", clubs: ["Burnley FC"] },
+  "jack harrison": { name: "Jack Harrison", clubs: ["New England Revolution"] },
+  "marcus rashford": { name: "Marcus Rashford", clubs: ["Manchester United"] },
+  "altay bayindir": { name: "Altay Bayındır", clubs: ["Celta de Vigo"] },
+  "mohamed ali cho": { name: "Mohamed-Ali Cho", clubs: ["Hull City"] },
+  "ilyas ansah": { name: "Ilyas Ansah", clubs: ["Hull City"] },
+  "konstantinos tzolakis": { name: "Konstantinos Tzolakis", clubs: ["Hull City"] },
+  "nobel mendy": { name: "Nobel Mendy", clubs: ["Hull City"] },
+  "hidemasa morita": { name: "Hidemasa Morita", clubs: ["Hull City"] },
+  "jack butland": { name: "Jack Butland", clubs: ["Hull City"] },
+  "matt targett": { name: "Matt Targett", clubs: ["Hull City"] },
+  "ivor pandur": { name: "Ivor Pandur", clubs: ["Rangers FC"] },
+  "radek vitek": { name: "Radek Vítek", clubs: ["Middlesbrough FC"] },
+  "will lankshear": { name: "Will Lankshear", clubs: ["Middlesbrough FC"] },
+  "ashley phillips": { name: "Ashley Phillips", clubs: ["Middlesbrough FC"] },
+  "caleb yirenkyi": { name: "Caleb Yirenkyi", clubs: ["Coventry City"] },
+  "aurele amenda": { name: "Aurèle Amenda", clubs: ["Coventry City"] },
+  "gustavo hamer": { name: "Gustavo Hamer", clubs: ["Coventry City"] },
+  "kota takai": { name: "Kota Takai", clubs: ["Sint-Truidense VV"] },
+  "min hyeok yang": { name: "Min-hyeok Yang", clubs: ["KVC Westerlo"] },
+  "mikey moore": { name: "Mikey Moore", clubs: ["1.FC Köln"] },
+  "alejo veliz": { name: "Alejo Veliz", clubs: ["Esporte Clube Bahia"] },
+  "david carmo": { name: "David Carmo", clubs: ["Olympiacos Piraeus"] },
+  "jota silva": { name: "Jota Silva", clubs: ["Olympiacos Piraeus"] },
+  "kang in lee": { name: "Kang-in Lee", clubs: ["Atlético de Madrid"] },
+  "alejandro grimaldo": { name: "Alejandro Grimaldo", clubs: ["Atlético de Madrid"] },
+  "jonathan david": { name: "Jonathan David", clubs: ["Atlético de Madrid"] },
+  "nahuel molina": { name: "Nahuel Molina", clubs: ["AS Roma"] },
+  "endrick": { name: "Endrick", clubs: ["Real Madrid"] },
+  "franco mastantuono": { name: "Franco Mastantuono", clubs: ["ACF Fiorentina"] },
+  "ferran torres": { name: "Ferran Torres", clubs: ["Paris Saint-Germain"] },
+  "mario gila": { name: "Mario Gila", clubs: ["AC Milan"] },
+  "diego moreira": { name: "Diego Moreira", clubs: ["AC Milan"] },
+  "christopher nkunku": { name: "Christopher Nkunku", clubs: ["RB Leipzig"] },
+  "santiago gimenez": { name: "Santiago Gimenez", clubs: ["FC Porto"] },
+  "dusan vlahovic": { name: "Dušan Vlahović", clubs: ["Besiktas JK"] },
+  "lois openda": { name: "Loïs Openda", clubs: ["Olympique Lyon"] },
+  "douglas luiz": { name: "Douglas Luiz", clubs: ["Juventus FC"] },
+  "nico gonzalez": { name: "Nico González", clubs: ["Juventus FC"] },
+  "davide frattesi": { name: "Davide Frattesi", clubs: ["SS Lazio"] },
+  "benjamin pavard": { name: "Benjamin Pavard", clubs: ["Inter Milan"] },
+  "santiago castro": { name: "Santiago Castro", clubs: ["AS Roma"] },
+  "artem dovbyk": { name: "Artem Dovbyk", clubs: ["Bologna FC 1909"] },
+  "neil el aynaoui": { name: "Neil El Aynaoui", clubs: ["RB Leipzig"] },
+  "rodrigo mora": { name: "Rodrigo Mora", clubs: ["AS Roma"] },
+  "romelu lukaku": { name: "Romelu Lukaku", clubs: ["Fenerbahce"] },
+  "moise kean": { name: "Moise Kean", clubs: ["Como 1907"] },
+  "pedro goncalves": { name: "Pedro Gonçalves", clubs: ["ACF Fiorentina"] },
+  "konstantinos karetsas": { name: "Konstantinos Karetsas", clubs: ["Borussia Dortmund"] },
+  "giannis konstantelias": { name: "Giannis Konstantelias", clubs: ["Borussia Dortmund"] },
+  "joey veerman": { name: "Joey Veerman", clubs: ["Borussia Dortmund"] },
+  "julien duranville": { name: "Julien Duranville", clubs: ["Olympique Lyon"] },
+  "moussa diaby": { name: "Moussa Diaby", clubs: ["Bayer 04 Leverkusen"] },
+  "guela doue": { name: "Guéla Doué", clubs: ["Bayer 04 Leverkusen"] },
+  "facundo medina": { name: "Facundo Medina", clubs: ["Bayer 04 Leverkusen"] },
+  "victor boniface": { name: "Victor Boniface", clubs: ["Bayer 04 Leverkusen"] },
+  "lutsharel geertruida": { name: "Lutsharel Geertruida", clubs: ["PSV Eindhoven"] },
+  "giovanni reyna": { name: "Giovanni Reyna", clubs: ["RC Strasbourg Alsace"] },
+  "mason greenwood": { name: "Mason Greenwood", clubs: ["Fenerbahce"] },
+  "maghnes akliouche": { name: "Maghnes Akliouche", clubs: ["Paris Saint-Germain"] },
+  "mika godts": { name: "Mika Godts", clubs: ["Paris Saint-Germain"] },
+};
+
+/* ROUND 707: THE MOVE BELONGS TO A MAN, NOT TO A NAME, the same rule as the
+   grid's overlayClubsFor. The table merges namesakes under one name ("Beto" is
+   three men over three nationalities), so the move counts only when the rows
+   read for the name are one man (one nationality) and that man is the one who
+   moved: his 2026 market row carries the same nationality. No 2026 market row
+   (Griezmann) falls back to the one man rule; no rows at all takes the full
+   overlay name. Anything else, and any error, is null: ask the model. */
+async function overlayProves(foldedName: string, identities: Set<string>, want: string[]): Promise<string | null> {
+  const entry = TRANSFER_OVERLAY_2026[foldedName];
+  if (!entry || !entry.clubs.some((c) => want.includes(c))) return null;
+  if (identities.size > 1) return null;
+  if (identities.size === 1) {
+    try {
+      const { data, error } = await sb.from("player_market_values").select("nationality")
+        .eq("year", 2026).eq("player_name", entry.name).limit(2);
+      if (error) return null;
+      const rows = (data ?? []) as { nationality: string | null }[];
+      if (rows.length > 1) return null;
+      if (rows.length === 1 && !identities.has(foldName(rows[0].nationality ?? ""))) return null;
+    } catch { return null; }
+  }
+  return entry.name;
+}
+
 /* Returns the player's stored name when the stint table PROVES the attribute,
    and null in every other case including every error. Null means "ask the
-   model", never "no". */
+   model", never "no". Round 707: a verified 2026 move proves it too, after the
+   table has been read and only for the man who moved (overlayProves). */
 async function confirmClubAttribute(
   playerName: string,
   attribute: string,
@@ -132,19 +413,21 @@ async function confirmClubAttribute(
   if (!want) return null;
   try {
     const { data } = await sb.from("soccer_player_club_stints")
-      .select("player_name, club")
+      .select("player_name, club, nationality")
       .eq("name_folded", foldName(playerName))
       .limit(400);
+    const identities = new Set<string>();
     for (const row of (data ?? [])) {
-      const r = row as { player_name?: string; club?: string };
+      const r = row as { player_name?: string; club?: string; nationality?: string | null };
+      if (r.nationality) identities.add(foldName(r.nationality));
       /* A stored club may be two clubs joined by " / " for a split season, so
          read each side, the way Round 489 does in the grid. */
       for (const part of String(r.club ?? "").split(" / ")) {
         if (want.includes(part.trim())) return r.player_name || playerName;
       }
     }
+    return await overlayProves(foldName(playerName), identities, want);
   } catch { return null; }
-  return null;
 }
 
 
@@ -232,29 +515,43 @@ serve(async (req) => {
     const rowKey = attrKeyOf(playerName, rowAttribute);
     const colKey = attrKeyOf(playerName, columnAttribute);
 
+    /* ROUND 707: A CACHED NO ON A CLUB HALF IS PUT TO THE RECORDS BEFORE IT IS
+       SERVED, the sibling of the grid's rule that a records refusal is worked
+       out again. This game never writes a records refusal (the table pass is
+       confirm only), but its cache holds the MODEL's refusals, and the model's
+       knowledge predates the 2026 window: on 2026-09-30 it held Tonali "has
+       never played for Tottenham Hotspur" and Rashford "never played for
+       Barcelona", both verified moves. So a cached verdict of valid:false whose
+       club half the model said no to (or did not say) is checked against the
+       stint table and the overlay first. Proved, the half is true and the
+       cached pair is not served; not proved, or any error, and the cached
+       verdict is served exactly as before. Acceptances are served untouched.
+       Nothing here can accept what the records do not prove. */
+    let provedRow: string | null = null;
+    let provedCol: string | null = null;
+
     /* The pair cache is still read FIRST, and it is not being torn out: 144
-       rows were paid for and they keep answering until they age out. A stored
-       YES answers at once. A stored NO is HELD rather than returned (Round
-       703): the club records get their say before it is believed. */
-    let pairRefusal: Record<string, unknown> | null = null;
+       rows were paid for and they keep answering until they age out. */
     try {
       const { data: hit } = await sb.from("ai_validation_cache").select("verdict")
         .eq("game", CACHE_GAME).eq("cache_key", cacheKey).maybeSingle();
       if (hit?.verdict) {
-        const stored = hit.verdict as Record<string, unknown>;
-        if (stored.valid === true) {
-          return new Response(JSON.stringify({ ...stored, cached: true }), {
+        const v = hit.verdict as Record<string, unknown>;
+        if (v.valid === false) {
+          if (v.matchesRow !== true) provedRow = await confirmClubAttribute(playerName, rowAttribute);
+          if (v.matchesColumn !== true) provedCol = await confirmClubAttribute(playerName, columnAttribute);
+        }
+        if (!provedRow && !provedCol) {
+          return new Response(JSON.stringify({ ...v, cached: true }), {
             headers: { ...corsHeaders, "Content-Type": "application/json" },
           });
         }
-        pairRefusal = stored;
       }
     } catch { /* cache down -> fall through */ }
 
-    /* Then the two single attribute facts. If BOTH halves end up known this
-       answers with no AI call at all, which is the whole point: a player
-       already seen on any other board is very likely to be answerable here for
-       nothing. */
+    /* Then the two single attribute facts. If BOTH are known this answers with
+       no AI call at all, which is the whole point: a player already seen on any
+       other board is very likely to be answerable here for nothing. */
     let knownFullName = playerName;
     let rowKnown: boolean | null = null;
     let colKnown: boolean | null = null;
@@ -266,64 +563,84 @@ serve(async (req) => {
       const colFact = byKey.get(colKey);
       if (rowFact) rowKnown = rowFact.match === true;
       if (colFact) colKnown = colFact.match === true;
-      knownFullName = (rowFact?.fullName as string) || (colFact?.fullName as string) || playerName;
+      /* Round 707: a stored no on a club half is worked out again the same way,
+         once, and the corrected half replaces it in the fact cache below. */
+      if (rowKnown === false && !provedRow) provedRow = await confirmClubAttribute(playerName, rowAttribute);
+      if (colKnown === false && !provedCol) provedCol = await confirmClubAttribute(playerName, columnAttribute);
+      if (provedRow) rowKnown = true;
+      if (provedCol) colKnown = true;
+      knownFullName = provedRow || provedCol || (rowFact?.fullName as string) || (colFact?.fullName as string) || playerName;
+      if (rowFact && colFact && !provedRow && !provedCol) {
+        const rowOk = rowFact.match === true;
+        const colOk = colFact.match === true;
+        return new Response(JSON.stringify({
+          valid: rowOk && colOk,
+          reason: {
+            [rowAttribute]: rowOk ? "Verified previously." : "This player does not match this attribute.",
+            [columnAttribute]: colOk ? "Verified previously." : "This player does not match this attribute.",
+          },
+          fullName: (rowFact.fullName as string) || (colFact.fullName as string) || playerName,
+          cached: true,
+        }), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
+      }
     } catch { /* cache down -> fall through to AI */ }
 
-    /* ROUND 497: the confirm-only records pass, between the fact lookup above
-       and the cacheOnly check below so both keep working exactly as they did.
+    /* ROUND 497: the confirm-only records pass, inserted between the fact
+       lookup above and the cacheOnly check below so both keep working exactly
+       as they did. It is ADDITIVE: Round 379's decomposition is not touched.
        Anything the table proves is written into the SAME fact cache the model
-       writes, so the next board asking about that player gets it free.
-       ROUND 703: it used to run only for a half with NO stored fact, so a
-       stored "no" (a false fact, or a pair refusal returned before this pass
-       was reached) beat the stint table every time. Now it runs for every half
-       not already a yes, and for both halves whenever a pair refusal is
-       waiting, because that refusal may rest on exactly the half a record
-       overturns. */
-    const recheck = (known: boolean | null) => pairRefusal !== null || known !== true;
-    const rowProved = recheck(rowKnown) ? await confirmClubAttribute(playerName, rowAttribute) : null;
-    const colProved = recheck(colKnown) ? await confirmClubAttribute(playerName, columnAttribute) : null;
-    if (pairRefusal && !rowProved && !colProved) {
-      /* A refusal the records do not touch is kept, exactly as before. */
-      return new Response(JSON.stringify({ ...pairRefusal, cached: true }), {
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
-    }
+       writes, so the next board asking about that player gets it free even for
+       an attribute this pass cannot answer. */
     const determined: Array<{ game: string; cache_key: string; verdict: unknown }> = [];
-    if (rowProved) {
-      if (rowKnown !== true) determined.push({ game: CACHE_GAME, cache_key: rowKey, verdict: { match: true, fullName: rowProved } });
-      rowKnown = true;
-      knownFullName = rowProved;
+    /* Round 707: a half the records proved over a cached no is written back as
+       the fact it is, so the stale no is replaced rather than re-read forever. */
+    if (provedRow) determined.push({ game: CACHE_GAME, cache_key: rowKey, verdict: { match: true, fullName: provedRow } });
+    if (provedCol) determined.push({ game: CACHE_GAME, cache_key: colKey, verdict: { match: true, fullName: provedCol } });
+    if (rowKnown === null) {
+      const proved = await confirmClubAttribute(playerName, rowAttribute);
+      if (proved) {
+        rowKnown = true;
+        knownFullName = proved;
+        provedRow = proved;
+        determined.push({ game: CACHE_GAME, cache_key: rowKey, verdict: { match: true, fullName: proved } });
+      }
     }
-    if (colProved) {
-      if (colKnown !== true) determined.push({ game: CACHE_GAME, cache_key: colKey, verdict: { match: true, fullName: colProved } });
-      colKnown = true;
-      knownFullName = colProved;
-    }
-    if (pairRefusal) {
-      /* The refusal can now only stand on a half the records did not overturn.
-         Its own per-half answers fill whatever the facts do not know. */
-      if (rowKnown === null && typeof pairRefusal.matchesRow === "boolean") rowKnown = pairRefusal.matchesRow;
-      if (colKnown === null && typeof pairRefusal.matchesColumn === "boolean") colKnown = pairRefusal.matchesColumn;
+    if (colKnown === null) {
+      const proved = await confirmClubAttribute(playerName, columnAttribute);
+      if (proved) {
+        colKnown = true;
+        knownFullName = proved;
+        provedCol = proved;
+        determined.push({ game: CACHE_GAME, cache_key: colKey, verdict: { match: true, fullName: proved } });
+      }
     }
     if (determined.length > 0) {
       try { await sb.from("ai_validation_cache").upsert(determined); } catch { /* non-fatal */ }
     }
     /* Answered without the AI only when BOTH halves are determined. A false
        here is never a records miss: it is a model verdict this cache already
-       paid for. A records miss leaves its half null and falls through. */
+       paid for, exactly the verdict the block above would have returned had it
+       held both halves. A records miss leaves its half null and falls through. */
     if (rowKnown !== null && colKnown !== null) {
-      const fromRecords = rowProved !== null || colProved !== null;
-      const halfReason = (proved: string | null, known: boolean) =>
-        proved ? "Verified from our club records." : known ? "Verified previously." : "This player does not match this attribute.";
-      return new Response(JSON.stringify({
+      const verdict = {
         valid: rowKnown && colKnown,
+        matchesRow: rowKnown,
+        matchesColumn: colKnown,
         reason: {
-          [rowAttribute]: halfReason(rowProved, rowKnown),
-          [columnAttribute]: halfReason(colProved, colKnown),
+          [rowAttribute]: rowKnown ? "Verified from our club records." : "This player does not match this attribute.",
+          [columnAttribute]: colKnown ? "Verified from our club records." : "This player does not match this attribute.",
         },
         fullName: knownFullName,
-        ...(fromRecords ? { source: "records" } : { cached: true }),
-      }), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
+        source: "records",
+      };
+      /* Round 707: when this answer overturned a cached pair, the pair row is
+         replaced too, so the model's stale no is not read again next time.
+         Round 703: the same write when the records decided a half of a pair
+         that had no cached row, so the next ask is served as cached. */
+      if (provedRow || provedCol) {
+        try { await sb.from("ai_validation_cache").upsert({ game: CACHE_GAME, cache_key: cacheKey, verdict }); } catch { /* non-fatal */ }
+      }
+      return new Response(JSON.stringify(verdict), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
     }
 
     /* Round 397: verification harnesses can prove cache coverage without ever
@@ -502,16 +819,18 @@ times over.`,
     /* ROUND 703: the model never outvotes the club records on a half they
        proved. Before this, a proved half could reach this point with the other
        half unknown, and the model's "no" on the proved half was returned and
-       then written back over the proved fact. */
-    if (aiVerdict && (rowProved || colProved) && parsed && typeof parsed === "object") {
+       then written back over the proved fact. provedRow and provedCol are set
+       by every records pass above (Round 707's re-check of a cached no and the
+       null-half pass alike), so this covers both. */
+    if (aiVerdict && (provedRow || provedCol) && parsed && typeof parsed === "object") {
       const rec = parsed as Record<string, unknown>;
-      if (rowProved) rec.matchesRow = true;
-      if (colProved) rec.matchesColumn = true;
+      if (provedRow) rec.matchesRow = true;
+      if (provedCol) rec.matchesColumn = true;
       if (typeof rec.matchesRow === "boolean" && typeof rec.matchesColumn === "boolean") {
         rec.valid = rec.matchesRow && rec.matchesColumn;
         rec.reason = {
-          [rowAttribute]: rowProved ? "Verified from our club records." : rec.matchesRow ? "Verified." : "This player does not match this attribute.",
-          [columnAttribute]: colProved ? "Verified from our club records." : rec.matchesColumn ? "Verified." : "This player does not match this attribute.",
+          [rowAttribute]: provedRow ? "Verified from our club records." : rec.matchesRow ? "Verified." : "This player does not match this attribute.",
+          [columnAttribute]: provedCol ? "Verified from our club records." : rec.matchesColumn ? "Verified." : "This player does not match this attribute.",
         };
       } else if (rec.valid !== true) {
         /* A bare "no" that never says which half it meant cannot be read

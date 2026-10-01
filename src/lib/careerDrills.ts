@@ -67,18 +67,20 @@ import { effectivePotential, type CareerState } from './soccerCareerEngine';
 
 export { daySeed, lehmer, ROUNDS_PER_RUN };
 
-export type DrillKind = 'wallshot' | 'tackle' | 'gloves';
-export type DrillStat = 'shooting' | 'defending' | 'reflexes';
+export type PositionDrillKind = 'wallshot' | 'tackle' | 'gloves';
+export type DrillKind = PositionDrillKind | 'firsttouch';
+export type DrillStat = 'shooting' | 'defending' | 'reflexes' | 'dribbling';
 
 export const DRILL_META: Record<DrillKind, { name: string; stat: DrillStat; statLabel: string; emoji: string; verb: string; slug: string }> = {
   wallshot: { name: 'Wall Shot', stat: 'shooting', statLabel: 'Shooting', emoji: '🧱', verb: 'scored', slug: 'career-drill-wallshot' },
   tackle: { name: 'Tackle', stat: 'defending', statLabel: 'Defending', emoji: '🦵', verb: 'won', slug: 'career-drill-tackle' },
   gloves: { name: 'Glove Save', stat: 'reflexes', statLabel: 'Reflexes', emoji: '🧤', verb: 'saved', slug: 'career-drill-gloves' },
+  firsttouch: { name: 'First Touch', stat: 'dribbling', statLabel: 'Dribbling', emoji: '👟', verb: 'controlled', slug: 'career-drill-firsttouch' },
 };
 
 /** The player's position picks the drill. Keepers dive, the back line and the
     holding midfielder tackle, everybody else shoots through the wall. */
-export function drillForPosition(position: string): DrillKind {
+export function drillForPosition(position: string): PositionDrillKind {
   if (position === 'GK') return 'gloves';
   if (position === 'CB' || position === 'LB' || position === 'RB' || position === 'CDM') return 'tackle';
   return 'wallshot';
@@ -86,7 +88,7 @@ export function drillForPosition(position: string): DrillKind {
 
 /* One day is one run for everybody at that position, and the three drills on
    the same day are three different runs. */
-const KIND_SALT: Record<DrillKind, number> = { wallshot: 1719, tackle: 4583, gloves: 8317 };
+const KIND_SALT: Record<DrillKind, number> = { wallshot: 1719, tackle: 4583, gloves: 8317, firsttouch: 12011 };
 export function drillSeed(kind: DrillKind, dateStr: string): number {
   return ((daySeed(dateStr) * 7919 + KIND_SALT[kind]) % 2147483646) + 1;
 }

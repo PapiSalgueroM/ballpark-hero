@@ -28,8 +28,18 @@ const prefersReducedMotion = () =>
   typeof window.matchMedia === 'function' &&
   window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+interface Flight {
+  elapsed: number;
+  startedAt: number;
+  segment: number;
+  onSettle: () => void;
+}
+
 export function useArcadeFlight(durationMs: number) {
   const [progress, setProgress] = useState(0);
+  const [paused, setPaused] = useState(false);
+  const pausedRef = useRef(false);
+  const flightRef = useRef<Flight | null>(null);
   const rafRef = useRef<number | null>(null);
   const timerRef = useRef<number | null>(null);
 
@@ -38,39 +48,75 @@ export function useArcadeFlight(durationMs: number) {
     if (timerRef.current !== null) { window.clearTimeout(timerRef.current); timerRef.current = null; }
   }, []);
 
-  useEffect(() => stop, [stop]);
+  useEffect(() => () => { stop(); flightRef.current = null; }, [stop]);
+
+  const fly = useCallback((flight: Flight) => {
+    const segment = ++flight.segment;
+    flight.startedAt = performance.now();
+    const isCurrent = () => flightRef.current === flight && flight.segment === segment && !pausedRef.current;
+    const settle = () => {
+      if (!isCurrent()) return;
+      stop();
+      flightRef.current = null;
+      setProgress(1);
+      flight.onSettle();
+    };
+    if (flight.elapsed >= durationMs) { settle(); return; }
+    const tick = (now: number) => {
+      if (!isCurrent()) return;
+      const elapsed = Math.min(durationMs, flight.elapsed + now - flight.startedAt);
+      setProgress(elapsed / durationMs);
+      if (elapsed < durationMs) { rafRef.current = requestAnimationFrame(tick); return; }
+      settle();
+    };
+    rafRef.current = requestAnimationFrame(tick);
+    timerRef.current = window.setTimeout(settle, durationMs - flight.elapsed + 60);
+  }, [durationMs, stop]);
 
   /** Put the ball back on the ground, for the start of the next round. */
-  const reset = useCallback(() => { stop(); setProgress(0); }, [stop]);
+  const reset = useCallback(() => {
+    stop();
+    flightRef.current = null;
+    pausedRef.current = false;
+    setPaused(false);
+    setProgress(0);
+  }, [stop]);
+
+  const pause = useCallback(() => {
+    if (pausedRef.current) return;
+    pausedRef.current = true;
+    const flight = flightRef.current;
+    if (flight) {
+      flight.elapsed = Math.min(durationMs, flight.elapsed + performance.now() - flight.startedAt);
+      flight.segment++;
+      setProgress(flight.elapsed / durationMs);
+    }
+    stop();
+    setPaused(true);
+  }, [durationMs, stop]);
+
+  const resume = useCallback(() => {
+    if (!pausedRef.current) return;
+    pausedRef.current = false;
+    setPaused(false);
+    if (flightRef.current) fly(flightRef.current);
+  }, [fly]);
 
   /** Fly for durationMs, then call onSettle exactly once. */
   const launch = useCallback((onSettle: () => void) => {
+    if (pausedRef.current) return;
     stop();
     setProgress(0);
+    flightRef.current = null;
     if (prefersReducedMotion()) {
       setProgress(1);
       onSettle();
       return;
     }
-    const started = performance.now();
-    let settled = false;
-    const settle = () => {
-      if (settled) return;
-      settled = true;
-      stop();
-      setProgress(1);
-      onSettle();
-    };
-    const tick = (now: number) => {
-      if (settled) return;
-      const p = Math.min(1, (now - started) / durationMs);
-      setProgress(p);
-      if (p < 1) { rafRef.current = requestAnimationFrame(tick); return; }
-      settle();
-    };
-    rafRef.current = requestAnimationFrame(tick);
-    timerRef.current = window.setTimeout(settle, durationMs + 60);
-  }, [durationMs, stop]);
+    const flight = { elapsed: 0, startedAt: 0, segment: 0, onSettle };
+    flightRef.current = flight;
+    fly(flight);
+  }, [fly, stop]);
 
-  return { progress, launch, reset };
+  return { progress, paused, launch, reset, pause, resume };
 }
