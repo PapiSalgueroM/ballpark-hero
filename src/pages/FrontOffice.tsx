@@ -33,7 +33,8 @@ const FrontOffice = () => {
               'Pick a franchise: its real 2026 squad, offence and defence, rated off the 2025 season and draft position.',
               'Work the roster: cut contracts to open cap room, sign free agents, propose trades the AI evaluates on age, position and rating.',
               'Play each week: results, injuries and rival moves roll in; division standings decide the real 14-team playoff bracket.',
-              'After the Super Bowl, scout the draft: grades carry error, so the board can lie to you.',
+              'Set the depth chart from the Roster box: tap two men to swap them, and the sim reads who starts off your order. Injured men are skipped and the next man steps up.',
+              'After the Super Bowl, scout the draft: grades carry error, so the board can lie to you. Before your last pick, use the franchise tag on one expiring man: one guaranteed year at the top five average at his position or 120 percent of his old deal, whichever is more.',
               'Every offseason your young players develop, veterans decline, contracts expire and the cap rises. Dynasties are built, not bought.',
               'Face the room: the podium, the accountability scrum and the trade question move your trust upstairs, and what you promise can raise or soften next season\'s mandate.',
             ]}

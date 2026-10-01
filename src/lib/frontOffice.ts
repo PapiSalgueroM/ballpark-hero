@@ -952,13 +952,25 @@ function clearTag(p: GmPlayer): void {
   delete p.guaranteed;
 }
 
-/** CPU clubs tag their best expiring starter, TAG_CPU_MIN_OVR or better, when the tender fits. */
+/** CPU clubs tag their best expiring starter when the tender fits, and only
+    a man the tender is fair for: one of the five best at his position in the
+    whole league (the men the top five mean is made of), rated
+    TAG_CPU_MIN_OVR or better, and not tagged last spring. The first two
+    drafts of this policy were measured in scripts/simNflTagDepth.mjs: "any
+    expiring starter rated 80" had every club tagging every year by the third
+    offseason (a tagged man is on one year, so he came up again and was
+    tagged again), and dropping only the repeat still had 88 to 92 percent of
+    clubs tagging. The top five rule lands at about a third of clubs an
+    offseason, which is the real league's range. */
 export function cpuFranchiseTags(league: LeagueState, userTeam?: string): { team: string; player: string; salary: number }[] {
   const out: { team: string; player: string; salary: number }[] = [];
+  const everyone = Object.values(league.teams).flatMap(x => x.players);
+  const betterAtHisPosition = (p: GmPlayer) => everyone.filter(q => q.pos === p.pos && q.ovr > p.ovr).length;
   for (const t of Object.values(league.teams)) {
     if (t.abbr === userTeam || t.tagUsedFor === league.season + 1) continue;
     const starters = starterIds(t);
-    const cands = expiringPlayers(t).filter(p => starters.has(p.id) && p.ovr >= TAG_CPU_MIN_OVR);
+    const cands = expiringPlayers(t).filter(p => starters.has(p.id) && p.ovr >= TAG_CPU_MIN_OVR
+      && p.tagSeason !== league.season && betterAtHisPosition(p) < TAG_TOP_N);
     for (const p of cands) {
       const res = applyFranchiseTag(league, t, p.id);
       if (res.ok) { out.push({ team: t.abbr, player: p.name, salary: res.salary }); break; }

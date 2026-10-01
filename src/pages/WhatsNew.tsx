@@ -24,6 +24,12 @@ const WhatsNew = () => {
 
       <section className="space-y-8 text-sm leading-relaxed text-muted-foreground">
         <div>
+          <h2 className="text-lg font-semibold text-foreground mb-2">October 2026</h2>
+          <ul className="list-disc pl-5 space-y-2">
+            <li><strong className="text-foreground">NFL Front Office: the franchise tag, and a depth chart you actually set.</strong> On the draft screen, before your last pick opens free agency, you can now tag one man whose deal is up: one year, fully guaranteed, at the average of the top five salaries at his position or 120 percent of his old deal, whichever is more (the real rule, and the card quotes the price before you tap). He cannot walk that offseason. Rival clubs tag too, about a third of them a year, and untagged stars can now hit the market now and then, so the pool is worth a look. The Roster box also has a depth chart: eight position groups, tap a man and then the one to swap him with, and the sim reads who starts off your order, so benching a better man costs you and promoting a hidden gem pays. Injured starters are skipped and the next man steps up. A save from before this picks up exactly where it was, same strength, same results. <Link to="/front-office" className="text-primary hover:underline">Open the front office</Link>.</li>
+          </ul>
+        </div>
+        <div>
           <h2 className="text-lg font-semibold text-foreground mb-2">September 2026</h2>
           <ul className="list-disc pl-5 space-y-2">
             <li><strong className="text-foreground">New game: Manager Hot Seat, five games to save your job.</strong> You walk into a real club on a bad run, the board give you five league games and a points target, and you either hit it or you are gone. Pick a shape and a team talk before every match, handle the press, and watch the board, the fans and the dressing room react. It runs on the Club Manager engine, so every match is the full match sim from that game. There is a daily (same club and target for everyone) and a free play mode for any club you like. It records that you played but puts no points on the leaderboard for now.</li>
