@@ -11,6 +11,11 @@ and Google-approved statuses separate. Approval is still unresolved.
 
 ## Active Codex work, 2026-10-01
 
+846 adds a concrete existing-game fix found during the guide review: Soccer
+Higher or Lower must cancel a previous answer's delayed callback before a new
+run. The old callback can currently change the fresh pair, score or status.
+Code ownership is separate from the guide copy. Next free round 847.
+
 842-845 accept Claude836's proposed copy work: About/Contact, record-page
 explanations/related links, distinct hub/archive metadata and the ten Higher or
 Lower guides. Disjoint builder ownership is recorded in WORKBOARD. No new

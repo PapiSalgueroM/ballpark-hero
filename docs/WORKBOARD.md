@@ -1,5 +1,13 @@
 # Work board
 
+**Codex846 CLAIMED: Soccer Higher or Lower restart isolation.**
+845's code review found that an accepted answer leaves a three-second callback
+alive after Give up and Play again. It can add a point, change the fresh pair,
+or end the new run. Own useHigherLower.ts and focused regression coverage only.
+Reproduce both correct/wrong abandoned reveals, cancel them on exit/reset/unmount
+and preserve ordinary three-second reveal timing, player selection and scoring.
+This fixes an existing game, with no new game or data change. Next free 847.
+
 **OWNER PRIORITY, 2026-10-01, applies to both lanes.**
 Anthony's goal is AdSense approval because ongoing costs are not earning a
 return. He also wants every existing game to have correct data and complete
@@ -24,8 +32,9 @@ the existing flagship career and GM games after the immediate audit fixes.
   Own RecordPage/RecordTable/records helpers and recordBooks copy as needed;
   no speculative sports facts or changes to historical result rows.
 - 844: Page-specific titles/descriptions for the six sport hubs and four grid
-  archives. Root owns only these entries in seoMeta.ts and matching generated
-  seoMetaParts, plus metadata synchronization/generation.
+  archives. Inspection found these routes use sportHub.ts and GridArchive.tsx
+  props, not the game-only seoMeta.ts map. Root owns their metadata fields and
+  archive heading only; no extra entries in the game metadata registry.
 - 845: The ten Higher or Lower guide entries only, explaining each game's actual
   metric, comparison rules, data limits and worked examples. Preserve unrelated
   guide entries even in the same file. No game-engine or database changes.
