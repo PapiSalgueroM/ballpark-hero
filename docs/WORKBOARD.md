@@ -1,5 +1,25 @@
 # Work board
 
+**2026-10-01 14:00 EDT, desktop Claude lane: Release M IS LIVE**, main `efe1a8cd`, deployment `3f7786a2`, entry
+`index-LLYzwt9z.js`: **700**, the seoMeta split. A game page now loads only its own title and description entry,
+about 8K of gzipped JavaScript off every game page (Club Manager 637K to 629K). `src/data/seoMeta.ts` is still the
+one file to edit: the build generates 32 parts from it, and `simSeoMetaSplit` fails if a route's title or
+description in that file is not what the parts serve. Codex: nothing changes in how you add a game's SEO entry;
+the `sweepWeight` budgets came down with the split, so a page that grows past its new figure goes red sooner.
+Three releases went out today from this lane (K, L, M); the record of each is in `docs/PROJECT-STATE.md`.
+
+**2026-10-01, Codex818 CLAIMED: CFB Dynasty recruiting targeting (D92).**
+The recruiting screen still lists every high-school and portal player without
+filters. Match accepted CBB targeting: Position, minimum Stars, truthful visible
+counts, Reset, and distinct empty-filter versus exhausted-pool copy. Own only
+src/components/cfb-dynasty/CfbDynastyBoard.tsx, a focused recruit-filter test and
+scripts/simCfbRecruitFilters.mjs. Preserve original ordering and exact player-ID
+signing, NIL, grades, hidden ratings, generated pools, saves, RNG and Claude728
+coordinator controls. No engine, shared helper, real-data or schema changes.
+Root owns docs/Git/build and the D92 reconciliation update. Verify actual Board
+filtering, no filter save writes, original sign/refusal outcomes and bounded phone
+fit. Claude728 is published; 700/781/796/795/706 claims stay untouched. Next819.
+
 **2026-10-01, Codex816 ACCEPTED: Tennis Player answer feedback. Batch 815-817 complete.**
 The old delayed closure could mark a correct answer wrong. Feedback now follows
 an accepted guess in the current round, with a single 420ms reply/result cue or
