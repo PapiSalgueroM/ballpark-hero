@@ -1038,6 +1038,13 @@ export const HOCKEY_CONTENT: GameContentMap = {
         ],
       },
       {
+        heading: "Choose who contributes to your simulation rating",
+        items: [
+          "Open Roster and choose your simulation contributors: six healthy forwards, four healthy defensemen and one healthy goalie. If a group has fewer available players, use all of them. Uncheck a selected forward or defenseman before choosing his replacement.",
+          "Stage your changes, then Apply contributors to save them. Use automatic goes back to the highest rated healthy players. These groups feed the rating model; they are not full lines, defensive pairs or ice time.",
+        ],
+      },
+      {
         heading: "Sim the season and watch your pace",
         items: [
           "Sim the season in 20 rounds of roughly four games each, with a live read on whether you are on pace.",
@@ -1087,6 +1094,12 @@ export const HOCKEY_CONTENT: GameContentMap = {
     ],
     exampleSections: [
       {
+        heading: "What a goalie change does in the model",
+        paragraphs: [
+          "For a fictional rating example, keep your forwards and defensemen unchanged and replace a healthy 80 rated goalie with a healthy 85 rated goalie. The goalie group has a 20 percent weight, so your simulation strength rises by one point. Apply commits that choice; it changes your odds, not a promised result.",
+        ],
+      },
+      {
         heading: "Working the phone for a Buffalo blueliner",
         paragraphs: [
           "Say you take Buffalo. You waive a fading winger, sign a 79 rated defenseman, then package your third line center plus a pick for a younger blueliner. The AI takes the deal because the value clears its price.",
@@ -1109,7 +1122,8 @@ export const HOCKEY_CONTENT: GameContentMap = {
       {
         heading: "Strength math behind your team rating",
         items: [
-          "Strength math: the top six forwards carry half your rating, the top four defensemen 30 percent, the starting goalie 20.",
+          "Strength math: your selected forwards carry half your rating, your defensemen 30 percent and your goalie 20 percent. Automatic selection uses the top six healthy forwards, top four healthy defensemen and best healthy goalie. An empty group uses a rating of 62 in this game's model.",
+          "If a selected player is injured or leaves your roster, the game keeps your other valid choices and fills the gap with the highest rated healthy option. A player who recovers needs to be selected again if you want him back in the group.",
         ],
       },
       {
@@ -1131,6 +1145,10 @@ export const HOCKEY_CONTENT: GameContentMap = {
       {
         q: "How long can one franchise run?",
         a: "As long as ownership keeps you. Seasons chain through the draft and offseason, the game autosaves in your browser, and your Cup count carries over.",
+      },
+      {
+        q: "Do my contributor choices survive a reload?",
+        a: "Yes, after Apply contributors they live in your existing franchise save. Unsaved changes are only a preview. Old saves use automatic selection, and Use automatic clears your manual choices. You cannot select an injured player, somebody from another club or the same player twice.",
       },
     ],
   },
