@@ -1,5 +1,97 @@
 # Project state
 
+## BUILT 2026-09-30: Round 653, the grid answer archives (branch `r653-grid-archives`, not on main)
+
+- **What was wrong.** The four grid answer pages (`/nba-grid/archive`, `/mlb-grid/archive`,
+  `/hockey-grid/archive`, `/cbb-grid/archive`) stopped at 2026-08-30 while saying "the last 14" and
+  "Today's board is not here": the generator ran by hand only and rolled boards off on every run.
+  The college page printed "_ Eldredge" as a Hofstra guard, listed 13 players twice in one cell
+  (Bradley Beal at Florida and Started 2010 or Later) and ran 76 counts high, because
+  `ncaa_player_stats` holds 1,600 players twice. No heading said "answers", every board heading
+  carried an ISO date.
+- **What changed.** `scripts/genGridArchive.mjs` accumulates: the window starts where the file
+  starts and ends yesterday in America/New_York, and it refuses to write if a published board
+  would roll off or change (rows, columns, and since the fix round every cell's count and names,
+  with `--republish` to write a deliberate recount and print what moved), or if the college
+  pool has moved off the recorded one. Players are
+  counted by the source's own id (each grid lib loads it only when asked, `withIds`, so the games
+  download nothing new); placeholder names still count, since the game accepts them, but never
+  print; ties break by name then id, so a rerun writes the same bytes (checked). Regenerated to
+  2026-09-29: 14 to 44 boards a sport, and the 42 franchise boards already published are byte for
+  byte unchanged. Headings "NBA Grid Answers: Past Daily Boards" and "NBA grid answers for August
+  30, 2026", copy stated from the data only, game page links "NBA grid answers for past days".
+- **The release step.** `npm run archive:grids`, then `build:seo`: the new "The release build"
+  section of `docs/SHIP-PIPELINE.md`. **This branch carries no rebuilt `public/` or
+  `scripts/data/lastmod.json`**, so whoever assembles the release runs both steps.
+  `simGridArchive` sections 6, 10 and 11 read `public/` and stay red until they do.
+- **The fence.** `simGridArchive` counts by id and adds sections 7 to 11 (freshness against the
+  file's own claim, no player twice in a cell, no malformed name, the saved copy's range and
+  counts, no ISO date in a board heading), with the controls `stale`, `repeat`, `malformed`,
+  `copyrange` and `isoh2`; every control, old and new, is now green only when its own section
+  goes red and no other one moves.
+- **For a later database round, reported and not touched (reads only).** The 1,600 extra rows
+  in `ncaa_player_stats` are ids 16201 to 17400 (copies of 15001 to 16200) and 23001 to 23400
+  (copies of 22601 to 23000): same slug, same rank, same stats, written seconds after the
+  originals in the 2026-05-09 load, so two batches of a ranked list were sent twice. The table's
+  only index is the id primary key. The three placeholder rows are 21867 "_ Johnston" (New
+  Hampshire, 1985-87), 32408 "_ Ford" (Maryland Eastern Shore, 1988-89) and 41595 "_ Eldredge"
+  (Hofstra, 1991-95); their slugs carry the underscore too, so the source had no first name. That
+  round should: (1) delete the extra ids after checking each row against its original column by
+  column; (2) add a unique index on `player_slug`; (3) find each placeholder's first name on two
+  sources or leave the row, never guess; (4) **first** give the archive a school pool per board.
+  Counted once per player, Marshall and Rutgers have 9 players with 700+ rebounds and UNC
+  Greensboro 9 with 350+ assists, under the pool's floor of 10, so today the live College Grid
+  can serve those crossings short of what the design promises (none is published yet). Deleting
+  the rows drops those three schools from the pool (106 to 103), which changes every future
+  college board. Without a per board pool, `archive:grids` then refuses to run and
+  `simGridArchive` section 5 goes red. The other three grid tables have no duplicate rows and no
+  placeholder names.
+- **The fix round (same branch, after review).** Three reviewers found the same blocker: the
+  page promised that anything listed would be accepted in the game, and 227 college answers were
+  not. The game resolved a typed name through `byNormalizedName`, which kept ONE player per
+  name (the last row loaded), and 1,697 college names belong to two or more players, so typing
+  "Danny Manning" for Kansas x 1,500+ Career Points was judged on a later Danny Manning with 59
+  games and refused. That was a live game bug since Round 368, not only an archive one. Fixed on
+  the game side, one engine many sports: `byNormalizedName` is `Map<string, P[]>` in
+  `gridEngine.ts` and `cbbGrid.ts`, and the new `pickNamesake` in `gridEngine.ts` judges the
+  namesake who fits the cell; all four grid pages and both grid hooks (`useFootballGrid`,
+  `useCollegeGrid`) read it through that. The generator resolves every name it lists through
+  the same path and refuses otherwise, and `simGridArchive` section 2 types every listed answer
+  into the game's own lookup (control `shadowed`). Also from the review: the generator now
+  compares published cells too and refuses unless `--republish` (the docs said it did and it did
+  not); section 9 carries its own name rule instead of importing the generator's (a broken
+  `malformedName` left it green, measured); section 12 checks "rarest by career games played"
+  (control `notrarest`, and flipping the sort had left every section green); `miscount` control
+  for the distinct id count; the subtitle says "Past boards from August 17, 2026" instead of
+  "Every past board" (the grids have run since July, the archive starts 08-17), fenced in
+  section 10; and the hub links now read "NBA grid answers" with `why` lines that promise the
+  count and the rarest names rather than "every answer". The archive file itself did not move
+  (only its note did): with the game accepting any fitting namesake, every listed name was
+  already one the game takes.
+- **Merged onto main's Release H head (`49be326e`), 2026-09-30, on the same branch.** The
+  branch was cut before Rounds 652 and 654 landed, so four files conflicted and both rounds
+  stand in each: `simGridArchive` section 6 walks the saved tables row by row (Round 652, one
+  `<tr>` per crossing) through the fix round's `snapshotOf`, and the `miscount` control now
+  patches the count in the row's own `<td>`; `sportHub.ts` keeps Round 654's "every change
+  since" labels on the format histories beside the "grid answers" labels; What's New and this
+  file keep both sides, newest first. `cbbGrid.ts` merged clean, main had not touched it.
+  Gates on the merged tree: tsc 0; the archive regenerated to 2026-09-29 (44 boards a sport,
+  0 published cells moved, the bytes equal to the branch's once line endings are folded, so
+  every listed name already goes through the game's lookup); `simGridArchive` sections 1 to 5,
+  7 to 9 and 12 green against the live database (cbb: 3,168 answers typed in, 0 refused, 392 of
+  them names shared by two or more players), sections 6, 10 and 11 red for the one reason above,
+  the saved pages in `public/` are the release build's; of the ten controls, `badanswer`,
+  `shadowed`, `miscount`, `stale`, `repeat`, `malformed` and `notrarest` each turn their own
+  section red (isolation waits on the same rebuild), `dedupe` takes section 6 from 5 findings
+  to 8, and `copyrange` and `isoh2` refuse to run on the old snapshots; `gridNamesakes`,
+  `noDoubleRecord` and `collegeGridOffline` green in vitest, and `dailyReload` is red by the
+  same 12 perfect lineup daily record tests on origin/main itself, so that red is main's;
+  `simCollegeGridKey` green with all 14 controls (run from a copy whose vitest path points at
+  the main tree, a worktree has no `node_modules`); `simNoRivalNames` 0 findings;
+  `simHarnessAnchors` green; no U+2013 or U+2014 in the diff.
+- **Follow ups.** The page's JSON grows by about 13K a day in one chunk (546K now): split it by
+  sport or by month well before a year.
+
 ## LIVE 2026-09-30: Release H (707, 708, 711, 730, 732), main `b8c77dce`
 
 Assembled by the desktop Claude lane in the gate clone (`release-h`), on top of Release G and

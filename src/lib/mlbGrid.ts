@@ -11,6 +11,7 @@ import {
   type GridCategory,
   type GridCell,
   type GridDifficulty,
+  type GridFetchOptions,
 } from '@/lib/gridEngine';
 
 /**
@@ -115,6 +116,7 @@ const MLB_GRID: FranchiseGridConfig<IndexedPlayer> = {
   franchiseColumn: 'franchises',
   orderColumn: 'player_name',
   minPoolSize: MIN_POOL_SIZE,
+  idColumn: 'playerid',
   toPlayer(raw) {
     const name = String(raw.player_name ?? '').trim();
     const frStr = String(raw.franchises ?? '').trim();
@@ -135,8 +137,8 @@ const MLB_GRID: FranchiseGridConfig<IndexedPlayer> = {
  * Fetches the full mlb_grid_players view once and builds an in-memory index.
  * Returns null on failure or an implausibly small result.
  */
-export function fetchMlbGridData(): Promise<MlbGridData | null> {
-  return fetchFranchiseGridData(MLB_GRID);
+export function fetchMlbGridData(opts?: GridFetchOptions): Promise<MlbGridData | null> {
+  return fetchFranchiseGridData(MLB_GRID, opts);
 }
 
 /** Bespoke PlayerAutocomplete source for the mlb_grid_players view. */
