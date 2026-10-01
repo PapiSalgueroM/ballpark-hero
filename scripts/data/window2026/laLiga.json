@@ -143,7 +143,12 @@
     ],
     "window": "2026-summer",
     "checked": "2026-09-30",
-    "note": "LALIGA registration 2026-08-27 (ARNAU), transfer from Girona."
+    "note": "LALIGA registration 2026-08-27 (ARNAU), transfer from Girona. add is his 2026 row at Girona FC (the table's own position, age and value), a club the bake does not model.",
+    "add": {
+      "p": "Right-Back",
+      "a": 22,
+      "usd": 11000000
+    }
   },
   {
     "name": "Pablo Maffeo",
@@ -156,7 +161,12 @@
     ],
     "window": "2026-summer",
     "checked": "2026-09-30",
-    "note": "LALIGA registration 2026-08-21, loan from Olympiacos (he left Mallorca for Olympiacos this summer)."
+    "note": "LALIGA registration 2026-08-21, loan from Olympiacos (he left Mallorca for Olympiacos this summer). add is his 2026 row at RCD Mallorca (the table's own position, age and value), a club the bake does not model.",
+    "add": {
+      "p": "Right-Back",
+      "a": 28,
+      "usd": 5000000
+    }
   },
   {
     "name": "Justin de Haas",
@@ -181,7 +191,12 @@
     ],
     "window": "2026-summer",
     "checked": "2026-09-30",
-    "note": "LALIGA registration 2026-08-25, loan from Ipswich Town."
+    "note": "LALIGA registration 2026-08-25, loan from Ipswich Town. add is his 2026 row at FC Volendam (the table's own position, age and value), a club the bake does not model.",
+    "add": {
+      "p": "Goalkeeper",
+      "a": 22,
+      "usd": 2000000
+    }
   },
   {
     "name": "Félix Correia",
@@ -207,7 +222,12 @@
     ],
     "window": "2026-summer",
     "checked": "2026-09-30",
-    "note": "LALIGA registration 2026-09-01, loan from Saint-Etienne."
+    "note": "LALIGA registration 2026-09-01, loan from Saint-Etienne. add is his 2026 row at AS Saint-Étienne (the table's own position, age and value), a club the bake does not model.",
+    "add": {
+      "p": "Centre-Forward",
+      "a": 21,
+      "usd": 16000000
+    }
   },
   {
     "name": "Giorgi Kochorashvili",
@@ -267,7 +287,12 @@
     ],
     "window": "2026-summer",
     "checked": "2026-09-30",
-    "note": "LALIGA registration 2026-09-01, transfer from Club America."
+    "note": "LALIGA registration 2026-09-01, transfer from Club America. add is his 2026 row at CF América (the table's own position, age and value), a club the bake does not model.",
+    "add": {
+      "p": "Centre-Back",
+      "a": 26,
+      "usd": 5000000
+    }
   },
   {
     "name": "Couhaib Driouech",
@@ -328,7 +353,12 @@
     ],
     "window": "2026-summer",
     "checked": "2026-09-30",
-    "note": "LALIGA registration 2026-08-19, transfer from Real Zaragoza."
+    "note": "LALIGA registration 2026-08-19, transfer from Real Zaragoza. add is his 2026 row at Real Zaragoza (the table's own position, age and value), a club the bake does not model.",
+    "add": {
+      "p": "Central Midfield",
+      "a": 24,
+      "usd": 3000000
+    }
   },
   {
     "name": "Johan Mojica",
@@ -340,7 +370,12 @@
     ],
     "window": "2026-summer",
     "checked": "2026-09-30",
-    "note": "LALIGA registration 2026-08-14, transfer from Mallorca."
+    "note": "LALIGA registration 2026-08-14, transfer from Mallorca. add is his 2026 row at RCD Mallorca (the table's own position, age and value), a club the bake does not model.",
+    "add": {
+      "p": "Left-Back",
+      "a": 33,
+      "usd": 2000000
+    }
   },
   {
     "name": "Martín Satriano",
@@ -389,7 +424,12 @@
     ],
     "window": "2026-summer",
     "checked": "2026-09-30",
-    "note": "LALIGA registration 2026-08-14, transfer from Sporting Gijon."
+    "note": "LALIGA registration 2026-08-14, transfer from Sporting Gijon. add is his 2026 row at Sporting Gijón (the table's own position, age and value), a club the bake does not model.",
+    "add": {
+      "p": "Right Winger",
+      "a": 25,
+      "usd": 4000000
+    }
   },
   {
     "name": "Raúl Moro",
@@ -414,7 +454,12 @@
     ],
     "window": "2026-summer",
     "checked": "2026-09-30",
-    "note": "LALIGA registration 2026-09-01, loan from Como; his 2026 row sits at Cremonese."
+    "note": "LALIGA registration 2026-09-01, loan from Como; his 2026 row sits at Cremonese. add is his 2026 row at US Cremonese (the table's own position, age and value), a club the bake does not model.",
+    "add": {
+      "p": "Goalkeeper",
+      "a": 28,
+      "usd": 3000000
+    }
   },
   {
     "name": "Mujaid Sadick",
@@ -452,7 +497,12 @@
     ],
     "window": "2026-summer",
     "checked": "2026-09-30",
-    "note": "LALIGA registration 2026-09-01, transfer from Maccabi Tel Aviv."
+    "note": "LALIGA registration 2026-09-01, transfer from Maccabi Tel Aviv. add is his 2026 row at Maccabi Tel Aviv (the table's own position, age and value), a club the bake does not model.",
+    "add": {
+      "p": "Left-Back",
+      "a": 22,
+      "usd": 3000000
+    }
   },
   {
     "name": "Kevin Lomónaco",
@@ -464,7 +514,12 @@
     ],
     "window": "2026-summer",
     "checked": "2026-09-30",
-    "note": "LALIGA registration 2026-09-01, release clause paid to Independiente."
+    "note": "LALIGA registration 2026-09-01, release clause paid to Independiente. add is his 2026 row at CA Independiente (the table's own position, age and value), a club the bake does not model.",
+    "add": {
+      "p": "Centre-Back",
+      "a": 23,
+      "usd": 10000000
+    }
   },
   {
     "name": "Thomas Lemar",
@@ -553,7 +608,12 @@
     ],
     "window": "2026-summer",
     "checked": "2026-09-30",
-    "note": "LALIGA registration 2026-08-24 (THIAGO), loan from Villarreal; his 2026 row sits at Oviedo."
+    "note": "LALIGA registration 2026-08-24 (THIAGO), loan from Villarreal; his 2026 row sits at Oviedo. add is his 2026 row at Real Oviedo (the table's own position, age and value), a club the bake does not model.",
+    "add": {
+      "p": "Left Winger",
+      "a": 21,
+      "usd": 5000000
+    }
   },
   {
     "name": "Enzo Bardeli",
@@ -565,7 +625,12 @@
     ],
     "window": "2026-summer",
     "checked": "2026-09-30",
-    "note": "LALIGA registration 2026-08-16, free from Dunkerque."
+    "note": "LALIGA registration 2026-08-16, free from Dunkerque. add is his 2026 row at USL Dunkerque (the table's own position, age and value), a club the bake does not model.",
+    "add": {
+      "p": "Central Midfield",
+      "a": 24,
+      "usd": 6000000
+    }
   },
   {
     "name": "José María Giménez",
@@ -627,7 +692,12 @@
     ],
     "window": "2026-summer",
     "checked": "2026-09-30",
-    "note": "LALIGA registration 2026-07-29, release clause paid to Mallorca."
+    "note": "LALIGA registration 2026-07-29, release clause paid to Mallorca. add is his 2026 row at RCD Mallorca (the table's own position, age and value), a club the bake does not model.",
+    "add": {
+      "p": "Goalkeeper",
+      "a": 25,
+      "usd": 6000000
+    }
   },
   {
     "name": "Dominik Livakovic",
@@ -687,7 +757,12 @@
     ],
     "window": "2026-summer",
     "checked": "2026-09-30",
-    "note": "Girona loan ended, back at Athletic. LALIGA page: Athletic, 2 matches in 2026-27."
+    "note": "Girona loan ended, back at Athletic. LALIGA page: Athletic, 2 matches in 2026-27. add is his 2026 row at Girona FC (the table's own position, age and value), a club the bake does not model.",
+    "add": {
+      "p": "Right-Back",
+      "a": 22,
+      "usd": 4000000
+    }
   },
   {
     "name": "Quilindschy Hartman",
