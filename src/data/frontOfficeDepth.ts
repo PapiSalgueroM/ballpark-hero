@@ -1,6 +1,6 @@
 // GENERATED 2026-10-01 by scripts/genFrontOfficeRoster.mjs from scripts/data/nflRosters2026.json (do not hand-edit).
 // Round 828. The rest of every club beside the fifteen starters in
-// frontOfficePlayers.ts: 1158 bench men (the active roster) and 526 practice squad men.
+// frontOfficePlayers.ts: 1158 bench men (the active roster) and 525 practice squad men.
 // Roster: nflverse rosters release, season 2026, week 4, the latest week
 // the release carried when this was baked (3018 rows read; every status is read
 // off that week only). Kickers, punters and long snappers are left out: the game
@@ -16,7 +16,9 @@
 // ranked apart, each across the whole band; noSeason names the second kind.
 // Contracts, salaries and roster moves inside the game are fictional. The
 // practice squad does not count against the game's cap.
-// Membership second source: scripts/data/nflRosterSecondSource.json.
+// Second source checks: scripts/data/nflRosterSecondSource.json and
+// scripts/data/nflRosterSpotCheck.json; a man both other sources contradict is held
+// out and listed with the reason in scripts/data/nflRosters2026LeftOut.json.
 
 import type { FoPlayer } from './frontOfficePlayers';
 
@@ -112,8 +114,8 @@ export const FO_DEPTH: Record<string, FoDepthTeam> = {
       { name: 'Ryan Neuzil', pos: 'OL', age: 29, ovr: 77, salary: 1, years: 3 },
       { name: 'Ethan Onianwa', pos: 'OL', age: 23, ovr: 76, salary: 1, years: 3 },
       { name: 'Gervon Dexter Sr.', pos: 'DL', age: 25, ovr: 65, salary: 1, years: 4 },
-      { name: 'LaCale London', pos: 'DL', age: 29, ovr: 64, salary: 1, years: 3 },
-      { name: 'Samson Ebukam', pos: 'DL', age: 31, ovr: 64, salary: 1, years: 1 },
+      { name: 'LaCale London', pos: 'DL', age: 29, ovr: 64, salary: 1, years: 2 },
+      { name: 'Samson Ebukam', pos: 'DL', age: 31, ovr: 64, salary: 1, years: 2 },
       { name: 'Cameron Thomas', pos: 'DL', age: 26, ovr: 63, salary: 1, years: 3 },
       { name: 'Maason Smith', pos: 'DL', age: 23, ovr: 62, salary: 1, years: 3 },
       { name: 'Za\'Darius Smith', pos: 'LB', age: 33, ovr: 65, salary: 1, years: 2 },
@@ -146,7 +148,7 @@ export const FO_DEPTH: Record<string, FoDepthTeam> = {
       { name: 'Josh Thompson', pos: 'OL', age: 23, ovr: 75, salary: 1, years: 4 },
       { name: 'Kam Dewberry', pos: 'OL', age: 22, ovr: 75, salary: 1, years: 3 },
       { name: 'Riley Mahlman', pos: 'OL', age: 23, ovr: 75, salary: 1, years: 4 },
-      { name: 'Zacch Pickens', pos: 'DL', age: 26, ovr: 65, salary: 1, years: 2 },
+      { name: 'Zacch Pickens', pos: 'DL', age: 26, ovr: 64, salary: 1, years: 2 },
       { name: 'Brian Asamoah', pos: 'LB', age: 26, ovr: 65, salary: 1, years: 3 },
       { name: 'Drake Jackson', pos: 'LB', age: 25, ovr: 65, salary: 1, years: 3 },
       { name: 'Bralen Trice', pos: 'LB', age: 25, ovr: 64, salary: 1, years: 3 },
@@ -475,7 +477,7 @@ export const FO_DEPTH: Record<string, FoDepthTeam> = {
       { name: 'Mason Graham', pos: 'DL', age: 22, ovr: 65, salary: 1, years: 3 },
       { name: 'Mike Hall Jr.', pos: 'DL', age: 23, ovr: 64, salary: 1, years: 4 },
       { name: 'Sam Williams', pos: 'DL', age: 27, ovr: 64, salary: 1, years: 2 },
-      { name: 'Isaiah McGuire', pos: 'DL', age: 25, ovr: 63, salary: 1, years: 3 },
+      { name: 'Isaiah McGuire', pos: 'DL', age: 25, ovr: 63, salary: 1, years: 4 },
       { name: 'Adin Huntington', pos: 'DL', age: 24, ovr: 61, salary: 1, years: 3 },
       { name: 'Justin Jefferson', pos: 'LB', age: 23, ovr: 64, salary: 1, years: 4 },
       { name: 'Winston Reid', pos: 'LB', age: 27, ovr: 63, salary: 1, years: 2 },
@@ -498,8 +500,8 @@ export const FO_DEPTH: Record<string, FoDepthTeam> = {
       { name: 'KT Leveston', pos: 'OL', age: 27, ovr: 76, salary: 1, years: 3 },
       { name: 'Obinna Eze', pos: 'OL', age: 28, ovr: 76, salary: 1, years: 2 },
       { name: 'Xavier Truss', pos: 'OL', age: 25, ovr: 76, salary: 1, years: 4 },
-      { name: 'Zion Logue', pos: 'DL', age: 25, ovr: 64, salary: 1, years: 4 },
-      { name: 'Sam Kamara', pos: 'DL', age: 28, ovr: 63, salary: 1, years: 3 },
+      { name: 'Sam Kamara', pos: 'DL', age: 28, ovr: 63, salary: 1, years: 2 },
+      { name: 'Zion Logue', pos: 'DL', age: 25, ovr: 63, salary: 1, years: 4 },
       { name: 'Khordae Sydnor', pos: 'DL', age: 23, ovr: 61, salary: 1, years: 4 },
       { name: 'Logan Fano', pos: 'DL', age: 24, ovr: 61, salary: 1, years: 3 },
       { name: 'Nadame Tucker', pos: 'DL', age: 26, ovr: 61, salary: 1, years: 3 },
@@ -1186,8 +1188,8 @@ export const FO_DEPTH: Record<string, FoDepthTeam> = {
       { name: 'Jarrett Kingston', pos: 'OL', age: 26, ovr: 76, salary: 1, years: 3 },
       { name: 'Malik Herring', pos: 'DL', age: 28, ovr: 63, salary: 1, years: 2 },
       { name: 'Zeek Biggers', pos: 'DL', age: 22, ovr: 63, salary: 1, years: 4 },
-      { name: 'Jordan Phillips', pos: 'DL', age: 22, ovr: 62, salary: 1, years: 4 },
-      { name: 'Rob Beal Jr.', pos: 'DL', age: 27, ovr: 61, salary: 1, years: 2 },
+      { name: 'Jordan Phillips', pos: 'DL', age: 22, ovr: 62, salary: 1, years: 3 },
+      { name: 'Rob Beal Jr.', pos: 'DL', age: 27, ovr: 61, salary: 1, years: 3 },
       { name: 'Jacob Rodriguez', pos: 'LB', age: 23, ovr: 65, salary: 1, years: 4 },
       { name: 'Willie Gay Jr.', pos: 'LB', age: 28, ovr: 64, salary: 1, years: 2 },
       { name: 'Andre Jones Jr.', pos: 'LB', age: 27, ovr: 63, salary: 1, years: 2 },
@@ -1212,16 +1214,15 @@ export const FO_DEPTH: Record<string, FoDepthTeam> = {
       { name: 'Tre Watson', pos: 'TE', age: 23, ovr: 62, salary: 1, years: 3 },
       { name: 'Gottlieb Ayedze', pos: 'OL', age: 26, ovr: 76, salary: 1, years: 2 },
       { name: 'Mazi Smith', pos: 'DL', age: 25, ovr: 65, salary: 1, years: 4 },
-      { name: 'James Ester', pos: 'DL', age: 25, ovr: 62, salary: 1, years: 3 },
-      { name: 'Keith Cooper Jr.', pos: 'DL', age: 23, ovr: 62, salary: 1, years: 3 },
-      { name: 'Max Llewellyn', pos: 'DL', age: 24, ovr: 62, salary: 1, years: 4 },
-      { name: 'Rodney McGraw', pos: 'DL', age: 24, ovr: 61, salary: 1, years: 4 },
+      { name: 'Keith Cooper Jr.', pos: 'DL', age: 23, ovr: 62, salary: 1, years: 4 },
+      { name: 'Max Llewellyn', pos: 'DL', age: 24, ovr: 62, salary: 1, years: 3 },
+      { name: 'Rodney McGraw', pos: 'DL', age: 24, ovr: 61, salary: 1, years: 3 },
       { name: 'Amari Gainer', pos: 'LB', age: 26, ovr: 63, salary: 1, years: 3 },
       { name: 'Liam Anderson', pos: 'LB', age: 26, ovr: 63, salary: 1, years: 2 },
       { name: 'Major Burns', pos: 'DB', age: 24, ovr: 62, salary: 1, years: 3 },
       { name: 'Ethan Bonner', pos: 'DB', age: 26, ovr: 61, salary: 1, years: 3 },
     ],
-    noSeason: ['A.J. Henning', 'Aaron Brewer', 'Amari Gainer', 'Andre Jones Jr.', 'Andrew Meyer', 'Austin Jackson', 'Caedan Wallace', 'Caleb Douglas', 'Carlos Washington', 'Chris Bell', 'Chris Johnson', 'Chukwuebuka Godrick', 'DJ Campbell', 'DJ Herman', 'Gottlieb Ayedze', 'Jackson Woodard', 'Jacob Rodriguez', 'Jalen Reagor', 'James Ester', 'Jarquez Hunter', 'Jarrett Kingston', 'Jaylin Simpson', 'Julius Wood', 'Justin Joly', 'Kadyn Proctor', 'Keith Cooper Jr.', 'Kevin Coleman Jr.', 'Kyle McCord', 'Liam Anderson', 'Major Burns', 'Malik Herring', 'Marcellas Dial Jr.', 'Max Llewellyn', 'Mazi Smith', 'Michael Taaffe', 'Reese Taylor', 'Rodney McGraw', 'Seydou Traore', 'Tre Watson', 'Will Kacmarek', 'Will Sheppard'],
+    noSeason: ['A.J. Henning', 'Aaron Brewer', 'Amari Gainer', 'Andre Jones Jr.', 'Andrew Meyer', 'Austin Jackson', 'Caedan Wallace', 'Caleb Douglas', 'Carlos Washington', 'Chris Bell', 'Chris Johnson', 'Chukwuebuka Godrick', 'DJ Campbell', 'DJ Herman', 'Gottlieb Ayedze', 'Jackson Woodard', 'Jacob Rodriguez', 'Jalen Reagor', 'Jarquez Hunter', 'Jarrett Kingston', 'Jaylin Simpson', 'Julius Wood', 'Justin Joly', 'Kadyn Proctor', 'Keith Cooper Jr.', 'Kevin Coleman Jr.', 'Kyle McCord', 'Liam Anderson', 'Major Burns', 'Malik Herring', 'Marcellas Dial Jr.', 'Max Llewellyn', 'Mazi Smith', 'Michael Taaffe', 'Reese Taylor', 'Rodney McGraw', 'Seydou Traore', 'Tre Watson', 'Will Kacmarek', 'Will Sheppard'],
   },
   MIN: {
     bench: [

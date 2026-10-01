@@ -2,11 +2,12 @@
  "read": "2026-10-01",
  "week": 4,
  "what": "Every man on an NFL club's active, reserve or practice squad list on the record (scripts/data/nflRosters2026.json) who is not in NFL Front Office, and why. Written by scripts/genFrontOfficeRoster.mjs.",
- "count": 359,
+ "count": 360,
  "byReason": {
   "a kicker, punter or long snapper": 105,
   "on a reserve list and not one of the club's fifteen starters": 246,
-  "no usable birth date in the release, so no real age": 8
+  "no usable birth date in the release, so no real age": 8,
+  "the second source disagrees": 1
  },
  "leftOut": [
   {
@@ -1548,6 +1549,13 @@
    "pos": "LB",
    "status": "RES",
    "reason": "on a reserve list (R48) and not one of the club's fifteen starters: a reserve list is not the 53"
+  },
+  {
+   "team": "MIA",
+   "name": "James Ester",
+   "pos": "DL",
+   "status": "DEV",
+   "reason": "the second source disagrees: the release files him at DT, while the club's own roster page and ESPN both list him at guard (read 2026-10-01)"
   },
   {
    "team": "MIN",

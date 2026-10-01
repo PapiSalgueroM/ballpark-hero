@@ -61,10 +61,13 @@
 
    MEASUREMENTS (2026-10-01, the bake of that day, the harness's own seeds):
      Section 1: active rosters 50 to 54 a club (1638 men), practice squads 15
-     to 18 (526); 1684 of 1684 bench and practice squad men found on their
-     club, with their status, on the release's week 4; second source 28 of
-     30 settled by both sources, 28 of 28 agreeing with the bake, 2 split
-     (an elevated practice squad tight end, a fresh signing).
+     to 18 (525); 1683 of 1683 bench and practice squad men found on their
+     club, with their status, on the committed record of the release's week
+     4; the bake of the record matches all three committed files, 360 men
+     left out with a reason; second source 28 of 30 settled by both sources,
+     28 of 28 agreeing with the bake, 2 split (an elevated practice squad
+     tight end, a fresh signing); the review's spot check 60 men over six
+     clubs, 59 settled, 1 split, 1 held out on position (James Ester).
      Section 4: 192 clubs, fit and with 3363 bench men hurt, 0 strength
      differences; 1632 games replayed, 0 different.
      Section 5, over four sets of forty seasons (NFL_FULL_SEED_BASE 5000,
@@ -95,6 +98,7 @@
      bigbench     every bench salary six times larger            -> 6
      sharedcopy   the finder's probe copy is the club itself     -> 6
      recordedit   the record moves one KC bench man to DEN        -> 1
+     noheld       the bake ignores the spot check's held out list -> 1
    Under a control the process exits non zero whether or not the expected
    sections went red, and says which it was.
 
@@ -121,6 +125,7 @@ const EXPECT = {
   sharedcopy: [6],
   bigbench: [6],
   recordedit: [1],
+  noheld: [1],
 };
 if (CONTROL && !EXPECT[CONTROL]) {
   console.error(`NFL_FULL_CONTROL=${CONTROL} is not a control this harness knows (${Object.keys(EXPECT).join(', ')})`);
@@ -158,6 +163,7 @@ const NOTE = {
   sharedcopy: 'the engine copy hands the Trade Finder the clubs themselves instead of a copy',
   bigbench: 'the depth data copy pays every bench man six times his salary',
   recordedit: 'the record moves one KC bench man to DEN, in memory',
+  noheld: 'the bake ignores the spot check\'s held out list',
 };
 const SECTION_NAMES = {
   1: 'the data: real, current, second sourced, and agreeing with the engine',
@@ -325,6 +331,9 @@ console.log('1) the data: real, current, second sourced, and agreeing with the e
      refreshed without a rebake, goes red. Control recordedit moves one bench
      man to another club in the record, in memory only. */
   const record = JSON.parse(fs.readFileSync(path.join(ROOT, 'scripts', 'data', 'nflRosters2026.json'), 'utf8'));
+  const spotCheck = JSON.parse(fs.readFileSync(path.join(ROOT, 'scripts', 'data', 'nflRosterSpotCheck.json'), 'utf8'));
+  let bakedLeftOut = [];
+  let bakedDepth = [];
   if (CONTROL === 'recordedit') {
     const iTeam = record.rosterColumns.indexOf('team');
     const iName = record.rosterColumns.indexOf('full_name');
@@ -355,7 +364,14 @@ console.log('1) the data: real, current, second sourced, and agreeing with the e
   {
     const norm = t => t.split('\r\n').join('\n');
     const starterSrc = norm(fs.readFileSync(path.join(ROOT, 'src', 'data', 'frontOfficePlayers.ts'), 'utf8'));
-    const baked = gen.bakeFromRecord(record, gen.readTeamMeta(starterSrc));
+    const spotHeld = CONTROL === 'noheld' ? [] : spotCheck.heldOut;
+    if (CONTROL === 'noheld') {
+      if (!spotCheck.heldOut.length) throw new Error('control noheld: the spot check holds nobody out, so it would change nothing. Refusing to run.');
+      console.log(`   control noheld: the bake ignores the spot check's held out list (${spotCheck.heldOut.map(h => h.name).join(', ')})`);
+    }
+    const baked = gen.bakeFromRecord(record, gen.readTeamMeta(starterSrc), spotHeld);
+    bakedLeftOut = baked.leftOut;
+    bakedDepth = baked.depth;
     const files = [
       ['src/data/frontOfficePlayers.ts', baked.text],
       ['src/data/frontOfficeDepth.ts', baked.depthText],
@@ -394,6 +410,64 @@ console.log('1) the data: real, current, second sourced, and agreeing with the e
   ok(1, 'the second source record covers three clubs and thirty men', second.clubs.length === 3 && total === 30, `${second.clubs.length} clubs, ${total} men`);
   ok(1, 'at least 25 of the 30 are settled by both sources', settled >= 25, `${settled} settled`);
   ok(1, 'where both sources agree, the bake agrees with them', off.length === 0, off.slice(0, 3).join(' | '));
+
+  /* THE REVIEW'S SPOT CHECK (scripts/data/nflRosterSpotCheck.json): six more
+     clubs, ten men each, chosen by a fixed rule, with list, position and age
+     off each club's own page and ESPN's on 2026-10-01. Read against what the
+     bake actually shipped (bakedDepth, which a control can change), not
+     against the record's own tier labels. Measured 2026-10-01: 60 men, 59
+     settled on the list by both sources, 1 split (Jaleel McLaughlin, whom a
+     news report puts on the 53 as the release does), 1 position both sources
+     contradict (James Ester, held out); every age agrees with at least one
+     source once the game's 1 September reference is allowed for. */
+  {
+    const POS_GROUP = { QB: 'QB', RB: 'RB', FB: 'RB', WR: 'WR', TE: 'TE', OL: 'OL', OT: 'OL', T: 'OL', G: 'OL', C: 'OL', DL: 'DL', DE: 'DL', DT: 'DL', NT: 'DL', EDGE: 'DL', LB: 'LB', ILB: 'LB', OLB: 'LB', DB: 'DB', CB: 'DB', S: 'DB', K: 'ST', PK: 'ST', P: 'ST', LS: 'ST' };
+    const ageOn = (born, y, m, d) => { const b = new Date(`${born}T00:00:00Z`); let a = y - b.getUTCFullYear(); if (m < b.getUTCMonth() + 1 || (m === b.getUTCMonth() + 1 && d < b.getUTCDate())) a -= 1; return a; };
+    let men = 0, settledList = 0;
+    const bad = [], splitList = [], ages = [], heldBad = [];
+    for (const club of spotCheck.clubs) {
+      const core = teams.find(t => t.abbr === club.abbr).players;
+      const dep = bakedDepth.find(d => d.abbr === club.abbr) ?? { bench: [], practice: [] };
+      const inGame = [...core.map(p => ({ ...p, tier: 'roster' })), ...dep.bench.map(p => ({ ...p, tier: 'roster' })), ...dep.practice.map(p => ({ ...p, tier: 'practice' }))];
+      for (const m of club.men) {
+        men += 1;
+        const g = inGame.find(p => p.name === m.name);
+        const where = g ? g.tier : 'absent';
+        /* the list: a starter off a reserve list is on the roster by the starters rule */
+        const want = s => (s === 'reserve' && g && core.some(p => p.name === m.name) ? 'roster' : s);
+        if (m.clubSite !== m.espn) splitList.push(`${club.abbr} ${m.name}`);
+        else {
+          settledList += 1;
+          const agreed = want(m.clubSite);
+          const specialist = POS_GROUP[m.clubPos] === 'ST' && POS_GROUP[m.espnPos] === 'ST';
+          if (specialist) {
+            if (where !== 'absent' || !bakedLeftOut.some(x => x.team === club.abbr && x.name === m.name && /kicker, punter/.test(x.reason))) bad.push(`${club.abbr} ${m.name}: a specialist, but the bake has him ${where}`);
+          } else if (where === 'absent') {
+            if (!bakedLeftOut.some(x => x.team === club.abbr && x.name === m.name && /second source/.test(x.reason))) bad.push(`${club.abbr} ${m.name}: both sources say ${m.clubSite}, the bake drops him with no second source reason`);
+          } else if (where !== agreed) bad.push(`${club.abbr} ${m.name}: both sources say ${m.clubSite}, the bake says ${where}`);
+        }
+        /* the position: where both sources agree on a group the bake does not use for him, he must be held out */
+        const cg = POS_GROUP[m.clubPos], eg = POS_GROUP[m.espnPos];
+        if (cg && cg === eg && cg !== 'ST') {
+          const shipped = g ? g.pos : null;
+          if (shipped && shipped !== cg) heldBad.push(`${club.abbr} ${m.name}: both sources say ${cg}, the game ships him at ${shipped}`);
+          if (!shipped && !bakedLeftOut.some(x => x.team === club.abbr && x.name === m.name)) heldBad.push(`${club.abbr} ${m.name}: missing from the game and from the left out list`);
+        }
+        /* the age: the game's age is on 1 September; the sources printed theirs on 2026-10-01 */
+        if (g) {
+          const sep = ageOn(m.born, 2026, 9, 1), oct = ageOn(m.born, 2026, 10, 1);
+          if (g.age !== sep) ages.push(`${club.abbr} ${m.name}: the game says ${g.age}, his birth date says ${sep}`);
+          else if (m.ages.clubSite !== oct && m.ages.espn !== oct) ages.push(`${club.abbr} ${m.name}: born ${m.born} (${oct} on the day read), club page ${m.ages.clubSite}, ESPN ${m.ages.espn}`);
+        }
+      }
+    }
+    console.log(`   spot check (${spotCheck.read}): ${men} men over ${spotCheck.clubs.length} clubs, ${settledList} settled on the list by both sources, ${splitList.length} split (${splitList.join(', ')}); held out by the second source: ${spotCheck.heldOut.map(h => `${h.team} ${h.name}`).join(', ') || 'nobody'}`);
+    ok(1, 'the spot check covers six clubs and sixty men', spotCheck.clubs.length === 6 && men === 60, `${spotCheck.clubs.length} clubs, ${men} men`);
+    ok(1, 'at least 55 of the 60 are settled on the list by both sources', settledList >= 55, `${settledList} settled`);
+    ok(1, 'where both sources agree on the list, the bake agrees (specialists left out with the reason)', bad.length === 0, bad.slice(0, 3).join(' | '));
+    ok(1, 'where both sources agree on a position the release contradicts, the man is held out with the reason', heldBad.length === 0, heldBad.slice(0, 3).join(' | '));
+    ok(1, 'every age is the birth date\'s, and at least one source prints the same', ages.length === 0, ages.slice(0, 3).join(' | '));
+  }
 }
 
 /* ======================================================================= 2 */

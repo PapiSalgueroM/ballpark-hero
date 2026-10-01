@@ -142,6 +142,8 @@ const OUT = path.join(ROOT, 'src', 'data', 'frontOfficePlayers.ts');
 const OUT_DEPTH = path.join(ROOT, 'src', 'data', 'frontOfficeDepth.ts');
 export const RECORD = path.join(ROOT, 'scripts', 'data', 'nflRosters2026.json');
 export const LEFT_OUT = path.join(ROOT, 'scripts', 'data', 'nflRosters2026LeftOut.json');
+/** Round 828 review: the second source spot check, whose heldOut list the bake obeys. */
+export const SPOT_CHECK = path.join(ROOT, 'scripts', 'data', 'nflRosterSpotCheck.json');
 export const ROSTER_SEASON = 2026;
 export const STATS_SEASON = 2025;
 /** On the roster: active, or held on a reserve list. Cut and practice squad are not. */
@@ -733,7 +735,9 @@ export function renderDepthFile(depth, sources) {
   lines.push('// ranked apart, each across the whole band; noSeason names the second kind.');
   lines.push('// Contracts, salaries and roster moves inside the game are fictional. The');
   lines.push('// practice squad does not count against the game\'s cap.');
-  lines.push('// Membership second source: scripts/data/nflRosterSecondSource.json.');
+  lines.push('// Second source checks: scripts/data/nflRosterSecondSource.json and');
+  lines.push('// scripts/data/nflRosterSpotCheck.json; a man both other sources contradict is held');
+  lines.push('// out and listed with the reason in scripts/data/nflRosters2026LeftOut.json.');
   lines.push('');
   lines.push("import type { FoPlayer } from './frontOfficePlayers';");
   lines.push('');
@@ -887,7 +891,7 @@ export function recordRows(rec) {
 /* Every man on a club's list on the record who is not in the game, and why.
    It walks the record rather than trusting the bake's own counters, so a
    man who falls out for a reason nobody wrote down stops the bake. */
-export function leftOutList(rec, teams, depth, teamMeta) {
+export function leftOutList(rec, teams, depth, teamMeta, held = new Map()) {
   const { roster, stats } = recordRows(rec);
   const statsById = new Map(stats.map(s => [s.player_id, s]));
   const abbrs = new Set(teamMeta.map(t => t.abbr));
@@ -904,7 +908,8 @@ export function leftOutList(rec, teams, depth, teamMeta) {
     const p = personFrom(r, statsById, abbrs, true);
     if (p && inGame.has(p.key) && !seen.has(p.key)) { seen.add(p.key); continue; }
     let reason;
-    if (['K', 'P', 'LS'].includes(pos)) reason = 'a kicker, punter or long snapper: the game has no position for them yet';
+    if (held.has(`${team}|${name}`)) reason = held.get(`${team}|${name}`);
+    else if (['K', 'P', 'LS'].includes(pos)) reason = 'a kicker, punter or long snapper: the game has no position for them yet';
     else if (!group(pos)) reason = `position ${pos || 'blank'} is not one of the eight the game has`;
     else if (!abbrs.has(team)) reason = `club ${team || 'blank'} is not one of the 32`;
     else if (!name) reason = 'no name in the release';
@@ -919,15 +924,25 @@ export function leftOutList(rec, teams, depth, teamMeta) {
 }
 
 /** The whole bake from a record, as strings, so --check and the fence can compare without writing. */
-export function bakeFromRecord(rec, teamMeta) {
-  const { roster, stats } = recordRows(rec);
+export function bakeFromRecord(rec, teamMeta, heldOut = []) {
+  const { roster: all, stats } = recordRows(rec);
+  /* Round 828 review: a man both other sources contradict (scripts/data/
+     nflRosterSpotCheck.json, heldOut) is held out of the bake with the reason,
+     never moved to the position or club somebody guesses. A held entry that
+     matches no row of the record is a stale list, and the bake stops. */
+  const held = new Map(heldOut.map(h => [`${h.team}|${h.name}`, h.reason]));
+  const rowKey = r => `${String(r.team || '').toUpperCase()}|${String(r.full_name || '').trim()}`;
+  for (const k of held.keys()) {
+    if (all.filter(r => rowKey(r) === k).length !== 1) throw new Error(`heldOut ${k} does not match exactly one row of the record`);
+  }
+  const roster = all.filter(r => !held.has(rowKey(r)));
   const teams = buildRoster({ roster, stats, teamMeta });
   const join = buildRoster.lastJoin;
   const depth = buildDepth({ roster, stats, teamMeta, core: teams });
-  const held = buildDepth.lastHeld;
+  const heldCounts = buildDepth.lastHeld;
   const text = renderFile(teams, { read: rec.read, week: rec.week, rosterRows: rec.rosterRowsInRelease, statRows: rec.statRowsInRelease });
-  const depthText = renderDepthFile(depth, { read: rec.read, rosterRows: rec.rosterRowsInRelease, week: rec.week, held });
-  const leftOut = leftOutList(rec, teams, depth, teamMeta);
+  const depthText = renderDepthFile(depth, { read: rec.read, rosterRows: rec.rosterRowsInRelease, week: rec.week, held: heldCounts });
+  const leftOut = leftOutList(rec, teams, depth, teamMeta, held);
   const byReason = {};
   for (const m of leftOut) {
     const k = m.reason.split(':')[0].replace(/ \(.*\)/, '');
@@ -941,7 +956,7 @@ export function bakeFromRecord(rec, teamMeta) {
     byReason,
     leftOut,
   }, null, 1)}\n`;
-  return { teams, depth, held, join, text, depthText, leftOut, leftJson };
+  return { teams, depth, held: heldCounts, join, text, depthText, leftOut, leftJson };
 }
 
 const isMain = process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
@@ -962,7 +977,8 @@ if (isMain) {
   }
   if (!fs.existsSync(RECORD)) throw new Error(`${path.relative(ROOT, RECORD)} is missing; run with --record to pull the release`);
   const rec = JSON.parse(fs.readFileSync(RECORD, 'utf8'));
-  const out = bakeFromRecord(rec, teamMeta);
+  const spot = JSON.parse(fs.readFileSync(SPOT_CHECK, 'utf8'));
+  const out = bakeFromRecord(rec, teamMeta, spot.heldOut ?? []);
   log(`record read ${rec.read}, week ${rec.week}: ${rec.roster.length} roster rows (${rec.rosterRowsInRelease} in the release), ${rec.stats.length} stats rows (${rec.statRowsInRelease} in the release)`);
   /* say the join out loud: a silent join is how the whole league got rated on
      draft position once already */
