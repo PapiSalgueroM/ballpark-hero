@@ -1987,6 +1987,12 @@ export const BASKETBALL_CONTENT: GameContentMap = {
               "Collect badges in the Trophy Case: 21 of them, from a first ring and Rookie of the Year to 30,000 career points, a triple double season and $100M to your name, each lit the moment the facts of your career say so.",
             ],
           },
+          {
+            heading: "Making the call when your rival forces one",
+            items: [
+              "Some seasons your rival hands you a decision instead of a headline: a flagrant you can answer or let go, a debate show offering real money, a youth camp his foundation wants you to co-host, an All-Star vote his team is buying ads for. Every button prints exactly what it moves, and a gamble prints its odds.",
+            ],
+          },
         ],
       },
       {
@@ -2067,6 +2073,12 @@ export const BASKETBALL_CONTENT: GameContentMap = {
           "The fans nag you for the thing your position is judged on and never the other way round: a point guard hears more assists, a center hears own the glass, and nobody hears about a three, a block or a steal, because the season line does not count one.",
         ],
       },
+      {
+        heading: "How your rival's choices work",
+        items: [
+          "A season where your rival makes no headline has a 45% shot at a rival choice instead, never both in the same year, and every choice shows up once before any of them repeats. The buttons move only what they print: morale, fanbase, net worth, karma or the heat of the feud, and morale feeds straight into next season's box score.",
+        ],
+      },
     ],
     exampleSections: [
       {
@@ -2079,6 +2091,12 @@ export const BASKETBALL_CONTENT: GameContentMap = {
         heading: "A title, a Finals MVP and a Hall of Fame verdict",
         paragraphs: [
           "The new team contends. You take the discount at 28, win it all at 30, and grab Finals MVP. Decline arrives at 33, surgery buys two more years, and the verdict reads first ballot Hall of Famer. The GOAT tier stays out of reach. It usually does.",
+        ],
+      },
+      {
+        heading: "Answering your rival's flagrant",
+        paragraphs: [
+          "Your rival takes you out on a drive and the refs upgrade it to a flagrant. Give it right back heats the feud and usually pays Morale +8, but it carries a 30% chance you are the one who gets tossed (Morale -5, Fanbase -5, Net worth -$100k). Help him up on camera is Fanbase +5, Karma +5 and the feud cools. You pick say nothing and watch the film: Morale +6, the feud heats up, and those six points ride into next season's box score.",
         ],
       },
     ],

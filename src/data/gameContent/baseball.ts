@@ -888,6 +888,12 @@ export const BASEBALL_CONTENT: GameContentMap = {
               "Collect badges in the Trophy Case: 26 of them, from a first ring and Rookie of the Year to 500 home runs, 3,000 strikeouts and $100M to your name, each lit the moment the facts of your career say so.",
             ],
           },
+          {
+            heading: "Making the call when your rival forces one",
+            items: [
+              "Some seasons your rival puts a decision on your plate instead of a story: benches clearing that you can answer or calm down, a debate show offering real money, a youth clinic his foundation wants you to co-host, an All-Star vote his club is buying ads for. Every button prints exactly what it moves, and a gamble prints its odds.",
+            ],
+          },
         ],
       },
       {
@@ -929,6 +935,12 @@ export const BASEBALL_CONTENT: GameContentMap = {
         heading: "Tracking morale, fanbase and health",
         items: [
           "Three meters run your life: morale, fanbase and health. Low health means shortened seasons.",
+        ],
+      },
+      {
+        heading: "How your rival's choices work",
+        items: [
+          "Any season your rival stays out of the news carries a 45% chance of a rival choice instead, never both in one season, and you meet every choice once before one comes back. Each button moves exactly what it prints: morale, fanbase, net worth, karma or the heat of the feud. Morale goes straight into next season's numbers, at the plate or on the mound.",
         ],
       },
       {
@@ -991,6 +1003,12 @@ export const BASEBALL_CONTENT: GameContentMap = {
         heading: "Chasing the money to a Hall of Famer verdict",
         paragraphs: [
           "You chase the money, the new fanbase starts cold, and the decline grinds. At 38 you retire with 430 homers, a ring and five All-Star nods. Verdict: Hall of Famer.",
+        ],
+      },
+      {
+        heading: "When the benches clear on your rival",
+        paragraphs: [
+          "Both benches empty after a pitch up and in, your rival is first out of his dugout, and the card asks what you do about it. Answer it on the field heats the feud and usually pays Morale +8, but it carries a 30% chance you are the one who gets tossed (Morale -5, Fanbase -5, Net worth -$100k). Play peacemaker on camera is Fanbase +5, Karma +5 and the feud cools. You pick say nothing and watch the tape: Morale +6, the feud heats up, and those six points ride into next season's numbers.",
         ],
       },
     ],
