@@ -1,5 +1,82 @@
 # Work board
 
+**2026-10-01, Codex803 Name Them All feedback ACCEPTED.**
+Actual hits announce the accepted full name and show one420ms cue. Missed answers
+reveal with one360ms cue; reduced motion stays static. Full names wrap, owned actions
+are44px with visible focus, held keys stay quiet, and timers clear on retry/unmount.
+Existing Retry and More lists actions now sit in the finished top card, correcting
+the measured offscreen action and872px Retry jump. Original answer fetching/cleaning,
+aliases, ambiguity,180-second timer, tiers, score, share and completion stay held.
+
+Nine actual Page/helper outcomes and thirteen effective copied unit controls pass.
+Final production CSS eight native contexts and three effective browser controls pass,
+with128 immediate/settled action-Y samples all0. The name control is narrowed to the
+actually found86-character answer, measuring476px scroll overflow and glyph right
+771.45 against box304; the weaker placeholder-based proof is preserved and not
+credited. Removed reduced-motion protection and original downstream Retry reproduce
+the actual unwanted animation and1114-to242 jump. Independent completion/save held.
+
+Real app types, both builds, exactlyone-route three-clock capture, all15 artifact
+fences plus guide/search/anchor guards pass. All1784 captured source files,188 raw
+saved pages and168 URL hashes/dates/sitemap rows stay held. Two actual App contexts
+(320 normal,1440 reduced) load untouched production JS/CSS/Navbar/ticker/Footer/help.
+The original first catalog/min20/limit5000 reads26 fictional HTTP rows cleaning to24;
+compiled JS substitutions are0. Exact2/24 and24/24 scores/full clipboard/one real
+locally intercepted guest completion each pass,62 owned action-Y samples are0,
+full glyphs/actions/focus fit and reload is quiet. No errors/bad HTTP/new game saves/
+outward writes. Root inspected phone-gold.png at original detail. Sources/HTML/assets
+held and browsers/servers/copies stopped. No publication or Google decision claim.
+
+Receipts: TEMP/dukb-round803-final-acceptance.json,
+dukb-round803-builder-receipt.json,
+dukb-round803-native/report.json and cleanup.json,
+dukb-round803-native-name-proof-hardening.log,
+dukb-round803-production-app/report.json and cleanup.json,
+dukb-round803-production-20261001/production803-preservation-receipt.json,
+production803-type.log, production803-build-final.log,
+production803-artifact-and-source-fences.log and production803-boot-fence.log.
+Final entry index-pzpz3weV.js,
+SHA5b1298146306dd6ca1d6c201c8eedfd3b8661735fbb7fe5d4fd66a29523c3931.
+802 native focus corrections,805 Search and806 committed feedback continue;
+the older immutable413 suite still runs. All Claude claims stand. Next free807.
+
+**2026-10-01, Codex806 CLAIMED: F1 Driver committed guess feedback.**
+The actual Board captures the old playing state in a50ms timeout, so a winning
+answer still schedules Wrong guess. Own only src/components/f1-driver/F1DriverBoard.tsx,
+new adjacent F1DriverFeedback.module.css, src/test/f1DriverFeedback.test.tsx and
+scripts/simF1DriverFeedback.mjs. Derive feedback from the accepted new game state,
+keep correct wins free of wrong-guess feedback, and give actual misses one finite
+cue with static reduced motion and cleaned-up timers. Preserve every existing
+makeGuess/hint/give-up/reset action, original hook/data/clues/score/save/share and
+completion. No invented driver data or shared UI changes.805 owns Search separately.
+Verify actual Board and real-hook correct/incorrect/exhausted/hint/restored/reset
+outcomes, exact score/save/share/completion and quiet duplicate/clone paths. Prove
+an effective copied stale-closure control, plus cue/reduced-motion/cleanup controls
+with independent outcomes. Complete native phone/desktop and production App proof.
+Master build spec96/97. Root owns Git/docs/build outputs;803 builder picks this up
+after its final App acceptance.802 finishes measured native corrections in parallel.
+The older immutable413 regression remains pending. All Claude claims stand.
+Claim pushed before application implementation. Next free807.
+
+**2026-10-01, Codex805 CLAIMED: F1 Driver Search keyboard suggestions.**
+The actual search rebuilds its driver array on every render, causing the suggestion
+reset effect to undo ArrowDown. Own only src/components/f1-driver/F1DriverSearch.tsx,
+new F1DriverSearchNavigation.module.css beside it, src/test/f1DriverSearchNavigation.test.tsx
+and scripts/simF1DriverSearchNavigation.mjs. Memoize the existing names for the current
+puzzle, preserve the exact matching/order/ten-result limit/exclusions/raw-name fallback,
+and make keyboard selection visible in the local list with readable44px choices and
+correct combobox semantics. Keep held-key submits quiet and preserve native focus.
+No driver data, puzzle helper, hook, Board, Page, real stats or scoring changes.
+Verify actual component/helper ArrowDown to third choice plus Enter, ArrowUp/Escape,
+query/guessed resets, original ordered matches and exact callback names. Require
+an effective original-array reset control and offscreen-row control with independent
+matching/callback baselines, then320/390/430/1440 native motion contexts and final
+production App proof. Root owns Git/docs/isolated build outputs; builder owns four
+files. Master build spec96/97, original master list F1 game accessibility. Claude700
+metadata,718 rotation and733/734 data remain reserved.802 measured focus correction
+and803 final production acceptance continue. The older immutable413 run is pending.
+This claim is pushed before implementation. Next free806.
+
 **2026-10-01, Codex801 NBA season picker ACCEPTED.**
 Every eligible name-match season is now reachable through explicit ten-season
 expansions using the original helper's order, eligibility and exclusions. Counts
