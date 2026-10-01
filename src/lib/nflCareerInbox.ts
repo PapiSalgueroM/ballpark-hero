@@ -319,6 +319,22 @@ const NFL_INBOX_POOL: InboxMessageDef[] = [
     ],
   },
   {
+    id: "playoffs_old_teammate", from: "Old teammate", emoji: "🤙", phase: "any", minAge: 24, beat: "playoffs",
+    text: "If we both win this weekend we see each other next round. Loser buys dinner?",
+    choices: [
+      { label: "Bet's on", reply: "Bet. Start looking at the menu, you're paying", karma: 2, morale: 3 },
+      { label: "Not this week, locked in", reply: "Love you man but no jokes this week", karma: 2, morale: 1 },
+    ],
+  },
+  {
+    id: "playoffs_street", from: "Neighbor", emoji: "🏠", phase: "any", beat: "playoffs",
+    text: "The whole street put your number up in their windows. The kids made a banner and want you to sign it.",
+    choices: [
+      { label: "Stop by and sign it", reply: "On my way after practice. Get the markers ready", karma: 7, popularity: 3 },
+      { label: "Send signed photos", reply: "Sending photos for every kid on the street", karma: 3, popularity: 1 },
+    ],
+  },
+  {
     id: "playoffs_scout_team", from: "Practice squad player", emoji: "🛡️", phase: "any", beat: "playoffs",
     text: "I'm playing the other team's star all week on scout team. Want me to go full speed on you, even if it gets chippy?",
     choices: [
