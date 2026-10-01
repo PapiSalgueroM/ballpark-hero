@@ -340,7 +340,7 @@ export default function NbaStatLine() {
           </div>
         )}
 
-        <AdBanner slot="7540487748" format="horizontal" className="mt-8" />
+        {(phase === 'setup' || phase === 'playing' || phase === 'done') && <AdBanner slot="7540487748" format="horizontal" className="mt-8" />}
         <div className="flex justify-center mt-6">
           <ReportQuestion gameType={SLUG} />
         </div>

@@ -11,6 +11,9 @@ const control = process.env.NBA_STAT_LINE_PICKER_CONTROL || '';
 const independent = 'holds an independent original-helper';
 const repeat = "onKeyDown={e => { if (e.repeat && (e.key === 'Enter' || e.key === ' ')) e.preventDefault(); }}";
 const controls = {
+  adloading: { file: 'page', test: 'holds manual ads off loading', anchor: "(phase === 'setup' || phase === 'playing' || phase === 'done')", replacement: 'true' },
+  aderror: { file: 'page', test: 'holds manual ads off loading', anchor: "(phase === 'setup' || phase === 'playing' || phase === 'done')", replacement: "(phase !== 'boot')" },
+  adready: { file: 'page', test: 'allows the original consented manual slot', anchor: "(phase === 'setup' || phase === 'playing' || phase === 'done')", replacement: 'false' },
   cap: { file: 'hook', test: 'reaches beyond20', anchor: 'const suggestions = suggestionMatches.slice(0, suggestionLimit);', replacement: 'const suggestions = suggestionMatches.slice(0, 10);' },
   more: { file: 'page', test: 'reaches beyond20', anchor: 'setSuggestionLimit(limit => limit + 10);', replacement: 'setSuggestionLimit(10);' },
   reset: { file: 'page', test: 'reaches beyond20', anchor: 'useLayoutEffect(() => { setSuggestionLimit(10); }, [g.query, phase]);', replacement: 'useLayoutEffect(() => {}, [g.query, phase]);' },
@@ -57,10 +60,11 @@ try {
   assert.ok(!run.error, String(run.error)); assert.equal(run.signal, null, 'Terminated runners earn no credit'); assert.match(output, /nbaStatLinePicker\.test\.tsx/, 'Actual Page tests must run');
   assert.doesNotMatch(output, /Failed to resolve import|Cannot find module|Failed to load url|No test files found|Unhandled Errors|Test timed out|RPC timeout/, 'Import, collection and timeout failures earn no credit');
   if (control) {
-    assert.equal(run.status, 1, 'Copied defect must fail its intended outcome with the actual test exit'); assert.match(output, /Tests\s+1 failed.*1 passed.*8 skipped/);
+    assert.equal(run.status, 1, 'Copied defect must fail its intended outcome with the actual test exit'); assert.match(output, /Tests\s+1 failed.*1 passed.*10 skipped/);
     assert.match(output, new RegExp('FAIL[^\n]*' + controls[control].test)); assert.match(output, /AssertionError|expected .* to|Expected element with focus:|expect\(element\)\.to/i);
     console.log(`simNbaStatLinePicker ${control}: exact copied binding changed, one intended outcome failed and one independent original-helper baseline passed.`);
-  } else { assert.equal(run.status, 0, output.slice(-5000)); assert.match(output, /10 passed/); console.log('simNbaStatLinePicker: ten actual Page/hook/helper outcomes passed.'); }
+  } else { assert.equal(run.status, 0, output.slice(-5000)); assert.match(output, /12 passed/); console.log('simNbaStatLinePicker: twelve actual Page/hook/helper outcomes passed.'); }
+  console.log('simNbaStatLinePicker: real manual ads stay off boot/failure and retain setup/play/results eligibility plus the existing consent gate.');
   console.log('simNbaStatLinePicker: original first-ten tiers, era gates, duplicate exclusion, beyond20 exact keys and stable retained nodes exercised.');
   console.log('simNbaStatLinePicker: exact weighted/summed score, full daily keys, original share text and quiet restored once-only completion exercised.');
   console.log('simNbaStatLinePicker: quiet paging/typing/no-matches, query/run reset, focus and repeat cancellation exercised; pixel/native flow remains separate.');
