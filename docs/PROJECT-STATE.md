@@ -1,5 +1,131 @@
 # Project state
 
+## ACCEPTED 2026-10-01: NASCAR answer feedback and hint points
+
+812 removes wrong feedback after correct wins, adds finite/static result cues,
+keeps restores quiet and makes names/actions readable and usable. Hint copy now
+uses original payouts. Eleven outcomes, ten effective controls, native checks,
+independent review and combined production/artifact gates pass. Two untouched
+App contexts verify original-bank 1000/600 results, exact saves/share/once booking,
+quiet reload and stable scroll. All evidence and boundaries are on WORKBOARD.
+811/812 accepted; 813 acceptance and 815/816 continue. Next free 817.
+
+## ACCEPTED 2026-10-01: accurate clue-game hint points and counts
+
+811 fixes Constructor/Tennis next-payout copy and all three hint counters, with
+Nation resetting its count for a new round. Eight focused outcomes, six effective
+controls, independent review and combined production/artifact gates pass. Six
+final App phone contexts preserve exact scores/saves/share/once completion and
+quiet reload. Nation's new-round count is verified. Evidence is on WORKBOARD.
+Tennis's separate old wrong cue is reproduced and remains assigned to 816.
+812/813 acceptance and 815/816 continue. No publication claim. Next free 817.
+
+## CLAIMED 2026-10-01: truthful Tennis and CBB answer feedback
+
+815 reserves the CBB Board and local feedback CSS/test/sim. 816 reserves the
+matching Tennis files only after 811 acceptance. Both still use stale delayed
+wrong-guess feedback. Reproduce and replace with committed-result cues, finite
+motion and static reduced motion while preserving rules/data/save/completion.
+Exact boundaries are on WORKBOARD. All Claude claims stand. Next free 817.
+
+811-813 combined production types/build/artifact/affected gates pass; actual-App
+checks are running. Fresh visitor triage still has the same seven open reports
+with existing ownership. No database or report-status changes.
+
+## ACCEPTED 2026-10-01: fail-closed live search verification
+
+814 stops partial request failures from reporting a complete pass or satisfying
+a negative control. Eight isolated actual-harness cases prove the new checks and
+two old false-green mutations. Fresh live verification passes all 16 lookups with
+zero errors and stable repeated results. Product/data files are unchanged.
+
+Claude's separate release-k advanced to f08d0563 with new routes and shared daily
+identity work. Main's newer accepted commits and 811-813 drafts must be preserved
+when integrated. Current physical gate bd3ec0de plus those drafts certifies only
+that captured tree, not release-k. Detailed handoff is on WORKBOARD. Next free 815.
+
+## CLAIMED 2026-10-01: truthful live search verification
+
+814 reserves only the live accented-name harness after a measured 15/16 lookup
+run with one request error exited green. Root will make incomplete verification
+explicit and prove the error path without changing product/data behavior.
+811-813 continue in parallel. Next free 815.
+
+## IN PROGRESS 2026-10-01: fresh Nation counters and live crawl audit
+
+811 also clears Nation's local hint count on the original Play Again reset, after
+the builder found it survives between rounds. Same owned Board, focused lifecycle
+proof before capture. 812/813 continue. Next free 814.
+
+The full live audit passes 167 of 168 planned routes, with no unexpected noindex.
+Only the unpublished /aussie-rules-manager URL returns the home document. Google
+indexing and AdSense approval are still not established by these HTTP checks.
+
+## ACCEPTED 2026-10-01: MLB reveal timer ownership
+
+810 prevents abandoned guesses from awarding points or skipping rounds after a
+reset, protects a newer reveal's full duration and clears timers on unmount.
+Original rules, pairs, RNG, timing and exact 325-point Daily/Unlimited games hold.
+Ten outcomes/eight effective controls and two production App contexts (263 checks)
+pass, including exact saves/full share/one completion/quiet reload. Combined types,
+build, all artifact guards and full NoDoubleRecord pass. Evidence is on WORKBOARD.
+807/809/810 are accepted. 811-813 continue; all Claude claims stand. Next free 814.
+
+## ACCEPTED 2026-10-01: player-search failures and stale requests
+
+809 exposes failed empty lookups with a retry message, preserves useful matches
+and invalidates cleared searches. All 48 focused/existing tests, seven effective
+controls, native checks and two untouched production Puck Detective contexts pass.
+Failed searches consume no guesses or saves; exact selection, clue feedback and
+quiet reload hold. Combined production and artifact gates pass. Receipts and
+limits are on WORKBOARD. 810 acceptance and 811-813 continue.
+
+Lovable is available but not installed here. Desktop tab selection failed after
+one recovery, so no publish occurred. The integration was suggested; code work
+continues independently. Live publication and Google decisions remain separate.
+
+## ACCEPTED 2026-10-01: accurate F1 Driver clues, hints and help
+
+807 fixes misleading clue categories and hint costs, adds an actual-tier worked
+example and restores help focus without scrolling. Original game outcomes hold.
+Ten focused tests, ten existing feedback tests, seven effective controls and native
+checks pass. Combined 807/809/810 types, builds, all 15 artifact guards, full
+NoDoubleRecord and other affected guards pass. All 1800 raw sources and saved
+page/URL content hold. Two untouched production App contexts score 800 and 200
+with exact save/share/once completion and 119 checks. Detailed evidence is on
+WORKBOARD. No publication claim. 809/810 App checks and 811-813 continue.
+
+## CLAIMED 2026-10-01: clue copy, NASCAR feedback and reveal timers
+
+811 owns only Constructor, Tennis and Nation Boards' inaccurate hint copy plus
+focused checks. 812 owns NASCAR Board/local feedback CSS and checks for committed
+answer animations, readable results and accurate hint points. 813 owns the eight
+remaining Higher/Lower hooks and focused checks, reproducing the MLB-style stale
+reveal defect per hook before applying its small cancellation fix. Exact scopes
+and preserved behaviors are on WORKBOARD. 807/809/810 finish their frozen App
+checks. All Claude reservations stand. Next free 814.
+
+At 15:52 UTC the live site still serves the earlier index-jsexOB8y.js release.
+Home, F1 Driver and Rank Em are indexable in raw HTML; live sitemap has 167 URLs.
+Current repo changes still need publication. The automated Lovable browser is
+logged out and this session has no deploy_project tool; the desktop session is
+uninspected. AdSense approval and Google's indexing decisions remain unverified.
+
+## ACCEPTED 2026-10-01: regression harness repairs
+
+808 repairs College's final-verdict boundary and manager cleanup ownership, with
+all original controls plus effective new removed-return/destructive-cleanup
+copies. Default240 engine outcomes and1780 RAW source closures hold;489 syntax/
+anchor and no-rival-name guards pass. No frontend/runtime/snapshot changes.
+The old Aussie timeout does not reproduce in two unchanged10-test runs (season
+3565/4439ms against5000). No timeout was raised. Receipts are on WORKBOARD.
+
+810 claims only the MLB Higher/Lower hook plus focused tests/harness to cancel
+owned stale reveal timers. Actual reset wrongly grants old points/skips a round,
+and an old Daily timer truncates the new Unlimited reveal. Preserve all original
+game/save/share/completion rules and exact2000ms reveal. Claim before code edits.
+807/809 continue; all Claude reservations stand. Next free811.
+
 ## CLAIM ADDENDUM 2026-10-01: truthful Driver clue headings
 
 807 also replaces fixed clue categories with numbered headings: original bank
