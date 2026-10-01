@@ -852,6 +852,16 @@ export function promoteFromPractice(team: GmTeamState, playerId: string): boolea
   return true;
 }
 
+/* Round 828: the copy the Trade Finder probes on. proposeTrade only ever
+   reassigns a club's players array and moves picks between the two picks
+   arrays, so copying those two arrays is all a probe needs, and it is what
+   keeps the finder quick with fifty men a club. scripts/simNflFullRosters.mjs
+   checks it finds exactly the deep copy's offers and leaves the league as it
+   found it. */
+export function tradeProbeCopy(t: GmTeamState): GmTeamState {
+  return { ...t, players: [...t.players], picks: [...t.picks] };
+}
+
 /** Trade evaluation: AI accepts when incoming value beats outgoing by margin. */
 export function tradeValue(p: GmPlayer): number {
   const posW = p.pos === 'QB' ? 1.5 : 1;

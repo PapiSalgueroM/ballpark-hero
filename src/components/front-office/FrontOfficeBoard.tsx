@@ -18,7 +18,7 @@ import {
   DEPTH_GROUPS, depthChart, swapDepth, starterIds, hasSavedDepth, resetDepth, type DepthPos,
   expiringPlayers, tagRefusal, applyFranchiseTag, franchiseTagSalary,
   /* Round 828: full rosters, the 53 limit and the practice squad. */
-  deepRosterRefusal, promoteFromPractice, DEEP_ROSTER_MAX, STARTER_SLOTS, type GmPlayer,
+  deepRosterRefusal, promoteFromPractice, DEEP_ROSTER_MAX, STARTER_SLOTS, tradeProbeCopy, type GmPlayer,
 } from '@/lib/frontOffice';
 /* Round 631: a cut costs dead money and the man cannot come back this season. */
 import { deadMoneyFor, deadCapUsed, signRefusal, cutRefusal, tradeRefusal } from '@/lib/frontOfficeCuts';
@@ -631,7 +631,8 @@ export default function FrontOfficeBoard() {
   // Round 82: shop a player league-wide with the real trade rules
   const doShop = () => {
     if (!league || !myTradePiece) return;
-    const offers = findTrades(league.teams, myTeam, myTradePiece, league.cap, proposeTrade, tradeValue);
+    /* Round 828: the cheap probe copy, so fifty men a club does not freeze the button */
+    const offers = findTrades(league.teams, myTeam, myTradePiece, league.cap, proposeTrade, tradeValue, { cloneTeam: tradeProbeCopy });
     setShopOffers(offers); setShopTried(true);
   };
   const acceptShopOffer = (o: FinderOffer) => {

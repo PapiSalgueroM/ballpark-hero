@@ -40,10 +40,16 @@ export function findTrades<T extends FinderTeam>(
   cap: number,
   tradeFn: TradeFn<T>,
   valueFn: (p: FinderPlayer) => number,
-  opts?: { maxOffers?: number; pickPenalty?: number },
+  opts?: { maxOffers?: number; pickPenalty?: number; cloneTeam?: (t: T) => T },
 ): FinderOffer[] {
   const maxOffers = opts?.maxOffers ?? 4;
   const pickPenalty = opts?.pickPenalty ?? 8; // gain discount when a deal costs you a pick
+  /* Round 828: a sport whose trade function only reassigns its clubs' players
+     and picks arrays can hand in a cheaper copy. An NFL club now carries fifty
+     men, and a full JSON copy of both clubs for every man probed took the
+     finder from about 40 ms to about 700 ms on a desktop. Without it, the
+     deep copy, exactly as before. */
+  const copy = opts?.cloneTeam ?? clone;
   const myTeam = teams[myTeamId];
   const mine = myTeam?.players.find(p => p.id === myPlayerId);
   if (!myTeam || !mine) return [];
@@ -60,8 +66,8 @@ export function findTrades<T extends FinderTeam>(
       // try the pickless deal first; only spend a pick when we must
       for (const sweeten of [false, true]) {
         if (sweeten && myTeam.picks.length === 0) continue;
-        const myClone = clone(myTeam);
-        const theirClone = clone(theirTeam);
+        const myClone = copy(myTeam);
+        const theirClone = copy(theirTeam);
         if (tradeFn(myClone, theirClone, myPlayerId, target.id, sweeten, cap) === 'accepted') {
           const gain = valueFn(target) - myValue - (sweeten ? pickPenalty : 0);
           if (!best || gain > best.gain) {

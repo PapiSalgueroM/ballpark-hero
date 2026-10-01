@@ -91,6 +91,7 @@
      nocutdown    the offseason never cuts down to 53            -> 6
      deepold      every club reads its units the full roster way -> 7
      bigbench     every bench salary six times larger            -> 6
+     sharedcopy   the finder's probe copy is the club itself     -> 6
    Under a control the process exits non zero whether or not the expected
    sections went red, and says which it was.
 
@@ -114,6 +115,7 @@ const EXPECT = {
   inventfirst: [6],
   nocutdown: [6],
   deepold: [7],
+  sharedcopy: [6],
   bigbench: [6],
 };
 if (CONTROL && !EXPECT[CONTROL]) {
@@ -134,6 +136,10 @@ const ENGINE_SWAPS = {
     '  while (t.players.length > DEEP_ROSTER_MAX) {',
     '  while (false) {',
   ]],
+  sharedcopy: [[
+    '  return { ...t, players: [...t.players], picks: [...t.picks] };',
+    '  return t;',
+  ]],
   deepold: [[
     '  if (team.rosterDepth !== 2) return team.players.filter(p => p.out === 0 && groups.includes(p.pos));',
     '  if (false) return team.players.filter(p => p.out === 0 && groups.includes(p.pos));',
@@ -145,6 +151,7 @@ const NOTE = {
   inventfirst: 'the engine copy never calls a practice squad man up; it invents',
   nocutdown: 'the engine copy never cuts a full club down to 53',
   deepold: 'the engine copy reads every club the full roster way, old saves included',
+  sharedcopy: 'the engine copy hands the Trade Finder the clubs themselves instead of a copy',
   bigbench: 'the depth data copy pays every bench man six times his salary',
 };
 const SECTION_NAMES = {
@@ -236,10 +243,11 @@ try {
     `export * as cuts from ${JSON.stringify(fwd(path.join(ROOT, 'src', 'lib', 'frontOfficeCuts.ts')))};`,
     `export { FO_DEPTH, FO_DEPTH_WEEK } from ${JSON.stringify(fwd(depthPath))};`,
     `export { FO_TEAMS } from ${JSON.stringify(fwd(path.join(ROOT, 'src', 'data', 'frontOfficePlayers.ts')))};`,
+    `export { findTrades } from ${JSON.stringify(fwd(path.join(ROOT, 'src', 'lib', 'tradeFinder.ts')))};`,
   ].join('\n'), 'current');
   engine = mod.engine;
   cuts = mod.cuts;
-  data = { FO_DEPTH: mod.FO_DEPTH, FO_TEAMS: mod.FO_TEAMS, week: mod.FO_DEPTH_WEEK };
+  data = { FO_DEPTH: mod.FO_DEPTH, FO_TEAMS: mod.FO_TEAMS, week: mod.FO_DEPTH_WEEK, findTrades: mod.findTrades };
 } catch (e) {
   console.error(`FAIL: the engine could not be bundled and run: ${String(e && e.message ? e.message : e).slice(0, 300)}`);
   fs.rmSync(BUNDLE_DIR, { recursive: true, force: true });
@@ -247,7 +255,7 @@ try {
 }
 for (const fn of ['initLeague', 'runOffseason', 'teamStrength', 'unitStarters', 'starterIds', 'depthOrder', 'simGame', 'injuryPass',
   'aiWeeklyMoves', 'releasePlayer', 'signPlayer', 'capUsed', 'capRoom', 'generateDraftClass', 'draftOrder', 'prospectToPlayer',
-  'applyFranchiseTag', 'tagRefusal', 'expiringPlayers', 'promoteFromPractice', 'deepRosterRefusal', 'refillDeepRoster', 'cutDownToMax', 'ensureFoLeagueIds']) {
+  'applyFranchiseTag', 'tagRefusal', 'expiringPlayers', 'promoteFromPractice', 'deepRosterRefusal', 'refillDeepRoster', 'cutDownToMax', 'ensureFoLeagueIds', 'tradeProbeCopy', 'proposeTrade', 'tradeValue']) {
   if (typeof engine[fn] !== 'function') { console.error(`FAIL: frontOffice.ts does not export ${fn}`); process.exit(1); }
 }
 
@@ -580,6 +588,30 @@ const CLUBS = data.FO_TEAMS.map(t => t.abbr);
       ok(6, 'the refill calls up the practice squad before inventing anybody',
         called >= 1 && called === Math.min(psQb, engine.DEEP_GROUP_TARGET.QB - 1), `${t.abbr}: ${psQb} on the squad, ${called} called up`);
     }
+  }
+
+  /* the Trade Finder's cheap probe copy finds the deep copy's offers and leaves the league alone */
+  {
+    let probes = 0, same = 0;
+    const leak = [], differ = [];
+    for (const seed of SEEDS.slice(0, 3)) {
+      const lg = deepLeague(seed);
+      for (const abbr of ['KC', 'PHI', 'SF', 'DET']) {
+        const mine = [...lg.teams[abbr].players].sort((a, b) => b.ovr - a.ovr);
+        for (const piece of [mine[0], mine[4], mine[20]]) {
+          probes += 1;
+          const before = JSON.stringify(lg);
+          const deep = data.findTrades(lg.teams, abbr, piece.id, lg.cap, engine.proposeTrade, engine.tradeValue);
+          const cheap = data.findTrades(lg.teams, abbr, piece.id, lg.cap, engine.proposeTrade, engine.tradeValue, { cloneTeam: engine.tradeProbeCopy });
+          if (JSON.stringify(lg) !== before) { leak.push(`${seed} ${abbr} ${piece.name}`); break; }
+          if (JSON.stringify(deep) === JSON.stringify(cheap)) same += 1;
+          else differ.push(`${seed} ${abbr} ${piece.name}`);
+        }
+      }
+    }
+    console.log(`   trade finder: ${same} of ${probes} probes found the same offers with the cheap copy`);
+    ok(6, 'the Trade Finder probe leaves the league exactly as it found it', leak.length === 0, leak.slice(0, 3).join(', '));
+    ok(6, 'the cheap probe copy finds exactly the deep copy\'s offers', differ.length === 0 && probes > 0, differ.slice(0, 3).join(', '));
   }
 
   const stats = { seasons: 0, cuts: 0, deadOk: 0, signs: 0, fullRefused: 0, tags: 0, drafted: 0, cutDowns: 0, promoted: 0, invented: 0, maxSave: 0, maxPs: 0, maxCapShare: 0, realLeft: [], draftCut: 0 };
