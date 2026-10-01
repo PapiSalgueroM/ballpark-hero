@@ -88,7 +88,10 @@
      extradraw      recording a game takes a draw from the league    -> 2
      mvpnowin       the MVP score ignores the club's record          -> 3
      noqualify      nobody needs games to qualify                    -> 3 and 4
-     sixthstarters  the sixth man race lets starters in              -> 3
+     sixthstarters  the sixth man race lets starters in              -> 3 and 8
+                    (8 since the review fix: the page's sixth man figure is
+                    read against the simulated winners, and with starters
+                    let in the median winner scored 31.2, rerun and fired)
      doubleclose    a second close names and writes its awards again -> 6
      oldnever       a league saved before the round never keeps lines -> 2 and 7
                     (section 2's no lines league is an old save's shape)
@@ -129,7 +132,8 @@ const EXPECT = {
   extradraw: [2],
   mvpnowin: [3],
   noqualify: [3, 4],
-  sixthstarters: [3],
+  /* 8 too since the review fix: section 8 reads the page's sixth man figure against the simulated winners */
+  sixthstarters: [3, 8],
   doubleclose: [6],
   oldnever: [2, 7],
   /* added by the review fix: who counts as a first year man, and the page's sixth man claim */
