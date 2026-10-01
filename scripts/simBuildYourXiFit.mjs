@@ -157,7 +157,7 @@ const CONTROLS = {
     sections: [1, 3], file: 'xifit',
     from: '    return held ? gradeFit(held, s.allowed) : \'natural\';\n',
     to: '    void held; return \'natural\';\n',
-    note: 'role fit reads every man as natural; section 1 must go red',
+    note: 'role fit reads every man as natural; sections 1 and 3 must go red',
   },
   farlinks: {
     sections: [2], file: 'chem',
