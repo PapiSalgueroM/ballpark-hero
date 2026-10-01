@@ -1,5 +1,15 @@
 # Project state
 
+## ACCEPTED 2026-10-01: Tycoon replay checks without worker starvation
+
+797's six actual gameplay outcomes and all eight original negative controls pass.
+Real Node yields let worker updates run while every fake-frame observation, score,
+baseline metric and threshold stays held. Worker/import/timeout errors cannot count
+as an intended failed outcome. Tycoon product source remains byte-exactly unchanged.
+Final reports and cleanup are on WORKBOARD.798/799 combined types and production
+builds pass; native/artifact acceptance and current full-node regression remain due.
+Next free800; all Claude reservations remain held.
+
 ## IN PROGRESS 2026-10-01: correct the F1 constructor guide's worked score
 
 799 fixes the actual guide's600-point promise at clue four to the unchanged hook's

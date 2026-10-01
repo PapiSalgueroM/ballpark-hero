@@ -1,5 +1,24 @@
 # Work board
 
+**2026-10-01, Codex797 Tycoon runner correction ACCEPTED.**
+The unchanged six gameplay outcomes reproduced a Vitest worker RPC timeout during
+long synchronous fake-frame loops. The actual test now yields a real Node turn every
+64 sampled frames without advancing its fake clock, RAF queue, match or thresholds.
+The wrapper uses one worker and owned ignored control copies with working React
+resolution. Intended negative rows must contain an actual assertion failure; worker,
+timeout, transform and import errors remain rejected. No Tycoon product bytes changed.
+All six outcomes and all eight original controls pass. The unchanged baseline and
+corrected positive fixture both measure202 goals over30 matches,197 immediate replays,
+worst delay7 frames; the storm commits360 with179 landed and worst delay11 frames.
+The final classifier also rejected the retained before-fix worker-error report and
+bounded runner-error controls. The permanent control-copy factory independently
+loaded an actual changed copy and produced its intended assertion plus a passing
+Office baseline, with no leftover owned control folders or active runner.
+Receipts: TEMP/dukb-round797-tycoon-physical/builder-receipt.json,
+final-classifier-receipt.json and cleanup.json. The exact accepted test/wrapper are
+copied into the finished798/799 production gate. Current full-node regression remains
+due;798 native acceptance and799 artifact checks continue. Next free800.
+
 **2026-10-01, Codex799 CLAIMED: F1 constructor worked-example accuracy.**
 Actual rendered guide/saved page promises600 after the championship clue, but the
 unchanged game's fourth-clue first-guess result is400. Own only that worked-example
