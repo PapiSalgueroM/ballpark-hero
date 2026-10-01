@@ -1,0 +1,61 @@
+.text,
+.resultCard {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.option {
+  min-height: 44px;
+  overflow-wrap: anywhere;
+}
+
+.option:focus-visible,
+.resultCard:focus-visible {
+  outline: 2px solid hsl(var(--primary));
+  outline-offset: -2px;
+}
+
+.correct {
+  animation: correct 420ms ease-out;
+}
+
+.wrong {
+  animation: wrong 300ms ease-out;
+}
+
+.clue {
+  animation: clue 360ms ease-out;
+}
+
+.result {
+  animation: result 420ms ease-out;
+}
+
+@keyframes correct {
+  from { background-color: hsl(var(--correct) / 0.18); box-shadow: inset 0 0 0 1px hsl(var(--correct)); }
+  to { background-color: hsl(var(--card)); box-shadow: none; }
+}
+
+@keyframes wrong {
+  from { opacity: 0.6; background-color: hsl(var(--destructive) / 0.12); }
+  to { opacity: 1; background-color: hsl(var(--card)); }
+}
+
+@keyframes clue {
+  from { opacity: 0.55; color: hsl(var(--primary)); }
+  to { opacity: 1; color: hsl(var(--foreground)); }
+}
+
+@keyframes result {
+  from { opacity: 0.6; }
+  to { opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .correct,
+  .wrong,
+  .clue,
+  .result {
+    animation: none;
+  }
+}

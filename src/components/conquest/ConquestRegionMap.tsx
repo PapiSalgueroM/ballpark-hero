@@ -32,10 +32,11 @@ import { useEffect, useId, useMemo, useRef, useState, type CSSProperties } from 
 import { bboxArea, blobFontSize, computeTeamBlobs, pathBoundingBox, type TerritoryGeom } from '@/lib/conquestMapGeometry';
 import {
   assignTeamLooks, cameraTransform, diffOwners, labelFor, lookCss, takeoverWaves, unionBoxes,
-  CAPS_MIN_FONT, UNCLAIMED_COLOR, PHONE_LABEL_SCALE,
+  CAPS_MIN_FONT, UNCLAIMED_COLOR, PHONE_LABEL_SCALE, CAMERA_MAX_SCALE,
   type CameraBox, type ConquestMapSport, type TeamLook,
 } from '@/lib/conquestMapLook';
 import { POWERUPS } from '@/data/conquestPowerups';
+import { fitMapView, panMapView, zoomMapView, type MapView } from '@/lib/conquestMapView';
 
 /** Regions that just changed hands, keyed by region, valued by the OLD owner. */
 export interface ConquestTakeover {
@@ -74,6 +75,8 @@ export interface ConquestRegionMapProps {
   labelStyle?: 'classic' | 'caps';
   /** 'stage' drops the rounded border and lets the svg fill its container. Default 'card'. */
   size?: 'card' | 'stage';
+  /** Manual exploration is unavailable while a scene owns the camera. */
+  exploreEnabled?: boolean;
 }
 
 /**
@@ -103,15 +106,46 @@ interface RegionGeom extends TerritoryGeom { width: number; box: CameraBox }
 const LEGEND_TILES = 6;
 const WAVE_DELAY_MS = 160;
 const CAMERA_TRANSITION_MS = 450;
+const FULL_MAP: MapView = { x: 0, y: 0, scale: 1 };
 
 export default function ConquestRegionMap({
   sport, owners, battle = null, takeover = null,
   powerupStates, invincibleTeams, territoryStolenState = null, showLegend = true,
   focusRegions, homeRegions, highlightTeam = null, labelStyle = 'classic', size = 'card',
+  exploreEnabled = true,
 }: ConquestRegionMapProps) {
   const uid = useId().replace(/[^A-Za-z0-9_-]/g, '');
   const [hovered, setHovered] = useState<string | null>(null);
+  const [selected, setSelected] = useState<string | null>(null);
+  const selectedTarget = useRef<SVGPathElement | null>(null);
+  const [exploring, setExploring] = useState<string | null>(null);
+  const [query, setQuery] = useState('');
+  const [ownerFilter, setOwnerFilter] = useState('');
+  const [availability, setAvailability] = useState('all');
+  const [view, setView] = useState<MapView>(FULL_MAP);
+  const drag = useRef<{ pointerId: number; clientX: number; clientY: number; inverse: DOMMatrix; view: MapView; moved: boolean } | null>(null);
+  const suppressClick = useRef(false);
+  const isExploring = exploring === sport.key && exploreEnabled;
   const caps = labelStyle === 'caps';
+
+  useEffect(() => {
+    setExploring(null);
+    setQuery('');
+    setOwnerFilter('');
+    setAvailability('all');
+    setView(FULL_MAP);
+    drag.current = null;
+    suppressClick.current = false;
+  }, [exploreEnabled, sport.key]);
+
+  useEffect(() => {
+    if (selected && !sport.regions.some(region => region.id === selected)) setSelected(null);
+  }, [selected, sport.regions]);
+
+  const selectRegion = (regionId: string, target: SVGPathElement) => {
+    selectedTarget.current = target;
+    setSelected(regionId);
+  };
 
   const teamById = useMemo(() => new Map(sport.teams.map(t => [t.id, t])), [sport]);
   const looks = useMemo(() => assignTeamLooks(sport.teams), [sport]);
@@ -127,6 +161,23 @@ export default function ConquestRegionMap({
     }
     return map;
   }, [sport]);
+
+  const matching = useMemo(() => {
+    const search = query.trim().toLocaleLowerCase();
+    return new Set(sport.regions.filter(region => {
+      const owner = owners[region.id] ?? null;
+      const team = owner ? teamById.get(owner) : null;
+      return (!ownerFilter || owner === ownerFilter)
+        && (!search || `${region.name} ${region.id} ${team?.city ?? ''} ${team?.name ?? ''} ${owner ?? ''}`.toLocaleLowerCase().includes(search))
+        && (availability === 'all'
+          || (availability === 'unclaimed' && !owner)
+          || (availability === 'powerup' && !owner && powerupStates?.has(region.id))
+          || (availability === 'invincible' && !!owner && invincibleTeams?.has(owner)));
+    }).map(region => region.id));
+  }, [query, ownerFilter, availability, sport, owners, teamById, powerupStates, invincibleTeams]);
+  const maxX = sport.viewBox.width - sport.viewBox.width / view.scale;
+  const maxY = sport.viewBox.height - sport.viewBox.height / view.scale;
+  const resetFilters = () => { setQuery(''); setOwnerFilter(''); setAvailability('all'); };
 
   // The camera: undefined means no camera group at all, null a group with no
   // transform, an array a zoom onto the union of those regions' boxes.
@@ -245,6 +296,10 @@ export default function ConquestRegionMap({
   const hoveredRegion = hovered ? sport.regions.find(r => r.id === hovered) : null;
   const hoveredTeam = hovered && owners[hovered] ? teamById.get(owners[hovered]!) : null;
   const hoveredLook = hoveredTeam ? looks.get(hoveredTeam.id) : null;
+  const selectedRegion = selected ? sport.regions.find(region => region.id === selected) : null;
+  const selectedOwner = selected ? owners[selected] ?? null : null;
+  const selectedTeam = selectedOwner ? teamById.get(selectedOwner) : null;
+  const selectedLook = selectedTeam ? looks.get(selectedTeam.id) : null;
 
   const ranked = [...counts.entries()].sort((a, b) => b[1] - a[1]);
   const legendTiles = ranked.slice(0, LEGEND_TILES);
@@ -276,9 +331,11 @@ export default function ConquestRegionMap({
             data-layer="fill"
             data-region={region.id}
             data-owner={owner ?? ''}
+            data-match={isExploring ? matching.has(region.id) : undefined}
             className={role === 'attacker' && battle?.stage !== 'resolved' ? 'cq-lit' : undefined}
             style={{
               transition: 'fill 0.5s ease-in-out',
+              opacity: isExploring && !matching.has(region.id) ? 0.25 : undefined,
               filter: stolen ? 'brightness(1.5) drop-shadow(0 0 6px rgba(255,215,0,0.8))' : lifted ? 'brightness(1.25)' : undefined,
             }}
           />
@@ -393,10 +450,23 @@ export default function ConquestRegionMap({
           d={region.path}
           fill="transparent"
           stroke="none"
-          className="cursor-pointer"
+          className="cursor-pointer cq-hit"
+          data-layer="hit"
+          data-region={region.id}
+          role="button"
+          tabIndex={0}
+          aria-label={`View ${region.name} details`}
+          aria-expanded={selected === region.id}
+          aria-controls={`${uid}-region-details`}
           onMouseEnter={() => setHovered(region.id)}
           onMouseLeave={() => setHovered(null)}
-          onClick={() => setHovered(h => (h === region.id ? null : region.id))}
+          onClick={event => selectRegion(region.id, event.currentTarget)}
+          onKeyDown={event => {
+            if (event.key === 'Enter' || event.key === ' ') {
+              event.preventDefault();
+              selectRegion(region.id, event.currentTarget);
+            }
+          }}
         />
       ))}
 
@@ -494,16 +564,99 @@ export default function ConquestRegionMap({
 
   return (
     <div className="relative w-full">
+      <div className="flex flex-wrap items-center justify-between gap-2 p-2">
+        <button type="button" disabled={!exploreEnabled} aria-expanded={isExploring} aria-controls={`${uid}-explore`} className="min-h-[44px] rounded-lg border border-border px-3 text-sm font-semibold disabled:opacity-50" onClick={() => {
+          setExploring(isExploring ? null : sport.key);
+          setView(FULL_MAP);
+          drag.current = null;
+          suppressClick.current = false;
+        }}>{isExploring ? 'Close Explore' : 'Explore map'}</button>
+        {!exploreEnabled && <span className="text-xs text-muted-foreground">Available after playback</span>}
+      </div>
+      {isExploring && (
+        <section id={`${uid}-explore`} aria-label="Explore map controls" className="space-y-2 px-2 pb-2 text-xs" data-map-explore>
+          <label className="block">Find a territory or team
+            <input type="search" value={query} onChange={event => setQuery(event.target.value)} className="mt-1 min-h-[44px] w-full min-w-0 rounded-lg border border-border bg-background px-3 text-sm" />
+          </label>
+          <div className="grid grid-cols-2 gap-2">
+            <label className="min-w-0">Owner
+              <select value={ownerFilter} onChange={event => setOwnerFilter(event.target.value)} className="mt-1 min-h-[44px] w-full min-w-0 rounded-lg border border-border bg-background px-2">
+                <option value="">All owners</option>
+                {sport.teams.map(team => <option key={team.id} value={team.id}>{team.city ? `${team.city} ` : ''}{team.name}</option>)}
+              </select>
+            </label>
+            <label className="min-w-0">Availability
+              <select value={availability} onChange={event => setAvailability(event.target.value)} className="mt-1 min-h-[44px] w-full min-w-0 rounded-lg border border-border bg-background px-2">
+                <option value="all">All territories</option>
+                <option value="unclaimed">Unclaimed</option>
+                <option value="powerup">Power-up available</option>
+                <option value="invincible">Invincible owner</option>
+              </select>
+            </label>
+          </div>
+          <p role="status">{matching.size} of {sport.regions.length} {noun(sport.regions.length)} match. {matching.size ? 'Matching areas are highlighted. Tap any territory for details.' : 'No matches. Change or reset the filters.'}</p>
+          <div className="flex flex-wrap gap-1.5">
+            <button type="button" className="cq-explore-action" disabled={!matching.size} onClick={() => {
+              const box = unionBoxes([...matching].map(id => geomById.get(id)!.box));
+              if (box) setView(fitMapView(box, sport.viewBox));
+            }}>Fit matches</button>
+            <button type="button" className="cq-explore-action" onClick={resetFilters}>Reset filters</button>
+            <button type="button" className="cq-explore-action" disabled={view.scale >= CAMERA_MAX_SCALE} onClick={() => setView(current => zoomMapView(current, current.scale + 0.4, sport.viewBox))}>Zoom in</button>
+            <button type="button" className="cq-explore-action" disabled={view.scale <= 1} onClick={() => setView(current => zoomMapView(current, current.scale - 0.4, sport.viewBox))}>Zoom out</button>
+            <button type="button" className="cq-explore-action" onClick={() => setView(FULL_MAP)}>Reset view</button>
+          </div>
+          <div className="flex flex-wrap gap-1.5" aria-label="Pan map">
+            {([
+              ['left', -1, 0, view.x <= 0], ['right', 1, 0, view.x >= maxX],
+              ['up', 0, -1, view.y <= 0], ['down', 0, 1, view.y >= maxY],
+            ] as const).map(([direction, dx, dy, disabled]) => <button key={direction} type="button" className="cq-explore-action" disabled={disabled} onClick={() => setView(current => panMapView(current, dx * sport.viewBox.width / current.scale / 4, dy * sport.viewBox.height / current.scale / 4, sport.viewBox))}>Pan {direction}</button>)}
+          </div>
+          <p className="text-muted-foreground">Zoom in, then drag the map or use the pan buttons. Explore only changes your view.</p>
+        </section>
+      )}
       <svg
-        viewBox={`0 0 ${sport.viewBox.width} ${sport.viewBox.height}`}
+        viewBox={isExploring ? `${view.x} ${view.y} ${sport.viewBox.width / view.scale} ${sport.viewBox.height / view.scale}` : `0 0 ${sport.viewBox.width} ${sport.viewBox.height}`}
         className={size === 'stage' ? 'w-full h-auto bg-[#0a0f1a]' : 'w-full h-auto rounded-xl border border-border bg-[#0a0f1a]'}
         preserveAspectRatio="xMidYMid meet"
-        role="img"
+        role="group"
         aria-label={`${sport.key.toUpperCase()} conquest map. Biggest empires: ${summary || 'none yet'}.`}
         data-sport={sport.key}
         data-map="conquest-region-map"
         data-size={size === 'stage' ? 'stage' : undefined}
         data-label-style={caps ? 'caps' : undefined}
+        style={isExploring && view.scale > 1 ? { touchAction: 'none', cursor: 'grab' } : undefined}
+        onPointerDown={event => {
+          suppressClick.current = false;
+          if (!isExploring || view.scale <= 1 || event.button !== 0 || event.isPrimary === false) return;
+          const matrix = event.currentTarget.getScreenCTM();
+          if (!matrix) return;
+          drag.current = { pointerId: event.pointerId, clientX: event.clientX, clientY: event.clientY, inverse: matrix.inverse(), view, moved: false };
+        }}
+        onPointerMove={event => {
+          const start = drag.current;
+          if (!isExploring || !start || start.pointerId !== event.pointerId) return;
+          const dx = event.clientX - start.clientX;
+          const dy = event.clientY - start.clientY;
+          if (!start.moved && Math.hypot(dx, dy) < 6) return;
+          start.moved = true;
+          event.currentTarget.setPointerCapture(event.pointerId);
+          event.preventDefault();
+          setView(panMapView(start.view, -(start.inverse.a * dx + start.inverse.c * dy), -(start.inverse.b * dx + start.inverse.d * dy), sport.viewBox));
+        }}
+        onPointerUp={event => {
+          const start = drag.current;
+          if (!start || start.pointerId !== event.pointerId) return;
+          suppressClick.current = start.moved;
+          drag.current = null;
+          if (event.currentTarget.hasPointerCapture(event.pointerId)) event.currentTarget.releasePointerCapture(event.pointerId);
+        }}
+        onPointerCancel={() => { drag.current = null; suppressClick.current = false; }}
+        onLostPointerCapture={event => { if (event.target === event.currentTarget) drag.current = null; }}
+        onClickCapture={event => {
+          const suppress = suppressClick.current && event.detail > 0;
+          suppressClick.current = false;
+          if (suppress) { event.preventDefault(); event.stopPropagation(); }
+        }}
       >
         <defs>
           {[...looks.values()].filter(l => l.kind !== 'plain').map(look => (
@@ -541,8 +694,8 @@ export default function ConquestRegionMap({
           <g
             data-layer="camera"
             className="cq-camera"
-            data-camera-scale={camera.transform === 'none' ? '1' : camera.scale.toFixed(3)}
-            style={{ transform: camera.transform, transition: `transform ${CAMERA_TRANSITION_MS}ms ease-in-out` }}
+            data-camera-scale={isExploring || camera.transform === 'none' ? '1' : camera.scale.toFixed(3)}
+            style={{ transform: isExploring ? 'none' : camera.transform, transition: isExploring ? 'none' : `transform ${CAMERA_TRANSITION_MS}ms ease-in-out` }}
           >
             {layers}
           </g>
@@ -550,6 +703,9 @@ export default function ConquestRegionMap({
       </svg>
 
       <style>{`
+        .cq-explore-action { min-height: 44px; min-width: 44px; border: 1px solid hsl(var(--border)); border-radius: 0.5rem; padding: 0 0.65rem; }
+        .cq-explore-action:disabled { opacity: 0.5; }
+        .cq-hit:focus-visible { outline: none; stroke: #ffd166; stroke-width: 2; vector-effect: non-scaling-stroke; }
         .cq-label { font-size: calc(var(--fs) * 1px); }
         @media (max-width: 640px) { .cq-label { font-size: calc(var(--fs) * ${PHONE_LABEL_SCALE}px); } }
         @keyframes cq-takeover {
@@ -580,7 +736,7 @@ export default function ConquestRegionMap({
         }
       `}</style>
 
-      {hovered && hoveredRegion && (
+      {!selectedRegion && hovered && hoveredRegion && (
         <div className="absolute top-2 right-2 bg-card/95 backdrop-blur border border-border rounded-lg px-3 py-2 text-xs shadow-lg pointer-events-none z-10">
           <div className="font-bold text-foreground">{hoveredRegion.name}</div>
           {hoveredTeam ? (
@@ -603,6 +759,37 @@ export default function ConquestRegionMap({
             </div>
           )}
         </div>
+      )}
+
+      {selectedRegion && (
+        <section id={`${uid}-region-details`} aria-label="Territory details" data-region-details={selectedRegion.id} className="mt-2 rounded-xl border border-border bg-card p-3 text-xs">
+          <div className="flex items-start justify-between gap-2">
+            <div className="min-w-0 flex-1">
+              <h3 className="break-words font-bold text-foreground">{selectedRegion.name}</h3>
+              {selectedTeam ? (
+                <>
+                  <div className="mt-1 flex items-center gap-1.5">
+                    <span className="h-2.5 w-2.5 shrink-0 rounded-sm" style={{ background: selectedLook ? lookCss(selectedLook) : selectedTeam.color }} />
+                    <span className="min-w-0 break-words text-muted-foreground">{selectedTeam.city ? `${selectedTeam.city} ` : ''}{selectedTeam.name}</span>
+                  </div>
+                  <p className="mt-0.5 text-muted-foreground">
+                    {counts.get(selectedTeam.id) ?? 0} {noun(counts.get(selectedTeam.id) ?? 0)}
+                    {invincibleTeams?.has(selectedTeam.id) && ' 🛡️ Invincible'}
+                  </p>
+                </>
+              ) : (
+                <p className="mt-1 break-words text-muted-foreground">
+                  {selectedOwner ? `Owner: ${selectedOwner}` : 'Unclaimed'}
+                  {!selectedOwner && powerupStates?.has(selectedRegion.id) && ` ${powerupIconByRegion.get(selectedRegion.id) || '⚡'} Power-Up available`}
+                </p>
+              )}
+            </div>
+            <button type="button" aria-label="Close territory details" className="min-h-[44px] shrink-0 rounded-lg border border-border px-3 font-semibold text-foreground hover:bg-secondary" onClick={() => {
+              setSelected(null);
+              if (selectedTarget.current?.isConnected) selectedTarget.current.focus();
+            }}>Close</button>
+          </div>
+        </section>
       )}
 
       {showLegend && legendTiles.length > 0 && (

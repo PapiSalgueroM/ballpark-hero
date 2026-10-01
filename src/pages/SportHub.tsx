@@ -12,12 +12,42 @@
  * typed into prose is a count that goes wrong the next time a game ships. That
  * is not a hypothetical, it is Round 260.
  */
+import type { ReactNode } from 'react';
 import { Link, Navigate } from 'react-router-dom';
 import { GameNavbar } from '@/components/game/GameNavbar';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
-import { categoriesByTitle, type GameDef } from '@/data/gameRegistry';
-import { hubFor } from '@/lib/sportHub';
+import { ALL_GAMES, categoriesByTitle, type GameDef } from '@/data/gameRegistry';
+import { hubFor, SPORT_HUBS } from '@/lib/sportHub';
+
+/* Round 654: a game's path written into a hub's prose ships as that game's
+   name, linked. The NBA and College hubs had 33 of these ("/nba-grid,
+   /nba-connections, /missing-five ... serve everyone the same board") printed
+   to the reader as bare text, a web address where a name should be and no
+   link to follow. The name is read from the registry by path rather than typed
+   into the copy, so a rename reaches every sentence at once. A path that is
+   not a live game is left as written, and simHubs section 7 fails the page for
+   it. Only a path standing on its own counts: one inside a longer path, or
+   glued to a word, is not a mention. */
+function withGameLinks(text: string): ReactNode[] {
+  const out: ReactNode[] = [];
+  let last = 0;
+  for (const m of text.matchAll(/\/[a-z0-9-]+/g)) {
+    const at = m.index ?? 0;
+    const before = at === 0 ? ' ' : text[at - 1];
+    const after = text[at + m[0].length] ?? ' ';
+    if (!/[\s(]/.test(before) || after === '/') continue;
+    const game = ALL_GAMES.find(g => g.path === m[0]);
+    if (!game) continue;
+    out.push(
+      text.slice(last, at),
+      <Link key={at} to={game.path} className="text-primary hover:underline">{game.label}</Link>,
+    );
+    last = at + m[0].length;
+  }
+  out.push(text.slice(last));
+  return out;
+}
 
 /* Round 639: each game is an h3 now, so the page's outline reads NFL Front
    Office, NFL My Career, NFL Grid under the section they sit in, rather than a
@@ -116,7 +146,7 @@ const SportHub = ({ route }: { route: string }) => {
             <h2 className="text-lg font-display font-bold text-foreground mb-2">
               Every {hub.keyword} game here, and how they differ
             </h2>
-            <p className="text-sm text-muted-foreground leading-relaxed">{hub.whyHere}</p>
+            <p className="text-sm text-muted-foreground leading-relaxed">{withGameLinks(hub.whyHere)}</p>
           </section>
         )}
 
@@ -127,7 +157,7 @@ const SportHub = ({ route }: { route: string }) => {
               {hub.startHere.map(s => (
                 <li key={s.path} className="text-sm text-muted-foreground leading-relaxed">
                   <Link to={s.path} className="font-semibold text-primary hover:underline">{s.label}</Link>
-                  {'. '}{s.why}
+                  {'. '}{withGameLinks(s.why)}
                 </li>
               ))}
             </ul>
@@ -139,7 +169,7 @@ const SportHub = ({ route }: { route: string }) => {
             <h2 className="text-lg font-display font-bold text-foreground mb-2">
               {hub.sport}, the background
             </h2>
-            <p className="text-sm text-muted-foreground leading-relaxed">{hub.reference}</p>
+            <p className="text-sm text-muted-foreground leading-relaxed">{withGameLinks(hub.reference)}</p>
             {hub.referenceLinks && hub.referenceLinks.length > 0 && (
               <ul className="mt-3 space-y-1 text-sm">
                 {hub.referenceLinks.map(r => (
@@ -162,7 +192,7 @@ const SportHub = ({ route }: { route: string }) => {
               {hub.hubFaqs.map(f => (
                 <div key={f.q}>
                   <h3 className="text-sm font-semibold text-foreground">{f.q}</h3>
-                  <p className="mt-1 text-sm text-muted-foreground leading-relaxed">{f.a}</p>
+                  <p className="mt-1 text-sm text-muted-foreground leading-relaxed">{withGameLinks(f.a)}</p>
                 </div>
               ))}
             </div>
@@ -184,7 +214,7 @@ const SportHub = ({ route }: { route: string }) => {
 
 /** The other hubs, plus the two standing pages worth sending people to. */
 function HubFooterLinks({ route }: { route: string }) {
-  const others = OTHER_HUBS.filter(h => h.route !== route);
+  const others = SPORT_HUBS.filter(h => h.route !== route);
   return (
     <section className="rounded-xl border border-border bg-card/50 p-4">
       <h2 className="font-display font-bold text-foreground mb-2">Other sports</h2>
@@ -195,7 +225,7 @@ function HubFooterLinks({ route }: { route: string }) {
             to={h.route}
             className="inline-flex items-center gap-1.5 rounded-lg border border-border px-3 py-1.5 text-sm text-foreground hover:border-primary/40"
           >
-            <span>{h.emoji}</span>{h.label}
+            <span>{h.emoji}</span>{h.navLabel}
           </Link>
         ))}
       </div>
@@ -217,17 +247,5 @@ function HubFooterLinks({ route }: { route: string }) {
     </section>
   );
 }
-
-/* Kept as a flat list rather than read back out of SPORT_HUBS so this file
-   never imports its own page data twice, and so the labels here can be short
-   ("Soccer") where the page headings are long ("Soccer Games"). */
-const OTHER_HUBS = [
-  { route: '/soccer', emoji: '⚽', label: 'Soccer' },
-  { route: '/pro-basketball', emoji: '🏀', label: 'Basketball' },
-  { route: '/pro-football', emoji: '🏈', label: 'Football' },
-  { route: '/baseball', emoji: '⚾', label: 'Baseball' },
-  { route: '/hockey', emoji: '🏒', label: 'Hockey' },
-  { route: '/college', emoji: '🎓', label: 'College' },
-];
 
 export default SportHub;

@@ -46,6 +46,8 @@
  *   node scripts/simGuideHeadings.mjs --freeze /route
  * records that route's current flat text in the fixture. It refuses a route
  * that is already converted or already frozen.
+ * After a verified gameplay or factual correction, --refresh /route derives
+ * that existing converted route's record again. Other route records stay held.
  *
  * Run: node scripts/simGuideHeadings.mjs
  */
@@ -62,7 +64,7 @@ const FIXTURE = path.join(ROOT, 'scripts/data/guideHeadingsFrozen.json');
 const SEO = path.join(ROOT, 'src/components/seo/GameSeoContent.tsx');
 
 /* Raise this in the round that converts another guide. */
-const CONVERTED_FLOOR = 127;
+const CONVERTED_FLOOR = 129;
 
 const CONTROLS = { skiplevel: 2, nokeyword: 1, lostline: 1, unconvert: 3, snapdrift: 4 };
 const CONTROL = process.env.GUIDE_HEADINGS_CONTROL || '';
@@ -142,6 +144,21 @@ const fixture = JSON.parse(fs.readFileSync(FIXTURE, 'utf8'));
 
 /* ---- freeze mode ---- */
 const freezeAt = process.argv.indexOf('--freeze');
+const refreshAt = process.argv.indexOf('--refresh');
+if (freezeAt >= 0 && refreshAt >= 0) abort('Choose either --freeze or --refresh');
+if (refreshAt >= 0) {
+  const route = process.argv[refreshAt + 1];
+  const c = content.get(route);
+  if (!c || !isConverted(c) || !fixture.routes[route]) abort(`--refresh ${route}: requires an existing converted and frozen guide`);
+  const flat = flatGuide(c);
+  if (PARTS.some(p => !Array.isArray(flat[p]) || !flat[p].length)) abort(`--refresh ${route}: every guide part must contain text`);
+  fixture.routes[route] = Object.fromEntries(PARTS.map(p => [p, flat[p]]));
+  fixture.about = 'Guide text generated before section conversion or explicitly refreshed after a verified gameplay or factual correction. scripts/simGuideHeadings.mjs section 1 requires each sentence exactly once in its original part. Use --freeze /route before conversion, or --refresh /route after a verified change to an existing converted guide. Never edit sentence entries by hand.';
+  fs.writeFileSync(FIXTURE, JSON.stringify(fixture, null, 2) + '\n');
+  console.log(`simGuideHeadings: refreshed ${route} from its actual guide (${PARTS.map(p => `${p} ${flat[p].length}`).join(', ')})`);
+  fs.rmSync(TMP, { recursive: true, force: true });
+  process.exit(0);
+}
 if (freezeAt >= 0) {
   const route = process.argv[freezeAt + 1];
   const c = content.get(route);

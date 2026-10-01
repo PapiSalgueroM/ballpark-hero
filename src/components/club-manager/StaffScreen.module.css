@@ -1,0 +1,17 @@
+.wrap {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.committed {
+  animation: staffCommit 420ms ease-out both;
+}
+
+@keyframes staffCommit {
+  from { opacity: 0.5; box-shadow: 0 0 0 2px hsl(var(--primary) / 0.45); }
+  to { opacity: 1; box-shadow: 0 0 0 0 hsl(var(--primary) / 0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .committed { animation: none; }
+}

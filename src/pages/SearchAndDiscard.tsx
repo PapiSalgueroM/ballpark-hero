@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState, type KeyboardEvent } from 'react';
 import { Loader2, Search, Trash2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { FlagImg } from '@/components/FlagImg';
@@ -16,6 +16,7 @@ import {
   SD_FORMATION, SdSeason, SdState, applyKeep, cpuKeep, drawOffer, duelOver,
   emptySlots, newDuel, sdFits, settleSeason, squadRating,
 } from '@/lib/searchDiscard';
+import feedback from './SearchAndDiscard.module.css';
 
 /**
  * Search and Discard (Round 325). The owner's spec from the 08-28 review:
@@ -39,6 +40,20 @@ export default function SearchAndDiscard() {
   const [offer, setOffer] = useState<Player[] | null>(null);
   const [keepPick, setKeepPick] = useState<Player | null>(null);
   const [season, setSeason] = useState<SdSeason | null>(null);
+  const [committed, setCommitted] = useState<{ side: 0 | 1; slot: number; discarded: string[] } | null>(null);
+  const acceptedState = useRef<SdState | null>(null);
+  const pendingFocus = useRef<'slot' | 'search' | 'result' | 'setup' | null>(null);
+  const playArea = useRef<HTMLDivElement>(null);
+  const offers = useRef<HTMLDivElement>(null);
+  const turnHeading = useRef<HTMLParagraphElement>(null);
+  const resultArea = useRef<HTMLDivElement>(null);
+  const setupArea = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!committed) return;
+    const timer = setTimeout(() => setCommitted(null), 500);
+    return () => clearTimeout(timer);
+  }, [committed]);
 
   useEffect(() => {
     let cancelled = false;
@@ -59,6 +74,9 @@ export default function SearchAndDiscard() {
     setState(duel);
     setSeason(null);
     setKeepPick(null);
+    setCommitted(null);
+    acceptedState.current = null;
+    pendingFocus.current = 'search';
     setOffer(drawOffer(duel));
     setPhase('drafting');
   }, [pool]);
@@ -69,15 +87,19 @@ export default function SearchAndDiscard() {
       setState(next);
       setOffer(null);
       setPhase('settled');
+      pendingFocus.current = 'result';
       return true;
     }
     return false;
   }, []);
 
   const humanKeep = (slotIndex: number) => {
-    if (!state || !offer || !keepPick) return;
+    if (!state || !offer || !keepPick || acceptedState.current === state || (mode === 'cpu' && state.turn !== 0)) return;
     if (state.squads[state.turn][slotIndex] !== null || !sdFits(keepPick, SD_FORMATION.slots[slotIndex])) return;
     const next = applyKeep(state, offer, keepPick, slotIndex);
+    acceptedState.current = state;
+    setCommitted({ side: state.turn, slot: slotIndex, discarded: offer.filter(p => p !== keepPick).map(p => p.name) });
+    pendingFocus.current = 'search';
     setKeepPick(null);
     if (finishIfOver(next)) return;
     setState(next);
@@ -89,8 +111,12 @@ export default function SearchAndDiscard() {
   useEffect(() => {
     if (phase !== 'drafting' || mode !== 'cpu' || !state || !offer || state.turn !== 1) return;
     const t = setTimeout(() => {
+      if (acceptedState.current === state) return;
       const { keep, slotIndex } = cpuKeep(state, offer);
       const next = applyKeep(state, offer, keep, slotIndex);
+      acceptedState.current = state;
+      setCommitted({ side: state.turn, slot: slotIndex, discarded: offer.filter(p => p !== keep).map(p => p.name) });
+      pendingFocus.current = 'search';
       if (finishIfOver(next)) return;
       setState(next);
       setOffer(drawOffer(next));
@@ -107,28 +133,68 @@ export default function SearchAndDiscard() {
   const turnName = state ? (state.turn === 0 ? 'Manager A' : mode === 'cpu' ? 'The CPU' : 'Manager B') : '';
   const humanTurn = !!state && (mode === 'pass' || state.turn === 0);
 
-  const SquadColumn = ({ side, label }: { side: 0 | 1; label: string }) => (
+  useEffect(() => {
+    const request = pendingFocus.current;
+    if (!request) return;
+    pendingFocus.current = null;
+    let target: HTMLElement | null = null;
+    const active = document.activeElement;
+    if ((request === 'search' || request === 'result') && active && active !== document.body && !playArea.current?.contains(active) && phase !== 'setup') return;
+    if (request === 'slot' && state && keepPick) {
+      const index = emptySlots(state, state.turn).find(i => sdFits(keepPick, SD_FORMATION.slots[i]));
+      if (index !== undefined) target = playArea.current?.querySelector(`[data-sd-slot="${state.turn}:${index}"]`) ?? null;
+    } else if (request === 'search') {
+      target = humanTurn ? offers.current?.querySelector('button:not(:disabled)') ?? null : turnHeading.current;
+    } else if (request === 'result') target = resultArea.current;
+    else if (request === 'setup') target = setupArea.current?.querySelector('button') ?? null;
+    target?.focus({ preventScroll: true });
+    const column = request === 'slot' ? target?.closest<HTMLElement>('[data-sd-squad]') : null;
+    if (target && column) {
+      const cell = target.getBoundingClientRect(), box = column.getBoundingClientRect();
+      if (cell.bottom > box.bottom - 4) column.scrollTop += cell.bottom - box.bottom + 4;
+      else if (cell.top < box.top + 4) column.scrollTop -= box.top - cell.top + 4;
+    }
+  }, [phase, state, offer, keepPick, humanTurn]);
+
+  const actionKeys = (event: KeyboardEvent<HTMLButtonElement>) => {
+    if (event.repeat && (event.key === 'Enter' || event.key === ' ')) event.preventDefault();
+  };
+  const choose = (player: Player) => {
+    pendingFocus.current = keepPick === player ? null : 'slot';
+    setKeepPick(keepPick === player ? null : player);
+  };
+  const newDuelSetup = () => {
+    setCommitted(null); pendingFocus.current = 'setup'; setPhase('setup');
+  };
+
+  const renderSquad = (side: 0 | 1, label: string) => (
     <div className="flex-1 min-w-0">
       <p className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground mb-1.5 text-center">
         {label} · {state ? squadRating(state.squads[side]) : 0} OVR
       </p>
-      <div className="space-y-1">
+      <div data-sd-squad={side} className={cn(feedback.squad, 'space-y-1')}>
         {SD_FORMATION.slots.map((slot, i) => {
           const p = state?.squads[side][i] ?? null;
           const openForKeep = humanTurn && side === state?.turn && !p && keepPick !== null && sdFits(keepPick, slot);
           return (
             <button
               key={i}
+              data-sd-slot={`${side}:${i}`}
+              data-sd-player={p?.name ?? ''}
+              aria-label={`${label}, ${slot.label}: ${p ? `${p.name}, rating ${playerRating(p)}` : openForKeep ? `Keep ${keepPick!.name} here` : 'Open'}`}
               onClick={() => (openForKeep ? humanKeep(i) : undefined)}
+              onKeyDown={actionKeys}
               disabled={!openForKeep}
               className={cn(
+                feedback.slot,
                 'w-full rounded-md border px-1.5 py-1 text-left flex items-baseline gap-1.5 transition-colors',
                 p ? 'bg-correct/10 border-correct/40' : 'bg-card border-border',
-                openForKeep && 'border-primary bg-primary/10 animate-pulse cursor-pointer',
+                openForKeep && 'border-primary bg-primary/10 cursor-pointer',
+                committed?.side === side && committed.slot === i && feedback.kept,
               )}
             >
               <span className="text-[9px] font-bold text-muted-foreground w-7 shrink-0">{slot.label}</span>
-              <span className="text-[11px] font-semibold text-foreground truncate">
+              <span className={cn(feedback.fullName, 'text-[11px] font-semibold text-foreground')}>
                 {p ? `${p.name} · ${playerRating(p)}` : openForKeep ? 'Put him here' : 'Open'}
               </span>
             </button>
@@ -145,7 +211,7 @@ export default function SearchAndDiscard() {
         description="Two managers, one shared pool of real players. Search three, keep one into your 4-3-3, discard the rest from the whole game, then settle it in a simulated season. Play the CPU or pass and play."
         path="/search-and-discard"
       />
-      <GameShell width="narrow" title="Search and Discard" emoji="🔎" subtitle="Keep one, bin two, and let the season decide.">
+      <GameShell width="narrow" title="Search and Discard" emoji="🔎" subtitle="Keep one, bin two, and let the season decide." className={feedback.page}>
         {phase === 'boot' && (
           <div className="flex justify-center py-16"><Loader2 className="w-8 h-8 animate-spin text-primary" /></div>
         )}
@@ -153,24 +219,24 @@ export default function SearchAndDiscard() {
         {phase === 'error' && (
           <div className="text-center py-12">
             <p className="text-destructive font-semibold mb-3">Couldn't load the player pool right now.</p>
-            <button onClick={() => window.location.reload()} className="px-6 py-2.5 bg-primary text-primary-foreground rounded-full font-semibold">
+            <button onClick={() => window.location.reload()} className="min-h-[44px] px-6 py-2.5 bg-primary text-primary-foreground rounded-full font-semibold">
               Try again
             </button>
           </div>
         )}
 
         {phase === 'setup' && (
-          <div className="space-y-4 max-w-sm mx-auto">
+          <div ref={setupArea} className="space-y-4 max-w-sm mx-auto">
             <div className="rounded-xl border border-border bg-surface-1 p-4 text-sm text-muted-foreground space-y-1.5">
               <p className="font-bold text-foreground">How to play</p>
               <p>Both managers build the same 4-3-3 from one shared pool of real players. On your turn you search three, keep exactly one into a compatible open slot, and the other two are discarded from the whole game.</p>
               <p>A discard is a weapon: a star you bin can never reach the other squad. Eleven keeps each, then both XIs play the same simulated 38 game season, derbies included, and the table settles it.</p>
             </div>
-            <button onClick={() => start('cpu')} className="w-full rounded-xl border border-border bg-surface-1 p-4 text-left hover:border-primary/50 hover:bg-primary/5 transition-colors">
+            <button onClick={() => start('cpu')} onKeyDown={actionKeys} className="min-h-[44px] w-full rounded-xl border border-border bg-surface-1 p-4 text-left hover:border-primary/50 hover:bg-primary/5 transition-colors">
               <span className="block font-bold text-foreground">Versus the CPU</span>
               <span className="block text-xs text-muted-foreground mt-0.5">It keeps the best fit and guards its scarce slots</span>
             </button>
-            <button onClick={() => start('pass')} className="w-full rounded-xl border border-border bg-surface-1 p-4 text-left hover:border-primary/50 hover:bg-primary/5 transition-colors">
+            <button onClick={() => start('pass')} onKeyDown={actionKeys} className="min-h-[44px] w-full rounded-xl border border-border bg-surface-1 p-4 text-left hover:border-primary/50 hover:bg-primary/5 transition-colors">
               <span className="block font-bold text-foreground">Pass and play</span>
               <span className="block text-xs text-muted-foreground mt-0.5">Two people, one screen, alternating searches</span>
             </button>
@@ -178,39 +244,44 @@ export default function SearchAndDiscard() {
         )}
 
         {phase === 'drafting' && state && offer && (
-          <div className="space-y-4">
-            <p className="text-center text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+          <div ref={playArea} className="space-y-4">
+            <p ref={turnHeading} tabIndex={-1} data-sd-turn className="text-center text-xs font-semibold uppercase tracking-wider text-muted-foreground">
               <Search className="inline w-3.5 h-3.5 mr-1" />
               {turnName}'s search · {emptySlots(state, state.turn).length} slot{emptySlots(state, state.turn).length === 1 ? '' : 's'} to fill
             </p>
 
-            <div className="grid grid-cols-3 gap-2">
+            <div ref={offers} className="grid grid-cols-3 gap-2">
               {offer.map(p => {
                 const fitsSomewhere = emptySlots(state, state.turn).some(i => sdFits(p, SD_FORMATION.slots[i]));
                 const active = humanTurn && fitsSomewhere;
                 return (
                   <button
                     key={p.name}
-                    onClick={() => (active ? setKeepPick(keepPick === p ? null : p) : undefined)}
+                    data-sd-offer={p.name}
+                    aria-label={`${p.name}, ${p.position}, rating ${playerRating(p)}${!fitsSomewhere ? ', no open slot fits' : !humanTurn ? ', CPU turn' : ''}`}
+                    aria-pressed={keepPick === p}
+                    onClick={() => (active ? choose(p) : undefined)}
+                    onKeyDown={actionKeys}
                     disabled={!active}
                     className={cn(
+                      feedback.offer,
                       'rounded-xl border p-2 text-center transition-colors',
                       keepPick === p ? 'border-primary bg-primary/10' : 'border-border bg-surface-1',
                       active ? 'hover:border-primary/50' : 'opacity-60',
                     )}
                   >
                     <span className="block text-lg font-black text-primary">{playerRating(p)}</span>
-                    <span className="block text-[11px] font-bold text-foreground leading-tight">{p.name}</span>
+                    <span className={cn(feedback.fullName, 'block text-[11px] font-bold text-foreground leading-tight')}>{p.name}</span>
                     <span className="block text-[9px] text-muted-foreground mt-0.5">
                       {p.position} · <FlagImg name={p.nationality} size={10} showLabel />
                     </span>
-                    <span className="block text-[9px] text-muted-foreground">{p.club} · {p.marketValue}M</span>
+                    <span className={cn(feedback.fullName, 'block text-[9px] text-muted-foreground')}>{p.club} · {p.marketValue}M</span>
                     {!fitsSomewhere && <span className="block text-[9px] text-destructive mt-0.5">No open slot fits</span>}
                   </button>
                 );
               })}
             </div>
-            <p className="text-center text-[11px] text-muted-foreground">
+            <p data-sd-instruction className={cn(feedback.fullName, 'text-center text-[11px] text-muted-foreground')}>
               {humanTurn
                 ? keepPick
                   ? `Now tap the slot for ${keepPick.name}. The other two go in the bin for good.`
@@ -219,20 +290,21 @@ export default function SearchAndDiscard() {
             </p>
 
             <div className="flex gap-3">
-              <SquadColumn side={0} label="Manager A" />
-              <SquadColumn side={1} label={mode === 'cpu' ? 'The CPU' : 'Manager B'} />
+              {renderSquad(0, 'Manager A')}
+              {renderSquad(1, mode === 'cpu' ? 'The CPU' : 'Manager B')}
             </div>
 
             {state.discards.length > 0 && (
-              <p className="text-center text-[10px] text-muted-foreground">
+              <p className={cn(feedback.fullName, 'text-center text-[10px] text-muted-foreground')}>
                 <Trash2 className="inline w-3 h-3 mr-1" />
-                Binned: {state.discards.slice(-6).map(p => p.name).join(', ')}{state.discards.length > 6 ? ` and ${state.discards.length - 6} more` : ''}
+                Binned: {state.discards.slice(-6).map((p, index) => <span key={p.name} data-sd-discard={p.name} className={committed?.discarded.includes(p.name) ? feedback.discarded : undefined}>{index > 0 ? ', ' : ''}{p.name}</span>)}{state.discards.length > 6 ? ` and ${state.discards.length - 6} more` : ''}
               </p>
             )}
           </div>
         )}
 
         {isDone && season && state && (
+          <div ref={resultArea} tabIndex={-1} aria-label="Duel result" data-sd-result>
           <ResultScreen
             won={won}
             outcomeEmoji={won ? '🏆' : season.winner === -1 ? '🤝' : '🫠'}
@@ -242,13 +314,14 @@ export default function SearchAndDiscard() {
             statRow={[{ label: 'Season score', value: finalScore }]}
             emojiGrid={`🔎 Search and Discard\n${won ? '🏆' : '🫠'} ${season.points[0]} pts vs ${season.points[1]} pts`}
             share={{ score: String(finalScore), gameName: 'Search and Discard', gamePath: '/search-and-discard' }}
-            onPlayAgain={() => setPhase('setup')}
+            onPlayAgain={newDuelSetup}
             playAgainLabel="New duel"
           >
             <div className="text-left text-sm text-muted-foreground space-y-1 my-4 py-3 px-4 rounded-xl bg-surface-2 border border-border/60">
               {season.story.map((line, i) => <p key={i}>{line}</p>)}
             </div>
           </ResultScreen>
+          </div>
         )}
 
         <AdBanner slot="7540487748" format="horizontal" className="mt-8" />

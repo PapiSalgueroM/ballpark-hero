@@ -1,9 +1,11 @@
-import { useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Check, Copy, X } from 'lucide-react';
+import { Check, Copy } from 'lucide-react';
 import { GameNav } from '@/components/game/GameNav';
-import { VALUES } from '@/lib/fetchQuizBoard';
+import { Dialog, DialogContent, DialogDescription, DialogTitle } from '@/components/ui/dialog';
+import { VALUES, type ClueValue } from '@/lib/fetchQuizBoard';
 import { useQuizBoard } from '@/hooks/useQuizBoard';
+import motion from './QuizBoard.module.css';
 
 export function QuizBoard() {
   const {
@@ -11,6 +13,25 @@ export function QuizBoard() {
     finished, guess, setGuess, select, submit, closeTile, shareText,
   } = useQuizBoard();
   const [copied, setCopied] = useState(false);
+  const [pendingAnswer, setPendingAnswer] = useState<{ category: string; value: ClueValue; clueId: string } | null>(null);
+  const [feedback, setFeedback] = useState<{ clueId: string; correct: boolean } | null>(null);
+  const opener = useRef<{ node: HTMLButtonElement; clueId: string } | null>(null);
+  const answeredCells = useRef(new Map<string, HTMLDivElement>());
+
+  useLayoutEffect(() => {
+    if (!pendingAnswer) return;
+    const tile = board[pendingAnswer.category]?.[pendingAnswer.value];
+    if (tile?.clue.clueId === pendingAnswer.clueId && tile.answered && typeof tile.correct === 'boolean') {
+      setFeedback({ clueId: tile.clue.clueId, correct: tile.correct });
+    }
+    setPendingAnswer(null);
+  }, [pendingAnswer, board]);
+
+  useEffect(() => {
+    if (!feedback) return;
+    const timer = setTimeout(() => setFeedback(null), 500);
+    return () => clearTimeout(timer);
+  }, [feedback]);
 
   const copyShare = async () => {
     try {
@@ -46,7 +67,12 @@ export function QuizBoard() {
         <div>
           <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Score</p>
           <p className={`font-display text-3xl font-black ${score < 0 ? 'text-destructive' : 'text-gold'}`}>
-            ${score}
+            <span
+              key={feedback?.clueId ?? 'score'}
+              data-quiz-score={score}
+              data-quiz-feedback={feedback ? (feedback.correct ? 'correct' : 'wrong') : undefined}
+              className={feedback ? (feedback.correct ? motion.scoreCorrect : motion.scoreWrong) : undefined}
+            >${score}</span>
           </p>
         </div>
         <p className="text-xs text-muted-foreground">
@@ -64,7 +90,7 @@ export function QuizBoard() {
             key={cat}
             className="flex min-h-[52px] items-center justify-center rounded-lg bg-primary/90 px-1 py-2 text-center"
           >
-            <span className="text-[10px] font-black uppercase leading-tight tracking-wide text-primary-foreground sm:text-xs">
+            <span className={`${motion.category} text-[10px] font-black uppercase leading-tight tracking-wide text-primary-foreground sm:text-xs`}>
               {cat}
             </span>
           </div>
@@ -80,7 +106,13 @@ export function QuizBoard() {
               return (
                 <div
                   key={`${cat}-${v}`}
-                  className={`flex min-h-[56px] items-center justify-center rounded-lg border text-2xl ${
+                  ref={node => { if (node) answeredCells.current.set(t.clue.clueId, node); else answeredCells.current.delete(t.clue.clueId); }}
+                  role="group"
+                  tabIndex={-1}
+                  aria-label={`${cat}, $${v}, ${t.correct ? 'correct' : 'wrong'}`}
+                  data-quiz-clue={t.clue.clueId}
+                  data-quiz-feedback={feedback?.clueId === t.clue.clueId ? (t.correct ? 'correct' : 'wrong') : undefined}
+                  className={`${motion.cell} ${feedback?.clueId === t.clue.clueId ? (t.correct ? motion.correct : motion.wrong) : ''} flex min-h-[56px] items-center justify-center rounded-lg border text-2xl ${
                     t.correct
                       ? 'border-emerald-500/40 bg-emerald-500/10'
                       : 'border-destructive/40 bg-destructive/10'
@@ -93,7 +125,9 @@ export function QuizBoard() {
             return (
               <button
                 key={`${cat}-${v}`}
-                onClick={() => select(cat, v)}
+                aria-label={`${cat}, $${v}`}
+                data-quiz-clue={t.clue.clueId}
+                onClick={e => { opener.current = { node: e.currentTarget, clueId: t.clue.clueId }; select(cat, v); }}
                 className="flex min-h-[56px] items-center justify-center rounded-lg border border-gold/30 bg-card font-display text-lg font-black text-gold transition-colors hover:bg-gold/10 sm:text-xl"
               >
                 ${v}
@@ -104,25 +138,32 @@ export function QuizBoard() {
       </div>
 
       {/* Clue modal */}
-      {openTile && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4">
-          <div className="w-full max-w-lg rounded-2xl border border-border bg-card p-6">
-            <div className="mb-3 flex items-center justify-between">
-              <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+      <Dialog open={!!openTile} onOpenChange={open => { if (!open) closeTile(); }}>
+        {openTile && (
+          <DialogContent
+            className={`${motion.dialog} w-[calc(100%-2rem)] max-h-[calc(100dvh-2rem)] overflow-y-auto rounded-2xl border-border bg-card`}
+            onCloseAutoFocus={e => {
+              e.preventDefault();
+              const from = opener.current;
+              const target = from?.node.isConnected ? from.node : from && answeredCells.current.get(from.clueId);
+              target?.focus({ preventScroll: true });
+            }}
+          >
+              <DialogTitle className="pr-10 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
                 {openTile.clue.category} · ${openTile.clue.value}
-              </span>
-              <button onClick={closeTile} aria-label="Close">
-                <X className="h-4 w-4 text-muted-foreground" />
-              </button>
-            </div>
+              </DialogTitle>
 
-            <p className="py-6 text-center font-display text-xl font-bold leading-snug text-foreground">
+            <DialogDescription className="py-6 text-center font-display text-xl font-bold leading-snug text-foreground">
               {openTile.clue.clue}
-            </p>
+            </DialogDescription>
 
             <form
-              onSubmit={e => { e.preventDefault(); submit(); }}
-              className="flex gap-2"
+              onSubmit={e => {
+                e.preventDefault();
+                setPendingAnswer({ category: openTile.clue.category, value: openTile.clue.value, clueId: openTile.clue.clueId });
+                submit();
+              }}
+              className="flex min-w-0 gap-2"
             >
               <input
                 autoFocus
@@ -130,11 +171,11 @@ export function QuizBoard() {
                 onChange={e => setGuess(e.target.value)}
                 placeholder="Who or what is…"
                 aria-label="Your answer"
-                className="flex-1 min-w-0 rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground"
+                className="flex-1 min-w-0 min-h-[44px] rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground"
               />
               <button
                 type="submit"
-                className="rounded-lg bg-primary px-5 py-2 text-sm font-bold text-primary-foreground hover:opacity-90"
+                className="min-h-[44px] rounded-lg bg-primary px-5 py-2 text-sm font-bold text-primary-foreground hover:opacity-90"
               >
                 Answer
               </button>
@@ -142,9 +183,9 @@ export function QuizBoard() {
             <p className="mt-3 text-center text-[11px] text-muted-foreground">
               Wrong answers cost you ${openTile.clue.value}. Skipping is free, close this to leave it.
             </p>
-          </div>
-        </div>
-      )}
+          </DialogContent>
+        )}
+      </Dialog>
 
       {finished && (
         <div className="mt-5 rounded-2xl border border-border bg-card p-5 text-center">

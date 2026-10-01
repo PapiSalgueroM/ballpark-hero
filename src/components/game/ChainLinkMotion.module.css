@@ -1,0 +1,40 @@
+.wrap {
+  overflow-wrap: anywhere;
+}
+
+.latest {
+  animation: linkReveal 420ms ease-out;
+}
+
+.connection {
+  animation: connectionCue 360ms ease-out;
+}
+
+@keyframes linkReveal {
+  from {
+    opacity: 0.75;
+    transform: translateY(2px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes connectionCue {
+  0%, 100% {
+    text-shadow: none;
+  }
+  40% {
+    text-shadow: 0 0 7px currentColor;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .latest, .connection {
+    animation: none;
+    opacity: 1;
+    transform: none;
+    text-shadow: none;
+  }
+}

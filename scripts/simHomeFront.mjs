@@ -39,6 +39,20 @@
  *               record planted, and prints no done, streak or day count words.
  *               Round 297 removed a personal dailies checklist from this page
  *               on the owner's word; this is the fence that keeps it gone.
+ *   7 continue  Round 717's Continue playing row. Every save key on its list
+ *               (src/data/continueSaves.ts) equals the SAVE_KEY the game's own
+ *               file declares; every *SAVE_KEY constant anywhere in src is on
+ *               the list or excused here by name, so the next long form game
+ *               cannot ship without a card; every field a card reads is a
+ *               property the game's own code declares; saves built by ten of
+ *               the engines themselves read back as the line the engine's own
+ *               values say; a hostile save never throws and never prints more
+ *               than a short name; and the rendered row is empty with no save
+ *               and shows exactly one card per planted save, in list order.
+ *   8 favsport  The favourite sport moves exactly its own section to the
+ *               front and leaves the rest in registry order, no pick is
+ *               registry order, a stored value that is not a sport reads as no
+ *               pick, and the chips render one pressed button for the pick.
  *
  * NEGATIVE CONTROLS, HOME_FRONT_CONTROL=<name>. Each rewrites one input in
  * memory, refuses to run if the rewrite changed nothing, and must turn ONLY
@@ -50,6 +64,16 @@
  *   rail      the rail drops the last daily game
  *   shipped   Just shipped shows its games oldest first
  *   progress  every chip appends " Done" when a streak record exists
+ *   continuekey    the Fight Gym card looks for a key the game never writes
+ *   continuefield  the Stadium Tycoon card reads a field the save does not have
+ *   continueguard  a card prints a save's name at any length
+ *   continuecold   the row renders its heading with no save in the browser
+ *   aussiemissing  the new manager's real save has no registered card
+ *   aussiekey      the manager card reads a key its hook never writes
+ *   aussiefield    the action log's club ID is mistaken for a display name
+ *   aussieround    the action count is falsely displayed as a round
+ *   favfirst       the favourite sport is ignored
+ *   favtrust       any stored string is taken as a sport
  *
  * Run: node scripts/simHomeFront.mjs
  */
@@ -61,7 +85,11 @@ import { createRequire } from 'node:module';
 import { fileURLToPath } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const CONTROLS = { stage: 1, savekey: 2, nocolour: 3, noglyph: 3, rail: 4, shipped: 5, progress: 6 };
+const CONTROLS = {
+  stage: 1, savekey: 2, nocolour: 3, noglyph: 3, rail: 4, shipped: 5, progress: 6,
+  continuekey: 7, continuefield: 7, continueguard: 7, continuecold: 7, favfirst: 8, favtrust: 8,
+  aussiemissing: 7, aussiekey: 7, aussiefield: 7, aussieround: 7,
+};
 const CONTROL = process.env.HOME_FRONT_CONTROL || '';
 if (CONTROL && !(CONTROL in CONTROLS)) {
   console.error(`HOME_FRONT_CONTROL=${CONTROL} is not a control this harness knows (${Object.keys(CONTROLS).join(', ')})`);
@@ -113,6 +141,23 @@ railSrc = controlled('progress', railSrc, '{game.label}',
   "{game.label}{(() => { try { return localStorage.getItem('dukb-streaks-v1') ? ' Done' : ''; } catch { return ''; } })()}");
 let shippedSrc = read('src/components/home/JustShipped.tsx');
 shippedSrc = controlled('shipped', shippedSrc, 'justShipped(JUST_SHIPPED_COUNT)', 'justShipped(JUST_SHIPPED_COUNT).reverse()');
+let continueSrc = read('src/data/continueSaves.ts');
+const aussieRow = "{ path: '/aussie-rules-manager', saveKey: 'aussie-rules-manager-save-v1' }";
+if (CONTROL.startsWith('aussie') && continueSrc.split(aussieRow).length !== 2) {
+  console.error('Aussie control needs one unique real Continue row'); process.exit(1);
+}
+continueSrc = controlled('aussiemissing', continueSrc, `  ${aussieRow},\n`, '');
+continueSrc = controlled('aussiekey', continueSrc, aussieRow, aussieRow.replace('save-v1', 'save-v2'));
+continueSrc = controlled('aussiefield', continueSrc, aussieRow, aussieRow.replace(' }', ", name: ['clubId'] }"));
+continueSrc = controlled('aussieround', continueSrc, aussieRow, aussieRow.replace(' }', ", count: { at: ['actions'], say: 'round {n}' } }"));
+continueSrc = controlled('continuekey', continueSrc, "saveKey: 'fight-gym-save-v1'", "saveKey: 'fight-gym-save-v2'");
+continueSrc = controlled('continuefield', continueSrc, "at: ['matchNo']", "at: ['matchNum']");
+continueSrc = controlled('continueguard', continueSrc,
+  'return t.length > SAVE_NAME_MAX ? `${t.slice(0, SAVE_NAME_MAX - 3).trimEnd()}...` : t;', 'return t;');
+let rowSrc = read('src/components/home/ContinueRow.tsx');
+rowSrc = controlled('continuecold', rowSrc, 'if (saved.length === 0) return null;', 'if (saved.length < 0) return null;');
+homeFrontSrc = controlled('favfirst', homeFrontSrc, 'if (!fav) return all;', 'return all;');
+homeFrontSrc = controlled('favtrust', homeFrontSrc, '.includes(raw) ? (raw as SportKey) : null', '.includes(raw) ? (raw as SportKey) : (raw as SportKey)');
 
 /* ── one bundle: the registry, the front data, and renders of the pieces ─ */
 const temp = fs.mkdtempSync(path.join(os.tmpdir(), `dukb-home-front-${process.pid}-`));
@@ -122,6 +167,8 @@ const SWAPS = [
   [/[\\/]src[\\/]components[\\/]home[\\/]SportGlyph\.tsx$/, () => glyphSrc, 'tsx'],
   [/[\\/]src[\\/]components[\\/]home[\\/]DailyRail\.tsx$/, () => railSrc, 'tsx'],
   [/[\\/]src[\\/]components[\\/]home[\\/]JustShipped\.tsx$/, () => shippedSrc, 'tsx'],
+  [/[\\/]src[\\/]data[\\/]continueSaves\.ts$/, () => continueSrc, 'ts'],
+  [/[\\/]src[\\/]components[\\/]home[\\/]ContinueRow\.tsx$/, () => rowSrc, 'tsx'],
 ];
 await build({
   stdin: {
@@ -143,6 +190,72 @@ await build({
       export const renderRail = today => wrap(React.createElement(DailyRail, { today }));
       export const renderShipped = () => wrap(React.createElement(JustShipped, null,
         games => games.map(g => React.createElement('a', { key: g.path, href: g.path, 'data-shipped-card': '' }, g.label))));
+      /* Round 717 */
+      import { ContinueRow } from './src/components/home/ContinueRow';
+      import { FavouriteSport } from './src/components/home/FavouriteSport';
+      export { CONTINUE_SAVES, describeSave, savedGames, SAVE_NAME_MAX } from './src/data/continueSaves';
+      export { SAVED_FALLBACK } from './src/components/home/ContinueRow';
+      export { VISIBLE_CATEGORIES } from './src/data/gameRegistry';
+      export { favouriteFirst, readFavouriteSport, FAVOURITE_SPORT_KEY } from './src/data/homeFront';
+      export const renderContinue = () => wrap(React.createElement(ContinueRow));
+      export const renderFav = (sports, value) => renderToStaticMarkup(React.createElement(FavouriteSport, { sports, value, onPick: () => {} }));
+      /* saves built by the engines themselves, each wrapped the way its board writes it */
+      import * as FC from './src/lib/fightCareer';
+      import * as FG from './src/lib/fightGym';
+      import * as FP from './src/lib/fightPromoter';
+      import * as HC from './src/lib/hallOfChampions';
+      import * as IA from './src/lib/idleArena';
+      import * as WF from './src/lib/wonderkidFactory';
+      import * as ST from './src/lib/stadiumTycoon';
+      import * as FO from './src/lib/frontOffice';
+      import * as CFB from './src/lib/cfbDynasty';
+      import * as CBB from './src/lib/cbbDynasty';
+      import * as AR from './src/lib/aussieRulesManager';
+      export { SAVE_KEY as AUSSIE_SAVE_KEY } from './src/lib/aussieRulesManager';
+      export const restoreAussie = AR.readManagerSave;
+      export const aussieResumeSaves = () => {
+        const save = { version: 1, seed: 792, clubId: 'club-2', actions: [] };
+        let state = AR.createManager(save.seed, save.clubId);
+        const snapshots = [];
+        const capture = () => snapshots.push({ raw: JSON.stringify(save), state });
+        const commit = action => {
+          const next = AR.reduceManager(state, action);
+          if (next === state) throw new Error('The actual Aussie resume fixture rejected a legal action');
+          save.actions.push(action); state = next;
+        };
+        capture();
+        for (let round = 0; round < 10; round += 1) {
+          commit({ type: 'prepare', choice: 'rest' });
+          for (let quarter = 0; quarter < 4; quarter += 1) {
+            commit({ type: 'play', tactic: 'control' });
+            if (round === 0 && quarter === 0) capture();
+            if (quarter < 3) commit({ type: 'next' });
+          }
+          commit({ type: 'next' });
+        }
+        capture();
+        return snapshots;
+      };
+      export const engineSaves = () => {
+        let seed = 717;
+        const rng = () => { seed = (seed * 1103515245 + 12345) % 2147483648; return seed / 2147483648; };
+        const league = FO.initLeague(rng);
+        const foTeam = Object.keys(league.teams)[0];
+        const cfbTeam = CFB.CFB_SCHOOLS[0].id;
+        const cbbTeam = CBB.CBB_SCHOOLS[0].id;
+        return {
+          '/fight-career': { raw: JSON.stringify({ st: FC.newFightCareer('Sim Tester', 'welter', 'slugger', 'sim'), phase: 'hub' }), want: /^Sim Tester, 0 fights$/ },
+          '/fight-gym': { raw: JSON.stringify({ g: FG.newGym('Sim Gym', 'sim') }), want: /^Sim Gym, week 1$/ },
+          '/fight-promoter': { raw: JSON.stringify({ st: FP.newPromoter('Sim Promotions', 'sim') }), want: /^Sim Promotions, show 1$/ },
+          '/hall-of-champions': { raw: HC.serialize(HC.freshState(7), 0), want: /^1 wing open$/ },
+          '/idle-arena': { raw: IA.serialize(IA.newState(0)), want: /^0 trophies$/ },
+          '/wonderkid-factory': { raw: WF.serialize(WF.newFactory(0, 7)), want: /^\\d+ kids? in the academy$/ },
+          '/stadium-tycoon': { raw: ST.serializeTycoon(ST.newTycoon(0), 0), want: /^0 matches played$/ },
+          '/front-office': { raw: JSON.stringify({ league, myTeam: foTeam, phase: 'hub', titles: 0, seasonsPlayed: 0 }), want: new RegExp('^' + foTeam + ', 20\\\\d\\\\d season$') },
+          '/cfb-dynasty': { raw: JSON.stringify({ st: CFB.initCfb(cfbTeam, rng), phase: 'hub', recruits: null, portal: null }), want: new RegExp('^' + cfbTeam + ', 20\\\\d\\\\d season$') },
+          '/cbb-dynasty': { raw: JSON.stringify({ st: CBB.initCbb(cbbTeam, rng), phase: 'hub', recruits: null, portal: null }), want: new RegExp('^' + cbbTeam + ', 20\\\\d\\\\d season$') },
+        };
+      };
     `,
     resolveDir: ROOT,
     loader: 'tsx',
@@ -355,6 +468,254 @@ console.log('6) the rail is the same for everybody: no ticks, no counts, no read
   const words = text.match(/\b(done|completed|played|streak|day \d+|\d+ of \d+|\d+\/\d+)\b|✓|✔/i);
   if (words) fail(6, `the rail prints ${JSON.stringify(words[0])}, which is progress talk`);
   if (!failedSections.has(6)) console.log('   no storage read, identical with a planted record, no progress words');
+}
+
+/* ── 7: Continue playing ──────────────────────────────────────────────── */
+console.log('7) Continue playing: the right keys, real fields, hostile saves, one card per save');
+{
+  const { CONTINUE_SAVES, describeSave, savedGames, SAVE_NAME_MAX, SAVED_FALLBACK } = front;
+  /* The file that declares each game's SAVE_KEY, then the files that declare
+     the shape of what it saves. Typed here, apart from the list it checks. */
+  const WHERE = {
+    '/soccer-career': ['src/pages/SoccerCareer.tsx', 'src/lib/soccerCareerEngine.ts'],
+    '/club-manager': ['src/lib/clubManager.ts'],
+    '/stadium-tycoon': ['src/lib/stadiumTycoon.ts'],
+    '/wonderkid-factory': ['src/lib/wonderkidFactory.ts'],
+    '/rebuild': ['src/lib/rebuildSave.ts'],
+    '/front-office': ['src/components/front-office/FrontOfficeBoard.tsx', 'src/lib/frontOffice.ts'],
+    '/nfl-my-career': ['src/components/nfl-my-career/NflMyCareerBoard.tsx', 'src/lib/nflMyCareer.ts'],
+    '/cfb-dynasty': ['src/components/cfb-dynasty/CfbDynastyBoard.tsx', 'src/lib/cfbDynasty.ts'],
+    '/cbb-dynasty': ['src/components/cbb-dynasty/CbbDynastyBoard.tsx', 'src/lib/cbbDynasty.ts'],
+    '/nba-front-office': ['src/components/nba-front-office/NbaFrontOfficeBoard.tsx', 'src/lib/nbaFrontOffice.ts'],
+    '/nba-my-career': ['src/components/nba-my-career/NbaMyCareerBoard.tsx', 'src/lib/nbaMyCareer.ts'],
+    '/mlb-my-career': ['src/components/mlb-my-career/MlbMyCareerBoard.tsx', 'src/lib/mlbMyCareer.ts'],
+    '/mlb-front-office': ['src/components/mlb-front-office/MlbFrontOfficeBoard.tsx', 'src/lib/mlbFrontOffice.ts'],
+    '/nhl-my-career': ['src/components/nhl-my-career/NhlMyCareerBoard.tsx', 'src/lib/nhlMyCareer.ts'],
+    '/nhl-front-office': ['src/components/nhl-front-office/NhlFrontOfficeBoard.tsx', 'src/lib/nhlFrontOffice.ts'],
+    '/aussie-rules-manager': ['src/lib/aussieRulesManager.ts'],
+    '/fight-career': ['src/components/fight-career/FightCareerBoard.tsx', 'src/lib/fightCareer.ts'],
+    '/fight-promoter': ['src/components/fight-promoter/FightPromoterBoard.tsx', 'src/lib/fightPromoter.ts'],
+    '/fight-gym': ['src/components/fight-gym/FightGymBoard.tsx', 'src/lib/fightGym.ts'],
+    '/hall-of-champions': ['src/lib/hallOfChampions.ts'],
+    '/idle-arena': ['src/lib/idleArena.ts'],
+  };
+  /* A save key in src that is deliberately NOT a card, and why. */
+  const EXCUSED = {
+    'dukb-face-off-v1': 'Face Off is a daily quiz; its save is a match record, not a run to go back to',
+    'dukb-contract-chaos-v1': 'Contract Chaos plays its five seasons in one sitting; its save is a play record (played, best, total, the daily), not a run to go back to',
+  };
+  const SAVE_CONST = /\bconst\s+[A-Z_]*SAVE_KEY\s*=\s*(['"])([^'"]+)\1/g;
+  const code = rel => stripComments(read(rel));
+
+  /* a: live games, one card each */
+  const paths = CONTINUE_SAVES.map(e => e.path);
+  const keys = CONTINUE_SAVES.map(e => e.saveKey);
+  if (CONTINUE_SAVES.length < 15) fail(7, `the list holds only ${CONTINUE_SAVES.length} games, so this measured almost nothing`);
+  for (const p of paths) if (!gameByPath.has(p)) fail(7, `${p} is on the Continue list and is not a live registry game`);
+  if (new Set(paths).size !== paths.length) fail(7, 'a game is on the Continue list twice');
+  if (new Set(keys).size !== keys.length) fail(7, 'two Continue entries share a save key');
+
+  /* b: each key is the one its game declares */
+  for (const e of CONTINUE_SAVES) {
+    const files = WHERE[e.path];
+    if (!files) { fail(7, `${e.path} is on the list and this harness does not know where its save is declared`); continue; }
+    const declared = [...code(files[0]).matchAll(SAVE_CONST)].map(m => m[2]);
+    if (declared.length === 0) fail(7, `${files[0]} declares no SAVE_KEY, so ${e.path} was not compared`);
+    else if (!declared.includes(e.saveKey)) fail(7, `${e.path} looks for ${JSON.stringify(e.saveKey)} and ${files[0]} saves under ${JSON.stringify(declared)}`);
+  }
+
+  /* c: every save key in src is a card or excused by name */
+  const srcFiles = [];
+  const walkDir = dir => {
+    for (const d of fs.readdirSync(path.join(ROOT, dir), { withFileTypes: true })) {
+      const rel = `${dir}/${d.name}`;
+      if (d.isDirectory()) { if (d.name !== 'test' && d.name !== '__tests__') walkDir(rel); }
+      else if (/\.(ts|tsx)$/.test(d.name) && !/\.test\.tsx?$/.test(d.name)) srcFiles.push(rel);
+    }
+  };
+  walkDir('src');
+  const found = new Map();
+  for (const rel of srcFiles) {
+    const txt = read(rel);
+    if (!txt.includes('SAVE_KEY')) continue;
+    for (const m of stripComments(txt).matchAll(SAVE_CONST)) found.set(m[2], rel);
+  }
+  if (found.size < 15) fail(7, `only ${found.size} save keys found in src, so the sweep read almost nothing`);
+  for (const [key, rel] of found) {
+    if (!keys.includes(key) && !(key in EXCUSED)) fail(7, `${rel} saves under ${JSON.stringify(key)} and that game has no Continue card and no excuse here`);
+  }
+  for (const key of keys) if (!found.has(key)) fail(7, `the Continue list looks for ${JSON.stringify(key)} and no file in src declares it`);
+
+  /* d: every field a card reads is one the game's own code declares */
+  let fieldsChecked = 0;
+  for (const e of CONTINUE_SAVES) {
+    const files = WHERE[e.path];
+    if (!files) continue;
+    const src = files.map(code).join('\n');
+    const at = [e.name, e.count && e.count.at, e.ended && e.ended.at].filter(Boolean);
+    for (const fieldPath of at) {
+      fieldPath.forEach((seg, i) => {
+        if (/^\d+$/.test(seg)) return;
+        fieldsChecked += 1;
+        /* a one or two letter wrapper is what the board hands JSON.stringify */
+        if (i === 0 && seg.length <= 2) {
+          if (!new RegExp(`JSON\\.stringify\\(\\{\\s*${seg}\\b`).test(code(files[0]))) fail(7, `${e.path} reads the save through ${JSON.stringify(seg)}, and ${files[0]} does not write a save wrapped in it`);
+          return;
+        }
+        if (!new RegExp(`\\b${seg}\\??\\s*:`).test(src)) fail(7, `${e.path} reads ${JSON.stringify(fieldPath.join('.'))} and ${JSON.stringify(seg)} is not a property ${files.join(' or ')} declares`);
+      });
+    }
+  }
+
+  /* e: saves the engines built themselves read back as their own values */
+  const engine = front.engineSaves();
+  for (const [p, { raw, want }] of Object.entries(engine)) {
+    const e = CONTINUE_SAVES.find(x => x.path === p);
+    if (!e) { fail(7, `${p} has an engine save here and no Continue entry`); continue; }
+    const line = describeSave(e, raw);
+    if (!line || !want.test(line)) fail(7, `a save ${p}'s own engine built reads ${JSON.stringify(line)}, and its values say ${want}`);
+  }
+
+  /* and hand built saves in each game's shape, for the ones with no cheap engine start */
+  const SAMPLES = {
+    '/soccer-career': [[{ currentClub: 'Sample Town', age: 23, retired: false }, 'Sample Town, age 23'], [{ currentClub: 'Sample Town', age: 36, retired: true }, 'Sample Town, retired']],
+    '/club-manager': [[{ clubName: 'Sample FC', season: 3, sacked: false }, 'Sample FC, season 3'], [{ clubName: 'Sample FC', season: 3, sacked: true }, 'Sample FC, sacked']],
+    '/rebuild': [[{ v: 1, seats: [{ kind: 'human', club: 'Sample United' }] }, 'Sample United']],
+    '/nfl-my-career': [[{ c: { team: 'ABC', year: 2029, retired: false }, phase: 'hub' }, 'ABC, 2029 season']],
+    '/nba-my-career': [[{ c: { team: 'ABC', year: 2030, retired: true }, phase: 'retired' }, 'ABC, retired']],
+    '/mlb-my-career': [[{ c: { team: 'ABC', year: 2031 }, phase: 'hub' }, 'ABC, 2031 season']],
+    '/nhl-my-career': [[{ c: { team: 'ABC', year: 2032 }, phase: 'hub' }, 'ABC, 2032 season']],
+    '/nba-front-office': [[{ league: { season: 2027 }, myTeam: 'ABC', fired: false }, 'ABC, 2027 season']],
+    '/mlb-front-office': [[{ league: { season: 2028 }, myTeam: 'ABC', fired: true }, 'ABC, fired']],
+    '/nhl-front-office': [[{ league: { season: 2029 }, myTeam: 'ABC' }, 'ABC, 2029 season']],
+    '/stadium-tycoon': [[{ clubName: 'Sample Rovers', matchNo: 1 }, 'Sample Rovers, 1 match played']],
+  };
+  for (const [p, cases] of Object.entries(SAMPLES)) {
+    const e = CONTINUE_SAVES.find(x => x.path === p);
+    for (const [obj, want] of cases) {
+      const line = e ? describeSave(e, JSON.stringify(obj)) : null;
+      if (line !== want) fail(7, `${p} reads ${JSON.stringify(obj)} as ${JSON.stringify(line)}, expected ${JSON.stringify(want)}`);
+    }
+  }
+
+  /* f: a hostile save never throws and never prints much */
+  const plant = (fieldPath, value) => {
+    const root = /^\d+$/.test(fieldPath[0]) ? [] : {};
+    let cur = root;
+    fieldPath.forEach((seg, i) => {
+      if (i === fieldPath.length - 1) { cur[seg] = value; return; }
+      const next = /^\d+$/.test(fieldPath[i + 1]) ? [] : {};
+      cur[seg] = next; cur = next;
+    });
+    return root;
+  };
+  let hostileRuns = 0;
+  for (const e of CONTINUE_SAVES) {
+    const raws = ['not json{', '[]', 'null', '42', '"text"', '{}', '{"__proto__":{"clubName":"Evil","season":3}}'];
+    if (e.name) {
+      raws.push(JSON.stringify(plant(e.name, 'x'.repeat(5000))));
+      raws.push(JSON.stringify(plant(e.name, 12345)));
+      raws.push(JSON.stringify(plant(e.name, 'A\u0000B\n\tC')));
+    }
+    if (e.count) for (const bad of [-1, 1.5, 1e9, '12', null, { n: 3 }]) raws.push(JSON.stringify(plant(e.count.at, bad)));
+    if (e.ended) raws.push(JSON.stringify(plant(e.ended.at, 'true')));
+    for (const raw of raws) {
+      hostileRuns += 1;
+      let line;
+      try { line = describeSave(e, raw); } catch (err) { fail(7, `${e.path} throws on ${raw.slice(0, 40)}: ${err.message}`); continue; }
+      if (line === null) continue;
+      if (typeof line !== 'string') { fail(7, `${e.path} returned ${typeof line} for ${raw.slice(0, 40)}`); continue; }
+      if (line.length > SAVE_NAME_MAX + 30) fail(7, `${e.path} prints ${line.length} characters for ${raw.slice(0, 40)}...`);
+      if (/[\u0000-\u001f]/.test(line)) fail(7, `${e.path} prints a control character`);
+      if (/Evil|NaN|undefined|null|-1|1\.5|1000000000|\[object/.test(line)) fail(7, `${e.path} prints ${JSON.stringify(line)} for ${raw.slice(0, 40)}`);
+      if (e.ended && raw.includes('"true"') && line.includes(e.ended.say)) fail(7, `${e.path} calls a save ${e.ended.say} on the string "true"`);
+    }
+  }
+
+  /* g: the rendered row */
+  const withWindow = fn => {
+    const had = 'window' in globalThis;
+    const old = globalThis.window;
+    globalThis.window = { localStorage: globalThis.localStorage };
+    try { return fn(); } finally { if (had) globalThis.window = old; else delete globalThis.window; }
+  };
+  const cards = html => [...html.matchAll(/<a ([^>]*)>([\s\S]*?)<\/a>/g)]
+    .filter(m => /\bdata-continue-card="/.test(m[1]))
+    .map(m => ({ href: (/\bhref="([^"]+)"/.exec(m[1]) || [])[1] || '', inner: decode(m[2].replace(/<[^>]+>/g, ' ')).replace(/\s+/g, ' ').trim() }));
+  store.clear();
+  reads.length = 0;
+  const cold = withWindow(() => front.renderContinue());
+  if (cold !== '') fail(7, `with no save in the browser the row renders ${cold.length} characters instead of nothing`);
+  if (savedGames(globalThis.localStorage).length !== 0) fail(7, 'savedGames finds a save in an empty browser');
+  if (reads.some(k => !keys.includes(k))) fail(7, `the row asks storage for ${reads.filter(k => !keys.includes(k)).join(', ')}, which is not a save key`);
+  for (const e of CONTINUE_SAVES) {
+    store.clear();
+    store.set(e.saveKey, '{}');
+    const got = cards(withWindow(() => front.renderContinue()));
+    const g = gameByPath.get(e.path);
+    if (got.length !== 1 || got[0].href !== e.path) fail(7, `a save under ${JSON.stringify(e.saveKey)} renders ${JSON.stringify(got.map(c => c.href))}, not one card for ${e.path}`);
+    else if (g && !(got[0].inner.includes(g.label) && got[0].inner.includes(SAVED_FALLBACK))) fail(7, `the ${e.path} card reads ${JSON.stringify(got[0].inner)}`);
+  }
+  /* Action logs contain no saved club name or round; replay belongs to the game. */
+  const aussie = CONTINUE_SAVES.find(entry => entry.path === '/aussie-rules-manager');
+  const aussieSaves = front.aussieResumeSaves();
+  if (JSON.stringify(aussieSaves.map(value => value.state.phase)) !== JSON.stringify(['prepare', 'break', 'complete'])) fail(7, 'the actual Aussie fixtures did not reach initial, quarter break and completed states');
+  for (const { raw, state } of aussieSaves) {
+    const restored = front.restoreAussie(raw);
+    if (!restored || JSON.stringify(restored.state) !== JSON.stringify(state)) fail(7, 'the serialized Aussie action log does not resume its actual engine state');
+    const shape = JSON.parse(raw);
+    if (JSON.stringify(Object.keys(shape).sort()) !== JSON.stringify(['actions', 'clubId', 'seed', 'version'])) fail(7, 'the Aussie fixture is not the strict saved action-log shape');
+    if (!aussie || describeSave(aussie, raw) !== null) fail(7, 'Aussie Continue must not invent a display name or round from the action log');
+    store.clear(); store.set(front.AUSSIE_SAVE_KEY, raw);
+    const got = cards(withWindow(() => front.renderContinue()));
+    const game = gameByPath.get('/aussie-rules-manager');
+    const expected = `${game.emoji} ${game.label} ${SAVED_FALLBACK}`;
+    if (got.length !== 1 || got[0].href !== '/aussie-rules-manager' || got[0].inner !== expected) fail(7, `a real ${state.phase} Aussie save must render exactly its generic saved card, got ${JSON.stringify(got)}`);
+    if (store.get(front.AUSSIE_SAVE_KEY) !== raw) fail(7, 'Continue changed the serialized Aussie save bytes');
+  }
+  for (const unrelated of [null, 'aussie-rules-manager-save-v2']) {
+    store.clear(); if (unrelated) store.set(unrelated, aussieSaves[1].raw);
+    if (savedGames(globalThis.localStorage).length !== 0 || cards(withWindow(() => front.renderContinue())).length !== 0) fail(7, 'an absent Aussie key or another save version must not create a Continue card');
+  }
+  store.clear();
+  for (const e of CONTINUE_SAVES) store.set(e.saveKey, '{}');
+  const all = cards(withWindow(() => front.renderContinue())).map(c => c.href);
+  store.clear();
+  if (JSON.stringify(all) !== JSON.stringify(paths)) fail(7, `with every save planted the row shows ${all.length} cards, not the ${paths.length} on the list in order`);
+  if (!failedSections.has(7)) {
+    console.log(`   ${CONTINUE_SAVES.length} games, every key the game's own, ${found.size} save keys in src all accounted for (${Object.keys(EXCUSED).length} excused), ${fieldsChecked} fields declared by the games`);
+    console.log(`   ${Object.keys(engine).length} engine built saves and ${Object.values(SAMPLES).flat().length} shaped saves read right, ${hostileRuns} hostile saves survived, empty with none, one card per save`);
+    console.log('   three real Aussie action logs resume exact initial/break/completed states, generic card only, bytes held and no absent/wrong-key card');
+  }
+}
+
+/* ── 8: the favourite sport ───────────────────────────────────────────── */
+console.log('8) the favourite sport moves its own section first and nothing else');
+{
+  const { VISIBLE_CATEGORIES, favouriteFirst, readFavouriteSport, FAVOURITE_SPORT_KEY } = front;
+  const titles = VISIBLE_CATEGORIES.map(c => c.title);
+  const sports = VISIBLE_CATEGORIES.map(c => CATEGORY_SPORT[c.title]);
+  if (JSON.stringify(favouriteFirst(VISIBLE_CATEGORIES, null).map(c => c.title)) !== JSON.stringify(titles)) fail(8, 'with no pick the sections are not in registry order');
+  for (const [i, s] of sports.entries()) {
+    const got = favouriteFirst(VISIBLE_CATEGORIES, s).map(c => c.title);
+    const want = [titles[i], ...titles.filter((_, j) => j !== i)];
+    if (JSON.stringify(got) !== JSON.stringify(want)) fail(8, `picking ${s} orders the sections ${JSON.stringify(got.slice(0, 3))}..., expected ${JSON.stringify(want.slice(0, 3))}...`);
+  }
+  const reader = v => ({ getItem: k => (k === FAVOURITE_SPORT_KEY ? v : null) });
+  if (readFavouriteSport(reader(sports[3])) !== sports[3]) fail(8, `a stored ${JSON.stringify(sports[3])} does not read back`);
+  for (const bad of ['banana', '', ' soccer', 'Soccer', '__proto__', 'toString', 'constructor', '{"s":1}']) {
+    if (readFavouriteSport(reader(bad)) !== null) fail(8, `a stored ${JSON.stringify(bad)} reads as a sport`);
+  }
+  if (readFavouriteSport({ getItem: () => { throw new Error('blocked'); } }) !== null) fail(8, 'blocked storage does not read as no pick');
+  if (readFavouriteSport(null) !== null) fail(8, 'no storage does not read as no pick');
+  const html = front.renderFav(sports, 'hockey');
+  const buttons = [...html.matchAll(/<button ([^>]*)>/g)].map(m => m[1]);
+  const pressed = buttons.filter(a => /aria-pressed="true"/.test(a));
+  if (buttons.length !== sports.length) fail(8, `${buttons.length} chips for ${sports.length} sports`);
+  if (buttons.some(a => !/type="button"/.test(a))) fail(8, 'a chip is not a plain button');
+  if (pressed.length !== 1 || !/data-fav-sport="hockey"/.test(pressed[0])) fail(8, `with hockey picked ${pressed.length} chip(s) read pressed`);
+  if (/aria-pressed="true"/.test(front.renderFav(sports, null))) fail(8, 'a chip reads pressed with no pick');
+  if (!failedSections.has(8)) console.log(`   ${sports.length} sports, each moves only its own section first, 8 bad stored values read as no pick, one pressed chip`);
 }
 
 /* ── the verdict ──────────────────────────────────────────────────────── */

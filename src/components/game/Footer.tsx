@@ -34,13 +34,14 @@ export function Footer() {
           has never indexed. The list is read from sportHubNav.ts (Round 672:
           the short list, so every page stops downloading the hubs' prose),
           which simHubs holds equal to sportHub.ts; simInternalLinks holds
-          every hub to the same floor. */}
+          every hub to the same floor. Round 654: the words are each hub's
+          navLabel, so the NFL hub is NFL here rather than Football. */}
       <nav aria-label="Sports" className="flex flex-wrap items-center justify-center gap-x-3 gap-y-2 px-4">
         {HUB_NAV.map((hub, i) => (
           <span key={hub.route} className="inline-flex items-center gap-x-3">
             {i > 0 && <span aria-hidden="true">·</span>}
             <Link to={hub.route} className="underline hover:text-foreground transition-colors">
-              {hub.h1.replace(/ Games( Hub)?$/, '')}
+              {hub.navLabel}
             </Link>
           </span>
         ))}

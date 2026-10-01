@@ -14,8 +14,8 @@
  * So the footer and the home page read this short list and the hub page
  * alone imports the copy. It is a second copy of three fields on purpose,
  * and the pair is guarded: scripts/simHubs.mjs fails unless this list names
- * the same hubs, in the same order, with the same h1 and the same category
- * titles as SPORT_HUBS. A new hub goes in both files.
+ * the same hubs, in the same order, with the same h1, the same category
+ * titles and the same navLabel as SPORT_HUBS. A new hub goes in both files.
  */
 import type { CategoryTitle } from '@/data/gameRegistry';
 
@@ -23,13 +23,15 @@ export interface HubNav {
   route: string;
   h1: string;
   titles: CategoryTitle[];
+  /** Round 654: the footer's short word for the hub, see SportHub.navLabel */
+  navLabel: string;
 }
 
 export const HUB_NAV: HubNav[] = [
-  { route: '/soccer', h1: 'Soccer Games', titles: ['Soccer'] },
-  { route: '/pro-basketball', h1: 'Basketball Games', titles: ['Pro Basketball'] },
-  { route: '/hockey', h1: 'Hockey Games', titles: ['Hockey'] },
-  { route: '/pro-football', h1: 'Football Games', titles: ['Pro Football'] },
-  { route: '/baseball', h1: 'Baseball Games', titles: ['Baseball'] },
-  { route: '/college', h1: 'College Games Hub', titles: ['College Sports'] },
+  { route: '/soccer', h1: 'Soccer Games', titles: ['Soccer'], navLabel: 'Soccer' },
+  { route: '/pro-basketball', h1: 'NBA Basketball Games', titles: ['Pro Basketball'], navLabel: 'NBA' },
+  { route: '/hockey', h1: 'NHL Hockey Games', titles: ['Hockey'], navLabel: 'NHL' },
+  { route: '/pro-football', h1: 'NFL Football Games', titles: ['Pro Football'], navLabel: 'NFL' },
+  { route: '/baseball', h1: 'MLB Baseball Games', titles: ['Baseball'], navLabel: 'MLB' },
+  { route: '/college', h1: 'College Football and Basketball Games', titles: ['College Sports'], navLabel: 'College' },
 ];

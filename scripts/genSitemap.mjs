@@ -84,6 +84,10 @@ const STATIC_PAGES = [
   { p: '/mlb-postseason-format-history', freq: 'monthly', pri: '0.6' },
   /* Round 534: the fifth reference explainer. */
   { p: '/nhl-playoff-format-history', freq: 'monthly', pri: '0.6' },
+  /* Round 656: the 2026 World Cup results, read from src/data/wc2026Results.ts.
+     Non game, so named here like the explainers, which is also what puts it in
+     front of the prerenderer. */
+  { p: '/world-cup-2026-results', freq: 'monthly', pri: '0.6' },
   /* Round 354: the NBA grid archive. A non-game page has to be named here to
      be submitted at all, and being submitted is also what puts it in front of
      the prerenderer, which reads its route list from this file's output. */

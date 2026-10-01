@@ -55,6 +55,13 @@ export interface NhlGmPlayer {
   pot: number;
 }
 
+/** Selected ratings for this simulation, not full NHL lines or ice time. */
+export interface NhlContributors {
+  forwards: string[];
+  defense: string[];
+  goalie: string | null;
+}
+
 /* Round 631: CutLedger is the optional deadCap and releasedThisSeason pair,
    so every league saved before this round keeps loading and reads as empty. */
 export interface NhlGmTeam extends CutLedger {
@@ -64,6 +71,7 @@ export interface NhlGmTeam extends CutLedger {
   losses: number;   // regulation losses
   otLosses: number; // worth a point
   picks: number[];
+  contributors?: NhlContributors;
 }
 
 export interface NhlLeague {
@@ -173,12 +181,85 @@ export function nhlCapRoom(t: NhlGmTeam, cap: number): number {
   return Math.round((cap - nhlCapUsed(t)) * 10) / 10;
 }
 
+function contributorsShape(value: unknown): value is NhlContributors {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return false;
+  const record = value as Record<string, unknown>;
+  if (Object.keys(record).length !== 3 || !['forwards', 'defense', 'goalie'].every(key => Object.prototype.hasOwnProperty.call(record, key))) return false;
+  return Array.isArray(record.forwards) && record.forwards.every(id => typeof id === 'string')
+    && Array.isArray(record.defense) && record.defense.every(id => typeof id === 'string')
+    && (record.goalie === null || typeof record.goalie === 'string');
+}
+
+function sameContributors(a: NhlContributors, b: NhlContributors): boolean {
+  return a.goalie === b.goalie && a.forwards.length === b.forwards.length && a.defense.length === b.defense.length
+    && a.forwards.every(id => b.forwards.includes(id)) && b.forwards.every(id => a.forwards.includes(id))
+    && a.defense.every(id => b.defense.includes(id)) && b.defense.every(id => a.defense.includes(id));
+}
+
+/** Keep valid preferences, then fill unavailable slots by the original rating order. */
+export function nhlContributors(t: NhlGmTeam): NhlContributors {
+  const healthy = t.players.filter(p => p.out === 0);
+  const preference = contributorsShape(t.contributors) ? t.contributors : null;
+  const select = (ids: string[], players: NhlGmPlayer[], count: number): string[] => {
+    const selected: string[] = [];
+    const available = Math.min(count, players.length);
+    for (const id of ids) {
+      if (selected.length >= available) break;
+      if (!selected.includes(id) && players.some(p => p.id === id)) selected.push(id);
+    }
+    for (const p of [...players].sort((a, b) => b.ovr - a.ovr)) {
+      if (selected.length >= available) break;
+      if (!selected.includes(p.id)) selected.push(p.id);
+    }
+    return selected;
+  };
+  return {
+    forwards: select(preference?.forwards ?? [], healthy.filter(p => p.pos === 'C' || p.pos === 'W'), 6),
+    defense: select(preference?.defense ?? [], healthy.filter(p => p.pos === 'D'), 4),
+    goalie: select(preference?.goalie ? [preference.goalie] : [], healthy.filter(p => p.pos === 'G'), 1)[0] ?? null,
+  };
+}
+
+/** Invalid or unchanged choices leave this team and its saved state untouched. */
+export function nhlSetContributors(t: NhlGmTeam, value: unknown): boolean {
+  if (!contributorsShape(value)) return false;
+  const healthy = t.players.filter(p => p.out === 0);
+  const ids = [...value.forwards, ...value.defense, ...(value.goalie === null ? [] : [value.goalie])];
+  if (new Set(ids).size !== ids.length) return false;
+  if (value.forwards.length !== Math.min(6, healthy.filter(p => p.pos === 'C' || p.pos === 'W').length)
+    || value.defense.length !== Math.min(4, healthy.filter(p => p.pos === 'D').length)
+    || (value.goalie === null ? 0 : 1) !== Math.min(1, healthy.filter(p => p.pos === 'G').length)) return false;
+  if (!value.forwards.every(id => healthy.some(p => p.id === id && (p.pos === 'C' || p.pos === 'W')))
+    || !value.defense.every(id => healthy.some(p => p.id === id && p.pos === 'D'))
+    || (value.goalie !== null && !healthy.some(p => p.id === value.goalie && p.pos === 'G'))) return false;
+  if (sameContributors(value, nhlContributors(t))) return false;
+  t.contributors = { forwards: [...value.forwards], defense: [...value.defense], goalie: value.goalie };
+  return true;
+}
+
+export function nhlResetContributors(t: NhlGmTeam): boolean {
+  if (!Object.prototype.hasOwnProperty.call(t, 'contributors')) return false;
+  delete t.contributors;
+  return true;
+}
+
+/** Legacy and automatic teams never acquire an override through repair. */
+export function repairNhlContributors(t: NhlGmTeam): boolean {
+  if (!Object.prototype.hasOwnProperty.call(t, 'contributors')) return false;
+  if (!contributorsShape(t.contributors)) return nhlResetContributors(t);
+  const effective = nhlContributors(t);
+  if (sameContributors(t.contributors, effective)) return false;
+  t.contributors = effective;
+  return true;
+}
+
 /** Strength: top six forwards 50%, top four D 30%, best goalie 20%. */
 export function nhlStrength(t: NhlGmTeam): number {
   const healthy = t.players.filter(p => p.out === 0);
-  const fwd = healthy.filter(p => p.pos === 'C' || p.pos === 'W').sort((a, b) => b.ovr - a.ovr).slice(0, 6);
-  const d = healthy.filter(p => p.pos === 'D').sort((a, b) => b.ovr - a.ovr).slice(0, 4);
-  const g = healthy.filter(p => p.pos === 'G').sort((a, b) => b.ovr - a.ovr).slice(0, 1);
+  const selection = t.contributors === undefined ? null : nhlContributors(t);
+  const fwd = selection ? selection.forwards.map(id => healthy.find(p => p.id === id)!) : healthy.filter(p => p.pos === 'C' || p.pos === 'W').sort((a, b) => b.ovr - a.ovr).slice(0, 6);
+  const d = selection ? selection.defense.map(id => healthy.find(p => p.id === id)!) : healthy.filter(p => p.pos === 'D').sort((a, b) => b.ovr - a.ovr).slice(0, 4);
+  const g = selection ? selection.goalie === null ? [] : [healthy.find(p => p.id === selection.goalie)!] : healthy.filter(p => p.pos === 'G').sort((a, b) => b.ovr - a.ovr).slice(0, 1);
   const avg = (xs: NhlGmPlayer[], fallback: number) =>
     xs.length ? xs.reduce((s, p) => s + p.ovr, 0) / xs.length : fallback;
   return avg(fwd, 62) * 0.5 + avg(d, 62) * 0.3 + avg(g, 62) * 0.2;
@@ -208,6 +289,7 @@ export function simNhlRound(league: NhlLeague, myTeam: string, rng: () => number
         if (t.abbr === myTeam) notes.push(`🚑 ${p.name} is out ${p.out} round${p.out === 1 ? '' : 's'}.`);
       }
     }
+    repairNhlContributors(t);
   }
   const loseGame = (loser: NhlGmTeam, isMe: boolean) => {
     if (rng() < 0.25) { loser.otLosses += 1; if (isMe) myOtl += 1; }
@@ -302,7 +384,9 @@ export const NHL_ROSTER_MIN = 8;
 export const NHL_ROSTER_MAX = 15;
 
 export function nhlRelease(t: NhlGmTeam, fas: NhlGmPlayer[], id: string): boolean {
-  return cutPlayer(t, fas, id, NHL_ROSTER_MIN);
+  const released = cutPlayer(t, fas, id, NHL_ROSTER_MIN);
+  if (released) repairNhlContributors(t);
+  return released;
 }
 
 export function nhlSign(t: NhlGmTeam, fas: NhlGmPlayer[], id: string, cap: number): boolean {
@@ -314,6 +398,7 @@ export function nhlSign(t: NhlGmTeam, fas: NhlGmPlayer[], id: string, cap: numbe
   if (nhlCapRoom(t, cap) < p.salary) return false;
   fas.splice(i, 1);
   t.players.push(p);
+  repairNhlContributors(t);
   return true;
 }
 
@@ -342,6 +427,7 @@ export function nhlTrade(
   my.players.push(theirs);
   their.players.push(mine);
   if (sweeten && my.picks.length) { their.picks.push(my.picks.pop()!); }
+  repairNhlContributors(my); repairNhlContributors(their);
   return 'accepted';
 }
 
@@ -366,6 +452,7 @@ export function nhlExecuteTalksTrade(
   my.players.push(theirs);
   their.players.push(mine);
   if (addPick) { their.picks.push(my.picks.pop()!); }
+  repairNhlContributors(my); repairNhlContributors(their);
   return 'done';
 }
 
@@ -420,6 +507,7 @@ export function nhlOffseason(league: NhlLeague, rng: () => number): string[] {
     t.wins = 0; t.losses = 0; t.otLosses = 0; t.picks = [1, 2];
     rollDeadCap(t);
     replenishNhlRoster(t, rng, taken);
+    repairNhlContributors(t);
   }
   league.freeAgents = league.freeAgents.sort((a, b) => b.ovr - a.ovr).slice(0, 30);
   for (const fa of league.freeAgents) { fa.age += 1; if (fa.age >= 32) fa.ovr = Math.max(63, fa.ovr - 1); }

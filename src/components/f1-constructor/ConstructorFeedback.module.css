@@ -1,0 +1,35 @@
+.feedback {
+  min-height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.reply {
+  animation: reply 420ms ease-out 1;
+}
+
+.won {
+  animation: won 420ms ease-out 1;
+}
+
+.lost {
+  animation: lost 420ms ease-out 1;
+}
+
+@keyframes reply {
+  from { opacity: 0.55; }
+  to { opacity: 1; }
+}
+
+@keyframes won {
+  35% { box-shadow: 0 0 0 3px rgb(52 211 153 / 35%); }
+}
+
+@keyframes lost {
+  35% { box-shadow: 0 0 0 3px rgb(248 113 113 / 25%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reply, .won, .lost { animation: none; }
+}

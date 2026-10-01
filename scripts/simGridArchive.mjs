@@ -1,47 +1,126 @@
 /**
- * Round 354 harness, extended in Round 358: the archive says only what the
- * game would agree with, for all three franchise grids.
+ * Round 354 harness, extended in Rounds 358, 369, 370 and 653: the archive says
+ * only what the game would agree with, and what the page says about the
+ * archive is true.
  *
  * The page publishes past boards and the players who solve them, so the
  * failure that matters is not a crash, it is a page that is CONFIDENTLY WRONG:
- * a board that was never served on that date, or a player listed as an answer
- * that the game itself would reject. Both would be invisible to a build and
- * obvious to a reader who knows the sport.
+ * a board that was never served on that date, a player the game would reject,
+ * a count that is off, a name printed twice, or copy that describes an archive
+ * the file does not hold. All of those are invisible to a build and obvious to
+ * a reader who knows the sport.
  *
- * What this holds, per sport, checked against each game's own code and live
- * data rather than against the file that produced the page:
- *   1. Every archived board is the board that date's seed really produces,
- *      recomputed here with that game's buildGridPuzzle.
- *   2. Every listed answer really satisfies its crossing, recomputed with that
- *      game's playerMatchesCell against its live player data, and every
- *      published count matches the real number of valid players.
- *   3. The archive carries no clock: no board is dated later than the day the
- *      file was generated for, because that day's board is still being played.
- *   4. The page is real content, not a stub: every cell clears a floor.
+ * What this holds, checked against each game's own code and live data rather
+ * than against the file that produced the page:
+ *    1. Every archived board is the board that date's seed really produces.
+ *    2. Every listed answer is accepted by THE GAME'S OWN GUESS PATH for its
+ *       crossing (normalizeName on the typed name, byNormalizedName, then
+ *       pickNamesake against the cell, exactly as the four grid pages do it),
+ *       and every published count is the number of DISTINCT PLAYERS, by the
+ *       source's own id, that satisfy it. Round 653: ncaa_player_stats holds
+ *       1,600 players twice, and a count of rows ran high by exactly those.
+ *       Round 653 fix: 1,697 college names belong to two or more players, the
+ *       game's map kept one of them, and 227 listed names were names a player
+ *       typing them took a strike for (Danny Manning at Kansas). Checking a
+ *       name against the set of players who fit could not see that; resolving
+ *       it the way the game does can.
+ *    3. No board is dated after the day the file was generated for.
+ *    4. Every cell clears a floor, so the page is content and not a stub.
+ *    5. A recorded school pool still matches the live one.
+ *    6. Every cell reaches the saved page with its label and its count.
+ *    7. Round 653: the newest board is no more than 3 days older than the day
+ *       the file says it was generated for. Measured against the file's own
+ *       claim and never the machine clock, so it cannot start failing because
+ *       time passed; keeping the claim current is the release step
+ *       (npm run archive:grids, docs/SHIP-PIPELINE.md). It prints how old the
+ *       newest board is today, as information only.
+ *    8. Round 653: no cell lists the same player twice (Bradley Beal twice at
+ *       Florida), nor two namesakes that read as one man twice.
+ *    9. Round 653: no listed name is malformed ("_ Eldredge" went out as a
+ *       Hofstra guard). The rule is written HERE, not imported from
+ *       scripts/lib/gridArchiveRules.mjs: the generator decides what to print
+ *       with malformedName there, and a fence that imported the same function
+ *       stayed green when that function was broken to return null (measured:
+ *       the file then carried "_ Eldredge" again and this section said 0).
+ *   10. Round 653: the saved page's copy states the range and the board counts
+ *       the data really holds. It used to say "the last 14" of a file that had
+ *       stopped a month earlier. Every "from <Month D, YYYY>" on the page,
+ *       the subtitle's included, names the oldest board.
+ *   11. Round 653: no h2 on the saved page carries an ISO date, and every board
+ *       has its "grid answers for <Month D, YYYY>" heading.
+ *   12. Round 653 fix: the names a cell lists are the RAREST by career games
+ *       played, as the page and the file's note both promise: no fitting
+ *       printable player left off the list has fewer games than a listed one
+ *       (ties allowed, since the generator breaks them by name), and a list
+ *       shorter than the generator's cap (PER_CELL, 8) leaves nobody off.
+ *       Measured before this section existed: flipping the generator's sort
+ *       changed the names in all 1,584 cells and every section stayed green.
  *
- * NEGATIVE CONTROL: ARCHIVE_CONTROL=badanswer swaps one published answer for a
- * player who does not satisfy that crossing (asserting it found a real player
- * to swap in) and section 2 must go red.
+ * Sections 6, 10 and 11 read the prerendered snapshot in public/, so they are
+ * only meaningful after npm run build:seo has baked the current data.
  *
- * Run: node scripts/simGridArchive.mjs   (needs the database)
+ * NEGATIVE CONTROLS, one per section it proves, each refusing to run if it
+ * cannot plant what it describes, and each green only when its own section
+ * goes red and no other section moves. They corrupt the data the page was
+ * built from (the file, the loaded pool, the snapshot), never the checks:
+ *   ARCHIVE_CONTROL=badanswer  a cell's last name swapped for a player who does not fit (2)
+ *   ARCHIVE_CONTROL=shadowed   the loaded index made to resolve one listed name to a
+ *                              namesake who does not fit, the pre fix last row wins map (2)
+ *   ARCHIVE_CONTROL=miscount   one cell's published count raised by one, in the file and
+ *                              in the saved page built from it (2)
+ *   ARCHIVE_CONTROL=dedupe     the pre Round 371 prerenderer's document wide cell dedupe (6)
+ *   ARCHIVE_CONTROL=stale      the file's generatedFor moved 4 days past its newest board (7)
+ *   ARCHIVE_CONTROL=repeat     a cell's last name replaced by its first (8)
+ *   ARCHIVE_CONTROL=malformed  a real valid player with a placeholder name listed (9)
+ *   ARCHIVE_CONTROL=copyrange  the saved copy's newest date moved back a day (10)
+ *   ARCHIVE_CONTROL=isoh2      one saved board heading written with its ISO date (11)
+ *   ARCHIVE_CONTROL=notrarest  a cell's first name swapped for the most played player
+ *                              who fits and is not listed (12)
+ *
+ * Run: node scripts/simGridArchive.mjs   (needs the database, reads only)
  */
 import { execSync } from 'node:child_process';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
+import { addDays, longDate } from './lib/gridArchiveRules.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.ARCHIVE_CONTROL || '';
-const KNOWN_CONTROLS = ['badanswer', 'dedupe'];
-if (CONTROL && !KNOWN_CONTROLS.includes(CONTROL)) {
-  console.error(`ARCHIVE_CONTROL=${CONTROL} is not a control this harness knows`);
+const CONTROLS = { badanswer: 2, shadowed: 2, miscount: 2, dedupe: 6, stale: 7, repeat: 8, malformed: 9, copyrange: 10, isoh2: 11, notrarest: 12 };
+if (CONTROL && !(CONTROL in CONTROLS)) {
+  console.error(`ARCHIVE_CONTROL=${CONTROL} is not a control this harness knows (${Object.keys(CONTROLS).join(', ')})`);
   process.exit(1);
 }
+const cannotRun = m => { console.error(`simGridArchive control (${CONTROL}) cannot run: ${m}`); process.exit(1); };
 
-let failures = 0;
-const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
+const failures = {};
+let section = 0;
+const fail = m => { failures[section] = (failures[section] || 0) + 1; console.error('  FAIL: ' + m); };
 const MIN_PER_CELL = 3;
+const FRESH_DAYS = 3;
+/* The most names a cell lists (PER_CELL in scripts/genGridArchive.mjs). A
+   shorter list means the cell had no more printable players to list. */
+const PER_CELL = 8;
+
+/* THIS HARNESS'S OWN NAME RULE, on purpose not the generator's malformedName.
+   A name is unprintable when it carries an underscore (the source's placeholder
+   for a missing first name), does not start with a letter, has fewer than two
+   letters, carries a digit anywhere but a trailing career span like
+   "(1994-2006)" (the MLB table's way of telling namesakes apart), or a double
+   space. Unicode letters count as letters: Éric and Šarūnas are names. */
+const unprintable = name => {
+  const n = String(name ?? '').trim();
+  if (!n) return 'is empty';
+  if (n.includes('_')) return 'carries an underscore';
+  const core = n.replace(/\s*\(\d{4}-\d{4}\)$/, '');
+  if (!/^\p{L}/u.test(core)) return 'does not start with a letter';
+  if ((core.match(/\p{L}/gu) ?? []).length < 2) return 'has fewer than two letters';
+  if (/\d/.test(core)) return 'carries a digit outside a career span';
+  if (/\s{2,}/.test(core)) return 'carries a double space';
+  return null;
+};
 
 const archive = JSON.parse(fs.readFileSync(path.join(ROOT, 'src', 'data', 'gridArchive.json'), 'utf8'));
 const SPORTS = [
@@ -67,66 +146,47 @@ fs.writeFileSync(ENTRY, [
   'globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };',
   importLines,
   `const dateLib = await import('${rel('src/lib/dateUtils.ts')}');`,
+  `const engine = await import('${rel('src/lib/gridEngine.ts')}');`,
+  `const search = await import('${rel('src/lib/playerSearch.ts')}');`,
   'export const libs = {',
   libLines,
   '};',
   'export const dateSeed = dateLib.dateSeed;',
+  /* The guess path of all four grid pages: normalizeName from playerSearch on
+     the typed name, byNormalizedName, then pickNamesake against the cell. */
+  'export const pickNamesake = engine.pickNamesake;',
+  'export const normalizeTyped = search.normalizeName;',
 ].join('\n'));
 execSync(`"${path.join(ROOT, 'node_modules', '.bin', 'esbuild')}" "${ENTRY}" --bundle --format=esm --platform=node --outfile="${BUNDLE}" --log-level=error`);
-const { libs, dateSeed } = await import(pathToFileURL(BUNDLE).href);
+const { libs, dateSeed, pickNamesake, normalizeTyped } = await import(pathToFileURL(BUNDLE).href);
 
-/* Load every sport's live pool up front, so an unreachable database is one
-   clear message rather than three half checks. */
+/* Load every sport's live pool up front, with the source's ids, so an
+   unreachable database is one clear message rather than several half checks.
+   ROUND 369: the whole pull is retried, because a pull is ten to forty pages
+   and one exhausting its per page retries is a transient, not a finding. */
 const pools = {};
 for (const s of SPORTS) {
-  /* ROUND 369: retry the whole pull, for the third time this lesson has come
-     up. The grid libs already retry each PAGE (Round 358), but a pull is ten to
-     forty pages, so the chance of one exhausting its retries is much higher
-     than for a single page, and this harness went red twice on a pool that
-     loaded fine seconds later. A fence that fails at random teaches people to
-     re-run it rather than read it, which is worse than not having it. Round 362
-     put the same retry in simLeaderboardCaps. */
   let d = null;
   for (let attempt = 0; attempt <= 2 && !d; attempt++) {
     if (attempt) await new Promise(r => setTimeout(r, 800 * attempt));
-    d = await libs[s.key].fetchData();
+    d = await libs[s.key].fetchData({ withIds: true });
   }
   if (!d) {
     console.log(`${s.key.toUpperCase()} GRID DATA UNREACHABLE. NOTHING WAS CHECKED.`);
     console.error('simGridArchive: the player data did not load, which is itself worth investigating');
     process.exit(1);
   }
+  const noId = d.players.filter(pl => pl.id === undefined || pl.id === null || pl.id === '').length;
+  if (noId) {
+    console.error(`simGridArchive: ${noId} ${s.key} players came back with no id, so no count can be checked. NOTHING WAS CHECKED.`);
+    process.exit(1);
+  }
   pools[s.key] = d;
 }
 
-/* The control corrupts the published data, not the checking code, so what it
-   proves is that a wrong page would be caught. */
-if (CONTROL === 'badanswer') {
-  let planted = false;
-  for (const s of SPORTS) {
-    const sport = archive.sports[s.key];
-    if (!sport || planted) continue;
-    for (const b of sport.boards) {
-      const real = rebuild(s.key, b.date);
-      for (const c of b.cells) {
-        const rowCat = real.rows.find(x => x.label === c.row);
-        const colCat = real.cols.find(x => x.label === c.col);
-        if (!rowCat || !colCat) continue;
-        const wrong = pools[s.key].players.find(pl => !libs[s.key].matches(pl, { row: rowCat, col: colCat }));
-        if (wrong) { c.answers[0] = wrong.name; planted = true; break; }
-      }
-      if (planted) break;
-    }
-  }
-  if (!planted) { console.error('control planted nothing: no invalid player could be found to swap in'); process.exit(1); }
-  console.log('   NEGATIVE CONTROL ON: one published answer replaced with a player who does not fit, section 2 must go red');
-}
-
 /* Rebuild a board exactly as it was published: seed alone for the franchise
-   grids, seed plus the RECORDED school pool for CBB. Using the recorded pool is
-   the point, not a shortcut: it is what makes an already published board
-   checkable at all once its inputs can move. Section 5 is what stops that
-   becoming a way to hide drift. */
+   grids, seed plus the RECORDED school pool for CBB. Section 5 is what stops
+   that becoming a way to hide drift. */
 function rebuild(sportKey, date) {
   const sport = SPORTS.find(x => x.key === sportKey);
   if (!sport.derivesPool) return libs[sportKey].build(dateSeed(date));
@@ -134,19 +194,146 @@ function rebuild(sportKey, date) {
   return libs[sportKey].build(dateSeed(date), recorded);
 }
 
+/* The cell as the game builds it, or null when the board does not carry it. */
+function realCell(sportKey, date, c) {
+  const real = rebuild(sportKey, date);
+  const rowCat = real?.rows.find(x => x.label === c.row);
+  const colCat = real?.cols.find(x => x.label === c.col);
+  return rowCat && colCat ? { row: rowCat, col: colCat } : null;
+}
+
+/* Every player who fits a cell, from the game's own data. */
+function validPlayers(sportKey, date, c) {
+  const cell = realCell(sportKey, date, c);
+  if (!cell) return null;
+  return pools[sportKey].players.filter(pl => libs[sportKey].matches(pl, cell));
+}
+
+/* What the game does with a typed name in a cell, and nothing else: the
+   player it would record when it accepts, null when it would refuse. */
+function gameAccepts(sportKey, name, cell) {
+  const lib = libs[sportKey];
+  const judged = pickNamesake(pools[sportKey].byNormalizedName.get(normalizeTyped(name)), pl => lib.matches(pl, cell));
+  return judged && lib.matches(judged, cell) ? judged : null;
+}
+
 const present = SPORTS.filter(s => archive.sports[s.key]);
+const allCells = () => present.flatMap(s => archive.sports[s.key].boards.flatMap(b => b.cells.map(c => ({ s, b, c }))));
+
+/* ---------- controls that corrupt the published data ----------
+   They corrupt the data, never the checking code, so what they prove is that
+   a wrong page would be caught. Each one refuses to run if it cannot plant
+   exactly the fault it names without also tripping another section. */
+if (CONTROL === 'badanswer') {
+  let planted = false;
+  for (const { s, b, c } of allCells()) {
+    const valid = validPlayers(s.key, b.date, c);
+    if (!valid) continue;
+    const validNames = new Set(valid.map(pl => pl.name));
+    /* The LAST listed name goes, not the first: the man dropped is the
+       busiest listed, so section 12 has no rarer man left off to object to,
+       and only section 2 can. */
+    const wrong = pools[s.key].players.find(pl => !validNames.has(pl.name) && !unprintable(pl.name) && !c.answers.includes(pl.name));
+    if (wrong) { c.answers[c.answers.length - 1] = wrong.name; planted = true; break; }
+  }
+  if (!planted) cannotRun('no invalid player could be found to swap in');
+  console.log('   NEGATIVE CONTROL ON: one published answer replaced with a player who does not fit, section 2 must go red');
+}
+if (CONTROL === 'shadowed') {
+  /* The fault this round fixed in the game, planted in the loaded index: the
+     typed name resolves to one man and he is not the one who fits. The pool's
+     players are untouched, so the count and the rarest list stay right and
+     only the lookup can object. */
+  let planted = null;
+  for (const { s, b, c } of allCells()) {
+    const cell = realCell(s.key, b.date, c);
+    if (!cell || !c.answers.length) continue;
+    const name = c.answers[0];
+    const key = normalizeTyped(name);
+    const before = pools[s.key].byNormalizedName.get(key);
+    if (!before || !gameAccepts(s.key, name, cell)) continue;
+    const wrong = pools[s.key].players.find(pl => !libs[s.key].matches(pl, cell));
+    if (!wrong) continue;
+    pools[s.key].byNormalizedName.set(key, [wrong]);
+    if (gameAccepts(s.key, name, cell)) cannotRun(`the ${s.key} index still accepts "${name}" after being pointed at ${wrong.name}`);
+    planted = `${s.key} ${b.date} ${c.row} x ${c.col}: "${name}" now resolves to ${wrong.name}, who does not fit`;
+    break;
+  }
+  if (!planted) cannotRun('no listed name could be pointed at a player who does not fit');
+  console.log(`   NEGATIVE CONTROL ON: ${planted}, section 2 must go red`);
+}
+/* miscount plants in the file here and in the saved page inside snapshotOf,
+   because the page was built from the file and section 6 compares the two. */
+const MISCOUNT = { sport: null, label: null, was: null, now: null };
+if (CONTROL === 'miscount') {
+  const hit = allCells()[0];
+  if (!hit) cannotRun('no cell to miscount');
+  MISCOUNT.sport = hit.s.key; MISCOUNT.label = `${hit.c.row} and ${hit.c.col}`; MISCOUNT.was = String(hit.c.total);
+  hit.c.total += 1; MISCOUNT.now = String(hit.c.total);
+  console.log(`   NEGATIVE CONTROL ON: ${hit.s.key} ${hit.b.date} ${hit.c.row} x ${hit.c.col} now claims ${hit.c.total} valid players, section 2 must go red`);
+}
+if (CONTROL === 'stale') {
+  const before = archive.generatedFor;
+  archive.generatedFor = addDays(before, FRESH_DAYS + 1);
+  if (archive.generatedFor === before) cannotRun('generatedFor did not move');
+  console.log(`   NEGATIVE CONTROL ON: the file now claims ${archive.generatedFor} while its newest boards stay where they were, section 7 must go red`);
+}
+if (CONTROL === 'repeat') {
+  /* The last name becomes a copy of the first: the man dropped is the busiest
+     listed, so section 12 has nobody rarer left off and only section 8 moves. */
+  const hit = allCells().find(({ c }) => c.answers.length >= 2 && c.answers[0] !== c.answers[c.answers.length - 1]);
+  if (!hit) cannotRun('no cell lists two different names');
+  hit.c.answers[hit.c.answers.length - 1] = hit.c.answers[0];
+  console.log(`   NEGATIVE CONTROL ON: ${hit.s.key} ${hit.b.date} ${hit.c.row} x ${hit.c.col} lists ${hit.c.answers[0]} twice, section 8 must go red`);
+}
+if (CONTROL === 'malformed') {
+  /* A REAL player the game accepts in that cell, so section 2 stays green and
+     only the name rule can object. Section 12 skips unprintable names, so the
+     swap does not move it either. */
+  let planted = null;
+  for (const { s, b, c } of allCells()) {
+    const cell = realCell(s.key, b.date, c);
+    const bad = (validPlayers(s.key, b.date, c) ?? []).find(pl => unprintable(pl.name) && !c.answers.includes(pl.name) && cell && gameAccepts(s.key, pl.name, cell));
+    if (bad) { c.answers[c.answers.length - 1] = bad.name; planted = `${s.key} ${b.date} ${c.row} x ${c.col} now lists "${bad.name}"`; break; }
+  }
+  if (!planted) cannotRun('no published cell has a valid player with a malformed name to list');
+  console.log(`   NEGATIVE CONTROL ON: ${planted}, section 9 must go red`);
+}
+if (CONTROL === 'notrarest') {
+  /* A real player who fits, is printable, is not listed, and has more games
+     than every listed man, so sections 2, 8 and 9 stay green and only the
+     rarest rule can object. */
+  let planted = null;
+  for (const { s, b, c } of allCells()) {
+    const cell = realCell(s.key, b.date, c);
+    const valid = validPlayers(s.key, b.date, c);
+    if (!cell || !valid || !c.answers.length) continue;
+    const listedGames = Math.max(...c.answers.map(n => Math.min(...valid.filter(pl => pl.name === n).map(pl => pl.games))));
+    const busy = valid.filter(pl => !unprintable(pl.name) && !c.answers.includes(pl.name) && pl.games > listedGames && gameAccepts(s.key, pl.name, cell))
+      .sort((a, z) => z.games - a.games)[0];
+    if (!busy) continue;
+    planted = `${s.key} ${b.date} ${c.row} x ${c.col}: "${c.answers[0]}" replaced by ${busy.name} (${busy.games} games, the listed men have at most ${listedGames})`;
+    c.answers[0] = busy.name;
+    break;
+  }
+  if (!planted) cannotRun('no cell has an unlisted fitting player with more games than its listed ones');
+  console.log(`   NEGATIVE CONTROL ON: ${planted}, section 12 must go red`);
+}
+
 if (present.length !== SPORTS.length) {
+  section = 1;
   fail(`the archive file carries ${present.length} sports, expected ${SPORTS.length}`);
 }
 
+section = 1;
 console.log('1) every archived board is the board that date really produced');
 for (const s of present) {
   const boards = archive.sports[s.key].boards;
   let bad = 0;
   for (const b of boards) {
     const real = rebuild(s.key, b.date);
-    const rowsOk = JSON.stringify(real.rows.map(x => x.label)) === JSON.stringify(b.rows);
-    const colsOk = JSON.stringify(real.cols.map(x => x.label)) === JSON.stringify(b.cols);
+    const rowsOk = real && JSON.stringify(real.rows.map(x => x.label)) === JSON.stringify(b.rows);
+    const colsOk = real && JSON.stringify(real.cols.map(x => x.label)) === JSON.stringify(b.cols);
     if (!rowsOk || !colsOk) {
       bad += 1;
       if (bad <= 3) fail(`${s.key} ${b.date}: the archived board is not what that date's seed produces`);
@@ -155,34 +342,49 @@ for (const s of present) {
   console.log(`   ${s.key}  ${boards.length - bad} of ${boards.length} boards reproduce exactly`);
 }
 
-console.log('2) every published answer is one the game would accept');
+section = 2;
+console.log('2) every published answer is accepted by the game\'s own guess path, and every count is of distinct players');
+const cellValid = new Map();
 for (const s of present) {
   const boards = archive.sports[s.key].boards;
-  let checked = 0, wrongName = 0, wrongCount = 0;
+  let checked = 0, wrongName = 0, refused = 0, wrongCount = 0, shared = 0;
+  const rows = pools[s.key].players.length;
+  const distinct = new Set(pools[s.key].players.map(pl => String(pl.id))).size;
   for (const b of boards) {
-    const real = rebuild(s.key, b.date);
     for (const c of b.cells) {
-      const rowCat = real.rows.find(x => x.label === c.row);
-      const colCat = real.cols.find(x => x.label === c.col);
-      if (!rowCat || !colCat) { fail(`${s.key} ${b.date}: cell "${c.row}" x "${c.col}" is not on that board at all`); continue; }
-      const all = pools[s.key].players.filter(pl => libs[s.key].matches(pl, { row: rowCat, col: colCat }));
-      if (all.length !== c.total) {
+      const cell = realCell(s.key, b.date, c);
+      const all = cell ? pools[s.key].players.filter(pl => libs[s.key].matches(pl, cell)) : null;
+      if (!all) { fail(`${s.key} ${b.date}: cell "${c.row}" x "${c.col}" is not on that board at all`); continue; }
+      cellValid.set(c, all);
+      /* Counted by id, not by row: a player loaded twice is one player. */
+      const players = new Set(all.map(pl => String(pl.id))).size;
+      if (players !== c.total) {
         wrongCount += 1;
-        if (wrongCount <= 3) fail(`${s.key} ${b.date} ${c.row} x ${c.col}: page says ${c.total} valid players, the data says ${all.length}`);
+        if (wrongCount <= 3) fail(`${s.key} ${b.date} ${c.row} x ${c.col}: page says ${c.total} valid players, the data holds ${players} (${all.length} rows)`);
       }
       const valid = new Set(all.map(pl => pl.name));
       for (const name of c.answers) {
         checked += 1;
+        const under = pools[s.key].byNormalizedName.get(normalizeTyped(name)) ?? [];
+        if (under.length > 1) shared += 1;
         if (!valid.has(name)) {
           wrongName += 1;
           if (wrongName <= 3) fail(`${s.key} ${b.date} ${c.row} x ${c.col}: "${name}" is published as an answer but does not satisfy the crossing`);
+          continue;
+        }
+        /* Someone fits under this name. Now the question the page actually
+           makes a promise about: type it into the game for this cell. */
+        if (!gameAccepts(s.key, name, cell)) {
+          refused += 1;
+          if (refused <= 3) fail(`${s.key} ${b.date} ${c.row} x ${c.col}: "${name}" is published as an answer and the game's own lookup refuses it (${under.length} player${under.length === 1 ? '' : 's'} under that name, id${under.length === 1 ? '' : 's'} ${under.map(pl => pl.id).join(', ')})`);
         }
       }
     }
   }
-  console.log(`   ${s.key}  ${checked} answers checked, ${wrongName} invalid, ${wrongCount} miscounted cells`);
+  console.log(`   ${s.key}  ${checked} answers typed into the game, ${wrongName} do not fit, ${refused} refused by the lookup (${shared} are names shared by 2+ players), ${wrongCount} miscounted cells (source ${rows} rows, ${distinct} distinct players)`);
 }
 
+section = 3;
 console.log('3) the archive carries no clock');
 for (const s of present) {
   /* Compared against the generator's own recorded end date rather than the
@@ -195,6 +397,7 @@ for (const s of present) {
   }
 }
 
+section = 4;
 console.log('4) the archive is content, not a stub');
 for (const s of present) {
   const boards = archive.sports[s.key].boards;
@@ -211,14 +414,12 @@ for (const s of present) {
   console.log(`   ${s.key}  ${cells - thin} of ${cells} cells carry real answers`);
 }
 
+section = 5;
 console.log('5) a recorded school pool still matches the live one');
 {
-  /* Only CBB carries a pool, and its absence on the franchise grids is
-     meaningful rather than an oversight: those boards are seed-only, so there
-     is nothing to record. A pool that has drifted does not corrupt the archive,
-     because section 1 rebuilds from what was recorded, but it does mean the
-     LIVE game would now serve a different board for those dates, and a reader
-     comparing the two would be right to call the archive wrong. So report it. */
+  /* Only CBB carries a pool. A pool that has drifted does not corrupt the
+     archive, because section 1 rebuilds from what was recorded, but it does
+     mean the LIVE game would now serve a different board for those dates. */
   let checked = 0;
   for (const s of present) {
     const recorded = archive.sports[s.key].schoolPool;
@@ -237,6 +438,23 @@ console.log('5) a recorded school pool still matches the live one');
   if (checked === 0) console.log('   no sport records a pool, nothing to check');
 }
 
+const decode = t => String(t).replace(/<[^>]*>/g, '').replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&').replace(/\s+/g, ' ').trim();
+const snapshotOf = sport => {
+  const file = path.join(ROOT, 'public', sport.game.replace(/^\//, ''), 'archive', 'index.html');
+  let doc = fs.existsSync(file) ? fs.readFileSync(file, 'utf8') : null;
+  if (doc && CONTROL === 'miscount' && MISCOUNT.sport && sport.game === archive.sports[MISCOUNT.sport].game) {
+    /* The saved page was built from the miscounted file, so it carries the
+       same wrong number: since Round 652 each crossing is one <tr>, its label
+       in a <th> and its count in the <td> right after it. */
+    const esc = t => String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    const was = `<th>${esc(MISCOUNT.label)}</th><td>${MISCOUNT.was}</td>`;
+    if (doc.includes(was)) doc = doc.replace(was, `<th>${esc(MISCOUNT.label)}</th><td>${MISCOUNT.now}</td>`);
+    else console.log(`   (miscount: the ${MISCOUNT.sport} snapshot does not carry "${MISCOUNT.label}" with ${MISCOUNT.was}, so it was left as it is; section 6 can only agree with the file once public/ is rebuilt)`);
+  }
+  return { file, doc };
+};
+
+section = 6;
 console.log('6) every cell survives prerendering and reaches a crawler');
 {
   /* THIS SECTION READS THE SNAPSHOT, NOT THE JSON, which is the whole point.
@@ -246,64 +464,242 @@ console.log('6) every cell survives prerendering and reaches a crawler');
      document global dedupe silently deleted any repeated table cell: 21 of 126
      labels and 70 of 126 counts were missing from /nba-grid/archive, with no
      visible gap to notice.
-     Walked in DOCUMENT ORDER: a label whose count is present somewhere else on
-     the page is not good enough, because every cell sharing that count matches
-     the same single paragraph. That distinction is exactly what a first attempt
-     at measuring this got wrong. */
-  const stripP = /<p>(.*?)<\/p>/gs;
+     Walked ROW BY ROW: a label whose count is present somewhere else on the
+     page is not good enough, because every cell sharing that count matches the
+     same text. That distinction is exactly what a first attempt at measuring
+     this got wrong. Until Round 652 the snapshot wrote every cell as its own
+     paragraph and this paired a label with the paragraph after it; since then
+     each crossing is saved as one <tr>, and its count is read from its own
+     row, which is the pairing a crawler sees too. */
   const escHtml = t => String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  let controlFired = false;
   for (const s of present) {
     const sport = archive.sports[s.key];
-    const file = path.join(ROOT, 'public', sport.game.replace(/^\//, ''), 'archive', 'index.html');
-    if (!fs.existsSync(file)) { fail(`${s.key}: no prerendered snapshot at ${file}, so nothing was served to a crawler`); continue; }
-    const doc = fs.readFileSync(file, 'utf8');
-    let paras = [...doc.matchAll(stripP)].map(m => m[1]);
+    const { file, doc } = snapshotOf(sport);
+    if (!doc) { fail(`${s.key}: no prerendered snapshot at ${file}, so nothing was served to a crawler`); continue; }
+    let rows = [...doc.matchAll(/<tr>([\s\S]*?)<\/tr>/g)].map(m => [...m[1].matchAll(/<(td|th)>([\s\S]*?)<\/\1>/g)].map(c => c[2]));
     if (CONTROL === 'dedupe') {
       /* Reproduce the pre Round 371 prerenderer: one document global Set, so
-         the second and later occurrence of any identical paragraph is dropped.
+         the second and later occurrence of any identical cell is dropped.
          That is exactly what deleted 70 counts and 21 labels from
          /nba-grid/archive. */
-      const before = paras.length;
-      const seenP = new Set();
-      paras = paras.filter(x => (seenP.has(x) ? false : (seenP.add(x), true)));
-      if (paras.length >= before) { console.error('control cannot run: nothing repeated to dedupe'); process.exit(1); }
+      const before = rows.flat().length;
+      const seenC = new Set();
+      rows = rows.map(r => r.filter(x => (seenC.has(x) ? false : (seenC.add(x), true))));
+      if (rows.flat().length < before) controlFired = true;
     }
     const cells = sport.boards.flatMap(b => b.cells);
     const wanted = new Map();
     for (const c of cells) wanted.set(escHtml(`${c.row} and ${c.col}`), String(c.total));
-    /* COUNT OCCURRENCES, NOT DISTINCT VALUES. A first version compared the 126
-       cells against the number of distinct labels present and reported 21
-       "missing" on a page that was in fact complete: crossings legitimately
-       repeat across boards, so NBA has 126 cells but only 105 distinct labels.
-       What matters is that each CELL has a label paragraph of its own, which is
-       an occurrence count. That is the third measuring error this bug provoked,
-       after testing substring presence instead of per cell presence and after
-       forgetting that an ampersand is escaped in the output. The subject is
-       slippery; count the thing you actually mean. */
     let intact = 0, noCount = 0, labelOccurrences = 0;
-    for (let i = 0; i < paras.length; i++) {
-      const lbl = paras[i];
+    for (const row of rows) {
+      const lbl = row[0];
       if (!wanted.has(lbl)) continue;
       labelOccurrences += 1;
-      if (paras[i + 1] === wanted.get(lbl)) intact += 1; else noCount += 1;
+      if (row[1] === wanted.get(lbl)) intact += 1; else noCount += 1;
     }
     const missingLabels = cells.length - labelOccurrences;
-    console.log(`   ${s.key}  ${intact} of ${cells.length} cells intact, ${noCount} missing their count, ${missingLabels} cells with no label paragraph`);
+    console.log(`   ${s.key}  ${intact} of ${cells.length} cells intact, ${noCount} missing their count, ${missingLabels} cells with no row of their own`);
     if (noCount > 0) fail(`${s.key}: ${noCount} crossings reach a crawler with no answer count, though the page promises one for every cell`);
     if (missingLabels > 0) fail(`${s.key}: ${missingLabels} crossing labels never reached the snapshot, so their answers appear under the wrong heading`);
   }
+  if (CONTROL === 'dedupe' && !controlFired) cannotRun('nothing repeated to dedupe');
+}
+
+section = 7;
+console.log(`7) the newest board is within ${FRESH_DAYS} days of the day the file claims`);
+{
+  const claim = archive.generatedFor;
+  const todayET = new Intl.DateTimeFormat('en-CA', { timeZone: 'America/New_York' }).format(new Date());
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(String(claim))) fail(`the file's generatedFor is "${claim}", not a date, so nothing it says about freshness can be checked`);
+  else {
+    const floor = addDays(claim, -FRESH_DAYS);
+    for (const s of present) {
+      const newest = archive.sports[s.key].boards.map(b => b.date).sort().slice(-1)[0];
+      /* Information only: how far behind the clock the bake is. Asserting on
+         it would turn this harness red on a schedule. */
+      const behind = Math.round((Date.parse(todayET + 'T12:00:00Z') - Date.parse(newest + 'T12:00:00Z')) / 86400000);
+      console.log(`   ${s.key}  newest board ${newest}, the file claims ${claim} (floor ${floor}); ${behind} days behind today in America/New_York`);
+      if (!newest || newest < floor) fail(`${s.key}: the newest board is ${newest}, more than ${FRESH_DAYS} days before the ${claim} the file says it was generated for, so the archive stops short of its own claim`);
+    }
+  }
+}
+
+section = 8;
+console.log('8) no cell lists the same player twice');
+for (const s of present) {
+  let repeats = 0;
+  for (const b of archive.sports[s.key].boards) {
+    for (const c of b.cells) {
+      const seen = new Map();
+      for (const n of c.answers) seen.set(n, (seen.get(n) || 0) + 1);
+      for (const [n, times] of seen) {
+        if (times < 2) continue;
+        repeats += 1;
+        const ids = new Set((cellValid.get(c) ?? []).filter(pl => pl.name === n).map(pl => String(pl.id)));
+        if (repeats <= 3) {
+          fail(ids.size < times
+            ? `${s.key} ${b.date} ${c.row} x ${c.col}: "${n}" is listed ${times} times and is ${ids.size} player (id ${[...ids].join(', ') || 'unknown'})`
+            : `${s.key} ${b.date} ${c.row} x ${c.col}: "${n}" is listed ${times} times for ${ids.size} namesakes, which reads as one man twice`);
+        }
+      }
+    }
+  }
+  console.log(`   ${s.key}  ${repeats} cells list a name more than once`);
+}
+
+section = 9;
+console.log('9) no listed name is malformed (this harness\'s own rule, not the generator\'s)');
+for (const s of present) {
+  let bad = 0, names = 0;
+  for (const b of archive.sports[s.key].boards) {
+    for (const c of b.cells) {
+      for (const n of c.answers) {
+        names += 1;
+        const why = unprintable(n);
+        if (why) { bad += 1; if (bad <= 3) fail(`${s.key} ${b.date} ${c.row} x ${c.col}: "${n}" ${why}`); }
+      }
+    }
+  }
+  console.log(`   ${s.key}  ${names} names, ${bad} malformed`);
+}
+
+section = 10;
+console.log('10) the saved copy states the range and the counts the data holds');
+{
+  const MONTH_DATE = '[A-Z][a-z]+ \\d{1,2}, \\d{4}';
+  let controlFired = false;
+  for (const s of present) {
+    const sport = archive.sports[s.key];
+    let { file, doc } = snapshotOf(sport);
+    if (!doc) { fail(`${s.key}: no prerendered snapshot at ${file}`); continue; }
+    const dates = sport.boards.map(b => b.date).sort();
+    const oldest = longDate(dates[0]);
+    const newest = longDate(dates[dates.length - 1]);
+    if (CONTROL === 'copyrange' && !controlFired) {
+      const was = `to ${newest}.`;
+      const now = `to ${longDate(addDays(dates[dates.length - 1], -1))}.`;
+      const i = doc.indexOf('These are the');
+      const j = i < 0 ? -1 : doc.indexOf(was, i);
+      if (j < 0) cannotRun(`the ${s.key} snapshot has no "These are the ... ${was}" sentence to move`);
+      doc = doc.slice(0, j) + now + doc.slice(j + was.length);
+      controlFired = true;
+      console.log(`   NEGATIVE CONTROL ON: the ${s.key} copy now ends its range ${now.slice(3, -1)}, section 10 must go red`);
+    }
+    const texts = [...doc.matchAll(/<(p|h1|li)>([\s\S]*?)<\/\1>/g)].map(m => decode(m[2]));
+    const sentence = texts.map(t => t.match(new RegExp(`These are the (\\d+) boards from (${MONTH_DATE}) to (${MONTH_DATE})\\.`))).find(Boolean);
+    if (!sentence) { fail(`${s.key}: the saved page never says which boards it holds ("These are the N boards from ... to ...")`); continue; }
+    const [, n, from, to] = sentence;
+    if (Number(n) !== sport.boards.length) fail(`${s.key}: the copy says ${n} boards, the data holds ${sport.boards.length}`);
+    if (from !== oldest || to !== newest) fail(`${s.key}: the copy says ${from} to ${to}, the data runs ${oldest} to ${newest}`);
+    /* Any other range on the page, in either date shape, has to agree too. */
+    let ranges = 0;
+    for (const t of texts) {
+      for (const m of t.matchAll(new RegExp(`from (${MONTH_DATE}|\\d{4}-\\d{2}-\\d{2}) to (${MONTH_DATE}|\\d{4}-\\d{2}-\\d{2})`, 'g'))) {
+        ranges += 1;
+        const a = /^\d{4}/.test(m[1]) ? longDate(m[1]) : m[1];
+        const z = /^\d{4}/.test(m[2]) ? longDate(m[2]) : m[2];
+        if (a !== oldest || z !== newest) fail(`${s.key}: the page says "${m[0]}", the data runs ${oldest} to ${newest}`);
+      }
+      /* And every start date the page names on its own (the subtitle's "Past
+         boards from August 17, 2026") is the oldest board, not "every". */
+      for (const m of t.matchAll(new RegExp(`from (${MONTH_DATE}|\\d{4}-\\d{2}-\\d{2})`, 'g'))) {
+        const a = /^\d{4}/.test(m[1]) ? longDate(m[1]) : m[1];
+        if (a !== oldest) fail(`${s.key}: the page says "${m[0]}", the oldest board is ${oldest}`);
+      }
+    }
+    let starts = 0;
+    for (const t of texts) starts += [...t.matchAll(new RegExp(`from (${MONTH_DATE})`, 'g'))].length;
+    if (starts < 2) fail(`${s.key}: the page names its start date ${starts} time${starts === 1 ? '' : 's'}; the subtitle and the copy should both say where the boards begin`);
+    /* The board count the page states for each of the other archives. */
+    let others = 0;
+    for (const t of texts) {
+      const m = t.match(/^(.+?) grid answers, (\d+) past boards/);
+      if (!m) continue;
+      const other = Object.values(archive.sports).find(x => x.label === m[1]);
+      if (!other) { fail(`${s.key}: the page counts boards for "${m[1]}", which is not an archive`); continue; }
+      others += 1;
+      if (Number(m[2]) !== other.boards.length) fail(`${s.key}: the page says ${m[1]} has ${m[2]} past boards, its data holds ${other.boards.length}`);
+    }
+    if (others !== present.length - 1) fail(`${s.key}: the page states a board count for ${others} other archives, expected ${present.length - 1}`);
+    console.log(`   ${s.key}  "${sentence[0]}" (${ranges} range${ranges === 1 ? '' : 's'} and ${others} other counts checked)`);
+  }
+  if (CONTROL === 'copyrange' && !controlFired) cannotRun('no snapshot to change');
+}
+
+section = 11;
+console.log('11) every board heading is a written date, never an ISO one');
+{
+  let controlFired = false;
+  for (const s of present) {
+    const sport = archive.sports[s.key];
+    let { file, doc } = snapshotOf(sport);
+    if (!doc) { fail(`${s.key}: no prerendered snapshot at ${file}`); continue; }
+    if (CONTROL === 'isoh2' && !controlFired) {
+      const date = sport.boards[0].date;
+      const was = `<h2>${sport.label} grid answers for ${longDate(date)}</h2>`;
+      if (!doc.includes(was)) cannotRun(`the ${s.key} snapshot has no ${was} to rewrite`);
+      doc = doc.replace(was, `<h2>${sport.label} grid answers for ${date}</h2>`);
+      controlFired = true;
+      console.log(`   NEGATIVE CONTROL ON: the ${s.key} heading for ${date} now carries the ISO date, section 11 must go red`);
+    }
+    const h2s = [...doc.matchAll(/<h2(?:\s[^>]*)?>([\s\S]*?)<\/h2>/g)].map(m => decode(m[1]));
+    const iso = h2s.filter(t => /\d{4}-\d{2}-\d{2}/.test(t));
+    for (const t of iso.slice(0, 3)) fail(`${s.key}: the heading "${t}" carries an ISO date`);
+    const have = new Set(h2s);
+    const missing = sport.boards.filter(b => !have.has(`${sport.label} grid answers for ${longDate(b.date)}`));
+    for (const b of missing.slice(0, 3)) fail(`${s.key}: the board for ${b.date} has no "${sport.label} grid answers for ${longDate(b.date)}" heading`);
+    console.log(`   ${s.key}  ${h2s.length} headings, ${iso.length} with an ISO date, ${sport.boards.length - missing.length} of ${sport.boards.length} boards under their written date`);
+  }
+  if (CONTROL === 'isoh2' && !controlFired) cannotRun('no snapshot to change');
+}
+
+section = 12;
+console.log('12) the names a cell lists are the rarest who fit, by career games played');
+for (const s of present) {
+  let cells = 0, notRarest = 0, leftOff = 0;
+  for (const b of archive.sports[s.key].boards) {
+    for (const c of b.cells) {
+      const all = cellValid.get(c);
+      if (!all) continue;
+      cells += 1;
+      /* One entry per player, printable names only: the generator lists a
+         shared name once for its rarest bearer, so a listed name stands for
+         the fewest games any fitting player under it has. */
+      const seen = new Set();
+      const printable = all.filter(pl => !unprintable(pl.name) && !seen.has(String(pl.id)) && seen.add(String(pl.id)));
+      const listed = new Set(c.answers);
+      const reps = c.answers.map(n => Math.min(...printable.filter(pl => pl.name === n).map(pl => pl.games))).filter(Number.isFinite);
+      if (!reps.length) continue;
+      const ceiling = Math.max(...reps);
+      const unlisted = printable.filter(pl => !listed.has(pl.name));
+      const rarer = unlisted.filter(pl => pl.games < ceiling).sort((a, z) => a.games - z.games);
+      if (rarer.length) {
+        notRarest += 1;
+        if (notRarest <= 3) fail(`${s.key} ${b.date} ${c.row} x ${c.col}: lists a player with ${ceiling} games under "Rarest answers" while ${rarer[0].name} (${rarer[0].games}) fits and is left off`);
+      }
+      if (c.answers.length < PER_CELL && unlisted.length) {
+        leftOff += 1;
+        if (leftOff <= 3) fail(`${s.key} ${b.date} ${c.row} x ${c.col}: lists ${c.answers.length} of at most ${PER_CELL} names and leaves ${unlisted.length} printable fitting player${unlisted.length === 1 ? '' : 's'} off (${unlisted[0].name})`);
+      }
+    }
+  }
+  console.log(`   ${s.key}  ${cells} cells, ${notRarest} list a busier man over a rarer one, ${leftOff} short lists leave someone off`);
 }
 
 console.log('');
-if (CONTROL === 'dedupe') {
-  if (failures > 0) { console.log(`simGridArchive control (dedupe): green. The old document global dedupe was caught (${failures} finding${failures === 1 ? '' : 's'}).`); process.exit(0); }
-  console.error('simGridArchive control (dedupe): RED. Repeated cells were dropped and section 6 did not notice.');
+const red = Object.keys(failures).map(Number).sort((a, b) => a - b);
+const total = red.reduce((n, k) => n + failures[k], 0);
+if (CONTROL) {
+  const own = CONTROLS[CONTROL];
+  const others = red.filter(k => k !== own);
+  if (failures[own] > 0 && others.length === 0) {
+    console.log(`simGridArchive control (${CONTROL}): green. Section ${own} caught it (${failures[own]} finding${failures[own] === 1 ? '' : 's'}) and no other section moved.`);
+    process.exit(0);
+  }
+  if (!failures[own]) console.error(`simGridArchive control (${CONTROL}): RED. Section ${own} did not notice the planted fault.`);
+  if (others.length) console.error(`simGridArchive control (${CONTROL}): RED. Section${others.length === 1 ? '' : 's'} ${others.join(', ')} also went red, so the control does not isolate section ${own} (a plain run must be green first).`);
   process.exit(1);
 }
-if (CONTROL === 'badanswer') {
-  if (failures > 0) { console.log(`simGridArchive control: green. The planted wrong answer was caught (${failures} finding).`); process.exit(0); }
-  console.error('simGridArchive control: RED. A published answer the game would reject went unnoticed.');
-  process.exit(1);
-}
-if (failures > 0) { console.error(`simGridArchive: ${failures} failure${failures === 1 ? '' : 's'}`); process.exit(1); }
-console.log('simGridArchive: green. Every board is the real board and every answer would be accepted in the game.');
+if (total > 0) { console.error(`simGridArchive: ${total} failure${total === 1 ? '' : 's'} in section${red.length === 1 ? '' : 's'} ${red.join(', ')}`); process.exit(1); }
+console.log('simGridArchive: green. Every board is the real board, every answer is accepted by the game\'s own guess path, every count is of distinct players, every list is the rarest who fit, and the page says what the data holds.');

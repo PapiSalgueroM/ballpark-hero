@@ -70,6 +70,21 @@
      8) A paused save is picked back up, never kicked off a second time.
      9) A save from before this round (no play, no eleven, no clock) still
         resolves to a full report.
+    10) Round 742. A man in my squad never turns out for the club he left.
+        The 2026-09-29 footer report: buy a player off another club, play
+        that club, and he was in their eleven as well as mine, made up men
+        included, because every read of the opposition went to the raw
+        projection, which knows nothing about transfers. For every fixture
+        the next opponent's top rated outfield man is put in my squad before
+        the kick off (appended with a fresh id, see the section for why not
+        buyPlayer), half the fixtures a real man off the season one roster and
+        half a generated man off the roster three years on, then the match is
+        played through the live path and the quick sim and his name is looked
+        for at floor 0 in their eleven, bench, subs, scorers, ratings sheet,
+        play and cards, in the preview's danger men, in a fresh scorer race
+        and on the golden boot board before and after the match. The counts
+        of fixtures, real men, generated men, named elevens and previews are
+        printed, with floors on the first three.
 
    Negative controls, LIVE_MATCH_CONTROL=<name>. Each rewrites a copy of the
    engine before bundling, refuses to run if the string it rewrites is not
@@ -93,6 +108,11 @@
                 Section 2 must go red and nothing else may (the stream, the
                 two ways of finishing and the old shape never read that
                 block against the play).
+     doubleman  mySquadNames comes back empty, so oppRosterFor and the scorer
+                draw hand back the raw projection and the boot board keeps a
+                man's old club entry: the pre 742 engine, a man I signed
+                turning out for both sides. Section 10 must go red and
+                nothing else may (no other section signs anyone).
 
    Thresholds, measured on this harness's own seed and under SIM_SEED=1, 2
    and 3 (2026-09-07; SIM_SEED is folded into every seed the harness draws
@@ -108,6 +128,11 @@
         is about 6.5 points, so 15 sits more than two SDs under the lowest
         sample and four under the mean; nooppsubs measures 0 of 0)
      named elevens 29, 33, 28, 33 of 42; kick offs 42, finished 42, seeds 500
+     section 10 (2026-09-30, own seed then SIM_SEED=1, 2): 41 fixtures with a
+     man taken (one opponent, ADO Den Haag, has no roster at all), real men
+     21, 22, 21 and generated men 20, 19, 20, floors 10 each; named elevens
+     with him gone 28, 33, 26; doubleman turns every one of those 41 red on
+     the preview, the race, the eleven, the sheet and the play
 
    Negative baseline for section 3, from the engine before its draw was
    reordered (415 matches, 2026-09-07): the second half's play and bookings
@@ -179,6 +204,15 @@ const CONTROLS = {
     ]],
     note: 'buildMatchDetail ships one more shot than the stream carries; section 2 must go red',
   },
+  doubleman: {
+    must: [10], also: [],
+    what: 'the one line of mySquadNames',
+    edits: [[
+      'export function mySquadNames(state: CareerState): Set<string> {\n  return new Set(state.squad.map(p => p.name));\n',
+      'export function mySquadNames(state: CareerState): Set<string> {\n  if (state) return new Set();\n  return new Set(state.squad.map(p => p.name));\n',
+    ]],
+    note: 'mySquadNames is empty, so every rival roster is the raw projection again and a man I signed turns out for both sides; section 10 must go red',
+  },
 };
 if (CONTROL && !CONTROLS[CONTROL]) {
   console.error(`LIVE_MATCH_CONTROL=${CONTROL} is not a control this harness knows (${Object.keys(CONTROLS).join(', ')})`);
@@ -236,12 +270,14 @@ export const engine = mod;
 execSync(`"${ROOT}/node_modules/.bin/esbuild" "${ENTRY}" --bundle --format=esm --platform=node --alias:@=${ROOT_URL}/src --outfile="${BUNDLE}" --log-level=error`, { stdio: 'inherit' });
 const cm = (await import(pathToFileURL(BUNDLE).href)).engine;
 for (const name of ['startCareer', 'playNextEntry', 'resumeMatch', 'startSecondHalf', 'changeLive', 'makeHalftimeSub',
-  'benchForHalftime', 'liveStatsAt', 'oppOnPitchAt', 'myOnPitchAt', 'projectedRoster', 'yearsOn', 'MAX_SUBS', 'squadNumbers', 'liveFeed']) {
+  'benchForHalftime', 'liveStatsAt', 'oppOnPitchAt', 'myOnPitchAt', 'projectedRoster', 'yearsOn', 'MAX_SUBS', 'squadNumbers', 'liveFeed',
+  'matchFacts', 'initScorerRace', 'goldenBootTable']) {
   if (cm[name] === undefined) { console.error(`the engine does not export ${name}`); process.exit(1); }
 }
 const {
   startCareer, playNextEntry, resumeMatch, startSecondHalf, changeLive, makeHalftimeSub,
   benchForHalftime, liveStatsAt, oppOnPitchAt, myOnPitchAt, projectedRoster, yearsOn, MAX_SUBS,
+  matchFacts, initScorerRace, goldenBootTable,
 } = cm;
 
 /* ---- failures, attributed to the section they fell in ---- */
@@ -909,6 +945,108 @@ begin(9, 'A save paused before this round still resolves');
   }
   if (states < 8) fail(`only ${states} old shape saves resolved`);
   console.log(`   ${states} old shape saves resolved with a full report: play per half ${min(halves)} to ${max(halves)} events, stats shots >= on target >= goals both sides, first half scorer counts kept`);
+}
+
+/* ---------- 10. a man I signed never turns out for the club he left ---------- */
+begin(10, 'A man in my squad never turns out for the club he left, real or generated');
+{
+  /* The 2026-09-29 footer report: "if I buy a player from another club then
+     he appears on both teams ... it happens with the made-up players too."
+     The projection knows nothing about transfers, so every read of the
+     opposition's roster has to subtract my squad (oppRosterFor in the
+     engine). For every fixture, before the kick off, the next opponent's top
+     rated outfield man is put in my squad, the match is played both ways,
+     and his name is looked for everywhere the other side is named.
+
+     He is appended straight onto the squad with a fresh id rather than bought
+     through buyPlayer. The market only offers him inside a window, at a
+     price and a squad size the save may refuse, so a purchase would decide
+     which fixtures get checked and which do not, and the engine reads the
+     squad, never the door he came through: a bought man, a loan in and this
+     append are one shape to every site under test.
+
+     Season one of the current era is the bake itself and has no generated
+     men, so half the fixtures read the opponent's roster three years on (the
+     save copied with its season moved, which is exactly what yearsOn
+     measures) and take the top rated generated outfielder there, falling
+     back to a real man where the club still has none. The other half take
+     the top rated real man off the season one roster. Both counts are
+     printed and floored. */
+  const BUMP = 3;
+  let checked = 0;
+  let realMen = 0;
+  let genMen = 0;
+  let namedElevens = 0;
+  let previews = 0;
+  let noRoster = 0;
+  let idx = 0;
+  const cmPlayerOf = (pl, n) => ({
+    id: `r742-signed-${n}`, name: pl.n, position: pl.p, rating: pl.r, age: pl.a,
+    fitness: 100, morale: 70, injuryWeeks: 0, suspendedMatches: 0, isYouth: false,
+    seasonGoals: 0, seasonAssists: 0, value: pl.v, contractYears: 3, wage: 40,
+    ...(pl.g ? { generated: true } : {}),
+  });
+  const topOutfield = (roster, want) => [...roster]
+    .filter(p => p.p !== 'GK' && want(p))
+    .sort((a, b) => b.r - a.r || a.n.localeCompare(b.n))[0] ?? null;
+  const namesIn = (xs, key) => (xs ?? []).map(x => x[key]);
+  for (const f of fixtures) {
+    idx += 1;
+    const opp = f.ht.live.opponent;
+    const wantGen = idx % 2 === 0;
+    const base = wantGen ? { ...f.pre, season: f.pre.season + BUMP } : f.pre;
+    const roster = projectedRoster(opp, yearsOn(base), base.eraId ?? 'now');
+    const man = (wantGen ? topOutfield(roster, p => p.g) : null) ?? topOutfield(roster, p => !p.g);
+    /* A thin club with no projected roster at all (ADO Den Haag on this
+       harness's own seed) has nobody to double, so there is nothing to test. */
+    if (!man) { noRoster += 1; continue; }
+    const name = man.n;
+    const ctx = `${ctxOf(f)} [${man.g ? 'generated' : 'real'} ${name} in my squad]`;
+    const pre = { ...base, squad: [...base.squad, cmPlayerOf(man, idx)] };
+    checked += 1;
+    if (man.g) genMen += 1; else realMen += 1;
+    const theirs = (label, names) => { if (names.includes(name)) fail(`${ctx}: ${label} names him for ${opp}`); };
+    /* Before a ball is kicked: the preview's danger men and the race board. */
+    const facts = withSeed(f.seed + 800, () => matchFacts(pre));
+    if (!facts || facts.opponent !== opp) fail(`${ctx}: the preview is for ${facts ? facts.opponent : 'nobody'}, the fixture is against ${opp}`);
+    else { previews += 1; theirs(`the preview's danger men [${facts.oppDanger.join(', ')}]`, facts.oppDanger); }
+    theirs('a fresh scorer race', initScorerRace(pre).filter(e => e.club === opp).map(e => e.name));
+    theirs('the golden boot board', goldenBootTable(pre, 1000).filter(e => e.club === opp).map(e => e.name));
+    /* The live path: kick off, the interval, the second half, the whistle. */
+    const ht = withSeed(f.seed + 801, () => playNextEntry(pre));
+    if (ht.kind !== 'halftime' || !ht.state.live) { fail(`${ctx}: the kick off came back "${ht.kind}"`); continue; }
+    const live = ht.state.live;
+    if (live.opponent !== opp) { fail(`${ctx}: the live match is against ${live.opponent}`); continue; }
+    if (live.oppXi) namedElevens += 1;
+    theirs('the eleven at kick off', namesIn(live.oppXi, 'n'));
+    theirs('the bench at kick off', namesIn(live.oppBench, 'n'));
+    theirs('the first half scorers', namesIn(live.h1Opp, 'name'));
+    const s2 = withSeed(f.seed + 802, () => startSecondHalf(ht.state));
+    if (!s2) { fail(`${ctx}: startSecondHalf returned null`); continue; }
+    const fin = withSeed(f.seed + 803, () => resumeMatch(s2));
+    /* The quick sim of the same fixture. */
+    const quick = withSeed(f.seed + 804, () => playNextEntry(pre, { skipHalftime: true }));
+    for (const [pathName, res] of [['live', fin], ['quick', quick]]) {
+      if (res.kind !== 'match' || !res.report?.detail) { fail(`${ctx}: the ${pathName} path came back "${res.kind}"`); continue; }
+      const r = res.report;
+      const d = r.detail;
+      theirs(`the ${pathName} path's scorers`, namesIn(r.oppScorers, 'name'));
+      theirs(`the ${pathName} path's eleven`, namesIn(d.oppXi, 'n'));
+      theirs(`the ${pathName} path's subs`, [...namesIn(d.oppSubs, 'on'), ...namesIn(d.oppSubs, 'off')]);
+      theirs(`the ${pathName} path's ratings sheet`, namesIn(d.oppRatings, 'name'));
+      theirs(`the ${pathName} path's play`, (d.play ?? []).filter(e => e.side === 'opp').map(e => e.who));
+      theirs(`the ${pathName} path's cards`, namesIn(d.oppCards, 'name'));
+      theirs(`the golden boot board after the ${pathName} path`, goldenBootTable(res.state, 1000).filter(e => e.club === opp).map(e => e.name));
+    }
+  }
+  /* Floors from the fixture walk itself: 42 fixtures, half of them asked for
+     a generated man, and at three years on about one club in eight still has
+     none (measured 288 of 330 clubs with one), so the generated count sits
+     well above 10 on every seed and the real count at or above 21. */
+  if (checked < 30) fail(`only ${checked} fixtures checked`);
+  if (realMen < 10) fail(`only ${realMen} fixtures put a real man in my squad`);
+  if (genMen < 10) fail(`only ${genMen} fixtures put a generated man in my squad`);
+  console.log(`   ${checked} fixtures with the next opponent's top man in my squad (${realMen} real, ${genMen} generated; ${noRoster} opponents with no roster to take from), ${namedElevens} named elevens, ${previews} previews: his name never on their eleven, bench, subs, scorers, ratings sheet, play or cards, never a danger man for them, never theirs in the scorer race, both ways of finishing (floor 0)`);
 }
 
 /* ---------- the verdict ---------- */

@@ -30,6 +30,7 @@ import { HowToPlayPopover } from '@/components/game/HowToPlayPopover';
 import AdBanner from '@/components/ads/AdBanner';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
+import { ClubManagerClubList } from '@/components/club-manager/ClubManagerClubList';
 import { CURRENCIES, STRICTNESS_INFO, startOptionsOf } from '@/lib/clubManagerStart';
 import { levelFor, pointsFree, xpOf, MAX_LEVEL } from '@/lib/clubManagerXp';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
@@ -235,7 +236,10 @@ const ClubManager = () => {
             'Handle the press when they come for you, and pick your team talk before kick off and again at half time.',
             'Win trophies, keep the board happy, and build a managerial career that can cross leagues and continents.',
           ]}
-        />
+        >
+          {/* Round 655: every league and club as readable text, below the guide. */}
+          <ClubManagerClubList />
+        </GameSeoContent>
         <GameNav />
       </GameShell>
     </>
@@ -1271,7 +1275,7 @@ const ClubManager = () => {
         {/* -------- Squad -------- */}
         <TabsContent value="squad">
           <div className="space-y-3">
-            <ScreenLoading><SquadScreen squad={c.squad} xiIds={c.xiIds} eraId={c.eraId} captainId={c.setPieces?.captain ?? null} /></ScreenLoading>
+            <ScreenLoading><SquadScreen squad={c.squad} xiIds={c.xiIds} eraId={c.eraId} captainId={c.setPieces?.captain ?? null} career={c} /></ScreenLoading>
             {/* Round 193: the contracts desk, built in Round 105 and never
                mounted until now, so renewals were unreachable for 88 rounds.
                Plain renewal or the cheaper clause deal, and every clause you

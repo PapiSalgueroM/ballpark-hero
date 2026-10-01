@@ -113,6 +113,8 @@ export function AcademyScreen({ career, onUpgrade, onHire, onRecall, onPromote, 
   const [picking, setPicking] = useState<string | null>(null);
   const [region, setRegion] = useState<string>(SCOUT_REGIONS[0].id);
   const [weeks, setWeeks] = useState<number>(SCOUT_TRIPS[1].weeks);
+  const [positionFilter, setPositionFilter] = useState('');
+  const [ageFilter, setAgeFilter] = useState('');
   const assignRef = useRevealScroll<HTMLDivElement>(`scout:${picking ?? ''}`, { skipFirst: true });
 
   if (!a) {
@@ -121,7 +123,11 @@ export function AcademyScreen({ career, onUpgrade, onHire, onRecall, onPromote, 
 
   const cand = a.candidates.find(c => c.id === picking) ?? null;
   const squadFull = career.squad.length >= 30;
-  const prospects = [...a.prospects].sort((x, y) => y.highGuess - x.highGuess);
+  const positions = [...new Set(a.prospects.map(p => p.position))].sort();
+  const ages = [...new Set(a.prospects.map(p => p.age))].sort((x, y) => x - y);
+  const prospects = a.prospects
+    .filter(p => (!positionFilter || p.position === positionFilter) && (!ageFilter || p.age === Number(ageFilter)))
+    .sort((x, y) => y.highGuess - x.highGuess);
 
   return (
     <div className="space-y-2">
@@ -245,10 +251,39 @@ export function AcademyScreen({ career, onUpgrade, onHire, onRecall, onPromote, 
         <div className="text-[10px] text-muted-foreground uppercase tracking-wider mb-1.5 flex items-center gap-1">
           <ArrowUpCircle className="w-3 h-3" /> On the books · {a.prospects.length}/{MAX_PROSPECTS}
         </div>
-        {prospects.length === 0 && (
+        {(a.prospects.length > 0 || positionFilter || ageFilter) && (
+          <>
+            <div className="flex flex-wrap items-end gap-2 mb-2">
+              <label className="flex flex-1 min-w-[100px] max-w-full flex-col gap-1 text-[10px] text-muted-foreground">
+                Position
+                <select value={positionFilter} onChange={e => setPositionFilter(e.target.value)} className="min-h-[44px] w-full rounded-lg border border-border bg-secondary px-2 text-xs text-foreground">
+                  <option value="">All positions</option>
+                  {positionFilter && !positions.some(p => p === positionFilter) && <option value={positionFilter}>{positionFilter}</option>}
+                  {positions.map(position => <option key={position} value={position}>{position}</option>)}
+                </select>
+              </label>
+              <label className="flex flex-1 min-w-[100px] max-w-full flex-col gap-1 text-[10px] text-muted-foreground">
+                Age
+                <select value={ageFilter} onChange={e => setAgeFilter(e.target.value)} className="min-h-[44px] w-full rounded-lg border border-border bg-secondary px-2 text-xs text-foreground">
+                  <option value="">All ages</option>
+                  {ageFilter && !ages.includes(Number(ageFilter)) && <option value={ageFilter}>{ageFilter}</option>}
+                  {ages.map(age => <option key={age} value={age}>{age}</option>)}
+                </select>
+              </label>
+              <button type="button" onClick={() => { setPositionFilter(''); setAgeFilter(''); }} disabled={!positionFilter && !ageFilter} className="min-h-[44px] rounded-lg border border-border px-3 text-xs text-muted-foreground hover:text-foreground disabled:opacity-40">
+                Reset filters
+              </button>
+            </div>
+            <p role="status" className="text-[10px] text-muted-foreground mb-2">Showing {prospects.length} of {a.prospects.length} prospects</p>
+          </>
+        )}
+        {a.prospects.length === 0 && (
           <p className="text-[10px] text-muted-foreground">
             Nobody yet. Intake day comes round every summer and the better your recruitment, the better the group.
           </p>
+        )}
+        {a.prospects.length > 0 && prospects.length === 0 && (
+          <p className="text-[10px] text-muted-foreground">No prospects match those filters. Try another position or age, or reset filters.</p>
         )}
         {squadFull && prospects.length > 0 && (
           <p className="text-[10px] text-yellow-400 mb-1">Your squad is full. Sell or release someone before you sign another kid.</p>

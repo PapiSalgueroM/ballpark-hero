@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo, type ReactNode } from 'react';
-import { useGuessTransferValue } from '@/hooks/useGuessTransferValue';
+import { useGuessTransferValue, transferValueScore, TRANSFER_VALUE_SCORE_BUCKETS } from '@/hooks/useGuessTransferValue';
 import { cn } from '@/lib/utils';
 import { FlagImg } from '@/components/FlagImg';
 import { Minus, Plus } from 'lucide-react';
@@ -255,8 +255,9 @@ const GuessTransferValue = () => {
                 >
                   <PostGameStats
                     gameSlug="guess-transfer-value"
-                    userScore={gameStatus === 'won' ? Math.max(100, (maxGuesses - guesses.length + 1) * 150) : 0}
-                    isVisible={true}
+                    userScore={transferValueScore(gameStatus === 'won', guesses.length)}
+                    buckets={TRANSFER_VALUE_SCORE_BUCKETS}
+                    isVisible={mode === 'daily'}
                   />
                 </ResultScreen>
               </div>

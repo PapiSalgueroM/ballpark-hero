@@ -1,0 +1,20 @@
+.list {
+  height: 272px;
+  max-height: 272px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  overflow-anchor: none;
+  min-width: 0;
+  grid-auto-rows: max-content;
+  align-content: start;
+}
+
+.player, .action { min-height: 44px; }
+.action { min-width: 44px; }
+.player { min-width: 0; }
+.name { min-width: 0; overflow-wrap: anywhere; }
+
+.player:focus-visible, .action:focus-visible {
+  outline: 2px solid hsl(var(--primary));
+  outline-offset: -2px;
+}

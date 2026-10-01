@@ -23,6 +23,7 @@ import { CelebrationStyles } from '@/components/club-manager/Celebration';
 import { extensionHeadline } from '@/lib/usCareerExtension';
 import type { ExtensionTalk } from '@/lib/usCareerExtension';
 import { cn } from '@/lib/utils';
+import motion from './ExtensionMotion.module.css';
 
 interface Props {
   talk: ExtensionTalk;
@@ -50,7 +51,7 @@ export default function ExtensionCard({ talk, seasonWord, onPush, onSign, onDecl
           usually a little under what the open market pays. Turn it down and you play the
           year out and reach free agency, where everybody bids and nothing is promised.
         </p>
-        <p className="mt-1 text-[11px] font-semibold text-gold">{talk.note}</p>
+        <p key={talk.note} data-extension-reply={talk.pushed ? 'resolved' : 'opening'} className={cn('mt-1 text-[11px] font-semibold text-gold', talk.pushed && motion.reply)}>{talk.note}</p>
       </div>
 
       {o ? (
