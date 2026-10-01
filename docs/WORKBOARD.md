@@ -56,6 +56,12 @@ fit/focus/finite-static feedback and final types/build/all15 artifact fences. Ke
 until the delivered fictional scope is explicit. No deployment or report write is implied.
 Next free793. Root handles docs/git/build; UI implementation follows791 acceptance.
 
+**792 root registration addendum:** the claimed new home link also owns the derived
+homepage ledger entry (/), alongside /aussie-rules-manager and /whats-new. Its source
+fingerprint must advance only for that real link change. No other page/date is reserved.
+Frozen game squad roles (6backs,5midfield,1ruck,6forwards), same-role swaps and five swaps
+per break are game constraints, stated separately from verified official match rules.
+
 **791 source/native checkpoint ACCEPTED, final combined build pending:**12 actual-panel
 outcomes and four effective copied controls pass (one intended fail, one original money
 callback pass, ten skips). Original pre-791 code reproduces two exact Tab/return failures
