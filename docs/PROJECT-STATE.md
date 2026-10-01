@@ -1,5 +1,12 @@
 # Project state
 
+## CLAIMED 2026-10-01: truthful live search verification
+
+814 reserves only the live accented-name harness after a measured 15/16 lookup
+run with one request error exited green. Root will make incomplete verification
+explicit and prove the error path without changing product/data behavior.
+811-813 continue in parallel. Next free 815.
+
 ## IN PROGRESS 2026-10-01: fresh Nation counters and live crawl audit
 
 811 also clears Nation's local hint count on the original Play Again reset, after

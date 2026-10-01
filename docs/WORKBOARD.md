@@ -1,5 +1,17 @@
 # Work board
 
+**2026-10-01, Codex814 CLAIMED: live search verification must fail closed.**
+Root owns only scripts/simPlayerSearchAccents.mjs. A fresh run on the accepted 809
+helper reported 15 of 16 lookups found, one error, then exited zero with all green.
+The harness increments an error counter and silently continues unless every query
+failed. Record each failed lookup and refuse complete-success credit for partial
+verification. Keep original accent/ranking/determinism assertions and raw/notie
+controls intact; verify the error path with an effective isolated control and
+distinguish request failures from evidence that an accent control worked. No
+application or data edits. Original misleading log is preserved at
+C:/Users/antho/AppData/Local/Temp/dukb-round809-live-accent-regression.log.
+811-813 remain disjoint. Next free 815.
+
 **2026-10-01, Codex811 scope addendum: fresh Nation hint count.**
 Actual Board inspection found that ResultScreen's Play Again calls resetGame,
 which clears the puzzle but leaves the Board's hintsUsed counter alive. A new
