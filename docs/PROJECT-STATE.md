@@ -1,5 +1,27 @@
 # Project state
 
+## IN PROGRESS 2026-10-01: MLB trade desk roster access claimed
+
+798 removes three UI-only top-eight barriers from the existing MLB Trade Finder and
+manual trade desk, with explicit remaining-player access and bounded readable lists.
+Original helpers, saves, money and booking remain unchanged. Exact files and real
+outcome/negative/native acceptance are on WORKBOARD.797 integration and final combined
+production checks continue independently. Claude reservations hold. Next free799.
+
+## IN PROGRESS 2026-10-01: catalog and release integration repairs claimed
+
+797 addresses four Aussie Rules catalog/resume/name-guard omissions exposed by the frozen
+406-node run (398 pass, eight fail, seventy browser harnesses excluded). It also investigates
+the CRLF anchor fence, selected Budget nationality flag and two old Tycoon control errors.
+Player-pool duplicate/stale-bake triage is read-only; Claude669's data work stays reserved.
+Exact files/evidence are on WORKBOARD.794 source outcomes/controls/types pass, plus eight
+native contexts/five controls/96 zero-scroll samples; final production remains due.
+793's sixteen native duels/eight controls pass within the Page fixture,
+with actual App/Footer acceptance still due. No full-green/publication claim. Next798.
+Claude795/796 and incoming d99b58e4 stand. Merge his refreshed669 player data and both
+practice normalizations before further triage. Retain only our new Aussie metadata row
+across his700 metadata split. No Soccer Career engine or shared Front Office edits here.
+
 ## LIVE 2026-10-01: Release J (653 grid answer archives, the 669 Footle re-bake), main `2652f9fa`
 
 Assembled by the desktop Claude lane in the gate clone (`r669-bake`) on top of Release I and Codex's commits as
@@ -54,7 +76,9 @@ fire. `simHarnessAnchors` went red on the last merge for Codex's `simBuzzerPract
 they measure changed. Browser walks: `playHomeFold`, `playSoftFourOhFour` and `playSnapshotDrift` green;
 `sweepWeight` raised two budgets with the measured figure beside them (Footle 328K on 325K measured after the
 re-bake, Soccer Grid 308K on 304K, shared chunks); `playRenderStability` crashed its browser at 100 percent CPU on
-the first run and is being rerun on a quiet machine, so it is NOT yet a green and is recorded when it lands.
+the first run; rerun in two passes it is green on all 167 routes (140 in the first pass, where one slow load on
+`/nba-starting-5` captured only the cookie banner, then that page and the last 27 in a second pass, every one the
+same five times).
 
 ## CHECKPOINT 2026-10-01: Search and Discard scroll correction frozen
 
