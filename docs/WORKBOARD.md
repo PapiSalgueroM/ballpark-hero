@@ -1,5 +1,74 @@
 # Work board
 
+**2026-10-01, Codex807 CLAIMED: truthful F1 Driver hint points.**
+The existing hint says -100 and multiplies hints by100, while the real clue
+payouts are1000,800,600,400,200,100. Own Driver Board plus a focused new test and
+sim wrapper after806 is accepted and committed. Show the next available payout
+from the original POINTS_BY_CLUE and an honest hint count. Hold the hook, data,
+guess/hint handlers, payouts, save/share/completion and806 CSS. Verify all five
+hint stages, mixed miss/hint play, max-clue hiding and effective copy controls.
+No edits start before the pending806 production App receipt is accepted.
+
+**2026-10-01, Codex808 CLAIMED: two measured regression harness defects.**
+Root owns only scripts/simCollegeGridPage.mjs and scripts/simManagerHotSeat.mjs.
+The College guard mistakes the namesake selection's first judge call for the
+final verdict and falsely reports missing no-charge early returns. Preserve the
+namesake behavior and inspect the exact final verdict instead, proving controls
+for both removed early returns. The manager harness deletes its original source
+when the whole checkout lives inside TEMP because cleanup uses a prefix test.
+Track and delete only its own rewritten control file. Preserve the actual library
+and prove the destructive cleanup in a disposable physical fixture. No product
+files or assertions are weakened; exact source anchors and original controls hold.
+
+The completed older413 scope reports409 PASS and4 FAIL: Aussie Board5000ms timeout,
+College guard drift, guide records repaired later by804, and a live accented-name
+search miss under read-only diagnosis. Final closure found1779 held source files
+and the one library removed by the manager harness. The frozen gate is preserved;
+no whole-suite green or complete closure is claimed. Receipt:
+TEMP/dukb-round797-production-20261001/combined798799-final-suite-receipt.json.
+802 final native proof passes; its source-only NoDouble CSS-copy repair is being
+verified.805/806 production checks continue. All Claude claims stand. Next free809.
+
+**2026-10-01, Codex803 Name Them All feedback ACCEPTED.**
+Actual hits announce the accepted full name and show one420ms cue. Missed answers
+reveal with one360ms cue; reduced motion stays static. Full names wrap, owned actions
+are44px with visible focus, held keys stay quiet, and timers clear on retry/unmount.
+Existing Retry and More lists actions now sit in the finished top card, correcting
+the measured offscreen action and872px Retry jump. Original answer fetching/cleaning,
+aliases, ambiguity,180-second timer, tiers, score, share and completion stay held.
+
+Nine actual Page/helper outcomes and thirteen effective copied unit controls pass.
+Final production CSS eight native contexts and three effective browser controls pass,
+with128 immediate/settled action-Y samples all0. The name control is narrowed to the
+actually found86-character answer, measuring476px scroll overflow and glyph right
+771.45 against box304; the weaker placeholder-based proof is preserved and not
+credited. Removed reduced-motion protection and original downstream Retry reproduce
+the actual unwanted animation and1114-to242 jump. Independent completion/save held.
+
+Real app types, both builds, exactlyone-route three-clock capture, all15 artifact
+fences plus guide/search/anchor guards pass. All1784 captured source files,188 raw
+saved pages and168 URL hashes/dates/sitemap rows stay held. Two actual App contexts
+(320 normal,1440 reduced) load untouched production JS/CSS/Navbar/ticker/Footer/help.
+The original first catalog/min20/limit5000 reads26 fictional HTTP rows cleaning to24;
+compiled JS substitutions are0. Exact2/24 and24/24 scores/full clipboard/one real
+locally intercepted guest completion each pass,62 owned action-Y samples are0,
+full glyphs/actions/focus fit and reload is quiet. No errors/bad HTTP/new game saves/
+outward writes. Root inspected phone-gold.png at original detail. Sources/HTML/assets
+held and browsers/servers/copies stopped. No publication or Google decision claim.
+
+Receipts: TEMP/dukb-round803-final-acceptance.json,
+dukb-round803-builder-receipt.json,
+dukb-round803-native/report.json and cleanup.json,
+dukb-round803-native-name-proof-hardening.log,
+dukb-round803-production-app/report.json and cleanup.json,
+dukb-round803-production-20261001/production803-preservation-receipt.json,
+production803-type.log, production803-build-final.log,
+production803-artifact-and-source-fences.log and production803-boot-fence.log.
+Final entry index-pzpz3weV.js,
+SHA5b1298146306dd6ca1d6c201c8eedfd3b8661735fbb7fe5d4fd66a29523c3931.
+802 native focus corrections,805 Search and806 committed feedback continue;
+the older immutable413 suite still runs. All Claude claims stand. Next free807.
+
 **2026-10-01, Codex806 CLAIMED: F1 Driver committed guess feedback.**
 The actual Board captures the old playing state in a50ms timeout, so a winning
 answer still schedules Wrong guess. Own only src/components/f1-driver/F1DriverBoard.tsx,

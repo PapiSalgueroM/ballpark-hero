@@ -1,5 +1,34 @@
 # Project state
 
+## CLAIMED 2026-10-01: truthful Driver hints and regression repairs
+
+807 reserves Driver Board plus new focused test/sim after806 commits. The current
+-100 hint cost is false against the original clue payout ladder. Show the actual
+next payout and count hints, preserving all game outcomes.808 reserves only the
+College page source guard and manager hot-seat harness cleanup. The former reads
+the namesake judge call instead of the final verdict; the latter deletes its own
+original library in a checkout inside TEMP. Concrete scope is on WORKBOARD.
+
+The older413 scope finished409 PASS/4 FAIL.804 subsequently repaired its stale
+guide records; College drift, Aussie5000ms timeout and live accented-name lookup
+are being investigated.1779 RAW inputs held, one library was removed by the
+manager harness. Frozen gate/output preserved, no full-green/closure claim.
+802/805/806 final production acceptance continues. All Claude claims stand.
+Next free809. Claims pushed before implementation.
+
+## ACCEPTED 2026-10-01: Name Them All feedback and readable reveals
+
+803 adds truthful full-name hit announcements, finite/static answer cues, readable
+answers and44px actions. Retry/More lists now stay in the finished top card, fixing
+the measured phone focus and Retry jump. Original catalog/helpers/180-second timer/
+score/share/completion stay held. Nine outcomes/thirteen unit controls/eight final-CSS
+contexts/three effective browser copies, types/two builds/all15 artifact fences plus
+guide/search/anchor guards and two actual App contexts pass. All1784 source files,
+188 saved pages and168 URL hashes/dates stay held. Full receipts are on WORKBOARD;
+the weaker placeholder control is preserved and not credited. No publication claim.
+802 measured native corrections,805 Search and806 feedback continue. The older413
+regression is still running. All Claude reservations stand. Next free807.
+
 ## IN PROGRESS 2026-10-01: F1 Driver feedback after committed guesses
 
 806 reserves the isolated Driver Board/module/tests/harness to fix wrong-guess
