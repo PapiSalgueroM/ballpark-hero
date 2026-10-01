@@ -24,6 +24,12 @@ const WhatsNew = () => {
 
       <section className="space-y-8 text-sm leading-relaxed text-muted-foreground">
         <div>
+          <h2 className="text-lg font-semibold text-foreground mb-2">October 2026</h2>
+          <ul className="list-disc pl-5 space-y-2">
+            <li><strong className="text-foreground">Club Manager: apply for a job yourself.</strong> A player asked for the other side of the phone, so now you can write to any club in any league from the Manager panel instead of waiting for one to call. The club takes two to five match days to answer and weighs your standing, the gap between the two clubs and how its own season is going, so a struggling club a rung below you will listen and a giant will not. A no comes with the reason in your inbox and that club will not take another call until next season is over. A yes gives you the choice: join right then (their season so far is simulated under the manager before you, like a takeover) or see your season out and start there in the summer, with your current board hearing about it either way. One application at a time, three a season.</li>
+          </ul>
+        </div>
+        <div>
           <h2 className="text-lg font-semibold text-foreground mb-2">September 2026</h2>
           <ul className="list-disc pl-5 space-y-2">
             <li><strong className="text-foreground">New game: Manager Hot Seat, five games to save your job.</strong> You walk into a real club on a bad run, the board give you five league games and a points target, and you either hit it or you are gone. Pick a shape and a team talk before every match, handle the press, and watch the board, the fans and the dressing room react. It runs on the Club Manager engine, so every match is the full match sim from that game. There is a daily (same club and target for everyone) and a free play mode for any club you like. It records that you played but puts no points on the leaderboard for now.</li>

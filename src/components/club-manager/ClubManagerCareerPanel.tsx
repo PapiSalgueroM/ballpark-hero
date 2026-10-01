@@ -2,10 +2,11 @@ import { FlagImg } from '@/components/FlagImg';
 import { MANAGER_BACKGROUNDS, CLUB_IDENTITIES, money } from '@/lib/clubManager';
 import type { CareerState, nationOfferFor } from '@/lib/clubManager';
 import type { useClubManager } from '@/hooks/useClubManager';
+import JobHuntCard from '@/components/club-manager/JobHuntCard';
 
 export default function ClubManagerCareerPanel({ c, g, nationOffer }: {
   c: CareerState;
-  g: Pick<ReturnType<typeof useClubManager>, 'resignNation' | 'acceptNation' | 'answerApproach'>;
+  g: Pick<ReturnType<typeof useClubManager>, 'resignNation' | 'acceptNation' | 'answerApproach' | 'applyJob' | 'joinNow' | 'joinSummer'>;
   nationOffer: ReturnType<typeof nationOfferFor>;
 }) {
   return (
@@ -75,6 +76,11 @@ export default function ClubManagerCareerPanel({ c, g, nationOffer }: {
                   <div className="bg-card border border-gold/40 rounded-xl p-3 mb-2 text-xs text-foreground">
                     🤝 <span className="font-bold">Pre-agreement signed:</span> you take over at <span className="font-bold">{c.pendingMove.club}</span> when the season ends. Finish the job here first.
                   </div>
+                )}
+                {/* Round 783: the other direction of the phone. Not while out of
+                    work, where the wilderness screen has its own market. */}
+                {!c.sacked && !c.wilderness && (
+                  <JobHuntCard c={c} onApply={g.applyJob} onJoinNow={g.joinNow} onJoinSummer={g.joinSummer} />
                 )}
                 <div className="bg-card border border-border rounded-xl p-3">
                   <div className="text-[10px] text-muted-foreground uppercase tracking-wider mb-1.5">💼 Manager career</div>
