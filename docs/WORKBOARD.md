@@ -1,5 +1,35 @@
 # Work board
 
+**2026-10-01, Codex809 ACCEPTED: truthful player-search failures.**
+Empty lookups with a failed applicable request now show a retry message instead
+of claiming no player exists. Useful direct, fallback and local results keep
+their original ranking and exact selection. Cleared or replaced searches cancel
+and invalidate pending requests, so stale rows cannot return. No database changes.
+
+All 11 new and 37 existing identity/interaction tests pass, with seven effective
+copied controls and independent original outcomes. Eight native contexts and
+three browser copies pass after strengthening current-response readiness. Two
+final production Puck Detective contexts use untouched JS and 220 fictional GET
+fixture rows satisfying the original pool floor. Each checks three failed lookup
+paths without spending a guess, then exact nonfirst selection/clue feedback/one
+daily save and quiet reload. Twelve actions have no Y change or overflow; retry
+text is fully visible in 44px rows. Errors and outward writes are zero. Sources,
+HTML and assets held; browser/server stopped and phone screenshot inspected.
+
+Combined types/build/all 15 artifact guards and affected regressions passed in
+the frozen 807 gate. Original 413-suite accented lookup failure remains historical
+with unknown HTTP cause; this fix addresses the independently reproduced hidden
+request failure. Receipts: C:/Users/antho/AppData/Local/Temp/
+dukb-round809-final-source-receipt.json, dukb-round809-native/report.json,
+dukb-round809-production-app/report.json and cleanup.json.
+810 acceptance follows; 811-813 continue. Next free 814.
+
+Publishing update: Lovable was found available but not installed in this session;
+installation was suggested without interrupting code work. The desktop Edge
+attempt could not reliably select the existing Lovable tab: first geometry was
+unavailable, then the refreshed element was missing from cached app state.
+No publish or account action occurred. Live still needs a verified publish.
+
 **2026-10-01, Codex807 ACCEPTED: accurate F1 Driver clues, hints and help.**
 Hint buttons show the original next payout, counters report the actual hint count,
 and numbered clue headings replace incorrect categories without changing a clue.

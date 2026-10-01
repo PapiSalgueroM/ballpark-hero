@@ -1,5 +1,18 @@
 # Project state
 
+## ACCEPTED 2026-10-01: player-search failures and stale requests
+
+809 exposes failed empty lookups with a retry message, preserves useful matches
+and invalidates cleared searches. All 48 focused/existing tests, seven effective
+controls, native checks and two untouched production Puck Detective contexts pass.
+Failed searches consume no guesses or saves; exact selection, clue feedback and
+quiet reload hold. Combined production and artifact gates pass. Receipts and
+limits are on WORKBOARD. 810 acceptance and 811-813 continue.
+
+Lovable is available but not installed here. Desktop tab selection failed after
+one recovery, so no publish occurred. The integration was suggested; code work
+continues independently. Live publication and Google decisions remain separate.
+
 ## ACCEPTED 2026-10-01: accurate F1 Driver clues, hints and help
 
 807 fixes misleading clue categories and hint costs, adds an actual-tier worked
