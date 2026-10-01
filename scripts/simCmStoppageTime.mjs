@@ -150,7 +150,8 @@ const NM = modulesDir();
         not try to.)
      of each half's own goals            first half 5.96 to 8.96 percent in its board, second half 13.96 to 16.48
      mean boards                         3.63 to 3.71 and 6.15 to 6.28 minutes
-     goals per match, board open minus
+     goals per match in the ninety and
+       their boards, board open minus
        closed (1)                        -0.004 to +0.001            tolerance 0.05
        (the arms share every seed, so the gap is near zero by
         construction; a board that added its own goals would add about a

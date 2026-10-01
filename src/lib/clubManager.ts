@@ -12786,10 +12786,11 @@ function oppAt(live: LiveMatch, minute: number): OppXiLine[] | null {
  * here (two to eight minutes, the Round 472 formula) are the shorter ones
  * of the older game, which took about the same late share with fewer
  * minutes. Uniform, only about 5.6 percent of all goals came after the
- * 90th. Measured by scripts/simCmStoppageTime.mjs (the numbers are in its
- * header): MEASURED_SHARES, against roughly 4 and 7 to 9 percent in the
- * real game. Cards, injuries and chances stay uniform over the stretch and
- * its board.
+ * 90th. Measured by scripts/simCmStoppageTime.mjs over five seeds (the
+ * numbers are in its header): 2.9 to 4.2 percent of all goals in first half
+ * added time and 7.3 to 8.6 percent after the 90th, against roughly 4 and
+ * 7 to 9 in the real game, and goals per match unmoved. Cards, injuries and
+ * chances stay uniform over the stretch and its board.
  *
  * Extra time has one board, at 120, because Round 670 made it one thirty
  * minute stretch with no interval at 105. A change made inside a board is
