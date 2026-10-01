@@ -26,6 +26,7 @@ const WhatsNew = () => {
         <div>
           <h2 className="text-lg font-semibold text-foreground mb-2">October 2026</h2>
           <ul className="list-disc pl-5 space-y-2">
+            <li><strong className="text-foreground">Career Ladder: the daily stops repeating itself.</strong> From October 15 the daily player works through the whole pool before anyone comes round again, so a man you have already guessed will not turn up for about half a year. Still two days in three from the deeper cuts and the third from the big names, and if you have a finished ladder saved from before the switch, it stays yours. <Link to="/career-ladder" className="text-primary hover:underline">Play today's ladder</Link>.</li>
             <li><strong className="text-foreground">New game: Aussie Rules Manager.</strong> Pick one of six fictional clubs, choose your eighteen starters and five bench players, prepare the squad and call each quarter through a ten-round league. Goals, behinds, the ladder and local season saves use a separate Aussie Rules engine. Clubs, players and results are generated, with game rules kept separate from the real 2026 match rules. A finished season records a play without ranked points. <Link to="/aussie-rules-manager" className="text-primary hover:underline">Manage a club</Link>.</li>
           </ul>
         </div>
