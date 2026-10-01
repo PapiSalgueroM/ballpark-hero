@@ -1,8 +1,8 @@
 {
   "__version": 3,
   "/": {
-    "hash": "125e70b85d3276bd",
-    "date": "2026-09-21"
+    "hash": "74a29f76dedea6f6",
+    "date": "2026-10-01"
   },
   "/about": {
     "hash": "e9b17eb973aac3d9",
@@ -20,13 +20,17 @@
     "hash": "5fca3b9e05212f90",
     "date": "2026-09-30"
   },
+  "/aussie-rules-manager": {
+    "hash": "bedc76e9e1844b88",
+    "date": "2026-10-01"
+  },
   "/ball-iq": {
     "hash": "6f8a7e00e1863905",
     "date": "2026-09-19"
   },
   "/baseball": {
-    "hash": "52cf69064b11a1b3",
-    "date": "2026-09-30"
+    "hash": "8be52ea4f5113286",
+    "date": "2026-10-01"
   },
   "/baseball-career": {
     "hash": "bc7759fdd89e3151",
@@ -61,12 +65,12 @@
     "date": "2026-09-30"
   },
   "/cbb-grid": {
-    "hash": "e82046854ec65ec1",
-    "date": "2026-09-30"
+    "hash": "2312edafa6482e43",
+    "date": "2026-10-01"
   },
   "/cbb-grid/archive": {
-    "hash": "608a5cd8ccc19a50",
-    "date": "2026-09-05"
+    "hash": "51a75c813a4150b0",
+    "date": "2026-10-01"
   },
   "/cfb-dynasty": {
     "hash": "1fbbcd867d512202",
@@ -93,8 +97,8 @@
     "date": "2026-09-30"
   },
   "/college": {
-    "hash": "23a40147a1f30a18",
-    "date": "2026-09-30"
+    "hash": "32423354f70acd4e",
+    "date": "2026-10-01"
   },
   "/college-grid": {
     "hash": "b2ac0349630f7aae",
@@ -233,20 +237,20 @@
     "date": "2026-09-30"
   },
   "/hockey": {
-    "hash": "bbdca7135effe802",
-    "date": "2026-09-30"
+    "hash": "7a21895b61d9f61a",
+    "date": "2026-10-01"
   },
   "/hockey-career": {
     "hash": "2e7f387b81915795",
     "date": "2026-09-30"
   },
   "/hockey-grid": {
-    "hash": "6456e075743cc982",
-    "date": "2026-09-30"
+    "hash": "d00a58b65b59e0a4",
+    "date": "2026-10-01"
   },
   "/hockey-grid/archive": {
-    "hash": "5d823cc12f9d8640",
-    "date": "2026-09-05"
+    "hash": "d05a0aa34f64e674",
+    "date": "2026-10-01"
   },
   "/hockey-higher-lower": {
     "hash": "3c8e2b31f29b7d45",
@@ -305,12 +309,12 @@
     "date": "2026-09-30"
   },
   "/mlb-grid": {
-    "hash": "344f39026cd7ff25",
-    "date": "2026-09-30"
+    "hash": "1a5a24cb65df77be",
+    "date": "2026-10-01"
   },
   "/mlb-grid/archive": {
-    "hash": "b9bbb8960bb624b8",
-    "date": "2026-09-05"
+    "hash": "173e734b0d47ed14",
+    "date": "2026-10-01"
   },
   "/mlb-higher-lower": {
     "hash": "8bb21a141aed7b88",
@@ -357,12 +361,12 @@
     "date": "2026-09-30"
   },
   "/nba-grid": {
-    "hash": "1403dfe6d5910e0f",
-    "date": "2026-09-30"
+    "hash": "8f04e8db3baa7412",
+    "date": "2026-10-01"
   },
   "/nba-grid/archive": {
-    "hash": "80e43e65bd3e573d",
-    "date": "2026-09-05"
+    "hash": "e86d0dc408c95034",
+    "date": "2026-10-01"
   },
   "/nba-higher-lower": {
     "hash": "06f9d47d69b371a8",
@@ -477,8 +481,8 @@
     "date": "2026-09-16"
   },
   "/pro-basketball": {
-    "hash": "377873c972bd45ae",
-    "date": "2026-09-30"
+    "hash": "c312885609b99d15",
+    "date": "2026-10-01"
   },
   "/pro-football": {
     "hash": "51cee2d646aeb336",
@@ -609,8 +613,8 @@
     "date": "2026-09-30"
   },
   "/stat-detective": {
-    "hash": "2dba9cff45fbeda6",
-    "date": "2026-09-30"
+    "hash": "0d4701e6906d76f6",
+    "date": "2026-10-01"
   },
   "/teammates": {
     "hash": "47d5952cc76ca1ba",
@@ -641,7 +645,7 @@
     "date": "2026-09-19"
   },
   "/whats-new": {
-    "hash": "de6e2125df780c62",
+    "hash": "d5d3d027137262b4",
     "date": "2026-10-01"
   },
   "/who-am-i": {
