@@ -13,9 +13,17 @@ import {
   type NbaLeague, type NbaProspect, type SeriesResult, nbaExecuteTalksTrade,
   ensureNbaLeagueIds, NBA_ROSTER_MIN, NBA_ROSTER_MAX,
   /* Round 722: the luxury tax, the aprons and the fourteen man tip off floor. */
-  nbaTipOff, nbaTipOffRefusal, nbaAssessTax, nbaTaxView, nbaApronNote, NBA_TIPOFF_MIN, NBA_MIN_CONTRACT,
+  nbaTipOff, nbaTipOffRefusal, nbaAssessTax, nbaTaxView, nbaApronNote, NBA_TIPOFF_MIN,
+  /* Round 824: new deals are priced in the money of the season they start in. */
+  nbaMinContract, nbaDraftSigning,
 } from '@/lib/nbaFrontOffice';
 import { FoCapPanel } from '@/components/front-office-shared/FoCapPanel';
+/* Round 824: the season's lines and awards, engine in nbaSeasonStats.ts, box shared. */
+import {
+  nbaCloseSeasonStats, nbaLeaders, nbaTeamLines, NBA_AWARD_LABEL, NBA_AWARD_RULE,
+  type NbaAwardKey, type NbaAwardPick, type NbaSeasonAwards,
+} from '@/lib/nbaSeasonStats';
+import { FoSeasonStatsCard, type FoStatsAward } from '@/components/front-office-shared/FoSeasonStatsCard';
 /* Round 631: waiving a man costs dead money and he cannot come back this season. */
 import { deadMoneyFor, deadCapUsed, signRefusal, cutRefusal, rosterFullRefusal, tradeRefusal } from '@/lib/frontOfficeCuts';
 /* Round 531: the cap on screen says which day its figure was read. */
@@ -58,6 +66,25 @@ const SAVE_KEY = 'nba-front-office-save-v1';
 const CUT_SAID = 'You waived him this season.';
 
 const NBA_WORDS: FoSportWords = { title: 'the Finals', playoffs: 'the playoffs', round: 'a series', games: 80 };
+
+/* Round 824: what the close screen and the history say about the season's
+   lines. The rosters carry real names, so every one of them says it is this
+   save's sim season. */
+const SIM_NOTE = "Sim season: every line and award here comes from this save's games, not real NBA stats.";
+const AWARD_ORDER: NbaAwardKey[] = ['mvp', 'allLeague', 'roy', 'dpoy', 'sixth'];
+const awardDetail = (k: NbaAwardKey, m: NbaAwardPick): string => k === 'dpoy'
+  ? `${m.spg} stl, ${m.bpg} blk, ${m.rpg} reb a game`
+  : `${m.ppg} pts, ${m.rpg} reb, ${m.apg} ast a game`;
+function awardRows(a: NbaSeasonAwards, myTeam: string): FoStatsAward[] {
+  return AWARD_ORDER.map(k => {
+    const men = k === 'allLeague' ? a.allLeague : a[k] ? [a[k]!] : [];
+    return {
+      label: NBA_AWARD_LABEL[k],
+      rule: NBA_AWARD_RULE[k],
+      winners: men.map(m => ({ id: m.id, name: m.name, team: m.team, detail: awardDetail(k, m), mine: m.team === myTeam })),
+    };
+  });
+}
 
 /* Round 722: the tax at season close, drawn on the recap beside the results.
    Optional on the postseason so a save written before the round draws without it. */
@@ -270,7 +297,7 @@ export default function NbaFrontOfficeBoard() {
       const before = lg.teams[myTeam].players.length;
       const tip = nbaTipOff(lg, Math.random, myTeam);
       const mine = tip.filled[myTeam];
-      if (mine?.length) tipLines.push(`📋 You tipped off with ${before} under contract, so the league filled you to ${NBA_TIPOFF_MIN} on minimum deals: ${mine.map(p => p.name).join(', ')}, $${NBA_MIN_CONTRACT}M each.`);
+      if (mine?.length) tipLines.push(`📋 You tipped off with ${before} under contract, so the league filled you to ${NBA_TIPOFF_MIN} on minimum deals: ${mine.map(p => p.name).join(', ')}, $${nbaMinContract(lg.cap)}M each.`);
     }
     const report = simRound(lg, myTeam, Math.random);
     const newFeed = [
@@ -284,6 +311,15 @@ export default function NbaFrontOfficeBoard() {
       /* Round 722: the tax is assessed on every club at close, once. The GM's
          own bill moves trust upstairs and the recap draws it beside the results. */
       const taxes = nbaAssessTax(lg);
+      /* Round 824: the season's awards, named once from its lines and written
+         on the winners' cards. The feed says so when one of yours won. */
+      const closed = nbaCloseSeasonStats(lg);
+      if (closed) {
+        for (const k of AWARD_ORDER) {
+          const men = k === 'allLeague' ? closed.allLeague : closed[k] ? [closed[k]!] : [];
+          for (const m of men) if (m.team === myTeam) newFeed.push(`🏅 ${m.name} takes ${NBA_AWARD_LABEL[k]} in this save's ${closed.season} season.`);
+        }
+      }
       const myTax = taxes.find(x => x.team === myTeam);
       const reaction = ownerTaxReaction(myTax?.bill ?? 0);
       const payers = taxes.filter(x => x.bill > 0).sort((a, b) => b.bill - a.bill);
@@ -358,7 +394,8 @@ export default function NbaFrontOfficeBoard() {
     const lg: NbaLeague = JSON.parse(JSON.stringify(league));
     const pr = draftClass.find(p => p.id === id);
     if (!pr) return;
-    lg.teams[myTeam].players.push(nbaProspectToPlayer(pr, Math.random));
+    const signing = nbaDraftSigning(lg);
+    lg.teams[myTeam].players.push(nbaProspectToPlayer(pr, Math.random, signing));
     const remaining = draftClass.filter(p => p.id !== id);
     const aiTakes = remaining.slice(0, 5);
     const order = nbaStandings(lg).map(t => t.abbr).reverse().filter(a => a !== myTeam);
@@ -368,7 +405,7 @@ export default function NbaFrontOfficeBoard() {
     const rivalPicks: { team: string; playerName: string; pos: string; grade: number }[] = [];
     aiTakes.forEach((p, i) => {
       const abbr = order[i % order.length];
-      lg.teams[abbr].players.push(nbaProspectToPlayer(p, Math.random));
+      lg.teams[abbr].players.push(nbaProspectToPlayer(p, Math.random, signing));
       rivalPicks.push({ team: abbr, playerName: p.name, pos: String(p.pos), grade: p.grade });
     });
     const nextClass = remaining.filter(p => !aiTakes.includes(p));
@@ -568,6 +605,9 @@ export default function NbaFrontOfficeBoard() {
     /* Round 187: the verdict curtain. Every string below is exactly what
        Round 180 wrote; stageVerdict only decides confetti and tone. */
     const staging = stageVerdict({ iAmChampion: champion === myTeam, fired });
+    /* Round 824: the closed season's lines and awards. */
+    const leaders = nbaLeaders(league, 3);
+    const seasonAwards = (league.awards ?? []).find(a => a.season === league.season) ?? null;
     return (
       <div className="space-y-4">
         <div
@@ -650,6 +690,31 @@ export default function NbaFrontOfficeBoard() {
             </div>
           )}
         </div>
+        {/* Round 824: the season in numbers, one box with three tabs. A save
+            from before the round has no lines for this season and says so. */}
+        {leaders ? (
+          <FoSeasonStatsCard
+            season={league.season}
+            note={SIM_NOTE}
+            qualifyLine={`To lead a table or win an award a man needs ${leaders.minGames} games this season, four in five of an average club's.`}
+            awards={seasonAwards ? awardRows(seasonAwards, myTeam) : []}
+            emptyAwards="No awards this season."
+            leaders={([['Points', 'pts'], ['Rebounds', 'reb'], ['Assists', 'ast']] as const).map(([lab, col]) => ({
+              label: lab,
+              rows: leaders[col].map(r => ({ id: r.id, name: r.name, team: r.team, value: r.value, mine: r.team === myTeam })),
+            }))}
+            teamName={label(myTeam)}
+            columns={['PPG', 'RPG', 'APG']}
+            teamLines={nbaTeamLines(league, myTeam).map(l => ({
+              id: l.id, name: l.name, g: l.g, values: [l.ppg, l.rpg, l.apg],
+              tag: l.rookie ? '(rookie)' : l.gs * 2 < l.g ? '(bench)' : undefined,
+            }))}
+          />
+        ) : (
+          <p data-season-stats-pending className="rounded-2xl border border-border bg-card p-3 text-center text-[11px] text-muted-foreground">
+            This save started before season lines were kept, so this season has none. Lines and awards start with next season's tip off.
+          </p>
+        )}
       </div>
     );
   }
@@ -793,7 +858,7 @@ export default function NbaFrontOfficeBoard() {
             dead={dead}
             note={capNote()}
             tax={view}
-            roster={{ count: my.players.length, floor: NBA_TIPOFF_MIN, max: NBA_ROSTER_MAX, minContract: NBA_MIN_CONTRACT }}
+            roster={{ count: my.players.length, floor: NBA_TIPOFF_MIN, max: NBA_ROSTER_MAX, minContract: nbaMinContract(league.cap) }}
           />
           {cutBlock && <p data-cut-block className="mb-2 text-center text-[10px] text-destructive">{cutBlock}</p>}
           <div className="grid max-h-96 grid-cols-1 gap-1 overflow-y-auto sm:grid-cols-2">
@@ -807,6 +872,13 @@ export default function NbaFrontOfficeBoard() {
                 <span className="min-w-0">
                   <span className={cn('block truncate font-bold', p.out > 0 ? 'text-destructive' : 'text-foreground')}>{p.name} {p.out > 0 ? `(out ${p.out}r)` : ''}</span>
                   <span className="block text-[10px] text-muted-foreground">{p.pos} · {p.age}y · ${p.salary}M x{p.years}</span>
+                  {/* Round 824: this save's awards, on his card. The names are
+                      real, so each one says it is a sim award, never the real one. */}
+                  {p.awards && p.awards.length > 0 && (
+                    <span data-award-badge className="block truncate text-[10px] text-gold" title={`This save's sim awards, not real NBA ones: ${p.awards.join(', ')}`}>
+                      🏅 {p.awards.slice(-2).reverse().map(a => `Sim ${a}`).join(', ')}{p.awards.length > 2 ? ` +${p.awards.length - 2} more` : ''}
+                    </span>
+                  )}
                 </span>
                 <span className="ml-2 flex shrink-0 items-center gap-1.5">
                   <b className="text-primary">{p.ovr}</b>
@@ -971,7 +1043,7 @@ export default function NbaFrontOfficeBoard() {
           {tipBlock && <p data-tipoff-block className="mb-2 text-[11px] text-destructive">{tipBlock}</p>}
           {!tipBlock && tipShort > 0 && (
             <p data-tipoff-short className="mb-2 text-[11px] text-muted-foreground">
-              {tipShort} short of the {NBA_TIPOFF_MIN} man floor. At tip off the league fills the gap on minimum deals (${NBA_MIN_CONTRACT}M each), so sign who you want first.
+              {tipShort} short of the {NBA_TIPOFF_MIN} man floor. At tip off the league fills the gap on minimum deals (${nbaMinContract(league.cap)}M each), so sign who you want first.
             </p>
           )}
           <button onClick={playRound} disabled={!!tipBlock} title={tipBlock ?? undefined} className="inline-flex items-center gap-2 rounded-full bg-primary px-8 py-2.5 text-sm font-bold text-primary-foreground hover:opacity-90 disabled:opacity-40">
@@ -998,6 +1070,38 @@ export default function NbaFrontOfficeBoard() {
               </div>
             ))}
           </div>
+          {/* Round 824: the league's history in this save, newest first: the
+              champion and the season's awards, with what your club won. */}
+          {(league.awards ?? []).length > 0 && (() => {
+            const history = [...(league.awards ?? [])].reverse();
+            const ours = history.reduce((n, a) => n + AWARD_ORDER.reduce((m, k) => m + (k === 'allLeague' ? a.allLeague : a[k] ? [a[k]!] : []).filter(x => x.team === myTeam).length, 0), 0);
+            return (
+              <div data-award-history className="mt-3 border-t border-border pt-2">
+                <p className="text-center text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Award history, this save</p>
+                <p className="mb-1 text-center text-[10px] text-muted-foreground">
+                  {ours > 0 ? `Your club has won ${ours} award${ours === 1 ? '' : 's'} here.` : 'Your club has not won an award here yet.'} Sim seasons, not real NBA history.
+                </p>
+                <div className="max-h-40 space-y-1 overflow-y-auto">
+                  {history.slice(0, 8).map(a => {
+                    const champ = league.champions.find(c => c.season === a.season)?.team;
+                    const bits = [
+                      champ ? `Champions ${champ}` : null,
+                      a.mvp ? `MVP ${a.mvp.name} (${a.mvp.team})` : null,
+                      a.roy ? `Rookie ${a.roy.name} (${a.roy.team})` : null,
+                      a.dpoy ? `Defense ${a.dpoy.name} (${a.dpoy.team})` : null,
+                      a.sixth ? `Sixth man ${a.sixth.name} (${a.sixth.team})` : null,
+                    ].filter(Boolean);
+                    return (
+                      <p key={a.season} className="text-[10px] text-muted-foreground">
+                        <b className="text-foreground">{a.season}</b> · {bits.join(' · ')}
+                        {a.allLeague.length > 0 && <> · All-League {a.allLeague.map(m => m.name).join(', ')}</>}
+                      </p>
+                    );
+                  })}
+                </div>
+              </div>
+            );
+          })()}
         </div>
       )}
 
