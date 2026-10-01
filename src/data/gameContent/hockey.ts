@@ -1482,7 +1482,7 @@ export const HOCKEY_CONTENT: GameContentMap = {
       {
         heading: "A 91 rated lineup runs the playoffs",
         paragraphs: [
-          "Your finished lineup rates 91. The Qualifying Round is a 6-0 rout, the First Round a 4-0 shutout, the Second Round goes to overtime and you take it 3-2, and the Conference Final ends the run 4-2. Three rounds survived, 48 points, and the card you would take back is the 84 you put in net.",
+          "Your finished lineup rates 91. The Qualifying Round is a 6-0 rout, the First Round a 4-0 shutout, the Second Round goes to overtime and you take it 3-2, and the Conference Final ends the run 4-2. Three rounds survived, 48 points, and the card you would take back is the 82 you settled for on the second defense pair.",
         ],
       },
     ],
@@ -1502,7 +1502,7 @@ export const HOCKEY_CONTENT: GameContentMap = {
       {
         heading: "Building toward a lineup in the mid nineties",
         items: [
-          "A Cup run needs a lineup in the mid nineties. Watch the running rating under the cards as you fill the lines.",
+          "The Cup only becomes a real chance once your lineup is in the mid nineties. Watch the running rating under the cards as you fill the lines.",
         ],
       },
     ],
