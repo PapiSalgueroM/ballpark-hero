@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback } from 'react';
+import { useState, useMemo, useCallback, useEffect, useRef } from 'react';
 import { aflGoalKickers, AflGoalKicker } from '@/data/aflGoalKickers';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { higherLowerScore } from '@/lib/higherLowerScore';
@@ -85,6 +85,14 @@ export function useAflHL() {
 
   const [currentResult, setCurrentResult] = useState<RoundResult | null>(null);
   const [showingResult, setShowingResult] = useState(false);
+  const revealTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const revealVersion = useRef(0);
+  const cancelReveal = useCallback(() => {
+    revealVersion.current += 1;
+    if (revealTimer.current !== null) clearTimeout(revealTimer.current);
+    revealTimer.current = null;
+  }, []);
+  useEffect(() => cancelReveal, [cancelReveal]);
 
   const [unlimitedPairs, setUnlimitedPairs] = useState<[AflGoalKicker, AflGoalKicker][]>(
     () => buildPairs(Math.floor(Math.random() * 100000), hard),
@@ -155,7 +163,11 @@ export function useAflHL() {
 
       if (mode === 'daily') addDailyAction({ t: 'result', correct });
 
-      setTimeout(() => {
+      cancelReveal();
+      const version = revealVersion.current;
+      revealTimer.current = setTimeout(() => {
+        if (version !== revealVersion.current) return;
+        revealTimer.current = null;
         if (mode !== 'daily') {
           setUnlimitedResults((prev) => [...prev, { player1: p1, player2: p2, correct }]);
           setUnlimitedRound((prev) => prev + 1);
@@ -164,10 +176,11 @@ export function useAflHL() {
         setShowingResult(false);
       }, 2000);
     },
-    [currentPair, showingResult, gameStatus, mode, addDailyAction],
+    [currentPair, showingResult, gameStatus, mode, addDailyAction, cancelReveal],
   );
 
   const switchMode = useCallback((m: AflHLMode) => {
+    cancelReveal();
     if (m === 'unlimited') {
       setUnlimitedPairs(buildPairs(Math.floor(Math.random() * 100000), hard));
       setUnlimitedResults([]);
@@ -176,9 +189,10 @@ export function useAflHL() {
     setMode(m);
     setCurrentResult(null);
     setShowingResult(false);
-  }, [hard]);
+  }, [hard, cancelReveal]);
 
   const toggleHard = useCallback(() => {
+    cancelReveal();
     setHard((prev) => {
       const next = !prev;
       setMode('unlimited');
@@ -189,7 +203,7 @@ export function useAflHL() {
       setShowingResult(false);
       return next;
     });
-  }, []);
+  }, [cancelReveal]);
 
   useGameCompletion('afl-higher-lower', rawDailyStatus !== 'playing', dailyScore);
 

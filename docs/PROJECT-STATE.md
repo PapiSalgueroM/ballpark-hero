@@ -1,5 +1,115 @@
 # Project state
 
+## LIVE 2026-10-01: Release K (twelve reviewed rounds, two new games), main `1e0aa2b8`
+
+Assembled by the desktop Claude lane in the gate clone (`release-k`) on top of Release J and Codex's commits as
+they stood at each merge. **douknowball.com is serving it:** deployment `823e6dea`, called only after
+`get_project` showed `latest_commit_sha` `1e0aa2b8`; the live entry moved from `index-jsexOB8y.js` to `index-DH__DSXe.js`.
+Proof by content: the x-deployment-id header read 823e6dea 30 seconds after the deploy; /deadline-day and /nhl-gauntlet-draft answer 200 with their own h1 and are in the live sitemap (170 URLs); /front-office carries the reworded heading Tagged stars and who walks; /whats-new carries the lines for Deadline Day, the shootout order, applying for a job, the franchise tag, the coordinators and Internacional.
+
+**How it was built.** Every round below went builder, one adversarial review, one fix pass, all on Opus, then the
+merged tree was gated here. The reviews found 27 majors across the twelve rounds and every one was fixed or is
+named below as not fixed with its reason. Stage by stage results (findings, fixes, gates, what was left) are in
+`scratchpad/chains-v3.json` of the session and summarised here.
+
+- **721, new game Deadline Day (`/deadline-day`).** A sporting director's last day of the window: a clock in game
+  hours, a budget, squad needs, bids against the Club Manager valuation desk and closeness meter (imported, the
+  engine is not forked and its module registrations are restored after every call), rivals who take players, and a
+  window grade. Daily and free play. Review majors fixed: the wage cost nothing so the agent's terms could be beaten
+  for free; Menu during the daily reset the window; the clock check could not fail; rivals signing players had no
+  harness check. `simDeadlineDay`. Caps row `deadline-day` APPLIED (unscored).
+- **724, Gauntlet Draft NHL (`/nhl-gauntlet-draft`).** The fifth sport on the shared gauntlet engine, pool from the
+  site's own NHL data. Review major fixed: nothing held the NHL position rule or lineup shape. `simGauntletEngine`
+  holds NHL to every section the other four are held to. Caps row `nhl-gauntlet-draft` APPLIED (100). Not fixed, noted
+  for its own round: the shared engine gives no "in overtime" label to a game won by one extra time goal.
+- **782, Club Manager shootout order (report of 2026-09-23).** The manager lists up to eleven takers on the tactics
+  screen; a shootout walks that order over the men still on the pitch, each kick's odds moved by the taker's
+  penalties rating and the keeper facing him inside the existing cap; every kick is listed in the report. Unset
+  means the old behaviour exactly (150 of 150 fixture rows). Review majors fixed: the order tile never scrolled into
+  view, and nothing held the keeper's nudge. `simCmShootoutOrder`. Left as briefed: with an order set a favourite
+  wins fewer shootouts than with none (61.3 against 67.6 percent for the strongest side), because each kick reads
+  only its taker and keeper; a bounded strength lean is a design call.
+- **783, Club Manager apply for a job (report of 2026-09-23).** Apply to any modelled club; an answer in two to five
+  match days from reputation, record, tier gap and how that club's season is going; on a yes, join now or at the
+  rollover; one open application, a season's cooldown after a no, three a season. Review majors fixed (four): a
+  booked summer move overrode a job taken after a sacking; a late season application vanished unanswered at the
+  rollover; the manager could end up promised to two clubs; the cooldown could be broken through the real rollover
+  with every gate green. `simCmApplications`.
+- **723, NFL Front Office franchise tag and depth chart.** One tag an offseason at the greater of the top five
+  average at the position or 120 percent of last year's salary; a depth chart per position group that the sim's
+  strength reads. Review majors fixed: a newcomer went to the bottom of a saved order whatever his rating; two tag
+  rules could be broken with everything green. `simNflTagDepth` (62 checks). Kept on purpose and disclosed in the
+  guide: untagged stars walk 15 percent of the time, which is what gives the tag a use. No phone pass of the tag
+  card and the chart tiles was done in a worktree: owed.
+- **728, College Football Dynasty depth.** Offensive and defensive coordinators (generated, hired and fired in the
+  offseason, a bounded effect on the unit, a salary from the budget), rivalry week, and strength of schedule on the
+  schedule screen and in Playoff selection, in a module the basketball dynasty can share (not bound yet). Review
+  major fixed: the coordinator's effect was never fenced where the sim reads it. `simCfbStaff`. Not fixed, with
+  reasons in the branch: AI coordinators are hired at each program's own level, a three school state can only pair
+  two, and a save from before the round keeps the raw wins conference sort until its offseason.
+- **725, Soccer Career life events.** A cooldown per event, the catalog audited type by type (the table is in the
+  harness header), 20 new events with role speakers only. Review majors fixed: the shared story rule and every
+  cooldown length could be switched off with the harness green. `simCareerLifeCooldowns` (16 controls). One
+  residual: a financial crisis drops the private physio's yearly cost while the flag stays set.
+- **726, World XI season report.** Month by month form with a standout and one narrated moment, per player season
+  stats, young player and goal of the season, a "what would have changed" line that really re-simulates, a share
+  card. Review majors fixed (four): copy claimed stats add up to team totals when they did not; the round turned
+  `simNoInventedConduct` red; lines repeated inside a season; the "nobody real speaks" guard could be beaten.
+  `simWorldXiSeasonReport`, plus the browser fixture `playWorldXiReportFit` for phone widths.
+- **727, Sports Bingo pass the device.** Two to four seats on one phone, each with its own card from the same pack
+  run, a hand over screen, custom condition families with a visible fallback. Review majors fixed: the same packs
+  rule was checked through a field play never reads; nothing checked each seat gets its own card; a flaky page
+  test. `simBingoSeats`. Not fixed on purpose: a refresh mid turn gives the seat a full clock back.
+- **718, Career Ladder no repeat rotation, from 2026-10-15.** The daily deals from a committed, append only roster
+  (`src/data/careerLadderRoster.json`), so a data edit can no longer re-deal a man a day later (the review's major).
+  `simCareerLadderRotation` (8 controls, a golden 800 day walk). STANDING STEP, now in `CLAUDE.md`: a round that
+  changes `career_players` or `career_seasons` runs `node scripts/genCareerLadderRoster.mjs` and commits the JSON.
+  The Clue Auction half of the old claim does not apply (it has no daily).
+- **784, three reports closed as a guess, rechecked.** Soccer Career: a keeper's drills now train keeper skills and
+  the First Touch tile says so (the review found the reported defect still there in that drill); defenders' clean
+  sheets hold (`simCareerCleanSheets`). Perfect Season NBA: the odds on the card are the odds in the sim
+  (`simPerfectSeasonOdds`), with the best record kept. Career quiz: Alisson starts at Internacional in 2013 and 24
+  more first clubs audited; the data is APPLIED (`round_784_career_first_clubs`, 3,612 to 3,640 season rows) and
+  the live tables render the committed `careerPlayers.ts` byte for byte. Left for later rounds: NHL and MLB Perfect
+  Season copy still says "chase the perfect season" (odds one in 3,857 and one in 12.1 million at an 88 overall), a
+  handful of disclosed data rows, and the duplicate Alisson player.
+- **706, the college tables, readers only.** The College Basketball Grid search no longer offers `_ Surname`
+  placeholders and the three twin programs read as one program each. `simCollegeTables` (16 controls) tests the
+  call sites, not just the helpers (the review's major). **Its five migrations are NOT applied:** `cbb_programs` at
+  00:00 ET; `nfl_draft_picks` then regenerate `scripts/data/collegeGridPlayers.json` (the diff must drop exactly the
+  13 `draft:1977` ids), reload `college_grid_players` and regenerate `nfl_grid_players`; HOLD `ncaa_player_stats`
+  until the College Basketball Grid archive's 106 school pool is re-pinned in the same step; `cfb_qb` and `cfb_rb`
+  whenever. Until then the 13 invented 1977 names are still College Grid answers, and What's New says nothing
+  about them.
+- **Gate fixes made at assembly.** Manager Hot Seat's verdict now wears the shared result moment (Round 719 had
+  missed Round 710's rule and `simResultMoment` was red on main); `/aussie-rules-manager` is listed there with its
+  own season complete panel; `simCareerLifeCooldowns` folds line endings on its read; guide headings on Sports
+  Bingo and NFL Front Office no longer repeat a phrase; the frozen guide record follows the reviewed guide changes.
+- **Not in this release:** 700 (the seoMeta split passed review with no majors but restructures the file three of
+  these rounds add to, so it ships alone next), 703 (reviewed and fixed at `67c4e42d`; the site code has to be live
+  before its nine edge functions are redeployed, so it is the next publish), 722 (four majors fixed; sent back to
+  calibrate the tax line, which billed Denver 416 million in season one), 781, 795 and 796 (finishing), 735 to 740.
+
+**Gates.** Type gate 0 on the merged tree and again after each merge of main. Twelve branches merged with only What's New and the generated search index conflicting. build:seo: 176 routes prerendered, 0 failed, 27 lastmod dates rewritten, 2 new, 170 URLs; two pages redrawn alone (PRERENDER_ONLY) after their headings were reworded. Thirty snapshot and release fences in two lanes plus twenty round fences, all green on the final tree; simGridArchive's three controls fire. Reds settled on the way: simResultMoment (Hot Seat wired, Aussie Rules listed), simHarnessAnchors (a raw read in simCareerLifeCooldowns), simGuideHeadings (repeated heading phrases, the frozen record refreshed for /front-office, /sports-bingo and /soccer-career, the floor to 131), simAdsense (80 callers), simIndexNow (floor 170), and one simPrerenderBoot page load timeout that passed twice on rerun. Browser walks: playHomeFold, playSoftFourOhFour, playSnapshotDrift and playWorldXiReportFit green; playRenderStability green on the 32 routes whose saved pages changed; sweepWeight green after four budgets rose with their measured figures (Club Manager 641K on 637K, NFL Front Office 312K on 308K, Minefield 288K on 285K, Footle 333K on 330K) and the Aussie Rules guide bundle was registered. Not done: a phone look at the NFL tag card and depth chart tiles, and scripts/simHalftime.mjs was not part of this gate.
+
+## INTEGRATED 2026-10-01: Claude Release K and current fixes
+
+Main now includes Release K through 1e0aa2b8, with 813 on top at 51934cdf. All
+current claims and earlier accepted work were retained. Fresh unchanged tests
+pass 89/89 across all nine Higher/Lower hooks and shared daily puzzle identity.
+Their save envelope needs no correction. The next 815-817 production gate uses
+this integrated baseline; older gate evidence keeps its original scope. Next free 818.
+
+## ACCEPTED 2026-10-01: eight more Higher/Lower restart fixes
+
+813 cancels stale reveals in AFL, College Football, F1, Golf, Hockey, NBA, NFL
+and Tennis, preserving original rules, RNG, 2000ms reveal and daily saves. All
+72 actual-hook outcomes and seven effective control families pass, including
+original full 325-point games. Types/builds/all artifact guards and eight final
+App routes pass; no page errors, overflow, extra booking or asset drift observed.
+Detailed bounded evidence is on WORKBOARD. Alongside 810, all nine claimed
+Higher/Lower hooks are covered. 811-814 accepted; 815-817 continue. Next free 818.
+
 ## CLAIMED 2026-10-01: Tennis and CBB worked help examples
 
 817 owns only both local HowToPlay panels and focused help checks. Add actual-tier
