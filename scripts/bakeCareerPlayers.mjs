@@ -45,9 +45,11 @@ const PAGE_SIZE = 1000;
    Round 784 baked 3,640 seasons: the 3,612 in the table plus the 28 first club
    rows its migration adds. Until that migration is applied the table reads
    3,612 and a bake would put Alisson back at Roma, so it fails closed here
-   (and on CORRECTION_LEDGERS below) instead of writing. */
+   (and on CORRECTION_LEDGERS below) instead of writing. Round 827 baked 3,644:
+   the 3,640 plus Haaland's 2019-20 Salzburg season and Kane's three loans, so
+   a bake before its migration fails closed the same way. */
 const PLAYER_FLOOR = 253;
-const SEASON_FLOOR = 3640;
+const SEASON_FLOOR = 3644;
 
 /* Corrections recorded in a ledger, each with a migration that writes it to
    the tables. The file is baked from the tables, so a correction lives in the
@@ -56,6 +58,7 @@ const SEASON_FLOOR = 3640;
    recorded correction, because the bake would silently undo it. */
 export const CORRECTION_LEDGERS = [
   { file: 'scripts/data/careerFirstClubs.json', migration: 'supabase/migrations/20261001120000_career_first_clubs.sql' },
+  { file: 'scripts/data/careerRowsVerified2026-10.json', migration: 'supabase/migrations/20261002120000_career_rows_verified.sql' },
 ];
 
 /** Every recorded correction the pool does not carry. Empty when it carries them all. */

@@ -36,7 +36,9 @@
  *      (CORRECTION_LEDGERS in the bake) adds or changes is in the file, and the
  *      bake's guard names every one of them in a pool that lacks them, so a
  *      re-bake from a table the migration has not reached fails closed rather
- *      than putting Alisson back at Roma.
+ *      than putting Alisson back at Roma. Round 827 added its record
+ *      (scripts/data/careerRowsVerified2026-10.json), whose rows can carry
+ *      several changes each, so the pool before is rebuilt undoing all of them.
  *
  * NEGATIVE CONTROLS, applied to the file TEXT in memory the way a hand edit
  * would land, each refusing to run if its rewrite changed nothing:
@@ -67,10 +69,11 @@ if (CONTROL && !['split', 'stale'].includes(CONTROL)) { console.error(`CAREER_CO
 if (CONTROL === 'stale' && LOCAL_ONLY) { console.error('the stale control is caught by the live sections; run it without CAREER_FALLBACK_LOCAL_ONLY'); process.exit(1); }
 
 /* the counts on 2026-09-11, seasons moved to Round 784's bake (3,612 plus the
-   28 first club rows); a shrink is lost coverage, a short read, or a bake from
-   a table that does not carry the 784 migration yet */
+   28 first club rows) and then Round 827's (plus Haaland's 2019-20 Salzburg
+   season and Kane's three loans); a shrink is lost coverage, a short read, or
+   a bake from a table that does not carry those migrations yet */
 const PLAYER_FLOOR = 253;
-const SEASON_FLOOR = 3640;
+const SEASON_FLOOR = 3644;
 const SAMPLE = 30;
 
 let failures = 0;
@@ -257,10 +260,13 @@ for (const { file, migration } of CORRECTION_LEDGERS) {
      changed row back at its old figure. The bake's guard must name them all,
      or a re-bake run before the migration would quietly undo the correction. */
   const isAdded = (name, s) => ledger.added.some(r => r.player === name && r.season === s.season && r.club === s.club);
-  const changedFor = (name, s) => ledger.changed.find(c => c.player === name && c.season === s.season && c.club === s.club);
+  /* Round 827: a row can carry several recorded changes (Haaland's 2018-19
+     Salzburg row changes appearances, goals and assists, De Bruyne's Chelsea
+     row its season too), so every one of them is undone, not the first */
+  const changesFor = (name, s) => ledger.changed.filter(c => c.player === name && c.season === s.season && c.club === s.club);
   const before = players.map(p => ({
     ...p,
-    career: p.career.filter(s => !isAdded(p.name, s)).map(s => { const c = changedFor(p.name, s); return c ? { ...s, [c.field]: c.from } : s; }),
+    career: p.career.filter(s => !isAdded(p.name, s)).map(s => changesFor(p.name, s).reduce((row, c) => ({ ...row, [c.field]: c.from }), s)),
   }));
   const want = ledger.added.length + ledger.changed.length;
   const caught = correctionProblems(before, ledger).length;
