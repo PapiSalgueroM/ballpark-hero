@@ -12,9 +12,9 @@
  * scripted policies.
  *
  * WHAT IT HOLDS
- *   1) one call, every card: every seat's view of the deal carries the
- *      identical pack sequence, and during play every seat is shown the
- *      same players in the same order
+ *   1) every seat its own card: no two seats at a table hold the same card
+ *      in the same order, and the seat view the page draws and the engine
+ *      judges a seat on (seatGame) carries that seat's own card
  *   2) the families mean what they say: over every one of the 63 family
  *      picks, a card never carries a condition outside the pick when the
  *      pick can fill 24 squares, the fallback flag is raised exactly when it
@@ -22,12 +22,22 @@
  *      and exactly the shortfall from outside the pick
  *   3) every seat's card is completable from the shared packs, restricted
  *      picks included, and a perfect seat blacks it out
- *   4) the verdict is the rule: with seats finishing after different numbers
- *      of players turned up, the engine's winner equals a winner computed
- *      here from the rule as written (fewest players to the goal, then most
- *      squares, shared when level, most squares when nobody got there), its
- *      doneAt bookkeeping matches the harness's own count, and the table
- *      stops after the round the goal was first met in
+ *   4) one call for every seat, and the verdict is the rule. Every turn of
+ *      every seat is played on the TABLE's open pack (t.packs[t.packIndex],
+ *      read here straight off the table, never through the engine's seat
+ *      view): a person's tap on any square of their card is accepted exactly
+ *      when a player they turned up from that pack satisfies it, and a CPU's
+ *      board after its turn equals its own temper's claims on that pack,
+ *      replayed here with its own stream (cpuRng), square for square. With
+ *      seats finishing after different numbers of players turned up, the
+ *      engine's winner equals a winner computed here from the rule as written
+ *      (fewest players to the goal, then most squares, shared when level,
+ *      most squares when nobody got there), its doneAt bookkeeping matches
+ *      the harness's own count, and the table stops after the round the goal
+ *      was first met in. (Before the 2026-10-01 review this checked the
+ *      packs field of seatGame, which no play path reads, so a CPU dealt
+ *      another pack passed. The page side, what the turn screen shows, is
+ *      src/test/sportsBingoTable.test.tsx.)
  *   5) the three tempers keep their order at a table, by margins set from
  *      measured runs, so filling seats with CPUs does not flatten them, and
  *      each plays within a band of its own solo rate
@@ -51,6 +61,10 @@
  *              finishers on different counts           124, 128, 116, 121, 129
  *              of those, fewest count had fewer squares  77, 78, 67, 85, 85
  *              floors 25, 50 and 30, under half the lowest of each
+ *              human turns judged   7920, 8147, 8167, 8154, 8076
+ *              CPU turns replayed   2854, 2992, 2964, 2980, 2978
+ *              floors 3500 and 1400; none judged off the table's pack at any salt
+ *   section 1  1800 pairs of seats per salt, none dealt the same ordered card
  *   section 5  casual 9.3 to 9.4, sharp 17.6 to 17.9, ruthless 22.1 to 22.3
  *              squares; the smaller gap ran 4.4 to 4.6, the floor is 2; each
  *              within 0.3 of its solo rate, the band is 1.5
@@ -58,13 +72,15 @@
  * NEGATIVE CONTROLS, each patching a copy of a file after normalising CRLF,
  * asserting the text it rewrites is present exactly once, and refusing to
  * run otherwise:
- *   SIM_BINGO_SEATS_CONTROL=split      rotates the packs per seat, so seat two
- *                                      hears pack two first: section 1 (the
- *                                      deal) and section 4 (the order each
- *                                      seat is shown players in play) must
- *                                      FAIL. Section 3 stays green on purpose:
- *                                      a rotation holds the same players, so
- *                                      every card is still completable.
+ *   SIM_BINGO_SEATS_CONTROL=split      every CPU seat plays the pack rotated by
+ *                                      its seat number, in settleCpu, the play
+ *                                      path a CPU turn runs through: section 4
+ *                                      must FAIL
+ *   SIM_BINGO_SEATS_CONTROL=splitclaim a person's claims are judged against
+ *                                      the pack rotated by their seat number,
+ *                                      in claimSquare: section 4 must FAIL
+ *   SIM_BINGO_SEATS_CONTROL=samecard   every seat is dealt seat one's card:
+ *                                      section 1 must FAIL
  *   SIM_BINGO_SEATS_CONTROL=anyfamily  ignores the family pick when dealing:
  *                                      section 2 must FAIL
  *   SIM_BINGO_SEATS_CONTROL=tiebreak   drops the fewest players rule from the
@@ -101,7 +117,7 @@ let section = 0;
 const failedSections = new Set();
 const fail = m => { failures += 1; failedSections.add(section); console.error('  FAIL: ' + m); };
 
-const CONTROLS = ['split', 'anyfamily', 'tiebreak', 'peek', 'redeal', 'temper'];
+const CONTROLS = ['split', 'splitclaim', 'samecard', 'anyfamily', 'tiebreak', 'peek', 'redeal', 'temper'];
 const CONTROL = process.env.SIM_BINGO_SEATS_CONTROL || '';
 if (CONTROL && !CONTROLS.includes(CONTROL)) {
   console.error(`SIM_BINGO_SEATS_CONTROL=${CONTROL} is not a control this harness knows (${CONTROLS.join(', ')})`);
@@ -149,10 +165,24 @@ let pageSrc = readLf(PAGE_SRC);
 let handoverSrc = readLf(HANDOVER_SRC);
 if (CONTROL === 'split') {
   libPath = patchedCopy(LIB_SRC, [[
-    'return { cardIds: t.cards[index], packs: t.packs };',
-    'return { cardIds: t.cards[index], packs: [...t.packs.slice(index), ...t.packs.slice(0, index)] };',
+    'cpuClaims(seatGame(cur, seat.index), cur.packs[cur.packIndex], marked',
+    'cpuClaims(seatGame(cur, seat.index), cur.packs[(cur.packIndex + seat.index) % PACK_COUNT], marked',
   ]], 'simBingoSeats.control.sportsBingo.ts');
-  console.log('NEGATIVE CONTROL ON: every seat hears the packs rotated by its seat number');
+  console.log('NEGATIVE CONTROL ON: every CPU seat plays the pack rotated by its seat number');
+}
+if (CONTROL === 'splitclaim') {
+  libPath = patchedCopy(LIB_SRC, [[
+    'const shown = t.packs[t.packIndex].slice(0, t.revealed);',
+    'const shown = t.packs[(t.packIndex + seat.index) % PACK_COUNT].slice(0, t.revealed);',
+  ]], 'simBingoSeats.control.sportsBingo.ts');
+  console.log("NEGATIVE CONTROL ON: a person's claims are judged against the pack rotated by their seat number");
+}
+if (CONTROL === 'samecard') {
+  libPath = patchedCopy(LIB_SRC, [[
+    'cards.push(shuffled(bank, rng).slice(0, CARD_SIZE - 1).map(c => c.id));',
+    'cards.push(cards[0] ?? shuffled(bank, rng).slice(0, CARD_SIZE - 1).map(c => c.id));',
+  ]], 'simBingoSeats.control.sportsBingo.ts');
+  console.log("NEGATIVE CONTROL ON: every seat is dealt seat one's card");
 }
 if (CONTROL === 'anyfamily') {
   libPath = patchedCopy(LIB_SRC, [[
@@ -235,7 +265,7 @@ globalThis.localStorage = {
 const { bingo, r428, POOL } = await import(pathToFileURL(BUNDLE).href);
 const {
   ALL_FAMILIES, CARD_SIZE, CONDITIONS, CPU_LEVELS, DIFFICULTIES, FREE_INDEX, PACK_COUNT, PACK_SIZE, PACK_SECONDS,
-  buildGame, claimSquare, claimableSquares, closeTurn, conditionById, cpuClaims, createTable, dailySeed, dealCards, declareWinner,
+  buildGame, claimSquare, claimableSquares, closeTurn, conditionById, cpuClaims, cpuRng, createTable, dailySeed, dealCards, declareWinner,
   goalMet, lehmer, loadBingoTable, loadDailyBingo, openTurn, parseBingoTable, revealNext, saveBingoTable,
   seatGame, squaresOf,
 } = bingo;
@@ -272,15 +302,25 @@ function cpuPackPlayed(prev, t, seatIndex, wasCreate) {
 
 /** Plays a whole table through the engine. Human seats follow `policies[index]`
  *  one engine call at a time, the way the page applies a tap. Returns the
- *  finished table plus everything the harness counted for itself. */
+ *  finished table plus everything the harness counted for itself, including
+ *  the turns that were not played on the table's own open pack (section 4
+ *  holds those; section 5 leaves them alone so its temper control has to be
+ *  caught by the rates and nothing else). */
 function playTable(setup, seed, policies) {
   let t = createTable(POOL, seed, setup);
   const n = t.seats.length;
-  const shown = t.seats.map(() => []); /* per seat: the players turned up, in order */
   const myDoneAt = t.seats.map(() => null);
   const turnsTaken = t.seats.map(() => 0);
-  const prevMarked = t.seats.map(s => [...s.marked]);
+  /* Every board before the deal is empty. Not the boards createTable hands
+     back: a CPU ahead of the first person has already played pack one on
+     those, and replaying its turn on top of its own marks would be wrong. */
+  const prevMarked = t.seats.map(() => new Array(CARD_SIZE).fill(false));
   const packsOf = t.seats.map(() => []);
+  const pack = { humanTurns: 0, humanOff: 0, cpuTurns: 0, cpuOff: 0 };
+  /* A seat's card over the table's packs, read off the table's own fields and
+     never through seatGame, so an engine that plays a seat on another pack
+     cannot agree with itself here. The deal's arrays never change in play. */
+  const cardOf = i => ({ cardIds: t.cards[i], packs: t.packs });
 
   const noteCpu = (prev, wasCreate) => {
     for (const s of t.seats) {
@@ -293,7 +333,13 @@ function playTable(setup, seed, policies) {
       }
       turnsTaken[s.index] += 1;
       packsOf[s.index].push(p);
-      for (const pl of seatGame(t, s.index).packs[p]) shown[s.index].push(pl.name);
+      /* The CPU's turn replayed on the TABLE's pack p, with its own card, its
+         temper and its own stream (keyed by the deal, the pack and the seat):
+         its board must match square for square. */
+      pack.cpuTurns += 1;
+      const want = [...prevMarked[s.index]];
+      for (const sq of cpuClaims(cardOf(s.index), t.packs[p], prevMarked[s.index], s.level, cpuRng({ ...t, packIndex: p }, s.index))) want[sq] = true;
+      if (want.join() !== s.marked.join()) pack.cpuOff += 1;
       if (myDoneAt[s.index] === null && goalMet(s.marked, t.goal)) myDoneAt[s.index] = p * PACK_SIZE + PACK_SIZE;
       prevMarked[s.index] = [...s.marked];
     }
@@ -316,27 +362,33 @@ function playTable(setup, seed, policies) {
       const next = revealNext(t);
       if (next === t) throw new Error(`seed ${seed}: revealNext refused at ${t.revealed}`);
       t = next;
-      shown[seat.index].push(seatGame(t, seat.index).packs[t.packIndex][t.revealed - 1].name);
     }
-    const options = claimableSquares(seatGame(t, seat.index), t.packs[t.packIndex].slice(0, t.revealed), seat.marked);
+    /* The seat is judged on the players it turned up from the TABLE's open
+       pack: a tap on any open square of its card is accepted exactly when one
+       of them satisfies it, and refused unchanged otherwise. */
+    pack.humanTurns += 1;
+    const options = claimableSquares(cardOf(seat.index), t.packs[t.packIndex].slice(0, t.revealed), seat.marked);
+    let judgedOff = false;
+    for (let sq = 0; sq < CARD_SIZE; sq += 1) {
+      if (sq === FREE_INDEX || seat.marked[sq]) continue;
+      if ((claimSquare(t, sq) !== t) !== options.includes(sq)) judgedOff = true;
+    }
     for (const sq of options) {
       if (!pol.keep()) continue;
       const before = t;
       t = claimSquare(t, sq);
-      if (t === before) throw new Error(`seed ${seed}: claimSquare refused a claimable square ${sq}`);
+      if (t === before) { judgedOff = true; continue; }
       const mine = t.seats[seat.index];
       if (myDoneAt[seat.index] === null && goalMet(mine.marked, t.goal)) myDoneAt[seat.index] = t.packIndex * PACK_SIZE + t.revealed;
     }
-    /* A square nothing turned up satisfies is refused unchanged. */
-    const dud = [...Array(CARD_SIZE).keys()].find(sq => sq !== FREE_INDEX && !t.seats[seat.index].marked[sq] && !options.includes(sq));
-    if (dud !== undefined && claimSquare(t, dud) !== t) throw new Error(`seed ${seed}: a square nobody shown satisfies was claimed`);
+    if (judgedOff) pack.humanOff += 1;
     prevMarked[seat.index] = [...t.seats[seat.index].marked];
     const prev = t;
     t = closeTurn(t);
     if (t === prev) throw new Error(`seed ${seed}: closeTurn refused`);
     noteCpu(prev, false);
   }
-  return { t, shown, myDoneAt, turnsTaken, packsOf, n };
+  return { t, myDoneAt, turnsTaken, packsOf, n, pack };
 }
 
 /** The rule as written, computed from the harness's own counts. */
@@ -362,29 +414,40 @@ const seatsOf = (kinds) => kinds.map((k, i) => (k === 'cpu'
   ? { kind: 'cpu', name: `CPU ${i}`, level: CPU_LEVELS[i % CPU_LEVELS.length].id }
   : { kind: 'human', name: `Seat ${i}`, level: 'casual' }));
 
-/* ================= 1. one call, every card ================= */
+/* ================= 1. every seat its own card ================= */
 section = 1;
-console.log('\n1. EVERY SEAT HEARS THE SAME PACKS');
+console.log('\n1. EVERY SEAT ITS OWN CARD');
 const dealt = [];
 {
-  let views = 0;
-  let viewsOff = 0;
+  let pairs = 0;
+  let twins = 0;
+  let short = 0;
+  let viewOff = 0;
   for (const n of [2, 3, 4]) {
     for (const [label, families] of PICKS) {
       for (let k = 0; k < SEEDS; k += 1) {
         const kinds = Array.from({ length: n }, (_, i) => (i % 2 === 1 ? 'cpu' : 'human'));
         const t = createTable(POOL, seedAt(k), { seats: seatsOf(kinds), families, difficulty: 'standard', goal: 'line' });
         dealt.push({ n, label, families, t });
-        const shared = packPrint(t.packs);
+        if (t.cards.length !== n) { short += 1; continue; }
         for (let i = 0; i < n; i += 1) {
-          views += 1;
-          if (packPrint(seatGame(t, i).packs) !== shared) viewsOff += 1;
+          /* The view the page draws the grid from and claimSquare judges on. */
+          if (seatGame(t, i).cardIds.join() !== t.cards[i].join()) viewOff += 1;
+          /* 24 squares drawn per seat: two seats sharing an ordered card by
+             chance is out of reach, so one twin means one card was handed round. */
+          for (let j = i + 1; j < n; j += 1) {
+            pairs += 1;
+            if (t.cards[i].join() === t.cards[j].join()) twins += 1;
+          }
         }
       }
     }
   }
-  console.log(`  ${dealt.length} tables dealt (two, three and four seats, three family picks, ${SEEDS} seeds each): ${views} seat views, views whose packs differ from the table's ${viewsOff}`);
-  if (viewsOff > 0) fail(`${viewsOff} seat views carry a pack sequence other than the table's`);
+  console.log(`  ${dealt.length} tables dealt (two, three and four seats, three family picks, ${SEEDS} seeds each): ${pairs} pairs of seats, pairs holding the same card in the same order ${twins}`);
+  console.log(`  tables dealt a card count other than their seat count ${short}, seat views carrying a card other than the seat's own ${viewOff}`);
+  if (twins > 0) fail(`${twins} pairs of seats were dealt the identical card, not a card each`);
+  if (short > 0) fail(`${short} tables were not dealt one card per seat`);
+  if (viewOff > 0) fail(`${viewOff} seat views carry a card other than the seat's own`);
 }
 
 /* ================= 2. the families mean what they say ================= */
@@ -440,22 +503,22 @@ console.log('\n3. EVERY CARD IS COMPLETABLE FROM THE SHARED PACKS');
   for (const { t } of dealt) {
     for (let i = 0; i < t.seats.length; i += 1) {
       cards += 1;
-      const g = seatGame(t, i);
+      const g = { cardIds: t.cards[i], packs: t.packs };
       const all = t.packs.flat();
       if (g.cardIds.some(id => !all.some(p => conditionById(id).test(p)))) incompletable += 1;
       const marked = new Array(CARD_SIZE).fill(false);
-      for (const pack of g.packs) for (const sq of claimableSquares(g, pack, marked)) marked[sq] = true;
+      for (const pack of t.packs) for (const sq of claimableSquares(g, pack, marked)) marked[sq] = true;
       if (squaresOf(marked) === CARD_SIZE - 1) blackouts += 1;
     }
   }
-  console.log(`  ${cards} cards over ${dealt.length} tables: incompletable from the table's packs ${incompletable}, blacked out by a perfect seat through its own view ${blackouts}`);
+  console.log(`  ${cards} cards over ${dealt.length} tables: incompletable from the table's packs ${incompletable}, blacked out by a perfect seat on the table's packs ${blackouts}`);
   if (incompletable > 0) fail(`${incompletable} cards carry a condition the shared packs cannot satisfy`);
   if (blackouts !== cards) fail(`a perfect seat blacked out only ${blackouts} of ${cards} cards`);
 }
 
-/* ================= 4. the verdict is the rule ================= */
+/* ================= 4. one call for every seat, and the verdict is the rule ================= */
 section = 4;
-console.log('\n4. THE VERDICT IS THE RULE');
+console.log("\n4. EVERY TURN ON THE TABLE'S PACK, AND THE VERDICT IS THE RULE");
 {
   const LINEUPS = [
     { kinds: ['human', 'human'], pols: [PERFECT, EAGER] },
@@ -472,7 +535,10 @@ console.log('\n4. THE VERDICT IS THE RULE');
   let doneAtOff = 0;
   let stopOff = 0;
   let turnsOff = 0;
-  let shownOff = 0;
+  let humanTurns = 0;
+  let humanOff = 0;
+  let cpuTurns = 0;
+  let cpuOff = 0;
   let byGoal = 0;
   let bySquares = 0;
   let shared = 0;
@@ -491,8 +557,13 @@ console.log('\n4. THE VERDICT IS THE RULE');
           fail(e.message);
           continue;
         }
-        const { t, shown, myDoneAt, turnsTaken, packsOf, n } = played;
+        const { t, myDoneAt, turnsTaken, packsOf, n, pack } = played;
         tables += 1;
+        /* every turn played on the table's open pack */
+        humanTurns += pack.humanTurns;
+        humanOff += pack.humanOff;
+        cpuTurns += pack.cpuTurns;
+        cpuOff += pack.cpuOff;
         /* bookkeeping */
         for (const s of t.seats) if (s.doneAt !== myDoneAt[s.index]) doneAtOff += 1;
         /* stop after the round the goal was first met in, or after pack ten */
@@ -502,17 +573,6 @@ console.log('\n4. THE VERDICT IS THE RULE');
         /* every seat took one turn per pack, on the same packs */
         const expectPacks = [...Array(expectLast + 1).keys()].join();
         for (let i = 0; i < n; i += 1) if (turnsTaken[i] !== expectLast + 1 || packsOf[i].join() !== expectPacks) turnsOff += 1;
-        /* every seat was shown the same players in the same order, as far as it turned them up */
-        const full = t.packs.slice(0, expectLast + 1).flat().map(p => p.name);
-        for (let i = 0; i < n; i += 1) {
-          const seen = shown[i];
-          const perPack = t.seats[i].kind === 'cpu' ? PACK_SIZE : pols[i].reveal;
-          for (let p = 0; p <= expectLast; p += 1) {
-            for (let r = 0; r < perPack; r += 1) {
-              if (seen[p * perPack + r] !== full[p * PACK_SIZE + r]) { shownOff += 1; p = expectLast + 1; break; }
-            }
-          }
-        }
         /* the verdict */
         const mine = ruleVerdict(t, myDoneAt);
         const theirs = declareWinner(t);
@@ -530,13 +590,15 @@ console.log('\n4. THE VERDICT IS THE RULE');
     }
   }
   console.log(`  ${tables} tables played (both goals, ${LINEUPS.length} lineups of two to four seats, ${SEEDS} seeds each): verdicts off the rule ${verdictOff}, doneAt off the harness's count ${doneAtOff}`);
-  console.log(`  tables that stopped on the wrong pack ${stopOff}, seats that took the wrong turns ${turnsOff}, seats shown a different sequence ${shownOff}`);
+  console.log(`  tables that stopped on the wrong pack ${stopOff}, seats that took the wrong turns ${turnsOff}`);
+  console.log(`  turns judged off the table's open pack: ${humanOff} of ${humanTurns} human turns (every square of the card tapped), ${cpuOff} of ${cpuTurns} CPU turns (replayed square for square)`);
   console.log(`  decided by the goal ${byGoal}, by the square count after ten packs ${bySquares}, shared ${shared}; tables where seats reached the goal with different counts ${revealsDecided}, of which the fewest count seat had fewer squares than another finisher ${revealsOverSquares}`);
   if (verdictOff > 0) fail(`${verdictOff} verdicts disagree with the rule as written`);
   if (doneAtOff > 0) fail(`${doneAtOff} seats carry a doneAt the harness did not count`);
   if (stopOff > 0) fail(`${stopOff} tables stopped on a pack other than the round the goal was first met in`);
   if (turnsOff > 0) fail(`${turnsOff} seats took a different number of turns or different packs from the table`);
-  if (shownOff > 0) fail(`${shownOff} seats were shown players out of the shared order`);
+  if (humanOff > 0) fail(`${humanOff} human turns were judged on something other than the players turned up from the table's open pack`);
+  if (cpuOff > 0) fail(`${cpuOff} CPU turns marked other than the CPU's own temper claims on the table's open pack`);
   /* Coverage: every branch of the rule has to have been exercised, or the
      tiebreak control has nothing to bite and a dead branch would read green.
      Measured 2026-10-01 over 720 tables at each of salts 0 to 4: 124, 128,
@@ -544,6 +606,11 @@ console.log('\n4. THE VERDICT IS THE RULE');
      85 and 85 of them where the fewest count seat had fewer squares than
      another finisher; 57, 55, 53, 58 and 55 decided by the square count
      after ten packs. Each floor sits under half the lowest of its five. */
+  /* And the pack checks above must have had turns to judge: measured
+     2026-10-01 at salts 0 to 4, 7920, 8147, 8167, 8154 and 8076 human turns
+     and 2854, 2992, 2964, 2980 and 2978 CPU turns. Floors under half the lowest. */
+  if (humanTurns < 3500) fail(`only ${humanTurns} human turns were judged, too few to trust the pack check`);
+  if (cpuTurns < 1400) fail(`only ${cpuTurns} CPU turns were replayed, too few to trust the pack check`);
   if (revealsDecided < 50) fail(`only ${revealsDecided} tables had finishers on different counts, too few to exercise the tie rule`);
   if (revealsOverSquares < 30) fail(`only ${revealsOverSquares} tables set the fewest count against the most squares, too few to tell the rule from a square count`);
   if (bySquares < 25) fail(`only ${bySquares} tables were decided by the square count, too few to exercise the no finisher branch`);
@@ -731,7 +798,7 @@ if (!oldLibOk || typeof r428.buildGame !== 'function') {
 /* ================= verdict ================= */
 console.log('');
 if (CONTROL) {
-  const AIMED = { split: [1, 4], anyfamily: [2], tiebreak: [4], peek: [7], redeal: [9], temper: [5] }[CONTROL];
+  const AIMED = { split: [4], splitclaim: [4], samecard: [1], anyfamily: [2], tiebreak: [4], peek: [7], redeal: [9], temper: [5] }[CONTROL];
   const missed = AIMED.filter(n => !failedSections.has(n));
   const where = [...failedSections].sort((a, b) => a - b).join(', ') || 'none';
   if (missed.length === 0) { console.log(`control "${CONTROL}": ${failures} failure(s) in sections ${where}, every aimed section (${AIMED.join(', ')}) fired, the checks work`); process.exit(0); }
