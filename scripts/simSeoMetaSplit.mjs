@@ -504,7 +504,15 @@ async function check(page, route) {
   }
   if (route !== '/') {
     if (r.capture === savedHeads.get(route)) identical += 1;
-    else notIdentical.push(route);
+    else {
+      notIdentical.push(route);
+      /* Where it parts company, so a reported difference can be judged
+         without a second run. */
+      const saved = savedHeads.get(route);
+      let i = 0;
+      while (i < r.capture.length && r.capture[i] === saved[i]) i += 1;
+      console.log(`   ${route}: capture and saved head part at byte ${i} of ${r.capture.length}/${saved.length}:\n      capture ...${JSON.stringify(r.capture.slice(Math.max(0, i - 60), i + 140))}\n      saved   ...${JSON.stringify(saved.slice(Math.max(0, i - 60), i + 140))}`);
+    }
   }
   /* 2. the parts on the wire */
   const own = gamePaths.has(route) ? partFile.get(partOf(route)) : null;
