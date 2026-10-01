@@ -59,7 +59,8 @@ import type { MotionEvent } from '@/components/club-manager/LiveSimMotion';
  * 45+2' and 90+4', and a line in the board (minute 90, plus 3) fires when the
  * clock reaches 90+3, not at 90. The whistle, the interval and the question
  * at the end of the ninety all move to the end of the board. A change made in
- * the board is filed at the period's last minute with its plus.
+ * the board is filed at the period's last minute with its plus, and the
+ * engine draws the rest of that board again off it (recutBoard).
  *
  * The choreography between events (who is carrying the ball, the shape
  * pushing up and dropping back, the drift) is theatre, drawn only inside the
@@ -785,14 +786,16 @@ export function LiveSimScreen({
        a man you have just taken off closes instead of hanging over a dot that
        is no longer his. */
     const on = new Set(myOnPitchAt(liveNow, minute + 1));
-    const gone = liveGoneIds(liveNow, minute);
+    /* Round 781: in a board, only what the clock has reached there. */
+    const gone = liveGoneIds(liveNow, minute, plus);
+    const by = playedBy(minute, plus);
     for (const inj of [...(liveNow.h1Injuries ?? []), ...(liveNow.h2Injuries ?? [])]) {
-      if (inj.id && inj.minute <= minute && on.has(inj.id)) gone.delete(inj.id);
+      if (inj.id && by(inj) && on.has(inj.id)) gone.delete(inj.id);
     }
     if (!on.has(picking) || gone.has(picking)) closeSheet();
     // closeSheet is stable per render; the inputs are the pick, the stage, the match and the minute.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [picking, running, liveNow, minute]);
+  }, [picking, running, liveNow, minute, plus]);
   const doSub = (inId: string) => {
     if (!picking || !liveNow) return;
     onChange(changeMinute, { kind: 'sub', outId: picking, inId }, plus);
@@ -820,16 +823,18 @@ export function LiveSimScreen({
   const injuredWaiting: CMPlayer[] = useMemo(() => {
     if (!liveNow || !running) return [];
     const on = new Set(myOnPitchAt(liveNow, minute));
+    /* Round 781: an injury or a red deeper in the board has not happened yet. */
+    const by = playedBy(minute, plus);
     const reds = new Set<string>();
-    for (const c of [...(liveNow.h1Cards ?? []), ...(liveNow.h2Cards ?? [])]) if (c.kind === 'red' && c.id && c.minute <= minute) reds.add(c.id);
+    for (const c of [...(liveNow.h1Cards ?? []), ...(liveNow.h2Cards ?? [])]) if (c.kind === 'red' && c.id && by(c)) reds.add(c.id);
     const out: CMPlayer[] = [];
     for (const inj of [...(liveNow.h1Injuries ?? []), ...(liveNow.h2Injuries ?? [])]) {
-      if (!inj.id || inj.minute > minute || !on.has(inj.id) || reds.has(inj.id)) continue;
+      if (!inj.id || !by(inj) || !on.has(inj.id) || reds.has(inj.id)) continue;
       const p = career.squad.find(q => q.id === inj.id);
       if (p) out.push(p);
     }
     return out;
-  }, [liveNow, running, minute, career]);
+  }, [liveNow, running, minute, plus, career]);
 
   /* ---- the interval: the real dressing room, embedded ---- */
   const startSecond = () => {

@@ -12782,8 +12782,9 @@ function oppAt(live: LiveMatch, minute: number): OppXiLine[] | null {
  *
  * Extra time has one board, at 120, because Round 670 made it one thirty
  * minute stretch with no interval at 105. A change made inside a board is
- * filed at the period's last minute with its own plus and redraws nothing,
- * since the board has already been drawn.
+ * filed at the period's last minute with its own plus, keeps everything at
+ * or before that point of the board, and draws the rest of the board again
+ * off the change (recutBoard); the board's length does not move.
  */
 const BOARD: Record<'h1' | 'h2' | 'et', { base: number; roll: number; lo: number; hi: number; from: number }> = {
   h1: { base: 1, roll: 1, lo: 1, hi: 5, from: 0 },
@@ -13178,6 +13179,70 @@ function recutSecondHalf(state: CareerState, entry: CalendarEntry, live: LiveMat
   drawSegment(state, live, fx, 2, minute, end, lamMine * share, lamOpp * share);
   /* Round 670 review: off the per half rates, not the 45 to 120 sum. */
   live.possH2 = secondPeriodPossession(live);
+}
+
+/**
+ * Round 781: a change made inside a board, at `p` minutes into the board of
+ * `period`. What happened by then stands; the rest of the board is drawn
+ * again off the eleven and the shape just chosen, so a man taken off at 90+2
+ * cannot score at 90+4 and a man coming on can. The board itself does not
+ * move, the fourth official has already held it up. The stretch is drawn on
+ * the extended clock, (to + p, to + board], at the period's own rate per
+ * minute of board (a stretch of length L spreads its goals over L plus the
+ * board, see BOARD), and folded back onto the period's last minute.
+ */
+function recutBoard(state: CareerState, entry: CalendarEntry, live: LiveMatch, period: 'h1' | 'h2' | 'et', p: number): void {
+  const board = live.added?.[period];
+  if (board === undefined || p >= board) return;
+  if (period === 'et' && !live.et) return;
+  const fx = fixtureFor(state, entry)!;
+  /* The board of the ninety comes before extra time; one drawn already is
+     decided again at the end of the board, as recutSecondHalf does at 90. */
+  if (period === 'h2' && live.et) {
+    delete live.et;
+    if (live.added) delete live.added.et;
+  }
+  const to = period === 'h1' ? 45 : period === 'h2' ? 90 : live.et!.to;
+  const len = period === 'et' ? (live.et!.to - live.et!.from) : 45;
+  const stays = playedBy(to, p);
+  if (period === 'h1') {
+    live.h1My = (live.h1My ?? []).filter(stays);
+    live.h1Opp = (live.h1Opp ?? []).filter(stays);
+    live.h1Play = (live.h1Play ?? []).filter(stays);
+    live.h1Cards = (live.h1Cards ?? []).filter(stays);
+    live.h1OppCards = (live.h1OppCards ?? []).filter(stays);
+    live.h1Injuries = (live.h1Injuries ?? []).filter(stays);
+  } else {
+    live.h2My = (live.h2My ?? []).filter(stays);
+    live.h2Opp = (live.h2Opp ?? []).filter(stays);
+    live.h2Play = (live.h2Play ?? []).filter(stays);
+    live.h2Cards = (live.h2Cards ?? []).filter(stays);
+    live.h2OppCards = (live.h2OppCards ?? []).filter(stays);
+    live.h2Injuries = (live.h2Injuries ?? []).filter(stays);
+    live.oppSubs = (live.oppSubs ?? []).filter(stays);
+  }
+  const off = offPitchIds(live);
+  const xi = livePairs(state, live).filter(x => !off.has(x.p.id));
+  const first = period === 'h1' ? firstHalfLambdas(state, fx, xi, live.mentality) : null;
+  const { lamMine, lamOpp } = first
+    ?? secondHalfLambdas(state, fx, live, xi, live.myGoals + (live.h2My ?? []).length, live.oppGoals + (live.h2Opp ?? []).length);
+  const share = ((board - p) / 45) * (len / (len + board));
+  drawSegment(state, live, fx, period === 'h1' ? 1 : 2, to + p, to + board, lamMine * share, lamOpp * share);
+  /* Everything just drawn sits past `to`: fold it into the board. */
+  if (period === 'h1') {
+    foldBoard(to, live.h1My ?? [], live.h1Opp ?? [], live.h1Play ?? [], live.h1Cards ?? [], live.h1OppCards ?? [], live.h1Injuries ?? []);
+    live.h1My = [...(live.h1My ?? [])].sort(clockOrder);
+    live.h1Opp = [...(live.h1Opp ?? [])].sort(clockOrder);
+    live.h1Play = [...(live.h1Play ?? [])].sort((a, b) => clockOrder(a, b) || PLAY_ORDER[a.kind] - PLAY_ORDER[b.kind]);
+    live.myGoals = live.h1My.length;
+    live.oppGoals = live.h1Opp.length;
+    live.read = halftimeRead(state, men(xi), live.myGoals, live.oppGoals, first!.mine, first!.oppS);
+  } else {
+    foldBoard(to, live.h2My ?? [], live.h2Opp ?? [], live.h2Play ?? [], live.h2Cards ?? [], live.h2OppCards ?? [], live.h2Injuries ?? []);
+    live.h2My = [...(live.h2My ?? [])].sort(clockOrder);
+    live.h2Opp = [...(live.h2Opp ?? [])].sort(clockOrder);
+    live.h2Play = [...(live.h2Play ?? [])].sort((a, b) => clockOrder(a, b) || PLAY_ORDER[a.kind] - PLAY_ORDER[b.kind]);
+  }
 }
 
 export interface LiveFeedEvent {
@@ -15639,11 +15704,16 @@ function halftimeRead(
 
 /** Round 504: everyone of mine who has left this match for good by a
  *  minute: taken off, sent off, or down injured. None of them come back. */
-export function liveGoneIds(live: LiveMatch, minute: number): Set<string> {
+export function liveGoneIds(
+  live: LiveMatch, minute: number,
+  /** Round 781: how far into the board of `minute` the clock stands; a line deeper in it has not happened. */
+  plus?: number,
+): Set<string> {
   const gone = new Set<string>();
-  for (const s of live.subs ?? []) if (s.offId && s.minute <= minute) gone.add(s.offId);
-  for (const c of [...(live.h1Cards ?? []), ...(live.h2Cards ?? [])]) if (c.kind === 'red' && c.id && c.minute <= minute) gone.add(c.id);
-  for (const inj of [...(live.h1Injuries ?? []), ...(live.h2Injuries ?? [])]) if (inj.id && inj.minute <= minute) gone.add(inj.id);
+  const by = playedBy(minute, plus);
+  for (const s of live.subs ?? []) if (s.offId && by(s)) gone.add(s.offId);
+  for (const c of [...(live.h1Cards ?? []), ...(live.h2Cards ?? [])]) if (c.kind === 'red' && c.id && by(c)) gone.add(c.id);
+  for (const inj of [...(live.h1Injuries ?? []), ...(live.h2Injuries ?? [])]) if (inj.id && by(inj)) gone.add(inj.id);
   return gone;
 }
 
@@ -15738,8 +15808,8 @@ export function changeLive(
   career: CareerState, minute: number, change: LiveChange,
   /** Round 781: how far into the board of `minute` the change was made (a
    *  sub at 90+2 is minute 90, plus 2), kept on the line so the report labels
-   *  it the way the clock read. The board is already drawn, so nothing is
-   *  redrawn for it. */
+   *  it the way the clock read, and the rest of that board is drawn again
+   *  off the change (recutBoard). Ignored outside a board. */
   plus?: number,
 ): CareerState | null {
   const state: CareerState = JSON.parse(JSON.stringify(career));
@@ -15749,6 +15819,15 @@ export function changeLive(
   if (!Number.isFinite(minute) || minute < 0 || minute > (live.et ? live.et.to : 90)) return null;
   // Never earlier than the last thing that happened; a clock only runs forward.
   const m = Math.floor(Math.max(minute, live.minute ?? 0));
+  /* Round 781: which board the clock stands in, if any, and how far into it.
+     Only a change made at the period's last minute has one, and never past
+     the board the period drew; a match drawn before this round has none. */
+  const period: 'h1' | 'h2' | 'et' | null = m === 45 && !live.h2Drawn ? 'h1'
+    : m === 90 && live.h2Drawn && !live.et ? 'h2'
+      : live.et && m === live.et.to ? 'et' : null;
+  const boardNow = period ? live.added?.[period] ?? 0 : 0;
+  const p = boardNow > 0 && Math.floor(minute) === m && plus !== undefined && Number.isFinite(plus) && plus > 0
+    ? Math.min(Math.floor(plus), boardNow) : 0;
   if (change.kind === 'sub') {
     if (live.subsUsed >= MAX_HALFTIME_SUBS) return null;
     const idx = live.onPitch.indexOf(change.outId);
@@ -15756,12 +15835,14 @@ export function changeLive(
     if (live.onPitch.includes(change.inId)) return null;
     /* A man who has been sent off cannot be replaced; that is the rule. Only
        a red the clock has reached counts: the half is committed ahead of
-       the clock, and a red drawn for later is redrawn with the rest. */
-    const reds = [...(live.h1Cards ?? []), ...(live.h2Cards ?? [])].filter(c => c.kind === 'red' && c.id === change.outId && c.minute <= m);
+       the clock, and a red drawn for later is redrawn with the rest.
+       Round 781: in a board, only a red at or before the board minute the
+       clock reads; one deeper in it is redrawn too. */
+    const reds = [...(live.h1Cards ?? []), ...(live.h2Cards ?? [])].filter(c => c.kind === 'red' && c.id === change.outId && playedBy(m, period ? p : undefined)(c));
     if (reds.length) return null;
     /* And nobody comes back on: not a man already taken off, not a man who
        limped off. */
-    if (liveGoneIds(live, m).has(change.inId)) return null;
+    if (liveGoneIds(live, m, period ? p : undefined).has(change.inId)) return null;
     const coming = state.squad.find(p => p.id === change.inId);
     if (!coming || !isAvailable(coming)) return null;
     const going = state.squad.find(p => p.id === change.outId);
@@ -15769,16 +15850,18 @@ export function changeLive(
     live.subsUsed += 1;
     live.subs = [...(live.subs ?? []), {
       off: going?.name ?? change.outId, on: coming.name, minute: m, offId: change.outId, onId: change.inId,
-      ...plusOf({ plus: plus && plus > 0 ? Math.floor(plus) : 0 }),
+      ...plusOf({ plus: p }),
     }];
   } else {
     live.mentality = change.mentality;
     state.mentality = change.mentality;
-    live.shapeChanges = [...(live.shapeChanges ?? []), { minute: m, mentality: change.mentality, ...plusOf({ plus: plus && plus > 0 ? Math.floor(plus) : 0 }) }];
+    live.shapeChanges = [...(live.shapeChanges ?? []), { minute: m, mentality: change.mentality, ...plusOf({ plus: p }) }];
   }
   live.minute = m;
   const entry = state.calendar[live.week];
   if (entry && m < 45) recutFirstHalf(state, entry, live, m);
+  /* Round 781: a change in a board redraws the rest of that board. */
+  else if (entry && period) recutBoard(state, entry, live, period, p);
   else if (entry && m >= 46 && live.h2Drawn) recutSecondHalf(state, entry, live, m);
   return state;
 }
