@@ -12,6 +12,10 @@ import {
   nbaCalibrateTaxScale, type NbaTaxEntry,
 } from './nbaLuxuryTax';
 export { NBA_TIPOFF_MIN, NBA_MIN_CONTRACT, nbaTaxLine, nbaFirstApron, nbaSecondApron, nbaTaxBill } from './nbaLuxuryTax';
+/* Round 824: season lines and awards. The stats file imports only types from
+   this one, so there is no cycle at run time. */
+import { type FoSeasonStats, foNewSeasonStats } from './foSeasonStats';
+import { type NbaSeasonAwards, nbaBoxScore, nbaRecordBox, nbaLiveStats } from './nbaSeasonStats';
 
 /**
  * NBA Front Office engine (2026-08-05). Basketball sibling of
@@ -81,6 +85,15 @@ export interface NbaLeague {
    * next summer, so nobody is billed for a season that started untaxed.
    */
   taxScale?: number;
+  /**
+   * Round 824: this season's player lines and club totals (nbaSeasonStats.ts).
+   * Optional: a league saved before the round keeps no lines for the season
+   * it was saved in and starts keeping them at its next summer, the way it
+   * met the tax.
+   */
+  stats?: FoSeasonStats;
+  /** Round 824: every closed season's awards, oldest first. */
+  awards?: NbaSeasonAwards[];
 }
 
 /* Round 568: this counter used to live at module scope, which restarts on
@@ -168,6 +181,8 @@ export function initNbaLeague(rng: () => number = Math.random): NbaLeague {
     freeAgents: initialFaPool(rng, leagueNames({ teams, freeAgents: [] })),
     round: 1,
     champions: [],
+    /* Round 824: lines kept from the first tip off. */
+    stats: foNewSeasonStats(2026),
   };
   /* Round 722: the tax lines are set from this league's own payrolls. */
   nbaCalibrateLeagueTax(league);
@@ -322,7 +337,10 @@ export function simRound(league: NbaLeague, myTeam: string, rng: () => number): 
       }
     }
   }
-  for (const abbr of abbrs) {
+  /* Round 824: the season's lines, when the league is keeping them this season. */
+  const stats = nbaLiveStats(league);
+  for (let ai = 0; ai < abbrs.length; ai += 1) {
+    const abbr = abbrs[ai];
     const me = league.teams[abbr];
     for (let g = 0; g < GAMES_PER_ROUND; g++) {
       let opp = abbrs[Math.floor(rng() * abbrs.length)];
@@ -331,8 +349,13 @@ export function simRound(league: NbaLeague, myTeam: string, rng: () => number): 
       // each matchup is counted once from the home side only: half rate
       if (rng() < 0.5) continue;
       const p = nbaWinProb(me, them);
-      if (rng() < p) { me.wins += 1; them.losses += 1; if (abbr === myTeam) myW += 1; if (opp === myTeam) myL += 1; }
+      /* Round 824: the deciding draw is kept so the box score can be read off
+         it. Still exactly one draw, so every result is what it always was. */
+      const draw = rng();
+      const homeWon = draw < p;
+      if (homeWon) { me.wins += 1; them.losses += 1; if (abbr === myTeam) myW += 1; if (opp === myTeam) myL += 1; }
       else { me.losses += 1; them.wins += 1; if (abbr === myTeam) myL += 1; if (opp === myTeam) myW += 1; }
+      if (stats) nbaRecordBox(stats, nbaBoxScore(me, them, homeWon, draw, p, league.round * 1000 + ai * GAMES_PER_ROUND + g, league.season));
     }
   }
   return { myWins: myW, myLosses: myL, notes };
@@ -708,6 +731,9 @@ export function nbaOffseason(league: NbaLeague, rng: () => number, myTeam?: stri
   league.cap = nextCap;
   league.season += 1;
   league.round = 1;
+  /* Round 824: a clean sheet of lines for the new season. A league saved
+     before the round starts keeping them here, at its first summer. */
+  league.stats = foNewSeasonStats(league.season);
   /* Round 722: a league saved before the round gets its tax lines here, at
      its first summer, from the payrolls it will tip off with. A calibrated
      league keeps its scale, and its lines rise with the cap. */
