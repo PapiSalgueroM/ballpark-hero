@@ -1,5 +1,127 @@
 # Project state
 
+## LIVE 2026-10-01: Release O (820 honest Perfect Season odds for NFL, NHL and MLB; 821 the MLB and NHL wheels read their whole tables), main `fcdae1bf`
+
+Assembled by the desktop Claude lane in the gate clone (`release-o`). **douknowball.com is serving it:** deployment
+`102f28a4`, called only after `get_project` showed `latest_commit_sha` `fcdae1bf`; the live entry moved from
+`index-DIQbV2hM.js` to `index-Bj5VrkKR.js`. Proof by content: `/perfect-season-mlb` says "116 wins" in its saved
+page, `/whats-new` carries both new lines, and the four Perfect Season pages answer 200.
+
+- **820, from a player report (1,312 NBA seasons without an 82-0).** The NBA page got its honest odds and best
+  record card in Round 728. This round moves that into one shared piece and binds NFL, NHL and MLB to it, each
+  measured the same way: 200,000 drafts played the way a good player would and 200,000 seasons through each
+  game's own sim. No sim changed. Football: a typical roster (81.9) goes 17-0 about one run in 1,200. Hockey: a
+  typical lineup (86) goes 82-0 about one run in 190,000. Baseball never went 162-0 in 200,000 tries, so the page
+  points at the real record instead, 116 wins (the 1906 Cubs and the 2001 Mariners), which about one draft in
+  four reaches. Every result card prints the odds for the lineup just drafted and the best record in this browser.
+- **821, found by 820's reviewer.** The MLB wheel asked for every team season since 1901 in one request and the
+  REST endpoint hands back 1,000 rows at most, so the wheel stopped at 1962. It now pages the whole table (2,572
+  team seasons, 1901 to 2021). Hockey had the same leak and counted franchise decades from about a fifth of its
+  players; it gains 28 stops (222 now). **Classic and Hard spin the full wheel now; the daily keeps the old wheel
+  until 2026-10-08 ET (`FULL_WHEEL_DAILY_FROM`)** so no daily changes during a day already being played.
+- **Follow ups the reviewer left, not built:** the NHL and MLB win models are too generous (a typical NHL lineup
+  averages 70.5 wins against a real record of 65), so both should move to `simulateSeasonFair` with their own win
+  curve; `statDetective.ts` reads a fixed 25 pages; the NHL guide says "a century of hockey" and the NFL how to
+  says "1999 to today", both worth checking against the tables.
+
+**Gates.** Type gate 0. `simPerfectSeasonOdds`, `simPerfectSeasonWheel`, `simPerfectSeason`, `simGuideHeadings`,
+`simSeoTitles`, `simNoRivalNames`, `simHarnessAnchors` and 11 snapshot readers green after twelve pages were
+redrawn alone; vitest `perfectSeasonResult` 16 passed; `sweepWeight` green; `playRenderStability` green on seven
+routes. `simSeoMetaSplit` section 4 was red before the push only because it compares against `origin/main` and
+this release changes the MLB description on purpose: it was checked with `SEO_SPLIT_BASE_REF=HEAD` and is green by
+default now that main carries the change. The merge of main conflicted in `scripts/data/lastmod.json`; main's
+ledger was taken and `genSitemap.mjs` rerun, then `simSitemap`, `simPrerender` and `simIndexNow` were green.
+
+## Current Codex handoff, 2026-10-01
+
+Codex828-832 and 836-838 are accepted in code. Claude's Release O handoff
+confirms publication of Codex831, 836 and 837. Codex838 needs the next publish.
+Claude has claimed 839-841 from the rendered audit: leaderboard timeouts,
+home copy after React mounts, and college-grid loading. Next free round 842.
+The proposed additional copy work remains pending, with no new Codex claim
+in this batch. Older active/pending notes below are historical.
+838 landed as `2db7c148` on top of Release O, preserving both lanes' changes.
+Its tested runtime and saved page did not change during integration; the
+merged sitemap and all 170 page-date fingerprints pass fresh checks.
+
+838 completes master spec section 84's three-point contest in Buzzer Beater:
+five arcade racks, 25 shots, two-point money balls, 30 possible points, local
+unranked replay and reopenable rules. Daily saves and original ten-shot modes
+hold. Four focused cases, 11 existing practice cases, effective regression
+controls and a full 25-shot production phone play-through pass. The phone run
+made 14 shots for 17 points, including three money balls, without errors,
+broken assets or completion posts. Sources held and browser/server stopped.
+Real app types, build, 15 artifact harnesses and snapshot boot also pass.
+Only Buzzer Beater's saved-page fingerprint changed; 169 others remain held.
+Exact receipts and ownership are on WORKBOARD.
+
+831's final route-local fix keeps all 10 measured clue/hint/result actions
+from shifting the document at 320px normal and 1440px reduced motion.
+836 corrects unsupported public feature promises and explains real records
+versus generated simulation data. 837 holds the Stat Line manual ad until its
+game is usable. These fixes and their saved pages have passed production gates.
+
+AdSense remains unresolved. The account still shows the September 25 Low value
+content decision. Search Console refresh was blocked by the browser URL safety
+check, so 68 indexed and 94 excluded remain September 20 observations. No
+Google submission was made. Claude owns the remaining era-copy correction and
+full rendered audit. See audits/ADSENSE-QUALITY-2026-10-01.md. A Git push does
+not establish publication to douknowball.com or Google approval.
+
+Codex837 is implemented with12 focused outcomes and three effective copied
+regression checks. NBA Stat Line no longer requests a manual ad during loading
+or pool failure. Consent, gameplay and original scores/saves/share hold.
+Combined app types pass; production build/artifact verification is pending.
+
+Codex838 is claimed from master spec84: a complete Buzzer Beater three-point
+contest mode using the existing physics and flight controls. Original daily
+scores and saves stay held. Codex836/837 and831's final scroll correction are
+in combined verification; no new AdSense approval or indexing claim. Next839.
+
+Codex829 is accepted after actual App checks at320 normal/1440 reduced:
+20 accepted links keep the document still, original score/save/share/completion
+hold and finite/static feedback works. Final receipt is on WORKBOARD.
+Codex837 now holds NBA Stat Line's manual ad while its pool is loading or has
+failed. It is claimed, not yet implemented. Codex836 copy checks continue.
+Club Manager era-copy contradictions were handed to Claude832, which owns
+that file. Next free round838.
+
+## ADSENSE 2026-10-01: owner supplied the Low value content policy card
+
+AdSense approval is unresolved. The screenshot confirms the named rejection,
+not a new technical indexing fault. Prior account evidence and the intentional
+pack-battle noindex exclusion are in audits/GOOGLE-READINESS-2026-09-30.md.
+Codex836 owns a bounded public-copy/content-quality review and corrections,
+starting with unsupported home-page game features. No review was requested.
+Next free round837; Claude's active depth work stays untouched.
+
+Codex832 is accepted: the CFB recruiting feed no longer shifts the recruit
+columns when a signing arrives. Browser checks preserve scroll and original
+signing state; the prior build moves the columns74px under the same test.
+Eight focused tests and the production gates pass. Exact receipts on WORKBOARD.
+
+
+Codex830 is now accepted:118 actual App checks pass at320px normal/reduced,
+including distinct consecutive feedback, stable rows, original40-point outcome,
+exact save/share/once completion, reset and quiet reload.829 is built and pushed
+with seven positives/five controls; its final browser checks remain pending.
+Keep lane prefixes on overlapping828-835 IDs. Next shared free round836.
+
+
+## BUILT 2026-10-01: Missing Nine feedback (830)
+
+Fresh puzzles no longer inherit old wrong-answer feedback. Seven actual Page
+outcomes, eight effective controls and combined runtime gates pass. Source is
+pushed; final browser checks remain pending. Exact evidence is on WORKBOARD.
+
+
+## BUILT 2026-10-01: Nation feedback (831)
+
+Six focused outcomes, three regression controls and combined runtime gates pass.
+The code is pushed; final actual App browser verification is still pending.
+828 is accepted;829/830/832 remain active. Next free round833.
+
+
 Codex832 is closing the measured CFB signing page jump from818, using a stable
 recruiting message area. All signing and budget rules stay held. Next free833.
 
