@@ -73,9 +73,11 @@
 
    NEGATIVE CONTROLS, BYXI_CONTROL=<name>. Each rewrites one string in one
    source file at bundle time, refuses to run unless that string occurs
-   exactly once, and passes only when the section it names goes red and no
-   other section does:
-     nofit     role fit reads every man as natural.          section 1
+   exactly once, and passes (exit 0) only when the sections it names go red
+   and no other section does:
+     nofit     role fit reads every man as natural.          sections 1 and 3
+               (1 for the points, 3 because every grade then disagrees
+               with the shared rule)
      farlinks  chemistry counts every pair, not neighbours.   section 2
      nocap     the chemistry cap is gone.                     section 3
      leak      World XI's season gets a half point nudge.     section 4
@@ -152,31 +154,31 @@ const FILES = {
 };
 const CONTROLS = {
   nofit: {
-    section: 1, file: 'xifit',
+    sections: [1, 3], file: 'xifit',
     from: '    return held ? gradeFit(held, s.allowed) : \'natural\';\n',
     to: '    void held; return \'natural\';\n',
     note: 'role fit reads every man as natural; section 1 must go red',
   },
   farlinks: {
-    section: 2, file: 'chem',
+    sections: [2], file: 'chem',
     from: '      if (opts?.linked && !opts.linked(a, b)) continue;\n',
     to: '      void opts;\n',
     note: 'chemistry counts every pair on the pitch; section 2 must go red',
   },
   nocap: {
-    section: 3, file: 'xifit',
+    sections: [3], file: 'xifit',
     from: 'const chemistryValue = Math.min(CHEMISTRY_CAP, raw);',
     to: 'const chemistryValue = raw;',
     note: 'the chemistry cap is gone; section 3 must go red',
   },
   leak: {
-    section: 4, file: 'wxi',
+    sections: [4], file: 'wxi',
     from: 'const adjust = fit ? fit.roleFit + fit.chemistry + fit.balance : 0;',
     to: 'const adjust = fit ? fit.roleFit + fit.chemistry + fit.balance : 0.5;',
     note: 'a World XI season with no breakdown gets nudged; section 4 must go red',
   },
   oldcrash: {
-    section: 5, file: 'tiles',
+    sections: [5], file: 'tiles',
     from: '  if (!fit) return null;\n',
     to: '',
     note: 'the worth tiles read a report fit block that old reports do not have; section 5 must go red',
@@ -638,11 +640,11 @@ begin(5, 'old reports render, and the new tiles render for full and half built e
 /* ======================= verdict ======================= */
 const red = [...failedIn.keys()].sort((x, y) => x - y);
 if (CONTROL) {
-  const want = CONTROLS[CONTROL].section;
-  const fired = red.includes(want) && red.every(s => s === want);
+  const want = CONTROLS[CONTROL].sections;
+  const fired = want.every(s => red.includes(s)) && red.every(s => want.includes(s));
   console.log(fired
-    ? `CONTROL FIRED: BYXI_CONTROL=${CONTROL} turned section ${want} red and nothing else`
-    : `CONTROL DID NOT FIRE AS IT SHOULD: BYXI_CONTROL=${CONTROL} wanted section ${want} red alone, red sections: ${red.join(', ') || 'none'}`);
+    ? `CONTROL FIRED: BYXI_CONTROL=${CONTROL} turned section ${want.join(' and ')} red and nothing else`
+    : `CONTROL DID NOT FIRE AS IT SHOULD: BYXI_CONTROL=${CONTROL} wanted section ${want.join(' and ')} red alone, red sections: ${red.join(', ') || 'none'}`);
   process.exit(fired ? 0 : 1);
 }
 const total = [...failedIn.values()].reduce((s, n) => s + n, 0);
