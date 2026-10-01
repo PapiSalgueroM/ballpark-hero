@@ -1,5 +1,61 @@
 # Project state
 
+## LIVE 2026-10-01: Release J (653 grid answer archives, the 669 Footle re-bake), main `2652f9fa`
+
+Assembled by the desktop Claude lane in the gate clone (`r669-bake`) on top of Release I and Codex's commits as
+they stood at each merge, pushed to main as a merge. **douknowball.com is serving it:** deployment `546d0dc1`,
+called only after `get_project` showed `latest_commit_sha` `2652f9fa`; the live entry moved from
+`index--eNejDlV.js` to `index-jsexOB8y.js`. Proof by content: the `x-deployment-id` header read `546d0dc1` 45
+seconds after the deploy; the four archive pages answer 200 with 440 table rows each; `/whats-new/` carries
+"Grid answers for every past day"; the live chunk `footleEnrichment-BN7X1CZM.js` (the same name the gate build
+produced) contains Morten Hjulmand, who was not in the pool before the re-bake.
+
+- **653, grid answer archives.** Every past day's answers for the NBA, MLB, hockey and college basketball grids on
+  one archive page per sport (`/nba-grid/archive`, `/mlb-grid/archive`, `/hockey-grid/archive`, `/cbb-grid/archive`,
+  all four already in the sitemap). The pages had stuck on August 30 and kept calling themselves the last 14 days;
+  they now run from August 17 to today, generated from the same daily seed the game uses, with the namesake fix in
+  all four grids (a player who shares a name with another is keyed by id, not by display name) and the archive
+  regenerated with 0 names moved. `simGridArchive` holds the archive against the game's own picker day by day, with
+  controls `copyrange`, `isoh2` and `dedupe`.
+- **669, the Footle pool re-baked.** Round 669's data step ran at 00:03 ET today: the 2026 market table has its
+  Defensive Midfield rows back (412 rows, 5,862 in the season, from 46 and 5,496), two sources a row, and
+  `scripts/bakePlayers.mjs` regenerated `src/data/players.ts` from it: 538 to 553 players. The World XI report of
+  2026-09-21 is resolved on the shelf with the fix reference. `simPlayersPool` (controls `handedit`, `agezero`) and
+  `simWorldXiDefensiveMids` are green on the re-baked file.
+- **Data applied ahead of their branches (both fail closed, both verified after):** Round 733's golf majors
+  migration (526 rows to 504: the 25 dash placeholder rows gone, the three dagger marks off Francis Ouimet and Bobby
+  Jones so Jones is one golfer with 7 rows, the three 2026 champions in; end hash `8a97bd0b`), and Round 734's F1
+  standings migration (18 corrected rows such as 1976 Hunt 69, Lauda 68 and the champion spelled Juan Manuel Fangio,
+  plus the 11 scoreless 1952 and 1953 starters the import cut off; 3,106 rows). Their branches
+  (`r733-golf-majors-fix` `d746b2bf` with `simGolfMajors` and 14 controls, `r734-f1-standings-fix` `c1dca470` with
+  `simF1Champions` and 5 controls, the 16 false "drove for more than one team" notes rewritten from evidence) are
+  green, merged with main and ride the next release.
+- **The edge functions Release H owed are settled.** soccer-grid-validate v24, football-connect4-validate v13,
+  tennis-chain-validate v10 and scores-poll v10 were found deployed on 2026-09-30 evening; each deployed source was
+  fetched through the Supabase MCP and equals the repo file by sha256, so `scripts/data/edgeDeployed.json` records
+  them (main `21487709`) and the unverified ratchet dropped to 18.
+- **The session limit cut the fleet at about 01:45 ET.** Twenty one builders went out at 00:35; nineteen were still
+  running when the 5 hour window ran out. Nothing was lost: every worktree's files were committed and pushed to its
+  own branch as a work in progress save at 05:05, and a finishing workflow (six chains at a time, each a finisher,
+  one adversarial review and a fixer when the review finds a major) is running on 706, 718, 782, 722, 723, 725, 783,
+  727, 703, 726, 781, 784, 735 and 739. Branches and heads are on the board.
+- **Still held:** 703, 706, 718 (finishing now), the 735 to 740 transfer window data (one integration round folds
+  the league files into the overlay once 735 and 739 are filled out).
+
+**Gates.** Type gate 0 on the merged tree. `build:seo` on `r669-bake`: 173 routes prerendered, 0 failed, 13 lastmod
+dates rewritten, 167 URLs. Thirty harnesses in two lanes (the snapshot readers CLAUDE.md names plus
+`simGridArchive`, `simPlayersPool`, `simWorldXiDefensiveMids`, `simPrerenderTables`, `simRecordPages`, `simDaily`,
+`simRelatedGames`), all green on the merged tree once four reds were settled: `simIndexNow` (the floor had not
+moved for Manager Hot Seat in Release I; both lanes raised it to 167), `simEdgeSync` (the ledger above),
+`simLeaderboardCaps` (Codex's two fixture keys, fixed by its Round 780), `simSiteSearch` (a keystroke timing band
+read at 100 percent CPU with 21 builders running, green on a quiet machine). `simGridArchive`'s three controls
+fire. `simHarnessAnchors` went red on the last merge for Codex's `simBuzzerPractice` and `simFreeKickPractice`
+(raw reads searched with multi line anchors); both now fold line endings on the read itself and pass, with nothing
+they measure changed. Browser walks: `playHomeFold`, `playSoftFourOhFour` and `playSnapshotDrift` green;
+`sweepWeight` raised two budgets with the measured figure beside them (Footle 328K on 325K measured after the
+re-bake, Soccer Grid 308K on 304K, shared chunks); `playRenderStability` crashed its browser at 100 percent CPU on
+the first run and is being rerun on a quiet machine, so it is NOT yet a green and is recorded when it lands.
+
 ## CHECKPOINT 2026-10-01: Search and Discard scroll correction frozen
 
 793 native QA reproduced a69px accepted-pick page jump. A scoped class on the existing
