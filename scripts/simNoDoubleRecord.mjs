@@ -635,6 +635,11 @@ try {
         copy = copy.replace(e.from, e.to);
       }
       if (copy === src) abort(`control ${name} cannot run: the rewrite of ${rel} changed nothing`);
+      for (const match of stripComments(copy).matchAll(/\bfrom (['"])(\.\.?\/[^'"]+\.module\.css)\1/g)) {
+        const originalCss = path.resolve(ROOT, path.dirname(rel), match[2]);
+        if (count(copy, match[0]) !== 1 || !originalCss.startsWith(path.join(ROOT, 'src') + path.sep) || !fs.existsSync(originalCss) || !fs.statSync(originalCss).isFile()) abort(`control ${name} cannot run: ${rel} has an unresolved or ambiguous relative CSS module import`);
+        copy = copy.replace(match[0], `from '${originalCss.replaceAll('\\', '/')}'`);
+      }
       if (/from '\.\.?\//.test(copy)) abort(`control ${name} cannot run: ${rel} has a relative import, which a copy elsewhere cannot resolve`);
       const dir = path.join(controlDir, name);
       fs.mkdirSync(dir, { recursive: true });

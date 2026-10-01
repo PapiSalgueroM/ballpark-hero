@@ -1,5 +1,36 @@
 # Project state
 
+## ACCEPTED 2026-10-01: F1 Driver committed feedback
+
+806 removes stale wrong feedback after correct wins, binds finite420/static cues
+to actual committed turns/status and prevents give-up from borrowing a prior miss.
+Full guesses wrap; hook/actions/data/all payouts/save/share/completion hold. Ten
+outcomes/nineunit controls/8native+4copies (994checks), combined805/806 type/build/
+all15 fences and two actual App contexts (1000/600,84checks) pass with no Y changes/
+errors/overflow/extra writes.1791 inputs/188 saved pages/168 URLs held. No publish.
+The measured original help Escape-to-BODY focus gap is deferred to807, whose scope
+now also includes the isolated HowToPlay opener/close-focus and fictional hint
+example.807/808/809 proceed; all Claude reservations stand. Next free810.
+Full receipts and boundaries are on WORKBOARD.
+
+## ACCEPTED 2026-10-01: Rank Em editable order
+
+802 adds editable five-pick drafts and one explicit Lock, preserving original
+rounds/scoring/save/share/completion. Finite/static cues,44px full-name controls
+and visible focus pass10 outcomes/15unit controls/8native+6copies and two actual
+App contexts (1000/600,229checks,0Y/errors/overflow). Types/final build/all15fences
+plus source guards pass. Only Rank snapshot/derived URL/guide record change,
+187 other saved pages/167 URLs/128 guide records hold. NoDouble copied CSS import
+support and Rank result detection pass targeted proofs; two separate whole-test
+positives refuse an existing MLB timer teardown error and are not credited.
+Detailed receipts/limits are on WORKBOARD. No publication claim.
+
+809 claims shared playerSearch/PlayerAutocomplete plus focused test/sim: failed
+empty lookups must offer retry instead of a false No players found, preserving
+useful partial results, ordering and stale-response guards. No data/DB writes.
+The historical413 accent failure's root cause remains unproven.806 is ready for
+commit;807/808 follow. All Claude reservations stand. Next free810.
+
 ## ACCEPTED 2026-10-01: F1 Driver Search keyboard and phone popup
 
 805 fixes ArrowDown resets and offscreen low-input suggestions, preserving the

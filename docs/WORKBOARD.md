@@ -1,5 +1,77 @@
 # Work board
 
+**2026-10-01, Codex806 F1 Driver committed feedback ACCEPTED.**
+Remove the stale50ms guess closure. Feedback comes from one actual accepted guess
+append and is bound to its turn/status. Correct wins show correct feedback; misses
+get one420ms cue. Give-up after a miss cannot borrow that animation. Reduced motion
+is static,600ms feedback timers clear, restores/clones/mode changes stay quiet.
+Long submitted names wrap instead of overflowing. Original hook/data/hint/give-up/
+reset actions, all six payouts, saves/full share/completion stay held.
+
+Ten actual outcomes/nine effective unit controls, eight native contexts/four copies
+and994 checks pass. Old status binding reproduces three borrowed loss-animation
+frames; the name copy restores121px overflow; reduced-rule/stale-closure copies
+fail their actual outcomes while original600score/save stays exact. The final CSS
+matches the accepted native boundary byte for byte. Combined805/806 types/build/
+all15 artifact fences plus source guards pass;1791 RAW inputs/188 pages/168 URLs
+held. Two untouched actual App contexts score1000/600 with84 checks, native Enter/
+finite420/static reduce, exact raw save/full clipboard/one actual locally fulfilled
+guest POST and quiet reload. No Y changes/errors/bad HTTP/unrelated writes.
+Source/HTML/assets held; browser/server/copies stopped. No publication claim.
+
+The original help modal closes, but Escape returns focus to BODY. That measured
+pre-existing gap was retained and is not credited as fixed by806.807 now expands
+its claimed scope to F1DriverHowToPlay.tsx: keep the same rules/modal, restore
+close focus with preventScroll, use a44px opener and add one fictional worked hint
+example. The existing next-payout/counter correction remains its primary task.
+Receipts: TEMP/dukb-round806-builder-receipt.json,dukb-round806-native/report.json,
+dukb-round806-production-app/report.json and cleanup.json, and the combined
+dukb-round805-production-20261001/production805-preservation-receipt.json.
+Final entry index-CpG6jSlL.js, SHAde17755024c5f9a3c92d2dffe5c24d878b2a7393bd92545f4c54ab53c1a379e4.
+802 and805 are pushed;807/808/809 and all Claude reservations stand. Next free810.
+
+**2026-10-01, Codex802 Rank Em editable order ACCEPTED.**
+The fifth pick stays a draft. Review, move, remove or undo picks, then Lock order
+once. Original rounds,200-point slot scoring, daily save/share/completion and
+Unlimited stay held. Native44px controls/full names/visible focus work without
+document jumps. Actual committed result cues run420ms and reduced motion stays
+static. Invalid/no-op edits, clones, restored rounds and repeated Lock stay quiet.
+
+Ten actual outcomes/fifteen effective unit copies, eight final-CSS native contexts
+and six effective browser copies pass. The final existing-control focus fallback
+holds JSX/CSS, so the already accepted one-route three-clock capture stays valid.
+Types/final build/all15 fences plus guide/site-search/anchors pass.1787 RAW source
+inputs held; only Rank saved text/derived URL/guide record changed,187 other raw
+pages,167 other URLs and128 other guide records held. Two actual App contexts use
+untouched original rounds, scoring1000 and600, with229 checks and17 immediate/
+settled action samples all0Y. Exact saves/full share/local plays1/points/one actual
+locally intercepted guest POST and quiet reload pass.619dist/1178src files held.
+
+The shared recorder test now recognizes Rank's actual result heading separately
+from draft status. Original full67 outcomes and nomark38 intended failures pass.
+The copied-page wrapper resolves only verified relative CSS module imports;
+toggling its copied recorder reproduces exactlyone Rank failure,66 other rows
+plus two global checks pass, no unhandled errors. Two separate full-positive
+attempts were refused for the existing MLB timer after window teardown, retained
+and not credited. Browsers/servers/control copies stopped. No publication claim.
+Receipts: TEMP/dukb-round802-builder-receipt.json,dukb-round802-native/app-report.json,
+app-cleanup.json,dukb-round802-no-double-css/receipt.json,
+dukb-round802-production-20261001/production802-preservation-receipt.json,
+dukb-round802-owned-copy-receipt.json. Final entry index-DF6NdGRS.js,
+SHAe800ad62261e2af943e2125aaf54fe812fc47be3de98ea57e6c54ff634db8494.
+
+**2026-10-01, Codex809 CLAIMED: truthful empty player-search failures.**
+Own only src/lib/playerSearch.ts,src/components/game/PlayerAutocomplete.tsx plus
+new focused test/sim. Current measured direct503 plus successful top1000 fallback
+returns empty/error:null, while that fallback has none of the requested player.
+The shared autocomplete also discards returned errors and says No players found.
+When no matches survive and an applicable request failed, expose a retry message;
+preserve useful partial/local matches, original ranking/limits/callbacks and stale
+response guards. No DB/schema/data changes or outward writes. The original413
+historical miss's cause is unproven because HTTP status was not logged. Verify
+success, each one-leg failure, useful partial results, localmatches and stale
+responses with asserted controls. All Claude reservations stand. Next free810.
+
 **2026-10-01, Codex805 F1 Driver Search ACCEPTED.**
 Memoize the original driver options so ArrowDown keeps its selected row. Use
 accessible native suggestions with full names,44px actions, visible focus and
@@ -19,7 +91,7 @@ and hit-tested. The original Kimi Antonelli guess then Max Verstappen win scores
 800, preserves the exact three daily writes/full clipboard and sends one locally
 intercepted real guest completion. Quiet reload,0Y changes/errors/overflow pass.
 Sources/HTML/assets held; browsers/servers stopped. No publication claim.
-Receipts: TEMP/dukb-round805-final-receipt.json,dukb-round805-test-type-fix.json,
+Receipts: TEMP/dukb-round805-final-integrated-receipt.json,dukb-round805-test-type-fix.json,
 dukb-round805-production-app/report.json and cleanup.json,
 dukb-round805-production-20261001/production805-preservation-receipt.json.
 Final entry index-CpG6jSlL.js, SHAde17755024c5f9a3c92d2dffe5c24d878b2a7393bd92545f4c54ab53c1a379e4.
