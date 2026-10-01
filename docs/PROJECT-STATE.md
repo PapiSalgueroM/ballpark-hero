@@ -1,5 +1,15 @@
 # Project state
 
+## IN PROGRESS 2026-10-01: final production build passes, day pin compatibility claimed
+
+Current combined types/build pass in the physical1729c27f checkout with frozen786/787/788
+overlays and corrected Quiz JS. Entry index-CnGiHcn2.js; utility CSS stays byte-identical to
+the accepted215c948d stylesheet. All14 rebuilt-site node fences pass; actual boot browser
+gate follows.789 claims only Hot Seat's two-line durable useRef day pin to match the existing
+strict guard; its previous Memo cache is not an observed runtime midnight failure. Full
+Daily Reload and native matrices continue.787's measured narrow mobile result receipts
+need a scoped layout fix and subsequent rebuild before visual acceptance. Next free790.
+
 ## CHECKPOINT 2026-10-01: Stat Detective source and fresh daily regression accepted
 
 786's seven actual-page/helper checks and ten effective copied controls pass, with types0.

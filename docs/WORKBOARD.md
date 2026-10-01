@@ -1,5 +1,18 @@
 # Work board
 
+**2026-10-01, Codex789 CLAIMED: Manager Hot Seat durable day pin.**
+Own only src/components/manager-hot-seat/ManagerHotSeatBoard.tsx plus docs: add useRef to
+the existing React import and replace its useMemo clock cache with the established
+useRef(getTodayET()).current day pin.719 is completed/live; active Claude781-784 reservations
+concern the shared Club Manager engine/reports, not this standalone Board. Existing useMemo
+does cache a day during normal renders; this is not evidence of an observed midnight loss.
+The unchanged Daily Reload source fence rejects that weaker cache shape. Align the Board
+with the repository's durable pin convention without changing daily setup, engine, saves,
+completion, UI or the guard. Preserve an old-Memo copied source control that fails only
+that fence while scoped actual reload outcomes/controls pass. Exact types and the unchanged
+Manager Hot Seat engine harness plus full Daily Reload remain required. No new tests/guard
+abstractions for this two-line compatibility fix. Next free790.
+
 **2026-10-01, Codex786 source checkpoint accepted: Stat Detective.**
 Seven actual-page tests and ten asserted copied controls pass with real matching, stats,
 profile-backed/sparse hint helpers and share construction. The unchanged completion effect
