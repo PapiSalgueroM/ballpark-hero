@@ -1,5 +1,50 @@
 # Project state
 
+## LIVE 2026-10-01: Release P (781 Club Manager stoppage time and the aggregate on a second leg; 819 Soccer Career's dilemmas are reachable and every option does what its card says), main `5738ab58`
+
+Assembled by the desktop Claude lane in the gate clone (`release-p`). **douknowball.com is serving it:** deployment
+`4ff29cca`, called only after `get_project` showed `latest_commit_sha` `5738ab58`; the live entry moved from
+`index-Bj5VrkKR.js` to `index-E8L0RxXO.js`. Proof by content: `/whats-new` carries both new lines; the live Soccer Career chunk contains "THE HOTEL BAR" and the private trainer wording; the live match centre and match report chunks contain "First leg"; `/club-manager`, `/soccer-career`, `/buzzer-beater` and `/leaderboard` answer 200.
+
+- **781, from a player report (`f3cd3431`: "no stoppage time goals, and no aggregate on the second leg").** Nothing
+  could happen past the 45th or the 90th minute before; the board on the clock was a caption. The clock now runs
+  on to 45+N and 90+N in the live match and goals, cards and injuries land in it with the right label on every
+  surface (the banner, the timeline, the report): about one goal in 25 in first half stoppage time and one in 12
+  after the 90th. Extra time still only comes when a Champions League decider is level after ninety, and wears its
+  own board at 120. On a second leg the first leg and the running aggregate sit under the score, the match centre
+  says who leads going in, and the bracket labels its headline numbers as the aggregate.
+- **What 781's review changed (five majors, all fixed).** The live goal banner and the extra time clock had no
+  gate at all (a "90'" banner on a stoppage time goal stayed green); a change made at 90 could put an away
+  substitution at 91 to 96 with no plus label (81 of 3,852 changes in a probe); the round broke the pinned
+  shootout fixture from 782 (0 of 150 replays matched; re-recorded from this round's engine before the merge as
+  that harness's header allows, 150 of 150, its control still red on 135); and `simClubManagerStaff` capped scouted
+  ceilings at 93 when the engine allows a rare 95, which was already red on main at one seed.
+- **781 moves every Club Manager match for a given seed.** The goal counts and the board roll are drawn before
+  the goal minutes, over a longer clock, so a save in progress replays differently from here on. Balance is
+  unchanged over 12,000 seeds (level at 90: 18.9 percent before, 19.6 after; goals per match 2.782 and 2.772). Old
+  saves paused mid match open and finish (284 saves, 568 matches, none re-decided). Manager Hot Seat's daily changes
+  on deploy for the same reason; that code tolerates it and `simManagerHotSeat` is green.
+- **819, found by this lane during Round 796.** Soccer Career's moral dilemmas were meant to land about one season
+  in three from age 20 and never did: dismissing the social media screen skipped past them (60 careers, 943
+  social media screens, 0 dilemmas). They now come up after you post, never more than one a season, and nothing
+  piles up from seasons missed.
+- **What 819's review changed.** A doping offer came from "your club's fitness coach" at a real club, with a line
+  saying every top player does it: that is an accusation against an identifiable role at a real club, and it is
+  now a private trainer with nobody from the club involved. An old save with a podium finish years ago got "The
+  snub" at once, because the flag behind it is never cleared; it now fires only on the close of the season the
+  podium came in. About a dozen options did not do what their card said (a "2 season ban" served one, taking the
+  armband never made you captain, joining your rival's club paid the fee and never moved you, a promised fine never
+  came): each now does what it says or says what it does, checked by a new `simCareerDilemmaTruth`. The reach
+  harness could not see a lost consequence (three mutations stayed green) and now can. Balance over 200 careers a
+  policy: no career ends early, and every dilemma has an option that does not hurt you.
+- **Also in this publish:** Codex838's Buzzer Beater three point contest (on main at the merge).
+- **Left open, recorded by the reviewers:** reloading during first half stoppage time opens at the interval;
+  `soccerCareerCorruption.ts` has the same ban off by one on two lines (older code, reachable before this round);
+  a double tap on Continue can reroll a dilemma; a magazine cover joke in one dilemma is the owner's to judge
+  against AdSense.
+
+**Gates.** Type gate 0. Lane A (23 snapshot and release readers) and lane B (21 fences for the two rounds, `simCmStoppageTime` with seven controls, `simCmShootoutOrder`, `simLiveSimMotion`, `simCareerDilemmaReach`, `simCareerDilemmaTruth`, `simNoInventedQuotes`, `simNoInventedConduct` among them) green on the release tree; `simUclSeasonOne`, which had refused to run on main since Round 783 changed the expression its anchors match, was repaired here and is green with its tier, custom and vacuous controls firing. **Real browser pass on the built site** (Chromium, host like server): `sweepGames` 182 routes at phone, tablet and desktop, 546 checks, 0 findings; `playGames` on `/club-manager` and `/soccer-career`, 14 interactions each, clean; `playRenderStability` green on the three redrawn or changed routes; `sweepWeight` green. After the merge of main: type gate 0, `simSitemap`, `simIndexNow`, `simPrerender`, `simHarnessAnchors`, `simNoRivalNames` green. **Not measured on the release tree:** `simHalftime` hit a 50 minute cap with a dozen builders sharing the machine (a season costs the same as on main, 2.4 to 3.0 s against 2.5 to 3.7 s, so it is load, not the round; the reviewer ran its four sections in pieces before the merge, all green), and `simAcademy`, `simPress`, `simRoles`, `simEras` and `simOpposition` were still running at the publish. They are owed as a post release check on a quiet machine. Builder, reviewer and fixer ran on Opus; the lead merged, built and gated here.
+
 ## Current audit-only instruction, 2026-10-01
 
 Codex847 is a forensic and hostile QA audit. The latest request explicitly says
