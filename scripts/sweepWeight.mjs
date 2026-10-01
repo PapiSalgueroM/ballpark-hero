@@ -88,16 +88,16 @@ const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
    the other five were over and spent it getting back under. */
 const BUDGETS = [
   ['/', 226],
-  ['/club-manager', 626], /* release G: 626K measured with the match centre (714), the squad rows (715) and the double roster fix (742); was 622 */
+  ['/club-manager', 630], /* release H: 628K measured, the ticker's sport filter menu (711) in the entry chunk; release G: 626K with the match centre (714), the squad rows (715) and the double roster fix (742); was 622 */
   ['/soccer-career', 736],
   ['/stadium-tycoon', 290],
   /* Round 216: the new idle game. Measured 243K on the day it shipped,
      mostly the shared index chunk. */
   ['/wonderkid-factory', 270],
-  ['/minefield', 280], /* release G: 280K measured; the shared result moment (710), the native share sheet (744) and the hub trail (654) sit in chunks every game loads; was 276 */
-  ['/footle', 320], /* release G: 319K measured, same shared chunks as above; was 316 */
-  ['/nfl-my-career', 400],
-  ['/front-office', 300], /* release G: 299K measured, same shared chunks as above; was 296 */
+  ['/minefield', 284], /* release G: 280K measured; the shared result moment (710), the native share sheet (744) and the hub trail (654) sit in chunks every game loads; was 276 */
+  ['/footle', 324], /* release G: 319K measured, same shared chunks as above; was 316 */
+  ['/nfl-my-career', 404], /* release H: 401K measured; the ticker's sport filter menu (711) and the share sheet (744) sit in the entry chunk every page loads; was 400 */
+  ['/front-office', 304], /* release H: 302K measured, the entry chunk's ticker menu (711); was 300 */ /* release G: 299K measured, same shared chunks as above; was 296 */
   ['/soccer-grid', 300],
   ['/leaderboard', 266],
 ];

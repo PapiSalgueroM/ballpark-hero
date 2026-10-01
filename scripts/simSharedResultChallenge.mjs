@@ -43,7 +43,8 @@ const controls = {
 const control = process.env.SHARED_RESULT_CONTROL || '';
 assert.ok(!control || controls[control], 'Unknown shared result control');
 const sourceFiles = ['src/components/game/ShareButtons.tsx', 'src/components/game/GameNavbar.tsx', 'src/components/game/SharedResultCard.tsx', 'src/lib/sharedResult.ts'];
-const originals = await Promise.all(sourceFiles.map(async file => [file, await readFile(path.join(root, file), 'utf8')]));
+/* Release H: read with the line endings folded, so the multi line anchors match on a CRLF checkout (simHarnessAnchors). */
+const originals = await Promise.all(sourceFiles.map(async file => [file, (await readFile(path.join(root, file), 'utf8')).replace(/\r\n/g, '\n')]));
 let folder;
 let copy;
 try {
@@ -82,7 +83,7 @@ try {
     assert.match(output, /Tests\s+24 passed/, diagnostic);
     console.log('simSharedResultChallenge: 24 actual clipboard, URL round-trip, privacy, bounds, plaintext, dismissal, focus and existing-sharing checks passed.');
   }
-  for (const [file, source] of originals) assert.equal(await readFile(path.join(root, file), 'utf8'), source, `Production file changed: ${file}`);
+  for (const [file, source] of originals) assert.equal((await readFile(path.join(root, file), 'utf8')).replace(/\r\n/g, '\n'), source, `Production file changed: ${file}`);
   console.log('simSharedResultChallenge: production modules remain unchanged; controls use only owned temporary copies.');
 } finally {
   if (copy) await rm(copy, { force: true });
