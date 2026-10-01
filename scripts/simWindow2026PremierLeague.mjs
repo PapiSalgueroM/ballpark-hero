@@ -13,11 +13,19 @@
    sourced, with the reason.
 
    Copied from the Serie A sibling (scripts/simWindow2026SerieA.mjs, Round
-   738) so the five leagues are held to one shape, plus three checks the
+   738) so the five leagues are held to one shape, plus two checks the
    integration builder also applies, so a row that would be refused there
-   goes red here first: no Wikipedia source, no overlay name even accent and
-   case folded, and no row whose 2026 market row already sits at the club it
-   claims (that move is already in the table and the row is noise).
+   goes red here first: no Wikipedia source, and no overlay name even accent
+   and case folded. A row whose 2026 market row already sits at the club it
+   claims is counted, not failed: the builder counts it as "already at the
+   club", and once the Round 795 migration has moved these players every row
+   here is in that state on correct data.
+
+   The overlay names section 4 reads are the hand written list: on the Round
+   795 branch TRANSFER_OVERLAY_2026 also carries the generated window
+   additions (these rows among them) and the hand list is exported as
+   TRANSFER_OVERLAY_2026_HAND; before that branch lands, TRANSFER_OVERLAY_2026
+   is the hand list. The import takes whichever the module has.
 
    Every entry uses the overlay's field shape (name, to, db, loan, add) plus:
      sources  two URLs on two different hosts, never Wikipedia. sources[0] is
@@ -35,8 +43,10 @@
    Sections:
      1. SHAPE     every field has its type; to null carries a note.
      2. WINDOW    window is one of the two windows and checked is a date.
-     3. HOSTS     the two sources sit on two different hosts, neither of them
-                  Wikipedia.
+     3. HOSTS     the two sources sit on two different sites, neither of them
+                  Wikipedia. A site is the name before the public suffix, so
+                  espn.com, africa.espn.com, espn.co.uk and espn.com.mx are
+                  one site and two ESPN pages are one source, not two.
      4. OVERLAY   no name repeats one already in transferOverlay2026.mjs
                   (exactly, or accent and case folded), and no name appears
                   twice in this file.
@@ -45,8 +55,9 @@
      6. ENGINE    to is what scripts/lib/dbClubNames.mjs maps db to (null
                   when the engine does not model the club).
      7. ROWS      a name without add matches exactly one 2026 row (the
-                  migration keys on the name alone) and that row is not
-                  already at db; a name with add matches none.
+                  migration keys on the name alone); a name with add matches
+                  none. Rows still elsewhere (stale) and rows already at db
+                  (moved) are counted and printed, never failed.
      8. LEFT OUT  the left-out file has its shape and names nobody the main
                   file carries.
 
@@ -57,6 +68,10 @@
      WINDOW2026_CONTROL=window    an entry loses its checked date
      WINDOW2026_CONTROL=hosts     an entry's second source moves to the
                                   first source's host
+     WINDOW2026_CONTROL=family    an entry's second source moves to a
+                                  sister host of the first (africa. in
+                                  front of it), which an exact host
+                                  comparison would let through
      WINDOW2026_CONTROL=wiki      an entry's second source becomes a
                                   Wikipedia page
      WINDOW2026_CONTROL=overlay   an entry takes an overlay name (Morgan
@@ -67,8 +82,8 @@
      WINDOW2026_CONTROL=engine    a Hull City entry claims the engine club
                                   Juventus
      WINDOW2026_CONTROL=rows      an entry with a 2026 row gains add data
-     WINDOW2026_CONTROL=current   an entry claims the club its 2026 row
-                                  already sits at
+     WINDOW2026_CONTROL=norow     an entry without add names a player no
+                                  2026 row carries
      WINDOW2026_CONTROL=leftout   the left-out file names a player the main
                                   file carries
 
@@ -80,19 +95,38 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { TRANSFER_OVERLAY_2026 } from './transferOverlay2026.mjs';
+import * as overlayModule from './transferOverlay2026.mjs';
 import { DB_TO_ENGINE } from './lib/dbClubNames.mjs';
+
+/* The hand written overlay (see the header): the Round 795 export when the
+   module has it, the whole overlay before that branch lands. */
+const TRANSFER_OVERLAY_2026 = overlayModule.TRANSFER_OVERLAY_2026_HAND ?? overlayModule.TRANSFER_OVERLAY_2026;
+if (!Array.isArray(TRANSFER_OVERLAY_2026) || TRANSFER_OVERLAY_2026.length === 0) {
+  console.error('scripts/transferOverlay2026.mjs exports no overlay list. NOTHING WAS CHECKED.');
+  process.exit(1);
+}
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const FILE = path.join(ROOT, 'scripts', 'data', 'window2026', 'premierLeague.json');
 const LEFT = path.join(ROOT, 'scripts', 'data', 'window2026', 'premierLeague.left-out.json');
 const CONTROL = process.env.WINDOW2026_CONTROL || '';
-const SECTIONS = { shape: 1, window: 2, hosts: 3, wiki: 3, overlay: 4, fold: 4, spelling: 5, engine: 6, rows: 7, current: 7, leftout: 8 };
+const SECTIONS = { shape: 1, window: 2, hosts: 3, family: 3, wiki: 3, overlay: 4, fold: 4, spelling: 5, engine: 6, rows: 7, norow: 7, leftout: 8 };
 const failures = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0 };
 let section = 1;
 const fail = m => { failures[section] += 1; console.error('  FAIL: ' + m); };
 const abort = m => { console.error(m); process.exit(1); };
 const fold = s => String(s).normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/\s+/g, ' ').trim();
+const hostOf = u => new URL(u).hostname.replace(/^www\./, '').toLowerCase();
+/* The site a host belongs to: the label before the public suffix, where the
+   suffix is the last label, or the last two when they read like co.uk or
+   com.mx (a generic second level under a two letter country code). So
+   espn.com, africa.espn.com, espn.co.uk and espn.com.mx are all "espn". */
+const siteOf = host => {
+  const labels = host.split('.');
+  const country = labels.length >= 3 && /^[a-z]{2}$/.test(labels[labels.length - 1])
+    && /^(co|com|org|net|gov|ac|edu)$/.test(labels[labels.length - 2]);
+  return labels[labels.length - (country ? 3 : 2)] ?? host;
+};
 
 const entries = JSON.parse(fs.readFileSync(FILE, 'utf8'));
 const leftOut = JSON.parse(fs.readFileSync(LEFT, 'utf8'));
@@ -110,6 +144,16 @@ if (CONTROL) {
   if (CONTROL === 'shape') { plain.loan = 'yes'; }
   if (CONTROL === 'window') { delete plain.checked; }
   if (CONTROL === 'hosts') { plain.sources = [plain.sources[0], plain.sources[0].replace(/\/[^/]*$/, '/another-page')]; }
+  if (CONTROL === 'family') {
+    const sister = new URL(plain.sources[0]);
+    sister.hostname = `africa.${hostOf(plain.sources[0])}`;
+    sister.pathname = sister.pathname.replace(/\/?$/, '/another-page');
+    /* The plant must be one the old exact host comparison passes, or it
+       proves nothing about the site check. */
+    if (hostOf(sister.href) === hostOf(plain.sources[0])) abort('control cannot run: the sister host equals the first host');
+    if (siteOf(hostOf(sister.href)) !== siteOf(hostOf(plain.sources[0]))) abort('control cannot run: the sister host is not on the same site');
+    plain.sources = [plain.sources[0], sister.href];
+  }
   if (CONTROL === 'wiki') { plain.sources = [plain.sources[0], 'https://en.wikipedia.org/wiki/2026_Premier_League_summer_transfer_window']; }
   if (CONTROL === 'overlay') {
     if (!TRANSFER_OVERLAY_2026.some(o => o.name === 'Morgan Rogers')) abort('control cannot run: Morgan Rogers is not in the overlay');
@@ -138,8 +182,9 @@ if (CONTROL) {
     hull.to = 'Juventus';
   }
   if (CONTROL === 'rows') { plain.add = { p: 'Centre-Forward', a: 25, usd: 10800000 }; }
-  /* current is planted in section 7, once the table has said where the
-     plain entry's row sits. */
+  /* A name no player has, in memory only: section 7 must find no 2026 row
+     for it and fail, since the entry carries no add data. */
+  if (CONTROL === 'norow') { plain.name = 'Planted Control Nobody'; }
   if (CONTROL === 'leftout') { leftOut.push({ name: entries[0].name, move: 'planted by the control', why: 'control' }); }
   console.log(`   NEGATIVE CONTROL ON: ${CONTROL} (section ${SECTIONS[CONTROL]})`);
 }
@@ -176,19 +221,20 @@ for (const e of entries) {
 }
 
 section = 3;
-console.log('3) Two sources on two different hosts, neither of them Wikipedia');
+console.log('3) Two sources on two different sites, neither of them Wikipedia');
 {
   let n = 0;
   for (const e of entries) {
     if (!Array.isArray(e.sources) || e.sources.length !== 2) continue; /* section 1 owns that */
     let hosts;
-    try { hosts = e.sources.map(u => new URL(u).hostname.replace(/^www\./, '').toLowerCase()); } catch { fail(`${e.name}: a source is not a URL`); continue; }
+    try { hosts = e.sources.map(hostOf); } catch { fail(`${e.name}: a source is not a URL`); continue; }
     const wiki = hosts.filter(h => /(^|\.)wikipedia\.org$/.test(h));
     if (wiki.length) fail(`${e.name}: a source is on ${wiki[0]}, which is a spot check, never a source`);
     if (hosts[0] === hosts[1]) fail(`${e.name}: both sources are on ${hosts[0]}`);
+    else if (siteOf(hosts[0]) === siteOf(hosts[1])) fail(`${e.name}: ${hosts[0]} and ${hosts[1]} are one site (${siteOf(hosts[0])}), so this is one source`);
     else if (!wiki.length) n += 1;
   }
-  console.log(`   ${n} entries with two hosts`);
+  console.log(`   ${n} entries with two sites`);
 }
 
 section = 4;
@@ -259,7 +305,7 @@ console.log('6) to is the engine name the club map gives db');
 }
 
 section = 7;
-console.log('7) One 2026 row per name, not already at db; none when the entry adds the player');
+console.log('7) One 2026 row per name; none when the entry adds the player');
 {
   const names = [...new Set(entries.map(e => e.name))];
   const byName = new Map();
@@ -271,26 +317,24 @@ console.log('7) One 2026 row per name, not already at db; none when the entry ad
       byName.get(r.player_name).push(r.club);
     }
   }
-  if (CONTROL === 'current') {
-    const clubs = byName.get(plain.name) || [];
-    if (clubs.length !== 1) abort(`control cannot run: ${plain.name} has ${clubs.length} 2026 rows`);
-    if (clubs[0] === plain.db) abort('control cannot run: the plain entry already fails the current check');
-    plain.db = clubs[0];
-  }
   let checked = 0;
   let stale = 0;
+  let already = 0;
   for (const e of entries) {
     const clubs = byName.get(e.name) || [];
     if (e.add && clubs.length > 0) fail(`${e.name}: has ${clubs.length} 2026 row(s), so it must not carry add data`);
     if (!e.add && clubs.length !== 1) fail(`${e.name}: ${clubs.length} rows for 2026, the migration keys on the name alone and needs exactly one`);
+    /* Counted, never failed: a row already at db is what the Round 795
+       migration leaves behind, and the integration builder counts it as
+       "already at the club" rather than refusing it. */
     if (!e.add && clubs.length === 1) {
-      if (clubs[0] === e.db) fail(`${e.name}: his 2026 row already sits at "${e.db}", the table has this move`);
+      if (clubs[0] === e.db) already += 1;
       else stale += 1;
     }
     checked += 1;
   }
   if (checked !== entries.length) fail(`checked ${checked} of ${entries.length} entries`);
-  console.log(`   ${checked} entries checked against the 2026 rows, ${stale} rows the table has stale`);
+  console.log(`   ${checked} entries checked against the 2026 rows: ${stale} rows the table has stale, ${already} already at the entry's club`);
 }
 
 section = 8;

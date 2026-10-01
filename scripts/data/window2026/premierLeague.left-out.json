@@ -63,5 +63,15 @@
     "name": "Ben Johnson",
     "move": "Ipswich right back; his 2026 row sits at Ipswich and ESPN's Ipswich 2026-27 squad page does not list him.",
     "why": "No source found for a move or for where he plays now."
+  },
+  {
+    "name": "Sverre Nypan",
+    "move": "Manchester City to Lommel SK, season long loan, 2026-07-11 (Sports Mole); mancity.com covers his return from Middlesbrough in February 2026; his 2026 row sits at Middlesbrough.",
+    "why": "The Lommel loan has one source (the Manchester City loan list page refused the fetch on 2026-10-01), and no 2026 row is spelled for Lommel, so there is no db to write."
+  },
+  {
+    "name": "Rodrigo Gomes",
+    "move": "His 2026 row sits at Estoril, his 2023-24 loan club from Braga; he joined Wolves in summer 2024 (wolves.co.uk, 2024-06-12) and is their number 21 (wolves.co.uk first team page and ESPN's Wolves squad page).",
+    "why": "The row is wrong but the move is neither 2026 window, so it belongs to whoever corrects pre 2026 data, not to this file."
   }
 ]
