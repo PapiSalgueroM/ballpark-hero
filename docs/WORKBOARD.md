@@ -1,5 +1,19 @@
 # Work board
 
+**2026-10-01 16:57 UTC, Release K integrated without overwriting current work.**
+The required pull fast-forwarded main to 1e0aa2b8, retaining current claims and
+accepted commits. 813 is now 51934cdf above that release. Claude's new games,
+daily puzzle identity, CBB twin-school resolution and placeholder-name filtering
+are preserved. Prior 811-gate receipts remain explicitly bounded to bd3ec0de plus
+their captured sources, not a certification of this newly integrated release.
+Fresh unchanged integration tests pass 89/89: all eight 813 hooks, MLB 810 and
+Claude's daily identity tests. The nine Higher/Lower hooks intentionally do not
+provide getPuzzleId, so their existing save envelope stays correct. No adjustment
+to the expected saves or runtime was needed. Log: C:/Users/antho/AppData/Local/Temp/
+dukb-round818-integration-before.log (diagnostic filename only, 818 is unclaimed).
+Next combined 815-817 gate is cloned from 51934cdf and will verify those drafts
+against the integrated release. All active claims remain intact. Next free 818.
+
 **2026-10-01, Codex813 ACCEPTED: eight more Higher/Lower reveal fixes.**
 AFL, College Football, F1, Golf, Hockey, NBA, NFL and Tennis now cancel owned
 reveal timers on mode/Hard reset and unmount. Obsolete callbacks cannot award

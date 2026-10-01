@@ -1,5 +1,13 @@
 # Project state
 
+## INTEGRATED 2026-10-01: Claude Release K and current fixes
+
+Main now includes Release K through 1e0aa2b8, with 813 on top at 51934cdf. All
+current claims and earlier accepted work were retained. Fresh unchanged tests
+pass 89/89 across all nine Higher/Lower hooks and shared daily puzzle identity.
+Their save envelope needs no correction. The next 815-817 production gate uses
+this integrated baseline; older gate evidence keeps its original scope. Next free 818.
+
 ## ACCEPTED 2026-10-01: eight more Higher/Lower restart fixes
 
 813 cancels stale reveals in AFL, College Football, F1, Golf, Hockey, NBA, NFL
