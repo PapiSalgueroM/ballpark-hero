@@ -258,6 +258,27 @@ const LIVE_IDENTIFIERS = [
   "'fifa_cover'",     // old saved sponsorship value, read once by the save migration in repairCareer
 ];
 
+/* ===========================================================================
+   REAL PEOPLE WHOSE NAME HOLDS A BANNED WORD. Round 829 review.
+
+   A real player whose surname is also a product's name is a person, not the
+   product. Like the live identifiers above, each entry is blanked out of the
+   line before matching, and only as his exact full name, the way the record
+   spells it, and only in the files that carry that record. So the product
+   name written any other way in those same files (a bare surname, another
+   case, a title with a year, a comment) still fails, and so does his name in
+   any other file. SIM_RIVAL_CONTROL=person proves it.
+
+   Add a man only when a league's own record names him and a second source
+   agrees he is real. Never add a word, only a person.
+   =========================================================================== */
+const REAL_PEOPLE = [
+  /* Detroit Tigers pitcher, born 2000-02-21: MLB's Stats API record of the
+     2026-09-27 roster and ESPN's Detroit roster (read 2026-10-01) agree. */
+  { name: 'Ty Madden', files: ['scripts/data/mlbRosters2026.json', 'scripts/data/mlbStats2026.json', 'src/data/mlbFoRosters2026.ts'] },
+];
+const PERSON_CONTROL = process.env.SIM_RIVAL_CONTROL === 'person';
+
 /* A line ending in this marker is skipped. Only two places use it: the two
    older sims that carry their own list of banned brand names, which would
    otherwise trip this guard by doing the same job it does. */
@@ -275,11 +296,9 @@ const SKIP_DIRS = new Set(['node_modules', 'dist', 'dist-ssr', '.git', '.playwri
    it is skipped by name rather than line by line. scripts/.cache holds the
    downloaded nflverse files, gitignored, never shipped. Round 611: the
    College Grid answer key is the same kind of file (it holds Maddens too).
-   Round 829: so is MLB's roster record, its league tables and its left out
-   list, pulled from MLB's Stats API (Detroit's Ty Madden is in all three).
-   The data file generated from them is in src and is not skipped: its one
-   such row carries the inline marker, written by the generator. */
-const SKIP_FILES = new Set(['simNoRivalNames.mjs', 'nflGridPlayers.json', 'collegeGridPlayers.json', 'mlbRosters2026.json', 'mlbStats2026.json', 'mlbRostersLeftOut2026.json']);
+   Round 829's MLB files are NOT skipped: their one real Madden is allowed by
+   his full name in REAL_PEOPLE above, and every other line is scanned. */
+const SKIP_FILES = new Set(['simNoRivalNames.mjs', 'nflGridPlayers.json', 'collegeGridPlayers.json']);
 const BINARY = /\.(png|jpe?g|gif|ico|webp|avif|svg|woff2?|ttf|eot|mp3|mp4|webm|pdf|zip|lockb)$/i;
 
 /* docs/ is deliberately NOT scanned. It holds competitor research whose entire
@@ -324,6 +343,17 @@ for (const entry of SCAN) {
 }
 
 const findings = [];
+/* SIM_RIVAL_CONTROL=person: five other spellings of the one banned word that
+   rides on a real name. Each must still be a finding in every file the person
+   is allowed in. */
+const CONTROL_PROBES = [
+  '{"name":"Madden"}',
+  '{"name":"ty madden"}',
+  '{"name":"Ty  Madden"}',
+  '// ratings borrowed from Madden 26',
+  '{"name":"Tyler Madden"}',
+];
+const controlProblems = [];
 
 for (const file of files) {
   let text;
@@ -334,6 +364,16 @@ for (const file of files) {
   }
   if (text.includes('\0')) continue; // binary that slipped past the extension list
   const rel = path.relative(ROOT, file);
+  const relFwd = rel.split(path.sep).join('/');
+  const people = REAL_PEOPLE.filter(p => p.files.includes(relFwd)).map(p => p.name);
+  /* The control: in each file a person is allowed in, the person must be there
+     (or the allowance is dead weight), and the product name written five
+     other ways, appended to that file's text here and nowhere on disk, must
+     each still fail. */
+  if (PERSON_CONTROL && people.length) {
+    for (const name of people) if (!text.includes(name)) controlProblems.push(`${relFwd} no longer holds ${name}, so the allowance there is dead weight`);
+    text += `\n${CONTROL_PROBES.join('\n')}`;
+  }
   const lines = text.split('\n');
 
   lines.forEach((line, i) => {
@@ -344,6 +384,10 @@ for (const file of files) {
     let probe = line;
     for (const id of LIVE_IDENTIFIERS) {
       probe = probe.split(id).join(' '.repeat(id.length));
+    }
+    // Round 829 review: and a real person, by his exact full name, in his own files.
+    for (const name of people) {
+      probe = probe.split(name).join(' '.repeat(name.length));
     }
 
     for (const { src, re } of patterns) {
@@ -370,6 +414,22 @@ for (const file of files) {
       });
     }
   });
+}
+
+if (PERSON_CONTROL) {
+  const scoped = REAL_PEOPLE.flatMap(p => p.files);
+  const missed = [];
+  for (const f of scoped) {
+    for (const probe of CONTROL_PROBES) {
+      if (!findings.some(x => x.rel.split(path.sep).join('/') === f && x.text === probe.trim())) missed.push(`${f}: ${probe}`);
+    }
+  }
+  const real = findings.filter(x => !CONTROL_PROBES.includes(x.text));
+  console.log(`control person: ${scoped.length} files x ${CONTROL_PROBES.length} other spellings, ${scoped.length * CONTROL_PROBES.length - missed.length} caught; ${real.length} findings outside the probes`);
+  for (const m of [...controlProblems, ...missed].slice(0, 10)) console.log(`   NOT CAUGHT ${m}`);
+  if (controlProblems.length || missed.length || real.length) { console.log('FAIL: control person did not fire as designed'); process.exit(1); }
+  console.log('simNoRivalNames: control person fired as designed (the full name passes, every other spelling fails)');
+  process.exit(0);
 }
 
 if (findings.length) {
