@@ -43,6 +43,19 @@ const pitch = (view: ReturnType<typeof render>) => view.container.querySelector(
 const next = (view: ReturnType<typeof render>, index: number) => { advance(760); click(view, index === 9 ? 'See the run' : 'Next kick'); };
 const ball = (view: ReturnType<typeof render>) => pitch(view).querySelector('circle[fill="white"]')!;
 
+function finishRecorded(view: ReturnType<typeof render>) {
+  let points = 0, goals = 0;
+  for (let index = 0; index < 10; index++) {
+    const hold = nativeButton(view, 'Hold to strike'); fireEvent.mouseDown(hold); fireEvent.mouseUp(hold);
+    const outcome = vi.mocked(takeShot).mock.results.at(-1)!.value;
+    points += outcome.points; goals += Number(outcome.scored); next(view, index);
+  }
+  return { points, goals };
+}
+function finishPractice(view: ReturnType<typeof render>) {
+  for (let index = 0; index < 10; index++) { click(view, 'Kick'); next(view, index); }
+}
+
 beforeEach(() => {
   vi.useFakeTimers({ toFake: ['Date', 'setTimeout', 'clearTimeout', 'setInterval', 'clearInterval'] });
   vi.setSystemTime(new Date('2026-09-30T12:00:00Z'));
@@ -215,5 +228,40 @@ describe('actual Free Kick steady practice', { timeout: 30000 }, () => {
     const other = draw(); start(other); click(other, 'Kick');
     expect(frames.size).toBe(1); other.unmount(); advance(5000);
     expect(frames.size).toBe(0); expect(vi.getTimerCount()).toBe(0); expect(recordCompletion).not.toHaveBeenCalled();
+  });
+
+  it('keeps a newly finished daily booked across practice and unlimited without rewriting or recording it', () => {
+    const view = draw(); click(view, "Today's ten");
+    const key = dailyRecordKey('free-kick', DATE), writes = vi.spyOn(Storage.prototype, 'setItem');
+    const daily = finishRecorded(view), saved = localStorage.getItem(key);
+    expect(recordCompletion).toHaveBeenCalledExactlyOnceWith('/free-kick', daily.points, null, daily.goals);
+    start(view); finishPractice(view); click(view, "Today's ten");
+    expect(view.container.querySelector('[data-arcade-phase]'), 'the freshly earned daily must return finished').toHaveAttribute('data-arcade-phase', 'done');
+    expect(view.getByText(`${daily.goals} of 10 scored`)).toBeVisible();
+    expect(view.getByText(new RegExp(`^${daily.points} points`))).toBeVisible();
+    expect(recordCompletion).toHaveBeenCalledTimes(1);
+    expect(writes.mock.calls.filter(([storedKey]) => storedKey === key)).toHaveLength(1);
+    expect(localStorage.getItem(key)).toBe(saved);
+    click(view, 'Another ten');
+    const unlimited = finishRecorded(view);
+    expect(recordCompletion).toHaveBeenNthCalledWith(2, '/free-kick', unlimited.points, null, unlimited.goals);
+    expect(recordCompletion).toHaveBeenCalledTimes(2);
+    start(view); finishPractice(view); click(view, "Today's ten");
+    expect(view.getByText(`${daily.goals} of 10 scored`)).toBeVisible();
+    expect(view.getByText(new RegExp(`^${daily.points} points`))).toBeVisible();
+    expect(recordCompletion).toHaveBeenCalledTimes(2);
+    expect(writes.mock.calls.filter(([storedKey]) => storedKey === key)).toHaveLength(1);
+    expect(localStorage.getItem(key)).toBe(saved);
+  });
+
+  it('keeps a newly finished daily in memory when private storage refuses its write', () => {
+    const write = vi.spyOn(Storage.prototype, 'setItem').mockImplementation(() => { throw new Error('Storage refused'); });
+    const view = draw(); click(view, "Today's ten"); const daily = finishRecorded(view);
+    expect(recordCompletion).toHaveBeenCalledTimes(1); expect(write).toHaveBeenCalledTimes(1);
+    start(view); finishPractice(view); click(view, "Today's ten");
+    expect(view.container.querySelector('[data-arcade-phase]'), 'blocked storage must not discard the earned daily in this mount').toHaveAttribute('data-arcade-phase', 'done');
+    expect(view.getByText(`${daily.goals} of 10 scored`)).toBeVisible();
+    expect(view.getByText(new RegExp(`^${daily.points} points`))).toBeVisible();
+    expect(recordCompletion).toHaveBeenCalledTimes(1); expect(write).toHaveBeenCalledTimes(1); expect(localStorage.length).toBe(0);
   });
 });

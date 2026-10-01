@@ -1,5 +1,37 @@
 # Work board
 
+**2026-10-01, Codex788 COMPLETE acceptance: newly earned daily stays booked.**
+Both Boards cache the first finished daily before its save and return that exact snapshot
+with booked state in the same batch. The immutable mount restore and original fresh result
+UI stay intact.22 actual tests, two eleven-test wrappers, all26 old/four new copied controls,
+16 native width/motion contexts and four320px refused-storage flows pass. Free Kick's native
+earned daily is500/2, Buzzer's valid charged baseline0/0; every return keeps exactly one daily
+write/record, later Unlimited records its exact second completion, and a further practice
+return preserves the original daily. Real physics/flight/storage/completion hook execute;
+outward auth/record/share use local sinks, so no account delivery or publication claim.
+Overflow/errors/external HTTP0; eight input files preserved, browser/server/copies cleaned.
+Receipts: TEMP/dukb-round788-native/report.json and cleanup.json; practice controls remain
+in TEMP/dukb-round788-practice-controls. Full Daily Reload now passes original107/107, all21
+clear rows, all11 mark-dependent silent rows with10 other rows holding, and all24 day pins.
+The test-only picker selects actual direct name/subtitle spans through children, avoiding
+disabled Reset and jsdom colon-ID :scope errors. Failed selector diagnostic stays uncredited.
+Proof: TEMP/dukb-round788-daily-reload-final.log. Exact source-ratchet67 outcomes/eight static
+controls already pass as recorded above. No hook/engine/data/schema changes. Final combined
+build refresh for787's receipt fix and789's day pin remains pending before publication.
+
+**786 final native acceptance:** eight actual page/helper/shared-Dialog/SEOguide contexts pass
+on the completed788 utility CSS. Native Tab twice/Space chooses the second suggestion,
+input Enter-first and suggestion Enter work, help trap/Escape returns its exact trigger.
+Search/result focus does not scroll; older nodes stay stable. Exact profile clues, sparse
+pointers2/2/4/4/5/6/null, win2/8/lossX/8/Deep1/8 shares and once-only undefined-score completion
+sink hold. Finite420/300/360/420ms cues end, reduced motion stays static and settled clones
+stay quiet. Owned controls44px; shared help close remains its existing32px, explicitly
+outside this page's claim. Page/dialog overflow/errors/external requests0. Six original
+inputs preserved, page/module match combined source manifest. Receipts and inspected320
+images: TEMP/dukb-round786-stat-audit/report.json,production-preservation-receipt.json.
+The initial native lookup used a different Chromium whitespace name, earned no credit and
+is preserved with tab-diagnostic.json. No production app change was needed for that fixture.
+
 **2026-10-01, Codex789 CLAIMED: Manager Hot Seat durable day pin.**
 Own only src/components/manager-hot-seat/ManagerHotSeatBoard.tsx plus docs: add useRef to
 the existing React import and replace its useMemo clock cache with the established

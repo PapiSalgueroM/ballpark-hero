@@ -102,6 +102,18 @@ function finishPractice(view: ReturnType<typeof render>) {
   return { points, made };
 }
 
+function finishRecorded(view: ReturnType<typeof render>) {
+  let points = 0, made = 0;
+  for (let index = 0; index < 10; index++) {
+    const hold = button('Hold to shoot');
+    fireEvent.mouseDown(hold); fireEvent.mouseUp(hold);
+    const outcome = actualShot(); points += outcome.points; made += Number(outcome.made);
+    if (board(view).getAttribute('data-arcade-phase') === 'flying') advance(780);
+    next(index);
+  }
+  return { points, made };
+}
+
 describe('Buzzer Beater steady practice', () => {
   it('keeps selected power through delayed and field Space inputs without charging or shooting', () => {
     const view = startPractice();
@@ -253,5 +265,48 @@ describe('Buzzer Beater steady practice', () => {
     expect(recordCompletion).toHaveBeenCalledExactlyOnceWith('/buzzer-beater', points, null, made);
     expect(writeArcadeRun).not.toHaveBeenCalled();
     expect(localStorage.getItem(key)).toBe(saved);
+  }, 30000);
+
+  it('keeps a newly finished daily booked across practice and unlimited without rewriting or recording it', () => {
+    reduceMotion();
+    const view = render(<BuzzerBeaterBoard />);
+    const date = getTodayET(), key = `buzzer-beater-daily-${date}`;
+    const writes = vi.spyOn(Storage.prototype, 'setItem');
+    fireEvent.click(button("Today's ten"));
+    const daily = finishRecorded(view), saved = localStorage.getItem(key);
+    expect(recordCompletion).toHaveBeenCalledExactlyOnceWith('/buzzer-beater', daily.points, null, daily.made);
+    expect(writeArcadeRun).toHaveBeenCalledTimes(1);
+    fireEvent.click(button('Steady practice')); finishPractice(view);
+    fireEvent.click(button("Today's ten"));
+    expect(board(view), 'the freshly earned daily must return finished').toHaveAttribute('data-arcade-phase', 'done');
+    expect(screen.getByText(`${daily.made} of 10 made`)).toBeVisible();
+    expect(screen.getByText(new RegExp(`^${daily.points} points`))).toBeVisible();
+    expect(recordCompletion).toHaveBeenCalledTimes(1); expect(writeArcadeRun).toHaveBeenCalledTimes(1);
+    expect(writes.mock.calls.filter(([storedKey]) => storedKey === key)).toHaveLength(1);
+    expect(localStorage.getItem(key)).toBe(saved);
+    fireEvent.click(button('Another ten'));
+    const unlimited = finishRecorded(view);
+    expect(recordCompletion).toHaveBeenNthCalledWith(2, '/buzzer-beater', unlimited.points, null, unlimited.made);
+    expect(recordCompletion).toHaveBeenCalledTimes(2);
+    fireEvent.click(button('Steady practice')); finishPractice(view); fireEvent.click(button("Today's ten"));
+    expect(screen.getByText(`${daily.made} of 10 made`)).toBeVisible();
+    expect(screen.getByText(new RegExp(`^${daily.points} points`))).toBeVisible();
+    expect(recordCompletion).toHaveBeenCalledTimes(2); expect(writeArcadeRun).toHaveBeenCalledTimes(1);
+    expect(localStorage.getItem(key)).toBe(saved);
+  }, 30000);
+
+  it('keeps a newly finished daily in memory when private storage refuses its write', () => {
+    reduceMotion();
+    const write = vi.spyOn(Storage.prototype, 'setItem').mockImplementation(() => { throw new Error('Storage refused'); });
+    const view = render(<BuzzerBeaterBoard />);
+    fireEvent.click(button("Today's ten"));
+    const daily = finishRecorded(view);
+    expect(recordCompletion).toHaveBeenCalledTimes(1); expect(write).toHaveBeenCalledTimes(1);
+    fireEvent.click(button('Steady practice')); finishPractice(view); fireEvent.click(button("Today's ten"));
+    expect(board(view), 'blocked storage must not discard the earned daily in this mount').toHaveAttribute('data-arcade-phase', 'done');
+    expect(screen.getByText(`${daily.made} of 10 made`)).toBeVisible();
+    expect(screen.getByText(new RegExp(`^${daily.points} points`))).toBeVisible();
+    expect(recordCompletion).toHaveBeenCalledTimes(1); expect(write).toHaveBeenCalledTimes(1);
+    expect(writeArcadeRun).toHaveBeenCalledTimes(1); expect(localStorage.length).toBe(0);
   }, 30000);
 });

@@ -1,5 +1,16 @@
 # Project state
 
+## CHECKPOINT 2026-10-01: fresh arcade dailies and Stat Detective native acceptance passed
+
+788 is accepted:22 actual tests,30 effective controls,16 native cases/four private-storage
+flows preserve newly earned dailies across practice, with no second write/record and a later
+Unlimited finish still booked once. The full unchanged Daily Reload gate passes107/107 and
+both controls after its test-only player selector repair and789's durable day pin.786's
+eight native cases also pass exact clues, shares, once-only completion sink, focus, finite/
+static motion and phone fit. WORKBOARD carries source boundaries, failed attempts and proofs.
+Current build/fifteen fences pass. The final787 mobile receipt correction and789 day pin
+still need their combined build refresh; live publication remains separate. Next free790.
+
 ## IN PROGRESS 2026-10-01: final production build passes, day pin compatibility claimed
 
 Current combined types/build pass in the physical1729c27f checkout with frozen786/787/788

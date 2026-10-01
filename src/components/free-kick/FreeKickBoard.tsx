@@ -68,10 +68,12 @@ export default function FreeKickBoard() {
 
   const rngRef = useRef<() => number>(lehmer(1));
   const savedRef = useRef(restored !== null);
+  const completedDailyRef = useRef(restored);
+  const [bookedDaily, setBookedDaily] = useState(restored !== null);
 
   const setup = kicks[kickIdx] ?? null;
   const isDone = phase === 'done';
-  const bookedAlready = mode === 'daily' && restored !== null;
+  const bookedAlready = mode === 'daily' && bookedDaily;
   useGameCompletion(SLUG, isDone && mode !== 'practice' && !bookedAlready, score, goals);
 
   const practiceRangeKeyDown = (event: ReactKeyboardEvent<HTMLInputElement>) => {
@@ -98,12 +100,15 @@ export default function FreeKickBoard() {
     aimingRef.current = false;
     chargingRef.current = false;
     setCharging(false);
-    if (m === 'daily' && restored) {
+    const completedDaily = m === 'daily' ? completedDailyRef.current : null;
+    setBookedDaily(completedDaily !== null);
+    if (completedDaily) {
       savedRef.current = true;
+      resetFlight();
       setMode('daily');
       setKicks(buildRun(daySeed(todayStr)));
-      setScore(restored.score);
-      setGoals(restored.count);
+      setScore(completedDaily.score);
+      setGoals(completedDaily.count);
       setPhase('done');
       return;
     }
@@ -178,6 +183,7 @@ export default function FreeKickBoard() {
   useEffect(() => {
     if (phase !== 'done' || mode !== 'daily' || savedRef.current) return;
     savedRef.current = true;
+    completedDailyRef.current = { score, count: goals };
     writeArcadeRun(SLUG, todayStr, COUNT_FIELD, { score, count: goals });
   }, [phase, mode, score, goals, todayStr]);
 
