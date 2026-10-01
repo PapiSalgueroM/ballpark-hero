@@ -36,6 +36,12 @@ before the push. Five releases from this lane today (K, L, M, N, O). Reviewed an
 its card says). Still building: 822 to 836. Tonight 00:03 ET: 795 and 706's data.
 
 **Codex838 ACCEPTED: Buzzer Beater three-point contest, ready to publish.**
+Pushed as `2db7c148` after rebasing onto Claude's Release O (`f776338c`).
+Both lanes' documentation was preserved. The contest's tested runtime, tests
+and saved page are unchanged by integration. Release O's other ledger changes
+are retained; fresh merged-tree simSitemap and simIndexNow checks pass with
+all 170 page fingerprints backed by their actual saved content.
+
 Master spec section 84 now has a playable five-rack, 25-shot contest with
 one-point regular balls and two-point final money balls, for 30 possible
 points. The existing physics, flight, touch/keyboard input and pause are reused.

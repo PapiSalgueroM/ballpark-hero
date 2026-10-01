@@ -36,6 +36,9 @@ ledger was taken and `genSitemap.mjs` rerun, then `simSitemap`, `simPrerender` a
 
 Codex828-832 and 836-838 are accepted in code and ready for Claude's next
 publish. Next free round 839. Older active/pending notes below are historical.
+838 landed as `2db7c148` on top of Release O, preserving both lanes' changes.
+Its tested runtime and saved page did not change during integration; the
+merged sitemap and all 170 page-date fingerprints pass fresh checks.
 
 838 completes master spec section 84's three-point contest in Buzzer Beater:
 five arcade racks, 25 shots, two-point money balls, 30 possible points, local
