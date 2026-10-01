@@ -348,7 +348,10 @@ for (sport of SPORTS) {
       const [y, t] = found.get(stop) || [];
       const entry = index.find(e => STOP.mlb.on(e, y, t));
       if (!entry) continue;
-      const squad = await M.new_mlb.fetchSquad(entry);
+      /* fetchSquad answers null on any error, and the database does cancel a
+         read under load now and then: three tries before calling it a miss. */
+      let squad = null;
+      for (let t = 0; t < 3 && !squad; t++) { if (t) await sleep(2000 * t); squad = await M.new_mlb.fetchSquad(entry); }
       const p = squad?.players.find(x => x.name === name);
       if (!p) { fail(`${stop} deals no ${name} (${squad ? squad.players.length + ' players' : 'squad failed to load'})`); continue; }
       if (!p.eligible.includes(slot)) fail(`${name} off ${stop} cannot play ${slot} (eligible ${p.eligible.join(', ')})`);
