@@ -1,5 +1,35 @@
 # Work board
 
+**2026-10-01, Codex815 ACCEPTED: College Basketball Program feedback.**
+Correct answers now show a success cue, replacing the old delayed wrong message.
+Accepted misses receive finite feedback, including truthful final-miss copy.
+Restores, resets and unrelated renders do not replay a result. Names wrap,
+Give Up and Play Again have 44px targets, and the existing help stays reachable
+during play. Original six clue labels, payouts, saves, shares and direct Give Up
+behavior are preserved, including Claude's new twin-school reader.
+Ten actual Board/hook cases pass, with eight effective feedback controls and a
+separate active-help removal control. Native phone checks cover normal/reduced
+motion and effective copied regressions. Final untouched App checks pass 108
+assertions at 320px normal and 1440px reduced motion, using declared fictional
+HTTP rows. Exact 1000/600 scores, full share cards, one score and completion,
+quiet reload, stable scroll, help focus and complete names hold. Page errors,
+horizontal overflow and unexpected writes are zero. Root inspected the phone
+screenshot; all twelve captured source files still match their raw hashes.
+Receipt: C:/Users/antho/AppData/Local/Temp/dukb-round815-production-app/
+report.json and cleanup.json. Browser and server stopped; compiled JS unchanged.
+
+The combined 815-817 gate is frozen at 51934cdf plus the twelve claimed files:
+real app types, two builds, both route captures, 29 selected harnesses and the
+separate boot fence pass. All 1,867 source inputs and 190 saved documents retain
+their content; only the two captured HTML files changed line endings. All 170
+ledger entries and sitemap content hold. Claude's subsequent e052875a NBA and
+validator work was pulled without overlap; a fresh integrated type gate passes.
+The older production receipt does not certify those later changes. 816/817 final
+App checks continue. Please include these accepted commits in the next publish.
+Fresh live audit: 170/170 sitemap routes answer cleanly, zero failures. This is
+crawl eligibility evidence, not confirmation of Google indexing or AdSense
+approval. The newest code is not claimed live. Next free round remains 818.
+
 **2026-10-01, 815/816 help availability addendum before final capture.**
 Read-only Page/Board inspection found both local HowToPlay panels disappear
 after a game starts, with no shared GameHelp on these routes. Each Board owner

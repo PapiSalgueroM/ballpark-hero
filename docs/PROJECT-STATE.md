@@ -1,5 +1,18 @@
 # Project state
 
+## ACCEPTED 2026-10-01: College Basketball Program feedback (815)
+
+Correct answers now show success, misses animate once, long names fit and help
+stays available during play. All original scoring/save/share rules hold. Final
+App checks pass on phone normal and desktop reduced motion; screenshot reviewed.
+The combined 815-817 build and 29 selected guards plus boot pass on the frozen
+51934cdf baseline. Subsequent Claude NBA/validator changes through e052875a are
+pulled and pass fresh app types. Exact evidence boundaries are on WORKBOARD.
+816/817 final App checks continue. Next free 818. Accepted code awaits publish.
+
+The completed live audit now reports 170/170 sitemap routes clean. Google
+indexing decisions and AdSense approval remain unconfirmed.
+
 ## LIVE UPDATE 2026-10-01 and current help addendum
 
 The live 16:59 UTC sample now serves index-DH__DSXe.js and a 170-URL sitemap.
