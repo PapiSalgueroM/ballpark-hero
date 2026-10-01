@@ -97,7 +97,7 @@ const BUDGETS = [
   ['/minefield', 284], /* release G: 280K measured; the shared result moment (710), the native share sheet (744) and the hub trail (654) sit in chunks every game loads; was 276 */
   ['/footle', 324], /* release G: 319K measured, same shared chunks as above; was 316 */
   ['/nfl-my-career', 404], /* release H: 401K measured; the ticker's sport filter menu (711) and the share sheet (744) sit in the entry chunk every page loads; was 400 */
-  ['/front-office', 300], /* release G: 299K measured, same shared chunks as above; was 296 */
+  ['/front-office', 304], /* release H: 302K measured, the entry chunk's ticker menu (711); was 300 */ /* release G: 299K measured, same shared chunks as above; was 296 */
   ['/soccer-grid', 300],
   ['/leaderboard', 266],
 ];
