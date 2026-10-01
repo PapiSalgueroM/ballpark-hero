@@ -1,5 +1,5 @@
 import { FlagImg, TextWithFlags } from '@/components/FlagImg';
-import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
+import { useState, useEffect, useLayoutEffect, useCallback, useMemo, useRef } from 'react';
 import { cn } from '@/lib/utils';
 import { Loader2, RotateCcw, Search, Check, X, Lock, Coins } from 'lucide-react';
 import ShareButtons from '@/components/game/ShareButtons';
@@ -33,6 +33,7 @@ import {
 } from '@/lib/clueAuction';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
 import { recordCompletion, getCurrentPlayerName } from '@/lib/completions';
+import styles from './ClueAuction.module.css';
 
 type Phase = 'boot' | 'error' | 'playing' | 'won' | 'lost';
 
@@ -63,6 +64,40 @@ const ClueAuction = () => {
   const [dropOpen, setDropOpen] = useState(false);
   const [best, setBest] = useState(() => loadBest());
   const inputRef = useRef<HTMLInputElement>(null);
+  const clueNodes = useRef(new Map<ClueId, HTMLDivElement>());
+  const resultTitle = useRef<HTMLHeadingElement>(null);
+  const [feedback, setFeedback] = useState<{ kind: 'clue' | 'wrong' | 'won' | 'lost'; id: number; clue?: ClueId; name?: string; text: string } | null>(null);
+  const feedbackId = useRef(0);
+  const previous = useRef({ phase, bank, purchased, wrongGuesses });
+
+  useLayoutEffect(() => {
+    const before = previous.current;
+    previous.current = { phase, bank, purchased, wrongGuesses };
+    if (phase === 'boot' || (phase === 'playing' && before.phase !== 'playing')) {
+      setFeedback(null);
+      return;
+    }
+    if (before.phase !== 'playing') return;
+    const addedClue = purchased.length === before.purchased.length + 1 ? purchased[purchased.length - 1] : undefined;
+    if (addedClue && bank === before.bank - CLUE_BY_ID[addedClue].price) {
+      const clue = CLUE_BY_ID[addedClue];
+      setFeedback({ kind: 'clue', id: ++feedbackId.current, clue: addedClue, text: `${clue.label} bought for ${clue.price}. ${bank} points left.` });
+      clueNodes.current.get(addedClue)?.focus({ preventScroll: true });
+    } else if (wrongGuesses.length === before.wrongGuesses.length + 1 && bank === Math.max(0, before.bank - WRONG_GUESS_COST)) {
+      const guess = wrongGuesses[wrongGuesses.length - 1];
+      setFeedback({ kind: phase === 'lost' ? 'lost' : 'wrong', id: ++feedbackId.current, name: guess.name, text: `Wrong guess. ${bank} points left.` });
+      if (phase === 'lost') resultTitle.current?.focus({ preventScroll: true });
+    } else if (phase === 'won' && bank === before.bank) {
+      setFeedback({ kind: 'won', id: ++feedbackId.current, text: `Solved. ${bank} points banked.` });
+      resultTitle.current?.focus({ preventScroll: true });
+    }
+  }, [phase, bank, purchased, wrongGuesses]);
+
+  useEffect(() => {
+    if (!feedback) return;
+    const timer = window.setTimeout(() => setFeedback(null), 600);
+    return () => window.clearTimeout(timer);
+  }, [feedback]);
 
   const startGame = useCallback((d: WhoAmIData, excludeName?: string) => {
     const s = pickSecret(d.pool, excludeName);
@@ -173,14 +208,20 @@ const ClueAuction = () => {
     return (
       <div
         key={c.id}
+        ref={node => { if (node) clueNodes.current.set(c.id, node); else clueNodes.current.delete(c.id); }}
+        tabIndex={-1}
+        aria-label={`${c.label} clue`}
+        data-auction-clue={c.id}
+        data-auction-reveal={feedback?.kind === 'clue' && feedback.clue === c.id ? 'committed' : undefined}
         className={cn(
           'bg-card border rounded-xl p-3 flex flex-col gap-1.5',
           bought ? 'border-correct/50' : 'border-border',
+          feedback?.kind === 'clue' && feedback.clue === c.id && styles.reveal,
         )}
       >
         <div className="flex items-center gap-1.5">
           <span className="text-base leading-none">{c.emoji}</span>
-          <span className="text-xs sm:text-sm font-semibold text-foreground flex-1 truncate">{c.label}</span>
+          <span className="text-xs sm:text-sm font-semibold text-foreground flex-1 min-w-0 break-words">{c.label}</span>
           <span className={cn('text-[11px] font-bold shrink-0', bought ? 'text-muted-foreground line-through' : 'text-primary')}>
             {c.price}
           </span>
@@ -200,8 +241,9 @@ const ClueAuction = () => {
             <button
               onClick={() => buyClue(c)}
               disabled={tooPricey}
+              aria-label={`${tooPricey ? 'Not enough points for' : 'Buy'} ${c.label} clue for ${c.price} points`}
               className={cn(
-                'w-full px-2 py-1.5 rounded-lg text-xs font-bold transition-opacity mt-auto',
+                'w-full min-h-[44px] px-2 py-1.5 rounded-lg text-xs font-bold transition-opacity mt-auto',
                 tooPricey
                   ? 'bg-secondary/60 text-muted-foreground cursor-not-allowed'
                   : 'bg-primary text-primary-foreground hover:opacity-90',
@@ -240,7 +282,7 @@ const ClueAuction = () => {
   return (
     <main id="dukb-main" className="min-h-screen bg-background">
       <GameNavbar />
-      <div className="relative z-10 mx-auto w-full max-w-4xl"><GameHelp /></div>
+      <div className="relative z-10 mx-auto w-full max-w-4xl"><GameHelp className="min-h-[44px] min-w-[44px]" /></div>
       <PageSeo
         title="Clue Auction: Buy Clues, Guess the Footballer | DoUKnowBall"
         description="A secret footballer and a bank of 100 points. Buy clues like nationality, current club and age bracket, guess whenever you dare, and keep the rest as your score. Free, no sign-up."
@@ -268,12 +310,16 @@ const ClueAuction = () => {
             <p className="text-destructive font-semibold mb-3">Couldn't load the player pool right now.</p>
             <button
               onClick={boot}
-              className="px-6 py-2.5 bg-primary text-primary-foreground rounded-full font-semibold"
+              className="min-h-[44px] px-6 py-2.5 bg-primary text-primary-foreground rounded-full font-semibold"
             >
               Try again
             </button>
           </div>
         )}
+
+        <div className={styles.feedbackArea} role="status" aria-live="polite" aria-atomic="true">
+          {feedback && <span key={feedback.id} data-auction-feedback={feedback.kind}>{feedback.text}</span>}
+        </div>
 
         {phase === 'playing' && secret && reveals && (
           <>
@@ -296,7 +342,17 @@ const ClueAuction = () => {
               </div>
             </div>
 
-            <div className="relative mb-4">
+            <div className="relative min-w-0 mb-4" onKeyDown={event => {
+              if (event.key === 'Escape') {
+                event.preventDefault();
+                event.stopPropagation();
+                setInput('');
+                setDropOpen(false);
+                inputRef.current?.focus({ preventScroll: true });
+              }
+            }} onBlur={event => {
+              if (!event.currentTarget.contains(event.relatedTarget)) setDropOpen(false);
+            }}>
               <div className="flex items-center gap-2 bg-card border border-border rounded-xl px-3 focus-within:border-primary/60 transition-colors">
                 <Search className="w-4 h-4 text-muted-foreground shrink-0" />
                 <input
@@ -307,17 +363,15 @@ const ClueAuction = () => {
                     setDropOpen(true);
                   }}
                   onFocus={() => setDropOpen(true)}
-                  onBlur={() => setTimeout(() => setDropOpen(false), 150)}
                   onKeyDown={e => {
-                    if (e.key === 'Enter' && suggestions.length > 0) submitGuess(suggestions[0]);
-                    if (e.key === 'Escape') {
-                      setInput('');
-                      setDropOpen(false);
+                    if (e.key === 'Enter' && !e.repeat && suggestions.length > 0) {
+                      e.preventDefault();
+                      submitGuess(suggestions[0]);
                     }
                   }}
                   placeholder="Name the secret player (2+ letters)"
                   aria-label="Name the secret player"
-                  className="w-full bg-transparent py-3 text-sm text-foreground placeholder:text-muted-foreground"
+                  className="w-full min-w-0 min-h-[44px] bg-transparent py-3 text-sm text-foreground placeholder:text-muted-foreground"
                   autoComplete="off"
                   autoCorrect="off"
                   spellCheck={false}
@@ -338,12 +392,13 @@ const ClueAuction = () => {
                           e.preventDefault();
                           submitGuess(p);
                         }}
-                        className="w-full flex items-center gap-2 px-3 py-2.5 text-left hover:bg-secondary/60 transition-colors"
+                        onClick={e => { if (e.detail === 0) submitGuess(p); }}
+                        className={cn('w-full min-h-[44px] flex items-center gap-2 px-3 py-2.5 text-left hover:bg-secondary/60 transition-colors', styles.suggestion)}
                       >
                         <FlagImg name={p.nationality} size={18} />
                         <span className="flex-1 min-w-0">
-                          <span className="block text-sm font-semibold text-foreground truncate">{p.name}</span>
-                          <span className="block text-[11px] text-muted-foreground truncate">
+                          <span className="block text-sm font-semibold text-foreground break-words" title={p.name}>{p.name}</span>
+                          <span className="block text-[11px] text-muted-foreground break-words" title={p.club}>
                             {shortPosition(p.position)} · {p.club}
                           </span>
                         </span>
@@ -357,7 +412,8 @@ const ClueAuction = () => {
 
             {purchased.length === 0 && wrongGuesses.length === 0 && (
               <div className="bg-card border border-border rounded-xl p-4 text-sm text-muted-foreground text-center mb-4">
-                Nothing is known yet. Buy a clue below, or go full psychic and guess cold for the perfect 100.
+                <p>Nothing is known yet. Buy a clue below, or go full psychic and guess cold for the perfect 100. A clue needs more points in your bank than its price.</p>
+                <p className="mt-2">Example: buy the 10-point age bracket and 20-point club initial. You keep 70 points, or 60 after one wrong guess. Solve it to bank what is left.</p>
               </div>
             )}
 
@@ -366,7 +422,9 @@ const ClueAuction = () => {
                 {wrongGuesses.map(p => (
                   <span
                     key={p.name}
-                    className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full border border-destructive/40 bg-destructive/10 text-destructive text-[11px] font-medium"
+                    data-auction-wrong={p.name}
+                    data-auction-miss={feedback?.kind === 'wrong' && feedback.name === p.name ? 'committed' : undefined}
+                    className={cn('inline-flex items-center gap-1 px-2 py-0.5 rounded-full border border-destructive/40 bg-destructive/10 text-destructive text-[11px] font-medium', styles.receipt, feedback?.kind === 'wrong' && feedback.name === p.name && styles.miss)}
                   >
                     <X className="w-3 h-3" /> <FlagImg name={p.nationality} size={14} /> {p.name} (-{WRONG_GUESS_COST})
                   </span>
@@ -385,9 +443,9 @@ const ClueAuction = () => {
         )}
 
         {(phase === 'won' || phase === 'lost') && secret && (
-          <div className="bg-card border border-border rounded-2xl p-6 text-center">
+          <div data-auction-result={won ? 'won' : 'lost'} data-auction-result-cue={feedback?.kind === phase ? 'committed' : undefined} className={cn('bg-card border border-border rounded-2xl p-6 text-center', styles.result, feedback?.kind === phase && styles.resultCue)}>
             <div className="text-4xl mb-2">{won ? (bank >= 90 ? '🧠' : bank >= 60 ? '🕵️' : '💸') : '🫥'}</div>
-            <h2 className="text-2xl font-bold text-primary font-display mb-1">
+            <h2 ref={resultTitle} tabIndex={-1} className="text-2xl font-bold text-primary font-display mb-1">
               {won ? `Solved it with ${bank} points left` : 'Bank empty. Case closed.'}
             </h2>
             <p className="text-sm text-muted-foreground mb-4">
@@ -401,7 +459,7 @@ const ClueAuction = () => {
                 {purchased.map(id => {
                   const c = CLUE_BY_ID[id];
                   return (
-                    <div key={id} className="flex items-center gap-2 bg-secondary/40 border border-border rounded-lg px-3 py-2">
+                    <div key={id} data-auction-receipt="clue" className={cn('flex items-center gap-2 bg-secondary/40 border border-border rounded-lg px-3 py-2', styles.resultReceipt)}>
                       <span>{c.emoji}</span>
                       <span className="text-xs text-muted-foreground w-28 shrink-0">{c.label}</span>
                       <span className="text-sm font-semibold text-foreground flex-1 min-w-0 break-words">
@@ -412,7 +470,7 @@ const ClueAuction = () => {
                   );
                 })}
                 {wrongGuesses.length > 0 && (
-                  <div className="flex items-center gap-2 bg-secondary/40 border border-border rounded-lg px-3 py-2">
+                  <div data-auction-receipt="wrong" className={cn('flex items-center gap-2 bg-secondary/40 border border-border rounded-lg px-3 py-2', styles.resultReceipt)}>
                     <span>❌</span>
                     <span className="text-xs text-muted-foreground w-28 shrink-0">Wrong guesses</span>
                     <span className="text-sm font-semibold text-foreground flex-1 min-w-0 break-words">
@@ -442,7 +500,7 @@ const ClueAuction = () => {
             />
             <button
               onClick={() => data && startGame(data, secret.name)}
-              className="mt-4 inline-flex items-center gap-2 px-8 py-3 bg-primary text-primary-foreground rounded-full font-semibold hover:opacity-90 transition-opacity"
+              className="mt-4 min-h-[44px] inline-flex items-center gap-2 px-8 py-3 bg-primary text-primary-foreground rounded-full font-semibold hover:opacity-90 transition-opacity"
             >
               <RotateCcw className="w-4 h-4" /> New case
             </button>

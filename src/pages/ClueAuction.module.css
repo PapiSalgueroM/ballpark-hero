@@ -1,0 +1,65 @@
+.feedbackArea {
+  min-height: 40px;
+  margin-bottom: 8px;
+  font-size: 12px;
+  line-height: 20px;
+  overflow-wrap: anywhere;
+}
+
+.suggestion, .receipt, .result {
+  overflow-wrap: anywhere;
+}
+
+.receipt {
+  max-width: 100%;
+}
+
+[data-auction-clue]:focus-visible,
+.result h2:focus-visible {
+  outline: 2px solid hsl(var(--primary));
+  outline-offset: 3px;
+}
+
+.reveal {
+  animation: clueReveal 420ms ease-out 1;
+}
+
+.miss {
+  animation: guessMiss 360ms ease-out 1;
+}
+
+.resultCue {
+  animation: caseResult 420ms ease-out 1;
+}
+
+@media (max-width: 639px) {
+  .resultReceipt {
+    display: grid;
+    grid-template-columns: 20px minmax(0, 1fr) auto;
+    row-gap: 4px;
+  }
+
+  .resultReceipt > span:first-child { grid-column: 1; grid-row: 1; }
+  .resultReceipt > span:nth-child(2) { grid-column: 2; grid-row: 1; width: auto; }
+  .resultReceipt > span:nth-child(3) { grid-column: 1 / -1; grid-row: 2; }
+  .resultReceipt > span:nth-child(4) { grid-column: 3; grid-row: 1; }
+}
+
+@keyframes clueReveal {
+  from { box-shadow: 0 0 0 3px hsl(var(--correct) / 0.5); }
+  to { box-shadow: 0 0 0 0 transparent; }
+}
+
+@keyframes guessMiss {
+  from { background-color: hsl(var(--destructive) / 0.28); }
+  to { background-color: hsl(var(--destructive) / 0.1); }
+}
+
+@keyframes caseResult {
+  from { box-shadow: 0 0 0 3px hsl(var(--primary) / 0.5); }
+  to { box-shadow: 0 0 0 0 transparent; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal, .miss, .resultCue { animation: none; }
+}

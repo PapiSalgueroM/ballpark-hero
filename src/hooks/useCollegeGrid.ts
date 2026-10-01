@@ -191,8 +191,16 @@ export function useCollegeGrid() {
       if (cells[activeCell].status === 'correct') return;
 
       /* The search box offers the key's own display names, so a miss here is
-         a typed name the key does not carry, and it costs nothing. */
-      const player = gridData.byNormalizedName.get(normalizeGridName(playerName));
+         a typed name the key does not carry, and it costs nothing. Round 653:
+         every player under the name is read, and the judge's kindest verdict
+         among them stands (a yes over an unknown over a no), so a name two
+         players share is never a no because of the wrong one. */
+      const { rowAttr, colAttr } = getRowCol(activeCell);
+      const namesakes = gridData.byNormalizedName.get(normalizeGridName(playerName)) ?? [];
+      const verdictOf = (p: CollegeGridEntry) => judgeCollegeCell(p, rowAttr, colAttr);
+      const player = namesakes.find((p) => verdictOf(p) === 'yes')
+        ?? namesakes.find((p) => verdictOf(p) === 'unknown')
+        ?? namesakes[0];
       if (!player) {
         toast.error('Pick a player from the suggestions.');
         return;
@@ -202,7 +210,6 @@ export function useCollegeGrid() {
         return;
       }
 
-      const { rowAttr, colAttr } = getRowCol(activeCell);
       const verdict = judgeCollegeCell(player, rowAttr, colAttr);
       if (verdict === 'unknown') {
         /* The records cannot settle this cell for him either way, so the

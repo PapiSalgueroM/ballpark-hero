@@ -1,6 +1,6 @@
-/* Round 771: actual retained InboxCard, real pure reply effects and native browser scheduling.
+/* Round 771: actual retained InboxCard, real pure reply effects and native committed feedback.
    INBOX_CARD_DIST selects a finished build; default is ROOT/dist.
-   INBOX_CARD_CONTROL=passive|nowrap changes asserted temporary copies.
+   INBOX_CARD_CONTROL=retained|nowrap changes asserted temporary copies.
    INBOX_CARD_ARTIFACTS optionally saves screenshots and measured reports. */
 import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
@@ -14,7 +14,7 @@ import { chromium } from './lib/playwrightLoader.mjs';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const dist = path.resolve(process.env.INBOX_CARD_DIST || path.join(root, 'dist'));
 const control = process.env.INBOX_CARD_CONTROL || '';
-assert.ok(['', 'passive', 'nowrap'].includes(control), 'Unknown inbox browser control');
+assert.ok(['', 'retained', 'nowrap'].includes(control), 'Unknown inbox browser control');
 const artifacts = process.env.INBOX_CARD_ARTIFACTS ? path.resolve(process.env.INBOX_CARD_ARTIFACTS) : null;
 const folder = await fs.mkdtemp(path.join(os.tmpdir(), 'dukb-inbox-card-'));
 const owned = [];
@@ -84,13 +84,13 @@ try {
   const cardSource = await fs.readFile(cardPath, 'utf8');
   const probePath = path.join(folder, 'ProbeInboxCard.tsx');
   const alias = { '@': path.join(root, 'src') };
-  if (control === 'passive') {
-    const anchor = /  useLayoutEffect\(\(\) => \{\r?\n    if \(!answerRequest\)/g;
-    assert.equal([...cardSource.matchAll(anchor)].length, 1, 'Real reply layout-effect binding must occur once');
+  if (control === 'retained') {
+    const anchor = '    setAnswerRequest(null);';
+    assert.equal(cardSource.split(anchor).length - 1, 1, 'Real reply intent-clear binding must occur once');
     const cssImport = "from './InboxCard.module.css'";
     assert.equal(cardSource.split(cssImport).length - 1, 1);
-    const changed = cardSource.replace(anchor, '  useEffect(() => {\n    if (!answerRequest)').replace(cssImport, "from '@/components/club-manager/InboxCard.module.css'");
-    assert.notEqual(changed, cardSource, 'Control must change actual reply scheduling');
+    const changed = cardSource.replace(anchor, '    if (inbox.find(m => m.id === answerRequest)?.resolved) setAnswerRequest(null);').replace(cssImport, "from '@/components/club-manager/InboxCard.module.css'");
+    assert.notEqual(changed, cardSource, 'Control must retain actual reply intent');
     await write(path.basename(probePath), changed);
     alias['@/components/club-manager/InboxCard'] = probePath;
   }
@@ -224,15 +224,15 @@ try {
     await page.evaluate(() => window.__qa.noOp(true));
     await page.getByRole('button', { name: 'Listen 7', exact: true }).click(); await quiet();
     await page.evaluate(() => window.__qa.autoResolve());
-    if (control === 'passive') {
+    if (control === 'retained') {
       await page.waitForFunction(() => document.querySelector('[data-inbox-message="fixture-message-7"][data-inbox-feedback="committed"]'), null, { timeout: 350 });
       const race = await page.evaluate(() => ({ id: document.querySelector('[data-inbox-feedback]')?.dataset.inboxMessage, text: document.querySelector('[data-inbox-feedback]')?.textContent, animations: document.getAnimations().filter(animation => animation instanceof CSSAnimation).map(animation => ({ name: animation.animationName, duration: animation.effect.getTiming().duration, id: animation.effect.target.dataset.inboxMessage })) }));
-      assert.equal(race.id, 'fixture-message-7', 'Changed passive hook must falsely cue the later automatic resolution');
+      assert.equal(race.id, 'fixture-message-7', 'Retained intent must falsely cue the later automatic resolution');
       assert.ok(race.text.includes('Fixture automatically resolved later. No chosen option was recorded.'));
       assert.equal(race.animations.length, reduced ? 0 : 1);
       if (!reduced) { assert.equal(race.animations[0].duration, 420); assert.equal(race.animations[0].id, race.id); }
       results.push({ width, motion: reduced ? 'reduced' : 'normal', nativeNoOpThenAutomaticResolution: race });
-      console.log(`inbox passive320 ${reduced ? 'reduced' : 'normal'}: asserted hook copy restores the false committed marker for the exact later automatic outcome; ${race.animations.length} CSS animations.`);
+      console.log(`inbox retained320 ${reduced ? 'reduced' : 'normal'}: asserted intent-clear copy restores the false committed marker for the exact later automatic outcome; ${race.animations.length} CSS animations.`);
       await cleanInteractions();
       await context.close();
       continue;
@@ -263,7 +263,7 @@ try {
     await fs.mkdir(artifacts, { recursive: true });
     await fs.writeFile(path.join(artifacts, control ? `${control}-report.json` : 'report.json'), JSON.stringify({ dist, fixture: 'Actual compiled InboxCard and real pure answerMessage, frozen fictional retained messages and finished production CSS. Standalone card fixture, not a full Club Manager saved session. Outside requests blocked.', results }, null, 2));
   }
-  if (control) console.log(`playInboxCard ${control}: both motion modes reproduce the asserted real scheduling or wrapping defect.`);
+  if (control) console.log(`playInboxCard ${control}: both motion modes reproduce the asserted real retained-intent or wrapping defect.`);
   else console.log('playInboxCard: all eight viewport/motion cases pass with complete saved copy and 44px controls; original input order and reply identity retained.');
   console.log('playInboxCard: production card/CSS unchanged, no account or remote writes, zero interaction save writes; all temporary source copies are owned.');
 } finally {
