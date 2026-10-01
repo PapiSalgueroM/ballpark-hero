@@ -474,7 +474,7 @@ let r784Caught = false;
     if (!old || old.minSteps !== r.oldMinSteps || old.hint !== r.oldHint) fail7(`${r.id} under ${r.rule}: the value the Round 784 migration replaces is not the applied companion's`, key);
     const d = deriveHint(graphs[r.rule], r.a, r.b);
     if (!d || d.minSteps !== r.minSteps || d.hint !== r.hint) fail7(`${r.id} under ${r.rule}: the Round 784 migration writes ${r.minSteps} "${r.hint}", the search on the baked pool says ${d ? `${d.minSteps} "${d.hint}"` : 'no path'}`, key);
-    if (/[–—]/.test(r.hint) || r.hint.length > 200) fail7(`${r.id} under ${r.rule}: the rewritten hint has a long dash or runs past 200 characters`, key);
+    if (/[\u2013\u2014]/.test(r.hint) || r.hint.length > 200) fail7(`${r.id} under ${r.rule}: the rewritten hint has a long dash or runs past 200 characters`, key);
   }
   let beaten = 0;
   for (const c of companion.values()) for (const rule of ['classic', 'europe']) {
