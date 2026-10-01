@@ -56,6 +56,14 @@
  * 167 sitemap routes (166 saved pages plus the template) found every field
  * equal on every route, with timing that varied by seconds between runs.
  *
+ * RED THAT IS NOT THIS ROUND'S BUG. Section 1 holds the live head to the
+ * saved page, so a branch that legitimately changes what a head says (a guide
+ * FAQ reworded, a title changed in src/data/seoMeta.ts) is red there until the
+ * saved pages are drawn again at release. That is the check doing its job:
+ * the source and the saved page disagree, and only the release build makes
+ * them agree. Section 4 compares with main's source instead, so it reads such
+ * a branch's new words as a difference from main too, and says which route.
+ *
  * NEGATIVE CONTROLS (SEO_SPLIT_CONTROL). Each must turn exactly its own route
  * red, and the harness exits 1 when it does (caught) and 2 when anything else
  * happens (the control proves nothing):
