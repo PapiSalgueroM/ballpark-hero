@@ -334,7 +334,7 @@ const NAME_SHAPES = [
 ];
 
 /* ---------- 1) the stats add up ---------- */
-console.log('1) every player line adds up to the team totals');
+console.log('1) goals and assists add up to the team totals, and every player line stays in range');
 {
   let seasons = 0, lines = 0, months = 0, keeperSheets = 0, opponents = 0;
   for (let k = 1; k <= SEEDS; k++) {

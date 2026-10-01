@@ -727,7 +727,7 @@ export const SOCCER_CONTENT_1: GameContentMap = {
         items: [
           "Position families count: wingers cover both flanks, central midfielders cover holding and attacking slots, strikers and centre forwards swap freely, full backs cover wing back slots. Front line winger slots take wingers and wide midfielders only, never wing backs.",
           "The timer covers the whole run, and zero on the clock ends it. The season sim rates your XI out of 100 across a 38 game, 20 team league.",
-          "The season report runs month by month with a standout each month, gives every player his appearances, goals, assists, clean sheets and average rating (they add up to the team totals), hands out player, young player and goal of the season, and names the one shape or respin the sim says would have moved the finish most, as arithmetic on the same rolls and never a promise. Nobody real is quoted in it.",
+          "The season report runs month by month with a standout each month, gives every player his appearances, goals, assists, average rating and, for the keeper and back line, the clean sheets in the games he played (goals and assists add up to the team totals), hands out player, young player and goal of the season, and names the one shape or respin the sim says would have moved the finish most, as arithmetic on the same rolls and never a promise. Nobody real is quoted in it.",
         ],
       },
     ],

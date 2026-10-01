@@ -111,7 +111,7 @@ export function SeasonReportTabs({ report, className, initialPanel = null }: Sea
             </div>
           ))}
           <p className="px-3 py-1.5 text-[10px] text-muted-foreground">
-            Appearances, goals, assists and clean sheets (keeper and back line) add up to the season totals above. Avg is the sim's match rating out of 10.
+            Goals and assists add up to the team's. CS (keeper and back line) counts the clean sheets in the games each man played. Avg is the sim's match rating out of 10.
           </p>
         </div>
       )}

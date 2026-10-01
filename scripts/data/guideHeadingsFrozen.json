@@ -3447,7 +3447,7 @@
         "Respins reroll a nation you cannot solve, shared across all slots. You choose your budget before the draw: none, 3, 5 or 10, with 3 as the default.",
         "Position families count: wingers cover both flanks, central midfielders cover holding and attacking slots, strikers and centre forwards swap freely, full backs cover wing back slots. Front line winger slots take wingers and wide midfielders only, never wing backs.",
         "The timer covers the whole run, and zero on the clock ends it. The season sim rates your XI out of 100 across a 38 game, 20 team league.",
-        "The season report runs month by month with a standout each month, gives every player his appearances, goals, assists, clean sheets and average rating (they add up to the team totals), hands out player, young player and goal of the season, and names the one shape or respin the sim says would have moved the finish most, as arithmetic on the same rolls and never a promise. Nobody real is quoted in it."
+        "The season report runs month by month with a standout each month, gives every player his appearances, goals, assists, average rating and, for the keeper and back line, the clean sheets in the games he played (goals and assists add up to the team totals), hands out player, young player and goal of the season, and names the one shape or respin the sim says would have moved the finish most, as arithmetic on the same rolls and never a promise. Nobody real is quoted in it."
       ],
       "example": [
         "A 4-3-3 on the 90 second clock. Brazil lands on the goalkeeper slot and Alisson is typed before the reel settles. France at striker is just as friendly.",
