@@ -1,5 +1,10 @@
 # Project state
 
+Codex838 is claimed from master spec84: a complete Buzzer Beater three-point
+contest mode using the existing physics and flight controls. Original daily
+scores and saves stay held. Codex836/837 and831's final scroll correction are
+in combined verification; no new AdSense approval or indexing claim. Next839.
+
 Codex829 is accepted after actual App checks at320 normal/1440 reduced:
 20 accepted links keep the document still, original score/save/share/completion
 hold and finite/static feedback works. Final receipt is on WORKBOARD.
