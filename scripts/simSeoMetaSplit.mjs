@@ -39,6 +39,17 @@
  *      every hub in src/lib/sportHubNav.ts and at least one game in every one
  *      of the 32 parts, so every part chunk has been fetched and read by a
  *      real page.
+ *   4. MAIN'S TABLE, ENTRY FOR ENTRY (run first, no browser). main's own
+ *      src/data/seoMeta.ts, read with git show (SEO_SPLIT_BASE_REF, default
+ *      origin/main, so fetch first), against what the split serves: for EVERY
+ *      route in it, the title and description in the part the page's own
+ *      lookup picks must equal main's, in the committed part files and in the
+ *      built chunks alike, and a route on one side only is a finding. Added
+ *      when Release K landed two games and a reworded description on main in
+ *      the unsplit shape, which a merge could lose without a single page in
+ *      section 1 noticing, since the saved pages of the new games are new too.
+ *      Measured 2026-10-01 after that merge: 132 routes, all equal at both
+ *      levels.
  *
  * MEASURED HEADROOM. Nothing here is a band: every check is an equality, and
  * a single disagreeing tag is a failure. On 2026-10-01, three runs over the
@@ -52,7 +63,9 @@
  *               own, the shape of a lookup that disagrees with where the
  *               generator put the entry. The page then renders its own prop
  *               title and description and a Game block named after it, and
- *               sections 1 and 2 must both catch it on that route alone. The
+ *               section 1 must catch it on that route alone. Section 2 stays
+ *               quiet by design: it reads addresses, and the swap keeps the
+ *               page's own part address while changing the body. The
  *               control refuses to run unless its own part file holds
  *               /club-manager and the substitute does not, and it counts the
  *               swapped responses: zero means it never fired.
@@ -60,20 +73,35 @@
  *               canonicalise to the home page; section 1 must catch the
  *               canonical on /soccer alone. It refuses to run unless the
  *               saved head carries the canonical it rewrites.
+ *   lostentry   /nhl-gauntlet-draft (new in Release K) is cut out of the text
+ *               of its part, committed file and built chunk, in memory, the
+ *               shape of a merge that kept the parts and lost main's new
+ *               entry; section 4 must report it missing at both levels, on
+ *               that route alone. No browser.
+ *   staledesc   /sports-bingo's description in the text of its part, both
+ *               levels, is put back to the words it had before Release K
+ *               reworded it on main; section 4 must catch the description at
+ *               both levels, on that route alone. No browser.
+ *   The two section 4 controls refuse to run unless the text they cut or
+ *   replace occurs exactly once in each part text, and they edit the bytes
+ *   the section reads, never its parsed result.
  *
  * Run: vite build (or npm run build), then node scripts/simSeoMetaSplit.mjs
+ *   SEO_SPLIT_STATIC=1    section 4 alone, no browser (seconds, not minutes)
+ *   SEO_SPLIT_BASE_REF=r  the git ref whose table section 4 reads (origin/main)
  *   SEO_SPLIT_ONLY=/a,/b  scope the run (coverage is then reported, not held)
  *   SEO_SPLIT_SETTLE=ms   the settle after the head stops moving (3500, the prerenderer's)
  *   SEO_SPLIT_WORKERS=n   pages drawn at once (4)
  * Never run it while a build is writing dist.
  */
 import { createServer } from 'node:http';
+import { execFileSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import pw from './lib/playwrightLoader.mjs';
 import { SAMPLE_DAYS, clockScript } from './lib/prerenderClock.mjs';
-import { PART_COUNT, partOf, readSource } from './genSeoMetaParts.mjs';
+import { PART_COUNT, PART_DIR, partOf, readSource, evalSeoMeta } from './genSeoMetaParts.mjs';
 
 const { chromium } = pw;
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -85,8 +113,10 @@ const WORKERS = Math.max(1, Number(process.env.SEO_SPLIT_WORKERS || 4));
 const BASE_URL = 'https://douknowball.com';
 
 const CONTROLS = {
-  wrongpart: { route: '/club-manager', finding: 'title' },
-  savedcanon: { route: '/soccer', finding: 'canonical' },
+  wrongpart: { route: '/club-manager', finding: 'title', section: 1 },
+  savedcanon: { route: '/soccer', finding: 'canonical', section: 1 },
+  lostentry: { route: '/nhl-gauntlet-draft', finding: 'missing', section: 4 },
+  staledesc: { route: '/sports-bingo', finding: 'description', section: 4 },
 };
 const CONTROL = process.env.SEO_SPLIT_CONTROL || '';
 const abort = m => { console.error(`simSeoMetaSplit: cannot run: ${m}`); process.exit(2); };
@@ -107,6 +137,133 @@ const wholeMap = assetNames.filter(n => /^seoMeta-[^.]+\.js$/.test(n));
 if (partFile.size !== PART_COUNT) abort(`dist/assets holds ${partFile.size} part chunks, not ${PART_COUNT}${wholeMap.length ? ` and the whole map ${wholeMap.join(', ')}` : ''}; dist predates the split, rebuild it`);
 const SEO_META = await readSource(ROOT);
 const gamePaths = new Set(Object.keys(SEO_META));
+
+/* ---- 4. main's unsplit table, entry for entry, before any page is drawn ----
+   A merge of main can bring entries the split never saw (Release K added two
+   games and reworded one description in the one file, src/data/seoMeta.ts).
+   The parts are generated from that file, so a merge that kept it and forgot
+   to regenerate, or one that resolved a conflict in the parts by hand, would
+   serve stale or missing text, and only the pages drawn in section 1 would
+   notice. This reads main's copy of the table straight out of git and holds
+   every route in it to what the split actually serves, at two levels: the
+   committed part files, and the built chunks a browser fetches. Each route is
+   looked up with the page's own part function, evaluated from the generated
+   src/data/seoMetaParts/index.ts, and its loader list, not this harness's
+   partOf, so a lookup that disagrees with where the generator put an entry
+   is a finding here too. A route on one side only is a finding either way. */
+const BASE_REF = process.env.SEO_SPLIT_BASE_REF || 'origin/main';
+const mainFindings = new Map();
+const addMain = (route, m) => { if (!mainFindings.has(route)) mainFindings.set(route, []); mainFindings.get(route).push(m); };
+let mainRoutes = 0, mainLevels = [];
+{
+  let mainText;
+  try {
+    mainText = execFileSync('git', ['show', `${BASE_REF}:src/data/seoMeta.ts`], { cwd: ROOT, encoding: 'utf8', maxBuffer: 1 << 24 });
+  } catch (e) {
+    abort(`git show ${BASE_REF}:src/data/seoMeta.ts failed (${String(e?.message ?? e).split('\n')[0]}); fetch origin or set SEO_SPLIT_BASE_REF`);
+  }
+  const MAIN = await evalSeoMeta(ROOT, mainText, `${BASE_REF}:src/data/seoMeta.ts`);
+  mainRoutes = Object.keys(MAIN).length;
+  if (mainRoutes < 100) abort(`${BASE_REF}'s table evaluated to ${mainRoutes} entries, fewer than 100; it is not being read`);
+
+  const { transformWithEsbuild } = await import('vite');
+  const importText = async js => import(`data:text/javascript;base64,${Buffer.from(js).toString('base64')}`);
+  const evalTs = async (ts, file) => importText((await transformWithEsbuild(ts, file, { loader: 'ts', format: 'esm', sourcemap: false })).code);
+
+  /* The page's lookup and its loader list, from the generated index. */
+  const indexFile = path.join(ROOT, PART_DIR, 'index.ts');
+  const indexText = lf(fs.readFileSync(indexFile, 'utf8'));
+  const index = await evalTs(indexText, indexFile);
+  if (typeof index.seoMetaPart !== 'function') abort(`${PART_DIR}/index.ts exports no seoMetaPart`);
+  const loaderNames = [...indexText.matchAll(/^\s*\(\) => import\('\.\/(seoMetaPart\d\d)'\),$/gm)].map(m => m[1]);
+  if (loaderNames.length !== index.SEO_META_PARTS?.length || loaderNames.length !== PART_COUNT) {
+    abort(`${PART_DIR}/index.ts lists ${loaderNames.length} loader file names for ${index.SEO_META_PARTS?.length} loaders, expected ${PART_COUNT}`);
+  }
+
+  /* The two texts of every part, the committed file and the built chunk. The
+     controls edit these texts, never the parsed result, so a control that
+     fires has changed the very bytes this section reads. */
+  const committedText = new Map(), builtText = new Map();
+  for (const name of new Set(loaderNames)) {
+    committedText.set(name, lf(fs.readFileSync(path.join(ROOT, PART_DIR, `${name}.ts`), 'utf8')));
+    const chunk = partFile.get(Number(name.slice(-2)));
+    if (!chunk) abort(`dist/assets holds no chunk for ${name}`);
+    builtText.set(name, fs.readFileSync(path.join(ASSETS, chunk), 'utf8'));
+  }
+  if (CONTROL === 'lostentry' || CONTROL === 'staledesc') {
+    const route = CONTROLS[CONTROL].route;
+    const e = MAIN[route];
+    if (!e) abort(`control ${CONTROL}: ${BASE_REF}'s table has no ${route}, so the control proves nothing`);
+    const name = loaderNames[index.seoMetaPart(route)];
+    const q = JSON.stringify;
+    const edits = CONTROL === 'lostentry'
+      ? [[committedText, `  ${q(route)}: {\n    title: ${q(e.title)},\n    description: ${q(e.description)},\n  },\n`, ''],
+         [builtText, `${q(route)}:{title:${q(e.title)},description:${q(e.description)}}`, null]]
+      /* The words Sports Bingo carried before Release K reworded them. */
+      : [[committedText, q(e.description), q('Open timed packs of real players and mark every square on your soccer bingo card they satisfy before the pack closes. Daily, unlimited or race a CPU. Free.')],
+         [builtText, q(e.description), q('Open timed packs of real players and mark every square on your soccer bingo card they satisfy before the pack closes. Daily, unlimited or race a CPU. Free.')]];
+    for (const [texts, from, to] of edits) {
+      const text = texts.get(name);
+      const count = text.split(from).length - 1;
+      if (count !== 1) abort(`control ${CONTROL}: ${name} carries ${route}'s text ${count} times in the ${texts === committedText ? 'committed file' : 'built chunk'}, not once`);
+      if (to !== null) texts.set(name, text.replace(from, to));
+      else {
+        /* A minified entry is followed by a comma, or preceded by one when it is last. */
+        const at = text.indexOf(from);
+        const after = text[at + from.length] === ',';
+        texts.set(name, after ? text.slice(0, at) + text.slice(at + from.length + 1) : text.slice(0, at - (text[at - 1] === ',' ? 1 : 0)) + text.slice(at + from.length));
+      }
+    }
+    console.log(`CONTROL ${CONTROL}: ${route} is ${CONTROL === 'lostentry' ? 'dropped from' : 'given its pre Release K description in'} ${name}, committed and built, in memory; section 4 must go red on ${route} alone`);
+  }
+
+  for (const [level, texts] of [['committed', committedText], ['built', builtText]]) {
+    const parts = new Map();
+    for (const [name, text] of texts) {
+      const mod = level === 'committed' ? await evalTs(text, path.join(ROOT, PART_DIR, `${name}.ts`)) : await importText(text);
+      if (!mod.SEO_META_PART || typeof mod.SEO_META_PART !== 'object') abort(`the ${level} ${name} exports no SEO_META_PART`);
+      parts.set(name, mod.SEO_META_PART);
+    }
+    const holders = new Map();
+    for (const [name, rec] of parts) for (const r of Object.keys(rec)) holders.set(r, [...(holders.get(r) ?? []), name]);
+    for (const route of new Set([...Object.keys(MAIN), ...holders.keys()])) {
+      const own = loaderNames[index.seoMetaPart(route)];
+      const served = parts.get(own)?.[route];
+      const at = holders.get(route) ?? [];
+      if (!(route in MAIN)) { addMain(route, `${level} extra: served from ${at.join(', ')} but not in ${BASE_REF}'s table`); continue; }
+      if (at.length > 1) addMain(route, `${level} duplicate: held by ${at.join(', ')}`);
+      if (!served) { addMain(route, `${level} missing: in ${BASE_REF}'s table, but ${own}, the part the page loads, does not hold it${at.length ? ` (it sits in ${at.join(', ')})` : ''}`); continue; }
+      for (const k of ['title', 'description']) {
+        if (served[k] !== MAIN[route][k]) addMain(route, `${level} ${k}: the split serves ${JSON.stringify(served[k])}, ${BASE_REF} says ${JSON.stringify(MAIN[route][k])}`);
+      }
+    }
+    mainLevels.push(`${level} ${[...holders.keys()].length}`);
+  }
+}
+const reportMain = () => {
+  console.log(`4) ${BASE_REF}'s unsplit table, every route's title and description equal to what the split serves`);
+  let shown = 0;
+  for (const [route, ms] of mainFindings) for (const m of ms) { if (shown < 24) console.error(`  FAIL: ${route}: ${m}`); shown += 1; }
+  if (shown > 24) console.error(`  ... and ${shown - 24} more`);
+  console.log(`   ${mainFindings.size ? 'RED' : 'ok '} ${mainRoutes} routes in ${BASE_REF}'s table; routes the split serves: ${mainLevels.join(', ')}; ${mainFindings.size} route(s) disagree`);
+};
+/* SEO_SPLIT_STATIC=1, or a section 4 control: section 4 alone, no browser. */
+if (process.env.SEO_SPLIT_STATIC || CONTROLS[CONTROL]?.section === 4) {
+  reportMain();
+  if (CONTROL) {
+    const want = CONTROLS[CONTROL];
+    if (want.section !== 4) abort(`control ${CONTROL} draws pages; run it without SEO_SPLIT_STATIC`);
+    const msgs = mainFindings.get(want.route) ?? [];
+    const hit = ['committed', 'built'].every(l => msgs.some(m => m.startsWith(`${l} ${want.finding}:`)));
+    if (hit && mainFindings.size === 1) {
+      console.log(`simSeoMetaSplit control ${CONTROL}: red on ${want.route} alone with its ${want.finding}, in the committed part and the built chunk, the break was caught where it should be (exit 1)`);
+      process.exit(1);
+    }
+    console.error(`simSeoMetaSplit control ${CONTROL}: DEAD OR LEAKY. ${want.finding} on ${want.route} at both levels=${hit}, red routes [${[...mainFindings.keys()].join(', ') || 'none'}]`);
+    process.exit(2);
+  }
+  process.exit(mainFindings.size ? 1 : 0);
+}
 
 /* ---- the routes ---- */
 const sitemap = fs.readFileSync(path.join(PUBLIC, 'sitemap.xml'), 'utf8');
@@ -411,18 +568,20 @@ for (const n of [1, 2]) {
   if (shown > 24) console.error(`  ... and ${shown - 24} more`);
   console.log(`   ${f.size ? 'RED' : 'ok '} ${n === 1
     ? `${compared} heads compared field by field (${games.filter(g => comparedRoutes.has(g)).length} game pages, ${hubs.filter(h => comparedRoutes.has(h)).length} hubs, ${comparedRoutes.has('/') ? 'the home page against the template' : 'no home page'}); ${identical} of ${compared - (comparedRoutes.has('/') ? 1 : 0)} saved heads byte identical to the capture after the prerenderer's clean up${notIdentical.length ? ` (not: ${notIdentical.slice(0, 6).join(', ')}${notIdentical.length > 6 ? ', ...' : ''})` : ''}${homeOgUrlSeen ? '; the home page differs from the template only by the og:url the template never carried' : ''}`
-    : `${fetchedParts.size} distinct part chunks fetched; no page fetched a part not its own`}`);
+    : `${fetchedParts.size} distinct part chunks fetched; ${f.size ? `${f.size} page(s) fetched a part not their own or missed their own` : 'no page fetched a part not its own'}`}`);
 }
 console.log(`3) ${TITLES[3]}`);
 for (const m of findings[3]) console.error(`  FAIL: ${m}`);
 if (findings[3].length) red.push(3);
 console.log(`   ${findings[3].length ? 'RED' : 'ok '} ${scoped ? 'scoped run, coverage reported only: ' : ''}${compared} routes, ${games.length} games over ${gameParts.size} parts, ${fetchedParts.size} part chunks fetched, ${Math.round((Date.now() - started) / 1000)}s`);
 for (const s of skipped) console.log(`   SKIP (loud): ${s}`);
+reportMain();
+if (mainFindings.size) red.push(4);
 console.log('');
 
 if (CONTROL) {
   const want = CONTROLS[CONTROL];
-  const redRoutes = new Set([...findings[1].keys(), ...findings[2].keys()]);
+  const redRoutes = new Set([...findings[1].keys(), ...findings[2].keys(), ...mainFindings.keys()]);
   const fired = CONTROL !== 'wrongpart' || swapped > 0;
   const hit = (findings[1].get(want.route) ?? []).some(m => m.startsWith(`${want.finding}:`));
   const wire = CONTROL !== 'wrongpart' || (findings[2].get(want.route) ?? []).length === 0;
@@ -438,4 +597,4 @@ if (red.length) {
   console.error(`simSeoMetaSplit: RED in section${red.length === 1 ? '' : 's'} ${red.join(', ')}`);
   process.exit(1);
 }
-console.log(`simSeoMetaSplit: green. ${compared} pages drawn from the split build carry the saved head in every field a crawler reads, and every game page fetched only its own part.`);
+console.log(`simSeoMetaSplit: green. ${compared} pages drawn from the split build carry the saved head in every field a crawler reads, every game page fetched only its own part, and all ${mainRoutes} routes in ${BASE_REF}'s table are served with the same title and description.`);

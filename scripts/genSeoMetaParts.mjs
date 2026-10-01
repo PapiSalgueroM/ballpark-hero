@@ -69,15 +69,29 @@ const HEADER = [
   '   is not what the source makes. */',
 ].join('\n');
 
-/** src/data/seoMeta.ts, evaluated: the TypeScript stripped by esbuild, then
-    imported. Exported for simSeoMetaSplit, which needs the same entries. */
-export async function readSource(root) {
-  const { transform } = await import('esbuild');
-  const ts = fs.readFileSync(path.join(root, SOURCE), 'utf8');
-  const { code } = await transform(ts, { loader: 'ts', format: 'esm' });
-  const mod = await import(`data:text/javascript;base64,${Buffer.from(code).toString('base64')}`);
-  if (!mod.SEO_META || typeof mod.SEO_META !== 'object') throw new Error(`${SOURCE} exports no SEO_META`);
+/** The text of a seoMeta.ts, evaluated: the TypeScript stripped by vite's own
+    esbuild wrapper (vite is a declared dependency, esbuild on its own is not),
+    then imported. The module is imported from a data: URL, so it has to stay
+    self contained: a type import is erased, a value import cannot resolve and
+    fails the build with the reason below. Exported for simSeoMetaSplit, which
+    evaluates main's copy of the table with it. */
+export async function evalSeoMeta(root, ts, label = SOURCE) {
+  const { transformWithEsbuild } = await import('vite');
+  const { code } = await transformWithEsbuild(ts, path.join(root, SOURCE), { loader: 'ts', format: 'esm', sourcemap: false });
+  let mod;
+  try {
+    mod = await import(`data:text/javascript;base64,${Buffer.from(code).toString('base64')}`);
+  } catch (e) {
+    const why = String(e?.message ?? e).split('\n')[0].replace(/"data:[^"]*"/g, 'a data: URL');
+    throw new Error(`${label} could not be evaluated on its own (${why}); it must import nothing but types`);
+  }
+  if (!mod.SEO_META || typeof mod.SEO_META !== 'object') throw new Error(`${label} exports no SEO_META`);
   return mod.SEO_META;
+}
+
+/** src/data/seoMeta.ts, evaluated. */
+export async function readSource(root) {
+  return evalSeoMeta(root, fs.readFileSync(path.join(root, SOURCE), 'utf8'));
 }
 
 function partFile(i, entries) {
