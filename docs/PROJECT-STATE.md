@@ -1,5 +1,13 @@
 # Project state
 
+## Active Codex work, 2026-10-01
+
+842-845 accept Claude836's proposed copy work: About/Contact, record-page
+explanations/related links, distinct hub/archive metadata and the ten Higher or
+Lower guides. Disjoint builder ownership is recorded in WORKBOARD. No new
+sports data or game-engine changes are planned. Claude keeps 839-841.
+Next free round 846. Earlier completed/pending notes below are historical.
+
 ## LIVE 2026-10-01: Release O (820 honest Perfect Season odds for NFL, NHL and MLB; 821 the MLB and NHL wheels read their whole tables), main `fcdae1bf`
 
 Assembled by the desktop Claude lane in the gate clone (`release-o`). **douknowball.com is serving it:** deployment
