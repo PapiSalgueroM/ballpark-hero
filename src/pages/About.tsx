@@ -44,10 +44,20 @@ const About = () => {
         <div>
           <h2 className="text-lg font-semibold text-foreground mb-2">What we care about</h2>
           <p>
-            Getting the data right comes first. Real rosters, real stats, verified lineups. When a grid says a player suited up for two clubs, he actually did. If something looks wrong anyway, every page has a Report a bug button in the footer that lands straight in our inbox with the page attached, and we fix it.
+            Getting the data right comes first. Trivia uses real sporting records, and a grid answer has to match the player's actual career. If something looks wrong, every page has a Report a bug button in the footer so you can send us the page and the detail that needs checking.
           </p>
           <p className="mt-2">
             Second, games have to be worth coming back to. That is why the dailies have streaks and share cards, the grids score you on how rare your answers are, and the sims have real depth: contracts, trades, injuries, playoff runs, whole careers. No two-second gimmicks.
+          </p>
+        </div>
+
+        <div>
+          <h2 className="text-lg font-semibold text-foreground mb-2">Real records and simulated seasons</h2>
+          <p>
+            Career and manager games also create fictional players, contracts and season results. Ratings and simulated outcomes are game mechanics, not real sporting records. Where Club Manager's roster data is incomplete, squads are marked as partial and can include generated youth players.
+          </p>
+          <p className="mt-2">
+            For historical winners, browse the <Link to="/records" className="underline hover:text-foreground transition-colors">Record Books</Link>. Each competition page explains how its tables were checked. The game guides explain the rules and any data limitations for that game.
           </p>
         </div>
 
