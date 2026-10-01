@@ -1,5 +1,12 @@
 # Project state
 
+## CLAIMED 2026-10-01: CFB recruiting filters (818)
+
+Finish the CFB targeting part of D92 using the existing CBB pattern: position,
+minimum stars, counts and Reset on the recruiting screen. Signing, engine rules,
+budgets, generated players and saved state stay unchanged. Exact ownership is
+on WORKBOARD. 815-817 are complete and pushed. Next free round: 819.
+
 ## ACCEPTED 2026-10-01: Tennis feedback (816), batch 815-817 complete
 
 Tennis now shows feedback for the accepted answer, never the old delayed wrong
