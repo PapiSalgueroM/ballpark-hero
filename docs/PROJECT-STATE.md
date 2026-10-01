@@ -1,5 +1,49 @@
 # Project state
 
+## ACCEPTED 2026-10-01: Name Them All feedback and readable reveals
+
+803 adds truthful full-name hit announcements, finite/static answer cues, readable
+answers and44px actions. Retry/More lists now stay in the finished top card, fixing
+the measured phone focus and Retry jump. Original catalog/helpers/180-second timer/
+score/share/completion stay held. Nine outcomes/thirteen unit controls/eight final-CSS
+contexts/three effective browser copies, types/two builds/all15 artifact fences plus
+guide/search/anchor guards and two actual App contexts pass. All1784 source files,
+188 saved pages and168 URL hashes/dates stay held. Full receipts are on WORKBOARD;
+the weaker placeholder control is preserved and not credited. No publication claim.
+802 measured native corrections,805 Search and806 feedback continue. The older413
+regression is still running. All Claude reservations stand. Next free807.
+
+## IN PROGRESS 2026-10-01: F1 Driver feedback after committed guesses
+
+806 reserves the isolated Driver Board/module/tests/harness to fix wrong-guess
+feedback scheduled after a correct win by the stale playing-state closure. Actual
+miss cues become finite and static for reduced motion; hook/data/actions/score/save/
+share/completion stay held.805 owns Search, disjoint from the Board. Exact scope
+and acceptance are on WORKBOARD.803 finishes production proof before its builder
+starts806.802 native corrections and the older413 regression continue. Next free807.
+
+## IN PROGRESS 2026-10-01: F1 Driver Search keyboard suggestions
+
+805 fixes the actual ArrowDown highlight reset in the isolated search component,
+with local visible selection, readable44px choices, combobox semantics and held-key
+protection. Original names/matching/topten order/exclusions/callback fallback stay
+held. Exact four-file ownership and outcome/control/native/App gates are on WORKBOARD.
+802 corrects a measured focused-target visibility case before its final recapture;
+803 is frozen for production proof. The older413 regression remains running.
+Next free806; all Claude reservations stand.
+
+## ACCEPTED 2026-10-01: NBA Stat Line exposes every matching season
+
+801 adds truthful ten-season expansions, full names/44px focusable controls and
+safe search/Score/paging handoffs. The measured phone offscreen issue is corrected
+with a stable action station and local selected-list scrolling. Original targets,
+calculations, score, save, share and completion remain held. Ten outcomes/twelve unit
+controls/eight final-CSS contexts/eight browser controls, types/two builds/all15
+artifact fences/original helper checks and two actual App contexts pass. All188
+saved pages/all168 URL dates+hashes remain held. Full receipts are on WORKBOARD.
+802 captured production and803 final proof continue;805 is being scouted. Frozen413
+still runs on its older scope, so no complete-suite or publication claim. Next free805.
+
 ## ACCEPTED 2026-10-01: generated guide refresh after verified changes
 
 804 adds explicit --refresh for existing converted/frozen guides and updates only
