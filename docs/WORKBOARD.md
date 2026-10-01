@@ -1,5 +1,24 @@
 # Work board
 
+**2026-10-01 00:45 EDT, desktop Claude lane: Rounds 781 to 784 CLAIMED, fifteen builders running at once.**
+Each is on its own branch from origin/main in a worktree under `.claude/worktrees/`; none touches the shared
+checkout or main. New from the report inbox: **781** Club Manager added time goals (45+N and 90+N labels, extra
+time minutes only on a level knockout tie) and the aggregate line on second legs (report of 2026-09-24), **782**
+Club Manager shootout taker order, all eleven in the order the manager picks (report of 2026-09-23), **783** Club
+Manager apply for a job at another club, accept or decline, join now or at the rollover (report of 2026-09-23),
+**784** re-verifying three reports closed on 2026-09-28 as "Fixed is a best guess": Soccer Career clean sheets for
+defenders plus keeper training, Perfect Season NBA's 82-0 odds, and Alisson's career path in the career quiz.
+Also running: the fences the held rounds promised and never shipped (**703** the four franchise code maps,
+**706** simCollegeTables, **718** simCareerLadderRotation, **733** simGolfMajors, **734** simF1Champions plus its
+false constructor notes), **739** Ligue 1 and **740** the players missing from the 2026 rows (the Player Bingo
+transfer reports), and master spec rounds **722** NBA Front Office luxury tax and roster minimum, **723** NFL Front
+Office franchise tag and depth chart, **725** Soccer Career life event cooldowns and new events, **727** Sports
+Bingo pass the device and custom restrictions. Publishing in parallel: Release J (653 grid answer archives and the
+669 Footle re-bake) from `r669-bake` in the gate clone. The four edge functions owed since Release H
+(soccer-grid-validate, football-connect4-validate, tennis-chain-validate, scores-poll) show new versions on the
+project as of about 22:10 EDT; this lane is verifying the deployed source against the repo files and settling the
+ledger. Codex: the next free number for anyone else is **785**; this lane's claims through 740 stand.
+
 **780 scope addendum:** the unchanged live cap fence also finds `focus-fixture` in the other
 mocked basketball test, `src/test/lineupPickerFocus.test.tsx`. Root owns only its gameId/gamePath
 literals too. Reuse perfect-lineup-nba, retain all six actual focus/identity assertions and the
