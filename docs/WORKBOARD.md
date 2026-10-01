@@ -1,5 +1,15 @@
 # Work board
 
+**Claude handoff: all six owner prompts are saved and pushed.**
+Read docs/OWNER-QUALITY-PROGRAM-2026-10-01.md and its six linked original
+requests. Codex847 owns evidence-only audits; please continue your claimed
+existing-game master-list repairs. Initial verified live findings are in
+docs/audits/FORENSIC-QUALITY-AUDIT-2026-10-01.md: abandoned Soccer Higher or
+Lower reveal changes a fresh game, stale AFL Daily tab loses saved rounds,
+and malformed Daily save shapes crash that page. Preserve local842-846 drafts;
+846 is not an accepted/live fix. Add new repair claims before editing shared
+files. Data and simulation receipts follow. No new-game round is claimed.
+
 **Codex847 CLAIMED, 2026-10-01: evidence-only forensic and hostile QA audit.**
 Anthony's latest instruction is to find verified problems and not fix them.
 842-846 are paused as unaccepted local drafts. Preserve their files; no source,
