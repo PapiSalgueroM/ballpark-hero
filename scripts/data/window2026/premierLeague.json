@@ -1064,5 +1064,152 @@
     "window": "2026-summer",
     "checked": "2026-10-01",
     "note": "His 2026 row is his loan at Borussia Dortmund; Chelsea recalled him in January 2026 and loaned him to Strasbourg to the end of 2025-26. He has the number 30 for 2026-27 and is on ESPN's Chelsea squad page."
+  },
+  {
+    "name": "Eiran Cashin",
+    "to": "Derby County",
+    "db": "Derby County",
+    "loan": true,
+    "sources": [
+      "https://www.brightonandhovealbion.com/media-article/mft-transfer-news-eiran-cashin-derby-county-loan-september-2026",
+      "https://www.skysports.com/football/news/11095/13546618/transfer-news-summer-transfer-window-2026-premier-league-deals-ins-and-outs"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Season long loan from Brighton back to his old club (dcfc.co.uk too). His 2026 row is his loan at Blackburn from the second half of 2025-26."
+  },
+  {
+    "name": "Jayden Meghoma",
+    "to": "Portsmouth",
+    "db": "Portsmouth FC",
+    "loan": true,
+    "sources": [
+      "https://www.portsmouthfc.co.uk/news/2026/september/01/meghoma-signs-on-loan",
+      "https://www.espn.com/soccer/player/_/id/352820/jayden-meghoma"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Season long loan from Brentford on deadline day. His 2026 row is his 2025-26 loan at Rangers. ESPN's player page lists him at Portsmouth."
+  },
+  {
+    "name": "Liam Millar",
+    "to": "Birmingham City",
+    "db": "Birmingham City",
+    "loan": true,
+    "sources": [
+      "https://www.bcfc.com/pages/en/media-article/blues-complete-loan-signing-of-liam-millar",
+      "https://www.skysports.com/football/news/11095/13546618/transfer-news-summer-transfer-window-2026-premier-league-deals-ins-and-outs"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Season long loan from Hull, 2026-09-01."
+  },
+  {
+    "name": "Julián Araujo",
+    "to": "Bournemouth",
+    "db": "AFC Bournemouth",
+    "sources": [
+      "https://www.afcb.co.uk/news/2026/september/10/injury-news--updates-on-/",
+      "https://www.espn.com/soccer/team/squad/_/id/349/afc-bournemouth"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "His 2026 row is his January 2026 loan at Celtic; the loan ended and he is back in Bournemouth's squad (the club's own injury update of 2026-09-10, ESPN's Bournemouth squad page)."
+  },
+  {
+    "name": "Max Aarons",
+    "to": "Bournemouth",
+    "db": "AFC Bournemouth",
+    "sources": [
+      "https://www.afcb.co.uk/news/2026/september/15/cherries-squad-has-wealth-of-european-experience",
+      "https://www.espn.com/soccer/team/squad/_/id/349/afc-bournemouth"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "His 2026 row is his 2025-26 loan at Rangers; the loan ended and he is back in Bournemouth's squad for their 2026-27 European campaign."
+  },
+  {
+    "name": "Daniel Jebbison",
+    "to": "Bournemouth",
+    "db": "AFC Bournemouth",
+    "sources": [
+      "https://www.afcb.co.uk/news/2026/september/07/jebbison--i-can-help-the-team-this-season/",
+      "https://www.espn.com/soccer/team/squad/_/id/349/afc-bournemouth"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "His 2026 row is his 2025-26 loan at Preston; the loan ended and he is back in Bournemouth's squad."
+  },
+  {
+    "name": "Anis Mehmeti",
+    "to": "Ipswich Town",
+    "db": "Ipswich Town",
+    "sources": [
+      "https://www.bcfc.co.uk/city-men-news/mehmeti-joins-ipswich-town/",
+      "https://www.espn.com/soccer/team/squad/_/id/373/ipswich-town"
+    ],
+    "window": "2026-01",
+    "checked": "2026-10-01",
+    "note": "Permanent from Bristol City, 2026-01-23, while Ipswich were still in the Championship (so ESPN's Premier League January list does not carry it). ESPN's Ipswich 2026-27 squad page lists him."
+  },
+  {
+    "name": "Abdoul Ouattara",
+    "to": "Ipswich Town",
+    "db": "Ipswich Town",
+    "sources": [
+      "https://www.rcstrasbourgalsace.fr/en/abdoul-ouattara-leaves-racing/",
+      "https://www.espn.com/soccer/team/squad/_/id/373/ipswich-town"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Permanent from Strasbourg, 2026-08-17. ESPN's Ipswich 2026-27 squad page lists him."
+  },
+  {
+    "name": "Konstantinos Tsimikas",
+    "to": "Liverpool",
+    "db": "Liverpool FC",
+    "sources": [
+      "https://www.liverpoolfc.com/news/confirmed-liverpool-line-v-atletico-madrid-2",
+      "https://www.espn.com/soccer/team/squad/_/id/364/liverpool"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "His 2026 row is his 2025-26 loan at Roma; the loan ended and he was on Liverpool's bench against Atletico Madrid on 2026-09-09. The club spells him Kostas."
+  },
+  {
+    "name": "Lewis Koumas",
+    "to": "Liverpool",
+    "db": "Liverpool FC",
+    "sources": [
+      "https://www.liverpoolfc.com/news/confirmed-liverpool-line-v-atletico-madrid-2",
+      "https://www.espn.com/soccer/team/squad/_/id/364/liverpool"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "His 2026 row is his loan at Birmingham; he finished 2025-26 on loan at Hull (ESPN's January list) and was on Liverpool's bench against Atletico Madrid on 2026-09-09."
+  },
+  {
+    "name": "Aaron Ramsdale",
+    "to": "Southampton",
+    "db": "Southampton FC",
+    "sources": [
+      "https://www.southamptonfc.com/en/news/article/mens-squad-numbers-confirmed-for-2026-27",
+      "https://www.espn.com/soccer/team/squad/_/id/376/southampton"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "His 2026 row is his 2025-26 loan at Newcastle; the loan ended and Southampton gave him the number 32 for 2026-27 (2026-08-15)."
+  },
+  {
+    "name": "Yann Gboho",
+    "to": "Coventry City",
+    "db": "Coventry City",
+    "sources": [
+      "https://www.toulousefc.com/play/blog/2026/09/yann-gboho-quitte-le-toulouse-football-club-pour-coventry",
+      "https://www.espn.com/soccer/team/squad/_/id/388/coventry-city"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "From Toulouse, September 2026. ESPN's Coventry 2026-27 squad page lists him."
   }
 ]
