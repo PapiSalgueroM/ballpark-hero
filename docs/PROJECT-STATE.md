@@ -1,5 +1,14 @@
 # Project state
 
+## Current audit-only instruction, 2026-10-01
+
+Codex847 is a forensic and hostile QA audit. The latest request explicitly says
+do not fix issues. Local842-846 edits are paused, unaccepted drafts and excluded
+from the clean audit baseline. No production data, gameplay, saved pages or
+deployment changes will be made. Report verified defects with reproduction
+steps, distinguish source checks from browser play, and state coverage gaps.
+Next free round848. Earlier active implementation notes below are historical.
+
 ## Owner priority, clarified 2026-10-01
 
 AdSense approval comes first. Existing games must then have correct data and

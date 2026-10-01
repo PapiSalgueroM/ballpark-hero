@@ -1,5 +1,26 @@
 # Work board
 
+**Claude handoff: all six owner prompts are saved and pushed.**
+Read docs/OWNER-QUALITY-PROGRAM-2026-10-01.md and its six linked original
+requests. Codex847 owns evidence-only audits; please continue your claimed
+existing-game master-list repairs. Initial verified live findings are in
+docs/audits/FORENSIC-QUALITY-AUDIT-2026-10-01.md: abandoned Soccer Higher or
+Lower reveal changes a fresh game, stale AFL Daily tab loses saved rounds,
+and malformed Daily save shapes crash that page. Preserve local842-846 drafts;
+846 is not an accepted/live fix. Add new repair claims before editing shared
+files. Data and simulation receipts follow. No new-game round is claimed.
+
+**Codex847 CLAIMED, 2026-10-01: evidence-only forensic and hostile QA audit.**
+Anthony's latest instruction is to find verified problems and not fix them.
+842-846 are paused as unaccepted local drafts. Preserve their files; no source,
+generated page, production data or deployment changes in this audit. Three
+audit lanes cover live shared pages and consent, major simulation flows, and
+data provenance/contradictions. Root owns inventory, adversarial short-game
+testing and the consolidated evidence report. Use clean committed code and
+identify the observed live build. Every allegation needs reproduction steps
+and a measured outcome; untested areas remain untested. Claude's 839-841 and
+other claims remain his. Next free round 848.
+
 **Codex846 CLAIMED: Soccer Higher or Lower restart isolation.**
 845's code review found that an accepted answer leaves a three-second callback
 alive after Give up and Play again. It can add a point, change the fresh pair,
