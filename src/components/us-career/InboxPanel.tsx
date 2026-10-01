@@ -23,21 +23,30 @@
    text lands at season end, with the inbox closed, so a set seeded on the
    first draw would mean the new text never moves at all, which is the whole
    feature gone. The board's ref outlives the tab, so it is the right owner.
-   Reduced motion lands the row on its final frame (CelebrationStyles). */
+   Reduced motion lands the row on its final frame (CelebrationStyles).
+
+   Round 796: a sport that delivers on its own calendar passes it in, and
+   every text that arrived on a beat says which one and which year ("Trade
+   deadline, 2027"), on the row and on the open message. A text from before
+   that round has no beat and simply shows without the line. */
 import { useEffect, useState } from 'react';
 import { CelebrationStyles, revealDelay } from '@/components/club-manager/Celebration';
 import { cn } from '@/lib/utils';
-import type { InboxMessage } from '@/lib/careerInbox';
+import { inboxBeatLine } from '@/lib/careerInbox';
+import type { InboxMessage, InboxBeat } from '@/lib/careerInbox';
 
-export function InboxPanel({ messages, onAnswer, seen }: {
+export function InboxPanel({ messages, onAnswer, seen, calendar }: {
   /** Newest delivered first reads best; this component does not resort them. */
   messages: InboxMessage[];
   onAnswer: (msgId: string, choiceIdx: number) => void;
   /** Ids already listed, owned by the board so it survives closing the tab. */
   seen: Set<string>;
+  /** Round 796: the sport's calendar, for the beat each text arrived on. */
+  calendar?: InboxBeat[];
 }) {
   const [openId, setOpenId] = useState<string | null>(null);
   const open = messages.find(m => m.id === openId) ?? null;
+  const openBeat = open ? inboxBeatLine(open, calendar) : null;
   /* Read during render on purpose: it is a plain set behind the board's ref,
      not state, and the answer is "was this row here last time", which is
      exactly what a ref remembers. Marked after commit so the first draw of a
@@ -55,6 +64,7 @@ export function InboxPanel({ messages, onAnswer, seen }: {
         </button>
         <div className="rounded-2xl border border-border bg-card p-4">
           <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">{open.emoji} {open.from}</p>
+          {openBeat && <p className="mt-0.5 text-[10px] text-muted-foreground" data-inbox-beat={open.beat}>{openBeat}</p>}
           <p className="mt-2 text-sm text-foreground">{open.text}</p>
         </div>
         {open.answered !== undefined ? (
@@ -91,6 +101,7 @@ export function InboxPanel({ messages, onAnswer, seen }: {
       <CelebrationStyles />
       {messages.map(m => {
         const freshIdx = fresh.indexOf(m.id);
+        const when = inboxBeatLine(m, calendar);
         return (
           <button
             key={m.id}
@@ -108,6 +119,7 @@ export function InboxPanel({ messages, onAnswer, seen }: {
               <span className="flex items-center gap-1.5 text-xs font-bold text-foreground">
                 {m.from}
                 {m.answered === undefined && <span className="h-1.5 w-1.5 rounded-full bg-primary" />}
+                {when && <span className="ml-auto shrink-0 text-[10px] font-normal text-muted-foreground" data-inbox-beat={m.beat}>{when}</span>}
               </span>
               <span className="block truncate text-[11px] text-muted-foreground">{m.text}</span>
             </span>

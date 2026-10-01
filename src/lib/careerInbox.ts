@@ -296,6 +296,13 @@ export function unreadInboxCount<S extends InboxHost>(s: S): number {
   return (s.phoneInbox ?? []).filter(m => m.answered === undefined).length;
 }
 
+/** Round 796: the "when" line for a text that arrived on a calendar beat
+ *  ("⏰ Trade deadline, 2027"), or null for one that did not. */
+export function inboxBeatLine(m: InboxMessage, calendar?: InboxBeat[]): string | null {
+  const beat = m.beat ? calendar?.find(b => b.id === m.beat) : undefined;
+  return beat ? `${beat.emoji} ${beat.label}, ${m.year}` : null;
+}
+
 /* ─── the answer flow ────────────────────────────────────────────────────── */
 
 /**

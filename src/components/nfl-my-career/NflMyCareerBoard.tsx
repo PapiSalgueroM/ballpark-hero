@@ -58,8 +58,11 @@ import { fmtFollowers, pushHeadlines } from '@/lib/careerSocial';
    in nflCareerInbox.ts and nflCareerRivalryEvents.ts. */
 import { InboxPanel } from '@/components/us-career/InboxPanel';
 import { RivalryEventCard } from '@/components/us-career/RivalryEventCard';
-import { nflUnreadInboxCount, answerNflInboxMessage } from '@/lib/nflCareerInbox';
-import { dismissNflRivalryEvent } from '@/lib/nflCareerRivalryEvents';
+import { nflUnreadInboxCount, answerNflInboxMessage, nflDraftNightInbox, NFL_CALENDAR } from '@/lib/nflCareerInbox';
+import { dismissNflRivalryEvent, resolveNflRivalryChoice } from '@/lib/nflCareerRivalryEvents';
+/* Round 796: the rival choice card, and the inbox on the football calendar. */
+import { RivalryChoiceCard } from '@/components/us-career/RivalryChoiceCard';
+import type { RivalryChoiceCard as RivalryChoice } from '@/lib/careerRivalryChoices';
 import { cn } from '@/lib/utils';
 
 /* Round 126: 'coach' is new. Retirement used to be the last screen in the
@@ -123,6 +126,10 @@ export default function NflMyCareerBoard() {
      inbox tab is open, so a set inside it started empty on every open and
      replayed the whole list with nothing new in it. */
   const inboxSeenRef = useRef<Set<string>>(new Set());
+  /* Round 796: what a rival choice did, shown on the card until Continue.
+     Transient like the curtain: the answer is already on the save, so a
+     reload lands on the hub with the choice made. */
+  const [rivalryOutcome, setRivalryOutcome] = useState<{ card: RivalryChoice; choiceIdx: number; line: string } | null>(null);
   /* Round 126: the coaching career. It lives in a ref as well as in state so
      persist can always write the current one without every existing call site
      having to learn about it. */
@@ -188,6 +195,8 @@ export default function NflMyCareerBoard() {
     const tq = rollTeamQuality(null, Math.random);
     /* Round 182: the depth chart is set the day you arrive. */
     const roleNote = nflAssignRole(c, tq, Math.random);
+    /* Round 796: draft night's text lands before a down is played. */
+    nflDraftNightInbox(c, Math.random);
     setCareer(c);
     setTeamQuality(tq);
     const pressureLine = draftPressureLine(c.draftPick, FIRST_ROUND_END);
@@ -404,6 +413,20 @@ export default function NflMyCareerBoard() {
     persist(state, phase, teamQuality);
   };
 
+  /* Round 796: answering a rival choice writes it to the save at once and
+     keeps the card up to show what happened. A second tap finds nothing
+     pending and changes nothing. */
+  const chooseRivalry = (choiceIdx: number) => {
+    if (!career?.pendingRivalryChoice) return;
+    const card = career.pendingRivalryChoice;
+    const res = resolveNflRivalryChoice(career, choiceIdx, Math.random);
+    if (!res) return;
+    setCareer(res.state);
+    setFeed(f => [res.line, ...f].slice(0, 8));
+    setRivalryOutcome({ card, choiceIdx, line: res.line });
+    persist(res.state, phase, teamQuality);
+  };
+
   const retireNow = () => {
     if (!career) return;
     const c: CareerState = JSON.parse(JSON.stringify(career));
@@ -423,6 +446,7 @@ export default function NflMyCareerBoard() {
     setFaWindow(null);
     setTalkLine(null);
     setDraftDay(null);
+    setRivalryOutcome(null);
     setPanel('none');
     coachRef.current = null;
     setCoach(null);
@@ -571,6 +595,28 @@ export default function NflMyCareerBoard() {
         <RivalryEventCard
           event={career.pendingRivalryEvent}
           onContinue={dismissRivalry}
+          headToHead={career.rival ? {
+            myName: career.name, myRating: career.ovr,
+            rivalName: career.rival.name, rivalRating: career.rival.ovr,
+          } : undefined}
+        />
+      </div>
+    );
+  }
+
+  /* ------------------- Round 796: a rival choice -------------------
+     Same place in the flow as the beat card above, which a season never
+     stacks with this one. Persisted on the save while unanswered, so a
+     reload mid-choice still asks. */
+  const rivalryChoice = career.pendingRivalryChoice ?? rivalryOutcome?.card ?? null;
+  if (rivalryChoice) {
+    return (
+      <div ref={revealRef}>
+        <RivalryChoiceCard
+          card={rivalryChoice}
+          onChoose={chooseRivalry}
+          outcome={career.pendingRivalryChoice ? null : rivalryOutcome}
+          onContinue={() => setRivalryOutcome(null)}
           headToHead={career.rival ? {
             myName: career.name, myRating: career.ovr,
             rivalName: career.rival.name, rivalRating: career.rival.ovr,
@@ -784,7 +830,7 @@ export default function NflMyCareerBoard() {
         {panel === 'inbox' && (
           /* Round 521: the Round 80 half of the flagship's phone, on the
              engine careerInbox.ts, bound to the NFL in nflCareerInbox.ts. */
-          <InboxPanel messages={[...(career.phoneInbox ?? [])].reverse()} onAnswer={handleInboxAnswer} seen={inboxSeenRef.current} />
+          <InboxPanel messages={[...(career.phoneInbox ?? [])].reverse()} onAnswer={handleInboxAnswer} seen={inboxSeenRef.current} calendar={NFL_CALENDAR} />
         )}
       </div>
     );
