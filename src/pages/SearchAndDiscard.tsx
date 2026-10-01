@@ -211,7 +211,7 @@ export default function SearchAndDiscard() {
         description="Two managers, one shared pool of real players. Search three, keep one into your 4-3-3, discard the rest from the whole game, then settle it in a simulated season. Play the CPU or pass and play."
         path="/search-and-discard"
       />
-      <GameShell width="narrow" title="Search and Discard" emoji="🔎" subtitle="Keep one, bin two, and let the season decide.">
+      <GameShell width="narrow" title="Search and Discard" emoji="🔎" subtitle="Keep one, bin two, and let the season decide." className={feedback.page}>
         {phase === 'boot' && (
           <div className="flex justify-center py-16"><Loader2 className="w-8 h-8 animate-spin text-primary" /></div>
         )}

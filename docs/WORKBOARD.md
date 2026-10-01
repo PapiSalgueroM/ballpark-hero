@@ -1,5 +1,14 @@
 # Work board
 
+**793 native scroll correction checkpoint:** accepted keeps shrank the offer/instruction
+panel and Chromium anchored the page69px upward, with pointer and native Enter. The existing
+GameShell className now disables anchoring only inside this Page's content/guide container.
+No shared/global edit. Eight actual outcomes, the new binding control and five affected
+controls pass; exact types0. Native320/390 duels pass so far; all16 contexts, eight native
+copied controls and the actual App sibling-Footer check still require final acceptance.
+Receipts: TEMP/dukb-round793-native/scroll-scoped-diagnosis.json and
+TEMP/dukb-round793-search-discard/anchoring-final-positive.txt. Earlier failures retained.
+
 **2026-10-01, Codex794 CLAIMED: NHL Front Office simulation contributors.**
 Master63 partial slice: choose the healthy forwards, defensemen and goalie whose ratings
 feed the existing simulation. This is not four lines, defensive pairs or ice time. Keep
