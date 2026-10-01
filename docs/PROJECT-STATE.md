@@ -1,5 +1,14 @@
 # Project state
 
+## IN PROGRESS 2026-09-30: four-agent Codex batch 764 through 767
+
+764 Soccer Career training feedback and 765 NBA/NHL/F1 lineup targeting have stable app source,
+with focused tests in progress. 766 adds finite Mystery Box card/slot feedback. Root's 767 fixes
+the draft voting panel mutating its supplied roster during MVP sorting, then adds a finite winner
+cue. All four tasks have pushed exact file ownership before edits. Existing engines, data and
+Claude's release work remain outside this batch. Completed 760 through 763 are source-ready on
+main, pending Claude's next publish. Next unclaimed number is 768.
+
 ## IN PROGRESS 2026-09-30: Codex 764 and 765, next gameplay batch
 
 Four completed rounds 760 through 763 are pushed on main through `d8943be7`, ready for Claude's

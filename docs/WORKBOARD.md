@@ -1,5 +1,23 @@
 # Work board
 
+**2026-09-30, Codex Rounds 766 and 767 CLAIMED: Mystery Box and draft winner feedback.**
+766 owns only `src/components/mystery-box/MysteryBoxBoard.tsx`, new scoped MysteryBoxMotion CSS,
+focused actual-Board tests and a sim wrapper. Reveal the already drawn card using its existing
+tier colors, give compatible slots a finite cue and acknowledge a committed placement. Keep
+all eleven slots and controls stable, avoid same-state replay and make reduced motion static.
+Preserve every hook, pool, draw/odds/RNG, rating, flag, decision, callback, save and share behavior.
+Test pointer/keyboard placement and disabled choices, exact identity/tier/values and 320px fit.
+767 is root's bounded `src/components/fantasy-draft/VoteWinner.tsx` task, plus new scoped winner
+CSS and focused tests/harness. Its existing winningTeam.sort mutates the supplied roster, even
+before a vote. Rank the share-preview MVPs using a copy instead, prove frozen/unsorted input
+rosters retain order and exact chosen MVP values, and add finite feedback to the existing winner
+pill after a committed vote. Preserve vote callbacks/counts, roster identity, text and sharing
+destinations. No parent FantasyDraft, AI, simulation, scoring, saves or pool changes. Keep the
+winner controls immediate, stable and static under reduced motion. Independent review and
+focused browser proof are required. Root owns docs/commits; agents own only claimed source.
+764 TrainingPanel and 765 GenericLineupBoard source are already stable for the combined build.
+Next free round is **768**.
+
 **2026-09-30, Codex Rounds 764 and 765 CLAIMED: flagship training and lineup targeting.**
 764 owns only `src/components/soccer-career/TrainingPanel.tsx`, new scoped TrainingFeedback CSS,
 focused rendered tests and a sim wrapper. Add finite cues to existing settled penalty/keeper
