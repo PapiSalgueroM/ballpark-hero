@@ -55,6 +55,7 @@ describe('actual Search and Discard committed presentation', () => {
   it('retains all22 slot nodes through selection, cancellation, cloned renders and committed keeps', async () => {
     const { view, model } = await start();
     const nodes = slots(view), offer = drawOffer(model);
+    expect(view.container.querySelector(`#dukb-main > .${feedback.page}`)).not.toBeNull();
     expect(nodes).toHaveLength(22); expect(currentOffers(view)).toEqual(offer.map(player => player.name));
     const choice = cpuKeep(model, offer), option = offers(view).find(node => node.dataset.sdOffer === choice.keep.name)!;
     option.focus(); fireEvent.click(option);

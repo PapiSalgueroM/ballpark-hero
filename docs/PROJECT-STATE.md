@@ -1,5 +1,12 @@
 # Project state
 
+## CHECKPOINT 2026-10-01: Search and Discard scroll correction frozen
+
+793 native QA reproduced a69px accepted-pick page jump. A scoped class on the existing
+GameShell content/guide container corrects Chromium anchoring without a global edit.
+Eight actual outcomes, six changed controls and exact types pass. Final native matrix,
+actual App Footer and combined production checks remain due.794 engine work is starting.
+
 ## IN PROGRESS 2026-10-01: NHL simulation contributors claimed
 
 794 is a partial master63 slice: player-selected healthy forwards, defensemen and goalie

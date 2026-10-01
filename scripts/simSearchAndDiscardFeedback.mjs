@@ -14,6 +14,7 @@ const focused = 'focuses a non-first chosen offer';
 const cpu = 'keeps the exact CPU delay';
 const cleanup = 'cancels pending CPU work';
 const controls = {
+  anchor: { test: retained, edits: [['className={feedback.page}', 'className={undefined}']] },
   remount: { test: retained, edits: [
     ['const renderSquad = (side: 0 | 1, label: string) => (', 'const SquadColumn = ({ side, label }: { side: 0 | 1; label: string }) => ('],
     ["{renderSquad(0, 'Manager A')}", '<SquadColumn side={0} label="Manager A" />'],
