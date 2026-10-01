@@ -1,5 +1,18 @@
 # Project state
 
+## ACCEPTED 2026-10-01: Name Them All feedback and readable reveals
+
+803 adds truthful full-name hit announcements, finite/static answer cues, readable
+answers and44px actions. Retry/More lists now stay in the finished top card, fixing
+the measured phone focus and Retry jump. Original catalog/helpers/180-second timer/
+score/share/completion stay held. Nine outcomes/thirteen unit controls/eight final-CSS
+contexts/three effective browser copies, types/two builds/all15 artifact fences plus
+guide/search/anchor guards and two actual App contexts pass. All1784 source files,
+188 saved pages and168 URL hashes/dates stay held. Full receipts are on WORKBOARD;
+the weaker placeholder control is preserved and not credited. No publication claim.
+802 measured native corrections,805 Search and806 feedback continue. The older413
+regression is still running. All Claude reservations stand. Next free807.
+
 ## IN PROGRESS 2026-10-01: F1 Driver feedback after committed guesses
 
 806 reserves the isolated Driver Board/module/tests/harness to fix wrong-guess
