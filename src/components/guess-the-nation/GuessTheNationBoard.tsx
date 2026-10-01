@@ -242,6 +242,7 @@ export function GuessTheNationBoard() {
     <div ref={gameRef}>
       <GameShell
         width="narrow"
+        className={feedbackStyles.board}
         title="Guess The Nation"
         headingLevel={2}
         emoji="🌍"

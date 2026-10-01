@@ -1,5 +1,6 @@
 import { supabase } from '@/integrations/supabase/client';
 import { DraftablePlayer, SeasonSlot, SpinSquad } from '@/lib/perfectSeason';
+import { fetchAllRowsParallel } from '@/lib/fetchAllRows';
 import { coachFor } from '@/data/nflCoaches';
 
 export const NFL_SLOTS: SeasonSlot[] = [
@@ -75,17 +76,30 @@ function eraName(abbr: string, year: number, name: string): string {
   return name;
 }
 
-/** One light query, cached by the page: every team season in the stats era. */
-export async function fetchTeamSeasonIndex(): Promise<TeamSeasonEntry[] | null> {
+/* What the old single read could ever return: the server's 1,000 row cap. */
+const OLD_WHEEL_ROWS = 1000;
+
+/**
+ * Every team season in the stats era, cached by the page.
+ *
+ * Round 821: this was one request with .limit(2000), which the server caps at
+ * 1,000 rows. The 1999 to 2024 window holds 828, so nothing was lost yet, but
+ * it was the same read as the MLB and NHL wheels that did lose rows, so it
+ * pages the same way now, in id order (the order the old read returned,
+ * checked 2026-10-01). `oldWheel` (a daily dated before FULL_WHEEL_DAILY_FROM)
+ * keeps the first 1,000 rows, the old read's cap.
+ */
+export async function fetchTeamSeasonIndex(opts: { oldWheel?: boolean } = {}): Promise<TeamSeasonEntry[] | null> {
   try {
-    const { data, error } = await supabase
+    const { data, error } = await fetchAllRowsParallel<any>((from, to) => supabase
       .from('nfl_team_seasons' as any)
       .select('team_name, abbr, year')
       .gte('year', 1999)
       .lte('year', 2024)
-      .limit(2000);
+      .order('id', { ascending: true })
+      .range(from, to), 1);
     if (error || !data) return null;
-    const rows = (data as any[])
+    const rows = (opts.oldWheel ? data.slice(0, OLD_WHEEL_ROWS) : data)
       .filter(r => r.abbr && r.team_name && r.year != null)
       .map(r => {
         const year = Number(r.year);
