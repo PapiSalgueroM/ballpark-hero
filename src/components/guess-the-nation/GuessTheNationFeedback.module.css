@@ -1,0 +1,21 @@
+.clue { animation: clueOpen 420ms ease-out 1; }
+.reply { animation: replyReveal 420ms ease-out 1; }
+.result { animation: resultReveal 420ms ease-out 1; }
+.fullName { max-width: 100%; overflow-wrap: anywhere; }
+
+@keyframes clueOpen {
+  from { box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.45); }
+  to { box-shadow: 0 0 0 2px transparent; }
+}
+@keyframes replyReveal {
+  from { opacity: 0.45; }
+  to { opacity: 1; }
+}
+@keyframes resultReveal {
+  from { opacity: 0.65; }
+  to { opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .clue, .reply, .result { animation: none; }
+}
