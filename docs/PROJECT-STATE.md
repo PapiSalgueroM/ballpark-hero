@@ -1,6 +1,15 @@
 # Project state
 
-## CHECKPOINT 2026-09-30: Quiz Board native acceptance joins the six source-ready rounds
+## IN PROGRESS 2026-09-30: Free Kick steady-input practice claimed
+
+777 claims only FreeKickBoard and scoped tests/CSS for unrecorded power-range practice. Existing
+physics, daily/unlimited records and completion stay authoritative; practice is excluded from
+recording. Staff776 acceptance continues.774's complete older ScoreShown fence now passes16/16
+cases and unchanged40-career baselines, with its quiznegative control failing only the intended
+bank assertion. Full receipts are on WORKBOARD. Combined build/CSS/fifteen fences still wait
+behind the full392-node suite. No publication claim for769 onward. Next unclaimed number:778.
+
+## CHECKPOINT 2026-09-30: Quiz Board native acceptance joins seven source-ready rounds
 
 774 passes seven actual Board/hook tests, six copied controls and eight five-category native
 browser cases, with keyboard clue access, exact focus, scores/saved IDs and finite/static
