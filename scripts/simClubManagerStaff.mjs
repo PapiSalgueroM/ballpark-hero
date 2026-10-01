@@ -160,6 +160,8 @@ const aliases = [
 execSync(`"${ROOT}/node_modules/.bin/esbuild" "${ENTRY}" --bundle --format=esm --platform=node --outfile="${BUNDLE}" --log-level=error ${aliases.join(' ')}`, { stdio: 'inherit' });
 const mod = await import(pathToFileURL(BUNDLE).href);
 const cm = mod.engine;
+/* Round 832: an era's squads load with the era, so the harness fetches all three first. */
+await cm.ensureAllEraRosters();
 const st = mod.desk;
 const fin = mod.books;
 const {

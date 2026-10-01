@@ -100,6 +100,8 @@ if (CONTROL === 'pool') {
 }
 
 const cm = (await import(pathToFileURL(BUNDLE).href)).engine;
+/* Round 832: an era's squads load with the era, so the harness fetches all three first. */
+await cm.ensureAllEraRosters();
 const {
   startCareer, playNextEntry, finishSeason, startNextSeason, uclQualifiersFrom,
   sortedLeagueTable, sortedWorldTable, careerLeagueOf, worldLeagueDefs,

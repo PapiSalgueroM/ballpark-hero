@@ -51,6 +51,8 @@ export const international = intl;
 `);
 execSync(`"${ROOT}/node_modules/.bin/esbuild" "${ENTRY}" --bundle --format=esm --platform=node --outfile="${BUNDLE}" --log-level=error`, { stdio: 'inherit' });
 const { engine: CM, international: INTL } = await import(pathToFileURL(BUNDLE).href);
+/* Round 832: an era's squads load with the era, so the harness fetches all three first. */
+await CM.ensureAllEraRosters();
 const { startCareer, nationStanding, nationOfferFor, takeNationJob, leaveNationJob, nationLift, startNextSeason } = CM;
 const { runManagerSummer, nationStrength, NATION_CONFED } = INTL;
 

@@ -58,6 +58,8 @@ globalThis.localStorage = {
   clear: () => { store.clear(); },
 };
 const { cm } = await import(pathToFileURL(BUNDLE).href);
+/* Round 832: an era's squads load with the era, so the harness fetches all three first. */
+await cm.ensureAllEraRosters();
 
 const staticLeague = id => cm.REAL_LEAGUES.find(l => l.id === id);
 const effClubs = (state, id) => state.leagueOverrides?.[id] ?? staticLeague(id).clubs;

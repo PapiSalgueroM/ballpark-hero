@@ -309,7 +309,14 @@ globalThis.localStorage = {
    same call twice in one instance differs by design. Every compared run gets
    a FRESH instance of its bundle, which is what a page load is. */
 let instances = 0;
-const fresh = async which => (await import(`${pathToFileURL(OUT[which]).href}?instance=${++instances}`)).mod;
+/* Round 832: an era's squads load with the era, so a fresh instance that has
+   the loader fetches all three before it is handed out. A reference engine
+   from before the round has none and carries its eras already. */
+const fresh = async which => {
+  const m = (await import(`${pathToFileURL(OUT[which]).href}?instance=${++instances}`)).mod;
+  if (typeof m.ensureAllEraRosters === 'function') await m.ensureAllEraRosters();
+  return m;
+};
 const mine = await fresh('mine');
 const DATA = (await import(pathToFileURL(OUT.data).href)).mod;
 console.log(baseHasRound612

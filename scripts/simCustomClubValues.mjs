@@ -302,6 +302,8 @@ const { cm, eras } = req(path.join(TMP, 'live.cjs'));
 const old = req(path.join(TMP, 'pre.cjs')).cm;
 const cmBlind = req(path.join(TMP, 'liveBlind.cjs')).cm;
 const oldBlind = req(path.join(TMP, 'preBlind.cjs')).cm;
+/* Round 832: an era's squads load with the era, so every bundle fetches all three first. */
+for (const engine of [cm, old, cmBlind, oldBlind]) await engine.ensureAllEraRosters();
 
 /* ---------- helpers ---------- */
 const SEED_BASE = Number.isFinite(Number(process.env.SIM_SEED)) ? Number(process.env.SIM_SEED) : 0;

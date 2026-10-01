@@ -83,6 +83,8 @@ if (CONTROL === 'noop') {
 }
 
 const cm = (await import(pathToFileURL(BUNDLE).href)).engine;
+/* Round 832: an era's squads load with the era, so the harness fetches all three first. */
+await cm.ensureAllEraRosters();
 const { startCareer, ensureUclLegs, uclLegsFor } = cm;
 
 /* A career whose club really does play in Europe, so the calendar carries

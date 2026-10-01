@@ -87,6 +87,8 @@ if (CONTROL === 'dirty') {
 }
 
 const cm = (await import(pathToFileURL(BUNDLE).href)).engine;
+/* Round 832: an era's squads load with the era, so the harness fetches all three first. */
+await cm.ensureAllEraRosters();
 const { startCareer, startMidSeason, MIDSEASON_ENTRY, sortedLeagueTable, worldLeagueDefs, careerLeagueOf, leagueRounds } = cm;
 
 const ENTRIES = ['autumn', 'newYear', 'runIn'];
