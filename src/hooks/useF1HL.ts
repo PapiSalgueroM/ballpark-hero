@@ -1,7 +1,7 @@
 import { useState, useMemo, useCallback, useEffect, useRef } from 'react';
 import { f1HLDrivers, F1HLDriver } from '@/data/f1HLDrivers';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
-import { higherLowerScore } from '@/lib/higherLowerScore';
+import { higherLowerScore, isHigherLowerDailyLog } from '@/lib/higherLowerScore';
 import { useDailyPuzzle } from '@/hooks/useDailyPuzzle';
 import { dateSeed } from '@/lib/dateUtils';
 
@@ -80,6 +80,7 @@ export function useF1HL() {
     maxGuesses: ROUNDS,
     isWon: (g) => g.length >= ROUNDS,
     deserializeGuesses: (raw) => raw as HLAction[],
+    isValidGuesses: isHigherLowerDailyLog,
   });
 
   const dailyPairs = useMemo(() => buildPairs(dateSeed(todayStr)), [todayStr]);

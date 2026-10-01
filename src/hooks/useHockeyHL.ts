@@ -2,7 +2,7 @@ import { useState, useMemo, useCallback, useEffect, useRef } from 'react';
 import { makeFirstDraw } from '@/lib/firstDraw';
 import { hockeyHLPlayers, HockeyHLPlayer } from '@/data/hockeyHLPlayers';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
-import { higherLowerScore } from '@/lib/higherLowerScore';
+import { higherLowerScore, isHigherLowerDailyLog } from '@/lib/higherLowerScore';
 import { useDailyPuzzle } from '@/hooks/useDailyPuzzle';
 import { dateSeed } from '@/lib/dateUtils';
 
@@ -94,6 +94,7 @@ export function useHockeyHL() {
     maxGuesses: ROUNDS,
     isWon: (g) => g.length >= ROUNDS,
     deserializeGuesses: (raw) => raw as HLAction[],
+    isValidGuesses: isHigherLowerDailyLog,
   });
 
   const dailyPairs = useMemo(() => getDailyPairs(todayStr), [todayStr]);

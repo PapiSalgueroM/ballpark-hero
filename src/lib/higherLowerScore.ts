@@ -30,3 +30,16 @@ export const HIGHER_LOWER_DAILY_MAX = higherLowerScore(
   Array.from({ length: HIGHER_LOWER_DAILY_ROUNDS }, () => ({ correct: true })),
 );
 export const HIGHER_LOWER_SCORE_BUCKETS = evenScoreBuckets(HIGHER_LOWER_DAILY_MAX);
+
+/** Round 848: what a saved Higher or Lower daily has to look like before the
+    daily hook restores it (its isValidGuesses): no more than the day's ten
+    rounds, each one a decided { t: 'result', correct } with a real boolean.
+    A save that fails is thrown away and the day starts fresh, where it used
+    to break the page on the first round it read. */
+export function isHigherLowerDailyLog(log: ReadonlyArray<unknown>): boolean {
+  return log.length <= HIGHER_LOWER_DAILY_ROUNDS && log.every((a) => {
+    if (a === null || typeof a !== 'object') return false;
+    const round = a as { t?: unknown; correct?: unknown };
+    return round.t === 'result' && typeof round.correct === 'boolean';
+  });
+}

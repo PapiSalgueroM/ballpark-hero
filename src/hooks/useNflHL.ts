@@ -1,7 +1,7 @@
 import { useState, useMemo, useCallback, useEffect, useRef } from 'react';
 import { NFL_HL_CATEGORIES, type NflHLCategory, type NflHLCatPlayer } from '@/data/nflHLCategories';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
-import { higherLowerScore } from '@/lib/higherLowerScore';
+import { higherLowerScore, isHigherLowerDailyLog } from '@/lib/higherLowerScore';
 import { useDailyPuzzle } from '@/hooks/useDailyPuzzle';
 import { dateSeed } from '@/lib/dateUtils';
 
@@ -89,6 +89,7 @@ export function useNflHL() {
     maxGuesses: ROUNDS,
     isWon: (g) => g.length >= ROUNDS,
     deserializeGuesses: (raw) => raw as HLAction[],
+    isValidGuesses: isHigherLowerDailyLog,
   });
 
   const dailyRounds = useMemo(() => buildRounds(dateSeed(todayStr)), [todayStr]);
