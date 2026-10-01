@@ -873,8 +873,11 @@ export default function NhlFrontOfficeBoard() {
             Cap hit ${nhlCapUsed(my)}M of the ${league.cap}M ceiling
             {dead > 0 && <> · dead money <b className="text-destructive">${dead}M</b></>}
           </p>
-          {/* Round 830 review: real names beside a dollar figure read as real deals, so the box says they are not. */}
-          <p data-salary-note className="mb-2 text-center text-[10px] text-muted-foreground">{capNote()}. Player salaries and contract years are made up for the game, not their real deals.</p>
+          <p className="mb-0.5 text-center text-[10px] text-muted-foreground">{capNote()}</p>
+          {/* Round 830 review: real names beside a dollar figure read as real deals, so
+              the box says they are not. Its own line: simLeagueCaps wants the date line
+              exactly as capNote() prints it, directly under the cap. */}
+          <p data-salary-note className="mb-2 text-center text-[10px] text-muted-foreground">Player salaries and contract years are made up for the game, not their real deals.</p>
           {cutBlock && <p data-cut-block className="mb-2 text-center text-[10px] text-destructive">{cutBlock}</p>}
           {dropBlock && <p data-puckdrop-block className="mb-2 text-center text-[10px] text-destructive">{dropBlock}</p>}
           <div className="max-h-96 space-y-2 overflow-y-auto">

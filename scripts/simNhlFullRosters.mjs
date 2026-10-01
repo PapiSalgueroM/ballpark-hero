@@ -697,7 +697,7 @@ console.log('10) What the page says is what the data is');
     return text.replace(from, to);
   };
   if (CONTROL === 'overclaim') page = bind('the page', page, "22 or 23 real players from the league's own data, rated off real 2025-26 stats (a rookie or anyone without a full season gets a marked stand in rating)", "22 or 23 real players, every one rated off real 2025-26 stats");
-  if (CONTROL === 'nosalary') board = bind('the board', board, '. Player salaries and contract years are made up for the game, not their real deals.', '.');
+  if (CONTROL === 'nosalary') board = bind('the board', board, '>Player salaries and contract years are made up for the game, not their real deals.<', '><');
   if (CONTROL === 'camprule') guide = bind('the guide', guide, 'twelve forwards and six defensemen', 'eleven forwards and six defensemen');
   if (CONTROL === 'noinvented') guide = bind('the guide', guide, 'The free agents you start with, every draft prospect', 'The free agents you start with');
   ok(10, 'the guide entry and the What\'s New line were found', guide.length > 500 && entry.length > 200, `${guide.length} ${entry.length}`);
