@@ -207,7 +207,7 @@ export const CATEGORIES: GameCategory[] = [
     title: 'Baseball',
     emoji: '⚾',
     games: [
-      { path: '/perfect-season-mlb', label: '162-0 MLB Perfect Season', emoji: '🏆', description: 'Spin, draft across eras, chase perfection', addedOn: '2026-07-01' },
+      { path: '/perfect-season-mlb', label: '162-0 MLB Perfect Season', emoji: '🏆', description: 'Spin, draft across eras, chase 116 wins', addedOn: '2026-07-01' },
       { path: '/baseball-career', label: 'MLB Career Path', emoji: '⚾', description: 'Guess the baseball player', daily: true, addedOn: '2026-03-08' },
       { path: '/mlb-higher-lower', label: 'MLB Higher or Lower', emoji: '📊', description: 'Which legend hit more career home runs?', daily: true, addedOn: '2026-03-08' },
       { path: '/mlb-grid', label: 'MLB Franchise Grid', emoji: '🔲', description: 'Fill the 3×3 with legends who match both teams', daily: true, addedOn: '2026-07-03' },

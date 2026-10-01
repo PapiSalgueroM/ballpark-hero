@@ -1,5 +1,79 @@
 # Project state
 
+831 is now accepted: final production browser checks show no document movement
+across all10 measured wrong/hint/result actions at320 normal/1440 reduced.
+Original score/save/share/completion and finite/static cues hold. Source and
+artifact gates pass; exact95-check receipt and cleanup are on WORKBOARD.
+828-832,836 and837 are ready in code;838 contest remains active. Next839.
+
+## Current Codex handoff, 2026-10-01
+
+836 public-copy corrections and837 Stat Line manual ad eligibility are
+accepted and ready for Claude's next publish. Types, build,15 artifact
+harnesses and snapshot boot pass. Three saved pages are refreshed; only four
+page fingerprints changed, all other ledger entries are preserved.
+AdSense remains unresolved. The existing account panel still shows the
+September25 Low value content decision. Search Console refresh was blocked
+by the browser URL safety check, so68/94 remain September20 observations.
+No Google submission was made. The evidence and remaining era-copy correction
+are in audits/ADSENSE-QUALITY-2026-10-01.md and WORKBOARD.
+831's final no-jump browser pair is running;838's three-point contest is in
+implementation/targeted checks. Next free839. No new live-release claim.
+
+Codex837 is implemented with12 focused outcomes and three effective copied
+regression checks. NBA Stat Line no longer requests a manual ad during loading
+or pool failure. Consent, gameplay and original scores/saves/share hold.
+Combined app types pass; production build/artifact verification is pending.
+
+Codex838 is claimed from master spec84: a complete Buzzer Beater three-point
+contest mode using the existing physics and flight controls. Original daily
+scores and saves stay held. Codex836/837 and831's final scroll correction are
+in combined verification; no new AdSense approval or indexing claim. Next839.
+
+Codex829 is accepted after actual App checks at320 normal/1440 reduced:
+20 accepted links keep the document still, original score/save/share/completion
+hold and finite/static feedback works. Final receipt is on WORKBOARD.
+Codex837 now holds NBA Stat Line's manual ad while its pool is loading or has
+failed. It is claimed, not yet implemented. Codex836 copy checks continue.
+Club Manager era-copy contradictions were handed to Claude832, which owns
+that file. Next free round838.
+
+## ADSENSE 2026-10-01: owner supplied the Low value content policy card
+
+AdSense approval is unresolved. The screenshot confirms the named rejection,
+not a new technical indexing fault. Prior account evidence and the intentional
+pack-battle noindex exclusion are in audits/GOOGLE-READINESS-2026-09-30.md.
+Codex836 owns a bounded public-copy/content-quality review and corrections,
+starting with unsupported home-page game features. No review was requested.
+Next free round837; Claude's active depth work stays untouched.
+
+Codex832 is accepted: the CFB recruiting feed no longer shifts the recruit
+columns when a signing arrives. Browser checks preserve scroll and original
+signing state; the prior build moves the columns74px under the same test.
+Eight focused tests and the production gates pass. Exact receipts on WORKBOARD.
+
+
+Codex830 is now accepted:118 actual App checks pass at320px normal/reduced,
+including distinct consecutive feedback, stable rows, original40-point outcome,
+exact save/share/once completion, reset and quiet reload.829 is built and pushed
+with seven positives/five controls; its final browser checks remain pending.
+Keep lane prefixes on overlapping828-835 IDs. Next shared free round836.
+
+
+## BUILT 2026-10-01: Missing Nine feedback (830)
+
+Fresh puzzles no longer inherit old wrong-answer feedback. Seven actual Page
+outcomes, eight effective controls and combined runtime gates pass. Source is
+pushed; final browser checks remain pending. Exact evidence is on WORKBOARD.
+
+
+## BUILT 2026-10-01: Nation feedback (831)
+
+Six focused outcomes, three regression controls and combined runtime gates pass.
+The code is pushed; final actual App browser verification is still pending.
+828 is accepted;829/830/832 remain active. Next free round833.
+
+
 Codex832 is closing the measured CFB signing page jump from818, using a stable
 recruiting message area. All signing and budget rules stay held. Next free833.
 

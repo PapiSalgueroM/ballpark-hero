@@ -1,4 +1,4 @@
-import { cleanup, fireEvent, render, waitFor, within } from '@testing-library/react';
+import { act, cleanup, fireEvent, render, waitFor, within } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
@@ -7,7 +7,7 @@ import * as stats from '@/lib/nbaStatLine';
 import { getTodayET } from '@/lib/dateUtils';
 import { recordCompletion } from '@/lib/completions';
 
-vi.mock('@/lib/nbaStatLine', async original => ({ ...await original<typeof import('@/lib/nbaStatLine')>(), fetchNbaStatLinePool: async () => pool }));
+vi.mock('@/lib/nbaStatLine', async original => ({ ...await original<typeof import('@/lib/nbaStatLine')>(), fetchNbaStatLinePool: vi.fn(async () => pool) }));
 vi.mock('@/contexts/AuthContext', () => ({ useAuth: () => ({ user: null, profile: null, loading: false, refreshProfile: vi.fn() }) }));
 vi.mock('@/lib/completions', async original => ({ ...await original<typeof import('@/lib/completions')>(), recordCompletion: vi.fn(), getCurrentPlayerName: () => 'Fixture guest' }));
 vi.mock('@/lib/badges', async original => ({ ...await original<typeof import('@/lib/badges')>(), getNewlyEarnedBadges: async () => [] }));
@@ -55,6 +55,45 @@ const quiet = (state: Awaited<ReturnType<typeof start>>) => {
 };
 
 describe('actual NBA Stat Line season picker', () => {
+  it('holds manual ads off loading and failed pool states while retaining retry and guide', async () => {
+    localStorage.setItem('cookie-consent', 'accepted');
+    window.adsbygoogle = [];
+    const guideText = 'A target per-36 stat line from real NBA history, five player seasons of your choosing, and one minutes weighted combined line scored 0 to 100 by similarity. A shared daily target with one scored run, plus an unlimited mode with a fresh target every time.';
+    for (const failure of ['empty', 'rejected'] as const) {
+      let finish!: () => void;
+      vi.mocked(stats.fetchNbaStatLinePool).mockImplementationOnce(() => new Promise((resolve, reject) => {
+        finish = () => failure === 'empty' ? resolve(null) : reject(new Error('Fixture unavailable pool'));
+      }));
+      const view = render(frame()), guide = view.getByText(guideText);
+      expect(view.container.querySelector('[data-dukb-manual-ad]'), 'Loading must not request a manual ad').toBeNull();
+      expect(window.adsbygoogle).toHaveLength(0);
+      await act(async () => { finish(); });
+      expect(view.getByText("Couldn't load the season pool right now.")).toBeInTheDocument();
+      expect(view.getByRole('button', { name: 'Try again' })).toBeEnabled();
+      expect(view.getByText(guideText)).toBe(guide);
+      expect(view.container.querySelector('[data-dukb-manual-ad]'), 'Failure must not request a manual ad').toBeNull();
+      expect(window.adsbygoogle).toHaveLength(0); expect(recordCompletion).not.toHaveBeenCalled();
+      view.unmount();
+    }
+  });
+
+  it('allows the original consented manual slot in setup play and results', async () => {
+    localStorage.setItem('cookie-consent', 'accepted'); window.adsbygoogle = [];
+    const view = render(frame()), menu = await view.findByRole('button', { name: /^Daily target/ });
+    const slot = view.container.querySelector('ins.adsbygoogle');
+    expect(slot).not.toBeNull(); expect(window.adsbygoogle).toHaveLength(1);
+    click(menu as HTMLButtonElement);
+    expect(view.container.querySelector('ins.adsbygoogle')).toBe(slot);
+    for (const season of [pool[24], pool[2], pool[29], pool[5], pool[33]]) pick(view, season.key);
+    expect(view.container.querySelector('ins.adsbygoogle')).toBe(slot);
+    click(view.getByRole('button', { name: 'Score my line' }) as HTMLButtonElement);
+    expect(view.container.querySelector('ins.adsbygoogle')).toBe(slot); expect(window.adsbygoogle).toHaveLength(1);
+    expect(recordCompletion).toHaveBeenCalledTimes(1); view.unmount();
+    localStorage.setItem('cookie-consent', 'essential');
+    const essential = render(frame()); await essential.findByRole('button', { name: /^Daily target/ });
+    expect(essential.container.querySelector('[data-dukb-manual-ad]')).toBeNull(); expect(window.adsbygoogle).toHaveLength(1);
+  });
+
   it('holds the original first-ten order, labeled search and quiet typing', async () => {
     const state = await start(); type(state.view);
     const expected = stats.suggestSeasons(stats.eligiblePoolFor(pool, state.target), NAME, new Set(), 10);

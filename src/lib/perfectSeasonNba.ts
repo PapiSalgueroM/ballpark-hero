@@ -1,5 +1,6 @@
 import { supabase } from '@/integrations/supabase/client';
 import { DraftablePlayer, SeasonSlot, SpinSquad } from '@/lib/perfectSeason';
+import { fetchAllRowsParallel } from '@/lib/fetchAllRows';
 
 /**
  * NBA adapter for the Perfect Season engine.
@@ -34,7 +35,9 @@ const MIN_SQUAD_MINUTES = 500;  // roughly 20 games of real run
 const MIN_INDEX_PLAYERS = 6;
 const MIN_SQUAD_PLAYERS = 7;
 const INDEX_PAGE = 1000;        // PostgREST caps rows per request
-const INDEX_PAGES = 15;         // 15k budget covers the ~13.5k qualifying rows
+const INDEX_PAGES = 15;         // asked for at once: 14,722 qualifying rows on 2026-10-01
+/* What the old fixed read could ever return: fifteen pages. */
+const OLD_WHEEL_ROWS = INDEX_PAGES * INDEX_PAGE;
 
 const COMBINED_ROWS = new Set(['2TM', '3TM', '4TM', '5TM']);
 
@@ -157,32 +160,32 @@ export function filterIndexByDecade(idx: NbaTeamSeasonEntry[], decade: NbaDecade
  * Wheel index, cached by the page: every team season with at least six
  * 1000+ minute players (about 1,600 entries, 1951-52 to today). The table
  * has no team-level rollup, so this pages through the rotation-player rows
- * in parallel and groups them client side. Pages are ordered by id
- * descending so a future data refresh overflows the oldest rows first.
+ * in parallel and groups them client side, ordered by id descending.
+ *
+ * Round 821: it used to ask for exactly fifteen pages, so it stopped at 15,000
+ * rows whatever the table held (14,722 on 2026-10-01, one new season from
+ * dropping the oldest ones), and a page that failed was skipped, so the wheel
+ * quietly lost a thousand rows. It now reads until a short page and fails
+ * closed on a page that fails every retry. `oldWheel` (a daily dated before
+ * FULL_WHEEL_DAILY_FROM) keeps the first 15,000 rows, the old read's reach.
  */
-export async function fetchTeamSeasonIndex(): Promise<NbaTeamSeasonEntry[] | null> {
+export async function fetchTeamSeasonIndex(opts: { oldWheel?: boolean } = {}): Promise<NbaTeamSeasonEntry[] | null> {
   try {
-    const pages = await Promise.all(
-      Array.from({ length: INDEX_PAGES }, (_, i) =>
-        supabase
-          .from('bref_nba_player_seasons' as any)
-          .select('season, team')
-          .gte('minutes', MIN_INDEX_MINUTES)
-          .order('id', { ascending: false })
-          .range(i * INDEX_PAGE, (i + 1) * INDEX_PAGE - 1)
-      )
-    );
+    const { data, error } = await fetchAllRowsParallel<any>((from, to) => supabase
+      .from('bref_nba_player_seasons' as any)
+      .select('season, team')
+      .gte('minutes', MIN_INDEX_MINUTES)
+      .order('id', { ascending: false })
+      .range(from, to), INDEX_PAGES);
+    if (error || !data) return null;
 
     const counts = new Map<string, number>();
-    for (const page of pages) {
-      if (page.error || !page.data) continue;
-      for (const r of page.data as any[]) {
-        const season = typeof r.season === 'string' ? r.season : '';
-        const team = typeof r.team === 'string' ? r.team : '';
-        if (!season || !team || COMBINED_ROWS.has(team)) continue;
-        const key = `${season}|${team}`;
-        counts.set(key, (counts.get(key) ?? 0) + 1);
-      }
+    for (const r of (opts.oldWheel ? data.slice(0, OLD_WHEEL_ROWS) : data) as any[]) {
+      const season = typeof r.season === 'string' ? r.season : '';
+      const team = typeof r.team === 'string' ? r.team : '';
+      if (!season || !team || COMBINED_ROWS.has(team)) continue;
+      const key = `${season}|${team}`;
+      counts.set(key, (counts.get(key) ?? 0) + 1);
     }
 
     const entries: NbaTeamSeasonEntry[] = [];
