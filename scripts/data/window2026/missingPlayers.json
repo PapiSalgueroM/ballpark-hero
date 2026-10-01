@@ -1,0 +1,145 @@
+[
+  {
+    "name": "Serge Gnabry",
+    "to": "Bayern Munich",
+    "db": "Bayern Munich",
+    "add": { "p": "Second Striker", "a": 30, "usd": 19440000 },
+    "checked": "2026-10-01",
+    "sources": [
+      "https://www.bundesliga.com/en/bundesliga/player/serge-gnabry",
+      "https://www.espn.com/soccer/team/squad/_/id/132/bayern-munich"
+    ],
+    "sourceNotes": [
+      "bundesliga.com (league official, season 2026/2027): FC Bayern Muenchen, number 7, Striker, born 14.07.1995, Germany (DEU) and Cote d'Ivoire (CIV).",
+      "espn.com Bayern Munich 2026-27 squad: number 7, Serge Gnabry, F, 31, Germany.",
+      "fcbayern.com could not be read from this session (its squad page sits behind a bot wall and the February 2026 extension article timed out four times); the extension to 30 June 2028 is reported on fcbayern.com/en/news/2026/02/serge-gnabry-extends-with-bayern-to-2028 and on fotmob.com, so he did not move."
+    ],
+    "born": "1995-07-14",
+    "insert": {
+      "player_name": "Serge Gnabry",
+      "position": "Second Striker",
+      "age": 30,
+      "nationality": "Germany",
+      "club": "Bayern Munich",
+      "market_value_usd": 19440000,
+      "year": 2026
+    },
+    "value": {
+      "transfermarkt": { "url": "https://www.transfermarkt.com/serge-gnabry/profil/spieler/159471", "valueEur": 18000000, "updated": "2026-05-27", "club": "Bayern Munich", "mainPosition": "Second Striker", "born": "1995-07-14", "citizenship": ["Germany"] },
+      "fotmob": { "url": "https://www.fotmob.com/players/385437/serge-gnabry", "valueEur": 11800000, "club": "Bayern Muenchen", "primary": "Attacking Midfielder", "positions": ["AM", "LW"], "born": "1995-07-14", "country": "Germany" },
+      "eurUsdRate": 1.08,
+      "ratioFotmobOverTransfermarkt": 0.656,
+      "band": "inside 0.323 to 1.341 (the Round 669 fence)"
+    },
+    "note": "No 2026 move: his newest row is 2025 (Bayern Munich, Second Striker, 29, USD 27m) and the autumn 2025 snapshot simply has no 2026 row for him. Position carried as Transfermarkt's main position, which is also what his 2013 to 2025 rows say; bundesliga.com says Striker, FotMob attacking midfielder. Age is his age on 2026-01-01, the table's convention.",
+    "status": "verified"
+  },
+  {
+    "name": "Lucas Herrington",
+    "to": "Hull City",
+    "db": "Hull City",
+    "add": { "p": "Centre-Back", "a": 18, "usd": 8640000 },
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "sources": [
+      "https://www.coloradorapids.com/news/colorado-rapids-transfer-18-year-old-defender-lucas-herrington-to-hull-city",
+      "https://www.espn.com/soccer/team/squad/_/id/306/hull-city"
+    ],
+    "sourceNotes": [
+      "coloradorapids.com (official club release, August 2026): Colorado Rapids transfer 18 year old defender Lucas Herrington to Hull City (Premier League); the fee breaks the club record and the Rapids keep a sell on share. Their January 2026 signing release says central defender, born September 5, 2007, from Brisbane Roar.",
+      "espn.com Hull City 2026-27 squad: number 22, Lucas Herrington, D, 19, Australia.",
+      "hullcitytigers.com could not be resolved from this session (DNS failed three times, curl timed out), so the buying club's own page is not cited; mlssoccer.com (league official) carries the same transfer dated 2026-08-12."
+    ],
+    "born": "2007-09-05",
+    "insert": {
+      "player_name": "Lucas Herrington",
+      "position": "Centre-Back",
+      "age": 18,
+      "nationality": "Australia",
+      "club": "Hull City",
+      "market_value_usd": 8640000,
+      "year": 2026
+    },
+    "value": {
+      "transfermarkt": { "url": "https://www.transfermarkt.com/lucas-herrington/profil/spieler/1279984", "valueEur": 8000000, "updated": "2026-07-22", "club": "Hull City", "mainPosition": "Centre-Back", "born": "2007-09-05", "citizenship": ["Australia"] },
+      "fotmob": { "url": "https://www.fotmob.com/players/1686118/lucas-herrington", "valueEur": 1200000, "club": "Hull City", "primary": "Center-back", "positions": ["CB"], "born": "2007-09-05", "country": "Australia" },
+      "eurUsdRate": 1.08,
+      "ratioFotmobOverTransfermarkt": 0.15,
+      "band": "OUTSIDE 0.323 to 1.341 (the Round 669 fence): FotMob's estimate is a seventh of Transfermarkt's, so the value rests on one source"
+    },
+    "note": "The reported player (report 1bc9b2e5, 2026-09-03). He has no row in any year. Also in world_cup_players 2026 (Australia, number 25, DF, born 2007-09-05, listed at Colorado Rapids, which is where he was in June). He moved Colorado Rapids to Hull City in the summer 2026 window. Age is his age on 2026-01-01, the table's convention.",
+    "status": "partial",
+    "missing": ["market_value_usd"]
+  },
+  {
+    "name": "Connor Metcalfe",
+    "to": "St. Pauli",
+    "db": "FC St. Pauli",
+    "add": { "p": "Central Midfield", "a": 26, "usd": 1620000 },
+    "checked": "2026-10-01",
+    "sources": [
+      "https://www.fcstpauli.com/news/presserunde-connor-metcalfe-vor-vfl-wolfsburg-2627",
+      "https://www.bundesliga.com/en/2bundesliga/player/connor-metcalfe"
+    ],
+    "sourceNotes": [
+      "fcstpauli.com (official club, 2026-09-09): press round with Connor Metcalfe before the 2. Bundesliga match at VfL Wolfsburg on 2026-09-12, so he is in the 2026-27 FC St. Pauli squad. The club's 2022 signing release calls him a zentrale Mittelfeldspieler (central midfielder), Australian, from Melbourne City FC.",
+      "bundesliga.com (league official, season 2026/2027): FC St. Pauli, number 24, Midfielder, born November 5, 1999, Australia.",
+      "espn.com player 260643 agrees: St. Pauli, Midfielder, Australia, 11/5/1999, number 24. The fcstpauli.com squad page itself renders its roster by script and showed no names to the fetcher."
+    ],
+    "born": "1999-11-05",
+    "insert": {
+      "player_name": "Connor Metcalfe",
+      "position": "Central Midfield",
+      "age": 26,
+      "nationality": "Australia",
+      "club": "FC St. Pauli",
+      "market_value_usd": 1620000,
+      "year": 2026
+    },
+    "value": {
+      "transfermarkt": { "url": "https://www.transfermarkt.com/connor-metcalfe/profil/spieler/522223", "valueEur": 1500000, "updated": "2026-05-27", "club": "St. Pauli", "mainPosition": "Central Midfield", "born": "1999-11-05", "citizenship": ["Australia"] },
+      "fotmob": { "url": "https://www.fotmob.com/players/885870/connor-metcalfe", "valueEur": 869600, "club": "St. Pauli", "primary": "Attacking Midfielder", "positions": ["AM", "DM", "RM", "ST"], "born": "1999-11-05", "country": "Australia" },
+      "eurUsdRate": 1.08,
+      "ratioFotmobOverTransfermarkt": 0.58,
+      "band": "inside 0.323 to 1.341 (the Round 669 fence)"
+    },
+    "note": "No 2026 move: at FC St. Pauli since 2022 and no row in any year. FC St. Pauli play in the 2. Bundesliga in 2026-27 (relegated), which is what INSANE_CLUB_LEAGUE already says. Age is his age on 2026-01-01, the table's convention.",
+    "status": "verified"
+  },
+  {
+    "name": "Kai Trewin",
+    "to": "New York City FC",
+    "db": "New York City FC",
+    "add": { "p": "Defensive Midfield", "a": 24, "usd": 1944000 },
+    "window": "2026-01",
+    "checked": "2026-10-01",
+    "sources": [
+      "https://www.newyorkcityfc.com/news/new-york-city-fc-signs-defender-kai-trewin-from-melbourne-city-fc",
+      "https://www.espn.com/soccer/team/squad/_/id/17606/new-york-city-fc"
+    ],
+    "sourceNotes": [
+      "newyorkcityfc.com (official club, January 2026): New York City FC signs defender Kai Trewin from Melbourne City FC, Australian, 24, born May 18, 2001, from Batemans Bay, signed through the 2028-29 season with an option for 2029-30.",
+      "espn.com New York City FC 2026 squad: number 5, Kai Trewin, D, 25, Australia.",
+      "mlssoccer.com (league official, 2026-01-27) carries the same signing and says he plays centre back and holding midfield. He had right ankle surgery in July 2026 after the World Cup and is still on the roster."
+    ],
+    "born": "2001-05-18",
+    "insert": {
+      "player_name": "Kai Trewin",
+      "position": "Defensive Midfield",
+      "age": 24,
+      "nationality": "Australia",
+      "club": "New York City FC",
+      "market_value_usd": 1944000,
+      "year": 2026
+    },
+    "value": {
+      "transfermarkt": { "url": "https://www.transfermarkt.com/kai-trewin/profil/spieler/691326", "valueEur": 1800000, "updated": "2026-06-02", "club": "New York City", "mainPosition": "Defensive Midfield", "born": "2001-05-18", "citizenship": ["Australia"] },
+      "fotmob": { "url": "https://www.fotmob.com/players/1101030/kai-trewin", "valueEur": 1200000, "club": "New York City FC", "primary": "Defensive Midfielder", "positions": ["DM", "CB", "RWB", "CM"], "born": "2001-05-18", "country": "Australia" },
+      "eurUsdRate": 1.08,
+      "ratioFotmobOverTransfermarkt": 0.667,
+      "band": "inside 0.323 to 1.341 (the Round 669 fence)"
+    },
+    "note": "Moved Melbourne City FC to New York City FC in the January 2026 window and has no row in any year. Also in world_cup_players 2026 (Australia, number 15, DF). Position is Transfermarkt's main position, which FotMob's primary matches; his club and ESPN list him as a defender, so a reader who expects Centre-Back is not wrong, the table's source vocabulary just puts him a line higher. Age is his age on 2026-01-01, the table's convention.",
+    "status": "verified"
+  }
+]
