@@ -1,5 +1,5 @@
 import { FlagFromEmoji } from '@/components/FlagImg';
-import { useState, useCallback, useEffect, useMemo, useRef } from 'react';
+import { useState, useCallback, useEffect, useLayoutEffect, useMemo, useRef } from 'react';
 import { Loader2, Check, X, Minus, ArrowUp, ArrowDown } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { GameShell } from '@/components/game/GameShell';
@@ -15,6 +15,7 @@ import { PlayerAutocomplete } from '@/components/game/PlayerAutocomplete';
 import { NHL_PLAYER_SOURCE, normalizeName, type PlayerEntity } from '@/lib/playerSearch';
 import { useDailyPuzzle } from '@/hooks/useDailyPuzzle';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
+import styles from './PuckDetective.module.css';
 import {
   GUESS_LIMIT,
   MatchTier,
@@ -73,6 +74,15 @@ function directionIcon(dir: NumericDirection) {
 function directionClasses(dir: NumericDirection): string {
   if (dir === 'match') return 'text-correct border-correct/50 bg-correct/10';
   return 'text-amber-500 border-amber-500/50 bg-amber-500/10';
+}
+
+function tierDescription(tier: MatchTier): string {
+  return tier === 'exact' ? 'exact match' : tier === 'close' ? 'same position group' : 'no match';
+}
+
+function numericDescription(direction: NumericDirection, unknown: boolean): string {
+  if (unknown) return 'number unknown';
+  return direction === 'match' ? 'exact match' : direction === 'higher' ? 'mystery number is higher' : 'mystery number is lower';
 }
 
 const PuckDetective = () => {
@@ -223,6 +233,36 @@ const PuckDetective = () => {
 
   const won = gameStatus === 'won';
   const guessedIds = useMemo(() => new Set(storedGuesses.map((g) => g.playerId)), [storedGuesses]);
+  const pendingGuessRef = useRef<{ mode: Mode; mysteryId: number; playerId: number; ids: number[] } | null>(null);
+  const [guessCue, setGuessCue] = useState<{ mode: Mode; mysteryId: number; playerId: number; count: number } | null>(null);
+  const previousRoundRef = useRef({ mode, mysteryId: mystery?.playerId, count: storedGuesses.length });
+
+  useLayoutEffect(() => {
+    const previous = previousRoundRef.current;
+    const pending = pendingGuessRef.current;
+    pendingGuessRef.current = null;
+    previousRoundRef.current = { mode, mysteryId: mystery?.playerId, count: storedGuesses.length };
+    if (previous.mode !== mode || previous.mysteryId !== mystery?.playerId || storedGuesses.length < previous.count) {
+      setGuessCue(null);
+      return;
+    }
+    if (pending && pending.mode === mode && pending.mysteryId === mystery?.playerId &&
+      storedGuesses.length === pending.ids.length + 1 &&
+      pending.ids.every((id, index) => storedGuesses[index].playerId === id) &&
+      storedGuesses[storedGuesses.length - 1]?.playerId === pending.playerId) {
+      setGuessCue({ mode, mysteryId: pending.mysteryId, playerId: pending.playerId, count: storedGuesses.length });
+    }
+  }, [mode, mystery?.playerId, storedGuesses]);
+
+  useEffect(() => {
+    if (!guessCue) return;
+    const timer = window.setTimeout(() => setGuessCue(null), 600);
+    return () => window.clearTimeout(timer);
+  }, [guessCue]);
+
+  const activeCue = guessCue?.mode === mode && guessCue.mysteryId === mystery?.playerId &&
+    guessCue.count === storedGuesses.length && storedGuesses[storedGuesses.length - 1]?.playerId === guessCue.playerId
+    ? guessCue : null;
 
   // --- Submit a guess ----------------------------------------------------------
   const [query, setQuery] = useState('');
@@ -238,6 +278,7 @@ const PuckDetective = () => {
     if (guessedIds.has(match.playerId)) { setQuery(''); return; }
 
     const correct = isCorrectGuess(match, mystery);
+    pendingGuessRef.current = { mode, mysteryId: mystery.playerId, playerId: match.playerId, ids: storedGuesses.map(g => g.playerId) };
     setQuery('');
 
     if (mode === 'daily') {
@@ -251,7 +292,7 @@ const PuckDetective = () => {
         setUnlimitedStatus('lost');
       }
     }
-  }, [gameStatus, mystery, pool, guessedIds, mode, addDailyStored, unlimitedGuesses]);
+  }, [gameStatus, mystery, pool, guessedIds, mode, addDailyStored, unlimitedGuesses, storedGuesses]);
 
   // Unlimited streak tracking: bump on win, reset on loss, only when the
   // round just resolved (guards against re-firing on every render).
@@ -339,7 +380,7 @@ const PuckDetective = () => {
                   key={m}
                   onClick={() => switchMode(m)}
                   className={cn(
-                    'px-4 py-2 rounded-full text-sm font-semibold transition-all',
+                    'min-h-[44px] px-4 py-2 rounded-full text-sm font-semibold transition-all',
                     mode === m ? 'bg-primary text-primary-foreground' : 'bg-secondary text-secondary-foreground hover:bg-secondary/80',
                   )}
                 >
@@ -358,7 +399,7 @@ const PuckDetective = () => {
                     key={d}
                     onClick={() => changeDifficulty(d)}
                     className={cn(
-                      'px-6 py-2 rounded-full text-sm font-semibold transition-all capitalize',
+                      'min-h-[44px] px-6 py-2 rounded-full text-sm font-semibold transition-all capitalize',
                       difficulty === d
                         ? d === 'easy'
                           ? 'bg-correct text-correct-foreground'
@@ -390,7 +431,7 @@ const PuckDetective = () => {
         {phase === 'error' && (
           <div className="text-center py-12">
             <p className="text-destructive font-semibold mb-3">Couldn't load the NHL roster right now.</p>
-            <button onClick={boot} className="px-6 py-2.5 bg-primary text-primary-foreground rounded-full font-semibold">
+            <button onClick={boot} className="min-h-[44px] px-6 py-2.5 bg-primary text-primary-foreground rounded-full font-semibold">
               Try again
             </button>
           </div>
@@ -428,33 +469,44 @@ const PuckDetective = () => {
               <div className="space-y-2 mb-4">
                 {[...guesses].reverse().map((g, i) => (
                   <div
-                    key={`${g.player.playerId}-${i}`}
+                    key={g.player.playerId}
+                    data-puck-guess={g.player.playerId}
+                    data-puck-cue={activeCue?.playerId === g.player.playerId ? (g.isCorrect ? 'correct' : 'clues') : undefined}
                     className={cn(
                       'bg-card border rounded-xl px-4 py-3',
                       g.isCorrect ? 'border-correct' : 'border-border',
+                      activeCue?.playerId === g.player.playerId && styles.guessCue,
                     )}
                   >
                     <div className="flex items-center justify-between gap-2 mb-2">
-                      <span className="font-bold text-foreground truncate">{g.player.name}</span>
+                      <span className={cn('min-w-0 font-bold text-foreground', styles.fullName)}>{g.player.name}</span>
                       <span className="text-[10px] text-muted-foreground shrink-0">#{guesses.length - i}</span>
                     </div>
-                    <div className="flex flex-wrap gap-1.5">
-                      <span className={cn('inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-semibold border', tierChipClasses(g.feedback.team))}>
+                    <div className={cn('flex flex-wrap gap-1.5', activeCue?.playerId === g.player.playerId && styles.attributeCue)}>
+                      <span data-puck-attribute="team" aria-label={`Team: ${teamLabel(g.player.team)}, ${tierDescription(g.feedback.team)}`} className={cn('inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-semibold border', tierChipClasses(g.feedback.team))}>
                         {tierIcon(g.feedback.team)} {teamLabel(g.player.team)}
                       </span>
-                      <span className={cn('inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-semibold border', tierChipClasses(g.feedback.position))}>
+                      <span data-puck-attribute="position" aria-label={`Position: ${positionLabel(g.player.position)}, ${tierDescription(g.feedback.position)}`} className={cn('inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-semibold border', tierChipClasses(g.feedback.position))}>
                         {tierIcon(g.feedback.position)} {positionLabel(g.player.position)}
                       </span>
-                      <span className={cn('inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-semibold border', tierChipClasses(g.feedback.country))}>
+                      <span data-puck-attribute="country" aria-label={`Country: ${countryLabel(g.player.country)}, ${tierDescription(g.feedback.country)}`} className={cn('inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-semibold border', tierChipClasses(g.feedback.country))}>
                         {tierIcon(g.feedback.country)} <FlagFromEmoji emoji={countryFlag(g.player.country)} size={14} /> {countryLabel(g.player.country)}
                       </span>
-                      <span className={cn('inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-semibold border', directionClasses(g.feedback.ageDirection))}>
+                      <span data-puck-attribute="age" aria-label={`Age: ${g.player.age}, ${numericDescription(g.feedback.ageDirection, false)}`} className={cn('inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-semibold border', directionClasses(g.feedback.ageDirection))}>
                         {directionIcon(g.feedback.ageDirection)} Age {g.player.age}
                       </span>
-                      <span className={cn('inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-semibold border', directionClasses(g.feedback.jerseyDirection))}>
+                      <span data-puck-attribute="jersey" aria-label={`Jersey: ${g.player.jerseyNumber ?? '?'}, ${numericDescription(g.feedback.jerseyDirection, g.player.jerseyNumber == null || mystery.jerseyNumber == null)}`} className={cn('inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-semibold border', directionClasses(g.feedback.jerseyDirection))}>
                         {directionIcon(g.feedback.jerseyDirection)} #{g.player.jerseyNumber ?? '?'}
                       </span>
                     </div>
+                    {activeCue?.playerId === g.player.playerId && (
+                      <span className="sr-only" role="status">
+                        Guess {guesses.length}: {g.player.name}. {g.isCorrect ? 'Correct player.' : 'Clues revealed.'}
+                        {' '}Team: {tierDescription(g.feedback.team)}. Position: {tierDescription(g.feedback.position)}.
+                        {' '}Country: {tierDescription(g.feedback.country)}. Age: {numericDescription(g.feedback.ageDirection, false)}.
+                        {' '}Jersey: {numericDescription(g.feedback.jerseyDirection, g.player.jerseyNumber == null || mystery.jerseyNumber == null)}.
+                      </span>
+                    )}
                   </div>
                 ))}
               </div>

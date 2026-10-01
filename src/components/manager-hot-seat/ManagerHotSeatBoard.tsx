@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { ChevronLeft, Shuffle, CalendarDays, RotateCcw } from 'lucide-react';
 import ShareButtons from '@/components/game/ShareButtons';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
@@ -101,7 +101,7 @@ function Progress({ run }: { run: HotSeatRun }) {
 }
 
 export default function ManagerHotSeatBoard() {
-  const today = useMemo(() => getTodayET(), []);
+  const today = useRef(getTodayET()).current;
   const daily = useMemo(() => dailyHotSeat(today), [today]);
   const [phase, setPhase] = useState<Phase>('menu');
   const [run, setRun] = useState<HotSeatRun | null>(null);

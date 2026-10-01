@@ -11,6 +11,7 @@ import {
   type GridCategory,
   type GridCell,
   type GridDifficulty,
+  type GridFetchOptions,
 } from '@/lib/gridEngine';
 
 /**
@@ -131,6 +132,8 @@ const NHL_GRID: FranchiseGridConfig<IndexedPlayer> = {
   franchiseColumn: 'teams',
   orderColumn: 'player_name',
   minPoolSize: MIN_POOL_SIZE,
+  /* One row per player in this table, so the row id is the player's id. */
+  idColumn: 'id',
   toPlayer(raw) {
     const name = String(raw.player_name ?? '').trim();
     const teamsStr = String(raw.teams ?? '').trim();
@@ -154,8 +157,8 @@ const NHL_GRID: FranchiseGridConfig<IndexedPlayer> = {
  * or an implausibly small result, so the page can show an error state
  * instead of a broken grid.
  */
-export function fetchHockeyGridData(): Promise<HockeyGridData | null> {
-  return fetchFranchiseGridData(NHL_GRID);
+export function fetchHockeyGridData(opts?: GridFetchOptions): Promise<HockeyGridData | null> {
+  return fetchFranchiseGridData(NHL_GRID, opts);
 }
 
 /** Bespoke PlayerAutocomplete source for nhl_player_stats (NOT the shared NHL_PLAYER_SOURCE, see module docstring). */
