@@ -1,5 +1,32 @@
 # Work board
 
+**2026-10-01, Codex799 F1 worked-example correction ACCEPTED.**
+The actual rendered guide now agrees with the unchanged fourth-clue first-correct
+guess:400 points after three hints, with no prior wrong guesses. Three real-hook/
+shared-guide outcomes pass; the five independent earlier/later clue scores stay held.
+Both asserted changed copies produce one intended assertion failure, one independent
+real-hook pass and one explicit skip. The legacy McLaren example prop now says10;
+this is source consistency only, since that unused prop is not rendered by the guide.
+Primary sources checked Oct1: [Formula1 team profile](https://www.formula1.com/en/teams/mclaren)
+and the [FIA Oct5,2025 Singapore transcript](https://www.fia.com/news/f1-2025-singapore-grand-prix-post-race-press-conference-transcript).
+No puzzle facts, gameplay hooks, score rules or other guide sentences changed.
+
+Combined798/799 production types0 and two builds pass. The F1 saved page was sampled
+at0/5/11 days with zero failed/date-dependent blocks; all15 rebuilt-artifact fences
+pass, plus the focused F1, metadata and generated-search fences. Relative to the
+merged e0882389 baseline, only four owned raw saved pages changed and184 others held;
+only three real content fingerprints changed and165 other URL dates/hashes held.
+For this799 copy, all167 other current ledger rows and all168 sitemap URLs remain
+held. The search generator changed only its derived source hash. Existing accepted
+792/794 snapshots and both lanes' news were preserved.
+Receipts: TEMP/dukb-round799-f1-guide-score/builder-receipt.json,
+TEMP/dukb-round797-production-20261001/combined798799-preservation-receipt.json,
+combined798799-fourteen-artifact-fences.log, combined798799-boot-fence.log and
+combined799-focused-final.log; TEMP/dukb-round799-owned-copy-receipt.json.
+798 native QA is correcting measured local focused-row clipping; the next completed
+MLB build gets its own final artifact checks. Current full-suite/publication and
+Google approval remain separate. Next free800; Claude733/734 and other lanes held.
+
 **2026-10-01, Codex797 Tycoon runner correction ACCEPTED.**
 The unchanged six gameplay outcomes reproduced a Vitest worker RPC timeout during
 long synchronous fake-frame loops. The actual test now yields a real Node turn every

@@ -1,5 +1,17 @@
 # Project state
 
+## ACCEPTED 2026-10-01: F1 guide score and saved-page agreement
+
+799's championship example now correctly promises400 at clue four. Three actual
+hook/guide outcomes and both effective changed-copy controls pass; all other clue
+scores stay unchanged. The unused McLaren prop says the independently verified10.
+Types0, two production builds, three-clock saved-page capture, all15 artifact fences
+and focused F1/search/metadata checks pass. Only F1's current saved page/ledger row
+and derived search source hash changed here; all167 other current URL ledger rows
+hold. Exact receipts and primary source links are on WORKBOARD.798's real narrow
+focused-row clipping correction and native checks continue before its final rebuild.
+Full-node regression and publication remain due. Next free800; Claude claims stand.
+
 ## ACCEPTED 2026-10-01: Tycoon replay checks without worker starvation
 
 797's six actual gameplay outcomes and all eight original negative controls pass.
