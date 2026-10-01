@@ -1,4 +1,5 @@
 import { supabase } from '@/integrations/supabase/client';
+import { normalizeName } from '@/lib/playerSearch';
 
 /**
  * The franchise grid engine (Round 402, phase 1 of
@@ -65,11 +66,28 @@ export type GridDifficulty = 'easy' | 'normal' | 'hard';
 export interface FranchisePlayer {
   name: string;
   franchises: Set<string>;
+  /** The source's own id for this player, present only when the fetch was
+      asked for it (see GridFetchOptions). The games never ask. */
+  id?: string;
+}
+
+/** Round 653: what a caller can ask the fetch for beyond what the game needs.
+    The grid archive counts players by id, because a table can hold the same
+    player twice or two players under one name, and the page cannot. The games
+    do not need ids, so they do not download the column. */
+export interface GridFetchOptions {
+  withIds?: boolean;
 }
 
 export interface FranchiseGridData<P extends FranchisePlayer> {
   players: P[];
-  byNormalizedName: Map<string, P>;
+  /** Every player under a normalized name, in the order the rows loaded.
+      Round 653: this held ONE player per name, whichever row loaded last, so
+      a name two players share was judged on one of them only. The college
+      table has 1,697 such names, and typing "Danny Manning" for Kansas was
+      judged on a later Danny Manning with 59 games and refused. See
+      pickNamesake for how a guess reads this. */
+  byNormalizedName: Map<string, P[]>;
 }
 
 /** One sport's configuration of the engine. */
@@ -85,24 +103,28 @@ export interface FranchiseGridConfig<P extends FranchisePlayer> {
   toPlayer: (raw: Record<string, unknown>) => P | null;
   /** Below this many indexed players the fetch is treated as broken and the page shows its error state. */
   minPoolSize: number;
+  /** The column that identifies a player, loaded only when a caller passes withIds. */
+  idColumn?: string;
 }
 
 // ---------------------------------------------------------------------------
 // Names
 // ---------------------------------------------------------------------------
 
-// Combining diacritical marks block (U+0300 to U+036F), built from char codes
-// (never literal accented characters) so it cannot be mangled by copy/paste
-// or re-encoding, matching the DIACRITICS regex in src/lib/playerSearch.ts.
-const DIACRITICS = new RegExp('[' + String.fromCharCode(0x0300) + '-' + String.fromCharCode(0x036f) + ']', 'g');
-
+/**
+ * The key a player is indexed under, and the key a typed name is looked up
+ * by. It IS the search layer's normalizeName, on purpose. Round 653 fix: this
+ * used to be its own NFD strip and lowercase, while the four grid pages look a
+ * typed name up with normalizeName, which also folds the Latin letters NFD
+ * cannot decompose (ð, ø, ł, æ, ß, þ). The two agreed on every name but the
+ * ones with such a letter, and there the index said "petur guðmundsson" while
+ * the page asked for "petur gudmundsson": Pétur Guðmundsson was refused in the
+ * live NBA grid for Lakers x Spurs, a cell the archive lists him under. The
+ * generator's lookup check found it the first time it ran. One normaliser for
+ * the index and every lookup, and the drift cannot come back.
+ */
 export function normalizeGridName(name: string): string {
-  return name
-    .normalize('NFD')
-    .replace(DIACRITICS, '')
-    .toLowerCase()
-    .trim()
-    .replace(/\s+/g, ' ');
+  return normalizeName(name);
 }
 
 /** 'CLE,LAL,MIA' to a Set of upper case codes; empty when the string is blank. */
@@ -124,7 +146,11 @@ export function splitFranchises(list: string): Set<string> {
  * validates every guess against. Returns null on failure or an implausibly
  * small result, so the page can show an error state instead of a broken grid.
  */
-export async function fetchFranchiseGridData<P extends FranchisePlayer>(cfg: FranchiseGridConfig<P>): Promise<FranchiseGridData<P> | null> {
+export async function fetchFranchiseGridData<P extends FranchisePlayer>(cfg: FranchiseGridConfig<P>, opts: GridFetchOptions = {}): Promise<FranchiseGridData<P> | null> {
+  /* Asked for ids with no column to read them from: refuse rather than hand
+     back players the caller will count wrong. */
+  if (opts.withIds && !cfg.idColumn) return null;
+  const select = opts.withIds ? `${cfg.idColumn}, ${cfg.select}` : cfg.select;
   try {
     // PostgREST caps every select at 1000 rows regardless of .limit(),
     // so page through the table with .range() until a short page arrives.
@@ -143,7 +169,7 @@ export async function fetchFranchiseGridData<P extends FranchisePlayer>(cfg: Fra
          rather than hang. */
       const page = async () => await supabase
         .from(cfg.table as any)
-        .select(cfg.select)
+        .select(select)
         .not(cfg.franchiseColumn, 'is', null)
         .order(cfg.orderColumn, { ascending: true })
         .range(from, from + PAGE_SIZE - 1);
@@ -158,18 +184,37 @@ export async function fetchFranchiseGridData<P extends FranchisePlayer>(cfg: Fra
     }
 
     const players: P[] = [];
-    const byNormalizedName = new Map<string, P>();
+    const byNormalizedName = new Map<string, P[]>();
     for (const raw of rows) {
       const entry = cfg.toPlayer(raw);
       if (!entry) continue;
+      if (opts.withIds && cfg.idColumn && raw[cfg.idColumn] != null) entry.id = String(raw[cfg.idColumn]);
       players.push(entry);
-      byNormalizedName.set(normalizeGridName(entry.name), entry);
+      const key = normalizeGridName(entry.name);
+      const under = byNormalizedName.get(key);
+      if (under) under.push(entry); else byNormalizedName.set(key, [entry]);
     }
 
     return players.length >= cfg.minPoolSize ? { players, byNormalizedName } : null;
   } catch {
     return null;
   }
+}
+
+/**
+ * The player a typed name is judged as, for one cell. A guess is right when
+ * ANY player under that name fits the cell, so the one who fits is the one
+ * recorded; when none fits, the first stands in so the miss still names a
+ * real player. Null when nobody carries the name.
+ *
+ * Round 653. Every grid page and both grid hooks read the index through this,
+ * and scripts/simGridArchive.mjs resolves every published answer through it
+ * too, so the archive lists only names this path accepts. The same shape in
+ * every sport: a fix here is a fix in all of them.
+ */
+export function pickNamesake<P>(candidates: P[] | undefined, fits: (player: P) => boolean): P | null {
+  if (!candidates || candidates.length === 0) return null;
+  return candidates.find(fits) ?? candidates[0];
 }
 
 /** A cell is answered when the player satisfies both of its categories. */

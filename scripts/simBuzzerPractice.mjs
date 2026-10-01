@@ -17,15 +17,17 @@ const controls = {
   physics: { anchor: 'takeShot({ x: fade, arc, power }, setup, rngRef.current)', replacement: 'takeShot({ x: fade, arc, power: 0.99 }, setup, rngRef.current)', failed: 6, passed: 3, name: 'uses the exact seeded engine path and retains field arrow aim' },
   completion: { anchor: "isDone && !bookedAlready && mode !== 'practice'", replacement: 'isDone && !bookedAlready', failed: 3, passed: 6, name: 'finishes and replays ten actual shots without record, completion or recorded sharing' },
   record: { anchor: "phase !== 'done' || mode !== 'daily' || savedRef.current", replacement: "phase !== 'done' || mode === 'unlimited' || savedRef.current", failed: 3, passed: 6, name: 'finishes and replays ten actual shots without record, completion or recorded sharing' },
-  restored: { anchor: "if (m === 'daily' && restored) {\n      savedRef.current = true;", replacement: "if (m === 'daily' && restored) {", failed: 2, passed: 7, name: 'preserves a restored daily byte for byte across practice and returning to today' },
-  stale: { anchor: "if (m === 'daily' && restored) {\n      savedRef.current = true;", replacement: "if (m === 'daily' && restored) {\n      savedRef.current = true; markRestoredFinish(SLUG);", failed: 1, passed: 8, name: 'records an unlimited finish after returning to a restored daily without stale restore suppression' },
+  restored: { anchor: "if (completedDaily) {\n      savedRef.current = true;", replacement: "if (completedDaily) {", failed: 2, passed: 7, name: 'preserves a restored daily byte for byte across practice and returning to today' },
+  stale: { anchor: "if (completedDaily) {\n      savedRef.current = true;", replacement: "if (completedDaily) {\n      savedRef.current = true; markRestoredFinish(SLUG);", failed: 1, passed: 8, name: 'records an unlimited finish after returning to a restored daily without stale restore suppression' },
   focus: { anchor: 'target?.focus({ preventScroll: true });', replacement: 'void target;', failed: 3, passed: 6, name: 'finishes and replays ten actual shots without record, completion or recorded sharing' },
   help: { anchor: "if (phase === 'aiming' || phase === 'flying') pause();", replacement: 'void phase;', failed: 1, passed: 8, name: 'pauses rules and flight without consuming power or settling early' },
   share: { anchor: "mode !== 'practice' && <ShareButtons", replacement: 'true && <ShareButtons', failed: 1, passed: 8, name: 'finishes and replays ten actual shots without record, completion or recorded sharing' },
+  daily: { anchor: "const completedDaily = m === 'daily' ? completedDailyRef.current : null;", replacement: "const completedDaily = m === 'daily' ? restored : null;", name: 'keeps a newly finished daily booked across practice and unlimited without rewriting or recording it' },
+  booked: { anchor: 'setBookedDaily(completedDaily !== null);', replacement: 'setBookedDaily(false);', name: 'keeps a newly finished daily in memory when private storage refuses its write' },
 };
 assert.ok(!control || control in controls, 'Unknown Buzzer practice control');
 const sourcePath = path.join(root, 'src/components/buzzer-beater/BuzzerBeaterBoard.tsx');
-const original = await readFile(sourcePath, 'utf8');
+const original = (await readFile(sourcePath, 'utf8')).replace(/\r\n/g, '\n');
 const source = original.replace(/\r\n/g, '\n');
 let folder;
 try {
@@ -56,16 +58,16 @@ try {
   if (control) {
     const expected = controls[control];
     assert.notEqual(run.status, 0, 'Changed input/bookkeeping must fail rendered outcomes');
-    assert.match(output, /Tests\s+1 failed.*1 passed.*7 skipped/, output.slice(-6000));
+    assert.match(output, /Tests\s+1 failed.*1 passed.*9 skipped/, output.slice(-6000));
     assert.ok(output.includes(`FAIL  src/test/buzzerPractice.test.tsx > Buzzer Beater steady practice > ${expected.name}`), 'Intended outcome assertion must fail');
     assert.doesNotMatch(output, /Failed to resolve import|Cannot find module|Failed to load url|Unhandled Errors|Test timed out|RPC timeout/, 'Loading or timeout errors never earn control credit');
-    console.log(`simBuzzerPractice ${control}: the intended actual outcome rejects the binding; one independent actual outcome passes and seven tests are explicitly skipped. The separate positive gate runs all nine.`);
+    console.log(`simBuzzerPractice ${control}: the intended actual outcome rejects the binding; one independent actual outcome passes and nine tests are explicitly skipped. The separate positive gate runs all eleven.`);
   } else {
     assert.equal(run.status, 0, output.slice(-6000));
-    assert.match(output, /9 passed/);
-    console.log('simBuzzerPractice: nine actual Board checks pass for delayed input, exact paths, continued capture, ten-shot/replay, rules/pause/focus and untouched recorded modes.');
+    assert.match(output, /11 passed/);
+    console.log('simBuzzerPractice: eleven actual Board checks pass for delayed input, exact paths, continued capture, ten-shot/replay, rules/pause/focus, fresh daily roundtrips and private storage refusal.');
   }
-  assert.equal(await readFile(sourcePath, 'utf8'), original, 'Production source remains unchanged');
+  assert.equal((await readFile(sourcePath, 'utf8')).replace(/\r\n/g, '\n'), original, 'Production source remains unchanged');
   console.log('simBuzzerPractice: real shot/flight and record/completion lifecycle execute; copied controls preserve original sources and rules.');
 } finally {
   if (folder) { await rm(path.join(folder, 'BuzzerBeaterBoard.tsx'), { force: true }); await rmdir(folder); }
