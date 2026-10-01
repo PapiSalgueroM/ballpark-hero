@@ -78,7 +78,11 @@ const SPORT_OPTIONS: SportOption[] = [
    does. So the two eager board calls were always live scans, and the choice
    below is between two live board scans and four, not between none and two. The
    decision still holds on those numbers. The cache is real, it just sits under
-   the personal rank card rather than under the board. */
+   the personal rank card rather than under the board.
+
+   Round 839: true again for one of the two. The unfiltered All Time board now
+   reads player_ranks (migration 20261001220000); Today, 7 Days, 30 Days and
+   every sport filter are still computed live, over an index range on the day. */
 type Period = 'today' | 'week' | 'month' | 'alltime';
 
 const ALL_PERIODS: Period[] = ['today', 'week', 'month', 'alltime'];
@@ -107,6 +111,14 @@ const mapBoard = (res: any): BoardRow[] =>
         gamesPlayed: Number(r.games_played) || 0,
       }))
     : [];
+
+/* Round 839: supabase-js RESOLVES on an HTTP error, it does not throw. A 500
+   comes back as { data: null, error }, mapBoard turns that into an empty list,
+   and the catch below never runs. On 2026-10-01 the Today board was answering
+   57014 (statement timeout) on every load and this page told every visitor
+   "No scores yet today. Be the first!" on a day 293 players had scored. A
+   board response counts as loaded only when it carries no error and an array. */
+const boardFailed = (res: any): boolean => !!res?.error || !Array.isArray(res?.data);
 
 const mapMine = (res: any): MyRank | null => {
   const row = Array.isArray(res?.data) ? res.data[0] : null;
@@ -181,6 +193,10 @@ export default function Leaderboard() {
     setFailed(blank(false));
 
     const slugs = slugsFor(sport);
+    /* Round 839: the two eager windows are marked in flight like the lazy ones,
+       so the window effect below can also serve a retry of Today or All Time
+       without doubling this request. */
+    EAGER_PERIODS.forEach(p => inFlight.current.add(p));
     (async () => {
       try {
         const [todayBoard, allBoard, myToday, myAll] = await Promise.all([
@@ -190,6 +206,7 @@ export default function Leaderboard() {
           (supabase.rpc as any)('global_rank', { p_player: ownHandle, p_period: 'alltime', p_games: slugs }),
         ]);
         if (genRef.current !== gen) return;
+        setFailed(prev => ({ ...prev, today: boardFailed(todayBoard), alltime: boardFailed(allBoard) }));
         setRows(prev => ({ ...prev, today: mapBoard(todayBoard), alltime: mapBoard(allBoard) }));
         setMyRank(prev => ({ ...prev, today: mapMine(myToday), alltime: mapMine(myAll) }));
       } catch {
@@ -197,6 +214,8 @@ export default function Leaderboard() {
         setFailed(prev => ({ ...prev, today: true, alltime: true }));
         setRows(prev => ({ ...prev, today: [], alltime: [] }));
         setMyRank(prev => ({ ...prev, today: null, alltime: null }));
+      } finally {
+        if (genRef.current === gen) EAGER_PERIODS.forEach(p => inFlight.current.delete(p));
       }
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -215,7 +234,12 @@ export default function Leaderboard() {
      loaded, and `failed` is failed. */
   useEffect(() => {
     const period = activeTab;
-    if (EAGER_PERIODS.includes(period)) return;
+    /* Round 839: this used to return early for Today and All Time, on the
+       reasoning that the effect above owns them. It does on mount and on a
+       filter change (they are in flight, so the check below skips them), but
+       "Try again" clears one window and nothing above reruns, so a retried
+       Today board sat on its spinner for good. Nobody saw it only because the
+       failed panel could never show (see boardFailed). */
     if (rows[period] !== undefined || failed[period]) return;
     if (inFlight.current.has(period)) return;
 
@@ -229,6 +253,7 @@ export default function Leaderboard() {
           (supabase.rpc as any)('global_rank', { p_player: ownHandle, p_period: period, p_games: slugs }),
         ]);
         if (genRef.current !== gen) return;
+        setFailed(prev => ({ ...prev, [period]: boardFailed(board) }));
         setRows(prev => ({ ...prev, [period]: mapBoard(board) }));
         setMyRank(prev => ({ ...prev, [period]: mapMine(mine) }));
       } catch {
@@ -237,7 +262,10 @@ export default function Leaderboard() {
         setRows(prev => ({ ...prev, [period]: [] }));
         setMyRank(prev => ({ ...prev, [period]: null }));
       } finally {
-        inFlight.current.delete(period);
+        /* Only the current filter's request may clear the mark: an older one
+           finishing late would otherwise unmark a window the newer filter has
+           in the air and let it be fetched twice. */
+        if (genRef.current === gen) inFlight.current.delete(period);
       }
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
