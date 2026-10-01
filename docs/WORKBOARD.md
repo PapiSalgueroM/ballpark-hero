@@ -1,5 +1,28 @@
 # Work board
 
+**2026-10-01, Codex779 source/browser checkpoint: Budget Builder decisions accepted.**
+The real Board previews original candidate cost, exact replaced-player refund, remaining
+budget, XI rating/filled slots and honestly labeled current-condition status. Native Confirm
+submits that exact Player once. Preview/Cancel spends nothing; refused/no-op callbacks keep
+the shortlist and stay quiet. Committed signing/release returns to the stable labeled slot,
+with finite420ms feedback and static reduced motion. If a search removes the original row,
+Cancel focuses the connected Search input instead of a detached element. Search/Close are
+labeled, all new targets are at least44px in both dimensions and the existing60-match limit
+stays explicit. Hook/data/criteria, affordability/refunds and scoring are unchanged.
+
+Nine actual Board/real-hook tests and seven asserted source controls pass. Each control has
+one intended assertion failure, one independent outcome passing and seven tests explicitly
+skipped; the separate positive runs all nine. Eight native width/motion contexts pass944
+checks, including paired complete XI/series/score/share/completion, exact identity, the1000M
+replacement boundary, no-op, excluded-row Cancel, keyboard Close/Escape, focus and quiet clones.
+Overflow0; long names fit, reaction area40px, layout boxes and scroll stay stable, normal cues
+run once and disappear, reduced cues stay static. Six app/engine bytes stay unchanged during
+QA; no browser errors/external requests, browser/server and copied-control folders cleaned.
+Exact app types0. Report, controls-receipt.json, logs and inspected390px screenshot:
+TEMP/dukb-round779-budget-audit. Native proof uses finished772 utilities plus actual scoped
+CSS; final combined current-main build/CSS/fifteen fences and publication remain pending.
+Claude781-784 reservations stand; next free785.
+
 **2026-10-01, Codex780 COMPLETE: test-only lineup cap keys corrected.**
 The two mocked basketball fixtures now use existing perfect-lineup-nba key/path. All original
 nine picker and six focus/identity tests pass (15/15). Completion stays mocked; production

@@ -1,5 +1,14 @@
 # Project state
 
+## CHECKPOINT 2026-10-01: Budget Builder source and native decisions accepted
+
+779 adds exact signing previews and confirmation, truthful finite/static feedback, and native
+picker focus, including Cancel when Search removes its opener. Nine real Board/hook tests,
+seven asserted controls, app types0 and eight native cases/944 checks pass. Completed XI,
+series, score/share/completion and original candidate identity remain paired with the existing
+hook. WORKBOARD carries receipts and the preliminary772-CSS boundary. Combined current-main
+build/fences and publication remain pending.777/778 final native keyboard checks continue.
+
 ## CHECKPOINT 2026-10-01: lineup fixture cap correction accepted, full gate being repaired
 
 780 is complete: both test-only key/path corrections preserve all15 original outcomes; the
