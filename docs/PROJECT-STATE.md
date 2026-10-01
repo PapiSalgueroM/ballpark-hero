@@ -1,5 +1,17 @@
 # Project state
 
+## IN PROGRESS 2026-10-01: Puck Detective and Soccer Career phone claimed
+
+790 owns stable Puck Detective history, truthful committed feedback and readable controls.
+791 owns only Soccer Career PhonePanel modal keyboard/focus and44px local controls. Exact
+file scopes and actual-outcome/native acceptance are on WORKBOARD; all Claude reservations
+stand. Root claims only786/787's two generated snapshots and derived ledger/sitemap entries,
+with a fresh combined production build/fifteen fences/targeted boots before acceptance.
+788's missing combined private-store then later Unlimited path now passes22 tests, four
+effective copied controls and four native private flows. Only18 test lines changed; app
+source stays intact. The unchanged affected pause gate also passes16 cases. Next free792.
+Source commits update the preview; publication and Google approval remain separate.
+
 ## CHECKPOINT 2026-10-01: durable Hot Seat pin accepted, private-path evidence supplemented
 
 789's two-line pin passes types,240 unchanged engine setups/24 replays, full Daily Reload

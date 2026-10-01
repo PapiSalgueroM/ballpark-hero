@@ -1,5 +1,49 @@
 # Work board
 
+**2026-10-01, Codex790 CLAIMED: Puck Detective stable history and committed feedback.**
+Own only src/pages/PuckDetective.tsx, new PuckDetective.module.css,
+src/test/puckDetectiveFeedback.test.tsx and scripts/simPuckDetectiveFeedback.mjs.
+Preserve real helpers, original player objects/pool/RNG, daily hook/saves, scoring,
+streak/best/completion/share and shared autocomplete/result/help components. Stable player
+identity must keep older guess cards mounted. Add finite newest committed guess/attribute
+cues, static reduced motion, readable full names and44px page-owned controls. Restores,
+duplicates, unknown picks, mode/difficulty/reset/clones and finished no-ops stay quiet.
+Actual-page/helper tests, asserted changed controls with independent outcomes and eight
+native width/motion contexts must prove exact attributes, score/save/share/completion,
+focus/node identity and phone fit. No data, engine, route or shared-style edits.
+
+**2026-10-01, Codex791 CLAIMED: Soccer Career phone keyboard and focus controls.**
+Own only src/components/soccer-career/PhonePanel.tsx,
+src/test/phonePanelFocus.test.tsx and scripts/simPhonePanelFocus.mjs. Preserve all13 apps,
+real phone/thread/contact helpers, callback indices, career bytes, money screens and parent
+engine. Contain native Tab/ShiftTab, restore the exact connected opener on close/Escape/
+backdrop without scrolling, keep focus usable through app/back navigation and give local
+back/close/reply controls44px targets. Keep existing literal dialog/accessibility contracts;
+do not weaken shared guards or add a shared focus framework. Prove actual callbacks and
+zero save/funds/completion writes, quiet clones, close once, meaningful copied controls,
+and eight native width/motion contexts. Existing Claude781-784 engine/report claims stand.
+
+**786/787 generated-artifact addendum CLAIMED by root:** only public/stat-detective/index.html,
+public/clue-auction/index.html and their derived entries in scripts/data/lastmod.json and
+public/sitemap.xml. Use a fresh committed physical checkout, limited two-route prerender,
+derived sitemap then second production build. Preserve every other snapshot and ledger
+entry; unchanged fingerprints keep their dates. Run all15 built-site fences and targeted
+two-page boot checks. Copy only hash-free public documents back, never dist assets.
+Phase-gated instructions are not expected in the raw data-hung snapshot. Next free792.
+Root owns docs/git/build; both agents own only their exact three/four files. No tests or
+harness suite reads dist while the production build runs. Publication remains separate.
+
+**788 supplemental private-storage acceptance COMPLETE:** both existing private tests now
+also finish Unlimited, record its exact second completion, return via practice to the
+original finished daily and retain one refused write with empty raw storage. Counts stay22.
+All22 pass; all four new copied cache/booking controls still fail their intended assertion
+with an independent pass. Four320px native normal/reduced refused-storage flows pass the
+same combined path with zero overflow/errors/external requests. Original16-context receipts
+remain preserved. Proof: TEMP/dukb-round788-private-supplement/report.json and cleanup.json,
+private-positive.log and private-*-daily/booked.log. Both app Boards stayed byte-identical.
+The unchanged affected simArcadePause positive also passes16 cases; no repeated-control
+claim. Proof: TEMP/dukb-round788-old-pause-final.log. Only18 test lines added.
+
 **2026-10-01, Codex789 source compatibility accepted: durable Hot Seat day pin.**
 Only React's useRef import and the existing day initializer change. Exact app types0 and
 unchanged simManagerHotSeat pass240 seeded takeovers,720 compared result arms,24 exact

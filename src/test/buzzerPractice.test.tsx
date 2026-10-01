@@ -308,5 +308,15 @@ describe('Buzzer Beater steady practice', () => {
     expect(screen.getByText(new RegExp(`^${daily.points} points`))).toBeVisible();
     expect(recordCompletion).toHaveBeenCalledTimes(1); expect(write).toHaveBeenCalledTimes(1);
     expect(writeArcadeRun).toHaveBeenCalledTimes(1); expect(localStorage.length).toBe(0);
+    fireEvent.click(button('Another ten')); const unlimited = finishRecorded(view);
+    expect(recordCompletion).toHaveBeenNthCalledWith(2, '/buzzer-beater', unlimited.points, null, unlimited.made);
+    expect(recordCompletion).toHaveBeenCalledTimes(2); expect(write).toHaveBeenCalledTimes(1);
+    expect(writeArcadeRun).toHaveBeenCalledTimes(1); expect(localStorage.length).toBe(0);
+    fireEvent.click(button('Steady practice')); finishPractice(view); fireEvent.click(button("Today's ten"));
+    expect(board(view)).toHaveAttribute('data-arcade-phase', 'done');
+    expect(screen.getByText(`${daily.made} of 10 made`)).toBeVisible();
+    expect(screen.getByText(new RegExp(`^${daily.points} points`))).toBeVisible();
+    expect(recordCompletion).toHaveBeenCalledTimes(2); expect(write).toHaveBeenCalledTimes(1);
+    expect(writeArcadeRun).toHaveBeenCalledTimes(1); expect(localStorage.length).toBe(0);
   }, 30000);
 });

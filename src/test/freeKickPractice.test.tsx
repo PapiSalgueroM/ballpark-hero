@@ -263,5 +263,13 @@ describe('actual Free Kick steady practice', { timeout: 30000 }, () => {
     expect(view.getByText(`${daily.goals} of 10 scored`)).toBeVisible();
     expect(view.getByText(new RegExp(`^${daily.points} points`))).toBeVisible();
     expect(recordCompletion).toHaveBeenCalledTimes(1); expect(write).toHaveBeenCalledTimes(1); expect(localStorage.length).toBe(0);
+    click(view, 'Another ten'); const unlimited = finishRecorded(view);
+    expect(recordCompletion).toHaveBeenNthCalledWith(2, '/free-kick', unlimited.points, null, unlimited.goals);
+    expect(recordCompletion).toHaveBeenCalledTimes(2); expect(write).toHaveBeenCalledTimes(1); expect(localStorage.length).toBe(0);
+    start(view); finishPractice(view); click(view, "Today's ten");
+    expect(view.container.querySelector('[data-arcade-phase]')).toHaveAttribute('data-arcade-phase', 'done');
+    expect(view.getByText(`${daily.goals} of 10 scored`)).toBeVisible();
+    expect(view.getByText(new RegExp(`^${daily.points} points`))).toBeVisible();
+    expect(recordCompletion).toHaveBeenCalledTimes(2); expect(write).toHaveBeenCalledTimes(1); expect(localStorage.length).toBe(0);
   });
 });
