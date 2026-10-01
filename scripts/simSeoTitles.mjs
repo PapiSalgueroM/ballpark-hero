@@ -45,6 +45,26 @@
  *      reported. A dist with the text in no chunk predates this round and is
  *      skipped, loudly.
  *
+ * ROUND 700: THE ONE LAZY CHUNK BECAME 32 PARTS. Every game page fetched all
+ * 127 entries (9.3K gzipped) to read one, so scripts/genSeoMetaParts.mjs now
+ * splits src/data/seoMeta.ts into src/data/seoMetaParts by a hash of the path
+ * and PageSeo loads only the part holding its own page. Three sections moved
+ * with it:
+ *   2. loadSeoMeta takes the page's path and loads that part. With only
+ *      /footle's part loaded, a game in another part still renders its own
+ *      props, so no part carries text that is not its own; then every game's
+ *      part is loaded the way its page loads it and every route renders as
+ *      before.
+ *   4. Every description the minifier keeps byte for byte (no quote, no
+ *      backslash, no backtick) is searched for in every built chunk: none may
+ *      sit in the entry chunk, each must sit in exactly one other chunk, the
+ *      part chunk its path hashes to, and no chunk may hold entries from two
+ *      parts (the shape of the old whole map). The part sizes are reported.
+ *   6. THE PARTS ARE WHAT THE SOURCE MAKES. genSeoMetaParts in check mode
+ *      finds nothing to rewrite, and through the page's own lookup every
+ *      entry is found, word for word, in the part the page would load and in
+ *      no other part, and no part carries a path the source does not.
+ *
  * NEGATIVE CONTROLS (SEO_TITLES_CONTROL). Each refuses to run if its anchor is
  * missing, edits only an in memory copy, and must turn exactly its own section
  * red with the finding it names:
@@ -61,7 +81,13 @@
  *   inentry     a side build where PageSeo imports seoMeta statically,  section 4
  *               putting the map back on the entry chunk's import path
  *               (vite build into a temp dir through a transform plugin,
- *               about a minute; the real dist and src are untouched)
+ *               about three minutes; the real dist and src are untouched)
+ *   onechunk    a side build where every part is put in one chunk, the  section 4
+ *               old whole map under a new name (vite build into a temp
+ *               dir with a manualChunks rule, about three minutes)
+ *   drift       a temp copy of src/data/seoMeta.ts gets a new /footle    section 6
+ *               description and the committed parts are not regenerated
+ *   misplaced   the page's lookup is moved one part along, in memory     section 6
  * Under a control the harness exits 1 when exactly the predicted section is
  * red (the break was caught) and 2 when it is not (the control proves nothing).
  *
@@ -114,6 +140,9 @@ const CONTROLS = {
   staleshot: { section: 3, finding: 'saved title' },
   twold: { section: 3, finding: 'Game JSON-LD block(s)' },
   inentry: { section: 4, finding: 'entry chunk' },
+  onechunk: { section: 4, finding: 'parts in one chunk' },
+  drift: { section: 6, finding: 'is not what the source makes' },
+  misplaced: { section: 6, finding: 'is not in the part its lookup loads' },
   brandheading: { section: 5, finding: 'carries the brand' },
   sportlessh1: { section: 5, finding: 'the h1 names no sport' },
   sportlesslabel: { section: 5, finding: 'family label' },
@@ -145,8 +174,9 @@ const MODULES = path.dirname(path.dirname(REACT));
 /* ---- PageSeo, seoMeta, the registry and a renderer, bundled once ---- */
 const TMP = fs.mkdtempSync(path.join(os.tmpdir(), `seoTitles-${process.pid}-`));
 const pageSeoSrc = lf(fs.readFileSync(SEO, 'utf8'));
-/* The load itself, not the type beside it that names the same module. */
-const LAZY_ANCHOR = "seoMetaLoad = import('@/data/seoMeta')";
+/* The load itself, not the type beside it that names the same module. Round
+   700: it is one part's loader now, called with the part the path hashes to. */
+const LAZY_ANCHOR = 'load = SEO_META_PARTS[part]()';
 const LOOKUP_ANCHOR = 'const entry = meta?.[path];';
 let seoPath = SEO;
 const HOLD_ANCHOR = 'const holdJsonLd = isGame && !meta;';
@@ -173,6 +203,7 @@ import PageSeo, { loadSeoMeta } from '${seoPath.replaceAll('\\', '/')}';
 export { loadSeoMeta };
 export { CATEGORIES, ALL_GAMES } from '${ROOT_URL}/src/data/gameRegistry.ts';
 export { SEO_META } from '${ROOT_URL}/src/data/seoMeta.ts';
+export { SEO_META_PARTS, SEO_META_PART_COUNT, seoMetaPart } from '${ROOT_URL}/src/data/seoMetaParts/index.ts';
 export const render = (route, props) => {
   const context = {};
   const markup = renderToStaticMarkup(
@@ -189,7 +220,7 @@ execSync(`"${ESBUILD}" "${ENTRY}" --bundle --format=cjs --platform=node --jsx=au
   stdio: 'inherit',
   env: { ...process.env, NODE_PATH: MODULES },
 });
-const { CATEGORIES, ALL_GAMES, SEO_META, loadSeoMeta, render: renderRaw } = createRequire(import.meta.url)(BUNDLE);
+const { CATEGORIES, ALL_GAMES, SEO_META, SEO_META_PARTS, SEO_META_PART_COUNT, seoMetaPart, loadSeoMeta, render: renderRaw } = createRequire(import.meta.url)(BUNDLE);
 /* React 18's server renderer warns that useLayoutEffect does nothing on the
    server once per Router. Only that message is dropped. */
 const render = (route, props) => {
@@ -238,8 +269,8 @@ function headOf(html) {
   };
 }
 
-const findings = { 1: [], 2: [], 3: [], 4: [], 5: [] };
-const notes = { 1: '', 2: '', 3: '', 4: '', 5: '' };
+const findings = { 1: [], 2: [], 3: [], 4: [], 5: [], 6: [] };
+const notes = { 1: '', 2: '', 3: '', 4: '', 5: '', 6: '' };
 const skipped = { 3: [], 4: [], 5: [] };
 
 /* ---------- 1. the words ---------- */
@@ -337,10 +368,25 @@ const rendered = new Map();
      render, and a stranded one carrying the prop's JSON-LD left two Game
      blocks in the head on 19 of 24 fresh browser renders. */
   if (first.ld.length) f.push(`/footle rendered ${first.ld.length} Game JSON-LD block(s) before the seoMeta chunk was loaded, a stranded early render would keep it beside the real one`);
-  /* 2b. Load it the way the page does, then every later render reads the
-     cache synchronously. */
-  const loaded = await loadSeoMeta();
-  if (!loaded) f.push('loadSeoMeta() resolved to nothing, so the seoMeta module did not load');
+  /* 2b. Round 700: a page loads the part holding its own path and nothing
+     else. With /footle's part alone loaded, a game in another part must
+     still render its own props: if it rendered seoMeta text, a part would be
+     carrying entries that are not its own and the split would be saving
+     nothing. */
+  const footle = await loadSeoMeta('/footle');
+  if (!footle?.['/footle']) f.push("loadSeoMeta('/footle') resolved to nothing or to a part without /footle, so the seoMeta part did not load");
+  const other = games.find(g => seoMetaPart(g.path) !== seoMetaPart('/footle'));
+  if (!other) abort('every game hashes to /footle\'s part, so per part loading cannot be told apart');
+  const early = headOf(render(other.path, propsFor(other.path)));
+  if (early.title[0] !== propsFor(other.path).title) {
+    f.push(`${other.path} rendered "${early.title[0]}" with only /footle's part loaded, so a part carries entries that are not its own`);
+  }
+  /* 2c. Then every game loads its own part the way its page does, and every
+     later render reads the cache synchronously. */
+  for (const g of games) {
+    const part = await loadSeoMeta(g.path);
+    if (!part?.[g.path]) f.push(`loadSeoMeta('${g.path}') resolved to nothing or to a part without it, so its seoMeta part did not load`);
+  }
   for (const g of games) {
     const meta = SEO_META[g.path];
     const head = headOf(render(g.path, propsFor(g.path)));
@@ -370,7 +416,7 @@ const rendered = new Map();
   if (head.title[0] !== own.title || head.description[0] !== own.description || head['og:title'][0] !== own.title) {
     f.push(`/about has no seoMeta entry and did not keep its own props (title "${head.title[0]}")`);
   }
-  notes[2] = `/footle renders its own props before the chunk loads; after it, ${rendered.size} game routes render seoMeta in six tags and the JSON-LD; /about keeps its own props`;
+  notes[2] = `/footle renders its own props before its part loads, ${other.path} still does with only /footle's part loaded; after every game's part, ${rendered.size} game routes render seoMeta in six tags and the JSON-LD; /about keeps its own props`;
 }
 
 /* ---------- 3. the saved pages ---------- */
@@ -442,46 +488,76 @@ if (CONTROL && CONTROL !== 'staleshot' && CONTROL !== 'twold') {
   notes[3] = `${compared} saved page${compared === 1 ? '' : 's'} compared, ${skipped[3].length} skipped`;
 }
 
-/* ---------- 4. the entry chunk ---------- */
+/* ---------- 4. the entry chunk and the parts ---------- */
 let distDir = path.join(ROOT, 'dist');
-if (CONTROL === 'inentry') {
-  if (count(pageSeoSrc, LAZY_ANCHOR) !== 1) abort(`control inentry: PageSeo carries "${LAZY_ANCHOR}" ${count(pageSeoSrc, LAZY_ANCHOR)} times, not once, so there is no one load to make static`);
+/* The two side builds share one shape: the real config, a temp outDir, and
+   one change that must provably reach the bundle. */
+async function sideBuild(name, extra) {
   const vitePath = findUp('vite/dist/node/index.js');
-  if (!vitePath) abort('control inentry: vite not found in any node_modules above the repo');
+  if (!vitePath) abort(`control ${name}: vite not found in any node_modules above the repo`);
   const { build } = await import(pathToFileURL(vitePath).href);
-  distDir = path.join(TMP, 'dist-inentry');
-  let fired = false;
-  console.log('CONTROL inentry: a side build where PageSeo imports seoMeta statically, so the map rides the entry chunk again; section 4 must go red');
+  distDir = path.join(TMP, `dist-${name}`);
   try {
     await build({
       root: ROOT,
       configFile: path.join(ROOT, 'vite.config.ts'),
       mode: 'production',
       logLevel: 'error',
-      build: { outDir: distDir, emptyOutDir: true },
-      plugins: [{
-        name: 'seo-titles-control-inentry',
-        enforce: 'pre',
-        transform(code, id) {
-          if (!id.replaceAll('\\', '/').endsWith('src/components/seo/PageSeo.tsx')) return null;
-          const src = lf(code);
-          if (count(src, LAZY_ANCHOR) !== 1) return null;
-          fired = true;
-          return `import * as seoMetaStatic from '@/data/seoMeta';\n${src.replace(LAZY_ANCHOR, 'seoMetaLoad = Promise.resolve(seoMetaStatic)')}`;
-        },
-      }],
+      ...extra,
+      build: { outDir: distDir, emptyOutDir: true, ...extra.build },
     });
   } catch (e) {
     /* A crash must never read as a caught break: that is exit 2, not 1. */
-    abort(`control inentry: the side build failed: ${String(e?.message ?? e).split('\n')[0]}`);
+    abort(`control ${name}: the side build failed: ${String(e?.message ?? e).split('\n')[0]}`);
   }
+}
+if (CONTROL === 'inentry') {
+  if (count(pageSeoSrc, LAZY_ANCHOR) !== 1) abort(`control inentry: PageSeo carries "${LAZY_ANCHOR}" ${count(pageSeoSrc, LAZY_ANCHOR)} times, not once, so there is no one load to make static`);
+  let fired = false;
+  console.log('CONTROL inentry: a side build where PageSeo imports seoMeta statically, so the map rides the entry chunk again; section 4 must go red');
+  await sideBuild('inentry', {
+    plugins: [{
+      name: 'seo-titles-control-inentry',
+      enforce: 'pre',
+      transform(code, id) {
+        if (!id.replaceAll('\\', '/').endsWith('src/components/seo/PageSeo.tsx')) return null;
+        const src = lf(code);
+        if (count(src, LAZY_ANCHOR) !== 1) return null;
+        fired = true;
+        return `import * as seoMetaStatic from '@/data/seoMeta';\n${src.replace(LAZY_ANCHOR, 'load = Promise.resolve({ SEO_META_PART: seoMetaStatic.SEO_META })')}`;
+      },
+    }],
+  });
   if (!fired) abort('control inentry: the transform never saw PageSeo, so the side build proves nothing');
+}
+if (CONTROL === 'onechunk') {
+  /* Every part module into one chunk: the whole map back under a new name,
+     the exact thing Round 700 took apart. */
+  const merged = new Set();
+  console.log('CONTROL onechunk: a side build where all the parts land in one chunk, the old whole map again; section 4 must go red');
+  await sideBuild('onechunk', {
+    build: {
+      rollupOptions: {
+        output: {
+          manualChunks(id) {
+            if (!/src\/data\/seoMetaParts\/seoMetaPart\d\d\.ts$/.test(id.replaceAll('\\', '/'))) return undefined;
+            merged.add(id);
+            return 'seoMetaAll';
+          },
+        },
+      },
+    },
+  });
+  if (merged.size !== SEO_META_PART_COUNT) abort(`control onechunk: the rule saw ${merged.size} of the ${SEO_META_PART_COUNT} part modules, so the side build proves nothing`);
 }
 {
   const f = findings[4];
   const indexHtml = path.join(distDir, 'index.html');
-  const probes = PROBE_PATHS.map(p => SEO_META[p]?.description);
-  if (probes.some(d => !d || /["'\\]/.test(d))) abort(`the probe descriptions (${PROBE_PATHS.join(', ')}) are missing or carry a quote or backslash`);
+  /* Every description the minifier carries byte for byte. A double quote, a
+     backslash or a backtick may be escaped in the built string, so those
+     few are not searched for; the two probes must be among the searchable. */
+  const searchable = Object.entries(SEO_META).filter(([, e]) => !/["`\\]/.test(e.description));
+  if (PROBE_PATHS.some(p => !searchable.some(([q]) => q === p))) abort(`the probe descriptions (${PROBE_PATHS.join(', ')}) are missing or carry a double quote, backtick or backslash`);
   if (!fs.existsSync(indexHtml)) {
     skipped[4].push(`no ${path.relative(ROOT, indexHtml)}: run npm run build first`);
     notes[4] = 'no build to read';
@@ -491,26 +567,44 @@ if (CONTROL === 'inentry') {
       f.push('dist/index.html loads no module script, so the entry chunk cannot be found');
     } else {
       const assets = path.join(distDir, 'assets');
-      const holders = fs.readdirSync(assets).filter(n => n.endsWith('.js')).filter(n => {
-        const js = fs.readFileSync(path.join(assets, n), 'utf8');
-        return probes.every(d => js.includes(d));
-      });
+      const chunks = fs.readdirSync(assets).filter(n => n.endsWith('.js')).map(n => [n, fs.readFileSync(path.join(assets, n), 'utf8')]);
       const entryName = path.basename(entryRel);
       const entryBytes = fs.readFileSync(path.join(distDir, entryRel));
-      const entryText = entryBytes.toString('utf8');
-      const inEntry = probes.filter(d => entryText.includes(d)).length;
-      if (inEntry) f.push(`the entry chunk ${entryName} carries ${inEntry} of the ${probes.length} probe descriptions, so every page pays for all 127`);
-      if (!holders.length) {
-        skipped[4].push(`${path.relative(ROOT, distDir)} holds none of the SEO text in any chunk, so it predates this round; run npm run build`);
+      const holdersOf = new Map();
+      const partsIn = new Map();
+      for (const [p, e] of searchable) {
+        const holders = chunks.filter(([, js]) => js.includes(e.description)).map(([n]) => n);
+        holdersOf.set(p, holders);
+        for (const n of holders) {
+          if (!partsIn.has(n)) partsIn.set(n, new Set());
+          partsIn.get(n).add(seoMetaPart(p));
+        }
+      }
+      if (!partsIn.size) {
+        skipped[4].push(`${path.relative(ROOT, distDir)} holds none of the SEO text in any chunk, so it predates Round 642; run npm run build`);
         notes[4] = `entry ${entryName} ${kb(entryBytes.length)}, no chunk holds the SEO text yet`;
       } else {
-        const lazy = holders.filter(n => n !== entryName);
-        if (lazy.length !== 1 && !inEntry) f.push(`the SEO text sits in ${lazy.length} non entry chunks (${lazy.join(', ')}), expected exactly one`);
-        const sizes = lazy.map(n => {
-          const b = fs.readFileSync(path.join(assets, n));
-          return `${n} ${kb(b.length)} raw, ${kb(gzipSync(b).length)} gzipped`;
-        });
-        notes[4] = `entry ${entryName} ${kb(entryBytes.length)} raw, ${kb(gzipSync(entryBytes).length)} gzipped, carries ${inEntry} of ${probes.length} probes; SEO text in ${sizes.join('; ') || 'the entry chunk only'}`;
+        const inEntry = [...holdersOf.values()].filter(h => h.includes(entryName)).length;
+        if (inEntry) f.push(`the entry chunk ${entryName} carries ${inEntry} of the ${searchable.length} searchable descriptions, so every page pays for them`);
+        /* Round 700: the old whole map, under any name, is a chunk holding
+           entries from more than one part. */
+        for (const [n, parts] of partsIn) {
+          if (n !== entryName && parts.size > 1) f.push(`${n} holds entries from ${parts.size} parts in one chunk, so a page fetching it pays for other pages' text`);
+        }
+        /* A game's own page chunk may carry the same words as its own prop
+           (Contract Chaos passes its description verbatim), which costs no
+           other page anything. What matters is that exactly one PART chunk
+           holds an entry, the one its path hashes to. */
+        for (const [p, holders] of holdersOf) {
+          const want = `seoMetaPart${String(seoMetaPart(p)).padStart(2, '0')}-`;
+          const inParts = holders.filter(n => /^seoMetaPart\d\d-/.test(n));
+          if (inParts.length !== 1 || !inParts[0].startsWith(want)) f.push(`${p}: its description sits in ${inParts.join(', ') || 'no part chunk'}, expected exactly one, its own part ${want}*.js`);
+        }
+        const partGz = chunks.filter(([n]) => /^seoMetaPart\d\d-/.test(n)).map(([n]) => gzipSync(fs.readFileSync(path.join(assets, n))).length).sort((a, b) => a - b);
+        const sizes = partGz.length
+          ? `${partGz.length} part chunks, ${kb(partGz[0])} to ${kb(partGz[partGz.length - 1])} gzipped (median ${kb(partGz[Math.floor(partGz.length / 2)])}), ${kb(partGz.reduce((a, b) => a + b, 0))} together`
+          : 'no part chunks';
+        notes[4] = `entry ${entryName} ${kb(entryBytes.length)} raw, ${kb(gzipSync(entryBytes).length)} gzipped, carries ${inEntry} of ${searchable.length} searchable descriptions; ${sizes}`;
       }
     }
   }
@@ -585,6 +679,54 @@ const FAMILY = /Higher or Lower|Connections|Career Path|Connect 4|Gauntlet Draft
   notes[5] = `${pages} saved game pages read: guide heading is the seoMeta title and no heading carries the brand; ${family} family h1s and every family label name their sport`;
 }
 
+/* ---------- 6. the parts are what the source makes (Round 700) ---------- */
+/* src/data/seoMeta.ts is the only place anyone writes this text and the parts
+   are generated from it, so two things can go wrong: somebody edits the
+   source and never regenerates, or the page's lookup and the generator's
+   placement stop agreeing. (a) runs the generator in check mode; (b) loads
+   every part through the bundled loaders and finds each entry where the
+   page's own lookup says it is, word for word, and nowhere else.
+   Controls: drift edits a temp copy of the source, so (a) must fire;
+   misplaced moves the lookup one part along in memory, so (b) must. */
+{
+  const f = findings[6];
+  let genRoot = ROOT;
+  if (CONTROL === 'drift') {
+    genRoot = path.join(TMP, 'drift-root');
+    const from = path.join(ROOT, 'src/data');
+    const to = path.join(genRoot, 'src/data');
+    fs.mkdirSync(path.join(to, 'seoMetaParts'), { recursive: true });
+    for (const n of fs.readdirSync(path.join(from, 'seoMetaParts'))) fs.copyFileSync(path.join(from, 'seoMetaParts', n), path.join(to, 'seoMetaParts', n));
+    const src = fs.readFileSync(path.join(from, 'seoMeta.ts'), 'utf8');
+    const desc = SEO_META['/footle']?.description;
+    if (!desc || count(src, desc) !== 1) abort('control drift: /footle\'s description is not in src/data/seoMeta.ts exactly once, so there is nothing to edit');
+    fs.writeFileSync(path.join(to, 'seoMeta.ts'), src.replace(desc, `${desc} Edited.`));
+    console.log('CONTROL drift: a temp copy of src/data/seoMeta.ts gives /footle a new description and the parts beside it are not regenerated; section 6 must go red');
+  }
+  const { writeSeoMetaParts } = await import(pathToFileURL(path.join(ROOT, 'scripts/genSeoMetaParts.mjs')).href);
+  const drift = await writeSeoMetaParts(genRoot, { check: true });
+  for (const line of drift) f.push(`${line}; run node scripts/genSeoMetaParts.mjs and commit src/data/seoMetaParts`);
+
+  let lookup = seoMetaPart;
+  if (CONTROL === 'misplaced') {
+    lookup = p => (seoMetaPart(p) + 1) % SEO_META_PART_COUNT;
+    console.log('CONTROL misplaced: the page looks one part along from where the generator put each entry; section 6 must go red');
+  }
+  if (SEO_META_PARTS.length !== SEO_META_PART_COUNT) f.push(`the index has ${SEO_META_PARTS.length} loaders for ${SEO_META_PART_COUNT} parts`);
+  const parts = await Promise.all(SEO_META_PARTS.map(load => load().then(m => m.SEO_META_PART)));
+  const homes = new Map();
+  parts.forEach((part, i) => { for (const p of Object.keys(part ?? {})) homes.set(p, [...(homes.get(p) ?? []), i]); });
+  for (const [p, e] of Object.entries(SEO_META)) {
+    const got = parts[lookup(p)]?.[p];
+    if (!got || got.title !== e.title || got.description !== e.description) f.push(`${p} is not in the part its lookup loads (part ${lookup(p)}) word for word`);
+    const n = (homes.get(p) ?? []).length;
+    if (n !== 1) f.push(`${p} sits in ${n} parts, not exactly one`);
+  }
+  for (const p of homes.keys()) if (!SEO_META[p]) f.push(`a part carries ${p}, which src/data/seoMeta.ts does not`);
+  const sizes = parts.map(part => Object.keys(part ?? {}).length);
+  notes[6] = `genSeoMetaParts --check finds ${drift.length} file(s) to rewrite; ${Object.keys(SEO_META).length} entries over ${parts.length} parts (${Math.min(...sizes)} to ${Math.max(...sizes)} each), every one found where the page looks`;
+}
+
 fs.rmSync(TMP, { recursive: true, force: true });
 
 /* ---------- the report ---------- */
@@ -592,11 +734,12 @@ const TITLES = {
   1: 'the words: label once, unique, sport word, 60 with the brand, 120 to 158 with free, no dash',
   2: 'the render: props before the chunk, seoMeta everywhere after it',
   3: 'the saved pages carry the seoMeta head once prerendered, all or none',
-  4: 'the entry chunk carries none of the SEO text; one lazy chunk carries it',
+  4: 'the entry chunk carries none of the SEO text; each entry sits in its own part chunk and no chunk holds two parts',
   5: 'the saved headings: guide heading is the search title, no brand, family h1s and labels name their sport',
+  6: 'the parts are what src/data/seoMeta.ts makes, and the page finds every entry in the part it loads',
 };
 console.log('');
-for (const n of [1, 2, 3, 4, 5]) {
+for (const n of [1, 2, 3, 4, 5, 6]) {
   console.log(`${n}) ${TITLES[n]}`);
   for (const m of findings[n].slice(0, 12)) console.error(`  FAIL: ${m}`);
   if (findings[n].length > 12) console.error(`  ... and ${findings[n].length - 12} more`);
@@ -605,7 +748,7 @@ for (const n of [1, 2, 3, 4, 5]) {
   for (const line of s.slice(0, 8)) console.log(`   SKIP (loud): ${line}`);
   if (s.length > 8) console.log(`   SKIP (loud): ... and ${s.length - 8} more`);
 }
-const red = [1, 2, 3, 4, 5].filter(n => findings[n].length);
+const red = [1, 2, 3, 4, 5, 6].filter(n => findings[n].length);
 const total = red.reduce((t, n) => t + findings[n].length, 0);
 console.log('');
 if (CONTROL) {

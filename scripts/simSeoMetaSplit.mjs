@@ -298,6 +298,7 @@ const notIdentical = [];
 const skipped = [];
 const fetchedParts = new Set();
 
+const comparedRoutes = new Set();
 async function check(page, route) {
   if (savedHeads.get(route) == null) {
     skipped.push(`${route}: no saved page to compare against`);
@@ -306,11 +307,23 @@ async function check(page, route) {
   let r;
   try {
     r = await draw(page, route);
-  } catch (e) {
-    add(1, route, `could not be drawn: ${String(e?.message ?? e).split('\n')[0].slice(0, 100)}`);
-    return;
+  } catch (first) {
+    /* One retry on a fresh page, as the prerenderer retries on a fresh
+       browser: a busy machine can time a first load out, and that says
+       nothing about the head. A second failure is a finding. */
+    console.error(`   retrying ${route} on a fresh page (${String(first?.message ?? first).split('\n')[0].slice(0, 80)})`);
+    const fresh = await newPage();
+    try {
+      r = await draw(fresh, route);
+    } catch (e) {
+      add(1, route, `could not be drawn twice: ${String(e?.message ?? e).split('\n')[0].slice(0, 100)}`);
+      return;
+    } finally {
+      await fresh.context().close().catch(() => {});
+    }
   }
   compared += 1;
+  comparedRoutes.add(route);
   for (const k of FIELDS) {
     const a = r.live[k], b = r.saved[k];
     if (homeOgUrl(route, k, a, b)) { homeOgUrlSeen = true; continue; }
@@ -373,8 +386,8 @@ const games = routes.filter(r => gamePaths.has(r));
 const gameParts = new Set(games.map(partOf));
 if (!scoped) {
   if (compared < 40) findings[3].push(`only ${compared} routes compared, fewer than 40`);
-  if (!routes.includes('/') || savedHeads.get('/') == null) findings[3].push('the home page was not compared');
-  for (const h of hubs) if (!routes.includes(h) || savedHeads.get(h) == null) findings[3].push(`the hub ${h} was not compared`);
+  if (!comparedRoutes.has('/')) findings[3].push('the home page was not compared');
+  for (const h of hubs) if (!comparedRoutes.has(h)) findings[3].push(`the hub ${h} was not compared`);
   if (gameParts.size !== PART_COUNT) findings[3].push(`the games drawn cover ${gameParts.size} of the ${PART_COUNT} parts`);
   if (fetchedParts.size !== PART_COUNT) findings[3].push(`the pages fetched ${fetchedParts.size} of the ${PART_COUNT} part chunks`);
 }
@@ -397,7 +410,7 @@ for (const n of [1, 2]) {
   }
   if (shown > 24) console.error(`  ... and ${shown - 24} more`);
   console.log(`   ${f.size ? 'RED' : 'ok '} ${n === 1
-    ? `${compared} heads compared field by field (${games.length} game pages, ${hubs.filter(h => routes.includes(h)).length} hubs, ${routes.includes('/') ? 'the home page against the template' : 'no home page'}); ${identical} of ${compared - (routes.includes('/') ? 1 : 0)} saved heads byte identical to the capture after the prerenderer's clean up${notIdentical.length ? ` (not: ${notIdentical.slice(0, 6).join(', ')}${notIdentical.length > 6 ? ', ...' : ''})` : ''}${homeOgUrlSeen ? '; the home page differs from the template only by the og:url the template never carried' : ''}`
+    ? `${compared} heads compared field by field (${games.filter(g => comparedRoutes.has(g)).length} game pages, ${hubs.filter(h => comparedRoutes.has(h)).length} hubs, ${comparedRoutes.has('/') ? 'the home page against the template' : 'no home page'}); ${identical} of ${compared - (comparedRoutes.has('/') ? 1 : 0)} saved heads byte identical to the capture after the prerenderer's clean up${notIdentical.length ? ` (not: ${notIdentical.slice(0, 6).join(', ')}${notIdentical.length > 6 ? ', ...' : ''})` : ''}${homeOgUrlSeen ? '; the home page differs from the template only by the og:url the template never carried' : ''}`
     : `${fetchedParts.size} distinct part chunks fetched; no page fetched a part not its own`}`);
 }
 console.log(`3) ${TITLES[3]}`);
