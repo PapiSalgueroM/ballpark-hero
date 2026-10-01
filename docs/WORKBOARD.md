@@ -1,5 +1,14 @@
 # Work board
 
+**2026-09-30, Codex Round 772 CLAIMED: lineup picker focus after dismissal.**
+Root owns only `src/components/perfect-lineup/GenericLineupBoard.tsx`, new focused actual-dialog
+tests and a sim wrapper. Round765 browser proof documented focus dropping to BODY after a pick.
+Remember the opening Pick control and its stable slot. Return focus to the same control after
+Cancel/Escape/outside dismissal, or to its labeled slot after selection removes that control.
+Preserve filters, chosen identity, scoring, daily/practice state and all callbacks. Verify actual
+native keyboard dismissals/picks and repeat opens across the shared NBA/NHL/F1 component, plus
+asserted controls and browser proof. No pool/config/hook/engine/data changes. Next free: **773**.
+
 **2026-09-30, Codex Round 771 CLAIMED: reachable Club Manager inbox and recent outcomes.**
 Own only `src/components/club-manager/InboxCard.tsx`, scoped CSS if needed, focused actual-card
 tests and a new sim wrapper. The component currently truncates to four while the engine retains

@@ -1,5 +1,11 @@
 # Project state
 
+## IN PROGRESS 2026-09-30: four simultaneous Codex tasks 769 through 772
+
+Three agents implement Conquest Explore, First Touch and reachable Club Manager inbox outcomes.
+Root also fixes the shared NBA/NHL/F1 lineup picker losing focus after dismissal, a measured
+Round765 limitation. Exact non-overlapping claims are on WORKBOARD. Next unclaimed number: 773.
+
 ## IN PROGRESS 2026-09-30: three independent game features 769 through 771
 
 769 Conquest Explore and 770 First Touch are building under separate agent ownership. 771 now
