@@ -81,6 +81,18 @@ TEMP means C:/Users/antho/AppData/Local/Temp on the owner's computer.
 
 ## Release and review boundary
 
+Update after the shared Git sync: Claude's Release O handoff confirms that
+Codex831, 836 and 837 reached production with main `fcdae1bf`, deployment
+`102f28a4` and entry `index-Bj5VrkKR.js`. This is the publishing lane's receipt;
+Codex has not repeated the rendered production check. The new Codex838 contest
+was pushed afterward as `2db7c148` and still needs publication. AdSense approval
+and current Search Console counts remain unverified.
+
+Claude's rendered audit also identified missing home copy after React mounts,
+a leaderboard timeout and slow college grids. Claims 839-841 cover those fixes.
+The additional About/Contact, record-page, metadata and guide-copy findings
+remain pending. These are the concrete follow-ups to the current rejection.
+
 836 and837 passed the real app type check, production build,15 artifact
 harnesses and explicit snapshot boot. The three affected saved pages are
 updated, with changed fingerprints only for home, About, basketball and
