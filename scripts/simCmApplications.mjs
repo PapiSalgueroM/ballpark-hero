@@ -96,12 +96,18 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const ROOT_URL = ROOT.replaceAll('\\', '/');
 const TMP = os.tmpdir().replaceAll('\\', '/');
 const CONTROL = process.env.CM_APPLICATIONS_CONTROL || '';
-if (CONTROL && !['deaf', 'tierblind', 'twice', 'nocooldown'].includes(CONTROL)) {
+const CONTROLS = ['deaf', 'tierblind', 'twice', 'nocooldown', 'rollwipe', 'troubleblind', 'courted', 'late', 'lostyes', 'sackkeeps'];
+if (CONTROL && !CONTROLS.includes(CONTROL)) {
   console.error(`CM_APPLICATIONS_CONTROL=${CONTROL} is not a control this harness knows`);
   process.exit(1);
 }
 const BASES = Math.max(4, Number(process.env.CM_APPLICATIONS_BASES) || 24);
 const PER_BASE = 20;
+/* Section 1's paired trouble check and section 6's approach counts: floors
+   set from the measurements in the header. */
+const TROUBLE_PAIRS_FLOOR = 100;
+const TROUBLE_GAP_FLOOR = 3;
+const FREE_APPROACHES_FLOOR = 3;
 
 let failures = 0;
 const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
@@ -144,8 +150,10 @@ let libPath = `${ROOT_URL}/src/lib/clubManagerJobHunt.ts`;
 function rewrite(file, edits, outName, what) {
   let src = lf(fs.readFileSync(file, 'utf8'));
   for (const [from, to] of edits) {
-    if (!src.includes(from)) {
-      console.error(`control cannot run: ${what} is not in the shape CM_APPLICATIONS_CONTROL=${CONTROL} rewrites (${from.slice(0, 60)}...)`);
+    /* Exactly once: an anchor that also matched somewhere else would rewrite
+       whichever came first, which may not be the rule the control is for. */
+    if (src.split(from).length !== 2) {
+      console.error(`control cannot run: ${what} is not in the shape CM_APPLICATIONS_CONTROL=${CONTROL} rewrites, exactly once (${from.slice(0, 60)}...)`);
       process.exit(1);
     }
     src = src.replace(from, to);
@@ -173,6 +181,33 @@ if (CONTROL === 'nocooldown') {
   libPath = rewrite(LIB, [["  if (hunt.cooldowns.some(c => c.club === club && career.season <= c.until)) return 'cooldown';\n", "  if (false) return 'cooldown';\n"]], 'clubManagerJobHunt.nocooldown.ts', 'the cooldown check');
   console.log('NEGATIVE CONTROL ON: a decline shuts no door; section 2 must go red');
 }
+if (CONTROL === 'rollwipe') {
+  libPath = rewrite(LIB, [['  return { ...hunt, open: null, summerMove: null, sentSeason: season, sent: 0 };\n', '  return { ...hunt, open: null, summerMove: null, sentSeason: season, sent: 0, cooldowns: [] };\n']], 'clubManagerJobHunt.rollwipe.ts', 'the rollover\'s reset');
+  console.log('NEGATIVE CONTROL ON: the rollover wipes every cooldown; section 2 must go red');
+}
+if (CONTROL === 'troubleblind') {
+  libPath = rewrite(LIB, [['export const TROUBLE_WEIGHT = 0.05;\n', 'export const TROUBLE_WEIGHT = 0;\n']], 'clubManagerJobHunt.troubleblind.ts', 'the trouble weight');
+  console.log('NEGATIVE CONTROL ON: the club ignores how its own season is going; section 1 must go red');
+}
+if (CONTROL === 'courted') {
+  libPath = rewrite(LIB, [
+    ['  return !!(hunt.open || hunt.summerMove);\n', '  return false;\n'],
+    ["  if (career.approach) return 'approach';\n", "  if (false) return 'approach';\n"],
+  ], 'clubManagerJobHunt.courted.ts', 'the rule that keeps an approach and an application apart');
+  console.log('NEGATIVE CONTROL ON: an approach and an application stop seeing each other; section 6 must go red');
+}
+if (CONTROL === 'late') {
+  libPath = rewrite(LIB, [["  if (leagueMatchesLeft < ANSWER_MAX_MATCHES) return 'late';\n", "  if (false) return 'late';\n"]], 'clubManagerJobHunt.late.ts', 'the late season refusal');
+  console.log('NEGATIVE CONTROL ON: an application can go out in the last league games; section 7 must go red');
+}
+if (CONTROL === 'lostyes') {
+  libPath = rewrite(LIB, [["  return hunt.open && hunt.open.status === 'accepted' ? hunt.open.club : null;\n", '  return null;\n']], 'clubManagerJobHunt.lostyes.ts', 'the waiting yes');
+  console.log('NEGATIVE CONTROL ON: a yes still waiting at the season\'s end is forgotten; section 7 must go red');
+}
+if (CONTROL === 'sackkeeps') {
+  libPath = rewrite(LIB, [['  return { ...hunt, open: null, summerMove: null };\n', '  return hunt;\n']], 'clubManagerJobHunt.sackkeeps.ts', 'the sack\'s end of the hunt');
+  console.log('NEGATIVE CONTROL ON: a booked move survives the sack; section 7 must go red');
+}
 
 /* One CommonJS bundle: the engine, the calendar and the pure module (or its
    rewritten copy). The exact alias on the module path outranks the @ prefix
@@ -196,12 +231,15 @@ const { cm, cal, jh } = createRequire(import.meta.url)(BUNDLE);
 const {
   REAL_LEAGUES, playableClubs, isPartialClub, startCareer, playNextEntry, finishSeason, startNextSeason,
   applyForJob, applyTargets, joinClubInSummer, answerMessage, saveCareer, loadCareer, clubDefFor,
+  respondApproach, enterWilderness, wildernessWeek, acceptWildernessJob, myLeagueMatchesLeft, jobApplyRefusal,
+  applicationInputFor,
 } = cm;
 const { simToWeek, joinClubNow } = cal;
 const { applyRefusal, jobHuntOf, STANDING_WEIGHT, ANSWER_MIN_MATCHES, ANSWER_MAX_MATCHES, APPLICATIONS_PER_SEASON, LEAVING_BOARD_HIT } = jh;
 
 if (CONTROL === 'deaf' && STANDING_WEIGHT !== 0) { console.error('the deaf control did not reach the bundled engine'); process.exit(1); }
 if (CONTROL === 'tierblind' && (jh.TIER_UP_WEIGHT !== 0 || jh.TIER_DOWN_WEIGHT !== 0)) { console.error('the tierblind control did not reach the bundled engine'); process.exit(1); }
+if (CONTROL === 'troubleblind' && jh.TROUBLE_WEIGHT !== 0) { console.error('the troubleblind control did not reach the bundled engine'); process.exit(1); }
 
 /* ---------- helpers that drive the engine ---------- */
 
@@ -237,6 +275,18 @@ function playUntilAnswered(state, maxMatches = 12) {
   return { state: s, matches, outcome: 'stuck' };
 }
 
+/** Plays the season out with the board warmed before every entry (the sack race is not what these probes measure). */
+function playOut(state) {
+  let s = state;
+  let guard = 0;
+  while (s.week < s.calendar.length && guard++ < 150) {
+    const r = playNextEntry({ ...s, boardConfidence: 90 }, { skipHalftime: true });
+    s = r.state;
+    if (r.kind === 'seasonOver' || s.sacked) break;
+  }
+  return s;
+}
+
 /** A career record of level r in [0, 1], written into the fields the market reads. */
 function withRecord(state, r) {
   const s = clone(state);
@@ -266,15 +316,19 @@ for (const league of REAL_LEAGUES) {
 if (pool.length < 60) fail(`the club pool has ${pool.length} clubs, the real leagues should give far more`);
 console.log(`0) ${BASES} base careers played to about week ten`);
 const bases = [];
+let approachesDeclined = 0;
 for (let i = 0; i < BASES && pool.length; i++) {
   const pick = pool[Math.floor((i / BASES) * pool.length) % pool.length];
   let s = startCareer(pick.club);
   s = advanceTo(s, 10);
   if (s.sacked || s.week < 6) { console.log(`   skipped ${pick.club}: sacked or stuck at week ${s.week}`); continue; }
+  /* An approach waiting on the manager refuses every application (section 6
+     holds that rule), so a base that has one turns it down first. */
+  if (s.approach) { s = respondApproach(s, false); approachesDeclined += 1; }
   bases.push(s);
 }
 if (bases.length < Math.min(BASES, 8)) fail(`only ${bases.length} usable bases of ${BASES}`);
-console.log(`   ${bases.length} bases, tiers ${[...new Set(bases.map(myTier))].sort().join(', ')}, weeks ${Math.min(...bases.map(b => b.week))} to ${Math.max(...bases.map(b => b.week))}`);
+console.log(`   ${bases.length} bases, tiers ${[...new Set(bases.map(myTier))].sort().join(', ')}, weeks ${Math.min(...bases.map(b => b.week))} to ${Math.max(...bases.map(b => b.week))}, ${approachesDeclined} live approach(es) turned down first`);
 
 /* ---------- 1. the answer is the manager's to earn ---------- */
 section(`1) Acceptance against standing and tier gap over ${bases.length * PER_BASE} applications`);
@@ -376,16 +430,75 @@ const tierGap = sameYes - upYes;
 const upOnly = pairs.filter(p => p.up && !p.same).length;
 console.log(`   paired tier check: ${pairs.length} pairs (${pairsLost} lost to a sacking), yes at my tier ${sameYes.toFixed(1)} percent, yes above it ${upYes.toFixed(1)} percent, gap ${tierGap.toFixed(1)} points; pairs where only the bigger club said yes ${upOnly}`);
 
+/* Round 783 review: how the club's own season is going, paired the same way.
+   The same manager, record, roll and wait write once to a club of one tier
+   whose season is fine (no trouble at all, a known place in its table) and
+   once to a club of the SAME tier whose season is going badly (trouble of
+   STRUGGLING or more, read off the engine's own applicationInputFor), so the
+   tier and the manager cancel and the gap is the club's season. The tier
+   chosen is the one nearest the manager's that has both kinds. */
+const TROUBLE_LEVELS = 10;
+const STRUGGLING = 8;
+const tPairs = [];
+let tLost = 0, tBases = 0;
+const troubleAt = { settled: [], struggling: [] };
+for (const base of bases) {
+  const mine = myTier(base);
+  const byTier = new Map();
+  for (const t of applyTargets(base)) {
+    const inp = applicationInputFor(base, t.club);
+    const kind = inp.targetTrouble >= STRUGGLING ? 'struggling'
+      : inp.targetTrouble === 0 && inp.targetPos !== null ? 'settled' : null;
+    if (!kind) continue;
+    if (!byTier.has(t.tier)) byTier.set(t.tier, { settled: [], struggling: [] });
+    byTier.get(t.tier)[kind].push({ ...t, trouble: inp.targetTrouble });
+  }
+  const tiers = [...byTier.entries()]
+    .filter(([, g]) => g.settled.length && g.struggling.length)
+    .sort((a, b) => Math.abs(a[0] - mine) - Math.abs(b[0] - mine) || a[0] - b[0]);
+  if (!tiers.length) continue;
+  tBases += 1;
+  const g = tiers[0][1];
+  for (let i = 0; i < TROUBLE_LEVELS; i++) {
+    const s0 = withRecord(base, i / (TROUBLE_LEVELS - 1));
+    const arms = [g.settled[Math.floor(Math.random() * g.settled.length)], g.struggling[Math.floor(Math.random() * g.struggling.length)]];
+    const roll = Math.random();
+    let wait = null;
+    const answers = [];
+    for (const t of arms) {
+      const applied = applyForJob(clone(s0), t.club);
+      if (!applied) { fail(`${base.clubName}: could not apply to ${t.club} for the paired trouble check (${jobApplyRefusal(s0, t.club)})`); break; }
+      applied.jobHunt.open.roll = roll;
+      if (wait === null) wait = applied.jobHunt.open.matchesLeft;
+      else applied.jobHunt.open.matchesLeft = wait;
+      const run = playUntilAnswered(applied);
+      if (run.outcome !== 'accepted' && run.outcome !== 'declined') break;
+      answers.push(run.outcome === 'accepted' ? 1 : 0);
+    }
+    if (answers.length === 2) {
+      tPairs.push({ settled: answers[0], struggling: answers[1] });
+      troubleAt.settled.push(arms[0].trouble);
+      troubleAt.struggling.push(arms[1].trouble);
+    } else tLost += 1;
+  }
+}
+const settledYes = pct(tPairs.filter(p => p.settled).length, tPairs.length);
+const strugglingYes = pct(tPairs.filter(p => p.struggling).length, tPairs.length);
+const troubleGap = strugglingYes - settledYes;
+console.log(`   paired trouble check: ${tPairs.length} pairs from ${tBases} bases (${tLost} lost to a sacking), yes where their season is fine ${settledYes.toFixed(1)} percent, yes where it is going badly ${strugglingYes.toFixed(1)} percent, gap ${troubleGap.toFixed(1)} points (trouble ${mean(troubleAt.settled).toFixed(1)} vs ${mean(troubleAt.struggling).toFixed(1)} when sent); pairs where only the settled club said yes ${tPairs.filter(p => p.settled && !p.struggling).length}`);
+
 if (rows.length < bases.length * PER_BASE * 0.9) fail(`only ${rows.length} of ${bases.length * PER_BASE} applications were answered`);
 if (!(rStanding >= 0.25)) fail(`acceptance does not rise with standing: r=${isNum(rStanding) ? rStanding.toFixed(3) : 'NaN'} (floor 0.25)`);
 if (pairs.length < 100) fail(`only ${pairs.length} paired tier checks were answered (floor 100)`);
 if (!(tierGap >= 10)) fail(`acceptance does not fall with the tiers applied up: the paired gap is ${isNum(tierGap) ? tierGap.toFixed(1) : 'NaN'} points (floor 10)`);
+if (tPairs.length < TROUBLE_PAIRS_FLOOR) fail(`only ${tPairs.length} paired trouble checks were answered (floor ${TROUBLE_PAIRS_FLOOR})`);
+if (!(troubleGap >= TROUBLE_GAP_FLOOR)) fail(`acceptance does not rise with the trouble the club is in: the paired gap is ${isNum(troubleGap) ? troubleGap.toFixed(1) : 'NaN'} points (floor ${TROUBLE_GAP_FLOOR})`);
 if (!(acceptedShare >= 12 && acceptedShare <= 75)) fail(`${acceptedShare.toFixed(1)} percent of applications were accepted (band 12 to 75)`);
 if (offSchedule) fail(`${offSchedule} answers did not land on the match day the application fixed`);
 if (badCopy) fail(`${badCopy} answers carried quoted speech`);
 if (noMessage) fail(`${noMessage} applications or answers left no inbox message`);
 if (missingOptions) fail(`${missingOptions} answers carried the wrong options (a yes offers joinNow and joinSummer, a no offers nothing and is resolved)`);
-ok(`acceptance rises with standing and falls with the tiers applied up, every answer on its fixed match day, every answer in the inbox from the club's board`);
+ok(`acceptance rises with standing and with the trouble the club is in, falls with the tiers applied up, every answer on its fixed match day, every answer in the inbox from the club's board`);
 
 /* ---------- 2. the limits ---------- */
 section('2) One at a time, a season long cooldown, three a season');
@@ -424,8 +537,28 @@ section('2) One at a time, a season long cooldown, three a season');
     if (applyForJob(s3, D.club) !== null) fail('a fourth application went out in one season');
     if (applyRefusal(s3, D.club) !== 'limit') fail(`the fourth's refusal reads ${applyRefusal(s3, D.club)}`);
     if (applyForJob({ ...s3, season: s3.season + 1 }, E.club) === null) fail('the count did not reset with the season');
+    /* Round 783 review: and through the REAL rollover, twice. The declined
+       save plays its season out, goes through finishSeason and
+       startNextSeason staying put, and the door must still be shut; one more
+       season through the same two calls and it must be open. A rollover that
+       dropped the cooldowns passed every check above, which only ever moved
+       the season number by hand. */
+    const roll = st => startNextSeason(finishSeason(playOut(st)).state);
+    let n1 = null;
+    try { n1 = roll(s2); } catch (e) { fail(`the declined save's rollover threw: ${e.message}`); }
+    if (n1) {
+      if (n1.season !== s2.season + 1 || n1.clubName !== s2.clubName) fail(`the rollover put the manager at ${n1.clubName} in season ${n1.season}`);
+      if (jobApplyRefusal(n1, A.club) !== 'cooldown') fail(`the season after the no, through the real rollover, ${A.club} reads ${jobApplyRefusal(n1, A.club)}, not cooldown`);
+      if (applyForJob(n1, A.club) !== null) fail(`${A.club} took an application the season after they said no, through the real rollover`);
+      let n2 = null;
+      try { n2 = roll(n1); } catch (e) { fail(`the second rollover threw: ${e.message}`); }
+      if (n2) {
+        if (n2.season !== s2.season + 2) fail(`the second rollover reads season ${n2.season}`);
+        if (jobApplyRefusal(n2, A.club) !== null) fail(`two seasons after the no, through the real rollover, ${A.club} still reads ${jobApplyRefusal(n2, A.club)}`);
+      }
+    }
   }
-  ok('one open application at a time, a decline shuts the door through next season and no further, three a season and the count resets');
+  ok('one open application at a time, a decline shuts the door through next season and no further (by hand and through two real rollovers), three a season and the count resets');
 }
 
 /* ---------- 3. a summer move fires exactly once ---------- */
@@ -585,6 +718,179 @@ section('5) A save from before the round opens and plays with nothing in flight'
     }
   }
   ok('an old save opens with nothing in flight, can apply, plays on without the field, and an application in flight survives a save and load');
+}
+
+/* ---------- 6. never promised to two clubs ---------- */
+section('6) An approach and an application never overlap');
+{
+  /* Three arms from each base, each played the same number of my matches
+     with the board warmed and the form forced hot before every entry (so the
+     engine's approach roll is live every week), any approach that lands
+     counted and cleared: free (nothing in flight), out (an application whose
+     answer never comes due) and booked (a summer move on the save). The free
+     arm proves the setup draws approaches; the other two must draw none. */
+  const MATCHES = 50;
+  const hot = ['W', 'W', 'W', 'W', 'W'];
+  const counts = { free: 0, out: 0, booked: 0 };
+  const played = { free: 0, out: 0, booked: 0 };
+  const probeBases = bases.filter(b => myTier(b) >= 2).slice(0, 6);
+  if (probeBases.length < 2) fail(`only ${probeBases.length} bases below the top tier for the approach probes`);
+  for (const base of probeBases) {
+    const target = applyTargets(base).find(t => t.tier >= myTier(base));
+    const out = applyForJob(base, target.club);
+    if (!out) { fail(`${base.clubName}: could not apply to ${target.club} for the approach probe (${jobApplyRefusal(base, target.club)})`); continue; }
+    out.jobHunt.open.matchesLeft = 999;
+    const booked = { ...clone(base), jobHunt: { ...jobHuntOf(base), summerMove: { club: target.club, blurb: '' } } };
+    for (const [arm, start] of [['free', clone(base)], ['out', out], ['booked', booked]]) {
+      let s = start;
+      let matches = 0;
+      let guard = 0;
+      while (matches < MATCHES && s.week < s.calendar.length && guard++ < 120) {
+        const r = playNextEntry({ ...s, boardConfidence: 90, form: [...s.form, ...hot], approach: null }, { skipHalftime: true });
+        s = r.state;
+        if (r.kind === 'match') matches += 1;
+        if (s.approach) counts[arm] += 1;
+        if (r.kind === 'seasonOver' || s.sacked) break;
+      }
+      played[arm] += matches;
+    }
+    /* An approach injected beside an application: the handshake is refused
+       and the approach stays live; turning it down still works. And with an
+       approach live, no application goes out. */
+    const live = { club: applyTargets(base).find(t => t.club !== target.club)?.club ?? 'Elsewhere', leagueName: '', tierLabel: '', blurb: '', week: base.week, expiresWeek: base.week + 5 };
+    const both = { ...out, approach: live };
+    const shook = respondApproach(both, true);
+    if (shook.pendingMove || shook.boardConfidence !== both.boardConfidence || !shook.approach) fail(`${base.clubName}: an approach was committed to with an application out (pre-agreement ${shook.pendingMove?.club ?? 'none'}, board ${both.boardConfidence} to ${shook.boardConfidence})`);
+    const bothBooked = { ...booked, approach: live };
+    if (respondApproach(bothBooked, true).pendingMove) fail(`${base.clubName}: an approach was committed to with a summer move booked`);
+    if (respondApproach(both, false).approach) fail(`${base.clubName}: an approach could not be turned down with an application out`);
+    const courted = { ...clone(base), approach: live };
+    if (jobApplyRefusal(courted, target.club) !== 'approach') fail(`${base.clubName}: with an approach live an application reads ${jobApplyRefusal(courted, target.club)}, not approach`);
+    if (applyForJob(courted, target.club) !== null) fail(`${base.clubName}: an application went out with an approach live`);
+  }
+  console.log(`   approaches drawn over ${played.free}, ${played.out} and ${played.booked} matches: free ${counts.free}, application out ${counts.out}, move booked ${counts.booked}`);
+  if (counts.free < FREE_APPROACHES_FLOOR) fail(`the free arm drew ${counts.free} approaches (floor ${FREE_APPROACHES_FLOOR}), so the probe cannot see the guard`);
+  if (counts.out) fail(`${counts.out} approaches landed while an application was out`);
+  if (counts.booked) fail(`${counts.booked} approaches landed while a summer move was booked`);
+  ok(`no approach while an application is out or a move is booked (${counts.free} drawn in the free arm), no handshake beside one, and no application beside a live approach`);
+}
+
+/* ---------- 7. the end of the season, and the sack ---------- */
+section('7) Late in the season, at its end, and after the sack');
+{
+  const base = bases.find(b => myTier(b) >= 2) ?? bases[0];
+  const target = applyTargets(base).find(t => t.tier >= myTier(base));
+  /* (a) The last league game an application may go out on: with exactly
+     ANSWER_MAX_MATCHES league games left it goes, and with the longest wait
+     it is still answered before the season ends; one league game later it is
+     refused as late. */
+  let s = clone(base);
+  let guard = 0;
+  while (myLeagueMatchesLeft(s) > ANSWER_MAX_MATCHES && guard++ < 120) {
+    const r = playNextEntry({ ...s, boardConfidence: 90 }, { skipHalftime: true });
+    s = r.state;
+    if (r.kind === 'seasonOver' || s.sacked) break;
+  }
+  /* An approach that landed on the way refuses every application (section
+     6's rule), so it is turned down first, here and one game later. */
+  const lastCall = s.approach ? respondApproach(s, false) : s;
+  if (myLeagueMatchesLeft(lastCall) !== ANSWER_MAX_MATCHES) fail(`could not stop at ${ANSWER_MAX_MATCHES} league games left (read ${myLeagueMatchesLeft(lastCall)})`);
+  const applied = applyForJob(lastCall, target.club);
+  let yesState = null;
+  if (!applied) fail(`with ${ANSWER_MAX_MATCHES} league games left the application was refused (${jobApplyRefusal(lastCall, target.club)})`);
+  else {
+    applied.jobHunt.open.matchesLeft = ANSWER_MAX_MATCHES;
+    applied.jobHunt.open.roll = 0;
+    applied.boardConfidence = 85;
+    const run = playUntilAnswered(applied, 40);
+    if (run.outcome !== 'accepted') fail(`an application sent with ${ANSWER_MAX_MATCHES} league games left and the longest wait came back ${run.outcome}`);
+    else yesState = run.state;
+  }
+  let oneLater = lastCall;
+  guard = 0;
+  while (myLeagueMatchesLeft(oneLater) >= ANSWER_MAX_MATCHES && guard++ < 20) {
+    const r = playNextEntry({ ...oneLater, boardConfidence: 90 }, { skipHalftime: true });
+    oneLater = r.state;
+    if (r.kind === 'seasonOver' || oneLater.sacked) break;
+  }
+  if (oneLater.approach) oneLater = respondApproach(oneLater, false);
+  if (jobApplyRefusal(oneLater, target.club) !== 'late') fail(`with ${myLeagueMatchesLeft(oneLater)} league games left the refusal reads ${jobApplyRefusal(oneLater, target.club)}, not late`);
+  if (applyForJob(oneLater, target.club) !== null) fail(`an application went out with ${myLeagueMatchesLeft(oneLater)} league games left`);
+
+  /* (b) A yes nobody answered is the summary's first offer, and taking it
+     moves the manager; Continue turns it down. An application still pending
+     at the season's end (its wait forced past the last game) is answered
+     then, and its yes leads the offers the same way. */
+  const atEnd = [];
+  if (yesState) atEnd.push(['a yes left unanswered', yesState]);
+  if (applied) {
+    const pending = clone(applied);
+    pending.jobHunt.open.matchesLeft = 999;
+    atEnd.push(['an application still pending', pending]);
+  }
+  for (const [what, st] of atEnd) {
+    const done = finishSeason(playOut(st));
+    const lead = done.summary.offers[0]?.club ?? null;
+    if (lead !== target.club) { fail(`${what} at the season's end: the summary's first offer is ${lead ?? 'nothing'}, not ${target.club}`); continue; }
+    const took = startNextSeason(done.state, target.club);
+    if (took.clubName !== target.club) fail(`${what}: taking the offer put the manager at ${took.clubName}`);
+    const stayed = startNextSeason(done.state);
+    if (stayed.clubName !== base.clubName || jobHuntOf(stayed).open !== null) fail(`${what}: Continue left the manager at ${stayed.clubName} with ${JSON.stringify(jobHuntOf(stayed).open)}`);
+  }
+
+  /* (c) The sack with a summer move booked. The out of work screen offers
+     the agreed club first; whichever job is taken there is the job the
+     rollover gives. Also on a path that never called enterWilderness. */
+  let sack = null;
+  const fresh = applyForJob(base, target.club);
+  if (!fresh) fail(`could not apply to ${target.club} for the sack probe`);
+  else {
+    fresh.jobHunt.open.roll = 0;
+    fresh.boardConfidence = 85;
+    const run = playUntilAnswered(fresh);
+    const bookedMove = run.outcome === 'accepted' ? joinClubInSummer(run.state) : null;
+    if (!bookedMove || jobHuntOf(bookedMove).summerMove?.club !== target.club) fail(`the sack probe could not book a summer move (${run.outcome})`);
+    else {
+      sack = bookedMove;
+      guard = 0;
+      while (!sack.sacked && sack.week < sack.calendar.length && guard++ < 40) {
+        sack = playNextEntry({ ...sack, boardConfidence: 0.5 }, { skipHalftime: true }).state;
+      }
+      if (!sack.sacked) { fail('the sack probe was never sacked'); sack = null; }
+    }
+  }
+  if (sack) {
+    const w = enterWilderness(sack);
+    if (w.wilderness?.offers[0]?.club !== target.club) fail(`out of work, the first offer is ${w.wilderness?.offers[0]?.club ?? 'nothing'}, not the agreed ${target.club}`);
+    const hunt = jobHuntOf(w);
+    if (hunt.open !== null || hunt.summerMove !== null) fail('the sack left the job hunt with something in flight');
+    /* Wait for a second offer, then take it: the rollover must honour it.
+       The agreed offer keeps the wilderness's eight week floor from firing,
+       so a quiet phone is possible; after twelve weeks an offer for another
+       club is written in, in the agreed offer's shape, because what is
+       measured is the rollover honouring the pick, not the phone ringing. */
+    let ww = w;
+    for (let k = 0; k < 12 && !(ww.wilderness?.offers ?? []).some(o => o.club !== target.club); k++) ww = wildernessWeek(ww);
+    let other = (ww.wilderness?.offers ?? []).find(o => o.club !== target.club);
+    let written = false;
+    if (!other) {
+      const alt = applyTargets(sack).find(t => t.club !== target.club);
+      other = { ...ww.wilderness.offers[0], club: alt.club, league: alt.league, tier: alt.tier };
+      ww = { ...ww, wilderness: { ...ww.wilderness, offers: [...ww.wilderness.offers, other] } };
+      written = true;
+    }
+    console.log(`   sacked at ${sack.clubName} in week ${sack.week} with a move to ${target.club} booked; the other job taken is ${other.club} (${written ? 'written in after twelve quiet weeks' : 'a real call'})`);
+    /* The second path is a save that never went through enterWilderness: the
+       booked move is still on it when the job is taken. */
+    for (const [path, st] of [['through enterWilderness', ww], ['skipping enterWilderness', { ...sack, wilderness: ww.wilderness }]]) {
+      const took = acceptWildernessJob(st, other.club);
+      if (!took || took.clubName !== other.club) fail(`${path}: taking the ${other.club} job put the manager at ${took?.clubName ?? 'nowhere'}`);
+      if (took && (jobHuntOf(took).summerMove || took.sacked || took.wilderness)) fail(`${path}: stale state crossed the new job`);
+    }
+    const tookAgreed = acceptWildernessJob(w, target.club);
+    if (!tookAgreed || tookAgreed.clubName !== target.club) fail(`taking the agreed ${target.club} job from the out of work screen put the manager at ${tookAgreed?.clubName ?? 'nowhere'}`);
+  }
+  ok(`an application goes out with ${ANSWER_MAX_MATCHES} league games left and is answered in time, not with fewer; a waiting yes leads the summary; after the sack the job taken is the job you get`);
 }
 
 /* ---------- verdict ---------- */
