@@ -358,7 +358,7 @@ export const MORE_SPORTS_CONTENT: GameContentMap = {
       {
         heading: "What the 16 title clue would confirm",
         paragraphs: [
-          "Holding out for the championship clue, a count of 16 titles, would have confirmed it at 600. Some clues are worth skipping.",
+          "Holding out for the championship clue, a count of 16 titles, would have confirmed it at 400. Some clues are worth skipping.",
         ],
       },
     ],
