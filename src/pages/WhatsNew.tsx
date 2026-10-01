@@ -24,6 +24,12 @@ const WhatsNew = () => {
 
       <section className="space-y-8 text-sm leading-relaxed text-muted-foreground">
         <div>
+          <h2 className="text-lg font-semibold text-foreground mb-2">October 2026</h2>
+          <ul className="list-disc pl-5 space-y-2">
+            <li><strong className="text-foreground">New game: Aussie Rules Manager.</strong> Pick one of six fictional clubs, choose your eighteen starters and five bench players, prepare the squad and call each quarter through a ten-round league. Goals, behinds, the ladder and local season saves use a separate Aussie Rules engine. Clubs, players and results are generated, with game rules kept separate from the real 2026 match rules. A finished season records a play without ranked points. <Link to="/aussie-rules-manager" className="text-primary hover:underline">Manage a club</Link>.</li>
+          </ul>
+        </div>
+        <div>
           <h2 className="text-lg font-semibold text-foreground mb-2">September 2026</h2>
           <ul className="list-disc pl-5 space-y-2">
             <li><strong className="text-foreground">New game: Manager Hot Seat, five games to save your job.</strong> You walk into a real club on a bad run, the board give you five league games and a points target, and you either hit it or you are gone. Pick a shape and a team talk before every match, handle the press, and watch the board, the fans and the dressing room react. It runs on the Club Manager engine, so every match is the full match sim from that game. There is a daily (same club and target for everyone) and a free play mode for any club you like. It records that you played but puts no points on the leaderboard for now.</li>
