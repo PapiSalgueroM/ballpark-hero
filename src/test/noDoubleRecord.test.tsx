@@ -218,7 +218,7 @@ vi.mock('@/lib/nflGrid', async (importOriginal) => ({
   ...(await importOriginal<typeof import('@/lib/nflGrid')>()),
   fetchNflGridData: async () => {
     const p = { name: 'Probe Player' };
-    return { players: [p], byNormalizedName: new Map([['probe player', p]]) };
+    return { players: [p], byNormalizedName: new Map([['probe player', [p]]]) };
   },
   playerMatchesCell: () => false,
 }));
@@ -609,11 +609,15 @@ const CASES: Case[] = [
   page('missing-five', () => <MissingFive />, giveUpFinish, { usesMark: true, ready: c => !!findButton(c, /^Give up$/) }),
   page('missing-nine', () => <MissingNine />, giveUpFinish, { usesMark: true, ready: c => !!findButton(c, /^Give up$/) }),
   page('missing-eleven', () => <MissingEleven />, giveUpFinish, { usesMark: true, ready: c => !!findButton(c, /^Give up$/) }),
-  page('rank-em', () => <RankEm />, async api => {
-    for (const item of getDailyRankRound().items) {
-      await click(button(api.container, new RegExp(`^${item.name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}$`)));
-    }
-  }, { usesMark: true }),
+  {
+    ...page('rank-em', () => <RankEm />, async api => {
+      for (const item of getDailyRankRound().items) {
+        await click(button(api.container, new RegExp(`^${item.name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}$`)));
+      }
+      await click(button(api.container, /^Lock order$/));
+    }, { usesMark: true }),
+    finished: api => !!api.container.querySelector('[role="status"] h2'),
+  },
   /* Puck Detective ends two ways. A give up is its own flag, restored in a
      state initializer, so its reload needs no mark; a solve is the guess log,
      restored by useDailyPuzzle after mount, so its reload does. */

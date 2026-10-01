@@ -131,6 +131,7 @@ if (!ESBUILD) { console.error('esbuild not found in any node_modules above the r
 /* ---- the lib, rewritten when a control asks ---- */
 const LIB = path.join(ROOT, 'src', 'lib', 'managerHotSeat.ts');
 let libPath = `${ROOT_URL}/src/lib/managerHotSeat.ts`;
+let controlCopy = null;
 function rewrite(file, edits, outName, what) {
   let src = lf(fs.readFileSync(file, 'utf8'));
   for (const [from, to] of edits) {
@@ -142,6 +143,7 @@ function rewrite(file, edits, outName, what) {
   }
   const out = `${TMP}/${process.pid}.${outName}`;
   fs.writeFileSync(out, src);
+  controlCopy = out;
   return out;
 }
 if (CONTROL === 'flat') {
@@ -352,7 +354,7 @@ registerLeagueOverrides(null);
 ok('a custom club and a league override registered before the run are the same objects after a start, two matches, a press answer and a replay, and the hot seat world never shows them');
 
 /* ---------- verdict ---------- */
-for (const f of [ENTRY, BUNDLE, libPath.startsWith(TMP) ? libPath : null]) { if (f) { try { fs.unlinkSync(f); } catch { /* fine */ } } }
+for (const f of [ENTRY, BUNDLE, controlCopy]) { if (f) { try { fs.unlinkSync(f); } catch { /* fine */ } } }
 if (failures) {
   console.error(`\nsimManagerHotSeat: ${failures} failure(s)`);
   process.exit(1);

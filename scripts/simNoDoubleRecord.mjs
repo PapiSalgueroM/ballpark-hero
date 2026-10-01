@@ -227,6 +227,8 @@ const VITEST_CONTROLS = {
   },
 };
 const moduleOf = file => '@/' + file.replace(/^src\//, '').replace(/\.(ts|tsx)$/, '');
+/* Round788: practice exceptions also bind the actual phase and daily booking
+   definitions. Six in-memory controls prove each binding still refuses drift. */
 const SCAN_CONTROLS = {
   scanslug: {
     file: 'src/hooks/useNflHL.ts',
@@ -241,6 +243,40 @@ const SCAN_CONTROLS = {
     to: "useGameCompletion('rank-em', mode === 'daily' && rawDailyStatus !== 'playing', score);",
     kind: 'mode',
     why: "Rank 'Em's recorder is ANDed with its mode again",
+  },
+  scanpracticefree: {
+    file: 'src/components/free-kick/FreeKickBoard.tsx',
+    from: "isDone && mode !== 'practice' && !bookedAlready",
+    to: "isDone && mode === 'daily' && !bookedAlready",
+    kind: 'mode', why: 'Free Kick changes its proven practice exclusion to a different mode gate',
+  },
+  scanpracticebuzzer: {
+    file: 'src/components/buzzer-beater/BuzzerBeaterBoard.tsx',
+    from: "isDone && !bookedAlready && mode !== 'practice'",
+    to: "isDone && !bookedAlready && mode === 'daily'",
+    kind: 'mode', why: 'Buzzer Beater changes its proven practice exclusion to a different mode gate',
+  },
+  scanbookedfree: {
+    file: 'src/components/free-kick/FreeKickBoard.tsx',
+    from: "const bookedAlready = mode === 'daily' && bookedDaily;",
+    to: "const bookedAlready = mode === 'daily' && false;",
+    kind: 'mode', why: 'Free Kick ignores the completed daily booking state',
+  },
+  scanbookedbuzzer: {
+    file: 'src/components/buzzer-beater/BuzzerBeaterBoard.tsx',
+    from: "const bookedAlready = mode === 'daily' && bookedDaily;",
+    to: "const bookedAlready = mode === 'daily' && false;",
+    kind: 'mode', why: 'Buzzer Beater ignores the completed daily booking state',
+  },
+  scandonefree: {
+    file: 'src/components/free-kick/FreeKickBoard.tsx',
+    from: "const isDone = phase === 'done';", to: 'const isDone = true;',
+    kind: 'mode', why: 'Free Kick stops waiting for the actual finished phase',
+  },
+  scandonebuzzer: {
+    file: 'src/components/buzzer-beater/BuzzerBeaterBoard.tsx',
+    from: "const isDone = phase === 'done';", to: 'const isDone = true;',
+    kind: 'mode', why: 'Buzzer Beater stops waiting for the actual finished phase',
   },
 };
 const ALL = [...Object.keys(VITEST_CONTROLS), ...Object.keys(SCAN_CONTROLS)];
@@ -257,6 +293,15 @@ if (CONTROL && ONLY) {
    Keyed by file and recorder slug expression. A new one fails; an entry that
    no longer matches a recorder must be removed. */
 const MODE_GATE_BASELINE = [
+  // Round788: both actual practice suites prove fresh and restored daily returns,
+  // private storage refusal and later Unlimited completion with real shot rules.
+  // Bind every recorder predicate and its booking/phase definitions exactly.
+  { file: 'src/components/free-kick/FreeKickBoard.tsx', slug: 'free-kick',
+    done: "isDone && mode !== 'practice' && !bookedAlready", booked: "mode === 'daily' && bookedDaily", phase: "phase === 'done'",
+    why: 'practice never records; the in-memory finished daily returns booked in the same batch, including after storage refusal' },
+  { file: 'src/components/buzzer-beater/BuzzerBeaterBoard.tsx', slug: 'buzzer-beater',
+    done: "isDone && !bookedAlready && mode !== 'practice'", booked: "mode === 'daily' && bookedDaily", phase: "phase === 'done'",
+    why: 'practice never records; the in-memory finished daily returns booked in the same batch, including after storage refusal' },
   { file: 'src/hooks/useFaceOff.ts', slug: 'face-off', why: 'the daily button is hidden once the daily is played, and a finished run is never restored' },
   { file: 'src/hooks/useHofOrBust.ts', slug: 'hof-or-bust', why: 'restores in the state initializer, and the switch to Unlimited is one way (no way back to the daily)' },
   { file: 'src/hooks/useScorePredictor.ts', slug: 'score-predictor', why: 'restores in the state initializer, and the switch to Unlimited is one way' },
@@ -427,7 +472,10 @@ function scan(files) {
       const done = resolveExpr(code, r.args[1]);
       if (/&&/.test(done) && MODE_CHECK.test(done)) {
         const key = slug ?? r.args[0];
-        const base = MODE_GATE_BASELINE.find(b => b.file === rel && b.slug === key);
+        const base = MODE_GATE_BASELINE.find(b => b.file === rel && b.slug === key
+          && (!b.done || b.done === done.replace(/\s+/g, ' '))
+          && (!b.booked || b.booked === resolveExpr(code, 'bookedAlready').replace(/\s+/g, ' '))
+          && (!b.phase || b.phase === resolveExpr(code, 'isDone').replace(/\s+/g, ' ')));
         if (base) baselineHits.add(`${rel}|${key}`);
         else findings.push({ kind: 'mode', file: rel, line: r.at, what: `${key} records on "${done.replace(/\s+/g, ' ')}", ANDed with a mode check: a trip to another mode and back re-arms it over a finish already recorded` });
       }
@@ -587,6 +635,11 @@ try {
         copy = copy.replace(e.from, e.to);
       }
       if (copy === src) abort(`control ${name} cannot run: the rewrite of ${rel} changed nothing`);
+      for (const match of stripComments(copy).matchAll(/\bfrom (['"])(\.\.?\/[^'"]+\.module\.css)\1/g)) {
+        const originalCss = path.resolve(ROOT, path.dirname(rel), match[2]);
+        if (count(copy, match[0]) !== 1 || !originalCss.startsWith(path.join(ROOT, 'src') + path.sep) || !fs.existsSync(originalCss) || !fs.statSync(originalCss).isFile()) abort(`control ${name} cannot run: ${rel} has an unresolved or ambiguous relative CSS module import`);
+        copy = copy.replace(match[0], `from '${originalCss.replaceAll('\\', '/')}'`);
+      }
       if (/from '\.\.?\//.test(copy)) abort(`control ${name} cannot run: ${rel} has a relative import, which a copy elsewhere cannot resolve`);
       const dir = path.join(controlDir, name);
       fs.mkdirSync(dir, { recursive: true });

@@ -57,6 +57,7 @@ export const CONTINUE_SAVES: readonly ContinueSave[] = [
   { path: '/mlb-front-office', saveKey: 'mlb-front-office-save-v1', name: ['myTeam'], count: { at: ['league', 'season'], say: '{n} season' }, ended: { at: ['fired'], say: 'fired' } },
   { path: '/nhl-my-career', saveKey: 'nhl-my-career-save-v1', name: ['c', 'team'], count: { at: ['c', 'year'], say: '{n} season' }, ended: { at: ['c', 'retired'], say: 'retired' } },
   { path: '/nhl-front-office', saveKey: 'nhl-front-office-save-v1', name: ['myTeam'], count: { at: ['league', 'season'], say: '{n} season' }, ended: { at: ['fired'], say: 'fired' } },
+  { path: '/aussie-rules-manager', saveKey: 'aussie-rules-manager-save-v1' },
   { path: '/fight-career', saveKey: 'fight-career-save-v1', name: ['st', 'fighter', 'name'], count: { at: ['st', 'fightNo'], say: '{n} fights', one: '1 fight' }, ended: { at: ['st', 'retired'], say: 'retired' } },
   { path: '/fight-promoter', saveKey: 'fight-promoter-save-v1', name: ['st', 'name'], count: { at: ['st', 'show'], say: 'show {n}' }, ended: { at: ['st', 'closed'], say: 'closed' } },
   { path: '/fight-gym', saveKey: 'fight-gym-save-v1', name: ['g', 'name'], count: { at: ['g', 'week'], say: 'week {n}' }, ended: { at: ['g', 'closed'], say: 'closed' } },

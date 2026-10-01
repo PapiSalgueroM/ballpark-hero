@@ -47,6 +47,8 @@
    refuses to run unless its target text appears exactly once:
      invoke         plants a functions.invoke of college-grid-validate in the hook   section 1
      chargeunknown  plants an addDailyGuess x in the unknown branch                  section 2
+     notfound       removes the unknown-name early return                            section 2
+     duplicate      removes the already-used player's early return                   section 2
      typedlist      plants the nflCareerPlayers import in the search box             section 3
      copy           plants "SEC Conference" into the guide intro                     section 4
      undealt        plants a criterion no board deals into the guide intro           section 4
@@ -71,7 +73,7 @@ const DIALOG = 'src/components/college-grid/CollegeGridHowToPlay.tsx';
 const SEARCH = 'src/components/college-grid/CollegeGridSearch.tsx';
 const GUIDE = 'src/data/gameContent/college.ts';
 
-const CONTROLS = { invoke: 1, chargeunknown: 2, typedlist: 3, copy: 4, undealt: 4, noboardid: 5, oldseenkey: 6, heismanname: 7 };
+const CONTROLS = { invoke: 1, chargeunknown: 2, notfound: 2, duplicate: 2, typedlist: 3, copy: 4, undealt: 4, noboardid: 5, oldseenkey: 6, heismanname: 7 };
 const ONLY = process.env.SIM_CGPAGE_CONTROL || '';
 if (ONLY && !CONTROLS[ONLY]) {
   console.error(`SIM_CGPAGE_CONTROL=${ONLY} is not a control this harness knows (${Object.keys(CONTROLS).join(', ')})`);
@@ -143,8 +145,9 @@ function sectionTwo(hook) {
   const submit = at >= 0 ? blockFrom(hook, hook.indexOf('async (playerName', at)) : null;
   if (!submit) return ['no submitGuess body found in the hook'];
   const body = submit.body;
-  const judgeAt = body.indexOf('judgeCollegeCell(');
-  if (judgeAt < 0) return ['submitGuess does not call judgeCollegeCell'];
+  const verdicts = [...body.matchAll(/\bconst verdict = judgeCollegeCell\(/g)];
+  if (verdicts.length !== 1) return ['submitGuess must have one final judgeCollegeCell verdict'];
+  const judgeAt = verdicts[0].index;
   const before = body.slice(0, judgeAt);
   if (!/if \(!player\) \{[^}]*return;/.test(before)) out.push('a name the key does not carry no longer returns before judging');
   if (!/already on your board[\s\S]*?return;/.test(before)) out.push('a player already on the board no longer returns before judging');
@@ -388,6 +391,17 @@ if (want('chargeunknown')) {
   console.log('\nchargeunknown) an addDailyGuess x planted in the unknown branch');
   const hook = mustReplace(source.hook, "if (verdict === 'unknown') {", "if (verdict === 'unknown') {\n        addDailyGuess({ t: 'x', board: puzzle.id });", HOOK);
   grade('chargeunknown', sectionTwo(hook));
+}
+for (const [name, anchor, expected] of [
+  ['notfound', "toast.error('Pick a player from the suggestions.');\n        return;", 'a name the key does not carry no longer returns before judging'],
+  ['duplicate', 'toast.error(`${player.name} is already on your board.`);\n        return;', 'a player already on the board no longer returns before judging'],
+]) {
+  if (!want(name)) continue;
+  console.log(`\n${name}) the no-charge early return removed`);
+  const hook = mustReplace(source.hook, anchor, anchor.replace('\n        return;', ''), HOOK);
+  const out = sectionTwo(hook);
+  if (out.length !== 1 || out[0] !== expected) abort(`control ${name} did not fail only its intended early-return assertion`);
+  grade(name, out);
 }
 if (want('typedlist')) {
   console.log('\ntypedlist) the nflCareerPlayers import planted in the search box');

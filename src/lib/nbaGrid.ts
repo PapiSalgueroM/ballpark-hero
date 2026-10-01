@@ -11,6 +11,7 @@ import {
   type GridCategory,
   type GridCell,
   type GridDifficulty,
+  type GridFetchOptions,
 } from '@/lib/gridEngine';
 
 /**
@@ -118,6 +119,8 @@ const NBA_GRID: FranchiseGridConfig<IndexedPlayer> = {
   franchiseColumn: 'teams',
   orderColumn: 'player_name',
   minPoolSize: MIN_POOL_SIZE,
+  /* One row per player in this table, so the row id is the player's id. */
+  idColumn: 'id',
   toPlayer(raw) {
     const name = String(raw.player_name ?? '').trim();
     const teamsStr = String(raw.teams ?? '').trim();
@@ -141,8 +144,8 @@ const NBA_GRID: FranchiseGridConfig<IndexedPlayer> = {
  * or an implausibly small result, so the page can show an error state
  * instead of a broken grid.
  */
-export function fetchNbaGridData(): Promise<NbaGridData | null> {
-  return fetchFranchiseGridData(NBA_GRID);
+export function fetchNbaGridData(opts?: GridFetchOptions): Promise<NbaGridData | null> {
+  return fetchFranchiseGridData(NBA_GRID, opts);
 }
 
 /** Bespoke PlayerAutocomplete source for nba_player_stats (career-history
