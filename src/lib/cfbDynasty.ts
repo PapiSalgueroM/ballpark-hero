@@ -467,9 +467,17 @@ export function cfbRankings(st: CfbState): CfbTeam[] {
 }
 
 export function confStandings(st: CfbState, conf: string): CfbTeam[] {
-  return Object.values(st.teams)
-    .filter(t => CFB_SCHOOL_MAP.get(t.id)!.conf === conf)
-    .sort((a, b) => b.confWins - a.confWins || a.confLosses - b.confLosses || b.wins - a.wins || cfbStrength(b) - cfbStrength(a));
+  const teams = Object.values(st.teams).filter(t => CFB_SCHOOL_MAP.get(t.id)!.conf === conf);
+  if (!st.depth) {
+    return teams.sort((a, b) => b.confWins - a.confWins || a.confLosses - b.confLosses || b.wins - a.wins || cfbStrength(b) - cfbStrength(a));
+  }
+  /* Round 728: rivalry week takes a league game off anyone whose rival is in
+     another conference, so those programs play 7 conference games to
+     everyone else's 8. Raw conference wins would hand the title game race to
+     whoever played more of them, so with the program layer on the table
+     goes by conference winning percentage first. */
+  const pct = (t: CfbTeam) => (t.confWins + t.confLosses ? t.confWins / (t.confWins + t.confLosses) : 0);
+  return teams.sort((a, b) => pct(b) - pct(a) || b.confWins - a.confWins || a.confLosses - b.confLosses || b.wins - a.wins || cfbStrength(b) - cfbStrength(a));
 }
 
 export interface CfbPlayoffGame { name: string; home: string; away: string; hs: number; as: number; winner: string }

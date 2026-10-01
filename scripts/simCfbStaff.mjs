@@ -7,27 +7,46 @@
      1) the bound: a coordinator moves his unit by at most 3 rating points
         either way for ANY rating (0 to 150 probed, not just the 45 to 95 the
         generator makes), the edge never falls as the rating rises, and every
-        unit in a live league sits inside it (hard);
+        unit in a live league sits inside it (hard). And where the sim reads
+        it: cfbWinProb reads cfbStrength, and for every team and every rating
+        pair (plus both chairs vacant) the staff moves cfbStrength by exactly
+        half the two unit edges the Roster tab shows, never past the bound
+        (hard). Before the review of this round only cfbUnits (display) was
+        checked, and the harness stayed green with coordinators taken out of
+        the win model or doubled in it;
      2) offense: over SEEDS seeds a better offensive coordinator scores more.
         Common random numbers: the same seed, the same draws, only his rating
         moves, so points per game may never fall as the rating rises on ANY
         seed (hard), each step of the mean must rise by at least STEP_FLOOR,
         the 45-to-95 uplift must sit inside its measured band, and in a game
         whose result did not flip he never moved the score by more than the
-        cap of CFB_POINTS_PER_EDGE per point of edge (hard);
+        cap of CFB_POINTS_PER_EDGE per point of edge (hard). The same draws
+        mean a better coordinator can only turn a loss into a win, so wins
+        may never fall as the rating rises on any seed (hard), and the wins a
+        season a 95 adds over a 45 must sit in WIN_BAND. That band, not the
+        points band, is what fences the win model: about 9 of the 10.8
+        points are the pure score shift, so the points band cannot tell a
+        coordinator who decides games from one who only pads the score;
      3) defense: the same for the defensive coordinator and points allowed;
      4) a ten season dynasty over DYN_SEEDS seeds, with a greedy player who
         signs recruits first and then hires the best coordinator he can,
         completes: twelve games each, a twelve team field, a Heisman, rosters
         with their skill positions, every AI chair filled; and the budget is
         never negative after any step (hard), and a hire the pot cannot cover
-        is refused with nothing changed (hard);
+        is refused with nothing changed (hard). The dynasties never walk
+        anybody on payroll, so the walk is provoked twice: the thinnest
+        budget on the board (UNLV, no wins, a heavy rivalry loss) against two
+        95s through the real offseason, and chargePayroll over every budget
+        from -5 to 40 and every pair of chairs (all hard);
      5) rivalry week: every school has exactly one rival; an in-state pair
         shares a state in src/data/colleges.ts, the audited college table;
         every other pair is marked generated; every swing sits inside its
         stated range with the right sign, the morale reaches the team's
         strength, and the next budget carries the recruiting swing exactly
-        (all hard);
+        (all hard). Rivalry week takes a league game off anyone whose rival is
+        in another conference, so the conference table goes by winning
+        percentage: nobody left out of a title game may hold a better
+        conference percentage than one let in (hard);
      6) strength of schedule: the engine's number equals the average strength
         of the opponents in the game log for every team after every season, so
         a team that played stronger opponents shows the higher number (hard);
@@ -41,7 +60,11 @@
         completes nine more seasons with the layer on;
      8) the board, under vitest: src/components/cfb-dynasty/
         CfbDynastyDepth.test.tsx (an old save loads and plays, a new dynasty
-        has its staff, the hiring window refuses what it cannot afford).
+        has its staff, the hiring window refuses what it cannot afford);
+     9) league balance: AI staff are hired at each program's level, so the
+        layer leans a little toward the strong. BAL_SEASONS seasons run on the
+        legacy engine and with the layer on, same seeds, and the drift in the
+        upset rate and in the weakest program's wins must sit in its band.
 
    MEASURED HEADROOM, written down before the bands were set (Round 728,
    2026-10-01, 300 seeds a batch, five batches at CFB_STAFF_SEED_BASE 0, 1000,
@@ -63,6 +86,26 @@
    9 of the 10.8 points is the coordinator's shift (1.5 a point of edge times
    6 points of edge), the rest is games his edge turned from losses to wins.
 
+   Added after the review (2026-10-01, the same five seed bases, with the
+   conference table on winning percentage):
+     wins a season a 95 adds over a 45, offense 0.887, 0.893, 0.987, 0.987,
+       0.967; defense 0.930, 0.923, 0.957, 0.980, 1.010 (spread 0.12). With
+       coordinators out of the win model it is exactly 0 (same draws), and
+       with their effect doubled 1.63 and 1.65. WIN_BAND [0.6, 1.3], about
+       0.29 either side of the measured range, so a half or a double
+       strength effect fails;
+     league balance, 600 seasons a base, layer minus legacy: upset rate
+       -1.93, -1.90, -2.03, -1.53, -2.01 points (spread 0.50), UNLV regular
+       season wins -0.41, -0.37, -0.35, -0.24, -0.35 (spread 0.17); top six
+       prestige programs' title share 91.5 to 93.2% legacy and 91.8 to 94.7%
+       with the layer (printed, too few titles to band). UPSET_DRIFT_BAND
+       [-3.5, -0.5] and WEAK_DRIFT_BAND [-0.8, 0.1];
+     provoked payroll walk: someone walked in 4 of 10 seeds (a 95 is
+       sometimes poached first); conference seasons with uneven league game
+       counts 990 of 1000, title games the percentage rule picked differently
+       from raw wins 13 of 1000, playoff fields the schedule changed 22 of
+       200.
+
    Negative controls (house rule: prove each check can fail). Each patches the
    BUNDLE, never the source, and refuses to run unless its target string is
    in the bundle exactly once:
@@ -73,6 +116,10 @@
      CFB_STAFF_CONTROL=sos        the log records the wrong team  -> 6 red
      CFB_STAFF_CONTROL=rank       the ranking ignores the schedule-> 6 red
      CFB_STAFF_CONTROL=legacy     rivalry week leaks into old saves -> 7 red
+     CFB_STAFF_CONTROL=nostaff    coordinators leave the win model -> 1, 2, 3 red
+     CFB_STAFF_CONTROL=doubled    their effect on it doubles       -> 1, 2, 3 red
+     CFB_STAFF_CONTROL=nowalk     payroll never makes anyone walk  -> 4 red
+     CFB_STAFF_CONTROL=confraw    the table goes back to raw wins  -> 5 red
 
    Run: node scripts/simCfbStaff.mjs
 */
@@ -97,7 +144,11 @@ const DYN_SEASONS = 10;
 const LEVELS = [45, 55, 65, 70, 75, 85, 95];
 const STEP_FLOOR = 0.5;
 const UPLIFT_BAND = [8.5, 13.5];
+const WIN_BAND = [0.6, 1.3];
 const FIELDS_FLOOR = 5;
+const BAL_SEASONS = 600;
+const UPSET_DRIFT_BAND = [-3.5, -0.5];
+const WEAK_DRIFT_BAND = [-0.8, 0.1];
 
 /* Each control: the exact bundled text it rewrites and what it becomes. */
 const CONTROLS = {
@@ -108,6 +159,10 @@ const CONTROLS = {
   sos: ['(home.opps ??= []).push(g.away);', '(home.opps ??= []).push(g.home);'],
   rank: ['(strengthOfSchedule(t.opps, (oid) => str.get(oid) ?? 60) ?? str.get(t.id)) + str.get(t.id)', 'str.get(t.id) + str.get(t.id)'],
   legacy: ['if (st.depth && st.round === CFB_RIVALRY_ROUND) {', 'if (st.round === CFB_RIVALRY_ROUND) {'],
+  nostaff: ['const staffPart = staff ? (staff.off + staff.def) / 2 : 0;', 'const staffPart = 0;'],
+  doubled: ['const staffPart = staff ? (staff.off + staff.def) / 2 : 0;', 'const staffPart = staff ? staff.off + staff.def : 0;'],
+  nowalk: ['while (staffPayroll(staff) > pot) {', 'while (false) {'],
+  confraw: ['pct(b) - pct(a) || b.confWins - a.confWins', 'b.confWins - a.confWins'],
 };
 if (CONTROL && !CONTROLS[CONTROL]) { console.error(`CFB_STAFF_CONTROL=${CONTROL} is not a control this harness knows`); process.exit(1); }
 
@@ -165,6 +220,37 @@ console.log('1) the bound: a coordinator moves his unit at most 3 points, for an
     if (!t.staff?.OC || !t.staff?.DC) fail(`${t.id} starts a new dynasty without both coordinators`);
   }
   if (unitsOver) fail(`${unitsOver} units in a live league sit past the bound`);
+  /* The bound where the sim reads it. cfbWinProb reads cfbStrength, not
+     cfbUnits (that one only feeds the Roster tab), so this is the check that
+     says coordinators really decide games and by how much: each unit is about
+     half the team, so a pair moves the team by (offEdge + defEdge) / 2 of
+     the edges the Roster tab shows, and never by more than
+     STAFF_UNIT_EDGE_MAX. Every team in a live league, every rating pair from
+     0 to 150 in steps of 5, both vacant chairs, morale held at 0, against the
+     same team with no staff and no morale at all (an old save). */
+  let strMiss = 0; let strOver = 0; let firstStr = null; let probes = 0;
+  for (const t of Object.values(st.teams)) {
+    const bare = cfb.cfbStrength({ ...t, staff: undefined, morale: undefined });
+    const pairs = [{ OC: null, DC: null }];
+    for (let oc = 0; oc <= 150; oc += 5) for (let dc = 0; dc <= 150; dc += 5) {
+      pairs.push({ OC: { ...t.staff.OC, rating: oc }, DC: { ...t.staff.DC, rating: dc } });
+    }
+    for (const staff of pairs) {
+      const withStaff = { ...t, staff, morale: 0 };
+      const u = cfb.cfbUnits(withStaff);
+      const d = cfb.cfbStrength(withStaff) - bare;
+      const want = (u.offEdge + u.defEdge) / 2;
+      probes += 1;
+      if (Math.abs(d - want) > 1e-9) {
+        strMiss += 1;
+        if (!firstStr) firstStr = `${t.id} OC ${staff.OC?.rating ?? 'vacant'} DC ${staff.DC?.rating ?? 'vacant'}: strength moved ${d.toFixed(3)}, unit edges say ${want.toFixed(3)}`;
+      }
+      if (Math.abs(d) > STAFF_UNIT_EDGE_MAX + 1e-9) strOver += 1;
+    }
+  }
+  console.log(`   team strength, what the win model reads: ${probes} staff pairs probed, off the unit edges ${strMiss}, past the bound ${strOver}; a 95 pair moves it ${(cfb.cfbStrength({ ...st.teams[MY], staff: { OC: { ...st.teams[MY].staff.OC, rating: 95 }, DC: { ...st.teams[MY].staff.DC, rating: 95 } }, morale: 0 }) - cfb.cfbStrength({ ...st.teams[MY], staff: undefined, morale: undefined })).toFixed(2)}`);
+  if (strMiss) fail(`${strMiss} staff pairs move team strength (what cfbWinProb reads) by something other than half the two unit edges, first: ${firstStr}`);
+  if (strOver) fail(`${strOver} staff pairs move team strength past ${STAFF_UNIT_EDGE_MAX}`);
   const sal = [45, 70, 95].map(prog.coordinatorSalary);
   console.log(`   edge at 0/45/70/95/150: ${[0, 45, 70, 95, 150].map(r => prog.coordinatorEdge(r).toFixed(2)).join(' / ')}; salary at 45/70/95: ${sal.join(' / ')}`);
 }
@@ -187,13 +273,19 @@ function seasonWith(seed, role, rating) {
 
 function unitSection(role, label, pick, better) {
   const perLevel = LEVELS.map(() => []);
-  let seedViolations = 0; let capBreaks = 0; let firstCap = null; let flips = 0; let same = 0;
+  const winsLevel = LEVELS.map(() => []);
+  let seedViolations = 0; let winViolations = 0; let capBreaks = 0; let firstCap = null; let flips = 0; let same = 0;
   const neutralIdx = LEVELS.indexOf(70);
   for (let seed = 1; seed <= SEEDS; seed += 1) {
     const runs = LEVELS.map(L => seasonWith(seed, role, L));
     const per = runs.map(g => mean(g.map(pick)));
     per.forEach((v, i) => perLevel[i].push(v));
     for (let i = 1; i < per.length; i += 1) if (better(per[i - 1], per[i]) < -1e-9) seedViolations += 1;
+    /* Wins, the thing the win model decides. Same seed, same draws, so a
+       better coordinator can only turn a loss into a win, never the reverse. */
+    const wins = runs.map(g => g.filter(x => x.won).length);
+    wins.forEach((v, i) => winsLevel[i].push(v));
+    for (let i = 1; i < wins.length; i += 1) if (wins[i] < wins[i - 1]) winViolations += 1;
     for (let i = 0; i < LEVELS.length; i += 1) {
       if (i === neutralIdx) continue;
       const cap = Math.ceil(CFB_POINTS_PER_EDGE * Math.abs(prog.coordinatorEdge(LEVELS[i]) - prog.coordinatorEdge(70)) - 1e-9);
@@ -209,9 +301,13 @@ function unitSection(role, label, pick, better) {
   const means = perLevel.map(mean);
   const steps = means.slice(1).map((m, i) => better(means[i], m));
   const uplift = better(means[0], means[means.length - 1]);
+  const winGain = mean(winsLevel[winsLevel.length - 1]) - mean(winsLevel[0]);
   console.log(`   ${label} per game at ${LEVELS.join('/')}: ${means.map(m => m.toFixed(2)).join(' / ')}`);
   console.log(`   45 to 95 ${role === 'OC' ? 'uplift' : 'drop'} ${uplift.toFixed(2)}, smallest step ${Math.min(...steps).toFixed(2)}, seeds that went the wrong way ${seedViolations}, games compared ${same} (+${flips} that flipped), cap breaks ${capBreaks}`);
+  console.log(`   wins a season at 45/95: ${mean(winsLevel[0]).toFixed(3)} / ${mean(winsLevel[winsLevel.length - 1]).toFixed(3)}, gain ${winGain.toFixed(3)} (band ${WIN_BAND.join(' to ')}), seed steps that lost wins ${winViolations}`);
   if (seedViolations) fail(`${seedViolations} seed steps where a better ${role} made ${label} worse; with common random numbers that is never allowed`);
+  if (winViolations) fail(`${winViolations} seed steps where a better ${role} won fewer games; with common random numbers that is never allowed`);
+  if (winGain < WIN_BAND[0] || winGain > WIN_BAND[1]) fail(`a 95 ${role} instead of a 45 won ${winGain.toFixed(3)} more games a season, band ${WIN_BAND.join(' to ')}: the coordinator is not moving the win model by the stated amount`);
   if (Math.min(...steps) < STEP_FLOOR) fail(`a step of the ${role} ladder moved ${label} by only ${Math.min(...steps).toFixed(2)}, floor ${STEP_FLOOR}`);
   if (uplift < UPLIFT_BAND[0] || uplift > UPLIFT_BAND[1]) fail(`45 to 95 moved ${label} by ${uplift.toFixed(2)}, band ${UPLIFT_BAND.join(' to ')}`);
   if (capBreaks) fail(`${capBreaks} games where the ${role} moved the score past his cap, first: ${firstCap}`);
@@ -229,7 +325,35 @@ const dyn = {
   emptyHeisman: 0, badField: 0, badGames: 0, holes: 0, aiEmpty: 0,
   rivalryGames: 0, swingOut: 0, firstSwing: null, moraleMiss: 0, budgetMiss: 0, myRivalry: 0,
   sosChecked: 0, sosMiss: 0, firstSos: null, sosOrder: 0, fieldsChanged: 0,
+  confSeasons: 0, confUneven: 0, confShut: 0, firstShut: null, confPctDecided: 0,
 };
+
+/* Rivalry week takes a league game off anyone whose rival is in another
+   conference, so the title game race goes by conference winning percentage.
+   Checked on the table the engine hands the postseason: nobody left out of
+   the title game may have a strictly better conference percentage than one
+   of the two let in. Also counted: how often the table had uneven game
+   counts, and how often the percentage picked a different title game from
+   raw conference wins (the case the rule exists for). */
+const confPct = t => (t.confWins + t.confLosses ? t.confWins / (t.confWins + t.confLosses) : 0);
+function checkConfRace(st) {
+  for (const conf of cfb.CFB_CONFS) {
+    const table = cfb.confStandings(st, conf);
+    dyn.confSeasons += 1;
+    if (new Set(table.map(t => t.confWins + t.confLosses)).size > 1) dyn.confUneven += 1;
+    const worstIn = Math.min(confPct(table[0]), confPct(table[1]));
+    const shut = table.slice(2).filter(t => confPct(t) > worstIn + 1e-9);
+    if (shut.length) {
+      dyn.confShut += 1;
+      if (!dyn.firstShut) {
+        const f = t => `${t.id} ${t.confWins}-${t.confLosses}`;
+        dyn.firstShut = `season ${st.season} ${conf}: title game ${f(table[0])} vs ${f(table[1])}, left out ${shut.map(f).join(', ')}`;
+      }
+    }
+    const raw = [...table].sort((a, b) => b.confWins - a.confWins || a.confLosses - b.confLosses || b.wins - a.wins || cfb.cfbStrength(b) - cfb.cfbStrength(a));
+    if ([table[0].id, table[1].id].sort().join() !== [raw[0].id, raw[1].id].sort().join()) dyn.confPctDecided += 1;
+  }
+}
 const checkNil = (st, where) => {
   if (!(st.nil >= 0)) { dyn.negatives += 1; if (!dyn.firstNeg) dyn.firstNeg = `${where}: nil ${st.nil}`; }
 };
@@ -320,7 +444,7 @@ function runDynasty(st, rng, seasons, tag) {
   for (let s = 1; s <= seasons; s += 1) {
     const gameLog = [];
     playSeason(st, rng, gameLog);
-    if (st.depth) checkSos(st, gameLog);
+    if (st.depth) { checkSos(st, gameLog); checkConfRace(st); }
     const post = cfb.runCfbPostseason(st, rng);
     if (st.depth) {
       /* The field picked again off the same post title game table, once as
@@ -380,6 +504,56 @@ console.log(`4) ten season dynasties over ${DYN_SEEDS} seeds complete, and the b
   if (!(net >= 3)) fail(`the provoked refusal was not provoked: the hire cost ${net}`);
   if (ok || st.nil !== net - 1 || JSON.stringify(st.teams.UNLV.staff) !== before) fail(`a hire costing ${net} went through on a pot of ${net - 1}, or a refusal changed something`);
   if (ok) checkNil(st, 'provoked refusal');
+
+  /* The payroll walk, provoked. The dynasties above never walk anyone (a
+     budget clears its own program's payroll unless it is tiny), so without
+     this the "never negative" check above says nothing about chargePayroll.
+     The smallest budget on the board: UNLV with no wins, after a rivalry
+     loss by 21 or more (the full 8 off), carrying two 95s. Ten seeds, since a
+     95 can also be poached before payday; a poached chair is fine, the pot
+     must still never go negative and must still cover whoever is left. */
+  const unlv = CFB_SCHOOL_MAP.get('UNLV').prestige;
+  const thin = Math.max(0, cfb.nilBudgetFor(unlv, 0) - RIVAL_RECRUIT_MAX);
+  const pay95 = prog.coordinatorSalary(95);
+  if (!(thin < 2 * pay95)) fail(`the provoked walk is not provoked: a budget of ${thin} covers two 95s at ${pay95}`);
+  let walkCases = 0; let walkBroke = 0; let firstWalkBroke = null;
+  for (let seed = 1; seed <= 10; seed += 1) {
+    const s2 = cfb.initCfb('UNLV', lehmer(500 + seed), { depth: true });
+    s2.teams.UNLV.wins = 0; s2.teams.UNLV.losses = CFB_ROUNDS;
+    const rival = cfb.cfbRivalOf('UNLV').rival;
+    s2.lastRivalry = { season: s2.season, opp: rival, us: 0, them: 28, won: false, kind: 'generated', morale: -RIVAL_MORALE_MAX, recruit: -RIVAL_RECRUIT_MAX };
+    for (const role of prog.STAFF_ROLES) s2.teams.UNLV.staff[role] = { ...s2.teams.UNLV.staff[role], rating: 95, salary: pay95 };
+    const notes = cfb.cfbOpenOffseason(s2, lehmer(900 + seed));
+    const left = cfb.cfbPayroll(s2);
+    if (notes.some(n => n.includes('walked'))) walkCases += 1;
+    if (!(s2.nil >= 0) || s2.staffWindow.budget !== thin || left > thin || s2.nil !== thin - left) {
+      walkBroke += 1;
+      if (!firstWalkBroke) firstWalkBroke = `seed ${seed}: budget ${s2.staffWindow.budget} (want ${thin}), payroll left ${left}, pot ${s2.nil}`;
+    }
+  }
+  /* And chargePayroll itself over every budget from -5 to 40 and every pair
+     of chairs: the pot left is never negative, it is the budget less who is
+     left, nobody walks when the budget covers them, the dearest goes first,
+     and the second only goes when the first was not enough. */
+  let gridCases = 0; let gridBroke = 0; let firstGrid = null;
+  const mk = (role, r) => (r === null ? null : { id: `g-${role}-${r}`, name: 'Grid Probe', role, rating: r, salary: prog.coordinatorSalary(r), since: 0 });
+  for (let b = -5; b <= 40; b += 1) for (const ro of [null, 45, 70, 85, 95]) for (const rd of [null, 45, 70, 85, 95]) {
+    const staff = { OC: mk('OC', ro), DC: mk('DC', rd) };
+    const before = prog.staffPayroll(staff);
+    const pot = Math.max(0, b);
+    const { left, walked } = prog.chargePayroll(b, staff);
+    const after = prog.staffPayroll(staff);
+    gridCases += 1;
+    const ok = left >= 0 && left === pot - after && after <= pot
+      && (before <= pot ? walked.length === 0 : walked.length > 0)
+      && walked.every(w => prog.STAFF_ROLES.every(r => !staff[r] || staff[r].salary <= w.salary))
+      && (walked.length < 2 || Math.min(...walked.map(w => w.salary)) > pot);
+    if (!ok) { gridBroke += 1; if (!firstGrid) firstGrid = `budget ${b}, OC ${ro}, DC ${rd}: left ${left}, payroll ${before} to ${after}, walked ${walked.length}`; }
+  }
+  console.log(`   provoked payroll walk: a ${thin} point budget against two ${pay95} point 95s walked someone in ${walkCases} of 10 seeds, broken ${walkBroke}; chargePayroll grid ${gridCases} cases, broken ${gridBroke}`);
+  if (walkCases === 0) fail('the provoked payroll walk never walked anybody, so the walk path was not exercised');
+  if (walkBroke) fail(`${walkBroke} provoked offseasons left the pot negative or off the budget, first: ${firstWalkBroke}`);
+  if (gridBroke) fail(`${gridBroke} chargePayroll cases broke the walk rule, first: ${firstGrid}`);
   console.log(`   ${dyn.seasons} seasons: budget negative ${dyn.negatives} time(s), hires ${dyn.hires}, refused ${dyn.refusals} (broken refusals ${dyn.refusalBroke}), walked on payroll ${dyn.walked}`);
   console.log(`   empty Heisman races ${dyn.emptyHeisman}, bad fields ${dyn.badField}, teams off twelve games ${dyn.badGames}, skill holes ${dyn.holes}, empty AI chairs ${dyn.aiEmpty}`);
   if (dyn.negatives) fail(`the budget went negative ${dyn.negatives} time(s), first: ${dyn.firstNeg}`);
@@ -433,6 +607,9 @@ console.log('5) rivalry week: one rival each, in-state pairs are real geography,
   if (dyn.swingOut) fail(`${dyn.swingOut} rivalry swings out of range, first: ${dyn.firstSwing}`);
   if (dyn.moraleMiss) fail(`${dyn.moraleMiss} times rivalry morale did not reach the team's strength exactly`);
   if (dyn.budgetMiss) fail(`${dyn.budgetMiss} offseason budgets did not carry the rivalry swing exactly`);
+  console.log(`   conference race: ${dyn.confSeasons} conference seasons, ${dyn.confUneven} with uneven league game counts; a better conference record left out of the title game ${dyn.confShut} time(s); percentage picked a different title game from raw wins ${dyn.confPctDecided} time(s)`);
+  if (dyn.confUneven === 0) fail('no conference season ever had uneven game counts, so the conference race check was never exercised');
+  if (dyn.confShut) fail(`${dyn.confShut} title games left out a team with the better conference record, first: ${dyn.firstShut}`);
   /* The swing function itself, across every margin a game can produce and beyond. */
   for (let m = 0; m <= 120; m += 1) {
     const s = prog.rivalrySwing(m, cfb.CFB_RIVAL_FULL_MARGIN);
@@ -478,6 +655,7 @@ console.log('7) old saves: a pre-728 save plays exactly as it did, and upgrades 
   cfb.runCfbPostseason(st, rng);
   st.seasonsPlayed += 1;
   const before = dyn.seasons;
+  const shutBefore = dyn.confShut;
   cfb.cfbOpenOffseason(st, rng);
   if (st.nil !== cfb.nilBudgetFor(CFB_SCHOOL_MAP.get('TEX').prestige, st.teams.TEX.wins)) fail(`a legacy offseason opened with ${st.nil}, not the old NIL formula`);
   cfb.cfbOffseason(st, rng);
@@ -485,6 +663,7 @@ console.log('7) old saves: a pre-728 save plays exactly as it did, and upgrades 
   if (!st.depth || Object.values(st.teams).some(t => !t.staff?.OC || !t.staff?.DC)) fail('the upgrade did not give every program its staff');
   runDynasty(st, rng, 9, 'upgraded legacy save');
   if (dyn.seasons - before !== 9) fail(`the upgraded save played ${dyn.seasons - before} seasons, not nine`);
+  if (dyn.confShut > shutBefore) fail(`the upgraded save left a better conference record out of a title game ${dyn.confShut - shutBefore} time(s)`);
   console.log(`   upgraded save: ${st.seasonsPlayed} seasons played, staff on every program, rivalry week ${st.lastRivalry ? 'played' : 'never played'}`);
   if (!st.lastRivalry) fail('the upgraded save never played a rivalry week');
 }
@@ -503,6 +682,45 @@ console.log('8) the board: an old save loads, a new dynasty has its staff, the w
     const lines = out.split('\n').filter(l => /×|FAIL|AssertionError|expected|Error/.test(l)).slice(0, 10);
     fail('the board test is red:\n    ' + lines.join('\n    '));
   }
+}
+
+console.log(`9) league balance: over ${BAL_SEASONS} seasons the program layer tilts the league no further than measured`);
+{
+  /* AI staff are hired at each program's own level, so the layer leans a
+     little toward the strong, and a new dynasty starts with it on. The same
+     seeds run on the legacy engine (held to its digest in section 7) and with
+     the layer on, and the drift between them is held to a band. Upsets (the
+     lower prestige program wins a regular season game) are the strongest
+     signal there is, every game counts; the weakest program's wins are the
+     sharpest. Title shares are printed, too few titles to band. */
+  const byPrestige = [...CFB_SCHOOLS].sort((a, b) => a.prestige - b.prestige || (a.id < b.id ? -1 : 1));
+  const weakest = byPrestige[0].id;
+  const top6 = new Set(byPrestige.slice(-6).map(s => s.id));
+  const stats = {};
+  for (const depth of [false, true]) {
+    let titles = 0; let upsets = 0; let games = 0; let weakWins = 0;
+    for (let seed = 1; seed <= BAL_SEASONS; seed += 1) {
+      const rng = lehmer(SEED_BASE + seed * 3571 + 11);
+      const st = cfb.initCfb(weakest, rng, { depth });
+      for (let r = 1; r <= CFB_ROUNDS; r += 1) {
+        for (const g of cfb.simCfbRound(st, rng).games) {
+          games += 1;
+          const ph = CFB_SCHOOL_MAP.get(g.home).prestige; const pa = CFB_SCHOOL_MAP.get(g.away).prestige;
+          if (ph !== pa && g.winner === (ph < pa ? g.home : g.away)) upsets += 1;
+        }
+        if (r < CFB_ROUNDS) st.round += 1;
+      }
+      weakWins += st.teams[weakest].wins;
+      if (top6.has(cfb.runCfbPostseason(st, rng).champion)) titles += 1;
+    }
+    stats[depth] = { upsets: 100 * upsets / games, weak: weakWins / BAL_SEASONS, top6: 100 * titles / BAL_SEASONS };
+  }
+  const L = stats[false]; const D = stats[true];
+  const upDrift = D.upsets - L.upsets; const weakDrift = D.weak - L.weak;
+  console.log(`   upsets ${L.upsets.toFixed(2)}% legacy, ${D.upsets.toFixed(2)}% with the layer, drift ${upDrift.toFixed(2)} (band ${UPSET_DRIFT_BAND.join(' to ')})`);
+  console.log(`   ${weakest} regular season wins ${L.weak.toFixed(2)} legacy, ${D.weak.toFixed(2)} with the layer, drift ${weakDrift.toFixed(2)} (band ${WEAK_DRIFT_BAND.join(' to ')}); top six prestige titles ${L.top6.toFixed(1)}% and ${D.top6.toFixed(1)}%`);
+  if (upDrift < UPSET_DRIFT_BAND[0] || upDrift > UPSET_DRIFT_BAND[1]) fail(`the program layer moved the upset rate by ${upDrift.toFixed(2)} points, band ${UPSET_DRIFT_BAND.join(' to ')}`);
+  if (weakDrift < WEAK_DRIFT_BAND[0] || weakDrift > WEAK_DRIFT_BAND[1]) fail(`the program layer moved ${weakest}'s wins by ${weakDrift.toFixed(2)} a season, band ${WEAK_DRIFT_BAND.join(' to ')}`);
 }
 
 fs.rmSync(TMP, { recursive: true, force: true });
