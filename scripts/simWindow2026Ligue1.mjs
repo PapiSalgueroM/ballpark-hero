@@ -7,8 +7,9 @@
    that scripts/transferOverlay2026.mjs does not already carry. It is a
    research file: nothing reads it yet, and one integration round folds the
    five league files into the overlay later. Its companion
-   ligue1.unresolved.md lists the moves found but not two sourced, with what
-   was found and where.
+   ligue1.left-out.json lists the moves found but not two sourced, in the
+   Serie A file's shape (name, move, why) plus the club on his 2026 row (row)
+   and what was read (read).
 
    Every entry uses the overlay's field shape (name, to, db, loan, add) plus:
      sources  two URLs on two different hosts, both read on the checked date.
@@ -38,8 +39,8 @@
      7. ROWS      a name without add matches exactly one 2026 row (the
                   migration keys on the name alone); a name with add matches
                   none.
-     8. LEFT OUT  the unresolved file names nobody the main file carries, and
-                  every entry in it has a name, a claim and a reason.
+     8. LEFT OUT  the left-out file names nobody the main file carries, and
+                  every entry in it has a name, a move and a reason.
      9. DASHES    neither file contains an em dash or an en dash (house rule).
 
    NEGATIVE CONTROLS (house rule: prove each check can fail). Each plants one
@@ -54,7 +55,7 @@
      WINDOW2026_CONTROL=spelling  an entry's db becomes a spelling no row has
      WINDOW2026_CONTROL=engine    a Monaco entry claims the engine club PSG
      WINDOW2026_CONTROL=rows      an entry with a 2026 row gains add data
-     WINDOW2026_CONTROL=leftout   the unresolved file names a player the main
+     WINDOW2026_CONTROL=leftout   the left-out file names a player the main
                                   file carries
      WINDOW2026_CONTROL=dashes    an entry's note gains an em dash
 
@@ -74,7 +75,7 @@ import { DB_TO_ENGINE } from './lib/dbClubNames.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const FILE = path.join(ROOT, 'scripts', 'data', 'window2026', 'ligue1.json');
-const LEFT = path.join(ROOT, 'scripts', 'data', 'window2026', 'ligue1.unresolved.md');
+const LEFT = path.join(ROOT, 'scripts', 'data', 'window2026', 'ligue1.left-out.json');
 const CONTROL = process.env.WINDOW2026_CONTROL || '';
 const SECTIONS = { shape: 1, window: 2, hosts: 3, overlay: 4, spelling: 5, engine: 6, rows: 7, leftout: 8, dashes: 9 };
 const failures = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0, 9: 0 };
@@ -83,18 +84,11 @@ const fail = m => { failures[section] += 1; console.error('  FAIL: ' + m); };
 const abort = m => { console.error(m); process.exit(1); };
 
 let rawMain = fs.readFileSync(FILE, 'utf8');
-let rawLeft = fs.readFileSync(LEFT, 'utf8');
+const rawLeft = fs.readFileSync(LEFT, 'utf8');
 const entries = JSON.parse(rawMain);
+const leftOut = JSON.parse(rawLeft);
 if (!Array.isArray(entries) || entries.length === 0) abort('ligue1.json is empty or not an array. NOTHING WAS CHECKED.');
-
-/* The unresolved file is markdown. Every record is a bullet that opens with
-   the player's name in bold, then the claim and the reason separated by
-   " | ". Anything else in the file is prose. */
-const leftOut = rawLeft.split(/\r?\n/).filter(l => /^- \*\*/.test(l)).map(l => {
-  const m = l.match(/^- \*\*(.+?)\*\*\s*(.*)$/);
-  const parts = (m ? m[2] : '').split(' | ').map(s => s.trim());
-  return { name: m ? m[1].trim() : '', move: parts[0] || '', why: parts[1] || '', line: l };
-});
+if (!Array.isArray(leftOut)) abort('ligue1.left-out.json is not an array. NOTHING WAS CHECKED.');
 
 /* ------------------------------------------------------------------ */
 /* Negative controls: each rewrites one value in memory.              */
@@ -122,7 +116,7 @@ if (CONTROL) {
     mon.to = 'PSG';
   }
   if (CONTROL === 'rows') { plain.add = { p: 'Centre-Forward', a: 25, usd: 10800000 }; }
-  if (CONTROL === 'leftout') { leftOut.push({ name: entries[0].name, move: 'planted by the control', why: 'control', line: '' }); }
+  if (CONTROL === 'leftout') { leftOut.push({ name: entries[0].name, move: 'planted by the control', why: 'control' }); }
   if (CONTROL === 'dashes') {
     if (!/"note"/.test(rawMain)) abort('control cannot run: no note in the file to plant into');
     rawMain = rawMain.replace(/"note": "/, '"note": "\u2014 ');
@@ -199,7 +193,9 @@ async function rest(pathAndQuery) {
   let last = '';
   for (let attempt = 1; attempt <= 3; attempt += 1) {
     let res;
-    try { res = await fetch(`${URL_}/rest/v1/${pathAndQuery}`, { headers: HEADERS }); }
+    /* A stalled connection once held a run for minutes: abort at 20 seconds
+       so it counts as one failed attempt. */
+    try { res = await fetch(`${URL_}/rest/v1/${pathAndQuery}`, { headers: HEADERS, signal: AbortSignal.timeout(20000) }); }
     catch (err) { last = `unreachable (${String(err).slice(0, 80)})`; res = null; }
     if (res && res.ok) return res.json();
     if (res) last = `HTTP ${res.status}`;
@@ -262,22 +258,22 @@ console.log('7) One 2026 row per name, none when the entry adds the player');
 }
 
 section = 8;
-console.log(`8) The unresolved file (${leftOut.length} records)`);
+console.log(`8) The left-out file (${leftOut.length} records)`);
 {
   const mainNames = new Set(entries.map(e => e.name));
   for (const l of leftOut) {
-    const who = l.name || l.line.slice(0, 60);
-    if (!l.name) fail(`${who}: no name`);
-    if (!l.move) fail(`${who}: no claimed move`);
-    if (!l.why) fail(`${who}: no reason`);
-    if (mainNames.has(l.name)) fail(`${who}: unresolved AND in ligue1.json`);
+    const who = l && typeof l.name === 'string' ? l.name : JSON.stringify(l).slice(0, 60);
+    if (typeof l.name !== 'string' || !l.name.trim()) fail(`${who}: no name`);
+    if (typeof l.move !== 'string' || !l.move.trim()) fail(`${who}: no move`);
+    if (typeof l.why !== 'string' || !l.why.trim()) fail(`${who}: no reason`);
+    if (mainNames.has(l.name)) fail(`${who}: left out AND in ligue1.json`);
   }
 }
 
 section = 9;
 console.log('9) No em dash or en dash in either file');
 {
-  for (const [label, text] of [['ligue1.json', rawMain], ['ligue1.unresolved.md', rawLeft]]) {
+  for (const [label, text] of [['ligue1.json', rawMain], ['ligue1.left-out.json', rawLeft]]) {
     const i = text.search(/[\u2013\u2014]/);
     if (i >= 0) fail(`${label}: a dash character at offset ${i}: ${JSON.stringify(text.slice(Math.max(0, i - 30), i + 30))}`);
   }
@@ -294,4 +290,4 @@ if (CONTROL) {
   process.exit(0);
 }
 if (total > 0) { console.error(`\nsimWindow2026Ligue1: ${total} failure(s)`); process.exit(1); }
-console.log(`\nsimWindow2026Ligue1: all green (${entries.length} entries, ${leftOut.length} unresolved)`);
+console.log(`\nsimWindow2026Ligue1: all green (${entries.length} entries, ${leftOut.length} left out)`);

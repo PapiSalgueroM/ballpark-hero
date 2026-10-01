@@ -480,5 +480,485 @@
     "window": "2026-summer",
     "checked": "2026-10-01",
     "note": "Season long loan from Chelsea, announced by Chelsea (2026-08-11). ESPN's Strasbourg 2026-27 squad page lists him."
+  },
+  {
+    "name": "George Ilenikhena",
+    "to": "Al-Ittihad",
+    "db": "Al-Ittihad Club",
+    "sources": [
+      "https://www.asmonaco.com/en/news/george-ilenikhena-joins-al-ittihad",
+      "https://africa.espn.com/football/player/bio/_/id/357108/george-ilenikhena"
+    ],
+    "window": "2026-01",
+    "checked": "2026-10-01",
+    "note": "Permanent from Monaco, announced by Monaco on 2026-02-03 in the Saudi winter window. ESPN's player page lists him at Al Ittihad with 2026-27 Saudi Pro League stats."
+  },
+  {
+    "name": "Adam Karabec",
+    "to": null,
+    "db": "AC Sparta Prague",
+    "sources": [
+      "https://sparta.cz/en/tymy/1-muzi-a/hraci",
+      "https://www.espn.com/soccer/player/_/id/306895/adam-karabec"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "His 2026 row is the 2025-26 loan at Lyon. The loan ended and he went back to Sparta Prague (engine does not model the club), whose first team list carries him at number 10. ESPN's player page lists him at Sparta Prague with 2026-27 Europa League stats."
+  },
+  {
+    "name": "Ayase Ueda",
+    "to": "Lille",
+    "db": "LOSC Lille",
+    "sources": [
+      "https://www.feyenoord.com/en/news/ayase-ueda-leaves-feyenoord-for-losc-lille-310826",
+      "https://www.espn.com/soccer/team/squad/_/id/166/lille"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Permanent from Feyenoord, announced by Feyenoord on 2026-08-31 with immediate effect. ESPN's Lille 2026-27 squad page lists him."
+  },
+  {
+    "name": "Arnaud Bodart",
+    "to": "Le Havre",
+    "db": "Le Havre AC",
+    "sources": [
+      "https://hac.football/fr/posts/arnaud-bodart-debarque-au-hac",
+      "https://www.espn.com/soccer/team/squad/_/id/3236/le-havre"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Left Lille by mutual agreement and signed for Le Havre for one season as a medical joker, announced by Le Havre on 2026-09-16 (after the window closed, which the joker rule allows). ESPN's Le Havre 2026-27 squad page lists him."
+  },
+  {
+    "name": "Rayan Fofana",
+    "to": "Le Havre",
+    "db": "Le Havre AC",
+    "loan": true,
+    "sources": [
+      "https://hac.football/fr/posts/rayan-fofana-le-havre-je-pense-que-cest-lendroit-parfait",
+      "https://www.espn.com/soccer/team/squad/_/id/3236/le-havre"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Loan from Lens for the 2026-27 season, presented by Le Havre on 2026-09-10. ESPN's Le Havre 2026-27 squad page lists him and ESPN's Lens page does not."
+  },
+  {
+    "name": "Noah Edjouma",
+    "to": "Brest",
+    "db": "Stade Brestois 29",
+    "loan": true,
+    "sources": [
+      "https://www.losc.fr/actualites/2026-09-01/noah-edjouma-prete-au-stade-brestois-29",
+      "https://www.espn.com/soccer/team/squad/_/id/6997/brest"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "His 2026 row still sits at Toulouse, the club Lille signed him from. Lille loaned him to Brest for 2026-27, announced by Lille on 2026-09-01. ESPN's Brest 2026-27 squad page lists him."
+  },
+  {
+    "name": "Mohamed Bayo",
+    "to": "Samsunspor",
+    "db": "Samsunspor",
+    "sources": [
+      "https://www.losc.fr/actualites/2026-09-05/mohamed-bayo-transfere-samsunspor",
+      "https://www.espn.co.uk/football/player/_/id/267519/mohamed-bayo"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "A Lille player whose 2026 row sits at Gaziantep, his 2025-26 loan club. Sold by Lille to Samsunspor, announced by Lille on 2026-09-05 (the Turkish window was still open). ESPN's player page lists him at Samsunspor with 2026-27 Super Lig stats."
+  },
+  {
+    "name": "Vincent Burlet",
+    "to": null,
+    "db": "Cracovia",
+    "sources": [
+      "https://www.losc.fr/actualites/2026-07-15/vincent-burlet-transfere-au-ks-cracovia",
+      "https://www.espn.com/soccer/player/_/id/346853/vincent-burlet"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "A Lille player whose 2026 row sits at Boulogne, his 2025-26 loan club. Sold by Lille to Cracovia (engine does not model the club), announced by Lille on 2026-07-15. ESPN's player page lists him at Cracovia."
+  },
+  {
+    "name": "Loun Srdanovic",
+    "to": "Lille",
+    "db": "LOSC Lille",
+    "sources": [
+      "https://www.losc.fr/actualites/2026-07-06/loun-srdanovic-defenseur-international-u19-suisse-rejoint-le-losc",
+      "https://www.espn.com/soccer/team/squad/_/id/166/lille"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Permanent from Servette, announced by Lille on 2026-07-06, four year contract to 2030. His 2026 row sits at Servette FC U21. ESPN's Lille 2026-27 squad page lists him."
+  },
+  {
+    "name": "Başar Önal",
+    "to": "Lille",
+    "db": "LOSC Lille",
+    "sources": [
+      "https://ligue1.com/en/articles/l1_article_5504-basar-oenal-continues-losc-s-proud-turkish-tradition",
+      "https://www.espn.com/soccer/team/squad/_/id/166/lille"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Permanent from NEC Nijmegen, four year contract to 2030 (ligue1.com, the league's own site, 2026-07-14). ESPN's Lille 2026-27 squad page lists him as Basar Onal."
+  },
+  {
+    "name": "Andrew Omobamidele",
+    "to": "Anderlecht",
+    "db": "RSC Anderlecht",
+    "loan": true,
+    "sources": [
+      "https://www.rcstrasbourgalsace.fr/andrew-omobamidele-prete-a-anderlecht/",
+      "https://www.espn.com/soccer/team/squad/_/id/441/anderlecht"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Loan from Strasbourg, announced by Strasbourg on 2026-09-02 (the Belgian window was still open). ESPN's Anderlecht 2026-27 squad page lists him."
+  },
+  {
+    "name": "Soumaïla Coulibaly",
+    "to": "Watford",
+    "db": "Watford FC",
+    "loan": true,
+    "sources": [
+      "https://www.rcstrasbourgalsace.fr/soumaila-coulibaly-prete-a-watford/",
+      "https://www.espn.com/soccer/team/squad/_/id/395/watford"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "His 2026 row sits at Brest. Strasbourg loaned him to Watford with an option to buy, announced by Strasbourg on 2026-09-01. ESPN's Watford 2026-27 squad page lists him (number 3)."
+  },
+  {
+    "name": "Abdoul Ouattara",
+    "to": "Ipswich Town",
+    "db": "Ipswich Town",
+    "sources": [
+      "https://www.rcstrasbourgalsace.fr/abdoul-ouattara-quitte-le-racing/",
+      "https://www.espn.com/soccer/team/squad/_/id/373/ipswich-town"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Permanent from Strasbourg to Ipswich Town, announced by Strasbourg on 2026-08-17. ESPN's Ipswich 2026-27 squad page lists him."
+  },
+  {
+    "name": "Mathis Amougou",
+    "to": "Toulouse",
+    "db": "FC Toulouse",
+    "loan": true,
+    "sources": [
+      "https://www.rcstrasbourgalsace.fr/mathis-amougou-prete-a-toulouse/",
+      "https://www.espn.com/soccer/team/squad/_/id/179/toulouse"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Loan from Strasbourg, announced by Strasbourg on 2026-09-01. ESPN's Toulouse 2026-27 squad page lists him."
+  },
+  {
+    "name": "Deivid Washington",
+    "to": "Strasbourg",
+    "db": "RC Strasbourg Alsace",
+    "sources": [
+      "https://www.rcstrasbourgalsace.fr/deivid-washington-signe-a-strasbourg/",
+      "https://www.espn.com/soccer/team/squad/_/id/180/strasbourg"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Permanent from Chelsea, contract to 2031, announced by Strasbourg on 2026-09-01. His 2026 row sits at Chelsea FC U21. ESPN's Strasbourg 2026-27 squad page lists him."
+  },
+  {
+    "name": "Mateo Del Blanco",
+    "to": "Strasbourg",
+    "db": "RC Strasbourg Alsace",
+    "sources": [
+      "https://www.rcstrasbourgalsace.fr/mateo-del-blanco-rejoint-le-racing/",
+      "https://www.espn.com/soccer/team/squad/_/id/180/strasbourg"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Permanent from Union de Santa Fe, contract to 2031, announced by Strasbourg on 2026-07-08. ESPN's Strasbourg 2026-27 squad page lists him."
+  },
+  {
+    "name": "Oso",
+    "to": "Strasbourg",
+    "db": "RC Strasbourg Alsace",
+    "sources": [
+      "https://www.rcstrasbourgalsace.fr/oso-rejoint-le-racing/",
+      "https://www.espn.com/soccer/team/squad/_/id/180/strasbourg"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Permanent from Sevilla, contract to 2031, announced by Strasbourg on 2026-08-30. ESPN's Strasbourg 2026-27 squad page lists him."
+  },
+  {
+    "name": "Milos Lukovic",
+    "to": "Kaiserslautern",
+    "db": "1.FC Kaiserslautern",
+    "loan": true,
+    "sources": [
+      "https://www.rcstrasbourgalsace.fr/milos-lukovic-prete-a-kaiserslautern/",
+      "https://www.espn.com/soccer/player/_/id/370771/milos-lukovic"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "A Strasbourg player whose 2026 row sits at Preston, his 2025-26 loan club. Loaned to Kaiserslautern, announced by Strasbourg on 2026-08-27. ESPN's player page lists him at Kaiserslautern in the 2026-27 2. Bundesliga."
+  },
+  {
+    "name": "Rayane Messi",
+    "to": "Al-Ettifaq",
+    "db": "Al-Ettifaq FC",
+    "loan": true,
+    "sources": [
+      "https://www.rcstrasbourgalsace.fr/rayane-messi-prete-a-al-ettifaq/",
+      "https://www.espn.com/soccer/player/_/id/394467/rayane-messi"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "A Strasbourg player whose 2026 row sits at Pau. Loaned to Al-Ettifaq with an option to buy, announced by Strasbourg on 2026-08-14. ESPN's player page lists him at Al Ettifaq with 2026-27 Saudi Pro League stats."
+  },
+  {
+    "name": "Óscar Perea",
+    "to": null,
+    "db": "CF América",
+    "sources": [
+      "https://www.rcstrasbourgalsace.fr/oscar-perea-quitte-le-racing/",
+      "https://www.espn.com/soccer/player/_/id/336456/oscar-perea"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "A Strasbourg player whose 2026 row sits at AVS, his 2025-26 loan club. Sold to Club America (engine does not model the club), announced by Strasbourg on 2026-07-28 as a permanent transfer. ESPN's player page lists him at America with 2026-27 stats."
+  },
+  {
+    "name": "Morgan Guilavogui",
+    "to": "Real Salt Lake",
+    "db": "Real Salt Lake City",
+    "sources": [
+      "https://www.rclens.fr/fr/news/depart-morgan-guilavogui-rclens-real-salt-lake-20260203",
+      "https://www.espn.com/soccer/player/_/id/305777/morgan-guilavogui"
+    ],
+    "window": "2026-01",
+    "checked": "2026-10-01",
+    "note": "Permanent from Lens to Real Salt Lake in MLS, announced by Lens on 2026-02-03. ESPN's player page lists him at Real Salt Lake."
+  },
+  {
+    "name": "Franjo Ivanović",
+    "to": "Lens",
+    "db": "RC Lens",
+    "loan": true,
+    "sources": [
+      "https://www.rclens.fr/fr/franjo-ivanovic-rclens-leslensois2-20260812",
+      "https://www.espn.com/soccer/team/squad/_/id/175/lens"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Season long loan from Benfica without an option to buy, announced by Lens on 2026-08-12. ESPN's Lens 2026-27 squad page lists him."
+  },
+  {
+    "name": "Jhoanner Chávez",
+    "to": "Lens",
+    "db": "RC Lens",
+    "sources": [
+      "https://www.rclens.fr/fr/news/pret-jhoanner-chavez-rclens-sparta-prague-20260209",
+      "https://www.espn.com/soccer/team/squad/_/id/175/lens"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "His 2026 row is the loan at Sparta Prague, which Lens announced on 2026-02-09 as running to June 2026 with an option. The loan ended and he is back at Lens: ESPN's Lens 2026-27 squad page lists him and Sparta's first team list no longer does."
+  },
+  {
+    "name": "Michaël Cuisance",
+    "to": "Lens",
+    "db": "RC Lens",
+    "sources": [
+      "https://www.rclens.fr/fr/rclens-michael-cuisance-arrivee-mercato-20262027",
+      "https://www.espn.com/soccer/team/squad/_/id/175/lens"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Permanent from Hertha Berlin, contract to 2030, announced by Lens for 2026-27. ESPN's Lens 2026-27 squad page lists him."
+  },
+  {
+    "name": "Michal Skoras",
+    "to": "Lens",
+    "db": "RC Lens",
+    "sources": [
+      "https://www.rclens.fr/fr/michal-skoras-mercato-rclens-leslensois-20260714",
+      "https://www.espn.com/soccer/team/squad/_/id/175/lens"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Permanent from Gent, contract to 2031, announced by Lens on 2026-07-14. ESPN's Lens 2026-27 squad page lists him."
+  },
+  {
+    "name": "Thorgan Hazard",
+    "to": "Lens",
+    "db": "RC Lens",
+    "sources": [
+      "https://www.rclens.fr/fr/thorgan-hazard-mercato-rclens-leslensois-20260713",
+      "https://www.espn.com/soccer/team/squad/_/id/175/lens"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Free transfer when his Anderlecht contract ended, back at his first club on a deal to 2028, announced by Lens on 2026-07-13. ESPN's Lens 2026-27 squad page lists him."
+  },
+  {
+    "name": "Yassine Titraoui",
+    "to": "Lens",
+    "db": "RC Lens",
+    "sources": [
+      "https://www.rclens.fr/fr/yacine-titraoui-leslensois-rclens-mercato-20260803",
+      "https://www.espn.com/soccer/team/squad/_/id/175/lens"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Permanent from Charleroi, contract to 2031, announced by Lens on 2026-08-03. ESPN's Lens 2026-27 squad page lists him."
+  },
+  {
+    "name": "Rémy Labeau Lascary",
+    "to": "Auxerre",
+    "db": "AJ Auxerre",
+    "loan": true,
+    "sources": [
+      "https://www.rclens.fr/fr/rclens-remy-labeau-lascary-pret-ajauxerre-20260727",
+      "https://www.espn.com/soccer/team/squad/_/id/172/auxerre"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "A Lens player whose 2026 row sits at Brest, his 2025-26 loan club. Lens loaned him to Auxerre with an option to buy, announced on 2026-07-27. ESPN's Auxerre 2026-27 squad page lists him."
+  },
+  {
+    "name": "Adrien Thomasson",
+    "to": "Rennes",
+    "db": "Stade Rennais FC",
+    "sources": [
+      "https://www.staderennais.com/actualites/mercato/adrien-thomasson-est-rouge-et-noir",
+      "https://www.espn.com/soccer/team/squad/_/id/169/rennes"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Free transfer when his Lens contract ended, signed to 2029, announced by Rennes on 2026-05-28. ESPN's Rennes 2026-27 squad page lists him."
+  },
+  {
+    "name": "Issa Soumaré",
+    "to": "Rennes",
+    "db": "Stade Rennais FC",
+    "sources": [
+      "https://www.staderennais.com/actualites/mercato/issa-soumare-est-rouge-et-noir",
+      "https://www.espn.com/soccer/team/squad/_/id/169/rennes"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Permanent from Le Havre, contract to 2030, announced by Rennes on 2026-06-16. ESPN's Rennes 2026-27 squad page lists him."
+  },
+  {
+    "name": "Bryan Reynolds",
+    "to": "Rennes",
+    "db": "Stade Rennais FC",
+    "sources": [
+      "https://www.staderennais.com/actualites/mercato/linternational-americain-bryan-reynolds-en-renfort",
+      "https://www.espn.com/soccer/team/squad/_/id/169/rennes"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Permanent from Westerlo, contract to 2030, announced by Rennes on 2026-07-09. ESPN's Rennes 2026-27 squad page lists him."
+  },
+  {
+    "name": "Charlie Cresswell",
+    "to": "Rennes",
+    "db": "Stade Rennais FC",
+    "sources": [
+      "https://www.staderennais.com/actualites/mercato/charlie-bienvenue-a-rennes",
+      "https://www.espn.com/soccer/team/squad/_/id/169/rennes"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Permanent from Toulouse, contract to 2031, announced by Rennes on 2026-08-04. ESPN's Rennes 2026-27 squad page lists him."
+  },
+  {
+    "name": "Sebastian Szymanski",
+    "to": "Rennes",
+    "db": "Stade Rennais FC",
+    "sources": [
+      "https://www.staderennais.com/actualites/mercato/sebastian-szymanski-nouveau-createur-rouge-et-noir",
+      "https://www.espn.com/soccer/team/squad/_/id/169/rennes"
+    ],
+    "window": "2026-01",
+    "checked": "2026-10-01",
+    "note": "Permanent from Fenerbahce, contract to 2029, announced by Rennes on 2026-01-22. ESPN's Rennes 2026-27 squad page lists him."
+  },
+  {
+    "name": "Kader Meïté",
+    "to": "Al-Hilal",
+    "db": "Al-Hilal SFC",
+    "sources": [
+      "https://www.staderennais.com/actualites/mercato/kader-meite-rejoint-al-hilal",
+      "https://www.espn.com/soccer/player/_/id/396028/kader-meite"
+    ],
+    "window": "2026-01",
+    "checked": "2026-10-01",
+    "note": "Permanent from Rennes to Al Hilal, announced by Rennes on 2026-02-01, the last day of the winter window. ESPN's player page lists him at Al Hilal."
+  },
+  {
+    "name": "Seko Fofana",
+    "to": "Porto",
+    "db": "FC Porto",
+    "loan": true,
+    "sources": [
+      "https://www.staderennais.com/actualites/mercato/retour-de-seko-fofana-a-porto",
+      "https://www.espn.com/soccer/player/_/id/184118/seko-fofana"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Rennes first loaned him to Porto in February 2026, then loaned him there again for 2026-27 without an option to buy, announced on 2026-08-26. ESPN's player page lists him at FC Porto."
+  },
+  {
+    "name": "Mikayil Faye",
+    "to": null,
+    "db": "1.FC Nuremberg",
+    "loan": true,
+    "sources": [
+      "https://www.staderennais.com/actualites/mercato/mikayil-faye-senvole-pour-lallemagne",
+      "https://www.espn.com/soccer/player/_/id/297344/mikayil-faye"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "A Rennes player whose 2026 row sits at Cremonese, his 2025-26 loan club. Rennes loaned him to Nuremberg in the 2. Bundesliga (engine does not model the club) with an option to buy, announced on 2026-07-23. ESPN's player page lists him at Nurnberg."
+  },
+  {
+    "name": "Breel Embolo",
+    "to": "Atlanta United",
+    "db": "Atlanta United FC",
+    "sources": [
+      "https://www.staderennais.com/actualites/mercato/breel-embolo-rejoint-les-etats-unis-et-sengage-avec-atlanta",
+      "https://www.espn.com/soccer/player/_/id/202099/breel-embolo"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Permanent from Rennes to Atlanta United in MLS, announced by Rennes on 2026-08-23 (listed under transfers in the club's summer recap). ESPN's player page lists him at Atlanta United."
+  },
+  {
+    "name": "Alidu Seidu",
+    "to": "Nice",
+    "db": "OGC Nice",
+    "loan": true,
+    "sources": [
+      "https://www.staderennais.com/actualites/mercato/alidu-seidu-prete-a-nice",
+      "https://www.espn.com/soccer/team/squad/_/id/2502/nice"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Loan from Rennes to the end of the season without an option to buy, announced by Rennes on 2026-09-18. ESPN's Nice 2026-27 squad page lists him."
+  },
+  {
+    "name": "Miłosz Piekutowski",
+    "to": "Strasbourg",
+    "db": "RC Strasbourg Alsace",
+    "sources": [
+      "https://www.rcstrasbourgalsace.fr/milosz-piekutowski-est-bleublanc/",
+      "https://www.espn.com/soccer/team/squad/_/id/180/strasbourg"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Permanent from Jagiellonia Bialystok, contract to 2031, announced by Strasbourg on 2026-07-06. ESPN's Strasbourg 2026-27 squad page lists him."
   }
 ]
