@@ -56,7 +56,9 @@
  *      the hash catches all 28.
  *   5) An old save loads. A career written without the field comes back
  *      with no order, plays the fixture's match the fixture's way, and an
- *      order set on it survives a save and a load; a bad id is refused.
+ *      order set on it survives a save and a load; a bad id is refused, and
+ *      a loan signing (onLoan, a man on loan TO the club, who can start) is
+ *      listed like anyone else.
  *
  * Negative controls (house rule: prove the checks can fail), each a rewrite
  * of a copy of src/lib/clubManager.ts that refuses to run if its anchor is
