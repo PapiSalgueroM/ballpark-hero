@@ -2,6 +2,162 @@ import type { GameContentMap } from './types';
 
 // Soccer game guides, batch 2. Casual human tone, no em dashes anywhere.
 export const SOCCER_CONTENT_2: GameContentMap = {
+  '/manager-hot-seat': {
+    intro: [
+      "Manager Hot Seat is the short, sharp version of Club Manager. You walk into a real club on a bad run, the board give you five league games and a points target, and you either hit it or you are sacked.",
+      "It runs on the Club Manager engine, so every match, every meter and every press question is the same one the full game plays. Before each match you pick a shape and a team talk, and after it the board, the fans and the dressing room all react.",
+      "There is a daily, the same club and the same target for everyone, and a free play mode where you can take any club you like.",
+    ],
+    headings: {
+      howToPlay: "How to play Manager Hot Seat, the free five game sack race",
+      rules: "Manager Hot Seat rules: the target, the board and the fans",
+      example: "A Manager Hot Seat walkthrough, five games to save the job",
+      tips: "Manager Hot Seat tips for keeping your job",
+      faq: "Manager Hot Seat FAQ: the engine, the daily and the leaderboard",
+    },
+    howToPlaySections: [
+      {
+        heading: "Pick the daily club or your own",
+        items: [
+          "Pick today's hot seat for the shared daily club, or open free play and choose any club, or let the game pick one at random.",
+        ],
+      },
+      {
+        heading: "The takeover briefing",
+        items: [
+          "The engine plays the season up to the day the job opens, then shows you the table place, the recent form and the board's target.",
+        ],
+      },
+      {
+        heading: "Before every match",
+        items: [
+          "Tap Take the job and the first match comes up with a read on the game from the dugout.",
+        ],
+        subsections: [
+          {
+            heading: "Picking a shape",
+            items: ["Pick a shape: defensive, balanced or attacking."],
+          },
+          {
+            heading: "Picking a team talk",
+            items: ["Pick a team talk: calm them, fire them up, demand more, the hairdryer, or say nothing at all."],
+          },
+        ],
+      },
+      {
+        heading: "After the final whistle",
+        items: [
+          "Kick off. The result comes back with what it did to the board, the fans and the dressing room.",
+          "When the press have a question, answer it before the next match.",
+          "Keep going until you hit the target, run out of league games, or the board run out of patience.",
+        ],
+      },
+    ],
+    ruleSections: [
+      {
+        heading: "How the job opens",
+        items: [
+          "The job opens after the worst run of form the simulated season produced between league weeks 6 and 14.",
+          "The board start on 30 out of 100, whatever they thought of the last manager.",
+        ],
+      },
+      {
+        heading: "The points target",
+        items: [
+          "The target is a number of points from your next 5 league games.",
+          "It is read off those five fixtures: more is asked at home and against weaker sides, less away and against stronger ones.",
+          "Cup and European ties still get played and still move the meters, but only league points count toward the target.",
+        ],
+      },
+      {
+        heading: "Board, fans and dressing room",
+        items: [
+          "The dressing room meter is the average morale of the eleven the engine picks, and morale feeds straight into how well they play.",
+        ],
+        subsections: [
+          {
+            heading: "Keeping or losing the job",
+            items: [
+              "Hit the target and you keep the job straight away, even with games to spare.",
+              "Finish one point short with the fan meter at 65 or above and the fans save you.",
+              "If the board meter hits zero at any final whistle, you are sacked on the spot.",
+              "If even winning every league game left could not get you within a point of the target, the board do not wait for the last game.",
+            ],
+          },
+        ],
+      },
+      {
+        heading: "The daily and the leaderboard",
+        items: [
+          "The daily is the same club, the same takeover week and the same target for everyone, and every match on the day draws from the same seeded stream, so the difference between two players is the calls they made.",
+          "Manager Hot Seat records that you played but puts no points on the leaderboard for now, while the points system is being rebuilt.",
+        ],
+      },
+    ],
+    exampleSections: [
+      {
+        heading: "Walking into a slump",
+        paragraphs: [
+          "Say today's club is a mid table side that has taken two points from its last five. The job opens 15th after 11 games, the board expect 9th, and the target is 7 points from 5 league games.",
+        ],
+      },
+      {
+        heading: "The first two league games",
+        paragraphs: [
+          "Game one is at home to a weaker side. The read says the dressing room is flat, so you go balanced and say nothing. A 2 to 0 win puts 3 on the board and lifts the fans.",
+          "Game two is away at a stronger side. You sit deep with a defensive shape and take a 1 to 1 draw. That is 4. The press ask about the board and you back yourself.",
+        ],
+      },
+      {
+        heading: "A cup tie in the middle",
+        paragraphs: [
+          "A cup tie comes next. It does not count, but a bad defeat still costs board confidence, so you play it properly and go out on penalties.",
+        ],
+      },
+      {
+        heading: "Hitting the target early",
+        paragraphs: [
+          "Game three is at home and you need 3 points from 3 games. Balanced with a fire them up talk, and a 2 to 1 win makes it 7. Target hit, job kept, two league games to spare.",
+        ],
+      },
+    ],
+    tipSections: [
+      {
+        heading: "Reading the room",
+        items: [
+          "Read the line under the fixture before you pick a talk. It is the dugout's honest read of the mood and the odds.",
+          "Saying the same thing every week stops working, and after a few in a row it starts to grate.",
+        ],
+      },
+      {
+        heading: "Chasing or protecting",
+        items: [
+          "Attacking means more goals at both ends. Chase with it when you need wins, not when a draw will do.",
+          "Defensive means fewer goals and more draws. It is the shape for protecting a point you can afford.",
+        ],
+      },
+      {
+        heading: "The press and the cup",
+        items: [
+          "The press answers move morale and the board a little. Promising a win out loud fires the other lot up and costs you if you do not deliver.",
+          "Do not throw the cup games. They do not count toward the target, but a bad exit takes a chunk out of the board meter.",
+        ],
+      },
+      {
+        heading: "Fans as a safety net",
+        items: [
+          "One point short is not always the end. Keep the fans onside with results and they can buy you the job.",
+        ],
+      },
+    ],
+    faqs: [
+      { q: "Is Manager Hot Seat the same as Club Manager?", a: "It runs on the same engine. The clubs, squads, fixtures, match simulation, board meter, fan meter, team talks and press room all come from Club Manager unchanged. Hot Seat is the short version: one job, five league games, one target." },
+      { q: "Why did I take over a club near the top of the table?", a: "The job opens after the worst run of form between league weeks 6 and 14, so a strong side can still be in a slump. The target is set from the fixtures, so a good side gets asked for more." },
+      { q: "Are the results real?", a: "No. The clubs and squads are the real ones Club Manager uses, but every match is simulated, and so is the season before you arrive. Nothing that happens here is a claim about the real club." },
+      { q: "Can I replay today's hot seat?", a: "The daily is one go per day, and a refresh picks up where you left off. Free play has no limit." },
+      { q: "Does it count on the leaderboard?", a: "Not yet. It records that you played, but it puts no points on the leaderboard for now." },
+    ],
+  },
   '/sign-the-player': {
     intro: [
       "Three bidders, one billion pounds each: you, The Sheikh, and Moneyball Mike. Twenty two players go under the hammer across two passes, eleven journeymen wait to fill the gaps, and a simulated mini league decides who spent it best.",
@@ -2304,6 +2460,126 @@ export const SOCCER_CONTENT_2: GameContentMap = {
       { q: 'Is the daily the same for everyone?', a: 'Yes. The ten kicks come from the date, so every player gets the same run, and your score is kept for the day.' },
       { q: 'Do I need a keyboard?', a: 'No. Drag the pitch to aim and let go to strike, which works the same on a phone.' },
       { q: 'Why did my perfect corner go wide?', a: 'Because of how hard you hit it. Power sprays the ball off the spot you picked, and near the post there is no room to spray into.' },
+    ],
+  },
+  '/contract-chaos': {
+    intro: [
+      "Contract Chaos is a free soccer agent game. Your client's contract is up, his club wants him back, other clubs want him away, and you decide where he signs.",
+      "The offers pull against each other on purpose: the title chasers pay less and bench more, the rebuilds pay more and promise the shirt, and a release clause can turn a small club into a stepping stone. Then five seasons play out and show whether you got it right.",
+      "Every player and every club is generated. The offers run on the same contract market as the free agency window in the site's career games.",
+    ],
+    headings: {
+      howToPlay: "How to play Contract Chaos, a free soccer agent game",
+      rules: "Contract Chaos rules for offers, pushes and scoring",
+      example: "Contract Chaos walkthrough: one wonderkid, three offers",
+      tips: "Contract Chaos tips for picking the right deal",
+      faq: "Contract Chaos FAQ: generated players, the daily and scores",
+    },
+    howToPlaySections: [
+      {
+        heading: "Opening the daily deal or free play",
+        items: ["Open today's offers or deal yourself a client in free play."],
+      },
+      {
+        heading: "Reading your client's card",
+        items: ["Read your client first: his age, his rating, his potential and what he is worth a year."],
+      },
+      {
+        heading: "Comparing offers one tile at a time",
+        items: ["Tap each offer to read the full terms, then use the back button to compare the next one."],
+        subsections: [
+          { heading: "Pushing for a better wage", items: ["Push any offer for more money once, if you think he has the leverage."] },
+        ],
+      },
+      {
+        heading: "Signing and playing five seasons",
+        items: ["Sign one deal and play the five seasons one at a time, or skip straight to the verdict."],
+      },
+    ],
+    ruleSections: [
+      {
+        heading: "What every offer on the table carries",
+        items: ["Every offer shows the wage, the length, a signing bonus, a trophy bonus, a release clause if there is one, the promised role, how safe the manager is, home or abroad, the size of the city and how ambitious the club is."],
+      },
+      {
+        heading: "How each kind of club pays",
+        items: ["Title chasers pay below his market value, top half clubs pay about the market and rebuilds pay above it.", "A rebuild always promises the starting spot, while a title chaser's bench is crowded."],
+      },
+      {
+        heading: "Negotiation and walkouts",
+        items: ["A push works more often for a highly rated player and less often for a veteran past his peak.", "A failed push can make an outside club walk away, but your own club never walks and the last offer on the table never walks."],
+      },
+      {
+        heading: "Promises, sackings and settling abroad",
+        items: ["The promised role holds only while the manager who signed him keeps his job, and a hot seat manager is sacked half the time.", "Moving abroad costs a few games in the first season while he settles in."],
+      },
+      {
+        heading: "Release clauses and expiring deals",
+        items: ["If he outgrows his club and his contract has a release clause, a title chaser can pay it and take him.", "Every career is judged over five seasons. If his deal ends sooner he signs on somewhere at whatever he is worth by then."],
+      },
+      {
+        heading: "Scoring out of 100",
+        items: ["The score is out of 100: 30 for growth, 25 for minutes, 25 for trophies and 20 for money."],
+        subsections: [
+          { heading: "Growth measured against age", items: ["Growth is judged against his age, so a kid is measured on how close he got to his potential and a veteran on how well he held off the decline."] },
+          { heading: "When a medal counts", items: ["A trophy only counts if he played at least a fifth of the minutes that season."] },
+        ],
+      },
+      {
+        heading: "Streaks, points and generated names",
+        items: ["Plays count toward your streak and your games played, but there is no leaderboard score for this game yet.", "Every player and every club in the game is made up."],
+      },
+    ],
+    exampleSections: [
+      {
+        heading: "Meeting a nineteen year old winger",
+        paragraphs: ["Today's client is a 19 year old winger rated 74 with a potential of 88, worth about €1.6M a year."],
+      },
+      {
+        heading: "Three offers side by side",
+        paragraphs: ["His club offers €1.4M for three years. A title chaser offers €1.3M for two years as a rotation player at a squad strength of 91. A rebuild offers €1.9M for four years, the starting spot and a €1.1M signing bonus."],
+      },
+      {
+        heading: "The push and the release clause",
+        paragraphs: ["You push the rebuild and they come up to €2.1M. You sign. He plays nearly every minute, climbs to 84 by his third season, and a title chaser pays his release clause to take him on a much bigger wage."],
+      },
+      {
+        heading: "The verdict five seasons on",
+        paragraphs: ["Five seasons later he is rated 87 with a league title, about €26M earned and a score of 83, a Great call. The roads not taken show his old club would have scored far less."],
+      },
+    ],
+    tipSections: [
+      {
+        heading: "Minutes before badges for a kid",
+        items: ["For a young player, minutes matter more than the badge on the shirt. A kid on the bench at a giant grows slower than a kid starting every week."],
+      },
+      {
+        heading: "Money and minutes for a veteran",
+        items: ["For a veteran, the money and the minutes are most of the score, because growth is mostly about slowing the decline."],
+      },
+      {
+        heading: "Treating the clause as upside",
+        items: ["A release clause is upside, not a risk. If he outgrows the club, it is his ticket to a bigger one."],
+      },
+      {
+        heading: "Reading the manager's seat",
+        items: ["Check the manager's seat before you trust a promised role. A hot seat promise can be gone by season two."],
+      },
+      {
+        heading: "Choosing which offer to push",
+        items: ["Push the offers you would be happy to lose, and think twice before pushing the one you want."],
+      },
+      {
+        heading: "Short contracts as a growth bet",
+        items: ["Short deals are a bet on growth. If he improves, the next contract pays for it; if he gets hurt, it does not."],
+      },
+    ],
+    faqs: [
+      { q: 'Are the players and clubs real?', a: "No. Every player and club is generated, so no real footballer's contract is being guessed at." },
+      { q: 'Why is there no leaderboard score?', a: "Plays are recorded without a score while the site's points are rebuilt. Your best and average are kept on this device." },
+      { q: 'Is the daily the same for everyone?', a: 'Yes. Same client, same offers, same push results and the same five seasons for the same choice. You get one signature a day.' },
+      { q: 'Can I see what would have happened with another offer?', a: 'Yes. The verdict screen plays every offer out over the same five seasons and ranks them, with yours marked.' },
+      { q: 'Why did my promised starting spot disappear?', a: 'The manager who promised it got sacked. The new manager picks on form and rating, not on promises he never made.' },
     ],
   },
 };

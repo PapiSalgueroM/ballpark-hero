@@ -57,6 +57,14 @@
  *      word of a name, from that section's rows (who won how many is computed,
  *      never typed), and every "since YYYY" in them is the first year the rows
  *      hold.
+ *  11. The MVP tables (Round 656). Every section whose table has a column keyed
+ *      mvp names its award in words.mvp, and its page carries exactly one "Most
+ *      <award> awards, <first> to <latest>" table, the span being the years the
+ *      column holds. Recounted here from the JSON per name as the line writes
+ *      it: every name with two or more, counts, years, order, the leader line,
+ *      the "names appear once" line, and a counting note above the leader that
+ *      names the years the column leaves blank and any line naming two players.
+ *      A section with no such column carries no MVP heading.
  *
  * NEGATIVE CONTROLS. RECORD_PAGES_CONTROL=<name> breaks one input, in memory,
  * for the one check it targets, and the run is green only if THAT check went
@@ -90,6 +98,7 @@ const CONTROLS = {
   fulltable: 8, indexleader: 8,
   hashlink: 9, genericlabel: 9, jsxlabel: 9,
   blurbcount: 10, blurbsince: 10, shortcount: 10,
+  mvpleader: 11, mvpcount: 11, mvpwords: 11,
 };
 const CONTROL = process.env.RECORD_PAGES_CONTROL || '';
 
@@ -171,7 +180,9 @@ const stripComments = src => src
   .replace(/\/\*[\s\S]*?\*\//g, '')
   .replace(/(^|[^:'"`\\])\/\/.*$/gm, '$1');
 
-/** The readable body of a saved page, one block per line, site chrome removed. */
+/** The readable body of a saved page, one block per line, site chrome removed.
+    Since Round 652 a table is saved as a table, one <tr> per line, so its rows
+    are kept here as lines of their own. */
 function bodyLines(html) {
   const i = html.indexOf('<div id="dukb-snapshot">');
   if (i < 0) return [];
@@ -179,7 +190,7 @@ function bodyLines(html) {
     .replace(/<div data-site-chrome>[\s\S]*?<\/div>/g, '')
     .split('\n')
     .map(l => l.trim())
-    .filter(l => /^<(h[1-4]|p|li|a)\b/.test(l));
+    .filter(l => /^<(h[1-4]|p|li|a|tr)\b/.test(l));
 }
 const textOf = line => unesc(line.replace(/<[^>]+>/g, '')).trim();
 const tagOf = line => (line.match(/^<([a-z0-9]+)/) || [])[1];
@@ -196,9 +207,13 @@ function sectionAfter(lines, heading) {
 
 const rowsOf = def => book.sections[def.key] || [];
 const firstOf = def => Math.min(...rowsOf(def).map(r => r.year));
-const cellsOf = (def, r) => [String(r.year), r.champion, ...def.columns.map(([k]) => r.extra[k]).filter(v => v != null && String(v).trim() !== '')]
-  .map(c => `<p>${esc(c)}</p>`);
-const headerOf = def => [def.yearLabel, def.championLabel ?? 'Champion', ...def.columns.map(([, l]) => l)].map(c => `<p>${esc(c)}</p>`);
+/* One saved table row, as the prerenderer writes it since Round 652. Every
+   column has a cell, an empty one included, so a missing runner up no longer
+   shifts the venue into its place the way the one paragraph per cell shape did. */
+const rowOf = (cells, tag = 'td') => `<tr>${cells.map(c => `<${tag}>${esc(String(c).replace(/\s+/g, ' ').trim())}</${tag}>`).join('')}</tr>`;
+const cellsIn = line => [...line.matchAll(/<(td|th)>([\s\S]*?)<\/\1>/g)].map(m => unesc(m[2].replace(/<[^>]+>/g, '')).trim());
+const cellsOf = (def, r) => rowOf([String(r.year), r.champion, ...def.columns.map(([k]) => r.extra[k] ?? '')]);
+const headerOf = def => rowOf([def.yearLabel, def.championLabel ?? 'Champion', ...def.columns.map(([, l]) => l)], 'th');
 
 /** The recount: one per row for the name exactly as the row writes it. */
 function recount(rows) {
@@ -360,7 +375,7 @@ console.log('2) every row in recordBooks.json is in its saved page, under its ow
     if (!rows.length) { fail(`${def.key}: recordBooks.json has no rows`); continue; }
     if (CONTROL === 'droprow' && def === first) {
       const last = rows[rows.length - 1];
-      html = mutateSaved(def.slug, `<p>${last.year}</p>\n<p>${esc(last.champion)}</p>\n`, `<p>${last.year}</p>\n`, 'droprow');
+      html = mutateSaved(def.slug, `\n${cellsOf(def, last)}\n`, '\n', 'droprow');
     }
     const lines = bodyLines(html);
     const heading = `Every ${def.words.one} since ${firstOf(def)}, year by year`;
@@ -370,7 +385,7 @@ console.log('2) every row in recordBooks.json is in its saved page, under its ow
     let key = null;
     for (const l of every) {
       if (tagOf(l) === 'h3') { key = textOf(l); blocks.set(key, []); continue; }
-      if (key && tagOf(l) === 'p') blocks.get(key).push(l);
+      if (key && tagOf(l) === 'tr') blocks.get(key).push(l);
     }
     const byDecade = new Map();
     for (const r of rows) {
@@ -383,11 +398,11 @@ console.log('2) every row in recordBooks.json is in its saved page, under its ow
       const h3 = decadeText(def, d, fy, ly);
       const got = blocks.get(h3);
       if (!got) { fail(`${def.key}: no block for the ${d}s, so ${list.length} rows are missing`); continue; }
-      const expected = [...headerOf(def), ...list.flatMap(r => cellsOf(def, r))];
+      const expected = [headerOf(def), ...list.map(r => cellsOf(def, r))];
       const n = Math.max(expected.length, got.length);
       for (let i = 0; i < n; i++) {
         if (expected[i] !== got[i]) {
-          fail(`${def.key} ${d}s: cell ${i} is ${JSON.stringify(got[i] ?? '(nothing)')} and the data says ${JSON.stringify(expected[i] ?? '(nothing)')}`);
+          fail(`${def.key} ${d}s: row ${i} is ${JSON.stringify(got[i] ?? '(nothing)')} and the data says ${JSON.stringify(expected[i] ?? '(nothing)')}`);
           break;
         }
       }
@@ -413,23 +428,29 @@ console.log('3) the most titles table matches a recount of the JSON, per name as
     const once = multi.length ? all.length - multi.length : 0;
     if (CONTROL === 'miscount' && def === first) {
       const topRow = [...listed].sort((a, b) => b.count - a.count)[0];
-      html = mutateSaved(def.slug, `<p>${esc(topRow.name)}</p>\n<p>${topRow.count}</p>`, `<p>${esc(topRow.name)}</p>\n<p>${topRow.count + 1}</p>`, 'miscount');
+      html = mutateSaved(def.slug, `<tr><td>${esc(topRow.name)}</td><td>${topRow.count}</td>`, `<tr><td>${esc(topRow.name)}</td><td>${topRow.count + 1}</td>`, 'miscount');
     }
     const heading = `${def.words.most} since ${firstOf(def)}`;
     const sec = sectionAfter(bodyLines(html), heading);
     if (!sec) { fail(`${def.key}: no "${heading}" section`); continue; }
     const ps = sec.filter(l => tagOf(l) === 'p');
-    const head = [cap(def.words.who[0]), `${cap(def.words.unit[1])} under this name`, 'Years'].map(c => `<p>${esc(c)}</p>`);
-    const h = ps.findIndex((l, i) => l === head[0] && ps[i + 1] === head[1] && ps[i + 2] === head[2]);
-    if (h < 0) { fail(`${def.key}: the most titles table has no ${head.map(textOf).join(' / ')} header`); continue; }
+    const trs = sec.filter(l => tagOf(l) === 'tr');
+    const head = rowOf([cap(def.words.who[0]), `${cap(def.words.unit[1])} under this name`, 'Years'], 'th');
+    const h = trs.indexOf(head);
+    if (h < 0) { fail(`${def.key}: the most titles table has no ${cellsIn(head).join(' / ')} header row`); continue; }
     const got = new Map();
-    let prev = Infinity, i = h + 3, ordered = true;
-    while (i + 2 < ps.length && /^\d+$/.test(textOf(ps[i + 1])) && /^\d{4}(, \d{4})*$/.test(textOf(ps[i + 2]))) {
-      const name = textOf(ps[i]), n = Number(textOf(ps[i + 1])), yrs = textOf(ps[i + 2]);
+    let prev = Infinity, ordered = true;
+    for (const tr of trs.slice(h + 1)) {
+      const cells = cellsIn(tr);
+      if (cells.length !== 3 || !/^\d+$/.test(cells[1]) || !/^\d{4}(, \d{4})*$/.test(cells[2])) {
+        fail(`${def.key}: the most titles table has a row that is not name, count, years: ${JSON.stringify(cells)}`);
+        break;
+      }
+      const [name, count, yrs] = cells;
+      const n = Number(count);
       if (n > prev) ordered = false;
       prev = n;
       got.set(name, { n, yrs });
-      i += 3;
     }
     if (!ordered) fail(`${def.key}: the most titles table is not in order, most first`);
     for (const x of listed) {
@@ -657,9 +678,9 @@ console.log('8) /records shows the newest ten seasons of each section, links eac
     const { top, names: topNames } = topOf(rows);
     const leadPrefix = `Most ${def.words.unit[1]} under one name since ${f1}: `;
     if (CONTROL === 'fulltable' && def === first) {
-      const anchor = cellsOf(def, rows.filter(r => shown.has(r.year)).slice(-1)[0]).join('\n');
+      const anchor = `\n${cellsOf(def, rows.filter(r => shown.has(r.year)).slice(-1)[0])}\n`;
       if (!idx.includes(anchor)) refuse('the last shown row of the first section is not in the saved /records page');
-      idx = idx.replace(anchor, `${anchor}\n${eleventh.flatMap(r => cellsOf(def, r)).join('\n')}`);
+      idx = idx.replace(anchor, `${anchor}${eleventh.map(r => cellsOf(def, r)).join('\n')}\n`);
     }
     if (CONTROL === 'indexleader' && def === first) {
       const from = `<p>${esc(leadPrefix)}`;
@@ -673,10 +694,10 @@ console.log('8) /records shows the newest ten seasons of each section, links eac
     }
     const before = failedChecks.get(8) || 0;
     for (const r of rows.filter(x => shown.has(x.year))) {
-      if (!idx.includes(cellsOf(def, r).join('\n'))) fail(`/records ${def.key}: ${r.year} ${r.champion} is not shown`);
+      if (!idx.includes(`\n${cellsOf(def, r)}\n`)) fail(`/records ${def.key}: ${r.year} ${r.champion} is not shown`);
     }
     for (const r of eleventh) {
-      if (idx.includes(cellsOf(def, r).join('\n'))) fail(`/records ${def.key}: ${r.year} ${r.champion} is shown, the eleventh season, so the index is carrying the full table again`);
+      if (idx.includes(`\n${cellsOf(def, r)}\n`)) fail(`/records ${def.key}: ${r.year} ${r.champion} is shown, the eleventh season, so the index is carrying the full table again`);
     }
     const block = sectionAfter(bodyLines(idx), `${def.emoji} ${def.title}`) || [];
     const linkLine = block.find(l => l.includes(`href="/records/${def.slug}"`));
@@ -816,6 +837,132 @@ console.log('10) blurbs and notes carry no counts next to a name, and every "sin
     }
   }
   console.log(`   ${sentencesRead} sentences read, ${sinceChecked} "since" years checked against the rows`);
+}
+
+/* ======================================================================= */
+current = 11;
+console.log('11) every MVP column is counted into its own table, per name as written, span bound to the column');
+{
+  let tables = 0;
+  const firstMvp = RECORD_SECTIONS.find(d => d.columns.some(([k]) => k === 'mvp'));
+  for (const def of RECORD_SECTIONS) {
+    const col = def.columns.find(([k]) => k === 'mvp');
+    let html = saved.get(def.slug);
+    if (!html) { fail(`${def.key}: no saved page to read`); continue; }
+    let mvpWord = def.words.mvp;
+    if (CONTROL === 'mvpwords' && def === firstMvp) {
+      if (!mvpWord) refuse(`${def.key} has no words.mvp to take away`);
+      mvpWord = undefined;
+    }
+    const isMvpHeading = l => tagOf(l) === 'h2' && / MVP awards, \d{4} to \d{4}$/.test(textOf(l));
+    if (!col) {
+      if (mvpWord) fail(`${def.key}: words.mvp is set and the table has no MVP column to count`);
+      if (bodyLines(html).some(isMvpHeading)) fail(`${def.key}: an MVP heading on a page whose table has no MVP column`);
+      continue;
+    }
+    if (!mvpWord) { fail(`${def.key}: the table has an MVP column and the section has no words.mvp, so its page has no MVP table`); continue; }
+
+    /* the recount, written here: one award per line for the name as the line writes it */
+    const rows = rowsOf(def);
+    const named = rows.filter(r => String(r.extra[col[0]] ?? '').trim() !== '').map(r => ({ year: r.year, name: String(r.extra[col[0]]).trim() }));
+    if (!named.length) { fail(`${def.key}: the MVP column is empty in recordBooks.json`); continue; }
+    const by = new Map();
+    for (const r of named) {
+      if (!by.has(r.name)) by.set(r.name, []);
+      by.get(r.name).push(r.year);
+    }
+    const all = [...by.entries()].map(([name, ys]) => ({ name, count: ys.length, years: [...ys].sort((a, b) => a - b) }));
+    const multi = all.filter(x => x.count >= 2);
+    const listed = multi.length ? multi : all;
+    const once = multi.length ? all.length - multi.length : 0;
+    const top = Math.max(...all.map(x => x.count));
+    const topNames = all.filter(x => x.count === top).map(x => x.name).sort((a, b) => a.localeCompare(b));
+    const first = Math.min(...named.map(r => r.year));
+    const latest = Math.max(...named.map(r => r.year));
+    const withName = new Set(named.map(r => r.year));
+    const blank = [...new Set(rows.map(r => r.year))].filter(y => !withName.has(y)).sort((a, b) => a - b);
+    const shared = named.filter(r => / & | and /.test(r.name)).sort((a, b) => a.year - b.year);
+
+    if (CONTROL === 'mvpleader' && def === firstMvp) {
+      /* a wrong MVP leader: the runner up's name where the real leader's stands */
+      const intruder = [...all].sort((a, b) => b.count - a.count || a.name.localeCompare(b.name)).find(x => !topNames.includes(x.name));
+      if (!intruder) refuse(`${def.key} has nobody behind the MVP leader to put in front`);
+      html = mutateSaved(def.slug, `<p>Out in front: ${esc(join(topNames))}, ${top} `, `<p>Out in front: ${esc(intruder.name)}, ${top} `, 'mvpleader');
+    }
+    if (CONTROL === 'mvpcount' && def === firstMvp) {
+      const row = all.find(x => x.name === topNames[0]);
+      html = mutateSaved(def.slug, `<tr><td>${esc(row.name)}</td><td>${row.count}</td>`, `<tr><td>${esc(row.name)}</td><td>${row.count + 1}</td>`, 'mvpcount');
+    }
+
+    const before = failedChecks.get(11) || 0;
+    const lines = bodyLines(html);
+    const heading = `Most ${mvpWord} awards, ${first} to ${latest}`;
+    const mvpH2s = lines.filter(isMvpHeading).map(textOf);
+    if (mvpH2s.length !== 1) fail(`${def.key}: ${mvpH2s.length} MVP headings, expected exactly one`);
+    const sec = sectionAfter(lines, heading);
+    if (!sec) { fail(`${def.key}: no h2 ${JSON.stringify(heading)}, the span the column holds`); continue; }
+    const texts = sec.map(textOf);
+    /* Round 652 saves a table as rows, one <tr> per line, so the MVP table is read cell by cell */
+    const trs = sec.filter(l => tagOf(l) === 'tr');
+    const cellsOf = l => [...l.matchAll(/<(td|th)>([\s\S]*?)<\/\1>/g)].map(c => textOf(c[2]));
+    const h = trs.findIndex(l => JSON.stringify(cellsOf(l)) === JSON.stringify(['Player', 'Awards under this name', 'Years']));
+    if (h < 0) { fail(`${def.key}: the MVP table has no Player / Awards under this name / Years header`); continue; }
+    const got = new Map();
+    let prev = Infinity, ordered = true;
+    for (let i = h + 1; i < trs.length; i++) {
+      const c = cellsOf(trs[i]);
+      if (c.length !== 3 || !/^\d+$/.test(c[1]) || !/^\d{4}(, \d{4})*$/.test(c[2])) break;
+      const n = Number(c[1]);
+      if (n > prev) ordered = false;
+      prev = n;
+      got.set(c[0], { n, yrs: c[2] });
+    }
+    if (!ordered) fail(`${def.key}: the MVP table is not in order, most first`);
+    for (const x of listed) {
+      const g = got.get(x.name);
+      if (!g) { fail(`${def.key}: ${x.name} has ${x.count} MVP awards and is missing from the table`); continue; }
+      if (g.n !== x.count) fail(`${def.key}: ${x.name} shows ${g.n} MVP awards, the rows give ${x.count}`);
+      if (g.yrs !== x.years.join(', ')) fail(`${def.key}: ${x.name} shows MVP years ${g.yrs}, the rows give ${x.years.join(', ')}`);
+    }
+    for (const name of got.keys()) if (!listed.some(x => x.name === name)) fail(`${def.key}: ${name} is in the MVP table and should not be`);
+
+    const onceWant = `${once} more ${once === 1 ? 'name appears' : 'names appear'} once in the ${col[1]} column.`;
+    const onceGot = texts.find(t => / once in the .+ column\.$/.test(t));
+    if (once > 0 && onceGot !== onceWant) fail(`${def.key}: the once line reads ${JSON.stringify(onceGot ?? '(missing)')}, the rows give ${JSON.stringify(onceWant)}`);
+    if (once === 0 && onceGot) fail(`${def.key}: the page says ${JSON.stringify(onceGot)} and every listed name won more than once`);
+
+    const frontAt = texts.findIndex(t => t.startsWith('Out in front: '));
+    const noteAt = texts.findIndex(t => t.startsWith('How we counted: '));
+    if (frontAt < 0) fail(`${def.key}: no "Out in front" line under the MVP heading`);
+    else {
+      const m = texts[frontAt].match(/^Out in front: (.+), (\d+) (awards?)( each)?\.$/);
+      if (!m) fail(`${def.key}: cannot read ${JSON.stringify(texts[frontAt])}`);
+      else {
+        /* no MVP line holds ", " or " and ", checked rather than assumed, so a joined
+           list splits back into names; otherwise the whole string is compared */
+        const splittable = all.every(x => !/, | and /.test(x.name));
+        const gotNames = splittable ? m[1].split(/, | and /).sort((a, b) => a.localeCompare(b)) : [m[1]];
+        const wantNames = splittable ? topNames : [join(topNames)];
+        if (JSON.stringify(gotNames) !== JSON.stringify(wantNames)) fail(`${def.key}: the MVP leader line names ${JSON.stringify(gotNames)}, the rows give exactly ${JSON.stringify(wantNames)}`);
+        if (Number(m[2]) !== top) fail(`${def.key}: the MVP leader line gives ${m[2]}, the rows give ${top}`);
+        if (m[3] !== (top === 1 ? 'award' : 'awards') || Boolean(m[4]) !== (topNames.length > 1)) fail(`${def.key}: "${texts[frontAt]}" words the count wrongly`);
+      }
+    }
+    if (noteAt < 0) fail(`${def.key}: no counting note under the MVP heading`);
+    else {
+      const note = texts[noteAt];
+      if (frontAt >= 0 && noteAt > frontAt) fail(`${def.key}: the MVP counting note comes after the leader, so a reader meets the count before the rule`);
+      if (!note.includes(`each line in the ${col[1]} column counts for the player name exactly as the table writes it`)) fail(`${def.key}: the MVP note does not say each line counts for the name exactly as written`);
+      const blankPart = (note.match(/Nothing is listed in that column for ([^.]*?), so no award/) || [])[1] || '';
+      if (JSON.stringify(yearsIn(blankPart)) !== JSON.stringify(blank)) fail(`${def.key}: the MVP note names blank years ${JSON.stringify(yearsIn(blankPart))}, the rows leave ${JSON.stringify(blank)}`);
+      const sharedSaid = [...note.matchAll(/The (\d{4}) line names more than one player \(([^)]*)\)/g)].map(x => `${x[1]} ${x[2]}`);
+      const sharedWant = shared.map(s => `${s.year} ${s.name}`);
+      if (JSON.stringify(sharedSaid) !== JSON.stringify(sharedWant)) fail(`${def.key}: the MVP note names shared lines ${JSON.stringify(sharedSaid)}, the rows have ${JSON.stringify(sharedWant)}`);
+    }
+    if ((failedChecks.get(11) || 0) === before) tables += 1;
+  }
+  const cols = RECORD_SECTIONS.filter(d => d.columns.some(([k]) => k === 'mvp')).length;
+  console.log(`   ${tables} of ${cols} sections with an MVP column carry a table that matches the recount`);
 }
 
 /* ======================================================================= */

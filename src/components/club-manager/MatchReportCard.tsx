@@ -6,6 +6,9 @@ import type { MatchWeekReport, MatchStats } from '@/lib/clubManager';
 import { ConfettiBurst, CelebrationStyles, revealDelay } from '@/components/club-manager/Celebration';
 import { MadeUpTag } from '@/components/club-manager/SquadScreen';
 import VictoryMoment from '@/components/game/VictoryMoment';
+import { cardsAndSubsAt, reportLines } from '@/lib/clubManagerMatchCentre';
+import type { CardsAndSubs } from '@/lib/clubManagerMatchCentre';
+import { MatchTimeline } from '@/components/club-manager/MatchTimeline';
 
 /** Round 157: one stat as two bars meeting in the middle, matchday-app style. */
 function StatBar({ label, mine, theirs, decimals = 0, suffix = '' }: {
@@ -15,11 +18,11 @@ function StatBar({ label, mine, theirs, decimals = 0, suffix = '' }: {
   const myShare = total > 0 ? (mine / total) * 100 : 50;
   const fmt = (n: number) => (decimals ? n.toFixed(decimals) : String(n)) + suffix;
   return (
-    <div>
+    <div data-cm-stat={label}>
       <div className="flex items-center justify-between text-[10px] mb-0.5">
-        <span className="font-bold text-foreground tabular-nums">{fmt(mine)}</span>
+        <span className="font-bold text-foreground tabular-nums" data-cm-stat-n="mine">{fmt(mine)}</span>
         <span className="text-muted-foreground uppercase tracking-wider text-[9px]">{label}</span>
-        <span className="font-bold text-muted-foreground tabular-nums">{fmt(theirs)}</span>
+        <span className="font-bold text-muted-foreground tabular-nums" data-cm-stat-n="theirs">{fmt(theirs)}</span>
       </div>
       <div className="flex h-1.5 rounded-full overflow-hidden bg-secondary gap-px">
         <div className="bg-primary rounded-l-full" style={{ width: `${myShare}%` }} />
@@ -29,8 +32,11 @@ function StatBar({ label, mine, theirs, decimals = 0, suffix = '' }: {
   );
 }
 
-/** The full stats block, only when the report carries the Round 157 detail. */
-function StatsBlock({ stats }: { stats: MatchStats }) {
+/** The full stats block, only when the report carries the Round 157 detail.
+ *  Round 714: keeper saves (counted off the same play), and both dugouts'
+ *  bookings and changes (counted off their committed lines), each only when
+ *  the report recorded them, so an older report never prints a made up zero. */
+function StatsBlock({ stats, counts }: { stats: MatchStats; counts: CardsAndSubs | null }) {
   return (
     <div className="space-y-2">
       {/* Round 472: possession wears its percent sign on both sides, because
@@ -42,6 +48,16 @@ function StatsBlock({ stats }: { stats: MatchStats }) {
       <StatBar label="Expected goals" mine={stats.xg} theirs={stats.oppXg} decimals={2} />
       <StatBar label="Corners" mine={stats.corners} theirs={stats.oppCorners} />
       <StatBar label="Fouls" mine={stats.fouls} theirs={stats.oppFouls} />
+      {stats.saves !== undefined && stats.oppSaves !== undefined && (
+        <StatBar label="Keeper saves" mine={stats.saves} theirs={stats.oppSaves} />
+      )}
+      {counts && (
+        <>
+          <StatBar label="Yellow cards" mine={counts.yellows} theirs={counts.oppYellows} />
+          <StatBar label="Red cards" mine={counts.reds} theirs={counts.oppReds} />
+          <StatBar label="Substitutions" mine={counts.subs} theirs={counts.oppSubs} />
+        </>
+      )}
     </div>
   );
 }
@@ -159,6 +175,9 @@ export function MatchReportCard({ report, clubName, onContinue }: MatchReportCar
     if (words.length <= 1) return opponent.slice(0, 10);
     return words.slice(0, 3).map(w => w[0]).join('').toUpperCase();
   })();
+  /* Round 714: the bookings and changes over the whole match, off the report's own lines. */
+  const detailLines = detail ? reportLines(detail) : null;
+  const detailCounts = detail && detailLines ? cardsAndSubsAt(detailLines, detail.et ? detail.et.to : 90) : null;
   const hasChips = !!detail && (
     detail.cards.length > 0 || detail.injuries.length > 0 || detail.subs.length > 0 || oppCards.length > 0 || oppSubs.length > 0
   );
@@ -336,7 +355,7 @@ export function MatchReportCard({ report, clubName, onContinue }: MatchReportCar
               <span className="shrink-0">Match stats</span>
               <span className="font-bold normal-case truncate">{opponent}</span>
             </div>
-            <StatsBlock stats={detail.stats} />
+            <StatsBlock stats={detail.stats} counts={detailCounts} />
             {/* Round 169: momentum as one continuous flow, us above the
                 line, them below, like his match app models draw it.
                 Round 178: possession and shots ride ON the chart now, the
@@ -372,6 +391,11 @@ export function MatchReportCard({ report, clubName, onContinue }: MatchReportCar
               </div>
             </div>
           </div>
+        )}
+
+        {/* Round 714: the event timeline, both clubs either side of the clock. */}
+        {detail && detail.timeline.length > 0 && (
+          <MatchTimeline detail={detail} clubName={clubName} opponent={opponent} />
         )}
 
         {/* Round 157: the man of the match, and everyone's number behind him. */}

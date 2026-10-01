@@ -1,90 +1,116 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { supabase } from '@/integrations/supabase/client';
+import { peekCurrentPlayerName } from '@/lib/completions';
+import {
+  DAILY_STANDING_RPC,
+  bucketEdges,
+  beatPercent,
+  bucketIndexFor,
+  parseStanding,
+  type DailyStanding,
+  type ScoreBucket,
+} from '@/lib/dailyStanding';
 
-export interface ScoreBucket {
-  label: string;
-  min: number;
-  max: number;
-}
+export type { ScoreBucket };
 
 interface PostGameStatsProps {
+  /** The slug the game records under, the same one its useGameCompletion call uses. */
   gameSlug: string;
+  /** The score the game recorded for today's daily. */
   userScore: number;
+  /** Only true on the DAILY result. A practice or unlimited round is not
+      today's puzzle, so it has no place on today's board. */
   isVisible: boolean;
-  /** Round 644: the rows, on the scale the game really records. Footle's
-      scores run 100 to 700, so on the default 0 to 1000 rows nobody ever
-      landed in the top one. */
-  buckets?: ScoreBucket[];
+  /** Rows on the scale the game really records, best row first. Round 644
+      found Footle's panel on a 0 to 1000 default while its scores run 100 to
+      700; Round 716 made this required so no game can fall back to that. */
+  buckets: ScoreBucket[];
 }
 
-const DEFAULT_BUCKETS: ScoreBucket[] = [
-  { label: '900-1000', min: 900, max: 1000 },
-  { label: '700-899', min: 700, max: 899 },
-  { label: '500-699', min: 500, max: 699 },
-  { label: '300-499', min: 300, max: 499 },
-  { label: '0-299', min: 0, max: 299 },
-];
-
-const PostGameStats = ({ gameSlug, userScore, isVisible, buckets = DEFAULT_BUCKETS }: PostGameStatsProps) => {
-  const [bucketCounts, setBucketCounts] = useState<number[]>(() => buckets.map(() => 0));
-  const [totalPlayers, setTotalPlayers] = useState(0);
-  const [animate, setAnimate] = useState(false);
+/**
+ * Round 716: today's standing, the one shared panel every daily game mounts
+ * beside its result. It asks the database for the day's counts
+ * (src/lib/dailyStanding.ts has the rules) and shows the players, where you
+ * landed, the median and the top score. Fewer than 20 players today, or any
+ * failure at all, and it shows nothing: a number about 4 people is not a
+ * standing, and a wrong one is worse than none.
+ */
+const PostGameStats = ({ gameSlug, userScore, isVisible, buckets }: PostGameStatsProps) => {
+  const [standing, setStanding] = useState<DailyStanding | null>(null);
+  const [grown, setGrown] = useState(false);
+  const bucketKey = JSON.stringify(buckets);
+  const rows = useMemo<ScoreBucket[]>(() => JSON.parse(bucketKey), [bucketKey]);
 
   useEffect(() => {
-    if (!isVisible) return;
-    const today = new Date().toISOString().split('T')[0];
+    setStanding(null);
+    setGrown(false);
+    if (!isVisible || !Number.isFinite(userScore)) return undefined;
+    const edges = bucketEdges(rows);
+    if (!edges) return undefined;
+    let cancelled = false;
+    (async () => {
+      try {
+        const { data, error } = await (supabase.rpc as any)(DAILY_STANDING_RPC, {
+          p_game: gameSlug,
+          p_edges: edges,
+          p_score: Math.round(userScore),
+          p_player: peekCurrentPlayerName() || null,
+        });
+        if (cancelled || error) return;
+        const parsed = parseStanding(data, rows);
+        if (!parsed) return;
+        setStanding(parsed);
+        requestAnimationFrame(() => { if (!cancelled) setGrown(true); });
+      } catch {
+        /* the standing is a bonus, never a crash */
+      }
+    })();
+    return () => { cancelled = true; };
+  }, [isVisible, gameSlug, userScore, rows]);
 
-    const fetchScores = async () => {
-      const { data } = await supabase
-        .from('user_game_scores')
-        .select('score')
-        .eq('game_type', gameSlug)
-        .eq('puzzle_date', today);
+  if (!isVisible || !standing) return null;
 
-      if (!data?.length) return;
-      const counts = buckets.map(b => data.filter(r => r.score >= b.min && r.score <= b.max).length);
-      setBucketCounts(counts);
-      setTotalPlayers(data.length);
-      requestAnimationFrame(() => setAnimate(true));
-    };
-    fetchScores();
-  }, [isVisible, gameSlug, buckets]);
-
-  if (!isVisible || totalPlayers === 0) return null;
-
-  const maxCount = Math.max(...bucketCounts, 1);
-  const belowUser = bucketCounts.reduce((sum, c, i) => (buckets[i].max < userScore ? sum + c : sum), 0);
-  const percentile = Math.round((belowUser / totalPlayers) * 100);
-  const userBucketIdx = buckets.findIndex(b => userScore >= b.min && userScore <= b.max);
+  const pct = beatPercent(standing);
+  const mostInARow = Math.max(...standing.counts, 1);
+  const yourRow = bucketIndexFor(userScore, rows);
 
   return (
-    <div className="bg-card border border-border rounded-xl p-4 mt-4 w-full max-w-md mx-auto">
-      <p className="text-xs text-muted-foreground uppercase tracking-wider mb-3 font-semibold">
-        📊 Score Distribution · {totalPlayers} players today
+    <div
+      data-no-prerender
+      data-testid="daily-standing"
+      className="bg-card border border-border rounded-xl p-4 mt-2 mb-4 w-full max-w-md mx-auto text-left"
+    >
+      <p className="text-xs text-muted-foreground uppercase tracking-wider mb-2 font-semibold">
+        📊 Today's board · {standing.players.toLocaleString('en-US')} players
+      </p>
+      <p className="text-sm text-foreground mb-3">
+        You beat <span className="text-primary font-bold">{pct}%</span> of players today
       </p>
       <div className="space-y-1.5">
-        {buckets.map((b, i) => (
+        {rows.map((b, i) => (
           <div key={b.label} className="flex items-center gap-2">
-            <span className={`text-[11px] w-16 text-right font-mono ${i === userBucketIdx ? 'text-primary font-bold' : 'text-muted-foreground'}`}>
+            <span className={`text-[11px] w-16 shrink-0 text-right font-mono ${i === yourRow ? 'text-primary font-bold' : 'text-muted-foreground'}`}>
               {b.label}
             </span>
             <div className="flex-1 h-5 bg-secondary/50 rounded overflow-hidden relative">
               <div
-                className={`h-full rounded transition-all duration-[800ms] ease-out ${i === userBucketIdx ? 'bg-primary' : 'bg-muted-foreground/30'}`}
-                style={{ width: animate ? `${(bucketCounts[i] / maxCount) * 100}%` : '0%' }}
+                className={`h-full rounded transition-[width] duration-700 ease-out motion-reduce:transition-none ${i === yourRow ? 'bg-primary' : 'bg-muted-foreground/30'}`}
+                style={{ width: grown ? `${(standing.counts[i] / mostInARow) * 100}%` : '0%' }}
               />
-              {bucketCounts[i] > 0 && (
+              {standing.counts[i] > 0 && (
                 <span className="absolute right-1.5 top-0 h-full flex items-center text-[10px] text-muted-foreground">
-                  {bucketCounts[i]}
+                  {standing.counts[i]}
                 </span>
               )}
             </div>
           </div>
         ))}
       </div>
-      <p className="text-xs text-muted-foreground mt-3 text-center">
-        You scored better than <span className="text-primary font-semibold">{percentile}%</span> of players today
-      </p>
+      <div className="flex items-center justify-center gap-4 mt-3 text-xs text-muted-foreground">
+        <span>You <span className="font-semibold text-foreground">{Math.round(userScore)}</span></span>
+        <span>Median <span className="font-semibold text-foreground">{Math.round(standing.median)}</span></span>
+        <span>Top <span className="font-semibold text-foreground">{standing.top}</span></span>
+      </div>
     </div>
   );
 };

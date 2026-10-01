@@ -79,6 +79,13 @@ const ROUTES = [
   /* Round 649: the per competition record page shape, which counts its facts
      at render and must say the same thing on every date */
   '/records/super-bowl-winners',
+  /* Round 652: the prerenderer now compares a whole table as one block across
+     its clock samples, so one cell that moves with the date drops the entire
+     table from the saved page. The record pages above, a grid archive and a
+     format history are the three kinds of page built on tables, and this is
+     the harness that would show one of them drifting. */
+  '/nba-grid/archive',
+  '/nfl-playoff-format-history',
   '/leaderboard',
   '/whats-new',
   '/about',

@@ -1,5 +1,693 @@
 # Project state
 
+## CHECKPOINT 2026-10-01: staff decision source and native acceptance passed
+
+776 passes eleven actual-screen/helper tests, four asserted source controls, two peer reviews
+and eight native width/motion contexts. It adds exact previews, payoff confirmation, truthful
+finite feedback and visible focus while preserving no-op and unrelated shortlists. Full proof,
+293px no-wrap control and fixture limits are on WORKBOARD. Current-main type/build/CSS/fifteen
+fences remain pending.777/778 practice and779 budget decisions continue;780 cap-key correction
+is being checked. Claude's live I block below supersedes older publication status. Next free:781.
+
+## IN PROGRESS 2026-10-01: lineup fixture cap correction claimed
+
+780 replaces the mocked basketball test's fake fixture-lineup game key with the already capped
+perfect-lineup-nba key/path. No production cap/schema or guard change. Its nine original picker
+outcomes and the live read-only cap/stale-list fence will be rerun.776 through779 acceptance
+continues. Claude's current live I block below supersedes older pending-publication statements.
+Next free number:781. Full392 suite still runs; final combined acceptance remains pending.
+
+## LIVE 2026-09-30: Release I (719, new game Manager Hot Seat), main `c046a45c`
+
+Assembled by the desktop Claude lane in the gate clone (`release-i`) on top of Release H and Codex's
+commits as they stood at the merge, pushed to main as a merge. **douknowball.com is serving it:**
+deployment `148b9e1e-112d-4574-bee7-ce543a9d37a4`, called only after `get_project` showed `latest_commit_sha` `c046a45c`; the live
+entry moved from `index-B5Vwjroo.js` to `index--eNejDlV.js`. Proof by content: C:/Program Files/Git/manager-hot-seat answers 200 with its own snapshot and /whats-new carries the Manager Hot Seat line.
+
+- **719, Manager Hot Seat.** Take over a real club on a bad run: the board gives you five league games
+  and a points target read off the fixture list, hit it or you are sacked, with a reprieve when you fall
+  one point short and the fans are singing. It runs the Club Manager engine unchanged through a seeded
+  random swap (one engine, many games), has a daily and a free play, rules and a worked example before
+  play, a guide, search keywords and a What's New line. The fixer fleet removed the rival name strings
+  and began its harness; a single agent finished it on the merged tree: `simManagerHotSeat` runs 240
+  setups a seed over three arms and holds, with floors set from four samples written in its header, that
+  the target follows the club's strength (Pearson r 0.34 to 0.39, floor 0.15), that reading the room
+  pays (63 to 73 percent of the results the talk flipped went to the reader, floor 55; survival up 5 to 8
+  points, floor 1), that a silent manager survives 69 to 81 percent of the time (band 30 to 92), and that
+  outcomes replay; four controls (`flat`, `deaf`, `drift`, `leak`). The hot seat restores Club Manager's
+  module registrations after every engine call (`onStaticWorld`), so a Club Manager save open in the same
+  tab keeps its custom club and league overrides; the `leak` control proves the wipe without it. The
+  determinism paragraph says what is true (outcomes replay, some engine ids carry `Date.now()`). Its caps
+  row (`manager-hot-seat`, unscored plays) is APPLIED.
+- **Still held:** 653 (its agent was rebasing the namesake fix onto main at publish time; it rides the
+  midnight publish with Round 669's data step if it lands green), 703, 706, 718, 733, 734.
+
+**Gates.** tsc 0 on the assembled tree and after each merge of main; the round's own gates as its agent reported them (simManagerHotSeat green on four seeds with four controls firing, simGuideHeadings with five controls, simNoRivalNames 0, simHarnessAnchors, simSiteSearch, simCompletionSlugs, simScoringCoverage, simClubManager green); build:seo 173 routes prerendered, 0 failed. Not run on this tree, by the weekly meter: the 44 harness gate and the browser walks (Release H's ran 90 minutes earlier on the same base); the next session runs them. Also at 00:1x ET: Round 669's data step APPLIED on production (412 Defensive Midfield rows and 5,862 rows in 2026, every guard green), the World XI report ecdb0e9d resolved, and the Footle pool re-baked to 553 players on branch r669-bake, publishing next.
+
+## IN PROGRESS 2026-10-01: Budget Builder decisions claimed in the third implementation lane
+
+779 owns only BudgetBuilderBoard and focused tests/CSS for exact signing previews, confirmation,
+truthful committed feedback and picker focus. Existing affordability/refund/scoring stays in its
+real hook; the current top60 bound remains explicit.776 Staff native proof and777/778 arcade
+practice tests continue. Scope and the bounded777 old-pause CSS resolver are on WORKBOARD.
+Full392 suite still runs. Combined build/fences and publication remain pending. Next free:780.
+
+## IN PROGRESS 2026-09-30: both standalone arcade practice lanes claimed
+
+778 root claims the separate BuzzerBeaterBoard for fixed-power unrecorded practice, alongside
+777 Free Kick. Both preserve the authoritative physics and existing recorded modes, with
+native explicit actions and no practice completion writes. Staff776 testing/browser acceptance
+continues. All scopes are on WORKBOARD. Full suite still runs; final build/fences and publication
+of769 onward remain pending. Next unclaimed number:779.
+
+## IN PROGRESS 2026-09-30: Free Kick steady-input practice claimed
+
+777 claims only FreeKickBoard and scoped tests/CSS for unrecorded power-range practice. Existing
+physics, daily/unlimited records and completion stay authoritative; practice is excluded from
+recording. Staff776 acceptance continues.774's complete older ScoreShown fence now passes16/16
+cases and unchanged40-career baselines, with its quiznegative control failing only the intended
+bank assertion. Full receipts are on WORKBOARD. Combined build/CSS/fifteen fences still wait
+behind the full392-node suite. No publication claim for769 onward. Next unclaimed number:778.
+
+## CHECKPOINT 2026-09-30: Quiz Board native acceptance joins seven source-ready rounds
+
+774 passes seven actual Board/hook tests, six copied controls and eight five-category native
+browser cases, with keyboard clue access, exact focus, scores/saved IDs and finite/static
+answer feedback. Phone heading overlap has a real copied-control proof and scoped fix. Full
+receipts and fixture limits are on WORKBOARD. The older two Quiz score tests pass; full old
+score fence/control compatibility is being checked.776 StaffScreen acceptance continues.
+769 through775 source is pushed as checkpoints; final corrected build/CSS/fifteen-fence
+acceptance and publication remain pending behind the full392-node suite. All754 through768
+remain live in H. Reserved names747 is correctly regraded done in the master reconciliation,
+which now counts52 done and216 partial. Next unclaimed number:777.
+
+## CHECKPOINT 2026-09-30: F1 Constructor truthful reactions accepted
+
+775 fixes a rendered winning-guess Wrong reaction and adds finite reply/result feedback with
+stable controls. Seven tests, three copied controls and eight native browser contexts pass660
+checks, exact scores/completion and daily-restore outcomes, with no overflow or feedback jump.
+Full proof and fixture limits are on WORKBOARD.774 Quiz Board native acceptance continues;
+its two older scoreShown tests pass after a bounded actual-dialog portal query fallback.
+776 StaffScreen source work continues independently. Full392-node suite is still running;
+final combined build and15 built-site fences remain pending. Next unclaimed number:777.
+
+## CHECKPOINT 2026-09-30: Soccer Classic accepted; staff decisions claimed
+
+773 adds full eligible reachability, existing League/Country targeting and exact picker focus,
+accepted by11 actual tests, three copied controls and eight native browser contexts. Details
+and fixture limits are on WORKBOARD. The next free agent takes claimed776 isolated StaffScreen
+decisions, preserving existing pure effects/IDs/payroll and no-op shortlist state, with safe
+payoff confirmation and finite truthful cues. Quiz Board774 and constructor775 browser proof
+continues. No rebuild while the full392-node suite runs. Next unclaimed number:777.
+
+## CHECKPOINT 2026-09-30: all four 769 through772 have native browser acceptance
+
+Conquest769 now passes40 native browser cases and2362 checks across all five maps, including
+continuous trusted touch drag/tap, bounded viewport, exact filters/counts and immediate scene
+camera hand-back. Ten new tests, ten copied controls and independent review pass. Full proof
+and fixture limits are on WORKBOARD. First Touch770, Inbox771 and lineup focus772 receipts
+remain accepted. Final combined corrected-JS build and15 fences wait for the full392-node
+suite to finish. New773 Soccer picker,774 Quiz Board and775 F1 Constructor are in progress;
+their scopes exclude hooks/data and Claude's held claims. Next unclaimed number:776.
+
+## IN PROGRESS 2026-09-30: Quiz Board and F1 Constructor follow the Soccer picker
+
+Codex774 claims the isolated Quiz Board clue overlay and committed answer feedback. Root775
+fixes a F1 Constructor reaction reading old state and showing Wrong guess after a win, then
+adds finite truthful feedback. The two boards, their scoped CSS/tests/harnesses have exact
+claims on WORKBOARD. No hooks, data, seeds, matching, scoring or Claude held lanes change.
+773 Soccer Classic targeting continues separately. Full suite still running; builds stay held.
+Next unclaimed number:776.
+
+## IN PROGRESS 2026-09-30: next independent game task 773
+
+Soccer Classic Perfect Lineup still caps its picker at forty and loses dismissal focus in its
+separate board. Codex773 claims only that board and focused tests/harness to add existing League
+and Country targeting, full eligible reachability and native focus return. This does not touch
+the shared NBA/NHL/F1 board from772, any hook/data or Claude's held lanes. The full392-node suite
+continues while agents handle independent source acceptance. Next unclaimed number:774.
+
+## CHECKPOINT 2026-09-30: First Touch, retained inbox and lineup focus accepted in browsers
+
+Codex770,771,772 have accepted actual-component tests, asserted controls and final772-CSS
+browser matrices. First Touch adds160 scored balls across eight contexts; Inbox exposes all
+retained messages and exact outcomes in eight contexts; NBA/NHL/F1 focus returns correctly in
+24 contexts. Detailed evidence and fixture limits are on WORKBOARD. Conquest769 is completing
+its forty-case map matrix after a native touch-capture fix. The full392-node suite is running.
+Final corrected-JS build and fifteen built-site fences are still pending. These four source
+rounds are not yet published. Root is scouting the next unclaimed work in parallel.
+
+All earlier Codex754 through768 are LIVE in Claude Release H. The top Release H receipt below
+supersedes older historical blocks saying nine of them awaited publishing. Google approval
+and reindexing remain external pending outcomes from741. Next unclaimed number:773.
+
+## LIVE 2026-09-30: Release H (707, 708, 711, 730, 732), main `b8c77dce`
+
+Assembled by the desktop Claude lane in the gate clone (`release-h`), on top of Release G and
+Codex's commits as they stood at the merge, pushed to main as a merge. **douknowball.com is serving
+it:** deployment `52a432a4-3df2-4981-b056-674db1d67c3e`, called only after `get_project` showed `latest_commit_sha` `b8c77dce`; the
+live entry moved from `index-D1UqICV9.js` to `index-B5Vwjroo.js`. Proof by content: /whats-new serves the three new lines (the tennis lists caught up with 2026, the ticker says when it last heard, Soccer Grid knows this summer's transfers) and the live entry chunk carries the ticker's Delayed and unavailable strings.
+
+These five are the branches the fixer fleet finished before it was stopped at 96 percent of the
+account's weekly meter (the fleet's briefs were the triage plus the adversarial review findings; the
+fixers closed every item or refuted it with evidence and pushed with their gates).
+
+- **707, soccer stints behind the verified overlay.** Soccer Grid and Soccer Connect 4 accept the
+  verified 2026 moves: the grid function held an overlay yes for a club criterion and a records
+  refusal re-evaluation, and the Connect 4 sibling now holds the same (one engine, many sports).
+  `simSoccerStints` holds the 241 entry list equal in four places (the overlay file, both functions,
+  the migration) and reads the live table. **Its three migrations are APPLIED** (2026-09-30 evening):
+  240 overlay stints inserted, 1,465 exact copy rows deleted (1,423 groups), the person key pass a
+  no op as measured; the table went from 80,586 rows to 79,361. **The two edge functions are NOT yet
+  redeployed** (soccer-grid-validate, football-connect4-validate): their source is 796 and 847 lines
+  and the deploy, plus the `scripts/data/edgeDeployed.json` update the fixer's notes spell out
+  (sha256 b795f236... version 24 and 173e874f... version 13, CRLF normalised), is the next session's
+  first step. Until then the live validators run the old code over the corrected table, which is
+  strictly better than before (the records pass now finds the 2026 stints).
+- **708, soccer awards shape.** `awardWinners()` deals only rows shaped like a winner (no outlets,
+  ranks, nations, scorelines or "nobody won" strings), `simSoccerAwardsShape` runs green on this tree
+  (its module scope reads are guarded, the rival name hits and the three dashes gone), and the three
+  verified awards get their record. The claim is soccer_awards only; national_team_squads and the AFL
+  goal kickers are open again.
+- **711, live ticker depth.** The strip says when it last heard, flags a late feed, filters by sport
+  and follows teams; `simTickerDepth` (seven controls) holds the freshness rules to the measured poll
+  cadence, the premise comment says what the table shows, the unreachable branch is gone, and
+  What's New says so. The scores-poll function also changed (it polls yesterday's date until noon ET)
+  and is **NOT yet redeployed** either; same next step.
+- **730, Ballon d'Or.** All 76 rows verified, `simBallonDor` (eight controls) holds the migration to
+  the record, 0 rival name findings. **APPLIED** 2026-09-30: every row carries a nationality.
+- **732, tennis Grand Slam winners.** 1,025 rows verified against the official lists and ESPN, the six
+  2026 champions confirmed on public pages, the dash gone from the regex, the score wipe reversible
+  from the record, a What's New line. **APPLIED** 2026-09-30: 1,015 rows, the 2026 champions filled,
+  the second 1977 Australian Open added, ten wartime placeholder rows gone, a unique index per
+  edition. Follow up: re-bake `src/data/tennisHLPlayers.ts` from the table (Sinner 5, Zverev 2).
+
+**Held with named defects, their partial fixes pushed as work in progress on their branches:** 653
+(the game side fix is on the branch, a grid guess is right when any namesake fits the cell, but the
+merge into H hit a four way conflict with 652 and 654 on simGridArchive, sportHub and the state doc),
+703, 706, 718, 719, 733, 734 (each a harness begun). The briefs are in the lane's scratchpad and the
+findings in the triage and review journals; the next session finishes them one at a time, inline.
+
+**Gates.** tsc 0 on the assembled tree and again after each of three merges of main (Codex's 750 to 759 and later commits). The 44 harness gate (the fifteen snapshot readers CLAUDE.md names plus every fence Release G shipped) ran on the built tree: 43 of 44, the one red being Codex's simSharedResultChallenge, which read its four production files raw and searched them with multi line anchors, so simHarnessAnchors was red on every Windows checkout since it landed; it folds line endings now and both are green. The five rounds' own fences green with their controls: simSoccerStints (sections 0 to 3 after the migrations: would insert 0, would delete 0, would update 0), simSoccerAwardsShape, simTickerDepth (seven controls, SIM_TICKER_DEPTH_CONTROL), simBallonDor (eight), simTennisSlams (twelve); plus simTicker, simLiveScores, simAccessibility, simSiteSearch, simCompletionSlugs, simScoringCoverage, simLeaderboardCaps, simGuideHeadings, simNoRivalNames. Browser, on a quiet machine with a host like server on 4173: playHomeFold green, playSoftFourOhFour green, playSnapshotDrift green, sweepWeight green after five budgets took the entry chunk's growth with their measured reasons (/club-manager 630K, /minefield 284K, /footle 324K, /nfl-my-career 404K, /front-office 304K; Round 711's sport filter menu and follow preferences load on every page, with the native share sheet of 744), one route timing out on page load each run (environmental, a different route each time). playRenderStability checked 150 of 172 routes stable and then the headless browser crashed at /ufc, leaving 22 unchecked, the same harness limit on this machine as in Release G; simPrerender section 16, the source side of that rule, is green. Migrations applied on production behind their own guards, get_advisors clean of error level items: 730, 732, and 707's three. Not run: the full runAllSims on this tree (the gate above is the evidence).
+
+## IN PROGRESS 2026-09-30: four simultaneous Codex tasks 769 through 772
+
+Three agents implement Conquest Explore, First Touch and reachable Club Manager inbox outcomes.
+Root also fixes the shared NBA/NHL/F1 lineup picker losing focus after dismissal, a measured
+Round765 limitation. Exact non-overlapping claims are on WORKBOARD. Next unclaimed number: 773.
+
+## IN PROGRESS 2026-09-30: three independent game features 769 through 771
+
+769 Conquest Explore and 770 First Touch are building under separate agent ownership. 771 now
+claims the isolated Club Manager InboxCard: its four-message display can hide retained pending
+requests, so all recent messages and exact resolved outcomes will become reachable. Existing
+parent/engine/data/release claims remain untouched. Root handles independent review and final
+combined verification. Source rounds 760 through 768 still await Claude's publish. Next free: 772.
+
+## IN PROGRESS 2026-09-30: Conquest exploration 769 and playable First Touch 770
+
+Both larger features have pushed exact claims and independent agent ownership. 769 uses a
+manual bounded SVG viewport with search/filter/fit controls and scene-active gating. 770 has
+a saved design contract and a separate deterministic First Touch engine/Board integrated into
+Training Ground. It reuses existing capped daily training banking without parent/engine edits.
+Completed 754 through 768 receipts remain below; nine source rounds await Claude publishing.
+Next unclaimed number is 771. Claude's reserved lanes stay untouched.
+
+## BUILT 2026-09-30: fifteen Codex rounds 754 through 768 complete; larger features continue
+
+Six rounds 754 through 759 are live in Release G. Nine rounds 760 through 768 are source-ready
+for Claude's next publish. Latest completed work adds finite Mystery Box card/slot feedback and
+Fantasy Draft Country/Foot targeting, preserving card values, eligibility, ranking and callbacks.
+Full evidence and fixture limits are on WORKBOARD. The batch adds 126 rendered tests, with
+asserted negative controls and actual compiled browser checks. Exact app types, final isolated
+768 build, all fifteen built-site fences and four final pool/source harnesses pass. Final CSS
+matches the already accepted 767 artifact byte-for-byte. No shared dist/public or account writes.
+
+769 is claimed for five-sport Conquest exploration: search/filter, fit, zoom and bounded pan,
+disabled during active scenes. First Touch training is the next scoped game feature being
+designed. Claude retains release publishing and its existing data/platform/engine claims.
+Google approval and reindexing remain external pending outcomes, as documented in Round741.
+
+## BUILT 2026-09-30: Codex 764, 765 and 767 complete; 766 and 768 acceptance continues
+
+Soccer Career training gains settled-shot, exact session-result and banked feedback, retaining
+all local mechanics (12 tests, four controls, 88 browser cases). NBA/NHL/F1 lineup pickers gain
+existing-dimension targeting and access beyond forty choices (nine tests, three controls, 24
+browser cases). Draft voting ranks an MVP copy instead of mutating rosters and gains finite winner
+feedback (five tests, two controls, eight browser cases). Detailed limits and evidence are on
+WORKBOARD, including the lineup dialog's existing return-to-BODY behavior. Original training
+handlers stay byte-identical; no pool/engine/data/account changes. Final 767 build/types, fifteen
+built-site fences and eight scoped source harnesses pass. These source rounds await Claude's
+publish. Mystery Box 766 and draft Country/Foot targeting 768 acceptance are still in progress.
+
+## IN PROGRESS 2026-09-30: Codex 768 pool targeting, following built 764 through 767
+
+The 764 through 767 combined production build and exact app types pass; all fifteen built-site
+fences pass. Three-sport lineup targeting passes all 24 final browser cases, with existing dialog
+dismissal to BODY recorded explicitly. Training, Mystery Box and draft winner final acceptance
+continues. The next free agent is taking claimed 768 Fantasy Draft Country/Foot targeting from
+master H, with existing shortlist/eligibility/order preserved. Exact ownership is on WORKBOARD.
+Next unclaimed number: 769. Claude retains release publishing and all its existing claims.
+
+## IN PROGRESS 2026-09-30: four-agent Codex batch 764 through 767
+
+764 Soccer Career training feedback and 765 NBA/NHL/F1 lineup targeting have stable app source,
+with focused tests in progress. 766 adds finite Mystery Box card/slot feedback. Root's 767 fixes
+the draft voting panel mutating its supplied roster during MVP sorting, then adds a finite winner
+cue. All four tasks have pushed exact file ownership before edits. Existing engines, data and
+Claude's release work remain outside this batch. Completed 760 through 763 are source-ready on
+main, pending Claude's next publish. Next unclaimed number is 768.
+
+## IN PROGRESS 2026-09-30: Codex 764 and 765, next gameplay batch
+
+Four completed rounds 760 through 763 are pushed on main through `d8943be7`, ready for Claude's
+next release. Final 761 browser rerun passed all eight cases against the finished 763 artifact;
+its coverage audit finds all 128 registered challenge paths mounting the receiving common navbar.
+Bespoke result surfaces still keep broad D121 partial. Root continues with claimed 764 Soccer
+Career training feedback and 765 NBA/NHL/F1 Perfect Lineup picker targeting. Ownership and
+acceptance are recorded on WORKBOARD before source edits. No publication claim for this batch.
+
+## BUILT 2026-09-30: Codex rounds 760 through 763 complete, ready for Claude's next publish
+
+760: persistent territory inspection across all five Conquest maps. 761: public-score challenge
+URLs and dismissible receiving results. 762: active-time pause/resume in Free Kick and Buzzer
+Beater, with safe charging and keyboard routing. 763: finite committed Fantasy Draft pick feedback.
+These add game functionality and motion without new sports data, engine outcomes or account writes.
+
+Final isolated production build and exact app type gate pass. All fifteen built-site fences pass;
+thirteen scoped source harnesses plus the full existing simDrillMotion browser harness pass.
+Fifty-three rendered tests and all nineteen asserted controls pass for the four rounds. Browser
+receipts cover eighty five-sport map cases plus twenty final CSS checks, eight sharing cases,
+eight draft cases, sixteen full arcade contexts and eight final input-guard contexts. Paired daily
+runs preserve identical scores with exactly one save/completion. Full evidence/fixture limits are
+on WORKBOARD. Broader suite and release publishing stay with Claude. Source-only 760 through 763
+are queued for the next publish; 741 through 759 are already live in Release G. No root dist/public
+or personal browser interaction. Next unclaimed number: 764.
+
+## BUILT 2026-09-30: Codex gameplay rounds 760, 761 and 763, final 762 acceptance underway
+
+The six earlier Codex rounds 754 through 759 are now live in Release G. Root independently checked
+the live index-D1UqICV9.js entry and both 320px arcade help triggers: 44px, in the title header,
+clickable, and returning focus after dismissal. Earlier source-only notes below are historical.
+
+760 adds persistent touch/keyboard territory details across five Conquest maps (nine rendered
+tests, three controls, 80 browser combinations). 761 adds public-score challenge URLs and a
+dismissible receiving result (24 rendered tests, six controls, eight browser combinations).
+763 adds finite committed draft pick feedback, with quiet empty rows and static reduced motion
+(four rendered tests, two controls, eight browser combinations). Full per-round proof and fixture
+limits are on WORKBOARD. Exact app types, isolated production build and all fifteen built-site
+fences pass. The final rebuild will include the normalized shared-result lookup and a reviewed
+arcade keyboard guard. 762 pause/resume already passes 405 browser checks, 112 actual shots and
+four paired daily records with unchanged scores and one save/completion per run. Focused link and
+role-button keys are receiving the same input guard before final acceptance. 760 through 763
+are source-only until Claude publishes the next release. Root dist/public and accounts untouched.
+
+## LIVE 2026-09-30: Release G (652, 654, 655, 656, 710, 712, 713, 714, 715, 716, 717, 720, 729, 731, 742, 743, 745), main `ee67e2e3`
+
+Assembled by the desktop Claude lane in the gate clone (`release-g`, the root checkout of
+`C:\Users\antho\dukb-gate`), pushed to main as a merge of the release branch and main,
+`ee67e2e3` (it carries Codex's 741 to 759 as they stood at 19:42). **douknowball.com is serving it:** deployment `704c2b13-a506-43b5-9313-eeabf869525a`, called only after `get_project`
+showed `latest_commit_sha` `ee67e2e3`; the live entry moved from `index-_2k7DL7K.js` to `index-D1UqICV9.js`. Proof
+by content: C:/Program Files/Git/whats-new serves the five new lines (Contract Chaos, the Heisman page, the double roster fix, the respin picker, the trailing slash), /contract-chaos, /records/heisman-trophy-winners and /world-cup-2026-results answer 200 with their own snapshots, and /records/super-bowl-winners carries nine real tables where it carried none.
+
+**How it was built.** The session that built these rounds died at 14:43 EDT with every builder mid
+flight, so every branch was triaged from scratch (26 agents: tsc, its own fences and their controls,
+a rules read of the diff, the claim against what shipped, every migration read line by line). The
+review fleet that followed was stopped at 16:24 EDT when the account's meter read 90 percent of the
+5 hour window and 85 percent of the week; what it finished is on the branches. Release G is the set
+that was green as built or fixed inline; the rest is held with a named defect (below).
+
+- **745, a trailing slash no longer costs a page its guide.** Codex's Round 741 live audit found
+  /soccer-career/ dropping its 11,086 character guide and all eight FAQ questions after React mounted.
+  Seven components read the raw location.pathname; all read one normalised route now
+  (`src/lib/routePath.ts`, `useRoutePath`), `src/test/trailingSlashRoutes.test.tsx` mounts the real
+  guide block, help button and nav at both spellings, and fails with the raw read put back.
+- **743, World XI keeps the respins you picked** (footer report 2026-09-29): a stale closure in the
+  start callback made 10 or None into 3. `src/test/worldXiRespins.test.tsx`, two of three tests fail on
+  the old dependency list. Report 0732f1db resolved.
+- **742, Club Manager: the man you sign no longer turns out for the club he left** (footer report
+  2026-09-29, real and generated men alike): one choke point, `mySquadNames`, read through
+  `oppRosterFor` at every site that names the other side (their eleven, bench, subs, scorers, ratings
+  sheet, the golden boot race, the pre match danger men, the rival club viewer). The projection and its
+  cache are untouched, nothing new is drawn from the random stream. `simLiveMatch` section 10 (41
+  fixtures a seed, half of them a generated man, three seeds), control `doubleman`. Report b0f5b81b
+  resolved.
+- **652, tables reach a crawler as tables**: the prerenderer writes a table as one block with one row
+  per line; simPrerenderTables, simRecordPages and simGridArchive read rows. Live only with this
+  release's rebuilt snapshots.
+- **654, hubs name their league and their games**, breadcrumbs trail through the sport hub, the format
+  pages carry keyword links, and each big sim links its other half (simRelatedGames section 7).
+- **655, Club Manager's leagues and clubs as readable text** under the guide (simClubManagerClubList,
+  six controls, the saved page read only from this release on).
+- **656, the 2026 World Cup results page** (/world-cup-2026-results, every knockout score, every group
+  in finishing order, the awards, from the Round 395 two source file) and the MVP tables on three
+  Record Books pages; simWc2026ResultsPage (ten controls) and simRecordPages check 11. A semi final
+  loser can never read as out in the group stage (a review guard).
+- **710, one result moment**: ResultScreen mounts a shared sport coloured moment with a fixed height
+  score pill; simResultMoment is true on its own tree (the 36 games that end a run on their own surface
+  are listed with reasons, wiring them is a follow up), controls CRLF safe.
+- **712, streak history**: an eight week calendar on the profile counting only days on record, and
+  achievement unlock dates (simStreakHistory, nine controls).
+- **713, the report queue gets a workflow**: seven statuses, priority, notes, a fix reference, a game
+  filter; the migration is APPLIED (2026-09-30, 55 closed rows became Fixed, 10 open stay New) and its
+  tightened insert policy pins status, priority, admin note and fix reference to their defaults on the
+  way in, so a reporter cannot file a report pre marked Fixed with a made up admin note.
+- **714, Club Manager match centre**: keeper saves, bookings and subs in the stats, a real event timeline
+  on the report (simCmMatchCentre, six controls).
+- **715, the squad page** carries the scouts' ceiling band, wage, deal and worth on every row, sorts, and
+  opens a row on tap (simSquadRows, eight controls, 83 saves).
+- **716, today's standing on the ten daily games**, counted in the database on the Eastern day by best
+  score per name, hidden under 20 players; the read only `daily_score_standing` function is APPLIED
+  (2026-09-30; `idx_game_completions_day_game` and the public read policy confirmed on production first).
+  No daily game has reached 20 players on any Eastern day in the last 30 days, so the panel is hidden
+  everywhere until one does.
+- **717, the home page remembers**: a Continue playing row from held saves and favourite sport chips
+  (simHomeFront sections 7 and 8, playHomeFold section 6).
+- **720, new game Contract Chaos**: five seasons of offers off the shared free agency engine, scored 0
+  to 100; simContractChaos (seven sections, six anchored controls). Its caps row is APPLIED (unscored
+  plays while the points economy is rebuilt).
+- **729, the Heisman**: all 91 winners verified against heisman.com and ESPN, 23 position codes
+  corrected on production (APPLIED 2026-09-30, fail closed on all 91 rows before and after), a Record
+  Books page at /records/heisman-trophy-winners, simHeisman (seven controls) and simRecords.
+- **731, NASCAR champions**: 77 seasons verified against nascar.com and Racing Reference, six fields
+  corrected on production (APPLIED 2026-09-30 behind before and after md5 guards), three wins counts
+  set to NULL where the league and the reference disagree, simNascarChampions (seven controls).
+
+**Held out of G, each with a named defect** (fix on its own branch, queued): 653 (227 listed College
+Basketball answers the game's own name lookup rejects, because `byNormalizedName` keeps the last
+namesake; the live College Grid refuses Danny Manning at Kansas for the same reason), 703 (four hand
+typed franchise code maps with no fence, a promised harness that does not exist), 706 (fence missing;
+its five migrations wait for 653), 707 (fence missing, the sibling Connect 4 validator untouched), 708
+(harness crashes at module scope, rival names, dashes; claim narrowed to soccer_awards), 711 (no
+harness), 718 (no harness; Career Ladder only, Clue Auction has no daily mode), 719 (three rival name
+strings, no harness), 730 (fence missing, 24 rival name hits), 732 (an em dash in a regex, a source
+question, a score wipe with no backup), 733 and 734 (fence missing; 734's record states a false fact
+15 times about Red Bull drivers). Round 669's data step runs at 00:03 America/New_York on 2026-10-01.
+
+**Gates.** tsc 0 on the release tree and again on the tree merged with Codex's 741 to 759. Six vitest files, 57 tests green. The 44 harness gate (the fifteen snapshot readers CLAUDE.md names plus every fence a merged round ships) ran twice in two lanes on the built tree: 38 of 44, then, after six integration fixes with 41 controls firing, 44 of 44; nine of them rerun green on the merged tree. Browser: playSoftFourOhFour green, playSnapshotDrift green (nothing a crawler reads depends on the day), sweepWeight green after four budgets were raised with their measured reasons (/club-manager 626K, /minefield 280K, /footle 320K, /front-office 300K; the shared result moment, the native share sheet and the hub trail sit in chunks every game loads). Two walks are owed a quiet machine: playHomeFold timed out loading the page while twelve fixers ran, and playRenderStability crashed the browser the same way and left 35 routes unchecked (simPrerender section 16, the source side of the same rule, is green). Migrations applied on production, each behind its own guards: 720, 731, 713, 716, 729; get_advisors shows no error level item. Not run: the full runAllSims on this tree (the 44 above and the release's own fences are the evidence; the full suite runs on the release H tree).
+
+## BUILT 2026-09-30: six further Codex rounds 754 through 759 complete
+
+757 arcade help clears the logo/ticker and has 44px targets. 759 rules dialogs return focus to their
+own help trigger on close, preserving controlled behavior and content. Six actual-dialog tests pass;
+the actual removed-focus control fails five with one unrelated pass. Independent review approved.
+Finished-build browser: eight route/width combinations, three opening and three closing methods,
+exact guide text, restored focus, no header/title overlap, overflow or page errors. Restoring the old
+floating position reproduces all eight out-of-header cases and both desktop blocked clicks. Browser
+Escape checks now wait for actual entrance/focus readiness; no outside-overlay dismissal claim.
+Existing development missing-description warnings remain unchanged. Screenshot rectangles inspected.
+
+All six rounds 754 through 759 are now built, checked and pushed for Claude's release. The isolated
+759 build/types passed, nine scoped node harnesses passed, and per-round controls/browser receipts
+are on WORKBOARD. Four US careers gained response/badge feedback, CBB recruiting gained targeting,
+shared player search gained keyboard/disabled correctness, and both arcade help controls are usable.
+Current next batch: 760 territory inspection, 761 challenge links and 762 arcade pause/resume.
+Frontend publication is still with Claude. Root dist/public and real accounts remain untouched.
+
+## BUILT 2026-09-30: Codex 754 to 758 acceptance and continued gameplay work
+
+754 player search supports native keyboard activation once and rejects disabled/stale selection.
+Eight rendered tests, three actual negative controls, 378 browser checks across four widths and both
+motion modes passed. Search results, namesake identity, filters and pointer-before-blur stay intact.
+755 extension reply and 756 earned-badge feedback passed independent 64 compiled-card combinations,
+including real engine outcomes, stable controls/nodes, finite effects and static reduced motion.
+These two rounds improve all four US careers; no career engines, narratives or progression change.
+758 CBB Dynasty adds position/minimum-star targeting to both existing prospect pools, truthful counts,
+reset and distinct no-match/depleted states. Seven actual Board tests and filter/resave controls pass.
+Eight full-route browser cases verify zero filter saves, two real correct-ID signings/two save writes,
+60 existing NIL spent, correct class/order/grades, 44px targets and no overlap/overflow. All data is
+existing generated/local fixture data, with remote requests blocked. No sports facts or engine edits.
+
+Exact app type gate and isolated 759 production build pass. Nine scoped common-runner harnesses green.
+757/759 arcade help/focus final browser check remains underway, so completion is not yet claimed.
+Next active gameplay batch is 760 shared Conquest territory details, 761 shared-score challenge links
+and 762 arcade pause/resume. Claimed file ownership is in WORKBOARD. Claude retains gated publication.
+
+## SOURCE BUILT 2026-09-30: Codex 755 and 756, career replies and badges
+
+Four US My Career games share finite extension reply and earned-badge feedback. Opening extension
+notes and locked badges stay quiet; existing figures, badge evaluator results, controls and nodes
+remain unchanged, with static reduced motion. Five extension and six badge rendered tests passed.
+Actual temporary binding/label controls produce their expected failures and leave unrelated tests
+green. Exact app type gate and isolated 757 production build passed. Independent compiled-component
+browser acceptance is still running; completion and frontend publication are not claimed yet.
+Other current claims: 754 shared autocomplete activation, 757 arcade help placement, 758 generated
+CBB recruiting filters and 759 help-dialog focus return. Claude retains release/publish duty.
+
+## BUILT 2026-09-30: Codex Round 753, three chain games and completed release handoff
+
+Combat, Tennis and NASCAR timelines animate only the newest committed person and connection,
+finishing in 420/360ms. Empty/seed states stay quiet, existing nodes remain, identical running or
+settled chains and ended-state updates do not replay, and reduced motion is static. All factual
+display fields, bonuses, lengths, multipliers and ended colors remain unchanged. Scoped wrapping
+fixes the measured no-space name/connection overflow on narrow phones without clipping text.
+
+Fifteen actual-timeline tests passed. Each asserted removed-reveal/connection control causes three
+intended transition failures and twelve unrelated passes. The permanent compiled-timeline browser
+gate passes 24 sport/width/motion combinations at 320/390/430/1440. Its asserted pre-wrap control
+restores six measured 320px failures: Combat 115px, Tennis 371px, NASCAR 372px. Spaced baseline text
+still fits. Type gate 0, isolated 753 build 0, all nine final scoped node harnesses green. Independent
+source review approved. Fixtures cover presentation, not full chain validator/board integration.
+All owned browsers/servers and temporary copied modules are cleaned. Evidence:
+`C:/Users/antho/AppData/Local/Temp/dukb-round753-timeline-gate`.
+Permanent command: `node scripts/playChainTimelineMotion.mjs`, optional `CHAIN_TIMELINE_DIST` for
+a finished build, control `CHAIN_TIMELINE_CONTROL=nowrap`.
+
+Ten Codex rounds are complete on main: 741, 744 and 746 through 753. New animations cover twelve
+distinct games; other work adds native sharing, Academy filters, live reserved-name enforcement
+and truthful Google/indexing checks. Frontend publication is pending with Claude, whose release-g
+was observed at `7013fa6c` and needs the subsequent Codex main commits after its 746 base. The work
+board lists the exact handoff and new browser gates. Do not apply 747 twice or claim AdSense approval;
+Google remains Needs attention / Low value content, and pack-battle stays intentionally noindexed.
+
+## BUILT 2026-09-30: Codex Rounds 751 and 752, four Front Office games
+
+Trade talks now reveal the newest committed reply, mark an agreed/ended call with finite feedback,
+wrap long packages and keep existing buttons immediately usable with 44px targets. Exact engine
+lines, packages, callbacks, disabled one-shot push and stable enabled-button focus remain intact.
+Six actual-card tests passed; removing the real reply binding fails four checks and leaves two
+transition/focus checks green. Browser proof: 739 checks across 32 sport/width/motion contexts.
+
+Ownership now gives brief cues for existing hot-seat and changed pace messages. The original trust
+values, thresholds, text, colors and card geometry are retained. Its existing 700ms bar transition
+also respects reduced motion. Seven rendered tests pass; a trust-26 boundary mutation fails exactly
+one, six unrelated checks stay green. Independent source review approved. Browser proof: 1,299
+valid comparisons in 32 contexts and 192 trust samples against the pre-change actual component.
+Reduced-motion transition-property is none with an immediate correct width, despite the site's
+global 1e-06s duration override. No game state, engine, parent-board or save changes.
+
+Type gate 0, isolated combined 752 build 0, all 12 scoped common-runner harnesses green, including
+the existing owner/trade engine checks. All four widths 320/390/430/1440 and both motion modes pass
+with no errors, overflow or external requests. Actual compiled-component fixtures prove the UI;
+they do not claim a full board/hook run. All owned browser servers stopped. Evidence and screenshots:
+`C:/Users/antho/AppData/Local/Temp/dukb-round751-trade-audit`.
+Source is pushed for Claude's gated release; frontend publication pending. Round 753 owns only
+finite feedback in the Combat, Tennis and NASCAR timelines and remains separate from their data.
+
+## BUILT 2026-09-30: Codex Round 750, narrow-phone grid geometry
+
+Football, College and Soccer Grid keep all nine cells square when long correct answers arrive.
+Visual names are bounded while full names remain in DOM, accessible names and titles. Every rarity
+badge and percentage stays visible, including the unusual/unicorn and missing-rarity cases. Button
+identity, retry/wrong focus, selection indices, locked-cell behavior and 749 motion remain intact.
+Four rendered tests green; removing titles in asserted copies fails four. Browser geometry gate
+passes 24 combinations of three accents, four widths and both motion modes. A real unbound-copy
+control regains the original 46.75px expansion in all six 320px probes and flags 42 geometry changes.
+This closes the measured 749 phone defect, superseding the open receipt below. Controlled compiled
+Boards with finished production CSS prove layout, not validator/route-shell integration.
+
+Type gate 0, combined isolated 752 production build 0. Evidence/screenshots:
+`C:/Users/antho/AppData/Local/Temp/dukb-round750-geometry`. Permanent outcome check:
+`node scripts/playGridCellGeometry.mjs`, optional `GRID_GEOMETRY_DIST` for a finished build,
+negative control `GRID_GEOMETRY_CONTROL=unbound`; component fence `simGridCellLayout`.
+Source is ready for Claude's next gated release. No live frontend publication is claimed.
+
+## BUILT 2026-09-30: Codex Rounds 748 and 749, five games with new motion
+
+Free Kick and Buzzer Beater share finite settled-shot celebrations and miss feedback. Existing
+points/verdicts, entry-angle explanations, daily completion/save and immediate Next are preserved.
+Ten rendered tests pass; real altered-point/auto-next controls fail four/two respective checks.
+Browser proof: 416 checks, 76 real shots, all four widths 320/390/430/1440 with normal/reduced motion,
+four daily runs saved once, reloads did not resubmit, 2,000 deterministic shots per game identical
+to the old engine results. Effects end within 700ms, reduced motion runs none. No page/console
+errors, overflow or external writes. Evidence: `dukb-round748-arcade-audit` in the local Temp folder.
+
+Football Grid, College Grid and Soccer Grid share correct-cell glow/lock-in and wrong-answer motion.
+Eight rendered tests pass; removing actual correct bindings fails both transition checks. Twenty-four
+compiled board fixtures cover three accents, four widths, normal/reduced motion, finite effects,
+unchanged button identity/callbacks and retry focus. These fixtures do not claim full validator/hook
+coverage. A real pre-existing 320px long-name cell expansion (67.5px to 114.25px) is claimed as 750,
+with an outcome geometry fence planned. Round 751 independently owns four-game TradeTalksCard
+presentation. Source types and isolated production build passed; Claude owns publication.
+
+747 compatibility receipt: read held `r673-lock-doors`. The live name predicate/trigger creates no
+account write RPC or second write path, changes no profile grants, and will also guard 673's fixed
+save RPC. The 746/747 wrappers now print real test reports, fixing their EMPTY common-runner result.
+Both discoverable suites passed: seven/89 actual tests. Existing ignored-filter/unguarded-helper
+controls still fail six/60 intended checks and leave one/29 unrelated checks green. No policy or
+common runner changes, no temporary copies left behind.
+
+## DATABASE LIVE / CLIENT BUILT 2026-09-30: Codex Round 747, reserved names
+
+Future profile name writes cannot use the listed administrative names or clear DoUKnowBall account
+combinations. The existing client moderation/publicName path inherits the same whole-name rule;
+ordinary sports and fan names remain valid. No Profile, auth, completion or game-engine edits.
+`simReservedNames`: 89 tests green, 60 enforcement/substitution checks fail with the guard removed
+from an asserted copy, 29 unrelated checks stay green. App type/build proof is the isolated 746 gate
+on the same helper source. Frontend release pending with Claude.
+
+Migration `20260930200618_round_747_reserved_profile_names.sql` applied successfully. It self-verifies
+the real invoker trigger as authenticated against temporary rows: 150 rejected writes across 30
+reserved variants, 20 ordinary names with inserts/upserts, unchanged legacy names, streak updates,
+one-field edits and rollback. A disabled temporary trigger admits the reserved control. No stored
+profile is rewritten and no fixture remains. Live AFTER trigger and empty search path confirmed;
+RLS retained, predicate auth/service access and anon denial confirmed, NBSP/BOM parity confirmed.
+Security advisors show exactly the same categories/counts as before the migration.
+
+Separate pre-existing handle-pool issue handed to Claude's completion/points owner: some generated
+substitutes contain fragments the old profanity filter rejects (Scrappy, Closer). This round reserves
+authority names; it does not claim historical profile cleanup or the section 12 report/notify flow.
+
+## BUILT 2026-09-30: Codex Round 746, Academy filters
+
+Academy prospects can be filtered by position and exact age together, with count/reset and clear
+empty states. Existing ceiling ordering, source list and signing/release rules remain intact.
+`simAcademyFilters`: seven rendered tests green, ignored-filter negative control produces six
+outcome failures while the original empty intake remains green. Type gate and isolated build 0.
+Browser acceptance: 45 checks at 320/390/1440, actual sign/release IDs and fees, unchanged budget
+and squad constraints, preserved saves, 44px controls and no overflow. No page errors or external
+writes. Source is ready for Claude's next gated release; publication pending. Round 748 is claimed
+for shared finite arcade goal/basket/miss reactions after the owner's animation request.
+
+## BUILT 2026-09-30: Codex Round 744, common native result sharing
+
+The shared result buttons now include Share result, using the existing native-share and clipboard
+helper. Default and caller-supplied text agree with the existing destination buttons. The control
+disables while pending, quietly accepts cancellation and restores itself afterwards. No score,
+recording, data or save changes. Section 102's native action is closed; card streak/percentile
+enrichment is still open.
+
+Type gate 0, isolated production build 0, AdSense, harness-anchor and rival-name guards green.
+Browser acceptance passed 26 checks at 320, 390 and 1440 pixels, including native success,
+cancellation, unsupported sharing, clipboard fallback/failure, duplicate suppression and unchanged
+existing X/copy payloads. The new button is 44 pixels high and all three widths have no overflow.
+No page, console or request errors. Committed on shared main for Claude's next gated release;
+this receipt does not claim it is published. Round 746 is claimed for Academy position/age filters.
+
+## VERIFIED 2026-09-30: Round 741, AdSense decision and live indexing audit
+
+Codex directly observed AdSense **Needs attention / Low value content**, ads.txt
+**Authorized**, and a September 25, 2026 at 04:59 EDT last update. The September 15
+pending-review notes below are superseded. No review was requested or account setting
+changed. The policy card names no individual page.
+
+Search Console's noindex warning names exactly one URL: **/pack-battle**, intentionally
+retired and excluded since Round 198. Keep that noindex. The domain report's displayed
+September 20 data says 68 indexed and 94 excluded (5 redirects, 10 crawled, 1 noindex,
+78 discovered). No validation, indexing or sitemap request was made.
+
+All 163 published sitemap URLs return 200, one self-canonical, readable saved content
+and no robots/googlebot meta or X-Robots-Tag indexing restriction. The ten local
+deliberate noindex pages remain outside the sitemap. Unknown URLs still acquire the
+fallback noindex with the app bundle blocked. These measurements do not prove Google
+has indexed or recrawled every page.
+
+**Real content defect handed to Claude's owning SEO release:** `/soccer-career/` and
+`/club-manager/` lose their full guides and FAQ markup after React mounts, while their
+normal forms retain them. Article characters fall 11,086 to 0 and 15,345 to 0; FAQ
+questions fall 8 and 10 to absent. Exact pathname lookups in GameSeoContent miss the
+slash. Raw saved pages remain complete. No Codex edit to the claimed SEO files.
+
+**Audit repair committed `5c71f887`:** auditLive now reads actual indexing meta and
+individual HTTP headers, with crawler scope preserved. `simLiveIndexability` drives
+13 healthy localhost URLs then 11 real response mutations, verifying the actual audit
+rejects only changed pages. Types, isolated production build, indexing, hidden-page,
+AdSense, harness-anchor and rival-name guards passed. No application, data or snapshot
+change; no deploy required. Full proof and limits:
+[September 30 Google receipt](audits/GOOGLE-READINESS-2026-09-30.md).
+## FIXED 2026-09-30, NOT ON MAIN: Round 707, the soccer stints behind the verified overlay (branch `r707-soccer-stints`)
+Two edge functions written and NOT deployed, three migrations written and NOT applied. The triage and
+three reviewers sent the first cut back (a fence cited in four places that did not exist, the sibling
+validator untouched, a verified move attached to a name rather than a man); all of it is closed on the
+branch.
+- **What it does.** The 241 moves of `scripts/transferOverlay2026.mjs` count as club stints in
+  `soccer-grid-validate` and `football-connect4-validate` (a yes only, never a no, careerComplete still
+  read from the table), and only for the man who moved: a name whose rows carry two nationalities, or
+  whose 2026 market row is another nationality, goes to the model as before ("Beto" is three men,
+  "Rodrigo Mora" and "Nico González" two each). The grid works a cached club or nationality refusal
+  out again rather than serving it (World Cup squad refusals, 96 of the 299 records refusals, are
+  served: the squads are complete); connect4 puts a cached no on a club half to the records before
+  serving it and replaces the stale fact. "Played for Atlético Madrid" reaches the 204 rows stored at
+  "Atlético de Madrid" in both games.
+- **The fence.** `scripts/simSoccerStints.mjs`: section 0 parity of the overlay file, both function
+  maps and the migration list (241 = 241 = 241 = 241, 0 mismatches); sections 1 to 3 the live read
+  only counts the migrations refuse on (would insert 240, would delete 1465 in 1423 groups, would
+  update 0, each equal to its file's constant on 2026-09-30, and 0 once applied); section 4 the
+  source shape. Five controls, all fire.
+- **At release, in this order.** (1) Apply `20260930170000_round_707_overlay_stints.sql` (240 rows,
+  refuses on any other count), `20260930170100_round_707_stint_duplicates.sql` (1,465 rows in 1,423
+  groups), `20260930170200_round_707_stint_person_keys.sql` (0 rows today; its expected_updates
+  constant must be re-measured with simSoccerStints section 3 before any later run). Any order
+  between them; run `node scripts/simSoccerStints.mjs` after and read "would insert 0" and "would
+  delete 0". (2) Deploy `soccer-grid-validate` and `football-connect4-validate` through the
+  Supabase MCP, then update both entries in `scripts/data/edgeDeployed.json` (sha256 of the merged
+  file, version +1, date) in the same commit; `simEdgeSync` is red until that is done and says which
+  file. (3) Rebuild the snapshots for the What's New line.
+- **Out of scope, on the follow up list.** Gaps in the market rows before 2026 (Tonali's Newcastle
+  years are in neither table, so "Played for Newcastle" stays a hard no for him) and the 64 stale
+  sweep pairs, each wanting a two source record.
+## ROUND 708 FIXED 2026-09-30, NOT ON MAIN: soccer_awards readers, shape test and record (branch `r708-small-soccer-tables`)
+Head `7b759017` on top of the round's `be9e2723`. **What shipped is the soccer_awards half only.** The board
+line for 708 still says "soccer_awards, national_team_squads, AFL goal kickers"; the lead narrows it at
+assembly. national_team_squads got no reader change (Build Your XI and validate-player already select
+`player_name` only) and no migration; AFL goal kickers got nothing at all.
+- **The reader.** `awardWinners()` in `src/lib/listQuiz.ts` refuses any award off `VERIFIED_SOCCER_AWARDS`
+  (throws, before the query), reads only `winner_name, club_or_team`, and runs every row through
+  `awardRowProblem()` in `src/lib/awardRowShape.ts`: a winner that is a number, a rank, blank, a paper, a
+  nation, 'Not awarded' or several men, or a club that is a scoreline, is skipped. In the three awards the
+  List Quiz reads that drops the five 'Not awarded' Golden Shoe seasons (an answer the quiz used to expect)
+  and `cleanAwardWinner()` takes the '(tie)' and '(2)' tags off, so Sanchez, Stoichkov, Forlan, Henry,
+  Ronaldo and Suarez stop being a second answer nobody could type.
+- **The record.** `scripts/data/soccerAwardsVerified2026-09.json`: European Golden Shoe (56 winners 1968 to
+  2025 plus the five suspended seasons), Premier League Player of the Season (32, 1994-95 to 2025-26) and
+  MLS MVP (30, 1996 to 2025), each on two organisations, no wiki. The Shoe's organiser page (ESM,
+  eusm.eu) is a script shell, recorded as `noOfficial`; Topend Sports, Futbol Update, SportsLib, Goal and
+  bundesliga.com carry it. The 2025-26 Golden Shoe (Harry Kane, 36 goals, 72 points, presented
+  2026-08-19) is decided and **not in the table**: it sits in `knownGaps`, the quiz deals one fewer season,
+  and a one row migration moves it into `winners`.
+- **The fence.** `scripts/simSoccerAwardsShape.mjs`, seven sections, eight controls, green on main before
+  any migration lands. Section 5 against the live table on 2026-09-30:
+  `European Golden Shoe: 61 rows, 5 dropped (Not awarded), 56 pass and match the record's 56; quiz deals 39 distinct names, record has 39; not in the table yet: 2026 Harry Kane`,
+  `Premier League Player of the Season: 32 rows, 0 dropped (none), 32 pass and match the record's 32; quiz deals 27 distinct names, record has 27`,
+  `MLS MVP: 30 rows, 0 dropped (none), 30 pass and match the record's 30; quiz deals 28 distinct names, record has 28`.
+  Sections 6 and 7 print PENDING while the World Cup rewrite and the squads realignment are unshipped
+  (183 of the 393 World Cup rows are junk shaped, the other 210 are name shaped rows under the wrong
+  award, which only the allowlist keeps out) and check the tables against the migrations once the files
+  exist.
+- **What the review found and the fix closed.** The harness as built read the two migrations and the
+  record at module scope and crashed with ENOENT before section 1, so no control could fire and
+  runAllSims would have gone red on merge. The squads fingerprint counted digit positions over the 60
+  statistics rows too (live 2784, typed 2724), so it could never match. The greedy control predicted one
+  section and turned two red. The squadcol control was "caught" by a section that was already red for
+  another reason: every control now asserts the failure text it exists to provoke. The 'several names'
+  rule fired only above five words, so 'Oleg Salenko Hristo Stoichkov' passed; it fires at four
+  capitalised tokens now (no recorded winner has more than three, the shortest two man cell has four).
+  The blank check had no fixture. Two rival name hits (a record field named after the governing body and
+  its fail message), three dashes in fixtures (built from code points now), and two names for one
+  unshipped migration.
+- **Gates.** tsc 0; simSoccerAwardsShape green with outlet, several, tie, allowlist, greedy, record,
+  wcverified and squadcol each exiting 1 on exactly their predicted sections; simNoRivalNames 0 findings;
+  simHarnessAnchors green; no U+2013 or U+2014 in the diff.
+**Follow ups, none started:** the World Cup awards record and
+`supabase/migrations/20260930120000_round_708_soccer_awards_world_cup.sql` (the harness's section 6 and
+the wcverified control are ready for them; add a control that drifts one migration row when it ships);
+`20260930121000_round_708_national_team_squads_realign.sql` (section 7 is ready; the fingerprint there
+pins exact live counts, so any row added to the table will turn it red until the migration lands, which
+is why it only runs once the file exists); the 2025-26 Golden Shoe row; AFL goal kickers, unstarted.
+**Trap for the next harness:** a harness that reads a file at module scope is red the moment the file is
+missing, on every run and under every control, and its own header can still say "green on main". Guard
+the read on existence and print PENDING, so the sections that fence the shipped code keep running.
+
 ## LIVE 2026-09-29: Release F (660, 661, 668, 669 code, 670, 672), main `add1c6b0`
 
 Assembled in the gate clone's `release-f` worktree, pushed to main as a fast forward from `ef16139d`.

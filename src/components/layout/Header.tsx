@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { LogoMark } from '@/components/layout/Logo';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useRoutePath } from '@/hooks/useRoutePath';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -33,7 +34,7 @@ export function Header() {
   const navigate = useNavigate();
   /* Round 283: the guest sign up strip below is suppressed on the home page.
      See the comment at that block for the measurement behind it. */
-  const isHome = useLocation().pathname === '/';
+  const isHome = useRoutePath() === '/';
 
   const handleSignOut = async () => {
     await signOut();

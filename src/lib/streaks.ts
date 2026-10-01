@@ -183,6 +183,13 @@ export function recordGameCompletion(gameSlug: string, when: Date = new Date(), 
   const today = getEtDateString(when);
   const state = readState();
 
+  /* Round 712: the diary is written from the state BEFORE this finish lands,
+     so the runs it starts with (and the best runs it marks as already held)
+     are the ones the counters had, not the ones this finish is about to make.
+     Taken after, a five day streak finished today would be filed as held
+     before the diary began and never get its date. */
+  writeDiary(notePlay(readDiary() ?? startDiary(state, today), state, gameSlug, today));
+
   state.global = advanceEntry(state.global, today);
 
   const perGamePrev = state.perGame[gameSlug] ?? { ...EMPTY_ENTRY };
@@ -212,6 +219,9 @@ export function recordVisit(when: Date = new Date()): StreakState {
     state.loginDates.sort();
   }
   writeState(state);
+  // Round 712: start the diary on the first visit, so the days it can vouch
+  // for begin the day this browser first loads it rather than the first finish.
+  if (!readDiary()) writeDiary(startDiary(state, today));
   return state;
 }
 
@@ -307,4 +317,214 @@ export function getTopPerGameStreaks(n: number = 5): Array<{ gameSlug: string; e
     .filter(({ entry }) => entry.longest > 0)
     .sort((a, b) => b.entry.longest - a.entry.longest || a.gameSlug.localeCompare(b.gameSlug))
     .slice(0, n);
+}
+
+/* ─── Round 712: the play diary, the history half of spec item 15 ──────────
+
+   The counters above know three things per streak: how long the run is, the
+   best it has ever been, and the last day it was credited. That is enough for
+   the flame in the header and nowhere near enough for a calendar, because "5 in
+   a row, last on the 12th" does not say which of the last eight weeks' days
+   were played. So from this round a second key keeps the days themselves.
+
+   A SEPARATE KEY, ON PURPOSE. StreakState is uploaded to profiles.streak_state
+   on every signed in save and that column is publicly readable, so a list of
+   every day somebody played does not belong in it. And a tab still running the
+   previous build rewrites StreakState from only the fields it knows, which
+   would quietly wipe anything added to it. The diary sits beside the counters
+   under its own key, which older code never touches.
+
+   IT NEVER CLAIMS A DAY IT DID NOT SEE. Three marks, not two:
+     played   a finish was credited that day.
+     rest     the diary can vouch that nothing was.
+     unknown  the day is from before this browser kept a diary.
+   When the diary starts, the run each counter already holds is copied in,
+   because a current run of 5 ending on the 12th IS five played days, the 8th
+   to the 12th: advanceEntry cannot have produced it any other way. Days before
+   that run are unknown rather than rest, since an older run may have been
+   there. A line the counters had never credited (a brand new browser, or a
+   game first played after the diary began) is complete for all time, because a
+   finish on this browser would have credited it.
+
+   Writes happen in exactly two places, recordGameCompletion and recordVisit,
+   and only to this key. Everything else below is a pure function of what it
+   is handed, which is what scripts/simStreakHistory.mjs drives. */
+
+const DIARY_KEY = 'dukb-play-diary-v1';
+
+/** Days one line keeps, a little over two years. Past that the oldest drop
+ *  off and become unknown, never rest (see trimLine). */
+const DIARY_CAP = 800;
+
+export interface DiaryLine {
+  /** First ET day this line vouches for; earlier days are unknown. null means
+   *  every day, because nothing had been credited when the line began. */
+  from: string | null;
+  /** ET days with a credited finish, ascending, no repeats. */
+  days: string[];
+}
+
+export interface PlayDiary {
+  version: 1;
+  /** ET day this browser started keeping the diary. */
+  keptSince: string;
+  global: DiaryLine;
+  perGame: Record<string, DiaryLine>;
+  /** The best runs the counters already held before the diary could see
+   *  them. A run that long may have happened out of sight, so nothing that
+   *  needs one is ever dated from the diary. */
+  heldAtStart: { longest: number; bestGameStreak: number };
+}
+
+/** The days of the run an entry holds: `current` days in a row ending on
+ *  lastDate. A credited entry always has at least its last day. */
+export function runDays(entry: StreakEntry | undefined | null): string[] {
+  if (!entry || typeof entry.lastDate !== 'string') return [];
+  const n = Math.min(DIARY_CAP, Math.max(1, Math.floor(Number(entry.current)) || 1));
+  const out: string[] = [];
+  for (let i = n - 1; i >= 0; i--) out.push(shiftDate(entry.lastDate, -i));
+  return out;
+}
+
+/** A line built from what the counters know: the held run, vouched for from
+ *  its first day, or complete for all time if nothing was ever credited. */
+function lineFromEntry(entry: StreakEntry | undefined | null): DiaryLine {
+  const days = runDays(entry);
+  return { from: days.length ? days[0] : null, days };
+}
+
+const bestOf = (perGame: Record<string, StreakEntry> | undefined): number =>
+  Object.values(perGame ?? {}).reduce((top, e) => Math.max(top, e?.longest ?? 0), 0);
+
+/** Pure. A fresh diary from the counters as they stand before anything new lands. */
+export function startDiary(state: StreakState, today: string): PlayDiary {
+  const perGame: Record<string, DiaryLine> = {};
+  for (const [slug, entry] of Object.entries(state.perGame ?? {})) perGame[slug] = lineFromEntry(entry);
+  return {
+    version: 1,
+    keptSince: today,
+    global: lineFromEntry(state.global),
+    perGame,
+    heldAtStart: { longest: state.global?.longest ?? 0, bestGameStreak: bestOf(state.perGame) },
+  };
+}
+
+function withDay(line: DiaryLine, day: string): DiaryLine {
+  if (line.days.includes(day)) return line;
+  return { from: line.from, days: [...line.days, day].sort() };
+}
+
+/** Keeps a line under the cap. The days dropped become unknown, never rest. */
+function trimLine(line: DiaryLine): { line: DiaryLine; trimmed: boolean } {
+  if (line.days.length <= DIARY_CAP) return { line, trimmed: false };
+  const days = line.days.slice(line.days.length - DIARY_CAP);
+  return { line: { from: days[0], days }, trimmed: true };
+}
+
+/**
+ * Pure: the diary after a finish of `slug` on `today`. `before` is the counter
+ * state before that finish is applied. Idempotent per (line, day), exactly like
+ * advanceEntry, so a replay or a second game the same day adds nothing twice.
+ * When a line drops old days, the best runs held at that moment are folded
+ * into heldAtStart, because a run in the dropped days can no longer be seen.
+ */
+export function notePlay(diary: PlayDiary, before: StreakState, slug: string, today: string): PlayDiary {
+  const g = trimLine(withDay(diary.global, today));
+  const p = trimLine(withDay(diary.perGame[slug] ?? lineFromEntry(before.perGame?.[slug]), today));
+  const heldAtStart = { ...diary.heldAtStart };
+  if (g.trimmed) heldAtStart.longest = Math.max(heldAtStart.longest, before.global?.longest ?? 0);
+  if (p.trimmed) heldAtStart.bestGameStreak = Math.max(heldAtStart.bestGameStreak, bestOf(before.perGame));
+  return { ...diary, global: g.line, perGame: { ...diary.perGame, [slug]: p.line }, heldAtStart };
+}
+
+function isLine(v: unknown): v is DiaryLine {
+  if (!v || typeof v !== 'object') return false;
+  const l = v as DiaryLine;
+  return (l.from === null || typeof l.from === 'string')
+    && Array.isArray(l.days) && l.days.every(d => typeof d === 'string');
+}
+
+/** This browser's diary, or null if there is none yet (or it is unreadable,
+ *  in which case the next write starts a new one and the old days read as
+ *  unknown, which is true). */
+export function readDiary(): PlayDiary | null {
+  try {
+    const raw = localStorage.getItem(DIARY_KEY);
+    if (!raw) return null;
+    const d = JSON.parse(raw);
+    if (!d || d.version !== 1 || typeof d.keptSince !== 'string' || !isLine(d.global)) return null;
+    const perGame: Record<string, DiaryLine> = {};
+    if (d.perGame && typeof d.perGame === 'object') {
+      for (const [slug, line] of Object.entries(d.perGame)) if (isLine(line)) perGame[slug] = line;
+    }
+    const held = d.heldAtStart && typeof d.heldAtStart === 'object' ? d.heldAtStart : {};
+    return {
+      version: 1,
+      keptSince: d.keptSince,
+      global: d.global,
+      perGame,
+      heldAtStart: { longest: Number(held.longest) || 0, bestGameStreak: Number(held.bestGameStreak) || 0 },
+    };
+  } catch {
+    return null;
+  }
+}
+
+/** The counters exactly as stored, with no liveness check. The calendar needs
+ *  the stored run length: getStreakState shows a broken run as 0, and a run of
+ *  0 would hide the days that run really covered. */
+export function readStreakCounters(): StreakState {
+  return readState();
+}
+
+function writeDiary(diary: PlayDiary): void {
+  try {
+    localStorage.setItem(DIARY_KEY, JSON.stringify(diary));
+  } catch {
+    // Same as writeState: a full or blocked storage must never break a game.
+  }
+}
+
+export type DayMark = 'played' | 'rest' | 'unknown' | 'ahead';
+
+export interface CalendarDay {
+  day: string;
+  mark: DayMark;
+}
+
+/**
+ * Pure: `weeks` weeks of one line, Monday to Sunday, oldest week first, the
+ * last week holding `today`. Days after today are 'ahead'. The counters' own
+ * run is folded in as well, so a day credited by a tab that never wrote the
+ * diary still shows as played. With no line at all the counters are all there
+ * is: their run is played, the days after it are rest, the days before it are
+ * unknown. Every date here is plain calendar arithmetic on ET date strings, so
+ * a clock change cannot stretch or shrink a week.
+ */
+export function playCalendar(
+  line: DiaryLine | null | undefined,
+  entry: StreakEntry | null | undefined,
+  today: string,
+  weeks = 8,
+): CalendarDay[][] {
+  const counted = lineFromEntry(entry);
+  const played = new Set([...(line?.days ?? []), ...counted.days]);
+  const from = line ? line.from : counted.from;
+  const monday = (new Date(`${today}T00:00:00Z`).getUTCDay() + 6) % 7;
+  const start = shiftDate(today, -monday - 7 * (weeks - 1));
+  const out: CalendarDay[][] = [];
+  for (let w = 0; w < weeks; w++) {
+    const week: CalendarDay[] = [];
+    for (let d = 0; d < 7; d++) {
+      const day = shiftDate(start, w * 7 + d);
+      let mark: DayMark;
+      if (day > today) mark = 'ahead';
+      else if (played.has(day)) mark = 'played';
+      else if (from !== null && day < from) mark = 'unknown';
+      else mark = 'rest';
+      week.push({ day, mark });
+    }
+    out.push(week);
+  }
+  return out;
 }

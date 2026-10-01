@@ -607,7 +607,7 @@ async function answerTile(root: HTMLElement, value: number, answer: string) {
   const tile = Array.from(root.querySelectorAll('button')).find(b => (b.textContent ?? '').trim() === `$${value}`);
   if (!tile) throw new Error(`no $${value} tile`);
   await act(async () => { fireEvent.click(tile); });
-  const input = root.querySelector('input[aria-label="Your answer"]') as HTMLInputElement;
+  const input = (root.querySelector('input[aria-label="Your answer"]') ?? document.querySelector('[role="dialog"] input[aria-label="Your answer"]')) as HTMLInputElement;
   await act(async () => { fireEvent.change(input, { target: { value: answer } }); });
   await act(async () => { fireEvent.submit(input.closest('form')!); });
 }

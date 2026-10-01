@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Round 90: index.html must never be cached. The hashed asset files
+         under /assets are immutable and still cache normally; only this
+         document has to stay fresh so a returning player always gets the
+         newest chunk names. -->
+    
+    
+    
+    <title>Manager Hot Seat: Save Your Job Football Game | DoUKnowBall</title>
+    <!-- Round 69: static AdSense account association. The ad script itself stays
+         consent gated below; this meta tag just makes the site-to-account link
+         visible to Google's crawler on the raw HTML, no consent needed. -->
+    <meta name="google-adsense-account" content="ca-pub-2929318086316376">
+    <meta name="msvalidate.01" content="9C0F485E90B6744EF88628240F61B9E1">
+    <meta name="yandex-verification" content="78b02f385cab3272">
+    
+    <!-- Round 265: the home page's canonical, in the template rather than in
+         the app. Every OTHER page carries one because the prerenderer captures
+         the head after React has drawn it, but the home page is deliberately
+         not prerendered (the host regenerates it every build), so its canonical
+         only existed once JavaScript ran. Measured on the live site with
+         JavaScript off and a Googlebot user agent: ten pages checked, ten
+         canonicals, and the one that was missing was the home page. It is also
+         the page most likely to collect tracking parameters from shares, which
+         is exactly what a self referencing canonical is for. -->
+    
+
+    <!-- Round 281: who this site is, in the template rather than at runtime.
+
+         Every other page ships as a snapshot whose head is copied verbatim from
+         the build, so a tag React adds survives. The home page is the one page
+         that cannot work that way, because vite regenerates it from THIS file on
+         whatever machine builds the site, so anything added at runtime never
+         reaches the raw HTML. Measured on 2026-08-24, the shipped home page
+         carried zero structured data blocks: the WebApplication object the app
+         has been generating since Round 53 had never been seen by a crawler,
+         only by a browser that runs JavaScript. Same trap that swallowed the
+         canonical in Round 265 and the readable copy in Round 257.
+
+         WebSite and Organization are the two things Google reads to work out
+         whose domain this is and what to call it, and WebApplication is what
+         says the thing at this address is a free browser game rather than a
+         shop or a blog. All three are claims about the SITE rather than about
+         whichever page is being served, and each carries an @id naming the site
+         root so none of them can be read as a claim about the current page.
+         Putting them here does exactly that: the snapshots copy this head, so
+         all 126 of them carry the pair and a crawler can tie 127 documents to
+         one entity. The page level object, whatever type that page is, is still
+         emitted by PageSeo on top of this.
+
+         KEEP THIS IN STEP WITH SITE_JSON_LD in src/lib/pageSchema.ts.
+         scripts/simSchema.mjs parses this block and compares it against that
+         export, so the two cannot drift apart quietly. -->
+    <script type="application/ld+json">[{"@context":"https://schema.org","@type":"WebSite","@id":"https://douknowball.com/#website","name":"DoUKnowBall","alternateName":"Do U Know Ball","url":"https://douknowball.com/","inLanguage":"en","publisher":{"@id":"https://douknowball.com/#org"}},{"@context":"https://schema.org","@type":"Organization","@id":"https://douknowball.com/#org","name":"DoUKnowBall","url":"https://douknowball.com/","logo":"https://douknowball.com/icon-512.png"},{"@context":"https://schema.org","@type":"WebApplication","@id":"https://douknowball.com/#webapp","name":"DoUKnowBall","url":"https://douknowball.com/","applicationCategory":"GameApplication","operatingSystem":"Web Browser","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"publisher":{"@id":"https://douknowball.com/#org"}}]</script><script type="application/ld+json" data-rh="true">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"DoUKnowBall","item":"https://douknowball.com"},{"@type":"ListItem","position":2,"name":"Soccer Games","item":"https://douknowball.com/soccer"},{"@type":"ListItem","position":3,"name":"Manager Hot Seat","item":"https://douknowball.com/manager-hot-seat"}]}</script><script type="application/ld+json" data-rh="true">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Is Manager Hot Seat the same as Club Manager?","acceptedAnswer":{"@type":"Answer","text":"It runs on the same engine. The clubs, squads, fixtures, match simulation, board meter, fan meter, team talks and press room all come from Club Manager unchanged. Hot Seat is the short version: one job, five league games, one target."}},{"@type":"Question","name":"Why did I take over a club near the top of the table?","acceptedAnswer":{"@type":"Answer","text":"The job opens after the worst run of form between league weeks 6 and 14, so a strong side can still be in a slump. The target is set from the fixtures, so a good side gets asked for more."}},{"@type":"Question","name":"Are the results real?","acceptedAnswer":{"@type":"Answer","text":"No. The clubs and squads are the real ones Club Manager uses, but every match is simulated, and so is the season before you arrive. Nothing that happens here is a claim about the real club."}},{"@type":"Question","name":"Can I replay today's hot seat?","acceptedAnswer":{"@type":"Answer","text":"The daily is one go per day, and a refresh picks up where you left off. Free play has no limit."}},{"@type":"Question","name":"Does it count on the leaderboard?","acceptedAnswer":{"@type":"Answer","text":"Not yet. It records that you played, but it puts no points on the leaderboard for now."}},{"@type":"Question","name":"Is Manager Hot Seat free to play?","acceptedAnswer":{"@type":"Answer","text":"Yes. Manager Hot Seat is free to play on DoUKnowBall, right in your browser. No download and no signup needed."}}]}</script><script type="application/ld+json" data-rh="true">{"@context":"https://schema.org","@type":"Game","name":"Manager Hot Seat: Save Your Job Football Game | DoUKnowBall","description":"Take over a real club on a bad run. Five league games, one points target, and a board ready to sack you. Pick the shape and the talk. Free football game.","url":"https://douknowball.com/manager-hot-seat","isAccessibleForFree":true,"gamePlatform":"Web Browser","publisher":{"@id":"https://douknowball.com/#org"}}</script>
+    
+    
+    <!-- Round 286: the site's own social image, on its own domain. The old
+         one lived on the host's upload bucket, which is an external image host
+         (the legal rule allows exactly one, flagcdn.com), said "10+ games" on a
+         site with over a hundred, and had a line of garbled text at the bottom.
+         It is generated from the same source as the favicon and the header
+         mark: scripts/logo/gen_logo.py. -->
+    
+    
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="DoUKnowBall: free daily sports trivia, puzzles and career sims">
+    
+    
+    <!-- Round 286: icons. The SVG is the crisp one and modern browsers take it
+         first; the .ico carries 16, 32 and 48 for everything else; the touch
+         icon is what a phone shows when the site is added to a home screen. -->
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180">
+    <meta name="theme-color" content="#0b0d14">
+    <!-- Round 290: installable. The manifest names the same icons the tab and the home
+         screen already use, so Add to Home Screen on Android and desktop Chrome gets the
+         mark, the name and a standalone window. simBrand section 7 holds the file to the
+         icons on disk and this theme colour. -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="application-name" content="DoUKnowBall">
+    <meta name="apple-mobile-web-app-title" content="DoUKnowBall">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&amp;family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+    
+    <script>
+      // Owner 2026-08-05: no third-party editor badge should ever show on the
+      // live site. The host injects a floating "Edit with ..." badge into the
+      // published page after load; this watcher removes it (and anything like
+      // it) the moment it appears.
+      (function () {
+        var isBadge = function (el) {
+          if (!(el instanceof HTMLElement)) return false;
+          var idc = ((el.id || '') + ' ' + (el.className || '')).toString().toLowerCase();
+          if (idc.indexOf('lovable') !== -1 || idc.indexOf('gpt-engineer') !== -1 || idc.indexOf('gptengineer') !== -1) return true;
+          if (el.tagName === 'A') {
+            var href = (el.getAttribute('href') || '').toLowerCase();
+            if (href.indexOf('lovable.dev') !== -1 || href.indexOf('gptengineer.app') !== -1) return true;
+          }
+          return false;
+        };
+        var sweep = function () {
+          try {
+            var all = document.querySelectorAll('[id*="lovable" i], [class*="lovable" i], a[href*="lovable.dev"], a[href*="gptengineer"], [id*="gpt-engineer" i]');
+            for (var i = 0; i < all.length; i++) {
+              var el = all[i];
+              if (isBadge(el)) el.remove();
+            }
+          } catch (e) { /* never break the page over badge cleanup */ }
+        };
+        new MutationObserver(sweep).observe(document.documentElement, { childList: true, subtree: true });
+        document.addEventListener('DOMContentLoaded', sweep);
+        window.addEventListener('load', sweep);
+      })();
+    </script>
+    <script>
+      // Google Analytics loads only after Accept. AdSense is intentionally not
+      // global: direct visits to account, reset, fallback, and other screens
+      // without a deliberate slot do not load it. Auto Ads and Auto optimize
+      // stay off in the account. The static verification meta stays global.
+      (function () {
+        try {
+          if (localStorage.getItem('cookie-consent') === 'accepted') {
+            window.dataLayer = window.dataLayer || [];
+            window.gtag = function () { window.dataLayer.push(arguments); };
+            window.gtag('js', new Date());
+            window.gtag('config', 'G-KZQK2G68YC');
+            var g = document.createElement('script');
+            g.async = true;
+            g.src = 'https://www.googletagmanager.com/gtag/js?id=G-KZQK2G68YC';
+            document.head.appendChild(g);
+          }
+        } catch (e) { /* storage blocked: analytics stays off */ }
+      })();
+    </script>
+    
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <!-- Round 314: the moment before React mounts used to show this document's
+       full crawler copy as a wall of raw text (the owner filmed it). The block
+       stays completely in the DOM for crawlers and for no-JS visitors (the
+       noscript lifts the cap), but a browser that is about to boot the app
+       sees one dimmed screenful, which reads as the site loading rather than
+       a broken page. React replaces #root's children on mount, so the capped
+       wrapper lives exactly as long as the wait does. -->
+  <!-- Round 448: the dim was not enough. His words, with a screenshot: "that
+       thing still shows when u log in into douknowball with the balck screen
+       and all that text and i dont want taht". Every sign in with Google
+       comes back through a full reload of this document, so the wait before
+       React mounts is the first thing a player sees after choosing an
+       account, and a screenful of grey paragraphs is what it showed. The
+       copy stays exactly where it is for crawlers and for no-JS visitors; a
+       booting browser now sees the mark on the app's own background and
+       nothing else, because #dukb-boot sits over the copy inside #root and
+       React replaces #root's children on mount, so it vanishes at the exact
+       moment the app appears. The cap on the copy stays so the document
+       cannot scroll during the wait. -->
+  
+  <noscript></noscript>
+  
+  
+<link rel="canonical" href="https://douknowball.com/manager-hot-seat" data-rh="true"><meta property="og:type" content="website" data-rh="true"><meta property="og:url" content="https://douknowball.com/manager-hot-seat" data-rh="true"><meta property="og:image" content="https://douknowball.com/og-image.png" data-rh="true"><meta name="twitter:card" content="summary_large_image" data-rh="true"><meta name="twitter:image" content="https://douknowball.com/og-image.png" data-rh="true"><meta name="description" content="Take over a real club on a bad run. Five league games, one points target, and a board ready to sack you. Pick the shape and the talk. Free football game." data-rh="true"><meta property="og:title" content="Manager Hot Seat: Save Your Job Football Game | DoUKnowBall" data-rh="true"><meta property="og:description" content="Take over a real club on a bad run. Five league games, one points target, and a board ready to sack you. Pick the shape and the talk. Free football game." data-rh="true"><meta name="twitter:title" content="Manager Hot Seat: Save Your Job Football Game | DoUKnowBall" data-rh="true"><meta name="twitter:description" content="Take over a real club on a bad run. Five league games, one points target, and a board ready to sack you. Pick the shape and the talk. Free football game." data-rh="true">
+<style>html,body{background:#0a0a0b;color:#fafafa;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;margin:0;padding:0}a{color:#7dd3fc}#dukb-snapshot{padding:16px}</style>
+<style>#dukb-boot{position:fixed;inset:0;z-index:2147483000;display:flex;align-items:center;justify-content:center;background:#0a0a0b}#dukb-boot img{width:72px;height:72px}#dukb-snapshot{max-height:100vh;overflow:hidden}</style>
+<noscript><style>#dukb-boot{display:none}#dukb-snapshot{max-height:none;overflow:visible}</style></noscript>
+<script src="/prerender-boot.js" defer></script>
+</head>
+<body>
+<div id="root">
+<div id="dukb-boot" aria-hidden="true"><img src="/logo-mark.svg" alt="" width="72" height="72" decoding="async"></div>
+<div id="dukb-snapshot">
+<div data-site-chrome>
+<a href="/">DOUKNOWBALL</a>
+</div>
+<h1>Manager Hot Seat</h1>
+<p>Five games. One target. The board are watching.</p>
+<h2>Manager Hot Seat: Save Your Job Football Game</h2>
+<p>Manager Hot Seat is the short version of Club Manager, on the same engine. Take over a real club on a bad run, read the room before every match, handle the press, and hit the board's points target in five league games before they sack you.</p>
+<p>Manager Hot Seat is the short, sharp version of Club Manager. You walk into a real club on a bad run, the board give you five league games and a points target, and you either hit it or you are sacked.</p>
+<p>It runs on the Club Manager engine, so every match, every meter and every press question is the same one the full game plays. Before each match you pick a shape and a team talk, and after it the board, the fans and the dressing room all react.</p>
+<p>There is a daily, the same club and the same target for everyone, and a free play mode where you can take any club you like.</p>
+<h2>How to play Manager Hot Seat, the free five game sack race</h2>
+<h3>Pick the daily club or your own</h3>
+<li>Pick today's hot seat for the shared daily club, or open free play and choose any club, or let the game pick one at random.</li>
+<h3>The takeover briefing</h3>
+<li>The engine plays the season up to the day the job opens, then shows you the table place, the recent form and the board's target.</li>
+<h3>Before every match</h3>
+<li>Tap Take the job and the first match comes up with a read on the game from the dugout.</li>
+<h4>Picking a shape</h4>
+<li>Pick a shape: defensive, balanced or attacking.</li>
+<h4>Picking a team talk</h4>
+<li>Pick a team talk: calm them, fire them up, demand more, the hairdryer, or say nothing at all.</li>
+<h3>After the final whistle</h3>
+<li>Kick off. The result comes back with what it did to the board, the fans and the dressing room.</li>
+<li>When the press have a question, answer it before the next match.</li>
+<li>Keep going until you hit the target, run out of league games, or the board run out of patience.</li>
+<h2>Manager Hot Seat rules: the target, the board and the fans</h2>
+<h3>How the job opens</h3>
+<li>The job opens after the worst run of form the simulated season produced between league weeks 6 and 14.</li>
+<li>The board start on 30 out of 100, whatever they thought of the last manager.</li>
+<h3>The points target</h3>
+<li>The target is a number of points from your next 5 league games.</li>
+<li>It is read off those five fixtures: more is asked at home and against weaker sides, less away and against stronger ones.</li>
+<li>Cup and European ties still get played and still move the meters, but only league points count toward the target.</li>
+<h3>Board, fans and dressing room</h3>
+<li>The dressing room meter is the average morale of the eleven the engine picks, and morale feeds straight into how well they play.</li>
+<h4>Keeping or losing the job</h4>
+<li>Hit the target and you keep the job straight away, even with games to spare.</li>
+<li>Finish one point short with the fan meter at 65 or above and the fans save you.</li>
+<li>If the board meter hits zero at any final whistle, you are sacked on the spot.</li>
+<li>If even winning every league game left could not get you within a point of the target, the board do not wait for the last game.</li>
+<h3>The daily and the leaderboard</h3>
+<li>The daily is the same club, the same takeover week and the same target for everyone, and every match on the day draws from the same seeded stream, so the difference between two players is the calls they made.</li>
+<li>Manager Hot Seat records that you played but puts no points on the leaderboard for now, while the points system is being rebuilt.</li>
+<h2>A Manager Hot Seat walkthrough, five games to save the job</h2>
+<h3>Walking into a slump</h3>
+<p>Say today's club is a mid table side that has taken two points from its last five. The job opens 15th after 11 games, the board expect 9th, and the target is 7 points from 5 league games.</p>
+<h3>The first two league games</h3>
+<p>Game one is at home to a weaker side. The read says the dressing room is flat, so you go balanced and say nothing. A 2 to 0 win puts 3 on the board and lifts the fans.</p>
+<p>Game two is away at a stronger side. You sit deep with a defensive shape and take a 1 to 1 draw. That is 4. The press ask about the board and you back yourself.</p>
+<h3>A cup tie in the middle</h3>
+<p>A cup tie comes next. It does not count, but a bad defeat still costs board confidence, so you play it properly and go out on penalties.</p>
+<h3>Hitting the target early</h3>
+<p>Game three is at home and you need 3 points from 3 games. Balanced with a fire them up talk, and a 2 to 1 win makes it 7. Target hit, job kept, two league games to spare.</p>
+<h2>Manager Hot Seat tips for keeping your job</h2>
+<h3>Reading the room</h3>
+<li>Read the line under the fixture before you pick a talk. It is the dugout's honest read of the mood and the odds.</li>
+<li>Saying the same thing every week stops working, and after a few in a row it starts to grate.</li>
+<h3>Chasing or protecting</h3>
+<li>Attacking means more goals at both ends. Chase with it when you need wins, not when a draw will do.</li>
+<li>Defensive means fewer goals and more draws. It is the shape for protecting a point you can afford.</li>
+<h3>The press and the cup</h3>
+<li>The press answers move morale and the board a little. Promising a win out loud fires the other lot up and costs you if you do not deliver.</li>
+<li>Do not throw the cup games. They do not count toward the target, but a bad exit takes a chunk out of the board meter.</li>
+<h3>Fans as a safety net</h3>
+<li>One point short is not always the end. Keep the fans onside with results and they can buy you the job.</li>
+<h2>Manager Hot Seat FAQ: the engine, the daily and the leaderboard</h2>
+<h3>Is Manager Hot Seat the same as Club Manager?</h3>
+<p>It runs on the same engine. The clubs, squads, fixtures, match simulation, board meter, fan meter, team talks and press room all come from Club Manager unchanged. Hot Seat is the short version: one job, five league games, one target.</p>
+<h3>Why did I take over a club near the top of the table?</h3>
+<p>The job opens after the worst run of form between league weeks 6 and 14, so a strong side can still be in a slump. The target is set from the fixtures, so a good side gets asked for more.</p>
+<h3>Are the results real?</h3>
+<p>No. The clubs and squads are the real ones Club Manager uses, but every match is simulated, and so is the season before you arrive. Nothing that happens here is a claim about the real club.</p>
+<h3>Can I replay today's hot seat?</h3>
+<p>The daily is one go per day, and a refresh picks up where you left off. Free play has no limit.</p>
+<h3>Does it count on the leaderboard?</h3>
+<p>Not yet. It records that you played, but it puts no points on the leaderboard for now.</p>
+<h3>Is Manager Hot Seat free to play?</h3>
+<p>Yes. Manager Hot Seat is free to play on DoUKnowBall, right in your browser. No download and no signup needed.</p>
+<h2>More games to play</h2>
+<a href="/soccer-conquest">🗺️ Soccer Conquest Imperialism across the top five leagues: 96 clubs on one map of Europe, winners annex whole empires until one club rules the continent</a>
+<a href="/stadium-tycoon">🏟️ Stadium Tycoon Idle empire: grow a tiny club through live toy matches, ten divisions, reputation stars and a legacy boardroom</a>
+<a href="/wonderkid-factory">🔭 Wonderkid Factory Idle academy: scout generated kids, grow them toward hidden ceilings and sell at the perfect moment</a>
+<a href="/front-office">🏢 NFL Front Office Full GM sim with real rosters: cap, trades, drafts, dynasties</a>
+<a href="/nba-chain">🔗 NBA Chain Build a chain of connected players</a>
+<a href="/baseball-career">⚾ MLB Career Path Guess the baseball player</a>
+<div data-site-chrome>
+<p>All team names, competition names, logos and trademarks are property of their respective owners. DoUKnowBall is an independent fan project and is not affiliated with, endorsed by or sponsored by the NFL, NBA, UFC, NHL, MLB, FIFA, UEFA, the Premier League, the English Football League, LaLiga, Serie A, the Bundesliga, Ligue 1, the Eredivisie, MLS, the Saudi Pro League, the IOC, the NCAA, F1, the PGA Tour, NASCAR, the ATP or the WTA. Player names and statistics are used for identification and commentary only. © 2026 DoUKnowBall</p>
+<a href="/soccer">Soccer</a>
+<a href="/pro-basketball">NBA</a>
+<a href="/hockey">NHL</a>
+<a href="/pro-football">NFL</a>
+<a href="/baseball">MLB</a>
+<a href="/college">College</a>
+<a href="/search">Search Games</a>
+<a href="/about">About</a>
+<a href="/contact">Contact</a>
+<a href="/whats-new">What's New</a>
+<a href="/records">Record Books</a>
+<a href="/leaderboard">Leaderboard</a>
+<a href="/privacy">Privacy Policy</a>
+<a href="/terms">Terms of Service</a>
+<a href="/accessibility">Accessibility</a>
+<p>Ads and analytics only run if you press Accept. Essential only keeps them off and every game works the same. <a href="/privacy">Learn more</a></p>
+</div>
+</div>
+</div>
+</body>
+</html>

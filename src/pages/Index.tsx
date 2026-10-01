@@ -11,12 +11,14 @@ import { PollsPlaceholder } from '@/components/home/PollsPlaceholder';
 import { FeaturedStage } from '@/components/home/FeaturedStage';
 import { DailyRail } from '@/components/home/DailyRail';
 import { JustShipped } from '@/components/home/JustShipped';
+import { ContinueRow } from '@/components/home/ContinueRow';
+import { FavouriteSport } from '@/components/home/FavouriteSport';
 import { SportGlyph, sportStyle } from '@/components/home/SportGlyph';
 import { useStreaks } from '@/hooks/useStreaks';
 import { AuthModal } from '@/components/auth/AuthModal';
 
 import { ALL_GAMES, CATEGORIES, VISIBLE_CATEGORIES, FEATURED_GAMES, GAME_COUNT_LABEL, TOTAL_GAMES, type GameDef, type CategoryTitle } from '@/data/gameRegistry';
-import { CATEGORY_SPORT, sportOf } from '@/data/homeFront';
+import { CATEGORY_SPORT, sportOf, readFavouriteSport, favouriteFirst, FAVOURITE_SPORT_KEY, type SportKey } from '@/data/homeFront';
 import { isNewGame } from '@/lib/newBadge';
 /* Round 659: the search engine loads the first time somebody reaches for
    the box (focus, a tap or a key), not with the page. Index ships in the
@@ -98,6 +100,22 @@ export default function Index() {
   const [searchQuery, setSearchQuery] = useState('');
   const [bestScores, setBestScores] = useState<Record<string, number>>({});
   const isSearching = searchQuery.trim().length > 0;
+
+  /* Round 717: the favourite sport. Read on the first render, so the sport
+     sections are in this visitor's order from the first frame and nothing
+     moves once the page has drawn. */
+  const [favSport, setFavSport] = useState<SportKey | null>(() => {
+    try { return readFavouriteSport(window.localStorage); } catch { return null; }
+  });
+  const pickSport = (sport: SportKey | null) => {
+    setFavSport(sport);
+    try {
+      if (sport) localStorage.setItem(FAVOURITE_SPORT_KEY, sport);
+      else localStorage.removeItem(FAVOURITE_SPORT_KEY);
+    } catch { /* storage blocked: the pick lasts for this visit only */ }
+  };
+  const sportSections = useMemo(() => favouriteFirst(VISIBLE_CATEGORIES, favSport), [favSport]);
+  const pickableSports = useMemo(() => VISIBLE_CATEGORIES.map(c => CATEGORY_SPORT[c.title]), []);
 
   // The engine builds its index once on first call and caches it, so this is
   // scoring only, re-run when the query text changes and not before.
@@ -348,6 +366,12 @@ export default function Index() {
                     to play: a 390 by 844 phone sees it at about y=250, where
                     the Round 283 fence allows 430. */}
                 <FeaturedStage />
+                {/* Round 717: every long form game this browser has a save
+                    for, straight under the stage. Nothing at all for a
+                    visitor with no saves, so a first visit's screen is
+                    unchanged; playHomeFold section 6 plants saves and holds
+                    the first tile where it was. */}
+                <ContinueRow />
               </div>
 
               {/* ─── DAILY PUZZLES ───
@@ -442,7 +466,11 @@ export default function Index() {
                 </RevealSection>
               </section>
 
-              {VISIBLE_CATEGORIES.map(cat => (
+              {/* Round 717: pick a sport and its section leads the list below.
+                  The chips sit above everything they reorder. */}
+              <FavouriteSport sports={pickableSports} value={favSport} onPick={pickSport} />
+
+              {sportSections.map(cat => (
                 <section key={cat.title} data-sport={CATEGORY_SPORT[cat.title]}>
                   {/* Round 658: the sport's drawn glyph in its own ink leads
                       every section, so the colour on the cards below always
@@ -455,6 +483,11 @@ export default function Index() {
                     <span className="text-xs font-normal text-muted-foreground ml-1">
                       ({cat.games.length} {cat.games.length === 1 ? 'game' : 'games'})
                     </span>
+                    {favSport === CATEGORY_SPORT[cat.title] && (
+                      <span data-fav-tag="" className="shrink-0 rounded bg-tile/15 px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-foreground ring-1 ring-inset ring-tile/40">
+                        Your sport
+                      </span>
+                    )}
                     {/* Round 198: the College hub existed with real copy and
                         links to every college game, but nothing on the site
                         pointed at it, so no crawler could reach it and no

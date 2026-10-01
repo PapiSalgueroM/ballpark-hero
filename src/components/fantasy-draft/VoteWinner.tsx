@@ -3,6 +3,7 @@ import { User, Bot, Trophy, Copy, Check, MessageCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import type { DraftPlayer } from './PlayerPool';
+import motion from './DraftWinnerMotion.module.css';
 
 interface VoteWinnerProps {
   userTeam: DraftPlayer[];
@@ -17,7 +18,7 @@ export const VoteWinner = ({ userTeam, aiTeam, onVote, voted, voteCounts }: Vote
 
   const winningTeam = voted === 'user' ? userTeam : aiTeam;
   const winnerLabel = voted === 'user' ? 'Your Team' : 'AI Team';
-  const topPlayers = winningTeam
+  const topPlayers = [...winningTeam]
     .sort((a, b) => b.market_value_millions - a.market_value_millions)
     .slice(0, 3);
 
@@ -69,7 +70,7 @@ export const VoteWinner = ({ userTeam, aiTeam, onVote, voted, voteCounts }: Vote
         {voted && (
           <>
             <div className="text-center space-y-3">
-              <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-primary/15 border border-primary/40">
+              <div key={voted} data-draft-winner={voted} className={cn('inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-primary/15 border border-primary/40', motion.winner)}>
                 <Trophy className="w-5 h-5 text-primary" />
                 <span className="text-sm font-bold text-primary uppercase tracking-wider">
                   {winnerLabel} wins!

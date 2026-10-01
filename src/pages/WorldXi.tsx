@@ -108,7 +108,7 @@ const WorldXi = () => {
     setRespinsLeft(respinBudget);
     prevStepRef.current = -1; // so the first slot of a replay spins too
     setPhase('playing');
-  }, [data, formation, timerMode]);
+  }, [data, formation, timerMode, respinBudget]);
 
   // Countdown tick (only in timed modes while playing).
   useEffect(() => {
