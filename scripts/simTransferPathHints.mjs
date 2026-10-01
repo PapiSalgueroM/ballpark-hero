@@ -67,12 +67,13 @@ import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { build } from 'esbuild';
-import { MODE_RULES, ROUND_784_MIGRATION, buildGraph, deriveHint, distances, expandCompactCareers, hintProblems, parseActiveRefreshMigration, parseActiveRestoreMigration, parseHint, parseRuleEntryRefresh, parseTransferPathCompanionMigration, ruleEntryRefreshState, ruleProblems, sharedClub } from './lib/transferPathHints.mjs';
+import { MODE_RULES, ROUND_784_MIGRATION, ROUND_827_MIGRATION, buildGraph, deriveHint, distances, expandCompactCareers, hintProblems, parseActiveRefreshMigration, parseActiveRestoreMigration, parseHint, parseRuleEntryRefresh, parseTransferPathCompanionMigration, ruleEntryRefreshState, ruleProblems, sharedClub } from './lib/transferPathHints.mjs';
+import { loadRecord, parseActiveRewrites, reverseRecord } from './genCareerRowsVerified.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.TPH_CONTROL || '';
 const LOCAL_ONLY = process.env.TRANSFER_PATH_LOCAL_ONLY === '1';
-if (CONTROL && !['stale', 'club', 'min', 'direct', 'mode', 'companion', 'livepuzzleid', 'r784min', 'r784drop'].includes(CONTROL)) { console.error(`TPH_CONTROL=${CONTROL} is not a control this harness knows`); process.exit(1); }
+if (CONTROL && !['stale', 'club', 'min', 'direct', 'mode', 'companion', 'livepuzzleid', 'r784min', 'r784drop', 'r827min', 'r827drop', 'r827active'].includes(CONTROL)) { console.error(`TPH_CONTROL=${CONTROL} is not a control this harness knows`); process.exit(1); }
 let failures = 0;
 let liveIdControlCaught = false;
 const fail = m => { failures += 1; if (failures <= 25) console.error('  FAIL: ' + m); };
@@ -435,66 +436,124 @@ console.log('4) the wording');
   console.log(`   ${hints.length + site.fallbackPuzzles.length} hints read, longest ${longest} characters`);
 }
 
-console.log('7) the Round 784 career rows and the Transfer Path entries they rewrite');
+console.log('7) the career migrations (Rounds 784 and 827) and the Transfer Path entries they rewrite');
 let r784Caught = false;
 {
-  const ROUND_784_REWRITES = 8;
+  /* Round 827: the career migrations form a chain. Each rewrites, over the
+     value before it (the applied companion, then each earlier rewrite), the
+     entries its new links shorten; every value it writes is the search's own
+     on the baked pool, and once the chain is applied no entry is beaten. */
+  const CHAIN = [
+    { round: 784, file: ROUND_784_MIGRATION, rewrites: 8, measured: '2026-10-01' },
+    { round: 827, file: ROUND_827_MIGRATION, rewrites: 8, measured: '2026-10-01' },
+  ];
+  const CONTROL_KEY = { r784min: 'tpa-285|classic', r784drop: 'tpa-640|europe', r827min: 'tpa-924|classic', r827drop: 'tpa-110|europe', r827active: 'tpa-924|active' };
   const fail7 = (m, key) => {
     fail(m);
-    if ((CONTROL === 'r784min' && key === 'tpa-285|classic') || (CONTROL === 'r784drop' && key === 'tpa-640|europe')) r784Caught = true;
+    if (CONTROL_KEY[CONTROL] && key === CONTROL_KEY[CONTROL]) r784Caught = true;
   };
-  const rows = parseRuleEntryRefresh(fs.readFileSync(path.join(ROOT, ROUND_784_MIGRATION), 'utf8'));
-  if (CONTROL === 'r784min') {
-    const r = rows.find(x => x.id === 'tpa-285' && x.rule === 'classic');
-    if (!r) { console.error('control cannot run: tpa-285 classic is not in the parsed Round 784 rows'); process.exit(1); }
+  const parsed = CHAIN.map(link => ({ ...link, rows: parseRuleEntryRefresh(fs.readFileSync(path.join(ROOT, link.file), 'utf8')) }));
+  const linkRows = round => parsed.find(l => l.round === round).rows;
+  if (CONTROL === 'r784min' || CONTROL === 'r827min') {
+    const [id, rule] = CONTROL_KEY[CONTROL].split('|');
+    const r = linkRows(CONTROL === 'r784min' ? 784 : 827).find(x => x.id === id && x.rule === rule);
+    if (!r) { console.error(`control cannot run: ${id} ${rule} is not in the parsed rows`); process.exit(1); }
     r.minSteps += 1;
-    console.log('   NEGATIVE CONTROL ON: tpa-285 is rewritten one step too high, this section must report it');
+    console.log(`   NEGATIVE CONTROL ON: ${id} is rewritten one step too high, this section must report it`);
   }
-  if (CONTROL === 'r784drop') {
-    const i = rows.findIndex(x => x.id === 'tpa-640' && x.rule === 'europe');
-    if (i < 0) { console.error('control cannot run: tpa-640 Europe is not in the parsed Round 784 rows'); process.exit(1); }
+  if (CONTROL === 'r784drop' || CONTROL === 'r827drop') {
+    const [id, rule] = CONTROL_KEY[CONTROL].split('|');
+    const rows = linkRows(CONTROL === 'r784drop' ? 784 : 827);
+    const i = rows.findIndex(x => x.id === id && x.rule === rule);
+    if (i < 0) { console.error(`control cannot run: ${id} ${rule} is not in the parsed rows`); process.exit(1); }
     rows.splice(i, 1);
-    console.log('   NEGATIVE CONTROL ON: tpa-640 Europe is dropped from the rewrite, this section must report it');
+    console.log(`   NEGATIVE CONTROL ON: ${id} ${rule} is dropped from the rewrite, this section must report it`);
   }
   const companion = new Map(parseTransferPathCompanionMigration(fs.readFileSync(COMPANION, 'utf8')).desired.map(r => [r.id, r]));
   const applied = (c, rule) => rule === 'classic'
     ? { minSteps: c.minSteps, hint: c.hint }
     : c.europeMinSteps === null ? null : { minSteps: c.europeMinSteps, hint: c.europeHint };
-  /* the baked pool is the tables as they stand after the Round 784 migration */
+  /* the baked pool is the tables as they stand after the last career migration */
   const graphs = { classic: buildGraph(site.fallbackPlayers), europe: buildGraph(site.playersUnderRule(site.fallbackPlayers, 'europe')) };
-  const byKey = new Map();
-  for (const r of rows) {
-    const key = `${r.id}|${r.rule}`;
-    if (byKey.has(key)) fail7(`the Round 784 migration rewrites ${r.id} under ${r.rule} twice`, key);
-    byKey.set(key, r);
-    const c = companion.get(r.id);
-    if (!c) { fail7(`the Round 784 migration rewrites ${r.id}, which the applied companion does not carry`, key); continue; }
-    if (c.playerA !== r.a || c.playerB !== r.b) fail7(`the Round 784 migration names ${r.id} as ${r.a} to ${r.b}, the companion has ${c.playerA} to ${c.playerB}`, key);
-    const old = applied(c, r.rule);
-    if (!old || old.minSteps !== r.oldMinSteps || old.hint !== r.oldHint) fail7(`${r.id} under ${r.rule}: the value the Round 784 migration replaces is not the applied companion's`, key);
-    const d = deriveHint(graphs[r.rule], r.a, r.b);
-    if (!d || d.minSteps !== r.minSteps || d.hint !== r.hint) fail7(`${r.id} under ${r.rule}: the Round 784 migration writes ${r.minSteps} "${r.hint}", the search on the baked pool says ${d ? `${d.minSteps} "${d.hint}"` : 'no path'}`, key);
-    if (/[\u2013\u2014]/.test(r.hint) || r.hint.length > 200) fail7(`${r.id} under ${r.rule}: the rewritten hint has a long dash or runs past 200 characters`, key);
+  const current = new Map();
+  const valueOf = (c, rule) => (current.has(`${c.id}|${rule}`) ? current.get(`${c.id}|${rule}`) : applied(c, rule));
+  for (const link of parsed) {
+    const byKey = new Map();
+    for (const r of link.rows) {
+      const key = `${r.id}|${r.rule}`;
+      if (byKey.has(key)) fail7(`the Round ${link.round} migration rewrites ${r.id} under ${r.rule} twice`, key);
+      byKey.set(key, r);
+      const c = companion.get(r.id);
+      if (!c) { fail7(`the Round ${link.round} migration rewrites ${r.id}, which the applied companion does not carry`, key); continue; }
+      if (c.playerA !== r.a || c.playerB !== r.b) fail7(`the Round ${link.round} migration names ${r.id} as ${r.a} to ${r.b}, the companion has ${c.playerA} to ${c.playerB}`, key);
+      const old = valueOf(c, r.rule);
+      if (!old || old.minSteps !== r.oldMinSteps || old.hint !== r.oldHint) fail7(`${r.id} under ${r.rule}: the value the Round ${link.round} migration replaces is not the one before it (the applied companion and the earlier career migrations)`, key);
+      else if (!ruleProblems(graphs[r.rule], r.a, r.b, old).length) fail7(`${r.id} under ${r.rule}: the Round ${link.round} migration rewrites an entry the baked pool does not beat`, key);
+      const d = deriveHint(graphs[r.rule], r.a, r.b);
+      if (!d || d.minSteps !== r.minSteps || d.hint !== r.hint) fail7(`${r.id} under ${r.rule}: the Round ${link.round} migration writes ${r.minSteps} "${r.hint}", the search on the baked pool says ${d ? `${d.minSteps} "${d.hint}"` : 'no path'}`, key);
+      if (/[\u2013\u2014]/.test(r.hint) || r.hint.length > 200) fail7(`${r.id} under ${r.rule}: the rewritten hint has a long dash or runs past 200 characters`, key);
+    }
+    for (const [key, r] of byKey) current.set(key, { minSteps: r.minSteps, hint: r.hint });
+    if (link.rows.length !== link.rewrites) fail7(`the Round ${link.round} migration rewrites ${link.rows.length} entries, ${link.rewrites} were derived on ${link.measured}; move this only with the pool change that explains it`, 'count');
   }
   let beaten = 0;
   for (const c of companion.values()) for (const rule of ['classic', 'europe']) {
     const key = `${c.id}|${rule}`;
-    const stale = ruleProblems(graphs[rule], c.playerA, c.playerB, applied(c, rule)).length > 0;
-    if (stale) beaten += 1;
-    if (stale && !byKey.has(key)) fail7(`${c.id} under ${rule}: the baked pool beats the applied entry and the Round 784 migration does not rewrite it`, key);
-    if (!stale && byKey.has(key)) fail7(`${c.id} under ${rule}: the Round 784 migration rewrites an entry the baked pool does not beat`, key);
+    if (ruleProblems(graphs[rule], c.playerA, c.playerB, applied(c, rule)).length) beaten += 1;
+    if (ruleProblems(graphs[rule], c.playerA, c.playerB, valueOf(c, rule)).length) fail7(`${c.id} under ${rule}: the baked pool beats the entry and no career migration rewrites it`, key);
   }
+
+  /* Active players only. The table holds the applied 2026-09-07 restore and the
+     Round 531 refresh is pending. Round 827 rewrites the active entries its links
+     newly beat (an entry that holds on the pool before it and not after),
+     accepting either of those two values; the refresh rows it beats are named,
+     because the refresh fails closed on them once 827 is applied. */
+  const appliedActive = parseActiveRestoreMigration(fs.readFileSync(APPLIED_RESTORE, 'utf8'));
   const refresh = parseActiveRefreshMigration(fs.readFileSync(ACTIVE_RESTORE, 'utf8'));
+  const activeRows = parseActiveRewrites(fs.readFileSync(path.join(ROOT, ROUND_827_MIGRATION), 'utf8'));
+  if (CONTROL === 'r827active') {
+    const r = activeRows.find(x => x.id === 'tpa-924');
+    if (!r) { console.error('control cannot run: tpa-924 is not in the parsed Round 827 active rows'); process.exit(1); }
+    r.hint = r.hint.replace('Chelsea', 'Manchester City');
+    console.log('   NEGATIVE CONTROL ON: tpa-924\'s active hint names the wrong last club, this section must report it');
+  }
   const activeGraph = buildGraph(site.playersUnderRule(site.fallbackPlayers, 'active'));
-  for (const [id, r] of refresh) if (ruleProblems(activeGraph, r.a, r.b, { minSteps: r.minSteps, hint: r.hint }).length) fail7(`pending active refresh ${id} is beaten on the baked pool; a career change that moves an active minimum must rewrite it too`, `${id}|active`);
-  if (rows.length !== ROUND_784_REWRITES) fail7(`the Round 784 migration rewrites ${rows.length} entries, ${ROUND_784_REWRITES} were derived on 2026-10-01; move this only with the pool change that explains it`, 'count');
+  const record827 = loadRecord(ROOT);
+  const beforeGraph = buildGraph(site.playersUnderRule(reverseRecord(site.fallbackPlayers, record827), 'active'));
+  const activeByKey = new Map(activeRows.map(r => [r.id, r]));
+  for (const r of activeRows) {
+    const key = `${r.id}|active`;
+    const a = appliedActive.get(r.id), p = refresh.get(r.id) ?? a;
+    if (!a || a.minSteps !== r.appliedMinSteps || a.hint !== r.appliedHint) fail7(`${r.id} under active: the applied value Round 827 replaces is not the applied restore's`, key);
+    if (!p || p.minSteps !== r.pendingMinSteps || p.hint !== r.pendingHint) fail7(`${r.id} under active: the pending value Round 827 replaces is not the Round 531 refresh's`, key);
+    const d = deriveHint(activeGraph, r.a, r.b);
+    if (!d || d.minSteps !== r.minSteps || d.hint !== r.hint) fail7(`${r.id} under active: the Round 827 migration writes ${r.minSteps} "${r.hint}", the search on the baked pool says ${d ? `${d.minSteps} "${d.hint}"` : 'no path'}`, key);
+  }
+  let newlyBeaten = 0, alreadyBeaten = 0;
+  for (const [id, a] of appliedActive) {
+    const holdsBefore = !ruleProblems(beforeGraph, a.a, a.b, { minSteps: a.minSteps, hint: a.hint }).length;
+    const holdsAfter = !ruleProblems(activeGraph, a.a, a.b, { minSteps: a.minSteps, hint: a.hint }).length;
+    if (!holdsBefore) { alreadyBeaten += 1; continue; }
+    if (!holdsAfter) newlyBeaten += 1;
+    if (!holdsAfter && !activeByKey.has(id)) fail7(`${id} under active: the Round 827 pool beats the applied entry and the migration does not rewrite it`, `${id}|active`);
+    if (holdsAfter && activeByKey.has(id)) fail7(`${id} under active: the Round 827 migration rewrites an entry the baked pool does not beat`, `${id}|active`);
+  }
+  const refreshBeaten = [];
+  for (const [id, r] of refresh) {
+    if (!ruleProblems(activeGraph, r.a, r.b, { minSteps: r.minSteps, hint: r.hint }).length) continue;
+    if (activeByKey.has(id)) refreshBeaten.push(id);
+    else fail7(`pending active refresh ${id} is beaten on the baked pool; a career change that moves an active minimum must rewrite it too`, `${id}|active`);
+  }
+  const rows = parsed.flatMap(l => l.rows);
   const classic = rows.filter(r => r.rule === 'classic').length;
-  console.log(`   ${rows.length} entries rewritten (${classic} classic, ${rows.length - classic} Europe), each the search's on the baked pool over the applied value it replaces; ${beaten} applied entries beaten on the baked pool; the pending active refresh holds on all ${refresh.size}`);
+  console.log(`   ${parsed.map(l => `Round ${l.round}: ${l.rows.length}`).join(', ')} entries rewritten (${classic} classic, ${rows.length - classic} Europe), each the search's on the baked pool over the value before it; ${beaten} applied companion entries beaten on the baked pool, every one rewritten`);
+  console.log(`   active: Round 827 rewrites ${activeRows.length} (${newlyBeaten} applied entries newly beaten, ${alreadyBeaten} already beaten before it, the pending refresh's business); the pending refresh holds on ${refresh.size - refreshBeaten.length} of ${refresh.size}`);
+  if (refreshBeaten.length) console.log(`   PENDING: the Round 531 refresh writes a value the baked pool beats on ${refreshBeaten.join(', ')}. Once Round 827 is applied it fails closed there; regenerate it before applying it after 827.`);
 }
 
 console.log('');
 if (CONTROL) {
-  if (CONTROL === 'r784min' || CONTROL === 'r784drop') {
+  if (['r784min', 'r784drop', 'r827min', 'r827drop', 'r827active'].includes(CONTROL)) {
     if (r784Caught) { console.log(`simTransferPathHints control (${CONTROL}): green. Section 7 reported the planted row (${failures} findings).`); process.exit(0); }
     console.error(`simTransferPathHints control (${CONTROL}): RED. ${failures ? 'Findings came, but not the planted row.' : 'The planted row went unreported.'}`); process.exit(1);
   }

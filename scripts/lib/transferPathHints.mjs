@@ -343,6 +343,10 @@ export function parseActiveRefreshMigration(sql) {
 
 const RULE_ENTRY_REFRESH_ROW_RE = /^\s*\('((?:[^']|'')*)', '((?:[^']|'')*)', '((?:[^']|'')*)', '(classic|europe)', (\d+), '((?:[^']|'')*)', (\d+), '((?:[^']|'')*)'\),?$/gm;
 export const ROUND_784_MIGRATION = 'supabase/migrations/20261001120000_career_first_clubs.sql';
+/* Round 827: the second career migration with rule entry rewrites, in the same
+   row shape (and an active block of its own, read by parseActiveRewrites in
+   scripts/genCareerRowsVerified.mjs) */
+export const ROUND_827_MIGRATION = 'supabase/migrations/20261002120000_career_rows_verified.sql';
 
 /** Round 784: the rule entries a career migration rewrites in the same
  *  transaction as the careers, each beside the value it replaces:

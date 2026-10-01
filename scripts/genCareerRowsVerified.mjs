@@ -102,6 +102,16 @@ export function applyRecord(players, record) {
   return out;
 }
 
+/** The pool as it stood before the record, rebuilt from the pool after it: added rows gone, every change undone (row order is not restored). */
+export function reverseRecord(players, record) {
+  return players.map(p => ({
+    ...p,
+    career: p.career
+      .filter(s => !record.added.some(a => a.player === p.name && a.season === s.season && a.club === s.club))
+      .map(s => record.changed.filter(c => c.player === p.name && c.season === s.season && c.club === s.club).reduce((row, c) => ({ ...row, [c.field]: c.from }), s)),
+  }));
+}
+
 /** 'before' when the pool carries every from value and no added row, 'after' when it carries every to value and every added row, else 'mixed'. */
 export function recordState(players, record) {
   try {
