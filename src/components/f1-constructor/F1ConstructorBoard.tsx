@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useF1Constructor } from '@/hooks/useF1Constructor';
 import { useScrollToGame } from '@/hooks/useScrollToGame';
 import { F1ConstructorSearch } from './F1ConstructorSearch';
@@ -6,26 +6,35 @@ import { F1ConstructorHowToPlay } from './F1ConstructorHowToPlay';
 import ShareButtons from '@/components/game/ShareButtons';
 import { GameNav } from '@/components/game/GameNav';
 import { MAX_CLUES } from '@/types/f1Constructor';
+import motion from './ConstructorFeedback.module.css';
 
 const CLUE_LABELS = ['Vibe', 'Country', 'Era', 'Championships', 'Livery', 'Famous Driver'];
 
 export function F1ConstructorBoard() {
   const { gameState, startGame, makeGuess, giveUp, revealHint, resetGame, pointsForCurrentClue } = useF1Constructor();
   const gameRef = useScrollToGame(gameState);
-  const [wrongFlash, setWrongFlash] = useState(false);
+  const [feedback, setFeedback] = useState<{ kind: 'correct' | 'wrong'; turn: number } | null>(null);
+  const previous = useRef(gameState);
   const [hintsUsed, setHintsUsed] = useState(0);
   const [showGiveUpConfirm, setShowGiveUpConfirm] = useState(false);
 
-  const handleGuess = (name: string) => {
-    const prevClues = gameState?.revealedClues ?? 0;
-    makeGuess(name);
-    setTimeout(() => {
-      if (gameState?.revealedClues !== prevClues || gameState?.gameStatus === 'playing') {
-        setWrongFlash(true);
-        setTimeout(() => setWrongFlash(false), 500);
-      }
-    }, 50);
-  };
+  useEffect(() => {
+    const prior = previous.current;
+    previous.current = gameState;
+    if (!gameState || !prior || prior.puzzle.id !== gameState.puzzle.id || prior.mode !== gameState.mode || gameState.guesses.length < prior.guesses.length) {
+      setFeedback(null);
+    } else if (gameState.guesses.length > prior.guesses.length) {
+      setFeedback({ kind: gameState.gameStatus === 'won' ? 'correct' : 'wrong', turn: gameState.guesses.length });
+    } else if (gameState.gameStatus !== prior.gameStatus) {
+      setFeedback(null);
+    }
+  }, [gameState]);
+
+  useEffect(() => {
+    if (!feedback) return;
+    const timer = window.setTimeout(() => setFeedback(null), 600);
+    return () => window.clearTimeout(timer);
+  }, [feedback]);
 
   const handleHint = () => {
     revealHint();
@@ -122,13 +131,15 @@ export function F1ConstructorBoard() {
           })}
         </div>
 
-        {wrongFlash && (
-          <p className="text-center text-red-400 text-sm font-semibold animate-pulse">Wrong guess! Try again...</p>
-        )}
+        <div role="status" className={motion.feedback}>
+          {feedback && <p key={`${feedback.kind}-${feedback.turn}`} data-constructor-feedback={feedback.kind} className={`${motion.reply} text-center text-sm font-semibold ${feedback.kind === 'correct' ? 'text-emerald-400' : 'text-red-400'}`}>
+            {feedback.kind === 'correct' ? 'Correct guess. Constructor found.' : isOver ? 'Wrong guess. The answer is below.' : 'Wrong guess! Try again...'}
+          </p>}
+        </div>
 
         {!isOver && (
           <>
-            <F1ConstructorSearch onGuess={handleGuess} guesses={guesses} currentPuzzle={gameState?.puzzle} />
+            <F1ConstructorSearch onGuess={makeGuess} guesses={guesses} currentPuzzle={gameState?.puzzle} />
 
             <div className="flex items-center justify-center gap-4">
               {canHint && (
@@ -179,7 +190,7 @@ export function F1ConstructorBoard() {
         )}
 
         {isOver && (
-          <div className="text-center space-y-4 rounded-2xl border border-red-500/20 bg-zinc-900 p-6">
+          <div data-constructor-result={feedback ? gameStatus : undefined} className={`text-center space-y-4 rounded-2xl border border-red-500/20 bg-zinc-900 p-6 ${feedback ? gameStatus === 'won' ? motion.won : motion.lost : ''}`}>
             {gameStatus === 'won' ? (
               <>
                 <p className="text-3xl">🏆</p>

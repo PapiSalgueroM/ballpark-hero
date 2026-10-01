@@ -1,5 +1,15 @@
 # Project state
 
+## CHECKPOINT 2026-09-30: F1 Constructor truthful reactions accepted
+
+775 fixes a rendered winning-guess Wrong reaction and adds finite reply/result feedback with
+stable controls. Seven tests, three copied controls and eight native browser contexts pass660
+checks, exact scores/completion and daily-restore outcomes, with no overflow or feedback jump.
+Full proof and fixture limits are on WORKBOARD.774 Quiz Board native acceptance continues;
+its two older scoreShown tests pass after a bounded actual-dialog portal query fallback.
+776 StaffScreen source work continues independently. Full392-node suite is still running;
+final combined build and15 built-site fences remain pending. Next unclaimed number:777.
+
 ## CHECKPOINT 2026-09-30: Soccer Classic accepted; staff decisions claimed
 
 773 adds full eligible reachability, existing League/Country targeting and exact picker focus,

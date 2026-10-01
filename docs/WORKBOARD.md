@@ -1,5 +1,29 @@
 # Work board
 
+**774 scope addendum, root owned:** preserve `scripts/simScoreShown.mjs` quiznegative copy
+loading after QuizBoard imports scoped CSS. Resolve only that new relative CSS import inside
+the existing asserted copied-control rewrite, with swap's exact-one-anchor check. Keep its
+negative-bank mutation and every shown/shared/recorded assertion unchanged. The two existing
+actual Quiz Board scoreShown tests already pass (all wrong banks0, mixed board banks2600).
+
+**2026-09-30, Codex775 source/browser checkpoint: truthful constructor reactions accepted.**
+Baseline rendered test reproduced Wrong guess after an actual first-clue win. Reactions now
+follow committed guess count/status, with finite420ms reply/result motion, static reduced mode
+and a stable40px reaction area. Hooks, matcher, clues, scores, storage and share remain intact.
+Seven actual-board/real-hook tests pass. Three asserted binding copies fail their intended
+checks: wrong2/5, silent4/3, timer1/6. Initial/restored/hint/give-up/reset states stay quiet and
+pending timers clean up. Independent source review accepted. Eight native browser contexts
+(320/390/768/1440,both motion settings) pass660 checks using actual Board/Search/constructor,
+dailyRecord/restoredFinish and completion-hook lifecycle with outward account facades.
+Each records exact1000,600,0,0,1000 outcomes; completed daily restore records zero new callback
+and preserves its exact saved record. No overflow/errors/external requests or feedback-induced
+input geometry/scroll movement. Clue/search/input/hint/cue and reciprocal running animation
+identity remain stable on unchanged rerender. Six source hashes stay byte-identical. Phone
+win screenshot inspected. TEMP/dukb-round775-constructor-audit/report.json is the full receipt.
+Boundary is a fictional fixture pool with controlled Auth/completion/badge facade, not live
+data/account writes. Finished772 utilities plus directly compiled scoped CSS are accepted;
+final combined corrected-JS build/CSS receipt is still owed. Full392 suite continues.
+
 **2026-09-30, Codex Round 776 CLAIMED: committed Club Manager staff decisions (29,97).**
 Own only `src/components/club-manager/StaffScreen.tsx`, scoped CSS, actual-screen tests and a
 new sim wrapper. Preview exact existing-helper fees/payroll/effects and require a local second
