@@ -117,8 +117,10 @@ export const CBB_SCHOOL_STATES: Record<string, string> = {
 
 /** Round 823: the last round's league night is rivalry night. */
 export const CBB_RIVALRY_ROUND = CBB_ROUNDS;
-/** A rivalry won by this many points or more swings the most. */
-export const CBB_RIVAL_FULL_MARGIN = 20;
+/** A rivalry won by this many points or more swings the most. Measured over
+ *  2,000 rivalry games (Round 823), the median margin is 18 and the top
+ *  quarter starts at 26, so 25 keeps the full swing for a real blowout. */
+export const CBB_RIVAL_FULL_MARGIN = 25;
 /** Points a game per point of assistant edge, his end against theirs. */
 export const CBB_POINTS_PER_EDGE = 1.5;
 /** How much the committee weighs strength of schedule: the same as the eye test. */
@@ -339,40 +341,69 @@ function playGame(aId: string, bId: string, st: CbbState, rng: () => number, rec
 }
 
 /** One round: every program plays two games, one in-conference, one cross.
- *  Round 823: with the program layer on, the last round's league night is
- *  rivalry night instead. Every program plays its rival whatever league he is
- *  in, home court alternating by season the way a series does, and nobody
- *  draws his rival again in that round's cross-country game. */
+ *  Round 823: with the program layer on, the last round is rivalry night. */
 export function simCbbRound(st: CbbState, rng: () => number): { games: CbbGame[]; myGames: CbbGame[] } {
   const games: CbbGame[] = [];
-  const rivalryNight = !!st.depth && st.round === CBB_RIVALRY_ROUND;
-  for (const inConf of [true, false]) {
-    const paired = new Set<string>();
-    if (rivalryNight && inConf) {
-      for (const r of cbbRivalries()) {
-        if (!st.teams[r.a] || !st.teams[r.b]) continue;
-        paired.add(r.a); paired.add(r.b);
-        const g = st.season % 2 === 0 ? playGame(r.a, r.b, st, rng) : playGame(r.b, r.a, st, rng);
-        g.rivalry = true;
-        games.push(g);
+  if (st.depth && st.round === CBB_RIVALRY_ROUND) {
+    playRivalryNight(st, rng, games);
+  } else {
+    for (const inConf of [true, false]) {
+      const paired = new Set<string>();
+      for (const s of CBB_SCHOOLS) {
+        if (paired.has(s.id)) continue;
+        const candidates = CBB_SCHOOLS.filter(o =>
+          o.id !== s.id && !paired.has(o.id) && (inConf ? o.conf === s.conf : o.conf !== s.conf));
+        const opp = candidates.length
+          ? candidates[Math.floor(rng() * candidates.length)]
+          : CBB_SCHOOLS.find(o => o.id !== s.id && !paired.has(o.id));
+        if (!opp) continue;
+        paired.add(s.id); paired.add(opp.id);
+        games.push(playGame(s.id, opp.id, st, rng));
       }
-    }
-    for (const s of CBB_SCHOOLS) {
-      if (paired.has(s.id)) continue;
-      const avoid = rivalryNight ? cbbRivalOf(s.id)?.rival : undefined;
-      const candidates = CBB_SCHOOLS.filter(o =>
-        o.id !== s.id && !paired.has(o.id) && o.id !== avoid && (inConf ? o.conf === s.conf : o.conf !== s.conf));
-      const opp = candidates.length
-        ? candidates[Math.floor(rng() * candidates.length)]
-        : CBB_SCHOOLS.find(o => o.id !== s.id && !paired.has(o.id));
-      if (!opp) continue;
-      paired.add(s.id); paired.add(opp.id);
-      games.push(playGame(s.id, opp.id, st, rng));
     }
   }
   /* Round 823: the season log and the rivalry swing, the shared copy. */
   if (st.depth) recordProgramRound(st, games, CBB_PROGRAM);
   return { games, myGames: games.filter(g => g.home === st.myTeam || g.away === st.myTeam) };
+}
+
+/**
+ * Round 823: the last round with the program layer on. The league night is
+ * rivalry night: every program plays its rival whatever league he is in,
+ * home court alternating by season the way a series does. The cross-country
+ * game is then drawn for everybody before any of it is played, so a draw that
+ * hands somebody his rival a second time can be untangled: that game swaps
+ * opponents with another one, and since every school has exactly one rival
+ * the swap can never make a new rival pair.
+ */
+function playRivalryNight(st: CbbState, rng: () => number, games: CbbGame[]): void {
+  for (const r of cbbRivalries()) {
+    if (!st.teams[r.a] || !st.teams[r.b]) continue;
+    const g = st.season % 2 === 0 ? playGame(r.a, r.b, st, rng) : playGame(r.b, r.a, st, rng);
+    g.rivalry = true;
+    games.push(g);
+  }
+  const paired = new Set<string>();
+  const pairs: [string, string][] = [];
+  for (const s of CBB_SCHOOLS) {
+    if (paired.has(s.id)) continue;
+    const candidates = CBB_SCHOOLS.filter(o => o.id !== s.id && !paired.has(o.id) && o.conf !== s.conf);
+    const opp = candidates.length
+      ? candidates[Math.floor(rng() * candidates.length)]
+      : CBB_SCHOOLS.find(o => o.id !== s.id && !paired.has(o.id));
+    if (!opp) continue;
+    paired.add(s.id); paired.add(opp.id);
+    pairs.push([s.id, opp.id]);
+  }
+  for (let i = 0; i < pairs.length && pairs.length > 1; i += 1) {
+    const [a, b] = pairs[i];
+    if (cbbRivalOf(a)?.rival !== b) continue;
+    const j = i === 0 ? 1 : 0;
+    const [c, d] = pairs[j];
+    pairs[i] = [a, d];
+    pairs[j] = [c, b];
+  }
+  for (const [home, away] of pairs) games.push(playGame(home, away, st, rng));
 }
 
 /** Round 823: a team's strength of schedule, the average strength of the
