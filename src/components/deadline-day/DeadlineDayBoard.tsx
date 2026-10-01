@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { CalendarDays, ChevronLeft, Clock, RotateCcw, Shuffle } from 'lucide-react';
-import ShareButtons from '@/components/game/ShareButtons';
+import { CalendarDays, ChevronLeft, Clock, Shuffle } from 'lucide-react';
+import { ResultScreen } from '@/components/game/ResultScreen';
 import { Input } from '@/components/ui/input';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
 import { useDeadlineDay } from '@/hooks/useDeadlineDay';
@@ -17,6 +17,7 @@ import {
   clockLabel,
   deskRead,
   hoursLeft,
+  needBoxes,
   rivalOn,
   shareText,
   slotWord,
@@ -369,46 +370,62 @@ function Sales({ run, hook, onBack }: { run: DeadlineRun; hook: Hook; onBack: ()
   );
 }
 
+/* The end of a window is the site's shared result card (Round 710's result
+   moment), like Contract Chaos and every other game that ends on one. It
+   does not record the play: useDeadlineDay already does, once, when the
+   grade lands, so recordCompletionOnMount stays off. */
 function Result({ run, hook }: { run: DeadlineRun; hook: Hook }) {
   const g = run.grade!;
+  const outcome = g.score >= 65 ? 'win' : g.score >= 35 ? 'close' : 'loss';
   return (
-    <div className="space-y-3 rounded-lg border border-border bg-card p-4" data-testid="deadline-grade">
-      <div className="text-xs font-semibold uppercase tracking-wide text-primary">{run.state.clubName}, the window is shut</div>
-      <div className="flex items-baseline gap-3">
-        <div className="text-5xl font-bold">{g.letter}</div>
-        <div className="text-lg font-semibold tabular-nums">{g.score} / 100</div>
-      </div>
-      <div className="grid grid-cols-3 gap-2 text-center text-xs">
-        <div className="rounded-md bg-muted px-2 py-2"><div className="font-bold tabular-nums">{g.needsPts} / {NEEDS_POINTS}</div><div className="text-muted-foreground">{g.filled} of {g.needs} needs</div></div>
-        <div className="rounded-md bg-muted px-2 py-2"><div className="font-bold tabular-nums">{g.valuePts} / {VALUE_POINTS}</div><div className="text-muted-foreground">value for money</div></div>
-        <div className="rounded-md bg-muted px-2 py-2"><div className="font-bold tabular-nums">{g.budgetPts} / {BUDGET_POINTS}</div><div className="text-muted-foreground">{money(g.budgetLeft)} left</div></div>
-      </div>
-      <div className="space-y-1 text-sm">
-        {run.needs.map((n, k) => (
-          <div key={k} className="flex items-center justify-between gap-2">
-            <span className="capitalize">{slotWord(n.label)}</span>
-            <span className={g.filledBy[k] ? 'font-semibold' : 'text-muted-foreground'}>{g.filledBy[k] ?? 'not filled'}</span>
-          </div>
-        ))}
-      </div>
-      {g.signings.length > 0 && (
-        <div className="rounded-md bg-muted p-2 text-xs">
-          <div className="mb-1 font-semibold uppercase tracking-wide text-muted-foreground">Fees against what they were worth</div>
-          <ul className="space-y-1">
-            {g.signings.map(s => (
-              <li key={s.name} className="flex justify-between gap-2">
-                <span className="truncate">{s.name} ({s.rating})</span>
-                <span className="shrink-0 tabular-nums">{money(s.fee)} for a {money(s.value)} player</span>
-              </li>
+    <div data-testid="deadline-grade">
+      <ResultScreen
+        outcome={outcome}
+        score={`${g.score}/100`}
+        scoreLabel={`grade ${g.letter}`}
+        outcomeEmoji="⏰"
+        headline={`Grade ${g.letter} at ${run.state.clubName}`}
+        statLine={`The window is shut. ${g.filled} of ${g.needs} needs filled, ${money(g.budgetLeft)} left.`}
+        statRow={[
+          { label: 'needs', value: `${g.needsPts}/${NEEDS_POINTS}` },
+          { label: 'value', value: `${g.valuePts}/${VALUE_POINTS}` },
+          { label: 'budget', value: `${g.budgetPts}/${BUDGET_POINTS}` },
+        ]}
+        emojiGrid={`⏰ Deadline Day ${g.score}/100\n${needBoxes(g)}`}
+        share={{
+          score: `${g.letter}, ${g.score}/100`,
+          gameName: 'Deadline Day',
+          gamePath: '/deadline-day',
+          customText: shareText(run),
+        }}
+        onPlayAgain={hook.randomFree}
+        playAgainLabel="New club"
+        playNext={<button type="button" onClick={hook.backToMenu} className="min-h-[32px] text-sm text-primary hover:underline">Back to the menu</button>}
+      >
+        <div className="mb-3 space-y-2 rounded-xl border border-border bg-card p-3 text-left">
+          <div className="space-y-1 text-sm">
+            {run.needs.map((n, k) => (
+              <div key={k} className="flex items-center justify-between gap-2">
+                <span className="capitalize">{slotWord(n.label)}</span>
+                <span className={g.filledBy[k] ? 'font-semibold' : 'text-muted-foreground'}>{g.filledBy[k] ?? 'not filled'}</span>
+              </div>
             ))}
-          </ul>
+          </div>
+          {g.signings.length > 0 && (
+            <div className="rounded-md bg-muted p-2 text-xs">
+              <div className="mb-1 font-semibold uppercase tracking-wide text-muted-foreground">Fees against what they were worth</div>
+              <ul className="space-y-1">
+                {g.signings.map(s => (
+                  <li key={s.name} className="flex justify-between gap-2">
+                    <span className="truncate">{s.name} ({s.rating})</span>
+                    <span className="shrink-0 tabular-nums">{money(s.fee)} for a {money(s.value)} player</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
         </div>
-      )}
-      <ShareButtons gameName="Deadline Day" gamePath="/deadline-day" score={`${g.letter}, ${g.score}/100`} customText={shareText(run)} />
-      <div className="grid grid-cols-2 gap-2">
-        <button type="button" onClick={hook.randomFree} className="min-h-[48px] rounded-md border border-border px-3 py-2 text-sm font-semibold"><RotateCcw className="mr-1 inline h-4 w-4" />New club</button>
-        <button type="button" onClick={hook.backToMenu} className="min-h-[48px] rounded-md border border-border px-3 py-2 text-sm font-semibold">Menu</button>
-      </div>
+      </ResultScreen>
     </div>
   );
 }

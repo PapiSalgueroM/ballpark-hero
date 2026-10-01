@@ -768,7 +768,11 @@ export function gradeWindow(run: DeadlineRun): DeadlineGrade {
 export function shareText(run: DeadlineRun): string {
   const g = run.grade;
   const head = run.setup.daily ? `Deadline Day ${run.setup.daily}` : 'Deadline Day';
-  if (!g) return `${head}\n${run.state.clubName}: still on the phones`;
-  const boxes = g.filledBy.map(f => (f ? '🟩' : '🟥')).join('');
-  return `${head}\n${run.state.clubName}: grade ${g.letter} (${g.score}/100)\n${boxes} ${g.filled} of ${g.needs} needs, ${money(g.budgetLeft)} left`;
+  if (!g) return `${head}\n${run.state.clubName}: still on the phones\ndouknowball.com/deadline-day`;
+  return `${head}\n${run.state.clubName}: grade ${g.letter} (${g.score}/100)\n${needBoxes(g)} ${g.filled} of ${g.needs} needs, ${money(g.budgetLeft)} left\ndouknowball.com/deadline-day`;
+}
+
+/** One box a need: green filled, red not. The share text and the result card's grid. */
+export function needBoxes(g: DeadlineGrade): string {
+  return g.filledBy.map(f => (f ? '🟩' : '🟥')).join('');
 }
