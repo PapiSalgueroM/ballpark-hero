@@ -47,6 +47,12 @@
         as it stood before this round (read from git at BASE), from one seed.
         Every league state after every week and offseason is identical, and
         the old save never grows a bench: it is not topped up.
+     8) THE BOARD, under vitest (src/components/front-office/
+        FrontOfficeFullRoster.test.tsx): a full roster's Roster box opens on
+        group tiles, a practice squad man is called up while there is a spot,
+        the call up and every Sign are greyed with the reason at 53, a tapped
+        team starts a league with the whole club, and a fifteen man save keeps
+        its old list.
 
    MEASUREMENTS (2026-10-01, the bake of that day, the harness's own seeds):
      Section 1: active rosters 50 to 54 a club (1638 men), practice squads 15
@@ -145,6 +151,7 @@ const SECTION_NAMES = {
   5: 'what does move, measured',
   6: 'ten franchises, five seasons each',
   7: 'an old save loads and plays as it did',
+  8: 'the board on a full roster, under vitest',
 };
 
 let checks = 0;
@@ -748,6 +755,27 @@ console.log('7) an old save loads and plays as it did');
     }
     console.log(`   ${states} league states compared over three seeds and three seasons each`);
     ok(7, 'a fifteen man league plays exactly as it did before this round', diverged.length === 0, diverged.join(', '));
+  }
+}
+
+/* ======================================================================= 8 */
+if (CONTROL) {
+  console.log('8) skipped under a control: vitest reads src, and every control here edits a copy in temp');
+} else {
+  console.log('8) the board on a full roster, under vitest');
+  const vitest = findUp(path.join('node_modules', 'vitest', 'vitest.mjs'));
+  const TEST = 'src/components/front-office/FrontOfficeFullRoster.test.tsx';
+  ok(8, 'vitest can be found by walking up from the repo root', !!vitest);
+  if (vitest) {
+    const { spawnSync } = await import('node:child_process');
+    const r = spawnSync(process.execPath, [vitest, 'run', TEST, '--reporter=verbose'],
+      { cwd: ROOT, encoding: 'utf8', env: { ...process.env, CI: '1', FORCE_COLOR: '0', NO_COLOR: '1' }, maxBuffer: 64 * 1024 * 1024 });
+    const out = (r.stdout || '') + (r.stderr || '');
+    const summary = out.match(/Tests\s+(.+)/);
+    const line = summary ? summary[1].trim() : 'no summary line';
+    console.log(`   vitest exit ${r.status}, ${line}`);
+    ok(8, 'vitest exited zero', r.status === 0, out.split('\n').filter(l => /×|FAIL|AssertionError|Unable to find/.test(l)).slice(0, 8).join(' | '));
+    ok(8, 'all four board tests ran and passed', /\b4 passed\b/.test(line) && !/failed/.test(line), line);
   }
 }
 
