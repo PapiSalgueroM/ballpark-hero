@@ -244,8 +244,10 @@ describe('every US career position prints its own stat line', () => {
         bad.push(...checkText(line(s, pos), rule(pos), `season ${(s as { year: number }).year}`, true));
       }
       const b = bullets(career);
+      const own = statBullet(career);
+      bad.push(...checkText(own, rule(pos), 'stat bullet', false));
       /* The engine's retirement card carries exactly the helper's stat bullet. */
-      expect(b).toContain(statBullet(career));
+      if (!b.includes(own)) bad.push(`retirement card [${b.join(' | ')}] does not carry the stat bullet "${own}"`);
       for (const text of b) bad.push(...checkText(text, rule(pos), 'retirement bullet', false));
       const figure = soFar(career);
       if (figure !== null) bad.push(...checkText(figure, rule(pos), 'career so far', false));
