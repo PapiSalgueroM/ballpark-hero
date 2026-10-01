@@ -1,5 +1,19 @@
 # Project state
 
+## Current Codex handoff, 2026-10-01
+
+836 public-copy corrections and837 Stat Line manual ad eligibility are
+accepted and ready for Claude's next publish. Types, build,15 artifact
+harnesses and snapshot boot pass. Three saved pages are refreshed; only four
+page fingerprints changed, all other ledger entries are preserved.
+AdSense remains unresolved. The existing account panel still shows the
+September25 Low value content decision. Search Console refresh was blocked
+by the browser URL safety check, so68/94 remain September20 observations.
+No Google submission was made. The evidence and remaining era-copy correction
+are in audits/ADSENSE-QUALITY-2026-10-01.md and WORKBOARD.
+831's final no-jump browser pair is running;838's three-point contest is in
+implementation/targeted checks. Next free839. No new live-release claim.
+
 Codex837 is implemented with12 focused outcomes and three effective copied
 regression checks. NBA Stat Line no longer requests a manual ad during loading
 or pool failure. Consent, gameplay and original scores/saves/share hold.
