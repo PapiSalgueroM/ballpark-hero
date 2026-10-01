@@ -1,6 +1,6 @@
 # DoUKnowBall Master Plan
 
-Updated: 2026-07-03 (session 3). This is the single source of truth for what is done, staged, built, and pending. Statuses: [DONE] live or verified, [STAGED] in batch 1 waiting for Anthony to run PUBLISH_GAMES.bat, [BUILT] code written locally and waiting to be staged in batch 2, [PENDING] not started, [IN PROGRESS] partially done.
+Original roadmap: 2026-07-03 (session 3). The numbered ideas and statuses below describe that historical planning session. Current task claims, completed-round evidence and published status are tracked in [WORKBOARD](WORKBOARD.md) and [PROJECT-STATE](PROJECT-STATE.md), updated 2026-10-01. Check those before choosing work so an old pending label does not duplicate a completed or active task.
 
 ## Ground rules
 

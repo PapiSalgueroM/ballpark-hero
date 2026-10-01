@@ -1,5 +1,66 @@
 # Project state
 
+## ACCEPTED 2026-10-01: generated guide refresh after verified changes
+
+804 adds explicit --refresh for existing converted/frozen guides and updates only
+the accepted F1 score and NHL contributor instruction records. All127 other route
+records and every guard section remain held. Full guard/five effective negative
+controls/four invalid-request refusals/485-harness anchor scanner pass. Exact
+receipts are on WORKBOARD.802 still owns its rank-em record when its production
+capture runs.801 App acceptance and802/803 native work continue; the immutable413
+suite remains running against older captured records. Next free805.
+
+## IN PROGRESS 2026-10-01: guide records after verified gameplay corrections
+
+804 adds an explicit generated refresh for already converted/frozen guides, so
+accepted NHL control instructions and the corrected F1 score can update their
+original-text records without weakening the guide checks. Other entries stay held;
+802 refreshes only its own rank-em record when frozen. Whole guard/negative controls
+and invalid-route refusal remain required.801's types/build/all15 artifact gates
+pass and final native/App proof continues.802/803 build in parallel. The immutable
+413 run continues against its older captured records. Next free805.
+
+## ACCEPTED 2026-10-01: Emoji Guess feedback and keyboard flow
+
+800 adds truthful committed feedback, finite/static motion, full readable answers,
+44px owned controls and safe input/Next/Share handoffs. Original actual daily puzzles,
+scores/saves/share/completion stay held. Nine positives/thirteen unit controls,
+eight strengthened native contexts/four defect controls, real types/two builds,
+three-clock saved-page capture/all15 artifact fences and two actual App contexts
+pass. Exact receipts and the corrected isolated prerender run are on WORKBOARD.
+Only Emoji Guess's saved page/derived URL row changed;187 other raw saved pages
+and167 other URL hashes/dates stay held.801 production and802/803 builders continue;
+the frozen413 regression remains running. Publication/Google decisions remain due.
+Next free804; all Claude reservations stand.
+
+## IN PROGRESS 2026-10-01: Name Them All readable feedback
+
+803 claims the isolated ListQuiz Page/module/test/harness. Replace color-only hit
+feedback and truncated reveals with truthful announcements, finite/static motion,
+readable answers and safe native focus. Original answers/aliases, timed mode,
+tiers, completion and share stay held. Exact acceptance is on WORKBOARD.801/802
+continue;800's corrected app type gate passes and its isolated production pipeline
+continues. The immutable413 regression is still running. Next free804.
+
+## IN PROGRESS 2026-10-01: Rank 'Em editable draft and explicit lock
+
+802 replaces fifth-pick autosubmission with a reviewable local order and one
+explicit Lock order action. Original rounds, facts, daily log, score/share and
+completion stay held. Exact Page/module/tests/harness and narrow guide/completion
+fixture/generated ownership are on WORKBOARD.801 season picker continues;800's
+native/control proof is accepted and its test-only type fix is being checked before
+production restarts. The frozen413-node regression continues. Next free803.
+
+## IN PROGRESS 2026-10-01: NBA Stat Line season access and keyboard flow
+
+801 claims the isolated Page/picker module and small hook suggestion-limit plumbing,
+plus focused actual outcome tests/harness. Expose eligible seasons beyond the hidden
+first ten using the unchanged helper order/eligibility and preserve every original
+target, line calculation, score, save, share and completion. Exact scope/acceptance
+are on WORKBOARD.800 passes nine positives/thirteen unit controls/eight strengthened
+native contexts/four browser controls; its separate production pipeline is running.
+The frozen413-node regression continues unchanged. Next free802; Claude claims hold.
+
 ## ACCEPTED 2026-10-01: MLB trade desk exposes every roster player
 
 798's three trade lists now offer every original player with honest eight-player
