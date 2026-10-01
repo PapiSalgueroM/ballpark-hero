@@ -329,6 +329,10 @@ export const SEO_META: Record<string, SeoMeta> = {
     title: 'Gauntlet Draft: MLB Lineup Card Draft Game',
     description: 'Fill an MLB lineup card one spot at a time from five real players, then survive a five round October against stronger teams. Free daily baseball draft.',
   },
+  '/nhl-gauntlet-draft': {
+    title: 'Gauntlet Draft: NHL Lines and Goalie Draft Game',
+    description: 'Draft two NHL forward lines, two defense pairs and a goalie from five real players a pick, then survive a five round playoff. Free daily hockey draft.',
+  },
   '/conquest-mlb': {
     title: 'MLB Conquest: Baseball Imperialism Map Game',
     description: "Every territory starts with its nearest MLB park, and every winner annexes the loser's whole empire. Two clubs start with nothing. Free baseball map game.",

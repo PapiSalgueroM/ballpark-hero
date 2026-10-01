@@ -234,6 +234,7 @@ export const CATEGORIES: GameCategory[] = [
       { path: '/nhl-front-office', label: 'NHL Front Office', emoji: '🏢', description: 'Full GM sim with real 2026-27 rosters: hard cap, OT points, the bracket, the Cup', addedOn: '2026-08-11', featured: true },
       { path: '/nhl-connect-4', label: 'NHL Connect 4', emoji: '🏒', description: 'Hockey trivia meets Connect 4', addedOn: '2026-02-10' },
       { path: '/perfect-lineup-nhl', label: 'Perfect Lineup: NHL', emoji: '🏒', description: 'Build a dream line under random team & era constraints, then simulate', daily: true, addedOn: '2026-06-14' },
+      { path: '/nhl-gauntlet-draft', label: 'Gauntlet Draft: NHL', emoji: '🏒', description: 'Draft two lines, two pairs and a goalie five cards at a time, then survive the playoffs', daily: true, addedOn: '2026-10-01' },
     ],
   },
   {

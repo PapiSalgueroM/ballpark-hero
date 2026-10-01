@@ -85,6 +85,7 @@ export const PATH_BUNDLE: Record<string, ContentBundle> = {
   '/nhl-connect-4': 'hockey',
   '/nhl-connections': 'hockey',
   '/nhl-front-office': 'hockey',
+  '/nhl-gauntlet-draft': 'hockey',
   '/nhl-my-career': 'hockey',
   '/perfect-lineup-nhl': 'hockey',
   '/perfect-season-nhl': 'hockey',
