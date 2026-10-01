@@ -125,7 +125,7 @@ if (CONTROL) {
   if (CONTROL === 'leftout') { leftOut.push({ name: entries[0].name, move: 'planted by the control', why: 'control', line: '' }); }
   if (CONTROL === 'dashes') {
     if (!/"note"/.test(rawMain)) abort('control cannot run: no note in the file to plant into');
-    rawMain = rawMain.replace(/"note": "/, '"note": "— ');
+    rawMain = rawMain.replace(/"note": "/, '"note": "\u2014 ');
   }
   console.log(`   NEGATIVE CONTROL ON: ${CONTROL} (section ${SECTIONS[CONTROL]})`);
 }
@@ -278,7 +278,7 @@ section = 9;
 console.log('9) No em dash or en dash in either file');
 {
   for (const [label, text] of [['ligue1.json', rawMain], ['ligue1.unresolved.md', rawLeft]]) {
-    const i = text.search(/[–—]/);
+    const i = text.search(/[\u2013\u2014]/);
     if (i >= 0) fail(`${label}: a dash character at offset ${i}: ${JSON.stringify(text.slice(Math.max(0, i - 30), i + 30))}`);
   }
 }

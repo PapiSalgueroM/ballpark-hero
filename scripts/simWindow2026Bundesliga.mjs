@@ -139,7 +139,7 @@ if (CONTROL === 'rows') {
 if (CONTROL === 'dash') {
   const e = firstNonAdd();
   const before = entriesText;
-  e.note = (e.note || '') + ' – planted';
+  e.note = (e.note || '') + ' \u2013 planted';
   entriesText = JSON.stringify(entries, null, 2);
   if (entriesText === before) abort('control cannot run: the rewrite changed nothing');
   console.log(`   NEGATIVE CONTROL ON: an en dash written into ${e.name}'s note`);
@@ -285,7 +285,7 @@ console.log('6) Each entry names exactly one 2026 row (none for add entries)');
 section = 7;
 console.log('7) No em or en dash in either file');
 {
-  const DASH = /[–—]/;
+  const DASH = /[\u2013\u2014]/;
   for (const [label, text] of [['bundesliga.json', entriesText], ['bundesliga.left-out.json', rawLeft]]) {
     const lines = text.split('\n');
     lines.forEach((l, i) => { if (DASH.test(l)) fail(`${label}:${i + 1} carries an em or en dash`); });
