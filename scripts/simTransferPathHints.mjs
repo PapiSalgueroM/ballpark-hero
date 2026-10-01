@@ -46,6 +46,13 @@
  *      refresh must still hold. Measured 2026-10-01: 8 entries on 6 puzzles
  *      (6 classic, 2 Europe), no active entry moves. Section 3 accepts the live
  *      table on either side of that rewrite, never between.
+ *      Round 827 made it a chain: supabase/migrations/20261002120000_career_rows_verified.sql
+ *      (De Bruyne's Chelsea season moved to 2013-2014, Kane's loans, Haaland's
+ *      2019-20 Salzburg season) rewrites 8 more entries over the value before it
+ *      (tpa-110, tpa-438, tpa-535 and tpa-924, classic and Europe, all through
+ *      De Bruyne meeting Salah and Eto'o at Chelsea in 2013-2014) and one active
+ *      entry, tpa-924, over the applied or the pending refresh value. The
+ *      refresh's own tpa-924 value is beaten by it and is named as PENDING.
  *
  * NEGATIVE CONTROLS: TPH_CONTROL=stale plants the old tp-19 hint on the
  * parsed migration (section 1 must go red); TPH_CONTROL=club plants a hint
@@ -58,7 +65,9 @@
  * changes one live puzzle id in memory and the restore preflight must catch it.
  * TPH_CONTROL=r784min writes tpa-285's classic minimum one step too high in
  * the parsed Round 784 rows, and TPH_CONTROL=r784drop drops tpa-640's Europe
- * row from them (section 7 must report that exact row in both).
+ * row from them (section 7 must report that exact row in both). TPH_CONTROL=r827min,
+ * r827drop and r827active do the same to tpa-924 classic, tpa-110 Europe and
+ * tpa-924's active hint in the parsed Round 827 rows.
  *
  * Run: node scripts/simTransferPathHints.mjs
  */
@@ -241,29 +250,64 @@ console.log('3) the live tables, through the site\'s own fetchers');
         ? `   PENDING: ${path.basename(ROUND_784_MIGRATION)} is not applied; all ${r784.length} entries it rewrites still carry the values it replaces`
         : `   the Round 784 rewrite is MIXED on the live table`);
 
+    /* Round 827: the same, for its classic and Europe rewrites and its active
+       one (written over the applied or the pending refresh value). Its Europe
+       and active values are what the table must carry once it is applied. */
+    const r827 = parseRuleEntryRefresh(fs.readFileSync(path.join(ROOT, ROUND_827_MIGRATION), 'utf8'));
+    const r827Active = parseActiveRewrites(fs.readFileSync(path.join(ROOT, ROUND_827_MIGRATION), 'utf8'));
+    const r827RuleState = ruleEntryRefreshState(r827, (id, rule) => {
+      const p = liveById.get(id);
+      if (!p) return null;
+      return rule === 'classic' ? { minSteps: p.minSteps, hint: p.hint } : (p[rule] ?? null);
+    });
+    const activeSide = r => {
+      const e = liveById.get(r.id)?.active ?? null;
+      if (e && e.minSteps === r.minSteps && e.hint === r.hint) return 'after';
+      if (e && ((e.minSteps === r.appliedMinSteps && e.hint === r.appliedHint) || (e.minSteps === r.pendingMinSteps && e.hint === r.pendingHint))) return 'before';
+      return 'mixed';
+    };
+    const r827Sides = new Set([r827RuleState, ...r827Active.map(activeSide)]);
+    const r827State = r827Sides.size === 1 ? [...r827Sides][0] : 'mixed';
+    if (r827State === 'mixed') fail(`live Transfer Path entries are in a mixed state against the ${r827.length + r827Active.length} Round 827 rewrites: only all before or all after is valid`);
+    const europeAfter = new Map([...r784Europe, ...(r827State === 'after' ? r827.filter(r => r.rule === 'europe').map(r => [r.id, r]) : [])]);
+    const activeAfter = new Map(r827State === 'after' ? r827Active.map(r => [r.id, r]) : []);
+    console.log(r827State === 'after'
+      ? `   the Round 827 career rows and their ${r827.length + r827Active.length} Transfer Path rewrites are applied`
+      : r827State === 'before'
+        ? `   PENDING: ${path.basename(ROUND_827_MIGRATION)} is not applied; all ${r827.length + r827Active.length} entries it rewrites still carry a value it replaces`
+        : `   the Round 827 rewrite is MIXED on the live table`);
+
     /* Each special rule is checked on the graph its filter leaves. The pending
        refresh is preflighted even while the database holds the applied restore. */
     for (const rule of MODE_RULES) {
       const rg = buildGraph(site.playersUnderRule(players, rule));
       let withPath = 0, same = 0, staleApplied = 0;
       if (rule === 'active') {
+        const refreshBeatenBy827 = [];
         for (const p of puzzles) {
           const restore = restoreRows.get(p.id) ?? null;
           const proposed = restore ? { minSteps: restore.minSteps, hint: restore.hint } : null;
+          const by827 = activeAfter.get(p.id) ?? null;
           if (restore && (restore.a !== p.playerA || restore.b !== p.playerB)) fail(`proposed active restore ${p.id} names ${restore.a} to ${restore.b}, live has ${p.playerA} to ${p.playerB}`);
-          for (const pr of ruleProblems(rg, p.playerA, p.playerB, proposed)) fail(`proposed active restore ${p.id}: ${pr}`);
+          const proposedProblems = ruleProblems(rg, p.playerA, p.playerB, proposed);
+          /* once Round 827 is applied its links beat the refresh's own value here,
+             and the refresh fails closed on the row (its guard reads the applied value) */
+          if (by827 && proposedProblems.length) refreshBeatenBy827.push(p.id);
+          else for (const pr of proposedProblems) fail(`proposed active restore ${p.id}: ${pr}`);
           if (proposed) withPath += 1;
           const entry = p.active ?? null;
           if (activeLiveState === 'applied') {
-            const appliedRow = appliedRows.get(p.id) ?? null;
-            if ((entry === null) !== (appliedRow === null) || (entry && (entry.minSteps !== appliedRow.minSteps || entry.hint !== appliedRow.hint))) fail(`live ${p.id} under active differs from the applied 2026-09-07 restore row`);
+            const appliedRow = by827 ?? appliedRows.get(p.id) ?? null;
+            if ((entry === null) !== (appliedRow === null) || (entry && (entry.minSteps !== appliedRow.minSteps || entry.hint !== appliedRow.hint))) fail(`live ${p.id} under active differs from the applied 2026-09-07 restore row${by827 ? ' as the Round 827 migration rewrites it' : ''}`);
             else same += 1;
             if (appliedRow && ruleProblems(rg, p.playerA, p.playerB, { minSteps: appliedRow.minSteps, hint: appliedRow.hint }).length) staleApplied += 1;
           } else if (activeLiveState === 'refreshed') {
-            if ((entry === null) !== (proposed === null) || (entry && (entry.minSteps !== proposed.minSteps || entry.hint !== proposed.hint))) fail(`live ${p.id} under active differs from the exact verified refresh row`);
+            const want = by827 ?? proposed;
+            if ((entry === null) !== (want === null) || (entry && (entry.minSteps !== want.minSteps || entry.hint !== want.hint))) fail(`live ${p.id} under active differs from the exact verified refresh row${by827 ? ' as the Round 827 migration rewrites it' : ''}`);
             else same += 1;
           }
         }
+        if (refreshBeatenBy827.length) console.log(`   PENDING: Round 827 is applied and beats the Round 531 refresh's own value on ${refreshBeatenBy827.join(', ')}; regenerate the refresh before applying it`);
         console.log(`   active refresh preflighted on ${rg.names.length} live players (${withPath} paths); database state ${activeLiveState}, ${same} of ${puzzles.length} rows match that atomic state`);
         if (activeLiveState === 'applied') console.log(`   PENDING: the Round 531 refresh (${path.basename(ACTIVE_RESTORE)}) is not applied; ${staleApplied} applied rows are already beaten on the current identity set and ${restoreRows.size - appliedRows.size} pairs have no live hint. Apply it once the Round 531 frontend is live.`);
         continue;
@@ -272,7 +316,7 @@ console.log('3) the live tables, through the site\'s own fetchers');
         const entry = p[rule] ?? null;
         if (entry) withPath += 1;
         const companion = companionRows.get(p.id);
-        const rewrite = r784Europe.get(p.id);
+        const rewrite = europeAfter.get(p.id);
         const expected = rewrite
           ? { minSteps: rewrite.minSteps, hint: rewrite.hint }
           : companion?.europeMinSteps === null || companion?.europeMinSteps === undefined
@@ -280,11 +324,11 @@ console.log('3) the live tables, through the site\'s own fetchers');
             : { minSteps: companion.europeMinSteps, hint: companion.europeHint };
         if (!companion) fail(`live ${p.id} is absent from the applied companion`);
         else if (companion.playerA !== p.playerA || companion.playerB !== p.playerB) fail(`applied companion ${p.id} names ${companion.playerA} to ${companion.playerB}, live has ${p.playerA} to ${p.playerB}`);
-        else if ((entry === null) !== (expected === null) || (entry && (entry.minSteps !== expected.minSteps || entry.hint !== expected.hint))) fail(`live ${p.id} under Europe differs from the applied companion${rewrite ? ' as the Round 784 migration rewrites it' : ''}`);
+        else if ((entry === null) !== (expected === null) || (entry && (entry.minSteps !== expected.minSteps || entry.hint !== expected.hint))) fail(`live ${p.id} under Europe differs from the applied companion${rewrite ? ' as a career migration rewrites it' : ''}`);
         else same += 1;
         for (const pr of ruleProblems(rg, p.playerA, p.playerB, entry ? { minSteps: entry.minSteps, hint: entry.hint } : null)) fail(`live ${p.id} under ${rule}: ${pr}`);
       }
-      console.log(`   ${same} of ${puzzles.length} live rows match the applied companion${r784Europe.size ? ` with the ${r784Europe.size} Round 784 rewrites` : ''} under ${rule}, ${withPath} with a path, on ${rg.names.length} players`);
+      console.log(`   ${same} of ${puzzles.length} live rows match the applied companion${europeAfter.size ? ` with the ${europeAfter.size} career migration rewrites` : ''} under ${rule}, ${withPath} with a path, on ${rg.names.length} players`);
     }
   }
   }
