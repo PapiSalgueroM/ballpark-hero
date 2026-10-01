@@ -129,6 +129,21 @@ function pearson(xs, ys) {
   return sxx > 0 && syy > 0 ? sxy / Math.sqrt(sxx * syy) : NaN;
 }
 const clone = s => JSON.parse(JSON.stringify(s));
+/* Runs fn on its own seeded stream (the same generator as
+   scripts/lib/seedRandom.mjs), then puts the harness's stream back, so two
+   arms given one seed draw the same numbers in the same order. */
+function onStream(seed, fn) {
+  const saved = Math.random;
+  let a = seed >>> 0;
+  Math.random = () => {
+    a |= 0;
+    a = (a + 0x6d2b79f5) | 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+  try { return fn(); } finally { Math.random = saved; }
+}
 
 /* A worktree inside the repo has no node_modules of its own, so walk up for
    esbuild rather than trusting ROOT/node_modules. */
@@ -431,12 +446,17 @@ const upOnly = pairs.filter(p => p.up && !p.same).length;
 console.log(`   paired tier check: ${pairs.length} pairs (${pairsLost} lost to a sacking), yes at my tier ${sameYes.toFixed(1)} percent, yes above it ${upYes.toFixed(1)} percent, gap ${tierGap.toFixed(1)} points; pairs where only the bigger club said yes ${upOnly}`);
 
 /* Round 783 review: how the club's own season is going, paired the same way.
-   The same manager, record, roll and wait write once to a club of one tier
-   whose season is fine (no trouble at all, a known place in its table) and
-   once to a club of the SAME tier whose season is going badly (trouble of
-   STRUGGLING or more, read off the engine's own applicationInputFor), so the
-   tier and the manager cancel and the gap is the club's season. The tier
-   chosen is the one nearest the manager's that has both kinds. */
+   The same manager, record and wait write once to a club of one tier whose
+   season is fine (no trouble at all, a known place in its table) and once to
+   a club of the SAME tier whose season is going badly (trouble of STRUGGLING
+   or more, read off the engine's own applicationInputFor), so the tier and
+   the manager cancel and the gap is the club's season. The tier chosen is the
+   one nearest the manager's that has both kinds. What is compared is the odds
+   each club decided on, as the weekly tick recorded them on the answer: the
+   roll is fixed at 0 so every answer is a yes and carries its odds. A yes or
+   no per pair was tried first and read a gap of 5.4 points against a blind
+   control's -0.8 with a sampling spread near 1.5 either way, which is a coin
+   toss as a gate; the odds are the same decision without the roll's noise. */
 const TROUBLE_LEVELS = 10;
 const STRUGGLING = 8;
 const tPairs = [];
@@ -462,30 +482,37 @@ for (const base of bases) {
   for (let i = 0; i < TROUBLE_LEVELS; i++) {
     const s0 = withRecord(base, i / (TROUBLE_LEVELS - 1));
     const arms = [g.settled[Math.floor(Math.random() * g.settled.length)], g.struggling[Math.floor(Math.random() * g.struggling.length)]];
-    const roll = Math.random();
-    let wait = null;
-    const answers = [];
+    /* Both arms walk the same random stream (the house rule: seed the arms),
+       so they play the same matches to the same results and reach the answer
+       with the same form and the same table; nothing random reads the club
+       applied to, so the only thing the two answers differ by is that club. */
+    const pairSeed = Math.floor(Math.random() * 4294967296);
+    const odds = [];
     for (const t of arms) {
-      const applied = applyForJob(clone(s0), t.club);
-      if (!applied) { fail(`${base.clubName}: could not apply to ${t.club} for the paired trouble check (${jobApplyRefusal(s0, t.club)})`); break; }
-      applied.jobHunt.open.roll = roll;
-      if (wait === null) wait = applied.jobHunt.open.matchesLeft;
-      else applied.jobHunt.open.matchesLeft = wait;
-      const run = playUntilAnswered(applied);
-      if (run.outcome !== 'accepted' && run.outcome !== 'declined') break;
-      answers.push(run.outcome === 'accepted' ? 1 : 0);
+      const o = onStream(pairSeed, () => {
+        const applied = applyForJob(clone(s0), t.club);
+        if (!applied) { fail(`${base.clubName}: could not apply to ${t.club} for the paired trouble check (${jobApplyRefusal(s0, t.club)})`); return null; }
+        applied.jobHunt.open.roll = 0;
+        const run = playUntilAnswered(applied);
+        if (run.outcome !== 'accepted') return null;
+        const v = run.state.jobHunt.open.odds;
+        if (!isNum(v)) { fail(`${base.clubName}: the yes from ${t.club} carries no odds`); return null; }
+        return v;
+      });
+      if (o === null) break;
+      odds.push(o);
     }
-    if (answers.length === 2) {
-      tPairs.push({ settled: answers[0], struggling: answers[1] });
+    if (odds.length === 2) {
+      tPairs.push({ settled: odds[0], struggling: odds[1] });
       troubleAt.settled.push(arms[0].trouble);
       troubleAt.struggling.push(arms[1].trouble);
     } else tLost += 1;
   }
 }
-const settledYes = pct(tPairs.filter(p => p.settled).length, tPairs.length);
-const strugglingYes = pct(tPairs.filter(p => p.struggling).length, tPairs.length);
-const troubleGap = strugglingYes - settledYes;
-console.log(`   paired trouble check: ${tPairs.length} pairs from ${tBases} bases (${tLost} lost to a sacking), yes where their season is fine ${settledYes.toFixed(1)} percent, yes where it is going badly ${strugglingYes.toFixed(1)} percent, gap ${troubleGap.toFixed(1)} points (trouble ${mean(troubleAt.settled).toFixed(1)} vs ${mean(troubleAt.struggling).toFixed(1)} when sent); pairs where only the settled club said yes ${tPairs.filter(p => p.settled && !p.struggling).length}`);
+const settledOdds = 100 * mean(tPairs.map(p => p.settled));
+const strugglingOdds = 100 * mean(tPairs.map(p => p.struggling));
+const troubleGap = strugglingOdds - settledOdds;
+console.log(`   paired trouble check: ${tPairs.length} pairs from ${tBases} bases (${tLost} lost to a sacking), odds where their season is fine ${settledOdds.toFixed(1)} percent, where it is going badly ${strugglingOdds.toFixed(1)} percent, gap ${troubleGap.toFixed(1)} points (trouble ${mean(troubleAt.settled).toFixed(1)} vs ${mean(troubleAt.struggling).toFixed(1)} when sent); pairs where the settled club's odds were higher ${tPairs.filter(p => p.settled > p.struggling).length}`);
 
 if (rows.length < bases.length * PER_BASE * 0.9) fail(`only ${rows.length} of ${bases.length * PER_BASE} applications were answered`);
 if (!(rStanding >= 0.25)) fail(`acceptance does not rise with standing: r=${isNum(rStanding) ? rStanding.toFixed(3) : 'NaN'} (floor 0.25)`);
