@@ -87,7 +87,10 @@ const BASELINE = path.join(SCRIPT_ROOT, 'scripts', 'data', 'cmLeagueRulesDigest.
 const args = process.argv.slice(2);
 const WRITE = args.includes('--write');
 const partArg = args.find(a => a.startsWith('--part='));
-const PARTS = partArg ? partArg.slice(7).split(',') : ['modern', 'eras', 'pure', 'synthetic', 'chunks'];
+const PARTS = partArg ? partArg.slice(7).split(',') : ['modern', 'eras', 'pure', 'drop4', 'cupless', 'chunks'];
+/* The structural checks read this tree's own table; a baseline taken from
+   another tree (CM_RULES_ROOT) runs the digest only. */
+const OWN_TREE = path.resolve(process.env.CM_RULES_ROOT || SCRIPT_ROOT) === path.resolve(SCRIPT_ROOT);
 const CONTROL = process.env.CM_RULES_CONTROL || '';
 const CONTROLS = ['dropcount', 'fourth', 'static'];
 if (CONTROL && !CONTROLS.includes(CONTROL)) { console.error(`CM_RULES_CONTROL=${CONTROL} is not a control this harness knows (${CONTROLS.join(', ')})`); process.exit(1); }
@@ -138,7 +141,9 @@ async function bundleEngine(transform) {
       name: 'cm-transform',
       setup(b) {
         b.onLoad({ filter: /[\\/]src[\\/]lib[\\/]clubManager\.ts$/ }, args2 => {
-          let src = fs.readFileSync(args2.path, 'utf8');
+          /* Line endings normalised first, so a transform's anchors match on a
+             CRLF checkout too (template literals read CRLF as LF anyway). */
+          let src = fs.readFileSync(args2.path, 'utf8').replaceAll('\r\n', '\n');
           if (path.resolve(args2.path) === path.resolve(enginePath) && transform) src = transform(src);
           return { contents: src, loader: 'ts', resolveDir: path.dirname(args2.path) };
         });
@@ -343,6 +348,317 @@ async function partPure() {
   const drops = Object.fromEntries(all.map(({ l }) => [l.id, cm.__relegationSpots(l.id)]));
   console.log(`   drop counts: ${Object.entries(drops).map(([k, v]) => `${k} ${v}`).join(', ')}`);
   if (WRITE) written.pure = got; else compare('pure', got, baseline.parts.pure);
+  if (OWN_TREE && !WRITE) { tableIsComplete(cm, all); fillerNamesComplete(mod); }
+}
+
+/* The table answers for every league and names nothing that is not there.
+   Read off the real exported values. */
+function tableIsComplete(cm, all) {
+  console.log('3b) the rules table: a row for every league, every row used, every reference real');
+  const R = cm.LEAGUE_RULES;
+  if (!R) { fail('LEAGUE_RULES is not exported'); return; }
+  const defIds = new Set(all.map(({ l }) => l.id));
+  for (const id of defIds) if (!Object.prototype.hasOwnProperty.call(R, id)) fail(`league ${id} has no LEAGUE_RULES row`);
+  for (const id of Object.keys(R)) if (!defIds.has(id)) fail(`LEAGUE_RULES has a row for ${id}, which no league def uses`);
+  const nationIds = new Set(cm.NATIONS.map(n => n.id));
+  for (const [id, r] of Object.entries(R)) {
+    if (!nationIds.has(r.nationId)) fail(`${id} names nation ${r.nationId}, which NATIONS does not hold`);
+    if (r.season !== 'autumnSpring' && r.season !== 'calendarYear') fail(`${id} does not say which calendar its real league plays`);
+    if (!Number.isInteger(r.drop) || r.drop < 0) fail(`${id} drops ${r.drop}`);
+    if (r.ladder === 'promotion' && !r.playoff) fail(`${id} is a promotion ladder with no playoff rung`);
+    if (r.ladder === 'playoffs' && (!r.playoff || r.drop !== 0)) fail(`${id} is a playoffs ladder that relegates or has no playoff rung`);
+    if (r.secondTier) {
+      const below = R[r.secondTier];
+      if (!below || !cm.REAL_LEAGUES.some(l => l.id === r.secondTier)) fail(`${id} names second tier ${r.secondTier}, which is not a modern league`);
+      else if (below.ladder !== 'promotion') fail(`${id}'s second tier ${r.secondTier} does not talk about promotion`);
+      if (r.drop < 1) fail(`${id} has a second tier and relegates nobody`);
+    }
+    const def = all.find(({ l }) => l.id === id)?.l;
+    if (def && def.cupName !== r.cup) fail(`${id}'s league def carries cup ${def.cupName} where its row says ${r.cup}`);
+    if (def && def.euro !== (r.europe !== null)) fail(`${id}'s league def has euro ${def.euro} where its row has places ${JSON.stringify(r.europe)}`);
+  }
+  for (const n of cm.NATIONS) if (!n.leagueIds.length) fail(`nation ${n.id} has no league`);
+  console.log(`   ${Object.keys(R).length} rows for ${defIds.size} leagues, ${cm.NATIONS.length} nations, ${cm.PYRAMIDS.length} pyramids`);
+}
+
+/* The name guard's list of era names is exactly the era players whose names
+   the filler can build, recomputed from the era bakes and the generator's own
+   banks. An incomplete list would let a made up player wear a real era
+   name; an extra name would re-roll a name the old guard allowed. */
+function fillerNamesComplete(mod) {
+  console.log('3c) the era names the filler could build are listed exactly');
+  const listed = mod.eras.ERA_NAMES_THE_FILLER_COULD_BUILD;
+  if (!Array.isArray(listed)) { fail('ERA_NAMES_THE_FILLER_COULD_BUILD is not exported'); return; }
+  const src = fs.readFileSync(path.join(ROOT, 'src', 'lib', 'clubManagerEras.ts'), 'utf8');
+  const bank = name => {
+    const m = src.match(new RegExp(`const ${name} = \\[([\\s\\S]*?)\\];`));
+    return m ? [...m[1].matchAll(/'([^']+)'/g)].map(x => x[1]) : [];
+  };
+  const first = new Set(bank('GEN_FIRST'));
+  const last = new Set(bank('GEN_LAST'));
+  if (first.size < 100 || last.size < 100) { fail(`the generator banks read ${first.size} x ${last.size}, the read is broken`); return; }
+  const buildable = n => { const i = n.indexOf(' '); return i > 0 && first.has(n.slice(0, i)) && last.has(n.slice(i + 1)); };
+  const want = new Set();
+  let eraPlayers = 0;
+  for (const world of Object.values(mod.eras.HISTORIC_ROSTERS)) {
+    for (const roster of Object.values(world)) for (const p of roster) { eraPlayers += 1; if (buildable(p.n)) want.add(p.n); }
+  }
+  if (eraPlayers < 2000) { fail(`only ${eraPlayers} era players were loaded, so the list cannot be checked`); return; }
+  const have = new Set(listed);
+  const missing = [...want].filter(n => !have.has(n));
+  const extra = [...have].filter(n => !want.has(n));
+  if (missing.length) fail(`the filler could build these real era names and the guard does not list them: ${missing.join(', ')}`);
+  if (extra.length) fail(`the guard lists names no era player has: ${extra.join(', ')}`);
+  console.log(`   ${eraPlayers} era players, ${want.size} buildable names, ${listed.length} listed`);
+}
+
+/* ------------------------------------------------------------------ */
+/* The two new shapes, on synthetic leagues added as rows only          */
+/* ------------------------------------------------------------------ */
+
+const SYNTH_TOP = Array.from({ length: 20 }, (_, i) => `Synthtop Rovers ${i + 1}`);
+const SYNTH_SECOND = Array.from({ length: 20 }, (_, i) => `Synthsecond Town ${i + 1}`);
+const SYNTH_NOCUP = Array.from({ length: 18 }, (_, i) => `Nocup United ${i + 1}`);
+const EXPECT_DROP = 4;
+
+/* Rows only: a rules row each, a league row each, a nation row each, exactly
+   what the next real league adds. Every anchor must be in the source once. */
+function injectSynthetic(src) {
+  const once = (needle, label) => {
+    const n = src.split(needle).length - 1;
+    if (n !== 1) { console.error(`synthetic leagues cannot be added: ${label} appears ${n} times in clubManager.ts`); process.exit(1); }
+  };
+  const rulesAnchor = 'export const LEAGUE_RULES: Record<string, LeagueRules> = {\n';
+  const leaguesAnchor = 'export const REAL_LEAGUES: LeagueDef[] = [\n';
+  const nationsAnchor = '].map(n => ({ ...n, leagueIds:';
+  once(rulesAnchor, 'the LEAGUE_RULES opening');
+  once(leaguesAnchor, 'the REAL_LEAGUES opening');
+  once(nationsAnchor, 'the NATIONS closing');
+  const drop = CONTROL === 'fourth' ? EXPECT_DROP - 1 : EXPECT_DROP;
+  if (CONTROL === 'fourth') console.log(`NEGATIVE CONTROL ON: the synthetic top flight sends ${drop} down, not ${EXPECT_DROP}, part drop4 must go red`);
+  const rules = [
+    `  synthTop: { nationId: 'synthland', flag: '', cup: 'Synth Cup', europe: null, drop: ${drop}, secondTier: 'synthSecond', ladder: 'top', season: 'calendarYear' },`,
+    `  synthSecond: { nationId: 'synthland', flag: '', cup: 'Synth Cup', europe: null, drop: 2, ladder: 'promotion', playoff: { rankUpTo: 8, target: 6, label: 'Make the promotion playoffs' }, season: 'calendarYear' },`,
+    `  synthNoCup: { nationId: 'nocupia', flag: '', cup: null, europe: null, drop: 0, ladder: 'playoffs', playoff: { rankUpTo: 8, target: 7, label: 'Make the playoffs' }, floorFromBottom: 4, season: 'autumnSpring' },`,
+  ].join('\n') + '\n';
+  const rows = [
+    `  { id: 'synthTop', name: 'Synth Top Division', clubs: ${JSON.stringify(SYNTH_TOP)} },`,
+    `  { id: 'synthSecond', name: 'Synth Second Division', clubs: ${JSON.stringify(SYNTH_SECOND)} },`,
+    `  { id: 'synthNoCup', name: 'Nocup League', clubs: ${JSON.stringify(SYNTH_NOCUP)} },`,
+  ].join('\n') + '\n';
+  const nations = `  { id: 'synthland', name: 'Synthland', flag: '' },\n  { id: 'nocupia', name: 'Nocupia', flag: '' },\n`;
+  let out = src.replace(rulesAnchor, rulesAnchor + rules);
+  out = out.replace(leaguesAnchor, leaguesAnchor + rows);
+  out = out.replace(nationsAnchor, nations + nationsAnchor);
+  return out;
+}
+
+/* Ten seasons of one club, the board held off so the season always runs to
+   its end (the board is not what this checks). Every summer is handed over
+   as { before, fin, next, read }, where read is what beforeRollover read off
+   the finished season BEFORE the rollover registered next season's
+   memberships (league lookups answer for the registered ones). */
+function tenSeasons(cm, club, seedKey, onSummer, beforeRollover = () => null) {
+  Math.random = seeded(hashKey(`cm-league-rules|${seedKey}`));
+  let s = cm.startCareer(club, 'now');
+  for (let season = 1; season <= 10; season++) {
+    for (let i = 0; i < 160; i++) {
+      s = { ...s, boardConfidence: Math.max(s.boardConfidence, 50) };
+      const r = cm.playNextEntry(s, { skipHalftime: true });
+      s = r.state;
+      if (r.kind === 'seasonOver') break;
+      if (i === 159) fail(`${club}: season ${season} never ended`);
+    }
+    if (s.sacked) { fail(`${club}: sacked in season ${season} with the board held off`); break; }
+    const fin = cm.finishSeason(s);
+    const read = beforeRollover(fin);
+    const next = cm.startNextSeason(fin.state);
+    onSummer({ season, before: s, fin, next, read });
+    s = next;
+  }
+  Math.random = REAL_RANDOM;
+  return s;
+}
+
+async function partDrop4() {
+  console.log(`4a) a synthetic top flight that sends ${EXPECT_DROP} down into a modelled second tier, ten seasons`);
+  const mod = await bundleEngine(src => injectSynthetic(exposePrivates(src)));
+  const { cm } = mod;
+  const top = cm.REAL_LEAGUES.find(l => l.id === 'synthTop');
+  const second = cm.REAL_LEAGUES.find(l => l.id === 'synthSecond');
+  if (!top || !second) { fail('the synthetic leagues did not reach REAL_LEAGUES'); return; }
+  const pyr = cm.PYRAMIDS.find(p => p.top === 'synthTop');
+  if (!pyr || pyr.second !== 'synthSecond') fail('the synthetic pair is not in PYRAMIDS');
+  const nation = cm.NATIONS.find(n => n.id === 'synthland');
+  if (!nation || nation.leagueIds.join('|') !== 'synthTop|synthSecond') fail(`the synthetic nation holds ${nation?.leagueIds.join(', ')}`);
+  /* The board's floor for a bottom club off the title band reads the drop:
+     size minus four. (Every synthetic club rates the same, so a club's own
+     objectives all ask for the title; the ladder is asked directly.) */
+  const floor = cm.__leagueDemand(20, 4, 20, top, 20);
+  console.log(`   bottom of the ladder: "${floor.label}" target ${floor.target}`);
+  if (floor.target !== 20 - EXPECT_DROP) fail(`the board's floor in the top flight is ${floor.target}, expected ${20 - EXPECT_DROP}`);
+  if (cm.__relegationSpots('synthTop') !== EXPECT_DROP) fail(`relegationSpots reads ${cm.__relegationSpots('synthTop')} for the synthetic top flight`);
+  const staticUnion = [...top.clubs, ...second.clubs].sort().join('|');
+  let summers = 0, moves = 0, myMoves = 0;
+  /* The final tables, by the engine's own sort, read before the rollover. */
+  const readTables = fin => {
+    const s = fin.state;
+    const prevTop = s.leagueOverrides?.synthTop ?? top.clubs;
+    const myId = prevTop.includes(s.clubName) ? 'synthTop' : 'synthSecond';
+    const tableOf = id => (myId === id ? cm.sortedLeagueTable(s) : cm.sortedWorldTable(s, id, s.world?.[id]?.table ?? []));
+    return { myId, top: tableOf('synthTop').map(r => r.club), second: tableOf('synthSecond').map(r => r.club) };
+  };
+  tenSeasons(cm, SYNTH_TOP[0], 'drop4', ({ season, before, next, read }) => {
+    summers += 1;
+    const prevTop = before.leagueOverrides?.synthTop ?? top.clubs;
+    const prevSecond = before.leagueOverrides?.synthSecond ?? second.clubs;
+    const ov = next.leagueOverrides ?? {};
+    const nowTop = ov.synthTop ?? [];
+    const nowSecond = ov.synthSecond ?? [];
+    if (nowTop.length !== 20 || nowSecond.length !== 20) { fail(`summer ${season}: the divisions hold ${nowTop.length} and ${nowSecond.length}`); return; }
+    if ([...nowTop, ...nowSecond].sort().join('|') !== staticUnion) fail(`summer ${season}: the two divisions no longer hold the same forty clubs`);
+    const up = nowTop.filter(c => !prevTop.includes(c));
+    const down = nowSecond.filter(c => !prevSecond.includes(c));
+    if (up.length !== EXPECT_DROP) fail(`summer ${season}: ${up.length} came up, expected ${EXPECT_DROP}`);
+    if (down.length !== EXPECT_DROP) fail(`summer ${season}: ${down.length} went down, expected ${EXPECT_DROP}`);
+    /* And the RIGHT clubs: the bottom of the top flight's final table and the
+       top of the second's. */
+    const topSet = new Set(prevTop), secondSet = new Set(prevSecond);
+    if (read.top.length !== 20 || read.second.length !== 20) fail(`summer ${season}: the final tables read ${read.top.length} and ${read.second.length} rows`);
+    const wantDown = read.top.filter(c => topSet.has(c)).slice(-EXPECT_DROP).sort().join('|');
+    const wantUp = read.second.filter(c => secondSet.has(c)).slice(0, EXPECT_DROP).sort().join('|');
+    if ([...down].sort().join('|') !== wantDown) fail(`summer ${season}: down ${down.join(', ')}, the table's bottom ${EXPECT_DROP} were ${wantDown}`);
+    if ([...up].sort().join('|') !== wantUp) fail(`summer ${season}: up ${up.join(', ')}, the table's top ${EXPECT_DROP} were ${wantUp}`);
+    moves += up.length + down.length;
+    const wasIn = prevTop.includes(before.clubName) ? 'synthTop' : 'synthSecond';
+    const nowIn = cm.careerLeagueOf(next).id;
+    if (nowIn !== wasIn) myMoves += 1;
+    const expectIn = up.includes(before.clubName) ? 'synthTop' : down.includes(before.clubName) ? 'synthSecond' : wasIn;
+    if (nowIn !== expectIn) fail(`summer ${season}: my club plays in ${nowIn}, the table put it in ${expectIn}`);
+    if (next.leagueClubs.length !== 20) fail(`summer ${season}: my next league has ${next.leagueClubs.length} clubs`);
+  }, readTables);
+  if (summers !== 10) fail(`${summers} summers ran, expected 10`);
+  console.log(`   ${summers} summers, ${moves} club moves, my club changed division ${myMoves} times`);
+}
+
+async function partCupless() {
+  console.log('4b) a synthetic league with no domestic cup, ten seasons');
+  const mod = await bundleEngine(src => injectSynthetic(src));
+  const { cm } = mod;
+  const lg = cm.REAL_LEAGUES.find(l => l.id === 'synthNoCup');
+  if (!lg) { fail('the cupless league did not reach REAL_LEAGUES'); return; }
+  if (lg.cupName !== null) fail(`the cupless league's def carries cup ${lg.cupName}`);
+  let summers = 0, matches = 0, cupWeeks = 0, cupObjectives = 0, cupResults = 0, cupTrophies = 0;
+  const check = (s, label) => {
+    cupWeeks += s.calendar.filter(e => e.type === 'cup').length;
+    cupObjectives += (s.boardObjectives ?? []).filter(o => o.id === 'cup' || o.id === 'double').length;
+    if (s.cupBracket && s.cupBracket.length) fail(`${label}: a cup bracket was drawn`);
+    if (Object.keys(s.cupDraw ?? {}).length) fail(`${label}: a cup opponent was drawn`);
+    if (s.cupRound !== 'out' || s.cupExit) fail(`${label}: cupRound ${s.cupRound}, cupExit ${s.cupExit}`);
+    if (cm.careerLeagueOf(s).cupName !== null) fail(`${label}: the save reads a cup name`);
+  };
+  tenSeasons(cm, SYNTH_NOCUP[0], 'cupless', ({ season, before, fin, next }) => {
+    summers += 1;
+    if (season === 1) check(before, 'season 1');
+    for (const r of before.resultLog ?? []) { matches += 1; if (r.competition === 'cup') cupResults += 1; }
+    cupTrophies += before.trophies.filter(t => t.emoji === '🏅').length;
+    const cupGraded = (fin.summary.objectives ?? []).filter(o => /\bcup\b|double/i.test(o.label));
+    if (cupGraded.length) fail(`summer ${season}: the season review grades a cup: ${cupGraded.map(o => o.label).join(' | ')}`);
+    check(next, `season ${season + 1}`);
+    const ov = next.leagueOverrides?.synthNoCup;
+    if (ov) fail(`summer ${season}: the cupless league's membership moved`);
+  });
+  if (summers !== 10) fail(`${summers} summers ran, expected 10`);
+  if (matches < 300) fail(`only ${matches} matches were logged across ten seasons, the seasons did not run`);
+  if (cupWeeks) fail(`${cupWeeks} cup weeks were scheduled`);
+  if (cupObjectives) fail(`${cupObjectives} cup objectives were set`);
+  if (cupResults) fail(`${cupResults} cup matches were played`);
+  if (cupTrophies) fail(`${cupTrophies} cup trophies were lifted`);
+  /* The same engine still runs the cup where there is one: the synthetic
+     top flight's nation has the Synth Cup. */
+  Math.random = seeded(7);
+  const withCup = cm.startCareer(SYNTH_TOP[0], 'now');
+  Math.random = REAL_RANDOM;
+  if (withCup.calendar.filter(e => e.type === 'cup').length !== 4) fail('a league with a cup lost its four cup weeks');
+  if (!withCup.cupBracket?.length) fail('a league with a cup drew no bracket');
+  console.log(`   ${summers} summers, ${matches} matches, ${cupWeeks} cup weeks, ${cupObjectives} cup objectives, ${cupResults} cup matches; the cup league next door still plays its four rounds`);
+}
+
+/* ------------------------------------------------------------------ */
+/* Each era's squads in a chunk of their own, on the built files        */
+/* ------------------------------------------------------------------ */
+
+async function partChunks() {
+  console.log('5) the built chunks: each era in its own chunk, reached only by a dynamic import');
+  let dir = path.join(SCRIPT_ROOT, 'dist', 'assets');
+  if (!fs.existsSync(dir)) { console.log('   (no build in dist/, skipped: run vite build first)'); return; }
+  const mod = await bundleEngine(null);
+  await mod.eras.ensureAllEraRosters?.();
+  const worlds = { now: mod.cm.CM_ROSTERS, ...mod.eras.HISTORIC_ROSTERS };
+  if (Object.keys(worlds).length !== 4) { fail(`the bundle holds ${Object.keys(worlds).length} worlds`); return; }
+  /* A probe is the start of one roster row as the minifier prints it, for a
+     plain ASCII name, kept only when no other world has the same name, age
+     and position, so a probe found in a file belongs to exactly one world. */
+  const keyOf = p => `{n:${JSON.stringify(p.n)},p:${JSON.stringify(p.p)},a:${p.a},`;
+  const owners = new Map();
+  for (const [w, rosters] of Object.entries(worlds)) {
+    for (const roster of Object.values(rosters)) for (const p of roster) {
+      if (!/^[A-Za-z .'-]+$/.test(p.n) || p.n.includes("'")) continue;
+      const k = keyOf(p);
+      owners.set(k, owners.has(k) && owners.get(k) !== w ? null : w);
+    }
+  }
+  const probes = {};
+  for (const [k, w] of owners) if (w) (probes[w] ??= []).push(k);
+  for (const w of Object.keys(worlds)) {
+    probes[w] = (probes[w] ?? []).slice(0, 40);
+    if (probes[w].length < 20) { fail(`only ${probes[w].length} probes for ${w}`); return; }
+  }
+  if (CONTROL === 'static') {
+    /* What a static import of an era does to a build: its rows land in a
+       chunk the engine reaches without asking (here, the engine chunk
+       itself) and that chunk names the era chunk in a static import. Done to
+       a copy of dist/assets, so the real build is untouched. */
+    const copy = path.join(TMP, 'assets');
+    fs.cpSync(dir, copy, { recursive: true });
+    const files = fs.readdirSync(copy).filter(f => f.endsWith('.js'));
+    const engine = files.find(f => probes.now.some(k => fs.readFileSync(path.join(copy, f), 'utf8').includes(k)));
+    const era = files.find(f => probes.era2010.some(k => fs.readFileSync(path.join(copy, f), 'utf8').includes(k)));
+    if (!engine || !era || engine === era) { console.error('control cannot run: the engine chunk and the 2010 chunk are not two separate files in this build'); process.exit(1); }
+    fs.appendFileSync(path.join(copy, engine), `\nimport"./${era}";\nconst __planted=[${probes.era2010.slice(0, 5).map(k => `${k}v:1,r:1}`).join(',')}];\n`);
+    console.log(`NEGATIVE CONTROL ON: ${engine} imports ${era} statically and carries 2010 rows, part chunks must go red`);
+    dir = copy;
+  }
+  const files = fs.readdirSync(dir).filter(f => f.endsWith('.js'));
+  const text = new Map(files.map(f => [f, fs.readFileSync(path.join(dir, f), 'utf8')]));
+  const holders = w => files.filter(f => probes[w].some(k => text.get(f).includes(k)));
+  const engineFiles = holders('now');
+  if (engineFiles.length !== 1) { fail(`today's rosters sit in ${engineFiles.length} files: ${engineFiles.join(', ')}`); return; }
+  const engine = engineFiles[0];
+  const eraChunks = {};
+  for (const w of Object.keys(worlds).filter(x => x !== 'now')) {
+    const hs = holders(w);
+    if (hs.length !== 1) { fail(`${w}'s rosters sit in ${hs.length} files: ${hs.join(', ')}`); continue; }
+    const f = hs[0];
+    eraChunks[w] = f;
+    const found = probes[w].filter(k => text.get(f).includes(k)).length;
+    if (found !== probes[w].length) fail(`${w}'s chunk ${f} holds ${found} of its ${probes[w].length} probe rows`);
+    if (f === engine) fail(`${w}'s rosters are in the engine chunk ${f}`);
+    for (const other of Object.keys(worlds)) if (other !== w && probes[other].some(k => text.get(f).includes(k))) fail(`${w}'s chunk ${f} also carries ${other} rows`);
+  }
+  for (const [w, f] of Object.entries(eraChunks)) {
+    const esc = f.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const staticRe = new RegExp(`(?:import|export)\\s*(?:[^"'()]*?from\\s*)?["']\\./${esc}["']`);
+    const dynamicRe = new RegExp(`import\\(\\s*["']\\./${esc}["']\\s*\\)`);
+    const statics = files.filter(g => staticRe.test(text.get(g)));
+    const dynamics = files.filter(g => dynamicRe.test(text.get(g)));
+    if (statics.length) fail(`${w}'s chunk ${f} is imported statically by ${statics.join(', ')}`);
+    if (!dynamics.length) fail(`nothing imports ${w}'s chunk ${f} dynamically, so nothing can load it`);
+    const indexHtml = path.join(SCRIPT_ROOT, 'dist', 'index.html');
+    if (fs.existsSync(indexHtml) && fs.readFileSync(indexHtml, 'utf8').includes(f)) fail(`dist/index.html preloads ${w}'s chunk ${f}`);
+    console.log(`   ${w}: ${f}, ${probes[w].length} probe rows, reached by import() from ${dynamics.length} file(s), statically from ${statics.length}`);
+  }
+  console.log(`   today's rosters: ${engine}`);
 }
 
 /* ------------------------------------------------------------------ */
@@ -353,7 +669,7 @@ function controlDropCount(src) {
   /* Austria drops one. Before this round that was an id in a chain of ifs
      inside relegationSpots; since it is one row of the rules table. Either
      shape is rewritten to two, and a run that finds neither refuses. */
-  const rowRe = /(\n\s*austria:\s*\{[^}]*?drop:\s*)1\b/;
+  const rowRe = /(\n\s*austria: \{[^\n]*?\bdrop: )1\b/;
   if (rowRe.test(src)) { console.log('NEGATIVE CONTROL ON: Austria drops 2 in the rules row, part pure must go red'); return src.replace(rowRe, '$12'); }
   const old = "leagueId === 'austria' || ";
   if (src.includes(old)) { console.log('NEGATIVE CONTROL ON: Austria leaves the drop-one chain, part pure must go red'); return src.replace(old, ''); }
@@ -363,7 +679,7 @@ function controlDropCount(src) {
 
 /* ------------------------------------------------------------------ */
 
-const PART_FNS = { modern: partModern, eras: partEras, pure: partPure };
+const PART_FNS = { modern: partModern, eras: partEras, pure: partPure, drop4: partDrop4, cupless: partCupless, chunks: partChunks };
 for (const p of PARTS) {
   const fn = PART_FNS[p];
   if (!fn) { console.log(`(part ${p} is not built yet)`); continue; }

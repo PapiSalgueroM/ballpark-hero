@@ -322,7 +322,7 @@ const ALSO_REAL_ELSEWHERE = [
  * the era files and fails unless it matches exactly, so a new era bake that
  * adds a colliding name goes red until the name is here.
  */
-const ERA_NAMES_THE_FILLER_COULD_BUILD = [
+export const ERA_NAMES_THE_FILLER_COULD_BUILD = [
   'Bruno Fernandes', 'Gabriel Silva', 'Hugo Ibarra', 'Javier Garrido', 'Javier Paredes', 'Jorge Andrade',
   'Lorenzo Reyes', 'Lucas Silva', 'Mateo Kovacic', 'Pedro Mendes', 'Pedro Pereira',
 ];
