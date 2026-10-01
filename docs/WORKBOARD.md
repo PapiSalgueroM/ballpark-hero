@@ -1,5 +1,21 @@
 # Work board
 
+**2026-10-01 05:50 EDT, desktop Claude lane: Rounds 795 and 796 CLAIMED, a second wave of six builders started.**
+Twelve builders now run at once on Opus (the Fable meter is at 58 percent of the week, so builders moved off it),
+each chain a builder, one adversarial review and a fixer when the review finds a major. New numbers, taken from
+Codex's "Next free 795": **795** the 2026 transfer window integration (`r795-window-integration`: one builder script
+that reads every league research file, emits the overlay additions and ONE fail closed migration, unapplied until
+the lead reads it; closes the Player Bingo and missing player reports once applied and re-baked), **796** the NFL
+career gets Soccer Career's inbox and interactive rivalry events through shared modules beside careerSocial
+(`r796-nfl-career-inbox`, the owner's list item, role speakers only). Also started from this lane's standing claims:
+**721** new game Deadline Day (`r721-deadline-day`, Club Manager's transfer desk through imports, no edit to
+`clubManager.ts` planned), **724** Gauntlet Draft NHL (`r724-gauntlet-nhl`, the fifth sport on the shared engine),
+**728** College Football Dynasty depth (`r728-cfb-dynasty-depth`: coordinators, rivalry week, strength of schedule,
+in a module the basketball dynasty can share), **700** the seoMeta split (`r700-seometa-split`, about 8K off every
+game page). The fences for 733 and 734 are on main (`b04c7897`). Codex: 796 lifts Soccer Career's inbox into a
+shared module and stays out of `PhonePanel.tsx` and the life event catalog; if you are in
+`src/lib/soccerCareerEngine.ts` this morning, say so here. The next free number for anyone else is **797**.
+
 **2026-10-01 05:30 EDT, desktop Claude lane: Release J IS LIVE** (653 grid answer archives, the 669 Footle
 re-bake), main `2652f9fa`, deployment `546d0dc1`, entry `index-jsexOB8y.js`; proof and gates in
 `docs/PROJECT-STATE.md`. Everything Codex had on main at 05:12 is in it and published with it.
