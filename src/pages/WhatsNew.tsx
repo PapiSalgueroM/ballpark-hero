@@ -24,6 +24,12 @@ const WhatsNew = () => {
 
       <section className="space-y-8 text-sm leading-relaxed text-muted-foreground">
         <div>
+          <h2 className="text-lg font-semibold text-foreground mb-2">October 2026</h2>
+          <ul className="list-disc pl-5 space-y-2">
+            <li><strong className="text-foreground">New game: Gauntlet Draft for the NHL.</strong> Hockey was the one big league the draft did not have, and now it does. Eleven picks, two forward lines, two defense pairs and a goalie, and every pick deals five real players off this season's rosters (the same ones NHL Front Office plays), from a star down to a bargain. Keep one, fill the lineup, then it runs a five round playoff against tougher and tougher teams. Tied games go to sudden death overtime like real playoff hockey, so no shootouts. Ratings come from last season's scoring for skaters and save percentage and wins for goalies, and four goalies whose number was only a placeholder sit out rather than get a rating their play never earned. There is a daily (same cards for everyone) and an unlimited mode. <Link to="/nhl-gauntlet-draft" className="text-primary hover:underline">Draft your lines</Link>.</li>
+          </ul>
+        </div>
+        <div>
           <h2 className="text-lg font-semibold text-foreground mb-2">September 2026</h2>
           <ul className="list-disc pl-5 space-y-2">
             <li><strong className="text-foreground">New game: Manager Hot Seat, five games to save your job.</strong> You walk into a real club on a bad run, the board give you five league games and a points target, and you either hit it or you are gone. Pick a shape and a team talk before every match, handle the press, and watch the board, the fans and the dressing room react. It runs on the Club Manager engine, so every match is the full match sim from that game. There is a daily (same club and target for everyone) and a free play mode for any club you like. It records that you played but puts no points on the leaderboard for now.</li>
