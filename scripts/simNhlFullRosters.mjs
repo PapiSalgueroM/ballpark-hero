@@ -24,7 +24,8 @@
  *   6. Ten seeded franchises, five seasons each, the board's own loop (20 rounds
  *      with AI moves, the playoffs, two draft picks with the AI taking five after
  *      each, the offseason): no throw, no shared id, every club still ices 12, 6
- *      and 2 after every offseason, the AI never signs past 23.
+ *      and 2 after every offseason, no invented man shares a name with anyone,
+ *      the AI never signs past 23.
  *   7. An old save. A 13 man league from before this round, saved and loaded,
  *      plays a season, an offseason and a second season to the exact fingerprint
  *      the pre-830 engine produced (frozen below, taken 2026-10-01 from
@@ -51,6 +52,7 @@
  *   refill    the offseason's full roster refill removed             -> 6
  *   legacy    the full roster refill run on every league, old saves too -> 7
  *   allmen    the strength read averaging every healthy forward      -> 7, 8
+ *   dupname   every offseason fill named after a real man            -> 6
  *
  * Measured headroom (2026-10-01, this record):
  *   section 6: after every offseason 0 clubs short of 12/6/2 and 0 of 1600 club
@@ -76,7 +78,7 @@ const PRINT_LEGACY = process.env.NHL_FULL_PRINT_LEGACY || '';
 
 const EXPECT = {
   invent: [2, 4], age: [2], spot: [1], thirteen: [4, 5, 8], paycurve: [4], partial: [4],
-  ceiling: [4, 5, 6], refill: [6], legacy: [7], allmen: [7, 8],
+  ceiling: [4, 5, 6], refill: [6], legacy: [7], allmen: [7, 8], dupname: [6],
 };
 if (CONTROL && !EXPECT[CONTROL]) { console.error(`NHL_FULL_CONTROL=${CONTROL} is not a control this harness knows (${Object.keys(EXPECT).join(', ')})`); process.exit(1); }
 
@@ -117,6 +119,7 @@ const ENGINE_EDITS = {
   ceiling: [['export const NHL_FULL_ROSTER_MAX = 23;', 'export const NHL_FULL_ROSTER_MAX = 30;']],
   refill: [['if (league.rosterDepth) replenishNhlRoster(t, rng, taken, NHL_FULL_FLOORS, nhlDepthSalaryFor);', 'void NHL_FULL_FLOORS;']],
   legacy: [['if (league.rosterDepth) replenishNhlRoster(t, rng, taken, NHL_FULL_FLOORS, nhlDepthSalaryFor);', 'if (true) replenishNhlRoster(t, rng, taken, NHL_FULL_FLOORS, nhlDepthSalaryFor);']],
+  dupname: [['name: nhlGenName(rng, taken), pos,\n', "name: 'Elias Pettersson', pos,\n"]],
   allmen: [["healthy.filter(p => p.pos === 'C' || p.pos === 'W').sort((a, b) => b.ovr - a.ovr).slice(0, 6);", "healthy.filter(p => p.pos === 'C' || p.pos === 'W').sort((a, b) => b.ovr - a.ovr);"]],
 };
 const DATA_EDITS = {
@@ -399,6 +402,8 @@ console.log('6) Ten seeded franchises, five seasons each');
 {
   const FRANCHISES = ['TOR', 'EDM', 'VAN', 'NSH', 'NJD', 'COL', 'TBL', 'SJS', 'WPG', 'BOS'];
   let seasons = 0, largest = 0, overCap = 0, teamSeasons = 0, aiPast = 0, aboveMine = 0, aboveCpu = 0;
+  const realTwice = new Map();
+  for (const seeds of Object.values(D.NHL_FO_FULL_ROSTERS)) for (const s of seeds) realTwice.set(s.name, (realTwice.get(s.name) ?? 0) + 1);
   const problems = [];
   FRANCHISES.forEach((me, i) => {
     try {
@@ -425,13 +430,18 @@ console.log('6) Ten seeded franchises, five seasons each');
           if (E.nhlCapUsed(t) > lg.cap) overCap += 1;
         }
         if (lg.rosterDepth !== 23) problems.push(`${me} season ${s + 1}: lost rosterDepth`);
+        /* Round 211's rule on a full league: an invented man never shares a name with anyone.
+           Two real men may (Vancouver carries two Elias Petterssons, a centre and a defenseman). */
+        const count = new Map();
+        for (const p of [...Object.values(lg.teams).flatMap(t => t.players), ...lg.freeAgents]) count.set(p.name, (count.get(p.name) ?? 0) + 1);
+        for (const [n, k] of count) if (k > 1 && (realTwice.get(n) ?? 0) < k) problems.push(`${me} season ${s + 1}: ${n} appears ${k} times`);
       }
     } catch (e) {
       problems.push(`${me}: threw ${String(e && e.message ? e.message : e).slice(0, 160)}`);
     }
   });
   console.log(`   ${seasons} franchise seasons, ${teamSeasons} club seasons; largest roster seen ${largest} (printed, not asserted); clubs over the cap at a season start ${overCap} of ${teamSeasons}; over 23 at a season start: your club ${aboveMine} of ${seasons}, CPU clubs ${aboveCpu} of ${teamSeasons - seasons}`);
-  ok(6, 'fifty franchise seasons played without a throw, a shared id, a broken number or a club short of 12/6/2', problems.length === 0, problems.slice(0, 4).join('; '));
+  ok(6, 'fifty franchise seasons played without a throw, a shared id or name, a broken number or a club short of 12/6/2', problems.length === 0, problems.slice(0, 4).join('; '));
   ok(6, 'all fifty seasons ran', seasons === 50, String(seasons));
   ok(6, 'the AI never signed a club past 23 in season', aiPast === 0, `${aiPast} club rounds past 23`);
 }
