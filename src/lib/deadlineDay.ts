@@ -90,9 +90,9 @@ export const CANDIDATES_PER_NEED = 3;
 /** How far above the need's line a candidate may be rated, so a small club is not offered the world. */
 export const CANDIDATE_SPAN = 5;
 /** The board's money for the day, as a share of what the cheapest man for each need would cost at his asking price plus his asking bonus. */
-export const BUDGET_SHARE = 1.05;
+export const BUDGET_SHARE = 1.0;
 /** The chance a rival comes in for a player in your queue in one hour, rising to BASE + LATE by the last hour. */
-export const RIVAL_ENTER_BASE = 0.03;
+export const RIVAL_ENTER_BASE = 0.02;
 export const RIVAL_ENTER_LATE = 0.04;
 /** The chance a rival closes on a player you left alone for the hour. The engine's own dithering number. */
 export const RIVAL_CLOSE = 0.3;
@@ -280,19 +280,17 @@ function readNeeds(state: CareerState, count: number): DeadlineNeed[] {
 
 /** Real players who can play the slot and clear its line: a cheap one, a middling one and a dear one. */
 function readCandidates(state: CareerState, need: DeadlineNeed, market: MarketPlayer[], taken: Set<string>, rng: () => number): MarketPlayer[] {
-  let min = need.min;
   let fits: MarketPlayer[] = [];
-  /* If nobody on the market clears the line, the board settle for cover a
-     point lower, at most four times. */
-  for (let drop = 0; drop <= 4; drop++) {
+  /* The market is the top divisions, so a small club's weakest starter can sit
+     under everybody on it. The line stays where it is and the window widens
+     upward until there is a real choice. */
+  for (let span = CANDIDATE_SPAN; span <= CANDIDATE_SPAN + 20; span += 3) {
     fits = market.filter(m => need.allowed.includes(m.position)
-      && m.rating >= min && m.rating <= min + CANDIDATE_SPAN
+      && m.rating >= need.min && m.rating <= need.min + span
       && m.age <= 33 && !taken.has(m.name) && m.club !== state.clubName
       && !isPartialClub(m.club) && (m.value ?? m.price) > 0);
-    if (fits.length >= CANDIDATES_PER_NEED) break;
-    min -= 1;
+    if (fits.length >= CANDIDATES_PER_NEED * 3) break;
   }
-  need.min = min;
   fits.sort((a, b) => (a.value ?? a.price) - (b.value ?? b.price) || a.name.localeCompare(b.name));
   const out: MarketPlayer[] = [];
   const n = fits.length;
@@ -390,6 +388,13 @@ export function termsWanted(run: DeadlineRun, i: number): PersonalTerms | null {
 export function termsMeter(run: DeadlineRun, i: number, offer: PersonalTerms): number | null {
   const want = termsWanted(run, i);
   return want ? termsCloseness(want, offer) : null;
+}
+
+/** Why the selling club would not pick up for this man right now, in the engine's own words, or null. */
+export function openRefusal(run: DeadlineRun, i: number): string | null {
+  const t = run.targets[i];
+  if (!t || t.status !== 'idle') return null;
+  return onStaticWorld(() => doorRefusal({ ...run.state, negotiation: null }, t.mp, 'talk'));
 }
 
 /** The hours left on the clock. */
@@ -505,10 +510,9 @@ export function openTalks(prev: DeadlineRun, i: number): DeadlineRun {
     const run = cloneRun(prev);
     const t = run.targets[i];
     const neg = atTable(run, t, mixSeed(run.setup.seed, SEED_OPEN + i), s => startNegotiation(s, t.mp));
-    if (!neg) {
-      t.note = doorRefusal({ ...run.state, negotiation: null }, t.mp, 'talk') ?? 'They will not talk today.';
-      return run;
-    }
+    /* Refused at the door: nothing happened, so nothing is recorded. The
+       screen asks openRefusal for the engine's reason. */
+    if (!neg) return prev;
     t.neg = t.rival ? { ...neg, rivalBidder: t.rival.club, rivalOffer: t.rival.offer } : neg;
     t.rival = null;
     t.status = 'talks';

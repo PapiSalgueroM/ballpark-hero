@@ -244,8 +244,10 @@ function bidFor(run, i, arm, last) {
   const desk = deskRead(run, i);
   const mid = (desk.low + desk.high) / 2;
   const line = Math.ceil(ask * 0.97 * 10) / 10;
+  /* Every open need costs at least a bid and a terms offer, and he keeps an
+     hour a need in hand for a rival or a sale. */
   const open = run.needs.length - filledNeeds(run).size;
-  const spare = hoursLeft(run) - 2 * Math.max(1, open);
+  const spare = hoursLeft(run) - 3 * Math.max(1, open);
   let bid;
   if (spare <= 0 || t.neg.patience <= 2) bid = line;
   else if (last === undefined) bid = Math.min(line, Math.max(Math.ceil(ask * 0.77 * 10) / 10, mid * 0.98));
@@ -264,7 +266,13 @@ function play(start, arm) {
     const t = run.targets[i];
     if (t.status === 'idle') {
       const next = openTalks(run, i);
-      if (next === run) { skipped.add(t.need); continue; }
+      if (next === run) {
+        /* A full squad is fixed by a sale; anything else skips the need. */
+        const k = run.state.squad.length >= 30 ? openSale(run) : -1;
+        if (k >= 0) run = watch(sellPlayer(run, k), tag);
+        else skipped.add(t.need);
+        continue;
+      }
       run = watch(next, tag);
       continue;
     }
@@ -285,7 +293,7 @@ function play(start, arm) {
     /* terms */
     const want = termsWanted(run, i);
     const fee = t.neg.agreedFee ?? 0;
-    if (fee + want.bonus > run.state.budget) {
+    if (fee + want.bonus > run.state.budget || run.state.squad.length >= 30) {
       const k = openSale(run);
       if (k >= 0) { run = watch(sellPlayer(run, k), tag); continue; }
     }
@@ -411,9 +419,13 @@ for (let i = 0; i < starts.length; i++) {
   const a = arms.desk[i].grade.score, b = arms.over[i].grade.score;
   if (a > b) deskWins += 1; else if (b > a) overWins += 1;
 }
+const hoursUsed = r => r.actions.filter(a => a.t === 'bid' || a.t === 'terms' || a.t === 'sell').length;
 for (const arm of Object.keys(arms)) {
   const full = arms[arm].filter(r => r.grade.filled === r.grade.needs).length;
-  console.log(`   ${arm.padEnd(4)} score ${fmt(g(arm, 'score'))}, needs ${fmt(g(arm, 'needsPts'))}, value ${fmt(g(arm, 'valuePts'))}, budget ${fmt(g(arm, 'budgetPts'))}; every need filled in ${fmt(pct(full, starts.length), 1)} percent; hours used ${fmt(mean(arms[arm].map(r => r.hour)), 1)}`);
+  const st = {};
+  for (const r of arms[arm]) for (const t of r.targets) if (t.status !== 'idle') st[t.status] = (st[t.status] || 0) + 1;
+  const ratio = mean(arms[arm].flatMap(r => r.grade.signings.map(s => s.fee / s.value)));
+  console.log(`   ${arm.padEnd(4)} score ${fmt(g(arm, 'score'))}, needs ${fmt(g(arm, 'needsPts'))}, value ${fmt(g(arm, 'valuePts'))}, budget ${fmt(g(arm, 'budgetPts'))}; every need filled in ${fmt(pct(full, starts.length), 1)} percent; hours used ${fmt(mean(arms[arm].map(hoursUsed)), 1)}; fee over value ${fmt(ratio, 3)}; sales ${fmt(mean(arms[arm].map(r => r.sales.filter(s => s.done).length)), 2)}; deals ${JSON.stringify(st)}`);
 }
 const scoreGap = g('desk', 'score') - g('over', 'score');
 const valueGap = g('desk', 'valuePts') - g('over', 'valuePts');
