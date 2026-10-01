@@ -74,17 +74,31 @@
  * Math.random, three cohorts so the late career is actually reached:
  *
  *   1  Careers driven, batches recorded as the engine queued them.
- *   2  HARD. No event fires twice inside its cooldown, in any career. The gap
- *      is recomputed here from the season years on the raw save, and the
- *      cooldown read off the engine's own eventCooldown. Also HARD: no batch
- *      carries two events of one story. Measured over seed offsets 0 to 4:
- *      1,975, 2,012, 1,944, 1,969 and 1,990 repeat firings checked, 0 inside
- *      a cooldown, 0 doubled batches; with the picker blind to the ledger
- *      (nocooldown, seed 0) 740 of 2,639 were inside one, 141 of those a
- *      shared story.
+ *   2  HARD. No event fires twice inside its cooldown, in any career.
+ *      Firings are grouped by this file's own key (the id, or the story in
+ *      STORY_SETS it belongs to), each gap is judged against this file's own
+ *      table (PINNED_COOLDOWN by the kind the catalog declares, PINNED_DEFAULT
+ *      by category for the other catalogs, once for a shared story), and the
+ *      seasons are the years on the raw save. Nothing here asks the engine's
+ *      eventLedgerKey or eventCooldown: a review found that while this section
+ *      asked them, a ledger key that ignored the story or a zeroed cooldown
+ *      table moved the engine and the harness together and every section
+ *      stayed green. Also HARD: nothing comes round in the same or the next
+ *      season (every pinned value is at least one), and no batch carries two
+ *      events of one story. Measured over seed offsets 0 to 4: 1,975, 2,012,
+ *      1,944, 1,969 and 1,990 repeat firings checked, 0 inside a cooldown, 0
+ *      in the same or the next season, 0 doubled batches; with the picker
+ *      blind to the ledger (nocooldown, seed 0) 740 of 2,639 were inside one,
+ *      293 of them the next season, 141 a shared story.
  *   3  HARD. Every id in the life catalog is reachable (turned up in some
  *      state's catalog), and every new id actually FIRED in at least one
  *      career. A gate nobody can pass is dead words.
+ *   3b HARD. The comeback game (262) fires only while the latest serious
+ *      injury on the save is this season's or last season's. Measured over
+ *      seed offsets 0 to 4: 207, 221, 203, 197 and 216 comeback games, every
+ *      one 0 or 1 seasons after the injury (0:201 1:6 at seed 0); with the
+ *      gate open to any injury ever (comebackany, seed 0) 228 of 427 came 2
+ *      to 16 seasons after it.
  *   4  The rate. Four numbers, each inside a band set from measurement, so
  *      the new events did not flood the game and the cooldowns did not starve
  *      it. All at N=200 (500 careers, about 8,200 playing seasons a run).
@@ -110,14 +124,24 @@
  *      choice a non empty consequence and an apply function, every life event
  *      an explicit cooldown, no id used twice anywhere in the full catalog,
  *      no two life events with the same consequence set, no two with word
- *      overlap above 0.5 (measured ceiling 0.35).
+ *      overlap above 0.5 (measured ceiling 0.35). And the tables: COOLDOWN
+ *      and EVENT_COOLDOWN_DEFAULT say exactly what PINNED_COOLDOWN and
+ *      PINNED_DEFAULT say, every life event's cooldown is a COOLDOWN kind,
+ *      the engine's eventCooldown and eventLedgerKey agree with this file on
+ *      every event offered (250 events, 0 disagree), and 272's private physio
+ *      is billed once however often the event comes round (yearly costs 0,
+ *      then 0.15 at 33, still 0.15 after a second visit at 37).
  *   6  HARD. Text hygiene over every title, description, label and
  *      consequence: no em or en dash, nothing on the RIVAL_NAMES list from
  *      simNoRivalNames, and every Capitalised Two Word name is one the
  *      allowlist here knows to be generated, so a real name cannot arrive
  *      without somebody reading this file.
  *   7  A save with no eventLastFired loads, plays, and gets its ledger on the
- *      next batch; a save with a corrupt ledger has it dropped on load.
+ *      next batch; a save with a corrupt ledger has it dropped on load; and
+ *      a card the catalog no longer carries when it is answered (Round 667's
+ *      skip after a reload) hands back the stamp it took this season, so a
+ *      once a career event behind a random gate (211, 217 and 219 roll 0.35)
+ *      is never used up without the player answering it.
  *
  * NEGATIVE CONTROLS, one or more per section. Each puts a defect back into an
  * in memory copy of one source file (also written to the temp directory for
@@ -131,19 +155,37 @@
  *                batches over seed offsets 0 to 4; rare, because only seven
  *                events carry a story key, which is why it is counted over
  *                every career rather than sampled).
- *   neverfires   event 272 is gated at age 330: section 3 fails.
- *   nonew        getLifeEvents drops ids 253 to 272: section 4 fails (and 3
- *                and 5b with it, as they should).
+ *   keynostory   eventLedgerKey ignores the story, so each catalog keeps its
+ *                own entry: section 2 fails (seed 0: 83 repeats of a shared
+ *                story inside its cooldown, 5 batches carrying two of one
+ *                story) and 5 with it.
+ *   zerokinds    every COOLDOWN kind but once is 0: section 2 fails (seed 0:
+ *                300 inside a cooldown, 246 the next season, most of them the
+ *                comeback game in consecutive seasons) and 5 with it.
+ *   zerodefaults the category defaults the other catalogs fall back on are 0:
+ *                section 2 fails (seed 0: 398 inside, 261 the next season)
+ *                and 5 with it.
+ *   neverfires   event 272 is gated at age 330: section 3 fails (and 5,
+ *                whose physio check then cannot find 272 at 33).
+ *   comebackany  262 is due after any serious injury ever: section 3b fails
+ *                (seed 0: 228 comeback games 2 to 16 seasons late).
+ *   nonew        getLifeEvents drops ids 253 to 272: section 4 fails (and 3,
+ *                3b, 5 and 5b with it, as they should).
  *   flood        every batch draws 4 to 6 events: section 4 fails.
  *   oneoption    an option is removed from event 221, leaving it one button:
  *                section 5 fails.
+ *   physiostacks 272 hires a second private physio on its second visit:
+ *                section 5 fails (yearly costs 0.3 after two visits).
  *   nostory      realism 462 loses the statue vote's story key: section 5b
- *                fails.
+ *                fails (and 2, which still counts 232 and 462 as one story,
+ *                and 5).
  *   dupetitle    263 takes the title of realism event 419: section 5b
  *                fails (and 6, as the new title is not on the cast list).
  *   dash         an en dash in event 261's title: section 6 fails.
  *   keepcorrupt  repairCareer stops dropping a ledger that is not a plain
  *                object: section 7 fails.
+ *   skipkeepsstamp  a card skipped on reload keeps the stamp it took when it
+ *                was drawn: section 7 fails.
  *
  * Run: node scripts/simCareerLifeCooldowns.mjs [careers]
  *      SEED_OFFSET=1 node scripts/simCareerLifeCooldowns.mjs   another draw
@@ -634,7 +676,8 @@ console.log('2) No event fires twice inside its cooldown');
         pairs += 1;
         if (key.startsWith('story:')) storyPairs += 1;
         const gap = list[i].season - list[i - 1].season;
-        /* the floor, true of every event whatever its table says */
+        /* the floor, true of every event whatever its table says: never the
+           same season (a doubled batch) and never the next one */
         if (gap <= 1) backToBack += 1;
         if (gap <= list[i].cooldown) {
           violations += 1;
@@ -643,11 +686,11 @@ console.log('2) No event fires twice inside its cooldown');
       }
     }
   }
-  console.log(`   ${pairs} repeat firings of the same event or story in the same career checked (${storyPairs} of them a shared story), ${violations} inside the cooldown, ${backToBack} in back to back seasons, ${sameBatch} duplicated inside one batch`);
+  console.log(`   ${pairs} repeat firings of the same event or story in the same career checked (${storyPairs} of them a shared story), ${violations} inside the cooldown, ${backToBack} in the same or the next season, ${sameBatch} duplicated inside one batch`);
   for (const ex of examples) console.error(`   ${ex}`);
   if (pairs === 0) fail('no event ever fired twice in any career, so this section measured nothing');
   if (violations > 0) fail(`${violations} firings landed inside the event's cooldown`);
-  if (backToBack > 0) fail(`${backToBack} events or stories fired in back to back seasons`);
+  if (backToBack > 0) fail(`${backToBack} events or stories fired again in the same or the next season`);
   if (sameBatch > 0) fail(`${sameBatch} batches carried the same event or story twice`);
 
   /* The ledger itself, read off the finished saves. */
