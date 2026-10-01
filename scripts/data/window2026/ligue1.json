@@ -1,0 +1,484 @@
+[
+  {
+    "name": "Thilo Kehrer",
+    "to": "Ajax",
+    "db": "Ajax Amsterdam",
+    "loan": true,
+    "sources": [
+      "https://www.asmonaco.com/en/news/thilo-kehrer-loaned-to-ajax-amsterdam",
+      "https://english.ajax.nl/articles/ajax-and-as-monaco-reach-agreement-on-thilo-kehrer/"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Season long loan from Monaco without an option, announced by both clubs on 2026-09-02 (the Dutch window was still open). ESPN's Ajax 2026-27 squad page lists him."
+  },
+  {
+    "name": "Caio Henrique",
+    "to": "Ajax",
+    "db": "Ajax Amsterdam",
+    "sources": [
+      "https://www.asmonaco.com/en/news/obrigado-caio",
+      "https://english.ajax.nl/articles/caio-henrique-joins-ajax/"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Permanent from Monaco after six seasons, both clubs announced it on 2026-06-30, contract to 2030. ESPN's Ajax 2026-27 squad page lists him."
+  },
+  {
+    "name": "Kassoum Ouattara",
+    "to": "Beşiktaş",
+    "db": "Besiktas JK",
+    "sources": [
+      "https://www.asmonaco.com/en/news/kassoum-ouattara-joins-besiktas-jk",
+      "https://global.espn.com/football/player/_/id/345243/kassoum-ouattara"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Permanent from Monaco, announced 2026-07-02, four year contract. ESPN's player page lists him at Besiktas with 2026-27 Super Lig stats."
+  },
+  {
+    "name": "Matthis Abline",
+    "to": "Monaco",
+    "db": "AS Monaco",
+    "sources": [
+      "https://www.asmonaco.com/en/news/matthis-abline-to-as-monaco",
+      "https://www.espn.com/soccer/team/squad/_/id/174/monaco"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Permanent from relegated Nantes, announced 2026-07-30, five year contract to June 2031. His 2026 row sits at FC Nantes. ESPN's Monaco 2026-27 squad page lists him (ESPN's Nantes page has not been cleared of him, so the Monaco page is the one read)."
+  },
+  {
+    "name": "Sadibou Sané",
+    "to": "Monaco",
+    "db": "AS Monaco",
+    "sources": [
+      "https://www.asmonaco.com/en/news/sadibou-sane-joins-as-monaco",
+      "https://www.espn.com/soccer/team/squad/_/id/174/monaco"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Permanent from relegated Metz, five year contract to June 2031 (asmonaco.com article dated 2026-08-07, the deal was reported 2026-07-08). His 2026 row sits at FC Metz. ESPN's Monaco 2026-27 squad page lists him."
+  },
+  {
+    "name": "Bilal Nadir",
+    "to": "Hamburg",
+    "db": "Hamburger SV",
+    "sources": [
+      "https://www.hsv.de/en/news/hsv-sign-bilal-nadir",
+      "https://www.bundesliga.com/en/bundesliga/news/who-is-bilal-nadir-hamburg-morocco-midfielder-marseille-38332"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Free transfer from Marseille when his contract ended, announced by HSV on 2026-07-24, contract to 2029. Also on bundesliga.com's summer transfer centre (Hamburg in: Marseille) and ESPN's Hamburg 2026-27 squad page."
+  },
+  {
+    "name": "Lilian Brassier",
+    "to": "Eintracht Frankfurt",
+    "db": "Eintracht Frankfurt",
+    "sources": [
+      "https://www.bundesliga.com/en/bundesliga/news/eintracht-frankfurt-sign-lilian-brassier-theate-replacement-38940",
+      "https://www.espn.com/football/player/_/id/290141"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Permanent from Rennes, 2026-09-01, contract to 2031 (bundesliga.com is the league's own site; the eintracht.de page could not be located without search). ESPN's player page lists him at Frankfurt with 2026-27 Bundesliga stats, and ESPN's Frankfurt squad page lists him."
+  },
+  {
+    "name": "Leonardo Balerdi",
+    "to": "Roma",
+    "db": "AS Roma",
+    "loan": true,
+    "sources": [
+      "https://www.asroma.com/it/notizie/75798/leonardo-balerdi-e-un-nuovo-calciatore-giallorosso",
+      "https://www.espn.com/soccer/player/_/id/271555"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Loan from Marseille with a purchase option that becomes an obligation on appearances, announced by Roma on 2026-08-30. ESPN's player page lists him at AS Roma with 2026-27 Serie A stats."
+  },
+  {
+    "name": "Hamed Traoré",
+    "to": "Genoa",
+    "db": "Genoa CFC",
+    "loan": true,
+    "sources": [
+      "https://genoacfc.it/2026/07/17/hamed-junior-traore-e-un-giocatore-del-genoa/",
+      "https://www.espn.com/soccer/team/squad/_/id/3263/genoa"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Loan from Marseille with a purchase option, announced by Genoa on 2026-07-17. ESPN's Genoa 2026-27 squad page lists him. The table spells him Hamed Traoré, Genoa writes Hamed Junior Traore."
+  },
+  {
+    "name": "Amir Murillo",
+    "to": "Beşiktaş",
+    "db": "Besiktas JK",
+    "sources": [
+      "https://www.goal.com/fr/news/officiel-amir-murillo-quitte-l-om-et-file-en-turquie/blt1167a6081e81cebd",
+      "https://www.espn.com/soccer/player/news/_/id/216420"
+    ],
+    "window": "2026-01",
+    "checked": "2026-10-01",
+    "note": "Permanent from Marseille on 2026-02-06, the last days of the winter window, two and a half year contract plus one. Neither om.fr nor bjk.com.tr could be located without search, so Goal's report of both clubs' statements stands first. ESPN's player page lists him at Besiktas with 2026-27 Super Lig stats."
+  },
+  {
+    "name": "Afonso Moreira",
+    "to": "Bayer Leverkusen",
+    "db": "Bayer 04 Leverkusen",
+    "sources": [
+      "https://www.bayer04.de/en-us/player/werkself/bayer-04-leverkusen/afonso-moreira",
+      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-summer-2026-37051"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Permanent from Lyon on 2026-07-01, contract to June 2031 (the Eagle Football Group press release of 2026-06-18 is filed with the AMF). ESPN's Leverkusen 2026-27 squad page lists him."
+  },
+  {
+    "name": "Ainsley Maitland-Niles",
+    "to": "Everton",
+    "db": "Everton FC",
+    "sources": [
+      "https://www.abcbourse.com/marches/ainsley-maitland-niles-transfere-a-everton_701909",
+      "https://www.espn.com/soccer/team/squad/_/id/368/everton"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Permanent from Lyon to Everton on deadline day 2026-09-01 for 3.5m, contract to June 2029. The first source is Olympique Lyonnais' own press release of 2026-09-02 as carried by the newswire abcbourse. ESPN's Everton 2026-27 squad page lists him."
+  },
+  {
+    "name": "Martín Satriano",
+    "to": "Getafe",
+    "db": "Getafe CF",
+    "sources": [
+      "https://www.boursedirect.fr/fr/actualites/categorie/divers/eagle-football-group-l-ol-leve-l-option-d-achat-de-martin-satriano-avant-son-pret-a-getafe-boursier-8878e7888dd7d887024adc30878919b47984bcde",
+      "https://www.laliga.com/en-GB/clubs/getafe-cf/transfers"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Lyon bought him from Lens and loaned him to Getafe on 2026-01-18 (Lyon press release), Getafe exercised the option on 2026-03-30 and LALIGA registered the transfer from Lyon on 2026-08-12. The window is written as the summer registration to agree with the La Liga file. ESPN's Getafe 2026-27 squad page lists him."
+  },
+  {
+    "name": "Mads Bidstrup",
+    "to": "Lyon",
+    "db": "Olympique Lyon",
+    "sources": [
+      "https://www.abcbourse.com/marches/transfert-de-mads-bidstrup_699113",
+      "https://www.espn.com/soccer/team/squad/_/id/167/lyon"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Permanent from Red Bull Salzburg, Lyon press release of 2026-07-01 (carried by abcbourse), five year contract to June 2031. His 2026 row sits at Red Bull Salzburg. ESPN's Lyon 2026-27 squad page lists him."
+  },
+  {
+    "name": "Keito Nakamura",
+    "to": "Lyon",
+    "db": "Olympique Lyon",
+    "sources": [
+      "https://www.webdisclosure.com/press-release/japanese-international-keito-nakamura-signs-a-4-year-contract-with-ol-tpXnEmh0wmy",
+      "https://www.espn.com/soccer/team/squad/_/id/167/lyon"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Permanent from Reims, Lyon press release of 2026-09-02 (regulated newswire), four year contract to June 2030. His 2026 row sits at Stade Reims. ESPN's Lyon 2026-27 squad page lists him."
+  },
+  {
+    "name": "Zachary Athekame",
+    "to": "Lyon",
+    "db": "Olympique Lyon",
+    "loan": true,
+    "sources": [
+      "https://www.acmilan.com/en/news/articles/media/2026-08-14/official-statement-zachary-athekame",
+      "https://www.abcbourse.com/marches/zachary-athekame-prete-a-l-ol-jusqu-en-juin-2027_701323"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Loan from AC Milan without an option until 2027-06-30, announced by both clubs on 2026-08-14. His 2026 row sits at AC Milan. ESPN's Lyon 2026-27 squad page lists him."
+  },
+  {
+    "name": "Kaïl Boudache",
+    "to": "Lyon",
+    "db": "Olympique Lyon",
+    "sources": [
+      "https://ligue1.com/en/articles/l1_article_5731-meet-kail-boudache-lyon-s-next-bright-hope",
+      "https://www.espn.com/soccer/team/squad/_/id/167/lyon"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Left Nice for Lyon on a five year contract to 2031 when his Nice deal ran out (ligue1.com, the league's own site, 2026-08-25). ESPN's Lyon 2026-27 squad page lists him and ESPN's Nice page does not."
+  },
+  {
+    "name": "Hans Hateboer",
+    "to": "Groningen",
+    "db": "FC Groningen",
+    "sources": [
+      "https://eredivisie.nl/clubs/fc-groningen/spelers/hans-hateboer/",
+      "https://africa.espn.com/football/player/stats/_/id/193448/Hans-Hateboer"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "His 2026 row is the Lyon loan from Rennes, which ended 2026-06-30 along with his Rennes contract. He signed for Groningen as a free agent on 2026-09-15. The Eredivisie's own site lists him in the Groningen squad (number 33) and ESPN's player page shows him at FC Groningen with 2026-27 Eredivisie stats."
+  },
+  {
+    "name": "Kojo Peprah Oppong",
+    "to": "Fenerbahçe",
+    "db": "Fenerbahce",
+    "sources": [
+      "https://www.ogcnice.com/en/article/130742/oppong-signs-for-fenerbahce.html",
+      "https://www.espn.com/soccer/team/squad/_/id/436/fenerbahce"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Permanent from Nice, announced by Nice on 2026-08-28, four year contract. ESPN's Fenerbahce 2026-27 squad page lists him."
+  },
+  {
+    "name": "Gauthier Hein",
+    "to": "Nice",
+    "db": "OGC Nice",
+    "sources": [
+      "https://www.ogcnice.com/en/article/130640/gauthier-hein-is-a-rouge-et-noir-player.html",
+      "https://www.espn.com/soccer/team/squad/_/id/2502/nice"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Permanent from relegated Metz, announced by Nice on 2026-08-04, contract to June 2029. His 2026 row sits at FC Metz. ESPN's Nice 2026-27 squad page lists him (ESPN's Metz page has not been cleared of him)."
+  },
+  {
+    "name": "Kevin Carlos",
+    "to": "Cagliari",
+    "db": "Cagliari Calcio",
+    "loan": true,
+    "sources": [
+      "https://cagliaricalcio.com/en/?p=25949",
+      "https://www.espn.com/soccer/team/squad/_/id/2925/cagliari"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Loan from Nice with an option to buy, announced by Cagliari on 2026-08-10. ESPN's Cagliari 2026-27 squad page lists him."
+  },
+  {
+    "name": "Juma Bah",
+    "to": "Augsburg",
+    "db": "FC Augsburg",
+    "loan": true,
+    "sources": [
+      "https://www.fcaugsburg.de/en/article/fca-leiht-juma-bah-von-manchester-city-aus-23405",
+      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-summer-2026-37051"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "A Manchester City player whose 2026 row sits at his 2025-26 loan club Nice. Loaned to Augsburg with an option on 2026-09-01. ESPN's Augsburg 2026-27 squad page lists him."
+  },
+  {
+    "name": "Gideon Mensah",
+    "to": "Köln",
+    "db": "1.FC Köln",
+    "sources": [
+      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-summer-2026-37051",
+      "https://www.espn.com/soccer/team/squad/_/id/122/fc-cologne"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Permanent from Auxerre, 2026-07-11, on the league's summer transfer centre (Cologne in: Auxerre). ESPN's Cologne 2026-27 squad page lists him."
+  },
+  {
+    "name": "Junior Dina Ebimbe",
+    "to": "Schalke 04",
+    "db": "FC Schalke 04",
+    "sources": [
+      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-summer-2026-37051",
+      "https://www.espn.com/soccer/team/squad/_/id/133/schalke-04"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "An Eintracht Frankfurt player whose 2026 row sits at his 2025-26 loan club Brest. Sold to Schalke this summer (league transfer centre, Frankfurt out: Schalke). ESPN's Schalke 2026-27 squad page lists him."
+  },
+  {
+    "name": "Terem Moffi",
+    "to": "Hamburg",
+    "db": "Hamburger SV",
+    "sources": [
+      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-summer-2026-37051",
+      "https://www.espn.com/soccer/team/squad/_/id/127/hamburger-sv"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "A Nice player whose 2026 row sits at Porto, his January 2026 loan club. Sold by Nice to Hamburg on 2026-08-24 (league transfer centre, Hamburg in: Nice). ESPN's Hamburg 2026-27 squad page lists him."
+  },
+  {
+    "name": "Martin Adeline",
+    "to": "Hamburg",
+    "db": "Hamburger SV",
+    "sources": [
+      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-summer-2026-37051",
+      "https://www.espn.com/soccer/team/squad/_/id/127/hamburger-sv"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Permanent from promoted Troyes, 2026-07-13 (league transfer centre, Hamburg in: Troyes). ESPN's Hamburg 2026-27 squad page lists him."
+  },
+  {
+    "name": "Conrad Harder",
+    "to": "Strasbourg",
+    "db": "RC Strasbourg Alsace",
+    "loan": true,
+    "sources": [
+      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-summer-2026-37051",
+      "https://www.espn.com/soccer/team/squad/_/id/180/strasbourg"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Loan from RB Leipzig on deadline day 2026-09-01 (league transfer centre, Leipzig out: Strasbourg, loan). ESPN's Strasbourg 2026-27 squad page lists him."
+  },
+  {
+    "name": "Karim Coulibaly",
+    "to": "Strasbourg",
+    "db": "RC Strasbourg Alsace",
+    "sources": [
+      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-summer-2026-37051",
+      "https://www.espn.com/soccer/team/squad/_/id/180/strasbourg"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Permanent from Werder Bremen, 2026-08-21 (league transfer centre, Bremen out: Strasbourg). ESPN's Strasbourg 2026-27 squad page lists him."
+  },
+  {
+    "name": "Nathan Ngoumou",
+    "to": "Nice",
+    "db": "OGC Nice",
+    "sources": [
+      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-summer-2026-37051",
+      "https://www.espn.com/soccer/team/squad/_/id/2502/nice"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Permanent from Borussia Monchengladbach, 2026-08-17 (league transfer centre, Gladbach out: Nice). ESPN's Nice 2026-27 squad page lists him as Nathan N'Goumou."
+  },
+  {
+    "name": "Niels Nkounkou",
+    "to": "Nice",
+    "db": "OGC Nice",
+    "loan": true,
+    "sources": [
+      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-summer-2026-37051",
+      "https://www.espn.com/soccer/team/squad/_/id/2502/nice"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "An Eintracht Frankfurt player whose 2026 row sits at Torino, his 2025-26 loan club. Loaned to Nice on 2026-09-01 (league transfer centre, Frankfurt out: Nice, loan). ESPN's Nice 2026-27 squad page lists him."
+  },
+  {
+    "name": "Mohamed Amoura",
+    "to": "Nice",
+    "db": "OGC Nice",
+    "loan": true,
+    "sources": [
+      "https://www.bundesliga.com/en/2bundesliga/news/official-bundesliga-2-second-division-transfer-centre-summer-2026-37052",
+      "https://www.espn.com/soccer/team/squad/_/id/2502/nice"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Loan from relegated Wolfsburg on 2026-08-31 (the 2. Bundesliga transfer centre, Wolfsburg out: Nice, loan, spelt Mohammed Amoura there). ESPN's Nice 2026-27 squad page lists him."
+  },
+  {
+    "name": "Arouna Sangante",
+    "to": "Sevilla",
+    "db": "Sevilla FC",
+    "sources": [
+      "https://www.laliga.com/en-GB/clubs/sevilla-fc/transfers",
+      "https://www.espn.com/soccer/team/squad/_/id/243/sevilla"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Free from Le Havre, registered by LALIGA with Sevilla on 2026-08-13 (Havre Athletic Club, free). ESPN's Sevilla 2026-27 squad page lists him."
+  },
+  {
+    "name": "Félix Correia",
+    "to": "Sevilla",
+    "db": "Sevilla FC",
+    "loan": true,
+    "sources": [
+      "https://www.laliga.com/en-GB/clubs/sevilla-fc/transfers",
+      "https://www.espn.com/soccer/team/squad/_/id/243/sevilla"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Loan from Lille with an option, registered by LALIGA with Sevilla on 2026-09-01 (listed as Felix, from LOSC, loan). ESPN's Sevilla 2026-27 squad page lists him."
+  },
+  {
+    "name": "Boulaye Dia",
+    "to": "Rennes",
+    "db": "Stade Rennais FC",
+    "loan": true,
+    "sources": [
+      "https://www.sslazio.it/it/news/comunicati/boulaye-dia-ceduto-allo-stade-rennais",
+      "https://www.espn.com/soccer/team/squad/_/id/169/rennes"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Loan from Lazio with an obligation to buy on sporting conditions, announced by Lazio on 2026-09-01. His 2026 row sits at SS Lazio. ESPN's Rennes 2026-27 squad page lists him."
+  },
+  {
+    "name": "Amir Richardson",
+    "to": "Le Havre",
+    "db": "Le Havre AC",
+    "loan": true,
+    "sources": [
+      "https://www.acffiorentina.com/news/richardson-passa-al-le-havre-190726",
+      "https://www.espn.com/soccer/team/squad/_/id/3236/le-havre"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "A Fiorentina player whose 2026 row sits at FC Copenhagen, his January 2026 loan club. Loaned to Le Havre with an option, announced by Fiorentina on 2026-07-19. ESPN's Le Havre 2026-27 squad page lists him."
+  },
+  {
+    "name": "Willem Geubbels",
+    "to": "Lecce",
+    "db": "US Lecce",
+    "sources": [
+      "https://uslecce.it/geubbels-in-giallorosso/",
+      "https://www.espn.com/soccer/team/squad/_/id/113/lecce"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Permanent from Paris FC, announced by Lecce on 2026-08-02, contract to June 2030. ESPN's Lecce 2026-27 squad page lists him."
+  },
+  {
+    "name": "David Odogu",
+    "to": "Toulouse",
+    "db": "FC Toulouse",
+    "loan": true,
+    "sources": [
+      "https://www.acmilan.com/en/news/articles/media/2026-08-18/official-statement-david-odogu",
+      "https://www.espn.com/soccer/team/squad/_/id/179/toulouse"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Loan from AC Milan, announced by Milan on 2026-08-18. His 2026 row sits at AC Milan. ESPN's Toulouse 2026-27 squad page lists him."
+  },
+  {
+    "name": "Angel Gomes",
+    "to": "Marseille",
+    "db": "Olympique Marseille",
+    "sources": [
+      "https://www.wolves.co.uk/news/club/20260606-wolves-confirm-2026-retained-list/",
+      "https://www.espn.com/soccer/player/_/id/256773/angel-gomes"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "His 2026 row is the January 2026 loan at Wolves. Wolves' retained list of 2026-06-06 says the loan ended and he returned to Marseille, where he stayed. ESPN's player page lists him at Marseille with 2026-27 Ligue 1 stats, and ESPN's Marseille squad page lists him."
+  },
+  {
+    "name": "Filip Jørgensen",
+    "to": "Strasbourg",
+    "db": "RC Strasbourg Alsace",
+    "loan": true,
+    "sources": [
+      "https://www.chelseafc.com/en/news/article/chelsea-filip-jorgensen-completes-loan-switch",
+      "https://www.espn.com/soccer/team/squad/_/id/180/strasbourg"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Season long loan from Chelsea, announced by Chelsea (2026-08-11). ESPN's Strasbourg 2026-27 squad page lists him."
+  }
+]
