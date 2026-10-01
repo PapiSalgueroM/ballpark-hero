@@ -1,5 +1,21 @@
 # Project state
 
+## ACCEPTED 2026-10-01: CFB recruiting filters (818)
+
+CFB Dynasty now filters both recruiting pools by position and minimum stars,
+with counts, Reset and clear empty states. Portal stars are visible, names wrap
+and controls fit touch. Original signing, budgets, roster classes, coordinator
+controls and saves hold. Eight tests, two effective controls, independent review,
+the frozen production gates and two final App contexts pass. Filter actions keep
+scroll Y 180 and write no saves or RNG. Exact evidence is on WORKBOARD.
+
+818 awaits the next publish. 815-817 are confirmed live in Release M by its entry,
+deployment header and compiled Tennis/CBB feature strings. The earlier Release L
+crawl passed 170/170; M received a focused sample. Google indexing/AdSense account
+decisions remain unconfirmed. D92's targeting gap is closed in code; region,
+academics, interest and personality remain. Claude keeps 819/820 and all other
+reservations. No active Codex claim remains. Next free round: 821.
+
 ## LIVE 2026-10-01: Release M (700, the seoMeta split), main `efe1a8cd`
 
 Assembled by the desktop Claude lane in the gate clone (`release-m`) and shipped alone, because the round
