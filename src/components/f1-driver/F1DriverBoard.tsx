@@ -5,10 +5,8 @@ import { F1DriverSearch } from './F1DriverSearch';
 import { F1DriverHowToPlay } from './F1DriverHowToPlay';
 import ShareButtons from '@/components/game/ShareButtons';
 import { GameNav } from '@/components/game/GameNav';
-import { MAX_CLUES, type F1DriverState } from '@/types/f1Driver';
+import { MAX_CLUES, POINTS_BY_CLUE, type F1DriverState } from '@/types/f1Driver';
 import feedbackStyles from './F1DriverFeedback.module.css';
-
-const CLUE_LABELS = ['Vibe', 'Era & Nationality', 'Teams', 'Race Wins', 'Championships', 'Famous Moment'];
 
 export function F1DriverBoard() {
   const { gameState, startGame, makeGuess, giveUp, revealHint, resetGame, pointsForCurrentClue } = useF1Driver();
@@ -85,6 +83,7 @@ export function F1DriverBoard() {
   const isOver = gameStatus !== 'playing';
   const hasGuessed = guesses.length > 0;
   const canHint = revealedClues < MAX_CLUES;
+  const nextHintPoints = POINTS_BY_CLUE[revealedClues] ?? 0;
   const shownFeedback = feedback && feedback.turn === guesses.length && feedback.status === gameStatus ? feedback : null;
 
   const shareScore = gameStatus === 'won'
@@ -120,7 +119,7 @@ export function F1DriverBoard() {
               >
                 <div className="flex items-center gap-2 mb-1">
                   <span className={`text-xs font-semibold uppercase tracking-wider ${isRevealed ? 'text-red-400' : 'text-zinc-400'}`}>
-                    {CLUE_LABELS[i]}
+                    Clue {i + 1}
                   </span>
                   {!isRevealed && (
                     <span className="text-xs text-zinc-400">🔒</span>
@@ -158,7 +157,7 @@ export function F1DriverBoard() {
                   onClick={handleHint}
                   className="text-sm text-yellow-500/70 hover:text-yellow-400 transition-colors"
                 >
-                  💡 Hint (-100 pts)
+                  💡 Hint ({nextHintPoints} pts next)
                 </button>
               )}
               {hasGuessed && !showGiveUpConfirm && (
@@ -171,7 +170,7 @@ export function F1DriverBoard() {
               )}
             </div>
             {hintsUsed > 0 && (
-              <p className="text-center text-xs text-yellow-600">{hintsUsed} hint{hintsUsed > 1 ? 's' : ''} used (-{hintsUsed * 100} pts)</p>
+              <p className="text-center text-xs text-yellow-600">{hintsUsed} hint{hintsUsed > 1 ? 's' : ''} used</p>
             )}
 
             {/* Give Up confirmation */}
