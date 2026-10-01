@@ -14,7 +14,7 @@ import {
   teamOverall, simulateSeason, randomSeed, ratingTier, squadFillsAny,
   GAME_MODE_LABELS, GAME_MODE_BLURBS, HIDDEN_RATING_DISPLAY, isRatingHidden,
   getDailyDateET, makeDailyPicker, loadDailyAttempt, saveDailyAttempt,
-  msUntilNextDailyET, formatCountdown, DailyAttemptRecord,
+  msUntilNextDailyET, formatCountdown, DailyAttemptRecord, dailyUsesOldWheel,
 } from '@/lib/perfectSeason';
 import {
   NHL_SLOTS, NHL_GAMES, TeamEraIndexEntry,
@@ -24,6 +24,9 @@ import {
   PerfectSeasonTheme, getDailyTheme, applyTheme, buildVerificationLine, themesForSport,
 } from '@/lib/perfectSeasonThemes';
 import { recordCompletion, getCurrentPlayerName } from '@/lib/completions';
+import { perfectSeasonTagline } from '@/lib/perfectSeasonOdds';
+import { usePerfectSeasonBest } from '@/hooks/usePerfectSeasonBest';
+import { BestSoFar, SeasonOddsLines } from '@/components/perfect-season/SeasonOdds';
 
 const SPORT_KEY = 'nhl';
 
@@ -68,6 +71,9 @@ const PerfectSeasonNhl = () => {
   const [revealed, setRevealed] = useState(0);
   const [countdown, setCountdown] = useState('');
   const [dailyTheme, setDailyTheme] = useState<PerfectSeasonTheme | null>(null);
+  /* Round 820: the best record this browser has posted in this sport, kept
+     by the hook all four Perfect Season pages share. */
+  const { best, newBest, record: recordBest, reset: resetBest } = usePerfectSeasonBest(SPORT_KEY);
   const wheelTimer = useRef<ReturnType<typeof setInterval> | null>(null);
   const simTimer = useRef<ReturnType<typeof setInterval> | null>(null);
   const countdownTimer = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -118,7 +124,8 @@ const PerfectSeasonNhl = () => {
     if (phase !== 'boot') return;
     let alive = true;
     (async () => {
-      const idx = await fetchTeamEraIndex();
+      // Round 821: a daily dated before the switch deals from the old wheel.
+      const idx = await fetchTeamEraIndex({ oldWheel: mode === 'daily' && dailyUsesOldWheel(todayStr) });
       if (!alive) return;
       if (idx) {
         if (mode === 'daily') {
@@ -251,12 +258,15 @@ const PerfectSeasonNhl = () => {
     if (phase !== 'done' || !sim || completionSaved.current) return;
     completionSaved.current = true;
     recordCompletion('/perfect-season-nhl', sim.wins, getCurrentPlayerName());
-  }, [phase, sim]);
+    // Round 820: every finished run, in any mode, is weighed against the best.
+    recordBest({ wins: sim.wins, losses: sim.losses, overall: Math.round(overall), date: todayStr, mode });
+  }, [phase, sim, overall, mode, todayStr, recordBest]);
 
   const skipSim = () => setRevealed(NHL_GAMES);
 
   const restart = () => {
     completionSaved.current = false;
+    resetBest();
     setPicks(Object.fromEntries(NHL_SLOTS.map(s => [s.key, null])));
     setUsedNames(new Set());
     setSelected(null);
@@ -324,7 +334,7 @@ const PerfectSeasonNhl = () => {
             <span className="block mt-1 text-sm md:text-base font-semibold tracking-[0.2em] uppercase text-muted-foreground">NHL Perfect Season</span>
           </h1>
           <p className="text-muted-foreground text-sm md:text-base max-w-xl mx-auto">
-            Spin the wheel of hockey history, draft one player per stop, and chase the perfect season.
+            {perfectSeasonTagline(SPORT_KEY)}
           </p>
           {phase !== 'mode-select' && (
             <div className="mt-3 inline-flex items-center gap-1.5 text-xs px-3 py-1 rounded-full bg-secondary text-muted-foreground font-semibold uppercase tracking-wider">
@@ -343,6 +353,7 @@ const PerfectSeasonNhl = () => {
         </header>
 
         {phase === 'mode-select' && (
+          <>
           <div className="grid sm:grid-cols-3 gap-3 max-w-2xl mx-auto">
             {(['classic', 'hard', 'daily'] as GameMode[]).map(m => {
               const Icon = MODE_ICONS[m];
@@ -359,6 +370,8 @@ const PerfectSeasonNhl = () => {
               );
             })}
           </div>
+          <div className="max-w-2xl mx-auto text-center"><BestSoFar best={best} /></div>
+          </>
         )}
 
         {phase === 'daily-locked' && lockedAttempt && (
@@ -612,6 +625,10 @@ const PerfectSeasonNhl = () => {
                   {mode === 'daily' && `Daily · ${todayStr} · `}
                   Team overall {sim.overall} · drafted in {spins} spin{spins === 1 ? '' : 's'}
                 </p>
+                {/* Round 820: the odds of an unbeaten season for the lineup the sim
+                    just played (the raw overall, not the rounded one above), and
+                    the best record. Shared with the other three sports. */}
+                <SeasonOddsLines sport={SPORT_KEY} overall={overall} perfect={sim.perfect} best={best} newBest={newBest} />
                 {sim.perfect && (
                   <p className="text-sm text-correct font-semibold mb-2 inline-flex items-center gap-1.5">
                     <Trophy className="w-4 h-4" /> Share this. Nobody will believe you.
