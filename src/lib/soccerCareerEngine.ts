@@ -264,25 +264,19 @@ export interface WorldCupResult {
   bestPlayer: boolean;
 }
 
-/* ─── Ballon d'Or System ─── */
-export interface BallonDorNominee {
-  name: string;
+/* ─── Ballon d'Or System ───
+   Round 834: the night's shape is the shared one in careerAwardsNight.ts. A
+   nominee is a shared candidate plus what the soccer card shows. */
+export interface BallonDorNominee extends AwardsCandidate {
   nationality: string;
   club: string;
   position: string;
-  points: number;
   goals: number;
   trophies: string[];
-  isPlayer: boolean;
 }
 
-export interface BallonDorResult {
-  year: number;
-  nominees: BallonDorNominee[];
-  playerRank: number | null; // 1-10 if nominated, null if not
-  playerPoints: number;
-  playerNominated: boolean;
-}
+/** playerRank: 1-10 if nominated, 11-30 in the wider world ranking, else null. */
+export type BallonDorResult = AwardsNight<BallonDorNominee>;
 
 /* ─── UCL Knockout Result ─── */
 export interface UCLKnockoutMatch {
@@ -5202,21 +5196,10 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
     playerCup: season.domesticCup,
   });
 
-  // Ballon d'Or calculation
-  const bdorResult = calculateBallonDor(s, season, thisYear, world);
-  s.pendingBallonDor = bdorResult;
-  if (bdorResult.playerRank !== null) {
-    season.ballonDorRank = bdorResult.playerRank;
-    if (bdorResult.playerRank === 1) {
-      season.ballonDor = true;
-      s.awards = [...s.awards, { year: thisYear, name: "Ballon d'Or", emoji: "🏅" }];
-      s.marketValue = Math.round((s.marketValue + 15) * 10) / 10;
-      s.popularity = clamp(s.popularity + 20, 0, 100);
-    } else if (bdorResult.playerRank <= 3) {
-      s.popularity = clamp(s.popularity + 5, 0, 100);
-      s.bdorSnubFuel = true; // the snub storyline can fire next season
-    }
-  }
+  // Ballon d'Or calculation. Round 834: what the night writes on the save (the
+  // staged ceremony, the place on the season, the cabinet, the winner's and the
+  // podium's consequences) is the shared settle, bound by SOCCER_BALLON_DOR.
+  settleAwardsNight(SOCCER_BALLON_DOR, s, season, calculateBallonDor(s, season, thisYear, world));
 
   // International debut event
   if (s.intStats.debutYear === thisYear) {
@@ -6250,6 +6233,56 @@ export function simulateUCL(state: CareerState, season: SeasonRecord): UCLResult
   return { qualified: true, matches, result, playerGoals: totalPlayerGoals, isTopScorer };
 }
 
+/* ─── Round 834: the awards night, bound for Soccer ───
+   The night itself (shortlist, seating, ranking, wider ranking, what the save
+   keeps, the speeches' mechanics) is src/lib/careerAwardsNight.ts, shared with
+   every career that binds it. Everything below is soccer's: the meters the
+   night may move with soccer's own clamps and rounding, the award, the copy,
+   and (further down) the scoring and the speeches. */
+import {
+  runAwardsNight, settleAwardsNight, applySpeech,
+  type AwardsCandidate, type AwardsNight, type AwardsMeter, type AwardsNightSport, type SpeechOption,
+} from "./careerAwardsNight";
+
+type SoccerAwardsMeter = "popularity" | "morale" | "integrityBonus" | "rivalryIntensity" | "socialMediaFollowers" | "marketValue";
+
+const SOCCER_AWARDS_METERS: Record<SoccerAwardsMeter, AwardsMeter<CareerState>> = {
+  popularity: { label: "Popularity", add: (s, d) => { s.popularity = clamp(s.popularity + d, 0, 100); } },
+  morale: { label: "Morale", add: (s, d) => { s.morale = clamp(s.morale + d, 0, 100); } },
+  integrityBonus: { label: "Integrity", add: (s, d) => { s.integrityBonus += d; } },
+  rivalryIntensity: { label: "Rivalry", add: (s, d) => { s.rivalryIntensity = clamp((s.rivalryIntensity ?? 0) + d, 0, 100); } },
+  socialMediaFollowers: { label: "Followers", add: (s, d) => { s.socialMediaFollowers = Math.round((s.socialMediaFollowers + d) * 100) / 100; } },
+  marketValue: { label: "Market Value", add: (s, d) => { s.marketValue = Math.round((s.marketValue + d) * 10) / 10; } },
+};
+
+/* The field is the era's real stars (careerEras.ts) until 2032, which is the
+   one place on the site an awards night ranks real people, each with goals
+   the sim invents for that season. It predates the shared night and is the
+   owner's call; the shared module's contract keeps every other sport on
+   generated names, and scripts/simCareerAwardsNight.mjs fences this
+   declaration to this file. */
+export const SOCCER_BALLON_DOR: AwardsNightSport<CareerState, BallonDorNominee, SoccerAwardsMeter, SeasonRecord> = {
+  award: { id: "ballon_dor", name: "Ballon d'Or", emoji: "🏅", shortlistSize: 10, widerSize: 30, podiumSize: 3, rivals: "legacy-real-era-stars" },
+  meters: SOCCER_AWARDS_METERS,
+  winnerSteps: [{ meter: "marketValue", delta: 15 }, { meter: "popularity", delta: 20 }],
+  podiumSteps: [{ meter: "popularity", delta: 5 }],
+  stage: (s, night) => { s.pendingBallonDor = night; },
+  recordPlace: (season, place) => { season.ballonDorRank = place; },
+  recordWin: season => { season.ballonDor = true; },
+  addToCabinet: (s, entry) => { s.awards = [...s.awards, entry]; },
+  onPodium: s => { s.bdorSnubFuel = true; }, // the snub storyline can fire next season
+  say: (s, line) => { s.events = [...s.events, line]; },
+  copy: {
+    winnerTitle: "BALLON D'OR WINNER!",
+    title: year => `Ballon d'Or ${year}`,
+    winnerLine: "The best player in the world! Legacy +20, Market Value +€15M",
+    podiumLine: place => `You finished ${place === 2 ? "2nd" : "3rd"}! Legacy +5`,
+    shortlistLine: place => `You finished ${place}th, close but not enough this year`,
+    wider: { before: "Outside the top 10, but you ranked ", after: " in the world's Top 30" },
+    notNominated: "You were not nominated this year",
+  },
+};
+
 /* ─── Ballon d'Or Calculation ─── */
 
 interface RealContender {
@@ -6572,96 +6605,83 @@ function calculateBallonDor(state: CareerState, season: SeasonRecord, year: numb
   // goals are capped at 28 points, so a 45-goal trophyless season was not even
   // NOMINATED. That was the purest form of the snub the owner reported.
   const playerInTop10 = playerCanContend && (playerNominated || playerDominant || statMonster);
-  const npcSpotsNeeded = playerInTop10 ? 9 : 10;
-  const topNPCs = allNomineeData.slice(0, npcSpotsNeeded);
 
-  // Filler nominees (only needed if the era pool somehow ran short)
-  let fillerSeed = 0;
-  while (topNPCs.length < npcSpotsNeeded && fillerSeed < 20) {
-    const gen = generateContender(usedNames, year * 31 + fillerSeed++);
-    if (usedNames.has(gen.name)) continue;
-    usedNames.add(gen.name);
-    topNPCs.push({
-      name: gen.name, nationality: gen.nationality, position: gen.position,
-      club: gen.club, points: rand(30, 50), goals: rand(5, 15), trophies: [], isPlayer: false,
-    });
-  }
-
-  // Add player if nominated (or if the season was flat out dominant)
-  if (playerInTop10) {
-    topNPCs.push({
+  /* Round 834: the shortlist, the seating, the ranking after every rule and the
+     wider top 30 are the shared awards night's (careerAwardsNight.ts). What
+     stays here is everything soccer decides: who is scored and how, the filler
+     contenders, and the three Round 54 verdict rules, in the order they always
+     ran and drawing exactly what they always drew. */
+  return runAwardsNight<BallonDorNominee>(SOCCER_BALLON_DOR.award, year, {
+    field: allNomineeData,
+    // Add player if nominated (or if the season was flat out dominant)
+    player: playerInTop10 ? {
       name: state.playerName, nationality: state.nationality, position: state.position,
       club: state.currentClub, points: playerPoints, goals: season.goals, trophies: playerTrophies, isPlayer: true,
-    });
-  }
-
-  // Sort final list and take exactly 10
-  topNPCs.sort((a, b) => b.points - a.points);
-  const top10 = topNPCs.slice(0, 10);
-  let playerRankIdx = top10.findIndex(n => n.isPlayer);
-  let playerRank = playerRankIdx >= 0 ? playerRankIdx + 1 : null;
-
-  // Round 54: a dominant season is untouchable. If the raw numbers say the
-  // player owned the year, they lift the trophy, even if a filler nominee
-  // landed above them on a technicality.
-  if (playerDominant && playerRank !== 1) {
-    const playerEntry = top10.find(n => n.isPlayer);
-    if (playerEntry) {
-      playerEntry.points = top10.reduce((mx, n) => Math.max(mx, n.points), 0) + rand(3, 9);
-      top10.sort((a, b) => b.points - a.points);
-      playerRankIdx = top10.findIndex(n => n.isPlayer);
-      playerRank = playerRankIdx >= 0 ? playerRankIdx + 1 : null;
-    }
-  }
-
-  // STRICT WIN CONDITIONS: Player can only win (rank 1) if they meet elite criteria.
-  // Round 54 widened the paths so voters respect stats, not just trophies:
-  // 30+ goals, UCL+League double, World Cup, a domestic treble, or a 45+ goal
-  // involvement season alongside any major trophy all count as winning material.
-  if (playerRank === 1 && !playerDominant) {
-    const hasUCLAndLeague = season.championsLeague && season.leagueTitle;
-    const hasWorldCup = season.worldCup;
-    const has30PlusGoals = season.goals >= BDOR_WIN_MIN_GOALS;
-    const bigInvolvementPlusTrophy = gaTotal >= 45 && (season.leagueTitle || season.championsLeague);
-    const meetsWinCondition = has30PlusGoals || hasUCLAndLeague || hasWorldCup || trebleSeason || bigInvolvementPlusTrophy;
-    if (!meetsWinCondition) {
-      // Demote player to 2nd, they weren't dominant enough
-      const playerEntry = top10.find(n => n.isPlayer);
-      if (playerEntry && top10.length >= 2) {
-        // Swap with the top NPC
-        const topNPC = top10.find(n => !n.isPlayer);
-        if (topNPC) {
-          topNPC.points = Math.max(topNPC.points, playerEntry.points + rand(2, 6));
-          top10.sort((a, b) => b.points - a.points);
-          playerRankIdx = top10.findIndex(n => n.isPlayer);
-          playerRank = playerRankIdx >= 0 ? playerRankIdx + 1 : null;
-        }
+    } : null,
+    playerPoints,
+    // Filler nominees (only needed if the era pool somehow ran short)
+    fill: (shortlist, need) => {
+      let fillerSeed = 0;
+      while (shortlist.length < need && fillerSeed < 20) {
+        const gen = generateContender(usedNames, year * 31 + fillerSeed++);
+        if (usedNames.has(gen.name)) continue;
+        usedNames.add(gen.name);
+        shortlist.push({
+          name: gen.name, nationality: gen.nationality, position: gen.position,
+          club: gen.club, points: rand(30, 50), goals: rand(5, 15), trophies: [], isPlayer: false,
+        });
       }
-    }
-  }
-
-  // Round 54 PODIUM FLOOR: even in a year someone else legitimately owned, a
-  // monster individual season cannot be shoved down to 8th. 45+ goals, or 55+
-  // goal involvements, guarantees at least a podium finish.
-  if (statMonster && playerRank !== null && playerRank > 3) {
-    const playerEntry = top10.find(n => n.isPlayer);
-    if (playerEntry) {
-      const thirdBest = [...top10].sort((a, b) => b.points - a.points)[2];
-      playerEntry.points = (thirdBest ? thirdBest.points : playerEntry.points) + rand(1, 4);
-      top10.sort((a, b) => b.points - a.points);
-      playerRankIdx = top10.findIndex(n => n.isPlayer);
-      playerRank = playerRankIdx >= 0 ? playerRankIdx + 1 : null;
-    }
-  }
-
-  // Extended top-30 ranking: strong-but-not-nominated seasons still place in the world top 30
-  if (playerRank === null && playerCanContend && playerPoints >= 12) {
-    const better = allNomineeData.filter(n => !n.isPlayer && n.points > playerPoints).length;
-    const extendedRank = Math.max(11, better + 1);
-    if (extendedRank <= 30) playerRank = extendedRank;
-  }
-
-  return { year, nominees: top10, playerRank, playerPoints, playerNominated: playerInTop10 };
+    },
+    verdicts: [
+      // Round 54: a dominant season is untouchable. If the raw numbers say the
+      // player owned the year, they lift the trophy, even if a filler nominee
+      // landed above them on a technicality.
+      (top10, playerRank) => {
+        if (playerDominant && playerRank !== 1) {
+          const playerEntry = top10.find(n => n.isPlayer);
+          if (playerEntry) {
+            playerEntry.points = top10.reduce((mx, n) => Math.max(mx, n.points), 0) + rand(3, 9);
+          }
+        }
+      },
+      // STRICT WIN CONDITIONS: Player can only win (rank 1) if they meet elite criteria.
+      // Round 54 widened the paths so voters respect stats, not just trophies:
+      // 30+ goals, UCL+League double, World Cup, a domestic treble, or a 45+ goal
+      // involvement season alongside any major trophy all count as winning material.
+      (top10, playerRank) => {
+        if (playerRank === 1 && !playerDominant) {
+          const hasUCLAndLeague = season.championsLeague && season.leagueTitle;
+          const hasWorldCup = season.worldCup;
+          const has30PlusGoals = season.goals >= BDOR_WIN_MIN_GOALS;
+          const bigInvolvementPlusTrophy = gaTotal >= 45 && (season.leagueTitle || season.championsLeague);
+          const meetsWinCondition = has30PlusGoals || hasUCLAndLeague || hasWorldCup || trebleSeason || bigInvolvementPlusTrophy;
+          if (!meetsWinCondition) {
+            // Demote player to 2nd, they weren't dominant enough
+            const playerEntry = top10.find(n => n.isPlayer);
+            if (playerEntry && top10.length >= 2) {
+              // Swap with the top NPC
+              const topNPC = top10.find(n => !n.isPlayer);
+              if (topNPC) topNPC.points = Math.max(topNPC.points, playerEntry.points + rand(2, 6));
+            }
+          }
+        }
+      },
+      // Round 54 PODIUM FLOOR: even in a year someone else legitimately owned, a
+      // monster individual season cannot be shoved down to 8th. 45+ goals, or 55+
+      // goal involvements, guarantees at least a podium finish.
+      (top10, playerRank) => {
+        if (statMonster && playerRank !== null && playerRank > 3) {
+          const playerEntry = top10.find(n => n.isPlayer);
+          if (playerEntry) {
+            const thirdBest = [...top10].sort((a, b) => b.points - a.points)[2];
+            playerEntry.points = (thirdBest ? thirdBest.points : playerEntry.points) + rand(1, 4);
+          }
+        }
+      },
+    ],
+    // Extended top-30 ranking: strong-but-not-nominated seasons still place in the world top 30
+    widerEligible: playerCanContend && playerPoints >= 12,
+  });
 }
 
 /* ─── Flow helper: advance to next phase ─── */
@@ -6747,38 +6767,44 @@ export function dismissBallonDor(prev: CareerState, clubs: ClubData[]): CareerSt
    needs a child). Effects land on top of the automatic win bonuses. */
 export type BdorSpeechChoice = "thank_rival" | "family_on_stage" | "tears" | "greatest_ever";
 
+/* Round 834: the four speeches as shared speech options. The steps run in the
+   order the old switch ran them and greatest_ever still draws its one coin
+   after the morale step, so every later draw lands where it always did. */
+export const SOCCER_BDOR_SPEECHES: SpeechOption<CareerState, SoccerAwardsMeter, BdorSpeechChoice>[] = [
+  {
+    id: "thank_rival", emoji: "🎤", label: "Thank your rival by name: he made me this good", tone: "gold",
+    available: s => !!s.rival && !s.rival.retired,
+    effect: [{ meter: "popularity", delta: 12 }, { meter: "integrityBonus", delta: 5 }, { meter: "rivalryIntensity", delta: -20 }],
+    line: s => `🎤 On the biggest stage you thanked ${s.rival?.name ?? "your rival"} by name: "he made me this good." The room stood up. The feud will never be the same.`,
+  },
+  {
+    id: "family_on_stage", emoji: "👶", label: "Bring your kid on stage to hold the golden ball", tone: "gold",
+    available: s => s.family.children > 0,
+    effect: [{ meter: "popularity", delta: 15 }, { meter: "morale", delta: 10 }],
+    line: () => "👶 You carried your kid on stage and let them hold the golden ball. Every camera in the theatre wept.",
+  },
+  {
+    id: "tears", emoji: "😭", label: "Cry through the whole thing, thank your youth coach", tone: "gold",
+    effect: [{ meter: "popularity", delta: 10 }, { meter: "morale", delta: 8 }],
+    line: () => "😭 You cried from the first sentence to the last. The clip of you thanking your youth coach is everywhere.",
+  },
+  {
+    id: "greatest_ever", emoji: "🐐", label: "Declare yourself the greatest to ever do it", tone: "bold",
+    effect: [{ meter: "morale", delta: 5 }],
+    risk: {
+      chance: 0.35,
+      hit: [{ meter: "popularity", delta: -10 }, { meter: "rivalryIntensity", delta: 10 }],
+      miss: [{ meter: "popularity", delta: 8 }],
+    },
+    line: (_s, outcome) => outcome === "hit"
+      ? '🐐 "I am the greatest to ever do this." Half the room gasped, the pundits fed on it for weeks. Popularity -10, but you meant every word.'
+      : '🐐 "I am the greatest to ever do this." Delivered with such calm that people just... agreed. Popularity +8.',
+  },
+];
+
 export function applyBdorSpeech(prev: CareerState, choice: BdorSpeechChoice, clubs: ClubData[]): CareerState {
   const s = { ...prev };
-  const rivalName = s.rival?.name ?? "your rival";
-  switch (choice) {
-    case "thank_rival":
-      s.popularity = clamp(s.popularity + 12, 0, 100);
-      s.integrityBonus += 5;
-      s.rivalryIntensity = clamp((s.rivalryIntensity ?? 0) - 20, 0, 100);
-      s.events = [...s.events, `🎤 On the biggest stage you thanked ${rivalName} by name: "he made me this good." The room stood up. The feud will never be the same.`];
-      break;
-    case "family_on_stage":
-      s.popularity = clamp(s.popularity + 15, 0, 100);
-      s.morale = clamp(s.morale + 10, 0, 100);
-      s.events = [...s.events, "👶 You carried your kid on stage and let them hold the golden ball. Every camera in the theatre wept."];
-      break;
-    case "tears":
-      s.popularity = clamp(s.popularity + 10, 0, 100);
-      s.morale = clamp(s.morale + 8, 0, 100);
-      s.events = [...s.events, "😭 You cried from the first sentence to the last. The clip of you thanking your youth coach is everywhere."];
-      break;
-    case "greatest_ever":
-      s.morale = clamp(s.morale + 5, 0, 100);
-      if (Math.random() < 0.35) {
-        s.popularity = clamp(s.popularity - 10, 0, 100);
-        s.rivalryIntensity = clamp((s.rivalryIntensity ?? 0) + 10, 0, 100);
-        s.events = [...s.events, '🐐 "I am the greatest to ever do this." Half the room gasped, the pundits fed on it for weeks. Popularity -10, but you meant every word.'];
-      } else {
-        s.popularity = clamp(s.popularity + 8, 0, 100);
-        s.events = [...s.events, '🐐 "I am the greatest to ever do this." Delivered with such calm that people just... agreed. Popularity +8.'];
-      }
-      break;
-  }
+  applySpeech(SOCCER_BALLON_DOR, SOCCER_BDOR_SPEECHES, s, choice);
   s.pendingBallonDor = null;
   return advanceToNextPhase(s, clubs);
 }
@@ -6813,39 +6839,42 @@ export function dismissWorldCup(prev: CareerState, clubs: ClubData[]): CareerSta
    effects, and every path ends by clearing the pending result. */
 export type WorldCupSpeechChoice = "for_the_country" | "shirt_to_the_fans" | "call_out_doubters" | "quiet_lap";
 
+/* Round 834: the tournament winner's speech on the shared speech options. Both
+   tournament cards draw their buttons from this list, so the button words and
+   the effects can no longer drift apart in one copy and not the other. */
+export const SOCCER_WORLD_CUP_SPEECHES: SpeechOption<CareerState, SoccerAwardsMeter, WorldCupSpeechChoice>[] = [
+  {
+    id: "for_the_country", emoji: "🏆", label: "Dedicate it to every kid back home", tone: "gold",
+    effect: [{ meter: "popularity", delta: 18 }, { meter: "morale", delta: 12 }, { meter: "socialMediaFollowers", delta: 3 }],
+    line: s => `🏆 You dedicated it to every kid in ${s.nationality} playing on a broken pitch right now. A nation lost its mind.`,
+  },
+  {
+    id: "shirt_to_the_fans", emoji: "🎽", label: "Throw your shirt into the away end", tone: "gold",
+    effect: [{ meter: "popularity", delta: 14 }, { meter: "morale", delta: 8 }, { meter: "integrityBonus", delta: 6 }],
+    line: () => "🎽 You threw the match shirt into the away end and walked off in a training top. That photo is now a mural.",
+  },
+  {
+    id: "call_out_doubters", emoji: "📢", label: "Name the pundits who wrote you off", tone: "bold",
+    effect: [{ meter: "morale", delta: 15 }, { meter: "socialMediaFollowers", delta: 4 }],
+    risk: {
+      chance: 0.4,
+      hit: [{ meter: "popularity", delta: -8 }],
+      miss: [{ meter: "popularity", delta: 10 }],
+    },
+    line: (_s, outcome) => outcome === "hit"
+      ? '📢 "Where are they now?" Named three pundits live on air. Iconic, petty, and replayed for a decade. Popularity -8.'
+      : '📢 "Where are they now?" Named three pundits live on air and the whole country cheered. Popularity +10.',
+  },
+  {
+    id: "quiet_lap", emoji: "🚶", label: "Say nothing. Walk one slow lap with the trophy", tone: "quiet",
+    effect: [{ meter: "morale", delta: 10 }, { meter: "integrityBonus", delta: 10 }, { meter: "popularity", delta: 6 }],
+    line: () => "🚶 No speech. You walked one slow lap with the trophy, found your family in row 12, and said nothing at all.",
+  },
+];
+
 export function applyWorldCupSpeech(prev: CareerState, choice: WorldCupSpeechChoice, clubs: ClubData[]): CareerState {
   const s = { ...prev };
-  switch (choice) {
-    case "for_the_country":
-      s.popularity = clamp(s.popularity + 18, 0, 100);
-      s.morale = clamp(s.morale + 12, 0, 100);
-      s.socialMediaFollowers = Math.round((s.socialMediaFollowers + 3) * 100) / 100;
-      s.events = [...s.events, `🏆 You dedicated it to every kid in ${s.nationality} playing on a broken pitch right now. A nation lost its mind.`];
-      break;
-    case "shirt_to_the_fans":
-      s.popularity = clamp(s.popularity + 14, 0, 100);
-      s.morale = clamp(s.morale + 8, 0, 100);
-      s.integrityBonus += 6;
-      s.events = [...s.events, "🎽 You threw the match shirt into the away end and walked off in a training top. That photo is now a mural."];
-      break;
-    case "call_out_doubters":
-      s.morale = clamp(s.morale + 15, 0, 100);
-      s.socialMediaFollowers = Math.round((s.socialMediaFollowers + 4) * 100) / 100;
-      if (Math.random() < 0.4) {
-        s.popularity = clamp(s.popularity - 8, 0, 100);
-        s.events = [...s.events, '📢 "Where are they now?" Named three pundits live on air. Iconic, petty, and replayed for a decade. Popularity -8.'];
-      } else {
-        s.popularity = clamp(s.popularity + 10, 0, 100);
-        s.events = [...s.events, '📢 "Where are they now?" Named three pundits live on air and the whole country cheered. Popularity +10.'];
-      }
-      break;
-    case "quiet_lap":
-      s.morale = clamp(s.morale + 10, 0, 100);
-      s.integrityBonus += 10;
-      s.popularity = clamp(s.popularity + 6, 0, 100);
-      s.events = [...s.events, "🚶 No speech. You walked one slow lap with the trophy, found your family in row 12, and said nothing at all."];
-      break;
-  }
+  applySpeech(SOCCER_BALLON_DOR, SOCCER_WORLD_CUP_SPEECHES, s, choice);
   s.pendingWorldCup = null;
   s.pendingTournament = null;
   return advanceToNextPhase(s, clubs);
