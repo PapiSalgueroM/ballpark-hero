@@ -107,7 +107,9 @@ beforeEach(() => {
 });
 afterEach(() => { cleanup(); });
 
-describe('World Leaderboard: a failed board is never drawn as an empty one', () => {
+/* 30 seconds a case: each takes one to three seconds alone, and at five a busy
+   machine timed one out and the leftover page failed every case after it. */
+describe('World Leaderboard: a failed board is never drawn as an empty one', { timeout: 30_000 }, () => {
   it('1 a { data: null, error } board shows the failed panel and never the empty label', async () => {
     view();
     expect(boardCalls('today')).toHaveLength(1);
