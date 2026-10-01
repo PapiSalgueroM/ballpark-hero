@@ -1,4 +1,10 @@
 import { makeIdMinter, ensureLeagueEntityIds } from './entityIds';
+import {
+  buildRivalries, enableProgramLayer, openProgramOffseason, recordProgramRound, rivalOf, sosTable,
+  staffEdges, staffPayroll, strengthOfSchedule, windowFire, windowHire,
+  type Coordinator, type ProgramSport, type ProgramStaff, type RivalKind, type RivalryResult, type Rivalry,
+  type SlateGame, type StaffRole, type StaffWindow,
+} from './collegeProgram';
 /**
  * CBB Dynasty engine (2026-08-05). College basketball sibling of
  * cfbDynasty.ts. Real programs, fully fictional generated players (class
@@ -16,6 +22,15 @@ import { makeIdMinter, ensureLeagueEntityIds } from './entityIds';
  * College hoops flavor: elite freshmen are ONE-AND-DONE (88+ overall
  * declares after year one), the portal never sleeps, and a National Player
  * of the Year is crowned once per fictional career.
+ *
+ * Round 823: the program layer CFB Dynasty got in Round 728, bound here
+ * through src/lib/collegeProgram.ts rather than written again. Two assistants
+ * (offense and defense, generated people) each move their end of the floor
+ * by at most 3 rating points and are paid out of the program budget before
+ * NIL; the last round's league night is rivalry night; and the committee
+ * reads strength of schedule. A save from before it has none of the new
+ * fields and plays exactly as it did (scripts/simCbbStaff.mjs holds that to
+ * a digest), then picks the layer up when its offseason closes.
  */
 
 export type CbbPos = 'PG' | 'SG' | 'SF' | 'PF' | 'C';
@@ -84,6 +99,52 @@ export const CBB_ROUNDS = 10;
 export const CBB_GAMES_PER_ROUND = 2;
 export const DANCE_SIZE = 32;
 
+/** Round 823: the state each school is in, copied from src/data/colleges.ts
+ *  (one row per school, each with its IPEDS unit id) and held against it by
+ *  scripts/simCbbStaff.mjs, so rivalry night can pair in-state schools
+ *  without this engine pulling the whole college quiz table into its chunk.
+ *  Thirteen programs are not in that table (Virginia, NC State, Texas Tech,
+ *  UConn, Villanova, Creighton, Marquette, St. John's, Xavier, Butler,
+ *  Saint Mary's, Dayton and VCU), so they have no state here and are never
+ *  called an in-state game. */
+export const CBB_SCHOOL_STATES: Record<string, string> = {
+  DUKE: 'North Carolina', UNC: 'North Carolina', LOU: 'Kentucky', CUSE: 'New York',
+  UK: 'Kentucky', AUB: 'Alabama', FLA: 'Florida', BAMA: 'Alabama', TENN: 'Tennessee', ARK: 'Arkansas', 'A&M': 'Texas',
+  PUR: 'Indiana', MSU: 'Michigan', UCLA: 'California', ILL: 'Illinois', MICH: 'Michigan', IU: 'Indiana', WISC: 'Wisconsin',
+  KU: 'Kansas', HOU: 'Texas', BAY: 'Texas', ISU: 'Iowa', ZONA: 'Arizona', BYU: 'Utah',
+  ZAGA: 'Washington', SDSU: 'California', MEM: 'Tennessee',
+};
+
+/** Round 823: the last round's league night is rivalry night. */
+export const CBB_RIVALRY_ROUND = CBB_ROUNDS;
+/** A rivalry won by this many points or more swings the most. */
+export const CBB_RIVAL_FULL_MARGIN = 20;
+/** Points a game per point of assistant edge, his end against theirs. */
+export const CBB_POINTS_PER_EDGE = 1.5;
+/** How much the committee weighs strength of schedule: the same as the eye test. */
+export const CBB_SOS_WEIGHT = 0.8;
+
+let rivalryCache: Rivalry[] | null = null;
+/** Every school's rivalry night opponent. Built on first use rather than at
+ *  module scope, the house rule for anything computed from an import. */
+export function cbbRivalries(): Rivalry[] {
+  if (!rivalryCache) rivalryCache = buildRivalries(CBB_SCHOOLS, CBB_SCHOOL_STATES);
+  return rivalryCache;
+}
+export function cbbRivalOf(id: string): { rival: string; kind: RivalKind; state?: string } | null {
+  return rivalOf(cbbRivalries(), id);
+}
+
+/** Round 823: basketball's descriptor for the shared program glue. The chairs
+ *  are the two ends of the floor, so the notes call them that. */
+export const CBB_PROGRAM: ProgramSport = {
+  schools: CBB_SCHOOLS,
+  rivalFullMargin: CBB_RIVAL_FULL_MARGIN,
+  rivalOf: cbbRivalOf,
+  roleTitle: { OC: 'offensive assistant', DC: 'defensive assistant' },
+  chairName: { OC: 'offense', DC: 'defense' },
+};
+
 export interface CbbPlayer {
   id: string;
   name: string;
@@ -100,7 +161,21 @@ export interface CbbTeam {
   wins: number;
   losses: number;
   confChamp: boolean; // won the conference tournament
+  /* Round 823, all optional: a save from before it has none of them and
+     plays exactly as it did (scripts/simCbbStaff.mjs holds that to a digest). */
+  staff?: ProgramStaff;
+  /** Strength points carried out of rivalry night into March, reset each offseason. */
+  morale?: number;
+  /** Everyone this team has played in the regular season, the games in its record. */
+  opps?: string[];
 }
+
+/** Round 823: my rivalry night result, kept until the offseason spends its recruiting swing. */
+export type CbbRivalryResult = RivalryResult;
+/** Round 823: one line of my schedule. */
+export type CbbSlateGame = SlateGame;
+/** Round 823: the offseason hiring window, open for one season's offseason. */
+export type CbbStaffWindow = StaffWindow;
 
 export interface CbbState {
   season: number;
@@ -112,6 +187,12 @@ export interface CbbState {
   myTitles: number;
   seasonsPlayed: number;
   poyWinners: string[];
+  /** Round 823: present once the program layer (staff, rivalry night,
+   *  strength of schedule) is on. Absent means the pre-823 game, untouched. */
+  depth?: number;
+  lastRivalry?: CbbRivalryResult | null;
+  mySlate?: CbbSlateGame[];
+  staffWindow?: CbbStaffWindow | null;
 }
 
 /* Round 568: this counter used to live at module scope, which restarts on
@@ -144,7 +225,26 @@ function starsFor(prestige: number, rng: () => number): number {
   return roll > 91 ? 5 : roll > 68 ? 4 : roll > 32 ? 3 : 2;
 }
 
-export function initCbb(myTeam: string, rng: () => number = Math.random): CbbState {
+export function initCbb(myTeam: string, rng: () => number = Math.random, opts: { depth?: boolean } = {}): CbbState {
+  const st = initCbbLegacy(myTeam, rng);
+  /* Round 823: every draw the pre-823 start made is made first and in the
+     same order, so a legacy start is the same league it always was. */
+  if (opts.depth) cbbEnableDepth(st, rng);
+  return st;
+}
+
+/**
+ * Round 823: switch the program layer on. Every program gets an offensive and
+ * a defensive assistant at its own level, and the season log starts. A new
+ * dynasty does this at the start; a save from before Round 823 does it when
+ * its offseason closes, so the season it was in the middle of finishes
+ * exactly as it would have.
+ */
+export function cbbEnableDepth(st: CbbState, rng: () => number): void {
+  enableProgramLayer(st, CBB_PROGRAM, rng);
+}
+
+function initCbbLegacy(myTeam: string, rng: () => number): CbbState {
   const teams: Record<string, CbbTeam> = {};
   for (const s of CBB_SCHOOLS) {
     const players: CbbPlayer[] = ROSTER_SHAPE.map(pos => {
@@ -159,7 +259,8 @@ export function initCbb(myTeam: string, rng: () => number = Math.random): CbbSta
   return { season: 2026, teams, round: 1, myTeam, nil: cbbNilFor(CBB_SCHOOL_MAP.get(myTeam)!.prestige, 0), titles: [], myTitles: 0, seasonsPlayed: 0, poyWinners: [] };
 }
 
-export function cbbStrength(t: CbbTeam): number {
+/** The rotation on its own: the top five carry three quarters of it. */
+function cbbRotation(t: CbbTeam): number {
   const sorted = [...t.players].sort((a, b) => b.ovr - a.ovr);
   const five = sorted.slice(0, 5);
   const bench = sorted.slice(5, 8);
@@ -167,24 +268,68 @@ export function cbbStrength(t: CbbTeam): number {
   return avg(five, 60) * 0.75 + avg(bench, 60) * 0.25;
 }
 
+export function cbbStrength(t: CbbTeam): number {
+  /* Round 823: half of each assistant's edge (each end of the floor is half
+     the game) and the morale rivalry night carries into March. Both are
+     absent on a pre-823 save, which therefore rates exactly as it did. */
+  const staff = t.staff ? staffEdges(t.staff) : null;
+  const staffPart = staff ? (staff.off + staff.def) / 2 : 0;
+  return cbbRotation(t) + staffPart + (t.morale ?? 0);
+}
+
+/** Round 823: each end of the floor. Everybody plays both ends, so both start
+ *  from the rotation and each assistant moves his end by at most
+ *  STAFF_UNIT_EDGE_MAX; the team (before morale) is the two ends averaged. */
+export function cbbUnits(t: CbbTeam): { off: number; def: number; offEdge: number; defEdge: number } {
+  const base = cbbRotation(t);
+  const e = staffEdges(t.staff);
+  return { off: base + e.off, def: base + e.def, offEdge: e.off, defEdge: e.def };
+}
+
 export function cbbWinProb(a: CbbTeam, b: CbbTeam): number {
   const gap = cbbStrength(a) - cbbStrength(b);
   return 1 / (1 + Math.pow(10, -gap / 6.5)); // one bad night can still end a season
 }
 
-export interface CbbGame { home: string; away: string; hs: number; as: number; winner: string }
+export interface CbbGame { home: string; away: string; hs: number; as: number; winner: string; rivalry?: boolean }
 
 function hoopsScore(win: boolean, rng: () => number): number {
   return win ? 68 + Math.floor(rng() * 26) : 52 + Math.floor(rng() * 24);
+}
+
+/**
+ * Round 823: the score of a game whose winner is already decided, with the
+ * program layer on. Each side's points move by CBB_POINTS_PER_EDGE for every
+ * point its offensive assistant's edge beats the other side's defensive
+ * assistant's. When that leaves the loser level or ahead, the LOSER comes
+ * down to one possession behind (1 to 3 points), never the winner up: raising
+ * the winner looked equivalent in Round 728 and is not, because a better
+ * coach could then score fewer points in a game he won. Every game makes the
+ * same three draws whatever the scores, so a different assistant never
+ * reshuffles the rest of the season.
+ */
+function depthScores(home: CbbTeam, away: CbbTeam, homeWins: boolean, rng: () => number): [number, number] {
+  const h = staffEdges(home.staff);
+  const a = staffEdges(away.staff);
+  const hs = Math.max(0, Math.round(hoopsScore(homeWins, rng) + CBB_POINTS_PER_EDGE * (h.off - a.def)));
+  const as = Math.max(0, Math.round(hoopsScore(!homeWins, rng) + CBB_POINTS_PER_EDGE * (a.off - h.def)));
+  const finish = 1 + Math.floor(rng() * 3);
+  return homeWins ? [hs, Math.max(0, Math.min(as, hs - finish))] : [Math.max(0, Math.min(hs, as - finish)), as];
 }
 
 function playGame(aId: string, bId: string, st: CbbState, rng: () => number, record = true): CbbGame {
   const a = st.teams[aId], b = st.teams[bId];
   const p = cbbWinProb(a, b);
   const aWins = rng() < p;
-  let hs = hoopsScore(aWins, rng), as2 = hoopsScore(!aWins, rng);
-  if (aWins && hs <= as2) hs = as2 + 1 + Math.floor(rng() * 8);
-  if (!aWins && as2 <= hs) as2 = hs + 1 + Math.floor(rng() * 8);
+  let hs: number, as2: number;
+  if (st.depth) {
+    [hs, as2] = depthScores(a, b, aWins, rng);
+  } else {
+    /* The pre-823 shape, verbatim, draws and quirks included. */
+    hs = hoopsScore(aWins, rng); as2 = hoopsScore(!aWins, rng);
+    if (aWins && hs <= as2) hs = as2 + 1 + Math.floor(rng() * 8);
+    if (!aWins && as2 <= hs) as2 = hs + 1 + Math.floor(rng() * 8);
+  }
   const g: CbbGame = { home: aId, away: bId, hs, as: as2, winner: aWins ? aId : bId };
   if (record) {
     st.teams[g.winner].wins += 1;
@@ -193,15 +338,30 @@ function playGame(aId: string, bId: string, st: CbbState, rng: () => number, rec
   return g;
 }
 
-/** One round: every program plays two games, one in-conference, one cross. */
+/** One round: every program plays two games, one in-conference, one cross.
+ *  Round 823: with the program layer on, the last round's league night is
+ *  rivalry night instead. Every program plays its rival whatever league he is
+ *  in, home court alternating by season the way a series does, and nobody
+ *  draws his rival again in that round's cross-country game. */
 export function simCbbRound(st: CbbState, rng: () => number): { games: CbbGame[]; myGames: CbbGame[] } {
   const games: CbbGame[] = [];
+  const rivalryNight = !!st.depth && st.round === CBB_RIVALRY_ROUND;
   for (const inConf of [true, false]) {
     const paired = new Set<string>();
+    if (rivalryNight && inConf) {
+      for (const r of cbbRivalries()) {
+        if (!st.teams[r.a] || !st.teams[r.b]) continue;
+        paired.add(r.a); paired.add(r.b);
+        const g = st.season % 2 === 0 ? playGame(r.a, r.b, st, rng) : playGame(r.b, r.a, st, rng);
+        g.rivalry = true;
+        games.push(g);
+      }
+    }
     for (const s of CBB_SCHOOLS) {
       if (paired.has(s.id)) continue;
+      const avoid = rivalryNight ? cbbRivalOf(s.id)?.rival : undefined;
       const candidates = CBB_SCHOOLS.filter(o =>
-        o.id !== s.id && !paired.has(o.id) && (inConf ? o.conf === s.conf : o.conf !== s.conf));
+        o.id !== s.id && !paired.has(o.id) && o.id !== avoid && (inConf ? o.conf === s.conf : o.conf !== s.conf));
       const opp = candidates.length
         ? candidates[Math.floor(rng() * candidates.length)]
         : CBB_SCHOOLS.find(o => o.id !== s.id && !paired.has(o.id));
@@ -210,7 +370,21 @@ export function simCbbRound(st: CbbState, rng: () => number): { games: CbbGame[]
       games.push(playGame(s.id, opp.id, st, rng));
     }
   }
+  /* Round 823: the season log and the rivalry swing, the shared copy. */
+  if (st.depth) recordProgramRound(st, games, CBB_PROGRAM);
   return { games, myGames: games.filter(g => g.home === st.myTeam || g.away === st.myTeam) };
+}
+
+/** Round 823: a team's strength of schedule, the average strength of the
+ *  opponents it has actually played this regular season, or null before it
+ *  has played anyone. */
+export function cbbSos(st: CbbState, id: string): number | null {
+  return strengthOfSchedule(st.teams[id]?.opps, oid => cbbStrength(st.teams[oid]));
+}
+
+/** Every team's strength of schedule and where it ranks, hardest first. */
+export function cbbSosTable(st: CbbState): Map<string, { sos: number; rank: number }> {
+  return sosTable(st, cbbStrength);
 }
 
 /** Committee score: record first, but the eye test (strength) matters. */
@@ -218,8 +392,20 @@ function seedScore(t: CbbTeam): number {
   return t.wins * 1.6 + cbbStrength(t) * 0.8;
 }
 
+/** The committee's list, which seeds March and hands out its 26 at-large
+ *  bids. Round 823: with the program layer on it reads who you played too,
+ *  weighed the same as the eye test, so of two teams on the same record and
+ *  the same strength the tougher schedule goes first. Before anyone has
+ *  played, a team's own strength stands in for its schedule. */
 export function cbbRankings(st: CbbState): CbbTeam[] {
-  return Object.values(st.teams).sort((a, b) => seedScore(b) - seedScore(a));
+  if (!st.depth) return Object.values(st.teams).sort((a, b) => seedScore(b) - seedScore(a));
+  const str = new Map(Object.values(st.teams).map(t => [t.id, cbbStrength(t)]));
+  const score = new Map(Object.values(st.teams).map(t => {
+    const own = str.get(t.id)!;
+    const sos = strengthOfSchedule(t.opps, oid => str.get(oid) ?? 60) ?? own;
+    return [t.id, t.wins * 1.6 + own * 0.8 + sos * CBB_SOS_WEIGHT];
+  }));
+  return Object.values(st.teams).sort((a, b) => score.get(b.id)! - score.get(a.id)!);
 }
 
 export function cbbConfStandings(st: CbbState, conf: string): CbbTeam[] {
@@ -366,6 +552,34 @@ export function cbbSignRecruit(st: CbbState, r: CbbRecruit, cls: CbbClass, rng: 
   return true;
 }
 
+/**
+ * Round 823: the offseason opens, through the shared glue. The program budget
+ * is the old NIL formula (prestige plus last season's wins) plus whatever
+ * rivalry night swung it by; the coaching carousel turns; the two assistants
+ * are paid off the top; what is left is the NIL pot. A legacy save just gets
+ * the old budget, exactly what the board used to set. Runs once per
+ * offseason.
+ */
+export function cbbOpenOffseason(st: CbbState, rng: () => number): string[] {
+  const school = CBB_SCHOOL_MAP.get(st.myTeam)!;
+  return openProgramOffseason(st, rng, CBB_PROGRAM, cbbNilFor(school.prestige, st.teams[st.myTeam].wins));
+}
+
+/** Round 823: hire an assistant off the offseason market while its window is open. */
+export function cbbHireCoordinator(st: CbbState, candidateId: string): boolean {
+  return windowHire(st, candidateId);
+}
+
+/** Round 823: let an assistant go while the window is open. His salary goes back into the pot. */
+export function cbbFireCoordinator(st: CbbState, role: StaffRole): Coordinator | null {
+  return windowFire(st, role);
+}
+
+/** Round 823: what the two assistants cost this season. */
+export function cbbPayroll(st: CbbState): number {
+  return staffPayroll(st.teams[st.myTeam]?.staff);
+}
+
 /** Offseason: one-and-dones leave, seniors graduate, classes advance, AI reloads. */
 export function cbbOffseason(st: CbbState, rng: () => number): string[] {
   const notes: string[] = [];
@@ -415,7 +629,10 @@ export function cbbOffseason(st: CbbState, rng: () => number): string[] {
       });
     }
     t.wins = 0; t.losses = 0; t.confChamp = false;
+    /* Round 823: a new season's log, and rivalry night's morale is spent. */
+    if (st.depth) { t.opps = []; t.morale = 0; }
   }
+  if (st.depth) st.mySlate = [];
   st.season += 1;
   st.round = 1;
   return notes;
