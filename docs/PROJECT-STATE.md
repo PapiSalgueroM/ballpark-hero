@@ -1,5 +1,17 @@
 # Project state
 
+## ACCEPTED 2026-10-01: NBA Stat Line exposes every matching season
+
+801 adds truthful ten-season expansions, full names/44px focusable controls and
+safe search/Score/paging handoffs. The measured phone offscreen issue is corrected
+with a stable action station and local selected-list scrolling. Original targets,
+calculations, score, save, share and completion remain held. Ten outcomes/twelve unit
+controls/eight final-CSS contexts/eight browser controls, types/two builds/all15
+artifact fences/original helper checks and two actual App contexts pass. All188
+saved pages/all168 URL dates+hashes remain held. Full receipts are on WORKBOARD.
+802 captured production and803 final proof continue;805 is being scouted. Frozen413
+still runs on its older scope, so no complete-suite or publication claim. Next free805.
+
 ## ACCEPTED 2026-10-01: generated guide refresh after verified changes
 
 804 adds explicit --refresh for existing converted/frozen guides and updates only
