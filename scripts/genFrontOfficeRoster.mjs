@@ -621,6 +621,8 @@ export function buildDepth({ roster, stats, teamMeta, core, perGame = true }) {
   const people = [];
   const seen = new Set();
   const held = { reserve: 0, specialists: 0, duplicate: 0 };
+  /* every man on the club, starters included, who had no 2025 season to rate */
+  const noSeason = new Map(teamMeta.map(t => [t.abbr, new Set()]));
   for (const r of roster) {
     const bench = BENCH_STATUSES.includes(r.status);
     const practice = PRACTICE_STATUSES.includes(r.status);
@@ -628,6 +630,7 @@ export function buildDepth({ roster, stats, teamMeta, core, perGame = true }) {
       if (ROSTER_STATUSES.includes(r.status)) {
         const p = personFrom(r, statsById, abbrs, perGame);
         if (p && !coreKeys.has(p.key)) held.reserve += 1;
+        if (p && coreKeys.has(p.key) && !p.played) noSeason.get(p.team).add(p.name);
       }
       continue;
     }
@@ -636,17 +639,35 @@ export function buildDepth({ roster, stats, teamMeta, core, perGame = true }) {
       if (['K', 'P', 'LS'].includes(String(r.position || '').toUpperCase())) held.specialists += 1;
       continue;
     }
+    if (!p.played) noSeason.get(p.team).add(p.name);
     if (coreKeys.has(p.key)) continue;
     if (seen.has(p.key)) { held.duplicate += 1; continue; }
     seen.add(p.key);
     people.push({ ...p, tier: bench ? 'bench' : 'practice' });
   }
   buildDepth.lastHeld = held;
-  const byTeam = new Map(teamMeta.map(t => [t.abbr, { abbr: t.abbr, bench: [], practice: [] }]));
+  const byTeam = new Map(teamMeta.map(t => [t.abbr, { abbr: t.abbr, bench: [], practice: [], noSeason: [] }]));
+  for (const [abbr, names] of noSeason) byTeam.get(abbr).noSeason = [...names].sort((a, b) => a.localeCompare(b));
   for (const g of Object.keys(SLOTS)) {
-    const chosen = people.filter(p => p.group === g);
     const scale = g === 'OL' ? DEPTH_SCALE.OL : DEFENSIVE.has(g) ? DEPTH_SCALE.def : DEPTH_SCALE.skill;
-    const rated = rateCohort(chosen, g, scale);
+    /* TWO COHORTS ON ONE BAND, and this is the one place the depth rule
+       departs from the starters'. Among the starters a man with no 2025
+       season sits under every man who had one (unproven is not proven). On a
+       band five points wide that split leaves the men without a season one
+       value, the floor, and those men are not only rookies: Nick Bosa missed
+       2025 hurt and is a backup here only because the two linemen who played
+       took the two starting slots. Rated with the split he would read 61,
+       the worst number the file can print, which is a false thing to say
+       about a real player. So the men with a season are ranked on what they
+       did, the men without one on where they were drafted and how long they
+       have been in the league, and each cohort is spread across the band.
+       The rows without a season are listed in noSeason and the board says
+       so beside the rating. */
+    const chosen = people.filter(p => p.group === g);
+    const rated = new Map([
+      ...rateCohort(chosen.filter(p => g === 'OL' || p.played), g, scale),
+      ...rateCohort(chosen.filter(p => g !== 'OL' && !p.played), g, scale),
+    ]);
     const rows = chosen.map(p => ({ ...p, ovr: rated.get(p.key) ?? scale[0] }));
     for (const t of teamMeta) {
       const mine = rows.filter(p => p.team === t.abbr).sort((a, b) => b.ovr - a.ovr || a.name.localeCompare(b.name));
@@ -686,6 +707,8 @@ export function renderDepthFile(depth, sources) {
   lines.push(`// position and mapped onto a band under the starters: ${DEPTH_SCALE.skill.join(' to ')} for skill players`);
   lines.push(`// and defenders, ${DEPTH_SCALE.OL.join(' to ')} for linemen. A backup's numbers measure his snaps`);
   lines.push('// as much as his ability, so he is ranked against backups, never starters.');
+  lines.push(`// Men with a ${STATS_SEASON} season and men without one (rookies, men hurt all year) are`);
+  lines.push('// ranked apart, each across the whole band; noSeason names the second kind.');
   lines.push('// Contracts, salaries and roster moves inside the game are fictional. The');
   lines.push('// practice squad does not count against the game\'s cap.');
   lines.push('// Membership second source: scripts/data/nflRosterSecondSource.json.');
@@ -697,6 +720,9 @@ export function renderDepthFile(depth, sources) {
   lines.push('  bench: FoPlayer[];');
   lines.push('  /** The practice squad. Real men, off the active roster. */');
   lines.push('  practice: FoPlayer[];');
+  lines.push(`  /** Every man on the club, starters included, with fewer than ${MIN_GAMES} games in ${STATS_SEASON}:`);
+  lines.push('      rated on draft position and service alone, and the board says so. */');
+  lines.push('  noSeason: string[];');
   lines.push('}');
   lines.push('');
   /* the starters file's own row shape, so every harness that harvests real
@@ -713,6 +739,7 @@ export function renderDepthFile(depth, sources) {
     lines.push('    practice: [');
     for (const p of t.practice) lines.push(`      ${row(p)},`);
     lines.push('    ],');
+    lines.push(`    noSeason: [${t.noSeason.map(q).join(', ')}],`);
     lines.push('  },');
   }
   lines.push('};');
