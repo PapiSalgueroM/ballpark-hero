@@ -122,6 +122,9 @@ export function useDeadlineDay() {
     }
   }, [today, daily.club]);
 
+  /* The in memory copies (dailySaved, freeSaved) move with the store. They
+     were only read on mount, so Menu then reopening the daily started the
+     window from nothing and the next move overwrote the stored actions. */
   const persist = useCallback((r: DeadlineRun) => {
     if (r.setup.daily) {
       const s = summaryOf(r);
@@ -132,12 +135,14 @@ export function useDeadlineDay() {
         ...(s ? { letter: s.letter, score: s.score, filled: s.filled, needs: s.needs } : {}),
       });
       if (s) setDailyDone(s);
+      setDailySaved(s || !r.actions.length ? null : r.actions);
     } else {
       try {
         localStorage.setItem(FREE_KEY, JSON.stringify({ v: 1, club: r.setup.club, seed: r.setup.seed, actions: r.actions, done: !!r.grade }));
       } catch {
         /* storage full or blocked: the window still plays, it just will not survive a refresh */
       }
+      setFreeSaved(r.grade ? null : { setup: r.setup, actions: r.actions });
     }
   }, []);
 
