@@ -242,6 +242,34 @@ describe('World Leaderboard: a failed board is never drawn as an empty one', { t
     expect(boardCalls('alltime')).toHaveLength(1);
   });
 
+  it('8 a failed rank call is not "No points": the card says it did not load, and Try again asks once more', async () => {
+    view();
+    await answer([
+      [boardCalls('today')[0], rows('Ana', 'Ben')],
+      [boardCalls('alltime')[0], rows('Ana')],
+      [rankCalls('today')[0], timeout],
+      [rankCalls('alltime')[0], mine],
+    ]);
+    expect(screen.getByText('Ana')).toBeInTheDocument();
+    expect(screen.getByText('Your world rank did not load this time')).toBeInTheDocument();
+    expect(screen.queryByText('No points today')).toBeNull();
+    expect(screen.queryByText(FAILED)).toBeNull();
+
+    act(() => { fireEvent.click(screen.getByRole('button', { name: 'Try again' })); });
+    await settle();
+    expect(boardCalls('today')).toHaveLength(2);
+    expect(rankCalls('today')).toHaveLength(2);
+    await answer([[boardCalls('today')[1], rows('Ana', 'Ben')], [rankCalls('today')[1], mine]]);
+    expect(screen.getByText('#4')).toBeInTheDocument();
+    expect(screen.queryByText('Your world rank did not load this time')).toBeNull();
+
+    /* The all time card loaded on mount and still does. */
+    tab('All-Time');
+    await settle();
+    expect(screen.getByText('#4')).toBeInTheDocument();
+    expect(rankCalls('alltime')).toHaveLength(1);
+  });
+
   it('7 a lazy window that fails says so and Try again asks once more', async () => {
     view();
     tab('30 Days');

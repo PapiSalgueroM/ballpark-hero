@@ -95,7 +95,8 @@ const EAGER_PERIODS: Period[] = ['today', 'alltime'];
    scores in the last 7 days. Be the first!" during the fetch and again after a
    500, which is two different lies with the same words. */
 type Board = BoardRow[] | undefined;
-type Rank = MyRank | null | undefined;
+/* 'failed' is the rank call failing, which is not the same as no points: see mapMine. */
+type Rank = MyRank | null | 'failed' | undefined;
 
 const blank = <T,>(v: T): Record<Period, T> => ({ today: v, week: v, month: v, alltime: v });
 
@@ -120,8 +121,13 @@ const mapBoard = (res: any): BoardRow[] =>
    board response counts as loaded only when it carries no error and an array. */
 const boardFailed = (res: any): boolean => !!res?.error || !Array.isArray(res?.data);
 
-const mapMine = (res: any): MyRank | null => {
-  const row = Array.isArray(res?.data) ? res.data[0] : null;
+/* Round 839 review: the rank call resolves on an error too, and its card drew a
+   failed answer as "No points in the last 30 days", the same lie the board told.
+   global_rank for 30 Days measured up to 1.96 s against the 3 second anonymous
+   timeout, so this is not hypothetical. */
+const mapMine = (res: any): MyRank | null | 'failed' => {
+  if (res?.error || !Array.isArray(res?.data)) return 'failed';
+  const row = res.data[0];
   if (!row) return null;
   return {
     rank: Number(row.rank),
@@ -289,10 +295,18 @@ export default function Leaderboard() {
      was written when there were two tabs and never extended. On 7 Days it told
      4,555 of the 5,501 scoring players on this site that they had no points,
      while their all time total sat behind the next tab along. */
-  const MyRankCard = ({ mine, period }: { mine: MyRank | null; period: Period }) => (
+  const MyRankCard = ({ mine, period }: { mine: MyRank | null | 'failed'; period: Period }) => (
     <div className="mb-4 rounded-xl border border-gold/50 bg-surface-1 px-4 py-3 flex items-center gap-3">
       <Globe className="w-5 h-5 text-gold shrink-0" />
-      {mine ? (
+      {mine === 'failed' ? (
+        <>
+          <div className="flex-1 min-w-0">
+            <p className="font-semibold">Your world rank did not load this time</p>
+            <p className="text-xs text-muted-foreground">The board below is fine, it is just your own spot.</p>
+          </div>
+          <Button size="sm" variant="outline" onClick={() => retry(period)}>Try again</Button>
+        </>
+      ) : mine ? (
         <div className="flex-1 min-w-0">
           <p className="font-semibold">
             Your world rank: <span className="text-gold">#{mine.rank.toLocaleString()}</span>
