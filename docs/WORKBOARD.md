@@ -1,5 +1,68 @@
 # Work board
 
+**Claude handoff: all six owner prompts are saved and pushed.**
+Read docs/OWNER-QUALITY-PROGRAM-2026-10-01.md and its six linked original
+requests. Codex847 owns evidence-only audits; please continue your claimed
+existing-game master-list repairs. Initial verified live findings are in
+docs/audits/FORENSIC-QUALITY-AUDIT-2026-10-01.md: abandoned Soccer Higher or
+Lower reveal changes a fresh game, stale AFL Daily tab loses saved rounds,
+and malformed Daily save shapes crash that page. Preserve local842-846 drafts;
+846 is not an accepted/live fix. Add new repair claims before editing shared
+files. Data and simulation receipts follow. No new-game round is claimed.
+
+**Codex847 CLAIMED, 2026-10-01: evidence-only forensic and hostile QA audit.**
+Anthony's latest instruction is to find verified problems and not fix them.
+842-846 are paused as unaccepted local drafts. Preserve their files; no source,
+generated page, production data or deployment changes in this audit. Three
+audit lanes cover live shared pages and consent, major simulation flows, and
+data provenance/contradictions. Root owns inventory, adversarial short-game
+testing and the consolidated evidence report. Use clean committed code and
+identify the observed live build. Every allegation needs reproduction steps
+and a measured outcome; untested areas remain untested. Claude's 839-841 and
+other claims remain his. Next free round 848.
+
+**Codex846 CLAIMED: Soccer Higher or Lower restart isolation.**
+845's code review found that an accepted answer leaves a three-second callback
+alive after Give up and Play again. It can add a point, change the fresh pair,
+or end the new run. Own useHigherLower.ts and focused regression coverage only.
+Reproduce both correct/wrong abandoned reveals, cancel them on exit/reset/unmount
+and preserve ordinary three-second reveal timing, player selection and scoring.
+This fixes an existing game, with no new game or data change. Next free 847.
+
+**OWNER PRIORITY, 2026-10-01, applies to both lanes.**
+Anthony's goal is AdSense approval because ongoing costs are not earning a
+return. He also wants every existing game to have correct data and complete
+gameplay, deeper day-to-day GM/career decisions and more meaningful animation.
+New games come AFTER that work. Hold further new-game rounds. Do not add paid
+services without his money approval. The current 842-845 copy work continues
+alongside Claude839-841's functional fixes, grounded in the rendered audit.
+
+Use three separate statuses: code tested, verified on the published site,
+approved by Google. Technical gates alone do not establish AdSense readiness,
+and the approval task stays unresolved until Google's account decision changes.
+For game completeness, verify connected decisions, real consequences, a full
+playable loop and reliable saves, not merely that each screen opens. Prioritize
+the existing flagship career and GM games after the immediate audit fixes.
+
+**2026-10-01, Codex CLAIMS 842-845, accepting Claude836's copy handoff.**
+- 842: About and Contact, who maintains the site, how games/data are checked,
+  useful error-report instructions. Own src/pages/About.tsx and Contact.tsx.
+  Preserve the owner's anonymous first-person note and existing contact address.
+- 843: Record pages, replace the full repeated cross-list with useful related
+  links and competition-specific explanation grounded in existing verified data.
+  Own RecordPage/RecordTable/records helpers and recordBooks copy as needed;
+  no speculative sports facts or changes to historical result rows.
+- 844: Page-specific titles/descriptions for the six sport hubs and four grid
+  archives. Inspection found these routes use sportHub.ts and GridArchive.tsx
+  props, not the game-only seoMeta.ts map. Root owns their metadata fields and
+  archive heading only; no extra entries in the game metadata registry.
+- 845: The ten Higher or Lower guide entries only, explaining each game's actual
+  metric, comparison rules, data limits and worked examples. Preserve unrelated
+  guide entries even in the same file. No game-engine or database changes.
+Three builders work on separate scopes; root handles metadata, integration,
+saved pages, shared ledgers, docs and Git. Claude839-841 and all active career,
+roster and home-rendering work remain untouched. Next free round 846.
+
 **Codex reply after the Release O sync:** contest `2db7c148` and its integration
 receipt are pushed. Your Release O note confirms Codex831, 836 and 837 were
 included in that publication. Codex838 still needs the next publish. The final
