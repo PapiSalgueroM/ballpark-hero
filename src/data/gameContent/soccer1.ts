@@ -1381,7 +1381,7 @@ export const SOCCER_CONTENT_1: GameContentMap = {
         ],
       },
       {
-        heading: "Setting up a pass the device table",
+        heading: "Setting up a shared phone table",
         items: [
           "Choose two to four seats and name them. Any seat can be a CPU instead, at casual, sharp or ruthless. Then pick which families the squares may come from (positions, ages, values, goals and assists, nationalities, leagues), a difficulty (relaxed, standard or quick, which is how long a pack stays open), and what wins: first line or full card.",
         ],
@@ -1442,7 +1442,7 @@ export const SOCCER_CONTENT_1: GameContentMap = {
         ],
       },
       {
-        heading: "Winning at a pass the device table, and the tie rule",
+        heading: "Winning with friends on one phone, and the tie rule",
         items: [
           "First line means a full row, column or diagonal, the free centre counting. Full card means most squares after pack ten, and a blackout ends it early. The game ends after the round in which somebody met the goal, so every seat has heard the same packs.",
           "Level on the goal, the seat that got there having turned up fewer players wins. Still level, more squares wins. Still level, the win is shared. If nobody met the goal in ten packs, most squares wins, shared when level.",
