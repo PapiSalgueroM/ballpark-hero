@@ -48,6 +48,7 @@ import { ConfettiBurst, CelebrationStyles, revealDelay } from '@/components/club
 import { foHubTiles, type FoPanelKey } from '@/lib/foHub';
 import { FoHubTiles, FoPanelHeader } from '@/components/front-office-shared/FoHubTiles';
 import contributorsStyles from './NhlContributors.module.css';
+import { isFrontOfficeSave } from '@/lib/frontOfficeSave';
 
 /* Round 180: 'fired' is new. Zero trust upstairs ends the save. */
 type Phase = 'pick' | 'hub' | 'draft' | 'recap' | 'fired';
@@ -159,6 +160,7 @@ function ContributorPicker({ team, onApply, onAuto, onBack }: {
 
 export default function NhlFrontOfficeBoard() {
   const [phase, setPhase] = useState<Phase>('pick');
+  const [saveError, setSaveError] = useState(false);
   /* Round 204: the hub is tiles now, so null means the hub itself and a
      tab key means you have opened that box. Club Manager's Round 74 rule,
      brought to the four GM games. */
@@ -219,8 +221,9 @@ export default function NhlFrontOfficeBoard() {
     try {
       const raw = localStorage.getItem(SAVE_KEY);
       if (!raw) return;
-      const s = JSON.parse(raw) as SaveShape;
-      if (!s.league || !s.myTeam) return;
+      const parsed: unknown = JSON.parse(raw);
+      if (!isFrontOfficeSave(parsed, 'NHL', NHL_FO_ROUNDS)) { setSaveError(true); return; }
+      const s = parsed as SaveShape;
       /* Round 568: FIRST, above every setState below, because everything
          past this line reads the league by id and a save written before the
          id fix can hold two men under one. The draft class is passed too: it
@@ -251,7 +254,7 @@ export default function NhlFrontOfficeBoard() {
       else if (s.phase !== 'recap') setPhase(s.phase);
       else if (s.postseason) setPhase('recap');
       else openDraft(s.league, s.myTeam, s);
-    } catch { /* fresh */ }
+    } catch { setSaveError(true); }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -272,6 +275,7 @@ export default function NhlFrontOfficeBoard() {
   };
 
   const start = (abbr: string) => {
+    setSaveError(false);
     const lg = initNhlLeague();
     const m = mandateFor(lg, abbr, false);
     setLeague(lg); setMyTeam(abbr); setPhase('hub'); setTab(null);
@@ -579,6 +583,12 @@ export default function NhlFrontOfficeBoard() {
   if (phase === 'pick' || !league || !my) {
     return (
       <div className="space-y-4">
+        {saveError && (
+          <div role="alert" className="rounded-xl border border-destructive/40 bg-card p-4 text-sm">
+            <p>We couldn&apos;t open this save. Pick a team to start a new franchise. Your old save stays here until you pick a team or delete it.</p>
+            <button onClick={() => { localStorage.removeItem(SAVE_KEY); setSaveError(false); }} className="mt-3 rounded-lg border border-border px-3 py-2 font-semibold hover:border-primary">Delete unusable save</button>
+          </div>
+        )}
         <div className="rounded-2xl border border-border bg-card p-4 text-center">
           <p className="font-display text-lg font-bold text-foreground">Take over an NHL front office</p>
           <p className="mt-1 text-xs text-muted-foreground">

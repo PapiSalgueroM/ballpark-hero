@@ -1,5 +1,15 @@
 # Project state
 
+## Codex854 accepted repair, 2026-10-01
+
+NFL/NHL malformed saves recover to a usable picker with raw bytes preserved
+until explicit delete/new team; other game saves remain intact.36 focused
+component checks and two guard-removal controls pass expected outcomes. Native
+four320/1440 contexts and12 corrupt shapes pass. Both320 franchises finish a
+whole season, refresh recap/draft and reload2027 after all earned picks.
+Clean type/build, all15 built-site fences and the new harness runner pass.
+Soccer malformed-save recovery remains open. Ready for Claude publication.
+
 ## Codex853 accepted repair, 2026-10-01
 
 Account dialogs restore their actual opener focus and signup accurately says
