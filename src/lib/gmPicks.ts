@@ -170,10 +170,15 @@ function legacyMarkers(raw: unknown, rules: GmPickRules): { rounds: number[]; ig
    is invented: a pick no club holds in the old save is not recreated.
 
    The old engines dealt only a few rounds (three in the NFL sim, two in the
-   others). Rounds past the deepest marker in the save, and every round of
-   every later year, start with their own clubs. */
+   others). Rounds past those, and every round of every later year, start
+   with their own clubs. Pass `dealtRounds`, the number the engine dealt:
+   since Round 904 the NFL sim spends a marker for each pick made on draft
+   night, so a save written mid draft can hold no marker at all for a round
+   that was dealt and used, and only the engine knows it was dealt. Without
+   it the deepest marker in the save stands in, which is exact for any save
+   written outside the draft. */
 export function migrateLegacyPicks(
-  teams: Record<string, LegacyPickTeam>, season: number, rules: GmPickRules,
+  teams: Record<string, LegacyPickTeam>, season: number, rules: GmPickRules, dealtRounds?: number,
 ): MigrationResult {
   const ids = Object.keys(teams).sort();
   const held: Record<string, number[]> = {};
@@ -185,6 +190,7 @@ export function migrateLegacyPicks(
     ignored += m.ignored;
     for (const r of m.rounds) if (r > deepest) deepest = r;
   }
+  if (dealtRounds !== undefined) deepest = Math.min(rules.rounds, Math.max(deepest, dealtRounds));
   const picks: GmPick[] = [];
   let markers = 0;
   let unknownOrig = 0;

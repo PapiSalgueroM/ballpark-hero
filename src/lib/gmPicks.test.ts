@@ -77,6 +77,16 @@ describe('migration from the old number[]', () => {
     expect(m.ignored).toBe(2);
     expect(m.ledger.picks.filter(p => p.year === 2026 && p.round === 1).length).toBe(1);
   });
+  it('a save written mid draft, every dealt marker spent, does not get its picks back', () => {
+    const spent = { A: { picks: [] as number[] }, B: { picks: [3] } };
+    const told = migrateLegacyPicks(spent, 2026, NFL_PICK_RULES, 3);
+    expect(told.ledger.picks.filter(p => p.year === 2026 && p.round <= 3).length).toBe(1);
+    expect(told.ledger.picks.filter(p => p.year === 2026 && p.round === 4).length).toBe(2);
+    const guessed = migrateLegacyPicks({ A: { picks: [] }, B: { picks: [] } }, 2026, NFL_PICK_RULES);
+    expect(guessed.ledger.picks.filter(p => p.year === 2026).length).toBe(14);
+    const toldEmpty = migrateLegacyPicks({ A: { picks: [] }, B: { picks: [] } }, 2026, NFL_PICK_RULES, 3);
+    expect(toldEmpty.ledger.picks.filter(p => p.year === 2026).length).toBe(8);
+  });
   it('an extra nobody is missing is kept and flagged', () => {
     const m = migrateLegacyPicks({ A: { picks: [1, 1, 2] }, B: { picks: [1, 2] } }, 2026, NBA_PICK_RULES);
     expect(m.markers).toBe(5);

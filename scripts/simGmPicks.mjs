@@ -193,7 +193,7 @@ for (const sport of SPORTS) {
       if (sport.key === 'nfl') teams[b].picks.sort();
     }
     const before = JSON.stringify(teams);
-    const m = gm.picks.migrateLegacyPicks(teams, 2026, rules);
+    const m = gm.picks.migrateLegacyPicks(teams, 2026, rules, LEGACY[sport.key].length);
     const total = ids.reduce((s, id) => s + teams[id].picks.length, 0);
     ok(3, `${sport.key} seed ${seed}: every marker is a pick`, m.markers === total && m.ignored === 0, `${m.markers} of ${total}`);
     let wrong = 0;
