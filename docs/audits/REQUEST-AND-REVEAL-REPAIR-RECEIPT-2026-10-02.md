@@ -15,6 +15,7 @@ Claude owns production verification and publication.
 | 877 | `/whod-they-beat` | Keep feedback until Next final/View results; show earned score immediately; protect decided answer and keyboard focus | 24 normal cases; eight exact executable controls; native three viewport/input cases below |
 | 879 | `simPrerenderBoot` | Explicit outside aborts in the boot-only browser harness | Original failure retained; removed-fence control fails runner while original boot assertions pass; final 15 built checks green |
 | 878 | `/nfl-my-career`, `/nba-my-career`, `/mlb-my-career`, `/nhl-my-career` money screens | Actual committed transaction receipt; finite cues for changed buckets and latest local statement | 19 actual component/engine cases; 11 executable controls; four native component/input cases, 727 checks |
+| 880 | Daily-reload verification for `/buzzer-beater` and `/free-kick` | Drive actual primary pointer holds/releases with scoped jsdom capture support | Original each3 pass/4 fail; after each7/7; existing full107/107 across21 routes and effective controls |
 
 ## Preserved behavior and measured limits
 
@@ -130,8 +131,39 @@ match root after EOL normalization. Entry: `index-pB-89qU1.js`, SHA256
   `run-2.log`, `build-receipt.json`,36 final images and retained first attempt.
 - Pulled-main money gate: `%TEMP%/dukb-release-s-codex878-880-offline`,
   `type-878.txt`, `build-878.txt`, `fences-878.txt`, `sources-878.txt` and stderr.
+- Arcade reload: `%TEMP%/dukb-daily-arcade880-2026-10-02-a1`,
+  original/final JSON, `dailyReload-full-controls.txt`,
+  `input-control-results.json` and copied-input logs.
+
+## Arcade reload gate repair,880
+
+Claude reported eight reload failures on accepted main and Release S. Both
+drivers still sent mouseDown/mouseUp, while the actual boards use primary
+PointerEvents. Each original seven-case row passed discovery/corrupt-save
+baselines but failed its four finish-dependent outcomes because no shot was
+released and no Next control existed. Changing only those event pairs and
+installing/restoring the existing jsdom pointer-capture fixture produced7/7
+on both. There is no demonstrated product save bug here.
+
+All107 existing tests across21 routes pass. The unchanged clear control removes
+real saved keys and rejects restore on all21 rows while finish and corrupt-save
+baselines hold. Silent rejects recording on exactly11 mark-dependent rows and
+holds10 independent rows, including both arcade games, with finish/restore/replay
+held. Eleven source call-removal copies, the bound-slug control and the unpinned
+clock control are effective. All25 recording files keep their pinned clock.
+
+Six additional owned-copy runs put back mouse input, cancel the release, or omit
+pointer support in each driver. Every one rejects the intended four outcomes
+and holds three baselines, without loader/unhandled/transport errors. Two normal
+copies retain7/7. Scoped global/capture restoration and raw source holds are
+verified. These extra checks live in the receipt, avoiding a permanent duplicate
+of the existing daily suite. The shared assertion file's raw SHA256 is unchanged:
+`6aa14bf76c1e7d355fb9569a86c6fc15c8e683dc92a7fda74bc64dad12e704cf`.
+App type0 after copying the three test files into the accepted gate. The product
+build remains the same878 artifact since880 changes no runtime file. Peer review
+is clear. This is actual-page jsdom save/recording proof, not another live sweep.
 
 Publication, bounded production API verification and physical-device/Safari
 testing remain outside this receipt. Claude separately recorded Release S as
-published in the work board.878 needs the next publication.880 arcade daily
-reload driver audit remains separate and is not yet credited here.
+published in the work board.878 needs the next publication.881 NBA court
+control work remains separate and is not yet credited here.

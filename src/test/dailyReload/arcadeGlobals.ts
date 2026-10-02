@@ -12,7 +12,7 @@
  *   exercising the reduced motion path is worth having anyway.
  *
  *   A short setInterval does not schedule, which freezes the power bar's
- *   sweep. React batches the mouse down and the mouse up into one render so
+ *   sweep. React batches the pointer down and the pointer up into one render so
  *   the sweep should never start, but if it ever did the released power would
  *   depend on how long the machine took, and assertion 2 compares two runs
  *   byte for byte. Belt and braces on a real flake.
@@ -23,7 +23,11 @@
  * refresh and is never paid twice; scripts/simFreeKick.mjs and
  * scripts/simBuzzerBeater.mjs prove the games are worth playing.
  */
+import { installArcadePointers } from '../arcadePointerFixture';
+
 export function freezeArcadeGlobals(): () => void {
+  const pointerGlobals = [globalThis, window].map(target => [target, Object.getOwnPropertyDescriptor(target, 'PointerEvent')] as const);
+  const pointers = installArcadePointers();
   const realMatch = window.matchMedia;
   const stubMatch = ((query: string) => ({
     matches: /prefers-reduced-motion/.test(query),
@@ -43,6 +47,11 @@ export function freezeArcadeGlobals(): () => void {
   window.setInterval = frozen;
 
   return () => {
+    pointers.restore();
+    for (const [target, descriptor] of pointerGlobals) {
+      if (descriptor) Object.defineProperty(target, 'PointerEvent', descriptor);
+      else delete (target as unknown as Record<string, unknown>).PointerEvent;
+    }
     if (window.matchMedia === stubMatch) window.matchMedia = realMatch;
     if (window.setInterval === frozen) window.setInterval = realInterval;
   };
