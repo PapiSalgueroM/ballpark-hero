@@ -7,7 +7,70 @@
    src/data/gmStaff/packs.ts is every game's post list, and
    src/lib/clubManagerStaff.ts now delegates its shared parts to it.
 
-   HEADER_SECTIONS (filled in as the sections land)
+   Sections:
+     1) Club Manager's desk still does exactly what it did. The fixture
+        scripts/data/cmStaffFixture.json was recorded from main at a4433f41,
+        BEFORE the move: twenty clubs (four per tier, four from the eras),
+        three seasons each, twice (as the club opens, and with every man on
+        level 9 so approaches arrive), through the real tickStaff, hireStaff,
+        sackStaff, matchStaffOffer, releaseToPoacher and rolloverStaff, plus
+        the wage curve, 508 clubs' day one levels and 26 validator cases.
+        40 runs, 2494 lines, 572 desk events (121 approaches, 78 matches, 10
+        matches refused at the limit, 27 releases, 14 walked unanswered, 120
+        pay offs, 161 appointments). Replayed line for line.
+     2) every pack is a desk the core can run: posts match the rules, no post
+        takes a reserved key, one head coach per front office and he is
+        unpoachable, every effect key declared, every multiplier 1 with
+        nobody in the job (Round 95), a full top level desk lands inside each
+        key's bound so the bound never eats a level somebody paid for.
+     3) every level from 1 to 10 moves every effect, read three ways: on the
+        ladder, on the desk with the man alone, and on the desk with everybody
+        else at the top. 1053 steps; each must be over half an even ninth of
+        the ladder. Measured: every one is exactly an even ninth.
+     4) a corrupt level (NaN, 99, minus a billion, a string) cannot push an
+        effect past its two ends, nor a whole corrupt desk past a key's bound.
+     5) draft grade noise shrinks at every level of the scouting post: at
+        level 1 it IS the front offices' constant, Math.floor(u * 9) - 4,
+        draw for draw (and frontOffice.ts is read to prove it still is);
+        measured mean error 2.22, 2.04, 1.85, 1.67, 1.48, 1.30, 1.11, 0.93,
+        0.74, 0.56 over a 9000 point grid, so every step drops 0.185. The
+        floor is 0.09 a step. Deterministic, so it does not move with a seed.
+     6) payroll on each game's own money. Measured (share of the season purse:
+        a full level 10 desk, a middling owner's day one desk, a level 1 desk,
+        the fees to hire a whole level 10 desk, the pay offs to clear one):
+          nfl 59/34/13/48/30  nba 58/32/12/34/22  mlb 57/31/12/32/20
+          nhl 65/35/14/39/24  cfb 23/15/6/13/23   cbb 26/13/7/15/26
+          fightGym 30/15/6/8/5  afl 54/33/12/42/25
+        Ceilings 85, 60, (floor 3), 60, 60. Deterministic arithmetic.
+     7) six seasons of every pack's desk for forty owners from smallest to
+        biggest, three owner sets: approaches never for a head coach, never
+        for anybody under level 6, a strong assistant is called on, matches
+        never pass the limit, every hire leaves the purse short by exactly
+        the fee, the block passes its own validator after every tick, nobody
+        in a room or on a shortlist shares half a name, nobody grows two
+        levels in a summer or past his potential. Approaches a season with
+        everybody on level 8, measured over the three owner sets:
+          nfl 1.33 to 1.40  nba 1.05 to 1.18  mlb 1.27 to 1.38  nhl 1.18 to 1.24
+          cfb 0.32 to 0.36  cbb 0.29 to 0.34  fightGym 1.48 to 1.65  afl 1.38 to 1.60
+        Band: half the lowest to one and a half times the highest. And a
+        level 8 desk draws at least 1.3 times what the day one desk draws
+        (measured 1.85 at the lowest).
+     8) every effect line at every level is read back and held to the value
+        the game applies, and GmStaffPanel prints those lines and reads the
+        match limit instead of typing it.
+
+   Negative controls (each bundles a copy with one line changed and refuses
+   to run if the line is not there; each must exit 1):
+     fixturewage  Club Manager pays 2.2 a level instead of 2.1       section 1 (41)
+     fixturecore  the shared summer forgets the roomy grow chance     section 1 (19)
+     flat         every effect is nothing until level 10, then all    sections 3, 5 (952)
+     nocap        gmEffectAt loses its clamp                          sections 4, 5 (314)
+     noscout      the scouting error ignores the scouting post        section 5 (9)
+     poachhead    a rival can come in for the head coach              section 7 (1)
+     nopoach      nobody is ever approached                           sections 1, 7 (77)
+     dearstaff    a pro staff costs three times as much a level       sections 6, 7 (2692)
+     wrongwords   a multiplier tile promises the top level's lift     section 8 (104)
+   Run one with GM_STAFF_CONTROL=<name>.
 
    Run:    node scripts/simGmStaff.mjs
    Record: GM_STAFF_RECORD=1 node scripts/simGmStaff.mjs   (rewrites the fixture; only ever run on a tree
