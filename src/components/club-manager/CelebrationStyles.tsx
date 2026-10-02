@@ -27,10 +27,14 @@ export function CelebrationStyles() {
       .cm-gold-glow { animation: cmGoldGlow 1.5s ease-in-out infinite; }
       @keyframes cmTickIn { 0% { opacity: 0; transform: translateX(-6px); } 100% { opacity: 1; transform: translateX(0); } }
       .cm-tick-in { opacity: 0; animation: cmTickIn 0.35s ease-out forwards; }
+      /* cm-rise for a control that must not be pressed before it shows: hidden
+         (so unclickable) through its delay, visible from its first frame. */
+      @keyframes cmRiseGated { 0% { opacity: 0; visibility: visible; transform: translateY(7px); } 100% { opacity: 1; visibility: visible; transform: translateY(0); } }
+      .cm-rise-gated { opacity: 0; visibility: hidden; animation: cmRiseGated 0.45s ease-out forwards; }
 
 
       @media (prefers-reduced-motion: reduce) {
-        .cm-rise, .cm-slam, .cm-tick-in { animation: none; opacity: 1; transform: none; }
+        .cm-rise, .cm-slam, .cm-tick-in, .cm-rise-gated { animation: none; opacity: 1; transform: none; visibility: visible; }
         .cm-win-pulse, .cm-loss-shake, .cm-gold-glow { animation: none; }
       }
     `}</style>

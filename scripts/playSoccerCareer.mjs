@@ -275,6 +275,11 @@ const ACTIONS = [
   'Join Club',              // the other shape a transfer offer takes
   'Request transfer',       // no offers on the table means ask for them
   '💪 Not Done Yet',        // decline an early retirement suggestion
+  /* Round 834: a won Ballon d'Or offers the speech in place of Continue, so
+     with no match the fallback would click the first button on the page (a
+     header or nav button), not the card. This speech has no gate, and the
+     button is gone once it is given, so Continue is next. */
+  '😭 Cry through',
   'Next Year', 'Next Season', 'Continue', 'Sign Contract',
   'Accept', 'Confirm', 'Proceed', 'Next', 'Done', 'Close',
 ];

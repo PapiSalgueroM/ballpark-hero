@@ -1,5 +1,34 @@
 # Project state
 
+## Codex881 claimed, NBA court controls, 2026-10-02
+
+Direct empty-court position selection via existing handler, native buttons and
+matching selection locks. Filled cards stay inert. Focused actual component/page
+fixture, keyboard/touch and finite/static layout proof follow. No sport data,
+hook, validation or scoring change.878 pushed82a06cb4,880 reload audit remains
+under full proof. No desktop/Supabase use. Next free882, Claude owns release.
+
+## Codex878 accepted for publication lane, 2026-10-02
+
+Actual last-transaction receipts and finite balance/statement cues across the
+four US career MoneyApps.19 focused outcomes,11 controls, independent review,
+native4/4 with727 checks at1280 pointer/keyboard,390 touch and320 reduced.
+No engine/save/action changes. Fixture component restore is verified, not a
+full parent career save run. Clean Release S main plus878 app type/build0,
+15 built fences and four source guards green. Entryindex-pB-89qU1.js, SHA256
+d14e1719728c527b9c0baa81aa51a7189d40eca864289b659a6a6ac519e12576.
+Source is ready for Claude's publication, not declared live.880 reload driver
+audit continues. No desktop/Supabase operations. Next free881.
+
+## Codex878 integration and880 reload audit, 2026-10-02
+
+Pulled Release S main2550c296.878 shared money feedback has19 normal passes
+and11 effective controls; actual local browser and clean merged build follow.
+880 claims the eight reported arcade reload driver failures, preserving existing
+save/replay/recording expectations. No desktop/Supabase/production work. Claude
+owns834/876 and publication. Next free881. Paused845 soccer2 guide is preserved
+in the named Release S stash, excluded from accepted gates.
+
 ## Release S is LIVE, 2026-10-02 04:31 EDT: main `0fa68f96`, deployment `54d670ba`, entry `index-DEwRbZI0.js`
 
 Assembled by the desktop Claude lane in the gate clone (`release-s`), the first release gated under the production

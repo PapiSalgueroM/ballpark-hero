@@ -2,6 +2,8 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { FlagImg } from "@/components/FlagImg";
 import { useRevealScroll } from "@/hooks/useRevealScroll";
+import { SpeechChoices } from "@/components/career/AwardsNightCard";
+import { SOCCER_WORLD_CUP_SPEECHES } from "@/lib/soccerCareerEngine";
 import type {
   IntlTournament, IntlTie, IntlRound, IntlTableRow, IntlHistoryEntry,
 } from "@/lib/soccerCareerEngine";
@@ -388,21 +390,9 @@ export function TournamentCard({
       </div>
 
       {isWinner ? (
-        <div className="space-y-1.5">
-          <p className="text-center text-[11px] font-bold uppercase tracking-wider text-amber-300">The microphone is yours</p>
-          <Button onClick={() => onSpeech("for_the_country")} className="w-full h-auto py-2 text-xs font-bold text-black bg-amber-600 hover:bg-amber-500 justify-start text-left whitespace-normal">
-            🏆 Dedicate it to every kid back home
-          </Button>
-          <Button onClick={() => onSpeech("shirt_to_the_fans")} className="w-full h-auto py-2 text-xs font-bold text-black bg-amber-600 hover:bg-amber-500 justify-start text-left whitespace-normal">
-            🎽 Throw your shirt into the away end
-          </Button>
-          <Button onClick={() => onSpeech("call_out_doubters")} className="w-full h-auto py-2 text-xs font-bold text-black bg-amber-700 hover:bg-amber-600 justify-start text-left whitespace-normal">
-            📢 Name the pundits who wrote you off
-          </Button>
-          <Button onClick={() => onSpeech("quiet_lap")} className="w-full h-auto py-2 text-xs font-bold text-white bg-muted hover:bg-muted/80 justify-start text-left whitespace-normal">
-            🚶 Say nothing. Walk one slow lap with the trophy
-          </Button>
-        </div>
+        /* Round 834: the shared speech buttons, from the same options the
+           engine applies (SOCCER_WORLD_CUP_SPEECHES). */
+        <SpeechChoices prompt="The microphone is yours" options={SOCCER_WORLD_CUP_SPEECHES} onChoose={onSpeech} />
       ) : (
         <Button onClick={onDismiss} className="w-full h-10 text-sm font-bold text-black bg-emerald-600 hover:bg-emerald-500">
           Continue →
