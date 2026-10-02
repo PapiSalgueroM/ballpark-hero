@@ -1,5 +1,16 @@
 # Project state
 
+## Incident UI: Nano despite Pro, free Micro change prepared, 2026-10-02
+
+Owner authorized Supabase computer control. Dashboard currently says
+Unhealthy/NANO. Reviewed Nano to Micro quote is+$0.00/month ($9.68 before and
+after, taxes excluded), with automatic restart and possible extended downtime.
+Final confirmation has NOT been clicked; action-time user choice is pending.
+Claude should avoid a simultaneous resize/restart. One separate ClickHouse
+log aggregation, no Postgres SQL/REST probe, shows continued timeout-bearing
+entries in the last15 minutes.871-873 remain offline. Recovery unconfirmed.
+
+
 ## Codex871-873 claimed, database incident priority, 2026-10-02 02:35 EDT
 
 New owner screenshot shows Disk IO budget warning and schema connection

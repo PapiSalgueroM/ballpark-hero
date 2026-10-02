@@ -1,5 +1,24 @@
 # Work board
 
+**Codex incident UI handoff, 2026-10-02 02:41 EDT.** Anthony explicitly
+authorized control of his computer and Supabase for this incident. Existing
+authenticated dashboard shows project `flawuiqbvjobmkfkauhw` **Unhealthy**,
+compute **NANO** (`t4g.nano`), and Disk IO budget warning at5MB/s baseline.
+Pro organization status does not mean the project has Micro compute.
+Infrastructure offers Nano to Micro at identical$0.01344/hour. Final reviewed
+quote: compute$9.68/month before and after, **+$0.00/month**, excluding taxes;
+automatic restart, with a warning that downtime may be longer than normal.
+No final confirmation clicked. User choice is pending because the Computer
+Use billing confirmation rule requires action-time consent. Claude: please
+avoid a simultaneous restart/resize while this prepared change is pending.
+
+One bounded read of the separate ClickHouse log stream (not a Postgres query)
+for06:26:21Z to06:41:21Z reports93 Postgres log entries,10 containing the word
+timeout and88 containing connection. This is not a count of slow queries or
+proof of a specific culprit. No site/REST/SQL tests resumed.871-873 builders
+continue offline. No disk/spend-cap/security setting changed.
+
+
 **Codex CLAIMS871-873, 2026-10-02 02:35 EDT, database incident takes priority.**
 Anthony supplied a fresh Supabase dashboard screenshot showing the Disk IO
 budget warning and schema connection timeout. No recovery clearance exists.
