@@ -1581,6 +1581,21 @@ export const MORAL_DILEMMAS: MoralDilemma[] = [
   rivalChoiceDilemma("rival_charity_match"),
 ];
 
+/* Round 850: one zero appearance row for a year he lived without playing it,
+   the shape the ban and prison years in advanceProSeason already write. With
+   a reason, the reason is the club, the way "BANNED" and "PRISON" are; with
+   null he spent the year at his own club (a year lost to injury). */
+function yearOutRow(s: CareerState, reason: string | null): SeasonRecord {
+  const last = s.seasons[s.seasons.length - 1];
+  return {
+    year: (last ? last.year : 2019) + 1, age: s.age,
+    club: reason ?? s.currentClub, clubCountry: reason ? "" : s.currentClubCountry, clubTier: reason ? 99 : s.currentClubTier,
+    apps: 0, goals: 0, assists: 0, cleanSheets: 0, yellowCards: 0, redCards: 0, rating: 0,
+    leagueTitle: false, domesticCup: false, championsLeague: false, worldCup: false, ballonDor: false, ballonDorRank: null, type: "playing",
+    intApps: 0, intGoals: 0, intAssists: 0, intRating: 0, tournament: null, tournamentResult: null,
+  };
+}
+
 /**
  * Round 253: the three roads back from a serious injury, and the whole
  * point of the arc: each one is a real trade, none is free.
@@ -1605,6 +1620,19 @@ export function applyRehabChoice(prev: CareerState, choiceIndex: number): Career
   s.pendingRehab = null;
   s.phase = "playing";
   if (!r) return s;
+  /* Round 850: a save written before this round can be sitting here with the
+     injury year unrecorded, because the season used to be thrown away at this
+     stop. Its games are gone, so the year goes on as a zero appearance
+     injured row rather than as matches nobody played. A save from this round
+     already has the row (written when the injury stopped the season), the age
+     check finds it, and nothing is added. */
+  const lastRow = s.seasons[s.seasons.length - 1];
+  if (lastRow && lastRow.age < s.age) {
+    const row = yearOutRow(s, null);
+    row.injury = r.name; row.injuryWeeks = r.weeks; row.injurySevere = true;
+    if (s.loan) row.onLoanFrom = s.loan.parentClub;
+    s.seasons = [...s.seasons, row];
+  }
 
   const history = [...(s.seriousInjuries ?? [])];
   s.events = [...s.events];
@@ -4824,6 +4852,11 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
       newspaper: disgrace.paper, type: "negative",
       headline: disgrace.headline, body: disgrace.body,
     }];
+    /* Round 850: the trial is a year he lived, so it gets its row, the same
+       zero appearance shape the ban and prison years use with the reason as
+       the club. Before this the year went by with no row and the calendar
+       fell a year behind his age (the prison row comes the year after). */
+    s.seasons = [...s.seasons, yearOutRow(s, "CONVICTED")];
     s.phase = "newspaper";
     return s;
   } else if (heat >= 70 && Math.random() < 0.35) {
@@ -4948,6 +4981,16 @@ function playPendingProSeason(s: CareerState, clubs: ClubData[]): CareerState {
         year: s.seasons.length > 0 ? s.seasons[s.seasons.length - 1].year + 1 : 2020,
         specialistCost: s.netWorth >= 1.6 ? 0.8 : null,
       };
+      /* Round 850: the season stops here for the rehab choice and the next
+         Next Season is the year after, so this IS the injury year and it goes
+         on the record now: the games and goals the engine played him before
+         and around the injury, marked with the injury the way every injured
+         season is. Only his own line: the trophy rolls are dropped because the
+         rest of that season (the Champions League, the world's results, the
+         announcements) never runs. Before this the year had no row at all. */
+      const injuryRow: SeasonRecord = { ...season, leagueTitle: false, domesticCup: false };
+      if (s.loan) injuryRow.onLoanFrom = s.loan.parentClub;
+      s.seasons = [...s.seasons, injuryRow];
       s.phase = "rehab_choice";
       return s;
     }
@@ -5630,6 +5673,14 @@ function generateNewsArticles(s: CareerState, season: SeasonRecord, totalGoals: 
 export function dismissNewspaper(prev: CareerState): CareerState {
   const s = { ...prev };
   s.pendingNews = [];
+  /* Round 850: a conviction saved by an older version sits here with the
+     trial year unrecorded, so it gets its row now. Since this round the
+     conviction writes that row itself, the age check finds it, and nothing
+     is added twice. */
+  if (!s.pendingSummary && (s.prisonSeasons ?? 0) > 0) {
+    const lastRow = s.seasons[s.seasons.length - 1];
+    if (lastRow && lastRow.age < s.age) s.seasons = [...s.seasons, yearOutRow(s, "CONVICTED")];
+  }
   /* ROUND 502: THIS LINE ENDED CAREERS, PERMANENTLY, AND THE PLAYER WAS STILL
      SITTING THERE.
      The newspaper phase is reachable from exactly ONE place, the corruption
