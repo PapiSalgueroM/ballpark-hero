@@ -51,10 +51,17 @@
  *      inside a MemoryRouter (supabase stubbed, effects do not run on the
  *      server, which is also true of the first paint): exactly one h1, whose
  *      text is the module's h1 and the template's h1, with nothing inside it
- *      hidden, so what a renderer reads is what a visitor sees; every heading,
- *      paragraph and list item of the module in the About section in order,
- *      with every link; every paragraph of 120 characters or more in the
- *      page's text; the section after the last game tile, and not hidden.
+ *      hidden, so what a renderer reads is what a visitor sees. The About
+ *      section is a lazy chunk, which a server render prints as its empty
+ *      fallback, so it renders on its own through the same router: every
+ *      heading, paragraph and list item of the module in order, with every
+ *      link, every paragraph of 120 characters or more, no h1, not hidden.
+ *   9. IT IS A LAZY CHUNK EVERY VISITOR STILL GETS. Index.tsx (code, not
+ *      comments) declares the About component with React.lazy at module
+ *      level and mounts it once, alone in <Suspense fallback={null}>, at
+ *      brace depth zero in the JSX the page returns (no condition, no flag),
+ *      after the sport sections; and a walk of the static imports from
+ *      src/main.tsx reaches neither src/data/homeCopy.ts nor the component.
  *   8. NO HIDDEN TEXT IN THE HOME PAGE'S SOURCE. Google's spam policies name
  *      hidden text (clipped, off screen, zero size or zero opacity) when it is
  *      there for a search engine rather than a visitor, and the first draft of
@@ -67,7 +74,9 @@
  * Controls. Each must turn its own part(s) red and nothing else:
  *   moduledrift    one sentence of the module changes (part 6)
  *   templatedrift  the same sentence changes in the template only (part 6)
- *   nosection      the About section is taken out of Index.tsx (part 7)
+ *   nosection      the About mount is taken out of Index.tsx (part 9)
+ *   staticimport   Index.tsx imports the copy module again and reads its h1
+ *                  from it, so the copy is back in the entry (part 9)
  *   hiddenh1       the first draft's clipped span goes back into the h1 (7, 8)
  *   srabout        a screen reader only line goes into the About section (7, 8)
  *   srsource       a screen reader only line goes into the hero, outside the
@@ -79,7 +88,7 @@
  * Run: node scripts/simHomeCopy.mjs
  */
 import { build } from 'esbuild';
-import { readFileSync, mkdtempSync, rmSync } from 'node:fs';
+import { readFileSync, mkdtempSync, rmSync, existsSync, statSync } from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { createRequire } from 'node:module';
@@ -93,7 +102,7 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.HOME_COPY_CONTROL || '';
 const HOME_CONTROLS = {
   descdrift: '4b', commentapp: '4b', commenttpl: '4b',
-  moduledrift: '6', templatedrift: '6', nosection: '7',
+  moduledrift: '6', templatedrift: '6', nosection: '9', staticimport: '9',
   hiddenh1: ['7', '8'], srabout: ['7', '8'], srsource: '8', retiredlink: '3',
 };
 if (CONTROL && !(CONTROL in HOME_CONTROLS)) {
@@ -121,12 +130,33 @@ let homeCopySrc = controlled('moduledrift', readFileSync(path.join(ROOT, 'src/da
 const RETIRED_FROM = "a('/minefield', 'Minefield')";
 const RETIRED_TO = "a('/world-cup', 'Minefield')";
 homeCopySrc = controlled('retiredlink', homeCopySrc, RETIRED_FROM, RETIRED_TO);
+/** The same, for a pattern; it must match exactly once. */
+function controlledRe(name, src, re, to) {
+  if (CONTROL !== name) return src;
+  const hits = src.match(new RegExp(re.source, re.flags.includes('g') ? re.flags : re.flags + 'g')) ?? [];
+  if (hits.length !== 1) {
+    console.error(`control ${name}: ${re} matches ${hits.length} times, not once, so it would prove nothing`);
+    process.exit(1);
+  }
+  const out = src.replace(re, to);
+  if (out === src) { console.error(`control ${name}: the source did not change`); process.exit(1); }
+  console.log(`   control ${name}: ${JSON.stringify(hits[0].trim())} becomes ${JSON.stringify(hits[0].replace(re, to).trim())}`);
+  return out;
+}
+
 let indexBundled = readFileSync(path.join(ROOT, 'src/pages/Index.tsx'), 'utf8');
 indexBundled = controlled('nosection', indexBundled, '<HomeAbout />', '');
 /* the first draft's h1, word for word: the name on screen and the rest of the
    sentence in a one pixel clipped box, there for a renderer and not a person */
-indexBundled = controlled('hiddenh1', indexBundled, '{HOME_COPY.h1}',
-  '{HOME_COPY.h1}<span className="-mr-px inline-block h-px w-px overflow-hidden whitespace-nowrap [clip-path:inset(50%)]">: free daily sports trivia, puzzles and career sims</span>');
+indexBundled = controlledRe('hiddenh1', indexBundled, /DoUKnowBall(\s*<\/h1>)/,
+  'DoUKnowBall<span className="-mr-px inline-block h-px w-px overflow-hidden whitespace-nowrap [clip-path:inset(50%)]">: free daily sports trivia, puzzles and career sims</span>$1');
+/* staticimport: the copy module comes back into the entry, used for real (an
+   unused import would be dropped by the compiler and prove nothing): the h1
+   reads it again, as the first draft did. The page renders the same words,
+   so only the import graph in part 9 can object. */
+indexBundled = controlled('staticimport', indexBundled, "import { FavouriteSport } from '@/components/home/FavouriteSport';",
+  "import { FavouriteSport } from '@/components/home/FavouriteSport';\nimport { HOME_COPY } from '@/data/homeCopy';");
+indexBundled = controlledRe('staticimport', indexBundled, />(\s*)DoUKnowBall(\s*<\/h1>)/, '>$1{HOME_COPY.h1}$2');
 indexBundled = controlled('srsource', indexBundled, 'All playable without an account.`}',
   'All playable without an account.`}<span className="sr-only"> Free sports trivia, quizzes and career sims.</span>');
 let homeAboutSrc = readFileSync(path.join(ROOT, 'src/components/home/HomeAbout.tsx'), 'utf8');
@@ -161,12 +191,15 @@ try {
         import { HelmetProvider } from 'react-helmet-async';
         import { AuthProvider } from './src/contexts/AuthContext';
         import Index from './src/pages/Index';
+        import { HomeAbout } from './src/components/home/HomeAbout';
         export { CATEGORIES, ALL_GAMES } from './src/data/gameRegistry';
         export { HOME_COPY } from './src/data/homeCopy';
         export const renderHome = () => renderToStaticMarkup(
           React.createElement(HelmetProvider, { context: {} },
             React.createElement(MemoryRouter, { initialEntries: ['/'] },
               React.createElement(AuthProvider, null, React.createElement(Index)))));
+        export const renderAbout = () => renderToStaticMarkup(
+          React.createElement(MemoryRouter, { initialEntries: ['/'] }, React.createElement(HomeAbout)));
       `,
       resolveDir: ROOT,
       loader: 'tsx',
@@ -579,19 +612,27 @@ console.log('7) the home page as React renders it: one h1, the template\'s, all 
       }
     }
 
-    /* the outcome: every paragraph of 120 characters or more is in the page */
-    const pageText = plain(markup);
-    const missingLong = longBlocks.filter(b => !pageText.includes(b.text));
-    if (missingLong.length) fail(`${missingLong.length} of the ${longBlocks.length} paragraphs of 120+ characters are not in the rendered page, first ${JSON.stringify(missingLong[0].text.slice(0, 60))}`);
+    /* The About section is its own chunk, mounted through React.lazy, and a
+       server render does not wait for a lazy component: it prints the
+       fallback, which is nothing. So the section is rendered here on its own,
+       through the same router, and part 9 holds the page to mounting it,
+       unconditionally, below every tile. */
+    let aboutMarkup = '';
+    try { aboutMarkup = bundled.renderAbout(); } catch (e) { fail(`the About section did not render on the server: ${e && e.message}`); }
 
-    /* the section itself: every block in order, every link, after the last
-       tile, and visible */
-    const at = markup.indexOf('<section data-home-about');
+    /* the outcome: every paragraph of 120 characters or more is in it */
+    const pageText = plain(aboutMarkup);
+    const missingLong = longBlocks.filter(b => !pageText.includes(b.text));
+    if (missingLong.length) fail(`${missingLong.length} of the ${longBlocks.length} paragraphs of 120+ characters are not in the rendered About section, first ${JSON.stringify(missingLong[0].text.slice(0, 60))}`);
+
+    /* the section itself: every block in order, every link, and visible */
+    const at = aboutMarkup.indexOf('<section data-home-about');
     if (at < 0) {
-      fail('the rendered home page has no About section (section[data-home-about])');
+      fail('the About module renders no About section (section[data-home-about])');
     } else {
-      const end = markup.indexOf('</section>', at);
-      const sec = markup.slice(at, end < 0 ? markup.length : end + '</section>'.length);
+      const end = aboutMarkup.indexOf('</section>', at);
+      const sec = aboutMarkup.slice(at, end < 0 ? aboutMarkup.length : end + '</section>'.length);
+      if ((aboutMarkup.match(/<h1\b/g) ?? []).length) fail('the About section carries an h1 of its own, and the page has one already');
       const got = [...sec.matchAll(/<(h2|h3|h4|p|li)\b[^>]*>([\s\S]*?)<\/\1>/g)].map(m => ({ tag: m[1], text: plain(m[2]) }));
       const key = b => `${b.tag}: ${b.text}`;
       if (JSON.stringify(got.map(key)) !== JSON.stringify(moduleBlocks.map(key))) {
@@ -602,11 +643,13 @@ console.log('7) the home page as React renders it: one h1, the template\'s, all 
       const links = [...sec.matchAll(/<a\b[^>]*\bhref="([^"]*)"[^>]*>([\s\S]*?)<\/a>/g)].map(m => `${decode(m[1])}|${plain(m[2])}`);
       if (JSON.stringify(links) !== JSON.stringify(moduleLinks)) fail(`the About section renders ${links.length} links and the module has ${moduleLinks.length}, or they differ in order or text`);
       /* a game card's class list starts with home-tile; the tile styles in
-         the page's own style element say .home-tile too and are not tiles */
-      const tiles = (markup.slice(0, at).match(/class="home-tile\b/g) ?? []).length;
-      const tilesAfter = (markup.slice(at).match(/class="home-tile\b/g) ?? []).length;
-      if (tiles < 50) fail(`only ${tiles} game tiles render above the About section, so it is not below the games`);
-      if (tilesAfter > 0) fail(`${tilesAfter} game tiles render after the About section, which belongs below every tile`);
+         the page's own style element say .home-tile too and are not tiles.
+         The page render must still draw the games, and draw no About section
+         of its own: the lazy fallback is nothing, so a section here would
+         mean it had come back into the entry chunk. */
+      const tiles = (markup.match(/class="home-tile\b/g) ?? []).length;
+      if (tiles < 50) fail(`only ${tiles} game tiles in the server render of the page, so the render proves nothing about the page`);
+      if (markup.includes('data-home-about')) fail('the server render of the page already carries the About section, so it is no longer the lazy chunk part 9 holds it to');
       /* hidden in any of the ways a class, a style or an attribute can hide
          it, and any of them anywhere in the section: copy meant to be read */
       const hiders = hiddenIn(sec);
@@ -616,8 +659,8 @@ console.log('7) the home page as React renders it: one h1, the template\'s, all 
       }
       if (/aria-hidden="true"|<details\b/.test(sec)) fail('the About section is hidden from readers or collapsed behind a details element');
       if (!failedParts.has('7')) {
-        console.log(`   one h1, ${JSON.stringify(h1s[0])}; the About section renders all ${got.length} blocks and ${links.length} links in order, after ${tiles} game tiles, nothing hiding it`);
-        console.log(`   all ${longBlocks.length} paragraphs of 120+ characters are in the rendered text (${pageText.length} characters rendered on the server)`);
+        console.log(`   the page: one h1, ${JSON.stringify(h1s[0])}, nothing in it hidden, ${tiles} game tiles; the About module: all ${got.length} blocks and ${links.length} links in order, nothing hiding it`);
+        console.log(`   all ${longBlocks.length} paragraphs of 120+ characters are in the rendered About section (${pageText.length} characters)`);
       }
     }
   }
@@ -658,6 +701,109 @@ console.log('8) no visually hidden text in src/pages/Index.tsx or src/components
   const probe = scan('probe', indexBundled, null);
   if (indexBundled.includes(BASELINE) && !probe.some(f => f.includes('sr-only'))) fail('the scan cannot see the sr-only label it is told to allow, so it proves nothing');
   if (!failedParts.has('8')) console.log(`   none: every class list and style in both files is visible text (the stat chip's screen reader label ${indexBundled.includes(BASELINE) ? 'is the one allowed exception' : 'is gone'})`);
+}
+
+/* ── 9: the copy is its own chunk, and every visitor still gets it ────── */
+/* Round 840. The copy (about 3.7 KB gzipped with its component) rode in the
+   entry chunk every page downloads and pushed six pages over their weight
+   budgets, so it moved behind React.lazy. That trade is only honest while
+   the section still reaches every visitor with no action, so this holds the
+   mount: a lazy component at module level, mounted once inside a Suspense
+   whose fallback is nothing, outside every condition in the page's JSX, and
+   below every tile. And it holds the weight: no file the entry reaches by a
+   static import may import src/data/homeCopy.ts or the About component.
+   Controls: nosection (the mount removed) and staticimport (the copy module
+   imported by Index.tsx again, and used). */
+part = '9';
+console.log('9) the About section is a lazy chunk, mounted for every visitor, and the copy stays out of the entry');
+{
+  const strip = src => src.replace(/\{\s*\/\*[\s\S]*?\*\/\s*\}/g, ' ').replace(/\/\*[\s\S]*?\*\//g, ' ').replace(/(^|[^:'"`\\])\/\/[^\n]*/g, '$1');
+  const code = strip(indexBundled).replace(/\r\n/g, '\n');
+  /* a module level lazy import of the About component */
+  if (!/^const HomeAbout = lazy\(\(\) => import\('@\/components\/home\/HomeAbout'\)/m.test(code)) {
+    fail('src/pages/Index.tsx has no module level "const HomeAbout = lazy(() => import(\'@/components/home/HomeAbout\')...)"');
+  }
+  /* mounted exactly once, alone inside a Suspense with no fallback */
+  const mounts = [...code.matchAll(/<HomeAbout\s*\/>/g)];
+  const wrapped = code.match(/<Suspense fallback=\{null\}>\s*<HomeAbout\s*\/>\s*<\/Suspense>/);
+  if (mounts.length !== 1) fail(`src/pages/Index.tsx mounts the About section ${mounts.length} times, not once`);
+  else if (!wrapped) fail('the About section is not mounted alone inside <Suspense fallback={null}>');
+  else {
+    /* unconditional: in the JSX the page returns, a condition needs an
+       expression container, so the mount must sit at brace depth zero from
+       the start of that return. A state flag, a ternary, a && or a map all
+       open a brace the mount would be inside. */
+    const fnAt = code.indexOf('export default function Index(');
+    const at = wrapped.index;
+    const retAt = code.lastIndexOf('\n  return (', at);
+    if (fnAt < 0 || retAt < fnAt) fail('could not find the return of the Index component above the mount');
+    else {
+      const between = code.slice(retAt, at).replace(/(['"])(?:(?!\1)[^\\\n]|\\.)*\1/g, '""');
+      let depth = 0;
+      for (const ch of between) { if (ch === '{') depth += 1; else if (ch === '}') depth -= 1; }
+      if (depth !== 0) fail(`the About mount sits inside ${depth} open expression container(s) in the page's JSX, so a condition or a flag decides whether it renders`);
+      const lastTiles = code.lastIndexOf('sportSections.map(', at);
+      if (lastTiles < retAt) fail('the About mount does not come after the sport sections in the page, so it is not below every tile');
+      const rest = code.slice(at + wrapped[0].length, code.indexOf('\n}\n', at));
+      if (/<(section|RevealSection|GameCard)\b/.test(rest)) fail('something with tiles is mounted after the About section, which belongs below every tile');
+    }
+  }
+
+  /* the static import graph from the entry */
+  const SRC = path.join(ROOT, 'src');
+  const norm = p => path.resolve(p).toLowerCase();
+  const overrides = new Map([
+    [norm(path.join(SRC, 'pages/Index.tsx')), indexBundled],
+    [norm(path.join(SRC, 'components/home/HomeAbout.tsx')), homeAboutSrc],
+    [norm(path.join(SRC, 'data/homeCopy.ts')), homeCopySrc],
+  ]);
+  const CODE_EXT = /\.(tsx?|jsx?|mjs)$/;
+  const resolveSpec = (from, spec) => {
+    const bare = spec.split('?')[0];
+    let base;
+    if (bare.startsWith('@/')) base = path.join(SRC, bare.slice(2));
+    else if (bare.startsWith('.')) base = path.resolve(path.dirname(from), bare);
+    else return null;
+    for (const c of [base, ...['.ts', '.tsx', '.js', '.jsx', '.mjs'].map(e => base + e), ...['index.ts', 'index.tsx', 'index.js'].map(i => path.join(base, i))]) {
+      if (existsSync(c) && statSync(c).isFile()) return c;
+    }
+    return null;
+  };
+  /* Comments are NOT stripped here: a commented import that names the copy
+     module fails closed, and a stripper that misreads a glob in a string
+     could hide a real import, which would fail open. */
+  const IMPORTS = [
+    /\bimport\s+(?!type\s)[\w$*{}\s,]*?\s*from\s*['"]([^'"]+)['"]/g,
+    /\bimport\s*['"]([^'"]+)['"]/g,
+    /\bexport\s+(?!type\s)(?:\*(?:\s+as\s+[\w$]+)?|\{[^}]*\})\s*from\s*['"]([^'"]+)['"]/g,
+  ];
+  const walk = entry => {
+    const seen = new Set();
+    const stack = [entry];
+    while (stack.length) {
+      const f = stack.pop();
+      const key = norm(f);
+      if (seen.has(key)) continue;
+      seen.add(key);
+      if (!CODE_EXT.test(f)) continue;
+      const src = overrides.get(key) ?? readFileSync(f, 'utf8');
+      for (const re of IMPORTS) for (const m of src.matchAll(re)) {
+        const to = resolveSpec(f, m[1]);
+        if (to) stack.push(to);
+      }
+    }
+    return seen;
+  };
+  const entry = walk(path.join(SRC, 'main.tsx'));
+  const has = (set, rel) => set.has(norm(path.join(SRC, rel)));
+  if (entry.size < 50 || !has(entry, 'App.tsx') || !has(entry, 'pages/Index.tsx')) {
+    fail(`the import walk from src/main.tsx reached only ${entry.size} files${has(entry, 'pages/Index.tsx') ? '' : ', not Index.tsx'}, so it proves nothing`);
+  }
+  if (has(entry, 'data/homeCopy.ts')) fail('src/data/homeCopy.ts is reachable by static imports from src/main.tsx, so the copy rides in the entry chunk every page downloads');
+  if (has(entry, 'components/home/HomeAbout.tsx')) fail('src/components/home/HomeAbout.tsx is reachable by static imports from src/main.tsx, so the lazy chunk is not lazy');
+  const lazySide = walk(path.join(SRC, 'components/home/HomeAbout.tsx'));
+  if (!has(lazySide, 'data/homeCopy.ts')) fail('the About component does not import src/data/homeCopy.ts, so the lazy chunk does not carry the copy');
+  if (!failedParts.has('9')) console.log(`   lazy at module level, mounted once inside <Suspense fallback={null}> outside every condition, after the sport sections; ${entry.size} files reached statically from src/main.tsx, none of them the copy or the About component`);
 }
 
 console.log('');
