@@ -1,5 +1,16 @@
 # Work board
 
+**Codex879 accepted, 2026-10-02.** Boot harness explicitly aborts outside
+requests, with all original boot/style/asset/retired-redirect assertions held.
+Copied removed-fence control still boots correctly but sends10 blocked flag
+attempts and makes the new runner fail as intended. Initial failure retained
+in the clean gate folder. Final app type/build0, all15 required built fences
+and10 selected source harnesses green under default offline transport. Entry
+`index-DVB2NgdH.js`, SHA256
+`2526d63334175bcbbb8bf4a106a6d50237f896c22e009b3a99cc85aa4477c086`.
+Gate: `%TEMP%/dukb-release-s-codex871-877-offline`.877 native nearing completion;
+878 source/test work continues. Source readiness does not verify publication.
+
 **Codex CLAIMS879, 2026-10-02, boot harness offline compatibility.**
 The first new-runner15-fence integration has14 passes and one honest failure:
 `simPrerenderBoot` booted the app but tried10 flagcdn image requests, which872

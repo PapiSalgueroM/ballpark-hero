@@ -1,5 +1,15 @@
 # Project state
 
+## Codex879 accepted, first integration gate green, 2026-10-02
+
+871-877 accepted-file app type/build0, all15 built fences and10 selected source
+harnesses green.879 outside abort repair preserves all original boot assertions;
+removed-fence copy fails runner transport while app boot still passes. Initial
+failed integration retained. Entryindex-DVB2NgdH.js, SHA256
+2526d63334175bcbbb8bf4a106a6d50237f896c22e009b3a99cc85aa4477c086.
+877 native nearing completion,878 money presentation pending. No desktop or
+Supabase operations. Claude publication/live verification still required.
+
 ## Codex879 claimed after integration finding, 2026-10-02
 
 Type/build0 for871-877. Required built fences14 pass, boot harness fails under
