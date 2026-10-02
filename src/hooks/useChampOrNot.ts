@@ -46,8 +46,8 @@ export function useChampOrNot() {
   const [mode, setMode] = useState<ChampMode>('daily');
   /* Round 643 review: today's daily on its own, whatever mode is on screen.
      It moves in the same step as the save, so the recorder reads what is
-     stored: `answers` below is only what the board shows, and it waits out
-     each reveal. Reading the recorder off `answers` lost a finish whenever
+     stored: `answers` below is only what the board shows, and it holds the
+     reveal until Next. Reading the recorder off `answers` lost a finish whenever
      the page reloaded or went to Unlimited inside the final reveal, because
      the restore found the day already finished and marked it. Restored in
      the initializer. */
@@ -58,12 +58,10 @@ export function useChampOrNot() {
   const [unlimitedRun, setUnlimitedRun] = useState(0);
   const [hard, setHard] = useState(false);
   const unlimitedNonce = useRef(String(Date.now() % 1000000007));
-  /* The pending reveal, so a mode change can cancel it: left running, it
-     wrote the daily's answers onto the Unlimited board. */
-  const revealTimer = useRef<number | null>(null);
+  /* The decided answer waits here until Next; changing the board discards it. */
+  const pendingAnswers = useRef<boolean[] | null>(null);
   const clearReveal = useCallback(() => {
-    if (revealTimer.current !== null) window.clearTimeout(revealTimer.current);
-    revealTimer.current = null;
+    pendingAnswers.current = null;
   }, []);
   useEffect(() => clearReveal, [clearReveal]);
 
@@ -137,7 +135,7 @@ export function useChampOrNot() {
   useGameCompletion('champ-or-not', dailyDone, dailyAnswers.filter(Boolean).length, 1);
 
   const answer = useCallback((saysTrue: boolean) => {
-    if (!current || showingResult) return;
+    if (!current || pendingAnswers.current || showingResult || typeof saysTrue !== 'boolean') return;
     const correct = saysTrue === current.isTrue;
     setLastPick(saysTrue);
     setShowingResult(true);
@@ -148,14 +146,17 @@ export function useChampOrNot() {
       } catch { /* storage full or blocked: play on */ }
       setDailyAnswers(next);
     }
-    clearReveal();
-    revealTimer.current = window.setTimeout(() => {
-      revealTimer.current = null;
-      setAnswers(next);
-      setShowingResult(false);
-      setLastPick(null);
-    }, 2200);
-  }, [current, showingResult, answers, mode, today, clearReveal]);
+    pendingAnswers.current = next;
+  }, [current, showingResult, answers, mode, today]);
+
+  const advanceReveal = useCallback(() => {
+    const next = pendingAnswers.current;
+    if (!next) return;
+    pendingAnswers.current = null;
+    setAnswers(next);
+    setShowingResult(false);
+    setLastPick(null);
+  }, []);
 
   const switchMode = useCallback((m: ChampMode) => {
     if (m === mode) return;
@@ -194,7 +195,7 @@ export function useChampOrNot() {
 
   return {
     loadState, mode, switchMode, rounds, roundIdx, current, showingResult,
-    lastPick, answers, done, score, answer, playAgain, today,
+    lastPick, answers, done, score, answer, advanceReveal, playAgain, today,
     hard, hardActive, toggleHard,
   };
 }

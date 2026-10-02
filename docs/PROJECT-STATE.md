@@ -1,5 +1,25 @@
 # Project state
 
+## Codex882 accepted, Champ or Not readable feedback, 2026-10-02
+
+Next claim/View results replaces the forced 2.2s advance. Earned score appears
+immediately, with guarded focus and one decided answer per reveal. Original
+daily save/booking, fixed day, recovery and difficulty behavior remain intact.
+18 focused outcomes, nine effective controls, 67 existing recording outcomes
+and three recording controls pass. Native actual built route 3/3 at 1440
+pointer/keyboard, 390 touch and 320 touch/reduced, 381 checks and 16 screenshots.
+Fictional REST fixtures and fallback fonts, no live-data or backend-write proof.
+Type/build 0, 15 built fences and two source guards pass; final review clear.
+882's immutable pre-merge gate entry: index-Db2JDd0b.js, SHA256
+d999f334f8e8cb80b6892a80fb251d7581b210276dd61ff622d6c751cf6d2ac4.
+Claude's latest handoff reports 878/880/881 published in Release T. 882 is ready
+for the next publication. All private processes closed, no desktop/Supabase/live
+operations. Claude now owns 883 (Liga MX); next free 884.
+Release T merged with only tracking-document conflicts. All six 882 scope
+files match the tested gate. Clean merged commit 2038dc26: real app type 0;
+four focused files, 120/120 outcomes pass (including two recording bookkeeping
+checks). Logs: `%TEMP%/dukb-882-release-t-merge-2026-10-02`.
+
 ## Release T is LIVE, 2026-10-02 06:31 EDT: main `125fda49`, deployment `c9d7a5df`, entry `index-pqBjaq8x.js`
 
 Assembled by the desktop Claude lane in the gate clone (`release-t`), gated under the production load rule.

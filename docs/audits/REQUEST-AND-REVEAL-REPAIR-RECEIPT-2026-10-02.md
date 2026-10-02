@@ -17,6 +17,7 @@ Claude owns production verification and publication.
 | 878 | `/nfl-my-career`, `/nba-my-career`, `/mlb-my-career`, `/nhl-my-career` money screens | Actual committed transaction receipt; finite cues for changed buckets and latest local statement | 19 actual component/engine cases; 11 executable controls; four native component/input cases, 727 checks |
 | 880 | Daily-reload verification for `/buzzer-beater` and `/free-kick` | Drive actual primary pointer holds/releases with scoped jsdom capture support | Original each3 pass/4 fail; after each7/7; existing full107/107 across21 routes and effective controls |
 | 881 | `/nba-starting-5` | Select empty court positions directly; matching locks and selected state; preserve court opener focus | 14 focused cases, eight effective controls; four unique native cases,341 checks and16 screenshots |
+| 882 | `/champ-or-not` | Hold historical explanations for Next claim/View results; earned score and guarded focus at answer time | 18 focused outcomes, nine controls,67 existing recording outcomes; native3/3 with381 checks |
 
 ## Preserved behavior and measured limits
 
@@ -143,6 +144,16 @@ match root after EOL normalization. Entry: `index-pB-89qU1.js`, SHA256
 - NBA clean gate: `%TEMP%/dukb-release-s-codex881-offline`, `type-881.txt`,
   `build-881.txt`, `fences-881.txt`, `sources-881.txt` and stderr. The retained
   aborted wrong-CWD type attempt and first test-option type failure are excluded.
+- Champ focused before/final/controls: `%TEMP%/dukb-champ882-proof-2026-10-02`,
+  `verified-summary.json`, raw selected-before JSON, final normal/control logs
+  and erased-cast emission receipt. Original source is separately held in
+  `%TEMP%/dukb-champ882-root-original`.
+- Champ existing recording: `%TEMP%/dukb-champ882-recording-2026-10-02-a1`,
+  `final-summary.json`, actual child JSON/stdout, source holds and test integrity.
+- Champ actual built route: `%TEMP%/dukb-champ882-native-2026-10-02`,
+  `report.json`, `run-2.log`,16 accepted images and retained first attempt.
+- Champ gate: `%TEMP%/dukb-release-s-codex882-offline`, type/build/fences/boot/
+  source logs and stderr, with setup, cast and inline-byte-read failures retained.
 
 ## Arcade reload gate repair,880
 
@@ -236,9 +247,87 @@ match root after EOL normalization. Entry: `index-B1_iQCl7.js`, SHA256
 The first type run exposed six unsupported test query options; only those were
 removed, every outcome expectation held, and focused/type/build checks reran.
 
+## Champ or Not readable reveals,882
+
+The owned2200ms timer is replaced by one pending-answer ref and an explicit
+advance action. Next claim keeps the historical explanation on screen; the
+last claim offers View results. Same-frame duplicate and nonboolean answers
+are refused. The header includes the earned pending correct point, while the
+result score still derives from committed answers. Daily save and completion
+remain at answer time, with the original day, save shape, restore protection,
+builder, fetches and scoring. Mode changes, Unlimited replay/difficulty and
+unmount discard pending feedback. Daily's Hard toggle keeps its current reveal.
+The Next focus handoff matches the accepted finals pattern and preserves
+deliberate Help, Hard, mode and Record Books focus. Instructions explain the
+manual action, and the metadata no longer claims ten seconds per question.
+
+Exact preserved original hook/page copies were tested against five selected
+outcomes: Daily/Unlimited explanations disappeared, and a correct answer's
+visible score stayed0 during feedback. Those three failed while wrong-save
+and ordinary scoring/advancement baselines passed.13 other rows were explicitly
+excluded. Final18/18 pass. Nine copied executable controls reject exact named
+regressions with all18 run, none skipped or unhandled: timer5/13, duplicate1/17,
+invalid1/17, pending4/14, Daily Hard1/17, shown score2/16, status2/16, focus2/16
+and focus owner1/17 (fail/pass). CRLF bindings, original bytes and cleanup hold.
+An unmount assertion that could not discriminate cleanup was removed instead
+of credited; that cleanup path is source reviewed.
+
+All67 existing recording outcomes pass, and all61 original expectation lines
+and unrelated test bytes are held. Only the Champ finish/race stimuli call the
+new advance action. The old timer-specific late-day control uses the existing
+manual bindings for all three reveal games, with its original predicates.
+Late-day rejects6 intended outcomes with61 held, unpinned3/64 and day-keyed6/61,
+plus two bookkeeping passes each. Actual child JSON/stdout and seven source
+holds are retained. No pending/diagnostic/transport faults or leftover copies.
+
+Three unique actual built-route runs pass:1440 pointer/keyboard160 checks,
+390 true touch109 and320 touch/reduced112,381 total and16 images. Each plays all
+ten Daily claims with one wrong answer, holds first/final feedback for ten real
+seconds, saves each answer immediately and books9/10 once before View results.
+Early/finished refresh and mode returns hold. Desktop also completes Hard
+Unlimited10/10 and replay without changing or booking the Daily again. Native
+keyboard verifies the first answer-to-Next handoff; subsequent play uses pointer
+or tap. The320 run enables reduced preference; it does not measure computed
+animation styles. No horizontal overflow, page/console errors, unhandled
+outside attempts or preload blocks in the accepted runs. Root inspected the
+390 final reveal. Owned contexts/browser/4984 server closed, boot's4985 server
+closed, and neither port had a remaining listener.
+
+The actual page, shared presentation, fetch shaping, builder, hook, save and
+recording path stay real in native runs. REST table/history/completion replies
+are explicitly fictional fixtures; remote font CSS is empty, so fallback
+typography is tested. This is neither live historical-data nor database-write
+verification. First native attempt held147 gameplay checks before the transport
+guard exposed omitted font/history fixtures. Its raw report, logs and images
+remain. Only explicit offline fixtures were added; error checks stayed intact.
+
+The immutable gate archives maine8021bf8 plus the six final882 scope files,
+excluding paused drafts. Real app type/build0, all15 built fences (14 node and
+boot separately), simChampOrNotReveal and simHarnessAnchors pass offline. Final
+entry: `index-Db2JDd0b.js`, SHA256
+`d999f334f8e8cb80b6892a80fb251d7581b210276dd61ff622d6c751cf6d2ac4`.
+The initial setup type attempt ran before extraction finished and is excluded.
+Final type caught an invalid-input test cast, corrected through unknown with
+byte-identical emitted JavaScript and normal rerun. The source guardian required
+an explicit raw-byte read variable in harness cleanup; its failure is retained,
+raw comparison semantics held, and the final guardian reran. The first pending
+control predicted three failures but discovered the fourth final-mode ownership
+case; exact target accounting was corrected with every assertion unchanged.
+Independent source, recording, focused/control and native review is clear.
+
+Final pull brought Release T and Claude's 883 claim. Only WORKBOARD and
+PROJECT-STATE conflicted; both lanes' sections were kept. The six verified
+882 files still match the original gate after EOL normalization. A clean
+archive of merged commit 2038dc26 excludes all paused drafts: real app type 0,
+four focused files and 120/120 outcomes pass, including the two recording
+bookkeeping checks. Logs are in `%TEMP%/dukb-882-release-t-merge-2026-10-02`,
+`type-merge.txt` and `focused-merge.txt`. This post-merge check did not repeat
+the earlier build, controls or native runs. All owned processes have exited.
+
 Publication, bounded production API verification and physical-device/Safari
-testing remain outside this receipt. Claude separately recorded Release S as
-published in the work board.878/881 need the next publication;880 is a test-only
-gate repair. A source-only Football Draft delayed-callback candidate is saved
-in `%TEMP%/dukb-football-draft-scout-2026-10-02-a1/SOURCE-CANDIDATE.md` for later
-reproduction, without claiming a verified product bug or starting882.
+testing remain outside this receipt. Claude's latest remote handoff records
+Release T as published, including 878, 881 and the 880 test-only gate repair.
+882 needs the next publication. Football Draft's source-only delayed-callback candidate
+is retained, but its route redirects home and it is absent from the active
+registry, so no repair or playable-site failure is credited there. Claude claimed
+883 during the final pull; next free 884.

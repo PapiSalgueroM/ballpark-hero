@@ -1,3 +1,4 @@
+import { useLayoutEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { useChampOrNot } from '@/hooks/useChampOrNot';
 import { GameNav } from '@/components/game/GameNav';
@@ -20,18 +21,34 @@ import { cn } from '@/lib/utils';
 const ChampOrNot = () => {
   const {
     loadState, mode, switchMode, rounds, roundIdx, current, showingResult,
-    lastPick, answers, done, score, answer, playAgain,
+    lastPick, answers, done, score, answer, advanceReveal, playAgain,
     hard, hardActive, toggleHard,
   } = useChampOrNot();
 
   const total = rounds.length;
   const lastCorrect = showingResult && current ? lastPick === current.isTrue : null;
+  const shownScore = score + (lastCorrect ? 1 : 0);
+  const advanceButton = useRef<HTMLButtonElement>(null);
+  const revealFocus = useRef<{ round: typeof current; pick: boolean; opener: HTMLButtonElement } | null>(null);
+  useLayoutEffect(() => {
+    const request = revealFocus.current;
+    if (!request) return;
+    revealFocus.current = null;
+    if (!showingResult || current !== request.round || lastPick !== request.pick) return;
+    const active = document.activeElement;
+    if (active === request.opener || active === document.body || !active?.isConnected) advanceButton.current?.focus({ preventScroll: true });
+  }, [showingResult, current, lastPick]);
+  const pickAnswer = (pick: boolean, opener: HTMLButtonElement) => {
+    if (!current || showingResult || revealFocus.current) return;
+    revealFocus.current = { round: current, pick, opener };
+    answer(pick);
+  };
 
   return (
     <>
       <PageSeo
         title="Champ or Not - True or False Champions Quiz | DoUKnowBall"
-        description="Ten champion claims, true or false. Did the Nuggets really win that Finals? Ten seconds a question across NFL, NBA, MLB, NHL, WNBA, college, soccer and footy."
+        description="Ten champion claims, true or false. Did the Nuggets really win that Finals? Pick your answer and read the real result across NFL, NBA, MLB, NHL, WNBA, college, soccer and footy."
         path="/champ-or-not"
       />
       <GameShell help="none"
@@ -67,7 +84,7 @@ const ChampOrNot = () => {
             {loadState === 'ready' && !done && (
               <div className="flex items-center justify-center gap-4 mt-3 text-sm">
                 <span className="text-muted-foreground">Claim: <span className="font-semibold text-foreground">{Math.min(roundIdx + 1, total)}</span>/{total}</span>
-                <span className="text-muted-foreground">Right: <span className="font-semibold text-gold">{score}</span></span>
+                <span className="text-muted-foreground">Right: <span className="font-semibold text-gold">{shownScore}</span></span>
                 {hardActive && <span className="text-destructive font-semibold">😈 Hard</span>}
               </div>
             )}
@@ -83,6 +100,7 @@ const ChampOrNot = () => {
               <li>Tap CHAMP if the claim is true, NOT if it is false.</li>
               <li>One point per correct call, ten claims a day, same claims for everyone.</li>
               <li>The reveal always shows who really won that year, and for the finals leagues, who they beat and by what.</li>
+              <li>Take your time with the answer. Tap Next claim when ready, or View results after the last claim.</li>
               <li>Hard mode (Unlimited only): the fake winner really did win, just a season or three away from the year on the card.</li>
             </ul>
             <p className="font-semibold text-foreground">Worked example:</p>
@@ -120,11 +138,11 @@ const ChampOrNot = () => {
               {!showingResult && (
                 <div className="grid grid-cols-2 gap-3 mt-6">
                   <button
-                    onClick={() => answer(true)}
+                    onClick={event => pickAnswer(true, event.currentTarget)}
                     className="px-4 py-3 rounded-xl bg-primary text-primary-foreground font-bold hover:opacity-90 transition-opacity"
                   >🏆 CHAMP</button>
                   <button
-                    onClick={() => answer(false)}
+                    onClick={event => pickAnswer(false, event.currentTarget)}
                     className="px-4 py-3 rounded-xl bg-secondary text-foreground font-bold border border-border hover:bg-secondary/70 transition-colors"
                   >🚫 NOT</button>
                 </div>
@@ -137,12 +155,17 @@ const ChampOrNot = () => {
                     {lastCorrect ? <Check className="w-5 h-5" /> : <X className="w-5 h-5" />}
                     {lastCorrect ? 'Right!' : 'Wrong!'}
                   </div>
-                  <p className="text-muted-foreground">
+                  <p role="status" className="text-muted-foreground">
                     {current.isTrue
                       ? 'That one really happened.'
                       : `Nope. ${current.year} went to ${current.realTeams.join(' and ')}.`}
                     {current.beatLine ? ` They beat ${current.beatLine}.` : ''}
                   </p>
+                  <button
+                    ref={advanceButton}
+                    onClick={advanceReveal}
+                    className="w-full min-h-[44px] mt-3 px-4 py-3 rounded-xl bg-primary text-primary-foreground font-semibold hover:opacity-90 transition-opacity"
+                  >{roundIdx + 1 === total ? 'View results' : 'Next claim'}</button>
                 </div>
               )}
             </div>
