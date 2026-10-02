@@ -830,8 +830,8 @@ export const CM_ERAS: CMEra[] = [
     label: seasonLabel(2015),
     startYear: 2015,
     emoji: '\u{1F98A}',
-    blurb: 'The Leicester season. MSN Barcelona, Vardy at 5000 to 1, Juventus chasing five straight. Premier League, La Liga and Serie A, 2015-16.',
-    get honesty() { return `Real data. ${eraPlayersPhrase('era2015')} with their real 2015 ages and values, all 60 clubs of the 2015-16 Premier League, La Liga and Serie A. Thin squads are padded with made up youth players and say so.`; },
+    blurb: 'The Leicester season. MSN Barcelona, Vardy at 5000 to 1, Lewandowski at Bayern, Ibrahimovic at PSG. All of the big five, 2015-16.',
+    get honesty() { return `Real data. ${eraPlayersPhrase('era2015')} with their real 2015 ages and values, all 98 clubs of the 2015-16 Premier League, La Liga, Serie A, Bundesliga and Ligue 1. Thin squads are padded with made up youth players and say so.`; },
   },
   {
     id: 'era2010',
