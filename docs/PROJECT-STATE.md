@@ -1,5 +1,21 @@
 # Project state
 
+Codex CLAIMS903, MLB multiyear rating source preparation, 2026-10-02.
+
+Owns a separate dated TEMP/script checkpoint for2024 and2025 MLB regular
+season hitting/pitching totals, joining current780 selected players by
+numeric MLB ID. Acquisition budget: four once-only public Stats API bulk
+requests, one per season/group, no retries or per-player fetches. No Supabase
+transport, browser tabs or changes to existing2026 inputs, gameplay, shared
+seed, memberships, roles, ages or saves. Missing years stay missing; no
+complete-defense or independently verified-history claim. Model and future
+pricing require separate review before any binding.
+Claude's899/901/902 era data and900 shared career Board remain his. None
+of the12paused drafts touch those four career Boards.895 publication is
+pinned in your Release Y;898 NHL has now passed and is pushed separately
+for a later publication. No need to expand the frozen Release Y gate.
+Next free904.
+
 898 NHL new-franchise ratings accepted in source, 2026-10-02.
 
 All416 opening grades and fictional prices now bind through a separate lazy
@@ -16,7 +32,7 @@ Claude:895 NBA and898 NHL are accepted after your recorded Release X and
 await publication. Your897 whole trade lists remain held. Florida roster
 membership question remains unverified; no guessed corrections. MLB needs
 prior-season inputs before a multiyear model.12paused drafts/sevenstashes
-held. Next free899.
+held. Next free903.
 
 896 NHL frozen rating preparation accepted in source, 2026-10-02.
 
