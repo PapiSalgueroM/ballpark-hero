@@ -37,7 +37,10 @@
      2) A chemistry link exists only where the data shows it (hard). Every
         link joins two pitch neighbours whose rows carry the same club (or
         the same first nationality) and says which; every neighbour pair that
-        shares one has its link; no link touches an empty slot. The layout the
+        shares one has its link; no link touches an empty slot. A club the
+        table stores under two names (Juventus FC and Juventus) links as one
+        club, two clubs never do, and a bare label that is not one of the
+        club's own stored names does not either. The layout the
         links read is checked against a line table of this harness's own: the
         keeper only neighbours his back line, no pair spans two lines, and a
         left sided slot sits left of every central slot in its line (the 3-5-2
@@ -79,6 +82,7 @@
                (1 for the points, 3 because every grade then disagrees
                with the shared rule)
      farlinks  chemistry counts every pair, not neighbours.   section 2
+     alias     one club under two stored names reads as two.  section 2
      nocap     the chemistry cap is gone.                     section 3
      leak      World XI's season gets a half point nudge.     section 4
      oldcrash  the worth tiles read a report's fit unguarded. section 5
@@ -151,6 +155,7 @@ const FILES = {
   chem: path.join(ROOT, 'src', 'lib', 'chemistry.ts'),
   wxi: path.join(ROOT, 'src', 'lib', 'worldXi.ts'),
   tiles: path.join(ROOT, 'src', 'components', 'lineup', 'XiFitBreakdown.tsx'),
+  teams: path.join(ROOT, 'src', 'data', 'lineupTeams.ts'),
 };
 const CONTROLS = {
   nofit: {
@@ -164,6 +169,12 @@ const CONTROLS = {
     from: '      if (opts?.linked && !opts.linked(a, b)) continue;\n',
     to: '      void opts;\n',
     note: 'chemistry counts every pair on the pitch; section 2 must go red',
+  },
+  alias: {
+    sections: [2], file: 'teams',
+    from: '    if (names.includes(name)) return names[0];\n',
+    to: '    if (names.includes(name)) return name;\n',
+    note: 'a club stored under two names reads as two clubs; section 2 must go red',
   },
   nocap: {
     sections: [3], file: 'xifit',
@@ -219,6 +230,7 @@ export * as fit from '${ROOT_URL}/src/lib/xiFit.ts';
 export * as pf from '${ROOT_URL}/src/lib/positionFit.ts';
 export { FORMATIONS as WX_FORMATIONS } from '${ROOT_URL}/src/lib/squadDeal.ts';
 export { FORMATIONS as BY_FORMATIONS } from '${ROOT_URL}/src/types/lineupBuilder.ts';
+export { CLUB_TABLE_NAMES } from '${ROOT_URL}/src/data/lineupTeams.ts';
 export { XiFitBreakdown, XiFitDetail, XiFitWorth } from '${ROOT_URL}/src/components/lineup/XiFitBreakdown.tsx';
 export { SeasonReportTabs } from '${ROOT_URL}/src/components/world-xi/SeasonReportTabs.tsx';
 import React from '${NM}/react/index.js';
@@ -297,7 +309,7 @@ if (PRINT_DIGEST) {
   process.exit(0);
 }
 
-const { fit, pf, BY_FORMATIONS, render, XiFitBreakdown, XiFitDetail, XiFitWorth, SeasonReportTabs } = B;
+const { fit, pf, BY_FORMATIONS, CLUB_TABLE_NAMES, render, XiFitBreakdown, XiFitDetail, XiFitWorth, SeasonReportTabs } = B;
 const FORM_NAMES = Object.keys(BY_FORMATIONS);
 
 /* ---- Build Your XI elevens ---- */
@@ -329,15 +341,14 @@ function shuffleOf(rand, n) {
     if (p.some((v, i) => v !== i)) return p;
   }
 }
-/** The slots the page hands xiFitBreakdown, built the way LineupBuilder builds them. */
+/** The slots the page hands xiFitBreakdown, through the page's own builder
+    (lineupFitSlots), from filled slots shaped like the page's. */
 function fitSlots(formationName, men) {
-  return BY_FORMATIONS[formationName].map((slot, i) => ({
-    role: slot.role,
-    allowed: pf.SLOT_ALLOWED_BY_ROLE[slot.role],
-    man: men[i]
-      ? { name: men[i].name, position: men[i].position ?? null, played: men[i].played, club: men[i].club, nationality: men[i].nationality }
-      : null,
-  }));
+  const filled = new Map();
+  men.forEach((m, i) => {
+    if (m) filled.set(i, { ...BY_FORMATIONS[formationName][i], playerName: m.name, assignedTeam: '', isNation: false, pick: { position: m.position ?? undefined, played: m.played, club: m.club, nationality: m.nationality } });
+  });
+  return fit.lineupFitSlots(BY_FORMATIONS[formationName], filled);
 }
 /** The squad the page hands the season sim, built the way LineupBuilder builds it. */
 function squadOf(formationName, men) {
@@ -418,6 +429,42 @@ for (let k = 0; k < 120; k++) {
 
 /* ======================= 2) links only where the data shows them ======================= */
 begin(2, 'a chemistry link exists only between neighbours the data says share a club or a country');
+/* One club stored under two names is one club (the table spells Juventus as
+   "Juventus FC" and "Juventus", and the Juventus slot offers both, so
+   Locatelli and Bremer side by side were never linked), while two different
+   clubs never link, nor does a bare label that is not one of the club's own
+   stored names. Every two name club in the game's alias table, at two
+   neighbouring centre backs. */
+{
+  const f = '4-3-3';
+  const roles = BY_FORMATIONS[f].map(s => s.role);
+  const pair = fit.pitchNeighbours(roles).find(([a, b]) => roles[a] === 'CB' && roles[b] === 'CB');
+  const twoNames = Object.entries(CLUB_TABLE_NAMES).filter(([, names]) => names.length >= 2);
+  if (!pair || twoNames.length < 3) fail(`the alias case has no material: centre back pair ${J(pair)}, ${twoNames.length} clubs stored under two names`);
+  let joined = 0;
+  const xiWith = (c1, c2) => {
+    const men = roles.map((r, k) => ({ name: `Alias${k}`, position: r, club: `Club Own ${k}`, nationality: `Country Own ${k}` }));
+    men[pair[0]] = { ...men[pair[0]], club: c1 };
+    men[pair[1]] = { ...men[pair[1]], club: c2 };
+    return breakdownOf(f, men);
+  };
+  for (const [label, names] of pair ? twoNames : []) {
+    const b = xiWith(names[0], names[1]);
+    const club = b.chemistry.links.filter(l => l.type === 'club');
+    if (club.length !== 1 || club[0].value !== names[0]) fail(`${names[0]} and ${names[1]} (both ${label}) side by side: club links ${J(club)}`);
+    else joined += 1;
+  }
+  if (pair) {
+    const apart = xiWith(twoNames[0][1][0], twoNames[1][1][0]);
+    if (apart.chemistry.links.length) fail(`two different clubs side by side linked: ${J(apart.chemistry.links)}`);
+    const bare = Object.entries(CLUB_TABLE_NAMES).find(([label, names]) => !names.includes(label));
+    if (bare) {
+      const b = xiWith(bare[0], bare[1][0]);
+      if (b.chemistry.links.length) fail(`a bare "${bare[0]}" beside "${bare[1][0]}" linked, and a bare label may be some other club's stored name`);
+    }
+  }
+  console.log(`   one club under two stored names: ${joined} of ${twoNames.length} clubs link their two spellings`);
+}
 let linkCount = 0;
 let clubLinks = 0;
 for (const { formationName, slots, b } of seen) {

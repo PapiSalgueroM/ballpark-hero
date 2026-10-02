@@ -1,6 +1,8 @@
 import type { Position } from '@/types/game';
-import { ALL_POSITIONS, FIT_PENALTY, gradeFit, type FitGrade } from '@/lib/positionFit';
+import type { FilledSlot, PositionSlot } from '@/types/lineupBuilder';
+import { ALL_POSITIONS, FIT_PENALTY, gradeFit, SLOT_ALLOWED_BY_ROLE, type FitGrade } from '@/lib/positionFit';
 import { CHEMISTRY_WEIGHTS, computeChemistry, type ChemistryPlayer } from '@/lib/chemistry';
+import { canonicalClubName } from '@/data/lineupTeams';
 
 /**
  * Round 825: HOW an eleven is put together, as three numbers the season sim
@@ -185,6 +187,31 @@ export function pitchNeighbours(roles: string[]): [number, number][] {
     }
   }
   return out;
+}
+
+/**
+ * The slots Build Your XI hands the breakdown, off the dropdown row each pick
+ * came from. One function so the page and simBuildYourXiFit build them the
+ * same way. The club goes in under one spelling per club (canonicalClubName),
+ * so a club the table stores under two names links as the one club it is.
+ */
+export function lineupFitSlots(positions: PositionSlot[], filled: ReadonlyMap<number, FilledSlot>): XiFitSlot[] {
+  return positions.map((pos, i) => {
+    const s = filled.get(i);
+    return {
+      role: pos.role,
+      allowed: SLOT_ALLOWED_BY_ROLE[pos.role],
+      man: s
+        ? {
+            name: s.playerName,
+            position: s.pick?.position ?? null,
+            played: s.pick?.played,
+            club: canonicalClubName(s.pick?.club),
+            nationality: s.pick?.nationality,
+          }
+        : null,
+    };
+  });
 }
 
 /* ---------------- The breakdown ---------------- */

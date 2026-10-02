@@ -22,8 +22,7 @@ import { StatTile } from '@/components/game/StatTile';
 import { normalizePosition, playerRating } from '@/lib/squadDeal';
 import { ordinal, simulateWorldXiSeason, type WxPlayer } from '@/lib/worldXi';
 import { SeasonReportTabs } from '@/components/world-xi/SeasonReportTabs';
-import { SLOT_ALLOWED_BY_ROLE } from '@/lib/positionFit';
-import { seasonAdjust, xiFitBreakdown, type XiFitSlot } from '@/lib/xiFit';
+import { lineupFitSlots, seasonAdjust, xiFitBreakdown, type XiFitSlot } from '@/lib/xiFit';
 import { XiFitBreakdown, XiFitWorth } from '@/components/lineup/XiFitBreakdown';
 
 const formationOptions: Formation[] = ['4-3-3', '4-4-2', '3-5-2', '4-2-3-1', '3-4-3', '5-3-2'];
@@ -156,26 +155,7 @@ const LineupBuilder = () => {
      same breakdown is what the tiles show while you pick, before you submit
      and on the result card. It replaced the old chemistry chip, which counted
      every pair on the pitch and moved nothing. */
-  const fitSlots: XiFitSlot[] = useMemo(
-    () =>
-      positions.map((pos, i) => {
-        const s = filledSlots.get(i);
-        return {
-          role: pos.role,
-          allowed: SLOT_ALLOWED_BY_ROLE[pos.role],
-          man: s
-            ? {
-                name: s.playerName,
-                position: s.pick?.position ?? null,
-                played: s.pick?.played,
-                club: s.pick?.club,
-                nationality: s.pick?.nationality,
-              }
-            : null,
-        };
-      }),
-    [positions, filledSlots]
-  );
+  const fitSlots: XiFitSlot[] = useMemo(() => lineupFitSlots(positions, filledSlots), [positions, filledSlots]);
   const fitBreakdown = useMemo(() => xiFitBreakdown(fitSlots), [fitSlots]);
   const slotLabels = useMemo(() => positions.map((p) => p.label), [positions]);
 
