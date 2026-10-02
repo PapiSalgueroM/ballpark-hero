@@ -68,6 +68,11 @@
  *   rehabtwice        a reloaded rehab save gets a second row
  *   noconvictionsave  an old save on the conviction paper still gets no row
  *   convictiontwice   a reloaded conviction save gets a second row
+ *   pageclubs         the page's Keep Playing hands the engine no clubs
+ *
+ * 6. The page's Keep Playing passes the clubs it loaded (an empty list
+ *    compiles, plays the season and only stops the rival moving clubs, which
+ *    no fleet check could see).
  *
  * Run: node scripts/simCareerKeepPlaying.mjs [careers]
  */
@@ -164,11 +169,14 @@ const CONTROLS = {
   noconvictionsave: ROWS.newsSave,
   convictiontwice: [ROWS.newsSave[0], '    if (lastRow) s.seasons = [...s.seasons, yearOutRow(s, "CONVICTED")];'],
 };
+/* and one that mutates the page's call instead of the engine */
+const PAGE_CALL = "setCareer(declineRetirementSuggestion(career, clubs));";
+const PAGE_CONTROLS = { pageclubs: [PAGE_CALL, "setCareer(declineRetirementSuggestion(career, []));"] };
 let CURRENT_SRC = SRC;
 if (CONTROL) {
-  if (!CONTROLS[CONTROL]) { console.error(`  FAIL: unknown KEEP_PLAYING_CONTROL=${CONTROL}`); process.exit(1); }
-  CURRENT_SRC = swap(SRC, CONTROLS[CONTROL][0], CONTROLS[CONTROL][1], `control ${CONTROL}`);
-  console.log(`CONTROL ${CONTROL}: the current engine is mutated, this run must go red`);
+  if (!CONTROLS[CONTROL] && !PAGE_CONTROLS[CONTROL]) { console.error(`  FAIL: unknown KEEP_PLAYING_CONTROL=${CONTROL}`); process.exit(1); }
+  if (CONTROLS[CONTROL]) CURRENT_SRC = swap(SRC, CONTROLS[CONTROL][0], CONTROLS[CONTROL][1], `control ${CONTROL}`);
+  console.log(`CONTROL ${CONTROL}: the current ${CONTROLS[CONTROL] ? "engine" : "page"} is mutated, this run must go red`);
 }
 
 const TMP = mkdtempSync(path.join(os.tmpdir(), "keep-playing-"));
@@ -603,6 +611,19 @@ const heatUp = s => (s.age >= 22 ? { ...s, corruptionHeat: 95, dirtyMoney: Math.
   }
   console.log(`   already lost years: ${ok}/${tried} kept every row and lost no more (${carrying} carry their old gaps, nothing invented to fill them)`);
   check(tried >= OLD_SAVES / 2 && ok === tried, `only ${ok} of ${tried} saves with lost years continued cleanly (need ${OLD_SAVES / 2} tried)`);
+}
+
+/* ── 6: the page hands Keep Playing the clubs it plays the season against ──
+   Dropping the argument is a type error, but an empty list compiles and
+   quietly plays the season against no clubs (the rival can never move), so
+   the call itself is held, read from the code with the comments stripped. */
+{
+  let page = readFileSync(path.join(ROOT, "src/pages/SoccerCareer.tsx"), "utf8").replace(/\r\n/g, "\n");
+  if (PAGE_CONTROLS[CONTROL]) page = swap(page, PAGE_CONTROLS[CONTROL][0], PAGE_CONTROLS[CONTROL][1], `control ${CONTROL}`);
+  const code = page.replace(/\/\*[^]*?\*\//g, "").replace(/^\s*\/\/.*$/gm, "");
+  const calls = count(code, "declineRetirementSuggestion(");
+  console.log(`6) the page calls Keep Playing ${calls} time(s), with its clubs ${count(code, PAGE_CALL)}`);
+  check(calls === 1 && count(code, PAGE_CALL) === 1, "the page's Keep Playing does not pass the clubs it loaded");
 }
 
 /* ── 5: balance, printed only ── */
