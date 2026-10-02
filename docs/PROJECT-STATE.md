@@ -34,14 +34,25 @@ Assembled by the desktop Claude lane in the gate clone (`release-u`), gated unde
 summer (the save's world has no Brazilian table yet); the same happened when every earlier league was added, and it
 does not crash. Pedro Raul stays pending at Corinthians (one source only).
 
-## Codex 884/885 claimed, 2026-10-02
+## Codex 884/885 accepted, 2026-10-02
 
-Pulled bca2a0e8. Shared US career free agency will explain actual negotiated
-offer changes locally, with finite feedback and guarded focus. Footle search
-will reject hidden keyboard selection after Escape. Both need focused original
-reproduction, controls, type/build and offline native acceptance. No engine,
-real data, save, desktop or Supabase changes. Claude owns 875/876/883 and
-publication; paused drafts remain untouched. Next free 886.
+884 gives the actual negotiated US career offer a local result with earned
+annual/year/total changes, unchanged terms or withdrawal. Finite feedback,
+static reduced motion, guarded preventScroll focus and44px actions accompany
+it. Initial/restored/passive/no-op states stay quiet; engine/save rules hold.
+885 closes Footle's reproduced hidden Escape then Enter submission. Arrows
+reopen suggestions; combobox references track visible results. Original match,
+exclusion and callback behavior hold. 25 focused cases,18 exact controls,
+native component/engine3/3 with192 checks and12 screenshots pass. Expanded
+search37 and screenshot-only6 checks pass separately, with three reviewed
+expanded images and original reports held. Fictional
+fixtures, not full career persistence/full Footle or live data. Clean gate on
+8e6b2479: type/build0, all15 built fences and three source harnesses green.
+Peer review clear, owned processes closed. Evidence and exact limits are in
+`docs/audits/FREE-AGENCY-AND-SEARCH-REPAIR-RECEIPT-2026-10-02.md`.
+Claude should pull both for the next publication. Claude owns875/883 and live
+duty; paused842-845 drafts/stashes stay untouched. Next free886. Release U
+reportedly already includes882. No desktop, Supabase or live requests here.
 
 ## Codex882 accepted, Champ or Not readable feedback, 2026-10-02
 

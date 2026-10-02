@@ -1,4 +1,4 @@
-import { useState, useMemo, useRef, useEffect, useCallback } from 'react';
+import { useState, useMemo, useRef, useEffect, useCallback, useId } from 'react';
 import { Player } from '@/types/game';
 import { Search } from 'lucide-react';
 import { smartMatch, smartScore, highlightMatches } from '@/lib/smartSearch';
@@ -15,6 +15,7 @@ export function PlayerSearch({ players, guessedNames, onSelect }: PlayerSearchPr
   const [highlightIndex, setHighlightIndex] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const listId = useId();
 
   const filtered = useMemo(() => {
     if (!query.trim() || query.trim().length < 2) return [];
@@ -24,6 +25,7 @@ export function PlayerSearch({ players, guessedNames, onSelect }: PlayerSearchPr
       .sort((a, b) => smartScore(a.name, query) - smartScore(b.name, query))
       .slice(0, 10);
   }, [query, players, guessedNames]);
+  const hasOptions = isOpen && filtered.length > 0;
 
   useEffect(() => setHighlightIndex(0), [filtered]);
 
@@ -49,11 +51,21 @@ export function PlayerSearch({ players, guessedNames, onSelect }: PlayerSearchPr
       setIsOpen(false);
     } else if (e.key === 'ArrowDown') {
       e.preventDefault();
+      if (filtered.length === 0) return;
+      if (!isOpen) {
+        setIsOpen(true);
+        return;
+      }
       setHighlightIndex(i => Math.min(i + 1, filtered.length - 1));
     } else if (e.key === 'ArrowUp') {
       e.preventDefault();
+      if (filtered.length === 0) return;
+      if (!isOpen) {
+        setIsOpen(true);
+        return;
+      }
       setHighlightIndex(i => Math.max(i - 1, 0));
-    } else if (e.key === 'Enter' && filtered.length > 0) {
+    } else if (e.key === 'Enter' && isOpen && filtered[highlightIndex]) {
       e.preventDefault();
       handleSelect(filtered[highlightIndex]);
     }
@@ -81,16 +93,24 @@ export function PlayerSearch({ players, guessedNames, onSelect }: PlayerSearchPr
           onKeyDown={handleKeyDown}
           placeholder="Search for a player..."
           aria-label="Search for a player"
+          role="combobox"
+          aria-autocomplete="list"
+          aria-expanded={hasOptions}
+          aria-controls={hasOptions ? listId : undefined}
+          aria-activedescendant={hasOptions && filtered[highlightIndex] ? `${listId}-option-${highlightIndex}` : undefined}
           className="w-full bg-card border border-border text-foreground rounded-xl pl-12 pr-5 py-3.5 text-base focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary placeholder:text-muted-foreground transition-all"
           autoComplete="off"
         />
       </div>
 
       {isOpen && filtered.length > 0 && (
-        <div className="absolute top-full mt-2 w-full bg-card border border-border rounded-xl shadow-2xl z-50 max-h-64 overflow-y-auto">
+        <div id={listId} role="listbox" aria-label="Player suggestions" className="absolute top-full mt-2 w-full bg-card border border-border rounded-xl shadow-2xl z-50 max-h-64 overflow-y-auto">
           {filtered.map((player, idx) => (
             <button
               key={player.name}
+              id={`${listId}-option-${idx}`}
+              role="option"
+              aria-selected={idx === highlightIndex}
               onClick={() => handleSelect(player)}
               className={`w-full text-left px-5 py-3 transition-colors flex items-center justify-between first:rounded-t-xl last:rounded-b-xl ${idx === highlightIndex ? 'bg-secondary' : 'hover:bg-secondary'}`}
             >
