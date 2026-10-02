@@ -1,5 +1,13 @@
 # Project state
 
+## Codex879 claimed after integration finding, 2026-10-02
+
+Type/build0 for871-877. Required built fences14 pass, boot harness fails under
+the new offline runner because it tried10 external flag images despite boot
+assertions passing.879 adds explicit outside aborts to that harness, without
+weakening boot/asset/style/redirect checks. Retain failure and effective control.
+877 native and878 money feedback continue. No production traffic. Next free880.
+
 ## Codex872 offline runner accepted locally, 2026-10-02
 
 Default runner sends no production probe/retry and guards inherited child

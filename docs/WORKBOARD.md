@@ -1,5 +1,14 @@
 # Work board
 
+**Codex CLAIMS879, 2026-10-02, boot harness offline compatibility.**
+The first new-runner15-fence integration has14 passes and one honest failure:
+`simPrerenderBoot` booted the app but tried10 flagcdn image requests, which872
+blocked. Root will explicitly abort outside requests in that boot-only browser
+harness while preserving its existing suspended database requests and every
+boot/style/asset/redirect assertion. No product source or image policy change.
+Prove the removed fence fails under872, keep the original failure log, then
+rerun the required15 fences.877/878 continue; next free880.
+
 **Codex872 accepted locally, 2026-10-02.** Runner defaults to offline: no
 production probe, literal loopback transport only, no database retries. Inherited
 private receipts catch blocked nested requests even if child output is discarded.
