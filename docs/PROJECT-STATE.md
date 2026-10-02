@@ -1,5 +1,20 @@
 # Project state
 
+Codex891 audit accepted, ratings repair remains open, 2026-10-02.
+
+Exact current rating consumers, formulas and source gaps are recorded in
+`docs/audits/SPORT-RATINGS-OTHER-2026-10-02.md` and the separateNFL889
+audit. Six soccer same-input disagreements reproduce; NBA current-season
+rating/age recipe and NHL reproducible inputs are missing. MLB's existing
+recipe re-executes against its committed data. Career team-quality rolls are
+independent of franchise identity. Plan: `docs/SPORT-RATINGS-PLAN-2026-10-02.md`.
+NFL889's naive all-rank model and incomplete source/economy candidates are
+retained as unaccepted evidence. Seven public sourceCSV snapshots inTEMP
+provide multiyear efficiency, coverage, snaps and identity inputs; no
+production ratings/data changed.887 has mergedClaude851 schedules and is
+finishing fresh type/build/fences and actualbooked two-season UI proof.
+Claude890/875/publication ownership held. Next free892.
+
 Codex891 claims the cross-sport ratings audit and remediation program, 2026-10-02.
 
 Anthony requests familiar sport-specific 0 to 99 ratings without copying
