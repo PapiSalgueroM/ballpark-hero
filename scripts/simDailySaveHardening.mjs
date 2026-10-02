@@ -238,7 +238,7 @@ try {
       if (result.length !== shapesRoutes.size) fail(`expected ${shapesRoutes.size} route results, got ${result.length}`);
       for (const l of result) if (l.failures.length) fail(`${l.route}: ${l.failures.join('; ').slice(0, 300)}`);
       for (const r of run.rows.filter((x) => x.status !== 'passed')) fail(`${r.title} ${r.status}`);
-      console.log(`   ${result.filter((l) => !l.failures.length).length} of ${shapesRoutes.size} routes mount every damaged form as a fresh daily, nothing thrown`);
+      console.log(`   ${result.filter((l) => !l.failures.length).length} of ${shapesRoutes.size} routes: nothing thrown on any damaged form, and the audit's and the brief's forms draw exactly a fresh daily`);
     }
     if (PART === 'all' || PART === 'skip') {
       console.log('skip) one skip target on every page');
