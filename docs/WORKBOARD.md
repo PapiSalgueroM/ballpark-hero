@@ -1,5 +1,15 @@
 # Work board
 
+**Codex855/856 CLAIMED, same repair batch.**855 owns QA847-07 initial
+instruction/consent keyboard coordination in the shared HowToPlayPopover and
+CookieConsent only if needed, with focused tests. Show rules before play and
+keep actual consent choices reachable; no auto-consent or script-gate change.
+856 owns QA847-10 notification geometry through src/components/ui/sonner.tsx
+only if a bounded mobile-offset repair solves the measured overlap; preserve
+toast behavior and verify native Next Year clicks at narrow pointer/touch
+sizes. Do not edit SoccerCareer.tsx or Claude850's engine. Root integrates
+and gates these after846/852/853/854. Next free857.
+
 **Codex repair batch CLAIMED after audit, 2026-10-01.** Anthony said keep going
 after the evidence delivery. Resume product-quality repairs under the saved
 AdSense request, with tests and separate commits. Pulled Release Q at29e64f42;

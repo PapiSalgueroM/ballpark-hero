@@ -2,6 +2,10 @@
 
 ## Current Codex repair batch, 2026-10-01
 
+Additional disjoint claims855/856 cover initial help/consent keyboard access
+and narrow toast geometry. Neither changes consent decisions, vendor gating,
+Soccer engine or production sports data. Next free857.
+
 Audit847 was delivered and Anthony said keep going. Product-quality repairs
 resume under the saved AdSense request: root resumes846's Soccer Higher or
 Lower callback isolation;852 fixes Footle's result currency and Accessibility
