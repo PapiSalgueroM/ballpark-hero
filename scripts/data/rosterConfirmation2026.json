@@ -2,7 +2,7 @@
  "measuredOn": "2026-09-11",
  "rule": "A baked Club Manager player whose newest row in public.player_market_values_dedup is year 2025, with no year-2026 row at any club the game models and none anywhere else either. The bake falls back to the 2025 row for these, which carries the 2025 CLUB, so the player ships at last season's club with nothing saying so.",
  "population": 379,
- "populationRound876": "Round 876 mapped the table's 1.FC Nuremberg spelling to Nürnberg and re-baked from the 2026-10-02 dump. Three Nürnberg players came in on a 2025 row with no 2026 row anywhere (Berkay Yilmaz, Oliver Villadsen, Tim Janisch), so they joined the population and wait in pending like the rest. No other new fallback row appeared that an overlay row does not already source. Then Brazil's Serie A was mapped (twenty table spellings) and the bake re-run from the same dump. Twenty players at those clubs came in on a 2025 row with no 2026 row anywhere (Luiz Araújo, Gustavo Gómez, Weverton, Lima, Júnior Alonso, Everson, Zé Rafael, Lucas Ronier, Juninho Capixaba, Ignacio Laquintana, Matheus Martins, Nathan Fernandes, Matheus Nascimento, Rafael Lobato, Memphis Depay, Talles Magno, Pedro Raul, Jean Meneses, Alexander Aravena, Gustavo Prado), so they joined the population and wait in pending: none has been checked against a second source yet. Two rows that sat in removedClubNotModelled because the World Cup table put them at Vasco da Gama and Palmeiras (Andrés Gómez, Ramón Sosa) moved to movedTo on that same evidence, since both clubs are modelled now.",
+ "populationRound876": "Round 876 mapped the table's 1.FC Nuremberg spelling to Nürnberg and re-baked from the 2026-10-02 dump. Three Nürnberg players came in on a 2025 row with no 2026 row anywhere (Berkay Yilmaz, Oliver Villadsen, Tim Janisch), so they joined the population and wait in pending like the rest. No other new fallback row appeared that an overlay row does not already source. Then Brazil's Serie A was mapped (twenty table spellings) and the bake re-run from the same dump. Twenty players at those clubs came in on a 2025 row with no 2026 row anywhere (Luiz Araújo, Gustavo Gómez, Weverton, Lima, Júnior Alonso, Everson, Zé Rafael, Lucas Ronier, Juninho Capixaba, Ignacio Laquintana, Matheus Martins, Nathan Fernandes, Matheus Nascimento, Rafael Lobato, Memphis Depay, Talles Magno, Pedro Raul, Jean Meneses, Alexander Aravena, Gustavo Prado), so they joined the population. The same day a review found two of them false, and all twenty were then checked on the web (adjudicatorWeb2026_10_02): nineteen settled, Pedro Raul still pending. Two rows that sat in removedClubNotModelled because the World Cup table put them at Vasco da Gama and Palmeiras (Andrés Gómez, Ramón Sosa) moved to movedTo on that same evidence, since both clubs are modelled now.",
  "source": "public.player_market_values_dedup, read through the Supabase MCP on 2026-09-11.",
  "adjudicator": "public.world_cup_players where world_cup_year = 2026: the 2026 World Cup squads of all 48 nations, applied Round 389 (supabase/migrations/20260901_round_389_world_cup_2026_squads.sql). Every row there is a player two independent sources agree on, Wikipedia squad templates read through the API and Al Jazeera 2026-06-02, with Yahoo Sports 2026-06-11 as the third voice where they differed. Clubs are Wikipedia's. It covers only players picked for the World Cup, which is why it resolves 23 of the 356 and no more.",
  "adjudicatorWeb2026_09_15": "Web adjudication, 2026-09-15, for the 18 pending Premier League rows. Two independent source families were read with WebFetch and WebSearch only: A, official (the premierleague.com squad data feed for season 2026, which lists a loaned-out player at his loan club and not at his parent, plus club, league and UEFA pages) and B, independent press (Sky Sports, ESPN, Sports Illustrated and others; Sky Sport Deutschland never counted as independent of Sky Sports UK). A row moved out of pending only where both families agreed on status and club. Each row carries its own URLs and read dates.",
@@ -298,6 +298,169 @@
    "name": "Zidane Iqbal",
    "club": "Utrecht",
    "wc2026": "Utrecht"
+  },
+  {
+   "name": "Luiz Araújo",
+   "club": "Flamengo",
+   "adjudicatedOn": "2026-10-02",
+   "sources": [
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/819",
+     "publisher": "ESPN (Flamengo squad page, season 2026-27)",
+     "readOn": "2026-10-02",
+     "says": "Luiz Araújo listed, forward, shirt 7"
+    },
+    {
+     "family": "B",
+     "url": "https://www.band.com.br/esportes/flamengo-confirma-lesao-de-luiz-araujo-e-atualiza-situacoes-de-leo-ortiz-e-paqueta-202607191300",
+     "publisher": "Band (2026-07-19)",
+     "readOn": "2026-10-02",
+     "says": "Flamengo confirm his knee injury, no surgery"
+    },
+    {
+     "family": "B",
+     "url": "https://jornaldebrasilia.com.br/torcida/flamengo-projeta-ter-luiz-araujo-contra-o-cruzeiro-saiba-como-esta-o-dm/",
+     "publisher": "Jornal de Brasília",
+     "readOn": "2026-10-02",
+     "says": "Flamengo expect him back against Cruzeiro in August"
+    }
+   ]
+  },
+  {
+   "name": "Gustavo Gómez",
+   "club": "Palmeiras",
+   "adjudicatedOn": "2026-10-02",
+   "sources": [
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2029",
+     "publisher": "ESPN (Palmeiras squad page, season 2026-27)",
+     "readOn": "2026-10-02",
+     "says": "Gustavo Gómez listed, defender, shirt 15"
+    },
+    {
+     "family": "B",
+     "url": "https://tribunadejundiai.com.br/mais/esportes/palmeiras-oficializa-renovacao-com-gustavo-gomez-ate-2030/",
+     "publisher": "Tribuna de Jundiaí (August 2026)",
+     "readOn": "2026-10-02",
+     "says": "Palmeiras make his renewal to 2030 official"
+    }
+   ]
+  },
+  {
+   "name": "Everson",
+   "club": "Atlético Mineiro",
+   "adjudicatedOn": "2026-10-02",
+   "sources": [
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/7632",
+     "publisher": "ESPN (Atlético-MG squad page, 2026)",
+     "readOn": "2026-10-02",
+     "says": "Éverson listed, goalkeeper, shirt 22"
+    },
+    {
+     "family": "B",
+     "url": "https://br.soccerway.com/noticias/futebol-brasileirao-betano-atletico-mg-renova-contrato-do-goleiro-everson-ate-o-fim-de-2027/GGn08Mhc",
+     "publisher": "Soccerway Brasil",
+     "readOn": "2026-10-02",
+     "says": "contract renewed to the end of 2027"
+    }
+   ]
+  },
+  {
+   "name": "Lucas Ronier",
+   "club": "Coritiba",
+   "note": "Out with a knee ligament injury since August 2026, still a Coritiba player.",
+   "adjudicatedOn": "2026-10-02",
+   "sources": [
+    {
+     "family": "B",
+     "url": "https://www.band.com.br/band-parana/noticias/joia-do-coritiba-lucas-ronier-rompe-ligamento-e-passara-por-cirurgia-202608081300",
+     "publisher": "Band Paraná (2026-08-08)",
+     "readOn": "2026-10-02",
+     "says": "Coritiba prospect Lucas Ronier tears a ligament, surgery"
+    },
+    {
+     "family": "B",
+     "url": "https://www.gazetaesportiva.com/times/coritiba/lucas-ronier-volta-a-serie-a-e-aposta-em-confianca-para-brilhar-pelo-coritiba-em-2026/",
+     "publisher": "Gazeta Esportiva",
+     "readOn": "2026-10-02",
+     "says": "back in Serie A with Coritiba in 2026"
+    }
+   ]
+  },
+  {
+   "name": "Juninho Capixaba",
+   "club": "Red Bull Bragantino",
+   "adjudicatedOn": "2026-10-02",
+   "sources": [
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/6079",
+     "publisher": "ESPN (Red Bull Bragantino squad page, season 2026-27)",
+     "readOn": "2026-10-02",
+     "says": "Juninho Capixaba listed, defender, shirt 29"
+    },
+    {
+     "family": "B",
+     "url": "https://placar.com.br/placar/juninho-capixaba-renova-com-o-bragantino-ate-2027/",
+     "publisher": "Placar",
+     "readOn": "2026-10-02",
+     "says": "renewed with Bragantino to 2027"
+    }
+   ]
+  },
+  {
+   "name": "Matheus Martins",
+   "club": "Botafogo",
+   "note": "A sale to Dynamo Moscow was agreed in August 2026 and collapsed at the medical, and he went back to Botafogo.",
+   "adjudicatedOn": "2026-10-02",
+   "sources": [
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/6086",
+     "publisher": "ESPN (Botafogo squad page, season 2026-27)",
+     "readOn": "2026-10-02",
+     "says": "Matheus Martins listed"
+    },
+    {
+     "family": "B",
+     "url": "https://lesnouvellesdufoot.fr/dinamo-fait-une-declaration-apres-avoir-restitue-plata-au-flamengo-et-matheus-martins-au-botafogo-decouvrez-le-communique/",
+     "publisher": "Les Nouvelles du Foot (2026-09-02)",
+     "readOn": "2026-10-02",
+     "says": "Dynamo return Matheus Martins to Botafogo"
+    },
+    {
+     "family": "B",
+     "url": "https://www.livescore.com/en/news/football/more/russian-roulette-dynamo-dump-brazilian-duo-after-bizarre-medical-test-drama-goal/",
+     "publisher": "LiveScore",
+     "readOn": "2026-10-02",
+     "says": "Dynamo cancel the transfer after the medical"
+    }
+   ]
+  },
+  {
+   "name": "Memphis Depay",
+   "club": "Corinthians",
+   "adjudicatedOn": "2026-10-02",
+   "sources": [
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/874",
+     "publisher": "ESPN (Corinthians squad page, season 2026-27)",
+     "readOn": "2026-10-02",
+     "says": "Memphis Depay listed, forward, shirt 10"
+    },
+    {
+     "family": "B",
+     "url": "https://www.bnewssaopaulo.com.br/noticias/esportes/memphis-depay-fica-no-corinthians-veja-como-funciona-o-contrato-do-jogador.html",
+     "publisher": "BNews São Paulo (September 2026)",
+     "readOn": "2026-10-02",
+     "says": "Depay stays at Corinthians on a renewal to July 2028"
+    }
+   ]
   }
  ],
  "movedTo": [
@@ -712,14 +875,344 @@
    "from": "Nottingham Forest",
    "to": "Palmeiras",
    "note": "Round 876: was removedClubNotModelled on the same evidence (the 2026 World Cup table puts him at Palmeiras). Palmeiras are modelled now (Brazil's Serie A), so he moves there instead of leaving the game."
-  }
- ],
- "removedClubNotModelled": [
+  },
+  {
+   "name": "Weverton",
+   "from": "Palmeiras",
+   "to": "Grêmio",
+   "realClub": "Grêmio",
+   "adjudicatedOn": "2026-10-02",
+   "sources": [
+    {
+     "family": "A",
+     "url": "https://gremio.net/noticias/detalhes/29912",
+     "publisher": "Grêmio",
+     "readOn": "2026-10-02",
+     "says": "Weverton é a nova contratação do Grêmio, 2026-01-15, contract to the end of 2028"
+    },
+    {
+     "family": "B",
+     "url": "https://www.band.com.br/esportes/gremio-oficializa-contratacao-goleiro-weverton-ex-palmeiras-202601151121",
+     "publisher": "Band (2026-01-15)",
+     "readOn": "2026-10-02",
+     "says": "Grêmio make the signing official, free from Palmeiras, three years"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/6273",
+     "publisher": "ESPN (Grêmio squad page, season 2026-27)",
+     "readOn": "2026-10-02",
+     "says": "Weverton listed, goalkeeper, shirt 1"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2029",
+     "publisher": "ESPN (Palmeiras squad page, season 2026-27)",
+     "readOn": "2026-10-02",
+     "says": "Weverton absent"
+    }
+   ]
+  },
+  {
+   "name": "Júnior Alonso",
+   "from": "Atlético Mineiro",
+   "to": "Atlanta United",
+   "realClub": "Atlanta United",
+   "adjudicatedOn": "2026-10-02",
+   "sources": [
+    {
+     "family": "A",
+     "url": "https://www.atlutd.com/news/atlanta-united-signs-defender-junior-alonso-paraguay-july-2026",
+     "publisher": "Atlanta United",
+     "readOn": "2026-10-02",
+     "says": "signed through 2028-29, free transfer after two seasons at Atlético Mineiro"
+    },
+    {
+     "family": "B",
+     "url": "https://www.atlantanewsfirst.com/2026/07/21/atlanta-united-signs-defenders-jnior-alonso-paulo-daz-bolster-backline/",
+     "publisher": "Atlanta News First (2026-07-21)",
+     "readOn": "2026-10-02",
+     "says": "Atlanta United sign Júnior Alonso"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/7632",
+     "publisher": "ESPN (Atlético-MG squad page, 2026)",
+     "readOn": "2026-10-02",
+     "says": "Alonso absent"
+    }
+   ]
+  },
+  {
+   "name": "Talles Magno",
+   "from": "Corinthians",
+   "to": "New York City FC",
+   "note": "His loan from New York City FC to Corinthians ended in December 2025 and he went back to his parent club.",
+   "realClub": "New York City FC",
+   "adjudicatedOn": "2026-10-02",
+   "sources": [
+    {
+     "family": "A",
+     "url": "https://www.newyorkcityfc.com/roster",
+     "publisher": "New York City FC",
+     "readOn": "2026-10-02",
+     "says": "roster lists Talles Magno, 11, forward"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/17606/new-york-city-fc",
+     "publisher": "ESPN (New York City FC squad page, 2026)",
+     "readOn": "2026-10-02",
+     "says": "Talles Magno, 11, forward, 17 appearances"
+    },
+    {
+     "family": "B",
+     "url": "https://www.hudsonriverblue.com/will-talles-magno-play-for-new-york-city-fc-in-mls-in-2026",
+     "publisher": "Hudson River Blue (2026-01-16)",
+     "readOn": "2026-10-02",
+     "says": "back at New York City FC after the Corinthians loan"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/874",
+     "publisher": "ESPN (Corinthians squad page, season 2026-27)",
+     "readOn": "2026-10-02",
+     "says": "Talles Magno absent"
+    }
+   ]
+  },
+  {
+   "name": "Lima",
+   "from": "Fluminense",
+   "to": "Santos",
+   "loan": true,
+   "loanFrom": "Fluminense",
+   "note": "Season loan to Santos to the end of 2026, after a loan to América of Mexico was cut short. Placed at the club he plays for, the loanPolicy.",
+   "realClub": "Santos",
+   "adjudicatedOn": "2026-10-02",
+   "sources": [
+    {
+     "family": "B",
+     "url": "https://www.dgabc.com.br/Noticia/4345140/santos-anuncia-lima-ex-meia-do-fluminense-por-emprestimo-ate-o-fim-de-2026",
+     "publisher": "Diário do Grande ABC (2026-09-04)",
+     "readOn": "2026-10-02",
+     "says": "Santos announce Lima, on loan from Fluminense to the end of 2026"
+    },
+    {
+     "family": "B",
+     "url": "https://www.flashscore.com.br/noticias/santos-anuncia-contratacao-de-lima-do-fluminense/Y1lKB4AC/",
+     "publisher": "Flashscore Brasil",
+     "readOn": "2026-10-02",
+     "says": "Santos announce Lima from Fluminense"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2674",
+     "publisher": "ESPN (Santos squad page, season 2026-27)",
+     "readOn": "2026-10-02",
+     "says": "Lima listed, midfielder, shirt 45"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/3445",
+     "publisher": "ESPN (Fluminense squad page, season 2026-27)",
+     "readOn": "2026-10-02",
+     "says": "Lima absent"
+    }
+   ]
+  },
+  {
+   "name": "Matheus Nascimento",
+   "from": "Botafogo",
+   "to": "Grêmio",
+   "note": "Permanent move after a loan at LA Galaxy that ran to June 2026.",
+   "realClub": "Grêmio",
+   "adjudicatedOn": "2026-10-02",
+   "sources": [
+    {
+     "family": "A",
+     "url": "https://gremio.net/noticias/detalhes/30567/gremio-anuncia-contratacao-de-matheus-nascimento",
+     "publisher": "Grêmio",
+     "readOn": "2026-10-02",
+     "says": "Grêmio anuncia contratação de Matheus Nascimento, 2026-07-09, four years"
+    },
+    {
+     "family": "B",
+     "url": "https://www.dgabc.com.br/Noticia/4334249/gremio-anuncia-atacante-matheus-nascimento-ex-botafogo-por-quatro-anos",
+     "publisher": "Diário do Grande ABC",
+     "readOn": "2026-10-02",
+     "says": "Grêmio announce the ex-Botafogo striker for four years"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/6273",
+     "publisher": "ESPN (Grêmio squad page, season 2026-27)",
+     "readOn": "2026-10-02",
+     "says": "Matheus Nascimento listed, forward, shirt 30"
+    }
+   ]
+  },
+  {
+   "name": "Rafael Lobato",
+   "from": "Botafogo",
+   "to": "Rio Ave",
+   "note": "Permanent move in August 2025 on a four year deal; the table still carried him at Botafogo.",
+   "realClub": "Rio Ave",
+   "adjudicatedOn": "2026-10-02",
+   "sources": [
+    {
+     "family": "B",
+     "url": "https://pt.soccerway.com/noticias/futebol-liga-portugal-betclic-oficial-rio-ave-garante-contratacao-de-rafael-lobato-para-o-ataque/tjWnThmR",
+     "publisher": "Soccerway Portugal",
+     "readOn": "2026-10-02",
+     "says": "Rio Ave sign Rafael Lobato from Botafogo, four years"
+    },
+    {
+     "family": "B",
+     "url": "https://www.abola.pt/noticias/rio-ave-extremo-de-19-anos-ganha-gas-para-a-segunda-metade-da-epoca-2026010619312532811",
+     "publisher": "A Bola (2026-01-06)",
+     "readOn": "2026-10-02",
+     "says": "Rafael Lobato at Rio Ave"
+    },
+    {
+     "family": "B",
+     "url": "https://africa.espn.com/football/player/_/id/361652/rafael-lobato",
+     "publisher": "ESPN player page",
+     "readOn": "2026-10-02",
+     "says": "club Rio Ave"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/6086",
+     "publisher": "ESPN (Botafogo squad page, season 2026-27)",
+     "readOn": "2026-10-02",
+     "says": "Rafael Lobato absent"
+    }
+   ]
+  },
+  {
+   "name": "Zé Rafael",
+   "from": "Santos",
+   "to": "Alverca",
+   "note": "Left Santos by mutual termination in late July 2026, then signed for Alverca.",
+   "realClub": "Alverca",
+   "adjudicatedOn": "2026-10-02",
+   "sources": [
+    {
+     "family": "B",
+     "url": "https://www.abola.pt/noticias/mercado-oficial-ganhou-brasileirao-libertadores-e-sudamericana-no-palmeiras-e-ruma-a-portugal-2026082410305523777",
+     "publisher": "A Bola (2026-08-24)",
+     "readOn": "2026-10-02",
+     "says": "official: Zé Rafael joins Alverca"
+    },
+    {
+     "family": "B",
+     "url": "https://www.dgabc.com.br/Noticia/4342903/ze-rafael-assina-com-o-portugues-alverca-apos-titulos-com-o-palmeiras-",
+     "publisher": "Diário do Grande ABC",
+     "readOn": "2026-10-02",
+     "says": "Zé Rafael signs for Alverca"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2674",
+     "publisher": "ESPN (Santos squad page, season 2026-27)",
+     "readOn": "2026-10-02",
+     "says": "Zé Rafael absent"
+    }
+   ]
+  },
+  {
+   "name": "Ignacio Laquintana",
+   "from": "Red Bull Bragantino",
+   "to": "Vitória",
+   "loan": true,
+   "loanFrom": "Red Bull Bragantino",
+   "note": "Loaned to Huesca earlier in 2026, then to Vitória on 2026-09-11, the last day of the Brazilian window, to the end of the Brasileirão. Placed at the club he plays for, the loanPolicy.",
+   "realClub": "Vitória",
+   "adjudicatedOn": "2026-10-02",
+   "sources": [
+    {
+     "family": "B",
+     "url": "https://www.bahianoticias.com.br/esportes/vitoria/31541-vitoria-acerta-contratacao-do-ponta-uruguaio-laquintana-ex-rb-bragantino-saiba-detalhes",
+     "publisher": "Bahia Notícias",
+     "readOn": "2026-10-02",
+     "says": "Vitória sign Laquintana on loan from RB Bragantino to the end of the league"
+    },
+    {
+     "family": "B",
+     "url": "https://lesnouvellesdufoot.fr/vitoria-sacquitte-de-son-interdiction-de-transfert-et-enregistre-laquintana-lors-du-dernier-jour-de-la-periode-des-transferts/",
+     "publisher": "Les Nouvelles du Foot (2026-09-11)",
+     "readOn": "2026-10-02",
+     "says": "Vitória register Laquintana on deadline day"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/6079",
+     "publisher": "ESPN (Red Bull Bragantino squad page, season 2026-27)",
+     "readOn": "2026-10-02",
+     "says": "Laquintana absent"
+    }
+   ]
+  },
+  {
+   "name": "Alexander Aravena",
+   "from": "Grêmio",
+   "to": "Portland Timbers",
+   "loan": true,
+   "loanFrom": "Grêmio",
+   "note": "Loan from 2026-02-25 through the 2026 season with a purchase option. Placed at the club he plays for, the loanPolicy.",
+   "realClub": "Portland Timbers",
+   "adjudicatedOn": "2026-10-02",
+   "sources": [
+    {
+     "family": "A",
+     "url": "https://www.timbers.com/players/Alexander-Aravena",
+     "publisher": "Portland Timbers",
+     "readOn": "2026-10-02",
+     "says": "28, forward, via loan on 2026-02-25 from Grêmio through the 2026 season"
+    },
+    {
+     "family": "B",
+     "url": "https://redgol.cl/mercado-de-fichajes/fin-a-la-aventura-en-brasil-alexander-aravena-pasa-de-rechazar-a-colo-colo-a-firmar-en-la-mls",
+     "publisher": "RedGol",
+     "readOn": "2026-10-02",
+     "says": "Aravena leaves Brazil for the MLS"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/6273",
+     "publisher": "ESPN (Grêmio squad page, season 2026-27)",
+     "readOn": "2026-10-02",
+     "says": "Aravena absent"
+    }
+   ]
+  },
   {
    "name": "Antonio Sanabria",
    "from": "Torino",
-   "realClub": "Cremonese"
-  },
+   "to": "Internacional",
+   "note": "Moved out of removedClubNotModelled in Round 876: Torino to Cremonese in August 2025, then Cremonese to Internacional on 2026-08-20, and Internacional are modelled now.",
+   "realClub": "Internacional",
+   "adjudicatedOn": "2026-10-02",
+   "sources": [
+    {
+     "family": "B",
+     "url": "https://ca.soccerway.com/player/sanabria-antonio/jNePUJ0b/transfers",
+     "publisher": "Soccerway",
+     "readOn": "2026-10-02",
+     "says": "Cremonese to Internacional, 2026-08-20"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/1936",
+     "publisher": "ESPN (Internacional squad page, season 2026-27)",
+     "readOn": "2026-10-02",
+     "says": "Antonio Sanabria listed"
+    }
+   ]
+  }
+ ],
+ "removedClubNotModelled": [
   {
    "name": "Conor Chaplin",
    "from": "Ipswich Town",
@@ -754,6 +1247,96 @@
      "publisher": "ESPN",
      "readOn": "2026-09-15",
      "says": "Leicester City #8, League One start 29 Aug 2026"
+    }
+   ]
+  },
+  {
+   "name": "Nathan Fernandes",
+   "from": "Botafogo",
+   "realClub": "Ludogorets, on loan from Botafogo",
+   "note": "Loan with an option to buy, to June 2027. Bulgaria is not modelled.",
+   "adjudicatedOn": "2026-10-02",
+   "sources": [
+    {
+     "family": "A",
+     "url": "https://ludogorets.com/en/news/?i=7591",
+     "publisher": "Ludogorets",
+     "readOn": "2026-10-02",
+     "says": "Transfers 21 July 2026: Nathan Fernandes on loan from Botafogo with an option to buy"
+    },
+    {
+     "family": "B",
+     "url": "https://www.livesport.com/en/player/nathan-fernandes/Wx49MeHr/",
+     "publisher": "Livesport",
+     "readOn": "2026-10-02",
+     "says": "club Ludogorets"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/6086",
+     "publisher": "ESPN (Botafogo squad page, season 2026-27)",
+     "readOn": "2026-10-02",
+     "says": "Nathan Fernandes absent"
+    }
+   ]
+  },
+  {
+   "name": "Jean Meneses",
+   "from": "Vasco da Gama",
+   "realClub": "Deportes Limache",
+   "note": "Left Vasco da Gama and plays in Chile, which is not modelled.",
+   "adjudicatedOn": "2026-10-02",
+   "sources": [
+    {
+     "family": "B",
+     "url": "https://www.encancha.cl/futbol-chileno/u-de-chile/2026/02/21/pudo-ser-azul-y-ahora-sera-rival-la-historia-detras-del-intento-de-la-u-por-fichar-a-jean-meneses/",
+     "publisher": "En Cancha (2026-02-21)",
+     "readOn": "2026-10-02",
+     "says": "Meneses back in Chilean football with Deportes Limache"
+    },
+    {
+     "family": "B",
+     "url": "https://redgol.cl/campeonato-nacional/jean-meneses-finaliza-su-paso-por-brasil-el-equipo-chileno-que-lo-espera-como-refuerzo",
+     "publisher": "RedGol",
+     "readOn": "2026-10-02",
+     "says": "Meneses ends his spell in Brazil, Deportes Limache wait for him"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/3454",
+     "publisher": "ESPN (Vasco da Gama squad page, season 2026-27)",
+     "readOn": "2026-10-02",
+     "says": "Jean Meneses absent"
+    }
+   ]
+  },
+  {
+   "name": "Gustavo Prado",
+   "from": "Internacional",
+   "realClub": "Dynamo Kyiv, on loan from Internacional",
+   "note": "Back from a loan at Ceará on 2026-09-03, loaned to Dynamo Kyiv on 2026-09-04 to 2027-06-30. Ukraine is not modelled.",
+   "adjudicatedOn": "2026-10-02",
+   "sources": [
+    {
+     "family": "B",
+     "url": "https://us.soccerway.com/player/gustavo-prado/hUieK09m/",
+     "publisher": "Soccerway",
+     "readOn": "2026-10-02",
+     "says": "loaned to Dynamo Kyiv from Internacional 2026-09-04, until 2027-06-30"
+    },
+    {
+     "family": "B",
+     "url": "https://global.espn.com/football/player/_/id/361391/gustavo-prado",
+     "publisher": "ESPN player page",
+     "readOn": "2026-10-02",
+     "says": "club Dynamo Kyiv"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/1936",
+     "publisher": "ESPN (Internacional squad page, season 2026-27)",
+     "readOn": "2026-10-02",
+     "says": "Gustavo Prado absent"
     }
    ]
   }
@@ -2196,84 +2779,11 @@
    "club": "Nürnberg"
   },
   {
-   "name": "Luiz Araújo",
-   "club": "Flamengo"
-  },
-  {
-   "name": "Gustavo Gómez",
-   "club": "Palmeiras"
-  },
-  {
-   "name": "Weverton",
-   "club": "Palmeiras"
-  },
-  {
-   "name": "Lima",
-   "club": "Fluminense"
-  },
-  {
-   "name": "Júnior Alonso",
-   "club": "Atlético Mineiro"
-  },
-  {
-   "name": "Everson",
-   "club": "Atlético Mineiro"
-  },
-  {
-   "name": "Zé Rafael",
-   "club": "Santos"
-  },
-  {
-   "name": "Lucas Ronier",
-   "club": "Coritiba"
-  },
-  {
-   "name": "Juninho Capixaba",
-   "club": "Red Bull Bragantino"
-  },
-  {
-   "name": "Ignacio Laquintana",
-   "club": "Red Bull Bragantino"
-  },
-  {
-   "name": "Matheus Martins",
-   "club": "Botafogo"
-  },
-  {
-   "name": "Nathan Fernandes",
-   "club": "Botafogo"
-  },
-  {
-   "name": "Matheus Nascimento",
-   "club": "Botafogo"
-  },
-  {
-   "name": "Rafael Lobato",
-   "club": "Botafogo"
-  },
-  {
-   "name": "Memphis Depay",
-   "club": "Corinthians"
-  },
-  {
-   "name": "Talles Magno",
-   "club": "Corinthians"
-  },
-  {
    "name": "Pedro Raul",
-   "club": "Corinthians"
-  },
-  {
-   "name": "Jean Meneses",
-   "club": "Vasco da Gama"
-  },
-  {
-   "name": "Alexander Aravena",
-   "club": "Grêmio"
-  },
-  {
-   "name": "Gustavo Prado",
-   "club": "Internacional"
+   "club": "Corinthians",
+   "checkedOn": "2026-10-02",
+   "note": "Checked 2026-10-02 and left pending: ESPN's Corinthians 2026-27 squad page lists him (shirt 18), but the only press found (Mais Goiás, 2026-08-04) says Corinthians wanted to sell him before the window shut, and no second source after the window confirms he stayed."
   }
- ]
+ ],
+ "adjudicatorWeb2026_10_02": "Web adjudication, 2026-10-02, for the twenty Brazilian rows Round 876 added to pending, after a review found two of them false (Weverton at Grêmio since January, Júnior Alonso at Atlanta United since July). Read with WebFetch and WebSearch only. Family A is the club's own site where it could be reached; family B is independent press and ESPN's 2026-27 squad pages, read after the Brazilian window shut on 2026-09-11. A row left pending only where two publishers agreed on the club. Nineteen of the twenty were settled: ten at a new club (nine moves plus Antonio Sanabria, below), three at clubs the game does not model, seven confirmed where they were. Pedro Raul stays pending with what the check found. The same pass found Antonio Sanabria, held out as removedClubNotModelled at Cremonese, signed for Internacional on 2026-08-20, so he moves to movedTo now that Internacional are modelled."
 }

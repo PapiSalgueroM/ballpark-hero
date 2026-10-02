@@ -293,6 +293,13 @@ if (at('Barcelona', 'Lewandowski')) errors.push('ANCHOR: Lewandowski still at Ba
 if (at('Chelsea', 'João Félix')) errors.push('ANCHOR: Joao Felix still at Chelsea, reported wrong by a player 2026-09-11');
 if (!at('Al-Nassr', 'João Félix')) errors.push('ANCHOR: Joao Felix missing from Al-Nassr');
 if (at('Liverpool', 'Diogo Jota')) errors.push('ANCHOR: Diogo Jota must not ship in any 2026-27 squad');
+/* Round 876, from the review of the Brazil re-bake: two 2025 fallback rows
+   planted men at clubs they had left. Grêmio announced Weverton on 2026-01-15
+   (gremio.net/noticias/detalhes/29912, band.com.br); Atlanta United signed
+   Júnior Alonso in July 2026 (atlutd.com, atlantanewsfirst.com). The ledger
+   rows carry the sources. */
+if (at('Palmeiras', 'Weverton') || !at('Grêmio', 'Weverton')) errors.push('ANCHOR: Weverton must be at Grêmio, not Palmeiras');
+if (at('Atlético Mineiro', 'Júnior Alonso') || !at('Atlanta United', 'Júnior Alonso')) errors.push('ANCHOR: Júnior Alonso must be at Atlanta United, not Atlético Mineiro');
 
 const xiAvg = club => {
   const rs = (byClub.get(club) ?? []).map(p => p.r).sort((a, b) => b - a).slice(0, 11);
@@ -308,9 +315,12 @@ if (!(xiAvg('Basel') > xiAvg('Vaduz'))) errors.push('SANITY: Basel <= Vaduz');
 // Round 189: the HNL giants outrate the promoted side.
 if (!(xiAvg('Dinamo Zagreb') > xiAvg('Rudeš'))) errors.push('SANITY: Dinamo <= Rudeš');
 if (!(xiAvg('Hajduk Split') > xiAvg('Gorica'))) errors.push('SANITY: Hajduk <= Gorica');
-// Round 876: Brazil's giants outrate the two promoted sides the table barely sees.
+// Round 876: Brazil's giants outrate the sides the table barely sees. Flamengo
+// against Remo (2 real players) mostly proves Flamengo kept its mapping; the
+// Palmeiras pair is against Vitória, which ships 8 real players, so it compares
+// real ratings rather than the 60s xiAvg pads a near empty club with.
 if (!(xiAvg('Flamengo') > xiAvg('Remo'))) errors.push('SANITY: Flamengo <= Remo');
-if (!(xiAvg('Palmeiras') > xiAvg('Chapecoense'))) errors.push('SANITY: Palmeiras <= Chapecoense');
+if (!(xiAvg('Palmeiras') > xiAvg('Vitória'))) errors.push('SANITY: Palmeiras <= Vitória');
 
 const total = [...byClub.values()].reduce((s, l) => s + l.length, 0);
 if (total < 2800) errors.push(`Only ${total} players total (expected 2800+)`);
