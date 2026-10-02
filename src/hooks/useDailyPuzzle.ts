@@ -122,6 +122,18 @@ export interface DailyPuzzleOptions<T, G> {
    *   e.g. (raw) => raw as GuessResult[]
    */
   deserializeGuesses: (raw: unknown) => G[];
+
+  /**
+   * Round 848: the game's own check on a restored guess log, run on what
+   * deserializeGuesses returned and only after the shared check has passed
+   * (an array of plain objects with nothing null in it, and a known status).
+   * Return false and the save is thrown away: today's puzzle starts fresh and
+   * the next write replaces the bad bytes. Use it for item fields the page
+   * reads without a guard, and for a log that can never be longer than a
+   * fixed size (never tie that to maxGuesses: Football Grid lifts it at
+   * runtime). Default: no extra check.
+   */
+  isValidGuesses?: (guesses: G[]) => boolean;
 }
 
 export interface DailyPuzzleReturn<T, G> {
@@ -137,6 +149,16 @@ export interface DailyPuzzleReturn<T, G> {
    * Triggers win/loss evaluation via isWon / isLost callbacks.
    */
   addGuess: (guess: G) => void;
+
+  /**
+   * Round 848 review: when another tab has saved further on today's daily,
+   * take that state now and return true; the caller then gives up the answer
+   * it was about to make, before showing anything about it. addGuess makes
+   * the same check, but a game that shows a verdict beside the answer (a
+   * reveal, a toast, a score) has to ask first, or it shows a verdict for an
+   * answer that is never counted. False when this tab is current.
+   */
+  takeNewerSave: () => boolean;
 
   /** Current game outcome. Persisted to localStorage. */
   gameStatus: 'playing' | 'won' | 'lost';
@@ -209,12 +231,27 @@ function selectDailyPuzzle<T>(
   return { puzzle: puzzles[index], index };
 }
 
+/* Round 848: the shape every restored log must have before a page reads it.
+   A save that kept v, date and puzzleIndex but carried guesses as null, an
+   object, a string, a number or an array holding null used to sail through
+   the checks below, because deserializeGuesses is a type assertion, and the
+   page then broke on its first .length or .map, with a retry that read the
+   same bytes and broke again. The shared check is the part true of every
+   game: an array, nothing null or missing in it, and a status the hook itself
+   could have written. A game's own item fields are its isValidGuesses. */
+const GAME_STATUSES: ReadonlyArray<unknown> = ['playing', 'won', 'lost'];
+
+function isGuessLog(value: unknown): value is unknown[] {
+  return Array.isArray(value) && value.every((g) => g !== null && g !== undefined);
+}
+
 function readPersistedState<G>(
   storageKey: string,
   todayStr: string,
   puzzleIndex: number,
   puzzleId: string | undefined,
   deserializeGuesses: (raw: unknown) => G[],
+  isValidGuesses?: (guesses: G[]) => boolean,
 ): { guesses: G[]; gameStatus: 'playing' | 'won' | 'lost' } | null {
   try {
     const raw = localStorage.getItem(storageKey);
@@ -230,8 +267,13 @@ function readPersistedState<G>(
       saved.puzzleIndex === puzzleIndex &&
       (saved.puzzleId === undefined || puzzleId === undefined || saved.puzzleId === puzzleId)
     ) {
+      const guesses = deserializeGuesses(saved.guesses);
+      // Round 848: a malformed log is no save at all. Today starts fresh and
+      // the next write replaces these bytes.
+      if (!isGuessLog(guesses) || !GAME_STATUSES.includes(saved.gameStatus)) return null;
+      if (isValidGuesses && !isValidGuesses(guesses)) return null;
       return {
-        guesses: deserializeGuesses(saved.guesses),
+        guesses,
         gameStatus: saved.gameStatus,
       };
     }
@@ -298,6 +340,7 @@ export function useDailyPuzzle<T, G>(
     isWon,
     isLost,
     deserializeGuesses,
+    isValidGuesses,
   } = options;
 
   // todayStr is computed once on mount and never changes during the session.
@@ -383,6 +426,7 @@ export function useDailyPuzzle<T, G>(
       puzzleIndex,
       puzzleId,
       deserializeGuesses,
+      isValidGuesses,
     );
 
     if (saved) {
@@ -427,12 +471,79 @@ export function useDailyPuzzle<T, G>(
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loadKey]);
 
+  /* Round 848: two tabs on one daily share one save, and each used to write
+     its own log over it. Open today's daily twice, answer two rounds in the
+     first tab and one in the second (still showing round one), and the save
+     went from two decided rounds back to one. Now a tab never writes over a
+     save that is ahead of it: when the stored log for this same day and
+     puzzle is longer than the one in memory, or has finished while this tab
+     still plays, this tab takes the stored state and shows it, so it jumps to
+     the saved round, and the answer it was about to record (to a round
+     another tab already decided) is dropped. A decided round is never
+     undecided and never decided twice. A finish taken over this way was
+     recorded by the tab that made it, so it is marked like a restore.
+     Rebuilt every render and called through a ref, so addGuess keeps the
+     dependency list simDailyRecord anchors. Returns true when it took over. */
+  const adoptNewerSave = (): boolean => {
+    /* Round 848 review: a finished tab takes nothing over. Its day is decided,
+       and no longer save can undecide it. */
+    if (puzzle == null || loadedForKey.current !== loadKey || statusRef.current !== 'playing') return false;
+    const stored = readPersistedState(storageKey, todayStr, puzzleIndex, puzzleId, deserializeGuesses, isValidGuesses);
+    if (!stored) return false;
+    const ahead = stored.guesses.length > guessesRef.current.length
+      || (stored.gameStatus !== 'playing' && statusRef.current === 'playing');
+    if (!ahead) return false;
+    guessesRef.current = stored.guesses;
+    statusRef.current = stored.gameStatus;
+    if (stored.gameStatus !== 'playing') markRestoredFinish(gameSlug);
+    setGuesses(stored.guesses);
+    setGameStatus(stored.gameStatus);
+    return true;
+  };
+  const adoptNewerSaveRef = useRef(adoptNewerSave);
+  adoptNewerSaveRef.current = adoptNewerSave;
+
+  /* Round 848 review: and the rest of that turn goes with it. A handler may
+     give more than one answer in one turn (Transfer Path's step then its
+     closing step and the win, Career Path's four hint cells), every one built
+     on the board this tab was showing. Once the first is dropped the rest are
+     answers to a board that no longer exists, and appending them to the state
+     just taken over recorded a Transfer Path win for a chain that never
+     reached the target. The flag lives until the taken over state is
+     committed, which is before the player can see it, let alone answer it. */
+  const droppingTurn = useRef(false);
+  useEffect(() => { droppingTurn.current = false; });
+
+  const takeNewerSave = useCallback((): boolean => {
+    if (!adoptNewerSaveRef.current()) return false;
+    droppingTurn.current = true;
+    return true;
+  }, []);
+
+  /* Round 848: and an open tab follows the other one live. The browser fires
+     storage in every other tab of this site when one writes, so a second tab
+     moves to the saved round before the player can answer the old one. */
+  useEffect(() => {
+    const onStorage = (e: StorageEvent) => {
+      if (e.key === storageKey) adoptNewerSaveRef.current();
+    };
+    window.addEventListener('storage', onStorage);
+    return () => window.removeEventListener('storage', onStorage);
+  }, [storageKey]);
+
   const addGuess = useCallback(
     (guess: G) => {
       // Both reads are refs, not the closure: a second call in this same tick
       // has to see what the first one just added, and has to be refused if the
       // first one ended the game.
       if (statusRef.current !== 'playing' || puzzle == null) return;
+      // Round 848: another tab is ahead, take its state and drop this answer,
+      // and every answer the same turn goes on to give.
+      if (droppingTurn.current) return;
+      if (adoptNewerSaveRef.current()) {
+        droppingTurn.current = true;
+        return;
+      }
 
       const newGuesses = [...guessesRef.current, guess];
       let newStatus: 'playing' | 'won' | 'lost' = 'playing';
@@ -473,6 +584,7 @@ export function useDailyPuzzle<T, G>(
     puzzle,
     guesses,
     addGuess,
+    takeNewerSave,
     gameStatus,
     isLoading,
     todayStr,

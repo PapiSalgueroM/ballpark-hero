@@ -5,7 +5,7 @@ import { F1ConstructorBoard } from '@/components/f1-constructor/F1ConstructorBoa
 
 export default function F1Constructor() {
   return (
-    <>
+    <main id="dukb-main" tabIndex={-1}>
       <PageSeo
         title="Guess the F1 Constructor - Formula 1 Team Puzzle | DoUKnowBall"
         description="Guess the Formula 1 constructor from clues about their history, championships, and famous drivers."
@@ -31,6 +31,6 @@ export default function F1Constructor() {
           "Lotus: 7× Constructors' Champion, Jim Clark, Colin Chapman era"
         ]}
       />
-    </>
+    </main>
   );
 }

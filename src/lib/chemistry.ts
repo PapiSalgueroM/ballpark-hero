@@ -60,11 +60,18 @@ function fieldFor(p: ChemistryPlayer, type: LinkType): string | undefined {
   return trimmed ? trimmed : undefined;
 }
 
+export interface ChemistryOptions {
+  /** Round 825: only pairs this says yes to can link. Build Your XI's season
+   *  passes "next to each other on the pitch"; every other caller passes
+   *  nothing and keeps every pair, exactly as before. */
+  linked?: (a: ChemistryPlayer, b: ChemistryPlayer) => boolean;
+}
+
 /**
  * Computes pairwise chemistry links across a list of picked players.
  * Order-independent, safe to call with any number of players (0, 1, or 11+).
  */
-export function computeChemistry(players: ChemistryPlayer[]): ChemistryResult {
+export function computeChemistry(players: ChemistryPlayer[], opts?: ChemistryOptions): ChemistryResult {
   const links: ChemistryLink[] = [];
   const perPlayerBonus: Record<string, number> = {};
   const counts: Record<LinkType, number> = { club: 0, league: 0, nationality: 0 };
@@ -76,6 +83,7 @@ export function computeChemistry(players: ChemistryPlayer[]): ChemistryResult {
       const a = players[i];
       const b = players[j];
       if (a.name === b.name) continue;
+      if (opts?.linked && !opts.linked(a, b)) continue;
 
       for (const type of LINK_TYPES) {
         const va = fieldFor(a, type);

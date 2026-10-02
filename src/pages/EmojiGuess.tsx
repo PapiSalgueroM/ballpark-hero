@@ -6,7 +6,7 @@ import { EmojiGuessBoard } from '@/components/emoji-guess/EmojiGuessBoard';
 
 export default function EmojiGuess() {
   return (
-    <>
+    <main id="dukb-main" tabIndex={-1}>
       <PageSeo
         title="Emoji Guess - Football in Emoji | DoUKnowBall"
         description="Five football emoji riddles a day: players, clubs, managers and iconic moments. Three guesses each, a hint after your first miss."
@@ -32,6 +32,6 @@ export default function EmojiGuess() {
           '🧔🍷🇮🇹, a midfielder with a vineyard',
         ]}
       />
-    </>
+    </main>
   );
 }

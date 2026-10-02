@@ -2,6 +2,7 @@ import { useState, useCallback, useMemo, useEffect } from 'react';
 import { makeFirstDraw } from '@/lib/firstDraw';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { useDailyPuzzle } from '@/hooks/useDailyPuzzle';
+import { isConnect4Log } from '@/lib/dailySaveShapes';
 import { normalizeName } from '@/lib/playerSearch';
 import { normalizeValidationReason } from '@/lib/validationReason';
 import { SUPABASE_PUBLISHABLE_KEY, SUPABASE_URL } from '@/integrations/supabase/client';
@@ -134,6 +135,7 @@ export function useFootballConnect4() {
     maxGuesses: 999,
     isWon: (actions) => replayC4Board(actions).phase === 'won',
     deserializeGuesses: (raw) => raw as C4Action[],
+    isValidGuesses: (g) => isConnect4Log(g, ROWS, COLS),
   });
 
   const dailyState = useMemo(() => replayC4Board(dailyActions), [dailyActions]);

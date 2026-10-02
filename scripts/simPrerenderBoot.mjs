@@ -146,9 +146,15 @@ const browser = await pw.chromium.launch({
   args: ['--no-sandbox'],
 });
 
+// Boot checks use only this server. Outside images are not boot evidence.
+async function fenceOutside(page) {
+  await page.route('**/*', route => new URL(route.request().url()).origin === `http://127.0.0.1:${PORT}` ? route.continue() : route.abort());
+}
+
 console.log('2) the app boots on a snapshot served against a build it never saw');
 for (const route of SAMPLE) {
   const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
+  await fenceOutside(page);
   const broken = [];
   page.on('response', r => { if (r.status() >= 400) broken.push(`${r.status()} ${r.url().replace(`http://127.0.0.1:${PORT}`, '')}`); });
   /* the live database is not this harness's business, and letting it hang
@@ -222,6 +228,7 @@ console.log('4) every retired address lands on its destination in a real browser
 for (const [route] of stubs) {
   const to = readRoutes().retired.find(r => r.from === route).to;
   const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
+  await fenceOutside(page);
   let navs = 0;
   const broken = [];
   page.on('framenavigated', f => { if (f === page.mainFrame()) navs += 1; });

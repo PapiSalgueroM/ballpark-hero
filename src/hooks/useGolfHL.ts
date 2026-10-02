@@ -2,6 +2,7 @@ import { useState, useMemo, useCallback, useEffect, useRef } from 'react';
 import { golfLegends, GolfLegend } from '@/data/golfLegends';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { higherLowerScore } from '@/lib/higherLowerScore';
+import { isHigherLowerDailyLog } from '@/lib/dailySaveShapes';
 import { useDailyPuzzle } from '@/hooks/useDailyPuzzle';
 import { dateSeed } from '@/lib/dateUtils';
 
@@ -68,6 +69,7 @@ export function useGolfHL() {
   const {
     guesses: dailyActions,
     addGuess: addDailyAction,
+    takeNewerSave: takeNewerDailySave,
     gameStatus: rawDailyStatus,
     isLoading,
     todayStr,
@@ -78,6 +80,7 @@ export function useGolfHL() {
     maxGuesses: ROUNDS,
     isWon: (g) => g.length >= ROUNDS,
     deserializeGuesses: (raw) => raw as HLAction[],
+    isValidGuesses: isHigherLowerDailyLog,
   });
 
   const dailyPairs = useMemo(() => buildPairs(dateSeed(todayStr)), [todayStr]);
@@ -151,6 +154,8 @@ export function useGolfHL() {
   const makeGuess = useCallback(
     (choice: 'left' | 'right') => {
       if (!currentPair || showingResult || gameStatus !== 'playing') return;
+      // Round 848 review: another tab already decided this round; jump to it, no verdict.
+      if (mode === 'daily' && takeNewerDailySave()) return;
       const [p1, p2] = currentPair;
       // Ties count as correct either way (plenty of 2s and 3s in the pool).
       const tie = p1.majors === p2.majors;
@@ -175,7 +180,7 @@ export function useGolfHL() {
         setShowingResult(false);
       }, 2000);
     },
-    [currentPair, showingResult, gameStatus, mode, addDailyAction, cancelReveal],
+    [currentPair, showingResult, gameStatus, mode, addDailyAction, takeNewerDailySave, cancelReveal],
   );
 
   const switchMode = useCallback((m: GolfHLMode) => {

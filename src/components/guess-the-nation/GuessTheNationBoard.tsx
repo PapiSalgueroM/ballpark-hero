@@ -77,15 +77,15 @@ export function GuessTheNationBoard() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center" aria-live="polite" aria-busy="true">
+      <main id="dukb-main" tabIndex={-1} className="min-h-screen bg-background flex items-center justify-center" aria-live="polite" aria-busy="true">
         <Loader2 className="w-8 h-8 animate-spin text-amber-400" />
-      </div>
+      </main>
     );
   }
 
   if (error) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center px-4">
+      <main id="dukb-main" tabIndex={-1} className="min-h-screen bg-background flex items-center justify-center px-4">
         <div className="text-center max-w-sm">
           <p className="text-destructive font-semibold mb-3">Couldn't load Guess The Nation right now.</p>
           <button
@@ -95,14 +95,14 @@ export function GuessTheNationBoard() {
             Try again
           </button>
         </div>
-      </div>
+      </main>
     );
   }
 
   /* ─── Mode selection ─── */
   if (!gameState) {
     return (
-      <div className="min-h-screen bg-background text-foreground">
+      <main id="dukb-main" tabIndex={-1} className="min-h-screen bg-background text-foreground">
         <div className="container mx-auto px-4 py-8 max-w-xl">
           <div className="text-center mb-8">
             <div className="text-5xl mb-3">🌍</div>
@@ -197,7 +197,7 @@ export function GuessTheNationBoard() {
 
           <GameNav />
         </div>
-      </div>
+      </main>
     );
   }
 

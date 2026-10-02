@@ -1139,7 +1139,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
       {
         heading: "Submitting your finished XI for a rating",
         items: [
-          "Fill all 11 slots, review your chemistry links, then submit for the AI rating.",
+          "Fill all 11 slots, check the role fit, chemistry and balance tiles under the pitch, then submit for the AI rating.",
         ],
       },
     ],
@@ -1165,8 +1165,16 @@ export const SOCCER_CONTENT_2: GameContentMap = {
       {
         heading: "Scoring chemistry and the offline backup judge",
         items: [
-          "Chemistry: each pair sharing a club is worth 3 points, a league 2, a nationality 1, capped at 9 per player.",
+          "Chemistry: two players standing next to each other on the pitch who are at the same club on our data add +0.6 to the side, from the same country +0.2, up to +2 in all.",
           "If the AI judge is unreachable, a built in offline judge grades you instead, so a run never dead ends.",
+        ],
+      },
+      {
+        heading: "Role fit and balance in the season sim",
+        items: [
+          "Role fit: a player in a slot his recorded positions cover plays at full value. Next door, like a right back at left back, costs 2 rating points on him, averaged over the eleven. The slot check never lets anyone further out of position than that.",
+          "Balance: no defensive midfielder in a CM or CDM slot costs the side 1, and a wide slot held by someone who is not a wide player, like a centre back at full back, costs 0.5 for that flank.",
+          "The season report says what role fit, chemistry and balance were each worth in league points, by replaying the same season without each one.",
         ],
       },
     ],
@@ -1180,7 +1188,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
       {
         heading: "A verdict that praises the spine",
         paragraphs: [
-          "The finished XI leans Premier League, chemistry pays you for it, and the verdict praises the spine while roasting your left back. You run it back in a 3-5-2.",
+          "Two men from the same club end up side by side in your back line, so chemistry pays you for it, and the verdict praises the spine while roasting your left back. You run it back in a 3-5-2.",
         ],
       },
     ],
@@ -1198,9 +1206,9 @@ export const SOCCER_CONTENT_2: GameContentMap = {
         ],
       },
       {
-        heading: "Stacking one league for chemistry points",
+        heading: "Putting clubmates side by side for chemistry",
         items: [
-          "Stacking one league quietly adds chemistry points to the final screen.",
+          "Two players from the same club or country only link when they stand next to each other, so use your slot choice to put them side by side.",
         ],
       },
       {
@@ -1225,7 +1233,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
       },
       {
         q: "What does the rating look like?",
-        a: "A rating headline, a short written analysis of your picks, and your chemistry line. Under it comes a season report: a squad rating out of 100, where you finish in a 20 team league, points, trophies and a top scorer, plus how your defence, midfield and attack compare. Two tabs open the season month by month and give every pick his appearances, goals, assists and average rating, and one line says what a different shape or a stronger pick in your weakest slot would have changed on the same rolls. Every player is judged at his peak, so retired greats are not marked down for being retired.",
+        a: "A rating headline, a short written analysis of your picks, and your role fit, chemistry and balance tiles. Under it comes a season report: a squad rating out of 100, where you finish in a 20 team league, points, trophies and a top scorer, plus how your defence, midfield and attack compare and what role fit, chemistry and balance were each worth in points. Two tabs open the season month by month and give every pick his appearances, goals, assists and average rating, and one line says what a different shape or a stronger pick in your weakest slot would have changed on the same rolls. Every player is judged at his peak, so retired greats are not marked down for being retired.",
       },
     ],
   },

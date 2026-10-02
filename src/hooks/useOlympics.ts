@@ -25,6 +25,7 @@ export function useOlympics() {
     puzzle: dailyPuzzle,
     guesses: dailyActions,
     addGuess: addDailyAction,
+    takeNewerSave: takeNewerDailySave,
     gameStatus: rawDailyStatus,
     isLoading,
   } = useDailyPuzzle<OlympicAthlete, OlympicsAction>({
@@ -97,6 +98,8 @@ export function useOlympics() {
 
   const submitGuess = useCallback((guess: string) => {
     if (status !== 'playing') return;
+    // Round 848 review: another tab already finished or moved the daily; jump to it, no verdict.
+    if (mode === 'daily' && takeNewerDailySave()) return;
     const normalized = guess.trim().toLowerCase();
     const target = athlete.name.toLowerCase();
     const lastName = target.split(' ').pop() ?? '';
@@ -114,10 +117,11 @@ export function useOlympics() {
       toast.error('❌ Not correct');
       setTimeout(() => setWrongGuess(false), 1500);
     }
-  }, [mode, status, athlete.name, clueLevel, logScore, addDailyAction]);
+  }, [mode, status, athlete.name, clueLevel, logScore, addDailyAction, takeNewerDailySave]);
 
   const giveUp = useCallback(() => {
     if (status !== 'playing') return;
+    if (mode === 'daily' && takeNewerDailySave()) return;
     logScore(TOTAL_CLUES, 0, false);
     if (mode === 'daily') {
       addDailyAction({ t: 'give' });
@@ -125,7 +129,7 @@ export function useOlympics() {
       setUnlimitedStatus('revealed');
       setUnlimitedClueLevel(TOTAL_CLUES - 1);
     }
-  }, [mode, status, logScore, addDailyAction]);
+  }, [mode, status, logScore, addDailyAction, takeNewerDailySave]);
 
   const resetGame = useCallback(() => {
     if (mode !== 'unlimited') return;

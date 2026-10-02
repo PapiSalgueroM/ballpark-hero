@@ -4,6 +4,7 @@ import { FORMATIONS, Formation, FormationSlot, normalizePosition, playerRating }
 import { normalizeName } from '@/lib/whoAmI';
 import { rng, winProbability } from '@/lib/perfectSeason';
 import { ALL_POSITIONS, allowedLabelFor, eligiblePositions, fitsAllowed, slotAllowedPositions } from '@/lib/positionFit';
+import type { XiFitAdjust } from '@/lib/xiFit';
 
 /**
  * World XI (build an XI, one slot at a time)
@@ -497,6 +498,22 @@ export interface SeasonReport {
   playerStats?: PlayerSeasonStats[];
   awards?: SeasonAwards;
   whatIf?: WhatIf;
+  /** Round 825, Build Your XI only. Optional: World XI never passes a
+   *  breakdown, and a report built before this round has none. */
+  fit?: SeasonFit;
+}
+
+/**
+ * Round 825: the role fit, chemistry and balance the season was played with
+ * (squad rating points, as handed in), and what each was worth in league
+ * points: the same 38 rolls replayed without that one, everything else kept.
+ */
+export interface SeasonFit extends XiFitAdjust {
+  /** The squad rating plus the three, the number the league was played at. */
+  matchRating: number;
+  points: XiFitAdjust;
+  /** The sentence the narrative carries. */
+  line: string;
 }
 
 /** Simple hash of the squad's names into a stable non-negative seed. */
@@ -676,11 +693,15 @@ export function formationMisfits(players: WxPlayer[], formationName: string): nu
  * what a respin that landed a pick at the side's level would have done.
  * With no change it returns exactly the season's own finish, and the harness
  * holds it to that.
+ *
+ * Round 825: `adjust` is the Build Your XI breakdown's total (squad rating
+ * points) the season itself was played with, so an alternative is replayed
+ * on the same footing; simBuildYourXiFit also replays each factor through it.
  */
 export function whatIfFinish(
   filled: WxPlayer[],
   formationName: string,
-  alt: { formation?: string; liftWeakest?: boolean } = {},
+  alt: { formation?: string; liftWeakest?: boolean; adjust?: number } = {},
 ): { points: number; tablePosition: number } {
   const players = filled.filter((p): p is WxPlayer => p !== null);
   const seed = squadSeed(players);
@@ -691,7 +712,7 @@ export function whatIfFinish(
     squadRating = squadRatingOf(ratings.filter((_, i) => i !== weakest));
   }
   const penalty = shapePenalty(players, formationName, alt.formation);
-  const run = playLeague(rng(seed), winProbability(ratingToOverall(squadRating) - penalty));
+  const run = playLeague(rng(seed), winProbability(ratingToOverall(squadRating + (alt.adjust ?? 0)) - penalty));
   return { points: run.points, tablePosition: run.tablePosition };
 }
 
@@ -884,6 +905,8 @@ function buildSeasonExtras(
   injuries: SeasonInjury[],
   formationName: string,
   squadRating: number,
+  /** Round 825: the breakdown total the season was played with, 0 for World XI. */
+  adjust: number,
 ): SeasonExtras {
   const n = players.length;
   const { results, rivalPoints, points, tablePosition } = league;
@@ -1135,12 +1158,12 @@ function buildSeasonExtras(
   if (FORMATIONS.some(f => f.name === formationName)) {
     for (const f of FORMATIONS) {
       if (f.name === formationName) continue;
-      const alt = whatIfFinish(players, formationName, { formation: f.name });
+      const alt = whatIfFinish(players, formationName, { formation: f.name, adjust });
       if (!bestShape || swing(alt) > swing(bestShape)) bestShape = { name: f.name, misfits: formationMisfits(players, f.name), ...alt };
     }
   }
   const weakest = ratings.length >= 2 ? ratings.indexOf(Math.min(...ratings)) : -1;
-  const lifted = weakest >= 0 ? whatIfFinish(players, formationName, { liftWeakest: true }) : null;
+  const lifted = weakest >= 0 ? whatIfFinish(players, formationName, { liftWeakest: true, adjust }) : null;
   const liftedRating = weakest >= 0 ? squadRatingOf(ratings.filter((_, i) => i !== weakest)) : squadRating;
   const from = ordinal(finish.tablePosition);
   /* Said the way it moved: a change of place names both places, and a
@@ -1216,8 +1239,15 @@ function buildSeasonExtras(
  * average player market value mapped through the same log curve as
  * squadDeal.ts's playerRating, so a Legends-tier draw reads as an elite squad
  * and a bargain-bin draw reads as relegation fodder.
+ *
+ * Round 825: Build Your XI hands in `fit`, its role fit, chemistry and
+ * balance (src/lib/xiFit.ts), in squad rating points. They move the rating
+ * the league is played at and nothing else: every draw happens in the same
+ * order, the printed squad rating stays the paper one, and World XI, which
+ * passes nothing, plays exactly the season it always did (simBuildYourXiFit
+ * holds a digest of it).
  */
-export function simulateWorldXiSeason(filled: WxPlayer[], formationName: string): SeasonReport {
+export function simulateWorldXiSeason(filled: WxPlayer[], formationName: string, fit?: XiFitAdjust): SeasonReport {
   const players = filled.filter((p): p is WxPlayer => p !== null);
   const seed = squadSeed(players);
   const rand = rng(seed);
@@ -1228,10 +1258,39 @@ export function simulateWorldXiSeason(filled: WxPlayer[], formationName: string)
   const playerRatings = ratingsFor(players);
   const squadRating = squadRatingOf(playerRatings);
 
-  const overall = ratingToOverall(squadRating);
+  const adjust = fit ? fit.roleFit + fit.chemistry + fit.balance : 0;
+  const overall = ratingToOverall(squadRating + adjust);
   const winP = winProbability(overall);
   const league = playLeague(rand, winP);
   const { points, wins, draws, losses, unbeatenRun, rivalPoints, tablePosition } = league;
+
+  /* Round 825: what each of the three was worth, the same rolls replayed
+     without it. A fresh generator on the same seed gives the same 38 rolls
+     and the same rivals, so only that one number differs. */
+  let seasonFit: SeasonFit | undefined;
+  if (fit) {
+    const replay = (adj: number) => playLeague(rng(seed), winProbability(ratingToOverall(squadRating + adj))).points;
+    const worth: XiFitAdjust = {
+      roleFit: points - replay(adjust - fit.roleFit),
+      chemistry: points - replay(adjust - fit.chemistry),
+      balance: points - replay(adjust - fit.balance),
+    };
+    /* One season, said as one season. On the same rolls the sign is always
+       right, but the size is lumpy: measured in review over 120 elevens, a
+       chemistry edge worth about half a point a season on average comes out
+       at 0 in most single seasons, so the line never claims more than this
+       season. */
+    const said = (label: string, pts: number) =>
+      pts === 0 ? `${label} made no difference` : pts > 0 ? `${label} added ${pts} point${pts === 1 ? '' : 's'}` : `${label} cost ${-pts} point${pts === -1 ? '' : 's'}`;
+    seasonFit = {
+      roleFit: fit.roleFit,
+      chemistry: fit.chemistry,
+      balance: fit.balance,
+      matchRating: (Math.round((squadRating + adjust) * 10) / 10) || 0,
+      points: worth,
+      line: `This season, played again without each one: ${said('role fit', worth.roleFit)}, ${said('chemistry', worth.chemistry)}, ${said('balance', worth.balance)}.`,
+    };
+  }
 
   // Trophies: rating threshold plus a little rng, layered so an elite squad
   // can still miss out on the treble and a mid squad can still nick a cup.
@@ -1285,7 +1344,7 @@ export function simulateWorldXiSeason(filled: WxPlayer[], formationName: string)
 
   /* Round 726: every draw below this line comes after every draw above it,
      so nothing the report already printed can move. */
-  const extras = buildSeasonExtras(rand, players, playerRatings, league, topScorer, injuries, formationName, squadRating);
+  const extras = buildSeasonExtras(rand, players, playerRatings, league, topScorer, injuries, formationName, squadRating, adjust);
 
   const positionLine = tablePosition === 1
     ? `${formationName} title winners. Champions of the league.`
@@ -1326,6 +1385,7 @@ export function simulateWorldXiSeason(filled: WxPlayer[], formationName: string)
   else narrative.push('No silverware this year. There is always next season.');
   for (const inj of injuries) narrative.push(`Injury: ${inj.name} out for ${inj.weeksOut} weeks.`);
   narrative.push(transferHeadline);
+  if (seasonFit) narrative.push(seasonFit.line);
   narrative.push(extras.whatIf.line);
 
   return {
@@ -1350,6 +1410,7 @@ export function simulateWorldXiSeason(filled: WxPlayer[], formationName: string)
     playerStats: extras.playerStats,
     awards: extras.awards,
     whatIf: extras.whatIf,
+    ...(seasonFit ? { fit: seasonFit } : {}),
   };
 }
 
