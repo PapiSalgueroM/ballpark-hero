@@ -16,6 +16,7 @@ import type { CareerRival } from './careerRival';
 import type { PlayerAppearance } from './soccerCareerAppearance';
 import { getNbaLifeEventsA } from './nbaCareerLifeA';
 import { getNbaLifeEventsB } from './nbaCareerLifeB';
+import { getNbaLifeEventsC } from './nbaCareerLifeC';
 import { getNbaCorruptionEvents } from './nbaCareerCorruption';
 // Round 179: the shared free agency engine, one implementation for all four sports.
 import { buildFaWindow } from './usCareerFreeAgency';
@@ -854,6 +855,7 @@ export function drawNbaEvent(c: NbaCareerState, rng: () => number): NbaCareerEve
   // Everything in those files self-gates, so no extra rules are needed here.
   deck.push(...getNbaLifeEventsA(c, rng));
   deck.push(...getNbaLifeEventsB(c, rng));
+  deck.push(...getNbaLifeEventsC(c, rng)); /* Round 918: deck C, 36 cards, draws nothing from rng */
   const corrupt = getNbaCorruptionEvents(c, rng);
   deck.push(...corrupt);
   const arcOpen = Object.keys(c.lifeFlags ?? {}).some(k => ['props', 'tank', 'sneaks', 'tamper', 'wash'].includes(k));
