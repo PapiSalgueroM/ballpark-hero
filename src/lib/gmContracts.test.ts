@@ -90,7 +90,7 @@ describe('the offseason with the desk in front of it', () => {
     const ledger = openLedger(lg, 'ME');
     const run = runDeskOffseason(host('nhl'), lg, ledger, () => 0.5);
     expect(run.ok).toBe(false);
-    if (!run.ok) expect(run.undecided.map(u => u.id)).toEqual(['a']);
+    if (run.ok === false) expect(run.undecided.map(u => u.id)).toEqual(['a']);
     expect(lg.season).toBe(2030);
     expect(lg.teams.ME.players).toHaveLength(2);
   });
