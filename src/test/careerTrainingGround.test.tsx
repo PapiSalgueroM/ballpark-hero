@@ -228,7 +228,7 @@ const gates = (seed: number, pattern: string, position = 'ST') => {
     [...pattern].forEach((move, n) => {
       const lit = run.button('🚩');
       const all = [...lit.parentElement!.querySelectorAll<HTMLButtonElement>('button')];
-      const at = all.indexOf(lit);
+      const at = all.indexOf(lit as HTMLButtonElement);
       if (move === 'h') fireEvent.click(lit);
       else if (move === 'm') fireEvent.click(all[(at + 1) % 6]);
       else { run.wait(Math.max(650, 1400 - n * 100) - 1); run.snap('about to shut'); run.wait(1); }
