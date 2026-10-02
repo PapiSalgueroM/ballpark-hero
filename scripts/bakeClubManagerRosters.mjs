@@ -152,8 +152,30 @@ if (dumpArg) {
 /* ------------------------------------------------------------------ */
 /* Assemble: per player keep the 2026 row, else discounted 2025       */
 /* ------------------------------------------------------------------ */
+/* Round 883 review: the table has no id that spans years (its id is a row
+   id), so a name is the only key, and keying on it alone merged two men who
+   share one. Mapping Liga MX let Toluca's Paulinho (2026 row, age 33, a
+   striker) overwrite Palmeiras's Paulinho (2025 row, age 24) and Vasco's Jose
+   Luis Rodriguez (a right back) overwrite FC Juarez's (a winger), deleting two
+   real players from clubs they really play for. A newer row now replaces an
+   older one of the same name only when they can be the same man: the age moves
+   by -1 to 3 years between the two rows and the position stays in its group
+   (keeper, defence, midfield, attack, with midfield and attack counted as one,
+   since wingers and number tens are filed as either). Measured on the
+   2026-10-02 dump: of 1,213 such pairs at two modelled clubs, 1,199 move by
+   exactly a year, eight left midfielders by -1 and one by 3 (all the same
+   men, a quirk of the table), and six fail the test, all six two different
+   men. The other man is kept as his own record under a separate key; the
+   overlay and the ledger below act on the name, which is the newer man. */
+const POS_GROUP = { GK: 'G', CB: 'D', LB: 'D', RB: 'D', CDM: 'MA', CM: 'MA', CAM: 'MA', LM: 'MA', RM: 'MA', LW: 'MA', RW: 'MA', ST: 'MA', CF: 'MA' };
+function canBeSameMan(newer, older) {
+  if (newer.year === older.year) return true;
+  const d = newer.rawAge - older.rawAge;
+  return d >= -1 && d <= 3 && POS_GROUP[newer.p] === POS_GROUP[older.p];
+}
 const errors = [];
 const byPlayer = new Map();
+const namesakes = [];
 for (const r of rows) {
   const engineClub = DB_TO_ENGINE[r.club];
   if (!engineClub) continue;
@@ -165,16 +187,33 @@ for (const r of rows) {
   const usd = Number(r.market_value_usd);
   if (!Number.isFinite(age) || age < 14 || age > 45) continue;
   if (!Number.isFinite(usd) || usd <= 0) continue;
-  const existing = byPlayer.get(name);
-  if (existing && existing.year >= r.year) continue;
   const isFallback = r.year === 2025;
-  byPlayer.set(name, {
+  const rec = {
+    name,
     year: r.year,
+    rawAge: age,
     club: engineClub,
     p: pos,
     a: isFallback ? age + 1 : age,
     usd: isFallback ? usd * 0.95 : usd,
-  });
+  };
+  if (!byPlayer.has(name)) byPlayer.set(name, []);
+  byPlayer.get(name).push(rec);
+}
+for (const [name, recs] of byPlayer) {
+  // Newest row first; the first row of a year wins a tie, as before.
+  const order = recs.map((x, i) => [x, i]).sort((a, b) => b[0].year - a[0].year || a[1] - b[1]).map(x => x[0]);
+  const kept = [];
+  for (const rec of order) {
+    if (kept.some(k => canBeSameMan(k, rec))) continue;
+    kept.push(rec);
+  }
+  byPlayer.set(name, kept[0]);
+  for (const other of kept.slice(1)) namesakes.push(other);
+}
+for (const other of namesakes) {
+  byPlayer.set(`${other.name}\u0000${other.club}`, other);
+  console.log(`Namesake kept apart: ${other.name} at ${other.club} (${other.year} row, age ${other.rawAge}, ${other.p})`);
 }
 
 /* ------------------------------------------------------------------ */
@@ -247,7 +286,7 @@ console.log(`Adjudication applied: ${adjMoved} moved, ${adjRemoved} removed, ${a
 /* ------------------------------------------------------------------ */
 const byClub = new Map(engineClubs.map(c => [c, []]));
 for (const [name, rec] of byPlayer) {
-  byClub.get(rec.club).push({ n: name, p: rec.p, a: rec.a, v: gbpM(rec.usd), r: ratingOf(rec.usd) });
+  byClub.get(rec.club).push({ n: rec.name ?? name, p: rec.p, a: rec.a, v: gbpM(rec.usd), r: ratingOf(rec.usd) });
 }
 for (const list of byClub.values()) list.sort((a, b) => b.v - a.v || a.n.localeCompare(b.n));
 

@@ -2,7 +2,7 @@
 // Source: Supabase player_market_values_dedup (2026 rows, 2025 fallback at a
 // 5% discount) PLUS the verified summer 2026 transfer overlay
 // (scripts/transferOverlay2026.mjs), so squads reflect August 2026 after the
-// window. 4359 players, 368 clubs across the big five leagues
+// window. 4365 players, 368 clubs across the big five leagues
 // (2026-27 memberships), EFL Championship, Saudi Pro League, MLS East and
 // West, Eredivisie, Primeira Liga, Scottish Premiership, Süper Lig,
 // 2. Bundesliga, Belgian Pro League, Austrian Bundesliga, Super League
@@ -29,7 +29,7 @@ export interface BakedPlayer {
 export const CM_ROSTER_META = {
   generated: '2026-10-02',
   asOf: 'August 2026, after the summer window',
-  players: 4359,
+  players: 4365,
   clubs: 368,
   overlayMoves: 713,
 };
@@ -1524,6 +1524,7 @@ export const CM_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'Wanderson', p: 'LW', a: 31, v: 3, r: 72 },
     { n: 'William', p: 'RB', a: 30, v: 3, r: 72 },
     { n: 'Lucas Romero', p: 'CDM', a: 31, v: 2, r: 70 },
+    { n: 'Dudu', p: 'LW', a: 33, v: 1.4, r: 68 },
   ],
   'Crystal Palace': [
     { n: 'Adam Wharton', p: 'CDM', a: 21, v: 56.7, r: 88 },
@@ -1787,6 +1788,7 @@ export const CM_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'Raymundo Fulgencio', p: 'LW', a: 25, v: 1.5, r: 68 },
     { n: 'Sebastián Jurado', p: 'GK', a: 28, v: 1.5, r: 68 },
     { n: 'Alejandro Mayorga', p: 'LB', a: 28, v: 1.4, r: 68 },
+    { n: 'José Luis Rodríguez', p: 'LW', a: 27, v: 1.4, r: 68 },
   ],
   'FC Midtjylland': [
     { n: 'Franculino', p: 'ST', a: 21, v: 18, r: 82 },
@@ -3577,12 +3579,14 @@ export const CM_ROSTERS: Record<string, BakedPlayer[]> = {
   'Palmeiras': [
     { n: 'Vitor Roque', p: 'ST', a: 20, v: 30.8, r: 85 },
     { n: 'José Manuel López', p: 'ST', a: 25, v: 18, r: 82 },
+    { n: 'Paulinho', p: 'CF', a: 25, v: 12.1, r: 80 },
     { n: 'Andreas Pereira', p: 'CM', a: 30, v: 12, r: 79 },
     { n: 'Jhon Arias', p: 'RW', a: 28, v: 12, r: 79 },
     { n: 'Mauricio', p: 'CAM', a: 24, v: 11.3, r: 79 },
     { n: 'Joaquín Piquerez', p: 'LB', a: 27, v: 9.8, r: 78 },
     { n: 'Ramón Sosa', p: 'CF', a: 26, v: 9.3, r: 78 },
     { n: 'Agustín Giay', p: 'RB', a: 21, v: 8.3, r: 77 },
+    { n: 'Allan', p: 'RW', a: 21, v: 7.8, r: 77 },
     { n: 'Raphael Veiga', p: 'CAM', a: 30, v: 6, r: 76 },
     { n: 'Marlon Freitas', p: 'CDM', a: 30, v: 4.9, r: 74 },
     { n: 'Khellven', p: 'RB', a: 24, v: 4.5, r: 74 },
@@ -4119,6 +4123,7 @@ export const CM_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'Gabriel Silva', p: 'LW', a: 23, v: 3, r: 72 },
     { n: 'Pedro Ferreira', p: 'CDM', a: 27, v: 2.4, r: 71 },
     { n: 'Vinícius Lopes', p: 'RW', a: 26, v: 2.3, r: 70 },
+    { n: 'Matheus Pereira', p: 'LB', a: 25, v: 2.1, r: 70 },
     { n: 'Lucas Soares', p: 'RB', a: 27, v: 1.5, r: 68 },
   ],
   'Santos': [
@@ -4522,6 +4527,7 @@ export const CM_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'Damián Bobadilla', p: 'CM', a: 24, v: 3.8, r: 73 },
     { n: 'Ferreirinha', p: 'LW', a: 28, v: 3.8, r: 73 },
     { n: 'Nahuel Ferraresi', p: 'CB', a: 27, v: 3.8, r: 73 },
+    { n: 'Alan Franco', p: 'CB', a: 29, v: 3.6, r: 73 },
     { n: 'André Silva', p: 'ST', a: 28, v: 3, r: 72 },
     { n: 'Gonzalo Tapia', p: 'ST', a: 23, v: 3, r: 72 },
     { n: 'Pedro Lima', p: 'RB', a: 19, v: 3, r: 72 },
