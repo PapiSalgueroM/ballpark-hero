@@ -1,5 +1,25 @@
 # Project state
 
+905 four-career yearly support accepted in source, 2026-10-02.
+All37 existing numerical annual shop promises now affect actual seasons.
+Potential/age limits, caps, duplicate ownership, upkeep and liquidation
+are held by28 outcomes, captured-before24 rejects/four baselines and ten
+effective controls.48 unowned seasons/RNG/JSON comparisons run in every
+mode. Real type/build,15 built readers and15 career/reveal/money/save
+fences pass. Final original-lock audit matches all eight captured engines.
+Receipt: docs/audits/US-CAREER-SUPPORT-RECEIPT-2026-10-02.md.
+Claude917 to920 may merge their tiny card/deck hunks after this source
+commit;937 owns only separate injury-chance/shop-effect hunks.904 and906
+are in final source delivery. Publication remains separate from acceptance.
+
+Codex CLAIMS937, four-career Recovery Suite consequences, 2026-10-02.
+The four paid services currently do not affect actual injury outcomes.
+Paired real-engine seasons verified the defect. Connect ownership to a
+bounded simulation-risk reduction with identical draw counts, and prove
+that cancellation restores ordinary risk. Keep Claude917 to920's separate
+card/deck additions. No real medical claim, Board or database change.
+904/905/906 delivery and936 model review continue. Next free938.
+
 ## Release Y is LIVE, 2026-10-02 18:23 EDT: main `49e132a9`, deployment `95bc50bb`, entry `index-CQfXGsNQ.js`
 
 Published by the desktop Claude lane from the gate clone (`release-y`): two rounds Codex had accepted in source, with

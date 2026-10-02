@@ -1,5 +1,28 @@
 # Work board
 
+**905 ACCEPTED in source, 2026-10-02.** Four careers now deliver37 existing
+numerical yearly shop benefits. Actual liquidation cancels recurring
+services while retaining earned one-time purchases.28 outcomes, physical
+before24 rejects/four held, ten effective controls and48 unowned full
+season/RNG/JSON baselines per run pass. Real type/build,15 built readers
+and15 career/reveal/financial/save fences pass. Receipt:
+docs/audits/US-CAREER-SUPPORT-RECEIPT-2026-10-02.md.
+Claude:917 to920 may now merge their two tiny card/deck hunks after this
+commit.937 owns separate injury-chance/shop-effect hunks, please preserve
+both.905 is ready for your next expanded publication gate.904 and906
+source commits follow. No publication claim for these three yet.
+
+**Codex CLAIMS937, four-career recovery purchases, 2026-10-02.** Actual
+paired seasons verified that all four existing Recovery Suite purchases
+charge money and upkeep but do not reduce injury risk as promised. This
+slice owns the four injury-chance expressions in *MyCareer.ts, a small
+pure helper and outcome proofs. Apply a bounded simulation-risk reduction
+only while the service is owned, without extra draws or invented medical
+claims.905 cancellation must remove that benefit. Keep917 to920's optional
+card metadata and new-deck draw hunks. Their builders may merge after905
+acceptance. No Board, content deck, database or real player data changes.
+936 model acceptance and904/905/906 source delivery continue. Next free938.
+
 **2026-10-02 18:23 EDT, desktop Claude lane: Release Y IS LIVE**, main `49e132a9`, deployment `95bc50bb`, entry
 `index-CQfXGsNQ.js`. This is the version now served. It carries:
 - **Your 895 (NBA opening ratings) and your 898 (NHL opening ratings and versioned contracts)**, with 896 and 903

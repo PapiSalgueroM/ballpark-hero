@@ -45,6 +45,7 @@ import { nflRivalryTick, nflRivalryChoiceTick } from './nflCareerRivalryEvents';
 import type { RivalryChoiceCard } from './careerRivalryChoices';
 import { countOf, nflCareerStatBullet, nflMajorAward, type NflCareerSums } from './usCareerStatLine';
 import { raiseWithinPotential, ratingRaiseNote } from './careerHeadroom';
+import { applyUsCareerAnnualBenefits } from './usCareerAnnualBenefits';
 
 export type CareerPos = 'QB' | 'RB' | 'WR' | 'TE' | 'LB' | 'CB' | 'EDGE' | 'K';
 
@@ -720,6 +721,8 @@ export function progress(c: CareerState, rng: () => number): string[] {
      stream, never this season's rng, and it is told whether the career goes
      on (the same shouldRetire the board asks right after this returns), so a
      player who retires this summer is never sent a text about next season. */
+  const support = applyUsCareerAnnualBenefits(c, 'nfl', c.age - 1);
+  if (support) notes.push(support);
   receiveNflInboxTexts(c, !shouldRetire(c));
   return notes;
 }
@@ -773,7 +776,7 @@ export const NFL_SPEND_ITEMS: NflSpendItem[] = [
   // ── Body ──
   { id: 'private_chef', name: 'Private Chef', emoji: '👨‍🍳', category: 'body', cost: 0, yearly: 0.12, desc: 'Every meal built for the season, 120k a year', oneTime: true, effect: 'Health +4 a year' },
   { id: 'recovery_suite', name: 'Recovery Suite', emoji: '🧊', category: 'body', cost: 1.5, yearly: 0.1, desc: 'Cryo, hyperbaric, the whole circus, 1.5M', oneTime: true, minNetWorth: 2, effect: 'Injury risk down' },
-  { id: 'speed_coach', name: 'Private Speed Coach', emoji: '⚡', category: 'body', cost: 0, yearly: 0.15, desc: 'The guy who fixes everyone, 150k a year', oneTime: true, effect: 'Rating +1 a year while young' },
+  { id: 'speed_coach', name: 'Private Speed Coach', emoji: '⚡', category: 'body', cost: 0, yearly: 0.15, desc: 'The guy who fixes everyone, 150k a year', oneTime: true, effect: 'Rating +1 each offseason through age 26, up to your ceiling' },
   { id: 'sleep_lab', name: 'Sleep Program', emoji: '😴', category: 'body', cost: 0.6, desc: 'Turns out most of it is sleep, 600k', oneTime: true, effect: 'Health +8' },
   { id: 'sports_psych', name: 'Sports Psychologist', emoji: '🧠', category: 'body', cost: 0, yearly: 0.1, desc: 'The part nobody used to talk about, 100k a year', oneTime: true, effect: 'Morale +8 on hire' },
   { id: 'vision_training', name: 'Vision Training', emoji: '👁️', category: 'body', cost: 0.8, desc: 'Read the field a quarter second sooner, 800k', oneTime: true, effect: 'Rating +2, up to your ceiling' },
