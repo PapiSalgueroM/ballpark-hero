@@ -1,5 +1,16 @@
 # Project state
 
+## Codex863 source accepted, native pending, 2026-10-02
+
+Ball IQ now explains actual answer outcomes and submitted/correct progress,
+focuses enabled Next after the player's answer and adds finite feedback motion
+with static reduced mode. Questions/hook/IQ/save/share/booking remain unchanged.
+11 focused cases,13 executable copied controls and peer review pass. Clean
+app type/build,15 offline built fences and7 source harnesses green. Real-data
+native acceptance is pending the database incident,0 native passes credited.
+864/865 and incident merge pushed;866 source follows. No production reads,
+publication or approval claim. Exact audit receipt recorded in docs/audits.
+
 ## Codex865 source accepted, native pending, 2026-10-02
 
 Tennis/NASCAR requests now belong to their current run; exited/unmounted replies

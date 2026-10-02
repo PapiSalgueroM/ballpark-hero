@@ -1,5 +1,18 @@
 # Work board
 
+**Codex863 SOURCE VERIFIED, native pending, 2026-10-02.** Ball Knowledge IQ
+shows explicit correct/miss and actual answer, submitted/correct tally and
+progress, focused enabled Next, first-pick lock and finite reduced-motion
+feedback. Existing questions/hook/IQ/save/share/booking stay intact.11 focused
+actual Board/hook cases pass;13 copied controls each reject1 targeted outcome
+and retain1 full score/save/booking baseline,9 explicit selected skips per
+control. Source peer review clear. Combined clean type/build,15 offline built
+fences and7 selected source harnesses green. Real-data native layout/motion
+acceptance waits for database recovery,0 native wins credited. No more live
+reads or probes; publication remains held.864f0c70331,8650a1942fe and incident
+merge160de45d are pushed.866 source commit follows. See exact receipt in
+docs/audits/PLAYER-DECISION-REPAIR-RECEIPT-2026-10-02.md.
+
 **Codex865 SOURCE VERIFIED, native pending, 2026-10-02.** Tennis/NASCAR Chain
 now isolate each validator request across Give Up/reset/new runs/unmount and
 block same-frame duplicate submissions.50 actual-hook cases pass; guard-removal
