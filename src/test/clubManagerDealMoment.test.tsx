@@ -37,15 +37,21 @@ function seedRandom(seed: number) {
 interface Deal { market: MarketPlayer[]; open: CareerState; agreed: CareerState }
 
 /** Open talks with an affordable man, shake on the fee, give him his terms. */
-function playDeal(): Deal {
+function playDeal(structured = false): Deal {
   const base = startCareer('Brentford');
   expect(base.transferWindow).not.toBeNull();
   const market = buildMarket(base);
+  /* For the structured deal: add-ons, a sell-on, and one of mine in part
+     exchange, an outfield senior the squad can spare. */
+  const spare = [...base.squad]
+    .filter(p => p.position !== 'GK' && !p.onLoan && !p.isYouth)
+    .sort((a, b) => a.rating - b.rating)[0];
+  const extras = structured ? { addOn: 2, sellOnPct: 10, swapId: spare.id } : undefined;
   for (const mp of [...market].sort((a, b) => a.price - b.price)) {
     const open = startNegotiation(base, mp);
     if (!open?.negotiation) continue;
     if (open.negotiation.theirAsk > base.budget * 0.5) break;
-    const fee = makeOffer(open, open.negotiation.theirAsk);
+    const fee = makeOffer(open, open.negotiation.theirAsk, extras);
     const want = fee?.negotiation?.terms?.want;
     if (!fee || !want) continue;
     const agreed = offerTerms(fee, want);
@@ -137,6 +143,62 @@ describe('Club Manager: the deal moment', () => {
     /* Both sides go through the same strip: the kit's own style block names
        these classes in a comment, and it is the same block on both. */
     expect(strip(atTheFlip)).toBe(strip(reopened.container.innerHTML));
+  });
+
+  it('shakes once for a hijack and for a collapse, and never slams', () => {
+    const { market, open } = playDeal();
+    const rival = market.find(m => m.club !== open.negotiation!.player.club)!.club;
+    const lost: Array<[Negotiation['status'], string, string]> = [
+      ['hijacked', 'HIJACKED', `${rival} closed the deal while you hesitated.`],
+      ['collapsed', 'DEAL COLLAPSED', 'They walked away from the table. Deal dead this window.'],
+    ];
+    for (const [status, words, note] of lost) {
+      const gone = closed(open, status, note);
+      const view = render(<Screen career={open} market={market} />);
+      expect(count(view.container, 'cm-loss-shake')).toBe(0);
+      view.rerender(<Screen career={gone} market={market} />);
+      expect(statusWords(view.container)).toHaveTextContent(words);
+      expect(card(view.container)).toHaveClass('cm-loss-shake');
+      expect(card(view.container)!.tagName).toBe('DIV');
+      expect(count(view.container, 'cm-loss-shake')).toBe(1);
+      for (const cls of ['cm-slam', 'cm-win-pulse', 'cm-rise', 'cm-tick-in', 'cm-confetti']) {
+        expect(count(view.container, cls)).toBe(0);
+      }
+      /* A lost deal has no slip and no ledger: there is no fee to state. */
+      expect(view.container.querySelector('[data-testid="cm-deal-slip"]')).toBeNull();
+      expect(view.container.querySelector('[data-testid="cm-season-business"]')).toBeNull();
+      cleanup();
+
+      /* Reopened onto the same lost deal: the words, and no sting. */
+      const reopened = render(<Screen career={gone} market={market} />);
+      expect(statusWords(reopened.container)).toHaveTextContent(words);
+      expect(count(reopened.container, 'cm-loss-shake')).toBe(0);
+      cleanup();
+    }
+  });
+
+  it('states the extras the fee came with, as the save holds them', () => {
+    const { market, open, agreed } = playDeal(true);
+    const neg = agreed.negotiation!;
+    const x = neg.agreedExtras!;
+    expect(x.addOn).toBeGreaterThan(0);
+    expect(x.sellOnPct).toBeGreaterThan(0);
+    const swapped = open.squad.find(p => p.id === x.swapId)!;
+    expect(agreed.squad.some(p => p.id === swapped.id)).toBe(false);
+
+    const view = render(<Screen career={open} market={market} />);
+    view.rerender(<Screen career={agreed} market={market} />);
+    const cash = moneyIn(agreed);
+    expect(view.container.querySelector('[data-testid="cm-deal-slip"]')!.textContent).toBe(
+      `${neg.player.name} signs from ${neg.player.club} for ${cash(neg.agreedFee!)}, `
+      + `plus ${cash(x.addOn!)} in add-ons, a ${x.sellOnPct} percent sell-on, ${swapped.name} going the other way.`,
+    );
+    /* Two rows arrived with this deal, him in and the other man out, and they
+       tick in one after the other. */
+    const fresh = [...view.container.querySelectorAll<HTMLElement>('[data-fresh-row]')];
+    expect(fresh.map(r => r.textContent!.includes(neg.player.name) || r.textContent!.includes(swapped.name)))
+      .toEqual([true, true]);
+    expect(fresh.map(r => r.style.animationDelay)).toEqual(['0.6s', '0.82s']);
   });
 
   it('plays once: a later render keeps the node and a new negotiation is clean', () => {
