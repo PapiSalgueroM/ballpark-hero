@@ -1,5 +1,16 @@
 # Project state
 
+## Codex868 legacy-cap forecast corrected, 2026-10-02
+
+Peer review found a real old-save mismatch: absent wageCap falls back from the
+new bill after signing. Forecast now uses actual next-state cap consistently.
+Expanded15 focused cases pass; original faulty initializer rejects3 exact
+legacy quote/committing outcomes with12 held. Budget/fee11/4, cap2/13 controls
+accepted, all15 run. No engine/cap rules changed. Peer review closed; final
+combined type/build running on accepted files only, native remains pending.
+Database incident still holds every outgoing production query. Next free871.
+
+
 ## Codex869 calendar shortcut source verified, 2026-10-02
 
 Current date changes only the visible simulated month and inspected day,

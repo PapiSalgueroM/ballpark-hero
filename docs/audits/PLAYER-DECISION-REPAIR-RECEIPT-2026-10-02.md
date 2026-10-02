@@ -270,6 +270,20 @@ with11 held. All13 run per control,0 pending/unhandled; actual source/test/engin
 bytes held and owned copies cleaned. Receipts TEMP/dukb-868-contract-before.json
 and -after.json. Commite9cfb96f pushed. Native and final combined gates follow.
 
+Peer review caught one own forecast error before final acceptance: loadCareer
+does not fill absent wageCap. The old-save renewal keeps it absent, so actual
+next card derives its fallback cap from next wage bill, whereas the first
+forecast printed the current fallback. Corrected denominator/warning/delta
+from actual next state, no engine rule change. Two new committing old-save
+cases compare forecast with actual signed header and save/reload.
+
+Expanded15-case before:12pass/3 exact legacy quote failures; after15/15. Budget
+and fee controls each11 targeted failures/4 held, removed warning2/13. New
+legacy control changes the actual nextCap initializer once back to current
+cap and rejects exactly the three missing-cap outcomes,12 held. All15 run,
+0 pending/unhandled, source bytes held and owned copies cleaned. Before proof
+TEMP/dukb-868-legacy-cap-before.json. Peer review confirms the finding is closed.
+
 ## 869: Club Manager calendar return
 
 URL: `/club-manager`, Home Calendar.

@@ -1,6 +1,6 @@
 /* Round 868: actual renewal previews must match the real committed contract.
-   CONTRACT_PREVIEW_CONTROL=budget|fee|cap changes a disposable component only.
-   CONTRACT_PREVIEW_CONTROL=all runs normal and all three asserted controls. */
+   CONTRACT_PREVIEW_CONTROL=budget|fee|cap|legacy changes a disposable component only.
+   CONTRACT_PREVIEW_CONTROL=all runs normal and all four asserted controls. */
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -11,7 +11,7 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const test = 'src/test/contractPreview.test.tsx';
 const component = 'src/components/club-manager/ContractsCard.tsx';
 const control = process.env.CONTRACT_PREVIEW_CONTROL || '';
-assert.ok(['', 'budget', 'fee', 'cap', 'all'].includes(control), 'Unknown contract preview control.');
+assert.ok(['', 'budget', 'fee', 'cap', 'legacy', 'all'].includes(control), 'Unknown contract preview control.');
 const heldPaths = [component, test, 'src/lib/clubManager.ts'];
 const heldBytes = heldPaths.map(file => fs.readFileSync(path.join(root, file)));
 const source = fs.readFileSync(path.join(root, component), 'utf8').replace(/\r\n/g, '\n');
@@ -22,6 +22,10 @@ const report = path.join(folder, 'report.json');
 const copies = [];
 const title = name => `Club Manager contract preview ${name}`;
 const capTargets = ['plain', 'clause'].map(kind => title(`warns about the ${kind} soft cap but preserves an affordable over-cap renewal`));
+const legacyTargets = [
+  title('uses supported missing wage and cap defaults without repairing the input'),
+  ...['plain', 'clause'].map(kind => title(`makes the missing-cap ${kind} forecast match the committed header and saved reload`)),
+];
 const quoteTargets = [
   title('shows both complete real renewal quotes without mutating career or saving'),
   ...['plain', 'clause'].map(kind => title(`makes the ${kind} forecast become the real contract budget wage and saved deal`)),
@@ -29,6 +33,7 @@ const quoteTargets = [
   ...capTargets,
   title('quotes the full renewal behind Remove and really deletes the existing clause'),
   title('uses supported missing wage and cap defaults without repairing the input'),
+  ...['plain', 'clause'].map(kind => title(`makes the missing-cap ${kind} forecast match the committed header and saved reload`)),
 ];
 
 function run(kind = '') {
@@ -38,7 +43,8 @@ function run(kind = '') {
     const anchors = {
       budget: ['{money(next.budget)}', '{money(career.budget)}'],
       fee: ['a week. {money(terms.fee)} to sign.</p>', 'a week. {money(0)} to sign.</p>'],
-      cap: ['nextBill !== null && nextBill > cap &&', 'false && nextBill !== null && nextBill > cap &&'],
+      cap: ['nextBill > nextCap &&', 'false && nextBill > nextCap &&'],
+      legacy: ['const nextCap = next?.wageCap ?? wageCapFrom(nextBill);', 'const nextCap = cap;'],
     };
     const [anchor, replacement] = anchors[kind];
     assert.equal(source.split(anchor).length - 1, 1, 'The executable quote control anchor must occur exactly once.');
@@ -53,27 +59,27 @@ function run(kind = '') {
   assert.ok(!result.error, `${String(result.error)}\n${result.stderr || ''}`);
   assert.ok(fs.existsSync(report), 'The actual component suite must produce a JSON report.');
   const json = JSON.parse(fs.readFileSync(report, 'utf8'));
-  assert.equal(json.numTotalTests, 13, `Every component case must run. ${result.stdout || ''}\n${result.stderr || ''}`);
+  assert.equal(json.numTotalTests, 15, `Every component case must run. ${result.stdout || ''}\n${result.stderr || ''}`);
   assert.equal(json.numPendingTests, 0, 'No focused case may be skipped.');
   assert.equal(Number(json.numUnhandledErrors ?? 0), 0, 'No unhandled error may coexist with assertion results.');
   const failed = json.testResults.flatMap(file => file.assertionResults).filter(row => row.status === 'failed');
   if (!kind) {
     assert.equal(result.status, 0, failed.map(row => `${row.fullName}: ${row.failureMessages[0]}`).join('\n'));
-    assert.equal(json.numPassedTests, 13);
+    assert.equal(json.numPassedTests, 15);
     assert.equal(failed.length, 0);
-    console.log('Contract preview: 13/13 actual-screen cases passed with real careers and renewal engines.');
+    console.log('Contract preview: 15/15 actual-screen cases passed with real careers and renewal engines.');
     console.log('Contract preview: plain and clause forecasts matched actual contracts, money, wages and saved/reloaded deals.');
     console.log('Contract preview: exact-fee boundaries, insufficient money and affordable over-cap renewals passed.');
-    console.log('Contract preview: clause removal, supported wage/cap defaults, read-only rendering and unchanged callback/key routing passed.');
+    console.log('Contract preview: clause removal, legacy missing-cap committing/reload headers, read-only rendering and unchanged callback/key routing passed.');
   } else {
-    const targets = kind === 'cap' ? capTargets : quoteTargets;
+    const targets = kind === 'cap' ? capTargets : kind === 'legacy' ? legacyTargets : quoteTargets;
     assert.equal(result.status, 1, 'The changed forecast must cause an assertion failure.');
     assert.deepEqual(failed.map(row => row.fullName).sort(), [...targets].sort(), 'Only intended rendered forecast assertions may fail.');
-    assert.equal(json.numPassedTests, 13 - targets.length);
+    assert.equal(json.numPassedTests, 15 - targets.length);
     assert.ok(failed.every(row => row.failureMessages.some(message => /toHaveTextContent/.test(message))), 'Each targeted failure must assert rendered forecast content.');
     console.log(`Contract preview control ${kind}: one unique executable forecast anchor changed in an isolated component.`);
-    console.log(`Contract preview control ${kind}: ${targets.length} intended content assertions failed; ${13 - targets.length} independent cases stayed green.`);
-    console.log(`Contract preview control ${kind}: all13 cases ran with zero pending tests and unhandled errors.`);
+    console.log(`Contract preview control ${kind}: ${targets.length} intended content assertions failed; ${15 - targets.length} independent cases stayed green.`);
+    console.log(`Contract preview control ${kind}: all15 cases ran with zero pending tests and unhandled errors.`);
     for (const row of failed) console.log(`Contract preview control ${kind}: rejected ${row.fullName}.`);
   }
   fs.rmSync(report, { force: true });
@@ -81,7 +87,7 @@ function run(kind = '') {
 
 try {
   if (!control || control === 'all') run();
-  if (control === 'all') { run('budget'); run('fee'); run('cap'); }
+  if (control === 'all') { run('budget'); run('fee'); run('cap'); run('legacy'); }
   else if (control) run(control);
 } finally {
   fs.rmSync(report, { force: true });

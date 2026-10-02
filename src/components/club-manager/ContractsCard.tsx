@@ -78,7 +78,8 @@ export function ContractsCard({ career, onRenew, onRenewWithClause, onRelease, o
     .sort((a, b) => (sellValue(b) / (b.releaseClause as number)) - (sellValue(a) / (a.releaseClause as number)));
 
   const forecast = (p: CMPlayer, kind: 'plain' | 'clause' | 'remove', terms: ReturnType<typeof renewalTerms> & { clause?: number }, next: CareerState | null) => {
-    const nextBill = next ? wageBill(next) : null;
+    const nextBill = next ? wageBill(next) : bill;
+    const nextCap = next?.wageCap ?? wageCapFrom(nextBill);
     return (
       <div data-contract-preview={kind} data-contract-player-id={p.id} className="mt-1 rounded-lg border border-border/40 bg-secondary/30 p-2 text-[10px] leading-relaxed text-muted-foreground break-words">
         <p className="font-bold text-foreground">{terms.years} years at {terms.wage}k a week. {money(terms.fee)} to sign.</p>
@@ -86,8 +87,8 @@ export function ContractsCard({ career, onRenew, onRenewWithClause, onRelease, o
         {next ? (
           <>
             <p>Leaves <span className="font-bold text-foreground">{money(next.budget)}</span> in the transfer kitty.</p>
-            <p>Wage bill: {nextBill}k of {cap}k a week.</p>
-            {nextBill !== null && nextBill > cap && <p className="text-amber-400">Over the wage budget by {nextBill - cap}k a week. The board notice every week.</p>}
+            <p>Wage bill: {nextBill}k of {nextCap}k a week.</p>
+            {nextBill > nextCap && <p className="text-amber-400">Over the wage budget by {nextBill - nextCap}k a week. The board notice every week.</p>}
           </>
         ) : <p className="text-amber-400">Need {money(terms.fee - career.budget)} more for the signing fee.</p>}
       </div>

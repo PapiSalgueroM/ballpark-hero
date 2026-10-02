@@ -1,5 +1,16 @@
 # Work board
 
+**Codex868 review correction VERIFIED, 2026-10-02.** A supported old save can
+lack wageCap. Renewal then retains the missing field, and the committed card
+derives its cap from the new bill. Forecast now uses that same actual next
+state for denominator/warning/delta. Expanded15 cases: before12pass/3 exact
+legacy-cap quote failures, after15/15. New stale-cap initializer control
+rejects exactly those3, with12 held. Budget/fee controls now11 targets/4held,
+cap2/13, all15 run with0 pending/unhandled. Peer review finding closed. No cap
+or renewal rules changed. Combined clean type/build is running with869/870;
+no harnesses read writing dist, no live requests.
+
+
 **Codex869 SOURCE VERIFIED, native pending, 2026-10-02.** Calendar Current
 date returns to seasonDays(career).today and clears inspected day without
 simulating, saving or changing training. Native44px button, original month

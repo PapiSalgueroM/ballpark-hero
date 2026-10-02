@@ -38,7 +38,7 @@ function expectQuote(container: HTMLElement, career: CareerState, id: string, ki
   const quote = preview(container, id, kind);
   expect(quote).toHaveTextContent(`${terms.years} years at ${terms.wage}k a week. ${moneyIn(career)(terms.fee)} to sign.`);
   expect(quote).toHaveTextContent(`Leaves ${moneyIn(career)(next.budget)} in the transfer kitty.`);
-  const cap = career.wageCap ?? wageCapFrom(wageBill(career));
+  const cap = next.wageCap ?? wageCapFrom(wageBill(next));
   expect(quote).toHaveTextContent(`Wage bill: ${wageBill(next)}k of ${cap}k a week.`);
   expect(quote).toHaveTextContent(deal === 'clause'
     ? `Exit clause ${moneyIn(career)(renewalTermsWithClause(player).clause)}. Any club can pay it.`
@@ -85,7 +85,7 @@ describe('Club Manager contract preview', () => {
     expect(kind === 'plain' ? onRenew : onClause).toHaveBeenCalledExactlyOnceWith(id);
     expect(kind === 'plain' ? onClause : onRenew).not.toHaveBeenCalled();
     expect(observed).toEqual(next);
-    expect(view.getByText(`${wageBill(next)}k of ${next.wageCap ?? wageCapFrom(wageBill(career))}k a week`)).toBeVisible();
+    expect(view.getByText(`${wageBill(next)}k of ${next.wageCap ?? wageCapFrom(wageBill(next))}k a week`)).toBeVisible();
     expect(saveCareer(observed)).toBe(true);
     const restored = loadCareer()!;
     expect(restored.budget).toBe(next.budget);
@@ -143,6 +143,25 @@ describe('Club Manager contract preview', () => {
     const before = JSON.stringify(career);
     const view = render(<ContractsCard career={career} onRenew={vi.fn()} onRenewWithClause={vi.fn()} />);
     expectQuote(view.container, career, id, 'plain'); expectQuote(view.container, career, id, 'clause');
+    expect(JSON.stringify(career)).toBe(before);
+  });
+
+  it.each(['plain', 'clause'] as const)('makes the missing-cap %s forecast match the committed header and saved reload', kind => {
+    const { career, id } = fixture(); delete career.wageCap;
+    const before = JSON.stringify(career); let observed = career;
+    const onRenew = vi.fn(), onClause = vi.fn();
+    const view = render(<CommittingContracts initial={career} onRenew={onRenew} onClause={onClause} observe={state => { observed = state; }} />);
+    const next = expectQuote(view.container, career, id, kind), cap = wageCapFrom(wageBill(next));
+    fireEvent.click(action(view.container, kind));
+    expect(observed).toEqual(next); expect(observed.wageCap).toBeUndefined();
+    expect(view.getByText(`${wageBill(next)}k of ${cap}k a week`)).toBeVisible();
+    expect(saveCareer(observed)).toBe(true);
+    const restored = loadCareer()!;
+    expect(restored.budget).toBe(next.budget);
+    expect(restored.squad.find(p => p.id === id)).toEqual(next.squad.find(p => p.id === id));
+    expect(restored.wageCap ?? wageCapFrom(wageBill(restored))).toBe(cap);
+    view.rerender(<ContractsCard career={restored} onRenew={onRenew} onRenewWithClause={onClause} />);
+    expect(view.getByText(`${wageBill(next)}k of ${cap}k a week`)).toBeVisible();
     expect(JSON.stringify(career)).toBe(before);
   });
 
