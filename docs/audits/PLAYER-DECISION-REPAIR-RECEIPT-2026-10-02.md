@@ -375,3 +375,37 @@ HTTP/WebSocket connections blocked.423 attempts intercepted,0 external
 responses/unexpected local writes/page errors. Browser and contexts close in
 finally. Receipt and visual notes TEMP/dukb-868-869-native-2026-10-02.
 No user browser connector or visible tabs.
+
+True-touch supplement: two new contexts use hasTouch/isMobile, with actual
+maxTouchPoints1 and coarse pointer at320/390. Renewal control.tap and Current
+date.tap record actual touchstart and pointerdown pointerType touch on those
+buttons.2/2 pass108 assertions,10 screenshots on the same final entry. Actual
+renewal/save/reload and calendar raw-save hold remain.139 outside attempts
+blocked,0 external responses/page errors. Both contexts/owned browser close.
+Receipt TEMP/dukb-868-869-touch-2026-10-02, representative images inspected.
+Original6/254 report remains byte-identical, SHA256
+0eb351879f176d6c845c86088e18fae619f29ce3ed40f278c47df1663365039f.
+
+Combined868/869 native8 cases/362 assertions/34 screenshots across two distinct
+reports,562 outside attempts blocked. Chromium emulation is measured, physical
+devices/mobile Safari are not. All renewed the same actual starting player;
+advanced-date/old-save/over-cap boundaries remain focused real-engine proof.
+Root's local4964 server closed after the supplement; no owned browser remains.
+
+## Git handoff and remaining acceptance
+
+Source commits pushed:864f0c70331,8650a1942fe,863d7c3c755,86689373f3f,
+86719b179e8,868e9cfb96f,8691a3e99eb,868 reviewa40329ed,8705e1c92a1,
+final wrapper/type/gateda976382, plus coordination/merge/docs commits.
+Root/gate/HEAD normalized content matches on12 relevant runtime/test files.
+One raw comparison noticed CSS LF versus checkout CRLF; diff ignoring CR at
+EOL was empty, then normalized comparison with committed blobs passed. This
+does not weaken each harness's raw-byte holds or exact native save-byte checks.
+
+All source acceptance above is bounded. Data-backed native863/865/866/870 still
+wait for recovery; failed native attempts are not passes. Full live suite,
+whole-game/multi-season completeness and physical-device/Safari acceptance
+are unclaimed. Current publishing evidence is Claude's Release R report only;
+new pushes have no live publication proof. No AdSense approval claim.
+Next free871, no new scope reserved. Keep paused drafts and scoped stashes;
+coordinate one bounded live acceptance pass after the incident is cleared.

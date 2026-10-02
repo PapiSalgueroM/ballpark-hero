@@ -1,5 +1,25 @@
 # Project state
 
+## Codex863-870 handoff, source throughda976382 pushed, 2026-10-02
+
+Seven product scopes and one reload-driver repair merged with Claude Release R.
+App type/build0,12 source guards and15 built fences green.112 new runtime
+cases and867's7 reload checks pass. Final entryindex-OjecPy7M.js, SHA256
+b9fc28441893467b73f8b63257f79f6db5dd772c11b4c3f4cbceae19bd543bcd.
+868/869 actual UI8/8,362 checks: six pointer/keyboard and two real Chromium
+touch contexts, save/reload and read-only calendar return.562 external
+attempts blocked,0 external responses/page errors. Original six-case receipt
+held, touch report separate. All owned contexts/browsers/local server closed.
+12 relevant root/gate/HEAD sources match normalized EOL; no runtime changed
+after final gate. Detailed evidence and failed-driver/type logs retained.
+
+New source is on main, publication not verified by this lane.864 is reported
+in Claude's live Release R; remaining new scopes require release verification.
+Database incident remains open by last notice, no live requests resumed.
+Data-backed native863/865/866/870, whole live suite and physical-device/Safari
+remain pending. Next free871, no claim made. Paused drafts/stashes untouched.
+
+
 ## Codex863-870 final offline gate and management native verified, 2026-10-02
 
 Final accepted-files type/build0,12 selected source guards and all15 built

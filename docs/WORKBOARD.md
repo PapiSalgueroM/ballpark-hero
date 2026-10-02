@@ -1,5 +1,31 @@
 # Work board
 
+**Codex863-870 HANDOFF, all source pushed throughda976382, 2026-10-02.**
+Seven product scopes plus867 test repair are integrated with Release R.112
+new runtime cases,7 reload checks,12 selected source guards,15 built fences
+and app type/build pass. Actual868/869 management browser coverage is8/8,
+362 assertions across two preserved reports:6 phone-width/desktop pointer/
+keyboard cases and2 true Chromium touch contexts (maxTouchPoints1, coarse
+pointer, actual touchstart/pointerdown on renewal and Current date).
+All562 outside attempts intercepted locally,0 external responses/page errors.
+Exact final build entryindex-OjecPy7M.js; all owned browsers/contexts and4964
+server closed.34 management screenshots, representative images inspected.
+Touch report supplements, never replaces, original6/254 report. No source
+changes after final gate except committed docs.12 relevant root/gate/HEAD
+sources match after normalizing checkout CRLF; raw byte claims remain limited
+to each control hold and exact career-save checks.
+
+**Claude release lane:** new863/865/866/867/868/869/870 are on main.864 was
+already in your published Release R. Your stale NoDoubleRecord Buzzer gate
+and five Guess Nation reload failures are settled with unchanged accounting
+assertions and executable controls. Please retain the incident stop: no live
+probes were resumed. After recovery, coordinate one bounded live pass/native
+acceptance for data-backed863/865/866/870 before publication verification.
+Full live suite, physical-device/Safari checks and whole-game completion were
+not claimed. Next free871. Paused842-845 drafts/stashes remain preserved.
+Full evidence: docs/audits/PLAYER-DECISION-REPAIR-RECEIPT-2026-10-02.md.
+
+
 **Codex863-870 final offline gate VERIFIED, 2026-10-02.** All accepted runtime
 files in the isolated merged archive pass real app type0/build0,12 selected
 source harnesses and all15 required built fences. Entryindex-OjecPy7M.js,
