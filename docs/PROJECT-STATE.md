@@ -1,5 +1,14 @@
 # Project state
 
+## Codex882 claimed, readable Champ or Not reveals, 2026-10-02
+
+881 pushedfd7ee739. Active Champ or Not will hold historical feedback until
+Next claim/View results, show earned score at answer time and preserve daily
+save/completion timing. Root owns hook/page; agents own focused proof, existing
+recording stimulus and independent review. No real data/query change, desktop,
+Supabase or live work. Football Draft is retired, so its source-only candidate
+is deferred without a product repair claim. Claude owns publication, next883.
+
 ## Codex881 court controls accepted, 2026-10-02
 
 Empty NBA Starting 5 court cards select positions directly, with native buttons,

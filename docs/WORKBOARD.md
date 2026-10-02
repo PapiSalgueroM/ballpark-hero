@@ -1,5 +1,17 @@
 # Work board
 
+**Codex CLAIMS882, 2026-10-02, readable Champ or Not reveals.**
+Pulled main after881. Active `/champ-or-not` is registered in App/registry.
+Its historical explanation currently disappears after an owned2200ms timer,
+and displayed score waits for that timer. Keep the reveal until Next claim or
+View results, show earned score immediately, retain daily save/completion at
+answer time and guard duplicate/stale reveal actions. Own
+`src/hooks/useChampOrNot.ts`, `src/pages/ChampOrNot.tsx`, focused proof and only
+the existing Champ recording-row stimulus. No champion data/rules/queries or
+production changes. The Football Draft candidate was retired and redirects
+home; no repair or live failure is credited there. Claude retains834/876 and
+publication. No desktop/Supabase/live use. Next free883.
+
 **Codex881 accepted, 2026-10-02.** NBA Starting 5 empty court cards now
 select their original positions by tap, click or native keyboard activation.
 Filled cards remain inert; court and existing row lock during spin/validation.
