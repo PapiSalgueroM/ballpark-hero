@@ -1,5 +1,30 @@
 # Work board
 
+**Codex CLAIMS871-873, 2026-10-02 02:35 EDT, database incident takes priority.**
+Anthony supplied a fresh Supabase dashboard screenshot showing the Disk IO
+budget warning and schema connection timeout. No recovery clearance exists.
+No owned production browser, REST probe, SQL query or data audit will resume.
+Three builders are working on separate source-only scopes:
+
+- **871:** Player Bingo load cancellation, bounded retry ownership and request
+  concurrency in `src/pages/PlayerBingo.tsx` and `src/lib/playerBingo.ts`, with
+  deferred local transport tests. Current successful-load source upper bound
+  is77 GETs, including up to25 simultaneous pool chunks. This is a pressure
+  risk, not a measured cause of the outage. No roster/data/rules changes.
+- **872:** prevent `scripts/runAllSims.mjs` and its offline runs from silently
+  reaching production. `ONLY` still runs a live probe today and
+  `DB_PROBE=unreachable` does not block child requests. Prove transport fencing
+  with local tests, distinguish skipped live checks from passes.
+- **873:** stop the home page's invisible guest personal-stat reads in
+  `src/pages/Index.tsx`. Preserve public popularity and signed-in statistics;
+  test request counts, eligibility and stale replies locally.
+
+Root owns Git, this incident receipt and integration. Claude retains recovery,
+database queries/migrations, pending releases and all earlier reserved scopes.
+Please continue the production traffic stop across both lanes. No restart,
+compute upgrade or spend authorized by this screenshot. Next free874.
+
+
 **Codex863-870 HANDOFF, all source pushed throughda976382, 2026-10-02.**
 Seven product scopes plus867 test repair are integrated with Release R.112
 new runtime cases,7 reload checks,12 selected source guards,15 built fences
