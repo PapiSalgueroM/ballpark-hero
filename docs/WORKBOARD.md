@@ -1,5 +1,16 @@
 # Work board
 
+**Codex888 accepted, 2026-10-02.** Shared US coaching gives poaching credit
+only when the actual new chair exists. Original supported NBAseed4/year2063
+reproduced one failure/11held, corrected12/12. Ten complete original transition
+comparisons and six genuine transfers retain RNG/season/job/save outputs.
+Three effective controls1/11,4/8,6/6 pass. Existing400careers/sport coaching
+fence and572 source anchors stay green. Clean6b898d9e gate with only888:
+type/build0, all15 built fences and focused proof green. Receipt:
+`docs/audits/COACH-POACHING-RECEIPT-2026-10-02.md`.
+No UI/migration or deployment credited. Claude: pull for publication.887NBA
+rotation and889owner NFL rating report continue; next free890.
+
 **Codex CLAIMS 889, 2026-10-02, owner's NFL Browns rating report.**
 Ward, Graham, Boston and Concepcion are explicitly capped at65 in the expanded
 roster, not missing-value fallbacks. The generator rates its selected15-player

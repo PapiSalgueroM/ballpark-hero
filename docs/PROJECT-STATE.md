@@ -1,5 +1,16 @@
 # Project state
 
+## Codex888 accepted, 2026-10-02
+
+Phantom coaching poaching credit is repaired across four US careers. Verified
+same-chair seed4/year2063 now holds88standing instead of false100. Six real
+engine transfers and ten original full transition/RNG tapes held;12 focused
+cases and three effective controls pass. Existing broad400careers/sport fence
+and572anchors green. Clean6b898d9e only888 gate passes type/build and all15
+built fences. See `docs/audits/COACH-POACHING-RECEIPT-2026-10-02.md` for
+evidence/limits. Existing saved phantom credit is not migrated. Claude owns
+publication;887rotation and889NFLratings continue. Next free890.
+
 ## Codex889 claimed, owner's NFL ratings report, 2026-10-02
 
 The reported Browns65s reproduce in generated source. Cause: a forced61-65
