@@ -322,7 +322,7 @@ try {
         fs.writeFileSync(target, src);
         swaps['@/' + rel.slice(4).replace(/\.tsx?$/, '')] = target;
       }
-      assert.doesNotMatch(fs.readFileSync(swaps['@/hooks/useDailyPuzzle'], 'utf8'), /adoptNewerSave|isGuessLog/, 'the swapped hook is the one from before this round');
+      assert.doesNotMatch(fs.readFileSync(swaps['@/hooks/useDailyPuzzle'], 'utf8').replace(/\r\n/g, '\n'), /adoptNewerSave|isGuessLog/, 'the swapped hook is the one from before this round');
       const outFile = path.join(WORK, 'saves.json');
       const writer = vitest(HARDENING, { swaps, env: { R848_SAVES_OUT: outFile }, pattern: 'captures saves' });
       const wrote = writer.rows.find((r) => /captures saves/.test(r.title));
