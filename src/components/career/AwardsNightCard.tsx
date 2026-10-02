@@ -61,10 +61,10 @@ export function AwardsNightCard<C extends AwardsCandidate>({
           {isWinner ? copy.winnerTitle : copy.title(night.year)}
         </h3>
         {isWinner && (
-          <p className="text-sm text-amber-300 font-bold">{copy.winnerLine}</p>
+          <p className="text-sm text-amber-300 font-bold">{copy.winnerLine(night.moved)}</p>
         )}
         {!isWinner && isNominated && place !== null && place <= award.podiumSize && (
-          <p className="text-sm text-muted-foreground">{copy.podiumLine(place)}</p>
+          <p className="text-sm text-muted-foreground">{copy.podiumLine(place, night.moved)}</p>
         )}
         {!isWinner && isNominated && place !== null && place > award.podiumSize && (
           <p className="text-sm text-muted-foreground">{copy.shortlistLine(place)}</p>
@@ -106,8 +106,12 @@ export function AwardsNightCard<C extends AwardsCandidate>({
         </div>
       )}
 
+      {/* The speech is the result, so it arrives with the headline, never
+          before it: hidden and unclickable until the countdown has landed. */}
       {isWinner && speech?.open ? (
-        <SpeechChoices prompt={speech.prompt} options={speech.options} onChoose={speech.onChoose} />
+        <div className="cm-rise-gated" style={{ animationDelay: revealDelay(n, 0.95) }}>
+          <SpeechChoices prompt={speech.prompt} options={speech.options} onChoose={speech.onChoose} />
+        </div>
       ) : (
         <Button onClick={onDismiss} className={`w-full h-10 text-sm font-bold text-black ${isWinner ? "bg-amber-600 hover:bg-amber-500" : "bg-emerald-600 hover:bg-emerald-500"}`}>
           Continue →

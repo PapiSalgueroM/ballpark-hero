@@ -19,8 +19,8 @@
                    verdict rules in order, and whether the wider ranking may
                    place him. The engine never scores anyone.
      3. meters     every meter a night or a speech may move, each with the
-                   label the copy uses and the one function that moves it
-                   (clamps and rounding are the sport's).
+                   label the copy uses, the one function that moves it
+                   (clamps and rounding are the sport's) and one that reads it.
      4. steps      what winning and a podium finish do, as ordered meter steps.
      5. save hooks where the night is staged for the card, where the place and
                    the win are written on the season record, the trophy
@@ -37,6 +37,8 @@
      - a speech moves exactly the meters its steps name, in the order written,
        and draws at most once (its risk, if it has one), from the rng it is
        given;
+     - a winning or podium night carries what its steps really moved after
+       the sport's clamps (`moved`), never what they asked for;
      - nothing here draws a random number except a speech's risk, so a sport
        keeps the order of its own draws exactly as it wrote them.
 
@@ -65,8 +67,16 @@ export interface AwardsNight<C extends AwardsCandidate = AwardsCandidate> {
   playerPoints: number;
   /** Did the player make the ballot at all? */
   playerNominated: boolean;
-  /** The winner's speech once given on the card: which one, the log line, and
-   *  what it actually moved. Absent on a night with no speech yet. */
+  /** What the night itself did for the player, measured after the sport's
+   *  clamps and written the way describeSteps writes it ("" when the steps
+   *  landed nothing, say popularity already at its cap). Set by the settle on
+   *  a winning or podium night; absent on any other night and on a night a
+   *  save staged before Round 834's review. */
+  moved?: string;
+  /** The winner's speech once given on the card: which one, its line as the
+   *  card shows it (the log line without the numbers it prints, since `moved`
+   *  carries the measured ones), and what it actually moved. Absent on a night
+   *  with no speech yet. */
   speech?: { id: string; line: string; moved: string };
 }
 
@@ -105,6 +115,9 @@ export interface AwardsBallot<C extends AwardsCandidate> {
 export interface AwardsMeter<S> {
   label: string;
   add: (s: S, delta: number) => void;
+  /** Where the meter stands, so a card can say what a step really moved once
+   *  the sport's clamps have had their say (a +20 at a cap of 100 from 95 is +5). */
+  read: (s: S) => number;
   /** How a change reads on a card ("+€15M"); a signed number when absent. */
   show?: (delta: number) => string;
 }
@@ -117,8 +130,10 @@ export interface MeterStep<M extends string> {
 export interface AwardsNightCopy {
   winnerTitle: string;
   title: (year: number) => string;
-  winnerLine: string;
-  podiumLine: (place: number) => string;
+  /** `moved` is the night's measured `moved`: undefined on a night staged
+   *  before it was measured, so the line must then name no number. */
+  winnerLine: (moved?: string) => string;
+  podiumLine: (place: number, moved?: string) => string;
   shortlistLine: (place: number) => string;
   /** The wider ranking line, split around the emphasised "#place". */
   wider: { before: string; after: string };
@@ -225,23 +240,49 @@ export function applyMeterSteps<S, M extends string>(meters: Record<M, AwardsMet
   for (const step of steps) meters[step.meter].add(s, step.delta);
 }
 
-/** What the night writes on the save: the staged night, the place on the
- *  season record, and the winner's and the podium's consequences. */
+/** Round 834 review: runs `apply` and returns what it really moved, every
+ *  meter read before and after (rounded to two places), in the meters' own
+ *  order, unmoved ones left out. A meter at its cap moves less than its step
+ *  asks, or nothing, and a card built from this says so. */
+export function measureMoves<S, M extends string>(meters: Record<M, AwardsMeter<S>>, s: S, apply: () => void): MeterStep<M>[] {
+  const ids = Object.keys(meters) as M[];
+  const before = ids.map(m => meters[m].read(s));
+  apply();
+  return ids
+    .map((meter, i) => ({ meter, delta: Math.round((meters[meter].read(s) - before[i]) * 100) / 100 }))
+    .filter(st => st.delta !== 0);
+}
+
+/** A speech's line as a card shows it beside what the speech measurably
+ *  moved: cut before the first number it prints ("Popularity +8"), since that
+ *  number is what the step asked for and a cap can make it untrue. The career
+ *  log keeps the whole line. A line that opens with a number is kept whole. */
+export function narrativeOf<S, M extends string>(meters: Record<M, AwardsMeter<S>>, line: string): string {
+  const labels = Object.values<AwardsMeter<S>>(meters).map(m => m.label.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"));
+  const at = line.search(new RegExp(`(?:${labels.join("|")}) [+-]`));
+  return at > 0 ? line.slice(0, at).trimEnd() : line;
+}
+
+/** What the night writes on the save: the place on the season record, the
+ *  winner's and the podium's consequences, then the staged night, carrying
+ *  what those consequences really moved. */
 export function settleAwardsNight<S, C extends AwardsCandidate, M extends string, R>(
   sport: AwardsNightSport<S, C, M, R>, s: S, season: R, night: AwardsNight<C>,
 ): void {
-  sport.stage(s, night);
   const place = night.playerRank;
-  if (place === null) return;
-  sport.recordPlace(season, place);
-  if (place === 1) {
-    sport.recordWin(season);
-    sport.addToCabinet(s, { year: night.year, name: sport.award.name, emoji: sport.award.emoji });
-    applyMeterSteps(sport.meters, s, sport.winnerSteps);
-  } else if (place <= sport.award.podiumSize) {
-    applyMeterSteps(sport.meters, s, sport.podiumSteps);
-    sport.onPodium?.(s);
+  let moved: MeterStep<M>[] | null = null;
+  if (place !== null) {
+    sport.recordPlace(season, place);
+    if (place === 1) {
+      sport.recordWin(season);
+      sport.addToCabinet(s, { year: night.year, name: sport.award.name, emoji: sport.award.emoji });
+      moved = measureMoves(sport.meters, s, () => applyMeterSteps(sport.meters, s, sport.winnerSteps));
+    } else if (place <= sport.award.podiumSize) {
+      moved = measureMoves(sport.meters, s, () => applyMeterSteps(sport.meters, s, sport.podiumSteps));
+      sport.onPodium?.(s);
+    }
   }
+  sport.stage(s, moved ? { ...night, moved: describeSteps(sport.meters, moved) } : night);
 }
 
 /** The options a card should show on this save. */

@@ -2776,7 +2776,7 @@ function BallonDorCeremonyCard({ bdor, career, onDismiss, onSpeech }: { bdor: Ba
     <AwardsNightCard<BallonDorNominee>
       night={bdor}
       award={SOCCER_BALLON_DOR.award}
-      copy={{ ...copy, winnerLine: money(copy.winnerLine) }}
+      copy={{ ...copy, winnerLine: moved => money(copy.winnerLine(moved)) }}
       portrait={career.appearance
         ? won => <PlayerAvatar appearance={career.appearance!} clubColor={career.currentClubColor} size={won ? 88 : 64} animate />
         : undefined}

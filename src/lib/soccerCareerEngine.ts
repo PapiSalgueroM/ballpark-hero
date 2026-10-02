@@ -6386,26 +6386,27 @@ export function simulateUCL(state: CareerState, season: SeasonRecord): UCLResult
    night may move with soccer's own clamps and rounding, the award, the copy,
    and (further down) the scoring and the speeches. */
 import {
-  runAwardsNight, settleAwardsNight, applySpeech, describeSteps,
+  runAwardsNight, settleAwardsNight, applySpeech, describeSteps, measureMoves, narrativeOf,
   type AwardsCandidate, type AwardsNight, type AwardsMeter, type AwardsNightSport, type SpeechOption, type MeterStep,
 } from "./careerAwardsNight";
 
 type SoccerAwardsMeter = "popularity" | "morale" | "integrityBonus" | "rivalryIntensity" | "socialMediaFollowers" | "marketValue";
 
 const SOCCER_AWARDS_METERS: Record<SoccerAwardsMeter, AwardsMeter<CareerState>> = {
-  popularity: { label: "Popularity", add: (s, d) => { s.popularity = clamp(s.popularity + d, 0, 100); } },
-  morale: { label: "Morale", add: (s, d) => { s.morale = clamp(s.morale + d, 0, 100); } },
-  integrityBonus: { label: "Integrity", add: (s, d) => { s.integrityBonus += d; } },
-  rivalryIntensity: { label: "Rivalry", add: (s, d) => { s.rivalryIntensity = clamp((s.rivalryIntensity ?? 0) + d, 0, 100); } },
-  socialMediaFollowers: { label: "Followers", add: (s, d) => { s.socialMediaFollowers = Math.round((s.socialMediaFollowers + d) * 100) / 100; } },
-  marketValue: { label: "Market Value", add: (s, d) => { s.marketValue = Math.round((s.marketValue + d) * 10) / 10; }, show: d => `${d >= 0 ? "+" : "-"}€${Math.abs(d)}M` },
+  popularity: { label: "Popularity", add: (s, d) => { s.popularity = clamp(s.popularity + d, 0, 100); }, read: s => s.popularity },
+  morale: { label: "Morale", add: (s, d) => { s.morale = clamp(s.morale + d, 0, 100); }, read: s => s.morale },
+  integrityBonus: { label: "Integrity", add: (s, d) => { s.integrityBonus += d; }, read: s => s.integrityBonus },
+  rivalryIntensity: { label: "Rivalry", add: (s, d) => { s.rivalryIntensity = clamp((s.rivalryIntensity ?? 0) + d, 0, 100); }, read: s => s.rivalryIntensity ?? 0 },
+  socialMediaFollowers: { label: "Followers", add: (s, d) => { s.socialMediaFollowers = Math.round((s.socialMediaFollowers + d) * 100) / 100; }, read: s => s.socialMediaFollowers },
+  marketValue: { label: "Market Value", add: (s, d) => { s.marketValue = Math.round((s.marketValue + d) * 10) / 10; }, read: s => s.marketValue, show: d => `${d >= 0 ? "+" : "-"}€${Math.abs(d)}M` },
 };
 
-/* Round 834: what winning and a podium do, written once. The night applies
-   these and the ceremony card's lines are built from them (describeSteps), so
-   the card says what happens. Before this round the card promised "Legacy +20"
-   and "Legacy +5" while the night moved popularity; legacy only counts Ballon
-   d'Ors at retirement (calculateLegacy). */
+/* Round 834: what winning and a podium do, written once. Before this round the
+   card promised "Legacy +20" and "Legacy +5" while the night moved popularity;
+   legacy only counts Ballon d'Ors at retirement (calculateLegacy). The review
+   found the next untruth: a winner usually sits at or near popularity 100, so
+   "+20" landed in full on 5 of 30 real wins. The card now prints what the
+   night measured it moved (the night's `moved`), never these numbers. */
 const BDOR_WINNER_STEPS: MeterStep<SoccerAwardsMeter>[] = [{ meter: "marketValue", delta: 15 }, { meter: "popularity", delta: 20 }];
 const BDOR_PODIUM_STEPS: MeterStep<SoccerAwardsMeter>[] = [{ meter: "popularity", delta: 5 }];
 
@@ -6429,8 +6430,8 @@ export const SOCCER_BALLON_DOR: AwardsNightSport<CareerState, BallonDorNominee, 
   copy: {
     winnerTitle: "BALLON D'OR WINNER!",
     title: year => `Ballon d'Or ${year}`,
-    winnerLine: `The best player in the world! ${describeSteps(SOCCER_AWARDS_METERS, BDOR_WINNER_STEPS)}`,
-    podiumLine: place => `You finished ${place === 2 ? "2nd" : "3rd"}! ${describeSteps(SOCCER_AWARDS_METERS, BDOR_PODIUM_STEPS)}, and this snub could follow you into next season`,
+    winnerLine: moved => `The best player in the world!${moved ? ` ${moved}` : ""}`,
+    podiumLine: (place, moved) => `You finished ${place === 2 ? "2nd" : "3rd"}!${moved ? ` ${moved}, and this` : " This"} snub could follow you into next season`,
     shortlistLine: place => `You finished ${place}th, close but not enough this year`,
     wider: { before: "Outside the top 10, but you ranked ", after: " in the world's Top 30" },
     notNominated: "You were not nominated this year",
@@ -6992,27 +6993,17 @@ export function bdorSpeechOpen(s: CareerState): boolean {
 }
 
 /** Gives the speech on the card. Applied once: the night keeps which speech
- *  it was, the log line and what it moved, and a second call does nothing. */
+ *  it was, its line and what it measurably moved after the clamps, and a
+ *  second call does nothing. The card's line drops the number the log line
+ *  prints ("Popularity +8"), which a winner at the cap never gets; the moved
+ *  line beside it carries the real one. */
 export function giveBdorSpeech(prev: CareerState, choice: BdorSpeechChoice): CareerState {
   if (!bdorSpeechOpen(prev) || !SOCCER_BDOR_SPEECHES.some(o => o.id === choice)) return prev;
   const s = { ...prev };
-  const before = meterReadings(s);
-  const line = applySpeech(SOCCER_BALLON_DOR, SOCCER_BDOR_SPEECHES, s, choice)!;
-  const after = meterReadings(s);
-  const moved = (Object.keys(before) as SoccerAwardsMeter[])
-    .map(m => ({ meter: m, delta: Math.round((after[m] - before[m]) * 100) / 100 }))
-    .filter(st => st.delta !== 0);
-  s.pendingBallonDor = { ...prev.pendingBallonDor!, speech: { id: choice, line, moved: describeSteps(SOCCER_AWARDS_METERS, moved) } };
+  let line = "";
+  const moved = measureMoves(SOCCER_AWARDS_METERS, s, () => { line = applySpeech(SOCCER_BALLON_DOR, SOCCER_BDOR_SPEECHES, s, choice)!; });
+  s.pendingBallonDor = { ...prev.pendingBallonDor!, speech: { id: choice, line: narrativeOf(SOCCER_AWARDS_METERS, line), moved: describeSteps(SOCCER_AWARDS_METERS, moved) } };
   return s;
-}
-
-/** The meters as they stand, so a speech reports what it really moved after
- *  the clamps, not what it asked for. */
-function meterReadings(s: CareerState): Record<SoccerAwardsMeter, number> {
-  return {
-    popularity: s.popularity, morale: s.morale, integrityBonus: s.integrityBonus,
-    rivalryIntensity: s.rivalryIntensity ?? 0, socialMediaFollowers: s.socialMediaFollowers, marketValue: s.marketValue,
-  };
 }
 
 /* ─── Dismiss international debut screen ─── */

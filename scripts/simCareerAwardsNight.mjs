@@ -115,16 +115,40 @@ const CONTROLS = {
     section: 6,
     patches: [{
       file: 'src/lib/soccerCareerEngine.ts',
-      from: 'winnerLine: `The best player in the world! ${describeSteps(SOCCER_AWARDS_METERS, BDOR_WINNER_STEPS)}`,',
-      to: 'winnerLine: "The best player in the world! Legacy +20, Market Value +€15M",',
+      from: 'winnerLine: moved => `The best player in the world!${moved ? ` ${moved}` : ""}`,',
+      to: 'winnerLine: () => "The best player in the world! Legacy +20, Market Value +€15M",',
     }],
   },
   effectonly: {
     section: 6,
     patches: [{
       file: 'src/lib/careerAwardsNight.ts',
-      from: '    applyMeterSteps(sport.meters, s, sport.winnerSteps);',
-      to: '    applyMeterSteps(sport.meters, s, sport.winnerSteps.slice(1));',
+      from: 'moved = measureMoves(sport.meters, s, () => applyMeterSteps(sport.meters, s, sport.winnerSteps));',
+      to: 'moved = measureMoves(sport.meters, s, () => applyMeterSteps(sport.meters, s, sport.winnerSteps.slice(1)));',
+    }],
+  },
+  nominalnight: {
+    section: 6,
+    patches: [{
+      file: 'src/lib/careerAwardsNight.ts',
+      from: 'sport.stage(s, moved ? { ...night, moved: describeSteps(sport.meters, moved) } : night);',
+      to: 'sport.stage(s, moved ? { ...night, moved: describeSteps(sport.meters, place === 1 ? sport.winnerSteps : sport.podiumSteps) } : night);',
+    }],
+  },
+  nominalmoved: {
+    section: 6,
+    patches: [{
+      file: 'src/lib/soccerCareerEngine.ts',
+      from: 'moved: describeSteps(SOCCER_AWARDS_METERS, moved) } };',
+      to: 'moved: describeSteps(SOCCER_AWARDS_METERS, SOCCER_BDOR_SPEECHES.find(o => o.id === choice)!.effect) } };',
+    }],
+  },
+  numberedline: {
+    section: 6,
+    patches: [{
+      file: 'src/lib/soccerCareerEngine.ts',
+      from: 'speech: { id: choice, line: narrativeOf(SOCCER_AWARDS_METERS, line), moved:',
+      to: 'speech: { id: choice, line, moved:',
     }],
   },
   speechtwice: {
@@ -153,8 +177,12 @@ const check = (ok, m) => { checks += 1; if (!ok) fail(m); };
 const B = await bundleAwardsNight(ROOT, { patches, extra: { awards: 'src/lib/careerAwardsNight.ts' } });
 const { soccer, awards: A } = B;
 /* Filled by section 1's replay, read by section 6: on every real ceremony the
-   fleet reaches, was the speech offered exactly when the player won? */
-const liveNights = { won: 0, offered: 0, wrong: 0 };
+   fleet reaches, was the speech offered exactly when the player won, did the
+   night carry its measured `moved` exactly when it was a win or a podium, and
+   how many wins did the popularity cap cut short. `wins` keeps a copy of each
+   real won save on its ceremony (taken without a draw, so the replay is not
+   disturbed) for section 6 to give speeches on. */
+const liveNights = { won: 0, offered: 0, wrong: 0, measured: 0, measuredWrong: 0, winsCut: 0, wins: [] };
 
 /* ---------- 1. Soccer unchanged ---------- */
 section = 1;
@@ -165,6 +193,13 @@ console.log('1) Soccer Career replays the pre-lift fixture byte for byte');
     onNight: (s, bdor) => {
       if (bdor.playerRank === 1) { liveNights.won += 1; if (soccer.bdorSpeechOpen(s)) liveNights.offered += 1; }
       else if (soccer.bdorSpeechOpen(s)) liveNights.wrong += 1;
+      const podium = bdor.playerRank !== null && bdor.playerRank <= 3;
+      if (podium !== (typeof bdor.moved === 'string')) liveNights.measuredWrong += 1;
+      else if (podium) liveNights.measured += 1;
+      if (bdor.playerRank === 1) {
+        if (!/Popularity \+20\b/.test(bdor.moved ?? '')) liveNights.winsCut += 1;
+        liveNights.wins.push(JSON.parse(JSON.stringify(s)));
+      }
     },
   })));
   /* Round 834 part 2 changed the winner's and the podium's ceremony cards on
@@ -275,7 +310,7 @@ console.log('\n2) The shared contract, on a synthetic sport');
 
   /* Speeches on a plain meter set: no clamps, so every move is visible. */
   const meters = {};
-  for (const [id, label] of [['a', 'Alpha'], ['b', 'Beta'], ['c', 'Gamma'], ['d', 'Delta']]) meters[id] = { label, add: (s, x) => { s[id] += x; } };
+  for (const [id, label] of [['a', 'Alpha'], ['b', 'Beta'], ['c', 'Gamma'], ['d', 'Delta']]) meters[id] = { label, add: (s, x) => { s[id] += x; }, read: s => s[id] };
   const sport = { meters, say: (s, line) => { s.log = [...s.log, line]; } };
   const options = [
     { id: 'sure', emoji: '🎤', label: 'Sure thing', tone: 'gold', effect: [{ meter: 'a', delta: 3 }, { meter: 'b', delta: -2 }], line: () => 'sure' },
@@ -318,25 +353,42 @@ console.log('\n2) The shared contract, on a synthetic sport');
   check(A.availableSpeeches(options, { ok: false }).map(o => o.id).join() === 'sure,coin'
     && A.availableSpeeches(options, { ok: true }).map(o => o.id).join() === 'sure,coin,gated', 'availableSpeeches does not apply the gates');
 
-  /* The settle: what the save keeps for each place. */
+  /* The settle: what the save keeps for each place, and the night it stages
+     carries what the steps moved (a win or a podium only). */
+  const settleNight = place => ({ year: 2031, nominees: [], playerRank: place, playerPoints: 0, playerNominated: place !== null && place <= 8 });
   for (const place of [1, 2, 3, 4, 8, 12, null]) {
     const calls = [];
     const s = { a: 10, b: 10, c: 10, d: 10, log: [] };
     const rec = {};
+    let staged = null;
     const bound = {
       award: { ...award }, meters,
       winnerSteps: [{ meter: 'a', delta: 9 }], podiumSteps: [{ meter: 'b', delta: 2 }],
-      stage: () => calls.push('stage'), recordPlace: (r, p) => { r.place = p; calls.push('place'); },
+      stage: (_s, n) => { staged = n; calls.push('stage'); }, recordPlace: (r, p) => { r.place = p; calls.push('place'); },
       recordWin: r => { r.won = true; calls.push('win'); }, addToCabinet: (_s, e) => calls.push(`cabinet:${e.name}:${e.year}`),
       onPodium: () => calls.push('podium'), say: () => calls.push('say'), copy: {},
     };
-    A.settleAwardsNight(bound, s, rec, { year: 2031, nominees: [], playerRank: place, playerPoints: 0, playerNominated: place !== null && place <= 8 });
+    A.settleAwardsNight(bound, s, rec, settleNight(place));
     const want = place === null ? 'stage'
-      : place === 1 ? 'stage,place,win,cabinet:Synthetic Cup:2031'
-        : place <= 3 ? 'stage,place,podium' : 'stage,place';
+      : place === 1 ? 'place,win,cabinet:Synthetic Cup:2031,stage'
+        : place <= 3 ? 'place,podium,stage' : 'place,stage';
     check(calls.join() === want, `settle at place ${place} did ${calls.join()} instead of ${want}`);
     check(s.a === (place === 1 ? 19 : 10) && s.b === (place !== null && place > 1 && place <= 3 ? 12 : 10), `settle at place ${place} moved the wrong meters`);
     check(place === null ? rec.place === undefined : rec.place === place, `settle at place ${place} recorded ${rec.place}`);
+    const wantMoved = place === 1 ? 'Alpha +9' : place !== null && place <= 3 ? 'Beta +2' : undefined;
+    check(staged?.moved === wantMoved, `settle at place ${place} staged moved ${JSON.stringify(staged?.moved)} instead of ${JSON.stringify(wantMoved)}`);
+  }
+  /* At a cap the staged night says what landed, not what the step asked for:
+     Alpha capped at 15, a +9 win from 10 lands +5, and from 15 lands nothing. */
+  const cappedMeters = { ...meters, a: { label: 'Alpha', add: (st, x) => { st.a = Math.min(15, st.a + x); }, read: st => st.a } };
+  for (const [from, want] of [[10, 'Alpha +5'], [15, '']]) {
+    const s = { a: from, b: 10, c: 10, d: 10, log: [] };
+    let staged = null;
+    A.settleAwardsNight({
+      award: { ...award }, meters: cappedMeters, winnerSteps: [{ meter: 'a', delta: 9 }], podiumSteps: [{ meter: 'b', delta: 2 }],
+      stage: (_s, n) => { staged = n; }, recordPlace: () => undefined, recordWin: () => undefined, addToCabinet: () => undefined, say: () => undefined, copy: {},
+    }, s, {}, settleNight(1));
+    check(staged?.moved === want, `a capped win from ${from} staged moved ${JSON.stringify(staged?.moved)}, it landed ${JSON.stringify(want)}`);
   }
 }
 
@@ -475,7 +527,11 @@ console.log('\n6) The ceremony card says what the night does, and a win offers t
   } finally {
     Math.random = keep;
   }
-  /* Mid values, so no clamp can hide a step. */
+  /* Mid values everywhere but popularity, which each case sets: 50 (no clamp
+     can hide a step, so the night must do exactly its steps), 95 and 100. A
+     real winner sits near the cap: on the replay's 30 won ceremonies the
+     review measured popularity before the win at 100 eleven times and 95 or
+     more on 20, and the "+20" the card used to print landed whole on 5. */
   Object.assign(base, { popularity: 50, morale: 50, integrityBonus: 0, rivalryIntensity: 50, socialMediaFollowers: 10, marketValue: 20, rival: null });
   const SPORT = soccer.SOCCER_BALLON_DOR;
   const METERS = SPORT.meters;
@@ -485,6 +541,21 @@ console.log('\n6) The ceremony card says what the night does, and a win offers t
   /* Every "Word +N" or "Word +€NM" a line prints, whatever the word. */
   const claims = text => [...text.matchAll(/([A-Z][A-Za-z]*(?: [A-Z][A-Za-z]*)*) ([+-])€?(\d+(?:\.\d+)?)M?/g)]
     .map(m => ({ label: m[1], delta: Number(m[2] + m[3]) }));
+  /* What changed on every meter between two saves, unmoved ones left out. */
+  const movedBetween = (before, after) => Object.fromEntries(ids
+    .map(k => [k, Math.round(((after[k] ?? 0) - (before[k] ?? 0)) * 100) / 100]).filter(([, v]) => v !== 0));
+  /* Every number `text` prints must be what that meter really moved, and
+     every meter that moved must be named in `named` (the text by default). */
+  const lies = (text, did, named = text) => {
+    const bad = [];
+    for (const c of claims(text)) {
+      if (!labels.has(c.label)) bad.push(`says "${c.label} ${c.delta}" and there is no such meter`);
+      else if (did[labelToId[c.label]] !== c.delta) bad.push(`says ${c.label} ${c.delta}, it moved ${did[labelToId[c.label]] ?? 0}`);
+    }
+    const namedClaims = claims(named);
+    for (const k of Object.keys(did)) if (!namedClaims.some(c => c.label === METERS[k].label)) bad.push(`moves ${METERS[k].label} ${did[k]} and never says so`);
+    return bad;
+  };
   const YEAR = 2031;
   const nightAt = rank => ({
     year: YEAR, playerRank: rank, playerPoints: 90, playerNominated: true,
@@ -493,55 +564,64 @@ console.log('\n6) The ceremony card says what the night does, and a win offers t
       nationality: 'England', position: 'ST', club: 'Generated FC', goals: 20, trophies: [],
     })),
   });
-  const truthOf = (line, rank) => {
-    const s = { ...base, events: [...base.events], awards: [...base.awards] };
-    const season = { year: YEAR, ballonDor: false, ballonDorRank: null };
+  /* The real settle on the base save at a given popularity: the save after,
+     the night it staged, and what really moved. */
+  const settleAt = (rank, popularity) => {
+    const s = { ...base, popularity, events: [...base.events], awards: [...base.awards] };
     const before = { ...s };
-    A.settleAwardsNight(SPORT, s, season, nightAt(rank));
-    const moved = Object.fromEntries(ids.filter(k => s[k] !== before[k]).map(k => [k, Math.round((s[k] - before[k]) * 100) / 100]));
-    const said = claims(line);
-    const bad = [];
-    for (const c of said) {
-      if (!labels.has(c.label)) bad.push(`says "${c.label} ${c.delta}" and the night has no such meter`);
-      else if (moved[labelToId[c.label]] !== c.delta) bad.push(`says ${c.label} ${c.delta}, the night moved it ${moved[labelToId[c.label]] ?? 0}`);
-    }
-    for (const k of Object.keys(moved)) if (!said.some(c => c.label === METERS[k].label)) bad.push(`moves ${METERS[k].label} ${moved[k]} and never says so`);
-    return { said, moved, bad };
+    A.settleAwardsNight(SPORT, s, { year: YEAR, ballonDor: false, ballonDorRank: null }, nightAt(rank));
+    return { s, night: s.pendingBallonDor, did: movedBetween(before, s) };
   };
-  const lines = [
-    ['winner', SPORT.copy.winnerLine, 1],
-    ['2nd place', SPORT.copy.podiumLine(2), 2],
-    ['3rd place', SPORT.copy.podiumLine(3), 3],
-  ];
-  for (const [what, line, rank] of lines) {
-    const t = truthOf(line, rank);
-    console.log(`   ${what.padEnd(9)} says ${t.said.map(c => `${c.label} ${c.delta}`).join(', ') || 'nothing'}; the night moves ${Object.entries(t.moved).map(([k, v]) => `${METERS[k].label} ${v}`).join(', ') || 'nothing'}`);
-    check(t.said.length > 0, `the ${what} line names no effect at all`);
-    for (const b of t.bad) fail(`the ${what} line ${b}`);
-    check(!DASHES.test(line), `a dash in the ${what} line`);
+  const lineOf = (rank, moved) => rank === 1 ? SPORT.copy.winnerLine(moved) : SPORT.copy.podiumLine(rank, moved);
+  let capped = 0;
+  for (const popularity of [50, 95, 100]) {
+    for (const [what, rank] of [['winner', 1], ['2nd place', 2], ['3rd place', 3]]) {
+      const { night, did } = settleAt(rank, popularity);
+      const line = lineOf(rank, night?.moved);
+      const asked = Object.fromEntries((rank === 1 ? SPORT.winnerSteps : SPORT.podiumSteps).map(st => [st.meter, st.delta]));
+      if (popularity !== 50 && (did.popularity ?? 0) !== asked.popularity) capped += 1;
+      console.log(`   ${what.padEnd(9)} at popularity ${String(popularity).padEnd(3)} says ${claims(line).map(c => `${c.label} ${c.delta}`).join(', ') || 'nothing'}; the night moved ${Object.entries(did).map(([k, v]) => `${METERS[k].label} ${v}`).join(', ') || 'nothing'}`);
+      check(typeof night?.moved === 'string', `the ${what} night at popularity ${popularity} carries no measured move`);
+      for (const b of lies(line, did)) fail(`the ${what} line at popularity ${popularity} ${b}`);
+      if (popularity === 50) {
+        /* Away from the caps the night does exactly its steps, and says so. */
+        check(JSON.stringify(did) === JSON.stringify(Object.fromEntries(ids.filter(k => asked[k] !== undefined).map(k => [k, asked[k]]))),
+          `the ${what} night at popularity 50 moved ${JSON.stringify(did)}, its steps are ${JSON.stringify(asked)}`);
+        check(claims(line).length > 0, `the ${what} line names no effect at all`);
+      }
+      check(!DASHES.test(line), `a dash in the ${what} line`);
+    }
   }
+  /* The cap cases are cap cases: the winner at 95 and all three at 100. */
+  check(capped === 4, `${capped} of the 95 and 100 cases were cut by the cap, 4 should be, so they are not testing what they say`);
+  check(claims(SPORT.copy.winnerLine(undefined)).length === 0 && claims(SPORT.copy.podiumLine(2, undefined)).length === 0,
+    'a night staged before the measure (an old save) still prints a number nobody measured');
 
   /* The card on screen carries those lines, and a won night offers the speech. */
-  const onCeremony = (rank, lastYear = YEAR, extra = {}) => {
-    const night = nightAt(rank);
+  const onCeremony = (rank, lastYear = YEAR, extra = {}, popularity = 50) => {
+    const { s } = settleAt(rank, popularity);
     return {
-      ...base, events: [...base.events], phase: 'ballon_dor', pendingBallonDor: night,
+      ...s, phase: 'ballon_dor',
       seasons: [...base.seasons, { ...(base.seasons[base.seasons.length - 1] ?? {}), year: lastYear, ballonDor: rank === 1, ballonDorRank: rank }],
       family: { ...base.family, children: 0 }, ...extra,
     };
   };
-  const strip = html => html.replace(/<[^>]+>/g, ' ').replace(/&#x27;|&#39;/g, "'").replace(/&amp;/g, '&').replace(/\s+/g, ' ');
+  const strip = html => html.replace(/<[^>]+>/g, ' ').replace(/&#x27;|&#39;/g, "'").replace(/&quot;/g, '"').replace(/&amp;/g, '&').replace(/\s+/g, ' ');
   const offered = s => A.availableSpeeches(soccer.SOCCER_BDOR_SPEECHES, s);
   const won = onCeremony(1);
   const wonText = strip(B.cards.bdor(won.pendingBallonDor, won));
-  check(wonText.includes(SPORT.copy.winnerLine), 'the winner card does not show the winner line');
+  check(wonText.includes(SPORT.copy.winnerLine(won.pendingBallonDor.moved)), 'the winner card does not show the winner line');
+  const atCap = onCeremony(1, YEAR, {}, 100);
+  const atCapText = strip(B.cards.bdor(atCap.pendingBallonDor, atCap));
+  check(atCapText.includes(SPORT.copy.winnerLine(atCap.pendingBallonDor.moved)) && !/Popularity [+-]\d/.test(atCapText),
+    'the card of a winner already at popularity 100 still promises a popularity move');
   check(soccer.bdorSpeechOpen(won), 'a won ceremony on the season just played does not offer the speech');
   check(offered(won).length === 2 && offered(won).every(o => wonText.includes(o.label)), 'the won card does not show the speeches this save may give');
   check(!wonText.includes(soccer.SOCCER_BDOR_SPEECHES.find(o => o.id === 'thank_rival').label), 'the won card offers the rival speech with no rival');
   check(!/Continue/.test(wonText), 'the won card lets the speech be skipped past before it is given');
   const podium = onCeremony(2);
   const podiumText = strip(B.cards.bdor(podium.pendingBallonDor, podium));
-  check(podiumText.includes(SPORT.copy.podiumLine(2)), 'the podium card does not show the podium line');
+  check(podiumText.includes(SPORT.copy.podiumLine(2, podium.pendingBallonDor.moved)), 'the podium card does not show the podium line');
   check(!soccer.bdorSpeechOpen(podium) && soccer.SOCCER_BDOR_SPEECHES.every(o => !podiumText.includes(o.label)) && /Continue/.test(podiumText), 'a lost ceremony offers a speech');
 
   /* One pick, applied once, then the card shows what it did. */
@@ -571,10 +651,50 @@ console.log('\n6) The ceremony card says what the night does, and a win offers t
   const reloaded = JSON.parse(JSON.stringify(after));
   check(!soccer.bdorSpeechOpen(reloaded) && strip(B.cards.bdor(reloaded.pendingBallonDor, reloaded)).includes(after.pendingBallonDor.speech.line), 'a save written on the ceremony after the speech does not load as it was');
 
-  /* On the replay's real ceremonies: offered on every win, never otherwise. */
+  /* On the replay's real ceremonies: offered on every win, never otherwise;
+     the measured move on every win and podium, never otherwise; and the cap
+     cuts real wins short, which is the case the card has to get right. */
   console.log(`   replay: ${liveNights.won} won ceremonies, speech offered on ${liveNights.offered}, offered on a lost one ${liveNights.wrong} times`);
+  console.log(`   replay: ${liveNights.measured} win and podium nights carry their measured move (${liveNights.measuredWrong} nights wrong), ${liveNights.winsCut} of ${liveNights.won} wins cut short of Popularity +20 by the cap`);
   check(liveNights.won >= 20, 'too few won ceremonies in the replay to prove the offer');
   check(liveNights.offered === liveNights.won && liveNights.wrong === 0, 'the speech is not offered on exactly the won ceremonies');
+  check(liveNights.measuredWrong === 0 && liveNights.measured >= liveNights.won, 'a real night carries a measured move it should not, or lacks one it should');
+  check(liveNights.winsCut > 0, 'no real win was cut short by the popularity cap, so the replay cannot tell a measured night from one that prints its steps');
+
+  /* Every speech each real winner may give, on a copy of his save on the
+     ceremony (the replay's own draws untouched: these draw from their own
+     seed). What the card shows after it, the line and the moved line, must
+     name only what really moved; the log line keeps its own number, and on a
+     capped winner that number is often not what happened, which is exactly
+     why the card does not show it. */
+  let given = 0, cut = 0, logLies = 0;
+  const speechLies = [];
+  liveNights.wins.forEach((real, k) => {
+    for (const opt of A.availableSpeeches(soccer.SOCCER_BDOR_SPEECHES, real)) {
+      const keepRandom = Math.random;
+      Math.random = mulberry32(834000 + k * 31 + opt.id.length);
+      let out;
+      try { out = soccer.giveBdorSpeech(JSON.parse(JSON.stringify(real)), opt.id); } finally { Math.random = keepRandom; }
+      given += 1;
+      const sp = out.pendingBallonDor?.speech;
+      if (!sp) { speechLies.push(`${opt.id} on real win ${k} was not given`); continue; }
+      const did = movedBetween(real, out);
+      const logged = out.events[out.events.length - 1];
+      const outcome = !opt.risk ? 'sure' : logged === opt.line(out, 'hit') ? 'hit' : 'miss';
+      const asked = {};
+      for (const st of [...opt.effect, ...(opt.risk ? opt.risk[outcome] : [])]) asked[st.meter] = (asked[st.meter] ?? 0) + st.delta;
+      if (Object.keys(asked).some(m => (did[m] ?? 0) !== asked[m])) cut += 1;
+      if (claims(logged).some(c => did[labelToId[c.label]] !== c.delta)) logLies += 1;
+      for (const b of lies(`${sp.line} ${sp.moved}`, did, sp.moved)) speechLies.push(`${opt.id} on real win ${k}: the card ${b}`);
+      const shown = strip(B.cards.bdor(out.pendingBallonDor, out));
+      if (!shown.includes(sp.line) || !shown.includes(sp.moved)) speechLies.push(`${opt.id} on real win ${k}: the card does not show the line and what it moved`);
+    }
+  });
+  console.log(`   real winners: ${given} speeches given, ${cut} cut short by a cap, the log line's own number untrue on ${logLies}; the card untrue on ${speechLies.length}`);
+  check(given >= 2 * liveNights.won, `only ${given} speeches given on ${liveNights.won} real wins`);
+  check(cut > 0 && logLies > 0, 'no real winner\'s speech was cut by a cap, so this cannot tell a measured card from one that prints the steps');
+  for (const b of speechLies.slice(0, 5)) fail(b);
+  if (speechLies.length > 5) fail(`and ${speechLies.length - 5} more`);
 }
 
 console.log('');

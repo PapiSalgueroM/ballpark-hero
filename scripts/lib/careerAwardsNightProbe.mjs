@@ -43,6 +43,21 @@ import { createHash } from 'node:crypto';
  *  saves apart; the clear fields beside it are for reading a failure. */
 export const hashOf = v => createHash('sha256').update(typeof v === 'string' ? v : JSON.stringify(v)).digest('hex').slice(0, 10);
 
+/* Round 834's review gave a winning or podium night one new field, `moved`
+   (what the night measurably did after the clamps), which no tree before it
+   writes. It is taken out of the night before any hash, so the fixture
+   recorded from main still proves everything else is unchanged; section 6 of
+   scripts/simCareerAwardsNight.mjs holds the field itself. Only that one key
+   is dropped, and only from a staged night, so a save is otherwise hashed
+   whole. */
+const withoutMeasured = night => {
+  if (!night || typeof night !== 'object' || !('moved' in night)) return night;
+  const { moved: _moved, ...rest } = night;
+  return rest;
+};
+const saveHash = s => hashOf(s && s.pendingBallonDor && 'moved' in s.pendingBallonDor
+  ? { ...s, pendingBallonDor: withoutMeasured(s.pendingBallonDor) } : s);
+
 export const mulberry32 = a => () => {
   a |= 0; a = (a + 0x6D2B79F5) | 0;
   let t = Math.imul(a ^ (a >>> 15), 1 | a);
@@ -116,7 +131,7 @@ function nightRecord(c, bdor, names) {
     pts: bdor.playerPoints,
     nom: bdor.playerNominated,
     list: bdor.nominees.map(n => `${n.isPlayer ? 'P' : ix(n.name)}:${n.points}`).join(' '),
-    h: hashOf(bdor),
+    h: hashOf(withoutMeasured(bdor)),
   };
 }
 
@@ -132,7 +147,7 @@ function trySpeech(fn, s, choice, clubs, seed) {
     Math.random = keep;
   }
   const line = after.events?.length > (before.events?.length ?? 0) ? after.events[before.events.length] : null;
-  return { id: choice, d: meterDelta(before, after), line, h: hashOf(after) };
+  return { id: choice, d: meterDelta(before, after), line, h: saveHash(after) };
 }
 
 /**
@@ -171,7 +186,7 @@ export function probeAwardsNight({ soccer, appearance, cards }, { onNight } = {}
         c % 3 === 0 ? appearance.defaultAppearance() : null,
         POT_LADDER[c % POT_LADDER.length],
       );
-      const rec = label => steps.push(`${CODE[label] ?? label}${hashOf(s)}`);
+      const rec = label => steps.push(`${CODE[label] ?? label}${saveHash(s)}`);
       rec('init');
       let guard = 0, step = 0;
       while (!s.retired && guard++ < 700) {
