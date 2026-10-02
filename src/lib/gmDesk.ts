@@ -29,7 +29,7 @@
  * tile SAYS is decided here and in each system's own lib file, never in JSX,
  * so scripts/simGmDesk.mjs can check it without a browser.
  */
-import type { ReactElement } from 'react';
+import type { ReactNode } from 'react';
 import type { FoHubFacts } from './foHub';
 import type { GmSport } from './gmSport';
 
@@ -69,6 +69,10 @@ export function readGmDesk(raw: unknown): GmDesk {
  * its starting value. Missing, invalid, or a validator that throws: fresh().
  * This never writes. The block is replaced the next time its owner calls
  * withGmBlock, and no other key is disturbed either way.
+ *
+ * What comes back is the stored object itself, not a copy. Treat it as read
+ * only and build the next value fresh: changing it in place changes the
+ * board's state behind React's back and the screen will not redraw.
  */
 export function gmBlock<T>(desk: GmDesk, key: string, isValid: (v: unknown) => boolean, fresh: () => T): T {
   if (Object.prototype.hasOwnProperty.call(desk.blocks, key)) {
@@ -156,8 +160,11 @@ export interface GmPanelDef<F extends GmFacts = GmFacts> {
   title: string;
   /** The box's live face, or null to leave the box off the hub for now. */
   tile: (ctx: GmTileContext<F>) => GmTileFace | null;
-  /** The screen behind the box. A real component, so it may use hooks. */
-  Panel: (props: GmPanelProps<F>) => ReactElement | null;
+  /**
+   * The screen behind the box. A real component, so it may use hooks. Typed by
+   * its call alone, so a plain function, an FC and a memo all fit.
+   */
+  Panel: (props: GmPanelProps<F>) => ReactNode;
 }
 
 /** A hub box, in the shape components/hub/HubTiles draws. */

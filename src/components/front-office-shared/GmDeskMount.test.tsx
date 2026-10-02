@@ -13,11 +13,11 @@
  */
 import { describe, it, expect, afterEach } from 'vitest';
 import { render, screen, fireEvent, cleanup } from '@testing-library/react';
-import { useState } from 'react';
+import { memo, useState, type FC } from 'react';
 import { GmDeskMount } from './GmDeskMount';
 import {
   freshGmDesk, gmBlock, withGmBlock, readGmDesk,
-  type GmDesk, type GmFacts, type GmPanelDef,
+  type GmDesk, type GmFacts, type GmPanelDef, type GmPanelProps,
 } from '@/lib/gmDesk';
 import { GM_SPORT_KEYS, GM_SPORTS, type GmSportKey } from '@/lib/gmSport';
 import type { FoHubFacts } from '@/lib/foHub';
@@ -179,5 +179,20 @@ describe('GmDeskMount', () => {
     render(<GmDeskMount sport="nba" desk={freshGmDesk()} facts={facts} panels={list} open={null} onOpen={() => {}} onDesk={() => {}} />);
     expect(screen.getByText('2 picks')).toBeTruthy();
     expect(screen.getByText('Tally')).toBeTruthy();
+  });
+
+  it('a panel may be a plain function, an FC or a memo', () => {
+    const face = { icon: 'x', value: 'v', sub: 's', accent: false };
+    const AsFc: FC<GmPanelProps> = ({ facts }) => <p data-testid="fc">fc for {facts.teamId}</p>;
+    const AsMemo = memo(function Inner({ sport }: GmPanelProps) { return <p data-testid="memo">memo in {sport.words.league}</p>; });
+    const list: GmPanelDef[] = [
+      { key: 'fc', title: 'As FC', tile: () => face, Panel: AsFc },
+      { key: 'memo', title: 'As memo', tile: () => face, Panel: AsMemo },
+    ];
+    const first = render(<Host sport="nhl" panels={list} startOpen="fc" />);
+    expect(screen.getByTestId('fc').textContent).toBe('fc for AAA');
+    first.unmount();
+    render(<Host sport="nhl" panels={list} startOpen="memo" />);
+    expect(screen.getByTestId('memo').textContent).toBe('memo in the NHL');
   });
 });
