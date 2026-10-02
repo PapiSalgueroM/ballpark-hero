@@ -183,7 +183,7 @@ export function XiFitWorth({ fit, className }: { fit?: SeasonFit; className?: st
         <StatTile label="Balance" value={pts(fit.points.balance)} state={fit.points.balance < 0 ? 'incorrect' : 'correct'} />
       </div>
       <p className="mt-1.5 text-center text-[11px] text-muted-foreground">
-        League points each was worth on the same rolls. The league was played at {fit.matchRating}.
+        What each was worth this season: the same 38 games played again without it. One season is lumpy, so a small edge can come out at 0. The league was played at {fit.matchRating}.
       </p>
     </div>
   );

@@ -53,7 +53,10 @@
         each factor's worth replays (whatIfFinish on the same rolls) to the
         number printed, role fit and balance never gain points, chemistry
         never loses any, and the match rating is the paper rating plus the
-        total.
+        total. The worth line says it is this season and no more (one
+        replay is lumpy, see section 3's comment), and so do the worth tiles.
+        The three numbers drawn on the tiles are the three the season played,
+        read off the rendered markup.
      4) World XI is unchanged. A sha256 over 240 seeded World XI seasons
         (every shape) must equal the digest recorded below, measured on
         origin/main 5497751d before this round touched the engine. And a
@@ -84,6 +87,7 @@
      farlinks  chemistry counts every pair, not neighbours.   section 2
      alias     one club under two stored names reads as two.  section 2
      nocap     the chemistry cap is gone.                     section 3
+     tileraw   the chemistry tile shows the uncapped sum.     section 3
      leak      World XI's season gets a half point nudge.     section 4
      oldcrash  the worth tiles read a report's fit unguarded. section 5
 
@@ -181,6 +185,12 @@ const CONTROLS = {
     from: 'const chemistryValue = Math.min(CHEMISTRY_CAP, raw);',
     to: 'const chemistryValue = raw;',
     note: 'the chemistry cap is gone; section 3 must go red',
+  },
+  tileraw: {
+    sections: [3], file: 'tiles',
+    from: "{ kind: 'chemistry', label: 'Chemistry', value: b.chemistry.value,",
+    to: "{ kind: 'chemistry', label: 'Chemistry', value: b.chemistry.raw,",
+    note: 'the chemistry tile shows the links before the cap while the season plays the capped number; section 3 must go red',
   },
   leak: {
     sections: [4], file: 'wxi',
@@ -609,7 +619,30 @@ for (const { f, men, b, report } of seasons) {
   if (sf.points.chemistry < 0) fail(`${f}: chemistry lost ${sf.points.chemistry} points`);
   if (sf.matchRating !== round1(report.squadRating + total)) fail(`${f}: match rating ${sf.matchRating} for paper ${report.squadRating} and total ${total}`);
   if (!report.narrative.includes(sf.line)) fail(`${f}: the worth line is not in the narrative`);
+  /* One replay is one season: the sign is always right on the same rolls,
+     the size is lumpy (review 2026-10-02: a chemistry edge worth about half a
+     point on average came out at 0 in 46 of 63 single seasons), so the line
+     has to say it is this season and no more. */
+  if (!sf.line.startsWith('This season, ')) fail(`${f}: the worth line does not say it is one season: ${sf.line}`);
   if (sf.points.roleFit || sf.points.chemistry || sf.points.balance) worthMoved += 1;
+}
+/* The tiles show what the season plays: the three numbers drawn on the
+   tiles, read off the rendered markup, against the three the season consumed
+   (its fit block), on every season above plus the one club eleven whose
+   chemistry links add up past the cap. */
+{
+  const capMen = naturalXi(seeded(4242), '4-4-2', 4242).map(m => ({ ...m, club: 'Club 1', nationality: 'Country 1' }));
+  const capB = fit.xiFitBreakdown(fitSlots('4-4-2', capMen));
+  const capReport = wxi.simulateWorldXiSeason(squadOf('4-4-2', capMen), '4-4-2', fit.seasonAdjust(capB));
+  let drawnRight = 0;
+  for (const { f, men, b, report } of [...seasons, { f: '4-4-2', men: capMen, b: capB, report: capReport }]) {
+    const html = render(XiFitBreakdown, { breakdown: b, slots: fitSlots(f, men), labels: BY_FORMATIONS[f].map(s => s.label) });
+    const drawn = [...html.matchAll(/tabular-nums">([^<]+)</g)].map(m => Number(m[1]));
+    const played = report.fit ? [report.fit.roleFit, report.fit.chemistry, report.fit.balance] : null;
+    if (J(drawn) !== J(played)) fail(`${f}: the tiles show ${J(drawn)}, the season played ${J(played)}`);
+    else drawnRight += 1;
+  }
+  console.log(`   ${drawnRight} of ${seasons.length + 1} elevens: the three tiles show exactly the three numbers the season played`);
 }
 console.log(`   ${seasons.length} seasons replayed factor by factor, ${worthMoved} of them moved by at least one; stated: role fit ${FIT_PENALTY.family}/${FIT_PENALTY.wrong}/${FIT_PENALTY.keeper} on the man, chemistry x${CHEMISTRY_SCALE} up to ${CHEMISTRY_CAP}, holding ${HOLDING_PRICE}, width ${WIDTH_PRICE} a flank`);
 /* The rules dialog states the numbers the engine uses (code, not comments). */
@@ -663,7 +696,7 @@ begin(5, 'old reports render, and the new tiles render for full and half built e
   const { f, men, b, report } = seasons.find(s => s.report.fit && (s.report.fit.points.roleFit || s.report.fit.points.chemistry || s.report.fit.points.balance)) ?? seasons[0];
   const w = tryRender('the worth tiles', XiFitWorth, { fit: report.fit });
   if (w !== null) {
-    for (const s of ['Role fit', 'Chemistry', 'Balance', String(report.fit.matchRating)]) if (!w.includes(s)) fail(`the worth tiles never say ${s}`);
+    for (const s of ['Role fit', 'Chemistry', 'Balance', String(report.fit.matchRating), 'this season', 'can come out at 0']) if (!w.includes(s)) fail(`the worth tiles never say ${s}`);
   }
   const slots = fitSlots(f, men);
   const labels = BY_FORMATIONS[f].map(s => s.label);

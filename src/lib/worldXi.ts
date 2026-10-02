@@ -1275,15 +1275,20 @@ export function simulateWorldXiSeason(filled: WxPlayer[], formationName: string,
       chemistry: points - replay(adjust - fit.chemistry),
       balance: points - replay(adjust - fit.balance),
     };
+    /* One season, said as one season. On the same rolls the sign is always
+       right, but the size is lumpy: measured in review over 120 elevens, a
+       chemistry edge worth about half a point a season on average comes out
+       at 0 in most single seasons, so the line never claims more than this
+       season. */
     const said = (label: string, pts: number) =>
-      pts === 0 ? `${label} moved nothing` : pts > 0 ? `${label} added ${pts} point${pts === 1 ? '' : 's'}` : `${label} cost ${-pts} point${pts === -1 ? '' : 's'}`;
+      pts === 0 ? `${label} made no difference` : pts > 0 ? `${label} added ${pts} point${pts === 1 ? '' : 's'}` : `${label} cost ${-pts} point${pts === -1 ? '' : 's'}`;
     seasonFit = {
       roleFit: fit.roleFit,
       chemistry: fit.chemistry,
       balance: fit.balance,
       matchRating: (Math.round((squadRating + adjust) * 10) / 10) || 0,
       points: worth,
-      line: `How the eleven fit together, on the same rolls: ${said('role fit', worth.roleFit)}, ${said('chemistry', worth.chemistry)}, ${said('balance', worth.balance)}.`,
+      line: `This season, played again without each one: ${said('role fit', worth.roleFit)}, ${said('chemistry', worth.chemistry)}, ${said('balance', worth.balance)}.`,
     };
   }
 
