@@ -1,5 +1,17 @@
 # Work board
 
+Codex896 DONE in source, unused NHL opening-rating preparation, 2026-10-02.
+
+Reviewed-v2 script model, condensed dated inputs, pre-write generator,
+separate416-player map and ten-case refusal harness are accepted.32 original
+budgets and196 partial rows held; all three controls execute every case.
+Independent review, isolated type/build,15 built readers and source/anchor
+fences pass. Receipt: docs/audits/NHL-OPENING-RATING-PREPARATION-2026-10-02.md.
+No NHL game binding in this commit.898 working engine/Board/evidence needs
+actual native acceptance; Claude897 full trade lists are preserved. Existing
+seed/membership/ages/Gauntlet/saves remain held. MLB multi-year observations
+are missing; the780-player current pipeline stays intact. Next free899.
+
 Codex895 DONE in source, new NBA GM opening ratings, 2026-10-02.
 
 All300 original v0.4 grades/prices feed new franchises through a separate

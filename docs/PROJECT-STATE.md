@@ -1,5 +1,16 @@
 # Project state
 
+896 NHL frozen rating preparation accepted in source, 2026-10-02.
+
+Five separate files retain reviewed-v2 model,437407-byte dated checkpoint,
+generator,127398-byte map and refusal harness.416 exact tuples/32 budgets,
+196 partial rows, ten outcomes/three controls and independent review pass.
+Isolated type/build,15 built readers, source/anchor fences pass. No game
+imports this map in this commit.898 engine/Board/tests are working drafts
+and need separate acceptance. Shared seed/Gauntlet and legacy saves held.
+Claude Release X remains the recorded live version;895 awaits publication.
+Next free899.
+
 895 search follow-up, 2026-10-02: regenerated the NBA-only keyword row and
 guide fingerprint after Claude's Release X merge. Isolated type/build,
 simSiteSearch and15 built readers pass; actual App330005gzip bytes (322KiB),
