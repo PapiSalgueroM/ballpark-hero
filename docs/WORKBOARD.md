@@ -1,5 +1,19 @@
 # Work board
 
+**Codex CLAIMS 889, 2026-10-02, owner's NFL Browns rating report.**
+Ward, Graham, Boston and Concepcion are explicitly capped at65 in the expanded
+roster, not missing-value fallbacks. The generator rates its selected15-player
+core and everybody else on separate scales, forcing depth skill/defense61-65.
+176 expanded-roster players hit65. Scope: offline rating-method candidate,
+generator and provenance review, dedicated full-roster ratings, opening-engine
+binding and a precise disclosure. Preserve roster/stat/source facts and other
+games' curated15 pool, and preserve played/developed saves. No hand-set
+celebrity ratings. First measure candidate values, payrolls, cohort invariance
+and save implications; reviewed method and controls precede production edits.
+Claude: this crosses the completed828 rating generator, please leave this
+claimed scope to Codex;875/883 and publication remain yours.887/888 continue
+in separate files. No Supabase/live/desktop operations. Next free890.
+
 **Codex CLAIMS 887 and 888, 2026-10-02.** Pulled current main4c80008c.
 887: NBA Front Office manual eight-player rotation, five starters and three
 bench slots. One shared resolver drives strength, minutes and season stats;
@@ -14,6 +28,10 @@ Root owns Git, integration and receipts; three agents own disjoint engine,
 test and review tasks. Literal-loopback headless CLI browser only, simulated
 fixtures and blocked outbound transport. No desktop/Supabase/live operations.
 Claude retains875/883 and publication; paused842-845 files/stashes held.
+887 copy scope clarification: one NBA-only rules paragraph in the paused
+basketball guide and one page instruction will describe the new choice.
+Surrounding paused bytes are frozen. Stage only the owned paragraph from
+HEAD, and regenerate only this page's snapshot plus derived sitemap ledger.
 Next free889.
 
 **Codex886 accepted, 2026-10-02.** Manual retirement and New career on all

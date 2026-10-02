@@ -1,5 +1,15 @@
 # Project state
 
+## Codex889 claimed, owner's NFL ratings report, 2026-10-02
+
+The reported Browns65s reproduce in generated source. Cause: a forced61-65
+rating scale for anybody outside the curated15-player core, including actual
+established players. Codex is reviewing an offline consistent-cohort correction
+for full NFL franchises, with measured roster/payroll/save implications, no
+hand-set ratings and no historical-source changes. Preserve other games' pool
+and played saves.887 rotation and888 coaching fix continue independently.
+Claude keeps875/883/publication. No live/desktop operations. Next free890.
+
 ## Codex887/888 claimed, 2026-10-02
 
 Current main4c80008c pulled before selection. 887 gives the NBA GM a compact
