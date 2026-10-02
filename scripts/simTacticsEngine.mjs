@@ -154,9 +154,10 @@
    is gitignored, never in src), refuses to run unless the string it
    rewrites occurs exactly once, and passes only when the section it names
    went red and nothing else did:
-     nofit      FIT_PENALTY all zero. Section 1 must go red (the ordering,
-                both halves' lambda ordering, the first half share, the
-                full match gap) and nothing else may.
+     nofit      fitPenalty returns zero (the table itself lives in
+                positionFit.ts since Round 825). Section 1 must go red
+                (the fit report sum, both halves' lambda ordering, the
+                first half share, the full match gap) and nothing else may.
      fit2nd     secondHalfLambdas reads every man with a null slot, so the
                 penalty reaches the first half and not the second. Section
                 1 must go red (the second half lambda ordering only; the
@@ -227,12 +228,16 @@ const CONTROL = process.env.TACTICS_CONTROL || '';
 const lf = s => s.replaceAll('\r\n', '\n');
 
 const CONTROLS = {
+  /* Round 825 moved the FIT_PENALTY table into positionFit.ts (Build Your XI
+     reads it too), so this control now zeroes the one place the engine
+     charges it, fitPenalty, which every strength, bench and fit report read
+     goes through. Same effect on the engine as zeroing the table. */
   nofit: {
     must: [1], also: [],
-    what: 'the FIT_PENALTY table',
+    what: 'the return line of fitPenalty',
     edits: [[
-      'export const FIT_PENALTY: Record<FitGrade, number> = { natural: 0, family: 2, wrong: 6, keeper: 14 };\n',
-      'export const FIT_PENALTY: Record<FitGrade, number> = { natural: 0, family: 0, wrong: 0, keeper: 0 };\n',
+      '  return slot ? FIT_PENALTY[fitGrade(p, slot)] : 0;\n',
+      '  void p; void slot; return 0;\n',
     ]],
     note: 'a man out of position pays nothing; section 1 must go red',
   },
