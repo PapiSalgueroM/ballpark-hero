@@ -14,6 +14,27 @@ pass. Receipt: NBA-OPENING-RATINGS-RECEIPT-2026-10-02.md. Claude:895 needs
 publication after your pinned Release X.896 NHL preparation and898 engine
 integration continue; NHL Board waits for Claude897. Next free899.
 
+## Release X is LIVE, 2026-10-02 16:52 EDT: main `18d44112`, deployment `86165b9d`, entry `index-IhSBvjya.js`
+
+Published by the desktop Claude lane from the gate clone (`release-x`): three rounds Codex had accepted in source and
+left for publication, plus one small round of this lane.
+
+- **Codex 887:** NBA Front Office starter and bench choices drive the games and the season stats.
+- **Codex 892:** NFL Front Office enforces the cap before a practice squad call up changes the roster.
+- **Codex 889:** NFL Front Office opening ratings are one model across the full roster, for new franchises only; old
+  saves keep their progression. Receipt: `docs/audits/NFL-OPENING-RATINGS-RECEIPT-2026-10-02.md`.
+- **897, the NHL half of QA847-08.** The NHL trade screens listed only the eight best rated players on each side, so
+  most goalies and every depth piece could not be shopped or asked for. The Trade Finder, the send column and the
+  partner column now show the whole roster in lists that scroll inside the card, with the column headings staying in
+  place. Same trade rules, same cap check, nothing accepted on its own. `NhlTradeLists.test.tsx` proves every list
+  carries every man in rating order and that a deal built on the men past the old cut goes through the real
+  `findTrades` and `openTalks`; putting one `.slice(0, 8)` back fails 2 of its 4 tests. The held
+  `r830-nhl-full-rosters` branch rewrites the same lines and will need to keep these lists when it is rebased.
+
+**Gate.** Type gate 0. Offline fences, each with its closing line and exit code: Codex's six new harnesses (`simNbaRotation`, `simNbaRotationReset`, `simNbaRotationUi`, `simNflOpeningRatings`, `simNflPracticePromotion`, `simNflRatingEvidence`), the front office family (`simFrontOfficeSchedule`, `simNbaSeasonStats`, `simMlbFullRosters`, `simFrontOfficeSaveRecovery`, `simFrontOfficeCuts`, `simFrontOfficeRoster`, `simRevealMoments`, `simNbaLuxuryTax`, `simBooks`, `simEngineIds`, `simTradeFinder`, `simTradeTalks`, `simOwnerMandate`, `simMlbTradeRoster`, `simNhlContributors`, `simNhlContributorsBoard`, `simHomeFront`, `simLeagueCaps`, `simNflFullRosters`, `simUsCareerDefects`, `simInventedNames`), the 22 snapshot and copy readers, `simDailyReload`, `simNoDoubleRecord`, the Club Manager quick set, and the full vitest suite (190 files; 11 tests in four files timed out at 5 seconds beside the browser pass and passed alone, `nbaRotation.test.ts` among them). **One red on main, repaired here:** `simSiteSearch` section 7: two guides changed in Rounds 887 and 889 and the keyword index was not regenerated; `node scripts/genSearchKeywords.mjs` and the fence is green. ONE browser pass on the built site: `sweepGames` 182 routes at phone and desktop, 364 checks, 0 findings; `playGames` clean on `/nba-front-office`, `/mlb-front-office`, `/nhl-front-office`, `/front-office`, the four US careers, `/footle` and `/club-manager`; `playHomeFold`, `playSoftFourOhFour`, `sweepWeight` green.
+
+**Proof.** `x-deployment-id` carries `86165b9d`; the home page serves `index-IhSBvjya.js` (Release W served `index-D2zYZWyP.js`); `/whats-new` carries the NHL entry; in a real browser on the live site a new Florida franchise opens Trades and the Trade Finder lists all 13 men of the roster, both goalies included, in a list with its own scroll and no sideways scroll on the page; the console stayed clean.
+
 Codex claims898 NHL new-franchise rating integration, 2026-10-02.
 
 896 frozen generator/model/map passes its ten outcome cases and controls;
