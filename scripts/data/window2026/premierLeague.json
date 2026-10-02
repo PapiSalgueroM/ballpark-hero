@@ -13,8 +13,8 @@
   },
   {
     "name": "Lucas Paquetá",
-    "to": null,
-    "note": "Flamengo, permanent, announced by West Ham on 2026-01-28. Flamengo is not a club the engine models.",
+    "to": "Flamengo",
+    "note": "Flamengo, permanent, announced by West Ham on 2026-01-28. Round 876: Flamengo are modelled now (Brazil's Serie A).",
     "db": "CR Flamengo",
     "sources": [
       "https://www.whufc.com/en/news/lucas-paqueta-joins-flamengo",
@@ -150,8 +150,8 @@
   },
   {
     "name": "Jhon Arias",
-    "to": null,
-    "note": "Palmeiras, permanent, 2026-02-07 (the Brazilian window was still open). Palmeiras is not a club the engine models.",
+    "to": "Palmeiras",
+    "note": "Palmeiras, permanent, 2026-02-07 (the Brazilian window was still open). Round 876: Palmeiras are modelled now (Brazil's Serie A).",
     "db": "Sociedade Esportiva Palmeiras",
     "sources": [
       "https://www.wolves.co.uk/news/mens-first-team/20260207-arias-makes-wolves-departure/",
@@ -226,8 +226,8 @@
   },
   {
     "name": "Pedro Lima",
-    "to": null,
-    "note": "Sao Paulo, loan until summer 2027, 2026-09-12 (the Brazilian window was open). Not a club the engine models.",
+    "to": "São Paulo",
+    "note": "Sao Paulo, loan until summer 2027, 2026-09-12 (the Brazilian window was open). Round 876: Sao Paulo are modelled now (Brazil's Serie A), listed at the club he plays for.",
     "db": "São Paulo Futebol Clube",
     "loan": true,
     "sources": [

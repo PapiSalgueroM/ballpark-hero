@@ -142,7 +142,8 @@ export const TRANSFER_OVERLAY_2026_HAND = [
   { name: 'Allan Saint-Maximin', to: 'Charlotte FC', db: 'Charlotte FC' },
   { name: 'Brais Méndez', to: 'Columbus Crew', db: 'Columbus Crew' },
   // Left the modeled world
-  { name: 'Gabriel Pec', to: null, note: 'Cruzeiro', db: 'Cruzeiro Esporte Clube' },
+  // Round 876: Cruzeiro are modelled now (Brazil's Serie A), so he lands there.
+  { name: 'Gabriel Pec', to: 'Cruzeiro', db: 'Cruzeiro Esporte Clube' },
 
   /* ------------------------------------------------------------------ */
   /* Round 450 (2026-09-05): the rest of the summer 2026 window.        */
@@ -381,7 +382,8 @@ export const TRANSFER_OVERLAY_2026_HAND = [
   { name: 'Kota Takai', to: 'Sint-Truiden', db: 'Sint-Truidense VV', loan: true },
   { name: 'Min-hyeok Yang', to: 'Westerlo', db: 'KVC Westerlo', loan: true },
   { name: 'Mikey Moore', to: 'Köln', db: '1.FC Köln', loan: true },
-  { name: 'Alejo Veliz', to: null, note: 'Bahia', db: 'Esporte Clube Bahia' },
+  // Round 876: Bahia are modelled now (Brazil's Serie A), so he lands there.
+  { name: 'Alejo Veliz', to: 'Bahia', db: 'Esporte Clube Bahia' },
   { name: 'David Carmo', to: 'Olympiacos', db: 'Olympiacos Piraeus' },
   { name: 'Jota Silva', to: 'Olympiacos', db: 'Olympiacos Piraeus', loan: true },
   // La Liga. Atletico: Lee Kang-in (psg.fr and Al Jazeera, 2026-07-25),

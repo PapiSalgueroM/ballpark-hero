@@ -184,6 +184,23 @@ export const DB_TO_ENGINE = {
   // club from Volos NFC and stays unmapped.
   '1.FC Nuremberg': 'Nürnberg', 'Abha Club': 'Abha', 'Erzurumspor FK': 'Erzurumspor',
   'Corum FK': 'Çorum FK', 'Volos NFC': 'Volos',
+  // Round 876: Brazil's Serie A 2026. Every table spelling was read off the
+  // 2026-10-02 dump. Lucas Moura's 2026 row sits under a second Sao Paulo
+  // spelling, so both map. Left unmapped on purpose: the bare "Fluminense"
+  // spelling (one 2026 row, a 41 year old nobody checked against a second
+  // source) and Chapecoense's only spelling (one 2025 row for a man whose
+  // 2026 row is at Fortaleza, so mapping it would plant him at last season's
+  // club); Chapecoense is KNOWN_EMPTY in the bake instead.
+  'CR Flamengo': 'Flamengo', 'Sociedade Esportiva Palmeiras': 'Palmeiras',
+  'Club Athletico Paranaense': 'Athletico Paranaense', 'Fluminense Football Club': 'Fluminense',
+  'Esporte Clube Bahia': 'Bahia', 'Cruzeiro Esporte Clube': 'Cruzeiro',
+  'Clube Atlético Mineiro': 'Atlético Mineiro', 'Santos FC': 'Santos',
+  'Coritiba Foot Ball Club': 'Coritiba', 'Red Bull Bragantino': 'Red Bull Bragantino',
+  'São Paulo Futebol Clube': 'São Paulo', 'São Paulo FC': 'São Paulo',
+  'Botafogo de Futebol e Regatas': 'Botafogo', 'Esporte Clube Vitória': 'Vitória',
+  'Sport Club Corinthians Paulista': 'Corinthians', 'Mirassol Futebol Clube (SP)': 'Mirassol',
+  'Clube de Regatas Vasco da Gama': 'Vasco da Gama', 'Grêmio Foot-Ball Porto Alegrense': 'Grêmio',
+  'Sport Club Internacional': 'Internacional', 'Clube do Remo (PA)': 'Remo',
   // UCL flavor clubs outside the baked leagues
   'Club Brugge KV': 'Club Brugge',
 };

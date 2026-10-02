@@ -63,7 +63,11 @@ const KNOWN_EMPTY = ['ADO Den Haag', 'Cambuur',
   // row at Dinamo Zagreb, which empties them honestly.
   'Varaždin', 'Lokomotiva Zagreb', 'Gorica', 'Rudeš', 'Istra 1961',
   // Round 394: 2. Bundesliga and Belgian members with no 2025/2026 rows.
-  'Dynamo Dresden', 'Osnabrück', 'Energie Cottbus', 'Lommel'];
+  'Dynamo Dresden', 'Osnabrück', 'Energie Cottbus', 'Lommel',
+  // Round 876: Brazil's Serie A 2026. Chapecoense have no 2026 row in the
+  // table and their one 2025 row belongs to a man whose 2026 row is at
+  // Fortaleza, so their spelling is left unmapped and they ship empty.
+  'Chapecoense'];
 
 /** Core clubs (big five leagues) must have 7+ players or the bake fails. */
 const CORE_LEAGUE_CLUBS = new Set([
@@ -304,6 +308,9 @@ if (!(xiAvg('Basel') > xiAvg('Vaduz'))) errors.push('SANITY: Basel <= Vaduz');
 // Round 189: the HNL giants outrate the promoted side.
 if (!(xiAvg('Dinamo Zagreb') > xiAvg('Rudeš'))) errors.push('SANITY: Dinamo <= Rudeš');
 if (!(xiAvg('Hajduk Split') > xiAvg('Gorica'))) errors.push('SANITY: Hajduk <= Gorica');
+// Round 876: Brazil's giants outrate the two promoted sides the table barely sees.
+if (!(xiAvg('Flamengo') > xiAvg('Remo'))) errors.push('SANITY: Flamengo <= Remo');
+if (!(xiAvg('Palmeiras') > xiAvg('Chapecoense'))) errors.push('SANITY: Palmeiras <= Chapecoense');
 
 const total = [...byClub.values()].reduce((s, l) => s + l.length, 0);
 if (total < 2800) errors.push(`Only ${total} players total (expected 2800+)`);
@@ -328,7 +335,8 @@ let out = `// Rounds 70+72: real rosters for every Club Manager club, generated 
 // (2026-27 memberships), EFL Championship, Saudi Pro League, MLS East and
 // West, Eredivisie, Primeira Liga, Scottish Premiership, Süper Lig,
 // 2. Bundesliga, Belgian Pro League, Austrian Bundesliga, Super League
-// Greece, Danish Superliga, Swiss Super League and SuperSport HNL.
+// Greece, Danish Superliga, Swiss Super League, SuperSport HNL and
+// Brazil's Serie A.
 // Values in £m, ratings 48-94 from the value curve.
 // Regenerate with: node scripts/bakeClubManagerRosters.mjs
 // DO NOT EDIT BY HAND.

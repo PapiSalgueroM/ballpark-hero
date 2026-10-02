@@ -2666,6 +2666,12 @@ export const LEAGUE_RULES: Record<string, LeagueRules> = {
     nationId: 'croatia', flag: 'Croatia', cup: 'Croatian Cup', europe: { ucl: 1, uel: 2, uecl: 3 }, drop: 1, ladder: 'top', season: 'autumnSpring',
     simplified: 'The real league plays each other four times over 36 rounds and settles ninth in a playoff; it is played here as a straight double round robin with one going straight down.',
   },
+  /* Round 876: Brazil's Serie A. The real format exactly (20 clubs, double
+     round robin, four down), only the calendar differs: the real league runs
+     through the calendar year and is played here on the game's August to May
+     calendar, as MLS is. No continental competition is modelled for it (the
+     Copa Libertadores is not in the game), so it has no European places. */
+  brasileirao: { nationId: 'brazil', flag: 'Brazil', cup: 'Copa do Brasil', europe: null, drop: 4, ladder: 'top', season: 'calendarYear' },
   /* The era leagues. No Conference League existed before 2021, so uecl is 0
      and the board's ladder skips that band; 2005-06 still called the second
      competition the UEFA Cup. */
@@ -2846,6 +2852,17 @@ export const REAL_LEAGUES: LeagueDef[] = [
     id: 'croatia', name: 'SuperSport HNL',
     clubs: ['Dinamo Zagreb', 'Hajduk Split', 'Rijeka', 'Osijek', 'Varaždin', 'Slaven Belupo', 'Istra 1961', 'Lokomotiva Zagreb', 'Gorica', 'Rudeš'],
   },
+  /* Round 876: Brazil's Serie A 2026. Membership read 2026-10-02 off two
+     agreeing tables, the CBF's own
+     (https://www.cbf.com.br/futebol-brasileiro/tabelas/campeonato-brasileiro/serie-a/2026)
+     and ESPN's (https://www.espn.com/soccer/standings/_/league/bra.1): the
+     same twenty clubs, Remo and Chapecoense among them. Rosters from the same
+     value table as every other league; Chapecoense have no usable rows and
+     ship as a youth padded squad that says so. */
+  {
+    id: 'brasileirao', name: 'Brasileirão Série A',
+    clubs: ['Flamengo', 'Palmeiras', 'Athletico Paranaense', 'Fluminense', 'Bahia', 'Cruzeiro', 'Atlético Mineiro', 'Santos', 'Coritiba', 'Red Bull Bragantino', 'São Paulo', 'Botafogo', 'Vitória', 'Corinthians', 'Mirassol', 'Vasco da Gama', 'Grêmio', 'Internacional', 'Remo', 'Chapecoense'],
+  },
 ].map(leagueFromRow);
 
 /**
@@ -2951,6 +2968,13 @@ const STRENGTH_PRIORS: Record<string, number> = {
   // after the summer sales; Rudeš come up as the promoted side.
   'Rijeka': 72, 'Osijek': 68, 'Varaždin': 67, 'Slaven Belupo': 66,
   'Istra 1961': 65, 'Lokomotiva Zagreb': 65, 'Gorica': 64, 'Rudeš': 61,
+  // Round 876: Brazil's Serie A. A prior only reaches a club with no baked
+  // player at all (bakedXIAvg rates every other squad from its data), and
+  // Chapecoense are the one such member. 61 is the value every promoted or
+  // bottom side with no usable rows has shipped with (Rudeš, Lommel,
+  // Iraklis, Kalamata, Austria Lustenau, AC Horsens), below the 64 a $1m
+  // player rates at, which is the value table's floor.
+  'Chapecoense': 61,
 };
 
 /** The real league a club plays in. Every playable club is covered.
@@ -3196,6 +3220,8 @@ export const NATIONS: NationDef[] = [
   { id: 'switzerland', name: 'Switzerland', flag: '🇨🇭' },
   // Round 189
   { id: 'croatia', name: 'Croatia', flag: '🇭🇷' },
+  // Round 876
+  { id: 'brazil', name: 'Brazil', flag: '🇧🇷' },
 ].map(n => ({ ...n, leagueIds: REAL_LEAGUES.filter(l => leagueRulesOf(l.id).nationId === n.id).map(l => l.id) }));
 
 /** Primary kit colors for the club dot in the UI (approximate, decorative). */
@@ -3332,6 +3358,14 @@ const CLUB_COLORS: Record<string, string> = {
   'Osijek': '#0f4c81', 'Varaždin': '#12294a', 'Slaven Belupo': '#0e6eb8',
   'Istra 1961': '#0a7a3c', 'Lokomotiva Zagreb': '#e2001a', 'Gorica': '#12294a',
   'Rudeš': '#1f9d55',
+  // Round 876: Brazil's Serie A (plain shirt colours, no crest art)
+  'Flamengo': '#c8102e', 'Palmeiras': '#006437', 'Athletico Paranaense': '#c8102e',
+  'Fluminense': '#7a1e3a', 'Bahia': '#0057b8', 'Cruzeiro': '#1b3f94',
+  'Atlético Mineiro': '#2b2b2b', 'Santos': '#d9d9d9', 'Coritiba': '#0a7040',
+  'Red Bull Bragantino': '#d9d9d9', 'São Paulo': '#d02128', 'Botafogo': '#2b2b2b',
+  'Vitória': '#d02128', 'Corinthians': '#d9d9d9', 'Mirassol': '#f5d800',
+  'Vasco da Gama': '#2b2b2b', 'Grêmio': '#0d80bf', 'Internacional': '#d02128',
+  'Remo': '#12294a', 'Chapecoense': '#0a7040',
 };
 
 /**

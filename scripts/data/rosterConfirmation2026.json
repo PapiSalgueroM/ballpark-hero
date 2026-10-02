@@ -1,8 +1,8 @@
 {
  "measuredOn": "2026-09-11",
  "rule": "A baked Club Manager player whose newest row in public.player_market_values_dedup is year 2025, with no year-2026 row at any club the game models and none anywhere else either. The bake falls back to the 2025 row for these, which carries the 2025 CLUB, so the player ships at last season's club with nothing saying so.",
- "population": 359,
- "populationRound876": "Round 876 mapped the table's 1.FC Nuremberg spelling to Nürnberg and re-baked from the 2026-10-02 dump. Three Nürnberg players came in on a 2025 row with no 2026 row anywhere (Berkay Yilmaz, Oliver Villadsen, Tim Janisch), so they joined the population and wait in pending like the rest. No other new fallback row appeared that an overlay row does not already source.",
+ "population": 379,
+ "populationRound876": "Round 876 mapped the table's 1.FC Nuremberg spelling to Nürnberg and re-baked from the 2026-10-02 dump. Three Nürnberg players came in on a 2025 row with no 2026 row anywhere (Berkay Yilmaz, Oliver Villadsen, Tim Janisch), so they joined the population and wait in pending like the rest. No other new fallback row appeared that an overlay row does not already source. Then Brazil's Serie A was mapped (twenty table spellings) and the bake re-run from the same dump. Twenty players at those clubs came in on a 2025 row with no 2026 row anywhere (Luiz Araújo, Gustavo Gómez, Weverton, Lima, Júnior Alonso, Everson, Zé Rafael, Lucas Ronier, Juninho Capixaba, Ignacio Laquintana, Matheus Martins, Nathan Fernandes, Matheus Nascimento, Rafael Lobato, Memphis Depay, Talles Magno, Pedro Raul, Jean Meneses, Alexander Aravena, Gustavo Prado), so they joined the population and wait in pending: none has been checked against a second source yet. Two rows that sat in removedClubNotModelled because the World Cup table put them at Vasco da Gama and Palmeiras (Andrés Gómez, Ramón Sosa) moved to movedTo on that same evidence, since both clubs are modelled now.",
  "source": "public.player_market_values_dedup, read through the Supabase MCP on 2026-09-11.",
  "adjudicator": "public.world_cup_players where world_cup_year = 2026: the 2026 World Cup squads of all 48 nations, applied Round 389 (supabase/migrations/20260901_round_389_world_cup_2026_squads.sql). Every row there is a player two independent sources agree on, Wikipedia squad templates read through the API and Al Jazeera 2026-06-02, with Yahoo Sports 2026-06-11 as the third voice where they differed. Clubs are Wikipedia's. It covers only players picked for the World Cup, which is why it resolves 23 of the 356 and no more.",
  "adjudicatorWeb2026_09_15": "Web adjudication, 2026-09-15, for the 18 pending Premier League rows. Two independent source families were read with WebFetch and WebSearch only: A, official (the premierleague.com squad data feed for season 2026, which lists a loaned-out player at his loan club and not at his parent, plus club, league and UEFA pages) and B, independent press (Sky Sports, ESPN, Sports Illustrated and others; Sky Sport Deutschland never counted as independent of Sky Sports UK). A row moved out of pending only where both families agreed on status and club. Each row carries its own URLs and read dates.",
@@ -700,14 +700,21 @@
    "name": "Yuito Suzuki",
    "from": "Brøndby IF",
    "to": "Freiburg"
-  }
- ],
- "removedClubNotModelled": [
+  },
   {
    "name": "Andrés Gómez",
    "from": "Rennes",
-   "realClub": "Vasco da Gama"
+   "to": "Vasco da Gama",
+   "note": "Round 876: was removedClubNotModelled on the same evidence (the 2026 World Cup table puts him at Vasco da Gama). Vasco da Gama are modelled now (Brazil's Serie A), so he moves there instead of leaving the game."
   },
+  {
+   "name": "Ramón Sosa",
+   "from": "Nottingham Forest",
+   "to": "Palmeiras",
+   "note": "Round 876: was removedClubNotModelled on the same evidence (the 2026 World Cup table puts him at Palmeiras). Palmeiras are modelled now (Brazil's Serie A), so he moves there instead of leaving the game."
+  }
+ ],
+ "removedClubNotModelled": [
   {
    "name": "Antonio Sanabria",
    "from": "Torino",
@@ -749,11 +756,6 @@
      "says": "Leicester City #8, League One start 29 Aug 2026"
     }
    ]
-  },
-  {
-   "name": "Ramón Sosa",
-   "from": "Nottingham Forest",
-   "realClub": "Palmeiras"
   }
  ],
  "notCurrent": [
@@ -2192,6 +2194,86 @@
   {
    "name": "Tim Janisch",
    "club": "Nürnberg"
+  },
+  {
+   "name": "Luiz Araújo",
+   "club": "Flamengo"
+  },
+  {
+   "name": "Gustavo Gómez",
+   "club": "Palmeiras"
+  },
+  {
+   "name": "Weverton",
+   "club": "Palmeiras"
+  },
+  {
+   "name": "Lima",
+   "club": "Fluminense"
+  },
+  {
+   "name": "Júnior Alonso",
+   "club": "Atlético Mineiro"
+  },
+  {
+   "name": "Everson",
+   "club": "Atlético Mineiro"
+  },
+  {
+   "name": "Zé Rafael",
+   "club": "Santos"
+  },
+  {
+   "name": "Lucas Ronier",
+   "club": "Coritiba"
+  },
+  {
+   "name": "Juninho Capixaba",
+   "club": "Red Bull Bragantino"
+  },
+  {
+   "name": "Ignacio Laquintana",
+   "club": "Red Bull Bragantino"
+  },
+  {
+   "name": "Matheus Martins",
+   "club": "Botafogo"
+  },
+  {
+   "name": "Nathan Fernandes",
+   "club": "Botafogo"
+  },
+  {
+   "name": "Matheus Nascimento",
+   "club": "Botafogo"
+  },
+  {
+   "name": "Rafael Lobato",
+   "club": "Botafogo"
+  },
+  {
+   "name": "Memphis Depay",
+   "club": "Corinthians"
+  },
+  {
+   "name": "Talles Magno",
+   "club": "Corinthians"
+  },
+  {
+   "name": "Pedro Raul",
+   "club": "Corinthians"
+  },
+  {
+   "name": "Jean Meneses",
+   "club": "Vasco da Gama"
+  },
+  {
+   "name": "Alexander Aravena",
+   "club": "Grêmio"
+  },
+  {
+   "name": "Gustavo Prado",
+   "club": "Internacional"
   }
  ]
 }
