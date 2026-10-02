@@ -52,6 +52,8 @@ execSync(
 );
 
 const { engine: cm, eras: ER, era2015: E15, era2010: E10, modern: MOD } = await import(pathToFileURL(BUNDLE).href);
+/* Round 832: an era's squads load with the era, so the harness fetches all three first. */
+await ER.ensureAllEraRosters();
 const { eraUpliftRating, eraRosters, projectedRoster } = ER;
 const {
   startCareer, playNextEntry, startNextSeason, sortedTable, buildMarket,

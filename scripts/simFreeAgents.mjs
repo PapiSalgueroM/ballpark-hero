@@ -391,6 +391,8 @@ if (CONTROL === 'realname') {
   const PRE = path.join(TMP, 'pre.cjs');
   bundle(PRE);
   const pre = createRequire(import.meta.url)(PRE);
+  /* Round 832: the era squads load with the era; fetch them before reading them. */
+  await pre.cm.ensureAllEraRosters();
   const now = new Set(Object.values(pre.cm.CM_ROSTERS).flat().map(p => p.n));
   const realName = Object.values(pre.HISTORIC_ROSTERS).flatMap(w => Object.values(w).flat()).map(p => p.n).find(n => !now.has(n));
   if (!realName) { console.log('   FAIL control realname found no historic name outside the 2026 world'); process.exit(1); }
@@ -401,6 +403,8 @@ if (CONTROL === 'realname') {
 
 bundle(BUNDLE);
 const { cm, fin, ContractsCard, HISTORIC_ROSTERS, render } = createRequire(import.meta.url)(BUNDLE);
+/* Round 832: HISTORIC_ROSTERS fills as each era loads, so load all three first. */
+await cm.ensureAllEraRosters();
 
 const mean = (xs) => xs.reduce((a, b) => a + b, 0) / Math.max(1, xs.length);
 const median = (xs) => { const s = [...xs].sort((a, b) => a - b); return s[Math.floor(s.length / 2)] ?? 0; };

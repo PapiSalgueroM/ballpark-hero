@@ -404,6 +404,8 @@ execSync(`"${NM}/.bin/esbuild" "${ENTRY}" --bundle --format=cjs --platform=node 
 const store = new Map();
 globalThis.localStorage = { getItem: k => store.get(k) ?? null, setItem: (k, v) => store.set(k, String(v)), removeItem: k => store.delete(k), clear: () => store.clear() };
 const { cmA, cmB, cmC, MatchReportCard, LiveSimScreen, UclBracketCard, render } = createRequire(import.meta.url)(BUNDLE);
+/* Round 832: an era's squads load with the era, so every arm fetches all three first. */
+for (const engine of [cmA, cmB, cmC]) await engine.ensureAllEraRosters();
 for (const [arm, cm] of [['A', cmA], ['B', cmB], ['C', cmC]]) {
   for (const name of ['startCareer', 'playNextEntry', 'resumeMatch', 'startSecondHalf', 'startExtraTime', 'isExtraTimeDue',
     'changeLive', 'markLiveMinute', 'uclTieOutcome', 'uclAwayGoalsApply', 'uclLegsFor', 'ET_DEFLATOR', 'ET_MINUTES', 'myOnPitchAt', 'extraTimeCall']) {

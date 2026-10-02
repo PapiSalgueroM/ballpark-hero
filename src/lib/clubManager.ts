@@ -169,14 +169,14 @@ export interface RaceScorer {
  * Entries logged before the typed competition field existed are bucketed
  * from their display label, which always starts with the competition name.
  */
-export function teamCompRecord(state: CareerState, cupName: string): Record<CompBucket | 'all', TeamCompLine> {
+export function teamCompRecord(state: CareerState, cupName: string | null): Record<CompBucket | 'all', TeamCompLine> {
   const mk = (): TeamCompLine => ({ p: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0 });
   const out: Record<CompBucket | 'all', TeamCompLine> = { all: mk(), league: mk(), cup: mk(), ucl: mk() };
   for (const e of state.resultLog ?? []) {
     const bucket: CompBucket = e.competition
       ? compBucketOf(e.competition)
       : e.comp.startsWith('Champions League') ? 'ucl'
-      : e.comp.startsWith(cupName) ? 'cup'
+      : cupName !== null && e.comp.startsWith(cupName) ? 'cup'
       : 'league';
     const [gf, ga] = e.score.split('-').map(n => parseInt(n, 10) || 0);
     for (const line of [out.all, out[bucket]]) {
@@ -2535,10 +2535,166 @@ export const EURO_CLUBS = [
 export interface LeagueDef {
   id: string;
   name: string;
-  cupName: string;
-  /** Can clubs from this league qualify for the Champions League in-game? */
+  /** The domestic cup, or null for a league that has none (Round 832).
+   *  Filled from the league's row in LEAGUE_RULES. */
+  cupName: string | null;
+  /** Can clubs from this league qualify for the Champions League in-game?
+   *  Filled from LEAGUE_RULES: true exactly when the row has UEFA places. */
   euro: boolean;
   clubs: string[];
+}
+
+/* ================================================================== */
+/* Round 832: one rules table, keyed by league id                     */
+/* ================================================================== */
+
+/**
+ * Everything about a league's SHAPE, in one row per league id, modern and
+ * era alike. Before this round the same facts lived as id branches spread
+ * through the engine: the drop zone in a chain of ifs in relegationSpots, the
+ * promotion pairs in PYRAMIDS, the flags in LEAGUE_NATIONS, the nations'
+ * league lists in NATIONS, the UEFA places in EURO_SLOTS, the cup name and
+ * the euro flag on each league def, and three board ladders keyed on ids
+ * ('championship', 'bundesliga2', anything starting 'mls') plus a fourth for
+ * 'saudi'. All of those are now read off this table, and PYRAMIDS,
+ * LEAGUE_NATIONS, EURO_SLOTS and the nations' leagueIds are derived from it.
+ *
+ * Adding a league is: a row here, a row in REAL_LEAGUES (id, name, clubs),
+ * a nation row in NATIONS if the nation is new, then its clubs' rosters,
+ * priors and colours. Nothing else branches on a league id.
+ *
+ * Two shapes exist here that no league used before this round, so the next
+ * leagues are data: cup null (a league with no domestic cup: no cup in the
+ * calendar, no bracket, no cup objective, and the cup screens say there is
+ * none) and any drop count (four for a league that sends four down; with a
+ * secondTier the summer trades that many both ways). simCmLeagueRules plays
+ * both on synthetic leagues for ten seasons.
+ */
+export interface LeagueRules {
+  /** The NATIONS id that owns the league: the picker groups by it and the
+   *  domestic cup draws from every league of the nation. */
+  nationId: string;
+  /** The flag name for FlagImg (LEAGUE_NATIONS is derived from this). */
+  flag: string;
+  /** The domestic cup, or null for a league with none. */
+  cup: string | null;
+  /** The UEFA places the table hands out, or null outside UEFA's
+   *  competitions in this game (no Champions League from this league). */
+  europe: EuroSlots | null;
+  /** Clubs relegated every summer. 0 for a league with no relegation. */
+  drop: number;
+  /** The modelled division below. The summer trades `drop` clubs both ways
+   *  between the two (PYRAMIDS is derived from this). */
+  secondTier?: string;
+  /** How the board talks. 'top': the title, the European windows, a
+   *  continental prize, the top half, survival. 'promotion': a second tier,
+   *  the title, automatic promotion, the playoff rung, the top half,
+   *  survival. 'playoffs': no relegation and a season settled in a playoff,
+   *  so the title, the playoff rung, then mid-table. */
+  ladder: 'top' | 'promotion' | 'playoffs';
+  /** The playoff rung of a 'promotion' or 'playoffs' ladder: clubs ranked
+   *  this high are asked to finish at the target, in these words. */
+  playoff?: { rankUpTo: number; target: number; label: string };
+  /** 'playoffs' ladder: below the playoff rung, the target sits this many
+   *  places from the bottom. */
+  floorFromBottom?: number;
+  /** A continental prize outside UEFA, asked of clubs ranked this high. */
+  continental?: { label: string; rankUpTo: number; target: number };
+  /** The real league's calendar. The engine plays every league on one
+   *  August to May calendar, which a calendar year league shares by
+   *  simplification (MLS since Round 72). */
+  season: 'autumnSpring' | 'calendarYear';
+  /** What the engine plays more simply than the real league, in words,
+   *  where the verified notes on the league say so. */
+  simplified?: string;
+  /** How clubs level on points are split (TiebreakRule, with the sources
+   *  at its definition). Absent is goal difference then goals scored, the
+   *  only order the engine can take for a league whose own order has not
+   *  been verified. Round 832 review: this sat in a map of its own keyed by
+   *  league id, the one league rule left outside this table. */
+  tiebreak?: TiebreakRule;
+}
+
+const SPLIT_SIMPLIFIED = 'The real league splits into groups part way through the season; it is played here as a straight double round robin.';
+
+export const LEAGUE_RULES: Record<string, LeagueRules> = {
+  premier: { nationId: 'england', flag: 'England', cup: 'FA Cup', europe: { ucl: 4, uel: 5, uecl: 6 }, drop: 3, tiebreak: 'gdGf', secondTier: 'championship', ladder: 'top', season: 'autumnSpring' },
+  championship: {
+    nationId: 'england', flag: 'England', cup: 'FA Cup', europe: null, drop: 3, ladder: 'promotion',
+    playoff: { rankUpTo: 8, target: 6, label: 'Make the promotion playoffs' }, season: 'autumnSpring',
+    simplified: 'Three go up and three come down in a straight swap; the real promotion playoff is not played.',
+  },
+  laliga: { nationId: 'spain', flag: 'Spain', cup: 'Copa del Rey', europe: { ucl: 4, uel: 5, uecl: 6 }, drop: 3, tiebreak: 'h2h', ladder: 'top', season: 'autumnSpring' },
+  seriea: { nationId: 'italy', flag: 'Italy', cup: 'Coppa Italia', europe: { ucl: 4, uel: 5, uecl: 6 }, drop: 3, tiebreak: 'h2h', ladder: 'top', season: 'autumnSpring' },
+  bundesliga: {
+    nationId: 'germany', flag: 'Germany', cup: 'DFB-Pokal', europe: { ucl: 4, uel: 5, uecl: 6 }, drop: 2, tiebreak: 'gdGfAgg', secondTier: 'bundesliga2', ladder: 'top', season: 'autumnSpring',
+    simplified: 'The real relegation playoff (sixteenth against the 2. Bundesliga\'s third) is not played: two go straight down and two straight up.',
+  },
+  ligue1: { nationId: 'france', flag: 'France', cup: 'Coupe de France', europe: { ucl: 3, uel: 4, uecl: 5 }, drop: 3, tiebreak: 'gdH2h', ladder: 'top', season: 'autumnSpring' },
+  eredivisie: { nationId: 'netherlands', flag: 'Netherlands', cup: 'KNVB Cup', europe: { ucl: 2, uel: 3, uecl: 4 }, drop: 2, ladder: 'top', season: 'autumnSpring' },
+  saudi: {
+    nationId: 'saudi', flag: 'Saudi Arabia', cup: "King's Cup", europe: null, drop: 3, ladder: 'top', season: 'autumnSpring',
+    continental: { label: 'AFC Champions League Elite', rankUpTo: 5, target: 3 },
+  },
+  mlsEast: {
+    nationId: 'usa', flag: 'USA', cup: 'U.S. Open Cup', europe: null, drop: 0, ladder: 'playoffs',
+    playoff: { rankUpTo: 9, target: 8, label: 'Make the playoffs' }, floorFromBottom: 4, season: 'calendarYear',
+    simplified: 'The playoffs are not played; the conference table settles the season.',
+  },
+  mlsWest: {
+    nationId: 'usa', flag: 'USA', cup: 'U.S. Open Cup', europe: null, drop: 0, ladder: 'playoffs',
+    playoff: { rankUpTo: 9, target: 8, label: 'Make the playoffs' }, floorFromBottom: 4, season: 'calendarYear',
+    simplified: 'The playoffs are not played; the conference table settles the season.',
+  },
+  primeira: { nationId: 'portugal', flag: 'Portugal', cup: 'Taça de Portugal', europe: { ucl: 2, uel: 3, uecl: 4 }, drop: 2, ladder: 'top', season: 'autumnSpring' },
+  scottish: { nationId: 'scotland', flag: 'Scotland', cup: 'Scottish Cup', europe: { ucl: 1, uel: 2, uecl: 3 }, drop: 1, ladder: 'top', season: 'autumnSpring' },
+  superlig: { nationId: 'turkey', flag: 'Türkiye', cup: 'Turkish Cup', europe: { ucl: 1, uel: 2, uecl: 3 }, drop: 3, ladder: 'top', season: 'autumnSpring' },
+  bundesliga2: {
+    nationId: 'germany', flag: 'Germany', cup: 'DFB-Pokal', europe: null, drop: 2, ladder: 'promotion',
+    playoff: { rankUpTo: 6, target: 3, label: 'Reach the promotion playoff' }, season: 'autumnSpring',
+    simplified: 'The real promotion playoff (third against the Bundesliga\'s sixteenth) is not played: two go straight up and two straight down.',
+  },
+  proleague: { nationId: 'belgium', flag: 'Belgium', cup: 'Belgian Cup', europe: { ucl: 1, uel: 2, uecl: 3 }, drop: 1, ladder: 'top', season: 'autumnSpring' },
+  austria: { nationId: 'austria', flag: 'Austria', cup: 'ÖFB Cup', europe: { ucl: 1, uel: 2, uecl: 3 }, drop: 1, ladder: 'top', season: 'autumnSpring', simplified: SPLIT_SIMPLIFIED },
+  greece: { nationId: 'greece', flag: 'Greece', cup: 'Greek Cup', europe: { ucl: 1, uel: 2, uecl: 3 }, drop: 2, ladder: 'top', season: 'autumnSpring', simplified: SPLIT_SIMPLIFIED },
+  denmark: { nationId: 'denmark', flag: 'Denmark', cup: 'Danish Cup', europe: { ucl: 1, uel: 2, uecl: 3 }, drop: 2, ladder: 'top', season: 'autumnSpring', simplified: SPLIT_SIMPLIFIED },
+  switzerland: {
+    nationId: 'switzerland', flag: 'Switzerland', cup: 'Swiss Cup', europe: { ucl: 1, uel: 2, uecl: 3 }, drop: 1, ladder: 'top', season: 'autumnSpring',
+    simplified: `${SPLIT_SIMPLIFIED} One goes straight down and the real relegation playoff is not played.`,
+  },
+  croatia: {
+    nationId: 'croatia', flag: 'Croatia', cup: 'Croatian Cup', europe: { ucl: 1, uel: 2, uecl: 3 }, drop: 1, ladder: 'top', season: 'autumnSpring',
+    simplified: 'The real league plays each other four times over 36 rounds and settles ninth in a playoff; it is played here as a straight double round robin with one going straight down.',
+  },
+  /* The era leagues. No Conference League existed before 2021, so uecl is 0
+     and the board's ladder skips that band; 2005-06 still called the second
+     competition the UEFA Cup. */
+  premier2010: { nationId: 'england', flag: 'England', cup: 'FA Cup', europe: { ucl: 4, uel: 5, uecl: 0 }, drop: 3, tiebreak: 'gdGf', ladder: 'top', season: 'autumnSpring' },
+  laliga2010: { nationId: 'spain', flag: 'Spain', cup: 'Copa del Rey', europe: { ucl: 4, uel: 6, uecl: 0 }, drop: 3, tiebreak: 'h2h', ladder: 'top', season: 'autumnSpring' },
+  premier2015: { nationId: 'england', flag: 'England', cup: 'FA Cup', europe: { ucl: 4, uel: 5, uecl: 0 }, drop: 3, tiebreak: 'gdGf', ladder: 'top', season: 'autumnSpring' },
+  laliga2015: { nationId: 'spain', flag: 'Spain', cup: 'Copa del Rey', europe: { ucl: 4, uel: 6, uecl: 0 }, drop: 3, tiebreak: 'h2h', ladder: 'top', season: 'autumnSpring' },
+  seriea2015: { nationId: 'italy', flag: 'Italy', cup: 'Coppa Italia', europe: { ucl: 3, uel: 5, uecl: 0 }, drop: 3, tiebreak: 'h2h', ladder: 'top', season: 'autumnSpring' },
+  premier2005: { nationId: 'england', flag: 'England', cup: 'FA Cup', europe: { ucl: 4, uel: 5, uecl: 0, uelName: 'UEFA Cup' }, drop: 3, tiebreak: 'gdGf', ladder: 'top', season: 'autumnSpring' },
+  laliga2005: { nationId: 'spain', flag: 'Spain', cup: 'Copa del Rey', europe: { ucl: 4, uel: 6, uecl: 0, uelName: 'UEFA Cup' }, drop: 3, tiebreak: 'h2h', ladder: 'top', season: 'autumnSpring' },
+};
+
+/** What an id with no row reads as: a cupless top flight outside Europe that
+ *  sends three down, the answers relegationSpots and EURO_SLOTS gave an
+ *  unknown id before this round. Never a real league: simCmLeagueRules holds
+ *  every league def to a row of its own. */
+const UNKNOWN_LEAGUE_RULES: LeagueRules = { nationId: '', flag: '', cup: null, europe: null, drop: 3, ladder: 'top', season: 'autumnSpring' };
+
+/** The rules row for a league id. */
+export function leagueRulesOf(leagueId: string): LeagueRules {
+  return Object.prototype.hasOwnProperty.call(LEAGUE_RULES, leagueId) ? LEAGUE_RULES[leagueId] : UNKNOWN_LEAGUE_RULES;
+}
+
+/** A membership row (id, name, clubs) becomes a league def with its cup and
+ *  its euro flag read off the rules table. Same key order as the literal
+ *  defs had, so nothing that serialises a def changes. */
+function leagueFromRow(row: { id: string; name: string; clubs: string[] }): LeagueDef {
+  const rules = leagueRulesOf(row.id);
+  return { id: row.id, name: row.name, cupName: rules.cup, euro: rules.europe !== null, clubs: row.clubs };
 }
 
 /**
@@ -2549,52 +2705,52 @@ export interface LeagueDef {
  */
 export const REAL_LEAGUES: LeagueDef[] = [
   {
-    id: 'premier', name: 'Premier League', cupName: 'FA Cup', euro: true,
+    id: 'premier', name: 'Premier League',
     // 2026-27: Coventry, Ipswich and Hull came up; Wolves, Burnley and West Ham went down.
     clubs: ['Arsenal', 'Aston Villa', 'Bournemouth', 'Brentford', 'Brighton', 'Chelsea', 'Coventry City', 'Crystal Palace', 'Everton', 'Fulham', 'Hull City', 'Ipswich Town', 'Leeds United', 'Liverpool', 'Manchester City', 'Manchester United', 'Newcastle', 'Nottingham Forest', 'Sunderland', 'Tottenham'],
   },
   {
-    id: 'championship', name: 'EFL Championship', cupName: 'FA Cup', euro: false,
+    id: 'championship', name: 'EFL Championship',
     // 2026-27 lineup per the fixture release: the three relegated Premier
     // League sides plus Cardiff, Bolton and Lincoln up from League One.
     clubs: ['Birmingham City', 'Blackburn Rovers', 'Bolton Wanderers', 'Bristol City', 'Burnley', 'Cardiff City', 'Charlton Athletic', 'Derby County', 'Lincoln City', 'Middlesbrough', 'Millwall', 'Norwich City', 'Portsmouth', 'Preston North End', 'QPR', 'Sheffield United', 'Southampton', 'Stoke City', 'Swansea City', 'Watford', 'West Brom', 'West Ham', 'Wolves', 'Wrexham'],
   },
   {
-    id: 'laliga', name: 'La Liga', cupName: 'Copa del Rey', euro: true,
+    id: 'laliga', name: 'La Liga',
     // 2026-27: Racing Santander, Deportivo and Málaga up; Oviedo, Girona and Mallorca down.
     clubs: ['Alavés', 'Athletic Club', 'Atlético Madrid', 'Barcelona', 'Real Betis', 'Celta Vigo', 'Deportivo La Coruña', 'Elche', 'Espanyol', 'Getafe', 'Levante', 'Málaga', 'Osasuna', 'Racing Santander', 'Rayo Vallecano', 'Real Madrid', 'Real Sociedad', 'Sevilla', 'Valencia', 'Villarreal'],
   },
   {
-    id: 'seriea', name: 'Serie A', cupName: 'Coppa Italia', euro: true,
+    id: 'seriea', name: 'Serie A',
     // 2026-27: Venezia, Frosinone and Monza up; Cremonese, Verona and Pisa down.
     clubs: ['Atalanta', 'Bologna', 'Cagliari', 'Como', 'Fiorentina', 'Frosinone', 'Genoa', 'Inter Milan', 'Juventus', 'Lazio', 'Lecce', 'AC Milan', 'Monza', 'Napoli', 'Parma', 'Roma', 'Sassuolo', 'Torino', 'Udinese', 'Venezia'],
   },
   {
-    id: 'bundesliga', name: 'Bundesliga', cupName: 'DFB-Pokal', euro: true,
+    id: 'bundesliga', name: 'Bundesliga',
     // 2026-27: Schalke, Elversberg and Paderborn up; Heidenheim, St. Pauli and Wolfsburg down.
     clubs: ['Augsburg', 'Bayer Leverkusen', 'Bayern Munich', 'Borussia Dortmund', 'Gladbach', 'Eintracht Frankfurt', 'Freiburg', 'Hamburg', 'Hoffenheim', 'Köln', 'Mainz', 'RB Leipzig', 'Schalke 04', 'Elversberg', 'Paderborn', 'Stuttgart', 'Union Berlin', 'Werder Bremen'],
   },
   {
-    id: 'ligue1', name: 'Ligue 1', cupName: 'Coupe de France', euro: true,
+    id: 'ligue1', name: 'Ligue 1',
     // 2026-27: Troyes and Le Mans up; Metz and Nantes down.
     clubs: ['Angers', 'Auxerre', 'Brest', 'Le Havre', 'Le Mans', 'Lens', 'Lille', 'Lorient', 'Lyon', 'Marseille', 'Monaco', 'Nice', 'Paris FC', 'PSG', 'Rennes', 'Strasbourg', 'Toulouse', 'Troyes'],
   },
   {
-    id: 'eredivisie', name: 'Eredivisie', cupName: 'KNVB Cup', euro: true,
+    id: 'eredivisie', name: 'Eredivisie',
     // 2026-27: ADO Den Haag, Cambuur and Willem II up; Volendam, NAC and Heracles down.
     clubs: ['Ajax', 'AZ Alkmaar', 'ADO Den Haag', 'Cambuur', 'Excelsior', 'Feyenoord', 'Fortuna Sittard', 'Go Ahead Eagles', 'Groningen', 'Heerenveen', 'NEC Nijmegen', 'PEC Zwolle', 'PSV', 'Sparta Rotterdam', 'Telstar', 'Twente', 'Utrecht', 'Willem II'],
   },
   {
-    id: 'saudi', name: 'Saudi Pro League', cupName: "King's Cup", euro: false,
+    id: 'saudi', name: 'Saudi Pro League',
     // 2026-27: Abha, Al-Faisaly and Al-Diriyah up; Al-Najma, Al-Okhdood and Damac down.
     clubs: ['Abha', 'Al-Ahli', 'Al-Diriyah', 'Al-Ettifaq', 'Al-Faisaly', 'Al-Fateh', 'Al-Fayha', 'Al-Hazem', 'Al-Hilal', 'Al-Ittihad', 'Al-Khaleej', 'Al-Kholood', 'Al-Nassr', 'Al-Qadsiah', 'Al-Riyadh', 'Al-Shabab', 'Al-Taawoun', 'NEOM SC'],
   },
   {
-    id: 'mlsEast', name: 'MLS Eastern Conference', cupName: 'U.S. Open Cup', euro: false,
+    id: 'mlsEast', name: 'MLS Eastern Conference',
     clubs: ['Atlanta United', 'Charlotte FC', 'Chicago Fire', 'FC Cincinnati', 'Columbus Crew', 'D.C. United', 'Inter Miami', 'CF Montréal', 'Nashville SC', 'New England Revolution', 'New York City FC', 'New York Red Bulls', 'Orlando City', 'Philadelphia Union', 'Toronto FC'],
   },
   {
-    id: 'mlsWest', name: 'MLS Western Conference', cupName: 'U.S. Open Cup', euro: false,
+    id: 'mlsWest', name: 'MLS Western Conference',
     clubs: ['Austin FC', 'Colorado Rapids', 'FC Dallas', 'Houston Dynamo', 'LA Galaxy', 'LAFC', 'Minnesota United', 'Portland Timbers', 'Real Salt Lake', 'San Diego FC', 'San Jose Earthquakes', 'Seattle Sounders', 'Sporting Kansas City', 'St. Louis City', 'Vancouver Whitecaps'],
   },
   /* Round 140, from the owner's review: "way way way more leagues... with
@@ -2608,15 +2764,15 @@ export const REAL_LEAGUES: LeagueDef[] = [
      sit below that dataset's value floor and are marked in CM_PARTIAL, the
      same honesty rule the Championship has shipped with since Round 72. */
   {
-    id: 'primeira', name: 'Primeira Liga', cupName: 'Taça de Portugal', euro: true,
+    id: 'primeira', name: 'Primeira Liga',
     clubs: ['Porto', 'Benfica', 'Sporting CP', 'Braga', 'Vitória Guimarães', 'Famalicão', 'Rio Ave', 'Casa Pia', 'Estoril', 'Moreirense', 'Arouca', 'Gil Vicente', 'Santa Clara', 'Nacional', 'Estrela Amadora', 'Alverca', 'Marítimo', 'Académico de Viseu'],
   },
   {
-    id: 'scottish', name: 'Scottish Premiership', cupName: 'Scottish Cup', euro: true,
+    id: 'scottish', name: 'Scottish Premiership',
     clubs: ['Celtic', 'Rangers', 'Aberdeen', 'Hearts', 'Hibernian', 'Dundee United', 'Dundee', 'Motherwell', 'St Mirren', 'Kilmarnock', 'Falkirk', 'St Johnstone'],
   },
   {
-    id: 'superlig', name: 'Süper Lig', cupName: 'Turkish Cup', euro: true,
+    id: 'superlig', name: 'Süper Lig',
     clubs: ['Galatasaray', 'Fenerbahçe', 'Beşiktaş', 'Trabzonspor', 'Başakşehir', 'Samsunspor', 'Eyüpspor', 'Göztepe', 'Kasımpaşa', 'Alanyaspor', 'Konyaspor', 'Gaziantep FK', 'Gençlerbirliği', 'Kocaelispor', 'Rizespor', 'Erzurumspor', 'Amedspor', 'Çorum FK'],
   },
   /* Round 142: the second division he asked for by name ("some second
@@ -2624,7 +2780,7 @@ export const REAL_LEAGUES: LeagueDef[] = [
      season preview: Wolfsburg, Heidenheim and St. Pauli down from the
      Bundesliga, Osnabrück and Energie Cottbus up from 3. Liga. */
   {
-    id: 'bundesliga2', name: '2. Bundesliga', cupName: 'DFB-Pokal', euro: false,
+    id: 'bundesliga2', name: '2. Bundesliga',
     clubs: ['Wolfsburg', 'Heidenheim', 'St. Pauli', 'Bochum', 'Hertha BSC', 'Magdeburg', 'Kaiserslautern', 'Holstein Kiel', 'Hannover 96', 'Dynamo Dresden', 'Braunschweig', 'Greuther Fürth', 'Nürnberg', 'Darmstadt', 'Arminia Bielefeld', 'Karlsruhe', 'Osnabrück', 'Energie Cottbus'],
   },
   /* Round 143: Belgium's reformed top flight. 2026-27 is the expansion
@@ -2632,7 +2788,7 @@ export const REAL_LEAGUES: LeagueDef[] = [
      exactly the shape this engine plays. Beveren, Kortrijk and Lommel came
      up, Dender went down via the playoff Lommel won. */
   {
-    id: 'proleague', name: 'Belgian Pro League', cupName: 'Belgian Cup', euro: true,
+    id: 'proleague', name: 'Belgian Pro League',
     clubs: ['Club Brugge', 'Union Saint-Gilloise', 'Anderlecht', 'Genk', 'Gent', 'Antwerp', 'Standard Liège', 'Mechelen', 'Charleroi', 'Westerlo', 'Sint-Truiden', 'OH Leuven', 'Cercle Brugge', 'La Louvière', 'Zulte Waregem', 'Beveren', 'Kortrijk', 'Lommel'],
   },
   /* Round 177: wave three, first pair. Memberships verified 2026-08-19
@@ -2647,11 +2803,11 @@ export const REAL_LEAGUES: LeagueDef[] = [
      members with no dataset rows at all (Lustenau, Iraklis, Kalamata,
      Kifisia, Volos) ship as fully youth-padded squads that say so. */
   {
-    id: 'austria', name: 'Austrian Bundesliga', cupName: 'ÖFB Cup', euro: true,
+    id: 'austria', name: 'Austrian Bundesliga',
     clubs: ['RB Salzburg', 'Sturm Graz', 'Rapid Wien', 'LASK', 'Wolfsberger AC', 'Austria Wien', 'Grazer AK', 'Hartberg', 'Ried', 'Altach', 'WSG Tirol', 'Austria Lustenau'],
   },
   {
-    id: 'greece', name: 'Super League Greece', cupName: 'Greek Cup', euro: true,
+    id: 'greece', name: 'Super League Greece',
     clubs: ['Olympiacos', 'Panathinaikos', 'AEK Athens', 'PAOK', 'Aris', 'Asteras Tripolis', 'Atromitos', 'Iraklis', 'Kalamata', 'Kifisia', 'Levadiakos', 'OFI', 'Panetolikos', 'Volos'],
   },
   /* Round 185: wave three, second pair. Memberships verified 2026-08-19
@@ -2668,11 +2824,11 @@ export const REAL_LEAGUES: LeagueDef[] = [
      members with zero usable dataset rows (AC Horsens, SønderjyskE) ship
      as fully youth-padded squads that say so. */
   {
-    id: 'denmark', name: 'Danish Superliga', cupName: 'Danish Cup', euro: true,
+    id: 'denmark', name: 'Danish Superliga',
     clubs: ['FC Copenhagen', 'FC Midtjylland', 'Brøndby IF', 'AGF', 'FC Nordsjælland', 'Viborg FF', 'Randers FC', 'OB', 'Silkeborg IF', 'Lyngby', 'AC Horsens', 'SønderjyskE'],
   },
   {
-    id: 'switzerland', name: 'Swiss Super League', cupName: 'Swiss Cup', euro: true,
+    id: 'switzerland', name: 'Swiss Super League',
     clubs: ['Basel', 'Young Boys', 'Thun', 'St. Gallen', 'Lugano', 'Servette', 'Luzern', 'Lausanne-Sport', 'FC Zürich', 'Grasshopper', 'Sion', 'Vaduz'],
   },
   /* Round 189: wave three, last verifiable candidate. Membership verified
@@ -2687,10 +2843,10 @@ export const REAL_LEAGUES: LeagueDef[] = [
      and sends one straight down, the same simplification Switzerland
      shipped with. */
   {
-    id: 'croatia', name: 'SuperSport HNL', cupName: 'Croatian Cup', euro: true,
+    id: 'croatia', name: 'SuperSport HNL',
     clubs: ['Dinamo Zagreb', 'Hajduk Split', 'Rijeka', 'Osijek', 'Varaždin', 'Slaven Belupo', 'Istra 1961', 'Lokomotiva Zagreb', 'Gorica', 'Rudeš'],
   },
-];
+].map(leagueFromRow);
 
 /**
  * Round 310: which divisions trade clubs at the summer rollover. Only the
@@ -2701,43 +2857,23 @@ export const REAL_LEAGUES: LeagueDef[] = [
  * straight up, two straight down. This pairing is an explicit table on
  * purpose and must never be inferred from NATIONS: the USA also has two
  * leagueIds and those are conferences, not a pyramid.
+ * Round 832: still explicit, now as a top flight's secondTier in its
+ * LEAGUE_RULES row, and the count is that top flight's drop, so the two can
+ * never disagree. Listed in REAL_LEAGUES order, which the summer walks.
  */
-export const PYRAMIDS: { top: string; second: string; count: number }[] = [
-  { top: 'premier', second: 'championship', count: 3 },
-  { top: 'bundesliga', second: 'bundesliga2', count: 2 },
-];
+export const PYRAMIDS: { top: string; second: string; count: number }[] = REAL_LEAGUES
+  .filter(l => leagueRulesOf(l.id).secondTier)
+  .map(l => ({ top: l.id, second: leagueRulesOf(l.id).secondTier!, count: leagueRulesOf(l.id).drop }));
 
 /**
  * Round 163: the nation behind every league id, for the flag on the league
  * picker. Names match the FlagImg lookup table exactly. Era leagues reuse
  * these ids, and a custom league wears the id of the league it joined.
+ * Round 832: read off each LEAGUE_RULES row's flag.
  */
-export const LEAGUE_NATIONS: Record<string, string> = {
-  premier: 'England',
-  championship: 'England',
-  laliga: 'Spain',
-  seriea: 'Italy',
-  bundesliga: 'Germany',
-  ligue1: 'France',
-  eredivisie: 'Netherlands',
-  bundesliga2: 'Germany',
-  saudi: 'Saudi Arabia',
-  mlsEast: 'USA',
-  mlsWest: 'USA',
-  primeira: 'Portugal',
-  scottish: 'Scotland',
-  superlig: 'Türkiye',
-  proleague: 'Belgium',
-  austria: 'Austria',
-  greece: 'Greece',
-  denmark: 'Denmark',
-  switzerland: 'Switzerland',
-  croatia: 'Croatia',
-  // Round 312: the era league ids, so the world tables picker flags them too.
-  premier2005: 'England', laliga2005: 'Spain',
-  premier2010: 'England', laliga2010: 'Spain',
-  premier2015: 'England', laliga2015: 'Spain', seriea2015: 'Italy',
-};
+export const LEAGUE_NATIONS: Record<string, string> = Object.fromEntries(
+  Object.entries(LEAGUE_RULES).map(([id, rules]) => [id, rules.flag]),
+);
 
 /** Strength priors for league clubs the player pool cannot rate. */
 const STRENGTH_PRIORS: Record<string, number> = {
@@ -2847,14 +2983,14 @@ export function leagueOf(clubName: string): LeagueDef {
 export const ERA_LEAGUES: Record<string, LeagueDef[]> = {
   era2010: [
     {
-      id: 'premier2010', name: 'Premier League', cupName: 'FA Cup', euro: true,
+      id: 'premier2010', name: 'Premier League',
       clubs: ['Arsenal', 'Aston Villa', 'Birmingham City', 'Blackburn Rovers', 'Blackpool', 'Bolton Wanderers', 'Chelsea', 'Everton', 'Fulham', 'Liverpool', 'Manchester City', 'Manchester United', 'Newcastle', 'Stoke City', 'Sunderland', 'Tottenham', 'West Brom', 'West Ham', 'Wigan Athletic', 'Wolves'],
     },
     {
-      id: 'laliga2010', name: 'La Liga', cupName: 'Copa del Rey', euro: true,
+      id: 'laliga2010', name: 'La Liga',
       clubs: ['Almería', 'Athletic Club', 'Atlético Madrid', 'Barcelona', 'Deportivo La Coruña', 'Espanyol', 'Getafe', 'Hércules', 'Levante', 'Málaga', 'Mallorca', 'Osasuna', 'Racing Santander', 'Real Madrid', 'Real Sociedad', 'Sevilla', 'Sporting Gijón', 'Valencia', 'Villarreal', 'Zaragoza'],
     },
-  ],
+  ].map(leagueFromRow),
   /* Round 175: the 2015-16 season, memberships verified against the season
      records (Wikipedia and worldfootball final tables, checked 2026-08-18)
      AND against the market values table itself (every club dense with real
@@ -2863,11 +2999,11 @@ export const ERA_LEAGUES: Record<string, LeagueDef[]> = {
      there, so colors and rivalries carry over. */
   era2015: [
     {
-      id: 'premier2015', name: 'Premier League', cupName: 'FA Cup', euro: true,
+      id: 'premier2015', name: 'Premier League',
       clubs: ['Arsenal', 'Aston Villa', 'Bournemouth', 'Chelsea', 'Crystal Palace', 'Everton', 'Leicester City', 'Liverpool', 'Manchester City', 'Manchester United', 'Newcastle', 'Norwich City', 'Southampton', 'Stoke City', 'Sunderland', 'Swansea City', 'Tottenham', 'Watford', 'West Brom', 'West Ham'],
     },
     {
-      id: 'laliga2015', name: 'La Liga', cupName: 'Copa del Rey', euro: true,
+      id: 'laliga2015', name: 'La Liga',
       clubs: ['Athletic Club', 'Atlético Madrid', 'Barcelona', 'Celta Vigo', 'Deportivo La Coruña', 'Eibar', 'Espanyol', 'Getafe', 'Granada', 'Las Palmas', 'Levante', 'Málaga', 'Rayo Vallecano', 'Real Betis', 'Real Madrid', 'Real Sociedad', 'Sevilla', 'Sporting Gijón', 'Valencia', 'Villarreal'],
     },
     /* Round 191: the era's third league, by the same recipe. Membership
@@ -2877,24 +3013,24 @@ export const ERA_LEAGUES: Record<string, LeagueDef[]> = {
        AND against the market values table itself (Frosinone is the one
        thin squad and the picker says so). */
     {
-      id: 'seriea2015', name: 'Serie A', cupName: 'Coppa Italia', euro: true,
+      id: 'seriea2015', name: 'Serie A',
       clubs: ['Juventus', 'Napoli', 'Roma', 'Inter Milan', 'AC Milan', 'Fiorentina', 'Lazio', 'Torino', 'Genoa', 'Sampdoria', 'Sassuolo', 'Udinese', 'Empoli', 'Chievo Verona', 'Palermo', 'Atalanta', 'Bologna', 'Hellas Verona', 'Carpi', 'Frosinone'],
     },
-  ],
+  ].map(leagueFromRow),
   /* Round 176: the 2005-06 season, memberships verified against the season
      records (Wikipedia and worldfootball plus RSSSF final tables, checked
      2026-08-19) AND against the market values table itself. Cadiz and
      Alaves are the two thin squads and the picker says so. */
   era2005: [
     {
-      id: 'premier2005', name: 'Premier League', cupName: 'FA Cup', euro: true,
+      id: 'premier2005', name: 'Premier League',
       clubs: ['Arsenal', 'Aston Villa', 'Birmingham City', 'Blackburn Rovers', 'Bolton Wanderers', 'Charlton Athletic', 'Chelsea', 'Everton', 'Fulham', 'Liverpool', 'Manchester City', 'Manchester United', 'Middlesbrough', 'Newcastle', 'Portsmouth', 'Sunderland', 'Tottenham', 'West Brom', 'West Ham', 'Wigan Athletic'],
     },
     {
-      id: 'laliga2005', name: 'La Liga', cupName: 'Copa del Rey', euro: true,
+      id: 'laliga2005', name: 'La Liga',
       clubs: ['Alavés', 'Athletic Club', 'Atlético Madrid', 'Barcelona', 'Cádiz', 'Celta Vigo', 'Deportivo La Coruña', 'Espanyol', 'Getafe', 'Málaga', 'Mallorca', 'Osasuna', 'Racing Santander', 'Real Betis', 'Real Madrid', 'Real Sociedad', 'Sevilla', 'Valencia', 'Villarreal', 'Zaragoza'],
     },
-  ],
+  ].map(leagueFromRow),
 };
 
 /** The league a club plays in within a given era. Null when the era is not
@@ -2987,12 +3123,14 @@ export function eraClubDefFor(clubName: string, eraId: string | undefined): Club
   return clubDefFor(clubName);
 }
 
-/** The era's leagues, optionally narrowed to one nation (matched by the
- *  modern league id prefix: 'premier2010' belongs to whoever owns 'premier'). */
+/** The era's leagues, optionally narrowed to one nation. Round 832: by the
+ *  nation on the league's rules row. The old match was the modern league id
+ *  as a prefix ('premier2010' starts with 'premier'), which a future
+ *  'bundesliga2015' would have matched against 'bundesliga2' as well. */
 export function eraLeaguesFor(eraId: string, nation?: NationDef): LeagueDef[] {
   const leagues = ERA_LEAGUES[eraId] ?? [];
   if (!nation) return leagues;
-  return leagues.filter(el => nation.leagueIds.some(id => el.id.startsWith(id)));
+  return leagues.filter(el => leagueRulesOf(el.id).nationId === nation.id);
 }
 
 /** Era clubs for a picker screen, strongest first, with era stature. */
@@ -3023,6 +3161,9 @@ export function boardWantLabel(clubName: string, eraId?: string): string {
 
 // Round 146: the picker needs these era helpers alongside the modern ones.
 export { isHistoricEra } from '@/lib/clubManagerEras';
+/* Round 832: an era's squads arrive with the era. Anything that runs an era
+   (the page, a harness) awaits one of these first; see clubManagerEras.ts. */
+export { ensureEraRosters, ensureAllEraRosters, eraRostersLoaded } from '@/lib/clubManagerEras';
 
 /* ================================================================== */
 /* Round 70: every club is playable. Nations, colors, rivals, defs.   */
@@ -3030,29 +3171,32 @@ export { isHistoricEra } from '@/lib/clubManagerEras';
 
 export interface NationDef { id: string; name: string; flag: string; leagueIds: string[]; }
 
+/* Round 832: a nation row is its id, name and flag; its leagueIds are every
+   modern league whose LEAGUE_RULES row names it, in REAL_LEAGUES order. A new
+   nation is one row here plus its leagues' rules rows. */
 export const NATIONS: NationDef[] = [
-  { id: 'england', name: 'England', flag: '🏴󠁧󠁢󠁥󠁮󠁧󠁿', leagueIds: ['premier', 'championship'] },
-  { id: 'spain', name: 'Spain', flag: '🇪🇸', leagueIds: ['laliga'] },
-  { id: 'italy', name: 'Italy', flag: '🇮🇹', leagueIds: ['seriea'] },
-  { id: 'germany', name: 'Germany', flag: '🇩🇪', leagueIds: ['bundesliga', 'bundesliga2'] },
-  { id: 'france', name: 'France', flag: '🇫🇷', leagueIds: ['ligue1'] },
-  { id: 'netherlands', name: 'Netherlands', flag: '🇳🇱', leagueIds: ['eredivisie'] },
-  { id: 'saudi', name: 'Saudi Arabia', flag: '🇸🇦', leagueIds: ['saudi'] },
-  { id: 'usa', name: 'United States', flag: '🇺🇸', leagueIds: ['mlsEast', 'mlsWest'] },
+  { id: 'england', name: 'England', flag: '🏴󠁧󠁢󠁥󠁮󠁧󠁿' },
+  { id: 'spain', name: 'Spain', flag: '🇪🇸' },
+  { id: 'italy', name: 'Italy', flag: '🇮🇹' },
+  { id: 'germany', name: 'Germany', flag: '🇩🇪' },
+  { id: 'france', name: 'France', flag: '🇫🇷' },
+  { id: 'netherlands', name: 'Netherlands', flag: '🇳🇱' },
+  { id: 'saudi', name: 'Saudi Arabia', flag: '🇸🇦' },
+  { id: 'usa', name: 'United States', flag: '🇺🇸' },
   // Round 140
-  { id: 'portugal', name: 'Portugal', flag: '🇵🇹', leagueIds: ['primeira'] },
-  { id: 'scotland', name: 'Scotland', flag: '🏴󠁧󠁢󠁳󠁣󠁴󠁿', leagueIds: ['scottish'] },
-  { id: 'turkey', name: 'Turkey', flag: '🇹🇷', leagueIds: ['superlig'] },
-  { id: 'belgium', name: 'Belgium', flag: '🇧🇪', leagueIds: ['proleague'] },
+  { id: 'portugal', name: 'Portugal', flag: '🇵🇹' },
+  { id: 'scotland', name: 'Scotland', flag: '🏴󠁧󠁢󠁳󠁣󠁴󠁿' },
+  { id: 'turkey', name: 'Turkey', flag: '🇹🇷' },
+  { id: 'belgium', name: 'Belgium', flag: '🇧🇪' },
   // Round 177
-  { id: 'austria', name: 'Austria', flag: '🇦🇹', leagueIds: ['austria'] },
-  { id: 'greece', name: 'Greece', flag: '🇬🇷', leagueIds: ['greece'] },
+  { id: 'austria', name: 'Austria', flag: '🇦🇹' },
+  { id: 'greece', name: 'Greece', flag: '🇬🇷' },
   // Round 185
-  { id: 'denmark', name: 'Denmark', flag: '🇩🇰', leagueIds: ['denmark'] },
-  { id: 'switzerland', name: 'Switzerland', flag: '🇨🇭', leagueIds: ['switzerland'] },
+  { id: 'denmark', name: 'Denmark', flag: '🇩🇰' },
+  { id: 'switzerland', name: 'Switzerland', flag: '🇨🇭' },
   // Round 189
-  { id: 'croatia', name: 'Croatia', flag: '🇭🇷', leagueIds: ['croatia'] },
-];
+  { id: 'croatia', name: 'Croatia', flag: '🇭🇷' },
+].map(n => ({ ...n, leagueIds: REAL_LEAGUES.filter(l => leagueRulesOf(l.id).nationId === n.id).map(l => l.id) }));
 
 /** Primary kit colors for the club dot in the UI (approximate, decorative). */
 const CLUB_COLORS: Record<string, string> = {
@@ -5089,13 +5233,13 @@ function emptyRow(club: string): TableRow {
  * played.
  */
 export type TiebreakRule = 'h2h' | 'gdGf' | 'gdGfAgg' | 'gdH2h' | 'gdGfOnly';
-const LEAGUE_TIEBREAKS: Record<string, TiebreakRule> = {
-  laliga: 'h2h', laliga2005: 'h2h', laliga2010: 'h2h', laliga2015: 'h2h',
-  seriea: 'h2h', seriea2015: 'h2h',
-  premier: 'gdGf', premier2005: 'gdGf', premier2010: 'gdGf', premier2015: 'gdGf',
-  bundesliga: 'gdGfAgg',
-  ligue1: 'gdH2h',
-};
+/* Round 832 review: read off each league's LEAGUE_RULES row (tiebreak), so a
+   new league's order is one field on its row like every other rule. */
+const LEAGUE_TIEBREAKS: Record<string, TiebreakRule> = Object.fromEntries(
+  Object.entries(LEAGUE_RULES)
+    .filter(([, rules]) => rules.tiebreak !== undefined)
+    .map(([id, rules]) => [id, rules.tiebreak as TiebreakRule]),
+);
 export function leagueTiebreak(leagueId: string | undefined): TiebreakRule {
   return (leagueId && LEAGUE_TIEBREAKS[leagueId]) || 'gdGfOnly';
 }
@@ -9457,7 +9601,10 @@ const UCL_R16_MARK = 0.5;
    leg clear of the next round's first leg at every league size the game has. */
 const UCL_SECOND_LEG_GAP = 0.035;
 
-function buildCalendar(leagueSize: number, r16 = false, twoLegKo = false): CalendarEntry[] {
+/* Round 832: `cup` false is a league with no domestic cup (cupName null on
+   its rules row): its season carries no cup week at all. Every league before
+   this round has one, and for them the calendar is the one it always was. */
+function buildCalendar(leagueSize: number, r16 = false, twoLegKo = false, cup = true): CalendarEntry[] {
   // Odd-sized leagues carry a BYE ghost, so the schedule runs 2*n rounds.
   const effSize = leagueSize % 2 === 0 ? leagueSize : leagueSize + 1;
   const rounds = 2 * (effSize - 1);
@@ -9482,18 +9629,18 @@ function buildCalendar(leagueSize: number, r16 = false, twoLegKo = false): Calen
       cal.push({ type: 'uclGroup', round: md });
       md += 1;
     }
-    if (r === marks.cupR16) cal.push({ type: 'cup', round: 0, cupRound: 'R16' });
-    if (r === marks.cupQF) cal.push({ type: 'cup', round: 0, cupRound: 'QF' });
+    if (cup && r === marks.cupR16) cal.push({ type: 'cup', round: 0, cupRound: 'R16' });
+    if (cup && r === marks.cupQF) cal.push({ type: 'cup', round: 0, cupRound: 'QF' });
     if (r === marks.window) cal.push({ type: 'window', round: 0 });
     // Round 462: only an era whose real format had one plays a round of 16.
     if (r16 && r === marks.uclR16) pushKo(cal, 'R16', 1);
     if (r16 && twoLegKo && r === marks.uclR16b) pushKo(cal, 'R16', 2);
     if (r === marks.uclQF) pushKo(cal, 'QF', 1);
     if (twoLegKo && r === marks.uclQFb) pushKo(cal, 'QF', 2);
-    if (r === marks.cupSF) cal.push({ type: 'cup', round: 0, cupRound: 'SF' });
+    if (cup && r === marks.cupSF) cal.push({ type: 'cup', round: 0, cupRound: 'SF' });
     if (r === marks.uclSF) pushKo(cal, 'SF', 1);
     if (twoLegKo && r === marks.uclSFb) pushKo(cal, 'SF', 2);
-    if (r === marks.cupF) cal.push({ type: 'cup', round: 0, cupRound: 'F' });
+    if (cup && r === marks.cupF) cal.push({ type: 'cup', round: 0, cupRound: 'F' });
     /* The final is one match at a neutral venue in every era on offer, so it
        never gets a second leg however twoLegKo is set. */
     if (r === marks.uclF) cal.push({ type: 'uclKo', round: 0, uclRound: 'F' });
@@ -10865,7 +11012,12 @@ function cupCountryClubs(state: CareerState): ClubDef[] {
   }
   const myLeague = careerLeagueOf(state);
   const nation = NATIONS.find(n => n.leagueIds.includes(myLeague.id));
-  const ids = nation ? nation.leagueIds : [myLeague.id];
+  /* Round 832 review: only the leagues of the nation that play this cup. A
+     league whose rules row has no domestic cup sends nobody into its
+     neighbours' cup, the same way its own clubs never play one. Every nation
+     before this round plays one cup across all its leagues, so for them this
+     is the whole nation as before. */
+  const ids = nation ? nation.leagueIds.filter(id => leagueRulesOf(id).cup === myLeague.cupName) : [myLeague.id];
   return ids.flatMap(id => playableClubs(id)).filter(c => c.name !== dropped);
 }
 
@@ -11082,16 +11234,14 @@ function nearestRival(clubName: string, eraId?: string, clubsOverride?: string[]
  * heavyweights are all told to win it, not to finish second.
  */
 function relegationSpots(leagueId: string): number {
-  // MLS conferences do not relegate; everyone else drops 1-3.
-  if (leagueId.startsWith('mls')) return 0;
-  /* Round 185: Switzerland sent one straight down last season (Winterthur,
-     with 11th place playing a barrage the engine does not model), so 1;
-     Denmark sent two down (Fredericia and Vejle), so 2 below.
-     Round 189: Croatia sent one straight down (Vukovar 1991, 10th of 10,
-     with 9th place playing a barrage the engine does not model), so 1. */
-  if (leagueId === 'scottish' || leagueId === 'proleague' || leagueId === 'austria' || leagueId === 'switzerland' || leagueId === 'croatia') return 1;
-  if (leagueId === 'bundesliga' || leagueId === 'bundesliga2' || leagueId === 'eredivisie' || leagueId === 'primeira' || leagueId === 'greece' || leagueId === 'denmark') return 2;
-  return 3;
+  /* Round 832: the drop count is each league's LEAGUE_RULES row. MLS
+     conferences do not relegate (0). Round 185: Switzerland sent one
+     straight down last season (Winterthur, with 11th place playing a barrage
+     the engine does not model), so 1; Denmark sent two down (Fredericia and
+     Vejle), so 2. Round 189: Croatia sent one straight down (Vukovar 1991,
+     10th of 10, with 9th place playing a barrage the engine does not model),
+     so 1. An id with no row drops 3, as every unlisted id always did. */
+  return leagueRulesOf(leagueId).drop;
 }
 
 /**
@@ -11113,51 +11263,26 @@ function relegationSpots(leagueId: string): number {
  * England or Spain, the Eredivisie champion goes in but third place is
  * qualifying rounds, and that difference is the realism he is asking for.
  */
-interface EuroSlots {
+export interface EuroSlots {
   ucl: number; uel: number; uecl: number;
   /** Round 176: what the second UEFA competition was CALLED in this
    *  league's era. Absent means Europa League (its name since 2009). The
    *  2005-06 era ran the UEFA Cup, and a 2005 board must say so. */
   uelName?: string;
 }
-export const EURO_SLOTS: Record<string, EuroSlots> = {
-  premier:    { ucl: 4, uel: 5, uecl: 6 },
-  laliga:     { ucl: 4, uel: 5, uecl: 6 },
-  seriea:     { ucl: 4, uel: 5, uecl: 6 },
-  bundesliga: { ucl: 4, uel: 5, uecl: 6 },
-  ligue1:     { ucl: 3, uel: 4, uecl: 5 },
-  eredivisie: { ucl: 2, uel: 3, uecl: 4 },
-  // Round 140. Simplified like the rest: qualifying-round routes count as in.
-  primeira:   { ucl: 2, uel: 3, uecl: 4 },
-  scottish:   { ucl: 1, uel: 2, uecl: 3 },
-  superlig:   { ucl: 1, uel: 2, uecl: 3 },
-  proleague:  { ucl: 1, uel: 2, uecl: 3 },
-  // Round 177. Same simplified single-champion shape as the other
-  // one-ticket leagues: qualifying-round routes count as in.
-  austria:    { ucl: 1, uel: 2, uecl: 3 },
-  greece:     { ucl: 1, uel: 2, uecl: 3 },
-  // Round 185. Same one-ticket shape; qualifying routes count as in.
-  denmark:     { ucl: 1, uel: 2, uecl: 3 },
-  switzerland: { ucl: 1, uel: 2, uecl: 3 },
-  // Round 189. Same one-ticket shape; qualifying routes count as in.
-  croatia:     { ucl: 1, uel: 2, uecl: 3 },
-  // Round 146: the 2010-11 era. No Conference League existed until 2021, so
-  // uecl is 0 and the demand ladder skips that band entirely.
-  premier2010: { ucl: 4, uel: 5, uecl: 0 },
-  laliga2010:  { ucl: 4, uel: 6, uecl: 0 },
-  // Round 175: 2015-16 ran the same shape, and the Conference League still
-  // did not exist (it began in 2021), so uecl stays 0 here too.
-  premier2015: { ucl: 4, uel: 5, uecl: 0 },
-  laliga2015:  { ucl: 4, uel: 6, uecl: 0 },
-  // Round 191: 2015-16 Serie A sent two straight to the group stage and
-  // third into qualifying (counted as in, per the simplification above);
-  // no Conference League existed.
-  seriea2015:  { ucl: 3, uel: 5, uecl: 0 },
-  // Round 176: 2005-06. No Conference League, and the second competition
-  // was still called the UEFA Cup (it became the Europa League in 2009).
-  premier2005: { ucl: 4, uel: 5, uecl: 0, uelName: 'UEFA Cup' },
-  laliga2005:  { ucl: 4, uel: 6, uecl: 0, uelName: 'UEFA Cup' },
-};
+/* Round 832: each league's places live on its LEAGUE_RULES row (europe) and
+   this lookup is derived from them, keyed by league id as before. The notes
+   that came with the numbers still hold: Round 140, 177, 185 and 189 leagues
+   take the one-ticket shape with qualifying-round routes counted as in;
+   Round 146 and 175 eras have no Conference League (it began in 2021), so
+   uecl 0 and the ladder skips that band; Round 191's 2015-16 Serie A sent two
+   straight to the group stage and third into qualifying, counted as in; and
+   Round 176's 2005-06 still called the second competition the UEFA Cup. */
+export const EURO_SLOTS: Record<string, EuroSlots> = Object.fromEntries(
+  Object.entries(LEAGUE_RULES)
+    .filter(([, rules]) => rules.europe !== null)
+    .map(([id, rules]) => [id, rules.europe as EuroSlots]),
+);
 
 /* Round 543: how many Champions League places this league actually has.
  *
@@ -11177,7 +11302,7 @@ export const EURO_SLOTS: Record<string, EuroSlots> = {
  * rather than silently sending nobody. */
 export function uclPlacesIn(league: Pick<LeagueDef, 'id' | 'euro'>): number {
   if (!league.euro) return 0;
-  return EURO_SLOTS[league.id]?.ucl ?? 4;
+  return leagueRulesOf(league.id).europe?.ucl ?? 4;
 }
 
 /* Round 145: the title band is measured, not guessed. His review, 2026-08-17:
@@ -11282,37 +11407,31 @@ function titleBandSize(league: LeagueDef, eraId?: string): number {
    prize. The table screen already shows where you are against it. */
 function leagueDemand(rank: number, tier: number, size: number, league: LeagueDef, titleGap: number, eraId?: string, clubName?: string): { target: number; label: string } {
   const half = Math.floor(size / 2);
-  const drop = relegationSpots(league.id);
+  /* Round 832: the ladder, the playoff rung, the drop and the places all come
+     off the league's LEAGUE_RULES row; no league id is named below. */
+  const rules = leagueRulesOf(league.id);
+  const drop = rules.drop;
 
   // The second divisions are their own world: the prize is going UP.
-  if (league.id === 'championship') {
+  // (The Championship, and since Round 142 the 2. Bundesliga, whose third
+  // placed side plays the Bundesliga's sixteenth: each row's playoff rung.)
+  if (rules.ladder === 'promotion') {
     // The single biggest club in the division is not aiming for second.
     if (rank <= 1) return { target: 1, label: `Win the ${league.name}` };
     if (rank <= 2 || (rank <= 4 && tier <= 2)) {
       // A club this big in this division exists to leave it immediately.
       return { target: 2, label: `Win automatic promotion` };
     }
-    if (rank <= 8) return { target: 6, label: `Make the promotion playoffs` };
-    if (rank <= Math.round(size * 0.65)) return { target: half, label: `Finish in the top half` };
-    return { target: size - drop, label: `Stay up. Avoid relegation` };
-  }
-  // Round 142: Germany's second tier sends two straight up and the third
-  // placed side into a playoff against the Bundesliga's sixteenth.
-  if (league.id === 'bundesliga2') {
-    if (rank <= 1) return { target: 1, label: `Win the ${league.name}` };
-    if (rank <= 2 || (rank <= 4 && tier <= 2)) {
-      return { target: 2, label: `Win automatic promotion` };
-    }
-    if (rank <= 6) return { target: 3, label: `Reach the promotion playoff` };
+    if (rules.playoff && rank <= rules.playoff.rankUpTo) return { target: rules.playoff.target, label: rules.playoff.label };
     if (rank <= Math.round(size * 0.65)) return { target: half, label: `Finish in the top half` };
     return { target: size - drop, label: `Stay up. Avoid relegation` };
   }
 
   // MLS: no relegation exists, so no board can honestly threaten it.
-  if (league.id.startsWith('mls')) {
+  if (rules.ladder === 'playoffs') {
     if (rank <= 2) return { target: 1, label: `Win the ${league.name}` };
-    if (rank <= 9) return { target: 8, label: `Make the playoffs` };
-    return { target: size - 4, label: `Finish mid-table or better` };
+    if (rules.playoff && rank <= rules.playoff.rankUpTo) return { target: rules.playoff.target, label: rules.playoff.label };
+    return { target: size - (rules.floorFromBottom ?? 4), label: `Finish mid-table or better` };
   }
 
   // Heavyweights everywhere else: the badge demands the title, full stop.
@@ -11323,7 +11442,7 @@ function leagueDemand(rank: number, tier: number, size: number, league: LeagueDe
     return { target: 1, label: `Win the ${league.name}` };
   }
 
-  const slots = EURO_SLOTS[league.id];
+  const slots = rules.europe;
   if (league.euro && slots) {
     // The windows shift down by the title band's overshoot past the CL
     // places. A one-slot league never hands the CL demand to a non giant,
@@ -11350,9 +11469,10 @@ function leagueDemand(rank: number, tier: number, size: number, league: LeagueDe
     }
   }
 
-  // Saudi Pro League: the continental prize is the AFC Champions League.
-  if (league.id === 'saudi' && rank <= 5) {
-    return { target: 3, label: `Qualify for the AFC Champions League Elite` };
+  // A continental prize outside UEFA (the Saudi Pro League's is the AFC
+  // Champions League Elite), off the row.
+  if (rules.continental && rank <= rules.continental.rankUpTo) {
+    return { target: rules.continental.target, label: `Qualify for the ${rules.continental.label}` };
   }
 
   if (rank <= Math.round(size * 0.65)) {
@@ -11382,15 +11502,19 @@ export function buildBoardObjectives(clubName: string, hasUcl: boolean, leagueSi
   const demand = leagueDemand(club.expectation, club.tier, leagueSize, league, titleGapFor(clubName, league, eraId), eraId, clubName);
   objs.push({ id: 'league', target: demand.target, label: demand.label });
   const cupTarget = club.tier === 1 ? 4 : club.tier === 2 ? 3 : club.tier === 3 ? 2 : 1;
-  objs.push({
-    id: 'cup',
-    target: cupTarget,
-    label:
-      cupTarget === 4 ? `Win the ${league.cupName}` :
-      cupTarget === 3 ? `Reach the ${league.cupName} final` :
-      cupTarget === 2 ? `Reach the ${league.cupName} semi-finals` :
-      `Win your ${league.cupName} Round of 16 tie`,
-  });
+  /* Round 832: a league with no domestic cup gets no cup objective. */
+  const cupName = league.cupName;
+  if (cupName !== null) {
+    objs.push({
+      id: 'cup',
+      target: cupTarget,
+      label:
+        cupTarget === 4 ? `Win the ${cupName}` :
+        cupTarget === 3 ? `Reach the ${cupName} final` :
+        cupTarget === 2 ? `Reach the ${cupName} semi-finals` :
+        `Win your ${cupName} Round of 16 tie`,
+    });
+  }
   if (hasUcl) {
     const t = club.tier === 1 ? 2 : 1;
     objs.push({
@@ -11438,8 +11562,8 @@ export function buildBoardObjectives(clubName: string, hasUcl: boolean, leagueSi
 
   /* Round 140: the biggest clubs sometimes want history, not just the title.
      Deterministic and rare, so it reads as an event when your board asks. */
-  if (club.tier === 1 && demand.target === 1 && h % 5 === 0) {
-    objs.push({ id: 'double', target: 0, label: `Win the ${league.name} and ${league.cupName} double` });
+  if (club.tier === 1 && demand.target === 1 && h % 5 === 0 && cupName !== null) {
+    objs.push({ id: 'double', target: 0, label: `Win the ${league.name} and ${cupName} double` });
   }
 
   // Smaller clubs are told to build, not just to survive.
@@ -15682,14 +15806,16 @@ export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID, cu
     balancedFixtures: true,
     table: leagueClubs.map(emptyRow),
     form: [],
-    calendar: buildCalendar(league.clubs.length, eraUclHasR16(era.id), uclLegsFor(era.id, 'QF') === 2),
+    calendar: buildCalendar(league.clubs.length, eraUclHasR16(era.id), uclLegsFor(era.id, 'QF') === 2, league.cupName !== null),
     clubStrengths: genClubStrengths(custom ? { ...league, clubs: leagueClubs } : league, startYearsOn, era.id),
     transferWindow: 'summer',
     windowWeeksLeft: 4,
     aiHeadlines: [],
     goneNames: [],
     seasonSignings: [],
-    cupRound: 'R16',
+    /* Round 832: a league with no domestic cup starts with it already done:
+       'out' and no exit round, so nothing grades a cup run or waits on one. */
+    cupRound: league.cupName !== null ? 'R16' : 'out',
     cupDraw: {},
     // Round 72: only clubs in UCL-eligible leagues start in Europe.
     // Round 154: a brand new custom club starts outside Europe whatever its
@@ -15768,8 +15894,11 @@ export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID, cu
   state.uclWorld = initUclWorld(state);
   // Round 165: the golden boot race starts at zero with the season.
   state.scorerRace = initScorerRace(state);
-  state.cupBracket = buildCupBracket(state);
-  state.cupDraw.R16 = myCupOpponent(state, 'R16') ?? drawCupOpponent(state);
+  // Round 832: and a league with no domestic cup draws none.
+  if (league.cupName !== null) {
+    state.cupBracket = buildCupBracket(state);
+    state.cupDraw.R16 = myCupOpponent(state, 'R16') ?? drawCupOpponent(state);
+  }
   state.xiIds = autoPickXI(state.squad, FORMATIONS[state.formationIndex]);
   /* Round 505: day one armband and takers, so the tactics screen has them before a ball is kicked. */
   ensureSetPieces(state);
@@ -16510,7 +16639,7 @@ function legacyLogOf(career: CareerState): LegacyLogEntry[] {
     week: e.week,
     league: e.competition
       ? e.competition === 'league'
-      : !(e.comp.startsWith('Champions League') || e.comp.startsWith(cupName)),
+      : !(e.comp.startsWith('Champions League') || (cupName !== null && e.comp.startsWith(cupName))),
     res: e.res,
   }));
 }
@@ -17348,8 +17477,16 @@ function runPromotionRelegation(prev: CareerState): { overrides: Record<string, 
     const topDef = REAL_LEAGUES.find(l => l.id === pyr.top);
     const secondDef = REAL_LEAGUES.find(l => l.id === pyr.second);
     if (!topDef || !secondDef) continue;
-    const topClubs = carried?.[pyr.top] ?? topDef.clubs;
-    const secondClubs = carried?.[pyr.second] ?? secondDef.clubs;
+    /* Round 832 review: the memberships as this summer has already moved
+       them, not as the season started. With the rules table a third tier is
+       one more row (a second tier with a secondTier of its own), and reading
+       the season's start here put the clubs just promoted out of the middle
+       division back into it and lost the ones just relegated into it: a club
+       in two leagues by the first summer. For two pairs that share no league
+       (the only shape before this round) `next` still holds exactly what
+       `carried` did when each pair is reached, so nothing they do changes. */
+    const topClubs = next[pyr.top] ?? topDef.clubs;
+    const secondClubs = next[pyr.second] ?? secondDef.clubs;
     const topTable = myLeagueId === pyr.top
       ? sortedLeagueTable(prev)
       : sortedWorldTable(prev, pyr.top, prev.world?.[pyr.top]?.table ?? []);
@@ -17713,7 +17850,7 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
     balancedFixtures: true,
     table: leagueClubs.map(emptyRow),
     form: [],
-    calendar: buildCalendar(league.clubs.length, eraUclHasR16(eraId), uclLegsFor(eraId, 'QF') === 2),
+    calendar: buildCalendar(league.clubs.length, eraUclHasR16(eraId), uclLegsFor(eraId, 'QF') === 2, league.cupName !== null),
     clubStrengths: genClubStrengths(nextCustom ? { ...league, clubs: leagueClubs } : league, nextYearsOn, eraId),
     transferWindow: 'summer',
     windowWeeksLeft: 4,
@@ -17721,7 +17858,7 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
     // Round 132: anybody the club had to go and get is off the market now.
     goneNames: [...freeAgentsIn],
     seasonSignings: [],
-    cupRound: 'R16',
+    cupRound: league.cupName !== null ? 'R16' : 'out',
     cupDraw: {},
     uclField: nextUclField.length ? nextUclField : undefined,
     uclGroup: initUclGroup(qualifiedUcl, clubName, eraId, nextUclField),
@@ -18032,8 +18169,11 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
      the pot is not settled until the sponsor's cheque above has landed. */
   state.boardObjectives = [...(state.boardObjectives ?? []), ...buildBoardAsks(state)];
   state.boardAsksVersion = BOARD_ASKS_VERSION;
-  state.cupBracket = buildCupBracket(state);
-  state.cupDraw.R16 = myCupOpponent(state, 'R16') ?? drawCupOpponent(state);
+  // Round 832: a league with no domestic cup draws none.
+  if (league.cupName !== null) {
+    state.cupBracket = buildCupBracket(state);
+    state.cupDraw.R16 = myCupOpponent(state, 'R16') ?? drawCupOpponent(state);
+  }
   state.xiIds = autoPickXI(state.squad, FORMATIONS[state.formationIndex] ?? FORMATIONS[0]);
   generateHeadlines(state);
   /* Round 161: the add-ons that came due lead the summer's news. This sits
@@ -18167,6 +18307,22 @@ export function saveCareer(career: CareerState): boolean {
     return true;
   } catch {
     return false;
+  }
+}
+
+/**
+ * Round 832: which era the saved career plays in, read without opening it, so
+ * the page can fetch that era's squads before loadCareer repairs anything
+ * with them. Null when there is no save, or nothing readable in it.
+ */
+export function savedCareerEraId(): string | null {
+  try {
+    const raw = localStorage.getItem(SAVE_KEY);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw) as { eraId?: unknown } | null;
+    return parsed && typeof parsed.eraId === 'string' ? parsed.eraId : null;
+  } catch {
+    return null;
   }
 }
 

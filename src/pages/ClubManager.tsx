@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { lazy, Suspense, useMemo, useState } from 'react';
+import { lazy, Suspense, useCallback, useMemo, useState } from 'react';
 import type { ReactNode } from 'react';
 import { cn } from '@/lib/utils';
 import type { MidSeasonEntry } from '@/lib/clubManagerCalendar';
@@ -22,7 +22,8 @@ import { projectFinances } from '@/lib/clubManagerFinances';
 import { fanMeter } from '@/lib/clubManagerMeters';
 import { STAFF_POST_IDS, STAFF_POST_INFO, staffOf } from '@/lib/clubManagerStaff';
 import type { NationDef, CupRound, CustomClubSpec, ManagerSpec } from '@/lib/clubManager';
-import { eraRealShareLabel, eraHonestyLine } from '@/lib/clubManagerEras';
+import { eraRealShareLabel, eraHonestyLine, eraRostersLoaded, ensureEraRosters } from '@/lib/clubManagerEras';
+import { reloadToRetryChunk } from '@/lib/freshBuild';
 import { FlagImg } from '@/components/FlagImg';
 import { GameNav } from '@/components/game/GameNav';
 import { GameShell } from '@/components/game/GameShell';
@@ -80,6 +81,33 @@ function ScreenLoading({ children, compact = false }: { children: ReactNode; com
   );
 }
 
+/** Round 832: a past era's squads did not arrive (offline, a dropped
+ *  connection, a new deploy). Says so and offers the fetch again. */
+function EraLoadFailed({ label, onRetry, onBack }: { label: string; onRetry: () => void; onBack?: () => void }) {
+  return (
+    <div role="alert" data-testid="cm-era-load-failed" className="max-w-md mx-auto my-12 rounded-xl border border-border bg-card p-5 text-center">
+      <div className="text-sm font-bold text-foreground">The {label} squads did not load.</div>
+      <div className="mt-1 text-xs text-muted-foreground">Check your connection, then try again. Nothing has been lost.</div>
+      <button
+        onClick={onRetry}
+        className="mt-4 px-5 py-2.5 rounded-xl font-bold bg-primary text-primary-foreground hover:opacity-90 transition-opacity"
+      >
+        Try again
+      </button>
+      {/* Round 832 review: the picker's waiting steps hide their own back
+          buttons, so a season that will not load offers the way back here. */}
+      {onBack && (
+        <button
+          onClick={onBack}
+          className="mt-4 ml-2 px-5 py-2.5 rounded-xl font-bold bg-secondary text-foreground hover:bg-secondary/70 transition-colors"
+        >
+          Pick another season
+        </button>
+      )}
+    </div>
+  );
+}
+
 const FORM_TONE: Record<'W' | 'D' | 'L', string> = {
   W: 'bg-emerald-500', D: 'bg-yellow-500', L: 'bg-red-500',
 };
@@ -129,6 +157,25 @@ const ClubManager = () => {
   /* Round 303: a founded club waits here while the dugout step runs, so the
      manager spec and the club spec land in startCareer together. */
   const [pendingCustomSpec, setPendingCustomSpec] = useState<CustomClubSpec | null>(null);
+  /* Round 832: a past era's squads are fetched when its tile is picked, while
+     the nation step (which needs none of them) is on screen. This records a
+     fetch still running or one that failed, so the league and team steps can
+     wait for it or offer a retry. Null when nothing is pending. */
+  const [eraLoad, setEraLoad] = useState<{ id: string; failed: boolean } | null>(null);
+  const loadPickedEra = useCallback((id: string, retry = false) => {
+    if (eraRostersLoaded(id)) { setEraLoad(null); return; }
+    setEraLoad({ id, failed: false });
+    ensureEraRosters(id).then(
+      () => setEraLoad(cur => (cur && cur.id === id ? null : cur)),
+      () => {
+        /* Round 832 review: Try again reloads the page when the import fails
+           again, because Chromium never refetches a failed chunk in the same
+           page (see reloadToRetryChunk). */
+        if (retry && reloadToRetryChunk()) return;
+        setEraLoad(cur => (cur && cur.id === id ? { id, failed: true } : cur));
+      },
+    );
+  }, []);
   const pickRef = useRevealScroll<HTMLDivElement>(`pick:${pickStep}:${pickEra}:${pickNation?.id ?? ''}:${pickLeagueId ?? ''}`, { skipFirst: true });
   const era = eraById(pickEra);
   const eraYearsOn = Math.max(0, era.startYear - CM_BASE_YEAR);
@@ -221,9 +268,9 @@ const ClubManager = () => {
         <GameSeoContent
           pageHasOwnH1
           title="Club Manager: Football Management Sim"
-          description="A full club-management sim in your browser: 330 clubs across 20 real leagues, from the Premier League, the 2. Bundesliga and the Scottish Premiership to the Saudi Pro League, MLS, Croatia, Denmark, Switzerland, Austria and Greece, each with its real squad and market values as of August 2026. Manage today or in a real past season: 2015-16 with Leicester at 5000 to 1, 2010-11 with prime Messi, or 2005-06 with Ronaldinho's Barcelona. Or create your own club with its own crest and stadium. Negotiate transfers, survive bidding wars, hit the board's named objectives, and chase titles season after season."
+          description="A full club-management sim in your browser: 330 clubs across 20 real leagues, from the Premier League, the 2. Bundesliga and the Scottish Premiership to the Saudi Pro League, MLS, Croatia, Denmark, Switzerland, Austria and Greece, with real players at their real market values as of August 2026 and thin squads topped up with made up youth, marked as such. Manage today or in a real past season: 2015-16 with Leicester at 5000 to 1, 2010-11 with prime Messi, or 2005-06 with Ronaldinho's Barcelona. Or create your own club with its own crest and stadium. Negotiate transfers, survive bidding wars, hit the board's named objectives, and chase titles season after season."
           howToPlay={[
-            'Pick your era: 2026-27 with real squads, or the real 2015-16, 2010-11 or 2005-06 Premier League and La Liga.',
+            'Pick your era: 2026-27 with real players, or the real 2015-16, 2010-11 or 2005-06 Premier League and La Liga.',
             'Pick your nation, league and club (330 clubs across 20 real leagues), or create your own club with its own crest, stadium and budget.',
             'Read the board\'s objectives: league finish, cup run, Europe where it applies, beating your rival, and a goals quota.',
             'Go and meet the two asks the board makes in the market: a country quota, an experience count, the thinnest line in your squad, a signing 21 or under at a rating floor, or one fee over a threshold, every number worked out from your club and your era.',
@@ -250,6 +297,12 @@ const ClubManager = () => {
 
   /* ================= BOOT ================= */
   if (g.phase === 'boot') {
+    /* Round 832: an era save waits for its era's squads, and a failed fetch
+       says so with a way to try again, never a blank page and never a fresh
+       start offered over the career. */
+    if (g.bootError) {
+      return shell(<EraLoadFailed label={g.bootError} onRetry={g.retryBoot} />);
+    }
     return shell(<div className="text-center py-24 text-muted-foreground animate-pulse">Loading…</div>);
   }
 
@@ -298,10 +351,15 @@ const ClubManager = () => {
     /* Round 146: a historic era swaps the whole picker world: its nations,
        its leagues, its clubs, its stature. The modern path is untouched. */
     const historicPick = isHistoricEra(pickEra);
+    /* Round 832: every step past the nations reads the era's squads, so a
+       past era holds those steps on a loading line (or a retry) until they
+       are here. Today's world is always ready. */
+    const eraReady = eraRostersLoaded(pickEra);
+    const waitingForEra = historicPick && !eraReady && pickStep !== 'era' && pickStep !== 'nation';
     const league = pickLeagueId
       ? (historicPick ? eraLeaguesFor(pickEra) : REAL_LEAGUES).find(l => l.id === pickLeagueId)
       : null;
-    const teams = league
+    const teams = league && !waitingForEra
       ? (historicPick ? eraPlayableClubs(pickEra, league.id) : playableClubs(league.id))
       : [];
 
@@ -336,7 +394,7 @@ const ClubManager = () => {
               {CM_ERAS.map(e => (
                 <button
                   key={e.id}
-                  onClick={() => { setPickEra(e.id); setPickStep('nation'); }}
+                  onClick={() => { setPickEra(e.id); setPickStep('nation'); loadPickedEra(e.id); }}
                   className="rounded-xl border bg-card border-border hover:border-primary px-4 py-3 text-left transition-all"
                 >
                   <div className="flex items-center gap-2.5">
@@ -434,8 +492,15 @@ const ClubManager = () => {
           </div>
         )}
 
+        {/* Round 832: the past era's squads are still on their way, or did not come. */}
+        {waitingForEra && (
+          eraLoad?.id === pickEra && eraLoad.failed
+            ? <EraLoadFailed label={era.label} onRetry={() => loadPickedEra(pickEra, true)} onBack={() => { setPickStep('era'); setPickNation(null); setPickLeagueId(null); }} />
+            : <div className="text-center py-16 text-muted-foreground animate-pulse">Loading the {era.label} squads…</div>
+        )}
+
         {/* -------- Step 2: league -------- */}
-        {pickStep === 'league' && pickNation && (
+        {pickStep === 'league' && pickNation && !waitingForEra && (
           <div className="max-w-2xl mx-auto space-y-2.5">
             <button
               onClick={() => { setPickStep('nation'); setPickNation(null); }}
@@ -461,7 +526,7 @@ const ClubManager = () => {
                     <div className="min-w-0">
                       <div className="text-base font-bold text-foreground">{lg.name}</div>
                       <div className="text-[10px] text-muted-foreground">
-                        {lg.clubs.length} clubs · domestic cup: {lg.cupName}{lg.euro ? ' · Champions League spots' : ''}
+                        {lg.clubs.length} clubs · {lg.cupName !== null ? `domestic cup: ${lg.cupName}` : 'no domestic cup'}{lg.euro ? ' · Champions League spots' : ''}
                       </div>
                     </div>
                     <ChevronRight className="w-4 h-4 text-muted-foreground ml-auto shrink-0" />
@@ -476,7 +541,7 @@ const ClubManager = () => {
         )}
 
         {/* -------- Step 3: team -------- */}
-        {pickStep === 'team' && pickNation && league && (
+        {pickStep === 'team' && pickNation && league && !waitingForEra && (
           <div className={cn(g.pendingClub && 'pb-24')}>
             <button
               onClick={() => { g.chooseClub(''); setPickStep('league'); }}
@@ -581,7 +646,7 @@ const ClubManager = () => {
         )}
 
         {/* -------- Step 4 (optional): found your own club (Round 154) -------- */}
-        {pickStep === 'custom' && pickNation && league && (
+        {pickStep === 'custom' && pickNation && league && !waitingForEra && (
           <ScreenLoading><CustomClubForm
             leagueName={league.name}
             leagueId={league.id}
@@ -592,7 +657,7 @@ const ClubManager = () => {
         )}
 
         {/* -------- Step 5 (Round 303): who is in the dugout -------- */}
-        {pickStep === 'manager' && (
+        {pickStep === 'manager' && !waitingForEra && (
           <ScreenLoading><ManagerForm
             clubName={pendingCustomSpec?.name || g.pendingClub || 'Back'}
             defaultNation={pickNation?.name ?? 'England'}
@@ -734,7 +799,10 @@ const ClubManager = () => {
   const rivalName = c.boardObjectives?.find(o => o.id === 'rival')?.rivalName ?? null;
   const rivalIdx = rivalName ? g.tableRows.findIndex(r => r.club === rivalName) : -1;
   const bidsCount = (c.incomingBids ?? []).length;
-  const cupAlive = c.cupRound !== 'out' && c.cupRound !== 'won';
+  /* Round 832: null in a league with no domestic cup; every cup line below
+     then says there is none rather than "Knocked out". */
+  const cupName = careerLeagueOf(c).cupName;
+  const cupAlive = cupName !== null && c.cupRound !== 'out' && c.cupRound !== 'won';
   const uclAlive = (c.uclGroup !== null && c.uclKoRound === null) || (!!c.uclKoRound && c.uclKoRound !== 'out' && c.uclKoRound !== 'won');
 
   /* ---- Round 74: the rival viewer takes over the whole screen ---- */
@@ -974,8 +1042,8 @@ const ClubManager = () => {
               />
               <HubTile
                 icon="🏅" title="Cups" accent={cupAlive && !!c.cupDraw[c.cupRound as CupRound]}
-                value={cupAlive ? 'Still alive' : c.cupRound === 'won' ? 'CUP WINNERS' : 'Knocked out'}
-                sub={uclAlive ? 'UCL alive too' : careerLeagueOf(c).cupName}
+                value={cupName === null ? 'No domestic cup' : cupAlive ? 'Still alive' : c.cupRound === 'won' ? 'CUP WINNERS' : 'Knocked out'}
+                sub={uclAlive ? (cupName === null ? 'UCL alive' : 'UCL alive too') : (cupName ?? careerLeagueOf(c).name)}
                 onClick={() => setHubPanel('cups')}
               />
               <HubTile
@@ -1204,8 +1272,15 @@ const ClubManager = () => {
                       panel put the UCL groups straight under the domestic cup
                       line, which read as the cup showing the wrong table, and
                       the domestic bracket card had never been mounted at all. */}
+                  {/* Round 832: a league with no domestic cup says so, once, and
+                      shows no bracket. */}
+                  {cupName === null ? (
+                    <div className="bg-card border border-border rounded-xl p-3 text-xs text-muted-foreground">
+                      🏅 There is no domestic cup in the {careerLeagueOf(c).name}, so the season is the league{careerLeagueOf(c).euro ? ' and Europe' : ''}.
+                    </div>
+                  ) : (<>
                   <div className="text-[10px] text-muted-foreground uppercase tracking-wider px-1">
-                    🏅 {careerLeagueOf(c).cupName}
+                    🏅 {cupName}
                   </div>
                   <div className="bg-card border border-border rounded-xl p-3 text-xs text-foreground">
                     {cupAlive ? (
@@ -1218,6 +1293,7 @@ const ClubManager = () => {
                   </div>
                   {/* Round 102 built this bracket; Round 312 finally mounts it. */}
                   <ScreenLoading><CupBracketCard career={c} onClubClick={setClubView} /></ScreenLoading>
+                  </>)}
                   <div className="text-[10px] text-muted-foreground uppercase tracking-wider px-1 pt-1">
                     ⭐ Champions League
                   </div>
