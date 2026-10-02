@@ -1,5 +1,146 @@
 # Project state
 
+## Codex863-870 handoff, source throughda976382 pushed, 2026-10-02
+
+Seven product scopes and one reload-driver repair merged with Claude Release R.
+App type/build0,12 source guards and15 built fences green.112 new runtime
+cases and867's7 reload checks pass. Final entryindex-OjecPy7M.js, SHA256
+b9fc28441893467b73f8b63257f79f6db5dd772c11b4c3f4cbceae19bd543bcd.
+868/869 actual UI8/8,362 checks: six pointer/keyboard and two real Chromium
+touch contexts, save/reload and read-only calendar return.562 external
+attempts blocked,0 external responses/page errors. Original six-case receipt
+held, touch report separate. All owned contexts/browsers/local server closed.
+12 relevant root/gate/HEAD sources match normalized EOL; no runtime changed
+after final gate. Detailed evidence and failed-driver/type logs retained.
+
+New source is on main, publication not verified by this lane.864 is reported
+in Claude's live Release R; remaining new scopes require release verification.
+Database incident remains open by last notice, no live requests resumed.
+Data-backed native863/865/866/870, whole live suite and physical-device/Safari
+remain pending. Next free871, no claim made. Paused drafts/stashes untouched.
+
+
+## Codex863-870 final offline gate and management native verified, 2026-10-02
+
+Final accepted-files type/build0,12 selected source guards and all15 built
+fences pass. Entryindex-OjecPy7M.js, SHA256
+b9fc28441893467b73f8b63257f79f6db5dd772c11b4c3f4cbceae19bd543bcd.
+112 new runtime cases,867 reload7/7 and existing accounting baselines pass.
+Four test inference errors corrected by fixture CareerState annotation;
+granted-clause quotes bounded inside existing scroll pattern. Actual management
+UI6/6,254 checks at320/390/1440: real renewal/save/reload and read-only calendar
+return. Pointer/keyboard at phone widths, actual touch follows separately.
+All outside HTTP/WebSocket transport blocked,0 external responses/page errors.
+Data-backed native863/865/866/870 and live release verification remain pending
+the database incident. Paused drafts/stashes preserved. Next free871.
+
+
+## Codex870 earned Bingo feedback source verified, 2026-10-02
+
+Extra-line banner uses actual line delta's points, with polite status and finite
+motion-safe animation.7 actual-page cases and four asserted copied controls
+pass; before5pass/2fail. Independent scoring2/2 held,14 explicit unselected.
+Real page/line accounting/share/booking with fictional boundary pool/criteria,
+no real-data/native proof. Runtime scoring/completion/placement unchanged.
+Peer review clear. Clean combined type/build running with final868/869 too;
+then15 offline built fences and native management checks with all external
+requests blocked. No production probes/publication. Next free871.
+
+
+## Codex868 legacy-cap forecast corrected, 2026-10-02
+
+Peer review found a real old-save mismatch: absent wageCap falls back from the
+new bill after signing. Forecast now uses actual next-state cap consistently.
+Expanded15 focused cases pass; original faulty initializer rejects3 exact
+legacy quote/committing outcomes with12 held. Budget/fee11/4, cap2/13 controls
+accepted, all15 run. No engine/cap rules changed. Peer review closed; final
+combined type/build running on accepted files only, native remains pending.
+Database incident still holds every outgoing production query. Next free871.
+
+
+## Codex869 calendar shortcut source verified, 2026-10-02
+
+Current date changes only the visible simulated month and inspected day,
+with44px native button.8 focused cases pass from6fail/2held before. Five
+asserted controls reject one intended outcome each, two original baselines
+hold, five explicit selected skips per control. Normal has no skips. Anchor
+fence554 scripts green. All engine/date/save/training/simulation behavior
+unchanged. Native actual Enter/mobile geometry and combined gates follow870.
+Production incident stays open. Next free871.
+
+
+## Codex868 contract previews source verified, 2026-10-02
+
+Actual renewal functions drive visible term/fee/clause/budget/wage forecasts,
+including Remove full-renewal cost and signing shortfall. Original one-tap
+callbacks and soft cap remain.13 focused cases and three controls pass with
+actual engine/save reload baselines. Before10fail/3pass; copied quote controls
+reject9 targets/4held, cap rejects2/11held. No engine/data/hook changes. Final
+combined type/build/native gates await869/870. Production incident remains
+open and all transport stopped. Native preparation must block every external
+URL. Next free871.
+
+
+## Codex867 verified;870 bonus feedback claimed, 2026-10-02
+
+Guess the Nation reload driver now finds actual ResultScreen, with one exact
+selector change and all assertions preserved. Offline7/7 pass; clear/silent
+controls reject the intended restore/booking regressions. Fresh pull before
+870 is up to date. Player Bingo bonus feedback will show actual earned line
+delta instead of a constant100.868 contract/869 calendar work continues.
+Merged863-866 type/build and15 offline built fences pass. Seven source scopes
+pass across runs; one concurrent Silverware page case returned STACK_TRACE_ERROR,
+then unchanged one-worker replay10/10 and all three controls passed. Cause is
+not proven; retain failed log. Database incident still holds live testing.
+Next free871.
+
+
+## Codex867-869 claimed after Release R merge, 2026-10-02
+
+Merged Claude's source atd2466763 with863/865/866. Both documentation lanes
+retained. Release R is reported live by Claude (b710846e), but the database
+incident remains open, so no production probes or live publication from this
+lane. Clean merged type/build running. Claim867 Guess the Nation reload-driver
+result targeting,868 Club Manager contract cost/budget/term previews,869
+calendar return to current date. Scopes are separate, no engine/data changes.
+Paused football guide is held in a scoped stash, other drafts untouched.
+Next free870. The later gate receipt will supersede pre-merge build evidence.
+
+
+## Codex866 source accepted, Release R integration pending, 2026-10-02
+
+Silverware reveals wait for deliberate Next/See results and show earned points,
+with keyboard focus and44px action.10 focused cases/three controls, existing
+recording67 checks and peer review pass. Final daily still saves/books at the
+deciding answer. Pre-Release-R clean type/build,15 offline built fences and7
+selected source harnesses pass. Source863d7c3c755/8650a1942fe are local only:
+remote advances rejected their pushes; earlier pushed wording was premature.
+864f0c70331 and incident merge160de45d reached main. Root integrates Release R
+next, preserving paused football guide separately. No live requests or
+publication until the database incident is cleared. Next unclaimed867.
+
+
+## Codex863 source accepted, native pending, 2026-10-02
+
+Ball IQ now explains actual answer outcomes and submitted/correct progress,
+focuses enabled Next after the player's answer and adds finite feedback motion
+with static reduced mode. Questions/hook/IQ/save/share/booking remain unchanged.
+11 focused cases,13 executable copied controls and peer review pass. Clean
+app type/build,15 offline built fences and7 source harnesses green. Real-data
+native acceptance is pending the database incident,0 native passes credited.
+864/865 and incident merge pushed;866 source follows. No production reads,
+publication or approval claim. Exact audit receipt recorded in docs/audits.
+
+## Codex865 source accepted, native pending, 2026-10-02
+
+Tennis/NASCAR requests now belong to their current run; exited/unmounted replies
+stay quiet and cannot alter score or unlock a newer check.50 focused cases and
+two asserted controls pass, peer review clear, no backend/data changes.
+Clean app type/build,15 offline built fences and7 selected source harnesses
+green. Native unavailable because production GETs stall,0 native passes
+credited. All production probes/contexts stopped, publication held.864 and
+incident merge are pushed;863/866 source commits follow. Exact receipt in
+docs/audits/PLAYER-DECISION-REPAIR-RECEIPT-2026-10-02.md. Paused drafts preserved.
 ## INCIDENT 2026-10-02 00:10 ET: the production database stopped answering (open when this was written)
 
 From about 04:10 UTC the Supabase project answered REST calls with 5xx or not at all (20 to 25 second aborts),

@@ -40,10 +40,10 @@ export function FirstLineBanner({ onBank, onContinue }: FirstLineBannerProps) {
 }
 
 /** Transient toast for every line completed AFTER the first (auto-cleared by the page). */
-export function LineFlash({ lines }: { lines: number }) {
+export function LineFlash({ lines, points }: { lines: number; points: number }) {
   return (
-    <div className="mb-3 px-4 py-2 rounded-xl bg-primary/10 border border-primary text-center text-sm font-bold text-primary animate-in fade-in slide-in-from-top-2 duration-300">
-      🔥 Line {lines} complete! +100 bonus
+    <div role="status" className="mb-3 px-4 py-2 rounded-xl bg-primary/10 border border-primary text-center text-sm font-bold text-primary motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-top-2 motion-safe:duration-300">
+      🔥 Line {lines} complete! +{points} bonus
     </div>
   );
 }

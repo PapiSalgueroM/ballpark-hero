@@ -53,7 +53,7 @@ const PlayerBingo = () => {
   const [best, setBest] = useState(() => loadBest());
   const [extended, setExtended] = useState(false); // accepted "keep playing" after the first bingo
   const [choice, setChoice] = useState(false); // first-line bank/continue prompt is open
-  const [lineFlash, setLineFlash] = useState<number | null>(null); // transient extra-line banner
+  const [lineFlash, setLineFlash] = useState<{ lines: number; points: number } | null>(null); // transient extra-line banner
   const [endReason, setEndReason] = useState<EndReason>(null);
 
   const criteria = useMemo(() => (data ? buildCriteria(data) : []), [data]);
@@ -174,7 +174,7 @@ const PlayerBingo = () => {
         setChoice(true);
         return;
       }
-      if (linesNow > linesCompleted) setLineFlash(linesNow);
+      if (linesNow > linesCompleted) setLineFlash({ lines: linesNow, points: (linesNow - linesCompleted) * 100 });
       advanceOrEnd(linesNow);
     } else {
       setShakeId(cell.id);
@@ -338,7 +338,7 @@ const PlayerBingo = () => {
             </div>
 
             {phase === 'playing' && choice && <FirstLineBanner onBank={bankWin} onContinue={continueRun} />}
-            {phase === 'playing' && !choice && lineFlash !== null && <LineFlash lines={lineFlash} />}
+            {phase === 'playing' && !choice && lineFlash !== null && <LineFlash lines={lineFlash.lines} points={lineFlash.points} />}
 
             {phase === 'playing' && !choice && current && (
               <div className="bg-card border border-border rounded-2xl p-5 text-center mb-4">

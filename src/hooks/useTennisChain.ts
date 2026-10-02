@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useRef, useEffect } from 'react';
 import { TennisChainState, TennisChainMode, getTennisChainMultiplier, getTennisEarnedBadge, TENNIS_CHAIN_STARTERS } from '@/types/tennisChain';
 import { supabase } from '@/integrations/supabase/client';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
@@ -48,8 +48,19 @@ function getRandomStarter(): string {
 export function useTennisChain() {
   const [gameState, setGameState] = useState<TennisChainState | null>(null);
   const [validating, setValidating] = useState(false);
+  const requestIdRef = useRef(0);
+  const validatingRef = useRef(false);
+
+  const invalidateRequest = useCallback(() => {
+    requestIdRef.current += 1;
+    validatingRef.current = false;
+    setValidating(false);
+  }, []);
+
+  useEffect(() => () => { requestIdRef.current += 1; }, []);
 
   const startGame = useCallback((mode: TennisChainMode) => {
+    invalidateRequest();
     const starter = mode === 'daily' ? getDailyStarter() : getRandomStarter();
     setGameState({
       currentPlayer: starter,
@@ -60,10 +71,10 @@ export function useTennisChain() {
       usedPlayers: new Set([starter.toLowerCase()]),
       mode,
     });
-  }, []);
+  }, [invalidateRequest]);
 
   const makeGuess = useCallback(async (guessedName: string) => {
-    if (!gameState || gameState.gameStatus !== 'playing' || validating) return;
+    if (!gameState || gameState.gameStatus !== 'playing' || validatingRef.current) return;
 
     const normalizedGuess = guessedName.toLowerCase();
 
@@ -78,6 +89,8 @@ export function useTennisChain() {
       return;
     }
 
+    const requestId = ++requestIdRef.current;
+    validatingRef.current = true;
     setValidating(true);
 
     try {
@@ -88,6 +101,7 @@ export function useTennisChain() {
         },
       });
 
+      if (requestId !== requestIdRef.current) return;
       if (error) throw error;
 
       if (data.valid) {
@@ -136,17 +150,22 @@ export function useTennisChain() {
         }) : null);
       }
     } catch {
+      if (requestId !== requestIdRef.current) return;
       // FAIL CLOSED: a network failure is not a wrong answer, don't accept
       // an unverified guess (that farms score) and don't end the game.
       // Leave the chain untouched and ask the player to retry.
       toast.error("Couldn't verify that guess right now, please try again.");
     } finally {
-      setValidating(false);
+      if (requestId === requestIdRef.current) {
+        validatingRef.current = false;
+        setValidating(false);
+      }
     }
-  }, [gameState, validating]);
+  }, [gameState]);
 
   const giveUp = useCallback(() => {
     if (!gameState) return;
+    invalidateRequest();
     const chainLength = gameState.chain.length - 1;
     setGameState(prev => prev ? ({
       ...prev,
@@ -154,11 +173,12 @@ export function useTennisChain() {
       gameOverReason: 'You gave up!',
       earnedBadge: getTennisEarnedBadge(chainLength),
     }) : null);
-  }, [gameState]);
+  }, [gameState, invalidateRequest]);
 
   const resetGame = useCallback(() => {
+    invalidateRequest();
     setGameState(null);
-  }, []);
+  }, [invalidateRequest]);
 
   useGameCompletion('tennis-chain', gameState?.gameStatus === 'ended', gameState?.score ?? 0);
 

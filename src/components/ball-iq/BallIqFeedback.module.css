@@ -1,0 +1,14 @@
+.board { overflow-anchor: none; }
+.fullText { overflow-wrap: anywhere; }
+.feedback { min-height: 88px; margin-top: 16px; border-radius: 12px; padding: 12px; border: 1px solid hsl(var(--border)); }
+.correct { --iq-tone: var(--primary); border-color: hsl(var(--primary) / .6); background: hsl(var(--primary) / .08); }
+.wrong { --iq-tone: var(--destructive); border-color: hsl(var(--destructive) / .55); background: hsl(var(--destructive) / .06); }
+.reveal { animation: answerReveal 420ms ease-out 1; }
+@keyframes answerReveal {
+  from { opacity: .65; box-shadow: 0 0 0 3px hsl(var(--iq-tone) / .35); }
+  to { opacity: 1; box-shadow: 0 0 0 3px transparent; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .reveal { animation: none; }
+  .board .option { transition: none; }
+}

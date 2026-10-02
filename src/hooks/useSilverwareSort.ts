@@ -73,12 +73,11 @@ export function useSilverwareSort() {
   const [results, setResults] = useState<BoardResult[]>(dailyResults);
   const [unlimitedRun, setUnlimitedRun] = useState(0);
   const unlimitedNonce = useRef(String(Date.now() % 1000000007));
-  /* The pending reveal, so a mode change can cancel it: left running, it
-     wrote the daily's results onto the Unlimited board. */
-  const revealTimer = useRef<number | null>(null);
+  /* Keep the decided board visible until the player advances. Mode changes
+     clear this pending result so it cannot land on a different run. */
+  const pendingResults = useRef<BoardResult[] | null>(null);
   const clearReveal = useCallback(() => {
-    if (revealTimer.current !== null) window.clearTimeout(revealTimer.current);
-    revealTimer.current = null;
+    pendingResults.current = null;
   }, []);
   useEffect(() => clearReveal, [clearReveal]);
 
@@ -207,13 +206,16 @@ export function useSilverwareSort() {
       } catch { /* storage full or blocked: play on */ }
       setDailyResults(next);
     }
-    clearReveal();
-    revealTimer.current = window.setTimeout(() => {
-      revealTimer.current = null;
-      setResults(next);
-      resetBoardState();
-    }, 3400);
-  }, [board, canSubmit, slots, attempt, results, mode, today, resetBoardState, clearReveal]);
+    pendingResults.current = next;
+  }, [board, canSubmit, slots, attempt, results, mode, today]);
+
+  const advanceReveal = useCallback(() => {
+    const next = pendingResults.current;
+    if (!next) return;
+    pendingResults.current = null;
+    setResults(next);
+    resetBoardState();
+  }, [resetBoardState]);
 
   const switchMode = useCallback((m: SortMode) => {
     if (m === mode) return;
@@ -238,7 +240,7 @@ export function useSilverwareSort() {
 
   return {
     loadState, mode, switchMode, boards, boardIdx, board, slots, locked,
-    attempt, revealed, place, unplace, canSubmit, submit, results, done,
+    attempt, revealed, place, unplace, canSubmit, submit, advanceReveal, results, done,
     score, maxScore, playAgain, today,
   };
 }
