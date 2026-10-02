@@ -700,3 +700,97 @@ describe('7b) a finish no longer than this tab still wins', () => {
     });
   }
 });
+
+/* ------------------------------------------------------------------ 8 */
+
+/* Round 848 review: what the storage event may and may not do. Another tab
+   writes all sorts under all sorts of keys; an open tab moves only forward,
+   only to a save for its own day and puzzle, never on garbage, and never
+   throws, including in a browser whose storage throws on every call. */
+describe('8) the storage event never moves a tab backwards or breaks it', () => {
+  const two = () => {
+    const a = probe();
+    act(() => a.result.current.addGuess({ n: 1 }));
+    act(() => a.result.current.addGuess({ n: 2 }));
+    return a;
+  };
+  const still = (a: ReturnType<typeof probe>) => {
+    expect(a.result.current.guesses).toEqual([{ n: 1 }, { n: 2 }]);
+    expect(a.result.current.gameStatus).toBe('playing');
+    act(() => a.result.current.addGuess({ n: 3 }));
+    expect(parsed(PROBE_KEY)).toEqual(good([{ n: 1 }, { n: 2 }, { n: 3 }]));
+  };
+
+  it('a longer save for another puzzle under the same key is not taken', () => {
+    const a = two();
+    localStorage.setItem(PROBE_KEY, JSON.stringify({ ...good([{ n: 1 }, { n: 2 }, { n: 3 }, { n: 4 }]), puzzleIndex: 5 }));
+    storage(PROBE_KEY);
+    still(a);
+  });
+
+  it('a longer save dated another day under the same key is not taken', () => {
+    const a = two();
+    localStorage.setItem(PROBE_KEY, JSON.stringify({ ...good([{ n: 1 }, { n: 2 }, { n: 3 }, { n: 4 }]), date: '2026-10-02' }));
+    storage(PROBE_KEY);
+    still(a);
+  });
+
+  it('garbage, a damaged log and a cleared key are not taken, and nothing throws', () => {
+    const a = two();
+    for (const bytes of ['{"v":1,', 'null', '"text"', JSON.stringify(good([{ n: 1 }, { n: 2 }, null as never, { n: 4 }]))]) {
+      localStorage.setItem(PROBE_KEY, bytes);
+      storage(PROBE_KEY);
+    }
+    localStorage.removeItem(PROBE_KEY);
+    storage(PROBE_KEY);
+    still(a);
+  });
+
+  it('a write to another game, or to yesterday, moves nothing', () => {
+    const a = two();
+    localStorage.setItem('afl-hl-daily-' + TODAY, JSON.stringify(good([{ n: 1 }, { n: 2 }, { n: 3 }])));
+    storage('afl-hl-daily-' + TODAY);
+    localStorage.setItem('r848-probe-daily-2026-09-30', JSON.stringify({ ...good([{ n: 1 }, { n: 2 }, { n: 3 }]), date: '2026-09-30' }));
+    storage('r848-probe-daily-2026-09-30');
+    still(a);
+  });
+
+  it('a finished tab is never sent back to playing, even by a longer save', () => {
+    const a = probe();
+    act(() => a.result.current.addGuess({ n: 1 }));
+    act(() => a.result.current.addGuess({ n: 99 }));
+    expect(a.result.current.gameStatus).toBe('won');
+    localStorage.setItem(PROBE_KEY, JSON.stringify(good([{ n: 1 }, { n: 2 }, { n: 3 }])));
+    storage(PROBE_KEY);
+    expect(a.result.current.gameStatus).toBe('won');
+    expect(a.result.current.guesses).toEqual([{ n: 1 }, { n: 99 }]);
+  });
+
+  it('midnight: yesterday\'s open tab ignores today\'s writes and keeps its own day', () => {
+    const yesterday = probe();
+    act(() => yesterday.result.current.addGuess({ n: 1 }));
+    vi.setSystemTime(new Date('2026-10-02T16:00:00Z'));
+    const today = probe();
+    act(() => today.result.current.addGuess({ n: 7 }));
+    act(() => today.result.current.addGuess({ n: 8 }));
+    storage('r848-probe-daily-2026-10-02');
+    storage(PROBE_KEY);
+    expect(yesterday.result.current.guesses).toEqual([{ n: 1 }]);
+    act(() => yesterday.result.current.addGuess({ n: 2 }));
+    expect(parsed(PROBE_KEY)).toEqual(good([{ n: 1 }, { n: 2 }]));
+    expect(parsed('r848-probe-daily-2026-10-02')).toEqual({ ...good([{ n: 7 }, { n: 8 }]), date: '2026-10-02' });
+  });
+
+  it('a browser whose storage throws on every call: the event and the answers never throw', () => {
+    const a = probe();
+    const get = vi.spyOn(Storage.prototype, 'getItem').mockImplementation(() => { throw new Error('denied'); });
+    const set = vi.spyOn(Storage.prototype, 'setItem').mockImplementation(() => { throw new Error('denied'); });
+    expect(() => storage(PROBE_KEY)).not.toThrow();
+    act(() => a.result.current.addGuess({ n: 1 }));
+    act(() => a.result.current.addGuess({ n: 2 }));
+    expect(a.result.current.guesses).toEqual([{ n: 1 }, { n: 2 }]);
+    expect(a.result.current.takeNewerSave()).toBe(false);
+    get.mockRestore();
+    set.mockRestore();
+  });
+});

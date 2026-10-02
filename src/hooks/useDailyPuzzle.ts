@@ -485,7 +485,9 @@ export function useDailyPuzzle<T, G>(
      Rebuilt every render and called through a ref, so addGuess keeps the
      dependency list simDailyRecord anchors. Returns true when it took over. */
   const adoptNewerSave = (): boolean => {
-    if (puzzle == null || loadedForKey.current !== loadKey) return false;
+    /* Round 848 review: a finished tab takes nothing over. Its day is decided,
+       and no longer save can undecide it. */
+    if (puzzle == null || loadedForKey.current !== loadKey || statusRef.current !== 'playing') return false;
     const stored = readPersistedState(storageKey, todayStr, puzzleIndex, puzzleId, deserializeGuesses, isValidGuesses);
     if (!stored) return false;
     const ahead = stored.guesses.length > guessesRef.current.length

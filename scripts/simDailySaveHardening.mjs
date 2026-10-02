@@ -61,6 +61,8 @@
  *   finished (review) the guard ignores a stored finish no longer than this
  *           tab's log: exactly the two section 7b rows (a Footle or UFC give
  *           up in one tab, which the other tab could then win and record).
+ *   decided (review) a finished tab may take a longer save over: exactly the
+ *           section 8 row where a won tab must stay won.
  *   empty   (review) the shared check refuses an empty log: the parity rows
  *           for /footle and /ufc (a give up before any guess) must go red.
  *   strict  (review) Footle's check made one field stricter than Footle
@@ -92,7 +94,7 @@ const VITEST = path.join(path.dirname(createRequire(path.join(ROOT, 'package.jso
 const PRE = '617b8354';
 const PART = process.env.R848_PART || 'all';
 const CONTROL = process.env.R848_CONTROL || '';
-const CONTROLS = ['stale', 'guard', 'turn', 'verdict', 'event', 'mark', 'finished', 'strict', 'single', 'empty', 'shape', 'skip'];
+const CONTROLS = ['stale', 'guard', 'turn', 'verdict', 'event', 'mark', 'finished', 'decided', 'strict', 'single', 'empty', 'shape', 'skip'];
 assert.ok(['all', 'saves', 'shapes', 'skip', 'parity'].includes(PART), `unknown R848_PART ${PART}`);
 assert.ok(!CONTROL || CONTROLS.includes(CONTROL), `unknown R848_CONTROL ${CONTROL}`);
 
@@ -208,7 +210,7 @@ try {
   const hookFile = 'src/hooks/useDailyPuzzle.ts';
 
   /* ---------------------------------------------------------- controls */
-  if (['stale', 'guard', 'turn', 'verdict', 'event', 'mark', 'finished'].includes(CONTROL)) {
+  if (['stale', 'guard', 'turn', 'verdict', 'event', 'mark', 'finished', 'decided'].includes(CONTROL)) {
     const GUARD = ['      if (droppingTurn.current) return;\n      if (adoptNewerSaveRef.current()) {\n        droppingTurn.current = true;\n        return;\n      }\n', ''];
     const TAKE = ['    if (!adoptNewerSaveRef.current()) return false;\n    droppingTurn.current = true;\n    return true;\n', '    return false;\n'];
     const edits = {
@@ -219,6 +221,7 @@ try {
       event: [["    window.addEventListener('storage', onStorage);\n", '    void onStorage;\n']],
       mark: [["    if (stored.gameStatus !== 'playing') markRestoredFinish(gameSlug);\n", '']],
       finished: [["\n      || (stored.gameStatus !== 'playing' && statusRef.current === 'playing');\n", ';\n']],
+      decided: [["loadedForKey.current !== loadKey || statusRef.current !== 'playing') return false;", 'loadedForKey.current !== loadKey) return false;']],
     }[CONTROL];
     const copy = copyWith(hookFile, edits, 'useDailyPuzzle.ts');
     const run = vitest(HARDENING, { swaps: { '@/hooks/useDailyPuzzle': copy } });
@@ -238,8 +241,9 @@ try {
       event: (t) => /an open tab follows another tab through the storage event|: an open tab moves to the saved round|7\) .*through the storage event|7b\) /.test(t),
       mark: (t) => /a finish taken over from another tab|7\) a finish is recorded once|7b\) /.test(t),
       finished: (t) => /7b\) /.test(t),
+      decided: (t) => /8\) .*a finished tab is never sent back to playing/.test(t),
     }[CONTROL];
-    const expected = { stale: 30, guard: 9, turn: 3, verdict: 11, event: 16, mark: 11, finished: 2 }[CONTROL];
+    const expected = { stale: 30, guard: 9, turn: 3, verdict: 11, event: 16, mark: 11, finished: 2, decided: 1 }[CONTROL];
     const failed = run.rows.filter((r) => r.status === 'failed');
     const intended = run.rows.filter((r) => want(r.title));
     assert.equal(intended.length, expected, `the control's ${expected} target rows exist`);
