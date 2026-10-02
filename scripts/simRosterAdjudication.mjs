@@ -168,7 +168,14 @@ console.log(`Roster: ${Object.keys(ROSTERS).length} clubs, ${totalPlayers} playe
 /* ------------------------------------------------------------------ */
 begin('1', '\n1) Every adjudicated move is at its new club and gone from the old one');
 for (const m of L.movedTo) {
-  const at = clubsOf(m.name);
+  /* Round 883: a row may name a club where a DIFFERENT man of the same name
+     plays (namesakeAt, with who he is in the note). That club is left out of
+     this man's count, and it must really hold the name, so the field cannot
+     go stale and quietly excuse a duplicate. */
+  const others = m.namesakeAt ?? [];
+  const all = clubsOf(m.name);
+  for (const c of others) if (!all.includes(c)) fail(`${m.name}: namesakeAt names ${c}, which has nobody of that name`);
+  const at = all.filter(c => !others.includes(c));
   if (at.includes(m.from)) fail(`${m.name} is still in the ${m.from} squad, but the ledger's sources put him at ${m.to}`);
   if (!at.includes(m.to)) fail(`${m.name} should be at ${m.to} and is not (found: ${at.join(', ') || 'no squad'})`);
   if (at.length > 1) fail(`${m.name} is in ${at.length} squads at once: ${at.join(', ')}`);

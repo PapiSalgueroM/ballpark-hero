@@ -1,9 +1,10 @@
 {
  "measuredOn": "2026-09-11",
  "rule": "A baked Club Manager player whose newest row in public.player_market_values_dedup is year 2025, with no year-2026 row at any club the game models and none anywhere else either. The bake falls back to the 2025 row for these, which carries the 2025 CLUB, so the player ships at last season's club with nothing saying so.",
- "population": 408,
+ "population": 414,
  "populationRound876": "Round 876 mapped the table's 1.FC Nuremberg spelling to Nürnberg and re-baked from the 2026-10-02 dump. Three Nürnberg players came in on a 2025 row with no 2026 row anywhere (Berkay Yilmaz, Oliver Villadsen, Tim Janisch), so they joined the population and wait in pending like the rest. No other new fallback row appeared that an overlay row does not already source. Then Brazil's Serie A was mapped (twenty table spellings) and the bake re-run from the same dump. Twenty players at those clubs came in on a 2025 row with no 2026 row anywhere (Luiz Araújo, Gustavo Gómez, Weverton, Lima, Júnior Alonso, Everson, Zé Rafael, Lucas Ronier, Juninho Capixaba, Ignacio Laquintana, Matheus Martins, Nathan Fernandes, Matheus Nascimento, Rafael Lobato, Memphis Depay, Talles Magno, Pedro Raul, Jean Meneses, Alexander Aravena, Gustavo Prado), so they joined the population. The same day a review found two of them false, and all twenty were then checked on the web (adjudicatorWeb2026_10_02): nineteen settled, Pedro Raul still pending. Two rows that sat in removedClubNotModelled because the World Cup table put them at Vasco da Gama and Palmeiras (Andrés Gómez, Ramón Sosa) moved to movedTo on that same evidence, since both clubs are modelled now.",
  "populationRound883": "Round 883 mapped Liga MX (seventeen table spellings, Atlante having none) and re-baked from the 2026-10-02 dump. Twenty nine players at those clubs came in on a 2025 row (Esteban Andrada, Nathan Silva, Robert Ergas, Alejandro Mayorga, Dagoberto Espinoza, Pablo Bennevendo, Sebastián Santos, Pablo Monroy, Gustavo Ferrareis, Diego Valdés, Piero Quispe, Mateo Klimowicz, Lorenzo Faravelli, Luka Romero, Jairo Torres, Diego Valoyes, Hugo Camberos, Oussama Idrissi, Ronaldo Nájera, Amaury Morales, Josué Colmán, Yairo Moreno, Fernando González, Fernando Beltrán, Richard Sánchez, Érick Gutiérrez, Andrés Montaño, Emiliano Gómez, Franco Fagúndez), so they joined the population. All twenty nine were then checked on the web the same day (adjudicatorWeb2026_10_02_ligamx) and none is left pending. Nine of them do have a 2026 row, but at a club the bake does not map: four at their own club's U21 side (Dagoberto Espinoza, Pablo Bennevendo, Sebastián Santos, Pablo Monroy) and five elsewhere (Diego Valdés at Vélez Sarsfield, Mateo Klimowicz at Cerro Porteño, Diego Valoyes at Talleres, Yairo Moreno at Independiente Medellín, Fernando González at Dorados de Sinaloa), so the bake falls back to their 2025 club just the same, and they are counted here with the rest rather than trusted.",
+ "populationRound883Namesakes": "The Round 883 review found the bake keyed players by name alone, so a newer row of one man deleted an older row of a different man with the same name. The bake now keeps them apart (an age move of -1 to 3 and the same position group, or they are two men), which restored six 2025 rows that had been silently dropped: Paulinho (Palmeiras), Jose Luis Rodriguez (FC Juarez), Alan Franco (Sao Paulo), Matheus Pereira (Santa Clara), Dudu (Cruzeiro) and Allan (Palmeiras). All six were read on the web on 2026-10-02: two confirmed, four moved to the modelled club they play for. Each row names the club of the other man in namesakeAt.",
  "source": "public.player_market_values_dedup, read through the Supabase MCP on 2026-09-11.",
  "adjudicator": "public.world_cup_players where world_cup_year = 2026: the 2026 World Cup squads of all 48 nations, applied Round 389 (supabase/migrations/20260901_round_389_world_cup_2026_squads.sql). Every row there is a player two independent sources agree on, Wikipedia squad templates read through the API and Al Jazeera 2026-06-02, with Yahoo Sports 2026-06-11 as the third voice where they differed. Clubs are Wikipedia's. It covers only players picked for the World Cup, which is why it resolves 23 of the 356 and no more.",
  "adjudicatorWeb2026_09_15": "Web adjudication, 2026-09-15, for the 18 pending Premier League rows. Two independent source families were read with WebFetch and WebSearch only: A, official (the premierleague.com squad data feed for season 2026, which lists a loaned-out player at his loan club and not at his parent, plus club, league and UEFA pages) and B, independent press (Sky Sports, ESPN, Sports Illustrated and others; Sky Sport Deutschland never counted as independent of Sky Sports UK). A row moved out of pending only where both families agreed on status and club. Each row carries its own URLs and read dates.",
@@ -724,6 +725,63 @@
      "publisher": "ESPN (Atlético de San Luis squad page, season 2026-27)",
      "readOn": "2026-10-02",
      "says": "listed as Luis Nájera, 23, his full name being Luis Ronaldo Nájera Reyna"
+    }
+   ]
+  },
+  {
+   "name": "Paulinho",
+   "club": "Palmeiras",
+   "namesakeAt": [
+    "Toluca"
+   ],
+   "adjudicatedOn": "2026-10-02",
+   "note": "Paulo Henrique Sampaio Filho, born 2000-07-15, the Palmeiras number 10. Not the Toluca striker of the same name (Joao Paulo Dias Fernandes, born 1992), whose 2026 row used to overwrite this one in the bake.",
+   "sources": [
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2029",
+     "publisher": "ESPN (Palmeiras squad page, season 2026-27)",
+     "readOn": "2026-10-02",
+     "says": "forward, shirt 10, age 26"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/player/_/id/258271",
+     "publisher": "ESPN (player page)",
+     "readOn": "2026-10-02",
+     "says": "Palmeiras number 10, born 2000-07-15, started the Serie A match of 2026-07-26"
+    },
+    {
+     "family": "B",
+     "url": "https://www.dgabc.com.br/Noticia/4321893/expulsao-gol-de-paulinho-anulacao-polemica-e-penalti-perdido-palmeiras-bate-chape",
+     "publisher": "Diario do Grande ABC (2026-05-31)",
+     "readOn": "2026-10-02",
+     "says": "scored the winner for Palmeiras against Chapecoense"
+    }
+   ]
+  },
+  {
+   "name": "José Luis Rodríguez",
+   "club": "FC Juárez",
+   "namesakeAt": [
+    "Vasco da Gama"
+   ],
+   "adjudicatedOn": "2026-10-02",
+   "note": "The Panamanian winger at FC Juarez. Not the Uruguayan right back of the same name at Vasco da Gama, whose 2026 row used to overwrite this one in the bake.",
+   "sources": [
+    {
+     "family": "A",
+     "url": "https://www.ligamx.net/cancha/club/11790",
+     "publisher": "Liga MX (FC Juarez Apertura 2026 squad)",
+     "readOn": "2026-10-02",
+     "says": "shirt 11, midfielder, not Mexican"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/17851",
+     "publisher": "ESPN (FC Juarez squad page, season 2026-27)",
+     "readOn": "2026-10-02",
+     "says": "midfielder, shirt 11, age 28"
     }
    ]
   }
@@ -1652,6 +1710,116 @@
      "publisher": "Récord (2026-09-09)",
      "readOn": "2026-10-02",
      "says": "Tigres make his signing from Puebla official"
+    }
+   ]
+  },
+  {
+   "name": "Alan Franco",
+   "from": "São Paulo",
+   "to": "Tigres UANL",
+   "realClub": "Tigres UANL, on loan from São Paulo",
+   "loan": true,
+   "loanFrom": "São Paulo",
+   "namesakeAt": [
+    "Atlético Mineiro"
+   ],
+   "adjudicatedOn": "2026-10-02",
+   "note": "The Argentine centre back, on a one season loan at Tigres with an option to buy, placed there by the loan policy. Not the Ecuadorian midfielder of the same name at Atletico Mineiro.",
+   "sources": [
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/232",
+     "publisher": "ESPN (Tigres UANL squad page, season 2026-27)",
+     "readOn": "2026-10-02",
+     "says": "defender, shirt 15, age 29"
+    },
+    {
+     "family": "B",
+     "url": "https://www.dgabc.com.br/Noticia/4335054/alan-franco-se-despede-do-sao-paulo-para-jogar-no-mexico",
+     "publisher": "Diario do Grande ABC (2026-07-14)",
+     "readOn": "2026-10-02",
+     "says": "leaves Sao Paulo for Tigres on a one season loan with an option to buy"
+    }
+   ]
+  },
+  {
+   "name": "Matheus Pereira",
+   "from": "Santa Clara",
+   "to": "Toronto FC",
+   "realClub": "Toronto FC",
+   "namesakeAt": [
+    "Cruzeiro"
+   ],
+   "adjudicatedOn": "2026-10-02",
+   "note": "The Brazilian left back, born 2000, signed through the 2027-28 MLS season. Not the Cruzeiro attacking midfielder of the same name.",
+   "sources": [
+    {
+     "family": "A",
+     "url": "https://www.torontofc.ca/news/toronto-fc-sign-brazilian-left-back-matheus-pereira",
+     "publisher": "Toronto FC",
+     "readOn": "2026-10-02",
+     "says": "signed from Santa Clara"
+    },
+    {
+     "family": "B",
+     "url": "https://www.mlssoccer.com/news/toronto-fc-acquire-brazilian-defender-matheus-pereira",
+     "publisher": "MLS",
+     "readOn": "2026-10-02",
+     "says": "signed through 2027-28 with an option for 2028-29"
+    }
+   ]
+  },
+  {
+   "name": "Dudu",
+   "from": "Cruzeiro",
+   "to": "Atlético Mineiro",
+   "realClub": "Atlético Mineiro",
+   "namesakeAt": [
+    "Athletico Paranaense"
+   ],
+   "adjudicatedOn": "2026-10-02",
+   "note": "Eduardo Pereira Rodrigues, born 1992-01-07, left Cruzeiro by mutual consent and signed for Atletico Mineiro to the end of 2027. Not the Athletico Paranaense midfielder of the same name, aged 20.",
+   "sources": [
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/player/_/id/178349/dudu",
+     "publisher": "ESPN (player page)",
+     "readOn": "2026-10-02",
+     "says": "Atletico-MG number 92, played 2026-09-19"
+    },
+    {
+     "family": "B",
+     "url": "https://www.fotmob.com/players/174531/dudu",
+     "publisher": "FotMob",
+     "readOn": "2026-10-02",
+     "says": "Atletico-MG, born 1992-01-07, played 2026-09-19"
+    }
+   ]
+  },
+  {
+   "name": "Allan",
+   "from": "Palmeiras",
+   "to": "Manchester City",
+   "realClub": "Manchester City",
+   "namesakeAt": [
+    "Corinthians"
+   ],
+   "adjudicatedOn": "2026-10-02",
+   "note": "Allan Andrade Elias, born 2004-04-19, sold to Manchester City on 2026-08-31 on a five year deal. Not the Corinthians midfielder of the same name (born 1997).",
+   "sources": [
+    {
+     "family": "B",
+     "url": "https://www.fotmob.com/players/1721789/allan",
+     "publisher": "FotMob",
+     "readOn": "2026-10-02",
+     "says": "Manchester City since August 2026, born 2004-04-19, on the bench 2026-09-20"
+    },
+    {
+     "family": "B",
+     "url": "https://www.nst.com.my/amp/sports/football/2026/08/1523012/man-city-confirm-signing-allan-elias-palmeiras",
+     "publisher": "New Straits Times (2026-08)",
+     "readOn": "2026-10-02",
+     "says": "Manchester City confirm the signing from Palmeiras"
     }
    ]
   }

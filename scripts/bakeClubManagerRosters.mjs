@@ -272,7 +272,9 @@ const adjudication = JSON.parse(fs.readFileSync(path.join(ROOT, 'scripts/data/ro
 let adjMoved = 0;
 let adjRemoved = 0;
 for (const m of adjudication.movedTo) {
-  const rec = byPlayer.get(m.name);
+  // A namesake kept apart above sits under name plus his table club, which
+  // is the ledger's "from"; the man the name alone finds is the other one.
+  const rec = byPlayer.get(`${m.name}\u0000${m.from}`) ?? byPlayer.get(m.name);
   if (!engineClubSet.has(m.to)) { errors.push(`ADJUDICATION: unknown destination "${m.to}" for ${m.name}`); continue; }
   if (rec) { rec.club = m.to; adjMoved += 1; }
 }
