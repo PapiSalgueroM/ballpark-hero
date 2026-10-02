@@ -1,4 +1,6 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { NbaRotationPanel } from './NbaRotationPanel';
+import { nbaSetRotationSlot, nbaAutoRotation } from '@/lib/nbaRotation';
 import { DraftNightCard } from '@/components/front-office-shared/DraftNightCard';
 import { buildDraftNight } from '@/lib/draftNight';
 import type { DraftNight } from '@/lib/draftNight';
@@ -10,12 +12,20 @@ import {
   nbaDraftClass, nbaProspectToPlayer, nbaStrength, nbaCapUsed, nbaCapRoom,
   nbaRelease, nbaSign, nbaTrade, nbaTradeValue, EAST,
   NBA_ROUNDS,
-  type NbaLeague, type NbaProspect, type SeriesResult, nbaExecuteTalksTrade,
+  type NbaLeague, type NbaGmPlayer, type NbaProspect, type SeriesResult, nbaExecuteTalksTrade,
   ensureNbaLeagueIds, NBA_ROSTER_MIN, NBA_ROSTER_MAX,
   /* Round 722: the luxury tax, the aprons and the fourteen man tip off floor. */
-  nbaTipOff, nbaTipOffRefusal, nbaAssessTax, nbaTaxView, nbaApronNote, NBA_TIPOFF_MIN, NBA_MIN_CONTRACT,
+  nbaTipOff, nbaTipOffRefusal, nbaAssessTax, nbaTaxView, nbaApronNote, NBA_TIPOFF_MIN,
+  /* Round 824: new deals are priced in the money of the season they start in. */
+  nbaMinContract, nbaDraftSigning,
 } from '@/lib/nbaFrontOffice';
 import { FoCapPanel } from '@/components/front-office-shared/FoCapPanel';
+/* Round 824: the season's lines and awards, engine in nbaSeasonStats.ts, box shared. */
+import {
+  nbaCloseSeasonStats, nbaLeaders, nbaTeamLines, NBA_AWARD_LABEL, NBA_AWARD_RULE,
+  type NbaAwardKey, type NbaAwardPick, type NbaSeasonAwards,
+} from '@/lib/nbaSeasonStats';
+import { FoSeasonStatsCard, type FoStatsAward } from '@/components/front-office-shared/FoSeasonStatsCard';
 /* Round 631: waiving a man costs dead money and he cannot come back this season. */
 import { deadMoneyFor, deadCapUsed, signRefusal, cutRefusal, rosterFullRefusal, tradeRefusal } from '@/lib/frontOfficeCuts';
 /* Round 531: the cap on screen says which day its figure was read. */
@@ -59,6 +69,43 @@ const CUT_SAID = 'You waived him this season.';
 
 const NBA_WORDS: FoSportWords = { title: 'the Finals', playoffs: 'the playoffs', round: 'a series', games: 80 };
 
+/* Round 824: what the close screen and the history say about the season's
+   lines. The rosters carry real names, so every one of them says it is this
+   save's sim season. */
+const SIM_NOTE = "Sim season: every line and award here comes from this save's games, not real NBA stats.";
+function openingEvidence(p: NbaGmPlayer) {
+  const e = p.openingRatingEvidence;
+  return e && e.modelVersion === 'nba894-review-v0.4' && Number.isInteger(e.openingOvr)
+    && e.openingOvr >= 0 && e.openingOvr <= 99 && e.partial === true
+    && ['box-score-proxy', 'prior-only', 'unmeasured-prior'].includes(e.basis) ? e : null;
+}
+function ratingNote(p: NbaGmPlayer) {
+  if (!p.openingRatingEvidence) return null;
+  const e = openingEvidence(p);
+  const basis = e?.basis === 'box-score-proxy' ? 'retained-season box scores'
+    : e?.basis === 'prior-only' ? 'prior season only, reduced confidence' : 'unmeasured game prior';
+  return <span data-rating-evidence className="block text-[10px] text-muted-foreground">
+    {e ? `Opening estimate ${e.openingOvr}: ${basis}. Limited defense and role evidence.` : 'Opening rating evidence unavailable.'}
+  </span>;
+}
+function ratingMarker(p: NbaGmPlayer) {
+  return openingEvidence(p) ? <span data-rating-partial title="Limited opening evidence" className="ml-0.5 text-[9px] text-muted-foreground">e</span> : null;
+}
+const AWARD_ORDER: NbaAwardKey[] = ['mvp', 'allLeague', 'roy', 'dpoy', 'sixth'];
+const awardDetail = (k: NbaAwardKey, m: NbaAwardPick): string => k === 'dpoy'
+  ? `${m.spg} stl, ${m.bpg} blk, ${m.rpg} reb a game`
+  : `${m.ppg} pts, ${m.rpg} reb, ${m.apg} ast a game`;
+function awardRows(a: NbaSeasonAwards, myTeam: string): FoStatsAward[] {
+  return AWARD_ORDER.map(k => {
+    const men = k === 'allLeague' ? a.allLeague : a[k] ? [a[k]!] : [];
+    return {
+      label: NBA_AWARD_LABEL[k],
+      rule: NBA_AWARD_RULE[k],
+      winners: men.map(m => ({ id: m.id, name: m.name, team: m.team, detail: awardDetail(k, m), mine: m.team === myTeam })),
+    };
+  });
+}
+
 /* Round 722: the tax at season close, drawn on the recap beside the results.
    Optional on the postseason so a save written before the round draws without it. */
 type TaxClose = {
@@ -83,12 +130,23 @@ interface SaveShape {
 
 export default function NbaFrontOfficeBoard() {
   const [phase, setPhase] = useState<Phase>('pick');
+  const [starting, setStarting] = useState<string | null>(null);
+  const startPending = useRef(false);
+  const [startError, setStartError] = useState('');
+  const alive = useRef(true);
+  useEffect(() => {
+    alive.current = true;
+    return () => { alive.current = false; };
+  }, []);
   /* Round 204: the hub is tiles now, so null means the hub itself and a
      tab key means you have opened that box. Club Manager's Round 74 rule,
      brought to the four GM games. */
   const [tab, setTab] = useState<Tab | null>(null);
   const [myTeam, setMyTeam] = useState('');
   const [league, setLeague] = useState<NbaLeague | null>(null);
+  const [rotationOpen, setRotationOpen] = useState(false);
+  const rotationOpener = useRef<HTMLButtonElement>(null);
+  const rotationReturn = useRef(false);
   const [feed, setFeed] = useState<string[]>([]);
   /* Round 530: a done deal or a signing slams in at the top of the feed the
      moment it happens. Matched on the line's text, never its index, so the
@@ -186,13 +244,38 @@ export default function NbaFrontOfficeBoard() {
     } catch { /* full */ }
   }, [phase, titles, seasonsPlayed, draftClass, picksLeft, mandate, trust, fired, pressTilt, seasonTradeLine, champion, series, gradeLine, taxClose]);
 
+  useEffect(() => {
+    if (!rotationOpen && rotationReturn.current) {
+      rotationReturn.current = false;
+      rotationOpener.current?.focus({ preventScroll: true });
+    }
+  }, [rotationOpen]);
+
+  const updateRotation = (slot?: number, id?: string): boolean => {
+    const current = league;
+    if (!current || phase !== 'hub' || !current.teams[myTeam]) return false;
+    const next = JSON.parse(JSON.stringify(current)) as NbaLeague;
+    const changed = slot === undefined
+      ? nbaAutoRotation(next.teams[myTeam])
+      : nbaSetRotationSlot(next.teams[myTeam], slot, id ?? '');
+    if (!changed) return false;
+    setLeague(next);
+    persist({}, next, myTeam);
+    return true;
+  };
+
   const label = (abbr: string) => {
     const t = NBA_TEAM_MAP.get(abbr);
     return t ? `${t.city} ${t.name}` : abbr;
   };
 
-  const start = (abbr: string) => {
-    const lg = initNbaLeague();
+  const start = async (abbr: string) => {
+    if (startPending.current) return;
+    startPending.current = true; setStarting(abbr); setStartError('');
+    try {
+    const { NBA_OPENING_RATINGS } = await import('@/data/nbaOpeningRatings');
+    if (!alive.current) return;
+    const lg = initNbaLeague(Math.random, NBA_OPENING_RATINGS);
     const m = mandateFor(lg, abbr, false);
     setLeague(lg); setMyTeam(abbr); setPhase('hub'); setTab(null);
     setFeed([
@@ -208,6 +291,12 @@ export default function NbaFrontOfficeBoard() {
     }));
     setPressTilt(0); setSeasonTradeLine(null);
     persist({ phase: 'hub', titles: 0, seasonsPlayed: 0, mandate: m, trust: FO_TRUST_START, fired: false, pressTilt: 0, seasonTradeLine: null }, lg, abbr);
+    } catch {
+      if (alive.current) setStartError('Could not load the opening ratings. Your existing save has not changed. Try your team again.');
+    } finally {
+      startPending.current = false;
+      if (alive.current) setStarting(null);
+    }
   };
 
   /* Round 192: one answer, three registers. Trust moves now, the tilt
@@ -270,7 +359,7 @@ export default function NbaFrontOfficeBoard() {
       const before = lg.teams[myTeam].players.length;
       const tip = nbaTipOff(lg, Math.random, myTeam);
       const mine = tip.filled[myTeam];
-      if (mine?.length) tipLines.push(`📋 You tipped off with ${before} under contract, so the league filled you to ${NBA_TIPOFF_MIN} on minimum deals: ${mine.map(p => p.name).join(', ')}, $${NBA_MIN_CONTRACT}M each.`);
+      if (mine?.length) tipLines.push(`📋 You tipped off with ${before} under contract, so the league filled you to ${NBA_TIPOFF_MIN} on minimum deals: ${mine.map(p => p.name).join(', ')}, $${nbaMinContract(lg.cap)}M each.`);
     }
     const report = simRound(lg, myTeam, Math.random);
     const newFeed = [
@@ -284,6 +373,15 @@ export default function NbaFrontOfficeBoard() {
       /* Round 722: the tax is assessed on every club at close, once. The GM's
          own bill moves trust upstairs and the recap draws it beside the results. */
       const taxes = nbaAssessTax(lg);
+      /* Round 824: the season's awards, named once from its lines and written
+         on the winners' cards. The feed says so when one of yours won. */
+      const closed = nbaCloseSeasonStats(lg);
+      if (closed) {
+        for (const k of AWARD_ORDER) {
+          const men = k === 'allLeague' ? closed.allLeague : closed[k] ? [closed[k]!] : [];
+          for (const m of men) if (m.team === myTeam) newFeed.push(`🏅 ${m.name} takes ${NBA_AWARD_LABEL[k]} in this save's ${closed.season} season.`);
+        }
+      }
       const myTax = taxes.find(x => x.team === myTeam);
       const reaction = ownerTaxReaction(myTax?.bill ?? 0);
       const payers = taxes.filter(x => x.bill > 0).sort((a, b) => b.bill - a.bill);
@@ -358,7 +456,8 @@ export default function NbaFrontOfficeBoard() {
     const lg: NbaLeague = JSON.parse(JSON.stringify(league));
     const pr = draftClass.find(p => p.id === id);
     if (!pr) return;
-    lg.teams[myTeam].players.push(nbaProspectToPlayer(pr, Math.random));
+    const signing = nbaDraftSigning(lg);
+    lg.teams[myTeam].players.push(nbaProspectToPlayer(pr, Math.random, signing));
     const remaining = draftClass.filter(p => p.id !== id);
     const aiTakes = remaining.slice(0, 5);
     const order = nbaStandings(lg).map(t => t.abbr).reverse().filter(a => a !== myTeam);
@@ -368,7 +467,7 @@ export default function NbaFrontOfficeBoard() {
     const rivalPicks: { team: string; playerName: string; pos: string; grade: number }[] = [];
     aiTakes.forEach((p, i) => {
       const abbr = order[i % order.length];
-      lg.teams[abbr].players.push(nbaProspectToPlayer(p, Math.random));
+      lg.teams[abbr].players.push(nbaProspectToPlayer(p, Math.random, signing));
       rivalPicks.push({ team: abbr, playerName: p.name, pos: String(p.pos), grade: p.grade });
     });
     const nextClass = remaining.filter(p => !aiTakes.includes(p));
@@ -510,6 +609,7 @@ export default function NbaFrontOfficeBoard() {
 
   const reset = () => {
     localStorage.removeItem(SAVE_KEY);
+    setRotationOpen(false); rotationReturn.current = false;
     setPhase('pick'); setLeague(null); setMyTeam('');
     setMandate(null); setTrust(FO_TRUST_START); setFired(false); setGradeLine(null); setTaxClose(null);
     setPresser(null); setPressTilt(0); setSeasonTradeLine(null);
@@ -521,13 +621,16 @@ export default function NbaFrontOfficeBoard() {
         <div className="rounded-2xl border border-border bg-card p-4 text-center">
           <p className="font-display text-lg font-bold text-foreground">Take over a front office</p>
           <p className="mt-1 text-xs text-muted-foreground">
-            Real rosters from the curated NBA Conquest data. Run the cap, work the phones, survive the
-            play-in, win best-of-seven wars, draft the future. Saves automatically.
+            Curated NBA roster snapshot with original simulation ratings. Run the cap, work the phones,
+            survive the play-in, draft the future. Ages and contracts are simulated. Saves automatically.
           </p>
+          <p className="mt-2 text-xs text-muted-foreground">Opening estimates use 2024-25 and 2025-26 regular seasons. Box scores only partly measure defense and roles; missing matches use a marked game prior.</p>
         </div>
+        {startError && <p role="alert" className="text-xs text-destructive">{startError}</p>}
+        {starting && <p role="status" className="text-xs text-muted-foreground">Loading opening ratings for {label(starting)}...</p>}
         <div className="grid grid-cols-2 gap-1.5 sm:grid-cols-4">
           {NBA_TEAMS.map(t => (
-            <button key={t.id} onClick={() => start(t.id)} className="rounded-lg border border-border bg-card px-2 py-2 text-left transition-all hover:scale-[1.02] hover:border-primary/60">
+            <button key={t.id} disabled={!!starting} onClick={() => void start(t.id)} className="rounded-lg border border-border bg-card px-2 py-2 text-left transition-all hover:scale-[1.02] hover:border-primary/60 disabled:opacity-50">
               <span className="block h-1.5 w-full rounded-full" style={{ background: t.color }} />
               <span className="mt-1.5 block truncate text-xs font-bold text-foreground">{t.city} {t.name}</span>
               <span className="block truncate text-[10px] text-muted-foreground">{EAST.includes(t.id) ? 'East' : 'West'}</span>
@@ -568,6 +671,9 @@ export default function NbaFrontOfficeBoard() {
     /* Round 187: the verdict curtain. Every string below is exactly what
        Round 180 wrote; stageVerdict only decides confetti and tone. */
     const staging = stageVerdict({ iAmChampion: champion === myTeam, fired });
+    /* Round 824: the closed season's lines and awards. */
+    const leaders = nbaLeaders(league, 3);
+    const seasonAwards = (league.awards ?? []).find(a => a.season === league.season) ?? null;
     return (
       <div className="space-y-4">
         <div
@@ -650,6 +756,31 @@ export default function NbaFrontOfficeBoard() {
             </div>
           )}
         </div>
+        {/* Round 824: the season in numbers, one box with three tabs. A save
+            from before the round has no lines for this season and says so. */}
+        {leaders ? (
+          <FoSeasonStatsCard
+            season={league.season}
+            note={SIM_NOTE}
+            qualifyLine={`To lead a table or win an award a man needs ${leaders.minGames} games this season, four in five of an average club's.`}
+            awards={seasonAwards ? awardRows(seasonAwards, myTeam) : []}
+            emptyAwards="No awards this season."
+            leaders={([['Points', 'pts'], ['Rebounds', 'reb'], ['Assists', 'ast']] as const).map(([lab, col]) => ({
+              label: lab,
+              rows: leaders[col].map(r => ({ id: r.id, name: r.name, team: r.team, value: r.value, mine: r.team === myTeam })),
+            }))}
+            teamName={label(myTeam)}
+            columns={['PPG', 'RPG', 'APG']}
+            teamLines={nbaTeamLines(league, myTeam).map(l => ({
+              id: l.id, name: l.name, g: l.g, values: [l.ppg, l.rpg, l.apg],
+              tag: l.rookie ? '(rookie)' : l.gs * 2 < l.g ? '(bench)' : undefined,
+            }))}
+          />
+        ) : (
+          <p data-season-stats-pending className="rounded-2xl border border-border bg-card p-3 text-center text-[11px] text-muted-foreground">
+            This save started before season lines were kept, so this season has none. Lines and awards start with next season's tip off.
+          </p>
+        )}
       </div>
     );
   }
@@ -786,6 +917,12 @@ export default function NbaFrontOfficeBoard() {
       )}
 
       {tab === 'team' && (
+        rotationOpen ? <NbaRotationPanel
+          team={my}
+          onPick={(slot, id) => updateRotation(slot, id)}
+          onAuto={() => updateRotation()}
+          onBack={() => { rotationReturn.current = true; setRotationOpen(false); }}
+        /> :
         <div className="rounded-2xl border border-border bg-card p-3">
           {/* Round 722: the shared cap panel, the NBA's tax and tip off floor passed as its descriptor. */}
           <FoCapPanel
@@ -793,8 +930,14 @@ export default function NbaFrontOfficeBoard() {
             dead={dead}
             note={capNote()}
             tax={view}
-            roster={{ count: my.players.length, floor: NBA_TIPOFF_MIN, max: NBA_ROSTER_MAX, minContract: NBA_MIN_CONTRACT }}
+            roster={{ count: my.players.length, floor: NBA_TIPOFF_MIN, max: NBA_ROSTER_MAX, minContract: nbaMinContract(league.cap) }}
           />
+          <button ref={rotationOpener} type="button" onClick={() => setRotationOpen(true)} className="mb-3 min-h-[44px] w-full rounded-lg border border-primary/50 bg-primary/10 px-3 text-xs font-bold text-primary">Set rotation</button>
+          <p data-rating-legend className="mb-3 text-[11px] text-muted-foreground">
+            OVR, ages, potential and contracts are simulated. {my.players.some(p => openingEvidence(p))
+              ? 'Opening estimates use 2024-25 and 2025-26 regular-season inputs. e means limited defense and role evidence. Later changes come from this save.'
+              : 'Existing save ratings and progression are kept. Generated players use game ratings.'}
+          </p>
           {cutBlock && <p data-cut-block className="mb-2 text-center text-[10px] text-destructive">{cutBlock}</p>}
           <div className="grid max-h-96 grid-cols-1 gap-1 overflow-y-auto sm:grid-cols-2">
             {[...my.players].sort((a, b) => b.ovr - a.ovr).map(p => {
@@ -807,9 +950,17 @@ export default function NbaFrontOfficeBoard() {
                 <span className="min-w-0">
                   <span className={cn('block truncate font-bold', p.out > 0 ? 'text-destructive' : 'text-foreground')}>{p.name} {p.out > 0 ? `(out ${p.out}r)` : ''}</span>
                   <span className="block text-[10px] text-muted-foreground">{p.pos} · {p.age}y · ${p.salary}M x{p.years}</span>
+                  {ratingNote(p)}
+                  {/* Round 824: this save's awards, on his card. The names are
+                      real, so each one says it is a sim award, never the real one. */}
+                  {p.awards && p.awards.length > 0 && (
+                    <span data-award-badge className="block truncate text-[10px] text-gold" title={`This save's sim awards, not real NBA ones: ${p.awards.join(', ')}`}>
+                      🏅 {p.awards.slice(-2).reverse().map(a => `Sim ${a}`).join(', ')}{p.awards.length > 2 ? ` +${p.awards.length - 2} more` : ''}
+                    </span>
+                  )}
                 </span>
                 <span className="ml-2 flex shrink-0 items-center gap-1.5">
-                  <b className="text-primary">{p.ovr}</b>
+                  <b className="text-primary">{p.ovr}{ratingMarker(p)}</b>
                   <button
                     onClick={() => setCutArmed(arming ? null : p.id)}
                     disabled={!!cutBlock}
@@ -864,10 +1015,11 @@ export default function NbaFrontOfficeBoard() {
                 <span className="min-w-0">
                   <span className="block truncate font-bold text-foreground">{p.name}</span>
                   <span className="block text-[10px] text-muted-foreground">{p.pos} · {p.age}y · wants ${p.salary}M</span>
+                  {ratingNote(p)}
                   {refusal && <span className="block text-[10px] text-destructive">{refusal}</span>}
                 </span>
                 <span className="ml-2 flex shrink-0 items-center gap-1.5">
-                  <b className="text-primary">{p.ovr}</b>
+                  <b className="text-primary">{p.ovr}{ratingMarker(p)}</b>
                   <button onClick={() => doSign(p.id)} disabled={p.salary > room || !!refusal || !!fullBlock} title={refusal ?? fullBlock ?? undefined} className="rounded-full bg-primary px-2.5 py-0.5 text-[10px] font-bold text-primary-foreground disabled:opacity-40">Sign</button>
                 </span>
               </div>
@@ -885,10 +1037,12 @@ export default function NbaFrontOfficeBoard() {
           <div className="rounded-xl border border-gold/30 bg-gold/5 p-2.5 space-y-2">
             <p className="text-center text-[11px] font-bold text-foreground">🔍 Trade Finder</p>
             <p className="text-center text-[10px] text-muted-foreground">Pick one of your players and shop him. Only deals the AI genuinely accepts show up, cap checked.</p>
-            <div className="grid grid-cols-2 gap-1">
-              {[...my.players].sort((a, b) => b.ovr - a.ovr).slice(0, 8).map(p => (
+            {/* Round 851: every man, not the top 8, in a list that scrolls inside the
+                card (the same shape the NHL board takes in Round 830). */}
+            <div data-trade-shop-list className="grid max-h-60 grid-cols-2 gap-1 overflow-y-auto">
+              {[...my.players].sort((a, b) => b.ovr - a.ovr).map(p => (
                 <button key={p.id} onClick={() => { setMyTradePiece(p.id); setShopOffers([]); setShopTried(false); }} className={cn('flex items-center justify-between rounded-lg border px-2 py-1 text-[11px]', myTradePiece === p.id ? 'border-gold bg-gold/10' : 'border-border/60 bg-background')}>
-                  <span className="truncate text-foreground">{p.name} ({p.pos})</span><b className="text-primary">{p.ovr}</b>
+                  <span className="min-w-0 text-left"><span className="block truncate text-foreground">{p.name} ({p.pos})</span>{ratingNote(p)}</span><b className="shrink-0 text-primary">{p.ovr}{ratingMarker(p)}</b>
                 </button>
               ))}
             </div>
@@ -934,23 +1088,24 @@ export default function NbaFrontOfficeBoard() {
             <>
               <p className="text-center text-[10px] text-muted-foreground">1. Pick who YOU send. 2. Tap who you want back and open talks. The other GM counters like a person: a pick to close the gap, a lesser man instead, or the dial tone.</p>
               <div className="grid grid-cols-2 gap-2">
-                <div className="space-y-1">
+                <div data-trade-send-list className="max-h-80 space-y-1 overflow-y-auto">
                   <p className="text-center text-[10px] font-bold uppercase text-muted-foreground">You send</p>
-                  {[...my.players].sort((a, b) => b.ovr - a.ovr).slice(0, 8).map(p => (
+                  {[...my.players].sort((a, b) => b.ovr - a.ovr).map(p => (
                     <button key={p.id} onClick={() => setMyTradePiece(p.id)} className={cn('flex w-full items-center justify-between rounded-lg border px-2 py-1 text-[11px]', myTradePiece === p.id ? 'border-gold bg-gold/10' : 'border-border/60 bg-background')}>
-                      <span className="truncate text-foreground">{p.name} ({p.pos})</span><b className="text-primary">{p.ovr}</b>
+                      <span className="min-w-0 text-left"><span className="block truncate text-foreground">{p.name} ({p.pos})</span>{ratingNote(p)}</span><b className="shrink-0 text-primary">{p.ovr}{ratingMarker(p)}</b>
                     </button>
                   ))}
                 </div>
-                <div className="space-y-1">
+                <div data-trade-get-list className="max-h-80 space-y-1 overflow-y-auto">
                   <p className="text-center text-[10px] font-bold uppercase text-muted-foreground">You get ({tradePartner})</p>
-                  {[...league.teams[tradePartner].players].sort((a, b) => b.ovr - a.ovr).slice(0, 8).map(p => {
+                  {[...league.teams[tradePartner].players].sort((a, b) => b.ovr - a.ovr).map(p => {
                     /* Round 631: the trade paths refuse a man you let go this season, so the screen says so. */
                     const back = tradeRefusal(my, p.id, CUT_SAID);
                     return (
                     <div key={p.id} data-trade-row={p.id} className="flex items-center justify-between gap-1 rounded-lg border border-border/60 bg-background px-2 py-1 text-[11px]">
                       <span className="min-w-0">
-                        <span className="block truncate text-foreground">{p.name} ({p.pos}) <b className="text-primary">{p.ovr}</b></span>
+                        <span className="block truncate text-foreground">{p.name} ({p.pos}) <b className="text-primary">{p.ovr}{ratingMarker(p)}</b></span>
+                        {ratingNote(p)}
                         {back && <span className="block text-[9px] text-destructive">{back}</span>}
                       </span>
                       <button onClick={() => openTradeTalks(p.id)} disabled={!myTradePiece || !!back} title={back ?? undefined} className="shrink-0 rounded-full bg-primary px-2.5 py-0.5 text-[9px] font-bold text-primary-foreground disabled:opacity-40">Open talks</button>
@@ -971,7 +1126,7 @@ export default function NbaFrontOfficeBoard() {
           {tipBlock && <p data-tipoff-block className="mb-2 text-[11px] text-destructive">{tipBlock}</p>}
           {!tipBlock && tipShort > 0 && (
             <p data-tipoff-short className="mb-2 text-[11px] text-muted-foreground">
-              {tipShort} short of the {NBA_TIPOFF_MIN} man floor. At tip off the league fills the gap on minimum deals (${NBA_MIN_CONTRACT}M each), so sign who you want first.
+              {tipShort} short of the {NBA_TIPOFF_MIN} man floor. At tip off the league fills the gap on minimum deals (${nbaMinContract(league.cap)}M each), so sign who you want first.
             </p>
           )}
           <button onClick={playRound} disabled={!!tipBlock} title={tipBlock ?? undefined} className="inline-flex items-center gap-2 rounded-full bg-primary px-8 py-2.5 text-sm font-bold text-primary-foreground hover:opacity-90 disabled:opacity-40">
@@ -998,6 +1153,38 @@ export default function NbaFrontOfficeBoard() {
               </div>
             ))}
           </div>
+          {/* Round 824: the league's history in this save, newest first: the
+              champion and the season's awards, with what your club won. */}
+          {(league.awards ?? []).length > 0 && (() => {
+            const history = [...(league.awards ?? [])].reverse();
+            const ours = history.reduce((n, a) => n + AWARD_ORDER.reduce((m, k) => m + (k === 'allLeague' ? a.allLeague : a[k] ? [a[k]!] : []).filter(x => x.team === myTeam).length, 0), 0);
+            return (
+              <div data-award-history className="mt-3 border-t border-border pt-2">
+                <p className="text-center text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Award history, this save</p>
+                <p className="mb-1 text-center text-[10px] text-muted-foreground">
+                  {ours > 0 ? `Your club has won ${ours} award${ours === 1 ? '' : 's'} here.` : 'Your club has not won an award here yet.'} Sim seasons, not real NBA history.
+                </p>
+                <div className="max-h-40 space-y-1 overflow-y-auto">
+                  {history.slice(0, 8).map(a => {
+                    const champ = league.champions.find(c => c.season === a.season)?.team;
+                    const bits = [
+                      champ ? `Champions ${champ}` : null,
+                      a.mvp ? `MVP ${a.mvp.name} (${a.mvp.team})` : null,
+                      a.roy ? `Rookie ${a.roy.name} (${a.roy.team})` : null,
+                      a.dpoy ? `Defense ${a.dpoy.name} (${a.dpoy.team})` : null,
+                      a.sixth ? `Sixth man ${a.sixth.name} (${a.sixth.team})` : null,
+                    ].filter(Boolean);
+                    return (
+                      <p key={a.season} className="text-[10px] text-muted-foreground">
+                        <b className="text-foreground">{a.season}</b> · {bits.join(' · ')}
+                        {a.allLeague.length > 0 && <> · All-League {a.allLeague.map(m => m.name).join(', ')}</>}
+                      </p>
+                    );
+                  })}
+                </div>
+              </div>
+            );
+          })()}
         </div>
       )}
 

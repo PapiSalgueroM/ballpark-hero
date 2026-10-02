@@ -1,0 +1,33 @@
+{
+  "started": "2026-10-01T23:01:25.455Z",
+  "url": "https://douknowball.com/soccer-career",
+  "boundary": "Separate isolated live browser. Native creator and original random roll. Only disposable soccerCareerSave.seasons is changed to null; no product edits or server writes.",
+  "blocked": [],
+  "pageErrors": [],
+  "eraOptions": [
+    "Early 90s (1990 start)",
+    "Late 90s (1995 start)",
+    "Early 2000s (2000 start)",
+    "Late 2000s (2005 start)",
+    "Early 2010s (2010 start)",
+    "Late 2010s (2015 start)",
+    "2020s (2020 start)",
+    "Current era (2025 start)"
+  ],
+  "liveEntry": "/assets/index-E8L0RxXO.js",
+  "nativeStart": {
+    "phase": "youth",
+    "age": 16,
+    "seasonRows": 1
+  },
+  "firstFailure": true,
+  "corruptBytesHeld": true,
+  "retryFailedAgain": true,
+  "text": "Skip to main content\n😬\nThis page broke\n\nSomething in this game went wrong and it stopped drawing. It is our fault, not anything you did.\n\nIf you had a save going, it is still on this device. It is kept in your browser, and nothing here has touched it.\n\nBack to the games\nTry this page again\n\nTelling us what you were doing helps a lot. The report a bug button is at the bottom of this page.\n\nAll team names, competition names, logos and trademarks are property of their respective owners. DoUKnowBall is an independent fan project and is not affiliated with, endorsed by or sponsored by the NFL, NBA, UFC, NHL, MLB, FIFA, UEFA, the Premier League, the English Football League, LaLiga, Serie A, the Bundesliga, Ligue 1, the Eredivisie, MLS, the Saudi Pro League, the IOC, the NCAA, F1, the PGA Tour, NASCAR, the ATP or the WTA. Player names and statistics are used for identification and commentary only. © 2026 DoUKnowBall\n\nSoccer\n·\nNBA\n·\nNHL\n·\nNFL\n·\nMLB\n·\nCollege\nSearch Games\n·\nAbout\n·\nContact\n·\nWhat's New\n·\nRecord Books\n·\nLeaderboard\n·\nPrivacy Policy\n·\nTerms of Service\n·\nAccessibility\n·\nCookie choices\n·\nLight mode\n·\nReport a bug",
+  "validSaveRecovered": true,
+  "validRawHeld": false,
+  "cleanup": {
+    "browserStopped": true
+  },
+  "finished": "2026-10-01T23:01:35.406Z"
+}

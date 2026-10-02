@@ -199,6 +199,8 @@ execSync(
   { stdio: 'inherit' },
 );
 const { cm, asks, nations, fin } = await import(pathToFileURL(BUNDLE).href);
+/* Round 832: an era's squads load with the era, so the harness fetches all three first. */
+await cm.ensureAllEraRosters();
 const {
   REAL_LEAGUES, playableClubs, CM_ERAS, eraLeaguesFor, eraPlayableClubs,
   startCareer, buildMarket, buyPlayer, objectiveStatuses, groupOf, loadCareer,

@@ -35,7 +35,7 @@ import type { Formation, FormationSlot } from '@/lib/squadDeal';
 /* Round 505: the one position rule the lineup games share, so an out of
    position man here is graded by the same family table World XI uses.
    positionFit imports nothing but types, so there is no cycle. */
-import { ALL_POSITIONS, eligiblePositions, fitsAllowed } from '@/lib/positionFit';
+import { ALL_POSITIONS, eligiblePositions, FIT_PENALTY, gradeFit, type FitGrade } from '@/lib/positionFit';
 import { players as RAW_POOL } from '@/data/players';
 // Round 70: real 2026 rosters for every club in the big five leagues, baked
 // from the Transfermarkt style market value data in Supabase. The bake file
@@ -97,6 +97,8 @@ import type { UclGroupRule } from '@/lib/clubManagerUclGroups';
 /* Round 670 review: how a Champions League tie is read, shared with Soccer
    Career. The module imports nothing. */
 import { uclTieOutcome } from '@/lib/uclTieRule';
+/* Round 781: the match clock with the board in it. The module imports nothing. */
+import { clockOrder, playedBy } from '@/lib/clubManagerClock';
 
 /**
  * Club Manager engine.
@@ -167,14 +169,14 @@ export interface RaceScorer {
  * Entries logged before the typed competition field existed are bucketed
  * from their display label, which always starts with the competition name.
  */
-export function teamCompRecord(state: CareerState, cupName: string): Record<CompBucket | 'all', TeamCompLine> {
+export function teamCompRecord(state: CareerState, cupName: string | null): Record<CompBucket | 'all', TeamCompLine> {
   const mk = (): TeamCompLine => ({ p: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0 });
   const out: Record<CompBucket | 'all', TeamCompLine> = { all: mk(), league: mk(), cup: mk(), ucl: mk() };
   for (const e of state.resultLog ?? []) {
     const bucket: CompBucket = e.competition
       ? compBucketOf(e.competition)
       : e.comp.startsWith('Champions League') ? 'ucl'
-      : e.comp.startsWith(cupName) ? 'cup'
+      : cupName !== null && e.comp.startsWith(cupName) ? 'cup'
       : 'league';
     const [gf, ga] = e.score.split('-').map(n => parseInt(n, 10) || 0);
     for (const line of [out.all, out[bucket]]) {
@@ -1023,7 +1025,16 @@ export interface ScorerLine {
   /** Round 505: from the spot, or a direct free kick. */
   penalty?: boolean;
   freeKick?: boolean;
+  /** Round 781: minutes into the added time of the period `minute` ends
+   *  (45+3' is minute 45, plus 3). Absent on every line in regular time and
+   *  on every line written before this round. */
+  plus?: number;
 }
+
+/* Round 781: the clock with the board in it (minuteLabel, clockOrder,
+   playedBy), kept in its own small file and re-exported here, so every
+   screen that already imports the engine reads it from one place. */
+export { minuteLabel, clockOrder, playedBy } from '@/lib/clubManagerClock';
 
 export interface OtherResult { home: string; away: string; hg: number; ag: number; }
 
@@ -1044,6 +1055,8 @@ export interface CardLine {
   /** Round 504: a red that was a second yellow (a one match ban) rather
    *  than a straight red (one or two). */
   second?: boolean;
+  /** Round 781: into the board of `minute`, see ScorerLine. */
+  plus?: number;
 }
 export interface SubLine {
   off: string; on: string; minute: number;
@@ -1053,8 +1066,10 @@ export interface SubLine {
    *  off is one the game made up (a projected world), so every screen can
    *  say so the way the ratings sheet does. */
   onGen?: boolean; offGen?: boolean;
+  /** Round 781: into the board of `minute`, see ScorerLine. */
+  plus?: number;
 }
-export interface InjuryLine { name: string; minute: number; weeks: number; id?: string; }
+export interface InjuryLine { name: string; minute: number; weeks: number; id?: string; plus?: number; }
 
 export type PlayKind = 'shot' | 'corner' | 'throwin' | 'foul';
 
@@ -1078,6 +1093,8 @@ export interface PlayEvent {
   penalty?: boolean;
   /** Round 505, goals only: a direct free kick. */
   freeKick?: boolean;
+  /** Round 781: into the board of `minute`, see ScorerLine. */
+  plus?: number;
 }
 
 /** Round 505: one of my goals as the halves commit it: who, when, and
@@ -1089,6 +1106,8 @@ export interface MyGoalLine {
   minute: number;
   penalty?: boolean;
   freeKick?: boolean;
+  /** Round 781: into the board of `minute`, see ScorerLine. */
+  plus?: number;
 }
 
 /** Round 504: one opposition player on the day, from the era roster. */
@@ -1127,6 +1146,10 @@ export interface TimelineEvent {
   /** Round 714: a goal or a save from the spot, a goal from a direct free kick. */
   penalty?: boolean;
   freeKick?: boolean;
+  /** Round 781: into the board of `minute` (45+2'). A clock row (half time,
+   *  the whistle, extra time) carries the board itself, so it sorts after
+   *  everything that happened in it. */
+  plus?: number;
 }
 
 export interface PlayerRatingLine {
@@ -1162,8 +1185,13 @@ export interface MatchDetail {
    *  roster cannot field eleven gets no invented ratings sheet. Absent on
    *  pre-178 saves. */
   oppRatings?: PlayerRatingLine[];
-  /** Round 169: stoppage time shown on the clock, per half. */
-  added?: { h1: number; h2: number };
+  /** Round 169: stoppage time shown on the clock, per half.
+   *  Round 781: the board is now football, not a caption. It is decided as
+   *  the last stretch of each period is drawn (drawSegment), goals, cards and
+   *  injuries can fall inside it (minute 45 or 90 with `plus`), and `et` is
+   *  the board at the end of extra time when it was played. A report written
+   *  before this round has no `et` and no line with a plus. */
+  added?: { h1: number; h2: number; et?: number };
   /** Round 169: the sim's own crowd for this fixture. */
   attendance?: number;
   /** Ground capacity when the save knows it (custom clubs); null otherwise.
@@ -1229,8 +1257,16 @@ export interface MatchWeekReport {
   /** Round 670: the tie this match settled, on a second leg: the aggregate
    *  after any extra time, in my orientation, whether away goals split it,
    *  and whether my club went through. Absent on every other match and on
-   *  every report written before this round. */
-  tie?: { leg: 1 | 2; aggMine: number; aggTheirs: number; byAwayGoals?: boolean; through?: boolean };
+   *  every report written before this round.
+   *  Round 781: a first leg carries it too, with `leg: 1` and tonight's score
+   *  as the aggregate so far, and a second leg also carries the first leg's
+   *  score in my orientation (`leg1Mine`, `leg1Theirs`) and where it was
+   *  played, so the report can print "First leg 2-1 away, agg 3-2" without
+   *  reading the bracket. Absent on reports written before this round. */
+  tie?: {
+    leg: 1 | 2; aggMine: number; aggTheirs: number; byAwayGoals?: boolean; through?: boolean;
+    leg1Mine?: number; leg1Theirs?: number; leg1Home?: boolean;
+  };
   /** Round 782: the shootout kick by kick, present only when the manager had
    *  set a shootout order. `decidedBy` and `shootoutWon` carry the result
    *  exactly as before, so nothing that reads them changes. */
@@ -1573,9 +1609,12 @@ export function wildernessProfile(career: CareerState): ManagerProfile {
      promotions and relegations are read off the finishes rather than
      invented: a title in a season is the promotion story at the lower end,
      and a bottom three finish is the relegation one. The table size is not
-     stored per season, so twenty is the honest divisor here. */
+     stored per season, so twenty is the honest divisor here. Round 883: a
+     league that relegates nobody (Liga MX has eighteen clubs, so its last
+     place is 18th) never reads as a relegation. */
+  const wentDown = (h: SeasonRecord) => h.position >= 18 && relegationSpots(leagueOf(h.club).id) > 0;
   const promotions = career.history.filter(h => h.position === 1).length;
-  const relegations = career.history.filter(h => h.position >= 18).length;
+  const relegations = career.history.filter(wentDown).length;
   const def = clubDefFor(career.clubName);
   const out = career.wilderness?.weeksOut ?? 0;
   return {
@@ -1586,7 +1625,7 @@ export function wildernessProfile(career: CareerState): ManagerProfile {
     relegations,
     seasonsManaged: Math.max(0, career.season - 1) + (career.history.length ? 0 : 0),
     lastTier: def.tier as ClubTier,
-    departure: (career.history[career.history.length - 1]?.position ?? 0) >= 18 ? 'relegated' : 'sacked',
+    departure: career.history.length && wentDown(career.history[career.history.length - 1]) ? 'relegated' : 'sacked',
     /* A week out is not a season out, but the market does cool. Four weeks
        of silence reads to a board like a season on the sofa. */
     seasonsOut: Math.floor(out / 4),
@@ -2328,7 +2367,13 @@ export interface LiveMatch {
   /** My substitutions, at the minute each one was made. */
   subs?: SubLine[];
   /** Shape changes, at their minutes, so the record says when. */
-  shapeChanges?: { minute: number; mentality: Mentality }[];
+  shapeChanges?: { minute: number; mentality: Mentality; plus?: number }[];
+  /** Round 781: the referee's board per period, decided as the last stretch
+   *  of that period is drawn, so the goals drawn in it fit under it and the
+   *  viewer can run its clock through it. Absent on a period not yet drawn
+   *  and on every live match saved before this round; the whistle then
+   *  rolls the board the Round 472 way, as it always did. */
+  added?: { h1?: number; h2?: number; et?: number };
   /** The clock the match stands at: the last minute the manager acted at,
    *  or the restart. The viewer resumes a paused save from here. */
   minute?: number;
@@ -2493,10 +2538,209 @@ export const EURO_CLUBS = [
 export interface LeagueDef {
   id: string;
   name: string;
-  cupName: string;
-  /** Can clubs from this league qualify for the Champions League in-game? */
+  /** The domestic cup, or null for a league that has none (Round 832).
+   *  Filled from the league's row in LEAGUE_RULES. */
+  cupName: string | null;
+  /** Can clubs from this league qualify for the Champions League in-game?
+   *  Filled from LEAGUE_RULES: true exactly when the row has UEFA places. */
   euro: boolean;
   clubs: string[];
+}
+
+/* ================================================================== */
+/* Round 832: one rules table, keyed by league id                     */
+/* ================================================================== */
+
+/**
+ * Everything about a league's SHAPE, in one row per league id, modern and
+ * era alike. Before this round the same facts lived as id branches spread
+ * through the engine: the drop zone in a chain of ifs in relegationSpots, the
+ * promotion pairs in PYRAMIDS, the flags in LEAGUE_NATIONS, the nations'
+ * league lists in NATIONS, the UEFA places in EURO_SLOTS, the cup name and
+ * the euro flag on each league def, and three board ladders keyed on ids
+ * ('championship', 'bundesliga2', anything starting 'mls') plus a fourth for
+ * 'saudi'. All of those are now read off this table, and PYRAMIDS,
+ * LEAGUE_NATIONS, EURO_SLOTS and the nations' leagueIds are derived from it.
+ *
+ * Adding a league is: a row here, a row in REAL_LEAGUES (id, name, clubs),
+ * a nation row in NATIONS if the nation is new, then its clubs' rosters,
+ * priors and colours. Nothing else branches on a league id.
+ *
+ * Two shapes exist here that no league used before this round, so the next
+ * leagues are data: cup null (a league with no domestic cup: no cup in the
+ * calendar, no bracket, no cup objective, and the cup screens say there is
+ * none) and any drop count (four for a league that sends four down; with a
+ * secondTier the summer trades that many both ways). simCmLeagueRules plays
+ * both on synthetic leagues for ten seasons.
+ */
+export interface LeagueRules {
+  /** The NATIONS id that owns the league: the picker groups by it and the
+   *  domestic cup draws from every league of the nation. */
+  nationId: string;
+  /** The flag name for FlagImg (LEAGUE_NATIONS is derived from this). */
+  flag: string;
+  /** The domestic cup, or null for a league with none. */
+  cup: string | null;
+  /** The UEFA places the table hands out, or null outside UEFA's
+   *  competitions in this game (no Champions League from this league). */
+  europe: EuroSlots | null;
+  /** Clubs relegated every summer. 0 for a league with no relegation. */
+  drop: number;
+  /** The modelled division below. The summer trades `drop` clubs both ways
+   *  between the two (PYRAMIDS is derived from this). */
+  secondTier?: string;
+  /** How the board talks. 'top': the title, the European windows, a
+   *  continental prize, the top half, survival. 'promotion': a second tier,
+   *  the title, automatic promotion, the playoff rung, the top half,
+   *  survival. 'playoffs': no relegation and a season settled in a playoff,
+   *  so the title, the playoff rung, then mid-table. */
+  ladder: 'top' | 'promotion' | 'playoffs';
+  /** The playoff rung of a 'promotion' or 'playoffs' ladder: clubs ranked
+   *  this high are asked to finish at the target, in these words. */
+  playoff?: { rankUpTo: number; target: number; label: string };
+  /** 'playoffs' ladder: below the playoff rung, the target sits this many
+   *  places from the bottom. */
+  floorFromBottom?: number;
+  /** A continental prize outside UEFA, asked of clubs ranked this high. */
+  continental?: { label: string; rankUpTo: number; target: number };
+  /** The real league's calendar. The engine plays every league on one
+   *  August to May calendar, which a calendar year league shares by
+   *  simplification (MLS since Round 72). */
+  season: 'autumnSpring' | 'calendarYear';
+  /** What the engine plays more simply than the real league, in words,
+   *  where the verified notes on the league say so. */
+  simplified?: string;
+  /** How clubs level on points are split (TiebreakRule, with the sources
+   *  at its definition). Absent is goal difference then goals scored, the
+   *  only order the engine can take for a league whose own order has not
+   *  been verified. Round 832 review: this sat in a map of its own keyed by
+   *  league id, the one league rule left outside this table. */
+  tiebreak?: TiebreakRule;
+}
+
+const SPLIT_SIMPLIFIED = 'The real league splits into groups part way through the season; it is played here as a straight double round robin.';
+
+export const LEAGUE_RULES: Record<string, LeagueRules> = {
+  premier: { nationId: 'england', flag: 'England', cup: 'FA Cup', europe: { ucl: 4, uel: 5, uecl: 6 }, drop: 3, tiebreak: 'gdGf', secondTier: 'championship', ladder: 'top', season: 'autumnSpring' },
+  championship: {
+    nationId: 'england', flag: 'England', cup: 'FA Cup', europe: null, drop: 3, ladder: 'promotion',
+    playoff: { rankUpTo: 8, target: 6, label: 'Make the promotion playoffs' }, season: 'autumnSpring',
+    simplified: 'Three go up and three come down in a straight swap; the real promotion playoff is not played.',
+  },
+  laliga: { nationId: 'spain', flag: 'Spain', cup: 'Copa del Rey', europe: { ucl: 4, uel: 5, uecl: 6 }, drop: 3, tiebreak: 'h2h', ladder: 'top', season: 'autumnSpring' },
+  seriea: { nationId: 'italy', flag: 'Italy', cup: 'Coppa Italia', europe: { ucl: 4, uel: 5, uecl: 6 }, drop: 3, tiebreak: 'h2h', ladder: 'top', season: 'autumnSpring' },
+  bundesliga: {
+    nationId: 'germany', flag: 'Germany', cup: 'DFB-Pokal', europe: { ucl: 4, uel: 5, uecl: 6 }, drop: 2, tiebreak: 'gdGfAgg', secondTier: 'bundesliga2', ladder: 'top', season: 'autumnSpring',
+    simplified: 'The real relegation playoff (sixteenth against the 2. Bundesliga\'s third) is not played: two go straight down and two straight up.',
+  },
+  ligue1: { nationId: 'france', flag: 'France', cup: 'Coupe de France', europe: { ucl: 3, uel: 4, uecl: 5 }, drop: 3, tiebreak: 'gdH2h', ladder: 'top', season: 'autumnSpring' },
+  eredivisie: { nationId: 'netherlands', flag: 'Netherlands', cup: 'KNVB Cup', europe: { ucl: 2, uel: 3, uecl: 4 }, drop: 2, ladder: 'top', season: 'autumnSpring' },
+  saudi: {
+    nationId: 'saudi', flag: 'Saudi Arabia', cup: "King's Cup", europe: null, drop: 3, ladder: 'top', season: 'autumnSpring',
+    continental: { label: 'AFC Champions League Elite', rankUpTo: 5, target: 3 },
+  },
+  mlsEast: {
+    nationId: 'usa', flag: 'USA', cup: 'U.S. Open Cup', europe: null, drop: 0, ladder: 'playoffs',
+    playoff: { rankUpTo: 9, target: 8, label: 'Make the playoffs' }, floorFromBottom: 4, season: 'calendarYear',
+    simplified: 'The playoffs are not played; the conference table settles the season.',
+  },
+  mlsWest: {
+    nationId: 'usa', flag: 'USA', cup: 'U.S. Open Cup', europe: null, drop: 0, ladder: 'playoffs',
+    playoff: { rankUpTo: 9, target: 8, label: 'Make the playoffs' }, floorFromBottom: 4, season: 'calendarYear',
+    simplified: 'The playoffs are not played; the conference table settles the season.',
+  },
+  primeira: { nationId: 'portugal', flag: 'Portugal', cup: 'Taça de Portugal', europe: { ucl: 2, uel: 3, uecl: 4 }, drop: 2, ladder: 'top', season: 'autumnSpring' },
+  scottish: { nationId: 'scotland', flag: 'Scotland', cup: 'Scottish Cup', europe: { ucl: 1, uel: 2, uecl: 3 }, drop: 1, ladder: 'top', season: 'autumnSpring' },
+  superlig: { nationId: 'turkey', flag: 'Türkiye', cup: 'Turkish Cup', europe: { ucl: 1, uel: 2, uecl: 3 }, drop: 3, ladder: 'top', season: 'autumnSpring' },
+  bundesliga2: {
+    nationId: 'germany', flag: 'Germany', cup: 'DFB-Pokal', europe: null, drop: 2, ladder: 'promotion',
+    playoff: { rankUpTo: 6, target: 3, label: 'Reach the promotion playoff' }, season: 'autumnSpring',
+    simplified: 'The real promotion playoff (third against the Bundesliga\'s sixteenth) is not played: two go straight up and two straight down.',
+  },
+  proleague: { nationId: 'belgium', flag: 'Belgium', cup: 'Belgian Cup', europe: { ucl: 1, uel: 2, uecl: 3 }, drop: 1, ladder: 'top', season: 'autumnSpring' },
+  austria: { nationId: 'austria', flag: 'Austria', cup: 'ÖFB Cup', europe: { ucl: 1, uel: 2, uecl: 3 }, drop: 1, ladder: 'top', season: 'autumnSpring', simplified: SPLIT_SIMPLIFIED },
+  greece: { nationId: 'greece', flag: 'Greece', cup: 'Greek Cup', europe: { ucl: 1, uel: 2, uecl: 3 }, drop: 2, ladder: 'top', season: 'autumnSpring', simplified: SPLIT_SIMPLIFIED },
+  denmark: { nationId: 'denmark', flag: 'Denmark', cup: 'Danish Cup', europe: { ucl: 1, uel: 2, uecl: 3 }, drop: 2, ladder: 'top', season: 'autumnSpring', simplified: SPLIT_SIMPLIFIED },
+  switzerland: {
+    nationId: 'switzerland', flag: 'Switzerland', cup: 'Swiss Cup', europe: { ucl: 1, uel: 2, uecl: 3 }, drop: 1, ladder: 'top', season: 'autumnSpring',
+    simplified: `${SPLIT_SIMPLIFIED} One goes straight down and the real relegation playoff is not played.`,
+  },
+  croatia: {
+    nationId: 'croatia', flag: 'Croatia', cup: 'Croatian Cup', europe: { ucl: 1, uel: 2, uecl: 3 }, drop: 1, ladder: 'top', season: 'autumnSpring',
+    simplified: 'The real league plays each other four times over 36 rounds and settles ninth in a playoff; it is played here as a straight double round robin with one going straight down.',
+  },
+  /* Round 876: Brazil's Serie A. The real shape (20 clubs, double round
+     robin, four down) with three simplifications. The real league runs
+     through the calendar year and is played here on the game's August to May
+     calendar, as MLS is. No continental competition is modelled for it (the
+     Copa Libertadores is not in the game), so it has no European places. And
+     the real table splits clubs level on points by wins first, then goal
+     difference, goals scored and head to head (the 2026 regulations as
+     reported by O Imparcial, January 2026, and Flashscore's 2026 guide);
+     TiebreakRule has no wins step, so it takes the gdGfOnly default. */
+  brasileirao: {
+    nationId: 'brazil', flag: 'Brazil', cup: 'Copa do Brasil', europe: null, drop: 4, ladder: 'top', season: 'calendarYear',
+    simplified: 'Played on the August to May calendar rather than January to December, with no Copa Libertadores, and clubs level on points split by goal difference then goals scored, where the real table reads wins first.',
+  },
+  /* Round 883: Liga MX 2026-27, the first real league with no domestic cup
+     (cup null, the shape Round 832 proved on a synthetic row). Each fact
+     from two sources, read 2026-10-02:
+     - No promotion or relegation from 2026-27 on (article 35 of the new
+       competition regulations): Infobae, "Oficial: desaparece el descenso y
+       ascenso en la Liga MX a partir del Apertura 2026" (2026-07-16), and
+       Record, "Oficial: no habra ascenso y descenso en la Liga MX"
+       (2026-07-16). So drop 0 and the MLS ladder: no board threatens it.
+     - No domestic cup: the Copa MX was last played in November 2020 and its
+       return was only ever promised (Record, 2025-10-17, the federation
+       president saying it would come back "for 2025 or 2026"); the 2026-27
+       calendar guides list the Leagues Cup and the Liguilla and no cup
+       (Excelsior, "Guia de calendario de la Liga MX Apertura 2026"; TUDN,
+       "Revela la Liga MX el calendario del Apertura 2026"). The Leagues Cup
+       is a cross border competition with MLS and is not used as a cup.
+     - The top eight of the table go straight to the Liguilla quarter finals,
+       the play-in gone (TUDN as above; Mediotiempo, "Liga MX elimina el
+       Play-In definitivamente", 2026-04-23): the board's playoff rung.
+     Simplified: the Apertura and Clausura are played as one double round
+     robin of 34 rounds and the Liguilla is not played, so the table settles
+     the season. Level clubs split by goal difference then goals scored,
+     which are the real first two steps (Fox Sports Mexico, 2026-04-22, then
+     head to head and away goals); only that one source spelled the order
+     out, so the row takes the gdGfOnly default rather than claiming the
+     head to head step. */
+  ligamx: {
+    nationId: 'mexico', flag: 'Mexico', cup: null, europe: null, drop: 0, ladder: 'playoffs',
+    playoff: { rankUpTo: 10, target: 8, label: 'Make the Liguilla' }, floorFromBottom: 4, season: 'autumnSpring',
+    simplified: 'The Apertura and Clausura are played as one double round robin and the Liguilla is not played, so the table settles the season. There is no domestic cup (the Copa MX has not been played since 2020), and clubs level on points split by goal difference then goals scored, the real table\'s first two steps.',
+  },
+  /* The era leagues. No Conference League existed before 2021, so uecl is 0
+     and the board's ladder skips that band; 2005-06 still called the second
+     competition the UEFA Cup. */
+  premier2010: { nationId: 'england', flag: 'England', cup: 'FA Cup', europe: { ucl: 4, uel: 5, uecl: 0 }, drop: 3, tiebreak: 'gdGf', ladder: 'top', season: 'autumnSpring' },
+  laliga2010: { nationId: 'spain', flag: 'Spain', cup: 'Copa del Rey', europe: { ucl: 4, uel: 6, uecl: 0 }, drop: 3, tiebreak: 'h2h', ladder: 'top', season: 'autumnSpring' },
+  premier2015: { nationId: 'england', flag: 'England', cup: 'FA Cup', europe: { ucl: 4, uel: 5, uecl: 0 }, drop: 3, tiebreak: 'gdGf', ladder: 'top', season: 'autumnSpring' },
+  laliga2015: { nationId: 'spain', flag: 'Spain', cup: 'Copa del Rey', europe: { ucl: 4, uel: 6, uecl: 0 }, drop: 3, tiebreak: 'h2h', ladder: 'top', season: 'autumnSpring' },
+  seriea2015: { nationId: 'italy', flag: 'Italy', cup: 'Coppa Italia', europe: { ucl: 3, uel: 5, uecl: 0 }, drop: 3, tiebreak: 'h2h', ladder: 'top', season: 'autumnSpring' },
+  premier2005: { nationId: 'england', flag: 'England', cup: 'FA Cup', europe: { ucl: 4, uel: 5, uecl: 0, uelName: 'UEFA Cup' }, drop: 3, tiebreak: 'gdGf', ladder: 'top', season: 'autumnSpring' },
+  laliga2005: { nationId: 'spain', flag: 'Spain', cup: 'Copa del Rey', europe: { ucl: 4, uel: 6, uecl: 0, uelName: 'UEFA Cup' }, drop: 3, tiebreak: 'h2h', ladder: 'top', season: 'autumnSpring' },
+};
+
+/** What an id with no row reads as: a cupless top flight outside Europe that
+ *  sends three down, the answers relegationSpots and EURO_SLOTS gave an
+ *  unknown id before this round. Never a real league: simCmLeagueRules holds
+ *  every league def to a row of its own. */
+const UNKNOWN_LEAGUE_RULES: LeagueRules = { nationId: '', flag: '', cup: null, europe: null, drop: 3, ladder: 'top', season: 'autumnSpring' };
+
+/** The rules row for a league id. */
+export function leagueRulesOf(leagueId: string): LeagueRules {
+  return Object.prototype.hasOwnProperty.call(LEAGUE_RULES, leagueId) ? LEAGUE_RULES[leagueId] : UNKNOWN_LEAGUE_RULES;
+}
+
+/** A membership row (id, name, clubs) becomes a league def with its cup and
+ *  its euro flag read off the rules table. Same key order as the literal
+ *  defs had, so nothing that serialises a def changes. */
+function leagueFromRow(row: { id: string; name: string; clubs: string[] }): LeagueDef {
+  const rules = leagueRulesOf(row.id);
+  return { id: row.id, name: row.name, cupName: rules.cup, euro: rules.europe !== null, clubs: row.clubs };
 }
 
 /**
@@ -2507,52 +2751,52 @@ export interface LeagueDef {
  */
 export const REAL_LEAGUES: LeagueDef[] = [
   {
-    id: 'premier', name: 'Premier League', cupName: 'FA Cup', euro: true,
+    id: 'premier', name: 'Premier League',
     // 2026-27: Coventry, Ipswich and Hull came up; Wolves, Burnley and West Ham went down.
     clubs: ['Arsenal', 'Aston Villa', 'Bournemouth', 'Brentford', 'Brighton', 'Chelsea', 'Coventry City', 'Crystal Palace', 'Everton', 'Fulham', 'Hull City', 'Ipswich Town', 'Leeds United', 'Liverpool', 'Manchester City', 'Manchester United', 'Newcastle', 'Nottingham Forest', 'Sunderland', 'Tottenham'],
   },
   {
-    id: 'championship', name: 'EFL Championship', cupName: 'FA Cup', euro: false,
+    id: 'championship', name: 'EFL Championship',
     // 2026-27 lineup per the fixture release: the three relegated Premier
     // League sides plus Cardiff, Bolton and Lincoln up from League One.
     clubs: ['Birmingham City', 'Blackburn Rovers', 'Bolton Wanderers', 'Bristol City', 'Burnley', 'Cardiff City', 'Charlton Athletic', 'Derby County', 'Lincoln City', 'Middlesbrough', 'Millwall', 'Norwich City', 'Portsmouth', 'Preston North End', 'QPR', 'Sheffield United', 'Southampton', 'Stoke City', 'Swansea City', 'Watford', 'West Brom', 'West Ham', 'Wolves', 'Wrexham'],
   },
   {
-    id: 'laliga', name: 'La Liga', cupName: 'Copa del Rey', euro: true,
+    id: 'laliga', name: 'La Liga',
     // 2026-27: Racing Santander, Deportivo and Málaga up; Oviedo, Girona and Mallorca down.
     clubs: ['Alavés', 'Athletic Club', 'Atlético Madrid', 'Barcelona', 'Real Betis', 'Celta Vigo', 'Deportivo La Coruña', 'Elche', 'Espanyol', 'Getafe', 'Levante', 'Málaga', 'Osasuna', 'Racing Santander', 'Rayo Vallecano', 'Real Madrid', 'Real Sociedad', 'Sevilla', 'Valencia', 'Villarreal'],
   },
   {
-    id: 'seriea', name: 'Serie A', cupName: 'Coppa Italia', euro: true,
+    id: 'seriea', name: 'Serie A',
     // 2026-27: Venezia, Frosinone and Monza up; Cremonese, Verona and Pisa down.
     clubs: ['Atalanta', 'Bologna', 'Cagliari', 'Como', 'Fiorentina', 'Frosinone', 'Genoa', 'Inter Milan', 'Juventus', 'Lazio', 'Lecce', 'AC Milan', 'Monza', 'Napoli', 'Parma', 'Roma', 'Sassuolo', 'Torino', 'Udinese', 'Venezia'],
   },
   {
-    id: 'bundesliga', name: 'Bundesliga', cupName: 'DFB-Pokal', euro: true,
+    id: 'bundesliga', name: 'Bundesliga',
     // 2026-27: Schalke, Elversberg and Paderborn up; Heidenheim, St. Pauli and Wolfsburg down.
     clubs: ['Augsburg', 'Bayer Leverkusen', 'Bayern Munich', 'Borussia Dortmund', 'Gladbach', 'Eintracht Frankfurt', 'Freiburg', 'Hamburg', 'Hoffenheim', 'Köln', 'Mainz', 'RB Leipzig', 'Schalke 04', 'Elversberg', 'Paderborn', 'Stuttgart', 'Union Berlin', 'Werder Bremen'],
   },
   {
-    id: 'ligue1', name: 'Ligue 1', cupName: 'Coupe de France', euro: true,
+    id: 'ligue1', name: 'Ligue 1',
     // 2026-27: Troyes and Le Mans up; Metz and Nantes down.
     clubs: ['Angers', 'Auxerre', 'Brest', 'Le Havre', 'Le Mans', 'Lens', 'Lille', 'Lorient', 'Lyon', 'Marseille', 'Monaco', 'Nice', 'Paris FC', 'PSG', 'Rennes', 'Strasbourg', 'Toulouse', 'Troyes'],
   },
   {
-    id: 'eredivisie', name: 'Eredivisie', cupName: 'KNVB Cup', euro: true,
+    id: 'eredivisie', name: 'Eredivisie',
     // 2026-27: ADO Den Haag, Cambuur and Willem II up; Volendam, NAC and Heracles down.
     clubs: ['Ajax', 'AZ Alkmaar', 'ADO Den Haag', 'Cambuur', 'Excelsior', 'Feyenoord', 'Fortuna Sittard', 'Go Ahead Eagles', 'Groningen', 'Heerenveen', 'NEC Nijmegen', 'PEC Zwolle', 'PSV', 'Sparta Rotterdam', 'Telstar', 'Twente', 'Utrecht', 'Willem II'],
   },
   {
-    id: 'saudi', name: 'Saudi Pro League', cupName: "King's Cup", euro: false,
+    id: 'saudi', name: 'Saudi Pro League',
     // 2026-27: Abha, Al-Faisaly and Al-Diriyah up; Al-Najma, Al-Okhdood and Damac down.
     clubs: ['Abha', 'Al-Ahli', 'Al-Diriyah', 'Al-Ettifaq', 'Al-Faisaly', 'Al-Fateh', 'Al-Fayha', 'Al-Hazem', 'Al-Hilal', 'Al-Ittihad', 'Al-Khaleej', 'Al-Kholood', 'Al-Nassr', 'Al-Qadsiah', 'Al-Riyadh', 'Al-Shabab', 'Al-Taawoun', 'NEOM SC'],
   },
   {
-    id: 'mlsEast', name: 'MLS Eastern Conference', cupName: 'U.S. Open Cup', euro: false,
+    id: 'mlsEast', name: 'MLS Eastern Conference',
     clubs: ['Atlanta United', 'Charlotte FC', 'Chicago Fire', 'FC Cincinnati', 'Columbus Crew', 'D.C. United', 'Inter Miami', 'CF Montréal', 'Nashville SC', 'New England Revolution', 'New York City FC', 'New York Red Bulls', 'Orlando City', 'Philadelphia Union', 'Toronto FC'],
   },
   {
-    id: 'mlsWest', name: 'MLS Western Conference', cupName: 'U.S. Open Cup', euro: false,
+    id: 'mlsWest', name: 'MLS Western Conference',
     clubs: ['Austin FC', 'Colorado Rapids', 'FC Dallas', 'Houston Dynamo', 'LA Galaxy', 'LAFC', 'Minnesota United', 'Portland Timbers', 'Real Salt Lake', 'San Diego FC', 'San Jose Earthquakes', 'Seattle Sounders', 'Sporting Kansas City', 'St. Louis City', 'Vancouver Whitecaps'],
   },
   /* Round 140, from the owner's review: "way way way more leagues... with
@@ -2566,15 +2810,15 @@ export const REAL_LEAGUES: LeagueDef[] = [
      sit below that dataset's value floor and are marked in CM_PARTIAL, the
      same honesty rule the Championship has shipped with since Round 72. */
   {
-    id: 'primeira', name: 'Primeira Liga', cupName: 'Taça de Portugal', euro: true,
+    id: 'primeira', name: 'Primeira Liga',
     clubs: ['Porto', 'Benfica', 'Sporting CP', 'Braga', 'Vitória Guimarães', 'Famalicão', 'Rio Ave', 'Casa Pia', 'Estoril', 'Moreirense', 'Arouca', 'Gil Vicente', 'Santa Clara', 'Nacional', 'Estrela Amadora', 'Alverca', 'Marítimo', 'Académico de Viseu'],
   },
   {
-    id: 'scottish', name: 'Scottish Premiership', cupName: 'Scottish Cup', euro: true,
+    id: 'scottish', name: 'Scottish Premiership',
     clubs: ['Celtic', 'Rangers', 'Aberdeen', 'Hearts', 'Hibernian', 'Dundee United', 'Dundee', 'Motherwell', 'St Mirren', 'Kilmarnock', 'Falkirk', 'St Johnstone'],
   },
   {
-    id: 'superlig', name: 'Süper Lig', cupName: 'Turkish Cup', euro: true,
+    id: 'superlig', name: 'Süper Lig',
     clubs: ['Galatasaray', 'Fenerbahçe', 'Beşiktaş', 'Trabzonspor', 'Başakşehir', 'Samsunspor', 'Eyüpspor', 'Göztepe', 'Kasımpaşa', 'Alanyaspor', 'Konyaspor', 'Gaziantep FK', 'Gençlerbirliği', 'Kocaelispor', 'Rizespor', 'Erzurumspor', 'Amedspor', 'Çorum FK'],
   },
   /* Round 142: the second division he asked for by name ("some second
@@ -2582,7 +2826,7 @@ export const REAL_LEAGUES: LeagueDef[] = [
      season preview: Wolfsburg, Heidenheim and St. Pauli down from the
      Bundesliga, Osnabrück and Energie Cottbus up from 3. Liga. */
   {
-    id: 'bundesliga2', name: '2. Bundesliga', cupName: 'DFB-Pokal', euro: false,
+    id: 'bundesliga2', name: '2. Bundesliga',
     clubs: ['Wolfsburg', 'Heidenheim', 'St. Pauli', 'Bochum', 'Hertha BSC', 'Magdeburg', 'Kaiserslautern', 'Holstein Kiel', 'Hannover 96', 'Dynamo Dresden', 'Braunschweig', 'Greuther Fürth', 'Nürnberg', 'Darmstadt', 'Arminia Bielefeld', 'Karlsruhe', 'Osnabrück', 'Energie Cottbus'],
   },
   /* Round 143: Belgium's reformed top flight. 2026-27 is the expansion
@@ -2590,7 +2834,7 @@ export const REAL_LEAGUES: LeagueDef[] = [
      exactly the shape this engine plays. Beveren, Kortrijk and Lommel came
      up, Dender went down via the playoff Lommel won. */
   {
-    id: 'proleague', name: 'Belgian Pro League', cupName: 'Belgian Cup', euro: true,
+    id: 'proleague', name: 'Belgian Pro League',
     clubs: ['Club Brugge', 'Union Saint-Gilloise', 'Anderlecht', 'Genk', 'Gent', 'Antwerp', 'Standard Liège', 'Mechelen', 'Charleroi', 'Westerlo', 'Sint-Truiden', 'OH Leuven', 'Cercle Brugge', 'La Louvière', 'Zulte Waregem', 'Beveren', 'Kortrijk', 'Lommel'],
   },
   /* Round 177: wave three, first pair. Memberships verified 2026-08-19
@@ -2605,11 +2849,11 @@ export const REAL_LEAGUES: LeagueDef[] = [
      members with no dataset rows at all (Lustenau, Iraklis, Kalamata,
      Kifisia, Volos) ship as fully youth-padded squads that say so. */
   {
-    id: 'austria', name: 'Austrian Bundesliga', cupName: 'ÖFB Cup', euro: true,
+    id: 'austria', name: 'Austrian Bundesliga',
     clubs: ['RB Salzburg', 'Sturm Graz', 'Rapid Wien', 'LASK', 'Wolfsberger AC', 'Austria Wien', 'Grazer AK', 'Hartberg', 'Ried', 'Altach', 'WSG Tirol', 'Austria Lustenau'],
   },
   {
-    id: 'greece', name: 'Super League Greece', cupName: 'Greek Cup', euro: true,
+    id: 'greece', name: 'Super League Greece',
     clubs: ['Olympiacos', 'Panathinaikos', 'AEK Athens', 'PAOK', 'Aris', 'Asteras Tripolis', 'Atromitos', 'Iraklis', 'Kalamata', 'Kifisia', 'Levadiakos', 'OFI', 'Panetolikos', 'Volos'],
   },
   /* Round 185: wave three, second pair. Memberships verified 2026-08-19
@@ -2626,11 +2870,11 @@ export const REAL_LEAGUES: LeagueDef[] = [
      members with zero usable dataset rows (AC Horsens, SønderjyskE) ship
      as fully youth-padded squads that say so. */
   {
-    id: 'denmark', name: 'Danish Superliga', cupName: 'Danish Cup', euro: true,
+    id: 'denmark', name: 'Danish Superliga',
     clubs: ['FC Copenhagen', 'FC Midtjylland', 'Brøndby IF', 'AGF', 'FC Nordsjælland', 'Viborg FF', 'Randers FC', 'OB', 'Silkeborg IF', 'Lyngby', 'AC Horsens', 'SønderjyskE'],
   },
   {
-    id: 'switzerland', name: 'Swiss Super League', cupName: 'Swiss Cup', euro: true,
+    id: 'switzerland', name: 'Swiss Super League',
     clubs: ['Basel', 'Young Boys', 'Thun', 'St. Gallen', 'Lugano', 'Servette', 'Luzern', 'Lausanne-Sport', 'FC Zürich', 'Grasshopper', 'Sion', 'Vaduz'],
   },
   /* Round 189: wave three, last verifiable candidate. Membership verified
@@ -2645,10 +2889,33 @@ export const REAL_LEAGUES: LeagueDef[] = [
      and sends one straight down, the same simplification Switzerland
      shipped with. */
   {
-    id: 'croatia', name: 'SuperSport HNL', cupName: 'Croatian Cup', euro: true,
+    id: 'croatia', name: 'SuperSport HNL',
     clubs: ['Dinamo Zagreb', 'Hajduk Split', 'Rijeka', 'Osijek', 'Varaždin', 'Slaven Belupo', 'Istra 1961', 'Lokomotiva Zagreb', 'Gorica', 'Rudeš'],
   },
-];
+  /* Round 876: Brazil's Serie A 2026. Membership read 2026-10-02 off two
+     agreeing tables, the CBF's own
+     (https://www.cbf.com.br/futebol-brasileiro/tabelas/campeonato-brasileiro/serie-a/2026)
+     and ESPN's (https://www.espn.com/soccer/standings/_/league/bra.1): the
+     same twenty clubs, Remo and Chapecoense among them. Rosters from the same
+     value table as every other league; Chapecoense have no usable rows and
+     ship as a youth padded squad that says so. */
+  {
+    id: 'brasileirao', name: 'Brasileirão Série A',
+    clubs: ['Flamengo', 'Palmeiras', 'Athletico Paranaense', 'Fluminense', 'Bahia', 'Cruzeiro', 'Atlético Mineiro', 'Santos', 'Coritiba', 'Red Bull Bragantino', 'São Paulo', 'Botafogo', 'Vitória', 'Corinthians', 'Mirassol', 'Vasco da Gama', 'Grêmio', 'Internacional', 'Remo', 'Chapecoense'],
+  },
+  /* Round 883: Liga MX 2026-27. Membership read 2026-10-02 off two agreeing
+     lists, Liga MX's own site (https://ligamx.net/, the Apertura 2026 club
+     menus and table) and ESPN's 2026-27 standings
+     (https://www.espn.com/soccer/standings/_/league/mex.1): the same
+     eighteen clubs. Atlante are back in place of Mazatlan, whose top flight
+     certificate their owner bought (Telemundo, "Atlante esta de regreso",
+     and Mediotiempo, "Liga MX recibe a Atlante"). Atlante have no usable
+     rows in the value table and ship as a youth padded squad that says so. */
+  {
+    id: 'ligamx', name: 'Liga MX',
+    clubs: ['América', 'Guadalajara', 'Cruz Azul', 'Monterrey', 'Tigres UANL', 'Toluca', 'Pumas UNAM', 'Pachuca', 'León', 'Santos Laguna', 'Atlas', 'Necaxa', 'Puebla', 'Querétaro', 'Tijuana', 'FC Juárez', 'Atlético San Luis', 'Atlante'],
+  },
+].map(leagueFromRow);
 
 /**
  * Round 310: which divisions trade clubs at the summer rollover. Only the
@@ -2659,43 +2926,23 @@ export const REAL_LEAGUES: LeagueDef[] = [
  * straight up, two straight down. This pairing is an explicit table on
  * purpose and must never be inferred from NATIONS: the USA also has two
  * leagueIds and those are conferences, not a pyramid.
+ * Round 832: still explicit, now as a top flight's secondTier in its
+ * LEAGUE_RULES row, and the count is that top flight's drop, so the two can
+ * never disagree. Listed in REAL_LEAGUES order, which the summer walks.
  */
-export const PYRAMIDS: { top: string; second: string; count: number }[] = [
-  { top: 'premier', second: 'championship', count: 3 },
-  { top: 'bundesliga', second: 'bundesliga2', count: 2 },
-];
+export const PYRAMIDS: { top: string; second: string; count: number }[] = REAL_LEAGUES
+  .filter(l => leagueRulesOf(l.id).secondTier)
+  .map(l => ({ top: l.id, second: leagueRulesOf(l.id).secondTier!, count: leagueRulesOf(l.id).drop }));
 
 /**
  * Round 163: the nation behind every league id, for the flag on the league
  * picker. Names match the FlagImg lookup table exactly. Era leagues reuse
  * these ids, and a custom league wears the id of the league it joined.
+ * Round 832: read off each LEAGUE_RULES row's flag.
  */
-export const LEAGUE_NATIONS: Record<string, string> = {
-  premier: 'England',
-  championship: 'England',
-  laliga: 'Spain',
-  seriea: 'Italy',
-  bundesliga: 'Germany',
-  ligue1: 'France',
-  eredivisie: 'Netherlands',
-  bundesliga2: 'Germany',
-  saudi: 'Saudi Arabia',
-  mlsEast: 'USA',
-  mlsWest: 'USA',
-  primeira: 'Portugal',
-  scottish: 'Scotland',
-  superlig: 'Türkiye',
-  proleague: 'Belgium',
-  austria: 'Austria',
-  greece: 'Greece',
-  denmark: 'Denmark',
-  switzerland: 'Switzerland',
-  croatia: 'Croatia',
-  // Round 312: the era league ids, so the world tables picker flags them too.
-  premier2005: 'England', laliga2005: 'Spain',
-  premier2010: 'England', laliga2010: 'Spain',
-  premier2015: 'England', laliga2015: 'Spain', seriea2015: 'Italy',
-};
+export const LEAGUE_NATIONS: Record<string, string> = Object.fromEntries(
+  Object.entries(LEAGUE_RULES).map(([id, rules]) => [id, rules.flag]),
+);
 
 /** Strength priors for league clubs the player pool cannot rate. */
 const STRENGTH_PRIORS: Record<string, number> = {
@@ -2773,6 +3020,18 @@ const STRENGTH_PRIORS: Record<string, number> = {
   // after the summer sales; Rudeš come up as the promoted side.
   'Rijeka': 72, 'Osijek': 68, 'Varaždin': 67, 'Slaven Belupo': 66,
   'Istra 1961': 65, 'Lokomotiva Zagreb': 65, 'Gorica': 64, 'Rudeš': 61,
+  // Round 876: Brazil's Serie A. A prior only reaches a club with no baked
+  // player at all (bakedXIAvg rates every other squad from its data), and
+  // Chapecoense are the one such member. 61 is the value every promoted or
+  // bottom side with no usable rows has shipped with (Rudeš, Lommel,
+  // Iraklis, Kalamata, Austria Lustenau, AC Horsens), below the 64 a $1m
+  // player rates at, which is the value table's floor.
+  'Chapecoense': 61,
+  // Round 883: Liga MX. Atlante are the one member with no baked player
+  // (back in the top flight in place of Mazatlan, from the second tier), so
+  // they take the same 61 every promoted side with no usable rows has
+  // shipped with, Chapecoense the last of them.
+  'Atlante': 61,
 };
 
 /** The real league a club plays in. Every playable club is covered.
@@ -2805,14 +3064,14 @@ export function leagueOf(clubName: string): LeagueDef {
 export const ERA_LEAGUES: Record<string, LeagueDef[]> = {
   era2010: [
     {
-      id: 'premier2010', name: 'Premier League', cupName: 'FA Cup', euro: true,
+      id: 'premier2010', name: 'Premier League',
       clubs: ['Arsenal', 'Aston Villa', 'Birmingham City', 'Blackburn Rovers', 'Blackpool', 'Bolton Wanderers', 'Chelsea', 'Everton', 'Fulham', 'Liverpool', 'Manchester City', 'Manchester United', 'Newcastle', 'Stoke City', 'Sunderland', 'Tottenham', 'West Brom', 'West Ham', 'Wigan Athletic', 'Wolves'],
     },
     {
-      id: 'laliga2010', name: 'La Liga', cupName: 'Copa del Rey', euro: true,
+      id: 'laliga2010', name: 'La Liga',
       clubs: ['Almería', 'Athletic Club', 'Atlético Madrid', 'Barcelona', 'Deportivo La Coruña', 'Espanyol', 'Getafe', 'Hércules', 'Levante', 'Málaga', 'Mallorca', 'Osasuna', 'Racing Santander', 'Real Madrid', 'Real Sociedad', 'Sevilla', 'Sporting Gijón', 'Valencia', 'Villarreal', 'Zaragoza'],
     },
-  ],
+  ].map(leagueFromRow),
   /* Round 175: the 2015-16 season, memberships verified against the season
      records (Wikipedia and worldfootball final tables, checked 2026-08-18)
      AND against the market values table itself (every club dense with real
@@ -2821,11 +3080,11 @@ export const ERA_LEAGUES: Record<string, LeagueDef[]> = {
      there, so colors and rivalries carry over. */
   era2015: [
     {
-      id: 'premier2015', name: 'Premier League', cupName: 'FA Cup', euro: true,
+      id: 'premier2015', name: 'Premier League',
       clubs: ['Arsenal', 'Aston Villa', 'Bournemouth', 'Chelsea', 'Crystal Palace', 'Everton', 'Leicester City', 'Liverpool', 'Manchester City', 'Manchester United', 'Newcastle', 'Norwich City', 'Southampton', 'Stoke City', 'Sunderland', 'Swansea City', 'Tottenham', 'Watford', 'West Brom', 'West Ham'],
     },
     {
-      id: 'laliga2015', name: 'La Liga', cupName: 'Copa del Rey', euro: true,
+      id: 'laliga2015', name: 'La Liga',
       clubs: ['Athletic Club', 'Atlético Madrid', 'Barcelona', 'Celta Vigo', 'Deportivo La Coruña', 'Eibar', 'Espanyol', 'Getafe', 'Granada', 'Las Palmas', 'Levante', 'Málaga', 'Rayo Vallecano', 'Real Betis', 'Real Madrid', 'Real Sociedad', 'Sevilla', 'Sporting Gijón', 'Valencia', 'Villarreal'],
     },
     /* Round 191: the era's third league, by the same recipe. Membership
@@ -2835,24 +3094,24 @@ export const ERA_LEAGUES: Record<string, LeagueDef[]> = {
        AND against the market values table itself (Frosinone is the one
        thin squad and the picker says so). */
     {
-      id: 'seriea2015', name: 'Serie A', cupName: 'Coppa Italia', euro: true,
+      id: 'seriea2015', name: 'Serie A',
       clubs: ['Juventus', 'Napoli', 'Roma', 'Inter Milan', 'AC Milan', 'Fiorentina', 'Lazio', 'Torino', 'Genoa', 'Sampdoria', 'Sassuolo', 'Udinese', 'Empoli', 'Chievo Verona', 'Palermo', 'Atalanta', 'Bologna', 'Hellas Verona', 'Carpi', 'Frosinone'],
     },
-  ],
+  ].map(leagueFromRow),
   /* Round 176: the 2005-06 season, memberships verified against the season
      records (Wikipedia and worldfootball plus RSSSF final tables, checked
      2026-08-19) AND against the market values table itself. Cadiz and
      Alaves are the two thin squads and the picker says so. */
   era2005: [
     {
-      id: 'premier2005', name: 'Premier League', cupName: 'FA Cup', euro: true,
+      id: 'premier2005', name: 'Premier League',
       clubs: ['Arsenal', 'Aston Villa', 'Birmingham City', 'Blackburn Rovers', 'Bolton Wanderers', 'Charlton Athletic', 'Chelsea', 'Everton', 'Fulham', 'Liverpool', 'Manchester City', 'Manchester United', 'Middlesbrough', 'Newcastle', 'Portsmouth', 'Sunderland', 'Tottenham', 'West Brom', 'West Ham', 'Wigan Athletic'],
     },
     {
-      id: 'laliga2005', name: 'La Liga', cupName: 'Copa del Rey', euro: true,
+      id: 'laliga2005', name: 'La Liga',
       clubs: ['Alavés', 'Athletic Club', 'Atlético Madrid', 'Barcelona', 'Cádiz', 'Celta Vigo', 'Deportivo La Coruña', 'Espanyol', 'Getafe', 'Málaga', 'Mallorca', 'Osasuna', 'Racing Santander', 'Real Betis', 'Real Madrid', 'Real Sociedad', 'Sevilla', 'Valencia', 'Villarreal', 'Zaragoza'],
     },
-  ],
+  ].map(leagueFromRow),
 };
 
 /** The league a club plays in within a given era. Null when the era is not
@@ -2945,12 +3204,14 @@ export function eraClubDefFor(clubName: string, eraId: string | undefined): Club
   return clubDefFor(clubName);
 }
 
-/** The era's leagues, optionally narrowed to one nation (matched by the
- *  modern league id prefix: 'premier2010' belongs to whoever owns 'premier'). */
+/** The era's leagues, optionally narrowed to one nation. Round 832: by the
+ *  nation on the league's rules row. The old match was the modern league id
+ *  as a prefix ('premier2010' starts with 'premier'), which a future
+ *  'bundesliga2015' would have matched against 'bundesliga2' as well. */
 export function eraLeaguesFor(eraId: string, nation?: NationDef): LeagueDef[] {
   const leagues = ERA_LEAGUES[eraId] ?? [];
   if (!nation) return leagues;
-  return leagues.filter(el => nation.leagueIds.some(id => el.id.startsWith(id)));
+  return leagues.filter(el => leagueRulesOf(el.id).nationId === nation.id);
 }
 
 /** Era clubs for a picker screen, strongest first, with era stature. */
@@ -2981,6 +3242,9 @@ export function boardWantLabel(clubName: string, eraId?: string): string {
 
 // Round 146: the picker needs these era helpers alongside the modern ones.
 export { isHistoricEra } from '@/lib/clubManagerEras';
+/* Round 832: an era's squads arrive with the era. Anything that runs an era
+   (the page, a harness) awaits one of these first; see clubManagerEras.ts. */
+export { ensureEraRosters, ensureAllEraRosters, eraRostersLoaded } from '@/lib/clubManagerEras';
 
 /* ================================================================== */
 /* Round 70: every club is playable. Nations, colors, rivals, defs.   */
@@ -2988,29 +3252,36 @@ export { isHistoricEra } from '@/lib/clubManagerEras';
 
 export interface NationDef { id: string; name: string; flag: string; leagueIds: string[]; }
 
+/* Round 832: a nation row is its id, name and flag; its leagueIds are every
+   modern league whose LEAGUE_RULES row names it, in REAL_LEAGUES order. A new
+   nation is one row here plus its leagues' rules rows. */
 export const NATIONS: NationDef[] = [
-  { id: 'england', name: 'England', flag: '🏴󠁧󠁢󠁥󠁮󠁧󠁿', leagueIds: ['premier', 'championship'] },
-  { id: 'spain', name: 'Spain', flag: '🇪🇸', leagueIds: ['laliga'] },
-  { id: 'italy', name: 'Italy', flag: '🇮🇹', leagueIds: ['seriea'] },
-  { id: 'germany', name: 'Germany', flag: '🇩🇪', leagueIds: ['bundesliga', 'bundesliga2'] },
-  { id: 'france', name: 'France', flag: '🇫🇷', leagueIds: ['ligue1'] },
-  { id: 'netherlands', name: 'Netherlands', flag: '🇳🇱', leagueIds: ['eredivisie'] },
-  { id: 'saudi', name: 'Saudi Arabia', flag: '🇸🇦', leagueIds: ['saudi'] },
-  { id: 'usa', name: 'United States', flag: '🇺🇸', leagueIds: ['mlsEast', 'mlsWest'] },
+  { id: 'england', name: 'England', flag: '🏴󠁧󠁢󠁥󠁮󠁧󠁿' },
+  { id: 'spain', name: 'Spain', flag: '🇪🇸' },
+  { id: 'italy', name: 'Italy', flag: '🇮🇹' },
+  { id: 'germany', name: 'Germany', flag: '🇩🇪' },
+  { id: 'france', name: 'France', flag: '🇫🇷' },
+  { id: 'netherlands', name: 'Netherlands', flag: '🇳🇱' },
+  { id: 'saudi', name: 'Saudi Arabia', flag: '🇸🇦' },
+  { id: 'usa', name: 'United States', flag: '🇺🇸' },
   // Round 140
-  { id: 'portugal', name: 'Portugal', flag: '🇵🇹', leagueIds: ['primeira'] },
-  { id: 'scotland', name: 'Scotland', flag: '🏴󠁧󠁢󠁳󠁣󠁴󠁿', leagueIds: ['scottish'] },
-  { id: 'turkey', name: 'Turkey', flag: '🇹🇷', leagueIds: ['superlig'] },
-  { id: 'belgium', name: 'Belgium', flag: '🇧🇪', leagueIds: ['proleague'] },
+  { id: 'portugal', name: 'Portugal', flag: '🇵🇹' },
+  { id: 'scotland', name: 'Scotland', flag: '🏴󠁧󠁢󠁳󠁣󠁴󠁿' },
+  { id: 'turkey', name: 'Turkey', flag: '🇹🇷' },
+  { id: 'belgium', name: 'Belgium', flag: '🇧🇪' },
   // Round 177
-  { id: 'austria', name: 'Austria', flag: '🇦🇹', leagueIds: ['austria'] },
-  { id: 'greece', name: 'Greece', flag: '🇬🇷', leagueIds: ['greece'] },
+  { id: 'austria', name: 'Austria', flag: '🇦🇹' },
+  { id: 'greece', name: 'Greece', flag: '🇬🇷' },
   // Round 185
-  { id: 'denmark', name: 'Denmark', flag: '🇩🇰', leagueIds: ['denmark'] },
-  { id: 'switzerland', name: 'Switzerland', flag: '🇨🇭', leagueIds: ['switzerland'] },
+  { id: 'denmark', name: 'Denmark', flag: '🇩🇰' },
+  { id: 'switzerland', name: 'Switzerland', flag: '🇨🇭' },
   // Round 189
-  { id: 'croatia', name: 'Croatia', flag: '🇭🇷', leagueIds: ['croatia'] },
-];
+  { id: 'croatia', name: 'Croatia', flag: '🇭🇷' },
+  // Round 876
+  { id: 'brazil', name: 'Brazil', flag: '🇧🇷' },
+  // Round 883
+  { id: 'mexico', name: 'Mexico', flag: '🇲🇽' },
+].map(n => ({ ...n, leagueIds: REAL_LEAGUES.filter(l => leagueRulesOf(l.id).nationId === n.id).map(l => l.id) }));
 
 /** Primary kit colors for the club dot in the UI (approximate, decorative). */
 const CLUB_COLORS: Record<string, string> = {
@@ -3146,6 +3417,21 @@ const CLUB_COLORS: Record<string, string> = {
   'Osijek': '#0f4c81', 'Varaždin': '#12294a', 'Slaven Belupo': '#0e6eb8',
   'Istra 1961': '#0a7a3c', 'Lokomotiva Zagreb': '#e2001a', 'Gorica': '#12294a',
   'Rudeš': '#1f9d55',
+  // Round 876: Brazil's Serie A (plain shirt colours, no crest art)
+  'Flamengo': '#c8102e', 'Palmeiras': '#006437', 'Athletico Paranaense': '#c8102e',
+  'Fluminense': '#7a1e3a', 'Bahia': '#0057b8', 'Cruzeiro': '#1b3f94',
+  'Atlético Mineiro': '#2b2b2b', 'Santos': '#d9d9d9', 'Coritiba': '#0a7040',
+  'Red Bull Bragantino': '#d9d9d9', 'São Paulo': '#d02128', 'Botafogo': '#2b2b2b',
+  'Vitória': '#d02128', 'Corinthians': '#d9d9d9', 'Mirassol': '#f5d800',
+  'Vasco da Gama': '#2b2b2b', 'Grêmio': '#0d80bf', 'Internacional': '#d02128',
+  'Remo': '#12294a', 'Chapecoense': '#0a7040',
+  // Round 883: Liga MX (plain shirt colours, no crest art)
+  'América': '#f5d800', 'Guadalajara': '#c8102e', 'Cruz Azul': '#0057b8',
+  'Monterrey': '#12294a', 'Tigres UANL': '#f5a800', 'Toluca': '#d02128',
+  'Pumas UNAM': '#12294a', 'Pachuca': '#12294a', 'León': '#0a7040',
+  'Santos Laguna': '#0a7040', 'Atlas': '#c8102e', 'Necaxa': '#d02128',
+  'Puebla': '#1b3f94', 'Querétaro': '#2b2b2b', 'Tijuana': '#c8102e',
+  'FC Juárez': '#1f9d55', 'Atlético San Luis': '#d02128', 'Atlante': '#0057b8',
 };
 
 /**
@@ -3200,6 +3486,15 @@ const RIVALS: Record<string, string> = {
   'D.C. United': 'New York Red Bulls', 'Toronto FC': 'CF Montréal', 'CF Montréal': 'Toronto FC',
   'Ajax': 'Feyenoord', 'Feyenoord': 'Ajax', 'PSV': 'Ajax', 'Sparta Rotterdam': 'Feyenoord',
   'Groningen': 'Heerenveen', 'Heerenveen': 'Groningen', 'ADO Den Haag': 'Ajax',
+  // Round 883: Liga MX, only the five clasicos two sources both name
+  // (Mediotiempo, "Que antiguedad tiene cada clasico del futbol mexicano",
+  // and Goal, "En Mexico, cuantos clasicos de futbol existen"): Nacional
+  // (America and Guadalajara), Joven (America and Cruz Azul), Capitalino
+  // (Pumas and America), Tapatio (Guadalajara and Atlas), Regio (Monterrey
+  // and Tigres). One direction per club, so America point at Guadalajara.
+  'América': 'Guadalajara', 'Guadalajara': 'América', 'Cruz Azul': 'América',
+  'Pumas UNAM': 'América', 'Atlas': 'Guadalajara',
+  'Monterrey': 'Tigres UANL', 'Tigres UANL': 'Monterrey',
 };
 
 /**
@@ -4664,13 +4959,15 @@ export function isAvailable(p: CMPlayer): boolean {
  * because the owner wants the freedom and the engine wants a price for it.
  * 'keeper' is the goalkeeper boundary crossed either way, and it is checked
  * first so no widening can reach around it.
+ *
+ * Round 825: the grade and its table (FIT_PENALTY, rating points taken off
+ * THAT MAN ONLY in the match strength, so a fully natural eleven pays
+ * nothing and the Round 95 rule holds) now live in positionFit.ts, so Build
+ * Your XI's season reads the same table. Same names, same numbers, exported
+ * from here as before.
  */
-export type FitGrade = 'natural' | 'family' | 'wrong' | 'keeper';
-
-/** Rating points taken off THAT MAN ONLY in the match strength. A fully
- *  natural eleven pays nothing, so the Round 95 rule holds: my club is on
- *  the same scale as an AI club with the identical squad. */
-export const FIT_PENALTY: Record<FitGrade, number> = { natural: 0, family: 2, wrong: 6, keeper: 14 };
+export type { FitGrade };
+export { FIT_PENALTY };
 
 /** Every position he can call his own: the one he plays plus any he has learned. */
 export function heldPositions(p: CMPlayer): Position[] {
@@ -4678,12 +4975,7 @@ export function heldPositions(p: CMPlayer): Position[] {
 }
 
 export function fitGrade(p: CMPlayer, slot: FormationSlot): FitGrade {
-  const slotIsGoal = slot.allowed.includes('GK');
-  if (slotIsGoal !== (p.position === 'GK')) return 'keeper';
-  const held = heldPositions(p);
-  if (held.some(pos => slot.allowed.includes(pos))) return 'natural';
-  if (held.some(pos => fitsAllowed(pos, slot.allowed))) return 'family';
-  return 'wrong';
+  return gradeFit(heldPositions(p), slot.allowed);
 }
 
 /** The penalty for a man in a slot; nothing when the slot is unknown. */
@@ -5050,13 +5342,13 @@ function emptyRow(club: string): TableRow {
  * played.
  */
 export type TiebreakRule = 'h2h' | 'gdGf' | 'gdGfAgg' | 'gdH2h' | 'gdGfOnly';
-const LEAGUE_TIEBREAKS: Record<string, TiebreakRule> = {
-  laliga: 'h2h', laliga2005: 'h2h', laliga2010: 'h2h', laliga2015: 'h2h',
-  seriea: 'h2h', seriea2015: 'h2h',
-  premier: 'gdGf', premier2005: 'gdGf', premier2010: 'gdGf', premier2015: 'gdGf',
-  bundesliga: 'gdGfAgg',
-  ligue1: 'gdH2h',
-};
+/* Round 832 review: read off each league's LEAGUE_RULES row (tiebreak), so a
+   new league's order is one field on its row like every other rule. */
+const LEAGUE_TIEBREAKS: Record<string, TiebreakRule> = Object.fromEntries(
+  Object.entries(LEAGUE_RULES)
+    .filter(([, rules]) => rules.tiebreak !== undefined)
+    .map(([id, rules]) => [id, rules.tiebreak as TiebreakRule]),
+);
 export function leagueTiebreak(leagueId: string | undefined): TiebreakRule {
   return (leagueId && LEAGUE_TIEBREAKS[leagueId]) || 'gdGfOnly';
 }
@@ -5199,9 +5491,17 @@ export function tiebreakFootnote(rule: TiebreakRule, rows: TableRow[], pairs?: R
  */
 function notePair(state: CareerState, leagueId: string, home: string, away: string, hg: number, ag: number): void {
   if (!LEAGUE_TIEBREAKS[leagueId]) return;
-  ensurePairLedger(state);
-  const ledger = state.pairResults!;
-  const pairs = ledger[leagueId] ?? (ledger[leagueId] = {});
+  /* Round 890: this used to call ensurePairLedger, which re-reads every pair
+     already stored, once for every league result in the world. A season books
+     about four and a half thousand of them, so the check alone was 60 percent
+     of a simulated season (profiled on 2026-10-02). The full shape check still
+     runs wherever a ledger can arrive unchecked: the load path, the season
+     turn and the Champions League note. Here it is enough that the ledger and
+     this league's entry are plain objects, which is checked in constant time. */
+  let ledger = state.pairResults;
+  if (!ledger || typeof ledger !== 'object' || Array.isArray(ledger)) ledger = state.pairResults = {};
+  let pairs = ledger[leagueId];
+  if (!pairs || typeof pairs !== 'object' || Array.isArray(pairs)) pairs = ledger[leagueId] = {};
   pairs[`${home}|${away}`] = [hg, ag];
 }
 
@@ -9418,7 +9718,10 @@ const UCL_R16_MARK = 0.5;
    leg clear of the next round's first leg at every league size the game has. */
 const UCL_SECOND_LEG_GAP = 0.035;
 
-function buildCalendar(leagueSize: number, r16 = false, twoLegKo = false): CalendarEntry[] {
+/* Round 832: `cup` false is a league with no domestic cup (cupName null on
+   its rules row): its season carries no cup week at all. Every league before
+   this round has one, and for them the calendar is the one it always was. */
+function buildCalendar(leagueSize: number, r16 = false, twoLegKo = false, cup = true): CalendarEntry[] {
   // Odd-sized leagues carry a BYE ghost, so the schedule runs 2*n rounds.
   const effSize = leagueSize % 2 === 0 ? leagueSize : leagueSize + 1;
   const rounds = 2 * (effSize - 1);
@@ -9443,18 +9746,18 @@ function buildCalendar(leagueSize: number, r16 = false, twoLegKo = false): Calen
       cal.push({ type: 'uclGroup', round: md });
       md += 1;
     }
-    if (r === marks.cupR16) cal.push({ type: 'cup', round: 0, cupRound: 'R16' });
-    if (r === marks.cupQF) cal.push({ type: 'cup', round: 0, cupRound: 'QF' });
+    if (cup && r === marks.cupR16) cal.push({ type: 'cup', round: 0, cupRound: 'R16' });
+    if (cup && r === marks.cupQF) cal.push({ type: 'cup', round: 0, cupRound: 'QF' });
     if (r === marks.window) cal.push({ type: 'window', round: 0 });
     // Round 462: only an era whose real format had one plays a round of 16.
     if (r16 && r === marks.uclR16) pushKo(cal, 'R16', 1);
     if (r16 && twoLegKo && r === marks.uclR16b) pushKo(cal, 'R16', 2);
     if (r === marks.uclQF) pushKo(cal, 'QF', 1);
     if (twoLegKo && r === marks.uclQFb) pushKo(cal, 'QF', 2);
-    if (r === marks.cupSF) cal.push({ type: 'cup', round: 0, cupRound: 'SF' });
+    if (cup && r === marks.cupSF) cal.push({ type: 'cup', round: 0, cupRound: 'SF' });
     if (r === marks.uclSF) pushKo(cal, 'SF', 1);
     if (twoLegKo && r === marks.uclSFb) pushKo(cal, 'SF', 2);
-    if (r === marks.cupF) cal.push({ type: 'cup', round: 0, cupRound: 'F' });
+    if (cup && r === marks.cupF) cal.push({ type: 'cup', round: 0, cupRound: 'F' });
     /* The final is one match at a neutral venue in every era on offer, so it
        never gets a second leg however twoLegKo is set. */
     if (r === marks.uclF) cal.push({ type: 'uclKo', round: 0, uclRound: 'F' });
@@ -10035,6 +10338,49 @@ function playsExtraTime(state: CareerState, entry: CalendarEntry): boolean {
   /* A legacy week carries no uclLeg and is the whole tie (Round 507). */
   const twoLegs = uclLegsFor(state.eraId, entry.uclRound) === 2 && !!entry.uclLeg;
   return !(twoLegs && entry.uclLeg === 1);
+}
+
+/** Round 781: my tie's first leg in MY orientation, and whether it was at my
+ *  ground (leg one is played at tie.home). Null before it is played. */
+function firstLegMine(state: CareerState, round: UclKoRound): { mine: number; theirs: number; home: boolean } | null {
+  const tie = state.uclBracket?.find(t => t.round === round && t.mine);
+  if (!tie?.leg1) return null;
+  const iAmHome = tie.home === state.clubName;
+  return {
+    mine: iAmHome ? tie.leg1.homeGoals : tie.leg1.awayGoals,
+    theirs: iAmHome ? tie.leg1.awayGoals : tie.leg1.homeGoals,
+    home: iAmHome,
+  };
+}
+
+/**
+ * Round 781: the tie as it stands tonight, for the live header, the match
+ * centre and the report: the first leg in my orientation and where it was
+ * played, the aggregate with tonight's goals so far, and whether this season
+ * reads away goals. Null on any week that is not the second leg of a two
+ * legged tie, so every screen can render it with one optional block.
+ */
+export interface SecondLegContext {
+  leg1Mine: number;
+  leg1Theirs: number;
+  leg1Home: boolean;
+  aggMine: number;
+  aggTheirs: number;
+  awayGoalsRule: boolean;
+}
+export function secondLegContext(career: CareerState, week: number, mine: number, theirs: number): SecondLegContext | null {
+  const entry = career.calendar[week];
+  if (!entry || !secondLegTonight(career, entry) || !entry.uclRound) return null;
+  const first = firstLegMine(career, entry.uclRound);
+  if (!first) return null;
+  return {
+    leg1Mine: first.mine,
+    leg1Theirs: first.theirs,
+    leg1Home: first.home,
+    aggMine: first.mine + mine,
+    aggTheirs: first.theirs + theirs,
+    awayGoalsRule: uclAwayGoalsApply(career.eraId),
+  };
 }
 
 /** Round 670: my two legged tie read with tonight as leg two, in the tie's
@@ -10783,7 +11129,12 @@ function cupCountryClubs(state: CareerState): ClubDef[] {
   }
   const myLeague = careerLeagueOf(state);
   const nation = NATIONS.find(n => n.leagueIds.includes(myLeague.id));
-  const ids = nation ? nation.leagueIds : [myLeague.id];
+  /* Round 832 review: only the leagues of the nation that play this cup. A
+     league whose rules row has no domestic cup sends nobody into its
+     neighbours' cup, the same way its own clubs never play one. Every nation
+     before this round plays one cup across all its leagues, so for them this
+     is the whole nation as before. */
+  const ids = nation ? nation.leagueIds.filter(id => leagueRulesOf(id).cup === myLeague.cupName) : [myLeague.id];
   return ids.flatMap(id => playableClubs(id)).filter(c => c.name !== dropped);
 }
 
@@ -11000,16 +11351,14 @@ function nearestRival(clubName: string, eraId?: string, clubsOverride?: string[]
  * heavyweights are all told to win it, not to finish second.
  */
 function relegationSpots(leagueId: string): number {
-  // MLS conferences do not relegate; everyone else drops 1-3.
-  if (leagueId.startsWith('mls')) return 0;
-  /* Round 185: Switzerland sent one straight down last season (Winterthur,
-     with 11th place playing a barrage the engine does not model), so 1;
-     Denmark sent two down (Fredericia and Vejle), so 2 below.
-     Round 189: Croatia sent one straight down (Vukovar 1991, 10th of 10,
-     with 9th place playing a barrage the engine does not model), so 1. */
-  if (leagueId === 'scottish' || leagueId === 'proleague' || leagueId === 'austria' || leagueId === 'switzerland' || leagueId === 'croatia') return 1;
-  if (leagueId === 'bundesliga' || leagueId === 'bundesliga2' || leagueId === 'eredivisie' || leagueId === 'primeira' || leagueId === 'greece' || leagueId === 'denmark') return 2;
-  return 3;
+  /* Round 832: the drop count is each league's LEAGUE_RULES row. MLS
+     conferences do not relegate (0). Round 185: Switzerland sent one
+     straight down last season (Winterthur, with 11th place playing a barrage
+     the engine does not model), so 1; Denmark sent two down (Fredericia and
+     Vejle), so 2. Round 189: Croatia sent one straight down (Vukovar 1991,
+     10th of 10, with 9th place playing a barrage the engine does not model),
+     so 1. An id with no row drops 3, as every unlisted id always did. */
+  return leagueRulesOf(leagueId).drop;
 }
 
 /**
@@ -11031,51 +11380,26 @@ function relegationSpots(leagueId: string): number {
  * England or Spain, the Eredivisie champion goes in but third place is
  * qualifying rounds, and that difference is the realism he is asking for.
  */
-interface EuroSlots {
+export interface EuroSlots {
   ucl: number; uel: number; uecl: number;
   /** Round 176: what the second UEFA competition was CALLED in this
    *  league's era. Absent means Europa League (its name since 2009). The
    *  2005-06 era ran the UEFA Cup, and a 2005 board must say so. */
   uelName?: string;
 }
-export const EURO_SLOTS: Record<string, EuroSlots> = {
-  premier:    { ucl: 4, uel: 5, uecl: 6 },
-  laliga:     { ucl: 4, uel: 5, uecl: 6 },
-  seriea:     { ucl: 4, uel: 5, uecl: 6 },
-  bundesliga: { ucl: 4, uel: 5, uecl: 6 },
-  ligue1:     { ucl: 3, uel: 4, uecl: 5 },
-  eredivisie: { ucl: 2, uel: 3, uecl: 4 },
-  // Round 140. Simplified like the rest: qualifying-round routes count as in.
-  primeira:   { ucl: 2, uel: 3, uecl: 4 },
-  scottish:   { ucl: 1, uel: 2, uecl: 3 },
-  superlig:   { ucl: 1, uel: 2, uecl: 3 },
-  proleague:  { ucl: 1, uel: 2, uecl: 3 },
-  // Round 177. Same simplified single-champion shape as the other
-  // one-ticket leagues: qualifying-round routes count as in.
-  austria:    { ucl: 1, uel: 2, uecl: 3 },
-  greece:     { ucl: 1, uel: 2, uecl: 3 },
-  // Round 185. Same one-ticket shape; qualifying routes count as in.
-  denmark:     { ucl: 1, uel: 2, uecl: 3 },
-  switzerland: { ucl: 1, uel: 2, uecl: 3 },
-  // Round 189. Same one-ticket shape; qualifying routes count as in.
-  croatia:     { ucl: 1, uel: 2, uecl: 3 },
-  // Round 146: the 2010-11 era. No Conference League existed until 2021, so
-  // uecl is 0 and the demand ladder skips that band entirely.
-  premier2010: { ucl: 4, uel: 5, uecl: 0 },
-  laliga2010:  { ucl: 4, uel: 6, uecl: 0 },
-  // Round 175: 2015-16 ran the same shape, and the Conference League still
-  // did not exist (it began in 2021), so uecl stays 0 here too.
-  premier2015: { ucl: 4, uel: 5, uecl: 0 },
-  laliga2015:  { ucl: 4, uel: 6, uecl: 0 },
-  // Round 191: 2015-16 Serie A sent two straight to the group stage and
-  // third into qualifying (counted as in, per the simplification above);
-  // no Conference League existed.
-  seriea2015:  { ucl: 3, uel: 5, uecl: 0 },
-  // Round 176: 2005-06. No Conference League, and the second competition
-  // was still called the UEFA Cup (it became the Europa League in 2009).
-  premier2005: { ucl: 4, uel: 5, uecl: 0, uelName: 'UEFA Cup' },
-  laliga2005:  { ucl: 4, uel: 6, uecl: 0, uelName: 'UEFA Cup' },
-};
+/* Round 832: each league's places live on its LEAGUE_RULES row (europe) and
+   this lookup is derived from them, keyed by league id as before. The notes
+   that came with the numbers still hold: Round 140, 177, 185 and 189 leagues
+   take the one-ticket shape with qualifying-round routes counted as in;
+   Round 146 and 175 eras have no Conference League (it began in 2021), so
+   uecl 0 and the ladder skips that band; Round 191's 2015-16 Serie A sent two
+   straight to the group stage and third into qualifying, counted as in; and
+   Round 176's 2005-06 still called the second competition the UEFA Cup. */
+export const EURO_SLOTS: Record<string, EuroSlots> = Object.fromEntries(
+  Object.entries(LEAGUE_RULES)
+    .filter(([, rules]) => rules.europe !== null)
+    .map(([id, rules]) => [id, rules.europe as EuroSlots]),
+);
 
 /* Round 543: how many Champions League places this league actually has.
  *
@@ -11095,7 +11419,7 @@ export const EURO_SLOTS: Record<string, EuroSlots> = {
  * rather than silently sending nobody. */
 export function uclPlacesIn(league: Pick<LeagueDef, 'id' | 'euro'>): number {
   if (!league.euro) return 0;
-  return EURO_SLOTS[league.id]?.ucl ?? 4;
+  return leagueRulesOf(league.id).europe?.ucl ?? 4;
 }
 
 /* Round 145: the title band is measured, not guessed. His review, 2026-08-17:
@@ -11200,37 +11524,31 @@ function titleBandSize(league: LeagueDef, eraId?: string): number {
    prize. The table screen already shows where you are against it. */
 function leagueDemand(rank: number, tier: number, size: number, league: LeagueDef, titleGap: number, eraId?: string, clubName?: string): { target: number; label: string } {
   const half = Math.floor(size / 2);
-  const drop = relegationSpots(league.id);
+  /* Round 832: the ladder, the playoff rung, the drop and the places all come
+     off the league's LEAGUE_RULES row; no league id is named below. */
+  const rules = leagueRulesOf(league.id);
+  const drop = rules.drop;
 
   // The second divisions are their own world: the prize is going UP.
-  if (league.id === 'championship') {
+  // (The Championship, and since Round 142 the 2. Bundesliga, whose third
+  // placed side plays the Bundesliga's sixteenth: each row's playoff rung.)
+  if (rules.ladder === 'promotion') {
     // The single biggest club in the division is not aiming for second.
     if (rank <= 1) return { target: 1, label: `Win the ${league.name}` };
     if (rank <= 2 || (rank <= 4 && tier <= 2)) {
       // A club this big in this division exists to leave it immediately.
       return { target: 2, label: `Win automatic promotion` };
     }
-    if (rank <= 8) return { target: 6, label: `Make the promotion playoffs` };
-    if (rank <= Math.round(size * 0.65)) return { target: half, label: `Finish in the top half` };
-    return { target: size - drop, label: `Stay up. Avoid relegation` };
-  }
-  // Round 142: Germany's second tier sends two straight up and the third
-  // placed side into a playoff against the Bundesliga's sixteenth.
-  if (league.id === 'bundesliga2') {
-    if (rank <= 1) return { target: 1, label: `Win the ${league.name}` };
-    if (rank <= 2 || (rank <= 4 && tier <= 2)) {
-      return { target: 2, label: `Win automatic promotion` };
-    }
-    if (rank <= 6) return { target: 3, label: `Reach the promotion playoff` };
+    if (rules.playoff && rank <= rules.playoff.rankUpTo) return { target: rules.playoff.target, label: rules.playoff.label };
     if (rank <= Math.round(size * 0.65)) return { target: half, label: `Finish in the top half` };
     return { target: size - drop, label: `Stay up. Avoid relegation` };
   }
 
   // MLS: no relegation exists, so no board can honestly threaten it.
-  if (league.id.startsWith('mls')) {
+  if (rules.ladder === 'playoffs') {
     if (rank <= 2) return { target: 1, label: `Win the ${league.name}` };
-    if (rank <= 9) return { target: 8, label: `Make the playoffs` };
-    return { target: size - 4, label: `Finish mid-table or better` };
+    if (rules.playoff && rank <= rules.playoff.rankUpTo) return { target: rules.playoff.target, label: rules.playoff.label };
+    return { target: size - (rules.floorFromBottom ?? 4), label: `Finish mid-table or better` };
   }
 
   // Heavyweights everywhere else: the badge demands the title, full stop.
@@ -11241,7 +11559,7 @@ function leagueDemand(rank: number, tier: number, size: number, league: LeagueDe
     return { target: 1, label: `Win the ${league.name}` };
   }
 
-  const slots = EURO_SLOTS[league.id];
+  const slots = rules.europe;
   if (league.euro && slots) {
     // The windows shift down by the title band's overshoot past the CL
     // places. A one-slot league never hands the CL demand to a non giant,
@@ -11268,9 +11586,10 @@ function leagueDemand(rank: number, tier: number, size: number, league: LeagueDe
     }
   }
 
-  // Saudi Pro League: the continental prize is the AFC Champions League.
-  if (league.id === 'saudi' && rank <= 5) {
-    return { target: 3, label: `Qualify for the AFC Champions League Elite` };
+  // A continental prize outside UEFA (the Saudi Pro League's is the AFC
+  // Champions League Elite), off the row.
+  if (rules.continental && rank <= rules.continental.rankUpTo) {
+    return { target: rules.continental.target, label: `Qualify for the ${rules.continental.label}` };
   }
 
   if (rank <= Math.round(size * 0.65)) {
@@ -11300,15 +11619,19 @@ export function buildBoardObjectives(clubName: string, hasUcl: boolean, leagueSi
   const demand = leagueDemand(club.expectation, club.tier, leagueSize, league, titleGapFor(clubName, league, eraId), eraId, clubName);
   objs.push({ id: 'league', target: demand.target, label: demand.label });
   const cupTarget = club.tier === 1 ? 4 : club.tier === 2 ? 3 : club.tier === 3 ? 2 : 1;
-  objs.push({
-    id: 'cup',
-    target: cupTarget,
-    label:
-      cupTarget === 4 ? `Win the ${league.cupName}` :
-      cupTarget === 3 ? `Reach the ${league.cupName} final` :
-      cupTarget === 2 ? `Reach the ${league.cupName} semi-finals` :
-      `Win your ${league.cupName} Round of 16 tie`,
-  });
+  /* Round 832: a league with no domestic cup gets no cup objective. */
+  const cupName = league.cupName;
+  if (cupName !== null) {
+    objs.push({
+      id: 'cup',
+      target: cupTarget,
+      label:
+        cupTarget === 4 ? `Win the ${cupName}` :
+        cupTarget === 3 ? `Reach the ${cupName} final` :
+        cupTarget === 2 ? `Reach the ${cupName} semi-finals` :
+        `Win your ${cupName} Round of 16 tie`,
+    });
+  }
   if (hasUcl) {
     const t = club.tier === 1 ? 2 : 1;
     objs.push({
@@ -11356,8 +11679,8 @@ export function buildBoardObjectives(clubName: string, hasUcl: boolean, leagueSi
 
   /* Round 140: the biggest clubs sometimes want history, not just the title.
      Deterministic and rare, so it reads as an event when your board asks. */
-  if (club.tier === 1 && demand.target === 1 && h % 5 === 0) {
-    objs.push({ id: 'double', target: 0, label: `Win the ${league.name} and ${league.cupName} double` });
+  if (club.tier === 1 && demand.target === 1 && h % 5 === 0 && cupName !== null) {
+    objs.push({ id: 'double', target: 0, label: `Win the ${league.name} and ${cupName} double` });
   }
 
   // Smaller clubs are told to build, not just to survive.
@@ -11755,11 +12078,11 @@ const SECOND_YELLOW_CHANCE = 0.25;
  * (it cannot: 45 minutes, at most a handful of goals) the draw falls back to
  * a plain one rather than looping forever.
  */
-function distinctMinutes(count: number, lo: number, hi: number, taken: Set<number>): number[] {
+function distinctMinutes(count: number, lo: number, hi: number, taken: Set<number>, board?: BoardWeight): number[] {
   const span = hi - lo + 1;
   const out: number[] = [];
   for (let i = 0; i < count; i++) {
-    let m = ri(lo, hi);
+    let m = drawMinute(lo, hi, board);
     if (taken.size < span) {
       let steps = 0;
       while (taken.has(m) && steps < span) { m = m === hi ? lo : m + 1; steps += 1; }
@@ -11768,6 +12091,21 @@ function distinctMinutes(count: number, lo: number, hi: number, taken: Set<numbe
     out.push(m);
   }
   return out.sort((a, b) => a - b);
+}
+
+/** Round 781: the minutes of a stretch that closes its period run on into
+ *  its board, `to` + 1 to `hi`, and a goal is `w` times likelier in one of
+ *  those than in an ordinary minute (BOARD in drawSegment says why). */
+interface BoardWeight { to: number; w: number }
+
+/** One minute in lo..hi, a minute past board.to counting board.w times.
+ *  One draw either way, and with no weight (or a weight of 1) exactly ri. */
+function drawMinute(lo: number, hi: number, board?: BoardWeight): number {
+  if (!board || board.w === 1 || board.to < lo || board.to >= hi) return ri(lo, hi);
+  const regular = board.to - lo + 1;
+  const extra = hi - board.to;
+  const u = Math.random() * (regular + board.w * extra);
+  return u < regular ? lo + Math.floor(u) : board.to + 1 + Math.min(extra - 1, Math.floor((u - regular) / board.w));
 }
 
 function splitMinutes(goals: number, firstHalfGoals: number, taken: Set<number>): number[] {
@@ -11784,10 +12122,12 @@ function pickMyScorerLines(
   xi: CMPlayer[], count: number, minLo: number, minHi: number, taken: Set<number>,
   /** Round 505: the duty of a man in his slot, for the scorer weight. */
   dutyOf?: (p: CMPlayer) => Duty | null,
+  /** Round 781: the board this stretch runs into and how busy it is. */
+  board?: BoardWeight,
 ): MyGoalLine[] {
   /* Round 205: distinct, and sharing the match's minute book with the
      opposition so no two goals anywhere land on the same clock. */
-  const minutes = distinctMinutes(count, minLo, minHi, taken);
+  const minutes = distinctMinutes(count, minLo, minHi, taken, board);
   const lines: MyGoalLine[] = [];
   for (let g = 0; g < count; g++) {
     const scorer = weightedPick(xi, p => scorerWeight(p) * dutyScoringMult(dutyOf?.(p)));
@@ -11840,10 +12180,11 @@ function creditMyScorers(
   return { goalCounts, assistCounts, assistNames };
 }
 
-function generateOppScorers(opp: string, goals: number, firstHalfGoals: number, yearsOnNow = 0, eraId: string = 'now', taken: Set<number> = new Set(), window?: [number, number], exclude: ReadonlySet<string> = NO_NAMES): ScorerLine[] {
+function generateOppScorers(opp: string, goals: number, firstHalfGoals: number, yearsOnNow = 0, eraId: string = 'now', taken: Set<number> = new Set(), window?: [number, number], exclude: ReadonlySet<string> = NO_NAMES, board?: BoardWeight): ScorerLine[] {
   /* Round 504: a segment of a half asks for its own window; the whole match
-     shape splits at the interval as before. */
-  const minutes = window ? distinctMinutes(goals, window[0], window[1], taken) : splitMinutes(goals, firstHalfGoals, taken);
+     shape splits at the interval as before. Round 781: a window that runs
+     into a board weights it (BoardWeight). */
+  const minutes = window ? distinctMinutes(goals, window[0], window[1], taken, board) : splitMinutes(goals, firstHalfGoals, taken);
   // Round 70: opponent scorers are their real attackers from the baked
   // rosters, weighted toward the expensive ones, so "Semenyo 63'" instead of
   // "Bournemouth No. 9". Round 132: from the projected roster, so a 2036 match
@@ -12051,6 +12392,8 @@ const STRAIGHT_RED_PER_HALF = 0.03;
 function drawSegmentCards(
   onPitchAt: (minute: number) => CMPlayer[], from: number, to: number, maxYellows: number,
   booked: Map<string, number>, dismissed: Set<string>,
+  /** Round 781: the last minute a card can fall in, the board included; the counts stay sized to (from, to]. */
+  hi: number = to,
 ): CardLine[] {
   const len = (to - from) / 45;
   const lo = from + 1;
@@ -12060,7 +12403,7 @@ function drawSegmentCards(
   for (let i = 0; i < yellows; i++) {
     /* The minute first, then whoever is still on the pitch at that minute:
        a man who limped off in the 20th is not booked in the 40th. */
-    const minute = ri(lo, to);
+    const minute = ri(lo, hi);
     const eligible = onPitchAt(minute).filter(p => !dismissed.has(p.id));
     if (!eligible.length) continue;
     const victim = weightedPick(eligible, weight);
@@ -12090,7 +12433,7 @@ function drawSegmentCards(
     /* A man already off for two yellows cannot also be sent off, and a man
        already carrying a booking cannot take a STRAIGHT red: on the timeline
        a yellow followed by a red is a second yellow to anyone reading it. */
-    const minute = ri(lo, to);
+    const minute = ri(lo, hi);
     const clean = onPitchAt(minute).filter(p => !dismissed.has(p.id) && !booked.has(p.id));
     const outfield = clean.filter(p => p.position !== 'GK');
     const hothead = clean.length ? pick(outfield.length ? outfield : clean) : null;
@@ -12109,6 +12452,8 @@ function drawSegmentCards(
 function drawSegmentOppCards(
   onPitchAt: (minute: number) => OppXiLine[], from: number, to: number, maxYellows: number,
   booked: Map<string, number>, dismissed: Set<string>,
+  /** Round 781: the last minute a card can fall in, the board included. */
+  hi: number = to,
 ): CardLine[] {
   const len = (to - from) / 45;
   const lo = from + 1;
@@ -12117,7 +12462,7 @@ function drawSegmentOppCards(
   const yellows = Math.round(ri(0, maxYellows) * len);
   for (let i = 0; i < yellows; i++) {
     /* The minute first, then whoever is on their pitch at that minute. */
-    const minute = ri(lo, to);
+    const minute = ri(lo, hi);
     const eligible = onPitchAt(minute).filter(p => !dismissed.has(p.n));
     if (!eligible.length) continue;
     const victim = weightedPickAny(eligible, weight);
@@ -12142,14 +12487,15 @@ function drawSegmentOppCards(
 }
 
 /** One injury roll for the minutes (from, to] of a half, at the match's long standing rate. */
-function drawSegmentInjury(state: CareerState, onPitch: CMPlayer[], from: number, to: number): InjuryLine | null {
+function drawSegmentInjury(state: CareerState, onPitch: CMPlayer[], from: number, to: number, hi: number = to): InjuryLine | null {
   const len = (to - from) / 45;
   if (!onPitch.length) return null;
   if (Math.random() >= 1 - Math.pow(1 - INJURY_PER_HALF, len)) return null;
   const victim = pick(onPitch);
   // Round 467: the medical staff read the same draw and write it shorter.
   const weeks = injurySpell(state, ri(1, 5));
-  return { name: victim.name, id: victim.id, minute: ri(from + 1, to), weeks };
+  /* Round 781: the minute may sit in the board (hi past to). */
+  return { name: victim.name, id: victim.id, minute: ri(from + 1, hi), weeks };
 }
 
 /**
@@ -12534,6 +12880,11 @@ function markOppSetPieceGoals(goals: ScorerLine[]): void {
 
 interface SegmentPlayIn {
   from: number; to: number;
+  /** Round 781: the last minute play can fall in, the board included. The
+   *  counts (shots, corners, fouls, throw ins) stay sized to (from, to], so a
+   *  four minute board adds no chances, it only lets the half's chances run
+   *  into it the way its goals do. Defaults to `to`. */
+  hi?: number;
   /** The segment's own lambdas, already scaled to its length. */
   lamMine: number; lamOpp: number;
   myGoals: { name: string; minute: number; penalty?: boolean; freeKick?: boolean }[];
@@ -12565,7 +12916,7 @@ interface SegmentPlayIn {
 function drawSegmentPlay(inp: SegmentPlayIn): PlayEvent[] {
   const len = (inp.to - inp.from) / 45;
   const lo = inp.from + 1;
-  const hi = inp.to;
+  const hi = inp.hi ?? inp.to;
   const out: PlayEvent[] = [];
   const round2 = (n: number): number => Math.round(n * 100) / 100;
   type Flank = 'left' | 'right';
@@ -12649,9 +13000,11 @@ function drawSegmentPlay(inp: SegmentPlayIn): PlayEvent[] {
     thrower: m => oppPick(m, p => throwWeightPos(p.p), true),
     fouler: m => oppPick(m, p => foulWeightPos(p.p), false),
   });
-  const ORDER: Record<PlayKind, number> = { throwin: 0, foul: 1, corner: 2, shot: 3 };
-  return out.sort((a, b) => a.minute - b.minute || ORDER[a.kind] - ORDER[b.kind]);
+  return out.sort((a, b) => a.minute - b.minute || PLAY_ORDER[a.kind] - PLAY_ORDER[b.kind]);
 }
+
+/** Inside a minute, a throw in before a foul before a corner before a shot. Round 781: hoisted so the board fold can keep it. */
+const PLAY_ORDER: Record<PlayKind, number> = { throwin: 0, foul: 1, corner: 2, shot: 3 };
 
 /** The expected goals a half actually carried: each stretch's full half lambda by its share of the 45. */
 function effectiveLambdas(segs: LamSegment[]): { lamMine: number; lamOpp: number } {
@@ -12864,10 +13217,15 @@ function secondHalfLambdas(
 
 /** Where my scorers, injury and cards for a segment get drawn, both halves, one shape. */
 function drawMySegment(
-  state: CareerState, live: LiveMatch, xi: CMPlayer[], from: number, to: number, lamMine: number,
+  state: CareerState, live: LiveMatch, xi: CMPlayer[], from: number, to: number, goalCount: number,
   maxYellows: number, taken: Set<number>, dutyOf?: (p: CMPlayer) => Duty | null,
+  /** Round 781: the last minute anything can fall in, the board included. */
+  hi: number = to,
+  /** Round 781: how busy the board is for a goal (BOARD weight). */
+  board?: BoardWeight,
 ): { goals: MyGoalLine[]; cards: CardLine[]; injuries: InjuryLine[] } {
-  const goals = pickMyScorerLines(xi, poisson(lamMine), from + 1, to, taken, dutyOf);
+  /* Round 781: the count is drawn by the caller (it sizes the board), the minutes here. */
+  const goals = pickMyScorerLines(xi, goalCount, from + 1, hi, taken, dutyOf, board);
   /* Round 505: from the spot or a free kick, credited to the taker, before
      the exits below are drawn so fixExits keeps him on past his goal. */
   markSetPieceGoals(state.setPieces, goals, xi);
@@ -12876,12 +13234,12 @@ function drawMySegment(
   const dismissed = dismissedOf(allCards, c => c.id);
   /* The injury first, after his last goal, so the cards below can be drawn
      off whoever is still standing at the booking's minute. */
-  const inj = drawSegmentInjury(state, xi.filter(p => !dismissed.has(p.id)), from, to);
+  const inj = drawSegmentInjury(state, xi.filter(p => !dismissed.has(p.id)), from, to, hi);
   const injuries = inj ? [inj] : [];
-  fixExits([], injuries, goals, to);
+  fixExits([], injuries, goals, hi);
   const onPitchAt = (m: number): CMPlayer[] => xi.filter(p => !injuries.some(x => x.id === p.id && x.minute < m));
-  const cards = drawSegmentCards(onPitchAt, from, to, maxYellows, booked, dismissed);
-  fixExits(cards, injuries, goals, to);
+  const cards = drawSegmentCards(onPitchAt, from, to, maxYellows, booked, dismissed, hi);
+  fixExits(cards, injuries, goals, hi);
   return { goals, cards, injuries };
 }
 
@@ -12900,6 +13258,95 @@ function oppAt(live: LiveMatch, minute: number): OppXiLine[] | null {
   return oppOnPitchAt(live, minute).filter(p => !gone.has(p.n));
 }
 
+/* ---------- Round 781: the referee's board is football ---------- */
+/**
+ * A player's report, 2026-09-24: "make it so goals can be scored in stoppage
+ * time (such as 90+5)". Until this round nothing could happen past the 45th
+ * or the 90th minute: the board was rolled at the whistle as a caption
+ * (Round 169, sized off the half's stoppages since Round 472) and every
+ * event was drawn inside (from, to]. Now the last stretch of a period draws
+ * its events over (from, to + board] and anything past `to` is folded onto
+ * the period's last minute with `plus` set (minute 90, plus 3 is 90+3'), so
+ * every reader that asks "at or before 90" still gets the ninety minute
+ * score, extra time still starts at 91, and the clock rows sort after the
+ * board they close.
+ *
+ * The board is sized the way Round 472 sized it and the two harnesses that
+ * pin that formula (simMatchDetail section 5, simMatchScreen section 1)
+ * still hold: base plus one minute per stoppage in the period (goals both
+ * sides, cards both sides, my injuries) plus a roll, clamped. It is read
+ * TWICE with the same roll: once before the stretch is drawn, off the
+ * stoppages already committed in the period plus the goal counts this
+ * stretch is about to place (that is the board the events are placed
+ * under), and once after, off everything now in the period, which can only
+ * be more, so no event ever sits past the board the report prints.
+ *
+ * How many goals land in the board. The stretch's goal count is sized to
+ * its own minutes, so the board adds no goals, it only moves some of them
+ * into added time: each goal's minute is drawn over the stretch plus its
+ * board, a minute of the board counting `weight` times an ordinary one. In
+ * the first half that is plain uniform (weight 1), and a half with k goals
+ * and roll r puts about (base + k + r) / (45 + base + k + r) of them in
+ * added time. The second half's board is busier than an average minute
+ * (weight 1.5): the side behind throws everything forward, and the boards
+ * here (two to eight minutes, the Round 472 formula) are the shorter ones
+ * of the older game, which took about the same late share with fewer
+ * minutes. Uniform, only about 5.6 percent of all goals came after the
+ * 90th. Measured by scripts/simCmStoppageTime.mjs over five seeds (the
+ * numbers are in its header): 2.9 to 4.2 percent of all goals in first half
+ * added time and 7.3 to 8.6 percent after the 90th, against roughly 4 and
+ * 7 to 9 in the real game, and goals per match unmoved. Cards, injuries and
+ * chances stay uniform over the stretch and its board.
+ *
+ * Extra time has one board, at 120, because Round 670 made it one thirty
+ * minute stretch with no interval at 105. A change made inside a board is
+ * filed at the period's last minute with its own plus, keeps everything at
+ * or before that point of the board, and draws the rest of the board again
+ * off the change (recutBoard); the board's length does not move.
+ */
+const BOARD: Record<'h1' | 'h2' | 'et', { base: number; roll: number; lo: number; hi: number; from: number; weight: number }> = {
+  h1: { base: 1, roll: 1, lo: 1, hi: 5, from: 0, weight: 1 },
+  h2: { base: 2, roll: 2, lo: 2, hi: 8, from: 45, weight: 1.5 },
+  et: { base: 1, roll: 1, lo: 1, hi: 3, from: 90, weight: 1 },
+};
+
+/** Which period a stretch ending at `to` closes, or null for one that ends mid period. */
+function periodEnding(live: LiveMatch, to: number): 'h1' | 'h2' | 'et' | null {
+  if (to === 45) return 'h1';
+  if (to === 90) return 'h2';
+  if (live.et && to === live.et.to) return 'et';
+  return null;
+}
+
+/** Stoppages committed in (lo, hi] on the event clock: goals both sides, cards both sides, my injuries. */
+function stoppagesIn(live: LiveMatch, lo: number, hi: number): number {
+  const inWin = (xs: { minute: number }[] | undefined): number => (xs ?? []).filter(x => x.minute > lo && x.minute <= hi).length;
+  return inWin(live.h1My) + inWin(live.h1Opp) + inWin(live.h2My) + inWin(live.h2Opp)
+    + inWin(live.h1Cards) + inWin(live.h2Cards) + inWin(live.h1OppCards) + inWin(live.h2OppCards)
+    + inWin(live.h1Injuries) + inWin(live.h2Injuries);
+}
+
+/** The Round 472 formula: base, a minute a stoppage, the roll, clamped. */
+function boardOf(period: 'h1' | 'h2' | 'et', stoppages: number, roll: number): number {
+  const b = BOARD[period];
+  return clamp(b.base + stoppages + roll, b.lo, b.hi);
+}
+
+/** An event drawn past the period's last minute is in its board: minute `to`, plus the minutes past it. */
+function foldBoard(to: number, ...lists: { minute: number; plus?: number }[][]): number {
+  let maxPlus = 0;
+  for (const xs of lists) {
+    for (const x of xs) {
+      if (x.minute > to) {
+        x.plus = x.minute - to;
+        x.minute = to;
+        maxPlus = Math.max(maxPlus, x.plus);
+      }
+    }
+  }
+  return maxPlus;
+}
+
 /**
  * One stretch of a half, (from, to], drawn in the order the football
  * needs: my goals, cards and injury; their goals off the eleven they start
@@ -12916,6 +13363,10 @@ function drawSegment(
   state: CareerState, live: LiveMatch, fx: MyFixture, half: 1 | 2,
   from: number, to: number, segM: number, segO: number,
 ): void {
+  /* Round 781: a stretch with no minutes in it (a change made inside the
+     board is filed at the period's last minute) draws nothing and leaves the
+     board it was made in alone. */
+  if (from >= to) return;
   const off = offPitchIds(live);
   /* Round 505: the eleven with their slots, so each man's duty rides on his
      slot and a sub into it inherits the job. */
@@ -12924,9 +13375,19 @@ function drawSegment(
   const dutyOf = dutyLookup(pairs);
   const taken = goalMinutesOf(live);
   const maxYellows = half === 1 ? 1 : 2;
-  const me = drawMySegment(state, live, xi, from, to, segM, maxYellows, taken, dutyOf);
+  /* Round 781: the goal counts first, because the board is sized off them,
+     then the board the stretch is placed under (see BOARD), then the draws
+     over (from, hi] with hi past `to` by the board. */
+  const nMine = poisson(segM);
+  const nOpp = poisson(segO);
+  const period = periodEnding(live, to);
+  const roll = period ? ri(0, BOARD[period].roll) : 0;
+  const hi = period ? to + boardOf(period, stoppagesIn(live, BOARD[period].from, to) + nMine + nOpp, roll) : to;
+  /* Round 781: and how busy a minute of that board is for a goal. */
+  const board: BoardWeight | undefined = period ? { to, w: BOARD[period].weight } : undefined;
+  const me = drawMySegment(state, live, xi, from, to, nMine, maxYellows, taken, dutyOf, hi, board);
   const oppStart = oppAt(live, from);
-  const byMinute = <T extends { minute: number }>(a: T, b: T): number => a.minute - b.minute;
+  const byMinute = clockOrder;
   if (half === 1) {
     live.h1My = [...(live.h1My ?? []), ...me.goals].sort(byMinute);
     live.h1Cards = [...(live.h1Cards ?? []), ...me.cards];
@@ -12939,7 +13400,7 @@ function drawSegment(
   let oppGoals: ScorerLine[];
   let oppCards: CardLine[] = [];
   if (!oppStart) {
-    oppGoals = generateOppScorers(fx.opponent, poisson(segO), 0, yearsOn(state), state.eraId, taken, [from + 1, to], mySquadNames(state));
+    oppGoals = generateOppScorers(fx.opponent, nOpp, 0, yearsOn(state), state.eraId, taken, [from + 1, hi], mySquadNames(state), board);
     live.oppSubs = drawOppSubs(live, from, to, []);
   } else {
     /* Their goals' MINUTES first (the other dugout reads the score as it
@@ -12948,9 +13409,9 @@ function drawSegment(
        before a booking he took), and only then the scorers' names, off the
        eleven on the pitch at each goal's minute, so a man off their bench
        can score and a man who came off cannot. */
-    const oppGoalMinutes = distinctMinutes(poisson(segO), from + 1, to, taken);
+    const oppGoalMinutes = distinctMinutes(nOpp, from + 1, hi, taken, board);
     const prior = allOppCards(live);
-    oppCards = drawSegmentOppCards(m => oppAt(live, m) ?? [], from, to, maxYellows, bookedMapOf(prior, c => c.name), dismissedOf(prior, c => c.name));
+    oppCards = drawSegmentOppCards(m => oppAt(live, m) ?? [], from, to, maxYellows, bookedMapOf(prior, c => c.name), dismissedOf(prior, c => c.name), hi);
     if (half === 1) live.h1OppCards = [...(live.h1OppCards ?? []), ...oppCards];
     else live.h2OppCards = [...(live.h2OppCards ?? []), ...oppCards];
     live.oppSubs = drawOppSubs(live, from, to, oppGoalMinutes);
@@ -12962,7 +13423,7 @@ function drawSegment(
     });
     /* A dismissal never sits before the same man's goal (fixExits moves the
        red, never the goal). */
-    fixExits(oppCards, [], oppGoals, to);
+    fixExits(oppCards, [], oppGoals, hi);
   }
   markOppSetPieceGoals(oppGoals);
   if (half === 1) live.h1Opp = [...(live.h1Opp ?? []), ...oppGoals].sort(byMinute);
@@ -12978,7 +13439,7 @@ function drawSegment(
   for (const inj of me.injuries) if (inj.id) exits.set(inj.id, Math.min(exits.get(inj.id) ?? Infinity, inj.minute));
   const mineAt = (m: number): CMPlayer[] => xi.filter(p => (exits.get(p.id) ?? Infinity) > m);
   const play = drawSegmentPlay({
-    from, to, lamMine: segM, lamOpp: segO,
+    from, to, hi, lamMine: segM, lamOpp: segO,
     myGoals: me.goals, oppGoals,
     mineAt, oppAt: oppStart ? (m => oppAt(live, m)) : (() => null),
     myCards: me.cards, oppCards,
@@ -12987,6 +13448,24 @@ function drawSegment(
   });
   if (half === 1) live.h1Play = [...(live.h1Play ?? []), ...play];
   else live.h2Play = [...(live.h2Play ?? []), ...play];
+  /* Round 781: everything drawn past the period's last minute is in its
+     board, and the board the report prints is read again off the period as
+     it now stands, with the same roll, so it is never shorter than the
+     deepest event in it (the max is the belt for a count that fell short). */
+  if (period) {
+    const deepest = foldBoard(to, me.goals, me.cards, me.injuries, oppGoals, oppCards, play);
+    const settled = Math.max(boardOf(period, stoppagesIn(live, BOARD[period].from, to), roll), deepest);
+    live.added = { ...(live.added ?? {}), [period]: settled };
+    if (half === 1) {
+      live.h1My = [...(live.h1My ?? [])].sort(clockOrder);
+      live.h1Opp = [...(live.h1Opp ?? [])].sort(clockOrder);
+      live.h1Play = [...(live.h1Play ?? [])].sort((a, b) => clockOrder(a, b) || PLAY_ORDER[a.kind] - PLAY_ORDER[b.kind]);
+    } else {
+      live.h2My = [...(live.h2My ?? [])].sort(clockOrder);
+      live.h2Opp = [...(live.h2Opp ?? [])].sort(clockOrder);
+      live.h2Play = [...(live.h2Play ?? [])].sort((a, b) => clockOrder(a, b) || PLAY_ORDER[a.kind] - PLAY_ORDER[b.kind]);
+    }
+  }
 }
 
 /**
@@ -13194,7 +13673,11 @@ function recutSecondHalf(state: CareerState, entry: CalendarEntry, live: LiveMat
      time was decided on, so extra time is decided again at 90. The clock
      only runs forward and extra time is drawn at 90, so the viewer cannot
      reach this; it keeps the engine honest if anything else ever does. */
-  if (live.et && minute < live.et.from) delete live.et;
+  if (live.et && minute < live.et.from) {
+    delete live.et;
+    /* Round 781: and the board at its end. */
+    if (live.added) delete live.added.et;
+  }
   /* Round 670: the stretch being redrawn runs to the end of extra time when
      it has been drawn, else to the ninety. */
   const end = live.et ? live.et.to : 90;
@@ -13218,6 +13701,77 @@ function recutSecondHalf(state: CareerState, entry: CalendarEntry, live: LiveMat
   live.possH2 = secondPeriodPossession(live);
 }
 
+/**
+ * Round 781: a change made inside a board, at `p` minutes into the board of
+ * `period`. What happened by then stands; the rest of the board is drawn
+ * again off the eleven and the shape just chosen, so a man taken off at 90+2
+ * cannot score at 90+4 and a man coming on can. The board itself does not
+ * move, the fourth official has already held it up. The stretch is drawn on
+ * the extended clock, (to + p, to + board], at the period's own rate per
+ * minute of board (a stretch of length L spreads its goals over L plus the
+ * board, a board minute counting the period's weight, see BOARD), and folded
+ * back onto the period's last minute.
+ */
+function recutBoard(state: CareerState, entry: CalendarEntry, live: LiveMatch, period: 'h1' | 'h2' | 'et', p: number): void {
+  const board = live.added?.[period];
+  if (board === undefined || p >= board) return;
+  if (period === 'et' && !live.et) return;
+  const fx = fixtureFor(state, entry)!;
+  /* The board of the ninety comes before extra time; one drawn already is
+     decided again at the end of the board, as recutSecondHalf does at 90. */
+  if (period === 'h2' && live.et) {
+    delete live.et;
+    if (live.added) delete live.added.et;
+  }
+  const to = period === 'h1' ? 45 : period === 'h2' ? 90 : live.et!.to;
+  const len = period === 'et' ? (live.et!.to - live.et!.from) : 45;
+  const stays = playedBy(to, p);
+  if (period === 'h1') {
+    live.h1My = (live.h1My ?? []).filter(stays);
+    live.h1Opp = (live.h1Opp ?? []).filter(stays);
+    live.h1Play = (live.h1Play ?? []).filter(stays);
+    live.h1Cards = (live.h1Cards ?? []).filter(stays);
+    live.h1OppCards = (live.h1OppCards ?? []).filter(stays);
+    live.h1Injuries = (live.h1Injuries ?? []).filter(stays);
+  } else {
+    live.h2My = (live.h2My ?? []).filter(stays);
+    live.h2Opp = (live.h2Opp ?? []).filter(stays);
+    live.h2Play = (live.h2Play ?? []).filter(stays);
+    live.h2Cards = (live.h2Cards ?? []).filter(stays);
+    live.h2OppCards = (live.h2OppCards ?? []).filter(stays);
+    live.h2Injuries = (live.h2Injuries ?? []).filter(stays);
+    live.oppSubs = (live.oppSubs ?? []).filter(stays);
+  }
+  const off = offPitchIds(live);
+  const xi = livePairs(state, live).filter(x => !off.has(x.p.id));
+  const first = period === 'h1' ? firstHalfLambdas(state, fx, xi, live.mentality) : null;
+  const { lamMine, lamOpp } = first
+    ?? secondHalfLambdas(state, fx, live, xi, live.myGoals + (live.h2My ?? []).length, live.oppGoals + (live.h2Opp ?? []).length);
+  /* A minute of the board counts `weight` times an ordinary one (see BOARD). */
+  const w = BOARD[period].weight;
+  const share = ((board - p) / 45) * (len * w / (len + w * board));
+  drawSegment(state, live, fx, period === 'h1' ? 1 : 2, to + p, to + board, lamMine * share, lamOpp * share);
+  /* Everything just drawn sits past `to`: fold it into the board. */
+  if (period === 'h1') {
+    foldBoard(to, live.h1My ?? [], live.h1Opp ?? [], live.h1Play ?? [], live.h1Cards ?? [], live.h1OppCards ?? [], live.h1Injuries ?? []);
+    live.h1My = [...(live.h1My ?? [])].sort(clockOrder);
+    live.h1Opp = [...(live.h1Opp ?? [])].sort(clockOrder);
+    live.h1Play = [...(live.h1Play ?? [])].sort((a, b) => clockOrder(a, b) || PLAY_ORDER[a.kind] - PLAY_ORDER[b.kind]);
+    live.myGoals = live.h1My.length;
+    live.oppGoals = live.h1Opp.length;
+    live.read = halftimeRead(state, men(xi), live.myGoals, live.oppGoals, first!.mine, first!.oppS);
+  } else {
+    /* Round 781 review: the other dugout's changes too. Drawn over the
+       extended clock, a long board (eight minutes, a change at 90 on the dot)
+       can put one at 91 to 96, which the report printed as 94' in a match of
+       ninety minutes. Folded, it is 90+4' like everything else in the board. */
+    foldBoard(to, live.h2My ?? [], live.h2Opp ?? [], live.h2Play ?? [], live.h2Cards ?? [], live.h2OppCards ?? [], live.h2Injuries ?? [], live.oppSubs ?? []);
+    live.h2My = [...(live.h2My ?? [])].sort(clockOrder);
+    live.h2Opp = [...(live.h2Opp ?? [])].sort(clockOrder);
+    live.h2Play = [...(live.h2Play ?? [])].sort((a, b) => clockOrder(a, b) || PLAY_ORDER[a.kind] - PLAY_ORDER[b.kind]);
+  }
+}
+
 export interface LiveFeedEvent {
   minute: number;
   side: 'me' | 'opp' | 'none';
@@ -13228,7 +13782,12 @@ export interface LiveFeedEvent {
   flank?: 'left' | 'right';
   penalty?: boolean;
   freeKick?: boolean;
+  /** Round 781: into the board of `minute` (90+3' is minute 90, plus 3). */
+  plus?: number;
 }
+
+/** Round 781: the plus of a line, as a spread, so a line in regular time carries no field. */
+const plusOf = (e: { plus?: number }): { plus?: number } => (e.plus ? { plus: e.plus } : {});
 
 /**
  * Everything the engine has committed for this match so far, in minute
@@ -13241,25 +13800,26 @@ export function liveFeed(live: LiveMatch): LiveFeedEvent[] {
   const flags = (g: { penalty?: boolean; freeKick?: boolean }): Partial<LiveFeedEvent> => ({
     ...(g.penalty ? { penalty: true } : {}), ...(g.freeKick ? { freeKick: true } : {}),
   });
-  for (const g of [...(live.h1My ?? []), ...(live.h2My ?? [])]) out.push({ minute: g.minute, side: 'me', kind: 'goal', text: g.name, ...flags(g) });
-  for (const g of [...(live.h1Opp ?? []), ...(live.h2Opp ?? [])]) out.push({ minute: g.minute, side: 'opp', kind: 'goal', text: g.name, ...flags(g) });
+  for (const g of [...(live.h1My ?? []), ...(live.h2My ?? [])]) out.push({ minute: g.minute, side: 'me', kind: 'goal', text: g.name, ...flags(g), ...plusOf(g) });
+  for (const g of [...(live.h1Opp ?? []), ...(live.h2Opp ?? [])]) out.push({ minute: g.minute, side: 'opp', kind: 'goal', text: g.name, ...flags(g), ...plusOf(g) });
   for (const e of [...(live.h1Play ?? []), ...(live.h2Play ?? [])]) {
     if (e.goal) continue;
     out.push({
       minute: e.minute, side: e.side, kind: e.kind === 'shot' ? (e.on ? 'save' : 'shot') : e.kind, text: e.who,
-      ...(e.flank ? { flank: e.flank } : {}), ...(e.penalty ? { penalty: true } : {}),
+      ...(e.flank ? { flank: e.flank } : {}), ...(e.penalty ? { penalty: true } : {}), ...plusOf(e),
     });
   }
-  for (const c of [...(live.h1Cards ?? []), ...(live.h2Cards ?? [])]) out.push({ minute: c.minute, side: 'me', kind: c.kind, text: c.name });
-  for (const c of [...(live.h1OppCards ?? []), ...(live.h2OppCards ?? [])]) out.push({ minute: c.minute, side: 'opp', kind: c.kind, text: c.name });
-  for (const inj of [...(live.h1Injuries ?? []), ...(live.h2Injuries ?? [])]) out.push({ minute: inj.minute, side: 'me', kind: 'injury', text: inj.name });
-  for (const s of live.subs ?? []) out.push({ minute: s.minute, side: 'me', kind: 'sub', text: `${s.on} on for ${s.off}` });
-  for (const s of live.oppSubs ?? []) out.push({ minute: s.minute, side: 'opp', kind: 'sub', text: `${s.on} on for ${s.off}` });
-  out.push({ minute: 45, side: 'none', kind: 'halftime', text: 'Half time' });
+  for (const c of [...(live.h1Cards ?? []), ...(live.h2Cards ?? [])]) out.push({ minute: c.minute, side: 'me', kind: c.kind, text: c.name, ...plusOf(c) });
+  for (const c of [...(live.h1OppCards ?? []), ...(live.h2OppCards ?? [])]) out.push({ minute: c.minute, side: 'opp', kind: c.kind, text: c.name, ...plusOf(c) });
+  for (const inj of [...(live.h1Injuries ?? []), ...(live.h2Injuries ?? [])]) out.push({ minute: inj.minute, side: 'me', kind: 'injury', text: inj.name, ...plusOf(inj) });
+  for (const s of live.subs ?? []) out.push({ minute: s.minute, side: 'me', kind: 'sub', text: `${s.on} on for ${s.off}`, ...plusOf(s) });
+  for (const s of live.oppSubs ?? []) out.push({ minute: s.minute, side: 'opp', kind: 'sub', text: `${s.on} on for ${s.off}`, ...plusOf(s) });
+  /* Round 781: the break sits after the first half's board, when one has been drawn. */
+  out.push({ minute: 45, side: 'none', kind: 'halftime', text: 'Half time', ...plusOf({ plus: live.added?.h1 }) });
   const ORDER: Record<LiveFeedEvent['kind'], number> = {
     throwin: 0, foul: 1, corner: 2, shot: 3, save: 3, goal: 4, yellow: 5, red: 5, injury: 5, sub: 6, halftime: 7,
   };
-  return out.sort((a, b) => a.minute - b.minute || ORDER[a.kind] - ORDER[b.kind]);
+  return out.sort((a, b) => clockOrder(a, b) || ORDER[a.kind] - ORDER[b.kind]);
 }
 
 /**
@@ -13272,10 +13832,14 @@ export function liveFeed(live: LiveMatch): LiveFeedEvent[] {
  */
 export function liveStatsAt(
   live: Pick<LiveMatch, 'h1Play' | 'h2Play' | 'possH1' | 'possH2' | 'et'>, minute: number,
+  /** Round 781: how far into the board of `minute` the clock stands (90+2 is minute 90, plus 2),
+   *  so the strip in added time counts only what has happened. Absent, the whole minute counts,
+   *  board included, which is what the report at the whistle wants. */
+  plus?: number,
 ): MatchStats {
   /* Round 670: the last minute played is the end of extra time when there was some. */
   const m = Math.max(0, Math.min(live.et ? live.et.to : 90, minute));
-  const play = [...(live.h1Play ?? []), ...(live.h2Play ?? [])].filter(e => e.minute <= m);
+  const play = [...(live.h1Play ?? []), ...(live.h2Play ?? [])].filter(playedBy(m, plus));
   const count = (side: 'me' | 'opp', f: (e: PlayEvent) => boolean): number => play.filter(e => e.side === side && f(e)).length;
   const xgOf = (side: 'me' | 'opp'): number => Math.round(play.filter(e => e.side === side && e.kind === 'shot').reduce((s, e) => s + (e.xg ?? 0), 0) * 100) / 100;
   const p1 = live.possH1 ?? 50;
@@ -13547,6 +14111,10 @@ function buildMatchDetail(args: {
   et?: { from: number; to: number };
   /** Round 670 polish: why it went on, levelAt90Words, when there was extra time. */
   etWords?: string;
+  /** Round 781: the board the live match drew per period (LiveMatch.added).
+   *  A period without one (a save from before this round) is rolled here
+   *  the Round 472 way, as it always was. */
+  added?: LiveMatch['added'];
 }): MatchDetail {
   const { myGoals, oppGoals, lamMine, lamOpp } = args;
   const round2 = (n: number) => Math.round(n * 100) / 100;
@@ -13585,16 +14153,22 @@ function buildMatchDetail(args: {
     for (const inj of args.injuries) if (inj.minute > from && inj.minute <= to) n += 1;
     return n;
   };
-  const added = {
-    h1: clamp(1 + stoppages(0, 45) + ri(0, 1), 1, 5),
-    h2: clamp(2 + stoppages(45, 90) + ri(0, 2), 2, 8),
+  /* Round 781: the board is football now, decided as each period's last
+     stretch was drawn (drawSegment) so its goals fit under it; the whistle
+     only rolls it for a period drawn before this round. Same formula. */
+  const added: MatchDetail['added'] = {
+    h1: args.added?.h1 ?? clamp(1 + stoppages(0, 45) + ri(0, 1), 1, 5),
+    h2: args.added?.h2 ?? clamp(2 + stoppages(45, 90) + ri(0, 2), 2, 8),
+    ...(args.et && args.added?.et !== undefined ? { et: args.added.et } : {}),
   };
+  /* Round 781: the board a clock row closes, so it sorts after what happened in it. */
+  const endBoard = args.et ? (added.et ?? 0) : added.h2;
 
   const timeline: TimelineEvent[] = [];
   timeline.push({ minute: 0, side: 'none', kind: 'kickoff', text: 'Kick off' });
   /* Round 714: a goal row says when it came from the spot or a free kick, off its own scorer line. */
   const setPiece = (sc: ScorerLine): Partial<TimelineEvent> => ({
-    ...(sc.penalty ? { penalty: true } : {}), ...(sc.freeKick ? { freeKick: true } : {}),
+    ...(sc.penalty ? { penalty: true } : {}), ...(sc.freeKick ? { freeKick: true } : {}), ...plusOf(sc),
   });
   for (const sc of args.myScorers) {
     timeline.push({ minute: sc.minute, side: 'me', kind: 'goal', text: sc.assist ? `${sc.name} (assist: ${sc.assist})` : sc.name, ...setPiece(sc) });
@@ -13607,42 +14181,44 @@ function buildMatchDetail(args: {
      its save follows at the same minute. No draw here: the stream is untouched. */
   for (const e of args.play) {
     if (e.kind === 'shot') {
-      if (e.penalty) timeline.push({ minute: e.minute, side: e.side, kind: 'penalty', text: e.who });
+      if (e.penalty) timeline.push({ minute: e.minute, side: e.side, kind: 'penalty', text: e.who, ...plusOf(e) });
       if (e.goal) continue;
-      timeline.push({ minute: e.minute, side: e.side, kind: e.on ? 'save' : 'shot', text: e.who, ...(e.penalty ? { penalty: true } : {}) });
+      timeline.push({ minute: e.minute, side: e.side, kind: e.on ? 'save' : 'shot', text: e.who, ...(e.penalty ? { penalty: true } : {}), ...plusOf(e) });
     } else if (e.kind === 'corner') {
-      timeline.push({ minute: e.minute, side: e.side, kind: 'corner', text: e.who });
+      timeline.push({ minute: e.minute, side: e.side, kind: 'corner', text: e.who, ...plusOf(e) });
     }
   }
-  for (const c of args.cards) timeline.push({ minute: c.minute, side: 'me', kind: c.kind, text: c.name });
-  for (const inj of args.injuries) timeline.push({ minute: inj.minute, side: 'me', kind: 'injury', text: inj.name });
-  for (const s of args.subs) timeline.push({ minute: s.minute, side: 'me', kind: 'sub', text: `${s.on} on for ${s.off}` });
+  for (const c of args.cards) timeline.push({ minute: c.minute, side: 'me', kind: c.kind, text: c.name, ...plusOf(c) });
+  for (const inj of args.injuries) timeline.push({ minute: inj.minute, side: 'me', kind: 'injury', text: inj.name, ...plusOf(inj) });
+  for (const s of args.subs) timeline.push({ minute: s.minute, side: 'me', kind: 'sub', text: `${s.on} on for ${s.off}`, ...plusOf(s) });
   /* Round 504: the other dugout's cards and changes sit on the same clock. */
-  for (const c of args.oppCards) timeline.push({ minute: c.minute, side: 'opp', kind: c.kind, text: c.name });
-  for (const s of args.oppSubs) timeline.push({ minute: s.minute, side: 'opp', kind: 'sub', text: `${s.on} on for ${s.off}` });
-  timeline.push({ minute: 45, side: 'none', kind: 'halftime', text: `Half time (+${added.h1}')` });
+  for (const c of args.oppCards) timeline.push({ minute: c.minute, side: 'opp', kind: c.kind, text: c.name, ...plusOf(c) });
+  for (const s of args.oppSubs) timeline.push({ minute: s.minute, side: 'opp', kind: 'sub', text: `${s.on} on for ${s.off}`, ...plusOf(s) });
+  /* Round 781: every clock row carries the board it closes, so it sorts after the goals scored in it. */
+  timeline.push({ minute: 45, side: 'none', kind: 'halftime', text: `Half time (+${added.h1}')`, plus: added.h1 });
   /* Round 670: the ninety minutes end with the board, and extra time starts.
      Round 670 polish: in the viewer's own words, so a second leg says it is
      the aggregate that is level. */
-  if (args.et) timeline.push({ minute: args.et.from, side: 'none', kind: 'extratime', text: `${args.etWords ?? 'Level after 90 minutes'} (+${added.h2}'), extra time` });
+  if (args.et) timeline.push({ minute: args.et.from, side: 'none', kind: 'extratime', text: `${args.etWords ?? 'Level after 90 minutes'} (+${added.h2}'), extra time`, plus: added.h2 });
   if (args.decidedBy === 'pens') {
     /* Round 507: the shootout's own result, not the night's. On a two legged
        tie you can lose the second leg and win the shootout, so reading `won`
        here printed the wrong club. */
     const penWon = args.shootoutWon ?? args.won;
-    timeline.push({ minute: end, side: penWon ? 'me' : 'opp', kind: 'pens', text: penWon ? `${args.clubName} win on penalties` : `${args.opponent} win on penalties` });
+    timeline.push({ minute: end, side: penWon ? 'me' : 'opp', kind: 'pens', text: penWon ? `${args.clubName} win on penalties` : `${args.opponent} win on penalties`, ...plusOf({ plus: endBoard }) });
   }
   timeline.push(args.et
-    ? { minute: end, side: 'none', kind: 'fulltime', text: 'Full time, after extra time' }
-    : { minute: 90, side: 'none', kind: 'fulltime', text: `Full time (+${added.h2}')` });
+    ? { minute: end, side: 'none', kind: 'fulltime', text: added.et ? `Full time, after extra time (+${added.et}')` : 'Full time, after extra time', ...plusOf({ plus: endBoard }) }
+    : { minute: 90, side: 'none', kind: 'fulltime', text: `Full time (+${added.h2}')`, plus: added.h2 });
   /* Round 714: inside a minute, the corner and the penalty award come before
-     what they led to; everything else keeps the order it always had. */
+     what they led to; everything else keeps the order it always had.
+     Round 781: and the board after the minute, before the next one. */
   const KIND_ORDER: Record<TimelineKind, number> = {
     kickoff: 0, corner: 1, penalty: 1,
     shot: 2, save: 2, goal: 2, yellow: 2, red: 2, injury: 2, sub: 2,
     halftime: 3, extratime: 3, pens: 4, fulltime: 5,
   };
-  timeline.sort((a, b) => a.minute - b.minute || KIND_ORDER[a.kind] - KIND_ORDER[b.kind]);
+  timeline.sort((a, b) => clockOrder(a, b) || KIND_ORDER[a.kind] - KIND_ORDER[b.kind]);
 
   /* Momentum, Round 472. His words: it has to read as up and down swings.
      It did not, and the reason was in the maths rather than the drawing: the
@@ -13761,7 +14337,7 @@ function buildMatchDetail(args: {
 
   return {
     stats,
-    cards: [...args.cards].sort((a, b) => a.minute - b.minute),
+    cards: [...args.cards].sort(clockOrder),
     injuries: args.injuries,
     subs: args.subs,
     timeline,
@@ -13942,11 +14518,15 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
      with away goals in extra time counting in the eras that counted them. */
   if (uclLeg && uclLeg.twoLegs && uclLeg.leg === 2) {
     const { iAmHome, out } = mySecondLegOutcome(state, uclLeg.round, myGoals, oppGoals);
+    /* Round 781: the first leg in my orientation, so the report can print it
+       beside the aggregate. Leg one was played at tie.home's ground. */
+    const first = firstLegMine(state, uclLeg.round);
     tieLine = {
       leg: 2,
       aggMine: iAmHome ? out.homeAgg : out.awayAgg,
       aggTheirs: iAmHome ? out.awayAgg : out.homeAgg,
       ...(out.byAwayGoals ? { byAwayGoals: true } : {}),
+      ...(first ? { leg1Mine: first.mine, leg1Theirs: first.theirs, leg1Home: first.home } : {}),
     };
     if (out.winner === null) {
       decidedBy = 'pens';
@@ -13974,6 +14554,10 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
       if (etPlayed) decidedBy = 'aet';
     }
     tieLine = { ...tieLine, through: advanced };
+  } else if (firstLegTonight) {
+    /* Round 781: a first leg says so, with tonight as the aggregate so far,
+       so the report can say the tie is still open and where it is settled. */
+    tieLine = { leg: 1, aggMine: myGoals, aggTheirs: oppGoals };
   } else if (isKnockout && drawn) {
     decidedBy = 'pens';
     /* Round 505: the assigned penalty taker, when he finished the match, moves the odds a bounded touch.
@@ -14014,7 +14598,7 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
   );
   const myScorers: ScorerLine[] = myLines.map((l, i) => ({
     name: l.name, minute: l.minute, assist: assistNames[i] ?? undefined,
-    ...(l.penalty ? { penalty: true } : {}), ...(l.freeKick ? { freeKick: true } : {}),
+    ...(l.penalty ? { penalty: true } : {}), ...(l.freeKick ? { freeKick: true } : {}), ...plusOf(l),
   }));
   const oppScorers: ScorerLine[] = [...(live.h1Opp ?? []), ...(live.h2Opp ?? [])];
   const tally = new Map<string, number>();
@@ -14664,7 +15248,7 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
      dressing room. A save from before the list existed still reads the
      difference between who started and who finished, at the break. */
   const subLines: SubLine[] = live.subs
-    ? live.subs.map(sb => ({ off: sb.off, on: sb.on, minute: sb.minute }))
+    ? live.subs.map(sb => ({ off: sb.off, on: sb.on, minute: sb.minute, ...plusOf(sb) }))
     : (() => {
       const out: SubLine[] = [];
       for (let i = 0; i < live.startXi.length; i++) {
@@ -14714,6 +15298,7 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
     oppCards: [...(live.h1OppCards ?? []), ...(live.h2OppCards ?? [])],
     et: live.et,
     etWords,
+    added: live.added,
   });
 
   const iAmHome = fx.home !== false; // neutral finals list us first
@@ -15338,14 +15923,16 @@ export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID, cu
     balancedFixtures: true,
     table: leagueClubs.map(emptyRow),
     form: [],
-    calendar: buildCalendar(league.clubs.length, eraUclHasR16(era.id), uclLegsFor(era.id, 'QF') === 2),
+    calendar: buildCalendar(league.clubs.length, eraUclHasR16(era.id), uclLegsFor(era.id, 'QF') === 2, league.cupName !== null),
     clubStrengths: genClubStrengths(custom ? { ...league, clubs: leagueClubs } : league, startYearsOn, era.id),
     transferWindow: 'summer',
     windowWeeksLeft: 4,
     aiHeadlines: [],
     goneNames: [],
     seasonSignings: [],
-    cupRound: 'R16',
+    /* Round 832: a league with no domestic cup starts with it already done:
+       'out' and no exit round, so nothing grades a cup run or waits on one. */
+    cupRound: league.cupName !== null ? 'R16' : 'out',
     cupDraw: {},
     // Round 72: only clubs in UCL-eligible leagues start in Europe.
     // Round 154: a brand new custom club starts outside Europe whatever its
@@ -15424,8 +16011,11 @@ export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID, cu
   state.uclWorld = initUclWorld(state);
   // Round 165: the golden boot race starts at zero with the season.
   state.scorerRace = initScorerRace(state);
-  state.cupBracket = buildCupBracket(state);
-  state.cupDraw.R16 = myCupOpponent(state, 'R16') ?? drawCupOpponent(state);
+  // Round 832: and a league with no domestic cup draws none.
+  if (league.cupName !== null) {
+    state.cupBracket = buildCupBracket(state);
+    state.cupDraw.R16 = myCupOpponent(state, 'R16') ?? drawCupOpponent(state);
+  }
   state.xiIds = autoPickXI(state.squad, FORMATIONS[state.formationIndex]);
   /* Round 505: day one armband and takers, so the tactics screen has them before a ball is kicked. */
   ensureSetPieces(state);
@@ -15678,11 +16268,16 @@ function halftimeRead(
 
 /** Round 504: everyone of mine who has left this match for good by a
  *  minute: taken off, sent off, or down injured. None of them come back. */
-export function liveGoneIds(live: LiveMatch, minute: number): Set<string> {
+export function liveGoneIds(
+  live: LiveMatch, minute: number,
+  /** Round 781: how far into the board of `minute` the clock stands; a line deeper in it has not happened. */
+  plus?: number,
+): Set<string> {
   const gone = new Set<string>();
-  for (const s of live.subs ?? []) if (s.offId && s.minute <= minute) gone.add(s.offId);
-  for (const c of [...(live.h1Cards ?? []), ...(live.h2Cards ?? [])]) if (c.kind === 'red' && c.id && c.minute <= minute) gone.add(c.id);
-  for (const inj of [...(live.h1Injuries ?? []), ...(live.h2Injuries ?? [])]) if (inj.id && inj.minute <= minute) gone.add(inj.id);
+  const by = playedBy(minute, plus);
+  for (const s of live.subs ?? []) if (s.offId && by(s)) gone.add(s.offId);
+  for (const c of [...(live.h1Cards ?? []), ...(live.h2Cards ?? [])]) if (c.kind === 'red' && c.id && by(c)) gone.add(c.id);
+  for (const inj of [...(live.h1Injuries ?? []), ...(live.h2Injuries ?? [])]) if (inj.id && by(inj)) gone.add(inj.id);
   return gone;
 }
 
@@ -15773,7 +16368,14 @@ export type LiveChange =
  * the change is not allowed: no match on, the third sub already made, the
  * man is not on the pitch or the one coming on is not fit.
  */
-export function changeLive(career: CareerState, minute: number, change: LiveChange): CareerState | null {
+export function changeLive(
+  career: CareerState, minute: number, change: LiveChange,
+  /** Round 781: how far into the board of `minute` the change was made (a
+   *  sub at 90+2 is minute 90, plus 2), kept on the line so the report labels
+   *  it the way the clock read, and the rest of that board is drawn again
+   *  off the change (recutBoard). Ignored outside a board. */
+  plus?: number,
+): CareerState | null {
   const state: CareerState = JSON.parse(JSON.stringify(career));
   const live = state.live;
   if (!live) return null;
@@ -15781,6 +16383,15 @@ export function changeLive(career: CareerState, minute: number, change: LiveChan
   if (!Number.isFinite(minute) || minute < 0 || minute > (live.et ? live.et.to : 90)) return null;
   // Never earlier than the last thing that happened; a clock only runs forward.
   const m = Math.floor(Math.max(minute, live.minute ?? 0));
+  /* Round 781: which board the clock stands in, if any, and how far into it.
+     Only a change made at the period's last minute has one, and never past
+     the board the period drew; a match drawn before this round has none. */
+  const period: 'h1' | 'h2' | 'et' | null = m === 45 && !live.h2Drawn ? 'h1'
+    : m === 90 && live.h2Drawn && !live.et ? 'h2'
+      : live.et && m === live.et.to ? 'et' : null;
+  const boardNow = period ? live.added?.[period] ?? 0 : 0;
+  const p = boardNow > 0 && Math.floor(minute) === m && plus !== undefined && Number.isFinite(plus) && plus > 0
+    ? Math.min(Math.floor(plus), boardNow) : 0;
   if (change.kind === 'sub') {
     if (live.subsUsed >= MAX_HALFTIME_SUBS) return null;
     const idx = live.onPitch.indexOf(change.outId);
@@ -15788,12 +16399,14 @@ export function changeLive(career: CareerState, minute: number, change: LiveChan
     if (live.onPitch.includes(change.inId)) return null;
     /* A man who has been sent off cannot be replaced; that is the rule. Only
        a red the clock has reached counts: the half is committed ahead of
-       the clock, and a red drawn for later is redrawn with the rest. */
-    const reds = [...(live.h1Cards ?? []), ...(live.h2Cards ?? [])].filter(c => c.kind === 'red' && c.id === change.outId && c.minute <= m);
+       the clock, and a red drawn for later is redrawn with the rest.
+       Round 781: in a board, only a red at or before the board minute the
+       clock reads; one deeper in it is redrawn too. */
+    const reds = [...(live.h1Cards ?? []), ...(live.h2Cards ?? [])].filter(c => c.kind === 'red' && c.id === change.outId && playedBy(m, period ? p : undefined)(c));
     if (reds.length) return null;
     /* And nobody comes back on: not a man already taken off, not a man who
        limped off. */
-    if (liveGoneIds(live, m).has(change.inId)) return null;
+    if (liveGoneIds(live, m, period ? p : undefined).has(change.inId)) return null;
     const coming = state.squad.find(p => p.id === change.inId);
     if (!coming || !isAvailable(coming)) return null;
     const going = state.squad.find(p => p.id === change.outId);
@@ -15801,15 +16414,18 @@ export function changeLive(career: CareerState, minute: number, change: LiveChan
     live.subsUsed += 1;
     live.subs = [...(live.subs ?? []), {
       off: going?.name ?? change.outId, on: coming.name, minute: m, offId: change.outId, onId: change.inId,
+      ...plusOf({ plus: p }),
     }];
   } else {
     live.mentality = change.mentality;
     state.mentality = change.mentality;
-    live.shapeChanges = [...(live.shapeChanges ?? []), { minute: m, mentality: change.mentality }];
+    live.shapeChanges = [...(live.shapeChanges ?? []), { minute: m, mentality: change.mentality, ...plusOf({ plus: p }) }];
   }
   live.minute = m;
   const entry = state.calendar[live.week];
   if (entry && m < 45) recutFirstHalf(state, entry, live, m);
+  /* Round 781: a change in a board redraws the rest of that board. */
+  else if (entry && period) recutBoard(state, entry, live, period, p);
   else if (entry && m >= 46 && live.h2Drawn) recutSecondHalf(state, entry, live, m);
   return state;
 }
@@ -15935,6 +16551,9 @@ export interface MatchFacts {
   oppDanger: string[];
   myStrength: number;
   oppStrength: number;
+  /** Round 781: the first leg in my orientation, when tonight is the second
+   *  leg of a two legged tie. Absent on every other match. */
+  firstLeg?: { mine: number; theirs: number; home: boolean };
 }
 
 function poissonPmf(lambda: number, k: number): number {
@@ -16037,6 +16656,11 @@ export function matchFacts(career: CareerState): MatchFacts | null {
       oppDanger,
       myStrength: Math.round(mine),
       oppStrength: Math.round(oppS),
+      /* Round 781: the first leg, when tonight settles a two legged tie. */
+      ...(() => {
+        const ctx = secondLegContext(career, w, 0, 0);
+        return ctx ? { firstLeg: { mine: ctx.leg1Mine, theirs: ctx.leg1Theirs, home: ctx.leg1Home } } : {};
+      })(),
     };
   }
   return null;
@@ -16132,7 +16756,7 @@ function legacyLogOf(career: CareerState): LegacyLogEntry[] {
     week: e.week,
     league: e.competition
       ? e.competition === 'league'
-      : !(e.comp.startsWith('Champions League') || e.comp.startsWith(cupName)),
+      : !(e.comp.startsWith('Champions League') || (cupName !== null && e.comp.startsWith(cupName))),
     res: e.res,
   }));
 }
@@ -16970,8 +17594,16 @@ function runPromotionRelegation(prev: CareerState): { overrides: Record<string, 
     const topDef = REAL_LEAGUES.find(l => l.id === pyr.top);
     const secondDef = REAL_LEAGUES.find(l => l.id === pyr.second);
     if (!topDef || !secondDef) continue;
-    const topClubs = carried?.[pyr.top] ?? topDef.clubs;
-    const secondClubs = carried?.[pyr.second] ?? secondDef.clubs;
+    /* Round 832 review: the memberships as this summer has already moved
+       them, not as the season started. With the rules table a third tier is
+       one more row (a second tier with a secondTier of its own), and reading
+       the season's start here put the clubs just promoted out of the middle
+       division back into it and lost the ones just relegated into it: a club
+       in two leagues by the first summer. For two pairs that share no league
+       (the only shape before this round) `next` still holds exactly what
+       `carried` did when each pair is reached, so nothing they do changes. */
+    const topClubs = next[pyr.top] ?? topDef.clubs;
+    const secondClubs = next[pyr.second] ?? secondDef.clubs;
     const topTable = myLeagueId === pyr.top
       ? sortedLeagueTable(prev)
       : sortedWorldTable(prev, pyr.top, prev.world?.[pyr.top]?.table ?? []);
@@ -17335,7 +17967,7 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
     balancedFixtures: true,
     table: leagueClubs.map(emptyRow),
     form: [],
-    calendar: buildCalendar(league.clubs.length, eraUclHasR16(eraId), uclLegsFor(eraId, 'QF') === 2),
+    calendar: buildCalendar(league.clubs.length, eraUclHasR16(eraId), uclLegsFor(eraId, 'QF') === 2, league.cupName !== null),
     clubStrengths: genClubStrengths(nextCustom ? { ...league, clubs: leagueClubs } : league, nextYearsOn, eraId),
     transferWindow: 'summer',
     windowWeeksLeft: 4,
@@ -17343,7 +17975,7 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
     // Round 132: anybody the club had to go and get is off the market now.
     goneNames: [...freeAgentsIn],
     seasonSignings: [],
-    cupRound: 'R16',
+    cupRound: league.cupName !== null ? 'R16' : 'out',
     cupDraw: {},
     uclField: nextUclField.length ? nextUclField : undefined,
     uclGroup: initUclGroup(qualifiedUcl, clubName, eraId, nextUclField),
@@ -17654,8 +18286,11 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
      the pot is not settled until the sponsor's cheque above has landed. */
   state.boardObjectives = [...(state.boardObjectives ?? []), ...buildBoardAsks(state)];
   state.boardAsksVersion = BOARD_ASKS_VERSION;
-  state.cupBracket = buildCupBracket(state);
-  state.cupDraw.R16 = myCupOpponent(state, 'R16') ?? drawCupOpponent(state);
+  // Round 832: a league with no domestic cup draws none.
+  if (league.cupName !== null) {
+    state.cupBracket = buildCupBracket(state);
+    state.cupDraw.R16 = myCupOpponent(state, 'R16') ?? drawCupOpponent(state);
+  }
   state.xiIds = autoPickXI(state.squad, FORMATIONS[state.formationIndex] ?? FORMATIONS[0]);
   generateHeadlines(state);
   /* Round 161: the add-ons that came due lead the summer's news. This sits
@@ -17789,6 +18424,22 @@ export function saveCareer(career: CareerState): boolean {
     return true;
   } catch {
     return false;
+  }
+}
+
+/**
+ * Round 832: which era the saved career plays in, read without opening it, so
+ * the page can fetch that era's squads before loadCareer repairs anything
+ * with them. Null when there is no save, or nothing readable in it.
+ */
+export function savedCareerEraId(): string | null {
+  try {
+    const raw = localStorage.getItem(SAVE_KEY);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw) as { eraId?: unknown } | null;
+    return parsed && typeof parsed.eraId === 'string' ? parsed.eraId : null;
+  } catch {
+    return null;
   }
 }
 

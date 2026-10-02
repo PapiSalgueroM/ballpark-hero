@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect, useMemo } from 'react';
+import { useState, useCallback, useEffect, useMemo, useRef } from 'react';
 import { HigherLowerPlayer, HigherLowerStatKey } from '@/types/higherLower';
 import { higherLowerPlayers, hlNoteFor } from '@/data/higherLowerPlayers';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
@@ -115,6 +115,14 @@ export function useHigherLower() {
   const [gameStatus, setGameStatus] = useState<'playing' | 'lost'>('playing');
   const [lastChoice, setLastChoice] = useState<{ stat: StatKey; correct: boolean } | null>(null);
   const [revealedStats, setRevealedStats] = useState(false);
+  const revealTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const revealVersion = useRef(0);
+  const cancelReveal = useCallback(() => {
+    revealVersion.current += 1;
+    if (revealTimer.current !== null) clearTimeout(revealTimer.current);
+    revealTimer.current = null;
+  }, []);
+  useEffect(() => cancelReveal, [cancelReveal]);
 
   const statLabels = STAT_LABELS;
 
@@ -127,10 +135,13 @@ export function useHigherLower() {
 
     setRevealedStats(true);
     setLastChoice({ stat, correct: isCorrect });
+    cancelReveal();
+    const version = revealVersion.current;
 
     if (isCorrect) {
-      setTimeout(() => {
-
+      revealTimer.current = setTimeout(() => {
+        if (version !== revealVersion.current) return;
+        revealTimer.current = null;
         const newStreak = streak + 1;
         setStreak(newStreak);
         if (newStreak > bestStreak) setBestStreak(newStreak);
@@ -143,18 +154,22 @@ export function useHigherLower() {
         setLastChoice(null);
       }, 3000);
     } else {
-      setTimeout(() => {
+      revealTimer.current = setTimeout(() => {
+        if (version !== revealVersion.current) return;
+        revealTimer.current = null;
         setGameStatus('lost');
       }, 3000);
     }
-  }, [gameStatus, currentPlayer, nextPlayer, streak, bestStreak, revealedStats]);
+  }, [gameStatus, currentPlayer, nextPlayer, streak, bestStreak, revealedStats, cancelReveal]);
 
   const giveUp = useCallback(() => {
     if (gameStatus !== 'playing') return;
+    cancelReveal();
     setGameStatus('lost');
-  }, [gameStatus]);
+  }, [gameStatus, cancelReveal]);
 
   const resetGame = useCallback(() => {
+    cancelReveal();
     const p1 = getRandomPlayer([]);
     const p2 = getRandomPlayer([p1.name], p1);
     setCurrentPlayer(p1);
@@ -163,7 +178,7 @@ export function useHigherLower() {
     setGameStatus('playing');
     setLastChoice(null);
     setRevealedStats(false);
-  }, []);
+  }, [cancelReveal]);
 
   const streakReaction = useMemo(() => getStreakReaction(streak), [streak]);
   const lossReaction = useMemo(() => getStreakReaction(streak), [streak]);

@@ -101,6 +101,8 @@ fs.writeFileSync(ENTRY, `
 globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
 const m = await import('${enginePath}');
 export const { startCareer, playNextEntry, sortedTable, sortedUclGroup, worldLeagueDefs, projectedUclBracket, ERA_LEAGUES, REAL_LEAGUES, leagueRounds, careerLeagueOf, LEAGUE_NATIONS, ERA_UCL_FIELDS } = m;
+/* Round 832: an era's squads load with the era, so the bundle fetches all three before it is read. */
+await m.ensureAllEraRosters();
 `);
 /* The @ alias is spelled out so a control copy of the engine written to the
    temp dir resolves its imports back to this tree's src. */

@@ -18,11 +18,12 @@ import ReportQuestion from '@/components/game/ReportQuestion';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
 import { supabase } from '@/integrations/supabase/client';
-import { computeChemistry, formatChemistry } from '@/lib/chemistry';
 import { StatTile } from '@/components/game/StatTile';
 import { normalizePosition, playerRating } from '@/lib/squadDeal';
 import { ordinal, simulateWorldXiSeason, type WxPlayer } from '@/lib/worldXi';
 import { SeasonReportTabs } from '@/components/world-xi/SeasonReportTabs';
+import { lineupFitSlots, seasonAdjust, xiFitBreakdown, type XiFitSlot } from '@/lib/xiFit';
+import { XiFitBreakdown, XiFitWorth } from '@/components/lineup/XiFitBreakdown';
 
 const formationOptions: Formation[] = ['4-3-3', '4-4-2', '3-5-2', '4-2-3-1', '3-4-3', '5-3-2'];
 
@@ -149,17 +150,14 @@ const LineupBuilder = () => {
     setPlayerInput('');
   };
 
-  const chemistry = useMemo(
-    () =>
-      computeChemistry(
-        filledSlotsArray.map((slot) => ({
-          name: slot.playerName,
-          club: slot.pick?.club,
-          nationality: slot.pick?.nationality,
-        })),
-      ),
-    [filledSlotsArray]
-  );
+  /* Round 825: role fit, chemistry and balance, slot by slot, off the rows
+     the picks came from. The season sim reads these three numbers, and the
+     same breakdown is what the tiles show while you pick, before you submit
+     and on the result card. It replaced the old chemistry chip, which counted
+     every pair on the pitch and moved nothing. */
+  const fitSlots: XiFitSlot[] = useMemo(() => lineupFitSlots(positions, filledSlots), [positions, filledSlots]);
+  const fitBreakdown = useMemo(() => xiFitBreakdown(fitSlots), [fitSlots]);
+  const slotLabels = useMemo(() => positions.map((p) => p.label), [positions]);
 
   /* Round 442, his "the simulation wasnt that good like other games and the
      details were bland". The result was one AI paragraph and a list of names.
@@ -197,8 +195,8 @@ const LineupBuilder = () => {
       value,
       age: slot.pick?.age,
     }));
-    return simulateWorldXiSeason(squad, formation ?? '4-3-3');
-  }, [phase, ratedXi, formation]);
+    return simulateWorldXiSeason(squad, formation ?? '4-3-3', seasonAdjust(fitBreakdown));
+  }, [phase, ratedXi, formation, fitBreakdown]);
 
   /* Which third of the pitch this XI is actually built on, averaged from the
      same card ratings. Slots are bucketed by the slot the player filled, not by
@@ -376,6 +374,10 @@ const LineupBuilder = () => {
                 onSelectPosition={selectPosition}
               />
             </div>
+
+            {/* Round 825: under the pitch, so it updates as you pick without
+                pushing the spinner or the search box anywhere. */}
+            <XiFitBreakdown breakdown={fitBreakdown} slots={fitSlots} labels={slotLabels} className="max-w-lg mx-auto" />
           </div>
         )}
 
@@ -398,13 +400,7 @@ const LineupBuilder = () => {
                   </div>
                 ))}
               </div>
-              {chemistry.totalBonus > 0 && (
-                <div className="mt-4 text-center">
-                  <span className="inline-flex items-center px-3 py-1.5 rounded-full bg-surface-2 text-gold text-sm font-semibold">
-                    {formatChemistry(chemistry)}
-                  </span>
-                </div>
-              )}
+              <XiFitBreakdown breakdown={fitBreakdown} slots={fitSlots} labels={slotLabels} className="mt-4" />
             </div>
 
             <div className="flex flex-wrap items-center justify-center gap-3">
@@ -480,13 +476,7 @@ const LineupBuilder = () => {
                     </div>
                   ))}
                 </div>
-                {chemistry.totalBonus > 0 && (
-                  <div className="mt-3 text-center">
-                    <span className="inline-flex items-center px-3 py-1.5 rounded-full bg-surface-2 text-gold text-sm font-semibold">
-                      {formatChemistry(chemistry)}
-                    </span>
-                  </div>
-                )}
+                <XiFitBreakdown breakdown={fitBreakdown} slots={fitSlots} labels={slotLabels} className="mt-3" />
               </div>
 
               {seasonReport && (
@@ -511,6 +501,8 @@ const LineupBuilder = () => {
                       state={seasonReport.trophies.length > 0 ? 'correct' : 'incorrect'}
                     />
                   </div>
+
+                  <XiFitWorth fit={seasonReport.fit} />
 
                   <div className="grid grid-cols-3 gap-2 mb-3">
                     {lineStrength.map(({ line, avg }) => (
@@ -549,6 +541,7 @@ const LineupBuilder = () => {
             "Choose a formation for your starting eleven",
             "Spin to get a random team assignment for each position",
             "Name a player from that team who fits the position",
+            "Check the role fit, chemistry and balance tiles under the pitch: the season sim plays all three",
             "Submit your full XI for an AI-powered evaluation and rating",
           ]}
           examples={[

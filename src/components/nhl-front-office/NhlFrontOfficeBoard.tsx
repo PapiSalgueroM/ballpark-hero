@@ -48,6 +48,7 @@ import { ConfettiBurst, CelebrationStyles, revealDelay } from '@/components/club
 import { foHubTiles, type FoPanelKey } from '@/lib/foHub';
 import { FoHubTiles, FoPanelHeader } from '@/components/front-office-shared/FoHubTiles';
 import contributorsStyles from './NhlContributors.module.css';
+import { isFrontOfficeSave } from '@/lib/frontOfficeSave';
 
 /* Round 180: 'fired' is new. Zero trust upstairs ends the save. */
 type Phase = 'pick' | 'hub' | 'draft' | 'recap' | 'fired';
@@ -159,6 +160,7 @@ function ContributorPicker({ team, onApply, onAuto, onBack }: {
 
 export default function NhlFrontOfficeBoard() {
   const [phase, setPhase] = useState<Phase>('pick');
+  const [saveError, setSaveError] = useState(false);
   /* Round 204: the hub is tiles now, so null means the hub itself and a
      tab key means you have opened that box. Club Manager's Round 74 rule,
      brought to the four GM games. */
@@ -219,8 +221,9 @@ export default function NhlFrontOfficeBoard() {
     try {
       const raw = localStorage.getItem(SAVE_KEY);
       if (!raw) return;
-      const s = JSON.parse(raw) as SaveShape;
-      if (!s.league || !s.myTeam) return;
+      const parsed: unknown = JSON.parse(raw);
+      if (!isFrontOfficeSave(parsed, 'NHL', NHL_FO_ROUNDS)) { setSaveError(true); return; }
+      const s = parsed as SaveShape;
       /* Round 568: FIRST, above every setState below, because everything
          past this line reads the league by id and a save written before the
          id fix can hold two men under one. The draft class is passed too: it
@@ -251,7 +254,7 @@ export default function NhlFrontOfficeBoard() {
       else if (s.phase !== 'recap') setPhase(s.phase);
       else if (s.postseason) setPhase('recap');
       else openDraft(s.league, s.myTeam, s);
-    } catch { /* fresh */ }
+    } catch { setSaveError(true); }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -272,6 +275,7 @@ export default function NhlFrontOfficeBoard() {
   };
 
   const start = (abbr: string) => {
+    setSaveError(false);
     const lg = initNhlLeague();
     const m = mandateFor(lg, abbr, false);
     setLeague(lg); setMyTeam(abbr); setPhase('hub'); setTab(null);
@@ -579,11 +583,17 @@ export default function NhlFrontOfficeBoard() {
   if (phase === 'pick' || !league || !my) {
     return (
       <div className="space-y-4">
+        {saveError && (
+          <div role="alert" className="rounded-xl border border-destructive/40 bg-card p-4 text-sm">
+            <p>We couldn&apos;t open this save. Pick a team to start a new franchise. Your old save stays here until you pick a team or delete it.</p>
+            <button onClick={() => { localStorage.removeItem(SAVE_KEY); setSaveError(false); }} className="mt-3 rounded-lg border border-border px-3 py-2 font-semibold hover:border-primary">Delete unusable save</button>
+          </div>
+        )}
         <div className="rounded-2xl border border-border bg-card p-4 text-center">
           <p className="font-display text-lg font-bold text-foreground">Take over an NHL front office</p>
           <p className="mt-1 text-xs text-muted-foreground">
             Real 2026-27 rosters from the NHL&apos;s own data, rated off real 2025-26 stats. Work
-            under the hard cap, chase points in an 82-game-shaped season, then the divisional
+            under the hard cap, chase points over an 80 game season, then the divisional
             bracket: sixteen teams, four best-of-7 rounds, one Cup. Saves automatically.
           </p>
         </div>
@@ -924,8 +934,10 @@ export default function NhlFrontOfficeBoard() {
           <div className="rounded-xl border border-gold/30 bg-gold/5 p-2.5 space-y-2">
             <p className="text-center text-[11px] font-bold text-foreground">🔍 Trade Finder</p>
             <p className="text-center text-[10px] text-muted-foreground">Pick one of your players and shop him. Only deals the AI genuinely accepts show up, cap checked.</p>
-            <div className="grid grid-cols-2 gap-1">
-              {[...my.players].sort((a, b) => b.ovr - a.ovr).slice(0, 8).map(p => (
+            {/* Round 897: every man, not the top 8 (a club's goalies sat outside the
+                cut), in a list that scrolls inside the card, as on the NBA board. */}
+            <div data-trade-shop-list className="grid max-h-60 grid-cols-2 gap-1 overflow-y-auto">
+              {[...my.players].sort((a, b) => b.ovr - a.ovr).map(p => (
                 <button key={p.id} onClick={() => { setMyTradePiece(p.id); setShopOffers([]); setShopTried(false); }} className={cn('flex items-center justify-between rounded-lg border px-2 py-1 text-[11px]', myTradePiece === p.id ? 'border-gold bg-gold/10' : 'border-border/60 bg-background')}>
                   <span className="truncate text-foreground">{p.name} ({p.pos})</span><b className="text-primary">{p.ovr}</b>
                 </button>
@@ -975,15 +987,18 @@ export default function NhlFrontOfficeBoard() {
               <div className="grid grid-cols-2 gap-2">
                 <div className="space-y-1">
                   <p className="text-center text-[10px] font-bold uppercase text-muted-foreground">You send</p>
-                  {[...my.players].sort((a, b) => b.ovr - a.ovr).slice(0, 8).map(p => (
+                  <div data-trade-send-list className="max-h-80 space-y-1 overflow-y-auto">
+                  {[...my.players].sort((a, b) => b.ovr - a.ovr).map(p => (
                     <button key={p.id} onClick={() => setMyTradePiece(p.id)} className={cn('flex w-full items-center justify-between rounded-lg border px-2 py-1 text-[11px]', myTradePiece === p.id ? 'border-gold bg-gold/10' : 'border-border/60 bg-background')}>
                       <span className="truncate text-foreground">{p.name} ({p.pos})</span><b className="text-primary">{p.ovr}</b>
                     </button>
                   ))}
+                  </div>
                 </div>
                 <div className="space-y-1">
                   <p className="text-center text-[10px] font-bold uppercase text-muted-foreground">You get ({tradePartner})</p>
-                  {[...league.teams[tradePartner].players].sort((a, b) => b.ovr - a.ovr).slice(0, 8).map(p => {
+                  <div data-trade-get-list className="max-h-80 space-y-1 overflow-y-auto">
+                  {[...league.teams[tradePartner].players].sort((a, b) => b.ovr - a.ovr).map(p => {
                     /* Round 631: the trade paths refuse a man you let go this season, so the screen says so. */
                     const back = tradeRefusal(my, p.id, CUT_SAID);
                     return (
@@ -996,6 +1011,7 @@ export default function NhlFrontOfficeBoard() {
                     </div>
                     );
                   })}
+                  </div>
                 </div>
               </div>
             </>

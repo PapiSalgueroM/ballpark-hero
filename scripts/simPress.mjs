@@ -625,14 +625,42 @@ console.log('6) The board read about it in the morning');
      guard. Board confidence is the noisiest number in this game: an untouched
      Everton season finishes with a standard deviation of 37.5 on it. */
   const SEEDS = 240;
+  /* ROUND 883: THREE SEED BASES POOLED, because one base was still a coin toss.
+     The Round 626 floor below was set under six single base observations
+     (5.70 to 11.67). One base of 240 pairs carries a standard error of about 3
+     on this difference, so a floor of 4 sits barely one and a half standard
+     errors under the true effect and a healthy tree fails it about one run in
+     fifteen. It duly did, on the release tree that added Liga MX (a new league
+     shifts every seeded season): 1.52 at base 7000, with nothing in the press
+     code changed. Measured the same day with a probe that reproduces this
+     section, per base:
+
+       release tree with Round 883   7000  1.52   9100  5.58   12400 11.67   pooled  6.26
+       main at Release U             7000  5.86   9100 13.63   12400 13.72   pooled 11.07
+       main f083e0b2 (Round 626)     7000 11.67   9100  7.85   12400  7.40   pooled  8.97
+       Rounds 617 plus 618           7000  5.70   9100 10.56   12400  6.30   pooled  7.52
+
+     Twelve single base observations run from 1.52 to 13.72; the four pooled
+     ones from 6.26 to 11.07. So the rule reads the pooled mean of the three
+     bases (720 pairs, standard error about 1.75): the same floor of 4.0 now
+     sits 36 percent under the lowest pooled observation and about two and a
+     half standard errors under the effect, and the nopress control (a flat
+     multiplier, a difference near zero) still lands far below it. Each base
+     is printed, because the spread is worth reading; no single base is the
+     rule. */
+  const SEED_BASES = [7000, 9100, 12400];
   const loved = [], hated = [], diffs = [];
-  for (let i = 0; i < SEEDS; i++) {
-    const a = run(95, 7000 + i);
-    const b = run(5, 7000 + i);
-    loved.push(a); hated.push(b); diffs.push(a - b);
+  for (const base of SEED_BASES) {
+    const d = [];
+    for (let i = 0; i < SEEDS; i++) {
+      const a = run(95, base + i);
+      const b = run(5, base + i);
+      loved.push(a); hated.push(b); diffs.push(a - b); d.push(a - b);
+    }
+    console.log(`   base ${base}: ${SEEDS} paired Everton seasons, paired difference ${mean(d).toFixed(2)} (2se ${se2(d).toFixed(2)})`);
   }
-  console.log(`   ${SEEDS} paired Everton seasons: papers onside ends on ${mean(loved).toFixed(1)} board confidence, papers against on ${mean(hated).toFixed(1)}`);
-  console.log(`   paired difference ${mean(diffs).toFixed(2)} (2se ${se2(diffs).toFixed(2)})`);
+  console.log(`   ${diffs.length} paired Everton seasons over ${SEED_BASES.length} seed bases: papers onside ends on ${mean(loved).toFixed(1)} board confidence, papers against on ${mean(hated).toFixed(1)}`);
+  console.log(`   pooled paired difference ${mean(diffs).toFixed(2)} (2se ${se2(diffs).toFixed(2)})`);
   /* ROUND 626: A MEASURED FLOOR, NOT A NOISE GATE, and the reason is measured.
      This used to fail when the paired difference did not clear two standard
      errors. The comment above records moving from 120 seeds to 240 to stop
@@ -660,7 +688,7 @@ console.log('6) The board read about it in the morning');
      the press effect halving, which is the thing worth protecting. The two
      standard errors are still printed, because they are worth reading; they are
      just not the rule any more. */
-  if (mean(diffs) <= 4) fail(`the press being for you or against you is worth only ${mean(diffs).toFixed(2)} board confidence, under the floor of 4.00 measured from 5.70 to 11.67 over three seed bases on two engines`);
+  if (mean(diffs) <= 4) fail(`the press being for you or against you is worth only ${mean(diffs).toFixed(2)} board confidence, pooled over three seed bases, under the floor of 4.00 (pooled observations run from 6.26 to 11.07 on four trees)`);
   if (mean(diffs) > 30) fail(`the press alone swing the board by ${mean(diffs).toFixed(2)}, which is a whole season of results`);
 }
 

@@ -177,6 +177,43 @@ export const DB_TO_ENGINE = {
   'Oud-Heverlee Leuven': 'OH Leuven', 'Cercle Brugge': 'Cercle Brugge', 'RAAL La Louvière': 'La Louvière',
   'SK Beveren': 'Beveren', 'KV Kortrijk': 'Kortrijk', 'Zulte Waregem': 'Zulte Waregem',
   'Royal Charleroi SC': 'Charleroi',
+  // Round 876: five clubs that shipped empty while the table carried their
+  // players under spellings nobody had mapped. Each table spelling was read
+  // off the 2026-10-02 dump of player_market_values_dedup and each engine
+  // spelling is the one REAL_LEAGUES carries. "Niki Volos" is a different
+  // club from Volos NFC and stays unmapped.
+  '1.FC Nuremberg': 'Nürnberg', 'Abha Club': 'Abha', 'Erzurumspor FK': 'Erzurumspor',
+  'Corum FK': 'Çorum FK', 'Volos NFC': 'Volos',
+  // Round 876: Brazil's Serie A 2026. Every table spelling was read off the
+  // 2026-10-02 dump. Lucas Moura's 2026 row sits under a second Sao Paulo
+  // spelling, so both map. Left unmapped on purpose: the bare "Fluminense"
+  // spelling (one 2026 row, a 41 year old nobody checked against a second
+  // source) and Chapecoense's only spelling (one 2025 row for a man whose
+  // 2026 row is at Fortaleza, so mapping it would plant him at last season's
+  // club); Chapecoense is KNOWN_EMPTY in the bake instead.
+  'CR Flamengo': 'Flamengo', 'Sociedade Esportiva Palmeiras': 'Palmeiras',
+  'Club Athletico Paranaense': 'Athletico Paranaense', 'Fluminense Football Club': 'Fluminense',
+  'Esporte Clube Bahia': 'Bahia', 'Cruzeiro Esporte Clube': 'Cruzeiro',
+  'Clube Atlético Mineiro': 'Atlético Mineiro', 'Santos FC': 'Santos',
+  'Coritiba Foot Ball Club': 'Coritiba', 'Red Bull Bragantino': 'Red Bull Bragantino',
+  'São Paulo Futebol Clube': 'São Paulo', 'São Paulo FC': 'São Paulo',
+  'Botafogo de Futebol e Regatas': 'Botafogo', 'Esporte Clube Vitória': 'Vitória',
+  'Sport Club Corinthians Paulista': 'Corinthians', 'Mirassol Futebol Clube (SP)': 'Mirassol',
+  'Clube de Regatas Vasco da Gama': 'Vasco da Gama', 'Grêmio Foot-Ball Porto Alegrense': 'Grêmio',
+  'Sport Club Internacional': 'Internacional', 'Clube do Remo (PA)': 'Remo',
+  // Round 883: Liga MX 2026-27. Every table spelling read off the 2026-10-02
+  // dump, one per club. Left unmapped on purpose: the U21 sides (CF America
+  // U21, Club Leon U21, Club Necaxa U21, Tigres UANL U21, UNAM Pumas U21,
+  // Atletico de San Luis U21: reserve rows, as no other league maps them),
+  // "Mazatlán FC" (three 2025 rows for a club that no longer plays, its place
+  // bought by Atlante), and "Tigres FC" and "Leones FC" (one row each, neither of them a Liga MX member).
+  // Atlante have no spelling at all and are KNOWN_EMPTY in the bake.
+  'CF América': 'América', 'Deportivo Guadalajara': 'Guadalajara', 'CD Cruz Azul': 'Cruz Azul',
+  'CF Monterrey': 'Monterrey', 'Tigres UANL': 'Tigres UANL', 'Deportivo Toluca': 'Toluca',
+  'UNAM Pumas': 'Pumas UNAM', 'CF Pachuca': 'Pachuca', 'Club León FC': 'León',
+  'Santos Laguna': 'Santos Laguna', 'Atlas Guadalajara': 'Atlas', 'Club Necaxa': 'Necaxa',
+  'Puebla FC': 'Puebla', 'Querétaro FC': 'Querétaro', 'Club Tijuana': 'Tijuana',
+  'FC Juárez': 'FC Juárez', 'Atlético de San Luis': 'Atlético San Luis',
   // UCL flavor clubs outside the baked leagues
   'Club Brugge KV': 'Club Brugge',
 };

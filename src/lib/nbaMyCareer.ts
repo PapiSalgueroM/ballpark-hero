@@ -39,6 +39,7 @@ import { receiveNbaInboxTexts } from './nbaCareerInbox';
 import type { RivalryEvent } from './careerRivalryEvents';
 import { nbaRivalryTick, nbaRivalryChoiceTick } from './nbaCareerRivalryEvents';
 import type { RivalryChoiceCard } from './careerRivalryChoices';
+import { raiseWithinPotential, ratingRaiseNote } from './careerHeadroom';
 /* Round 422: the share of gross pay that actually reaches the bank, after tax,
    agent and living. It was already the number this file used to turn career
    earnings into net worth; it is named here so the yearly banking and the
@@ -345,7 +346,7 @@ export const NBA_SPEND_ITEMS: NbaSpendItem[] = [
   { id: 'shot_doctor', name: 'Private Shooting Coach', emoji: '🎯', category: 'body', cost: 0, yearly: 0.2, desc: 'The guy who rebuilt three All Stars, 200k a year', oneTime: true, effect: 'Rating +1 a year while young' },
   { id: 'sleep_nba', name: 'Sleep Program', emoji: '😴', category: 'body', cost: 0.7, desc: 'Turns out most of it is sleep, 700k', oneTime: true, effect: 'Health +8' },
   { id: 'psych_nba', name: 'Sports Psychologist', emoji: '🧠', category: 'body', cost: 0, yearly: 0.12, desc: 'The part nobody used to talk about, 120k a year', oneTime: true, effect: 'Morale +8 on hire' },
-  { id: 'biomech_nba', name: 'Biomechanics Team', emoji: '🔬', category: 'body', cost: 1.2, desc: 'They rebuilt your landing mechanics, 1.2M', oneTime: true, effect: 'Rating +2' },
+  { id: 'biomech_nba', name: 'Biomechanics Team', emoji: '🔬', category: 'body', cost: 1.2, desc: 'They rebuilt your landing mechanics, 1.2M', oneTime: true, effect: 'Rating +2, up to your ceiling' },
   // Flex
   { id: 'chain_nba', name: 'The Chain', emoji: '💎', category: 'flex', cost: 0.6, desc: 'Iced out, photographed in every tunnel, 600k', oneTime: false, minFanbase: 40 },
   { id: 'tunnel_fits', name: 'A Stylist And A Tunnel Budget', emoji: '🕶️', category: 'flex', cost: 0, yearly: 0.3, desc: 'The tunnel is a runway now, 300k a year', oneTime: true, minFanbase: 45, effect: 'Fanbase +5 a year' },
@@ -403,7 +404,7 @@ export function buyNbaItem(c: NbaCareerState, itemId: string): { state: NbaCaree
     case 'youth_academy_nba': s.fanbase = Math.min(100, s.fanbase + 8); log = 'Your academy opened with 120 kids on day one.'; break;
     case 'team_stake': s.fanbase = Math.min(100, s.fanbase + 10); log = 'You own a piece of a franchise now. The other owners are still deciding how they feel about that.'; break;
     case 'sleep_nba': s.health = Math.min(100, s.health + 8); log = 'Turns out it was mostly sleep the whole time. Health +8.'; break;
-    case 'biomech_nba': s.ovr = Math.min(99, s.ovr + 2); log = 'They rebuilt how you land and everything got easier. Rating +2.'; break;
+    case 'biomech_nba': s.ovr = raiseWithinPotential(s.ovr, s.pot, 2); log = `They rebuilt how you land and everything got easier. ${ratingRaiseNote(c.ovr, s.ovr, 2)}`; break;
     case 'psych_nba': s.morale = Math.min(100, s.morale + 8); log = 'Best hire you ever made and the one you almost skipped. Morale +8.'; break;
     case 'mom_house_nba': s.morale = Math.min(100, s.morale + 15); log = 'You handed your mother the keys and she did not say a word for a full minute. Morale +15.'; break;
     case 'siblings_nba': s.morale = Math.min(100, s.morale + 10); log = 'Every sibling, all four years, paid in full. Morale +10.'; break;
@@ -725,8 +726,12 @@ export function nbaProgress(c: NbaCareerState, rng: () => number): string[] {
   for (const line of nbaMoneySeasonTick(c).events) notes.push(line);
   /* Round 525: the inbox. Silent on purpose, the same way the flagship's
      phone never announces a new text in the season feed: the unread badge
-     on the Inbox box is the tell. */
-  receiveNbaInboxTexts(c, rng);
+     on the Inbox box is the tell. Round 822: it delivers on the basketball
+     calendar and draws from its own keyed stream, never this season's rng,
+     and it is told whether the career goes on (the same nbaShouldRetire the
+     board asks right after this returns), so a player who retires this
+     summer is never sent a text about next season. */
+  receiveNbaInboxTexts(c, !nbaShouldRetire(c));
   return notes;
 }
 

@@ -1,0 +1,63 @@
+{
+  "finishedAt": "2026-10-01T22:45:27.797Z",
+  "reports": [
+    {
+      "file": "C:/Users/antho/AppData/Local/Temp/dukb-hostile-audit-2026-10-01/data.json",
+      "bytes": 142725,
+      "sha256": "a4884d30534bdf7a47b5147a5d8124e7273c81ab66d116f17eff55ee2648ef5f"
+    },
+    {
+      "file": "C:/Users/antho/AppData/Local/Temp/dukb-hostile-audit-2026-10-01/data.md",
+      "bytes": 17211,
+      "sha256": "d790f652f3a1f85210d09d9979e00ba2032c6b58b9a7795d9ad971155607b2e4"
+    }
+  ],
+  "findings": [
+    {
+      "id": "DQ01",
+      "classification": "confirmed systemic structural corruption plus two-source factual sample",
+      "priority": "P1"
+    },
+    {
+      "id": "DQ02",
+      "classification": "confirmed systemic structural corruption plus two-source factual sample",
+      "priority": "P1"
+    },
+    {
+      "id": "DQ03",
+      "classification": "confirmed wrong visible numeric value, already marked unverified",
+      "priority": "P2"
+    },
+    {
+      "id": "DQ04",
+      "classification": "source disagreement, not automatic correction",
+      "priority": "P2"
+    },
+    {
+      "id": "DQ05",
+      "classification": "documented provenance gaps, not newly proven false numbers",
+      "priority": "P2"
+    },
+    {
+      "id": "DQ06",
+      "classification": "ambiguous source metadata needing adjudication",
+      "priority": "P3"
+    },
+    {
+      "id": "DQ07",
+      "classification": "incomplete displayed career metadata, list completeness is unspecified",
+      "priority": "P3"
+    }
+  ],
+  "inventory": {
+    "productionDatasets": 22,
+    "localFiles": 48,
+    "ledgers": 16
+  },
+  "sourceHeld": true,
+  "selectedInputs": 64,
+  "permanentTestsAdded": 0,
+  "validation": "HL31checks and SportsFacts10sections passed; no build or broad suite; existing record parity only",
+  "mutations": "TEMP audit artifact writes only; no repository, DB, deploy, settings or submission changes",
+  "nextWork": "No further audit queries planned in this data lane."
+}

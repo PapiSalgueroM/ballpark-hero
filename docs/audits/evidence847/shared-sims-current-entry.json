@@ -1,0 +1,669 @@
+{
+  "started": "2026-10-01T22:57:33.765Z",
+  "cases": [
+    {
+      "sport": "NFL",
+      "url": "https://douknowball.com/front-office",
+      "errors": [],
+      "badHttp": [],
+      "blocked": [],
+      "kind": "corruptSave",
+      "broken": true,
+      "buttons": [
+        "Try this page again",
+        "Cookie choices",
+        "Light mode",
+        "Report a bug"
+      ],
+      "rawHeld": true,
+      "retryBroken": true,
+      "retryRawHeld": true,
+      "entries": [
+        {
+          "url": "https://douknowball.com/assets/index-E8L0RxXO.js",
+          "status": 200,
+          "sha256": "640820ed3b9ead81190861c4b061326a372e9c942067b3440d16e5e8cdea2e0b"
+        }
+      ],
+      "body": "Skip to main content\n😬\nThis page broke\n\nSomething in this game went wrong and it stopped drawing. It is our fault, not anything you did.\n\nIf you had a save going, it is still on this device. It is kept in your browser, and nothing here has touched it.\n\nBack to the games\nTry this page again\n\nTelling us what you were doing helps a lot. The report a bug button is at the bottom of this page.\n\nAll team names, competition names, logos and trademarks are property of their respective owners. DoUKnowBall is an independent fan project and is not affiliated with, endorsed by or sponsored by the NFL, NBA, UFC, NHL, MLB, FIFA, UEFA, the Premier League, the English Football League, LaLiga, Serie A, the Bundesliga, Ligue 1, the Eredivisie, MLS, the Saudi Pro League, the IOC, the NCAA, F1, the PGA Tour, NASCAR, the ATP or the WTA. Player names and statistics are used for identification and commentary only. © 2026 DoUKnowBall\n\nSoccer\n·\nNBA\n·\nNHL\n·\nNFL\n·\nMLB\n·\nCollege\nSearch Games\n·\nAbout\n·\nContact\n·\nWhat's New\n·\nRecord Books\n·\nLeaderboard\n·\nPrivacy Policy\n·\nTerms of Service\n·\nAccessibility\n·\nCookie choices\n·\nLight mode\n·\nReport a bug"
+    },
+    {
+      "sport": "NHL",
+      "url": "https://douknowball.com/nhl-front-office",
+      "errors": [],
+      "badHttp": [],
+      "blocked": [],
+      "kind": "corruptSave",
+      "broken": true,
+      "buttons": [
+        "Try this page again",
+        "Cookie choices",
+        "Light mode",
+        "Report a bug"
+      ],
+      "rawHeld": true,
+      "retryBroken": true,
+      "retryRawHeld": true,
+      "entries": [
+        {
+          "url": "https://douknowball.com/assets/index-E8L0RxXO.js",
+          "status": 200,
+          "sha256": "640820ed3b9ead81190861c4b061326a372e9c942067b3440d16e5e8cdea2e0b"
+        }
+      ],
+      "body": "Skip to main content\n😬\nThis page broke\n\nSomething in this game went wrong and it stopped drawing. It is our fault, not anything you did.\n\nIf you had a save going, it is still on this device. It is kept in your browser, and nothing here has touched it.\n\nBack to the games\nTry this page again\n\nTelling us what you were doing helps a lot. The report a bug button is at the bottom of this page.\n\nAll team names, competition names, logos and trademarks are property of their respective owners. DoUKnowBall is an independent fan project and is not affiliated with, endorsed by or sponsored by the NFL, NBA, UFC, NHL, MLB, FIFA, UEFA, the Premier League, the English Football League, LaLiga, Serie A, the Bundesliga, Ligue 1, the Eredivisie, MLS, the Saudi Pro League, the IOC, the NCAA, F1, the PGA Tour, NASCAR, the ATP or the WTA. Player names and statistics are used for identification and commentary only. © 2026 DoUKnowBall\n\nSoccer\n·\nNBA\n·\nNHL\n·\nNFL\n·\nMLB\n·\nCollege\nSearch Games\n·\nAbout\n·\nContact\n·\nWhat's New\n·\nRecord Books\n·\nLeaderboard\n·\nPrivacy Policy\n·\nTerms of Service\n·\nAccessibility\n·\nCookie choices\n·\nLight mode\n·\nReport a bug"
+    },
+    {
+      "sport": "NFL",
+      "url": "https://douknowball.com/front-office",
+      "errors": [],
+      "badHttp": [],
+      "blocked": [
+        {
+          "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/game_completions",
+          "method": "POST"
+        }
+      ],
+      "kind": "finalAndDraftSpam",
+      "before": {
+        "phase": "hub",
+        "fired": false,
+        "season": 2026,
+        "period": 17,
+        "seasonsPlayed": 0,
+        "titles": 0,
+        "picksLeft": 0,
+        "champions": [],
+        "roster": [
+          {
+            "id": "p1ng0w05bjvlae-226",
+            "name": "Patrick Mahomes"
+          },
+          {
+            "id": "p1ng0w05bjvlae-227",
+            "name": "Kenneth Walker III"
+          },
+          {
+            "id": "p1ng0w05bjvlae-228",
+            "name": "Brashard Smith"
+          },
+          {
+            "id": "p1ng0w05bjvlae-229",
+            "name": "Rashee Rice"
+          },
+          {
+            "id": "p1ng0w05bjvlae-230",
+            "name": "Xavier Worthy"
+          },
+          {
+            "id": "p1ng0w05bjvlae-231",
+            "name": "Tyquan Thornton"
+          },
+          {
+            "id": "p1ng0w05bjvlae-232",
+            "name": "Travis Kelce"
+          },
+          {
+            "id": "p1ng0w05bjvlae-233",
+            "name": "Josh Simmons"
+          },
+          {
+            "id": "p1ng0w05bjvlae-234",
+            "name": "Creed Humphrey"
+          },
+          {
+            "id": "p1ng0w05bjvlae-235",
+            "name": "Chris Jones"
+          },
+          {
+            "id": "p1ng0w05bjvlae-236",
+            "name": "George Karlaftis"
+          },
+          {
+            "id": "p1ng0w05bjvlae-237",
+            "name": "Nick Bolton"
+          },
+          {
+            "id": "p1ng0w05bjvlae-238",
+            "name": "Drue Tranquill"
+          },
+          {
+            "id": "p1ng0w05bjvlae-239",
+            "name": "Chamarri Conner"
+          },
+          {
+            "id": "p1ng0w05bjvlae-240",
+            "name": "Kristian Fulton"
+          }
+        ],
+        "record": {
+          "wins": 11,
+          "losses": 5
+        }
+      },
+      "afterFinal": {
+        "phase": "recap",
+        "fired": false,
+        "season": 2026,
+        "period": 17,
+        "seasonsPlayed": 1,
+        "titles": 0,
+        "picksLeft": 0,
+        "champions": [
+          {
+            "season": 2026,
+            "team": "BUF"
+          }
+        ],
+        "roster": [
+          {
+            "id": "p1ng0w05bjvlae-226",
+            "name": "Patrick Mahomes"
+          },
+          {
+            "id": "p1ng0w05bjvlae-227",
+            "name": "Kenneth Walker III"
+          },
+          {
+            "id": "p1ng0w05bjvlae-228",
+            "name": "Brashard Smith"
+          },
+          {
+            "id": "p1ng0w05bjvlae-229",
+            "name": "Rashee Rice"
+          },
+          {
+            "id": "p1ng0w05bjvlae-230",
+            "name": "Xavier Worthy"
+          },
+          {
+            "id": "p1ng0w05bjvlae-231",
+            "name": "Tyquan Thornton"
+          },
+          {
+            "id": "p1ng0w05bjvlae-232",
+            "name": "Travis Kelce"
+          },
+          {
+            "id": "p1ng0w05bjvlae-233",
+            "name": "Josh Simmons"
+          },
+          {
+            "id": "p1ng0w05bjvlae-234",
+            "name": "Creed Humphrey"
+          },
+          {
+            "id": "p1ng0w05bjvlae-235",
+            "name": "Chris Jones"
+          },
+          {
+            "id": "p1ng0w05bjvlae-236",
+            "name": "George Karlaftis"
+          },
+          {
+            "id": "p1ng0w05bjvlae-237",
+            "name": "Nick Bolton"
+          },
+          {
+            "id": "p1ng0w05bjvlae-238",
+            "name": "Drue Tranquill"
+          },
+          {
+            "id": "p1ng0w05bjvlae-239",
+            "name": "Chamarri Conner"
+          },
+          {
+            "id": "p1ng0w05bjvlae-240",
+            "name": "Kristian Fulton"
+          }
+        ],
+        "record": {
+          "wins": 11,
+          "losses": 6
+        }
+      },
+      "reload": {
+        "phase": "recap",
+        "fired": false,
+        "season": 2026,
+        "period": 17,
+        "seasonsPlayed": 1,
+        "titles": 0,
+        "picksLeft": 0,
+        "champions": [
+          {
+            "season": 2026,
+            "team": "BUF"
+          }
+        ],
+        "roster": [
+          {
+            "id": "p1ng0w05bjvlae-226",
+            "name": "Patrick Mahomes"
+          },
+          {
+            "id": "p1ng0w05bjvlae-227",
+            "name": "Kenneth Walker III"
+          },
+          {
+            "id": "p1ng0w05bjvlae-228",
+            "name": "Brashard Smith"
+          },
+          {
+            "id": "p1ng0w05bjvlae-229",
+            "name": "Rashee Rice"
+          },
+          {
+            "id": "p1ng0w05bjvlae-230",
+            "name": "Xavier Worthy"
+          },
+          {
+            "id": "p1ng0w05bjvlae-231",
+            "name": "Tyquan Thornton"
+          },
+          {
+            "id": "p1ng0w05bjvlae-232",
+            "name": "Travis Kelce"
+          },
+          {
+            "id": "p1ng0w05bjvlae-233",
+            "name": "Josh Simmons"
+          },
+          {
+            "id": "p1ng0w05bjvlae-234",
+            "name": "Creed Humphrey"
+          },
+          {
+            "id": "p1ng0w05bjvlae-235",
+            "name": "Chris Jones"
+          },
+          {
+            "id": "p1ng0w05bjvlae-236",
+            "name": "George Karlaftis"
+          },
+          {
+            "id": "p1ng0w05bjvlae-237",
+            "name": "Nick Bolton"
+          },
+          {
+            "id": "p1ng0w05bjvlae-238",
+            "name": "Drue Tranquill"
+          },
+          {
+            "id": "p1ng0w05bjvlae-239",
+            "name": "Chamarri Conner"
+          },
+          {
+            "id": "p1ng0w05bjvlae-240",
+            "name": "Kristian Fulton"
+          }
+        ],
+        "record": {
+          "wins": 11,
+          "losses": 6
+        }
+      },
+      "reloadBytesHeld": true,
+      "beforeDraft": {
+        "phase": "draft",
+        "fired": false,
+        "season": 2026,
+        "period": 17,
+        "seasonsPlayed": 1,
+        "titles": 0,
+        "picksLeft": 3,
+        "champions": [
+          {
+            "season": 2026,
+            "team": "BUF"
+          }
+        ],
+        "roster": [
+          {
+            "id": "p1ng0w05bjvlae-226",
+            "name": "Patrick Mahomes"
+          },
+          {
+            "id": "p1ng0w05bjvlae-227",
+            "name": "Kenneth Walker III"
+          },
+          {
+            "id": "p1ng0w05bjvlae-228",
+            "name": "Brashard Smith"
+          },
+          {
+            "id": "p1ng0w05bjvlae-229",
+            "name": "Rashee Rice"
+          },
+          {
+            "id": "p1ng0w05bjvlae-230",
+            "name": "Xavier Worthy"
+          },
+          {
+            "id": "p1ng0w05bjvlae-231",
+            "name": "Tyquan Thornton"
+          },
+          {
+            "id": "p1ng0w05bjvlae-232",
+            "name": "Travis Kelce"
+          },
+          {
+            "id": "p1ng0w05bjvlae-233",
+            "name": "Josh Simmons"
+          },
+          {
+            "id": "p1ng0w05bjvlae-234",
+            "name": "Creed Humphrey"
+          },
+          {
+            "id": "p1ng0w05bjvlae-235",
+            "name": "Chris Jones"
+          },
+          {
+            "id": "p1ng0w05bjvlae-236",
+            "name": "George Karlaftis"
+          },
+          {
+            "id": "p1ng0w05bjvlae-237",
+            "name": "Nick Bolton"
+          },
+          {
+            "id": "p1ng0w05bjvlae-238",
+            "name": "Drue Tranquill"
+          },
+          {
+            "id": "p1ng0w05bjvlae-239",
+            "name": "Chamarri Conner"
+          },
+          {
+            "id": "p1ng0w05bjvlae-240",
+            "name": "Kristian Fulton"
+          }
+        ],
+        "record": {
+          "wins": 11,
+          "losses": 6
+        }
+      },
+      "afterHeldDraft": {
+        "phase": "draft",
+        "fired": false,
+        "season": 2026,
+        "period": 17,
+        "seasonsPlayed": 1,
+        "titles": 0,
+        "picksLeft": 2,
+        "champions": [
+          {
+            "season": 2026,
+            "team": "BUF"
+          }
+        ],
+        "roster": [
+          {
+            "id": "p1ng0w05bjvlae-226",
+            "name": "Patrick Mahomes"
+          },
+          {
+            "id": "p1ng0w05bjvlae-227",
+            "name": "Kenneth Walker III"
+          },
+          {
+            "id": "p1ng0w05bjvlae-228",
+            "name": "Brashard Smith"
+          },
+          {
+            "id": "p1ng0w05bjvlae-229",
+            "name": "Rashee Rice"
+          },
+          {
+            "id": "p1ng0w05bjvlae-230",
+            "name": "Xavier Worthy"
+          },
+          {
+            "id": "p1ng0w05bjvlae-231",
+            "name": "Tyquan Thornton"
+          },
+          {
+            "id": "p1ng0w05bjvlae-232",
+            "name": "Travis Kelce"
+          },
+          {
+            "id": "p1ng0w05bjvlae-233",
+            "name": "Josh Simmons"
+          },
+          {
+            "id": "p1ng0w05bjvlae-234",
+            "name": "Creed Humphrey"
+          },
+          {
+            "id": "p1ng0w05bjvlae-235",
+            "name": "Chris Jones"
+          },
+          {
+            "id": "p1ng0w05bjvlae-236",
+            "name": "George Karlaftis"
+          },
+          {
+            "id": "p1ng0w05bjvlae-237",
+            "name": "Nick Bolton"
+          },
+          {
+            "id": "p1ng0w05bjvlae-238",
+            "name": "Drue Tranquill"
+          },
+          {
+            "id": "p1ng0w05bjvlae-239",
+            "name": "Chamarri Conner"
+          },
+          {
+            "id": "p1ng0w05bjvlae-240",
+            "name": "Kristian Fulton"
+          },
+          {
+            "id": "p1vt61hl58wt4c-41",
+            "name": "Caden Chesterton"
+          }
+        ],
+        "record": {
+          "wins": 11,
+          "losses": 6
+        }
+      },
+      "afterDoubleDraft": {
+        "phase": "hub",
+        "fired": false,
+        "season": 2027,
+        "period": 1,
+        "seasonsPlayed": 1,
+        "titles": 0,
+        "picksLeft": 0,
+        "champions": [
+          {
+            "season": 2026,
+            "team": "BUF"
+          }
+        ],
+        "roster": [
+          {
+            "id": "p1ng0w05bjvlae-226",
+            "name": "Patrick Mahomes"
+          },
+          {
+            "id": "p1ng0w05bjvlae-227",
+            "name": "Kenneth Walker III"
+          },
+          {
+            "id": "p1ng0w05bjvlae-228",
+            "name": "Brashard Smith"
+          },
+          {
+            "id": "p1ng0w05bjvlae-229",
+            "name": "Rashee Rice"
+          },
+          {
+            "id": "p1ng0w05bjvlae-230",
+            "name": "Xavier Worthy"
+          },
+          {
+            "id": "p1ng0w05bjvlae-231",
+            "name": "Tyquan Thornton"
+          },
+          {
+            "id": "p1ng0w05bjvlae-233",
+            "name": "Josh Simmons"
+          },
+          {
+            "id": "p1ng0w05bjvlae-234",
+            "name": "Creed Humphrey"
+          },
+          {
+            "id": "p1ng0w05bjvlae-235",
+            "name": "Chris Jones"
+          },
+          {
+            "id": "p1ng0w05bjvlae-236",
+            "name": "George Karlaftis"
+          },
+          {
+            "id": "p1ng0w05bjvlae-237",
+            "name": "Nick Bolton"
+          },
+          {
+            "id": "p1ng0w05bjvlae-238",
+            "name": "Drue Tranquill"
+          },
+          {
+            "id": "p1ng0w05bjvlae-239",
+            "name": "Chamarri Conner"
+          },
+          {
+            "id": "p1ng0w05bjvlae-240",
+            "name": "Kristian Fulton"
+          },
+          {
+            "id": "p1vt61hl58wt4c-41",
+            "name": "Caden Chesterton"
+          },
+          {
+            "id": "p1vt61hl58wt4c-48",
+            "name": "Grant Braddock"
+          },
+          {
+            "id": "p1vt61hl58wt4c-55",
+            "name": "Quincy Beaumont"
+          }
+        ],
+        "record": {
+          "wins": 0,
+          "losses": 0
+        }
+      },
+      "final": {
+        "phase": "hub",
+        "fired": false,
+        "season": 2027,
+        "period": 1,
+        "seasonsPlayed": 1,
+        "titles": 0,
+        "picksLeft": 0,
+        "champions": [
+          {
+            "season": 2026,
+            "team": "BUF"
+          }
+        ],
+        "roster": [
+          {
+            "id": "p1ng0w05bjvlae-226",
+            "name": "Patrick Mahomes"
+          },
+          {
+            "id": "p1ng0w05bjvlae-227",
+            "name": "Kenneth Walker III"
+          },
+          {
+            "id": "p1ng0w05bjvlae-228",
+            "name": "Brashard Smith"
+          },
+          {
+            "id": "p1ng0w05bjvlae-229",
+            "name": "Rashee Rice"
+          },
+          {
+            "id": "p1ng0w05bjvlae-230",
+            "name": "Xavier Worthy"
+          },
+          {
+            "id": "p1ng0w05bjvlae-231",
+            "name": "Tyquan Thornton"
+          },
+          {
+            "id": "p1ng0w05bjvlae-233",
+            "name": "Josh Simmons"
+          },
+          {
+            "id": "p1ng0w05bjvlae-234",
+            "name": "Creed Humphrey"
+          },
+          {
+            "id": "p1ng0w05bjvlae-235",
+            "name": "Chris Jones"
+          },
+          {
+            "id": "p1ng0w05bjvlae-236",
+            "name": "George Karlaftis"
+          },
+          {
+            "id": "p1ng0w05bjvlae-237",
+            "name": "Nick Bolton"
+          },
+          {
+            "id": "p1ng0w05bjvlae-238",
+            "name": "Drue Tranquill"
+          },
+          {
+            "id": "p1ng0w05bjvlae-239",
+            "name": "Chamarri Conner"
+          },
+          {
+            "id": "p1ng0w05bjvlae-240",
+            "name": "Kristian Fulton"
+          },
+          {
+            "id": "p1vt61hl58wt4c-41",
+            "name": "Caden Chesterton"
+          },
+          {
+            "id": "p1vt61hl58wt4c-48",
+            "name": "Grant Braddock"
+          },
+          {
+            "id": "p1vt61hl58wt4c-55",
+            "name": "Quincy Beaumont"
+          }
+        ],
+        "record": {
+          "wins": 0,
+          "losses": 0
+        }
+      },
+      "uniqueIds": true,
+      "entries": [
+        {
+          "url": "https://douknowball.com/assets/index-E8L0RxXO.js",
+          "status": 200,
+          "sha256": "640820ed3b9ead81190861c4b061326a372e9c942067b3440d16e5e8cdea2e0b"
+        }
+      ],
+      "body": "Skip to main content\nDOUKNOWBALL\nBack\nTrack stats\nNFL Front Office\n\nReal rosters. Real cap math. Your calls. Build a dynasty one season at a time.\n\nThe 2027 Draft\n\nThat is your draft done. The offseason has run and the new season is set up on the hub.\n\nON THE CLOCK\n\nYour pick is in, and 6 more went off the board.\n\n1. KC select Quincy Beaumont\nOL · your pick\n79\n2. LV take Jalen Crowder\nWR\n76\n3. MIA take Cade Ravensworth\nLB\n75\n4. NYJ take DeShawn Underhill\nLB\n75\n5. CLE take Roman Slater\nQB\n75\n6. PIT take Roman Vandermeer\nDB\n74\n7. WAS take Finn Wexford\nRB\n74\nContinue to the hub\n\n📥 Drafted Quincy Beaumont (OL), true rating 81 vs scouted 79.\n\n🏛️ The new mandate: Make the playoffs and win a playoff round. This roster is built for it.\n\n👋 Travis Kelce retires.\n\n🏷️ 3 rival clubs used the franchise tag.\n\nNFL Front Office: Football GM Simulator\n\nTake over a real NFL franchise on the real 2026 rosters, offence and defence, rated off 2025 production and draft position. Manage the salary cap, cut and sign players, negotiate trades the AI actually evaluates, ride out the weekly injury report, scout a draft class where the grades can lie, and chase titles across unlimited saved seasons with aging, breakouts and retirements.\n\nSomebody has to make the hard calls, and here that somebody is you. Take over any of the 32 clubs and run it all: the cap, free agency, trades, the draft.\n\nThe league moves around you: rivals sign players, stars get hurt in December, dynasties get built one contract at a time.\n\nHow to play NFL Front Office, a free online NFL GM simulation game\nPicking a franchise under the salary cap\nPick a franchise. Its players carry fictional contracts against a 260 million dollar cap that rises 5 percent each season.\nReading your ownership mandate\nRead the ownership mandate"
+    }
+  ],
+  "boundary": "Current actual live App, native actions, one-time copied native save injection, all vendor and non-GET requests aborted. No engine or JS substitutions.",
+  "finished": "2026-10-01T22:57:54.637Z",
+  "cleanup": {
+    "browserClosed": true,
+    "contextsClosed": true,
+    "ownedServer": false
+  }
+}

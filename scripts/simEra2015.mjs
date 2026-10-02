@@ -52,6 +52,8 @@ execSync(
 );
 
 const { engine: cm, eras: ER, era2015: E15, era2010: E10, modern: MOD } = await import(pathToFileURL(BUNDLE).href);
+/* Round 832: an era's squads load with the era, so the harness fetches all three first. */
+await ER.ensureAllEraRosters();
 const { eraUpliftRating, eraRosters, projectedRoster } = ER;
 const {
   startCareer, playNextEntry, startNextSeason, sortedTable, buildMarket,
@@ -178,7 +180,18 @@ console.log('2) Three worlds now, and none of them leak');
      (b. 1991) vs Santa Clara's; and one of Brazil's many Guilhermes
      against another. */
   const NAMESAKES_2026 = new Set(['Aaron Ramsey', 'Luis Suárez', 'Javi López', 'Javi Guerra', 'Beto', 'Lucas Silva',
-    'Diego López', 'Gabriel', 'Dodô', 'Rômulo', 'Ederson', 'Danilo', 'Gabriel Silva', 'Guilherme']);
+    'Diego López', 'Gabriel', 'Dodô', 'Rômulo', 'Ederson', 'Danilo', 'Gabriel Silva', 'Guilherme',
+    /* Round 876, Brazil's Serie A: Flamengo's Pedro (b. 1997) against Chelsea's Pedro Rodriguez (b. 1987);
+       Corinthians' Allan (Allan Rodrigues de Souza, b. 1997, on loan from Flamengo) against Napoli's Allan
+       Marques Loureiro (b. 1991); Palmeiras' Paulinho (b. 2000) against Tottenham's Paulinho (b. 1988). */
+    'Pedro', 'Allan', 'Paulinho',
+    /* Round 883, Liga MX, verified 2026-10-02 (birth dates, two sources each): Pachuca's right back Carlos
+       Sanchez (b. 2002-04-13, Soccerway and ESPN's Pachuca squad) against Aston Villa's Carlos Alberto Sanchez
+       Moreno (b. 1986); Leon's Juan Pablo Dominguez (b. 1998-10-30, ESPN's profile and Fox Sports Mexico on his
+       move from Toluca) against Deportivo's Juan Dominguez Lamas (b. 1990). Toluca's striker Paulinho, Joao Paulo
+       Dias Fernandes (b. 1992-11-09, ESPN's Toluca squad), is a third Paulinho, already allowed above. Manchester
+       City's Allan (Allan Andrade Elias, b. 2004) is a third Allan, already allowed above. */
+    'Carlos Sánchez', 'Juan Domínguez']);
   const eraByName = new Map();
   for (const roster of Object.values(ERA2015_ROSTERS)) for (const p of roster) eraByName.set(p.n, p);
   const modByName = new Map();

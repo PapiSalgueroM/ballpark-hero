@@ -8,6 +8,7 @@ import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { useDailyPuzzle } from '@/hooks/useDailyPuzzle';
+import { isRankEmLog } from '@/lib/dailySaveShapes';
 import { getTodayET, dateSeed } from '@/lib/dateUtils';
 import { cn } from '@/lib/utils';
 import { Trophy, ArrowDown, RotateCcw } from 'lucide-react';
@@ -52,6 +53,7 @@ const RankEm = () => {
     isWon: (g) => g.length > 0 && scoreRankGuess(g[0].order, dailyRound) === 5,
     isLost: (g) => g.length > 0 && scoreRankGuess(g[0].order, dailyRound) < 5,
     deserializeGuesses: (raw) => raw as RankAction[],
+    isValidGuesses: isRankEmLog,
   });
 
   const [unlimitedActions, setUnlimitedActions] = useState<RankAction[]>([]);

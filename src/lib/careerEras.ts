@@ -16,6 +16,10 @@ const rand = (min: number, max: number) => Math.floor(Math.random() * (max - min
 const clamp = (v: number, min: number, max: number) => Math.max(min, Math.min(max, v));
 const pick = <T>(arr: T[]): T => arr[Math.floor(Math.random() * arr.length)];
 const round1 = (v: number) => Math.round(v * 10) / 10;
+/* Round 826: a yearly cost joins the bill to the thousand, the way a bought
+   item's does. round1 rounded the WHOLE bill to a tenth, so a €10k dog on a
+   €24k rent took the bill to nothing and a €50k child on no bill cost €100k. */
+const addYearlyCost = (bill: number | undefined, cost: number) => Math.round(((bill || 0) + cost) * 1000) / 1000;
 
 /* ─── Era star pools ───
    power 1-10 = Ballon d'Or pedigree weight in that window. baseGoals is a
@@ -436,6 +440,10 @@ const RIVAL_NAME_COLLISIONS = new Set([
   "Andrés Fernández", "Sergio Fernández", "Theo Hernández", "Paulo Costa",
   "Paulo Ferreira", "Ángel López", "Marco Rossi", "Thiago Silva",
   "Florian Müller", "Pablo López", "Pablo Hernández", "Xavi Hernández", "Xavi Torres",
+  // Round 876: the 2026 window re-bake put a real Thiago Fernández in Club Manager.
+  "Thiago Fernández",
+  // Round 883: Liga MX brought a real Iván Moreno and Sergio Hernández into Club Manager.
+  "Iván Moreno", "Sergio Hernández",
 ]);
 export function getEraRivalName(year: number): string {
   const first = pick(eraDefFor(year).rivalFirsts);
@@ -1189,8 +1197,8 @@ export function getExtraEvents(state: CareerState): RandomEvent[] {
 
   if ((married || st.hasRelationship) && st.age >= 23 && st.family.children < 4) {
     evts.push({ id: 44, emoji: "👶", title: "Baby News!", description: "You are going to be a parent. Life is about to change forever.", category: "life", choices: [
-      { label: "Announce it to the world", emoji: "📣", color: "bg-emerald-600", consequence: "Child +1, Morale +12, Popularity +4", apply: s => { s.family = { ...s.family, children: s.family.children + 1 }; s.morale = clamp(s.morale + 12, 0, 100); s.popularity = clamp(s.popularity + 4, 0, 100); s.customYearlyCosts = round1(s.customYearlyCosts + 0.05); s.events = [...s.events, "👶 Welcomed a child, announced with a baby-boot photo"]; return s; } },
-      { label: "Keep it private", emoji: "🤫", color: "bg-muted", consequence: "Child +1, Morale +8", apply: s => { s.family = { ...s.family, children: s.family.children + 1 }; s.morale = clamp(s.morale + 8, 0, 100); s.customYearlyCosts = round1(s.customYearlyCosts + 0.05); s.events = [...s.events, "👶 Became a parent, far from the cameras"]; return s; } },
+      { label: "Announce it to the world", emoji: "📣", color: "bg-emerald-600", consequence: "Child +1, Morale +12, Popularity +4", apply: s => { s.family = { ...s.family, children: s.family.children + 1 }; s.morale = clamp(s.morale + 12, 0, 100); s.popularity = clamp(s.popularity + 4, 0, 100); s.customYearlyCosts = addYearlyCost(s.customYearlyCosts, 0.05); s.events = [...s.events, "👶 Welcomed a child, announced with a baby-boot photo"]; return s; } },
+      { label: "Keep it private", emoji: "🤫", color: "bg-muted", consequence: "Child +1, Morale +8", apply: s => { s.family = { ...s.family, children: s.family.children + 1 }; s.morale = clamp(s.morale + 8, 0, 100); s.customYearlyCosts = addYearlyCost(s.customYearlyCosts, 0.05); s.events = [...s.events, "👶 Became a parent, far from the cameras"]; return s; } },
     ] });
   }
 
@@ -1381,7 +1389,7 @@ export function getExtraEvents(state: CareerState): RandomEvent[] {
   }
 
   evts.push({ id: 72, emoji: "🐕", title: "Adopt a Rescue Dog", description: "A shelter you follow posts a scruffy rescue dog that nobody wants. You cannot stop thinking about it.", category: "life", choices: [
-    { label: "Adopt him", emoji: "🐾", color: "bg-emerald-600", consequence: "Morale +8, Followers +0.8M", apply: s => { s.morale = clamp(s.morale + 8, 0, 100); s.socialMediaFollowers = round1(s.socialMediaFollowers + 0.8); s.customYearlyCosts = round1(s.customYearlyCosts + 0.01); s.events = [...s.events, "🐕 Adopted a rescue dog. He has his own fan account now"]; return s; } },
+    { label: "Adopt him", emoji: "🐾", color: "bg-emerald-600", consequence: "Morale +8, Followers +0.8M", apply: s => { s.morale = clamp(s.morale + 8, 0, 100); s.socialMediaFollowers = round1(s.socialMediaFollowers + 0.8); s.customYearlyCosts = addYearlyCost(s.customYearlyCosts, 0.01); s.events = [...s.events, "🐕 Adopted a rescue dog. He has his own fan account now"]; return s; } },
     { label: "Not right now", emoji: "😔", color: "bg-muted", consequence: "No change", apply: s => { s.events = [...s.events, "🐕 Decided a dog can wait until retirement"]; return s; } },
   ] });
 

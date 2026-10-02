@@ -1,4 +1,5 @@
 import { NBA_TEAMS } from '@/data/conquestDataNba';
+import type { NbaOpeningRating, NbaOpeningRatingEvidence } from '@/data/nbaOpeningRatings';
 /* Round 211: no two men in one league share a name. */
 import { leagueNames, uniqueName } from './foNames';
 /* Round 531: the cap comes from one sourced file, never a bare literal here. */
@@ -12,6 +13,13 @@ import {
   nbaCalibrateTaxScale, type NbaTaxEntry,
 } from './nbaLuxuryTax';
 export { NBA_TIPOFF_MIN, NBA_MIN_CONTRACT, nbaTaxLine, nbaFirstApron, nbaSecondApron, nbaTaxBill } from './nbaLuxuryTax';
+/* Round 824: season lines and awards. The stats file imports only types from
+   this one, so there is no cycle at run time. */
+import { type FoSeasonStats, foNewSeasonStats } from './foSeasonStats';
+import { type NbaSeasonAwards, nbaBoxScore, nbaRecordBox, nbaLiveStats } from './nbaSeasonStats';
+import { nbaRotationSlots, nbaReconcileRotation } from './nbaRotation';
+/* Round 851: a booked, balanced schedule, shared with MLB and the NHL. */
+import { type FoSchedule, buildFoSchedule, foPlayRound } from './foSchedule';
 
 /**
  * NBA Front Office engine (2026-08-05). Basketball sibling of
@@ -42,6 +50,13 @@ export interface NbaGmPlayer {
   years: number;
   out: number; // rounds remaining injured
   pot: number;
+  /* Round 824, both optional so every saved man loads unchanged. */
+  /** The season a man drafted in this league debuts, which makes him a rookie that season. */
+  rookieSeason?: number;
+  /** This save's awards, newest last, e.g. "2027 MVP". A sim season's, never a real one. */
+  awards?: string[];
+  /** Original opening simulation estimate, retained through this saved career. */
+  openingRatingEvidence?: NbaOpeningRatingEvidence;
 }
 
 /* Round 631: CutLedger is the optional deadCap and releasedThisSeason pair,
@@ -49,6 +64,8 @@ export interface NbaGmPlayer {
 export interface NbaGmTeam extends CutLedger {
   abbr: string;
   players: NbaGmPlayer[];
+  /** Preferred starter and bench slots; healthy cover does not erase injured preferences. */
+  rotation?: string[];
   wins: number;
   losses: number;
   picks: number[];
@@ -76,6 +93,21 @@ export interface NbaLeague {
    * next summer, so nobody is billed for a season that started untaxed.
    */
   taxScale?: number;
+  /**
+   * Round 824: this season's player lines and club totals (nbaSeasonStats.ts).
+   * Optional: a league saved before the round keeps no lines for the season
+   * it was saved in and starts keeping them at its next summer, the way it
+   * met the tax.
+   */
+  stats?: FoSeasonStats;
+  /** Round 824: every closed season's awards, oldest first. */
+  awards?: NbaSeasonAwards[];
+  /**
+   * Round 851: this season's fixtures, one list of "HOME-AWAY" games per round
+   * (foSchedule.ts). Optional: a league saved before the round finishes the
+   * season it was saved in the old way and is booked at its next summer.
+   */
+  schedule?: FoSchedule;
 }
 
 /* Round 568: this counter used to live at module scope, which restarts on
@@ -89,7 +121,9 @@ const fid = makeIdMinter('n');
     Loose lists (a draft class, a recruiting class, a portal) come from the
     same counter, so they are one id space with the rosters. */
 export function ensureNbaLeagueIds(lg: NbaLeague, ...loose: (({ id: string }[]) | null | undefined)[]): number {
-  return ensureLeagueEntityIds(fid, lg as never, ...loose);
+  const repaired = ensureLeagueEntityIds(fid, lg as never, ...loose);
+  for (const t of Object.values(lg.teams)) nbaReconcileRotation(t);
+  return repaired;
 }
 
 function normPos(p: string): NbaPos {
@@ -97,8 +131,36 @@ function normPos(p: string): NbaPos {
   return c === 'G' ? 'G' : c === 'C' ? 'C' : 'F';
 }
 
-export function nbaSalaryFor(ovr: number): number {
-  return Math.round(Math.max(2, (ovr - 68) * 2.1 - 4) * 10) / 10;
+/** The game's own cap rise each summer, see leagueCaps.ts. */
+export const NBA_CAP_RISE = 1.07;
+/** Next season's cap, the one a contract signed this summer counts against. */
+export function nbaNextCap(cap: number): number {
+  return Math.round(cap * NBA_CAP_RISE);
+}
+
+/**
+ * Round 824: what one dollar of the opening season's pay is worth in a season
+ * whose cap is `cap`. Before this round every new deal was priced in 2026-27
+ * money forever while the cap and the tax line rose 7% a season, so payrolls
+ * fell behind the line and the tax faded: clubs over it ran five, then three
+ * or four, then nought to two, then nought or one. Every contract signed,
+ * drafted or re-signed from this round on is priced in the money of the
+ * season it starts in, so payrolls rise with the line. Contracts already on
+ * the books keep their number; a save from before the round loads unchanged
+ * and its new deals are priced this way from its next signing on.
+ */
+export function nbaPayScale(cap: number): number {
+  return cap / NBA_CAP_BASE;
+}
+
+/** A new deal for a man of this rating, in the money of a season whose cap is `cap` (the opening cap when omitted). */
+export function nbaSalaryFor(ovr: number, cap: number = NBA_CAP_BASE): number {
+  return Math.round(Math.max(2, (ovr - 68) * 2.1 - 4) * nbaPayScale(cap) * 10) / 10;
+}
+
+/** Round 824: the minimum deal in a season whose cap is `cap`. NBA_MIN_CONTRACT is the opening season's. */
+export function nbaMinContract(cap: number = NBA_CAP_BASE): number {
+  return Math.round(NBA_MIN_CONTRACT * nbaPayScale(cap) * 10) / 10;
 }
 
 /** Ages are editorial (no birth dates in the source data): stars get primes. */
@@ -108,7 +170,7 @@ function ageFor(ovr: number, rng: () => number): number {
   return 22 + Math.floor(rng() * 12);
 }
 
-export function initNbaLeague(rng: () => number = Math.random): NbaLeague {
+export function initNbaLeague(rng: () => number = Math.random, opening?: Record<string, Record<string, NbaOpeningRating>>): NbaLeague {
   const teams: Record<string, NbaGmTeam> = {};
   for (const t of NBA_TEAMS) {
     const players: NbaGmPlayer[] = (t.players ?? []).map(p => {
@@ -135,18 +197,52 @@ export function initNbaLeague(rng: () => number = Math.random): NbaLeague {
     freeAgents: initialFaPool(rng, leagueNames({ teams, freeAgents: [] })),
     round: 1,
     champions: [],
+    /* Round 824: lines kept from the first tip off. */
+    stats: foNewSeasonStats(2026),
   };
   /* Round 722: the tax lines are set from this league's own payrolls. */
   nbaCalibrateLeagueTax(league);
+  league.schedule = nbaBookSeason(league, rng);
+  // Finish the original constructor first so ages, terms, draws and fixtures stay held.
+  if (opening) {
+    for (const seed of NBA_TEAMS) {
+      for (const source of seed.players ?? []) {
+        const rating = opening[seed.id]?.[`${source.name}|${source.position}`];
+        const evidence = rating?.evidence;
+        if (!rating || !Number.isInteger(rating.ovr) || rating.ovr < 0 || rating.ovr > 99 ||
+            !Number.isFinite(rating.salary) || rating.salary < NBA_MIN_CONTRACT ||
+            !evidence || evidence.originKey !== `${seed.id}|${source.name}|${source.position}` ||
+            evidence.openingOvr !== rating.ovr || evidence.partial !== true ||
+            typeof evidence.modelVersion !== 'string' || !evidence.modelVersion ||
+            !['box-score-proxy', 'prior-only', 'unmeasured-prior'].includes(evidence.basis)) {
+          throw new Error('Opening NBA ratings do not match this roster.');
+        }
+        const player = league.teams[seed.id].players.find(p => p.name === source.name)!;
+        const headroom = Math.max(0, player.pot - player.ovr);
+        player.ovr = rating.ovr;
+        player.salary = rating.salary;
+        player.pot = Math.min(99, rating.ovr + headroom);
+        player.openingRatingEvidence = {
+          modelVersion: evidence.modelVersion, originKey: evidence.originKey,
+          openingOvr: evidence.openingOvr, basis: evidence.basis, partial: evidence.partial,
+        };
+      }
+    }
+  }
   return league;
+}
+
+/** Round 851: every club plays NBA_ROUNDS x GAMES_PER_ROUND games, half at home. */
+export function nbaBookSeason(league: NbaLeague, rng: () => number): FoSchedule {
+  return buildFoSchedule(Object.keys(league.teams), NBA_ROUNDS, GAMES_PER_ROUND, rng);
 }
 
 /**
  * Round 722: what a club will carry at tip off. A club short of the floor is
  * filled on the minimum there, so the shortfall is counted at that price.
  */
-export function nbaTipOffPayroll(t: NbaGmTeam): number {
-  return Math.round((nbaCapUsed(t) + NBA_MIN_CONTRACT * Math.max(0, NBA_TIPOFF_MIN - t.players.length)) * 10) / 10;
+export function nbaTipOffPayroll(t: NbaGmTeam, cap: number = NBA_CAP_BASE): number {
+  return Math.round((nbaCapUsed(t) + nbaMinContract(cap) * Math.max(0, NBA_TIPOFF_MIN - t.players.length)) * 10) / 10;
 }
 
 /**
@@ -156,7 +252,7 @@ export function nbaTipOffPayroll(t: NbaGmTeam): number {
  * round, once at the end of its next summer.
  */
 export function nbaCalibrateLeagueTax(league: NbaLeague): void {
-  const payrolls = Object.values(league.teams).map(nbaTipOffPayroll);
+  const payrolls = Object.values(league.teams).map(t => nbaTipOffPayroll(t, league.cap));
   league.taxScale = nbaCalibrateTaxScale(payrolls, league.cap);
 }
 
@@ -253,11 +349,11 @@ export function nbaTaxView(t: NbaGmTeam, league: Pick<NbaLeague, 'cap' | 'season
   };
 }
 
-/** Strength: best five 72%, next three 28%; injured players excluded. */
+/** Strength: five starters 72%, three bench players 28%; injured players excluded. */
 export function nbaStrength(t: NbaGmTeam): number {
-  const healthy = [...t.players].filter(p => p.out === 0).sort((a, b) => b.ovr - a.ovr);
-  const five = healthy.slice(0, 5);
-  const bench = healthy.slice(5, 8);
+  const slots = nbaRotationSlots(t);
+  const five = slots.slice(0, 5).filter((p): p is NbaGmPlayer => !!p);
+  const bench = slots.slice(5, 8).filter((p): p is NbaGmPlayer => !!p);
   const fiveAvg = five.length ? five.reduce((s, p) => s + p.ovr, 0) / five.length : 65;
   const benchAvg = bench.length ? bench.reduce((s, p) => s + p.ovr, 0) / bench.length : 65;
   return fiveAvg * 0.72 + benchAvg * 0.28;
@@ -274,7 +370,7 @@ export interface RoundReport {
   notes: string[];
 }
 
-/** Simulate one round: every team plays GAMES_PER_ROUND against random peers. */
+/** Simulate one round: every team plays its GAMES_PER_ROUND booked games. */
 export function simRound(league: NbaLeague, myTeam: string, rng: () => number): RoundReport {
   const abbrs = Object.keys(league.teams);
   const notes: string[] = [];
@@ -289,19 +385,23 @@ export function simRound(league: NbaLeague, myTeam: string, rng: () => number): 
       }
     }
   }
-  for (const abbr of abbrs) {
+  /* Round 824: the season's lines, when the league is keeping them this season. */
+  const stats = nbaLiveStats(league);
+  /* Round 851: the round's booked games (foSchedule.ts), every club exactly
+     GAMES_PER_ROUND of them; a league saved mid season before the round
+     finishes that season the old way. */
+  foPlayRound(league, abbrs, GAMES_PER_ROUND, rng, (abbr, opp, k) => {
     const me = league.teams[abbr];
-    for (let g = 0; g < GAMES_PER_ROUND; g++) {
-      let opp = abbrs[Math.floor(rng() * abbrs.length)];
-      if (opp === abbr) opp = abbrs[(abbrs.indexOf(abbr) + 1) % abbrs.length];
-      const them = league.teams[opp];
-      // each matchup is counted once from the home side only: half rate
-      if (rng() < 0.5) continue;
-      const p = nbaWinProb(me, them);
-      if (rng() < p) { me.wins += 1; them.losses += 1; if (abbr === myTeam) myW += 1; if (opp === myTeam) myL += 1; }
-      else { me.losses += 1; them.wins += 1; if (abbr === myTeam) myL += 1; if (opp === myTeam) myW += 1; }
-    }
-  }
+    const them = league.teams[opp];
+    const p = nbaWinProb(me, them);
+    /* Round 824: the deciding draw is kept so the box score can be read off
+       it. Still exactly one draw, so every result is what it always was. */
+    const draw = rng();
+    const homeWon = draw < p;
+    if (homeWon) { me.wins += 1; them.losses += 1; if (abbr === myTeam) myW += 1; if (opp === myTeam) myL += 1; }
+    else { me.losses += 1; them.wins += 1; if (abbr === myTeam) myL += 1; if (opp === myTeam) myW += 1; }
+    if (stats) nbaRecordBox(stats, nbaBoxScore(me, them, homeWon, draw, p, league.round * 1000 + k, league.season));
+  }, () => nbaBookSeason(league, rng));
   return { myWins: myW, myLosses: myL, notes };
 }
 
@@ -368,7 +468,9 @@ export const NBA_ROSTER_MIN = 8;
 export const NBA_ROSTER_MAX = 15;
 
 export function nbaRelease(t: NbaGmTeam, fas: NbaGmPlayer[], id: string): boolean {
-  return cutPlayer(t, fas, id, NBA_ROSTER_MIN);
+  const released = cutPlayer(t, fas, id, NBA_ROSTER_MIN);
+  if (released) nbaReconcileRotation(t);
+  return released;
 }
 
 export function nbaSign(t: NbaGmTeam, fas: NbaGmPlayer[], id: string, cap: number): boolean {
@@ -380,6 +482,7 @@ export function nbaSign(t: NbaGmTeam, fas: NbaGmPlayer[], id: string, cap: numbe
   if (nbaCapRoom(t, cap) < p.salary) return false;
   fas.splice(i, 1);
   t.players.push(p);
+  nbaReconcileRotation(t);
   return true;
 }
 
@@ -433,6 +536,7 @@ export function nbaTrade(
   my.players.push(theirs);
   their.players.push(mine);
   if (sweeten && my.picks.length) { their.picks.push(my.picks.pop()!); }
+  nbaReconcileRotation(my); nbaReconcileRotation(their);
   return 'accepted';
 }
 
@@ -455,6 +559,7 @@ export function nbaExecuteTalksTrade(
   my.players.push(theirs);
   their.players.push(mine);
   if (addPick) { their.picks.push(my.picks.pop()!); }
+  nbaReconcileRotation(my); nbaReconcileRotation(their);
   return 'done';
 }
 
@@ -475,12 +580,28 @@ export function nbaDraftClass(rng: () => number, size = 24, taken: Set<string> =
   return out.sort((a, b) => b.grade - a.grade);
 }
 
-export function nbaProspectToPlayer(pr: NbaProspect, rng: () => number): NbaGmPlayer {
+/**
+ * Round 824: the season a draft class signs into. The draft runs at the close
+ * of a season, so its rookie deals count against next season's cap and are
+ * priced in that season's money, and the rookies debut that season.
+ */
+export interface NbaSigning { cap: number; season: number }
+export function nbaDraftSigning(league: Pick<NbaLeague, 'cap' | 'season'>): NbaSigning {
+  return { cap: nbaNextCap(league.cap), season: league.season + 1 };
+}
+
+/* Round 824: `signing` prices the rookie deal and marks the debut season (the
+   rookie of the year race reads it). Without it the deal is priced in the
+   opening season's money and the man is not marked, which is what every
+   caller got before the round. */
+export function nbaProspectToPlayer(pr: NbaProspect, rng: () => number, signing?: NbaSigning): NbaGmPlayer {
+  const scale = signing ? nbaPayScale(signing.cap) : 1;
   return {
     id: fid(), name: pr.name, pos: pr.pos, age: pr.age, ovr: pr.trueOvr,
-    salary: Math.max(3, Math.round((pr.trueOvr - 62) * 0.4 * 10) / 10),
+    salary: Math.round(Math.max(3, Math.round((pr.trueOvr - 62) * 0.4 * 10) / 10) * scale * 10) / 10,
     years: 4, out: 0,
     pot: Math.min(99, pr.trueOvr + 4 + Math.floor(rng() * 9)),
+    ...(signing ? { rookieSeason: signing.season } : {}),
   };
 }
 
@@ -488,12 +609,13 @@ export function nbaProspectToPlayer(pr: NbaProspect, rng: () => number): NbaGmPl
    what the league hands a short roster at tip off and what a CPU club fills
    its fourteen with. Rated under the pool's worst, so he never displaces a
    real player from the eight who decide games. */
-function nbaMinimumMan(rng: () => number, taken: Set<string>, slot: number): NbaGmPlayer {
+function nbaMinimumMan(rng: () => number, taken: Set<string>, slot: number, cap: number): NbaGmPlayer {
   const ovr = 66 + Math.floor(rng() * 6);
   return {
     id: fid(), name: nbaGenName(rng, taken),
     pos: (['G', 'F', 'C'] as NbaPos[])[slot % 3],
-    age: 23 + Math.floor(rng() * 9), ovr, salary: NBA_MIN_CONTRACT,
+    /* Round 824: the minimum of the season he signs into. */
+    age: 23 + Math.floor(rng() * 9), ovr, salary: nbaMinContract(cap),
     years: 1, out: 0, pot: ovr,
   };
 }
@@ -545,14 +667,15 @@ export function nbaTipOff(league: NbaLeague, rng: () => number, myTeam?: string)
       let man: NbaGmPlayer;
       if (pool.length) {
         league.freeAgents.splice(league.freeAgents.indexOf(pool[0]), 1);
-        man = { ...pool[0], salary: NBA_MIN_CONTRACT, years: 1 };
+        man = { ...pool[0], salary: nbaMinContract(league.cap), years: 1 };
       } else {
-        man = nbaMinimumMan(rng, taken, t.players.length);
+        man = nbaMinimumMan(rng, taken, t.players.length, league.cap);
       }
       t.players.push(man);
       added.push(man);
     }
     if (added.length) filled[t.abbr] = added;
+    nbaReconcileRotation(t);
   }
   return { filled, refused };
 }
@@ -604,7 +727,7 @@ export function nbaOffseason(league: NbaLeague, rng: () => number, myTeam?: stri
   const taken = leagueNames(league);
   /* Round 722: next season's cap, under whose tax line a CPU club that just
      wrote a cheque, or would write one at today's payroll, steers. */
-  const nextCap = Math.round(league.cap * 1.07);
+  const nextCap = nbaNextCap(league.cap);
   for (const t of Object.values(league.teams)) {
     const cpu = t.abbr !== myTeam;
     /* Round 722: a CPU club facing a cheque stops re-signing its depth: an
@@ -624,7 +747,8 @@ export function nbaOffseason(league: NbaLeague, rng: () => number, myTeam?: stri
       p.years -= 1;
       if (p.years <= 0) {
         p.years = p.age <= 26 ? 4 : p.age <= 30 ? 3 : 2;
-        p.salary = nbaSalaryFor(p.ovr);
+        /* Round 824: the new deal starts next season, so it is priced in next season's money. */
+        p.salary = nbaSalaryFor(p.ovr, nextCap);
         if (taxAverse && !core.has(p.id)) { league.freeAgents.push({ ...p, years: 1 }); continue; }
         if (p.ovr < 80 && rng() < 0.45) { league.freeAgents.push({ ...p, years: 1 }); continue; }
       }
@@ -646,17 +770,26 @@ export function nbaOffseason(league: NbaLeague, rng: () => number, myTeam?: stri
        here; the GM's club is filled at tip off, from the pool, after he has
        had the summer to sign whom he likes. */
     if (cpu) {
-      while (t.players.length < NBA_TIPOFF_MIN) t.players.push(nbaMinimumMan(rng, taken, t.players.length));
+      while (t.players.length < NBA_TIPOFF_MIN) t.players.push(nbaMinimumMan(rng, taken, t.players.length, nextCap));
     }
+    nbaReconcileRotation(t);
   }
   league.freeAgents = league.freeAgents.sort((a, b) => b.ovr - a.ovr).slice(0, 30);
-  for (const fa of league.freeAgents) { fa.age += 1; if (fa.age >= 32) fa.ovr = Math.max(64, fa.ovr - 1); }
-  league.cap = Math.round(league.cap * 1.07);
+  /* Round 824: a free agent's ask is a deal he has not signed yet, so each
+     summer it is set again for his rating in next season's money. Without
+     this the pool kept asking opening season prices while the cap rose. */
+  for (const fa of league.freeAgents) { fa.age += 1; if (fa.age >= 32) fa.ovr = Math.max(64, fa.ovr - 1); fa.salary = nbaSalaryFor(fa.ovr, nextCap); }
+  league.cap = nextCap;
   league.season += 1;
   league.round = 1;
+  /* Round 824: a clean sheet of lines for the new season. A league saved
+     before the round starts keeping them here, at its first summer. */
+  league.stats = foNewSeasonStats(league.season);
   /* Round 722: a league saved before the round gets its tax lines here, at
      its first summer, from the payrolls it will tip off with. A calibrated
      league keeps its scale, and its lines rise with the cap. */
   if (league.taxScale == null) nbaCalibrateLeagueTax(league);
+  /* Round 851: the new season's fixtures, for an old save too. */
+  league.schedule = nbaBookSeason(league, rng);
   return notes;
 }

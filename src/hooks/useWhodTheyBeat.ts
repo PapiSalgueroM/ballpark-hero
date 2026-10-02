@@ -59,10 +59,9 @@ export function useWhodTheyBeat() {
   const unlimitedNonce = useRef(String(Date.now() % 1000000007));
   /* The pending reveal, so a mode change can cancel it: left running, it
      wrote the daily's answers onto the Unlimited board. */
-  const revealTimer = useRef<number | null>(null);
+  const pendingAnswers = useRef<boolean[] | null>(null);
   const clearReveal = useCallback(() => {
-    if (revealTimer.current !== null) window.clearTimeout(revealTimer.current);
-    revealTimer.current = null;
+    pendingAnswers.current = null;
   }, []);
   useEffect(() => clearReveal, [clearReveal]);
 
@@ -130,7 +129,7 @@ export function useWhodTheyBeat() {
   useGameCompletion('whod-they-beat', dailyDone, dailyAnswers.filter(Boolean).length, 1);
 
   const answer = useCallback((optionIndex: number) => {
-    if (!current || showingResult) return;
+    if (!current || pendingAnswers.current || showingResult || !Number.isInteger(optionIndex) || optionIndex < 0 || optionIndex >= current.options.length) return;
     const correct = optionIndex === current.correctIndex;
     setPickedIndex(optionIndex);
     setShowingResult(true);
@@ -141,14 +140,17 @@ export function useWhodTheyBeat() {
       } catch { /* storage blocked: play on */ }
       setDailyAnswers(next);
     }
-    clearReveal();
-    revealTimer.current = window.setTimeout(() => {
-      revealTimer.current = null;
-      setAnswers(next);
-      setShowingResult(false);
-      setPickedIndex(null);
-    }, 2200);
-  }, [current, showingResult, answers, mode, today, clearReveal]);
+    pendingAnswers.current = next;
+  }, [current, showingResult, answers, mode, today]);
+
+  const advanceReveal = useCallback(() => {
+    const next = pendingAnswers.current;
+    if (!next) return;
+    pendingAnswers.current = null;
+    setAnswers(next);
+    setShowingResult(false);
+    setPickedIndex(null);
+  }, []);
 
   const switchMode = useCallback((m: BeatMode) => {
     if (m === mode) return;
@@ -175,6 +177,6 @@ export function useWhodTheyBeat() {
 
   return {
     loadState, mode, switchMode, questions, qIdx, current, showingResult,
-    pickedIndex, answers, done, score, answer, playAgain,
+    pickedIndex, answers, done, score, answer, advanceReveal, playAgain,
   };
 }

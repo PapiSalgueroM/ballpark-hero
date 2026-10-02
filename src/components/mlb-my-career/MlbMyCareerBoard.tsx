@@ -11,6 +11,8 @@ import {
   repairNetWorth,
   getMlbSpendItem
 } from '@/lib/mlbMyCareer';
+/* Round 833: every position's own stat line, shared with the other three careers. */
+import { countOf, mlbCareerSoFar, mlbMajorAward, mlbStatLine } from '@/lib/usCareerStatLine';
 // Round 179: real free agency, shared engine and shared screen.
 import { pushFaOffer, applyFaSigning } from '@/lib/usCareerFreeAgency';
 import type { FaWindow } from '@/lib/usCareerFreeAgency';
@@ -23,6 +25,7 @@ import { buildSeasonReveal, draftPressureLine, type SeasonReveal } from '@/lib/u
 /* Round 530: draft day as a moment, and the retirement card on the same
    celebration kit the season curtain uses. */
 import DraftDayCard, { type DraftDayFacts } from '@/components/us-career/DraftDayCard';
+import USCareerActionConfirm from '@/components/us-career/USCareerActionConfirm';
 import { CelebrationStyles, revealDelay } from '@/components/club-manager/Celebration';
 import { SeasonRevealCard } from '@/components/us-career/SeasonRevealCard';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
@@ -59,7 +62,7 @@ import { fmtFollowers, pushHeadlines } from '@/lib/careerSocial';
    bound to baseball in mlbCareerInbox.ts and mlbCareerRivalryEvents.ts. */
 import { InboxPanel } from '@/components/us-career/InboxPanel';
 import { RivalryEventCard } from '@/components/us-career/RivalryEventCard';
-import { mlbUnreadInboxCount, answerMlbInboxMessage } from '@/lib/mlbCareerInbox';
+import { mlbUnreadInboxCount, answerMlbInboxMessage, mlbDraftNightInbox, MLB_CALENDAR } from '@/lib/mlbCareerInbox';
 import { dismissMlbRivalryEvent, resolveMlbRivalryChoice } from '@/lib/mlbCareerRivalryEvents';
 /* Round 796: the rival choice card, the same one the NFL board draws. */
 import { RivalryChoiceCard } from '@/components/us-career/RivalryChoiceCard';
@@ -193,6 +196,9 @@ export default function MlbMyCareerBoard() {
     const tq = mlbRollTeamQuality(null, Math.random);
     /* Round 183: the lineup card is set the day you arrive. */
     const roleNote = mlbAssignRole(c, tq, Math.random);
+    /* Round 822: draft day's text lands before a pitch is thrown, drawn
+       from the inbox's own keyed stream. */
+    mlbDraftNightInbox(c);
     setCareer(c);
     setTeamQuality(tq);
     const pressureLine = draftPressureLine(c.draftPick, FIRST_ROUND_END);
@@ -475,11 +481,11 @@ export default function MlbMyCareerBoard() {
 
   /* Round 126: see the note in NflMyCareerBoard. A suspended season has no
      stat fields, so this printed "undefined HR, undefined RBI" on the
-     retirement screen. */
-  const statLine = (s: MlbSeasonLine, p: MlbCareerPos) =>
-    s.teamResult === 'SUSPENDED' ? 'Suspended, no season played'
-      : p === 'SP' ? `${s.wins}-${s.lossesP}, ${s.era?.toFixed(2)} ERA, ${s.so} K`
-      : `.${String(Math.round((s.avg ?? 0) * 1000)).padStart(3, '0')}, ${s.hr} HR, ${s.rbi} RBI`;
+     retirement screen.
+     Round 833: and a reliever was sent down the batting branch, so a closer
+     read ".000, undefined HR, undefined RBI". The line lives in
+     usCareerStatLine.ts now, with the bullpen's own saves, holds, ERA and K. */
+  const statLine: (s: MlbSeasonLine, p: MlbCareerPos) => string = mlbStatLine;
 
   /* ------------------------------ create ------------------------------ */
   if (phase === 'create' || !career) {
@@ -659,14 +665,16 @@ export default function MlbMyCareerBoard() {
             <span className="rounded-full border border-border bg-background px-3 py-1.5">{legacy.hof ? '🏛️ Cooperstown' : 'No plaque in Cooperstown'}</span>
           </div>
           <div className="mt-4 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
-            <button onClick={reset} className="inline-flex items-center gap-2 rounded-full border border-border px-6 py-2.5 text-sm font-semibold text-foreground">
-              <RotateCcw className="h-4 w-4" /> New career
-            </button>
+            <USCareerActionConfirm action="restart" sport="MLB" onConfirm={reset}>
+              <button className="inline-flex min-h-11 min-w-11 items-center gap-2 rounded-full border border-border px-6 py-2.5 text-sm font-semibold text-foreground">
+                <RotateCcw className="h-4 w-4" /> New career
+              </button>
+            </USCareerActionConfirm>
             <ShareButtons
               gameName="MLB My Career"
               gamePath="/mlb-my-career"
               score={`legacy ${legacy.score}`}
-              customText={`MLB My Career ⚾ ${career.name}: ${career.seasons.length} seasons, ${career.rings} rings, ${career.mvpCys} MVPs. Verdict: ${legacy.verdict}. Legacy ${legacy.score}. douknowball.com/mlb-my-career`}
+              customText={`MLB My Career ⚾ ${career.name}: ${career.seasons.length} seasons, ${countOf(career.rings, 'ring', 'rings')}, ${countOf(career.mvpCys, mlbMajorAward(career.pos).one, mlbMajorAward(career.pos).many)}. Verdict: ${legacy.verdict}. Legacy ${legacy.score}. douknowball.com/mlb-my-career`}
             />
           </div>
         </div>
@@ -816,7 +824,7 @@ export default function MlbMyCareerBoard() {
         {panel === 'inbox' && (
           /* Round 525: the Round 80 half of the flagship's phone, on the
              engine careerInbox.ts, bound to baseball in mlbCareerInbox.ts. */
-          <InboxPanel messages={[...(career.phoneInbox ?? [])].reverse()} onAnswer={handleInboxAnswer} seen={inboxSeenRef.current} />
+          <InboxPanel messages={[...(career.phoneInbox ?? [])].reverse()} onAnswer={handleInboxAnswer} seen={inboxSeenRef.current} calendar={MLB_CALENDAR} />
         )}
       </div>
     );
@@ -965,11 +973,13 @@ export default function MlbMyCareerBoard() {
             <Dumbbell className="h-4 w-4" /> Play the {career.year} season
           </button>
           <p className="mt-2 text-[10px] text-muted-foreground">
-            Career so far: {career.rings} rings · {career.mvpCys} majors · {career.allStars} All-Star ·{' '}
-            {career.pos === 'SP' ? `${totals.wins} career wins` : `${totals.hr} career home runs`}
+            Career so far: {countOf(career.rings, 'ring', 'rings')} · {countOf(career.mvpCys, mlbMajorAward(career.pos).one, mlbMajorAward(career.pos).many)} · {career.allStars} All-Star ·{' '}
+            {mlbCareerSoFar(totals, career.pos)}
           </p>
           {career.seasons.length >= 6 && (
-            <button onClick={retireNow} className="mt-2 text-[11px] text-muted-foreground hover:text-destructive">Hang them up now</button>
+            <USCareerActionConfirm action="retire" sport="MLB" onConfirm={retireNow}>
+              <button className="mt-2 min-h-11 min-w-11 text-[11px] text-muted-foreground hover:text-destructive">Hang them up now</button>
+            </USCareerActionConfirm>
           )}
         </div>
       )}

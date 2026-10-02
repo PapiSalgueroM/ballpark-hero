@@ -11,6 +11,8 @@ import { NFL_ERAS,
   repairNetWorth,
   getNflSpendItem
 } from '@/lib/nflMyCareer';
+/* Round 833: every position's own stat line, shared with the other three careers. */
+import { countOf, nflCareerSoFar, nflMajorAward, nflStatLine } from '@/lib/usCareerStatLine';
 // Round 179: real free agency, shared engine and shared screen.
 import { pushFaOffer, applyFaSigning } from '@/lib/usCareerFreeAgency';
 import type { FaWindow } from '@/lib/usCareerFreeAgency';
@@ -24,6 +26,7 @@ import { SeasonRevealCard } from '@/components/us-career/SeasonRevealCard';
 /* Round 530: draft day as a moment, and the retirement card on the same
    celebration kit the season curtain uses. */
 import DraftDayCard, { type DraftDayFacts } from '@/components/us-career/DraftDayCard';
+import USCareerActionConfirm from '@/components/us-career/USCareerActionConfirm';
 import { CelebrationStyles, revealDelay } from '@/components/club-manager/Celebration';
 import { nflHeatLabel } from '@/lib/nflCareerCorruption';
 import { type PlayerAppearance, defaultAppearance } from '@/lib/soccerCareerAppearance';
@@ -485,12 +488,12 @@ export default function NflMyCareerBoard() {
   /* Round 126: a suspended season carries no stat fields at all, so this used
      to print "undefined yds, undefined TD, undefined INT" straight onto the
      retirement screen. Caught by the browser sweep for this round. It was
-     already there before the coaching career was, in three of the four games. */
-  const statLine = (s: SeasonLine, p: CareerPos) =>
-    s.teamResult === 'SUSPENDED' ? 'Suspended, no season played'
-      : p === 'QB' ? `${s.passYds} yds, ${s.passTd} TD, ${s.ints} INT`
-      : p === 'RB' ? `${s.rushYds} rush yds, ${s.rushTd} TD, ${s.rec} rec`
-      : `${s.rec} rec, ${s.recYds} yds, ${s.recTd} TD`;
+     already there before the coaching career was, in three of the four games.
+     Round 833: and a linebacker, corner, edge rusher or kicker fell through to
+     the receiver's line here and read "undefined rec, undefined yds, undefined
+     TD" in all four places this prints. The line lives in usCareerStatLine.ts
+     now, one branch per position the career deals. */
+  const statLine: (s: SeasonLine, p: CareerPos) => string = nflStatLine;
 
   /* ------------------------------ create ------------------------------ */
   if (phase === 'create' || !career) {
@@ -677,14 +680,16 @@ export default function NflMyCareerBoard() {
             <span className="rounded-full border border-border bg-background px-3 py-1.5">{legacy.hof ? '🏛️ Hall of Fame' : 'No bust in Canton'}</span>
           </div>
           <div className="mt-4 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
-            <button onClick={reset} className="inline-flex items-center gap-2 rounded-full border border-border px-6 py-2.5 text-sm font-semibold text-foreground">
-              <RotateCcw className="h-4 w-4" /> New career
-            </button>
+            <USCareerActionConfirm action="restart" sport="NFL" onConfirm={reset}>
+              <button className="inline-flex min-h-11 min-w-11 items-center gap-2 rounded-full border border-border px-6 py-2.5 text-sm font-semibold text-foreground">
+                <RotateCcw className="h-4 w-4" /> New career
+              </button>
+            </USCareerActionConfirm>
             <ShareButtons
               gameName="NFL My Career"
               gamePath="/nfl-my-career"
               score={`legacy ${legacy.score}`}
-              customText={`NFL My Career 🏈 ${career.name}: ${career.seasons.length} seasons, ${career.rings} rings, ${career.mvps} MVPs. Verdict: ${legacy.verdict}. Legacy ${legacy.score}. douknowball.com/nfl-my-career`}
+              customText={`NFL My Career 🏈 ${career.name}: ${career.seasons.length} seasons, ${countOf(career.rings, 'ring', 'rings')}, ${countOf(career.mvps, nflMajorAward(career.pos).one, nflMajorAward(career.pos).many)}. Verdict: ${legacy.verdict}. Legacy ${legacy.score}. douknowball.com/nfl-my-career`}
             />
           </div>
         </div>
@@ -865,7 +870,7 @@ export default function NflMyCareerBoard() {
       : null,
     rings: career.rings,
     ringWord: 'ring',
-    honours: [{ label: 'MVPs', n: career.mvps }, { label: 'All-Pros', n: career.allPros }],
+    honours: [{ label: nflMajorAward(career.pos).many, n: career.mvps }, { label: 'All-Pros', n: career.allPros }],
     /* The week's feed while there is one; after a reload, the paper kept on
        the save, so the box does not forget the career. */
     headlines: feed.length ? feed : (career.headlines ?? []),
@@ -980,11 +985,13 @@ export default function NflMyCareerBoard() {
             <Dumbbell className="h-4 w-4" /> Play the {career.year} season
           </button>
           <p className="mt-2 text-[10px] text-muted-foreground">
-            Career so far: {career.rings} rings · {career.mvps} MVPs · {career.allPros} All-Pros ·{' '}
-            {career.pos === 'QB' ? `${totals.passYds.toLocaleString()} pass yds` : career.pos === 'RB' ? `${totals.rushYds.toLocaleString()} rush yds` : `${totals.recYds.toLocaleString()} rec yds`}
+            Career so far: {countOf(career.rings, 'ring', 'rings')} · {countOf(career.mvps, nflMajorAward(career.pos).one, nflMajorAward(career.pos).many)} · {countOf(career.allPros, 'All-Pro', 'All-Pros')} ·{' '}
+            {nflCareerSoFar(totals, career.pos)}
           </p>
           {career.seasons.length >= 6 && (
-            <button onClick={retireNow} className="mt-2 text-[11px] text-muted-foreground hover:text-destructive">Hang them up now</button>
+            <USCareerActionConfirm action="retire" sport="NFL" onConfirm={retireNow}>
+              <button className="mt-2 min-h-11 min-w-11 text-[11px] text-muted-foreground hover:text-destructive">Hang them up now</button>
+            </USCareerActionConfirm>
           )}
         </div>
       )}

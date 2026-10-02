@@ -1801,7 +1801,7 @@ export const BASKETBALL_CONTENT: GameContentMap = {
 
   '/nba-front-office': {
     intro: [
-      "Running an NBA franchise looks easy from the couch. This sim hands you a real rotation, a cap sheet and 29 rivals so you can find out.",
+      "Running an NBA franchise looks easy from the couch. This sim hands you a curated roster snapshot, a cap sheet and 29 rivals so you can find out.",
       "Waive the deadweight, sign the bargains, swing trades the computer actually weighs, and steer the season toward the bracket and maybe a banner. Dynasties are the real scoreboard.",
     ],
     headings: {
@@ -1813,9 +1813,9 @@ export const BASKETBALL_CONTENT: GameContentMap = {
     },
     howToPlaySections: [
       {
-        heading: "Inheriting a real 30 team rotation",
+        heading: "Inheriting a roster from 30 franchises",
         items: [
-          "Pick any of the 30 franchises and inherit its real rotation, rated player by player.",
+          "Pick any of the 30 franchises. New games use original opening estimates from 2024-25 and 2025-26 regular-season inputs. The e marker means defense and role evidence is limited; unmatched players use a marked game prior. Ages, potential and contracts are simulated. Existing saves keep their ratings and development.",
         ],
       },
       {
@@ -1848,7 +1848,16 @@ export const BASKETBALL_CONTENT: GameContentMap = {
       {
         heading: "Cap room and roster size limits",
         items: [
-          "The cap starts at the real 2026-27 figure, just under 165 million, and rises 7 percent every season in the game. You can waive down to 8 players during the year, but the season cannot tip off with fewer than 14 or more than 15: short of 14 the league fills the gap with minimum deals at 2 million each and tells you who, and above 15 the first round waits until you waive down.",
+          "The cap starts at the real 2026-27 figure, just under 165 million, and rises 7 percent every season in the game. You can waive down to 8 players during the year, but the season cannot tip off with fewer than 14 or more than 15: short of 14 the league fills the gap with minimum deals (2 million each in a new league, rising with the cap) and tells you who, and above 15 the first round waits until you waive down.",
+          "New deals are priced in the money of the season they start in. Re-signings, rookie deals, the minimum and free agent asks all rise with the cap, so payrolls stop falling seven percent a year behind the tax line. They still drop over the first couple of seasons, because computer teams let expiring depth walk (all of it when they face a bill) and refill only on minimum deals, so expect fewer taxpayers than a new league opens with; from about the third season payrolls hold steady against the line. A contract already signed keeps its number until it runs out.",
+        ],
+      },
+      {
+        heading: "Season lines and the five awards",
+        items: [
+          "Every game writes a box score off the result already decided. Open Roster, then Set rotation to choose five starters and three bench players; selecting someone already chosen swaps their slots. Starters supply 72 percent of strength and the bench 28 percent. The eight slots get 36, 34, 33, 32, 30, 28, 26 and 21 simulated minutes. Injured choices get healthy cover and return when recovered; departed players are replaced. Automatic uses the highest-rated healthy eight. Those same players earn the season lines, their points add up to the team's score, and the winner outscored the loser. If nobody is healthy, the current engine uses its best eight for an emergency box score, even if injured, a simplified injury exception rather than a real NBA rule. These are this save's sim seasons, not real NBA stats.",
+          "At season close the league names five awards by fixed rules, and a man needs four in five of an average team's games to qualify (about 64 of 80). MVP: points plus rebounds plus assists a game, plus 20 times his club's winning share. All-League First Team: the five best by the MVP score, any position. Rookie of the Year: points plus rebounds plus assists a game, among first year men drafted in this league, so a new league's first season has none. Defensive Player of the Year: steals plus blocks plus half his rebounds a game, among men whose club allowed fewer points than the league average. Sixth Man of the Year: points a game, among men who started fewer than half the games they played.",
+          "The close screen shows the awards, the points, rebounds and assists leaders and your own club's lines. Winners wear the award on their roster card, and the Standings box keeps every season's champion and awards. A save from before season lines plays out its current season without them and starts keeping them next season.",
         ],
       },
       {
@@ -1933,11 +1942,12 @@ export const BASKETBALL_CONTENT: GameContentMap = {
       },
     ],
     faqs: [
-      { q: "Are the rosters real?", a: "The players are real, about ten curated per franchise. Contracts, salaries and ages in the sim are explicitly fictional." },
+      { q: "Are the rosters real?", a: "The players are real, about ten curated per franchise in a roster snapshot. OVR is an original simulation estimate, with limited box-score defense and unchanged seed roles. Prior-only and unmeasured estimates are marked separately. Contracts, salaries and ages are simulated, and later ratings come from your saved career." },
       { q: "Why did my trade get rejected?", a: "The engine values rating adjusted for age and wants to come out ahead. Offer youth, take back age, or add a pick." },
       { q: "Can I get fired?", a: "Yes. Ownership grades the mandate every season and tracks trust from 0 to 100. Losing the play-in when the ask was a banner costs real trust, a luxury tax bill costs a point per 6 million of it, and at zero the save ends and you take another job." },
-      { q: "What happens if I start the season with 12 players?", a: "The league fills you to 14 at tip off with the lowest rated free agents in the pool on one year minimum deals, 2 million each, and the feed names them. Sign who you actually want before you press play. With 16 or more you cannot start until you waive down to 15." },
+      { q: "What happens if I start the season with 12 players?", a: "The league fills you to 14 at tip off with the lowest rated free agents in the pool on one year minimum deals (2 million each in a new league, rising with the cap), and the feed names them. Sign who you actually want before you press play. With 16 or more you cannot start until you waive down to 15." },
       { q: "Does my save persist?", a: "Yes, the league auto saves in your browser across unlimited seasons. Clearing site data wipes the franchise." },
+      { q: "Are the season stats and awards real?", a: "No. The rosters use real names, but every line, leader and award comes from the games your save simulated. A star on a losing club can lose the MVP to a smaller line on a winner, because the rule counts his club's record." },
     ],
   },
 
@@ -1994,6 +2004,12 @@ export const BASKETBALL_CONTENT: GameContentMap = {
             heading: "Collecting badges in the Trophy Case",
             items: [
               "Collect badges in the Trophy Case: 21 of them, from a first ring and Rookie of the Year to 30,000 career points, a triple double season and $100M to your name, each lit the moment the facts of your career say so.",
+            ],
+          },
+          {
+            heading: "Answering your phone on the basketball calendar",
+            items: [
+              "Answer your phone. Texts from your agent, the head coach, the GM, a teammate or your mom land on the beats of the basketball year: draft night and your first summer league, camp, the trade deadline, the All-Star break, the playoffs if you get there, the offseason, and the summer before the last year of your deal. Every text says which beat and which year it came in on, and how you answer moves your karma, morale, fanbase or bank.",
             ],
           },
           {
@@ -2086,6 +2102,13 @@ export const BASKETBALL_CONTENT: GameContentMap = {
         heading: "How your rival's choices work",
         items: [
           "A season where your rival makes no headline has a 45% shot at a rival choice instead, never both in the same year, and every choice shows up once before any of them repeats. The buttons move only what they print: morale, fanbase, net worth, karma or the heat of the feud, and morale feeds straight into next season's box score.",
+        ],
+      },
+      {
+        heading: "How the phone's calendar works",
+        items: [
+          "Texts only arrive on beats your season really had. No playoff texts in a year you went home in April, no contract year texts until one year is left on the deal, and draft night's texts land before you play a game. Summer league comes round twice at most: the July after draft night and the one after your rookie year. One text a beat, up to three a season, fewer while old ones sit unanswered, and the same text never comes twice in a career.",
+          "The season the game retires you (41, 21 seasons, or a rating that craters) sends nothing about a year you will not play: no summer runs, no early lifts, no extension talk.",
         ],
       },
     ],

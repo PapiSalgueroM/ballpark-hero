@@ -29,7 +29,8 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render, screen, fireEvent, cleanup } from '@testing-library/react';
 import type { ComponentType } from 'react';
-import { initLeague, simGame, REGULAR_WEEKS } from '@/lib/frontOffice';
+import { initLeague, simGame, REGULAR_WEEKS, DEEP_ROSTER_MAX } from '@/lib/frontOffice';
+import { FO_DEPTH } from '@/data/frontOfficeDepth';
 import { initNbaLeague, simRound, NBA_ROUNDS } from '@/lib/nbaFrontOffice';
 import { initMlbLeague, simMlbRound, MLB_ROUNDS } from '@/lib/mlbFrontOffice';
 import { initNhlLeague, simNhlRound, NHL_FO_ROUNDS } from '@/lib/nhlFrontOffice';
@@ -75,6 +76,22 @@ const CASES: BoardCase[] = [
     saveKey: 'front-office-save-v1',
     finalWeek: rng => {
       const lg = initLeague(rng);
+      for (let w = 1; w < REGULAR_WEEKS; w += 1) { lg.schedule[w - 1].forEach(g => simGame(g, lg.teams, rng)); lg.week += 1; }
+      return { league: lg, team: Object.keys(lg.teams)[0] };
+    },
+    tile: 'This week', finalButton: 'Play the final week + playoffs',
+    headline: /win the 2026 title/, draftHeading: 'The 2027 Draft',
+    picks: 3, firstButton: 'Play Week 1', periodKey: 'week',
+  },
+  /* Round 828: a new NFL league carries every club's real 53 and practice
+     squad, so the season close, the draft and the offseason (the refill and
+     the cut to 53) run here on the league a new player actually gets. */
+  {
+    name: 'NFL Front Office, full rosters', env: 'FO_BOARD_NFL',
+    load: () => import('@/components/front-office/FrontOfficeBoard'),
+    saveKey: 'front-office-save-v1',
+    finalWeek: rng => {
+      const lg = initLeague(rng, { depth: FO_DEPTH });
       for (let w = 1; w < REGULAR_WEEKS; w += 1) { lg.schedule[w - 1].forEach(g => simGame(g, lg.teams, rng)); lg.week += 1; }
       return { league: lg, team: Object.keys(lg.teams)[0] };
     },
@@ -232,12 +249,40 @@ for (const c of CASES) {
       for (let i = 0; i < c.picks; i += 1) fireEvent.click(screen.getAllByText(/· age \d+/)[0]);
       expect(read().phase).toBe('hub');
       expect(read().league.season).toBe(2027);
+      /* Round 828: on full rosters the offseason refilled every club and cut
+         the computer clubs to the 53. The GM's own club is never cut behind
+         his back (the MLB and NHL shape): if his picks took him over, Play
+         waits until he has cut down himself, below. */
+      const deepLeague = read().league.rosterDepth === 2;
+      if (deepLeague) {
+        const others = Object.values(read().league.teams as Record<string, any>).filter(t => t.abbr !== team).map(t => t.players.length);
+        expect(Math.max(...others)).toBeLessThanOrEqual(DEEP_ROSTER_MAX);
+        expect(Math.min(...others)).toBeGreaterThanOrEqual(DEEP_ROSTER_MAX - 6);
+        expect(read().league.teams[team].releasedThisSeason ?? []).toEqual([]);
+      }
       /* Round 530: the last pick is narrated, so the screen holds the draft
          with its card until Continue is pressed. The save already says hub,
          which is what the two lines above check; the hub itself is not drawn
          until the press. */
       expect(screen.queryByText(c.tile)).toBeNull();
       fireEvent.click(screen.getByText('Continue to the hub'));
+      if (deepLeague && read().league.teams[team].players.length > DEEP_ROSTER_MAX) {
+        fireEvent.click(screen.getByText(c.tile));
+        expect((screen.getByText(c.firstButton).closest('button') as HTMLButtonElement).disabled).toBe(true);
+        expect(document.querySelector('[data-over-limit]')).toBeTruthy();
+        /* the cut, his own: a group tile, Cut, Cut him, until he is at 53 */
+        fireEvent.click(screen.getByText('Hub'));
+        fireEvent.click(screen.getByText('Roster'));
+        while (read().league.teams[team].players.length > DEEP_ROSTER_MAX) {
+          const group = [...document.querySelectorAll('[data-roster-group]')].find(b => /DB|LB|WR/.test(b.getAttribute('data-roster-group') ?? '')) as HTMLElement;
+          fireEvent.click(group);
+          const rows = [...document.querySelectorAll('[data-roster-row]')] as HTMLElement[];
+          fireEvent.click(rows[rows.length - 1].querySelector('button')!);
+          fireEvent.click(screen.getByText('Cut him'));
+          fireEvent.click(screen.getByText('Groups'));
+        }
+        fireEvent.click(screen.getByText('Hub'));
+      }
       fireEvent.click(screen.getByText(c.tile));
       fireEvent.click(screen.getByText(c.firstButton));
       expect(read().league[c.periodKey]).toBe(2);

@@ -17,7 +17,7 @@ import { SportGlyph, sportStyle } from '@/components/home/SportGlyph';
 import { useStreaks } from '@/hooks/useStreaks';
 import { AuthModal } from '@/components/auth/AuthModal';
 
-import { ALL_GAMES, CATEGORIES, VISIBLE_CATEGORIES, FEATURED_GAMES, GAME_COUNT_LABEL, TOTAL_GAMES, type GameDef, type CategoryTitle } from '@/data/gameRegistry';
+import { ALL_GAMES, CATEGORIES, VISIBLE_CATEGORIES, FEATURED_GAMES, GAME_COUNT_LABEL, type GameDef, type CategoryTitle } from '@/data/gameRegistry';
 import { CATEGORY_SPORT, sportOf, readFavouriteSport, favouriteFirst, FAVOURITE_SPORT_KEY, type SportKey } from '@/data/homeFront';
 import { isNewGame } from '@/lib/newBadge';
 /* Round 659: the search engine loads the first time somebody reaches for
@@ -65,38 +65,20 @@ function getPopularFallbackGames(): GameDef[] {
     .filter((g): g is GameDef => !!g);
 }
 
-function countPlayedGames(): number {
-  const today = new Date().toISOString().slice(0, 10);
-  let count = 0;
-  for (let i = 0; i < localStorage.length; i++) {
-    const key = localStorage.key(i);
-    if (key && key.includes(today)) {
-      try {
-        const val = localStorage.getItem(key);
-        if (val) {
-          const parsed = JSON.parse(val);
-          if (parsed.status && parsed.status !== 'playing') count++;
-        }
-      } catch { /* not a game key */ }
-    }
-  }
-  return count;
-}
-
 export default function Index() {
   const { user, profile } = useAuth();
   // Owner (2026-08-05): the hero shows a CONSECUTIVE-day streak (not total
   // days visited), games played TODAY (not lifetime), and world rank, and all
   // of it only for signed-in players. Guests get a sign-up nudge instead.
   const { globalCurrentStreak } = useStreaks();
-  const [playedCount, setPlayedCount] = useState(0);
   const [gamesToday, setGamesToday] = useState(0);
   const [authOpen, setAuthOpen] = useState(false);
   const [worldRank, setWorldRank] = useState<number | null>(null);
   // Same identity game_completions rows are written under (guest handle or
   // profile display name), mirrors useGameNavbarStats.
   const playerName = useMemo(() => getCurrentPlayerName(profile), [profile]);
-  const [totalPlayers, setTotalPlayers] = useState<number | null>(null);
+  const accountId = user?.id ?? null;
+  const canReadPersonal = !!accountId && profile?.user_id === accountId;
   const [searchQuery, setSearchQuery] = useState('');
   const [bestScores, setBestScores] = useState<Record<string, number>>({});
   const isSearching = searchQuery.trim().length > 0;
@@ -129,35 +111,46 @@ export default function Index() {
     [isSearching, searchQuery, engine]
   );
 
+  // Personal values only load for this visible account. Public popularity
+  // stays independent, so guests can still discover what people are playing.
   useEffect(() => {
-    setPlayedCount(countPlayedGames());
+    let active = true;
+    let fetching = false;
+    let loaded = false;
+    let controller: AbortController | undefined;
     setGamesToday(getLocalTodayCount());
-  }, []);
+    setWorldRank(null);
+    setBestScores({});
 
-  // Lifetime hero stats: distinct games ever completed under this handle
-  // (server truth from game_completions, floored by the local count so the
-  // chip never regresses while an insert is in flight) + all-time world rank
-  // from the same global_rank RPC the leaderboard's "Your world rank" uses.
-  useEffect(() => {
-    let cancelled = false;
     const load = async () => {
+      if (!active || !canReadPersonal || document.visibilityState !== 'visible' || fetching || loaded) return;
+      fetching = true;
+      controller = new AbortController();
       try {
         const todayUtc = new Date().toISOString().split('T')[0];
-        const [playedRes, rankRes, todayRes] = await Promise.all([
-          (supabase.from as any)('game_completions')
-            .select('game')
-            .eq('player_name', playerName),
+        const [rankRes, todayRes, bestRes] = await Promise.all([
           (supabase.rpc as any)('global_rank', {
             p_player: playerName,
             p_period: 'alltime',
             p_games: null,
-          }),
+          }).abortSignal(controller.signal),
           (supabase.from as any)('game_completions')
             .select('game')
             .eq('player_name', playerName)
-            .eq('completed_on', todayUtc),
+            .eq('completed_on', todayUtc).abortSignal(controller.signal),
+          supabase.from('user_best_scores')
+            .select('game_type, best_score')
+            .eq('user_id', accountId).abortSignal(controller.signal).then(bestRes => {
+              if (active && bestRes?.data) {
+                const map: Record<string, number> = {};
+                bestRes.data.forEach(r => { map[r.game_type] = r.best_score; });
+                setBestScores(map);
+              }
+              return bestRes;
+            }),
         ]);
-        if (cancelled) return;
+        if (!active) return;
+        loaded = !rankRes?.error && !todayRes?.error && !bestRes?.error;
 
         if (todayRes?.data) {
           const distinctToday = new Set(
@@ -166,71 +159,25 @@ export default function Index() {
           setGamesToday(prev => Math.max(prev, distinctToday));
         }
 
-        if (playedRes?.data) {
-          // Only count games that still exist on the site, so the chip can
-          // never read 40/38 after a game is retired.
-          const liveSlugs = new Set(ALL_GAMES.map(g => g.path.replace(/^\//, '')));
-          const distinct = new Set(
-            (playedRes.data as Array<{ game: string }>)
-              .map(r => r.game)
-              .filter(g => liveSlugs.has(g))
-          ).size;
-          setPlayedCount(prev => Math.min(TOTAL_GAMES, Math.max(prev, distinct)));
+        if (!rankRes?.error) {
+          const rankRow = Array.isArray(rankRes?.data) ? rankRes.data[0] : rankRes?.data ?? null;
+          const rank = rankRow ? Number(rankRow.rank) : 0;
+          setWorldRank(rank > 0 ? rank : null);
         }
-
-        const rankRow = Array.isArray(rankRes?.data) ? rankRes.data[0] : rankRes?.data ?? null;
-        const rank = rankRow ? Number(rankRow.rank) : 0;
-        setWorldRank(rank > 0 ? rank : null);
-      } catch { /* silent: chips keep their local values */ }
+      } catch { /* silent: keep local values until a later foreground retry */ }
+      finally { fetching = false; }
     };
     load();
-    return () => { cancelled = true; };
-  }, [playerName]);
-
-  useEffect(() => {
-    const fetchStats = async () => {
-      try {
-        const today = new Date().toISOString().slice(0, 10);
-
-        // Sitewide games-played-today, now backed by the real, anonymous-
-        // inclusive public.game_completions table instead of summing a
-        // hardcoded list of per-game (mostly auth-only) score tables.
-        // game_completions isn't in the generated Supabase types yet (added
-        // via direct SQL), so it's addressed dynamically here.
-        // Players who completed a game today from daily_completions
-        // TODO Round 3: daily_completions only counts logged-in users.
-        // Add anonymous_play_counter table for full play count including anonymous visitors.
-        const { count: dailyPlayers } = await supabase
-          .from('daily_completions')
-          .select('user_id', { count: 'exact', head: true })
-          .eq('date', today);
-        setTotalPlayers(dailyPlayers ?? 0);
-      } catch { /* silent */ }
+    const onVisible = () => { if (document.visibilityState === 'visible') load(); };
+    document.addEventListener('visibilitychange', onVisible);
+    window.addEventListener('focus', load);
+    return () => {
+      active = false;
+      controller?.abort();
+      document.removeEventListener('visibilitychange', onVisible);
+      window.removeEventListener('focus', load);
     };
-
-    fetchStats();
-    const interval = setInterval(fetchStats, 5 * 60 * 1000);
-    return () => clearInterval(interval);
-  }, []);
-
-  // Fetch user best scores
-  useEffect(() => {
-    if (!user) { setBestScores({}); return; }
-    const fetchBest = async () => {
-      try {
-        const { data } = await supabase
-          .from('user_best_scores')
-          .select('game_type, best_score')
-          .eq('user_id', user.id);
-        if (data) {
-          const map: Record<string, number> = {};
-          data.forEach(r => { map[r.game_type] = r.best_score; });
-          setBestScores(map);
-        }
-      } catch { /* silent */ }
-    };
-    fetchBest();
-  }, [user]);
+  }, [accountId, canReadPersonal, playerName]);
 
   return (
     <>
@@ -278,6 +225,16 @@ export default function Index() {
           <div className="pt-4 pb-3 md:flex md:items-end md:justify-between md:gap-8 md:pt-7 md:pb-6">
             <div className="min-w-0">
               <div className="flex h-8 items-center gap-3 md:h-11">
+                {/* Round 840: the owner's headline, the name and nothing
+                    else ("hero headline is too long", 2026-08-28). A literal
+                    rather than an import, so the copy module stays out of the
+                    chunk every page downloads; simHomeCopy part 7 holds it
+                    equal to HOME_COPY.h1 and to the template's h1. Every word
+                    of it is on screen: no hidden half for a renderer, which is
+                    hidden text however good the words. What the site is, in
+                    words, is the line under it and the About section below the
+                    tiles. simHomeCopy part 8 fails on any visually hidden text
+                    in this file or that section. */}
                 <h1 className="font-display text-2xl font-bold leading-none tracking-tight text-primary md:text-[40px]">
                   DoUKnowBall
                 </h1>
@@ -519,6 +476,18 @@ export default function Index() {
             </div>
           )}
 
+          {/* Round 840: the words, below every tile and above the footer, for
+              every visitor and outside every condition (a search result list
+              sits above it too). Its own chunk, requested the moment this page
+              first renders, so the copy stays out of the entry every page
+              downloads; the fallback is nothing and holds no height, and it is
+              the last thing on the page, so its arrival moves nothing above
+              it. simHomeCopy part 9 holds the mount unconditional and keeps
+              src/data/homeCopy.ts out of the entry's static imports. */}
+          <Suspense fallback={null}>
+            <HomeAbout />
+          </Suspense>
+
           {/* Golf went live 2026-08-05 (Guess The Golfer + Golf Higher or
               Lower), so the old Coming Soon placeholder is gone; the Golf
               category now renders through VISIBLE_CATEGORIES like the rest. */}
@@ -539,6 +508,11 @@ export default function Index() {
    loads, the placeholder holds the section's exact box, and because the
    swap happens well below what anyone is reading, nothing they see moves. */
 const LazyPolls = lazy(() => import('@/components/home/PollOfTheDay').then(m => ({ default: m.PollOfTheDay })));
+
+/* Round 840: the About copy, its own chunk. Mounted unconditionally above,
+   so React asks for it on the page's first render: no scroll, no idle, no
+   observer stands between a visitor (or a renderer) and the words. */
+const HomeAbout = lazy(() => import('@/components/home/HomeAbout').then(m => ({ default: m.HomeAbout })));
 
 function PollsWhenNear() {
   const ref = useRef<HTMLDivElement>(null);

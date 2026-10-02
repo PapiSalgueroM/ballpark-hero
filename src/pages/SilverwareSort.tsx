@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { useSilverwareSort } from '@/hooks/useSilverwareSort';
 import { BOARD_SIZE, ATTEMPTS } from '@/lib/silverwareSort';
@@ -21,12 +22,17 @@ import { cn } from '@/lib/utils';
 const SilverwareSort = () => {
   const {
     loadState, mode, switchMode, boards, boardIdx, board, slots, locked,
-    attempt, revealed, place, unplace, canSubmit, submit, results, done,
+    attempt, revealed, place, unplace, canSubmit, submit, advanceReveal, results, done,
     score, maxScore, playAgain,
   } = useSilverwareSort();
 
   const placedSet = new Set(slots.filter(v => v !== null));
   const perfects = results.filter(r => r.f).length;
+  const revealedRight = revealed?.filter(Boolean).length ?? 0;
+  const advanceButton = useRef<HTMLButtonElement>(null);
+  useEffect(() => {
+    if (revealed) advanceButton.current?.focus({ preventScroll: true });
+  }, [revealed]);
 
   return (
     <>
@@ -58,7 +64,7 @@ const SilverwareSort = () => {
             {loadState === 'ready' && !done && board && (
               <div className="flex items-center justify-center gap-4 mt-3 text-sm">
                 <span className="text-muted-foreground">Board: <span className="font-semibold text-foreground">{Math.min(boardIdx + 1, boards.length)}</span>/{boards.length}</span>
-                <span className="text-muted-foreground">Points: <span className="font-semibold text-gold">{score}</span></span>
+                <span className="text-muted-foreground">Points: <span className="font-semibold text-gold">{score + revealedRight}</span></span>
                 {!revealed && <span className="text-muted-foreground">Try <span className="font-semibold text-foreground">{attempt}</span>/{ATTEMPTS}</span>}
               </div>
             )}
@@ -73,6 +79,7 @@ const SilverwareSort = () => {
               <li>Tap a team to drop it into the highest empty rung. Tap a placed team to take it back out.</li>
               <li>Two tries per board. Rungs you get right on the first try lock in green for the second.</li>
               <li>One point per correct rung, three boards a day, same boards for everyone.</li>
+              <li>The reveal stays put while you check the counts. Tap Next board when ready, or See results after the last board.</li>
               <li>No two teams on a board are ever tied, so there is always exactly one right order.</li>
               <li>Counts follow the names as our Record Books write them, so South Melbourne and Sydney count separately.</li>
             </ul>
@@ -99,7 +106,7 @@ const SilverwareSort = () => {
 
         {loadState === 'ready' && !done && board && (
           <div className="max-w-md mx-auto">
-            <div className="bg-card border border-border rounded-2xl p-5">
+            <div className="bg-card border border-border rounded-2xl p-5" data-silverware-board>
               <p className="text-center font-semibold text-foreground mb-1">
                 {board.emoji} Most {board.title}
               </p>
@@ -148,6 +155,20 @@ const SilverwareSort = () => {
                   );
                 })}
               </div>
+
+              {revealed && (
+                <div className="space-y-3 text-center motion-safe:animate-fade-in">
+                  <p role="status" className="text-sm font-semibold text-foreground">
+                    {revealedRight} of {BOARD_SIZE} rungs right. +{revealedRight} points.
+                    {revealedRight === BOARD_SIZE && attempt === 1 && <span className="block text-xs text-gold">First try. Perfect cabinet.</span>}
+                  </p>
+                  <button
+                    ref={advanceButton}
+                    onClick={advanceReveal}
+                    className="w-full min-h-[44px] rounded-xl bg-primary px-4 py-3 font-bold text-primary-foreground hover:opacity-90"
+                  >{boardIdx + 1 === boards.length ? 'See results' : 'Next board'}</button>
+                </div>
+              )}
 
               {/* the tray */}
               {!revealed && (
@@ -217,6 +238,7 @@ const SilverwareSort = () => {
             'Submit: rungs you placed right lock green, and you get one more try at the rest',
             'One point per correct rung, three boards a day, same for everyone',
             'The reveal shows every count, so you leave knowing the real cabinet',
+            'Take your time with the reveal, then tap Next board or See results',
           ]}
           examples={[
             'A World Series board: Yankees over Cardinals over Dodgers is the easy top half, the bottom two are where runs die',

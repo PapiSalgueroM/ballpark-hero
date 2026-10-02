@@ -1,3 +1,4 @@
+import { installArcadePointers } from './arcadePointerFixture';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { act, cleanup, fireEvent, render, within } from '@testing-library/react';
 import FreeKickBoard from '@/components/free-kick/FreeKickBoard';
@@ -26,6 +27,7 @@ const nativeButton = (view: ReturnType<typeof render>, name: string) => {
   return button;
 };
 const click = (view: ReturnType<typeof render>, name: string) => fireEvent.click(nativeButton(view, name));
+let pointerFixture: ReturnType<typeof installArcadePointers>;
 let now = 0;
 let frameId = 0;
 let frames = new Map<number, FrameRequestCallback>();
@@ -46,7 +48,7 @@ const ball = (view: ReturnType<typeof render>) => pitch(view).querySelector('cir
 function finishRecorded(view: ReturnType<typeof render>) {
   let points = 0, goals = 0;
   for (let index = 0; index < 10; index++) {
-    const hold = nativeButton(view, 'Hold to strike'); fireEvent.mouseDown(hold); fireEvent.mouseUp(hold);
+    const hold = nativeButton(view, 'Hold to strike'); fireEvent.pointerDown(hold); fireEvent.pointerUp(hold);
     const outcome = vi.mocked(takeShot).mock.results.at(-1)!.value;
     points += outcome.points; goals += Number(outcome.scored); next(view, index);
   }
@@ -63,12 +65,12 @@ beforeEach(() => {
   vi.spyOn(performance, 'now').mockImplementation(() => now);
   vi.stubGlobal('requestAnimationFrame', (callback: FrameRequestCallback) => { frames.set(++frameId, callback); return frameId; });
   vi.stubGlobal('cancelAnimationFrame', (id: number) => { frames.delete(id); });
-  vi.stubGlobal('PointerEvent', MouseEvent);
+  pointerFixture = installArcadePointers();
   vi.spyOn(Math, 'random').mockReturnValue(random);
   localStorage.clear();
   vi.mocked(takeShot).mockClear(); vi.mocked(recordCompletion).mockClear();
 });
-afterEach(() => { cleanup(); consumeRestoredFinish('free-kick'); vi.restoreAllMocks(); vi.unstubAllGlobals(); vi.useRealTimers(); });
+afterEach(() => { cleanup(); pointerFixture.restore(); consumeRestoredFinish('free-kick'); vi.restoreAllMocks(); vi.unstubAllGlobals(); vi.useRealTimers(); });
 
 describe('actual Free Kick steady practice', { timeout: 30000 }, () => {
   it('shows rules and a worked example before play, closes to the entry and starts on the native Kick', () => {
@@ -183,7 +185,7 @@ describe('actual Free Kick steady practice', { timeout: 30000 }, () => {
     const writes = vi.spyOn(Storage.prototype, 'setItem'); let total = 0, goals = 0;
     for (let index = 0; index < 10; index++) {
       const hold = nativeButton(view, 'Hold to strike');
-      fireEvent.mouseDown(hold); advance(32); fireEvent.mouseUp(hold);
+      fireEvent.pointerDown(hold); advance(32); fireEvent.pointerUp(hold);
       const input = vi.mocked(takeShot).mock.calls[index][0]; expect(input.power).toBeCloseTo(.67, 8);
       const outcome = vi.mocked(takeShot).mock.results[index].value; total += outcome.points; goals += outcome.scored ? 1 : 0; next(view, index);
     }
@@ -213,7 +215,7 @@ describe('actual Free Kick steady practice', { timeout: 30000 }, () => {
     expect(view.container.querySelector('[data-arcade-mode]')).toHaveAttribute('data-arcade-mode', 'unlimited');
     expect(view.queryByRole('slider', { name: 'Power' })).toBeNull();
     for (let index = 0; index < 10; index++) {
-      const hold = view.getByRole('button', { name: 'Hold to strike' }); fireEvent.mouseDown(hold); fireEvent.mouseUp(hold); click(view, index === 9 ? 'See the run' : 'Next kick');
+      const hold = view.getByRole('button', { name: 'Hold to strike' }); fireEvent.pointerDown(hold); fireEvent.pointerUp(hold); click(view, index === 9 ? 'See the run' : 'Next kick');
     }
     expect(recordCompletion).toHaveBeenCalledTimes(1);
     expect(localStorage.getItem(key)).toBe(saved);

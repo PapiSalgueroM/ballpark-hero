@@ -1,3 +1,4 @@
+import { installArcadePointers } from './arcadePointerFixture';
 import { act, cleanup, fireEvent, render, screen } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import BuzzerBeaterBoard from '@/components/buzzer-beater/BuzzerBeaterBoard';
@@ -22,6 +23,7 @@ vi.mock('@/components/game/ShareButtons', () => ({ default: () => <div data-test
 
 const random = 0.125;
 const practiceSeed = Math.floor(random * 2147483645) + 1;
+let pointerFixture: ReturnType<typeof installArcadePointers>;
 let now = 0;
 let frameId = 0;
 let frames = new Map<number, FrameRequestCallback>();
@@ -37,16 +39,10 @@ beforeEach(() => {
   vi.spyOn(Math, 'random').mockReturnValue(random);
   vi.stubGlobal('requestAnimationFrame', (callback: FrameRequestCallback) => { frames.set(++frameId, callback); return frameId; });
   vi.stubGlobal('cancelAnimationFrame', (id: number) => { frames.delete(id); });
-  vi.stubGlobal('PointerEvent', MouseEvent);
-  Object.defineProperties(Element.prototype, {
-    setPointerCapture: { configurable: true, value: vi.fn() },
-    hasPointerCapture: { configurable: true, value: () => true },
-    releasePointerCapture: { configurable: true, value: vi.fn() },
-  });
+  pointerFixture = installArcadePointers();
 });
 afterEach(() => {
-  cleanup(); vi.restoreAllMocks(); vi.unstubAllGlobals(); vi.useRealTimers();
-  for (const name of ['setPointerCapture', 'hasPointerCapture', 'releasePointerCapture']) delete (Element.prototype as unknown as Record<string, unknown>)[name];
+  cleanup(); pointerFixture.restore(); vi.restoreAllMocks(); vi.unstubAllGlobals(); vi.useRealTimers();
 });
 
 function advance(milliseconds: number) {
@@ -106,7 +102,7 @@ function finishRecorded(view: ReturnType<typeof render>) {
   let points = 0, made = 0;
   for (let index = 0; index < 10; index++) {
     const hold = button('Hold to shoot');
-    fireEvent.mouseDown(hold); fireEvent.mouseUp(hold);
+    fireEvent.pointerDown(hold); fireEvent.pointerUp(hold);
     const outcome = actualShot(); points += outcome.points; made += Number(outcome.made);
     if (board(view).getAttribute('data-arcade-phase') === 'flying') advance(780);
     next(index);
@@ -228,7 +224,7 @@ describe('Buzzer Beater steady practice', () => {
     for (let index = 0; index < 10; index++) {
       const expected = takeShot({ x: 0, arc: 0.6, power: 0.4 }, setups[index], rng);
       const hold = button('Hold to shoot');
-      fireEvent.mouseDown(hold); fireEvent.mouseUp(hold);
+      fireEvent.pointerDown(hold); fireEvent.pointerUp(hold);
       expect(actualShot()).toEqual(expected);
       points += expected.points; made += Number(expected.made);
       advance(780); next(index);
@@ -257,7 +253,7 @@ describe('Buzzer Beater steady practice', () => {
     let points = 0, made = 0;
     for (let index = 0; index < 10; index++) {
       const hold = button('Hold to shoot');
-      fireEvent.mouseDown(hold); fireEvent.mouseUp(hold);
+      fireEvent.pointerDown(hold); fireEvent.pointerUp(hold);
       const result = actualShot(); points += result.points; made += Number(result.made);
       if (board(view).getAttribute('data-arcade-phase') === 'flying') advance(780);
       next(index);

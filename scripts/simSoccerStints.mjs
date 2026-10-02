@@ -164,8 +164,12 @@ const expectedSurplus = sqlConst(migDupesSql, 'expected_surplus');
 const migKeysSql = stripSql(read(MIG_KEYS));
 const expectedUpdates = sqlConst(migKeysSql, 'expected_updates');
 
-/* Imported inside the run, never at module scope. */
-const { TRANSFER_OVERLAY_2026: overlay } = await import('./transferOverlay2026.mjs');
+/* Imported inside the run, never at module scope. Round 795: the HAND list,
+   the 241 entries the two function maps and the Round 707 migration carry.
+   The generated window rows that follow it in TRANSFER_OVERLAY_2026 reach the
+   stint table through the Round 795 migration's own stint list, and
+   scripts/simWindow2026Integration.mjs holds that list to the files. */
+const { TRANSFER_OVERLAY_2026_HAND: overlay } = await import('./transferOverlay2026.mjs');
 if (!Array.isArray(overlay) || overlay.length < 200) refuse('scripts/transferOverlay2026.mjs did not yield the overlay list');
 
 console.log('0) the overlay, both function maps and the migration list are one list');

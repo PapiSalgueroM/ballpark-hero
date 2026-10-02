@@ -2,6 +2,7 @@ import { useState, useMemo, useCallback, useEffect, useRef } from 'react';
 import { mlbHLPlayers, MlbHLPlayer } from '@/data/mlbHLPlayers';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { higherLowerScore } from '@/lib/higherLowerScore';
+import { isHigherLowerDailyLog } from '@/lib/dailySaveShapes';
 import { useDailyPuzzle } from '@/hooks/useDailyPuzzle';
 import { dateSeed } from '@/lib/dateUtils';
 
@@ -70,6 +71,7 @@ export function useMlbHL() {
   const {
     guesses: dailyActions,
     addGuess: addDailyAction,
+    takeNewerSave: takeNewerDailySave,
     gameStatus: rawDailyStatus,
     isLoading,
     todayStr,
@@ -80,6 +82,7 @@ export function useMlbHL() {
     maxGuesses: ROUNDS,
     isWon: (g) => g.length >= ROUNDS,
     deserializeGuesses: (raw) => raw as HLAction[],
+    isValidGuesses: isHigherLowerDailyLog,
   });
 
   const dailyPairs = useMemo(() => buildPairs(dateSeed(todayStr)), [todayStr]);
@@ -153,6 +156,8 @@ export function useMlbHL() {
   const makeGuess = useCallback(
     (choice: 'left' | 'right') => {
       if (!currentPair || showingResult || gameStatus !== 'playing') return;
+      // Round 848 review: another tab already decided this round; jump to it, no verdict.
+      if (mode === 'daily' && takeNewerDailySave()) return;
       const [p1, p2] = currentPair;
       // Ties count as correct either way, the MLB pool literally has three
       // 521-HR careers (Williams/McCovey/Thomas), and the old `>=` logic
@@ -180,7 +185,7 @@ export function useMlbHL() {
         setShowingResult(false);
       }, 2000);
     },
-    [currentPair, showingResult, gameStatus, mode, addDailyAction, cancelReveal],
+    [currentPair, showingResult, gameStatus, mode, addDailyAction, takeNewerDailySave, cancelReveal],
   );
 
   const switchMode = useCallback((m: MlbHLMode) => {

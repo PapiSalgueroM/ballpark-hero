@@ -889,6 +889,12 @@ export const BASEBALL_CONTENT: GameContentMap = {
             ],
           },
           {
+            heading: "Answering your phone on the baseball calendar",
+            items: [
+              "Answer your phone. Texts from your agent, the manager, the GM, a teammate or your mom land on the beats of the baseball year: draft day, spring training, the All-Star break, the trade deadline, September, October if you get there, the offseason, an arbitration winter and the winter you hit free agency. Every text says which beat and which year it came in on, and how you answer moves your karma, morale, fanbase or bank.",
+            ],
+          },
+          {
             heading: "Making the call when your rival forces one",
             items: [
               "Some seasons your rival puts a decision on your plate instead of a story: benches clearing that you can answer or calm down, a debate show offering real money, a youth clinic his foundation wants you to co-host, an All-Star vote his club is buying ads for. Every button prints exactly what it moves, and a gamble prints its odds.",
@@ -941,6 +947,13 @@ export const BASEBALL_CONTENT: GameContentMap = {
         heading: "How your rival's choices work",
         items: [
           "Any season your rival stays out of the news carries a 45% chance of a rival choice instead, never both in one season, and you meet every choice once before one comes back. Each button moves exactly what it prints: morale, fanbase, net worth, karma or the heat of the feud. Morale goes straight into next season's numbers, at the plate or on the mound.",
+        ],
+      },
+      {
+        heading: "How the phone's calendar works",
+        items: [
+          "Texts only arrive on beats your season really had. No October texts in a year your club went home in September, arbitration only in the winters after your third, fourth and fifth seasons while your deal still has years on it, free agency only the winter your deal runs out, and draft day's text lands before you see a pitch. One text a beat, up to three a season, fewer while old ones sit unanswered, and the same text never comes twice in a career.",
+          "The season the game retires you (42, 21 seasons, or a rating that craters) sends nothing about a year you will not play: no winter ball offer, no bat and glove deal, no arbitration or free agency talk.",
         ],
       },
       {
@@ -1046,7 +1059,7 @@ export const BASEBALL_CONTENT: GameContentMap = {
 
   '/mlb-front-office': {
     intro: [
-      "Running a front office sounds fun until the payroll page loads. This is a full GM sim of the real 30 team league, every player rated off real 2025 stats.",
+      "Running a front office sounds fun until the payroll page loads. This is a full GM sim of the real 30 team league, every club carrying its real 26 man roster and every player rated off his real 2026 numbers.",
       "The problems are real: a tax line that will not move, aging veterans, scouts who lie, and 29 rivals that never stop churning.",
     ],
     headings: {
@@ -1060,7 +1073,8 @@ export const BASEBALL_CONTENT: GameContentMap = {
       {
         heading: "Inheriting a franchise's lineup and bullpen",
         items: [
-          "Choose a franchise and inherit its actual lineup, rotation and bullpen.",
+          "Choose a franchise and inherit its real 26: the lineup and bench, a five man rotation and the bullpen, as the club stood on the last day of the 2026 regular season.",
+          "The roster box shows who the sim plays: your best healthy 8 bats, 3 starters and 2 relievers. Everyone else is depth, and depth is who plays the day a starter hits the IL.",
         ],
       },
       {
@@ -1124,6 +1138,14 @@ export const BASEBALL_CONTENT: GameContentMap = {
         ],
       },
       {
+        heading: "Roster size and depth deals",
+        items: [
+          "A new franchise carries 26 and can hold 22 to 28. The 13 men the sim plays earn their rating's price, the other 13 start on depth deals at 0.7 million until those deals run out, and then they re-sign at their rating's price like anybody else. The roster box flags a cheap deal in its last year with what he will cost, so the jump never lands by surprise.",
+          "If the draft takes you past 28, you DFA down to 28 before Round 1, dead money and all, and Play waits until you have. The CPU clubs cut their own lowest rated depth men the same way.",
+          "A save started before the full rosters keeps its 13 man roster and its old limits of 9 to 16.",
+        ],
+      },
+      {
         heading: "Designating a player and the dead money",
         items: [
           "A DFA is not free. Half the man's salary stays on this season's payroll as dead money, a quarter lands on next season's if he had years left, and you cannot sign him back until the offseason.",
@@ -1178,6 +1200,7 @@ export const BASEBALL_CONTENT: GameContentMap = {
     ],
     faqs: [
       { q: "Are the contracts real?", a: "Rosters and ratings come from real data, but every salary, contract and transaction in the sim is fictional." },
+      { q: "Where do the rosters come from?", a: "MLB's own data: each club's major league roster on September 27, 2026, the last day of the regular season. The 26 are the 13 hitters and 13 pitchers who carried the most of that club's season. Hitters are rated off their 2026 OPS and pitchers off a number built from strikeouts, walks and homers, and a rating built on very few games says thin 2026 data next to it." },
       { q: "Can I go over the tax line?", a: "No. Moves that break the line do not go through. That squeeze is most of the job." },
       { q: "Why did my trade get rejected?", a: "The AI wants a premium on rating, age and position. Add one of your 2 picks, or offer someone younger." },
       { q: "Can I get fired?", a: "Yes. Ownership grades the mandate every season and tracks trust from 0 to 100. A 70 win season on a win-the-World-Series payroll costs real trust, and at zero the save ends and you take another job." },

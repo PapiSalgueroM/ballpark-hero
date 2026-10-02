@@ -40,8 +40,8 @@ async function finish(m: MountedPage): Promise<void> {
        is a hold rather than a click. Both go in one act so no timer can run
        between them. */
     await act(async () => {
-      fireEvent.mouseDown(shoot);
-      fireEvent.mouseUp(shoot);
+      fireEvent.pointerDown(shoot, { pointerId: 7, isPrimary: true, button: 0, pointerType: 'mouse' });
+      fireEvent.pointerUp(shoot, { pointerId: 7, isPrimary: true, button: 0, pointerType: 'mouse' });
     });
     const next = await waitFor(() => button(m.container, /^Next shot$|^See the run$/));
     await click(next);

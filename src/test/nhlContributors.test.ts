@@ -39,10 +39,14 @@ const fixtureLeague = (): NhlLeague => {
 
 /* Captured from the physical pre-794 engine. Only opaque minted IDs are normalized;
    every new ID must still be unique, and all player/transaction/game fields remain. */
+/* Round 851 moved these pins on purpose: the season is now booked from the
+   league's own generator (src/lib/foSchedule.ts) instead of drawing a random
+   opponent and a coin skip for every slot, so the fixtures and the draw count
+   changed (17065, 16984, 16938 calls before). */
 const ORIGINAL_REFERENCES = [
-  { seed: 117, digest: '51f4931b46c5f60136f1b154a715bfff25795522e777fb87bf51fdb07c29e3dc', rngCalls: 17065 },
-  { seed: 431, digest: '5531fced5b74a9cd05acf6b233265f7e07fcfdc06278f2f3cd803f885e763a9f', rngCalls: 16984 },
-  { seed: 907, digest: '4b71b4ddf68692a25d4b46fef49edde71557202bd526b0bd0da0867e93885f90', rngCalls: 16938 },
+  { seed: 117, digest: 'b5e307f401421b128b122b890e98b14d14390123165a5964b0bca35b2f0869af', rngCalls: 12088 },
+  { seed: 431, digest: 'fc273a8285ad7eab1cff2bdeba9084c3401d989e16551ad072fc03589af8044b', rngCalls: 12080 },
+  { seed: 907, digest: '1da7787fbd0f1e5f2f5c410beae4a26cc6e4244e3561b9963228c9a528583ec9', rngCalls: 12055 },
 ];
 function automaticCampaign(api: typeof engine, seed: number) {
   let calls = 0;

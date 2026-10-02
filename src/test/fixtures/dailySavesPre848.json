@@ -1,0 +1,103 @@
+{
+  "date": "2026-10-01",
+  "saves": [
+    {
+      "game": "afl-higher-lower",
+      "key": "afl-hl-daily-2026-10-01",
+      "bytes": "{\"v\":1,\"date\":\"2026-10-01\",\"puzzleIndex\":0,\"guesses\":[{\"t\":\"result\",\"correct\":true},{\"t\":\"result\",\"correct\":true},{\"t\":\"result\",\"correct\":true}],\"gameStatus\":\"playing\"}",
+      "restored": {
+        "round": 3,
+        "results": [
+          true,
+          true,
+          true
+        ],
+        "status": "playing",
+        "score": 45
+      }
+    },
+    {
+      "game": "nfl-higher-lower",
+      "key": "nfl-hl-daily-2026-10-01",
+      "bytes": "{\"v\":1,\"date\":\"2026-10-01\",\"puzzleIndex\":0,\"guesses\":[{\"t\":\"result\",\"correct\":true},{\"t\":\"result\",\"correct\":false},{\"t\":\"result\",\"correct\":true},{\"t\":\"result\",\"correct\":true},{\"t\":\"result\",\"correct\":true},{\"t\":\"result\",\"correct\":true},{\"t\":\"result\",\"correct\":true},{\"t\":\"result\",\"correct\":true},{\"t\":\"result\",\"correct\":false},{\"t\":\"result\",\"correct\":false}],\"gameStatus\":\"won\"}",
+      "restored": {
+        "round": 10,
+        "results": [
+          true,
+          false,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          false,
+          false
+        ],
+        "status": "complete",
+        "score": 145
+      }
+    },
+    {
+      "game": "shirt-number",
+      "key": "shirt-number-daily-2026-10-01",
+      "bytes": "{\"v\":1,\"date\":\"2026-10-01\",\"puzzleIndex\":9,\"puzzleId\":\"Lamine Yamal\",\"guesses\":[{\"guess\":20,\"correct\":false},{\"guess\":21,\"correct\":false}],\"gameStatus\":\"playing\"}",
+      "restored": {
+        "attempts": [
+          20,
+          21
+        ],
+        "status": "playing",
+        "score": 0
+      }
+    },
+    {
+      "game": "footle",
+      "key": "footle-daily-2026-10-01",
+      "bytes": "{\"v\":1,\"date\":\"2026-10-01\",\"puzzleIndex\":58,\"puzzleId\":\"Jérémy Doku\",\"guesses\":[{\"playerName\":\"Erling Haaland\",\"isCorrect\":false,\"cells\":{\"nationality\":{\"value\":\"Norway\",\"status\":\"close\"},\"club\":{\"value\":\"Manchester City\",\"status\":\"correct\"},\"goals\":{\"value\":\"12\",\"status\":\"incorrect\",\"arrow\":\"down\"},\"assists\":{\"value\":\"5\",\"status\":\"close\",\"arrow\":\"up\"},\"position\":{\"value\":\"CF\",\"status\":\"close\"},\"kitNumber\":{\"value\":\"9\",\"status\":\"unknown\"},\"age\":{\"value\":\"25\",\"status\":\"close\",\"arrow\":\"down\"},\"marketValue\":{\"value\":\"$216M\",\"status\":\"incorrect\",\"arrow\":\"down\"}}},{\"playerName\":\"Kylian Mbappé\",\"isCorrect\":false,\"cells\":{\"nationality\":{\"value\":\"France\",\"status\":\"close\"},\"club\":{\"value\":\"Real Madrid\",\"status\":\"incorrect\"},\"goals\":{\"value\":\"12\",\"status\":\"incorrect\",\"arrow\":\"down\"},\"assists\":{\"value\":\"2\",\"status\":\"incorrect\",\"arrow\":\"up\"},\"position\":{\"value\":\"CF\",\"status\":\"close\"},\"kitNumber\":{\"value\":\"9\",\"status\":\"unknown\"},\"age\":{\"value\":\"27\",\"status\":\"incorrect\",\"arrow\":\"down\"},\"marketValue\":{\"value\":\"$216M\",\"status\":\"incorrect\",\"arrow\":\"down\"}}}],\"gameStatus\":\"playing\"}",
+      "restored": {
+        "guesses": [
+          [
+            "Erling Haaland",
+            false
+          ],
+          [
+            "Kylian Mbappé",
+            false
+          ]
+        ],
+        "status": "playing"
+      }
+    },
+    {
+      "game": "ufc",
+      "key": "ufc-game-daily-2026-10-01",
+      "bytes": "{\"v\":1,\"date\":\"2026-10-01\",\"puzzleIndex\":64,\"guesses\":[{\"fighterName\":\"Jon Jones\",\"isCorrect\":false,\"cells\":{\"yearsActive\":{\"value\":\"16\",\"status\":\"incorrect\",\"arrow\":\"down\"},\"weightClass\":{\"value\":\"Heavyweight\",\"status\":\"incorrect\",\"arrow\":\"down\"},\"nationality\":{\"value\":\"USA\",\"status\":\"correct\"},\"age\":{\"value\":\"39\",\"status\":\"incorrect\",\"arrow\":\"down\"},\"wins\":{\"value\":\"28\",\"status\":\"incorrect\",\"arrow\":\"down\"},\"losses\":{\"value\":\"1\",\"status\":\"incorrect\",\"arrow\":\"up\"},\"draws\":{\"value\":\"0\",\"status\":\"correct\"},\"koTko\":{\"value\":\"11\",\"status\":\"correct\"},\"submissions\":{\"value\":\"7\",\"status\":\"incorrect\",\"arrow\":\"down\"}}},{\"fighterName\":\"Georges St-Pierre\",\"isCorrect\":false,\"cells\":{\"yearsActive\":{\"value\":\"13\",\"status\":\"close\",\"arrow\":\"down\"},\"weightClass\":{\"value\":\"Middleweight\",\"status\":\"incorrect\",\"arrow\":\"down\"},\"nationality\":{\"value\":\"Canada\",\"status\":\"close\"},\"age\":{\"value\":\"45\",\"status\":\"incorrect\",\"arrow\":\"down\"},\"wins\":{\"value\":\"26\",\"status\":\"incorrect\",\"arrow\":\"down\"},\"losses\":{\"value\":\"2\",\"status\":\"incorrect\",\"arrow\":\"up\"},\"draws\":{\"value\":\"0\",\"status\":\"correct\"},\"koTko\":{\"value\":\"8\",\"status\":\"close\",\"arrow\":\"up\"},\"submissions\":{\"value\":\"6\",\"status\":\"incorrect\",\"arrow\":\"down\"}}}],\"gameStatus\":\"playing\"}",
+      "restored": {
+        "guesses": [
+          [
+            "Jon Jones",
+            false
+          ],
+          [
+            "Georges St-Pierre",
+            false
+          ]
+        ],
+        "status": "playing"
+      }
+    },
+    {
+      "game": "nba-connections",
+      "key": "nba-connections-daily-2026-10-01",
+      "bytes": "{\"v\":1,\"date\":\"2026-10-01\",\"puzzleIndex\":1,\"puzzleId\":\"nbaconn-002\",\"guesses\":[{\"t\":\"ok\",\"theme\":\"Played for the Chicago Bulls\",\"players\":[\"Derrick Rose\",\"Joakim Noah\",\"Jimmy Butler\",\"Luol Deng\",\"Scottie Pippen\"],\"diff\":\"yellow\"},{\"t\":\"x\"}],\"gameStatus\":\"playing\"}",
+      "restored": {
+        "solved": [
+          "Played for the Chicago Bulls"
+        ],
+        "lives": 3,
+        "status": "playing"
+      }
+    }
+  ]
+}

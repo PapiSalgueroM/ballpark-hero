@@ -12,7 +12,7 @@
    choosing. Ids are all prefixed lifeB_ so they never collide with deck A.
    ========================================================================== */
 import type { CareerState, CareerEvent } from './nflMyCareer';
-import { teamLabelOf, nflEraById } from './nflMyCareer';
+import { teamLabelOf, nflEraById, POS_SALARY_MULT } from './nflMyCareer';
 
 /* Round 56 money and flag fields ride on the save object. Old saves predate
    them and some builds have not caught the engine interface up yet, so every
@@ -28,6 +28,10 @@ const L = (c: CareerState): LifeState => c as LifeState;
 
 const clamp = (v: number): number => Math.max(0, Math.min(100, v));
 const money = (x: number): number => Math.round(x * 10) / 10;
+/** Round 833: a fixed amount on a contract card (a floor, a fine, a pay
+ *  line), in the career's era money. Scale 1 in 2026, so a 2026 career reads
+ *  the same number it always did. Era read inside the call, never at load. */
+const atEra = (c: CareerState, amount: number): number => money(nflEraById(c.eraId).moneyScale * amount);
 
 const flag = (c: CareerState, k: string): number => (L(c).lifeFlags || {})[k] || 0;
 const setFlag = (c: CareerState, k: string, v: number) => { L(c).lifeFlags = { ...(L(c).lifeFlags || {}), [k]: v }; };
@@ -1351,7 +1355,7 @@ export function getNflLifeEventsB(c: CareerState, rng: () => number): CareerEven
     });
   }
 
-  if (c.salary >= 8 && c.contractYears >= 1 && flag(c, 'b_restructure') === 0) {
+  if (c.salary >= atEra(c, 8) && c.contractYears >= 1 && flag(c, 'b_restructure') === 0) {
     const cut = money(c.salary * 0.25);
     deck.push({
       id: 'lifeB_capRestructure',
@@ -1386,8 +1390,18 @@ export function getNflLifeEventsB(c: CareerState, rng: () => number): CareerEven
   }
 
   if (c.contractYears <= 0 && c.ovr >= 80 && flag(c, 'b_tag') === 0) {
-    const posMult = c.pos === 'QB' ? 1.9 : c.pos === 'WR' ? 1.15 : 0.9;
-    const tag = money(Math.max(4, (c.ovr - 64) * 1.55 * posMult));
+    /* Round 833: the tag was already in the rules in 2005, so no era gate, but
+       a 2005 throwback was tagged in 2026 money. It is scaled now, the way
+       marketSalary scales every other deal in the career (scale 1 in 2026).
+       And it reads the game's own pay by position, POS_SALARY_MULT, which
+       marketSalary and free agency use, instead of a private three bucket
+       table that tagged a kicker at 0.9 (the game pays a kicker 0.35 of the
+       scale and an edge rusher 1.45). The real tag is the average of the top
+       five salaries at the position, so a kicker's is the cheapest on the
+       board; the old table tagged an 80 rated kicker at 22.3M in 2026 and
+       7.1M in 2005, this tags him at 8.7M and 2.8M. */
+    const posMult = POS_SALARY_MULT[c.pos] ?? 1;
+    const tag = money(Math.max(4, (c.ovr - 64) * 1.55 * posMult) * nflEraById(c.eraId).moneyScale);
     deck.push({
       id: 'lifeB_franchiseTag',
       title: `Tagged at ${tag}M`,
@@ -1408,8 +1422,9 @@ export function getNflLifeEventsB(c: CareerState, rng: () => number): CareerEven
               cc.salary = money(tag * 1.25); cc.contractYears = 4; bumpMorale(cc, 10); bumpFan(cc, -6);
               return `They blinked in Week 1. Four years at ${money(cc.salary)}M, fanbase -6, and your agent has never been happier.`;
             }
-            cc.salary = tag; cc.contractYears = 1; spend(cc, 0.9); bumpMorale(cc, -8); bumpFan(cc, -10);
-            return `You blinked first. 0.9M in fines, still ${tag}M for one year, fanbase -10.`;
+            const fine = atEra(cc, 0.9);
+            cc.salary = tag; cc.contractYears = 1; spend(cc, fine); bumpMorale(cc, -8); bumpFan(cc, -10);
+            return `You blinked first. ${fine}M in fines, still ${tag}M for one year, fanbase -10.`;
           },
         },
         {
@@ -1424,8 +1439,8 @@ export function getNflLifeEventsB(c: CareerState, rng: () => number): CareerEven
   }
 
   if (yrs >= 5 && c.contractYears <= 0 && c.rings === 0 && c.age >= 27 && flag(c, 'b_ringChase') === 0) {
-    const discount = money(Math.max(1.2, c.salary * 0.6));
-    const bag = money(Math.max(2, c.salary * 1.35));
+    const discount = money(Math.max(atEra(c, 1.2), c.salary * 0.6));
+    const bag = money(Math.max(atEra(c, 2), c.salary * 1.35));
     deck.push({
       id: 'lifeB_contenderDiscount',
       title: 'One piece away, for less money',
@@ -1451,7 +1466,7 @@ export function getNflLifeEventsB(c: CareerState, rng: () => number): CareerEven
           label: 'One year prove it with the contender', effect: 'Split the difference',
           apply: (cc, r) => {
             setFlag(cc, 'b_ringChase', 3);
-            const nt = otherTeam(cc, r); cc.team = nt; cc.salary = money(Math.max(1.5, cc.salary * 0.8)); cc.contractYears = 1; cc.fanbase = 48; bumpMorale(cc, 8);
+            const nt = otherTeam(cc, r); cc.team = nt; cc.salary = money(Math.max(atEra(cc, 1.5), cc.salary * 0.8)); cc.contractYears = 1; cc.fanbase = 48; bumpMorale(cc, 8);
             return `One year, ${money(cc.salary)}M, with ${teamLabelOf(nt)}. Win and you get paid twice. Morale +8.`;
           },
         },

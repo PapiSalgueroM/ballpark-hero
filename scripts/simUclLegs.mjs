@@ -160,6 +160,8 @@ execSync(
 );
 
 const { cm } = await import(pathToFileURL(BUNDLE).href);
+/* Round 832: an era's squads load with the era, so the harness fetches all three first. */
+await cm.ensureAllEraRosters();
 const {
   startCareer, playNextEntry, uclLegsFor, uclAwayGoalsApply, uclTieOutcome, uclRoundOf16Draw,
 } = cm;

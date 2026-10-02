@@ -78,7 +78,11 @@ const SPORT_OPTIONS: SportOption[] = [
    does. So the two eager board calls were always live scans, and the choice
    below is between two live board scans and four, not between none and two. The
    decision still holds on those numbers. The cache is real, it just sits under
-   the personal rank card rather than under the board. */
+   the personal rank card rather than under the board.
+
+   Round 839: true again for one of the two. The unfiltered All Time board now
+   reads player_ranks (migration 20261001220000); Today, 7 Days, 30 Days and
+   every sport filter are still computed live, over an index range on the day. */
 type Period = 'today' | 'week' | 'month' | 'alltime';
 
 const ALL_PERIODS: Period[] = ['today', 'week', 'month', 'alltime'];
@@ -91,7 +95,8 @@ const EAGER_PERIODS: Period[] = ['today', 'alltime'];
    scores in the last 7 days. Be the first!" during the fetch and again after a
    500, which is two different lies with the same words. */
 type Board = BoardRow[] | undefined;
-type Rank = MyRank | null | undefined;
+/* 'failed' is the rank call failing, which is not the same as no points: see mapMine. */
+type Rank = MyRank | null | 'failed' | undefined;
 
 const blank = <T,>(v: T): Record<Period, T> => ({ today: v, week: v, month: v, alltime: v });
 
@@ -108,8 +113,21 @@ const mapBoard = (res: any): BoardRow[] =>
       }))
     : [];
 
-const mapMine = (res: any): MyRank | null => {
-  const row = Array.isArray(res?.data) ? res.data[0] : null;
+/* Round 839: supabase-js RESOLVES on an HTTP error, it does not throw. A 500
+   comes back as { data: null, error }, mapBoard turns that into an empty list,
+   and the catch below never runs. On 2026-10-01 the Today board was answering
+   57014 (statement timeout) on every load and this page told every visitor
+   "No scores yet today. Be the first!" on a day 293 players had scored. A
+   board response counts as loaded only when it carries no error and an array. */
+const boardFailed = (res: any): boolean => !!res?.error || !Array.isArray(res?.data);
+
+/* Round 839 review: the rank call resolves on an error too, and its card drew a
+   failed answer as "No points in the last 30 days", the same lie the board told.
+   global_rank for 30 Days measured up to 1.96 s against the 3 second anonymous
+   timeout, so this is not hypothetical. */
+const mapMine = (res: any): MyRank | null | 'failed' => {
+  if (res?.error || !Array.isArray(res?.data)) return 'failed';
+  const row = res.data[0];
   if (!row) return null;
   return {
     rank: Number(row.rank),
@@ -181,6 +199,10 @@ export default function Leaderboard() {
     setFailed(blank(false));
 
     const slugs = slugsFor(sport);
+    /* Round 839: the two eager windows are marked in flight like the lazy ones,
+       so the window effect below can also serve a retry of Today or All Time
+       without doubling this request. */
+    EAGER_PERIODS.forEach(p => inFlight.current.add(p));
     (async () => {
       try {
         const [todayBoard, allBoard, myToday, myAll] = await Promise.all([
@@ -190,6 +212,7 @@ export default function Leaderboard() {
           (supabase.rpc as any)('global_rank', { p_player: ownHandle, p_period: 'alltime', p_games: slugs }),
         ]);
         if (genRef.current !== gen) return;
+        setFailed(prev => ({ ...prev, today: boardFailed(todayBoard), alltime: boardFailed(allBoard) }));
         setRows(prev => ({ ...prev, today: mapBoard(todayBoard), alltime: mapBoard(allBoard) }));
         setMyRank(prev => ({ ...prev, today: mapMine(myToday), alltime: mapMine(myAll) }));
       } catch {
@@ -197,6 +220,8 @@ export default function Leaderboard() {
         setFailed(prev => ({ ...prev, today: true, alltime: true }));
         setRows(prev => ({ ...prev, today: [], alltime: [] }));
         setMyRank(prev => ({ ...prev, today: null, alltime: null }));
+      } finally {
+        if (genRef.current === gen) EAGER_PERIODS.forEach(p => inFlight.current.delete(p));
       }
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -215,7 +240,12 @@ export default function Leaderboard() {
      loaded, and `failed` is failed. */
   useEffect(() => {
     const period = activeTab;
-    if (EAGER_PERIODS.includes(period)) return;
+    /* Round 839: this used to return early for Today and All Time, on the
+       reasoning that the effect above owns them. It does on mount and on a
+       filter change (they are in flight, so the check below skips them), but
+       "Try again" clears one window and nothing above reruns, so a retried
+       Today board sat on its spinner for good. Nobody saw it only because the
+       failed panel could never show (see boardFailed). */
     if (rows[period] !== undefined || failed[period]) return;
     if (inFlight.current.has(period)) return;
 
@@ -229,6 +259,7 @@ export default function Leaderboard() {
           (supabase.rpc as any)('global_rank', { p_player: ownHandle, p_period: period, p_games: slugs }),
         ]);
         if (genRef.current !== gen) return;
+        setFailed(prev => ({ ...prev, [period]: boardFailed(board) }));
         setRows(prev => ({ ...prev, [period]: mapBoard(board) }));
         setMyRank(prev => ({ ...prev, [period]: mapMine(mine) }));
       } catch {
@@ -237,7 +268,10 @@ export default function Leaderboard() {
         setRows(prev => ({ ...prev, [period]: [] }));
         setMyRank(prev => ({ ...prev, [period]: null }));
       } finally {
-        inFlight.current.delete(period);
+        /* Only the current filter's request may clear the mark: an older one
+           finishing late would otherwise unmark a window the newer filter has
+           in the air and let it be fetched twice. */
+        if (genRef.current === gen) inFlight.current.delete(period);
       }
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -261,10 +295,18 @@ export default function Leaderboard() {
      was written when there were two tabs and never extended. On 7 Days it told
      4,555 of the 5,501 scoring players on this site that they had no points,
      while their all time total sat behind the next tab along. */
-  const MyRankCard = ({ mine, period }: { mine: MyRank | null; period: Period }) => (
+  const MyRankCard = ({ mine, period }: { mine: MyRank | null | 'failed'; period: Period }) => (
     <div className="mb-4 rounded-xl border border-gold/50 bg-surface-1 px-4 py-3 flex items-center gap-3">
       <Globe className="w-5 h-5 text-gold shrink-0" />
-      {mine ? (
+      {mine === 'failed' ? (
+        <>
+          <div className="flex-1 min-w-0">
+            <p className="font-semibold">Your world rank did not load this time</p>
+            <p className="text-xs text-muted-foreground">The board below is fine, it is just your own spot.</p>
+          </div>
+          <Button size="sm" variant="outline" onClick={() => retry(period)}>Try again</Button>
+        </>
+      ) : mine ? (
         <div className="flex-1 min-w-0">
           <p className="font-semibold">
             Your world rank: <span className="text-gold">#{mine.rank.toLocaleString()}</span>
@@ -279,8 +321,8 @@ export default function Leaderboard() {
           <p className="font-semibold">No points {WINDOW_WORDS[period]}</p>
           <p className="text-xs text-muted-foreground">
             {period === 'alltime'
-              ? `Finish any game and you'll appear here as ${ownShownName}.`
-              : `Play something and you'll appear here as ${ownShownName}.`}
+              ? `Earn a positive ranked score to appear here as ${ownShownName}.`
+              : `Earn a positive ranked score in this window to appear here as ${ownShownName}.`}
           </p>
         </div>
       )}
@@ -359,14 +401,14 @@ export default function Leaderboard() {
     <>
       <PageSeo
         title="World Leaderboard: Total Points | DoUKnowBall"
-        description="One global leaderboard for every game on DoUKnowBall. Top 100 for today, the last 7 days, the last 30 days and all-time, plus your own world rank. No account needed."
+        description="Compare ranked scores across sports. Top 100 today, 7 days, 30 days and all-time, plus your world rank. Guests can appear without an account."
         path="/leaderboard"
       />
       <div className="min-h-screen bg-background">
         <main id="dukb-main" className="max-w-4xl mx-auto px-4 py-8">
           <h1 className="text-3xl md:text-4xl font-display font-bold mb-2 text-center">World Leaderboard</h1>
           <p className="text-center text-muted-foreground text-sm mb-6">
-            One board, every game. Each game pays up to 100 pts a day: your best run counts, spamming doesn't.
+            Scored games share one board. Each pays up to 100 pts a day: only your best run counts.
           </p>
 
           <div className="mb-4">
@@ -454,16 +496,16 @@ export default function Leaderboard() {
         <section className="max-w-4xl mx-auto px-4 pb-16 prose-sm text-muted-foreground">
           <h2 className="text-xl font-display font-bold text-foreground mt-4 mb-3">How the world leaderboard works</h2>
           <p className="mb-3">
-            There is one board on this site and everybody is on it. Points from every game you
-            play add into the same total, so a run on <Link className="underline" to="/soccer-grid">Soccer Grid</Link> and a
+            Ranked scores from different games add into the same total, so a run on <Link className="underline" to="/soccer-grid">Soccer Grid</Link> and a
             run on <Link className="underline" to="/nhl-connect-4">NHL Connect 4</Link> count toward the same
-            standing. You do not need an account to appear: finish a game and you are on it under
-            whatever handle you are playing as.
+            standing. You do not need an account to appear: earn a positive ranked score and it
+            counts under whatever handle you are playing as. Games without a ranked score still
+            count toward your plays and streaks, but add no leaderboard points.
           </p>
 
-          <h3 className="text-base font-semibold text-foreground mt-5 mb-2">Every game is worth the same day</h3>
+          <h3 className="text-base font-semibold text-foreground mt-5 mb-2">How ranked games earn points</h3>
           <p className="mb-3">
-            Each game pays up to 100 points a day and only your best run of that day counts. That
+            Each scored game pays up to 100 points a day and only your best run of that day counts. That
             is deliberate and it decides two things at once. A thirty second game cannot be replayed
             forty times for forty scores, so the board does not reward whoever had the most idle
             afternoon. And a long career sim cannot bury a quick daily puzzle, because both top out
@@ -502,8 +544,8 @@ export default function Leaderboard() {
             <Link className="underline" to="/baseball">baseball</Link>,{' '}
             <Link className="underline" to="/hockey">hockey</Link> or{' '}
             <Link className="underline" to="/college">college</Link> sections, play the daily puzzles
-            there, then take one run at a game you have never tried. Four daily puzzles played
-            reasonably will out score one game played obsessively, every time.
+            there, then try a few different scored games. Replaying one game cannot raise its
+            contribution beyond the daily cap.
           </p>
           <p className="mb-3">
             If you want to know what the games are actually built on before you start,{' '}

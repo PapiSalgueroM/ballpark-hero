@@ -80,6 +80,34 @@ export function fitsAllowed(primary: Position, allowed: Position[], played?: Pos
   return (played ?? []).some(pos => allowed.includes(pos));
 }
 
+/* ---------------- Round 505's fit grade, shared since Round 825 ---------------- */
+
+/**
+ * How well a man fits a slot, and what it costs him. This is Club Manager's
+ * Round 505 table, moved here unchanged so Build Your XI's season reads a man
+ * in his slot by the same one instead of a copy (clubManager.ts re-exports
+ * both names and its fitGrade calls straight through).
+ *
+ * 'natural' is a position he holds (his own, or one he has learned or has a
+ * verified history at) in the slot's own list. 'family' is the shared rule
+ * above: a winger on the other flank, a full back at wing back, a CM at CDM.
+ * 'wrong' is anything else outfield. 'keeper' is the goalkeeper boundary
+ * crossed either way, checked first so no widening can reach around it.
+ */
+export type FitGrade = 'natural' | 'family' | 'wrong' | 'keeper';
+
+/** Rating points taken off THAT MAN ONLY. A fully natural eleven pays nothing. */
+export const FIT_PENALTY: Record<FitGrade, number> = { natural: 0, family: 2, wrong: 6, keeper: 14 };
+
+/** `held` is every position he can call his own, his primary first. */
+export function gradeFit(held: Position[], allowed: Position[]): FitGrade {
+  const slotIsGoal = allowed.includes('GK');
+  if (slotIsGoal !== (held[0] === 'GK')) return 'keeper';
+  if (held.some(pos => allowed.includes(pos))) return 'natural';
+  if (held.some(pos => fitsAllowed(pos, allowed))) return 'family';
+  return 'wrong';
+}
+
 /**
  * "CDM / CM / CAM" style summary of what a slot accepts. Computed from the
  * EFFECTIVE accepted set (any position whose family reaches one of the slot's

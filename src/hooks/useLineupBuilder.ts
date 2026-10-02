@@ -3,7 +3,7 @@ import { localEvaluateSoccerXI } from '@/lib/localLineupEval';
 import { getRandomTeamAssignments, clubs as ALL_CLUBS, nations as ALL_NATIONS } from '@/data/lineupTeams';
 import type { Formation, FilledSlot, GamePhase, AIVerdict, PickMeta, TeamAssignment } from '@/types/lineupBuilder';
 import { FORMATIONS } from '@/types/lineupBuilder';
-import { checkLineupPick } from '@/lib/positionFit';
+import { checkLineupPick, gradeFit, SLOT_ALLOWED_BY_ROLE } from '@/lib/positionFit';
 import type { Position } from '@/types/game';
 import { normalizePosition } from '@/lib/squadDeal';
 
@@ -28,8 +28,17 @@ const SUPABASE_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFz
    same-named player in a different role must earn nothing from it. The
    goalkeeper boundary needs no guard here because fitsAllowed puts it above
    both widening paths. */
+/* Round 825 review: since this round the read also runs for a pick the plain
+   rule takes as next door, which is a common pick (a right back at left back),
+   and it used to have no time limit. A slow table could hold such a pick
+   with nothing on screen. Past this many milliseconds the read gives up and
+   the plain rule answers, exactly as a failed read always has. */
+export const HISTORY_WAIT_MS = 4000;
+
 async function verifiedSecondaries(name: string, primary: Position | null): Promise<Position[]> {
   if (!name || !primary) return [];
+  const stop = new AbortController();
+  const timer = setTimeout(() => stop.abort(), HISTORY_WAIT_MS);
   try {
     /* Read with a plain fetch, the way this file already reaches the edge
        functions below. The typed client refuses the table outright:
@@ -39,7 +48,7 @@ async function verifiedSecondaries(name: string, primary: Position | null): Prom
        this round's business. */
     const res = await fetch(
       `${SUPABASE_REST}/player_verified_positions?select=primary_position,secondary_positions&player_name=ilike.${encodeURIComponent(name)}&limit=1`,
-      { headers: { apikey: SUPABASE_ANON, Authorization: `Bearer ${SUPABASE_ANON}` } },
+      { headers: { apikey: SUPABASE_ANON, Authorization: `Bearer ${SUPABASE_ANON}` }, signal: stop.signal },
     );
     if (!res.ok) return [];
     const rows = (await res.json()) as { primary_position: string | null; secondary_positions: unknown }[];
@@ -52,6 +61,8 @@ async function verifiedSecondaries(name: string, primary: Position | null): Prom
     return raw.map((x) => String(x).trim()).filter(Boolean) as Position[];
   } catch {
     return [];
+  } finally {
+    clearTimeout(timer);
   }
 }
 import { useGameCompletion } from '@/hooks/useGameCompletion';
@@ -153,10 +164,24 @@ export function useLineupBuilder() {
       );
       /* The history is only looked up when the plain rule is about to REFUSE,
          so an ordinary pick still costs no request at all and the Round 442
-         property holds. */
+         property holds.
+         Round 825: and when the plain rule takes him only as next door to the
+         slot, because role fit charges next door and his history may cover
+         the slot outright. Still one read of the curated table, no AI call,
+         and a pick in his own position still costs no request. */
+      const primary = pickMeta?.rawPosition ? normalizePosition(pickMeta.rawPosition.trim()) : null;
+      let played: Position[] = [];
+      if (positionCheck.ok && primary && gradeFit([primary], SLOT_ALLOWED_BY_ROLE[position.role]) === 'family') {
+        /* Busy from here, not from the validator call below: this pick is
+           going through either way, and without the flag the spinner stayed
+           off and the search box stayed live while the read ran, so a second
+           pick could be sent into the same slot (review, Round 825). */
+        setIsValidating(true);
+        setValidationError(null);
+        played = await verifiedSecondaries(playerName.trim(), primary);
+      }
       if (!positionCheck.ok) {
-        const primary = pickMeta?.rawPosition ? normalizePosition(pickMeta.rawPosition.trim()) : null;
-        const played = await verifiedSecondaries(playerName.trim(), primary);
+        played = await verifiedSecondaries(playerName.trim(), primary);
         if (played.length > 0) {
           positionCheck = checkLineupPick(
             playerName.trim(),
@@ -251,7 +276,7 @@ export function useLineupBuilder() {
         /* Carried on the slot, not in a name-keyed side map: the line above can
            rename this pick to the validator's fullName and a name lookup would
            then miss him. */
-        ...(pickMeta ? { pick: pickMeta } : {}),
+        ...(pickMeta ? { pick: played.length > 0 ? { ...pickMeta, played } : pickMeta } : {}),
       };
 
       setFilledSlots((prev) => {

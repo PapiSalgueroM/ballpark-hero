@@ -460,6 +460,7 @@ function career(
     mount: () => mountEl(Board(), `/${id}`, c => textOf(c).includes(name)),
     async finish(api) {
       await click(button(api.container, /^Hang them up now$/));
+      await click(button(document.body, /^Retire this player$/));
       await settle();
     },
     finished,
@@ -652,6 +653,7 @@ const CASES: Case[] = [
       for (let i = 0; i < 30 && !api.r.done; i += 1) {
         await run(() => api.r.answer(api.r.current.isTrue));
         await advance(2300);
+        await run(() => api.r.advanceReveal());
       }
     }),
     finished: api => api.r.mode === 'daily' && api.r.done,
@@ -664,6 +666,7 @@ const CASES: Case[] = [
       for (let i = 0; i < 30 && !api.r.done; i += 1) {
         await run(() => api.r.answer(api.r.current.correctIndex));
         await advance(2300);
+        await run(() => api.r.advanceReveal());
       }
     }),
     finished: api => api.r.mode === 'daily' && api.r.done,
@@ -679,6 +682,7 @@ const CASES: Case[] = [
         for (let t = 0; t < 5; t += 1) await run(() => api.r.place(t));
         await run(() => api.r.submit());
         await advance(3500);
+        await run(() => api.r.advanceReveal());
       }
     }),
     finished: api => api.r.mode === 'daily' && api.r.done,
@@ -878,8 +882,8 @@ const hlSaved = ([id, useHook]: [string, () => unknown]): Check => ({
   },
 });
 
-/* Champ or Not, Who'd They Beat and Silverware Sort show each result for a
-   couple of seconds before the board moves on. The daily is saved at the
+/* Champ or Not, Who'd They Beat and Silverware wait for the player's Next
+   action. The daily is saved at the
    final pick, so it is recorded then; a reload or a trip to Unlimited inside
    the final reveal must neither lose that record nor add a second one, and
    the late reveal must not land the daily's answers on the Unlimited board. */
@@ -894,6 +898,8 @@ interface Race {
   /** The tap that decides the round and saves it. */
   pick: (api: Api) => Promise<void>;
   revealMs: number;
+  /** Manual reveals advance through the actual player action after the wait. */
+  advance?: (api: Api) => Promise<void>;
   /** Where the daily of `day` is saved. */
   saveKey: (day: string) => string;
 }
@@ -903,6 +909,7 @@ const RACES: Race[] = [
     ready: r => r.loadState === 'ready' && r.rounds.length > 0,
     total: r => r.rounds.length, shown: r => r.answers.length,
     pick: api => run(() => api.r.answer(api.r.current.isTrue)),
+    advance: api => run(() => api.r.advanceReveal()),
     saveKey: day => `champ-or-not-daily-${day}`,
   },
   {
@@ -910,6 +917,7 @@ const RACES: Race[] = [
     ready: r => r.loadState === 'ready' && r.questions.length > 0,
     total: r => r.questions.length, shown: r => r.answers.length,
     pick: api => run(() => api.r.answer(api.r.current.correctIndex)),
+    advance: api => run(() => api.r.advanceReveal()),
     saveKey: day => `whod-they-beat-daily-${day}`,
   },
   {
@@ -921,6 +929,7 @@ const RACES: Race[] = [
       for (let t = 0; t < 5; t += 1) await run(() => api.r.place(t));
     },
     pick: api => run(() => api.r.submit()),
+    advance: api => run(() => api.r.advanceReveal()),
     saveKey: day => `silverware-sort-daily-${day}`,
   },
 ];
@@ -928,12 +937,16 @@ async function fullPick(race: Race, api: Api): Promise<void> {
   if (race.setup) await race.setup(api);
   await race.pick(api);
 }
+async function advanceBoard(race: Race, api: Api): Promise<void> {
+  await advance(race.revealMs + 100);
+  if (race.advance) await race.advance(api);
+}
 async function toFinalPick(race: Race): Promise<Api> {
   const api = await mountHook(race.useHook, race.ready);
   vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout'] });
   for (let i = 0; i < 20 && race.shown(api.r) < race.total(api.r) - 1; i += 1) {
     await fullPick(race, api);
-    await advance(race.revealMs + 100);
+    await advanceBoard(race, api);
   }
   await fullPick(race, api);
   expect(race.shown(api.r), 'the final result is still in its reveal').toBe(race.total(api.r) - 1);
@@ -1004,20 +1017,20 @@ const raceMidnight = (race: Race, when: Midnight): Check => ({
       const leave = when === 'tap' ? 1 : 2;
       for (let i = 0; i < 20 && race.shown(api.r) < race.total(api.r) - leave; i += 1) {
         await fullPick(race, api);
-        await advance(race.revealMs + 100);
+        await advanceBoard(race, api);
       }
       expect(getTodayET(), 'still the night the daily was dealt').toBe('2026-09-19');
       if (when === 'render') {
         await fullPick(race, api);
         vi.setSystemTime(AFTER_MIDNIGHT_ET);
-        await advance(race.revealMs + 100);
+        await advanceBoard(race, api);
         await fullPick(race, api);
       } else {
         if (race.setup) await race.setup(api);
         vi.setSystemTime(AFTER_MIDNIGHT_ET);
         await race.pick(api);
       }
-      await advance(race.revealMs + 100);
+      await advanceBoard(race, api);
       expect(api.r.done, 'the daily finishes after midnight').toBe(true);
       expect(paths(), 'a final pick after midnight records the daily once').toEqual([`/${race.id}`]);
       expect(localStorage.getItem(race.saveKey('2026-09-20')), 'after midnight, nothing is saved under the next day').toBeNull();

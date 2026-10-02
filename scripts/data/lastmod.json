@@ -1,16 +1,16 @@
 {
   "__version": 3,
   "/": {
-    "hash": "a4fa4e7733ac9013",
-    "date": "2026-10-01"
+    "hash": "49724f1fefbb859f",
+    "date": "2026-10-02"
   },
   "/about": {
     "hash": "74a425d771c0b5e1",
     "date": "2026-10-01"
   },
   "/accessibility": {
-    "hash": "be624390c0098085",
-    "date": "2026-08-27"
+    "hash": "b723b35037fcd796",
+    "date": "2026-10-02"
   },
   "/afl-higher-lower": {
     "hash": "ae510d9d49dca5f1",
@@ -45,11 +45,11 @@
     "date": "2026-09-30"
   },
   "/build-your-xi": {
-    "hash": "6ddcf94408b7e0b8",
-    "date": "2026-10-01"
+    "hash": "644a282438f5172e",
+    "date": "2026-10-02"
   },
   "/buzzer-beater": {
-    "hash": "7ce8c5beb31cc634",
+    "hash": "391f8d0e350d3f66",
     "date": "2026-10-01"
   },
   "/career": {
@@ -57,12 +57,12 @@
     "date": "2026-09-30"
   },
   "/career-ladder": {
-    "hash": "3c49227284b1d1a2",
-    "date": "2026-10-01"
+    "hash": "9bf49f5127c860dd",
+    "date": "2026-10-02"
   },
   "/cbb-dynasty": {
-    "hash": "55acf0673082d064",
-    "date": "2026-09-30"
+    "hash": "dba03127bd7cb8ef",
+    "date": "2026-10-02"
   },
   "/cbb-grid": {
     "hash": "2312edafa6482e43",
@@ -89,8 +89,8 @@
     "date": "2026-09-19"
   },
   "/club-manager": {
-    "hash": "bdd55097f6748d2e",
-    "date": "2026-10-01"
+    "hash": "6605c0e9f6894132",
+    "date": "2026-10-02"
   },
   "/clue-auction": {
     "hash": "eb595f5de269d4aa",
@@ -133,8 +133,8 @@
     "date": "2026-09-30"
   },
   "/dart-draft": {
-    "hash": "6c7d97daf8860146",
-    "date": "2026-10-01"
+    "hash": "10454e7332a324a9",
+    "date": "2026-10-02"
   },
   "/deadline-day": {
     "hash": "9b435186d0297d66",
@@ -193,8 +193,8 @@
     "date": "2026-10-01"
   },
   "/front-office": {
-    "hash": "d9fa158a8b694df7",
-    "date": "2026-10-01"
+    "hash": "7e1d98fe873a8949",
+    "date": "2026-10-02"
   },
   "/gauntlet-draft": {
     "hash": "36beece8c33d7f2d",
@@ -269,8 +269,8 @@
     "date": "2026-09-19"
   },
   "/leaderboard": {
-    "hash": "69ac03793458756a",
-    "date": "2026-09-12"
+    "hash": "78227029f717b3b4",
+    "date": "2026-10-02"
   },
   "/list-quiz": {
     "hash": "b7b5bee9032621cc",
@@ -305,7 +305,7 @@
     "date": "2026-09-30"
   },
   "/mlb-front-office": {
-    "hash": "ff3910fe8e1a2d0c",
+    "hash": "2361a5c36b7c204e",
     "date": "2026-10-01"
   },
   "/mlb-gauntlet-draft": {
@@ -325,7 +325,7 @@
     "date": "2026-09-30"
   },
   "/mlb-my-career": {
-    "hash": "47c8e4cab729629f",
+    "hash": "36d1c6de46af01bc",
     "date": "2026-10-01"
   },
   "/mlb-postseason-format-history": {
@@ -357,8 +357,8 @@
     "date": "2026-09-30"
   },
   "/nba-front-office": {
-    "hash": "f84afe1dcba2eeaf",
-    "date": "2026-10-01"
+    "hash": "13c6d818a7a2e1a4",
+    "date": "2026-10-02"
   },
   "/nba-gauntlet-draft": {
     "hash": "9de7039ef89d4830",
@@ -377,7 +377,7 @@
     "date": "2026-09-30"
   },
   "/nba-my-career": {
-    "hash": "963e0f7e519ac316",
+    "hash": "47abffbd460c1556",
     "date": "2026-10-01"
   },
   "/nba-playoff-format-history": {
@@ -429,15 +429,15 @@
     "date": "2026-09-30"
   },
   "/nhl-front-office": {
-    "hash": "4128f8a1c665fb64",
-    "date": "2026-10-01"
+    "hash": "bd5ce367c0787547",
+    "date": "2026-10-02"
   },
   "/nhl-gauntlet-draft": {
     "hash": "821c9a6630b34184",
     "date": "2026-10-01"
   },
   "/nhl-my-career": {
-    "hash": "879134eb6ccda7d9",
+    "hash": "cdb5dda331095416",
     "date": "2026-10-01"
   },
   "/nhl-playoff-format-history": {
@@ -589,12 +589,12 @@
     "date": "2026-09-19"
   },
   "/soccer": {
-    "hash": "73d7ba8c126ed2f8",
-    "date": "2026-10-01"
+    "hash": "baa15566bfbc3370",
+    "date": "2026-10-02"
   },
   "/soccer-career": {
-    "hash": "3936902c6b4026e8",
-    "date": "2026-10-01"
+    "hash": "5e389f42e5faf63b",
+    "date": "2026-10-02"
   },
   "/soccer-conquest": {
     "hash": "c229fdbbf5d7eba4",
@@ -653,12 +653,12 @@
     "date": "2026-09-19"
   },
   "/whats-new": {
-    "hash": "974423a47a0e4b71",
-    "date": "2026-10-01"
+    "hash": "d5c95d50ac570647",
+    "date": "2026-10-02"
   },
   "/who-am-i": {
-    "hash": "a63cb97ee4158083",
-    "date": "2026-10-01"
+    "hash": "d0ec820f2cd7c871",
+    "date": "2026-10-02"
   },
   "/whod-they-beat": {
     "hash": "bcf6176ad45a06be",

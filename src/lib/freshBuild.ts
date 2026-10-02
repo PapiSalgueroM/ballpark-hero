@@ -112,6 +112,23 @@ export function reloadOnceForStaleChunk(): boolean {
   return true;
 }
 
+/* Round 832 review: a "Try again" after a lazy chunk failed has to reload.
+   Chromium keeps a dynamic import that failed as failed for the life of the
+   page (the module map holds the failure), so calling import() again rejects
+   at once without asking the network, and a retry button that only does that
+   is dead in Chrome however good the connection gets. A new page fetches the
+   chunk afresh. Only when the player asks (never on its own, so it cannot
+   loop), never when the browser says it is offline (a reload then lands on the
+   browser's own offline page instead of our notice), never under the
+   prerenderer. True when it reloaded. */
+export function reloadToRetryChunk(): boolean {
+  if (typeof window === 'undefined') return false;
+  if ((window as unknown as { __DUKB_PRERENDER__?: boolean }).__DUKB_PRERENDER__) return false;
+  if (typeof navigator !== 'undefined' && navigator.onLine === false) return false;
+  window.location.reload();
+  return true;
+}
+
 function reloadOnStaleChunk(): void {
   window.addEventListener('vite:preloadError', (event: Event) => {
     if (reloadOnceForStaleChunk()) event.preventDefault();

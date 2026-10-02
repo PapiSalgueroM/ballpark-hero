@@ -6,7 +6,7 @@ import { BallIqBoard } from '@/components/ball-iq/BallIqBoard';
 
 export default function BallIq() {
   return (
-    <>
+    <main id="dukb-main" tabIndex={-1}>
       <PageSeo
         title="Ball Knowledge IQ Test - Do You Know Ball? | DoUKnowBall"
         description="Twelve questions, getting harder as you go. Find out your Ball Knowledge IQ and settle it once and for all: do you actually know ball?"
@@ -33,6 +33,6 @@ export default function BallIq() {
           'Below 70, Does not know ball',
         ]}
       />
-    </>
+    </main>
   );
 }

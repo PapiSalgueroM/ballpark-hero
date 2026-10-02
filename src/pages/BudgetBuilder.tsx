@@ -6,7 +6,7 @@ import { BudgetBuilderBoard } from '@/components/budget-builder/BudgetBuilderBoa
 
 export default function BudgetBuilder() {
   return (
-    <>
+    <main id="dukb-main" tabIndex={-1}>
       <PageSeo
         title="$1 Billion Budget Builder - Build the Best XI | DoUKnowBall"
         description="You have $1 billion and real market values. Pick a formation, sign eleven players, and see what rating your money actually bought."
@@ -33,6 +33,6 @@ export default function BudgetBuilder() {
           'Try 5-3-2, defenders are cheaper than wingers, and it shows',
         ]}
       />
-    </>
+    </main>
   );
 }

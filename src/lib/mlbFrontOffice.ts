@@ -1,18 +1,24 @@
-import { MLB_FO_ROSTERS } from '@/data/mlbFoPlayers';
+/* Round 829: every club's real 26, generated in the repo from MLB's own Stats
+   API record (scripts/genMlbFrontOfficeRoster.mjs). The 13 man file this used
+   to read stays for the MLB gauntlet draft, which has its own measured bands. */
+import { MLB_FO_ROSTERS_2026 } from '@/data/mlbFoRosters2026';
 /* Round 211: no two men in one league share a name. */
 import { leagueNames, uniqueName } from './foNames';
 /* Round 531: the tax line comes from one sourced file, never a bare literal here. */
 import { MLB_CBT_THRESHOLD_2026 } from './leagueCaps';
 import { makeIdMinter, ensureLeagueEntityIds } from './entityIds';
+/* Round 851: a booked, balanced schedule, shared with the NBA and the NHL. */
+import { type FoSchedule, buildFoSchedule, foPlayRound } from './foSchedule';
 /* Round 631: dead money and the no way back rule, shared by the four GM sims. */
 import { type CutLedger, cutPlayer, payrollWithDeadCap, rollDeadCap, rosterFullRefusal, signRefusal, tradeRefusal } from './frontOfficeCuts';
 
 /**
  * MLB Front Office engine (2026-08-05). Baseball sibling of the NFL and NBA
- * GM engines, built over real 2026 40-man rosters pulled from MLB's own
- * public StatsAPI with overalls derived from real 2025 stats (see
- * src/data/mlbFoPlayers.ts for the full derivation). Every salary, contract
- * and transaction the engine produces is explicitly fictional.
+ * GM engines. Since Round 829 a new league deals every club its real 26 from
+ * MLB's own public StatsAPI, rated off real 2026 stats (see
+ * src/data/mlbFoRosters2026.ts for the full derivation); a save from before
+ * keeps the 13 man rosters and the 9 to 16 limits it was built on. Every
+ * salary, contract and transaction the engine produces is explicitly fictional.
  *
  * Season model: 27 rounds of 6 games (162-game-shaped). Playoffs follow the
  * real MLB format per league: three division winners seeded 1-3 plus three
@@ -56,6 +62,8 @@ export interface MlbGmPlayer {
   years: number;
   out: number; // rounds remaining on the injured list
   pot: number;
+  /** Round 829: his opening rating rests on thin 2026 numbers. Optional, so older saves read as not. */
+  partial?: boolean;
 }
 
 /* Round 631: CutLedger is the optional deadCap and releasedThisSeason pair,
@@ -66,6 +74,9 @@ export interface MlbGmTeam extends CutLedger {
   wins: number;
   losses: number;
   picks: number[];
+  /** Round 829: 26 on a club dealt its full roster. Absent on a save from
+      before, which keeps the 13 man rules (mlbRosterMin and mlbRosterMax). */
+  depth?: number;
 }
 
 export interface MlbLeague {
@@ -75,6 +86,10 @@ export interface MlbLeague {
   freeAgents: MlbGmPlayer[];
   round: number; // 1..MLB_ROUNDS
   champions: { season: number; team: string }[];
+  /** Round 851: this season's fixtures, "HOME-AWAY" per round (foSchedule.ts).
+      Optional: a league saved before the round finishes that season the old
+      way and is booked at its next summer. */
+  schedule?: FoSchedule;
 }
 
 /* Round 568: this counter used to live at module scope, which restarts on
@@ -99,23 +114,41 @@ export function mlbSalaryFor(ovr: number): number {
   return Math.round(Math.max(0.7, (ovr - 70) * 0.84) * 10) / 10;
 }
 
+/* Round 829: the full rosters. A club dealt its real 26 carries this depth
+   mark and the 22 to 28 limits; a save from before carries no mark and keeps
+   9 to 16. 28 is the real September limit, so a signing or a draftee does
+   not force a DFA first. */
+export const MLB_DEPTH = 26;
+export const MLB_LEGACY_ROSTER_MIN = 9;
+export const MLB_LEGACY_ROSTER_MAX = 16;
+/* Round 829: depth deals. Priced at the game's own scale, 26 real men put six
+   clubs over the tax line on opening day (the Dodgers at $300.3M against
+   $244M), so a club's 13 the sim reads sign at the scale and the other 13
+   start on depth deals at the scale's floor. When a deal runs out he re-signs
+   at his rating's price like anybody else. Measured: every opening payroll
+   then sits between $120M and $230M. */
+export const MLB_DEPTH_SALARY = 0.7;
+
 export function initMlbLeague(rng: () => number = Math.random): MlbLeague {
   const teams: Record<string, MlbGmTeam> = {};
-  for (const [abbr, seeds] of Object.entries(MLB_FO_ROSTERS)) {
-    const players: MlbGmPlayer[] = seeds.map(s => ({
+  for (const [abbr, seeds] of Object.entries(MLB_FO_ROSTERS_2026)) {
+    const units = mlbStrengthUnits({ players: seeds.map((s, i) => ({ i, pos: s.pos, ovr: s.ovr, out: 0 })) });
+    const core = new Set([...units.bats, ...units.rot, ...units.pen].map(u => u.i));
+    const players: MlbGmPlayer[] = seeds.map((s, i) => ({
       id: fid(),
       name: s.name,
       pos: s.pos,
       age: s.age,
       ovr: s.ovr,
-      salary: mlbSalaryFor(s.ovr),
+      salary: core.has(i) ? mlbSalaryFor(s.ovr) : MLB_DEPTH_SALARY,
       years: s.age <= 25 ? 4 : s.age <= 30 ? 3 : 2,
       out: 0,
       pot: s.age <= 24 ? Math.min(99, s.ovr + 3 + Math.floor(rng() * 6)) : s.ovr,
+      ...(s.partial ? { partial: true } : {}),
     }));
-    teams[abbr] = { abbr, players, wins: 0, losses: 0, picks: [1, 2] };
+    teams[abbr] = { abbr, players, wins: 0, losses: 0, picks: [1, 2], depth: MLB_DEPTH };
   }
-  return {
+  const league: MlbLeague = {
     season: 2026,
     cap: MLB_TAX_BASE,
     teams,
@@ -124,6 +157,13 @@ export function initMlbLeague(rng: () => number = Math.random): MlbLeague {
     round: 1,
     champions: [],
   };
+  league.schedule = mlbBookSeason(league, rng);
+  return league;
+}
+
+/** Round 851: every club plays MLB_ROUNDS x MLB_GAMES_PER_ROUND games, half at home. */
+export function mlbBookSeason(league: MlbLeague, rng: () => number): FoSchedule {
+  return buildFoSchedule(Object.keys(league.teams), MLB_ROUNDS, MLB_GAMES_PER_ROUND, rng);
 }
 
 /* Round 211: widened from 10x10 to 28x28. A hundred possible people is
@@ -173,12 +213,27 @@ export function mlbCapRoom(t: MlbGmTeam, cap: number): number {
   return Math.round((cap - mlbCapUsed(t)) * 10) / 10;
 }
 
-/** Strength: lineup 55%, rotation 33%, bullpen 12%; IL players excluded. */
-export function mlbStrength(t: MlbGmTeam): number {
+/** Round 829: the men the strength reads, best healthy first: 8 bats, 3
+    starters, 2 relievers. Lifted out of mlbStrength unchanged so the roster
+    screen and the opening payroll read the same men the sim does. A bench
+    man counts only when he is better than a starter or a starter is hurt. */
+export function mlbStrengthUnits<T extends { pos: string; ovr: number; out: number }>(t: { players: T[] }): { bats: T[]; rot: T[]; pen: T[] } {
   const healthy = t.players.filter(p => p.out === 0);
   const bats = healthy.filter(p => !isPitcher(p)).sort((a, b) => b.ovr - a.ovr).slice(0, 8);
   const rot = healthy.filter(p => p.pos === 'SP').sort((a, b) => b.ovr - a.ovr).slice(0, 3);
   const pen = healthy.filter(p => p.pos === 'RP' || p.pos === 'CL').sort((a, b) => b.ovr - a.ovr).slice(0, 2);
+  return { bats, rot, pen };
+}
+
+/** Round 829: the ids of the men the sim plays right now. */
+export function mlbSimReads(t: { players: MlbGmPlayer[] }): string[] {
+  const u = mlbStrengthUnits(t);
+  return [...u.bats, ...u.rot, ...u.pen].map(p => p.id);
+}
+
+/** Strength: lineup 55%, rotation 33%, bullpen 12%; IL players excluded. */
+export function mlbStrength(t: MlbGmTeam): number {
+  const { bats, rot, pen } = mlbStrengthUnits(t);
   const avg = (xs: MlbGmPlayer[], fallback: number) =>
     xs.length ? xs.reduce((s, p) => s + p.ovr, 0) / xs.length : fallback;
   return avg(bats, 62) * 0.55 + avg(rot, 62) * 0.33 + avg(pen, 62) * 0.12;
@@ -196,31 +251,66 @@ export interface MlbRoundReport {
   notes: string[];
 }
 
-export function simMlbRound(league: MlbLeague, myTeam: string, rng: () => number): MlbRoundReport {
-  const abbrs = Object.keys(league.teams);
-  const notes: string[] = [];
-  let myW = 0, myL = 0;
+/* Round 829: a number in [0, 1) from a round's draw, a man's name and a salt,
+   so his injury roll is his own. murmur3's finaliser on an FNV style mix.
+   The name and not the id: an id carries a random per page load stamp
+   (entityIds.ts), so the same seed would roll different injuries on every
+   load, and a name is already one to a man in a league (Round 211). */
+function unitHash(seed: number, key: string, salt: number): number {
+  let h = (seed ^ Math.imul(salt, 0x9e3779b1)) >>> 0;
+  for (let i = 0; i < key.length; i += 1) h = Math.imul(h ^ key.charCodeAt(i), 0x01000193) >>> 0;
+  h ^= h >>> 16; h = Math.imul(h, 0x85ebca6b) >>> 0;
+  h ^= h >>> 13; h = Math.imul(h, 0xc2b2ae35) >>> 0;
+  h ^= h >>> 16;
+  return (h >>> 0) / 4294967296;
+}
+
+/* Round 829: the injury pass for a league dealt full rosters. The old pass
+   drew from the shared stream once per man, so thirteen extra bench men
+   shifted every roll after them and every game after that: adding a man
+   who never plays changed results. Here the round takes one draw, and each
+   man's roll comes from that draw and his own name. Same odds as before
+   (2.5 percent a round, out 1 to 4 rounds). Saves from before this round
+   keep the old pass, so they play exactly as they did. */
+function rollDepthInjuries(league: MlbLeague, myTeam: string, rng: () => number, notes: string[]): void {
+  const roundSeed = Math.floor(rng() * 4294967296);
   for (const t of Object.values(league.teams)) {
     for (const p of t.players) {
-      if (p.out > 0) p.out -= 1;
-      else if (rng() < 0.025) {
-        p.out = 1 + Math.floor(rng() * 4);
+      if (p.out > 0) { p.out -= 1; continue; }
+      if (unitHash(roundSeed, p.name, 1) < 0.025) {
+        p.out = 1 + Math.floor(unitHash(roundSeed, p.name, 2) * 4);
         if (t.abbr === myTeam) notes.push(`🚑 ${p.name} hits the IL for ${p.out} round${p.out === 1 ? '' : 's'}.`);
       }
     }
   }
-  for (const abbr of abbrs) {
-    const me = league.teams[abbr];
-    for (let g = 0; g < MLB_GAMES_PER_ROUND; g++) {
-      let opp = abbrs[Math.floor(rng() * abbrs.length)];
-      if (opp === abbr) opp = abbrs[(abbrs.indexOf(abbr) + 1) % abbrs.length];
-      const them = league.teams[opp];
-      if (rng() < 0.5) continue;
-      const p = mlbWinProb(me, them);
-      if (rng() < p) { me.wins += 1; them.losses += 1; if (abbr === myTeam) myW += 1; if (opp === myTeam) myL += 1; }
-      else { me.losses += 1; them.wins += 1; if (abbr === myTeam) myL += 1; if (opp === myTeam) myW += 1; }
+}
+
+export function simMlbRound(league: MlbLeague, myTeam: string, rng: () => number): MlbRoundReport {
+  const abbrs = Object.keys(league.teams);
+  const notes: string[] = [];
+  let myW = 0, myL = 0;
+  const deep = Object.values(league.teams).some(t => !!t.depth);
+  if (deep) rollDepthInjuries(league, myTeam, rng, notes);
+  else {
+    for (const t of Object.values(league.teams)) {
+      for (const p of t.players) {
+        if (p.out > 0) p.out -= 1;
+        else if (rng() < 0.025) {
+          p.out = 1 + Math.floor(rng() * 4);
+          if (t.abbr === myTeam) notes.push(`🚑 ${p.name} hits the IL for ${p.out} round${p.out === 1 ? '' : 's'}.`);
+        }
+      }
     }
   }
+  /* Round 851: the round's booked games (foSchedule.ts); a league saved mid
+     season before the round finishes that season the old way. */
+  foPlayRound(league, abbrs, MLB_GAMES_PER_ROUND, rng, (abbr, opp) => {
+    const me = league.teams[abbr];
+    const them = league.teams[opp];
+    const p = mlbWinProb(me, them);
+    if (rng() < p) { me.wins += 1; them.losses += 1; if (abbr === myTeam) myW += 1; if (opp === myTeam) myL += 1; }
+    else { me.losses += 1; them.wins += 1; if (abbr === myTeam) myL += 1; if (opp === myTeam) myW += 1; }
+  }, () => mlbBookSeason(league, rng));
   return { myWins: myW, myLosses: myL, notes };
 }
 
@@ -283,17 +373,23 @@ export function runMlbPlayoffs(league: MlbLeague, rng: () => number): { series: 
    src/lib/frontOfficeCuts.ts, once, for all four GM sims; measured before it,
    Corbin Carroll at 21.8M with four years left took the room from 75.3 to
    97.1 and straight back to 75.3 on a one year deal. */
-/** Round 631: the roster floor and ceiling. The board greys DFA and Sign at them. */
-export const MLB_ROSTER_MIN = 9;
-export const MLB_ROSTER_MAX = 16;
+/** Round 631: the roster floor and ceiling. The board greys DFA and Sign at them.
+    Round 829: these are a full roster club's; a club from an older save keeps
+    MLB_LEGACY_ROSTER_MIN and MLB_LEGACY_ROSTER_MAX. Read them through
+    mlbRosterMin and mlbRosterMax, which know which club is which. */
+export const MLB_ROSTER_MIN = 22;
+export const MLB_ROSTER_MAX = 28;
+export const mlbRosterMin = (t: { depth?: number }): number => (t.depth ? MLB_ROSTER_MIN : MLB_LEGACY_ROSTER_MIN);
+export const mlbRosterMax = (t: { depth?: number }): number => (t.depth ? MLB_ROSTER_MAX : MLB_LEGACY_ROSTER_MAX);
 
 export function mlbRelease(t: MlbGmTeam, fas: MlbGmPlayer[], id: string): boolean {
-  return cutPlayer(t, fas, id, MLB_ROSTER_MIN);
+  const floor = mlbRosterMin(t);
+  return cutPlayer(t, fas, id, floor);
 }
 
 export function mlbSign(t: MlbGmTeam, fas: MlbGmPlayer[], id: string, cap: number): boolean {
   const i = fas.findIndex(p => p.id === id);
-  if (i < 0 || rosterFullRefusal(t, MLB_ROSTER_MAX)) return false;
+  if (i < 0 || rosterFullRefusal(t, mlbRosterMax(t))) return false;
   /* Round 631: the same refusal the board shows beside the greyed button. */
   if (signRefusal(t, id)) return false;
   const p = fas[i];
@@ -314,7 +410,7 @@ export function mlbTrade(
 ): 'accepted' | 'rejected' | 'invalid' {
   const mine = my.players.find(p => p.id === myId);
   const theirs = their.players.find(p => p.id === theirId);
-  if (!mine || !theirs || my.players.length <= 9 || their.players.length <= 9) return 'invalid';
+  if (!mine || !theirs || my.players.length <= mlbRosterMin(my) || their.players.length <= mlbRosterMin(their)) return 'invalid';
   /* Round 631: nobody comes back the season he was cut, by trade either. */
   if (tradeRefusal(my, theirId) || tradeRefusal(their, myId)) return 'invalid';
   // Round 82: salary matching so payroll-heavy teams can still swap contracts
@@ -340,7 +436,7 @@ export function mlbExecuteTalksTrade(
 ): 'done' | 'invalid' {
   const mine = my.players.find(p => p.id === myId);
   const theirs = their.players.find(p => p.id === theirId);
-  if (!mine || !theirs || my.players.length <= 9 || their.players.length <= 9) return 'invalid';
+  if (!mine || !theirs || my.players.length <= mlbRosterMin(my) || their.players.length <= mlbRosterMin(their)) return 'invalid';
   /* Round 631: nobody comes back the season he was cut, by trade either. */
   if (tradeRefusal(my, theirId) || tradeRefusal(their, myId)) return 'invalid';
   if (addPick && !my.picks.length) return 'invalid';
@@ -381,7 +477,49 @@ export function mlbProspectToPlayer(pr: MlbProspect, rng: () => number): MlbGmPl
   };
 }
 
-export function mlbOffseason(league: MlbLeague, rng: () => number): string[] {
+/* Round 829 review: THE CUT DOWN TO 28, the shape Round 828 gave the NFL's
+   53. A full roster club the draft took over MLB_ROSTER_MAX releases, before
+   the season starts, its lowest rated men the sim does not play until it is
+   at 28. A real cut, through cutPlayer like every other: the man goes to the
+   pool, half his salary stays on the line as dead money, and he cannot come
+   back this season. The side carrying more than its 13 (hitters or pitchers)
+   gives a man up before the other loses any, and the cut never takes a club
+   below two catchers, nine hitters, five starters or five relievers. A save
+   from before this round has no depth mark and is never cut. */
+const MLB_SIDE_SHARE = 13;
+export function mlbCutDownToMax(t: MlbGmTeam, freeAgents: MlbGmPlayer[]): { team: string; player: string; pos: string }[] {
+  const out: { team: string; player: string; pos: string }[] = [];
+  if (!t.depth) return out;
+  while (t.players.length > mlbRosterMax(t)) {
+    const roster = [...t.players];
+    const reads = new Set(mlbSimReads(t));
+    const n = (f: (p: MlbGmPlayer) => boolean) => roster.reduce((s, p) => s + (f(p) ? 1 : 0), 0);
+    const isRp = (p: MlbGmPlayer) => p.pos === 'RP' || p.pos === 'CL';
+    const counts = { c: n(p => p.pos === 'C'), bats: n(p => !isPitcher(p)), sp: n(p => p.pos === 'SP'), pen: n(isRp) };
+    const keepsSpine = (p: MlbGmPlayer) =>
+      !(p.pos === 'C' && counts.c <= 2) && !(!isPitcher(p) && counts.bats <= 9)
+      && !(p.pos === 'SP' && counts.sp <= 5) && !(isRp(p) && counts.pen <= 5);
+    const spare = roster.filter(p => !reads.has(p.id) && keepsSpine(p));
+    const pitchersOver = roster.length - counts.bats > MLB_SIDE_SHARE;
+    const hittersOver = counts.bats > MLB_SIDE_SHARE;
+    const crowded = spare.filter(p => (isPitcher(p) ? pitchersOver : hittersOver));
+    const down = (crowded.length ? crowded : spare)
+      .sort((a, b) => a.ovr - b.ovr || b.age - a.age || a.name.localeCompare(b.name))[0];
+    if (!down || !cutPlayer(t, freeAgents, down.id, mlbRosterMin(t))) break;
+    out.push({ team: t.abbr, player: down.name, pos: down.pos });
+  }
+  return out;
+}
+
+/** Round 829 review: how many men a full roster club must DFA before it may
+    play, 0 when it is at or under its ceiling. The board holds Play on it. */
+export function mlbOverLimit(t: MlbGmTeam): number {
+  return t.depth ? Math.max(0, t.players.length - mlbRosterMax(t)) : 0;
+}
+
+/* userTeam: the club whose cut down is the GM's own. The board passes it and
+   holds Play until he has DFA'd to 28 himself; every other club is cut here. */
+export function mlbOffseason(league: MlbLeague, rng: () => number, userTeam?: string): string[] {
   const notes: string[] = [];
   /* Round 211: one name book for the whole offseason, so the men who
      arrive to fill rosters cannot duplicate each other or anybody left. */
@@ -407,15 +545,23 @@ export function mlbOffseason(league: MlbLeague, rng: () => number): string[] {
     rollDeadCap(t);
     replenishMlbRoster(t, rng, taken);
   }
+  /* Round 829 review: the cut down to 28, last, once the draft, the
+     departures and the refill have all landed. The pool is trimmed after it,
+     so the men cut compete for its 30 places like everybody else. */
+  for (const t of Object.values(league.teams)) if (t.abbr !== userTeam) mlbCutDownToMax(t, league.freeAgents);
   league.freeAgents = league.freeAgents.sort((a, b) => b.ovr - a.ovr).slice(0, 30);
   for (const fa of league.freeAgents) { fa.age += 1; if (fa.age >= 33) fa.ovr = Math.max(63, fa.ovr - 1); }
   league.cap = Math.round(league.cap * 1.03);
   league.season += 1;
   league.round = 1;
+  /* Round 851: the new season's fixtures, for an old save too. */
+  league.schedule = mlbBookSeason(league, rng);
   return notes;
 }
 
-/** Keep every club playable: at least 6 bats, 3 SP, 2 relievers, 11 players. */
+/** Keep every club playable: at least 6 bats, 3 SP, 2 relievers, 11 players.
+    Round 829: a full roster club keeps a real one's spine instead: nine bats,
+    a five man rotation, a pen of five, and the 22 man floor. */
 export function replenishMlbRoster(t: MlbGmTeam, rng: () => number, taken: Set<string> = new Set()): void {
   const add = (pos: string) => {
     const ovr = 69 + Math.floor(rng() * 7);
@@ -425,10 +571,15 @@ export function replenishMlbRoster(t: MlbGmTeam, rng: () => number, taken: Set<s
       years: 1 + Math.floor(rng() * 2), out: 0, pot: ovr,
     });
   };
-  while (t.players.filter(p => !isPitcher(p)).length < 6) add(['C', '1B', 'SS', 'OF'][Math.floor(rng() * 4)]);
-  while (t.players.filter(p => p.pos === 'SP').length < 3) add('SP');
-  while (t.players.filter(p => p.pos === 'RP' || p.pos === 'CL').length < 2) add('RP');
-  while (t.players.length < 11) add(rng() < 0.5 ? 'OF' : 'RP');
+  const [bats, starters, pen, floor] = t.depth ? [9, 5, 5, MLB_ROSTER_MIN] : [6, 3, 2, 11];
+  /* Round 829 review: a full roster club carries two catchers, as it was
+     dealt. Measured before this line, 30 franchises by 10 seasons: 808 of
+     9,000 club seasons opened with no catcher at all and 3,158 with one. */
+  if (t.depth) while (t.players.filter(p => p.pos === 'C').length < 2) add('C');
+  while (t.players.filter(p => !isPitcher(p)).length < bats) add(['C', '1B', 'SS', 'OF'][Math.floor(rng() * 4)]);
+  while (t.players.filter(p => p.pos === 'SP').length < starters) add('SP');
+  while (t.players.filter(p => p.pos === 'RP' || p.pos === 'CL').length < pen) add('RP');
+  while (t.players.length < floor) add(rng() < 0.5 ? 'OF' : 'RP');
 }
 
 /** Light AI roster churn for the 29 CPU clubs. */
@@ -437,7 +588,7 @@ export function mlbAiMoves(league: MlbLeague, myTeam: string, rng: () => number)
   for (const t of cpu) {
     if (rng() > 0.25 || !league.freeAgents.length) continue;
     const best = [...league.freeAgents].sort((a, b) => b.ovr - a.ovr)[0];
-    if (best && mlbCapRoom(t, league.cap) >= best.salary && t.players.length < 16) {
+    if (best && mlbCapRoom(t, league.cap) >= best.salary && t.players.length < mlbRosterMax(t)) {
       mlbSign(t, league.freeAgents, best.id, league.cap);
     }
   }

@@ -272,25 +272,19 @@ export interface WorldCupResult {
   bestPlayer: boolean;
 }
 
-/* ─── Ballon d'Or System ─── */
-export interface BallonDorNominee {
-  name: string;
+/* ─── Ballon d'Or System ───
+   Round 834: the night's shape is the shared one in careerAwardsNight.ts. A
+   nominee is a shared candidate plus what the soccer card shows. */
+export interface BallonDorNominee extends AwardsCandidate {
   nationality: string;
   club: string;
   position: string;
-  points: number;
   goals: number;
   trophies: string[];
-  isPlayer: boolean;
 }
 
-export interface BallonDorResult {
-  year: number;
-  nominees: BallonDorNominee[];
-  playerRank: number | null; // 1-10 if nominated, null if not
-  playerPoints: number;
-  playerNominated: boolean;
-}
+/** playerRank: 1-10 if nominated, 11-30 in the wider world ranking, else null. */
+export type BallonDorResult = AwardsNight<BallonDorNominee>;
 
 /* ─── UCL Knockout Result ─── */
 export interface UCLKnockoutMatch {
@@ -921,6 +915,9 @@ export interface CareerState {
   mafiaStage?: number;        // 0 none, 1 took the cup money, 2 arc closed
   bdorSnubFuel?: boolean;     // finished 2nd or 3rd last ceremony
   rivalryIntensity?: number;  // 0-100 heat of the feud, optional for old saves
+  /** Round 819 review: the club you said yes to on "THE ENEMY CALLS", moved
+   *  to when you press Continue on that dilemma. Optional, old saves lack it. */
+  pendingRivalMove?: string | null;
   /** Round 49 life layer. Optional so pre-R49 saves keep loading. */
   personality?: string | null; // showman | iceman | hothead | professor | enigma
   agentId?: string | null;     // cousin | shark | super | self
@@ -1319,7 +1316,7 @@ export const MORAL_DILEMMAS: MoralDilemma[] = [
     title: "MATCH FIXING",
     description: "A mysterious figure approaches you before a big match. He offers €5M to intentionally perform poorly. The money would be untraceable. No one would ever know... probably.",
     choices: [
-      { label: "Accept the money", emoji: "💰", consequence: "€5M added to your accounts", risk: "30% chance of investigation" },
+      { label: "Accept the money", emoji: "💰", consequence: "€5M added to your accounts", risk: "30% chance you are caught: banned for a season and the 5M taken back" },
       { label: "Refuse and report it", emoji: "🛡️", consequence: "Reputation +20, Legacy +10, Fair Play Award" },
       { label: "Refuse silently", emoji: "🤐", consequence: "Walk away. Nothing happens." },
     ],
@@ -1328,9 +1325,9 @@ export const MORAL_DILEMMAS: MoralDilemma[] = [
     id: "ped_offer",
     emoji: "💉",
     title: "PERFORMANCE ENHANCING DRUGS",
-    description: "Your fitness coach pulls you aside after training. He offers you an 'undetectable' substance that will boost all your stats by +5 for 3 seasons. \"Every top player does it,\" he whispers.",
+    description: "A private trainer you met over the summer, nobody from your club, gets you alone after a session. He offers you an 'undetectable' substance that will boost all your stats by +5 for 3 seasons. \"Nobody ever has to know,\" he whispers.",
     choices: [
-      { label: "Take the substance", emoji: "💊", consequence: "All stats +5 for 3 seasons", risk: "20% chance of failed test each season" },
+      { label: "Take the substance", emoji: "💊", consequence: "All stats +5 for 3 seasons", risk: "20% chance of a failed test each season: banned for a season" },
       { label: "Refuse", emoji: "✋", consequence: "Morale -5, but integrity +10 legacy bonus at retirement" },
     ],
   },
@@ -1341,7 +1338,7 @@ export const MORAL_DILEMMAS: MoralDilemma[] = [
     description: "You've developed a reputation for simulation. Journalists are running front-page stories about your theatrical falls in the box. Pundits are calling you 'the greatest actor in football.'",
     choices: [
       { label: "Embrace the dark arts", emoji: "🎭", consequence: "+2 goals per season from penalties, but reputation -15" },
-      { label: "Clean up your game", emoji: "🤝", consequence: "Reputation +10, eligible for Fair Play Award" },
+      { label: "Clean up your game", emoji: "🤝", consequence: "Reputation +10, integrity +5" },
       { label: "Ignore the noise", emoji: "🔇", consequence: "No change, let them talk" },
     ],
   },
@@ -1349,11 +1346,11 @@ export const MORAL_DILEMMAS: MoralDilemma[] = [
     id: "agent_corruption",
     emoji: "🕴️",
     title: "AGENT CORRUPTION",
-    description: "Your accountant discovers your agent has been taking 20% commission instead of the agreed 10% for the last 3 years. That's millions stolen from you. He's sitting in your living room, sweating.",
+    description: "Your accountant finds your agent has been skimming double the agreed commission for the last 3 years. That is real money stolen from you, and your agent is sitting in your living room, sweating.",
     choices: [
-      { label: "Fire him and sue", emoji: "⚖️", consequence: "Legal costs €500k, but recover the stolen money" },
-      { label: "Keep him: he gets results", emoji: "🤝", consequence: "Accept the loss, maintain relationship" },
-      { label: "Renegotiate to 12%", emoji: "📝", consequence: "Agent stays at 12%, partial money back" },
+      { label: "Fire your agent and sue", emoji: "⚖️", consequence: "Legal costs €500k, the stolen money back (up to €3M), and you negotiate your own deals from now on" },
+      { label: "Keep your agent: the results are real", emoji: "🤝", consequence: "Swallow the loss, morale -5" },
+      { label: "Make them pay some of it back", emoji: "📝", consequence: "Your agent stays, about a third of the money comes back" },
     ],
   },
   {
@@ -1370,10 +1367,10 @@ export const MORAL_DILEMMAS: MoralDilemma[] = [
   {
     id: "match_fixer_approach",
     emoji: "🎭",
-    title: "THE FIXER RETURNS",
-    description: "A different, smoother operator finds you at a hotel bar the night before a meaningless end-of-season game. \"Nobody cares about this one. Just miss a penalty if you get one. €2M, cash, tonight.\"",
+    title: "THE HOTEL BAR",
+    description: "A smooth operator finds you at a hotel bar the night before a meaningless end-of-season game. \"Nobody cares about this one. Just miss a penalty if you get one. €2M, cash, tonight.\"",
     choices: [
-      { label: "Take the deal", emoji: "💵", consequence: "€2M added instantly", risk: "25% chance of a leaked recording" },
+      { label: "Take the deal", emoji: "💵", consequence: "€2M added instantly", risk: "25% chance a recording leaks: banned for a season and the 2M taken back" },
       { label: "Film him and expose it", emoji: "🎥", consequence: "Hero status! Popularity +25, Fair Play recognition" },
       { label: "Politely decline, tell no one", emoji: "🚪", consequence: "Walk away clean. Nothing happens." },
     ],
@@ -1395,9 +1392,9 @@ export const MORAL_DILEMMAS: MoralDilemma[] = [
     title: "TUNNEL INCIDENT",
     description: "After a brutal derby loss, an opposition player shoves you in the tunnel and says something about your family. Cameras are everywhere. Your teammates are already grabbing your shirt to hold you back.",
     choices: [
-      { label: "Swing back", emoji: "👊", consequence: "3-match ban, popularity +5 with your ultras, -15 elsewhere" },
+      { label: "Swing back", emoji: "👊", consequence: "Fined two weeks' wages, popularity -10 (your ultras loved it, nobody else did)" },
       { label: "Walk away, report it", emoji: "🚶", consequence: "Federation fines the other player, your reputation +15" },
-      { label: "Trash talk, no contact", emoji: "🗣️", consequence: "Minor fine, clip goes viral either way" },
+      { label: "Trash talk, no contact", emoji: "🗣️", consequence: "Fined a week's wages, the clip goes viral either way" },
     ],
   },
   {
@@ -1414,12 +1411,12 @@ export const MORAL_DILEMMAS: MoralDilemma[] = [
   {
     id: "betting_ring_teammate",
     emoji: "🎲",
-    title: "TEAMMATE IN TROUBLE",
-    description: "Your roommate on away trips confesses he owes a betting syndicate a huge sum and they've started asking about your team's injury news. He's begging you not to tell the club.",
+    title: "AN OLD FRIEND IN TROUBLE",
+    description: "Your best mate from the academy, now playing a division below, confesses he owes a betting syndicate a huge sum and they've started asking him about your injury news. He's begging you not to tell anyone.",
     choices: [
-      { label: "Report it to the club", emoji: "📢", consequence: "Teammate suspended, integrity bonus +15, morale -5 in the dressing room" },
+      { label: "Report it to the federation", emoji: "📢", consequence: "He gets suspended, integrity +15, morale -5 (you lost a friend)" },
       { label: "Lend him the money quietly", emoji: "💶", consequence: "Net worth -1.5M, loyalty earned, risk buried" },
-      { label: "Tell him to fix it himself", emoji: "🤷", consequence: "Nothing happens immediately, but the situation lingers" },
+      { label: "Tell him to fix it himself", emoji: "🤷", consequence: "Nothing happens. You hope it stays that way" },
     ],
   },
   {
@@ -1428,8 +1425,8 @@ export const MORAL_DILEMMAS: MoralDilemma[] = [
     title: "THE NEW WONDERKID",
     description: "The club just paid a fortune for a hyped 18-year-old who plays your exact position. The manager is clearly grooming him to replace you. He's also incredibly likeable, which makes it worse.",
     choices: [
-      { label: "Mentor him openly", emoji: "🤝", consequence: "Popularity +15, but he develops faster and threatens your spot sooner" },
-      { label: "Freeze him out", emoji: "🧊", consequence: "Morale -10, dressing room tension, but you keep your place longer" },
+      { label: "Mentor him openly", emoji: "🤝", consequence: "Popularity +15, and the kid never forgets it" },
+      { label: "Freeze him out", emoji: "🧊", consequence: "Morale -10, the dressing room turns cold on you" },
       { label: "Focus on yourself, ignore it", emoji: "🎯", consequence: "No change, business as usual" },
     ],
   },
@@ -1440,7 +1437,7 @@ export const MORAL_DILEMMAS: MoralDilemma[] = [
     description: "A photo leaks of you out until 4am, three days before a huge cup final. It is blowing up online. Training is in six hours and the manager wants to see you immediately.",
     choices: [
       { label: "Own it, apologize publicly", emoji: "🙇", consequence: "Popularity +5 for honesty, morale -5, fined one week's wages" },
-      { label: "Deny everything", emoji: "🙅", consequence: "Story drags on, popularity -15 if it resurfaces later" },
+      { label: "Deny everything", emoji: "🙅", consequence: "Story drags on", risk: "35% chance it resurfaces: popularity -15" },
       { label: "Let your agent spin it", emoji: "🎙️", consequence: "Story dies down fast, small net worth cost for the PR team" },
     ],
   },
@@ -1449,7 +1446,7 @@ export const MORAL_DILEMMAS: MoralDilemma[] = [
     id: "magazine_shoot",
     emoji: "📸",
     title: "THE MAGAZINE CALL",
-    description: "A famous magazine wants you on the cover. The tasteful version pays well. The artistic version, wearing nothing but a strategically held football, pays absurdly. Your agent is already laughing.",
+    description: "A famous magazine wants you on the cover. The tasteful version pays well. The bold version, shirt off with a football under your arm, pays absurdly. Your agent is already laughing.",
     choices: [
       { label: "Tasteful calendar shoot", emoji: "😎", consequence: "2M fee, popularity +10" },
       { label: "The full artistic cover", emoji: "🙈", consequence: "6M fee, popularity +18", risk: "25% chance a sponsor drops you for 2M" },
@@ -1462,7 +1459,7 @@ export const MORAL_DILEMMAS: MoralDilemma[] = [
     title: "AN OFFER FROM SERIOUS PEOPLE",
     description: "Two men in beautiful suits find you at a family restaurant. They know your order. They want next month's cup tie thrown. 8M, offshore, untouchable. A small favor between friends, they say.",
     choices: [
-      { label: "Take the money", emoji: "💰", consequence: "8M offshore. They now consider you a friend.", risk: "They ALWAYS come back" },
+      { label: "Take the money", emoji: "💰", consequence: "8M offshore, morale -5. They now consider you a friend.", risk: "They ALWAYS come back" },
       { label: "Refuse and go to the police", emoji: "🚔", consequence: "Federation protection, popularity +20, integrity +15" },
       { label: "Refuse, say nothing", emoji: "🤐", consequence: "They nod and leave. You sleep badly for a week." },
     ],
@@ -1473,9 +1470,9 @@ export const MORAL_DILEMMAS: MoralDilemma[] = [
     title: "THE FRIENDS RETURN",
     description: "Same restaurant. Same suits. This time it is the title decider they want, and the number is 15M. The smile is thinner now. Friends help friends twice, they say.",
     choices: [
-      { label: "Do it one last time", emoji: "💶", consequence: "15M offshore", risk: "50% chance the investigation lands: 3-season ban, legacy shattered" },
-      { label: "Refuse them", emoji: "✋", consequence: "They mention the first favor on the way out", risk: "40% chance the first fix leaks: 2-season ban" },
-      { label: "Go to the police, full confession", emoji: "🚔", consequence: "Immunity for testimony, forced move abroad, popularity +25, the arc ends" },
+      { label: "Do it one last time", emoji: "💶", consequence: "15M offshore", risk: "50% chance the investigation lands: banned for two seasons, legacy shattered" },
+      { label: "Refuse them", emoji: "✋", consequence: "Morale -10, and they mention the first favor on the way out", risk: "40% chance the first fix leaks: banned for a season" },
+      { label: "Go to the police, full confession", emoji: "🚔", consequence: "Immunity for testimony, popularity +25, integrity +10, the arc ends" },
     ],
   },
   {
@@ -1529,7 +1526,7 @@ export const MORAL_DILEMMAS: MoralDilemma[] = [
     description: "A hotel valet just reversed your hypercar into a fountain at 40 km/h. He is 19, shaking, and pretty sure his life is over. Forty phones are already filming.",
     choices: [
       { label: "Hug him, forgive publicly", emoji: "🤗", consequence: "The clip melts hearts. Popularity +12, the car costs 1.5M" },
-      { label: "Insurance war", emoji: "📋", consequence: "Recover 1.5M, popularity -8, he loses his job" },
+      { label: "Insurance war", emoji: "📋", consequence: "Insurance covers the 1.5M, popularity -8, he loses his job" },
       { label: "Gift him a bus pass and a smile", emoji: "🚌", consequence: "Perfect comedy. Popularity +15, the car still costs 1.5M" },
     ],
   },
@@ -1586,6 +1583,21 @@ export const MORAL_DILEMMAS: MoralDilemma[] = [
   rivalChoiceDilemma("rival_charity_match"),
 ];
 
+/* Round 850: one zero appearance row for a year he lived without playing it,
+   the shape the ban and prison years in advanceProSeason already write. With
+   a reason, the reason is the club, the way "BANNED" and "PRISON" are; with
+   null he spent the year at his own club (a year lost to injury). */
+function yearOutRow(s: CareerState, reason: string | null): SeasonRecord {
+  const last = s.seasons[s.seasons.length - 1];
+  return {
+    year: (last ? last.year : 2019) + 1, age: s.age,
+    club: reason ?? s.currentClub, clubCountry: reason ? "" : s.currentClubCountry, clubTier: reason ? 99 : s.currentClubTier,
+    apps: 0, goals: 0, assists: 0, cleanSheets: 0, yellowCards: 0, redCards: 0, rating: 0,
+    leagueTitle: false, domesticCup: false, championsLeague: false, worldCup: false, ballonDor: false, ballonDorRank: null, type: "playing",
+    intApps: 0, intGoals: 0, intAssists: 0, intRating: 0, tournament: null, tournamentResult: null,
+  };
+}
+
 /**
  * Round 253: the three roads back from a serious injury, and the whole
  * point of the arc: each one is a real trade, none is free.
@@ -1610,9 +1622,25 @@ export function applyRehabChoice(prev: CareerState, choiceIndex: number): Career
   s.pendingRehab = null;
   s.phase = "playing";
   if (!r) return s;
+  /* Round 850: a save written before this round can be sitting here with the
+     injury year unrecorded, because the season used to be thrown away at this
+     stop. Its games are gone, so the year goes on as a zero appearance
+     injured row (with its year of money) rather than as matches nobody
+     played. A save from this round
+     already has the row (written when the injury stopped the season), the age
+     check finds it, and nothing is added. */
+  s.events = [...s.events];
+  const lastRow = s.seasons[s.seasons.length - 1];
+  if (lastRow && lastRow.age < s.age) {
+    const row = yearOutRow(s, null);
+    row.injury = r.name; row.injuryWeeks = r.weeks; row.injurySevere = true;
+    if (s.loan) row.onLoanFrom = s.loan.parentClub;
+    s.seasons = [...s.seasons, row];
+    simulateSeasonFinances(s, row);
+    runTournamentSummer(s, row, row.year, true);
+  }
 
   const history = [...(s.seriousInjuries ?? [])];
-  s.events = [...s.events];
 
   if (choiceIndex === 0) {
     const backIn = Math.max(2, Math.round(r.weeks * 0.6));
@@ -1665,13 +1693,14 @@ export function applyMoralDilemmaChoice(prev: CareerState, choiceIndex: number):
         s.netWorth = Math.round((s.netWorth + 5) * 100) / 100;
         s.events = [...s.events, "🎰 Accepted €5M to fix a match..."];
         if (Math.random() < 0.30) {
-          // Caught!
+          // Caught! matchFixBanned counts down BEFORE advanceProSeason checks
+          // it, so 2 here is one season out, which is what the card says.
           s.matchFixBanned = 2;
           s.popularity = clamp(s.popularity - 40, 0, 100);
           s.morale = clamp(s.morale - 30, 0, 100);
           s.integrityBonus -= 30;
           s.netWorth = Math.round((s.netWorth - 5) * 100) / 100; // fine
-          s.events = [...s.events, "🚨 CAUGHT! Match-fixing investigation found you guilty. 2-season ban! Legacy -30, reputation destroyed."];
+          s.events = [...s.events, "🚨 CAUGHT! The match-fixing investigation found you guilty. Banned for next season, the 5M taken back, legacy -30, reputation destroyed."];
           s.socialMediaFollowers = Math.max(0, s.socialMediaFollowers - 5);
         } else {
           s.events = [...s.events, "💰 The money arrived. No one suspects a thing... for now."];
@@ -1717,7 +1746,7 @@ export function applyMoralDilemmaChoice(prev: CareerState, choiceIndex: number):
         // Clean up
         s.popularity = clamp(s.popularity + 10, 0, 100);
         s.integrityBonus += 5;
-        s.events = [...s.events, "🤝 Cleaned up your game. Reputation +10, Fair Play eligible."];
+        s.events = [...s.events, "🤝 Cleaned up your game. Reputation +10, integrity +5."];
       } else {
         // Ignore
         s.events = [...s.events, "🔇 Ignored the diving allegations. Business as usual."];
@@ -1730,16 +1759,19 @@ export function applyMoralDilemmaChoice(prev: CareerState, choiceIndex: number):
       if (choiceIndex === 0) {
         // Fire and sue
         s.netWorth = Math.round((s.netWorth - 0.5 + recoveredAmount) * 100) / 100;
-        s.events = [...s.events, `⚖️ Fired agent and sued! Legal costs €500k, recovered €${recoveredAmount.toFixed(1)}M.`];
+        /* Round 819 review: fired means fired. "self" is how the life layer
+           already records a player who sacked his agent. */
+        s.agentId = "self";
+        s.events = [...s.events, `⚖️ Fired your agent and sued! Legal costs €500k, recovered €${recoveredAmount.toFixed(1)}M. You read every contract yourself now.`];
         s.morale = clamp(s.morale + 5, 0, 100);
       } else if (choiceIndex === 1) {
-        // Keep him
-        s.events = [...s.events, "🤝 Kept the agent despite the theft. He does get results..."];
+        // Keep the agent
+        s.events = [...s.events, "🤝 Kept your agent despite the theft. The results are real, the trust is not."];
         s.morale = clamp(s.morale - 5, 0, 100);
       } else {
-        // Renegotiate
+        // Some of it back
         s.netWorth = Math.round((s.netWorth + recoveredAmount * 0.3) * 100) / 100;
-        s.events = [...s.events, `📝 Renegotiated agent deal to 12%. Recovered €${(recoveredAmount * 0.3).toFixed(1)}M.`];
+        s.events = [...s.events, `📝 Your agent stays and pays back €${(recoveredAmount * 0.3).toFixed(1)}M.`];
       }
       break;
     }
@@ -1767,7 +1799,7 @@ export function applyMoralDilemmaChoice(prev: CareerState, choiceIndex: number):
           s.morale = clamp(s.morale - 25, 0, 100);
           s.integrityBonus -= 25;
           s.netWorth = Math.round((s.netWorth - 2) * 100) / 100;
-          s.events = [...s.events, "🚨 A recording leaked! Caught match-fixing. 2-season ban, reputation in ruins."];
+          s.events = [...s.events, "🚨 A recording leaked! Caught match-fixing. Banned for next season, the 2M taken back, reputation in ruins."];
         } else {
           s.events = [...s.events, "🤐 The recording never surfaced. You got away with it, for now."];
         }
@@ -1783,6 +1815,15 @@ export function applyMoralDilemmaChoice(prev: CareerState, choiceIndex: number):
     }
     case "captain_armband_feud": {
       if (choiceIndex === 0) {
+        /* Round 819 review: accepting the armband gives you the armband, on
+           the same fields the Round 244 captaincy arc keeps, so the badge,
+           the stint counter and the cabinet line all follow it. The gate
+           never offers this to a player who is already captain. */
+        if (!(s.isClubCaptain ?? false) && !s.loan) {
+          s.isClubCaptain = true;
+          s.captainClub = s.currentClub;
+          s.captainSeasons = 0;
+        }
         s.isLeader = true;
         s.popularity = clamp(s.popularity + 10, 0, 100);
         s.morale = clamp(s.morale - 8, 0, 100);
@@ -1797,15 +1838,21 @@ export function applyMoralDilemmaChoice(prev: CareerState, choiceIndex: number):
       break;
     }
     case "tunnel_brawl": {
+      /* Round 819 review: the card promised a ban and a fine that never
+         landed. The season sim has no match bans, so the punishment is the
+         fine, in wages, the way the night out photo fines you. */
+      const weekFine = Math.max(0.02, s.weeklyWage / 1000000);
       if (choiceIndex === 0) {
         s.popularity = clamp(s.popularity - 10, 0, 100);
-        s.events = [...s.events, "👊 Swung back in the tunnel. 3-match ban handed down. Your ultras loved it, everyone else didn't."];
+        s.netWorth = Math.round((s.netWorth - weekFine * 2) * 100) / 100;
+        s.events = [...s.events, "👊 Swung back in the tunnel. Fined two weeks' wages. Your ultras loved it, everyone else didn't."];
       } else if (choiceIndex === 1) {
         s.popularity = clamp(s.popularity + 15, 0, 100);
         s.integrityBonus += 10;
         s.events = [...s.events, "🚶 Walked away and reported the incident. The federation fined the other player. Reputation +15."];
       } else {
-        s.events = [...s.events, "🗣️ Traded words but kept your hands to yourself. Minor fine, clip goes viral anyway."];
+        s.netWorth = Math.round((s.netWorth - weekFine) * 100) / 100;
+        s.events = [...s.events, "🗣️ Traded words but kept your hands to yourself. Fined a week's wages, and the clip went viral anyway."];
       }
       break;
     }
@@ -1831,23 +1878,23 @@ export function applyMoralDilemmaChoice(prev: CareerState, choiceIndex: number):
       if (choiceIndex === 0) {
         s.integrityBonus += 15;
         s.morale = clamp(s.morale - 5, 0, 100);
-        s.events = [...s.events, "📢 Reported your teammate's betting trouble to the club. He was suspended. Integrity +15."];
+        s.events = [...s.events, "📢 Reported your old friend's betting debt to the federation. He was suspended. Integrity +15."];
       } else if (choiceIndex === 1) {
         s.netWorth = Math.round((s.netWorth - 1.5) * 100) / 100;
         s.morale = clamp(s.morale + 5, 0, 100);
-        s.events = [...s.events, "💶 Quietly lent your teammate €1.5M to clear his debt. Loyalty earned."];
+        s.events = [...s.events, "💶 Quietly lent your old friend €1.5M to clear his debt. Loyalty earned."];
       } else {
-        s.events = [...s.events, "🤷 Told him to sort it out himself. The situation lingers unresolved."];
+        s.events = [...s.events, "🤷 Told him to sort it out himself. You have not heard from him since."];
       }
       break;
     }
     case "wonderkid_jealousy": {
       if (choiceIndex === 0) {
         s.popularity = clamp(s.popularity + 15, 0, 100);
-        s.events = [...s.events, "🤝 Mentored the wonderkid openly. Popularity +15, but he's developing fast."];
+        s.events = [...s.events, "🤝 Mentored the wonderkid openly. Popularity +15, and the kid will not forget it."];
       } else if (choiceIndex === 1) {
         s.morale = clamp(s.morale - 10, 0, 100);
-        s.events = [...s.events, "🧊 Froze out the wonderkid. Dressing room tension rises, but you keep your place longer."];
+        s.events = [...s.events, "🧊 Froze out the wonderkid. The dressing room noticed, and morale took the hit."];
       } else {
         s.events = [...s.events, "🎯 Ignored the drama and focused on your own game."];
       }
@@ -1885,7 +1932,7 @@ export function applyMoralDilemmaChoice(prev: CareerState, choiceIndex: number):
           s.netWorth = Math.round((s.netWorth - 2) * 100) / 100;
           s.events = [...s.events, "🙈 The artistic cover breaks the internet. 6M earned, popularity +18... and a family-brand sponsor quietly walked, costing 2M."];
         } else {
-          s.events = [...s.events, "🙈 The artistic cover breaks the internet. 6M earned, popularity +18. The football was held VERY strategically."];
+          s.events = [...s.events, "🙈 The artistic cover breaks the internet. 6M earned, popularity +18. Your agent has the cover framed in his office."];
         }
       } else {
         s.events = [...s.events, "🚪 Declined the shoot. Your grandmother frames the polite refusal letter."];
@@ -1916,7 +1963,7 @@ export function applyMoralDilemmaChoice(prev: CareerState, choiceIndex: number):
           s.matchFixBanned = 3;
           s.popularity = clamp(s.popularity - 40, 0, 100);
           s.integrityBonus -= 40;
-          s.events = [...s.events, "🚨 THE INVESTIGATION LANDED. Betting patterns, wiretaps, everything. 3-SEASON BAN. The 15M sits frozen while your name burns."];
+          s.events = [...s.events, "🚨 THE INVESTIGATION LANDED. Betting patterns, wiretaps, everything. BANNED FOR TWO SEASONS. You kept the 15M and lost your name."];
         } else {
           s.events = [...s.events, "💶 The title decider slipped away. 15M offshore. The suits toast you from a distance. You check the news every morning."];
         }
@@ -1926,7 +1973,7 @@ export function applyMoralDilemmaChoice(prev: CareerState, choiceIndex: number):
           s.matchFixBanned = 2;
           s.popularity = clamp(s.popularity - 30, 0, 100);
           s.integrityBonus -= 25;
-          s.events = [...s.events, "🗞️ You refused, and the first fix leaked within a month. 2-SEASON BAN. The money was never worth this."];
+          s.events = [...s.events, "🗞️ You refused, and the first fix leaked within a month. BANNED FOR A SEASON. The money was never worth this."];
         } else {
           s.morale = clamp(s.morale - 10, 0, 100);
           s.events = [...s.events, "✋ You refused. On the way out, one suit mentioned the cup tie by date. You have not slept properly since."];
@@ -1936,7 +1983,7 @@ export function applyMoralDilemmaChoice(prev: CareerState, choiceIndex: number):
         s.popularity = clamp(s.popularity + 25, 0, 100);
         s.integrityBonus += 10;
         s.transferSituation = s.transferSituation ?? null;
-        s.events = [...s.events, "🚔 Full confession, full cooperation, immunity for testimony. The network falls. You will need a new city soon, but you sleep like a baby. Popularity +25."];
+        s.events = [...s.events, "🚔 Full confession, full cooperation, immunity for testimony. The network falls, and you sleep like a baby. Popularity +25."];
       }
       break;
     }
@@ -2005,9 +2052,10 @@ export function applyMoralDilemmaChoice(prev: CareerState, choiceIndex: number):
         s.popularity = clamp(s.popularity + 12, 0, 100);
         s.events = [...s.events, "🤗 You hugged the shaking valet on camera. The clip melted hearts. Popularity +12, hypercar -1.5M."];
       } else if (choiceIndex === 1) {
-        s.netWorth = Math.round((s.netWorth + 1.5) * 100) / 100;
+        /* Round 819 review: the insurance covers the crash, it does not pay
+           you 1.5M on top of a car that cost you nothing. */
         s.popularity = clamp(s.popularity - 8, 0, 100);
-        s.events = [...s.events, "📋 Insurance recovered 1.5M. The valet lost his job and the internet chose his side. Popularity -8."];
+        s.events = [...s.events, "📋 Insurance covered the 1.5M. The valet lost his job and the internet chose his side. Popularity -8."];
       } else {
         s.netWorth = Math.round((s.netWorth - 1.5) * 100) / 100;
         s.popularity = clamp(s.popularity + 15, 0, 100);
@@ -2095,6 +2143,13 @@ export function applyMoralDilemmaChoice(prev: CareerState, choiceIndex: number):
       const idx = choiceIndex === 0 || choiceIndex === 1 ? choiceIndex : 2;
       const line = resolveRivalryChoice(s, s.rival, dilemma.id, idx, SOCCER_RIVALRY_CHOICES, Math.random);
       if (line !== null) s.events = [...s.events, line];
+      /* Round 819 review: "Join forces with your rival" promises the
+         transfer, and it used to bank the bonus and leave you where you
+         were. The move itself happens on Continue (dismissMoralDilemma),
+         which has the club list; the shared choice above is untouched. */
+      if (dilemma.id === "rival_club_offer" && idx === 0 && s.rival?.club && !s.rival.retired && s.rival.club !== s.currentClub) {
+        s.pendingRivalMove = s.rival.club;
+      }
       break;
     }
   }
@@ -2107,6 +2162,27 @@ export function applyMoralDilemmaChoice(prev: CareerState, choiceIndex: number):
 export function dismissMoralDilemma(prev: CareerState, clubs: ClubData[]): CareerState {
   const s = { ...prev };
   s.pendingMoralDilemma = null;
+  /* Round 819 review: you said yes to your rival's club, so you sign there
+     now, the way any accepted offer signs: a four year deal at their going
+     rate or your current wage if that is higher, their fee, your agent's
+     cut, and the armband stays behind. This summer's window is spent on
+     that move. */
+  if (s.pendingRivalMove) {
+    const name = s.pendingRivalMove;
+    s.pendingRivalMove = null;
+    const nextYear = (s.seasons[s.seasons.length - 1]?.year ?? 2024) + 1;
+    const club = adjustClubsForYear(clubs, nextYear).find(c => c.name === name) ?? clubs.find(c => c.name === name);
+    if (club && club.name !== s.currentClub) {
+      const moved = acceptOffer(s, {
+        club, contractYears: 4,
+        wage: Math.max(s.weeklyWage, wageForTier(club.tier, s.overall)),
+        transferFee: realisticTransferFee(s.overall, s.age),
+      });
+      moved.events = [...s.events, ...moved.events];
+      return moved;
+    }
+    s.events = [...s.events, "📞 The move to your rival's club fell through at the last minute. You stay put, bonus banked."];
+  }
   // Continue to random events → transfer window
   const events = generateRandomEvents(s);
   if (events.length > 0) {
@@ -2135,7 +2211,12 @@ function tryTriggerMoralDilemma(s: CareerState): boolean {
       return true;
     }
   }
-  if (s.bdorSnubFuel && !s.moralDilemmasTriggered.includes("bdor_snub")) {
+  /* Round 819 review: only on the close of the season the podium came in.
+     bdorSnubFuel is never cleared by anything but this dilemma, so before
+     this check every save with a 2nd or 3rd place years ago got "THE SNUB"
+     the first time the dilemmas could reach it. */
+  const closedRank = s.seasons[s.seasons.length - 1]?.ballonDorRank;
+  if (s.bdorSnubFuel && (closedRank === 2 || closedRank === 3) && !s.moralDilemmasTriggered.includes("bdor_snub")) {
     const snub = MORAL_DILEMMAS.find(d => d.id === "bdor_snub");
     if (snub) {
       s.pendingMoralDilemma = snub;
@@ -2155,10 +2236,11 @@ function tryTriggerMoralDilemma(s: CareerState): boolean {
     if (d.id === "match_fixer_approach" && s.currentClubTier > 3) return false;
     if (d.id === "ped_offer" && s.overall > 90) return false; // already elite
     if (d.id === "diving_reputation" && s.position === "GK") return false;
-    if (d.id === "agent_corruption" && s.totalEarnings < 5) return false; // need some earnings
+    if (d.id === "agent_corruption" && (s.totalEarnings < 5 || s.agentId === "self")) return false; // need some earnings, and an agent
     if (d.id === "betting_ring_teammate" && s.totalEarnings < 2) return false;
     if (d.id === "wonderkid_jealousy" && s.age < 24) return false; // need a few seasons in
-    if (d.id === "captain_armband_feud" && s.age < 23) return false;
+    if (d.id === "captain_armband_feud" && (s.age < 23 || (s.isClubCaptain ?? false))) return false;
+    if (d.id === "rival_club_offer" && (!s.rival?.club || s.rival.club === s.currentClub)) return false; // the move needs somewhere to go
     if (d.id === "sponsor_scandal" && !s.sponsorDeal && s.sponsorshipIncome <= 0) return false;
     // 2026-08-05 expansion rules
     if (d.id === "magazine_shoot" && (s.popularity < 50 || s.age < 21)) return false;
@@ -2750,14 +2832,16 @@ function simulateSeasonFinances(s: CareerState, season: SeasonRecord): void {
     s.lifestyleLevel = "Humble";
     s.lifestyleCostPerYear = 0.05;
     s.properties = [];
-    s.purchasedItems = s.purchasedItems.filter(id => {
-      const item = getSpendingItem(id);
-      return item?.category === "lifestyle"; // keep lifestyle upgrades
-    });
-    s.customYearlyCosts = s.purchasedItems.reduce((sum, id) => {
-      const item = getSpendingItem(id);
-      return sum + (item?.monthlyCost || 0);
-    }, 0);
+    const keep = (id: string) => getSpendingItem(id)?.category === "lifestyle"; // keep lifestyle upgrades
+    /* Round 826: the bill loses the upkeep of what was sold and nothing else.
+       It used to be rebuilt from the items kept, which also wiped every
+       yearly cost that is not an item at all (the private physio, a child, a
+       rescue dog) while the physio, the child and the dog stayed, so the
+       physio worked for free for the rest of the career. */
+    const soldUpkeep = s.purchasedItems.filter(id => !keep(id))
+      .reduce((sum, id) => sum + (getSpendingItem(id)?.monthlyCost || 0), 0);
+    s.purchasedItems = s.purchasedItems.filter(keep);
+    s.customYearlyCosts = Math.max(0, Math.round(((s.customYearlyCosts || 0) - soldUpkeep) * 1000) / 1000);
     s.totalAssetValue = 0;
     s.consecutiveDeficitYears = 0;
     s.morale = clamp(s.morale - 20, 0, 100);
@@ -4436,10 +4520,13 @@ function generateIntSeasonStats(state: CareerState, year: number): { intApps: nu
    Three things can go wrong for the player and all three are real football:
    the country misses out, the manager leaves you at home, or you go and lose.
 */
-function runTournamentSummer(s: CareerState, season: SeasonRecord, year: number): void {
+/* Round 850: `out` runs the summer without him (an injury year or a trial
+   year): the world still crowns its champion and the history keeps the
+   summer, and no screen waits for a player who was never in it. */
+function runTournamentSummer(s: CareerState, season: SeasonRecord, year: number, out = false): void {
   const fmt = tournamentForYear(s.nationality, year);
   if (!fmt) return;
-  const eligible = s.internationalCareer && !s.intStats.isRetired && !s.retired;
+  const eligible = !out && s.internationalCareer && !s.intStats.isRetired && !s.retired;
   const t = runInternationalSummer(s.nationality, year, eligible ? playerFormOf(s) : null);
   if (!t) return;
 
@@ -4661,6 +4748,15 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
       newspaper: disgrace.paper, type: "negative",
       headline: disgrace.headline, body: disgrace.body,
     }];
+    /* Round 850: the trial is a year he lived, so it gets its row and its
+       year of money, the same as the ban and prison years: the zero
+       appearance shape with the reason as the club. Before this the year
+       went by with no row, the market and the bank skipped it, and the
+       calendar fell a year behind his age (the prison row comes the year
+       after). A tournament that summer is played without him. */
+    s.seasons = [...s.seasons, yearOutRow(s, "CONVICTED")];
+    simulateSeasonFinances(s, s.seasons[s.seasons.length - 1]);
+    runTournamentSummer(s, s.seasons[s.seasons.length - 1], s.seasons[s.seasons.length - 1].year, true);
     s.phase = "newspaper";
     return s;
   } else if (heat >= 70 && Math.random() < 0.35) {
@@ -4750,6 +4846,20 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
     s.phase = "retirement_suggestion";
     return s;
   }
+  return playPendingProSeason(s, clubs);
+}
+
+/* Round 850: the season itself, split off the start of the year above so the
+   retirement talk can sit between the two. Everything above is the year
+   beginning (the birthday, bans, the heat, the drug test, forced retirement);
+   everything below is the season being played and written down. When the
+   suggestion stops the year above, he has already aged into it, so Keep
+   Playing (declineRetirementSuggestion) comes back in here and plays that
+   exact season. Before this round Keep Playing only set the phase back to
+   playing, the next Next Season aged him again, and the year he chose to
+   play was never played or recorded: one live career lost six seasons and
+   finished six years behind its own calendar (audit QA847-14). */
+function playPendingProSeason(s: CareerState, clubs: ClubData[]): CareerState {
   
   const season = generateSeasonStats(s);
   // Injury report, named injuries that actually cost matches
@@ -4771,6 +4881,22 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
         year: s.seasons.length > 0 ? s.seasons[s.seasons.length - 1].year + 1 : 2020,
         specialistCost: s.netWorth >= 1.6 ? 0.8 : null,
       };
+      /* Round 850: the season stops here for the rehab choice and the next
+         Next Season is the year after, so this IS the injury year and it goes
+         on the record now: the games and goals the engine played him before
+         and around the injury, marked with the injury the way every injured
+         season is. Only his own line: the trophy rolls are dropped because the
+         rest of that season (the Champions League, the world's results, the
+         announcements) never runs. And the year's money runs, the way it does
+         for a ban or prison year: the wages still come in while he is out.
+         If it is a tournament summer it is played without him, so the
+         calendar moving on never skips a World Cup. Before this the year had
+         no row and no money at all. */
+      const injuryRow: SeasonRecord = { ...season, leagueTitle: false, domesticCup: false };
+      if (s.loan) injuryRow.onLoanFrom = s.loan.parentClub;
+      s.seasons = [...s.seasons, injuryRow];
+      simulateSeasonFinances(s, injuryRow);
+      runTournamentSummer(s, injuryRow, injuryRow.year, true);
       s.phase = "rehab_choice";
       return s;
     }
@@ -5098,21 +5224,10 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
     playerCup: season.domesticCup,
   });
 
-  // Ballon d'Or calculation
-  const bdorResult = calculateBallonDor(s, season, thisYear, world);
-  s.pendingBallonDor = bdorResult;
-  if (bdorResult.playerRank !== null) {
-    season.ballonDorRank = bdorResult.playerRank;
-    if (bdorResult.playerRank === 1) {
-      season.ballonDor = true;
-      s.awards = [...s.awards, { year: thisYear, name: "Ballon d'Or", emoji: "🏅" }];
-      s.marketValue = Math.round((s.marketValue + 15) * 10) / 10;
-      s.popularity = clamp(s.popularity + 20, 0, 100);
-    } else if (bdorResult.playerRank <= 3) {
-      s.popularity = clamp(s.popularity + 5, 0, 100);
-      s.bdorSnubFuel = true; // the snub storyline can fire next season
-    }
-  }
+  // Ballon d'Or calculation. Round 834: what the night writes on the save (the
+  // staged ceremony, the place on the season, the cabinet, the winner's and the
+  // podium's consequences) is the shared settle, bound by SOCCER_BALLON_DOR.
+  settleAwardsNight(SOCCER_BALLON_DOR, s, season, calculateBallonDor(s, season, thisYear, world));
 
   // International debut event
   if (s.intStats.debutYear === thisYear) {
@@ -5453,6 +5568,20 @@ function generateNewsArticles(s: CareerState, season: SeasonRecord, totalGoals: 
 export function dismissNewspaper(prev: CareerState): CareerState {
   const s = { ...prev };
   s.pendingNews = [];
+  /* Round 850: a conviction saved by an older version sits here with the
+     trial year unrecorded, so it gets its row (and its year of money) now.
+     Since this round the
+     conviction writes that row itself, the age check finds it, and nothing
+     is added twice. */
+  if (!s.pendingSummary && (s.prisonSeasons ?? 0) > 0) {
+    const lastRow = s.seasons[s.seasons.length - 1];
+    if (lastRow && lastRow.age < s.age) {
+      s.events = [...s.events];
+      s.seasons = [...s.seasons, yearOutRow(s, "CONVICTED")];
+      simulateSeasonFinances(s, s.seasons[s.seasons.length - 1]);
+      runTournamentSummer(s, s.seasons[s.seasons.length - 1], s.seasons[s.seasons.length - 1].year, true);
+    }
+  }
   /* ROUND 502: THIS LINE ENDED CAREERS, PERMANENTLY, AND THE PLAYER WAS STILL
      SITTING THERE.
      The newspaper phase is reachable from exactly ONE place, the corruption
@@ -6146,6 +6275,65 @@ export function simulateUCL(state: CareerState, season: SeasonRecord): UCLResult
   return { qualified: true, matches, result, playerGoals: totalPlayerGoals, isTopScorer };
 }
 
+/* ─── Round 834: the awards night, bound for Soccer ───
+   The night itself (shortlist, seating, ranking, wider ranking, what the save
+   keeps, the speeches' mechanics) is src/lib/careerAwardsNight.ts, shared with
+   every career that binds it. Everything below is soccer's: the meters the
+   night may move with soccer's own clamps and rounding, the award, the copy,
+   and (further down) the scoring and the speeches. */
+import {
+  runAwardsNight, settleAwardsNight, applySpeech, describeSteps, measureMoves, narrativeOf,
+  type AwardsCandidate, type AwardsNight, type AwardsMeter, type AwardsNightSport, type SpeechOption, type MeterStep,
+} from "./careerAwardsNight";
+
+type SoccerAwardsMeter = "popularity" | "morale" | "integrityBonus" | "rivalryIntensity" | "socialMediaFollowers" | "marketValue";
+
+const SOCCER_AWARDS_METERS: Record<SoccerAwardsMeter, AwardsMeter<CareerState>> = {
+  popularity: { label: "Popularity", add: (s, d) => { s.popularity = clamp(s.popularity + d, 0, 100); }, read: s => s.popularity },
+  morale: { label: "Morale", add: (s, d) => { s.morale = clamp(s.morale + d, 0, 100); }, read: s => s.morale },
+  integrityBonus: { label: "Integrity", add: (s, d) => { s.integrityBonus += d; }, read: s => s.integrityBonus },
+  rivalryIntensity: { label: "Rivalry", add: (s, d) => { s.rivalryIntensity = clamp((s.rivalryIntensity ?? 0) + d, 0, 100); }, read: s => s.rivalryIntensity ?? 0 },
+  socialMediaFollowers: { label: "Followers", add: (s, d) => { s.socialMediaFollowers = Math.round((s.socialMediaFollowers + d) * 100) / 100; }, read: s => s.socialMediaFollowers },
+  marketValue: { label: "Market Value", add: (s, d) => { s.marketValue = Math.round((s.marketValue + d) * 10) / 10; }, read: s => s.marketValue, show: d => `${d >= 0 ? "+" : "-"}€${Math.abs(d)}M` },
+};
+
+/* Round 834: what winning and a podium do, written once. Before this round the
+   card promised "Legacy +20" and "Legacy +5" while the night moved popularity;
+   legacy only counts Ballon d'Ors at retirement (calculateLegacy). The review
+   found the next untruth: a winner usually sits at or near popularity 100, so
+   "+20" landed in full on 5 of 30 real wins. The card now prints what the
+   night measured it moved (the night's `moved`), never these numbers. */
+const BDOR_WINNER_STEPS: MeterStep<SoccerAwardsMeter>[] = [{ meter: "marketValue", delta: 15 }, { meter: "popularity", delta: 20 }];
+const BDOR_PODIUM_STEPS: MeterStep<SoccerAwardsMeter>[] = [{ meter: "popularity", delta: 5 }];
+
+/* The field is the era's real stars (careerEras.ts) until 2032, which is the
+   one place on the site an awards night ranks real people, each with goals
+   the sim invents for that season. It predates the shared night and is the
+   owner's call; the shared module's contract keeps every other sport on
+   generated names, and scripts/simCareerAwardsNight.mjs fences this
+   declaration to this file. */
+export const SOCCER_BALLON_DOR: AwardsNightSport<CareerState, BallonDorNominee, SoccerAwardsMeter, SeasonRecord> = {
+  award: { id: "ballon_dor", name: "Ballon d'Or", emoji: "🏅", shortlistSize: 10, widerSize: 30, podiumSize: 3, rivals: "legacy-real-era-stars" },
+  meters: SOCCER_AWARDS_METERS,
+  winnerSteps: BDOR_WINNER_STEPS,
+  podiumSteps: BDOR_PODIUM_STEPS,
+  stage: (s, night) => { s.pendingBallonDor = night; },
+  recordPlace: (season, place) => { season.ballonDorRank = place; },
+  recordWin: season => { season.ballonDor = true; },
+  addToCabinet: (s, entry) => { s.awards = [...s.awards, entry]; },
+  onPodium: s => { s.bdorSnubFuel = true; }, // the snub storyline can fire next season
+  say: (s, line) => { s.events = [...s.events, line]; },
+  copy: {
+    winnerTitle: "BALLON D'OR WINNER!",
+    title: year => `Ballon d'Or ${year}`,
+    winnerLine: moved => `The best player in the world!${moved ? ` ${moved}` : ""}`,
+    podiumLine: (place, moved) => `You finished ${place === 2 ? "2nd" : "3rd"}!${moved ? ` ${moved}, and this` : " This"} snub could follow you into next season`,
+    shortlistLine: place => `You finished ${place}th, close but not enough this year`,
+    wider: { before: "Outside the top 10, but you ranked ", after: " in the world's Top 30" },
+    notNominated: "You were not nominated this year",
+  },
+};
+
 /* ─── Ballon d'Or Calculation ─── */
 
 interface RealContender {
@@ -6468,96 +6656,83 @@ function calculateBallonDor(state: CareerState, season: SeasonRecord, year: numb
   // goals are capped at 28 points, so a 45-goal trophyless season was not even
   // NOMINATED. That was the purest form of the snub the owner reported.
   const playerInTop10 = playerCanContend && (playerNominated || playerDominant || statMonster);
-  const npcSpotsNeeded = playerInTop10 ? 9 : 10;
-  const topNPCs = allNomineeData.slice(0, npcSpotsNeeded);
 
-  // Filler nominees (only needed if the era pool somehow ran short)
-  let fillerSeed = 0;
-  while (topNPCs.length < npcSpotsNeeded && fillerSeed < 20) {
-    const gen = generateContender(usedNames, year * 31 + fillerSeed++);
-    if (usedNames.has(gen.name)) continue;
-    usedNames.add(gen.name);
-    topNPCs.push({
-      name: gen.name, nationality: gen.nationality, position: gen.position,
-      club: gen.club, points: rand(30, 50), goals: rand(5, 15), trophies: [], isPlayer: false,
-    });
-  }
-
-  // Add player if nominated (or if the season was flat out dominant)
-  if (playerInTop10) {
-    topNPCs.push({
+  /* Round 834: the shortlist, the seating, the ranking after every rule and the
+     wider top 30 are the shared awards night's (careerAwardsNight.ts). What
+     stays here is everything soccer decides: who is scored and how, the filler
+     contenders, and the three Round 54 verdict rules, in the order they always
+     ran and drawing exactly what they always drew. */
+  return runAwardsNight<BallonDorNominee>(SOCCER_BALLON_DOR.award, year, {
+    field: allNomineeData,
+    // Add player if nominated (or if the season was flat out dominant)
+    player: playerInTop10 ? {
       name: state.playerName, nationality: state.nationality, position: state.position,
       club: state.currentClub, points: playerPoints, goals: season.goals, trophies: playerTrophies, isPlayer: true,
-    });
-  }
-
-  // Sort final list and take exactly 10
-  topNPCs.sort((a, b) => b.points - a.points);
-  const top10 = topNPCs.slice(0, 10);
-  let playerRankIdx = top10.findIndex(n => n.isPlayer);
-  let playerRank = playerRankIdx >= 0 ? playerRankIdx + 1 : null;
-
-  // Round 54: a dominant season is untouchable. If the raw numbers say the
-  // player owned the year, they lift the trophy, even if a filler nominee
-  // landed above them on a technicality.
-  if (playerDominant && playerRank !== 1) {
-    const playerEntry = top10.find(n => n.isPlayer);
-    if (playerEntry) {
-      playerEntry.points = top10.reduce((mx, n) => Math.max(mx, n.points), 0) + rand(3, 9);
-      top10.sort((a, b) => b.points - a.points);
-      playerRankIdx = top10.findIndex(n => n.isPlayer);
-      playerRank = playerRankIdx >= 0 ? playerRankIdx + 1 : null;
-    }
-  }
-
-  // STRICT WIN CONDITIONS: Player can only win (rank 1) if they meet elite criteria.
-  // Round 54 widened the paths so voters respect stats, not just trophies:
-  // 30+ goals, UCL+League double, World Cup, a domestic treble, or a 45+ goal
-  // involvement season alongside any major trophy all count as winning material.
-  if (playerRank === 1 && !playerDominant) {
-    const hasUCLAndLeague = season.championsLeague && season.leagueTitle;
-    const hasWorldCup = season.worldCup;
-    const has30PlusGoals = season.goals >= BDOR_WIN_MIN_GOALS;
-    const bigInvolvementPlusTrophy = gaTotal >= 45 && (season.leagueTitle || season.championsLeague);
-    const meetsWinCondition = has30PlusGoals || hasUCLAndLeague || hasWorldCup || trebleSeason || bigInvolvementPlusTrophy;
-    if (!meetsWinCondition) {
-      // Demote player to 2nd, they weren't dominant enough
-      const playerEntry = top10.find(n => n.isPlayer);
-      if (playerEntry && top10.length >= 2) {
-        // Swap with the top NPC
-        const topNPC = top10.find(n => !n.isPlayer);
-        if (topNPC) {
-          topNPC.points = Math.max(topNPC.points, playerEntry.points + rand(2, 6));
-          top10.sort((a, b) => b.points - a.points);
-          playerRankIdx = top10.findIndex(n => n.isPlayer);
-          playerRank = playerRankIdx >= 0 ? playerRankIdx + 1 : null;
-        }
+    } : null,
+    playerPoints,
+    // Filler nominees (only needed if the era pool somehow ran short)
+    fill: (shortlist, need) => {
+      let fillerSeed = 0;
+      while (shortlist.length < need && fillerSeed < 20) {
+        const gen = generateContender(usedNames, year * 31 + fillerSeed++);
+        if (usedNames.has(gen.name)) continue;
+        usedNames.add(gen.name);
+        shortlist.push({
+          name: gen.name, nationality: gen.nationality, position: gen.position,
+          club: gen.club, points: rand(30, 50), goals: rand(5, 15), trophies: [], isPlayer: false,
+        });
       }
-    }
-  }
-
-  // Round 54 PODIUM FLOOR: even in a year someone else legitimately owned, a
-  // monster individual season cannot be shoved down to 8th. 45+ goals, or 55+
-  // goal involvements, guarantees at least a podium finish.
-  if (statMonster && playerRank !== null && playerRank > 3) {
-    const playerEntry = top10.find(n => n.isPlayer);
-    if (playerEntry) {
-      const thirdBest = [...top10].sort((a, b) => b.points - a.points)[2];
-      playerEntry.points = (thirdBest ? thirdBest.points : playerEntry.points) + rand(1, 4);
-      top10.sort((a, b) => b.points - a.points);
-      playerRankIdx = top10.findIndex(n => n.isPlayer);
-      playerRank = playerRankIdx >= 0 ? playerRankIdx + 1 : null;
-    }
-  }
-
-  // Extended top-30 ranking: strong-but-not-nominated seasons still place in the world top 30
-  if (playerRank === null && playerCanContend && playerPoints >= 12) {
-    const better = allNomineeData.filter(n => !n.isPlayer && n.points > playerPoints).length;
-    const extendedRank = Math.max(11, better + 1);
-    if (extendedRank <= 30) playerRank = extendedRank;
-  }
-
-  return { year, nominees: top10, playerRank, playerPoints, playerNominated: playerInTop10 };
+    },
+    verdicts: [
+      // Round 54: a dominant season is untouchable. If the raw numbers say the
+      // player owned the year, they lift the trophy, even if a filler nominee
+      // landed above them on a technicality.
+      (top10, playerRank) => {
+        if (playerDominant && playerRank !== 1) {
+          const playerEntry = top10.find(n => n.isPlayer);
+          if (playerEntry) {
+            playerEntry.points = top10.reduce((mx, n) => Math.max(mx, n.points), 0) + rand(3, 9);
+          }
+        }
+      },
+      // STRICT WIN CONDITIONS: Player can only win (rank 1) if they meet elite criteria.
+      // Round 54 widened the paths so voters respect stats, not just trophies:
+      // 30+ goals, UCL+League double, World Cup, a domestic treble, or a 45+ goal
+      // involvement season alongside any major trophy all count as winning material.
+      (top10, playerRank) => {
+        if (playerRank === 1 && !playerDominant) {
+          const hasUCLAndLeague = season.championsLeague && season.leagueTitle;
+          const hasWorldCup = season.worldCup;
+          const has30PlusGoals = season.goals >= BDOR_WIN_MIN_GOALS;
+          const bigInvolvementPlusTrophy = gaTotal >= 45 && (season.leagueTitle || season.championsLeague);
+          const meetsWinCondition = has30PlusGoals || hasUCLAndLeague || hasWorldCup || trebleSeason || bigInvolvementPlusTrophy;
+          if (!meetsWinCondition) {
+            // Demote player to 2nd, they weren't dominant enough
+            const playerEntry = top10.find(n => n.isPlayer);
+            if (playerEntry && top10.length >= 2) {
+              // Swap with the top NPC
+              const topNPC = top10.find(n => !n.isPlayer);
+              if (topNPC) topNPC.points = Math.max(topNPC.points, playerEntry.points + rand(2, 6));
+            }
+          }
+        }
+      },
+      // Round 54 PODIUM FLOOR: even in a year someone else legitimately owned, a
+      // monster individual season cannot be shoved down to 8th. 45+ goals, or 55+
+      // goal involvements, guarantees at least a podium finish.
+      (top10, playerRank) => {
+        if (statMonster && playerRank !== null && playerRank > 3) {
+          const playerEntry = top10.find(n => n.isPlayer);
+          if (playerEntry) {
+            const thirdBest = [...top10].sort((a, b) => b.points - a.points)[2];
+            playerEntry.points = (thirdBest ? thirdBest.points : playerEntry.points) + rand(1, 4);
+          }
+        }
+      },
+    ],
+    // Extended top-30 ranking: strong-but-not-nominated seasons still place in the world top 30
+    widerEligible: playerCanContend && playerPoints >= 12,
+  });
 }
 
 /* ─── Flow helper: advance to next phase ─── */
@@ -6620,6 +6795,16 @@ export function dismissSummary(prev: CareerState, clubs: ClubData[]): CareerStat
 /* ─── Dismiss Social Media Action phase ─── */
 export function dismissSocialMediaPhase(prev: CareerState, clubs: ClubData[]): CareerState {
   const s = { ...prev };
+  /* Round 819: the moral dilemma comes next, the same order advanceToNextPhase
+     gives. From the day the dilemmas were added this went straight to the
+     random events, and since the social media screen opens every season from
+     18, the roll in advanceToNextPhase never ran again: no player saw a
+     dilemma after the youth years. Still one roll per season at most: the
+     roll in advanceToNextPhase only runs on a season that skips this screen. */
+  if (tryTriggerMoralDilemma(s)) {
+    s.phase = "moral_dilemma";
+    return s;
+  }
   // Continue to random events → transfer window
   const events = generateRandomEvents(s);
   if (events.length > 0) {
@@ -6643,40 +6828,78 @@ export function dismissBallonDor(prev: CareerState, clubs: ClubData[]): CareerSt
    needs a child). Effects land on top of the automatic win bonuses. */
 export type BdorSpeechChoice = "thank_rival" | "family_on_stage" | "tears" | "greatest_ever";
 
+/* Round 834: the four speeches as shared speech options. The steps run in the
+   order the old switch ran them and greatest_ever still draws its one coin
+   after the morale step, so every later draw lands where it always did. */
+export const SOCCER_BDOR_SPEECHES: SpeechOption<CareerState, SoccerAwardsMeter, BdorSpeechChoice>[] = [
+  {
+    id: "thank_rival", emoji: "🎤", label: "Thank your rival by name: he made me this good", tone: "gold",
+    available: s => !!s.rival && !s.rival.retired,
+    effect: [{ meter: "popularity", delta: 12 }, { meter: "integrityBonus", delta: 5 }, { meter: "rivalryIntensity", delta: -20 }],
+    line: s => `🎤 On the biggest stage you thanked ${s.rival?.name ?? "your rival"} by name: "he made me this good." The room stood up. The feud will never be the same.`,
+  },
+  {
+    id: "family_on_stage", emoji: "👶", label: "Bring your kid on stage to hold the golden ball", tone: "gold",
+    available: s => s.family.children > 0,
+    effect: [{ meter: "popularity", delta: 15 }, { meter: "morale", delta: 10 }],
+    line: () => "👶 You carried your kid on stage and let them hold the golden ball. Every camera in the theatre wept.",
+  },
+  {
+    id: "tears", emoji: "😭", label: "Cry through the whole thing, thank your youth coach", tone: "gold",
+    effect: [{ meter: "popularity", delta: 10 }, { meter: "morale", delta: 8 }],
+    line: () => "😭 You cried from the first sentence to the last. The clip of you thanking your youth coach is everywhere.",
+  },
+  {
+    id: "greatest_ever", emoji: "🐐", label: "Declare yourself the greatest to ever do it", tone: "bold",
+    effect: [{ meter: "morale", delta: 5 }],
+    risk: {
+      chance: 0.35,
+      hit: [{ meter: "popularity", delta: -10 }, { meter: "rivalryIntensity", delta: 10 }],
+      miss: [{ meter: "popularity", delta: 8 }],
+    },
+    line: (_s, outcome) => outcome === "hit"
+      ? '🐐 "I am the greatest to ever do this." Half the room gasped, the pundits fed on it for weeks. Popularity -10, but you meant every word.'
+      : '🐐 "I am the greatest to ever do this." Delivered with such calm that people just... agreed. Popularity +8.',
+  },
+];
+
 export function applyBdorSpeech(prev: CareerState, choice: BdorSpeechChoice, clubs: ClubData[]): CareerState {
   const s = { ...prev };
-  const rivalName = s.rival?.name ?? "your rival";
-  switch (choice) {
-    case "thank_rival":
-      s.popularity = clamp(s.popularity + 12, 0, 100);
-      s.integrityBonus += 5;
-      s.rivalryIntensity = clamp((s.rivalryIntensity ?? 0) - 20, 0, 100);
-      s.events = [...s.events, `🎤 On the biggest stage you thanked ${rivalName} by name: "he made me this good." The room stood up. The feud will never be the same.`];
-      break;
-    case "family_on_stage":
-      s.popularity = clamp(s.popularity + 15, 0, 100);
-      s.morale = clamp(s.morale + 10, 0, 100);
-      s.events = [...s.events, "👶 You carried your kid on stage and let them hold the golden ball. Every camera in the theatre wept."];
-      break;
-    case "tears":
-      s.popularity = clamp(s.popularity + 10, 0, 100);
-      s.morale = clamp(s.morale + 8, 0, 100);
-      s.events = [...s.events, "😭 You cried from the first sentence to the last. The clip of you thanking your youth coach is everywhere."];
-      break;
-    case "greatest_ever":
-      s.morale = clamp(s.morale + 5, 0, 100);
-      if (Math.random() < 0.35) {
-        s.popularity = clamp(s.popularity - 10, 0, 100);
-        s.rivalryIntensity = clamp((s.rivalryIntensity ?? 0) + 10, 0, 100);
-        s.events = [...s.events, '🐐 "I am the greatest to ever do this." Half the room gasped, the pundits fed on it for weeks. Popularity -10, but you meant every word.'];
-      } else {
-        s.popularity = clamp(s.popularity + 8, 0, 100);
-        s.events = [...s.events, '🐐 "I am the greatest to ever do this." Delivered with such calm that people just... agreed. Popularity +8.'];
-      }
-      break;
-  }
+  applySpeech(SOCCER_BALLON_DOR, SOCCER_BDOR_SPEECHES, s, choice);
   s.pendingBallonDor = null;
   return advanceToNextPhase(s, clubs);
+}
+
+/* Round 834: the Ballon d'Or speech is back on the ceremony card. It had no
+   buttons from Round 54 (they moved to the World Cup card) until this round:
+   applyBdorSpeech above was reachable only from the harnesses, which still
+   use it as the one step speech. The card uses the two below instead: the
+   speech is given on the card, the card shows what it did, and Continue is
+   the ordinary dismissBallonDor. */
+
+/** May the ceremony on screen still offer the winner's speech? Only on the
+ *  ceremony itself, only when the player won it, only once, and only for the
+ *  season just played: a night that does not belong to the last season on the
+ *  record (a stale ceremony an old save is still holding) offers nothing. */
+export function bdorSpeechOpen(s: CareerState): boolean {
+  const night = s.pendingBallonDor;
+  if (s.phase !== "ballon_dor" || !night || night.playerRank !== 1 || night.speech) return false;
+  const last = s.seasons[s.seasons.length - 1];
+  return !!last && last.year === night.year && last.ballonDor;
+}
+
+/** Gives the speech on the card. Applied once: the night keeps which speech
+ *  it was, its line and what it measurably moved after the clamps, and a
+ *  second call does nothing. The card's line drops the number the log line
+ *  prints ("Popularity +8"), which a winner at the cap never gets; the moved
+ *  line beside it carries the real one. */
+export function giveBdorSpeech(prev: CareerState, choice: BdorSpeechChoice): CareerState {
+  if (!bdorSpeechOpen(prev) || !SOCCER_BDOR_SPEECHES.some(o => o.id === choice)) return prev;
+  const s = { ...prev };
+  let line = "";
+  const moved = measureMoves(SOCCER_AWARDS_METERS, s, () => { line = applySpeech(SOCCER_BALLON_DOR, SOCCER_BDOR_SPEECHES, s, choice)!; });
+  s.pendingBallonDor = { ...prev.pendingBallonDor!, speech: { id: choice, line: narrativeOf(SOCCER_AWARDS_METERS, line), moved: describeSteps(SOCCER_AWARDS_METERS, moved) } };
+  return s;
 }
 
 /* ─── Dismiss international debut screen ─── */
@@ -6709,39 +6932,42 @@ export function dismissWorldCup(prev: CareerState, clubs: ClubData[]): CareerSta
    effects, and every path ends by clearing the pending result. */
 export type WorldCupSpeechChoice = "for_the_country" | "shirt_to_the_fans" | "call_out_doubters" | "quiet_lap";
 
+/* Round 834: the tournament winner's speech on the shared speech options. Both
+   tournament cards draw their buttons from this list, so the button words and
+   the effects can no longer drift apart in one copy and not the other. */
+export const SOCCER_WORLD_CUP_SPEECHES: SpeechOption<CareerState, SoccerAwardsMeter, WorldCupSpeechChoice>[] = [
+  {
+    id: "for_the_country", emoji: "🏆", label: "Dedicate it to every kid back home", tone: "gold",
+    effect: [{ meter: "popularity", delta: 18 }, { meter: "morale", delta: 12 }, { meter: "socialMediaFollowers", delta: 3 }],
+    line: s => `🏆 You dedicated it to every kid in ${s.nationality} playing on a broken pitch right now. A nation lost its mind.`,
+  },
+  {
+    id: "shirt_to_the_fans", emoji: "🎽", label: "Throw your shirt into the away end", tone: "gold",
+    effect: [{ meter: "popularity", delta: 14 }, { meter: "morale", delta: 8 }, { meter: "integrityBonus", delta: 6 }],
+    line: () => "🎽 You threw the match shirt into the away end and walked off in a training top. That photo is now a mural.",
+  },
+  {
+    id: "call_out_doubters", emoji: "📢", label: "Name the pundits who wrote you off", tone: "bold",
+    effect: [{ meter: "morale", delta: 15 }, { meter: "socialMediaFollowers", delta: 4 }],
+    risk: {
+      chance: 0.4,
+      hit: [{ meter: "popularity", delta: -8 }],
+      miss: [{ meter: "popularity", delta: 10 }],
+    },
+    line: (_s, outcome) => outcome === "hit"
+      ? '📢 "Where are they now?" Named three pundits live on air. Iconic, petty, and replayed for a decade. Popularity -8.'
+      : '📢 "Where are they now?" Named three pundits live on air and the whole country cheered. Popularity +10.',
+  },
+  {
+    id: "quiet_lap", emoji: "🚶", label: "Say nothing. Walk one slow lap with the trophy", tone: "quiet",
+    effect: [{ meter: "morale", delta: 10 }, { meter: "integrityBonus", delta: 10 }, { meter: "popularity", delta: 6 }],
+    line: () => "🚶 No speech. You walked one slow lap with the trophy, found your family in row 12, and said nothing at all.",
+  },
+];
+
 export function applyWorldCupSpeech(prev: CareerState, choice: WorldCupSpeechChoice, clubs: ClubData[]): CareerState {
   const s = { ...prev };
-  switch (choice) {
-    case "for_the_country":
-      s.popularity = clamp(s.popularity + 18, 0, 100);
-      s.morale = clamp(s.morale + 12, 0, 100);
-      s.socialMediaFollowers = Math.round((s.socialMediaFollowers + 3) * 100) / 100;
-      s.events = [...s.events, `🏆 You dedicated it to every kid in ${s.nationality} playing on a broken pitch right now. A nation lost its mind.`];
-      break;
-    case "shirt_to_the_fans":
-      s.popularity = clamp(s.popularity + 14, 0, 100);
-      s.morale = clamp(s.morale + 8, 0, 100);
-      s.integrityBonus += 6;
-      s.events = [...s.events, "🎽 You threw the match shirt into the away end and walked off in a training top. That photo is now a mural."];
-      break;
-    case "call_out_doubters":
-      s.morale = clamp(s.morale + 15, 0, 100);
-      s.socialMediaFollowers = Math.round((s.socialMediaFollowers + 4) * 100) / 100;
-      if (Math.random() < 0.4) {
-        s.popularity = clamp(s.popularity - 8, 0, 100);
-        s.events = [...s.events, '📢 "Where are they now?" Named three pundits live on air. Iconic, petty, and replayed for a decade. Popularity -8.'];
-      } else {
-        s.popularity = clamp(s.popularity + 10, 0, 100);
-        s.events = [...s.events, '📢 "Where are they now?" Named three pundits live on air and the whole country cheered. Popularity +10.'];
-      }
-      break;
-    case "quiet_lap":
-      s.morale = clamp(s.morale + 10, 0, 100);
-      s.integrityBonus += 10;
-      s.popularity = clamp(s.popularity + 6, 0, 100);
-      s.events = [...s.events, "🚶 No speech. You walked one slow lap with the trophy, found your family in row 12, and said nothing at all."];
-      break;
-  }
+  applySpeech(SOCCER_BALLON_DOR, SOCCER_WORLD_CUP_SPEECHES, s, choice);
   s.pendingWorldCup = null;
   s.pendingTournament = null;
   return advanceToNextPhase(s, clubs);
@@ -7498,11 +7724,20 @@ export function acceptRetirementSuggestion(prev: CareerState): CareerState {
   return s;
 }
 
-export function declineRetirementSuggestion(prev: CareerState): CareerState {
-  const s = { ...prev };
+export function declineRetirementSuggestion(prev: CareerState, clubs: ClubData[]): CareerState {
+  /* Round 850: Keep Playing plays the season he just aged into. The year was
+     already started when the suggestion came up (advanceProSeason ran up to
+     it), so this resumes that same advance at the season and nothing above it
+     runs twice. A save written while sitting on this screen, by any version,
+     is in exactly that state, so declining on it plays the pending season
+     once. Off this screen it keeps the old behaviour and plays nothing. */
+  const s = repairCareer({ ...prev });
   s.events = [...s.events, "💪 Decided to push on, not ready to hang up the boots yet"];
-  s.phase = "playing";
-  return s;
+  if (prev.phase !== "retirement_suggestion" || prev.retired) {
+    s.phase = "playing";
+    return s;
+  }
+  return playPendingProSeason(s, clubs);
 }
 
 /* ─── Manager Career ─── */

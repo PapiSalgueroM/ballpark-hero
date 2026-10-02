@@ -179,6 +179,8 @@ await bundle(pre, path.join(TMP, 'pre.cjs'));
 const req = createRequire(import.meta.url);
 const cm = req(path.join(TMP, 'live.cjs')).cm;
 const old = req(path.join(TMP, 'pre.cjs')).cm;
+/* Round 832: an era's squads load with the era, so both bundles fetch all three first. */
+for (const engine of [cm, old]) await engine.ensureAllEraRosters();
 
 /* ---------- helpers ---------- */
 const SEED_BASE = Number.isFinite(Number(process.env.SIM_SEED)) ? Number(process.env.SIM_SEED) : 0;
