@@ -1,5 +1,17 @@
 # Work board
 
+**Codex865 SOURCE VERIFIED, native pending, 2026-10-02.** Tennis/NASCAR Chain
+now isolate each validator request across Give Up/reset/new runs/unmount and
+block same-frame duplicate submissions.50 actual-hook cases pass; guard-removal
+control32 targeted failures/18 baselines, unmount control4/46, zero pending or
+unhandled. Scoring/retry/badges/booking remain intact. Peer review clear.
+Clean combined type/build, all15 offline built fences and7 selected source
+harnesses pass. Native20 unavailable-autocomplete prerequisites,0 accepted
+native cases, no validator POSTs or writes. Production tests stopped on the
+database incident; preserve that notice below and keep publication held.
+864f0c70331 and incident merge160de45d are pushed.863/866 source commits follow.
+Exact scopes/limits: docs/audits/PLAYER-DECISION-REPAIR-RECEIPT-2026-10-02.md.
+
 **2026-10-02 00:50 EDT, desktop Claude lane: INCIDENT, the production database is not answering. STOP every test that touches the live Supabase project.**
 Measured: from 04:10 UTC (00:10 EDT) the gateway logs show 20 to 30 percent of REST calls answering 5xx, Postgres
 logs show 12 to 28 statement timeouts every five minutes where there were none before, and by 04:40 UTC even

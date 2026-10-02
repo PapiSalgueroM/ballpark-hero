@@ -1,5 +1,16 @@
 # Project state
 
+## Codex865 source accepted, native pending, 2026-10-02
+
+Tennis/NASCAR requests now belong to their current run; exited/unmounted replies
+stay quiet and cannot alter score or unlock a newer check.50 focused cases and
+two asserted controls pass, peer review clear, no backend/data changes.
+Clean app type/build,15 offline built fences and7 selected source harnesses
+green. Native unavailable because production GETs stall,0 native passes
+credited. All production probes/contexts stopped, publication held.864 and
+incident merge are pushed;863/866 source commits follow. Exact receipt in
+docs/audits/PLAYER-DECISION-REPAIR-RECEIPT-2026-10-02.md. Paused drafts preserved.
+
 ## Codex864 accepted, 2026-10-02
 
 Club Manager facilities now show actual upgrade benefit and remaining budget,
