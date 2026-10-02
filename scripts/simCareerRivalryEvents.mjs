@@ -442,6 +442,13 @@ console.log('4) The NFL binding: every beat reachable and correct, and the tick 
     215: [nflFixture({ ovr: 90 }), rivalFixture({ ovr: 90 })],
     216: [nflFixture({ age: 30 }), rivalFixture()],
     217: [nflFixture({ age: 34 }), rivalFixture()],
+    /* Round 917: the six NFL beats added with the content pack. */
+    218: [nflFixture({ team: 'DAL', fanbase: 60 }), rivalFixture()],
+    219: [nflFixture({ team: 'DAL' }), rivalFixture()],
+    220: [nflFixture(), rivalFixture({ ovr: 88 })],
+    221: [nflFixture({ ovr: 85 }), rivalFixture({ ovr: 85 })],
+    222: [nflFixture(), rivalFixture()],
+    223: [nflFixture(), rivalFixture({ age: 27 })],
   };
   let reachable = 0, correct = 0;
   const total = nflRivalry.NFL_RIVALRY_EVENTS.length;

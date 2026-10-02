@@ -25,6 +25,11 @@
    soccer-specific beats (a Ballon d'Or, a Champions League run, a nationality
    match) that have no honest NFL equivalent, and inventing one would be
    filling a gap with something plausible, which CLAUDE.md rules out.
+   Round 917 added six more (218 to 223), twenty three in all, each one a
+   thing a football year has in any era the game offers: the schedule
+   release, a joint practice, a market reset, an all star week, a re-draft
+   column and a captaincy. None of them needed a field the rival does not
+   already carry.
 
    LEGAL SHAPE. Every description narrates the rival ("tells reporters",
    "announces", "invites you") rather than quoting him, the same rule the
@@ -206,6 +211,71 @@ export const NFL_RIVALRY_EVENTS: RivalryEventDef<CareerState, CareerRival>[] = [
     apply: s => {
       s.fanbase = clamp(s.fanbase + 8, 0, 100);
       s.rivalryIntensity = clamp((s.rivalryIntensity ?? 0) - 25, 0, 100);
+    },
+  },
+  /* Round 917: six more, each one a thing a football year really has (a
+     schedule release, a joint practice, a market reset, an all star week, a
+     re-draft column, a captaincy). Same rules as the seventeen above: gated
+     on what the rival's save carries, narrated and never quoted, and every
+     consequence line says what the apply does. */
+  {
+    id: 218, emoji: "🌙", title: "Prime Time Billing",
+    description: (_s, r) => `The schedule comes out and your game against ${r.name}'s team is the night game. The whole country gets the two of you now.`,
+    consequence: "Fanbase +6, rivalry intensifies",
+    when: (s, r) => !r.retired && r.team !== s.team && s.fanbase >= 55,
+    apply: s => {
+      s.fanbase = clamp(s.fanbase + 6, 0, 100);
+      s.rivalryIntensity = clamp((s.rivalryIntensity ?? 0) + 10, 0, 100);
+    },
+  },
+  {
+    id: 219, emoji: "🥊", title: "Joint Practice",
+    description: (_s, r) => `Your team and ${r.name}'s team share a field for joint practices in camp. No scoreboard, and everybody keeps score.`,
+    consequence: "50/50 outcome",
+    when: (s, r) => !r.retired && r.team !== s.team,
+    apply: (s, r, rng, pushLine) => {
+      if (rng() < 0.5) { s.morale = clamp(s.morale + 5, 0, 100); pushLine(`🥊 You got the better of ${r.name} in the joint practices. Morale +5.`); }
+      else { s.morale = clamp(s.morale - 4, 0, 100); pushLine(`🥊 ${r.name} got the better of you in the joint practices. Morale -4.`); }
+    },
+  },
+  {
+    id: 220, emoji: "💰", title: "Rival Resets the Market",
+    description: (_s, r) => `${r.name} just signed the biggest deal anyone at the position has seen. Every story about it mentions your name in the second paragraph.`,
+    consequence: "Morale -3, rivalry intensifies",
+    when: (_s, r) => !r.retired && r.ovr >= 84,
+    apply: s => {
+      s.morale = clamp(s.morale - 3, 0, 100);
+      s.rivalryIntensity = clamp((s.rivalryIntensity ?? 0) + 8, 0, 100);
+    },
+  },
+  {
+    id: 221, emoji: "🌺", title: "Same Side for a Week",
+    description: (_s, r) => `You and ${r.name} both make the all star roster and spend a week on the same sideline. It turns out he is easy to like.`,
+    consequence: "Fanbase +4, the feud softens",
+    when: (s, r) => !r.retired && s.ovr >= 82 && r.ovr >= 82,
+    apply: s => {
+      s.fanbase = clamp(s.fanbase + 4, 0, 100);
+      s.rivalryIntensity = clamp((s.rivalryIntensity ?? 0) - 10, 0, 100);
+    },
+  },
+  {
+    id: 222, emoji: "🔁", title: "The Re-Draft",
+    description: (_s, r) => `A national column re-drafts your class with everything known now, and it comes down to you or ${r.name} near the top.`,
+    consequence: "Ranked by today's rating: Fanbase +5 or Morale -4",
+    when: s => s.age >= 25,
+    apply: (s, r, _rng, pushLine) => {
+      if (s.ovr >= r.ovr) { s.fanbase = clamp(s.fanbase + 5, 0, 100); pushLine(`🔁 The re-draft takes you ahead of ${r.name}. Fanbase +5.`); }
+      else { s.morale = clamp(s.morale - 4, 0, 100); pushLine(`🔁 The re-draft takes ${r.name} ahead of you. Morale -4.`); }
+    },
+  },
+  {
+    id: 223, emoji: "🎖️", title: "Rival Named Captain",
+    description: (_s, r) => `${r.name}'s teammates voted him a captain. He is the one walking out for the coin toss the next time your teams meet.`,
+    consequence: "Morale -2, rivalry intensifies",
+    when: (_s, r) => !r.retired && r.age >= 26,
+    apply: s => {
+      s.morale = clamp(s.morale - 2, 0, 100);
+      s.rivalryIntensity = clamp((s.rivalryIntensity ?? 0) + 6, 0, 100);
     },
   },
 ];
