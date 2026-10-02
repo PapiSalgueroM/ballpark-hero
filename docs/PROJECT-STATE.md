@@ -1,5 +1,13 @@
 # Project state
 
+Codex claims894 NBA input recovery, 2026-10-02.
+
+The current named NBA OVRs lack a reproducible season-stat recipe and GM
+ages are generated. Root will retain bounded official bulk-source responses
+in TEMP and document coverage and gaps before any player-facing adoption.
+No NBA production rating/age rewrite yet. 889/892/893 continue independently.
+Next free895.
+
 Codex claims892 and893, 2026-10-02.
 
 892 repairs unaffordable NFL practice call-ups using the current league cap,

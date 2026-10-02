@@ -1,5 +1,16 @@
 # Work board
 
+Codex claims894 NBA rating-input recovery, 2026-10-02.
+
+Root owns a new NBA source-review receipt and TEMP-only acquisition of
+dated official player-season inputs. At most six bulk public requests,
+once each, no retries, no per-player crawl or image downloads. Establish
+whether current role, efficiency, sample and actual age can be reproduced
+for the unchanged300-name pool. Missing source data stays a gap. This claim
+does not authorize NBA seed, Conquest, career or save rewrites. 889 NFL
+review,892 cap repair and893 NHL source recovery continue in separate lanes.
+No live-site, Supabase, user-browser or deployment calls. Next free895.
+
 Codex claims892 and893, 2026-10-02.
 
 892 repairs the verified NFL practice-promotion salary-cap bypass. Scope:
