@@ -64,6 +64,7 @@ async function settle() {
 }
 
 const counts: Record<string, number> = {};
+const shapes: Record<string, { mains: number; tag: string; focusable: boolean; holdsContent: boolean }> = {};
 
 beforeEach(() => {
   vi.useFakeTimers({ toFake: ['Date'] });
@@ -98,18 +99,33 @@ describe('skip to main content', () => {
         </HelmetProvider>,
       );
       await settle();
-      const found = view.container.querySelectorAll(`[id="${TARGET}"]`).length;
+      const targets = view.container.querySelectorAll(`[id="${TARGET}"]`);
+      const found = targets.length;
       counts[address] = found;
+      /* Round 848 review: the target is the page's one main landmark, not a
+         div somewhere else, and turning a fragment into a main must not nest
+         one main inside another (a document has one visible main). It takes
+         focus, so the link really moves the keyboard there. */
+      const mains = view.container.querySelectorAll('main').length;
+      const tag = targets[0]?.tagName ?? '';
+      const focusable = targets[0] ? (targets[0] as HTMLElement).tabIndex === -1 : false;
+      const holdsContent = !!targets[0] && (targets[0].querySelector('button, a[href], input, select, textarea') !== null || (targets[0].textContent ?? '').trim().length >= 20);
+      shapes[address] = { mains, tag, focusable, holdsContent };
       /* The shared Supabase stub hands back no auth subscription, so a page
          that unsubscribes on unmount (reset-password) throws here. The count
          above is already taken; the teardown is the stub's, not the page's. */
       try { view.unmount(); } catch { /* stub teardown */ }
       cleanup();
       expect(found, `${address} has exactly one #${TARGET}`).toBe(1);
+      expect(mains, `${address} draws at most one main`).toBeLessThanOrEqual(1);
+      if (mains === 1) expect(tag, `${address}: where the page has a main, #${TARGET} is it`).toBe('MAIN');
+      expect(holdsContent, `${address}: #${TARGET} holds the page's content (its controls, or at least its words), so the link lands there`).toBe(true);
+      expect(focusable, `${address}: #${TARGET} takes focus from the link`).toBe(true);
     }, 30000);
   }
 
   afterAll(() => {
     console.log(`R848_SKIP ${JSON.stringify(counts)}`);
+    console.log(`R848_SKIP_SHAPE ${JSON.stringify(shapes)}`);
   });
 });

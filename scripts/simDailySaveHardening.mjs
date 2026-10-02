@@ -74,6 +74,10 @@
  *   shape   the shared shape check removed: the shapes test must go red, with
  *           every route whose game hands in no check of its own throwing.
  *   skip    the target removed from Free Kick: that row, and only that row.
+ *   skipdiv (review) Free Kick's id moved off its main onto an empty div in
+ *           front of it: still one target, so only the review's landmark
+ *           checks (the target is the main where there is one, and it holds
+ *           the page's content) can see it. That row, and only that row.
  *
  * All outcomes are deterministic (fixed clock, Math.random pinned, no network),
  * so there are no bands: the counts below are exact and were the same on every
@@ -94,7 +98,7 @@ const VITEST = path.join(path.dirname(createRequire(path.join(ROOT, 'package.jso
 const PRE = '617b8354';
 const PART = process.env.R848_PART || 'all';
 const CONTROL = process.env.R848_CONTROL || '';
-const CONTROLS = ['stale', 'guard', 'turn', 'verdict', 'event', 'mark', 'finished', 'decided', 'strict', 'single', 'empty', 'shape', 'skip'];
+const CONTROLS = ['stale', 'guard', 'turn', 'verdict', 'event', 'mark', 'finished', 'decided', 'strict', 'single', 'empty', 'shape', 'skip', 'skipdiv'];
 assert.ok(['all', 'saves', 'shapes', 'skip', 'parity'].includes(PART), `unknown R848_PART ${PART}`);
 assert.ok(!CONTROL || CONTROLS.includes(CONTROL), `unknown R848_CONTROL ${CONTROL}`);
 
@@ -288,14 +292,14 @@ try {
     }
     assert.notEqual(run.status, 0, 'the run is red');
     console.log(`R848 ${CONTROL} control: ${red.length} of ${CONTROL === 'single' ? 39 : rows.length} parity rows red (${red.length > 8 ? `${red.slice(0, 8).join(', ')}, ...` : red.join(', ')})`);
-  } else if (CONTROL === 'skip') {
-    const copy = copyWith('src/pages/FreeKick.tsx', [['<main id="dukb-main" tabIndex={-1} className=', '<main className=']], 'FreeKick.tsx');
+  } else if (CONTROL === 'skip' || CONTROL === 'skipdiv') {
+    const copy = copyWith('src/pages/FreeKick.tsx', [['<main id="dukb-main" tabIndex={-1} className=', CONTROL === 'skip' ? '<main className=' : '<div id="dukb-main" tabIndex={-1} /><main className=']], 'FreeKick.tsx');
     const run = vitest(SKIP, { swaps: { '@/pages/FreeKick': copy } });
     const failed = run.rows.filter((r) => r.status === 'failed');
     if (failed.length !== 1 || !/> \/free-kick$/.test(failed[0].title)) fail(`expected exactly the /free-kick row red, got ${failed.map((r) => r.title).join(', ') || 'none'}`);
     else if (!/AssertionError/.test(failed[0].messages)) fail('the /free-kick row failed on something other than its count');
     const counts = lines(run.text, 'R848_SKIP')[0] || {};
-    console.log(`R848 skip control: /free-kick drew ${counts['/free-kick']} targets, ${run.rows.length - failed.length} other rows green`);
+    console.log(`R848 ${CONTROL} control: /free-kick drew ${counts["/free-kick"]} target(s) and went red, ${run.rows.length - failed.length} other rows green`);
   } else {
     /* ------------------------------------------------------- the parts */
     if (PART === 'all' || PART === 'saves') {
