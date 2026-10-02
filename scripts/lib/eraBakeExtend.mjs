@@ -121,7 +121,7 @@ export function leaguePool(rows, year, dbToEra, label) {
     const prev = pool.get(r.player_name);
     const usd = r.market_value_usd ?? 0;
     if (!prev || usd > prev.usd || (usd === prev.usd && r.id < prev.id)) {
-      pool.set(r.player_name, { engine, dbClub: r.club, position: r.position, age: r.age, usd, id: r.id });
+      pool.set(r.player_name, { engine, dbClub: r.club, position: r.position, age: r.age, usd, id: r.id, nat: r.nationality });
     }
   }
   for (const db of Object.keys(dbToEra)) {
@@ -134,7 +134,7 @@ function bakeRow(name, rec) {
   const p = POS_MAP[rec.position];
   if (!p) die(`unmapped position "${rec.position}" (${name})`);
   if (!Number.isFinite(rec.age)) die(`no age on the row of ${name}`);
-  return { n: name, p, a: rec.age, v: gbpM(rec.usd), r: ratingOf(rec.usd), shipped: false };
+  return { n: name, p, a: rec.age, v: gbpM(rec.usd), r: ratingOf(rec.usd), shipped: false, nat: rec.nat };
 }
 
 /**
@@ -285,7 +285,7 @@ export function extendEra(cfg) {
     for (const r of rows) {
       if (r.year !== year || r.player_name !== ar.n || r.club !== ar.from) continue;
       const usd = r.market_value_usd ?? 0;
-      if (!best || usd > best.usd || (usd === best.usd && r.id < best.id)) best = { position: r.position, age: r.age, usd, id: r.id };
+      if (!best || usd > best.usd || (usd === best.usd && r.id < best.id)) best = { position: r.position, age: r.age, usd, id: r.id, nat: r.nationality };
     }
     if (!best) die(`arrival "${ar.n}": no year-${year} row at "${ar.from}"`);
     proveAt(ar.n, ar.to, 'arrival');
@@ -350,7 +350,11 @@ export function extendEra(cfg) {
     out.push('  ],');
   }
   out.push('};', '');
-  return { text: out.join(eol), stats, log, world };
+  /* The nationality on the same row each new line was baked from, for the
+     per world nationality map (updateNationalityBlock below). */
+  const nationalities = new Map();
+  for (const list of world.values()) for (const p of list) if (!p.shipped) nationalities.set(p.n, p.nat);
+  return { text: out.join(eol), stats, log, world, nationalities };
 }
 
 /** Run an extend from a bake script: print the log, fail closed, write. */
@@ -371,4 +375,43 @@ export function readPull(file) {
   const d = JSON.parse(fs.readFileSync(file, 'utf8'));
   if (d.table !== 'player_market_values') { console.error(`FATAL: ${file} is a pull of "${d.table}", not the base table`); process.exit(1); }
   return d.rows;
+}
+
+/**
+ * Bring one world's block of src/data/playerNationalities.ts in line with an
+ * extended era: every new line gets the nationality of the row it was baked
+ * from (which also re-points a name whose namesake won the one name, one
+ * player rule), and an entry whose player left the world is dropped, so the
+ * map holds exactly the world's names. Entries of lines that were already
+ * shipped are carried through untouched. Fails closed on a world name left
+ * without a country. Returns { added, changed, dropped, total }.
+ */
+export function updateNationalityBlock(file, worldKey, res) {
+  const raw = fs.readFileSync(file, 'utf8');
+  const eol = raw.includes('\r\n') ? '\r\n' : '\n';
+  const lines = raw.replace(/\r\n/g, '\n').split('\n');
+  const start = lines.indexOf(`${worldKey}: {`);
+  if (start < 0) die(`${file}: no block for ${worldKey}`);
+  let end = start + 1;
+  const map = new Map();
+  for (; end < lines.length && lines[end] !== '},'; end++) {
+    const m = lines[end].match(/^  '(.*)': '(.*)',$/);
+    if (!m) die(`${file}: a line this parser does not know in ${worldKey}: ${lines[end]}`);
+    map.set(unesc(m[1]), unesc(m[2]));
+  }
+  if (lines[end] !== '},') die(`${file}: the ${worldKey} block never closes`);
+  const names = new Set();
+  for (const list of res.world.values()) for (const p of list) names.add(p.n);
+  let added = 0, changed = 0, dropped = 0;
+  for (const n of [...map.keys()]) if (!names.has(n)) { map.delete(n); dropped += 1; }
+  for (const [n, nat] of res.nationalities) {
+    if (!nat) die(`${n} was baked from a row with no nationality`);
+    if (!map.has(n)) added += 1; else if (map.get(n) !== nat) changed += 1;
+    map.set(n, nat);
+  }
+  for (const n of names) if (!map.has(n)) die(`${worldKey}: ${n} is in the world and has no nationality`);
+  const block = [...map.keys()].sort().map(n => `  '${esc(n)}': '${esc(map.get(n))}',`);
+  lines.splice(start + 1, end - start - 1, ...block);
+  fs.writeFileSync(file, lines.join(eol));
+  return { added, changed, dropped, total: map.size };
 }

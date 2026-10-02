@@ -53,7 +53,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { execSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
-import { runExtend, readPull } from './lib/eraBakeExtend.mjs';
+import { runExtend, readPull, updateNationalityBlock } from './lib/eraBakeExtend.mjs';
 
 const ROOT =path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -653,6 +653,13 @@ if (bigFiveArg) {
   console.log(`Shipped lines: ${s.shippedLines}, of which ${s.shippedKept} are still in the world byte for byte. Touched:`);
   for (const t of s.touched) console.log(`  ${t}`);
   console.log(`New club sizes: ${Object.entries(s.sizes).map(([c, n]) => `${c} ${n}`).join(', ')}`);
+  /* The market's nationality filter reads one map per world, and it must hold
+     exactly this world's names: each new line takes the nationality on the
+     row it was baked from, and a man who left the world leaves the map. */
+  if (!process.argv.includes('--dry')) {
+    const n = updateNationalityBlock(path.join(ROOT, 'src/data/playerNationalities.ts'), 'era2015', res);
+    console.log(`Nationalities, era2015 block: ${n.added} added, ${n.changed} re-pointed, ${n.dropped} dropped, ${n.total} entries for ${s.players} players.`);
+  }
   process.exit(0);
 }
 

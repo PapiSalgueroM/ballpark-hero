@@ -336,7 +336,9 @@ async function partEras() {
   for (const [eraId, leagues] of Object.entries(mod.cm.ERA_LEAGUES)) {
     for (const l of leagues) saves.push({ key: `${eraId}|${l.id}`, club: l.clubs[0], eraId, second: false });
   }
-  if (saves.length !== 7) fail(`the eras hold ${saves.length} leagues where this round found 7`);
+  /* Round 899: nine, the 2015-16 era gained its Bundesliga and its Ligue 1 (a league added to an era
+     regenerates the baseline on purpose, like a modern one). */
+  if (saves.length !== 9) fail(`the eras hold ${saves.length} leagues where Round 899 left 9`);
   const got = await digestSaves(saves, mod);
   if (WRITE) written.eras = got; else compare('eras', got, baseline.parts.eras);
 }
