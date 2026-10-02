@@ -25,7 +25,7 @@ handbuilt help is outside this scope. Ready for Claude's publication lane.
 NFL/NHL malformed saves recover to a usable picker with raw bytes preserved
 until explicit delete/new team; other game saves remain intact.36 focused
 component checks and two guard-removal controls pass expected outcomes. Native
-four320/1440 contexts and12 corrupt shapes pass. Both320 franchises finish a
+four320/1440 contexts and12 damaged-save cases pass. Both320 franchises finish a
 whole season, refresh recap/draft and reload2027 after all earned picks.
 Clean type/build, all15 built-site fences and the new harness runner pass.
 Soccer malformed-save recovery remains open. Ready for Claude publication.

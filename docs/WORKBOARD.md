@@ -44,7 +44,7 @@ older, ID-repaired, draft and recap states; removed pool/period guards fail
 exactly four/two intended assertions. Native320 touch/1440 pointer: four game
 contexts and12 damaged-save cases pass with raw held across two loads and
 another actual game save held through delete/replacement. Both320 games finish
-their entire real season, refresh recap and draft, use all earned picks and
+their entire simulated season through native controls, refresh recap and draft, use all earned picks and
 reload the2027 hub (NFL17weeks/3picks, NHL20stretches/2picks). Zero uncaught
 errors/overflow. Clean type/build and all15 built-site fences pass; its new
 harness also passes runAllSims after substantive reporting was added.
