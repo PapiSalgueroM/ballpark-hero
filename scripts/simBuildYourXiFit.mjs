@@ -40,7 +40,10 @@
         shares one has its link; no link touches an empty slot. A club the
         table stores under two names (Juventus FC and Juventus) links as one
         club, two clubs never do, and a bare label that is not one of the
-        club's own stored names does not either. The layout the
+        club's own stored names does not either. The engine's neighbour
+        pairs are exactly this file's own reading of "next to each other"
+        (side by side in a line, or the next line and a quarter of the pitch
+        across at most). The layout the
         links read is checked against a line table of this harness's own: the
         keeper only neighbours his back line, no pair spans two lines, and a
         left sided slot sits left of every central slot in its line (the 3-5-2
@@ -86,6 +89,7 @@
                with the shared rule)
      farlinks  chemistry counts every pair, not neighbours.   section 2
      alias     one club under two stored names reads as two.  section 2
+     reach     neighbours reach 60 percent across.            section 2
      nocap     the chemistry cap is gone.                     section 3
      tileraw   the chemistry tile shows the uncapped sum.     section 3
      leak      World XI's season gets a half point nudge.     section 4
@@ -173,6 +177,12 @@ const CONTROLS = {
     from: '      if (opts?.linked && !opts.linked(a, b)) continue;\n',
     to: '      void opts;\n',
     note: 'chemistry counts every pair on the pitch; section 2 must go red',
+  },
+  reach: {
+    sections: [2], file: 'xifit',
+    from: 'export const NEIGHBOUR_REACH = 25;',
+    to: 'export const NEIGHBOUR_REACH = 60;',
+    note: 'neighbours reach 60 percent of the pitch across, so men who do not stand next to each other link; section 2 must go red',
   },
   alias: {
     sections: [2], file: 'teams',
@@ -511,9 +521,29 @@ for (const { formationName, slots, b } of seen) {
   }
 }
 /* The layout the links read, against this harness's own line table. */
+let ownPairs = 0;
 for (const f of FORM_NAMES) {
   const roles = BY_FORMATIONS[f].map(s => s.role);
   const spots = fit.pitchCoords(roles);
+  /* "Next to each other", this file's own reading of the rules text: side by
+     side in a drawn line, or in the next drawn line and no more than a
+     quarter of the pitch across (OWN_REACH, written here, not read from the
+     engine). The engine's pairs must be exactly these, so a reach widened in
+     xiFit.ts (review mutation: 60 percent let a left back link the right
+     sided centre mid) or narrowed shows here. */
+  const OWN_REACH = 25;
+  const own = new Set();
+  for (let i = 0; i < spots.length; i++) {
+    for (let j = i + 1; j < spots.length; j++) {
+      const a = spots[i];
+      const c = spots[j];
+      if ((a.row === c.row && Math.abs(a.col - c.col) === 1) || (Math.abs(a.row - c.row) === 1 && Math.abs(a.x - c.x) <= OWN_REACH + 1e-9)) own.add(`${i}-${j}`);
+    }
+  }
+  const eng = new Set(fit.pitchNeighbours(roles).map(([i, j]) => `${Math.min(i, j)}-${Math.max(i, j)}`));
+  for (const k of eng) if (!own.has(k)) fail(`${f}: slots ${k} (${k.split('-').map(n => roles[n]).join(' and ')}) count as neighbours but do not stand next to each other`);
+  for (const k of own) if (!eng.has(k)) fail(`${f}: slots ${k} (${k.split('-').map(n => roles[n]).join(' and ')}) stand next to each other and do not count`);
+  ownPairs += own.size;
   for (const [i, j] of fit.pitchNeighbours(roles)) {
     if (Math.abs(LINE[roles[i]] - LINE[roles[j]]) > 1 && LINE[roles[i]] !== LINE[roles[j]]) {
       /* Two lines apart is allowed only when the line between is empty in this shape. */
@@ -532,7 +562,7 @@ for (const f of FORM_NAMES) {
     });
   });
 }
-console.log(`   ${linkCount} links over ${seen.length} elevens (${clubLinks} club), every one between neighbours who share what it says, none missing`);
+console.log(`   ${linkCount} links over ${seen.length} elevens (${clubLinks} club), every one between neighbours who share what it says, none missing; ${ownPairs} neighbour pairs over ${FORM_NAMES.length} shapes, the same as this file's own reading`);
 
 /* ======================= 3) every number inside its stated bound ======================= */
 begin(3, 'every bonus and penalty inside its stated bound');
