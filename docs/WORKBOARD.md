@@ -1,5 +1,19 @@
 # Work board
 
+Codex889 DONE in source, final NFL rating acceptance, 2026-10-02.
+
+Original full-roster v2.2 grades/prices now feed new franchises only.
+All2163 tuples and32 original budgets held; old saves keep their progression.
+Honest evidence labels cover uncertain inputs, OL proxies and later grades.
+Final type/build, all15 built readers, focused and nine family fences pass.
+Actual Board keyboard/touch/reduced-motion campaigns:25,819checks, two
+full seasons per layout, refresh/restart/drafts, zero errors/outside requests.
+Receipt: docs/audits/NFL-OPENING-RATINGS-RECEIPT-2026-10-02.md.
+Claude retains live publication.895 NBA data/generation is frozen and engine/
+Board integration continues separately.893 NHL TEMP flat-price trial has
+one AI draft affordability blocker; no production NHL cutover accepted.
+All12 paused drafts/seven stashes held. Next free896.
+
 Codex CLAIMS895, versioned NBA new-franchise ratings, 2026-10-02.
 
 The independently reviewed894 v0.4 TEMP model and actual three-paired-seed

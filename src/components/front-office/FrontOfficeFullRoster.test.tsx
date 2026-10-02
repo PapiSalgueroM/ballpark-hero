@@ -111,6 +111,8 @@ describe('NFL Front Office: a full roster on the board', () => {
      and every list that shows his number says so, not only the roster row. */
   it('marks a rating that is only a draft spot on the depth chart and both trade lists', () => {
     const league = initLeague(lehmer(7), { depth: FO_DEPTH });
+    // Explicitly restore the pre889 saved-player shape for the legacy label check.
+    for (const t of Object.values(league.teams)) for (const p of [...t.players, ...(t.practice ?? [])]) delete p.openingRatingEvidence;
     const kc = league.teams.KC;
     const pos = DEPTH_GROUPS.find(g => kc.players.some(p => p.pos === g && p.noSeason))!;
     expect(pos).toBeTruthy();

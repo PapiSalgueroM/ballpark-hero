@@ -28,9 +28,9 @@ const FrontOffice = () => {
           <GameSeoContent
           pageHasOwnH1
             title="NFL Front Office: the GM Sim"
-            description="Take over a real NFL franchise on the real 2026 rosters, offence and defence, rated off 2025 production and draft position. Manage the salary cap, cut and sign players, negotiate trades the AI actually evaluates, ride out the weekly injury report, scout a draft class where the grades can lie, and chase titles across unlimited saved seasons with aging, breakouts and retirements."
+            description="Take over an NFL franchise using a 2026 roster snapshot. New franchises use original simulation ratings from 2023 to 2025 performance, playing time and draft priors, with limited evidence marked. Manage fictional contracts under the salary cap, negotiate trades, handle injuries, scout the draft and build a saved dynasty."
             howToPlay={[
-              'Pick a franchise: its real 2026 squad, the whole 53 and the practice squad, offence and defence, rated off the 2025 season and draft position. Kickers, punters and long snappers sit out for now.',
+              'Pick a franchise: its 2026 roster snapshot and practice squad. New opening ratings use 2023 to 2025 evidence across the whole roster, with no separate backup ceiling. Linemen use playing time and draft priors because the inputs cannot measure blocking. Limited evidence is marked with e. Kickers, punters and long snappers sit out for now.',
               'Work the roster: cut contracts to open cap room, sign free agents, propose trades the AI evaluates on age, position and rating. The roster holds 53, and the practice squad sits off the cap until you call a man up. Go over 53 (your picks can do it, and the Giants start at 54) and Play waits until you cut down.',
               'Play each week: results, injuries and rival moves roll in; division standings decide the real 14-team playoff bracket.',
               'Set the depth chart from the Roster box: tap two men to swap them, and the sim reads who starts off your order. Injured men are skipped and the next man steps up, so your backups finally matter.',

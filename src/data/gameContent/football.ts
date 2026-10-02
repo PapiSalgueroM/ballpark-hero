@@ -172,7 +172,7 @@ export const FOOTBALL_CONTENT: GameContentMap = {
       {
         heading: "Working a 53 man roster and the practice squad",
         items: [
-          "The Roster box opens on one tile per position group plus one for the practice squad, so fifty men never turn into one long list. The men at the top of each group's depth chart start, the bench steps in when a starter gets hurt, and the practice squad sits off the cap until you call a man up. The roster holds 53: at the limit you cut or trade before you can sign anybody.",
+          "The Roster box opens on one tile per position group plus one for the practice squad, so fifty men never turn into one long list. The men at the top of each group's depth chart start, the bench steps in when a starter gets hurt, and the practice squad sits off the cap until you call a man up. A call-up needs a roster spot and room for his displayed fictional salary, including dead money. The roster holds 53: at the limit you cut or trade before you can sign anybody.",
         ],
       },
       {
@@ -288,7 +288,7 @@ export const FOOTBALL_CONTENT: GameContentMap = {
     faqs: [
       {
         q: "Are the players real?",
-        a: "Yes, the real 2026 rosters, rated from the 2025 season. Quarterbacks, backs, receivers and tight ends are rated on what they produced per game, so a man who missed half the year is not punished for missing it. Defenders blend that production with where they were drafted, because the public numbers count tackles and sacks but carry no coverage figures at all, and rating a corner on tackles alone would mark the best ones down for the fact that nobody throws at them. Linemen have no counting stats either, so they go on draft position and years played. Backups and practice squad men go by the same rules, ranked against the other backups on a band just under the starters, and a man with no 2025 season behind him (a rookie, or a man hurt all year) is rated on where he was drafted, which the roster says beside his name. Contracts, trades, and draft prospects are all fictional.",
+        a: "The opening names and roster places come from a dated 2026 snapshot. New franchise OVRs are original simulation estimates, not official ratings or historical statistics. One position-specific method covers starters, backups and practice players using 2023 to 2025 evidence, recent seasons weighted more heavily. Passing efficiency, receiving and rushing production, playing time and limited defensive measures inform the estimate; small samples have less weight and missing metrics are not zeros. Linemen use participation and draft priors, which cannot measure blocking. An e marks limited evidence, and a player's row explains his opening basis. Later development belongs to your saved simulation. Existing franchises keep their own ratings and contracts. Salaries, trades, future prospects and game outcomes are fictional.",
       },
       {
         q: "Can I get fired?",

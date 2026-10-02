@@ -1,7 +1,7 @@
 import { FO_TEAMS, FO_TEAM_MAP, type FoPlayer, type FoTeam } from '@/data/frontOfficePlayers';
 /* Round 828: a type only. The bench and the practice squad are a separate,
    lazily loaded chunk the board hands to initLeague for a new league. */
-import type { FoDepthTeam } from '@/data/frontOfficeDepth';
+import type { FoDepthTeam, FoOpeningRatingEvidence } from '@/data/frontOfficeDepth';
 /* Round 211: no two men in one league share a name. */
 import { leagueNames, uniqueName } from './foNames';
 /* Round 531: the cap comes from one sourced file, never a bare literal here. */
@@ -18,8 +18,9 @@ import { type CutLedger, type DeadCapEntry, cutPlayer, payrollWithDeadCap, rollD
  * injuries, the real 14-team playoff format (7 seeds per conference, first
  * round byes for the 1 seeds), aging and contract churn across unlimited
  * seasons. Everything the GM does is explicitly hypothetical; player
- * ratings are derived by scripts/genFrontOfficeRoster.mjs from the 2026
- * rosters and the 2025 season (see the data file header for every rule).
+ * new full-roster opening estimates use the dated2023 to2025 checkpoint in
+ * scripts/genFrontOfficeRoster.mjs. Existing saves and the curated core-only
+ * path retain their own ratings (see the data headers for the separate rules).
  *
  * Determinism: all randomness flows through the caller's rng so headless
  * tests can replay seasons.
@@ -45,6 +46,8 @@ export interface GmPlayer extends FoPlayer {
   /** Round 828: he had no 2025 season to rate (a rookie, or hurt all year), so his
       opening rating is draft position and service alone. The board says so. */
   noSeason?: boolean;
+  /** The original simulation estimate, retained through trades and later development. Older saves have none. */
+  openingRatingEvidence?: Pick<FoOpeningRatingEvidence, 'modelVersion' | 'originKey' | 'openingOvr' | 'basis' | 'partial'>;
 }
 
 /** Round 723: the position groups the depth chart is drawn in. The roster
@@ -149,7 +152,10 @@ export function makeGmPlayer(p: FoPlayer, rng: () => number): GmPlayer {
    fifteen man league, and only then do the bench and the practice squad
    draw their growth ceilings. So for one seed a full league and a fifteen
    man league open on the same starters, the same market and the same
-   fixtures, which is what lets scripts/simNflFullRosters.mjs show that the
+   fixtures. Round889 overrides initial OVR and fictional salary only when
+   the supplied depth carries fullOpening. That intentionally changes new
+   full-roster results while preserving the initial draws and schedule.
+   On the original-scale depth fixture, scripts/simNflFullRosters.mjs shows the
    bench changes no result while every starter is fit. The name book the
    pool is dealt against includes the bench and the practice squad, so no
    invented free agent shares a name with a real backup; simInventedNames
@@ -171,17 +177,20 @@ export interface InitLeagueOptions {
 
 export function initLeague(rng: () => number = Math.random, opts: InitLeagueOptions = {}): LeagueState {
   const teams: Record<string, GmTeamState> = {};
+  const depth = opts.depth;
   for (const t of FO_TEAMS) {
     teams[t.abbr] = {
       abbr: t.abbr,
-      players: t.players.map(p => makeGmPlayer(p, rng)),
+      players: t.players.map(p => {
+        const opening = depth?.[t.abbr]?.fullOpening?.[`${p.name}|${p.pos}`];
+        return makeGmPlayer(opening ? { ...p, ...opening } : p, rng);
+      }),
       defense: t.defense,
       wins: 0,
       losses: 0,
       picks: [1, 2, 3],
     };
   }
-  const depth = opts.depth;
   const taken = leagueNames({ teams, freeAgents: [] });
   if (depth) {
     for (const d of Object.values(depth)) for (const p of [...d.bench, ...d.practice]) taken.add(p.name);
@@ -207,7 +216,14 @@ export function initLeague(rng: () => number = Math.random, opts: InitLeagueOpti
       team.players.push(...(d?.bench ?? []).map(p => makeGmPlayer(p, rng)));
       team.practice = (d?.practice ?? []).map(p => makeGmPlayer(p, rng));
       const unrated = new Set(d?.noSeason ?? []);
-      for (const p of [...team.players, ...team.practice]) if (unrated.has(p.name)) p.noSeason = true;
+      for (const p of [...team.players, ...team.practice]) {
+        if (unrated.has(p.name)) p.noSeason = true;
+        const evidence = d?.ratingEvidence?.[`${p.name}|${p.pos}`];
+        if (evidence) {
+          const { modelVersion, originKey, openingOvr, basis, partial } = evidence;
+          p.openingRatingEvidence = { modelVersion, originKey, openingOvr, basis, partial };
+        }
+      }
     }
     /* the computer clubs cut themselves before Week 1, never the GM's own; the
        cut draws no random numbers, so the deal above is the same either way */

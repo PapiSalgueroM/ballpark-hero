@@ -1,6 +1,6 @@
 # NFL ratings method and input audit
 
-Date: 2026-10-02. Round 889. Status: audit and TEMP candidates only, no production rating or contract change accepted.
+Date: 2026-10-02. Round889. Update: new-franchise source integration is now accepted in [the final receipt](NFL-OPENING-RATINGS-RECEIPT-2026-10-02.md). Publication remains separate. The dated audit and rejected trials below are retained as evidence of the original implementation and review process.
 
 The expanded product goal is recognizable 0 to 99 ability numbers across sports, derived by an original DoUKnowBall method. It is not permission to copy a commercial rating dataset, inflate every roster, replace missing statistics with guesses, or rewrite earned progression in existing saves. This report covers NFL. The separate `SPORT-RATINGS-OTHER-2026-10-02.md` covers the other sports.
 

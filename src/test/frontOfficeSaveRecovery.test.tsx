@@ -140,7 +140,9 @@ for (const c of cases) describe(`${c.sport} actual save recovery`, () => {
     /* Round 828: the NFL board fetches its roster chunk on the tap, so the new
        franchise is written a tick after the click, not inside it. Until then the
        unusable save must still be the one on disk. */
-    await waitFor(() => expect(Array.isArray(JSON.parse(localStorage.getItem(c.key)!).league.freeAgents)).toBe(true));
+    /* The cold source transform of the full rating checkpoint exceeds the
+       library's one-second wait. This bounds compilation and the actual save. */
+    await waitFor(() => expect(Array.isArray(JSON.parse(localStorage.getItem(c.key)!).league.freeAgents)).toBe(true), { timeout: 4000 });
     const fresh = JSON.parse(localStorage.getItem(c.key)!);
     expect(fresh.myTeam).toBe(c.team); expect(fresh.league[c.period]).toBe(1); expect(fresh.titles).toBe(0); expect(fresh.seasonsPlayed).toBe(0);
     expect(Array.isArray(fresh.league.freeAgents)).toBe(true); expect(view.queryByRole('alert')).toBeNull();

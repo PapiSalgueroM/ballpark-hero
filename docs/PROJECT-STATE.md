@@ -1,5 +1,20 @@
 # Project state
 
+889 NFL new-franchise ratings accepted in source, 2026-10-02.
+
+One reviewed v2.2 model now covers all2163 opening players without the old
+depth ceiling65. Ward87, Graham75, Boston73 and Concepcion74; limited
+evidence stays visible. Original club budgets, ages, terms, draws and old
+saves held. Compact five-field saved lineage survives moves/development.
+Final isolated type/build,15 built readers and focused/family fences pass.
+Exact final native Board: three layouts, two full seasons each,25,819checks,
+12images,420scale samples1, zero errors/outbound attempts. Opening App307KiB,
+roster60367gzip bytes lazy after choice. Receipt: NFL-OPENING-RATINGS-RECEIPT
+in docs/audits. Source accepted, not published; Claude retains publication.
+NBA895 integration remains claimed/in flight. NHL893 flat pricing is TEMP:
+one verified AI draft over-cap case still blocks adoption.12paused drafts
+and seven stashes held. Next free896.
+
 Codex claims895 NBA new-franchise rating integration, 2026-10-02.
 
 894 v0.4 model and TEMP economy review are complete: original seeded

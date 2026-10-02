@@ -47,6 +47,7 @@
      SIM_FO_CONTROL=seasontotals   rate on totals not rates  -> section 5 red
      SIM_FO_CONTROL=staleheader    header forgets the blend  -> section 6 red
      SIM_FO_CONTROL=staleseason    copy names a dead season  -> section 7 red
+     SIM_FO_CONTROL=ratingwindow   copy invents a rating season -> section 7 red
      SIM_FO_CONTROL=flatpedigree   draft curve clips at 32   -> section 8 red
      SIM_FO_CONTROL=evenblend      one weight for everyone   -> section 8 red
      SIM_FO_CONTROL=openjoin       join floor driven to 0    -> section 8 red
@@ -409,6 +410,14 @@ const COPY = [
    go green. */
 const stripComments = t => t.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
 const SEASONS = new Set([ROSTER_SEASON, STATS_SEASON]);
+const ratingInput = JSON.parse(fs.readFileSync(path.join(ROOT, 'scripts/data/nflFoRatingInputs2026.json'), 'utf8'));
+const ratingSeasons = ratingInput.openingWindow.statsSeasons;
+ok(7, 'the opening checkpoint has the current roster and a distinct dated evidence window',
+  ratingInput.openingWindow.rosterSeason === ROSTER_SEASON && Array.isArray(ratingSeasons)
+  && ratingSeasons.length > 1 && new Set(ratingSeasons).size === ratingSeasons.length
+  && ratingSeasons.every(year => Number.isInteger(year) && year < ROSTER_SEASON)
+  && Math.max(...ratingSeasons) === STATS_SEASON);
+const RATING_RANGE_RE = () => /\b(20\d{2})\s+to\s+(20\d{2})\b/g;
 const NEAR = 40;
 /* One shared year pattern. The second copy of it was written with doubled
    backslashes, so it matched nothing and the per file tally read zero for
@@ -440,11 +449,21 @@ for (const entry of COPY) {
      year nobody would write; this one reproduces the exact copy bug that
      shipped, which is the only thing worth proving. */
   if (CONTROL === 'staleseason' && rel.endsWith('FrontOfficeBoard.tsx')) {
-    const want = `Real ${ROSTER_SEASON} rosters`;
+    const want = `Real ${ROSTER_SEASON} roster snapshot`;
     if (!text.includes(want)) throw new Error(`control staleseason: "${want}" is not in the board copy, so it would change nothing`);
-    text = text.split(want).join(`Real ${STATS_SEASON} rosters`);
-    console.log(`   control staleseason: the board copy put back "Real ${STATS_SEASON} rosters", the sentence that actually shipped`);
+    text = text.split(want).join(`Real ${STATS_SEASON} roster snapshot`);
+    console.log(`   control staleseason: the board copy describes the current roster as ${STATS_SEASON}`);
   }
+  if (CONTROL === 'ratingwindow' && rel.endsWith('FrontOfficeBoard.tsx')) {
+    const want = `${Math.min(...ratingSeasons)} to ${Math.max(...ratingSeasons)}`;
+    if (!text.includes(want)) throw new Error('control ratingwindow would change nothing');
+    text = text.split(want).join(`${Math.min(...ratingSeasons) - 1} to ${Math.max(...ratingSeasons)}`);
+    console.log('   control ratingwindow: copy claims an unmeasured earlier season');
+  }
+  const ratingRanges = [...text.matchAll(RATING_RANGE_RE())];
+  for (const range of ratingRanges) ok(7, `${rel} states the actual opening rating window`,
+    Number(range[1]) === Math.min(...ratingSeasons) && Number(range[2]) === Math.max(...ratingSeasons),
+    `copy says ${range[0]}, the checkpoint uses ${ratingSeasons.join(', ')}`);
   for (const m of text.matchAll(YEAR_RE())) {
     const year = Number(m[1]);
     copyYears += 1;
@@ -454,10 +473,11 @@ for (const entry of COPY) {
     /* "2026 rosters" and "rosters ... 2026" both count as a roster claim */
     const rosterClaim = ROSTER_WORD.test(after.slice(0, 20)) || ROSTER_WORD.test(before.slice(-20));
     const statsClaim = !rosterClaim && STATS_WORD.test(around);
-    const want = rosterClaim ? ROSTER_SEASON : statsClaim ? STATS_SEASON : null;
+    const inRatingRange = !rosterClaim && ratingRanges.some(range => m.index >= range.index && m.index < range.index + range[0].length);
+    const want = rosterClaim ? ROSTER_SEASON : statsClaim && !inRatingRange ? STATS_SEASON : null;
     const label = rosterClaim ? 'a roster year' : statsClaim ? 'a production year' : 'a year';
     ok(7, `${rel} states ${label} the bake agrees with`,
-      want == null ? SEASONS.has(year) : year === want,
+      inRatingRange ? ratingSeasons.includes(year) : want == null ? SEASONS.has(year) : year === want,
       `copy says ${year} in "${around.replace(/\s+/g, ' ').trim().slice(0, 70)}"; the bake read the ${ROSTER_SEASON} roster and the ${STATS_SEASON} season`);
   }
   yearsPerFile.push([rel, [...text.matchAll(YEAR_RE())].length]);

@@ -1,5 +1,10 @@
 /* NFL Front Office: the whole club. Round 828.
 
+   Round889: section1 checks the current generated opening data. Sections2
+   to6 explicitly use the original-scale bake as a historical mechanics
+   fixture, preserving their measured baselines and corruption controls.
+   New-rating season/economy outcomes are checked by simNflOpeningRatings.
+
    The owner: "we are yet to have way more leagues and players for ... all the
    gm games". NFL Front Office shipped fifteen real men a club. A new league
    now carries every club's real active roster (the fifteen starters plus the
@@ -255,8 +260,14 @@ let engine, cuts, data, base = null;
 try {
   if (!ESBUILD) throw new Error('esbuild not found by walk-up from the repo root');
   const libDir = fwd(path.join(ROOT, 'src', 'lib'));
+  const gen = await import(pathToFileURL(path.join(ROOT, 'scripts', 'genFrontOfficeRoster.mjs')).href);
+  const record = JSON.parse(fs.readFileSync(path.join(ROOT, 'scripts/data/nflRosters2026.json'), 'utf8'));
+  const heldOut = JSON.parse(fs.readFileSync(path.join(ROOT, 'scripts/data/nflRosterSpotCheck.json'), 'utf8')).heldOut;
+  const legacyText = gen.bakeFromRecord(record, gen.readTeamMeta(normaliseEol(fs.readFileSync(path.join(ROOT, 'src/data/frontOfficePlayers.ts'), 'utf8'))), heldOut, { legacyDepth: true }).depthText;
+  const legacyPath = path.join(BUNDLE_DIR, 'frontOfficeLegacyDepth.ts');
+  fs.writeFileSync(legacyPath, legacyText.replace("from './frontOfficePlayers'", `from '${fwd(path.join(ROOT, 'src/data/frontOfficePlayers'))}'`));
   let enginePath = ENGINE;
-  let depthPath = DEPTH_FILE;
+  let depthPath = legacyPath;
   if (CONTROL && ENGINE_SWAPS[CONTROL]) {
     const src = normaliseEol(fs.readFileSync(ENGINE, 'utf8'));
     for (const [now] of ENGINE_SWAPS[CONTROL]) {
@@ -272,7 +283,7 @@ try {
     console.log(`   control ${CONTROL}: ${NOTE[CONTROL]}`);
   }
   if (CONTROL === 'benchabove' || CONTROL === 'bigbench') {
-    const src = normaliseEol(fs.readFileSync(DEPTH_FILE, 'utf8'));
+    const src = normaliseEol(fs.readFileSync(legacyPath, 'utf8'));
     const ROWX = /\{ name: '((?:[^'\\]|\\.)*)', pos: '(\w+)', age: (\d+), ovr: (\d+), salary: ([\d.]+), years: (\d+) \}/g;
     let n = 0;
     const text = src.replace(ROWX, (m, name, pos, age, ovr, salary, years) => {
@@ -289,13 +300,14 @@ try {
   const mod = await bundle([
     `export * as engine from ${JSON.stringify(fwd(enginePath))};`,
     `export * as cuts from ${JSON.stringify(fwd(path.join(ROOT, 'src', 'lib', 'frontOfficeCuts.ts')))};`,
-    `export { FO_DEPTH, FO_DEPTH_WEEK } from ${JSON.stringify(fwd(depthPath))};`,
+    `export { FO_DEPTH, FO_DEPTH_WEEK } from ${JSON.stringify(fwd(DEPTH_FILE))};`,
+    `export { FO_DEPTH as LEGACY_DEPTH } from ${JSON.stringify(fwd(depthPath))};`,
     `export { FO_TEAMS } from ${JSON.stringify(fwd(path.join(ROOT, 'src', 'data', 'frontOfficePlayers.ts')))};`,
     `export { findTrades } from ${JSON.stringify(fwd(path.join(ROOT, 'src', 'lib', 'tradeFinder.ts')))};`,
   ].join('\n'), 'current');
   engine = mod.engine;
   cuts = mod.cuts;
-  data = { FO_DEPTH: mod.FO_DEPTH, FO_TEAMS: mod.FO_TEAMS, week: mod.FO_DEPTH_WEEK, findTrades: mod.findTrades };
+  data = { FO_DEPTH: mod.FO_DEPTH, legacyDepth: mod.LEGACY_DEPTH, FO_TEAMS: mod.FO_TEAMS, week: mod.FO_DEPTH_WEEK, findTrades: mod.findTrades };
 } catch (e) {
   console.error(`FAIL: the engine could not be bundled and run: ${String(e && e.message ? e.message : e).slice(0, 300)}`);
   fs.rmSync(BUNDLE_DIR, { recursive: true, force: true });
@@ -407,6 +419,7 @@ console.log('1) the data: real, current, second sourced, and agreeing with the e
       console.log(`   control noheld: the bake ignores the spot check's held out list (${spotCheck.heldOut.map(h => h.name).join(', ')})`);
     }
     const baked = gen.bakeFromRecord(record, gen.readTeamMeta(starterSrc), spotHeld);
+    ok(1, 'the reviewed opening checkpoint belongs to this exact record and eligible pool', !baked.ratingProblem, baked.ratingProblem);
     bakedLeftOut = baked.leftOut;
     bakedDepth = baked.depth;
     const files = [
@@ -513,6 +526,9 @@ console.log('1) the data: real, current, second sourced, and agreeing with the e
 }
 
 /* ======================================================================= 2 */
+// Intentional old-scale fixture, separate from the current data and new-model acceptance.
+data.FO_DEPTH = data.legacyDepth;
+console.log('Sections2 to6: explicit original-scale mechanics fixture; new-rating acceptance is separate.');
 console.log('2) the bench sits under the starters');
 {
   const teams = data.FO_TEAMS;

@@ -703,8 +703,9 @@ export default function FrontOfficeBoard() {
         <div className="rounded-2xl border border-border bg-card p-4 text-center">
           <p className="font-display text-lg font-bold text-foreground">Take over a front office</p>
           <p className="mt-1 text-xs text-muted-foreground">
-            Real 2026 rosters, rated off the 2025 season and where each man was
-            drafted. The whole club too: every man on the 53 and the practice squad
+            Real 2026 roster snapshot, with original simulation ratings using
+            2023 to 2025 performance, playing time and draft priors. Limited
+            evidence is marked. The whole club too: men on the 53 and the practice squad
             (kickers, punters and long snappers sit this one out). Manage the cap, sign free
             agents, swing trades, survive the injury report, draft the future, and chase a dynasty
             across as many seasons as you can. Saves automatically.
@@ -997,19 +998,42 @@ export default function FrontOfficeBoard() {
   /* Round 828 follow up: men to cut before Play, 0 unless a full roster is over 53. */
   const overLimit = deepOverLimit(my);
   const practice = my.practice ?? [];
-  /* Round 828: the opening rating of a man with no season behind him is his
-     draft spot, and the roster says so until the first title is decided. */
-  const noTape = (p: GmPlayer) => p.noSeason && league.champions.length === 0 ? ' · no 2025 season, rated on draft spot' : '';
+  const openingEvidence = (p?: Partial<GmPlayer> | null) => {
+    const e = p?.openingRatingEvidence;
+    return e && typeof e.modelVersion === 'string' && Number.isFinite(e.openingOvr)
+      && typeof e.partial === 'boolean'
+      && ['production', 'defensive-proxy', 'participation-proxy', 'draft-prior', 'unmeasured-prior'].includes(e.basis)
+      ? e : null;
+  };
+  const basisText = {
+    production: 'position performance',
+    'defensive-proxy': 'limited defensive metrics',
+    'participation-proxy': 'playing time and draft or baseline prior, not blocking grades',
+    'draft-prior': 'draft prior, little measured performance',
+    'unmeasured-prior': 'little measured performance',
+  };
+  const noTape = (p: GmPlayer) => {
+    const e = openingEvidence(p);
+    return e ? ` · opening estimate ${e.openingOvr}: ${basisText[e.basis]}${e.partial ? ' (limited evidence)' : ''}`
+      : p.openingRatingEvidence ? ' · opening evidence unavailable'
+      : p.noSeason && league.champions.length === 0 ? ' · no 2025 season, rated on draft spot' : '';
+  };
   /* Round 828 review: the same fact beside every other rating the board shows
      (the depth chart, the market, both trade lists, the finder's offers and a
      group tile's top man), so a number that is only his draft spot never
      reads as measured anywhere. A "d" beside the number, explained by one line
      under any list that carries one. */
-  const draftRated = (p?: { noSeason?: boolean } | null) => !!p?.noSeason && league.champions.length === 0;
-  const draftMark = (p?: { noSeason?: boolean } | null) => (draftRated(p)
+  const draftRated = (p?: Partial<GmPlayer> | null) => !p?.openingRatingEvidence && !!p?.noSeason && league.champions.length === 0;
+  const draftMark = (p?: Partial<GmPlayer> | null) => openingEvidence(p)
+    ? openingEvidence(p)!.partial
+      ? <sup data-rating-partial title={`Opening simulation estimate: ${basisText[openingEvidence(p)!.basis]}. Later changes come from this save.`} className="ml-0.5 text-[8px] font-bold text-muted-foreground">e</sup>
+      : null
+    : (draftRated(p)
     ? <sup data-draft-rated title="No 2025 season to rate him on, so this number is where he was drafted" className="ml-0.5 text-[8px] font-bold text-muted-foreground">d</sup>
     : null);
-  const draftLegend = (list: ({ noSeason?: boolean } | null | undefined)[]) => (list.some(draftRated)
+  const draftLegend = (list: (Partial<GmPlayer> | null | undefined)[]) => list.some(p => openingEvidence(p))
+    ? <p data-rating-legend className="text-center text-[10px] text-muted-foreground">OVR is a simulation estimate. Opening evidence: 2023 to 2025. e: limited evidence. Later changes come from this save; contracts are fictional.</p>
+    : (list.some(draftRated)
     ? <p data-draft-legend className="text-center text-[10px] text-muted-foreground">d: no 2025 season to rate him on, so that number is where he was drafted.</p>
     : null);
   /* Round 828: the trade lists on a full roster, one group at a time, or the men the chart starts. */
@@ -1072,7 +1096,7 @@ export default function FrontOfficeBoard() {
         <span className="block text-[10px] text-muted-foreground">{p.pos} · {p.age}y · ${p.salary}M x{p.years}{p.tagSeason === league.season ? ' · 🏷️ tagged' : ''}{noTape(p)}</span>
       </span>
       <span className="ml-2 flex shrink-0 items-center gap-1.5">
-        <b className="text-primary">{p.ovr}</b>
+        <b className="text-primary">{p.ovr}{draftMark(p)}</b>
         <button
           onClick={() => setCutArmed(arming ? null : p.id)}
           disabled={!!cutBlock}
@@ -1334,7 +1358,7 @@ export default function FrontOfficeBoard() {
                           {refusal && !fullBlock && <span data-practice-refusal className="block text-[10px] text-destructive">{refusal}</span>}
                         </span>
                         <span className="ml-2 flex shrink-0 items-center gap-1.5">
-                          <b className="text-primary">{p.ovr}</b>
+                          <b className="text-primary">{p.ovr}{draftMark(p)}</b>
                           <button
                             onClick={() => doPromote(p.id)}
                             disabled={!!refusal}
@@ -1356,6 +1380,7 @@ export default function FrontOfficeBoard() {
               )}
             </div>
           )}
+          {depthView === null && draftLegend(rosterGroup === 'practice' ? practice : my.players)}
         </div>
       )}
 
