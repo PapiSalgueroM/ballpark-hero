@@ -121,8 +121,15 @@ for (const name of allClubNames) {
   const myLeagueId = leagueOf(name).id;
   const nation = cm.NATIONS.find(n => n.leagueIds.includes(myLeagueId));
   const countryClubs = new Set((nation ? nation.leagueIds : [myLeagueId]).flatMap(id => cm.playableClubs(id).map(c => c.name)));
-  if (!cup || !countryClubs.has(cup)) fail(`${name}: cup R16 draw "${cup}" is not a club from this country`);
-  if (cup === name) fail(`${name}: drawn against itself in the cup`);
+  /* Round 883: Liga MX is the first real league with no domestic cup. A
+     cupless club must have no draw at all; every other club keeps the
+     Round 102 rule. */
+  if (leagueOf(name).cupName === null) {
+    if (cup) fail(`${name}: plays in a league with no cup and was drawn against "${cup}"`);
+  } else {
+    if (!cup || !countryClubs.has(cup)) fail(`${name}: cup R16 draw "${cup}" is not a club from this country`);
+    if (cup === name) fail(`${name}: drawn against itself in the cup`);
+  }
   for (const p of s.squad) {
     if (!isNum(p.rating) || p.rating < 40 || p.rating > 95) fail(`${name}: ${p.name} rating ${p.rating}`);
     if (p.value !== undefined && (!isNum(p.value) || p.value <= 0)) fail(`${name}: ${p.name} value ${p.value}`);
