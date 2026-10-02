@@ -321,7 +321,9 @@ async function partModern() {
   const mod = await bundleEngine(exposePrivates);
   const pyramidIds = new Set(mod.cm.PYRAMIDS.flatMap(p => [p.top, p.second]));
   const saves = mod.cm.REAL_LEAGUES.map(l => ({ key: `now|${l.id}`, club: l.clubs[0], eraId: 'now', second: pyramidIds.has(l.id) }));
-  if (saves.length !== 20) fail(`the game has ${saves.length} modern leagues where this round found 20 (a league added later regenerates the baseline on purpose)`);
+  /* Round 876: 21 with Brazil's Serie A. Baseline rewritten from the Round 876
+     tree on purpose (see that commit for the attribution of every moved hash). */
+  if (saves.length !== 21) fail(`the game has ${saves.length} modern leagues where this round found 21 (a league added later regenerates the baseline on purpose)`);
   const got = await digestSaves(saves, mod);
   if (WRITE) written.modern = got; else compare('modern', got, baseline.parts.modern);
 }
