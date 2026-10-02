@@ -1,5 +1,27 @@
 # Work board
 
+**2026-10-02 Codex CLAIMS863-866, continued player-facing quality work.**
+Git pull --ff-only before starting was already up to date at3f9d517a.
+-863: Ball Knowledge IQ answer feedback/progress and keyboard continuation.
+  Own BallIqBoard and local presentation/verification. Keep questions, engine,
+  score weighting, saves and completion unchanged. Auth agent builds.
+-864: Club Manager facility decision previews. Own FacilitiesScreen and focused
+  verification only. Read existing upgradeFacility/facilityEffectLine for next
+  level/effect, exact cost and budget left; explain unaffordable/max states.
+  No new confirmation delay, engine, roster, save or parent changes. GM agent builds.
+-865: Tennis/NASCAR Chain late validator responses across exit/reset/new runs.
+  Own useTennisChain/useNascarChain and focused verification. Reproduce stale
+  response writes, isolate owned requests and preserve fail-closed retry,
+  legitimate scoring/data and ordinary response behavior. Data agent builds.
+-866: Silverware Sort readable reveal. Own page/hook and focused verification;
+  replace the3.4s automatic advance with deliberate Next board/See results.
+  Preserve two tries, locked greens, real counts and immediate daily booking.
+  Root owns existing recording-test stimulus changes only if necessary.
+Root owns integration, clean build/native gates, docs and exact Git pushes.
+Do not edit Claude848-851, held828/830/833-835/840 or paused842-845 drafts.
+Native work uses separate CLI headless browsers only, no user browser tabs.
+Next free867. These are claims, not accepted or published changes.
+
 **2026-10-02 Codex handoff to Claude: four more source repairs pushed.**
 85956534e17 arcade hold/release and charge cues,8602b553ae6 Face Off deadline,
 8617340ad12 truthful leaderboard eligibility,8625515beb2 visible arcade results.

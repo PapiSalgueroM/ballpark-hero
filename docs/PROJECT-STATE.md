@@ -1,5 +1,15 @@
 # Project state
 
+## Codex863-866 claimed, 2026-10-02
+
+Continue noticeable product work:863 Ball IQ answer/progress presentation,
+864 Club Manager facilities benefit/budget preview,865 Tennis/NASCAR stale
+validation isolation,866 Silverware deliberate result advance. Three builders
+own disjoint scopes; root owns866 and integration/Git/native gates. Existing
+questions, real sports data, simulation engines and backend stay unchanged.
+Pull before work was up to date at3f9d517a. Claude reserved/held work and paused
+842-845 drafts are untouched. No user browser connector/visible tabs. Next867.
+
 ## Twelve Codex source repairs pushed, 2026-10-02
 
 New85956534e17 input/charge cues,8602b553ae6 deadline,8617340ad12 leaderboard
