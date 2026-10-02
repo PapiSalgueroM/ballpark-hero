@@ -1,5 +1,15 @@
 # Project state
 
+## Codex six-repair batch pushed; next claims857/858, 2026-10-01
+
+846,852,853,854,855,856 are separate main commits through c98e0ad2. Clean
+type/build and22 selected harnesses are green, including all15 built-site
+fences and62 new focused cases. Native game outcomes are in WORKBOARD. Claude
+has a concrete release handoff there; main pushes are not proof of live publish.
+842-845 remain paused. Next857 handles Soccer malformed-save recovery at the
+page boundary without touching Claude850's engine;858 verifies/repairs initial
+RulesGate consent reachability using855's existing region. Next free859.
+
 ## Codex855 accepted repair, 2026-10-01
 
 Shared Help's cookie choices now sit inside its focus scope using one existing

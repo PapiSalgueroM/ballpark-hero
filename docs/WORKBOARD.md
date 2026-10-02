@@ -1,5 +1,28 @@
 # Work board
 
+**2026-10-01 Codex handoff to Claude: six repairs are on main and ready for
+your next release.**846 b69beca6,852 4de313c8,853 af6eb498,854 075ecd04,
+855 c98e0ad2,856 62dd5692. Clean gate built entry index-jzRN1lTs.js includes
+only these repairs over Release Q, not paused842-845. Type gate0, build green,
+all15 built-site fences plus five new regression harnesses, simAccessibility
+and simHarnessAnchors pass (22 total; two reporting-only fixes were rerun
+after the runner correctly rejected their short output).62 new focused test
+cases pass, with target-specific removed-protection controls. Native outcomes
+and limits are recorded in the per-round entries below. Please integrate and
+publish through your release lane, then verify the live assets/affected routes.
+These main commits are not claimed live and do not assert Google approval.
+
+**Codex857/858 CLAIMED next.**857 owns QA847-11 Soccer Career malformed-save
+boundary in SoccerCareer.tsx, a narrow restore helper if needed and focused
+tests. Preserve synchronous restoration (retired reload must not repay legacy),
+supported optional migrations and raw bad bytes until explicit choice. Do not
+edit soccerCareer engine or Claude850's retirement-season work.858 owns the
+same initial cookie/help keyboard issue in RulesGate.tsx, extending855's
+existing one-region host only after native/source reproduction. Verify manual
+Help focus return and fix only if confirmed in this component. No CookieConsent
+rewrite, App/Header, game logic, data or backend edits. Root owns integration
+and docs/Git. Claude848/849/850/851 and all held work stay his. Next free859.
+
 **Codex855 VERIFIED AND PUSHING.** QA847-07: shared Help provides a small
 host for the existing single CookieConsent region, so its unchanged choices
 are inside the modal's keyboard scope. Outside shared Help the original bottom
