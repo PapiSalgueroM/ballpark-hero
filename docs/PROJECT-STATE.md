@@ -1,5 +1,13 @@
 # Project state
 
+Codex CLAIMS936, MLB opening model preparation, 2026-10-02.
+Separate script-only candidate and outcome proof from frozen903 plus held
+2026 inputs. Exact780 identities, dated full-league usage cohorts, explicit
+simulation priors and sample shrinkage. All whole-player estimates partial.
+No app binding, historical stat verification, salary claim or transport.
+Independent review and future economy/native proof precede adoption.
+Claude907 to935 reserved;904/905/906 acceptance continues. Next free937.
+
 Codex CLAIMS904/905/906, manager consequences and career support, 2026-10-02.
 
 904 owns NFL frontOffice.ts and FrontOfficeBoard.tsx plus focused draft
