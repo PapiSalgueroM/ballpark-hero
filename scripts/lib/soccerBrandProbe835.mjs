@@ -9,9 +9,10 @@
  * the order of every Math.random draw. This file is the one procedure that
  * measures it, used twice:
  *
- *   scripts/recordSoccerBrandFixture835.mjs ran it ONCE, against the tree as
- *   it stood before any Round 835 code moved (origin/main 3fb92eea), and
- *   wrote scripts/data/soccerBrandFixture835.json.
+ *   scripts/recordSoccerBrandFixture835.mjs ran it against a main with no
+ *   Round 835 code on it (origin/main 3fb92eea first, origin/main 89d31144
+ *   after the branch took main in again) and wrote
+ *   scripts/data/soccerBrandFixture835.json.
  *
  *   scripts/simCareerSocialBrands.mjs section 1 runs it again against the
  *   current tree and requires the output to match that file byte for byte.
@@ -202,7 +203,9 @@ function step(E, s, cfg, k, clubs) {
     case 'red_card_appeal_result': return ['A', E.dismissAppealResult(s, clubs)];
     case 'retirement_suggestion': {
       if (s.age >= 34 || (cfg.seed + k) % 2 === 0) return ['Q', E.acceptRetirementSuggestion(s)];
-      return ['q', E.declineRetirementSuggestion(s)];
+      /* Round 850 gave Keep Playing the clubs (it plays the season on); the
+         page's handler passes them, so the probe does. */
+      return ['q', E.declineRetirementSuggestion(s, clubs)];
     }
     case 'random_events': {
       const ev = (s.pendingEvents || [])[0];

@@ -21,14 +21,17 @@
  *      every screen with a spread of posts, cover answers, event choices and
  *      moves, plays 35 old saves on, and calls the lifted functions over a
  *      grid of synthetic saves, hashing the whole save after every step. Its
- *      output must equal scripts/data/soccerBrandFixture835.json, recorded on
- *      origin/main 3fb92eea before any code moved. Soccer calls Math.random
+ *      output must equal scripts/data/soccerBrandFixture835.json, recorded
+ *      from a main with none of the lift on it (first origin/main 3fb92eea,
+ *      then again from origin/main 89d31144 once Rounds 819, 834 and 850 had
+ *      changed Soccer Career there; the file's recordedFrom header carries
+ *      the sha). Soccer calls Math.random
  *      in a fixed order, so a lift that moves one draw shows up here. The
  *      section also requires the fixture to have exercised what it claims
  *      (every post, every personality, every agent, the cover offer both
  *      ways, the stored tier ids), so a re-record with a broken probe cannot
- *      pass quietly. Measured in the fixture: posts 106 to 131 each,
- *      personalities 7 to 12 careers each, agents 8 to 18 each, cover taken
+ *      pass quietly. Measured in the fixture: posts 109 to 142 each,
+ *      personalities 7 to 12 careers each, agents 8 to 20 each, cover taken
  *      6 and turned down 3. Floors sit at about half of each.
  *   2. The contracts, on a synthetic sport that shares nothing with soccer
  *      (other field names, another currency, thousands not millions):
@@ -151,12 +154,15 @@ const close = (a, b) => Math.abs(a - b) < 1e-9;
    ============================================================ */
 if (SECTIONS.includes('1')) {
   console.log('\n1. Soccer Career replays the pre lift fixture byte for byte');
-  const want = fs.readFileSync(FIXTURE, 'utf8').split('\r\n').join('\n').trim();
+  /* The header says which main the fixture is a photograph of. It is set
+     aside before the comparison and has to be a real sha. */
+  const { recordedFrom, ...rec } = JSON.parse(fs.readFileSync(FIXTURE, 'utf8'));
+  const want = JSON.stringify(rec);
+  check(/^[0-9a-f]{40}$/.test(recordedFrom?.main || ''), `the fixture names the main it was recorded from (${String(recordedFrom?.main || 'nothing').slice(0, 8)})`);
   const t0 = Date.now();
   const got = probeSoccerBrand({ soccer: E, life: L });
   const gotText = JSON.stringify(got);
   console.log(`     probe ran in ${((Date.now() - t0) / 1000).toFixed(1)}s`);
-  const rec = JSON.parse(want);
   const steps = rec.careers.reduce((n, c) => n + c.steps.split(' ').length, 0);
   if (gotText === want) {
     ok(`all ${rec.careers.length} careers (${steps} hashed steps), ${rec.oldSaves.length} old saves and every unit probe match`);
