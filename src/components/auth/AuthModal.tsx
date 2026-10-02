@@ -102,6 +102,7 @@ export function AuthModal({ isOpen, onClose, defaultTab = 'login' }: AuthModalPr
   const { signIn, signUp } = useAuth();
   const [googleButtonElement, setGoogleButtonElement] = useState<HTMLDivElement | null>(null);
   const onCloseRef = useRef(onClose);
+  const opener = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
     onCloseRef.current = onClose;
@@ -320,7 +321,18 @@ export function AuthModal({ isOpen, onClose, defaultTab = 'login' }: AuthModalPr
       {/* Round 610: the dialog is pinned to the middle of the screen with no
           height limit, so on a short phone a taller form clipped its own title
           and footer with no way to reach them. It scrolls inside itself now. */}
-      <DialogContent className="sm:max-w-md max-h-[calc(100dvh-2rem)] overflow-y-auto">
+      <DialogContent
+        className="sm:max-w-md max-h-[calc(100dvh-2rem)] overflow-y-auto"
+        onOpenAutoFocus={() => {
+          opener.current = document.activeElement instanceof HTMLElement && document.activeElement !== document.body
+            ? document.activeElement : null;
+        }}
+        onCloseAutoFocus={event => {
+          if (!opener.current?.isConnected) return;
+          event.preventDefault();
+          opener.current.focus({ preventScroll: true });
+        }}
+      >
         <DialogHeader>
           <DialogTitle className="text-center font-display text-2xl">
             {tab === 'login' ? 'Welcome Back!' : 'Join DoUKnowBall'}
@@ -330,7 +342,7 @@ export function AuthModal({ isOpen, onClose, defaultTab = 'login' }: AuthModalPr
         <DialogDescription className="text-center text-sm text-muted-foreground -mt-2">
           {tab === 'login'
             ? 'Good to see you again. Log in and pick your streak back up.'
-            : "First time here? It's free and takes 10 seconds. Streaks, points and world rank only count once you have an account."}
+            : 'Guests earn points, build streaks and appear on the leaderboard too. Create a free account for your profile and saved scores.'}
         </DialogDescription>
 
         <div className="space-y-4 py-4">

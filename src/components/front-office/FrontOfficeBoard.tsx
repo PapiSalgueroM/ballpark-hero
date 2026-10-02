@@ -55,6 +55,7 @@ import { ConfettiBurst, CelebrationStyles, revealDelay } from '@/components/club
    since Round 74. What each box says lives in the engine, not here. */
 import { foHubTiles, type FoPanelKey } from '@/lib/foHub';
 import { FoHubTiles, FoPanelHeader } from '@/components/front-office-shared/FoHubTiles';
+import { isFrontOfficeSave } from '@/lib/frontOfficeSave';
 
 /* Round 180: 'fired' is new. Zero trust upstairs ends the save the way a
    Club Manager sacking does. */
@@ -97,6 +98,7 @@ interface SaveShape {
 
 export default function FrontOfficeBoard() {
   const [phase, setPhase] = useState<Phase>('pick');
+  const [saveError, setSaveError] = useState(false);
   /* Round 204: the hub is tiles now, so null means the hub itself and a
      tab key means you have opened that box. Club Manager's Round 74 rule,
      brought to the four GM games. */
@@ -176,8 +178,9 @@ export default function FrontOfficeBoard() {
     try {
       const raw = localStorage.getItem(SAVE_KEY);
       if (!raw) return;
-      const s = JSON.parse(raw) as SaveShape;
-      if (!s.league || !s.myTeam) return;
+      const parsed: unknown = JSON.parse(raw);
+      if (!isFrontOfficeSave(parsed, 'NFL', REGULAR_WEEKS)) { setSaveError(true); return; }
+      const s = parsed as SaveShape;
       /* Round 568: FIRST, above every setState below, because everything
          past this line reads the league by id and a save written before the
          id fix can hold two men under one. The draft class is passed too: it
@@ -212,7 +215,7 @@ export default function FrontOfficeBoard() {
       else if (s.phase !== 'recap') setPhase(s.phase);
       else if (s.postseason) setPhase('recap');
       else openDraft(s.league, s.myTeam, s);
-    } catch { /* fresh start */ }
+    } catch { setSaveError(true); }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -248,6 +251,9 @@ export default function FrontOfficeBoard() {
       return;
     }
     setStarting(null);
+    /* Codex853: a new franchise is the player's answer to a save that would not
+       open, so the notice goes once one really starts (not when the fetch fails). */
+    setSaveError(false);
     /* Round 828 follow up: every other club over 53 cuts itself before Week 1;
        yours is never cut behind your back and owes its cut on the board. */
     const lg = initLeague(Math.random, { depth, userTeam: abbr });
@@ -688,6 +694,12 @@ export default function FrontOfficeBoard() {
   if (phase === 'pick' || !league || !my) {
     return (
       <div className="space-y-4">
+        {saveError && (
+          <div role="alert" className="rounded-xl border border-destructive/40 bg-card p-4 text-sm">
+            <p>We couldn&apos;t open this save. Pick a team to start a new franchise. Your old save stays here until you pick a team or delete it.</p>
+            <button onClick={() => { localStorage.removeItem(SAVE_KEY); setSaveError(false); }} className="mt-3 rounded-lg border border-border px-3 py-2 font-semibold hover:border-primary">Delete unusable save</button>
+          </div>
+        )}
         <div className="rounded-2xl border border-border bg-card p-4 text-center">
           <p className="font-display text-lg font-bold text-foreground">Take over a front office</p>
           <p className="mt-1 text-xs text-muted-foreground">

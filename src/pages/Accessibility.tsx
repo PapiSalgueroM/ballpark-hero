@@ -31,7 +31,7 @@ const Accessibility = () => {
 
       <h1 className="text-3xl font-bold mb-8">Accessibility</h1>
 
-      <p className="text-sm text-muted-foreground mb-6">Last updated: August 27, 2026</p>
+      <p className="text-sm text-muted-foreground mb-6">Last updated: October 1, 2026</p>
 
       <section className="space-y-6 text-sm leading-relaxed text-muted-foreground">
         <div>
@@ -47,7 +47,7 @@ const Accessibility = () => {
             <li><strong>Screen reader labels:</strong> search boxes, answer fields, report forms and icon buttons carry names, game results are announced when they appear, and guess feedback (right, close, wrong) is spoken alongside the color coding, never carried by color alone.</li>
             <li><strong>Reduced motion is respected.</strong> With reduce motion set in your system, the animated tiles, reveals, pulses, spinners and the celebration confetti calm down, and the live scores ticker stops cycling and shows everything at once. The ticker also has its own pause button, and it holds still while your pointer or keyboard focus is on it.</li>
             <li><strong>Dialogs behave.</strong> Pop up panels announce themselves as dialogs, take keyboard focus when they open, and close with the Escape key. The cookie banner is a named region that receives focus the moment it appears, so the two buttons are one tab away instead of a whole page away.</li>
-            <li><strong>No time pressure by default.</strong> Daily puzzles have no clock. The one head to head mode with a shot clock is a deliberate game rule, and everything else waits for you.</li>
+            <li><strong>Timed and untimed play:</strong> some games use a countdown, including Alphabet Sprint and Face Off. For a game without a clock, try <a href="/footle" className="underline hover:text-foreground">Footle</a>, where you can take your time between guesses.</li>
             <li><strong>Text and zoom:</strong> the site uses real text, not text baked into images, and the layout is built to reflow at high zoom on a phone sized screen.</li>
           </ul>
         </div>
