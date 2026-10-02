@@ -9717,6 +9717,9 @@ function strengthOf(state: CareerState, club: string): number {
   const eraPrior = state.eraId && isHistoricEra(state.eraId) ? eraEuroPrior(state.eraId, club) : null;
   return state.clubStrengths[club] ?? eraPrior ?? STRENGTH_PRIORS[club] ?? Math.max(clubPreviewRating(club), 64);
 }
+/* Round 899: simEra2015 reads the rating every match uses, and the
+   association the round of 16 draw uses, for a save from before the round. */
+export { strengthOf, uclClubCountry };
 
 /** Ghost club that gives one side a bye in odd-sized leagues (MLS's 15). */
 const BYE = '__BYE__';
@@ -10136,12 +10139,20 @@ export const ERA_UCL_FIELDS: Record<string, { name: string; country: string; fin
    foreign and now carry the engine's own names (PSG, Gladbach), the names
    their rosters, colours and league rows are keyed by. A save made before
    this round can still hold the long name in a group it is half way through,
-   so a strength lookup reads the long name as the club it always was. Only
-   read, never written: the next draw uses the names above. */
-const ERA_EURO_OLD_NAMES: Record<string, string> = {
-  'Paris Saint-Germain': 'PSG',
-  'Borussia Mönchengladbach': 'Gladbach',
+   so every lookup by field row (the finish derived prior that strengthOf and
+   the board read, and the association the round of 16 draw reads) takes the
+   long name as the club it always was. Keyed by era, so another era's field
+   is never touched. Only read, never written: the next draw uses the names
+   above. */
+const ERA_EURO_OLD_NAMES: Record<string, Record<string, string>> = {
+  era2015: {
+    'Paris Saint-Germain': 'PSG',
+    'Borussia Mönchengladbach': 'Gladbach',
+  },
 };
+function eraEuroName(eraId: string, club: string): string {
+  return ERA_EURO_OLD_NAMES[eraId]?.[club] ?? club;
+}
 
 const ERA_TOP_XI_CACHE = new Map<string, number>();
 function eraTopXI(eraId: string): number {
@@ -10157,7 +10168,8 @@ function eraTopXI(eraId: string): number {
 /** A foreign era club's strength, derived from its real finish that season.
  *  Null for clubs not in the era's verified field. */
 function eraEuroPrior(eraId: string, club: string): number | null {
-  const row = (ERA_UCL_FIELDS[eraId] ?? []).find(e => e.name === club);
+  const name = eraEuroName(eraId, club);
+  const row = (ERA_UCL_FIELDS[eraId] ?? []).find(e => e.name === name);
   if (!row) return null;
   return Math.round((eraTopXI(eraId) - ERA_FINISH_GAP[row.finish]) * 10) / 10;
 }
@@ -10166,7 +10178,7 @@ function eraEuroPrior(eraId: string, club: string): number | null {
  *  the era bake when the club has a real roster, the finish derived prior
  *  when it is a verified foreign participant, 60 as the honest floor. */
 function eraEuroStrength(eraId: string, club: string): number {
-  const name = ERA_EURO_OLD_NAMES[club] ?? club;
+  const name = eraEuroName(eraId, club);
   return eraXIAvg(eraId, name) ?? eraEuroPrior(eraId, name) ?? 60;
 }
 
@@ -10554,7 +10566,7 @@ function noteUclPair(state: CareerState, home: string, away: string, hg: number,
  * the draw treats as blocking nobody.
  */
 function uclClubCountry(state: CareerState, club: string): string | null {
-  const row = state.eraId ? ERA_UCL_FIELDS[state.eraId]?.find(e => e.name === club) : undefined;
+  const row = state.eraId ? ERA_UCL_FIELDS[state.eraId]?.find(e => e.name === eraEuroName(state.eraId!, club)) : undefined;
   if (row) return row.country;
   const lg = state.eraId && isHistoricEra(state.eraId)
     ? eraLeagueOf(club, state.eraId)

@@ -44,8 +44,8 @@
  *      316 Bundesliga and 296 Ligue 1 players, the six thin clubs by name,
  *      one man at one club in the whole world, the eight men earlier rounds
  *      removed who are home now, the thirteen folds, a sample of the window.
- * Three negative controls, SIM_ERA2015_CONTROL=dupe|stale|threeleagues, each
- * of which must end the run red (see the block where they are defined).
+ * Four negative controls, SIM_ERA2015_CONTROL=dupe|stale|threeleagues|longname,
+ * each of which must end the run red (see the block where they are defined).
  *
  * Run: node scripts/simEra2015.mjs
  */
@@ -100,9 +100,12 @@ const REAL_RANDOM = Math.random;
                    one club check and the re-audit check must both fail.
      stale         Draxler sent back to Schalke: the window check must fail.
      threeleagues  the era cut back to its first three leagues for section 3:
-                   the league count, the sizes and the 98 demands must fail. */
+                   the league count, the sizes and the 98 demands must fail.
+     longname      section 7b's old save holds names the engine never had
+                   in place of the two old long names: its strength and
+                   association checks must fail. */
 const CONTROL = process.env.SIM_ERA2015_CONTROL ?? '';
-if (CONTROL && !['dupe', 'stale', 'threeleagues'].includes(CONTROL)) { console.error(`unknown control ${CONTROL}`); process.exit(2); }
+if (CONTROL && !['dupe', 'stale', 'threeleagues', 'longname'].includes(CONTROL)) { console.error(`unknown control ${CONTROL}`); process.exit(2); }
 const controlRefuse = why => { console.error(`CONTROL ${CONTROL} did not apply: ${why}`); process.exit(2); };
 function controlDupe(rosters) {
   const row = (rosters['PSG'] ?? []).find(p => p.n === 'Ángel Di María');
@@ -391,7 +394,10 @@ console.log('3) Boards talk 2015: title for Barcelona, survival talk for August 
   /* Round 899: each new nation has its own cup, and the cup words follow. */
   for (const [club, n, cup] of [['Borussia Dortmund', 18, /DFB-Pokal/], ['Lyon', 20, /Coupe de France/]]) {
     const o = buildBoardObjectives(club, false, n, 'era2015').find(x => x.id === 'cup');
-    if (o && !cup.test(o.label)) fail(`2015 ${club}'s cup objective says "${o.label}"`);
+    /* Review fix: a missing cup objective is a failure too, or the check
+       would pass on a change that dropped the cup for these leagues. */
+    if (!o) fail(`2015 ${club} has no cup objective at all`);
+    else if (!cup.test(o.label)) fail(`2015 ${club}'s cup objective says "${o.label}"`);
   }
 }
 
@@ -589,6 +595,59 @@ else {
   const grown = Object.entries(next.world ?? {}).map(([id, w]) => `${id} ${w.round}/${w.table.length}`).sort().join(',');
   console.log(`   season one world: ${kept} · season two world: ${grown}`);
   if (grown !== 'bundesliga2015 34/18,laliga2015 38/20,ligue12015 38/20,premier2015 38/20') fail(`season two of the old save has the world ${grown}`);
+}
+
+/* 7b (review fix). The save above was cut from a fresh branch save, so its
+   Champions League already says PSG and Gladbach. A save the previous engine
+   made says 'Paris Saint-Germain' and 'Borussia Mönchengladbach' in its
+   groups (measured on a save built by origin/main's own engine), and it has
+   no club strength for either, because they were foreign then. Before the
+   fix both read a modern preview rating in every match and no association
+   in the round of 16 draw. Here the long names must read exactly what the
+   short names read in the same save, and the save must play its season out.
+   Control longname renames to a name the engine has never had instead, and
+   the same checks must then fail. */
+console.log('7b) A save holding the old long Champions League names rates them as 2015-16');
+if (CONTROL && CONTROL !== 'longname') console.log('   skipped: another control is running');
+else {
+  const LONG = CONTROL === 'longname'
+    ? { PSG: 'Paris Saint Germain FC', Gladbach: 'Borussia Gladbach VfL' }
+    : { PSG: 'Paris Saint-Germain', Gladbach: 'Borussia Mönchengladbach' };
+  if (CONTROL === 'longname') console.log('   CONTROL longname applied: the groups hold names the engine never had');
+  Math.random = seeded(4802);
+  let s = startCareer('Chelsea', 'era2015');
+  for (let i = 0; i < 16 && !(s.uclWorld && s.uclWorld.length); i++) s = playNextEntry(s, { skipHalftime: true }).state;
+  const old = JSON.parse(JSON.stringify(s));
+  delete old.world.bundesliga2015;
+  delete old.world.ligue12015;
+  for (const lg of ERA_LEAGUES.era2015) {
+    if (lg.id !== 'bundesliga2015' && lg.id !== 'ligue12015') continue;
+    for (const c of lg.clubs) delete old.clubStrengths[c];
+  }
+  const ren = c => LONG[c] ?? c;
+  let found = 0;
+  const groups = [...(old.uclWorld ?? []), ...(old.uclGroup ? [{ clubs: old.uclGroup.opponents, table: old.uclGroup.table }] : [])];
+  for (const g of groups) {
+    for (const c of g.clubs) if (LONG[c]) found += 1;
+    g.clubs.splice(0, g.clubs.length, ...g.clubs.map(ren));
+    for (const r of g.table) r.club = ren(r.club);
+  }
+  if (found !== 2) {
+    if (CONTROL) controlRefuse(`the save's groups hold ${found} of PSG and Gladbach`);
+    fail(`the Chelsea save's Champions League holds ${found} of PSG and Gladbach, the check needs both`);
+  }
+  for (const [short, long] of Object.entries(LONG)) {
+    const want = cm.strengthOf(old, short);
+    const got = cm.strengthOf(old, long);
+    console.log(`   ${long}: strength ${got} (${short} reads ${want}), association ${cm.uclClubCountry(old, long)}`);
+    if (got !== want) fail(`${long} plays at ${got} in an old save where ${short} reads ${want}`);
+    const country = short === 'PSG' ? 'France' : 'Germany';
+    if (cm.uclClubCountry(old, long) !== country) fail(`${long} has the association ${cm.uclClubCountry(old, long)}, not ${country}`);
+  }
+  if (!CONTROL) {
+    const done = playSeason(old);
+    if (done.week < done.calendar.length) fail(`the long name save stopped at week ${done.week} of ${done.calendar.length}`);
+  }
 }
 
 Math.random = REAL_RANDOM;
