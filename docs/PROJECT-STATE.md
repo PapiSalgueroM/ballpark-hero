@@ -1,5 +1,19 @@
 # Project state
 
+## Codex867 verified;870 bonus feedback claimed, 2026-10-02
+
+Guess the Nation reload driver now finds actual ResultScreen, with one exact
+selector change and all assertions preserved. Offline7/7 pass; clear/silent
+controls reject the intended restore/booking regressions. Fresh pull before
+870 is up to date. Player Bingo bonus feedback will show actual earned line
+delta instead of a constant100.868 contract/869 calendar work continues.
+Merged863-866 type/build and15 offline built fences pass. Seven source scopes
+pass across runs; one concurrent Silverware page case returned STACK_TRACE_ERROR,
+then unchanged one-worker replay10/10 and all three controls passed. Cause is
+not proven; retain failed log. Database incident still holds live testing.
+Next free871.
+
+
 ## Codex867-869 claimed after Release R merge, 2026-10-02
 
 Merged Claude's source atd2466763 with863/865/866. Both documentation lanes

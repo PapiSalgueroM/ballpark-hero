@@ -1,5 +1,18 @@
 # Work board
 
+**Codex867 VERIFIED and870 CLAIMED, 2026-10-02.** Fresh git pull before870
+is up to date at8724ceac.867 changes one driver selector: actual ResultScreen
+status card contains its result h2; transient feedback does not. Before five
+Nation checks fail/two independent checks pass. After all7 pass, including
+the one-hint1100 win, save/reload, fingerprint and exact booking assertions.
+Clear-save control rejects restore/rebooking only; silent-mark rejects booking
+only. No assertion/timing/product change. Original bytes and logs retained.
+870 owns Player Bingo page/LineFlash plus focused verification: show the actual
+line delta's points when one placement completes multiple lines. Preserve
+placement rules, scoring, bank/continue, deck, data and completion. No production
+requests.868 contract/869 calendar builders continue. Next free871.
+
+
 **Codex867-869 CLAIMED, 2026-10-02, offline follow-through.** Merged Release R
 with863/865/866 atd2466763, retaining both documentation lanes. Clean merged
 type/build gates are running; production requests remain stopped. Claude's
