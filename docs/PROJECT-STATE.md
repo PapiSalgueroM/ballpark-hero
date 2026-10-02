@@ -1,5 +1,14 @@
 # Project state
 
+## Codex878 integration and880 reload audit, 2026-10-02
+
+Pulled Release S main2550c296.878 shared money feedback has19 normal passes
+and11 effective controls; actual local browser and clean merged build follow.
+880 claims the eight reported arcade reload driver failures, preserving existing
+save/replay/recording expectations. No desktop/Supabase/production work. Claude
+owns834/876 and publication. Next free881. Paused845 soccer2 guide is preserved
+in the named Release S stash, excluded from accepted gates.
+
 ## Release S is LIVE, 2026-10-02 04:31 EDT: main `0fa68f96`, deployment `54d670ba`, entry `index-DEwRbZI0.js`
 
 Assembled by the desktop Claude lane in the gate clone (`release-s`), the first release gated under the production
