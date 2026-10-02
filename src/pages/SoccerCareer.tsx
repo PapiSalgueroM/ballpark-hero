@@ -33,7 +33,7 @@ import {
   initCareer, advanceYouthYear, acceptOffer, advanceProSeason,
   dismissSummary, stayAtClub, signExtension, requestTransfer, applyEventChoice,
   dismissDebut, dismissWorldCup, retireFromInternational, dismissRivalryEvent,
-  dismissBallonDor, applyBdorSpeech, type BdorSpeechChoice, SOCCER_BALLON_DOR, SOCCER_WORLD_CUP_SPEECHES,
+  dismissBallonDor, giveBdorSpeech, bdorSpeechOpen, type BdorSpeechChoice, SOCCER_BALLON_DOR, SOCCER_BDOR_SPEECHES, SOCCER_WORLD_CUP_SPEECHES,
   applyWorldCupSpeech, type WorldCupSpeechChoice, manualRetire, choosePostRetirement, advanceManagerSeason, acceptManagerOffer, endManagerCareer, loadManagerMarket,
   acceptRetirementSuggestion, declineRetirementSuggestion,
   advancePunditSeason, endPunditCareer, punditLegacyPaid, playedSeniorSeason, POST_RETIREMENT_BONUS_CAP,
@@ -82,6 +82,7 @@ import PlayerAvatar from "@/components/soccer-career/PlayerAvatar";
 import AppearanceBuilder from "@/components/soccer-career/AppearanceBuilder";
 import { Confetti } from "@/components/soccer-career/CareerFx";
 import { AwardsNightCard, SpeechChoices } from "@/components/career/AwardsNightCard";
+import { availableSpeeches } from "@/lib/careerAwardsNight";
 import { CelebrationStyles, revealDelay } from "@/components/club-manager/Celebration";
 import { SignedSlip } from "@/components/soccer-career/SignedSlip";
 import type { SignedNote } from "@/components/soccer-career/SignedSlip";
@@ -896,9 +897,11 @@ export default function SoccerCareer() {
     if (!career) return;
     setCareer(dismissBallonDor(career, clubs));
   };
+  /* Round 834: the speech is given on the ceremony card and the card stays up
+     to show what it did; Continue is handleDismissBallonDor. */
   const handleBdorSpeech = (choice: BdorSpeechChoice) => {
     if (!career) return;
-    setCareer(applyBdorSpeech(career, choice, clubs));
+    setCareer(giveBdorSpeech(career, choice));
   };
 
   const handleManualRetire = () => {
@@ -2764,10 +2767,10 @@ function FinancialPanel({ career, onCurrencyChange }: { career: CareerState; onC
    Round 834: the card is the shared awards night card (AwardsNightCard), bound
    with the Ballon d'Or's copy and a soccer row: flag, position and club, points,
    goals and honours. The headline still lands after the countdown (Round 530).
-   The speech has had no buttons here since Round 54 (applyBdorSpeech and its
-   options exist, nothing draws them); onSpeech stays in the signature for the
-   day it does. */
-function BallonDorCeremonyCard({ bdor, career, onDismiss }: { bdor: BallonDorResult; career: CareerState; onDismiss: () => void; onSpeech: (choice: BdorSpeechChoice) => void }) {
+   The winner's speech had no buttons here from Round 54 until Round 834: now
+   a win offers the speeches this save may give, one pick, and the card shows
+   what it did before Continue. */
+function BallonDorCeremonyCard({ bdor, career, onDismiss, onSpeech }: { bdor: BallonDorResult; career: CareerState; onDismiss: () => void; onSpeech: (choice: BdorSpeechChoice) => void }) {
   const copy = SOCCER_BALLON_DOR.copy;
   return (
     <AwardsNightCard<BallonDorNominee>
@@ -2782,6 +2785,12 @@ function BallonDorCeremonyCard({ bdor, career, onDismiss }: { bdor: BallonDorRes
       score={n => `${n.points}pts`}
       scoreDetail={n => `${n.goals}G${n.trophies.length > 0 ? ` · ${n.trophies.join(", ")}` : ""}`}
       onDismiss={onDismiss}
+      speech={{
+        open: bdorSpeechOpen(career),
+        prompt: "The golden ball is yours. The speech:",
+        options: availableSpeeches(SOCCER_BDOR_SPEECHES, career),
+        onChoose: id => onSpeech(id as BdorSpeechChoice),
+      }}
     />
   );
 }

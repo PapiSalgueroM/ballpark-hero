@@ -65,6 +65,9 @@ export interface AwardsNight<C extends AwardsCandidate = AwardsCandidate> {
   playerPoints: number;
   /** Did the player make the ballot at all? */
   playerNominated: boolean;
+  /** The winner's speech once given on the card: which one, the log line, and
+   *  what it actually moved. Absent on a night with no speech yet. */
+  speech?: { id: string; line: string; moved: string };
 }
 
 /** Where the field's names come from. See RIVAL NAMES above. */
@@ -102,6 +105,8 @@ export interface AwardsBallot<C extends AwardsCandidate> {
 export interface AwardsMeter<S> {
   label: string;
   add: (s: S, delta: number) => void;
+  /** How a change reads on a card ("+€15M"); a signed number when absent. */
+  show?: (delta: number) => string;
 }
 
 export interface MeterStep<M extends string> {
@@ -202,6 +207,17 @@ export function runAwardsNight<C extends AwardsCandidate>(award: AwardsDef, year
     if (wider <= award.widerSize) place = wider;
   }
   return { year, nominees, playerRank: place, playerPoints: ballot.playerPoints, playerNominated: ballot.player !== null };
+}
+
+/** Round 834: what a list of steps does, in words, read from the steps
+ *  themselves ("Market Value +€15M, Popularity +20"). A card that says what a
+ *  night or a speech does builds its line from this, from the same steps the
+ *  engine applies, so the words cannot drift from the effect again. */
+export function describeSteps<S, M extends string>(meters: Record<M, AwardsMeter<S>>, steps: MeterStep<M>[]): string {
+  return steps.map(({ meter, delta }) => {
+    const m = meters[meter];
+    return `${m.label} ${m.show ? m.show(delta) : `${delta >= 0 ? "+" : ""}${delta}`}`;
+  }).join(", ");
 }
 
 /** Applies meter steps in the order written. */

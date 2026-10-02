@@ -139,8 +139,11 @@ function trySpeech(fn, s, choice, clubs, seed) {
  * @param soccer the bundled src/lib/soccerCareerEngine.ts
  * @param appearance the bundled src/lib/soccerCareerAppearance.ts
  * @param cards { bdor(bdor, career) => markup, tournament(t) => markup, worldCup(wc, career) => markup }
+ * @param opts.onNight (save, night) called on every ceremony as it comes up,
+ *   before anything is chosen; it must not touch the save and adds nothing to
+ *   the output, so a recording does not depend on it.
  */
-export function probeAwardsNight({ soccer, appearance, cards }) {
+export function probeAwardsNight({ soccer, appearance, cards }, { onNight } = {}) {
   const clubs = soccer.FALLBACK_CLUBS;
   const careers = [];
   const nights = [];
@@ -192,6 +195,7 @@ export function probeAwardsNight({ soccer, appearance, cards }) {
           case 'season_summary': s = soccer.dismissSummary(s, clubs); break;
           case 'ballon_dor': {
             const bdor = s.pendingBallonDor;
+            onNight?.(s, bdor);
             const night = nightRecord(c, bdor, names);
             if (c < 12 && cards) {
               const html = cards.bdor(bdor, s);

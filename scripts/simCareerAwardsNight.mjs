@@ -11,15 +11,19 @@
  *
  *   1. Soccer unchanged, HARD. scripts/lib/careerAwardsNightProbe.mjs drives 48
  *      seeded careers through every screen and records the whole save's hash
- *      after every step (10,029 of them), every Ballon d'Or night in clear
- *      (shortlist order, points, the player's place, 851 nights, 26 won), what
- *      every speech does on every won night and tournament (405 tournaments,
- *      54 won), 192 direct speech draws on real saves, and the ceremony and
- *      tournament cards' server rendered markup. It was recorded into
- *      scripts/data/careerAwardsNightFixture.json from origin/main 3fb92eea
- *      BEFORE any code moved; this replays it on the current tree and requires
- *      the output to be identical. Soccer calls Math.random directly in a fixed
- *      order, so a single reordered draw anywhere breaks it.
+ *      after every step (10,555 of them), every Ballon d'Or night in clear
+ *      (shortlist order, points, the player's place, 860 nights, 30 won), what
+ *      every speech does on every won night and tournament (405 tournaments),
+ *      192 direct speech draws on real saves, and the ceremony and tournament
+ *      cards' server rendered markup. First recorded from origin/main 3fb92eea
+ *      before any code moved; re-recorded after the merge with main from a git
+ *      archive of main itself (the fixture's recordedFrom, ac0801c1), never from
+ *      the branch, and the merged branch replayed it identical before part 2.
+ *      This replays it on the current tree and requires the output to be
+ *      identical. Soccer calls Math.random directly in a fixed order, so a
+ *      single reordered draw anywhere breaks it. The winner's and the podium's
+ *      ceremony cards are left out of the comparison since part 2 changed them
+ *      on purpose (section 6 holds them); every other card is compared whole.
  *   2. The contract, on a synthetic sport (2,000 nights with repeated names,
  *      short fields, fillers that repeat themselves, and verdict rules that
  *      throw points about): the shortlist never names a rival twice, the list
@@ -39,6 +43,16 @@
  *   5. No second copy. The inline shortlist, the wider ranking and the four
  *      hand written speech buttons must not come back beside the shared ones,
  *      and Soccer must keep calling them.
+ *   6. The ceremony card tells the truth (Round 834 part 2). Every "Word +N"
+ *      the winner and podium lines print must be a meter the night moves by
+ *      exactly that much, and every meter it moves must be named (the card
+ *      used to promise "Legacy +20" while the night moved popularity). A won
+ *      ceremony offers the speeches this save may give in place of Continue,
+ *      one pick moves exactly that speech's steps and writes one line, a
+ *      second pick does nothing, the card then shows what it did with
+ *      Continue, a lost or stale ceremony offers nothing, and on the replay's
+ *      real ceremonies the offer comes up on every win (30 of 30) and on no
+ *      loss.
  *
  * Negative controls (SIM_AWARDS_NIGHT_CONTROL), each must turn its section red:
  *   reorderdraw   the era star loop draws assists before goals   -> section 1
@@ -46,10 +60,13 @@
  *   speechleak    a gamble's hit also lands its miss steps       -> sections 2 and 3
  *   legacyreal    a second file declares real era stars          -> section 4
  *   secondcopy    an inline wider ranking reappears in the engine -> section 5
+ *   cardtext      the winner line goes back to "Legacy +20, ..."  -> section 6
+ *   effectonly    the night drops the winner's first step only    -> section 6
+ *   speechtwice   the card's speech loses its once-only guard     -> section 6
  * Each patch is refused unless the exact text it replaces is present, so a
  * control can never pass by changing nothing. Measured on the round's tree:
- * every control turns its own section red (reorderdraw and winnernottop also
- * break section 1, speechleak sections 1 and 3).
+ * every control turns its own section red (winnernottop also breaks section 1,
+ * speechleak sections 1 and 3, effectonly sections 1 and 2).
  *
  * Bands, all on fixed seeds so the same numbers come back every run: the
  * synthetic 35% gamble came up 338 of 1,000 (band 30 to 40%); Soccer's
@@ -94,6 +111,30 @@ const CONTROLS = {
   },
   legacyreal: { section: 4, patches: [] },
   secondcopy: { section: 5, patches: [] },
+  cardtext: {
+    section: 6,
+    patches: [{
+      file: 'src/lib/soccerCareerEngine.ts',
+      from: 'winnerLine: `The best player in the world! ${describeSteps(SOCCER_AWARDS_METERS, BDOR_WINNER_STEPS)}`,',
+      to: 'winnerLine: "The best player in the world! Legacy +20, Market Value +€15M",',
+    }],
+  },
+  effectonly: {
+    section: 6,
+    patches: [{
+      file: 'src/lib/careerAwardsNight.ts',
+      from: '    applyMeterSteps(sport.meters, s, sport.winnerSteps);',
+      to: '    applyMeterSteps(sport.meters, s, sport.winnerSteps.slice(1));',
+    }],
+  },
+  speechtwice: {
+    section: 6,
+    patches: [{
+      file: 'src/lib/soccerCareerEngine.ts',
+      from: '  if (!bdorSpeechOpen(prev) || !SOCCER_BDOR_SPEECHES.some(o => o.id === choice)) return prev;',
+      to: '  if (!SOCCER_BDOR_SPEECHES.some(o => o.id === choice)) return prev;',
+    }],
+  },
 };
 if (CONTROL && !CONTROLS[CONTROL]) {
   console.error(`unknown SIM_AWARDS_NIGHT_CONTROL "${CONTROL}" (known: ${Object.keys(CONTROLS).join(', ')})`);
@@ -111,13 +152,35 @@ const check = (ok, m) => { checks += 1; if (!ok) fail(m); };
 
 const B = await bundleAwardsNight(ROOT, { patches, extra: { awards: 'src/lib/careerAwardsNight.ts' } });
 const { soccer, awards: A } = B;
+/* Filled by section 1's replay, read by section 6: on every real ceremony the
+   fleet reaches, was the speech offered exactly when the player won? */
+const liveNights = { won: 0, offered: 0, wrong: 0 };
 
 /* ---------- 1. Soccer unchanged ---------- */
 section = 1;
 console.log('1) Soccer Career replays the pre-lift fixture byte for byte');
 {
   const fixture = JSON.parse(fs.readFileSync(path.join(ROOT, 'scripts/data/careerAwardsNightFixture.json'), 'utf8'));
-  const fresh = JSON.parse(JSON.stringify(probeAwardsNight(B)));
+  const fresh = JSON.parse(JSON.stringify(probeAwardsNight(B, {
+    onNight: (s, bdor) => {
+      if (bdor.playerRank === 1) { liveNights.won += 1; if (soccer.bdorSpeechOpen(s)) liveNights.offered += 1; }
+      else if (soccer.bdorSpeechOpen(s)) liveNights.wrong += 1;
+    },
+  })));
+  /* Round 834 part 2 changed the winner's and the podium's ceremony cards on
+     purpose (the speech is offered, the lines say what the night does), so
+     those two cards are left out of the replay on both sides; section 6 holds
+     them. Every other card, the shortlist, the wider ranking, no nomination
+     and both tournament cards, is still compared whole. */
+  const changedOnPurpose = d => {
+    let n = 0;
+    for (const night of d.nights) if (night.rank !== null && night.rank <= 3 && 'ui' in night) { delete night.ui; n += 1; }
+    d.markup = d.markup.map(m => (m.what === 'bdor winner' || m.what === 'bdor podium') && (m.html || m.ui) ? (n += 1, { what: m.what, night: m.night }) : m);
+    return n;
+  };
+  const leftOut = changedOnPurpose(fixture);
+  changedOnPurpose(fresh);
+  console.log(`   ${leftOut} winner and podium cards left out of the replay (changed on purpose, section 6)`);
   const stepCount = fixture.careers.reduce((a, c) => a + c.steps.split(' ').length, 0);
   console.log(`   fixture: ${fixture.careers.length} careers, ${stepCount} saves, ${fixture.nights.length} nights (${fixture.nights.filter(n => n.rank === 1).length} won), ${fixture.tournaments.length} tournaments, ${fixture.speeches.length} speeches, ${fixture.markup.length} kept cards`);
   check(fixture.careers.length >= 40 && stepCount > 5000 && fixture.nights.length > 500, 'the fixture is smaller than the round recorded, it cannot prove much');
@@ -347,11 +410,6 @@ console.log('\n3) Soccer Career speeches: 2,000 draws on a real save');
     && gate({ ...base, rival: { name: 'R', retired: false }, family: fam(0) }, 'thank_rival'), 'the rival speech is not gated on a rival who is still playing');
   check(!gate({ ...base, rival: null, family: fam(0) }, 'family_on_stage') && gate({ ...base, rival: null, family: fam(2) }, 'family_on_stage'), 'the family speech is not gated on having a child');
   check(A.availableSpeeches(soccer.SOCCER_WORLD_CUP_SPEECHES, base).length === 4, 'a tournament winner should always see all four speeches');
-  /* Reported, not gated: the ceremony card's copy names a meter the night does
-     not move. Changing it is a player visible change and the lead's call. */
-  const words = [...soccer.SOCCER_BALLON_DOR.copy.winnerLine.matchAll(/([A-Z][a-z]+(?: [A-Z][a-z]+)?) \+/g)].map(m => m[1]);
-  const moves = soccer.SOCCER_BALLON_DOR.winnerSteps.map(x => `${METERS[x.meter].label} ${x.delta > 0 ? '+' : ''}${x.delta}`);
-  console.log(`   NOTE (not gated): the winner line names ${words.join(' and ')}; winning moves ${moves.join(' and ')}`);
 }
 
 /* ---------- source helpers ---------- */
@@ -402,6 +460,121 @@ console.log('\n5) One awards night: no second copy beside the shared one');
   ];
   for (const [rel, text, re, what] of needed) check(re.test(text), `${rel} no longer uses ${what}`);
   console.log(`   ${banned.length} old copies absent, ${needed.length} shared calls present`);
+}
+
+/* ---------- 6. The ceremony card tells the truth, and the speech is offered once ---------- */
+section = 6;
+console.log('\n6) The ceremony card says what the night does, and a win offers the speech once');
+{
+  const stats = o => ({ pace: o, shooting: o, passing: o, dribbling: o, defending: o, physical: o, reflexes: o });
+  const keep = Math.random;
+  Math.random = mulberry32(8346);
+  let base;
+  try {
+    base = soccer.initCareer('Card Test', 'England', 'ST', '2020-24', stats(72), 72, 2020, soccer.FALLBACK_CLUBS, null, 88);
+  } finally {
+    Math.random = keep;
+  }
+  /* Mid values, so no clamp can hide a step. */
+  Object.assign(base, { popularity: 50, morale: 50, integrityBonus: 0, rivalryIntensity: 50, socialMediaFollowers: 10, marketValue: 20, rival: null });
+  const SPORT = soccer.SOCCER_BALLON_DOR;
+  const METERS = SPORT.meters;
+  const ids = Object.keys(METERS);
+  const labels = new Set(ids.map(k => METERS[k].label));
+  const labelToId = Object.fromEntries(ids.map(k => [METERS[k].label, k]));
+  /* Every "Word +N" or "Word +€NM" a line prints, whatever the word. */
+  const claims = text => [...text.matchAll(/([A-Z][A-Za-z]*(?: [A-Z][A-Za-z]*)*) ([+-])€?(\d+(?:\.\d+)?)M?/g)]
+    .map(m => ({ label: m[1], delta: Number(m[2] + m[3]) }));
+  const YEAR = 2031;
+  const nightAt = rank => ({
+    year: YEAR, playerRank: rank, playerPoints: 90, playerNominated: true,
+    nominees: Array.from({ length: 10 }, (_, i) => ({
+      name: i + 1 === rank ? 'Card Test' : `Generated ${i}`, points: 100 - i, isPlayer: i + 1 === rank,
+      nationality: 'England', position: 'ST', club: 'Generated FC', goals: 20, trophies: [],
+    })),
+  });
+  const truthOf = (line, rank) => {
+    const s = { ...base, events: [...base.events], awards: [...base.awards] };
+    const season = { year: YEAR, ballonDor: false, ballonDorRank: null };
+    const before = { ...s };
+    A.settleAwardsNight(SPORT, s, season, nightAt(rank));
+    const moved = Object.fromEntries(ids.filter(k => s[k] !== before[k]).map(k => [k, Math.round((s[k] - before[k]) * 100) / 100]));
+    const said = claims(line);
+    const bad = [];
+    for (const c of said) {
+      if (!labels.has(c.label)) bad.push(`says "${c.label} ${c.delta}" and the night has no such meter`);
+      else if (moved[labelToId[c.label]] !== c.delta) bad.push(`says ${c.label} ${c.delta}, the night moved it ${moved[labelToId[c.label]] ?? 0}`);
+    }
+    for (const k of Object.keys(moved)) if (!said.some(c => c.label === METERS[k].label)) bad.push(`moves ${METERS[k].label} ${moved[k]} and never says so`);
+    return { said, moved, bad };
+  };
+  const lines = [
+    ['winner', SPORT.copy.winnerLine, 1],
+    ['2nd place', SPORT.copy.podiumLine(2), 2],
+    ['3rd place', SPORT.copy.podiumLine(3), 3],
+  ];
+  for (const [what, line, rank] of lines) {
+    const t = truthOf(line, rank);
+    console.log(`   ${what.padEnd(9)} says ${t.said.map(c => `${c.label} ${c.delta}`).join(', ') || 'nothing'}; the night moves ${Object.entries(t.moved).map(([k, v]) => `${METERS[k].label} ${v}`).join(', ') || 'nothing'}`);
+    check(t.said.length > 0, `the ${what} line names no effect at all`);
+    for (const b of t.bad) fail(`the ${what} line ${b}`);
+    check(!DASHES.test(line), `a dash in the ${what} line`);
+  }
+
+  /* The card on screen carries those lines, and a won night offers the speech. */
+  const onCeremony = (rank, lastYear = YEAR, extra = {}) => {
+    const night = nightAt(rank);
+    return {
+      ...base, events: [...base.events], phase: 'ballon_dor', pendingBallonDor: night,
+      seasons: [...base.seasons, { ...(base.seasons[base.seasons.length - 1] ?? {}), year: lastYear, ballonDor: rank === 1, ballonDorRank: rank }],
+      family: { ...base.family, children: 0 }, ...extra,
+    };
+  };
+  const strip = html => html.replace(/<[^>]+>/g, ' ').replace(/&#x27;|&#39;/g, "'").replace(/&amp;/g, '&').replace(/\s+/g, ' ');
+  const offered = s => A.availableSpeeches(soccer.SOCCER_BDOR_SPEECHES, s);
+  const won = onCeremony(1);
+  const wonText = strip(B.cards.bdor(won.pendingBallonDor, won));
+  check(wonText.includes(SPORT.copy.winnerLine), 'the winner card does not show the winner line');
+  check(soccer.bdorSpeechOpen(won), 'a won ceremony on the season just played does not offer the speech');
+  check(offered(won).length === 2 && offered(won).every(o => wonText.includes(o.label)), 'the won card does not show the speeches this save may give');
+  check(!wonText.includes(soccer.SOCCER_BDOR_SPEECHES.find(o => o.id === 'thank_rival').label), 'the won card offers the rival speech with no rival');
+  check(!/Continue/.test(wonText), 'the won card lets the speech be skipped past before it is given');
+  const podium = onCeremony(2);
+  const podiumText = strip(B.cards.bdor(podium.pendingBallonDor, podium));
+  check(podiumText.includes(SPORT.copy.podiumLine(2)), 'the podium card does not show the podium line');
+  check(!soccer.bdorSpeechOpen(podium) && soccer.SOCCER_BDOR_SPEECHES.every(o => !podiumText.includes(o.label)) && /Continue/.test(podiumText), 'a lost ceremony offers a speech');
+
+  /* One pick, applied once, then the card shows what it did. */
+  const after = soccer.giveBdorSpeech(won, 'tears');
+  const tears = soccer.SOCCER_BDOR_SPEECHES.find(o => o.id === 'tears');
+  const want = Object.fromEntries(tears.effect.map(st => [st.meter, st.delta]));
+  const movedOk = ids.every(k => Math.round(((after[k] ?? 0) - (won[k] ?? 0)) * 100) / 100 === (want[k] ?? 0));
+  check(movedOk, 'the speech given on the card did not move exactly its own steps');
+  check(after.events.length === won.events.length + 1 && after.pendingBallonDor?.speech?.id === 'tears', 'the speech was not written once on the night and the log');
+  check(after.phase === 'ballon_dor', 'giving the speech left the ceremony before the card could show it');
+  const again = soccer.giveBdorSpeech(after, 'greatest_ever');
+  check(again === after && !soccer.bdorSpeechOpen(after), 'a second speech can be given on the same night');
+  const afterText = strip(B.cards.bdor(after.pendingBallonDor, after));
+  check(afterText.includes(after.pendingBallonDor.speech.line) && afterText.includes(after.pendingBallonDor.speech.moved) && /Continue/.test(afterText)
+    && soccer.SOCCER_BDOR_SPEECHES.every(o => !afterText.includes(o.label)), 'after the speech the card does not show what it did with Continue');
+  console.log(`   given: ${after.pendingBallonDor.speech.moved}`);
+  const next = soccer.dismissBallonDor(after, soccer.FALLBACK_CLUBS);
+  check(next.pendingBallonDor === null && next.phase !== 'ballon_dor', 'Continue after the speech does not leave the ceremony');
+
+  /* Old saves. A night that is not the season just played (a stale ceremony an
+     old save still holds) offers nothing; a save from before this round on a
+     won ceremony (no speech field) is the current night and is offered it. */
+  const stale = onCeremony(1, YEAR - 1);
+  check(!soccer.bdorSpeechOpen(stale) && soccer.giveBdorSpeech(stale, 'tears') === stale, 'a stale ceremony offers a speech for a past win');
+  const offPhase = { ...won, phase: 'playing' };
+  check(!soccer.bdorSpeechOpen(offPhase) && soccer.giveBdorSpeech(offPhase, 'tears') === offPhase, 'a speech can be given off the ceremony screen');
+  const reloaded = JSON.parse(JSON.stringify(after));
+  check(!soccer.bdorSpeechOpen(reloaded) && strip(B.cards.bdor(reloaded.pendingBallonDor, reloaded)).includes(after.pendingBallonDor.speech.line), 'a save written on the ceremony after the speech does not load as it was');
+
+  /* On the replay's real ceremonies: offered on every win, never otherwise. */
+  console.log(`   replay: ${liveNights.won} won ceremonies, speech offered on ${liveNights.offered}, offered on a lost one ${liveNights.wrong} times`);
+  check(liveNights.won >= 20, 'too few won ceremonies in the replay to prove the offer');
+  check(liveNights.offered === liveNights.won && liveNights.wrong === 0, 'the speech is not offered on exactly the won ceremonies');
 }
 
 console.log('');

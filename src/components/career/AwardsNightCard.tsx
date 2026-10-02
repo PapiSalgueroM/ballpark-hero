@@ -14,7 +14,7 @@ import {
    countdown, and the headline lands after the last name. A sport supplies the
    night, its award, its copy, and how one candidate's row reads. */
 export function AwardsNightCard<C extends AwardsCandidate>({
-  night, award, copy, portrait, badge, detail, score, scoreDetail, onDismiss,
+  night, award, copy, portrait, badge, detail, score, scoreDetail, onDismiss, speech,
 }: {
   night: AwardsNight<C>;
   award: AwardsDef;
@@ -27,6 +27,15 @@ export function AwardsNightCard<C extends AwardsCandidate>({
   score: (c: C) => string;
   scoreDetail: (c: C) => string;
   onDismiss: () => void;
+  /** Round 834: the winner's speech. While `open` the card offers the options
+   *  in place of Continue; once the night carries a speech, the card shows
+   *  what it did above Continue. Leave it out for a night with no speech. */
+  speech?: {
+    open: boolean;
+    prompt: string;
+    options: SpeechChoice<string>[];
+    onChoose: (id: string) => void;
+  };
 }) {
   const place = night.playerRank;
   const isWinner = place === 1;
@@ -90,9 +99,20 @@ export function AwardsNightCard<C extends AwardsCandidate>({
         ))}
       </div>
 
-      <Button onClick={onDismiss} className={`w-full h-10 text-sm font-bold text-black ${isWinner ? "bg-amber-600 hover:bg-amber-500" : "bg-emerald-600 hover:bg-emerald-500"}`}>
-        Continue →
-      </Button>
+      {isWinner && night.speech && (
+        <div className="rounded-lg border border-amber-400/30 bg-amber-500/10 p-3 space-y-1 text-center animate-fade-in">
+          <p className="text-xs">{night.speech.line}</p>
+          {night.speech.moved && <p className="text-[11px] font-bold text-amber-300">{night.speech.moved}</p>}
+        </div>
+      )}
+
+      {isWinner && speech?.open ? (
+        <SpeechChoices prompt={speech.prompt} options={speech.options} onChoose={speech.onChoose} />
+      ) : (
+        <Button onClick={onDismiss} className={`w-full h-10 text-sm font-bold text-black ${isWinner ? "bg-amber-600 hover:bg-amber-500" : "bg-emerald-600 hover:bg-emerald-500"}`}>
+          Continue →
+        </Button>
+      )}
     </div>
   );
 }
@@ -103,13 +123,16 @@ const TONE = {
   quiet: "text-white bg-muted hover:bg-muted/80",
 } as const;
 
+/** One speech button: what SpeechChoices needs from a speech option. */
+export type SpeechChoice<Id extends string> = { id: Id; emoji: string; label: string; tone: keyof typeof TONE };
+
 /** The winner's speech: one button per option, in the order the sport wrote
  *  them. Pass only the options this save may give (availableSpeeches). */
 export function SpeechChoices<Id extends string>({
   prompt, options, onChoose, roomy = false, fadeIn = false,
 }: {
   prompt: string;
-  options: { id: Id; emoji: string; label: string; tone: keyof typeof TONE }[];
+  options: SpeechChoice<Id>[];
   onChoose: (id: Id) => void;
   /** A taller button, for a card with room to spare. */
   roomy?: boolean;

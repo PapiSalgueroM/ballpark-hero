@@ -6386,8 +6386,8 @@ export function simulateUCL(state: CareerState, season: SeasonRecord): UCLResult
    night may move with soccer's own clamps and rounding, the award, the copy,
    and (further down) the scoring and the speeches. */
 import {
-  runAwardsNight, settleAwardsNight, applySpeech,
-  type AwardsCandidate, type AwardsNight, type AwardsMeter, type AwardsNightSport, type SpeechOption,
+  runAwardsNight, settleAwardsNight, applySpeech, describeSteps,
+  type AwardsCandidate, type AwardsNight, type AwardsMeter, type AwardsNightSport, type SpeechOption, type MeterStep,
 } from "./careerAwardsNight";
 
 type SoccerAwardsMeter = "popularity" | "morale" | "integrityBonus" | "rivalryIntensity" | "socialMediaFollowers" | "marketValue";
@@ -6398,8 +6398,16 @@ const SOCCER_AWARDS_METERS: Record<SoccerAwardsMeter, AwardsMeter<CareerState>> 
   integrityBonus: { label: "Integrity", add: (s, d) => { s.integrityBonus += d; } },
   rivalryIntensity: { label: "Rivalry", add: (s, d) => { s.rivalryIntensity = clamp((s.rivalryIntensity ?? 0) + d, 0, 100); } },
   socialMediaFollowers: { label: "Followers", add: (s, d) => { s.socialMediaFollowers = Math.round((s.socialMediaFollowers + d) * 100) / 100; } },
-  marketValue: { label: "Market Value", add: (s, d) => { s.marketValue = Math.round((s.marketValue + d) * 10) / 10; } },
+  marketValue: { label: "Market Value", add: (s, d) => { s.marketValue = Math.round((s.marketValue + d) * 10) / 10; }, show: d => `${d >= 0 ? "+" : "-"}€${Math.abs(d)}M` },
 };
+
+/* Round 834: what winning and a podium do, written once. The night applies
+   these and the ceremony card's lines are built from them (describeSteps), so
+   the card says what happens. Before this round the card promised "Legacy +20"
+   and "Legacy +5" while the night moved popularity; legacy only counts Ballon
+   d'Ors at retirement (calculateLegacy). */
+const BDOR_WINNER_STEPS: MeterStep<SoccerAwardsMeter>[] = [{ meter: "marketValue", delta: 15 }, { meter: "popularity", delta: 20 }];
+const BDOR_PODIUM_STEPS: MeterStep<SoccerAwardsMeter>[] = [{ meter: "popularity", delta: 5 }];
 
 /* The field is the era's real stars (careerEras.ts) until 2032, which is the
    one place on the site an awards night ranks real people, each with goals
@@ -6410,8 +6418,8 @@ const SOCCER_AWARDS_METERS: Record<SoccerAwardsMeter, AwardsMeter<CareerState>> 
 export const SOCCER_BALLON_DOR: AwardsNightSport<CareerState, BallonDorNominee, SoccerAwardsMeter, SeasonRecord> = {
   award: { id: "ballon_dor", name: "Ballon d'Or", emoji: "🏅", shortlistSize: 10, widerSize: 30, podiumSize: 3, rivals: "legacy-real-era-stars" },
   meters: SOCCER_AWARDS_METERS,
-  winnerSteps: [{ meter: "marketValue", delta: 15 }, { meter: "popularity", delta: 20 }],
-  podiumSteps: [{ meter: "popularity", delta: 5 }],
+  winnerSteps: BDOR_WINNER_STEPS,
+  podiumSteps: BDOR_PODIUM_STEPS,
   stage: (s, night) => { s.pendingBallonDor = night; },
   recordPlace: (season, place) => { season.ballonDorRank = place; },
   recordWin: season => { season.ballonDor = true; },
@@ -6421,8 +6429,8 @@ export const SOCCER_BALLON_DOR: AwardsNightSport<CareerState, BallonDorNominee, 
   copy: {
     winnerTitle: "BALLON D'OR WINNER!",
     title: year => `Ballon d'Or ${year}`,
-    winnerLine: "The best player in the world! Legacy +20, Market Value +€15M",
-    podiumLine: place => `You finished ${place === 2 ? "2nd" : "3rd"}! Legacy +5`,
+    winnerLine: `The best player in the world! ${describeSteps(SOCCER_AWARDS_METERS, BDOR_WINNER_STEPS)}`,
+    podiumLine: place => `You finished ${place === 2 ? "2nd" : "3rd"}! ${describeSteps(SOCCER_AWARDS_METERS, BDOR_PODIUM_STEPS)}, and this snub could follow you into next season`,
     shortlistLine: place => `You finished ${place}th, close but not enough this year`,
     wider: { before: "Outside the top 10, but you ranked ", after: " in the world's Top 30" },
     notNominated: "You were not nominated this year",
@@ -6963,6 +6971,48 @@ export function applyBdorSpeech(prev: CareerState, choice: BdorSpeechChoice, clu
   applySpeech(SOCCER_BALLON_DOR, SOCCER_BDOR_SPEECHES, s, choice);
   s.pendingBallonDor = null;
   return advanceToNextPhase(s, clubs);
+}
+
+/* Round 834: the Ballon d'Or speech is back on the ceremony card. It had no
+   buttons from Round 54 (they moved to the World Cup card) until this round:
+   applyBdorSpeech above was reachable only from the harnesses, which still
+   use it as the one step speech. The card uses the two below instead: the
+   speech is given on the card, the card shows what it did, and Continue is
+   the ordinary dismissBallonDor. */
+
+/** May the ceremony on screen still offer the winner's speech? Only on the
+ *  ceremony itself, only when the player won it, only once, and only for the
+ *  season just played: a night that does not belong to the last season on the
+ *  record (a stale ceremony an old save is still holding) offers nothing. */
+export function bdorSpeechOpen(s: CareerState): boolean {
+  const night = s.pendingBallonDor;
+  if (s.phase !== "ballon_dor" || !night || night.playerRank !== 1 || night.speech) return false;
+  const last = s.seasons[s.seasons.length - 1];
+  return !!last && last.year === night.year && last.ballonDor;
+}
+
+/** Gives the speech on the card. Applied once: the night keeps which speech
+ *  it was, the log line and what it moved, and a second call does nothing. */
+export function giveBdorSpeech(prev: CareerState, choice: BdorSpeechChoice): CareerState {
+  if (!bdorSpeechOpen(prev) || !SOCCER_BDOR_SPEECHES.some(o => o.id === choice)) return prev;
+  const s = { ...prev };
+  const before = meterReadings(s);
+  const line = applySpeech(SOCCER_BALLON_DOR, SOCCER_BDOR_SPEECHES, s, choice)!;
+  const after = meterReadings(s);
+  const moved = (Object.keys(before) as SoccerAwardsMeter[])
+    .map(m => ({ meter: m, delta: Math.round((after[m] - before[m]) * 100) / 100 }))
+    .filter(st => st.delta !== 0);
+  s.pendingBallonDor = { ...prev.pendingBallonDor!, speech: { id: choice, line, moved: describeSteps(SOCCER_AWARDS_METERS, moved) } };
+  return s;
+}
+
+/** The meters as they stand, so a speech reports what it really moved after
+ *  the clamps, not what it asked for. */
+function meterReadings(s: CareerState): Record<SoccerAwardsMeter, number> {
+  return {
+    popularity: s.popularity, morale: s.morale, integrityBonus: s.integrityBonus,
+    rivalryIntensity: s.rivalryIntensity ?? 0, socialMediaFollowers: s.socialMediaFollowers, marketValue: s.marketValue,
+  };
 }
 
 /* ─── Dismiss international debut screen ─── */
