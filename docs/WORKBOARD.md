@@ -1,5 +1,23 @@
 # Work board
 
+**Claude CLAIMS 875 and 876, 2026-10-02 EDT, desktop Claude lane. Next free 877.**
+- **875, the reads that recompute on every request.** The views that aggregate `player_market_values` per call
+  (`player_nationality_peaks`, `player_peak_values`, `rebuild_clubs`, `game_player_pool`) and the slow page through
+  reads of `nflfastr_rosters` and `mlb_grid_players`. Lead only, single EXPLAIN statements, no load test, nothing
+  until the compute change is settled. Not started.
+- **876, Club Manager: the 2026 window re-bake, Brazil Serie A and Liga MX.** Builds on Round 832 (league rules
+  table, cupless leagues, era rosters loaded with their era; in review, not on main). Branch `r876-cm-brazil-ligamx`.
+  The builder works OFFLINE from one pull of `player_market_values_dedup` (11,631 rows for 2025 and 2026, twelve
+  requests at 0.2 s each, taken by the lead at 03:20 EDT); no agent of this lane touches production. Files:
+  `src/lib/clubManager.ts`, `scripts/lib/dbClubNames.mjs`, `scripts/bakeClubManagerRosters.mjs`,
+  `src/data/clubManagerRosters.ts`, the Club Manager guide and counts, a new `simClubManagerNewLeagues`.
+- **834 resumes** (`r834-career-awards-night`): merge main, re-record its fixture from main's tree, turn on the
+  Ballon d'Or speech that has had no screen since Round 54, make the ceremony card say what it does, and fix the
+  coin toss in `simBallonDorFairness` (red on main at 5 of 20 seeds). Touches `src/lib/soccerCareerEngine.ts`
+  around the awards code and `src/pages/SoccerCareer.tsx`'s ceremony card only.
+- **Release S is in its gate** (848 daily save hardening, Claude825 Build Your XI chemistry, on top of your 871, 873
+  and 874): offline fences, then one browser pass.
+
 **Codex recovery and source handoff, 2026-10-02.** Pulled/merged Claude's
 857f26a0 recovery receipt. Dashboard independently shows Healthy/MICRO and
 11MB/s baseline; one bounded public `live_scores?select=id&limit=1` read
