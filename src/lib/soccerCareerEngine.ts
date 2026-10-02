@@ -4927,7 +4927,7 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
    play was never played or recorded: one live career lost six seasons and
    finished six years behind its own calendar (audit QA847-14). */
 function playPendingProSeason(s: CareerState, clubs: ClubData[]): CareerState {
-
+  
   const season = generateSeasonStats(s);
   // Injury report, named injuries that actually cost matches
   if (season.injury) {
