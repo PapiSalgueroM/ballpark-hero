@@ -42,6 +42,26 @@
      Mirassol, Remo, Chapecoense)
    The whole run takes a few seconds.
 
+   Round 883 added Liga MX, the first real league with no cup and no drop.
+   Besides A to D it holds, for a league whose drop count is 0: no board of
+   any of its clubs asks anybody to stay up, no headline over a full season
+   talks of the drop (every headline is read, not just the newest eight), and
+   finishing last is no relegation on the manager's record (wildernessProfile
+   read last place, 18th, as one before this round). Its cupless rows ride
+   on part B: no cup week, no bracket, no cup match, no cup name.
+
+   MEASURED 2026-10-02, Round 883 tree, six seasons a run, SIM_SEED unset
+   and 1 to 5:
+     Liga MX    América over Necaxa 8.5 to 17.5 points a season (rated 74
+                against 69, both real squads of 19 and 10), Guadalajara over
+                FC Juárez 14.5 to 21.2                       band pairGap 4
+                rank correlation, 12 clubs, 0.843 to 0.942  band RHO_MIN 0.7
+                244 to 259 headlines a run, none about the drop (the
+                check asks for at least 10 a season, so it cannot pass
+                on an empty feed)
+     Brazil on the same tree: 39.0 to 52.7 and 43.3 to 51.2, rho 0.932 to
+                0.956, above the Round 876 numbers and well clear of its band
+
    NEGATIVE CONTROLS (each must turn the run red, and each refuses to run if
    the text it mutates is not in the source):
      CM_NEW_CONTROL=dropcount  Brazil's rules row drops 3, part A goes red;
@@ -50,6 +70,10 @@
                                (Flamengo with Remo, Palmeiras with
                                Chapecoense), part C goes red;
      CM_NEW_CONTROL=invented   makeYouth stops flagging its pads, part D goes red.
+     CM_NEW_CONTROL=cupon      Liga MX's rules row gains a cup, parts A and B
+                               go red;
+     CM_NEW_CONTROL=dropcount2 Liga MX's rules row drops 2, part A and the
+                               drop talk checks go red.
 
    Run: node scripts/simClubManagerNewLeagues.mjs   (SIM_SEEDS=n, default 6)
 */
@@ -64,7 +88,7 @@ const ROOT_FWD = ROOT.replaceAll('\\', '/');
 const SEEDS = Number(process.env.SIM_SEEDS || 6);
 const SEED_SET = process.env.SIM_SEED || "";
 const CONTROL = process.env.CM_NEW_CONTROL || '';
-const CONTROLS = ['dropcount', 'nocup', 'swap', 'invented'];
+const CONTROLS = ['dropcount', 'nocup', 'swap', 'invented', 'cupon', 'dropcount2'];
 if (CONTROL && !CONTROLS.includes(CONTROL)) { console.error(`CM_NEW_CONTROL=${CONTROL} is not one of ${CONTROLS.join(', ')}`); process.exit(1); }
 
 /* One entry per league this round family added. size, drop and cup are the
@@ -77,7 +101,14 @@ const NEW_LEAGUES = [
     pairs: [['Flamengo', 'Remo'], ['Palmeiras', 'Chapecoense']],
     managed: ['Santos', 'Grêmio', 'Internacional', 'Fluminense', 'Botafogo', 'Corinthians'],
   },
+  {
+    id: 'ligamx', size: 18, drop: 0, cup: null, pairGap: 4,
+    pairs: [['América', 'Necaxa'], ['Guadalajara', 'FC Juárez']],
+    managed: ['Pumas UNAM', 'León', 'Atlético San Luis', 'Pachuca', 'Monterrey', 'Tijuana'],
+  },
 ];
+/* Round 883: what a league that relegates nobody must never say. */
+const DROP_TALK = /relegat|from safety|stay up/i;
 
 let failures = 0;
 const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
@@ -108,6 +139,8 @@ function mutateOnce(src, from, to, label) {
 function transformEngine(src) {
   if (CONTROL === 'dropcount') src = mutateOnce(src, "brasileirao: {\n    nationId: 'brazil', flag: 'Brazil', cup: 'Copa do Brasil', europe: null, drop: 4,", "brasileirao: {\n    nationId: 'brazil', flag: 'Brazil', cup: 'Copa do Brasil', europe: null, drop: 3,", 'dropcount');
   if (CONTROL === 'nocup') src = mutateOnce(src, "brasileirao: {\n    nationId: 'brazil', flag: 'Brazil', cup: 'Copa do Brasil',", "brasileirao: {\n    nationId: 'brazil', flag: 'Brazil', cup: null,", 'nocup');
+  if (CONTROL === 'cupon') src = mutateOnce(src, "ligamx: {\n    nationId: 'mexico', flag: 'Mexico', cup: null,", "ligamx: {\n    nationId: 'mexico', flag: 'Mexico', cup: 'Copa MX',", 'cupon');
+  if (CONTROL === 'dropcount2') src = mutateOnce(src, "ligamx: {\n    nationId: 'mexico', flag: 'Mexico', cup: null, europe: null, drop: 0,", "ligamx: {\n    nationId: 'mexico', flag: 'Mexico', cup: null, europe: null, drop: 2,", 'dropcount2');
   if (CONTROL === 'invented') src = mutateOnce(src, '    isYouth: true,\n', '    isYouth: false,\n', 'invented');
   /* Private helpers the checks ask directly. */
   return `${src}\nexport { relegationSpots as __relegationSpots, buildSquad as __buildSquad, getPool as __getPool };\n`;
@@ -139,15 +172,19 @@ async function bundleEngine() {
   return import(pathToFileURL(out).href);
 }
 
+/* Every headline the season printed is kept, since the state holds only the
+   newest eight. */
 function playSeason(cm, state) {
   let s = state;
+  const headlines = new Set();
   for (let i = 0; i < 160; i++) {
     const r = cm.playNextEntry(s, { skipHalftime: true });
     s = r.state;
-    if (r.kind === 'seasonOver') return { state: s };
-    if (s.sacked) return { state: s, sacked: true };
+    for (const h of s.aiHeadlines ?? []) headlines.add(h);
+    if (r.kind === 'seasonOver') return { state: s, headlines };
+    if (s.sacked) return { state: s, sacked: true, headlines };
   }
-  return { state: s, stuck: true };
+  return { state: s, stuck: true, headlines };
 }
 
 /* A. The rows say what the league is, and the engine reads them. */
@@ -172,6 +209,19 @@ function partRows(cm, row) {
   const want = row.drop > 0 ? row.size - row.drop : null;
   console.log(`   ${lg.clubs.length} clubs, drop ${rules.drop}, cup ${rules.cup}; weakest ${byRating[0]} (${cm.clubPreviewRating(byRating[0])}) is asked: ${lgObj?.label} (${lgObj?.target})`);
   if (want !== null && (!lgObj || lgObj.target !== want)) fail(`${byRating[0]}'s board asks ${lgObj?.label} (target ${lgObj?.target}), not to finish ${want}th or better`);
+  /* Round 883: a league that relegates nobody has no board, of any of its
+     clubs, asking anybody to stay up. */
+  if (row.drop === 0) {
+    const asks = new Set();
+    for (const c of lg.clubs) {
+      const o = cm.buildBoardObjectives(c, false, lg.clubs.length).find(x => x.id === 'league');
+      if (!o) { fail(`${c}'s board sets no league objective`); continue; }
+      asks.add(o.label);
+      if (DROP_TALK.test(o.label)) fail(`${c}'s board asks "${o.label}" in a league nobody goes down from`);
+      if (!(o.target >= 1 && o.target <= row.size)) fail(`${c}'s board target ${o.target} is off the table`);
+    }
+    console.log(`   every board of ${lg.clubs.length} asks one of: ${[...asks].join(' | ')}`);
+  }
   return lg;
 }
 
@@ -182,7 +232,7 @@ function partSeasons(cm, row, lg) {
   const nationClubs = new Set(cm.REAL_LEAGUES.filter(l => cm.leagueRulesOf(l.id).nationId === cm.leagueRulesOf(row.id).nationId).flatMap(l => l.clubs));
   const perClub = Object.fromEntries(lg.clubs.map(c => [c, []]));
   const matchesEach = 2 * (row.size - 1);
-  let ended = 0, sacked = 0, cupWeeks = 0, cupFinals = 0, cupNamed = 0, moved = 0;
+  let ended = 0, sacked = 0, cupWeeks = 0, cupFinals = 0, cupNamed = 0, moved = 0, headlinesSeen = 0;
   let k = 0;
   /* A sacking ends a career before its season does, and the engine sacks a
      mid table manager now and then (3 of 18 measured), so a sacked seed is
@@ -198,6 +248,16 @@ function partSeasons(cm, row, lg) {
     if (played.stuck) { fail(`${row.id} seed ${k} at ${club}: the season never ended`); Math.random = REAL_RANDOM; continue; }
     if (played.sacked) { sacked += 1; Math.random = REAL_RANDOM; continue; }
     ended += 1;
+    headlinesSeen += played.headlines.size;
+    if (row.drop === 0) {
+      /* Round 883: nobody goes down, so no headline counts anybody into a
+         drop zone and a last place finish is no relegation on the manager's
+         record either. */
+      for (const h of played.headlines) if (DROP_TALK.test(h)) fail(`${row.id} seed ${k}: a headline talks of the drop: "${h}"`);
+      const last = { ...s, history: [{ season: s.season, club, position: row.size, points: 0, trophies: [] }] };
+      const prof = cm.wildernessProfile(last);
+      if (prof.departure === 'relegated' || prof.relegations) fail(`${row.id} seed ${k}: finishing last at ${club} reads as ${prof.relegations} relegation(s), departure ${prof.departure}`);
+    }
     const table = s.table ?? [];
     if (table.length !== row.size) fail(`${row.id} seed ${k}: the table has ${table.length} rows`);
     let w = 0, l = 0;
@@ -229,7 +289,8 @@ function partSeasons(cm, row, lg) {
     moved += gone;
     Math.random = REAL_RANDOM;
   }
-  console.log(`   ${ended} seasons ended, ${sacked} sacked, ${cupWeeks} cup weeks scheduled, ${cupFinals} cup finals won, cup named on ${cupNamed} saves, ${moved} clubs moved in the summers`);
+  console.log(`   ${ended} seasons ended, ${sacked} sacked, ${cupWeeks} cup weeks scheduled, ${cupFinals} cup finals won, cup named on ${cupNamed} saves, ${moved} clubs moved in the summers, ${headlinesSeen} headlines read`);
+  if (row.drop === 0 && headlinesSeen < 10 * ended) fail(`only ${headlinesSeen} headlines over ${ended} seasons, too few to say none of them talks of the drop`);
   if (ended < SEEDS) fail(`only ${ended} of ${SEEDS} seasons reached the end in ${k} tries`);
   if (row.cup) {
     if (cupNamed !== k) fail(`the ${row.cup} was named on ${cupNamed} of ${k} saves`);
@@ -268,7 +329,8 @@ function partStrength(cm, row, lg, perClub) {
   for (const [strong, weak] of row.pairs) {
     const gap = mean(perClub[strong]) - mean(perClub[weak]);
     console.log(`   ${strong} ${mean(perClub[strong]).toFixed(1)} pts (rated ${cm.clubPreviewRating(strong)}) against ${weak} ${mean(perClub[weak]).toFixed(1)} (rated ${cm.clubPreviewRating(weak)}): gap ${gap.toFixed(1)}`);
-    if (!(gap >= PAIR_GAP)) fail(`${strong} beat ${weak} by ${gap.toFixed(1)} points a season, the band is ${PAIR_GAP}`);
+    const band = process.env.CM_NEW_PAIR_GAP ? PAIR_GAP : (row.pairGap ?? PAIR_GAP);
+    if (!(gap >= band)) fail(`${strong} beat ${weak} by ${gap.toFixed(1)} points a season, the band is ${band}`);
   }
   const managed = new Set(row.managed);
   const field = lg.clubs.filter(c => !managed.has(c) && perClub[c].length);

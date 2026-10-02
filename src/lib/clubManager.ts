@@ -1609,9 +1609,12 @@ export function wildernessProfile(career: CareerState): ManagerProfile {
      promotions and relegations are read off the finishes rather than
      invented: a title in a season is the promotion story at the lower end,
      and a bottom three finish is the relegation one. The table size is not
-     stored per season, so twenty is the honest divisor here. */
+     stored per season, so twenty is the honest divisor here. Round 883: a
+     league that relegates nobody (Liga MX has eighteen clubs, so its last
+     place is 18th) never reads as a relegation. */
+  const wentDown = (h: SeasonRecord) => h.position >= 18 && relegationSpots(leagueOf(h.club).id) > 0;
   const promotions = career.history.filter(h => h.position === 1).length;
-  const relegations = career.history.filter(h => h.position >= 18).length;
+  const relegations = career.history.filter(wentDown).length;
   const def = clubDefFor(career.clubName);
   const out = career.wilderness?.weeksOut ?? 0;
   return {
@@ -1622,7 +1625,7 @@ export function wildernessProfile(career: CareerState): ManagerProfile {
     relegations,
     seasonsManaged: Math.max(0, career.season - 1) + (career.history.length ? 0 : 0),
     lastTier: def.tier as ClubTier,
-    departure: (career.history[career.history.length - 1]?.position ?? 0) >= 18 ? 'relegated' : 'sacked',
+    departure: career.history.length && wentDown(career.history[career.history.length - 1]) ? 'relegated' : 'sacked',
     /* A week out is not a season out, but the market does cool. Four weeks
        of silence reads to a board like a season on the sofa. */
     seasonsOut: Math.floor(out / 4),
