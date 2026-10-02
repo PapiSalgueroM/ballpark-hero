@@ -25,7 +25,7 @@ const ROOT_URL = ROOT.replaceAll('\\', '/');
 const FIXTURE = path.join(ROOT, 'scripts/data/cmStaffFixture.json');
 const RECORD = process.env.GM_STAFF_RECORD === '1';
 const CONTROL = process.env.GM_STAFF_CONTROL || '';
-const CONTROLS = ['fixturewage'];
+const CONTROLS = ['fixturewage', 'fixturecore'];
 if (CONTROL && !CONTROLS.includes(CONTROL)) {
   console.error(`GM_STAFF_CONTROL=${CONTROL} is not a control this harness knows (${CONTROLS.join(', ')})`);
   process.exit(1);
@@ -68,24 +68,38 @@ function seedRandom(key) {
 }
 
 /* ---- bundle Club Manager and its staff desk, with a control copy when asked ---- */
-let deskPath = `${ROOT_URL}/src/lib/clubManagerStaff.ts`;
-if (CONTROL === 'fixturewage') {
-  const src = lf(fs.readFileSync(path.join(ROOT, 'src/lib/clubManagerStaff.ts'), 'utf8'));
-  const fixed = '(3 + 2.1 * clamp(level, 1, STAFF_MAX))';
-  const broken = '(3 + 2.2 * clamp(level, 1, STAFF_MAX))';
-  if (!src.includes(fixed)) { console.error('control cannot run: clubManagerStaff.ts is not in the shape GM_STAFF_CONTROL=fixturewage rewrites'); process.exit(1); }
-  deskPath = `${TMP}/clubManagerStaff.fixturewage.ts`;
-  fs.writeFileSync(deskPath, src.replace(fixed, broken));
-  console.log('NEGATIVE CONTROL ON: a Club Manager coach earns 2.2 a level instead of 2.1');
+const PATHS = {
+  desk: `${ROOT_URL}/src/lib/clubManagerStaff.ts`,
+  core: `${ROOT_URL}/src/lib/gmStaff.ts`,
+  packs: `${ROOT_URL}/src/data/gmStaff/packs.ts`,
+};
+const SOURCES = { desk: 'src/lib/clubManagerStaff.ts', core: 'src/lib/gmStaff.ts', packs: 'src/data/gmStaff/packs.ts' };
+/** Bundle a copy of one module with one line changed. Refuses to run when the line is not there. */
+function controlCopy(which, fixed, broken, what) {
+  const src = lf(fs.readFileSync(path.join(ROOT, SOURCES[which]), 'utf8'));
+  if (!src.includes(fixed)) { console.error(`control cannot run: ${SOURCES[which]} is not in the shape GM_STAFF_CONTROL=${CONTROL} rewrites`); process.exit(1); }
+  PATHS[which] = `${TMP}/${which}.${CONTROL}.ts`;
+  fs.writeFileSync(PATHS[which], src.replace(fixed, broken));
+  console.log(`NEGATIVE CONTROL ON: ${what}`);
+}
+if (CONTROL === 'fixturewage') controlCopy('desk', '  wagePerLevel: 2.1,', '  wagePerLevel: 2.2,', 'a Club Manager coach earns 2.2 a level instead of 2.1');
+if (CONTROL === 'fixturecore') {
+  controlCopy('core', 'const chance = p.potential - p.level >= 3 ? rules.growChanceRoomy : rules.growChance;', 'const chance = rules.growChance;',
+    'the shared summer forgets that a man with three levels of room grows more often');
 }
 const ENTRY = `${TMP}/entry.mjs`;
 const BUNDLE = `${TMP}/bundle.mjs`;
 fs.writeFileSync(ENTRY, `
 globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
 export const engine = await import('${ROOT_URL}/src/lib/clubManager.ts');
-export const desk = await import('${deskPath}');
+export const desk = await import('${PATHS.desk}');
+export const core = await import('${PATHS.core}');
 `);
-const aliases = [`--alias:@/lib/clubManagerStaff=${deskPath}`, `--alias:@=${ROOT_URL}/src`];
+const aliases = [
+  `--alias:@/lib/clubManagerStaff=${PATHS.desk}`,
+  `--alias:@/lib/gmStaff=${PATHS.core}`,
+  `--alias:@=${ROOT_URL}/src`,
+];
 execSync(`"${ESBUILD}" "${ENTRY}" --bundle --format=esm --platform=node --outfile="${BUNDLE}" --log-level=error ${aliases.join(' ')}`, { stdio: 'inherit' });
 const mod = await import(pathToFileURL(BUNDLE).href);
 const cm = mod.engine;
