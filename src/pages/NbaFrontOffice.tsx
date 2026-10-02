@@ -32,6 +32,7 @@ const NbaFrontOffice = () => {
             howToPlay={[
               'Pick a franchise and inherit its real rotation, rated player by player.',
               'Work the roster: waive contracts, sign free agents, swing trades with pick sweeteners.',
+              'Open Roster, then Set rotation: choose five starters and three bench players. Those slots determine strength, fixed minutes and season lines. Use automatic to return to the highest-rated healthy eight.',
               'Watch the tax line, set from your own league\'s payrolls. Payroll over it is taxed at season close in rising brackets, repeaters pay more, ownership holds the bill against you, and the season cannot tip off with fewer than 14 or more than 15 under contract.',
               'Play the season in stretches and watch the conference tables tighten.',
               'Finish 7th to 10th and you are in the play-in. Win a title through four best-of-7 rounds.',

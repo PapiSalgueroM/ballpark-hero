@@ -767,7 +767,7 @@ console.log('8) The copy says what the engine does');
   const news = read('src/pages/WhatsNew.tsx');
   ok(8, "What's New has the round", /Round 824/.test(news) || /season in numbers/i.test(news), 'no entry');
   /* The page's worked example for the Sixth Man race promises a points line.
-     The GM has no say over who starts (the best five healthy men do), so a
+     These automatic-rotation fixtures use the best five healthy men, so a
      bench man is by construction rated under the starters and plays fewer
      minutes: the number must be one the simulated winners actually reach.
      Measured 2026-10-01 over the thirty closes here: the median winner. The

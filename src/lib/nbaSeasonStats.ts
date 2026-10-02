@@ -13,8 +13,8 @@
  *   the draw fell: a draw just under the win probability is a one point
  *   game, a draw near zero is a blowout. The winner always outscores the
  *   loser, by at least one.
- *   The men. The eight men nbaStrength counts (best healthy five start,
- *   next three come off the bench) are the eight who play, on fixed minutes.
+ *   The men. The eight men nbaStrength counts (chosen starters and bench,
+ *   or the best healthy eight automatically) play on fixed slot minutes.
  *   Points split by minutes times a usage that climbs with rating, rebounds
  *   and blocks lean to bigs, assists and steals to guards, each with a game
  *   to game wobble. foSplit hands out whole numbers that add up exactly, so
@@ -41,6 +41,7 @@
  * man. No qualified man, no award, and the screen says so.
  */
 import type { NbaGmPlayer, NbaGmTeam, NbaLeague } from './nbaFrontOffice';
+import { NBA_ROTATION_MINUTES, nbaRotation as teamRotation, nbaRotationSlots } from './nbaRotation';
 import {
   type FoSeasonStats, type FoStatLine,
   foBoxRng, foLeaders, foMinGames, foPerGame, foPickAward, foRankAward, foSeasonPlayers, foSplit,
@@ -49,8 +50,7 @@ import {
 export const NBA_STAT_COLS = ['pts', 'reb', 'ast', 'stl', 'blk'] as const;
 export type NbaStatCol = typeof NBA_STAT_COLS[number];
 
-/** Minutes for the eight men who play, best first: five starters, then three off the bench. 240 in all. */
-export const NBA_ROTATION_MINUTES = [36, 34, 33, 32, 30, 28, 26, 21];
+export { NBA_ROTATION_MINUTES } from './nbaRotation';
 /** A club's points in an even game. The game's own tuning, not a real league figure. */
 export const NBA_TEAM_POINTS = 113;
 /** Games a man must play to qualify, as a share of an average club's games. */
@@ -58,9 +58,9 @@ export const NBA_AWARD_GAMES_SHARE = 0.8;
 /** What the MVP score adds per unit of the club's winning share. */
 export const NBA_MVP_WIN_WEIGHT = 20;
 
-/** The eight men nbaStrength counts, in its order: healthy, best rated first. */
+/** The same healthy starter and bench order the strength calculation uses. */
 export function nbaRotation(t: NbaGmTeam): NbaGmPlayer[] {
-  return [...t.players].filter(p => p.out === 0).sort((a, b) => b.ovr - a.ovr).slice(0, NBA_ROTATION_MINUTES.length);
+  return teamRotation(t);
 }
 
 export interface NbaBoxMan {
@@ -77,10 +77,12 @@ const POS_BLK: Record<string, number> = { G: 0.35, F: 1.0, C: 2.6 };
 const usage = (ovr: number): number => Math.max(0.5, 1 + (ovr - 72) * 0.1);
 
 function boxSide(t: NbaGmTeam, pts: number, r: () => number, season: number): NbaBoxSide {
-  /* A club with nobody healthy still has to put eight on the floor: its eight best. */
-  const healthy = nbaRotation(t);
-  const rot = healthy.length ? healthy : [...t.players].sort((a, b) => b.ovr - a.ovr).slice(0, NBA_ROTATION_MINUTES.length);
-  const mins = rot.map((_, i) => NBA_ROTATION_MINUTES[i]);
+  /* The original no-healthy emergency box still puts its eight best on the floor. */
+  const slots = nbaRotationSlots(t);
+  const rotation = slots.some(p => !!p) ? slots : [...t.players].sort((a, b) => b.ovr - a.ovr).slice(0, NBA_ROTATION_MINUTES.length);
+  const playing = rotation.flatMap((player, slot) => player ? [{ player, slot }] : []);
+  const rot = playing.map(p => p.player);
+  const mins = playing.map(p => NBA_ROTATION_MINUTES[p.slot]);
   const wobble = () => 0.55 + 0.9 * r();
   const reb = 40 + Math.floor(r() * 9);
   const ast = 22 + Math.floor(r() * 9);
@@ -94,7 +96,7 @@ function boxSide(t: NbaGmTeam, pts: number, r: () => number, season: number): Nb
   return {
     team: t.abbr, pts, reb, ast, stl, blk,
     men: rot.map((p, i) => ({
-      id: p.id, name: p.name, pos: p.pos, starter: i < 5, rookie: p.rookieSeason === season,
+      id: p.id, name: p.name, pos: p.pos, starter: playing[i].slot < 5, rookie: p.rookieSeason === season,
       pts: ptsS[i], reb: rebS[i], ast: astS[i], stl: stlS[i], blk: blkS[i],
     })),
   };

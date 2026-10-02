@@ -16,6 +16,7 @@ export { NBA_TIPOFF_MIN, NBA_MIN_CONTRACT, nbaTaxLine, nbaFirstApron, nbaSecondA
    this one, so there is no cycle at run time. */
 import { type FoSeasonStats, foNewSeasonStats } from './foSeasonStats';
 import { type NbaSeasonAwards, nbaBoxScore, nbaRecordBox, nbaLiveStats } from './nbaSeasonStats';
+import { nbaRotationSlots, nbaReconcileRotation } from './nbaRotation';
 /* Round 851: a booked, balanced schedule, shared with MLB and the NHL. */
 import { type FoSchedule, buildFoSchedule, foPlayRound } from './foSchedule';
 
@@ -60,6 +61,8 @@ export interface NbaGmPlayer {
 export interface NbaGmTeam extends CutLedger {
   abbr: string;
   players: NbaGmPlayer[];
+  /** Preferred starter and bench slots; healthy cover does not erase injured preferences. */
+  rotation?: string[];
   wins: number;
   losses: number;
   picks: number[];
@@ -115,7 +118,9 @@ const fid = makeIdMinter('n');
     Loose lists (a draft class, a recruiting class, a portal) come from the
     same counter, so they are one id space with the rosters. */
 export function ensureNbaLeagueIds(lg: NbaLeague, ...loose: (({ id: string }[]) | null | undefined)[]): number {
-  return ensureLeagueEntityIds(fid, lg as never, ...loose);
+  const repaired = ensureLeagueEntityIds(fid, lg as never, ...loose);
+  for (const t of Object.values(lg.teams)) nbaReconcileRotation(t);
+  return repaired;
 }
 
 function normPos(p: string): NbaPos {
@@ -315,11 +320,11 @@ export function nbaTaxView(t: NbaGmTeam, league: Pick<NbaLeague, 'cap' | 'season
   };
 }
 
-/** Strength: best five 72%, next three 28%; injured players excluded. */
+/** Strength: five starters 72%, three bench players 28%; injured players excluded. */
 export function nbaStrength(t: NbaGmTeam): number {
-  const healthy = [...t.players].filter(p => p.out === 0).sort((a, b) => b.ovr - a.ovr);
-  const five = healthy.slice(0, 5);
-  const bench = healthy.slice(5, 8);
+  const slots = nbaRotationSlots(t);
+  const five = slots.slice(0, 5).filter((p): p is NbaGmPlayer => !!p);
+  const bench = slots.slice(5, 8).filter((p): p is NbaGmPlayer => !!p);
   const fiveAvg = five.length ? five.reduce((s, p) => s + p.ovr, 0) / five.length : 65;
   const benchAvg = bench.length ? bench.reduce((s, p) => s + p.ovr, 0) / bench.length : 65;
   return fiveAvg * 0.72 + benchAvg * 0.28;
@@ -434,7 +439,9 @@ export const NBA_ROSTER_MIN = 8;
 export const NBA_ROSTER_MAX = 15;
 
 export function nbaRelease(t: NbaGmTeam, fas: NbaGmPlayer[], id: string): boolean {
-  return cutPlayer(t, fas, id, NBA_ROSTER_MIN);
+  const released = cutPlayer(t, fas, id, NBA_ROSTER_MIN);
+  if (released) nbaReconcileRotation(t);
+  return released;
 }
 
 export function nbaSign(t: NbaGmTeam, fas: NbaGmPlayer[], id: string, cap: number): boolean {
@@ -446,6 +453,7 @@ export function nbaSign(t: NbaGmTeam, fas: NbaGmPlayer[], id: string, cap: numbe
   if (nbaCapRoom(t, cap) < p.salary) return false;
   fas.splice(i, 1);
   t.players.push(p);
+  nbaReconcileRotation(t);
   return true;
 }
 
@@ -499,6 +507,7 @@ export function nbaTrade(
   my.players.push(theirs);
   their.players.push(mine);
   if (sweeten && my.picks.length) { their.picks.push(my.picks.pop()!); }
+  nbaReconcileRotation(my); nbaReconcileRotation(their);
   return 'accepted';
 }
 
@@ -521,6 +530,7 @@ export function nbaExecuteTalksTrade(
   my.players.push(theirs);
   their.players.push(mine);
   if (addPick) { their.picks.push(my.picks.pop()!); }
+  nbaReconcileRotation(my); nbaReconcileRotation(their);
   return 'done';
 }
 
@@ -636,6 +646,7 @@ export function nbaTipOff(league: NbaLeague, rng: () => number, myTeam?: string)
       added.push(man);
     }
     if (added.length) filled[t.abbr] = added;
+    nbaReconcileRotation(t);
   }
   return { filled, refused };
 }
@@ -732,6 +743,7 @@ export function nbaOffseason(league: NbaLeague, rng: () => number, myTeam?: stri
     if (cpu) {
       while (t.players.length < NBA_TIPOFF_MIN) t.players.push(nbaMinimumMan(rng, taken, t.players.length, nextCap));
     }
+    nbaReconcileRotation(t);
   }
   league.freeAgents = league.freeAgents.sort((a, b) => b.ovr - a.ovr).slice(0, 30);
   /* Round 824: a free agent's ask is a deal he has not signed yet, so each

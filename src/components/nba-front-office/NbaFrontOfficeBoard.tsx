@@ -1,4 +1,6 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { NbaRotationPanel } from './NbaRotationPanel';
+import { nbaSetRotationSlot, nbaAutoRotation } from '@/lib/nbaRotation';
 import { DraftNightCard } from '@/components/front-office-shared/DraftNightCard';
 import { buildDraftNight } from '@/lib/draftNight';
 import type { DraftNight } from '@/lib/draftNight';
@@ -116,6 +118,9 @@ export default function NbaFrontOfficeBoard() {
   const [tab, setTab] = useState<Tab | null>(null);
   const [myTeam, setMyTeam] = useState('');
   const [league, setLeague] = useState<NbaLeague | null>(null);
+  const [rotationOpen, setRotationOpen] = useState(false);
+  const rotationOpener = useRef<HTMLButtonElement>(null);
+  const rotationReturn = useRef(false);
   const [feed, setFeed] = useState<string[]>([]);
   /* Round 530: a done deal or a signing slams in at the top of the feed the
      moment it happens. Matched on the line's text, never its index, so the
@@ -212,6 +217,26 @@ export default function NbaFrontOfficeBoard() {
       } satisfies SaveShape));
     } catch { /* full */ }
   }, [phase, titles, seasonsPlayed, draftClass, picksLeft, mandate, trust, fired, pressTilt, seasonTradeLine, champion, series, gradeLine, taxClose]);
+
+  useEffect(() => {
+    if (!rotationOpen && rotationReturn.current) {
+      rotationReturn.current = false;
+      rotationOpener.current?.focus({ preventScroll: true });
+    }
+  }, [rotationOpen]);
+
+  const updateRotation = (slot?: number, id?: string): boolean => {
+    const current = league;
+    if (!current || phase !== 'hub' || !current.teams[myTeam]) return false;
+    const next = JSON.parse(JSON.stringify(current)) as NbaLeague;
+    const changed = slot === undefined
+      ? nbaAutoRotation(next.teams[myTeam])
+      : nbaSetRotationSlot(next.teams[myTeam], slot, id ?? '');
+    if (!changed) return false;
+    setLeague(next);
+    persist({}, next, myTeam);
+    return true;
+  };
 
   const label = (abbr: string) => {
     const t = NBA_TEAM_MAP.get(abbr);
@@ -547,6 +572,7 @@ export default function NbaFrontOfficeBoard() {
 
   const reset = () => {
     localStorage.removeItem(SAVE_KEY);
+    setRotationOpen(false); rotationReturn.current = false;
     setPhase('pick'); setLeague(null); setMyTeam('');
     setMandate(null); setTrust(FO_TRUST_START); setFired(false); setGradeLine(null); setTaxClose(null);
     setPresser(null); setPressTilt(0); setSeasonTradeLine(null);
@@ -851,6 +877,12 @@ export default function NbaFrontOfficeBoard() {
       )}
 
       {tab === 'team' && (
+        rotationOpen ? <NbaRotationPanel
+          team={my}
+          onPick={(slot, id) => updateRotation(slot, id)}
+          onAuto={() => updateRotation()}
+          onBack={() => { rotationReturn.current = true; setRotationOpen(false); }}
+        /> :
         <div className="rounded-2xl border border-border bg-card p-3">
           {/* Round 722: the shared cap panel, the NBA's tax and tip off floor passed as its descriptor. */}
           <FoCapPanel
@@ -860,6 +892,7 @@ export default function NbaFrontOfficeBoard() {
             tax={view}
             roster={{ count: my.players.length, floor: NBA_TIPOFF_MIN, max: NBA_ROSTER_MAX, minContract: nbaMinContract(league.cap) }}
           />
+          <button ref={rotationOpener} type="button" onClick={() => setRotationOpen(true)} className="mb-3 min-h-[44px] w-full rounded-lg border border-primary/50 bg-primary/10 px-3 text-xs font-bold text-primary">Set rotation</button>
           {cutBlock && <p data-cut-block className="mb-2 text-center text-[10px] text-destructive">{cutBlock}</p>}
           <div className="grid max-h-96 grid-cols-1 gap-1 overflow-y-auto sm:grid-cols-2">
             {[...my.players].sort((a, b) => b.ovr - a.ovr).map(p => {

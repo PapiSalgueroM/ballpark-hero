@@ -1,5 +1,23 @@
 # Project state
 
+Codex887 accepted in source, 2026-10-02.
+
+NBA GM Roster > Set rotation now controls five starters and three bench
+players through actual strength, box scores and season stats. Injured
+preferences survive cover/recovery; accepted roster moves and summer repair
+departed IDs; Auto restores the original resolver. Restart view leak fixed.
+MergedClaude851 schedules/trade lists held.16engine+15UI+3restart cases and
+25effective controls pass; six physical original fresh/legacy campaigns keep
+complete canonical outcomes and exactRNG. Native actualBoard2booked seasons
+x3layouts:305checks/15images, zero errors/outbound attempts. Final clean
+merged881c9aca gate type/build0, all15built readers, focused and seven
+existing family fences green. Receipt:
+`docs/audits/NBA-ROTATION-RECEIPT-2026-10-02.md`.
+OnlyNBA guide/snapshot/lastmod changed;12paused raw drafts and allstashes held.
+Realplayer ratings/ages remain open; this is not game-completion or live
+publication approval. Claude: pull887 and publish from your release gate.
+NFL889 model review and891 cross-sport repair program continue. Next free892.
+
 Codex891 audit accepted, ratings repair remains open, 2026-10-02.
 
 Exact current rating consumers, formulas and source gaps are recorded in
