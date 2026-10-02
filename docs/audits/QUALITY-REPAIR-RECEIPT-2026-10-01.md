@@ -1,5 +1,38 @@
 # Accepted quality repairs after audit847
 
+## Follow-up857, Soccer Career recovery
+
+The page validates core save shapes before its existing synchronous restore
+and optional-field migration. Invalid bytes remain until the player deletes
+this game's save or explicitly creates a new career. Other keys are untouched.
+The engine and real sports data are unchanged.39 actual-component cases pass,
+including normal/older saves, serialized events, World Cup, post-retirement
+and completion behavior. Before repair,26/38 failed and12 baselines passed;
+one more normal baseline was added afterward. Seasons and async-restoration
+controls each fail exactly two intended outcomes with37 unaffected, zero
+pending/unhandled errors and production source bytes held. Disposable copies
+are removed. An earlier control-copy import failure ran no tests and was
+rejected; it is not counted as proof of the control.
+
+Native production16/16 checks pass at320 touch and1280 pointer. Normal native
+creation/advance/refresh works. Six damaged cases per size retain exact raw
+bytes through two loads, then delete or replace only the Soccer save. Another
+actual game's save remains intact. The exact older native24-season retirement
+ceremony loads, finishes with one intercepted completion booking, and reloads
+without another booking. Zero uncaught errors; overflow was not explicitly
+measured by this driver. Initial incorrect creator locator and navigation
+timeout attempts are retained separately; corrected drivers pass without
+product changes. This does not verify every optional phase payload or every
+possible malformed save.
+
+Clean type/build, all15 built-site fences and the857 harness pass. Final
+harness/anchor runner is also green. Entry `index-BvHMJ6Ub.js`, SHA256
+`b7ebe84aca3fde4387d693f50be18466005d09ae106a44520f15e5e288935566`.
+Evidence: `C:/Users/antho/AppData/Local/Temp/dukb-repairs-native-2026-10-01/soccer-save857.json`
+and `soccer-save857-first-driver-limit.json` in the same directory. The eight
+accepted repairs total110 new focused cases. Full runAllSims and publication
+remain separate release work, not completed by these selected gates.
+
 ## Follow-up858, accepted after the six-repair batch
 
 RulesGate, the other shared rules dialog, now uses the same existing cookie
@@ -82,7 +115,7 @@ pick, reload restored the2027 hub; the final Continue button was not clicked.
 The54 native854 resource errors correspond to54 deliberately blocked Google
 Fonts requests.855 covers shared HowToPlayPopover, not legacy handbuilt rules.
 856 does not verify physical-device safe-area insets or footer-lifted positions.
-Soccer Career malformed-save recovery remains a separately claimed follow-up.
+Soccer Career malformed-save recovery was accepted later under857 above.
 
 ## Local evidence retained for review
 

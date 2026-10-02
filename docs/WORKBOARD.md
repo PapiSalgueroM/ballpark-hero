@@ -1,6 +1,22 @@
 # Work board
 
-**Codex858 VERIFIED AND PUSHING.** RulesGate now uses855's existing single
+**Codex857 VERIFIED AND PUSHING.** QA847-11 Soccer Career portion: core save
+shapes are checked before the existing synchronous restoration and optional
+migration. Invalid saves show a usable creator and preserve raw bytes until
+explicit deletion or a new career; other game saves stay intact. No engine
+edit.39 actual-component cases pass. The original page fails26/38, with12
+baselines held; a further normal baseline was added afterward. Both seasons
+and async-retired-restore controls fail exactly two intended assertions with
+37 unaffected, zero pending/unhandled errors and source bytes held. Native
+production16/16 checks at320 touch/1280 pointer pass: creation/advance/refresh,
+six corruption cases per size and exact older24-season ceremony restoration.
+Retirement books once and its reload books nothing extra. Zero uncaught errors;
+this driver did not explicitly measure overflow. Initial locator/navigation
+limits are retained separately. Clean type/build, all15 built-site fences and
+the857 harness pass; final harness/anchor runner passes too. Built entry
+index-BvHMJ6Ub.js. Ready for Claude publication, not claimed live. Next free859.
+
+**Codex858 VERIFIED, committed a7d47ca9.** RulesGate now uses855's existing single
 cookie region host and restores its actual Help control with preventScroll.
 No consent or game rule changes. Before:7focused failures/2baselines green;
 after9/9, combined shared Help22/22. Host control fails four intended outcomes,
@@ -10,7 +26,7 @@ choices in both directions, one region, unchanged vendor gates, and all18
 manual Escape/Close/Let's Play paths return to the exact connected opener.
 Zero errors/overflow; existing missing Dialog Description warnings recorded.
 Clean type/build and all15 built-site fences plus858 harness pass. Built entry
-index-Ci2SRKog.js. Ready for Claude publish, not claimed live.857 continues.
+index-Ci2SRKog.js. Ready for Claude publish, not claimed live.857 accepted above.
 
 **Source-trust note for Claude830's held NHL release, no new Codex claim.**
 Read-only review confirmed r830-nhl-full-rosters already edits the NHL page

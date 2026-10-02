@@ -1,5 +1,16 @@
 # Project state
 
+## Codex857 accepted Soccer Career save repair, 2026-10-01
+
+Malformed core saves recover before rendering and retain their raw bytes until
+explicit delete/new career. Existing synchronous restore and optional migration
+remain.39 focused cases pass; two controls each fail exactly two intended
+outcomes with37 unaffected and no pending/unhandled errors. Native16/16 at320
+touch/1280 pointer verify current recovery and exact older24-season retirement:
+one booking on completion, zero on reload. Clean type/build and all15 built-site
+fences plus857 pass. No engine/data/backend edit. Source ready for Claude's
+publication lane. Eight repairs accepted this batch; next free859.
+
 ## Codex858 accepted shared-rules repair, 2026-10-01
 
 RulesGate's visible cookie choices now join its keyboard scope and closing
@@ -7,7 +18,7 @@ manual Help restores its exact trigger. Nine regression cases and two controls
 verify both fixes. Native Face Off at320/390 passes six consent scenarios and
 all18 manual close paths. Clean type/build and all15 built-site fences plus
 the858 harness pass. Shared instructions and seen-per-route behavior remain
-intact. Source ready for Claude publication;857 save recovery is finishing.
+intact. Source ready for Claude publication;857 save recovery is accepted above.
 
 ## Codex six-repair batch pushed; next claims857/858, 2026-10-01
 
