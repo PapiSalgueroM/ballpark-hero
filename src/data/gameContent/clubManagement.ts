@@ -3,7 +3,7 @@ import type { GameContentMap } from './types';
 export const CLUB_MANAGEMENT_CONTENT: GameContentMap = {
   '/club-manager': {
     intro: [
-      "Club Manager is the site's big one: a full management sim in your browser. 350 real clubs across 21 leagues in 18 countries, from the Premier League to the Danish Superliga, the Swiss Super League, Croatia's SuperSport HNL and Brazil's Serie A, over 4,200 real players with their real August 2026 ages and market values, and a board that talks like a board.",
+      "Club Manager is the site's big one: a full management sim in your browser. 368 real clubs across 22 leagues in 19 countries, from the Premier League to the Danish Superliga, the Swiss Super League, Croatia's SuperSport HNL, Brazil's Serie A and Liga MX, over 4,300 real players with their real August 2026 ages and market values, and a board that talks like a board.",
       "Pick when you start too: today's game, or one of three real past seasons. 2015-16 is the year Leicester won it at 5000 to 1, with Vardy and Mahrez at their real pre-title values and MSN at Barcelona. 2010-11 is prime Messi and Rooney. 2005-06 is Ronaldinho's Ballon d'Or Barcelona with a 17 year old Messi, Mourinho's back to back Chelsea and Henry's Arsenal. The 2015-16 season holds all 60 clubs of that year's Premier League, La Liga and Serie A (Juventus mid five-in-a-row, Dybala newly arrived); the older seasons hold all 40 Premier League and La Liga clubs; every one carries hundreds of real players at their real ages and values from that year. Or found a club of your own: name it, design the crest, name the stadium, choose the money, and build it up by signing real players.",
     ],
     headings: {
@@ -79,6 +79,7 @@ export const CLUB_MANAGEMENT_CONTENT: GameContentMap = {
         items: [
           "Every league plays its real length: 38 rounds in the Premier League, 46 in the Championship, 34 in the Bundesliga, with the domestic cup from a round of 16 to the final and a full Champions League on top for qualified clubs.",
           "Brazil's Serie A is 20 clubs over 38 rounds with four going down and the Copa do Brasil as its cup. Three simplifications: it plays on the game's August to May calendar like MLS does rather than Brazil's own January to December one, the Copa Libertadores is not modelled, so a Brazilian club's season is the league and the cup, and clubs level on points are split by goal difference then goals scored, where the real table looks at wins first.",
+          "Liga MX is 18 clubs and nobody goes down, because relegation is suspended for 2026-27. Three simplifications: the Apertura and the Clausura are played as one 34 round double round robin with one champion, the Liguilla is not played (the board still asks a playoff club to finish in the top eight, the places that reach it), and clubs level on points are split by goal difference then goals scored, the real table's first two steps, and the game stops there. There is no cup, because the Copa MX has not been played since 2020, and the Leagues Cup is not modelled.",
         ],
         subsections: [
           {

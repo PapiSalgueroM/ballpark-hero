@@ -268,10 +268,10 @@ const ClubManager = () => {
         <GameSeoContent
           pageHasOwnH1
           title="Club Manager: Football Management Sim"
-          description="A full club-management sim in your browser: 350 clubs across 21 real leagues, from the Premier League, the 2. Bundesliga and the Scottish Premiership to the Saudi Pro League, MLS, Brazil, Croatia, Denmark, Switzerland, Austria and Greece, with real players at their real market values as of August 2026 and thin squads topped up with made up youth, marked as such. Manage today or in a real past season: 2015-16 with Leicester at 5000 to 1, 2010-11 with prime Messi, or 2005-06 with Ronaldinho's Barcelona. Or create your own club with its own crest and stadium. Negotiate transfers, survive bidding wars, hit the board's named objectives, and chase titles season after season."
+          description="A full club-management sim in your browser: 368 clubs across 22 real leagues, from the Premier League, the 2. Bundesliga and the Scottish Premiership to the Saudi Pro League, MLS, Brazil, Mexico, Croatia, Denmark, Switzerland, Austria and Greece, with real players at their real market values as of August 2026 and thin squads topped up with made up youth, marked as such. Manage today or in a real past season: 2015-16 with Leicester at 5000 to 1, 2010-11 with prime Messi, or 2005-06 with Ronaldinho's Barcelona. Or create your own club with its own crest and stadium. Negotiate transfers, survive bidding wars, hit the board's named objectives, and chase titles season after season."
           howToPlay={[
             'Pick your era: 2026-27 with real players, or the real 2015-16, 2010-11 or 2005-06 Premier League and La Liga.',
-            'Pick your nation, league and club (350 clubs across 21 real leagues), or create your own club with its own crest, stadium and budget.',
+            'Pick your nation, league and club (368 clubs across 22 real leagues), or create your own club with its own crest, stadium and budget.',
             'Read the board\'s objectives: league finish, cup run, Europe where it applies, beating your rival, and a goals quota.',
             'Go and meet the two asks the board makes in the market: a country quota, an experience count, the thinnest line in your squad, a signing 21 or under at a rating floor, or one fee over a threshold, every number worked out from your club and your era.',
             'Set your formation, mentality and XI, then play through the full season week by week.',
