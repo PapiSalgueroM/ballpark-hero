@@ -116,9 +116,13 @@ export function useClubManager() {
   const [pendingClub, setPendingClub] = useState<string | null>(null);
 
   /* Round 832: the label of an era whose squads would not load at boot, or
-     null. An era save cannot open without its squads, and loadCareer would
-     read a missing world as no save at all, so the page holds on a plain
-     notice with a retry instead of offering a fresh start over the career. */
+     null. An era save cannot be played without its squads. loadCareer can
+     still hand one back without them (the review opened a 2005, a 2010 and a
+     2015 save that way: its repairs did not happen to read the squads), and
+     the first screen or match that does read them then throws; a repair that
+     does read them makes loadCareer answer "no save". Either way the career
+     must not open early, so the page holds on a plain notice with a retry
+     instead of a crash or a fresh start over the career. */
   const [bootError, setBootError] = useState<string | null>(null);
   const [bootTry, setBootTry] = useState(0);
   const retryBoot = useCallback(() => setBootTry(n => n + 1), []);

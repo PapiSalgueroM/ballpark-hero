@@ -15,9 +15,10 @@
  * so a visitor whose clock is an hour out does not see every game as late.
  */
 import { useEffect, useState } from 'react';
-import { fetchLiveBoard, type LiveScoreRow } from '@/lib/liveScores';
+import { fetchLiveBoard, type LiveRead, type LiveScoreRow } from '@/lib/liveScores';
 
 const REFRESH_MS = 5 * 60 * 1000;
+const REQUEST_MS = 15_000;
 
 export type LiveStatus = 'loading' | 'ok' | 'failed';
 
@@ -33,9 +34,22 @@ export function useLiveScores(): LiveScoresState {
   useEffect(() => {
     let live = true;
     let offset = 0;
+    let request: { controller: AbortController; timer: number } | null = null;
+    const cancel = () => {
+      const owned = request;
+      request = null;
+      if (!owned) return;
+      window.clearTimeout(owned.timer);
+      owned.controller.abort();
+    };
     const load = () => {
-      fetchLiveBoard().then(read => {
-        if (!live) return;
+      if (!live || document.visibilityState !== 'visible' || request) return;
+      const owned = { controller: new AbortController(), timer: 0 };
+      request = owned;
+      const finish = (read: LiveRead | null) => {
+        if (!live || request !== owned) return;
+        request = null;
+        window.clearTimeout(owned.timer);
         const local = Date.now();
         if (read) {
           if (read.serverNow != null) offset = read.serverNow - local;
@@ -43,14 +57,23 @@ export function useLiveScores(): LiveScoresState {
         } else {
           setState(prev => ({ rows: prev.rows, status: 'failed', checkedAt: local + offset }));
         }
-      });
+      };
+      owned.timer = window.setTimeout(() => {
+        finish(null);
+        owned.controller.abort();
+      }, REQUEST_MS);
+      fetchLiveBoard(new Date(), owned.controller.signal).then(finish, () => finish(null));
     };
     load();
     const timer = window.setInterval(load, REFRESH_MS);
-    const onVisible = () => { if (document.visibilityState === 'visible') load(); };
+    const onVisible = () => {
+      if (document.visibilityState === 'visible') load();
+      else cancel();
+    };
     document.addEventListener('visibilitychange', onVisible);
     return () => {
       live = false;
+      cancel();
       window.clearInterval(timer);
       document.removeEventListener('visibilitychange', onVisible);
     };

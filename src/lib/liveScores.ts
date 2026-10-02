@@ -253,7 +253,7 @@ export interface LiveRead {
   serverNow: number | null;
 }
 
-export async function fetchLiveBoard(now: Date = new Date()): Promise<LiveRead | null> {
+export async function fetchLiveBoard(now: Date = new Date(), signal?: AbortSignal): Promise<LiveRead | null> {
   try {
     const { from, to } = windowFor(now);
     const params = new URLSearchParams({
@@ -265,6 +265,7 @@ export async function fetchLiveBoard(now: Date = new Date()): Promise<LiveRead |
     params.append('start_at', `lte.${to}`);
     const res = await fetch(`${SUPABASE_URL}/rest/v1/live_scores?${params.toString()}`, {
       headers: { apikey: SUPABASE_PUBLISHABLE_KEY, Authorization: `Bearer ${SUPABASE_PUBLISHABLE_KEY}` },
+      signal,
     });
     if (!res.ok) return null;
     const data = (await res.json()) as unknown;
