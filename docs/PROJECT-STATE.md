@@ -1,5 +1,18 @@
 # Project state
 
+Codex CLAIMS966/967, MLB/NHL current draft-capital consequences, 2026-10-02.
+Actual accepted trades and eight unchanged Board fixtures verified that
+zero/one/four owned tokens still yield two choices and selections never
+consume tokens. NHL's real AI helper also selects with zero capital.
+966 owns MLB draft engine/Board and focused outcome proofs.967 owns NHL
+draft engine/Board and focused proofs. Keep each sport's original limited
+two batches of five rivals, salary/roster rules, old save progress and
+normal RNG outcomes. Add working zero-capital exits and exactly-once
+actions. These numeric tokens are current simulation capital, not a dated
+future-year ledger or full league draft. Preserve Claude909/MLB desk binds.
+Parent owns guide hunks and scoped derived output; paused drafts held.
+939 NBA repair stays separate from938's frozen cap-panel hunk. Next free968. Claude940 to965 reserved; conflict renumbered without source changes.
+
 936 MLB opening model accepted as unbound preparation, 2026-10-02.
 Five files retain780 exact player identities in30 clubs, dated2024/2025/
 2026 cohorts, explicit simulation priors/shrinkage and all-partial grades.
