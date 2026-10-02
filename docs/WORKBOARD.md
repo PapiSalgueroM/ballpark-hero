@@ -1,5 +1,16 @@
 # Work board
 
+**Codex856 VERIFIED AND PUSHING.** QA847-10: the shared Sonner toast has
+a96px plus safe-area mobile bottom offset. One source line, no Soccer engine
+edit. Native actual Soccer Career academy creation at390 pointer,320 touch
+and1440 desktop: Joined toast is visible, Next Year receives the hit and age
+advances exactly once; refresh holds it.390 pointer hover keeps the toast past
+4600ms without blocking the action. Controlled before/after matrix9cases each
+proves eight narrow failures become zero, desktop offset and dismissal stay
+unchanged, and CookieConsent choices remain reachable. Clean type/build and
+all15 built-site fences pass. Physical-device safe-area and footer-lifted
+positions remain untested. Ready for Claude publication; not claimed live.
+
 **Codex846 VERIFIED AND PUSHING, 2026-10-01.** QA847-01 is repaired in
 useHigherLower.ts: owned reveal timers are canceled on Give up, reset and
 unmount; obsolete callbacks cannot change a fresh round. Six regression cases

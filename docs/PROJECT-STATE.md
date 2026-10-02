@@ -1,5 +1,14 @@
 # Project state
 
+## Codex856 accepted repair, 2026-10-01
+
+Mobile toasts sit above the fixed career action bar. Actual Soccer Career
+academy toast with390 pointer,320 touch and1440 desktop permits Next Year,
+advances age once and survives refresh. Hovered toast stays visible past its
+normal delay without blocking the390 action. One Sonner option, no engine
+edit. Clean type/build and all15 built-site fences pass. Ready for Claude's
+publish lane; physical device safe areas and footer-lifted bars are untested.
+
 ## Codex846 accepted repair, 2026-10-01
 
 Soccer Higher or Lower restarts are isolated from pending reveals. Six focused
