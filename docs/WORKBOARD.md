@@ -11,19 +11,21 @@ Root owns gates/Git/docs.859 owns Board input/labels;860 timer;861 leaderboard.
 Next free863. User reported visible tabs, so no browser connector/UI tools;
 native checks use separate CLI headless browser launches only.
 
-**Codex861 CLAIMED, truthful leaderboard participation wording.** Own
-src/pages/Leaderboard.tsx and focused content/recorder verification. Root owns
-its one crawler snapshot and derived sitemap artifacts. Current page and saved
-HTML promise every game/finish puts a player on the board. Source-confirmed
-Deadline Day/Contract Chaos completions pass undefined scores; the recorder
-omits score and counts plays/streaks with0 points. Round839 board/rank SQL
-requires positive nonnull scores. Qualify copy/metadata as scored games and
-explain positive-score participation and unscored finishes. No scoring, RPC,
-backend, layout or sports data edit. Native recorder replay was not run;
-browser connector use is stopped. Root gates/publishes source handoff. Next
-free862. Claude's release and all reserved simulation/data work remain his.
+**Codex861 VERIFIED AND PUSHING, truthful leaderboard eligibility.** Visible
+copy/metadata now requires a positive ranked score and explains unscored
+finishes as plays/streak credit with0 points. The absolute four-puzzles-win
+claim is replaced by the actual daily cap. Source matches real recorder and
+Round839 ranking, with no scoring/RPC/layout/backend edit. Eight focused and
+eight existing failure cases pass. Restored universal-copy control rejects
+four targets with four accounting/retry baselines held, no pending/unhandled.
+The wrapped read normalizes CRLF while holding raw bytes; normal/control pass
+on the actual560-CRLF-line page and the anchor fence passes. One leaderboard
+snapshot redrawn,169 sitemap dates held and only this page changed. Clean
+type/build and all15 built fences pass. Native unscored completion/live ranking
+untested.85956534e17 and8602b553ae6 are pushed;862 visible result commit next.
+No user browser tabs. Detailed receipt accompanies862. Next free863.
 
-**Codex860 VERIFIED AND PUSHING, Face Off deadline enforcement.** One actual
+**Codex860 VERIFIED, committed2b553ae6, Face Off deadline enforcement.** One actual
 elapsed-clock guard in useFaceOff turns expired input into timeout before solo
 or either pass-the-phone chair settlement.15 real-hook cases pass; removing
 the guard fails exactly ten intended expired outcomes while five independent

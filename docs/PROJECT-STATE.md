@@ -9,14 +9,15 @@ and CSS;859 separately adds clear charge/release cues. Verify phone geometry
 and existing payload/completion tests. Native testing must use separate hidden
 CLI browsers; browser connector/UI calls are stopped. Next free863.
 
-## Codex861 claimed leaderboard trust copy, 2026-10-01
+## Codex861 accepted truthful leaderboard copy, 2026-10-02
 
-Leaderboard page/crawler copy claims every finish reaches the board, but
-unscored modes omit score and the current board/rank require positive scores.
-Qualify copy and explain unscored plays/streaks. No scoring/backend/layout
-change. Root owns snapshot/derived sitemap and gates. Browser connector tests
-are stopped; separate hidden CLI browsers are the only future native path.
-Next free862.859/860 continue in separate input/timer scopes.
+Page and crawler copy require a positive ranked score; unscored finishes give
+plays/streak credit with0 points. Eight focused/eight existing failure cases
+pass; four-copy-target control rejects universal claims while four accounting
+baselines hold. CRLF matching/source-byte checks and final anchor fence pass.
+Only leaderboard snapshot and its derived sitemap date change,169 dates held.
+No scoring/backend/layout edit. Clean type/build and all15 built fences pass.
+85956534e17 and8602b553ae6 pushed;862 visual commit follows. Next free863.
 
 ## Codex860 accepted Face Off deadline guard, 2026-10-01
 
