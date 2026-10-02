@@ -1,0 +1,37 @@
+[
+  {
+    "name": "Paul Pogba",
+    "row": "AS Monaco",
+    "move": "contract terminated by mutual consent on 2026-08-19, no new club",
+    "why": "There is no club to write, the row stays at Monaco until he signs somewhere.",
+    "read": "asmonaco.com news listing and the Wikipedia career section, both read 2026-10-01"
+  },
+  {
+    "name": "Sofiane Boufal",
+    "row": "Le Havre AC",
+    "move": "released by Le Havre on 2026-07-02 per the Wikipedia summer list",
+    "why": "No destination found, so nothing to write.",
+    "read": "Wikipedia summer 2026 list only"
+  },
+  {
+    "name": "Krépin Diatta",
+    "row": "AS Monaco",
+    "move": "left Monaco when his contract ended, asmonaco.com published a farewell on 2026-06-30",
+    "why": "The destination club was not found, so nothing can be written.",
+    "read": "asmonaco.com news listing, Wikipedia infobox still says Monaco"
+  },
+  {
+    "name": "Tanguy Ndombélé",
+    "row": "OGC Nice",
+    "move": "his two year Nice contract ran to June 2026 and ESPN's Nice 2026-27 squad page does not list him",
+    "why": "No destination found.",
+    "read": "Wikipedia (stale), ESPN Nice squad"
+  },
+  {
+    "name": "Wout Faes",
+    "row": "AS Monaco",
+    "move": "the January 2026 loan at Monaco ended without the option being taken, he went back to Leicester City, and Leicester announced his permanent sale to Shabab Al-Ahli (UAE) on 2026-09-28",
+    "why": "Only one source for the Shabab Al-Ahli move: ESPN's player page still lists him at Leicester City and no second outlet carried it yet. Recheck later.",
+    "read": "lcfc.com news 2026-09-28, ESPN player page 228421 (Leicester City), both read 2026-10-01"
+  }
+]
