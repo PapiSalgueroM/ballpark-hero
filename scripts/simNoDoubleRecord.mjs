@@ -186,14 +186,10 @@ const VITEST_CONTROLS = {
     point: /after midnight/,
   },
   lateday: {
-    edits: REVEAL_HOOKS.flatMap(([file, item]) => !file.endsWith('useChampOrNot.ts') ? [
+    edits: REVEAL_HOOKS.flatMap(([file, item]) => [
       { file, from: `      setDaily${item}(next);\n`, to: '' },
       { file, from: '    if (!next) return;\n', to: `    if (!next) return;\n    if (mode === 'daily') setDaily${item}(next);\n` },
-    ] : [{
-      file,
-      from: `      setDaily${item}(next);\n    }\n    clearReveal();\n    revealTimer.current = window.setTimeout(() => {\n      revealTimer.current = null;\n`,
-      to: `    }\n    clearReveal();\n    revealTimer.current = window.setTimeout(() => {\n      revealTimer.current = null;\n      if (mode === 'daily') setDaily${item}(next);\n`,
-    }]),
+    ]),
     why: "the three reveal games move their daily state when the reveal ends again, not with the save, so a reload or a mode change inside the final reveal loses the record",
     red: row => / inside the final reveal$/.test(row.title),
     point: /recorded once|back on the daily/,

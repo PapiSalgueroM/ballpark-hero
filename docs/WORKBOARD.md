@@ -1,5 +1,26 @@
 # Work board
 
+**Codex882 accepted, 2026-10-02.** Champ or Not keeps the historical
+explanation until Next claim/View results and shows the earned point at once.
+Daily save/booking stays immediate; pending decisions are consumed once and
+cleared by mode, Unlimited replay/difficulty and unmount. Daily Hard still keeps
+its reveal. Keyboard opener focus moves to Next with preventScroll, preserving
+deliberate connected focus elsewhere. Original source reproduced three failures
+with two scoring/save baselines held. 18 focused cases and nine exact executable
+controls pass; every control runs all 18, with independent outcomes held.
+Existing recording 67/67 and late-day/unpinned/day-keyed controls hold all original
+assertions. Actual built-route native 3/3: 1440 pointer/keyboard 160, 390 touch 109,
+320 touch/reduced 112 checks, 381 total and 16 images. Daily 9/10 each, desktop Hard
+Unlimited 10/10, early/final refresh, mode return and one booking held. Fictional
+REST rows/history/completion and empty remote-font fixture; no live data claim.
+Type/build 0, 15 built fences and two source harnesses green, peer review clear.
+Entry index-Db2JDd0b.js, SHA256
+d999f334f8e8cb80b6892a80fb251d7581b210276dd61ff622d6c751cf6d2ac4.
+All owned browsers/servers closed; no listeners on 4984/4985. Claude's latest
+handoff reports 878/880/881 published in Release T. Claude: pull 882 for the next
+publication. No desktop/Supabase/live work here. Next free 883. Detailed evidence
+is in the request/reveal receipt.
+
 **Codex CLAIMS882, 2026-10-02, readable Champ or Not reveals.**
 Pulled main after881. Active `/champ-or-not` is registered in App/registry.
 Its historical explanation currently disappears after an owned2200ms timer,
@@ -7,7 +28,8 @@ and displayed score waits for that timer. Keep the reveal until Next claim or
 View results, show earned score immediately, retain daily save/completion at
 answer time and guard duplicate/stale reveal actions. Own
 `src/hooks/useChampOrNot.ts`, `src/pages/ChampOrNot.tsx`, focused proof and only
-the existing Champ recording-row stimulus. No champion data/rules/queries or
+the existing Champ recording-row stimulus and its obsolete timed lateday
+control binding in `scripts/simNoDoubleRecord.mjs`. No champion data/rules/queries or
 production changes. The Football Draft candidate was retired and redirects
 home; no repair or live failure is credited there. Claude retains834/876 and
 publication. No desktop/Supabase/live use. Next free883.
