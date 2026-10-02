@@ -25,7 +25,7 @@ const ROOT_URL = ROOT.replaceAll('\\', '/');
 const FIXTURE = path.join(ROOT, 'scripts/data/cmStaffFixture.json');
 const RECORD = process.env.GM_STAFF_RECORD === '1';
 const CONTROL = process.env.GM_STAFF_CONTROL || '';
-const CONTROLS = ['fixturewage', 'fixturecore'];
+const CONTROLS = ['fixturewage', 'fixturecore', 'flat', 'nocap', 'noscout', 'poachhead', 'dearstaff', 'wrongwords'];
 if (CONTROL && !CONTROLS.includes(CONTROL)) {
   console.error(`GM_STAFF_CONTROL=${CONTROL} is not a control this harness knows (${CONTROLS.join(', ')})`);
   process.exit(1);
@@ -87,6 +87,32 @@ if (CONTROL === 'fixturecore') {
   controlCopy('core', 'const chance = p.potential - p.level >= 3 ? rules.growChanceRoomy : rules.growChance;', 'const chance = rules.growChance;',
     'the shared summer forgets that a man with three levels of room grows more often');
 }
+if (CONTROL === 'flat') {
+  /* The two ends stay right and every level between them does nothing: the
+     shape a check on level 1 against level 10 alone would wave through. */
+  controlCopy('core', 'const raw = effect.none + ((effect.best - effect.none) * (level - 1)) / (maxLevel - 1);', 'const raw = level >= maxLevel ? effect.best : effect.none;',
+    'an effect is worth nothing until the top level, then all of it');
+}
+if (CONTROL === 'nocap') {
+  controlCopy('core', 'return clamp(raw, Math.min(effect.none, effect.best), Math.max(effect.none, effect.best));', 'return raw;',
+    'an effect is no longer held between its two ends');
+}
+if (CONTROL === 'noscout') {
+  controlCopy('core', 'return draw * (gmScoutSpread(level) / GM_SCOUT_SPREAD_NONE);', 'return draw;',
+    'the scouting error ignores who the scouting director is');
+}
+if (CONTROL === 'poachhead') {
+  controlCopy('core', 'if (rules.unpoachable?.includes(post)) continue;', '',
+    'a rival can come in for the head coach');
+}
+if (CONTROL === 'dearstaff') {
+  controlCopy('packs', 'wageBase: 3, wagePerLevel: 2.1, feeBase: 0.1,', 'wageBase: 3, wagePerLevel: 6.3, feeBase: 0.1,',
+    'a pro staff costs three times as much a level');
+}
+if (CONTROL === 'wrongwords') {
+  controlCopy('core', 'const pct = Math.round((v / effect.none - 1) * 1000) / 10;', 'const pct = Math.round((effect.best / effect.none - 1) * 1000) / 10;',
+    'every multiplier tile promises the top level\'s lift whatever the level');
+}
 const ENTRY = `${TMP}/entry.mjs`;
 const BUNDLE = `${TMP}/bundle.mjs`;
 fs.writeFileSync(ENTRY, `
@@ -94,16 +120,20 @@ globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: 
 export const engine = await import('${ROOT_URL}/src/lib/clubManager.ts');
 export const desk = await import('${PATHS.desk}');
 export const core = await import('${PATHS.core}');
+export const packs = await import('${PATHS.packs}');
 `);
 const aliases = [
   `--alias:@/lib/clubManagerStaff=${PATHS.desk}`,
   `--alias:@/lib/gmStaff=${PATHS.core}`,
+  `--alias:@/data/gmStaff/packs=${PATHS.packs}`,
   `--alias:@=${ROOT_URL}/src`,
 ];
 execSync(`"${ESBUILD}" "${ENTRY}" --bundle --format=esm --platform=node --outfile="${BUNDLE}" --log-level=error ${aliases.join(' ')}`, { stdio: 'inherit' });
 const mod = await import(pathToFileURL(BUNDLE).href);
 const cm = mod.engine;
 const desk = mod.desk;
+const core = mod.core;
+const PACKS = mod.packs.GM_STAFF_PACKS;
 await cm.ensureAllEraRosters();
 
 /* ================= the Club Manager staff history, recorded and replayed ================= */
@@ -348,6 +378,73 @@ console.log('1) The Club Manager staff history replays identically');
   }
   if (events < 200) fail(`the history only holds ${events} desk events, too thin to prove anything`);
   console.log(`   ${now.runs.length} runs, ${counted} lines, ${events} desk events, ${now.tables.startsCount} clubs' day one levels (recorded at ${fixture.recordedAt})`);
+}
+
+/* ================= the packs ================= */
+
+const LEVELS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+const EPS = 1e-9;
+const person = (level, id = 'x') => ({ id: `st-${id}`, name: `Test ${id}`, level, potential: Math.max(level, 1), wage: 1, since: 1, academy: false });
+/** A block with the given level in each post (null leaves the chair empty). Built by hand, so it can be corrupt on purpose. */
+function blockAt(pack, levelOf) {
+  const b = { v: pack.rules.version, poach: null, matchesLeft: pack.rules.matchesPerSeason, hires: 0, seasonSpend: 0 };
+  for (const post of pack.posts) { const lv = levelOf(post.id); b[post.id] = lv === null ? null : person(lv, post.id); }
+  return b;
+}
+
+/* ---------- 2. Every pack is a desk the core can run ---------- */
+console.log('2) Every pack is well formed: its posts, its keys and its bounds agree');
+{
+  let posts = 0;
+  let effects = 0;
+  const DASH = /[–—]/;
+  for (const pack of PACKS) {
+    const ids = pack.posts.map(p => p.id);
+    if (new Set(ids).size !== ids.length) fail(`${pack.id}: two posts share an id`);
+    if (ids.join('|') !== pack.rules.posts.join('|')) fail(`${pack.id}: the rules list ${pack.rules.posts.join(',')} and the posts are ${ids.join(',')}`);
+    for (const id of ids) if (core.GM_STAFF_RESERVED_KEYS.includes(id)) fail(`${pack.id}: a post is called ${id}, which the block keeps for itself`);
+    const heads = pack.posts.filter(p => p.head).map(p => p.id);
+    if ((pack.rules.unpoachable ?? []).join('|') !== heads.join('|')) fail(`${pack.id}: head posts ${heads.join(',')} but unpoachable ${(pack.rules.unpoachable ?? []).join(',')}`);
+    if (['nfl', 'nba', 'mlb', 'nhl'].includes(pack.id) && heads.length !== 1) fail(`${pack.id}: a front office has exactly one head coach to appoint, found ${heads.length}`);
+    if (!pack.posts.some(p => p.headCoachTrack) && pack.id !== 'fightGym') fail(`${pack.id}: nobody on the staff can be hired away as a head coach`);
+    for (const p of pack.posts) {
+      posts += 1;
+      if (p.head && p.headCoachTrack) fail(`${pack.id}/${p.id}: the head coach cannot also be the assistant who leaves to be one`);
+      for (const text of [p.label, p.short, p.blurb]) {
+        if (!text || !text.trim()) fail(`${pack.id}/${p.id}: an empty label, short name or blurb`);
+        if (DASH.test(text)) fail(`${pack.id}/${p.id}: a dash in "${text}"`);
+      }
+      if (!p.effects.length) fail(`${pack.id}/${p.id}: a post that does nothing`);
+      for (const e of p.effects) {
+        effects += 1;
+        const k = pack.keys[e.key];
+        if (!k) { fail(`${pack.id}/${p.id}: moves ${e.key}, which the pack does not declare`); continue; }
+        if (e.none !== k.none) fail(`${pack.id}/${p.id}/${e.key}: an empty chair is ${e.none} here and ${k.none} on the key`);
+        if (k.mult && k.none !== 1) fail(`${pack.id}/${e.key}: a multiplier that is not 1 with nobody in the job (Round 95)`);
+        if (e.best === e.none) fail(`${pack.id}/${p.id}/${e.key}: the top level is worth the same as nobody`);
+        if (e.best < k.lo - EPS || e.best > k.hi + EPS) fail(`${pack.id}/${p.id}/${e.key}: best ${e.best} is outside the key's ${k.lo} to ${k.hi}`);
+      }
+    }
+    for (const [key, k] of Object.entries(pack.keys)) {
+      if (!(k.lo <= k.none && k.none <= k.hi)) fail(`${pack.id}/${key}: nobody in the job (${k.none}) is outside ${k.lo} to ${k.hi}`);
+      const movers = pack.posts.flatMap(p => p.effects.filter(e => e.key === key));
+      if (!movers.length) { fail(`${pack.id}/${key}: declared and moved by nobody`); continue; }
+      /* The whole desk at the top level, added up by hand: it must land inside the bound, so the bound never eats a level somebody paid for. */
+      const raw = k.mult ? movers.reduce((t, e) => t * (e.best / e.none), k.none) : movers.reduce((t, e) => t + (e.best - e.none), k.none);
+      if (raw < k.lo - EPS || raw > k.hi + EPS) fail(`${pack.id}/${key}: a full top level desk makes ${raw}, past the bound ${k.lo} to ${k.hi}`);
+      const got = core.gmStaffEffect(pack, blockAt(pack, () => 10), key);
+      if (Math.abs(got - raw) > EPS) fail(`${pack.id}/${key}: the desk reads ${got} at the top, by hand it is ${raw}`);
+      const empty = core.gmStaffEffect(pack, blockAt(pack, () => null), key);
+      if (empty !== k.none) fail(`${pack.id}/${key}: an empty desk reads ${empty}, not ${k.none}`);
+      if (core.gmStaffEffect(pack, null, key) !== k.none) fail(`${pack.id}/${key}: a save with no desk at all does not read ${k.none}`);
+    }
+    if (core.gmStaffEffect(pack, blockAt(pack, () => 10), 'noSuchKey') !== 0) fail(`${pack.id}: a key nobody declared is worth something`);
+    for (const m of ['wageUnit', 'purseUnit', 'purseNote']) if (!pack.money[m]) fail(`${pack.id}: money.${m} is empty`);
+    if (!(pack.money.ticksPerSeason >= 1) || !(pack.money.seasonPurse > 0)) fail(`${pack.id}: no season to pay the staff over`);
+  }
+  if (PACKS.length !== 8) fail(`${PACKS.length} packs, the round ships 8 (NFL, NBA, MLB, NHL, CFB, CBB, the fight gym, Australian football)`);
+  if (new Set(PACKS.map(p => p.id)).size !== PACKS.length) fail('two packs share an id');
+  console.log(`   ${PACKS.length} packs, ${posts} posts, ${effects} effects`);
 }
 
 if (CONTROL) {

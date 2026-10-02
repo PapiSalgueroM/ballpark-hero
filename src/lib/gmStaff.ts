@@ -96,11 +96,16 @@ export interface GmStaffRules<P extends string = string> {
   severanceTicks: number;
   wagePerPurse: number;
   severanceMin: number;
+  /** Decimal places a fee is quoted to (missing is 1) and the purse, the spend and a pay off are kept to (missing is 2). */
+  feeDp?: number;
+  purseDp?: number;
   /** What matching a rival's offer does to his wage, for good. */
   matchRaise: number;
   /** Nobody under this level is ever approached; above it the chance a tick is poachPerLevel a level. */
   poachFromLevel: number;
   poachPerLevel: number;
+  /** Posts no rival ever comes in for: a head coach leaves because the GM said so, and for no other reason. */
+  unpoachable?: readonly P[];
   /** The chance a man with room grows a level over a summer, and with three or more levels of room. */
   growChance: number;
   growChanceRoomy: number;
@@ -131,8 +136,10 @@ export interface GmStaffCtx<P extends string = string> {
 /* ------------------------------------------------------------ the hash */
 
 const clamp = (v: number, lo: number, hi: number): number => Math.max(lo, Math.min(hi, v));
-const round1 = (n: number): number => Math.round(n * 10) / 10;
-const round2 = (n: number): number => Math.round(n * 100) / 100;
+/** Rounded to so many decimal places. One place is tenths, two is hundredths, exactly as Club Manager always rounded. */
+const roundTo = (n: number, dp: number): number => { const m = 10 ** dp; return Math.round(n * m) / m; };
+const feeDp = (rules: Pick<GmStaffRules, 'feeDp'>): number => rules.feeDp ?? 1;
+const purseDp = (rules: Pick<GmStaffRules, 'purseDp'>): number => rules.purseDp ?? 2;
 
 /** FNV-1a with a final avalanche. Same string, same number, every machine. */
 export function gmHash32(s: string): number {
@@ -245,6 +252,18 @@ function withSeat<P extends string>(block: GmStaffBlock<P>, post: P, person: GmS
   return { ...block, [post]: person, ...rest } as GmStaffBlock<P>;
 }
 
+/**
+ * The level an owner attracts for a post, from how big it is. `stature` runs
+ * from 0 (the smallest outfit in the game) to 1 (the biggest), which is
+ * levels 2 to 8, and each post takes its own hashed step of minus one to plus
+ * one so a staff is not one number wearing five hats. Club Manager reads its
+ * own tier ladder instead; every other game can hand its ctx this.
+ */
+export function gmStatureAnchor(owner: string, post: string, stature: number, maxLevel: number = GM_STAFF_MAX): number {
+  const s = typeof stature === 'number' && Number.isFinite(stature) ? clamp(stature, 0, 1) : 0;
+  return clamp(Math.round(2 + 6 * s) + gmHashInt(`start|${owner}|${post}`, -1, 1), 1, maxLevel);
+}
+
 /** Day one: one generated man in every post, at the level this owner attracts. */
 export function gmDefaultStaff<P extends string>(rules: GmStaffRules<P>, ctx: GmStaffCtx<P>): GmStaffBlock<P> {
   const taken = new Set<string>();
@@ -344,7 +363,7 @@ export function gmStaffShortlist<P extends string>(rules: GmStaffRules<P>, block
     const level = clamp(anchor + gmHashInt(`sp|${key}`, -2, 2), 1, rules.maxLevel);
     out.push({
       person: gmMakePerson(rules, key, post, level, ctx.season, ctx.money, false, taken),
-      fee: round1(Math.max(rules.feeBase, rules.feeBase + rules.feePerLevel * level * ctx.money * payOf(rules, post))),
+      fee: roundTo(Math.max(rules.feeBase, rules.feeBase + rules.feePerLevel * level * ctx.money * payOf(rules, post)), feeDp(rules)),
       from: rules.outsideFrom[gmHash32(`fr|${key}`) % rules.outsideFrom.length],
     });
   }
@@ -359,7 +378,7 @@ export function gmStaffShortlist<P extends string>(rules: GmStaffRules<P>, block
 /** What paying off a man costs, in the purse unit. */
 export function gmSeverance<P extends string>(rules: GmStaffRules<P>, person: GmStaffPerson | null | undefined): number | null {
   if (!person) return null;
-  return round2(Math.max(rules.severanceMin, (person.wage * rules.severanceTicks) / rules.wagePerPurse));
+  return roundTo(Math.max(rules.severanceMin, (person.wage * rules.severanceTicks) / rules.wagePerPurse), purseDp(rules));
 }
 
 /* ------------------------------------------------------------ the desk */
@@ -380,9 +399,9 @@ export function gmHireStaff<P extends string>(
   if (purse < cand.fee) return null;
   const next = withSeat(block, post, { ...cand.person }, {
     hires: block.hires + 1,
-    seasonSpend: round2(block.seasonSpend + cand.fee),
+    seasonSpend: roundTo(block.seasonSpend + cand.fee, purseDp(rules)),
   } as Partial<GmStaffBlock<P>>);
-  return { next, cand, purse: round2(purse - cand.fee) };
+  return { next, cand, purse: roundTo(purse - cand.fee, purseDp(rules)) };
 }
 
 /** Pay him off. Refuses an empty post and a purse that cannot cover it. His approach goes with him. */
@@ -397,9 +416,9 @@ export function gmSackStaff<P extends string>(
     poach: block.poach?.postId === post ? null : block.poach,
     /* A fresh vacancy draws a fresh three. */
     hires: block.hires + 1,
-    seasonSpend: round2(block.seasonSpend + pay),
+    seasonSpend: roundTo(block.seasonSpend + pay, purseDp(rules)),
   } as Partial<GmStaffBlock<P>>);
-  return { next, person, pay, purse: round2(purse - pay) };
+  return { next, person, pay, purse: roundTo(purse - pay, purseDp(rules)) };
 }
 
 /**
@@ -468,6 +487,7 @@ export function gmTickStaff<P extends string>(rules: GmStaffRules<P>, block: GmS
   for (const post of rules.posts) {
     const person = s[post];
     if (!person) continue;
+    if (rules.unpoachable?.includes(post)) continue;
     const key = `poach|${ctx.owner}|${ctx.world}|${ctx.season}|${ctx.week}|${post}`;
     if (gmHashFloat(key) >= gmPoachChance(rules, person.level)) continue;
     const rivals = ctx.rivals();
@@ -578,6 +598,101 @@ export function gmScoutNoise(u: number, level: number): number {
 export function gmScoutBand(grade: number, level: number): { lo: number; hi: number; spread: number } {
   const spread = gmScoutSpread(level);
   return { lo: Math.round(grade - spread), hi: Math.round(grade + spread), spread };
+}
+
+/* ------------------------------------------------------------ the packs */
+
+/** One job on a desk: its words, and what it moves. */
+export interface GmStaffPost<P extends string = string> {
+  id: P;
+  label: string;
+  short: string;
+  emoji: string;
+  /** One or two plain sentences for the tile: what he does, said the way the game talks. */
+  blurb: string;
+  effects: readonly GmStaffEffect[];
+  /** The head coach. The GM appoints and sacks him, and the rules list him as unpoachable. */
+  head?: boolean;
+  /** A strong man in this post is approached for a head coach's job elsewhere, and the screen says so. */
+  headCoachTrack?: boolean;
+}
+
+/** What one effect key means in a pack, and the most the whole desk may move it. */
+export interface GmStaffKey {
+  /** The value with nobody on the desk. */
+  none: number;
+  /** The whole desk together never moves it under lo or over hi. */
+  lo: number;
+  hi: number;
+  /** True for a multiplier (posts multiply), false for points (posts add). */
+  mult: boolean;
+  /** What it is, for the screen and for whoever binds it. */
+  what: string;
+}
+
+/** A game's whole desk as data: the posts, the numbers and the money scale. */
+export interface GmStaffPack<P extends string = string> {
+  id: string;
+  /** The game it belongs to, for the screen and the harness. */
+  game: string;
+  posts: readonly GmStaffPost<P>[];
+  rules: GmStaffRules<P>;
+  keys: Readonly<Record<string, GmStaffKey>>;
+  money: {
+    /** What a wage is counted in, as the screen says it ("k a week", "points a season"). */
+    wageUnit: string;
+    /** What fees, severance and the purse are counted in. */
+    purseUnit: string;
+    /** How many times a season the game ticks the desk and pays the wages. */
+    ticksPerSeason: number;
+    /** The money this desk is expected to live inside for a season, in the purse unit, and where the number comes from. */
+    seasonPurse: number;
+    purseNote: string;
+  };
+}
+
+/**
+ * What the whole desk does to one key today: every post that moves it, read
+ * at the level of whoever sits there (an empty chair is level 1, which is
+ * `none`), combined, and held inside the pack's bounds whatever the save
+ * says. A key the pack does not declare is worth nothing.
+ */
+export function gmStaffEffect<P extends string>(pack: GmStaffPack<P>, block: GmStaffBlock<P> | null | undefined, key: string): number {
+  const k = pack.keys[key];
+  if (!k) return 0;
+  if (!block) return k.none;
+  let total = k.none;
+  for (const post of pack.posts) {
+    for (const effect of post.effects) {
+      if (effect.key !== key) continue;
+      const v = gmEffectAt(effect, gmStaffLevel(block, post.id), pack.rules.maxLevel);
+      total = k.mult ? total * (v / effect.none) : total + (v - effect.none);
+    }
+  }
+  return clamp(total, k.lo, k.hi);
+}
+
+/** The line a vacant chair shows. Round 471's own words. */
+export const GM_STAFF_EMPTY_LINE = 'Nobody in the job. Nothing lost, nothing gained.';
+/** The line a level 1 man shows: he is the job done the way it was before he came. */
+export const GM_STAFF_NO_LIFT_LINE = 'No lift yet. Level 1 is the job done the way it always was.';
+
+/**
+ * What one effect of a post is worth today, in words, built from the same
+ * number the game applies, so a tile cannot promise what the code does not
+ * do. `level` is null for an empty chair. scripts/simGmStaff.mjs reads the
+ * number back out of every line at every level and holds it to gmEffectAt.
+ */
+export function gmEffectLine(k: GmStaffKey, effect: GmStaffEffect, level: number | null, maxLevel: number = GM_STAFF_MAX): string {
+  if (level === null) return GM_STAFF_EMPTY_LINE;
+  const v = gmEffectAt(effect, level, maxLevel);
+  if (v === effect.none) return GM_STAFF_NO_LIFT_LINE;
+  if (k.mult) {
+    const pct = Math.round((v / effect.none - 1) * 1000) / 10;
+    return `${pct > 0 ? '+' : ''}${pct}% on ${k.what}.`;
+  }
+  if (effect.none === 0) return `+${Math.round(v * 100) / 100} ${k.what}.`;
+  return `${Math.round(v * 10) / 10}, from ${effect.none} with nobody in the job: ${k.what}.`;
 }
 
 /** Weeks out after the head trainer has had him: never under one week, never longer than it was. */
