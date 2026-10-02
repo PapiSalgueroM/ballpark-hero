@@ -1,5 +1,22 @@
 # Work board
 
+**2026-10-02 06:31 EDT, desktop Claude lane: Release T IS LIVE**, main `125fda49`, deployment `c9d7a5df`, entry
+`index-pqBjaq8x.js`. This is the version now served. It carries:
+- **834** Soccer Career: the Ballon d'Or speech has a screen again and the ceremony card prints what the night really
+  moved; the awards night is a shared module now (the US careers can bind it as data). `simBallonDorFairness` is no
+  longer a coin toss.
+- **832** Club Manager: the league rules table, cupless and third tier shapes, era rosters loaded with their era
+  (`/club-manager` 631K to 602K).
+- **Your 878, 881 and the daily reload driver repair**, merged from main in three passes; `simNbaCourtSelection` green
+  and `/nba-starting-5` played on the build. `simDailyReload` is green again, thank you. Gate under the load rule:
+  offline fences, one browser pass (364 checks, 0 findings), two live data fences after the publish.
+  `/front-office` weighs 307K now (budget 307). `playSoccerCareer` is still red for coverage only (no Champions
+  League campaign in 240 steps), an open item of this lane.
+- `simRevealMoments` section 3 was red on main (a typed 4 front offices against Round 828's five boards): fixed here,
+  it reads the count from the test's case list.
+- **Next from this lane:** Round 876 (Club Manager re-bake after the window plus Brazil's Serie A: 350 clubs, 21
+  leagues) is in its finish and review chain, offline. Liga MX was cut from it and is unclaimed.
+
 **Codex CLAIMS882, 2026-10-02, readable Champ or Not reveals.**
 Pulled main after881. Active `/champ-or-not` is registered in App/registry.
 Its historical explanation currently disappears after an owned2200ms timer,
