@@ -41,6 +41,7 @@ import type { RivalryEvent } from './careerRivalryEvents';
 import { nbaRivalryTick, nbaRivalryChoiceTick } from './nbaCareerRivalryEvents';
 import type { RivalryChoiceCard } from './careerRivalryChoices';
 import { raiseWithinPotential, ratingRaiseNote } from './careerHeadroom';
+import { applyUsCareerAnnualBenefits } from './usCareerAnnualBenefits';
 /* Round 422: the share of gross pay that actually reaches the bank, after tax,
    agent and living. It was already the number this file used to turn career
    earnings into net worth; it is named here so the yearly banking and the
@@ -353,7 +354,7 @@ export const NBA_SPEND_ITEMS: NbaSpendItem[] = [
   // Body
   { id: 'chef_nba', name: 'Private Chef', emoji: '👨‍🍳', category: 'body', cost: 0, yearly: 0.15, desc: 'Every meal built for 82 games, 150k a year', oneTime: true, effect: 'Health +4 a year' },
   { id: 'recovery_nba', name: 'Recovery Suite', emoji: '🧊', category: 'body', cost: 2, yearly: 0.12, desc: 'Cryo, compression, the whole circus, 2M', oneTime: true, minNetWorth: 3, effect: 'Injury risk down' },
-  { id: 'shot_doctor', name: 'Private Shooting Coach', emoji: '🎯', category: 'body', cost: 0, yearly: 0.2, desc: 'The guy who rebuilt three All Stars, 200k a year', oneTime: true, effect: 'Rating +1 a year while young' },
+  { id: 'shot_doctor', name: 'Private Shooting Coach', emoji: '🎯', category: 'body', cost: 0, yearly: 0.2, desc: 'The guy who rebuilt three All Stars, 200k a year', oneTime: true, effect: 'Rating +1 each offseason through age 25, up to your ceiling' },
   { id: 'sleep_nba', name: 'Sleep Program', emoji: '😴', category: 'body', cost: 0.7, desc: 'Turns out most of it is sleep, 700k', oneTime: true, effect: 'Health +8' },
   { id: 'psych_nba', name: 'Sports Psychologist', emoji: '🧠', category: 'body', cost: 0, yearly: 0.12, desc: 'The part nobody used to talk about, 120k a year', oneTime: true, effect: 'Morale +8 on hire' },
   { id: 'biomech_nba', name: 'Biomechanics Team', emoji: '🔬', category: 'body', cost: 1.2, desc: 'They rebuilt your landing mechanics, 1.2M', oneTime: true, effect: 'Rating +2, up to your ceiling' },
@@ -741,6 +742,8 @@ export function nbaProgress(c: NbaCareerState, rng: () => number): string[] {
      and it is told whether the career goes on (the same nbaShouldRetire the
      board asks right after this returns), so a player who retires this
      summer is never sent a text about next season. */
+  const support = applyUsCareerAnnualBenefits(c, 'nba', c.age - 1);
+  if (support) notes.push(support);
   receiveNbaInboxTexts(c, !nbaShouldRetire(c));
   return notes;
 }
