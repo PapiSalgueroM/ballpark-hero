@@ -1,4 +1,4 @@
-/* Round 850: Keep Playing plays the season you aged into.
+/* Round 850: a year he lived always has exactly one row.
  *
  * THE DEFECT (audit QA847-14, a real live career): Next Season runs
  * advanceProSeason, which starts the year (the birthday, bans, the heat, the
@@ -7,52 +7,67 @@
  * into was never played or written down, the next Next Season aged him again,
  * and the calendar fell one year behind his age every time. That live career
  * lost the seasons at 33, 37, 41, 42, 43 and 44 and finished six years behind.
+ * Two more stops had the same shape from the player's side (aged first, an
+ * early return, then back to playing with no row): a severe injury's rehab
+ * choice threw the generated season away, and a corruption conviction
+ * returned with no row (prison is the year after).
  *
  * THE FIX: the season is its own step (playPendingProSeason) and Keep Playing
- * resumes exactly that pending season. Accepting is untouched.
+ * resumes exactly that pending season. The injury stop writes the season the
+ * engine generated (his own line, marked injured, team trophy rolls dropped
+ * because the rest of that season never runs). The conviction writes the zero
+ * appearance row the ban and prison years use, with CONVICTED as the reason.
+ * A save sitting on either screen from an older version gets its row once:
+ * applyRehabChoice writes a zero appearance injured row (the games it had were
+ * thrown away and are not invented back), dismissNewspaper the CONVICTED row.
  *
  * WHAT THIS HOLDS, driving the real engine with seeded Math.random:
- *   1. Over a fleet that declines EVERY suggestion, every year lived from the
- *      first season to retirement has exactly one season row (a ban or prison
- *      year has its own zero appearance row and counts), no age has two, and
- *      the calendar runs one year per row without a gap. Each decline adds
- *      the row for the age on the suggestion screen and never moves the age.
- *   2. The same fleet on the pre-850 engine (this file's engine with the
- *      round reverted, built in memory) loses years, so check 1 is a check
- *      that fails on the old code rather than one that cannot fail.
- *   3. Accepting retirement ends every career at the same point, byte for
- *      byte, as the pre-850 engine. Careers that never see a suggestion are
- *      byte identical end to end. Careers that decline are byte identical up
- *      to the moment the first suggestion is raised.
- *   4. Old saves. A save written by the pre-850 engine while SITTING on the
- *      suggestion plays that season once when declined: one row, at the age
- *      on the screen, and the next Next Season moves one year on. A save that
- *      already lost years keeps every row it had and loses no more.
- *   5. Balance, printed, never asserted: what declining every suggestion does
- *      to retirement age, goals, net worth and legacy, and how a 40 plus
- *      season reads.
- *
- * TWO SIBLINGS THIS DOES NOT FIX, counted and printed, never silently passed.
- * Both lose a lived year through the same shape (aged first, early return,
- * then the phase goes back to playing): a severe injury's rehab choice
- * (rehab_choice) and a corruption conviction (newspaper, prison the year
- * after). A year the driver SAW the engine stop for one of those is exempt
- * from check 1 and listed; any other missing year fails. Fixing those moves
- * careers that never see a suggestion, so they are their own round.
+ *   1. Three fleets (accept every suggestion, decline every suggestion, and
+ *      the worst road: decline, rush every rehab, take every dirty choice):
+ *      every age he lived, from the first row to the age he retired at, has
+ *      exactly one row, and the calendar runs one year per row. No exemption
+ *      list. The pre-850 engine (this file's engine with the round reverted,
+ *      built in memory) loses years in all three, so the check can fail.
+ *   2. Every Keep Playing keeps the age, writes one row at that age the year
+ *      after the last, and says "Decided to push on" exactly once. Off the
+ *      suggestion screen it writes nothing. Every injury stop's row carries
+ *      the injury on the screen, at least one game, and no team trophy.
+ *   3. Nothing moves before the first stop. A career the pre-850 engine
+ *      never stopped (no suggestion declined, no rehab, no conviction) is
+ *      byte identical end to end; one it did stop is byte identical up to the
+ *      stop, except for the new row. Accepting still ends a career at the same
+ *      point as the pre-850 engine when it never stopped for a rehab or a
+ *      conviction.
+ *   4. Old saves written by the pre-850 engine: sitting on the suggestion
+ *      (declining plays that season once), on the rehab choice (one zero
+ *      appearance injured row, then the next year), on the conviction paper
+ *      (one CONVICTED row, then the prison year). Saves written by this engine
+ *      on the rehab choice or the conviction paper, reloaded, get nothing
+ *      twice. A save that already lost years keeps every row it had and loses
+ *      no more.
+ *   5. Balance, printed, never asserted, for all three fleets against the
+ *      pre-850 engine.
  *
  * MEASURED (60 careers per fleet, KEEP_PLAYING_SEED 0x850a, 0x1234, 0x5eed,
- * 0xbeef and 0x7777, 2026-10-01): the pre-850 engine lost 177, 199, 207, 201
- * and 202 years to declines (2.95 to 3.45 per career, every career lost at
- * least one); this engine loses 0. Floor: 1 lost year per career on the old
- * engine, under a third of the lowest. Declines per fleet ran 143 to 160,
- * floor 1.5 per career (90). Saves with lost years continued: 17 to 23 of
- * 24, floor 12. The sibling years exempted ran 50 to 69 per fleet.
+ * 0xbeef and 0x7777, 2026-10-01): see the FLOORS block below for the numbers
+ * each floor was set from. The in-memory pre-850 engine was checked against
+ * the real origin/main file of that day (29e64f42): byte identical on 60 of 60
+ * careers in each of the three fleets.
  *
- * NEGATIVE CONTROLS, each must exit 1:
- *   KEEP_PLAYING_CONTROL=olddecline  Keep Playing only sets the phase again
- *     (exactly what shipped), so check 1 and check 4 go red.
- *   KEEP_PLAYING_CONTROL=readvance   Keep Playing starts the year over before
- *     playing (ages him a second time), so check 1 and check 4 go red.
+ * NEGATIVE CONTROLS, each must exit 1 (KEEP_PLAYING_CONTROL=<name>):
+ *   olddecline        Keep Playing only sets the phase again (what shipped)
+ *   readvance         Keep Playing starts the year over (ages him twice)
+ *   stuck             Keep Playing plays the season but leaves the warning up
+ *   offphase          Keep Playing plays a season off the suggestion screen
+ *   pushtwice         the "Decided to push on" line is written twice
+ *   acceptresume      accepting plays the pending season before retiring
+ *   norehabrow        the injury stop writes no row again
+ *   zerorehab         the injury stop writes an empty row, not the season
+ *   noconvictionrow   the conviction writes no row again
+ *   norehabsave       an old save on the rehab choice still gets no row
+ *   rehabtwice        a reloaded rehab save gets a second row
+ *   noconvictionsave  an old save on the conviction paper still gets no row
+ *   convictiontwice   a reloaded conviction save gets a second row
  *
  * Run: node scripts/simCareerKeepPlaying.mjs [careers]
  */
@@ -70,6 +85,21 @@ const OLD_SAVES = 24;
 const SEED_BASE = Number(process.env.KEEP_PLAYING_SEED || 0x850a);
 const CONTROL = process.env.KEEP_PLAYING_CONTROL || "";
 
+/* FLOORS, each under half of the lowest of the five measured seed bases
+   (0x850a, 0x1234, 0x5eed, 0xbeef, 0x7777), 60 careers per fleet, measured
+   2026-10-01 on the pre-850 engine unless it says otherwise:
+     years lost, accept fleet   28 to 40 (rehab 25 to 36, conviction 3 to 5)    floor 12
+     years lost, decline fleet  234 to 263 (Keep Playing 177 to 207)            floor 90
+     years lost, worst fleet    211 to 269                                      floor 100
+     declines, decline fleet    138 to 152 (this engine)                        floor 60
+     rehab stops, accept fleet  25 to 36                                        floor 9
+     convictions, worst fleet   12 to 19                                        floor 3
+   This engine lost 0 on every base. Old saves: 24 of 24 reached each of the
+   three screens on every base; 17 to 23 saves with lost years continued. */
+const FLOOR = {
+  lostAccept: 12, lostDecline: 90, lostWorst: 100, declines: 60, rehabAccept: 9, convictionsWorst: 3,
+};
+
 let failures = 0;
 let checks = 0;
 const fail = m => { failures += 1; if (failures <= 25) console.error("  FAIL: " + m); };
@@ -78,10 +108,20 @@ const check = (ok, m) => { checks += 1; if (!ok) fail(m); };
 /* ── the two engines ── */
 const SRC = readFileSync(ENGINE, "utf8").replace(/\r\n/g, "\n");
 const count = (hay, needle) => hay.split(needle).length - 1;
+function swap(src, from, to, label) {
+  if (count(src, from) !== 1) {
+    console.error(`  FAIL: anchor "${label}" is in the engine ${count(src, from)} times, it must be exactly once`);
+    process.exit(1);
+  }
+  const out = src.replace(from, () => to);
+  if (out === src) { console.error(`  FAIL: anchor "${label}" changed nothing`); process.exit(1); }
+  return out;
+}
 
-/* the pre-850 engine: undo the split and put the old decline back. Both
-   anchors must match exactly once or the harness refuses to run, so a later
-   edit cannot quietly turn the baseline into a copy of the current engine. */
+/* the pre-850 engine: undo the split, put the old decline back, and take the
+   four new rows out. Every anchor must match exactly once or the harness
+   refuses to run, so a later edit cannot quietly turn the baseline into a
+   copy of the current engine. */
 const SPLIT_RE = /  return playPendingProSeason\(s, clubs\);\n\}\n\n\/\*[^]*?\*\/\nfunction playPendingProSeason\(s: CareerState, clubs: ClubData\[\]\): CareerState \{\n/g;
 const DECLINE_RE = /export function declineRetirementSuggestion\(prev: CareerState, clubs: ClubData\[\]\): CareerState \{\n[^]*?\n\}\n/g;
 const OLD_DECLINE = 'export function declineRetirementSuggestion(prev: CareerState): CareerState {\n'
@@ -90,27 +130,45 @@ const OLD_DECLINE = 'export function declineRetirementSuggestion(prev: CareerSta
   + '  s.phase = "playing";\n'
   + '  return s;\n'
   + '}\n';
+const ROWS = {
+  conviction: ['    s.seasons = [...s.seasons, yearOutRow(s, "CONVICTED")];\n    s.phase = "newspaper";', '    s.phase = "newspaper";'],
+  rehab: ['      s.seasons = [...s.seasons, injuryRow];\n      s.phase = "rehab_choice";', '      s.phase = "rehab_choice";'],
+  rehabSave: ['  if (lastRow && lastRow.age < s.age) {\n    const row = yearOutRow(s, null);', '  if (false) {\n    const row = yearOutRow(s, null);'],
+  newsSave: ['    if (lastRow && lastRow.age < s.age) s.seasons = [...s.seasons, yearOutRow(s, "CONVICTED")];', '    void lastRow;'],
+};
 const splitHits = (SRC.match(SPLIT_RE) || []).length;
 const declineHits = (SRC.match(DECLINE_RE) || []).length;
 if (splitHits !== 1 || declineHits !== 1) {
   console.error(`  FAIL: cannot rebuild the pre-850 engine (split anchor ${splitHits}, decline anchor ${declineHits}, each must be 1)`);
   process.exit(1);
 }
-const BASELINE_SRC = SRC.replace(SPLIT_RE, "").replace(DECLINE_RE, OLD_DECLINE);
+let BASELINE_SRC = SRC.replace(SPLIT_RE, "").replace(DECLINE_RE, () => OLD_DECLINE);
+for (const [k, [from, to]] of Object.entries(ROWS)) BASELINE_SRC = swap(BASELINE_SRC, from, to, `revert ${k}`);
 
-/* the negative controls mutate the CURRENT engine's decline */
+/* the negative controls mutate the CURRENT engine */
 const RESUME = '|| prev.retired) {\n    s.phase = "playing";\n    return s;\n  }\n  return playPendingProSeason(s, clubs);';
+const PUSH_LINE = '  s.events = [...s.events, "\u{1F4AA} Decided to push on, not ready to hang up the boots yet"];\n';
+const ACCEPT_HEAD = 'export function acceptRetirementSuggestion(prev: CareerState): CareerState {\n  const s = { ...prev };';
 const CONTROLS = {
-  olddecline: '|| prev.retired) {\n    s.phase = "playing";\n    return s;\n  }\n  s.phase = "playing";\n  return s;',
-  readvance: '|| prev.retired) {\n    s.phase = "playing";\n    return s;\n  }\n  return advanceProSeason({ ...s, phase: "playing" }, clubs);',
+  olddecline: [RESUME, '|| prev.retired) {\n    s.phase = "playing";\n    return s;\n  }\n  s.phase = "playing";\n  return s;'],
+  readvance: [RESUME, '|| prev.retired) {\n    s.phase = "playing";\n    return s;\n  }\n  return advanceProSeason({ ...s, phase: "playing" }, clubs);'],
+  stuck: [RESUME, '|| prev.retired) {\n    s.phase = "playing";\n    return s;\n  }\n  return { ...playPendingProSeason(s, clubs), phase: "retirement_suggestion" };'],
+  offphase: ['  if (prev.phase !== "retirement_suggestion" || prev.retired) {', '  if (prev.retired) {'],
+  pushtwice: [PUSH_LINE, PUSH_LINE + PUSH_LINE],
+  acceptresume: [ACCEPT_HEAD, 'export function acceptRetirementSuggestion(prev: CareerState): CareerState {\n  const s = { ...playPendingProSeason(repairCareer({ ...prev }), FALLBACK_CLUBS) };'],
+  norehabrow: ROWS.rehab,
+  zerorehab: ['      const injuryRow: SeasonRecord = { ...season, leagueTitle: false, domesticCup: false };', '      const injuryRow: SeasonRecord = yearOutRow(s, null);'],
+  noconvictionrow: ROWS.conviction,
+  norehabsave: ROWS.rehabSave,
+  rehabtwice: [ROWS.rehabSave[0], '  if (lastRow) {\n    const row = yearOutRow(s, null);'],
+  noconvictionsave: ROWS.newsSave,
+  convictiontwice: [ROWS.newsSave[0], '    if (lastRow) s.seasons = [...s.seasons, yearOutRow(s, "CONVICTED")];'],
 };
 let CURRENT_SRC = SRC;
 if (CONTROL) {
   if (!CONTROLS[CONTROL]) { console.error(`  FAIL: unknown KEEP_PLAYING_CONTROL=${CONTROL}`); process.exit(1); }
-  if (count(SRC, RESUME) !== 1) { console.error("  FAIL: the control anchor is not in the engine exactly once, so the control would change nothing"); process.exit(1); }
-  CURRENT_SRC = SRC.replace(RESUME, CONTROLS[CONTROL]);
-  if (CURRENT_SRC === SRC) { console.error("  FAIL: the control changed nothing"); process.exit(1); }
-  console.log(`CONTROL ${CONTROL}: Keep Playing mutated in the current engine, this run must go red`);
+  CURRENT_SRC = swap(SRC, CONTROLS[CONTROL][0], CONTROLS[CONTROL][1], `control ${CONTROL}`);
+  console.log(`CONTROL ${CONTROL}: the current engine is mutated, this run must go red`);
 }
 
 const TMP = mkdtempSync(path.join(os.tmpdir(), "keep-playing-"));
@@ -164,8 +222,12 @@ function newCareer(E, c) {
   return E.initCareer(`Keep ${c}`, NATIONS[c % 8], POSITIONS[c % 8], "2020s", stats(ovr), ovr, 2025, clubs, null);
 }
 
-/* One step of the loop the page runs. `policy` answers the suggestion:
-   decline, accept, or never (retire by hand at 29, before one can come). */
+const isConvictionStop = s => s.phase === "newspaper" && !s.pendingSummary && (s.prisonSeasons ?? 0) > 0;
+
+/* One step of the loop the page runs. `policy`: accept, decline, never
+   (retire by hand at 29) or worst (decline, rush every rehab, take every
+   dirty choice on offer). The log records every stop the engine made, by
+   age, and the state at the first one. */
 function step(E, s, policy, log) {
   switch (s.phase) {
     case "youth": return E.advanceYouthYear(s, clubs);
@@ -182,9 +244,9 @@ function step(E, s, policy, log) {
     }
     case "retirement_suggestion": {
       log.suggestions.push(s.age);
-      if (!log.firstSuggestion) log.firstSuggestion = JSON.stringify(s);
-      if (policy !== "decline") return E.acceptRetirementSuggestion(s);
+      if (policy === "accept" || policy === "never") return E.acceptRetirementSuggestion(s);
       log.declines += 1;
+      if (log.firstStop === null) log.firstStop = { kind: "decline", state: JSON.stringify(s) };
       const before = s;
       const n = E.declineRetirementSuggestion(s, clubs);
       log.declineSteps.push({ before, after: n });
@@ -196,196 +258,364 @@ function step(E, s, policy, log) {
     case "random_events":
       if (!s.pendingEvents || !s.pendingEvents[0]) return { ...s, pendingEvents: [], phase: "playing" };
       return E.applyEventChoice(s, 0, clubs);
-    case "moral_dilemma": return E.dismissMoralDilemma(s, clubs);
+    /* the page answers the card, then Continue dismisses it */
+    case "moral_dilemma":
+      if (policy === "worst" && s.pendingMoralDilemma) return E.applyMoralDilemmaChoice(s, 0);
+      return E.dismissMoralDilemma(s, clubs);
     case "social_media_action": return E.dismissSocialMediaPhase(s, clubs);
     case "red_card_appeal_result": return E.dismissAppealResult(s, clubs);
     case "international_debut": return E.dismissDebut(s, clubs);
     case "world_cup": return E.dismissWorldCup(s, clubs);
     case "rivalry_event": return E.dismissRivalryEvent(s, clubs);
     case "ballon_dor": return E.dismissBallonDor(s, clubs);
-    case "rehab_choice": return E.applyRehabChoice(s, 1);
+    case "rehab_choice": return E.applyRehabChoice(s, policy === "worst" ? 0 : 1);
     case "transfer_window": return E.stayAtClub(s);
     default: throw new Error(`unhandled phase ${s.phase}`);
   }
 }
-/* the two sibling stops, recorded at the age they happen */
+/* the two stops that are not the suggestion, at the age they happen */
 function noteStop(s, log) {
-  if (s.phase === "rehab_choice") log.exempt.add(s.age);
-  if (s.phase === "newspaper" && (s.prisonSeasons ?? 0) > 0) log.exempt.add(s.age);
+  let kind = null;
+  if (s.phase === "rehab_choice") kind = "rehab";
+  else if (isConvictionStop(s)) kind = "conviction";
+  if (!kind) return;
+  log.stops.push({ kind, age: s.age });
+  log.stopStates.push(s);
+  if (log.firstStop === null) log.firstStop = { kind, state: JSON.stringify(s) };
 }
-function freshLog() { return { suggestions: [], declines: 0, declineSteps: [], exempt: new Set(), firstSuggestion: null }; }
+function freshLog() { return { suggestions: [], declines: 0, declineSteps: [], stops: [], stopStates: [], firstStop: null }; }
 
 function play(E, c, policy, from = null, logIn = null) {
   let s = from ?? newCareer(E, c);
   const log = logIn ?? freshLog();
   let guard = 0;
   while (!s.retired && guard++ < 900) s = step(E, s, policy, log);
-  if (!s.retired) throw new Error(`career ${c} never finished`);
+  if (!s.retired) throw new Error(`career ${c} never finished (stuck on ${s.phase} at ${s.age})`);
   return { s, log };
 }
+function safePlay(E, c, policy, label) {
+  try { return play(E, c, policy); } catch (e) { fail(`${label} career ${c}: ${String(e.message || e).slice(0, 120)}`); return null; }
+}
 
-/* Every lived year has one row: returns the missing ages that are not
-   exempt, and checks duplicates and the calendar. */
-function audit(s, log, label) {
+/* Every lived year has one row: every age from the first row to the age he
+   retired at, once, and the calendar one year per row. Returns the ages with
+   no row. */
+function audit(s, label, quiet = false) {
   const rows = s.seasons;
-  const ages = rows.map(r => r.age);
-  const seen = new Set();
-  for (const a of ages) {
-    check(!seen.has(a), `${label}: two rows at age ${a}`);
-    seen.add(a);
+  const seen = new Map();
+  for (const r of rows) seen.set(r.age, (seen.get(r.age) || 0) + 1);
+  const missing = [];
+  let doubled = 0, calendar = 0;
+  for (let a = rows[0].age; a <= s.age; a++) {
+    const n = seen.get(a) || 0;
+    if (n === 0) missing.push(a);
+    if (n > 1) { doubled += 1; if (!quiet) fail(`${label}: ${n} rows at age ${a}`); }
   }
   for (let i = 1; i < rows.length; i++) {
-    check(rows[i].year === rows[i - 1].year + 1, `${label}: calendar went ${rows[i - 1].year} to ${rows[i].year}`);
+    if (rows[i].year !== rows[i - 1].year + 1) { calendar += 1; if (!quiet) fail(`${label}: calendar went ${rows[i - 1].year} to ${rows[i].year}`); }
   }
-  const missing = [];
-  const exemptMissing = [];
-  for (let a = ages[0]; a <= ages[ages.length - 1]; a++) {
-    if (seen.has(a)) continue;
-    if (log.exempt.has(a)) exemptMissing.push(a); else missing.push(a);
-  }
-  check(rows[rows.length - 1].type === "retired" || s.phase === "retirement_ceremony", `${label}: ended without a retirement`);
-  return { missing, exemptMissing };
+  if (!quiet) check(rows.at(-1).age === s.age, `${label}: retired at ${s.age} but the last row is age ${rows.at(-1).age}`);
+  return { missing, doubled, calendar };
 }
 
-/* ── 1 and 2: the decline fleet, current and pre-850 ── */
-console.log(`1) ${CAREERS} careers that decline every retirement suggestion`);
-let declines = 0, lostNow = 0, lostOld = 0, exemptNow = 0, exemptOld = 0, careersLostOld = 0;
-const bal = { cur: [], old: [] };
-const prefixPairs = [];
-for (let c = 0; c < CAREERS; c++) {
-  const cur = play(CUR, c, "decline");
-  const old = play(OLD, c, "decline");
-  declines += cur.log.declines;
-  const a = audit(cur.s, cur.log, `career ${c}`);
-  lostNow += a.missing.length;
-  exemptNow += a.exemptMissing.length;
-  if (a.missing.length) fail(`career ${c}: lived ${a.missing.join(", ")} with no season row`);
-  /* every decline plays the season on the screen, at that age, the year after the last row */
-  for (const { before, after } of cur.log.declineSteps) {
-    check(after.age === before.age, `career ${c}: Keep Playing moved the age ${before.age} to ${after.age}`);
-    if (after.phase === "rehab_choice") continue;
-    const last = after.seasons[after.seasons.length - 1];
-    const prevLast = before.seasons[before.seasons.length - 1];
-    check(after.seasons.length === before.seasons.length + 1, `career ${c}: Keep Playing at ${before.age} wrote ${after.seasons.length - before.seasons.length} rows`);
-    check(last.age === before.age && last.year === prevLast.year + 1, `career ${c}: Keep Playing at ${before.age} wrote age ${last.age} year ${last.year} after ${prevLast.year}`);
-    check(after.events.some(e => e.includes("Decided to push on")), `career ${c}: the decision line is gone from the season's events`);
+/* ── 1 to 3: the three fleets, current and pre-850 ── */
+const FLEETS = ["accept", "decline", "worst"];
+const bal = {};
+const moved = {};
+let declineRowsBad = 0, pushBad = 0, injuryRowsBad = 0, injuryRows = 0;
+for (const policy of FLEETS) {
+  console.log(`1) ${CAREERS} careers, policy ${policy}`);
+  let lostNow = 0, lostOld = 0, rehabStops = 0, convictions = 0, declines = 0;
+  let identical = 0, untouched = 0, prefixSame = 0, prefixed = 0, gained = 0;
+  const lostOldBy = { decline: 0, rehab: 0, conviction: 0, other: 0 };
+  bal[policy] = { cur: [], old: [] };
+  for (let c = 0; c < CAREERS; c++) {
+    const cur = safePlay(CUR, c, policy, `${policy} (now)`);
+    const old = safePlay(OLD, c, policy, `${policy} (pre-850)`);
+    if (!cur || !old) continue;
+    const a = audit(cur.s, `${policy} career ${c}`);
+    lostNow += a.missing.length;
+    if (a.missing.length) fail(`${policy} career ${c}: lived ${a.missing.join(", ")} with no season row`);
+    const b = audit(old.s, `${policy} career ${c} (pre-850)`, true);
+    lostOld += b.missing.length;
+    for (const age of b.missing) {
+      if (old.log.declineSteps.some(d => d.before.age === age)) lostOldBy.decline += 1;
+      else if (old.log.stops.some(x => x.kind === "rehab" && x.age === age)) lostOldBy.rehab += 1;
+      else if (old.log.stops.some(x => x.kind === "conviction" && x.age === age)) lostOldBy.conviction += 1;
+      else lostOldBy.other += 1;
+    }
+    declines += cur.log.declines;
+    rehabStops += old.log.stops.filter(x => x.kind === "rehab").length;
+    convictions += old.log.stops.filter(x => x.kind === "conviction").length;
+    /* 2: every Keep Playing plays the season on the screen, once */
+    for (const { before, after } of cur.log.declineSteps) {
+      const last = after.seasons.at(-1);
+      const ok = after.age === before.age && after.seasons.length === before.seasons.length + 1
+        && last.age === before.age && last.year === before.seasons.at(-1).year + 1;
+      checks += 1;
+      if (!ok) { declineRowsBad += 1; fail(`${policy} career ${c}: Keep Playing at ${before.age} wrote ${after.seasons.length - before.seasons.length} rows, age now ${after.age}`); }
+      const pushes = after.events.filter(e => e.includes("Decided to push on")).length;
+      checks += 1;
+      if (pushes !== 1) { pushBad += 1; fail(`${policy} career ${c}: "Decided to push on" written ${pushes} times`); }
+    }
+    /* 2: every injury stop writes the season the engine generated, marked */
+    for (const st of cur.log.stopStates) {
+      if (st.phase !== "rehab_choice") continue;
+      injuryRows += 1;
+      const row = st.seasons.at(-1);
+      const r = st.pendingRehab;
+      const ok = row && r && row.age === st.age && row.injury === r.name && row.injuryWeeks === r.weeks
+        && row.injurySevere === true && row.apps >= 1 && !row.leagueTitle && !row.domesticCup && row.club === st.currentClub
+        && (st.loan ? row.onLoanFrom === st.loan.parentClub : !row.onLoanFrom);
+      checks += 1;
+      if (!ok) { injuryRowsBad += 1; fail(`${policy} career ${c}: the injury stop at ${st.age} wrote ${row ? `${row.club} age ${row.age} ${row.apps} apps injury ${row.injury}` : "nothing"}`); }
+    }
+    /* 3: nothing moves before the first stop */
+    if (old.log.firstStop === null) {
+      untouched += 1;
+      if (JSON.stringify(cur.s) === JSON.stringify(old.s)) identical += 1;
+      else fail(`${policy} career ${c}: never stopped on the pre-850 engine but did not finish byte identical`);
+    } else {
+      prefixed += 1;
+      const o = old.log.firstStop;
+      const n = cur.log.firstStop;
+      let same = false;
+      if (n && n.kind === o.kind) {
+        if (o.kind === "decline") same = n.state === o.state;
+        else {
+          const ns = JSON.parse(n.state);
+          same = JSON.stringify({ ...ns, seasons: ns.seasons.slice(0, -1) }) === o.state;
+        }
+      }
+      if (same) prefixSame += 1;
+      else fail(`${policy} career ${c}: differs from the pre-850 engine before its first ${o.kind} stop`);
+      gained += cur.s.seasons.length - old.s.seasons.length;
+    }
+    bal[policy].cur.push(cur.s); bal[policy].old.push(old.s);
   }
-  /* the old engine, same seeds: the years it loses are the defect */
-  const b = audit(old.s, old.log, `career ${c} (pre-850)`);
-  const oldLost = b.missing.filter(x => old.log.suggestions.includes(x)).length;
-  lostOld += oldLost;
-  exemptOld += b.exemptMissing.length;
-  if (oldLost) careersLostOld += 1;
-  prefixPairs.push([cur.log.firstSuggestion, old.log.firstSuggestion]);
-  bal.cur.push(cur.s); bal.old.push(old.s);
-  if (c < 3) {
-    const goals = s => s.seasons.reduce((t, r) => t + (r.goals || 0), 0);
-    console.log(`   seed ${c}: pre-850 ${old.s.seasons.length} rows, retired at ${old.s.age} in ${old.s.seasons.at(-1).year}, ${goals(old.s)} goals; now ${cur.s.seasons.length} rows, retired at ${cur.s.age} in ${cur.s.seasons.at(-1).year}, ${goals(cur.s)} goals`);
+  moved[policy] = { untouched, identical, prefixed, gained };
+  console.log(`   lived years with no row: now ${lostNow}, pre-850 ${lostOld} (decline ${lostOldBy.decline}, rehab ${lostOldBy.rehab}, conviction ${lostOldBy.conviction}, other ${lostOldBy.other})`);
+  console.log(`   pre-850 stops: ${rehabStops} rehab, ${convictions} convictions; declines now ${declines}`);
+  console.log(`   never stopped ${untouched}, of them byte identical ${identical}; stopped ${prefixed}, identical up to the first stop ${prefixSame}`);
+  check(lostNow === 0, `${policy}: ${lostNow} lived years with no row`);
+  check(identical === untouched, `${policy}: only ${identical} of ${untouched} careers that never stopped are byte identical`);
+  check(prefixSame === prefixed, `${policy}: only ${prefixSame} of ${prefixed} stopped careers match up to the first stop`);
+  check(lostOldBy.other === 0, `${policy}: the pre-850 engine lost ${lostOldBy.other} years to no stop this harness knows, so the stop log is incomplete`);
+  if (policy === "accept") {
+    check(lostOld >= FLOOR.lostAccept, `accept: the pre-850 engine lost only ${lostOld} years, floor ${FLOOR.lostAccept}: the check may not be able to fail`);
+    check(rehabStops >= FLOOR.rehabAccept, `accept: only ${rehabStops} rehab stops, floor ${FLOOR.rehabAccept}`);
+    check(untouched > 0, "accept: no career ran without a stop, so the identity check tests nothing");
+  }
+  if (policy === "decline") {
+    check(lostOld >= FLOOR.lostDecline, `decline: the pre-850 engine lost only ${lostOld} years, floor ${FLOOR.lostDecline}`);
+    check(declines >= FLOOR.declines, `decline: only ${declines} declines, floor ${FLOOR.declines}: the fleet is not reaching the screen`);
+  }
+  if (policy === "worst") {
+    check(lostOld >= FLOOR.lostWorst, `worst: the pre-850 engine lost only ${lostOld} years, floor ${FLOOR.lostWorst}`);
+    check(convictions >= FLOOR.convictionsWorst, `worst: only ${convictions} convictions, floor ${FLOOR.convictionsWorst}: the conviction path is not being reached`);
   }
 }
-console.log(`   ${declines} declines; years lost to a decline: now ${lostNow}, pre-850 ${lostOld} (in ${careersLostOld} careers)`);
-console.log(`   known sibling years (rehab or conviction, not this round): now ${exemptNow}, pre-850 ${exemptOld}`);
-check(declines >= CAREERS * 1.5, `only ${declines} declines over ${CAREERS} careers, the floor is ${CAREERS * 1.5}: the fleet is not reaching the screen`);
-check(lostNow === 0, `${lostNow} lived years with no row after a decline`);
-console.log("2) the same check on the pre-850 engine finds the defect");
-check(lostOld >= CAREERS,`the pre-850 engine lost only ${lostOld} years to declines, the floor is ${CAREERS}: the check may not be able to fail`);
+console.log(`2) Keep Playing steps wrong ${declineRowsBad}, push on line not once ${pushBad}; injury rows ${injuryRows}, wrong ${injuryRowsBad}`);
+check(injuryRows > 0, "no injury stop was reached on the current engine, so the injury row check tests nothing");
 
-/* ── 3: nothing else moves ── */
-console.log("3) byte identity with the pre-850 engine where nobody declines");
-let prefixSame = 0;
-for (const [x, y] of prefixPairs) if (x !== null && x === y) prefixSame += 1;
-check(prefixSame === CAREERS, `only ${prefixSame} of ${CAREERS} declining careers match the pre-850 engine up to the first suggestion`);
-let acceptSame = 0, acceptSaw = 0;
-for (let c = 0; c < CAREERS; c++) {
-  const cur = play(CUR, c, "accept");
-  const old = play(OLD, c, "accept");
-  if (cur.log.suggestions.length) acceptSaw += 1;
-  if (JSON.stringify(cur.s) === JSON.stringify(old.s)) acceptSame += 1;
-  else fail(`career ${c}: accepting retirement ended at ${cur.s.age} in ${cur.s.seasons.at(-1).year}, pre-850 at ${old.s.age} in ${old.s.seasons.at(-1).year}`);
+/* 2: off the suggestion screen Keep Playing plays nothing */
+{
+  let offBad = 0, offTried = 0;
+  for (let c = 0; c < 12; c++) {
+    let s = newCareer(CUR, 5000 + c);
+    const log = freshLog();
+    let guard = 0;
+    while (!(s.phase === "playing" && s.seasons.some(r => r.type === "playing")) && !s.retired && guard++ < 200) s = step(CUR, s, "accept", log);
+    if (s.phase !== "playing") continue;
+    offTried += 1;
+    const n = CUR.declineRetirementSuggestion(s, clubs);
+    if (n.seasons.length !== s.seasons.length || n.age !== s.age || n.phase !== "playing") offBad += 1;
+  }
+  console.log(`   Keep Playing off the suggestion screen: ${offTried} tried, ${offBad} played something`);
+  check(offTried >= 6, `only ${offTried} careers reached a playing state for the off screen check`);
+  check(offBad === 0, `${offBad} Keep Playing calls off the suggestion screen played a season`);
 }
-let neverSame = 0, neverSaw = 0;
-for (let c = 0; c < NEVER; c++) {
-  const cur = play(CUR, 1000 + c, "never");
-  const old = play(OLD, 1000 + c, "never");
-  if (cur.log.suggestions.length || old.log.suggestions.length) neverSaw += 1;
-  if (JSON.stringify(cur.s) === JSON.stringify(old.s)) neverSame += 1;
+
+/* the no-suggestion fleet: retire by hand at 29 */
+{
+  let same = 0, untouched = 0, saw = 0;
+  for (let c = 0; c < NEVER; c++) {
+    const cur = safePlay(CUR, 1000 + c, "never", "never (now)");
+    const old = safePlay(OLD, 1000 + c, "never", "never (pre-850)");
+    if (!cur || !old) continue;
+    if (cur.log.suggestions.length || old.log.suggestions.length) saw += 1;
+    audit(cur.s, `never career ${c}`);
+    if (old.log.firstStop === null) {
+      untouched += 1;
+      if (JSON.stringify(cur.s) === JSON.stringify(old.s)) same += 1;
+    }
+  }
+  console.log(`3) careers that retire at 29: ${untouched} of ${NEVER} never stopped, ${same} of them byte identical (${saw} saw a suggestion)`);
+  check(saw === 0, `${saw} careers in the no-suggestion fleet saw one`);
+  check(untouched >= NEVER / 2, `only ${untouched} of ${NEVER} no-suggestion careers ran without a stop`);
+  check(same === untouched, `only ${same} of ${untouched} unstopped no-suggestion careers match the pre-850 engine`);
 }
-console.log(`   declining careers identical to the first suggestion: ${prefixSame}/${CAREERS}`);
-console.log(`   accepting careers identical end to end: ${acceptSame}/${CAREERS} (${acceptSaw} saw the suggestion)`);
-console.log(`   careers that never see a suggestion identical end to end: ${neverSame}/${NEVER} (${neverSaw} saw one)`);
-check(acceptSaw === CAREERS, `${CAREERS - acceptSaw} accepting careers never reached the suggestion, so they test nothing`);
-check(neverSaw === 0, `${neverSaw} careers in the no-suggestion fleet saw one`);
-check(neverSame === NEVER, `only ${neverSame} of ${NEVER} careers that never see a suggestion match the pre-850 engine`);
 
 /* ── 4: old saves ── */
-console.log("4) saves written by the pre-850 engine");
-let sittingOk = 0, sittingOldLost = 0, sittingReached = 0, lostSavesOk = 0, lostSavesWithGap = 0;
-for (let c = 0; c < OLD_SAVES; c++) {
-  /* a: sitting on the suggestion screen */
-  let s = newCareer(OLD, 2000 + c);
+console.log("4) saves on the three screens");
+const rows = s => s.seasons.length;
+/* walk an engine's career to a screen; returns null if it retired first */
+function walkTo(E, seed, policy, want, prep = null) {
+  let s = newCareer(E, seed);
   const log = freshLog();
   let guard = 0;
-  while (s.phase !== "retirement_suggestion" && !s.retired && guard++ < 900) s = step(OLD, s, "decline", log);
-  if (s.phase !== "retirement_suggestion") { fail(`old save ${c}: never reached the suggestion`); continue; }
-  sittingReached += 1;
-  const save = JSON.stringify(s);
-  const loaded = CUR.repairCareer(JSON.parse(save));
-  const before = JSON.parse(save);
-  const after = CUR.declineRetirementSuggestion(loaded, clubs);
-  const oldAfter = OLD.declineRetirementSuggestion(JSON.parse(save), clubs);
-  if (oldAfter.seasons.length === before.seasons.length) sittingOldLost += 1;
-  let ok = after.age === before.age;
-  if (after.phase !== "rehab_choice") {
-    const last = after.seasons.at(-1);
-    ok = ok && after.seasons.length === before.seasons.length + 1
-      && last.age === before.age && last.year === before.seasons.at(-1).year + 1;
+  while (!want(s) && !s.retired && guard++ < 900) {
+    if (prep && s.phase === "playing") s = prep(s);
+    s = step(E, s, policy, log);
   }
-  /* and it is played once: the next Next Season is the year after */
-  let t = after; guard = 0;
-  while (t.phase !== "playing" && !t.retired && guard++ < 60) t = step(CUR, t, "decline", freshLog());
-  if (!t.retired) {
-    const rowsBefore = t.seasons.length;
-    const lastYear = t.seasons.at(-1).year;
-    const n = CUR.advanceProSeason(t, clubs);
-    ok = ok && n.age === t.age + 1;
-    if (n.seasons.length > rowsBefore) ok = ok && n.seasons.at(-1).year === lastYear + 1 && n.seasons.at(-1).age === n.age;
-  }
-  check(ok, `old save ${c}: declining a save sitting on the suggestion at ${before.age} did not play that season exactly once`);
-  if (ok) sittingOk += 1;
-
-  /* b: a save that already lost years, continued on this engine */
-  let l = newCareer(OLD, 3000 + c);
-  const llog = freshLog();
-  guard = 0;
-  while (!l.retired && llog.declines < 2 && guard++ < 900) l = step(OLD, l, "decline", llog);
-  while (!l.retired && l.phase !== "playing" && guard++ < 900) l = step(OLD, l, "decline", llog);
-  if (l.retired) continue;
-  const lostSave = JSON.stringify(l);
-  const keptRows = JSON.stringify(l.seasons);
-  const loadAge = l.age;
-  const fin = play(CUR, 3000 + c, "decline", CUR.repairCareer(JSON.parse(lostSave)), llog);
-  const keptSame = JSON.stringify(fin.s.seasons.slice(0, l.seasons.length)) === keptRows;
-  const a = audit(fin.s, fin.log, `lost save ${c}`);
-  const newGaps = a.missing.filter(x => x > loadAge);
-  if (a.missing.length) lostSavesWithGap += 1;
-  check(keptSame, `lost save ${c}: the rows it already had were rewritten`);
-  check(newGaps.length === 0, `lost save ${c}: lost ${newGaps.join(", ")} after it was loaded`);
-  if (keptSame && newGaps.length === 0) lostSavesOk += 1;
+  return want(s) ? s : null;
 }
-console.log(`   sitting on the suggestion: ${sittingOk}/${sittingReached} play that season once here; the pre-850 decline lost it on ${sittingOldLost}/${sittingReached}`);
-console.log(`   already lost years: ${lostSavesOk} kept every row and lost no more (${lostSavesWithGap} carry their old gaps, nothing invented to fill them)`);
-check(sittingReached === OLD_SAVES, `only ${sittingReached} of ${OLD_SAVES} old saves reached the suggestion`);
-check(sittingOldLost === sittingReached, `the pre-850 decline kept the season on ${sittingReached - sittingOldLost} saves, so the old save check may not be able to fail`);
-check(lostSavesOk >= OLD_SAVES / 2, `only ${lostSavesOk} saves with lost years were continued, the floor is ${OLD_SAVES / 2}`);
+/* then the next Next Season moves one year on, from whatever the screen
+   left: one more birthday and, if a row is written, the year after the last */
+function nextYearOk(s) {
+  let t = s; let guard = 0;
+  while (t.phase !== "playing" && !t.retired && guard++ < 60) t = step(CUR, t, "accept", freshLog());
+  if (t.retired) return true;
+  const n = CUR.advanceProSeason(t, clubs);
+  if (n.age !== t.age + 1) return false;
+  if (rows(n) > rows(t)) return n.seasons.at(-1).year === t.seasons.at(-1).year + 1 && n.seasons.at(-1).age === n.age;
+  return true;
+}
+/* heat at the trial line with money in the bags: the engine then runs the
+   trial on its own 50 percent roll (a state the game reaches through the
+   dirty choices; built here so every save gets there) */
+const heatUp = s => (s.age >= 22 ? { ...s, corruptionHeat: 95, dirtyMoney: Math.max(2, s.dirtyMoney ?? 0) } : s);
+{
+  const tally = { sit: [0, 0, 0], rehabOld: [0, 0, 0], rehabNew: [0, 0], convOld: [0, 0, 0], convNew: [0, 0] };
+  for (let c = 0; c < OLD_SAVES; c++) {
+    /* a: pre-850, sitting on the suggestion */
+    {
+      const s = walkTo(OLD, 2000 + c, "decline", x => x.phase === "retirement_suggestion");
+      if (s) {
+        tally.sit[0] += 1;
+        const save = JSON.stringify(s);
+        const after = CUR.declineRetirementSuggestion(CUR.repairCareer(JSON.parse(save)), clubs);
+        const oldAfter = OLD.declineRetirementSuggestion(JSON.parse(save), clubs);
+        if (rows(oldAfter) === rows(s)) tally.sit[2] += 1;
+        const last = after.seasons.at(-1);
+        const ok = after.age === s.age && rows(after) === rows(s) + 1 && last.age === s.age
+          && last.year === s.seasons.at(-1).year + 1 && nextYearOk(after);
+        check(ok, `old save ${c}: declining on the suggestion at ${s.age} did not play that season exactly once`);
+        if (ok) tally.sit[1] += 1;
+      }
+    }
+    /* b: pre-850, sitting on the rehab choice */
+    {
+      let s = null;
+      for (let k = 0; k < 24 && !s; k++) s = walkTo(OLD, 6000 + c * 24 + k, "accept", x => x.phase === "rehab_choice");
+      if (s) {
+        tally.rehabOld[0] += 1;
+        const save = JSON.stringify(s);
+        const after = CUR.applyRehabChoice(CUR.repairCareer(JSON.parse(save)), 1);
+        const oldAfter = OLD.applyRehabChoice(JSON.parse(save), 1);
+        if (rows(oldAfter) === rows(s)) tally.rehabOld[2] += 1;
+        const last = after.seasons.at(-1);
+        const ok = rows(after) === rows(s) + 1 && last.age === s.age && last.year === s.seasons.at(-1).year + 1
+          && last.injurySevere === true && last.injury === s.pendingRehab.name && last.apps === 0 && last.goals === 0
+          && JSON.stringify(after.seasons.slice(0, -1)) === JSON.stringify(s.seasons) && nextYearOk(after);
+        check(ok, `old rehab save ${c}: answering the rehab choice at ${s.age} did not write exactly one empty injured row`);
+        if (ok) tally.rehabOld[1] += 1;
+      }
+    }
+    /* c: this engine, sitting on the rehab choice, reloaded */
+    {
+      let s = null;
+      for (let k = 0; k < 24 && !s; k++) s = walkTo(CUR, 6000 + c * 24 + k, "accept", x => x.phase === "rehab_choice");
+      if (s) {
+        tally.rehabNew[0] += 1;
+        const after = CUR.applyRehabChoice(CUR.repairCareer(JSON.parse(JSON.stringify(s))), 1);
+        const ok = rows(after) === rows(s) && after.seasons.filter(r => r.age === s.age).length === 1 && nextYearOk(after);
+        check(ok, `rehab save ${c}: a reloaded save on the rehab choice at ${s.age} came out with ${after.seasons.filter(r => r.age === s.age).length} rows for that year`);
+        if (ok) tally.rehabNew[1] += 1;
+      }
+    }
+    /* d: pre-850, sitting on the conviction paper */
+    {
+      const s = walkTo(OLD, 7000 + c, "accept", isConvictionStop, heatUp);
+      if (s) {
+        tally.convOld[0] += 1;
+        const save = JSON.stringify(s);
+        const after = CUR.dismissNewspaper(CUR.repairCareer(JSON.parse(save)));
+        const oldAfter = OLD.dismissNewspaper(JSON.parse(save));
+        if (rows(oldAfter) === rows(s)) tally.convOld[2] += 1;
+        const last = after.seasons.at(-1);
+        let ok = rows(after) === rows(s) + 1 && last.age === s.age && last.year === s.seasons.at(-1).year + 1
+          && last.club === "CONVICTED" && last.apps === 0 && after.phase === "playing";
+        if (ok) {
+          const prison = CUR.advanceProSeason(after, clubs);
+          ok = prison.age === s.age + 1 && prison.seasons.at(-1).club === "PRISON" && prison.seasons.at(-1).year === last.year + 1;
+        }
+        check(ok, `old conviction save ${c}: the trial year at ${s.age} did not come out as one CONVICTED row then the prison year`);
+        if (ok) tally.convOld[1] += 1;
+      }
+    }
+    /* e: this engine, sitting on the conviction paper, reloaded */
+    {
+      const s = walkTo(CUR, 7000 + c, "accept", isConvictionStop, heatUp);
+      if (s) {
+        tally.convNew[0] += 1;
+        const after = CUR.dismissNewspaper(CUR.repairCareer(JSON.parse(JSON.stringify(s))));
+        const ok = rows(after) === rows(s) && after.seasons.filter(r => r.age === s.age).length === 1
+          && s.seasons.at(-1).club === "CONVICTED";
+        check(ok, `conviction save ${c}: a reloaded save on the conviction paper at ${s.age} came out with ${after.seasons.filter(r => r.age === s.age).length} rows for that year`);
+        if (ok) tally.convNew[1] += 1;
+      }
+    }
+  }
+  console.log(`   pre-850 on the suggestion: ${tally.sit[1]}/${tally.sit[0]} play that season once here (the pre-850 decline lost it on ${tally.sit[2]})`);
+  console.log(`   pre-850 on the rehab choice: ${tally.rehabOld[1]}/${tally.rehabOld[0]} get one empty injured row (the pre-850 choice wrote none on ${tally.rehabOld[2]})`);
+  console.log(`   this engine on the rehab choice, reloaded: ${tally.rehabNew[1]}/${tally.rehabNew[0]} keep one row for the year`);
+  console.log(`   pre-850 on the conviction paper: ${tally.convOld[1]}/${tally.convOld[0]} get one CONVICTED row, then prison (the pre-850 paper wrote none on ${tally.convOld[2]})`);
+  console.log(`   this engine on the conviction paper, reloaded: ${tally.convNew[1]}/${tally.convNew[0]} keep one row for the year`);
+  for (const [k, need] of [["sit", true], ["rehabOld", true], ["rehabNew", false], ["convOld", true], ["convNew", false]]) {
+    check(tally[k][0] === OLD_SAVES, `${k}: only ${tally[k][0]} of ${OLD_SAVES} saves reached the screen`);
+    if (need) check(tally[k][2] === tally[k][0], `${k}: the pre-850 engine wrote the row on ${tally[k][0] - tally[k][2]} saves, so this check may not be able to fail`);
+  }
+}
+/* f: a save that already lost years keeps every row and loses no more */
+{
+  let ok = 0, tried = 0, carrying = 0;
+  for (let c = 0; c < OLD_SAVES; c++) {
+    let l = newCareer(OLD, 3000 + c);
+    const llog = freshLog();
+    let guard = 0;
+    while (!l.retired && llog.declines < 2 && guard++ < 900) l = step(OLD, l, "decline", llog);
+    while (!l.retired && l.phase !== "playing" && guard++ < 900) l = step(OLD, l, "decline", llog);
+    if (l.retired) continue;
+    tried += 1;
+    const keptRows = JSON.stringify(l.seasons);
+    const loadAge = l.age;
+    let fin;
+    try { fin = play(CUR, 3000 + c, "decline", CUR.repairCareer(JSON.parse(JSON.stringify(l))), freshLog()); }
+    catch (e) { fail(`lost save ${c}: ${e.message}`); continue; }
+    const keptSame = JSON.stringify(fin.s.seasons.slice(0, l.seasons.length)) === keptRows;
+    const a = audit(fin.s, `lost save ${c}`, true);
+    const newGaps = a.missing.filter(x => x > loadAge);
+    if (a.missing.length) carrying += 1;
+    check(keptSame, `lost save ${c}: the rows it already had were rewritten`);
+    check(newGaps.length === 0 && a.doubled === 0, `lost save ${c}: lost ${newGaps.join(", ")} after it was loaded, ${a.doubled} doubled ages`);
+    if (keptSame && newGaps.length === 0 && a.doubled === 0) ok += 1;
+  }
+  console.log(`   already lost years: ${ok}/${tried} kept every row and lost no more (${carrying} carry their old gaps, nothing invented to fill them)`);
+  check(tried >= OLD_SAVES / 2 && ok === tried, `only ${ok} of ${tried} saves with lost years continued cleanly (need ${OLD_SAVES / 2} tried)`);
+}
 
 /* ── 5: balance, printed only ── */
-console.log("5) balance with every suggestion declined (printed, not asserted)");
+console.log("5) balance against the pre-850 engine (printed, not asserted)");
 const mean = xs => xs.reduce((t, x) => t + x, 0) / Math.max(1, xs.length);
 const pct = (xs, p) => { const v = [...xs].sort((x, y) => x - y); return v.length ? v[Math.min(v.length - 1, Math.floor(p * v.length))] : 0; };
-for (const [name, fleet] of [["pre-850", bal.old], ["now", bal.cur]]) {
-  const late = fleet.flatMap(s => s.seasons.filter(r => r.type === "playing" && r.age >= 40 && r.apps > 0));
-  const lateGoals = late.map(r => r.goals);
-  console.log(`   ${name.padEnd(8)} retire age ${mean(fleet.map(s => s.age)).toFixed(2)}, playing rows ${mean(fleet.map(s => s.seasons.filter(r => r.type === "playing" && r.apps > 0).length)).toFixed(2)}, goals ${mean(fleet.map(s => s.seasons.reduce((t, r) => t + (r.goals || 0), 0))).toFixed(1)}, net worth ${mean(fleet.map(s => s.netWorth)).toFixed(1)}M, legacy ${mean(fleet.map(s => s.legacy?.score ?? 0)).toFixed(1)}; seasons at 40+ ${late.length}, goals mean ${mean(lateGoals).toFixed(2)} p90 ${pct(lateGoals, 0.9)}, 20+ goal seasons ${lateGoals.filter(g => g >= 20).length}`);
+for (const policy of FLEETS) {
+  console.log(`   ${policy}: ${moved[policy].prefixed} careers moved after their first stop, +${moved[policy].gained} rows between them; ${moved[policy].identical} untouched and identical`);
+  for (const [name, fleet] of [["pre-850", bal[policy].old], ["now", bal[policy].cur]]) {
+    const late = fleet.flatMap(s => s.seasons.filter(r => r.type === "playing" && r.age >= 40 && r.apps > 0));
+    const lateGoals = late.map(r => r.goals);
+    console.log(`     ${name.padEnd(8)} retire age ${mean(fleet.map(s => s.age)).toFixed(2)}, rows ${mean(fleet.map(s => s.seasons.length)).toFixed(2)}, playing rows ${mean(fleet.map(s => s.seasons.filter(r => r.type === "playing" && r.apps > 0).length)).toFixed(2)}, goals ${mean(fleet.map(s => s.seasons.reduce((t, r) => t + (r.goals || 0), 0))).toFixed(1)}, net worth ${mean(fleet.map(s => s.netWorth)).toFixed(1)}M, legacy ${mean(fleet.map(s => s.legacy?.score ?? 0)).toFixed(1)}; 40+ seasons ${late.length}, goals mean ${mean(lateGoals).toFixed(2)} p90 ${pct(lateGoals, 0.9)}, 20+ goal seasons ${lateGoals.filter(g => g >= 20).length}`);
+  }
 }
 
 console.log(`simCareerKeepPlaying: ${checks} checks, ${failures} failures${CONTROL ? ` (control ${CONTROL}, red expected)` : ""}`);
