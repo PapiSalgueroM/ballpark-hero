@@ -1762,6 +1762,7 @@ export const MORE_SPORTS_CONTENT: GameContentMap = {
       "Fight Career is a free boxing career sim. You turn professional as a nobody, take one fight at a time, and try to be world champion before your body decides otherwise. Every fighter in it is invented, including the ones you beat, so nothing here is a real person's record being rewritten.",
       "The decision that runs the whole game is which fight you take. Three come in every time: a tune up that is safe and pays almost nothing, an even fight, and a step up that pays well, ranks you fast and can take years off the end of you. Damage never heals. It comes off your chin first, and it decides when you are finished.",
       "Then there is the night itself. Four styles beat each other in a circle, so there is always an answer to the man in front of you, and he adjusts to whatever you keep doing. Give him the same look three times and he will punish it.",
+      "And then there is everything between fights. You pick a trainer and a manager when you turn pro, two cards land after every fight (a weight cut, a hand injury, a promoter wanting you exclusively, a move up a division), people text you, a rival in your own division climbs beside you, and whatever your corner leaves of the purse goes in the bank for the camp shop.",
     ],
     headings: {
       howToPlay: "How to play Fight Career, a free boxing career sim",
@@ -1776,8 +1777,20 @@ export const MORE_SPORTS_CONTENT: GameContentMap = {
         items: ["Make your fighter: a name, one of 8 weight classes from flyweight to heavyweight, and one of 4 styles."],
       },
       {
+        heading: "Picking a trainer and a manager",
+        items: ["Pick a trainer and a manager. The trainer decides which camp weeks count for more and which for less, the manager decides how big your purses are and what he takes out of them. Each tile says its numbers."],
+      },
+      {
+        heading: "Dealing with what happens between fights",
+        items: ["After every fight, deal with what comes in before the next offers open: two cards, and sometimes a move by your rival. Every option says exactly what it does, and one on every card changes nothing that can reach a fight."],
+      },
+      {
         heading: "Reading the three fight offers",
         items: ["Read the three offers. Each one names the opponent, his style, the purse and how far a win moves you up the rankings."],
+      },
+      {
+        heading: "Using the five tiles on the hub",
+        items: ["Use the five tiles above the offers whenever you like: Inbox for texts from your corner and your family, Rival for his record and the feud, Bank and shop for camp upgrades, Corner for your trainer, manager, morale and fans, and Badges."],
       },
       {
         heading: "Spending six weeks of camp",
@@ -1832,6 +1845,25 @@ export const MORE_SPORTS_CONTENT: GameContentMap = {
           "There is no betting anywhere in this game. Purses and offers are contracts, not wagers.",
         ],
       },
+      {
+        heading: "The bank, the corner's share and the camp shop",
+        items: [
+          "Your trainer takes 10% of every purse and your manager takes his own share, 5% to 25% depending on who you hired. The rest goes in the bank. A card can put you on the tab, and the next purse pays it off first.",
+          "The camp shop sells five upgrades with three levels each, at 0.05m, 0.25m and 1.00m: sparring partners, a strength coach, a conditioning coach, a pad man and a cut man. Coach bonuses are banked a fraction at a time and paid as whole points, and a camp still never takes you past your ceiling.",
+        ],
+      },
+      {
+        heading: "Sharpness on fight night",
+        items: ["Some cards make you sharper or flatter for the next fight only: each point is added to your power, speed, stamina and defence that night and gone the morning after. Sparring partners add a point a level, and every 10 morale above or below 50 is a point either way."],
+      },
+      {
+        heading: "Your rival and the grudge match",
+        items: ["Your rival is an invented fighter in your division who fights on while you do, wins belts, loses, and retires. When he calls you out and you take it, he replaces the middle offer as a grudge match paying 30% more."],
+      },
+      {
+        heading: "Moving weight and the rematch clause",
+        items: ["Moving up a division makes knockouts more likely, moving down makes them rarer, and either way you start the new division unranked and any belt stays behind. A rematch clause after a loss turns the middle offer into the man who beat you, and a win is worth 4 places."],
+      },
     ],
     exampleSections: [
       {
@@ -1841,6 +1873,10 @@ export const MORE_SPORTS_CONTENT: GameContentMap = {
       {
         heading: "Learning the circle at number eleven",
         paragraphs: ["Three even fights later you are ranked 11 and you have learned the circle: the swarmer in front of you gets boxed, and when he starts switching you give him something else instead of the same jab for ten rounds."],
+      },
+      {
+        heading: "Two cards and a call out at number nine",
+        paragraphs: ["After your ninth fight two cards land. Four pounds over: hiring the nutritionist takes 0.02m from the bank, sweating it out leaves you 3 points flatter on the night, and coming in heavy cuts every purse on the table by 15% but leaves you 1 point sharper. You pay the nutritionist. The second card is the hometown hall, 5 more fans for 15% less money, and you stay on the road. Then your rival calls you out, you take it, and the middle offer becomes him at 30% more. With 0.31m in the bank you buy the cut man for 0.05m, and from now on you carry 4% less damage out of every fight."],
       },
       {
         heading: "Winning the title at number one",
@@ -1881,6 +1917,8 @@ export const MORE_SPORTS_CONTENT: GameContentMap = {
       { q: "Why will he not fight me for the title?", a: "Beating opponents well below your level stops moving you once you are in the top 10. You need real wins to reach number one, and once you are there every offer is for the belt." },
       { q: "Is there a daily?", a: "Yes. Fight Night is one three round bout per day, the same fighter and the same opponent for everybody, scored out of 100 on whether you won, how many rounds you took, whether you finished him, how little you took back and how well you read his style." },
       { q: "Does the game have betting?", a: "No. There is no wagering of any kind in it. The purse is what you are paid to fight." },
+      { q: "Do the cards between fights change my fights?", a: "Only when the option says so. Every card shows what each answer does, and every card has one answer that changes nothing a fight can feel: pick that every time and your career runs exactly as it would have without the cards." },
+      { q: "Who is my rival?", a: "An invented fighter in your own division, named from the same pool as every other boxer in the game. He has his own record, can win a belt before you, and retires when his time comes." },
     ],
   },
   '/ufc': {

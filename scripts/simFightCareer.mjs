@@ -32,6 +32,40 @@
  *   FIGHT_CONTROL=heavybar    a punch drains 50 percent more   -> section 6
  *   FIGHT_CONTROL=pinboth     worn men both drop to the floor  -> section 6
  *   FIGHT_CONTROL=strongpin   Round 628's clamped bar is back  -> section 6
+ *
+ * ROUND 916, SECTION 7: the life between fights (the corner, the deck, the
+ * inbox, the rival, the bank and shop). Its controls:
+ *   FIGHT_CONTROL=lifeleak    neutral play gets a point of sharpness -> 7a
+ *   FIGHT_CONTROL=fakeneutral a "neutral" option moves morale       -> 7a, 7c
+ *   FIGHT_CONTROL=nocards     nothing is dealt between fights       -> 7b, 7d
+ *   FIGHT_CONTROL=freecard    a card's cost is never charged        -> 7c
+ *   FIGHT_CONTROL=redeal      a reload forgets the waiting cards    -> 7d
+ *   FIGHT_CONTROL=flatshop    coach levels 2 and 3 do nothing       -> 7e
+ *   FIGHT_CONTROL=flatsharp   sharpness never reaches the night     -> 7e
+ *   FIGHT_CONTROL=wipesave    an old save loses its record on load  -> 7d, 7f
+ *
+ * Section 7's numbers, measured on healthy code on 2026-10-02:
+ *   7a the baseline was recorded on origin/main at a4433f41, BEFORE the life
+ *      layer existed, with the adaptive policy over five seed groups of 260
+ *      (1000, 21000, 41000, 61000, 81000): 55, 45, 55, 59 and 40 careers won
+ *      a world title (21.2, 17.3, 21.2, 22.7 and 15.4 percent) and the median
+ *      career ran 29, 28, 29, 29 and 29 fights. With every new screen answered
+ *      neutrally the life layer reproduces all 1,040 careers of the four
+ *      policies fight for fight, so it sits inside that spread exactly. The
+ *      lifeleak control (one point of sharpness) moved 1,027 of them and put
+ *      two groups at 66 and 67 titles, outside it.
+ *   7b decisions between fights, the offer and the camp included: median 5,
+ *      tenth percentile 4, mean 4.96 over 7,393 gaps. Floor 4. With nothing
+ *      dealt (nocards) the median is 3.
+ *   7c 121 options (40 cards, 6 rival choices, 11 rival beats) read back
+ *      from their words and checked against the state they leave.
+ *   7d about 2,900 steps reloaded through JSON and ensureLife.
+ *   7e twelve camps of three weeks: the 12% coaches reach 52, 53, 55, 57 at
+ *      levels 0 to 3 and the pad man 52, 53, 54, 56; the puncher's coach
+ *      takes power to 55 against 52 and leaves defence at 50 against 52.
+ *      Punches landed over 120 debuts at sharpness -4, -2, 0, 2, 4: 8902,
+ *      9267, 9757, 10270, 10586 (the smallest step is 316). The cut man takes
+ *      one fight's 2.332 damage to 2.24, 2.15 and 2.05.
  */
 
 /* Round 299: seeded stream, see scripts/lib/seedRandom.mjs. First import on purpose. */
@@ -156,8 +190,8 @@ if (CONTROL === 'freecard') {
 } else if (CONTROL === 'redeal') {
   /* A reload forgets the cards that were waiting. Section 7d. */
   rewriteLife('redeal', 'fightCareerLife',
-    '    pending: strings(raw.pending).filter(id => LIFE_CARDS.some(c => c.id === id)),',
-    '    pending: [],');
+    '  return { ...st, life: ensureLifeBlock(st) };',
+    '  return { ...st, life: { ...ensureLifeBlock(st), pending: [] } };');
 } else if (CONTROL === 'flatshop') {
   /* Only the first level of a coach does anything. Section 7e. */
   rewriteLife('flatshop', 'fightCareerLife',
@@ -1292,7 +1326,9 @@ function effectMismatches(e, words) {
     const offer = POLICIES.adaptive(base.offers, base);
     const tactics = smartLine(offer.opponent.style, offer.rounds);
     base = fc.takeFight(fc.runCamp(base, PLAN), offer.id, tactics).state;
-    life = ff.lifeTakeFight(ff.lifeRunCamp(life, PLAN), offer.id, tactics).state;
+    const next = ff.lifeTakeFight(ff.lifeRunCamp(life, PLAN), offer.id, tactics);
+    if (!next) { same = false; break; }
+    life = next.state;
     if (base.fighter.wins !== life.fighter.wins || base.fighter.damage !== life.fighter.damage || base.fightNo !== life.fightNo) same = false;
   }
   if (!same) fail('an old save played on through the life layer and fought different fights');
