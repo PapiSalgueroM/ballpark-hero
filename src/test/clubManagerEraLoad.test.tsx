@@ -3,9 +3,12 @@
  *
  * The three era bakes left the engine chunk and are fetched when an era is
  * picked or an era save is opened. That moves one risk onto the boot: an era
- * save opened before its squads have arrived. loadCareer reads any failure as
- * "no save", so a boot that called it too early would offer a fresh start
- * over the player's career, and the next write would replace it.
+ * save opened before its squads have arrived. loadCareer reads a failure in
+ * its repairs as "no save", so a boot that called it too early could offer a
+ * fresh start over the player's career, and the next write would replace it;
+ * and when its repairs happen not to read the squads it hands the career
+ * back, and the first screen that does read them throws (the review measured
+ * the second on a 2005, a 2010 and a 2015 save).
  *
  * This renders the REAL hook in a fresh module instance (vi.resetModules), so
  * no era is loaded when it boots, exactly like a page load:
