@@ -2607,24 +2607,30 @@ export interface LeagueRules {
   /** What the engine plays more simply than the real league, in words,
    *  where the verified notes on the league say so. */
   simplified?: string;
+  /** How clubs level on points are split (TiebreakRule, with the sources
+   *  at its definition). Absent is goal difference then goals scored, the
+   *  only order the engine can take for a league whose own order has not
+   *  been verified. Round 832 review: this sat in a map of its own keyed by
+   *  league id, the one league rule left outside this table. */
+  tiebreak?: TiebreakRule;
 }
 
 const SPLIT_SIMPLIFIED = 'The real league splits into groups part way through the season; it is played here as a straight double round robin.';
 
 export const LEAGUE_RULES: Record<string, LeagueRules> = {
-  premier: { nationId: 'england', flag: 'England', cup: 'FA Cup', europe: { ucl: 4, uel: 5, uecl: 6 }, drop: 3, secondTier: 'championship', ladder: 'top', season: 'autumnSpring' },
+  premier: { nationId: 'england', flag: 'England', cup: 'FA Cup', europe: { ucl: 4, uel: 5, uecl: 6 }, drop: 3, tiebreak: 'gdGf', secondTier: 'championship', ladder: 'top', season: 'autumnSpring' },
   championship: {
     nationId: 'england', flag: 'England', cup: 'FA Cup', europe: null, drop: 3, ladder: 'promotion',
     playoff: { rankUpTo: 8, target: 6, label: 'Make the promotion playoffs' }, season: 'autumnSpring',
     simplified: 'Three go up and three come down in a straight swap; the real promotion playoff is not played.',
   },
-  laliga: { nationId: 'spain', flag: 'Spain', cup: 'Copa del Rey', europe: { ucl: 4, uel: 5, uecl: 6 }, drop: 3, ladder: 'top', season: 'autumnSpring' },
-  seriea: { nationId: 'italy', flag: 'Italy', cup: 'Coppa Italia', europe: { ucl: 4, uel: 5, uecl: 6 }, drop: 3, ladder: 'top', season: 'autumnSpring' },
+  laliga: { nationId: 'spain', flag: 'Spain', cup: 'Copa del Rey', europe: { ucl: 4, uel: 5, uecl: 6 }, drop: 3, tiebreak: 'h2h', ladder: 'top', season: 'autumnSpring' },
+  seriea: { nationId: 'italy', flag: 'Italy', cup: 'Coppa Italia', europe: { ucl: 4, uel: 5, uecl: 6 }, drop: 3, tiebreak: 'h2h', ladder: 'top', season: 'autumnSpring' },
   bundesliga: {
-    nationId: 'germany', flag: 'Germany', cup: 'DFB-Pokal', europe: { ucl: 4, uel: 5, uecl: 6 }, drop: 2, secondTier: 'bundesliga2', ladder: 'top', season: 'autumnSpring',
+    nationId: 'germany', flag: 'Germany', cup: 'DFB-Pokal', europe: { ucl: 4, uel: 5, uecl: 6 }, drop: 2, tiebreak: 'gdGfAgg', secondTier: 'bundesliga2', ladder: 'top', season: 'autumnSpring',
     simplified: 'The real relegation playoff (sixteenth against the 2. Bundesliga\'s third) is not played: two go straight down and two straight up.',
   },
-  ligue1: { nationId: 'france', flag: 'France', cup: 'Coupe de France', europe: { ucl: 3, uel: 4, uecl: 5 }, drop: 3, ladder: 'top', season: 'autumnSpring' },
+  ligue1: { nationId: 'france', flag: 'France', cup: 'Coupe de France', europe: { ucl: 3, uel: 4, uecl: 5 }, drop: 3, tiebreak: 'gdH2h', ladder: 'top', season: 'autumnSpring' },
   eredivisie: { nationId: 'netherlands', flag: 'Netherlands', cup: 'KNVB Cup', europe: { ucl: 2, uel: 3, uecl: 4 }, drop: 2, ladder: 'top', season: 'autumnSpring' },
   saudi: {
     nationId: 'saudi', flag: 'Saudi Arabia', cup: "King's Cup", europe: null, drop: 3, ladder: 'top', season: 'autumnSpring',
@@ -2663,13 +2669,13 @@ export const LEAGUE_RULES: Record<string, LeagueRules> = {
   /* The era leagues. No Conference League existed before 2021, so uecl is 0
      and the board's ladder skips that band; 2005-06 still called the second
      competition the UEFA Cup. */
-  premier2010: { nationId: 'england', flag: 'England', cup: 'FA Cup', europe: { ucl: 4, uel: 5, uecl: 0 }, drop: 3, ladder: 'top', season: 'autumnSpring' },
-  laliga2010: { nationId: 'spain', flag: 'Spain', cup: 'Copa del Rey', europe: { ucl: 4, uel: 6, uecl: 0 }, drop: 3, ladder: 'top', season: 'autumnSpring' },
-  premier2015: { nationId: 'england', flag: 'England', cup: 'FA Cup', europe: { ucl: 4, uel: 5, uecl: 0 }, drop: 3, ladder: 'top', season: 'autumnSpring' },
-  laliga2015: { nationId: 'spain', flag: 'Spain', cup: 'Copa del Rey', europe: { ucl: 4, uel: 6, uecl: 0 }, drop: 3, ladder: 'top', season: 'autumnSpring' },
-  seriea2015: { nationId: 'italy', flag: 'Italy', cup: 'Coppa Italia', europe: { ucl: 3, uel: 5, uecl: 0 }, drop: 3, ladder: 'top', season: 'autumnSpring' },
-  premier2005: { nationId: 'england', flag: 'England', cup: 'FA Cup', europe: { ucl: 4, uel: 5, uecl: 0, uelName: 'UEFA Cup' }, drop: 3, ladder: 'top', season: 'autumnSpring' },
-  laliga2005: { nationId: 'spain', flag: 'Spain', cup: 'Copa del Rey', europe: { ucl: 4, uel: 6, uecl: 0, uelName: 'UEFA Cup' }, drop: 3, ladder: 'top', season: 'autumnSpring' },
+  premier2010: { nationId: 'england', flag: 'England', cup: 'FA Cup', europe: { ucl: 4, uel: 5, uecl: 0 }, drop: 3, tiebreak: 'gdGf', ladder: 'top', season: 'autumnSpring' },
+  laliga2010: { nationId: 'spain', flag: 'Spain', cup: 'Copa del Rey', europe: { ucl: 4, uel: 6, uecl: 0 }, drop: 3, tiebreak: 'h2h', ladder: 'top', season: 'autumnSpring' },
+  premier2015: { nationId: 'england', flag: 'England', cup: 'FA Cup', europe: { ucl: 4, uel: 5, uecl: 0 }, drop: 3, tiebreak: 'gdGf', ladder: 'top', season: 'autumnSpring' },
+  laliga2015: { nationId: 'spain', flag: 'Spain', cup: 'Copa del Rey', europe: { ucl: 4, uel: 6, uecl: 0 }, drop: 3, tiebreak: 'h2h', ladder: 'top', season: 'autumnSpring' },
+  seriea2015: { nationId: 'italy', flag: 'Italy', cup: 'Coppa Italia', europe: { ucl: 3, uel: 5, uecl: 0 }, drop: 3, tiebreak: 'h2h', ladder: 'top', season: 'autumnSpring' },
+  premier2005: { nationId: 'england', flag: 'England', cup: 'FA Cup', europe: { ucl: 4, uel: 5, uecl: 0, uelName: 'UEFA Cup' }, drop: 3, tiebreak: 'gdGf', ladder: 'top', season: 'autumnSpring' },
+  laliga2005: { nationId: 'spain', flag: 'Spain', cup: 'Copa del Rey', europe: { ucl: 4, uel: 6, uecl: 0, uelName: 'UEFA Cup' }, drop: 3, tiebreak: 'h2h', ladder: 'top', season: 'autumnSpring' },
 };
 
 /** What an id with no row reads as: a cupless top flight outside Europe that
@@ -5230,13 +5236,13 @@ function emptyRow(club: string): TableRow {
  * played.
  */
 export type TiebreakRule = 'h2h' | 'gdGf' | 'gdGfAgg' | 'gdH2h' | 'gdGfOnly';
-const LEAGUE_TIEBREAKS: Record<string, TiebreakRule> = {
-  laliga: 'h2h', laliga2005: 'h2h', laliga2010: 'h2h', laliga2015: 'h2h',
-  seriea: 'h2h', seriea2015: 'h2h',
-  premier: 'gdGf', premier2005: 'gdGf', premier2010: 'gdGf', premier2015: 'gdGf',
-  bundesliga: 'gdGfAgg',
-  ligue1: 'gdH2h',
-};
+/* Round 832 review: read off each league's LEAGUE_RULES row (tiebreak), so a
+   new league's order is one field on its row like every other rule. */
+const LEAGUE_TIEBREAKS: Record<string, TiebreakRule> = Object.fromEntries(
+  Object.entries(LEAGUE_RULES)
+    .filter(([, rules]) => rules.tiebreak !== undefined)
+    .map(([id, rules]) => [id, rules.tiebreak as TiebreakRule]),
+);
 export function leagueTiebreak(leagueId: string | undefined): TiebreakRule {
   return (leagueId && LEAGUE_TIEBREAKS[leagueId]) || 'gdGfOnly';
 }

@@ -79,6 +79,10 @@
      CM_RULES_CONTROL=thintier   the Premier League drops 25 into a 24 club
                                  Championship, part pure's table check must
                                  go red;
+     CM_RULES_CONTROL=idbranch   plants a championship branch in leagueDemand
+                                 and a map keyed by premier into the source
+                                 part pure's id scan (3d) reads, which must
+                                 name both;
      CM_RULES_CONTROL=static     the chunk check reads a copy of dist/assets
                                  whose engine chunk carries 2010 rows and a
                                  static import of the 2010 chunk (what a
@@ -103,7 +107,7 @@
    that for a change that is MEANT to move the game, and say why in the
    commit.
 */
-import { build } from 'esbuild';
+import { build, transform } from 'esbuild';
 import { createHash } from 'node:crypto';
 import fs from 'node:fs';
 import os from 'node:os';
@@ -124,7 +128,7 @@ const PARTS = partArg ? partArg.slice(7).split(',') : ['modern', 'eras', 'pure',
    another tree (CM_RULES_ROOT) runs the digest only. */
 const OWN_TREE = path.resolve(process.env.CM_RULES_ROOT || SCRIPT_ROOT) === path.resolve(SCRIPT_ROOT);
 const CONTROL = process.env.CM_RULES_CONTROL || '';
-const CONTROLS = ['dropcount', 'fourth', 'static', 'staticbuild', 'chainstart', 'cupfield', 'thintier'];
+const CONTROLS = ['dropcount', 'fourth', 'static', 'staticbuild', 'chainstart', 'cupfield', 'thintier', 'idbranch'];
 if (CONTROL && !CONTROLS.includes(CONTROL)) { console.error(`CM_RULES_CONTROL=${CONTROL} is not a control this harness knows (${CONTROLS.join(', ')})`); process.exit(1); }
 if (CONTROL && WRITE) { console.error('a control run never writes the baseline'); process.exit(1); }
 
@@ -381,7 +385,70 @@ async function partPure() {
   const drops = Object.fromEntries(all.map(({ l }) => [l.id, cm.__relegationSpots(l.id)]));
   console.log(`   drop counts: ${Object.entries(drops).map(([k, v]) => `${k} ${v}`).join(', ')}`);
   if (WRITE) written.pure = got; else compare('pure', got, baseline.parts.pure);
-  if (OWN_TREE && !WRITE) { tableIsComplete(cm, all); fillerNamesComplete(mod); }
+  if (OWN_TREE && !WRITE) { tableIsComplete(cm, all); fillerNamesComplete(mod); await noIdBranches(cm); }
+}
+
+/* Round 832 review: "nothing else branches on a league id", held on the code.
+   Every Club Manager source (the engine and its modules, the hook, the page,
+   the club manager components) is read with its comments stripped (esbuild's
+   own transform, so a comment explaining a rule can never satisfy or trip
+   this), and a league or nation id may not appear as a literal in a
+   comparison, a switch case, a lookup, a list or set membership test, a
+   prefix test, nor as the key of an object literal anywhere but LEAGUE_RULES.
+   The review found exactly one survivor this way, the tiebreak map, and moved
+   it onto the rows. Control idbranch plants one comparison and one keyed map
+   in memory and both must be named. */
+async function noIdBranches(cm) {
+  console.log('3d) no league or nation id is branched on outside the rules table');
+  const ids = [...new Set([...Object.keys(cm.LEAGUE_RULES), ...cm.NATIONS.map(n => n.id)])];
+  const leagueIds = Object.keys(cm.LEAGUE_RULES);
+  const files = [
+    ...fs.readdirSync(path.join(ROOT, 'src', 'lib')).filter(f => /^clubManager.*\.ts$/.test(f)).map(f => `src/lib/${f}`),
+    'src/hooks/useClubManager.ts', 'src/pages/ClubManager.tsx',
+    ...fs.readdirSync(path.join(ROOT, 'src', 'components', 'club-manager')).filter(f => f.endsWith('.tsx')).map(f => `src/components/club-manager/${f}`),
+  ];
+  const esc = s => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const lit = `["'\`](?:${ids.map(esc).join('|')})["'\`]`;
+  const prefixes = new Set(ids.flatMap(i => Array.from({ length: Math.max(0, i.length - 2) }, (_, n) => i.slice(0, n + 3))));
+  const shapes = [
+    ['a comparison', new RegExp(`(?:===|!==|==|!=)\\s*${lit}|${lit}\\s*(?:===|!==|==|!=)`, 'g')],
+    ['a switch case', new RegExp(`case\\s+${lit}\\s*:`, 'g')],
+    ['a lookup', new RegExp(`\\[\\s*${lit}\\s*\\]`, 'g')],
+    ['a list membership test', new RegExp(`\\[[^\\]\\n]*${lit}[^\\]\\n]*\\]\\s*\\.(?:includes|indexOf|some|has)\\(`, 'g')],
+    ['a set of ids', new RegExp(`new Set\\(\\[[^\\]\\n]*${lit}`, 'g')],
+  ];
+  const keyRe = new RegExp(`^\\s*["']?(${leagueIds.map(esc).join('|')})["']?\\s*:`);
+  let findings = 0, scanned = 0;
+  for (const rel of files) {
+    let raw = fs.readFileSync(path.join(ROOT, rel), 'utf8').replaceAll('\r\n', '\n');
+    if (CONTROL === 'idbranch' && rel === 'src/lib/clubManager.ts') {
+      const anchor = '  const rules = leagueRulesOf(league.id);\n';
+      if (raw.split(anchor).length !== 2) { console.error('control idbranch cannot run: leagueDemand does not read its rules row in the shape it plants beside'); process.exit(1); }
+      raw = raw.replace(anchor, `${anchor}  if (league.id === 'championship') return { target: 6, label: 'Make the promotion playoffs' };\n`)
+        + '\nconst CONTROL_DROPS: Record<string, number> = {\n  premier: 3,\n};\nvoid CONTROL_DROPS;\n';
+      console.log('NEGATIVE CONTROL ON: a championship branch in leagueDemand and a map keyed by premier, 3d must name both');
+    }
+    const { code } = await transform(raw, { loader: rel.endsWith('.tsx') ? 'tsx' : 'ts', jsx: 'preserve', legalComments: 'none' });
+    scanned += 1;
+    const lines = code.split('\n');
+    const report = (why, at) => {
+      const ln = code.slice(0, at).split('\n').length;
+      findings += 1;
+      fail(`${rel}: a league or nation id in ${why}: ${lines[ln - 1].trim().slice(0, 120)}`);
+    };
+    for (const [why, re] of shapes) for (const m of code.matchAll(re)) report(why, m.index);
+    for (const m of code.matchAll(/\.(startsWith|endsWith|includes)\(\s*["'`]([A-Za-z0-9]+)["'`]\s*\)/g)) {
+      if (prefixes.has(m[2]) || ids.includes(m[2])) report(`a ${m[1]} test`, m.index);
+    }
+    let decl = null;
+    lines.forEach(l => {
+      const d = l.match(/^(?:export )?(?:const|let|var) (\w+)/);
+      if (d) decl = d[1];
+      if (keyRe.test(l) && decl !== 'LEAGUE_RULES') { findings += 1; fail(`${rel}: an object keyed by a league id outside LEAGUE_RULES (${decl}): ${l.trim().slice(0, 100)}`); }
+    });
+  }
+  if (scanned < 40) fail(`only ${scanned} Club Manager sources were read, the file list is broken`);
+  console.log(`   ${scanned} sources read, ${ids.length} ids, ${findings} finding(s)`);
 }
 
 /* The table answers for every league and names nothing that is not there.
@@ -879,7 +946,7 @@ function controlThinTier(src) {
   /* Round 832 review: the Premier League's row made to send 25 down, more
      clubs than either division holds. Part pure's table check (3b) must name
      it (the digest differs too, which is not what this control is about). */
-  const row = /(\n\s*premier: \{[^\n]*?\bdrop: )3(, secondTier: 'championship')/;
+  const row = /(\n\s*premier: \{[^\n]*?\bdrop: )3(,[^\n]*?secondTier: 'championship')/;
   if (!row.test(src)) { console.error('control thintier cannot run: the Premier League row does not drop 3 into the Championship'); process.exit(1); }
   console.log('NEGATIVE CONTROL ON: the Premier League drops 25 into a 24 club Championship, part pure\'s table check must go red');
   return src.replace(row, '$125$2');
