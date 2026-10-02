@@ -1,5 +1,15 @@
 # Work board
 
+894 source-budget correction, 2026-10-02.
+
+The first official NBA API response is valid582-row UTF-8 JSON. The pull's
+Windows default text decoder incorrectly routed it to five official HTML
+pages, which contain no embedded player-season rows. All six responses and
+the decoder failure are retained. No data was adopted. Root now permits
+four distinct remaining bulk API requests (prior totals, both advanced
+seasons, current-season bios), once each, ten total requests maximum. Fix
+the decoder before acquisition; no repeat of the first request or crawl.
+
 Codex claims894 NBA rating-input recovery, 2026-10-02.
 
 Root owns a new NBA source-review receipt and TEMP-only acquisition of

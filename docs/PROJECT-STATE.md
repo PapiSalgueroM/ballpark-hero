@@ -1,5 +1,10 @@
 # Project state
 
+894 acquisition correction: the official582-row response is valid UTF-8.
+A Windows-decoder error caused five unhelpful HTML fallback reads. Retained,
+no adoption. Four distinct missing bulk datasets may now be requested once
+each, ten total maximum, with explicit UTF-8 parsing and scope checks.
+
 Codex claims894 NBA input recovery, 2026-10-02.
 
 The current named NBA OVRs lack a reproducible season-stat recipe and GM
