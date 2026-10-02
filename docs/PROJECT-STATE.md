@@ -1,5 +1,18 @@
 # Project state
 
+Codex claims898 NHL new-franchise rating integration, 2026-10-02.
+
+896 frozen generator/model/map passes its ten outcome cases and controls;
+independent review confirms all416 tuples,196 partial rows and32 budgets.
+898 owns NHL engine pricing/init/draft guard, actual Board/help/evidence,
+new-game-only versioning and source/native acceptance. Full coverage must
+validate before mutation or markers. Old saves/contracts and shared seed/
+Gauntlet stay held. NBA895 final harness/gates and896 clean source gates
+finish before their separate commits. Claude retains publication/database.
+Claude897 trade lists and Release X publication claim are pulled. Board
+edits wait for897 to land; independent engine/source preparation proceeds.
+No production NHL cutover accepted yet. Next free899.
+
 Codex claims896 NHL frozen opening-rating preparation, 2026-10-02.
 
 893 TEMP v2 model, flat future quote curve and narrow next-cap AI draft
