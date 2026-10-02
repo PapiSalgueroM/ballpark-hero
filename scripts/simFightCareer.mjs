@@ -108,7 +108,72 @@ function rewrite(which, anchor, replacement, inEngine = false) {
   console.log(`   [control ${which} applied]`);
 }
 
-if (CONTROL === 'nodecay') {
+/* Round 916: the life layer. Six files of its own and the four shared career
+   modules it binds, copied beside the engine so the bundle is one tree and a
+   control can rewrite any of them. Read here, before the controls, with the
+   same line ending rule as above. */
+const LIFE_FILES = [
+  'fightCareerLife', 'fightCareerLifeFlow', 'fightCareerInbox', 'fightCareerRivalry', 'fightCareerMoney',
+  'careerInbox', 'careerRivalryEvents', 'careerRivalryChoices', 'careerBadges', 'keyedRng',
+];
+const lifeSrc = Object.fromEntries(LIFE_FILES.map(name => [
+  name, fs.readFileSync(path.join(ROOT, 'src/lib', `${name}.ts`), 'utf8').replaceAll('\r\n', '\n'),
+]));
+function rewriteLife(which, file, anchor, replacement) {
+  if (!lifeSrc[file].includes(anchor)) {
+    console.log(`   FAIL control ${which} anchor is not in ${file}.ts, so it would change nothing`);
+    process.exit(1);
+  }
+  const next = lifeSrc[file].replace(anchor, replacement);
+  if (next === lifeSrc[file]) {
+    console.log(`   FAIL control ${which} changed nothing`);
+    process.exit(1);
+  }
+  lifeSrc[file] = next;
+  console.log(`   [control ${which} applied]`);
+}
+
+if (CONTROL === 'freecard') {
+  /* A card that says it costs money and takes none. Section 7c. */
+  rewriteLife('freecard', 'fightCareerLife',
+    '  if (e.cash) life.bank = round2(life.bank + e.cash);',
+    '  if (e.cash) life.bank = round2(life.bank + Math.max(0, e.cash));');
+} else if (CONTROL === 'lifeleak') {
+  /* The life reaches the bout with every answer neutral. Section 7a. */
+  rewriteLife('lifeleak', 'fightCareerLife',
+    '  const sharp = lifeSharpness(st);',
+    '  const sharp = lifeSharpness(st) + 1;');
+} else if (CONTROL === 'nocards') {
+  /* Nothing is dealt between fights. Section 7b. */
+  rewriteLife('nocards', 'fightCareerLife',
+    'export const CARDS_PER_FIGHT = 2;',
+    'export const CARDS_PER_FIGHT = 0;');
+} else if (CONTROL === 'fakeneutral') {
+  /* A "neutral" option that moves morale. Sections 7a and 7c. */
+  rewriteLife('fakeneutral', 'fightCareerLife',
+    "{ label: 'Split the difference', effect: {}, line: 'Met the trainer halfway.', neutral: true },",
+    "{ label: 'Split the difference', effect: { morale: -12 }, line: 'Met the trainer halfway.', neutral: true },");
+} else if (CONTROL === 'redeal') {
+  /* A reload forgets the cards that were waiting. Section 7d. */
+  rewriteLife('redeal', 'fightCareerLife',
+    '    pending: strings(raw.pending).filter(id => LIFE_CARDS.some(c => c.id === id)),',
+    '    pending: [],');
+} else if (CONTROL === 'flatshop') {
+  /* Only the first level of a coach does anything. Section 7e. */
+  rewriteLife('flatshop', 'fightCareerLife',
+    '(1 + upgradeLevel(st.life, up) * stepOf(up));',
+    '(1 + Math.min(1, upgradeLevel(st.life, up)) * stepOf(up));');
+} else if (CONTROL === 'flatsharp') {
+  /* Sharpness is banked and never reaches the night. Section 7e. */
+  rewriteLife('flatsharp', 'fightCareerLife',
+    '  if (sharp) mods.sharp = sharp;',
+    '  if (sharp) mods.sharp = 0;');
+} else if (CONTROL === 'wipesave') {
+  /* A save from before the round loses its record on load. Section 7f. */
+  rewriteLife('wipesave', 'fightCareerLife',
+    '  return { ...st, life: ensureLifeBlock(st) };',
+    '  return { ...st, fightNo: 0, history: [], life: ensureLifeBlock(st) };');
+} else if (CONTROL === 'nodecay') {
   rewrite('nodecay',
     'f.damage = Math.round((f.damage + res.damageTaken) * 10) / 10;',
     'f.damage = 0;');
@@ -189,11 +254,21 @@ if (CONTROL === 'nodecay') {
   process.exit(1);
 }
 
-fs.writeFileSync(SRC, src.replaceAll("@/lib/careerEngine", "./careerEngine"));
+const local = (text) => text.replaceAll('@/lib/', './');
+fs.writeFileSync(SRC, local(src));
 fs.writeFileSync(ENGINE, engineSrc);
-fs.writeFileSync(ENTRY, `export * as fc from './fightCareer';\n`);
+for (const name of LIFE_FILES) fs.writeFileSync(path.join(TMP, `${name}.ts`), local(lifeSrc[name]));
+fs.writeFileSync(ENTRY, [
+  "export * as fc from './fightCareer';",
+  "export * as fl from './fightCareerLife';",
+  "export * as ff from './fightCareerLifeFlow';",
+  "export * as fi from './fightCareerInbox';",
+  "export * as fr from './fightCareerRivalry';",
+  "export * as fm from './fightCareerMoney';",
+  '',
+].join('\n'));
 execSync(`"${findEsbuild()}" "${ENTRY}" --bundle --format=esm --platform=node --outfile="${BUNDLE}"`, { stdio: 'pipe' });
-const { fc } = await import(pathToFileURL(BUNDLE).href);
+const { fc, fl, ff, fi, fr, fm } = await import(pathToFileURL(BUNDLE).href);
 
 /* ── a deterministic stream, so every number below is reproducible ── */
 function rngFrom(seed) {
@@ -781,6 +856,457 @@ console.log('6) the condition bars tell the truth about the fight, for every kin
       ok(`${tag} both men end on the floor in ${bothPinPct.toFixed(2)}% of decisions (ceiling 1%)`);
     }
   }
+}
+
+/* ═══════════════ 7) the life between fights (Round 916) ═══════════════
+   Six checks, each with its own control. The first is the one the round
+   stands on: the life layer must not move a single fight unless the player
+   chose something that says it will. */
+
+const PLAN = { conditioning: 2, power: 2, defence: 1, speed: 1 };
+const WEIGHTS_SAMPLED = ['fly', 'light', 'welter', 'middle', 'heavy'];
+
+/** Answer everything the gap is waiting on with its neutral option, and
+    count the decisions. `onStep` sees every step before it is answered. */
+function clearGapNeutral(st0, onStep) {
+  let st = st0;
+  let decisions = 0;
+  for (let guard = 0; guard < 24; guard += 1) {
+    const step = ff.nextLifeStep(st);
+    if (!step) break;
+    if (onStep) onStep(st, step);
+    if (step.kind === 'beat') {
+      st = fr.dismissFightRivalryEvent(st);
+    } else if (step.kind === 'choice') {
+      st = fr.answerFightRivalryChoice(st, fr.neutralRivalryChoice(step.card.id)).state;
+      decisions += 1;
+    } else {
+      st = fl.answerLifeCard(st, step.card.options.findIndex(o => o.neutral)).state;
+      decisions += 1;
+    }
+  }
+  for (const m of st.life.phoneInbox.filter(x => x.answered === undefined)) {
+    st = ff.lifeAnswerInbox(st, m.id, fi.neutralInboxChoice(m));
+    decisions += 1;
+  }
+  return { st, decisions };
+}
+
+/** runCareer, through the life layer, every new screen answered neutrally.
+    Same seeds, same weights, same styles, same tactics as runCareer. */
+function runLifeCareer(seed, pick, onStep) {
+  const rng = rngFrom(seed);
+  const w = WEIGHTS_SAMPLED[Math.floor(rng() * WEIGHTS_SAMPLED.length)];
+  let st = ff.lifeNewCareer(`P${seed}`, w, STYLES[Math.floor(rng() * 4)], 'allround', 'family', `seed-${seed}`);
+  let fights = 0;
+  const perGap = [];
+  while (!st.retired && fights < 60) {
+    const gap = clearGapNeutral(st, onStep);
+    st = gap.st;
+    /* The two decisions the game always had, the offer and the camp, plus
+       whatever the life layer asked. */
+    perGap.push(2 + gap.decisions);
+    const offer = pick(st.offers, st);
+    if (!offer) break;
+    st = ff.lifeRunCamp(st, PLAN);
+    const res = ff.lifeTakeFight(st, offer.id, smartLine(offer.opponent.style, offer.rounds));
+    if (!res) break;
+    st = res.state;
+    fights += 1;
+  }
+  return {
+    fights, wins: st.fighter.wins, losses: st.fighter.losses, damage: st.fighter.damage, age: st.fighter.age,
+    titles: st.history.filter(h => h.title && h.result === 'W').length,
+    defences: st.titleDefences, legacy: fc.legacyOf(st).score, perGap, st,
+  };
+}
+
+const careerKey = (r) => `${r.fights}|${r.wins}|${r.losses}|${r.damage}|${r.age}|${r.titles}|${r.defences}|${r.legacy}`;
+const titled = (fleet) => fleet.filter(r => r.titles > 0).length;
+const titlePct = (fleet) => (titled(fleet) / fleet.length) * 100;
+
+/* What the existing game does, recorded on origin/main at a4433f41 BEFORE the
+   life layer existed, adaptive policy, 260 careers a group, five seed groups.
+   See the header for how these were measured. */
+const SEED_GROUPS = [1000, 21000, 41000, 61000, 81000];
+const RECORDED = {
+  /* Careers of the 260 that won a world title, and the median career length. */
+  titled: [55, 45, 55, 59, 40],
+  medianFights: [29, 28, 29, 29, 29],
+};
+
+let lifeAdaptive = null;
+{
+  console.log('7a) neutral answers leave every fight where it was');
+  let careers = 0;
+  let moved = 0;
+  for (const policy of Object.keys(POLICIES)) {
+    const base = runFleet(policy, N);
+    const life = [];
+    for (let i = 0; i < N; i += 1) life.push(runLifeCareer(1000 + i * 37, POLICIES[policy]));
+    if (policy === 'adaptive') lifeAdaptive = life;
+    const diff = base.filter((b, i) => careerKey(b) !== careerKey(life[i])).length;
+    careers += N;
+    moved += diff;
+    console.log(`   ${policy}: ${diff} of ${N} careers differ; title rate ${titlePct(base).toFixed(1)}% base, ${titlePct(life).toFixed(1)}% with the life layer; median fights ${median(base.map(r => r.fights))} and ${median(life.map(r => r.fights))}`);
+  }
+  if (moved) fail(`${moved} of ${careers} careers changed under neutral answers, so the life layer reaches the bout on its own`);
+  else ok(`all ${careers} careers identical, fight for fight, across four policies`);
+
+  /* The recorded spread. The base engine has to still be the engine that was
+     measured, and the neutral life has to sit inside the same spread. */
+  const lo = { t: Math.min(...RECORDED.titled), f: Math.min(...RECORDED.medianFights) };
+  const hi = { t: Math.max(...RECORDED.titled), f: Math.max(...RECORDED.medianFights) };
+  const failedBefore = failures;
+  const baseT = []; const baseF = []; const lifeT = []; const lifeF = [];
+  SEED_GROUPS.forEach((seed0, g) => {
+    const base = runFleet('adaptive', N, true, seed0);
+    const life = [];
+    for (let i = 0; i < N; i += 1) life.push(runLifeCareer(seed0 + i * 37, POLICIES.adaptive));
+    baseT.push(titled(base)); baseF.push(median(base.map(r => r.fights)));
+    lifeT.push(titled(life)); lifeF.push(median(life.map(r => r.fights)));
+    if (baseT[g] !== RECORDED.titled[g] || baseF[g] !== RECORDED.medianFights[g]) {
+      fail(`seed group ${seed0}: the base engine reads ${baseT[g]} titled careers and ${baseF[g]} median fights, recorded ${RECORDED.titled[g]} and ${RECORDED.medianFights[g]}`);
+    }
+    if (lifeT[g] < lo.t || lifeT[g] > hi.t || lifeF[g] < lo.f || lifeF[g] > hi.f) {
+      fail(`seed group ${seed0}: with the life layer ${lifeT[g]} titled careers and ${lifeF[g]} median fights, outside the recorded spread ${lo.t} to ${hi.t} and ${lo.f} to ${hi.f}`);
+    }
+  });
+  console.log(`   adaptive over five seed groups of ${N}: titled careers ${lifeT.join(', ')}; median fights ${lifeF.join(', ')}`);
+  if (failures === failedBefore) ok(`title rate and career length sit inside the recorded spread (${lo.t} to ${hi.t} titled careers of ${N}, ${lo.f} to ${hi.f} fights) in all five groups`);
+}
+
+{
+  console.log('7b) there is a life between fights');
+  const gaps = lifeAdaptive.flatMap(r => r.perGap);
+  const med = median(gaps);
+  const sorted = gaps.slice().sort((a, b) => a - b);
+  const p10 = sorted[Math.floor(sorted.length / 10)];
+  /* The round's floor is 4: the offer, the camp and two more. Measured on
+     healthy code: median 5, tenth percentile 4, mean about 4.9. */
+  if (!(med >= 4)) fail(`median decisions between fights is ${med}, under the floor of 4`);
+  else ok(`median ${med} decisions between fights over ${gaps.length} gaps (floor 4; tenth percentile ${p10}, mean ${mean(gaps).toFixed(2)})`);
+}
+
+const r2 = (v) => Math.round(v * 100) / 100;
+const r1 = (v) => Math.round(v * 10) / 10;
+const m100 = (v) => Math.max(0, Math.min(100, Math.round(v)));
+
+/** A mid career state every effect can act on: ranked sixth, a table that is
+    not for a title, a rival alive, a man who beat him on file. */
+function probeState() {
+  let st = ff.lifeNewCareer('Probe', 'welter', 'outboxer', 'allround', 'family', 'probe-916');
+  st = fl.cloneForLife(st);
+  st.fightNo = 9;
+  st.champion = false;
+  st.fighter.rank = 6;
+  st.fighter.damage = 45;
+  st.offers = fc.offersFor(st);
+  fl.dressOffers(st);
+  Object.assign(st.life, { bank: 1, fanbase: 50, morale: 50, karma: 50, rivalryIntensity: 40, sharp: 0, promoterFights: 0, pending: [] });
+  st.life.lastBeatenBy = { ...st.offers[0].opponent, name: 'Probe Beaten' };
+  return st;
+}
+
+/** Read the numbers back out of the words a button shows. */
+function parseWords(text) {
+  const out = {};
+  let m;
+  if ((m = text.match(/Bank ([+-])(\d+\.\d+)m/))) out.cash = (m[1] === '-' ? -1 : 1) * Number(m[2]);
+  if ((m = text.match(/Fans ([+-]\d+)/))) out.fans = Number(m[1]);
+  if ((m = text.match(/Morale ([+-]\d+)/))) out.morale = Number(m[1]);
+  if ((m = text.match(/Karma ([+-]\d+)/))) out.karma = Number(m[1]);
+  if ((m = text.match(/Feud ([+-]\d+)/))) out.heat = Number(m[1]);
+  if ((m = text.match(/Damage \+(\d+\.\d) for good/))) out.damage = Number(m[1]);
+  if ((m = text.match(/(\d+) months out of the ring/))) out.months = Number(m[1]);
+  if ((m = text.match(/Next fight ([+-]\d+) sharpness/))) out.sharp = Number(m[1]);
+  if ((m = text.match(/Purses on the table ([+-]\d+)%/))) out.pursePct = Number(m[1]);
+  if ((m = text.match(/(Down|Up) (\d+) in the rankings/))) out.rank = (m[1] === 'Down' ? 1 : -1) * Number(m[2]);
+  if ((m = text.match(/Move (up|down) a weight class/))) out.moveClass = m[1] === 'up' ? 1 : -1;
+  if ((m = text.match(/Purses ([+-]\d+)% for (\d+) fights, the safest offer leaves the table/))) { out.promoter = Number(m[2]); out.promoterPct = Number(m[1]); }
+  if ((m = text.match(/becomes the rematch, a win worth (\d+) places/))) out.rematch = Number(m[1]);
+  if ((m = text.match(/becomes the grudge fight, purse ([+-]\d+)%/))) out.grudge = Number(m[1]);
+  return out;
+}
+
+const tableKey = (offers) => JSON.stringify(offers.map(o => [o.opponent.name, o.purse, o.rankGain, o.label, o.title, o.rounds]));
+
+/** One effect against the words that promise it and the state it leaves.
+    Returns the list of things that do not match. */
+function effectMismatches(e, words) {
+  const bad = [];
+  const said = parseWords(words);
+  const want = (k, v) => { if ((said[k] ?? 0) !== (v ?? 0)) bad.push(`words say ${k} ${said[k] ?? 'nothing'}, effect is ${v ?? 'nothing'}`); };
+  want('cash', e.cash); want('fans', e.fans); want('morale', e.morale); want('karma', e.karma); want('heat', e.heat);
+  want('damage', e.damage); want('months', e.age ? Math.round(e.age * 12) : 0); want('sharp', e.sharp);
+  want('pursePct', e.pursePct); want('rank', e.rank); want('moveClass', e.moveClass); want('promoter', e.promoter);
+  want('rematch', e.rematch ? fl.REMATCH_RANK_GAIN : 0);
+  want('grudge', e.grudge ? Math.round((fl.GRUDGE_PURSE_MUL - 1) * 100) : 0);
+  if (e.promoter && said.promoterPct !== Math.round((fl.PROMOTER_PURSE_MUL - 1) * 100)) bad.push('promoter percent in the words is not the multiplier');
+  if (Object.keys(e).filter(k => e[k]).length === 0 && words !== 'Nothing changes.') bad.push(`an empty effect reads "${words}"`);
+
+  const before = probeState();
+  const after = fl.cloneForLife(before);
+  fl.applyLifeEffect(after, e);
+  const L0 = before.life; const L1 = after.life;
+  const is = (what, exp, got) => { if (exp !== got) bad.push(`${what} should be ${exp}, is ${got}`); };
+  is('bank', r2(L0.bank + (e.cash ?? 0)), L1.bank);
+  is('fans', m100(L0.fanbase + (e.fans ?? 0)), L1.fanbase);
+  is('morale', m100(L0.morale + (e.morale ?? 0)), L1.morale);
+  is('karma', m100(L0.karma + (e.karma ?? 0)), L1.karma);
+  is('feud', m100(L0.rivalryIntensity + (e.heat ?? 0)), L1.rivalryIntensity);
+  is('damage', r1(before.fighter.damage + (e.damage ?? 0)), after.fighter.damage);
+  is('age', r2(before.fighter.age + (e.age ?? 0)), after.fighter.age);
+  is('sharpness banked', L0.sharp + (e.sharp ?? 0), L1.sharp);
+  is('promoter fights', e.promoter ?? L0.promoterFights, L1.promoterFights);
+  is('attributes', JSON.stringify(before.fighter.attrs), JSON.stringify(after.fighter.attrs));
+  if (e.moveClass) {
+    const ids = fc.WEIGHT_CLASSES.map(w => w.id);
+    is('weight class', ids[ids.indexOf(before.weight) + e.moveClass], after.weight);
+    is('rank after the move', 99, after.fighter.rank);
+    is('class moves', L0.classMoves + 1, L1.classMoves);
+    is('offers after the move', 3, after.offers.length);
+    const k0 = fc.weightById(before.weight).koBias; const k1 = fc.weightById(after.weight).koBias;
+    if (!(e.moveClass > 0 ? k1 > k0 : k1 < k0)) bad.push('the class move did not move the knockout factor the way it says');
+  } else {
+    is('weight class', before.weight, after.weight);
+    is('rank', Math.max(1, Math.min(99, before.fighter.rank + (e.rank ?? 0))), after.fighter.rank);
+    is('bout stream', before.rngTick, after.rngTick);
+    let table = before.offers.map(o => ({ ...o }));
+    if (e.pursePct) table = table.map(o => ({ ...o, purse: r2(o.purse * (1 + e.pursePct / 100)) }));
+    if (e.promoter) table = table.slice(1).map(o => ({ ...o, purse: r2(o.purse * fl.PROMOTER_PURSE_MUL) }));
+    const mid = Math.floor(table.length / 2);
+    if (e.rematch) table[mid] = { ...table[mid], opponent: { name: 'Probe Beaten' }, label: 'Rematch', rankGain: fl.REMATCH_RANK_GAIN };
+    if (e.grudge) table[mid] = { ...table[mid], opponent: { name: L0.rival.name }, label: fl.GRUDGE_LABEL, purse: r2(table[mid].purse * fl.GRUDGE_PURSE_MUL) };
+    is('offers on the table', tableKey(table), tableKey(after.offers));
+  }
+  return bad;
+}
+
+{
+  console.log('7c) every button does what its words say');
+  const failedBefore = failures;
+  let options = 0;
+  const check = (tag, e, words) => {
+    options += 1;
+    const bad = effectMismatches(e, words);
+    if (bad.length) fail(`${tag}: ${bad.slice(0, 2).join('; ')}`);
+  };
+  const ids = new Set(fl.LIFE_CARDS.map(c => c.id));
+  if (fl.LIFE_CARDS.length < 36) fail(`the deck has ${fl.LIFE_CARDS.length} cards, the round needs 36`);
+  if (ids.size !== fl.LIFE_CARDS.length) fail('two cards share an id');
+  for (const card of fl.LIFE_CARDS) {
+    if (!(card.cooldown >= 1)) fail(`card ${card.id} has no cooldown`);
+    const neutral = card.options.filter(o => o.neutral);
+    if (neutral.length !== 1 || !fl.isBoutNeutral(neutral[0].effect)) fail(`card ${card.id} needs exactly one neutral option that cannot reach a fight`);
+    card.options.forEach((o, i) => check(`card ${card.id} option ${i}`, o.effect, fl.describeLifeEffect(o.effect)));
+  }
+  for (const def of fr.FIGHT_RIVALRY_CHOICES) {
+    const neutral = def.choices.filter(c => c.neutral);
+    if (neutral.length !== 1 || !fl.isBoutNeutral(neutral[0].effect)) fail(`rival choice ${def.id} needs exactly one neutral option`);
+    /* `consequence` is the string the card stores and the board prints. */
+    def.choices.forEach((c, i) => check(`rival choice ${def.id} option ${i}`, c.effect, c.consequence));
+  }
+  for (const b of fr.FIGHT_RIVALRY_EVENTS) {
+    if (!fl.isBoutNeutral(b.effect)) fail(`rival beat ${b.id} is not a decision, so it may not reach a fight`);
+    check(`rival beat ${b.id}`, b.effect, b.consequence);
+  }
+  for (const t of fi.FIGHT_INBOX_TEXTS) {
+    if (fi.neutralInboxChoice(t) < 0) fail(`text ${t.id} has no reply that moves nothing`);
+  }
+  /* The answer path runs the same effect: one card, through answerLifeCard. */
+  {
+    const st = probeState();
+    st.life.pending = ['hand-injury'];
+    const res = fl.answerLifeCard(st, 0);
+    const cost = fl.lifeCardById('hand-injury').options[0].effect.cash;
+    if (!res || res.state.life.bank !== r2(1 + cost) || res.state.life.pending.length !== 0 || res.state.life.decisions !== st.life.decisions + 1) {
+      fail('answering a card did not charge it, clear it and count it');
+    }
+    if (fl.answerLifeCard(res.state, 0) !== null) fail('a second tap on an answered card did something');
+  }
+  if (failures === failedBefore) ok(`${options} options across ${fl.LIFE_CARDS.length} cards, ${fr.FIGHT_RIVALRY_CHOICES.length} rival choices and ${fr.FIGHT_RIVALRY_EVENTS.length} rival beats: words, numbers and state agree; ${fi.FIGHT_INBOX_TEXTS.length} texts each carry a neutral reply`);
+}
+
+{
+  console.log('7d) a reload comes back to the same card');
+  const failedBefore = failures;
+  let steps = 0;
+  let lost = 0;
+  let early = 0;
+  const stepKey = (s) => (!s ? 'none' : s.kind === 'beat' ? `beat-${s.event.id}` : `${s.kind}-${s.card.id}`);
+  const answer = (st, step) => (step.kind === 'beat'
+    ? fr.dismissFightRivalryEvent(st)
+    : step.kind === 'choice'
+      ? fr.answerFightRivalryChoice(st, fr.neutralRivalryChoice(step.card.id)).state
+      : fl.answerLifeCard(st, step.card.options.findIndex(o => o.neutral)).state);
+  for (let i = 0; i < 40; i += 1) {
+    const lastDealt = {};
+    runLifeCareer(5000 + i * 37, POLICIES.adaptive, (st, step) => {
+      steps += 1;
+      /* What the board does on a reload: the save through JSON, then ensureLife. */
+      const back = fl.ensureLife(JSON.parse(JSON.stringify(st)));
+      const again = ff.nextLifeStep(back);
+      if (stepKey(again) !== stepKey(step)) { lost += 1; return; }
+      if (JSON.stringify(answer(back, again)) !== JSON.stringify(answer(st, step))) lost += 1;
+      /* And the cooldown: a card is not dealt again before it says it can be. */
+      if (step.kind === 'card') {
+        const was = lastDealt[step.card.id];
+        if (was !== undefined && was !== st.fightNo && st.fightNo - was < step.card.cooldown) early += 1;
+        lastDealt[step.card.id] = st.fightNo;
+      }
+    });
+  }
+  /* Measured on healthy code: about 3,000 steps over the forty careers. */
+  if (steps < 1500) fail(`only ${steps} steps were walked, too few to prove anything`);
+  if (lost) fail(`${lost} of ${steps} steps came back from a reload as a different card or a different answer`);
+  if (early) fail(`${early} cards were dealt again inside their own cooldown`);
+  if (failures === failedBefore) ok(`${steps} steps reloaded to the same card and the same answer, none dealt inside its cooldown`);
+}
+
+{
+  console.log('7e) every level of every ladder does something');
+  const failedBefore = failures;
+  const fresh = (trainer = 'allround') => {
+    const st = fl.cloneForLife(ff.lifeNewCareer('Ladder', 'welter', 'outboxer', trainer, 'family', 'ladder-916'));
+    st.fighter.potential = 99;
+    st.fighter.attrs = { power: 40, chin: 50, speed: 40, stamina: 40, defence: 40, ringIq: 50 };
+    st.life.bank = 10;
+    return st;
+  };
+  /* Twelve camps of three weeks in one area. Returns the attribute reached
+     and whether any camp ever lowered it. */
+  const campRun = (st0, area, attr) => {
+    let st = st0;
+    let lowered = false;
+    const plan = { conditioning: 1, power: 1, defence: 1, speed: 1, [area]: 3 };
+    for (let i = 0; i < 12; i += 1) {
+      const was = st.fighter.attrs[attr];
+      st = ff.lifeRunCamp(st, plan);
+      if (st.fighter.attrs[attr] < was) lowered = true;
+    }
+    return { reached: st.fighter.attrs[attr], lowered };
+  };
+  const COACHES = [['strength', 'power', 'power'], ['roadwork', 'conditioning', 'stamina'], ['padman', 'defence', 'defence'], ['padman', 'speed', 'speed']];
+  for (const [id, area, attr] of COACHES) {
+    let st = fresh();
+    const reached = [campRun(st, area, attr).reached];
+    for (let lvl = 1; lvl <= fm.MAX_UPGRADE_LEVEL; lvl += 1) {
+      const bank = st.life.bank;
+      const bought = ff.lifeBuyUpgrade(st, id);
+      if (!bought || r2(bank - bought.life.bank) !== fm.UPGRADE_PRICES[lvl - 1]) { fail(`${id} level ${lvl} did not cost ${fm.UPGRADE_PRICES[lvl - 1]}`); break; }
+      st = bought;
+      reached.push(campRun(st, area, attr).reached);
+    }
+    /* Measured on healthy code: 52 at level 0, then 53, 55 and 57 for the two
+       12% coaches and 53, 54 and 56 for the pad man. Every step is a point. */
+    for (let lvl = 1; lvl < reached.length; lvl += 1) {
+      if (!(reached[lvl] > reached[lvl - 1])) fail(`${id} level ${lvl} leaves ${attr} at ${reached[lvl]} after twelve camps, level ${lvl - 1} left it at ${reached[lvl - 1]}`);
+    }
+    console.log(`   ${id} on ${attr}: ${reached.join(', ')} after twelve camps at levels 0 to ${fm.MAX_UPGRADE_LEVEL}`);
+    if (ff.lifeBuyUpgrade(st, id) !== null) fail(`${id} sold a level past the top`);
+  }
+  {
+    const poor = fresh();
+    poor.life.bank = 0.01;
+    if (ff.lifeBuyUpgrade(poor, 'cutman') !== null) fail('the shop sold an upgrade the bank could not cover');
+  }
+  /* The trainers: the specialty is faster, the weak side is slower, and no
+     camp ever lowers an attribute. */
+  const allround = { power: campRun(fresh(), 'power', 'power'), defence: campRun(fresh(), 'defence', 'defence') };
+  const puncher = { power: campRun(fresh('puncher'), 'power', 'power'), defence: campRun(fresh('puncher'), 'defence', 'defence') };
+  if (!(puncher.power.reached > allround.power.reached)) fail(`the puncher's coach left power at ${puncher.power.reached}, the all-rounder at ${allround.power.reached}`);
+  if (!(puncher.defence.reached < allround.defence.reached)) fail(`the puncher's coach left defence at ${puncher.defence.reached}, the all-rounder at ${allround.defence.reached}`);
+  if (puncher.defence.lowered || puncher.power.lowered) fail('a camp lowered an attribute');
+  console.log(`   puncher's coach: power ${puncher.power.reached} against ${allround.power.reached}, defence ${puncher.defence.reached} against ${allround.defence.reached}`);
+
+  /* Sharpness, walked through the bout itself: the same 120 debut opponents,
+     the same tactics, and only the sharpness changes. */
+  const landedAt = (sharp) => {
+    let landed = 0;
+    for (let i = 0; i < 120; i += 1) {
+      const st = fl.cloneForLife(ff.lifeNewCareer(`S${i}`, 'welter', STYLES[i % 4], 'allround', 'family', `sharp-${i}`));
+      st.life.sharp = sharp;
+      const offer = st.offers[1];
+      const res = ff.lifeTakeFight(st, offer.id, smartLine(offer.opponent.style, offer.rounds));
+      landed += res.result.rounds.reduce((a, r) => a + r.playerLanded, 0);
+    }
+    return landed;
+  };
+  const curve = [-4, -2, 0, 2, 4].map(landedAt);
+  console.log(`   punches landed over 120 debuts at sharpness -4, -2, 0, 2, 4: ${curve.join(', ')}`);
+  for (let i = 1; i < curve.length; i += 1) {
+    if (!(curve[i] > curve[i - 1])) fail(`sharpness ${[-4, -2, 0, 2, 4][i]} landed ${curve[i]} punches, the step below landed ${curve[i - 1]}`);
+  }
+  /* The sparring partners and the mood are sharpness too, one step each. */
+  {
+    let st = fresh();
+    for (let lvl = 1; lvl <= fm.MAX_UPGRADE_LEVEL; lvl += 1) {
+      st = ff.lifeBuyUpgrade(st, 'sparring');
+      if (fl.lifeSharpness(st) !== lvl) fail(`sparring partners level ${lvl} give ${fl.lifeSharpness(st)} sharpness`);
+    }
+    for (let morale = 0; morale <= 100; morale += 10) {
+      const m = fresh();
+      m.life.morale = morale;
+      if (fl.lifeSharpness(m) !== (morale - 50) / 10) fail(`morale ${morale} gives ${fl.lifeSharpness(m)} sharpness`);
+    }
+  }
+  /* The cut man, level by level, on the same fight. */
+  {
+    const damageAt = (lvl) => {
+      let st = fresh();
+      for (let i = 0; i < lvl; i += 1) st = ff.lifeBuyUpgrade(st, 'cutman');
+      const offer = st.offers[2];
+      return ff.lifeTakeFight(st, offer.id, smartLine(offer.opponent.style, offer.rounds)).result.damageTaken;
+    };
+    const taken = [0, 1, 2, 3].map(damageAt);
+    for (let lvl = 1; lvl < taken.length; lvl += 1) {
+      if (taken[lvl] !== r2(taken[0] * (1 - 0.04 * lvl))) fail(`cut man level ${lvl} left ${taken[lvl]} damage of ${taken[0]}`);
+    }
+    console.log(`   cut man: ${taken.join(', ')} damage from the same fight at levels 0 to 3`);
+  }
+  if (failures === failedBefore) ok('four coaches, the sparring partners, the cut man, the trainers, the mood and five steps of sharpness all move what they say, one step at a time');
+}
+
+{
+  console.log('7f) a save from before the round opens and plays on');
+  const failedBefore = failures;
+  /* Ten fights on the engine alone: a version 1 save, no life block. */
+  let v1 = fc.newFightCareer('Old Save', 'middle', 'slugger', 'v1-916');
+  for (let i = 0; i < 10 && !v1.retired; i += 1) {
+    const offer = POLICIES.adaptive(v1.offers, v1);
+    v1 = fc.runCamp(v1, PLAN);
+    v1 = fc.takeFight(v1, offer.id, smartLine(offer.opponent.style, offer.rounds)).state;
+  }
+  const stored = JSON.parse(JSON.stringify(v1));
+  const opened = fl.ensureLife(stored);
+  const strip = (s) => { const { life, ...rest } = s; return JSON.stringify(rest); };
+  if (strip(opened) !== JSON.stringify(v1)) fail('opening an old save changed the fighter, the record or the offers');
+  if (!opened.life || opened.life.v !== 1 || opened.life.trainer.kind !== 'allround' || opened.life.manager.kind !== 'family' || opened.life.pending.length) {
+    fail('an old save did not get a plain default life block');
+  }
+  /* Then it plays on, and neutral play is still the engine's own career. */
+  let base = v1; let life = opened; let same = true;
+  for (let i = 0; i < 12 && !base.retired; i += 1) {
+    life = clearGapNeutral(life).st;
+    const offer = POLICIES.adaptive(base.offers, base);
+    const tactics = smartLine(offer.opponent.style, offer.rounds);
+    base = fc.takeFight(fc.runCamp(base, PLAN), offer.id, tactics).state;
+    life = ff.lifeTakeFight(ff.lifeRunCamp(life, PLAN), offer.id, tactics).state;
+    if (base.fighter.wins !== life.fighter.wins || base.fighter.damage !== life.fighter.damage || base.fightNo !== life.fightNo) same = false;
+  }
+  if (!same) fail('an old save played on through the life layer and fought different fights');
+  /* A block that is not a block resets that block alone. */
+  for (const junk of ['garbage', 7, [], { v: 2 }, null]) {
+    const fixed = fl.ensureLife({ ...stored, life: junk });
+    if (strip(fixed) !== JSON.stringify(v1) || fixed.life.v !== 1 || fixed.life.bank !== 0) fail(`a corrupt life block (${JSON.stringify(junk)}) was not reset on its own`);
+  }
+  /* And one bad field costs that field, not the block. */
+  const half = fl.ensureLife({ ...stored, life: { ...opened.life, bank: 3.21, fanbase: 'lots', pending: 5, shop: { cutman: 99, nonsense: 4 }, cooldowns: 'x' } });
+  if (half.life.bank !== 3.21 || half.life.fanbase !== fl.START_FANS || half.life.pending.length !== 0 || half.life.shop.cutman !== fm.MAX_UPGRADE_LEVEL || 'nonsense' in half.life.shop) {
+    fail('one bad field in a life block did not repair to its default while the rest was kept');
+  }
+  if (failures === failedBefore) ok('an old save keeps its fighter and record, gets a default corner, and fights the same fights on; corrupt blocks reset alone');
 }
 
 try { fs.rmSync(TMP, { recursive: true, force: true }); } catch { /* best effort */ }
