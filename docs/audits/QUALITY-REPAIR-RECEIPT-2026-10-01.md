@@ -1,6 +1,8 @@
 # Accepted quality repairs after audit847
 
-Eight repairs are on main:846 b69beca6,852 4de313c8,853 af6eb498,
+Twelve repair rounds are now on main. The four later859-862 commits and their
+exact verification are in [the arcade/scoring receipt](ARCADE-AND-SCORING-REPAIR-RECEIPT-2026-10-01.md).
+The earlier eight source repairs covered here are846 b69beca6,852 4de313c8,853 af6eb498,
 854 075ecd04,855 c98e0ad2,856 62dd5692,857 5f11492e,858 a7d47ca9.
 The original six-repair receipt below is retained, followed by the two later
 acceptances above it. This source acceptance is not a live deployment receipt.

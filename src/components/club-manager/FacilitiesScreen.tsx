@@ -2,7 +2,7 @@ import { cn } from '@/lib/utils';
 import { money, moneyIn } from '@/lib/clubManager';
 import type { CareerState } from '@/lib/clubManager';
 import {
-  CLUB_FACILITY_INFO, FACILITY_IDS, FACILITY_MAX, facilitiesOf, facilityEffectLine, facilityUpgradeCost,
+  CLUB_FACILITY_INFO, FACILITY_IDS, FACILITY_MAX, facilitiesOf, facilityEffectLine, facilityUpgradeCost, upgradeFacility,
 } from '@/lib/clubManagerFacilities';
 import type { FacilityId } from '@/lib/clubManagerFacilities';
 
@@ -32,6 +32,7 @@ export function FacilitiesScreen({ career, onUpgrade }: FacilitiesScreenProps) {
             const cost = facilityUpgradeCost(career, id);
             const info = CLUB_FACILITY_INFO[id];
             const canBuy = cost !== null && career.budget >= cost;
+            const next = canBuy ? upgradeFacility(career, id) : null;
             return (
               <div key={id} data-facility={id} data-facility-level={level}>
                 <div className="flex items-center justify-between gap-2">
@@ -41,7 +42,7 @@ export function FacilitiesScreen({ career, onUpgrade }: FacilitiesScreenProps) {
                     <button
                       onClick={() => onUpgrade(id)}
                       disabled={!canBuy}
-                      className="text-[9px] font-bold rounded-full px-2 py-0.5 border border-gold/50 text-gold hover:bg-gold/10 disabled:opacity-30 disabled:hover:bg-transparent transition-colors"
+                      className="min-h-[44px] text-[11px] font-bold rounded-xl px-3 py-2 border border-gold/50 text-gold hover:bg-gold/10 disabled:opacity-50 disabled:hover:bg-transparent transition-colors"
                     >
                       {cost === null ? 'Maxed' : `Upgrade ${money(cost)}`}
                     </button>
@@ -52,7 +53,17 @@ export function FacilitiesScreen({ career, onUpgrade }: FacilitiesScreenProps) {
                     <span key={i} className={cn('h-1.5 flex-1 rounded-sm', i < level ? 'bg-primary/80' : 'bg-secondary')} />
                   ))}
                 </div>
-                <p className="text-[9px] text-muted-foreground mt-0.5">{facilityEffectLine(career, id)}</p>
+                <p data-facility-current className="text-[11px] text-muted-foreground mt-1">Now: {facilityEffectLine(career, id)}</p>
+                {next ? (
+                  <div data-facility-preview className="mt-1 rounded-lg border border-primary/25 bg-primary/5 px-2 py-1.5 text-[11px]">
+                    <p className="text-foreground">Next, level {facilitiesOf(next)[id]}: {facilityEffectLine(next, id)}</p>
+                    <p className="mt-0.5 font-semibold text-foreground">Leaves {money(next.budget)} in the transfer kitty.</p>
+                  </div>
+                ) : (
+                  <p className="mt-1 text-[11px] text-muted-foreground">
+                    {cost === null ? 'Maximum level reached.' : `Need ${money(cost - career.budget)} more to upgrade.`}
+                  </p>
+                )}
               </div>
             );
           })}

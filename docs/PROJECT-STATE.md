@@ -1,5 +1,41 @@
 # Project state
 
+## Codex864 accepted, 2026-10-02
+
+Club Manager facilities now show actual upgrade benefit and remaining budget,
+with shortfall/max explanations and44px controls. Real engine and save unchanged.
+11 focused cases and two asserted quote controls pass; native6/6 new-career
+paths at four widths pass147 assertions with actual purchases and five reloads.
+No overflow/page errors/writes. Clean combined type/build pass; final built
+fences remain pending. Root pushes this repair separately;863/865/866 continue.
+Shared browser public-data loading stall is being traced separately. No live
+publication or Google approval claimed. Paused drafts remain untouched.
+
+## Codex863-866 claimed, 2026-10-02
+
+Continue noticeable product work:863 Ball IQ answer/progress presentation,
+864 Club Manager facilities benefit/budget preview,865 Tennis/NASCAR stale
+validation isolation,866 Silverware deliberate result advance. Three builders
+own disjoint scopes; root owns866 and integration/Git/native gates. Existing
+questions, real sports data, simulation engines and backend stay unchanged.
+Pull before work was up to date at3f9d517a. Claude reserved/held work and paused
+842-845 drafts are untouched. No user browser connector/visible tabs. Next867.
+
+## Twelve Codex source repairs pushed, 2026-10-02
+
+New85956534e17 input/charge cues,8602b553ae6 deadline,8617340ad12 leaderboard
+claims and8625515beb2 result visuals follow the eight repairs recorded below.
+163 new focused cases total. Clean gate type/build0; all15 built-site fences
+and25 distinct selected harnesses green across accepted runs. Production entry
+index-3CYGbOij.js, SHA256
+7ea4e205f04fb3e594980bad134efe7e937a9f650f3dfee94ecc23e814dccb81.
+Native24 release paths, four ten-shot dailies and eight actual scoring practice
+cases pass, with original driver/test limits retained in the new arcade/scoring
+receipt. Main source through5515beb2 is pushed, not confirmed published. Claude
+owns full-suite/release/live verification and his reserved simulation/data work.
+Paused842-845 drafts excluded; scoped stash and unrelated files preserved.
+No visible test tabs or user-browser connector. Next free863.
+
 ## Codex862 accepted visible arcade results, 2026-10-02
 
 Free Kick/Buzzer now show larger verdicts/points and stronger existing motion.
@@ -8,7 +44,7 @@ stay intact. Six real scoring cases at320/390/1440 reduced and two animated
 wins at320 pass;24 ordinary miss cases fit too. Existing feedback10/10 and
 final harness pass. Clean type/build, all15 built fences and25 distinct
 selected harnesses pass across accepted runs. Detailed receipt records earlier
-timeouts/driver limits.85956534e17,8602b553ae6,8617340ad12 are pushed;862 follows.
+timeouts/driver limits.85956534e17,8602b553ae6,8617340ad12,8625515beb2 are pushed.
 Only separate hidden CLI browsers used. Next free863; publication is Claude's.
 
 ## Codex861 accepted truthful leaderboard copy, 2026-10-02
