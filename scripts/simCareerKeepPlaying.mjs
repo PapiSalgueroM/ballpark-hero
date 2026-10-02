@@ -32,6 +32,10 @@
  *      after the last, and says "Decided to push on" exactly once. Off the
  *      suggestion screen it writes nothing. Every injury stop's row carries
  *      the injury on the screen, at least one game, and no team trophy.
+ *      Every season row has exactly one money season (simCareerParity's
+ *      rule), and every professional season in a tournament year has that
+ *      summer in the international history (the injury and trial years play
+ *      it without him), so the calendar moving on never skips a World Cup.
  *   3. Nothing moves before the first stop. A career the pre-850 engine
  *      never stopped (no suggestion declined, no rehab, no conviction) is
  *      byte identical end to end; one it did stop is byte identical up to the
@@ -69,6 +73,12 @@
  *   noconvictionsave  an old save on the conviction paper still gets no row
  *   convictiontwice   a reloaded conviction save gets a second row
  *   pageclubs         the page's Keep Playing hands the engine no clubs
+ *   nomoney           the injury year runs no money season
+ *   nomoneytrial      the trial year runs no money season
+ *   nomoneysave       an old rehab save's row runs no money season
+ *   nosummer          the injury year skips its tournament summer
+ *   nosummertrial     the trial year skips its tournament summer
+ *   nosummersave      an old rehab save's row skips its tournament summer
  *
  * 6. The page's Keep Playing passes the clubs it loaded (an empty list
  *    compiles, plays the season and only stops the rival moving clubs, which
@@ -135,9 +145,10 @@ const OLD_DECLINE = 'export function declineRetirementSuggestion(prev: CareerSta
   + '  s.phase = "playing";\n'
   + '  return s;\n'
   + '}\n';
+const TRIAL_SUMMER = '    runTournamentSummer(s, s.seasons[s.seasons.length - 1], s.seasons[s.seasons.length - 1].year, true);\n';
 const ROWS = {
-  conviction: ['    s.seasons = [...s.seasons, yearOutRow(s, "CONVICTED")];\n    simulateSeasonFinances(s, s.seasons[s.seasons.length - 1]);\n    s.phase = "newspaper";', '    s.phase = "newspaper";'],
-  rehab: ['      s.seasons = [...s.seasons, injuryRow];\n      simulateSeasonFinances(s, injuryRow);\n      s.phase = "rehab_choice";', '      s.phase = "rehab_choice";'],
+  conviction: ['    s.seasons = [...s.seasons, yearOutRow(s, "CONVICTED")];\n    simulateSeasonFinances(s, s.seasons[s.seasons.length - 1]);\n' + TRIAL_SUMMER + '    s.phase = "newspaper";', '    s.phase = "newspaper";'],
+  rehab: ['      s.seasons = [...s.seasons, injuryRow];\n      simulateSeasonFinances(s, injuryRow);\n      runTournamentSummer(s, injuryRow, injuryRow.year, true);\n      s.phase = "rehab_choice";', '      s.phase = "rehab_choice";'],
   rehabSave: ['  if (lastRow && lastRow.age < s.age) {\n    const row = yearOutRow(s, null);', '  if (false) {\n    const row = yearOutRow(s, null);'],
   newsSave: ['    if (lastRow && lastRow.age < s.age) {\n      s.events = [...s.events];', '    if (false) {\n      s.events = [...s.events];'],
 };
@@ -169,8 +180,11 @@ const CONTROLS = {
   noconvictionsave: ROWS.newsSave,
   convictiontwice: [ROWS.newsSave[0], '    if (lastRow) {\n      s.events = [...s.events];'],
   nomoney: ['      s.seasons = [...s.seasons, injuryRow];\n      simulateSeasonFinances(s, injuryRow);', '      s.seasons = [...s.seasons, injuryRow];'],
-  nomoneytrial: ['    simulateSeasonFinances(s, s.seasons[s.seasons.length - 1]);\n    s.phase = "newspaper";', '    s.phase = "newspaper";'],
+  nomoneytrial: ['    simulateSeasonFinances(s, s.seasons[s.seasons.length - 1]);\n' + TRIAL_SUMMER + '    s.phase = "newspaper";', TRIAL_SUMMER + '    s.phase = "newspaper";'],
   nomoneysave: ['    s.seasons = [...s.seasons, row];\n    simulateSeasonFinances(s, row);', '    s.seasons = [...s.seasons, row];'],
+  nosummer: ['      runTournamentSummer(s, injuryRow, injuryRow.year, true);\n', ''],
+  nosummertrial: [TRIAL_SUMMER + '    s.phase = "newspaper";', '    s.phase = "newspaper";'],
+  nosummersave: ['    simulateSeasonFinances(s, row);\n    runTournamentSummer(s, row, row.year, true);', '    simulateSeasonFinances(s, row);'],
 };
 /* and one that mutates the page's call instead of the engine */
 const PAGE_CALL = "setCareer(declineRetirementSuggestion(career, clubs));";
@@ -336,12 +350,20 @@ function audit(s, label, quiet = false) {
    A ban or prison year runs its money; so must a rehab or a trial year. */
 const playedRows = s => s.seasons.filter(r => r.type === "youth" || r.type === "playing").length - 1;
 const ticks = (E, s) => E.moneyOf(JSON.parse(JSON.stringify(s))).age;
+/* And the calendar moving on never skips a tournament: every professional
+   season row in a tournament year has that summer in the international
+   history, the injury and trial years included (played without him). The
+   ban and prison years are left out: they have skipped the summer since
+   long before this round, and changing them is not this round's to do. */
+const YEAR_OUT = new Set(["BANNED", "BANNED (PED)", "PRISON"]);
+const summersMissed = (E, s) => s.seasons.filter(r => r.type === "playing" && !YEAR_OUT.has(r.club)
+  && E.tournamentForYear(s.nationality, r.year) && !(s.intlHistory || []).some(h => h.year === r.year)).map(r => r.year);
 
 /* ── 1 to 3: the three fleets, current and pre-850 ── */
 const FLEETS = ["accept", "decline", "worst"];
 const bal = {};
 const moved = {};
-let declineRowsBad = 0, pushBad = 0, injuryRowsBad = 0, injuryRows = 0, moneyBad = 0;
+let declineRowsBad = 0, pushBad = 0, injuryRowsBad = 0, injuryRows = 0, moneyBad = 0, summerBad = 0, summersOld = 0;
 for (const policy of FLEETS) {
   console.log(`1) ${CAREERS} careers, policy ${policy}`);
   let lostNow = 0, lostOld = 0, rehabStops = 0, convictions = 0, declines = 0;
@@ -360,6 +382,10 @@ for (const policy of FLEETS) {
       moneyBad += 1;
       fail(`${policy} career ${c}: ${playedRows(cur.s)} seasons on the record and the market ran ${ticks(CUR, cur.s)} times`);
     }
+    const missedNow = summersMissed(CUR, cur.s);
+    summersOld += summersMissed(OLD, old.s).length;
+    checks += 1;
+    if (missedNow.length) { summerBad += 1; fail(`${policy} career ${c}: the summers of ${missedNow.join(", ")} were never played`); }
     const b = audit(old.s, `${policy} career ${c} (pre-850)`, true);
     lostOld += b.missing.length;
     for (const age of b.missing) {
@@ -432,7 +458,7 @@ for (const policy of FLEETS) {
     check(convictions >= FLOOR.convictionsWorst, `worst: only ${convictions} convictions, floor ${FLOOR.convictionsWorst}: the conviction path is not being reached`);
   }
 }
-console.log(`2) Keep Playing steps wrong ${declineRowsBad}, push on line not once ${pushBad}; injury rows ${injuryRows}, wrong ${injuryRowsBad}; careers where the market and the record disagree ${moneyBad}`);
+console.log(`2) Keep Playing steps wrong ${declineRowsBad}, push on line not once ${pushBad}; injury rows ${injuryRows}, wrong ${injuryRowsBad}; careers where the market and the record disagree ${moneyBad}; careers with a tournament summer never played ${summerBad} (pre-850 engine, same rule: ${summersOld})`);
 check(injuryRows > 0, "no injury stop was reached on the current engine, so the injury row check tests nothing");
 
 /* 2: off the suggestion screen Keep Playing plays nothing */
@@ -535,7 +561,7 @@ const heatUp = s => (s.age >= 22 ? { ...s, corruptionHeat: 95, dirtyMoney: Math.
         const ok = rows(after) === rows(s) + 1 && last.age === s.age && last.year === s.seasons.at(-1).year + 1
           && last.injurySevere === true && last.injury === s.pendingRehab.name && last.apps === 0 && last.goals === 0
           && JSON.stringify(after.seasons.slice(0, -1)) === JSON.stringify(s.seasons)
-          && ticks(CUR, after) === playedRows(after) && nextYearOk(after);
+          && ticks(CUR, after) === playedRows(after) && summersMissed(CUR, after).length === 0 && nextYearOk(after);
         check(ok, `old rehab save ${c}: answering the rehab choice at ${s.age} did not write exactly one empty injured row`);
         if (ok) tally.rehabOld[1] += 1;
       }
@@ -564,7 +590,7 @@ const heatUp = s => (s.age >= 22 ? { ...s, corruptionHeat: 95, dirtyMoney: Math.
         const last = after.seasons.at(-1);
         let ok = rows(after) === rows(s) + 1 && last.age === s.age && last.year === s.seasons.at(-1).year + 1
           && last.club === "CONVICTED" && last.apps === 0 && after.phase === "playing"
-          && ticks(CUR, after) === playedRows(after);
+          && ticks(CUR, after) === playedRows(after) && summersMissed(CUR, after).length === 0;
         if (ok) {
           const prison = CUR.advanceProSeason(after, clubs);
           ok = prison.age === s.age + 1 && prison.seasons.at(-1).club === "PRISON" && prison.seasons.at(-1).year === last.year + 1;

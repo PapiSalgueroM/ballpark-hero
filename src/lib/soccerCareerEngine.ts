@@ -1635,6 +1635,7 @@ export function applyRehabChoice(prev: CareerState, choiceIndex: number): Career
     if (s.loan) row.onLoanFrom = s.loan.parentClub;
     s.seasons = [...s.seasons, row];
     simulateSeasonFinances(s, row);
+    runTournamentSummer(s, row, row.year, true);
   }
 
   const history = [...(s.seriousInjuries ?? [])];
@@ -4623,10 +4624,13 @@ function generateIntSeasonStats(state: CareerState, year: number): { intApps: nu
    Three things can go wrong for the player and all three are real football:
    the country misses out, the manager leaves you at home, or you go and lose.
 */
-function runTournamentSummer(s: CareerState, season: SeasonRecord, year: number): void {
+/* Round 850: `out` runs the summer without him (an injury year or a trial
+   year): the world still crowns its champion and the history keeps the
+   summer, and no screen waits for a player who was never in it. */
+function runTournamentSummer(s: CareerState, season: SeasonRecord, year: number, out = false): void {
   const fmt = tournamentForYear(s.nationality, year);
   if (!fmt) return;
-  const eligible = s.internationalCareer && !s.intStats.isRetired && !s.retired;
+  const eligible = !out && s.internationalCareer && !s.intStats.isRetired && !s.retired;
   const t = runInternationalSummer(s.nationality, year, eligible ? playerFormOf(s) : null);
   if (!t) return;
 
@@ -4859,9 +4863,10 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
        appearance shape with the reason as the club. Before this the year
        went by with no row, the market and the bank skipped it, and the
        calendar fell a year behind his age (the prison row comes the year
-       after). */
+       after). A tournament that summer is played without him. */
     s.seasons = [...s.seasons, yearOutRow(s, "CONVICTED")];
     simulateSeasonFinances(s, s.seasons[s.seasons.length - 1]);
+    runTournamentSummer(s, s.seasons[s.seasons.length - 1], s.seasons[s.seasons.length - 1].year, true);
     s.phase = "newspaper";
     return s;
   } else if (heat >= 70 && Math.random() < 0.35) {
@@ -4994,11 +4999,14 @@ function playPendingProSeason(s: CareerState, clubs: ClubData[]): CareerState {
          rest of that season (the Champions League, the world's results, the
          announcements) never runs. And the year's money runs, the way it does
          for a ban or prison year: the wages still come in while he is out.
-         Before this the year had no row and no money at all. */
+         If it is a tournament summer it is played without him, so the
+         calendar moving on never skips a World Cup. Before this the year had
+         no row and no money at all. */
       const injuryRow: SeasonRecord = { ...season, leagueTitle: false, domesticCup: false };
       if (s.loan) injuryRow.onLoanFrom = s.loan.parentClub;
       s.seasons = [...s.seasons, injuryRow];
       simulateSeasonFinances(s, injuryRow);
+      runTournamentSummer(s, injuryRow, injuryRow.year, true);
       s.phase = "rehab_choice";
       return s;
     }
@@ -5692,6 +5700,7 @@ export function dismissNewspaper(prev: CareerState): CareerState {
       s.events = [...s.events];
       s.seasons = [...s.seasons, yearOutRow(s, "CONVICTED")];
       simulateSeasonFinances(s, s.seasons[s.seasons.length - 1]);
+      runTournamentSummer(s, s.seasons[s.seasons.length - 1], s.seasons[s.seasons.length - 1].year, true);
     }
   }
   /* ROUND 502: THIS LINE ENDED CAREERS, PERMANENTLY, AND THE PLAYER WAS STILL
