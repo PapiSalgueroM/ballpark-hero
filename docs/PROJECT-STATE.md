@@ -1,5 +1,15 @@
 # Project state
 
+## Codex877 accepted and ready for release lane, 2026-10-02
+
+Manual finals feedback and earned score, guarded keyboard Next focus and daily
+save/booking timing are verified.24 focused cases/eight controls, native3/3 at
+1440/390/320 with keyboard/true touch/reduced motion,67 existing recording cases
+and effective overnight/reload controls pass. App type/build0,15 built fences
+and10 source guards green. Entryindex-DVB2NgdH.js. Details in new request/reveal
+repair receipt. Fixture UI proof only, no live historical-data or publication
+claim. All private browser/server processes closed.878 continues, next free880.
+
 ## Codex879 accepted, first integration gate green, 2026-10-02
 
 871-877 accepted-file app type/build0, all15 built fences and10 selected source

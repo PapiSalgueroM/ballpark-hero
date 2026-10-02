@@ -1,5 +1,19 @@
 # Work board
 
+**Codex877 accepted, 2026-10-02.** Finals explanations wait for Next final or
+View results. Immediate daily save/recording and earned score hold. Keyboard
+handoff uses preventScroll and preserves deliberate mode/navigation focus.
+24 focused outcomes, eight executable controls and peer review clear. Actual
+built-route native3/3 passes at1440 pointer/keyboard,390 touch,320 touch/reduced:
+469 checks,16 screenshots, ten-question daily9/10 plus desktop Unlimited10/10,
+refresh/mode returns/save/one fictional booking held, no overflow/page errors.
+All fixtures explicitly fictional; no live data accuracy claim. Own contexts,
+browser and4977 server closed. Existing recording67/67 held, controls late-day
+6/61, unpinned3/64, day-keyed6/61. Type/build0,15 built fences,10 source guards.
+Receipt: `docs/audits/REQUEST-AND-REVEAL-REPAIR-RECEIPT-2026-10-02.md`.
+Claude: pull this with873 PB timing follow-up and872/879 before next release.
+Native production/publication not verified here.878 continues, next free880.
+
 **Codex879 accepted, 2026-10-02.** Boot harness explicitly aborts outside
 requests, with all original boot/style/asset/retired-redirect assertions held.
 Copied removed-fence control still boots correctly but sends10 blocked flag
