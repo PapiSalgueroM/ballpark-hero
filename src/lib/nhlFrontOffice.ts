@@ -4,6 +4,8 @@ import { leagueNames, uniqueName } from './foNames';
 /* Round 531: the cap comes from one sourced file, never a bare literal here. */
 import { NHL_UPPER_LIMIT_2026_27 } from './leagueCaps';
 import { makeIdMinter, ensureLeagueEntityIds } from './entityIds';
+/* Round 851: a booked, balanced schedule, shared with the NBA and MLB. */
+import { type FoSchedule, buildFoSchedule, foPlayRound } from './foSchedule';
 /* Round 631: dead money and the no way back rule, shared by the four GM sims. */
 import { type CutLedger, cutPlayer, payrollWithDeadCap, rollDeadCap, rosterFullRefusal, signRefusal, tradeRefusal } from './frontOfficeCuts';
 
@@ -81,6 +83,10 @@ export interface NhlLeague {
   freeAgents: NhlGmPlayer[];
   round: number; // 1..NHL_FO_ROUNDS
   champions: { season: number; team: string }[];
+  /** Round 851: this season's fixtures, "HOME-AWAY" per round (foSchedule.ts).
+      Optional: a league saved before the round finishes that season the old
+      way and is booked at its next summer. */
+  schedule?: FoSchedule;
 }
 
 /* Round 568: this counter used to live at module scope, which restarts on
@@ -121,7 +127,7 @@ export function initNhlLeague(rng: () => number = Math.random): NhlLeague {
     }));
     teams[abbr] = { abbr, players, wins: 0, losses: 0, otLosses: 0, picks: [1, 2] };
   }
-  return {
+  const league: NhlLeague = {
     season: 2026,
     cap: NHL_CAP_BASE,
     teams,
@@ -130,6 +136,13 @@ export function initNhlLeague(rng: () => number = Math.random): NhlLeague {
     round: 1,
     champions: [],
   };
+  league.schedule = nhlBookSeason(league, rng);
+  return league;
+}
+
+/** Round 851: every club plays NHL_FO_ROUNDS x NHL_GAMES_PER_ROUND games, half at home. */
+export function nhlBookSeason(league: NhlLeague, rng: () => number): FoSchedule {
+  return buildFoSchedule(Object.keys(league.teams), NHL_FO_ROUNDS, NHL_GAMES_PER_ROUND, rng);
 }
 
 /* Round 211: widened from 10x10 to 28x28. A hundred possible people is
@@ -295,23 +308,20 @@ export function simNhlRound(league: NhlLeague, myTeam: string, rng: () => number
     if (rng() < 0.25) { loser.otLosses += 1; if (isMe) myOtl += 1; }
     else { loser.losses += 1; if (isMe) myL += 1; }
   };
-  for (const abbr of abbrs) {
+  /* Round 851: the round's booked games (foSchedule.ts); a league saved mid
+     season before the round finishes that season the old way. */
+  foPlayRound(league, abbrs, NHL_GAMES_PER_ROUND, rng, (abbr, opp) => {
     const me = league.teams[abbr];
-    for (let g = 0; g < NHL_GAMES_PER_ROUND; g++) {
-      let opp = abbrs[Math.floor(rng() * abbrs.length)];
-      if (opp === abbr) opp = abbrs[(abbrs.indexOf(abbr) + 1) % abbrs.length];
-      const them = league.teams[opp];
-      if (rng() < 0.5) continue;
-      const p = nhlWinProb(me, them);
-      if (rng() < p) {
-        me.wins += 1; if (abbr === myTeam) myW += 1;
-        loseGame(them, opp === myTeam);
-      } else {
-        them.wins += 1; if (opp === myTeam) myW += 1;
-        loseGame(me, abbr === myTeam);
-      }
+    const them = league.teams[opp];
+    const p = nhlWinProb(me, them);
+    if (rng() < p) {
+      me.wins += 1; if (abbr === myTeam) myW += 1;
+      loseGame(them, opp === myTeam);
+    } else {
+      them.wins += 1; if (opp === myTeam) myW += 1;
+      loseGame(me, abbr === myTeam);
     }
-  }
+  }, () => nhlBookSeason(league, rng));
   return { myWins: myW, myLosses: myL, myOtLosses: myOtl, notes };
 }
 
@@ -514,6 +524,8 @@ export function nhlOffseason(league: NhlLeague, rng: () => number): string[] {
   league.cap = Math.round(league.cap * 1.09);
   league.season += 1;
   league.round = 1;
+  /* Round 851: the new season's fixtures, for an old save too. */
+  league.schedule = nhlBookSeason(league, rng);
   return notes;
 }
 

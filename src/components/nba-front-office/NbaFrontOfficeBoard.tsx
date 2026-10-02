@@ -957,8 +957,10 @@ export default function NbaFrontOfficeBoard() {
           <div className="rounded-xl border border-gold/30 bg-gold/5 p-2.5 space-y-2">
             <p className="text-center text-[11px] font-bold text-foreground">🔍 Trade Finder</p>
             <p className="text-center text-[10px] text-muted-foreground">Pick one of your players and shop him. Only deals the AI genuinely accepts show up, cap checked.</p>
-            <div className="grid grid-cols-2 gap-1">
-              {[...my.players].sort((a, b) => b.ovr - a.ovr).slice(0, 8).map(p => (
+            {/* Round 851: every man, not the top 8, in a list that scrolls inside the
+                card (the same shape the NHL board takes in Round 830). */}
+            <div data-trade-shop-list className="grid max-h-60 grid-cols-2 gap-1 overflow-y-auto">
+              {[...my.players].sort((a, b) => b.ovr - a.ovr).map(p => (
                 <button key={p.id} onClick={() => { setMyTradePiece(p.id); setShopOffers([]); setShopTried(false); }} className={cn('flex items-center justify-between rounded-lg border px-2 py-1 text-[11px]', myTradePiece === p.id ? 'border-gold bg-gold/10' : 'border-border/60 bg-background')}>
                   <span className="truncate text-foreground">{p.name} ({p.pos})</span><b className="text-primary">{p.ovr}</b>
                 </button>
@@ -1006,17 +1008,17 @@ export default function NbaFrontOfficeBoard() {
             <>
               <p className="text-center text-[10px] text-muted-foreground">1. Pick who YOU send. 2. Tap who you want back and open talks. The other GM counters like a person: a pick to close the gap, a lesser man instead, or the dial tone.</p>
               <div className="grid grid-cols-2 gap-2">
-                <div className="space-y-1">
+                <div data-trade-send-list className="max-h-80 space-y-1 overflow-y-auto">
                   <p className="text-center text-[10px] font-bold uppercase text-muted-foreground">You send</p>
-                  {[...my.players].sort((a, b) => b.ovr - a.ovr).slice(0, 8).map(p => (
+                  {[...my.players].sort((a, b) => b.ovr - a.ovr).map(p => (
                     <button key={p.id} onClick={() => setMyTradePiece(p.id)} className={cn('flex w-full items-center justify-between rounded-lg border px-2 py-1 text-[11px]', myTradePiece === p.id ? 'border-gold bg-gold/10' : 'border-border/60 bg-background')}>
                       <span className="truncate text-foreground">{p.name} ({p.pos})</span><b className="text-primary">{p.ovr}</b>
                     </button>
                   ))}
                 </div>
-                <div className="space-y-1">
+                <div data-trade-get-list className="max-h-80 space-y-1 overflow-y-auto">
                   <p className="text-center text-[10px] font-bold uppercase text-muted-foreground">You get ({tradePartner})</p>
-                  {[...league.teams[tradePartner].players].sort((a, b) => b.ovr - a.ovr).slice(0, 8).map(p => {
+                  {[...league.teams[tradePartner].players].sort((a, b) => b.ovr - a.ovr).map(p => {
                     /* Round 631: the trade paths refuse a man you let go this season, so the screen says so. */
                     const back = tradeRefusal(my, p.id, CUT_SAID);
                     return (

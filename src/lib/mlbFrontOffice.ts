@@ -7,6 +7,8 @@ import { leagueNames, uniqueName } from './foNames';
 /* Round 531: the tax line comes from one sourced file, never a bare literal here. */
 import { MLB_CBT_THRESHOLD_2026 } from './leagueCaps';
 import { makeIdMinter, ensureLeagueEntityIds } from './entityIds';
+/* Round 851: a booked, balanced schedule, shared with the NBA and the NHL. */
+import { type FoSchedule, buildFoSchedule, foPlayRound } from './foSchedule';
 /* Round 631: dead money and the no way back rule, shared by the four GM sims. */
 import { type CutLedger, cutPlayer, payrollWithDeadCap, rollDeadCap, rosterFullRefusal, signRefusal, tradeRefusal } from './frontOfficeCuts';
 
@@ -84,6 +86,10 @@ export interface MlbLeague {
   freeAgents: MlbGmPlayer[];
   round: number; // 1..MLB_ROUNDS
   champions: { season: number; team: string }[];
+  /** Round 851: this season's fixtures, "HOME-AWAY" per round (foSchedule.ts).
+      Optional: a league saved before the round finishes that season the old
+      way and is booked at its next summer. */
+  schedule?: FoSchedule;
 }
 
 /* Round 568: this counter used to live at module scope, which restarts on
@@ -142,7 +148,7 @@ export function initMlbLeague(rng: () => number = Math.random): MlbLeague {
     }));
     teams[abbr] = { abbr, players, wins: 0, losses: 0, picks: [1, 2], depth: MLB_DEPTH };
   }
-  return {
+  const league: MlbLeague = {
     season: 2026,
     cap: MLB_TAX_BASE,
     teams,
@@ -151,6 +157,13 @@ export function initMlbLeague(rng: () => number = Math.random): MlbLeague {
     round: 1,
     champions: [],
   };
+  league.schedule = mlbBookSeason(league, rng);
+  return league;
+}
+
+/** Round 851: every club plays MLB_ROUNDS x MLB_GAMES_PER_ROUND games, half at home. */
+export function mlbBookSeason(league: MlbLeague, rng: () => number): FoSchedule {
+  return buildFoSchedule(Object.keys(league.teams), MLB_ROUNDS, MLB_GAMES_PER_ROUND, rng);
 }
 
 /* Round 211: widened from 10x10 to 28x28. A hundred possible people is
@@ -289,18 +302,15 @@ export function simMlbRound(league: MlbLeague, myTeam: string, rng: () => number
       }
     }
   }
-  for (const abbr of abbrs) {
+  /* Round 851: the round's booked games (foSchedule.ts); a league saved mid
+     season before the round finishes that season the old way. */
+  foPlayRound(league, abbrs, MLB_GAMES_PER_ROUND, rng, (abbr, opp) => {
     const me = league.teams[abbr];
-    for (let g = 0; g < MLB_GAMES_PER_ROUND; g++) {
-      let opp = abbrs[Math.floor(rng() * abbrs.length)];
-      if (opp === abbr) opp = abbrs[(abbrs.indexOf(abbr) + 1) % abbrs.length];
-      const them = league.teams[opp];
-      if (rng() < 0.5) continue;
-      const p = mlbWinProb(me, them);
-      if (rng() < p) { me.wins += 1; them.losses += 1; if (abbr === myTeam) myW += 1; if (opp === myTeam) myL += 1; }
-      else { me.losses += 1; them.wins += 1; if (abbr === myTeam) myL += 1; if (opp === myTeam) myW += 1; }
-    }
-  }
+    const them = league.teams[opp];
+    const p = mlbWinProb(me, them);
+    if (rng() < p) { me.wins += 1; them.losses += 1; if (abbr === myTeam) myW += 1; if (opp === myTeam) myL += 1; }
+    else { me.losses += 1; them.wins += 1; if (abbr === myTeam) myL += 1; if (opp === myTeam) myW += 1; }
+  }, () => mlbBookSeason(league, rng));
   return { myWins: myW, myLosses: myL, notes };
 }
 
@@ -544,6 +554,8 @@ export function mlbOffseason(league: MlbLeague, rng: () => number, userTeam?: st
   league.cap = Math.round(league.cap * 1.03);
   league.season += 1;
   league.round = 1;
+  /* Round 851: the new season's fixtures, for an old save too. */
+  league.schedule = mlbBookSeason(league, rng);
   return notes;
 }
 

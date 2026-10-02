@@ -460,6 +460,7 @@ function career(
     mount: () => mountEl(Board(), `/${id}`, c => textOf(c).includes(name)),
     async finish(api) {
       await click(button(api.container, /^Hang them up now$/));
+      await click(button(document.body, /^Retire this player$/));
       await settle();
     },
     finished,
