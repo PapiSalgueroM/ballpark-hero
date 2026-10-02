@@ -13,7 +13,7 @@
  * round's commit: re-recording to turn the harness green is exactly the failure
  * it exists to catch.
  *
- * Run: node scripts/recordCareerAwardsNightFixture.mjs [--root <tree>] [--out <file>]
+ * Run: node scripts/recordCareerAwardsNightFixture.mjs [--root <tree>] [--out <file>] [--from <sha>]
  */
 import fs from 'node:fs';
 import path from 'node:path';
@@ -29,9 +29,12 @@ const arg = name => {
 const root = path.resolve(arg('--root') ?? HERE);
 const out = path.resolve(arg('--out') ?? path.join(HERE, 'scripts/data/careerAwardsNightFixture.json'));
 
+/* --from <sha> names the commit the --root tree was exported from. It is the
+   file's header, so a reader knows which main the replay is held to. */
+const from = arg('--from');
 const B = await bundleAwardsNight(root);
 const data = probeAwardsNight(B);
-fs.writeFileSync(out, JSON.stringify(data) + '\n');
+fs.writeFileSync(out, JSON.stringify(from ? { recordedFrom: from, ...data } : data) + '\n');
 const wins = data.nights.filter(n => n.rank === 1).length;
 const steps = data.careers.reduce((a, c) => a + c.steps.split(' ').length, 0);
 console.log(`wrote ${path.relative(HERE, out)} from ${root}: ${data.careers.length} careers, ${steps} saves hashed, ${data.nights.length} awards nights (${wins} won), ${data.tournaments.length} tournaments, ${data.speeches.length} direct speeches, ${data.markup.length} cards kept whole`);

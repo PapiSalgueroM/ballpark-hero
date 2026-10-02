@@ -280,7 +280,9 @@ export function probeAwardsNight({ soccer, appearance, cards }) {
             break;
           }
           case 'retirement_suggestion':
-            s = s.age >= 34 ? soccer.acceptRetirementSuggestion(s) : soccer.declineRetirementSuggestion(s);
+            /* Round 850 made Keep Playing play the pending season, which needs
+               the clubs; a tree from before it ignores the extra argument. */
+            s = s.age >= 34 ? soccer.acceptRetirementSuggestion(s) : soccer.declineRetirementSuggestion(s, clubs);
             break;
           default:
             throw new Error(`career ${c}: no driver for phase "${ph}"`);

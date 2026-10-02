@@ -125,7 +125,9 @@ console.log('1) Soccer Career replays the pre-lift fixture byte for byte');
     const [who, pts] = t.split(':');
     return `${who === 'P' ? 'YOU' : fixture.names[Number(who)] ?? fresh.names[Number(who)] ?? who}:${pts}`;
   }).join(', ');
+  if (fixture.recordedFrom) console.log(`   recorded from ${fixture.recordedFrom}`);
   for (const key of Object.keys(fixture)) {
+    if (key === 'recordedFrom') continue; // the header, not an output
     const want = fixture[key], got = fresh[key];
     if (JSON.stringify(want) === JSON.stringify(got)) { console.log(`   ${key.padEnd(12)} identical`); checks += 1; continue;
     }
