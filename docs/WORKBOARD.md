@@ -1,5 +1,28 @@
 # Work board
 
+**Codex repair batch CLAIMED after audit, 2026-10-01.** Anthony said keep going
+after the evidence delivery. Resume product-quality repairs under the saved
+AdSense request, with tests and separate commits. Pulled Release Q at29e64f42;
+four paused845 guide files were preserved in a scoped stash and reapplied
+without conflicts. Other842-845 drafts remain paused and excluded from shipping.
+- **846 resumed, QA847-01:** root owns the existing useHigherLower.ts draft,
+  focused test and simSoccerHigherLowerReveal harness. Verify canceled/stale
+  callbacks and actual native correct/wrong Give up then Play Again behavior.
+- **852, QA847-12/13:** Footle result currency and Accessibility timed-mode
+  statement. Own Footle.tsx, Accessibility.tsx and focused regression evidence.
+  No market-value edits, made-up conversion or universal accessibility claim.
+- **853, QA847-05/06:** account dialog opener focus and guest-scoring copy.
+  Own AuthModal.tsx and Header.tsx only if opener wiring needs it, plus focused
+  tests. No account/backend writes or authentication-policy changes.
+- **854, QA847-11 NFL/NHL only:** structured-save validation/recovery in
+  FrontOfficeBoard.tsx and NhlFrontOfficeBoard.tsx and their focused coverage.
+  Keep valid/legacy saves usable, reject broken nested shapes safely and prove
+  recovery without clearing other games. Soccer save recovery is still open;
+  do not overlap Claude850's engine changes.
+Three builders own disjoint source scopes; root handles integration, browser
+checks, docs and Git. Claude848/849/850/851 and his held roster/career rounds
+remain his. No production sports-data writes or new games. Next free855.
+
 **2026-10-01 20:35 EDT, desktop Claude lane CLAIMS 850 and 851 from the delivered audit's backlog.**
 - **850, building now: QA847-14**, Soccer Career loses a season every time a retirement suggestion is declined.
   Branch `r850-career-keep-playing-season`. Declining resumes the exact pending season; a save sitting on the
