@@ -9,11 +9,11 @@ import {
   initNhlLeague, simNhlRound, nhlFoStandings, runNhlFoPlayoffs, nhlOffseason,
   nhlDraftClass, nhlProspectToPlayer, nhlStrength, nhlCapUsed, nhlCapRoom,
   nhlRelease, nhlSign, nhlTrade, nhlTradeValue, nhlAiMoves, nhlPoints, EASTERN, WESTERN, NHL_FO_DIVISIONS,
-  NHL_FO_ROUNDS,
+  NHL_FO_ROUNDS, NHL_RATING_MODEL_VERSION, nhlSalaryFor, nhlAiDraftPicks,
   type NhlLeague, type NhlProspect, type NhlSeriesResult, nhlExecuteTalksTrade,
   ensureNhlLeagueIds, NHL_ROSTER_MIN, NHL_ROSTER_MAX,
   nhlContributors, nhlSetContributors, nhlResetContributors, repairNhlContributors,
-  type NhlContributors, type NhlGmTeam,
+  type NhlContributors, type NhlGmTeam, type NhlGmPlayer,
 } from '@/lib/nhlFrontOffice';
 /* Round 631: waiving a man costs dead money and he cannot come back this season. */
 import { deadMoneyFor, deadCapUsed, signRefusal, cutRefusal, rosterFullRefusal, tradeRefusal } from '@/lib/frontOfficeCuts';
@@ -57,6 +57,28 @@ type Tab = 'team' | 'market' | 'trade' | 'round' | 'standings';
 const SAVE_KEY = 'nhl-front-office-save-v1';
 /* Round 631: what the market and the trade screen say about a man you let go this season. */
 const CUT_SAID = 'You waived him this season.';
+
+function openingEvidence(p: NhlGmPlayer) {
+  const e = p.openingRatingEvidence;
+  const basis = p.pos === 'G' ? 'save-rate-proxy' : p.pos === 'D' ? 'offense-usage-proxy' : 'offensive-production';
+  return e && e.modelVersion === NHL_RATING_MODEL_VERSION && typeof e.originKey === 'string' && e.originKey.length > 0
+    && Number.isInteger(e.openingOvr) && e.openingOvr >= 0 && e.openingOvr <= 99 && typeof e.partial === 'boolean'
+    && (e.basis === basis || e.basis === 'unmeasured-prior')
+    && (e.basis === 'offensive-production' || e.partial) ? e : null;
+}
+function ratingNote(p: NhlGmPlayer) {
+  if (!p.openingRatingEvidence) return null;
+  const e = openingEvidence(p);
+  const basis = e?.basis === 'offensive-production' ? 'offensive production'
+    : e?.basis === 'offense-usage-proxy' ? 'offense and usage proxy'
+    : e?.basis === 'save-rate-proxy' ? 'save-rate proxy, shot quality unavailable' : 'unmeasured game prior';
+  return <span data-rating-evidence className="block text-[10px] text-muted-foreground">
+    {e ? `Opening estimate ${e.openingOvr}: ${basis}.${e.partial ? ' Limited opening evidence.' : ' Defense and other skills are not measured.'}` : 'Opening rating evidence unavailable.'}
+  </span>;
+}
+function ratingMarker(p: NhlGmPlayer) {
+  return openingEvidence(p)?.partial ? <span data-rating-partial title="Limited opening evidence" className="ml-0.5 text-[9px] text-muted-foreground">e</span> : null;
+}
 
 const NHL_WORDS: FoSportWords = { title: 'the Stanley Cup', playoffs: 'the playoffs', round: 'a series', games: 80 };
 
@@ -167,6 +189,9 @@ export default function NhlFrontOfficeBoard() {
   const [tab, setTab] = useState<Tab | null>(null);
   const [myTeam, setMyTeam] = useState('');
   const [league, setLeague] = useState<NhlLeague | null>(null);
+  const [starting, setStarting] = useState(false), [startError, setStartError] = useState('');
+  const startPending = useRef(false), alive = useRef(true);
+  useEffect(() => { alive.current = true; return () => { alive.current = false; }; }, []);
   const [contributorsOpen, setContributorsOpen] = useState(false);
   const contributorsOpener = useRef<HTMLButtonElement>(null), contributorReturn = useRef(false), contributorCommit = useRef<NhlLeague | null>(null);
   useLayoutEffect(() => {
@@ -274,9 +299,14 @@ export default function NhlFrontOfficeBoard() {
     return t ? `${t.city} ${t.name}` : abbr;
   };
 
-  const start = (abbr: string) => {
+  const start = async (abbr: string) => {
+    if (startPending.current) return;
+    startPending.current = true; setStarting(true); setStartError('');
+    try {
+    const { NHL_OPENING_RATINGS } = await import('@/data/nhlOpeningRatings');
+    if (!alive.current) return;
+    const lg = initNhlLeague(Math.random, NHL_OPENING_RATINGS);
     setSaveError(false);
-    const lg = initNhlLeague();
     const m = mandateFor(lg, abbr, false);
     setLeague(lg); setMyTeam(abbr); setPhase('hub'); setTab(null);
     setFeed([
@@ -292,6 +322,12 @@ export default function NhlFrontOfficeBoard() {
     }));
     setPressTilt(0); setSeasonTradeLine(null);
     persist({ phase: 'hub', titles: 0, seasonsPlayed: 0, mandate: m, trust: FO_TRUST_START, fired: false, pressTilt: 0, seasonTradeLine: null }, lg, abbr);
+    } catch {
+      if (alive.current) setStartError('We could not load the opening ratings. Try your team again. Your existing save is unchanged.');
+    } finally {
+      startPending.current = false;
+      if (alive.current) setStarting(false);
+    }
   };
 
   /* Round 192: one answer, three registers. Trust moves now, the tilt
@@ -415,20 +451,18 @@ export default function NhlFrontOfficeBoard() {
     const lg: NhlLeague = JSON.parse(JSON.stringify(league));
     const pr = draftClass.find(p => p.id === id);
     if (!pr) return;
-    lg.teams[myTeam].players.push(nhlProspectToPlayer(pr, Math.random));
+    lg.teams[myTeam].players.push(nhlProspectToPlayer(pr, Math.random, lg.ratingModelVersion));
     const remaining = draftClass.filter(p => p.id !== id);
-    const aiTakes = remaining.slice(0, 5);
     const order = nhlFoStandings(lg).map(t => t.abbr).reverse().filter(a => a !== myTeam);
     /* Round 515: the rival picks were applied and thrown away, so real
        decisions the engine made happened where nobody could see them.
        Captured here for the reveal, from the same objects the engine used. */
     const rivalPicks: { team: string; playerName: string; pos: string; grade: number }[] = [];
-    aiTakes.forEach((p, i) => {
-      const abbr = order[i % order.length];
-      lg.teams[abbr].players.push(nhlProspectToPlayer(p, Math.random));
-      rivalPicks.push({ team: abbr, playerName: p.name, pos: String(p.pos), grade: p.grade });
-    });
-    const nextClass = remaining.filter(p => !aiTakes.includes(p));
+    const aiDraft = nhlAiDraftPicks(lg, remaining, order, Math.random);
+    for (const { team, prospect } of aiDraft.picks) {
+      rivalPicks.push({ team, playerName: prospect.name, pos: String(prospect.pos), grade: prospect.grade });
+    }
+    const nextClass = aiDraft.remaining;
     const nextPicks = picksLeft - 1;
     /* Round 530: every pick builds its reveal, the last one included. Round
        519 had named the final pick as not narrated: it left for the hub in
@@ -480,7 +514,7 @@ export default function NhlFrontOfficeBoard() {
     if (!league) return;
     setCutArmed(null);
     const lg: NhlLeague = JSON.parse(JSON.stringify(league));
-    if (nhlRelease(lg.teams[myTeam], lg.freeAgents, pid)) { setLeague(lg); persist({}, lg, myTeam); }
+    if (nhlRelease(lg.teams[myTeam], lg.freeAgents, pid, lg.ratingModelVersion)) { setLeague(lg); persist({}, lg, myTeam); }
   };
   const changeContributors = (value: NhlContributors | null): boolean => {
     if (!league || contributorCommit.current === league) return false;
@@ -494,7 +528,7 @@ export default function NhlFrontOfficeBoard() {
   const doSign = (pid: string) => {
     if (!league) return;
     const lg: NhlLeague = JSON.parse(JSON.stringify(league));
-    if (nhlSign(lg.teams[myTeam], lg.freeAgents, pid, lg.cap)) {
+    if (nhlSign(lg.teams[myTeam], lg.freeAgents, pid, lg.cap, lg.ratingModelVersion)) {
       /* Round 530: the signing lands in the feed as a slam. The man and the
          number are read off the roster he just joined, so the line can only
          say what the engine did. */
@@ -592,14 +626,16 @@ export default function NhlFrontOfficeBoard() {
         <div className="rounded-2xl border border-border bg-card p-4 text-center">
           <p className="font-display text-lg font-bold text-foreground">Take over an NHL front office</p>
           <p className="mt-1 text-xs text-muted-foreground">
-            Real 2026-27 rosters from the NHL&apos;s own data, rated off real 2025-26 stats. Work
+            A curated roster snapshot with original simulation ratings. Work
             under the hard cap, chase points over an 80 game season, then the divisional
             bracket: sixteen teams, four best-of-7 rounds, one Cup. Saves automatically.
           </p>
         </div>
+        {starting && <p role="status" className="text-center text-xs text-muted-foreground">Loading opening ratings...</p>}
+        {startError && <p role="alert" className="text-center text-xs text-destructive">{startError}</p>}
         <div className="grid grid-cols-2 gap-1.5 sm:grid-cols-4">
           {NHL_TEAMS.map(t => (
-            <button key={t.id} onClick={() => start(t.id)} className="rounded-lg border border-border bg-card px-2 py-2 text-left transition-all hover:scale-[1.02] hover:border-primary/60">
+            <button key={t.id} disabled={starting} onClick={() => void start(t.id)} className="rounded-lg border border-border bg-card px-2 py-2 text-left transition-all hover:scale-[1.02] hover:border-primary/60 disabled:opacity-40">
               <span className="block h-1.5 w-full rounded-full" style={{ background: t.color }} />
               <span className="mt-1.5 block truncate text-xs font-bold text-foreground">{t.city} {t.name}</span>
               <span className="block truncate text-[10px] text-muted-foreground">{EASTERN.includes(t.id) ? 'Eastern' : 'Western'}</span>
@@ -845,6 +881,12 @@ export default function NhlFrontOfficeBoard() {
             {dead > 0 && <> · dead money <b className="text-destructive">${dead}M</b></>}
           </p>
           <p className="mb-2 text-center text-[10px] text-muted-foreground">{capNote()}</p>
+          <p data-rating-legend className="mb-3 text-[10px] text-muted-foreground">
+            OVR, potential and contracts are simulation values. The player list stays at its roster snapshot.
+            {league.ratingModelVersion === NHL_RATING_MODEL_VERSION
+              ? ' Opening estimates use 2024-25 and 2025-26 regular-season inputs: forwards measure offensive production, defensemen use offense and usage proxies, and goalies use save-rate proxies. The e marker means limited evidence. These do not measure every skill. Later ratings come from this saved simulation.'
+              : ' This franchise keeps its saved grades, contracts and development.'}
+          </p>
           {cutBlock && <p data-cut-block className="mb-2 text-center text-[10px] text-destructive">{cutBlock}</p>}
           <div className="grid max-h-96 grid-cols-1 gap-1 overflow-y-auto sm:grid-cols-2">
             {[...my.players].sort((a, b) => b.ovr - a.ovr).map(p => {
@@ -857,9 +899,10 @@ export default function NhlFrontOfficeBoard() {
                 <span className="min-w-0">
                   <span className={cn('block truncate font-bold', p.out > 0 ? 'text-destructive' : 'text-foreground')}>{p.name} {p.out > 0 ? `(out ${p.out}r)` : ''}</span>
                   <span className="block text-[10px] text-muted-foreground">{p.pos} · {p.age}y · ${p.salary}M x{p.years}</span>
+                  {ratingNote(p)}
                 </span>
                 <span className="ml-2 flex shrink-0 items-center gap-1.5">
-                  <b className="text-primary">{p.ovr}</b>
+                  <b className="text-primary">{p.ovr}{ratingMarker(p)}</b>
                   <button
                     onClick={() => setCutArmed(arming ? null : p.id)}
                     disabled={!!cutBlock}
@@ -910,16 +953,18 @@ export default function NhlFrontOfficeBoard() {
               /* Round 631: the engine's own refusal, so the button is never
                  live when pressing it would do nothing. */
               const refusal = signRefusal(my, p.id, CUT_SAID);
+              const ask = league.ratingModelVersion === NHL_RATING_MODEL_VERSION ? nhlSalaryFor(p.ovr, league.ratingModelVersion) : p.salary;
               return (
               <div key={p.id} data-fa-row={p.id} className="flex items-center justify-between rounded-lg border border-border/60 bg-background px-2.5 py-1.5 text-xs">
                 <span className="min-w-0">
                   <span className="block truncate font-bold text-foreground">{p.name}</span>
-                  <span className="block text-[10px] text-muted-foreground">{p.pos} · {p.age}y · wants ${p.salary}M</span>
+                  <span className="block text-[10px] text-muted-foreground">{p.pos} · {p.age}y · wants ${ask}M</span>
+                  {ratingNote(p)}
                   {refusal && <span className="block text-[10px] text-destructive">{refusal}</span>}
                 </span>
                 <span className="ml-2 flex shrink-0 items-center gap-1.5">
-                  <b className="text-primary">{p.ovr}</b>
-                  <button onClick={() => doSign(p.id)} disabled={p.salary > room || !!refusal || !!fullBlock} title={refusal ?? fullBlock ?? undefined} className="rounded-full bg-primary px-2.5 py-0.5 text-[10px] font-bold text-primary-foreground disabled:opacity-40">Sign</button>
+                  <b className="text-primary">{p.ovr}{ratingMarker(p)}</b>
+                  <button onClick={() => doSign(p.id)} disabled={ask > room || !!refusal || !!fullBlock} title={refusal ?? fullBlock ?? undefined} className="rounded-full bg-primary px-2.5 py-0.5 text-[10px] font-bold text-primary-foreground disabled:opacity-40">Sign</button>
                 </span>
               </div>
               );
@@ -939,7 +984,7 @@ export default function NhlFrontOfficeBoard() {
             <div data-trade-shop-list className="grid max-h-60 grid-cols-2 gap-1 overflow-y-auto">
               {[...my.players].sort((a, b) => b.ovr - a.ovr).map(p => (
                 <button key={p.id} onClick={() => { setMyTradePiece(p.id); setShopOffers([]); setShopTried(false); }} className={cn('flex items-center justify-between rounded-lg border px-2 py-1 text-[11px]', myTradePiece === p.id ? 'border-gold bg-gold/10' : 'border-border/60 bg-background')}>
-                  <span className="truncate text-foreground">{p.name} ({p.pos})</span><b className="text-primary">{p.ovr}</b>
+                  <span className="min-w-0 text-left"><span className="block truncate text-foreground">{p.name} ({p.pos})</span>{ratingNote(p)}</span><b className="shrink-0 text-primary">{p.ovr}{ratingMarker(p)}</b>
                 </button>
               ))}
             </div>
@@ -990,7 +1035,7 @@ export default function NhlFrontOfficeBoard() {
                   <div data-trade-send-list className="max-h-80 space-y-1 overflow-y-auto">
                   {[...my.players].sort((a, b) => b.ovr - a.ovr).map(p => (
                     <button key={p.id} onClick={() => setMyTradePiece(p.id)} className={cn('flex w-full items-center justify-between rounded-lg border px-2 py-1 text-[11px]', myTradePiece === p.id ? 'border-gold bg-gold/10' : 'border-border/60 bg-background')}>
-                      <span className="truncate text-foreground">{p.name} ({p.pos})</span><b className="text-primary">{p.ovr}</b>
+                      <span className="min-w-0 text-left"><span className="block truncate text-foreground">{p.name} ({p.pos})</span>{ratingNote(p)}</span><b className="shrink-0 text-primary">{p.ovr}{ratingMarker(p)}</b>
                     </button>
                   ))}
                   </div>
@@ -1004,7 +1049,8 @@ export default function NhlFrontOfficeBoard() {
                     return (
                     <div key={p.id} data-trade-row={p.id} className="flex items-center justify-between gap-1 rounded-lg border border-border/60 bg-background px-2 py-1 text-[11px]">
                       <span className="min-w-0">
-                        <span className="block truncate text-foreground">{p.name} ({p.pos}) <b className="text-primary">{p.ovr}</b></span>
+                        <span className="block truncate text-foreground">{p.name} ({p.pos}) <b className="text-primary">{p.ovr}{ratingMarker(p)}</b></span>
+                        {ratingNote(p)}
                         {back && <span className="block text-[9px] text-destructive">{back}</span>}
                       </span>
                       <button onClick={() => openTradeTalks(p.id)} disabled={!myTradePiece || !!back} title={back ?? undefined} className="shrink-0 rounded-full bg-primary px-2.5 py-0.5 text-[9px] font-bold text-primary-foreground disabled:opacity-40">Open talks</button>
