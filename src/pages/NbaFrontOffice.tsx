@@ -35,6 +35,7 @@ const NbaFrontOffice = () => {
               'Watch the tax line, set from your own league\'s payrolls. Payroll over it is taxed at season close in rising brackets, repeaters pay more, ownership holds the bill against you, and the season cannot tip off with fewer than 14 or more than 15 under contract.',
               'Play the season in stretches and watch the conference tables tighten.',
               'Finish 7th to 10th and you are in the play-in. Win a title through four best-of-7 rounds.',
+              "Close each season on its numbers: the league leaders, your club's lines and five awards named by stated rules, all from this save's sim games, never real NBA stats.",
               'Draft, develop, re-sign and go again. Banners are forever.',
               'Face the room: the podium, the accountability scrum and the trade question move your trust upstairs, and what you promise can raise or soften next season\'s mandate.',
             ]}
@@ -43,6 +44,7 @@ const NbaFrontOffice = () => {
               'Sneak from the 9 seed through the play-in to a Finals run',
               'Draft a 90-grade prospect who turns out to be a 78',
               'Open a new league on its $226.7M tax line, close the season $10M over it and pay $10.8M (the first $6.859M at 1.00, the rest at 1.25), or $30.8M as a repeater',
+              'Carry a strong sixth man behind your best five: off the bench he scores about 13 a game and can take Sixth Man of the Year, because he started fewer than half his games',
               'Build back-to-back champions and chase a dynasty',
             ]}
           />

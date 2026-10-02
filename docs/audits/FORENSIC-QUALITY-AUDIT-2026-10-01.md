@@ -1,7 +1,8 @@
 # Forensic quality audit, 2026-10-01
 
-Status: in progress. Codex847 is evidence only. No fixes or production data
-changes are included. Original requests and lane ownership are saved in
+Status: delivered as a bounded audit. Codex847 is evidence only. No fixes or
+production data changes are included. Full-catalog end-to-end testing remains
+open. Original requests and lane ownership are saved in
 `docs/OWNER-QUALITY-PROGRAM-2026-10-01.md`.
 
 Current inventory: `evidence847/inventory-current.csv` and the JSON companion.
@@ -25,7 +26,7 @@ or not established remain open; a successful initial render is not completion.
   click or impression, test score, signup or historical data update is sent.
   Filled ad creatives therefore remain untested.
 
-## Verified issues delivered so far
+## Verified product issues
 
 ### QA847-01, P1: abandoned soccer answer changes a new game
 
@@ -148,17 +149,19 @@ accurately in `src/components/auth/AuthModal.tsx`.
 URL: `https://douknowball.com/footle`, fresh context without a saved choice.
 Twelve Tab and six Shift+Tab presses cycle only inside the help modal, while
 cookie choices remain visible and pointer-hit-testable. Escape closes help and
-the banner becomes reachable later in the normal tab order. This is a keyboard
+restores its opener. Later Tab reachability of the cookie buttons was not
+measured. This is a keyboard
 usability defect with a workaround, not a verified consent-policy violation.
 Recommended repair: coordinate initial cookie/help focus in CookieConsent and
 the shared dialog without hiding or changing the user's consent choices.
 
-## Pending consolidation
+## Final coverage and version boundaries
 
 The reports now include actual NBA, MLB, NFL and NHL Front Office season runs,
 one Club Manager season and return into season two, Footle Daily and Unlimited,
 and a Soccer Career from native creation at16 to retirement at45. Four American
-create-a-player modes are receiving a final bounded native pass. The 111-route
+create-a-player modes each completed six season/decision cycles, manual
+retirement, save return and restart,24 cycles total. The 111-route
 short-game exploratory sweep completed with no reproduced flagged failures and
 three named driver limits. Mode toggles and blocked validators mean those
 clicks do not establish game completion.
@@ -166,8 +169,31 @@ clicks do not establish game completion.
 Claude's Release P landed during the audit and was merged without touching
 paused drafts. Current live replays observe `/assets/index-E8L0RxXO.js`, SHA256
 `640820ed3b9ead81190861c4b061326a372e9c942067b3440d16e5e8cdea2e0b`.
-Older measurements retain their original bundle identity. Root's clean4930
+Older measurements retain their recorded version boundaries. The NFL/NHL
+full-season contexts did not capture a per-context entry. Root's clean4930
 build remains8542bf83. No audit-authored gameplay or historical data fix landed.
+
+| Area | Actual measurement | Limit |
+| --- | --- | --- |
+| Routes and mobile |193 inventory entries;170 sitemap URLs plus four utility/fallback addresses mounted at320px | Patterns/redirects are not193 public playable games; initial mount is not completion |
+| Indexability | All170 sitemap raw/mounted metadata measured; distinct descriptions, one canonical, no noindex | Google indexing and Search Console account state unverified |
+| Comparison games | Nine native ten-round Daily completions with independently compared scoring; Soccer reveal/restart at320/1280px | All random pairs, factual answers and date rollover not established |
+| NBA/MLB GM | Three regular seasons, postseason recaps and four live draft picks; MLB hostile cuts/signing/refusal | All cap/trade/AI/bankruptcy branches and a second full season untested |
+| NFL/NHL GM | Four regular seasons at320/1440px,74 periods and ten draft picks; next-season refresh | Full-season contexts lack per-context bundle capture; current defect replays pinned separately |
+| Club Manager | One38-fixture league season via native calendar, one full live match, season2 return, renewal and two separate transfers | Most matches fast-forwarded; serialization-normalization flag unresolved; second full season unplayed |
+| Soccer Career | Native creation16 to retirement45, observed save returned after release, multiple refresh checkpoints | One original path; six lost years verified, not exhaustive career branches |
+| Four American careers |24 native season/decision cycles, four manual retirements, four restarts, byte-held midcareer/retired returns | Default position/current era; natural retirement and all optional systems untested |
+| Footle | Daily and Unlimited losses through eight distinct guesses each; invalid/duplicate/keyboard/give-up/refresh flows | Winning path and every difficulty untested; true valuation not externally reverified |
+| Shared product | Navigation/footer/search/legal text, guest leaderboards, keyboard dialogs and cookie script gate | No authenticated account, email, deletion, report or score write |
+| Advertising |170 stored-Accept reserved-container visits on Release P;75 pages have one slot with150px upper padding | Vendor scripts intercepted; filled creatives, regional messages and later game states untested |
+| Data |22 production dataset inventory entries,48 selected source files,16 ledgers;230 corrupt rows retained; two-source selected facts | Structural checks and stored fences do not validate every historical record |
+
+Specialist reports: `SHARED-PRODUCT-AUDIT-2026-10-01.md`,
+`SIMULATION-AUDIT-2026-10-01.md`, `NFL-NHL-SIMULATION-AUDIT-2026-10-01.md`,
+`CLUB-MANAGER-AUDIT-2026-10-01.md`, `FOOTLE-AUDIT-2026-10-01.md`,
+`SOCCER-CAREER-LIFETIME-AUDIT-2026-10-01.md` and
+`AMERICAN-CAREERS-AUDIT-2026-10-01.md`. Empty inventory finding arrays mean no
+verified finding in the measured evidence, not a pass for every possible path.
 
 ## Additional verified simulation and product issues
 
@@ -198,7 +224,7 @@ URLs: `https://douknowball.com/nba-front-office` and
 `https://douknowball.com/mlb-front-office`.
 
 Start Boston or the Dodgers, play all20 NBA or27 MLB rounds, then compare each
-club's final regular-season wins plus losses before playoffs. Live NBA totals
+club's saved regular-season wins plus losses at recap. Live NBA totals
 range64 to93 games; the independent clean NBA run ranges68 to94. Live MLB
 ranges148 to175. Standings compare raw wins. Expected: a fair schedule with the
 declared season length, or a clearly described alternative competition.
@@ -303,7 +329,7 @@ year2025 at age16 becomes2048 at45, six years behind the continuous2054 calendar
 The deliberate PED ban at39 has its own zero-app row and is excluded.
 
 Possible cause: `advanceProSeason` increments age before the suggestion's
-early returns. `declineRetirement` only changes phase to playing, leaving the
+early returns. `declineRetirementSuggestion` only changes phase to playing, leaving the
 deferred season unplayed. Proposed repair: either ask before committing the
 advance or resume that exact pending season on decline. Preserve intended
 retirement and injury rules, finance/development consequences and save recovery.
@@ -326,6 +352,34 @@ two-source27. Bo Nix's one-yard difference is unresolved publisher disagreement.
 No historical correction or gameplay edit was made, and no permanent test
 was added. All64 selected source/ledger RAW hashes held.
 
-Final rankings, page decisions, disclosure checks and the pre-submission
-checklist follow the final evidence consolidation. No Top20 list will be
-padded with unverified suspicions. AdSense approval remains unresolved.
+The MLB original53 reversed-span count was a TEXT comparison, not53 reversed
+numeric spans. The corrected annotations distinguish nine numeric reversals
+from44 lexical false positives. All161 MLB raw rows and69 NHL raw rows remain
+unchanged. Most correct replacements are unknown and require separate review.
+
+## Repair decisions and remaining work
+
+`QUALITY-REPAIR-BACKLOG-2026-10-01.md` ranks20 of the14 product families plus
+seven data findings/flags, maps exact URLs to proposed code/content repairs,
+states page consolidation/indexation decisions, reviews advertising/privacy
+and supplies20 pre-submission checks. `TOP20-DATA-REVIEW-2026-10-01.md` lists20
+actual flagged records, not20 fabricated independent root causes. The gameplay
+and AdSense sections deliberately report fewer than20 verified defects when
+the evidence supports fewer. Unverified checks are labeled as open work.
+
+No whole useful game is recommended for mass deletion or noindex from this
+evidence. Repair actual defects, review data and test the remaining catalog.
+Claims require their own evidence; see `CLAIM-VERIFICATION-2026-10-01.md`.
+Signed-in recovery, full filled-ad layouts, regional consent configuration,
+all-row historical facts and unplayed game branches remain open. No sitewide
+P0 outage was reproduced, and no Google policy approval is inferred.
+
+Claude848 owns QA847-02/03/04. The audit did not modify those consumers.
+Codex842-846 remain paused, unaccepted drafts. Google's AdSense decision and
+indexation status remain unresolved; no review request was submitted.
+
+Final preservation: `evidence847/final-preservation.json` confirms six paused
+draft hashes and all64 frozen data/ledger RAW hashes in the clean audit baseline.
+The shared checkout differs in line endings only for18 selected files.
+All owned audit browsers and the4930 server are closed. No app rebuild was
+needed for this final documentation-only consolidation.

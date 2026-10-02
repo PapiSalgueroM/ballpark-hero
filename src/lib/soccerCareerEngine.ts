@@ -1444,7 +1444,7 @@ export const MORAL_DILEMMAS: MoralDilemma[] = [
     id: "magazine_shoot",
     emoji: "📸",
     title: "THE MAGAZINE CALL",
-    description: "A famous magazine wants you on the cover. The tasteful version pays well. The artistic version, wearing nothing but a strategically held football, pays absurdly. Your agent is already laughing.",
+    description: "A famous magazine wants you on the cover. The tasteful version pays well. The bold version, shirt off with a football under your arm, pays absurdly. Your agent is already laughing.",
     choices: [
       { label: "Tasteful calendar shoot", emoji: "😎", consequence: "2M fee, popularity +10" },
       { label: "The full artistic cover", emoji: "🙈", consequence: "6M fee, popularity +18", risk: "25% chance a sponsor drops you for 2M" },
@@ -1899,7 +1899,7 @@ export function applyMoralDilemmaChoice(prev: CareerState, choiceIndex: number):
           s.netWorth = Math.round((s.netWorth - 2) * 100) / 100;
           s.events = [...s.events, "🙈 The artistic cover breaks the internet. 6M earned, popularity +18... and a family-brand sponsor quietly walked, costing 2M."];
         } else {
-          s.events = [...s.events, "🙈 The artistic cover breaks the internet. 6M earned, popularity +18. The football was held VERY strategically."];
+          s.events = [...s.events, "🙈 The artistic cover breaks the internet. 6M earned, popularity +18. Your agent has the cover framed in his office."];
         }
       } else {
         s.events = [...s.events, "🚪 Declined the shoot. Your grandmother frames the polite refusal letter."];
@@ -2905,14 +2905,16 @@ function simulateSeasonFinances(s: CareerState, season: SeasonRecord): void {
     s.lifestyleLevel = "Humble";
     s.lifestyleCostPerYear = 0.05;
     s.properties = [];
-    s.purchasedItems = s.purchasedItems.filter(id => {
-      const item = getSpendingItem(id);
-      return item?.category === "lifestyle"; // keep lifestyle upgrades
-    });
-    s.customYearlyCosts = s.purchasedItems.reduce((sum, id) => {
-      const item = getSpendingItem(id);
-      return sum + (item?.monthlyCost || 0);
-    }, 0);
+    const keep = (id: string) => getSpendingItem(id)?.category === "lifestyle"; // keep lifestyle upgrades
+    /* Round 826: the bill loses the upkeep of what was sold and nothing else.
+       It used to be rebuilt from the items kept, which also wiped every
+       yearly cost that is not an item at all (the private physio, a child, a
+       rescue dog) while the physio, the child and the dog stayed, so the
+       physio worked for free for the rest of the career. */
+    const soldUpkeep = s.purchasedItems.filter(id => !keep(id))
+      .reduce((sum, id) => sum + (getSpendingItem(id)?.monthlyCost || 0), 0);
+    s.purchasedItems = s.purchasedItems.filter(keep);
+    s.customYearlyCosts = Math.max(0, Math.round(((s.customYearlyCosts || 0) - soldUpkeep) * 1000) / 1000);
     s.totalAssetValue = 0;
     s.consecutiveDeficitYears = 0;
     s.morale = clamp(s.morale - 20, 0, 100);

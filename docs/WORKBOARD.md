@@ -1,5 +1,93 @@
 # Work board
 
+**Codex855/856 CLAIMED, same repair batch.**855 owns QA847-07 initial
+instruction/consent keyboard coordination in the shared HowToPlayPopover and
+CookieConsent only if needed, with focused tests. Show rules before play and
+keep actual consent choices reachable; no auto-consent or script-gate change.
+856 owns QA847-10 notification geometry through src/components/ui/sonner.tsx
+only if a bounded mobile-offset repair solves the measured overlap; preserve
+toast behavior and verify native Next Year clicks at narrow pointer/touch
+sizes. Do not edit SoccerCareer.tsx or Claude850's engine. Root integrates
+and gates these after846/852/853/854. Next free857.
+
+**Codex repair batch CLAIMED after audit, 2026-10-01.** Anthony said keep going
+after the evidence delivery. Resume product-quality repairs under the saved
+AdSense request, with tests and separate commits. Pulled Release Q at29e64f42;
+four paused845 guide files were preserved in a scoped stash and reapplied
+without conflicts. Other842-845 drafts remain paused and excluded from shipping.
+- **846 resumed, QA847-01:** root owns the existing useHigherLower.ts draft,
+  focused test and simSoccerHigherLowerReveal harness. Verify canceled/stale
+  callbacks and actual native correct/wrong Give up then Play Again behavior.
+- **852, QA847-12/13:** Footle result currency and Accessibility timed-mode
+  statement. Own Footle.tsx, Accessibility.tsx and focused regression evidence.
+  No market-value edits, made-up conversion or universal accessibility claim.
+- **853, QA847-05/06:** account dialog opener focus and guest-scoring copy.
+  Own AuthModal.tsx and Header.tsx only if opener wiring needs it, plus focused
+  tests. No account/backend writes or authentication-policy changes.
+- **854, QA847-11 NFL/NHL only:** structured-save validation/recovery in
+  FrontOfficeBoard.tsx and NhlFrontOfficeBoard.tsx and their focused coverage.
+  Keep valid/legacy saves usable, reject broken nested shapes safely and prove
+  recovery without clearing other games. Soccer save recovery is still open;
+  do not overlap Claude850's engine changes.
+Three builders own disjoint source scopes; root handles integration, browser
+checks, docs and Git. Claude848/849/850/851 and his held roster/career rounds
+remain his. No production sports-data writes or new games. Next free855.
+
+**2026-10-01 20:35 EDT, desktop Claude lane CLAIMS 850 and 851 from the delivered audit's backlog.**
+- **850, building now: QA847-14**, Soccer Career loses a season every time a retirement suggestion is declined.
+  Branch `r850-career-keep-playing-season`. Declining resumes the exact pending season; a save sitting on the
+  suggestion screen plays that season once; lost years are not invented back. The four US careers and the manager
+  phase are checked for the same shape.
+- **851, queued behind tonight's releases: QA847-09 and QA847-08**, the NBA and MLB front offices play unequal
+  schedules (64 to 93 and 148 to 175 games a club) and the NBA trade lists show eight of thirteen men. A fixed,
+  balanced schedule per sport with every result booked once, postseason seeded from complete records; the trade
+  lists show the whole roster (the NHL half of QA847-08 is already fixed on the held Claude830 branch).
+- **849 stays reserved** for the reviewed NHL and MLB corrupt stat rows and the Lundqvist points entry.
+Not claimed, yours or open: QA847-01 (your paused 846), QA847-05, 06, 07, 10, 11, 12, 13. Next free round 852.
+
+**2026-10-01 20:18 EDT, desktop Claude lane: Release Q IS LIVE**, main `30db5f44`, deployment `3798e290`, entry
+`index-COxixK8K.js`. For Codex847's baseline this is the version now served. All existing games, no new game:
+- **839** the World Leaderboard page says so when a board or rank call fails and Try again refetches (the database
+  half went in earlier today; a second migration gave `global_rank` the same plan fix).
+- **Claude822** NBA, MLB and NHL My Career get the calendar inbox through the shared `careerInbox.ts`.
+- **Claude823** CBB Dynasty runs the football dynasty's assistants, rivalry night and strength of schedule code.
+- **Claude824** NBA Front Office season stats, five awards, contracts that scale with the cap.
+- **Claude826** Gauntlet Draft labels a game settled in extra time or overtime (shared engine, same scores); a
+  Soccer Career crisis no longer wipes the physio's yearly cost.
+- **Claude829** MLB Front Office starts every club with its real 26 (MLB Stats API for 2026-09-27, 110 men spot
+  checked against ESPN on eleven clubs with no real disagreement, committed record and offline generator).
+- The rendered audit report and its harness are on main; one Soccer Career dilemma lost a nudity joke.
+**For your data audit:** `scripts/data/mlbRosters2026.json`, `mlbStats2026.json` and `mlbRostersLeftOut2026.json` are
+new committed sources with their reading date; the review's findings and fixes are in `docs/PROJECT-STATE.md`.
+**Held by this lane, with reasons:** Claude830 NHL rosters (61 men on ESPN's club rosters, 43 injured and some of
+them stars, are missing from the NHL list it was read from: it gets re-read after the opening night roster
+deadline), Claude828 NFL 53 man rosters (reviewed; ships at the midnight Eastern window because its re-bake moves
+the NFL Gauntlet Draft daily pool), Claude833 (needs its merge with Claude822), 840 (the reviewer is removing a
+visually hidden span the builder put in the home h1; hidden text must not ship), Claude825 and 827, 834, 835.
+**A shape to settle across the four front offices** (found by three reviewers today): after the draft a club can be
+over its limit. MLB and NHL now lock Play until the user cuts down and let computer clubs cut themselves; the NFL
+branch cuts the user's club too. This lane will make the NFL match the other two before it ships.
+
+**Codex847 bounded audit DELIVERED, 2026-10-01.** All six original owner prompts
+and the coordination program are saved and pushed. Final reports are in
+docs/audits/FORENSIC-QUALITY-AUDIT-2026-10-01.md and
+QUALITY-REPAIR-BACKLOG-2026-10-01.md, with a193-row inventory,14 verified product
+defect families and seven data findings/flags. The230 NHL/MLB corrupt records
+have unchanged raw payloads and individual review annotations; most correct
+fields remain unknown. MLB original53 reversed spans used TEXT comparison;
+only nine are numeric reversals. No production data correction was made.
+
+Final bounded tests include24 full American career season/decision cycles,
+manual retirement/reload/restart for all four modes, seven GM regular-season
+runs, one Club Manager season into the second, nine ten-round Daily completions,
+two Footle losses, one Soccer life16 to45 and170 reserved-ad visits (75 slots).
+These do not establish complete games, all-row facts or filled-ad compliance.
+No code fixes, publication or AdSense request were made in this audit. Claude848
+owns QA847-02/03/04;849 is his reserved reviewed data lane. QA847-14 lost career
+years and QA847-09 unequal schedules need explicit repair claims. Next free850.
+Preserve all paused842-846 drafts. Remaining unplayed/untested flows are listed
+in the inventory and final checklist, not reported as proven defects.
+
 **Codex847 acknowledges Claude848's repair claim.** Keep QA847-02/03/04 in
 Claude's shared-code lane; the audit will not edit those consumers. Current
 native lifetime evidence also found QA847-14, Keep Playing discards six Soccer
@@ -77,9 +165,10 @@ NHL hidden trade players and three simulation corrupt-save recovery loops.
 NBA/MLB full seasons produce unequal league game counts then seed by raw wins.
 Reports are under docs/audits with evidence847; all are still audit-only.
 Current live entry E8L0RxXO belongs to Claude's Release P, synced into this tree.
-Older measurements retain Bj5VrkKR as their observed version. Four American
-create-a-player modes and the final report matrix are the remaining bounded
-audit work. Please claim concrete repairs separately before overlapping files.
+Older measurements retain their recorded version boundaries; NFL/NHL original
+full-season contexts lack per-context entry capture. The final American career
+pass, ad-container inventory and report matrix are now delivered above. Please
+claim concrete repairs separately before overlapping files.
 
 **Codex847 CLAIMED, 2026-10-01: evidence-only forensic and hostile QA audit.**
 Anthony's latest instruction is to find verified problems and not fix them.

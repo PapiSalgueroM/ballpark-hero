@@ -1,8 +1,9 @@
 import { makeIdMinter, ensureLeagueEntityIds } from './entityIds';
 import {
-  buildRivalries, chargePayroll, fireCoordinator, genStaff, hireCoordinator, rivalOf, rivalrySwing,
-  staffCandidates, staffCarousel, staffEdges, staffPayroll, strengthOfSchedule,
-  type Coordinator, type ProgramStaff, type RivalKind, type Rivalry, type StaffRole,
+  buildRivalries, enableProgramLayer, openProgramOffseason, recordProgramRound, rivalOf, sosTable,
+  staffEdges, staffPayroll, strengthOfSchedule, windowFire, windowHire,
+  type Coordinator, type ProgramSport, type ProgramStaff, type RivalKind, type RivalryResult, type Rivalry,
+  type SlateGame, type StaffRole, type StaffWindow,
 } from './collegeProgram';
 /**
  * CFB Dynasty engine (2026-08-05). The college pillar of the sim suite.
@@ -130,6 +131,15 @@ export function cfbRivalOf(id: string): { rival: string; kind: RivalKind; state?
   return rivalOf(cfbRivalries(), id);
 }
 
+/** Round 823: football's descriptor for the shared program glue. */
+export const CFB_PROGRAM: ProgramSport = {
+  schools: CFB_SCHOOLS,
+  rivalFullMargin: CFB_RIVAL_FULL_MARGIN,
+  rivalOf: cfbRivalOf,
+  roleTitle: { OC: 'offensive coordinator', DC: 'defensive coordinator' },
+  chairName: { OC: 'OC', DC: 'DC' },
+};
+
 export interface CfbPlayer {
   id: string;
   name: string;
@@ -157,39 +167,15 @@ export interface CfbTeam {
   opps?: string[];
 }
 
-/** Round 728: my rivalry week result, kept until the offseason spends its recruiting swing. */
-export interface CfbRivalryResult {
-  season: number;
-  opp: string;
-  us: number;
-  them: number;
-  won: boolean;
-  kind: RivalKind;
-  state?: string;
-  /** Signed: plus for the winner, minus for the loser. */
-  morale: number;
-  recruit: number;
-}
+/** Round 728: my rivalry week result, kept until the offseason spends its
+ *  recruiting swing. Round 823: the shape lives in the shared module now. */
+export type CfbRivalryResult = RivalryResult;
 
 /** Round 728: one line of my schedule. */
-export interface CfbSlateGame {
-  round: number;
-  opp: string;
-  home: boolean;
-  us: number;
-  them: number;
-  won: boolean;
-  conference: boolean;
-  rivalry: boolean;
-}
+export type CfbSlateGame = SlateGame;
 
 /** Round 728: the offseason hiring window, open for one season's offseason. */
-export interface CfbStaffWindow {
-  season: number;
-  /** The whole program budget for the cycle, before the staff were paid. */
-  budget: number;
-  market: Coordinator[];
-}
+export type CfbStaffWindow = StaffWindow;
 
 export interface CfbState {
   season: number;
@@ -253,18 +239,7 @@ export function initCfb(myTeam: string, rng: () => number = Math.random, opts: {
  * exactly as it would have.
  */
 export function cfbEnableDepth(st: CfbState, rng: () => number): void {
-  if (st.depth) return;
-  for (const s of CFB_SCHOOLS) {
-    const t = st.teams[s.id];
-    if (!t) continue;
-    if (!t.staff) t.staff = genStaff(rng, s.prestige, s.id, st.season);
-    t.morale = 0;
-    t.opps = [];
-  }
-  st.depth = 1;
-  st.mySlate = [];
-  st.lastRivalry = null;
-  st.staffWindow = null;
+  enableProgramLayer(st, CFB_PROGRAM, rng);
 }
 
 function initCfbLegacy(myTeam: string, rng: () => number): CfbState {
@@ -396,42 +371,11 @@ export function simCfbRound(st: CfbState, rng: () => number): { games: CfbGame[]
     if (!opp) continue;
     play(s.id, opp.id, false);
   }
-  if (st.depth) recordCfbRound(st, games);
+  /* Round 728: the season log and the rivalry swing. Round 823: one copy in
+     the shared module, which both dynasties call. */
+  if (st.depth) recordProgramRound(st, games, CFB_PROGRAM);
   const myGame = games.find(g => g.home === st.myTeam || g.away === st.myTeam) ?? null;
   return { games, myGame };
-}
-
-/** Round 728: the season log (who played whom, for strength of schedule, and
- *  my own slate) plus the swing every rivalry result carries. */
-function recordCfbRound(st: CfbState, games: CfbGame[]): void {
-  for (const g of games) {
-    const home = st.teams[g.home];
-    const away = st.teams[g.away];
-    (home.opps ??= []).push(g.away);
-    (away.opps ??= []).push(g.home);
-    let swing: { morale: number; recruit: number } | null = null;
-    if (g.rivalry) {
-      swing = rivalrySwing(Math.abs(g.hs - g.as), CFB_RIVAL_FULL_MARGIN);
-      st.teams[g.winner].morale = swing.morale;
-      st.teams[g.winner === g.home ? g.away : g.home].morale = -swing.morale;
-    }
-    if (g.home !== st.myTeam && g.away !== st.myTeam) continue;
-    const home_ = g.home === st.myTeam;
-    const us = home_ ? g.hs : g.as;
-    const them = home_ ? g.as : g.hs;
-    const opp = home_ ? g.away : g.home;
-    const won = g.winner === st.myTeam;
-    (st.mySlate ??= []).push({ round: st.round, opp, home: home_, us, them, won, conference: g.conference, rivalry: !!g.rivalry });
-    if (swing) {
-      const rival = cfbRivalOf(st.myTeam);
-      st.lastRivalry = {
-        season: st.season, opp, us, them, won,
-        kind: rival?.kind ?? 'generated', state: rival?.state,
-        morale: won ? swing.morale : -swing.morale,
-        recruit: won ? swing.recruit : -swing.recruit,
-      };
-    }
-  }
 }
 
 /** Round 728: a team's strength of schedule, the average strength of the
@@ -442,12 +386,7 @@ export function cfbSos(st: CfbState, id: string): number | null {
 
 /** Every team's strength of schedule and where it ranks, hardest first. */
 export function cfbSosTable(st: CfbState): Map<string, { sos: number; rank: number }> {
-  const str = new Map(Object.values(st.teams).map(t => [t.id, cfbStrength(t)]));
-  const rows = Object.values(st.teams)
-    .map(t => ({ id: t.id, sos: strengthOfSchedule(t.opps, oid => str.get(oid) ?? 60) }))
-    .filter((r): r is { id: string; sos: number } => r.sos !== null)
-    .sort((a, b) => b.sos - a.sos);
-  return new Map(rows.map((r, i) => [r.id, { sos: r.sos, rank: i + 1 }]));
+  return sosTable(st, cfbStrength);
 }
 
 /** Poll ranking: wins first, then strength. Round 728: with the program
@@ -619,59 +558,19 @@ export function signRecruit(st: CfbState, r: CfbRecruit, cls: CfbClass, rng: () 
  */
 export function cfbOpenOffseason(st: CfbState, rng: () => number): string[] {
   const school = CFB_SCHOOL_MAP.get(st.myTeam)!;
-  const base = nilBudgetFor(school.prestige, st.teams[st.myTeam].wins);
-  if (!st.depth) { st.nil = base; return []; }
-  if (st.staffWindow && st.staffWindow.season === st.season) return [];
-  const notes: string[] = [];
-  const rivalry = st.lastRivalry && st.lastRivalry.season === st.season ? st.lastRivalry : null;
-  const budget = Math.max(0, base + (rivalry?.recruit ?? 0));
-  if (rivalry) {
-    notes.push(rivalry.won
-      ? `🔥 Beating ${CFB_SCHOOL_MAP.get(rivalry.opp)?.name ?? rivalry.opp} is worth ${rivalry.recruit} more budget points on the trail.`
-      : `🧊 Losing to ${CFB_SCHOOL_MAP.get(rivalry.opp)?.name ?? rivalry.opp} costs ${-rivalry.recruit} budget points on the trail.`);
-  }
-  for (const s of CFB_SCHOOLS) {
-    const t = st.teams[s.id];
-    if (!t) continue;
-    if (!t.staff) t.staff = genStaff(rng, s.prestige, s.id, st.season);
-    const mine = s.id === st.myTeam;
-    const gone = staffCarousel(rng, t.staff, { prestige: s.prestige, wins: t.wins, losses: t.losses, mine, season: st.season, idPrefix: s.id });
-    if (!mine) continue;
-    for (const g of gone) {
-      notes.push(g.why === 'poached'
-        ? `📋 Your ${g.role === 'OC' ? 'offensive' : 'defensive'} coordinator ${g.who.name} (${g.who.rating}) took a head coaching job. The chair is open.`
-        : `📋 ${g.who.name} is gone. The ${g.role} chair is open.`);
-    }
-  }
-  const myStaff = st.teams[st.myTeam].staff!;
-  const { left, walked } = chargePayroll(budget, myStaff);
-  for (const w of walked) {
-    notes.push(`💸 The budget could not cover ${w.name} (${w.role}, ${w.salary} a season), so he walked.`);
-  }
-  st.nil = left;
-  st.staffWindow = { season: st.season, budget, market: staffCandidates(rng, school.prestige, st.season) };
-  return notes;
+  /* Round 823: the body moved to the shared module word for word. */
+  return openProgramOffseason(st, rng, CFB_PROGRAM, nilBudgetFor(school.prestige, st.teams[st.myTeam].wins));
 }
 
 /** Round 728: hire off the offseason market, only while its window is open.
  *  The man already in that chair goes and his money comes back first. */
 export function cfbHireCoordinator(st: CfbState, candidateId: string): boolean {
-  const win = st.staffWindow;
-  const staff = st.teams[st.myTeam]?.staff;
-  if (!st.depth || !win || win.season !== st.season || !staff) return false;
-  const cand = win.market.find(c => c.id === candidateId);
-  if (!cand) return false;
-  if (!hireCoordinator(st, staff, cand)) return false;
-  win.market = win.market.filter(c => c.id !== candidateId);
-  return true;
+  return windowHire(st, candidateId);
 }
 
 /** Round 728: let a coordinator go while the window is open. His salary goes back into the pot. */
 export function cfbFireCoordinator(st: CfbState, role: StaffRole): Coordinator | null {
-  const win = st.staffWindow;
-  const staff = st.teams[st.myTeam]?.staff;
-  if (!st.depth || !win || win.season !== st.season || !staff) return null;
-  return fireCoordinator(st, staff, role);
+  return windowFire(st, role);
 }
 
 /** Round 728: what the staff costs this season. */

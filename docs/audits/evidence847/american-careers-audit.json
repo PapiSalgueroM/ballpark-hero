@@ -1,0 +1,2228 @@
+{
+  "generated": "2026-10-01T23:17:59.854Z",
+  "mode": "Audit only, no fixes",
+  "requestedRoutes": [
+    "/nba-career",
+    "/nfl-career",
+    "/baseball-career",
+    "/hockey-career"
+  ],
+  "routeCorrection": {
+    "reason": "Those four paths are player-guessing games. Existing App routes and game registry identify the create-a-player simulations at the paths tested below.",
+    "verifiedIn": [
+      "src/App.tsx",
+      "src/data/gameRegistry.ts"
+    ]
+  },
+  "liveEntry": {
+    "url": "https://douknowball.com/assets/index-E8L0RxXO.js",
+    "status": 200,
+    "sha256": "640820ed3b9ead81190861c4b061326a372e9c942067b3440d16e5e8cdea2e0b"
+  },
+  "coverage": [
+    {
+      "sport": "NBA",
+      "url": "https://douknowball.com/nba-my-career",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "motion": "no-preference",
+      "entriesStart": [
+        {
+          "url": "https://douknowball.com/assets/index-E8L0RxXO.js",
+          "status": 200,
+          "sha256": "640820ed3b9ead81190861c4b061326a372e9c942067b3440d16e5e8cdea2e0b"
+        }
+      ],
+      "entriesEnd": [
+        {
+          "url": "https://douknowball.com/assets/index-E8L0RxXO.js",
+          "status": 200,
+          "sha256": "640820ed3b9ead81190861c4b061326a372e9c942067b3440d16e5e8cdea2e0b"
+        }
+      ],
+      "created": {
+        "name": "Audit NBA Prospect",
+        "year": 2026,
+        "age": 20,
+        "pos": "PG",
+        "team": "MIA",
+        "seasons": 0
+      },
+      "playedSeasons": 6,
+      "playedYears": [
+        2026,
+        2027,
+        2028,
+        2029,
+        2030,
+        2031
+      ],
+      "offseasonChoices": [
+        {
+          "label": "Follow all 40 pages, no exceptions\nHealth and rating up",
+          "afterPhase": "season",
+          "afterSeasons": 1
+        },
+        {
+          "label": "Credit every man in the room\nThe locker room loves it",
+          "afterPhase": "season",
+          "afterSeasons": 2
+        },
+        {
+          "label": "Ask him why, in his office, on Monday\nDirect, usually works",
+          "afterPhase": "season",
+          "afterSeasons": 3
+        },
+        {
+          "label": "Ask to be moved somewhere you can win\nNew team, contender energy",
+          "afterPhase": "season",
+          "afterSeasons": 4
+        },
+        {
+          "label": "Say it to his face in the locker room\nAir cleared or war started",
+          "afterPhase": "season",
+          "afterSeasons": 5
+        },
+        {
+          "label": "Credit every man in the room\nThe locker room loves it",
+          "afterPhase": "season",
+          "afterSeasons": 6
+        }
+      ],
+      "extensions": [
+        "Sign it: 4 more years at $18.5M"
+      ],
+      "freeAgencyActions": [],
+      "rivalryActions": [
+        {
+          "kind": "rivalChoice",
+          "label": "😈 Give it right back\nThe feud heats up, otherwise Morale +8\n30% chance you're the one who gets tossed: Morale -5, Fanbase -5, Net worth -$100k"
+        },
+        {
+          "kind": "rivalChoice",
+          "label": "Continue"
+        },
+        {
+          "kind": "rivalChoice",
+          "label": "🤝 Co-host and split the bill\nFanbase +10, Net worth -$1M, Karma +8, the feud cools"
+        },
+        {
+          "kind": "rivalChoice",
+          "label": "Continue"
+        },
+        {
+          "kind": "rivalBeat",
+          "label": "Continue"
+        },
+        {
+          "kind": "rivalBeat",
+          "label": "Continue"
+        },
+        {
+          "kind": "rivalChoice",
+          "label": "👏 Congratulate him publicly\nFanbase +4, Karma +5, the feud cools"
+        },
+        {
+          "kind": "rivalChoice",
+          "label": "Continue"
+        },
+        {
+          "kind": "rivalBeat",
+          "label": "Continue"
+        }
+      ],
+      "secondSeasonReload": {
+        "rawHeld": true,
+        "careerHeld": true,
+        "before": {
+          "phase": "season",
+          "name": "Audit NBA Prospect",
+          "seasons": 2,
+          "year": 2028,
+          "age": 22,
+          "retired": false,
+          "team": "MIA",
+          "pos": "PG",
+          "contractYears": 2,
+          "health": 100,
+          "ovr": 76,
+          "netWorth": 1.5,
+          "careerHash": "e0939909c5723662f65262c4e777263fe3934dda5abe641cc7c409895e0e64a1",
+          "lines": [
+            {
+              "year": 2026,
+              "team": "MIA",
+              "age": 20,
+              "ovr": 73,
+              "games": 80,
+              "ppg": 11,
+              "rpg": 2.8,
+              "apg": 6.6,
+              "awards": [],
+              "teamResult": "Lost in the first round",
+              "salary": 2.5,
+              "poGames": 5,
+              "poPpg": 15,
+              "poRpg": 3.4,
+              "poApg": 9.7
+            },
+            {
+              "year": 2027,
+              "team": "MIA",
+              "age": 21,
+              "ovr": 75,
+              "games": 78,
+              "ppg": 7,
+              "rpg": 3.3,
+              "apg": 5.6,
+              "awards": [],
+              "teamResult": "WON THE NBA FINALS",
+              "salary": 2.5,
+              "poGames": 27,
+              "poPpg": 12,
+              "poRpg": 2.9,
+              "poApg": 7.4
+            }
+          ]
+        },
+        "after": {
+          "phase": "season",
+          "name": "Audit NBA Prospect",
+          "seasons": 2,
+          "year": 2028,
+          "age": 22,
+          "retired": false,
+          "team": "MIA",
+          "pos": "PG",
+          "contractYears": 2,
+          "health": 100,
+          "ovr": 76,
+          "netWorth": 1.5,
+          "careerHash": "e0939909c5723662f65262c4e777263fe3934dda5abe641cc7c409895e0e64a1",
+          "lines": [
+            {
+              "year": 2026,
+              "team": "MIA",
+              "age": 20,
+              "ovr": 73,
+              "games": 80,
+              "ppg": 11,
+              "rpg": 2.8,
+              "apg": 6.6,
+              "awards": [],
+              "teamResult": "Lost in the first round",
+              "salary": 2.5,
+              "poGames": 5,
+              "poPpg": 15,
+              "poRpg": 3.4,
+              "poApg": 9.7
+            },
+            {
+              "year": 2027,
+              "team": "MIA",
+              "age": 21,
+              "ovr": 75,
+              "games": 78,
+              "ppg": 7,
+              "rpg": 3.3,
+              "apg": 5.6,
+              "awards": [],
+              "teamResult": "WON THE NBA FINALS",
+              "salary": 2.5,
+              "poGames": 27,
+              "poPpg": 12,
+              "poRpg": 2.9,
+              "poApg": 7.4
+            }
+          ]
+        },
+        "playReachable": true
+      },
+      "rapidFirstPlay": {
+        "before": {
+          "phase": "season",
+          "name": "Audit NBA Prospect",
+          "seasons": 0,
+          "year": 2026,
+          "age": 20,
+          "retired": false,
+          "team": "MIA",
+          "pos": "PG",
+          "contractYears": 4,
+          "health": 100,
+          "ovr": 73,
+          "netWorth": 0.3,
+          "careerHash": "165dc637dfcd57e0107ce974038691199799878a1cfdce55e78a5dcfd0a77174",
+          "lines": []
+        },
+        "after": {
+          "phase": "event",
+          "name": "Audit NBA Prospect",
+          "seasons": 1,
+          "year": 2027,
+          "age": 21,
+          "retired": false,
+          "team": "MIA",
+          "pos": "PG",
+          "contractYears": 3,
+          "health": 100,
+          "ovr": 74,
+          "netWorth": 1.4,
+          "careerHash": "2df26e64fd2b9388c4cd51235136caf8cc86157c8f732bdb58578e2e69ce91ba",
+          "lines": [
+            {
+              "year": 2026,
+              "team": "MIA",
+              "age": 20,
+              "ovr": 73,
+              "games": 80,
+              "ppg": 11,
+              "rpg": 2.8,
+              "apg": 6.6,
+              "awards": [],
+              "teamResult": "Lost in the first round",
+              "salary": 2.5,
+              "poGames": 5,
+              "poPpg": 15,
+              "poRpg": 3.4,
+              "poApg": 9.7
+            }
+          ]
+        },
+        "recordedSeasonsDelta": 1
+      },
+      "retirement": {
+        "mode": "Native manual Hang them up now after six full season decision cycles",
+        "state": {
+          "phase": "retired",
+          "name": "Audit NBA Prospect",
+          "seasons": 6,
+          "year": 2032,
+          "age": 26,
+          "retired": true,
+          "team": "SAS",
+          "pos": "PG",
+          "contractYears": 2,
+          "health": 91,
+          "ovr": 85,
+          "netWorth": 27.5,
+          "careerHash": "36441ce5c8fd78dbcc255f5d312d572f61b764856fc59d7bcb00df15994f994d",
+          "lines": [
+            {
+              "year": 2026,
+              "team": "MIA",
+              "age": 20,
+              "ovr": 73,
+              "games": 80,
+              "ppg": 11,
+              "rpg": 2.8,
+              "apg": 6.6,
+              "awards": [],
+              "teamResult": "Lost in the first round",
+              "salary": 2.5,
+              "poGames": 5,
+              "poPpg": 15,
+              "poRpg": 3.4,
+              "poApg": 9.7
+            },
+            {
+              "year": 2027,
+              "team": "MIA",
+              "age": 21,
+              "ovr": 75,
+              "games": 78,
+              "ppg": 7,
+              "rpg": 3.3,
+              "apg": 5.6,
+              "awards": [],
+              "teamResult": "WON THE NBA FINALS",
+              "salary": 2.5,
+              "poGames": 27,
+              "poPpg": 12,
+              "poRpg": 2.9,
+              "poApg": 7.4
+            },
+            {
+              "year": 2028,
+              "team": "MIA",
+              "age": 22,
+              "ovr": 76,
+              "games": 54,
+              "ppg": 11,
+              "rpg": 3.1,
+              "apg": 6.4,
+              "awards": [],
+              "teamResult": "Lost in the first round",
+              "salary": 2.5,
+              "poGames": 6,
+              "poPpg": 18,
+              "poRpg": 3.5,
+              "poApg": 10.6
+            },
+            {
+              "year": 2029,
+              "team": "MIA",
+              "age": 23,
+              "ovr": 79,
+              "games": 81,
+              "ppg": 11,
+              "rpg": 3.5,
+              "apg": 5.2,
+              "awards": [],
+              "teamResult": "Lost in the first round",
+              "salary": 18.5,
+              "poGames": 6,
+              "poPpg": 15,
+              "poRpg": 3.9,
+              "poApg": 9.2
+            },
+            {
+              "year": 2030,
+              "team": "SAS",
+              "age": 24,
+              "ovr": 81,
+              "games": 80,
+              "ppg": 10,
+              "rpg": 3.1,
+              "apg": 7.2,
+              "awards": [],
+              "teamResult": "Lost in the conference semis",
+              "salary": 18.5,
+              "poGames": 10,
+              "poPpg": 16,
+              "poRpg": 5.3,
+              "poApg": 9.5
+            },
+            {
+              "year": 2031,
+              "team": "SAS",
+              "age": 25,
+              "ovr": 83,
+              "games": 79,
+              "ppg": 10,
+              "rpg": 3.4,
+              "apg": 7.3,
+              "awards": [],
+              "teamResult": "WON THE NBA FINALS",
+              "salary": 18.5,
+              "poGames": 24,
+              "poPpg": 17,
+              "poRpg": 5.5,
+              "poApg": 11.9
+            }
+          ]
+        },
+        "dialogTriggered": false,
+        "customDialogText": [],
+        "retiredReload": {
+          "rawHeld": true,
+          "state": {
+            "phase": "retired",
+            "name": "Audit NBA Prospect",
+            "seasons": 6,
+            "year": 2032,
+            "age": 26,
+            "retired": true,
+            "team": "SAS",
+            "pos": "PG",
+            "contractYears": 2,
+            "health": 91,
+            "ovr": 85,
+            "netWorth": 27.5,
+            "careerHash": "36441ce5c8fd78dbcc255f5d312d572f61b764856fc59d7bcb00df15994f994d",
+            "lines": [
+              {
+                "year": 2026,
+                "team": "MIA",
+                "age": 20,
+                "ovr": 73,
+                "games": 80,
+                "ppg": 11,
+                "rpg": 2.8,
+                "apg": 6.6,
+                "awards": [],
+                "teamResult": "Lost in the first round",
+                "salary": 2.5,
+                "poGames": 5,
+                "poPpg": 15,
+                "poRpg": 3.4,
+                "poApg": 9.7
+              },
+              {
+                "year": 2027,
+                "team": "MIA",
+                "age": 21,
+                "ovr": 75,
+                "games": 78,
+                "ppg": 7,
+                "rpg": 3.3,
+                "apg": 5.6,
+                "awards": [],
+                "teamResult": "WON THE NBA FINALS",
+                "salary": 2.5,
+                "poGames": 27,
+                "poPpg": 12,
+                "poRpg": 2.9,
+                "poApg": 7.4
+              },
+              {
+                "year": 2028,
+                "team": "MIA",
+                "age": 22,
+                "ovr": 76,
+                "games": 54,
+                "ppg": 11,
+                "rpg": 3.1,
+                "apg": 6.4,
+                "awards": [],
+                "teamResult": "Lost in the first round",
+                "salary": 2.5,
+                "poGames": 6,
+                "poPpg": 18,
+                "poRpg": 3.5,
+                "poApg": 10.6
+              },
+              {
+                "year": 2029,
+                "team": "MIA",
+                "age": 23,
+                "ovr": 79,
+                "games": 81,
+                "ppg": 11,
+                "rpg": 3.5,
+                "apg": 5.2,
+                "awards": [],
+                "teamResult": "Lost in the first round",
+                "salary": 18.5,
+                "poGames": 6,
+                "poPpg": 15,
+                "poRpg": 3.9,
+                "poApg": 9.2
+              },
+              {
+                "year": 2030,
+                "team": "SAS",
+                "age": 24,
+                "ovr": 81,
+                "games": 80,
+                "ppg": 10,
+                "rpg": 3.1,
+                "apg": 7.2,
+                "awards": [],
+                "teamResult": "Lost in the conference semis",
+                "salary": 18.5,
+                "poGames": 10,
+                "poPpg": 16,
+                "poRpg": 5.3,
+                "poApg": 9.5
+              },
+              {
+                "year": 2031,
+                "team": "SAS",
+                "age": 25,
+                "ovr": 83,
+                "games": 79,
+                "ppg": 10,
+                "rpg": 3.4,
+                "apg": 7.3,
+                "awards": [],
+                "teamResult": "WON THE NBA FINALS",
+                "salary": 18.5,
+                "poGames": 24,
+                "poPpg": 17,
+                "poRpg": 5.5,
+                "poApg": 11.9
+              }
+            ]
+          }
+        }
+      },
+      "restart": {
+        "dialogTriggered": false,
+        "afterFirstRaw": null,
+        "customDialogText": [],
+        "creationVisible": true
+      },
+      "creationBoundary": {
+        "longInput": {
+          "maxlength": "24",
+          "longNativeInput": "Audit Prospect ABCDEFGHI",
+          "length": 24,
+          "blankDraftDisabled": false
+        },
+        "whitespaceFallbackName": "Trey Buckets"
+      },
+      "finalDocumentOverflow": 0,
+      "errors": [],
+      "badHttp": [],
+      "blockedRequests": [
+        {
+          "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/game_completions",
+          "method": "POST"
+        },
+        {
+          "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/game_completions",
+          "method": "POST"
+        },
+        {
+          "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/game_completions",
+          "method": "POST"
+        },
+        {
+          "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/game_completions",
+          "method": "POST"
+        },
+        {
+          "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/game_completions",
+          "method": "POST"
+        },
+        {
+          "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/game_completions",
+          "method": "POST"
+        },
+        {
+          "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/game_completions",
+          "method": "POST"
+        },
+        {
+          "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/game_completions",
+          "method": "POST"
+        }
+      ],
+      "screenshots": [
+        "american-NBA-season.png",
+        "american-NBA-retired.png"
+      ]
+    },
+    {
+      "sport": "NFL",
+      "url": "https://douknowball.com/nfl-my-career",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "motion": "no-preference",
+      "entriesStart": [
+        {
+          "url": "https://douknowball.com/assets/index-E8L0RxXO.js",
+          "status": 200,
+          "sha256": "640820ed3b9ead81190861c4b061326a372e9c942067b3440d16e5e8cdea2e0b"
+        }
+      ],
+      "entriesEnd": [
+        {
+          "url": "https://douknowball.com/assets/index-E8L0RxXO.js",
+          "status": 200,
+          "sha256": "640820ed3b9ead81190861c4b061326a372e9c942067b3440d16e5e8cdea2e0b"
+        }
+      ],
+      "created": {
+        "name": "Audit NFL Prospect",
+        "year": 2026,
+        "age": 22,
+        "pos": "QB",
+        "team": "LA",
+        "seasons": 0
+      },
+      "playedSeasons": 6,
+      "playedYears": [
+        2026,
+        2027,
+        2028,
+        2029,
+        2030,
+        2031
+      ],
+      "offseasonChoices": [
+        {
+          "label": "Stay four hours after the cameras leave\nMorale and city love",
+          "afterPhase": "season",
+          "afterSeasons": 1
+        },
+        {
+          "label": "Bury him in camp\nRating up, body cost",
+          "afterPhase": "season",
+          "afterSeasons": 2
+        },
+        {
+          "label": "Play it straight, win the thing\nTrophy for charity",
+          "afterPhase": "season",
+          "afterSeasons": 3
+        },
+        {
+          "label": "Admit it and laugh at yourself\nHuman, mocked forever",
+          "afterPhase": "season",
+          "afterSeasons": 4
+        },
+        {
+          "label": "Free camp, you fund every dollar of it\nCosts money, city love",
+          "afterPhase": "season",
+          "afterSeasons": 5
+        },
+        {
+          "label": "Fund it properly, 2M and a real director\nReal money, real work",
+          "afterPhase": "season",
+          "afterSeasons": 6
+        }
+      ],
+      "extensions": [
+        "Sign it: 4 more years at $29.8M"
+      ],
+      "freeAgencyActions": [],
+      "rivalryActions": [
+        {
+          "kind": "rivalBeat",
+          "label": "Continue"
+        },
+        {
+          "kind": "rivalBeat",
+          "label": "Continue"
+        },
+        {
+          "kind": "rivalBeat",
+          "label": "Continue"
+        }
+      ],
+      "secondSeasonReload": {
+        "rawHeld": true,
+        "careerHeld": true,
+        "before": {
+          "phase": "season",
+          "name": "Audit NFL Prospect",
+          "seasons": 2,
+          "year": 2028,
+          "age": 24,
+          "retired": false,
+          "team": "LA",
+          "pos": "QB",
+          "contractYears": 2,
+          "health": 95,
+          "ovr": 79,
+          "netWorth": 22.8,
+          "careerHash": "5499af6f092fe215fb4c0aafca204e5c6714d1aff1142f5ee617487556f5bedd",
+          "lines": [
+            {
+              "year": 2026,
+              "team": "LA",
+              "age": 22,
+              "ovr": 74,
+              "games": 17,
+              "awards": [],
+              "teamResult": "Missed the playoffs",
+              "salary": 24.7,
+              "passYds": 3193,
+              "passTd": 18,
+              "ints": 17
+            },
+            {
+              "year": 2027,
+              "team": "LA",
+              "age": 23,
+              "ovr": 76,
+              "games": 17,
+              "awards": [],
+              "teamResult": "Missed the playoffs",
+              "salary": 24.7,
+              "passYds": 3551,
+              "passTd": 25,
+              "ints": 16
+            }
+          ]
+        },
+        "after": {
+          "phase": "season",
+          "name": "Audit NFL Prospect",
+          "seasons": 2,
+          "year": 2028,
+          "age": 24,
+          "retired": false,
+          "team": "LA",
+          "pos": "QB",
+          "contractYears": 2,
+          "health": 95,
+          "ovr": 79,
+          "netWorth": 22.8,
+          "careerHash": "5499af6f092fe215fb4c0aafca204e5c6714d1aff1142f5ee617487556f5bedd",
+          "lines": [
+            {
+              "year": 2026,
+              "team": "LA",
+              "age": 22,
+              "ovr": 74,
+              "games": 17,
+              "awards": [],
+              "teamResult": "Missed the playoffs",
+              "salary": 24.7,
+              "passYds": 3193,
+              "passTd": 18,
+              "ints": 17
+            },
+            {
+              "year": 2027,
+              "team": "LA",
+              "age": 23,
+              "ovr": 76,
+              "games": 17,
+              "awards": [],
+              "teamResult": "Missed the playoffs",
+              "salary": 24.7,
+              "passYds": 3551,
+              "passTd": 25,
+              "ints": 16
+            }
+          ]
+        },
+        "playReachable": true
+      },
+      "rapidFirstPlay": {
+        "before": {
+          "phase": "season",
+          "name": "Audit NFL Prospect",
+          "seasons": 0,
+          "year": 2026,
+          "age": 22,
+          "retired": false,
+          "team": "LA",
+          "pos": "QB",
+          "contractYears": 4,
+          "health": 100,
+          "ovr": 74,
+          "netWorth": 0.6,
+          "careerHash": "fedac01a1ab93348dfc9c884b1725a9e9bdcb4987a693c689bdf3af2c631ae1e",
+          "lines": []
+        },
+        "after": {
+          "phase": "event",
+          "name": "Audit NFL Prospect",
+          "seasons": 1,
+          "year": 2027,
+          "age": 23,
+          "retired": false,
+          "team": "LA",
+          "pos": "QB",
+          "contractYears": 3,
+          "health": 100,
+          "ovr": 76,
+          "netWorth": 11.7,
+          "careerHash": "30e59edffa6b778cb4a6b00aa8171b1dfd7534a54ef9478faffb1c33eecac94b",
+          "lines": [
+            {
+              "year": 2026,
+              "team": "LA",
+              "age": 22,
+              "ovr": 74,
+              "games": 17,
+              "awards": [],
+              "teamResult": "Missed the playoffs",
+              "salary": 24.7,
+              "passYds": 3193,
+              "passTd": 18,
+              "ints": 17
+            }
+          ]
+        },
+        "recordedSeasonsDelta": 1
+      },
+      "retirement": {
+        "mode": "Native manual Hang them up now after six full season decision cycles",
+        "state": {
+          "phase": "retired",
+          "name": "Audit NFL Prospect",
+          "seasons": 6,
+          "year": 2032,
+          "age": 28,
+          "retired": true,
+          "team": "LA",
+          "pos": "QB",
+          "contractYears": 2,
+          "health": 89,
+          "ovr": 84,
+          "netWorth": 72.4,
+          "careerHash": "cebb06495dca20df78d3fb192319c1934deb9ebb72ce8282ed197f1b7b60965c",
+          "lines": [
+            {
+              "year": 2026,
+              "team": "LA",
+              "age": 22,
+              "ovr": 74,
+              "games": 17,
+              "awards": [],
+              "teamResult": "Missed the playoffs",
+              "salary": 24.7,
+              "passYds": 3193,
+              "passTd": 18,
+              "ints": 17
+            },
+            {
+              "year": 2027,
+              "team": "LA",
+              "age": 23,
+              "ovr": 76,
+              "games": 17,
+              "awards": [],
+              "teamResult": "Missed the playoffs",
+              "salary": 24.7,
+              "passYds": 3551,
+              "passTd": 25,
+              "ints": 16
+            },
+            {
+              "year": 2028,
+              "team": "LA",
+              "age": 24,
+              "ovr": 79,
+              "games": 17,
+              "awards": [],
+              "teamResult": "Lost the Super Bowl",
+              "salary": 24.7,
+              "passYds": 4100,
+              "passTd": 25,
+              "ints": 15,
+              "poGames": 4,
+              "poLine": "804 yds, 5 TD, 3 INT"
+            },
+            {
+              "year": 2029,
+              "team": "LA",
+              "age": 25,
+              "ovr": 81,
+              "games": 17,
+              "awards": [],
+              "teamResult": "Missed the playoffs",
+              "salary": 29.8,
+              "passYds": 4009,
+              "passTd": 27,
+              "ints": 13
+            },
+            {
+              "year": 2030,
+              "team": "LA",
+              "age": 26,
+              "ovr": 82,
+              "games": 10,
+              "awards": [],
+              "teamResult": "Missed the playoffs",
+              "salary": 29.8,
+              "passYds": 2237,
+              "passTd": 15,
+              "ints": 8
+            },
+            {
+              "year": 2031,
+              "team": "LA",
+              "age": 27,
+              "ovr": 84,
+              "games": 17,
+              "awards": [],
+              "teamResult": "Missed the playoffs",
+              "salary": 29.8,
+              "passYds": 4258,
+              "passTd": 30,
+              "ints": 13
+            }
+          ]
+        },
+        "dialogTriggered": false,
+        "customDialogText": [],
+        "retiredReload": {
+          "rawHeld": true,
+          "state": {
+            "phase": "retired",
+            "name": "Audit NFL Prospect",
+            "seasons": 6,
+            "year": 2032,
+            "age": 28,
+            "retired": true,
+            "team": "LA",
+            "pos": "QB",
+            "contractYears": 2,
+            "health": 89,
+            "ovr": 84,
+            "netWorth": 72.4,
+            "careerHash": "cebb06495dca20df78d3fb192319c1934deb9ebb72ce8282ed197f1b7b60965c",
+            "lines": [
+              {
+                "year": 2026,
+                "team": "LA",
+                "age": 22,
+                "ovr": 74,
+                "games": 17,
+                "awards": [],
+                "teamResult": "Missed the playoffs",
+                "salary": 24.7,
+                "passYds": 3193,
+                "passTd": 18,
+                "ints": 17
+              },
+              {
+                "year": 2027,
+                "team": "LA",
+                "age": 23,
+                "ovr": 76,
+                "games": 17,
+                "awards": [],
+                "teamResult": "Missed the playoffs",
+                "salary": 24.7,
+                "passYds": 3551,
+                "passTd": 25,
+                "ints": 16
+              },
+              {
+                "year": 2028,
+                "team": "LA",
+                "age": 24,
+                "ovr": 79,
+                "games": 17,
+                "awards": [],
+                "teamResult": "Lost the Super Bowl",
+                "salary": 24.7,
+                "passYds": 4100,
+                "passTd": 25,
+                "ints": 15,
+                "poGames": 4,
+                "poLine": "804 yds, 5 TD, 3 INT"
+              },
+              {
+                "year": 2029,
+                "team": "LA",
+                "age": 25,
+                "ovr": 81,
+                "games": 17,
+                "awards": [],
+                "teamResult": "Missed the playoffs",
+                "salary": 29.8,
+                "passYds": 4009,
+                "passTd": 27,
+                "ints": 13
+              },
+              {
+                "year": 2030,
+                "team": "LA",
+                "age": 26,
+                "ovr": 82,
+                "games": 10,
+                "awards": [],
+                "teamResult": "Missed the playoffs",
+                "salary": 29.8,
+                "passYds": 2237,
+                "passTd": 15,
+                "ints": 8
+              },
+              {
+                "year": 2031,
+                "team": "LA",
+                "age": 27,
+                "ovr": 84,
+                "games": 17,
+                "awards": [],
+                "teamResult": "Missed the playoffs",
+                "salary": 29.8,
+                "passYds": 4258,
+                "passTd": 30,
+                "ints": 13
+              }
+            ]
+          }
+        }
+      },
+      "restart": {
+        "dialogTriggered": false,
+        "afterFirstRaw": null,
+        "customDialogText": [],
+        "creationVisible": true
+      },
+      "creationBoundary": {
+        "longInput": {
+          "maxlength": "24",
+          "longNativeInput": "Audit Prospect ABCDEFGHI",
+          "length": 24,
+          "blankDraftDisabled": false
+        },
+        "whitespaceFallbackName": "Ryder Blaze"
+      },
+      "finalDocumentOverflow": 0,
+      "errors": [],
+      "badHttp": [],
+      "blockedRequests": [
+        {
+          "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/game_completions",
+          "method": "POST"
+        },
+        {
+          "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/game_completions",
+          "method": "POST"
+        },
+        {
+          "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/game_completions",
+          "method": "POST"
+        },
+        {
+          "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/game_completions",
+          "method": "POST"
+        },
+        {
+          "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/game_completions",
+          "method": "POST"
+        },
+        {
+          "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/game_completions",
+          "method": "POST"
+        },
+        {
+          "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/game_completions",
+          "method": "POST"
+        },
+        {
+          "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/game_completions",
+          "method": "POST"
+        }
+      ],
+      "screenshots": [
+        "american-NFL-season.png",
+        "american-NFL-retired.png"
+      ]
+    },
+    {
+      "sport": "MLB",
+      "url": "https://douknowball.com/mlb-my-career",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "motion": "no-preference",
+      "entriesStart": [
+        {
+          "url": "https://douknowball.com/assets/index-E8L0RxXO.js",
+          "status": 200,
+          "sha256": "640820ed3b9ead81190861c4b061326a372e9c942067b3440d16e5e8cdea2e0b"
+        }
+      ],
+      "entriesEnd": [
+        {
+          "url": "https://douknowball.com/assets/index-E8L0RxXO.js",
+          "status": 200,
+          "sha256": "640820ed3b9ead81190861c4b061326a372e9c942067b3440d16e5e8cdea2e0b"
+        }
+      ],
+      "created": {
+        "name": "Audit MLB Prospect",
+        "year": 2026,
+        "age": 21,
+        "pos": "CF",
+        "team": "DET",
+        "seasons": 0
+      },
+      "playedSeasons": 6,
+      "playedYears": [
+        2026,
+        2027,
+        2028,
+        2029,
+        2030,
+        2031
+      ],
+      "offseasonChoices": [
+        {
+          "label": "Hire her and pay for it yourself\nMoney out, body up",
+          "afterPhase": "season",
+          "afterSeasons": 1
+        },
+        {
+          "label": "Say the right, empty things\nNobody remembers it tomorrow",
+          "afterPhase": "season",
+          "afterSeasons": 2
+        },
+        {
+          "label": "Say the right, empty things\nNobody remembers it tomorrow",
+          "afterPhase": "season",
+          "afterSeasons": 3
+        },
+        {
+          "label": "Say the right, empty things\nNobody remembers it tomorrow",
+          "afterPhase": "season",
+          "afterSeasons": 4
+        },
+        {
+          "label": "Say the right, empty things\nNobody remembers it tomorrow",
+          "afterPhase": "season",
+          "afterSeasons": 5
+        },
+        {
+          "label": "Do it, slogan and all\nMoney, mild mockery",
+          "afterPhase": "season",
+          "afterSeasons": 6
+        }
+      ],
+      "extensions": [
+        "Sign it: 4 more years at $14.5M"
+      ],
+      "freeAgencyActions": [],
+      "rivalryActions": [
+        {
+          "kind": "rivalBeat",
+          "label": "Continue"
+        },
+        {
+          "kind": "rivalBeat",
+          "label": "Continue"
+        },
+        {
+          "kind": "rivalChoice",
+          "label": "😈 Answer it on the field\nThe feud heats up, otherwise Morale +8\n30% chance you're the one who gets tossed: Morale -5, Fanbase -5, Net worth -$100k"
+        },
+        {
+          "kind": "rivalChoice",
+          "label": "Continue"
+        },
+        {
+          "kind": "rivalBeat",
+          "label": "Continue"
+        },
+        {
+          "kind": "rivalBeat",
+          "label": "Continue"
+        }
+      ],
+      "secondSeasonReload": {
+        "rawHeld": true,
+        "careerHeld": true,
+        "before": {
+          "phase": "season",
+          "name": "Audit MLB Prospect",
+          "seasons": 2,
+          "year": 2028,
+          "age": 23,
+          "retired": false,
+          "team": "DET",
+          "pos": "CF",
+          "contractYears": 4,
+          "health": 100,
+          "ovr": 75,
+          "netWorth": 1,
+          "careerHash": "a48665481947ce25579c46f51fe7371d921c9f5ad0c4c5524efdc116a56ad3b8",
+          "lines": [
+            {
+              "year": 2026,
+              "team": "DET",
+              "age": 21,
+              "ovr": 72,
+              "games": 155,
+              "awards": [],
+              "teamResult": "Missed October",
+              "salary": 0.8,
+              "avg": 0.252,
+              "hr": 14,
+              "rbi": 69,
+              "sb": 12,
+              "doubles": 29,
+              "obp": 0.32
+            },
+            {
+              "year": 2027,
+              "team": "DET",
+              "age": 22,
+              "ovr": 74,
+              "games": 156,
+              "awards": [],
+              "teamResult": "Missed October",
+              "salary": 0.8,
+              "avg": 0.259,
+              "hr": 14,
+              "rbi": 64,
+              "sb": 6,
+              "doubles": 33,
+              "obp": 0.347
+            }
+          ]
+        },
+        "after": {
+          "phase": "season",
+          "name": "Audit MLB Prospect",
+          "seasons": 2,
+          "year": 2028,
+          "age": 23,
+          "retired": false,
+          "team": "DET",
+          "pos": "CF",
+          "contractYears": 4,
+          "health": 100,
+          "ovr": 75,
+          "netWorth": 1,
+          "careerHash": "a48665481947ce25579c46f51fe7371d921c9f5ad0c4c5524efdc116a56ad3b8",
+          "lines": [
+            {
+              "year": 2026,
+              "team": "DET",
+              "age": 21,
+              "ovr": 72,
+              "games": 155,
+              "awards": [],
+              "teamResult": "Missed October",
+              "salary": 0.8,
+              "avg": 0.252,
+              "hr": 14,
+              "rbi": 69,
+              "sb": 12,
+              "doubles": 29,
+              "obp": 0.32
+            },
+            {
+              "year": 2027,
+              "team": "DET",
+              "age": 22,
+              "ovr": 74,
+              "games": 156,
+              "awards": [],
+              "teamResult": "Missed October",
+              "salary": 0.8,
+              "avg": 0.259,
+              "hr": 14,
+              "rbi": 64,
+              "sb": 6,
+              "doubles": 33,
+              "obp": 0.347
+            }
+          ]
+        },
+        "playReachable": true
+      },
+      "rapidFirstPlay": {
+        "before": {
+          "phase": "season",
+          "name": "Audit MLB Prospect",
+          "seasons": 0,
+          "year": 2026,
+          "age": 21,
+          "retired": false,
+          "team": "DET",
+          "pos": "CF",
+          "contractYears": 6,
+          "health": 100,
+          "ovr": 72,
+          "netWorth": 0.4,
+          "careerHash": "5608fabebcc1d4df1bb3d5f03d8db3f9fed0f0996845a0ac671c8b7471e6b45c",
+          "lines": []
+        },
+        "after": {
+          "phase": "event",
+          "name": "Audit MLB Prospect",
+          "seasons": 1,
+          "year": 2027,
+          "age": 22,
+          "retired": false,
+          "team": "DET",
+          "pos": "CF",
+          "contractYears": 5,
+          "health": 100,
+          "ovr": 73,
+          "netWorth": 0.8,
+          "careerHash": "20284ef449db8e5d59eaf6286f53d17feb243ecec9a1328f49b91f7924b15962",
+          "lines": [
+            {
+              "year": 2026,
+              "team": "DET",
+              "age": 21,
+              "ovr": 72,
+              "games": 155,
+              "awards": [],
+              "teamResult": "Missed October",
+              "salary": 0.8,
+              "avg": 0.252,
+              "hr": 14,
+              "rbi": 69,
+              "sb": 12,
+              "doubles": 29,
+              "obp": 0.32
+            }
+          ]
+        },
+        "recordedSeasonsDelta": 1
+      },
+      "retirement": {
+        "mode": "Native manual Hang them up now after six full season decision cycles",
+        "state": {
+          "phase": "retired",
+          "name": "Audit MLB Prospect",
+          "seasons": 6,
+          "year": 2032,
+          "age": 27,
+          "retired": true,
+          "team": "DET",
+          "pos": "CF",
+          "contractYears": 4,
+          "health": 100,
+          "ovr": 82,
+          "netWorth": 8.88,
+          "careerHash": "e908266624f49992255a1ce1cafd3f5d32958de68b1375b066e8e29e2480a18e",
+          "lines": [
+            {
+              "year": 2026,
+              "team": "DET",
+              "age": 21,
+              "ovr": 72,
+              "games": 155,
+              "awards": [],
+              "teamResult": "Missed October",
+              "salary": 0.8,
+              "avg": 0.252,
+              "hr": 14,
+              "rbi": 69,
+              "sb": 12,
+              "doubles": 29,
+              "obp": 0.32
+            },
+            {
+              "year": 2027,
+              "team": "DET",
+              "age": 22,
+              "ovr": 74,
+              "games": 156,
+              "awards": [],
+              "teamResult": "Missed October",
+              "salary": 0.8,
+              "avg": 0.259,
+              "hr": 14,
+              "rbi": 64,
+              "sb": 6,
+              "doubles": 33,
+              "obp": 0.347
+            },
+            {
+              "year": 2028,
+              "team": "DET",
+              "age": 23,
+              "ovr": 75,
+              "games": 158,
+              "awards": [],
+              "teamResult": "Missed October",
+              "salary": 0.8,
+              "avg": 0.255,
+              "hr": 15,
+              "rbi": 66,
+              "sb": 4,
+              "doubles": 30,
+              "obp": 0.322
+            },
+            {
+              "year": 2029,
+              "team": "DET",
+              "age": 24,
+              "ovr": 77,
+              "games": 161,
+              "awards": [],
+              "teamResult": "Missed October",
+              "salary": 0.8,
+              "avg": 0.279,
+              "hr": 26,
+              "rbi": 83,
+              "sb": 12,
+              "doubles": 42,
+              "obp": 0.373
+            },
+            {
+              "year": 2030,
+              "team": "DET",
+              "age": 25,
+              "ovr": 79,
+              "games": 155,
+              "awards": [],
+              "teamResult": "Missed October",
+              "salary": 0.8,
+              "avg": 0.283,
+              "hr": 25,
+              "rbi": 75,
+              "sb": 4,
+              "doubles": 34,
+              "obp": 0.357
+            },
+            {
+              "year": 2031,
+              "team": "DET",
+              "age": 26,
+              "ovr": 80,
+              "games": 156,
+              "awards": [],
+              "teamResult": "Missed October",
+              "salary": 14.5,
+              "avg": 0.284,
+              "hr": 24,
+              "rbi": 78,
+              "sb": 6,
+              "doubles": 36,
+              "obp": 0.38
+            }
+          ]
+        },
+        "dialogTriggered": false,
+        "customDialogText": [],
+        "retiredReload": {
+          "rawHeld": true,
+          "state": {
+            "phase": "retired",
+            "name": "Audit MLB Prospect",
+            "seasons": 6,
+            "year": 2032,
+            "age": 27,
+            "retired": true,
+            "team": "DET",
+            "pos": "CF",
+            "contractYears": 4,
+            "health": 100,
+            "ovr": 82,
+            "netWorth": 8.88,
+            "careerHash": "e908266624f49992255a1ce1cafd3f5d32958de68b1375b066e8e29e2480a18e",
+            "lines": [
+              {
+                "year": 2026,
+                "team": "DET",
+                "age": 21,
+                "ovr": 72,
+                "games": 155,
+                "awards": [],
+                "teamResult": "Missed October",
+                "salary": 0.8,
+                "avg": 0.252,
+                "hr": 14,
+                "rbi": 69,
+                "sb": 12,
+                "doubles": 29,
+                "obp": 0.32
+              },
+              {
+                "year": 2027,
+                "team": "DET",
+                "age": 22,
+                "ovr": 74,
+                "games": 156,
+                "awards": [],
+                "teamResult": "Missed October",
+                "salary": 0.8,
+                "avg": 0.259,
+                "hr": 14,
+                "rbi": 64,
+                "sb": 6,
+                "doubles": 33,
+                "obp": 0.347
+              },
+              {
+                "year": 2028,
+                "team": "DET",
+                "age": 23,
+                "ovr": 75,
+                "games": 158,
+                "awards": [],
+                "teamResult": "Missed October",
+                "salary": 0.8,
+                "avg": 0.255,
+                "hr": 15,
+                "rbi": 66,
+                "sb": 4,
+                "doubles": 30,
+                "obp": 0.322
+              },
+              {
+                "year": 2029,
+                "team": "DET",
+                "age": 24,
+                "ovr": 77,
+                "games": 161,
+                "awards": [],
+                "teamResult": "Missed October",
+                "salary": 0.8,
+                "avg": 0.279,
+                "hr": 26,
+                "rbi": 83,
+                "sb": 12,
+                "doubles": 42,
+                "obp": 0.373
+              },
+              {
+                "year": 2030,
+                "team": "DET",
+                "age": 25,
+                "ovr": 79,
+                "games": 155,
+                "awards": [],
+                "teamResult": "Missed October",
+                "salary": 0.8,
+                "avg": 0.283,
+                "hr": 25,
+                "rbi": 75,
+                "sb": 4,
+                "doubles": 34,
+                "obp": 0.357
+              },
+              {
+                "year": 2031,
+                "team": "DET",
+                "age": 26,
+                "ovr": 80,
+                "games": 156,
+                "awards": [],
+                "teamResult": "Missed October",
+                "salary": 14.5,
+                "avg": 0.284,
+                "hr": 24,
+                "rbi": 78,
+                "sb": 6,
+                "doubles": 36,
+                "obp": 0.38
+              }
+            ]
+          }
+        }
+      },
+      "restart": {
+        "dialogTriggered": false,
+        "afterFirstRaw": null,
+        "customDialogText": [],
+        "creationVisible": true
+      },
+      "creationBoundary": {
+        "longInput": {
+          "maxlength": "24",
+          "longNativeInput": "Audit Prospect ABCDEFGHI",
+          "length": 24,
+          "blankDraftDisabled": false
+        },
+        "whitespaceFallbackName": "Ace Diamond"
+      },
+      "finalDocumentOverflow": 0,
+      "errors": [],
+      "badHttp": [],
+      "blockedRequests": [
+        {
+          "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/game_completions",
+          "method": "POST"
+        },
+        {
+          "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/game_completions",
+          "method": "POST"
+        },
+        {
+          "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/game_completions",
+          "method": "POST"
+        },
+        {
+          "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/game_completions",
+          "method": "POST"
+        },
+        {
+          "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/game_completions",
+          "method": "POST"
+        },
+        {
+          "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/game_completions",
+          "method": "POST"
+        },
+        {
+          "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/game_completions",
+          "method": "POST"
+        },
+        {
+          "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/game_completions",
+          "method": "POST"
+        }
+      ],
+      "screenshots": [
+        "american-MLB-season.png",
+        "american-MLB-retired.png"
+      ]
+    },
+    {
+      "sport": "NHL",
+      "url": "https://douknowball.com/nhl-my-career",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "motion": "no-preference",
+      "entriesStart": [
+        {
+          "url": "https://douknowball.com/assets/index-E8L0RxXO.js",
+          "status": 200,
+          "sha256": "640820ed3b9ead81190861c4b061326a372e9c942067b3440d16e5e8cdea2e0b"
+        }
+      ],
+      "entriesEnd": [
+        {
+          "url": "https://douknowball.com/assets/index-E8L0RxXO.js",
+          "status": 200,
+          "sha256": "640820ed3b9ead81190861c4b061326a372e9c942067b3440d16e5e8cdea2e0b"
+        }
+      ],
+      "created": {
+        "name": "Audit NHL Prospect",
+        "year": 2026,
+        "age": 19,
+        "pos": "C",
+        "team": "BOS",
+        "seasons": 0
+      },
+      "playedSeasons": 6,
+      "playedYears": [
+        2026,
+        2027,
+        2028,
+        2029,
+        2030,
+        2031
+      ],
+      "offseasonChoices": [
+        {
+          "label": "Sleep in there overnight and film it\nGhost content",
+          "afterPhase": "season",
+          "afterSeasons": 1
+        },
+        {
+          "label": "Out chirp him on the broadcast\nWin the mic",
+          "afterPhase": "season",
+          "afterSeasons": 2
+        },
+        {
+          "label": "Public apology, private laugh\nDamage control",
+          "afterPhase": "season",
+          "afterSeasons": 3
+        },
+        {
+          "label": "Call a players only meeting\nClear the air",
+          "afterPhase": "season",
+          "afterSeasons": 4
+        },
+        {
+          "label": "Send the texts, 1.2M a year\n1.2M dirty, heat +20",
+          "afterPhase": "season",
+          "afterSeasons": 5
+        },
+        {
+          "label": "Sign it, 4M\n4M dirty, heat +20",
+          "afterPhase": "season",
+          "afterSeasons": 6
+        }
+      ],
+      "extensions": [
+        "Sign it: 5 more years at $5.5M"
+      ],
+      "freeAgencyActions": [],
+      "rivalryActions": [
+        {
+          "kind": "rivalBeat",
+          "label": "Continue"
+        },
+        {
+          "kind": "rivalChoice",
+          "label": "🤝 Co-host and split the bill\nFanbase +10, Net worth -$1M, Karma +8, the feud cools"
+        },
+        {
+          "kind": "rivalChoice",
+          "label": "Continue"
+        },
+        {
+          "kind": "rivalChoice",
+          "label": "😈 Settle it next game\nThe feud heats up, otherwise Morale +8\n30% chance you're the one who gets the penalty: Morale -5, Fanbase -5, Net worth -$100k"
+        },
+        {
+          "kind": "rivalChoice",
+          "label": "Continue"
+        }
+      ],
+      "secondSeasonReload": {
+        "rawHeld": true,
+        "careerHeld": true,
+        "before": {
+          "phase": "season",
+          "name": "Audit NHL Prospect",
+          "seasons": 2,
+          "year": 2028,
+          "age": 21,
+          "retired": false,
+          "team": "BOS",
+          "pos": "C",
+          "contractYears": 1,
+          "health": 97,
+          "ovr": 77,
+          "netWorth": 0.3,
+          "careerHash": "72091710d27a0da0f102616692a5ee6c10d8756e3690a14ffeaa3bbd5f705a6f",
+          "lines": [
+            {
+              "year": 2026,
+              "team": "BOS",
+              "age": 19,
+              "ovr": 73,
+              "games": 82,
+              "awards": [],
+              "teamResult": "Lost in Round 1",
+              "salary": 0.9,
+              "goals": 22,
+              "assists": 22,
+              "points": 44,
+              "poGames": 6,
+              "poGoals": 2,
+              "poAssists": 2,
+              "poPoints": 4
+            },
+            {
+              "year": 2027,
+              "team": "BOS",
+              "age": 20,
+              "ovr": 75,
+              "games": 80,
+              "awards": [],
+              "teamResult": "Lost in Round 2",
+              "salary": 0.9,
+              "goals": 32,
+              "assists": 28,
+              "points": 60,
+              "poGames": 10,
+              "poGoals": 4,
+              "poAssists": 6,
+              "poPoints": 10
+            }
+          ]
+        },
+        "after": {
+          "phase": "season",
+          "name": "Audit NHL Prospect",
+          "seasons": 2,
+          "year": 2028,
+          "age": 21,
+          "retired": false,
+          "team": "BOS",
+          "pos": "C",
+          "contractYears": 1,
+          "health": 97,
+          "ovr": 77,
+          "netWorth": 0.3,
+          "careerHash": "72091710d27a0da0f102616692a5ee6c10d8756e3690a14ffeaa3bbd5f705a6f",
+          "lines": [
+            {
+              "year": 2026,
+              "team": "BOS",
+              "age": 19,
+              "ovr": 73,
+              "games": 82,
+              "awards": [],
+              "teamResult": "Lost in Round 1",
+              "salary": 0.9,
+              "goals": 22,
+              "assists": 22,
+              "points": 44,
+              "poGames": 6,
+              "poGoals": 2,
+              "poAssists": 2,
+              "poPoints": 4
+            },
+            {
+              "year": 2027,
+              "team": "BOS",
+              "age": 20,
+              "ovr": 75,
+              "games": 80,
+              "awards": [],
+              "teamResult": "Lost in Round 2",
+              "salary": 0.9,
+              "goals": 32,
+              "assists": 28,
+              "points": 60,
+              "poGames": 10,
+              "poGoals": 4,
+              "poAssists": 6,
+              "poPoints": 10
+            }
+          ]
+        },
+        "playReachable": true
+      },
+      "rapidFirstPlay": {
+        "before": {
+          "phase": "season",
+          "name": "Audit NHL Prospect",
+          "seasons": 0,
+          "year": 2026,
+          "age": 19,
+          "retired": false,
+          "team": "BOS",
+          "pos": "C",
+          "contractYears": 3,
+          "health": 100,
+          "ovr": 73,
+          "netWorth": 0.5,
+          "careerHash": "ed74cffcb0d618369da6118f41a04a3b20568c326fd9477e3bbf3c3dde82cbc4",
+          "lines": []
+        },
+        "after": {
+          "phase": "event",
+          "name": "Audit NHL Prospect",
+          "seasons": 1,
+          "year": 2027,
+          "age": 20,
+          "retired": false,
+          "team": "BOS",
+          "pos": "C",
+          "contractYears": 2,
+          "health": 100,
+          "ovr": 75,
+          "netWorth": 0.9,
+          "careerHash": "24f180aed90e6fe1f99520e6b715e47b7871c33a9720ff8c41413d89a3542319",
+          "lines": [
+            {
+              "year": 2026,
+              "team": "BOS",
+              "age": 19,
+              "ovr": 73,
+              "games": 82,
+              "awards": [],
+              "teamResult": "Lost in Round 1",
+              "salary": 0.9,
+              "goals": 22,
+              "assists": 22,
+              "points": 44,
+              "poGames": 6,
+              "poGoals": 2,
+              "poAssists": 2,
+              "poPoints": 4
+            }
+          ]
+        },
+        "recordedSeasonsDelta": 1
+      },
+      "retirement": {
+        "mode": "Native manual Hang them up now after six full season decision cycles",
+        "state": {
+          "phase": "retired",
+          "name": "Audit NHL Prospect",
+          "seasons": 6,
+          "year": 2032,
+          "age": 25,
+          "retired": true,
+          "team": "BOS",
+          "pos": "C",
+          "contractYears": 2,
+          "health": 97,
+          "ovr": 82,
+          "netWorth": 10.3,
+          "careerHash": "260b1bb328f3ae89c0af03afe7bc8e45901a8e5d646b80624a072639c5eb62d9",
+          "lines": [
+            {
+              "year": 2026,
+              "team": "BOS",
+              "age": 19,
+              "ovr": 73,
+              "games": 82,
+              "awards": [],
+              "teamResult": "Lost in Round 1",
+              "salary": 0.9,
+              "goals": 22,
+              "assists": 22,
+              "points": 44,
+              "poGames": 6,
+              "poGoals": 2,
+              "poAssists": 2,
+              "poPoints": 4
+            },
+            {
+              "year": 2027,
+              "team": "BOS",
+              "age": 20,
+              "ovr": 75,
+              "games": 80,
+              "awards": [],
+              "teamResult": "Lost in Round 2",
+              "salary": 0.9,
+              "goals": 32,
+              "assists": 28,
+              "points": 60,
+              "poGames": 10,
+              "poGoals": 4,
+              "poAssists": 6,
+              "poPoints": 10
+            },
+            {
+              "year": 2028,
+              "team": "BOS",
+              "age": 21,
+              "ovr": 77,
+              "games": 82,
+              "awards": [],
+              "teamResult": "Missed the playoffs",
+              "salary": 5.5,
+              "goals": 41,
+              "assists": 39,
+              "points": 80
+            },
+            {
+              "year": 2029,
+              "team": "BOS",
+              "age": 22,
+              "ovr": 78,
+              "games": 79,
+              "awards": [],
+              "teamResult": "Missed the playoffs",
+              "salary": 5.5,
+              "goals": 47,
+              "assists": 40,
+              "points": 87
+            },
+            {
+              "year": 2030,
+              "team": "BOS",
+              "age": 23,
+              "ovr": 80,
+              "games": 82,
+              "awards": [],
+              "teamResult": "Missed the playoffs",
+              "salary": 5.5,
+              "goals": 43,
+              "assists": 40,
+              "points": 83
+            },
+            {
+              "year": 2031,
+              "team": "BOS",
+              "age": 24,
+              "ovr": 81,
+              "games": 80,
+              "awards": [],
+              "teamResult": "Lost in Round 1",
+              "salary": 5.5,
+              "goals": 38,
+              "assists": 33,
+              "points": 71,
+              "poGames": 6,
+              "poGoals": 4,
+              "poAssists": 5,
+              "poPoints": 9
+            }
+          ]
+        },
+        "dialogTriggered": false,
+        "customDialogText": [],
+        "retiredReload": {
+          "rawHeld": true,
+          "state": {
+            "phase": "retired",
+            "name": "Audit NHL Prospect",
+            "seasons": 6,
+            "year": 2032,
+            "age": 25,
+            "retired": true,
+            "team": "BOS",
+            "pos": "C",
+            "contractYears": 2,
+            "health": 97,
+            "ovr": 82,
+            "netWorth": 10.3,
+            "careerHash": "260b1bb328f3ae89c0af03afe7bc8e45901a8e5d646b80624a072639c5eb62d9",
+            "lines": [
+              {
+                "year": 2026,
+                "team": "BOS",
+                "age": 19,
+                "ovr": 73,
+                "games": 82,
+                "awards": [],
+                "teamResult": "Lost in Round 1",
+                "salary": 0.9,
+                "goals": 22,
+                "assists": 22,
+                "points": 44,
+                "poGames": 6,
+                "poGoals": 2,
+                "poAssists": 2,
+                "poPoints": 4
+              },
+              {
+                "year": 2027,
+                "team": "BOS",
+                "age": 20,
+                "ovr": 75,
+                "games": 80,
+                "awards": [],
+                "teamResult": "Lost in Round 2",
+                "salary": 0.9,
+                "goals": 32,
+                "assists": 28,
+                "points": 60,
+                "poGames": 10,
+                "poGoals": 4,
+                "poAssists": 6,
+                "poPoints": 10
+              },
+              {
+                "year": 2028,
+                "team": "BOS",
+                "age": 21,
+                "ovr": 77,
+                "games": 82,
+                "awards": [],
+                "teamResult": "Missed the playoffs",
+                "salary": 5.5,
+                "goals": 41,
+                "assists": 39,
+                "points": 80
+              },
+              {
+                "year": 2029,
+                "team": "BOS",
+                "age": 22,
+                "ovr": 78,
+                "games": 79,
+                "awards": [],
+                "teamResult": "Missed the playoffs",
+                "salary": 5.5,
+                "goals": 47,
+                "assists": 40,
+                "points": 87
+              },
+              {
+                "year": 2030,
+                "team": "BOS",
+                "age": 23,
+                "ovr": 80,
+                "games": 82,
+                "awards": [],
+                "teamResult": "Missed the playoffs",
+                "salary": 5.5,
+                "goals": 43,
+                "assists": 40,
+                "points": 83
+              },
+              {
+                "year": 2031,
+                "team": "BOS",
+                "age": 24,
+                "ovr": 81,
+                "games": 80,
+                "awards": [],
+                "teamResult": "Lost in Round 1",
+                "salary": 5.5,
+                "goals": 38,
+                "assists": 33,
+                "points": 71,
+                "poGames": 6,
+                "poGoals": 4,
+                "poAssists": 5,
+                "poPoints": 9
+              }
+            ]
+          }
+        }
+      },
+      "restart": {
+        "dialogTriggered": false,
+        "afterFirstRaw": null,
+        "customDialogText": [],
+        "creationVisible": true
+      },
+      "creationBoundary": {
+        "longInput": {
+          "maxlength": "24",
+          "longNativeInput": "Audit Prospect ABCDEFGHI",
+          "length": 24,
+          "blankDraftDisabled": false
+        },
+        "whitespaceFallbackName": "Gordie Blaze"
+      },
+      "finalDocumentOverflow": 0,
+      "errors": [],
+      "badHttp": [],
+      "blockedRequests": [
+        {
+          "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/game_completions",
+          "method": "POST"
+        },
+        {
+          "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/game_completions",
+          "method": "POST"
+        },
+        {
+          "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/game_completions",
+          "method": "POST"
+        },
+        {
+          "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/game_completions",
+          "method": "POST"
+        },
+        {
+          "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/game_completions",
+          "method": "POST"
+        },
+        {
+          "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/game_completions",
+          "method": "POST"
+        },
+        {
+          "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/game_completions",
+          "method": "POST"
+        },
+        {
+          "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/game_completions",
+          "method": "POST"
+        }
+      ],
+      "screenshots": [
+        "american-NHL-season.png",
+        "american-NHL-retired.png"
+      ]
+    }
+  ],
+  "summary": {
+    "modes": 4,
+    "seasons": 24,
+    "uniqueSeasonYears": true,
+    "fullOffseasonDecisionCycles": 24,
+    "midCareerReloads": 4,
+    "retiredReloads": 4,
+    "manualRetirements": 4,
+    "restarts": 4,
+    "nativeHeldEnterChecks": 4,
+    "recordedSeasonDeltaEach": 1,
+    "errors": 0,
+    "badHttp": 0,
+    "verifiedDefects": 0
+  },
+  "findings": [],
+  "observedBehavior": [
+    {
+      "topic": "Destructive actions",
+      "observed": "Hang them up now immediately marks the save retired. New career immediately removes the one local save and opens creation. None of the four routes displays a browser or custom cancellation/confirmation dialog for these actions.",
+      "boundary": "Cancellation and confirmation cannot be exercised because the current UI does not implement them. This is recorded behavior, not counted as a broken promised feature or a verified defect."
+    },
+    {
+      "topic": "Creation input",
+      "observed": "Native text insertion is bounded to 24 characters. Whitespace names intentionally start with a nonempty default fictional name in all four modes.",
+      "boundary": "Blank names were not treated as an invalid-name failure because the implemented fallback is explicit."
+    }
+  ],
+  "limits": [
+    "NBA initial live load did not mount within25 seconds and showed only the skip link; a fresh sequential replay completed the same six-season flow successfully. Failed loading evidence is preserved as an audit limit, not a site defect.",
+    "This is one generated prospect/default position and current era per sport, followed through six played seasons and the available manual retirement path. It does not prove natural age-based retirement, every position, historic eras, every event or all optional systems.",
+    "Six real UI season cycles were completed before manual retirement. No engine, progression, clock, RNG, contract or stored-career injection was used.",
+    "Native Space activates creation/decision/retirement/restart controls, pointer clicks play later seasons, and repeated native Enter tests first-season advancement. Full keyboard navigation/focus containment is not claimed.",
+    "Every vendor request and non-GET request was blocked. Real scores, account changes, reports, signups, analytics and ad impressions were not submitted. Remote booking success is not credited.",
+    "Only final new-creation document overflow was measured numerically; no exhaustive geometry/animation matrix is claimed.",
+    "Optional Bank, shop, every inbox reply, free-agency combinations and coaching careers were not exhaustively played. Real-world roster/stat accuracy is outside this lane."
+  ],
+  "rawReceipts": [
+    "american-careers-audit-raw.json",
+    "american-careers-audit-nba-retry.json"
+  ],
+  "failedEvidence": {
+    "receipt": "american-careers-audit-raw.json",
+    "sport": "NBA",
+    "message": "page.waitForFunction: Timeout 25000ms exceeded.\n    at mounted (C:\\Users\\antho\\AppData\\Local\\Temp\\dukb-hostile-audit-2026-10-01\\american-careers-audit.mjs:6:35)\n    at C:\\Users\\antho\\AppData\\Local\\Temp\\dukb-hostile-audit-2026-10-01\\american-careers-audit.mjs:11:69",
+    "screenshot": "american-NBA-audit-limit.png",
+    "supersededBy": "american-careers-audit-nba-retry.json"
+  },
+  "cleanup": {
+    "browserClosed": true,
+    "contextsClosed": true,
+    "ownedServers": 0,
+    "root4930Untouched": true,
+    "productEdits": 0,
+    "gitMutations": 0,
+    "externalMutations": 0
+  }
+}

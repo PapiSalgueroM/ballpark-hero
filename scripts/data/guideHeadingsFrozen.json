@@ -255,18 +255,28 @@
       "howToPlay": [
         "Pick one of 40 programs. Prestige sets your pipeline and NIL power.",
         "Play 10 rounds of two games each, one league matchup and one cross-country test.",
+        "Round 10's league night is rivalry night, and every program plays its rival, even one from another league. Your rival is a school from your own state when one is free to pair with you, otherwise a pairing the game made, and the game tells you which. Duke and North Carolina, Kentucky and Louisville, and Purdue and Indiana are in-state games; UConn has no state on file here, so its rival is a pairing the game made.",
+        "The rivalry winner carries 0.5 to 1.5 points of extra strength into the conference tournament and March, the loser drops the same, and a margin of 25 or more swings the full 1.5.",
         "Finish top four in your league for the conference tournament; win it and you dance automatically.",
         "Survive March: 32 teams, single elimination, five rounds from the Round of 32 to the title game.",
-        "Recruit each spring from a 14-player high school board and a 7-player portal, then run it back."
+        "Recruit each spring from a 14-player high school board and a 7-player portal, then run it back.",
+        "The same offseason screen holds your two assistant coaches, one for the offense and one for the defense. Each moves his end of the floor by up to 3 rating points either way: 70 is neutral, 95 is the full plus 3, 45 the full minus 3, and an empty chair is covered by a grad assistant who counts as a 50.",
+        "In a game each side scores 1.5 more points for every point its offensive assistant's edge beats the other side's defensive assistant's.",
+        "Keep your assistants, let one go and get his pay back, or shop three candidates per chair, one rated below your program's level, one around it and one above it. A hire costs the difference between his pay and the pay of the man he replaces, and is refused if the pot cannot cover it.",
+        "An assistant rated 85 or better can be hired away as a head coach after any season, and his chair stays empty until you fill it.",
+        "Your NIL budget each spring comes from prestige plus wins, and rivalry night moves it: a win adds 3 to 8 points and a loss takes 3 to 8 away, with a margin of 25 or more swinging the full 8.",
+        "Your two assistants are paid first out of that budget, from 3 points a season for a 45 to 16 for a 95, and what is left is your NIL money. If the budget cannot cover them, the dearest walks until it can."
       ],
       "rules": [
         "The field is 32 teams: six tournament champions plus 26 at-larges, seeded 1 through 32 by record first, strength second.",
+        "The committee also reads strength of schedule, the average strength of every regular season opponent you actually played, and weighs it the same as the eye test, so on the same record and the same strength the tougher schedule ranks higher. The 26 at-large bids and the seeds come off that ranking, and the Schedule tab shows your number and where it ranks.",
         "Freshmen rated 88 or higher go one-and-done almost every time, upperclassmen rated 90 or higher often declare, and seniors graduate.",
         "High school grades can be off by up to 4 points either way; portal players show true ratings and arrive as sophomores.",
         "A Cinderella flag fires when a 10 seed or worse crashes the Final Four. Saves are automatic in your browser."
       ],
       "example": [
         "You take VCU, prestige 79. The season is bumpy, but you sneak into the league's top four, win both tournament games, and grab the automatic bid.",
+        "Round 10's league night is rivalry night against Dayton, a pairing the game made since the board has no state on file for either school. You win it by 27, so VCU carries 1.5 extra points of strength into the league tournament and March, and the trail opens with 8 more budget points.",
         "March seeds you 13th. You win a nervy opener, shock a top-four seed in the Sweet 16, and crash the Final Four, earning the Cinderella tag. The semifinal ends it. Then your 90-rated sophomore declares, and NIL has to rebuild half a rotation."
       ],
       "tips": [
@@ -1752,7 +1762,8 @@
     },
     "/mlb-front-office": {
       "howToPlay": [
-        "Choose a franchise and inherit its actual lineup, rotation and bullpen.",
+        "Choose a franchise and inherit its real 26: the lineup and bench, a five man rotation and the bullpen, as the club stood on the last day of the 2026 regular season.",
+        "The roster box shows who the sim plays: your best healthy 8 bats, 3 starters and 2 relievers. Everyone else is depth, and depth is who plays the day a starter hits the IL.",
         "Read the ownership mandate: a stacked roster is told to win the World Series, a mid one to make October, a thin one to hit an honest win number. It resets every offseason.",
         "Work the roster: DFA dead weight, sign free agents, and take trades to the phone, where the other GM counters with pick demands and lesser returns instead of a flat yes or no.",
         "Play the 162 in stretches: each round simulates about a week and a half of baseball, 27 rounds total, with a live read on whether you are on pace.",
@@ -1764,6 +1775,9 @@
         "Trades weigh rating, age and position, with premiums on aces, shortstops and catchers.",
         "You hold 2 picks a year, and scout grades carry error. True ratings show only after you pick.",
         "Injuries cost one to four rounds on the IL, and your franchise saves automatically.",
+        "A new franchise carries 26 and can hold 22 to 28. The 13 men the sim plays earn their rating's price, the other 13 start on depth deals at 0.7 million until those deals run out, and then they re-sign at their rating's price like anybody else. The roster box flags a cheap deal in its last year with what he will cost, so the jump never lands by surprise.",
+        "If the draft takes you past 28, you DFA down to 28 before Round 1, dead money and all, and Play waits until you have. The CPU clubs cut their own lowest rated depth men the same way.",
+        "A save started before the full rosters keeps its 13 man roster and its old limits of 9 to 16.",
         "A DFA is not free. Half the man's salary stays on this season's payroll as dead money, a quarter lands on next season's if he had years left, and you cannot sign him back until the offseason.",
         "Trust upstairs runs 0 to 100: beat the mandate and it climbs, miss it and it falls, a ring fixes almost anything, and at zero you are fired and the save ends."
       ],
@@ -1861,24 +1875,27 @@
         "Open the Bank between seasons. Savings pays 2.5% a season and never loses, five things you can put money into each have a price that moves every season whether you look or not (a fund, flats back home, two shares and a coin that halves as often as it doubles), the statement keeps your last 12 moves, and the card school in the clubhouse is one sitting a season on odds that are printed before you sit in.",
         "Read the News box. The paper writes up every season in your own position's stat, the SocialGram shows followers read off your fanbase with three fan comments under the latest post, and the rival's card keeps the head to head against the player drafted the same year as you.",
         "Collect badges in the Trophy Case: 26 of them, from a first ring and Rookie of the Year to 500 home runs, 3,000 strikeouts and $100M to your name, each lit the moment the facts of your career say so.",
+        "Answer your phone. Texts from your agent, the manager, the GM, a teammate or your mom land on the beats of the baseball year: draft day, spring training, the All-Star break, the trade deadline, September, October if you get there, the offseason, an arbitration winter and the winter you hit free agency. Every text says which beat and which year it came in on, and how you answer moves your karma, morale, fanbase or bank.",
+        "Some seasons your rival puts a decision on your plate instead of a story: benches clearing that you can answer or calm down, a debate show offering real money, a youth clinic his foundation wants you to co-host, an All-Star vote his club is buying ads for. Every button prints exactly what it moves, and a gamble prints its odds.",
         "Enter the draft, land on a real club, and play seasons for full stat lines: average, homers and RBI, or wins, ERA and strikeouts.",
         "Check the lineup card. Top ten picks play from Opening Day; everyone else fights the veteran in spring, with bench bats and long-relief arms waiting on spot starts until the job flips. Relievers climb their own bullpen ladder instead.",
         "Handle the offseason event: winter training, surgery calls, trade rumors.",
         "When team control ends, hit the open market for real: competing offers from named clubs with their own money, length and roster quality, and one push for more on any of them.",
-        "Stack awards and rings, fight aging, and retire to a verdict.",
-        "Some seasons your rival puts a decision on your plate instead of a story: benches clearing that you can answer or calm down, a debate show offering real money, a youth clinic his foundation wants you to co-host, an All-Star vote his club is buying ads for. Every button prints exactly what it moves, and a gamble prints its odds."
+        "Stack awards and rings, fight aging, and retire to a verdict."
       ],
       "rules": [
         "You start at 21 in 2026 with 6 years of team control before free agency. The throwback starts in 2004 instead, inside a sealed 30 team league verified against the real season, with 2004 sized contracts.",
         "Three meters run your life: morale, fanbase and health. Low health means shortened seasons.",
+        "Any season your rival stays out of the news carries a 45% chance of a rival choice instead, never both in one season, and you meet every choice once before one comes back. Each button moves exactly what it prints: morale, fanbase, net worth, karma or the heat of the feud. Morale goes straight into next season's numbers, at the plate or on the mound.",
+        "Texts only arrive on beats your season really had. No October texts in a year your club went home in September, arbitration only in the winters after your third, fourth and fifth seasons while your deal still has years on it, free agency only the winter your deal runs out, and draft day's text lands before you see a pitch. One text a beat, up to three a season, fewer while old ones sit unanswered, and the same text never comes twice in a career.",
+        "The season the game retires you (42, 21 seasons, or a rating that craters) sends nothing about a year you will not play: no winter ball offer, no bat and glove deal, no arbitration or free agency talk.",
         "The lineup card is real: a bench season is about half the games, a spot starter gets a dozen turns, springs have memory both ways, and signing with a stacked contender can cost a mid player the everyday job.",
         "The press reads your actual season: a ring puts you on the podium, missing October badly puts you in the scrum, a bench year brings the role question. Three answers each time, safe, honest or fiery, and fiery gambles your fanbase for real.",
         "Players grow toward their potential through age 26 and decline from 32 on, faster after 37.",
         "Retirement hits at 42, after 21 seasons, or when your rating collapses. You can walk away after season 6.",
         "Money has rules of its own. There is a 1% fee on both sides of every trade and a $100k floor in the account that cannot be invested away; a season that leaves you under the floor is covered out of savings first, then by a forced sale of holdings at whatever the price is that day. Cards win 42% of hands and a win pays 1.15x the stake, the most you can stake is $50k or 4% of your cash, and once you are $500k down for your career the guys stop dealing you in for good. Keep sitting in while you are losing and somebody at home notices, which costs morale and fanbase.",
         "The fans nag you for the thing your position is judged on and never the other way round: a starter hears go deeper into games, a closer hears shut the door, a catcher hears more pop from behind the plate. No arm is ever asked for home runs, no bat is ever asked for an ERA, and the three spots with no speed in them are never asked to run.",
-        "One career at a time, saved automatically in your browser.",
-        "Any season your rival stays out of the news carries a 45% chance of a rival choice instead, never both in one season, and you meet every choice once before one comes back. Each button moves exactly what it prints: morale, fanbase, net worth, karma or the heat of the feud. Morale goes straight into next season's numbers, at the plate or on the mound."
+        "One career at a time, saved automatically in your browser."
       ],
       "example": [
         "You build a Slugging Shortstop who goes 12th overall. Year two brings the breakout, year five a ring. When control ends, the hometown club offers a discount while the market whispers bigger money elsewhere.",
@@ -2055,7 +2072,11 @@
         "Win four best of 7 rounds, then draft and rebuild for the repeat, as long as ownership keeps you."
       ],
       "rules": [
-        "The cap starts at the real 2026-27 figure, just under 165 million, and rises 7 percent every season in the game. You can waive down to 8 players during the year, but the season cannot tip off with fewer than 14 or more than 15: short of 14 the league fills the gap with minimum deals at 2 million each and tells you who, and above 15 the first round waits until you waive down.",
+        "The cap starts at the real 2026-27 figure, just under 165 million, and rises 7 percent every season in the game. You can waive down to 8 players during the year, but the season cannot tip off with fewer than 14 or more than 15: short of 14 the league fills the gap with minimum deals (2 million each in a new league, rising with the cap) and tells you who, and above 15 the first round waits until you waive down.",
+        "New deals are priced in the money of the season they start in. Re-signings, rookie deals, the minimum and free agent asks all rise with the cap, so payrolls stop falling seven percent a year behind the tax line. They still drop over the first couple of seasons, because computer teams let expiring depth walk (all of it when they face a bill) and refill only on minimum deals, so expect fewer taxpayers than a new league opens with; from about the third season payrolls hold steady against the line. A contract already signed keeps its number until it runs out.",
+        "Every game the sim plays writes a box score off the result it already decided. The eight men who decide games (your best five healthy players start, the next three come off the bench) are the eight on the floor, their points always add up to the team's score, and the winner always outscored the loser. The names are real, but these are this save's sim seasons, not real NBA stats.",
+        "At season close the league names five awards by fixed rules, and a man needs four in five of an average team's games to qualify (about 64 of 80). MVP: points plus rebounds plus assists a game, plus 20 times his club's winning share. All-League First Team: the five best by the MVP score, any position. Rookie of the Year: points plus rebounds plus assists a game, among first year men drafted in this league, so a new league's first season has none. Defensive Player of the Year: steals plus blocks plus half his rebounds a game, among men whose club allowed fewer points than the league average. Sixth Man of the Year: points a game, among men who started fewer than half the games they played.",
+        "The close screen shows the awards, the points, rebounds and assists leaders and your own club's lines. Winners wear the award on their roster card, and the Standings box keeps every season's champion and awards. A save from before season lines plays out its current season without them and starts keeping them next season.",
         "The real league put its 2026-27 tax line at 200.4 million, but the salaries here are the game's own and run richer at the top, so every new league sets its line from its own payrolls instead: enough clubs over it to look like a real season (eight paid tax in 2023-24), but nobody facing a bill above 190 million, about the most any club has ever been billed. A new league opens on a 226.7 million line with five clubs over it, and the line rises 7 percent a season with the cap.",
         "Every dollar of payroll over the line, dead money included, is taxed at season close in brackets about 3 percent of the line wide (6.9 million in a new league), at the league's real rates: 1.00 and 1.25 on the first two brackets, 3.50 and 4.75 on the next two, then half a dollar more per bracket. Pay tax in three of the previous four seasons and you are a repeater, taxed at 3.00, 3.25, 5.50 and 6.75 on the same brackets.",
         "The cap panel shows the projected bill all season. At close the bill is listed beside the results, ownership takes one point of trust per 6 million of it (never more than 20), and the money is held back from next season's cap room. Above the first apron (236.4 million in a new league) a trade has to send out at least the salary it brings back. Computer teams that pay tax let their expiring depth walk the next summer, so the line moves the whole league, not just you. A save from before the tax plays out its current season untaxed and gets its line that summer.",
@@ -2161,13 +2182,14 @@
         "Spend the money in 7 aisles: home, rides, investments, body, flex, family, and a shady aisle that only appears once you have something to hide.",
         "Read the News box. The paper writes up every season in your own position's stat, the SocialGram shows followers read off your fanbase with three fan comments under the latest post, and the rival's card keeps the head to head against the player drafted the same year as you.",
         "Collect badges in the Trophy Case: 21 of them, from a first ring and Rookie of the Year to 30,000 career points, a triple double season and $100M to your name, each lit the moment the facts of your career say so.",
+        "Answer your phone. Texts from your agent, the head coach, the GM, a teammate or your mom land on the beats of the basketball year: draft night and your first summer league, camp, the trade deadline, the All-Star break, the playoffs if you get there, the offseason, and the summer before the last year of your deal. Every text says which beat and which year it came in on, and how you answer moves your karma, morale, fanbase or bank.",
+        "Some seasons your rival hands you a decision instead of a headline: a flagrant you can answer or let go, a debate show offering real money, a youth camp his foundation wants you to co-host, an All-Star vote his team is buying ads for. Every button prints exactly what it moves, and a gamble prints its odds.",
         "Get drafted by a real NBA team. Stronger prospects go higher and earn more.",
         "Check the rotation. Top five picks open in the starting five; everyone else fights for the spot in camp every fall, and second-unit seasons come in bench minutes until you crack the five.",
         "Sim each season for a full line: games, points, rebounds, assists, awards, team result.",
         "Handle the offseason event, one big decision per summer.",
         "When the contract runs out, work a real free agency window: competing offers from named franchises with their own money, length and roster quality, and one push for more on any of them.",
-        "Retire when the body or the fire quits, and face the legacy verdict.",
-        "Some seasons your rival hands you a decision instead of a headline: a flagrant you can answer or let go, a debate show offering real money, a youth camp his foundation wants you to co-host, an All-Star vote his team is buying ads for. Every button prints exactly what it moves, and a gamble prints its odds."
+        "Retire when the body or the fire quits, and face the legacy verdict."
       ],
       "rules": [
         "Archetypes shape the stat engine: Point Gods pile up assists, Paint Beasts eat rebounds, Bucket Getters score but break down more.",
@@ -2179,7 +2201,9 @@
         "The 2003-04 throwback is a sealed 29 team world, verified against the real season: every draft, trade and signing stays inside it, and contracts pay 2003 money, about a third of today's.",
         "Money has rules of its own. There is a 1% fee on both sides of every trade and a $100k floor in the account that cannot be invested away; a season that leaves you under the floor is covered out of savings first, then by a forced sale of holdings at whatever the price is that day. Cards win 42% of hands and a win pays 1.15x the stake, the most you can stake is $50k or 4% of your cash, and once you are $500k down for your career the guys stop dealing you in for good. Keep sitting in while you are losing and somebody at home notices, which costs morale and fanbase.",
         "The fans nag you for the thing your position is judged on and never the other way round: a point guard hears more assists, a center hears own the glass, and nobody hears about a three, a block or a steal, because the season line does not count one.",
-        "A season where your rival makes no headline has a 45% shot at a rival choice instead, never both in the same year, and every choice shows up once before any of them repeats. The buttons move only what they print: morale, fanbase, net worth, karma or the heat of the feud, and morale feeds straight into next season's box score."
+        "A season where your rival makes no headline has a 45% shot at a rival choice instead, never both in the same year, and every choice shows up once before any of them repeats. The buttons move only what they print: morale, fanbase, net worth, karma or the heat of the feud, and morale feeds straight into next season's box score.",
+        "Texts only arrive on beats your season really had. No playoff texts in a year you went home in April, no contract year texts until one year is left on the deal, and draft night's texts land before you play a game. Summer league comes round twice at most: the July after draft night and the one after your rookie year. One text a beat, up to three a season, fewer while old ones sit unanswered, and the same text never comes twice in a career.",
+        "The season the game retires you (41, 21 seasons, or a rating that craters) sends nothing about a year you will not play: no summer runs, no early lifts, no extension talk."
       ],
       "example": [
         "You roll a Two-Way Menace guard, go 11th, and win Rookie of the Year on a bad team. Year three, morale craters and you demand a trade. Villain arc unlocked.",
@@ -2526,25 +2550,28 @@
         "Open the Bank between seasons. Savings pays 2.5% a season and never loses, five things you can put money into each have a price that moves every season whether you look or not (a fund, flats back home, two shares and a coin that halves as often as it doubles), the statement keeps your last 12 moves, and the card school at the back of the plane is one sitting a season on odds that are printed before you sit in.",
         "Read the News box. The paper writes up every season in your own position's stat, the SocialGram shows followers read off your fanbase with three fan comments under the latest post, and the rival's card keeps the head to head against the player drafted the same year as you.",
         "Collect badges in the Trophy Case: 23 of them, from a first Cup and the Calder to 500 goals, a 50 goal season and $100M to your name, each lit the moment the facts of your career say so.",
+        "Answer your phone. Texts from your agent, the head coach, the GM, a teammate or your mom land on the beats of the hockey year: draft day, camp, the World Juniors while you are young enough to go, the All-Star break, the trade deadline, the playoffs if you get there, the offseason, and the summer before the last year of your deal. Every text says which beat and which year it came in on, and how you answer moves your karma, morale, fanbase or bank.",
+        "Some seasons your rival forces a decision instead of making a headline: a cheap shot after the whistle you can settle or shrug off, a debate show offering real money, a youth clinic his foundation wants you to co-host, an All-Star vote his club is buying ads for. Every button prints exactly what it moves, and a gamble prints its odds.",
         "Get drafted by a real club; your slot reflects your starting ability.",
         "Check the lineup. Top ten skaters step straight in; everyone else fights the incumbent in camp every fall. Goalies always apprentice first, because no rookie walks into a number one crease.",
         "Play each season: skaters post goals, assists and points, goalies post wins and save percentage.",
         "Face one big offseason decision each year: training, trade requests, media noise.",
         "When the deal expires, hit July 1 for real: competing offers from named clubs with their own money, length and roster quality, and one push for more on any of them.",
-        "Age, decline, retire, then read the legacy verdict.",
-        "Some seasons your rival forces a decision instead of making a headline: a cheap shot after the whistle you can settle or shrug off, a debate show offering real money, a youth clinic his foundation wants you to co-host, an All-Star vote his club is buying ads for. Every button prints exactly what it moves, and a gamble prints its odds."
+        "Age, decline, retire, then read the legacy verdict."
       ],
       "rules": [
         "Careers start in 2026 at age 18 or 19 and last up to 22 seasons. The throwback starts in 2006 instead, inside a sealed 30 team league verified against the real season, with 2006 sized contracts.",
         "You improve toward your potential through age 25; decline starts at 31 for skaters, 34 for goalies.",
         "The lineup is real: fourth-line seasons run on half the ice time, a backup goalie gets twenty-odd starts, camps have memory both ways, and signing with a stacked Cup contender can cost a mid player his spot.",
         "The press reads your actual season: lift the Cup and you take the podium, miss badly and you face the scrum, sit down the lineup and the role question finds you. Three answers each time, safe, honest or fiery, and fiery gambles your fanbase for real.",
+        "When your rival makes no headline in a season, there is a 45% chance he puts a choice in front of you instead, never both in one season, and each choice comes up once before any repeats. A button only moves what it prints: morale, fanbase, net worth, karma or the heat of the feud. Morale rides straight into next season's points or save percentage.",
+        "Texts only arrive on beats your season really had. No playoff texts in a year your club missed, World Juniors texts only in a season you start at 19 or younger, no contract year texts until one year is left on the deal, and draft day's text lands before you play a shift. One text a beat, up to three a season, fewer while old ones sit unanswered, and the same text never comes twice in a career.",
+        "The season the game retires you (40 for skaters, 41 for goalies, 22 seasons, or a rating that collapses) sends nothing about a year you will not play: no summer skates, no new stick and skate deal, no extension talk.",
         "Retirement hits at 40 for skaters, 41 for goalies, or earlier if your rating collapses; you can walk away after 6 seasons.",
         "The legacy score weighs Cups, majors (Hart, Norris or Vezina), Conn Smythes, All-Star nods, seasons and production; 500 or more means the Hall of Fame.",
         "Money has rules of its own. There is a 1% fee on both sides of every trade and a $100k floor in the account that cannot be invested away; a season that leaves you under the floor is covered out of savings first, then by a forced sale of holdings at whatever the price is that day. Cards win 42% of hands and a win pays 1.15x the stake, the most you can stake is $50k or 4% of your cash, and once you are $500k down for your career the boys stop dealing you in for good. Keep sitting in while you are losing and somebody at home notices, which costs morale and fanbase.",
         "The fans nag you for the thing your position is judged on and never the other way round: a center hears more points, a winger hears bury more chances, the man on the blue line hears move the puck and keep it out, and a goalie only ever hears make the saves.",
-        "One career saves automatically in your browser; a new one replaces it.",
-        "When your rival makes no headline in a season, there is a 45% chance he puts a choice in front of you instead, never both in one season, and each choice comes up once before any repeats. A button only moves what it prints: morale, fanbase, net worth, karma or the heat of the feud. Morale rides straight into next season's points or save percentage."
+        "One career saves automatically in your browser; a new one replaces it."
       ],
       "example": [
         "Say your Sniper winger goes 23rd overall to a rebuilding club. Year one is 24 goals and silence. At 23 you erupt for 47 with an All-Star nod, but the losing wrecks your morale, so you force a trade to a contender.",
