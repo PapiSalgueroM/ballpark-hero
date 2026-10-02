@@ -923,7 +923,10 @@ export function getNbaLifeEventsA(c: NbaCareerState, rng: () => number): NbaCare
     });
   }
 
-  if (c.ovr <= 76 && yrs >= 1 && yrs <= 5) {
+  /* Round 918: a team sending its own player down began before the 2005-06
+     season (sources in nbaCareerLifeC.ts), so a 2003-04 career cannot be
+     sent down ahead of the 2004-05 season. c.year here is the season ahead. */
+  if (c.ovr <= 76 && yrs >= 1 && yrs <= 5 && (nbaEraById(c.eraId).id === 'now' || c.year >= 2005)) {
     deck.push({
       id: 'nbaA_gleague_stint',
       category: 'basketball', cooldown: 2, story: 'gLeague',

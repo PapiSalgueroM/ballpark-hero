@@ -200,6 +200,9 @@ for (let i = 0; i < CAREERS; i++) {
           lifeDraws++;
           if (typeof ev.category !== 'string' || !ev.category || !(ev.cooldown >= 1)) untagged.add(ev.id);
         }
+        /* Deck A's send down card, same rule: nobody was sent down before
+           the 2005-06 season (c.year is the season ahead). */
+        if (eraId === 'y2004' && ev.id === 'nbaA_gleague_stint' && c.year < 2005) eraLeaks.push(`${ev.id} in career ${i}, ${c.year}`);
         if (ev.id.startsWith('nbaC_')) {
           cFired.set(ev.id, (cFired.get(ev.id) ?? 0) + 1);
           if (eraId === 'y2004' && MODERN_ONLY.includes(ev.id)) eraLeaks.push(`${ev.id} in career ${i}, ${c.year}`);
