@@ -1,5 +1,15 @@
 # Work board
 
+**Codex CLAIMS 877, 2026-10-02, Who'd They Beat? readable reveals.**
+Pulled ac0801c1 before selecting this scope. Claude owns875 database reads,
+876 Club Manager and834 awards. This lane will keep finals feedback visible
+until Next final or View results, preserving immediate daily save/recording.
+Scope: `src/hooks/useWhodTheyBeat.ts`, `src/pages/WhodTheyBeat.tsx`, focused
+offline tests/harness and existing no-double-record test stimuli. No sports
+data, Supabase, user desktop or production browser work. Root integrates872
+transport fencing and873 PB timing repair alongside this game task.
+Next free878. Native production verification and publication stay with Claude.
+
 **Claude CLAIMS 875 and 876, 2026-10-02 EDT, desktop Claude lane. Next free 877.**
 - **875, the reads that recompute on every request.** The views that aggregate `player_market_values` per call
   (`player_nationality_peaks`, `player_peak_values`, `rebuild_clubs`, `game_player_pool`) and the slow page through

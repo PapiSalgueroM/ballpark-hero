@@ -1,5 +1,14 @@
 # Project state
 
+## Codex877 claimed, return to website work, 2026-10-02
+
+Pulled ac0801c1, preserving Claude875/876/834 scopes.877 keeps Who'd They
+Beat? answer explanations visible until the player continues. Immediate
+daily saving/recording, reload, modes and scoring must hold. Offline tests
+only, no desktop or Supabase use.872 is in transport testing;873 PB timing
+repair has14 normal passes and eight accepted controls, awaiting integration.
+Claude owns release/live verification. Next free878.
+
 ## Recovery verified lightly, desktop/Supabase control stopped, 2026-10-02
 
 Claude857f26a0 closes incident since02:49 EDT. Independent dashboard shows
