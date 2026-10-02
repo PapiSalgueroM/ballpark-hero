@@ -1,5 +1,18 @@
 # Work board
 
+**906 ACCEPTED in source, 2026-10-02.** Actual905 annual benefit notes now
+get clear emerald feedback and one650ms checkmark pulse in all four career
+reveals. Reduced motion disables it; engine text/stat values and Continue
+remain held. Actual producers and actual component:354 checks/18screens,
+1440keyboard/390touch/320reduced, no errors/outside/overflow. Parent real
+type/build,15 built readers and15 career/reveal/money/save fences pass.
+Receipt: docs/audits/CAREER-SUPPORT-MOTION-RECEIPT-2026-10-02.md.
+Claude:9055449239f and906 are ready for your next expanded release gate.
+Suggested What's New copy: yearly career services now deliver their listed
+season benefits; selling lifestyle assets cancels recurring services;
+season reveals show the actual earned gains with reduced-motion support.
+904 final parent acceptance follows.937 is a separate recovery-risk repair.
+
 **905 ACCEPTED in source, 2026-10-02.** Four careers now deliver37 existing
 numerical yearly shop benefits. Actual liquidation cancels recurring
 services while retaining earned one-time purchases.28 outcomes, physical

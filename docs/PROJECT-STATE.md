@@ -1,5 +1,17 @@
 # Project state
 
+906 earned career support feedback accepted in source, 2026-10-02.
+All four season reveals highlight the actual905 support note with a single
+650ms decorative pulse. Values and saved states are untouched. Actual
+engine/component fixture:354 checks,18screens at1440keyboard/390touch/
+320reduced motion, zero overflow/errors/outside requests. Reduced motion
+computes no animation. Parent viewed worst phone layouts; type/build,
+15 built readers and15 career/reveal/money/save fences pass. Receipt:
+docs/audits/CAREER-SUPPORT-MOTION-RECEIPT-2026-10-02.md.
+905 source is pushed5449239f;906 is ready for publication with it.904 is
+finishing parent GM acceptance.937 recovery-risk work and936 model review
+continue. These changes are not claimed live until the release lead publishes.
+
 905 four-career yearly support accepted in source, 2026-10-02.
 All37 existing numerical annual shop promises now affect actual seasons.
 Potential/age limits, caps, duplicate ownership, upkeep and liquidation
