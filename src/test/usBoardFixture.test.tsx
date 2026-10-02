@@ -85,6 +85,19 @@ function mulberry32(seed: number): () => number {
 
 const hash = (s: string) => createHash('sha1').update(s).digest('hex').slice(0, 12);
 const squash = (s: string) => s.replace(/\s+/g, ' ').trim();
+/* The whole document, dialogs included. React numbers its generated ids from
+   one counter for the whole process, so the id a dialog trigger carries says
+   how many dialogs every earlier test mounted and nothing about this screen:
+   left in, one sport's path could turn another sport red. The number is
+   taken out and everything else is kept. */
+const markupNow = () => document.body.innerHTML.replace(/radix-:r[0-9a-z]+:/g, 'radix-:r:');
+/* What the screen reads, without the stylesheets the celebration kit mounts
+   (their text is CSS, and it would fill the whole excerpt on a curtain). */
+const textNow = () => {
+  const copy = document.body.cloneNode(true) as HTMLElement;
+  copy.querySelectorAll('style').forEach(el => el.remove());
+  return squash(copy.textContent ?? '');
+};
 const flush = () => act(async () => { await new Promise(resolve => setTimeout(resolve, 0)); });
 
 interface Save { c?: Record<string, unknown>; phase?: string; teamQuality?: number | null; coach?: unknown }
@@ -185,8 +198,8 @@ class Walker {
     if (phase === 'retired' && this.lastPhase !== 'retired' && this.lastPhase !== 'coach') this.cov.retired += 1;
     this.lastPhase = phase;
     this.steps.push({
-      a, p: phase, n: seasons, s: hash(raw), m: hash(document.body.innerHTML), d,
-      t: squash(document.body.textContent ?? '').slice(0, 140),
+      a, p: phase, n: seasons, s: hash(raw), m: hash(markupNow()), d,
+      t: textNow().slice(0, 140),
     });
     this.onStep?.(this);
   }

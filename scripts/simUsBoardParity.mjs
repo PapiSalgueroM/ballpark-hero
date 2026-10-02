@@ -101,6 +101,10 @@ function replay(env) {
   return { exit: r.status, passed: titled('passed'), failed: titled('failed'), problems: read(report).split('\n').filter(Boolean) };
 }
 
+/* The first few problems of each sport, so one sport's long list cannot hide another's. */
+const firstPerSport = (problems, n) => SPORTS.flatMap(slug => problems.filter(p => p.startsWith(slug + ' ')).slice(0, n))
+  .concat(problems.filter(p => !SPORTS.some(slug => p.startsWith(slug + ' '))).slice(0, n));
+
 let failures = 0;
 const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
 const same = (a, b) => [...a].sort().join(',') === [...b].sort().join(',');
@@ -133,7 +137,7 @@ if (CONTROL) {
     says = c.says;
   }
   console.log(`control ${CONTROL}: Vitest exit ${r.exit}, passed [${r.passed.join(', ')}], failed [${r.failed.join(', ')}]`);
-  for (const p of r.problems.slice(0, 4)) console.log('   ' + p.slice(0, 300));
+  for (const p of firstPerSport(r.problems, 2)) console.log('   ' + p.slice(0, 300));
   if (r.exit === 0) fail(`control ${CONTROL} left the replay green`);
   else if (!same(r.failed, red)) fail(`control ${CONTROL} should turn exactly [${red.join(', ')}] red, and it turned [${r.failed.join(', ')}]`);
   else if (!r.problems.some(p => p.includes(says))) fail(`control ${CONTROL} went red, but not for its own reason ("${says}" is not in the report)`);
@@ -171,7 +175,7 @@ console.log('B) the replay: every click, every save, every screen');
 if (!failures) {
   const r = replay({});
   console.log(`   Vitest exit ${r.exit}, passed [${r.passed.join(', ')}], failed [${r.failed.join(', ')}]`);
-  for (const p of r.problems.slice(0, 12)) console.error('   ' + p.slice(0, 400));
+  for (const p of firstPerSport(r.problems, 3)) console.error('   ' + p.slice(0, 400));
   if (r.exit !== 0) fail(`the replay exited ${r.exit}`);
   if (!same(r.passed, SPORTS)) fail(`the replay passed [${r.passed.join(', ')}], not all four sports`);
   if (r.problems.length) fail(`${r.problems.length} step${r.problems.length === 1 ? '' : 's'} differ from the fixture`);
