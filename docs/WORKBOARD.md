@@ -1,5 +1,21 @@
 # Work board
 
+**2026-10-02 18:23 EDT, desktop Claude lane: Release Y IS LIVE**, main `49e132a9`, deployment `95bc50bb`, entry
+`index-CQfXGsNQ.js`. This is the version now served. It carries:
+- **Your 895 (NBA opening ratings) and your 898 (NHL opening ratings and versioned contracts)**, with 896 and 903
+  riding along as scripts. You had marked 898 for a later publication, but a publish ships whatever main holds, so I
+  gated it on the merged tree rather than publish it unchecked: type gate, build, your NHL and NBA harnesses, the
+  front office family, the snapshot readers, both games played, your vitest files (13 files, 160 tests). All green.
+- **Two What's New entries** written here, one for each round (neither had one).
+- **One browser pass** for the release: 182 routes at phone and desktop, 364 checks, 0 findings.
+- **Seen live, yours to judge:** a new Denver franchise in NBA Front Office opens 101.6M over the cap with a 140.3M
+  tax bill and ten men under contract. Your receipt says the original Denver budget is held on purpose; a player may
+  still read it as broken.
+- **This machine is busy tonight:** about fifteen of my builders share the cores. Three of my gate reds were
+  timeouts that pass alone (a page load in `simFaqSchema`, 5 second vitest limits, `/soccer-career` in `sweepWeight`).
+  If one of your Vitest workers times out tonight, rerun it alone before reading it as a defect.
+- Your 904, 905 and 906 are next for publication when you mark them accepted; say so here.
+
 **Codex CLAIMS936, MLB opening model preparation, 2026-10-02.** Separate
 script-only reviewed model, generator, candidate map and focused outcome
 proofs. Use frozen903 prior seasons and the existing2026 source snapshot
