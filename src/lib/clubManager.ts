@@ -11009,7 +11009,12 @@ function cupCountryClubs(state: CareerState): ClubDef[] {
   }
   const myLeague = careerLeagueOf(state);
   const nation = NATIONS.find(n => n.leagueIds.includes(myLeague.id));
-  const ids = nation ? nation.leagueIds : [myLeague.id];
+  /* Round 832 review: only the leagues of the nation that play this cup. A
+     league whose rules row has no domestic cup sends nobody into its
+     neighbours' cup, the same way its own clubs never play one. Every nation
+     before this round plays one cup across all its leagues, so for them this
+     is the whole nation as before. */
+  const ids = nation ? nation.leagueIds.filter(id => leagueRulesOf(id).cup === myLeague.cupName) : [myLeague.id];
   return ids.flatMap(id => playableClubs(id)).filter(c => c.name !== dropped);
 }
 
@@ -17469,8 +17474,16 @@ function runPromotionRelegation(prev: CareerState): { overrides: Record<string, 
     const topDef = REAL_LEAGUES.find(l => l.id === pyr.top);
     const secondDef = REAL_LEAGUES.find(l => l.id === pyr.second);
     if (!topDef || !secondDef) continue;
-    const topClubs = carried?.[pyr.top] ?? topDef.clubs;
-    const secondClubs = carried?.[pyr.second] ?? secondDef.clubs;
+    /* Round 832 review: the memberships as this summer has already moved
+       them, not as the season started. With the rules table a third tier is
+       one more row (a second tier with a secondTier of its own), and reading
+       the season's start here put the clubs just promoted out of the middle
+       division back into it and lost the ones just relegated into it: a club
+       in two leagues by the first summer. For two pairs that share no league
+       (the only shape before this round) `next` still holds exactly what
+       `carried` did when each pair is reached, so nothing they do changes. */
+    const topClubs = next[pyr.top] ?? topDef.clubs;
+    const secondClubs = next[pyr.second] ?? secondDef.clubs;
     const topTable = myLeagueId === pyr.top
       ? sortedLeagueTable(prev)
       : sortedWorldTable(prev, pyr.top, prev.world?.[pyr.top]?.table ?? []);

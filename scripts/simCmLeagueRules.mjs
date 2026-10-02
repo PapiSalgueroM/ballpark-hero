@@ -45,6 +45,13 @@
       Ten seasons in each: no crash, four down and four up every summer with
       the union and the sizes held, and the cupless save never schedules,
       draws, grades or shows a cup.
+   4c. SHAPES (hard, added by the review). Two more shapes the table can
+      express as rows only, both broken in the engine until the review: a
+      three tier chain (a second tier with a second tier of its own) and a
+      cupless league inside a nation that has a cup. Ten seasons: the three
+      divisions hold the same sixty clubs at 20/20/20 with none in two, the
+      right clubs move both ways at both steps, and no club of the cupless
+      league is ever drawn into the nation's cup.
    5. CHUNKS (hard, needs a build in dist/). Each era's roster block sits in
       its own chunk, the engine chunk carries none of them, and the only way
       in is a dynamic import (no chunk imports an era chunk statically).
@@ -62,6 +69,11 @@
                                  must go red;
      CM_RULES_CONTROL=fourth     drops the fourth relegated club of the
                                  synthetic league, part synthetic must go red;
+     CM_RULES_CONTROL=chainstart the summer reads the memberships the season
+                                 started with (the engine before the review),
+                                 part shapes must go red;
+     CM_RULES_CONTROL=cupfield   the cup draws from every league of the
+                                 nation, cup or not, part shapes must go red;
      CM_RULES_CONTROL=static     the chunk check reads a copy of dist/assets
                                  whose engine chunk carries 2010 rows and a
                                  static import of the 2010 chunk (what a
@@ -102,12 +114,12 @@ const BASELINE = path.join(SCRIPT_ROOT, 'scripts', 'data', 'cmLeagueRulesDigest.
 const args = process.argv.slice(2);
 const WRITE = args.includes('--write');
 const partArg = args.find(a => a.startsWith('--part='));
-const PARTS = partArg ? partArg.slice(7).split(',') : ['modern', 'eras', 'pure', 'drop4', 'cupless', 'chunks'];
+const PARTS = partArg ? partArg.slice(7).split(',') : ['modern', 'eras', 'pure', 'drop4', 'cupless', 'shapes', 'chunks'];
 /* The structural checks read this tree's own table; a baseline taken from
    another tree (CM_RULES_ROOT) runs the digest only. */
 const OWN_TREE = path.resolve(process.env.CM_RULES_ROOT || SCRIPT_ROOT) === path.resolve(SCRIPT_ROOT);
 const CONTROL = process.env.CM_RULES_CONTROL || '';
-const CONTROLS = ['dropcount', 'fourth', 'static', 'staticbuild'];
+const CONTROLS = ['dropcount', 'fourth', 'static', 'staticbuild', 'chainstart', 'cupfield'];
 if (CONTROL && !CONTROLS.includes(CONTROL)) { console.error(`CM_RULES_CONTROL=${CONTROL} is not a control this harness knows (${CONTROLS.join(', ')})`); process.exit(1); }
 if (CONTROL && WRITE) { console.error('a control run never writes the baseline'); process.exit(1); }
 
@@ -599,6 +611,119 @@ async function partCupless() {
   console.log(`   ${summers} summers, ${matches} matches, ${cupWeeks} cup weeks, ${cupObjectives} cup objectives, ${cupResults} cup matches; the cup league next door still plays its four rounds`);
 }
 
+/* Round 832 review: two more shapes the table can now express as rows only,
+   both broken in the engine until the review. A THIRD TIER (a second tier
+   that names a second tier of its own) and a CUPLESS LEAGUE INSIDE A NATION
+   THAT HAS A CUP. Measured before the fixes with these same rows: the chain
+   put clubs in two divisions from the first summer (57 distinct clubs of 60
+   by summer 1, 44 by summer 10, the top flight down to 13), and three clubs
+   of the cupless league turned up in three FA Cup style brackets. */
+const CHAIN_A = Array.from({ length: 20 }, (_, i) => `Chainalpha United ${i + 1}`);
+const CHAIN_B = Array.from({ length: 20 }, (_, i) => `Chainbeta City ${i + 1}`);
+const CHAIN_C = Array.from({ length: 20 }, (_, i) => `Chaingamma Town ${i + 1}`);
+const CHAIN_NOCUP = Array.from({ length: 18 }, (_, i) => `Chainland Nocup ${i + 1}`);
+const CHAIN_DROP = { chainA: 3, chainB: 2 };
+
+function injectShapes(src) {
+  const once = (needle, label) => {
+    const n = src.split(needle).length - 1;
+    if (n !== 1) { console.error(`shapes cannot be added: ${label} appears ${n} times in clubManager.ts`); process.exit(1); }
+  };
+  const rulesAnchor = 'export const LEAGUE_RULES: Record<string, LeagueRules> = {\n';
+  const leaguesAnchor = 'export const REAL_LEAGUES: LeagueDef[] = [\n';
+  const nationsAnchor = '].map(n => ({ ...n, leagueIds:';
+  once(rulesAnchor, 'the LEAGUE_RULES opening');
+  once(leaguesAnchor, 'the REAL_LEAGUES opening');
+  once(nationsAnchor, 'the NATIONS closing');
+  let out = src;
+  if (CONTROL === 'chainstart') {
+    const fixed = 'const topClubs = next[pyr.top] ?? topDef.clubs;\n    const secondClubs = next[pyr.second] ?? secondDef.clubs;';
+    if (out.split(fixed).length !== 2) { console.error('control chainstart cannot run: the summer does not read this summer\'s memberships in the shape it reverts'); process.exit(1); }
+    out = out.replace(fixed, 'const topClubs = carried?.[pyr.top] ?? topDef.clubs;\n    const secondClubs = carried?.[pyr.second] ?? secondDef.clubs;');
+    console.log('NEGATIVE CONTROL ON: the summer reads the memberships the season started with, part shapes must go red');
+  }
+  if (CONTROL === 'cupfield') {
+    const fixed = 'nation.leagueIds.filter(id => leagueRulesOf(id).cup === myLeague.cupName)';
+    if (out.split(fixed).length !== 2) { console.error('control cupfield cannot run: the cup field is not filtered by cup in the shape it reverts'); process.exit(1); }
+    out = out.replace(fixed, 'nation.leagueIds');
+    console.log('NEGATIVE CONTROL ON: the cup draws from every league of the nation, cup or not, part shapes must go red');
+  }
+  const rules = [
+    `  chainA: { nationId: 'chainland', flag: '', cup: 'Chain Cup', europe: null, drop: ${CHAIN_DROP.chainA}, secondTier: 'chainB', ladder: 'top', season: 'autumnSpring' },`,
+    `  chainB: { nationId: 'chainland', flag: '', cup: 'Chain Cup', europe: null, drop: ${CHAIN_DROP.chainB}, secondTier: 'chainC', ladder: 'promotion', playoff: { rankUpTo: 8, target: 6, label: 'Make the promotion playoffs' }, season: 'autumnSpring' },`,
+    `  chainC: { nationId: 'chainland', flag: '', cup: 'Chain Cup', europe: null, drop: 0, ladder: 'promotion', playoff: { rankUpTo: 8, target: 6, label: 'Make the promotion playoffs' }, season: 'autumnSpring' },`,
+    `  chainNoCup: { nationId: 'chainland', flag: '', cup: null, europe: null, drop: 0, ladder: 'top', season: 'autumnSpring' },`,
+  ].join('\n') + '\n';
+  const rows = [
+    `  { id: 'chainA', name: 'Chain First Division', clubs: ${JSON.stringify(CHAIN_A)} },`,
+    `  { id: 'chainB', name: 'Chain Second Division', clubs: ${JSON.stringify(CHAIN_B)} },`,
+    `  { id: 'chainC', name: 'Chain Third Division', clubs: ${JSON.stringify(CHAIN_C)} },`,
+    `  { id: 'chainNoCup', name: 'Chain Cupless League', clubs: ${JSON.stringify(CHAIN_NOCUP)} },`,
+  ].join('\n') + '\n';
+  out = out.replace(rulesAnchor, rulesAnchor + rules);
+  out = out.replace(leaguesAnchor, leaguesAnchor + rows);
+  out = out.replace(nationsAnchor, `  { id: 'chainland', name: 'Chainland', flag: '' },\n` + nationsAnchor);
+  return out;
+}
+
+async function partShapes() {
+  console.log('4c) a three tier chain and a cupless league in a nation with a cup, ten seasons');
+  const mod = await bundleEngine(src => injectShapes(src));
+  const { cm } = mod;
+  const pyr = cm.PYRAMIDS.filter(p => p.top.startsWith('chain')).map(p => `${p.top}>${p.second}:${p.count}`).join(' ');
+  if (pyr !== 'chainA>chainB:3 chainB>chainC:2') fail(`the chain reads as ${pyr}`);
+  const union = [...CHAIN_A, ...CHAIN_B, ...CHAIN_C].sort().join('|');
+  const ids = ['chainA', 'chainB', 'chainC'];
+  const finals = fin => {
+    const s = fin.state;
+    const now = Object.fromEntries(ids.map(id => [id, s.leagueOverrides?.[id] ?? cm.REAL_LEAGUES.find(l => l.id === id).clubs]));
+    const myId = ids.find(id => now[id].includes(s.clubName));
+    const tableOf = id => (myId === id ? cm.sortedLeagueTable(s) : cm.sortedWorldTable(s, id, s.world?.[id]?.table ?? [])).map(r => r.club);
+    return { now, tables: Object.fromEntries(ids.map(id => [id, tableOf(id)])), cup: (s.cupBracket ?? []).flatMap(t => [t.home, t.away]) };
+  };
+  let summers = 0, brokenSummers = 0, cupless = 0, brackets = 0, myMoves = 0;
+  tenSeasons(cm, CHAIN_A[0], 'chain', ({ season, before, next, read }) => {
+    summers += 1;
+    const after = Object.fromEntries(ids.map(id => [id, next.leagueOverrides?.[id] ?? []]));
+    const all = ids.flatMap(id => after[id]);
+    const sizes = ids.map(id => after[id].length).join('/');
+    const twice = all.length - new Set(all).size;
+    let bad = 0;
+    if (sizes !== '20/20/20') { bad += 1; fail(`summer ${season}: the divisions hold ${sizes}`); }
+    if (twice) { bad += 1; fail(`summer ${season}: ${twice} club(s) sit in two divisions`); }
+    if ([...new Set(all)].sort().join('|') !== union) { bad += 1; fail(`summer ${season}: the three divisions no longer hold the same sixty clubs (${new Set(all).size} distinct)`); }
+    /* and the right clubs: A's bottom three down, B's top three up, B's
+       bottom two (of the clubs that stayed) down, C's top two up */
+    const { now, tables } = read;
+    const inOf = id => tables[id].filter(c => now[id].includes(c));
+    const want = {
+      downA: inOf('chainA').slice(-3), upB: inOf('chainB').slice(0, 3),
+      downB: inOf('chainB').slice(-2), upC: inOf('chainC').slice(0, 2),
+    };
+    const has = (id, c) => after[id].includes(c);
+    for (const c of want.downA) if (!has('chainB', c)) { bad += 1; fail(`summer ${season}: ${c} finished in A's bottom three and is not in B`); }
+    for (const c of want.upB) if (!has('chainA', c)) { bad += 1; fail(`summer ${season}: ${c} finished in B's top three and is not in A`); }
+    for (const c of want.downB) if (!has('chainC', c)) { bad += 1; fail(`summer ${season}: ${c} finished in B's bottom two and is not in C`); }
+    for (const c of want.upC) if (!has('chainB', c)) { bad += 1; fail(`summer ${season}: ${c} finished in C's top two and is not in B`); }
+    if (bad) brokenSummers += 1;
+    /* my own club goes where its table put it (read off the memberships the
+       finished season ran under, not the registered ones) */
+    const wasIn = ids.find(id => now[id].includes(before.clubName));
+    const nowIn = cm.careerLeagueOf(next).id;
+    const expectIn = want.downA.includes(before.clubName) || want.upC.includes(before.clubName) ? 'chainB'
+      : want.upB.includes(before.clubName) ? 'chainA' : want.downB.includes(before.clubName) ? 'chainC' : wasIn;
+    if (nowIn !== expectIn) fail(`summer ${season}: my club plays in ${nowIn}, its table put it in ${expectIn}`);
+    if (nowIn !== wasIn) myMoves += 1;
+    /* the cup the season just played drew nobody from the cupless league */
+    brackets += 1;
+    cupless += read.cup.filter(c => CHAIN_NOCUP.includes(c)).length;
+  }, finals);
+  if (summers !== 10) fail(`${summers} summers ran, expected 10`);
+  if (cupless) fail(`${cupless} clubs of a league with no domestic cup were drawn into the Chain Cup over ${brackets} brackets`);
+  if (brackets < 10) fail(`only ${brackets} cup brackets were read`);
+  console.log(`   ${summers} summers, ${brokenSummers} broken, my club changed division ${myMoves} times; ${brackets} cup brackets, ${cupless} cupless clubs in them`);
+}
+
 /* ------------------------------------------------------------------ */
 /* Each era's squads in a chunk of their own, on the built files        */
 /* ------------------------------------------------------------------ */
@@ -732,7 +857,7 @@ function controlDropCount(src) {
 
 /* ------------------------------------------------------------------ */
 
-const PART_FNS = { modern: partModern, eras: partEras, pure: partPure, drop4: partDrop4, cupless: partCupless, chunks: partChunks };
+const PART_FNS = { modern: partModern, eras: partEras, pure: partPure, drop4: partDrop4, cupless: partCupless, shapes: partShapes, chunks: partChunks };
 for (const p of PARTS) {
   const fn = PART_FNS[p];
   if (!fn) { console.log(`(part ${p} is not built yet)`); continue; }
