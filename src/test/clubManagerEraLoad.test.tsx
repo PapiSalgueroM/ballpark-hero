@@ -33,6 +33,11 @@ vi.mock('@/lib/completions', () => ({
   recordStreakDay: vi.fn(),
 }));
 
+/* Round 832 review: the page reload a retry falls back to, watched rather than
+   done (jsdom cannot navigate). */
+const reloadSpy = vi.hoisted(() => vi.fn(() => true));
+vi.mock('@/lib/freshBuild', () => ({ reloadToRetryChunk: reloadSpy }));
+
 const KEY = 'dukb-club-manager-save';
 /* eslint-disable @typescript-eslint/no-explicit-any */
 let api: any = null;
@@ -59,7 +64,7 @@ function harnessFor(useHook: () => any) {
   };
 }
 
-beforeEach(() => { localStorage.clear(); api = null; vi.doUnmock('@/data/clubManagerEra2005'); });
+beforeEach(() => { localStorage.clear(); api = null; vi.doUnmock('@/data/clubManagerEra2005'); reloadSpy.mockClear(); });
 
 describe('Club Manager: an era save waits for its era', () => {
   it('a 2010-11 save resumes once its squads arrive, exactly as saved', async () => {
@@ -98,6 +103,26 @@ describe('Club Manager: an era save waits for its era', () => {
     expect(api.career.eraId).toBe('era2005');
     expect(api.career.clubName).toBe('Chelsea');
     console.log('  back online: the retry fetched the squads and the career resumed');
+  }, 60000);
+
+  /* Round 832 review: in Chromium a dynamic import that failed stays failed for
+     the life of the page, so Try again calling import() again never reaches
+     the network (measured on the built page: zero requests after the click,
+     the career never opened; Firefox refetched). A retry that still fails
+     reloads the page instead, which is a fresh fetch, and the first failure
+     never reloads on its own. On the code before this check the retry only set
+     the notice again and the reload was never asked for. */
+  it('a retry that fails again reloads the page, the first failure does not', async () => {
+    const { useHook, saved } = await saveThenReload('Chelsea', 'era2005');
+    vi.doMock('@/data/clubManagerEra2005', () => { throw new Error('Failed to fetch dynamically imported module'); });
+    const Harness = harnessFor(useHook);
+    render(<Harness />);
+    await waitFor(() => expect(api.bootError).toBe('2005-06'), { timeout: 20000 });
+    expect(reloadSpy).not.toHaveBeenCalled();
+    await act(async () => { api.retryBoot(); });
+    await waitFor(() => expect(reloadSpy).toHaveBeenCalledTimes(1), { timeout: 20000 });
+    expect(api.career).toBe(null);
+    expect(localStorage.getItem(KEY)).toBe(saved);
   }, 60000);
 
   it('a modern save opens on the same pass and fetches no era', async () => {

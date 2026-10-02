@@ -27,6 +27,7 @@ import type { TransferStatus, FacilityKind, TrainingPlan, SquadRole, TalkTone, D
 import type { NextFixtureInfo, TableRow, CustomClubSpec, ManagerSpec } from '@/lib/clubManager';
 import { simToWeek as runSimToWeek, startMidSeason, joinClubNow } from '@/lib/clubManagerCalendar';
 import { eraById, eraRostersLoaded, ensureEraRosters } from '@/lib/clubManagerEras';
+import { reloadToRetryChunk } from '@/lib/freshBuild';
 import type { MidSeasonEntry } from '@/lib/clubManagerCalendar';
 import { upgradeFacility as upgradeClubFacility } from '@/lib/clubManagerFacilities';
 import type { FacilityId } from '@/lib/clubManagerFacilities';
@@ -145,7 +146,15 @@ export function useClubManager() {
     setBootError(null);
     ensureEraRosters(eraId).then(
       () => { if (alive) open(); },
-      () => { if (alive) setBootError(eraById(eraId).label); },
+      () => {
+        if (!alive) return;
+        /* Round 832 review: a retry the player asked for reloads the page,
+           because Chromium never fetches a failed chunk again in the same
+           page (see reloadToRetryChunk). The first failure only shows the
+           notice; offline, the notice stays. */
+        if (bootTry > 0 && reloadToRetryChunk()) return;
+        setBootError(eraById(eraId).label);
+      },
     );
     return () => { alive = false; };
   }, [bootTry]);

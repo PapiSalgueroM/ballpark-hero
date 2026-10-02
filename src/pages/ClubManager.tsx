@@ -23,6 +23,7 @@ import { fanMeter } from '@/lib/clubManagerMeters';
 import { STAFF_POST_IDS, STAFF_POST_INFO, staffOf } from '@/lib/clubManagerStaff';
 import type { NationDef, CupRound, CustomClubSpec, ManagerSpec } from '@/lib/clubManager';
 import { eraRealShareLabel, eraHonestyLine, eraRostersLoaded, ensureEraRosters } from '@/lib/clubManagerEras';
+import { reloadToRetryChunk } from '@/lib/freshBuild';
 import { FlagImg } from '@/components/FlagImg';
 import { GameNav } from '@/components/game/GameNav';
 import { GameShell } from '@/components/game/GameShell';
@@ -82,7 +83,7 @@ function ScreenLoading({ children, compact = false }: { children: ReactNode; com
 
 /** Round 832: a past era's squads did not arrive (offline, a dropped
  *  connection, a new deploy). Says so and offers the fetch again. */
-function EraLoadFailed({ label, onRetry }: { label: string; onRetry: () => void }) {
+function EraLoadFailed({ label, onRetry, onBack }: { label: string; onRetry: () => void; onBack?: () => void }) {
   return (
     <div role="alert" data-testid="cm-era-load-failed" className="max-w-md mx-auto my-12 rounded-xl border border-border bg-card p-5 text-center">
       <div className="text-sm font-bold text-foreground">The {label} squads did not load.</div>
@@ -93,6 +94,16 @@ function EraLoadFailed({ label, onRetry }: { label: string; onRetry: () => void 
       >
         Try again
       </button>
+      {/* Round 832 review: the picker's waiting steps hide their own back
+          buttons, so a season that will not load offers the way back here. */}
+      {onBack && (
+        <button
+          onClick={onBack}
+          className="mt-4 ml-2 px-5 py-2.5 rounded-xl font-bold bg-secondary text-foreground hover:bg-secondary/70 transition-colors"
+        >
+          Pick another season
+        </button>
+      )}
     </div>
   );
 }
@@ -151,12 +162,18 @@ const ClubManager = () => {
      fetch still running or one that failed, so the league and team steps can
      wait for it or offer a retry. Null when nothing is pending. */
   const [eraLoad, setEraLoad] = useState<{ id: string; failed: boolean } | null>(null);
-  const loadPickedEra = useCallback((id: string) => {
+  const loadPickedEra = useCallback((id: string, retry = false) => {
     if (eraRostersLoaded(id)) { setEraLoad(null); return; }
     setEraLoad({ id, failed: false });
     ensureEraRosters(id).then(
       () => setEraLoad(cur => (cur && cur.id === id ? null : cur)),
-      () => setEraLoad(cur => (cur && cur.id === id ? { id, failed: true } : cur)),
+      () => {
+        /* Round 832 review: Try again reloads the page when the import fails
+           again, because Chromium never refetches a failed chunk in the same
+           page (see reloadToRetryChunk). */
+        if (retry && reloadToRetryChunk()) return;
+        setEraLoad(cur => (cur && cur.id === id ? { id, failed: true } : cur));
+      },
     );
   }, []);
   const pickRef = useRevealScroll<HTMLDivElement>(`pick:${pickStep}:${pickEra}:${pickNation?.id ?? ''}:${pickLeagueId ?? ''}`, { skipFirst: true });
@@ -478,7 +495,7 @@ const ClubManager = () => {
         {/* Round 832: the past era's squads are still on their way, or did not come. */}
         {waitingForEra && (
           eraLoad?.id === pickEra && eraLoad.failed
-            ? <EraLoadFailed label={era.label} onRetry={() => loadPickedEra(pickEra)} />
+            ? <EraLoadFailed label={era.label} onRetry={() => loadPickedEra(pickEra, true)} onBack={() => { setPickStep('era'); setPickNation(null); setPickLeagueId(null); }} />
             : <div className="text-center py-16 text-muted-foreground animate-pulse">Loading the {era.label} squads…</div>
         )}
 
