@@ -33,7 +33,7 @@ import {
   initCareer, advanceYouthYear, acceptOffer, advanceProSeason,
   dismissSummary, stayAtClub, signExtension, requestTransfer, applyEventChoice,
   dismissDebut, dismissWorldCup, retireFromInternational, dismissRivalryEvent,
-  dismissBallonDor, applyBdorSpeech, type BdorSpeechChoice,
+  dismissBallonDor, giveBdorSpeech, bdorSpeechOpen, type BdorSpeechChoice, SOCCER_BALLON_DOR, SOCCER_BDOR_SPEECHES, SOCCER_WORLD_CUP_SPEECHES,
   applyWorldCupSpeech, type WorldCupSpeechChoice, manualRetire, choosePostRetirement, advanceManagerSeason, acceptManagerOffer, endManagerCareer, loadManagerMarket,
   acceptRetirementSuggestion, declineRetirementSuggestion,
   advancePunditSeason, endPunditCareer, punditLegacyPaid, playedSeniorSeason, POST_RETIREMENT_BONUS_CAP,
@@ -81,6 +81,8 @@ import {
 import PlayerAvatar from "@/components/soccer-career/PlayerAvatar";
 import AppearanceBuilder from "@/components/soccer-career/AppearanceBuilder";
 import { Confetti } from "@/components/soccer-career/CareerFx";
+import { AwardsNightCard, SpeechChoices } from "@/components/career/AwardsNightCard";
+import { availableSpeeches } from "@/lib/careerAwardsNight";
 import { CelebrationStyles, revealDelay } from "@/components/club-manager/Celebration";
 import { SignedSlip } from "@/components/soccer-career/SignedSlip";
 import type { SignedNote } from "@/components/soccer-career/SignedSlip";
@@ -895,9 +897,11 @@ export default function SoccerCareer() {
     if (!career) return;
     setCareer(dismissBallonDor(career, clubs));
   };
+  /* Round 834: the speech is given on the ceremony card and the card stays up
+     to show what it did; Continue is handleDismissBallonDor. */
   const handleBdorSpeech = (choice: BdorSpeechChoice) => {
     if (!career) return;
-    setCareer(applyBdorSpeech(career, choice, clubs));
+    setCareer(giveBdorSpeech(career, choice));
   };
 
   const handleManualRetire = () => {
@@ -2329,21 +2333,9 @@ function WorldCupResultCard({ wc, career, onDismiss, onSpeech }: { wc: WorldCupR
         </>
       )}
       {isWinner ? (
-        <div className="space-y-1.5">
-          <p className="text-center text-[11px] font-bold uppercase tracking-wider text-amber-300 animate-fade-in">The microphone is yours. The speech:</p>
-          <Button onClick={() => onSpeech("for_the_country")} className="w-full h-auto py-2.5 text-xs font-bold text-black bg-amber-600 hover:bg-amber-500 justify-start text-left whitespace-normal">
-            🏆 Dedicate it to every kid back home
-          </Button>
-          <Button onClick={() => onSpeech("shirt_to_the_fans")} className="w-full h-auto py-2.5 text-xs font-bold text-black bg-amber-600 hover:bg-amber-500 justify-start text-left whitespace-normal">
-            🎽 Throw your shirt into the away end
-          </Button>
-          <Button onClick={() => onSpeech("call_out_doubters")} className="w-full h-auto py-2.5 text-xs font-bold text-black bg-amber-700 hover:bg-amber-600 justify-start text-left whitespace-normal">
-            📢 Name the pundits who wrote you off
-          </Button>
-          <Button onClick={() => onSpeech("quiet_lap")} className="w-full h-auto py-2.5 text-xs font-bold text-white bg-muted hover:bg-muted/80 justify-start text-left whitespace-normal">
-            🚶 Say nothing. Walk one slow lap with the trophy
-          </Button>
-        </div>
+        /* Round 834: the buttons come from the shared speech options, the
+           same list the tournament card draws. */
+        <SpeechChoices prompt="The microphone is yours. The speech:" fadeIn roomy options={SOCCER_WORLD_CUP_SPEECHES} onChoose={onSpeech} />
       ) : (
         <Button onClick={onDismiss} className="w-full h-10 text-sm font-bold text-black bg-emerald-600 hover:bg-emerald-500">
           Continue →
@@ -2771,81 +2763,35 @@ function FinancialPanel({ career, onCurrencyChange }: { career: CareerState; onC
   );
 }
 
-/* ─── Ballon d'Or Ceremony Screen ─── */
+/* ─── Ballon d'Or Ceremony Screen ───
+   Round 834: the card is the shared awards night card (AwardsNightCard), bound
+   with the Ballon d'Or's copy and a soccer row: flag, position and club, points,
+   goals and honours. The headline still lands after the countdown (Round 530).
+   The winner's speech had no buttons here from Round 54 until Round 834: now
+   a win offers the speeches this save may give, one pick, and the card shows
+   what it did before Continue. */
 function BallonDorCeremonyCard({ bdor, career, onDismiss, onSpeech }: { bdor: BallonDorResult; career: CareerState; onDismiss: () => void; onSpeech: (choice: BdorSpeechChoice) => void }) {
-  const isWinner = bdor.playerRank === 1;
-  const isPodium = bdor.playerRank !== null && bdor.playerRank <= 3;
-  const isNominated = bdor.playerNominated;
-  const borderColor = isWinner ? "border-amber-400/60" : isPodium ? "border-amber-500/30" : "border-border";
-  const bgGrad = isWinner ? "from-amber-500/20 to-transparent" : isPodium ? "from-amber-500/10 to-transparent" : "from-transparent to-transparent";
-  
-  const rankEmoji = (rank: number) => rank === 1 ? "🥇" : rank === 2 ? "🥈" : rank === 3 ? "🥉" : `${rank}.`;
-  
+  const copy = SOCCER_BALLON_DOR.copy;
   return (
-    <div className={`relative rounded-xl border-2 ${borderColor} bg-gradient-to-b ${bgGrad} p-5 space-y-4 animate-in fade-in zoom-in-90 duration-700`}>
-      {isWinner && <Confetti pieces={70} gold />}
-      {/* Round 530: the headline lands after the last nominee has ticked in,
-          so the countdown reads before the verdict. The whole header block
-          carries the delay; the card's own fade is untouched. */}
-      <div className="cm-slam text-center space-y-2" style={{ animationDelay: revealDelay(bdor.nominees.length, 0.75) }}>
-        {career.appearance && (
-          <div className="flex justify-center">
-            <div className={`rounded-xl overflow-hidden border-2 ${isWinner ? "border-amber-400/70 animate-trophy-glow" : "border-border"} bg-muted/20`}>
-              <PlayerAvatar appearance={career.appearance} clubColor={career.currentClubColor} size={isWinner ? 88 : 64} animate />
-            </div>
-          </div>
-        )}
-        <div className={`text-5xl ${isWinner ? "animate-trophy-glow" : ""}`}>{isWinner ? "🏅" : "⭐"}</div>
-        <h3 className="text-xl font-black tracking-tight">
-          {isWinner ? "BALLON D'OR WINNER!" : `Ballon d'Or ${bdor.year}`}
-        </h3>
-        {isWinner && (
-          <p className="text-sm text-amber-300 font-bold">{money('The best player in the world! Legacy +20, Market Value +€15M')}</p>
-        )}
-        {!isWinner && isNominated && bdor.playerRank !== null && bdor.playerRank <= 3 && (
-          <p className="text-sm text-muted-foreground">You finished {bdor.playerRank === 2 ? "2nd" : "3rd"}! Legacy +5</p>
-        )}
-        {!isWinner && isNominated && bdor.playerRank !== null && bdor.playerRank > 3 && (
-          <p className="text-sm text-muted-foreground">You finished {bdor.playerRank}th, close but not enough this year</p>
-        )}
-        {!isNominated && bdor.playerRank !== null && bdor.playerRank > 10 && (
-          <p className="text-sm text-muted-foreground">Outside the top 10, but you ranked <span className="font-bold text-foreground">#{bdor.playerRank}</span> in the world&apos;s Top 30</p>
-        )}
-        {!isNominated && bdor.playerRank === null && (
-          <p className="text-sm text-muted-foreground">You were not nominated this year</p>
-        )}
-      </div>
-      
-      {/* Top 10 nominees. Round 530: the list stays in the engine's rank order
-          on screen, winner at the top, but the ARRIVAL runs the other way:
-          tenth ticks in first and the winner last, a countdown. Keyed on the
-          year plus index so a fresh ceremony re-runs it and nothing else does. */}
-      <div className="space-y-1">
-        {bdor.nominees.map((n, i) => (
-          <div key={`${bdor.year}-${i}`} style={{ animationDelay: revealDelay(bdor.nominees.length - 1 - i) }} className={`cm-tick-in flex items-center justify-between text-xs rounded-lg px-2.5 py-1.5 ${
-            n.isPlayer ? (i === 0 ? "bg-amber-500/20 border border-amber-500/30" : "bg-emerald-500/10 border border-emerald-500/20") : "bg-muted/20"
-          }`}>
-            <div className="flex items-center gap-1.5 flex-1 min-w-0">
-              <span className="text-sm font-black w-6 shrink-0">{rankEmoji(i + 1)}</span>
-              <div className="min-w-0 flex-1">
-                <span className={`font-bold truncate block text-[11px] ${n.isPlayer ? "text-foreground" : "text-muted-foreground"}`}>
-                  <FlagImg name={n.nationality} size={14} />{n.name}
-                </span>
-                <span className="text-[9px] text-muted-foreground">{n.position} · {n.club}</span>
-              </div>
-            </div>
-            <div className="text-right shrink-0 ml-1">
-              <div className="font-bold text-[11px]">{n.points}pts</div>
-              <div className="text-[9px] text-muted-foreground">{n.goals}G{n.trophies.length > 0 ? ` · ${n.trophies.join(", ")}` : ""}</div>
-            </div>
-          </div>
-        ))}
-      </div>
-      
-      <Button onClick={onDismiss} className={`w-full h-10 text-sm font-bold text-black ${isWinner ? "bg-amber-600 hover:bg-amber-500" : "bg-emerald-600 hover:bg-emerald-500"}`}>
-        Continue →
-      </Button>
-    </div>
+    <AwardsNightCard<BallonDorNominee>
+      night={bdor}
+      award={SOCCER_BALLON_DOR.award}
+      copy={{ ...copy, winnerLine: moved => money(copy.winnerLine(moved)) }}
+      portrait={career.appearance
+        ? won => <PlayerAvatar appearance={career.appearance!} clubColor={career.currentClubColor} size={won ? 88 : 64} animate />
+        : undefined}
+      badge={n => <FlagImg name={n.nationality} size={14} />}
+      detail={n => `${n.position} · ${n.club}`}
+      score={n => `${n.points}pts`}
+      scoreDetail={n => `${n.goals}G${n.trophies.length > 0 ? ` · ${n.trophies.join(", ")}` : ""}`}
+      onDismiss={onDismiss}
+      speech={{
+        open: bdorSpeechOpen(career),
+        prompt: "The golden ball is yours. The speech:",
+        options: availableSpeeches(SOCCER_BDOR_SPEECHES, career),
+        onChoose: id => onSpeech(id as BdorSpeechChoice),
+      }}
+    />
   );
 }
 

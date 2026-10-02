@@ -1,5 +1,65 @@
 # Project state
 
+## Release T is LIVE, 2026-10-02 06:31 EDT: main `125fda49`, deployment `c9d7a5df`, entry `index-pqBjaq8x.js`
+
+Assembled by the desktop Claude lane in the gate clone (`release-t`), gated under the production load rule.
+
+- **834, the awards night.** Soccer Career's Ballon d'Or ceremony and tournament speeches now live in a shared module
+  (`src/lib/careerAwardsNight.ts`, `src/components/career/AwardsNightCard.tsx`) with soccer as its first descriptor,
+  so the US careers can bind the same night as data. Proven behaviour identical by replaying a fixture recorded from
+  main. What a player sees: **the Ballon d'Or speech is back** (it had no screen since Round 54: win it and the card
+  offers the speeches, one pick, applied once), and **the ceremony card prints what the night measurably moved**, not
+  a nominal number. The review found the first version still printed "Popularity +20" while the meter is capped at
+  100, false on 25 of 30 real wins; the card now reads every meter before and after. `simBallonDorFairness` was a
+  coin toss (red on main at 5 of 20 seeds): it now pools seeds and holds a 95 percent must win floor (0 of 20 red,
+  minimum 97.7 percent), with the podium kept as an invariant; the game was not tuned.
+- **832, Club Manager league capacity.** One league rules table (drop count, cup or none, second tier, European
+  places, tiebreak per row), cupless leagues and third tiers as shapes the table can express, and the three era
+  rosters load with their era instead of with the engine: `/club-manager` weighs 602K against 631K before. A
+  digest of 135 careers over 405 seasons is identical to main's engine. The review fixed six things, the worst a
+  Try again button that did nothing in Chromium after a failed era download. This is the ground Round 876 (Brazil,
+  in review) stands on.
+- **Codex 878** (career money receipts), **Codex 881** (NBA Starting 5: pick a position on the court) and the daily
+  reload driver repair, merged from main.
+- `simRevealMoments` section 3 counted a typed 4 front offices; Round 828 had added a fifth board. It now reads the
+  count from the test's own case list.
+
+**Gate.** Type gate 0 on the final tree (four times as main moved). Round 832's fence family, each with its closing line and exit code: `simCmLeagueRules` all parts including the chunk check on a real build, `simEras` (780 s), the three era harnesses, `simEraWorldTables`, `simClubManagerEraUcl`, `simClubManagerEraMidSeason`, `simInventedNames`, `simClubManager`, `simCmStoppageTime`, `simUclSeasonOne`, `simClubManagerSaveSize`, `simClubManagerClubList`, `simCreateClub`, `simCup`, `simWorld`, `simExtraTime`, `simYouthPadding`, `simPromotion`, `simHalftime` (966 s), `simPress` (1,774 s), `simOpposition` (2,326 s), and the Club Manager vitest files. Round 834's: `simCareerAwardsNight`, `simBallonDorFairness`, `simBallonDor`, `simBallonDorTruth`, `simSoccerCareer`, `simCareerKeepPlaying`, `simCareerDilemmaReach`, `simCareerParity`, `simCareerEngaged`, `simScoreShown`, `simNoInventedQuotes`, `simRevealMoments`, `simSoccerCareerSaveRecovery`, `simCareerNoDeadEnd`, `simCareerBanking`, `simCareerInbox`, `simCareerRealism`. The 22 snapshot and copy readers, `simDailyReload` and `simNoDoubleRecord` (both green again after Codex's driver repair), and the full vitest suite (176 files; 7 tests in two files timed out at 5 seconds beside the long harnesses and passed alone). Every long run was started detached, so no agent was disturbed. ONE browser pass on the built site: `sweepGames` 182 routes at phone and desktop, 364 checks, 0 findings; `playEra2005`, `playEra2010`, `playEra2015` green; `playGames` clean on `/soccer-career`, `/club-manager`, `/deadline-day`, `/manager-hot-seat`, `/nfl-my-career`, `/nba-my-career`, `/free-kick`, `/buzzer-beater` and `/nba-starting-5`; `playHomeFold`, `playSoftFourOhFour` green; `sweepWeight` green after `/front-office` took its measured 307K (the shared celebration styles grew by the gated rise the speech choices wait behind). **Red and not this release's:** `playSoccerCareer` still reaches no Champions League campaign in four careers of 240 steps (a coverage failure that predates Round 850; the page survived, no console error, and the walk now knows the speech button). Live after the publish, once each: `simWindow2026Bundesliga` and `simSoccerAwardsShape`, both green.
+
+**Proof.** `x-deployment-id` carries `c9d7a5df`; the home page serves `index-pqBjaq8x.js` (Release S served `index-DEwRbZI0.js`); `/whats-new` carries the Ballon d'Or speech entry; in a real browser on the live site the Soccer Career chunk (`SoccerCareer-O9YGIcsy.js`) contains the speech prompt and its choices, `/club-manager` loads 31 script files (600K) with no era chunk, and tapping 2010-11 fetches `clubManagerEra2010-D7aMHQ7g.js` and shows the nation step; no console error on either page.
+
+**Open, written down so nobody rediscovers it:** in era seasons, Champions League opponents from outside the era's
+leagues score with 2026 players (the fallback to the modern pool), while the guide calls each era a sealed world;
+the Ballon d'Or judges a tenth rival the card never shows (about one snub in 130 must win seasons; a one line
+change that moves soccer's draws, so the awards fixture must be re-recorded from main after it); the career LOG line
+for the "greatest ever" speech still prints its nominal number (changing it breaks the lift fixture; fix it when
+the fixture is retired).
+
+## Codex882 claimed, readable Champ or Not reveals, 2026-10-02
+
+881 pushedfd7ee739. Active Champ or Not will hold historical feedback until
+Next claim/View results, show earned score at answer time and preserve daily
+save/completion timing. Root owns hook/page; agents own focused proof, existing
+recording stimulus and independent review. No real data/query change, desktop,
+Supabase or live work. Football Draft is retired, so its source-only candidate
+is deferred without a product repair claim. Claude owns publication, next883.
+
+## Codex881 court controls accepted, 2026-10-02
+
+Empty NBA Starting 5 court cards select positions directly, with native buttons,
+matching spin/validation locks, selected state and keyboard focus. Filled cards
+remain display-only. Court selection avoids input autofocus that caused a
+verified phone jump; position-row autofocus remains as before.14 focused cases,
+eight effective controls and peer review pass. Actual page/court/autocomplete
+native4/4,341 checks and16 screenshots at1280 pointer/keyboard,390 touch,320
+touch/reduced. Fictional hook/presentation fixtures only, no data or complete
+game claim. Phone court center/top stays fixed with native82px scroll anchoring;
+the same detector rejects the old452px visible displacement and input focus.
+Type/build0,15 built fences and four source guards green. Entryindex-B1_iQCl7.js,
+SHA256bfcf9ad9a6f9960b170d6b8cbadc96b2f8f43aaf04a1038d57947fa53413c559.
+878/880 are pushed;881 joins the next Claude publication. Next free882.
+No desktop/Supabase/live use. Owned local browser/server processes closed.
+
 ## Codex880 reload driver repair accepted, 2026-10-02
 
 The eight arcade failures were obsolete mouse inputs. Test-only primary pointer

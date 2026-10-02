@@ -624,7 +624,12 @@ const finalPick = countRows(/✓.*plays the next season after the draft/);
 const draftDay = countRows(/✓.*mounts the draft day card/);
 const coach = countRows(/✓.*coaching a season replaces/);
 console.log(`   ${finalPick} front offices hold the draft after the last pick until Continue, ${draftDay} career hubs mount draft day with the engine's pick, ${coach} coach season reveal`);
-if (finalPick !== 4) fail(`${finalPick} of 4 front offices passed the final pick hold`);
+/* Round 828 gave the shared season close test a fifth board (the NFL on full
+   rosters), and this count was a typed 4, so it went red on a healthy tree.
+   The expected number is now read from the test's own case list. */
+const boardCases = (fs.readFileSync(path.join(ROOT, TESTS[0]), 'utf8').match(/^\s+name: '[^']+', env: 'FO_BOARD_/gm) || []).length;
+if (boardCases < 4) fail(`only ${boardCases} front office cases found in ${TESTS[0]}, the four games must all be there`);
+if (finalPick !== boardCases) fail(`${finalPick} of ${boardCases} front offices passed the final pick hold`);
 if (draftDay !== 4) fail(`${draftDay} of 4 career hubs passed the draft day mount`);
 if (coach !== 1) fail('the coach season reveal test did not pass');
 if (r.status !== 0 || countRows(/^\s*×/) > 0) {

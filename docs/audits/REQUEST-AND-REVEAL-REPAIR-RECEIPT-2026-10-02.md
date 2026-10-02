@@ -16,6 +16,7 @@ Claude owns production verification and publication.
 | 879 | `simPrerenderBoot` | Explicit outside aborts in the boot-only browser harness | Original failure retained; removed-fence control fails runner while original boot assertions pass; final 15 built checks green |
 | 878 | `/nfl-my-career`, `/nba-my-career`, `/mlb-my-career`, `/nhl-my-career` money screens | Actual committed transaction receipt; finite cues for changed buckets and latest local statement | 19 actual component/engine cases; 11 executable controls; four native component/input cases, 727 checks |
 | 880 | Daily-reload verification for `/buzzer-beater` and `/free-kick` | Drive actual primary pointer holds/releases with scoped jsdom capture support | Original each3 pass/4 fail; after each7/7; existing full107/107 across21 routes and effective controls |
+| 881 | `/nba-starting-5` | Select empty court positions directly; matching locks and selected state; preserve court opener focus | 14 focused cases, eight effective controls; four unique native cases,341 checks and16 screenshots |
 
 ## Preserved behavior and measured limits
 
@@ -134,6 +135,14 @@ match root after EOL normalization. Entry: `index-pB-89qU1.js`, SHA256
 - Arcade reload: `%TEMP%/dukb-daily-arcade880-2026-10-02-a1`,
   original/final JSON, `dailyReload-full-controls.txt`,
   `input-control-results.json` and copied-input logs.
+- NBA court: `%TEMP%/dukb-court881-proof-2026-10-02`, original/focus/final
+  focused logs, `controls.json`, `verified-summary.json`, individual native
+  reports,16 accepted images and retained failed/incomplete attempts.
+- NBA geometry: the same folder's `geometry-discrimination.json`,
+  `geometry-discrimination-final.log` and current/pre-focus390 images.
+- NBA clean gate: `%TEMP%/dukb-release-s-codex881-offline`, `type-881.txt`,
+  `build-881.txt`, `fences-881.txt`, `sources-881.txt` and stderr. The retained
+  aborted wrong-CWD type attempt and first test-option type failure are excluded.
 
 ## Arcade reload gate repair,880
 
@@ -163,7 +172,73 @@ App type0 after copying the three test files into the accepted gate. The product
 build remains the same878 artifact since880 changes no runtime file. Peer review
 is clear. This is actual-page jsdom save/recording proof, not another live sweep.
 
+## NBA court controls,881
+
+The backlog's existing position row worked, but court cards were display-only.
+Empty cards now render native buttons through an optional callback carrying the
+original index. Filled and callback-free cards remain inert. Names, integer,
+decimal, string and zero stats, units and court coordinates are unchanged.
+The page uses its existing selectPosition handler; both controls disable while
+the team spins or a player is being validated. The selected state is exposed
+with aria-pressed, targets are at least44px, and keyboard focus has a visible
+ring. Interactive selections have no indefinite pulse. Reduced motion follows
+the existing global0.001ms transition policy with animation:none.
+
+Actual page/autocomplete phone testing found a focus regression before this
+round shipped. Selecting the scrolled court opened and focused the input above
+it, resetting scrollY370 to0 and displacing the court center452px. The page now
+tracks whether court or row opened selection. Court keeps opener focus; the row
+retains its prior autofocus. Input reset, handler and gameplay hooks stay intact.
+
+The original focused suite held five static/phase baselines and rejected eight
+missing-control outcomes. The pre-focus-fix page held13 cases and rejected the
+one focus regression. Final14/14 pass. Eight copied executable controls reject
+their intended outcomes while every other case runs and holds: callback3/11,
+index6/8, lock3/11, row validation1/13, filled1/13, selected2/12, static1/13 and
+focus1/13 (fail/pass). No skips or unhandled errors. Control bindings are checked
+under CRLF, raw source holds are separate, and disposable copies are cleaned.
+The formatted-name/stat baseline holds independently in every control.
+
+Four unique completed native cases are accepted once:1280 pointer82 checks,
+1280 natural Tab/Enter/Space86,390 true touch85,320 true touch/reduced88.
+Total341 checks and16 screenshots. Actual page, court and PlayerAutocomplete
+are bundled with the completed build stylesheet. Hook state is explicitly
+fictional, and shell/spinner/SEO/guide presentation is stubbed with a labelled
+scroll tail. This proves these controls, locks, input reset, focus, dimensions,
+phase isolation and motion; it does not prove a complete lineup game, historical
+rosters, live validation or async validation/reroll race handling.
+
+Desktop preserves scroll position. Both touch cases preserve court center and
+parent top while browser anchoring adjusts scrollY and document position by82px
+when the input is inserted. At390 the center moved only0.0000076px and court top
+stayed40px. The geometry probe applied the same detector to a frozen pre-focus
+bundle: center displacement452px, court top40 to492 and active input. Geometry
+and focus independently reject that copy, with the original index2 dispatched
+exactly once in both. Scalar-scroll failure and the probe's initial aria-label
+versus tag diagnostic error are retained. Geometry acceptance does not claim
+unchanged absolute scrollY on phones.
+
+Other initial native driver mistakes are retained: a phase check before React
+committed, trying to Tab to an intentionally inert filled card, a fixture lock
+check before its committed state, and a literal-zero reduced-transition check
+that ignored the existing global CSS policy. Only temporary stimuli/read timing
+were corrected; functional assertions remain. Failed/incomplete cases are not
+counted. There were no page/console errors, outside attempts or preload blocks
+in the accepted cases. Root inspected the390 selected-court image. All owned
+contexts, browsers and4981-4983 servers closed. Independent peer review is clear.
+
+The immutable gate archives maincd7cf184 plus the four final881 files, excluding
+paused drafts. Real app type/build0, all15 required built fences and
+simHarnessAnchors, simNbaCourtSelection, simPlayerAutocompleteInteraction and
+simScoringCoverage pass offline. Seven final scope/hook/type/autocomplete files
+match root after EOL normalization. Entry: `index-B1_iQCl7.js`, SHA256
+`bfcf9ad9a6f9960b170d6b8cbadc96b2f8f43aaf04a1038d57947fa53413c559`.
+The first type run exposed six unsupported test query options; only those were
+removed, every outcome expectation held, and focused/type/build checks reran.
+
 Publication, bounded production API verification and physical-device/Safari
 testing remain outside this receipt. Claude separately recorded Release S as
-published in the work board.878 needs the next publication.881 NBA court
-control work remains separate and is not yet credited here.
+published in the work board.878/881 need the next publication;880 is a test-only
+gate repair. A source-only Football Draft delayed-callback candidate is saved
+in `%TEMP%/dukb-football-draft-scout-2026-10-02-a1/SOURCE-CANDIDATE.md` for later
+reproduction, without claiming a verified product bug or starting882.
