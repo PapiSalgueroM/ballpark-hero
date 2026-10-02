@@ -1010,7 +1010,7 @@ export default function SoccerCareer() {
 
   const handleDeclineRetirement = () => {
     if (!career) return;
-    setCareer(declineRetirementSuggestion(career));
+    setCareer(declineRetirementSuggestion(career, clubs));
   };
 
   const handlePunditAction = (action: PunditAction) => {

@@ -166,7 +166,7 @@ function step(s, c) {
       if (sit && sit.type === 'frozen_out' && sit.offers && sit.offers[0]) return E.acceptOffer(s, sit.offers[0]);
       return E.stayAtClub(s);
     }
-    case 'retirement_suggestion': return E.declineRetirementSuggestion(s);
+    case 'retirement_suggestion': return E.declineRetirementSuggestion(s, clubs);
     default: return { ...s, retired: true };
   }
 }
