@@ -249,11 +249,16 @@ for (const c of CASES) {
       for (let i = 0; i < c.picks; i += 1) fireEvent.click(screen.getAllByText(/· age \d+/)[0]);
       expect(read().phase).toBe('hub');
       expect(read().league.season).toBe(2027);
-      /* Round 828: on full rosters the offseason refilled every club and cut it to the 53. */
-      if (read().league.rosterDepth === 2) {
-        const sizes = Object.values(read().league.teams as Record<string, any>).map(t => t.players.length);
-        expect(Math.max(...sizes)).toBeLessThanOrEqual(DEEP_ROSTER_MAX);
-        expect(Math.min(...sizes)).toBeGreaterThanOrEqual(DEEP_ROSTER_MAX - 6);
+      /* Round 828: on full rosters the offseason refilled every club and cut
+         the computer clubs to the 53. The GM's own club is never cut behind
+         his back (the MLB and NHL shape): if his picks took him over, Play
+         waits until he has cut down himself, below. */
+      const deepLeague = read().league.rosterDepth === 2;
+      if (deepLeague) {
+        const others = Object.values(read().league.teams as Record<string, any>).filter(t => t.abbr !== team).map(t => t.players.length);
+        expect(Math.max(...others)).toBeLessThanOrEqual(DEEP_ROSTER_MAX);
+        expect(Math.min(...others)).toBeGreaterThanOrEqual(DEEP_ROSTER_MAX - 6);
+        expect(read().league.teams[team].releasedThisSeason ?? []).toEqual([]);
       }
       /* Round 530: the last pick is narrated, so the screen holds the draft
          with its card until Continue is pressed. The save already says hub,
@@ -261,6 +266,23 @@ for (const c of CASES) {
          until the press. */
       expect(screen.queryByText(c.tile)).toBeNull();
       fireEvent.click(screen.getByText('Continue to the hub'));
+      if (deepLeague && read().league.teams[team].players.length > DEEP_ROSTER_MAX) {
+        fireEvent.click(screen.getByText(c.tile));
+        expect((screen.getByText(c.firstButton).closest('button') as HTMLButtonElement).disabled).toBe(true);
+        expect(document.querySelector('[data-over-limit]')).toBeTruthy();
+        /* the cut, his own: a group tile, Cut, Cut him, until he is at 53 */
+        fireEvent.click(screen.getByText('Hub'));
+        fireEvent.click(screen.getByText('Roster'));
+        while (read().league.teams[team].players.length > DEEP_ROSTER_MAX) {
+          const group = [...document.querySelectorAll('[data-roster-group]')].find(b => /DB|LB|WR/.test(b.getAttribute('data-roster-group') ?? '')) as HTMLElement;
+          fireEvent.click(group);
+          const rows = [...document.querySelectorAll('[data-roster-row]')] as HTMLElement[];
+          fireEvent.click(rows[rows.length - 1].querySelector('button')!);
+          fireEvent.click(screen.getByText('Cut him'));
+          fireEvent.click(screen.getByText('Groups'));
+        }
+        fireEvent.click(screen.getByText('Hub'));
+      }
       fireEvent.click(screen.getByText(c.tile));
       fireEvent.click(screen.getByText(c.firstButton));
       expect(read().league[c.periodKey]).toBe(2);

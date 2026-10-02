@@ -19,6 +19,8 @@ import {
   expiringPlayers, tagRefusal, applyFranchiseTag, franchiseTagSalary,
   /* Round 828: full rosters, the 53 limit and the practice squad. */
   deepRosterRefusal, promoteFromPractice, DEEP_ROSTER_MAX, STARTER_SLOTS, tradeProbeCopy, type GmPlayer,
+  /* Round 828 follow up: men to cut before Play, the MLB and NHL shape. */
+  deepOverLimit,
 } from '@/lib/frontOffice';
 /* Round 631: a cut costs dead money and the man cannot come back this season. */
 import { deadMoneyFor, deadCapUsed, signRefusal, cutRefusal, tradeRefusal } from '@/lib/frontOfficeCuts';
@@ -62,6 +64,12 @@ type Tab = 'team' | 'market' | 'trade' | 'week' | 'standings';
 const SAVE_KEY = 'front-office-save-v1';
 
 const NFL_WORDS: FoSportWords = { title: 'the Super Bowl', playoffs: 'the playoffs', round: 'a playoff round', games: 17 };
+
+/* Round 828 follow up: what a full roster over 53 owes, in MLB's words for
+   the same lock (its feed line, roster box and play box), so the three boards
+   read alike. `when` is "before Week 1" or "before you play". */
+const overLimitLine = (carrying: number, over: number, when = 'before Week 1') =>
+  `You are carrying ${carrying}, ${over} over the limit of ${DEEP_ROSTER_MAX}. Cut ${over === 1 ? 'one man' : `${over} men`} on the Roster box ${when}.`;
 
 type Postseason = { rounds: PlayoffRound[]; champion: string; gradeLine: string | null };
 
@@ -240,8 +248,11 @@ export default function FrontOfficeBoard() {
       return;
     }
     setStarting(null);
-    const lg = initLeague(Math.random, { depth });
+    /* Round 828 follow up: every other club over 53 cuts itself before Week 1;
+       yours is never cut behind your back and owes its cut on the board. */
+    const lg = initLeague(Math.random, { depth, userTeam: abbr });
     const m = mandateFor(lg, abbr, false);
+    const owed = deepOverLimit(lg.teams[abbr]);
     setLeague(lg);
     setMyTeam(abbr);
     setPhase('hub');
@@ -249,6 +260,7 @@ export default function FrontOfficeBoard() {
     setWeekResults([]);
     setNewsFeed([
       `Welcome to the ${label(abbr)} front office. The ${lg.season} season starts now.`,
+      ...(owed > 0 ? [`✂️ ${overLimitLine(lg.teams[abbr].players.length, owed)}`] : []),
       `🏛️ The ownership mandate: ${m.text}`,
     ]);
     setChampion('');
@@ -315,6 +327,10 @@ export default function FrontOfficeBoard() {
 
   const playWeek = () => {
     if (!league || !my) return;
+    /* Round 828 follow up: a full roster over 53 cuts down before it plays,
+       through the same two tap Cut as any other release. Nothing is played,
+       so nothing is recorded either. */
+    if (deepOverLimit(my) > 0) return;
     /* Round 195: a played week counts as playing TODAY, the same per-session mark
        Club Manager has had since Round 157. Unscored on purpose: the
        scored completion stays the title. */
@@ -467,7 +483,11 @@ export default function FrontOfficeBoard() {
          the ask one tier, then the tilt is spent. */
       const m = mandateFor(lg, myTeam, champion === myTeam, pressTilt);
       setMandate(m);
+      /* Round 828 follow up: the offseason never cuts your club. If the picks
+         took it past 53 the feed says so first, and Play waits for the cut. */
+      const owed = deepOverLimit(lg.teams[myTeam]);
       const feed = [
+        ...(owed > 0 ? [`✂️ ${overLimitLine(lg.teams[myTeam].players.length, owed)}`] : []),
         note,
         `🏛️ The new mandate: ${m.text}`,
         ...(pressTilt === 1 ? ['🎙️ Your season-end answer raised the bar upstairs.']
@@ -477,14 +497,11 @@ export default function FrontOfficeBoard() {
         ...(myTagged ? [`🏷️ ${myTagged.name} plays the season on the tag, $${myTagged.salary}M guaranteed.`] : []),
         ...(news.tagged.length > 0 ? [`🏷️ ${news.tagged.length} rival club${news.tagged.length === 1 ? '' : 's'} used the franchise tag.`] : []),
         ...news.developed.filter(r => r.team === myTeam).map(r => `📈 ${r.player} develops ${r.from} to ${r.to}.`),
-        /* Round 828: a full roster refills off its own practice squad and cuts down to 53. */
+        /* Round 828: a full roster refills off its own practice squad. The cut
+           to 53 is the computer clubs' alone, so it never names yours. */
         ...(() => {
           const up = (news.promoted ?? []).filter(r => r.team === myTeam).map(r => `${r.player} (${r.pos})`);
-          const down = (news.cutDown ?? []).filter(r => r.team === myTeam).map(r => `${r.player} (${r.pos})`);
-          return [
-            ...(up.length ? [`⬆️ Called up from the practice squad: ${up.join(', ')}.`] : []),
-            ...(down.length ? [`✂️ The cut to ${DEEP_ROSTER_MAX} releases ${down.join(', ')}, dead money and all.`] : []),
-          ];
+          return up.length ? [`⬆️ Called up from the practice squad: ${up.join(', ')}.`] : [];
         })(),
       ];
       setNewsFeed(feed.slice(0, 8));
@@ -827,7 +844,7 @@ export default function FrontOfficeBoard() {
             <p className="mt-1 text-xs text-muted-foreground">
               You hold <b className="text-gold">{picksLeft}</b> pick{picksLeft === 1 ? '' : 's'}. Scout grades carry error:
               the number on the card is what your scouts THINK. Every pick joins your roster as a player, defenders included.
-              {my.rosterDepth === 2 && ` The roster limit is ${DEEP_ROSTER_MAX}: if the picks take you over it, the offseason releases your lowest rated men who do not start, with the usual dead money.`}
+              {my.rosterDepth === 2 && ` The roster limit is ${DEEP_ROSTER_MAX}: if your picks take you over it, you cut down before Week 1, dead money and all.`}
             </p>
           )}
         </div>
@@ -965,6 +982,8 @@ export default function FrontOfficeBoard() {
   const starters = starterIds(my);
   /* Round 828: the roster limit on a full roster, and the line the market box and the Sign buttons show at it. */
   const fullBlock = deepRosterRefusal(my);
+  /* Round 828 follow up: men to cut before Play, 0 unless a full roster is over 53. */
+  const overLimit = deepOverLimit(my);
   const practice = my.practice ?? [];
   /* Round 828: the opening rating of a man with no season behind him is his
      draft spot, and the roster says so until the first title is decided. */
@@ -1231,6 +1250,11 @@ export default function FrontOfficeBoard() {
             );
           })()}
           {cutBlock && depthView === null && <p data-cut-block className="mb-2 text-center text-[10px] text-destructive">{cutBlock}</p>}
+          {overLimit > 0 && depthView === null && (
+            <p data-over-limit className="mb-2 text-center text-[10px] text-destructive">
+              {overLimit} over the limit of {DEEP_ROSTER_MAX}. Cut {overLimit === 1 ? 'one man' : `${overLimit} men`} before Week {league.week}.
+            </p>
+          )}
           {depthView === null && !deep && <div className="grid max-h-96 grid-cols-1 gap-1 overflow-y-auto sm:grid-cols-2">
             {[...my.players].sort((a, b) => b.ovr - a.ovr).map(rosterRow)}
           </div>}
@@ -1465,9 +1489,15 @@ export default function FrontOfficeBoard() {
           ) : (
             <p className="text-sm text-muted-foreground">Bye week for you. The league plays on.</p>
           )}
+          {overLimit > 0 && (
+            <p data-over-limit className="text-xs text-destructive">
+              {overLimitLine(my.players.length, overLimit, 'before you play')}
+            </p>
+          )}
           <button
             onClick={playWeek}
-            className="inline-flex items-center gap-2 rounded-full bg-primary px-8 py-2.5 text-sm font-bold text-primary-foreground hover:opacity-90"
+            disabled={overLimit > 0}
+            className="inline-flex items-center gap-2 rounded-full bg-primary px-8 py-2.5 text-sm font-bold text-primary-foreground hover:opacity-90 disabled:opacity-40"
           >
             <ShieldHalf className="h-4 w-4" /> {league.week >= REGULAR_WEEKS ? 'Play the final week + playoffs' : `Play Week ${league.week}`}
           </button>

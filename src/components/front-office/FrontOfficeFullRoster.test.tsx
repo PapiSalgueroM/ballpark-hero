@@ -138,6 +138,46 @@ describe('NFL Front Office: a full roster on the board', () => {
     expect(all('[data-draft-legend]').length).toBeGreaterThan(0);
   });
 
+  /* Round 828 follow up: the MLB and NHL shape. The Giants open at 54 (a
+     starter on injured reserve counts), every other club cuts itself before
+     Week 1, and a Giants GM owes one cut: Play is locked with the count until
+     he makes it through the ordinary two tap Cut. */
+  it('locks Play with the count owed until a GM over 53 cuts down himself', async () => {
+    render(<FrontOfficeBoard />);
+    fireEvent.click(screen.getByText('New York Giants'));
+    await waitFor(() => expect(localStorage.getItem(KEY)).toBeTruthy());
+    const lg = read().league;
+    expect(lg.teams.NYG.players.length).toBe(DEEP_ROSTER_MAX + 1);
+    expect(lg.teams.NYG.releasedThisSeason ?? []).toEqual([]);
+    expect(Object.values(lg.teams as Record<string, any>).filter(t => t.abbr !== 'NYG').every(t => t.players.length <= DEEP_ROSTER_MAX)).toBe(true);
+    expect(screen.getByText(/You are carrying 54, 1 over the limit of 53\. Cut one man on the Roster box before Week 1\./)).toBeTruthy();
+
+    fireEvent.click(screen.getByText('This week'));
+    expect(el('[data-over-limit]').textContent).toContain('1 over the limit of 53');
+    const play = screen.getByText('Play Week 1').closest('button') as HTMLButtonElement;
+    expect(play.disabled).toBe(true);
+    fireEvent.click(play);
+    expect(read().league.week).toBe(1);
+
+    /* the cut, the ordinary way: a group tile, Cut, then Cut him */
+    fireEvent.click(screen.getByText('Hub'));
+    fireEvent.click(screen.getByText('Roster'));
+    expect(el('[data-over-limit]').textContent).toContain('Cut one man before Week 1');
+    fireEvent.click(el('[data-roster-group="DB"]'));
+    const rows = all('[data-roster-row]');
+    fireEvent.click(rows[rows.length - 1].querySelector('button')!);
+    fireEvent.click(screen.getByText('Cut him'));
+    expect(read().league.teams.NYG.players.length).toBe(DEEP_ROSTER_MAX);
+    expect(document.querySelector('[data-over-limit]')).toBeNull();
+
+    fireEvent.click(screen.getByText('Hub'));
+    fireEvent.click(screen.getByText('This week'));
+    const unlocked = screen.getByText('Play Week 1').closest('button') as HTMLButtonElement;
+    expect(unlocked.disabled).toBe(false);
+    fireEvent.click(unlocked);
+    expect(read().league.week).toBe(2);
+  });
+
   it('keeps the old list on a fifteen man save', () => {
     const league = initLeague(lehmer(6));
     save(league, 'KC');

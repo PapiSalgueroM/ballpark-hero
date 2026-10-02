@@ -161,6 +161,12 @@ export function makeGmPlayer(p: FoPlayer, rng: () => number): GmPlayer {
 export interface InitLeagueOptions {
   /** The bench and the practice squad per club, from src/data/frontOfficeDepth.ts. */
   depth?: Record<string, FoDepthTeam>;
+  /** Round 828 follow up: the GM's own club. On a full roster league every
+      other club over 53 (the starters rule counts a starter on injured
+      reserve, so the Giants open at 54) cuts itself down before Week 1, the
+      way the offseason does; the GM's club is never cut behind his back and
+      owes its cut on the board instead. Absent, nobody is cut. */
+  userTeam?: string;
 }
 
 export function initLeague(rng: () => number = Math.random, opts: InitLeagueOptions = {}): LeagueState {
@@ -203,6 +209,8 @@ export function initLeague(rng: () => number = Math.random, opts: InitLeagueOpti
       const unrated = new Set(d?.noSeason ?? []);
       for (const p of [...team.players, ...team.practice]) if (unrated.has(p.name)) p.noSeason = true;
     }
+    /* drawn nothing: the cut down uses no random numbers, so the deal above is the same with or without it */
+    if (opts.userTeam) cutDownComputerClubs(league, opts.userTeam);
   }
   return league;
 }
@@ -1271,16 +1279,19 @@ export function runOffseason(league: LeagueState, rng: () => number, userTeam?: 
   league.freeAgents = league.freeAgents.sort((a, b) => b.ovr - a.ovr).slice(0, 40);
   for (const fa of league.freeAgents) { fa.age += 1; fa.ovr = fa.age >= 31 ? declined(fa.ovr, 1) : fa.ovr; }
   /* Round 828: a full club refills from its own practice squad first and cuts
-     down to 53 last. A fifteen man club goes through the old pass untouched. */
+     down to 53 last. A fifteen man club goes through the old pass untouched.
+     Round 828 follow up: the computer clubs cut themselves; the GM's own club
+     is never cut behind his back (it owes its cut on the board, Play locked
+     until it is at 53, the shape MLB and the NHL use). The refills draw from
+     the rng and the cuts never do, so cutting after every refill rather than
+     club by club changes no draw and no result. */
   const deep = Object.values(league.teams).filter(t => t.rosterDepth === 2);
   if (deep.length) {
     news.promoted = [];
     news.cutDown = [];
     const taken = leagueNames(league);
-    for (const t of deep) {
-      news.promoted.push(...refillDeepRoster(t, taken, rng));
-      news.cutDown.push(...cutDownToMax(t, league.freeAgents));
-    }
+    for (const t of deep) news.promoted.push(...refillDeepRoster(t, taken, rng));
+    news.cutDown.push(...cutDownComputerClubs(league, userTeam));
   }
   replenishRosters(league, rng);
   league.cap = Math.round(league.cap * 1.05);
@@ -1373,6 +1384,25 @@ export function refillDeepRoster(t: GmTeamState, taken: Set<string>, rng: () => 
     }
   }
   return promoted;
+}
+
+/* Round 828 follow up: THE COMPUTER CLUBS CUT THEMSELVES, the GM never is,
+   the shape MLB (mlbCutDownToMax beside mlbOverLimit) and the NHL use. Every
+   full club over 53 but the GM's own is cut down by position need below;
+   userTeam absent (the harnesses) cuts every club. */
+export function cutDownComputerClubs(league: LeagueState, userTeam?: string): { team: string; player: string; pos: string }[] {
+  const out: { team: string; player: string; pos: string }[] = [];
+  for (const t of Object.values(league.teams)) {
+    if (t.rosterDepth === 2 && t.abbr !== userTeam) out.push(...cutDownToMax(t, league.freeAgents));
+  }
+  return out;
+}
+
+/** Round 828 follow up: how many men a full roster club must cut before it
+    may play, 0 at or under 53 and always 0 on a fifteen man club. The board
+    holds Play on it until the GM has cut down through the shared cut. */
+export function deepOverLimit(team: GmTeamState): number {
+  return team.rosterDepth === 2 ? Math.max(0, team.players.length - DEEP_ROSTER_MAX) : 0;
 }
 
 /* Round 828: THE CUT DOWN TO 53. A full club over DEEP_ROSTER_MAX after the

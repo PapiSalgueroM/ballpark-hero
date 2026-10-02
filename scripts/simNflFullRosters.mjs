@@ -38,8 +38,12 @@
         club by club (rank correlation over many seeds, band measured).
      6) TEN FRANCHISES, FIVE SEASONS EACH, the way the board plays them: the
         weekly loop, three draft picks, the franchise tag, a cut, a signing,
-        the offseason. Every offseason ends at or under 53 on every club,
-        every cut costs exactly the dead money the cuts module says, a tagged
+        the offseason. Every computer club opens and ends every offseason at
+        or under 53; the GM's own club is never cut behind his back (the
+        shape MLB and the NHL use): when the draft or the Giants' opening 54
+        puts him over, he owes the cut, the week will not play, and he cuts
+        through the shared release, so every club enters every season at 53
+        or under. Every cut costs exactly the dead money the cuts module says, a tagged
         man never reaches the pool, every drafted man is on his club (the
         roster or the practice squad) unless the cut to 53 released him, the
         refill calls up practice squad men before it invents anybody, ids
@@ -58,7 +62,9 @@
         the call up and every Sign are greyed with the reason at 53, a tapped
         team starts a league with the whole club, a rating that is only a
         draft spot carries its mark on the depth chart and both trade lists,
-        and a fifteen man save keeps its old list.
+        a Giants GM (54 at the opening) finds Play locked with the count he
+        owes until he cuts one man himself, and a fifteen man save keeps its
+        old list.
 
    MEASUREMENTS (2026-10-01, the bake of that day, the harness's own seeds):
      Section 1: active rosters 50 to 54 a club (1638 men), practice squads 15
@@ -78,13 +84,16 @@
      2.94 full against 2.83 to 2.90 fifteen man. Bands: share above 0.05
      (the bench does play), correlation at least 0.90, gap at most 0.6.
      Section 6: 50 seasons, 50 cuts with the rule's dead money, 50 signings
-     refused at 53, 50 tags, 1050 draftees all on their clubs; 4475 men
-     called up and 6544 depth men invented over 500 club offseasons, none of
-     them while a practice squad man at his position waited; 46 released in
-     the cut to 53, none of them draftees; biggest practice squad 18;
-     biggest save 298K (budget 700K); highest payroll 93.5 percent of the
-     cap; real men still 62 to 66 percent of the active rosters after five
-     seasons.
+     refused at 53, 50 tags, 1050 draftees all on their clubs; 4509 men
+     called up and 6564 depth men invented over 500 club offseasons, none of
+     them while a practice squad man at his position waited; 40 computer
+     club men released in the cut to 53, none of them draftees, and none of
+     the GM's; the GM owed a cut before 7 of 50 seasons (the Giants' opening
+     54 among them) and made 13 cuts himself; biggest practice squad 18;
+     biggest save 300K (budget 700K); highest payroll 90.6 percent of the
+     cap; real men still 63 to 65 percent of the active rosters after five
+     seasons. (Re-measured 2026-10-01 after the follow up that stopped the
+     offseason cutting the GM's club; before it, 46 released and 93.5.)
      Section 7: 162 league states over three seeds and three seasons, 0
      different from the engine at 1d2e5d96.
 
@@ -99,6 +108,7 @@
      bigbench     every bench salary six times larger            -> 6
      sharedcopy   the finder's probe copy is the club itself     -> 6
      promoteover  a call up ignores the 53                        -> 6
+     autocut      the offseason cuts the GM's own club too         -> 6
      declinefloor a decline lifts a 61 back to the old floor 62    -> 6
      recordedit   the record moves one KC bench man to DEN        -> 1
      noheld       the bake ignores the spot check's held out list -> 1
@@ -128,6 +138,7 @@ const EXPECT = {
   deepold: [7],
   sharedcopy: [6],
   promoteover: [6],
+  autocut: [6],
   declinefloor: [6],
   bigbench: [6],
   recordedit: [1],
@@ -151,6 +162,10 @@ const ENGINE_SWAPS = {
   nocutdown: [[
     '  while (t.players.length > DEEP_ROSTER_MAX) {',
     '  while (false) {',
+  ]],
+  autocut: [[
+    '    if (t.rosterDepth === 2 && t.abbr !== userTeam) out.push(...cutDownToMax(t, league.freeAgents));',
+    '    if (t.rosterDepth === 2) out.push(...cutDownToMax(t, league.freeAgents));',
   ]],
   promoteover: [[
     '  if (idx < 0 || deepRosterRefusal(team)) return false;',
@@ -177,6 +192,7 @@ const NOTE = {
   deepold: 'the engine copy reads every club the full roster way, old saves included',
   sharedcopy: 'the engine copy hands the Trade Finder the clubs themselves instead of a copy',
   promoteover: 'the engine copy lets a call up through at 53',
+  autocut: 'the engine copy cuts the GM\'s own club down to 53 behind his back, as the round first shipped',
   declinefloor: 'the engine copy lifts any man under 62 back to 62 when he declines',
   bigbench: 'the depth data copy pays every bench man six times his salary',
   recordedit: 'the record moves one KC bench man to DEN, in memory',
@@ -773,19 +789,44 @@ const CLUBS = data.FO_TEAMS.map(t => t.abbr);
     ok(6, 'the cheap probe copy finds exactly the deep copy\'s offers', differ.length === 0 && probes > 0, differ.slice(0, 3).join(', '));
   }
 
-  const stats = { seasons: 0, cuts: 0, deadOk: 0, signs: 0, fullRefused: 0, tags: 0, drafted: 0, cutDowns: 0, promoted: 0, invented: 0, maxSave: 0, maxPs: 0, maxCapShare: 0, realLeft: [], draftCut: 0 };
-  const bad = { size: [], groups: [], dead: [], tagPool: [], drafted: [], invent: [], ids: [], cap: [], full: [] };
+  const stats = { seasons: 0, cuts: 0, deadOk: 0, signs: 0, fullRefused: 0, tags: 0, drafted: 0, cutDowns: 0, promoted: 0, invented: 0, maxSave: 0, maxPs: 0, maxCapShare: 0, realLeft: [], draftCut: 0, owedSeasons: 0, userCutDown: 0, lockedWeeks: 0 };
+  const bad = { size: [], groups: [], dead: [], tagPool: [], drafted: [], invent: [], ids: [], cap: [], full: [], enter: [], autocut: [] };
   for (let f = 0; f < 10; f += 1) {
     const seed = 8280 + f;
     const rng = lcg(seed);
-    const my = CLUBS[(f * 7) % CLUBS.length];
-    const lg = deepLeague(seed);
+    /* the first franchise is the Giants, who open at 54 (a starter on injured
+       reserve counts), so the opening cut a GM owes is exercised every run */
+    const my = f === 0 ? 'NYG' : CLUBS[(f * 7) % CLUBS.length];
+    /* Round 828 follow up: a league started the board's way, with the GM's club
+       named, so every other club cuts itself down before Week 1 and his never is */
+    const lg = engine.initLeague(lcg(seed), { depth: data.FO_DEPTH, userTeam: my });
+    for (const t of Object.values(lg.teams)) {
+      if (t.abbr !== my && t.players.length > engine.DEEP_ROSTER_MAX) bad.size.push(`${seed} opening ${t.abbr} ${t.players.length}`);
+    }
+    if ((lg.teams[my].releasedThisSeason ?? []).length) bad.autocut.push(`${seed} opening: ${lg.teams[my].releasedThisSeason.length} of the GM's men released`);
     for (const t of Object.values(lg.teams)) {
       if (engine.capUsed(t) > lg.cap) bad.cap.push(`${seed} ${t.abbr} opens at ${engine.capUsed(t)} of ${lg.cap}`);
     }
     for (let s = 0; s < 5; s += 1) {
       stats.seasons += 1;
       const me = () => lg.teams[my];
+      /* the GM owes his cut before he can play, as the board's lock says: the
+         week cannot be played (the board returns), so he cuts his lowest rated
+         men who do not start through the shared release until he is at 53 */
+      const owed = engine.deepOverLimit(me());
+      if (owed > 0) {
+        stats.owedSeasons += 1;
+        stats.lockedWeeks += 1;
+        for (let k = 0; k < owed; k += 1) {
+          const st = engine.starterIds(me());
+          const man = [...me().players].filter(p => !st.has(p.id) && !p.guaranteed).sort((a, b) => a.ovr - b.ovr || a.name.localeCompare(b.name))[0];
+          if (!man || !engine.releasePlayer(me(), lg.freeAgents, man.id)) break;
+          stats.userCutDown += 1;
+        }
+      }
+      for (const t of Object.values(lg.teams)) {
+        if (t.players.length > engine.DEEP_ROSTER_MAX) bad.enter.push(`${seed} season ${s} ${t.abbr} enters at ${t.players.length}`);
+      }
       for (let w = 0; w < engine.REGULAR_WEEKS; w += 1) {
         playWeek(lg, my, rng);
         if (w === 4) {
@@ -842,8 +883,13 @@ const CLUBS = data.FO_TEAMS.map(t => t.abbr);
       stats.cutDowns += news.cutDown.length;
       stats.promoted += news.promoted.length;
       /* every club at or under 53, every group able to start */
+      /* the GM's club is never cut behind his back: nobody on his release list
+         after the offseason (it was emptied at its start) and no cut news names him */
+      if ((me().releasedThisSeason ?? []).length || news.cutDown.some(d => d.team === my)) {
+        bad.autocut.push(`${seed} season ${s}: ${(me().releasedThisSeason ?? []).length} of the GM's men released by the offseason`);
+      }
       for (const t of Object.values(lg.teams)) {
-        if (t.players.length > engine.DEEP_ROSTER_MAX) bad.size.push(`${seed} season ${s} ${t.abbr} ${t.players.length}`);
+        if (t.abbr !== my && t.players.length > engine.DEEP_ROSTER_MAX) bad.size.push(`${seed} season ${s} ${t.abbr} ${t.players.length}`);
         stats.maxPs = Math.max(stats.maxPs, t.practice.length);
         stats.maxCapShare = Math.max(stats.maxCapShare, engine.capUsed(t) / lg.cap);
         if (engine.capUsed(t) > lg.cap) bad.cap.push(`${seed} season ${s} ${t.abbr} ${engine.capUsed(t)} of ${lg.cap}`);
@@ -876,7 +922,11 @@ const CLUBS = data.FO_TEAMS.map(t => t.abbr);
   console.log(`   ${stats.seasons} seasons: ${stats.cuts} cuts (${stats.deadOk} with the rule's dead money), ${stats.fullRefused} signings refused at 53, ${stats.signs} signings after making room, ${stats.tags} tags, ${stats.drafted} draftees`);
   console.log(`   offseasons: ${stats.promoted} called up off the practice squad, ${stats.invented} depth men invented, ${stats.cutDowns} released in the cut to 53 (${stats.draftCut} of them draftees); biggest practice squad ${stats.maxPs}; biggest save ${(stats.maxSave / 1024).toFixed(0)}K; highest payroll ${(stats.maxCapShare * 100).toFixed(1)} percent of the cap`);
   console.log(`   real men still on the active rosters after five seasons: ${stats.realLeft.map(x => (x * 100).toFixed(0)).join(", ")} percent by franchise`);
-  ok(6, 'every club is at or under 53 after every offseason', bad.size.length === 0, bad.size.slice(0, 3).join(', '));
+  console.log(`   the GM owed a cut before ${stats.owedSeasons} of ${stats.seasons} seasons and made ${stats.userCutDown} cuts himself to get to 53`);
+  ok(6, 'every computer club is at or under 53 at the opening and after every offseason', bad.size.length === 0, bad.size.slice(0, 3).join(', '));
+  ok(6, 'the GM\'s club is never cut without his action (the opening and every offseason)', bad.autocut.length === 0, bad.autocut.slice(0, 3).join(' | '));
+  ok(6, 'every club enters every season at or under 53, the GM after his own cut', bad.enter.length === 0, bad.enter.slice(0, 3).join(', '));
+  ok(6, 'a GM over the limit happened and cut down himself (the Giants open at 54)', stats.owedSeasons >= 1 && stats.userCutDown >= 1, `${stats.owedSeasons} seasons owed, ${stats.userCutDown} cuts`);
   ok(6, 'every club fields every group\'s starters after every offseason', bad.groups.length === 0, bad.groups.slice(0, 3).join(', '));
   ok(6, 'every cut costs the dead money the cuts module says', bad.dead.length === 0 && stats.cuts >= 40, `${stats.cuts} cuts; ${bad.dead.slice(0, 2).join(' | ')}`);
   ok(6, 'a full roster refuses a signing at 53', bad.full.length === 0 && stats.fullRefused >= 40, `${stats.fullRefused} refusals; ${bad.full.slice(0, 2).join(' | ')}`);
@@ -983,7 +1033,7 @@ if (CONTROL) {
     const line = summary ? summary[1].trim() : 'no summary line';
     console.log(`   vitest exit ${r.status}, ${line}`);
     ok(8, 'vitest exited zero', r.status === 0, out.split('\n').filter(l => /×|FAIL|AssertionError|Unable to find/.test(l)).slice(0, 8).join(' | '));
-    ok(8, 'all five board tests ran and passed', /\b5 passed\b/.test(line) && !/failed/.test(line), line);
+    ok(8, 'all six board tests ran and passed', /\b6 passed\b/.test(line) && !/failed/.test(line), line);
   }
 }
 

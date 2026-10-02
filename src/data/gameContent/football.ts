@@ -241,7 +241,7 @@ export const FOOTBALL_CONTENT: GameContentMap = {
       {
         heading: "The 53 man limit and the offseason refill",
         items: [
-          "Every offseason each position group is refilled to its real size. The club calls up its own practice squad first and only signs a generated depth man when the squad has nobody left at that spot. If the draft takes you over 53, the lowest rated men who do not start are released, dead money and all, and a starter never is.",
+          "Every offseason each position group is refilled to its real size. The club calls up its own practice squad first and only signs a generated depth man when the squad has nobody left at that spot. A computer club the draft takes over 53 releases its lowest rated men who do not start, dead money and all, never a starter. Your club is never cut behind your back: if your picks take you over 53, the board tells you how many you owe and Play waits until you have cut down yourself. The Giants open at 54, because a starter on injured reserve still counts, so a Giants GM owes one cut before Week 1.",
         ],
       },
       {
