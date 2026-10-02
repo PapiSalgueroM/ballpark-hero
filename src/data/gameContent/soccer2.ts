@@ -1172,7 +1172,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
       {
         heading: "Role fit and balance in the season sim",
         items: [
-          "Role fit: a player in a slot his recorded positions cover plays at full value. Next door, like a right back at left back, costs 2 rating points on him, another line 6, a keeper swap 14, averaged over the eleven.",
+          "Role fit: a player in a slot his recorded positions cover plays at full value. Next door, like a right back at left back, costs 2 rating points on him, averaged over the eleven. The slot check never lets anyone further out of position than that.",
           "Balance: no defensive midfielder in a CM or CDM slot costs the side 1, and a wide slot held by someone who is not a wide player, like a centre back at full back, costs 0.5 for that flank.",
           "The season report says what role fit, chemistry and balance were each worth in league points, by replaying the same season without each one.",
         ],

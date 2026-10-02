@@ -67,7 +67,7 @@ export function LineupHowToPlay({ open, onOpenChange }: LineupHowToPlayProps) {
             <h3 className="font-bold text-foreground mb-2">🧩 Fit, Chemistry and Balance</h3>
             <ul className="space-y-1.5 text-muted-foreground">
               <li>• Under the pitch, and again before you submit, three tiles show how your eleven fits together. The season sim plays all three on top of your squad rating</li>
-              <li>• <span className="text-foreground font-semibold">Role fit:</span> a man in a slot his recorded positions cover plays at full value. Next door (a right back at left back, say) costs 2 rating points on him, another line 6, a keeper swap 14, averaged over the eleven</li>
+              <li>• <span className="text-foreground font-semibold">Role fit:</span> a man in a slot his recorded positions cover plays at full value. Next door (a right back at left back, say) costs 2 rating points on him, averaged over the eleven. The slot check never lets anyone further out of position than that</li>
               <li>• <span className="text-foreground font-semibold">Chemistry:</span> two men standing next to each other on the pitch who are at the same club on our data add +0.6, from the same country +0.2, up to +2 for the side</li>
               <li>• <span className="text-foreground font-semibold">Balance:</span> no defensive midfielder in a CM or CDM slot costs 1. A wide slot held by someone who is not a wide player (a centre back at full back) costs 0.5 for that flank</li>
               <li>• Tap a tile to see exactly why, and Back to return</li>

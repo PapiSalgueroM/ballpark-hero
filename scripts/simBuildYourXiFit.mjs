@@ -52,7 +52,10 @@
         match the shared rule, role fit sits in [-14, 0], chemistry in
         [0, cap] and the cap binds on an eleven of one club and one country,
         balance in [-(holding + two flanks), 0], the total is the sum, and the
-        rules dialog states the same numbers the engine uses. In the season:
+        rules dialog states the same numbers the engine uses. It quotes no
+        price the game cannot charge: through the slot check every accepted
+        man grades natural or next door (every primary, slot and one position
+        history), so the dialog says nobody gets further out than that. In the season:
         each factor's worth replays (whatIfFinish on the same rolls) to the
         number printed, role fit and balance never gain points, chemistry
         never loses any, and the match rating is the paper rating plus the
@@ -92,6 +95,7 @@
      reach     neighbours reach 60 percent across.            section 2
      nocap     the chemistry cap is gone.                     section 3
      tileraw   the chemistry tile shows the uncapped sum.     section 3
+     nogate    the slot check takes anybody anywhere.         section 3
      leak      World XI's season gets a half point nudge.     section 4
      oldcrash  the worth tiles read a report's fit unguarded. section 5
 
@@ -164,6 +168,7 @@ const FILES = {
   wxi: path.join(ROOT, 'src', 'lib', 'worldXi.ts'),
   tiles: path.join(ROOT, 'src', 'components', 'lineup', 'XiFitBreakdown.tsx'),
   teams: path.join(ROOT, 'src', 'data', 'lineupTeams.ts'),
+  pf: path.join(ROOT, 'src', 'lib', 'positionFit.ts'),
 };
 const CONTROLS = {
   nofit: {
@@ -195,6 +200,12 @@ const CONTROLS = {
     from: 'const chemistryValue = Math.min(CHEMISTRY_CAP, raw);',
     to: 'const chemistryValue = raw;',
     note: 'the chemistry cap is gone; section 3 must go red',
+  },
+  nogate: {
+    sections: [3], file: 'pf',
+    from: '  if (fitsAllowed(primary, allowed, played)) return { ok: true };\n',
+    to: '  void fitsAllowed; return { ok: true };\n',
+    note: 'the slot check takes anybody anywhere, so the dialog line that nobody gets further out than next door is false; section 3 must go red',
   },
   tileraw: {
     sections: [3], file: 'tiles',
@@ -680,11 +691,37 @@ console.log(`   ${seasons.length} seasons replayed factor by factor, ${worthMove
   const rules = lf(fs.readFileSync(path.join(ROOT, 'src', 'components', 'lineup', 'LineupHowToPlay.tsx'), 'utf8'))
     .replace(/\/\*[\s\S]*?\*\//g, '').replace(/\{\/\*[\s\S]*?\*\/\}/g, '').replace(/^\s*\/\/.*$/gm, '');
   const stated = [
-    `${FIT_PENALTY.family} rating points`, `another line ${FIT_PENALTY.wrong}`, `keeper swap ${FIT_PENALTY.keeper}`,
+    `${FIT_PENALTY.family} rating points`, 'never lets anyone further out of position',
     `+${round1(3 * CHEMISTRY_SCALE)}`, `+${round1(CHEMISTRY_SCALE)}`, `+${CHEMISTRY_CAP}`,
     `costs ${HOLDING_PRICE}`, `costs ${WIDTH_PRICE}`,
   ];
   for (const s of stated) if (!rules.includes(s)) fail(`the rules dialog never says "${s}"`);
+  /* A price the game can never charge is not a rule: the same dialog says a
+     keeper only ever goes in goal. */
+  for (const s of ['keeper swap', `another line ${FIT_PENALTY.wrong}`]) if (rules.includes(s)) fail(`the rules dialog quotes "${s}", a price the slot check never lets happen`);
+}
+/* And the claim behind that line, measured: through the game's own slot check
+   (checkLineupPick, with and without one verified extra position), every man
+   the game accepts grades natural or next door, never wrong or keeper. Every
+   primary, every slot role, every one position history. */
+{
+  const ROLES = Object.keys(pf.SLOT_ALLOWED_BY_ROLE);
+  const RAW = { GK: 'Goalkeeper', CB: 'Centre-Back', LB: 'Left-Back', RB: 'Right-Back', CDM: 'Defensive Midfield', CM: 'Central Midfield', CAM: 'Attacking Midfield', LM: 'Left Midfield', RM: 'Right Midfield', LW: 'Left Winger', RW: 'Right Winger', ST: 'Centre-Forward' };
+  const norm = raw => Object.keys(RAW).find(k => RAW[k] === raw) ?? null;
+  const taken = { natural: 0, family: 0, wrong: 0, keeper: 0 };
+  for (const primary of Object.keys(RAW)) {
+    for (const role of ROLES) {
+      for (const extra of [null, ...pf.ALL_POSITIONS]) {
+        const played = extra ? [extra] : undefined;
+        if (!pf.checkLineupPick('Probe', role, role, RAW[primary], norm, played).ok) continue;
+        const g = gradeFit([primary, ...(played ?? [])], pf.SLOT_ALLOWED_BY_ROLE[role]);
+        taken[g] += 1;
+        if (g === 'wrong' || g === 'keeper') fail(`the slot check takes a ${primary}${extra ? ` with ${extra} history` : ''} at ${role}, which grades ${g}`);
+      }
+    }
+  }
+  console.log(`   through the slot check: ${taken.natural} natural, ${taken.family} next door, ${taken.wrong} wrong line, ${taken.keeper} keeper`);
+  if (taken.family < 10) fail(`only ${taken.family} next door picks get through the slot check, too few for the claim to mean anything`);
 }
 
 /* ======================= 4) World XI unchanged ======================= */

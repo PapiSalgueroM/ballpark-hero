@@ -125,7 +125,10 @@ export function XiFitDetail({ kind, breakdown: b, slots, labels }: DetailProps) 
         ? 'Every man is in a slot his recorded positions cover, so all eleven play at full value.'
         : 'So far every man is in a slot his recorded positions cover.');
     }
-    rule = `A slot his positions cover costs nothing. Next door costs ${FIT_PENALTY.family} on that man, another line ${FIT_PENALTY.wrong}, a keeper swap ${FIT_PENALTY.keeper}, averaged over the eleven. Side total ${signed(b.roleFit.value)}.`;
+    /* The slot check (checkLineupPick) refuses anyone further out than next
+       door, so the shared table's other two prices never happen here and the
+       rule does not quote them. */
+    rule = `A slot his positions cover costs nothing. Next door costs ${FIT_PENALTY.family} on that man, averaged over the eleven. Side total ${signed(b.roleFit.value)}.`;
   } else if (kind === 'chemistry') {
     for (const l of b.chemistry.links) {
       lines.push(l.type === 'club'
