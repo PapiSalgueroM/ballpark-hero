@@ -38,13 +38,13 @@
 
 import type { CareerState } from "./nflMyCareer";
 import {
-  receiveInboxTexts as receiveInboxTextsFor,
+  receiveCalendarInboxTexts as receiveCalendarInboxTextsFor,
   deliverInboxTexts as deliverInboxTextsFor,
   answerInboxMessage as answerInboxMessageFor,
   unreadInboxCount as unreadInboxCountFor,
+  inboxStream,
 } from "./careerInbox";
 import type { InboxSport, InboxMessageDef, InboxMessage, InboxBeat } from "./careerInbox";
-import { keyedRng } from "./keyedRng";
 
 const clamp = (v: number, lo: number, hi: number) => Math.max(lo, Math.min(hi, v));
 
@@ -497,50 +497,38 @@ export const NFL_INBOX: InboxSport<CareerState> = {
  * before the last year of a deal, which is when that conversation happens
  * (and when the extension card is about to ask about it).
  *
- * `goesOn` is false when this season was the career's last (the engine
- * decides that right after the inbox runs, so progress passes it in): a beat
- * about a season still to come (`ahead` on the calendar) never happened for
- * a player who is about to retire.
+ * Round 822: a career that ends this season never has a beat about a season
+ * still to come (`ahead` on the calendar). That gate used to live here and in
+ * receiveNflInboxTexts; it lives in careerInbox.ts's receiveCalendarInboxTexts
+ * now, shared with the NBA, MLB and NHL calendars, so this reader only says
+ * what the season had.
  */
-export function nflSeasonBeats(c: CareerState, goesOn = true): string[] {
+export function nflSeasonBeats(c: CareerState): string[] {
   const line = c.seasons[c.seasons.length - 1];
   if (!line || line.teamResult === "SUSPENDED") return ["offseason"];
   const beats = ["camp", "bye", "deadline"];
   if ((line.poGames ?? 0) > 0) beats.push("playoffs");
   beats.push("offseason");
   if (!c.retired && c.contractYears === 1) beats.push("contract");
-  if (goesOn && !c.retired) return beats;
-  return beats.filter(id => !NFL_CALENDAR.find(b => b.id === id)?.ahead);
-}
-
-/**
- * Round 796: the inbox's own random stream, keyed to the save and the
- * moment. It used to draw from the season's stream, which meant every text
- * the bank gained or lost shifted every draw after it (the next camp, the
- * awards) and reshuffled every seeded NFL career. Now the season's stream
- * never sees the inbox: the same career at the same point always gets the
- * same texts, and scripts/simCareerInboxBeats.mjs section 9 plays seeded
- * careers with the inbox delivering and with it shut and requires every
- * season to come out identical.
- */
-function nflInboxRng(c: CareerState, moment: string): () => number {
-  return keyedRng(`${c.name}|${c.pos}|${c.team}|${c.draftPick}|${c.rival?.name ?? ""}|${c.year}|${c.seasons.length}|${(c.phoneUsedIds ?? []).length}|inbox-${moment}`);
+  return beats;
 }
 
 /** One season of the inbox. NFL has no youth phase, so it always answers
  *  "pro"; every template above is gated "any" or by age rather than phase
  *  for exactly that reason. `goesOn` false (the career ends this season)
  *  keeps every `ahead` beat and `ahead` text out of it. With no `rng` it
- *  draws from nflInboxRng, which is what the season tick does. */
+ *  draws from the inbox's own keyed stream (careerInbox.ts's inboxStream,
+ *  Round 796's nflInboxRng moved there unchanged), never the season's:
+ *  scripts/simCareerInboxBeats.mjs section 9 plays seeded careers with the
+ *  inbox delivering and with it shut and requires every season identical. */
 export function receiveNflInboxTexts(c: CareerState, goesOn = true, rng?: () => number): InboxMessage[] {
-  const sport = goesOn && !c.retired ? NFL_INBOX : { ...NFL_INBOX, pool: NFL_INBOX.pool.filter(t => !t.ahead) };
-  return receiveInboxTextsFor(c, "pro", sport, rng ?? nflInboxRng(c, "season"), nflSeasonBeats(c, goesOn));
+  return receiveCalendarInboxTextsFor(c, "pro", NFL_INBOX, rng ?? inboxStream(c, "season"), nflSeasonBeats(c), goesOn && !c.retired);
 }
 
 /** Round 796: draft night. The text that lands the moment your name is
  *  called, before a down is played, so no mood drift: no season has passed. */
 export function nflDraftNightInbox(c: CareerState, rng?: () => number): InboxMessage[] {
-  return deliverInboxTextsFor(c, "pro", NFL_INBOX, rng ?? nflInboxRng(c, "draft"), ["draft"]);
+  return deliverInboxTextsFor(c, "pro", NFL_INBOX, rng ?? inboxStream(c, "draft"), ["draft"]);
 }
 
 export function nflUnreadInboxCount(c: CareerState): number {

@@ -108,6 +108,8 @@ export const MLB_GAUNTLET_CONFIG: GauntletConfig<MlbGauntletPlayer> = {
   squadNoun: 'lineup',
   slotsPhrase: 'spots on the lineup card (the nine, a starter and a closer)',
   tiebreak: { phrase: 'extra innings, and more of them until somebody wins', won: 'Won in extra innings', lost: 'Lost in extra innings' },
+  /* Round 826: the tenth inning settling it is still extra innings. */
+  extraTime: { won: 'Won in extra innings', lost: 'Lost in extra innings' },
   subtitleOf: p => p.team,
   positionOf: p => p.pos,
   /* The pool runs 64 to 97 on real production percentiles, so these floors sit

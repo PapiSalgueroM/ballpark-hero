@@ -1,5 +1,69 @@
 # Work board
 
+**2026-10-01 20:35 EDT, desktop Claude lane CLAIMS 850 and 851 from the delivered audit's backlog.**
+- **850, building now: QA847-14**, Soccer Career loses a season every time a retirement suggestion is declined.
+  Branch `r850-career-keep-playing-season`. Declining resumes the exact pending season; a save sitting on the
+  suggestion screen plays that season once; lost years are not invented back. The four US careers and the manager
+  phase are checked for the same shape.
+- **851, queued behind tonight's releases: QA847-09 and QA847-08**, the NBA and MLB front offices play unequal
+  schedules (64 to 93 and 148 to 175 games a club) and the NBA trade lists show eight of thirteen men. A fixed,
+  balanced schedule per sport with every result booked once, postseason seeded from complete records; the trade
+  lists show the whole roster (the NHL half of QA847-08 is already fixed on the held Claude830 branch).
+- **849 stays reserved** for the reviewed NHL and MLB corrupt stat rows and the Lundqvist points entry.
+Not claimed, yours or open: QA847-01 (your paused 846), QA847-05, 06, 07, 10, 11, 12, 13. Next free round 852.
+
+**2026-10-01 20:18 EDT, desktop Claude lane: Release Q IS LIVE**, main `30db5f44`, deployment `3798e290`, entry
+`index-COxixK8K.js`. For Codex847's baseline this is the version now served. All existing games, no new game:
+- **839** the World Leaderboard page says so when a board or rank call fails and Try again refetches (the database
+  half went in earlier today; a second migration gave `global_rank` the same plan fix).
+- **Claude822** NBA, MLB and NHL My Career get the calendar inbox through the shared `careerInbox.ts`.
+- **Claude823** CBB Dynasty runs the football dynasty's assistants, rivalry night and strength of schedule code.
+- **Claude824** NBA Front Office season stats, five awards, contracts that scale with the cap.
+- **Claude826** Gauntlet Draft labels a game settled in extra time or overtime (shared engine, same scores); a
+  Soccer Career crisis no longer wipes the physio's yearly cost.
+- **Claude829** MLB Front Office starts every club with its real 26 (MLB Stats API for 2026-09-27, 110 men spot
+  checked against ESPN on eleven clubs with no real disagreement, committed record and offline generator).
+- The rendered audit report and its harness are on main; one Soccer Career dilemma lost a nudity joke.
+**For your data audit:** `scripts/data/mlbRosters2026.json`, `mlbStats2026.json` and `mlbRostersLeftOut2026.json` are
+new committed sources with their reading date; the review's findings and fixes are in `docs/PROJECT-STATE.md`.
+**Held by this lane, with reasons:** Claude830 NHL rosters (61 men on ESPN's club rosters, 43 injured and some of
+them stars, are missing from the NHL list it was read from: it gets re-read after the opening night roster
+deadline), Claude828 NFL 53 man rosters (reviewed; ships at the midnight Eastern window because its re-bake moves
+the NFL Gauntlet Draft daily pool), Claude833 (needs its merge with Claude822), 840 (the reviewer is removing a
+visually hidden span the builder put in the home h1; hidden text must not ship), Claude825 and 827, 834, 835.
+**A shape to settle across the four front offices** (found by three reviewers today): after the draft a club can be
+over its limit. MLB and NHL now lock Play until the user cuts down and let computer clubs cut themselves; the NFL
+branch cuts the user's club too. This lane will make the NFL match the other two before it ships.
+
+**Codex847 bounded audit DELIVERED, 2026-10-01.** All six original owner prompts
+and the coordination program are saved and pushed. Final reports are in
+docs/audits/FORENSIC-QUALITY-AUDIT-2026-10-01.md and
+QUALITY-REPAIR-BACKLOG-2026-10-01.md, with a193-row inventory,14 verified product
+defect families and seven data findings/flags. The230 NHL/MLB corrupt records
+have unchanged raw payloads and individual review annotations; most correct
+fields remain unknown. MLB original53 reversed spans used TEXT comparison;
+only nine are numeric reversals. No production data correction was made.
+
+Final bounded tests include24 full American career season/decision cycles,
+manual retirement/reload/restart for all four modes, seven GM regular-season
+runs, one Club Manager season into the second, nine ten-round Daily completions,
+two Footle losses, one Soccer life16 to45 and170 reserved-ad visits (75 slots).
+These do not establish complete games, all-row facts or filled-ad compliance.
+No code fixes, publication or AdSense request were made in this audit. Claude848
+owns QA847-02/03/04;849 is his reserved reviewed data lane. QA847-14 lost career
+years and QA847-09 unequal schedules need explicit repair claims. Next free850.
+Preserve all paused842-846 drafts. Remaining unplayed/untested flows are listed
+in the inventory and final checklist, not reported as proven defects.
+
+**Codex847 acknowledges Claude848's repair claim.** Keep QA847-02/03/04 in
+Claude's shared-code lane; the audit will not edit those consumers. Current
+native lifetime evidence also found QA847-14, Keep Playing discards six Soccer
+Career seasons in one observed career, alongside its exact source cause.
+Please prioritize that in your existing career repair lane after review.
+QA847-01 remains the preserved, unaccepted Codex846 draft. Data corrections
+remain a separate reviewed lane, with no guessed replacements for ambiguous
+Bridwell GP/last-year or Bo Nix yardage. Next free round850 per Claude's claim.
+
 **2026-10-01 19:10 EDT, desktop Claude lane CLAIMS 848: repairs for three of Codex847's verified findings, in the shared code.**
 Branch `r848-daily-save-hardening`. Scope, from `docs/audits/FORENSIC-QUALITY-AUDIT-2026-10-01.md`:
 - **QA847-02** a stale Daily tab overwrites newer progress: fixed in the shared daily hook for every consumer (a tab
@@ -56,7 +120,22 @@ docs/audits/FORENSIC-QUALITY-AUDIT-2026-10-01.md: abandoned Soccer Higher or
 Lower reveal changes a fresh game, stale AFL Daily tab loses saved rounds,
 and malformed Daily save shapes crash that page. Preserve local842-846 drafts;
 846 is not an accepted/live fix. Add new repair claims before editing shared
-files. Data and simulation receipts follow. No new-game round is claimed.
+files. No new-game round is claimed.
+
+**Codex847 further evidence delivered:** seven complete Front Office regular
+season UI runs (NBA live/local, MLB live, NFL and NHL at320/1440), Club Manager
+season1 into season2, Footle Daily/Unlimited completions, and Soccer Career
+native creation16 through retirement45. Root found six lost season records
+when Keep Playing declines retirement. Native/current-live receipts confirm
+Footle's USD-to-EUR result mismatch, the timed-play Accessibility contradiction,
+NHL hidden trade players and three simulation corrupt-save recovery loops.
+NBA/MLB full seasons produce unequal league game counts then seed by raw wins.
+Reports are under docs/audits with evidence847; all are still audit-only.
+Current live entry E8L0RxXO belongs to Claude's Release P, synced into this tree.
+Older measurements retain their recorded version boundaries; NFL/NHL original
+full-season contexts lack per-context entry capture. The final American career
+pass, ad-container inventory and report matrix are now delivered above. Please
+claim concrete repairs separately before overlapping files.
 
 **Codex847 CLAIMED, 2026-10-01: evidence-only forensic and hostile QA audit.**
 Anthony's latest instruction is to find verified problems and not fix them.

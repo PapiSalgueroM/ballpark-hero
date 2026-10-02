@@ -1,0 +1,3548 @@
+{
+ "generatedBy": "scripts/genMlbFrontOfficeRoster.mjs",
+ "rosterDate": "2026-09-27",
+ "rule": "Everyone on a club's 40 man list on the record date who is not in its shipped 26: optioned to the minors, or outside the 13 position players or 13 pitchers by 2026 playing time.",
+ "total": 580,
+ "clubs": {
+  "ARI": [
+   {
+    "id": 640462,
+    "name": "A.J. Puk",
+    "status": "D60",
+    "reason": "outside the 13 pitchers: 0 starts and 0 outs in 2026"
+   },
+   {
+    "id": 656976,
+    "name": "Pavin Smith",
+    "status": "A",
+    "reason": "outside the 13 position players: 122 plate appearances in 2026"
+   },
+   {
+    "id": 669203,
+    "name": "Corbin Burnes",
+    "status": "D15",
+    "reason": "outside the 13 pitchers: 3 starts and 31 outs in 2026"
+   },
+   {
+    "id": 669704,
+    "name": "Kade Strowd",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 672629,
+    "name": "Gerardo Carrillo",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 679885,
+    "name": "Justin Martinez",
+    "status": "A",
+    "reason": "outside the 13 pitchers: 0 starts and 40 outs in 2026"
+   },
+   {
+    "id": 682988,
+    "name": "Tyler Locklear",
+    "status": "D60",
+    "reason": "outside the 13 position players: 42 plate appearances in 2026"
+   },
+   {
+    "id": 683352,
+    "name": "Mitch Bratt",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 684442,
+    "name": "Kohl Drake",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 685314,
+    "name": "Andrew Saalfrank",
+    "status": "D60",
+    "reason": "outside the 13 pitchers: 0 starts and 0 outs in 2026"
+   },
+   {
+    "id": 686228,
+    "name": "Juan Burgos",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 686796,
+    "name": "Blake Walston",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 691009,
+    "name": "Dylan Ray",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 691441,
+    "name": "Cristian Mena",
+    "status": "D60",
+    "reason": "outside the 13 pitchers: 0 starts and 0 outs in 2026"
+   },
+   {
+    "id": 694371,
+    "name": "Tommy Troy",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 694410,
+    "name": "LuJames Groover",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 703615,
+    "name": "Jose Cabrera",
+    "status": "A",
+    "reason": "outside the 13 pitchers: 5 starts and 85 outs in 2026"
+   }
+  ],
+  "ATH": [
+   {
+    "id": 621139,
+    "name": "Brooks Kriske",
+    "status": "D60",
+    "reason": "outside the 13 pitchers: 0 starts and 8 outs in 2026"
+   },
+   {
+    "id": 643410,
+    "name": "Mark Leiter Jr.",
+    "status": "D60",
+    "reason": "outside the 13 pitchers: 0 starts and 101 outs in 2026"
+   },
+   {
+    "id": 656240,
+    "name": "Scott Blewett",
+    "status": "A",
+    "reason": "outside the 13 pitchers: 0 starts and 112 outs in 2026"
+   },
+   {
+    "id": 661531,
+    "name": "Brian Serven",
+    "status": "A",
+    "reason": "outside the 13 position players: 85 plate appearances in 2026"
+   },
+   {
+    "id": 664129,
+    "name": "Geoff Hartlieb",
+    "status": "A",
+    "reason": "outside the 13 pitchers: 0 starts and 84 outs in 2026"
+   },
+   {
+    "id": 667670,
+    "name": "Brent Rooker",
+    "status": "D60",
+    "reason": "outside the 13 position players: 203 plate appearances in 2026"
+   },
+   {
+    "id": 671286,
+    "name": "Johnathan Rodríguez",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 672016,
+    "name": "Denzel Clarke",
+    "status": "A",
+    "reason": "outside the 13 position players: 87 plate appearances in 2026"
+   },
+   {
+    "id": 680684,
+    "name": "Gunnar Hoglund",
+    "status": "D60",
+    "reason": "outside the 13 pitchers: 0 starts and 0 outs in 2026"
+   },
+   {
+    "id": 680723,
+    "name": "Drew Rom",
+    "status": "A",
+    "reason": "outside the 13 pitchers: 0 starts and 53 outs in 2026"
+   },
+   {
+    "id": 683021,
+    "name": "Michael Stefanic",
+    "status": "A",
+    "reason": "outside the 13 position players: 29 plate appearances in 2026"
+   },
+   {
+    "id": 683155,
+    "name": "Joey Estes",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 685801,
+    "name": "Hunter Bigge",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 686751,
+    "name": "Seth Johnson",
+    "status": "A",
+    "reason": "outside the 13 pitchers: 1 starts and 101 outs in 2026"
+   },
+   {
+    "id": 687231,
+    "name": "Darell Hernaiz",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 692013,
+    "name": "Henry Baez",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 695034,
+    "name": "Kade Morris",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 695720,
+    "name": "Tommy White",
+    "status": "A",
+    "reason": "outside the 13 position players: 195 plate appearances in 2026"
+   },
+   {
+    "id": 696522,
+    "name": "Hayden Juenger",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 697812,
+    "name": "Joe Rock",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 804556,
+    "name": "Braden Nett",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 806960,
+    "name": "Luis Morales",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 811965,
+    "name": "Joshua Kuroda-Grauer",
+    "status": "A",
+    "reason": "outside the 13 position players: 74 plate appearances in 2026"
+   },
+   {
+    "id": 814305,
+    "name": "Yunior Tur",
+    "status": "A",
+    "reason": "outside the 13 pitchers: 0 starts and 38 outs in 2026"
+   }
+  ],
+  "ATL": [
+   {
+    "id": 571657,
+    "name": "Kyle Farmer",
+    "status": "A",
+    "reason": "outside the 13 position players: 19 plate appearances in 2026"
+   },
+   {
+    "id": 622694,
+    "name": "Elieser Hernández",
+    "status": "A",
+    "reason": "outside the 13 pitchers: 0 starts and 36 outs in 2026"
+   },
+   {
+    "id": 641729,
+    "name": "Joe Jiménez",
+    "status": "D60",
+    "reason": "outside the 13 pitchers: 0 starts and 0 outs in 2026"
+   },
+   {
+    "id": 663158,
+    "name": "Robert Suarez",
+    "status": "A",
+    "reason": "outside the 13 pitchers: 0 starts and 102 outs in 2026"
+   },
+   {
+    "id": 666214,
+    "name": "Joey Wentz",
+    "status": "D60",
+    "reason": "outside the 13 pitchers: 0 starts and 0 outs in 2026"
+   },
+   {
+    "id": 675627,
+    "name": "Michael Grove",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 675916,
+    "name": "James Karinchak",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 676568,
+    "name": "Ricky Vanasco",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 678061,
+    "name": "Ray Kerr",
+    "status": "A",
+    "reason": "outside the 13 pitchers: 1 starts and 55 outs in 2026"
+   },
+   {
+    "id": 680577,
+    "name": "DaShawn Keirsey Jr.",
+    "status": "A",
+    "reason": "outside the 13 position players: 5 plate appearances in 2026"
+   },
+   {
+    "id": 680885,
+    "name": "Spencer Schwellenbach",
+    "status": "D60",
+    "reason": "outside the 13 pitchers: 0 starts and 0 outs in 2026"
+   },
+   {
+    "id": 682989,
+    "name": "Victor Mederos",
+    "status": "A",
+    "reason": "outside the 13 pitchers: 0 starts and 103 outs in 2026"
+   },
+   {
+    "id": 686628,
+    "name": "Blake Burkhalter",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 691548,
+    "name": "Rolddy Muñoz",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 694462,
+    "name": "Hurston Waldrep",
+    "status": "D60",
+    "reason": "outside the 13 pitchers: 2 starts and 32 outs in 2026"
+   },
+   {
+    "id": 700363,
+    "name": "AJ Smith-Shawver",
+    "status": "A",
+    "reason": "outside the 13 pitchers: 5 starts and 94 outs in 2026"
+   },
+   {
+    "id": 700413,
+    "name": "Tyler Uberstine",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 702566,
+    "name": "Owen Murphy",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 805347,
+    "name": "Jim Jarvis",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   }
+  ],
+  "BAL": [
+   {
+    "id": 621107,
+    "name": "Zach Eflin",
+    "status": "D60",
+    "reason": "outside the 13 pitchers: 1 starts and 11 outs in 2026"
+   },
+   {
+    "id": 642585,
+    "name": "Félix Bautista",
+    "status": "A",
+    "reason": "outside the 13 pitchers: 0 starts and 5 outs in 2026"
+   },
+   {
+    "id": 650968,
+    "name": "Yohel Pozo",
+    "status": "A",
+    "reason": "outside the 13 position players: 62 plate appearances in 2026"
+   },
+   {
+    "id": 663624,
+    "name": "Ryan Mountcastle",
+    "status": "D60",
+    "reason": "outside the 13 position players: 15 plate appearances in 2026"
+   },
+   {
+    "id": 664854,
+    "name": "Ryan Helsley",
+    "status": "D60",
+    "reason": "outside the 13 pitchers: 0 starts and 46 outs in 2026"
+   },
+   {
+    "id": 669211,
+    "name": "Keegan Akin",
+    "status": "D60",
+    "reason": "outside the 13 pitchers: 2 starts and 76 outs in 2026"
+   },
+   {
+    "id": 671382,
+    "name": "Cameron Foster",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 676051,
+    "name": "Codi Heuer",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 676059,
+    "name": "Jordan Westburg",
+    "status": "D60",
+    "reason": "outside the 13 position players: 0 plate appearances in 2026"
+   },
+   {
+    "id": 676480,
+    "name": "José Barrero",
+    "status": "A",
+    "reason": "outside the 13 position players: 6 plate appearances in 2026"
+   },
+   {
+    "id": 676742,
+    "name": "Cam Sanders",
+    "status": "A",
+    "reason": "outside the 13 pitchers: 0 starts and 88 outs in 2026"
+   },
+   {
+    "id": 677008,
+    "name": "Heston Kjerstad",
+    "status": "A",
+    "reason": "outside the 13 position players: 19 plate appearances in 2026"
+   },
+   {
+    "id": 677956,
+    "name": "Rece Hinds",
+    "status": "A",
+    "reason": "outside the 13 position players: 71 plate appearances in 2026"
+   },
+   {
+    "id": 681047,
+    "name": "Christian Franklin",
+    "status": "A",
+    "reason": "outside the 13 position players: 59 plate appearances in 2026"
+   },
+   {
+    "id": 681882,
+    "name": "Colin Selby",
+    "status": "D60",
+    "reason": "outside the 13 pitchers: 0 starts and 0 outs in 2026"
+   },
+   {
+    "id": 682274,
+    "name": "Yaramil Hiraldo",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 687952,
+    "name": "Christian Encarnacion-Strand",
+    "status": "A",
+    "reason": "outside the 13 position players: 213 plate appearances in 2026"
+   },
+   {
+    "id": 691172,
+    "name": "Yosver Zulueta",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 694346,
+    "name": "Trey Gibson",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 700249,
+    "name": "Cade Povich",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 701655,
+    "name": "Reed Trimble",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 801725,
+    "name": "Luis De León",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   }
+  ],
+  "BOS": [
+   {
+    "id": 642201,
+    "name": "Eli White",
+    "status": "D60",
+    "reason": "outside the 13 position players: 204 plate appearances in 2026"
+   },
+   {
+    "id": 643396,
+    "name": "Isiah Kiner-Falefa",
+    "status": "A",
+    "reason": "outside the 13 position players: 183 plate appearances in 2026"
+   },
+   {
+    "id": 656557,
+    "name": "Tanner Houck",
+    "status": "A",
+    "reason": "outside the 13 pitchers: 1 starts and 9 outs in 2026"
+   },
+   {
+    "id": 663330,
+    "name": "Jahmai Jones",
+    "status": "A",
+    "reason": "outside the 13 position players: 181 plate appearances in 2026"
+   },
+   {
+    "id": 663853,
+    "name": "Romy Gonzalez",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 670103,
+    "name": "Raymond Burgos",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 670912,
+    "name": "Johan Oviedo",
+    "status": "D60",
+    "reason": "outside the 13 pitchers: 0 starts and 11 outs in 2026"
+   },
+   {
+    "id": 671213,
+    "name": "Triston Casas",
+    "status": "D60",
+    "reason": "outside the 13 position players: 0 plate appearances in 2026"
+   },
+   {
+    "id": 676710,
+    "name": "Kutter Crawford",
+    "status": "D60",
+    "reason": "outside the 13 pitchers: 0 starts and 0 outs in 2026"
+   },
+   {
+    "id": 676979,
+    "name": "Garrett Crochet",
+    "status": "D60",
+    "reason": "outside the 13 pitchers: 6 starts and 90 outs in 2026"
+   },
+   {
+    "id": 677161,
+    "name": "Zack Kelly",
+    "status": "D60",
+    "reason": "outside the 13 pitchers: 0 starts and 49 outs in 2026"
+   },
+   {
+    "id": 678011,
+    "name": "Anthony Seigler",
+    "status": "D10",
+    "reason": "outside the 13 position players: 173 plate appearances in 2026"
+   },
+   {
+    "id": 681508,
+    "name": "Mickey Gasper",
+    "status": "D10",
+    "reason": "outside the 13 position players: 225 plate appearances in 2026"
+   },
+   {
+    "id": 681544,
+    "name": "Wyatt Olds",
+    "status": "A",
+    "reason": "outside the 13 pitchers: 0 starts and 47 outs in 2026"
+   },
+   {
+    "id": 681987,
+    "name": "Nate Eaton",
+    "status": "A",
+    "reason": "outside the 13 position players: 60 plate appearances in 2026"
+   },
+   {
+    "id": 686580,
+    "name": "Justin Slaten",
+    "status": "D15",
+    "reason": "outside the 13 pitchers: 0 starts and 94 outs in 2026"
+   },
+   {
+    "id": 691907,
+    "name": "Tsung-Che Cheng",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 692225,
+    "name": "Kristian Campbell",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 699151,
+    "name": "Jedixson Paez",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 700842,
+    "name": "Eduardo Rivera",
+    "status": "D60",
+    "reason": "outside the 13 pitchers: 3 starts and 30 outs in 2026"
+   },
+   {
+    "id": 701719,
+    "name": "Tyler Samaniego",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   }
+  ],
+  "CHC": [
+   {
+    "id": 571946,
+    "name": "Shelby Miller",
+    "status": "D60",
+    "reason": "outside the 13 pitchers: 0 starts and 0 outs in 2026"
+   },
+   {
+    "id": 592122,
+    "name": "Tyler Austin",
+    "status": "D60",
+    "reason": "outside the 13 position players: 0 plate appearances in 2026"
+   },
+   {
+    "id": 621053,
+    "name": "Tyler Ferguson",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 640451,
+    "name": "Hunter Harvey",
+    "status": "D60",
+    "reason": "outside the 13 pitchers: 0 starts and 12 outs in 2026"
+   },
+   {
+    "id": 657006,
+    "name": "Justin Steele",
+    "status": "D60",
+    "reason": "outside the 13 pitchers: 0 starts and 0 outs in 2026"
+   },
+   {
+    "id": 663423,
+    "name": "Trent Thornton",
+    "status": "D15",
+    "reason": "outside the 13 pitchers: 0 starts and 145 outs in 2026"
+   },
+   {
+    "id": 664208,
+    "name": "Phil Maton",
+    "status": "D60",
+    "reason": "outside the 13 pitchers: 0 starts and 83 outs in 2026"
+   },
+   {
+    "id": 665795,
+    "name": "Edward Cabrera",
+    "status": "FME",
+    "reason": "list status FME on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 666129,
+    "name": "Braxton Garrett",
+    "status": "A",
+    "reason": "outside the 13 pitchers: 2 starts and 28 outs in 2026"
+   },
+   {
+    "id": 668970,
+    "name": "Gavin Hollowell",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 672356,
+    "name": "Gabriel Arias",
+    "status": "A",
+    "reason": "outside the 13 position players: 149 plate appearances in 2026"
+   },
+   {
+    "id": 681151,
+    "name": "Jayden Murray",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 681230,
+    "name": "BJ Murray Jr.",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 681799,
+    "name": "Ethan Roberts",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 681909,
+    "name": "Justin Dean",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 682634,
+    "name": "Kevin Alcántara",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 687863,
+    "name": "Porter Hodge",
+    "status": "D60",
+    "reason": "outside the 13 pitchers: 0 starts and 0 outs in 2026"
+   },
+   {
+    "id": 687924,
+    "name": "Julian Aguiar",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 690990,
+    "name": "Cade Horton",
+    "status": "D60",
+    "reason": "outside the 13 pitchers: 2 starts and 22 outs in 2026"
+   },
+   {
+    "id": 694037,
+    "name": "Daniel Palencia",
+    "status": "A",
+    "reason": "outside the 13 pitchers: 0 starts and 89 outs in 2026"
+   },
+   {
+    "id": 696136,
+    "name": "Jordan Wicks",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 701649,
+    "name": "James Triantos",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 702303,
+    "name": "Riley Martin",
+    "status": "D60",
+    "reason": "outside the 13 pitchers: 1 starts and 25 outs in 2026"
+   }
+  ],
+  "CHW": [
+   {
+    "id": 502054,
+    "name": "Tommy Pham",
+    "status": "A",
+    "reason": "outside the 13 position players: 35 plate appearances in 2026"
+   },
+   {
+    "id": 663698,
+    "name": "Joey Bart",
+    "status": "D10",
+    "reason": "outside the 13 position players: 128 plate appearances in 2026"
+   },
+   {
+    "id": 668670,
+    "name": "Jake Rogers",
+    "status": "PL",
+    "reason": "list status PL on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 669684,
+    "name": "Chris Murphy",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 672860,
+    "name": "Prelander Berroa",
+    "status": "D60",
+    "reason": "outside the 13 pitchers: 0 starts and 0 outs in 2026"
+   },
+   {
+    "id": 673929,
+    "name": "Jordan Leasure",
+    "status": "D60",
+    "reason": "outside the 13 pitchers: 1 starts and 56 outs in 2026"
+   },
+   {
+    "id": 678024,
+    "name": "Mike Vasil",
+    "status": "D60",
+    "reason": "outside the 13 pitchers: 0 starts and 0 outs in 2026"
+   },
+   {
+    "id": 678577,
+    "name": "Junior Perez",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 681066,
+    "name": "Ky Bush",
+    "status": "D60",
+    "reason": "outside the 13 pitchers: 0 starts and 0 outs in 2026"
+   },
+   {
+    "id": 681343,
+    "name": "Shane Smith",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 681460,
+    "name": "Brooks Baldwin",
+    "status": "D60",
+    "reason": "outside the 13 position players: 0 plate appearances in 2026"
+   },
+   {
+    "id": 686563,
+    "name": "Jonathan Cannon",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 689672,
+    "name": "Drew Thorpe",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 695020,
+    "name": "Tanner Murray",
+    "status": "D60",
+    "reason": "outside the 13 position players: 33 plate appearances in 2026"
+   },
+   {
+    "id": 696146,
+    "name": "Hagen Smith",
+    "status": "A",
+    "reason": "outside the 13 pitchers: 1 starts and 84 outs in 2026"
+   },
+   {
+    "id": 699823,
+    "name": "Tyler Davis",
+    "status": "A",
+    "reason": "outside the 13 pitchers: 0 starts and 96 outs in 2026"
+   },
+   {
+    "id": 700337,
+    "name": "Edgar Quero",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 701780,
+    "name": "Tanner McDougal",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 805326,
+    "name": "Tyler Schweitzer",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 807747,
+    "name": "Rikuu Nishida",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   }
+  ],
+  "CIN": [
+   {
+    "id": 665828,
+    "name": "Oswaldo Cabrera",
+    "status": "A",
+    "reason": "outside the 13 position players: 25 plate appearances in 2026"
+   },
+   {
+    "id": 668881,
+    "name": "Hunter Greene",
+    "status": "D60",
+    "reason": "outside the 13 pitchers: 5 starts and 83 outs in 2026"
+   },
+   {
+    "id": 669911,
+    "name": "Michael Toglia",
+    "status": "D60",
+    "reason": "outside the 13 position players: 28 plate appearances in 2026"
+   },
+   {
+    "id": 671155,
+    "name": "Ivan Johnson",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 677943,
+    "name": "Will Banfield",
+    "status": "A",
+    "reason": "outside the 13 position players: 21 plate appearances in 2026"
+   },
+   {
+    "id": 682622,
+    "name": "Noelvi Marte",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 682825,
+    "name": "Luis Mey",
+    "status": "A",
+    "reason": "outside the 13 pitchers: 0 starts and 104 outs in 2026"
+   },
+   {
+    "id": 683175,
+    "name": "Connor Phillips",
+    "status": "A",
+    "reason": "outside the 13 pitchers: 0 starts and 90 outs in 2026"
+   },
+   {
+    "id": 683742,
+    "name": "Jose Franco",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 685112,
+    "name": "Zach McCambley",
+    "status": "A",
+    "reason": "outside the 13 pitchers: 0 starts and 40 outs in 2026"
+   },
+   {
+    "id": 686678,
+    "name": "Chase Solesky",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 686730,
+    "name": "Carson Spiers",
+    "status": "A",
+    "reason": "outside the 13 pitchers: 0 starts and 18 outs in 2026"
+   },
+   {
+    "id": 687209,
+    "name": "Zach Maxwell",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 695490,
+    "name": "Edwin Arroyo",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 695534,
+    "name": "Chase Petty",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 699114,
+    "name": "Leo Balcazar",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 699115,
+    "name": "Carlos Jorge",
+    "status": "A",
+    "reason": "outside the 13 position players: 50 plate appearances in 2026"
+   }
+  ],
+  "CLE": [
+   {
+    "id": 663368,
+    "name": "Blake Perkins",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 671106,
+    "name": "Logan Allen",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 680916,
+    "name": "Franco Aleman",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 682982,
+    "name": "Daniel Espino",
+    "status": "A",
+    "reason": "outside the 13 pitchers: 3 starts and 46 outs in 2026"
+   },
+   {
+    "id": 684974,
+    "name": "Craig Yoho",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 689958,
+    "name": "Andrew Walters",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 690984,
+    "name": "Petey Halpin",
+    "status": "A",
+    "reason": "outside the 13 position players: 195 plate appearances in 2026"
+   },
+   {
+    "id": 691414,
+    "name": "Yorman Gómez",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 692216,
+    "name": "CJ Kayfus",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 694197,
+    "name": "Angel Genao",
+    "status": "A",
+    "reason": "outside the 13 position players: 139 plate appearances in 2026"
+   },
+   {
+    "id": 694876,
+    "name": "Cooper Ingle",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 696135,
+    "name": "Kahlil Watson",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 700932,
+    "name": "Kyle Manzardo",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 804926,
+    "name": "Austin Peterson",
+    "status": "A",
+    "reason": "outside the 13 pitchers: 0 starts and 21 outs in 2026"
+   }
+  ],
+  "COL": [
+   {
+    "id": 592178,
+    "name": "Kris Bryant",
+    "status": "D60",
+    "reason": "outside the 13 position players: 0 plate appearances in 2026"
+   },
+   {
+    "id": 669298,
+    "name": "TJ Shook",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 676105,
+    "name": "Jeff Criswell",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 677060,
+    "name": "Chad Stevens",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 680604,
+    "name": "Blas Castaño",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 682769,
+    "name": "Eiberson Castellano",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 685326,
+    "name": "McCade Brown",
+    "status": "D60",
+    "reason": "outside the 13 pitchers: 0 starts and 0 outs in 2026"
+   },
+   {
+    "id": 687060,
+    "name": "Blake Adams",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 687312,
+    "name": "Gabriel Hughes",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 690022,
+    "name": "Ryan Ritter",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 690924,
+    "name": "Braxton Fulford",
+    "status": "A",
+    "reason": "outside the 13 position players: 85 plate appearances in 2026"
+   },
+   {
+    "id": 691728,
+    "name": "Zac Veen",
+    "status": "A",
+    "reason": "outside the 13 position players: 79 plate appearances in 2026"
+   },
+   {
+    "id": 693308,
+    "name": "Nick Frasso",
+    "status": "A",
+    "reason": "outside the 13 pitchers: 0 starts and 65 outs in 2026"
+   },
+   {
+    "id": 694514,
+    "name": "Sterlin Thompson",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 700327,
+    "name": "Welinton Herrera",
+    "status": "D60",
+    "reason": "outside the 13 pitchers: 0 starts and 7 outs in 2026"
+   },
+   {
+    "id": 701487,
+    "name": "Pierson Ohl",
+    "status": "D60",
+    "reason": "outside the 13 pitchers: 0 starts and 0 outs in 2026"
+   },
+   {
+    "id": 802686,
+    "name": "Hayden Harris",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 807743,
+    "name": "Sean Sullivan",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 815081,
+    "name": "Mark Manfredi",
+    "status": "A",
+    "reason": "outside the 13 pitchers: 0 starts and 53 outs in 2026"
+   }
+  ],
+  "DET": [
+   {
+    "id": 434378,
+    "name": "Justin Verlander",
+    "status": "A",
+    "reason": "outside the 13 pitchers: 2 starts and 27 outs in 2026"
+   },
+   {
+    "id": 572143,
+    "name": "Burch Smith",
+    "status": "D60",
+    "reason": "outside the 13 pitchers: 1 starts and 51 outs in 2026"
+   },
+   {
+    "id": 646241,
+    "name": "Enmanuel De Jesus",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 667452,
+    "name": "Corey Julks",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 669724,
+    "name": "Brenan Hanifee",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 672761,
+    "name": "Wenceel Pérez",
+    "status": "D60",
+    "reason": "outside the 13 position players: 175 plate appearances in 2026"
+   },
+   {
+    "id": 676428,
+    "name": "Brant Hurter",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 676684,
+    "name": "Will Vest",
+    "status": "D60",
+    "reason": "outside the 13 pitchers: 0 starts and 80 outs in 2026"
+   },
+   {
+    "id": 678009,
+    "name": "Parker Meadows",
+    "status": "D60",
+    "reason": "outside the 13 position players: 39 plate appearances in 2026"
+   },
+   {
+    "id": 681857,
+    "name": "Reese Olson",
+    "status": "D60",
+    "reason": "outside the 13 pitchers: 0 starts and 0 outs in 2026"
+   },
+   {
+    "id": 687830,
+    "name": "Sawyer Gipson-Long",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 689225,
+    "name": "Beau Brieske",
+    "status": "A",
+    "reason": "outside the 13 pitchers: 0 starts and 76 outs in 2026"
+   },
+   {
+    "id": 689981,
+    "name": "River Ryan",
+    "status": "A",
+    "reason": "outside the 13 pitchers: 2 starts and 13 outs in 2026"
+   },
+   {
+    "id": 690291,
+    "name": "Jace Jung",
+    "status": "A",
+    "reason": "outside the 13 position players: 11 plate appearances in 2026"
+   },
+   {
+    "id": 690544,
+    "name": "Bailey Horn",
+    "status": "D60",
+    "reason": "outside the 13 pitchers: 0 starts and 0 outs in 2026"
+   },
+   {
+    "id": 699073,
+    "name": "Thayron Liranzo",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 700242,
+    "name": "Trey Sweeney",
+    "status": "D60",
+    "reason": "outside the 13 position players: 0 plate appearances in 2026"
+   },
+   {
+    "id": 700270,
+    "name": "Yilber Díaz",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 701162,
+    "name": "Ben Malgeri",
+    "status": "A",
+    "reason": "outside the 13 position players: 140 plate appearances in 2026"
+   },
+   {
+    "id": 805725,
+    "name": "Jake Miller",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 807726,
+    "name": "John Peck",
+    "status": "A",
+    "reason": "outside the 13 position players: 80 plate appearances in 2026"
+   },
+   {
+    "id": 808825,
+    "name": "Andrew Sears",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 814430,
+    "name": "Brett Callahan",
+    "status": "A",
+    "reason": "outside the 13 position players: 80 plate appearances in 2026"
+   }
+  ],
+  "HOU": [
+   {
+    "id": 621043,
+    "name": "Carlos Correa",
+    "status": "D60",
+    "reason": "outside the 13 position players: 141 plate appearances in 2026"
+   },
+   {
+    "id": 656986,
+    "name": "Bennett Sousa",
+    "status": "A",
+    "reason": "outside the 13 pitchers: 1 starts and 90 outs in 2026"
+   },
+   {
+    "id": 664774,
+    "name": "LaMonte Wade Jr.",
+    "status": "A",
+    "reason": "outside the 13 position players: 146 plate appearances in 2026"
+   },
+   {
+    "id": 669384,
+    "name": "Raynel Delgado",
+    "status": "A",
+    "reason": "outside the 13 position players: 41 plate appearances in 2026"
+   },
+   {
+    "id": 669854,
+    "name": "Ronel Blanco",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 676369,
+    "name": "Nelson Velázquez",
+    "status": "A",
+    "reason": "outside the 13 position players: 113 plate appearances in 2026"
+   },
+   {
+    "id": 676694,
+    "name": "Jake Meyers",
+    "status": "D60",
+    "reason": "outside the 13 position players: 153 plate appearances in 2026"
+   },
+   {
+    "id": 678906,
+    "name": "Kai-Wei Teng",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 681973,
+    "name": "Josh Hendrickson",
+    "status": "A",
+    "reason": "outside the 13 pitchers: 0 starts and 8 outs in 2026"
+   },
+   {
+    "id": 687888,
+    "name": "Brandon Walter",
+    "status": "D60",
+    "reason": "outside the 13 pitchers: 0 starts and 0 outs in 2026"
+   },
+   {
+    "id": 694388,
+    "name": "Joey Loperfido",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 695001,
+    "name": "Alimber Santa",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 699044,
+    "name": "Miguel Ullola",
+    "status": "A",
+    "reason": "outside the 13 pitchers: 2 starts and 50 outs in 2026"
+   },
+   {
+    "id": 701121,
+    "name": "Logan VanWey",
+    "status": "A",
+    "reason": "outside the 13 pitchers: 0 starts and 38 outs in 2026"
+   },
+   {
+    "id": 701305,
+    "name": "Zach Dezenzo",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 805672,
+    "name": "Collin Price",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 805904,
+    "name": "Zach Cole",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 828599,
+    "name": "Lucas Spence",
+    "status": "A",
+    "reason": "outside the 13 position players: 63 plate appearances in 2026"
+   }
+  ],
+  "KCR": [
+   {
+    "id": 518886,
+    "name": "Craig Kimbrel",
+    "status": "BRV",
+    "reason": "list status BRV on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 543238,
+    "name": "Anthony Gose",
+    "status": "A",
+    "reason": "outside the 13 pitchers: 0 starts and 41 outs in 2026"
+   },
+   {
+    "id": 608032,
+    "name": "Carlos Estévez",
+    "status": "D60",
+    "reason": "outside the 13 pitchers: 0 starts and 1 outs in 2026"
+   },
+   {
+    "id": 621016,
+    "name": "Jose Cuas",
+    "status": "A",
+    "reason": "outside the 13 pitchers: 0 starts and 70 outs in 2026"
+   },
+   {
+    "id": 663697,
+    "name": "Jonathan India",
+    "status": "D60",
+    "reason": "outside the 13 position players: 58 plate appearances in 2026"
+   },
+   {
+    "id": 663704,
+    "name": "James McArthur",
+    "status": "A",
+    "reason": "outside the 13 pitchers: 0 starts and 0 outs in 2026"
+   },
+   {
+    "id": 664062,
+    "name": "Tony Gonsolin",
+    "status": "D15",
+    "reason": "outside the 13 pitchers: 0 starts and 8 outs in 2026"
+   },
+   {
+    "id": 668834,
+    "name": "Easton McGee",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 676510,
+    "name": "Nolan Hoffman",
+    "status": "A",
+    "reason": "outside the 13 pitchers: 0 starts and 45 outs in 2026"
+   },
+   {
+    "id": 679525,
+    "name": "Alec Marsh",
+    "status": "D60",
+    "reason": "outside the 13 pitchers: 0 starts and 0 outs in 2026"
+   },
+   {
+    "id": 679845,
+    "name": "Nick Loftin",
+    "status": "PL",
+    "reason": "list status PL on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 679922,
+    "name": "Carlos Duran",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 681432,
+    "name": "Luke Little",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 683090,
+    "name": "Matthew Lugo",
+    "status": "A",
+    "reason": "outside the 13 position players: 15 plate appearances in 2026"
+   },
+   {
+    "id": 683232,
+    "name": "Nick Mears",
+    "status": "D60",
+    "reason": "outside the 13 pitchers: 0 starts and 58 outs in 2026"
+   },
+   {
+    "id": 686632,
+    "name": "Steven Zobac",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 686701,
+    "name": "Ryan Bergert",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 687765,
+    "name": "Mitch Spence",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 694360,
+    "name": "Beck Way",
+    "status": "D15",
+    "reason": "outside the 13 pitchers: 1 starts and 70 outs in 2026"
+   },
+   {
+    "id": 695667,
+    "name": "Ben Kudrna",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 696131,
+    "name": "Mason Black",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 702352,
+    "name": "Spencer Bivens",
+    "status": "A",
+    "reason": "outside the 13 pitchers: 0 starts and 23 outs in 2026"
+   }
+  ],
+  "LAA": [
+   {
+    "id": 543685,
+    "name": "Anthony Rendon",
+    "status": "D60",
+    "reason": "outside the 13 position players: 0 plate appearances in 2026"
+   },
+   {
+    "id": 596112,
+    "name": "Robert Stephenson",
+    "status": "D60",
+    "reason": "outside the 13 pitchers: 0 starts and 0 outs in 2026"
+   },
+   {
+    "id": 642048,
+    "name": "Tayler Saucedo",
+    "status": "A",
+    "reason": "outside the 13 pitchers: 0 starts and 64 outs in 2026"
+   },
+   {
+    "id": 660162,
+    "name": "Yoán Moncada",
+    "status": "D60",
+    "reason": "outside the 13 position players: 130 plate appearances in 2026"
+   },
+   {
+    "id": 665861,
+    "name": "Sebastián Rivero",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 669326,
+    "name": "Bryce Teodosio",
+    "status": "A",
+    "reason": "outside the 13 position players: 76 plate appearances in 2026"
+   },
+   {
+    "id": 672569,
+    "name": "Gustavo Campero",
+    "status": "D10",
+    "reason": "outside the 13 position players: 12 plate appearances in 2026"
+   },
+   {
+    "id": 676620,
+    "name": "Blake Weiman",
+    "status": "A",
+    "reason": "outside the 13 pitchers: 0 starts and 53 outs in 2026"
+   },
+   {
+    "id": 677347,
+    "name": "Kyren Paris",
+    "status": "D10",
+    "reason": "outside the 13 position players: 18 plate appearances in 2026"
+   },
+   {
+    "id": 682515,
+    "name": "Logan Porter",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 684665,
+    "name": "Luke Murphy",
+    "status": "A",
+    "reason": "outside the 13 pitchers: 0 starts and 60 outs in 2026"
+   },
+   {
+    "id": 690829,
+    "name": "Ben Joyce",
+    "status": "D15",
+    "reason": "outside the 13 pitchers: 0 starts and 46 outs in 2026"
+   },
+   {
+    "id": 691951,
+    "name": "Sam Aldegheri",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 694680,
+    "name": "Trevor Martin",
+    "status": "A",
+    "reason": "outside the 13 pitchers: 0 starts and 46 outs in 2026"
+   },
+   {
+    "id": 695049,
+    "name": "Brett Kerry",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 695681,
+    "name": "Christian Moore",
+    "status": "A",
+    "reason": "outside the 13 position players: 147 plate appearances in 2026"
+   },
+   {
+    "id": 702674,
+    "name": "Caden Dana",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 805373,
+    "name": "Nacho Alvarez Jr.",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   }
+  ],
+  "LAD": [
+   {
+    "id": 571771,
+    "name": "Enrique Hernández",
+    "status": "A",
+    "reason": "outside the 13 position players: 96 plate appearances in 2026"
+   },
+   {
+    "id": 592779,
+    "name": "Brock Stewart",
+    "status": "A",
+    "reason": "outside the 13 pitchers: 1 starts and 80 outs in 2026"
+   },
+   {
+    "id": 595014,
+    "name": "Blake Treinen",
+    "status": "D15",
+    "reason": "outside the 13 pitchers: 0 starts and 89 outs in 2026"
+   },
+   {
+    "id": 621242,
+    "name": "Edwin Díaz",
+    "status": "A",
+    "reason": "outside the 13 pitchers: 0 starts and 56 outs in 2026"
+   },
+   {
+    "id": 623465,
+    "name": "Evan Phillips",
+    "status": "A",
+    "reason": "outside the 13 pitchers: 0 starts and 78 outs in 2026"
+   },
+   {
+    "id": 660813,
+    "name": "Brusdar Graterol",
+    "status": "D60",
+    "reason": "outside the 13 pitchers: 0 starts and 0 outs in 2026"
+   },
+   {
+    "id": 664776,
+    "name": "Jake Cousins",
+    "status": "D60",
+    "reason": "outside the 13 pitchers: 0 starts and 0 outs in 2026"
+   },
+   {
+    "id": 669165,
+    "name": "Kyle Hurt",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 672613,
+    "name": "Eliezer Alfonzo",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 676272,
+    "name": "Bobby Miller",
+    "status": "A",
+    "reason": "outside the 13 pitchers: 0 starts and 22 outs in 2026"
+   },
+   {
+    "id": 676508,
+    "name": "Ben Casparius",
+    "status": "D60",
+    "reason": "outside the 13 pitchers: 0 starts and 14 outs in 2026"
+   },
+   {
+    "id": 678020,
+    "name": "Seth Halvorsen",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 686218,
+    "name": "Emmet Sheehan",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 689017,
+    "name": "Landon Knack",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 690976,
+    "name": "Alex Freeland",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 691947,
+    "name": "Ronan Kopp",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 694813,
+    "name": "Gavin Stone",
+    "status": "D60",
+    "reason": "outside the 13 pitchers: 0 starts and 0 outs in 2026"
+   },
+   {
+    "id": 800543,
+    "name": "Josue De Paula",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 801434,
+    "name": "Paul Gervase",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 808975,
+    "name": "Hyeseong Kim",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   }
+  ],
+  "MIA": [
+   {
+    "id": 667652,
+    "name": "Jack Ralston",
+    "status": "A",
+    "reason": "outside the 13 pitchers: 1 starts and 52 outs in 2026"
+   },
+   {
+    "id": 677053,
+    "name": "Andrew Nardi",
+    "status": "D60",
+    "reason": "outside the 13 pitchers: 0 starts and 68 outs in 2026"
+   },
+   {
+    "id": 678692,
+    "name": "Ronny Henriquez",
+    "status": "D60",
+    "reason": "outside the 13 pitchers: 0 starts and 0 outs in 2026"
+   },
+   {
+    "id": 682790,
+    "name": "Wikelman González",
+    "status": "A",
+    "reason": "outside the 13 pitchers: 0 starts and 0 outs in 2026"
+   },
+   {
+    "id": 684049,
+    "name": "Brandan Bidois",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 686482,
+    "name": "Logan Driscoll",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 687134,
+    "name": "Bradley Blalock",
+    "status": "A",
+    "reason": "outside the 13 pitchers: 0 starts and 34 outs in 2026"
+   },
+   {
+    "id": 687287,
+    "name": "Patrick Monteverde",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 687531,
+    "name": "William Kempner",
+    "status": "D60",
+    "reason": "outside the 13 pitchers: 0 starts and 37 outs in 2026"
+   },
+   {
+    "id": 687985,
+    "name": "Josh White",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 690978,
+    "name": "Dax Fulton",
+    "status": "A",
+    "reason": "outside the 13 pitchers: 0 starts and 86 outs in 2026"
+   },
+   {
+    "id": 691185,
+    "name": "Maximo Acosta",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 691277,
+    "name": "Deyvison De Los Santos",
+    "status": "A",
+    "reason": "outside the 13 position players: 43 plate appearances in 2026"
+   },
+   {
+    "id": 691858,
+    "name": "Jared Serna",
+    "status": "A",
+    "reason": "outside the 13 position players: 32 plate appearances in 2026"
+   },
+   {
+    "id": 694350,
+    "name": "Zach Brzykcy",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 694795,
+    "name": "Josh Ekness",
+    "status": "A",
+    "reason": "outside the 13 pitchers: 0 starts and 92 outs in 2026"
+   },
+   {
+    "id": 702281,
+    "name": "Robby Snelling",
+    "status": "D60",
+    "reason": "outside the 13 pitchers: 1 starts and 15 outs in 2026"
+   },
+   {
+    "id": 800049,
+    "name": "Adam Mazur",
+    "status": "D60",
+    "reason": "outside the 13 pitchers: 0 starts and 0 outs in 2026"
+   }
+  ],
+  "MIL": [
+   {
+    "id": 605540,
+    "name": "Brandon Woodruff",
+    "status": "D60",
+    "reason": "outside the 13 pitchers: 9 starts and 136 outs in 2026"
+   },
+   {
+    "id": 657649,
+    "name": "Jared Koenig",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 663604,
+    "name": "Brandon Lockridge",
+    "status": "A",
+    "reason": "outside the 13 position players: 113 plate appearances in 2026"
+   },
+   {
+    "id": 666310,
+    "name": "Bo Naylor",
+    "status": "A",
+    "reason": "outside the 13 position players: 98 plate appearances in 2026"
+   },
+   {
+    "id": 668731,
+    "name": "Akil Baddoo",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 668831,
+    "name": "Garrett Stallings",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 668941,
+    "name": "JoJo Romero",
+    "status": "A",
+    "reason": "outside the 13 pitchers: 0 starts and 169 outs in 2026"
+   },
+   {
+    "id": 669060,
+    "name": "Bryse Wilson",
+    "status": "A",
+    "reason": "outside the 13 pitchers: 0 starts and 106 outs in 2026"
+   },
+   {
+    "id": 672012,
+    "name": "Tyler Black",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 672582,
+    "name": "Angel Zerpa",
+    "status": "D60",
+    "reason": "outside the 13 pitchers: 0 starts and 38 outs in 2026"
+   },
+   {
+    "id": 676467,
+    "name": "Colton Gordon",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 682990,
+    "name": "Quinn Priester",
+    "status": "D60",
+    "reason": "outside the 13 pitchers: 0 starts and 0 outs in 2026"
+   },
+   {
+    "id": 687075,
+    "name": "Brandon Sproat",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 689441,
+    "name": "Coleman Crow",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 691620,
+    "name": "Jeferson Quero",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 702153,
+    "name": "Brian Fitzpatrick",
+    "status": "D60",
+    "reason": "outside the 13 pitchers: 0 starts and 20 outs in 2026"
+   }
+  ],
+  "MIN": [
+   {
+    "id": 607455,
+    "name": "Anthony Banda",
+    "status": "D60",
+    "reason": "outside the 13 pitchers: 0 starts and 103 outs in 2026"
+   },
+   {
+    "id": 621345,
+    "name": "A.J. Minter",
+    "status": "A",
+    "reason": "outside the 13 pitchers: 0 starts and 137 outs in 2026"
+   },
+   {
+    "id": 641154,
+    "name": "Pablo López",
+    "status": "D60",
+    "reason": "outside the 13 pitchers: 0 starts and 0 outs in 2026"
+   },
+   {
+    "id": 656484,
+    "name": "Tristan Gray",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 663485,
+    "name": "Cole Sands",
+    "status": "D60",
+    "reason": "outside the 13 pitchers: 0 starts and 36 outs in 2026"
+   },
+   {
+    "id": 670183,
+    "name": "Garrett Acton",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 670242,
+    "name": "Matt Wallner",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 679358,
+    "name": "Eric Orze",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 681252,
+    "name": "Jack Anderson",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 690953,
+    "name": "Mick Abel",
+    "status": "D60",
+    "reason": "outside the 13 pitchers: 3 starts and 61 outs in 2026"
+   },
+   {
+    "id": 691181,
+    "name": "Emmanuel Rodriguez",
+    "status": "A",
+    "reason": "outside the 13 position players: 48 plate appearances in 2026"
+   },
+   {
+    "id": 693306,
+    "name": "Aaron Sabato",
+    "status": "A",
+    "reason": "outside the 13 position players: 6 plate appearances in 2026"
+   },
+   {
+    "id": 694224,
+    "name": "Gabriel Gonzalez",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 694230,
+    "name": "Hendry Mendez",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 694397,
+    "name": "Marco Raya",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 696070,
+    "name": "Kendry Rojas",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 701581,
+    "name": "David Festa",
+    "status": "D60",
+    "reason": "outside the 13 pitchers: 0 starts and 0 outs in 2026"
+   },
+   {
+    "id": 702474,
+    "name": "Mike Paredes",
+    "status": "D60",
+    "reason": "outside the 13 pitchers: 5 starts and 103 outs in 2026"
+   },
+   {
+    "id": 805346,
+    "name": "Ben Ross",
+    "status": "A",
+    "reason": "outside the 13 position players: 21 plate appearances in 2026"
+   },
+   {
+    "id": 805805,
+    "name": "Walker Jenkins",
+    "status": "A",
+    "reason": "outside the 13 position players: 93 plate appearances in 2026"
+   }
+  ],
+  "NYM": [
+   {
+    "id": 642376,
+    "name": "Jefry Yan",
+    "status": "A",
+    "reason": "outside the 13 pitchers: 1 starts and 61 outs in 2026"
+   },
+   {
+    "id": 656731,
+    "name": "Tylor Megill",
+    "status": "D60",
+    "reason": "outside the 13 pitchers: 0 starts and 0 outs in 2026"
+   },
+   {
+    "id": 657585,
+    "name": "Reed Garrett",
+    "status": "D60",
+    "reason": "outside the 13 pitchers: 0 starts and 0 outs in 2026"
+   },
+   {
+    "id": 663584,
+    "name": "Hayden Senger",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 663795,
+    "name": "Justin Hagenman",
+    "status": "A",
+    "reason": "outside the 13 pitchers: 1 starts and 24 outs in 2026"
+   },
+   {
+    "id": 665506,
+    "name": "Cristian Pache",
+    "status": "A",
+    "reason": "outside the 13 position players: 8 plate appearances in 2026"
+   },
+   {
+    "id": 673380,
+    "name": "Dedniel Núñez",
+    "status": "A",
+    "reason": "outside the 13 pitchers: 0 starts and 57 outs in 2026"
+   },
+   {
+    "id": 674073,
+    "name": "Jack Weisenburger",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 676572,
+    "name": "Eric Wagaman",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 677595,
+    "name": "Ronny Mauricio",
+    "status": "A",
+    "reason": "outside the 13 position players: 62 plate appearances in 2026"
+   },
+   {
+    "id": 681320,
+    "name": "Nate Lavender",
+    "status": "A",
+    "reason": "outside the 13 pitchers: 0 starts and 65 outs in 2026"
+   },
+   {
+    "id": 686551,
+    "name": "Christian Cairo",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 687721,
+    "name": "Cameron Weston",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 691769,
+    "name": "Philip Abner",
+    "status": "NYR",
+    "reason": "list status NYR on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 694646,
+    "name": "Chayce McDermott",
+    "status": "A",
+    "reason": "outside the 13 pitchers: 0 starts and 23 outs in 2026"
+   },
+   {
+    "id": 697811,
+    "name": "Dylan Ross",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 703492,
+    "name": "Nick Morabito",
+    "status": "A",
+    "reason": "outside the 13 position players: 46 plate appearances in 2026"
+   }
+  ],
+  "NYY": [
+   {
+    "id": 519317,
+    "name": "Giancarlo Stanton",
+    "status": "D60",
+    "reason": "outside the 13 position players: 96 plate appearances in 2026"
+   },
+   {
+    "id": 529017,
+    "name": "Alexander Cornielle",
+    "status": "A",
+    "reason": "outside the 13 pitchers: 0 starts and 3 outs in 2026"
+   },
+   {
+    "id": 605242,
+    "name": "Michael Fulmer",
+    "status": "A",
+    "reason": "outside the 13 pitchers: 0 starts and 41 outs in 2026"
+   },
+   {
+    "id": 641555,
+    "name": "J.C. Escarra",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 642708,
+    "name": "Amed Rosario",
+    "status": "A",
+    "reason": "outside the 13 position players: 244 plate appearances in 2026"
+   },
+   {
+    "id": 657376,
+    "name": "Clarke Schmidt",
+    "status": "D15",
+    "reason": "outside the 13 pitchers: 0 starts and 2 outs in 2026"
+   },
+   {
+    "id": 660787,
+    "name": "Yerry De los Santos",
+    "status": "A",
+    "reason": "outside the 13 pitchers: 0 starts and 66 outs in 2026"
+   },
+   {
+    "id": 661563,
+    "name": "Luis Gil",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 665645,
+    "name": "Kervin Castro",
+    "status": "D60",
+    "reason": "outside the 13 pitchers: 0 starts and 19 outs in 2026"
+   },
+   {
+    "id": 680474,
+    "name": "Max Schuemann",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 683011,
+    "name": "Anthony Volpe",
+    "status": "A",
+    "reason": "outside the 13 position players: 246 plate appearances in 2026"
+   },
+   {
+    "id": 683409,
+    "name": "Angel Chivilli",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 690440,
+    "name": "Bradley Hanner",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 691176,
+    "name": "Jasson Domínguez",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 694341,
+    "name": "Brendan Beck",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 695684,
+    "name": "Elmer Rodríguez",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 806146,
+    "name": "George Lombard Jr.",
+    "status": "A",
+    "reason": "outside the 13 position players: 166 plate appearances in 2026"
+   }
+  ],
+  "PHI": [
+   {
+    "id": 596117,
+    "name": "Garrett Stubbs",
+    "status": "A",
+    "reason": "outside the 13 position players: 65 plate appearances in 2026"
+   },
+   {
+    "id": 641482,
+    "name": "Nestor Cortes",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 641745,
+    "name": "Brad Keller",
+    "status": "D60",
+    "reason": "outside the 13 pitchers: 0 starts and 94 outs in 2026"
+   },
+   {
+    "id": 650559,
+    "name": "Bryan De La Cruz",
+    "status": "A",
+    "reason": "outside the 13 position players: 86 plate appearances in 2026"
+   },
+   {
+    "id": 660604,
+    "name": "Alan Rangel",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 670224,
+    "name": "Kameron Misner",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 676661,
+    "name": "Max Lazar",
+    "status": "A",
+    "reason": "outside the 13 pitchers: 0 starts and 30 outs in 2026"
+   },
+   {
+    "id": 679032,
+    "name": "Johan Rojas",
+    "status": "D60",
+    "reason": "outside the 13 position players: 0 plate appearances in 2026"
+   },
+   {
+    "id": 679775,
+    "name": "Kyle Backhus",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 680880,
+    "name": "Grant Holman",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 686934,
+    "name": "Alex McFarlane",
+    "status": "A",
+    "reason": "outside the 13 pitchers: 0 starts and 57 outs in 2026"
+   },
+   {
+    "id": 687282,
+    "name": "Gabriel Rincones Jr.",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 687515,
+    "name": "Colby Thomas",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 689147,
+    "name": "Orion Kerkering",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 691330,
+    "name": "Moisés Chace",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 694025,
+    "name": "Felix Reyes",
+    "status": "D60",
+    "reason": "outside the 13 position players: 38 plate appearances in 2026"
+   },
+   {
+    "id": 694851,
+    "name": "Andrew Hoffmann",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 805249,
+    "name": "Otto Kemp",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   }
+  ],
+  "PIT": [
+   {
+    "id": 668716,
+    "name": "Noah Murdock",
+    "status": "A",
+    "reason": "outside the 13 pitchers: 0 starts and 10 outs in 2026"
+   },
+   {
+    "id": 676755,
+    "name": "Isaac Mattson",
+    "status": "D15",
+    "reason": "outside the 13 pitchers: 0 starts and 116 outs in 2026"
+   },
+   {
+    "id": 681895,
+    "name": "Evan Sisk",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 682848,
+    "name": "Endy Rodríguez",
+    "status": "D60",
+    "reason": "outside the 13 position players: 159 plate appearances in 2026"
+   },
+   {
+    "id": 682927,
+    "name": "Ronny Simon",
+    "status": "A",
+    "reason": "outside the 13 position players: 68 plate appearances in 2026"
+   },
+   {
+    "id": 682995,
+    "name": "Hunter Barco",
+    "status": "A",
+    "reason": "outside the 13 pitchers: 0 starts and 53 outs in 2026"
+   },
+   {
+    "id": 682997,
+    "name": "Tyler Callihan",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 687394,
+    "name": "Jack Brannigan",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 691373,
+    "name": "Jhostynxon Garcia",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 694377,
+    "name": "Nick Yorke",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 694753,
+    "name": "Khristian Curtis",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 695257,
+    "name": "Billy Cook",
+    "status": "A",
+    "reason": "outside the 13 position players: 58 plate appearances in 2026"
+   },
+   {
+    "id": 696062,
+    "name": "Wilber Dotel",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 699008,
+    "name": "Antwone Kelly",
+    "status": "A",
+    "reason": "outside the 13 pitchers: 0 starts and 56 outs in 2026"
+   },
+   {
+    "id": 802419,
+    "name": "Thomas Harrington",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   }
+  ],
+  "SDP": [
+   {
+    "id": 605397,
+    "name": "Joe Musgrove",
+    "status": "D60",
+    "reason": "outside the 13 pitchers: 0 starts and 0 outs in 2026"
+   },
+   {
+    "id": 606996,
+    "name": "Kyle Hart",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 608337,
+    "name": "Lucas Giolito",
+    "status": "D60",
+    "reason": "outside the 13 pitchers: 5 starts and 89 outs in 2026"
+   },
+   {
+    "id": 660710,
+    "name": "Rodolfo Durán",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 663773,
+    "name": "Bryan Hoeing",
+    "status": "D60",
+    "reason": "outside the 13 pitchers: 0 starts and 0 outs in 2026"
+   },
+   {
+    "id": 666745,
+    "name": "Jhony Brito",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 669093,
+    "name": "Jeremiah Estrada",
+    "status": "D15",
+    "reason": "outside the 13 pitchers: 0 starts and 93 outs in 2026"
+   },
+   {
+    "id": 669200,
+    "name": "Mason McCoy",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 669398,
+    "name": "Gage Workman",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 669720,
+    "name": "Austin Hays",
+    "status": "A",
+    "reason": "outside the 13 position players: 105 plate appearances in 2026"
+   },
+   {
+    "id": 676664,
+    "name": "JP Sears",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 676702,
+    "name": "Hunter Stratton",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 678184,
+    "name": "Garrett Hawkins",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 687749,
+    "name": "Jase Bowen",
+    "status": "A",
+    "reason": "outside the 13 position players: 103 plate appearances in 2026"
+   },
+   {
+    "id": 687957,
+    "name": "Dustin Harris",
+    "status": "A",
+    "reason": "outside the 13 position players: 152 plate appearances in 2026"
+   },
+   {
+    "id": 688158,
+    "name": "David Morgan",
+    "status": "A",
+    "reason": "outside the 13 pitchers: 0 starts and 100 outs in 2026"
+   },
+   {
+    "id": 695238,
+    "name": "Will Wagner",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 806956,
+    "name": "Ethan Salas",
+    "status": "A",
+    "reason": "outside the 13 position players: 40 plate appearances in 2026"
+   },
+   {
+    "id": 823550,
+    "name": "Sung-Mun Song",
+    "status": "A",
+    "reason": "outside the 13 position players: 154 plate appearances in 2026"
+   }
+  ],
+  "SEA": [
+   {
+    "id": 621550,
+    "name": "Patrick Wisdom",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 645302,
+    "name": "Victor Robles",
+    "status": "A",
+    "reason": "outside the 13 position players: 149 plate appearances in 2026"
+   },
+   {
+    "id": 660844,
+    "name": "Leo Rivas",
+    "status": "A",
+    "reason": "outside the 13 position players: 148 plate appearances in 2026"
+   },
+   {
+    "id": 666374,
+    "name": "Matt Brash",
+    "status": "D60",
+    "reason": "outside the 13 pitchers: 0 starts and 50 outs in 2026"
+   },
+   {
+    "id": 669208,
+    "name": "Ryan Bliss",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 669717,
+    "name": "Will Wilson",
+    "status": "D60",
+    "reason": "outside the 13 position players: 6 plate appearances in 2026"
+   },
+   {
+    "id": 672841,
+    "name": "Carlos Vargas",
+    "status": "A",
+    "reason": "outside the 13 pitchers: 0 starts and 57 outs in 2026"
+   },
+   {
+    "id": 673662,
+    "name": "Robinson Ortiz",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 677961,
+    "name": "Cole Wilcox",
+    "status": "D15",
+    "reason": "outside the 13 pitchers: 0 starts and 81 outs in 2026"
+   },
+   {
+    "id": 680695,
+    "name": "Brennen Davis",
+    "status": "D60",
+    "reason": "outside the 13 position players: 0 plate appearances in 2026"
+   },
+   {
+    "id": 680862,
+    "name": "Willie MacIver",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 681006,
+    "name": "Josh Simpson",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 681890,
+    "name": "Troy Watson",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 688138,
+    "name": "Logan Evans",
+    "status": "D60",
+    "reason": "outside the 13 pitchers: 0 starts and 0 outs in 2026"
+   },
+   {
+    "id": 689546,
+    "name": "Nick Davila",
+    "status": "D60",
+    "reason": "outside the 13 pitchers: 0 starts and 82 outs in 2026"
+   },
+   {
+    "id": 700187,
+    "name": "Troy Taylor",
+    "status": "A",
+    "reason": "outside the 13 pitchers: 0 starts and 9 outs in 2026"
+   },
+   {
+    "id": 703155,
+    "name": "Lazaro Montes",
+    "status": "A",
+    "reason": "outside the 13 position players: 59 plate appearances in 2026"
+   },
+   {
+    "id": 703197,
+    "name": "Michael Arroyo",
+    "status": "A",
+    "reason": "outside the 13 position players: 41 plate appearances in 2026"
+   },
+   {
+    "id": 801126,
+    "name": "Brock Rodden",
+    "status": "D10",
+    "reason": "outside the 13 position players: 72 plate appearances in 2026"
+   },
+   {
+    "id": 807739,
+    "name": "Kade Anderson",
+    "status": "A",
+    "reason": "outside the 13 pitchers: 7 starts and 107 outs in 2026"
+   }
+  ],
+  "SFG": [
+   {
+    "id": 592858,
+    "name": "Rowan Wick",
+    "status": "D60",
+    "reason": "outside the 13 pitchers: 0 starts and 0 outs in 2026"
+   },
+   {
+    "id": 657424,
+    "name": "Matt Gage",
+    "status": "D60",
+    "reason": "outside the 13 pitchers: 0 starts and 82 outs in 2026"
+   },
+   {
+    "id": 663941,
+    "name": "Tristan Beck",
+    "status": "A",
+    "reason": "outside the 13 pitchers: 0 starts and 57 outs in 2026"
+   },
+   {
+    "id": 664056,
+    "name": "Harrison Bader",
+    "status": "D60",
+    "reason": "outside the 13 position players: 111 plate appearances in 2026"
+   },
+   {
+    "id": 665665,
+    "name": "Reiver Sanmartin",
+    "status": "D15",
+    "reason": "outside the 13 pitchers: 0 starts and 64 outs in 2026"
+   },
+   {
+    "id": 666711,
+    "name": "Joel Peguero",
+    "status": "D60",
+    "reason": "outside the 13 pitchers: 0 starts and 34 outs in 2026"
+   },
+   {
+    "id": 668800,
+    "name": "Andrew Knizner",
+    "status": "A",
+    "reason": "outside the 13 position players: 80 plate appearances in 2026"
+   },
+   {
+    "id": 671345,
+    "name": "Jason Foley",
+    "status": "A",
+    "reason": "outside the 13 pitchers: 0 starts and 78 outs in 2026"
+   },
+   {
+    "id": 675920,
+    "name": "Seth Lonsway",
+    "status": "A",
+    "reason": "outside the 13 pitchers: 0 starts and 7 outs in 2026"
+   },
+   {
+    "id": 676130,
+    "name": "José Buttó",
+    "status": "D60",
+    "reason": "outside the 13 pitchers: 0 starts and 6 outs in 2026"
+   },
+   {
+    "id": 676254,
+    "name": "Ryan Walker",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 678495,
+    "name": "Randy Rodríguez",
+    "status": "D60",
+    "reason": "outside the 13 pitchers: 0 starts and 0 outs in 2026"
+   },
+   {
+    "id": 681439,
+    "name": "Zach Morgan",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 682674,
+    "name": "Victor Bericoto",
+    "status": "A",
+    "reason": "outside the 13 position players: 116 plate appearances in 2026"
+   },
+   {
+    "id": 683363,
+    "name": "Matt Wilkinson",
+    "status": "A",
+    "reason": "outside the 13 pitchers: 6 starts and 83 outs in 2026"
+   },
+   {
+    "id": 683679,
+    "name": "Jesus Rodriguez",
+    "status": "D60",
+    "reason": "outside the 13 position players: 58 plate appearances in 2026"
+   },
+   {
+    "id": 687529,
+    "name": "Grant McCray",
+    "status": "A",
+    "reason": "outside the 13 position players: 91 plate appearances in 2026"
+   },
+   {
+    "id": 693313,
+    "name": "Carson Seymour",
+    "status": "A",
+    "reason": "outside the 13 pitchers: 1 starts and 95 outs in 2026"
+   },
+   {
+    "id": 694376,
+    "name": "Shay Whitcomb",
+    "status": "A",
+    "reason": "outside the 13 position players: 122 plate appearances in 2026"
+   },
+   {
+    "id": 694820,
+    "name": "Braxton Roxby",
+    "status": "A",
+    "reason": "outside the 13 pitchers: 0 starts and 16 outs in 2026"
+   },
+   {
+    "id": 695391,
+    "name": "Brett Harris",
+    "status": "A",
+    "reason": "outside the 13 position players: 51 plate appearances in 2026"
+   },
+   {
+    "id": 700280,
+    "name": "Miguel Mendez",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 701474,
+    "name": "Duncan Davitt",
+    "status": "A",
+    "reason": "outside the 13 pitchers: 0 starts and 24 outs in 2026"
+   },
+   {
+    "id": 702885,
+    "name": "Cesar Perdomo",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 801501,
+    "name": "Nate Furman",
+    "status": "D10",
+    "reason": "outside the 13 position players: 39 plate appearances in 2026"
+   },
+   {
+    "id": 805074,
+    "name": "Yunior Marte",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 805345,
+    "name": "Trent Harris",
+    "status": "A",
+    "reason": "outside the 13 pitchers: 0 starts and 70 outs in 2026"
+   },
+   {
+    "id": 806185,
+    "name": "Hayden Birdsong",
+    "status": "D60",
+    "reason": "outside the 13 pitchers: 0 starts and 0 outs in 2026"
+   },
+   {
+    "id": 806367,
+    "name": "Turner Hill",
+    "status": "A",
+    "reason": "outside the 13 position players: 124 plate appearances in 2026"
+   },
+   {
+    "id": 814154,
+    "name": "Scott Bandura",
+    "status": "A",
+    "reason": "outside the 13 position players: 30 plate appearances in 2026"
+   },
+   {
+    "id": 815589,
+    "name": "Bo Davidson",
+    "status": "A",
+    "reason": "outside the 13 position players: 22 plate appearances in 2026"
+   }
+  ],
+  "STL": [
+   {
+    "id": 677592,
+    "name": "Everson Pereira",
+    "status": "D10",
+    "reason": "outside the 13 position players: 111 plate appearances in 2026"
+   },
+   {
+    "id": 681676,
+    "name": "Ryan Fernandez",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 684516,
+    "name": "Hancel Rincon",
+    "status": "A",
+    "reason": "outside the 13 pitchers: 0 starts and 7 outs in 2026"
+   },
+   {
+    "id": 685464,
+    "name": "Cade Winquest",
+    "status": "A",
+    "reason": "outside the 13 pitchers: 0 starts and 41 outs in 2026"
+   },
+   {
+    "id": 687309,
+    "name": "Cooper Hjerpe",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 690916,
+    "name": "Richard Fitts",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 691008,
+    "name": "Max Rajcic",
+    "status": "D60",
+    "reason": "outside the 13 pitchers: 0 starts and 27 outs in 2026"
+   },
+   {
+    "id": 693409,
+    "name": "César Prieto",
+    "status": "A",
+    "reason": "outside the 13 position players: 39 plate appearances in 2026"
+   },
+   {
+    "id": 694335,
+    "name": "Matt Svanson",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 694358,
+    "name": "Tekoah Roby",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 695336,
+    "name": "Thomas Saggese",
+    "status": "A",
+    "reason": "outside the 13 position players: 180 plate appearances in 2026"
+   },
+   {
+    "id": 695491,
+    "name": "Joshua Báez",
+    "status": "D10",
+    "reason": "outside the 13 position players: 108 plate appearances in 2026"
+   },
+   {
+    "id": 699625,
+    "name": "Jimmy Crooks",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   }
+  ],
+  "TBR": [
+   {
+    "id": 592155,
+    "name": "Cam Booser",
+    "status": "A",
+    "reason": "outside the 13 pitchers: 0 starts and 123 outs in 2026"
+   },
+   {
+    "id": 622761,
+    "name": "Jorge Mateo",
+    "status": "A",
+    "reason": "outside the 13 position players: 221 plate appearances in 2026"
+   },
+   {
+    "id": 655889,
+    "name": "Manuel Rodríguez",
+    "status": "A",
+    "reason": "outside the 13 pitchers: 0 starts and 20 outs in 2026"
+   },
+   {
+    "id": 663611,
+    "name": "Nick Madrigal",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 664076,
+    "name": "Garrett Cleavinger",
+    "status": "D15",
+    "reason": "outside the 13 pitchers: 0 starts and 124 outs in 2026"
+   },
+   {
+    "id": 666158,
+    "name": "Gavin Lux",
+    "status": "D60",
+    "reason": "outside the 13 position players: 0 plate appearances in 2026"
+   },
+   {
+    "id": 669169,
+    "name": "Jonathan Heasley",
+    "status": "D60",
+    "reason": "outside the 13 pitchers: 0 starts and 12 outs in 2026"
+   },
+   {
+    "id": 669438,
+    "name": "Mason Englert",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 670955,
+    "name": "Edwin Uceta",
+    "status": "D60",
+    "reason": "outside the 13 pitchers: 0 starts and 0 outs in 2026"
+   },
+   {
+    "id": 671212,
+    "name": "Joe Boyle",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 686752,
+    "name": "Ryan Pepiot",
+    "status": "D60",
+    "reason": "outside the 13 pitchers: 0 starts and 0 outs in 2026"
+   },
+   {
+    "id": 689200,
+    "name": "Jacob Melton",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 694494,
+    "name": "Ty Johnson",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 699130,
+    "name": "Jadher Areinamo",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 700246,
+    "name": "Carson Williams",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 700652,
+    "name": "Kenny Piper",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 702047,
+    "name": "Alex Cook",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 811315,
+    "name": "Brody Hopkins",
+    "status": "A",
+    "reason": "outside the 13 pitchers: 0 starts and 16 outs in 2026"
+   }
+  ],
+  "TEX": [
+   {
+    "id": 543309,
+    "name": "Kyle Higashioka",
+    "status": "D10",
+    "reason": "outside the 13 position players: 186 plate appearances in 2026"
+   },
+   {
+    "id": 592866,
+    "name": "Trevor Williams",
+    "status": "A",
+    "reason": "outside the 13 pitchers: 1 starts and 86 outs in 2026"
+   },
+   {
+    "id": 656222,
+    "name": "Jalen Beeks",
+    "status": "D60",
+    "reason": "outside the 13 pitchers: 0 starts and 78 outs in 2026"
+   },
+   {
+    "id": 656756,
+    "name": "Jordan Montgomery",
+    "status": "A",
+    "reason": "outside the 13 pitchers: 0 starts and 78 outs in 2026"
+   },
+   {
+    "id": 671305,
+    "name": "Michel Otañez",
+    "status": "D15",
+    "reason": "outside the 13 pitchers: 0 starts and 0 outs in 2026"
+   },
+   {
+    "id": 671936,
+    "name": "Adam Macko",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 676395,
+    "name": "Robert Garcia",
+    "status": "A",
+    "reason": "outside the 13 pitchers: 0 starts and 56 outs in 2026"
+   },
+   {
+    "id": 680737,
+    "name": "Michael Helman",
+    "status": "A",
+    "reason": "outside the 13 position players: 35 plate appearances in 2026"
+   },
+   {
+    "id": 681351,
+    "name": "Logan O'Hoppe",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 683227,
+    "name": "Cody Freeman",
+    "status": "A",
+    "reason": "outside the 13 position players: 97 plate appearances in 2026"
+   },
+   {
+    "id": 686560,
+    "name": "Gavin Collyer",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 687239,
+    "name": "Ben Peoples",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 691945,
+    "name": "Carter Baumler",
+    "status": "D60",
+    "reason": "outside the 13 pitchers: 0 starts and 17 outs in 2026"
+   },
+   {
+    "id": 692030,
+    "name": "Jose Corniell",
+    "status": "D60",
+    "reason": "outside the 13 pitchers: 0 starts and 13 outs in 2026"
+   },
+   {
+    "id": 692437,
+    "name": "Winston Santos",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 693713,
+    "name": "Emiliano Teodo",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 695239,
+    "name": "Robby Ahlstrom",
+    "status": "A",
+    "reason": "outside the 13 pitchers: 0 starts and 111 outs in 2026"
+   },
+   {
+    "id": 695508,
+    "name": "Cam Cauley",
+    "status": "A",
+    "reason": "outside the 13 position players: 65 plate appearances in 2026"
+   },
+   {
+    "id": 699214,
+    "name": "Leandro Lopez",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 699314,
+    "name": "David Davalillo",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   }
+  ],
+  "TOR": [
+   {
+    "id": 554340,
+    "name": "Yimi García",
+    "status": "D60",
+    "reason": "outside the 13 pitchers: 0 starts and 0 outs in 2026"
+   },
+   {
+    "id": 621244,
+    "name": "José Berríos",
+    "status": "D60",
+    "reason": "outside the 13 pitchers: 0 starts and 0 outs in 2026"
+   },
+   {
+    "id": 623993,
+    "name": "Anthony Santander",
+    "status": "D60",
+    "reason": "outside the 13 position players: 0 plate appearances in 2026"
+   },
+   {
+    "id": 649966,
+    "name": "Luis Urías",
+    "status": "D10",
+    "reason": "outside the 13 position players: 59 plate appearances in 2026"
+   },
+   {
+    "id": 657675,
+    "name": "Rudy Martin Jr.",
+    "status": "D10",
+    "reason": "outside the 13 position players: 3 plate appearances in 2026"
+   },
+   {
+    "id": 663893,
+    "name": "Brendon Little",
+    "status": "A",
+    "reason": "outside the 13 pitchers: 0 starts and 85 outs in 2026"
+   },
+   {
+    "id": 664074,
+    "name": "Cody Ponce",
+    "status": "D60",
+    "reason": "outside the 13 pitchers: 1 starts and 7 outs in 2026"
+   },
+   {
+    "id": 669310,
+    "name": "CJ Van Eyk",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 670102,
+    "name": "Bowden Francis",
+    "status": "D60",
+    "reason": "outside the 13 pitchers: 0 starts and 0 outs in 2026"
+   },
+   {
+    "id": 676454,
+    "name": "Brendan Cellucci",
+    "status": "A",
+    "reason": "outside the 13 pitchers: 0 starts and 26 outs in 2026"
+   },
+   {
+    "id": 676566,
+    "name": "Shawn Ross",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 680718,
+    "name": "Addison Barger",
+    "status": "D60",
+    "reason": "outside the 13 position players: 28 plate appearances in 2026"
+   },
+   {
+    "id": 681293,
+    "name": "Spencer Arrighetti",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 682729,
+    "name": "Jonatan Clase",
+    "status": "D60",
+    "reason": "outside the 13 position players: 25 plate appearances in 2026"
+   },
+   {
+    "id": 682818,
+    "name": "Yohendrick Piñango",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 689149,
+    "name": "Chad Dallas",
+    "status": "A",
+    "reason": "outside the 13 pitchers: 0 starts and 43 outs in 2026"
+   },
+   {
+    "id": 692064,
+    "name": "José Rodríguez",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 694357,
+    "name": "Ricky Tiedemann",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 695445,
+    "name": "Chase Lee",
+    "status": "A",
+    "reason": "outside the 13 pitchers: 0 starts and 29 outs in 2026"
+   },
+   {
+    "id": 804619,
+    "name": "John Klein",
+    "status": "A",
+    "reason": "outside the 13 pitchers: 0 starts and 25 outs in 2026"
+   },
+   {
+    "id": 814005,
+    "name": "Jake Bloss",
+    "status": "D60",
+    "reason": "outside the 13 pitchers: 0 starts and 0 outs in 2026"
+   },
+   {
+    "id": 815873,
+    "name": "Sean Keys",
+    "status": "A",
+    "reason": "outside the 13 position players: 67 plate appearances in 2026"
+   }
+  ],
+  "WSN": [
+   {
+    "id": 656234,
+    "name": "Jake Bird",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 672442,
+    "name": "Yovanny Cruz",
+    "status": "A",
+    "reason": "outside the 13 pitchers: 0 starts and 48 outs in 2026"
+   },
+   {
+    "id": 678868,
+    "name": "Eddy Yean",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 680686,
+    "name": "Josiah Gray",
+    "status": "A",
+    "reason": "outside the 13 pitchers: 0 starts and 12 outs in 2026"
+   },
+   {
+    "id": 680899,
+    "name": "Erik Tolman",
+    "status": "A",
+    "reason": "outside the 13 pitchers: 0 starts and 46 outs in 2026"
+   },
+   {
+    "id": 686610,
+    "name": "Ken Waldichuk",
+    "status": "D60",
+    "reason": "outside the 13 pitchers: 0 starts and 28 outs in 2026"
+   },
+   {
+    "id": 687223,
+    "name": "Carson Palmquist",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 687605,
+    "name": "Andrew Pinckney",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 687606,
+    "name": "Paxton Schultz",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 687792,
+    "name": "DJ Herz",
+    "status": "A",
+    "reason": "outside the 13 pitchers: 2 starts and 21 outs in 2026"
+   },
+   {
+    "id": 687849,
+    "name": "Zak Kent",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 688692,
+    "name": "Jared Simpson",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 690925,
+    "name": "Clayton Beeter",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 691002,
+    "name": "Yohandy Morales",
+    "status": "A",
+    "reason": "outside the 13 position players: 47 plate appearances in 2026"
+   },
+   {
+    "id": 691384,
+    "name": "Luis Perales",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 693312,
+    "name": "Kyle Nicolas",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   },
+   {
+    "id": 695378,
+    "name": "Jack Sinclair",
+    "status": "A",
+    "reason": "outside the 13 pitchers: 0 starts and 33 outs in 2026"
+   },
+   {
+    "id": 695670,
+    "name": "Harry Ford",
+    "status": "A",
+    "reason": "outside the 13 position players: 118 plate appearances in 2026"
+   },
+   {
+    "id": 800600,
+    "name": "Jackson Kent",
+    "status": "RM",
+    "reason": "list status RM on the record date (in the minors or off the major league roster)"
+   }
+  ]
+ }
+}

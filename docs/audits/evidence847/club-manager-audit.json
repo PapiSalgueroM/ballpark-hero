@@ -1,0 +1,420 @@
+{
+  "auditOnly": true,
+  "date": "2026-10-01",
+  "finishedAt": "2026-10-01T23:04:48.498Z",
+  "auditWindow": {
+    "startedAt": "2026-10-01T22:44:53Z",
+    "nativeSeason": {
+      "startedAt": "2026-10-01T22:56:12.384Z",
+      "finishedAt": "2026-10-01T22:57:24.252Z"
+    },
+    "nativeTransfer": {
+      "startedAt": "2026-10-01T22:59:34.609Z",
+      "finishedAt": "2026-10-01T23:00:06.408Z"
+    },
+    "corruptFinishedAt": "2026-10-01T23:02:09.867Z"
+  },
+  "runtime": {
+    "site": "https://douknowball.com",
+    "viewport": {
+      "width": 390,
+      "height": 844
+    },
+    "entryBundles": [
+      "/assets/index-E8L0RxXO.js"
+    ],
+    "entryObservedStart": "2026-10-01T22:56:16.661Z",
+    "entryObservedEnd": "2026-10-01T23:00:04.376Z",
+    "assetResponses": [
+      {
+        "url": "https://douknowball.com/assets/index-E8L0RxXO.js",
+        "status": 200,
+        "headers": {
+          "cache-control": "public, max-age=31536000, immutable",
+          "cf-ray": "a43f0f48193e9446-CLE",
+          "content-encoding": "gzip",
+          "content-type": "text/javascript; charset=utf-8",
+          "date": "Thu, 01 Oct 2026 22:56:16 GMT",
+          "etag": "W/\"a04be3e331358cfa3a6ad8b43aba9d4f\"",
+          "referrer-policy": "strict-origin-when-cross-origin",
+          "server": "cloudflare",
+          "strict-transport-security": "max-age=31536000; includeSubDomains",
+          "x-content-type-options": "nosniff",
+          "x-deployment-id": "psr2.4ff29cca-7dce-4d43-82a1-359660f62268.1791500176.hFwQ6MWNGq0Ej2kGzrE4Cl8r2mpzG2DPHXTZbfkm7Ls"
+        },
+        "at": "2026-10-01T22:56:16.661Z"
+      },
+      {
+        "url": "https://douknowball.com/assets/index-E8L0RxXO.js",
+        "status": 200,
+        "headers": {
+          "cache-control": "public, max-age=31536000, immutable",
+          "cf-ray": "a43f0f881f6a9446-CLE",
+          "content-encoding": "gzip",
+          "content-type": "text/javascript; charset=utf-8",
+          "date": "Thu, 01 Oct 2026 22:56:26 GMT",
+          "etag": "W/\"a04be3e331358cfa3a6ad8b43aba9d4f\"",
+          "referrer-policy": "strict-origin-when-cross-origin",
+          "server": "cloudflare",
+          "strict-transport-security": "max-age=31536000; includeSubDomains",
+          "x-content-type-options": "nosniff",
+          "x-deployment-id": "psr2.4ff29cca-7dce-4d43-82a1-359660f62268.1791500186.7lzCkq43BrcH6cZ0AxkTgoU9o8i9SL87j5ChxQb3bqo"
+        },
+        "at": "2026-10-01T22:56:26.975Z"
+      },
+      {
+        "url": "https://douknowball.com/assets/index-E8L0RxXO.js",
+        "status": 200,
+        "headers": {
+          "cache-control": "public, max-age=31536000, immutable",
+          "cf-ray": "a43f10a98eaf9446-CLE",
+          "content-encoding": "gzip",
+          "content-type": "text/javascript; charset=utf-8",
+          "date": "Thu, 01 Oct 2026 22:57:13 GMT",
+          "etag": "W/\"a04be3e331358cfa3a6ad8b43aba9d4f\"",
+          "referrer-policy": "strict-origin-when-cross-origin",
+          "server": "cloudflare",
+          "strict-transport-security": "max-age=31536000; includeSubDomains",
+          "x-content-type-options": "nosniff",
+          "x-deployment-id": "psr2.4ff29cca-7dce-4d43-82a1-359660f62268.1791500233.6jpDANscRh_TDL1HfTO7mbNfTlvqiZi4Jc6v8MLHXOU"
+        },
+        "at": "2026-10-01T22:57:13.330Z"
+      },
+      {
+        "url": "https://douknowball.com/assets/index-E8L0RxXO.js",
+        "status": 200,
+        "headers": {
+          "cache-control": "public, max-age=31536000, immutable",
+          "cf-ray": "a43f10c41d509446-CLE",
+          "content-encoding": "gzip",
+          "content-type": "text/javascript; charset=utf-8",
+          "date": "Thu, 01 Oct 2026 22:57:17 GMT",
+          "etag": "W/\"a04be3e331358cfa3a6ad8b43aba9d4f\"",
+          "referrer-policy": "strict-origin-when-cross-origin",
+          "server": "cloudflare",
+          "strict-transport-security": "max-age=31536000; includeSubDomains",
+          "x-content-type-options": "nosniff",
+          "x-deployment-id": "psr2.4ff29cca-7dce-4d43-82a1-359660f62268.1791500237.t1qzEhzv1t27ewGq8eX8R3xoTVETEJRQqH9v18mr4dg"
+        },
+        "at": "2026-10-01T22:57:17.339Z"
+      },
+      {
+        "url": "https://douknowball.com/assets/index-E8L0RxXO.js",
+        "status": 200,
+        "headers": {
+          "cache-control": "public, max-age=31536000, immutable",
+          "cf-ray": "a43f10d37c4f9446-CLE",
+          "content-encoding": "gzip",
+          "content-type": "text/javascript; charset=utf-8",
+          "date": "Thu, 01 Oct 2026 22:57:19 GMT",
+          "etag": "W/\"a04be3e331358cfa3a6ad8b43aba9d4f\"",
+          "referrer-policy": "strict-origin-when-cross-origin",
+          "server": "cloudflare",
+          "strict-transport-security": "max-age=31536000; includeSubDomains",
+          "x-content-type-options": "nosniff",
+          "x-deployment-id": "psr2.4ff29cca-7dce-4d43-82a1-359660f62268.1791500239.0whfW93QBMl4oACUFvRwSIBJSuEwBfZ5Vn9bDkNyXHM"
+        },
+        "at": "2026-10-01T22:57:19.763Z"
+      },
+      {
+        "url": "https://douknowball.com/assets/index-E8L0RxXO.js",
+        "status": 200,
+        "headers": {
+          "cache-control": "public, max-age=31536000, immutable",
+          "cf-ray": "a43f10e32e3e9446-CLE",
+          "content-encoding": "gzip",
+          "content-type": "text/javascript; charset=utf-8",
+          "date": "Thu, 01 Oct 2026 22:57:22 GMT",
+          "etag": "W/\"a04be3e331358cfa3a6ad8b43aba9d4f\"",
+          "referrer-policy": "strict-origin-when-cross-origin",
+          "server": "cloudflare",
+          "strict-transport-security": "max-age=31536000; includeSubDomains",
+          "x-content-type-options": "nosniff",
+          "x-deployment-id": "psr2.4ff29cca-7dce-4d43-82a1-359660f62268.1791500242.PXby-BCBd1kyz__obtgzkMJYVCBRIsHmwN1ID6muxXA"
+        },
+        "at": "2026-10-01T22:57:22.185Z"
+      },
+      {
+        "url": "https://douknowball.com/assets/index-E8L0RxXO.js",
+        "status": 200,
+        "headers": {
+          "cache-control": "public, max-age=31536000, immutable",
+          "cf-ray": "a43f142d2d68daa2-CLE",
+          "content-encoding": "gzip",
+          "content-type": "text/javascript; charset=utf-8",
+          "date": "Thu, 01 Oct 2026 22:59:37 GMT",
+          "etag": "W/\"a04be3e331358cfa3a6ad8b43aba9d4f\"",
+          "referrer-policy": "strict-origin-when-cross-origin",
+          "server": "cloudflare",
+          "strict-transport-security": "max-age=31536000; includeSubDomains",
+          "x-content-type-options": "nosniff",
+          "x-deployment-id": "psr2.4ff29cca-7dce-4d43-82a1-359660f62268.1791500377.HKZx9xdkK6x02FdHo5i2CBeqfeDUiQGQltxhTcK6fYM"
+        },
+        "at": "2026-10-01T22:59:37.061Z"
+      },
+      {
+        "url": "https://douknowball.com/assets/index-E8L0RxXO.js",
+        "status": 200,
+        "headers": {
+          "cache-control": "public, max-age=31536000, immutable",
+          "cf-ray": "a43f1461ba85daa2-CLE",
+          "content-encoding": "gzip",
+          "content-type": "text/javascript; charset=utf-8",
+          "date": "Thu, 01 Oct 2026 22:59:45 GMT",
+          "etag": "W/\"a04be3e331358cfa3a6ad8b43aba9d4f\"",
+          "referrer-policy": "strict-origin-when-cross-origin",
+          "server": "cloudflare",
+          "strict-transport-security": "max-age=31536000; includeSubDomains",
+          "x-content-type-options": "nosniff",
+          "x-deployment-id": "psr2.4ff29cca-7dce-4d43-82a1-359660f62268.1791500385.CKADiedLJlfduYhrlhBZMFamldRXX_KfGOaAjx-3-M4"
+        },
+        "at": "2026-10-01T22:59:45.314Z"
+      },
+      {
+        "url": "https://douknowball.com/assets/index-E8L0RxXO.js",
+        "status": 200,
+        "headers": {
+          "cache-control": "public, max-age=31536000, immutable",
+          "cf-ray": "a43f14a789c1daa2-CLE",
+          "content-encoding": "gzip",
+          "content-type": "text/javascript; charset=utf-8",
+          "date": "Thu, 01 Oct 2026 22:59:56 GMT",
+          "etag": "W/\"a04be3e331358cfa3a6ad8b43aba9d4f\"",
+          "referrer-policy": "strict-origin-when-cross-origin",
+          "server": "cloudflare",
+          "strict-transport-security": "max-age=31536000; includeSubDomains",
+          "x-content-type-options": "nosniff",
+          "x-deployment-id": "psr2.4ff29cca-7dce-4d43-82a1-359660f62268.1791500396.aeRn7Q8YDc4w6uCvAN8XaSoIvpGN1J5SwKof3GTRNi0"
+        },
+        "at": "2026-10-01T22:59:56.481Z"
+      },
+      {
+        "url": "https://douknowball.com/assets/index-E8L0RxXO.js",
+        "status": 200,
+        "headers": {
+          "cache-control": "public, max-age=31536000, immutable",
+          "cf-ray": "a43f14bbba71daa2-CLE",
+          "content-encoding": "gzip",
+          "content-type": "text/javascript; charset=utf-8",
+          "date": "Thu, 01 Oct 2026 23:00:00 GMT",
+          "etag": "W/\"a04be3e331358cfa3a6ad8b43aba9d4f\"",
+          "referrer-policy": "strict-origin-when-cross-origin",
+          "server": "cloudflare",
+          "strict-transport-security": "max-age=31536000; includeSubDomains",
+          "x-content-type-options": "nosniff",
+          "x-deployment-id": "psr2.4ff29cca-7dce-4d43-82a1-359660f62268.1791500399.oXRCd2cPNs04EJK53pM70CaKX-QxokxAZIptCyttVdE"
+        },
+        "at": "2026-10-01T22:59:59.768Z"
+      },
+      {
+        "url": "https://douknowball.com/assets/index-E8L0RxXO.js",
+        "status": 200,
+        "headers": {
+          "cache-control": "public, max-age=31536000, immutable",
+          "cf-ray": "a43f14ca4b6fdaa2-CLE",
+          "content-encoding": "gzip",
+          "content-type": "text/javascript; charset=utf-8",
+          "date": "Thu, 01 Oct 2026 23:00:02 GMT",
+          "etag": "W/\"a04be3e331358cfa3a6ad8b43aba9d4f\"",
+          "referrer-policy": "strict-origin-when-cross-origin",
+          "server": "cloudflare",
+          "strict-transport-security": "max-age=31536000; includeSubDomains",
+          "x-content-type-options": "nosniff",
+          "x-deployment-id": "psr2.4ff29cca-7dce-4d43-82a1-359660f62268.1791500402.pAtJ30qh6E5QZ2idDKONJ7-Wli3GQrHriJo8sqIUHq0"
+        },
+        "at": "2026-10-01T23:00:02.005Z"
+      },
+      {
+        "url": "https://douknowball.com/assets/index-E8L0RxXO.js",
+        "status": 200,
+        "headers": {
+          "cache-control": "public, max-age=31536000, immutable",
+          "cf-ray": "a43f14d8ea3adaa2-CLE",
+          "content-encoding": "gzip",
+          "content-type": "text/javascript; charset=utf-8",
+          "date": "Thu, 01 Oct 2026 23:00:04 GMT",
+          "etag": "W/\"a04be3e331358cfa3a6ad8b43aba9d4f\"",
+          "referrer-policy": "strict-origin-when-cross-origin",
+          "server": "cloudflare",
+          "strict-transport-security": "max-age=31536000; includeSubDomains",
+          "x-content-type-options": "nosniff",
+          "x-deployment-id": "psr2.4ff29cca-7dce-4d43-82a1-359660f62268.1791500404.taLitliOH8ldUtDvGJ3hFk7tSeGjBWyvrCjm7307s0Q"
+        },
+        "at": "2026-10-01T23:00:04.376Z"
+      }
+    ],
+    "cleanLocalGateNotUsed": "C:/Users/antho/AppData/Local/Temp/dukb-round842-845-production",
+    "releaseLabel": "Current published entry index-E8L0RxXO.js, matching root Release P observation; no claim based on Git alone."
+  },
+  "findings": [],
+  "conclusion": "No new reproducible product defect was established in this bounded native sample. This does not clear all Club Manager behavior or data.",
+  "completedChecks": [
+    {
+      "name": "Native new current-era guest career",
+      "club": "Brentford",
+      "season": 1,
+      "squadSize": 25,
+      "budget": 69
+    },
+    {
+      "name": "Native contract renewal",
+      "beforeBudget": 69,
+      "afterBudget": 60.7,
+      "changedPlayers": [
+        {
+          "id": "p-dango-ouattara",
+          "name": "Dango Ouattara"
+        }
+      ]
+    },
+    {
+      "name": "Whole first season and season review",
+      "leagueMatches": 38,
+      "calendarEntries": 54,
+      "review": "Brentford finished9th,53points,16W5D17L,GF55GA47,board verdictB,season score28",
+      "directReports": 6,
+      "directReportRounds": [
+        1,
+        2,
+        10,
+        14,
+        30,
+        38
+      ],
+      "liveMatches": 1,
+      "liveHalfTimeReached": true,
+      "nativeCalendarFastForwards": 5,
+      "individualSimulationStatus": "Only two opening matches were individually driven; native calendar simulated remaining fixtures and stopped for reports/window/season review."
+    },
+    {
+      "name": "Native offseason / next season",
+      "club": "Brentford",
+      "season": 2,
+      "budget": 142,
+      "squadSize": 23
+    },
+    {
+      "name": "Settled season2 refresh and native Resume",
+      "saveBytesHeld": true
+    },
+    {
+      "name": "Two native release-clause transfers in a separate fresh guest career",
+      "beforeBudget": 60.7,
+      "afterBudget": 58.1,
+      "beforeSquad": 25,
+      "afterSquad": 27,
+      "newPlayers": [
+        {
+          "id": "sign-daniel-bachmann-s1",
+          "name": "Daniel Bachmann"
+        },
+        {
+          "id": "sign-juan-cuadrado-s1",
+          "name": "Juan Cuadrado"
+        }
+      ],
+      "nativeCompleted": [
+        true,
+        true
+      ]
+    },
+    {
+      "name": "Literal invalid-looking market search",
+      "value": "[]{}.*\\",
+      "pageErrors": 0
+    },
+    {
+      "name": "Corrupt primary save at actual fresh app boot",
+      "cases": [
+        {
+          "label": "null",
+          "input": "null",
+          "raw": "null",
+          "heading": "CLUB MANAGER",
+          "overflow": 0,
+          "entry": "/assets/index-E8L0RxXO.js",
+          "errors": [],
+          "writes": [],
+          "clubPickerReachable": true
+        },
+        {
+          "label": "invalid-json",
+          "input": "{",
+          "raw": "{",
+          "heading": "CLUB MANAGER",
+          "overflow": 0,
+          "entry": "/assets/index-E8L0RxXO.js",
+          "errors": [],
+          "writes": [],
+          "clubPickerReachable": true
+        },
+        {
+          "label": "empty-object",
+          "input": "{}",
+          "raw": "{}",
+          "heading": "CLUB MANAGER",
+          "overflow": 0,
+          "entry": "/assets/index-E8L0RxXO.js",
+          "errors": [],
+          "writes": [],
+          "clubPickerReachable": true
+        }
+      ]
+    }
+  ],
+  "observationsNeedingFurtherDiagnosis": [
+    {
+      "id": "CM-FLAG-01",
+      "kind": "Unconfirmed raw save normalization",
+      "current": "Fresh native career save bytes changed on first reload in both complete and transfer runs. The transfer-run settled save also changed after reload.",
+      "knownOutcome": "Club/season/budget/squad count held in observed before/after samples; completed season2 settled save bytes held.",
+      "reasonNotBug": "Exact changed fields were not retained. loadCareer has explicit repair routines; a byte change alone does not establish lost progression or incorrect game behavior.",
+      "recommendation": "Flag for a future captured field-diff probe; do not change gameplay from this audit."
+    }
+  ],
+  "coverageLimits": [
+    "No spam or held-key test, no complete negotiation or refused signing, no release/sale, no second full season.",
+    "No halftime substitution or tactical-change assertion. One live match did reach the break and completed via native second-half/full-report controls.",
+    "Native season-end signings block was not exercised in the complete run. Successful transfers are proven in a separate initial summer window.",
+    "First two old-driver attempts stopped before meaningful simulation. Their raw receipts are retained, not counted as product failures.",
+    "Old driver halftime and live-skip counters missed its own nested live-match branch; window count matched static guide prose. Those counters are discarded.",
+    "Original corrupt-reload attempts were overwritten by the pagehide saver. Only fresh-context startup corrupt tests above are credited.",
+    "Outward writes were blocked. Server score/completion behavior, accounts, ads, analytics and real-sports data accuracy are outside this native audit.",
+    "No source modifications, permanent tests, builds, publication or Git operations were performed in this audit lane."
+  ],
+  "safety": {
+    "externalWritesAllowed": 0,
+    "blockedWriteAttempts": 7,
+    "blockedTrackingRequests": 0,
+    "seasonRuntimeErrors": [],
+    "transferRuntimeErrors": [],
+    "corruptRuntimeErrors": []
+  },
+  "geometry": {
+    "seasonSamples": 17,
+    "seasonMaximumHorizontalOverflow": 0,
+    "transferSamples": 6,
+    "transferMaximumHorizontalOverflow": 0,
+    "corruptMaximumHorizontalOverflow": 0,
+    "scrollJumpClaim": false
+  },
+  "evidence": {
+    "season": "club-manager-native-evidence.json",
+    "seasonLog": "club-manager-native-third.log",
+    "transfer": "club-manager-transfer-audit.json",
+    "transferLog": "club-manager-transfer-supplement.log",
+    "corrupt": "club-manager-corrupt-startup.json",
+    "screenshots": [
+      "club-manager-season-ending.png",
+      "club-manager-offseason.png",
+      "club-manager-transfer-market.png",
+      "club-manager-corrupt-startup-null.png",
+      "club-manager-corrupt-startup-invalid-json.png",
+      "club-manager-corrupt-startup-empty-object.png"
+    ],
+    "earlierDriverLimits": [
+      "club-manager-first-driver-limit.json",
+      "club-manager-second-driver-limit.json"
+    ]
+  }
+}
