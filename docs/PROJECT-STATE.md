@@ -1,5 +1,17 @@
 # Project state
 
+Codex claims896 NHL frozen opening-rating preparation, 2026-10-02.
+
+893 TEMP v2 model, flat future quote curve and narrow next-cap AI draft
+guard now have author proofs. The draft guard substitutes two affordable
+scouting-order picks across twelve4-season streams and preserves776 legacy
+state/RNG checkpoints. Independent review is pending.896 owns script-only
+frozen inputs/model/generator and a separate GM opening map; no NHL seed,
+Gauntlet, age or saved-career rewrite. Engine/Board/native cutover still
+requires separate acceptance. NBA895 final UI lifecycle/gates are in flight.
+NFL889 source is pushed asdb02eb29; live publication remains Claude's.
+All12 paused drafts and seven stashes held. Next free897.
+
 889 NFL new-franchise ratings accepted in source, 2026-10-02.
 
 One reviewed v2.2 model now covers all2163 opening players without the old

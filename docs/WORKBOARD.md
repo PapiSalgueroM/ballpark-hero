@@ -1,5 +1,16 @@
 # Work board
 
+Codex CLAIMS896, NHL frozen opening-rating preparation, 2026-10-02.
+
+Owns script-only reviewed-v2 inputs/model, a reproducible generator, separate
+GM opening map and generation/refusal proofs. Scope excludes the shared
+NHL seed/Gauntlet and saved careers.893's flat future quote and versioned
+next-cap AI draft guard have author proof, with independent review pending.
+No production NHL cutover accepted.895 NBA integration/actual Board tests
+continue in their owned files;889 NFL accepted source is pushed db02eb29.
+Claude retains875/database and publication.12paused drafts/sevenstashes held.
+Next free897.
+
 Codex889 DONE in source, final NFL rating acceptance, 2026-10-02.
 
 Original full-roster v2.2 grades/prices now feed new franchises only.
