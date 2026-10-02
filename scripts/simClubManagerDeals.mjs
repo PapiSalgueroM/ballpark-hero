@@ -151,6 +151,7 @@ if (CONTROL && !KNOWN.includes(CONTROL)) {
  * exists to stop.
  */
 const DEALS_PATH = `${ROOT}/src/lib/clubManagerDeals.ts`;
+const TABLE_PATH = `${ROOT}/src/lib/gmDealTable.ts`;
 const ENGINE_PATH = `${ROOT}/src/lib/clubManager.ts`;
 let enginePath = ENGINE_PATH;
 /* The sections read the deal desk's own exports directly, so under a control
@@ -168,12 +169,16 @@ if (CONTROL) {
     }
     return src.replace(from, to);
   };
+  /* Round 908: the fee table moved to gmDealTable.ts, which clubManagerDeals
+     re-exports, so the two controls that rewrite a line of it rewrite it there.
+     The lines themselves are the same text they always were. */
+  let table = fs.readFileSync(TABLE_PATH, 'utf8').replaceAll('\r\n', '\n');
   if (CONTROL === 'nofog') {
     deals = swap(deals, 'export const VALUATION_SPREAD_MAX = 0.3;', 'export const VALUATION_SPREAD_MAX = 0.02;', 'clubManagerDeals.ts');
   } else if (CONTROL === 'nowalkout') {
-    deals = swap(deals, 'export const WALKOUT_RATIO = 0.55;', 'export const WALKOUT_RATIO = 0;', 'clubManagerDeals.ts');
+    table = swap(table, 'export const WALKOUT_RATIO = 0.55;', 'export const WALKOUT_RATIO = 0;', 'gmDealTable.ts');
   } else if (CONTROL === 'freehaggle') {
-    deals = swap(deals, "  if (verdict === 'counter') return 1;", "  if (verdict === 'counter') return 0;", 'clubManagerDeals.ts');
+    table = swap(table, "  if (verdict === 'counter') return 1;", "  if (verdict === 'counter') return 0;", 'gmDealTable.ts');
   } else if (CONTROL === 'freeterms') {
     deals = swap(deals, 'export const TERMS_WALKOUT = 0.62;', 'export const TERMS_WALKOUT = 0;', 'clubManagerDeals.ts');
   } else if (CONTROL === 'noloanterms') {
@@ -193,6 +198,16 @@ if (CONTROL) {
   } else if (CONTROL === 'nohandoff') {
     engine = swap(engine, "    next.phase = 'terms';", "    next.phase = 'fee';", 'clubManager.ts');
   }
+  /* Round 908: the deals copy must read the rewritten table rather than the
+     shipped one, on every line that imports or re-exports from it. */
+  const tableCopy = `${TMP}/cmDeals.control.table.ts`;
+  fs.writeFileSync(tableCopy, table);
+  const TABLE_IMPORT = "from '@/lib/gmDealTable';";
+  if (deals.split(TABLE_IMPORT).length - 1 < 2) {
+    console.error('control cannot run: clubManagerDeals.ts no longer imports and re-exports gmDealTable in the shape this harness rewrites');
+    process.exit(1);
+  }
+  deals = deals.replaceAll(TABLE_IMPORT, `from '${tableCopy}';`);
   const dealsCopy = `${TMP}/cmDeals.control.deals.ts`;
   fs.writeFileSync(dealsCopy, deals);
   dealsPath = dealsCopy;
