@@ -1,5 +1,30 @@
 # Project state
 
+904 NFL owned draft capital accepted in source, 2026-10-02.
+Trades now change the number of next-draft selections; every human/rival
+choice consumes an actual pick. Zero capital retains tagging and exits
+explicitly through one offseason. Legacy/damaged saves and duplicate
+clicks have outcome proof.25 cases, physical-before19 rejects/six held,
+12 effective controls and independent review pass. Actual post-season
+Board fixture:12 paths at1440/390/320,1056checks/48screens, no errors,
+outside requests or overflow. It does not claim a full native NFL season.
+Real app type/build,17 static/search/guide and16 GM/source fences pass.
+Owned guide/page/snapshot/fingerprints refreshed; ReleaseY's ledger held.
+Receipt: docs/audits/NFL-DRAFT-CAPITAL-RECEIPT-2026-10-02.md.
+Claude:904 plus9055449239f and906cc72ce41 are ready for publication.
+937 recovery-risk and936 model acceptance continue. Next free939 after938.
+
+Codex CLAIMS938, NBA current-versus-tipoff finance clarity, 2026-10-02.
+Actual30-club paired constructors and120 engine seasons prove895 held
+original budgets. Denver's initial140.3M tax excludes its four mandatory
+minimum tipoff contracts; without other moves, tipoff projects189.6M. Explain the
+conditional automatic fill in the existing cap panel using engine-derived
+payroll/tax forecasts. Own only a narrow NbaFrontOfficeBoard finance hunk,
+small pure helper if needed, focused proofs and one basketball-guide hunk
+with its scoped derived refresh. No rating, initializer, budget, save, AI,
+trade or real salary change. Preserve the paused basketball draft and
+Claude's future GM desk binds. Next free939.
+
 906 earned career support feedback accepted in source, 2026-10-02.
 All four season reveals highlight the actual905 support note with a single
 650ms decorative pulse. Values and saved states are untouched. Actual
@@ -27,7 +52,7 @@ are in final source delivery. Publication remains separate from acceptance.
 Codex CLAIMS937, four-career Recovery Suite consequences, 2026-10-02.
 The four paid services currently do not affect actual injury outcomes.
 Paired real-engine seasons verified the defect. Connect ownership to a
-bounded simulation-risk reduction with identical draw counts, and prove
+bounded simulation-risk reduction using existing injury draws, and prove
 that cancellation restores ordinary risk. Keep Claude917 to920's separate
 card/deck additions. No real medical claim, Board or database change.
 904/905/906 delivery and936 model review continue. Next free938.
