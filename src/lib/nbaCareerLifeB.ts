@@ -92,6 +92,7 @@ export function getNbaLifeEventsB(c: NbaCareerState, rng: () => number): NbaCare
   if (yrs >= 1 && c.age >= 23 && flag(c, 'nb_newborn') < 2) {
     deck.push({
       id: 'nbaB_newborn',
+      category: 'family', cooldown: 2,
       title: 'The due date is a five game road trip',
       body: 'Your first kid is due in the middle of a west coast swing, two time zones from the hospital. The doctor keeps repeating that babies do not read the schedule.',
       options: [
@@ -126,6 +127,7 @@ export function getNbaLifeEventsB(c: NbaCareerState, rng: () => number): NbaCare
   if (yrs >= 2 && c.age >= 25 && flag(c, 'nb_partnerCity') === 0) {
     deck.push({
       id: 'nbaB_partnerCity',
+      category: 'family', cooldown: 99,
       title: 'They got the job',
       body: 'Your partner just landed the role they have chased since college. It is 1,800 miles away, in a city with a different arena in it.',
       options: [
@@ -158,6 +160,7 @@ export function getNbaLifeEventsB(c: NbaCareerState, rng: () => number): NbaCare
   if (yrs >= 2 && c.age >= 24 && flag(c, 'nb_sibAgent') === 0) {
     deck.push({
       id: 'nbaB_siblingManager',
+      category: 'family', cooldown: 99,
       title: 'Your brother has business cards now',
       body: 'They say MANAGER in a font he picked himself. He has already told two sneaker brands that he speaks for you.',
       options: [
@@ -191,6 +194,7 @@ export function getNbaLifeEventsB(c: NbaCareerState, rng: () => number): NbaCare
   if (yrs >= 3 && flag(c, 'nb_parentHome') === 0) {
     deck.push({
       id: 'nbaB_parentCloser',
+      category: 'family', cooldown: 99,
       title: 'She keeps saying the word closer',
       body: 'Your mom has never asked you for a car, a bag or a dollar. She has asked, on every call for three months, if you could be closer.',
       options: [
@@ -223,6 +227,7 @@ export function getNbaLifeEventsB(c: NbaCareerState, rng: () => number): NbaCare
   if (yrs >= 1 && c.fanbase >= 35 && flag(c, 'nb_leak') === 0) {
     deck.push({
       id: 'nbaB_groupChatLeak',
+      category: 'family', cooldown: 99,
       title: 'The family group chat leaked',
       body: 'A cousin screenshotted it. Your review of the head coach, that his out of bounds plays were drawn by a man who has only ever heard basketball described to him, is now a trending audio.',
       options: [
@@ -254,6 +259,7 @@ export function getNbaLifeEventsB(c: NbaCareerState, rng: () => number): NbaCare
   if ((nw >= 3 || c.earnings >= 12) && flag(c, 'nb_house') === 0) {
     deck.push({
       id: 'nbaB_houseForSomeone',
+      category: 'family', cooldown: 99, story: 'familyHouse',
       title: 'Somebody never pays rent again',
       body: 'The money is there to buy a person a house outright, in cash, this week. The candidate list turned out to be longer than you expected.',
       options: [
@@ -285,6 +291,7 @@ export function getNbaLifeEventsB(c: NbaCareerState, rng: () => number): NbaCare
   if (yrs >= 2 && c.age >= 24 && flag(c, 'nb_houseguests') === 0) {
     deck.push({
       id: 'nbaB_summerHouseguests',
+      category: 'family', cooldown: 99,
       title: 'Thirty one relatives, one guest house',
       body: 'They all want to spend July at your place. Someone has already asked whether the theater room locks from the inside.',
       options: [
@@ -318,6 +325,7 @@ export function getNbaLifeEventsB(c: NbaCareerState, rng: () => number): NbaCare
   if (yrs >= 4 && teamPts >= 6000 && c.ovr >= 76 && flag(c, 'nb_record') === 0) {
     deck.push({
       id: 'nbaB_franchiseRecord',
+      category: 'legacy', cooldown: 99,
       title: '38 points from the franchise record',
       body: `The ${nbaTeamLabelOf(c.team)} all time scoring record is one good night away, and the seed is already locked. Game 82 means nothing to anybody in the building except you.`,
       options: [
@@ -350,6 +358,7 @@ export function getNbaLifeEventsB(c: NbaCareerState, rng: () => number): NbaCare
   if (yrs >= 8 && (c.rings >= 1 || c.allNbas >= 2 || c.fanbase >= 78) && flag(c, 'nb_jersey') === 0) {
     deck.push({
       id: 'nbaB_jerseyRetirement',
+      category: 'legacy', cooldown: 99,
       title: 'They want your number in the rafters',
       body: `${nbaTeamLabelOf(c.team)} have three ceremony dates and one very specific request about how long the speech can be.`,
       options: [
@@ -381,6 +390,7 @@ export function getNbaLifeEventsB(c: NbaCareerState, rng: () => number): NbaCare
   if (yrs >= 9 && c.age >= 31 && flag(c, 'nb_hof') === 0) {
     deck.push({
       id: 'nbaB_hofPush',
+      category: 'legacy', cooldown: 99,
       title: 'A firm that specializes in Springfield',
       body: 'They say your case needs narrative support. They have a slide deck about your life with a custom title font and a section called The Forgotten Peak.',
       options: [
@@ -412,6 +422,7 @@ export function getNbaLifeEventsB(c: NbaCareerState, rng: () => number): NbaCare
   if (yrs >= 5 && c.age >= 28 && flag(c, 'nb_heir') === 0) {
     deck.push({
       id: 'nbaB_mentorHeir',
+      category: 'legacy', cooldown: 99,
       title: 'They drafted your replacement',
       body: `${nbaTeamLabelOf(c.team)} took your exact position in the lottery. The kid has your rookie card framed in his apartment, which somehow makes it worse.`,
       options: [
@@ -443,6 +454,7 @@ export function getNbaLifeEventsB(c: NbaCareerState, rng: () => number): NbaCare
   if (yrs >= 9 && (c.rings >= 1 || c.mvps >= 1) && flag(c, 'nb_statue') === 0) {
     deck.push({
       id: 'nbaB_statueDebate',
+      category: 'legacy', cooldown: 99,
       title: 'The statue committee has notes',
       body: 'The city wants bronze outside the arena. The sculptor sent eleven pose options and one of them is you screaming at an official with both arms out.',
       options: [
@@ -474,6 +486,7 @@ export function getNbaLifeEventsB(c: NbaCareerState, rng: () => number): NbaCare
   if (yrs >= 8 && c.age >= 33 && flag(c, 'nb_tour') === 0) {
     deck.push({
       id: 'nbaB_farewellTour',
+      category: 'legacy', cooldown: 99,
       title: 'Announce it, or just go quietly',
       body: 'Say this is the last one and every road arena hands you a framed something at halftime. Say nothing and you get to play basketball without a receiving line.',
       options: [
@@ -505,6 +518,7 @@ export function getNbaLifeEventsB(c: NbaCareerState, rng: () => number): NbaCare
   if (yrs >= 8 && careerPts >= 12000 && flag(c, 'nb_milestone') === 0) {
     deck.push({
       id: 'nbaB_pointsMilestone',
+      category: 'legacy', cooldown: 99,
       title: 'Eleven points from 20,000',
       body: 'The arena has a ceremony cued up, a gold ball ready and a script for the PA guy. The other team has a rookie who would love to be the trivia answer that stops you.',
       options: [
@@ -539,6 +553,7 @@ export function getNbaLifeEventsB(c: NbaCareerState, rng: () => number): NbaCare
     const foe = isGuard(c) ? 'a 6 foot 6 guard' : isWing(c) ? 'a wing with 7 foot arms' : 'a center who never leaves his feet';
     deck.push({
       id: 'nbaB_nemesisDefender',
+      category: 'rivalry', cooldown: 99,
       title: 'He has your number',
       body: `There is ${foe} in your conference who has genuinely solved you. Nine for 31 across the last two meetings, and he smiles the entire time.`,
       options: [
@@ -572,6 +587,7 @@ export function getNbaLifeEventsB(c: NbaCareerState, rng: () => number): NbaCare
   if (yrs >= 3 && last && last.teamResult.startsWith('Lost') && flag(c, 'nb_series') === 0) {
     deck.push({
       id: 'nbaB_playoffPersonal',
+      category: 'rivalry', cooldown: 99,
       title: 'Game 4 got personal',
       body: 'He said something about your mother at the free throw line and the courtside mic caught most of it. The clip has 40 million views before your flight lands.',
       options: [
@@ -605,6 +621,7 @@ export function getNbaLifeEventsB(c: NbaCareerState, rng: () => number): NbaCare
   if (yrs >= 3 && prevTeam && flag(c, 'nb_oldFriend') === 0) {
     deck.push({
       id: 'nbaB_formerTeammate',
+      category: 'rivalry', cooldown: 99,
       title: 'Your old running mate switched sides',
       body: `He signed with a team you see four times a year and then did an interview about how he finally has structure. Everyone knew exactly who that was about.`,
       options: [
@@ -636,6 +653,7 @@ export function getNbaLifeEventsB(c: NbaCareerState, rng: () => number): NbaCare
   if (yrs >= 4 && flag(c, 'nb_oldCoach') === 0) {
     deck.push({
       id: 'nbaB_coachWhoBenched',
+      category: 'rivalry', cooldown: 99,
       title: 'The coach who benched you got a new job',
       body: 'Fourth quarter of a playoff game, he sat you for a veteran who went 3 for 14. He runs a team you see twice a year now and calls you a great kid in every interview.',
       options: [
@@ -669,6 +687,7 @@ export function getNbaLifeEventsB(c: NbaCareerState, rng: () => number): NbaCare
   if (yrs >= 3 && prevTeam && flag(c, 'nb_revenge') === 0) {
     deck.push({
       id: 'nbaB_revengeGame',
+      category: 'rivalry', cooldown: 99,
       title: 'First trip back',
       body: `Your return to ${nbaTeamLabelOf(prevTeam)} is a national Tuesday. They are playing a tribute video in the first timeout whether you want one or not.`,
       options: [
@@ -702,6 +721,7 @@ export function getNbaLifeEventsB(c: NbaCareerState, rng: () => number): NbaCare
   if (yrs >= 3 && c.ovr >= 80 && flag(c, 'nb_snub') === 0) {
     deck.push({
       id: 'nbaB_allStarSnub',
+      category: 'rivalry', cooldown: 99, story: 'allStarSnub',
       title: 'Left off the All Star team',
       body: '24 and 7 on a winning team, and the coaches took a guy averaging 19 because his team had a better February. One coach said the vote was really hard, on camera, badly.',
       options: [
@@ -735,6 +755,7 @@ export function getNbaLifeEventsB(c: NbaCareerState, rng: () => number): NbaCare
   if (yrs >= 2 && nw >= 1.5 && flag(c, 'nb_food') === 0) {
     deck.push({
       id: 'nbaB_restaurantGroup',
+      category: 'business', cooldown: 99,
       title: 'A chef wants your name on eight more doors',
       body: 'Two packed locations, real food, real books. He needs 3M to go from two restaurants to ten, and he wants your face on the wall of every one.',
       options: [
@@ -768,6 +789,7 @@ export function getNbaLifeEventsB(c: NbaCareerState, rng: () => number): NbaCare
   if (yrs >= 2 && nw >= 1 && flag(c, 'nb_tech') === 0) {
     deck.push({
       id: 'nbaB_techPitch',
+      category: 'business', cooldown: 99,
       title: 'A 26 year old in a 900 dollar hoodie',
       body: 'His app tells you which of your friends is actually on the way and which one is still in the shower. He wants 2M and he has said the word ecosystem nine times.',
       options: [
@@ -803,6 +825,7 @@ export function getNbaLifeEventsB(c: NbaCareerState, rng: () => number): NbaCare
   if (yrs >= 4 && c.fanbase >= 45 && flag(c, 'nb_academy') === 0) {
     deck.push({
       id: 'nbaB_youthAcademy',
+      category: 'business', cooldown: 99,
       title: 'Your name on a gym full of kids',
       body: 'Two courts, a weight room, a study hall and a bus route that actually reaches the neighborhood you came from. The full build is 4M.',
       options: [
@@ -834,6 +857,7 @@ export function getNbaLifeEventsB(c: NbaCareerState, rng: () => number): NbaCare
   if (yrs >= 3 && c.fanbase >= 50 && flag(c, 'nb_media') === 0) {
     deck.push({
       id: 'nbaB_mediaCompany',
+      category: 'business', cooldown: 99,
       title: 'Your podcast did 11 million downloads on a laptop mic',
       body: 'A network offered to buy it outright. A studio offered to fund whatever you want to build instead. Your cohost, a cousin, has opinions about both.',
       options: [
@@ -867,6 +891,7 @@ export function getNbaLifeEventsB(c: NbaCareerState, rng: () => number): NbaCare
   if (yrs >= 5 && nw >= 2 && c.age >= 27 && flag(c, 'nb_wine') === 0) {
     deck.push({
       id: 'nbaB_wineLabel',
+      category: 'business', cooldown: 99,
       title: 'A wine with your jersey number on the bottle',
       body: 'You have been to Napa twice and both times somebody offered you a vineyard. The third offer came with a spreadsheet, which is how you know it is serious.',
       options: [
@@ -900,6 +925,7 @@ export function getNbaLifeEventsB(c: NbaCareerState, rng: () => number): NbaCare
   if (yrs >= 6 && nw >= 4 && flag(c, 'nb_club') === 0) {
     deck.push({
       id: 'nbaB_overseasClub',
+      category: 'business', cooldown: 99,
       title: 'A second division club in Spain wants your name on the letterhead',
       body: 'Eleven thousand seats, a 90 year old crest and a president who cried during the video call. Promotion is worth real money and he knows you know that.',
       options: [
@@ -934,6 +960,7 @@ export function getNbaLifeEventsB(c: NbaCareerState, rng: () => number): NbaCare
   if (yrs >= 1 && flag(c, 'nb_vacay') === 0) {
     deck.push({
       id: 'nbaB_vacationPhoto',
+      category: 'offseason', cooldown: 99,
       title: 'The yacht photo',
       body: 'You are 400 pounds of joy in a photo taken in July and the internet has decided to have a full week about your conditioning. Your trainer sent it to you with no message.',
       options: [
@@ -965,6 +992,7 @@ export function getNbaLifeEventsB(c: NbaCareerState, rng: () => number): NbaCare
   if (c.fanbase >= 40 && flag(c, 'nb_golf') === 0) {
     deck.push({
       id: 'nbaB_celebGolf',
+      category: 'offseason', cooldown: 99,
       title: 'The celebrity golf tournament',
       body: 'Two days in Lake Tahoe, cameras on every tee box, and a pairing with a country singer who takes this extremely seriously.',
       options: [
@@ -1000,6 +1028,7 @@ export function getNbaLifeEventsB(c: NbaCareerState, rng: () => number): NbaCare
   if ((c.ovr >= 85 || c.mvps >= 1 || c.allNbas >= 1) && flag(c, 'nb_cover') === 0) {
     deck.push({
       id: 'nbaB_gameCover',
+      category: 'offseason', cooldown: 99,
       title: 'The video game cover shoot',
       body: 'Four hours in a motion capture suit with 92 dots on your face. They want the cover, the trailer and one very specific dunk you have done twice in your life.',
       options: [
@@ -1033,6 +1062,7 @@ export function getNbaLifeEventsB(c: NbaCareerState, rng: () => number): NbaCare
   if (yrs >= 2 && c.fanbase >= 45 && flag(c, 'nb_album') === 0) {
     deck.push({
       id: 'nbaB_album',
+      category: 'offseason', cooldown: 99,
       title: '14 tracks nobody asked for',
       body: 'You have been in a studio all June. Your engineer keeps saying it is actually not bad in the tone people use about babies that are not cute.',
       options: [
@@ -1066,6 +1096,7 @@ export function getNbaLifeEventsB(c: NbaCareerState, rng: () => number): NbaCare
   if (c.age >= 24 && flag(c, 'nb_cook') === 0) {
     deck.push({
       id: 'nbaB_learningToCook',
+      category: 'offseason', cooldown: 99,
       title: 'You are 26 and cannot make rice',
       body: 'You have made eleven million dollars and eaten the same three meals since high school. Somebody in your house said this out loud at dinner.',
       options: [
@@ -1097,6 +1128,7 @@ export function getNbaLifeEventsB(c: NbaCareerState, rng: () => number): NbaCare
   if ((yrs >= 4 || c.earnings >= 15) && flag(c, 'nb_charity') === 0) {
     deck.push({
       id: 'nbaB_foundationLaunch',
+      category: 'offseason', cooldown: 99,
       title: 'The foundation',
       body: 'Everyone has one. Most of them are a logo, a gala and a very confusing tax filing. Yours does not have to be.',
       options: [
@@ -1130,6 +1162,7 @@ export function getNbaLifeEventsB(c: NbaCareerState, rng: () => number): NbaCare
   if (c.fanbase >= 60 && flag(c, 'nb_namefan') === 0) {
     deck.push({
       id: 'nbaB_nameChangeFan',
+      category: 'weird', cooldown: 99,
       title: 'A man in Ohio legally changed his name to yours',
       body: 'Forty one years old, three kids, section 214 every home game. His wife found out from a piece of mail.',
       options: [
@@ -1161,6 +1194,7 @@ export function getNbaLifeEventsB(c: NbaCareerState, rng: () => number): NbaCare
   if (yrs >= 2 && flag(c, 'nb_psychic') === 0 && rng() < 0.8) {
     deck.push({
       id: 'nbaB_ownerPsychic',
+      category: 'weird', cooldown: 99,
       title: 'The owner hired a psychic',
       body: 'She sits in on shootaround and has firm opinions about the starting lineup. The head coach has stopped arguing with her, which is the scary part.',
       options: [
@@ -1194,6 +1228,7 @@ export function getNbaLifeEventsB(c: NbaCareerState, rng: () => number): NbaCare
   if (yrs >= 2 && flag(c, 'nb_ghost') === 0 && rng() < 0.8) {
     deck.push({
       id: 'nbaB_arenaGhost',
+      category: 'weird', cooldown: 99,
       title: 'The practice gym is haunted',
       body: 'Three rookies swear it is a center who played here in 1971. The security camera has a ball rolling out of the rack at 2:40am with nobody in the building.',
       options: [
@@ -1225,6 +1260,7 @@ export function getNbaLifeEventsB(c: NbaCareerState, rng: () => number): NbaCare
   if (yrs >= 1 && flag(c, 'nb_mascot') === 0 && rng() < 0.85) {
     deck.push({
       id: 'nbaB_mascotFeud',
+      category: 'weird', cooldown: 99,
       title: 'The mascot is doing a bit about you',
       body: 'He mimes your free throw routine at every home game and the jumbotron loves it. Nineteen thousand people love it. You do not love it.',
       options: [
@@ -1256,6 +1292,7 @@ export function getNbaLifeEventsB(c: NbaCareerState, rng: () => number): NbaCare
   if (yrs >= 1 && flag(c, 'nb_hotdog') === 0 && rng() < 0.85) {
     deck.push({
       id: 'nbaB_hotDogChallenge',
+      category: 'weird', cooldown: 99,
       title: 'The halftime hot dog challenge',
       body: 'A season ticket holder ate nine in four minutes and then called you out on the jumbotron by name. The team wants you in it. The nutritionist is standing directly behind the camera.',
       options: [
@@ -1289,6 +1326,7 @@ export function getNbaLifeEventsB(c: NbaCareerState, rng: () => number): NbaCare
   if (yrs >= 1 && flag(c, 'nb_raccoon') === 0 && rng() < 0.85) {
     deck.push({
       id: 'nbaB_facilityRaccoon',
+      category: 'weird', cooldown: 99,
       title: 'There is a raccoon above the film room',
       body: 'Nine days now. He has a name, it is Bandit, and he has taken three mouthguards and sat through an entire defensive install.',
       options: [
@@ -1320,6 +1358,7 @@ export function getNbaLifeEventsB(c: NbaCareerState, rng: () => number): NbaCare
   if (yrs >= 4 && c.fanbase >= 45 && flag(c, 'nb_heckler') === 0) {
     deck.push({
       id: 'nbaB_heckler',
+      category: 'weird', cooldown: 99,
       title: 'Nine years of the same three jokes',
       body: 'A man in section 108 has heckled you at every single home game since you were a rookie. He just mailed a handwritten letter asking if you two could meet.',
       options: [
@@ -1364,6 +1403,7 @@ export function getNbaLifeEventsB(c: NbaCareerState, rng: () => number): NbaCare
     const smax = money(Math.max(38, (c.ovr - 62) * 1.95) * nbaEraById(c.eraId).moneyScale);
     deck.push({
       id: 'nbaB_supermax',
+      category: 'contract', cooldown: 99,
       title: `The supermax is on the table at ${smax}M`,
       body: `${nbaTeamLabelOf(c.team)} put five years at ${smax}M in front of you. It is more money than your family has ever counted and it eats their entire cap sheet.`,
       options: [
@@ -1395,6 +1435,7 @@ export function getNbaLifeEventsB(c: NbaCareerState, rng: () => number): NbaCare
   if (yrs >= 3 && c.contractYears >= 1 && c.morale >= 45 && c.morale < 78 && flag(c, 'nb_tradeReq') === 0) {
     deck.push({
       id: 'nbaB_tradeRequest',
+      category: 'contract', cooldown: 99,
       title: 'You are 27 and they are 14 under .500',
       body: 'The front office keeps saying the word patience in meetings you did not ask to be in. Your prime is not a renewable resource.',
       options: [
@@ -1431,6 +1472,7 @@ export function getNbaLifeEventsB(c: NbaCareerState, rng: () => number): NbaCare
     const bag = money(Math.max(atEra(c, 4), c.salary * 1.3));
     deck.push({
       id: 'nbaB_contenderDiscount',
+      category: 'contract', cooldown: 99,
       title: 'One piece away, for a lot less money',
       body: `A real contender has ${discount}M and a starting spot. Two lottery teams have ${bag}M, a lovely practice facility and 24 wins.`,
       options: [
@@ -1471,6 +1513,7 @@ export function getNbaLifeEventsB(c: NbaCareerState, rng: () => number): NbaCare
     const market = money(Math.max(atEra(c, 2.5), nbaMarketSalary(c)));
     deck.push({
       id: 'nbaB_playerOption',
+      category: 'contract', cooldown: 2,
       title: `The player option is ${opt}M`,
       body: `Pick it up and the ${opt}M is guaranteed on July 1. Decline it and the market says ${market}M, right up until the moment it says something else.`,
       options: [
@@ -1504,6 +1547,7 @@ export function getNbaLifeEventsB(c: NbaCareerState, rng: () => number): NbaCare
   if (yrs >= 7 && c.age >= 30 && c.health >= 70 && c.earnings >= 60 && flag(c, 'nb_walkAway') === 0) {
     deck.push({
       id: 'nbaB_retireHealthy',
+      category: 'contract', cooldown: 99,
       title: 'You could stop right now',
       body: 'Knees, back and bank account all intact at the same time. Almost nobody in this league is ever handed that exact combination.',
       options: [
@@ -1541,6 +1585,7 @@ export function getNbaLifeEventsB(c: NbaCareerState, rng: () => number): NbaCare
     const leverage = atEra(c, 6);
     deck.push({
       id: 'nbaB_overseasMegaOffer',
+      category: 'contract', cooldown: 2,
       title: `${offer}M tax free to play in another hemisphere`,
       body: `A club overseas offered ${offer}M for one season, a private jet clause and a translator who is also, apparently, your driver. The NBA offers you the minimum and a locker by the door.`,
       options: [
