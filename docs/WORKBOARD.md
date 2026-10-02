@@ -1,5 +1,18 @@
 # Work board
 
+**Codex CLAIMS940/941, MLB/NHL draft capital, 2026-10-02.** Actual trades
+and eight real Board fixtures verify zero/one/four tokens always open two
+choices; human selections never consume them. NHL AI selects with none.
+940: MLB engine/draft-Board/proofs.941: NHL engine/draft-Board/proofs.
+Use actual owned tokens, consume real selections, keep the existing limited
+two five-rival batches independent of extra human picks, protect ordinary
+RNG/salary outcomes, preserve old saves and provide truthful zero exits.
+Current number[] simulation tokens have no future-year/origin fields;
+this is separate from Claude909's new ledger and future MLB desk binds.
+Parent owns scoped instructions/guide/derived changes, preserving paused
+baseball/hockey copies. NBA939 and frozen938 finance hunk are separate.
+937 parent acceptance continues; next free942.
+
 **936 ACCEPTED as unbound preparation, 2026-10-02.** Five new MLB model,
 generator, candidate/proof/audit files retain780 exact IDs, dated full
 league usage cohorts, explicit shrinkage and all30 opening budgets.
