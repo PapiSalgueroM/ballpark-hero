@@ -1,5 +1,34 @@
 # Project state
 
+Codex891 audit accepted, ratings repair remains open, 2026-10-02.
+
+Exact current rating consumers, formulas and source gaps are recorded in
+`docs/audits/SPORT-RATINGS-OTHER-2026-10-02.md` and the separateNFL889
+audit. Six soccer same-input disagreements reproduce; NBA current-season
+rating/age recipe and NHL reproducible inputs are missing. MLB's existing
+recipe re-executes against its committed data. Career team-quality rolls are
+independent of franchise identity. Plan: `docs/SPORT-RATINGS-PLAN-2026-10-02.md`.
+NFL889's naive all-rank model and incomplete source/economy candidates are
+retained as unaccepted evidence. Seven public sourceCSV snapshots inTEMP
+provide multiyear efficiency, coverage, snaps and identity inputs; no
+production ratings/data changed.887 has mergedClaude851 schedules and is
+finishing fresh type/build/fences and actualbooked two-season UI proof.
+Claude890/875/publication ownership held. Next free892.
+
+Codex891 claims the cross-sport ratings audit and remediation program, 2026-10-02.
+
+Anthony requests familiar sport-specific 0 to 99 ratings without copying
+commercial game datasets. NFL889 remains the implementation/data candidate
+owned by Codex.891 owns new read-only NBA/MLB/NHL/soccer audit and a persistent
+ratings plan, no unrelated gameplay/real data edits. Verified soccer calculation
+inconsistency and NBA/NHL source gaps must be recorded rather than hidden by
+named-player boosts. New real inputs use official sources, dated retained
+records, identity/sample fences and peer review before production. Real
+statistics and simulated OVR/contract judgments stay distinct. Claude retains
+875/890/Club Manager sources and publication; current soccer cutover must
+wait for an explicit non-overlapping handoff.887 NBA rotation is finishing.
+Paused842-845 files/stashes held. Next free892.
+
 ## Release V is LIVE, 2026-10-02 11:57 EDT: main `a224d290`, deployment `1a3a309b`, entry `index-PYxk2nEA.js`
 
 Assembled by the desktop Claude lane in the gate clone (`release-v`), gated under the production load rule.
@@ -42,6 +71,7 @@ about twice as fast; `simCmLeagueRules` digests are the proof it changes nothing
 **Known:** Edgar Guerra is baked at Puebla from a 2026 row while one publisher's Leon squad lists an Edgar Guerra;
 it is not a carried row and was not chased, worth a look in the next data pass. An old save mid season shows an all
 zero table for a league added after it began, until its next summer, as with every earlier league.
+
 
 ## Codex888 accepted, 2026-10-02
 

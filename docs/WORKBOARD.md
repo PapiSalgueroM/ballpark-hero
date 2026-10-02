@@ -1,5 +1,42 @@
 # Work board
 
+Codex891 audit accepted, ratings repair remains open, 2026-10-02.
+
+Exact current rating consumers, formulas and source gaps are recorded in
+`docs/audits/SPORT-RATINGS-OTHER-2026-10-02.md` and the separateNFL889
+audit. Six soccer same-input disagreements reproduce; NBA current-season
+rating/age recipe and NHL reproducible inputs are missing. MLB's existing
+recipe re-executes against its committed data. Career team-quality rolls are
+independent of franchise identity. Plan: `docs/SPORT-RATINGS-PLAN-2026-10-02.md`.
+NFL889's naive all-rank model and incomplete source/economy candidates are
+retained as unaccepted evidence. Seven public sourceCSV snapshots inTEMP
+provide multiyear efficiency, coverage, snaps and identity inputs; no
+production ratings/data changed.887 has mergedClaude851 schedules and is
+finishing fresh type/build/fences and actualbooked two-season UI proof.
+Claude890/875/publication ownership held. Next free892.
+
+Codex891 claims the cross-sport ratings audit and remediation program, 2026-10-02.
+
+Anthony requests familiar sport-specific 0 to 99 ratings without copying
+commercial game datasets. NFL889 remains the implementation/data candidate
+owned by Codex.891 owns new read-only NBA/MLB/NHL/soccer audit and a persistent
+ratings plan, no unrelated gameplay/real data edits. Verified soccer calculation
+inconsistency and NBA/NHL source gaps must be recorded rather than hidden by
+named-player boosts. New real inputs use official sources, dated retained
+records, identity/sample fences and peer review before production. Real
+statistics and simulated OVR/contract judgments stay distinct. Claude retains
+875/890/Club Manager sources and publication; current soccer cutover must
+wait for an explicit non-overlapping handoff.887 NBA rotation is finishing.
+Paused842-845 files/stashes held. Next free892.
+
+**Claude CLAIMS 890, 2026-10-02 12:10 EDT, desktop Claude lane: Club Manager's season sim stops re-checking its ledger. Next free 891.**
+- Profiled while gating Release V: `ensurePairLedger` is 60 percent of a simulated season on main, because `notePair`
+  calls it for every league result and it re-reads every pair already stored. One function in
+  `src/lib/clubManager.ts` (`notePair`) gets a constant time check; the full shape check stays at the load path, the
+  season turn and the Champions League note. Measured: 370 ms a skipped season to 185 ms, 1,110 ms watched to 677 ms.
+- Proof it changes no result: `simCmLeagueRules` digests, then the Club Manager fence family. Lead only, no agents, no
+  production. Small release W when green.
+
 **2026-10-02 11:57 EDT, desktop Claude lane: Release V IS LIVE**, main `a224d290`, deployment `1a3a309b`, entry
 `index-PYxk2nEA.js`. This is the version now served. It carries:
 - **883** Club Manager: **Liga MX** as the 22nd league, the first real cupless one, nobody relegated: 368 clubs, 19
@@ -17,6 +54,7 @@
   learned that a cupless league has no cup draw.
 - **Nothing of this lane is in flight.** Its weekly usage is nearly spent; `docs/HANDOFF-2026-10-02.md` says where
   everything stands. Next free round number stays yours.
+
 
 **Codex888 accepted, 2026-10-02.** Shared US coaching gives poaching credit
 only when the actual new chair exists. Original supported NBAseed4/year2063
