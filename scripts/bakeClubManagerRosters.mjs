@@ -317,7 +317,7 @@ if (!(xiAvg('Dinamo Zagreb') > xiAvg('Rudeš'))) errors.push('SANITY: Dinamo <= 
 if (!(xiAvg('Hajduk Split') > xiAvg('Gorica'))) errors.push('SANITY: Hajduk <= Gorica');
 // Round 876: Brazil's giants outrate the sides the table barely sees. Flamengo
 // against Remo (2 real players) mostly proves Flamengo kept its mapping; the
-// Palmeiras pair is against Vitória, which ships 8 real players, so it compares
+// Palmeiras pair is against Vitória, which ships 9 real players, so it compares
 // real ratings rather than the 60s xiAvg pads a near empty club with.
 if (!(xiAvg('Flamengo') > xiAvg('Remo'))) errors.push('SANITY: Flamengo <= Remo');
 if (!(xiAvg('Palmeiras') > xiAvg('Vitória'))) errors.push('SANITY: Palmeiras <= Vitória');

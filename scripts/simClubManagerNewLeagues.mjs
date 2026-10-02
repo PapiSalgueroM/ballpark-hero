@@ -106,8 +106,8 @@ function mutateOnce(src, from, to, label) {
 }
 
 function transformEngine(src) {
-  if (CONTROL === 'dropcount') src = mutateOnce(src, "brasileirao: { nationId: 'brazil', flag: 'Brazil', cup: 'Copa do Brasil', europe: null, drop: 4,", "brasileirao: { nationId: 'brazil', flag: 'Brazil', cup: 'Copa do Brasil', europe: null, drop: 3,", 'dropcount');
-  if (CONTROL === 'nocup') src = mutateOnce(src, "brasileirao: { nationId: 'brazil', flag: 'Brazil', cup: 'Copa do Brasil',", "brasileirao: { nationId: 'brazil', flag: 'Brazil', cup: null,", 'nocup');
+  if (CONTROL === 'dropcount') src = mutateOnce(src, "brasileirao: {\n    nationId: 'brazil', flag: 'Brazil', cup: 'Copa do Brasil', europe: null, drop: 4,", "brasileirao: {\n    nationId: 'brazil', flag: 'Brazil', cup: 'Copa do Brasil', europe: null, drop: 3,", 'dropcount');
+  if (CONTROL === 'nocup') src = mutateOnce(src, "brasileirao: {\n    nationId: 'brazil', flag: 'Brazil', cup: 'Copa do Brasil',", "brasileirao: {\n    nationId: 'brazil', flag: 'Brazil', cup: null,", 'nocup');
   if (CONTROL === 'invented') src = mutateOnce(src, '    isYouth: true,\n', '    isYouth: false,\n', 'invented');
   /* Private helpers the checks ask directly. */
   return `${src}\nexport { relegationSpots as __relegationSpots, buildSquad as __buildSquad, getPool as __getPool };\n`;
