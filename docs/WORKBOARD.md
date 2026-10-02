@@ -1,5 +1,18 @@
 # Work board
 
+**Codex868 SOURCE VERIFIED, native pending, 2026-10-02.** ContractsCard now
+shows each real engine renewal's years, signing fee, release clause, remaining
+transfer kitty and weekly bill before the original immediate action. Remove
+quotes its full renewal too. Shortfalls and over-budget wages are visible;
+affordable over-cap renewals remain allowed.13 focused component/actual-engine
+cases pass, including saved deal reload. Before10 failures/3 held baselines.
+Copied budget/fee controls each reject9 content assertions/4 held, cap rejects
+2 warnings/11 held, all13 run with0 pending/unhandled. Source/tests/guard bytes
+preserved and owned copies cleaned. Native acceptance is being prepared with
+all external transport blocked; no production requests. Combined final gates
+follow869/870 integration. Engine, hooks, save, roster and data unchanged.
+
+
 **Codex867 VERIFIED and870 CLAIMED, 2026-10-02.** Fresh git pull before870
 is up to date at8724ceac.867 changes one driver selector: actual ResultScreen
 status card contains its result h2; transient feedback does not. Before five

@@ -1,5 +1,17 @@
 # Project state
 
+## Codex868 contract previews source verified, 2026-10-02
+
+Actual renewal functions drive visible term/fee/clause/budget/wage forecasts,
+including Remove full-renewal cost and signing shortfall. Original one-tap
+callbacks and soft cap remain.13 focused cases and three controls pass with
+actual engine/save reload baselines. Before10fail/3pass; copied quote controls
+reject9 targets/4held, cap rejects2/11held. No engine/data/hook changes. Final
+combined type/build/native gates await869/870. Production incident remains
+open and all transport stopped. Native preparation must block every external
+URL. Next free871.
+
+
 ## Codex867 verified;870 bonus feedback claimed, 2026-10-02
 
 Guess the Nation reload driver now finds actual ResultScreen, with one exact
