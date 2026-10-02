@@ -1,5 +1,142 @@
 # Project state
 
+## Codex861 claimed leaderboard trust copy, 2026-10-01
+
+Leaderboard page/crawler copy claims every finish reaches the board, but
+unscored modes omit score and the current board/rank require positive scores.
+Qualify copy and explain unscored plays/streaks. No scoring/backend/layout
+change. Root owns snapshot/derived sitemap and gates. Browser connector tests
+are stopped; separate hidden CLI browsers are the only future native path.
+Next free862.859/860 continue in separate input/timer scopes.
+
+## Codex860 claimed Face Off deadline guard, 2026-10-01
+
+A controlled native delayed-interval fixture accepts a correct Face Off pick
+after11s and pays100 despite the10s deadline. Ordinary timeout and wrong-pick
+baselines pay0. Guard the actual clock at pick time in useFaceOff only, with
+solo/two-chair regressions. This is a scheduling fixture, not a claim that
+ordinary timeout is broken. No dealing/scoring/data change. Next free861.
+
+## Codex859 claimed arcade hold-release repair, 2026-10-01
+
+Native390 Free Kick and Buzzer Beater stay charging after releasing outside
+the held control or playing surface. Four failed paths and four working
+inside-release baselines are recorded. Own only their two Board components
+and focused verification. Preserve practice, keyboard and scoring. Claude
+simulation/data lanes remain separate. Next free860; two scouts are read-only.
+
+## Codex eight-repair batch on main, 2026-10-01
+
+Accepted product commits:846 b69beca6,852 4de313c8,853 af6eb498,
+854 075ecd04,855 c98e0ad2,856 62dd5692,857 5f11492e,858 a7d47ca9.
+110 new focused cases pass. Latest clean production entry index-BvHMJ6Ub.js;
+type/build and all15 built-site fences pass. Full suite and live publication
+remain Claude release work. Paused842-845 are excluded. Next free859;
+parallel read-only scouting continues without claiming or editing his lanes.
+
+## Codex857 accepted Soccer Career save repair, 2026-10-01
+
+Malformed core saves recover before rendering and retain their raw bytes until
+explicit delete/new career. Existing synchronous restore and optional migration
+remain.39 focused cases pass; two controls each fail exactly two intended
+outcomes with37 unaffected and no pending/unhandled errors. Native16/16 at320
+touch/1280 pointer verify current recovery and exact older24-season retirement:
+one booking on completion, zero on reload. Clean type/build and all15 built-site
+fences plus857 pass. No engine/data/backend edit. Source ready for Claude's
+publication lane. Eight repairs accepted this batch; next free859.
+
+## Codex858 accepted shared-rules repair, 2026-10-01
+
+RulesGate's visible cookie choices now join its keyboard scope and closing
+manual Help restores its exact trigger. Nine regression cases and two controls
+verify both fixes. Native Face Off at320/390 passes six consent scenarios and
+all18 manual close paths. Clean type/build and all15 built-site fences plus
+the858 harness pass. Shared instructions and seen-per-route behavior remain
+intact. Source ready for Claude publication;857 save recovery is accepted above.
+
+## Codex six-repair batch pushed; next claims857/858, 2026-10-01
+
+846,852,853,854,855,856 are separate main commits through c98e0ad2. Clean
+type/build and22 selected harnesses are green, including all15 built-site
+fences and62 new focused cases. Native game outcomes are in WORKBOARD. Claude
+has a concrete release handoff there; main pushes are not proof of live publish.
+842-845 remain paused. Next857 handles Soccer malformed-save recovery at the
+page boundary without touching Claude850's engine;858 verifies/repairs initial
+RulesGate consent reachability using855's existing region. Next free859.
+
+## Codex855 accepted repair, 2026-10-01
+
+Shared Help's cookie choices now sit inside its focus scope using one existing
+region/handler set. Seven focused cases, six existing Help cases and the
+outside-portal control pass expected outcomes. Six native320/390 contexts in
+each motion mode verify both keyboard directions, visible choices, unchanged
+Essential/Accept gates, Help staying open and banner restoration/reopening.
+Clean type/build, all15 built-site fences and the harness runner pass. Legacy
+handbuilt help is outside this scope. Ready for Claude's publication lane.
+
+## Codex854 accepted repair, 2026-10-01
+
+NFL/NHL malformed saves recover to a usable picker with raw bytes preserved
+until explicit delete/new team; other game saves remain intact.36 focused
+component checks and two guard-removal controls pass expected outcomes. Native
+four320/1440 contexts and12 damaged-save cases pass. Both320 franchises finish a
+whole season, refresh recap/draft and reload2027 after all earned picks.
+Clean type/build, all15 built-site fences and the new harness runner pass.
+Soccer malformed-save recovery remains open. Ready for Claude publication.
+
+## Codex853 accepted repair, 2026-10-01
+
+Account dialogs restore their actual opener focus and signup accurately says
+guests earn points/streaks and appear on the leaderboard. Eight focused cases,
+two removed-protection controls and26 relevant existing/new auth/help tests
+verify the change. Actual Header native16case matrix at320/390 passes with
+reduced and ordinary motion. Clean type/build and all15 built-site fences pass.
+No credentials/backend change. Ready for Claude publication, not claimed live.
+
+## Codex852 accepted repair, 2026-10-01
+
+Footle's result value is labeled in dollars, matching its stored USD millions.
+Accessibility identifies timed modes and links to untimed Footle. Native
+Footle result/refresh at320/1440 and actual Alphabet45s timer pass. Five focused
+tests pass with the old-euro control rejected. Clean type/build, accessibility
+and all15 built-site fences pass. Accessibility's crawler page was redrawn;
+only its derived sitemap date changed. Ready for Claude's publication lane.
+
+## Codex856 accepted repair, 2026-10-01
+
+Mobile toasts sit above the fixed career action bar. Actual Soccer Career
+academy toast with390 pointer,320 touch and1440 desktop permits Next Year,
+advances age once and survives refresh. Hovered toast stays visible past its
+normal delay without blocking the390 action. One Sonner option, no engine
+edit. Clean type/build and all15 built-site fences pass. Ready for Claude's
+publish lane; physical device safe areas and footer-lifted bars are untested.
+
+## Codex846 accepted repair, 2026-10-01
+
+Soccer Higher or Lower restarts are isolated from pending reveals. Six focused
+tests and both negative controls pass their expected outcomes; the original
+hook fails four cases. Native correct/wrong restart paths pass at1280/320.
+Clean production type/build and all15 built-site fences pass for this repair
+batch.852-856 native checks and two new harness reporting repairs continue.
+846 is ready for Claude's publication lane, with no claim that main is live.
+
+## Current Codex repair batch, 2026-10-01
+
+Additional disjoint claims855/856 cover initial help/consent keyboard access
+and narrow toast geometry. Neither changes consent decisions, vendor gating,
+Soccer engine or production sports data. Next free857.
+
+Audit847 was delivered and Anthony said keep going. Product-quality repairs
+resume under the saved AdSense request: root resumes846's Soccer Higher or
+Lower callback isolation;852 fixes Footle's result currency and Accessibility
+timing copy;853 fixes account opener focus and guest-scoring copy;854 repairs
+NFL/NHL structured-save recovery only. Source ownership and verification are
+in WORKBOARD. Claude850 owns lost Soccer seasons,851 schedules/NBA trades,
+848 shared Daily/skip fixes and849 reviewed sports data. Next free855.
+Release Q was pulled at29e64f42, with four paused845 guide drafts preserved in
+a scoped stash and reapplied cleanly.842-845 remain unaccepted and excluded
+from this repair batch. Earlier audit-only notes below describe the audit phase.
+
 ## LIVE 2026-10-01: Release Q (839 leaderboard page, Claude822 career calendar inboxes, Claude823 CBB assistants, Claude824 NBA stats and awards, Claude826 Gauntlet overtime label, Claude829 MLB real 26, the rendered audit report), main `30db5f44`
 
 Assembled by the desktop Claude lane in the gate clone (`release-q`). **douknowball.com is serving it:** deployment

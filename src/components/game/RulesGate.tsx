@@ -1,5 +1,5 @@
 import { useRoutePath } from '@/hooks/useRoutePath';
-import { useState, useEffect, ReactNode } from 'react';
+import { useState, useEffect, useRef, ReactNode } from 'react';
 import { HelpCircle } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { cn } from '@/lib/utils';
@@ -37,6 +37,7 @@ export function RulesGate({
 }: RulesGateProps) {
   const pathname = useRoutePath();
   const [open, setOpen] = useState(false);
+  const triggerRef = useRef<HTMLButtonElement>(null);
   const localStorageKey = `rules-gate-seen:${pathname}`;
 
   // The rules dialog remains visible on first entry to a game route, then
@@ -60,6 +61,7 @@ export function RulesGate({
   return (
     <>
       <button
+        ref={triggerRef}
         type="button"
         onClick={() => setOpen(true)}
         aria-label={triggerLabel}
@@ -73,13 +75,20 @@ export function RulesGate({
       </button>
 
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="max-w-md bg-card border-border text-foreground max-h-[85vh] overflow-y-auto">
+        <DialogContent
+          className="max-w-md bg-card border-border text-foreground max-h-[85vh] overflow-y-auto"
+          onCloseAutoFocus={event => {
+            event.preventDefault();
+            triggerRef.current?.focus({ preventScroll: true });
+          }}
+        >
           <DialogHeader>
             <DialogTitle className="text-2xl font-display text-primary text-center">
               {title}
             </DialogTitle>
           </DialogHeader>
 
+          {open && <div data-dukb-help-cookie-choices="" className="empty:hidden" />}
           <div className="space-y-5 text-sm">
             {children}
 
