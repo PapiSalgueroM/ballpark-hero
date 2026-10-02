@@ -51,7 +51,9 @@
       cupless league inside a nation that has a cup. Ten seasons: the three
       divisions hold the same sixty clubs at 20/20/20 with none in two, the
       right clubs move both ways at both steps, and no club of the cupless
-      league is ever drawn into the nation's cup.
+      league is ever drawn into the nation's cup. Part pure's table check
+      (3b) also refuses a drop a division cannot carry, two leagues sharing a
+      second tier, and a chain that loops.
    5. CHUNKS (hard, needs a build in dist/). Each era's roster block sits in
       its own chunk, the engine chunk carries none of them, and the only way
       in is a dynamic import (no chunk imports an era chunk statically).
@@ -74,6 +76,9 @@
                                  part shapes must go red;
      CM_RULES_CONTROL=cupfield   the cup draws from every league of the
                                  nation, cup or not, part shapes must go red;
+     CM_RULES_CONTROL=thintier   the Premier League drops 25 into a 24 club
+                                 Championship, part pure's table check must
+                                 go red;
      CM_RULES_CONTROL=static     the chunk check reads a copy of dist/assets
                                  whose engine chunk carries 2010 rows and a
                                  static import of the 2010 chunk (what a
@@ -119,7 +124,7 @@ const PARTS = partArg ? partArg.slice(7).split(',') : ['modern', 'eras', 'pure',
    another tree (CM_RULES_ROOT) runs the digest only. */
 const OWN_TREE = path.resolve(process.env.CM_RULES_ROOT || SCRIPT_ROOT) === path.resolve(SCRIPT_ROOT);
 const CONTROL = process.env.CM_RULES_CONTROL || '';
-const CONTROLS = ['dropcount', 'fourth', 'static', 'staticbuild', 'chainstart', 'cupfield'];
+const CONTROLS = ['dropcount', 'fourth', 'static', 'staticbuild', 'chainstart', 'cupfield', 'thintier'];
 if (CONTROL && !CONTROLS.includes(CONTROL)) { console.error(`CM_RULES_CONTROL=${CONTROL} is not a control this harness knows (${CONTROLS.join(', ')})`); process.exit(1); }
 if (CONTROL && WRITE) { console.error('a control run never writes the baseline'); process.exit(1); }
 
@@ -334,6 +339,7 @@ async function partPure() {
   const transform = src => {
     let s = exposePrivates(src);
     if (CONTROL === 'dropcount') s = controlDropCount(s);
+    if (CONTROL === 'thintier') s = controlThinTier(s);
     return s;
   };
   const mod = await bundleEngine(transform);
@@ -401,6 +407,20 @@ function tableIsComplete(cm, all) {
       if (r.drop < 1) fail(`${id} has a second tier and relegates nobody`);
     }
     const def = all.find(({ l }) => l.id === id)?.l;
+    /* Round 832 review: a drop the divisions cannot carry. The summer only
+       trades when both sides can move the full count, so a second tier with
+       fewer clubs than the drop above it (or a league dropping its whole size)
+       never relegates anybody, silently, while its board still threatens it. */
+    if (def && r.drop >= def.clubs.length) fail(`${id} drops ${r.drop} of its ${def.clubs.length} clubs`);
+    if (r.secondTier) {
+      const belowDef = cm.REAL_LEAGUES.find(l => l.id === r.secondTier);
+      if (belowDef && belowDef.clubs.length <= r.drop) fail(`${id} sends ${r.drop} down into ${r.secondTier}, which has only ${belowDef.clubs.length} clubs to send ${r.drop} up`);
+      const sharing = Object.entries(R).filter(([, x]) => x.secondTier === r.secondTier).map(([k]) => k);
+      if (sharing.length > 1) fail(`${sharing.join(' and ')} all name ${r.secondTier} as their second tier`);
+      for (let at = r.secondTier, hops = 0; at && R[at]; at = R[at].secondTier, hops += 1) {
+        if (at === id || hops > 10) { fail(`${id}'s chain of second tiers loops back on itself`); break; }
+      }
+    }
     if (def && def.cupName !== r.cup) fail(`${id}'s league def carries cup ${def.cupName} where its row says ${r.cup}`);
     if (def && def.euro !== (r.europe !== null)) fail(`${id}'s league def has euro ${def.euro} where its row has places ${JSON.stringify(r.europe)}`);
   }
@@ -853,6 +873,16 @@ function controlDropCount(src) {
   if (src.includes(old)) { console.log('NEGATIVE CONTROL ON: Austria leaves the drop-one chain, part pure must go red'); return src.replace(old, ''); }
   console.error('control cannot run: neither the rules row nor the old chain names Austria\'s drop count');
   process.exit(1);
+}
+
+function controlThinTier(src) {
+  /* Round 832 review: the Premier League's row made to send 25 down, more
+     clubs than either division holds. Part pure's table check (3b) must name
+     it (the digest differs too, which is not what this control is about). */
+  const row = /(\n\s*premier: \{[^\n]*?\bdrop: )3(, secondTier: 'championship')/;
+  if (!row.test(src)) { console.error('control thintier cannot run: the Premier League row does not drop 3 into the Championship'); process.exit(1); }
+  console.log('NEGATIVE CONTROL ON: the Premier League drops 25 into a 24 club Championship, part pure\'s table check must go red');
+  return src.replace(row, '$125$2');
 }
 
 /* ------------------------------------------------------------------ */
