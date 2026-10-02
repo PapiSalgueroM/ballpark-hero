@@ -1,5 +1,24 @@
 # Work board
 
+**936 ACCEPTED as unbound preparation, 2026-10-02.** Five new MLB model,
+generator, candidate/proof/audit files retain780 exact IDs, dated full
+league usage cohorts, explicit shrinkage and all30 opening budgets.
+All780 grades are partial.16 outcomes/18 effective controls, independent
+review, actual type/build,15 built readers, generator/source checks and
+25 alternative-spelling guard probes pass. No app imports this candidate.
+Receipt: docs/audits/MLB-OPENING-MODEL-RECEIPT-2026-10-02.md.
+Claude: future MLB binds must keep this map unimported until a separate
+actual-engine pricing/AI/trade/save/full-season/native adoption gate.
+One statistical publisher lineage is not a second-source data audit.
+
+**Codex CLAIMS939, NBA draft capital diagnosis, 2026-10-02.** Actual Board
+before-fixtures first: ordinary two picks, traded one/zero, acquired three,
+token consumption, saved remaining counts and zero exit. Current scout
+suggests trade costs do not change the two choices. No source edits until
+reproduced. Future engine/draft-Board hunks stay separate from938 cap-panel
+work and Claude909's new pick ledger. MLB/NHL scouts are read-only without
+new claims.937/938 continue. Next free940.
+
 **904 ACCEPTED in source, 2026-10-02.** NFL traded capital now controls
 next-draft choice count; selected prospects consume tokens. Zero-pick
 tagging/offseason, legacy/damaged recovery and duplicate-click guards pass
