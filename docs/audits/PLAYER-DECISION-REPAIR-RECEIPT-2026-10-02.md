@@ -332,3 +332,46 @@ anchors change once, CRLF binding checked, source/test/line/recording bytes held
 and owned copies cleaned. Unchanged existing scoreShown Bingo first-bank/
 blackout cases pass2/2 with14 other cases explicitly unselected. Peer source
 review clear. Exact receipts TEMP/dukb-player-bingo870-2026-10-02-a1.
+
+## Final accepted-files gate and management native
+
+Copied only accepted868-870 files into the existing clean merged archive,
+including final legacy cap correction. Initial final app type gate found four
+TS2322 test inference errors: fixture made contractYears required, but observer
+receives CareerState with the supported optional field. Added an explicit
+fixture return annotation, no test stimulus/expectation changed. Original
+final-868-870-type.log retained; repaired type exits0 with empty output.
+
+Bounded the now-expanded granted-clause quote list with the existing256px
+overflow-y-auto pattern. Final build0,12 selected source guards0 and all15
+required built fences0. Entryindex-OjecPy7M.js, SHA256
+b9fc28441893467b73f8b63257f79f6db5dd772c11b4c3f4cbceae19bd543bcd.
+Logs final-868-870-build-repair.log, final-source-gate.log, final-built-gate.log
+in TEMP/dukb-release-r-codex863-866-offline. No suites read writing dist;
+DB_PROBE=unreachable stops automatic live REST probe, Boot holds Supabase.
+112 new runtime cases across the seven product scopes pass. Full live-reading
+suite and whole-site sweep remain deliberately unrun.
+
+Native management6/6 cases,254 assertions,24 screenshots on that exact build:
+plain and clause renewals at320/390/1440 via actual Enter/click; actual new
+careers, no injected save, data/engine/RNG replacements. Every quote matches
+fee, remaining kitty, duration, wage, clause and weekly bill in actual signed
+save, then reload/resume. Other players and career week stay unchanged.
+Plain4yr/46k costs£8.3m, leaves£60.7m, bill678/773; clause4yr/40k costs£7.2m,
+leaves£61.8m, exit£17.3m, bill672/773. Values are generated simulation state,
+not real athlete contracts. Legacy/over-cap saves are covered by focused
+engine cases, no native old-save injection was used.
+
+Three calendar widths browse/select a day, then Current date returns to
+August2026 and clears selection while exact career-save bytes stay unchanged.
+Clause list's computed256px/auto scrolling and44px Remove access hold after
+grant/reload. Quotes/cards have0 sideways overflow,0 clipped quote text.
+Root and agent inspected representative phone screenshots. These six cases
+verify phone-width layout plus mouse/keyboard, not true touch interaction.
+
+Owned headless contexts use serviceWorkers:block and install all-URL routing
+before first navigation. Only exact local origin can continue; all outside
+HTTP/WebSocket connections blocked.423 attempts intercepted,0 external
+responses/unexpected local writes/page errors. Browser and contexts close in
+finally. Receipt and visual notes TEMP/dukb-868-869-native-2026-10-02.
+No user browser connector or visible tabs.

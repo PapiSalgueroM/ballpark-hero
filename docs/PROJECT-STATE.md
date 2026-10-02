@@ -1,5 +1,20 @@
 # Project state
 
+## Codex863-870 final offline gate and management native verified, 2026-10-02
+
+Final accepted-files type/build0,12 selected source guards and all15 built
+fences pass. Entryindex-OjecPy7M.js, SHA256
+b9fc28441893467b73f8b63257f79f6db5dd772c11b4c3f4cbceae19bd543bcd.
+112 new runtime cases,867 reload7/7 and existing accounting baselines pass.
+Four test inference errors corrected by fixture CareerState annotation;
+granted-clause quotes bounded inside existing scroll pattern. Actual management
+UI6/6,254 checks at320/390/1440: real renewal/save/reload and read-only calendar
+return. Pointer/keyboard at phone widths, actual touch follows separately.
+All outside HTTP/WebSocket transport blocked,0 external responses/page errors.
+Data-backed native863/865/866/870 and live release verification remain pending
+the database incident. Paused drafts/stashes preserved. Next free871.
+
+
 ## Codex870 earned Bingo feedback source verified, 2026-10-02
 
 Extra-line banner uses actual line delta's points, with polite status and finite

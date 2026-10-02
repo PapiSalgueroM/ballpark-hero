@@ -186,6 +186,7 @@ export function ContractsCard({ career, onRenew, onRenewWithClause, onRelease, o
           <div className="text-[10px] uppercase tracking-wider font-bold pt-1 text-muted-foreground">
             🔓 Release clauses you have granted ({claused.length})
           </div>
+          <div className="max-h-64 overflow-y-auto" data-contract-clauses>
           {claused.map(p => {
             const ratio = sellValue(p) / (p.releaseClause as number);
             const terms = renewalTerms(p);
@@ -215,6 +216,7 @@ export function ContractsCard({ career, onRenew, onRenewWithClause, onRelease, o
               </div>
             );
           })}
+          </div>
         </>
       )}
 

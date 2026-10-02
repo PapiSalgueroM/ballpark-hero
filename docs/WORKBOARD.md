@@ -1,5 +1,21 @@
 # Work board
 
+**Codex863-870 final offline gate VERIFIED, 2026-10-02.** All accepted runtime
+files in the isolated merged archive pass real app type0/build0,12 selected
+source harnesses and all15 required built fences. Entryindex-OjecPy7M.js,
+SHA256b9fc28441893467b73f8b63257f79f6db5dd772c11b4c3f4cbceae19bd543bcd.
+112 new runtime cases pass;867 reload-driver7/7 and existing recording/scoring
+baselines also hold. Initial final type found four test inference errors;
+annotated the contract fixture as CareerState without changing assertions,
+then type passed. Expanded granted-clause list uses the existing bounded
+scroll pattern. Six actual management UI cases at320/390/1440 pass254 checks,
+including real deal save/reload and three calendar returns preserving raw
+save. Phone-width pointer/keyboard paths verified; actual touch cases follow
+separately. All423 outside attempts blocked,0 external responses/page errors.
+No production requests. Data-backed native863/865/866/870 remain pending
+the incident. No whole-suite, whole-game or live publication claim. Next871.
+
+
 **Codex870 SOURCE VERIFIED, native pending, 2026-10-02.** Player Bingo extra
 line feedback shows the actual earned delta: two intersecting lines give+200,
 one gives+100. Polite status and existing finite motion now honor reduced

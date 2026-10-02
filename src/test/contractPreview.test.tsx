@@ -13,7 +13,7 @@ const termsFor = { plain: renewalTerms, clause: renewalTermsWithClause };
 
 /* Existing real career players, with controlled simulation contract boundaries.
    No player, roster, historical statistic or sports record is generated here. */
-function fixture() {
+function fixture(): { id: string; career: CareerState } {
   const base = startCareer('Brentford');
   const target = base.squad.find(p => !p.onLoan && !p.isYouth && p.age >= 20 && p.age <= 29)!;
   expect(target).toBeDefined();
