@@ -136,10 +136,10 @@ const OLD_DECLINE = 'export function declineRetirementSuggestion(prev: CareerSta
   + '  return s;\n'
   + '}\n';
 const ROWS = {
-  conviction: ['    s.seasons = [...s.seasons, yearOutRow(s, "CONVICTED")];\n    s.phase = "newspaper";', '    s.phase = "newspaper";'],
-  rehab: ['      s.seasons = [...s.seasons, injuryRow];\n      s.phase = "rehab_choice";', '      s.phase = "rehab_choice";'],
+  conviction: ['    s.seasons = [...s.seasons, yearOutRow(s, "CONVICTED")];\n    simulateSeasonFinances(s, s.seasons[s.seasons.length - 1]);\n    s.phase = "newspaper";', '    s.phase = "newspaper";'],
+  rehab: ['      s.seasons = [...s.seasons, injuryRow];\n      simulateSeasonFinances(s, injuryRow);\n      s.phase = "rehab_choice";', '      s.phase = "rehab_choice";'],
   rehabSave: ['  if (lastRow && lastRow.age < s.age) {\n    const row = yearOutRow(s, null);', '  if (false) {\n    const row = yearOutRow(s, null);'],
-  newsSave: ['    if (lastRow && lastRow.age < s.age) s.seasons = [...s.seasons, yearOutRow(s, "CONVICTED")];', '    void lastRow;'],
+  newsSave: ['    if (lastRow && lastRow.age < s.age) {\n      s.events = [...s.events];', '    if (false) {\n      s.events = [...s.events];'],
 };
 const splitHits = (SRC.match(SPLIT_RE) || []).length;
 const declineHits = (SRC.match(DECLINE_RE) || []).length;
@@ -167,7 +167,10 @@ const CONTROLS = {
   norehabsave: ROWS.rehabSave,
   rehabtwice: [ROWS.rehabSave[0], '  if (lastRow) {\n    const row = yearOutRow(s, null);'],
   noconvictionsave: ROWS.newsSave,
-  convictiontwice: [ROWS.newsSave[0], '    if (lastRow) s.seasons = [...s.seasons, yearOutRow(s, "CONVICTED")];'],
+  convictiontwice: [ROWS.newsSave[0], '    if (lastRow) {\n      s.events = [...s.events];'],
+  nomoney: ['      s.seasons = [...s.seasons, injuryRow];\n      simulateSeasonFinances(s, injuryRow);', '      s.seasons = [...s.seasons, injuryRow];'],
+  nomoneytrial: ['    simulateSeasonFinances(s, s.seasons[s.seasons.length - 1]);\n    s.phase = "newspaper";', '    s.phase = "newspaper";'],
+  nomoneysave: ['    s.seasons = [...s.seasons, row];\n    simulateSeasonFinances(s, row);', '    s.seasons = [...s.seasons, row];'],
 };
 /* and one that mutates the page's call instead of the engine */
 const PAGE_CALL = "setCareer(declineRetirementSuggestion(career, clubs));";
@@ -186,6 +189,7 @@ async function bundle(name, source) {
   writeFileSync(entry, `
 globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
 export * from '${ENGINE.replaceAll("\\", "/")}';
+export { ensureMoney as moneyOf } from '${path.join(ROOT, "src/lib/soccerMoney.ts").replaceAll("\\", "/")}';
 `);
   await build({
     entryPoints: [entry], bundle: true, format: "esm", platform: "node",
@@ -247,7 +251,7 @@ function step(E, s, policy, log) {
     case "playing": {
       if (policy === "never" && s.age >= 29) return E.manualRetire(s);
       const n = E.advanceProSeason(s, clubs);
-      noteStop(n, log);
+      noteStop(s, n, log);
       return n;
     }
     case "retirement_suggestion": {
@@ -258,7 +262,7 @@ function step(E, s, policy, log) {
       const before = s;
       const n = E.declineRetirementSuggestion(s, clubs);
       log.declineSteps.push({ before, after: n });
-      noteStop(n, log);
+      noteStop(s, n, log);
       return n;
     }
     case "newspaper": return E.dismissNewspaper(s);
@@ -281,15 +285,16 @@ function step(E, s, policy, log) {
     default: throw new Error(`unhandled phase ${s.phase}`);
   }
 }
-/* the two stops that are not the suggestion, at the age they happen */
-function noteStop(s, log) {
+/* the two stops that are not the suggestion, at the age they happen; the
+   first stop of any kind keeps the state the step that made it started from */
+function noteStop(prev, s, log) {
   let kind = null;
   if (s.phase === "rehab_choice") kind = "rehab";
   else if (isConvictionStop(s)) kind = "conviction";
   if (!kind) return;
   log.stops.push({ kind, age: s.age });
   log.stopStates.push(s);
-  if (log.firstStop === null) log.firstStop = { kind, state: JSON.stringify(s) };
+  if (log.firstStop === null) log.firstStop = { kind, state: JSON.stringify(prev) };
 }
 function freshLog() { return { suggestions: [], declines: 0, declineSteps: [], stops: [], stopStates: [], firstStop: null }; }
 
@@ -326,11 +331,17 @@ function audit(s, label, quiet = false) {
   return { missing, doubled, calendar };
 }
 
+/* One market season per season row, the rule simCareerParity holds: the
+   seed academy row ticks nothing and the retirement marker is not a season.
+   A ban or prison year runs its money; so must a rehab or a trial year. */
+const playedRows = s => s.seasons.filter(r => r.type === "youth" || r.type === "playing").length - 1;
+const ticks = (E, s) => E.moneyOf(JSON.parse(JSON.stringify(s))).age;
+
 /* ── 1 to 3: the three fleets, current and pre-850 ── */
 const FLEETS = ["accept", "decline", "worst"];
 const bal = {};
 const moved = {};
-let declineRowsBad = 0, pushBad = 0, injuryRowsBad = 0, injuryRows = 0;
+let declineRowsBad = 0, pushBad = 0, injuryRowsBad = 0, injuryRows = 0, moneyBad = 0;
 for (const policy of FLEETS) {
   console.log(`1) ${CAREERS} careers, policy ${policy}`);
   let lostNow = 0, lostOld = 0, rehabStops = 0, convictions = 0, declines = 0;
@@ -344,6 +355,11 @@ for (const policy of FLEETS) {
     const a = audit(cur.s, `${policy} career ${c}`);
     lostNow += a.missing.length;
     if (a.missing.length) fail(`${policy} career ${c}: lived ${a.missing.join(", ")} with no season row`);
+    checks += 1;
+    if (ticks(CUR, cur.s) !== playedRows(cur.s)) {
+      moneyBad += 1;
+      fail(`${policy} career ${c}: ${playedRows(cur.s)} seasons on the record and the market ran ${ticks(CUR, cur.s)} times`);
+    }
     const b = audit(old.s, `${policy} career ${c} (pre-850)`, true);
     lostOld += b.missing.length;
     for (const age of b.missing) {
@@ -387,14 +403,7 @@ for (const policy of FLEETS) {
       prefixed += 1;
       const o = old.log.firstStop;
       const n = cur.log.firstStop;
-      let same = false;
-      if (n && n.kind === o.kind) {
-        if (o.kind === "decline") same = n.state === o.state;
-        else {
-          const ns = JSON.parse(n.state);
-          same = JSON.stringify({ ...ns, seasons: ns.seasons.slice(0, -1) }) === o.state;
-        }
-      }
+      const same = !!n && n.kind === o.kind && n.state === o.state;
       if (same) prefixSame += 1;
       else fail(`${policy} career ${c}: differs from the pre-850 engine before its first ${o.kind} stop`);
       gained += cur.s.seasons.length - old.s.seasons.length;
@@ -423,7 +432,7 @@ for (const policy of FLEETS) {
     check(convictions >= FLOOR.convictionsWorst, `worst: only ${convictions} convictions, floor ${FLOOR.convictionsWorst}: the conviction path is not being reached`);
   }
 }
-console.log(`2) Keep Playing steps wrong ${declineRowsBad}, push on line not once ${pushBad}; injury rows ${injuryRows}, wrong ${injuryRowsBad}`);
+console.log(`2) Keep Playing steps wrong ${declineRowsBad}, push on line not once ${pushBad}; injury rows ${injuryRows}, wrong ${injuryRowsBad}; careers where the market and the record disagree ${moneyBad}`);
 check(injuryRows > 0, "no injury stop was reached on the current engine, so the injury row check tests nothing");
 
 /* 2: off the suggestion screen Keep Playing plays nothing */
@@ -525,7 +534,8 @@ const heatUp = s => (s.age >= 22 ? { ...s, corruptionHeat: 95, dirtyMoney: Math.
         const last = after.seasons.at(-1);
         const ok = rows(after) === rows(s) + 1 && last.age === s.age && last.year === s.seasons.at(-1).year + 1
           && last.injurySevere === true && last.injury === s.pendingRehab.name && last.apps === 0 && last.goals === 0
-          && JSON.stringify(after.seasons.slice(0, -1)) === JSON.stringify(s.seasons) && nextYearOk(after);
+          && JSON.stringify(after.seasons.slice(0, -1)) === JSON.stringify(s.seasons)
+          && ticks(CUR, after) === playedRows(after) && nextYearOk(after);
         check(ok, `old rehab save ${c}: answering the rehab choice at ${s.age} did not write exactly one empty injured row`);
         if (ok) tally.rehabOld[1] += 1;
       }
@@ -553,7 +563,8 @@ const heatUp = s => (s.age >= 22 ? { ...s, corruptionHeat: 95, dirtyMoney: Math.
         if (rows(oldAfter) === rows(s)) tally.convOld[2] += 1;
         const last = after.seasons.at(-1);
         let ok = rows(after) === rows(s) + 1 && last.age === s.age && last.year === s.seasons.at(-1).year + 1
-          && last.club === "CONVICTED" && last.apps === 0 && after.phase === "playing";
+          && last.club === "CONVICTED" && last.apps === 0 && after.phase === "playing"
+          && ticks(CUR, after) === playedRows(after);
         if (ok) {
           const prison = CUR.advanceProSeason(after, clubs);
           ok = prison.age === s.age + 1 && prison.seasons.at(-1).club === "PRISON" && prison.seasons.at(-1).year === last.year + 1;

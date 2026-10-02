@@ -1623,19 +1623,21 @@ export function applyRehabChoice(prev: CareerState, choiceIndex: number): Career
   /* Round 850: a save written before this round can be sitting here with the
      injury year unrecorded, because the season used to be thrown away at this
      stop. Its games are gone, so the year goes on as a zero appearance
-     injured row rather than as matches nobody played. A save from this round
+     injured row (with its year of money) rather than as matches nobody
+     played. A save from this round
      already has the row (written when the injury stopped the season), the age
      check finds it, and nothing is added. */
+  s.events = [...s.events];
   const lastRow = s.seasons[s.seasons.length - 1];
   if (lastRow && lastRow.age < s.age) {
     const row = yearOutRow(s, null);
     row.injury = r.name; row.injuryWeeks = r.weeks; row.injurySevere = true;
     if (s.loan) row.onLoanFrom = s.loan.parentClub;
     s.seasons = [...s.seasons, row];
+    simulateSeasonFinances(s, row);
   }
 
   const history = [...(s.seriousInjuries ?? [])];
-  s.events = [...s.events];
 
   if (choiceIndex === 0) {
     const backIn = Math.max(2, Math.round(r.weeks * 0.6));
@@ -4852,11 +4854,14 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
       newspaper: disgrace.paper, type: "negative",
       headline: disgrace.headline, body: disgrace.body,
     }];
-    /* Round 850: the trial is a year he lived, so it gets its row, the same
-       zero appearance shape the ban and prison years use with the reason as
-       the club. Before this the year went by with no row and the calendar
-       fell a year behind his age (the prison row comes the year after). */
+    /* Round 850: the trial is a year he lived, so it gets its row and its
+       year of money, the same as the ban and prison years: the zero
+       appearance shape with the reason as the club. Before this the year
+       went by with no row, the market and the bank skipped it, and the
+       calendar fell a year behind his age (the prison row comes the year
+       after). */
     s.seasons = [...s.seasons, yearOutRow(s, "CONVICTED")];
+    simulateSeasonFinances(s, s.seasons[s.seasons.length - 1]);
     s.phase = "newspaper";
     return s;
   } else if (heat >= 70 && Math.random() < 0.35) {
@@ -4987,10 +4992,13 @@ function playPendingProSeason(s: CareerState, clubs: ClubData[]): CareerState {
          and around the injury, marked with the injury the way every injured
          season is. Only his own line: the trophy rolls are dropped because the
          rest of that season (the Champions League, the world's results, the
-         announcements) never runs. Before this the year had no row at all. */
+         announcements) never runs. And the year's money runs, the way it does
+         for a ban or prison year: the wages still come in while he is out.
+         Before this the year had no row and no money at all. */
       const injuryRow: SeasonRecord = { ...season, leagueTitle: false, domesticCup: false };
       if (s.loan) injuryRow.onLoanFrom = s.loan.parentClub;
       s.seasons = [...s.seasons, injuryRow];
+      simulateSeasonFinances(s, injuryRow);
       s.phase = "rehab_choice";
       return s;
     }
@@ -5674,12 +5682,17 @@ export function dismissNewspaper(prev: CareerState): CareerState {
   const s = { ...prev };
   s.pendingNews = [];
   /* Round 850: a conviction saved by an older version sits here with the
-     trial year unrecorded, so it gets its row now. Since this round the
+     trial year unrecorded, so it gets its row (and its year of money) now.
+     Since this round the
      conviction writes that row itself, the age check finds it, and nothing
      is added twice. */
   if (!s.pendingSummary && (s.prisonSeasons ?? 0) > 0) {
     const lastRow = s.seasons[s.seasons.length - 1];
-    if (lastRow && lastRow.age < s.age) s.seasons = [...s.seasons, yearOutRow(s, "CONVICTED")];
+    if (lastRow && lastRow.age < s.age) {
+      s.events = [...s.events];
+      s.seasons = [...s.seasons, yearOutRow(s, "CONVICTED")];
+      simulateSeasonFinances(s, s.seasons[s.seasons.length - 1]);
+    }
   }
   /* ROUND 502: THIS LINE ENDED CAREERS, PERMANENTLY, AND THE PLAYER WAS STILL
      SITTING THERE.
