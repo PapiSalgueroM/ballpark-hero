@@ -1,5 +1,13 @@
 # Project state
 
+## Codex881 claimed, NBA court controls, 2026-10-02
+
+Direct empty-court position selection via existing handler, native buttons and
+matching selection locks. Filled cards stay inert. Focused actual component/page
+fixture, keyboard/touch and finite/static layout proof follow. No sport data,
+hook, validation or scoring change.878 pushed82a06cb4,880 reload audit remains
+under full proof. No desktop/Supabase use. Next free882, Claude owns release.
+
 ## Codex878 accepted for publication lane, 2026-10-02
 
 Actual last-transaction receipts and finite balance/statement cues across the

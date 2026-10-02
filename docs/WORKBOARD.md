@@ -1,5 +1,16 @@
 # Work board
 
+**Codex CLAIMS881, 2026-10-02, NBA court position selection.**
+Pulled before claim. Backlog line369 identifies court cards as display-only;
+the existing position row works. Add direct pointer/keyboard selection on empty
+court cards through the same selectPosition path. Keep filled cards inert,
+disable selection during team spin/validation and expose selection to assistive
+technology. Own `src/components/nba/NbaCourtLayout.tsx`,
+`src/pages/NbaLineup.tsx` and focused offline proof. No engine/data/validator,
+roster or evaluation change. This is a requested control improvement, not a
+claim of a broken game or a completed async race audit.880 continues; next
+free882. Claude retains834/876 and publication. No desktop or live requests.
+
 **Codex878 accepted, 2026-10-02.** Shared US career money screen now shows
 the actual last committed statement entry and finite changed-balance feedback.
 All14 action payloads and engine/save/parent callbacks are unchanged. Transfers
