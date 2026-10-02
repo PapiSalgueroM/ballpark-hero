@@ -491,6 +491,17 @@ export function useDailyPuzzle<T, G>(
   const adoptNewerSaveRef = useRef(adoptNewerSave);
   adoptNewerSaveRef.current = adoptNewerSave;
 
+  /* Round 848 review: and the rest of that turn goes with it. A handler may
+     give more than one answer in one turn (Transfer Path's step then its
+     closing step and the win, Career Path's four hint cells), every one built
+     on the board this tab was showing. Once the first is dropped the rest are
+     answers to a board that no longer exists, and appending them to the state
+     just taken over recorded a Transfer Path win for a chain that never
+     reached the target. The flag lives until the taken over state is
+     committed, which is before the player can see it, let alone answer it. */
+  const droppingTurn = useRef(false);
+  useEffect(() => { droppingTurn.current = false; });
+
   /* Round 848: and an open tab follows the other one live. The browser fires
      storage in every other tab of this site when one writes, so a second tab
      moves to the saved round before the player can answer the old one. */
@@ -508,8 +519,13 @@ export function useDailyPuzzle<T, G>(
       // has to see what the first one just added, and has to be refused if the
       // first one ended the game.
       if (statusRef.current !== 'playing' || puzzle == null) return;
-      // Round 848: another tab is ahead, take its state and drop this answer.
-      if (adoptNewerSaveRef.current()) return;
+      // Round 848: another tab is ahead, take its state and drop this answer,
+      // and every answer the same turn goes on to give.
+      if (droppingTurn.current) return;
+      if (adoptNewerSaveRef.current()) {
+        droppingTurn.current = true;
+        return;
+      }
 
       const newGuesses = [...guessesRef.current, guess];
       let newStatus: 'playing' | 'won' | 'lost' = 'playing';

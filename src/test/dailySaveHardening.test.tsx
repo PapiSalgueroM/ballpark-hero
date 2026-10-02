@@ -51,6 +51,10 @@ import { useNbaConnections } from '@/hooks/useNbaConnections';
 import { useFootballDraft } from '@/hooks/useFootballDraft';
 import { useGuessTransferValue } from '@/hooks/useGuessTransferValue';
 import { useWorldCup } from '@/hooks/useWorldCup';
+import { useTransferPath } from '@/hooks/useTransferPath';
+import { useCareerGame } from '@/hooks/useCareerGame';
+import { clubSeasonsOf, shareClub } from '@/lib/transferPathGraph';
+import { careerPlayers } from '@/data/careerPlayers';
 import { consumeRestoredFinish } from '@/lib/restoredFinish';
 
 /* Same pass-through as the page test: which key, index and id a hook reads. */
@@ -165,6 +169,63 @@ describe('1) the shared hook never writes a stale tab over a newer save', () => 
     expect(a.result.current.guesses).toEqual([{ n: 1 }, { n: 2 }]);
     act(() => a.result.current.addGuess({ n: 3 }));
     expect(parsed(PROBE_KEY)).toEqual(good([{ n: 1 }, { n: 2 }, { n: 3 }]));
+  });
+});
+
+/* ----------------------------------------------------------------- 1b */
+
+/* Round 848 review. Some handlers give more than one answer in a turn:
+   Transfer Path records the step, then the closing step and the win when the
+   new man also links to the target; Career Path's hint reveals four cells.
+   When the first answer is dropped because another tab is ahead, the rest
+   were built on the same stale board and must go with it. Before this, the
+   rest were appended to the state just taken over: a stale Transfer Path tab
+   recorded a win for a chain that never reached the target. */
+describe('1b) a handler whose first answer is dropped drops the rest of its turn', () => {
+  it('the shared hook: two answers in one turn from a stale tab change nothing', () => {
+    const a = probe(), b = probe();
+    act(() => a.result.current.addGuess({ n: 1 }));
+    act(() => a.result.current.addGuess({ n: 2 }));
+    const before = raw(PROBE_KEY);
+    act(() => { b.result.current.addGuess({ n: 7 }); b.result.current.addGuess({ n: 8 }); });
+    expect(raw(PROBE_KEY)).toBe(before);
+    expect(b.result.current.guesses).toEqual([{ n: 1 }, { n: 2 }]);
+    /* The next turn is the player's own answer to the round they now see. */
+    act(() => b.result.current.addGuess({ n: 3 }));
+    expect(parsed(PROBE_KEY)).toEqual(good([{ n: 1 }, { n: 2 }, { n: 3 }]));
+  });
+
+  it('Transfer Path: a stale tab cannot finish a chain another tab already moved', async () => {
+    const key = `transfer-path-daily-${TODAY}`;
+    const a = renderHook(() => useTransferPath()), b = renderHook(() => useTransferPath());
+    await flush();
+    const from = a.result.current.puzzle.playerA, target = a.result.current.puzzle.playerB;
+    const keys = clubSeasonsOf(careerPlayers);
+    const names = careerPlayers.map((p) => p.name).filter((n) => n !== from && n !== target);
+    const open = names.find((n) => shareClub(keys, from, n) && !shareClub(keys, n, target));
+    const closing = names.find((n) => shareClub(keys, from, n) && shareClub(keys, n, target));
+    expect(open, 'a first man who leaves the chain open').toBeDefined();
+    expect(closing, 'a first man who closes it on the spot').toBeDefined();
+    act(() => { a.result.current.addPlayer(open!); });
+    const one = raw(key);
+    expect(JSON.parse(one!).guesses).toEqual([{ t: 'step', player: open, club: shareClub(keys, from, open!) }]);
+    act(() => { b.result.current.addPlayer(closing!); });
+    expect(raw(key)).toBe(one);
+    expect(b.result.current.status).toBe('building');
+    expect(b.result.current.chain).toEqual([from, open]);
+    expect(recordCompletion).not.toHaveBeenCalled();
+  });
+
+  it('Career Path: a stale hint reveals nothing over a board another tab moved', async () => {
+    const key = `career-path-daily-${TODAY}`;
+    const a = renderHook(() => useCareerGame()), b = renderHook(() => useCareerGame());
+    await flush();
+    act(() => a.result.current.revealCell('0-goals'));
+    const one = raw(key);
+    expect(JSON.parse(one!).guesses).toEqual([{ t: 'cell', key: '0-goals' }]);
+    act(() => b.result.current.giveHint());
+    expect(raw(key)).toBe(one);
+    expect([...b.result.current.revealedCells]).toEqual(['0-goals']);
   });
 });
 

@@ -32,8 +32,11 @@
  *
  * Negative controls, one per run (R848_CONTROL), each on a copy swapped in
  * through NO_DOUBLE_SWAP, each anchor asserted present exactly once first:
- *   stale   the addGuess guard removed: exactly the twelve stale tab rows of
- *           sections 1 and 2 must fail on an assertion, everything else pass.
+ *   stale   the addGuess guard removed: exactly the fifteen stale tab rows of
+ *           sections 1, 1b and 2 must fail on an assertion, everything else pass.
+ *   turn    (review) only the rest-of-turn drop removed: exactly the three
+ *           section 1b rows, where a stale Transfer Path tab used to record a
+ *           win for a chain that never reached the target.
  *   event   the storage listener removed: exactly the ten storage event rows.
  *   shape   the shared shape check removed: the shapes test must go red, with
  *           every route whose game hands in no check of its own throwing.
@@ -58,7 +61,7 @@ const VITEST = path.join(path.dirname(createRequire(path.join(ROOT, 'package.jso
 const PRE = '617b8354';
 const PART = process.env.R848_PART || 'all';
 const CONTROL = process.env.R848_CONTROL || '';
-const CONTROLS = ['stale', 'event', 'shape', 'skip'];
+const CONTROLS = ['stale', 'turn', 'event', 'shape', 'skip'];
 assert.ok(['all', 'saves', 'shapes', 'skip'].includes(PART), `unknown R848_PART ${PART}`);
 assert.ok(!CONTROL || CONTROLS.includes(CONTROL), `unknown R848_CONTROL ${CONTROL}`);
 
@@ -157,23 +160,28 @@ try {
   const hookFile = 'src/hooks/useDailyPuzzle.ts';
 
   /* ---------------------------------------------------------- controls */
-  if (CONTROL === 'stale' || CONTROL === 'event') {
-    const edit = CONTROL === 'stale'
-      ? ['      if (adoptNewerSaveRef.current()) return;\n', '']
-      : ["    window.addEventListener('storage', onStorage);\n", '    void onStorage;\n'];
+  if (CONTROL === 'stale' || CONTROL === 'event' || CONTROL === 'turn') {
+    const edit = {
+      stale: ['      if (droppingTurn.current) return;\n      if (adoptNewerSaveRef.current()) {\n        droppingTurn.current = true;\n        return;\n      }\n', ''],
+      turn: ['      if (droppingTurn.current) return;\n', ''],
+      event: ["    window.addEventListener('storage', onStorage);\n", '    void onStorage;\n'],
+    }[CONTROL];
     const copy = copyWith(hookFile, [edit], 'useDailyPuzzle.ts');
     const run = vitest(HARDENING, { swaps: { '@/hooks/useDailyPuzzle': copy } });
-    const want = CONTROL === 'stale'
-      ? (t) => /a tab behind the stored log takes it over|a finish taken over from another tab|: the stale tab cannot drop a decided round|Shirt Number: a stale tab cannot drop/.test(t)
-      : (t) => /an open tab follows another tab through the storage event|: an open tab moves to the saved round/.test(t);
-    const expected = CONTROL === 'stale' ? 12 : 10;
+    const turnRows = /1b\) a handler whose first answer is dropped/;
+    const want = {
+      stale: (t) => turnRows.test(t) || /a tab behind the stored log takes it over|a finish taken over from another tab|: the stale tab cannot drop a decided round|Shirt Number: a stale tab cannot drop/.test(t),
+      turn: (t) => turnRows.test(t),
+      event: (t) => /an open tab follows another tab through the storage event|: an open tab moves to the saved round/.test(t),
+    }[CONTROL];
+    const expected = { stale: 15, turn: 3, event: 10 }[CONTROL];
     const failed = run.rows.filter((r) => r.status === 'failed');
     const intended = run.rows.filter((r) => want(r.title));
     assert.equal(intended.length, expected, `the control's ${expected} target rows exist`);
     for (const r of intended) if (r.status !== 'failed' || !/AssertionError/.test(r.messages)) fail(`${r.title} did not fail on an assertion under the ${CONTROL} control`);
     for (const r of failed) if (!want(r.title)) fail(`${r.title} failed under the ${CONTROL} control but is not one of its rows`);
     assert.notEqual(run.status, 0, 'the run is red');
-    console.log(`R848 ${CONTROL} control: ${failed.length} rows red, exactly the ${expected} ${CONTROL === 'stale' ? 'stale tab' : 'storage event'} rows, ${run.rows.filter((r) => r.status === 'passed').length} green`);
+    console.log(`R848 ${CONTROL} control: ${failed.length} rows red, exactly the ${expected} ${{ stale: 'stale tab', turn: 'rest of turn', event: 'storage event' }[CONTROL]} rows, ${run.rows.filter((r) => r.status === 'passed').length} green`);
   } else if (CONTROL === 'shape') {
     const copy = copyWith(hookFile, [['      if (!isGuessLog(guesses) || !GAME_STATUSES.includes(saved.gameStatus)) return null;\n', '']], 'useDailyPuzzle.ts');
     const run = vitest(SHAPES, { swaps: { '@/hooks/useDailyPuzzle': copy } });
