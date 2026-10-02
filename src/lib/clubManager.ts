@@ -5491,9 +5491,17 @@ export function tiebreakFootnote(rule: TiebreakRule, rows: TableRow[], pairs?: R
  */
 function notePair(state: CareerState, leagueId: string, home: string, away: string, hg: number, ag: number): void {
   if (!LEAGUE_TIEBREAKS[leagueId]) return;
-  ensurePairLedger(state);
-  const ledger = state.pairResults!;
-  const pairs = ledger[leagueId] ?? (ledger[leagueId] = {});
+  /* Round 890: this used to call ensurePairLedger, which re-reads every pair
+     already stored, once for every league result in the world. A season books
+     about four and a half thousand of them, so the check alone was 60 percent
+     of a simulated season (profiled on 2026-10-02). The full shape check still
+     runs wherever a ledger can arrive unchecked: the load path, the season
+     turn and the Champions League note. Here it is enough that the ledger and
+     this league's entry are plain objects, which is checked in constant time. */
+  let ledger = state.pairResults;
+  if (!ledger || typeof ledger !== 'object' || Array.isArray(ledger)) ledger = state.pairResults = {};
+  let pairs = ledger[leagueId];
+  if (!pairs || typeof pairs !== 'object' || Array.isArray(pairs)) pairs = ledger[leagueId] = {};
   pairs[`${home}|${away}`] = [hg, ag];
 }
 

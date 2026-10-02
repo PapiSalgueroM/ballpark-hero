@@ -1,5 +1,6 @@
 # Project state
 
+
 Codex887 accepted in source, 2026-10-02.
 
 NBA GM Roster > Set rotation now controls five starters and three bench
@@ -17,6 +18,26 @@ OnlyNBA guide/snapshot/lastmod changed;12paused raw drafts and allstashes held.
 Realplayer ratings/ages remain open; this is not game-completion or live
 publication approval. Claude: pull887 and publish from your release gate.
 NFL889 model review and891 cross-sport repair program continue. Next free892.
+
+## Release W is LIVE, 2026-10-02 12:58 EDT: main `24dc8764`, deployment `7c39cf15`, entry `index-D2zYZWyP.js`
+
+A small release from the desktop Claude lane (gate clone, `release-w`), lead only, no agents.
+
+- **890, Club Manager's season sim runs about twice as fast.** Profiling the release gate of Round 883 showed
+  `ensurePairLedger` taking 60 percent of a simulated season: `notePair` called it for every league result in the
+  world (about four and a half thousand a season) and it re-read every pair already stored, so a season was quadratic
+  in its fixtures. `notePair` now checks in constant time that the ledger and its league entry are plain objects; the
+  full shape check still runs at the load path, the season turn and the Champions League note, the places an
+  unchecked ledger can arrive. Measured on the same machine: a skipped season 370 ms to 185 ms, a watched one 1,110 ms
+  to 677 ms. What a player gets: skipping weeks and simming seasons takes about half the time.
+- **Nothing about the football changed, and that is proven, not claimed:** `simCmLeagueRules` holds digests of 22
+  modern leagues, the era leagues and the pure rules against a committed baseline, and every one is identical with the
+  fix. The same change makes the long harnesses of every Club Manager release gate far cheaper: `simEras` 644 s to 185 s, `simHalftime` 834 s to 463 s, `simOpposition` 2,326 s to 911 s, and `simPress` 2,005 s with one seed base to 1,006 s with three.
+
+**Gate.** Type gate 0. `simCmLeagueRules` all seven parts green against the committed baseline (the digests are the proof that no result moved), and `simPress` printed the same three paired differences to the hundredth as before the change (1.52, 5.58, 11.67). The Club Manager fence family, detached: `simClubManagerNewLeagues`, the three era harnesses, `simEraWorldTables`, `simClubManagerEraUcl`, `simClubManagerEraMidSeason`, `simInventedNames`, `simClubManager`, `simCmStoppageTime`, `simUclSeasonOne`, `simClubManagerSaveSize`, `simClubManagerClubList`, `simCreateClub`, `simCup`, `simWorld`, `simExtraTime`, `simYouthPadding`, `simPromotion`, `simRosterAdjudication`, `simFootleLeagues`, `simTransferOverlay`, `simFixtureBalance`, `simFreeAgents`, `simFinance`, `simBoardObjectives`, `simNationJob`, `simEras`, `simHalftime`, `simPress`, `simOpposition`, the Club Manager vitest files, and the 22 snapshot and copy readers. In a browser on the build: `playClubManager` a whole season through the interface, 0 findings; the three era walks; `playGames` clean on `/club-manager`, `/deadline-day`, `/manager-hot-seat`, `/footle` and `/soccer-career`; `playHomeFold`, `playSoftFourOhFour`, `sweepWeight` green. No full route sweep: one engine function and a What's New line changed. Two crashes beside the long harnesses, both green alone: `playEra2005` (a page load timeout) and `simCalendarCurrentDate` (a strict equality assertion, Codex's harness, worth a look for a race).
+
+**Proof.** `x-deployment-id` carries `7c39cf15`; the home page serves `index-D2zYZWyP.js` (Release V served `index-PYxk2nEA.js`); `/whats-new` carries the entry; in a real browser on the live site a new career at America in Liga MX reached the dugout (the cups tile reads No domestic cup), quick simmed eight league rounds, the save advanced to week 9 with 366 pairs in its ledger across five leagues, and the console stayed clean.
+
 
 Codex891 audit accepted, ratings repair remains open, 2026-10-02.
 
