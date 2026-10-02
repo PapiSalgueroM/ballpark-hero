@@ -34,7 +34,7 @@ const FrontOffice = () => {
               'Work the roster: cut contracts to open cap room, sign free agents, propose trades the AI evaluates on age, position and rating. The roster holds 53, and the practice squad sits off the cap until you call a man up. Go over 53 (your picks can do it, and the Giants start at 54) and Play waits until you cut down.',
               'Play each week: results, injuries and rival moves roll in; division standings decide the real 14-team playoff bracket.',
               'Set the depth chart from the Roster box: tap two men to swap them, and the sim reads who starts off your order. Injured men are skipped and the next man steps up, so your backups finally matter.',
-              'After the Super Bowl, scout the draft: grades carry error, so the board can lie to you. Before your last pick, use the franchise tag on one expiring man: one guaranteed year at the top five average at his position or 120 percent of his old deal, whichever is more.',
+              'After the Super Bowl, draft with the picks you still own. Trading one away costs a selection. Scout grades carry error. Before finishing the draft, decide the franchise tag on one expiring man: one guaranteed year at the top five average at his position or 120 percent of his old deal, whichever is more. With no picks left, run the league draft and offseason from that screen.',
               'Every offseason your young players develop, veterans decline, contracts expire and the cap rises. Dynasties are built, not bought.',
               'Face the room: the podium, the accountability scrum and the trade question move your trust upstairs, and what you promise can raise or soften next season\'s mandate.',
             ]}
