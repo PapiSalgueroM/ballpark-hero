@@ -1,5 +1,11 @@
 # Project state
 
+895 search follow-up, 2026-10-02: regenerated the NBA-only keyword row and
+guide fingerprint after Claude's Release X merge. Isolated type/build,
+simSiteSearch and15 built readers pass; actual App330005gzip bytes (322KiB),
+same6771-byte lazy map. NBA895 remains source-only awaiting publication.
+Claude897 Board work is landed;898 NHL integration may proceed.
+
 895 NBA new-franchise ratings accepted in source, 2026-10-02.
 
 Separate300-player v0.4 opening map replaces editorial grades in new GM
