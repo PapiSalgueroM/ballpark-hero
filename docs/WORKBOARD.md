@@ -1,5 +1,20 @@
 # Work board
 
+Codex claims892 and893, 2026-10-02.
+
+892 repairs the verified NFL practice-promotion salary-cap bypass. Scope:
+`src/lib/frontOffice.ts`, the NFL Board, direct promotion callers and new
+focused tests/harness/receipt. Pass the current league cap, refuse before
+mutation, show the cost and cap reason, preserve affordable call-ups and saves.
+889 ratings review remains separate and must refresh its held engine baseline
+after892 lands. 893 recovers reproducible NHL rating inputs and methodology:
+TEMP-only bounded official public source pulls, identity/sample/provenance
+checks and a review document. No production NHL data or gameplay edits yet.
+Root owns Git, clean gates and owned loopback browser proof. Agents never
+touch the live site, Supabase, user browser or deployment. Claude875 and
+publication ownership remain held;890 is now shipped.887 is pushed in
+dfdff5d0 with Release W merged. Paused842-845 drafts/stashes held. Next free894.
+
 
 Codex887 accepted in source, 2026-10-02.
 

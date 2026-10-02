@@ -1,5 +1,17 @@
 # Project state
 
+Codex claims892 and893, 2026-10-02.
+
+892 repairs unaffordable NFL practice call-ups using the current league cap,
+with actual Board price/refusal feedback and outcome/control/save proof.
+893 prepares dated official NHL skater/goalie inputs and reproducible rating
+methodology in TEMP only, then records review gaps. No NHL production-data
+cutover is authorized by this claim.889 NFL position/sample model review
+continues independently; its source hold will be refreshed after892 lands.
+887 rotation is pushed, Release W merged atdfdff5d0. Claude875/publication
+stay held. No desktop/live/database calls; paused drafts/stashes held.
+Next free894.
+
 
 Codex887 accepted in source, 2026-10-02.
 
