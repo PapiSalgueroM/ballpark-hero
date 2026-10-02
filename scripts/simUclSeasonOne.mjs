@@ -186,8 +186,10 @@ const CONTROLS = {
   places: {
     red: ['11'],
     what: 'the Premier League gets a fifth Champions League place',
-    re: /premier: \{ ucl: 4, uel: 5, uecl: 6 \}/g,
-    to: () => 'premier: { ucl: 5, uel: 6, uecl: 7 }',
+    /* Round 832: the places sit on the Premier League's LEAGUE_RULES row now
+       (europe), not on a line of their own in EURO_SLOTS, which is derived. */
+    re: /(premier: \{ nationId: ["']england["'][^\n]*?europe: )\{ ucl: 4, uel: 5, uecl: 6 \}/g,
+    to: (_m, row) => `${row}{ ucl: 5, uel: 6, uecl: 7 }`,
   },
   vacuous: {
     red: ['9'],
