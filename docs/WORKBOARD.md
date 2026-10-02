@@ -1,5 +1,17 @@
 # Work board
 
+**Codex861 CLAIMED, truthful leaderboard participation wording.** Own
+src/pages/Leaderboard.tsx and focused content/recorder verification. Root owns
+its one crawler snapshot and derived sitemap artifacts. Current page and saved
+HTML promise every game/finish puts a player on the board. Source-confirmed
+Deadline Day/Contract Chaos completions pass undefined scores; the recorder
+omits score and counts plays/streaks with0 points. Round839 board/rank SQL
+requires positive nonnull scores. Qualify copy/metadata as scored games and
+explain positive-score participation and unscored finishes. No scoring, RPC,
+backend, layout or sports data edit. Native recorder replay was not run;
+browser connector use is stopped. Root gates/publishes source handoff. Next
+free862. Claude's release and all reserved simulation/data work remain his.
+
 **Codex860 CLAIMED, Face Off deadline enforcement.** Own only
 src/hooks/useFaceOff.ts and focused hook tests/harness. Native production
 ordinary11s timeout pays0. A controlled scheduling fixture delays only100ms

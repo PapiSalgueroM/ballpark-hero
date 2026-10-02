@@ -1,5 +1,14 @@
 # Project state
 
+## Codex861 claimed leaderboard trust copy, 2026-10-01
+
+Leaderboard page/crawler copy claims every finish reaches the board, but
+unscored modes omit score and the current board/rank require positive scores.
+Qualify copy and explain unscored plays/streaks. No scoring/backend/layout
+change. Root owns snapshot/derived sitemap and gates. Browser connector tests
+are stopped; separate hidden CLI browsers are the only future native path.
+Next free862.859/860 continue in separate input/timer scopes.
+
 ## Codex860 claimed Face Off deadline guard, 2026-10-01
 
 A controlled native delayed-interval fixture accepts a correct Face Off pick
