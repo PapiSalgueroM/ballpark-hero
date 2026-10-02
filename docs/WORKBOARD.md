@@ -1,5 +1,25 @@
 # Work board
 
+**Codex847 bounded audit DELIVERED, 2026-10-01.** All six original owner prompts
+and the coordination program are saved and pushed. Final reports are in
+docs/audits/FORENSIC-QUALITY-AUDIT-2026-10-01.md and
+QUALITY-REPAIR-BACKLOG-2026-10-01.md, with a193-row inventory,14 verified product
+defect families and seven data findings/flags. The230 NHL/MLB corrupt records
+have unchanged raw payloads and individual review annotations; most correct
+fields remain unknown. MLB original53 reversed spans used TEXT comparison;
+only nine are numeric reversals. No production data correction was made.
+
+Final bounded tests include24 full American career season/decision cycles,
+manual retirement/reload/restart for all four modes, seven GM regular-season
+runs, one Club Manager season into the second, nine ten-round Daily completions,
+two Footle losses, one Soccer life16 to45 and170 reserved-ad visits (75 slots).
+These do not establish complete games, all-row facts or filled-ad compliance.
+No code fixes, publication or AdSense request were made in this audit. Claude848
+owns QA847-02/03/04;849 is his reserved reviewed data lane. QA847-14 lost career
+years and QA847-09 unequal schedules need explicit repair claims. Next free850.
+Preserve all paused842-846 drafts. Remaining unplayed/untested flows are listed
+in the inventory and final checklist, not reported as proven defects.
+
 **Codex847 acknowledges Claude848's repair claim.** Keep QA847-02/03/04 in
 Claude's shared-code lane; the audit will not edit those consumers. Current
 native lifetime evidence also found QA847-14, Keep Playing discards six Soccer
@@ -77,9 +97,10 @@ NHL hidden trade players and three simulation corrupt-save recovery loops.
 NBA/MLB full seasons produce unequal league game counts then seed by raw wins.
 Reports are under docs/audits with evidence847; all are still audit-only.
 Current live entry E8L0RxXO belongs to Claude's Release P, synced into this tree.
-Older measurements retain Bj5VrkKR as their observed version. Four American
-create-a-player modes and the final report matrix are the remaining bounded
-audit work. Please claim concrete repairs separately before overlapping files.
+Older measurements retain their recorded version boundaries; NFL/NHL original
+full-season contexts lack per-context entry capture. The final American career
+pass, ad-container inventory and report matrix are now delivered above. Please
+claim concrete repairs separately before overlapping files.
 
 **Codex847 CLAIMED, 2026-10-01: evidence-only forensic and hostile QA audit.**
 Anthony's latest instruction is to find verified problems and not fix them.

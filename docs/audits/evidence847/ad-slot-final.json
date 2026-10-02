@@ -1,0 +1,3187 @@
+{
+  "started": "2026-10-01T23:00:34.178Z",
+  "scope": "Every sitemap URL at320px with stored Accept. Vendor script bodies locally intercepted. Reserved/manual slots measured, no real creative, ad request, impression or click transmitted. Initial gameplay only.",
+  "rows": [
+    {
+      "route": "/accessibility",
+      "url": "https://douknowball.com/accessibility",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [],
+        "queue": 0,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/",
+      "url": "https://douknowball.com/",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [],
+        "queue": 0,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/about",
+      "url": "https://douknowball.com/about",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [],
+        "queue": 0,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/afl-higher-lower",
+      "url": "https://douknowball.com/afl-higher-lower",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [
+          {
+            "slot": "7540487748",
+            "format": "horizontal",
+            "width": 288,
+            "height": 100,
+            "paddingTop": "150px"
+          }
+        ],
+        "queue": 1,
+        "nonpersonalized": 1,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js",
+        "pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/aussie-rules-manager",
+      "url": "https://douknowball.com/aussie-rules-manager",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [],
+        "queue": 0,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/alphabet-sprint",
+      "url": "https://douknowball.com/alphabet-sprint",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [
+          {
+            "slot": "7540487748",
+            "format": "horizontal",
+            "width": 288,
+            "height": 100,
+            "paddingTop": "150px"
+          }
+        ],
+        "queue": 1,
+        "nonpersonalized": 1,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js",
+        "pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/ball-iq",
+      "url": "https://douknowball.com/ball-iq",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [],
+        "queue": 0,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/baseball-career",
+      "url": "https://douknowball.com/baseball-career",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [
+          {
+            "slot": "7540487748",
+            "format": "horizontal",
+            "width": 288,
+            "height": 100,
+            "paddingTop": "150px"
+          }
+        ],
+        "queue": 1,
+        "nonpersonalized": 1,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js",
+        "pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/baseball",
+      "url": "https://douknowball.com/baseball",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [],
+        "queue": 0,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/baseball-connections",
+      "url": "https://douknowball.com/baseball-connections",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [
+          {
+            "slot": "7540487748",
+            "format": "horizontal",
+            "width": 288,
+            "height": 100,
+            "paddingTop": "150px"
+          }
+        ],
+        "queue": 1,
+        "nonpersonalized": 1,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js",
+        "pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/build-your-xi",
+      "url": "https://douknowball.com/build-your-xi",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [
+          {
+            "slot": "7540487748",
+            "format": "horizontal",
+            "width": 288,
+            "height": 100,
+            "paddingTop": "150px"
+          }
+        ],
+        "queue": 1,
+        "nonpersonalized": 1,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js",
+        "pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/budget-builder",
+      "url": "https://douknowball.com/budget-builder",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [],
+        "queue": 0,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/buzzer-beater",
+      "url": "https://douknowball.com/buzzer-beater",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [],
+        "queue": 0,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/career",
+      "url": "https://douknowball.com/career",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [
+          {
+            "slot": "7540487748",
+            "format": "horizontal",
+            "width": 288,
+            "height": 100,
+            "paddingTop": "150px"
+          }
+        ],
+        "queue": 1,
+        "nonpersonalized": 1,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js",
+        "pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/cbb-dynasty",
+      "url": "https://douknowball.com/cbb-dynasty",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [],
+        "queue": 0,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/cbb-grid",
+      "url": "https://douknowball.com/cbb-grid",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [
+          {
+            "slot": "7540487748",
+            "format": "horizontal",
+            "width": 288,
+            "height": 100,
+            "paddingTop": "150px"
+          }
+        ],
+        "queue": 1,
+        "nonpersonalized": 1,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js",
+        "pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/cfb-dynasty",
+      "url": "https://douknowball.com/cfb-dynasty",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [],
+        "queue": 0,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/cfb-higher-lower",
+      "url": "https://douknowball.com/cfb-higher-lower",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [
+          {
+            "slot": "7540487748",
+            "format": "horizontal",
+            "width": 288,
+            "height": 100,
+            "paddingTop": "150px"
+          }
+        ],
+        "queue": 1,
+        "nonpersonalized": 1,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js",
+        "pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/champions-league-format-history",
+      "url": "https://douknowball.com/champions-league-format-history",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [],
+        "queue": 0,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/club-manager",
+      "url": "https://douknowball.com/club-manager",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [
+          {
+            "slot": "7540487748",
+            "format": "horizontal",
+            "width": 288,
+            "height": 100,
+            "paddingTop": "150px"
+          }
+        ],
+        "queue": 1,
+        "nonpersonalized": 1,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js",
+        "pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/college",
+      "url": "https://douknowball.com/college",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [],
+        "queue": 0,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/college-grid",
+      "url": "https://douknowball.com/college-grid",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [
+          {
+            "slot": "7540487748",
+            "format": "horizontal",
+            "width": 288,
+            "height": 100,
+            "paddingTop": "150px"
+          }
+        ],
+        "queue": 1,
+        "nonpersonalized": 1,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js",
+        "pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/conquest",
+      "url": "https://douknowball.com/conquest",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [],
+        "queue": 0,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/conquest-mlb",
+      "url": "https://douknowball.com/conquest-mlb",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [],
+        "queue": 0,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/conquest-nhl",
+      "url": "https://douknowball.com/conquest-nhl",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [],
+        "queue": 0,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/contact",
+      "url": "https://douknowball.com/contact",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [],
+        "queue": 0,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/dart-draft",
+      "url": "https://douknowball.com/dart-draft",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [],
+        "queue": 0,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/deadline-day",
+      "url": "https://douknowball.com/deadline-day",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [],
+        "queue": 0,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/career-ladder",
+      "url": "https://douknowball.com/career-ladder",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [
+          {
+            "slot": "7540487748",
+            "format": "horizontal",
+            "width": 288,
+            "height": 100,
+            "paddingTop": "150px"
+          }
+        ],
+        "queue": 1,
+        "nonpersonalized": 1,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js",
+        "pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/f1-constructor",
+      "url": "https://douknowball.com/f1-constructor",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [],
+        "queue": 0,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/f1-driver",
+      "url": "https://douknowball.com/f1-driver",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [],
+        "queue": 0,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/cbb-grid/archive",
+      "url": "https://douknowball.com/cbb-grid/archive",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [],
+        "queue": 0,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/face-off",
+      "url": "https://douknowball.com/face-off",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [
+          {
+            "slot": "7540487748",
+            "format": "horizontal",
+            "width": 288,
+            "height": 100,
+            "paddingTop": "150px"
+          }
+        ],
+        "queue": 1,
+        "nonpersonalized": 1,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js",
+        "pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/fantasy-draft",
+      "url": "https://douknowball.com/fantasy-draft",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [],
+        "queue": 0,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/champ-or-not",
+      "url": "https://douknowball.com/champ-or-not",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [
+          {
+            "slot": "7540487748",
+            "format": "horizontal",
+            "width": 288,
+            "height": 100,
+            "paddingTop": "150px"
+          }
+        ],
+        "queue": 1,
+        "nonpersonalized": 1,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js",
+        "pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/fight-gym",
+      "url": "https://douknowball.com/fight-gym",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [],
+        "queue": 0,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/fight-promoter",
+      "url": "https://douknowball.com/fight-promoter",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [],
+        "queue": 0,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/footle",
+      "url": "https://douknowball.com/footle",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [
+          {
+            "slot": "7540487748",
+            "format": "horizontal",
+            "width": 288,
+            "height": 100,
+            "paddingTop": "150px"
+          }
+        ],
+        "queue": 1,
+        "nonpersonalized": 1,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js",
+        "pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/football-grid",
+      "url": "https://douknowball.com/football-grid",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [
+          {
+            "slot": "7540487748",
+            "format": "horizontal",
+            "width": 288,
+            "height": 100,
+            "paddingTop": "150px"
+          }
+        ],
+        "queue": 1,
+        "nonpersonalized": 1,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js",
+        "pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/clue-auction",
+      "url": "https://douknowball.com/clue-auction",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [
+          {
+            "slot": "7540487748",
+            "format": "horizontal",
+            "width": 288,
+            "height": 100,
+            "paddingTop": "150px"
+          }
+        ],
+        "queue": 1,
+        "nonpersonalized": 1,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js",
+        "pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/gauntlet-draft",
+      "url": "https://douknowball.com/gauntlet-draft",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [
+          {
+            "slot": "7540487748",
+            "format": "horizontal",
+            "width": 288,
+            "height": 100,
+            "paddingTop": "150px"
+          }
+        ],
+        "queue": 1,
+        "nonpersonalized": 1,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js",
+        "pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/front-office",
+      "url": "https://douknowball.com/front-office",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [],
+        "queue": 0,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/connections",
+      "url": "https://douknowball.com/connections",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [
+          {
+            "slot": "7540487748",
+            "format": "horizontal",
+            "width": 288,
+            "height": 100,
+            "paddingTop": "150px"
+          }
+        ],
+        "queue": 1,
+        "nonpersonalized": 1,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js",
+        "pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/guess-cbb-team",
+      "url": "https://douknowball.com/guess-cbb-team",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [],
+        "queue": 0,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/guess-nascar-driver",
+      "url": "https://douknowball.com/guess-nascar-driver",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [],
+        "queue": 0,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/conquest-nba",
+      "url": "https://douknowball.com/conquest-nba",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [],
+        "queue": 0,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/guess-the-golfer",
+      "url": "https://douknowball.com/guess-the-golfer",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [
+          {
+            "slot": "7540487748",
+            "format": "horizontal",
+            "width": 288,
+            "height": 100,
+            "paddingTop": "150px"
+          }
+        ],
+        "queue": 1,
+        "nonpersonalized": 1,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js",
+        "pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/guess-the-college",
+      "url": "https://douknowball.com/guess-the-college",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [],
+        "queue": 0,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/contract-chaos",
+      "url": "https://douknowball.com/contract-chaos",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [
+          {
+            "slot": "7540487748",
+            "format": "horizontal",
+            "width": 288,
+            "height": 100,
+            "paddingTop": "150px"
+          }
+        ],
+        "queue": 1,
+        "nonpersonalized": 1,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js",
+        "pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/hall-of-champions",
+      "url": "https://douknowball.com/hall-of-champions",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [],
+        "queue": 0,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/guess-the-year",
+      "url": "https://douknowball.com/guess-the-year",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [],
+        "queue": 0,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/emoji-guess",
+      "url": "https://douknowball.com/emoji-guess",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [],
+        "queue": 0,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/hockey-career",
+      "url": "https://douknowball.com/hockey-career",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [
+          {
+            "slot": "7540487748",
+            "format": "horizontal",
+            "width": 288,
+            "height": 100,
+            "paddingTop": "150px"
+          }
+        ],
+        "queue": 1,
+        "nonpersonalized": 1,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js",
+        "pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/hockey",
+      "url": "https://douknowball.com/hockey",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [],
+        "queue": 0,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/f1-higher-lower",
+      "url": "https://douknowball.com/f1-higher-lower",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [
+          {
+            "slot": "7540487748",
+            "format": "horizontal",
+            "width": 288,
+            "height": 100,
+            "paddingTop": "150px"
+          }
+        ],
+        "queue": 1,
+        "nonpersonalized": 1,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js",
+        "pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/hockey-grid/archive",
+      "url": "https://douknowball.com/hockey-grid/archive",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [],
+        "queue": 0,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/hockey-higher-lower",
+      "url": "https://douknowball.com/hockey-higher-lower",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [
+          {
+            "slot": "7540487748",
+            "format": "horizontal",
+            "width": 288,
+            "height": 100,
+            "paddingTop": "150px"
+          }
+        ],
+        "queue": 1,
+        "nonpersonalized": 1,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js",
+        "pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/fight-career",
+      "url": "https://douknowball.com/fight-career",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [],
+        "queue": 0,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/leaderboard",
+      "url": "https://douknowball.com/leaderboard",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [],
+        "queue": 0,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/idle-arena",
+      "url": "https://douknowball.com/idle-arena",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [],
+        "queue": 0,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/manager-hot-seat",
+      "url": "https://douknowball.com/manager-hot-seat",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [],
+        "queue": 0,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/missing-five",
+      "url": "https://douknowball.com/missing-five",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [
+          {
+            "slot": "7540487748",
+            "format": "horizontal",
+            "width": 288,
+            "height": 100,
+            "paddingTop": "150px"
+          }
+        ],
+        "queue": 1,
+        "nonpersonalized": 1,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js",
+        "pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/mlb-connect-4",
+      "url": "https://douknowball.com/mlb-connect-4",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [
+          {
+            "slot": "7540487748",
+            "format": "horizontal",
+            "width": 288,
+            "height": 100,
+            "paddingTop": "150px"
+          }
+        ],
+        "queue": 1,
+        "nonpersonalized": 1,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js",
+        "pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/mlb-grid",
+      "url": "https://douknowball.com/mlb-grid",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [
+          {
+            "slot": "7540487748",
+            "format": "horizontal",
+            "width": 288,
+            "height": 100,
+            "paddingTop": "150px"
+          }
+        ],
+        "queue": 1,
+        "nonpersonalized": 1,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js",
+        "pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/mlb-my-career",
+      "url": "https://douknowball.com/mlb-my-career",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [],
+        "queue": 0,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/nascar-chain",
+      "url": "https://douknowball.com/nascar-chain",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [],
+        "queue": 0,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/nba-connect-4",
+      "url": "https://douknowball.com/nba-connect-4",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [
+          {
+            "slot": "7540487748",
+            "format": "horizontal",
+            "width": 288,
+            "height": 100,
+            "paddingTop": "150px"
+          }
+        ],
+        "queue": 1,
+        "nonpersonalized": 1,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js",
+        "pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/football-connect-4",
+      "url": "https://douknowball.com/football-connect-4",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [
+          {
+            "slot": "7540487748",
+            "format": "horizontal",
+            "width": 288,
+            "height": 100,
+            "paddingTop": "150px"
+          }
+        ],
+        "queue": 1,
+        "nonpersonalized": 1,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js",
+        "pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/nba-gauntlet-draft",
+      "url": "https://douknowball.com/nba-gauntlet-draft",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [
+          {
+            "slot": "7540487748",
+            "format": "horizontal",
+            "width": 288,
+            "height": 100,
+            "paddingTop": "150px"
+          }
+        ],
+        "queue": 1,
+        "nonpersonalized": 1,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js",
+        "pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/minefield",
+      "url": "https://douknowball.com/minefield",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [],
+        "queue": 0,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/free-kick",
+      "url": "https://douknowball.com/free-kick",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [],
+        "queue": 0,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/nba-higher-lower",
+      "url": "https://douknowball.com/nba-higher-lower",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [
+          {
+            "slot": "7540487748",
+            "format": "horizontal",
+            "width": 288,
+            "height": 100,
+            "paddingTop": "150px"
+          }
+        ],
+        "queue": 1,
+        "nonpersonalized": 1,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js",
+        "pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/missing-nine",
+      "url": "https://douknowball.com/missing-nine",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [
+          {
+            "slot": "7540487748",
+            "format": "horizontal",
+            "width": 288,
+            "height": 100,
+            "paddingTop": "150px"
+          }
+        ],
+        "queue": 1,
+        "nonpersonalized": 1,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js",
+        "pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/golf-higher-lower",
+      "url": "https://douknowball.com/golf-higher-lower",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [
+          {
+            "slot": "7540487748",
+            "format": "horizontal",
+            "width": 288,
+            "height": 100,
+            "paddingTop": "150px"
+          }
+        ],
+        "queue": 1,
+        "nonpersonalized": 1,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js",
+        "pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/nba-starting-5",
+      "url": "https://douknowball.com/nba-starting-5",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [
+          {
+            "slot": "7540487748",
+            "format": "horizontal",
+            "width": 288,
+            "height": 100,
+            "paddingTop": "150px"
+          }
+        ],
+        "queue": 1,
+        "nonpersonalized": 1,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js",
+        "pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/mlb-front-office",
+      "url": "https://douknowball.com/mlb-front-office",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [],
+        "queue": 0,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/guess-tennis-player",
+      "url": "https://douknowball.com/guess-tennis-player",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [],
+        "queue": 0,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/nfl-connect-4",
+      "url": "https://douknowball.com/nfl-connect-4",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [
+          {
+            "slot": "7540487748",
+            "format": "horizontal",
+            "width": 288,
+            "height": 100,
+            "paddingTop": "150px"
+          }
+        ],
+        "queue": 1,
+        "nonpersonalized": 1,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js",
+        "pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/guess-the-nation",
+      "url": "https://douknowball.com/guess-the-nation",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [],
+        "queue": 0,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/nfl-higher-lower",
+      "url": "https://douknowball.com/nfl-higher-lower",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [
+          {
+            "slot": "7540487748",
+            "format": "horizontal",
+            "width": 288,
+            "height": 100,
+            "paddingTop": "150px"
+          }
+        ],
+        "queue": 1,
+        "nonpersonalized": 1,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js",
+        "pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/higher-lower",
+      "url": "https://douknowball.com/higher-lower",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [
+          {
+            "slot": "7540487748",
+            "format": "horizontal",
+            "width": 288,
+            "height": 100,
+            "paddingTop": "150px"
+          }
+        ],
+        "queue": 1,
+        "nonpersonalized": 1,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js",
+        "pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/nhl-connect-4",
+      "url": "https://douknowball.com/nhl-connect-4",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [
+          {
+            "slot": "7540487748",
+            "format": "horizontal",
+            "width": 288,
+            "height": 100,
+            "paddingTop": "150px"
+          }
+        ],
+        "queue": 1,
+        "nonpersonalized": 1,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js",
+        "pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/hockey-grid",
+      "url": "https://douknowball.com/hockey-grid",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [
+          {
+            "slot": "7540487748",
+            "format": "horizontal",
+            "width": 288,
+            "height": 100,
+            "paddingTop": "150px"
+          }
+        ],
+        "queue": 1,
+        "nonpersonalized": 1,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js",
+        "pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/nhl-gauntlet-draft",
+      "url": "https://douknowball.com/nhl-gauntlet-draft",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [
+          {
+            "slot": "7540487748",
+            "format": "horizontal",
+            "width": 288,
+            "height": 100,
+            "paddingTop": "150px"
+          }
+        ],
+        "queue": 1,
+        "nonpersonalized": 1,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js",
+        "pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/hof-or-bust",
+      "url": "https://douknowball.com/hof-or-bust",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [],
+        "queue": 0,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/olympics",
+      "url": "https://douknowball.com/olympics",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [
+          {
+            "slot": "7540487748",
+            "format": "horizontal",
+            "width": 288,
+            "height": 100,
+            "paddingTop": "150px"
+          }
+        ],
+        "queue": 1,
+        "nonpersonalized": 1,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js",
+        "pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/list-quiz",
+      "url": "https://douknowball.com/list-quiz",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [
+          {
+            "slot": "7540487748",
+            "format": "horizontal",
+            "width": 288,
+            "height": 100,
+            "paddingTop": "150px"
+          }
+        ],
+        "queue": 1,
+        "nonpersonalized": 1,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js",
+        "pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/perfect-lineup-nhl",
+      "url": "https://douknowball.com/perfect-lineup-nhl",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [],
+        "queue": 0,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/missing-eleven",
+      "url": "https://douknowball.com/missing-eleven",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [
+          {
+            "slot": "7540487748",
+            "format": "horizontal",
+            "width": 288,
+            "height": 100,
+            "paddingTop": "150px"
+          }
+        ],
+        "queue": 1,
+        "nonpersonalized": 1,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js",
+        "pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/perfect-season-nfl",
+      "url": "https://douknowball.com/perfect-season-nfl",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [
+          {
+            "slot": "7540487748",
+            "format": "horizontal",
+            "width": 288,
+            "height": 100,
+            "paddingTop": "150px"
+          }
+        ],
+        "queue": 1,
+        "nonpersonalized": 1,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js",
+        "pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/missing-xi",
+      "url": "https://douknowball.com/missing-xi",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [
+          {
+            "slot": "7540487748",
+            "format": "horizontal",
+            "width": 288,
+            "height": 100,
+            "paddingTop": "150px"
+          }
+        ],
+        "queue": 1,
+        "nonpersonalized": 1,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js",
+        "pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/player-stock-market",
+      "url": "https://douknowball.com/player-stock-market",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [
+          {
+            "slot": "7540487748",
+            "format": "horizontal",
+            "width": 288,
+            "height": 100,
+            "paddingTop": "150px"
+          }
+        ],
+        "queue": 1,
+        "nonpersonalized": 1,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js",
+        "pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/pro-football",
+      "url": "https://douknowball.com/pro-football",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [],
+        "queue": 0,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/mlb-grid/archive",
+      "url": "https://douknowball.com/mlb-grid/archive",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [],
+        "queue": 0,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/mlb-gauntlet-draft",
+      "url": "https://douknowball.com/mlb-gauntlet-draft",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [
+          {
+            "slot": "7540487748",
+            "format": "horizontal",
+            "width": 288,
+            "height": 100,
+            "paddingTop": "150px"
+          }
+        ],
+        "queue": 1,
+        "nonpersonalized": 1,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js",
+        "pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/rank-em",
+      "url": "https://douknowball.com/rank-em",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [
+          {
+            "slot": "7540487748",
+            "format": "horizontal",
+            "width": 288,
+            "height": 100,
+            "paddingTop": "150px"
+          }
+        ],
+        "queue": 1,
+        "nonpersonalized": 1,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js",
+        "pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/mlb-postseason-format-history",
+      "url": "https://douknowball.com/mlb-postseason-format-history",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [],
+        "queue": 0,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/mlb-higher-lower",
+      "url": "https://douknowball.com/mlb-higher-lower",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [
+          {
+            "slot": "7540487748",
+            "format": "horizontal",
+            "width": 288,
+            "height": 100,
+            "paddingTop": "150px"
+          }
+        ],
+        "queue": 1,
+        "nonpersonalized": 1,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js",
+        "pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/records",
+      "url": "https://douknowball.com/records",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [],
+        "queue": 0,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/nba-career",
+      "url": "https://douknowball.com/nba-career",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [
+          {
+            "slot": "7540487748",
+            "format": "horizontal",
+            "width": 288,
+            "height": 100,
+            "paddingTop": "150px"
+          }
+        ],
+        "queue": 1,
+        "nonpersonalized": 1,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js",
+        "pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/mystery-box",
+      "url": "https://douknowball.com/mystery-box",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [],
+        "queue": 0,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/records/college-football-national-champions",
+      "url": "https://douknowball.com/records/college-football-national-champions",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [],
+        "queue": 0,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/nba-connections",
+      "url": "https://douknowball.com/nba-connections",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [
+          {
+            "slot": "7540487748",
+            "format": "horizontal",
+            "width": 288,
+            "height": 100,
+            "paddingTop": "150px"
+          }
+        ],
+        "queue": 1,
+        "nonpersonalized": 1,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js",
+        "pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/records/heisman-trophy-winners",
+      "url": "https://douknowball.com/records/heisman-trophy-winners",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [],
+        "queue": 0,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/nba-grid",
+      "url": "https://douknowball.com/nba-grid",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [
+          {
+            "slot": "7540487748",
+            "format": "horizontal",
+            "width": 288,
+            "height": 100,
+            "paddingTop": "150px"
+          }
+        ],
+        "queue": 1,
+        "nonpersonalized": 1,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js",
+        "pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/nba-my-career",
+      "url": "https://douknowball.com/nba-my-career",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [],
+        "queue": 0,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/nba-stat-line",
+      "url": "https://douknowball.com/nba-stat-line",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [],
+        "queue": 0,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/nfl-connections",
+      "url": "https://douknowball.com/nfl-connections",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [
+          {
+            "slot": "7540487748",
+            "format": "horizontal",
+            "width": 288,
+            "height": 100,
+            "paddingTop": "150px"
+          }
+        ],
+        "queue": 1,
+        "nonpersonalized": 1,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js",
+        "pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/nfl-my-career",
+      "url": "https://douknowball.com/nfl-my-career",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [],
+        "queue": 0,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/nhl-connections",
+      "url": "https://douknowball.com/nhl-connections",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [
+          {
+            "slot": "7540487748",
+            "format": "horizontal",
+            "width": 288,
+            "height": 100,
+            "paddingTop": "150px"
+          }
+        ],
+        "queue": 1,
+        "nonpersonalized": 1,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js",
+        "pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/nhl-my-career",
+      "url": "https://douknowball.com/nhl-my-career",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [],
+        "queue": 0,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/nba-chain",
+      "url": "https://douknowball.com/nba-chain",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [
+          {
+            "slot": "7540487748",
+            "format": "horizontal",
+            "width": 288,
+            "height": 100,
+            "paddingTop": "150px"
+          }
+        ],
+        "queue": 1,
+        "nonpersonalized": 1,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js",
+        "pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/perfect-lineup-f1",
+      "url": "https://douknowball.com/perfect-lineup-f1",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [],
+        "queue": 0,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/perfect-season-mlb",
+      "url": "https://douknowball.com/perfect-season-mlb",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [
+          {
+            "slot": "7540487748",
+            "format": "horizontal",
+            "width": 288,
+            "height": 100,
+            "paddingTop": "150px"
+          }
+        ],
+        "queue": 1,
+        "nonpersonalized": 1,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js",
+        "pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/nba-front-office",
+      "url": "https://douknowball.com/nba-front-office",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [],
+        "queue": 0,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/records/nrl-premiers",
+      "url": "https://douknowball.com/records/nrl-premiers",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [],
+        "queue": 0,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/nba-grid/archive",
+      "url": "https://douknowball.com/nba-grid/archive",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [],
+        "queue": 0,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/perfect-season-nhl",
+      "url": "https://douknowball.com/perfect-season-nhl",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [
+          {
+            "slot": "7540487748",
+            "format": "horizontal",
+            "width": 288,
+            "height": 100,
+            "paddingTop": "150px"
+          }
+        ],
+        "queue": 1,
+        "nonpersonalized": 1,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js",
+        "pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/records/wnba-champions",
+      "url": "https://douknowball.com/records/wnba-champions",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [],
+        "queue": 0,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/nba-playoff-format-history",
+      "url": "https://douknowball.com/nba-playoff-format-history",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [],
+        "queue": 0,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/privacy",
+      "url": "https://douknowball.com/privacy",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [],
+        "queue": 0,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/search-and-discard",
+      "url": "https://douknowball.com/search-and-discard",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [
+          {
+            "slot": "7540487748",
+            "format": "horizontal",
+            "width": 288,
+            "height": 100,
+            "paddingTop": "150px"
+          }
+        ],
+        "queue": 1,
+        "nonpersonalized": 1,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js",
+        "pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/soccer",
+      "url": "https://douknowball.com/soccer",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [],
+        "queue": 0,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/puck-detective",
+      "url": "https://douknowball.com/puck-detective",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [
+          {
+            "slot": "7540487748",
+            "format": "horizontal",
+            "width": 288,
+            "height": 100,
+            "paddingTop": "150px"
+          }
+        ],
+        "queue": 1,
+        "nonpersonalized": 1,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js",
+        "pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/nfl-career",
+      "url": "https://douknowball.com/nfl-career",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [
+          {
+            "slot": "7540487748",
+            "format": "horizontal",
+            "width": 288,
+            "height": 100,
+            "paddingTop": "150px"
+          }
+        ],
+        "queue": 1,
+        "nonpersonalized": 1,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js",
+        "pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/soccer-grid",
+      "url": "https://douknowball.com/soccer-grid",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [
+          {
+            "slot": "7540487748",
+            "format": "horizontal",
+            "width": 288,
+            "height": 100,
+            "paddingTop": "150px"
+          }
+        ],
+        "queue": 1,
+        "nonpersonalized": 1,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js",
+        "pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/rarity-round",
+      "url": "https://douknowball.com/rarity-round",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [
+          {
+            "slot": "7540487748",
+            "format": "horizontal",
+            "width": 288,
+            "height": 100,
+            "paddingTop": "150px"
+          }
+        ],
+        "queue": 1,
+        "nonpersonalized": 1,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js",
+        "pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/nfl-gauntlet-draft",
+      "url": "https://douknowball.com/nfl-gauntlet-draft",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [
+          {
+            "slot": "7540487748",
+            "format": "horizontal",
+            "width": 288,
+            "height": 100,
+            "paddingTop": "150px"
+          }
+        ],
+        "queue": 1,
+        "nonpersonalized": 1,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js",
+        "pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/squad-deal",
+      "url": "https://douknowball.com/squad-deal",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [
+          {
+            "slot": "7540487748",
+            "format": "horizontal",
+            "width": 288,
+            "height": 100,
+            "paddingTop": "150px"
+          }
+        ],
+        "queue": 1,
+        "nonpersonalized": 1,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js",
+        "pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/records/afl-premiers",
+      "url": "https://douknowball.com/records/afl-premiers",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [],
+        "queue": 0,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/nfl-playoff-format-history",
+      "url": "https://douknowball.com/nfl-playoff-format-history",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [],
+        "queue": 0,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/records/dally-m-medal-winners",
+      "url": "https://douknowball.com/records/dally-m-medal-winners",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [],
+        "queue": 0,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/nhl-front-office",
+      "url": "https://douknowball.com/nhl-front-office",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [],
+        "queue": 0,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/teammates",
+      "url": "https://douknowball.com/teammates",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [
+          {
+            "slot": "7540487748",
+            "format": "horizontal",
+            "width": 288,
+            "height": 100,
+            "paddingTop": "150px"
+          }
+        ],
+        "queue": 1,
+        "nonpersonalized": 1,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js",
+        "pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/records/nba-champions",
+      "url": "https://douknowball.com/records/nba-champions",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [],
+        "queue": 0,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/nhl-playoff-format-history",
+      "url": "https://douknowball.com/nhl-playoff-format-history",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [],
+        "queue": 0,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/terms",
+      "url": "https://douknowball.com/terms",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [],
+        "queue": 0,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/records/stanley-cup-winners",
+      "url": "https://douknowball.com/records/stanley-cup-winners",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [],
+        "queue": 0,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/perfect-lineup-nba",
+      "url": "https://douknowball.com/perfect-lineup-nba",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [],
+        "queue": 0,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/records/world-series-winners",
+      "url": "https://douknowball.com/records/world-series-winners",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [],
+        "queue": 0,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/ufc-chain",
+      "url": "https://douknowball.com/ufc-chain",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [],
+        "queue": 0,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/perfect-season-nba",
+      "url": "https://douknowball.com/perfect-season-nba",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [
+          {
+            "slot": "7540487748",
+            "format": "horizontal",
+            "width": 288,
+            "height": 100,
+            "paddingTop": "150px"
+          }
+        ],
+        "queue": 1,
+        "nonpersonalized": 1,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js",
+        "pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/sign-the-player",
+      "url": "https://douknowball.com/sign-the-player",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [],
+        "queue": 0,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/whod-they-beat",
+      "url": "https://douknowball.com/whod-they-beat",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [
+          {
+            "slot": "7540487748",
+            "format": "horizontal",
+            "width": 288,
+            "height": 100,
+            "paddingTop": "150px"
+          }
+        ],
+        "queue": 1,
+        "nonpersonalized": 1,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js",
+        "pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/soccer-career",
+      "url": "https://douknowball.com/soccer-career",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [],
+        "queue": 0,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/player-bingo",
+      "url": "https://douknowball.com/player-bingo",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [
+          {
+            "slot": "7540487748",
+            "format": "horizontal",
+            "width": 288,
+            "height": 100,
+            "paddingTop": "150px"
+          }
+        ],
+        "queue": 1,
+        "nonpersonalized": 1,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js",
+        "pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/world-cup-bracket",
+      "url": "https://douknowball.com/world-cup-bracket",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [],
+        "queue": 0,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/pro-basketball",
+      "url": "https://douknowball.com/pro-basketball",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [],
+        "queue": 0,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/sports-bingo",
+      "url": "https://douknowball.com/sports-bingo",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [
+          {
+            "slot": "7540487748",
+            "format": "horizontal",
+            "width": 288,
+            "height": 100,
+            "paddingTop": "150px"
+          }
+        ],
+        "queue": 1,
+        "nonpersonalized": 1,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js",
+        "pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/quiz-board",
+      "url": "https://douknowball.com/quiz-board",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [],
+        "queue": 0,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/stadium-tycoon",
+      "url": "https://douknowball.com/stadium-tycoon",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [],
+        "queue": 0,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/rebuild",
+      "url": "https://douknowball.com/rebuild",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [],
+        "queue": 0,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/tennis-chain",
+      "url": "https://douknowball.com/tennis-chain",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [],
+        "queue": 0,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/records/brownlow-medal-winners",
+      "url": "https://douknowball.com/records/brownlow-medal-winners",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [],
+        "queue": 0,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/transfer-path",
+      "url": "https://douknowball.com/transfer-path",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [],
+        "queue": 0,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/records/english-football-champions",
+      "url": "https://douknowball.com/records/english-football-champions",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [],
+        "queue": 0,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/whats-new",
+      "url": "https://douknowball.com/whats-new",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [],
+        "queue": 0,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/records/ncaa-basketball-champions",
+      "url": "https://douknowball.com/records/ncaa-basketball-champions",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [],
+        "queue": 0,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/wonderkid-factory",
+      "url": "https://douknowball.com/wonderkid-factory",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [],
+        "queue": 0,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/records/super-bowl-winners",
+      "url": "https://douknowball.com/records/super-bowl-winners",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [],
+        "queue": 0,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/world-xi",
+      "url": "https://douknowball.com/world-xi",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [
+          {
+            "slot": "7540487748",
+            "format": "horizontal",
+            "width": 288,
+            "height": 100,
+            "paddingTop": "150px"
+          }
+        ],
+        "queue": 1,
+        "nonpersonalized": 1,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js",
+        "pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/score-predictor",
+      "url": "https://douknowball.com/score-predictor",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [],
+        "queue": 0,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/silverware-sort",
+      "url": "https://douknowball.com/silverware-sort",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [
+          {
+            "slot": "7540487748",
+            "format": "horizontal",
+            "width": 288,
+            "height": 100,
+            "paddingTop": "150px"
+          }
+        ],
+        "queue": 1,
+        "nonpersonalized": 1,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js",
+        "pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/soccer-conquest",
+      "url": "https://douknowball.com/soccer-conquest",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [],
+        "queue": 0,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/sports-millionaire",
+      "url": "https://douknowball.com/sports-millionaire",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [
+          {
+            "slot": "7540487748",
+            "format": "horizontal",
+            "width": 288,
+            "height": 100,
+            "paddingTop": "150px"
+          }
+        ],
+        "queue": 1,
+        "nonpersonalized": 1,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js",
+        "pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/stat-detective",
+      "url": "https://douknowball.com/stat-detective",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [
+          {
+            "slot": "7540487748",
+            "format": "horizontal",
+            "width": 288,
+            "height": 100,
+            "paddingTop": "150px"
+          }
+        ],
+        "queue": 1,
+        "nonpersonalized": 1,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js",
+        "pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/tennis-higher-lower",
+      "url": "https://douknowball.com/tennis-higher-lower",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [
+          {
+            "slot": "7540487748",
+            "format": "horizontal",
+            "width": 288,
+            "height": 100,
+            "paddingTop": "150px"
+          }
+        ],
+        "queue": 1,
+        "nonpersonalized": 1,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js",
+        "pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/ufc",
+      "url": "https://douknowball.com/ufc",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [
+          {
+            "slot": "7540487748",
+            "format": "horizontal",
+            "width": 288,
+            "height": 100,
+            "paddingTop": "150px"
+          }
+        ],
+        "queue": 1,
+        "nonpersonalized": 1,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js",
+        "pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/who-am-i",
+      "url": "https://douknowball.com/who-am-i",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [
+          {
+            "slot": "7540487748",
+            "format": "horizontal",
+            "width": 288,
+            "height": 100,
+            "paddingTop": "150px"
+          }
+        ],
+        "queue": 1,
+        "nonpersonalized": 1,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js",
+        "pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
+      ],
+      "errors": []
+    },
+    {
+      "route": "/world-cup-2026-results",
+      "url": "https://douknowball.com/world-cup-2026-results",
+      "entry": "/assets/index-E8L0RxXO.js",
+      "initial": {
+        "slots": [],
+        "queue": 0,
+        "robots": []
+      },
+      "vendorAttempts": [
+        "www.googletagmanager.com/gtag/js"
+      ],
+      "errors": []
+    }
+  ],
+  "blocked": [
+    {
+      "route": "/",
+      "path": "/rest/v1/rpc/most_played_today"
+    },
+    {
+      "route": "/",
+      "path": "/rest/v1/rpc/global_rank"
+    },
+    {
+      "route": "/",
+      "path": "/rest/v1/daily_completions"
+    },
+    {
+      "route": "/fantasy-draft",
+      "path": "/functions/v1/fantasy-draft-daily"
+    },
+    {
+      "route": "/leaderboard",
+      "path": "/rest/v1/rpc/global_leaderboard"
+    },
+    {
+      "route": "/leaderboard",
+      "path": "/rest/v1/rpc/global_leaderboard"
+    },
+    {
+      "route": "/leaderboard",
+      "path": "/rest/v1/rpc/global_rank"
+    },
+    {
+      "route": "/leaderboard",
+      "path": "/rest/v1/rpc/global_rank"
+    }
+  ],
+  "cleanup": {
+    "browserStopped": true
+  },
+  "finished": "2026-10-01T23:12:52.545Z",
+  "firstPassLimits": [
+    "/career-ladder",
+    "/football-connect-4",
+    "/minefield",
+    "/mlb-grid/archive",
+    "/nba-chain",
+    "/records/nrl-premiers",
+    "/who-am-i"
+  ],
+  "retryCleanup": {
+    "browserStopped": true
+  },
+  "limitation": "Every sitemap URL at320px with stored Accept. Vendor script bodies locally intercepted. Reserved/manual slots measured, no real creative, ad request, impression or click transmitted. Initial gameplay only."
+}
