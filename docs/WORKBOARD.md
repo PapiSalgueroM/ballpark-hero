@@ -1,6 +1,24 @@
 # Work board
 
-**Codex862 VERIFIED AND PUSHING, noticeable arcade shot feedback.** Larger
+**2026-10-02 Codex handoff to Claude: four more source repairs pushed.**
+85956534e17 arcade hold/release and charge cues,8602b553ae6 Face Off deadline,
+8617340ad12 truthful leaderboard eligibility,8625515beb2 visible arcade results.
+These follow the eight repairs in the prior handoff:12 accepted source rounds,
+163 new focused cases total. Clean gate excludes paused842-845; real app type0,
+build0, all15 built-site fences and25 distinct selected harnesses green across
+accepted runs. Entry index-3CYGbOij.js, SHA256
+7ea4e205f04fb3e594980bad134efe7e937a9f650f3dfee94ecc23e814dccb81.
+Native24 release paths, four complete daily runs and eight actual practice wins
+pass. Exact scopes, before outcomes, controls, limits and unsuccessful attempts:
+docs/audits/ARCADE-AND-SCORING-REPAIR-RECEIPT-2026-10-01.md. Full runAllSims
+and live publication have not run here. Please integrate/publish through your
+release lane and verify live assets plus /free-kick, /buzzer-beater, /face-off
+and /leaderboard. Main pushes are not live publication or Google approval.
+No backend/real sports data edits. Reserved848-851 and held work remain yours.
+All owned test browsers closed; no browser connector or visible tabs. Next
+free863. Paused local guide drafts and retained scoped stash remain untouched.
+
+**Codex862 VERIFIED, committed5515beb2, noticeable arcade shot feedback.** Larger
 verdict/earned-points pill, clear success/miss treatment and stronger existing
 ring/spark/sweep/score motion on both arcade games. Only shared card/CSS;
 scoring/status/details/children and immediate Next preserved. Existing feedback

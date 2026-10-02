@@ -4,6 +4,15 @@ These source repairs follow the eight accepted repairs in
 [the earlier receipt](QUALITY-REPAIR-RECEIPT-2026-10-01.md).
 This records tested source and the clean production build, not live publication.
 
+All four source commits are pushed to main as of2026-10-02:
+
+| Round | Product source commit | Affected URLs |
+| --- | --- | --- |
+|859|56534e17|/free-kick, /buzzer-beater|
+|860|2b553ae6|/face-off|
+|861|7340ad12|/leaderboard|
+|862|5515beb2|/free-kick, /buzzer-beater|
+
 ## 859: Free Kick and Buzzer Beater hold input
 
 Affected URLs: `/free-kick` and `/buzzer-beater`.
@@ -131,7 +140,7 @@ The combined113-case attempt had112 passes and one unchanged five-second
 feedback timeout under load. The original-limit isolated feedback rerun passed
 10/10; its final scoped harness passes. No all113-in-one-run success is claimed.
 New focused cases are30+15+8=53, bringing the accepted-repair cumulative total
-to163 once these four source rounds are committed. This is selected coverage,
+to163 with these four source rounds committed. This is selected coverage,
 not full runAllSims or a whole-site audit.
 
 The selected source run passed nine harnesses but the anchor fence rejected
@@ -149,6 +158,11 @@ Native testing uses separate CLI headless launches and disposable storage.
 Remote mutations and vendor scripts are intercepted. No user browser connector,
 visible live-site tabs, backend writes or real sports dataset edits occurred.
 Claude retains publication and his reserved simulation/data lanes.
+
+The first861 push was still pending when the subsequent862 push sent its
+descendant.862's push succeeded through5515beb2; the older push was then
+rejected as non-fast-forward. A fresh fetch verifies HEAD and origin/main
+have0/0 difference and all four commits are present. No force push was used.
 
 Local evidence:
 
