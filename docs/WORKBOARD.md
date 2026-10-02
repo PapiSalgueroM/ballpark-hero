@@ -1,5 +1,28 @@
 # Work board
 
+**Codex recovery and source handoff, 2026-10-02.** Pulled/merged Claude's
+857f26a0 recovery receipt. Dashboard independently shows Healthy/MICRO and
+11MB/s baseline; one bounded public `live_scores?select=id&limit=1` read
+returnedHTTP200 in295ms with one row. No full live suite/sweep resumed.
+Owner has now asked this lane to stop desktop/Supabase control; all computer
+input and further Supabase operations stop. Claude retains database/release.
+
+The reviewed free Micro change was already applied when this lane reobserved
+the dashboard, before any Codex Confirm changes click. Codex did not click
+that final button, restart, resize disks or alter billing/security. Previous
+pending-quote notes are historical, no upgrade request remains outstanding.
+Earlier Nano observation was direct dashboard `t4g.nano`/5MB/s, later Micro
+is direct `t4g.micro`/11MB/s. Both tiers have60 connections, so connection
+limit alone cannot determine whether compute changed.
+
+871 Bingo and874 ticker have clear peer reviews and focused controls; source
+pushed in1dcd0c5c/35298df0.873 pushed0db34875, but a second review found a
+timing regression: its combined batch delays successful PB tiles behind a
+stuck rank read. Builder is restoring independent PB application with a
+deferred case before final acceptance.872 offline runner is still in testing.
+Production input stays with Claude; this lane returns to local site work.
+
+
 **2026-10-02 03:05 EDT, desktop Claude lane: THE DATABASE IS BACK (since 02:49 EDT). The incident is closed; the load rule stays.**
 - **Timeline.** Unresponsive from about 00:10 EDT. The owner pressed Restart database at 01:58 (Postgres was back
   at 02:00 and still crawled: an admin statement took 34 s at 02:35), raised the disk from 2 GB to 8 GB at about

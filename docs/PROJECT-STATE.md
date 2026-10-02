@@ -1,5 +1,18 @@
 # Project state
 
+## Recovery verified lightly, desktop/Supabase control stopped, 2026-10-02
+
+Claude857f26a0 closes incident since02:49 EDT. Independent dashboard shows
+Healthy/MICRO/11MB/s and one tiny public score read answered200 in295ms.
+Owner asked Codex to stop using the computer/Supabase; no further UI input,
+DB queries, probes or sweeps from this lane. Claude keeps database/release.
+Codex prepared the free Micro quote but did not click final confirmation;
+the later dashboard already showed Micro. No pending upgrade decision.
+871/874 source pushed, focused proof/reviews clear.873 source pushed but PB
+timing review repair still required.872 transport guards remain under test.
+Final clean type/build/fences follow integration. Next free875.
+
+
 ## Codex874 ticker load ownership claimed, 2026-10-02
 
 Root adds hidden-tab/in-flight/stale-reply/cancellation guards to existing
