@@ -105,6 +105,7 @@ export function useCareerGame() {
     puzzle: dailyPuzzle,
     guesses: dailyActions,
     addGuess: addDailyAction,
+    takeNewerSave: takeNewerDailySave,
     gameStatus: rawDailyStatus,
     isLoading,
   } = useDailyPuzzle<CareerPlayer, CareerAction>({
@@ -199,6 +200,8 @@ export function useCareerGame() {
 
   const makeGuess = useCallback((name: string): boolean => {
     if (gameStatus !== 'playing') return false;
+    // Round 848 review: another tab already moved the daily; jump to it, no verdict.
+    if (mode === 'daily' && takeNewerDailySave()) return false;
 
     if (name.toLowerCase().trim() === targetPlayer.name.toLowerCase().trim()) {
       if (mode === 'daily') {
@@ -230,7 +233,7 @@ export function useCareerGame() {
       }
     }
     return false;
-  }, [mode, gameStatus, targetPlayer, dailyWrongCount, unlimitedGuessesUsed, addDailyAction]);
+  }, [mode, gameStatus, targetPlayer, dailyWrongCount, unlimitedGuessesUsed, addDailyAction, takeNewerDailySave]);
 
   const giveUp = useCallback(() => {
     if (gameStatus !== 'playing') return;

@@ -53,6 +53,8 @@ import { useGuessTransferValue } from '@/hooks/useGuessTransferValue';
 import { useWorldCup } from '@/hooks/useWorldCup';
 import { useTransferPath } from '@/hooks/useTransferPath';
 import { useCareerGame } from '@/hooks/useCareerGame';
+import { useOlympics } from '@/hooks/useOlympics';
+import { toast } from 'sonner';
 import { clubSeasonsOf, shareClub } from '@/lib/transferPathGraph';
 import { careerPlayers } from '@/data/careerPlayers';
 import { consumeRestoredFinish } from '@/lib/restoredFinish';
@@ -316,6 +318,58 @@ function damaged(head: Record<string, unknown>, long: unknown[]): [string, strin
     ['a status the hook never writes', save([], 'finished')],
   ];
 }
+
+/* ----------------------------------------------------------------- 2b */
+
+/* Round 848 review. A stale tab's answer is dropped, but a game that shows
+   its verdict beside the answer still showed it: Higher or Lower played its
+   two second reveal (right or wrong, and a result row) for a round another
+   tab had already decided, Olympics said "Correct! You scored N points" and
+   logged the score, Career Path said "Not him, N guesses left" off a count
+   that was no longer the day's. A dropped answer now shows nothing but the
+   jump to the saved round. */
+describe('2b) a dropped answer shows no verdict, only the jump to the saved round', () => {
+  for (const row of HL) {
+    it(`${row.name} Higher or Lower: no reveal for the dropped answer`, () => {
+      const key = `${row.key}-daily-${TODAY}`;
+      const a = renderHook(() => row.hook() as unknown as HLGame), b = renderHook(() => row.hook() as unknown as HLGame);
+      answer(a, 'left');
+      answer(a, 'right');
+      const two = raw(key);
+      act(() => b.result.current.makeGuess('left'));
+      expect(raw(key)).toBe(two);
+      expect(b.result.current.showingResult).toBe(false);
+      expect(b.result.current.currentRound).toBe(2);
+      expect(b.result.current.results.map((r) => r.correct)).toEqual(a.result.current.results.map((r) => r.correct));
+    });
+  }
+
+  it('Olympics: no "correct, you scored" and no logged score for the dropped answer', async () => {
+    const said = vi.spyOn(toast, 'success');
+    const a = renderHook(() => useOlympics()), b = renderHook(() => useOlympics());
+    await flush();
+    act(() => a.result.current.giveUp());
+    expect(a.result.current.status).toBe('revealed');
+    const given = raw(`olympics-daily-${TODAY}`);
+    act(() => b.result.current.submitGuess(b.result.current.athlete.name));
+    expect(said).not.toHaveBeenCalled();
+    expect(raw(`olympics-daily-${TODAY}`)).toBe(given);
+    expect(b.result.current.status).toBe('revealed');
+  });
+
+  it('Career Path: no "guesses remaining" for the dropped answer', async () => {
+    const said = vi.spyOn(toast, 'error');
+    const a = renderHook(() => useCareerGame()), b = renderHook(() => useCareerGame());
+    await flush();
+    act(() => { a.result.current.makeGuess('Nobody Atall'); });
+    expect(said).toHaveBeenCalledTimes(1);
+    const one = raw(`career-path-daily-${TODAY}`);
+    act(() => { b.result.current.makeGuess('Nobody Else'); });
+    expect(said).toHaveBeenCalledTimes(1);
+    expect(raw(`career-path-daily-${TODAY}`)).toBe(one);
+    expect(b.result.current.guessesUsed).toBe(a.result.current.guessesUsed);
+  });
+});
 
 describe('3) a damaged save starts the day fresh and the next answer replaces it', () => {
   it('the shared hook', () => {

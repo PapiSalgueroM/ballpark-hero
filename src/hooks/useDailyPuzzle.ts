@@ -150,6 +150,16 @@ export interface DailyPuzzleReturn<T, G> {
    */
   addGuess: (guess: G) => void;
 
+  /**
+   * Round 848 review: when another tab has saved further on today's daily,
+   * take that state now and return true; the caller then gives up the answer
+   * it was about to make, before showing anything about it. addGuess makes
+   * the same check, but a game that shows a verdict beside the answer (a
+   * reveal, a toast, a score) has to ask first, or it shows a verdict for an
+   * answer that is never counted. False when this tab is current.
+   */
+  takeNewerSave: () => boolean;
+
   /** Current game outcome. Persisted to localStorage. */
   gameStatus: 'playing' | 'won' | 'lost';
 
@@ -502,6 +512,12 @@ export function useDailyPuzzle<T, G>(
   const droppingTurn = useRef(false);
   useEffect(() => { droppingTurn.current = false; });
 
+  const takeNewerSave = useCallback((): boolean => {
+    if (!adoptNewerSaveRef.current()) return false;
+    droppingTurn.current = true;
+    return true;
+  }, []);
+
   /* Round 848: and an open tab follows the other one live. The browser fires
      storage in every other tab of this site when one writes, so a second tab
      moves to the saved round before the player can answer the old one. */
@@ -566,6 +582,7 @@ export function useDailyPuzzle<T, G>(
     puzzle,
     guesses,
     addGuess,
+    takeNewerSave,
     gameStatus,
     isLoading,
     todayStr,

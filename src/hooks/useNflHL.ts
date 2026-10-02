@@ -80,6 +80,7 @@ export function useNflHL() {
   const {
     guesses: dailyActions,
     addGuess: addDailyAction,
+    takeNewerSave: takeNewerDailySave,
     gameStatus: rawDailyStatus,
     isLoading,
     todayStr,
@@ -166,6 +167,8 @@ export function useNflHL() {
   const makeGuess = useCallback(
     (choice: 'left' | 'right') => {
       if (!activeRound || showingResult || gameStatus !== 'playing') return;
+      // Round 848 review: another tab already decided this round; jump to it, no verdict.
+      if (mode === 'daily' && takeNewerDailySave()) return;
       const { p1, p2 } = activeRound;
       // Ties still score as correct either way, though pairing avoids them.
       const tie = p1.value === p2.value;
@@ -190,7 +193,7 @@ export function useNflHL() {
         setShowingResult(false);
       }, 2000);
     },
-    [activeRound, showingResult, gameStatus, mode, addDailyAction, cancelReveal],
+    [activeRound, showingResult, gameStatus, mode, addDailyAction, takeNewerDailySave, cancelReveal],
   );
 
   const switchMode = useCallback((m: NflHLMode) => {

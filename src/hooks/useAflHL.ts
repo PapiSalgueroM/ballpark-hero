@@ -70,6 +70,7 @@ export function useAflHL() {
   const {
     guesses: dailyActions,
     addGuess: addDailyAction,
+    takeNewerSave: takeNewerDailySave,
     gameStatus: rawDailyStatus,
     isLoading,
     todayStr,
@@ -154,6 +155,8 @@ export function useAflHL() {
   const makeGuess = useCallback(
     (choice: 'left' | 'right') => {
       if (!currentPair || showingResult || gameStatus !== 'playing') return;
+      // Round 848 review: another tab already decided this round; jump to it, no verdict.
+      if (mode === 'daily' && takeNewerDailySave()) return;
       const [p1, p2] = currentPair;
       // Ties count as correct either way (727 twice, 594, 575, 574, 549 x3).
       const tie = p1.goals === p2.goals;
@@ -178,7 +181,7 @@ export function useAflHL() {
         setShowingResult(false);
       }, 2000);
     },
-    [currentPair, showingResult, gameStatus, mode, addDailyAction, cancelReveal],
+    [currentPair, showingResult, gameStatus, mode, addDailyAction, takeNewerDailySave, cancelReveal],
   );
 
   const switchMode = useCallback((m: AflHLMode) => {
