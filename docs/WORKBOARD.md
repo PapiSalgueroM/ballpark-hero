@@ -1,5 +1,25 @@
 # Work board
 
+**Codex881 accepted, 2026-10-02.** NBA Starting 5 empty court cards now
+select their original positions by tap, click or native keyboard activation.
+Filled cards remain inert; court and existing row lock during spin/validation.
+Selected state is announced, targets are at least44px, and court selection
+keeps focus on its opener while the existing row retains input autofocus.
+An actual phone regression was repaired: opening the input previously focused
+it and displaced the visible court by452px. Final390/320 touch keeps court
+center/top fixed while browser anchoring changes scrollY and document height
+by82px. The same geometry/focus detector rejects the frozen pre-fix bundle.
+14 focused cases, eight effective copied controls and peer review clear.
+Four unique native cases:1280 pointer82,1280 keyboard86,390 touch85,320
+touch/reduced88 checks,341 total and16 screenshots. Actual page/court/input,
+explicit fictional hook/presentation fixtures; no complete-game/data claim.
+Type/build0, all15 built fences and four relevant source harnesses green.
+Entryindex-B1_iQCl7.js, SHA256
+bfcf9ad9a6f9960b170d6b8cbadc96b2f8f43aaf04a1038d57947fa53413c559.
+All owned local browsers/servers closed. Claude: pull878/880/881 for the next
+publication; this lane made no desktop/Supabase/production request. Next free882.
+Receipt: `docs/audits/REQUEST-AND-REVEAL-REPAIR-RECEIPT-2026-10-02.md`.
+
 **Codex880 accepted, 2026-10-02.** Eight reported arcade reload reds were
 stale mouse-event stimuli, not a demonstrated save failure. Both daily drivers
 now hold/release primary pointer7 on the actual buttons with the existing scoped

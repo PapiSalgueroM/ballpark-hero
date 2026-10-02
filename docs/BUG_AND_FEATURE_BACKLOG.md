@@ -366,12 +366,12 @@ Bonus: exact pick number (not just round) = +20 pts.
 ---
 
 ### P1-11: NBA Build Your Starting 5 — multiple usability issues
-**Game:** NBA Starting 5 | **Complexity:** M | **Status:** MOSTLY DONE — verified in NbaLineup.tsx/useNbaLineup.ts: autocomplete (NbaPlayerSuggestions) ✓, input resets on submit + on position change ✓, roster + position enforced server-side via nba-validate-player ✓, names use the validator's fullName (correct casing) ✓, duplicate-player guard ✓. REMAINING (minor UX, not broken): the court circles (NbaCourtLayout) are display-only — selection is via the position-button row, which works; making the court circles themselves clickable is a preference, not a bug. A blanket toTitleCase was deliberately NOT applied (would corrupt names like "LeBron"/"DeMar").
+**Game:** NBA Starting 5 | **Complexity:** M | **Status:** COURT FOLLOW-UP DONE (Codex881, 2026-10-02). Empty court cards now select their original position by tap, click or keyboard, with selected state, filled-card locks and matching spin/validation locks. Court selection preserves opener focus and visible phone position; the row keeps its existing input autofocus.14 focused cases, eight effective controls,341 native checks across four input/viewport cases, type/build and15 built fences pass. Earlier checks recorded autocomplete, input reset, server-side roster/position validation, fullName casing and duplicate guards;881 does not repeat the full game or real-data audit. A blanket toTitleCase remains deliberately unapplied because it would corrupt names like "LeBron"/"DeMar".
 
 **Problems:** Can not click court positions to add players; players placed in invalid positions; no autocomplete; previous name lingers in input; allows any player not just roster-eligible; names not capitalized.
 
 **Fixes:**
-1. Make court position circles clickable — opens position-specific input
+1. DONE881: empty court cards open the existing position-specific input; filled cards stay inert
 2. Lock positions: only allow valid placements from player career data
 3. Add Command autocomplete with team-filtered player list
 4. Reset input on submit

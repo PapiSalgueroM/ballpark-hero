@@ -6,6 +6,8 @@ interface NbaCourtLayoutProps {
   filledSlots: Map<number, NbaFilledSlot>;
   selectedPosition: number | null;
   challengeUnit?: string;
+  onSelectPosition?: (index: number) => void;
+  selectionDisabled?: boolean;
 }
 
 const positionCoords = [
@@ -16,7 +18,7 @@ const positionCoords = [
   { x: 50, y: 18 },  // C
 ];
 
-const NbaCourtLayout = ({ positions, filledSlots, selectedPosition, challengeUnit }: NbaCourtLayoutProps) => {
+const NbaCourtLayout = ({ positions, filledSlots, selectedPosition, challengeUnit, onSelectPosition, selectionDisabled }: NbaCourtLayoutProps) => {
   return (
     <div className="relative w-full max-w-lg mx-auto aspect-[3/4] rounded-2xl border border-orange-500/30 overflow-hidden bg-gradient-to-b from-orange-900/20 to-orange-800/10">
       {/* Court markings */}
@@ -34,18 +36,27 @@ const NbaCourtLayout = ({ positions, filledSlots, selectedPosition, challengeUni
         const filled = filledSlots.get(i);
         const isSelected = selectedPosition === i;
         const coord = positionCoords[i];
+        const isInteractive = !!onSelectPosition && !filled;
+        const Card = isInteractive ? 'button' : 'div';
 
         return (
-          <div
+          <Card
             key={i}
+            type={isInteractive ? 'button' : undefined}
+            disabled={isInteractive ? selectionDisabled : undefined}
+            onClick={isInteractive ? () => onSelectPosition?.(i) : undefined}
+            aria-label={isInteractive ? `Select ${pos.label} on court` : undefined}
+            aria-pressed={isInteractive ? isSelected : undefined}
             className={cn(
               'absolute -translate-x-1/2 -translate-y-1/2 transition-all duration-300',
               'flex flex-col items-center justify-center rounded-lg text-center min-w-[4.5rem] px-2 py-1.5',
               filled
                 ? 'bg-orange-500 text-black shadow-md shadow-orange-500/30'
                 : isSelected
-                  ? 'bg-primary text-primary-foreground shadow-lg scale-110 ring-2 ring-primary/50 animate-pulse'
-                  : 'bg-card border border-border text-foreground opacity-60'
+                  ? 'bg-primary text-primary-foreground shadow-lg scale-110 ring-2 ring-primary/50'
+                  : 'bg-card border border-border text-foreground opacity-60',
+              isSelected && !filled && !isInteractive && 'animate-pulse',
+              isInteractive && 'min-h-[44px] enabled:hover:opacity-100 disabled:cursor-not-allowed disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background motion-reduce:transition-none'
             )}
             style={{
               left: `${coord.x}%`,
@@ -70,7 +81,7 @@ const NbaCourtLayout = ({ positions, filledSlots, selectedPosition, challengeUni
                 )}
               </>
             )}
-          </div>
+          </Card>
         );
       })}
     </div>
