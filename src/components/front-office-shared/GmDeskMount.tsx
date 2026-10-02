@@ -41,7 +41,6 @@ export interface GmDeskMountProps<F extends GmFacts = GmFacts> {
 }
 
 export function GmDeskMount<F extends GmFacts = GmFacts>({ sport, desk, facts, panels, open, onOpen, onDesk }: GmDeskMountProps<F>) {
-  if (panels.length === 0) return null;
   const descriptor = gmSport(sport);
   const panel = gmPanelFor(panels, open);
 
@@ -56,7 +55,9 @@ export function GmDeskMount<F extends GmFacts = GmFacts>({ sport, desk, facts, p
   }
 
   /* A stale key (a panel that is no longer in the list) lands here too: the
-     hub is the honest answer to "open something that does not exist". */
+     hub is the honest answer to "open something that does not exist". And no
+     boxes means no wrapper either: an empty list, or one whose every tile said
+     null, must leave nothing on the hub, not an empty gap. */
   const tiles = gmDeskTiles(descriptor, desk, facts, panels);
   if (tiles.length === 0) return null;
   return (
