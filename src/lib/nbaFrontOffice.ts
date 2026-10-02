@@ -1,4 +1,5 @@
 import { NBA_TEAMS } from '@/data/conquestDataNba';
+import type { NbaOpeningRating, NbaOpeningRatingEvidence } from '@/data/nbaOpeningRatings';
 /* Round 211: no two men in one league share a name. */
 import { leagueNames, uniqueName } from './foNames';
 /* Round 531: the cap comes from one sourced file, never a bare literal here. */
@@ -54,6 +55,8 @@ export interface NbaGmPlayer {
   rookieSeason?: number;
   /** This save's awards, newest last, e.g. "2027 MVP". A sim season's, never a real one. */
   awards?: string[];
+  /** Original opening simulation estimate, retained through this saved career. */
+  openingRatingEvidence?: NbaOpeningRatingEvidence;
 }
 
 /* Round 631: CutLedger is the optional deadCap and releasedThisSeason pair,
@@ -167,7 +170,7 @@ function ageFor(ovr: number, rng: () => number): number {
   return 22 + Math.floor(rng() * 12);
 }
 
-export function initNbaLeague(rng: () => number = Math.random): NbaLeague {
+export function initNbaLeague(rng: () => number = Math.random, opening?: Record<string, Record<string, NbaOpeningRating>>): NbaLeague {
   const teams: Record<string, NbaGmTeam> = {};
   for (const t of NBA_TEAMS) {
     const players: NbaGmPlayer[] = (t.players ?? []).map(p => {
@@ -200,6 +203,32 @@ export function initNbaLeague(rng: () => number = Math.random): NbaLeague {
   /* Round 722: the tax lines are set from this league's own payrolls. */
   nbaCalibrateLeagueTax(league);
   league.schedule = nbaBookSeason(league, rng);
+  // Finish the original constructor first so ages, terms, draws and fixtures stay held.
+  if (opening) {
+    for (const seed of NBA_TEAMS) {
+      for (const source of seed.players ?? []) {
+        const rating = opening[seed.id]?.[`${source.name}|${source.position}`];
+        const evidence = rating?.evidence;
+        if (!rating || !Number.isInteger(rating.ovr) || rating.ovr < 0 || rating.ovr > 99 ||
+            !Number.isFinite(rating.salary) || rating.salary < NBA_MIN_CONTRACT ||
+            !evidence || evidence.originKey !== `${seed.id}|${source.name}|${source.position}` ||
+            evidence.openingOvr !== rating.ovr || evidence.partial !== true ||
+            typeof evidence.modelVersion !== 'string' || !evidence.modelVersion ||
+            !['box-score-proxy', 'prior-only', 'unmeasured-prior'].includes(evidence.basis)) {
+          throw new Error('Opening NBA ratings do not match this roster.');
+        }
+        const player = league.teams[seed.id].players.find(p => p.name === source.name)!;
+        const headroom = Math.max(0, player.pot - player.ovr);
+        player.ovr = rating.ovr;
+        player.salary = rating.salary;
+        player.pot = Math.min(99, rating.ovr + headroom);
+        player.openingRatingEvidence = {
+          modelVersion: evidence.modelVersion, originKey: evidence.originKey,
+          openingOvr: evidence.openingOvr, basis: evidence.basis, partial: evidence.partial,
+        };
+      }
+    }
+  }
   return league;
 }
 

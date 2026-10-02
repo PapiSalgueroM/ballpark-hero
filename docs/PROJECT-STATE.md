@@ -1,5 +1,19 @@
 # Project state
 
+895 NBA new-franchise ratings accepted in source, 2026-10-02.
+
+Separate300-player v0.4 opening map replaces editorial grades in new GM
+franchises. Original club budgets, identities, simulated ages/terms/RNG and
+legacy saves stay held. All300 estimates show limited evidence; opening
+lineage survives trades and development. Generator/engine/Board controls,
+physical baselines and paired economy review pass. Exact native source:
+three layouts, two80-game seasons each,4,242checks/18images,432scale samples1,
+zero errors/outside. Actual App adds1,442 gzip bytes; map6771bytes lazy.
+Final type/build, scoped snapshot,15 built readers and NBA/shared families
+pass. Receipt: NBA-OPENING-RATINGS-RECEIPT-2026-10-02.md. Claude:895 needs
+publication after your pinned Release X.896 NHL preparation and898 engine
+integration continue; NHL Board waits for Claude897. Next free899.
+
 Codex claims898 NHL new-franchise rating integration, 2026-10-02.
 
 896 frozen generator/model/map passes its ten outcome cases and controls;

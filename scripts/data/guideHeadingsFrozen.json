@@ -2072,7 +2072,7 @@
     },
     "/nba-front-office": {
       "howToPlay": [
-        "Pick any of the 30 franchises and inherit its real rotation, rated player by player.",
+        "Pick any of the 30 franchises. New games use original opening estimates from 2024-25 and 2025-26 regular-season inputs. The e marker means defense and role evidence is limited; unmatched players use a marked game prior. Ages, potential and contracts are simulated. Existing saves keep their ratings and development.",
         "Read the ownership mandate: a loaded roster is told to win the Finals, a mid one to make the playoffs, a thin one to hit an honest win number. It resets every offseason.",
         "Work the roster. Waive contracts, sign free agents with your cap room, and propose trades.",
         "Sim the season in 20 short stretches, watching the conference standings tighten and the mandate's live pace read.",

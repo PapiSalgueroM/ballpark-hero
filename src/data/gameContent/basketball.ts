@@ -1801,7 +1801,7 @@ export const BASKETBALL_CONTENT: GameContentMap = {
 
   '/nba-front-office': {
     intro: [
-      "Running an NBA franchise looks easy from the couch. This sim hands you a real rotation, a cap sheet and 29 rivals so you can find out.",
+      "Running an NBA franchise looks easy from the couch. This sim hands you a curated roster snapshot, a cap sheet and 29 rivals so you can find out.",
       "Waive the deadweight, sign the bargains, swing trades the computer actually weighs, and steer the season toward the bracket and maybe a banner. Dynasties are the real scoreboard.",
     ],
     headings: {
@@ -1813,9 +1813,9 @@ export const BASKETBALL_CONTENT: GameContentMap = {
     },
     howToPlaySections: [
       {
-        heading: "Inheriting a real 30 team rotation",
+        heading: "Inheriting a roster from 30 franchises",
         items: [
-          "Pick any of the 30 franchises and inherit its real rotation, rated player by player.",
+          "Pick any of the 30 franchises. New games use original opening estimates from 2024-25 and 2025-26 regular-season inputs. The e marker means defense and role evidence is limited; unmatched players use a marked game prior. Ages, potential and contracts are simulated. Existing saves keep their ratings and development.",
         ],
       },
       {
@@ -1942,7 +1942,7 @@ export const BASKETBALL_CONTENT: GameContentMap = {
       },
     ],
     faqs: [
-      { q: "Are the rosters real?", a: "The players are real, about ten curated per franchise. Contracts, salaries and ages in the sim are explicitly fictional." },
+      { q: "Are the rosters real?", a: "The players are real, about ten curated per franchise in a roster snapshot. OVR is an original simulation estimate, with limited box-score defense and unchanged seed roles. Prior-only and unmeasured estimates are marked separately. Contracts, salaries and ages are simulated, and later ratings come from your saved career." },
       { q: "Why did my trade get rejected?", a: "The engine values rating adjusted for age and wants to come out ahead. Offer youth, take back age, or add a pick." },
       { q: "Can I get fired?", a: "Yes. Ownership grades the mandate every season and tracks trust from 0 to 100. Losing the play-in when the ask was a banner costs real trust, a luxury tax bill costs a point per 6 million of it, and at zero the save ends and you take another job." },
       { q: "What happens if I start the season with 12 players?", a: "The league fills you to 14 at tip off with the lowest rated free agents in the pool on one year minimum deals (2 million each in a new league, rising with the cap), and the feed names them. Sign who you actually want before you press play. With 16 or more you cannot start until you waive down to 15." },

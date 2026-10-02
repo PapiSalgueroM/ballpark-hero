@@ -1,5 +1,13 @@
 # NBA rating inputs recovered
 
+Round895 follow-up, 2026-10-02: separate new-franchise opening estimates
+now have generation, engine, Board/control, economy and native evidence.
+See `NBA-OPENING-RATINGS-RECEIPT-2026-10-02.md` for accepted source and
+remaining limits. This earlier acquisition report stays dated to894: it
+does not itself establish a cutover. Shared seeds, ages, memberships and
+historical consumers remain held; missing aliases/defensive measures stay
+open. All300 new estimates retain partial evidence. Publication is separate.
+
 Date: 2026-10-02. Scope: Codex894 source preparation. Current NBA seed
 ratings, generated GM ages, rosters, gameplay and saves remain unchanged.
 This is not acceptance of a new player rating model.

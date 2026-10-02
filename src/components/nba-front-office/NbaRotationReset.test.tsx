@@ -1,5 +1,5 @@
 /* Actual Board restart paths with a fictional restored franchise and local-only persistence. */
-import { cleanup, fireEvent, render, screen, within } from '@testing-library/react';
+import { cleanup, fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import NbaFrontOfficeBoard from '@/components/nba-front-office/NbaFrontOfficeBoard';
 import { NBA_TEAMS } from '@/data/conquestDataNba';
@@ -28,11 +28,12 @@ function mount(manual = false) {
   return { raw, next: NBA_TEAMS.find(t => t.id !== team)! };
 }
 
-function restart(next: (typeof NBA_TEAMS)[number]) {
+async function restart(next: (typeof NBA_TEAMS)[number]) {
   fireEvent.click(screen.getByRole('button', { name: 'Abandon franchise and restart' }));
   expect(localStorage.getItem(KEY)).toBeNull();
   expect(localStorage.getItem(SENTINEL)).toBe('unrelated exact payload');
   fireEvent.click(screen.getByRole('button', { name: new RegExp(`^${next.city} ${next.name}\\s`) }));
+  await waitFor(() => expect(localStorage.getItem(KEY)).not.toBeNull(), { timeout: 4000 });
   const saved = JSON.parse(localStorage.getItem(KEY)!) as { league: NbaLeague; myTeam: string; phase: string };
   expect(saved.myTeam).toBe(next.id);
   expect(saved.phase).toBe('hub');
@@ -55,15 +56,15 @@ describe('NBA rotation view lifecycle across actual Board restart', () => {
     expect(localStorage.getItem(SENTINEL)).toBe('unrelated exact payload');
   });
 
-  it('keeps ordinary new-franchise restart and own-key deletion as an independent baseline', () => {
+  it('keeps ordinary new-franchise restart and own-key deletion as an independent baseline', async () => {
     const { next } = mount();
-    restart(next);
+    await restart(next);
     expect(screen.getByRole('button', { name: 'Set rotation' })).toBeInTheDocument();
     expect(document.querySelector('[data-nba-rotation]')).toBeNull();
     expect(document.querySelectorAll('[data-roster-row]').length).toBeGreaterThan(0);
   });
 
-  it('closes the previous rotation view before a new franchise opens its roster', () => {
+  it('closes the previous rotation view before a new franchise opens its roster', async () => {
     const { raw, next } = mount(true);
     fireEvent.click(screen.getByText('Roster'));
     fireEvent.click(screen.getByRole('button', { name: 'Set rotation' }));
@@ -71,7 +72,7 @@ describe('NBA rotation view lifecycle across actual Board restart', () => {
     expect(within(oldPanel).getByRole('combobox', { name: /^Starter 1 / })).toHaveValue('fictional-reset-7');
     expect(within(oldPanel).getByRole('status')).toBeEmptyDOMElement();
     expect(localStorage.getItem(KEY)).toBe(raw);
-    restart(next);
+    await restart(next);
     expect(screen.queryByRole('button', { name: 'Set rotation' })).not.toBeNull();
     expect(document.querySelector('[data-nba-rotation]')).toBeNull();
     fireEvent.click(screen.getByRole('button', { name: 'Set rotation' }));

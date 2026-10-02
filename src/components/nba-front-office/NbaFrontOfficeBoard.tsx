@@ -12,7 +12,7 @@ import {
   nbaDraftClass, nbaProspectToPlayer, nbaStrength, nbaCapUsed, nbaCapRoom,
   nbaRelease, nbaSign, nbaTrade, nbaTradeValue, EAST,
   NBA_ROUNDS,
-  type NbaLeague, type NbaProspect, type SeriesResult, nbaExecuteTalksTrade,
+  type NbaLeague, type NbaGmPlayer, type NbaProspect, type SeriesResult, nbaExecuteTalksTrade,
   ensureNbaLeagueIds, NBA_ROSTER_MIN, NBA_ROSTER_MAX,
   /* Round 722: the luxury tax, the aprons and the fourteen man tip off floor. */
   nbaTipOff, nbaTipOffRefusal, nbaAssessTax, nbaTaxView, nbaApronNote, NBA_TIPOFF_MIN,
@@ -73,6 +73,24 @@ const NBA_WORDS: FoSportWords = { title: 'the Finals', playoffs: 'the playoffs',
    lines. The rosters carry real names, so every one of them says it is this
    save's sim season. */
 const SIM_NOTE = "Sim season: every line and award here comes from this save's games, not real NBA stats.";
+function openingEvidence(p: NbaGmPlayer) {
+  const e = p.openingRatingEvidence;
+  return e && e.modelVersion === 'nba894-review-v0.4' && Number.isInteger(e.openingOvr)
+    && e.openingOvr >= 0 && e.openingOvr <= 99 && e.partial === true
+    && ['box-score-proxy', 'prior-only', 'unmeasured-prior'].includes(e.basis) ? e : null;
+}
+function ratingNote(p: NbaGmPlayer) {
+  if (!p.openingRatingEvidence) return null;
+  const e = openingEvidence(p);
+  const basis = e?.basis === 'box-score-proxy' ? 'retained-season box scores'
+    : e?.basis === 'prior-only' ? 'prior season only, reduced confidence' : 'unmeasured game prior';
+  return <span data-rating-evidence className="block text-[10px] text-muted-foreground">
+    {e ? `Opening estimate ${e.openingOvr}: ${basis}. Limited defense and role evidence.` : 'Opening rating evidence unavailable.'}
+  </span>;
+}
+function ratingMarker(p: NbaGmPlayer) {
+  return openingEvidence(p) ? <span data-rating-partial title="Limited opening evidence" className="ml-0.5 text-[9px] text-muted-foreground">e</span> : null;
+}
 const AWARD_ORDER: NbaAwardKey[] = ['mvp', 'allLeague', 'roy', 'dpoy', 'sixth'];
 const awardDetail = (k: NbaAwardKey, m: NbaAwardPick): string => k === 'dpoy'
   ? `${m.spg} stl, ${m.bpg} blk, ${m.rpg} reb a game`
@@ -112,6 +130,14 @@ interface SaveShape {
 
 export default function NbaFrontOfficeBoard() {
   const [phase, setPhase] = useState<Phase>('pick');
+  const [starting, setStarting] = useState<string | null>(null);
+  const startPending = useRef(false);
+  const [startError, setStartError] = useState('');
+  const alive = useRef(true);
+  useEffect(() => {
+    alive.current = true;
+    return () => { alive.current = false; };
+  }, []);
   /* Round 204: the hub is tiles now, so null means the hub itself and a
      tab key means you have opened that box. Club Manager's Round 74 rule,
      brought to the four GM games. */
@@ -243,8 +269,13 @@ export default function NbaFrontOfficeBoard() {
     return t ? `${t.city} ${t.name}` : abbr;
   };
 
-  const start = (abbr: string) => {
-    const lg = initNbaLeague();
+  const start = async (abbr: string) => {
+    if (startPending.current) return;
+    startPending.current = true; setStarting(abbr); setStartError('');
+    try {
+    const { NBA_OPENING_RATINGS } = await import('@/data/nbaOpeningRatings');
+    if (!alive.current) return;
+    const lg = initNbaLeague(Math.random, NBA_OPENING_RATINGS);
     const m = mandateFor(lg, abbr, false);
     setLeague(lg); setMyTeam(abbr); setPhase('hub'); setTab(null);
     setFeed([
@@ -260,6 +291,12 @@ export default function NbaFrontOfficeBoard() {
     }));
     setPressTilt(0); setSeasonTradeLine(null);
     persist({ phase: 'hub', titles: 0, seasonsPlayed: 0, mandate: m, trust: FO_TRUST_START, fired: false, pressTilt: 0, seasonTradeLine: null }, lg, abbr);
+    } catch {
+      if (alive.current) setStartError('Could not load the opening ratings. Your existing save has not changed. Try your team again.');
+    } finally {
+      startPending.current = false;
+      if (alive.current) setStarting(null);
+    }
   };
 
   /* Round 192: one answer, three registers. Trust moves now, the tilt
@@ -584,13 +621,16 @@ export default function NbaFrontOfficeBoard() {
         <div className="rounded-2xl border border-border bg-card p-4 text-center">
           <p className="font-display text-lg font-bold text-foreground">Take over a front office</p>
           <p className="mt-1 text-xs text-muted-foreground">
-            Real rosters from the curated NBA Conquest data. Run the cap, work the phones, survive the
-            play-in, win best-of-seven wars, draft the future. Saves automatically.
+            Curated NBA roster snapshot with original simulation ratings. Run the cap, work the phones,
+            survive the play-in, draft the future. Ages and contracts are simulated. Saves automatically.
           </p>
+          <p className="mt-2 text-xs text-muted-foreground">Opening estimates use 2024-25 and 2025-26 regular seasons. Box scores only partly measure defense and roles; missing matches use a marked game prior.</p>
         </div>
+        {startError && <p role="alert" className="text-xs text-destructive">{startError}</p>}
+        {starting && <p role="status" className="text-xs text-muted-foreground">Loading opening ratings for {label(starting)}...</p>}
         <div className="grid grid-cols-2 gap-1.5 sm:grid-cols-4">
           {NBA_TEAMS.map(t => (
-            <button key={t.id} onClick={() => start(t.id)} className="rounded-lg border border-border bg-card px-2 py-2 text-left transition-all hover:scale-[1.02] hover:border-primary/60">
+            <button key={t.id} disabled={!!starting} onClick={() => void start(t.id)} className="rounded-lg border border-border bg-card px-2 py-2 text-left transition-all hover:scale-[1.02] hover:border-primary/60 disabled:opacity-50">
               <span className="block h-1.5 w-full rounded-full" style={{ background: t.color }} />
               <span className="mt-1.5 block truncate text-xs font-bold text-foreground">{t.city} {t.name}</span>
               <span className="block truncate text-[10px] text-muted-foreground">{EAST.includes(t.id) ? 'East' : 'West'}</span>
@@ -893,6 +933,11 @@ export default function NbaFrontOfficeBoard() {
             roster={{ count: my.players.length, floor: NBA_TIPOFF_MIN, max: NBA_ROSTER_MAX, minContract: nbaMinContract(league.cap) }}
           />
           <button ref={rotationOpener} type="button" onClick={() => setRotationOpen(true)} className="mb-3 min-h-[44px] w-full rounded-lg border border-primary/50 bg-primary/10 px-3 text-xs font-bold text-primary">Set rotation</button>
+          <p data-rating-legend className="mb-3 text-[11px] text-muted-foreground">
+            OVR, ages, potential and contracts are simulated. {my.players.some(p => openingEvidence(p))
+              ? 'Opening estimates use 2024-25 and 2025-26 regular-season inputs. e means limited defense and role evidence. Later changes come from this save.'
+              : 'Existing save ratings and progression are kept. Generated players use game ratings.'}
+          </p>
           {cutBlock && <p data-cut-block className="mb-2 text-center text-[10px] text-destructive">{cutBlock}</p>}
           <div className="grid max-h-96 grid-cols-1 gap-1 overflow-y-auto sm:grid-cols-2">
             {[...my.players].sort((a, b) => b.ovr - a.ovr).map(p => {
@@ -905,6 +950,7 @@ export default function NbaFrontOfficeBoard() {
                 <span className="min-w-0">
                   <span className={cn('block truncate font-bold', p.out > 0 ? 'text-destructive' : 'text-foreground')}>{p.name} {p.out > 0 ? `(out ${p.out}r)` : ''}</span>
                   <span className="block text-[10px] text-muted-foreground">{p.pos} · {p.age}y · ${p.salary}M x{p.years}</span>
+                  {ratingNote(p)}
                   {/* Round 824: this save's awards, on his card. The names are
                       real, so each one says it is a sim award, never the real one. */}
                   {p.awards && p.awards.length > 0 && (
@@ -914,7 +960,7 @@ export default function NbaFrontOfficeBoard() {
                   )}
                 </span>
                 <span className="ml-2 flex shrink-0 items-center gap-1.5">
-                  <b className="text-primary">{p.ovr}</b>
+                  <b className="text-primary">{p.ovr}{ratingMarker(p)}</b>
                   <button
                     onClick={() => setCutArmed(arming ? null : p.id)}
                     disabled={!!cutBlock}
@@ -969,10 +1015,11 @@ export default function NbaFrontOfficeBoard() {
                 <span className="min-w-0">
                   <span className="block truncate font-bold text-foreground">{p.name}</span>
                   <span className="block text-[10px] text-muted-foreground">{p.pos} · {p.age}y · wants ${p.salary}M</span>
+                  {ratingNote(p)}
                   {refusal && <span className="block text-[10px] text-destructive">{refusal}</span>}
                 </span>
                 <span className="ml-2 flex shrink-0 items-center gap-1.5">
-                  <b className="text-primary">{p.ovr}</b>
+                  <b className="text-primary">{p.ovr}{ratingMarker(p)}</b>
                   <button onClick={() => doSign(p.id)} disabled={p.salary > room || !!refusal || !!fullBlock} title={refusal ?? fullBlock ?? undefined} className="rounded-full bg-primary px-2.5 py-0.5 text-[10px] font-bold text-primary-foreground disabled:opacity-40">Sign</button>
                 </span>
               </div>
@@ -995,7 +1042,7 @@ export default function NbaFrontOfficeBoard() {
             <div data-trade-shop-list className="grid max-h-60 grid-cols-2 gap-1 overflow-y-auto">
               {[...my.players].sort((a, b) => b.ovr - a.ovr).map(p => (
                 <button key={p.id} onClick={() => { setMyTradePiece(p.id); setShopOffers([]); setShopTried(false); }} className={cn('flex items-center justify-between rounded-lg border px-2 py-1 text-[11px]', myTradePiece === p.id ? 'border-gold bg-gold/10' : 'border-border/60 bg-background')}>
-                  <span className="truncate text-foreground">{p.name} ({p.pos})</span><b className="text-primary">{p.ovr}</b>
+                  <span className="min-w-0 text-left"><span className="block truncate text-foreground">{p.name} ({p.pos})</span>{ratingNote(p)}</span><b className="shrink-0 text-primary">{p.ovr}{ratingMarker(p)}</b>
                 </button>
               ))}
             </div>
@@ -1045,7 +1092,7 @@ export default function NbaFrontOfficeBoard() {
                   <p className="text-center text-[10px] font-bold uppercase text-muted-foreground">You send</p>
                   {[...my.players].sort((a, b) => b.ovr - a.ovr).map(p => (
                     <button key={p.id} onClick={() => setMyTradePiece(p.id)} className={cn('flex w-full items-center justify-between rounded-lg border px-2 py-1 text-[11px]', myTradePiece === p.id ? 'border-gold bg-gold/10' : 'border-border/60 bg-background')}>
-                      <span className="truncate text-foreground">{p.name} ({p.pos})</span><b className="text-primary">{p.ovr}</b>
+                      <span className="min-w-0 text-left"><span className="block truncate text-foreground">{p.name} ({p.pos})</span>{ratingNote(p)}</span><b className="shrink-0 text-primary">{p.ovr}{ratingMarker(p)}</b>
                     </button>
                   ))}
                 </div>
@@ -1057,7 +1104,8 @@ export default function NbaFrontOfficeBoard() {
                     return (
                     <div key={p.id} data-trade-row={p.id} className="flex items-center justify-between gap-1 rounded-lg border border-border/60 bg-background px-2 py-1 text-[11px]">
                       <span className="min-w-0">
-                        <span className="block truncate text-foreground">{p.name} ({p.pos}) <b className="text-primary">{p.ovr}</b></span>
+                        <span className="block truncate text-foreground">{p.name} ({p.pos}) <b className="text-primary">{p.ovr}{ratingMarker(p)}</b></span>
+                        {ratingNote(p)}
                         {back && <span className="block text-[9px] text-destructive">{back}</span>}
                       </span>
                       <button onClick={() => openTradeTalks(p.id)} disabled={!myTradePiece || !!back} title={back ?? undefined} className="shrink-0 rounded-full bg-primary px-2.5 py-0.5 text-[9px] font-bold text-primary-foreground disabled:opacity-40">Open talks</button>

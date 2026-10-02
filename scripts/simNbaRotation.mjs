@@ -163,8 +163,8 @@ const controls = {
   ],
   "rng": [
     "src/lib/nbaFrontOffice.ts",
-    "export function initNbaLeague(rng: () => number = Math.random): NbaLeague {",
-    "export function initNbaLeague(rng: () => number = Math.random): NbaLeague {\n  rng();",
+    "export function initNbaLeague(rng: () => number = Math.random, opening?: Record<string, Record<string, NbaOpeningRating>>): NbaLeague {",
+    "export function initNbaLeague(rng: () => number = Math.random, opening?: Record<string, Record<string, NbaOpeningRating>>): NbaLeague {\n  rng();",
     [
       0
     ]
