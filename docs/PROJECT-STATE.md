@@ -1,5 +1,48 @@
 # Project state
 
+## Release U is LIVE, 2026-10-02 08:01 EDT: main `bca2a0e8`, deployment `f7c690be`, entry `index-UMagImw7.js`
+
+Assembled by the desktop Claude lane in the gate clone (`release-u`), gated under the production load rule.
+
+- **876, Club Manager: Brazil's Serie A and the squads after the 2026 window.** The game goes from 330 clubs in 20
+  leagues to **350 clubs in 21 leagues and 18 countries**. Brazil is data on Round 832's rules table: 20 clubs
+  (membership checked against the CBF's table and one publisher), four go down, the Copa do Brasil, no continental
+  competition modelled. Three stated simplifications in the guide: the league plays on the game's August to May
+  calendar as MLS does, there is no Libertadores, and clubs level on points are split by goal difference then goals
+  scored where the real table looks at wins first. Four clubs are marked partial (Chapecoense, Remo, Mirassol,
+  Coritiba): the value table holds few of their players and nobody was invented to fill them.
+- **The re-bake.** `src/data/clubManagerRosters.ts` was generated on 2026-09-05 and had not moved since. It now carries
+  the 2026 window (Round 795): 3,658 to over 4,200 real players with Brazil, five clubs that shipped empty have their
+  squads, and the count of clubs padded with youth on day one fell from 290 to 274 before Brazil was added.
+  The bake ran offline from one pull of `player_market_values_dedup` (11,631 rows, twelve requests) so no agent
+  touched production.
+- **What the review caught.** Two men shipped at the wrong club on carried 2025 rows (Weverton, who joined Gremio in
+  January 2026, and Junior Alonso, who joined Atlanta United). The fixer then checked all twenty carried Brazilian
+  rows on the web with two sources each: thirteen men moved to where they really play, the rest are confirmed or
+  left pending in `scripts/data/rosterConfirmation2026.json`. One sanity pair that could not fail (it compared
+  against an empty club padded to 60) now compares two clubs with real players.
+- New harness `scripts/simClubManagerNewLeagues.mjs` (full Brazilian seasons with the cup, exactly four down, strength
+  ordered, no invented player beyond the youth rule; controls dropcount, nocup, swap, invented). `simCmLeagueRules`
+  baseline rewritten for 21 leagues after an attribution run: this tree with the previous roster file reproduces the
+  old baseline with zero failures, so the rewrite hides no engine change.
+
+**Gate.** Type gate 0 on the final tree. The Club Manager fence family, each with its closing line and exit code, started detached so no agent was disturbed: `simClubManagerNewLeagues`, `simCmLeagueRules`, the three era harnesses, `simEraWorldTables`, `simClubManagerEraUcl`, `simClubManagerEraMidSeason`, `simInventedNames`, `simClubManager`, `simCmStoppageTime`, `simUclSeasonOne`, `simClubManagerSaveSize`, `simClubManagerClubList`, `simCreateClub`, `simCup`, `simWorld`, `simExtraTime`, `simYouthPadding`, `simPromotion`, `simRosterAdjudication`, `simFootleLeagues`, `simTransferOverlay`, `simFreeAgents`, `simFinance`, `simBoardObjectives`, `simNationJob`, `simEras` (644 s), `simHalftime` (834 s), `simPress` (2,005 s), `simOpposition`, the Club Manager vitest files, and the 22 snapshot and copy readers. **Three reds the gate caught that the round's builder and reviewer had not run, all repaired here:** `simEra2010` and `simEra2015` flagged Pedro, Allan and Paulinho (Brazil's one word names against older stars; each verified as a different man and added to the namesake lists with both men named); `simGuideHeadings` held the Club Manager guide against its frozen record (refreshed with the harness's own `--refresh`); `/club-manager` measured 609K against a 604K budget (546 more real players in the roster chunk; budget 611). `simSeoMetaSplit` section 4 compares against origin/main's description by design and went green once this was on main. ONE browser pass on the built site: `sweepGames` 182 routes at phone and desktop, 364 checks, 0 findings; the three era walks green; `playGames` clean on `/club-manager`, `/deadline-day`, `/manager-hot-seat`, `/footle`, `/soccer-career` and `/champ-or-not`; `playClubManager` played a whole season through the interface with two release clause signings and 0 findings (its first run ended in a sacking with no affordable clause and reported that as shallow coverage, so it was run again).
+
+**Proof.** `x-deployment-id` carries `f7c690be`; the home page serves `index-UMagImw7.js` (Release T served `index-pqBjaq8x.js`); `/club-manager` and the home page say 350 real clubs across 21 leagues; `/whats-new` carries the Brazil entry; in a real browser on the live site, Today then Brazil shows Brasileirão Série A with 20 clubs and the Copa do Brasil, and the team step lists Flamengo, Palmeiras, Cruzeiro, Corinthians and the rest with their squads and budgets.
+
+**Known and accepted:** an old save in the middle of its first season shows an all zero Serie A tab until its next
+summer (the save's world has no Brazilian table yet); the same happened when every earlier league was added, and it
+does not crash. Pedro Raul stays pending at Corinthians (one source only).
+
+## Codex 884/885 claimed, 2026-10-02
+
+Pulled bca2a0e8. Shared US career free agency will explain actual negotiated
+offer changes locally, with finite feedback and guarded focus. Footle search
+will reject hidden keyboard selection after Escape. Both need focused original
+reproduction, controls, type/build and offline native acceptance. No engine,
+real data, save, desktop or Supabase changes. Claude owns 875/876/883 and
+publication; paused drafts remain untouched. Next free 886.
+
 ## Codex882 accepted, Champ or Not readable feedback, 2026-10-02
 
 Next claim/View results replaces the forced 2.2s advance. Earned score appears

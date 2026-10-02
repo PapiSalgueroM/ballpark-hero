@@ -146,7 +146,9 @@ console.log('2) The two worlds cannot leak into each other');
   // Espanyol's Javi Lopez (b. 1986) vs Alaves', and so on. A NEW name
   // showing up here after a re-bake still fails until somebody verifies it
   // is a genuine namesake and adds it deliberately.
-  const NAMESAKES = new Set(['Aaron Ramsey', 'Juan Rodríguez', 'Javi López', 'Diego López', 'Pablo Ibáñez']);
+  /* Round 876: Brazil's Serie A brought Flamengo's Pedro (Pedro Guilherme, b. 1997) into the 2026 rosters.
+     Barcelona's 2010 Pedro is Pedro Rodriguez (b. 1987): two men, one shirt name. */
+  const NAMESAKES = new Set(['Aaron Ramsey', 'Juan Rodríguez', 'Javi López', 'Diego López', 'Pablo Ibáñez', 'Pedro']);
   const eraByName = new Map();
   for (const roster of Object.values(ERA2010_ROSTERS)) for (const p of roster) eraByName.set(p.n, p);
   const modByName = new Map();

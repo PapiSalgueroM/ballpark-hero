@@ -180,7 +180,11 @@ console.log('2) Three worlds now, and none of them leak');
      (b. 1991) vs Santa Clara's; and one of Brazil's many Guilhermes
      against another. */
   const NAMESAKES_2026 = new Set(['Aaron Ramsey', 'Luis Suárez', 'Javi López', 'Javi Guerra', 'Beto', 'Lucas Silva',
-    'Diego López', 'Gabriel', 'Dodô', 'Rômulo', 'Ederson', 'Danilo', 'Gabriel Silva', 'Guilherme']);
+    'Diego López', 'Gabriel', 'Dodô', 'Rômulo', 'Ederson', 'Danilo', 'Gabriel Silva', 'Guilherme',
+    /* Round 876, Brazil's Serie A: Flamengo's Pedro (b. 1997) against Chelsea's Pedro Rodriguez (b. 1987);
+       Corinthians' Allan (Allan Rodrigues de Souza, b. 1997, on loan from Flamengo) against Napoli's Allan
+       Marques Loureiro (b. 1991); Palmeiras' Paulinho (b. 2000) against Tottenham's Paulinho (b. 1988). */
+    'Pedro', 'Allan', 'Paulinho']);
   const eraByName = new Map();
   for (const roster of Object.values(ERA2015_ROSTERS)) for (const p of roster) eraByName.set(p.n, p);
   const modByName = new Map();
