@@ -26,13 +26,16 @@ baselines pay0. Guard the actual clock at pick time in useFaceOff only, with
 solo/two-chair regressions. This is a scheduling fixture, not a claim that
 ordinary timeout is broken. No dealing/scoring/data change. Next free861.
 
-## Codex859 claimed arcade hold-release repair, 2026-10-01
+## Codex859 accepted arcade input and charge cues, 2026-10-01
 
-Native390 Free Kick and Buzzer Beater stay charging after releasing outside
-the held control or playing surface. Four failed paths and four working
-inside-release baselines are recorded. Own only their two Board components
-and focused verification. Preserve practice, keyboard and scoring. Claude
-simulation/data lanes remain separate. Next free860; two scouts are read-only.
+Free Kick/Buzzer outside release now fires once using owned primary capture.
+Cancel/lost capture/pause/start/unmount clear holds; button shows Release while
+charging.30 focused cases, seven controls and native24 inside/outside paths
+pass. Four real ten-shot dailies at320 keyboard/1440 mouse finish, restart and
+refresh with one booking and no duplicate. Physics/scoring/practice preserved.
+Clean combined type/build and all15 built fences pass. Anchor fence caught two
+new raw read paths; matching now normalizes CRLF with raw bytes held, final
+source runner green.860/861/862 ship separately next. Next free863.
 
 ## Codex eight-repair batch on main, 2026-10-01
 

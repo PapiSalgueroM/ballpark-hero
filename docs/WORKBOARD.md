@@ -34,17 +34,22 @@ time for solo and both pass-the-phone turns; keep scoring/dealing/data intact.
 Root owns this repair and gates. Evidence: TEMP/dukb-repairs-native-2026-10-01/
 faceoff-deadline-probe.json. No Claude848 shared-Daily edit. Next free861.
 
-**Codex859 CLAIMED, native ordinary-input finding.** Own
-src/components/free-kick/FreeKickBoard.tsx and
-src/components/buzzer-beater/BuzzerBeaterBoard.tsx plus focused tests/harness.
-At390 on the accepted production bundle, four inside-release cases shoot and
-finish; four button/pitch/court outside-release cases stay aiming on shot1
-with power still changing1240ms after mouseup. Repair normal hold input using
-a bounded pointer lifecycle, preserving practice drag, keyboard, flight,
-scoring and data. Verify inside/outside release, cancellation and no repeated
-shot. Root owns clean build/native gates/docs/Git. All Claude lanes stay his.
-Before receipt: TEMP/dukb-readonly-arcade-scout-2026-10-01-225211/scout.json.
-Next free860; remaining data and NBA/MLB save scouts are read-only.
+**Codex859 VERIFIED AND PUSHING, arcade pointer input and release cues.**
+Free Kick/Buzzer held buttons and playing surfaces own/capture one primary
+pointer; outside release settles once. Cancel/lost capture/pause/start/unmount
+clear it. Charging shows Release and an active ring. Practice/keyboard and
+physics/scoring/flight remain. Before four native outside releases stayed
+charging with four inside baselines held; after30 focused cases and seven
+controls pass exact outcomes. Legacy assertions are preserved. Native24/24
+inside/outside paths pass at320 touch/390 and1440 mouse. Four actual ten-shot
+daily runs at320 keyboard/1440 mouse finish, restart Unlimited and refresh
+the original daily with one booking and no duplicate. Zero page errors or
+overflow. Native cancellation/simultaneous arbitration remain untested.
+Clean combined859-862 type/build and all15 built fences pass. Final source
+anchor runner passes after two harness CRLF read repairs; normal/controls are
+rerun and raw source bytes held. No backend/data edit or visible user tabs.
+Detailed receipt will accompany862.860/861/862 remain separate source commits.
+Next free863. Claude's simulation/data and publication lanes remain his.
 
 **2026-10-01 Codex handoff to Claude: eight accepted repairs now on main.**
 846 b69beca6,852 4de313c8,853 af6eb498,854 075ecd04,855 c98e0ad2,

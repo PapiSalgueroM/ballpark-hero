@@ -5,6 +5,7 @@
    outcome tests to fail. Never edit the production source for a control. */
 import { act, cleanup, fireEvent, render, screen } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { installArcadePointers } from './arcadePointerFixture';
 import FreeKickBoard from '@/components/free-kick/FreeKickBoard';
 import BuzzerBeaterBoard from '@/components/buzzer-beater/BuzzerBeaterBoard';
 import { takeShot as kickShot, type ShotResult } from '@/lib/freeKick';
@@ -34,21 +35,23 @@ const games = [
   { name: 'Buzzer Beater', Board: BuzzerBeaterBoard, hold: 'Hold to shoot', next: 'Next shot', tally: 'Made', points: 241, verdict: 'Swish', slug: 'buzzer-beater', countField: 'made' },
 ];
 
+let pointerFixture: ReturnType<typeof installArcadePointers>;
 beforeEach(() => {
   vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout', 'setInterval', 'clearInterval'] });
   vi.clearAllMocks();
+  pointerFixture = installArcadePointers();
   localStorage.clear();
   const originalMatchMedia = window.matchMedia;
   vi.spyOn(window, 'matchMedia').mockImplementation(query => ({ ...originalMatchMedia(query), matches: true }));
   vi.mocked(kickShot).mockReturnValue(kickResult);
   vi.mocked(hoopShot).mockReturnValue(hoopResult);
 });
-afterEach(() => { cleanup(); vi.restoreAllMocks(); vi.unstubAllGlobals(); vi.useRealTimers(); });
+afterEach(() => { cleanup(); pointerFixture.restore(); vi.restoreAllMocks(); vi.unstubAllGlobals(); vi.useRealTimers(); });
 
 function shoot(hold: string) {
   const button = screen.getByRole('button', { name: hold });
-  fireEvent.mouseDown(button);
-  fireEvent.mouseUp(button);
+  fireEvent.pointerDown(button);
+  fireEvent.pointerUp(button);
 }
 
 describe.each(games)('$name settled feedback', game => {

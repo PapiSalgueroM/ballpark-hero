@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState, type KeyboardEvent as ReactKeyboardEvent } from 'react';
+import { useCallback, useEffect, useRef, useState, type KeyboardEvent as ReactKeyboardEvent, type PointerEvent as ReactPointerEvent } from 'react';
 import { Button } from '@/components/ui/button';
 import ShareButtons from '@/components/game/ShareButtons';
 import ArcadeShotFeedback from '@/components/arcade/ArcadeShotFeedback';
@@ -73,6 +73,18 @@ export default function BuzzerBeaterBoard() {
   const [power, setPower] = useState(0.4);
   const [charging, setCharging] = useState(false);
   const chargingRef = useRef(false);
+  const heldPointerRef = useRef<{ id: number; target: Element } | null>(null);
+
+  const clearPointerHold = useCallback(() => {
+    const held = heldPointerRef.current;
+    heldPointerRef.current = null;
+    if (held?.target.hasPointerCapture(held.id)) held.target.releasePointerCapture(held.id);
+  }, []);
+
+  useEffect(() => () => {
+    chargingRef.current = false;
+    clearPointerHold();
+  }, [clearPointerHold]);
   const aimingRef = useRef(false);
   const practicePowerRef = useRef<HTMLInputElement | null>(null);
   const practiceActionRef = useRef<HTMLButtonElement | null>(null);
@@ -120,6 +132,7 @@ export default function BuzzerBeaterBoard() {
   }, [charging, paused]);
 
   const start = useCallback((m: Mode) => {
+    clearPointerHold();
     setPracticeHelp(false);
     aimingRef.current = false;
     chargingRef.current = false;
@@ -148,7 +161,7 @@ export default function BuzzerBeaterBoard() {
     setFade(0); setArc(0.6); setPower(0.4);
     savedRef.current = false;
     setPhase('aiming');
-  }, [restored, todayStr, resetFlight]);
+  }, [restored, todayStr, resetFlight, clearPointerHold]);
 
   const release = useCallback(() => {
     if (paused || phase !== 'aiming' || !setup) return;
@@ -174,15 +187,37 @@ export default function BuzzerBeaterBoard() {
   }, [mode, paused, phase]);
 
   const endCharge = useCallback(() => {
+    clearPointerHold();
     if (!chargingRef.current) return;
     chargingRef.current = false;
     setCharging(false);
     if (!paused && !document.querySelector('[role="dialog"]')) release();
-  }, [paused, release]);
+  }, [paused, release, clearPointerHold]);
+
+  const beginPointerCharge = (event: ReactPointerEvent<HTMLElement | SVGSVGElement>) => {
+    if (event.button !== 0 || event.isPrimary === false || heldPointerRef.current || chargingRef.current) return;
+    beginCharge();
+    if (!chargingRef.current) return;
+    heldPointerRef.current = { id: event.pointerId, target: event.currentTarget };
+    event.currentTarget.setPointerCapture(event.pointerId);
+  };
+
+  const finishPointerCharge = (event: ReactPointerEvent<HTMLElement | SVGSVGElement>) => {
+    if (heldPointerRef.current?.id !== event.pointerId) return;
+    endCharge();
+  };
+
+  const cancelPointerCharge = (event: ReactPointerEvent<HTMLElement | SVGSVGElement>) => {
+    if (heldPointerRef.current?.id !== event.pointerId) return;
+    clearPointerHold();
+    chargingRef.current = false;
+    setCharging(false);
+  };
 
   const togglePause = () => {
     if (paused) resume();
     else {
+      clearPointerHold();
       aimingRef.current = false;
       chargingRef.current = false;
       setCharging(false);
@@ -226,14 +261,14 @@ export default function BuzzerBeaterBoard() {
     };
     const up = (e: KeyboardEvent) => {
       if (e.key !== ' ') return;
-      if (isInteractive(e)) { chargingRef.current = false; setCharging(false); return; }
+      if (isInteractive(e)) { clearPointerHold(); chargingRef.current = false; setCharging(false); return; }
       endCharge();
       e.preventDefault();
     };
     window.addEventListener('keydown', down);
     window.addEventListener('keyup', up);
     return () => { window.removeEventListener('keydown', down); window.removeEventListener('keyup', up); };
-  }, [paused, phase, beginCharge, endCharge]);
+  }, [paused, phase, beginCharge, endCharge, clearPointerHold]);
 
   /* Touch and mouse: drag the court to set the arc and the fade, let go to
      shoot. Up and down is the arc, which is literally what you see; left and
@@ -311,7 +346,7 @@ export default function BuzzerBeaterBoard() {
             setPracticeHelp(open);
             if (open) {
               aimingRef.current = false;
-              if (mode === 'contest') { chargingRef.current = false; setCharging(false); }
+              if (mode === 'contest') { clearPointerHold(); chargingRef.current = false; setCharging(false); }
               if (phase === 'aiming' || phase === 'flying') pause();
             }
           }}>{mode === 'contest' ? contestRules : practiceRules}</HowToPlayPopover>
@@ -362,19 +397,18 @@ export default function BuzzerBeaterBoard() {
         aria-label={setup ? `Jump shot from ${setup.distance} metres with a ${setup.contestReach ? `${setup.contestReach} metre` : 'no'} contest` : 'Jump shot'}
         onPointerDown={e => {
           if (paused || phase !== 'aiming') return;
-          pointerAim(e.clientX, e.clientY);
-          if (mode === 'practice') { aimingRef.current = true; e.currentTarget.setPointerCapture(e.pointerId); }
-          else beginCharge();
+          if (mode === 'practice') { pointerAim(e.clientX, e.clientY); aimingRef.current = true; e.currentTarget.setPointerCapture(e.pointerId); }
+          else { beginPointerCharge(e); if (heldPointerRef.current?.id === e.pointerId) pointerAim(e.clientX, e.clientY); }
         }}
-        onPointerMove={e => { if (!paused && phase === 'aiming' && (chargingRef.current || (mode === 'practice' && aimingRef.current))) pointerAim(e.clientX, e.clientY); }}
+        onPointerMove={e => { if (!paused && phase === 'aiming' && (mode === 'practice' ? aimingRef.current : chargingRef.current && (!heldPointerRef.current || heldPointerRef.current.id === e.pointerId))) pointerAim(e.clientX, e.clientY); }}
         onPointerUp={e => {
           if (mode === 'practice') {
             aimingRef.current = false;
             if (e.currentTarget.hasPointerCapture(e.pointerId)) e.currentTarget.releasePointerCapture(e.pointerId);
-          } else endCharge();
+          } else finishPointerCharge(e);
         }}
-        onPointerCancel={() => { aimingRef.current = false; }}
-        onLostPointerCapture={e => { if (e.target === e.currentTarget) aimingRef.current = false; }}
+        onPointerCancel={e => { if (mode === 'practice') aimingRef.current = false; else cancelPointerCharge(e); }}
+        onLostPointerCapture={e => { if (e.target === e.currentTarget) { if (mode === 'practice') aimingRef.current = false; else cancelPointerCharge(e); } }}
       >
         {/* the floor, with a metre tick every two metres so distance reads */}
         <rect x={0} y={FLOOR_Y} width={VIEW_W} height={VIEW_H - FLOOR_Y} fill="hsl(28 40% 22%)" />
@@ -526,11 +560,12 @@ export default function BuzzerBeaterBoard() {
           <div className="flex flex-wrap gap-2 pt-1">
             {mode === 'practice' ? (
               <Button ref={practiceActionRef} className="min-h-[44px] flex-1" disabled={paused} onClick={release} onKeyDown={practiceKeyDown}>Shoot</Button>
-            ) : <Button ref={mode === 'contest' ? practiceActionRef : undefined} size="sm" className={cn('flex-1', mode === 'contest' && 'min-h-[44px]')} disabled={paused} onMouseDown={beginCharge} onMouseUp={endCharge}
-              onTouchStart={e => { e.preventDefault(); beginCharge(); }} onTouchEnd={e => { e.preventDefault(); endCharge(); }}
+            ) : <Button ref={mode === 'contest' ? practiceActionRef : undefined} size="sm" className={cn('flex-1 touch-none', mode === 'contest' && 'min-h-[44px]', charging && 'ring-2 ring-primary ring-offset-2 ring-offset-background')} disabled={paused}
+              onPointerDown={beginPointerCharge} onPointerUp={finishPointerCharge} onPointerCancel={cancelPointerCharge}
+              onLostPointerCapture={e => { if (e.target === e.currentTarget) cancelPointerCharge(e); }}
               onKeyDown={e => { e.stopPropagation(); if ((e.key === ' ' || e.key === 'Enter') && !e.repeat) { e.preventDefault(); beginCharge(); } }}
               onKeyUp={e => { e.stopPropagation(); if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); endCharge(); } }}>
-              Hold to shoot
+              {charging ? 'Release to shoot' : 'Hold to shoot'}
             </Button>}
           </div>
           <p className="text-center text-[11px] text-muted-foreground">
