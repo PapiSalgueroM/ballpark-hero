@@ -74,6 +74,7 @@ vi.mock('@/components/game/PostGameStats', () => ({ default: () => null }));
 import * as E from '@/lib/soccerCareerEngine';
 import type { CareerState } from '@/lib/soccerCareerEngine';
 import { availableSpeeches } from '@/lib/careerAwardsNight';
+import { localizeMoney } from '@/lib/soccerCurrency';
 import SoccerCareer from '@/pages/SoccerCareer';
 
 const SAVE_KEY = 'soccerCareerSave';
@@ -176,13 +177,21 @@ describe('Soccer Career: the Ballon d\'Or ceremony card', () => {
     expect(card, 'the won ceremony is on screen').not.toBeNull();
     const text = card!.textContent ?? '';
     expect(text).toContain('The golden ball is yours. The speech:');
-    expect(text).toContain('Popularity +20');
-    expect(text).toContain('Market Value');
+    /* The line is what the night measured, not its steps: a winner near the
+       popularity cap gets less than +20, or none, and the card says so. */
+    const moved = start.pendingBallonDor!.moved;
+    expect(moved, 'the won night carries what it measurably moved').toBeTypeOf('string');
+    expect(moved).toContain('Market Value');
+    expect(text).toContain(localizeMoney(E.SOCCER_BALLON_DOR.copy.winnerLine(moved)));
     expect(text).not.toContain('Legacy');
     const offered = availableSpeeches(E.SOCCER_BDOR_SPEECHES, start);
     for (const o of offered) expect(buttons(card!).some(b => (b.textContent ?? '').includes(o.label)), o.id).toBe(true);
     for (const o of E.SOCCER_BDOR_SPEECHES.filter(x => !offered.includes(x))) expect(text).not.toContain(o.label);
     expect(hasContinue(card!), 'no Continue before the speech').toBe(false);
+    /* The speech is the result, so it waits for the headline: hidden and
+       unclickable through the countdown, not on screen from the first frame. */
+    const prompt = Array.from(card!.querySelectorAll('p')).find(p => (p.textContent ?? '').includes('The golden ball is yours'))!;
+    expect(prompt.closest('.cm-rise-gated'), 'the speech arrives with the headline').not.toBeNull();
 
     const tears = E.SOCCER_BDOR_SPEECHES.find(o => o.id === 'tears')!;
     const button = buttons(card!).find(b => (b.textContent ?? '').includes(tears.label))!;
@@ -233,7 +242,7 @@ describe('Soccer Career: the Ballon d\'Or ceremony card', () => {
     for (const o of E.SOCCER_BDOR_SPEECHES) expect(text).not.toContain(o.label);
     expect(text).not.toContain('Legacy');
     const rank = start.pendingBallonDor!.playerRank!;
-    if (rank <= 3) expect(text).toContain('Popularity +5');
+    if (rank <= 3) expect(text).toContain(E.SOCCER_BALLON_DOR.copy.podiumLine(rank, start.pendingBallonDor!.moved));
     expect(hasContinue(card!)).toBe(true);
     const cont = buttons(card!).find(b => (b.textContent ?? '').trim().startsWith('Continue'))!;
     await act(async () => { fireEvent.click(cont); });
