@@ -5,7 +5,7 @@ import { F1DriverBoard } from '@/components/f1-driver/F1DriverBoard';
 
 export default function F1Driver() {
   return (
-    <>
+    <main id="dukb-main" tabIndex={-1}>
       <PageSeo
         title="Guess the F1 Driver - Formula 1 Puzzle Game | DoUKnowBall"
         description="Guess the Formula 1 driver from progressive clues. Daily F1 trivia game."
@@ -31,6 +31,6 @@ export default function F1Driver() {
           "Niki Lauda: Ferrari/McLaren, Austrian, 3× Champion, 1976 crash survivor"
         ]}
       />
-    </>
+    </main>
   );
 }

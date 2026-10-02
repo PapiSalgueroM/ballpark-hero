@@ -119,7 +119,7 @@ export default function ResetPassword() {
         path="/reset-password"
         noindex
       />
-      <div className="min-h-screen bg-background flex items-center justify-center px-4">
+      <main id="dukb-main" tabIndex={-1} className="min-h-screen bg-background flex items-center justify-center px-4">
         <Card className="w-full max-w-md border-border/60">
           <CardHeader>
             <CardTitle className="font-display text-2xl text-center flex items-center justify-center gap-2">
@@ -187,7 +187,7 @@ export default function ResetPassword() {
             )}
           </CardContent>
         </Card>
-      </div>
+      </main>
     </>
   );
 }

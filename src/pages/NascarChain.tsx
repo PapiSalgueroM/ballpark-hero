@@ -6,7 +6,7 @@ import { NascarChainBoard } from '@/components/nascar-chain/NascarChainBoard';
 
 export default function NascarChain() {
   return (
-    <>
+    <main id="dukb-main" tabIndex={-1}>
       <PageSeo
         title="NASCAR Chain - Cup Champion Chain Game | DoUKnowBall"
         description="Name drivers who beat each other to the NASCAR Cup Series championship. Build the longest chain."
@@ -33,6 +33,6 @@ export default function NascarChain() {
           "Dale Earnhardt Jr. → Matt Kenseth (2000s contemporaries)"
         ]}
       />
-    </>
+    </main>
   );
 }

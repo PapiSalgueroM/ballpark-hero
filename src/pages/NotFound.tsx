@@ -27,7 +27,7 @@ const NotFound = () => {
   const suggestions = [...popular, ...featured].slice(0, 6);
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-4">
+    <main id="dukb-main" tabIndex={-1} className="flex min-h-screen items-center justify-center bg-background px-4">
       <Helmet>
         <title>Page Not Found | DoUKnowBall</title>
         <meta name="robots" content="noindex" data-dukb-not-found="" />
@@ -63,7 +63,7 @@ const NotFound = () => {
           {`See all ${GAME_COUNT_LABEL} games`}
         </Link>
       </div>
-    </div>
+    </main>
   );
 };
 

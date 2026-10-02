@@ -5,7 +5,7 @@ import { NascarDriverBoard } from '@/components/nascar-driver/NascarDriverBoard'
 
 export default function GuessNascarDriver() {
   return (
-    <>
+    <main id="dukb-main" tabIndex={-1}>
       <PageSeo
         title="Guess the NASCAR Driver - Cup Series Trivia Game | DoUKnowBall"
         description="Identify the mystery NASCAR Cup Series driver from progressive clues. Daily motorsport trivia challenge."
@@ -30,6 +30,6 @@ export default function GuessNascarDriver() {
           "Play daily for the shared puzzle or switch to unlimited for more NASCAR trivia."
         ]}
       />
-    </>
+    </main>
   );
 }
