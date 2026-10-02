@@ -344,7 +344,7 @@ try {
       console.log('parity) every consumer plays and restores through the new hook exactly as through the hook at ' + PRE);
       const { run, rows } = parity({});
       if (rows.length !== consumers.length) fail(`expected one parity row per consumer (${consumers.length}), got ${rows.length}`);
-      for (const l of rows) if (l.problems || !l.saves) fail(`${l.id}: ${l.problems} problem(s), ${l.saves} save(s) compared`);
+      for (const l of rows) if (l.problems || !l.saves) fail(`${l.id}: ${l.problems} problem(s), ${l.saves} save(s) compared${l.first ? `; first: ${l.first}` : ""}`);
       for (const r of run.rows.filter((x) => x.status === 'failed')) fail(`${r.title}: ${r.messages.split('\n')[0]}`);
       const saves = rows.reduce((n, l) => n + l.saves, 0), steps = rows.reduce((n, l) => n + l.steps, 0);
       const statuses = new Set(rows.flatMap((l) => l.statuses));

@@ -253,6 +253,16 @@ async function tick(ms = 30): Promise<void> {
   await act(async () => { await vi.advanceTimersByTimeAsync(ms); });
 }
 async function settle(): Promise<void> { for (let i = 0; i < 6; i++) await tick(30); }
+/* A page's lazy pieces (the how to play button, the guide) load on real time,
+   which the fake clock does not move, so a page mount waits for every dynamic
+   import in flight: otherwise one run draws the button and the other does not,
+   and the comparison is a coin toss. */
+async function settleImports(): Promise<void> {
+  for (let i = 0; i < 4; i++) {
+    await act(async () => { await vi.dynamicImportSettled(); });
+    await settle();
+  }
+}
 async function run(fn: () => unknown): Promise<void> { await act(async () => { await fn(); }); }
 async function advance(ms: number): Promise<void> { await act(async () => { await vi.advanceTimersByTimeAsync(ms); }); }
 async function until(cond: () => boolean, what: string): Promise<void> {
@@ -300,7 +310,7 @@ async function mountPage(Page: ComponentType, route: string, ready: (c: HTMLElem
   const view = render(
     <HelmetProvider><MemoryRouter initialEntries={[route]}><Page /></MemoryRouter></HelmetProvider>,
   );
-  await settle();
+  await settleImports();
   await until(() => ready(view.container), `${route} to come up`);
   return { r: null, container: view.container, unmount: view.unmount };
 }
@@ -783,7 +793,7 @@ async function restore(which: 'new' | 'old', d: Driver, bytes: string): Promise<
 }
 
 beforeEach(() => {
-  vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout', 'setInterval', 'clearInterval', 'Date'] });
+  vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout', 'setInterval', 'clearInterval', 'requestAnimationFrame', 'cancelAnimationFrame', 'Date'] });
   vi.setSystemTime(new Date(`${TODAY}T16:00:00Z`));
   vi.spyOn(Math, 'random').mockReturnValue(0.01234);
   localStorage.clear();
@@ -830,7 +840,7 @@ describe('one tab plays and restores exactly as before Round 848', () => {
         if (n.view !== o.view) problems.push(`${where}: restores to a different state than before (a save thrown away?) ${diffAt(o.view, n.view)}\n  bytes ${bytes}`);
         if (o.records || n.records) problems.push(`${where}: a restore recorded a completion (old ${o.records}, new ${n.records})`);
       }
-      console.log(`R848_PARITY ${JSON.stringify({ id: d.id, plays: Object.keys(d.plays).length, steps, saves: saves.size, statuses: [...statuses].sort(), problems: problems.length })}`);
+      console.log(`R848_PARITY ${JSON.stringify({ id: d.id, plays: Object.keys(d.plays).length, steps, saves: saves.size, statuses: [...statuses].sort(), problems: problems.length, first: problems[0]?.slice(0, 600) })}`);
       expect(IMPL.calls.old, 'the old hook ran').toBeGreaterThan(0);
       expect(IMPL.calls.new, 'the new hook ran').toBeGreaterThan(0);
       expect(saves.size, 'the plays wrote saves to compare').toBeGreaterThan(0);
