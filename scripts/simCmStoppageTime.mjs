@@ -361,6 +361,10 @@ globalThis.localStorage = {
   get length() { return store.size; },
 };
 const { cmA, cmB, timelineRows, MatchReportCard, UclBracketCard, LiveSimScreen, render } = require(BUNDLE);
+/* Round 832: an era's squads load with the era, so every arm fetches all three
+   first. Without it the twelve era careers below throw inside walk()'s try and
+   are skipped, and the walk stops at eight careers ("too thin"). */
+for (const engine of [cmA, cmB]) await engine.ensureAllEraRosters();
 for (const [arm, cm] of [['A', cmA], ['B', cmB]]) {
   for (const name of ['startCareer', 'playNextEntry', 'resumeMatch', 'startSecondHalf', 'startExtraTime', 'isExtraTimeDue',
     'markLiveMinute', 'changeLive', 'liveFeed', 'uclTieOutcome', 'uclAwayGoalsApply', 'uclLegsFor', 'secondLegContext', 'matchFacts',
