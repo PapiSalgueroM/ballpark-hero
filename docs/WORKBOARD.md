@@ -1,5 +1,23 @@
 # Work board
 
+893/894 source preparation reviewed, 2026-10-02. Ratings cutovers stay open.
+
+Official NHL two-season summaries/bios/realtime are retained in TEMP after
+eight once-only requests.415/416 identities join conservatively;397 have
+both seasons.352 skater seeds reproduce,11 goalie outputs differ by one,
+Middleton alias unresolved. Boston's actual8F/4D/1G contradicts7F/4D/2G.
+Official NBA totals/advanced/bio inputs cover582 current and569 prior
+observations.291/300 seeds join conservatively, nine unresolved;3515
+internal scope/arithmetic/sample/source checks and four corruption controls
+pass. Source lineages and seasonal-age/defensive-metric limits are explicit.
+NFL889 v2.2 is a qualified simulation candidate: dated role, sample, missing
+metric and clipping defects fixed,42 additional role-evidence gaps flagged,
+all2163 grades and finance unchanged by that metadata correction. Production
+integration/full-season proof and892 guard must precede cutover. Receipts:
+`docs/audits/NHL-RATINGS-SOURCE-2026-10-02.md`, NBA sibling and NFL audit.
+No real grades, age, membership, historic stats or saves adopted in this
+source-review round. Claude retains publication. Next free895.
+
 894 source-budget correction, 2026-10-02.
 
 The first official NBA API response is valid582-row UTF-8 JSON. The pull's

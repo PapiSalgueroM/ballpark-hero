@@ -4,7 +4,7 @@ Date: 2026-10-02. Round 889. Status: audit and TEMP candidates only, no producti
 
 The expanded product goal is recognizable 0 to 99 ability numbers across sports, derived by an original DoUKnowBall method. It is not permission to copy a commercial rating dataset, inflate every roster, replace missing statistics with guesses, or rewrite earned progression in existing saves. This report covers NFL. The separate `SPORT-RATINGS-OTHER-2026-10-02.md` covers the other sports.
 
-No site, Supabase, private API, user browser or backend request was made. Seven public CSV downloads were separately authorized, obtained once each from documented nflverse release URLs and kept in TEMP. No retry, API key, production data write, generator edit, gameplay edit, build or publish occurred. This new audit document is the only repository file written by this audit.
+No site, Supabase, private API, user browser or backend request was made. Seven initial public CSV downloads and three later historical weekly roster downloads were separately authorized, obtained once each from documented nflverse release URLs and kept in TEMP. Six primary honor articles were also read within a separate bounded authorization. No retry, API key, production data write, generator edit, gameplay edit, build or publish occurred. This new audit document is the only repository file written by this audit.
 
 ## Concrete problems in the current implementation
 
@@ -64,7 +64,7 @@ Direct PFR advanced-defense webpage access returned 403. No retry or workaround 
 ### Identity and aggregation fences needed
 
 1. Join offensive inputs by GSIS ID and season, not player name. All three REG files have unique player IDs.
-2. Join PFR defense/snaps through the recorded GSIS/PFR crosswalk. Current roster records have blank PFR IDs for all 404 linemen. The acquired crosswalk resolves 2,142 of 2,163 current members, adds 526 IDs including 390 linemen, and finds no conflicting retained PFR IDs or birth dates. Twenty-one unresolved identities remain flagged.
+2. Join PFR defense/snaps through the recorded GSIS/PFR crosswalk. All 439 raw OL roster entries have blank PFR IDs; 394 of those are in the eligible pool. The acquired crosswalk resolves 2,142 of 2,163 current members, adds 526 IDs including 390 eligible linemen, and finds no conflicting retained PFR IDs or birth dates. Twenty-one unresolved identities remain flagged.
 3. Exclude blank IDs. Never treat all blank IDs as one player.
 4. Resolve one consistent season total, rather than summing `2TM`/`3TM` totals with the corresponding team stints. The 2024/2025 DEF source contains both shapes.
 5. Reject contradictory duplicate identities before using a last-row-wins map. The 2023 DEF source gives each of two David Long IDs both an MIA and a `3TM` row, and each of two DJ Turner IDs both CIN and LV rows with different positions. This audit does not guess which upstream row to repair.
@@ -108,7 +108,7 @@ The refined experiment uses unchanged current membership, REG-only 2023/2024/202
 - Recency weights 0.45, 0.7 and 1, the prior curve, feature weights, scale `84 + 12*z`, clipping and half-typical-exposure shrinkage are explicit original simulation choices. They require calibration review. They are not historical facts or proof of ability.
 - A small latest sample can retain an established prior. For example, the acquired Bosa input has 119 defensive snaps in 2025 and 693 in 2024. The prototype does not invent an injury explanation or infer that he is a rookie.
 - A zero-season rookie uses a declared draft-only estimate with uncertainty. That does not establish his actual NFL performance.
-- OL uses a clearly partial participation/draft proxy because blocking quality is unmeasured. All 404 OL estimates remain partial, even after 276 obtain 2024/2025 snap exposure. This is a blocker to calling the NFL ratings complete.
+- OL uses a clearly partial participation/draft proxy because blocking quality is unmeasured. All 394 eligible OL estimates remain partial, even after 276 obtain 2024/2025 snap exposure. This is a blocker to calling the NFL ratings complete. An earlier audit count of 404 was incorrect and was replaced after a direct record recount.
 
 | Existing name | Current displayed seed | Refined TEMP estimate | Important interpretation |
 | --- | ---: | ---: | --- |
@@ -162,6 +162,56 @@ These prices are simulated, not real NFL contract data. Normalizing inside separ
 7. Review opening and later money jointly: cap room, contracts, tags, trade responses, cuts/dead money, practice promotion, generated-player asks and AI signings. Require useful paired season and multi-season outcomes, not just no crash or one payroll check.
 8. Verify real new-game UI, old/current save refresh and native end-to-end season behavior only after source and input review. Nothing in this source audit credits those checks as complete.
 
+## Follow-up review: dated roles, feature reliability and honors
+
+Independent review found concrete blockers in the frozen refined candidate. It compared 199 used defensive player-season observations with a reference group that did not represent the same historical role. Generic historical `DL` had entered DT references and generic `LB` had entered ILB references, while current depth labels selected other models. Safety/off-ball coverage was also weighted by defensive snaps even where the actual coverage sample contained only one to eight targets. A blank missed-tackle rate could become zero in the helper, though no currently used ILB/S observation had that blank. The blank case is a required fence repair, not a verified current historical record error.
+
+The frozen v1 reports remain available. They must not be adopted simply because a few named results appear credible.
+
+### Additional authorized historical role inputs
+
+The [weekly roster documentation](https://nflreadr.nflverse.com/reference/load_rosters_weekly.html) and its [actual loader](https://github.com/nflverse/nflreadr/blob/main/R/load_rosters_weekly.R) identify the dated GSIS/PFR, team, week and depth-position fields needed for these joins. Each file below was acquired once, without a retry.
+
+| TEMP file | Source | Retrieved UTC | REG rows | SHA256 |
+| --- | --- | --- | ---: | --- |
+| `roster_weekly_2023.csv` | [2023 weekly](https://github.com/nflverse/nflverse-data/releases/download/weekly_rosters/roster_weekly_2023.csv) | 2026-10-02 16:37:03 | 43,545 | `1433f1f239784dde7fcb35349d211a9b83abfc0156337b72ec4f923abf715bd3` |
+| `roster_weekly_2024.csv` | [2024 weekly](https://github.com/nflverse/nflverse-data/releases/download/weekly_rosters/roster_weekly_2024.csv) | 2026-10-02 16:37:04 | 44,473 | `074ecaeb9325de943c11f7bbc941425626985090ef8386f90cd837fa5cb5d4b3` |
+| `roster_weekly_2025.csv` | [2025 weekly](https://github.com/nflverse/nflverse-data/releases/download/weekly_rosters/roster_weekly_2025.csv) | 2026-10-02 16:37:04 | 44,697 | `c2f7a1ffebe06058400af1989d1cd2900cc5c9659f084623708a06d4e28de35b` |
+
+The actual historical labels distinguish DE, DT/NT, ILB/MLB and defensive-back roles. OLB is mixed: the acquired 2024/2025 records give both Matt Milano and Jared Verse that label. Therefore OLB alone must not be converted into a factual edge-rush assignment.
+
+The separate TEMP v2 fits a model per season and observed role, matches played REG snap weeks/team through exact GSIS/PFR identities, and excludes unsupported or conflicting role assignments. Generic labels do not silently become DT or ILB. OLB stays an explicitly partial separate cohort. An unresolved season does not acquire a guessed role from today's roster.
+
+Coverage confidence now uses actual targets. Missed-tackle confidence uses recorded combined tackles plus missed tackles. Pressure and sack rates use defensive snaps and retain the explicit missing pass-rush-opportunity limitation. Missing values stay null and contribute no fabricated perfect performance. Partial features, ambiguous roles and absent inputs remain visible in the payload.
+
+The final normal v2 probe exits zero and holds frozen offense/OL estimates, the original full payload and five production file hashes. Three executable copies separately restore missing-as-zero, coverage weighted by all snaps, and current-role historical normalization. Each fails its exact intended assertion; raw logs and cleanup proof are retained. This verifies those narrow method boundaries, not every sports fact.
+
+Selected v2 estimates are Ward 87, Graham 75, Bosa 94, Garrett 98, Surtain 94, Stingley 98, Verse 81 (partial OLB), Hamilton 87 (partial safety) and Warner 82 (partial off-ball). Offense remains frozen, including Mahomes 85. All are review numbers, not shipped grades. Its separate financial output remains retained; the bounded-target issue below prevents adopting this version as the final method.
+
+The v2 economy probe later held all 32 opening budgets and showed another method boundary: an extreme standardized small sample could extrapolate its measured target beyond 98 before the final combined clamp. The separate v2.1 clips the measured target first, then blends by confidence. This changes one low-volume off-ball example from 92 to 81 with confidence 0.3895. An executable unbounded-target copy rejects that exact logical confidence bound. The original v2 source, reports and economy outputs remain frozen.
+
+V2.1 estimates are Ward 87, Graham 75, Bosa 91, Garrett 95, Surtain 94 and Stingley 95. Frozen offense/OL estimates stay unchanged. Its opening average strength is 83.97521, with 100 estimates of 90+ and zero at or below $1.5M after the separate simulated-price normalization. The minimum such price is $7.4M. All 32 opening budgets/years and the original no-depth initializer hold. Three direct offseason transitions remain under cap, with candidate average payrolls about $168.11M/$166.37M/$169.68M. This still is not full-season, trade, tag or UI acceptance.
+
+Four final v2.1 controls reject unbounded targets, missing-as-zero, coverage weighted by snaps and current-role historical normalization. Each changes one executable copied binding and fails its exact intended assertion. Final source/report bytes hold and all copies are removed. Independent method review is pending; these controls do not establish football-model calibration or complete input truth.
+
+Independent v2.1 review subsequently accepted the bounded method as an implementation candidate, conditional on honest evidence labels and integration checks. It found 12 records whose inherited fine group implied a current S/DT measurement while their dated evidence had only CB/DE roles. The broader correct predicate uses the actual current explicit depth role, separately from inherited fine. That identifies 42 previously nonpartial defensive records without matching dated current-role evidence, including OLB/DE transitions. These are evidence-label gaps, not a reason to hand-edit their grades.
+
+The separate TEMP v2.2 marks all 42 gaps partial using that generic predicate, records the current explicit role alongside unchanged dated roles and leaves every grade, confidence, player fact, contract term and fictional opening price unchanged. Unsupported current fine roles remain partial. A copied executable omission fails the exact 42-gap assertion; supported-role and unknown-role probes remain explicit. V2.1 payloads, reports, financial evidence and the original verified summary remain byte-for-byte frozen. No new full-season or engine acceptance is claimed for this metadata correction.
+
+Round892 is authorized to change the production engine's promotion-cap boundary separately. Its committed engine must become an explicitly new integration baseline. The earlier v2.1 source hashes and economy receipt describe their original baseline and must not be silently recomputed or presented as hashes of a later engine.
+
+Graham's v1 decomposition was 763 snaps, prior 77.9563, measured estimate 72.4747 and confidence 0.8321. Shrinkage raised that estimate to 73; removing shrinkage produced 72. Changing confidence alone cannot justify a target of 80. Role alignment and unmeasured run-defense responsibilities deserve review instead of a name-specific patch.
+
+### Dated selection evidence, kept separate from ratings
+
+The bounded article reads cover the [2023 NFL-hosted AP list](https://www.nfl.com/news/2023-all-pro-team-lamar-jackson-tyreek-hill-aaron-donald-highlight-roster), [2024 list](https://www.nfl.com/news/2024-all-pro-team-lamar-jackson-jamarr-chase-justin-jefferson-highlight-roster), [2025 list](https://www.nfl.com/news/2025-all-pro-team-matthew-stafford-bijan-robinson-jaxon-smith-njigba-highlight-roster) and each corresponding AP announcement. AP direct opens were inaccessible; only primary search-returned announcements were used as limited corroboration, without retry. These are one AP selection lineage, not two independent selection authorities.
+
+`honors-facts.json` retains 184 factual season/tier/position/team selections, including 30 OL selections. Unique normalized identity, historical position-group compatibility and rookie/last-season checks resolve 182 records. Two source list spellings remain unresolved: `Chris Lidstrom` in 2023 and `Garrett Bolles` in 2025. They were not fuzzy-assigned to a current player. Ties and source labels remain intact.
+
+A separate general honor sensitivity affects 50 eligible estimates while preserving every non-honored estimate exactly. Its explicit first/second-team target and recency choices are trial simulation choices. Twelve eligible OL have joined honors, and that trial raises their maximum from 83 to 96. The 90+ pool increases from 105 to 128. This has not been merged into v2 or financially accepted, and it does not measure blocking quality for the remaining linemen.
+
+Mahomes has no selection in these three AP lists. This acquisition cannot support inventing a recent honor or forcing him to an external benchmark. A broader established-performance prior needs its own dated evidence and general calibration.
+
 ## Exact evidence and retained limitations
 
 Owned evidence directory: `C:/Users/antho/AppData/Local/Temp/dukb-nfl889-candidate-2026-10-02`.
@@ -176,5 +226,11 @@ Owned evidence directory: `C:/Users/antho/AppData/Local/Temp/dukb-nfl889-candida
 - `refined-full-before-crosswalk-report.json`: retained missing-identity result before the authorized crosswalk.
 - `refined-full-report.json` and `refined-full-payload.json`: final reviewed-input prototype and complete estimate basis for the unchanged 2,163 eligible records.
 - `refined-finance-report.json` and `refined-finance-payload.json`: actual original/candidate initializer, exact payroll checks and three direct offseason transitions. The esbuild metafile excludes Supabase dependencies.
+- `download-weekly-receipts.json`, `weekly-schema-audit.json`: three later authorized dated roster inputs and actual role fields.
+- `honors-facts.json`, `honors-facts-receipt.json`, `honors-resolved-facts.json`, `honors-sensitivity-report.json`: factual article provenance, unresolved spellings and separate trial sensitivity. First import and schema/floor calibration attempts remain retained rather than counted as accepted evidence.
+- `refined-v2-report.json`, `refined-v2-payload.json`, `refined-v2-final.log`, `refined-v2-controls.json`: dated-role/feature-confidence candidate, exact failing controls and source holds. The first failed diagnostic-print attempt is retained and excluded from the accepted normal run.
+- `refined-v2-finance-report.json`: retained v2 economy result before the measured-target correction.
+- `refined-v21-report.json`, `refined-v21-payload.json`, `refined-v21-run2.log`, `refined-v21-controls.json`, `refined-v21-finance-report.json`: separate bounded-target candidate, four exact controls and financial option. The first failed Windows preparation/missing-script attempt remains retained and is excluded from accepted proof.
+- `refined-v22-report.json`, `refined-v22-payload.json`, `refined-v22-finance-payload.json`, `refined-v22.log`, `refined-v22-controls.json`: metadata-only current-role evidence correction, unchanged grades/confidence/finance, exact executable omitted-marking control and byte holds for all frozen v2.1 evidence.
 
 Five production source/data hashes hold throughout the final estimates, and the financial probe separately holds engine and both seed-file raw bytes. The existing cache and committed record remain unchanged. No production code, input snapshot, guide, master list or save was edited by these probes. No complete NFL data validation, full career/GM playthrough, vendor-rating equivalence, live deployment or AdSense-readiness claim is made.

@@ -1,5 +1,17 @@
 # Project state
 
+Ratings source preparation reviewed, 2026-10-02.
+
+893 NHL retains official two-season inputs with415/416 conservative identity
+joins and397 prior/current matches; Boston seed actually8F/4D/1G and the
+Middleton alias remains unresolved.894 NBA retains582 current and569 prior
+observations,291/300 conservative seed joins,3515 internal checks and four
+corruption controls. Source lineage, age and defensive evidence limits are
+documented. NFL889 v2.2 is a bounded simulation candidate, not a cutover:
+42 generic current-role evidence gaps now partial with allgrades/prices held.
+892 cap repair is finishing clean gates/native proof. No ratings or factual
+data update shipped by these reviews. Next free895.
+
 894 acquisition correction: the official582-row response is valid UTF-8.
 A Windows-decoder error caused five unhelpful HTML fallback reads. Retained,
 no adoption. Four distinct missing bulk datasets may now be requested once
