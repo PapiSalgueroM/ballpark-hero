@@ -1040,7 +1040,7 @@ export const HOCKEY_CONTENT: GameContentMap = {
   '/nhl-front-office': {
     intro: [
       "Running an NHL club is a math problem with feelings, and now the math is yours.",
-      "You get a real 2026-27 roster rated off real 2025-26 stats, a hard cap, a points race and the actual divisional bracket. Contracts and trades in the sim are fictional; the hockey logic is not.",
+      "You get a curated roster snapshot, original simulation ratings, a points race and a divisional bracket. New opening estimates use 2024-25 and 2025-26 regular-season inputs: offensive production for forwards, offense and usage proxies for defensemen, and save-rate proxies for goalies. Contracts, potential and future events are simulated.",
     ],
     headings: {
       howToPlay: "How to play NHL Front Office, a free hockey GM simulation game",
@@ -1053,7 +1053,7 @@ export const HOCKEY_CONTENT: GameContentMap = {
       {
         heading: "Pick a club and inherit its roster",
         items: [
-          "Pick any of the 32 clubs and inherit its actual roster.",
+          "Pick any of the 32 clubs from the roster snapshot. Read each opening estimate note: the e marker means limited evidence, and an unmeasured game prior means the model lacks a usable observation. These estimates do not measure every skill. Existing saves keep their grades and development.",
         ],
         subsections: [
           {
@@ -1095,7 +1095,7 @@ export const HOCKEY_CONTENT: GameContentMap = {
       {
         heading: "A hard cap that rises every season",
         items: [
-          "The hard cap starts at 104M and rises about 9 percent a season; every move must fit.",
+          "The cap starts at 104M and rises about 9 percent a season in this simulation. Free-agent offers must fit your room, including dead money. The existing salary-matching trade rules can allow a club above the cap; this is a limit of the game's model. New-model future offers use one fixed rating curve; unexpired signed contracts keep their price.",
         ],
       },
       {
@@ -1109,7 +1109,7 @@ export const HOCKEY_CONTENT: GameContentMap = {
         heading: "Trades and the draft carry real risk",
         items: [
           "Trades are player for player plus an optional pick, and the AI prices age, rating and position before saying yes.",
-          "At the draft you make 2 picks, and scouting grades carry error; the true rating appears only after you commit.",
+          "At the draft you make 2 picks, and scouting grades carry error; the true rating appears only after you commit. In new-model franchises, rival clubs follow the scouting order and choose an affordable contract against the next cap, keeping unavailable choices in the pool. A contract price depends on the underlying simulated ability, so it is not a scout-only knowledge model.",
         ],
       },
       {
