@@ -562,6 +562,35 @@ console.log('6) Legends rate like legends; pre-title Leicester stay honest');
   if (madridDef.tier !== 1 || madridDef.expectation > 2) fail(`2015 Real Madrid reads tier ${madridDef.tier} expectation ${madridDef.expectation}`);
 }
 
+/* ---------- 7. A save from before the big five plays on ---------- */
+/* Round 899. A 2015-16 save made before this round carries a world of the
+   first three leagues only (its own league lives in `table`, the other two
+   in `world`). The proof with a save built by the previous engine itself is
+   in the round's record; this section keeps the same path under test from
+   here on: a fresh save cut back to that exact shape, sent through JSON the
+   way storage sends it, must finish its season on the three leagues it
+   knows, and the summer must hand it all five. */
+console.log('7) A three league save from before Round 899 plays on and grows in the summer');
+if (CONTROL) console.log('   skipped: a control run plays no seasons');
+else {
+  Math.random = seeded(4801);
+  let s = startCareer('Juventus', 'era2015');
+  for (let i = 0; i < 16; i++) s = playNextEntry(s, { skipHalftime: true }).state;
+  const before = Object.keys(s.world ?? {}).sort().join(',');
+  if (before !== 'bundesliga2015,laliga2015,ligue12015,premier2015') fail(`a fresh Juventus save carries the world ${before}`);
+  const old = JSON.parse(JSON.stringify(s));
+  delete old.world.bundesliga2015;
+  delete old.world.ligue12015;
+  const done = playSeason(old);
+  if (done.week < done.calendar.length) fail(`the three league save stopped at week ${done.week} of ${done.calendar.length}`);
+  const kept = Object.entries(done.world ?? {}).map(([id, w]) => `${id} ${w.round}`).sort().join(',');
+  if (kept !== 'laliga2015 38,premier2015 38') fail(`the three league save finished its season with the world ${kept}`);
+  const next = playSeason(startNextSeason(done));
+  const grown = Object.entries(next.world ?? {}).map(([id, w]) => `${id} ${w.round}/${w.table.length}`).sort().join(',');
+  console.log(`   season one world: ${kept} · season two world: ${grown}`);
+  if (grown !== 'bundesliga2015 34/18,laliga2015 38/20,ligue12015 38/20,premier2015 38/20') fail(`season two of the old save has the world ${grown}`);
+}
+
 Math.random = REAL_RANDOM;
 console.log('');
 if (failures > 0) {
