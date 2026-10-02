@@ -1,5 +1,18 @@
 # Work board
 
+**Codex855 VERIFIED AND PUSHING.** QA847-07: shared Help provides a small
+host for the existing single CookieConsent region, so its unchanged choices
+are inside the modal's keyboard scope. Outside shared Help the original bottom
+banner remains. No automatic consent/vendor policy change. Seven new and six
+existing Help cases pass; outside-portal control fails five while two unrelated
+baselines pass. Native six320/390 contexts in each motion mode: Tab/ShiftTab
+reach both visible choices, Essential requests0vendors, Accept requests one
+GA/AdSense each (intercepted, NPA1), Help stays open, Escape without choice
+restores one bottom banner and reopen/manual focus return work. Zero overflow
+or uncaught errors. Clean type/build, all15 built-site fences and its new runner
+pass. Handbuilt legacy help dialogs are outside this repair. Ready for Claude
+publication; no claim that these repairs are live. Next free857.
+
 **Codex854 VERIFIED AND PUSHING.** QA847-11 NFL/NHL portion: narrow nested
 save validation runs before state restoration. Broken saves show a usable
 team picker and retain raw bytes until explicit deletion or a new team. No

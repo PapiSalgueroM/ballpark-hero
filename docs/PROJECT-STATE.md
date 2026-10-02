@@ -1,5 +1,15 @@
 # Project state
 
+## Codex855 accepted repair, 2026-10-01
+
+Shared Help's cookie choices now sit inside its focus scope using one existing
+region/handler set. Seven focused cases, six existing Help cases and the
+outside-portal control pass expected outcomes. Six native320/390 contexts in
+each motion mode verify both keyboard directions, visible choices, unchanged
+Essential/Accept gates, Help staying open and banner restoration/reopening.
+Clean type/build, all15 built-site fences and the harness runner pass. Legacy
+handbuilt help is outside this scope. Ready for Claude's publication lane.
+
 ## Codex854 accepted repair, 2026-10-01
 
 NFL/NHL malformed saves recover to a usable picker with raw bytes preserved
