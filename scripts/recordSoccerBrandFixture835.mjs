@@ -21,7 +21,7 @@
  * was archived from). It is written into the fixture's `recordedFrom` header,
  * which the harness sets aside before it compares and requires to be a real
  * sha, so the file itself says what it is a photograph of. The fixture now in
- * the repo was recorded from origin/main 89d31144 (`git archive origin/main
+ * the repo was recorded from origin/main 6d29f561 (`git archive origin/main
  * src` into a scratch folder), after Rounds 819, 834 and 850 had landed there,
  * and replayed identical on the lifted tree merged with that same main.
  *

@@ -23,7 +23,7 @@
  *      grid of synthetic saves, hashing the whole save after every step. Its
  *      output must equal scripts/data/soccerBrandFixture835.json, recorded
  *      from a main with none of the lift on it (first origin/main 3fb92eea,
- *      then again from origin/main 89d31144 once Rounds 819, 834 and 850 had
+ *      then again from origin/main 6d29f561 once Rounds 819, 834 and 850 had
  *      changed Soccer Career there; the file's recordedFrom header carries
  *      the sha). Soccer calls Math.random
  *      in a fixed order, so a lift that moves one draw shows up here. The

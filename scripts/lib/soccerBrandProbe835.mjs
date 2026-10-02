@@ -10,7 +10,7 @@
  * measures it, used twice:
  *
  *   scripts/recordSoccerBrandFixture835.mjs ran it against a main with no
- *   Round 835 code on it (origin/main 3fb92eea first, origin/main 89d31144
+ *   Round 835 code on it (origin/main 3fb92eea first, origin/main 6d29f561
  *   after the branch took main in again) and wrote
  *   scripts/data/soccerBrandFixture835.json.
  *
