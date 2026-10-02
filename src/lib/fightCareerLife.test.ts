@@ -42,7 +42,7 @@ describe('the deck', () => {
       ...FIGHT_INBOX_TEXTS.flatMap(t => [t.text, ...t.choices.flatMap(c => [c.label, c.reply])]),
       ...TRAINERS.map(describeTrainer), ...MANAGERS.map(describeManager),
     ];
-    for (const w of words) expect(w).not.toMatch(/[–—]/);
+    for (const w of words) expect(w).not.toMatch(/[\u2013\u2014]/);
   });
 });
 

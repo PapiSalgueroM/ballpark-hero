@@ -268,7 +268,7 @@ function CornerPanel({ st }: { st: Live }) {
         ))}
         <p className="pt-1 text-[11px] text-muted-foreground">
           Next fight night: {sharp > 0 ? `+${sharp}` : sharp} sharpness (power, speed, stamina and defence, that night only).
-          Every 10 morale above or below 50 is a point. Every fan adds half a percent to your purses.
+          Every 10 morale above or below 50 is a point, and morale settles 2 back toward 50 after every fight. Every fan adds half a percent to your purses.
         </p>
       </div>
       {st.life.feed.length > 0 && (

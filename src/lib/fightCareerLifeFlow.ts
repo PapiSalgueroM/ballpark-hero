@@ -30,6 +30,9 @@ type Live = FightCareerState & { life: FightLife };
 
 const meter = (v: number): number => Math.max(0, Math.min(100, Math.round(v)));
 
+/** How far morale settles back toward 50 after a fight. */
+export const MORALE_DRIFT = 2;
+
 /** A new career with its corner picked. */
 export function lifeNewCareer(
   name: string, weight: WeightId, style: FightStyle,
@@ -78,6 +81,9 @@ export function lifeTakeFight(st: FightCareerState, offerId: string, tactics: Ta
   life.bank = round2(life.bank + takeHome);
   life.fanbase = fansAfter(life, won, drew, stoppage, won && offer.title && !before.champion);
   life.sharp = 0;
+  /* Morale settles back toward 50 after every fight, so a mood is something
+     kept up, not something banked once and owned for a career. */
+  life.morale = life.morale > 50 ? Math.max(50, life.morale - MORALE_DRIFT) : Math.min(50, life.morale + MORALE_DRIFT);
   if (life.promoterFights > 0) life.promoterFights -= 1;
   if (!won && !drew) life.lastBeatenBy = { ...offer.opponent, wins: offer.opponent.wins + 1 };
   if (offer.label === GRUDGE_LABEL) {
@@ -191,7 +197,7 @@ export const FIGHT_BADGES: BadgeDef<FightBadgeFacts>[] = [
   { id: 'fb-unbeaten', emoji: '🧼', label: 'Still perfect', blurb: 'Ten fights in and nobody has beaten you.', test: f => f.fights >= 10 && f.losses === 0 },
   { id: 'fb-champion', emoji: '🏆', label: 'World champion', blurb: 'Won a world title.', test: f => f.titleWins >= 1 },
   { id: 'fb-defender', emoji: '🛡️', label: 'A proper reign', blurb: 'Three successful title defences.', test: f => f.defences >= 3 },
-  { id: 'fb-two-weights', emoji: '⚖️', label: 'Two weights', blurb: 'Changed weight class and won a title.', test: f => f.classMoves >= 1 && f.titleWins >= 1 },
+  { id: 'fb-two-weights', emoji: '⚖️', label: 'Moved and won', blurb: 'Changed weight class at least once and won a world title.', test: f => f.classMoves >= 1 && f.titleWins >= 1 },
   { id: 'fb-rival', emoji: '😤', label: 'Settled it', blurb: 'Beat your rival in the ring.', test: f => f.rivalWins >= 1 },
   { id: 'fb-crowd', emoji: '📣', label: 'A following', blurb: 'Sixty fans on the meter.', test: f => f.fans >= 60 },
   { id: 'fb-banker', emoji: '🏦', label: 'Kept some of it', blurb: 'A million in the bank at once.', test: f => f.bank >= 1 },

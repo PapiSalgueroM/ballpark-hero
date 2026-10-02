@@ -1854,7 +1854,7 @@ export const MORE_SPORTS_CONTENT: GameContentMap = {
       },
       {
         heading: "Sharpness on fight night",
-        items: ["Some cards make you sharper or flatter for the next fight only: each point is added to your power, speed, stamina and defence that night and gone the morning after. Sparring partners add a point a level, and every 10 morale above or below 50 is a point either way."],
+        items: ["Some cards make you sharper or flatter for the next fight only: each point is added to your power, speed, stamina and defence that night and gone the morning after. Sparring partners add a point a level, and every 10 morale above or below 50 is a point either way. Morale settles 2 back toward 50 after every fight, so a good mood has to be kept up."],
       },
       {
         heading: "Your rival and the grudge match",
