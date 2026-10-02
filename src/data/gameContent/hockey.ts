@@ -881,6 +881,12 @@ export const HOCKEY_CONTENT: GameContentMap = {
         ],
         subsections: [
           {
+            heading: "Answer your phone on the hockey calendar",
+            items: [
+              "Answer your phone. Texts from your agent, the head coach, the GM, a teammate or your mom land on the beats of the hockey year: draft day, camp, the World Juniors while you are young enough to go, the All-Star break, the trade deadline, the playoffs if you get there, the offseason, and the summer before the last year of your deal. Every text says which beat and which year it came in on, and how you answer moves your karma, morale, fanbase or bank.",
+            ],
+          },
+          {
             heading: "Make the call when your rival forces one",
             items: [
               "Some seasons your rival forces a decision instead of making a headline: a cheap shot after the whistle you can settle or shrug off, a debate show offering real money, a youth clinic his foundation wants you to co-host, an All-Star vote his club is buying ads for. Every button prints exactly what it moves, and a gamble prints its odds.",
@@ -924,6 +930,13 @@ export const HOCKEY_CONTENT: GameContentMap = {
         heading: "Your rival's choices and what they move",
         items: [
           "When your rival makes no headline in a season, there is a 45% chance he puts a choice in front of you instead, never both in one season, and each choice comes up once before any repeats. A button only moves what it prints: morale, fanbase, net worth, karma or the heat of the feud. Morale rides straight into next season's points or save percentage.",
+        ],
+      },
+      {
+        heading: "How the phone's calendar works",
+        items: [
+          "Texts only arrive on beats your season really had. No playoff texts in a year your club missed, World Juniors texts only in a season you start at 19 or younger, no contract year texts until one year is left on the deal, and draft day's text lands before you play a shift. One text a beat, up to three a season, fewer while old ones sit unanswered, and the same text never comes twice in a career.",
+          "The season the game retires you (40 for skaters, 41 for goalies, 22 seasons, or a rating that collapses) sends nothing about a year you will not play: no summer skates, no new stick and skate deal, no extension talk.",
         ],
       },
       {

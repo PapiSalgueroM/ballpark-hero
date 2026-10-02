@@ -61,7 +61,7 @@ import { fmtFollowers, pushHeadlines } from '@/lib/careerSocial';
    bound to baseball in mlbCareerInbox.ts and mlbCareerRivalryEvents.ts. */
 import { InboxPanel } from '@/components/us-career/InboxPanel';
 import { RivalryEventCard } from '@/components/us-career/RivalryEventCard';
-import { mlbUnreadInboxCount, answerMlbInboxMessage } from '@/lib/mlbCareerInbox';
+import { mlbUnreadInboxCount, answerMlbInboxMessage, mlbDraftNightInbox, MLB_CALENDAR } from '@/lib/mlbCareerInbox';
 import { dismissMlbRivalryEvent, resolveMlbRivalryChoice } from '@/lib/mlbCareerRivalryEvents';
 /* Round 796: the rival choice card, the same one the NFL board draws. */
 import { RivalryChoiceCard } from '@/components/us-career/RivalryChoiceCard';
@@ -195,6 +195,9 @@ export default function MlbMyCareerBoard() {
     const tq = mlbRollTeamQuality(null, Math.random);
     /* Round 183: the lineup card is set the day you arrive. */
     const roleNote = mlbAssignRole(c, tq, Math.random);
+    /* Round 822: draft day's text lands before a pitch is thrown, drawn
+       from the inbox's own keyed stream. */
+    mlbDraftNightInbox(c);
     setCareer(c);
     setTeamQuality(tq);
     const pressureLine = draftPressureLine(c.draftPick, FIRST_ROUND_END);
@@ -818,7 +821,7 @@ export default function MlbMyCareerBoard() {
         {panel === 'inbox' && (
           /* Round 525: the Round 80 half of the flagship's phone, on the
              engine careerInbox.ts, bound to baseball in mlbCareerInbox.ts. */
-          <InboxPanel messages={[...(career.phoneInbox ?? [])].reverse()} onAnswer={handleInboxAnswer} seen={inboxSeenRef.current} />
+          <InboxPanel messages={[...(career.phoneInbox ?? [])].reverse()} onAnswer={handleInboxAnswer} seen={inboxSeenRef.current} calendar={MLB_CALENDAR} />
         )}
       </div>
     );

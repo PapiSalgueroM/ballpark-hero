@@ -61,7 +61,7 @@ import { fmtFollowers, pushHeadlines } from '@/lib/careerSocial';
    bound to hockey in nhlCareerInbox.ts and nhlCareerRivalryEvents.ts. */
 import { InboxPanel } from '@/components/us-career/InboxPanel';
 import { RivalryEventCard } from '@/components/us-career/RivalryEventCard';
-import { nhlUnreadInboxCount, answerNhlInboxMessage } from '@/lib/nhlCareerInbox';
+import { nhlUnreadInboxCount, answerNhlInboxMessage, nhlDraftNightInbox, NHL_CALENDAR } from '@/lib/nhlCareerInbox';
 import { dismissNhlRivalryEvent, resolveNhlRivalryChoice } from '@/lib/nhlCareerRivalryEvents';
 /* Round 796: the rival choice card, the same one the NFL board draws. */
 import { RivalryChoiceCard } from '@/components/us-career/RivalryChoiceCard';
@@ -195,6 +195,9 @@ export default function NhlMyCareerBoard() {
     const tq = nhlRollTeamQuality(null, Math.random);
     /* Round 183: the lineup is set the day you arrive. */
     const roleNote = nhlAssignRole(c, tq, Math.random);
+    /* Round 822: draft day's text lands before a shift is played, drawn
+       from the inbox's own keyed stream. */
+    nhlDraftNightInbox(c);
     setCareer(c);
     setTeamQuality(tq);
     const pressureLine = draftPressureLine(c.draftPick, FIRST_ROUND_END);
@@ -818,7 +821,7 @@ export default function NhlMyCareerBoard() {
         {panel === 'inbox' && (
           /* Round 525: the Round 80 half of the flagship's phone, on the
              engine careerInbox.ts, bound to hockey in nhlCareerInbox.ts. */
-          <InboxPanel messages={[...(career.phoneInbox ?? [])].reverse()} onAnswer={handleInboxAnswer} seen={inboxSeenRef.current} />
+          <InboxPanel messages={[...(career.phoneInbox ?? [])].reverse()} onAnswer={handleInboxAnswer} seen={inboxSeenRef.current} calendar={NHL_CALENDAR} />
         )}
       </div>
     );

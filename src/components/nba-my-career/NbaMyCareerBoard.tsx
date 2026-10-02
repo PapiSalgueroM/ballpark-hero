@@ -61,7 +61,7 @@ import { fmtFollowers, pushHeadlines } from '@/lib/careerSocial';
    bound to the NBA in nbaCareerInbox.ts and nbaCareerRivalryEvents.ts. */
 import { InboxPanel } from '@/components/us-career/InboxPanel';
 import { RivalryEventCard } from '@/components/us-career/RivalryEventCard';
-import { nbaUnreadInboxCount, answerNbaInboxMessage } from '@/lib/nbaCareerInbox';
+import { nbaUnreadInboxCount, answerNbaInboxMessage, nbaDraftNightInbox, NBA_CALENDAR } from '@/lib/nbaCareerInbox';
 import { dismissNbaRivalryEvent, resolveNbaRivalryChoice } from '@/lib/nbaCareerRivalryEvents';
 /* Round 796: the rival choice card, the same one the NFL board draws. */
 import { RivalryChoiceCard } from '@/components/us-career/RivalryChoiceCard';
@@ -196,6 +196,10 @@ export default function NbaMyCareerBoard() {
     const tq = nbaRollTeamQuality(null, Math.random);
     /* Round 182: the rotation is set the night you arrive. */
     const roleNote = nbaAssignRole(c, tq, Math.random);
+    /* Round 822: draft night's texts (the draft, and the summer league that
+       follows it) land before a game is played, drawn from the inbox's own
+       keyed stream. */
+    nbaDraftNightInbox(c);
     setCareer(c);
     setTeamQuality(tq);
     const pressureLine = draftPressureLine(c.draftPick, FIRST_ROUND_END);
@@ -816,7 +820,7 @@ export default function NbaMyCareerBoard() {
         {panel === 'inbox' && (
           /* Round 525: the Round 80 half of the flagship's phone, on the
              engine careerInbox.ts, bound to the NBA in nbaCareerInbox.ts. */
-          <InboxPanel messages={[...(career.phoneInbox ?? [])].reverse()} onAnswer={handleInboxAnswer} seen={inboxSeenRef.current} />
+          <InboxPanel messages={[...(career.phoneInbox ?? [])].reverse()} onAnswer={handleInboxAnswer} seen={inboxSeenRef.current} calendar={NBA_CALENDAR} />
         )}
       </div>
     );

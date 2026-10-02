@@ -726,8 +726,12 @@ export function nbaProgress(c: NbaCareerState, rng: () => number): string[] {
   for (const line of nbaMoneySeasonTick(c).events) notes.push(line);
   /* Round 525: the inbox. Silent on purpose, the same way the flagship's
      phone never announces a new text in the season feed: the unread badge
-     on the Inbox box is the tell. */
-  receiveNbaInboxTexts(c, rng);
+     on the Inbox box is the tell. Round 822: it delivers on the basketball
+     calendar and draws from its own keyed stream, never this season's rng,
+     and it is told whether the career goes on (the same nbaShouldRetire the
+     board asks right after this returns), so a player who retires this
+     summer is never sent a text about next season. */
+  receiveNbaInboxTexts(c, !nbaShouldRetire(c));
   return notes;
 }
 

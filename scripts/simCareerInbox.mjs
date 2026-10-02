@@ -50,9 +50,12 @@
  *            nothing, ever, which section 3 must report as a failure.
  *            Round 796: the NFL no longer takes this between-seasons path,
  *            it delivers on its own calendar through pickBeatTexts, so
- *            section 4 stays green under this control on purpose. The
+ *            section 4 stays green under this control on purpose. Round
+ *            822 moved the MLB, NBA and NHL inboxes onto calendars too, so
+ *            sections 5 to 7 stay green under it for the same reason. The
  *            calendar path has its own controls in
- *            scripts/simCareerInboxBeats.mjs.
+ *            scripts/simCareerInboxBeats.mjs (nobeats, nobeatsnba and the
+ *            rest).
  *   nocap    the drop-oldest-answered trim is patched to a no-op. A soccer
  *            career played long enough must then carry more than six
  *            messages on the save, which section 3 must catch.
@@ -611,13 +614,13 @@ console.log('6) The NBA binding: messages actually arrive, are not always empty,
   }
   /* Same measured-rate reasoning as the NFL section: everNonEmpty alone is a
      weak signal (halving wantPerSeason would still leave most careers
-     showing a message eventually). nbaCareerInbox.ts sets wantPerSeason = 2,
+     showing a message eventually). nbaCareerInbox.ts sets wantPerSeason (3 since Round 822),
      so phoneUsedIds.length (every distinct message ever delivered, tracked
      even after the 6-message cap drops the oldest answered one) over 8
      seasons should sit well above one a season if the binding is healthy. */
   const seasonsRun = careersRun * 8;
   const deliveryRate = totalDelivered / seasonsRun;
-  console.log(`   ${careersRun} NBA careers, ${everNonEmpty} delivered at least one message, ${totalDelivered} messages total over ${seasonsRun} career-seasons (rate ${deliveryRate.toFixed(3)} against a wantPerSeason of 2), ${capViolations} cap violations, ${answeredOk} answers accepted, ${refusedOk} double answers correctly refused`);
+  console.log(`   ${careersRun} NBA careers, ${everNonEmpty} delivered at least one message, ${totalDelivered} messages total over ${seasonsRun} career-seasons (rate ${deliveryRate.toFixed(3)} against a wantPerSeason of ${nbaInbox.NBA_INBOX.wantPerSeason}), ${capViolations} cap violations, ${answeredOk} answers accepted, ${refusedOk} double answers correctly refused`);
   if (careersRun < 30) fail('fewer NBA careers completed than the loop should have run');
   if (everNonEmpty < careersRun * 0.8) fail(`only ${everNonEmpty} of ${careersRun} NBA careers ever showed a message, the binding may not actually be firing`);
   /* Same 0.5 floor as the NFL section: measured over this exact run the rate
@@ -625,7 +628,7 @@ console.log('6) The NBA binding: messages actually arrive, are not always empty,
      under every measured run while still catching wantPerSeason being cut
      in half or the eligible pool silently emptying out for a chunk of a
      career. */
-  if (deliveryRate < 0.5) fail(`the NBA message delivery rate is ${deliveryRate.toFixed(3)} per career-season against a wantPerSeason of 2, well under what a healthy binding should show`);
+  if (deliveryRate < 0.5) fail(`the NBA message delivery rate is ${deliveryRate.toFixed(3)} per career-season against a wantPerSeason of ${nbaInbox.NBA_INBOX.wantPerSeason}, well under what a healthy binding should show`);
   if (answeredOk === 0) fail('not one NBA inbox answer was accepted across 30 careers');
 
   /* 5b. Nobody signs a text with a real player's name, and the shape of
@@ -706,15 +709,15 @@ console.log('7) The NHL binding: messages actually arrive, are not always empty,
   }
   /* Same reasoning as section 4: everNonEmpty is a weak binary signal on its
      own, the strong signal is the DELIVERY RATE, measured rather than
-     assumed. nhlCareerInbox.ts sets wantPerSeason = 2 the same as the NFL. */
+     assumed. nhlCareerInbox.ts sets wantPerSeason, 3 since Round 822 the same as the NFL. */
   const seasonsRun = careersRun * 8;
   const deliveryRate = totalDelivered / seasonsRun;
-  console.log(`   ${careersRun} NHL careers, ${everNonEmpty} delivered at least one message, ${totalDelivered} messages total over ${seasonsRun} career-seasons (rate ${deliveryRate.toFixed(3)} against a wantPerSeason of 2), ${capViolations} cap violations, ${answeredOk} answers accepted, ${refusedOk} double answers correctly refused`);
+  console.log(`   ${careersRun} NHL careers, ${everNonEmpty} delivered at least one message, ${totalDelivered} messages total over ${seasonsRun} career-seasons (rate ${deliveryRate.toFixed(3)} against a wantPerSeason of ${nhlInbox.NHL_INBOX.wantPerSeason}), ${capViolations} cap violations, ${answeredOk} answers accepted, ${refusedOk} double answers correctly refused`);
   if (careersRun < 30) fail('fewer NHL careers completed than the loop should have run');
   if (everNonEmpty < careersRun * 0.8) fail(`only ${everNonEmpty} of ${careersRun} NHL careers ever showed a message, the binding may not actually be firing`);
   /* Same floor section 4 uses, for the same measured reason: well under
      every healthy run, well above a broken one. */
-  if (deliveryRate < 0.5) fail(`the NHL message delivery rate is ${deliveryRate.toFixed(3)} per career-season against a wantPerSeason of 2, well under what a healthy binding should show`);
+  if (deliveryRate < 0.5) fail(`the NHL message delivery rate is ${deliveryRate.toFixed(3)} per career-season against a wantPerSeason of ${nhlInbox.NHL_INBOX.wantPerSeason}, well under what a healthy binding should show`);
   if (answeredOk === 0) fail('not one NHL inbox answer was accepted across 30 careers');
 
   /* 5b. Nobody signs a text with a real player's name, and the shape of
