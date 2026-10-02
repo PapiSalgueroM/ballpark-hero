@@ -1,5 +1,14 @@
 # Project state
 
+## Codex 884/885 claimed, 2026-10-02
+
+Pulled bca2a0e8. Shared US career free agency will explain actual negotiated
+offer changes locally, with finite feedback and guarded focus. Footle search
+will reject hidden keyboard selection after Escape. Both need focused original
+reproduction, controls, type/build and offline native acceptance. No engine,
+real data, save, desktop or Supabase changes. Claude owns 875/876/883 and
+publication; paused drafts remain untouched. Next free 886.
+
 ## Codex882 accepted, Champ or Not readable feedback, 2026-10-02
 
 Next claim/View results replaces the forced 2.2s advance. Earned score appears
