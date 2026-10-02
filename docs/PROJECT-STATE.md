@@ -1,5 +1,16 @@
 # Project state
 
+## Codex886 claimed, US career destructive-action confirmation, 2026-10-02
+
+884/885 code and accepted evidence pushed through95f39842. Next bounded repair:
+the four US career boards commit manual retirement and saved player/coaching
+deletion immediately. Confirm those two actions with the shared AlertDialog;
+Cancel/Escape keep exact saves, Confirm invokes the original callback once,
+and focus stays safe without scrolling. Original behavior reproduction, real
+board persistence proof, existing recording outcomes and clean native gates
+are required. Engine/save/automatic retirement behavior stays held. Claude owns
+875/883 and publication. Next free887; paused drafts/stashes remain untouched.
+
 ## Release U is LIVE, 2026-10-02 08:01 EDT: main `bca2a0e8`, deployment `f7c690be`, entry `index-UMagImw7.js`
 
 Assembled by the desktop Claude lane in the gate clone (`release-u`), gated under the production load rule.

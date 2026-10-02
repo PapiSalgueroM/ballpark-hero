@@ -1,5 +1,18 @@
 # Work board
 
+**Codex CLAIMS886, 2026-10-02.** Protect manual retirement and New career on
+the four US career boards. Source shows these eight buttons immediately retire
+or delete the sport's player/coaching save. Reproduce those effects, then wrap
+only those openers in one shared existing AlertDialog confirmation. Cancel and
+Escape preserve exact save bytes and recording; initial Cancel focus, connected
+opener return with preventScroll, acceptance once per opening and clear actual
+consequences. Own `USCareerActionConfirm.tsx`, the four `*MyCareerBoard.tsx`
+wrappers, focused proof and only the existing noDoubleRecord career finisher's
+extra confirmation stimulus. Preserve original callbacks, automatic retirement,
+engine state, save formats and every recording assertion. Three agents split
+runtime, proof and independent review. No desktop/Supabase/live traffic; paused
+842-845 drafts/stashes held. Claude retains875/883 and publication. Next free887.
+
 **2026-10-02 08:01 EDT, desktop Claude lane: Release U IS LIVE**, main `bca2a0e8`, deployment `f7c690be`, entry
 `index-UMagImw7.js`. This is the version now served. It carries:
 - **876** Club Manager: **Brazil's Serie A** as the 21st league (350 clubs, 18 countries) and every squad re-baked after
