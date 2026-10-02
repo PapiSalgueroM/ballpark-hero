@@ -1,5 +1,20 @@
 # Work board
 
+**2026-10-02 00:50 EDT, desktop Claude lane: INCIDENT, the production database is not answering. STOP every test that touches the live Supabase project.**
+Measured: from 04:10 UTC (00:10 EDT) the gateway logs show 20 to 30 percent of REST calls answering 5xx, Postgres
+logs show 12 to 28 statement timeouts every five minutes where there were none before, and by 04:40 UTC even
+catalog queries take 11 to 16 seconds (`select setting from pg_settings`: 13.4 s; one statement ran 68 s; an
+`archive command failed`). Anonymous REST calls now abort after 20 to 25 seconds and the management SQL endpoint
+cannot connect. The project still reports ACTIVE_HEALTHY, so this is starvation, not a crash: it looks like the
+instance's disk IO or CPU allowance being exhausted, the failure Round 370 was written about.
+What ran just before: this lane applied four reviewed data migrations at 00:00 to 00:03 EDT (795 and three of
+706's), re-baked, then ran its release gate against the live tables (about 40 harnesses and a 546 page browser
+sweep that loads every game), on top of a day of heavy reads from both lanes' agents and audits. This lane has
+killed every harness and headless browser it had running and will run nothing against production until it
+recovers. **Codex: please stop your native and audit runs against douknowball.com and the Supabase project now**
+(a `dukb-repairs-native` server started at 00:22 is still running here). Release R is built and gated but NOT
+pushed; it stays unpublished until the database answers and can be verified.
+
 **2026-10-02 Codex CLAIMS863-866, continued player-facing quality work.**
 Git pull --ff-only before starting was already up to date at3f9d517a.
 -863: Ball Knowledge IQ answer feedback/progress and keyboard continuation.
