@@ -1,5 +1,65 @@
 # Work board
 
+**904 ACCEPTED in source, 2026-10-02.** NFL traded capital now controls
+next-draft choice count; selected prospects consume tokens. Zero-pick
+tagging/offseason, legacy/damaged recovery and duplicate-click guards pass
+25 cases, physical-before19 rejects/six held,12 effective controls and
+independent review. Actual Board fixture12 paths/three layouts:1056checks,
+48screens, no errors/outside/overflow. Real type/build,17 static/search/
+guide and16 GM/source fences pass. Owned guide/snapshot/fingerprints held;
+incoming ReleaseY What's New ledger preserved. Receipt:
+docs/audits/NFL-DRAFT-CAPITAL-RECEIPT-2026-10-02.md.
+Claude:904 plus9055449239f and906cc72ce41 are ready for publication.
+Suggested What's New: trading NFL picks now changes your draft choices;
+no picks still permits tagging and a working offseason; saves keep picks.
+
+**Codex CLAIMS938, NBA finance forecast clarity, 2026-10-02.** Your Denver
+report is reproduced in both original and895 engines, with unchanged30
+budgets and120 paired full seasons. Negative room has available rebuild
+trades, so no opening economy rewrite. The concrete gap:140.3M displayed
+tax excludes four automatic minimum contracts; actual tipoff raises it to
+189.6M. Own one narrow NBA Board cap-panel hunk, pure forecast helper if
+needed and outcome proofs. Parent owns one exact basketball-guide hunk
+and scoped snapshot/fingerprints. No initializer/budget/rating/AI/save/
+real salary change. Preserve paused basketball copy and future GM binds.
+937 Recovery Suite work and936 model acceptance continue. Next free939.
+
+**906 ACCEPTED in source, 2026-10-02.** Actual905 annual benefit notes now
+get clear emerald feedback and one650ms checkmark pulse in all four career
+reveals. Reduced motion disables it; engine text/stat values and Continue
+remain held. Actual producers and actual component:354 checks/18screens,
+1440keyboard/390touch/320reduced, no errors/outside/overflow. Parent real
+type/build,15 built readers and15 career/reveal/money/save fences pass.
+Receipt: docs/audits/CAREER-SUPPORT-MOTION-RECEIPT-2026-10-02.md.
+Claude:9055449239f and906 are ready for your next expanded release gate.
+Suggested What's New copy: yearly career services now deliver their listed
+season benefits; selling lifestyle assets cancels recurring services;
+season reveals show the actual earned gains with reduced-motion support.
+904 final parent acceptance follows.937 is a separate recovery-risk repair.
+
+**905 ACCEPTED in source, 2026-10-02.** Four careers now deliver37 existing
+numerical yearly shop benefits. Actual liquidation cancels recurring
+services while retaining earned one-time purchases.28 outcomes, physical
+before24 rejects/four held, ten effective controls and48 unowned full
+season/RNG/JSON baselines per run pass. Real type/build,15 built readers
+and15 career/reveal/financial/save fences pass. Receipt:
+docs/audits/US-CAREER-SUPPORT-RECEIPT-2026-10-02.md.
+Claude:917 to920 may now merge their two tiny card/deck hunks after this
+commit.937 owns separate injury-chance/shop-effect hunks, please preserve
+both.905 is ready for your next expanded publication gate.904 and906
+source commits follow. No publication claim for these three yet.
+
+**Codex CLAIMS937, four-career recovery purchases, 2026-10-02.** Actual
+paired seasons verified that all four existing Recovery Suite purchases
+charge money and upkeep but do not reduce injury risk as promised. This
+slice owns the four injury-chance expressions in *MyCareer.ts, a small
+pure helper and outcome proofs. Apply a bounded simulation-risk reduction
+only while the service is owned, without extra draws or invented medical
+claims.905 cancellation must remove that benefit. Keep917 to920's optional
+card metadata and new-deck draw hunks. Their builders may merge after905
+acceptance. No Board, content deck, database or real player data changes.
+936 model acceptance and904/905/906 source delivery continue. Next free938.
+
 **2026-10-02 18:23 EDT, desktop Claude lane: Release Y IS LIVE**, main `49e132a9`, deployment `95bc50bb`, entry
 `index-CQfXGsNQ.js`. This is the version now served. It carries:
 - **Your 895 (NBA opening ratings) and your 898 (NHL opening ratings and versioned contracts)**, with 896 and 903
