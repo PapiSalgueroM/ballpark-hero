@@ -1,0 +1,108 @@
+/**
+ * Round 900: the NFL's binding for the one US career board.
+ *
+ * Everything here was in NflMyCareerBoard.tsx before the four boards became
+ * one: the engine calls, and the words and numbers that are football's own.
+ * The board (src/components/us-career/UsCareerBoard.tsx) imports no sport, and
+ * this file is the only place the NFL route reaches the NFL engine from.
+ */
+import {
+  NFL_ERAS, ARCHETYPES, startCareer, simSeason, progress, drawEvent,
+  shouldRetire, legacyOf, careerTotals, rollTeamQuality, teamLabelOf,
+  NFL_SPEND_ITEMS, buyNflItem, getNflSpendItem, repairNetWorth,
+  buildNflFaWindow, nflFaPushArgs, buildNflExtension, nflExtPushArgs,
+  nflAssignRole, nflCampBattle,
+  type CareerPos, type CareerState, type SeasonLine,
+} from '@/lib/nflMyCareer';
+import { countOf, nflCareerSoFar, nflMajorAward, nflStatLine } from '@/lib/usCareerStatLine';
+import { nflHeatLabel } from '@/lib/nflCareerCorruption';
+import { NFL_MONEY, nflMoneyAct, nflMoneyWealth } from '@/lib/nflCareerMoney';
+import { nflEarnedBadges, nflFanComments, nflFollowers, nflHeadlinesFor } from '@/lib/nflCareerLoop';
+import { NFL_BADGES } from '@/lib/careerBadges';
+import { nflUnreadInboxCount, answerNflInboxMessage, nflDraftNightInbox, NFL_CALENDAR } from '@/lib/nflCareerInbox';
+import { dismissNflRivalryEvent, resolveNflRivalryChoice } from '@/lib/nflCareerRivalryEvents';
+import type { UsCareerSport } from '@/lib/usCareerSport';
+
+export const NFL_CAREER_SPORT: UsCareerSport<CareerState, SeasonLine> = {
+  slug: 'nfl',
+  label: 'NFL',
+  saveKey: 'nfl-my-career-save-v1',
+  gameSlug: 'nfl-my-career',
+  gameName: 'NFL My Career',
+  /* The NFL has 32 clubs, so round one is 32. */
+  firstRoundEnd: 32,
+  create: {
+    defaultName: 'Ryder Blaze',
+    defaultPos: 'QB',
+    /* Round 56: eight positions, each with its own stat line and money curve. */
+    positions: ['QB', 'RB', 'WR', 'TE', 'LB', 'CB', 'EDGE', 'K'],
+    positionGridClass: 'grid grid-cols-4 gap-1 rounded-2xl bg-secondary p-1',
+    positionButtonClass: 'rounded-xl px-2 py-1.5 text-sm font-bold transition-all',
+    eras: NFL_ERAS,
+    eraEmoji: '🏈',
+    clubColor: '#10B981',
+    archetypes: ARCHETYPES,
+  },
+
+  startCareer: (name, pos, arch, rng, appearance, eraId) =>
+    startCareer(name, pos as CareerPos, arch as CareerState['archetype'], rng, appearance, eraId as 'now' | 'y2005'),
+  rollTeamQuality,
+  assignRole: nflAssignRole,
+  campBattle: nflCampBattle,
+  simSeason,
+  progress,
+  drawEvent,
+  shouldRetire,
+  legacyOf,
+  teamLabelOf,
+  statLine: (s, pos) => nflStatLine(s, pos as CareerPos),
+  suspendedLine: c => ({
+    year: c.year, team: c.team, age: c.age, ovr: c.ovr, games: 0,
+    awards: [], teamResult: 'SUSPENDED', salary: 0,
+  }),
+  suspendedNote: '🚫 Season served on the suspended list. No football, no money, no going back.',
+
+  buildExtension: buildNflExtension,
+  extPushArgs: nflExtPushArgs,
+  buildFaWindow: buildNflFaWindow,
+  faPushArgs: nflFaPushArgs,
+  faSportNoun: 'franchise',
+  seasonWord: 'season',
+
+  money: NFL_MONEY,
+  moneyAct: nflMoneyAct,
+  moneyWealth: nflMoneyWealth,
+  shopItems: NFL_SPEND_ITEMS,
+  buyItem: buyNflItem,
+  repairNetWorth: c => repairNetWorth(c, id => getNflSpendItem(id)?.cost ?? 0),
+  heatLabel: nflHeatLabel,
+  heatTitle: 'League security',
+
+  headlinesFor: nflHeadlinesFor,
+  followers: nflFollowers,
+  fanComments: nflFanComments,
+  badges: NFL_BADGES,
+  earnedBadges: nflEarnedBadges,
+
+  /* Round 796: draft night's text lands before a down is played, drawn from
+     the inbox's own keyed stream (so no rng is handed in). */
+  draftNightInbox: c => nflDraftNightInbox(c),
+  unreadInboxCount: nflUnreadInboxCount,
+  answerInbox: answerNflInboxMessage,
+  calendar: NFL_CALENDAR,
+  dismissRivalryEvent: c => dismissNflRivalryEvent(c),
+  resolveRivalryChoice: resolveNflRivalryChoice,
+
+  ringsOf: c => c.rings,
+  ringWord: 'ring',
+  ringsLabel: 'rings',
+  honours: c => [{ label: nflMajorAward(c.pos).many, n: c.mvps }, { label: 'All-Pros', n: c.allPros }],
+  /* Round 182: the depth chart, on the shirt. */
+  roleBadge: c => (c.role === 'backup' ? '🪑 Backup' : '⭐ Starter'),
+  careerSoFar: c =>
+    `${countOf(c.rings, 'ring', 'rings')} · ${countOf(c.mvps, nflMajorAward(c.pos).one, nflMajorAward(c.pos).many)} · ${countOf(c.allPros, 'All-Pro', 'All-Pros')} · ${nflCareerSoFar(careerTotals(c), c.pos)}`,
+  hallLine: hof => (hof ? '🏛️ Hall of Fame' : 'No bust in Canton'),
+  shareText: (c, legacy) =>
+    `NFL My Career 🏈 ${c.name}: ${c.seasons.length} seasons, ${countOf(c.rings, 'ring', 'rings')}, ${countOf(c.mvps, nflMajorAward(c.pos).one, nflMajorAward(c.pos).many)}. Verdict: ${legacy.verdict}. Legacy ${legacy.score}. douknowball.com/nfl-my-career`,
+  retirementAvatar: true,
+};

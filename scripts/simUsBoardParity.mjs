@@ -27,11 +27,14 @@
  * replays or it does not.
  *
  * Controls, one per run (each is a full replay, about three minutes):
- *   US_BOARD_PARITY_CONTROL=label    one label changed in a copy of a board:
- *                                    the sports that file draws go red on the
- *                                    words, the others stay green
+ *   US_BOARD_PARITY_CONTROL=label    one label changed in a copy of the shared
+ *                                    board: all four sports go red on the words
  *   US_BOARD_PARITY_CONTROL=draw     one extra Math.random() before the camp
- *                                    battle: the same sports go red on the save
+ *                                    battle in the shared board: all four go
+ *                                    red on the save
+ *   US_BOARD_PARITY_CONTROL=binding  one word changed in a copy of the NHL
+ *                                    binding: the NHL goes red on the words and
+ *                                    the other three stay green
  *   US_BOARD_PARITY_CONTROL=fixture  one save hash changed in a copy of the
  *                                    fixture: that sport goes red (no source
  *                                    is touched, so this is the replay's own
@@ -62,23 +65,38 @@ process.on('exit', () => {
 });
 const read = f => fs.readFileSync(f, 'utf8').split('\r\n').join('\n');
 
-/* The source controls. `red` is which sports the changed file draws. */
+/* The source controls. Each changes one thing in a copy of one file and
+   points the replay at the copy. `red` is which sports that file draws: the
+   shared board draws every sport whose wrapper hands it a binding (read off
+   the four wrappers, so this stays true if a board ever leaves the shared
+   one), and a binding draws only its own. */
+const BOARD = 'src/components/us-career/UsCareerBoard.tsx';
+const wrapperOf = slug => `src/components/${slug}-my-career/${slug[0].toUpperCase()}${slug.slice(1)}MyCareerBoard.tsx`;
+const onSharedBoard = SPORTS.filter(slug => read(path.join(ROOT, wrapperOf(slug))).includes("from '@/components/us-career/UsCareerBoard'"));
 const SOURCE_CONTROLS = {
   label: {
-    file: 'src/components/nfl-my-career/NflMyCareerBoard.tsx',
-    alias: '@/components/nfl-my-career/NflMyCareerBoard',
+    file: BOARD,
+    alias: '@/components/us-career/UsCareerBoard',
     from: '>Create your player</p>',
     to: '>Create your athlete</p>',
-    red: ['nfl'],
+    red: onSharedBoard,
     says: 'the screen reads',
   },
   draw: {
-    file: 'src/components/nfl-my-career/NflMyCareerBoard.tsx',
-    alias: '@/components/nfl-my-career/NflMyCareerBoard',
-    from: '    const campNote = nflCampBattle(c, teamQuality, Math.random);\n',
-    to: '    Math.random();\n    const campNote = nflCampBattle(c, teamQuality, Math.random);\n',
-    red: ['nfl'],
+    file: BOARD,
+    alias: '@/components/us-career/UsCareerBoard',
+    from: 'const campNote = sport.campBattle(c, teamQuality, Math.random);',
+    to: 'Math.random(); const campNote = sport.campBattle(c, teamQuality, Math.random);',
+    red: onSharedBoard,
     says: 'the save differs',
+  },
+  binding: {
+    file: 'src/lib/nhlCareerSport.ts',
+    alias: '@/lib/nhlCareerSport',
+    from: "'⭐ Top of the lineup'",
+    to: "'⭐ Top line'",
+    red: ['nhl'],
+    says: 'the screen reads',
   },
 };
 
@@ -126,8 +144,9 @@ if (CONTROL) {
     says = 'mlb click path step 40';
   } else {
     const c = SOURCE_CONTROLS[CONTROL];
-    if (!c) { console.error(`unknown control "${CONTROL}": use label, draw or fixture`); process.exit(1); }
+    if (!c) { console.error(`unknown control "${CONTROL}": use label, draw, binding or fixture`); process.exit(1); }
     const src = read(path.join(ROOT, c.file));
+    if (!c.red.length) { console.error(`control ${CONTROL}: no sport is drawn by ${c.file}, so this control would prove nothing`); process.exit(1); }
     if (src.split(c.from).length !== 2) { console.error(`control ${CONTROL}: ${c.file} does not carry exactly one "${c.from.trim()}", so this control would change nothing and prove nothing`); process.exit(1); }
     const copy = path.join(ROOT, 'src/test', `__control_usBoard_${CONTROL}${path.extname(c.file)}`);
     litter.push(copy);

@@ -1,0 +1,228 @@
+/**
+ * Round 900: what a sport hands the one US career board.
+ *
+ * NflMyCareerBoard, NbaMyCareerBoard, MlbMyCareerBoard and NhlMyCareerBoard
+ * were four copies of one 1,090 line file, 83 percent identical. The board is
+ * now src/components/us-career/UsCareerBoard.tsx, and everything the four
+ * copies really differed in is a field here. A new screen is wired once, in
+ * the board; a new sport is one binding (nflCareerSport.ts and its three
+ * siblings), never an `if (sport.slug === ...)` inside the board.
+ *
+ * This file imports no sport. A route loads the board, this file and its own
+ * binding, and nothing of the other three.
+ *
+ * The save is untouched by any of this: the four keys, the shape
+ * { c, phase, teamQuality, coach } and the restore rule are exactly what
+ * they were, and scripts/simUsBoardParity.mjs replays a fixture recorded from
+ * the four old boards to hold that.
+ */
+import type { PlayerAppearance } from '@/lib/soccerCareerAppearance';
+import type { CareerRival } from '@/lib/careerRival';
+import type { InboxBeat, InboxMessage } from '@/lib/careerInbox';
+import type { RivalryEvent } from '@/lib/careerRivalryEvents';
+import type { RivalryChoiceCard } from '@/lib/careerRivalryChoices';
+import type { MoneyAction, MoneyOutcome, MoneySport } from '@/lib/careerMoney';
+import type { BadgeDef } from '@/lib/careerBadges';
+import type { FaPushArgs, FaWindow } from '@/lib/usCareerFreeAgency';
+import type { ExtPushArgs, ExtensionTalk } from '@/lib/usCareerExtension';
+import type { UsSport } from '@/lib/usCareerToCoach';
+
+/** The part of a season line every sport writes. Each sport adds its own stats. */
+export interface UsCareerSeason {
+  year: number;
+  team: string;
+  age: number;
+  ovr: number;
+  games: number;
+  awards: string[];
+  teamResult: string;
+  salary: number;
+}
+
+/** The part of a career every sport keeps, which is all the board reads by name. */
+export interface UsCareerCore {
+  name: string;
+  pos: string;
+  team: string;
+  year: number;
+  age: number;
+  ovr: number;
+  morale: number;
+  fanbase: number;
+  health: number;
+  salary: number;
+  contractYears: number;
+  seasons: UsCareerSeason[];
+  retired: boolean;
+  draftPick: number;
+  earnings: number;
+  netWorth?: number;
+  dirtyMoney?: number;
+  heat?: number;
+  suspendedSeasons?: number;
+  purchased?: string[];
+  appearance?: PlayerAppearance | null;
+  yearlyCosts?: number;
+  rival?: CareerRival;
+  eraId?: string;
+  role?: 'starter' | 'backup';
+  headlines?: string[];
+  phoneInbox?: InboxMessage[];
+  karma?: number;
+  pendingRivalryEvent?: RivalryEvent | null;
+  pendingRivalryChoice?: RivalryChoiceCard | null;
+}
+
+export interface UsCareerArchetype { id: string; label: string; desc: string }
+export interface UsCareerEra { id: string; label: string; blurb: string }
+export interface UsCareerLegacy { score: number; verdict: string; hof: boolean; bullets: string[] }
+
+/** One crossroads card. `apply` writes the choice onto the career and returns the feed line. */
+export interface UsCareerEvent<C> {
+  id: string;
+  title: string;
+  body: string;
+  options: { label: string; effect: string; apply: (c: C, rng: () => number) => string }[];
+}
+
+/** One thing in the shop. The seven aisles are the same in every sport. */
+export interface UsShopItem {
+  id: string;
+  name: string;
+  emoji: string;
+  category: string;
+  cost: number;
+  yearly?: number;
+  desc: string;
+  oneTime: boolean;
+  minNetWorth?: number;
+  minFanbase?: number;
+  requiresDirty?: boolean;
+  effect?: string;
+}
+
+/** What the create screen draws. */
+export interface UsCareerCreate {
+  /** The name a player who types nothing is given. */
+  defaultName: string;
+  defaultPos: string;
+  /** Every position, in the order the buttons are drawn. */
+  positions: string[];
+  /** The grid the position buttons sit in, and each button's own classes:
+   *  five positions fit a row that eight or eleven do not. */
+  positionGridClass: string;
+  positionButtonClass: string;
+  eras: UsCareerEra[];
+  /** The mark on the present day era button. The throwback is always the same. */
+  eraEmoji: string;
+  /** The colour behind the face on the create screen and on the hub. */
+  clubColor: string;
+  archetypes: Record<string, UsCareerArchetype[]>;
+}
+
+/**
+ * One sport's binding. C is the sport's own career state and L its season
+ * line; the board holds them as the core shapes above and hands them back to
+ * these functions untouched.
+ *
+ * Every function that takes an rng is given Math.random by the board, in the
+ * order the old boards drew: the fixture is seeded, and one draw added, dropped
+ * or moved turns the replay red.
+ */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export interface UsCareerSport<C extends UsCareerCore = any, L extends UsCareerSeason = any> {
+  /** 'nfl', which is also the id the coach career runs on. */
+  slug: UsSport;
+  /** 'NFL', as the two confirmations print it. */
+  label: 'NFL' | 'NBA' | 'MLB' | 'NHL';
+  /** The localStorage key, verbatim: `{slug}-my-career-save-v1`. */
+  saveKey: string;
+  /** 'nfl-my-career': the completion slug, and the route with a slash in front. */
+  gameSlug: string;
+  /** 'NFL My Career', for the share button. */
+  gameName: string;
+  /** How long round one of this sport's draft is. */
+  firstRoundEnd: number;
+  create: UsCareerCreate;
+
+  /* The engine. */
+  startCareer(name: string, pos: string, arch: UsCareerArchetype, rng: () => number, appearance: PlayerAppearance, eraId: string): C;
+  rollTeamQuality(prev: number | null, rng: () => number): number;
+  assignRole(c: C, teamQuality: number, rng: () => number): string;
+  campBattle(c: C, teamQuality: number, rng: () => number): string | null;
+  simSeason(c: C, teamQuality: number, rng: () => number): { line: L; notes: string[] };
+  progress(c: C, rng: () => number): string[];
+  drawEvent(c: C, rng: () => number): UsCareerEvent<C>;
+  shouldRetire(c: C): boolean;
+  legacyOf(c: C): UsCareerLegacy;
+  teamLabelOf(abbr: string, eraId?: string): string;
+  statLine(s: L, pos: string): string;
+  /** The season line a banned year writes. Its keys and their order are on
+   *  the save, so each sport builds its own. */
+  suspendedLine(c: C): L;
+  /** The feed line a banned year opens with. */
+  suspendedNote: string;
+
+  /* Contracts. */
+  buildExtension(c: C, rng: () => number): ExtensionTalk;
+  extPushArgs(c: C, rng: () => number): ExtPushArgs;
+  buildFaWindow(c: C, incumbentQuality: number, rng: () => number): FaWindow;
+  faPushArgs(c: C, rng: () => number): FaPushArgs;
+  /** "franchise", "club" or "team": what the market calls who is bidding. */
+  faSportNoun: string;
+  /** What the extension card calls a year of play. */
+  seasonWord: string;
+
+  /* Money and the shop. */
+  money: MoneySport<C>;
+  moneyAct(c: C, action: MoneyAction): MoneyOutcome;
+  moneyWealth(c: C): number;
+  shopItems: UsShopItem[];
+  buyItem(c: C, itemId: string): { state: C; log: string } | null;
+  /** Round 422's repair on load: rebuild a balance the old upkeep bug drove
+   *  below zero. Each sport has its own (its own take home rate and its own
+   *  price list). A healthy save comes back untouched. */
+  repairNetWorth(c: C): C;
+  heatLabel(h: number): { label: string; tone: string; blurb: string };
+  /** Who is watching, above the heat meter. */
+  heatTitle: string;
+
+  /* The paper, the gram, the badges. */
+  headlinesFor(c: C, line: L): string[];
+  followers(c: C): number;
+  fanComments(c: C): string[];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  badges: BadgeDef<any>[];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  earnedBadges(c: C): BadgeDef<any>[];
+
+  /* The inbox and the rival. */
+  draftNightInbox(c: C): unknown;
+  unreadInboxCount(c: C): number;
+  answerInbox(c: C, msgId: string, choiceIdx: number): string | null;
+  calendar: InboxBeat[];
+  dismissRivalryEvent(c: C): { state: C; lines: string[] };
+  resolveRivalryChoice(c: C, choiceIdx: number, rng: () => number): { state: C; line: string } | null;
+
+  /* The words and numbers the four boards really differed in. */
+  /** Championships won: rings in three sports, Cups in the NHL. */
+  ringsOf(c: C): number;
+  /** "ring" or "Cup", for the trophy case, the rival card and the hub. */
+  ringWord: string;
+  /** The label under that count on the My Player screen: "rings" or "Cups". */
+  ringsLabel: string;
+  /** The honours the Trophy Case box counts. */
+  honours(c: C): { label: string; n: number }[];
+  /** The depth chart badge on the hub: "⭐ Starter", "🪑 Second unit". */
+  roleBadge(c: C): string;
+  /** Everything after "Career so far: " under the Play button. */
+  careerSoFar(c: C): string;
+  /** The second pill on the retirement card, for a Hall of Famer and for everyone else. */
+  hallLine(hof: boolean): string;
+  /** The share button's text on the retirement card. */
+  shareText(c: C, legacy: UsCareerLegacy): string;
+  /** Whether the retirement card draws the player's face. Only the NFL board
+   *  ever did, so only the NFL binding says yes (Round 900 moved the boards
+   *  and changed nothing a player sees). */
+  retirementAvatar: boolean;
+}
