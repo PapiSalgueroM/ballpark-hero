@@ -22,11 +22,13 @@
    frame one (Round 147). Reduced motion lands on the final frame through
    CelebrationStyles. */
 
+import { useLayoutEffect, useRef, useState } from 'react';
 import { Handshake, TrendingUp } from 'lucide-react';
 import { CelebrationStyles, revealDelay } from '@/components/club-manager/Celebration';
 import { FA_TIER_WORD, faTotalValue } from '@/lib/usCareerFreeAgency';
-import type { FaWindow } from '@/lib/usCareerFreeAgency';
+import type { FaOffer, FaWindow } from '@/lib/usCareerFreeAgency';
 import { cn } from '@/lib/utils';
+import motion from './FreeAgencyFeedback.module.css';
 
 interface Props {
   window: FaWindow;
@@ -38,7 +40,54 @@ interface Props {
   onSign: (index: number) => void;
 }
 
+interface PushIntent {
+  index: number;
+  offer: FaOffer;
+  window: FaWindow;
+  opener: HTMLButtonElement;
+}
+
 export default function FreeAgencyPanel({ window: w, sportNoun, talkLine, onPush, onSign }: Props) {
+  const [intent, setIntent] = useState<PushIntent | null>(null);
+  const focusRequest = useRef<PushIntent | null>(null);
+  const receipt = useRef<HTMLParagraphElement>(null);
+  const settled = intent && w !== intent.window ? w.offers[intent.index] : null;
+  const accepted = intent && settled?.team === intent.offer.team && settled.pushed;
+  const annualChange = accepted ? Math.round((settled.salary - intent.offer.salary) * 10) / 10 : 0;
+  const yearsChange = accepted ? settled.years - intent.offer.years : 0;
+  const totalChange = accepted ? Math.round((faTotalValue(settled) - faTotalValue(intent.offer)) * 10) / 10 : 0;
+  const outcome = accepted ? settled.gone ? 'withdrawn' : annualChange || yearsChange ? 'raised' : 'held' : null;
+  const changes = [
+    annualChange ? `${annualChange > 0 ? '+' : '-'}$${Math.abs(annualChange)}M a year` : null,
+    yearsChange ? `${yearsChange > 0 ? '+' : ''}${yearsChange} year${Math.abs(yearsChange) === 1 ? '' : 's'}` : null,
+    totalChange ? `${totalChange > 0 ? '+' : '-'}$${Math.abs(totalChange)}M total` : null,
+  ].filter(Boolean);
+  const resultLine = outcome === 'withdrawn' ? 'Offer withdrawn. Choose another deal.'
+    : outcome === 'held' ? 'Offer held. The terms did not change.'
+    : `Offer updated: ${changes.join(', ')}.`;
+
+  useLayoutEffect(() => {
+    if (!intent) return;
+    if (!outcome) {
+      focusRequest.current = null;
+      setIntent(null);
+      return;
+    }
+    if (focusRequest.current !== intent) return;
+    focusRequest.current = null;
+    const active = document.activeElement;
+    if (active === intent.opener || active === document.body || !active?.isConnected) receipt.current?.focus({ preventScroll: true });
+  }, [intent, outcome]);
+
+  const push = (index: number, opener: HTMLButtonElement) => {
+    const offer = w.offers[index];
+    if (!offer || offer.pushed || offer.gone) return;
+    const request = { index, offer: { ...offer }, window: w, opener };
+    focusRequest.current = request;
+    setIntent(request);
+    onPush(index);
+  };
+
   return (
     /* data-fa-window scopes the browser harness to this screen, because the
        sitewide ticker above it also talks about teams and signings. */
@@ -68,7 +117,10 @@ export default function FreeAgencyPanel({ window: w, sportNoun, talkLine, onPush
               className={cn(
                 'rounded-2xl border p-3',
                 o.gone ? 'border-border bg-card opacity-45' : o.incumbent ? 'border-gold/50 bg-card' : 'border-border bg-card',
+                intent?.index === i && outcome && motion.offer,
               )}
+              data-fa-offer={i}
+              data-fa-feedback={intent?.index === i && outcome ? outcome : undefined}
             >
               <div className="flex items-center justify-between gap-2">
                 <p className="min-w-0 truncate text-sm font-black text-foreground">
@@ -83,19 +135,25 @@ export default function FreeAgencyPanel({ window: w, sportNoun, talkLine, onPush
                 <span>Roster {o.quality}</span>
               </div>
               <p className="mt-1 text-[11px] italic text-muted-foreground">{o.gone ? 'Offer withdrawn.' : `"${o.pitch}"`}</p>
+              {intent?.index === i && outcome && (
+                <p ref={receipt} role="status" tabIndex={-1} data-fa-result={outcome}
+                  className={cn('mt-2 rounded-lg bg-secondary px-2.5 py-2 text-xs font-semibold text-foreground focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary', motion.receipt)}>
+                  {resultLine}
+                </p>
+              )}
               {!o.gone && (
                 <div className="mt-2 grid grid-cols-2 gap-1.5">
                   <button
                     onClick={() => onSign(i)}
-                    className="flex items-center justify-center gap-1 rounded-xl bg-primary px-3 py-2 text-xs font-bold text-primary-foreground hover:opacity-90"
+                    className="flex min-h-[44px] items-center justify-center gap-1 rounded-xl bg-primary px-3 py-2 text-xs font-bold text-primary-foreground hover:opacity-90"
                   >
                     <Handshake className="h-3.5 w-3.5" /> Sign
                   </button>
                   <button
-                    onClick={() => onPush(i)}
+                    onClick={event => push(i, event.currentTarget)}
                     disabled={o.pushed}
                     className={cn(
-                      'flex items-center justify-center gap-1 rounded-xl border px-3 py-2 text-xs font-bold',
+                      'flex min-h-[44px] items-center justify-center gap-1 rounded-xl border px-3 py-2 text-xs font-bold',
                       o.pushed
                         ? 'cursor-not-allowed border-border text-muted-foreground opacity-50'
                         : 'border-gold/50 text-gold hover:bg-gold/10',

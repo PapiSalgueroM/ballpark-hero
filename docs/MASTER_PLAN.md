@@ -142,7 +142,7 @@ Data notes (session 3): baseball_connections_puzzles now 188 rows, all live-serv
 73. [PENDING] College Grid: more categories and rarities to match the NFL grid depth.
 74. [DONE] Guess the College: cbb_programs expanded 132 to 186 with SQL-verified clues (2026-07-02). WARNING discovered during this work: ncaa_tournament_games is unusable (mislabeled 1940s voting data plus header rows stored as rows) and ncaa_basketball_champions is 53 percent false positives including fabricated champions (Columbia 1951, Vermont 1992). Any future NCAA-based game or grid (item 73 especially) must build strict junk filters or clean these tables first. cbb_awards is clean. Also: the Fable 5 monthly cap blocks default agents; pass model "sonnet" to the Agent tool and the factory keeps running.
 75. [STAGED] Guess CBB Team: top nav added; [PENDING] verify programs actually load once the client fix ships (empty-load bug was almost certainly the fetch failure).
-76. [PENDING] Footle: verify daily and unlimited work post-fix, then improve keyboard and feedback.
+76. [PENDING] Footle: verify daily and unlimited work post-fix, then improve keyboard and feedback. Round 885 repairs hidden Escape then Enter submission, arrow reopening and visible-option announcements. Focused and native component checks pass; this does not mark the full daily/unlimited item complete. Current evidence is in docs/audits/FREE-AGENCY-AND-SEARCH-REPAIR-RECEIPT-2026-10-02.md.
 77. [PENDING] Connections: verify post-fix, then load more puzzle batches (250 exist, target 1000+; puzzles are hand-curated so budget time).
 78. [PENDING] Career Quiz: verify post-fix, add difficulty tiers.
 79. [PENDING] Guess the Club: verify load post-fix, then text-only clue variant (no crests ever).

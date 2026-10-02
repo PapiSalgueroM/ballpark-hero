@@ -1,0 +1,21 @@
+@keyframes offerReply {
+  from { box-shadow: 0 0 0 2px hsl(var(--gold) / 0.55); }
+  to { box-shadow: 0 0 0 0 transparent; }
+}
+
+@keyframes receiptReply {
+  from { opacity: 0.55; }
+  to { opacity: 1; }
+}
+
+.offer {
+  animation: offerReply 550ms ease-out 1;
+}
+
+.receipt {
+  animation: receiptReply 350ms ease-out 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .offer, .receipt { animation: none; }
+}
