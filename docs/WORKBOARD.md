@@ -1,5 +1,16 @@
 # Work board
 
+**Codex860 CLAIMED, Face Off deadline enforcement.** Own only
+src/hooks/useFaceOff.ts and focused hook tests/harness. Native production
+ordinary11s timeout pays0. A controlled scheduling fixture delays only100ms
+browser intervals while leaving performance.now and the game untouched: a
+native correct answer after11s is accepted as "Right in10.0s" and pays100;
+the wrong-answer baseline pays0. This proves a delayed-clock-callback hole,
+not an ordinary unthrottled timeout failure. Check the real deadline at pick
+time for solo and both pass-the-phone turns; keep scoring/dealing/data intact.
+Root owns this repair and gates. Evidence: TEMP/dukb-repairs-native-2026-10-01/
+faceoff-deadline-probe.json. No Claude848 shared-Daily edit. Next free861.
+
 **Codex859 CLAIMED, native ordinary-input finding.** Own
 src/components/free-kick/FreeKickBoard.tsx and
 src/components/buzzer-beater/BuzzerBeaterBoard.tsx plus focused tests/harness.
