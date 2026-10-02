@@ -5,7 +5,7 @@ import { GameNavbar } from '@/components/game/GameNavbar';
 
 export default function GuessTennisPlayer() {
   return (
-    <>
+    <main id="dukb-main" tabIndex={-1}>
       <PageSeo
         title="Guess the Tennis Player - ATP and WTA Trivia | DoUKnowBall"
         description="Identify the mystery tennis player from career clues. ATP and WTA legends from 1970 to 2025. Daily puzzle."
@@ -31,6 +31,6 @@ export default function GuessTennisPlayer() {
           "Billie Jean King: USA, 12 Slams, Battle of the Sexes pioneer"
         ]}
       />
-    </>
+    </main>
   );
 }

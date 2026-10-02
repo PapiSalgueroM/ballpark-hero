@@ -13,7 +13,7 @@ const BuzzerBeater = () => (
     />
     <div className="min-h-screen bg-background">
       <GameNavbar />
-      <main className="mx-auto max-w-2xl px-4 pb-16 pt-6">
+      <main id="dukb-main" tabIndex={-1} className="mx-auto max-w-2xl px-4 pb-16 pt-6">
         <header className="mb-4 text-center">
           <div className="flex items-center justify-center gap-2">
             <h1 className="font-display text-3xl font-black text-foreground">Buzzer Beater</h1>

@@ -2,6 +2,7 @@ import { useState, useMemo, useCallback, useEffect, useRef } from 'react';
 import { nbaHLPlayers, NbaHLPlayer } from '@/data/nbaHLPlayers';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { higherLowerScore } from '@/lib/higherLowerScore';
+import { isHigherLowerDailyLog } from '@/lib/dailySaveShapes';
 import { useDailyPuzzle } from '@/hooks/useDailyPuzzle';
 import { dateSeed } from '@/lib/dateUtils';
 
@@ -71,6 +72,7 @@ export function useNbaHL() {
   const {
     guesses: dailyActions,
     addGuess: addDailyAction,
+    takeNewerSave: takeNewerDailySave,
     gameStatus: rawDailyStatus,
     isLoading,
     todayStr,
@@ -81,6 +83,7 @@ export function useNbaHL() {
     maxGuesses: ROUNDS,
     isWon: (g) => g.length >= ROUNDS,
     deserializeGuesses: (raw) => raw as HLAction[],
+    isValidGuesses: isHigherLowerDailyLog,
   });
 
   const dailyPairs = useMemo(() => buildPairs(dateSeed(todayStr)), [todayStr]);
@@ -154,6 +157,8 @@ export function useNbaHL() {
   const makeGuess = useCallback(
     (choice: 'left' | 'right') => {
       if (!currentPair || showingResult || gameStatus !== 'playing') return;
+      // Round 848 review: another tab already decided this round; jump to it, no verdict.
+      if (mode === 'daily' && takeNewerDailySave()) return;
       const [p1, p2] = currentPair;
       // Ties count as correct either way, HL pools contain exact-equal stat
       // values, and the old `>=` logic silently marked the right-side pick
@@ -180,7 +185,7 @@ export function useNbaHL() {
         setShowingResult(false);
       }, 2000);
     },
-    [currentPair, showingResult, gameStatus, mode, addDailyAction, cancelReveal],
+    [currentPair, showingResult, gameStatus, mode, addDailyAction, takeNewerDailySave, cancelReveal],
   );
 
   const switchMode = useCallback((m: NbaHLMode) => {

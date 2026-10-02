@@ -6,7 +6,7 @@ import { QuizBoard } from '@/components/quiz-board/QuizBoard';
 
 export default function QuizBoardPage() {
   return (
-    <>
+    <main id="dukb-main" tabIndex={-1}>
       <PageSeo
         title="Sports Quiz Board - Daily Trivia Game | DoUKnowBall"
         description="A fresh five-category sports quiz board every day. Pick your value, answer the clue, and don't get greedy, wrong answers cost you."
@@ -33,6 +33,6 @@ export default function QuizBoardPage() {
           '$1000, the ones your dad would get and you wouldn\'t',
         ]}
       />
-    </>
+    </main>
   );
 }

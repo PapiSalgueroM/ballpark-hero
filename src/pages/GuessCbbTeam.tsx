@@ -5,7 +5,7 @@ import { CbbProgramBoard } from '@/components/cbb-program/CbbProgramBoard';
 
 export default function GuessCbbTeam() {
   return (
-    <>
+    <main id="dukb-main" tabIndex={-1}>
       <PageSeo
         title="Guess the College Basketball Program - CBB Trivia | DoUKnowBall"
         description="Identify the mystery college basketball program from progressive clues. Daily CBB trivia challenge."
@@ -31,6 +31,6 @@ export default function GuessCbbTeam() {
           "Gonzaga Bulldogs: WCC, Perennial March Madness contender"
         ]}
       />
-    </>
+    </main>
   );
 }

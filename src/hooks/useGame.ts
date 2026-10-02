@@ -5,6 +5,7 @@ import { compareGuess } from '@/lib/gameLogic';
 import { ensureAnswerInList } from '@/lib/ensureAnswerInOptions';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { useDailyPuzzle } from '@/hooks/useDailyPuzzle';
+import { isFootleLog } from '@/lib/dailySaveShapes';
 import { getTodayET, getDailyTier, dailyIndex } from '@/lib/dateUtils';
 import { fetchFootlePlayerPool } from '@/lib/fetchFootlePlayerPool';
 
@@ -133,6 +134,7 @@ export function useGame() {
     isWon: (g) => g.length > 0 && g[g.length - 1].isCorrect,
     // Guesses are plain objects, safe to cast after JSON.parse
     deserializeGuesses: (raw) => raw as GuessResult[],
+    isValidGuesses: (g) => isFootleLog(g, MAX_GUESSES),
   });
 
   // Forfeit overrides the hook's status to 'lost' without needing useDailyPuzzle

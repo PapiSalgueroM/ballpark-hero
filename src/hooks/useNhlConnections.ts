@@ -2,6 +2,7 @@ import { useState, useMemo, useCallback, useEffect, useRef } from 'react';
 import { nhlConnectionsPuzzles } from '@/data/nhlConnectionsPuzzles';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { useDailyPuzzle } from '@/hooks/useDailyPuzzle';
+import { isSportConnectionsLog } from '@/lib/dailySaveShapes';
 import { fetchNhlConnectionsPuzzles } from '@/lib/fetchNhlConnectionsPuzzles';
 import { dailyIndex, getTodayET } from '@/lib/dateUtils';
 
@@ -85,6 +86,7 @@ export function useNhlConnections() {
     isWon: (g, puzzle) => g.filter(a => a.t === 'ok').length >= puzzle.groups.length,
     isLost: (g) => 4 - g.filter(a => a.t === 'x').length <= 0,
     deserializeGuesses: (raw) => raw as NhlConnAction[],
+    isValidGuesses: isSportConnectionsLog,
   });
 
   // Derived daily state

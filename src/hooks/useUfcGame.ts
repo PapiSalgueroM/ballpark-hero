@@ -6,6 +6,7 @@ import { compareUfcGuess } from '@/lib/ufcGameLogic';
 import { ensureAnswerInList } from '@/lib/ensureAnswerInOptions';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { useDailyPuzzle } from '@/hooks/useDailyPuzzle';
+import { isUfcLog } from '@/lib/dailySaveShapes';
 import { getTodayET } from '@/lib/dateUtils';
 
 const MAX_GUESSES = 8;
@@ -45,6 +46,7 @@ export function useUfcGame() {
     maxGuesses: MAX_GUESSES,
     isWon: (g) => g.length > 0 && g[g.length - 1].isCorrect,
     deserializeGuesses: (raw) => raw as UfcGuessResult[],
+    isValidGuesses: (g) => isUfcLog(g, MAX_GUESSES),
   });
 
   const effectiveDailyStatus: 'playing' | 'won' | 'lost' = forfeited ? 'lost' : rawDailyStatus;
