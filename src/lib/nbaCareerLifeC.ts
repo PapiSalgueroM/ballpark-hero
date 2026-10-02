@@ -642,7 +642,11 @@ export const NBA_LIFE_C: NbaLifeCDef[] = [
        The card promises a place on the ballot, never the award: the award is
        still decided by the season, in careerAwards.ts. */
     id: 'nbaC_rule_award_games', category: 'rules', cooldown: 3, story: 'awardGames',
-    when: c => isModern(c) && c.ovr >= 85 && c.health < 85 && yrsOf(c) >= 2,
+    when: c => {
+      const last = c.seasons[c.seasons.length - 1];
+      const missedTime = c.health < 88 || (!!last && last.games > 0 && last.games < 72);
+      return isModern(c) && yrsOf(c) >= 2 && c.ovr >= 80 && missedTime;
+    },
     title: 'Close to the games line',
     body: 'You have missed a lot of time with a sore knee, and the big awards now ask for a minimum number of games played. You are close to the line. The knee would like two more weeks. The calendar does not have two more weeks.',
     options: [
@@ -673,7 +677,7 @@ export const NBA_LIFE_C: NbaLifeCDef[] = [
   },
   {
     id: 'nbaC_rule_summer_league_return', category: 'rules', cooldown: 99, story: 'summerLeague',
-    when: c => yrsOf(c) >= 2 && yrsOf(c) <= 3 && c.ovr <= 78,
+    when: c => yrsOf(c) >= 2 && yrsOf(c) <= 3 && c.ovr <= 80,
     title: 'They want you back in summer league',
     body: 'Summer league is for rookies and for guys trying to make a roster. You are neither, and the team would still like you to play in it: more reps, the ball in your hands, a new assistant to impress. Some people will read it as a message.',
     options: [
