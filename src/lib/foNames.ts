@@ -23,12 +23,14 @@
 
 /** Every name currently in a league: real players, generated men, the lot. */
 export function leagueNames(league: {
-  teams: Record<string, { players: { name: string }[] }>;
+  teams: Record<string, { players: { name: string }[]; practice?: { name: string }[] }>;
   freeAgents: { name: string }[];
 }): Set<string> {
   const out = new Set<string>();
   for (const t of Object.values(league.teams ?? {})) {
     for (const p of t.players ?? []) out.add(p.name);
+    /* Round 828: the NFL practice squad is real men in the same league. */
+    for (const p of t.practice ?? []) out.add(p.name);
   }
   for (const p of league.freeAgents ?? []) out.add(p.name);
   return out;

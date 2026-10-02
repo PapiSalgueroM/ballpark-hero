@@ -16,7 +16,13 @@
    ever called inside function bodies. Never hoist it into a constant.
    ========================================================================== */
 import type { MlbCareerState, MlbCareerEvent } from './mlbMyCareer';
-import { mlbTeamLabelOf, mlbEraTeamIds } from './mlbMyCareer';
+import { mlbTeamLabelOf, mlbEraTeamIds, mlbEraById, mlbMarketSalary } from './mlbMyCareer';
+
+/** Round 833: the career year from which the qualifying offer card can be
+ *  drawn: the offseason after the 2012 season, when the system began
+ *  (sources at the card below). The deck is drawn after progress, so the
+ *  year is already the next season's. */
+export const MLB_QO_FIRST_YEAR = 2013;
 
 /* Round 58 money and flag fields ride on the save object. Old saves predate
    them and the engine interface has not caught up yet, so every read goes
@@ -59,8 +65,15 @@ const otherClub = (c: MlbCareerState, r: () => number): string => {
   return pool[Math.floor(r() * pool.length)];
 };
 
-/** Same shape as the engine market curve, duplicated so no value is imported. */
-const marketOf = (c: MlbCareerState): number => Math.max(1, money((c.ovr - 64) * 1.5 - 6));
+/* Round 833: the engine's own market curve, the one free agency pays, rather
+   than a copy of it. The copy had neither the era's money nor the position's
+   pay, so a 2004 career's hometown discount and market offers came in 2026
+   money and a reliever was quoted a bat's market. Called inside function
+   bodies only, like every other value this file imports (import cycle). */
+const marketOf = (c: MlbCareerState): number => mlbMarketSalary(c);
+/** A fixed amount on a contract card (a pay floor, a gate), in the career's
+ *  era money. Scale 1 in 2026, so a 2026 career reads the same numbers. */
+const atEra = (c: MlbCareerState, amount: number): number => money(mlbEraById(c.eraId).moneyScale * amount);
 
 export function getMlbLifeEventsB(c: MlbCareerState, rng: () => number): MlbCareerEvent[] {
   const deck: MlbCareerEvent[] = [];
@@ -1329,9 +1342,22 @@ export function getMlbLifeEventsB(c: MlbCareerState, rng: () => number): MlbCare
 
   /* ========== 7. CONTRACT AND CAREER FORKS ========== */
 
-  if (c.contractYears <= 0 && c.ovr >= 78 && yrs >= 6 && flag(c, 'b_qo') === 0) {
-    const qo = money(21 + Math.max(0, c.year - 2026) * 0.4);
-    const mkt = marketOf(c);
+  /* Round 833: the qualifying offer did not exist before the 2012 labor deal,
+     which replaced the old Type A and Type B free agent compensation. Fox News
+     (AP), "Qualifying offer price for major league free agents set at $13.3
+     million" (October 24, 2012): the system began with that contract, first
+     price $13.3M. CBS News (AP), "Qualifying Offer For MLB Free Agents Rises
+     To $15.3M" (October 7, 2014): up from $13.3 million "after the 2012
+     season, the first of the new system". So a 2004 throwback career meets it
+     from the offseason after the 2012 season on (the deck is drawn once
+     progress has moved the year to 2013), never before, and every amount on
+     the card is that era's money, the scale mlbMarketSalary already uses (the
+     market side IS mlbMarketSalary, so it is scaled once, there). A 2026
+     career's offer is unchanged: its year is past the gate and its scale is 1. */
+  if (c.year >= MLB_QO_FIRST_YEAR && c.contractYears <= 0 && c.ovr >= 78 && yrs >= 6 && flag(c, 'b_qo') === 0) {
+    const scale = mlbEraById(c.eraId).moneyScale;
+    const qo = money((21 + Math.max(0, c.year - 2026) * 0.4) * scale);
+    const mkt = money(marketOf(c));
     deck.push({
       id: 'mlbB_qualifyingOffer',
       title: `The qualifying offer is ${qo}M`,
@@ -1352,7 +1378,7 @@ export function getMlbLifeEventsB(c: MlbCareerState, rng: () => number): MlbCare
               const nt = otherClub(cc, r); cc.team = nt; cc.salary = money(mkt * 1.15); cc.contractYears = 4; cc.fanbase = 40; bumpMorale(cc, 10);
               return `Four years and ${money(cc.salary)}M a year from the ${mlbTeamLabelOf(nt)}. Fanbase reset to 40, morale +10.`;
             }
-            cc.salary = money(Math.max(2, mkt * 0.8)); cc.contractYears = 2; bumpMorale(cc, -8); bumpFan(cc, -4);
+            cc.salary = money(Math.max(atEra(cc, 2), mkt * 0.8)); cc.contractYears = 2; bumpMorale(cc, -8); bumpFan(cc, -4);
             return `The draft pick scared everybody off until February. Two years at ${money(cc.salary)}M, morale -8, fanbase -4.`;
           },
         },
@@ -1367,7 +1393,7 @@ export function getMlbLifeEventsB(c: MlbCareerState, rng: () => number): MlbCare
     });
   }
 
-  if (c.contractYears >= 2 && c.salary >= 12 && c.ovr >= 82 && flag(c, 'b_optOut') === 0) {
+  if (c.contractYears >= 2 && c.salary >= atEra(c, 12) && c.ovr >= 82 && flag(c, 'b_optOut') === 0) {
     const guaranteed = money(c.salary * c.contractYears);
     deck.push({
       id: 'mlbB_optOutClause',
@@ -1443,8 +1469,8 @@ export function getMlbLifeEventsB(c: MlbCareerState, rng: () => number): MlbCare
 
   if (c.contractYears <= 0 && yrs >= 5 && flag(c, 'b_homeDisc') === 0) {
     const mkt2 = marketOf(c);
-    const home = money(Math.max(1.5, mkt2 * 0.75));
-    const away = money(Math.max(2, mkt2 * 1.2));
+    const home = money(Math.max(atEra(c, 1.5), mkt2 * 0.75));
+    const away = money(Math.max(atEra(c, 2), mkt2 * 1.2));
     deck.push({
       id: 'mlbB_hometownDiscount',
       title: 'Less money to stay put',
@@ -1508,7 +1534,7 @@ export function getMlbLifeEventsB(c: MlbCareerState, rng: () => number): MlbCare
   }
 
   if (c.age >= 33 && yrs >= 8 && flag(c, 'b_asia') === 0) {
-    const jpn = money(Math.max(4, c.salary * 1.5));
+    const jpn = money(Math.max(atEra(c, 4), c.salary * 1.5));
     deck.push({
       id: 'mlbB_japanOffer',
       title: `Japan is offering ${jpn}M a year`,
@@ -1525,7 +1551,7 @@ export function getMlbLifeEventsB(c: MlbCareerState, rng: () => number): MlbCare
         {
           label: 'Stay here in a smaller role', effect: 'Home, less money',
           apply: (cc) => {
-            setFlag(cc, 'b_asia', 2); cc.salary = money(Math.max(1.2, cc.salary * 0.5)); cc.contractYears = 1; bumpMorale(cc, -4); bumpFan(cc, 6);
+            setFlag(cc, 'b_asia', 2); cc.salary = money(Math.max(atEra(cc, 1.2), cc.salary * 0.5)); cc.contractYears = 1; bumpMorale(cc, -4); bumpFan(cc, 6);
             return `One year at ${money(cc.salary)}M for a bench job in a league you refuse to leave. Fanbase +6, morale -4.`;
           },
         },
@@ -1533,8 +1559,8 @@ export function getMlbLifeEventsB(c: MlbCareerState, rng: () => number): MlbCare
           label: 'Use the offer as leverage here', effect: 'Bluff with a real hand',
           apply: (cc, r) => {
             setFlag(cc, 'b_asia', 3);
-            if (r() < 0.5) { cc.salary = money(Math.max(2, cc.salary * 1.25)); cc.contractYears = 2; bumpMorale(cc, 8); bumpFan(cc, 6); return `Somebody blinked. Two years at ${money(cc.salary)}M without leaving the country. Morale +8, fanbase +6.`; }
-            cc.salary = money(Math.max(1.2, cc.salary * 0.85)); cc.contractYears = 1; bumpMorale(cc, -6);
+            if (r() < 0.5) { cc.salary = money(Math.max(atEra(cc, 2), cc.salary * 1.25)); cc.contractYears = 2; bumpMorale(cc, 8); bumpFan(cc, 6); return `Somebody blinked. Two years at ${money(cc.salary)}M without leaving the country. Morale +8, fanbase +6.`; }
+            cc.salary = money(Math.max(atEra(cc, 1.2), cc.salary * 0.85)); cc.contractYears = 1; bumpMorale(cc, -6);
             return `Nobody blinked, and the Japan offer expired while you waited. One year at ${money(cc.salary)}M. Morale -6.`;
           },
         },

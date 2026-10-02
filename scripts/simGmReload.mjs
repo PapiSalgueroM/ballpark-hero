@@ -18,6 +18,10 @@
    Section:
      1) the four boards, rendered: src/components/front-office-shared/
         FrontOfficeSeasonClose.test.tsx under vitest, five tests per board.
+        Since Round 828 the NFL board runs twice: on a fifteen man league and
+        on the full rosters (the 53 and the practice squad) a new league gets,
+        so five cases and 25 tests, with the NFL copy shared by both under the
+        control.
         Each builds a save at the final week from the real engine, plays the
         final week on the real board, remounts, and reads the save. The
         REPRO row of each board prints what a reload let the player do, and
@@ -49,6 +53,8 @@ if (CONTROL && CONTROL !== 'replay') { console.error(`GM_RELOAD_CONTROL=${CONTRO
 const TEST = 'src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx';
 const BOARDS = [
   ['NFL Front Office', 'FO_BOARD_NFL', 'src/components/front-office/FrontOfficeBoard.tsx'],
+  /* Round 828: the same board on full rosters, the league a new player gets */
+  ['NFL Front Office, full rosters', 'FO_BOARD_NFL', 'src/components/front-office/FrontOfficeBoard.tsx'],
   ['NBA Front Office', 'FO_BOARD_NBA', 'src/components/nba-front-office/NbaFrontOfficeBoard.tsx'],
   ['MLB Front Office', 'FO_BOARD_MLB', 'src/components/mlb-front-office/MlbFrontOfficeBoard.tsx'],
   ['NHL Front Office', 'FO_BOARD_NHL', 'src/components/nhl-front-office/NhlFrontOfficeBoard.tsx'],
@@ -121,7 +127,7 @@ for (const [name] of BOARDS) {
   }
 }
 if (CONTROL !== 'replay') {
-  if (r.status !== 0 || !/20 passed/.test(out)) {
+  if (r.status !== 0 || !/25 passed/.test(out)) {
     const lines = out.split('\n').filter(l => /×|FAIL|AssertionError|expected|Unable to find/.test(l)).slice(0, 12);
     fail('the board test is red:\n    ' + lines.join('\n    '));
   }

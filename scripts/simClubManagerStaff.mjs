@@ -29,8 +29,8 @@
           scouting: every week played TWICE from the same state and the same
             point in the stream, once at lead scout 1 and once at 10, and
             only that week's reports compared, so the two runs cannot drift
-            apart; mean ceiling of what came home, never above the 93 the
-            trip already capped.
+            apart; mean ceiling of what came home, never above the 95 the
+            trip's rare find is capped at (93 for the rest, Round 781 review).
      4) Round 95's rule, twice: every effect in the module is exactly
         neutral at level 1 AND on an empty post, the effects are counted off
         the source so a fifth one cannot be added without being checked, the
@@ -484,7 +484,14 @@ console.log('3) Each effect runs the right way, on every position, and stays bou
         lowAll.push(...lo);
         highAll.push(...up);
         if (lo.length && lo.length === up.length) perWeek.push(mean(up) - mean(lo));
-        if (up.some(p => p > 93)) fail(`${club}: a scouted ceiling went past the 93 the trip caps at`);
+        /* Round 781 review: 95, not 93. The trip clamps at 93 with the lead
+           scout's bonus inside it, and then one find in about sixteen gets a
+           3 to 8 bump clamped at 95 (tickScouting). At 93 this held only on
+           streams that never drew such a find in a level 10 week: main's own
+           engine failed it at SIM_SEED=2 (a 94 from Brazil at Ajax), and
+           Round 781, which moves every match's draws, put the default seed on
+           one. */
+        if (up.some(p => p > 95)) fail(`${club}: a scouted ceiling went past the 95 a rare find on the trip caps at`);
         if (r.kind === 'seasonOver') break;
       }
     } finally { Math.random = saved; }

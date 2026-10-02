@@ -15,6 +15,7 @@ import ReportQuestion from '@/components/game/ReportQuestion';
 import PostGameStats from '@/components/game/PostGameStats';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
+import { fmtCompactUsd } from '@/lib/dealPlayers';
 
 const Index = () => {
   const {
@@ -317,7 +318,7 @@ const Index = () => {
               }
               funFact={
                 targetPlayer
-                  ? `💡 Did you know? ${targetPlayer.name} plays as a ${targetPlayer.position} and is valued at €${targetPlayer.marketValue}M.`
+                  ? `💡 Did you know? ${targetPlayer.name} plays as a ${targetPlayer.position} and is valued at ${fmtCompactUsd(targetPlayer.marketValue * 1_000_000)}.`
                   : undefined
               }
               emojiGrid={footleEmojiGrid(guesses, maxGuesses)}

@@ -1,0 +1,9 @@
+{
+  "auditOnly": true,
+  "noRepositoryWrites": true,
+  "noDatabaseWrites": true,
+  "noBrowserOrServerOwned": true,
+  "selectedRawInputsHeld": true,
+  "sourceCount": 48,
+  "ledgerCount": 16
+}

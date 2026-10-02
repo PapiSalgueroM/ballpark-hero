@@ -123,6 +123,8 @@ export const NHL_GAUNTLET_CONFIG: GauntletConfig<NhlGauntletPlayer> = {
   /* A knockout is the playoffs, and playoff hockey has no shootout: a level
      game goes to twenty minute sudden death periods until somebody scores. */
   tiebreak: { phrase: 'sudden death overtime, period after period until somebody scores', won: 'Won in overtime', lost: 'Lost in overtime' },
+  /* Round 826: the first overtime period settling it is still overtime. */
+  extraTime: { won: 'Won in overtime', lost: 'Lost in overtime' },
   subtitleOf: p => p.team,
   positionOf: p => p.pos,
   /* The pool runs 69 to 97 on real production percentiles, a little tighter

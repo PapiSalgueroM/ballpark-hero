@@ -97,6 +97,8 @@ import type { UclGroupRule } from '@/lib/clubManagerUclGroups';
 /* Round 670 review: how a Champions League tie is read, shared with Soccer
    Career. The module imports nothing. */
 import { uclTieOutcome } from '@/lib/uclTieRule';
+/* Round 781: the match clock with the board in it. The module imports nothing. */
+import { clockOrder, playedBy } from '@/lib/clubManagerClock';
 
 /**
  * Club Manager engine.
@@ -1023,7 +1025,16 @@ export interface ScorerLine {
   /** Round 505: from the spot, or a direct free kick. */
   penalty?: boolean;
   freeKick?: boolean;
+  /** Round 781: minutes into the added time of the period `minute` ends
+   *  (45+3' is minute 45, plus 3). Absent on every line in regular time and
+   *  on every line written before this round. */
+  plus?: number;
 }
+
+/* Round 781: the clock with the board in it (minuteLabel, clockOrder,
+   playedBy), kept in its own small file and re-exported here, so every
+   screen that already imports the engine reads it from one place. */
+export { minuteLabel, clockOrder, playedBy } from '@/lib/clubManagerClock';
 
 export interface OtherResult { home: string; away: string; hg: number; ag: number; }
 
@@ -1044,6 +1055,8 @@ export interface CardLine {
   /** Round 504: a red that was a second yellow (a one match ban) rather
    *  than a straight red (one or two). */
   second?: boolean;
+  /** Round 781: into the board of `minute`, see ScorerLine. */
+  plus?: number;
 }
 export interface SubLine {
   off: string; on: string; minute: number;
@@ -1053,8 +1066,10 @@ export interface SubLine {
    *  off is one the game made up (a projected world), so every screen can
    *  say so the way the ratings sheet does. */
   onGen?: boolean; offGen?: boolean;
+  /** Round 781: into the board of `minute`, see ScorerLine. */
+  plus?: number;
 }
-export interface InjuryLine { name: string; minute: number; weeks: number; id?: string; }
+export interface InjuryLine { name: string; minute: number; weeks: number; id?: string; plus?: number; }
 
 export type PlayKind = 'shot' | 'corner' | 'throwin' | 'foul';
 
@@ -1078,6 +1093,8 @@ export interface PlayEvent {
   penalty?: boolean;
   /** Round 505, goals only: a direct free kick. */
   freeKick?: boolean;
+  /** Round 781: into the board of `minute`, see ScorerLine. */
+  plus?: number;
 }
 
 /** Round 505: one of my goals as the halves commit it: who, when, and
@@ -1089,6 +1106,8 @@ export interface MyGoalLine {
   minute: number;
   penalty?: boolean;
   freeKick?: boolean;
+  /** Round 781: into the board of `minute`, see ScorerLine. */
+  plus?: number;
 }
 
 /** Round 504: one opposition player on the day, from the era roster. */
@@ -1127,6 +1146,10 @@ export interface TimelineEvent {
   /** Round 714: a goal or a save from the spot, a goal from a direct free kick. */
   penalty?: boolean;
   freeKick?: boolean;
+  /** Round 781: into the board of `minute` (45+2'). A clock row (half time,
+   *  the whistle, extra time) carries the board itself, so it sorts after
+   *  everything that happened in it. */
+  plus?: number;
 }
 
 export interface PlayerRatingLine {
@@ -1162,8 +1185,13 @@ export interface MatchDetail {
    *  roster cannot field eleven gets no invented ratings sheet. Absent on
    *  pre-178 saves. */
   oppRatings?: PlayerRatingLine[];
-  /** Round 169: stoppage time shown on the clock, per half. */
-  added?: { h1: number; h2: number };
+  /** Round 169: stoppage time shown on the clock, per half.
+   *  Round 781: the board is now football, not a caption. It is decided as
+   *  the last stretch of each period is drawn (drawSegment), goals, cards and
+   *  injuries can fall inside it (minute 45 or 90 with `plus`), and `et` is
+   *  the board at the end of extra time when it was played. A report written
+   *  before this round has no `et` and no line with a plus. */
+  added?: { h1: number; h2: number; et?: number };
   /** Round 169: the sim's own crowd for this fixture. */
   attendance?: number;
   /** Ground capacity when the save knows it (custom clubs); null otherwise.
@@ -1229,8 +1257,16 @@ export interface MatchWeekReport {
   /** Round 670: the tie this match settled, on a second leg: the aggregate
    *  after any extra time, in my orientation, whether away goals split it,
    *  and whether my club went through. Absent on every other match and on
-   *  every report written before this round. */
-  tie?: { leg: 1 | 2; aggMine: number; aggTheirs: number; byAwayGoals?: boolean; through?: boolean };
+   *  every report written before this round.
+   *  Round 781: a first leg carries it too, with `leg: 1` and tonight's score
+   *  as the aggregate so far, and a second leg also carries the first leg's
+   *  score in my orientation (`leg1Mine`, `leg1Theirs`) and where it was
+   *  played, so the report can print "First leg 2-1 away, agg 3-2" without
+   *  reading the bracket. Absent on reports written before this round. */
+  tie?: {
+    leg: 1 | 2; aggMine: number; aggTheirs: number; byAwayGoals?: boolean; through?: boolean;
+    leg1Mine?: number; leg1Theirs?: number; leg1Home?: boolean;
+  };
   /** Round 782: the shootout kick by kick, present only when the manager had
    *  set a shootout order. `decidedBy` and `shootoutWon` carry the result
    *  exactly as before, so nothing that reads them changes. */
@@ -2328,7 +2364,13 @@ export interface LiveMatch {
   /** My substitutions, at the minute each one was made. */
   subs?: SubLine[];
   /** Shape changes, at their minutes, so the record says when. */
-  shapeChanges?: { minute: number; mentality: Mentality }[];
+  shapeChanges?: { minute: number; mentality: Mentality; plus?: number }[];
+  /** Round 781: the referee's board per period, decided as the last stretch
+   *  of that period is drawn, so the goals drawn in it fit under it and the
+   *  viewer can run its clock through it. Absent on a period not yet drawn
+   *  and on every live match saved before this round; the whistle then
+   *  rolls the board the Round 472 way, as it always did. */
+  added?: { h1?: number; h2?: number; et?: number };
   /** The clock the match stands at: the last minute the manager acted at,
    *  or the restart. The viewer resumes a paused save from here. */
   minute?: number;
@@ -10034,6 +10076,49 @@ function playsExtraTime(state: CareerState, entry: CalendarEntry): boolean {
   return !(twoLegs && entry.uclLeg === 1);
 }
 
+/** Round 781: my tie's first leg in MY orientation, and whether it was at my
+ *  ground (leg one is played at tie.home). Null before it is played. */
+function firstLegMine(state: CareerState, round: UclKoRound): { mine: number; theirs: number; home: boolean } | null {
+  const tie = state.uclBracket?.find(t => t.round === round && t.mine);
+  if (!tie?.leg1) return null;
+  const iAmHome = tie.home === state.clubName;
+  return {
+    mine: iAmHome ? tie.leg1.homeGoals : tie.leg1.awayGoals,
+    theirs: iAmHome ? tie.leg1.awayGoals : tie.leg1.homeGoals,
+    home: iAmHome,
+  };
+}
+
+/**
+ * Round 781: the tie as it stands tonight, for the live header, the match
+ * centre and the report: the first leg in my orientation and where it was
+ * played, the aggregate with tonight's goals so far, and whether this season
+ * reads away goals. Null on any week that is not the second leg of a two
+ * legged tie, so every screen can render it with one optional block.
+ */
+export interface SecondLegContext {
+  leg1Mine: number;
+  leg1Theirs: number;
+  leg1Home: boolean;
+  aggMine: number;
+  aggTheirs: number;
+  awayGoalsRule: boolean;
+}
+export function secondLegContext(career: CareerState, week: number, mine: number, theirs: number): SecondLegContext | null {
+  const entry = career.calendar[week];
+  if (!entry || !secondLegTonight(career, entry) || !entry.uclRound) return null;
+  const first = firstLegMine(career, entry.uclRound);
+  if (!first) return null;
+  return {
+    leg1Mine: first.mine,
+    leg1Theirs: first.theirs,
+    leg1Home: first.home,
+    aggMine: first.mine + mine,
+    aggTheirs: first.theirs + theirs,
+    awayGoalsRule: uclAwayGoalsApply(career.eraId),
+  };
+}
+
 /** Round 670: my two legged tie read with tonight as leg two, in the tie's
  *  own orientation (Round 507), by the competition's rule for this season. */
 function mySecondLegOutcome(
@@ -11752,11 +11837,11 @@ const SECOND_YELLOW_CHANCE = 0.25;
  * (it cannot: 45 minutes, at most a handful of goals) the draw falls back to
  * a plain one rather than looping forever.
  */
-function distinctMinutes(count: number, lo: number, hi: number, taken: Set<number>): number[] {
+function distinctMinutes(count: number, lo: number, hi: number, taken: Set<number>, board?: BoardWeight): number[] {
   const span = hi - lo + 1;
   const out: number[] = [];
   for (let i = 0; i < count; i++) {
-    let m = ri(lo, hi);
+    let m = drawMinute(lo, hi, board);
     if (taken.size < span) {
       let steps = 0;
       while (taken.has(m) && steps < span) { m = m === hi ? lo : m + 1; steps += 1; }
@@ -11765,6 +11850,21 @@ function distinctMinutes(count: number, lo: number, hi: number, taken: Set<numbe
     out.push(m);
   }
   return out.sort((a, b) => a - b);
+}
+
+/** Round 781: the minutes of a stretch that closes its period run on into
+ *  its board, `to` + 1 to `hi`, and a goal is `w` times likelier in one of
+ *  those than in an ordinary minute (BOARD in drawSegment says why). */
+interface BoardWeight { to: number; w: number }
+
+/** One minute in lo..hi, a minute past board.to counting board.w times.
+ *  One draw either way, and with no weight (or a weight of 1) exactly ri. */
+function drawMinute(lo: number, hi: number, board?: BoardWeight): number {
+  if (!board || board.w === 1 || board.to < lo || board.to >= hi) return ri(lo, hi);
+  const regular = board.to - lo + 1;
+  const extra = hi - board.to;
+  const u = Math.random() * (regular + board.w * extra);
+  return u < regular ? lo + Math.floor(u) : board.to + 1 + Math.min(extra - 1, Math.floor((u - regular) / board.w));
 }
 
 function splitMinutes(goals: number, firstHalfGoals: number, taken: Set<number>): number[] {
@@ -11781,10 +11881,12 @@ function pickMyScorerLines(
   xi: CMPlayer[], count: number, minLo: number, minHi: number, taken: Set<number>,
   /** Round 505: the duty of a man in his slot, for the scorer weight. */
   dutyOf?: (p: CMPlayer) => Duty | null,
+  /** Round 781: the board this stretch runs into and how busy it is. */
+  board?: BoardWeight,
 ): MyGoalLine[] {
   /* Round 205: distinct, and sharing the match's minute book with the
      opposition so no two goals anywhere land on the same clock. */
-  const minutes = distinctMinutes(count, minLo, minHi, taken);
+  const minutes = distinctMinutes(count, minLo, minHi, taken, board);
   const lines: MyGoalLine[] = [];
   for (let g = 0; g < count; g++) {
     const scorer = weightedPick(xi, p => scorerWeight(p) * dutyScoringMult(dutyOf?.(p)));
@@ -11837,10 +11939,11 @@ function creditMyScorers(
   return { goalCounts, assistCounts, assistNames };
 }
 
-function generateOppScorers(opp: string, goals: number, firstHalfGoals: number, yearsOnNow = 0, eraId: string = 'now', taken: Set<number> = new Set(), window?: [number, number], exclude: ReadonlySet<string> = NO_NAMES): ScorerLine[] {
+function generateOppScorers(opp: string, goals: number, firstHalfGoals: number, yearsOnNow = 0, eraId: string = 'now', taken: Set<number> = new Set(), window?: [number, number], exclude: ReadonlySet<string> = NO_NAMES, board?: BoardWeight): ScorerLine[] {
   /* Round 504: a segment of a half asks for its own window; the whole match
-     shape splits at the interval as before. */
-  const minutes = window ? distinctMinutes(goals, window[0], window[1], taken) : splitMinutes(goals, firstHalfGoals, taken);
+     shape splits at the interval as before. Round 781: a window that runs
+     into a board weights it (BoardWeight). */
+  const minutes = window ? distinctMinutes(goals, window[0], window[1], taken, board) : splitMinutes(goals, firstHalfGoals, taken);
   // Round 70: opponent scorers are their real attackers from the baked
   // rosters, weighted toward the expensive ones, so "Semenyo 63'" instead of
   // "Bournemouth No. 9". Round 132: from the projected roster, so a 2036 match
@@ -12048,6 +12151,8 @@ const STRAIGHT_RED_PER_HALF = 0.03;
 function drawSegmentCards(
   onPitchAt: (minute: number) => CMPlayer[], from: number, to: number, maxYellows: number,
   booked: Map<string, number>, dismissed: Set<string>,
+  /** Round 781: the last minute a card can fall in, the board included; the counts stay sized to (from, to]. */
+  hi: number = to,
 ): CardLine[] {
   const len = (to - from) / 45;
   const lo = from + 1;
@@ -12057,7 +12162,7 @@ function drawSegmentCards(
   for (let i = 0; i < yellows; i++) {
     /* The minute first, then whoever is still on the pitch at that minute:
        a man who limped off in the 20th is not booked in the 40th. */
-    const minute = ri(lo, to);
+    const minute = ri(lo, hi);
     const eligible = onPitchAt(minute).filter(p => !dismissed.has(p.id));
     if (!eligible.length) continue;
     const victim = weightedPick(eligible, weight);
@@ -12087,7 +12192,7 @@ function drawSegmentCards(
     /* A man already off for two yellows cannot also be sent off, and a man
        already carrying a booking cannot take a STRAIGHT red: on the timeline
        a yellow followed by a red is a second yellow to anyone reading it. */
-    const minute = ri(lo, to);
+    const minute = ri(lo, hi);
     const clean = onPitchAt(minute).filter(p => !dismissed.has(p.id) && !booked.has(p.id));
     const outfield = clean.filter(p => p.position !== 'GK');
     const hothead = clean.length ? pick(outfield.length ? outfield : clean) : null;
@@ -12106,6 +12211,8 @@ function drawSegmentCards(
 function drawSegmentOppCards(
   onPitchAt: (minute: number) => OppXiLine[], from: number, to: number, maxYellows: number,
   booked: Map<string, number>, dismissed: Set<string>,
+  /** Round 781: the last minute a card can fall in, the board included. */
+  hi: number = to,
 ): CardLine[] {
   const len = (to - from) / 45;
   const lo = from + 1;
@@ -12114,7 +12221,7 @@ function drawSegmentOppCards(
   const yellows = Math.round(ri(0, maxYellows) * len);
   for (let i = 0; i < yellows; i++) {
     /* The minute first, then whoever is on their pitch at that minute. */
-    const minute = ri(lo, to);
+    const minute = ri(lo, hi);
     const eligible = onPitchAt(minute).filter(p => !dismissed.has(p.n));
     if (!eligible.length) continue;
     const victim = weightedPickAny(eligible, weight);
@@ -12139,14 +12246,15 @@ function drawSegmentOppCards(
 }
 
 /** One injury roll for the minutes (from, to] of a half, at the match's long standing rate. */
-function drawSegmentInjury(state: CareerState, onPitch: CMPlayer[], from: number, to: number): InjuryLine | null {
+function drawSegmentInjury(state: CareerState, onPitch: CMPlayer[], from: number, to: number, hi: number = to): InjuryLine | null {
   const len = (to - from) / 45;
   if (!onPitch.length) return null;
   if (Math.random() >= 1 - Math.pow(1 - INJURY_PER_HALF, len)) return null;
   const victim = pick(onPitch);
   // Round 467: the medical staff read the same draw and write it shorter.
   const weeks = injurySpell(state, ri(1, 5));
-  return { name: victim.name, id: victim.id, minute: ri(from + 1, to), weeks };
+  /* Round 781: the minute may sit in the board (hi past to). */
+  return { name: victim.name, id: victim.id, minute: ri(from + 1, hi), weeks };
 }
 
 /**
@@ -12531,6 +12639,11 @@ function markOppSetPieceGoals(goals: ScorerLine[]): void {
 
 interface SegmentPlayIn {
   from: number; to: number;
+  /** Round 781: the last minute play can fall in, the board included. The
+   *  counts (shots, corners, fouls, throw ins) stay sized to (from, to], so a
+   *  four minute board adds no chances, it only lets the half's chances run
+   *  into it the way its goals do. Defaults to `to`. */
+  hi?: number;
   /** The segment's own lambdas, already scaled to its length. */
   lamMine: number; lamOpp: number;
   myGoals: { name: string; minute: number; penalty?: boolean; freeKick?: boolean }[];
@@ -12562,7 +12675,7 @@ interface SegmentPlayIn {
 function drawSegmentPlay(inp: SegmentPlayIn): PlayEvent[] {
   const len = (inp.to - inp.from) / 45;
   const lo = inp.from + 1;
-  const hi = inp.to;
+  const hi = inp.hi ?? inp.to;
   const out: PlayEvent[] = [];
   const round2 = (n: number): number => Math.round(n * 100) / 100;
   type Flank = 'left' | 'right';
@@ -12646,9 +12759,11 @@ function drawSegmentPlay(inp: SegmentPlayIn): PlayEvent[] {
     thrower: m => oppPick(m, p => throwWeightPos(p.p), true),
     fouler: m => oppPick(m, p => foulWeightPos(p.p), false),
   });
-  const ORDER: Record<PlayKind, number> = { throwin: 0, foul: 1, corner: 2, shot: 3 };
-  return out.sort((a, b) => a.minute - b.minute || ORDER[a.kind] - ORDER[b.kind]);
+  return out.sort((a, b) => a.minute - b.minute || PLAY_ORDER[a.kind] - PLAY_ORDER[b.kind]);
 }
+
+/** Inside a minute, a throw in before a foul before a corner before a shot. Round 781: hoisted so the board fold can keep it. */
+const PLAY_ORDER: Record<PlayKind, number> = { throwin: 0, foul: 1, corner: 2, shot: 3 };
 
 /** The expected goals a half actually carried: each stretch's full half lambda by its share of the 45. */
 function effectiveLambdas(segs: LamSegment[]): { lamMine: number; lamOpp: number } {
@@ -12861,10 +12976,15 @@ function secondHalfLambdas(
 
 /** Where my scorers, injury and cards for a segment get drawn, both halves, one shape. */
 function drawMySegment(
-  state: CareerState, live: LiveMatch, xi: CMPlayer[], from: number, to: number, lamMine: number,
+  state: CareerState, live: LiveMatch, xi: CMPlayer[], from: number, to: number, goalCount: number,
   maxYellows: number, taken: Set<number>, dutyOf?: (p: CMPlayer) => Duty | null,
+  /** Round 781: the last minute anything can fall in, the board included. */
+  hi: number = to,
+  /** Round 781: how busy the board is for a goal (BOARD weight). */
+  board?: BoardWeight,
 ): { goals: MyGoalLine[]; cards: CardLine[]; injuries: InjuryLine[] } {
-  const goals = pickMyScorerLines(xi, poisson(lamMine), from + 1, to, taken, dutyOf);
+  /* Round 781: the count is drawn by the caller (it sizes the board), the minutes here. */
+  const goals = pickMyScorerLines(xi, goalCount, from + 1, hi, taken, dutyOf, board);
   /* Round 505: from the spot or a free kick, credited to the taker, before
      the exits below are drawn so fixExits keeps him on past his goal. */
   markSetPieceGoals(state.setPieces, goals, xi);
@@ -12873,12 +12993,12 @@ function drawMySegment(
   const dismissed = dismissedOf(allCards, c => c.id);
   /* The injury first, after his last goal, so the cards below can be drawn
      off whoever is still standing at the booking's minute. */
-  const inj = drawSegmentInjury(state, xi.filter(p => !dismissed.has(p.id)), from, to);
+  const inj = drawSegmentInjury(state, xi.filter(p => !dismissed.has(p.id)), from, to, hi);
   const injuries = inj ? [inj] : [];
-  fixExits([], injuries, goals, to);
+  fixExits([], injuries, goals, hi);
   const onPitchAt = (m: number): CMPlayer[] => xi.filter(p => !injuries.some(x => x.id === p.id && x.minute < m));
-  const cards = drawSegmentCards(onPitchAt, from, to, maxYellows, booked, dismissed);
-  fixExits(cards, injuries, goals, to);
+  const cards = drawSegmentCards(onPitchAt, from, to, maxYellows, booked, dismissed, hi);
+  fixExits(cards, injuries, goals, hi);
   return { goals, cards, injuries };
 }
 
@@ -12897,6 +13017,95 @@ function oppAt(live: LiveMatch, minute: number): OppXiLine[] | null {
   return oppOnPitchAt(live, minute).filter(p => !gone.has(p.n));
 }
 
+/* ---------- Round 781: the referee's board is football ---------- */
+/**
+ * A player's report, 2026-09-24: "make it so goals can be scored in stoppage
+ * time (such as 90+5)". Until this round nothing could happen past the 45th
+ * or the 90th minute: the board was rolled at the whistle as a caption
+ * (Round 169, sized off the half's stoppages since Round 472) and every
+ * event was drawn inside (from, to]. Now the last stretch of a period draws
+ * its events over (from, to + board] and anything past `to` is folded onto
+ * the period's last minute with `plus` set (minute 90, plus 3 is 90+3'), so
+ * every reader that asks "at or before 90" still gets the ninety minute
+ * score, extra time still starts at 91, and the clock rows sort after the
+ * board they close.
+ *
+ * The board is sized the way Round 472 sized it and the two harnesses that
+ * pin that formula (simMatchDetail section 5, simMatchScreen section 1)
+ * still hold: base plus one minute per stoppage in the period (goals both
+ * sides, cards both sides, my injuries) plus a roll, clamped. It is read
+ * TWICE with the same roll: once before the stretch is drawn, off the
+ * stoppages already committed in the period plus the goal counts this
+ * stretch is about to place (that is the board the events are placed
+ * under), and once after, off everything now in the period, which can only
+ * be more, so no event ever sits past the board the report prints.
+ *
+ * How many goals land in the board. The stretch's goal count is sized to
+ * its own minutes, so the board adds no goals, it only moves some of them
+ * into added time: each goal's minute is drawn over the stretch plus its
+ * board, a minute of the board counting `weight` times an ordinary one. In
+ * the first half that is plain uniform (weight 1), and a half with k goals
+ * and roll r puts about (base + k + r) / (45 + base + k + r) of them in
+ * added time. The second half's board is busier than an average minute
+ * (weight 1.5): the side behind throws everything forward, and the boards
+ * here (two to eight minutes, the Round 472 formula) are the shorter ones
+ * of the older game, which took about the same late share with fewer
+ * minutes. Uniform, only about 5.6 percent of all goals came after the
+ * 90th. Measured by scripts/simCmStoppageTime.mjs over five seeds (the
+ * numbers are in its header): 2.9 to 4.2 percent of all goals in first half
+ * added time and 7.3 to 8.6 percent after the 90th, against roughly 4 and
+ * 7 to 9 in the real game, and goals per match unmoved. Cards, injuries and
+ * chances stay uniform over the stretch and its board.
+ *
+ * Extra time has one board, at 120, because Round 670 made it one thirty
+ * minute stretch with no interval at 105. A change made inside a board is
+ * filed at the period's last minute with its own plus, keeps everything at
+ * or before that point of the board, and draws the rest of the board again
+ * off the change (recutBoard); the board's length does not move.
+ */
+const BOARD: Record<'h1' | 'h2' | 'et', { base: number; roll: number; lo: number; hi: number; from: number; weight: number }> = {
+  h1: { base: 1, roll: 1, lo: 1, hi: 5, from: 0, weight: 1 },
+  h2: { base: 2, roll: 2, lo: 2, hi: 8, from: 45, weight: 1.5 },
+  et: { base: 1, roll: 1, lo: 1, hi: 3, from: 90, weight: 1 },
+};
+
+/** Which period a stretch ending at `to` closes, or null for one that ends mid period. */
+function periodEnding(live: LiveMatch, to: number): 'h1' | 'h2' | 'et' | null {
+  if (to === 45) return 'h1';
+  if (to === 90) return 'h2';
+  if (live.et && to === live.et.to) return 'et';
+  return null;
+}
+
+/** Stoppages committed in (lo, hi] on the event clock: goals both sides, cards both sides, my injuries. */
+function stoppagesIn(live: LiveMatch, lo: number, hi: number): number {
+  const inWin = (xs: { minute: number }[] | undefined): number => (xs ?? []).filter(x => x.minute > lo && x.minute <= hi).length;
+  return inWin(live.h1My) + inWin(live.h1Opp) + inWin(live.h2My) + inWin(live.h2Opp)
+    + inWin(live.h1Cards) + inWin(live.h2Cards) + inWin(live.h1OppCards) + inWin(live.h2OppCards)
+    + inWin(live.h1Injuries) + inWin(live.h2Injuries);
+}
+
+/** The Round 472 formula: base, a minute a stoppage, the roll, clamped. */
+function boardOf(period: 'h1' | 'h2' | 'et', stoppages: number, roll: number): number {
+  const b = BOARD[period];
+  return clamp(b.base + stoppages + roll, b.lo, b.hi);
+}
+
+/** An event drawn past the period's last minute is in its board: minute `to`, plus the minutes past it. */
+function foldBoard(to: number, ...lists: { minute: number; plus?: number }[][]): number {
+  let maxPlus = 0;
+  for (const xs of lists) {
+    for (const x of xs) {
+      if (x.minute > to) {
+        x.plus = x.minute - to;
+        x.minute = to;
+        maxPlus = Math.max(maxPlus, x.plus);
+      }
+    }
+  }
+  return maxPlus;
+}
+
 /**
  * One stretch of a half, (from, to], drawn in the order the football
  * needs: my goals, cards and injury; their goals off the eleven they start
@@ -12913,6 +13122,10 @@ function drawSegment(
   state: CareerState, live: LiveMatch, fx: MyFixture, half: 1 | 2,
   from: number, to: number, segM: number, segO: number,
 ): void {
+  /* Round 781: a stretch with no minutes in it (a change made inside the
+     board is filed at the period's last minute) draws nothing and leaves the
+     board it was made in alone. */
+  if (from >= to) return;
   const off = offPitchIds(live);
   /* Round 505: the eleven with their slots, so each man's duty rides on his
      slot and a sub into it inherits the job. */
@@ -12921,9 +13134,19 @@ function drawSegment(
   const dutyOf = dutyLookup(pairs);
   const taken = goalMinutesOf(live);
   const maxYellows = half === 1 ? 1 : 2;
-  const me = drawMySegment(state, live, xi, from, to, segM, maxYellows, taken, dutyOf);
+  /* Round 781: the goal counts first, because the board is sized off them,
+     then the board the stretch is placed under (see BOARD), then the draws
+     over (from, hi] with hi past `to` by the board. */
+  const nMine = poisson(segM);
+  const nOpp = poisson(segO);
+  const period = periodEnding(live, to);
+  const roll = period ? ri(0, BOARD[period].roll) : 0;
+  const hi = period ? to + boardOf(period, stoppagesIn(live, BOARD[period].from, to) + nMine + nOpp, roll) : to;
+  /* Round 781: and how busy a minute of that board is for a goal. */
+  const board: BoardWeight | undefined = period ? { to, w: BOARD[period].weight } : undefined;
+  const me = drawMySegment(state, live, xi, from, to, nMine, maxYellows, taken, dutyOf, hi, board);
   const oppStart = oppAt(live, from);
-  const byMinute = <T extends { minute: number }>(a: T, b: T): number => a.minute - b.minute;
+  const byMinute = clockOrder;
   if (half === 1) {
     live.h1My = [...(live.h1My ?? []), ...me.goals].sort(byMinute);
     live.h1Cards = [...(live.h1Cards ?? []), ...me.cards];
@@ -12936,7 +13159,7 @@ function drawSegment(
   let oppGoals: ScorerLine[];
   let oppCards: CardLine[] = [];
   if (!oppStart) {
-    oppGoals = generateOppScorers(fx.opponent, poisson(segO), 0, yearsOn(state), state.eraId, taken, [from + 1, to], mySquadNames(state));
+    oppGoals = generateOppScorers(fx.opponent, nOpp, 0, yearsOn(state), state.eraId, taken, [from + 1, hi], mySquadNames(state), board);
     live.oppSubs = drawOppSubs(live, from, to, []);
   } else {
     /* Their goals' MINUTES first (the other dugout reads the score as it
@@ -12945,9 +13168,9 @@ function drawSegment(
        before a booking he took), and only then the scorers' names, off the
        eleven on the pitch at each goal's minute, so a man off their bench
        can score and a man who came off cannot. */
-    const oppGoalMinutes = distinctMinutes(poisson(segO), from + 1, to, taken);
+    const oppGoalMinutes = distinctMinutes(nOpp, from + 1, hi, taken, board);
     const prior = allOppCards(live);
-    oppCards = drawSegmentOppCards(m => oppAt(live, m) ?? [], from, to, maxYellows, bookedMapOf(prior, c => c.name), dismissedOf(prior, c => c.name));
+    oppCards = drawSegmentOppCards(m => oppAt(live, m) ?? [], from, to, maxYellows, bookedMapOf(prior, c => c.name), dismissedOf(prior, c => c.name), hi);
     if (half === 1) live.h1OppCards = [...(live.h1OppCards ?? []), ...oppCards];
     else live.h2OppCards = [...(live.h2OppCards ?? []), ...oppCards];
     live.oppSubs = drawOppSubs(live, from, to, oppGoalMinutes);
@@ -12959,7 +13182,7 @@ function drawSegment(
     });
     /* A dismissal never sits before the same man's goal (fixExits moves the
        red, never the goal). */
-    fixExits(oppCards, [], oppGoals, to);
+    fixExits(oppCards, [], oppGoals, hi);
   }
   markOppSetPieceGoals(oppGoals);
   if (half === 1) live.h1Opp = [...(live.h1Opp ?? []), ...oppGoals].sort(byMinute);
@@ -12975,7 +13198,7 @@ function drawSegment(
   for (const inj of me.injuries) if (inj.id) exits.set(inj.id, Math.min(exits.get(inj.id) ?? Infinity, inj.minute));
   const mineAt = (m: number): CMPlayer[] => xi.filter(p => (exits.get(p.id) ?? Infinity) > m);
   const play = drawSegmentPlay({
-    from, to, lamMine: segM, lamOpp: segO,
+    from, to, hi, lamMine: segM, lamOpp: segO,
     myGoals: me.goals, oppGoals,
     mineAt, oppAt: oppStart ? (m => oppAt(live, m)) : (() => null),
     myCards: me.cards, oppCards,
@@ -12984,6 +13207,24 @@ function drawSegment(
   });
   if (half === 1) live.h1Play = [...(live.h1Play ?? []), ...play];
   else live.h2Play = [...(live.h2Play ?? []), ...play];
+  /* Round 781: everything drawn past the period's last minute is in its
+     board, and the board the report prints is read again off the period as
+     it now stands, with the same roll, so it is never shorter than the
+     deepest event in it (the max is the belt for a count that fell short). */
+  if (period) {
+    const deepest = foldBoard(to, me.goals, me.cards, me.injuries, oppGoals, oppCards, play);
+    const settled = Math.max(boardOf(period, stoppagesIn(live, BOARD[period].from, to), roll), deepest);
+    live.added = { ...(live.added ?? {}), [period]: settled };
+    if (half === 1) {
+      live.h1My = [...(live.h1My ?? [])].sort(clockOrder);
+      live.h1Opp = [...(live.h1Opp ?? [])].sort(clockOrder);
+      live.h1Play = [...(live.h1Play ?? [])].sort((a, b) => clockOrder(a, b) || PLAY_ORDER[a.kind] - PLAY_ORDER[b.kind]);
+    } else {
+      live.h2My = [...(live.h2My ?? [])].sort(clockOrder);
+      live.h2Opp = [...(live.h2Opp ?? [])].sort(clockOrder);
+      live.h2Play = [...(live.h2Play ?? [])].sort((a, b) => clockOrder(a, b) || PLAY_ORDER[a.kind] - PLAY_ORDER[b.kind]);
+    }
+  }
 }
 
 /**
@@ -13191,7 +13432,11 @@ function recutSecondHalf(state: CareerState, entry: CalendarEntry, live: LiveMat
      time was decided on, so extra time is decided again at 90. The clock
      only runs forward and extra time is drawn at 90, so the viewer cannot
      reach this; it keeps the engine honest if anything else ever does. */
-  if (live.et && minute < live.et.from) delete live.et;
+  if (live.et && minute < live.et.from) {
+    delete live.et;
+    /* Round 781: and the board at its end. */
+    if (live.added) delete live.added.et;
+  }
   /* Round 670: the stretch being redrawn runs to the end of extra time when
      it has been drawn, else to the ninety. */
   const end = live.et ? live.et.to : 90;
@@ -13215,6 +13460,77 @@ function recutSecondHalf(state: CareerState, entry: CalendarEntry, live: LiveMat
   live.possH2 = secondPeriodPossession(live);
 }
 
+/**
+ * Round 781: a change made inside a board, at `p` minutes into the board of
+ * `period`. What happened by then stands; the rest of the board is drawn
+ * again off the eleven and the shape just chosen, so a man taken off at 90+2
+ * cannot score at 90+4 and a man coming on can. The board itself does not
+ * move, the fourth official has already held it up. The stretch is drawn on
+ * the extended clock, (to + p, to + board], at the period's own rate per
+ * minute of board (a stretch of length L spreads its goals over L plus the
+ * board, a board minute counting the period's weight, see BOARD), and folded
+ * back onto the period's last minute.
+ */
+function recutBoard(state: CareerState, entry: CalendarEntry, live: LiveMatch, period: 'h1' | 'h2' | 'et', p: number): void {
+  const board = live.added?.[period];
+  if (board === undefined || p >= board) return;
+  if (period === 'et' && !live.et) return;
+  const fx = fixtureFor(state, entry)!;
+  /* The board of the ninety comes before extra time; one drawn already is
+     decided again at the end of the board, as recutSecondHalf does at 90. */
+  if (period === 'h2' && live.et) {
+    delete live.et;
+    if (live.added) delete live.added.et;
+  }
+  const to = period === 'h1' ? 45 : period === 'h2' ? 90 : live.et!.to;
+  const len = period === 'et' ? (live.et!.to - live.et!.from) : 45;
+  const stays = playedBy(to, p);
+  if (period === 'h1') {
+    live.h1My = (live.h1My ?? []).filter(stays);
+    live.h1Opp = (live.h1Opp ?? []).filter(stays);
+    live.h1Play = (live.h1Play ?? []).filter(stays);
+    live.h1Cards = (live.h1Cards ?? []).filter(stays);
+    live.h1OppCards = (live.h1OppCards ?? []).filter(stays);
+    live.h1Injuries = (live.h1Injuries ?? []).filter(stays);
+  } else {
+    live.h2My = (live.h2My ?? []).filter(stays);
+    live.h2Opp = (live.h2Opp ?? []).filter(stays);
+    live.h2Play = (live.h2Play ?? []).filter(stays);
+    live.h2Cards = (live.h2Cards ?? []).filter(stays);
+    live.h2OppCards = (live.h2OppCards ?? []).filter(stays);
+    live.h2Injuries = (live.h2Injuries ?? []).filter(stays);
+    live.oppSubs = (live.oppSubs ?? []).filter(stays);
+  }
+  const off = offPitchIds(live);
+  const xi = livePairs(state, live).filter(x => !off.has(x.p.id));
+  const first = period === 'h1' ? firstHalfLambdas(state, fx, xi, live.mentality) : null;
+  const { lamMine, lamOpp } = first
+    ?? secondHalfLambdas(state, fx, live, xi, live.myGoals + (live.h2My ?? []).length, live.oppGoals + (live.h2Opp ?? []).length);
+  /* A minute of the board counts `weight` times an ordinary one (see BOARD). */
+  const w = BOARD[period].weight;
+  const share = ((board - p) / 45) * (len * w / (len + w * board));
+  drawSegment(state, live, fx, period === 'h1' ? 1 : 2, to + p, to + board, lamMine * share, lamOpp * share);
+  /* Everything just drawn sits past `to`: fold it into the board. */
+  if (period === 'h1') {
+    foldBoard(to, live.h1My ?? [], live.h1Opp ?? [], live.h1Play ?? [], live.h1Cards ?? [], live.h1OppCards ?? [], live.h1Injuries ?? []);
+    live.h1My = [...(live.h1My ?? [])].sort(clockOrder);
+    live.h1Opp = [...(live.h1Opp ?? [])].sort(clockOrder);
+    live.h1Play = [...(live.h1Play ?? [])].sort((a, b) => clockOrder(a, b) || PLAY_ORDER[a.kind] - PLAY_ORDER[b.kind]);
+    live.myGoals = live.h1My.length;
+    live.oppGoals = live.h1Opp.length;
+    live.read = halftimeRead(state, men(xi), live.myGoals, live.oppGoals, first!.mine, first!.oppS);
+  } else {
+    /* Round 781 review: the other dugout's changes too. Drawn over the
+       extended clock, a long board (eight minutes, a change at 90 on the dot)
+       can put one at 91 to 96, which the report printed as 94' in a match of
+       ninety minutes. Folded, it is 90+4' like everything else in the board. */
+    foldBoard(to, live.h2My ?? [], live.h2Opp ?? [], live.h2Play ?? [], live.h2Cards ?? [], live.h2OppCards ?? [], live.h2Injuries ?? [], live.oppSubs ?? []);
+    live.h2My = [...(live.h2My ?? [])].sort(clockOrder);
+    live.h2Opp = [...(live.h2Opp ?? [])].sort(clockOrder);
+    live.h2Play = [...(live.h2Play ?? [])].sort((a, b) => clockOrder(a, b) || PLAY_ORDER[a.kind] - PLAY_ORDER[b.kind]);
+  }
+}
+
 export interface LiveFeedEvent {
   minute: number;
   side: 'me' | 'opp' | 'none';
@@ -13225,7 +13541,12 @@ export interface LiveFeedEvent {
   flank?: 'left' | 'right';
   penalty?: boolean;
   freeKick?: boolean;
+  /** Round 781: into the board of `minute` (90+3' is minute 90, plus 3). */
+  plus?: number;
 }
+
+/** Round 781: the plus of a line, as a spread, so a line in regular time carries no field. */
+const plusOf = (e: { plus?: number }): { plus?: number } => (e.plus ? { plus: e.plus } : {});
 
 /**
  * Everything the engine has committed for this match so far, in minute
@@ -13238,25 +13559,26 @@ export function liveFeed(live: LiveMatch): LiveFeedEvent[] {
   const flags = (g: { penalty?: boolean; freeKick?: boolean }): Partial<LiveFeedEvent> => ({
     ...(g.penalty ? { penalty: true } : {}), ...(g.freeKick ? { freeKick: true } : {}),
   });
-  for (const g of [...(live.h1My ?? []), ...(live.h2My ?? [])]) out.push({ minute: g.minute, side: 'me', kind: 'goal', text: g.name, ...flags(g) });
-  for (const g of [...(live.h1Opp ?? []), ...(live.h2Opp ?? [])]) out.push({ minute: g.minute, side: 'opp', kind: 'goal', text: g.name, ...flags(g) });
+  for (const g of [...(live.h1My ?? []), ...(live.h2My ?? [])]) out.push({ minute: g.minute, side: 'me', kind: 'goal', text: g.name, ...flags(g), ...plusOf(g) });
+  for (const g of [...(live.h1Opp ?? []), ...(live.h2Opp ?? [])]) out.push({ minute: g.minute, side: 'opp', kind: 'goal', text: g.name, ...flags(g), ...plusOf(g) });
   for (const e of [...(live.h1Play ?? []), ...(live.h2Play ?? [])]) {
     if (e.goal) continue;
     out.push({
       minute: e.minute, side: e.side, kind: e.kind === 'shot' ? (e.on ? 'save' : 'shot') : e.kind, text: e.who,
-      ...(e.flank ? { flank: e.flank } : {}), ...(e.penalty ? { penalty: true } : {}),
+      ...(e.flank ? { flank: e.flank } : {}), ...(e.penalty ? { penalty: true } : {}), ...plusOf(e),
     });
   }
-  for (const c of [...(live.h1Cards ?? []), ...(live.h2Cards ?? [])]) out.push({ minute: c.minute, side: 'me', kind: c.kind, text: c.name });
-  for (const c of [...(live.h1OppCards ?? []), ...(live.h2OppCards ?? [])]) out.push({ minute: c.minute, side: 'opp', kind: c.kind, text: c.name });
-  for (const inj of [...(live.h1Injuries ?? []), ...(live.h2Injuries ?? [])]) out.push({ minute: inj.minute, side: 'me', kind: 'injury', text: inj.name });
-  for (const s of live.subs ?? []) out.push({ minute: s.minute, side: 'me', kind: 'sub', text: `${s.on} on for ${s.off}` });
-  for (const s of live.oppSubs ?? []) out.push({ minute: s.minute, side: 'opp', kind: 'sub', text: `${s.on} on for ${s.off}` });
-  out.push({ minute: 45, side: 'none', kind: 'halftime', text: 'Half time' });
+  for (const c of [...(live.h1Cards ?? []), ...(live.h2Cards ?? [])]) out.push({ minute: c.minute, side: 'me', kind: c.kind, text: c.name, ...plusOf(c) });
+  for (const c of [...(live.h1OppCards ?? []), ...(live.h2OppCards ?? [])]) out.push({ minute: c.minute, side: 'opp', kind: c.kind, text: c.name, ...plusOf(c) });
+  for (const inj of [...(live.h1Injuries ?? []), ...(live.h2Injuries ?? [])]) out.push({ minute: inj.minute, side: 'me', kind: 'injury', text: inj.name, ...plusOf(inj) });
+  for (const s of live.subs ?? []) out.push({ minute: s.minute, side: 'me', kind: 'sub', text: `${s.on} on for ${s.off}`, ...plusOf(s) });
+  for (const s of live.oppSubs ?? []) out.push({ minute: s.minute, side: 'opp', kind: 'sub', text: `${s.on} on for ${s.off}`, ...plusOf(s) });
+  /* Round 781: the break sits after the first half's board, when one has been drawn. */
+  out.push({ minute: 45, side: 'none', kind: 'halftime', text: 'Half time', ...plusOf({ plus: live.added?.h1 }) });
   const ORDER: Record<LiveFeedEvent['kind'], number> = {
     throwin: 0, foul: 1, corner: 2, shot: 3, save: 3, goal: 4, yellow: 5, red: 5, injury: 5, sub: 6, halftime: 7,
   };
-  return out.sort((a, b) => a.minute - b.minute || ORDER[a.kind] - ORDER[b.kind]);
+  return out.sort((a, b) => clockOrder(a, b) || ORDER[a.kind] - ORDER[b.kind]);
 }
 
 /**
@@ -13269,10 +13591,14 @@ export function liveFeed(live: LiveMatch): LiveFeedEvent[] {
  */
 export function liveStatsAt(
   live: Pick<LiveMatch, 'h1Play' | 'h2Play' | 'possH1' | 'possH2' | 'et'>, minute: number,
+  /** Round 781: how far into the board of `minute` the clock stands (90+2 is minute 90, plus 2),
+   *  so the strip in added time counts only what has happened. Absent, the whole minute counts,
+   *  board included, which is what the report at the whistle wants. */
+  plus?: number,
 ): MatchStats {
   /* Round 670: the last minute played is the end of extra time when there was some. */
   const m = Math.max(0, Math.min(live.et ? live.et.to : 90, minute));
-  const play = [...(live.h1Play ?? []), ...(live.h2Play ?? [])].filter(e => e.minute <= m);
+  const play = [...(live.h1Play ?? []), ...(live.h2Play ?? [])].filter(playedBy(m, plus));
   const count = (side: 'me' | 'opp', f: (e: PlayEvent) => boolean): number => play.filter(e => e.side === side && f(e)).length;
   const xgOf = (side: 'me' | 'opp'): number => Math.round(play.filter(e => e.side === side && e.kind === 'shot').reduce((s, e) => s + (e.xg ?? 0), 0) * 100) / 100;
   const p1 = live.possH1 ?? 50;
@@ -13544,6 +13870,10 @@ function buildMatchDetail(args: {
   et?: { from: number; to: number };
   /** Round 670 polish: why it went on, levelAt90Words, when there was extra time. */
   etWords?: string;
+  /** Round 781: the board the live match drew per period (LiveMatch.added).
+   *  A period without one (a save from before this round) is rolled here
+   *  the Round 472 way, as it always was. */
+  added?: LiveMatch['added'];
 }): MatchDetail {
   const { myGoals, oppGoals, lamMine, lamOpp } = args;
   const round2 = (n: number) => Math.round(n * 100) / 100;
@@ -13582,16 +13912,22 @@ function buildMatchDetail(args: {
     for (const inj of args.injuries) if (inj.minute > from && inj.minute <= to) n += 1;
     return n;
   };
-  const added = {
-    h1: clamp(1 + stoppages(0, 45) + ri(0, 1), 1, 5),
-    h2: clamp(2 + stoppages(45, 90) + ri(0, 2), 2, 8),
+  /* Round 781: the board is football now, decided as each period's last
+     stretch was drawn (drawSegment) so its goals fit under it; the whistle
+     only rolls it for a period drawn before this round. Same formula. */
+  const added: MatchDetail['added'] = {
+    h1: args.added?.h1 ?? clamp(1 + stoppages(0, 45) + ri(0, 1), 1, 5),
+    h2: args.added?.h2 ?? clamp(2 + stoppages(45, 90) + ri(0, 2), 2, 8),
+    ...(args.et && args.added?.et !== undefined ? { et: args.added.et } : {}),
   };
+  /* Round 781: the board a clock row closes, so it sorts after what happened in it. */
+  const endBoard = args.et ? (added.et ?? 0) : added.h2;
 
   const timeline: TimelineEvent[] = [];
   timeline.push({ minute: 0, side: 'none', kind: 'kickoff', text: 'Kick off' });
   /* Round 714: a goal row says when it came from the spot or a free kick, off its own scorer line. */
   const setPiece = (sc: ScorerLine): Partial<TimelineEvent> => ({
-    ...(sc.penalty ? { penalty: true } : {}), ...(sc.freeKick ? { freeKick: true } : {}),
+    ...(sc.penalty ? { penalty: true } : {}), ...(sc.freeKick ? { freeKick: true } : {}), ...plusOf(sc),
   });
   for (const sc of args.myScorers) {
     timeline.push({ minute: sc.minute, side: 'me', kind: 'goal', text: sc.assist ? `${sc.name} (assist: ${sc.assist})` : sc.name, ...setPiece(sc) });
@@ -13604,42 +13940,44 @@ function buildMatchDetail(args: {
      its save follows at the same minute. No draw here: the stream is untouched. */
   for (const e of args.play) {
     if (e.kind === 'shot') {
-      if (e.penalty) timeline.push({ minute: e.minute, side: e.side, kind: 'penalty', text: e.who });
+      if (e.penalty) timeline.push({ minute: e.minute, side: e.side, kind: 'penalty', text: e.who, ...plusOf(e) });
       if (e.goal) continue;
-      timeline.push({ minute: e.minute, side: e.side, kind: e.on ? 'save' : 'shot', text: e.who, ...(e.penalty ? { penalty: true } : {}) });
+      timeline.push({ minute: e.minute, side: e.side, kind: e.on ? 'save' : 'shot', text: e.who, ...(e.penalty ? { penalty: true } : {}), ...plusOf(e) });
     } else if (e.kind === 'corner') {
-      timeline.push({ minute: e.minute, side: e.side, kind: 'corner', text: e.who });
+      timeline.push({ minute: e.minute, side: e.side, kind: 'corner', text: e.who, ...plusOf(e) });
     }
   }
-  for (const c of args.cards) timeline.push({ minute: c.minute, side: 'me', kind: c.kind, text: c.name });
-  for (const inj of args.injuries) timeline.push({ minute: inj.minute, side: 'me', kind: 'injury', text: inj.name });
-  for (const s of args.subs) timeline.push({ minute: s.minute, side: 'me', kind: 'sub', text: `${s.on} on for ${s.off}` });
+  for (const c of args.cards) timeline.push({ minute: c.minute, side: 'me', kind: c.kind, text: c.name, ...plusOf(c) });
+  for (const inj of args.injuries) timeline.push({ minute: inj.minute, side: 'me', kind: 'injury', text: inj.name, ...plusOf(inj) });
+  for (const s of args.subs) timeline.push({ minute: s.minute, side: 'me', kind: 'sub', text: `${s.on} on for ${s.off}`, ...plusOf(s) });
   /* Round 504: the other dugout's cards and changes sit on the same clock. */
-  for (const c of args.oppCards) timeline.push({ minute: c.minute, side: 'opp', kind: c.kind, text: c.name });
-  for (const s of args.oppSubs) timeline.push({ minute: s.minute, side: 'opp', kind: 'sub', text: `${s.on} on for ${s.off}` });
-  timeline.push({ minute: 45, side: 'none', kind: 'halftime', text: `Half time (+${added.h1}')` });
+  for (const c of args.oppCards) timeline.push({ minute: c.minute, side: 'opp', kind: c.kind, text: c.name, ...plusOf(c) });
+  for (const s of args.oppSubs) timeline.push({ minute: s.minute, side: 'opp', kind: 'sub', text: `${s.on} on for ${s.off}`, ...plusOf(s) });
+  /* Round 781: every clock row carries the board it closes, so it sorts after the goals scored in it. */
+  timeline.push({ minute: 45, side: 'none', kind: 'halftime', text: `Half time (+${added.h1}')`, plus: added.h1 });
   /* Round 670: the ninety minutes end with the board, and extra time starts.
      Round 670 polish: in the viewer's own words, so a second leg says it is
      the aggregate that is level. */
-  if (args.et) timeline.push({ minute: args.et.from, side: 'none', kind: 'extratime', text: `${args.etWords ?? 'Level after 90 minutes'} (+${added.h2}'), extra time` });
+  if (args.et) timeline.push({ minute: args.et.from, side: 'none', kind: 'extratime', text: `${args.etWords ?? 'Level after 90 minutes'} (+${added.h2}'), extra time`, plus: added.h2 });
   if (args.decidedBy === 'pens') {
     /* Round 507: the shootout's own result, not the night's. On a two legged
        tie you can lose the second leg and win the shootout, so reading `won`
        here printed the wrong club. */
     const penWon = args.shootoutWon ?? args.won;
-    timeline.push({ minute: end, side: penWon ? 'me' : 'opp', kind: 'pens', text: penWon ? `${args.clubName} win on penalties` : `${args.opponent} win on penalties` });
+    timeline.push({ minute: end, side: penWon ? 'me' : 'opp', kind: 'pens', text: penWon ? `${args.clubName} win on penalties` : `${args.opponent} win on penalties`, ...plusOf({ plus: endBoard }) });
   }
   timeline.push(args.et
-    ? { minute: end, side: 'none', kind: 'fulltime', text: 'Full time, after extra time' }
-    : { minute: 90, side: 'none', kind: 'fulltime', text: `Full time (+${added.h2}')` });
+    ? { minute: end, side: 'none', kind: 'fulltime', text: added.et ? `Full time, after extra time (+${added.et}')` : 'Full time, after extra time', ...plusOf({ plus: endBoard }) }
+    : { minute: 90, side: 'none', kind: 'fulltime', text: `Full time (+${added.h2}')`, plus: added.h2 });
   /* Round 714: inside a minute, the corner and the penalty award come before
-     what they led to; everything else keeps the order it always had. */
+     what they led to; everything else keeps the order it always had.
+     Round 781: and the board after the minute, before the next one. */
   const KIND_ORDER: Record<TimelineKind, number> = {
     kickoff: 0, corner: 1, penalty: 1,
     shot: 2, save: 2, goal: 2, yellow: 2, red: 2, injury: 2, sub: 2,
     halftime: 3, extratime: 3, pens: 4, fulltime: 5,
   };
-  timeline.sort((a, b) => a.minute - b.minute || KIND_ORDER[a.kind] - KIND_ORDER[b.kind]);
+  timeline.sort((a, b) => clockOrder(a, b) || KIND_ORDER[a.kind] - KIND_ORDER[b.kind]);
 
   /* Momentum, Round 472. His words: it has to read as up and down swings.
      It did not, and the reason was in the maths rather than the drawing: the
@@ -13758,7 +14096,7 @@ function buildMatchDetail(args: {
 
   return {
     stats,
-    cards: [...args.cards].sort((a, b) => a.minute - b.minute),
+    cards: [...args.cards].sort(clockOrder),
     injuries: args.injuries,
     subs: args.subs,
     timeline,
@@ -13939,11 +14277,15 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
      with away goals in extra time counting in the eras that counted them. */
   if (uclLeg && uclLeg.twoLegs && uclLeg.leg === 2) {
     const { iAmHome, out } = mySecondLegOutcome(state, uclLeg.round, myGoals, oppGoals);
+    /* Round 781: the first leg in my orientation, so the report can print it
+       beside the aggregate. Leg one was played at tie.home's ground. */
+    const first = firstLegMine(state, uclLeg.round);
     tieLine = {
       leg: 2,
       aggMine: iAmHome ? out.homeAgg : out.awayAgg,
       aggTheirs: iAmHome ? out.awayAgg : out.homeAgg,
       ...(out.byAwayGoals ? { byAwayGoals: true } : {}),
+      ...(first ? { leg1Mine: first.mine, leg1Theirs: first.theirs, leg1Home: first.home } : {}),
     };
     if (out.winner === null) {
       decidedBy = 'pens';
@@ -13971,6 +14313,10 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
       if (etPlayed) decidedBy = 'aet';
     }
     tieLine = { ...tieLine, through: advanced };
+  } else if (firstLegTonight) {
+    /* Round 781: a first leg says so, with tonight as the aggregate so far,
+       so the report can say the tie is still open and where it is settled. */
+    tieLine = { leg: 1, aggMine: myGoals, aggTheirs: oppGoals };
   } else if (isKnockout && drawn) {
     decidedBy = 'pens';
     /* Round 505: the assigned penalty taker, when he finished the match, moves the odds a bounded touch.
@@ -14011,7 +14357,7 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
   );
   const myScorers: ScorerLine[] = myLines.map((l, i) => ({
     name: l.name, minute: l.minute, assist: assistNames[i] ?? undefined,
-    ...(l.penalty ? { penalty: true } : {}), ...(l.freeKick ? { freeKick: true } : {}),
+    ...(l.penalty ? { penalty: true } : {}), ...(l.freeKick ? { freeKick: true } : {}), ...plusOf(l),
   }));
   const oppScorers: ScorerLine[] = [...(live.h1Opp ?? []), ...(live.h2Opp ?? [])];
   const tally = new Map<string, number>();
@@ -14661,7 +15007,7 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
      dressing room. A save from before the list existed still reads the
      difference between who started and who finished, at the break. */
   const subLines: SubLine[] = live.subs
-    ? live.subs.map(sb => ({ off: sb.off, on: sb.on, minute: sb.minute }))
+    ? live.subs.map(sb => ({ off: sb.off, on: sb.on, minute: sb.minute, ...plusOf(sb) }))
     : (() => {
       const out: SubLine[] = [];
       for (let i = 0; i < live.startXi.length; i++) {
@@ -14711,6 +15057,7 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
     oppCards: [...(live.h1OppCards ?? []), ...(live.h2OppCards ?? [])],
     et: live.et,
     etWords,
+    added: live.added,
   });
 
   const iAmHome = fx.home !== false; // neutral finals list us first
@@ -15675,11 +16022,16 @@ function halftimeRead(
 
 /** Round 504: everyone of mine who has left this match for good by a
  *  minute: taken off, sent off, or down injured. None of them come back. */
-export function liveGoneIds(live: LiveMatch, minute: number): Set<string> {
+export function liveGoneIds(
+  live: LiveMatch, minute: number,
+  /** Round 781: how far into the board of `minute` the clock stands; a line deeper in it has not happened. */
+  plus?: number,
+): Set<string> {
   const gone = new Set<string>();
-  for (const s of live.subs ?? []) if (s.offId && s.minute <= minute) gone.add(s.offId);
-  for (const c of [...(live.h1Cards ?? []), ...(live.h2Cards ?? [])]) if (c.kind === 'red' && c.id && c.minute <= minute) gone.add(c.id);
-  for (const inj of [...(live.h1Injuries ?? []), ...(live.h2Injuries ?? [])]) if (inj.id && inj.minute <= minute) gone.add(inj.id);
+  const by = playedBy(minute, plus);
+  for (const s of live.subs ?? []) if (s.offId && by(s)) gone.add(s.offId);
+  for (const c of [...(live.h1Cards ?? []), ...(live.h2Cards ?? [])]) if (c.kind === 'red' && c.id && by(c)) gone.add(c.id);
+  for (const inj of [...(live.h1Injuries ?? []), ...(live.h2Injuries ?? [])]) if (inj.id && by(inj)) gone.add(inj.id);
   return gone;
 }
 
@@ -15770,7 +16122,14 @@ export type LiveChange =
  * the change is not allowed: no match on, the third sub already made, the
  * man is not on the pitch or the one coming on is not fit.
  */
-export function changeLive(career: CareerState, minute: number, change: LiveChange): CareerState | null {
+export function changeLive(
+  career: CareerState, minute: number, change: LiveChange,
+  /** Round 781: how far into the board of `minute` the change was made (a
+   *  sub at 90+2 is minute 90, plus 2), kept on the line so the report labels
+   *  it the way the clock read, and the rest of that board is drawn again
+   *  off the change (recutBoard). Ignored outside a board. */
+  plus?: number,
+): CareerState | null {
   const state: CareerState = JSON.parse(JSON.stringify(career));
   const live = state.live;
   if (!live) return null;
@@ -15778,6 +16137,15 @@ export function changeLive(career: CareerState, minute: number, change: LiveChan
   if (!Number.isFinite(minute) || minute < 0 || minute > (live.et ? live.et.to : 90)) return null;
   // Never earlier than the last thing that happened; a clock only runs forward.
   const m = Math.floor(Math.max(minute, live.minute ?? 0));
+  /* Round 781: which board the clock stands in, if any, and how far into it.
+     Only a change made at the period's last minute has one, and never past
+     the board the period drew; a match drawn before this round has none. */
+  const period: 'h1' | 'h2' | 'et' | null = m === 45 && !live.h2Drawn ? 'h1'
+    : m === 90 && live.h2Drawn && !live.et ? 'h2'
+      : live.et && m === live.et.to ? 'et' : null;
+  const boardNow = period ? live.added?.[period] ?? 0 : 0;
+  const p = boardNow > 0 && Math.floor(minute) === m && plus !== undefined && Number.isFinite(plus) && plus > 0
+    ? Math.min(Math.floor(plus), boardNow) : 0;
   if (change.kind === 'sub') {
     if (live.subsUsed >= MAX_HALFTIME_SUBS) return null;
     const idx = live.onPitch.indexOf(change.outId);
@@ -15785,12 +16153,14 @@ export function changeLive(career: CareerState, minute: number, change: LiveChan
     if (live.onPitch.includes(change.inId)) return null;
     /* A man who has been sent off cannot be replaced; that is the rule. Only
        a red the clock has reached counts: the half is committed ahead of
-       the clock, and a red drawn for later is redrawn with the rest. */
-    const reds = [...(live.h1Cards ?? []), ...(live.h2Cards ?? [])].filter(c => c.kind === 'red' && c.id === change.outId && c.minute <= m);
+       the clock, and a red drawn for later is redrawn with the rest.
+       Round 781: in a board, only a red at or before the board minute the
+       clock reads; one deeper in it is redrawn too. */
+    const reds = [...(live.h1Cards ?? []), ...(live.h2Cards ?? [])].filter(c => c.kind === 'red' && c.id === change.outId && playedBy(m, period ? p : undefined)(c));
     if (reds.length) return null;
     /* And nobody comes back on: not a man already taken off, not a man who
        limped off. */
-    if (liveGoneIds(live, m).has(change.inId)) return null;
+    if (liveGoneIds(live, m, period ? p : undefined).has(change.inId)) return null;
     const coming = state.squad.find(p => p.id === change.inId);
     if (!coming || !isAvailable(coming)) return null;
     const going = state.squad.find(p => p.id === change.outId);
@@ -15798,15 +16168,18 @@ export function changeLive(career: CareerState, minute: number, change: LiveChan
     live.subsUsed += 1;
     live.subs = [...(live.subs ?? []), {
       off: going?.name ?? change.outId, on: coming.name, minute: m, offId: change.outId, onId: change.inId,
+      ...plusOf({ plus: p }),
     }];
   } else {
     live.mentality = change.mentality;
     state.mentality = change.mentality;
-    live.shapeChanges = [...(live.shapeChanges ?? []), { minute: m, mentality: change.mentality }];
+    live.shapeChanges = [...(live.shapeChanges ?? []), { minute: m, mentality: change.mentality, ...plusOf({ plus: p }) }];
   }
   live.minute = m;
   const entry = state.calendar[live.week];
   if (entry && m < 45) recutFirstHalf(state, entry, live, m);
+  /* Round 781: a change in a board redraws the rest of that board. */
+  else if (entry && period) recutBoard(state, entry, live, period, p);
   else if (entry && m >= 46 && live.h2Drawn) recutSecondHalf(state, entry, live, m);
   return state;
 }
@@ -15932,6 +16305,9 @@ export interface MatchFacts {
   oppDanger: string[];
   myStrength: number;
   oppStrength: number;
+  /** Round 781: the first leg in my orientation, when tonight is the second
+   *  leg of a two legged tie. Absent on every other match. */
+  firstLeg?: { mine: number; theirs: number; home: boolean };
 }
 
 function poissonPmf(lambda: number, k: number): number {
@@ -16034,6 +16410,11 @@ export function matchFacts(career: CareerState): MatchFacts | null {
       oppDanger,
       myStrength: Math.round(mine),
       oppStrength: Math.round(oppS),
+      /* Round 781: the first leg, when tonight settles a two legged tie. */
+      ...(() => {
+        const ctx = secondLegContext(career, w, 0, 0);
+        return ctx ? { firstLeg: { mine: ctx.leg1Mine, theirs: ctx.leg1Theirs, home: ctx.leg1Home } } : {};
+      })(),
     };
   }
   return null;
