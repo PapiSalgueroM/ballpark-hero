@@ -317,6 +317,9 @@ const ALSO_REAL_ELSEWHERE = [
   /* Round 876, Brazil: Bruno Gomes (a right back in the Serie A rosters) is
      not in the nationality map the harness reads either. */
   'Bruno Gomes',
+  /* Round 883, Liga MX: two Mexican league men the nationality map the
+     harness reads does not carry yet. */
+  'Alan Medina', 'Javier Ruiz',
 ];
 
 /**
