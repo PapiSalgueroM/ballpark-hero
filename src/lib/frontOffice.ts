@@ -209,8 +209,10 @@ export function initLeague(rng: () => number = Math.random, opts: InitLeagueOpti
       const unrated = new Set(d?.noSeason ?? []);
       for (const p of [...team.players, ...team.practice]) if (unrated.has(p.name)) p.noSeason = true;
     }
-    /* drawn nothing: the cut down uses no random numbers, so the deal above is the same with or without it */
-    if (opts.userTeam) cutDownComputerClubs(league, opts.userTeam);
+    /* the computer clubs cut themselves before Week 1, never the GM's own; the
+       cut draws no random numbers, so the deal above is the same either way */
+    const gm = opts.userTeam;
+    if (gm) for (const t of Object.values(teams)) if (t.abbr !== gm) cutDownToMax(t, league.freeAgents);
   }
   return league;
 }
@@ -1291,7 +1293,8 @@ export function runOffseason(league: LeagueState, rng: () => number, userTeam?: 
     news.cutDown = [];
     const taken = leagueNames(league);
     for (const t of deep) news.promoted.push(...refillDeepRoster(t, taken, rng));
-    news.cutDown.push(...cutDownComputerClubs(league, userTeam));
+    /* the computer clubs cut themselves, as mlbOffseason does; userTeam absent (the harnesses) cuts every club */
+    for (const t of deep) if (t.abbr !== userTeam) news.cutDown.push(...cutDownToMax(t, league.freeAgents));
   }
   replenishRosters(league, rng);
   league.cap = Math.round(league.cap * 1.05);
@@ -1384,18 +1387,6 @@ export function refillDeepRoster(t: GmTeamState, taken: Set<string>, rng: () => 
     }
   }
   return promoted;
-}
-
-/* Round 828 follow up: THE COMPUTER CLUBS CUT THEMSELVES, the GM never is,
-   the shape MLB (mlbCutDownToMax beside mlbOverLimit) and the NHL use. Every
-   full club over 53 but the GM's own is cut down by position need below;
-   userTeam absent (the harnesses) cuts every club. */
-export function cutDownComputerClubs(league: LeagueState, userTeam?: string): { team: string; player: string; pos: string }[] {
-  const out: { team: string; player: string; pos: string }[] = [];
-  for (const t of Object.values(league.teams)) {
-    if (t.rosterDepth === 2 && t.abbr !== userTeam) out.push(...cutDownToMax(t, league.freeAgents));
-  }
-  return out;
 }
 
 /** Round 828 follow up: how many men a full roster club must cut before it

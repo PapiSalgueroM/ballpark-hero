@@ -164,8 +164,11 @@ const ENGINE_SWAPS = {
     '  while (false) {',
   ]],
   autocut: [[
-    '    if (t.rosterDepth === 2 && t.abbr !== userTeam) out.push(...cutDownToMax(t, league.freeAgents));',
-    '    if (t.rosterDepth === 2) out.push(...cutDownToMax(t, league.freeAgents));',
+    'for (const t of deep) if (t.abbr !== userTeam) news.cutDown.push(',
+    'for (const t of deep) if (t.abbr !== userTeam || true) news.cutDown.push(',
+  ], [
+    'for (const t of Object.values(teams)) if (t.abbr !== gm) cutDownToMax(',
+    'for (const t of Object.values(teams)) if (t.abbr !== gm || true) cutDownToMax(',
   ]],
   promoteover: [[
     '  if (idx < 0 || deepRosterRefusal(team)) return false;',
