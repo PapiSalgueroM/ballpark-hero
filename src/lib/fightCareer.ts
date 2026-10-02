@@ -143,11 +143,13 @@ export interface Fighter {
 
 /* Generated names. Deliberately a wide international pool, and deliberately
    ordinary rather than colourful, because a roster of nicknames reads as a
-   parody within three fights. */
+   parody within three fights. Round 876 swapped Lucas and Santiago for Leif
+   and Soren: Club Manager's Brazilian rosters brought in a real Lucas Ferreira
+   and a real Santiago Moreno, and simInventedNames checks every pairing. */
 const FIRST = [
   'Andre', 'Bakary', 'Cristian', 'Dmitri', 'Eze', 'Fabio', 'Gustavo', 'Hiroshi',
-  'Ibrahim', 'Jonas', 'Kwame', 'Lucas', 'Miguel', 'Nikolai', 'Omar', 'Pavel',
-  'Quentin', 'Rashid', 'Santiago', 'Tomas', 'Ugo', 'Viktor', 'Wesley', 'Yusuf',
+  'Ibrahim', 'Jonas', 'Kwame', 'Leif', 'Miguel', 'Nikolai', 'Omar', 'Pavel',
+  'Quentin', 'Rashid', 'Soren', 'Tomas', 'Ugo', 'Viktor', 'Wesley', 'Yusuf',
   'Adan', 'Beniamin', 'Caleb', 'Dario', 'Emeka', 'Farid', 'Gideon', 'Hassan',
 ];
 const LAST = [

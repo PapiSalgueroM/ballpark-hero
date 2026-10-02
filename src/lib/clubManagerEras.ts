@@ -314,6 +314,9 @@ const ALSO_REAL_ELSEWHERE = [
      still ships him elsewhere. Listing a man the rosters also carry is
      harmless: the set is a union. */
   'Alan Varela', 'Manu Silva', 'Pedro Lima',
+  /* Round 876, Brazil: Bruno Gomes (a right back in the Serie A rosters) is
+     not in the nationality map the harness reads either. */
+  'Bruno Gomes',
 ];
 
 /**
