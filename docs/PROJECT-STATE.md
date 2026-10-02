@@ -1,5 +1,14 @@
 # Project state
 
+## Codex872 offline runner accepted locally, 2026-10-02
+
+Default runner sends no production probe/retry and guards inherited child
+transport. Blocked traffic cannot report PASS, including swallowed nested output.
+63 local normal outcomes, four effective controls and2/2 scoped integration
+checks pass; denied sentinel TCP0. Peer review clear. Installed Chromium/private
+Playwright scope, not an arbitrary executable/raw-socket sandbox. Explicit live
+opt-in stays subject to Claude's production load budget.877/878 continue offline.
+
 ## Codex878 claimed, career money feedback, 2026-10-02
 
 Shared MoneyApp will show the committed transaction and finite changed-balance

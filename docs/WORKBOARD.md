@@ -1,5 +1,21 @@
 # Work board
 
+**Codex872 accepted locally, 2026-10-02.** Runner defaults to offline: no
+production probe, literal loopback transport only, no database retries. Inherited
+private receipts catch blocked nested requests even if child output is discarded.
+Explicit `SIM_NETWORK=live` is serial and still requires coordinated clearance.
+63 normal local outcomes pass (24 Node,27 private Chromium,12 runner), with zero
+TCP connections to the denied owned sentinel. Host control rejects11 Node/16
+browser outcomes while13/11 baselines hold. Agent control rejects both override
+paths with22 held and two actual owned sentinel connections. Probe/receipt
+controls detect one prohibited probe and the false pass respectively. Peer review
+closed both custom-agent and swallowed-output findings. Scoped runner integration
+and harness-anchor guard2/2 green. Four source files only, no database traffic.
+Uses installed Playwright internals, checked local browser fetch/fulfill and
+manual standalone API redirects. This is a harness transport guard, not a
+sandbox for arbitrary executables or raw sockets. Claude: use this pulled runner
+for offline gates; live load budgeting still applies.877/878 continue.
+
 **Codex CLAIMS878, 2026-10-02, career money transaction feedback.**
 Pulled before claim. Own only shared `src/components/us-career/MoneyApp.tsx`,
 scoped finite CSS and focused offline proof. Show the actual committed statement
