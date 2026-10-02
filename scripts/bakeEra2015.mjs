@@ -399,12 +399,204 @@ const DB_TO_ERA_L1 = {
   'ESTAC Troyes': 'Troyes',
 };
 
-/* BIG_FIVE_CORRECTIONS_START */
-const B5_FOLDS = [];
-const B5_MOVES = [];
-const B5_REMOVALS = [];
-const B5_ARRIVALS = [];
-const B5_NAMESAKES = [];
+/* THE SUMMER 2015 WINDOW, FIVE LEAGUES WIDE. Year-2015 rows predate that
+ * summer's window, so the two new leagues need the same correction the first
+ * three got, and the first three need a re-audit because the world grew.
+ * Every correction below is proved twice: a published record of the transfer
+ * AND the table's own year-2016 row, which the shared step CHECKS in code
+ * (a move or an arrival dies unless a year-2016 row names the destination; a
+ * removal dies if a year-2016 row still sits inside the world). Values stay
+ * the year-2015 snapshot for every player, moved or not.
+ *
+ * The published records, all read 2026-10-02, cited below by these keys:
+ *   WS-EN, WS-FR, WS-DE, WS-IT, WS-ES  World Soccer, "Summer 2015 transfers,
+ *        August 11 update", club by club ins and outs, one page per league:
+ *        https://worldsoccer.com/features/summer-2015-transfers-august-4-update-363811
+ *        (England), /2 (France), /3 (Germany), /4 (Italy), /5 (Spain).
+ *   MF   Maxifoot, "Tableaux transfert mercato Ete 2015", the whole French
+ *        window: https://www.maxifoot.fr/mercato/index-ete-2015.php
+ *   and for the late August deals the World Soccer list predates, the report
+ *   named on the line (ESPN, Goal, Sports Illustrated, the club's own site).
+ *
+ * WHAT COUNTS AS GLARING. Every mover valued at 4.5m pounds or more in the
+ * year-2015 snapshot was looked at, plus every smaller move the two lists
+ * above already prove. Smaller moves with no published record at hand stay
+ * where the snapshot has them: thin evidence is not a reason to move a man. */
+
+/* THE FOLDS: thirteen men Rounds 175 and 191 brought INTO the first three
+ * leagues as arrivals from Germany or France. Their year-2015 rows now
+ * surface in the new leagues' pulls at the clubs they left; the shipped line
+ * stays, the row is dropped, one man, one club. The step proves each fold is
+ * one row (same position, age and value on both sides). */
+const B5_FOLDS = [
+  { n: 'Kevin De Bruyne', why: 'Wolfsburg to Manchester City, Round 175 arrival' },
+  { n: 'Heung-min Son', why: 'Leverkusen to Tottenham, Round 175 arrival' },
+  { n: 'Bastian Schweinsteiger', why: 'Bayern to Manchester United, Round 175 arrival (WS-DE, WS-EN)' },
+  { n: 'Roberto Firmino', why: 'Hoffenheim to Liverpool, Round 175 arrival (WS-DE, WS-EN)' },
+  { n: 'Shinji Okazaki', why: 'Mainz to Leicester, Round 175 arrival (WS-DE, WS-EN)' },
+  { n: 'Dimitri Payet', why: 'Marseille to West Ham, Round 175 arrival (WS-FR, WS-EN)' },
+  { n: 'Yohan Cabaye', why: 'PSG to Crystal Palace, Round 175 arrival (WS-FR)' },
+  { n: 'Anthony Martial', why: 'Monaco to Manchester United, Round 175 arrival' },
+  { n: 'André Ayew', why: 'Marseille to Swansea, Round 175 arrival (WS-FR)' },
+  { n: "N'Golo Kanté", why: 'Caen to Leicester, Round 175 arrival (WS-FR)' },
+  { n: 'Ivan Perišić', why: 'Wolfsburg to Inter, Round 191 arrival' },
+  { n: 'Geoffrey Kondogbia', why: 'Monaco to Inter, Round 191 arrival (WS-FR)' },
+  { n: 'Pepe Reina', why: 'Bayern to Napoli, Round 191 arrival (WS-DE, WS-IT)' },
+];
+
+/* THE NAMESAKES: four strings worn by two real men each, one in a new
+ * league and one in the shipped world. The table itself carries both men in
+ * both years (two year-2015 rows and two year-2016 rows, different clubs,
+ * different ages), and each pair's birth years are in the harness beside the
+ * allowlist that names them (scripts/simEra2015.mjs). The engine keys
+ * players by name, so the standing rule decides: the higher value stays. */
+const B5_NAMESAKES = [
+  { n: 'Naldo', why: 'the Wolfsburg centre-back (32) and the Getafe centre-back (26)' },
+  { n: 'Marcelo', why: 'the Hannover centre-back (27) and the Real Madrid left-back (26)' },
+  { n: 'Rafinha', why: 'the Bayern right-back (29) and the Barcelona midfielder (21)' },
+  { n: 'Adama Traoré', why: 'the Lille midfielder from Mali (19) and the Barcelona winger Round 175 moved to Aston Villa (18)' },
+];
+/* MOVES INSIDE THE FIVE LEAGUE WORLD. `why` is the first proof; the second,
+ * the year-2016 row at the destination, is checked by the step. */
+const B5_MOVES = [
+  // Germany to Germany.
+  { n: 'Julian Draxler', to: 'Wolfsburg', why: 'Schalke to Wolfsburg, 31 Aug 2015 (Goal.com Germany, Deadline Day: Die Transfers der Bundesliga im Ueberblick)' },
+  { n: 'Dante', to: 'Wolfsburg', why: 'Bayern to Wolfsburg, 30 Aug 2015 (Goal.com Germany, the same deadline day list)' },
+  { n: 'Max Kruse', to: 'Wolfsburg', why: 'Gladbach to Wolfsburg (WS-DE)' },
+  { n: 'Gonzalo Castro', to: 'Borussia Dortmund', why: 'Leverkusen to Dortmund (WS-DE)' },
+  { n: 'Kevin Kampl', to: 'Bayer Leverkusen', why: 'Dortmund to Leverkusen, 28 Aug 2015 (ESPN, Bayer Leverkusen sign Borussia Dortmund Kevin Kampl; bvb.de, Kevin Kampl wechselt zu Bayer Leverkusen)' },
+  { n: 'Christoph Kramer', to: 'Bayer Leverkusen', why: 'back to Leverkusen as his Gladbach loan ended (Goal.com Germany list; the year-2015 row is his loan club)' },
+  { n: 'Josip Drmic', to: 'Gladbach', why: 'Leverkusen to Gladbach (WS-DE)' },
+  { n: 'Lars Stindl', to: 'Gladbach', why: 'Hannover to Gladbach (WS-DE)' },
+  { n: 'Johannes Geis', to: 'Schalke 04', why: 'Mainz to Schalke (WS-DE)' },
+  { n: 'Franco Di Santo', to: 'Schalke 04', why: 'Bremen to Schalke (WS-DE)' },
+  { n: 'Pierre-Emile Højbjerg', to: 'Schalke 04', why: 'Bayern loaned him to Schalke, 28 Aug 2015 (Goal.com, Schalke loan Pierre-Emile Hojbjerg from Bayern Munich; ESPN); the year-2015 row is his earlier loan club Augsburg' },
+  { n: 'Stefan Reinartz', to: 'Eintracht Frankfurt', why: 'Leverkusen to Frankfurt (WS-DE)' },
+  { n: 'David Abraham', to: 'Eintracht Frankfurt', why: 'Hoffenheim to Frankfurt (WS-DE)' },
+  { n: 'Sven Ulreich', to: 'Bayern Munich', why: 'Stuttgart to Bayern (WS-DE)' },
+  { n: 'Mitchell Weiser', to: 'Hertha BSC', why: 'Bayern to Hertha (WS-DE)' },
+  { n: 'Mitchell Langerak', to: 'Stuttgart', why: 'Dortmund to Stuttgart (WS-DE)' },
+  { n: 'Milos Jojic', to: 'Köln', why: 'Dortmund to Koln (WS-DE)' },
+  { n: 'Leonardo Bittencourt', to: 'Köln', why: 'Hannover to Koln (WS-DE)' },
+  { n: 'Anthony Modeste', to: 'Köln', why: 'Hoffenheim to Koln (WS-DE)' },
+  { n: 'Anthony Ujah', to: 'Werder Bremen', why: 'Koln to Bremen (WS-DE)' },
+  { n: 'Gotoku Sakai', to: 'Hamburg', why: 'Stuttgart to Hamburg (WS-DE)' },
+  { n: 'Aaron Hunt', to: 'Hamburg', why: 'Wolfsburg to Hamburg, 31 Aug 2015 (Goal.com Germany, the same deadline day list)' },
+  // Germany to England, Italy, Spain and France.
+  { n: 'Abdul Rahman Baba', to: 'Chelsea', why: 'Augsburg to Chelsea, Aug 2015 (Fox Sports, Chelsea complete transfer move for Augsburg\'s Baba Rahman)' },
+  { n: 'Kevin Wimmer', to: 'Tottenham', why: 'Koln to Tottenham (WS-DE)' },
+  { n: 'Joselu', to: 'Stoke City', why: 'Hannover to Stoke (WS-DE, WS-EN)' },
+  { n: 'Valon Behrami', to: 'Watford', why: 'Hamburg to Watford (WS-DE, WS-EN)' },
+  { n: 'Sebastian Prödl', to: 'Watford', why: 'Bremen to Watford (WS-DE, WS-EN)' },
+  { n: 'Jakub Błaszczykowski', to: 'Fiorentina', why: 'Dortmund loaned him to Fiorentina, 31 Aug 2015 (ESPN, Jakub Blaszczykowski joins Fiorentina on loan from Dortmund; FourFourTwo)' },
+  { n: 'Antonio Rüdiger', to: 'Roma', why: 'Stuttgart loaned him to Roma, Aug 2015 (ESPN, Antonio Rudiger completes Roma loan move from Stuttgart)' },
+  { n: 'Rafael van der Vaart', to: 'Real Betis', why: 'Hamburg to Betis, free (WS-DE, WS-ES)' },
+  { n: 'Kevin Trapp', to: 'PSG', why: 'Frankfurt to PSG (WS-DE, WS-FR)' },
+  { n: 'Jimmy Briand', to: 'Guingamp', why: 'Hannover to Guingamp (WS-DE, WS-FR)' },
+  // France to France.
+  { n: 'Layvin Kurzawa', to: 'PSG', why: 'Monaco to PSG, 27 Aug 2015 (MF; ESPN, Layvin Kurzawa from Monaco to PSG)' },
+  { n: 'Lucas Ocampos', to: 'Marseille', why: 'Monaco to Marseille (WS-FR)' },
+  { n: 'Thomas Lemar', to: 'Monaco', why: 'Caen to Monaco (WS-FR)' },
+  { n: 'Adama Traoré', to: 'Monaco', why: 'the Lille midfielder, Lille to Monaco (WS-FR); the year-2016 table holds a Monaco row under this name' },
+  { n: 'Farès Bahlouli', to: 'Monaco', why: 'Lyon to Monaco (WS-FR)' },
+  { n: 'Valère Germain', to: 'Nice', why: 'Monaco loaned him to Nice (WS-FR)' },
+  { n: 'Eric Bauthéac', to: 'Lille', why: 'Nice to Lille (WS-FR)' },
+  { n: 'Nolan Roux', to: 'Saint-Étienne', why: 'Lille to Saint-Etienne (WS-FR)' },
+  { n: 'Yoann Gourcuff', to: 'Rennes', why: 'left Lyon that summer (WS-FR) and signed for Rennes' },
+  { n: 'Ryad Boudebouz', to: 'Montpellier', why: 'Bastia to Montpellier (WS-FR)' },
+  // France to England, Spain and Italy.
+  { n: 'Florian Thauvin', to: 'Newcastle', why: 'Marseille to Newcastle, Aug 2015 (MF)' },
+  { n: "Clinton N'Jie", to: 'Tottenham', why: 'Lyon to Tottenham, Aug 2015 (MF)' },
+  { n: 'Jordan Amavi', to: 'Aston Villa', why: 'Nice to Aston Villa (WS-FR)' },
+  { n: 'Idrissa Gueye', to: 'Aston Villa', why: 'Lille to Aston Villa (WS-FR, WS-EN)' },
+  { n: 'Jordan Ayew', to: 'Aston Villa', why: 'Lorient to Aston Villa (WS-FR, WS-EN)' },
+  { n: 'Jordan Veretout', to: 'Aston Villa', why: 'Nantes to Aston Villa (WS-FR, WS-EN)' },
+  { n: 'Max Gradel', to: 'Bournemouth', why: 'Saint-Etienne to Bournemouth (WS-FR, WS-EN)' },
+  { n: 'Ola Toivonen', to: 'Sunderland', why: 'Rennes loaned him to Sunderland, Aug 2015 (MF)' },
+  { n: 'Yannick Carrasco', to: 'Atlético Madrid', why: 'Monaco to Atletico (WS-FR)' },
+  { n: 'Aymen Abdennour', to: 'Valencia', why: 'Monaco to Valencia, Aug 2015 (MF)' },
+  { n: 'Alphonse Areola', to: 'Villarreal', why: 'PSG loaned him to Villarreal (WS-FR); the year-2015 row is his earlier loan club Bastia' },
+  { n: 'Mariano', to: 'Sevilla', why: 'Bordeaux to Sevilla (WS-FR, WS-ES)' },
+  { n: 'Didier Digard', to: 'Real Betis', why: 'Nice to Betis, free (WS-FR, WS-ES)' },
+  { n: 'Lucas Digne', to: 'Roma', why: 'PSG loaned him to Roma, Aug 2015 (MF)' },
+  // The first three leagues to France and Germany: shipped lines that move.
+  { n: 'Rafael', to: 'Lyon', why: 'Manchester United to Lyon (WS-FR)' },
+  { n: 'Benjamin Stambouli', to: 'PSG', why: 'Tottenham to PSG (WS-FR, WS-EN)' },
+  { n: 'Javier Manquillo', to: 'Marseille', why: 'Atletico loaned him to Marseille (WS-FR); the shipped line sat at his 2014-15 loan club Liverpool' },
+  { n: 'Lucas Silva', to: 'Marseille', why: 'Real Madrid loaned him to Marseille, Aug 2015 (MF)' },
+  { n: 'Rémy Cabella', to: 'Marseille', why: 'Newcastle loaned him to Marseille, Aug 2015 (MF)' },
+  { n: 'Emiliano Insúa', to: 'Stuttgart', why: 'Atletico to Stuttgart (WS-DE); the shipped line sat at his 2014-15 loan club Rayo Vallecano' },
+  { n: 'Frederik Sørensen', to: 'Köln', why: 'Juventus to Koln (WS-DE); the shipped line sat at his 2014-15 loan club Hellas Verona' },
+];
+/* OUT OF THE WORLD. A removal, unlike a placement, cannot invent anything
+ * (the Round 191 asymmetry), so it is also the honest answer for a man who
+ * certainly left his year-2015 club but whose season start club the table's
+ * year-2016 row cannot prove. `single`: no year-2016 row exists at all.
+ * `later`: the year-2016 row names a club of this world that he only reached
+ * in January 2016, so it cannot place him in August 2015. */
+const B5_REMOVALS = [
+  { n: 'Jefferson Farfán', why: 'Schalke to Al Jazira (WS-DE)' },
+  { n: 'Tranquillo Barnetta', why: 'Schalke to Philadelphia Union (WS-DE)' },
+  { n: 'André-Pierre Gignac', why: 'Marseille to Tigres (WS-FR)' },
+  { n: 'Simon Kjaer', why: 'left Lille that summer (WS-FR), for Fenerbahce by his year-2016 row' },
+  { n: 'Christian Fuchs', why: 'Schalke to Leicester, free (WS-DE, WS-EN)', single: 'the table has no year-2016 row for him (Round 175 found the same), so he cannot be PLACED at Leicester on one proof; but Schalke are in the world now and leaving the champions\' left-back there would be false' },
+  { n: 'Dimitar Berbatov', why: 'released by Monaco (WS-FR)', single: 'no year-2016 row; he left the five leagues' },
+  { n: 'Rod Fanni', why: 'left Marseille (WS-FR)', single: 'no year-2016 row; he left the five leagues' },
+  { n: 'Giannelli Imbula', why: 'Marseille to Porto (WS-FR, MF)', later: 'the year-2016 row is Stoke City, where Porto sold him in January 2016' },
+  { n: 'Ciro Immobile', why: 'Dortmund loaned him to Sevilla (WS-DE, WS-ES)', later: 'the year-2016 row is Torino, his January 2016 loan, so Sevilla cannot be proved from the table and he is taken out rather than placed on one proof' },
+  { n: 'Claudio Beauvue', why: 'Guingamp to Lyon (WS-FR, MF)', later: 'the year-2016 row is Celta Vigo, who bought him in January 2016, so Lyon cannot be proved from the table' },
+  { n: 'Mevlüt Erdinç', why: 'Saint-Etienne to Hannover (WS-DE, MF)', later: 'the year-2016 row is Guingamp, his January 2016 loan, so Hannover cannot be proved from the table' },
+  { n: 'Papy Djilobodji', why: 'Nantes to Chelsea, 1 Sep 2015 (MF)', later: 'the year-2016 row is Werder Bremen, his January 2016 loan, so Chelsea cannot be proved from the table' },
+  { n: 'Stephan El Shaarawy', why: 'a shipped AC Milan line: Milan loaned him to Monaco that summer (WS-FR, MF)', later: 'the year-2016 row is Roma, his January 2016 loan, so Monaco cannot be proved from the table; Round 191 left him at Milan because Monaco was outside its world' },
+];
+
+/* ARRIVALS: a year-2015 row at a club outside the two new leagues' pulls,
+ * read from the pull by name and table club (never typed), placed at the
+ * club both proofs name. THE RE-AUDIT: eight of these are men Rounds 175
+ * and 191 REMOVED from the first three leagues because they left for a
+ * German or French club that was outside the world then and is inside it
+ * now (Di Maria, Vidal, Coman, Chicharito, Coentrao, Cavaleiro, Darder,
+ * Yanga-Mbiwa). The other removals of those rounds went to leagues this
+ * world still does not hold and stay out. */
+const B5_ARRIVALS = [
+  // The re-audit: removed by Rounds 175 and 191, home now.
+  { n: 'Ángel Di María', from: 'Manchester United', to: 'PSG', why: 'Manchester United to PSG (WS-FR, WS-EN); Round 175 removal' },
+  { n: 'Arturo Vidal', from: 'Juventus FC', to: 'Bayern Munich', why: 'Juventus to Bayern (WS-DE); Round 191 removal' },
+  { n: 'Kingsley Coman', from: 'Juventus FC', to: 'Bayern Munich', why: 'Juventus loaned him to Bayern, 30 Aug 2015 (Goal.com Germany, the deadline day list); Round 191 removal' },
+  { n: 'Chicharito', from: 'Real Madrid', to: 'Bayer Leverkusen', why: 'Manchester United to Leverkusen, 31 Aug 2015 (Goal.com Germany, the deadline day list); Round 175 removal, the year-2015 row is his loan club' },
+  { n: 'Fábio Coentrão', from: 'Real Madrid', to: 'Monaco', why: 'Real Madrid loaned him to Monaco, Aug 2015 (MF); Round 175 removal' },
+  { n: 'Ivan Cavaleiro', from: 'Deportivo de La Coruña', to: 'Monaco', why: 'Benfica to Monaco (WS-FR); Round 175 removal, the year-2015 row is his loan club' },
+  { n: 'Sergi Darder', from: 'Málaga CF', to: 'Lyon', why: 'Malaga to Lyon, Aug 2015 (MF); Round 175 removal' },
+  { n: 'Mapou Yanga-Mbiwa', from: 'AS Roma', to: 'Lyon', why: 'Roma to Lyon, Aug 2015 (MF); Round 191 removal' },
+  // New to the five leagues.
+  { n: 'Douglas Costa', from: 'Shakhtar Donetsk', to: 'Bayern Munich', why: 'Shakhtar to Bayern (WS-DE)' },
+  { n: 'Joshua Kimmich', from: 'RB Leipzig', to: 'Bayern Munich', why: 'Stuttgart, via his Leipzig loan, to Bayern (WS-DE)' },
+  { n: 'Julian Weigl', from: 'TSV 1860 Munich', to: 'Borussia Dortmund', why: '1860 Munich to Dortmund (WS-DE)' },
+  { n: 'Roman Bürki', from: 'SC Freiburg', to: 'Borussia Dortmund', why: 'Freiburg to Dortmund (WS-DE)' },
+  { n: 'Jonathan Tah', from: 'Fortuna Düsseldorf', to: 'Bayer Leverkusen', why: 'Hamburg to Leverkusen (WS-DE); the year-2015 row is his loan club' },
+  { n: 'Admir Mehmedi', from: 'SC Freiburg', to: 'Bayer Leverkusen', why: 'Freiburg to Leverkusen (WS-DE)' },
+  { n: 'Charles Aránguiz', from: 'Sport Club Internacional', to: 'Bayer Leverkusen', why: 'Internacional to Leverkusen, 13 Aug 2015 (Sports Illustrated, Bayer Leverkusen signs Chile\'s Charles Aranguiz; ESPN)' },
+  { n: 'Nico Elvedi', from: 'FC Zürich', to: 'Gladbach', why: 'Zurich to Gladbach (WS-DE)' },
+  { n: 'Júnior Caiçara', from: 'Ludogorets Razgrad', to: 'Schalke 04', why: 'Ludogorets to Schalke (WS-DE)' },
+  { n: 'Fabian Schär', from: 'FC Basel 1893', to: 'Hoffenheim', why: 'Basel to Hoffenheim (WS-DE)' },
+  { n: 'Pavel Kaderabek', from: 'AC Sparta Prague', to: 'Hoffenheim', why: 'Sparta Prague to Hoffenheim (WS-DE)' },
+  { n: 'Jonathan Schmid', from: 'SC Freiburg', to: 'Hoffenheim', why: 'Freiburg to Hoffenheim (WS-DE)' },
+  { n: 'Eduardo Vargas', from: 'Queens Park Rangers', to: 'Hoffenheim', why: 'Napoli to Hoffenheim, Aug 2015 (ESPN, Hoffenheim sign Chile forward Eduardo Vargas from Napoli; tsg-hoffenheim.de); the year-2015 row is his loan club' },
+  { n: 'Oliver Sorg', from: 'SC Freiburg', to: 'Hannover 96', why: 'Freiburg to Hannover (WS-DE)' },
+  { n: 'Luc Castaignos', from: 'FC Twente Enschede', to: 'Eintracht Frankfurt', why: 'Twente to Frankfurt (WS-DE)' },
+  { n: 'Albin Ekdal', from: 'Cagliari Calcio', to: 'Hamburg', why: 'Cagliari to Hamburg (WS-DE)' },
+  { n: 'Aron Jóhannsson', from: 'AZ Alkmaar', to: 'Werder Bremen', why: 'AZ to Bremen (WS-DE)' },
+  { n: 'Mathieu Valbuena', from: 'Dynamo Moscow', to: 'Lyon', why: 'Dynamo Moscow to Lyon (WS-FR)' },
+  { n: 'Guido Carrillo', from: 'Club Estudiantes de La Plata', to: 'Monaco', why: 'Estudiantes to Monaco (WS-FR)' },
+  { n: 'Mario Pašalić', from: 'Elche CF', to: 'Monaco', why: 'Chelsea loaned him to Monaco (WS-FR); the year-2015 row is his earlier loan club' },
+  { n: 'Karim Rekik', from: 'PSV Eindhoven', to: 'Marseille', why: 'Manchester City to Marseille (WS-FR); the year-2015 row is his loan club' },
+  { n: 'Rolando', from: 'RSC Anderlecht', to: 'Marseille', why: 'Porto to Marseille, 31 Aug 2015 (MF); the year-2015 row is his loan club' },
+  { n: 'Juan Fernando Quintero', from: 'FC Porto', to: 'Rennes', why: 'Porto loaned him to Rennes, Aug 2015 (MF)' },
+  { n: 'Robert Beric', from: 'Rapid Vienna', to: 'Saint-Étienne', why: 'Rapid Vienna to Saint-Etienne, 31 Aug 2015 (MF)' },
+  { n: 'Kolbeinn Sigthórsson', from: 'Ajax Amsterdam', to: 'Nantes', why: 'Ajax to Nantes (WS-FR)' },
+  { n: 'Majeed Waris', from: 'Trabzonspor', to: 'Lorient', why: 'Trabzonspor to Lorient (WS-FR)' },
+  { n: 'Baptiste Guillaume', from: 'RC Lens', to: 'Lille', why: 'Lens to Lille (WS-FR)' },
+];
 /* BIG_FIVE_CORRECTIONS_END */
 
 if (bigFiveArg) {
@@ -423,10 +615,36 @@ if (bigFiveArg) {
     ],
     worldDbToEra: { ...DB_TO_ERA_PL, ...DB_TO_ERA_LL, ...DB_TO_ERA_SA, ...DB_TO_ERA_BL, ...DB_TO_ERA_L1 },
     folds: B5_FOLDS, moves: B5_MOVES, removals: B5_REMOVALS, arrivals: B5_ARRIVALS, namesakes: B5_NAMESAKES,
-    anchors: [],
-    expectedThin: ['Las Palmas', 'Frosinone'],
+    /* A 2015-16 Bundesliga and Ligue 1 without their own headlines are not
+       those leagues, and the re-audit has to have landed. */
+    anchors: [
+      ['Bayern Munich', 'Robert Lewandowski'], ['Bayern Munich', 'Thomas Müller'], ['Bayern Munich', 'Manuel Neuer'],
+      ['Bayern Munich', 'Arturo Vidal'], ['Bayern Munich', 'Douglas Costa'],
+      ['Borussia Dortmund', 'Marco Reus'], ['Borussia Dortmund', 'Pierre-Emerick Aubameyang'],
+      ['Wolfsburg', 'Julian Draxler'], ['Bayer Leverkusen', 'Chicharito'],
+      ['PSG', 'Zlatan Ibrahimović'], ['PSG', 'Ángel Di María'], ['PSG', 'Thiago Silva'],
+      ['Lyon', 'Alexandre Lacazette'],
+      ['Manchester City', 'Kevin De Bruyne'], ['Leicester City', "N'Golo Kanté"], ['Leicester City', 'Jamie Vardy'],
+      ['Barcelona', 'Lionel Messi'], ['Juventus', 'Paulo Dybala'],
+    ],
+    /* Thin only where the table itself is thin (under 8 real rows after
+       the corrections). Re-measured 2026-10-02: Ingolstadt 7 and Darmstadt 7
+       (both promoted that summer), Angers 5 and GFC Ajaccio 2 (likewise). */
+    expectedThin: ['Las Palmas', 'Frosinone', 'Angers', 'GFC Ajaccio', 'Ingolstadt', 'Darmstadt'],
     header: s => [
       '// AUTO-GENERATED by scripts/bakeEra2015.mjs (Round 175, extended Rounds 191 and 899).',
+      '// The 2015-16 era world: real year-2015 Transfermarkt rows from',
+      `// player_market_values for all ${s.clubs} clubs of the 2015-16 Premier League,`,
+      '// La Liga, Serie A, Bundesliga and Ligue 1. The Serie A joined in Round 191',
+      '// and the Bundesliga and Ligue 1 in Round 899, both through the extend step',
+      '// (scripts/lib/eraBakeExtend.mjs; the new leagues from an offline pull of',
+      '// the base table, the lines already shipped carried through as bytes).',
+      '// Memberships and sources are in the script header. The verified summer',
+      `// 2015 window corrections are applied across all five leagues (${s.moves} rows`,
+      '// moved, removed, arrived or folded in total). Values in £m at the',
+      '// year-2015 snapshot, ratings 48-94 on the same curve as the 2026 bake.',
+      '// Regenerate per the header of scripts/bakeEra2015.mjs.',
+      '// DO NOT EDIT BY HAND.',
     ],
   }, { write: !process.argv.includes('--dry') });
   const s = res.stats;

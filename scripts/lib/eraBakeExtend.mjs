@@ -31,7 +31,10 @@
  *
  * The corrections a caller declares:
  *   moves     { n, to, why }            relocate inside the world (shipped line or new row)
- *   removals  { n, why, single? }       left the world; `single` documents a one-source removal
+ *   removals  { n, why, single?, later? }  left the world; `single` documents a one-source removal
+ *                                       (no following-year row at all), `later` a following-year
+ *                                       row that names a club of the world he only reached in a
+ *                                       LATER window, so it cannot place him at the season's start
  *   arrivals  { n, from, to, why }      a year-Y row at table club `from`, outside the new
  *                                       leagues' pools (or removed from the shipped world by an
  *                                       earlier round), placed at engine club `to`
@@ -195,6 +198,8 @@ export function extendEra(cfg) {
     return list.splice(idx, 1)[0];
   };
   const touched = new Map();
+  /* Where a name sits in the shipped world right now, or null once a correction took it out. */
+  const liveClubOf = name => (origin.has(name) && world.get(origin.get(name)).some(p => p.n === name) ? origin.get(name) : null);
   const stats = { moved: 0, removed: 0, arrived: 0, folded: 0, collisions: 0 };
 
   /* Folds first: the same man on both sides, the shipped line stays. */
@@ -211,56 +216,6 @@ export function extendEra(cfg) {
     stats.folded += 1;
     log.push(`  fold: ${f.n} stays at ${club}, the ${rec.dbClub} row is dropped (${f.why})`);
   }
-  /* Moves inside the world. */
-  for (const mv of cfg.moves ?? []) {
-    const rec = pool.get(mv.n);
-    const club = origin.get(mv.n);
-    if (!rec && !club) die(`mover "${mv.n}" is in neither the new rows nor the shipped world; the list is stale`);
-    if (rec && club) die(`mover "${mv.n}" is on both sides; declare the fold or the namesake first`);
-    if (!world.has(mv.to)) die(`mover "${mv.n}" is bound for unknown club "${mv.to}"`);
-    proveAt(mv.n, mv.to, 'move');
-    if (rec) {
-      if (rec.engine === mv.to) die(`mover "${mv.n}" is already at ${mv.to}`);
-      pool.delete(mv.n);
-      world.get(mv.to).push(bakeRow(mv.n, rec));
-    } else {
-      if (club === mv.to) die(`mover "${mv.n}" is already at ${mv.to}`);
-      world.get(mv.to).push(takeShipped(mv.n));
-      touched.set(mv.n, `moved ${club} to ${mv.to}: ${mv.why}`);
-    }
-    stats.moved += 1;
-  }
-  /* Out of the world. */
-  for (const rm of cfg.removals ?? []) {
-    const rec = pool.get(rm.n);
-    const club = origin.get(rm.n);
-    if (!rec && !club) die(`removal "${rm.n}" is in neither the new rows nor the shipped world; the list is stale`);
-    if (rec && club) die(`removal "${rm.n}" is on both sides; declare the fold or the namesake first`);
-    const next = nextOf(rm.n);
-    const stillIn = next.find(r => worldClubOf(r.club));
-    if (stillIn) die(`removal "${rm.n}": the year-${year + 1} row sits at ${stillIn.club}, inside the world; that is a move`);
-    if (!next.length && !rm.single) die(`removal "${rm.n}": no year-${year + 1} row at all, so it needs a documented single-source reason`);
-    if (rec) pool.delete(rm.n);
-    else { takeShipped(rm.n); touched.set(rm.n, `removed from ${club}: ${rm.why}`); }
-    stats.removed += 1;
-  }
-  /* Arrivals from outside the new pools. */
-  for (const ar of cfg.arrivals ?? []) {
-    if (pool.has(ar.n)) die(`arrival "${ar.n}" is already a new-league row; that is a move`);
-    if (origin.has(ar.n) && world.get(origin.get(ar.n)).some(p => p.n === ar.n)) die(`arrival "${ar.n}" is already in the shipped world`);
-    if (!world.has(ar.to)) die(`arrival "${ar.n}" is bound for unknown club "${ar.to}"`);
-    let best = null;
-    for (const r of rows) {
-      if (r.year !== year || r.player_name !== ar.n || r.club !== ar.from) continue;
-      const usd = r.market_value_usd ?? 0;
-      if (!best || usd > best.usd || (usd === best.usd && r.id < best.id)) best = { position: r.position, age: r.age, usd, id: r.id };
-    }
-    if (!best) die(`arrival "${ar.n}": no year-${year} row at "${ar.from}"`);
-    proveAt(ar.n, ar.to, 'arrival');
-    world.get(ar.to).push(bakeRow(ar.n, best));
-    stats.arrived += 1;
-  }
-
   /* One name, one player, per era world. A new-league name that is also a
      shipped name is two real men wearing one string (the engine keys players
      by name, so only one can exist): the higher value stays, a dead heat
@@ -287,6 +242,57 @@ export function extendEra(cfg) {
     declared.delete(name);
   }
   if (declared.size) die(`declared namesakes that never collided: ${[...declared.keys()].join(', ')}`);
+  /* Moves inside the world. */
+  for (const mv of cfg.moves ?? []) {
+    const rec = pool.get(mv.n);
+    const club = liveClubOf(mv.n);
+    if (!rec && !club) die(`mover "${mv.n}" is in neither the new rows nor the shipped world; the list is stale`);
+    if (rec && club) die(`mover "${mv.n}" is on both sides; declare the fold or the namesake first`);
+    if (!world.has(mv.to)) die(`mover "${mv.n}" is bound for unknown club "${mv.to}"`);
+    proveAt(mv.n, mv.to, 'move');
+    if (rec) {
+      if (rec.engine === mv.to) die(`mover "${mv.n}" is already at ${mv.to}`);
+      pool.delete(mv.n);
+      world.get(mv.to).push(bakeRow(mv.n, rec));
+    } else {
+      if (club === mv.to) die(`mover "${mv.n}" is already at ${mv.to}`);
+      world.get(mv.to).push(takeShipped(mv.n));
+      touched.set(mv.n, `moved ${club} to ${mv.to}: ${mv.why}`);
+    }
+    stats.moved += 1;
+  }
+  /* Out of the world. */
+  for (const rm of cfg.removals ?? []) {
+    const rec = pool.get(rm.n);
+    const club = liveClubOf(rm.n);
+    if (!rec && !club) die(`removal "${rm.n}" is in neither the new rows nor the shipped world; the list is stale`);
+    if (rec && club) die(`removal "${rm.n}" is on both sides; declare the fold or the namesake first`);
+    const next = nextOf(rm.n);
+    const stillIn = next.find(r => worldClubOf(r.club));
+    if (stillIn && !rm.later) die(`removal "${rm.n}": the year-${year + 1} row sits at ${stillIn.club}, inside the world; that is a move, unless a documented later window took him there`);
+    if (rm.later && !stillIn) die(`removal "${rm.n}" claims a later window but no year-${year + 1} row sits inside the world`);
+    if (!next.length && !rm.single) die(`removal "${rm.n}": no year-${year + 1} row at all, so it needs a documented single-source reason`);
+    if (rec) pool.delete(rm.n);
+    else { takeShipped(rm.n); touched.set(rm.n, `removed from ${club}: ${rm.why}`); }
+    stats.removed += 1;
+  }
+  /* Arrivals from outside the new pools. */
+  for (const ar of cfg.arrivals ?? []) {
+    if (pool.has(ar.n)) die(`arrival "${ar.n}" is already a new-league row; that is a move`);
+    if (liveClubOf(ar.n)) die(`arrival "${ar.n}" is already in the shipped world`);
+    if (!world.has(ar.to)) die(`arrival "${ar.n}" is bound for unknown club "${ar.to}"`);
+    let best = null;
+    for (const r of rows) {
+      if (r.year !== year || r.player_name !== ar.n || r.club !== ar.from) continue;
+      const usd = r.market_value_usd ?? 0;
+      if (!best || usd > best.usd || (usd === best.usd && r.id < best.id)) best = { position: r.position, age: r.age, usd, id: r.id };
+    }
+    if (!best) die(`arrival "${ar.n}": no year-${year} row at "${ar.from}"`);
+    proveAt(ar.n, ar.to, 'arrival');
+    world.get(ar.to).push(bakeRow(ar.n, best));
+    stats.arrived += 1;
+  }
+
 
   /* The rest of the new leagues, then the standing sort. */
   for (const [name, rec] of pool) world.get(rec.engine).push(bakeRow(name, rec));
