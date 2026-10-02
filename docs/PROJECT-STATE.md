@@ -1,5 +1,34 @@
 # Project state
 
+## Release S is LIVE, 2026-10-02 04:31 EDT: main `0fa68f96`, deployment `54d670ba`, entry `index-DEwRbZI0.js`
+
+Assembled by the desktop Claude lane in the gate clone (`release-s`), the first release gated under the production
+load rule: every fence offline, one browser pass, one light live check after the publish.
+
+- **848, the shared daily save.** The hook behind the daily games (`useDailyPuzzle`) no longer lets an older tab undo
+  rounds decided in a newer one, and a damaged save resets itself instead of breaking the page. The skip link now
+  lands on the game on all 19 pages that had no target. Parity against the hook as it stood before the round, a
+  fixture of saves written by the old code, eight negative controls.
+- **Claude825, Build Your XI chemistry.** Role fit, links and balance are shown under the pitch while you pick, and the
+  season plays them. Reviewed adversarially before the merge (four fixes: club alias links, an honest worth line, the
+  neighbour reach check, the pick flow's busy flag with a four second read limit).
+- **Codex871** (Player Bingo loading bounded and cancellable), **Codex873** (the home page stops invisible reads and
+  shows healthy personal bests before a stalled rank settles), **Codex874** (the ticker stops polling hidden tabs
+  and cancels its reads), **Codex877** (Who'd They Beat keeps the finals explanation on screen until you move on) and
+  **Codex872** (the harness runner is offline by default), merged from main in four passes.
+- What's New listed "The home page says what the site is" twice after two merges of its branch: one entry removed.
+
+**Gate.** Type gate 0 on the final tree. Offline fences, every one with its closing line and exit code: the 22 snapshot and copy readers, the two rounds' own (`simDailySaveHardening` all parts, `simBuildYourXiFit`), Codex's five new ones (`simHomePersonalReads`, `simLiveScoreOwnership`, `simPlayerBingoLoad`, `simWhodTheyBeatReveal`, `simRunnerTransport`), `simNoDoubleRecord`, `simCareerKeepPlaying`, `simFrontOfficeSaveRecovery` and the full vitest suite (171 files; the first run shared the machine with three lanes and two builders and lost 27 tests to the 5 second timeout, every one of them green when rerun alone). Two things fixed on the way: `simDailySaveHardening` read one file raw, which the anchor fence refuses on a CRLF checkout, and `/soccer-career` measured 707K against a 706K budget because the soccer guides chunk it shares grew with the Build Your XI guide (budget now 708, entry chunk 0.8K smaller than Release R's). ONE browser pass on the built site (Chromium, host like server): `sweepGames` 182 routes at phone and desktop, 364 checks, 0 findings; `playGames` clean on `/build-your-xi`, `/f1-driver`, `/guess-cbb-team`, `/emoji-guess`, `/player-bingo`, `/whod-they-beat` and the home page; `playHomeFold`, `playSoftFourOhFour` and `sweepWeight` green. One light live pass after the publish, once each: `simLineupPositions`, `simLineupVerifiedPositions`, `simValidatePlayerRecords`, `simSoccerAwardsShape`, all green in 13 to 48 seconds.
+
+**Proof.** `x-deployment-id` carries `54d670ba`; the home page serves `index-DEwRbZI0.js` (Release R served `index-DIZtEVXD.js`); `/whats-new` carries the Build Your XI and daily save lines and lists the home page entry once; in a real browser on the live site, the skip link at `/free-kick` moves focus to `MAIN#dukb-main`, and `/build-your-xi` at 375 pixels shows the Role fit, Chemistry and Balance tiles after a formation is picked, with no console error and no sideways scroll.
+
+**Known reds, not this release's:** `simDailyReload` is red on main as well (8 of 107: the Buzzer Beater and Free Kick
+drivers cannot find the "Next shot" button since the arcade hold and release work; measured on origin/main
+`5325c42b` with the same eight failures). Codex's, reported on the board.
+
+**Handoff.** `docs/HANDOFF-2026-10-02.md` is the cold start document for the next Claude session; the kit it points at
+is in `C:\Users\antho\dukb-handoff\2026-10-02\`.
+
 ## Codex877 accepted and ready for release lane, 2026-10-02
 
 Manual finals feedback and earned score, guarded keyboard Next focus and daily
