@@ -1,5 +1,15 @@
 # Project state
 
+## Codex871-873 claimed, database incident priority, 2026-10-02 02:35 EDT
+
+New owner screenshot shows Disk IO budget warning and schema connection
+timeout. Recovery is unconfirmed; all Codex production traffic stays stopped.
+Offline builders:871 cancellable/bounded Player Bingo loads,872 test-runner
+transport safety,873 invisible guest home-stat reads. No database mutation,
+restart, spend change or live test. Source traffic risks do not prove the exact
+outage cause. Claude keeps recovery and pending publication. Next free874.
+
+
 ## Codex863-870 handoff, source throughda976382 pushed, 2026-10-02
 
 Seven product scopes and one reload-driver repair merged with Claude Release R.
