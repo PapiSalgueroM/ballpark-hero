@@ -67,7 +67,10 @@ const KNOWN_EMPTY = ['ADO Den Haag', 'Cambuur',
   // Round 876: Brazil's Serie A 2026. Chapecoense have no 2026 row in the
   // table and their one 2025 row belongs to a man whose 2026 row is at
   // Fortaleza, so their spelling is left unmapped and they ship empty.
-  'Chapecoense'];
+  'Chapecoense',
+  // Round 883: Liga MX 2026-27. Atlante have no row in the table under any
+  // spelling (they were in the second tier until this season).
+  'Atlante'];
 
 /** Core clubs (big five leagues) must have 7+ players or the bake fails. */
 const CORE_LEAGUE_CLUBS = new Set([
@@ -149,8 +152,30 @@ if (dumpArg) {
 /* ------------------------------------------------------------------ */
 /* Assemble: per player keep the 2026 row, else discounted 2025       */
 /* ------------------------------------------------------------------ */
+/* Round 883 review: the table has no id that spans years (its id is a row
+   id), so a name is the only key, and keying on it alone merged two men who
+   share one. Mapping Liga MX let Toluca's Paulinho (2026 row, age 33, a
+   striker) overwrite Palmeiras's Paulinho (2025 row, age 24) and Vasco's Jose
+   Luis Rodriguez (a right back) overwrite FC Juarez's (a winger), deleting two
+   real players from clubs they really play for. A newer row now replaces an
+   older one of the same name only when they can be the same man: the age moves
+   by -1 to 3 years between the two rows and the position stays in its group
+   (keeper, defence, midfield, attack, with midfield and attack counted as one,
+   since wingers and number tens are filed as either). Measured on the
+   2026-10-02 dump: of 1,213 such pairs at two modelled clubs, 1,199 move by
+   exactly a year, eight left midfielders by -1 and one by 3 (all the same
+   men, a quirk of the table), and six fail the test, all six two different
+   men. The other man is kept as his own record under a separate key; the
+   overlay and the ledger below act on the name, which is the newer man. */
+const POS_GROUP = { GK: 'G', CB: 'D', LB: 'D', RB: 'D', CDM: 'MA', CM: 'MA', CAM: 'MA', LM: 'MA', RM: 'MA', LW: 'MA', RW: 'MA', ST: 'MA', CF: 'MA' };
+function canBeSameMan(newer, older) {
+  if (newer.year === older.year) return true;
+  const d = newer.rawAge - older.rawAge;
+  return d >= -1 && d <= 3 && POS_GROUP[newer.p] === POS_GROUP[older.p];
+}
 const errors = [];
 const byPlayer = new Map();
+const namesakes = [];
 for (const r of rows) {
   const engineClub = DB_TO_ENGINE[r.club];
   if (!engineClub) continue;
@@ -162,16 +187,33 @@ for (const r of rows) {
   const usd = Number(r.market_value_usd);
   if (!Number.isFinite(age) || age < 14 || age > 45) continue;
   if (!Number.isFinite(usd) || usd <= 0) continue;
-  const existing = byPlayer.get(name);
-  if (existing && existing.year >= r.year) continue;
   const isFallback = r.year === 2025;
-  byPlayer.set(name, {
+  const rec = {
+    name,
     year: r.year,
+    rawAge: age,
     club: engineClub,
     p: pos,
     a: isFallback ? age + 1 : age,
     usd: isFallback ? usd * 0.95 : usd,
-  });
+  };
+  if (!byPlayer.has(name)) byPlayer.set(name, []);
+  byPlayer.get(name).push(rec);
+}
+for (const [name, recs] of byPlayer) {
+  // Newest row first; the first row of a year wins a tie, as before.
+  const order = recs.map((x, i) => [x, i]).sort((a, b) => b[0].year - a[0].year || a[1] - b[1]).map(x => x[0]);
+  const kept = [];
+  for (const rec of order) {
+    if (kept.some(k => canBeSameMan(k, rec))) continue;
+    kept.push(rec);
+  }
+  byPlayer.set(name, kept[0]);
+  for (const other of kept.slice(1)) namesakes.push(other);
+}
+for (const other of namesakes) {
+  byPlayer.set(`${other.name}\u0000${other.club}`, other);
+  console.log(`Namesake kept apart: ${other.name} at ${other.club} (${other.year} row, age ${other.rawAge}, ${other.p})`);
 }
 
 /* ------------------------------------------------------------------ */
@@ -230,7 +272,9 @@ const adjudication = JSON.parse(fs.readFileSync(path.join(ROOT, 'scripts/data/ro
 let adjMoved = 0;
 let adjRemoved = 0;
 for (const m of adjudication.movedTo) {
-  const rec = byPlayer.get(m.name);
+  // A namesake kept apart above sits under name plus his table club, which
+  // is the ledger's "from"; the man the name alone finds is the other one.
+  const rec = byPlayer.get(`${m.name}\u0000${m.from}`) ?? byPlayer.get(m.name);
   if (!engineClubSet.has(m.to)) { errors.push(`ADJUDICATION: unknown destination "${m.to}" for ${m.name}`); continue; }
   if (rec) { rec.club = m.to; adjMoved += 1; }
 }
@@ -244,7 +288,7 @@ console.log(`Adjudication applied: ${adjMoved} moved, ${adjRemoved} removed, ${a
 /* ------------------------------------------------------------------ */
 const byClub = new Map(engineClubs.map(c => [c, []]));
 for (const [name, rec] of byPlayer) {
-  byClub.get(rec.club).push({ n: name, p: rec.p, a: rec.a, v: gbpM(rec.usd), r: ratingOf(rec.usd) });
+  byClub.get(rec.club).push({ n: rec.name ?? name, p: rec.p, a: rec.a, v: gbpM(rec.usd), r: ratingOf(rec.usd) });
 }
 for (const list of byClub.values()) list.sort((a, b) => b.v - a.v || a.n.localeCompare(b.n));
 
@@ -321,6 +365,12 @@ if (!(xiAvg('Hajduk Split') > xiAvg('Gorica'))) errors.push('SANITY: Hajduk <= G
 // real ratings rather than the 60s xiAvg pads a near empty club with.
 if (!(xiAvg('Flamengo') > xiAvg('Remo'))) errors.push('SANITY: Flamengo <= Remo');
 if (!(xiAvg('Palmeiras') > xiAvg('Vitória'))) errors.push('SANITY: Palmeiras <= Vitória');
+// Round 883: Liga MX's two biggest clubs outrate two smaller ones, every side
+// with real players (America 21, Necaxa 10, Guadalajara 13, Juarez 8 in the
+// 2026-10-02 bake), so both pairs compare real ratings and neither leans on
+// the pads of an empty club.
+if (!(xiAvg('América') > xiAvg('Necaxa'))) errors.push('SANITY: América <= Necaxa');
+if (!(xiAvg('Guadalajara') > xiAvg('FC Juárez'))) errors.push('SANITY: Guadalajara <= FC Juárez');
 
 const total = [...byClub.values()].reduce((s, l) => s + l.length, 0);
 if (total < 2800) errors.push(`Only ${total} players total (expected 2800+)`);
@@ -345,8 +395,8 @@ let out = `// Rounds 70+72: real rosters for every Club Manager club, generated 
 // (2026-27 memberships), EFL Championship, Saudi Pro League, MLS East and
 // West, Eredivisie, Primeira Liga, Scottish Premiership, Süper Lig,
 // 2. Bundesliga, Belgian Pro League, Austrian Bundesliga, Super League
-// Greece, Danish Superliga, Swiss Super League, SuperSport HNL and
-// Brazil's Serie A.
+// Greece, Danish Superliga, Swiss Super League, SuperSport HNL,
+// Brazil's Serie A and Liga MX.
 // Values in £m, ratings 48-94 from the value curve.
 // Regenerate with: node scripts/bakeClubManagerRosters.mjs
 // DO NOT EDIT BY HAND.

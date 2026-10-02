@@ -593,7 +593,7 @@ export default function NhlFrontOfficeBoard() {
           <p className="font-display text-lg font-bold text-foreground">Take over an NHL front office</p>
           <p className="mt-1 text-xs text-muted-foreground">
             Real 2026-27 rosters from the NHL&apos;s own data, rated off real 2025-26 stats. Work
-            under the hard cap, chase points in an 82-game-shaped season, then the divisional
+            under the hard cap, chase points over an 80 game season, then the divisional
             bracket: sixteen teams, four best-of-7 rounds, one Cup. Saves automatically.
           </p>
         </div>

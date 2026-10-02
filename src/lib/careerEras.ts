@@ -442,6 +442,8 @@ const RIVAL_NAME_COLLISIONS = new Set([
   "Florian Müller", "Pablo López", "Pablo Hernández", "Xavi Hernández", "Xavi Torres",
   // Round 876: the 2026 window re-bake put a real Thiago Fernández in Club Manager.
   "Thiago Fernández",
+  // Round 883: Liga MX brought a real Iván Moreno and Sergio Hernández into Club Manager.
+  "Iván Moreno", "Sergio Hernández",
 ]);
 export function getEraRivalName(year: number): string {
   const first = pick(eraDefFor(year).rivalFirsts);

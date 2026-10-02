@@ -229,7 +229,7 @@ const rewrite = (label, src, swaps) => {
 /* ---- the engine, bundled (under the control when one is set) -------------- */
 const CONTROL_FILE_SWAPS = {
   nosplit: { 'foSeasonStats.ts': [['  for (let k = 0; left > 0; k = (k + 1) % n, left -= 1) out[order[k].i] += 1;', '  void order;']] },
-  extradraw: { 'nbaFrontOffice.ts': [['      if (stats) nbaRecordBox(stats, nbaBoxScore(', '      if (stats && rng() >= 0) nbaRecordBox(stats, nbaBoxScore(']] },
+  extradraw: { 'nbaFrontOffice.ts': [['    if (stats) nbaRecordBox(stats, nbaBoxScore(', '    if (stats && rng() >= 0) nbaRecordBox(stats, nbaBoxScore(']] },
   mvpnowin: { 'nbaSeasonStats.ts': [['export const NBA_MVP_WIN_WEIGHT = 20;', 'export const NBA_MVP_WIN_WEIGHT = 0;']] },
   noqualify: { 'nbaSeasonStats.ts': [['export const NBA_AWARD_GAMES_SHARE = 0.8;', 'export const NBA_AWARD_GAMES_SHARE = 0;']] },
   sixthstarters: { 'nbaSeasonStats.ts': [['qualified.filter(p => p.gs * 2 < p.g)', 'qualified.filter(p => p.g > 0)']] },

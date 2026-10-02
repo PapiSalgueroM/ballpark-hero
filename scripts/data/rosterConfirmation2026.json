@@ -1,8 +1,10 @@
 {
  "measuredOn": "2026-09-11",
  "rule": "A baked Club Manager player whose newest row in public.player_market_values_dedup is year 2025, with no year-2026 row at any club the game models and none anywhere else either. The bake falls back to the 2025 row for these, which carries the 2025 CLUB, so the player ships at last season's club with nothing saying so.",
- "population": 379,
+ "population": 414,
  "populationRound876": "Round 876 mapped the table's 1.FC Nuremberg spelling to Nürnberg and re-baked from the 2026-10-02 dump. Three Nürnberg players came in on a 2025 row with no 2026 row anywhere (Berkay Yilmaz, Oliver Villadsen, Tim Janisch), so they joined the population and wait in pending like the rest. No other new fallback row appeared that an overlay row does not already source. Then Brazil's Serie A was mapped (twenty table spellings) and the bake re-run from the same dump. Twenty players at those clubs came in on a 2025 row with no 2026 row anywhere (Luiz Araújo, Gustavo Gómez, Weverton, Lima, Júnior Alonso, Everson, Zé Rafael, Lucas Ronier, Juninho Capixaba, Ignacio Laquintana, Matheus Martins, Nathan Fernandes, Matheus Nascimento, Rafael Lobato, Memphis Depay, Talles Magno, Pedro Raul, Jean Meneses, Alexander Aravena, Gustavo Prado), so they joined the population. The same day a review found two of them false, and all twenty were then checked on the web (adjudicatorWeb2026_10_02): nineteen settled, Pedro Raul still pending. Two rows that sat in removedClubNotModelled because the World Cup table put them at Vasco da Gama and Palmeiras (Andrés Gómez, Ramón Sosa) moved to movedTo on that same evidence, since both clubs are modelled now.",
+ "populationRound883": "Round 883 mapped Liga MX (seventeen table spellings, Atlante having none) and re-baked from the 2026-10-02 dump. Twenty nine players at those clubs came in on a 2025 row (Esteban Andrada, Nathan Silva, Robert Ergas, Alejandro Mayorga, Dagoberto Espinoza, Pablo Bennevendo, Sebastián Santos, Pablo Monroy, Gustavo Ferrareis, Diego Valdés, Piero Quispe, Mateo Klimowicz, Lorenzo Faravelli, Luka Romero, Jairo Torres, Diego Valoyes, Hugo Camberos, Oussama Idrissi, Ronaldo Nájera, Amaury Morales, Josué Colmán, Yairo Moreno, Fernando González, Fernando Beltrán, Richard Sánchez, Érick Gutiérrez, Andrés Montaño, Emiliano Gómez, Franco Fagúndez), so they joined the population. All twenty nine were then checked on the web the same day (adjudicatorWeb2026_10_02_ligamx) and none is left pending. Nine of them do have a 2026 row, but at a club the bake does not map: four at their own club's U21 side (Dagoberto Espinoza, Pablo Bennevendo, Sebastián Santos, Pablo Monroy) and five elsewhere (Diego Valdés at Vélez Sarsfield, Mateo Klimowicz at Cerro Porteño, Diego Valoyes at Talleres, Yairo Moreno at Independiente Medellín, Fernando González at Dorados de Sinaloa), so the bake falls back to their 2025 club just the same, and they are counted here with the rest rather than trusted.",
+ "populationRound883Namesakes": "The Round 883 review found the bake keyed players by name alone, so a newer row of one man deleted an older row of a different man with the same name. The bake now keeps them apart (an age move of -1 to 3 and the same position group, or they are two men), which restored six 2025 rows that had been silently dropped: Paulinho (Palmeiras), Jose Luis Rodriguez (FC Juarez), Alan Franco (Sao Paulo), Matheus Pereira (Santa Clara), Dudu (Cruzeiro) and Allan (Palmeiras). All six were read on the web on 2026-10-02: two confirmed, four moved to the modelled club they play for. Each row names the club of the other man in namesakeAt.",
  "source": "public.player_market_values_dedup, read through the Supabase MCP on 2026-09-11.",
  "adjudicator": "public.world_cup_players where world_cup_year = 2026: the 2026 World Cup squads of all 48 nations, applied Round 389 (supabase/migrations/20260901_round_389_world_cup_2026_squads.sql). Every row there is a player two independent sources agree on, Wikipedia squad templates read through the API and Al Jazeera 2026-06-02, with Yahoo Sports 2026-06-11 as the third voice where they differed. Clubs are Wikipedia's. It covers only players picked for the World Cup, which is why it resolves 23 of the 356 and no more.",
  "adjudicatorWeb2026_09_15": "Web adjudication, 2026-09-15, for the 18 pending Premier League rows. Two independent source families were read with WebFetch and WebSearch only: A, official (the premierleague.com squad data feed for season 2026, which lists a loaned-out player at his loan club and not at his parent, plus club, league and UEFA pages) and B, independent press (Sky Sports, ESPN, Sports Illustrated and others; Sky Sport Deutschland never counted as independent of Sky Sports UK). A row moved out of pending only where both families agreed on status and club. Each row carries its own URLs and read dates.",
@@ -459,6 +461,327 @@
      "publisher": "BNews São Paulo (September 2026)",
      "readOn": "2026-10-02",
      "says": "Depay stays at Corinthians on a renewal to July 2028"
+    }
+   ]
+  },
+  {
+   "name": "Esteban Andrada",
+   "club": "Monterrey",
+   "adjudicatedOn": "2026-10-02",
+   "note": "On the 2026-27 squad pages of both ESPN and Liga MX.",
+   "sources": [
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/220",
+     "publisher": "ESPN (Monterrey squad page, season 2026-27)",
+     "readOn": "2026-10-02",
+     "says": "goalkeeper, shirt 1"
+    },
+    {
+     "family": "A",
+     "url": "https://www.ligamx.net/cancha/club/14",
+     "publisher": "Liga MX (Monterrey Apertura 2026 squad)",
+     "readOn": "2026-10-02",
+     "says": "listed, goalkeeper 1"
+    }
+   ]
+  },
+  {
+   "name": "Pablo Bennevendo",
+   "club": "Pumas UNAM",
+   "adjudicatedOn": "2026-10-02",
+   "note": "On the 2026-27 squad pages of both ESPN and Liga MX.",
+   "sources": [
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/233",
+     "publisher": "ESPN (Pumas UNAM squad page, season 2026-27)",
+     "readOn": "2026-10-02",
+     "says": "shirt 2"
+    },
+    {
+     "family": "A",
+     "url": "https://www.ligamx.net/cancha/club/18",
+     "publisher": "Liga MX (Pumas UNAM Apertura 2026 squad)",
+     "readOn": "2026-10-02",
+     "says": "listed, 2"
+    }
+   ]
+  },
+  {
+   "name": "Pablo Monroy",
+   "club": "Pumas UNAM",
+   "adjudicatedOn": "2026-10-02",
+   "note": "On the 2026-27 squad pages of both ESPN and Liga MX.",
+   "sources": [
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/233",
+     "publisher": "ESPN (Pumas UNAM squad page, season 2026-27)",
+     "readOn": "2026-10-02",
+     "says": "shirt 13"
+    },
+    {
+     "family": "A",
+     "url": "https://www.ligamx.net/cancha/club/18",
+     "publisher": "Liga MX (Pumas UNAM Apertura 2026 squad)",
+     "readOn": "2026-10-02",
+     "says": "listed, 13"
+    }
+   ]
+  },
+  {
+   "name": "Dagoberto Espinoza",
+   "club": "América",
+   "adjudicatedOn": "2026-10-02",
+   "note": "On the 2026-27 squad pages of both ESPN and Liga MX.",
+   "sources": [
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/227",
+     "publisher": "ESPN (América squad page, season 2026-27)",
+     "readOn": "2026-10-02",
+     "says": "shirt 34"
+    },
+    {
+     "family": "A",
+     "url": "https://www.ligamx.net/cancha/club/1",
+     "publisher": "Liga MX (America Apertura 2026 squad)",
+     "readOn": "2026-10-02",
+     "says": "listed, 34"
+    }
+   ]
+  },
+  {
+   "name": "Luka Romero",
+   "club": "Cruz Azul",
+   "adjudicatedOn": "2026-10-02",
+   "note": "On the 2026-27 squad pages of both ESPN and Liga MX.",
+   "sources": [
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/218",
+     "publisher": "ESPN (Cruz Azul squad page, season 2026-27)",
+     "readOn": "2026-10-02",
+     "says": "shirt 18"
+    },
+    {
+     "family": "A",
+     "url": "https://www.ligamx.net/cancha/club/12566",
+     "publisher": "Liga MX (Cruz Azul Apertura 2026 squad)",
+     "readOn": "2026-10-02",
+     "says": "listed, 18"
+    }
+   ]
+  },
+  {
+   "name": "Andrés Montaño",
+   "club": "Cruz Azul",
+   "adjudicatedOn": "2026-10-02",
+   "note": "On the 2026-27 squad pages of both ESPN and Liga MX.",
+   "sources": [
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/218",
+     "publisher": "ESPN (Cruz Azul squad page, season 2026-27)",
+     "readOn": "2026-10-02",
+     "says": "shirt 10"
+    },
+    {
+     "family": "A",
+     "url": "https://www.ligamx.net/cancha/club/12566",
+     "publisher": "Liga MX (Cruz Azul Apertura 2026 squad)",
+     "readOn": "2026-10-02",
+     "says": "listed, 10"
+    }
+   ]
+  },
+  {
+   "name": "Hugo Camberos",
+   "club": "Guadalajara",
+   "adjudicatedOn": "2026-10-02",
+   "note": "On the 2026-27 squad pages of both ESPN and Liga MX.",
+   "sources": [
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/219",
+     "publisher": "ESPN (Guadalajara squad page, season 2026-27)",
+     "readOn": "2026-10-02",
+     "says": "shirt 14"
+    },
+    {
+     "family": "A",
+     "url": "https://www.ligamx.net/cancha/club/7",
+     "publisher": "Liga MX (Guadalajara Apertura 2026 squad)",
+     "readOn": "2026-10-02",
+     "says": "listed, 14"
+    }
+   ]
+  },
+  {
+   "name": "Oussama Idrissi",
+   "club": "Pachuca",
+   "adjudicatedOn": "2026-10-02",
+   "note": "On the 2026-27 squad pages of both ESPN and Liga MX.",
+   "sources": [
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/234",
+     "publisher": "ESPN (Pachuca squad page, season 2026-27)",
+     "readOn": "2026-10-02",
+     "says": "forward, shirt 11"
+    },
+    {
+     "family": "A",
+     "url": "https://www.ligamx.net/cancha/club/11",
+     "publisher": "Liga MX (Pachuca Apertura 2026 squad)",
+     "readOn": "2026-10-02",
+     "says": "listed, 11"
+    }
+   ]
+  },
+  {
+   "name": "Jairo Torres",
+   "club": "FC Juárez",
+   "adjudicatedOn": "2026-10-02",
+   "note": "On the 2026-27 squad pages of both ESPN and Liga MX.",
+   "sources": [
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/17851",
+     "publisher": "ESPN (FC Juárez squad page, season 2026-27)",
+     "readOn": "2026-10-02",
+     "says": "shirt 10"
+    },
+    {
+     "family": "A",
+     "url": "https://www.ligamx.net/cancha/club/11790",
+     "publisher": "Liga MX (FC Juarez Apertura 2026 squad)",
+     "readOn": "2026-10-02",
+     "says": "listed as Ian Jairo Misael Torres Ramirez, 10"
+    }
+   ]
+  },
+  {
+   "name": "Nathan Silva",
+   "club": "Pumas UNAM",
+   "adjudicatedOn": "2026-10-02",
+   "note": "Liga MX's own Pumas page leaves him out; ESPN's 2026-27 squad lists him and Excélsior reports Pumas blocked his exit after the window.",
+   "sources": [
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/233",
+     "publisher": "ESPN (Pumas UNAM squad page, season 2026-27)",
+     "readOn": "2026-10-02",
+     "says": "shirt 6"
+    },
+    {
+     "family": "B",
+     "url": "https://www.excelsior.com.mx/deportes/pumas-frena-salida-nathan-silva-botafogo-brasileno-queda",
+     "publisher": "Excélsior (2026-09-01)",
+     "readOn": "2026-10-02",
+     "says": "Pumas stop his move to Botafogo, he stays"
+    }
+   ]
+  },
+  {
+   "name": "Amaury Morales",
+   "club": "Cruz Azul",
+   "adjudicatedOn": "2026-10-02",
+   "note": "Out with a knee ligament injury, which is why the 2026-27 squad pages leave him out. Still a Cruz Azul player.",
+   "sources": [
+    {
+     "family": "B",
+     "url": "https://www.excelsior.com.mx/deportes/amaury-morales-fuera-apertura-2026-por-lesion-que-le-paso-canterano-cruz-azul",
+     "publisher": "Excélsior (2026-06-28)",
+     "readOn": "2026-10-02",
+     "says": "tore his right ACL in Cruz Azul training, out for the whole Apertura 2026"
+    },
+    {
+     "family": "B",
+     "url": "https://www.tvazteca.com/aztecadeportes/una-lesion-cambio-planes-cruz-azul-jugador-ya-tenia-pie-fuera-apertura-2026/",
+     "publisher": "TV Azteca (2026-07-25)",
+     "readOn": "2026-10-02",
+     "says": "a loan to Atlético de San Luis fell through on the injury, he stays at Cruz Azul"
+    }
+   ]
+  },
+  {
+   "name": "Ronaldo Nájera",
+   "club": "Atlético San Luis",
+   "adjudicatedOn": "2026-10-02",
+   "note": "Back from a loan at Atlético Madrid B. ESPN lists him by his first given name, Luis.",
+   "sources": [
+    {
+     "family": "B",
+     "url": "https://planoinformativo.com/planodeportivo/338627/ronaldo-najera-regresa-al-atletico-de-san-luis",
+     "publisher": "Plano Informativo (2026-06-22)",
+     "readOn": "2026-10-02",
+     "says": "back at San Luis after his loan at Atlético Madrid B"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/15720",
+     "publisher": "ESPN (Atlético de San Luis squad page, season 2026-27)",
+     "readOn": "2026-10-02",
+     "says": "listed as Luis Nájera, 23, his full name being Luis Ronaldo Nájera Reyna"
+    }
+   ]
+  },
+  {
+   "name": "Paulinho",
+   "club": "Palmeiras",
+   "namesakeAt": [
+    "Toluca"
+   ],
+   "adjudicatedOn": "2026-10-02",
+   "note": "Paulo Henrique Sampaio Filho, born 2000-07-15, the Palmeiras number 10. Not the Toluca striker of the same name (Joao Paulo Dias Fernandes, born 1992), whose 2026 row used to overwrite this one in the bake.",
+   "sources": [
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2029",
+     "publisher": "ESPN (Palmeiras squad page, season 2026-27)",
+     "readOn": "2026-10-02",
+     "says": "forward, shirt 10, age 26"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/player/_/id/258271",
+     "publisher": "ESPN (player page)",
+     "readOn": "2026-10-02",
+     "says": "Palmeiras number 10, born 2000-07-15, started the Serie A match of 2026-07-26"
+    },
+    {
+     "family": "B",
+     "url": "https://www.dgabc.com.br/Noticia/4321893/expulsao-gol-de-paulinho-anulacao-polemica-e-penalti-perdido-palmeiras-bate-chape",
+     "publisher": "Diario do Grande ABC (2026-05-31)",
+     "readOn": "2026-10-02",
+     "says": "scored the winner for Palmeiras against Chapecoense"
+    }
+   ]
+  },
+  {
+   "name": "José Luis Rodríguez",
+   "club": "FC Juárez",
+   "namesakeAt": [
+    "Vasco da Gama"
+   ],
+   "adjudicatedOn": "2026-10-02",
+   "note": "The Panamanian winger at FC Juarez. Not the Uruguayan right back of the same name at Vasco da Gama, whose 2026 row used to overwrite this one in the bake.",
+   "sources": [
+    {
+     "family": "A",
+     "url": "https://www.ligamx.net/cancha/club/11790",
+     "publisher": "Liga MX (FC Juarez Apertura 2026 squad)",
+     "readOn": "2026-10-02",
+     "says": "shirt 11, midfielder, not Mexican"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/17851",
+     "publisher": "ESPN (FC Juarez squad page, season 2026-27)",
+     "readOn": "2026-10-02",
+     "says": "midfielder, shirt 11, age 28"
     }
    ]
   }
@@ -1210,6 +1533,295 @@
      "says": "Antonio Sanabria listed"
     }
    ]
+  },
+  {
+   "name": "Lorenzo Faravelli",
+   "from": "Cruz Azul",
+   "to": "Necaxa",
+   "realClub": "Necaxa, on loan from Cruz Azul",
+   "loan": true,
+   "loanFrom": "Cruz Azul",
+   "adjudicatedOn": "2026-10-02",
+   "note": "On loan at Necaxa, placed there by the loan policy.",
+   "sources": [
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/229",
+     "publisher": "ESPN (Necaxa squad page, season 2026-27)",
+     "readOn": "2026-10-02",
+     "says": "shirt 8"
+    },
+    {
+     "family": "B",
+     "url": "https://www.foxsports.com.mx/2026/01/06/bajas-cruz-azul-nacho-rivero-compra-xolos-faravelli-prestamo-necaxa-18-meses/",
+     "publisher": "Fox Sports México (2026-01-06)",
+     "readOn": "2026-10-02",
+     "says": "loaned to Necaxa for 18 months"
+    }
+   ]
+  },
+  {
+   "name": "Alejandro Mayorga",
+   "from": "Necaxa",
+   "to": "FC Juárez",
+   "realClub": "FC Juárez",
+   "adjudicatedOn": "2026-10-02",
+   "note": "Plays for FC Juárez in 2026-27.",
+   "sources": [
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/17851",
+     "publisher": "ESPN (FC Juárez squad page, season 2026-27)",
+     "readOn": "2026-10-02",
+     "says": "shirt 4"
+    },
+    {
+     "family": "B",
+     "url": "https://us.soccerway.com/player/mayorga-manuel/x0XZ9KL4/transfers",
+     "publisher": "Soccerway",
+     "readOn": "2026-10-02",
+     "says": "Necaxa to FC Juárez, 2025-07-04"
+    }
+   ]
+  },
+  {
+   "name": "Fernando Beltrán",
+   "from": "Guadalajara",
+   "to": "León",
+   "realClub": "León",
+   "adjudicatedOn": "2026-10-02",
+   "note": "Plays for León in 2026-27.",
+   "sources": [
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/228",
+     "publisher": "ESPN (León squad page, season 2026-27)",
+     "readOn": "2026-10-02",
+     "says": "midfielder, shirt 6"
+    },
+    {
+     "family": "B",
+     "url": "https://www.fotmob.com/players/861896",
+     "publisher": "FotMob",
+     "readOn": "2026-10-02",
+     "says": "club León, played León 2-1 FC Juárez on 2026-09-28"
+    },
+    {
+     "family": "B",
+     "url": "https://www.90min.com/es/oficial-fernando-beltran-es-presentado-como-refuerzo-de-leon-dejando-atras-a-las-chivas-",
+     "publisher": "90min (2025-06-03)",
+     "readOn": "2026-10-02",
+     "says": "presented as a León signing, permanent, from Chivas"
+    }
+   ]
+  },
+  {
+   "name": "Sebastián Santos",
+   "from": "León",
+   "to": "Pachuca",
+   "realClub": "Pachuca, on loan from León",
+   "loan": true,
+   "loanFrom": "León",
+   "adjudicatedOn": "2026-10-02",
+   "note": "On loan at Pachuca, placed there by the loan policy.",
+   "sources": [
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/234",
+     "publisher": "ESPN (Pachuca squad page, season 2026-27)",
+     "readOn": "2026-10-02",
+     "says": "midfielder, shirt 12"
+    },
+    {
+     "family": "B",
+     "url": "https://cl.soccerway.com/jugador/santos-sebastian/IFVBfyYi/traspasos",
+     "publisher": "Soccerway",
+     "readOn": "2026-10-02",
+     "says": "loaned to Pachuca by León 2026-09-09, back 2027-06-30"
+    }
+   ]
+  },
+  {
+   "name": "Érick Gutiérrez",
+   "from": "Guadalajara",
+   "to": "Toluca",
+   "realClub": "Toluca",
+   "adjudicatedOn": "2026-10-02",
+   "note": "Plays for Toluca in 2026-27.",
+   "sources": [
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/223",
+     "publisher": "ESPN (Toluca squad page, season 2026-27)",
+     "readOn": "2026-10-02",
+     "says": "midfielder, shirt 35"
+    },
+    {
+     "family": "B",
+     "url": "https://www.foxsports.com.mx/2026/07/14/se-que-existe-morbo-erick-gutierrez-ya-palpita-el-duelo-ante-chivas-defendiendo-a-toluca/",
+     "publisher": "Fox Sports México (2026-07-14)",
+     "readOn": "2026-10-02",
+     "says": "now with Toluca, before facing Chivas"
+    }
+   ]
+  },
+  {
+   "name": "Gustavo Ferrareis",
+   "from": "Puebla",
+   "to": "Atlas",
+   "realClub": "Atlas",
+   "adjudicatedOn": "2026-10-02",
+   "note": "Plays for Atlas in 2026-27.",
+   "sources": [
+    {
+     "family": "B",
+     "url": "https://www.fotmob.com/players/602570",
+     "publisher": "FotMob",
+     "readOn": "2026-10-02",
+     "says": "club Atlas, 314 Liga MX minutes in 2026/27, played 2026-08-23"
+    },
+    {
+     "family": "B",
+     "url": "https://us.soccerway.com/player/gustavo-ferrareis/K4Q8FTsK/",
+     "publisher": "Soccerway",
+     "readOn": "2026-10-02",
+     "says": "free to Atlas 2025-07-03, contract to 2027-06-30, five league games in 2026-27"
+    }
+   ]
+  },
+  {
+   "name": "Emiliano Gómez",
+   "from": "Puebla",
+   "to": "Tigres UANL",
+   "realClub": "Tigres UANL",
+   "adjudicatedOn": "2026-10-02",
+   "note": "Plays for Tigres UANL in 2026-27.",
+   "sources": [
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/232",
+     "publisher": "ESPN (Tigres UANL squad page, season 2026-27)",
+     "readOn": "2026-10-02",
+     "says": "forward, shirt 9"
+    },
+    {
+     "family": "B",
+     "url": "https://www.record.com.mx/historia/emiliano-gomez-tigres-2026091005014973271",
+     "publisher": "Récord (2026-09-09)",
+     "readOn": "2026-10-02",
+     "says": "Tigres make his signing from Puebla official"
+    }
+   ]
+  },
+  {
+   "name": "Alan Franco",
+   "from": "São Paulo",
+   "to": "Tigres UANL",
+   "realClub": "Tigres UANL, on loan from São Paulo",
+   "loan": true,
+   "loanFrom": "São Paulo",
+   "namesakeAt": [
+    "Atlético Mineiro"
+   ],
+   "adjudicatedOn": "2026-10-02",
+   "note": "The Argentine centre back, on a one season loan at Tigres with an option to buy, placed there by the loan policy. Not the Ecuadorian midfielder of the same name at Atletico Mineiro.",
+   "sources": [
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/232",
+     "publisher": "ESPN (Tigres UANL squad page, season 2026-27)",
+     "readOn": "2026-10-02",
+     "says": "defender, shirt 15, age 29"
+    },
+    {
+     "family": "B",
+     "url": "https://www.dgabc.com.br/Noticia/4335054/alan-franco-se-despede-do-sao-paulo-para-jogar-no-mexico",
+     "publisher": "Diario do Grande ABC (2026-07-14)",
+     "readOn": "2026-10-02",
+     "says": "leaves Sao Paulo for Tigres on a one season loan with an option to buy"
+    }
+   ]
+  },
+  {
+   "name": "Matheus Pereira",
+   "from": "Santa Clara",
+   "to": "Toronto FC",
+   "realClub": "Toronto FC",
+   "namesakeAt": [
+    "Cruzeiro"
+   ],
+   "adjudicatedOn": "2026-10-02",
+   "note": "The Brazilian left back, born 2000, signed through the 2027-28 MLS season. Not the Cruzeiro attacking midfielder of the same name.",
+   "sources": [
+    {
+     "family": "A",
+     "url": "https://www.torontofc.ca/news/toronto-fc-sign-brazilian-left-back-matheus-pereira",
+     "publisher": "Toronto FC",
+     "readOn": "2026-10-02",
+     "says": "signed from Santa Clara"
+    },
+    {
+     "family": "B",
+     "url": "https://www.mlssoccer.com/news/toronto-fc-acquire-brazilian-defender-matheus-pereira",
+     "publisher": "MLS",
+     "readOn": "2026-10-02",
+     "says": "signed through 2027-28 with an option for 2028-29"
+    }
+   ]
+  },
+  {
+   "name": "Dudu",
+   "from": "Cruzeiro",
+   "to": "Atlético Mineiro",
+   "realClub": "Atlético Mineiro",
+   "namesakeAt": [
+    "Athletico Paranaense"
+   ],
+   "adjudicatedOn": "2026-10-02",
+   "note": "Eduardo Pereira Rodrigues, born 1992-01-07, left Cruzeiro by mutual consent and signed for Atletico Mineiro to the end of 2027. Not the Athletico Paranaense midfielder of the same name, aged 20.",
+   "sources": [
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/player/_/id/178349/dudu",
+     "publisher": "ESPN (player page)",
+     "readOn": "2026-10-02",
+     "says": "Atletico-MG number 92, played 2026-09-19"
+    },
+    {
+     "family": "B",
+     "url": "https://www.fotmob.com/players/174531/dudu",
+     "publisher": "FotMob",
+     "readOn": "2026-10-02",
+     "says": "Atletico-MG, born 1992-01-07, played 2026-09-19"
+    }
+   ]
+  },
+  {
+   "name": "Allan",
+   "from": "Palmeiras",
+   "to": "Manchester City",
+   "realClub": "Manchester City",
+   "namesakeAt": [
+    "Corinthians"
+   ],
+   "adjudicatedOn": "2026-10-02",
+   "note": "Allan Andrade Elias, born 2004-04-19, sold to Manchester City on 2026-08-31 on a five year deal. Not the Corinthians midfielder of the same name (born 1997).",
+   "sources": [
+    {
+     "family": "B",
+     "url": "https://www.fotmob.com/players/1721789/allan",
+     "publisher": "FotMob",
+     "readOn": "2026-10-02",
+     "says": "Manchester City since August 2026, born 2004-04-19, on the bench 2026-09-20"
+    },
+    {
+     "family": "B",
+     "url": "https://www.nst.com.my/amp/sports/football/2026/08/1523012/man-city-confirm-signing-allan-elias-palmeiras",
+     "publisher": "New Straits Times (2026-08)",
+     "readOn": "2026-10-02",
+     "says": "Manchester City confirm the signing from Palmeiras"
+    }
+   ]
   }
  ],
  "removedClubNotModelled": [
@@ -1337,6 +1949,264 @@
      "publisher": "ESPN (Internacional squad page, season 2026-27)",
      "readOn": "2026-10-02",
      "says": "Gustavo Prado absent"
+    }
+   ]
+  },
+  {
+   "name": "Diego Valdés",
+   "from": "América",
+   "realClub": "Vélez Sarsfield",
+   "adjudicatedOn": "2026-10-02",
+   "note": "Left América at the end of his contract and signed for Vélez to December 2027. Argentina is not modelled.",
+   "sources": [
+    {
+     "family": "B",
+     "url": "https://espndeportes.espn.com/futbol/mundial/nota/_/id/15339796/diego-valdes-fue-oficializado-como-nuevo-jugador-de-velez",
+     "publisher": "ESPN Deportes (2025-06-21)",
+     "readOn": "2026-10-02",
+     "says": "made official as a Vélez player"
+    },
+    {
+     "family": "B",
+     "url": "https://www.emol.com/noticias/Deportes/2025/06/21/1169982/diego-valdes-velez-sarsfield-fichaje.html",
+     "publisher": "Emol (2025-06-21)",
+     "readOn": "2026-10-02",
+     "says": "signs for Vélez Sarsfield"
+    },
+    {
+     "family": "B",
+     "url": "https://www.fotmob.com/players/390758",
+     "publisher": "FotMob",
+     "readOn": "2026-10-02",
+     "says": "club Vélez Sarsfield, played 2026-09-21"
+    }
+   ]
+  },
+  {
+   "name": "Mateo Klimowicz",
+   "from": "Atlético San Luis",
+   "realClub": "Cerro Porteño",
+   "adjudicatedOn": "2026-10-02",
+   "note": "Playing for Cerro Porteño in 2026. Paraguay is not modelled.",
+   "sources": [
+    {
+     "family": "B",
+     "url": "https://global.espn.com/football/player/_/id/251840/mateo-klimowicz",
+     "publisher": "ESPN player page",
+     "readOn": "2026-10-02",
+     "says": "Cerro Porteño, shirt 40, started 2026-09-19 and 2026-09-26"
+    },
+    {
+     "family": "B",
+     "url": "https://www.fotmob.com/players/889620",
+     "publisher": "FotMob",
+     "readOn": "2026-10-02",
+     "says": "club Cerro Porteño, 2026 Division Profesional"
+    }
+   ]
+  },
+  {
+   "name": "Diego Valoyes",
+   "from": "FC Juárez",
+   "realClub": "Talleres, on loan from FC Juárez",
+   "adjudicatedOn": "2026-10-02",
+   "note": "Loaned to Talleres from 2026-01-19 to 2026-12-31 with an option. Argentina is not modelled.",
+   "sources": [
+    {
+     "family": "B",
+     "url": "https://www.mdzol.com/deportes/bombazo-talleres-cordoba-abrocho-la-vuelta-diego-valoyes-n1429890",
+     "publisher": "MDZ",
+     "readOn": "2026-10-02",
+     "says": "Talleres sign him back on loan"
+    },
+    {
+     "family": "B",
+     "url": "https://ar.soccerway.com/jugador/valoyes-diego/bgreVCaF/traspasos",
+     "publisher": "Soccerway",
+     "readOn": "2026-10-02",
+     "says": "loan to Talleres 2026-01-19 to 2026-12-31"
+    },
+    {
+     "family": "B",
+     "url": "https://www.fotmob.com/players/783809",
+     "publisher": "FotMob",
+     "readOn": "2026-10-02",
+     "says": "club Talleres, played 2026-09-12"
+    }
+   ]
+  },
+  {
+   "name": "Yairo Moreno",
+   "from": "León",
+   "realClub": "CD Marathón",
+   "adjudicatedOn": "2026-10-02",
+   "note": "Signed by Marathón of Honduras in June 2026 (the value table's 2026 row at Independiente Medellín is older). Honduras is not modelled.",
+   "sources": [
+    {
+     "family": "B",
+     "url": "https://www.publimetro.co/deportes/2026/06/25/exjugador-de-la-seleccion-colombia-fue-anunciado-como-nuevo-jugador-de-un-equipo-de-honduras/",
+     "publisher": "Publimetro Colombia (2026-06-25)",
+     "readOn": "2026-10-02",
+     "says": "announced as a new player of a Honduran club"
+    },
+    {
+     "family": "B",
+     "url": "https://espndeportes.espn.com/futbol/jugador/_/id/200945/yairo-moreno",
+     "publisher": "ESPN Deportes player page",
+     "readOn": "2026-10-02",
+     "says": "Marathón, shirt 72, played 2026-09-17"
+    }
+   ]
+  },
+  {
+   "name": "Fernando González",
+   "from": "Querétaro",
+   "realClub": "Dorados de Sinaloa",
+   "adjudicatedOn": "2026-10-02",
+   "note": "The forward born 2001-04-26. After a loan at Querétaro (January 2025 to June 2026) he joined Dorados of the Liga de Expansión in August 2026, which the game does not model.",
+   "sources": [
+    {
+     "family": "B",
+     "url": "https://www.fotmob.com/players/1410518",
+     "publisher": "FotMob",
+     "readOn": "2026-10-02",
+     "says": "club Dorados de Sinaloa, played 2026-09-27"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/222",
+     "publisher": "ESPN (Querétaro squad page, season 2026-27)",
+     "readOn": "2026-10-02",
+     "says": "not listed"
+    }
+   ]
+  },
+  {
+   "name": "Piero Quispe",
+   "from": "Pumas UNAM",
+   "realClub": "Universitario de Deportes",
+   "adjudicatedOn": "2026-10-02",
+   "note": "Pumas ended his contract and he joined Universitario in July 2026. Peru is not modelled.",
+   "sources": [
+    {
+     "family": "B",
+     "url": "https://trome.com/deportes/futbol-internacional/sydney-fc-compartio-despedida-de-piero-quispe-jugara-por-universitario-de-deportes-video-fichajes-2026-noticia/",
+     "publisher": "Trome",
+     "readOn": "2026-10-02",
+     "says": "will play for Universitario"
+    },
+    {
+     "family": "B",
+     "url": "https://panamericana.pe/deportes/471955-universitario-asegura-regreso-piero-quispe-reforzar-plantel",
+     "publisher": "Panamericana",
+     "readOn": "2026-10-02",
+     "says": "Universitario secure his return"
+    },
+    {
+     "family": "B",
+     "url": "https://www.fotmob.com/players/1251269",
+     "publisher": "FotMob",
+     "readOn": "2026-10-02",
+     "says": "club Universitario, played 2026-09-19"
+    }
+   ]
+  },
+  {
+   "name": "Robert Ergas",
+   "from": "Pumas UNAM",
+   "realClub": "Aris Limassol",
+   "adjudicatedOn": "2026-10-02",
+   "note": "Left Pumas on a free to Aris Limassol on 2025-09-04. No 2026-27 appearance found (knee injury from October 2025), and he is on neither Pumas 2026-27 squad page. Cyprus is not modelled.",
+   "sources": [
+    {
+     "family": "A",
+     "url": "https://arisfc.com/en/news/robert-ergas-is-green-2025-09-03/",
+     "publisher": "Aris Limassol",
+     "readOn": "2026-10-02",
+     "says": "Robert Ergas signs"
+    },
+    {
+     "family": "B",
+     "url": "https://mx.soccerway.com/jugador/ergas-robert/WUpyb80C",
+     "publisher": "Soccerway",
+     "readOn": "2026-10-02",
+     "says": "free from Pumas to Aris 2025-09-04, current club Aris"
+    },
+    {
+     "family": "B",
+     "url": "https://global.espn.com/football/player/_/id/224208/robert-ergas",
+     "publisher": "ESPN player page",
+     "readOn": "2026-10-02",
+     "says": "club Aris Limassol"
+    }
+   ]
+  },
+  {
+   "name": "Richard Sánchez",
+   "from": "América",
+   "realClub": "Olimpia, on loan from Racing Club",
+   "adjudicatedOn": "2026-10-02",
+   "note": "Sold by América to Racing in March 2025, loaned to Olimpia from 2026-01-22 to 2026-12-31. Paraguay is not modelled.",
+   "sources": [
+    {
+     "family": "B",
+     "url": "https://ar.soccerway.com/jugador/sanchez-richard/Kxx4EN5F/traspasos",
+     "publisher": "Soccerway",
+     "readOn": "2026-10-02",
+     "says": "loan Racing to Olimpia 2026-01-22 to 2026-12-31"
+    },
+    {
+     "family": "B",
+     "url": "https://www.fotmob.com/players/745210",
+     "publisher": "FotMob",
+     "readOn": "2026-10-02",
+     "says": "club Olimpia on loan, played 2026-09-20"
+    }
+   ]
+  },
+  {
+   "name": "Josué Colmán",
+   "from": "Querétaro",
+   "realClub": "Nacional (Asunción)",
+   "adjudicatedOn": "2026-10-02",
+   "note": "Left Querétaro on a free for Newell's in August 2025, then Nacional on a free on 2026-01-24. Paraguay is not modelled.",
+   "sources": [
+    {
+     "family": "B",
+     "url": "https://co.soccerway.com/jugador/colman-josue/0GB7HV23/traspasos",
+     "publisher": "Soccerway",
+     "readOn": "2026-10-02",
+     "says": "free to Nacional 2026-01-24, contract to 2026-12-31"
+    },
+    {
+     "family": "B",
+     "url": "https://www.fotmob.com/players/688293",
+     "publisher": "FotMob",
+     "readOn": "2026-10-02",
+     "says": "club Nacional, played 2026-09-25"
+    }
+   ]
+  },
+  {
+   "name": "Franco Fagúndez",
+   "from": "Santos Laguna",
+   "realClub": "Independiente Santa Fe, on loan from Santos Laguna",
+   "adjudicatedOn": "2026-10-02",
+   "note": "Loaned to Santa Fe from 2026-01-06 to 2026-12-31. Colombia is not modelled.",
+   "sources": [
+    {
+     "family": "B",
+     "url": "https://es.soccerway.com/jugador/fagundez-franco/69DCiuWS/traspasos",
+     "publisher": "Soccerway",
+     "readOn": "2026-10-02",
+     "says": "loan to Santa Fe 2026-01-06 to 2026-12-31"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com.ar/football/player/_/id/318097/franco-fagundez",
+     "publisher": "ESPN player page",
+     "readOn": "2026-10-02",
+     "says": "Santa Fe, shirt 9, started 2026-09-29"
     }
    ]
   }
@@ -2785,5 +3655,6 @@
    "note": "Checked 2026-10-02 and left pending: ESPN's Corinthians 2026-27 squad page lists him (shirt 18), but the only press found (Mais Goiás, 2026-08-04) says Corinthians wanted to sell him before the window shut, and no second source after the window confirms he stayed."
   }
  ],
- "adjudicatorWeb2026_10_02": "Web adjudication, 2026-10-02, for the twenty Brazilian rows Round 876 added to pending, after a review found two of them false (Weverton at Grêmio since January, Júnior Alonso at Atlanta United since July). Read with WebFetch and WebSearch only. Family A is the club's own site where it could be reached; family B is independent press and ESPN's 2026-27 squad pages, read after the Brazilian window shut on 2026-09-11. A row left pending only where two publishers agreed on the club. Nineteen of the twenty were settled: ten at a new club (nine moves plus Antonio Sanabria, below), three at clubs the game does not model, seven confirmed where they were. Pedro Raul stays pending with what the check found. The same pass found Antonio Sanabria, held out as removedClubNotModelled at Cremonese, signed for Internacional on 2026-08-20, so he moves to movedTo now that Internacional are modelled."
+ "adjudicatorWeb2026_10_02": "Web adjudication, 2026-10-02, for the twenty Brazilian rows Round 876 added to pending, after a review found two of them false (Weverton at Grêmio since January, Júnior Alonso at Atlanta United since July). Read with WebFetch and WebSearch only. Family A is the club's own site where it could be reached; family B is independent press and ESPN's 2026-27 squad pages, read after the Brazilian window shut on 2026-09-11. A row left pending only where two publishers agreed on the club. Nineteen of the twenty were settled: ten at a new club (nine moves plus Antonio Sanabria, below), three at clubs the game does not model, seven confirmed where they were. Pedro Raul stays pending with what the check found. The same pass found Antonio Sanabria, held out as removedClubNotModelled at Cremonese, signed for Internacional on 2026-08-20, so he moves to movedTo now that Internacional are modelled.",
+ "adjudicatorWeb2026_10_02_ligamx": "Web adjudication, 2026-10-02, for the twenty nine Liga MX rows Round 883 added to pending. Read with WebFetch and WebSearch only. Family A is Liga MX's own Apertura 2026 squad pages (ligamx.net) or the club's own site; family B is independent press, ESPN's 2026-27 squad pages, Soccerway and FotMob, read after the Liga MX window. All twenty nine settled: twelve confirmed at their club, seven at another modelled Mexican club (two on loan), ten at a club the game does not model. A name absent from one squad page alone was never enough to move or drop anybody."
 }
