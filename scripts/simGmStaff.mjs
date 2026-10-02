@@ -25,7 +25,7 @@ const ROOT_URL = ROOT.replaceAll('\\', '/');
 const FIXTURE = path.join(ROOT, 'scripts/data/cmStaffFixture.json');
 const RECORD = process.env.GM_STAFF_RECORD === '1';
 const CONTROL = process.env.GM_STAFF_CONTROL || '';
-const CONTROLS = ['fixturewage', 'fixturecore', 'flat', 'nocap', 'noscout', 'poachhead', 'dearstaff', 'wrongwords'];
+const CONTROLS = ['fixturewage', 'fixturecore', 'flat', 'nocap', 'noscout', 'poachhead', 'nopoach', 'dearstaff', 'wrongwords'];
 if (CONTROL && !CONTROLS.includes(CONTROL)) {
   console.error(`GM_STAFF_CONTROL=${CONTROL} is not a control this harness knows (${CONTROLS.join(', ')})`);
   process.exit(1);
@@ -104,6 +104,10 @@ if (CONTROL === 'noscout') {
 if (CONTROL === 'poachhead') {
   controlCopy('core', 'if (rules.unpoachable?.includes(post)) continue;', '',
     'a rival can come in for the head coach');
+}
+if (CONTROL === 'nopoach') {
+  controlCopy('core', 'return level < rules.poachFromLevel ? 0 : rules.poachPerLevel * (level - (rules.poachFromLevel - 1));', 'return 0;',
+    'no rival ever comes in for anybody');
 }
 if (CONTROL === 'dearstaff') {
   controlCopy('packs', 'wageBase: 3, wagePerLevel: 2.1, feeBase: 0.1,', 'wageBase: 3, wagePerLevel: 6.3, feeBase: 0.1,',
@@ -439,12 +443,301 @@ console.log('2) Every pack is well formed: its posts, its keys and its bounds ag
       if (core.gmStaffEffect(pack, null, key) !== k.none) fail(`${pack.id}/${key}: a save with no desk at all does not read ${k.none}`);
     }
     if (core.gmStaffEffect(pack, blockAt(pack, () => 10), 'noSuchKey') !== 0) fail(`${pack.id}: a key nobody declared is worth something`);
-    for (const m of ['wageUnit', 'purseUnit', 'purseNote']) if (!pack.money[m]) fail(`${pack.id}: money.${m} is empty`);
+    for (const m of ['wageUnit', 'purseUnit', 'purseNote', 'tickWord']) if (!pack.money[m]) fail(`${pack.id}: money.${m} is empty`);
     if (!(pack.money.ticksPerSeason >= 1) || !(pack.money.seasonPurse > 0)) fail(`${pack.id}: no season to pay the staff over`);
   }
   if (PACKS.length !== 8) fail(`${PACKS.length} packs, the round ships 8 (NFL, NBA, MLB, NHL, CFB, CBB, the fight gym, Australian football)`);
   if (new Set(PACKS.map(p => p.id)).size !== PACKS.length) fail('two packs share an id');
   console.log(`   ${PACKS.length} packs, ${posts} posts, ${effects} effects`);
+}
+
+/* ---------- 3. Every level moves every effect ---------- */
+console.log('3) Every level from 1 to 10 moves every effect its post declares, on the ladder and on the desk');
+{
+  let steps = 0;
+  let thinnest = Infinity;
+  for (const pack of PACKS) {
+    for (const post of pack.posts) {
+      for (const e of post.effects) {
+        const k = pack.keys[e.key];
+        const dir = Math.sign(e.best - e.none);
+        const stepWant = Math.abs(e.best - e.none) / 9;
+        const at = lv => core.gmEffectAt(e, lv, pack.rules.maxLevel);
+        if (at(1) !== e.none) fail(`${pack.id}/${post.id}/${e.key}: level 1 is ${at(1)}, not exactly ${e.none}`);
+        if (Math.abs(at(10) - e.best) > EPS) fail(`${pack.id}/${post.id}/${e.key}: level 10 is ${at(10)}, not ${e.best}`);
+        /* The desk total with this man alone, and with everybody else already at the top. */
+        const alone = lv => core.gmStaffEffect(pack, blockAt(pack, id => (id === post.id ? lv : null)), e.key);
+        const crowded = lv => core.gmStaffEffect(pack, blockAt(pack, id => (id === post.id ? lv : 10)), e.key);
+        for (const [what, read] of [['ladder', at], ['desk, alone', alone], ['desk, the rest at 10', crowded]]) {
+          for (let lv = 1; lv < 10; lv++) {
+            const move = (read(lv + 1) - read(lv)) * dir;
+            steps += 1;
+            /* Relative size of the step against an even ninth of the whole ladder. */
+            const share = what === 'ladder' || !k.mult ? move / stepWant : move / (Math.abs(read(10) - read(1)) / 9);
+            thinnest = Math.min(thinnest, share);
+            if (!(share > 0.5)) fail(`${pack.id}/${post.id}/${e.key} (${what}): level ${lv} to ${lv + 1} moved ${move.toFixed(5)}, an even step is ${stepWant.toFixed(5)}`);
+          }
+        }
+        if (alone(1) !== k.none) fail(`${pack.id}/${post.id}/${e.key}: a level 1 man alone on the desk reads ${alone(1)}, not ${k.none}`);
+      }
+    }
+  }
+  console.log(`   ${steps} level steps read, the thinnest ${thinnest.toFixed(3)} of an even ninth (floor 0.5; the flat control reads 0)`);
+}
+
+/* ---------- 4. Nothing pushes an effect past its ends ---------- */
+console.log('4) A corrupt level cannot push a unit past its cap');
+{
+  const CORRUPT = [-1e9, -5, 0, 0.5, 10.5, 11, 99, 1e9, Infinity, -Infinity, NaN, '7', null, undefined];
+  let readings = 0;
+  let worst = 0;
+  for (const pack of PACKS) {
+    for (const post of pack.posts) {
+      for (const e of post.effects) {
+        const lo = Math.min(e.none, e.best);
+        const hi = Math.max(e.none, e.best);
+        for (const lv of CORRUPT) {
+          const v = core.gmEffectAt(e, lv, pack.rules.maxLevel);
+          readings += 1;
+          if (!(v >= lo - EPS && v <= hi + EPS)) { fail(`${pack.id}/${post.id}/${e.key}: level ${String(lv)} reads ${v}, outside ${lo} to ${hi}`); worst = Math.max(worst, Math.abs(v)); }
+        }
+      }
+    }
+    /* And the whole desk, every chair corrupt at once, straight off a block no validator has seen. */
+    for (const lv of [99, -99, 1e9]) {
+      const bad = blockAt(pack, () => 5);
+      for (const post of pack.posts) bad[post.id].level = lv;
+      for (const [key, k] of Object.entries(pack.keys)) {
+        const v = core.gmStaffEffect(pack, bad, key);
+        readings += 1;
+        if (!(v >= k.lo - EPS && v <= k.hi + EPS)) fail(`${pack.id}/${key}: a desk of level ${lv} reads ${v}, outside ${k.lo} to ${k.hi}`);
+      }
+      if (core.gmIsValidStaff(pack.rules, bad)) fail(`${pack.id}: a block with level ${lv} in every chair passes the validator`);
+    }
+  }
+  /* The two sided edge the college coordinators carry, at the numbers collegeProgram.ts uses. */
+  for (const r of [-1e9, 0, 45, 70, 95, 150, 1e9, NaN, Infinity]) {
+    const v = core.gmBoundedEdge(r, 70, 0.12, 3);
+    readings += 1;
+    if (!(v >= -3 && v <= 3)) fail(`gmBoundedEdge(${r}) is ${v}, past the cap of 3`);
+  }
+  if (core.gmBoundedEdge(95, 70, 0.12, 3) !== 3 || core.gmBoundedEdge(45, 70, 0.12, 3) !== -3 || core.gmBoundedEdge(70, 70, 0.12, 3) !== 0) fail('gmBoundedEdge does not give a coordinator his 3, minus 3 and 0');
+  console.log(`   ${readings} corrupt readings, every one inside its two ends`);
+}
+
+/* ---------- 5. The scouting read tightens at every level ---------- */
+console.log('5) Draft grade noise shrinks at every level of scouting director, from 4 down to 1');
+{
+  const GRID = 9000;
+  const us = Array.from({ length: GRID }, (_, i) => (i + 0.5) / GRID);
+  const meanAbs = lv => us.reduce((t, u) => t + Math.abs(core.gmScoutNoise(u, lv)), 0) / GRID;
+  /* With nobody in the job it is the front offices' own constant, draw for draw. */
+  let same = 0;
+  for (const u of us) if (core.gmScoutNoise(u, 1) === Math.floor(u * 9) - 4) same += 1;
+  if (same !== GRID) fail(`at level 1 only ${same} of ${GRID} draws equal Math.floor(u * 9) - 4`);
+  const stripped = lf(fs.readFileSync(path.join(ROOT, 'src/lib/frontOffice.ts'), 'utf8')).replace(/\/\*[\s\S]*?\*\//g, '').replace(/\/\/[^\n]*/g, '');
+  if (!stripped.includes('Math.floor(rng() * 9) - 4')) fail('frontOffice.ts no longer draws its scouting error as Math.floor(rng() * 9) - 4, so level 1 here is not "the draft as it is today" any more');
+  if (core.gmScoutSpread(1) !== 4 || Math.abs(core.gmScoutSpread(10) - 1) > EPS) fail(`the spread runs ${core.gmScoutSpread(1)} to ${core.gmScoutSpread(10)}, not 4 to 1`);
+  const means = LEVELS.map(meanAbs);
+  let thinnest = Infinity;
+  for (let i = 0; i < 9; i++) {
+    const drop = means[i] - means[i + 1];
+    thinnest = Math.min(thinnest, drop);
+    /* Measured: every step drops the mean error by 0.185 (2.222 at level 1, 0.556 at level 10). Half of that is the floor. */
+    if (!(drop > 0.09)) fail(`scouting level ${i + 1} to ${i + 2}: mean error ${means[i].toFixed(3)} to ${means[i + 1].toFixed(3)}, a drop of ${drop.toFixed(3)}`);
+    const a = core.gmScoutBand(75, i + 1);
+    const b = core.gmScoutBand(75, i + 2);
+    if (!(b.spread < a.spread) || b.hi - b.lo > a.hi - a.lo) fail(`scouting level ${i + 1} to ${i + 2}: the band did not tighten (${a.lo} to ${a.hi}, then ${b.lo} to ${b.hi})`);
+  }
+  const b1 = core.gmScoutBand(75, 1);
+  const b10 = core.gmScoutBand(75, 10);
+  if (b1.lo !== 71 || b1.hi !== 79 || b10.lo !== 74 || b10.hi !== 76) fail(`a 75 is shown as ${b1.lo} to ${b1.hi} with nobody and ${b10.lo} to ${b10.hi} at the top, not 71 to 79 and 74 to 76`);
+  for (const lv of [NaN, -3, 99, null]) if (!(core.gmScoutSpread(lv) >= 1 && core.gmScoutSpread(lv) <= 4)) fail(`scout spread at level ${String(lv)} is ${core.gmScoutSpread(lv)}`);
+  /* Every pack that has a scouting post reads the same ladder through its own desk. */
+  for (const pack of PACKS) {
+    if (!pack.keys.scoutSpread) continue;
+    const post = pack.posts.find(p => p.effects.some(e => e.key === 'scoutSpread'));
+    for (const lv of LEVELS) {
+      const v = core.gmStaffEffect(pack, blockAt(pack, id => (id === post.id ? lv : null)), 'scoutSpread');
+      if (Math.abs(v - core.gmScoutSpread(lv)) > EPS) fail(`${pack.id}: the ${post.label} at level ${lv} reads a spread of ${v}, the ladder says ${core.gmScoutSpread(lv)}`);
+    }
+  }
+  console.log(`   mean error ${means.map(m => m.toFixed(2)).join(' > ')}; thinnest step ${thinnest.toFixed(3)} (floor 0.09)`);
+}
+
+/* ---------- 6. The staff is affordable on each game's own money ---------- */
+console.log('6) A full desk fits inside each game\'s season purse, and still costs something');
+{
+  const rows = [];
+  for (const pack of PACKS) {
+    const r = pack.rules;
+    const season = (block, money = 1) => (core.gmStaffPayroll(r, block) * pack.money.ticksPerSeason) / r.wagePerPurse * money;
+    const at = lv => {
+      const b = blockAt(pack, () => lv);
+      for (const post of pack.posts) b[post.id].wage = core.gmStaffWage(r, lv, 1, post.id);
+      return b;
+    };
+    const top = season(at(10)) / pack.money.seasonPurse;
+    const bottom = season(at(1)) / pack.money.seasonPurse;
+    /* A middling owner's day one desk, the way a bind would open it. */
+    const ctx = { owner: `Middling ${pack.id}`, world: 'now', season: 1, week: 1, money: 1, anchor: post => core.gmStatureAnchor(`Middling ${pack.id}`, post, 0.5), inHouse: 2, rivals: () => ['Rival A', 'Rival B'] };
+    const day1 = season(core.gmDefaultStaff(r, ctx)) / pack.money.seasonPurse;
+    /* Hiring a whole top level desk off the shortlist: the fees together. */
+    const fees = pack.posts.reduce((t, p) => t + Math.max(r.feeBase, r.feeBase + r.feePerLevel * 10 * (r.pay?.[p.id] ?? 1)), 0) / pack.money.seasonPurse;
+    const sev = pack.posts.reduce((t, p) => t + core.gmSeverance(r, { ...person(10), wage: core.gmStaffWage(r, 10, 1, p.id) }), 0) / pack.money.seasonPurse;
+    rows.push(`${pack.id} top ${(top * 100).toFixed(0)}% day1 ${(day1 * 100).toFixed(0)}% floor ${(bottom * 100).toFixed(0)}% fees ${(fees * 100).toFixed(0)}% payoffs ${(sev * 100).toFixed(0)}%`);
+    if (!(top <= 0.85)) fail(`${pack.id}: a full level 10 desk costs ${(top * 100).toFixed(0)}% of the season purse (ceiling 85%)`);
+    if (!(day1 <= 0.6)) fail(`${pack.id}: a middling owner's day one desk costs ${(day1 * 100).toFixed(0)}% of the season purse (ceiling 60%)`);
+    if (!(bottom >= 0.03)) fail(`${pack.id}: a level 1 desk costs ${(bottom * 100).toFixed(1)}% of the purse, which is nothing`);
+    if (!(fees <= 0.6)) fail(`${pack.id}: hiring a whole level 10 desk costs ${(fees * 100).toFixed(0)}% of the purse in fees (ceiling 60%)`);
+    if (!(sev <= 0.6)) fail(`${pack.id}: paying off a whole level 10 desk costs ${(sev * 100).toFixed(0)}% of the purse (ceiling 60%)`);
+    if (!(top > day1 && day1 > bottom)) fail(`${pack.id}: the payroll does not rise with the level (${bottom}, ${day1}, ${top})`);
+  }
+  console.log(`   ${rows.join('\n   ')}`);
+}
+
+/* ---------- 7. Every pack's desk, run for six seasons ---------- */
+console.log('7) Six seasons of every desk: approaches arrive at a measured rate, never for the head coach, and the books add up');
+const RATES = {};
+{
+  const RIVALS = Array.from({ length: 12 }, (_, i) => `Rival ${i + 1}`);
+  const SEASONS = 6;
+  const OWNERS = 40;
+  let ticks = 0;
+  let hires = 0;
+  let headApproaches = 0;
+  let lowApproaches = 0;
+  let grew = 0;
+  for (const pack of PACKS) {
+    const r = pack.rules;
+    const dp = r.purseDp ?? 2;
+    const roundTo = n => Math.round(n * 10 ** dp) / 10 ** dp;
+    for (const salt of ['a', 'b', 'c']) {
+      for (const regime of ['natural', 'strong']) {
+        let approaches = 0;
+        let assistantCalls = 0;
+        for (let o = 0; o < OWNERS; o++) {
+          const owner = `${pack.id} owner ${salt}${o}`;
+          const stature = o / (OWNERS - 1);
+          const ctxAt = (season, week) => ({ owner, world: 'now', season, week, money: 1, anchor: post => core.gmStatureAnchor(owner, post, stature), inHouse: 2, rivals: () => RIVALS });
+          let block = core.gmDefaultStaff(r, ctxAt(1, 0));
+          if (regime === 'strong') for (const p of pack.posts) block[p.id] = { ...block[p.id], level: 8, potential: 10, wage: core.gmStaffWage(r, 8, 1, p.id) };
+          let answered = 0;
+          for (let season = 1; season <= SEASONS; season++) {
+            let purse = pack.money.seasonPurse;
+            let matched = 0;
+            for (let week = 1; week <= pack.money.ticksPerSeason; week++) {
+              ticks += 1;
+              const ctx = ctxAt(season, week);
+              const ev = core.gmTickStaff(r, block, ctx);
+              if (ev?.kind === 'approach') {
+                approaches += 1;
+                const post = pack.posts.find(p => p.id === ev.post);
+                if (post.head) headApproaches += 1;
+                if (post.headCoachTrack) assistantCalls += 1;
+                if (ev.person.level < r.poachFromLevel) lowApproaches += 1;
+                const turn = answered++ % 3;
+                if (turn === 0) {
+                  const m = core.gmMatchStaffOffer(r, block);
+                  if (m) { matched += 1; block = m.next; if (m.raised.wage < m.person.wage + 1) fail(`${pack.id}: matching did not raise his wage`); }
+                } else if (turn === 1) block = core.gmReleaseToPoacher(block).next;
+              }
+              if (matched > r.matchesPerSeason) fail(`${pack.id}: ${matched} matches in one season, the limit is ${r.matchesPerSeason}`);
+              for (const p of pack.posts) {
+                if (block[p.id]) continue;
+                const list = core.gmStaffShortlist(r, block, ctx, p.id);
+                const pick = list.find(c => c.fee <= purse && !c.person.academy) ?? list[list.length - 1];
+                const done = core.gmHireStaff(r, block, ctx, p.id, pick.person.id, purse);
+                if (!done) { fail(`${pack.id}: could not appoint anybody to ${p.id} on a purse of ${purse}`); break; }
+                if (done.purse !== roundTo(purse - pick.fee)) fail(`${pack.id}: a hire left ${done.purse}, the fee was ${pick.fee} on ${purse}`);
+                purse = done.purse;
+                block = done.next;
+                hires += 1;
+                const halves = list.flatMap(c => c.person.name.split(' '));
+                if (new Set(halves).size !== halves.length) fail(`${pack.id}: a shortlist with two people sharing half a name: ${list.map(c => c.person.name).join(', ')}`);
+                break;
+              }
+              purse = roundTo(purse - (core.gmStaffPayroll(r, block) / r.wagePerPurse));
+              if (!core.gmIsValidStaff(r, block)) { fail(`${pack.id}: the block failed its own validator in season ${season} week ${week}`); break; }
+              const seated = pack.posts.map(p => block[p.id]?.name).filter(Boolean).flatMap(n => n.split(' '));
+              if (new Set(seated).size !== seated.length) fail(`${pack.id}: two people on one desk share half a name: ${seated.join(' ')}`);
+            }
+            const next = core.gmRolloverStaff(r, block, ctxAt(season + 1, 0));
+            for (const p of pack.posts) {
+              const a = block[p.id];
+              const b = next[p.id];
+              if (a && b && b.level > a.level) grew += 1;
+              if (b && (b.level > b.potential || b.level - (a?.level ?? 0) > 1)) fail(`${pack.id}: ${p.id} went from ${a?.level} to ${b.level} (potential ${b.potential}) in one summer`);
+            }
+            block = next;
+          }
+        }
+        const perSeason = approaches / (OWNERS * SEASONS);
+        RATES[`${pack.id}|${regime}|${salt}`] = perSeason;
+        if (regime === 'strong' && pack.posts.some(p => p.headCoachTrack) && assistantCalls === 0) fail(`${pack.id}: nobody ever came in for a strong assistant`);
+      }
+    }
+  }
+  /* Measured on 2026-10-02, three owner sets of forty, six seasons each: the
+     strong desk (everybody on level 8) drew the rates in STRONG_MEASURED a
+     season. The band is half the lowest to one and a half times the highest,
+     so a desk whose approaches halved or grew by half fails and the spread
+     between owner sets (about ten percent) does not. The nopoach control
+     reads 0 everywhere. */
+  const STRONG_MEASURED = { nfl: [1.33, 1.40], nba: [1.05, 1.18], mlb: [1.27, 1.38], nhl: [1.18, 1.24], cfb: [0.32, 0.36], cbb: [0.29, 0.34], fightGym: [1.48, 1.65], afl: [1.38, 1.60] };
+  for (const pack of PACKS) {
+    const [lo, hi] = STRONG_MEASURED[pack.id] ?? [NaN, NaN];
+    for (const salt of ['a', 'b', 'c']) {
+      const strong = RATES[`${pack.id}|strong|${salt}`];
+      const natural = RATES[`${pack.id}|natural|${salt}`];
+      if (!(strong >= lo * 0.5 && strong <= hi * 1.5)) fail(`${pack.id} (owner set ${salt}): a strong desk drew ${strong.toFixed(2)} approaches a season, the band is ${(lo * 0.5).toFixed(2)} to ${(hi * 1.5).toFixed(2)}`);
+      /* Outcome against a baseline: good staff get noticed. Measured ratio 1.85 at the lowest. */
+      if (!(strong >= natural * 1.3)) fail(`${pack.id} (owner set ${salt}): a level 8 desk drew ${strong.toFixed(2)} a season against ${natural.toFixed(2)} as it opens, under 1.3 times`);
+    }
+  }
+  if (headApproaches) fail(`${headApproaches} approaches for a head coach, whom only the GM can let go`);
+  if (lowApproaches) fail(`${lowApproaches} approaches for somebody under level 6`);
+  const line = PACKS.map(p => `${p.id} ${['natural', 'strong'].map(g => ['a', 'b', 'c'].map(s => RATES[`${p.id}|${g}|${s}`].toFixed(2)).join('/')).join(' then ')}`);
+  console.log(`   ${ticks} ticks, ${hires} appointments, ${grew} summer steps up; approaches a season (as the desk opens, then all on level 8, three owner sets):\n   ${line.join('\n   ')}`);
+}
+
+/* ---------- 8. Every tile says what the code does ---------- */
+console.log('8) Every effect line, at every level, says the number the game applies');
+{
+  let lines = 0;
+  const DASH = /[–—]/;
+  for (const pack of PACKS) {
+    for (const post of pack.posts) {
+      for (const e of post.effects) {
+        const k = pack.keys[e.key];
+        if (core.gmEffectLine(k, e, null) !== core.GM_STAFF_EMPTY_LINE) fail(`${pack.id}/${post.id}: an empty chair promises something`);
+        for (const lv of LEVELS) {
+          const line = core.gmEffectLine(k, e, lv, pack.rules.maxLevel);
+          const v = core.gmEffectAt(e, lv, pack.rules.maxLevel);
+          lines += 1;
+          if (DASH.test(line)) fail(`${pack.id}/${post.id}: a dash in "${line}"`);
+          if (lv === 1) { if (line !== core.GM_STAFF_NO_LIFT_LINE) fail(`${pack.id}/${post.id}/${e.key}: level 1 says "${line}"`); continue; }
+          let said = NaN;
+          let truth = NaN;
+          let tol = 0;
+          if (k.mult) { said = Number(line.match(/^([+-]?\d+(?:\.\d+)?)% on /)?.[1]) / 100; truth = v / e.none - 1; tol = 0.0005 + EPS; }
+          else if (e.none === 0) { said = Number(line.match(/^\+(\d+(?:\.\d+)?) /)?.[1]); truth = v; tol = 0.005 + EPS; }
+          else { said = Number(line.match(/^(\d+(?:\.\d+)?), from /)?.[1]); truth = v; tol = 0.05 + EPS; }
+          if (!(Math.abs(said - truth) <= tol)) fail(`${pack.id}/${post.id}/${e.key} at level ${lv}: the tile says "${line}", the game applies ${truth.toFixed(4)}`);
+          if (!line.includes(k.what)) fail(`${pack.id}/${post.id}/${e.key}: the line does not say what it moves: "${line}"`);
+        }
+      }
+    }
+  }
+  /* The panel prints those lines and reads the limits; it never types a number of its own. */
+  const panelPath = path.join(ROOT, 'src/components/front-office-shared/GmStaffPanel.tsx');
+  if (fs.existsSync(panelPath)) {
+    const panel = lf(fs.readFileSync(panelPath, 'utf8')).replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/[^\n]*/gm, '');
+    for (const need of ['gmEffectLine', 'matchesLeft', 'gmStaffShortlist', 'wageUnit']) if (!panel.includes(need)) fail(`GmStaffPanel.tsx does not use ${need}`);
+    if (/\b\d+ match(es)? left/.test(panel)) fail('GmStaffPanel.tsx types the match limit as a number instead of reading it');
+    if (DASH.test(panel)) fail('a dash in GmStaffPanel.tsx');
+  } else fail('src/components/front-office-shared/GmStaffPanel.tsx is missing');
+  console.log(`   ${lines} lines read back against the ladder`);
 }
 
 if (CONTROL) {

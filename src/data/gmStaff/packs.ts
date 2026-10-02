@@ -81,7 +81,7 @@ const PRO_FROM = [
 
 /** A pro staff is paid by the week over the weeks the game plays; the head coach earns five times the curve. */
 const proMoney = (poachPerLevel: number): Money => ({
-  wageBase: 3, wagePerLevel: 2.1, feeBase: 0.1, feePerLevel: 0.05, severanceTicks: 9, wagePerPurse: 1000, severanceMin: 0.05,
+  wageBase: 3, wagePerLevel: 2.1, feeBase: 0.1, feePerLevel: 0.03, severanceTicks: 9, wagePerPurse: 1000, severanceMin: 0.05,
   poachPerLevel, poachWeeks: 2,
 });
 
@@ -129,7 +129,7 @@ export const NFL_STAFF_PACK: GmStaffPack<NflStaffPost> = {
     injuryWeeks: INJURY_KEY,
   },
   money: {
-    wageUnit: 'k a week', purseUnit: 'm', ticksPerSeason: 18, seasonPurse: 8,
+    wageUnit: 'k a week', purseUnit: 'm', ticksPerSeason: 18, tickWord: 'week', seasonPurse: 8,
     purseNote: 'The staff budget ownership opens the desk with, in the game\'s own millions. Staff are paid outside the salary cap.',
   },
 };
@@ -171,7 +171,7 @@ export const NBA_STAFF_PACK: GmStaffPack<NbaStaffPost> = {
     scoutSpread: SCOUT_KEY,
   },
   money: {
-    wageUnit: 'k a week', purseUnit: 'm', ticksPerSeason: 24, seasonPurse: 9,
+    wageUnit: 'k a week', purseUnit: 'm', ticksPerSeason: 24, tickWord: 'week', seasonPurse: 9,
     purseNote: 'The staff budget ownership opens the desk with, in the game\'s own millions. Staff are paid outside the salary cap.',
   },
 };
@@ -218,7 +218,7 @@ export const MLB_STAFF_PACK: GmStaffPack<MlbStaffPost> = {
     growth: GROWTH_KEY,
   },
   money: {
-    wageUnit: 'k a week', purseUnit: 'm', ticksPerSeason: 26, seasonPurse: 11,
+    wageUnit: 'k a week', purseUnit: 'm', ticksPerSeason: 26, tickWord: 'week', seasonPurse: 11,
     purseNote: 'The staff budget ownership opens the desk with, in the game\'s own millions. Staff are paid outside the payroll the tax line reads.',
   },
 };
@@ -261,7 +261,7 @@ export const NHL_STAFF_PACK: GmStaffPack<NhlStaffPost> = {
     scoutSpread: SCOUT_KEY,
   },
   money: {
-    wageUnit: 'k a week', purseUnit: 'm', ticksPerSeason: 24, seasonPurse: 8,
+    wageUnit: 'k a week', purseUnit: 'm', ticksPerSeason: 24, tickWord: 'week', seasonPurse: 8,
     purseNote: 'The staff budget ownership opens the desk with, in the game\'s own millions. Staff are paid outside the hard cap.',
   },
 };
@@ -317,7 +317,7 @@ export const CFB_STAFF_PACK: GmStaffPack<CollegeStaffPost> = {
   rules: rulesFor(COLLEGE_POSTS, COLLEGE_MONEY, {}, COLLEGE_FROM, 'A grad assistant on the staff already'),
   keys: COLLEGE_KEYS,
   money: {
-    wageUnit: 'points a season', purseUnit: 'points', ticksPerSeason: 1, seasonPurse: 62,
+    wageUnit: 'points a season', purseUnit: 'points', ticksPerSeason: 1, tickWord: 'season', seasonPurse: 62,
     purseNote: 'What nilBudgetFor in cfbDynasty.ts gives a prestige 80 program off a winless year: 40 + (80 - 70) * 2.2.',
   },
 };
@@ -329,7 +329,7 @@ export const CBB_STAFF_PACK: GmStaffPack<CollegeStaffPost> = {
   rules: rulesFor(COLLEGE_POSTS, COLLEGE_MONEY, {}, COLLEGE_FROM, 'A grad assistant on the staff already'),
   keys: COLLEGE_KEYS,
   money: {
-    wageUnit: 'points a season', purseUnit: 'points', ticksPerSeason: 1, seasonPurse: 54,
+    wageUnit: 'points a season', purseUnit: 'points', ticksPerSeason: 1, tickWord: 'season', seasonPurse: 54,
     purseNote: 'What cbbNilFor in cbbDynasty.ts gives a prestige 80 program off a winless year: 36 + (80 - 72) * 2.2, rounded.',
   },
 };
@@ -383,7 +383,7 @@ export const GYM_STAFF_PACK: GmStaffPack<GymStaffPost> = {
     purse: { none: 1, lo: 1, hi: 1.1, mult: true, what: 'the purse a fight is made for' },
   },
   money: {
-    wageUnit: 'k a week', purseUnit: 'm', ticksPerSeason: 52, seasonPurse: 3.432,
+    wageUnit: 'k a week', purseUnit: 'm', ticksPerSeason: 52, tickWord: 'week', seasonPurse: 3.432,
     purseNote: 'A six fighter gym\'s own overhead for a year: 52 weeks of weeklyCost in fightGym.ts, 0.012 + 6 * 0.009 a week.',
   },
 };
@@ -425,7 +425,7 @@ export const AFL_STAFF_PACK: GmStaffPack<AflStaffPost> = {
   game: 'Aussie Rules Manager',
   posts: AFL_POSTS,
   rules: rulesFor(AFL_POSTS, {
-    wageBase: 2, wagePerLevel: 1.2, feeBase: 0.05, feePerLevel: 0.03, severanceTicks: 11, wagePerPurse: 1000, severanceMin: 0.02,
+    wageBase: 2, wagePerLevel: 1.2, feeBase: 0.05, feePerLevel: 0.02, severanceTicks: 11, wagePerPurse: 1000, severanceMin: 0.02,
     poachPerLevel: 0.006, poachWeeks: 2,
   }, {}, [
     'A line coach at another club, out of contract',
@@ -442,7 +442,7 @@ export const AFL_STAFF_PACK: GmStaffPack<AflStaffPost> = {
     injuryWeeks: INJURY_KEY,
   },
   money: {
-    wageUnit: 'k a week', purseUnit: 'm', ticksPerSeason: 23, seasonPurse: 3,
+    wageUnit: 'k a week', purseUnit: 'm', ticksPerSeason: 23, tickWord: 'round', seasonPurse: 3,
     purseNote: 'The football department budget the desk opens with, in the game\'s own millions. The game has no other money yet.',
   },
 };

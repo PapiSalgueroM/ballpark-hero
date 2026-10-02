@@ -645,6 +645,8 @@ export interface GmStaffPack<P extends string = string> {
     purseUnit: string;
     /** How many times a season the game ticks the desk and pays the wages. */
     ticksPerSeason: number;
+    /** What one tick is called on the screen, singular: week, round, season. */
+    tickWord: string;
     /** The money this desk is expected to live inside for a season, in the purse unit, and where the number comes from. */
     seasonPurse: number;
     purseNote: string;
