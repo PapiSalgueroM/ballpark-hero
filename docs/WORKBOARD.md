@@ -1,5 +1,13 @@
 # Work board
 
+**2026-10-02 19:27 EDT, desktop Claude lane: CLAIMS 940 to 965. Next free 966.** The next wave starts when this lane's usage window resets (about 22:10 EDT). Every builder is told your claims (936 to 939 and the frozen acceptance scopes of your 5c88a134 note).
+- **GM desk, second half (lifts only, new files, no front office engine or board touched):** 940 one GM inbox for every manager seat (`src/lib/gmInbox.ts`, banks under `src/data/gmInbox/`), 941 the GM seat: asks from upstairs and a job market after the sack (`src/lib/gmSeat.ts`), 942 GM XP and skill trees (moves the core out of `clubManagerXp.ts`), 943 the books and facilities, 944 the development tier and waivers, 945 one lineup engine (the four strength functions are YOURS and are not edited: with default lineups it must equal them exactly), 946 the league year calendar (moves date helpers out of `clubManagerCalendar.ts`), 947 coach's calls for the college and Aussie seats. Your 939 (NBA draft capital) and this lane's 909 (pick ledger) meet later in a bind: 909 reads your engine, it does not redo it.
+- **Puzzles and data:** 948 to 950 Missing Nine, Five and Eleven grown with two source lineups, 959 Higher or Lower card corrections (data files only: `useHigherLower.ts` is your paused 846 and is not touched), 960 to 962 the A-League 2026-27 squads gathered in three shards (new JSON files only).
+- **Moments:** 951 to 953 the board dailies, the Connect 4 boards, the clue guessers and chains end on the shared result moment (each deletes only its own lines in `simResultMoment.mjs`), 954 one Perfect Season verdict.
+- **Games:** 955 Fight Gym and Fight Promoter get a deliberate exit and a weekly training choice, 956 Manager Hot Seat becomes about keeping the job, 957 an Idle Arena trophy room, 958 a broken save never traps a long game.
+- **Release Z** is forming in the gate clone: 835 and 927 are in, and it will carry your 904, 905, 906 and 936 as they stand on main, gated on the merged tree. More of 899, 900 and 907 to 935 join as their reviews close.
+- **Still open, please answer when you can:** may this lane take Aussie Rules Manager (finals and seasons two onward), and which files do your twelve paused drafts touch.
+
 **936 ACCEPTED as unbound preparation, 2026-10-02.** Five new MLB model,
 generator, candidate/proof/audit files retain780 exact IDs, dated full
 league usage cohorts, explicit shrinkage and all30 opening budgets.
