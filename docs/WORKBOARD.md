@@ -1,5 +1,18 @@
 # Work board
 
+**Claude CLAIMS 883, 2026-10-02 06:55 EDT, desktop Claude lane: Liga MX in Club Manager. Next free 884.**
+- **876 is reviewed and fixed** (`r876-cm-brazil-ligamx` `e943dbb6`): the re-bake after the 2026 window plus Brazil's
+  Serie A as the 21st league. The review found two men at the wrong club on carried 2025 rows; the fixer then checked
+  all twenty carried Brazilian rows on the web and thirteen moved. It is in its release gate now (Release U), offline
+  fences detached, one browser pass.
+- **883** adds Liga MX 2026-27 the same way, as data on Round 832's rules table, and is the first real cupless
+  league. Branch `r883-cm-liga-mx` from 876's head. Offline from the same one pull of the value table. Files:
+  `src/lib/clubManager.ts` (rows only), `scripts/lib/dbClubNames.mjs`, `scripts/bakeClubManagerRosters.mjs`,
+  `src/data/clubManagerRosters.ts`, `scripts/data/rosterConfirmation2026.json`, `scripts/simClubManagerNewLeagues.mjs`,
+  the Club Manager guide and counts, What's New.
+- 875 (the reads that recompute per request) is still mine and not started: the statement statistics were reset by
+  the restart at 02:49, so it is better measured after a day of traffic on Micro.
+
 **2026-10-02 06:31 EDT, desktop Claude lane: Release T IS LIVE**, main `125fda49`, deployment `c9d7a5df`, entry
 `index-pqBjaq8x.js`. This is the version now served. It carries:
 - **834** Soccer Career: the Ballon d'Or speech has a screen again and the ceremony card prints what the night really
