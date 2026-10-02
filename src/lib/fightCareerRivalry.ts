@@ -27,7 +27,7 @@ import {
 import { keyedRng } from '@/lib/keyedRng';
 import type { FightCareerState } from '@/lib/fightCareer';
 import {
-  applyLifeEffect, describeLifeEffect, cloneForLife, pushLifeFeed, isBoutNeutral,
+  applyLifeEffect, describeLifeEffect, cloneForLife, pushLifeFeed, isBoutNeutral, rivalInYourClass,
   type FightLife, type FightRival, type LifeEffect,
 } from '@/lib/fightCareerLife';
 
@@ -155,7 +155,8 @@ const option = (
 
 /** A table where the grudge fight can go: not when every offer is your own
  *  title shot, which is a fight you earned against a champion. */
-const openTable = (p: Live): boolean => p.offers.length > 0 && (p.champion || !p.offers[0].title);
+const openTable = (p: Live): boolean =>
+  rivalInYourClass(p) && p.offers.length > 0 && (p.champion || !p.offers[0].title);
 
 export interface FightChoiceDef extends Omit<RivalryChoiceDef<Live, FightRival>, 'choices'> {
   choices: Choice[];

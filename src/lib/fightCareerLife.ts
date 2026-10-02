@@ -132,6 +132,10 @@ export interface FightRival {
   rank: number;
   champion: boolean;
   retired: boolean;
+  /** The division he fights in: the one you started in. Move class and you
+   *  leave him behind; come back and he is there. Absent on a block from
+   *  before this field, which reads as your own division. */
+  weight?: WeightId;
   /** Your record against him. */
   h2hWins: number;
   h2hLosses: number;
@@ -314,11 +318,17 @@ export function cloneForLife(st: FightCareerState): FightCareerState & { life: F
 const meter = (v: number): number => clamp(Math.round(v), 0, 100);
 const middleOf = (offers: Offer[]): number => Math.floor(offers.length / 2);
 
+/** Is the rival in the division you fight in right now? */
+export function rivalInYourClass(st: FightCareerState): boolean {
+  const r = st.life?.rival;
+  return !!r && (r.weight === undefined || r.weight === st.weight);
+}
+
 /** The rival as a man you can actually be matched with. Built from his own
  *  name, so the same rival is the same fighter every time he is drawn. */
 export function rivalFighter(st: FightCareerState): Fighter | null {
   const r = st.life?.rival;
-  if (!r || r.retired) return null;
+  if (!r || r.retired || !rivalInYourClass(st)) return null;
   let h = 2166136261;
   for (let i = 0; i < r.name.length; i += 1) h = Math.imul(h ^ r.name.charCodeAt(i), 16777619);
   const f = makeFighter(rngFrom(h >>> 0), r.rating, st.weight, r.style);
@@ -435,6 +445,7 @@ export function newLife(st: FightCareerState, trainer: TrainerId = 'allround', m
     wins, losses: fights - wins, kos: Math.round(wins * 0.4),
     rank: st.champion ? 3 : st.fighter.rank === 99 ? 99 : clamp(st.fighter.rank + 2, 1, 20),
     champion: false, retired: false, h2hWins: 0, h2hLosses: 0,
+    weight: st.weight,
   };
   return {
     v: 1, tick: 0,
@@ -473,6 +484,7 @@ export function ensureLifeBlock(st: FightCareerState): FightLife {
   if (isObj(raw.cooldowns)) for (const [k, v] of Object.entries(raw.cooldowns)) if (typeof v === 'number' && Number.isFinite(v)) cooldowns[k] = v;
   const rival = isObj(raw.rival) && typeof raw.rival.name === 'string' && STYLE_IDS.includes(raw.rival.style as FightStyle)
     ? { ...fresh.rival!, ...(raw.rival as unknown as FightRival) } : raw.rival === null ? null : fresh.rival;
+  if (rival && rival.weight !== undefined && !WEIGHT_CLASSES.some(w => w.id === rival.weight)) rival.weight = st.weight;
   const beaten = isObj(raw.lastBeatenBy) && typeof raw.lastBeatenBy.name === 'string' && isObj(raw.lastBeatenBy.attrs)
     ? raw.lastBeatenBy as unknown as Fighter : null;
   return {

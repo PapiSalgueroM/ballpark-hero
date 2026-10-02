@@ -8,7 +8,7 @@ import { cn } from '@/lib/utils';
 import type { FightCareerState } from '@/lib/fightCareer';
 import {
   TRAINERS, MANAGERS, describeTrainer, describeManager, describeLifeEffect, answerLifeCard,
-  trainerDef, managerDef, lifeSharpness, lifeTakeHome, PROMOTER_PURSE_MUL,
+  trainerDef, managerDef, lifeSharpness, lifeTakeHome, PROMOTER_PURSE_MUL, rivalInYourClass,
   type FightLife, type TrainerId, type ManagerId,
 } from '@/lib/fightCareerLife';
 import {
@@ -180,7 +180,9 @@ function RivalPanel({ st }: { st: Live }) {
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
           <p className="truncate text-lg font-bold">{r.name}</p>
-          <p className="text-xs text-muted-foreground">Same weight class as you · age {Math.floor(r.age)}</p>
+          <p className="text-xs text-muted-foreground">
+            {rivalInYourClass(st) ? 'Same weight class as you' : 'Still in the division you left'} · age {Math.floor(r.age)}
+          </p>
         </div>
         <div className="shrink-0 text-right">
           <p className="text-sm font-bold text-primary">{rivalRankLabel(r)}</p>
