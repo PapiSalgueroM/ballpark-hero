@@ -1,5 +1,22 @@
 # Project state
 
+## Current Codex repair batch, 2026-10-01
+
+Additional disjoint claims855/856 cover initial help/consent keyboard access
+and narrow toast geometry. Neither changes consent decisions, vendor gating,
+Soccer engine or production sports data. Next free857.
+
+Audit847 was delivered and Anthony said keep going. Product-quality repairs
+resume under the saved AdSense request: root resumes846's Soccer Higher or
+Lower callback isolation;852 fixes Footle's result currency and Accessibility
+timing copy;853 fixes account opener focus and guest-scoring copy;854 repairs
+NFL/NHL structured-save recovery only. Source ownership and verification are
+in WORKBOARD. Claude850 owns lost Soccer seasons,851 schedules/NBA trades,
+848 shared Daily/skip fixes and849 reviewed sports data. Next free855.
+Release Q was pulled at29e64f42, with four paused845 guide drafts preserved in
+a scoped stash and reapplied cleanly.842-845 remain unaccepted and excluded
+from this repair batch. Earlier audit-only notes below describe the audit phase.
+
 ## LIVE 2026-10-01: Release Q (839 leaderboard page, Claude822 career calendar inboxes, Claude823 CBB assistants, Claude824 NBA stats and awards, Claude826 Gauntlet overtime label, Claude829 MLB real 26, the rendered audit report), main `30db5f44`
 
 Assembled by the desktop Claude lane in the gate clone (`release-q`). **douknowball.com is serving it:** deployment
