@@ -46,8 +46,14 @@
      7) an old save: two leagues written by the engine as it stood before this
         round (scripts/data/mlbLegacySaveFixture.json) replay a scripted
         stretch (signings to the old ceiling, DFAs to the old floor, a season,
-        October, a draft, an offseason and five rounds) to the same result,
-        byte for byte on everything but the minted ids
+        October, a draft, an offseason and five rounds). Every signing and DFA
+        lands exactly as the old engine logged it and every step of the
+        stretch is played. Round 851 moved this pin: the league now books a
+        real schedule (src/lib/foSchedule.ts), so a fixture saved before the
+        first pitch is booked on its first round and its game results, and
+        everything the AI does off them, can no longer match the old random
+        draw. The roster rules this section exists for are read before any
+        game is played, so they are still checked byte for byte.
      8) the board under vitest: the season close test for all four sims and
         the MLB board's own full roster test (which holds Play while the GM's
         club is over 28 and frees it after his DFAs)
@@ -671,9 +677,15 @@ console.log('7) an old save replays exactly as it did before this round');
       ok(7, `seed ${row.seed}: the old save plays`, false, String(e && e.message ? e.message : e).slice(0, 200));
       continue;
     }
-    ok(7, `seed ${row.seed}: every move and every round as before`, JSON.stringify(log) === JSON.stringify(row.log),
-      (() => { const i = log.findIndex((l, j) => JSON.stringify(l) !== JSON.stringify(row.log[j])); return i < 0 ? 'lengths differ' : `first difference at step ${i}: ${JSON.stringify(log[i])} vs ${JSON.stringify(row.log[i])}`; })());
-    ok(7, `seed ${row.seed}: the end state is byte for byte the old engine's`, sha(end) === row.endSha256);
+    /* Round 851: the moves before the first pitch are pinned byte for byte;
+       from the first round on the booked schedule decides the results, so
+       only the shape of the stretch is pinned (see the header). */
+    const moves = l => l.slice(0, l.findIndex(x => x[0] === 'round'));
+    ok(7, `seed ${row.seed}: every signing and DFA as before`, moves(log).length > 0 && JSON.stringify(moves(log)) === JSON.stringify(moves(row.log)),
+      (() => { const a = moves(log), b = moves(row.log); const i = a.findIndex((l, j) => JSON.stringify(l) !== JSON.stringify(b[j])); return i < 0 ? 'lengths differ' : `first difference at step ${i}: ${JSON.stringify(a[i])} vs ${JSON.stringify(b[i])}`; })());
+    ok(7, `seed ${row.seed}: every step of the stretch is played`, JSON.stringify(log.map(x => x[0])) === JSON.stringify(row.log.map(x => x[0])));
+    ok(7, `seed ${row.seed}: still an old save at the end, on the old limits`, end.teams.every(t => t.depth === null)
+      && E.mlbRosterMax(lg.teams[row.team]) === E.MLB_LEGACY_ROSTER_MAX);
   }
 }
 
