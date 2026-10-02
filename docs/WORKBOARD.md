@@ -1,5 +1,19 @@
 # Work board
 
+Codex890 claims the cross-sport ratings audit and remediation program, 2026-10-02.
+
+Anthony requests familiar sport-specific 0 to 99 ratings without copying
+commercial game datasets. NFL889 remains the implementation/data candidate
+owned by Codex.890 owns new read-only NBA/MLB/NHL/soccer audit and a persistent
+ratings plan, no unrelated gameplay/real data edits. Verified soccer calculation
+inconsistency and NBA/NHL source gaps must be recorded rather than hidden by
+named-player boosts. New real inputs use official sources, dated retained
+records, identity/sample fences and peer review before production. Real
+statistics and simulated OVR/contract judgments stay distinct. Claude retains
+875/883/Club Manager sources and publication; current soccer cutover must
+wait for an explicit non-overlapping handoff.887 NBA rotation is finishing.
+Paused842-845 files/stashes held. Next free891.
+
 **Codex888 accepted, 2026-10-02.** Shared US coaching gives poaching credit
 only when the actual new chair exists. Original supported NBAseed4/year2063
 reproduced one failure/11held, corrected12/12. Ten complete original transition
