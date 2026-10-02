@@ -1,0 +1,45 @@
+{
+  "checked": "2026-10-01T23:40:49.537Z",
+  "auditOnly": true,
+  "pausedDrafts": [
+    {
+      "file": "src/pages/RecordPage.tsx",
+      "sha256": "3c5bc163b3f280ee3563e433925e581599e5d397000055da1c0f8594db16ebb9",
+      "held": true
+    },
+    {
+      "file": "src/lib/records.ts",
+      "sha256": "978b0078a0f10b08e8182ebb3c565cf1583e2ee8f6b8cd7eef02a2565f883479",
+      "held": true
+    },
+    {
+      "file": "scripts/simRecordPages.mjs",
+      "sha256": "f6ef07e3dcb0c724caf3d5bde93e702e382909d2f065b3f80f20ce5c5cb4dec0",
+      "held": true
+    },
+    {
+      "file": "src/hooks/useHigherLower.ts",
+      "sha256": "50198344e3f655951c9c74b12e251e8d5ce1cc1afb373746d7c2aaad50cf693a",
+      "held": true
+    },
+    {
+      "file": "src/test/soccerHigherLowerReveal.test.tsx",
+      "sha256": "3cd11724f48dd24e8c8f3e664a6894fd9fcaa09ef7aec74efde0ac7d5b112b3e",
+      "held": true
+    },
+    {
+      "file": "scripts/simSoccerHigherLowerReveal.mjs",
+      "sha256": "312943bfde97c08c17adb1bbf78baf738acfff133425f3ee81f061debbdf16cb",
+      "held": true
+    }
+  ],
+  "cleanAuditBaseline": "C:/Users/antho/AppData/Local/Temp/dukb-round842-845-production",
+  "dataAndLedgerFiles": 64,
+  "allSelectedCleanBaselineRawHeld": true,
+  "sharedRawLineEndingDifferences": 18,
+  "sharedRawDifferenceBoundary": "Clean baseline is the source of the frozen data receipt. Shared checkout RAW differs in line endings for these18files; normalized substantive content held.",
+  "noProductOrProductionDataAuditEdits": true,
+  "ownedRootServer4930Stopped": true,
+  "browserLanesClosed": true,
+  "scope": "Final report validation only; no new app build or production publication"
+}

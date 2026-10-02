@@ -105,6 +105,8 @@ export const NFL_GAUNTLET_CONFIG: GauntletConfig<NflGauntletPlayer> = {
      two agreeing was an improvement on them disagreeing, and both were wrong
      about the sport. Football has overtime and no shootout. */
   tiebreak: { phrase: 'overtime, and another if it is still level', won: 'Won in overtime', lost: 'Lost in overtime' },
+  /* Round 826: the first overtime settling it is still overtime. */
+  extraTime: { won: 'Won in overtime', lost: 'Lost in overtime' },
   subtitleOf: p => p.team,
   positionOf: p => p.pos,
   tierFloors: [93, 84, 75],

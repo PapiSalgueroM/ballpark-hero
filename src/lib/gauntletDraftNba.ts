@@ -70,6 +70,8 @@ export const NBA_GAUNTLET_CONFIG: GauntletConfig<NbaPoolPlayer> = {
      mechanism is the same in every sport, but the words for it are not, and
      the words are what a reader checks against the sport they know. */
   tiebreak: { phrase: 'overtime, and another overtime if it is still level', won: 'Won in overtime', lost: 'Lost in overtime' },
+  /* Round 826: the first overtime settling it is still overtime. */
+  extraTime: { won: 'Won in overtime', lost: 'Lost in overtime' },
   subtitleOf: p => `${p.team} · ${p.era}`,
   positionOf: NBA_LINEUP_CONFIG.positionOf,
   tierFloors: [96, 92, 88],

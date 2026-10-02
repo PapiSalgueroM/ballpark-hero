@@ -26,9 +26,11 @@ Affected field paths: /hockey-grid accepts the numeric columns, /perfect-season-
 
 Flag 69 records for a separately authorized import review. Do not add 68+64 as independent records.
 
-### DQ02: MLB career table also has shifted fields
+### DQ02: MLB career table contains invalid dates and totals
 
-Of 2,000 rows, 147 have invalid first years, 53 have reversed year spans and 161 fail TB=H+2B+2×3B+3×HR. The union is 161, not 361. Al Bridwell stores start1252/end1905/H457/2B935/3B95/HR32/TB90. Official MLB and Baseball Reference agree on H1064/2B95/3B32/HR2/TB1229, and debut 1905. [primary](https://statsapi.mlb.com/api/v1/people/111459/stats?stats=career&group=hitting), [primary-bio](https://statsapi.mlb.com/api/v1/people/search?names=Al%20Bridwell), [independent](https://www.baseball-reference.com/players/b/bridwal01.shtml), [metric-definition](https://www.mlb.com/glossary/standard-stats/total-bases).
+The original SQL measurements on 2,000 rows found 147 first-year values matching `year_from !~ '^[12][0-9]{3}$' OR year_from < '1871'`, 53 matches of the TEXT predicate `year_from > year_to`, and 161 total-bases identity failures. The first-year predicate has no future-year upper bound. Rechecking the 161 captured rows numerically finds 9 reversed year spans; the other 44 TEXT matches have malformed short first-year strings that compare above four-digit last years lexically. The union remains 161 records. The evidence annotations use the original first-year predicate and the numeric reversal check, rather than calling all 53 TEXT matches reversed careers. The total-bases formula is `TB = H + doubles + 2 × triples + 3 × HR`; 2B and 3B denote the doubles and triples columns.
+
+Al Bridwell stores start1252/end1905/H457/2B935/3B95/HR32/TB90. Official MLB and Baseball Reference agree on H1064/2B95/3B32/HR2/TB1229, and debut 1905. [primary](https://statsapi.mlb.com/api/v1/people/111459/stats?stats=career&group=hitting), [primary-bio](https://statsapi.mlb.com/api/v1/people/search?names=Al%20Bridwell), [independent](https://www.baseball-reference.com/players/b/bridwal01.shtml), [metric-definition](https://www.mlb.com/glossary/standard-stats/total-bases). The invalid dates and totals are established; the importing cause remains unproved.
 
 GP remains unresolved: MLB 1253 against Baseball Reference 1252. Last year also requires league-convention reconciliation: the MLB bio says 1913, Baseball Reference 1915. No automatic correction is recommended for those fields.
 
@@ -118,4 +120,61 @@ The NBA career table's 3,227 rows passed basic season-bound/negative/exact-name 
 Full source/reference/date fields and 16 existing verification-ledger summaries are in data.json. All 48 selected local data RAW hashes and 16 ledger RAW hashes remain held: true.
 
 Untested or incompletely tested: all-row external facts, all retired/current membership and roster moves, alias resolution across every game, validator database joins, full awards winner lists, historical source conventions and all stat/position fields. Existing article/ledger claims are inventoried, not adopted as new verification. Missing provenance and historical snapshots remain visibly distinct from confirmed errors.
+
+## Critical data errors
+
+DQ01 and DQ02 are the systemic structural failures:69 distinct NHL records and
+161 distinct MLB records. The combined230 records are annotated for review in
+`evidence847/data-review-rows.json`;20 actual examples are listed in
+`TOP20-DATA-REVIEW-2026-10-01.md`. Correct replacements are unknown for most
+rows. Source-backed sample corrections do not authorize rewriting all rows.
+The gameplay impact limits above remain binding, including the lack of a
+demonstrated current MLB game result from the161 malformed rows.
+
+## High priority errors and trust gaps
+
+DQ03 is a confirmed wrong numeric entry for Lundqvist. DQ05 documents missing
+independent verification rather than proving every marked cell wrong. Keep
+existing unverified labels while reviewing values and their snapshot dates.
+
+## Medium priority errors and flags
+
+DQ04 needs publisher-convention adjudication. DQ06 needs dated roster identity
+and DQ07 needs a declared list convention or source-backed completion. Do not
+deduplicate legitimate same-name athletes or interpret historical snapshots
+as current rosters.
+
+## Missing data
+
+Source/retrieval/as-of/last-verification fields are absent on multiple datasets,
+as recorded individually in data.json. The201 null career assists and577 null
+NBA season minutes are preserved, not converted into zero. Empty unused
+world_cup_player_stats does not prove a broken game. The314 pending Club
+Manager fallback roster cases need review; a partial/generated squad is already
+marked. Actual current roster gaps require verified memberships and dates.
+
+## Validated data and limits
+
+The Bobby Robins selected career fields, Al Bridwell's selected batting fields
+and Lundqvist's27 points have the two-source comparisons linked above. Bridwell
+GP/final year remain unresolved. Basic structural checks passed on the stated
+NBA career, NHL roster, soccer latest-value and2026 World Cup subsets. Existing
+record/parity fences passed31 HL checks and10 sports-facts sections. None of
+those statements means every database record was externally reverified.
+
+## Validation tests added
+
+Permanent repository tests added:0, preserving the current evidence-only
+instruction. Existing validation ran, SELECT checks measured impossible fields,
+and TEMP tooling evaluated48 local files/51 literal groups. The review-row
+annotation refuses a count other than230 or a row with no measured structural
+reason. It is a report consistency check, not a production data repair.
+
+For a later separately claimed validation round, add independent fail-closed
+checks for entity+season uniqueness, required fields, season/date ranges,
+stat identities, position vocabularies, alias collisions between distinct
+stable IDs, sourced championships and future records labeled as simulation.
+Actual player-team/career-path validity needs dated source facts, not guessed
+rules. Test negative controls that really change evaluated inputs, and do not
+let existing source comments satisfy the checks.
 
