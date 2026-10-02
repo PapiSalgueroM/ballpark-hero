@@ -17,7 +17,7 @@ import { SportGlyph, sportStyle } from '@/components/home/SportGlyph';
 import { useStreaks } from '@/hooks/useStreaks';
 import { AuthModal } from '@/components/auth/AuthModal';
 
-import { ALL_GAMES, CATEGORIES, VISIBLE_CATEGORIES, FEATURED_GAMES, GAME_COUNT_LABEL, TOTAL_GAMES, type GameDef, type CategoryTitle } from '@/data/gameRegistry';
+import { ALL_GAMES, CATEGORIES, VISIBLE_CATEGORIES, FEATURED_GAMES, GAME_COUNT_LABEL, type GameDef, type CategoryTitle } from '@/data/gameRegistry';
 import { CATEGORY_SPORT, sportOf, readFavouriteSport, favouriteFirst, FAVOURITE_SPORT_KEY, type SportKey } from '@/data/homeFront';
 import { isNewGame } from '@/lib/newBadge';
 /* Round 659: the search engine loads the first time somebody reaches for
@@ -65,38 +65,20 @@ function getPopularFallbackGames(): GameDef[] {
     .filter((g): g is GameDef => !!g);
 }
 
-function countPlayedGames(): number {
-  const today = new Date().toISOString().slice(0, 10);
-  let count = 0;
-  for (let i = 0; i < localStorage.length; i++) {
-    const key = localStorage.key(i);
-    if (key && key.includes(today)) {
-      try {
-        const val = localStorage.getItem(key);
-        if (val) {
-          const parsed = JSON.parse(val);
-          if (parsed.status && parsed.status !== 'playing') count++;
-        }
-      } catch { /* not a game key */ }
-    }
-  }
-  return count;
-}
-
 export default function Index() {
   const { user, profile } = useAuth();
   // Owner (2026-08-05): the hero shows a CONSECUTIVE-day streak (not total
   // days visited), games played TODAY (not lifetime), and world rank, and all
   // of it only for signed-in players. Guests get a sign-up nudge instead.
   const { globalCurrentStreak } = useStreaks();
-  const [playedCount, setPlayedCount] = useState(0);
   const [gamesToday, setGamesToday] = useState(0);
   const [authOpen, setAuthOpen] = useState(false);
   const [worldRank, setWorldRank] = useState<number | null>(null);
   // Same identity game_completions rows are written under (guest handle or
   // profile display name), mirrors useGameNavbarStats.
   const playerName = useMemo(() => getCurrentPlayerName(profile), [profile]);
-  const [totalPlayers, setTotalPlayers] = useState<number | null>(null);
+  const accountId = user?.id ?? null;
+  const canReadPersonal = !!accountId && profile?.user_id === accountId;
   const [searchQuery, setSearchQuery] = useState('');
   const [bestScores, setBestScores] = useState<Record<string, number>>({});
   const isSearching = searchQuery.trim().length > 0;
@@ -129,35 +111,39 @@ export default function Index() {
     [isSearching, searchQuery, engine]
   );
 
+  // Personal values only load for this visible account. Public popularity
+  // stays independent, so guests can still discover what people are playing.
   useEffect(() => {
-    setPlayedCount(countPlayedGames());
+    let active = true;
+    let fetching = false;
+    let loaded = false;
+    let controller: AbortController | undefined;
     setGamesToday(getLocalTodayCount());
-  }, []);
+    setWorldRank(null);
+    setBestScores({});
 
-  // Lifetime hero stats: distinct games ever completed under this handle
-  // (server truth from game_completions, floored by the local count so the
-  // chip never regresses while an insert is in flight) + all-time world rank
-  // from the same global_rank RPC the leaderboard's "Your world rank" uses.
-  useEffect(() => {
-    let cancelled = false;
     const load = async () => {
+      if (!active || !canReadPersonal || document.visibilityState !== 'visible' || fetching || loaded) return;
+      fetching = true;
+      controller = new AbortController();
       try {
         const todayUtc = new Date().toISOString().split('T')[0];
-        const [playedRes, rankRes, todayRes] = await Promise.all([
-          (supabase.from as any)('game_completions')
-            .select('game')
-            .eq('player_name', playerName),
+        const [rankRes, todayRes, bestRes] = await Promise.all([
           (supabase.rpc as any)('global_rank', {
             p_player: playerName,
             p_period: 'alltime',
             p_games: null,
-          }),
+          }).abortSignal(controller.signal),
           (supabase.from as any)('game_completions')
             .select('game')
             .eq('player_name', playerName)
-            .eq('completed_on', todayUtc),
+            .eq('completed_on', todayUtc).abortSignal(controller.signal),
+          supabase.from('user_best_scores')
+            .select('game_type, best_score')
+            .eq('user_id', accountId).abortSignal(controller.signal),
         ]);
-        if (cancelled) return;
+        if (!active) return;
+        loaded = !rankRes?.error && !todayRes?.error && !bestRes?.error;
 
         if (todayRes?.data) {
           const distinctToday = new Set(
@@ -166,71 +152,30 @@ export default function Index() {
           setGamesToday(prev => Math.max(prev, distinctToday));
         }
 
-        if (playedRes?.data) {
-          // Only count games that still exist on the site, so the chip can
-          // never read 40/38 after a game is retired.
-          const liveSlugs = new Set(ALL_GAMES.map(g => g.path.replace(/^\//, '')));
-          const distinct = new Set(
-            (playedRes.data as Array<{ game: string }>)
-              .map(r => r.game)
-              .filter(g => liveSlugs.has(g))
-          ).size;
-          setPlayedCount(prev => Math.min(TOTAL_GAMES, Math.max(prev, distinct)));
+        if (!rankRes?.error) {
+          const rankRow = Array.isArray(rankRes?.data) ? rankRes.data[0] : rankRes?.data ?? null;
+          const rank = rankRow ? Number(rankRow.rank) : 0;
+          setWorldRank(rank > 0 ? rank : null);
         }
-
-        const rankRow = Array.isArray(rankRes?.data) ? rankRes.data[0] : rankRes?.data ?? null;
-        const rank = rankRow ? Number(rankRow.rank) : 0;
-        setWorldRank(rank > 0 ? rank : null);
-      } catch { /* silent: chips keep their local values */ }
-    };
-    load();
-    return () => { cancelled = true; };
-  }, [playerName]);
-
-  useEffect(() => {
-    const fetchStats = async () => {
-      try {
-        const today = new Date().toISOString().slice(0, 10);
-
-        // Sitewide games-played-today, now backed by the real, anonymous-
-        // inclusive public.game_completions table instead of summing a
-        // hardcoded list of per-game (mostly auth-only) score tables.
-        // game_completions isn't in the generated Supabase types yet (added
-        // via direct SQL), so it's addressed dynamically here.
-        // Players who completed a game today from daily_completions
-        // TODO Round 3: daily_completions only counts logged-in users.
-        // Add anonymous_play_counter table for full play count including anonymous visitors.
-        const { count: dailyPlayers } = await supabase
-          .from('daily_completions')
-          .select('user_id', { count: 'exact', head: true })
-          .eq('date', today);
-        setTotalPlayers(dailyPlayers ?? 0);
-      } catch { /* silent */ }
-    };
-
-    fetchStats();
-    const interval = setInterval(fetchStats, 5 * 60 * 1000);
-    return () => clearInterval(interval);
-  }, []);
-
-  // Fetch user best scores
-  useEffect(() => {
-    if (!user) { setBestScores({}); return; }
-    const fetchBest = async () => {
-      try {
-        const { data } = await supabase
-          .from('user_best_scores')
-          .select('game_type, best_score')
-          .eq('user_id', user.id);
-        if (data) {
+        if (bestRes?.data) {
           const map: Record<string, number> = {};
-          data.forEach(r => { map[r.game_type] = r.best_score; });
+          bestRes.data.forEach(r => { map[r.game_type] = r.best_score; });
           setBestScores(map);
         }
-      } catch { /* silent */ }
+      } catch { /* silent: keep local values until a later foreground retry */ }
+      finally { fetching = false; }
     };
-    fetchBest();
-  }, [user]);
+    load();
+    const onVisible = () => { if (document.visibilityState === 'visible') load(); };
+    document.addEventListener('visibilitychange', onVisible);
+    window.addEventListener('focus', load);
+    return () => {
+      active = false;
+      controller?.abort();
+      document.removeEventListener('visibilitychange', onVisible);
+      window.removeEventListener('focus', load);
+    };
+  }, [accountId, canReadPersonal, playerName]);
 
   return (
     <>
