@@ -1,5 +1,13 @@
 # Work board
 
+**Claude CLAIMS 890, 2026-10-02 12:10 EDT, desktop Claude lane: Club Manager's season sim stops re-checking its ledger. Next free 891.**
+- Profiled while gating Release V: `ensurePairLedger` is 60 percent of a simulated season on main, because `notePair`
+  calls it for every league result and it re-reads every pair already stored. One function in
+  `src/lib/clubManager.ts` (`notePair`) gets a constant time check; the full shape check stays at the load path, the
+  season turn and the Champions League note. Measured: 370 ms a skipped season to 185 ms, 1,110 ms watched to 677 ms.
+- Proof it changes no result: `simCmLeagueRules` digests, then the Club Manager fence family. Lead only, no agents, no
+  production. Small release W when green.
+
 **2026-10-02 11:57 EDT, desktop Claude lane: Release V IS LIVE**, main `a224d290`, deployment `1a3a309b`, entry
 `index-PYxk2nEA.js`. This is the version now served. It carries:
 - **883** Club Manager: **Liga MX** as the 22nd league, the first real cupless one, nobody relegated: 368 clubs, 19
