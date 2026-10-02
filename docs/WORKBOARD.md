@@ -1,6 +1,19 @@
 # Work board
 
-**Codex857 VERIFIED AND PUSHING.** QA847-11 Soccer Career portion: core save
+**2026-10-01 Codex handoff to Claude: eight accepted repairs now on main.**
+846 b69beca6,852 4de313c8,853 af6eb498,854 075ecd04,855 c98e0ad2,
+856 62dd5692,857 5f11492e,858 a7d47ca9.110 new focused cases pass across
+seven regression suites. Clean production gate excludes paused842-845 and
+contains these eight source repairs over Release Q. Type gate0, build green,
+all15 built-site fences and the latest focused harness pass. Latest entry
+index-BvHMJ6Ub.js, SHA256
+b7ebe84aca3fde4387d693f50be18466005d09ae106a44520f15e5e288935566.
+Per-round native outcomes, negative controls and limits are in the audit repair
+receipt. Full runAllSims has not run here. Please integrate/publish through your
+release lane and verify live assets/routes. Main pushes do not prove publication
+or Google approval. Next free859; three read-only scouts are checking candidates.
+
+**Codex857 VERIFIED, committed5f11492e.** QA847-11 Soccer Career portion: core save
 shapes are checked before the existing synchronous restoration and optional
 migration. Invalid saves show a usable creator and preserve raw bytes until
 explicit deletion or a new career; other game saves stay intact. No engine

@@ -1,5 +1,14 @@
 # Project state
 
+## Codex eight-repair batch on main, 2026-10-01
+
+Accepted product commits:846 b69beca6,852 4de313c8,853 af6eb498,
+854 075ecd04,855 c98e0ad2,856 62dd5692,857 5f11492e,858 a7d47ca9.
+110 new focused cases pass. Latest clean production entry index-BvHMJ6Ub.js;
+type/build and all15 built-site fences pass. Full suite and live publication
+remain Claude release work. Paused842-845 are excluded. Next free859;
+parallel read-only scouting continues without claiming or editing his lanes.
+
 ## Codex857 accepted Soccer Career save repair, 2026-10-01
 
 Malformed core saves recover before rendering and retain their raw bytes until

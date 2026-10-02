@@ -1,5 +1,10 @@
 # Accepted quality repairs after audit847
 
+Eight repairs are on main:846 b69beca6,852 4de313c8,853 af6eb498,
+854 075ecd04,855 c98e0ad2,856 62dd5692,857 5f11492e,858 a7d47ca9.
+The original six-repair receipt below is retained, followed by the two later
+acceptances above it. This source acceptance is not a live deployment receipt.
+
 ## Follow-up857, Soccer Career recovery
 
 The page validates core save shapes before its existing synchronous restore

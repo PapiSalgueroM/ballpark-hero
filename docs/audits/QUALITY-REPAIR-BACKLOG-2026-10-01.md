@@ -2,8 +2,7 @@
 
 ## Repair status after the initial audit, 2026-10-01
 
-Codex846,852,853,854,855,856 and858 are verified main commits;857 is accepted
-and being committed, with acceptance
+Codex846,852,853,854,855,856,857 and858 are verified main commits, with acceptance
 and exact limits in `QUALITY-REPAIR-RECEIPT-2026-10-01.md`. QA847-01,05,06,
 07 (shared HowToPlayPopover and RulesGate),10,12 and13 are repaired in source;
 11's NFL/NHL and Soccer Career portions are repaired. Publication has been
