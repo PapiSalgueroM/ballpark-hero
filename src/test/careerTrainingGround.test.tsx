@@ -27,7 +27,13 @@ import { createHash } from 'node:crypto';
 import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import TrainingPanel from '@/components/soccer-career/TrainingPanel';
+import TrainingGround from '@/components/career/TrainingGround';
 import type { CareerState } from '@/lib/soccerCareerEngine';
+import { RATING_TRAINING, trainingTier, type TrainingDrillSkin, type TrainingSport } from '@/lib/careerTraining';
+import { NFL_TRAINING_POSITIONS, nflTraining } from '@/lib/nflCareerTraining';
+import { NBA_TRAINING_POSITIONS, nbaTraining } from '@/lib/nbaCareerTraining';
+import { MLB_TRAINING_POSITIONS, mlbTraining } from '@/lib/mlbCareerTraining';
+import { NHL_TRAINING_POSITIONS, nhlTraining } from '@/lib/nhlCareerTraining';
 
 const FIXTURE = path.resolve(process.cwd(), 'src/test/careerTrainingGround.fixture.json');
 const RECORD = process.env.RECORD_TRAINING_FIXTURE === '1';
@@ -360,5 +366,111 @@ describe('the training ground plays the way it was recorded', () => {
       return;
     }
     expect(Object.keys(fixture!.scripts).sort()).toEqual(SCRIPTS.map(s => s.name).sort());
+  });
+});
+
+/* ── the four American skins, played on the same ground ──
+   Every position of every sport: the menu shows that position's drills, each
+   one plays to a result, the result says what the shared bank pays, and the
+   callback gets the skin's own drill id. Math.random is held at 0.5 here, so
+   the guesser always goes bottom left (zone 3) and the lit gate is always 3. */
+const SKINS: Array<{ sport: string; positions: string[]; skin: (pos: string) => TrainingSport }> = [
+  { sport: 'NFL', positions: NFL_TRAINING_POSITIONS, skin: p => nflTraining(p as never) },
+  { sport: 'NBA', positions: NBA_TRAINING_POSITIONS, skin: p => nbaTraining(p as never) },
+  { sport: 'MLB', positions: MLB_TRAINING_POSITIONS, skin: p => mlbTraining(p as never) },
+  { sport: 'NHL', positions: NHL_TRAINING_POSITIONS, skin: p => nhlTraining(p as never) },
+];
+
+/** The button whose words are, or include, these. Plain DOM, because a role
+    query walks the whole accessibility tree and this runs hundreds of times. */
+function button(view: ReturnType<typeof render>, words: string, exact = false): HTMLButtonElement {
+  const found = [...view.container.querySelectorAll('button')]
+    .find(b => (exact ? b.textContent === words : (b.textContent ?? '').includes(words)));
+  expect(found, `no button saying "${words}"`).toBeDefined();
+  return found!;
+}
+
+/** Play one drill well enough for an elite session. */
+function play(view: ReturnType<typeof render>, d: TrainingDrillSkin) {
+  const wait = (ms: number) => act(() => { vi.advanceTimersByTime(ms); });
+  const zones = () => [...view.container.querySelectorAll<HTMLButtonElement>('[data-training-zone]')];
+  if (d.kind === 'cones') {
+    for (let n = 1; n <= 8; n++) { fireEvent.click(button(view, String(n), true)); wait(300); }
+  } else if (d.kind === 'burst') {
+    fireEvent.click(button(view, d.startTitle));
+    for (let i = 0; i < 26; i++) fireEvent.click(button(view, d.go));
+    wait(5000);
+  } else if (d.kind === 'zones') {
+    expect(zones().map(z => z.getAttribute('aria-label'))).toEqual(d.zones.map(z => `${d.verb} ${z}`));
+    if (d.mode === 'save') {
+      wait(600);
+      expect(view.getByText(d.tell)).toBeInTheDocument();
+      for (let i = 0; i < 5; i++) { wait(650); fireEvent.click(zones()[3]); wait(1100); }
+    } else {
+      for (let i = 0; i < 5; i++) { fireEvent.click(zones()[4]); expect(view.getByText(d.made)).toBeInTheDocument(); wait(1100); }
+    }
+  } else {
+    fireEvent.click(button(view, d.startTitle));
+    for (let i = 0; i < 8; i++) { fireEvent.click(button(view, d.lit, true)); wait(350); }
+  }
+}
+
+describe('the American skins play on the same ground', () => {
+  beforeEach(() => { vi.spyOn(Math, 'random').mockReturnValue(0.5); });
+
+  for (const { sport, positions, skin } of SKINS) {
+    it(`${sport}: every position's menu, and every drill to a banked result`, () => {
+      expect(positions.length).toBeGreaterThan(0);
+      /* positions share drills, so each different drill is played once */
+      const played = new Set<string>();
+      for (const pos of positions) {
+        const s = skin(pos);
+        expect(s.drills.length, `${sport} ${pos} has too few drills`).toBeGreaterThanOrEqual(2);
+        expect(new Set(s.drills.map(d => d.id)).size, `${sport} ${pos} repeats a drill id`).toBe(s.drills.length);
+        const menu = render(<TrainingGround sport={s} available onComplete={vi.fn()} onClose={vi.fn()} />);
+        expect(menu.container.querySelector('[role="dialog"]')).toHaveAttribute('aria-label', s.label);
+        expect(menu.getByText(s.rule)).toBeInTheDocument();
+        expect(menu.getAllByText(/^Trains /)).toHaveLength(s.drills.length);
+        const noted = menu.container.querySelector(`[data-training-${s.note?.marker ?? 'no'}-rule]`);
+        if (s.note) expect(noted).toHaveTextContent(s.note.text); else expect(noted).toBeNull();
+        cleanup();
+        /* the season's session is used: the tiles are gone and the menu says so */
+        const shut = render(<TrainingGround sport={s} available={false} onComplete={vi.fn()} onClose={vi.fn()} />);
+        expect(shut.getByText(s.shut.body)).toBeInTheDocument();
+        expect(shut.queryByText(/^Trains /)).toBeNull();
+        cleanup();
+        for (const d of s.drills) {
+          const key = JSON.stringify(d);
+          if (played.has(key)) continue;
+          played.add(key);
+          const onComplete = vi.fn();
+          const onClose = vi.fn();
+          const view = render(<TrainingGround sport={s} available onComplete={onComplete} onClose={onClose} />);
+          fireEvent.click(button(view, `${d.name}Trains ${d.stat}`));
+          play(view, d);
+          const score = Number(view.container.querySelector('[data-training-score]')?.textContent);
+          expect(score, `${sport} ${pos} ${d.name}`).toBeGreaterThanOrEqual(80);
+          expect(view.container.querySelector('[data-training-result]')).toHaveAttribute('data-training-result', d.id);
+          expect(view.getByText(RATING_TRAINING.tierLine(trainingTier(score), d.stat))).toBeInTheDocument();
+          fireEvent.click(button(view, s.bank, true));
+          expect(onComplete).toHaveBeenCalledExactlyOnceWith(d.id, score);
+          fireEvent.click(button(view, s.done, true));
+          expect(onClose).toHaveBeenCalledTimes(1);
+          cleanup();
+        }
+      }
+      expect(played.size, `${sport} played too few different drills`).toBeGreaterThanOrEqual(4);
+    }, 60000);
+  }
+
+  it('a goalie and a hitter save, a skater and a pitcher place', () => {
+    const mode = (s: TrainingSport) => s.drills.flatMap(d => (d.kind === 'zones' ? [d.mode] : []));
+    expect(mode(nhlTraining('G'))).toEqual(['save']);
+    expect(mode(nhlTraining('C'))).toEqual(['pick']);
+    expect(mode(mlbTraining('SS'))).toEqual(['save']);
+    expect(mode(mlbTraining('SP'))).toEqual(['pick']);
+    expect(mode(nflTraining('QB'))).toEqual(['pick']);
+    expect(mode(nflTraining('K'))).toEqual(['pick']);
+    expect(mode(nflTraining('RB'))).toEqual([]);
   });
 });

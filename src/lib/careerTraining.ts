@@ -180,3 +180,22 @@ export interface TrainingSport<Id extends string = string> {
   bank: string;
   done: string;
 }
+
+/* ─── the words every single rating career shares ───
+   They sit beside bankTrainingRating because they describe it: a session
+   banks one or two into the rating, and the rating stops at potential. A skin
+   that spreads these can only promise what the bank pays. */
+export const RATING_TRAINING: Pick<TrainingSport, 'rule' | 'tierLine' | 'scoreLabel' | 'bank' | 'done'> = {
+  rule: 'One session a season. Score 50+ for a +1 to your rating, 80+ for a +2. Training never takes you past your ceiling.',
+  tierLine: (tier, stat) => (
+    tier === 2 ? `Elite session! +2 ${stat}, up to your ceiling` :
+    tier === 1 ? `Solid work. +1 ${stat}, up to your ceiling` :
+    'Rough day. No gains this time'
+  ),
+  scoreLabel: 'session score',
+  bank: 'Bank the session',
+  done: 'Back to your career',
+};
+
+/** What a single rating career's drills train, in the word its own screens use. */
+export const RATING_STAT = 'Rating';
