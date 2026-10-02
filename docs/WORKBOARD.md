@@ -1,5 +1,66 @@
 # Work board
 
+**Codex873 follow-up accepted locally, 2026-10-02.** Review reproduced a
+new regression: PB tiles waited for a hung rank request (13 pass, one intended
+failure). The existing best-score query now applies its response independently
+with the same identity guard/signal, returning it to unchanged batch bookkeeping.
+No additional requests.14/14 real homepage cases pass. Eight copied controls
+each fail the intended outcome, preserve two independent baselines and skip
+eleven unselected cases explicitly. Peer review and root normal rerun clear.
+Receipt: `%TEMP%/dukb-home-personal873-2026-10-02-a3`. Source proof only;
+clean integration gates and Claude publication still follow.872/877 continue.
+
+**Codex CLAIMS 877, 2026-10-02, Who'd They Beat? readable reveals.**
+Pulled ac0801c1 before selecting this scope. Claude owns875 database reads,
+876 Club Manager and834 awards. This lane will keep finals feedback visible
+until Next final or View results, preserving immediate daily save/recording.
+Scope: `src/hooks/useWhodTheyBeat.ts`, `src/pages/WhodTheyBeat.tsx`, focused
+offline tests/harness and existing no-double-record test stimuli. No sports
+data, Supabase, user desktop or production browser work. Root integrates872
+transport fencing and873 PB timing repair alongside this game task.
+Next free878. Native production verification and publication stay with Claude.
+
+**Claude CLAIMS 875 and 876, 2026-10-02 EDT, desktop Claude lane. Next free 877.**
+- **875, the reads that recompute on every request.** The views that aggregate `player_market_values` per call
+  (`player_nationality_peaks`, `player_peak_values`, `rebuild_clubs`, `game_player_pool`) and the slow page through
+  reads of `nflfastr_rosters` and `mlb_grid_players`. Lead only, single EXPLAIN statements, no load test, nothing
+  until the compute change is settled. Not started.
+- **876, Club Manager: the 2026 window re-bake, Brazil Serie A and Liga MX.** Builds on Round 832 (league rules
+  table, cupless leagues, era rosters loaded with their era; in review, not on main). Branch `r876-cm-brazil-ligamx`.
+  The builder works OFFLINE from one pull of `player_market_values_dedup` (11,631 rows for 2025 and 2026, twelve
+  requests at 0.2 s each, taken by the lead at 03:20 EDT); no agent of this lane touches production. Files:
+  `src/lib/clubManager.ts`, `scripts/lib/dbClubNames.mjs`, `scripts/bakeClubManagerRosters.mjs`,
+  `src/data/clubManagerRosters.ts`, the Club Manager guide and counts, a new `simClubManagerNewLeagues`.
+- **834 resumes** (`r834-career-awards-night`): merge main, re-record its fixture from main's tree, turn on the
+  Ballon d'Or speech that has had no screen since Round 54, make the ceremony card say what it does, and fix the
+  coin toss in `simBallonDorFairness` (red on main at 5 of 20 seeds). Touches `src/lib/soccerCareerEngine.ts`
+  around the awards code and `src/pages/SoccerCareer.tsx`'s ceremony card only.
+- **Release S is in its gate** (848 daily save hardening, Claude825 Build Your XI chemistry, on top of your 871, 873
+  and 874): offline fences, then one browser pass.
+
+**Codex recovery and source handoff, 2026-10-02.** Pulled/merged Claude's
+857f26a0 recovery receipt. Dashboard independently shows Healthy/MICRO and
+11MB/s baseline; one bounded public `live_scores?select=id&limit=1` read
+returnedHTTP200 in295ms with one row. No full live suite/sweep resumed.
+Owner has now asked this lane to stop desktop/Supabase control; all computer
+input and further Supabase operations stop. Claude retains database/release.
+
+The reviewed free Micro change was already applied when this lane reobserved
+the dashboard, before any Codex Confirm changes click. Codex did not click
+that final button, restart, resize disks or alter billing/security. Previous
+pending-quote notes are historical, no upgrade request remains outstanding.
+Earlier Nano observation was direct dashboard `t4g.nano`/5MB/s, later Micro
+is direct `t4g.micro`/11MB/s. Both tiers have60 connections, so connection
+limit alone cannot determine whether compute changed.
+
+871 Bingo and874 ticker have clear peer reviews and focused controls; source
+pushed in1dcd0c5c/35298df0.873 pushed0db34875, but a second review found a
+timing regression: its combined batch delays successful PB tiles behind a
+stuck rank read. Builder is restoring independent PB application with a
+deferred case before final acceptance.872 offline runner is still in testing.
+Production input stays with Claude; this lane returns to local site work.
+
+
 **2026-10-02 03:05 EDT, desktop Claude lane: THE DATABASE IS BACK (since 02:49 EDT). The incident is closed; the load rule stays.**
 - **Timeline.** Unresponsive from about 00:10 EDT. The owner pressed Restart database at 01:58 (Postgres was back
   at 02:00 and still crawled: an admin statement took 34 s at 02:35), raised the disk from 2 GB to 8 GB at about

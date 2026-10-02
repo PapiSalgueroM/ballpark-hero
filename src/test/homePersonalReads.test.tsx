@@ -88,6 +88,17 @@ describe('homepage personal read ownership', () => {
     expect(requests.find(r => r.table === 'global_rank')!.args).toEqual({ p_player: 'Alpha', p_period: 'alltime', p_games: null });
   });
 
+  it('healthy tile bests appear while rank remains pending', async () => {
+    signed(); const view = mount(); expect(personal()).toHaveLength(3);
+    const best = personal().find(r => r.table === 'user_best_scores')!;
+    await act(async () => { best.reply.resolve({ data: [{ game_type: 'nba-stat-line', best_score: 95 }], error: null }); });
+    expect(view.getAllByText('PB: 95').length).toBeGreaterThan(0);
+    expect(view.queryByText('World rank:')).toBeNull();
+    expect(view.getByText('Played today:').parentElement).toHaveTextContent('Played today: 1');
+    event('focus'); show('hidden'); show('visible'); expect(personal()).toHaveLength(3);
+    await finish(); stats(view, 7, 2, 95);
+  });
+
   it('guests make zero personal reads through focus visibility and idle time', async () => {
     mount(); await flush(); event('focus'); show('hidden'); show('visible');
     await act(async () => { await vi.advanceTimersByTimeAsync(15 * 60 * 1000); });

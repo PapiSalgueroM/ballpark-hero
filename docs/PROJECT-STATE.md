@@ -1,5 +1,35 @@
 # Project state
 
+## Codex873 PB timing repair accepted locally, 2026-10-02
+
+Independent successful tile bests display while rank remains pending. No new
+query or changed eligibility. Deferred before case13 pass/1 fail; after14/14;
+eight controls each1 intended failure,2 baseline passes,11 explicit skips.
+Peer review and root normal rerun clear. Clean final integration still pending.
+No desktop, Supabase or production browser requests.872/877 remain active.
+
+## Codex877 claimed, return to website work, 2026-10-02
+
+Pulled ac0801c1, preserving Claude875/876/834 scopes.877 keeps Who'd They
+Beat? answer explanations visible until the player continues. Immediate
+daily saving/recording, reload, modes and scoring must hold. Offline tests
+only, no desktop or Supabase use.872 is in transport testing;873 PB timing
+repair has14 normal passes and eight accepted controls, awaiting integration.
+Claude owns release/live verification. Next free878.
+
+## Recovery verified lightly, desktop/Supabase control stopped, 2026-10-02
+
+Claude857f26a0 closes incident since02:49 EDT. Independent dashboard shows
+Healthy/MICRO/11MB/s and one tiny public score read answered200 in295ms.
+Owner asked Codex to stop using the computer/Supabase; no further UI input,
+DB queries, probes or sweeps from this lane. Claude keeps database/release.
+Codex prepared the free Micro quote but did not click final confirmation;
+the later dashboard already showed Micro. No pending upgrade decision.
+871/874 source pushed, focused proof/reviews clear.873 source pushed but PB
+timing review repair still required.872 transport guards remain under test.
+Final clean type/build/fences follow integration. Next free875.
+
+
 ## Codex874 ticker load ownership claimed, 2026-10-02
 
 Root adds hidden-tab/in-flight/stale-reply/cancellation guards to existing
