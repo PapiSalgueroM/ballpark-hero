@@ -1,5 +1,19 @@
 # Work board
 
+**Codex866 SOURCE VERIFIED, native pending, 2026-10-02.** Silverware Sort
+keeps earned counts/rungs visible until Next board or See results. The action
+has a44px target and receives keyboard focus. Two tries, locked greens,
+scores and immediate final daily save/booking remain intact.10 focused cases
+and three copied controls pass; existing no-double-record67 rows/checks pass
+with its actual manual advance stimulus. Peer review clear. Clean type/build,
+all15 offline built fences and7 selected source harnesses pass before Release R.
+No native data-backed acceptance credited; production incident still holds
+all live tests/publication. Local863d7c3c755 and8650a1942fe push attempts were
+rejected by remote advances, contrary to the earlier pushed wording below.
+Root is merging Release R and will push all accepted source after offline
+integration. Paused drafts and both lanes' incident notes stay preserved.
+
+
 **Codex863 SOURCE VERIFIED, native pending, 2026-10-02.** Ball Knowledge IQ
 shows explicit correct/miss and actual answer, submitted/correct tally and
 progress, focused enabled Next, first-pick lock and finite reduced-motion

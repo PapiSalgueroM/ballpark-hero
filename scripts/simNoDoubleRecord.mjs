@@ -186,11 +186,14 @@ const VITEST_CONTROLS = {
     point: /after midnight/,
   },
   lateday: {
-    edits: REVEAL_HOOKS.map(([file, item]) => ({
+    edits: REVEAL_HOOKS.flatMap(([file, item]) => file.endsWith('useSilverwareSort.ts') ? [
+      { file, from: '      setDailyResults(next);\n', to: '' },
+      { file, from: '    if (!next) return;\n', to: "    if (!next) return;\n    if (mode === 'daily') setDailyResults(next);\n" },
+    ] : [{
       file,
       from: `      setDaily${item}(next);\n    }\n    clearReveal();\n    revealTimer.current = window.setTimeout(() => {\n      revealTimer.current = null;\n`,
       to: `    }\n    clearReveal();\n    revealTimer.current = window.setTimeout(() => {\n      revealTimer.current = null;\n      if (mode === 'daily') setDaily${item}(next);\n`,
-    })),
+    }]),
     why: "the three reveal games move their daily state when the reveal ends again, not with the save, so a reload or a mode change inside the final reveal loses the record",
     red: row => / inside the final reveal$/.test(row.title),
     point: /recorded once|back on the daily/,
@@ -252,9 +255,9 @@ const SCAN_CONTROLS = {
   },
   scanpracticebuzzer: {
     file: 'src/components/buzzer-beater/BuzzerBeaterBoard.tsx',
-    from: "isDone && !bookedAlready && mode !== 'practice'",
-    to: "isDone && !bookedAlready && mode === 'daily'",
-    kind: 'mode', why: 'Buzzer Beater changes its proven practice exclusion to a different mode gate',
+    from: "isDone && !bookedAlready && (mode === 'daily' || mode === 'unlimited')",
+    to: "isDone && !bookedAlready && mode !== 'practice'",
+    kind: 'mode', why: 'Buzzer Beater admits the unranked contest into its completion predicate',
   },
   scanbookedfree: {
     file: 'src/components/free-kick/FreeKickBoard.tsx',
@@ -300,8 +303,8 @@ const MODE_GATE_BASELINE = [
     done: "isDone && mode !== 'practice' && !bookedAlready", booked: "mode === 'daily' && bookedDaily", phase: "phase === 'done'",
     why: 'practice never records; the in-memory finished daily returns booked in the same batch, including after storage refusal' },
   { file: 'src/components/buzzer-beater/BuzzerBeaterBoard.tsx', slug: 'buzzer-beater',
-    done: "isDone && !bookedAlready && mode !== 'practice'", booked: "mode === 'daily' && bookedDaily", phase: "phase === 'done'",
-    why: 'practice never records; the in-memory finished daily returns booked in the same batch, including after storage refusal' },
+    done: "isDone && !bookedAlready && (mode === 'daily' || mode === 'unlimited')", booked: "mode === 'daily' && bookedDaily", phase: "phase === 'done'",
+    why: 'practice and contest never record, verified by their actual Board suites; finished daily returns booked, including after storage refusal' },
   { file: 'src/hooks/useFaceOff.ts', slug: 'face-off', why: 'the daily button is hidden once the daily is played, and a finished run is never restored' },
   { file: 'src/hooks/useHofOrBust.ts', slug: 'hof-or-bust', why: 'restores in the state initializer, and the switch to Unlimited is one way (no way back to the daily)' },
   { file: 'src/hooks/useScorePredictor.ts', slug: 'score-predictor', why: 'restores in the state initializer, and the switch to Unlimited is one way' },

@@ -1,5 +1,18 @@
 # Project state
 
+## Codex866 source accepted, Release R integration pending, 2026-10-02
+
+Silverware reveals wait for deliberate Next/See results and show earned points,
+with keyboard focus and44px action.10 focused cases/three controls, existing
+recording67 checks and peer review pass. Final daily still saves/books at the
+deciding answer. Pre-Release-R clean type/build,15 offline built fences and7
+selected source harnesses pass. Source863d7c3c755/8650a1942fe are local only:
+remote advances rejected their pushes; earlier pushed wording was premature.
+864f0c70331 and incident merge160de45d reached main. Root integrates Release R
+next, preserving paused football guide separately. No live requests or
+publication until the database incident is cleared. Next unclaimed867.
+
+
 ## Codex863 source accepted, native pending, 2026-10-02
 
 Ball IQ now explains actual answer outcomes and submitted/correct progress,
