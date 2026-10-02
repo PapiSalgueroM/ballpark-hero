@@ -53,8 +53,9 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { execSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
+import { runExtend, readPull } from './lib/eraBakeExtend.mjs';
 
-const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const ROOT =path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
 /* ================= Round 191: the Serie A extension ================= */
 /* The era grows its third league IN PLACE. The original --pl/--laliga
@@ -88,11 +89,15 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
    dump row is dropped in favor of the shipped line, one man, one club. */
 
 const extendArg = process.argv.find(a => a.startsWith('--extend-seriea='));
+/* Round 899: the Bundesliga and Ligue 1 join through the shared step in
+   scripts/lib/eraBakeExtend.mjs. See THE BIG FIVE EXTENSION further down. */
+const bigFiveArg = process.argv.includes('--extend-big-five');
 
 const plArg = process.argv.find(a => a.startsWith('--pl='));
 const llArg = process.argv.find(a => a.startsWith('--laliga='));
-if (!extendArg && (!plArg || !llArg)) {
-  console.error('Usage: node scripts/bakeEra2015.mjs --extend-seriea=seriea2015.json');
+if (!extendArg && !bigFiveArg && (!plArg || !llArg)) {
+  console.error('Usage: node scripts/bakeEra2015.mjs --extend-big-five [--base=<the 60 club file>] [--pull=<year 2015 pull>] [--next=<year 2016 pull>] [--dry]');
+  console.error('   or (Round 191, already applied): node scripts/bakeEra2015.mjs --extend-seriea=seriea2015.json');
   console.error('   or (superseded full bake): node scripts/bakeEra2015.mjs --pl=pl2015.json --laliga=laliga2015.json');
   process.exit(1);
 }
@@ -327,6 +332,111 @@ const SA_ARRIVALS = [
   { n: 'Nikola Kalinić', to: 'Fiorentina', position: 'Centre-Forward', age: 26, usd: 11000000 },
   { n: 'Pepe Reina', to: 'Napoli', position: 'Goalkeeper', age: 32, usd: 4000000 },
 ];
+
+/* ================= Round 899: THE BIG FIVE EXTENSION ================= */
+/* The era grows from three leagues to five IN PLACE, by the Round 191 move
+   made twice, through the shared step scripts/lib/eraBakeExtend.mjs (read
+   its header: the shipped 60 club file is the truth for the three leagues
+   it holds, its lines carried through as bytes; the 2015-16 Bundesliga and
+   Ligue 1 come from an OFFLINE pull of the base table; every correction is
+   declared below and proved twice). Run:
+
+     node scripts/bakeEra2015.mjs --extend-big-five
+
+   THE DATA, OFFLINE. Production is off limits to a bake, so the lead pulled
+   the base table player_market_values once into two files (defaults below,
+   --pull= and --next= override): every row of years 2005, 2010 and 2015,
+   and every row of 2006, 2011 and 2016. The documented query shape (base
+   table, year = 2015 exact, DISTINCT ON (player_name) ... ORDER BY
+   player_name, market_value_usd DESC, no fallback year) is reproduced from
+   the first file: filter the year and the league's club spellings, keep one
+   row per player_name with the highest value, and break a tie on the lowest
+   id so the bake is deterministic. The second file is used ONLY as the
+   second proof of a summer move: the club the following year's row names.
+
+   RUNNING IT AGAIN. The step refuses a file that already holds a new
+   league's club. To regenerate, hand it the 60 club file it grew from:
+     git show 89d31144:src/data/clubManagerEra2015.ts > base.ts
+     node scripts/bakeEra2015.mjs --extend-big-five --base=base.ts
+
+   THE RESERVE SIDE SPELLINGS. Six clubs' second teams hold one year-2015
+   row each ("VfB Stuttgart II", "Hamburger SV II", "Borussia Dortmund II",
+   "Hannover 96 II", "FC Bayern Munich II", "VfL Wolfsburg II"). Unlike the
+   two U21 keepers of Round 175, none of the six is a first team regular of
+   2015-16, so those spellings stay out of the maps and those rows stay out
+   of the world. */
+
+/* Table spelling -> engine name. Membership of the 2015-16 Bundesliga, two
+ * sources read 2026-10-02 that agree on all eighteen: RSSSF's season record
+ * (https://www.rsssf.org/tablesd/duit2016.html) and ESPN's final standings
+ * (https://www.espn.com/soccer/standings/_/league/GER.1/season/2015). Every
+ * spelling was checked against the pull (the step fails on a spelling with
+ * no rows). Names reuse the 2026 world's spelling wherever the club exists
+ * there (Gladbach, Köln, Hamburg, Mainz, Hertha BSC, Hannover 96,
+ * Darmstadt, Wolfsburg), so colours and rivalries carry over; Ingolstadt is
+ * the one club with no 2026 name. */
+const DB_TO_ERA_BL = {
+  'Bayern Munich': 'Bayern Munich', 'Borussia Dortmund': 'Borussia Dortmund',
+  'Bayer 04 Leverkusen': 'Bayer Leverkusen', 'Borussia Mönchengladbach': 'Gladbach',
+  'FC Schalke 04': 'Schalke 04', '1.FSV Mainz 05': 'Mainz', 'Hertha BSC': 'Hertha BSC',
+  'VfL Wolfsburg': 'Wolfsburg', '1.FC Köln': 'Köln', 'Hamburger SV': 'Hamburg',
+  'FC Ingolstadt 04': 'Ingolstadt', 'FC Augsburg': 'Augsburg',
+  'SV Werder Bremen': 'Werder Bremen', 'SV Darmstadt 98': 'Darmstadt',
+  'TSG 1899 Hoffenheim': 'Hoffenheim', 'Eintracht Frankfurt': 'Eintracht Frankfurt',
+  'VfB Stuttgart': 'Stuttgart', 'Hannover 96': 'Hannover 96',
+};
+/* The 2015-16 Ligue 1, the same two publishers, read the same day, agreeing
+ * on all twenty: RSSSF (https://www.rsssf.org/tablesf/fran2016.html) and
+ * ESPN (https://www.espn.com/soccer/standings/_/league/FRA.1/season/2015). */
+const DB_TO_ERA_L1 = {
+  'Paris Saint-Germain': 'PSG', 'Olympique Lyon': 'Lyon', 'AS Monaco': 'Monaco',
+  'OGC Nice': 'Nice', 'LOSC Lille': 'Lille', 'AS Saint-Étienne': 'Saint-Étienne',
+  'SM Caen': 'Caen', 'Stade Rennais FC': 'Rennes', 'Angers SCO': 'Angers',
+  'SC Bastia': 'Bastia', 'FC Girondins Bordeaux': 'Bordeaux',
+  'Montpellier HSC': 'Montpellier', 'Olympique Marseille': 'Marseille',
+  'FC Nantes': 'Nantes', 'FC Lorient': 'Lorient', 'EA Guingamp': 'Guingamp',
+  'FC Toulouse': 'Toulouse', 'Stade Reims': 'Reims', 'GFC Ajaccio': 'GFC Ajaccio',
+  'ESTAC Troyes': 'Troyes',
+};
+
+/* BIG_FIVE_CORRECTIONS_START */
+const B5_FOLDS = [];
+const B5_MOVES = [];
+const B5_REMOVALS = [];
+const B5_ARRIVALS = [];
+const B5_NAMESAKES = [];
+/* BIG_FIVE_CORRECTIONS_END */
+
+if (bigFiveArg) {
+  const argOf = (flag, dflt) => {
+    const a = process.argv.find(x => x.startsWith(`${flag}=`));
+    return a ? a.slice(a.indexOf('=') + 1) : dflt;
+  };
+  const file = path.join(ROOT, 'src/data/clubManagerEra2015.ts');
+  const res = runExtend({
+    file: argOf('--base', file), outFile: file, prefix: 'ERA2015', year: 2015,
+    rows: readPull(argOf('--pull', 'C:/Users/antho/dukb-handoff/data/market-base-2005-2010-2015.json')),
+    nextRows: readPull(argOf('--next', 'C:/Users/antho/dukb-handoff/data/market-base-2006-2011-2016.json')),
+    newLeagues: [
+      { label: 'Bundesliga', dbToEra: DB_TO_ERA_BL },
+      { label: 'Ligue 1', dbToEra: DB_TO_ERA_L1 },
+    ],
+    worldDbToEra: { ...DB_TO_ERA_PL, ...DB_TO_ERA_LL, ...DB_TO_ERA_SA, ...DB_TO_ERA_BL, ...DB_TO_ERA_L1 },
+    folds: B5_FOLDS, moves: B5_MOVES, removals: B5_REMOVALS, arrivals: B5_ARRIVALS, namesakes: B5_NAMESAKES,
+    anchors: [],
+    expectedThin: ['Las Palmas', 'Frosinone'],
+    header: s => [
+      '// AUTO-GENERATED by scripts/bakeEra2015.mjs (Round 175, extended Rounds 191 and 899).',
+    ],
+  }, { write: !process.argv.includes('--dry') });
+  const s = res.stats;
+  console.log(`Extended to ${s.players} players across ${s.clubs} clubs (${s.partial.length} partial: ${s.partial.join(', ')}).`);
+  console.log(`Big five corrections: ${s.moved} moved, ${s.removed} removed, ${s.arrived} arrived, ${s.folded} folded, ${s.collisions} namesakes resolved.`);
+  console.log(`Shipped lines: ${s.shippedLines}, of which ${s.shippedKept} are still in the world byte for byte. Touched:`);
+  for (const t of s.touched) console.log(`  ${t}`);
+  console.log(`New club sizes: ${Object.entries(s.sizes).map(([c, n]) => `${c} ${n}`).join(', ')}`);
+  process.exit(0);
+}
 
 /* Same curves as bakeClubManagerRosters.mjs, verbatim, so a 2015 value and a
  * 2026 value mean the same thing on the rating scale. */
