@@ -594,3 +594,109 @@ describe('6) every per game check passes everything its game writes', () => {
     expect(isFootleLog([g], 8)).toBe(false);
   });
 });
+
+/* ------------------------------------------------------------------ 7 */
+
+/* Round 848 review: a finish is recorded exactly once across tabs. The tab
+   that finishes records it; a tab that takes the finish over (through the
+   storage event, or through its own next click) marks it as restored, so its
+   completion hook sees the transition and records nothing; a reload records
+   nothing. Each row runs the real game hook with the real useGameCompletion
+   and counts the recorder. */
+describe('7) a finish is recorded once across two tabs', () => {
+  type View = { result: { current: any } }; // eslint-disable-line @typescript-eslint/no-explicit-any
+  type Row = { name: string; key: string; hook: () => unknown; finish(v: View): Promise<void>; poke(v: View): void; finished(v: View): boolean };
+  const pickFive = (v: View, names: string[]) => {
+    act(() => v.result.current.deselectAll());
+    for (const p of names) act(() => v.result.current.togglePlayer(p));
+    act(() => v.result.current.submitSelection());
+  };
+  const rows: Row[] = [
+    {
+      name: 'Afl Higher or Lower', key: `afl-hl-daily-${TODAY}`, hook: () => useAflHL(),
+      finish: async (v) => { for (let i = 0; i < 10; i++) answer(v as never, 'left'); },
+      poke: (v) => act(() => v.result.current.makeGuess('left')),
+      finished: (v) => v.result.current.gameStatus === 'complete',
+    },
+    {
+      name: 'NBA Connections (lost)', key: `nba-connections-daily-${TODAY}`, hook: () => useNbaConnections(),
+      finish: async (v) => {
+        const g = v.result.current.puzzle.groups as { players: string[] }[];
+        for (let k = 0; k < 4; k++) pickFive(v, [...g[k].players.slice(0, 3), ...g[(k + 1) % 4].players.slice(0, 2)]);
+      },
+      poke: (v) => pickFive(v, (v.result.current.puzzle.groups as { players: string[] }[])[0].players),
+      finished: (v) => v.result.current.gameStatus === 'complete',
+    },
+    {
+      name: 'Transfer Path (given up)', key: `transfer-path-daily-${TODAY}`, hook: () => useTransferPath(),
+      finish: async (v) => { act(() => v.result.current.giveUp()); },
+      poke: (v) => act(() => { v.result.current.giveUp(); }),
+      finished: (v) => v.result.current.status === 'gaveup',
+    },
+    {
+      name: 'Footle (won)', key: `footle-daily-${TODAY}`, hook: () => useGame(),
+      finish: async (v) => { act(() => v.result.current.makeGuess(v.result.current.targetPlayer)); },
+      poke: (v) => act(() => v.result.current.makeGuess(v.result.current.availablePlayers[0])),
+      finished: (v) => v.result.current.gameStatus === 'won',
+    },
+  ];
+  for (const row of rows) {
+    for (const via of ['the storage event', 'its own next click'] as const) {
+      it(`${row.name}: taken over through ${via}`, async () => {
+        consumeRestoredFinish(row.name);
+        const a = renderHook(row.hook) as never as View;
+        const b = renderHook(row.hook) as never as View & { unmount(): void };
+        await flush();
+        await row.finish(a);
+        await flush();
+        expect(row.finished(a), 'the first tab finished').toBe(true);
+        expect(recordCompletion, 'the finishing tab records it once').toHaveBeenCalledTimes(1);
+        const done = raw(row.key);
+        expect(row.finished(b), 'the second tab has not seen it yet').toBe(false);
+        if (via === 'the storage event') storage(row.key);
+        else row.poke(b);
+        await flush();
+        expect(row.finished(b), 'the second tab took the finish over').toBe(true);
+        expect(raw(row.key), 'the stale tab wrote nothing').toBe(done);
+        expect(recordCompletion, 'the tab that took it over records nothing').toHaveBeenCalledTimes(1);
+        b.unmount();
+        renderHook(row.hook);
+        await flush();
+        expect(recordCompletion, 'a reload records nothing').toHaveBeenCalledTimes(1);
+      });
+    }
+  }
+});
+
+/* Round 848 review: a finish no longer than this tab's log. Footle and the UFC
+   guesser write a give up straight to the save, the same guesses marked lost,
+   so the stored log is no longer than the other tab's: only the finished flag
+   says it is ahead. Without that half of the rule the other tab played on, and
+   could finish the day a second time and record it again. */
+describe('7b) a finish no longer than this tab still wins', () => {
+  type Row7b = { name: string; key: string; hook: () => unknown; pool: (r: any) => any[]; target: (r: any) => any }; // eslint-disable-line @typescript-eslint/no-explicit-any
+  const rows7b: Row7b[] = [
+    { name: 'Footle', key: `footle-daily-${TODAY}`, hook: () => useGame(), pool: (r: any) => r.availablePlayers, target: (r: any) => r.targetPlayer }, // eslint-disable-line @typescript-eslint/no-explicit-any
+    { name: 'UFC', key: `ufc-game-daily-${TODAY}`, hook: () => useUfcGame(), pool: (r: any) => r.fighters, target: (r: any) => r.targetFighter }, // eslint-disable-line @typescript-eslint/no-explicit-any
+  ];
+  for (const row of rows7b) {
+    it(`${row.name}: a give up in one tab ends the day in the other, and nothing is recorded twice`, async () => {
+      const a = renderHook(row.hook) as never as { result: { current: any } }; // eslint-disable-line @typescript-eslint/no-explicit-any
+      const b = renderHook(row.hook) as never as { result: { current: any } }; // eslint-disable-line @typescript-eslint/no-explicit-any
+      await flush();
+      const wrong = row.pool(a.result.current).find((p: { name: string }) => p.name !== row.target(a.result.current).name);
+      act(() => a.result.current.makeGuess(wrong));
+      storage(row.key);
+      expect(b.result.current.guesses).toHaveLength(1);
+      act(() => a.result.current.giveUp());
+      expect(recordCompletion).toHaveBeenCalledTimes(1);
+      const given = raw(row.key);
+      expect(JSON.parse(given!).gameStatus).toBe('lost');
+      storage(row.key);
+      expect(b.result.current.gameStatus, 'the other tab took the give up over').toBe('lost');
+      act(() => b.result.current.makeGuess(row.target(b.result.current)));
+      expect(raw(row.key)).toBe(given);
+      expect(recordCompletion).toHaveBeenCalledTimes(1);
+    });
+  }
+});

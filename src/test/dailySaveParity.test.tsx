@@ -415,6 +415,8 @@ function guesser(id: string, storage: string, useHook: () => unknown, pool: (r: 
       ],
       lose: repeat(8, (i) => step(`wrong ${i + 1}`, (api) => api.r.makeGuess(others(api)[i]))),
       forfeit: [step('wrong 1', (api) => api.r.makeGuess(others(api)[3])), step('give up', (api) => api.r.giveUp())],
+      /* A give up before any guess saves an empty log marked lost. */
+      forfeit0: [step('give up at once', (api) => api.r.giveUp())],
     },
   };
 }

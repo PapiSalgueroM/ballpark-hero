@@ -23,8 +23,16 @@
  *            consumer, under every damaged form.
  *   skip     src/test/skipTarget.test.tsx: every sitemap page, reset-password
  *            and an unknown address, exactly one skip target each.
- * R848_PART=saves|shapes|skip runs one part (default all, about three and a
- * half minutes on the owner's machine; the parts measured 15s, 90s and 75s).
+ *   parity   (review) src/test/dailySaveParity.test.tsx with R848_PRE_HOOK set
+ *            to the hook at PRE: all 39 consumers played through both hooks
+ *            from the same storage with the same inputs (byte identical saves
+ *            after every step, same state, same records), and every save the
+ *            old hook wrote restored through the new one to the same state
+ *            with its bytes untouched. One row per consumer, checked against
+ *            the coverage count below.
+ * R848_PART=saves|shapes|skip|parity runs one part (default all; the parts
+ * measured 15s, 90s, 75s and 60s on the owner's machine, so run them one at a
+ * time where a command may not pass four minutes).
  *
  * Before any of that, a source check: every useDailyPuzzle consumer in src is
  * either on a route the shapes test mounts, or one of the unrouted hooks the
@@ -33,18 +41,34 @@
  * Negative controls, one per run (R848_CONTROL), each on a copy swapped in
  * through NO_DOUBLE_SWAP, each anchor asserted present exactly once first:
  *   stale   both stale tab layers removed (the addGuess guard and
- *           takeNewerSave): exactly the 26 stale tab rows of sections 1, 1b, 2
- *           and 2b must fail on an assertion, everything else pass.
- *   guard   (review) only the addGuess guard removed: exactly the six rows no
- *           takeNewerSave covers (the shared hook, 1b, Shirt Number). The nine
- *           Higher or Lower audit rows hold on takeNewerSave alone.
+ *           takeNewerSave): exactly the 30 stale tab rows of sections 1, 1b, 2,
+ *           2b and the four click rows of 7 must fail on an assertion,
+ *           everything else pass.
+ *   guard   (review) only the addGuess guard removed: exactly the nine rows no
+ *           takeNewerSave covers (the shared hook, 1b, Shirt Number, three
+ *           click rows of 7). The Higher or Lower rows hold on takeNewerSave.
  *   turn    (review) only the rest-of-turn drop removed: exactly the three
  *           section 1b rows, where a stale Transfer Path tab used to record a
  *           win for a chain that never reached the target.
  *   verdict (review) takeNewerSave never takes over: exactly the eleven
  *           section 2b rows, where a stale tab showed a reveal, a "correct,
  *           you scored" or a "guesses left" for an answer that never counted.
- *   event   the storage listener removed: exactly the ten storage event rows.
+ *   event   the storage listener removed: exactly the sixteen storage event
+ *           rows (sections 1, 2, 7 and 7b).
+ *   mark    (review) a finish taken over from another tab is not marked as
+ *           restored: exactly the eleven rows that count the recorder across
+ *           two tabs (section 1's and all of sections 7 and 7b).
+ *   finished (review) the guard ignores a stored finish no longer than this
+ *           tab's log: exactly the two section 7b rows (a Footle or UFC give
+ *           up in one tab, which the other tab could then win and record).
+ *   empty   (review) the shared check refuses an empty log: the parity rows
+ *           for /footle and /ufc (a give up before any guess) must go red.
+ *   strict  (review) Footle's check made one field stricter than Footle
+ *           writes (it demands a direction arrow on every cell, which a
+ *           matching cell never carries): the parity row for /footle must go
+ *           red and every other parity row stay green.
+ *   single  (review) the stale guard compares with greater or equal, so it
+ *           fires in a single tab: parity must go red.
  *   shape   the shared shape check removed: the shapes test must go red, with
  *           every route whose game hands in no check of its own throwing.
  *   skip    the target removed from Free Kick: that row, and only that row.
@@ -68,13 +92,14 @@ const VITEST = path.join(path.dirname(createRequire(path.join(ROOT, 'package.jso
 const PRE = '617b8354';
 const PART = process.env.R848_PART || 'all';
 const CONTROL = process.env.R848_CONTROL || '';
-const CONTROLS = ['stale', 'guard', 'turn', 'verdict', 'event', 'shape', 'skip'];
-assert.ok(['all', 'saves', 'shapes', 'skip'].includes(PART), `unknown R848_PART ${PART}`);
+const CONTROLS = ['stale', 'guard', 'turn', 'verdict', 'event', 'mark', 'finished', 'strict', 'single', 'empty', 'shape', 'skip'];
+assert.ok(['all', 'saves', 'shapes', 'skip', 'parity'].includes(PART), `unknown R848_PART ${PART}`);
 assert.ok(!CONTROL || CONTROLS.includes(CONTROL), `unknown R848_CONTROL ${CONTROL}`);
 
 const HARDENING = 'src/test/dailySaveHardening.test.tsx';
 const SHAPES = 'src/test/dailySaveShapes.test.tsx';
 const SKIP = 'src/test/skipTarget.test.tsx';
+const PARITY = 'src/test/dailySaveParity.test.tsx';
 const FIXTURE = 'src/test/fixtures/dailySavesPre848.json';
 const read = (rel) => fs.readFileSync(path.join(ROOT, rel), 'utf8').replace(/\r\n/g, '\n');
 const code = (src) => src.replace(/\/\*[\s\S]*?\*\//g, '').replace(/(^|[^:'"`])\/\/.*$/gm, '$1');
@@ -118,6 +143,22 @@ function copyWith(rel, edits, name) {
 }
 
 const lines = (text, tag) => [...text.matchAll(new RegExp(`^${tag} (.+)$`, 'gm'))].map((m) => JSON.parse(m[1]));
+
+/* The parity test against the hook as it stood at PRE: the old hook is written
+   into this run's folder from git and named by R848_PRE_HOOK. */
+function parity(swaps) {
+  execFileSync('git', ['cat-file', '-e', `${PRE}^{commit}`], { cwd: ROOT });
+  const pre = path.join(WORK, 'pre-hook', 'useDailyPuzzle.ts');
+  if (!fs.existsSync(pre)) {
+    fs.mkdirSync(path.dirname(pre), { recursive: true });
+    fs.writeFileSync(pre, execFileSync('git', ['show', `${PRE}:src/hooks/useDailyPuzzle.ts`], { cwd: ROOT, encoding: 'utf8', maxBuffer: 16 * 1024 * 1024 }));
+  }
+  assert.doesNotMatch(fs.readFileSync(pre, 'utf8'), /adoptNewerSave|isGuessLog/, 'the old hook is the one from before this round');
+  const run = vitest(PARITY, { swaps, env: { R848_PRE_HOOK: pre.split(path.sep).join('/') } });
+  const rows = lines(run.text, 'R848_PARITY');
+  assert.ok(rows.length > 0, 'the parity rows ran (R848_PRE_HOOK reached the test)');
+  return { run, rows };
+}
 
 try {
   /* ------------------------------------------------------- 0) coverage */
@@ -167,7 +208,7 @@ try {
   const hookFile = 'src/hooks/useDailyPuzzle.ts';
 
   /* ---------------------------------------------------------- controls */
-  if (['stale', 'guard', 'turn', 'verdict', 'event'].includes(CONTROL)) {
+  if (['stale', 'guard', 'turn', 'verdict', 'event', 'mark', 'finished'].includes(CONTROL)) {
     const GUARD = ['      if (droppingTurn.current) return;\n      if (adoptNewerSaveRef.current()) {\n        droppingTurn.current = true;\n        return;\n      }\n', ''];
     const TAKE = ['    if (!adoptNewerSaveRef.current()) return false;\n    droppingTurn.current = true;\n    return true;\n', '    return false;\n'];
     const edits = {
@@ -176,24 +217,29 @@ try {
       turn: [['      if (droppingTurn.current) return;\n', '']],
       verdict: [TAKE],
       event: [["    window.addEventListener('storage', onStorage);\n", '    void onStorage;\n']],
+      mark: [["    if (stored.gameStatus !== 'playing') markRestoredFinish(gameSlug);\n", '']],
+      finished: [["\n      || (stored.gameStatus !== 'playing' && statusRef.current === 'playing');\n", ';\n']],
     }[CONTROL];
     const copy = copyWith(hookFile, edits, 'useDailyPuzzle.ts');
     const run = vitest(HARDENING, { swaps: { '@/hooks/useDailyPuzzle': copy } });
     /* Two layers stand between a stale tab and a decided round: addGuess
        refuses to write behind the stored log, and the games that show a
        verdict ask takeNewerSave first. The nine Higher or Lower audit rows
-       hold while either layer stands, so only stale (both removed) turns them. */
-    const guardRows = /a tab behind the stored log takes it over|a finish taken over from another tab|1b\) a handler whose first answer is dropped|Shirt Number: a stale tab cannot drop/;
-    const hlRows = /: the stale tab cannot drop a decided round/;
+       (and the Higher or Lower click row of section 7) hold while either
+       layer stands, so only stale (both removed) turns them. */
+    const guardRows = /a tab behind the stored log takes it over|a finish taken over from another tab|1b\) a handler whose first answer is dropped|Shirt Number: a stale tab cannot drop|7\) .*(Connections|Transfer Path|Footle).*its own next click/;
+    const hlRows = /: the stale tab cannot drop a decided round|7\) .*Higher or Lower: taken over through its own next click/;
     const verdictRows = /2b\) a dropped answer shows no verdict/;
     const want = {
       stale: (t) => guardRows.test(t) || hlRows.test(t) || verdictRows.test(t),
       guard: (t) => guardRows.test(t),
       turn: (t) => /1b\) a handler whose first answer is dropped/.test(t),
       verdict: (t) => verdictRows.test(t),
-      event: (t) => /an open tab follows another tab through the storage event|: an open tab moves to the saved round/.test(t),
+      event: (t) => /an open tab follows another tab through the storage event|: an open tab moves to the saved round|7\) .*through the storage event|7b\) /.test(t),
+      mark: (t) => /a finish taken over from another tab|7\) a finish is recorded once|7b\) /.test(t),
+      finished: (t) => /7b\) /.test(t),
     }[CONTROL];
-    const expected = { stale: 26, guard: 6, turn: 3, verdict: 11, event: 10 }[CONTROL];
+    const expected = { stale: 30, guard: 9, turn: 3, verdict: 11, event: 16, mark: 11, finished: 2 }[CONTROL];
     const failed = run.rows.filter((r) => r.status === 'failed');
     const intended = run.rows.filter((r) => want(r.title));
     assert.equal(intended.length, expected, `the control's ${expected} target rows exist`);
@@ -215,6 +261,29 @@ try {
     }
     assert.notEqual(run.status, 0, 'the run is red');
     console.log(`R848 shape control: ${run.rows.filter((r) => r.status === 'failed').length} of ${run.rows.length} routes red; all ${unchecked.size} routes whose game hands in no check threw`);
+  } else if (CONTROL === 'strict' || CONTROL === 'single' || CONTROL === 'empty') {
+    const swaps = CONTROL === 'strict'
+      ? { '@/lib/dailySaveShapes': copyWith('src/lib/dailySaveShapes.ts', [["return isRecord(cell) && isText(cell.status) && (cell.value === null || typeof cell.value !== 'object');", "return isRecord(cell) && isText(cell.status) && isText(cell.arrow) && (cell.value === null || typeof cell.value !== 'object');"]], 'dailySaveShapes.ts') }
+      : { '@/hooks/useDailyPuzzle': copyWith(hookFile, [CONTROL === 'single'
+        ? ['    const ahead = stored.guesses.length > guessesRef.current.length\n', '    const ahead = stored.guesses.length >= guessesRef.current.length\n']
+        : ['  return Array.isArray(value) && value.every((g) => g !== null && g !== undefined);\n', '  return Array.isArray(value) && value.length > 0 && value.every((g) => g !== null && g !== undefined);\n']], 'useDailyPuzzle.ts') };
+    const { run, rows } = parity(swaps);
+    const red = rows.filter((l) => l.problems > 0).map((l) => l.id).sort();
+    const failedIds = run.rows.filter((x) => x.status === 'failed').map((r) => r.title.split(' > ').pop());
+    const want = { strict: ['footle', 'ufc'], empty: ['footle', 'ufc'], single: null }[CONTROL];
+    if (want) {
+      if (red.join() !== want.join()) fail(`expected exactly ${want.join(', ')} red under the ${CONTROL} control, got ${red.join(', ') || 'none'}`);
+      for (const id of failedIds) if (!red.includes(id)) fail(`${id} failed for another reason under the ${CONTROL} control`);
+    } else {
+      /* A guard that fires in one tab drops every second answer: a row goes
+         red on its comparison, or on a driver that could not reach the state
+         it plays to (Transfer Path's open step). Either is the control firing. */
+      const broken = new Set([...red, ...failedIds]);
+      if (broken.size < 30) fail(`a guard that fires in one tab must break nearly every consumer, only ${broken.size} went red`);
+      red.splice(0, red.length, ...[...broken].sort());
+    }
+    assert.notEqual(run.status, 0, 'the run is red');
+    console.log(`R848 ${CONTROL} control: ${red.length} of ${CONTROL === 'single' ? 39 : rows.length} parity rows red (${red.length > 8 ? `${red.slice(0, 8).join(', ')}, ...` : red.join(', ')})`);
   } else if (CONTROL === 'skip') {
     const copy = copyWith('src/pages/FreeKick.tsx', [['<main id="dukb-main" tabIndex={-1} className=', '<main className=']], 'FreeKick.tsx');
     const run = vitest(SKIP, { swaps: { '@/pages/FreeKick': copy } });
@@ -266,6 +335,16 @@ try {
       for (const l of result) if (l.failures.length) fail(`${l.route}: ${l.failures.join('; ').slice(0, 300)}`);
       for (const r of run.rows.filter((x) => x.status !== 'passed')) fail(`${r.title} ${r.status}`);
       console.log(`   ${result.filter((l) => !l.failures.length).length} of ${shapesRoutes.size} routes: nothing thrown on any damaged form, and the audit's and the brief's forms draw exactly a fresh daily`);
+    }
+    if (PART === 'all' || PART === 'parity') {
+      console.log('parity) every consumer plays and restores through the new hook exactly as through the hook at ' + PRE);
+      const { run, rows } = parity({});
+      if (rows.length !== consumers.length) fail(`expected one parity row per consumer (${consumers.length}), got ${rows.length}`);
+      for (const l of rows) if (l.problems || !l.saves) fail(`${l.id}: ${l.problems} problem(s), ${l.saves} save(s) compared`);
+      for (const r of run.rows.filter((x) => x.status === 'failed')) fail(`${r.title}: ${r.messages.split('\n')[0]}`);
+      const saves = rows.reduce((n, l) => n + l.saves, 0), steps = rows.reduce((n, l) => n + l.steps, 0);
+      const statuses = new Set(rows.flatMap((l) => l.statuses));
+      console.log(`   ${rows.filter((l) => !l.problems).length} of ${rows.length} consumers identical over ${steps} steps; ${saves} saves written by the old hook restored unchanged (statuses ${[...statuses].sort().join(', ')})`);
     }
     if (PART === 'all' || PART === 'skip') {
       console.log('skip) one skip target on every page');
