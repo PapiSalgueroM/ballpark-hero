@@ -47,11 +47,14 @@ const supabase = createClient(urlMatch[0], keyMatch[0], { auth: { persistSession
  *  Round 140 additions: the import ranks players by value worldwide, so newly
  *  promoted sides and the smallest top flight squads sit below its floor.
  *  They are real clubs in verified 2026-27 memberships, marked CM_PARTIAL. */
-const KNOWN_EMPTY = ['Abha', 'ADO Den Haag', 'Cambuur',
+/* Round 876: Abha, Erzurumspor, Çorum FK, Volos and Nürnberg left this list;
+   the table carried their players under spellings scripts/lib/dbClubNames.mjs
+   now maps. */
+const KNOWN_EMPTY = ['ADO Den Haag', 'Cambuur',
   'Marítimo', 'Académico de Viseu', 'St Mirren',
-  'Erzurumspor', 'Amedspor', 'Çorum FK', 'Kocaelispor',
+  'Amedspor', 'Kocaelispor',
   // Round 177: verified 2026-27 members with zero current dataset rows.
-  'Austria Lustenau', 'Iraklis', 'Kalamata', 'Kifisia', 'Volos',
+  'Austria Lustenau', 'Iraklis', 'Kalamata', 'Kifisia',
   // Round 185: verified 2026-27 members with zero usable (2025/2026) rows.
   // AC Horsens have 28 rows in the dataset, every one from older seasons.
   'AC Horsens', 'SønderjyskE',
@@ -60,7 +63,7 @@ const KNOWN_EMPTY = ['Abha', 'ADO Den Haag', 'Cambuur',
   // row at Dinamo Zagreb, which empties them honestly.
   'Varaždin', 'Lokomotiva Zagreb', 'Gorica', 'Rudeš', 'Istra 1961',
   // Round 394: 2. Bundesliga and Belgian members with no 2025/2026 rows.
-  'Dynamo Dresden', 'Nürnberg', 'Osnabrück', 'Energie Cottbus', 'Lommel'];
+  'Dynamo Dresden', 'Osnabrück', 'Energie Cottbus', 'Lommel'];
 
 /** Core clubs (big five leagues) must have 7+ players or the bake fails. */
 const CORE_LEAGUE_CLUBS = new Set([

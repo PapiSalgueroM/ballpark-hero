@@ -1,7 +1,8 @@
 {
  "measuredOn": "2026-09-11",
  "rule": "A baked Club Manager player whose newest row in public.player_market_values_dedup is year 2025, with no year-2026 row at any club the game models and none anywhere else either. The bake falls back to the 2025 row for these, which carries the 2025 CLUB, so the player ships at last season's club with nothing saying so.",
- "population": 356,
+ "population": 359,
+ "populationRound876": "Round 876 mapped the table's 1.FC Nuremberg spelling to Nürnberg and re-baked from the 2026-10-02 dump. Three Nürnberg players came in on a 2025 row with no 2026 row anywhere (Berkay Yilmaz, Oliver Villadsen, Tim Janisch), so they joined the population and wait in pending like the rest. No other new fallback row appeared that an overlay row does not already source.",
  "source": "public.player_market_values_dedup, read through the Supabase MCP on 2026-09-11.",
  "adjudicator": "public.world_cup_players where world_cup_year = 2026: the 2026 World Cup squads of all 48 nations, applied Round 389 (supabase/migrations/20260901_round_389_world_cup_2026_squads.sql). Every row there is a player two independent sources agree on, Wikipedia squad templates read through the API and Al Jazeera 2026-06-02, with Yahoo Sports 2026-06-11 as the third voice where they differed. Clubs are Wikipedia's. It covers only players picked for the World Cup, which is why it resolves 23 of the 356 and no more.",
  "adjudicatorWeb2026_09_15": "Web adjudication, 2026-09-15, for the 18 pending Premier League rows. Two independent source families were read with WebFetch and WebSearch only: A, official (the premierleague.com squad data feed for season 2026, which lists a loaned-out player at his loan club and not at his parent, plus club, league and UEFA pages) and B, independent press (Sky Sports, ESPN, Sports Illustrated and others; Sky Sport Deutschland never counted as independent of Sky Sports UK). A row moved out of pending only where both families agreed on status and club. Each row carries its own URLs and read dates.",
@@ -2179,6 +2180,18 @@
   {
    "name": "Ebrima Colley",
    "club": "Young Boys"
+  },
+  {
+   "name": "Berkay Yilmaz",
+   "club": "Nürnberg"
+  },
+  {
+   "name": "Oliver Villadsen",
+   "club": "Nürnberg"
+  },
+  {
+   "name": "Tim Janisch",
+   "club": "Nürnberg"
   }
  ]
 }

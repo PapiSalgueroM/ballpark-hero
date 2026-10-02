@@ -913,7 +913,7 @@
   },
   {
     "name": "Mikayil Faye",
-    "to": null,
+    "to": "Nürnberg",
     "db": "1.FC Nuremberg",
     "loan": true,
     "sources": [
@@ -922,7 +922,7 @@
     ],
     "window": "2026-summer",
     "checked": "2026-10-01",
-    "note": "A Rennes player whose 2026 row sits at Cremonese, his 2025-26 loan club. Rennes loaned him to Nuremberg in the 2. Bundesliga (engine does not model the club) with an option to buy, announced on 2026-07-23. ESPN's player page lists him at Nurnberg."
+    "note": "A Rennes player whose 2026 row sits at Cremonese, his 2025-26 loan club. Rennes loaned him to Nuremberg in the 2. Bundesliga (engine does not model the club) with an option to buy, announced on 2026-07-23. ESPN's player page lists him at Nurnberg. Round 876 mapped the table's 1.FC Nuremberg spelling to the engine's Nürnberg, so to follows the map."
   },
   {
     "name": "Breel Embolo",

@@ -177,6 +177,13 @@ export const DB_TO_ENGINE = {
   'Oud-Heverlee Leuven': 'OH Leuven', 'Cercle Brugge': 'Cercle Brugge', 'RAAL La Louvière': 'La Louvière',
   'SK Beveren': 'Beveren', 'KV Kortrijk': 'Kortrijk', 'Zulte Waregem': 'Zulte Waregem',
   'Royal Charleroi SC': 'Charleroi',
+  // Round 876: five clubs that shipped empty while the table carried their
+  // players under spellings nobody had mapped. Each table spelling was read
+  // off the 2026-10-02 dump of player_market_values_dedup and each engine
+  // spelling is the one REAL_LEAGUES carries. "Niki Volos" is a different
+  // club from Volos NFC and stays unmapped.
+  '1.FC Nuremberg': 'Nürnberg', 'Abha Club': 'Abha', 'Erzurumspor FK': 'Erzurumspor',
+  'Corum FK': 'Çorum FK', 'Volos NFC': 'Volos',
   // UCL flavor clubs outside the baked leagues
   'Club Brugge KV': 'Club Brugge',
 };
