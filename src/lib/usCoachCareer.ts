@@ -462,9 +462,7 @@ export function playCoachSeason(
   const champion = asHead && p.champion;
   const roundsWon = asHead ? p.roundsWon : Math.max(0, Math.round(p.roundsWon * 0.5));
 
-  const departure: CoachDeparture = poachedTo !== null ? 'poached'
-    : exit.stay ? s.profile.departure
-    : exit.departure;
+  const departure: CoachDeparture = exit.stay ? s.profile.departure : exit.departure;
 
   s.profile = recordCoachSeason(s.profile, {
     tier: job.tier,
@@ -517,6 +515,7 @@ export function playCoachSeason(
     const open = coachingVacancies(s.sport, rng).filter(o => o.tier <= poachedTo && o.team !== job.team);
     const target = open[0];
     if (target) {
+      s.profile = { ...s.profile, departure: 'poached' };
       // A fresh brief and a fresh roster, because the new job is a different
       // job. Carrying the old ones over is how a man handed a franchise ends
       // up being told to run his side of the ball.
