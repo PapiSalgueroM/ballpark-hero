@@ -107,16 +107,20 @@ async function read(pathname, { settle = 400 } = {}) {
   }));
 }
 
-/* The home page's own headline, read out of the file the server sends rather
-   than typed out here, so a rewrite of that copy cannot leave this harness
-   looking for a sentence nobody says any more. It is the h1 rather than the
-   first line of rendered text on purpose: the rendered text starts with the
-   header and the ticker, which every page shares, so comparing that would
-   compare the furniture and always match. */
+/* The home page's own opening line, read out of the file the server sends
+   rather than typed out here, so a rewrite of that copy cannot leave this
+   harness looking for a sentence nobody says any more. It is a line of the
+   home copy rather than the first line of rendered text on purpose: the
+   rendered text starts with the header and the ticker, which every page
+   shares, so comparing that would compare the furniture and always match.
+   Round 840: it was the h1 until the h1 became the name alone, which this
+   site's own 404 text and every page's header also say; the first paragraph
+   of the copy block is the home page's and nobody else's. */
 const homeRaw = await raw('/');
-const homeH1 = (homeRaw.html.match(/<h1[^>]*>([^<]{20,200})<\/h1>/) ?? [])[1]?.trim() ?? '';
-if (homeH1.length < 20) {
-  say(false, 'could not read the home page headline out of the served file, so the duplicate checks below would prove nothing');
+const homeH1 = ((homeRaw.html.split('<div id="dukb-home-copy">')[1] ?? '').replace(/<!--[\s\S]*?-->/g, ' ')
+  .match(/<p>([^<]{60,1000})<\/p>/) ?? [])[1]?.trim() ?? '';
+if (homeH1.length < 60) {
+  say(false, 'could not read the home page\'s opening line out of the served file, so the duplicate checks below would prove nothing');
 }
 const home = await read('/');
 
@@ -133,7 +137,7 @@ console.log('1) a dead address is marked, before anything renders');
      canonical was making. */
   say(/not found/i.test(dead.ogTitle ?? ''), `its social title says so too: ${JSON.stringify(dead.ogTitle)}`);
   say(/not found/i.test(dead.title), `its title says so: ${JSON.stringify(dead.title)}`);
-  say(!dead.text.includes(homeH1), `the home page headline is gone from it (${JSON.stringify(homeH1.slice(0, 40))})`);
+  say(!dead.text.includes(homeH1), `the home page's opening line is gone from it (${JSON.stringify(homeH1.slice(0, 40))})`);
   say(dead.links >= 5, `it still points somewhere useful (${dead.links} internal links)`);
 }
 
@@ -144,7 +148,7 @@ console.log('2) a second dead address, one that looks like a real route');
      assumed to behave like a random string. */
   const dead = await read('/soccer-career/season/99');
   say(dead.robots === 'noindex, follow', `robots is ${JSON.stringify(dead.robots)}`);
-  say(!dead.text.includes(homeH1), 'the home page headline is gone from it too');
+  say(!dead.text.includes(homeH1), "the home page's opening line is gone from it too");
 }
 
 console.log('3) the home page is untouched');
@@ -171,7 +175,7 @@ console.log('4) real routes are untouched, which is the half that must not fail'
        inside #root and React removes it on mount. */
     const sent = await raw(r);
     if (!sent.snapshot) { noSnapshot += 1; say(false, `${r} is served without a snapshot block, so it comes from the fallback and this script would mark it`); }
-    if (homeH1 && sent.html.includes(`>${homeH1}<`)) { homeCopy += 1; say(false, `${r} is serving the home page headline, so it is the fallback wearing its clothes`); }
+    if (homeH1 && sent.html.includes(`>${homeH1}<`)) { homeCopy += 1; say(false, `${r} is serving the home page's opening line, so it is the fallback wearing its clothes`); }
     const rendered = await read(r);
     if (rendered.robots !== null) { marked += 1; say(false, `${r} was marked ${JSON.stringify(rendered.robots)} and is a real page`); }
   }

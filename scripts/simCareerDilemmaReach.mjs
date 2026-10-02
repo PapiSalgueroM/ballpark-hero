@@ -341,7 +341,7 @@ export const engine = await import('${ROOT_URL}/src/lib/soccerCareerEngine.ts');
             s = off && c % 2 === 0 ? E.acceptOffer(s, off) : E.stayAtClub(s);
             break;
           }
-          case 'retirement_suggestion': s = s.age >= 35 ? E.acceptRetirementSuggestion(s) : E.declineRetirementSuggestion(s); break;
+          case 'retirement_suggestion': s = s.age >= 35 ? E.acceptRetirementSuggestion(s) : E.declineRetirementSuggestion(s, clubs); break;
           case 'retirement_ceremony': case 'post_retirement': case 'retired': s = { ...s, retired: true }; break;
           default: deadEnds += 1; examples.push(`career ${c}: no move for phase ${s.phase} at ${s.age}`); guard = 9999; break;
         }

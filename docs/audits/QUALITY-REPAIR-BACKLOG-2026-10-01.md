@@ -1,5 +1,16 @@
 # Quality repair backlog and review checklist
 
+## Repair status after the initial audit, 2026-10-01
+
+Codex846,852,853,854,855,856,857 and858 are verified main commits, with acceptance
+and exact limits in `QUALITY-REPAIR-RECEIPT-2026-10-01.md`. QA847-01,05,06,
+07 (shared HowToPlayPopover and RulesGate),10,12 and13 are repaired in source;
+11's NFL/NHL and Soccer Career portions are repaired. Publication has been
+handed to Claude and is not claimed here. Claude848 owns02/03/04,849 the reviewed
+data corrections,850 lost Soccer seasons and851 NBA/MLB schedules and NBA
+trade eligibility. All original reproductions and proposed rows below retain
+their audit-time meaning. Do not treat old paused-status text as current.
+
 This is a proposed repair plan from Codex847's audit, not code that has shipped.
 Read `FORENSIC-QUALITY-AUDIT-2026-10-01.md` for reproductions and the linked
 specialist reports for original evidence. Claude848 owns QA847-02/03/04.

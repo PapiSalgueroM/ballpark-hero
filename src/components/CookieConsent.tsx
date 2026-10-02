@@ -5,12 +5,24 @@ import { CONSENT_CHANGED_EVENT, loadConsentedScripts } from '@/lib/consentedScri
 
 export function CookieConsent() {
   const [visible, setVisible] = useState(false);
+  const [helpTarget, setHelpTarget] = useState<HTMLElement | null>(null);
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const consent = localStorage.getItem('cookie-consent');
     if (!consent) setVisible(true);
   }, []);
+
+  // Keep the existing choices inside an open rules dialog's focus scope.
+  useEffect(() => {
+    if (!visible) return;
+    const syncTarget = () => setHelpTarget(document.querySelector<HTMLElement>('[data-dukb-help-cookie-choices]'));
+    syncTarget();
+    const observer = new MutationObserver(syncTarget);
+    observer.observe(document.body, { childList: true, subtree: true });
+    return () => observer.disconnect();
+  }, [visible]);
+  const insideHelp = !!helpTarget?.isConnected;
 
   /* A withdrawal in another tab reloads this one so vendor code that already
      ran is removed. Accept can start scripts in place, which preserves an
@@ -38,10 +50,10 @@ export function CookieConsent() {
      sit on top without ever burying the dialog's own buttons. Cleared the
      moment consent is answered, and on unmount, so it can never stick. */
   useEffect(() => {
-    if (!visible) return;
+    if (!visible || insideHelp) return;
     document.body.dataset.consentPending = '1';
     return () => { delete document.body.dataset.consentPending; };
-  }, [visible]);
+  }, [visible, insideHelp]);
 
   /* Round 117, second half of the same bug. Making the banner clickable again
      is not enough on its own: an open Radix modal also stamps aria-hidden on
@@ -59,7 +71,7 @@ export function CookieConsent() {
     const mo = new MutationObserver(unhide);
     mo.observe(el, { attributes: true, attributeFilter: ['aria-hidden'] });
     return () => mo.disconnect();
-  }, [visible]);
+  }, [visible, helpTarget]);
 
   const saveChoice = (choice: 'accepted' | 'essential') => {
     localStorage.setItem('cookie-consent', choice);
@@ -102,6 +114,7 @@ export function CookieConsent() {
      pointer-events none, banner inherits none, banner z-index 60 sitting
      uselessly above a z-50 overlay. Opting this one subtree back in is the
      standard escape hatch and is scoped to the banner alone. */
+  // Inside shared help, the same choices use normal layout within its trap.
   return createPortal(
     /* Round 307: a named region that takes focus when it appears. The portal
        lands at the end of the document, so without the focus move a keyboard
@@ -116,9 +129,11 @@ export function CookieConsent() {
       aria-label="Cookie choices"
       tabIndex={-1}
       data-site-chrome=""
-      className="fixed bottom-0 left-0 right-0 z-[60] pointer-events-auto p-4 bg-card border-t border-border shadow-lg"
+      className={insideHelp
+        ? 'pointer-events-auto rounded-xl border border-border p-3 bg-card'
+        : 'fixed bottom-0 left-0 right-0 z-[60] pointer-events-auto p-4 bg-card border-t border-border shadow-lg'}
     >
-      <div className="max-w-3xl mx-auto flex flex-col sm:flex-row items-center gap-3 text-sm text-muted-foreground">
+      <div className={`max-w-3xl mx-auto flex flex-col ${insideHelp ? '' : 'sm:flex-row'} items-center gap-3 text-sm text-muted-foreground`}>
         {/* Round 286: the banner used to say "by continuing you agree", which
             was never how it worked: nothing to do with ads loads until Accept
             is pressed. It says what it does now. */}
@@ -142,6 +157,6 @@ export function CookieConsent() {
         </div>
       </div>
     </div>,
-    document.body,
+    insideHelp ? helpTarget! : document.body,
   );
 }

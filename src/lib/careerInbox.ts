@@ -55,7 +55,17 @@
    way the season went. Rules 1 to 4 hold unchanged on that path. A sport
    that passes no beats (Soccer Career) takes the Round 80 path, line for
    line: scripts/simCareerInboxBeats.mjs replays a fixture recorded before
-   this round touched the file and requires the soccer output to match. */
+   this round touched the file and requires the soccer output to match.
+
+   Round 822: THE OTHER THREE CALENDARS. The NBA, MLB and NHL careers moved
+   onto calendars of their own, so the two things Round 796 wrote inside the
+   NFL binding moved here, where all four share them: the inbox's own random
+   stream keyed to the save (inboxStream), and the season tick that keeps
+   every `ahead` beat and `ahead` text away from a career that ends this
+   season (receiveCalendarInboxTexts). A sport binding hands in its calendar,
+   its bank and a reader of which beats its season had, and nothing else. */
+
+import { keyedRng } from "./keyedRng";
 
 /* ─── the pool ───────────────────────────────────────────────────────────── */
 
@@ -236,6 +246,51 @@ export function receiveInboxTexts<S extends InboxHost>(
 ): InboxMessage[] {
   driftInboxMood(s, sport);
   return deliverInboxTexts(s, phase, sport, rng, beats);
+}
+
+/**
+ * Round 822: one season of an inbox on a calendar. `beats` is what the season
+ * had, from the sport's own reader. `goesOn` false means the career ends this
+ * season, so every beat the calendar marks `ahead` (the summer before a
+ * contract year, a winter of arbitration) and every `ahead` text (offseason
+ * workouts, a documentary on next year) stays out of it: a player who retires
+ * this summer is never sent a text about a season he will not play. Round 796
+ * wrote this rule inside the NFL binding; all four American careers share it
+ * from here.
+ */
+export function receiveCalendarInboxTexts<S extends InboxHost>(
+  s: S, phase: "youth" | "pro", sport: InboxSport<S>, rng: () => number,
+  beats: readonly string[], goesOn: boolean,
+): InboxMessage[] {
+  if (goesOn) return receiveInboxTexts(s, phase, sport, rng, beats);
+  const ahead = new Set((sport.calendar ?? []).filter(b => b.ahead).map(b => b.id));
+  const lastSeason = { ...sport, pool: sport.pool.filter(t => !t.ahead) };
+  return receiveInboxTexts(s, phase, lastSeason, rng, beats.filter(id => !ahead.has(id)));
+}
+
+/** What the inbox's own stream is keyed on. Every American career save
+ *  carries these fields under these names. */
+export interface InboxStreamHost extends InboxHost {
+  name: string;
+  pos: string;
+  team: string;
+  draftPick: number;
+  rival?: { name: string } | null;
+  year: number;
+  seasons: readonly unknown[];
+}
+
+/**
+ * Round 796, shared in Round 822: the inbox's own random stream, keyed to the
+ * save and the moment ("draft", "season"). An inbox that drew from the
+ * season's stream shifted every draw after it, so every text a bank gained or
+ * lost reshuffled every seeded career of that sport. Keyed here, the season's
+ * stream never sees the inbox and the same career at the same point always
+ * gets the same texts. The key is the exact string the NFL binding used, so
+ * no NFL save or seeded NFL career moves.
+ */
+export function inboxStream(c: InboxStreamHost, moment: string): () => number {
+  return keyedRng(`${c.name}|${c.pos}|${c.team}|${c.draftPick}|${c.rival?.name ?? ""}|${c.year}|${c.seasons.length}|${(c.phoneUsedIds ?? []).length}|inbox-${moment}`);
 }
 
 /** Rule 1: the mood meter's season drift and its coupling at the extremes. */

@@ -58,7 +58,20 @@
  * each). Julian Alvarez and Cody Gakpo did not move; both sagas ended with
  * the player staying, so their rows are right as they stand.
  */
-export const TRANSFER_OVERLAY_2026 = [
+import { WINDOW_2026_ADDITIONS } from './data/window2026/overlayAdditions.generated.mjs';
+
+export { WINDOW_2026_ADDITIONS };
+
+/* Round 795 (2026-10-01): the league by league research of Rounds 735 to 740
+   (scripts/data/window2026/) is not typed in here. scripts/buildWindow2026.mjs
+   checks every research row (two sources on two hosts, a window, a spelling
+   the table carries, one 2026 row per name, no repeat of this hand list) and
+   writes the accepted rows to scripts/data/window2026/overlayAdditions.generated.mjs.
+   TRANSFER_OVERLAY_2026, at the end of this file, is this hand list followed
+   by those rows; the same build writes the migration that carries them into
+   the table. Edit a research file and re-run the builder, never this list,
+   for a window move. */
+export const TRANSFER_OVERLAY_2026_HAND = [
   // Premier League and out
   { name: 'Morgan Rogers', to: 'Chelsea', db: 'Chelsea FC' },
   { name: 'Elliot Anderson', to: 'Manchester City', db: 'Manchester City' },
@@ -449,4 +462,10 @@ export const TRANSFER_OVERLAY_2026 = [
   { name: 'Mason Greenwood', to: 'Fenerbahçe', db: 'Fenerbahce' },
   { name: 'Maghnes Akliouche', to: 'PSG', db: 'Paris Saint-Germain' },
   { name: 'Mika Godts', to: 'PSG', db: 'Paris Saint-Germain' },
+];
+
+/* What every consumer reads: the hand list, then the generated window rows. */
+export const TRANSFER_OVERLAY_2026 = [
+  ...TRANSFER_OVERLAY_2026_HAND,
+  ...WINDOW_2026_ADDITIONS,
 ];

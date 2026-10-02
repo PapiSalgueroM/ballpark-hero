@@ -54,7 +54,7 @@ function todaysNation(): string {
 }
 
 function resultCard(m: MountedPage): Element | null {
-  return m.container.querySelector('[role="status"]');
+  return m.container.querySelector('[role="status"] h2')?.closest('[role="status"]') ?? null;
 }
 
 function status(m: MountedPage): 'playing' | 'finished' {

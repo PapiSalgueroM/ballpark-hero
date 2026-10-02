@@ -18,7 +18,7 @@ const controls = {
   aimtap: { changes: [['if (e.currentTarget.hasPointerCapture?.(e.pointerId)) e.currentTarget.releasePointerCapture(e.pointerId);', 'if (e.currentTarget.hasPointerCapture?.(e.pointerId)) e.currentTarget.releasePointerCapture(e.pointerId); strike();', 1]], failure: delayed },
   charge: { changes: [
     ["const beginCharge = useCallback(() => {\n    if (mode === 'practice') return;", 'const beginCharge = useCallback(() => {', 1],
-    ["if (mode === 'practice') { aimingRef.current = true; e.currentTarget.setPointerCapture?.(e.pointerId); } else beginCharge();", 'beginCharge();', 1],
+    ["if (mode === 'practice') { pointerAim(e.clientX, e.clientY); aimingRef.current = true; e.currentTarget.setPointerCapture?.(e.pointerId); }", "if (mode === 'practice') { pointerAim(e.clientX, e.clientY); beginCharge(); }", 1],
   ], failure: delayed },
   complete: { changes: [["isDone && mode !== 'practice' && !bookedAlready", 'isDone && !bookedAlready', 1]], failure: isolated },
   write: { changes: [["if (phase !== 'done' || mode !== 'daily' || savedRef.current) return;", "if (phase !== 'done' || mode === 'unlimited' || savedRef.current) return;", 1]], failure: isolated },

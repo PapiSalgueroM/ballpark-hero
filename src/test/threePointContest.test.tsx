@@ -1,3 +1,4 @@
+import { installArcadePointers } from './arcadePointerFixture';
 import { act, cleanup, fireEvent, render, screen } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import BuzzerBeaterBoard from '@/components/buzzer-beater/BuzzerBeaterBoard';
@@ -23,6 +24,7 @@ vi.mock('@/components/game/ShareButtons', () => ({ default: ({ score, customText
 
 const random = 0.125;
 const freeSeed = Math.floor(random * 2147483645) + 1;
+let pointerFixture: ReturnType<typeof installArcadePointers>;
 let now = 0;
 let frameId = 0;
 let frames = new Map<number, FrameRequestCallback>();
@@ -37,6 +39,7 @@ beforeEach(async () => {
   vi.useFakeTimers({ toFake: ['Date', 'setTimeout', 'clearTimeout', 'setInterval', 'clearInterval'] });
   vi.setSystemTime(new Date('2026-09-30T17:00:00Z'));
   vi.clearAllMocks();
+  pointerFixture = installArcadePointers();
   consumeRestoredFinish('buzzer-beater');
   localStorage.clear();
   now = 0; frameId = 0; frames = new Map();
@@ -45,7 +48,7 @@ beforeEach(async () => {
   vi.stubGlobal('requestAnimationFrame', (callback: FrameRequestCallback) => { frames.set(++frameId, callback); return frameId; });
   vi.stubGlobal('cancelAnimationFrame', (id: number) => { frames.delete(id); });
 });
-afterEach(() => { cleanup(); vi.restoreAllMocks(); vi.unstubAllGlobals(); vi.useRealTimers(); });
+afterEach(() => { cleanup(); pointerFixture.restore(); vi.restoreAllMocks(); vi.unstubAllGlobals(); vi.useRealTimers(); });
 
 function advance(milliseconds: number) {
   act(() => {
@@ -81,7 +84,7 @@ function finishTen(view: ReturnType<typeof render>, seed: number, practice = fal
   for (let index = 0; index < 10; index++) {
     const expected = realShot({ x: 0, arc: 0.6, power: 0.4 }, setups[index], rng);
     if (practice) fireEvent.click(button('Shoot'));
-    else { fireEvent.mouseDown(button('Hold to shoot')); fireEvent.mouseUp(button('Hold to shoot')); }
+    else { const hold = button('Hold to shoot'); fireEvent.pointerDown(hold); fireEvent.pointerUp(hold); }
     expect(actualShot(), `original ten-shot engine result ${index + 1}`).toEqual(expected);
     settle(view);
     score += expected.points; made += Number(expected.made);
@@ -147,7 +150,7 @@ describe('Buzzer Beater three-point contest', () => {
         const fade = index % 7 === 3 ? 1 : 0, ticks = contestTicks(setups[index]);
         fireEvent.change(screen.getByRole('slider', { name: 'How far to fade off the closeout' }), { target: { value: fade } });
         const expected = realShot({ x: fade, arc: 0.6, power: chargedPower(ticks) }, setups[index], rng);
-        fireEvent.mouseDown(button('Hold to shoot')); advance(ticks * 16); fireEvent.mouseUp(button('Hold to shoot'));
+        const hold = button('Hold to shoot'); fireEvent.pointerDown(hold); advance(ticks * 16); fireEvent.pointerUp(hold);
         expect(actualShot(), `contest shot ${index + 1}, reduced=${reduced}`).toEqual(expected);
         expect(board(view)).toHaveAttribute('data-arcade-phase', reduced ? 'shotEnd' : 'flying');
         expect(markers[index % 5]).toHaveAttribute('data-ball-status', 'spent');

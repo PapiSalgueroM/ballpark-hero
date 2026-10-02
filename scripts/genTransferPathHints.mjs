@@ -67,7 +67,13 @@ const ROOT_URL = ROOT.replaceAll('\\', '/');
 const PRE_ENTRY = path.join(os.tmpdir(), 'gen-tph-active-entry.mjs');
 const PRE_BUNDLE = path.join(os.tmpdir(), 'gen-tph-active-bundle.mjs');
 globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
-fs.writeFileSync(PRE_ENTRY, `export { careerPlayers as fallbackPlayers } from '${SRC}/data/careerPlayers.ts';\nexport { transferPathIdentityKey } from '${SRC}/lib/transferPathIdentity.ts';\nexport { TRANSFER_OVERLAY_2026 as overlay } from '${ROOT_URL}/scripts/transferOverlay2026.mjs';\n`);
+/* Round 795: the active identity evidence is the HAND overlay. The generated
+   window rows (scripts/data/window2026/overlayAdditions.generated.mjs) would
+   activate one more identity (Alvaro Morata), which moves the tripwires
+   below and the active hints refresh migration, so that change belongs to a
+   Transfer Path round that reviews it. scripts/simWindow2026Integration.mjs
+   reports exactly which identities the window rows would add. */
+fs.writeFileSync(PRE_ENTRY, `export { careerPlayers as fallbackPlayers } from '${SRC}/data/careerPlayers.ts';\nexport { transferPathIdentityKey } from '${SRC}/lib/transferPathIdentity.ts';\nexport { TRANSFER_OVERLAY_2026_HAND as overlay } from '${ROOT_URL}/scripts/transferOverlay2026.mjs';\n`);
 await build({ entryPoints: [PRE_ENTRY], bundle: true, format: 'esm', platform: 'node', outfile: PRE_BUNDLE, logLevel: 'error', alias: { '@': path.join(ROOT, 'src') } });
 const seed = await import(pathToFileURL(PRE_BUNDLE).href + `?v=${Date.now()}`);
 const worldCupRows = parseWorldCupIdentities(fs.readFileSync(path.join(ROOT, 'supabase/migrations/20260901_round_389_world_cup_2026_squads.sql'), 'utf8'));

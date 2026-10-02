@@ -1,0 +1,58 @@
+{
+  "round": 828,
+  "checked": "2026-10-01",
+  "what": "Membership of the NFL Front Office bake (nflverse rosters release, season 2026, week 4) checked against two independent sources, the club's own roster page and ESPN's, for three clubs and ten men each: three starters, five bench men and two practice squad men. tier is where the bake puts him: roster (the starters file or the bench) or practice (the practice squad). clubSite and espn are where each source put him on the day. Where the two sources disagree with each other the man is recorded and not counted: ESPN lists a practice squad man the club has elevated for a game day on its active roster, and a club page can carry a signing ESPN has not caught up with.",
+  "clubs": [
+    {
+      "abbr": "KC",
+      "clubSite": "https://www.chiefs.com/team/players-roster/",
+      "espn": "https://www.espn.com/nfl/team/roster/_/name/kc/kansas-city-chiefs",
+      "men": [
+        { "name": "Patrick Mahomes", "pos": "QB", "tier": "roster", "clubSite": "roster", "espn": "roster" },
+        { "name": "Travis Kelce", "pos": "TE", "tier": "roster", "clubSite": "roster", "espn": "roster" },
+        { "name": "Chris Jones", "pos": "DL", "tier": "roster", "clubSite": "roster", "espn": "roster" },
+        { "name": "Justin Fields", "pos": "QB", "tier": "roster", "clubSite": "roster", "espn": "roster" },
+        { "name": "Noah Gray", "pos": "TE", "tier": "roster", "clubSite": "roster", "espn": "roster" },
+        { "name": "Trey Smith", "pos": "OL", "tier": "roster", "clubSite": "roster", "espn": "roster" },
+        { "name": "Alohi Gilman", "pos": "DB", "tier": "roster", "clubSite": "roster", "espn": "roster" },
+        { "name": "Mansoor Delane", "pos": "DB", "tier": "roster", "clubSite": "roster", "espn": "roster" },
+        { "name": "Kader Kohou", "pos": "DB", "tier": "practice", "clubSite": "practice", "espn": "practice" },
+        { "name": "Emmanuel Ogbah", "pos": "DL", "tier": "practice", "clubSite": "practice", "espn": "practice" }
+      ]
+    },
+    {
+      "abbr": "PHI",
+      "clubSite": "https://www.philadelphiaeagles.com/team/players-roster/",
+      "espn": "https://www.espn.com/nfl/team/roster/_/name/phi/philadelphia-eagles",
+      "men": [
+        { "name": "Jalen Hurts", "pos": "QB", "tier": "roster", "clubSite": "roster", "espn": "roster" },
+        { "name": "Saquon Barkley", "pos": "RB", "tier": "roster", "clubSite": "roster", "espn": "roster" },
+        { "name": "Jalen Carter", "pos": "DL", "tier": "roster", "clubSite": "roster", "espn": "roster" },
+        { "name": "Andy Dalton", "pos": "QB", "tier": "roster", "clubSite": "roster", "espn": "roster" },
+        { "name": "Jordan Mailata", "pos": "OL", "tier": "roster", "clubSite": "roster", "espn": "roster" },
+        { "name": "Cam Jurgens", "pos": "OL", "tier": "roster", "clubSite": "roster", "espn": "roster" },
+        { "name": "Nolan Smith", "pos": "LB", "tier": "roster", "clubSite": "roster", "espn": "roster" },
+        { "name": "Riq Woolen", "pos": "DB", "tier": "roster", "clubSite": "roster", "espn": "roster" },
+        { "name": "Zach Ertz", "pos": "TE", "tier": "practice", "clubSite": "practice", "espn": "roster" },
+        { "name": "Dameon Pierce", "pos": "RB", "tier": "practice", "clubSite": "practice", "espn": "practice" }
+      ]
+    },
+    {
+      "abbr": "SF",
+      "clubSite": "https://www.49ers.com/team/players-roster/",
+      "espn": "https://www.espn.com/nfl/team/roster/_/name/sf/san-francisco-49ers",
+      "men": [
+        { "name": "Brock Purdy", "pos": "QB", "tier": "roster", "clubSite": "roster", "espn": "roster" },
+        { "name": "Christian McCaffrey", "pos": "RB", "tier": "roster", "clubSite": "roster", "espn": "roster" },
+        { "name": "Fred Warner", "pos": "LB", "tier": "roster", "clubSite": "roster", "espn": "roster" },
+        { "name": "Mac Jones", "pos": "QB", "tier": "roster", "clubSite": "roster", "espn": "roster" },
+        { "name": "Nick Bosa", "pos": "DL", "tier": "roster", "clubSite": "roster", "espn": "roster" },
+        { "name": "Jake Brendel", "pos": "OL", "tier": "roster", "clubSite": "roster", "espn": "roster" },
+        { "name": "Deommodore Lenoir", "pos": "DB", "tier": "roster", "clubSite": "roster", "espn": "roster" },
+        { "name": "Keion White", "pos": "DL", "tier": "roster", "clubSite": "roster", "espn": "roster" },
+        { "name": "Brandin Cooks", "pos": "WR", "tier": "practice", "clubSite": "roster", "espn": "practice" },
+        { "name": "Matthew Judon", "pos": "LB", "tier": "practice", "clubSite": "practice", "espn": "practice" }
+      ]
+    }
+  ]
+}

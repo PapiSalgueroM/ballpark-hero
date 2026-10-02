@@ -28,9 +28,9 @@ const MlbFrontOffice = () => {
           <GameSeoContent
           pageHasOwnH1
             title="MLB Front Office: the GM Sim"
-            description="Take over a real MLB club with its actual 2026 roster, every player rated off real 2025 stats pulled from the league's own data. Manage the payroll against the luxury tax line, DFA dead weight, sign free agents, swing trades the AI weighs on age, position and rating, then grind the 162 in simulated stretches. Win your division for a bye, survive the best-of-3 Wild Card round, the Division Series, the LCS and the World Series. Draft prospects whose scouting grades can lie, ride aging curves and retirements, and stack rings across unlimited saved seasons."
+            description="Take over a real MLB club with its real 26 man roster from the last day of the 2026 regular season, every player rated off his real 2026 numbers pulled from the league's own data. Manage the payroll against the luxury tax line, DFA dead weight, sign free agents, swing trades the AI weighs on age, position and rating, then grind the 162 in simulated stretches. Win your division for a bye, survive the best-of-3 Wild Card round, the Division Series, the LCS and the World Series. Draft prospects whose scouting grades can lie, ride aging curves and retirements, and stack rings across unlimited saved seasons."
             howToPlay={[
-              'Pick a franchise and inherit its real 2026 lineup, rotation and bullpen.',
+              'Pick a franchise and inherit its real 26: lineup, bench, a five man rotation and the bullpen.',
               'Work the payroll: DFA contracts, sign free agents, swing trades with pick sweeteners.',
               'Play the season in stretches and watch six division races tighten.',
               'Win the division for a top-3 seed; the top two skip the Wild Card round entirely.',
