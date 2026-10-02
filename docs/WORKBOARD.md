@@ -1,5 +1,18 @@
 # Work board
 
+**Codex CLAIMS874, 2026-10-02, ticker request ownership.** Separate log-stream
+aggregation for06:26:21Z to06:41:21Z shows151 `live_scores` calls with58 HTTP5xx
+responses, and74 `game_completions` calls with52 HTTP5xx responses. These are
+observed request counts, not attribution of the outage to either endpoint.
+Source `useLiveScores` polls hidden tabs and allows overlapping visibility
+loads; leaving the page does not cancel its fetch. Root will repair only
+`src/hooks/useLiveScores.ts` and the optional signal in `src/lib/liveScores.ts`,
+with local deferred tests and controls. Preserve score rows, freshness/server
+clock rules, five-minute cadence and visible ticker copy. No feed/cron/SQL
+change.871-873 remain with the three builders; Claude owns recovery/release.
+Next free875. Prepared Nano to Micro confirmation remains pending user choice.
+
+
 **Codex incident UI handoff, 2026-10-02 02:41 EDT.** Anthony explicitly
 authorized control of his computer and Supabase for this incident. Existing
 authenticated dashboard shows project `flawuiqbvjobmkfkauhw` **Unhealthy**,

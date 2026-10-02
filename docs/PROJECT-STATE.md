@@ -1,5 +1,14 @@
 # Project state
 
+## Codex874 ticker load ownership claimed, 2026-10-02
+
+Root adds hidden-tab/in-flight/stale-reply/cancellation guards to existing
+live ticker reads. Source currently allows overlap and hidden polling.
+Recent separate logs show151 score calls/58 HTTP5xx in15 minutes, not proof
+of cause. Keep data/freshness/cadence/feed/cron unchanged. Offline tests only.
+871-873 continue. Micro confirmation pending. Next free875.
+
+
 ## Incident UI: Nano despite Pro, free Micro change prepared, 2026-10-02
 
 Owner authorized Supabase computer control. Dashboard currently says
