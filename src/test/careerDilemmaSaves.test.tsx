@@ -114,7 +114,7 @@ function playTo(seed: number, stop: (s: CareerState) => boolean): CareerState {
       case 'rivalry_event': s = E.dismissRivalryEvent(s, clubs); break;
       case 'ballon_dor': s = E.dismissBallonDor(s, clubs); break;
       case 'transfer_window': s = (s.transferSituation as any)?.type === 'contract_expiry' ? E.signExtension(s) : E.stayAtClub(s); break;
-      case 'retirement_suggestion': s = E.declineRetirementSuggestion(s); break;
+      case 'retirement_suggestion': s = E.declineRetirementSuggestion(s, clubs); break;
       default: throw new Error(`no move for ${s.phase}`);
     }
   }

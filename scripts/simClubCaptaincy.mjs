@@ -228,7 +228,7 @@ for (let c = 0; c < CAREERS; c++) {
         case "retirement_suggestion":
           /* half the fleet plays into decline like real stubborn captains,
              which is the only road to the 33+ handover */
-          step(x => (c % 2 === 0 ? acceptRetirementSuggestion(x) : engine.declineRetirementSuggestion(x)), "retire");
+          step(x => (c % 2 === 0 ? acceptRetirementSuggestion(x) : engine.declineRetirementSuggestion(x, clubs)), "retire");
           break;
         case "retirement_ceremony": s.retired = true; break;
         /* Round 253: a serious injury now pauses the season for a rehab

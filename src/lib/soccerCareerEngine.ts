@@ -4913,7 +4913,21 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
     s.phase = "retirement_suggestion";
     return s;
   }
-  
+  return playPendingProSeason(s, clubs);
+}
+
+/* Round 850: the season itself, split off the start of the year above so the
+   retirement talk can sit between the two. Everything above is the year
+   beginning (the birthday, bans, the heat, the drug test, forced retirement);
+   everything below is the season being played and written down. When the
+   suggestion stops the year above, he has already aged into it, so Keep
+   Playing (declineRetirementSuggestion) comes back in here and plays that
+   exact season. Before this round Keep Playing only set the phase back to
+   playing, the next Next Season aged him again, and the year he chose to
+   play was never played or recorded: one live career lost six seasons and
+   finished six years behind its own calendar (audit QA847-14). */
+function playPendingProSeason(s: CareerState, clubs: ClubData[]): CareerState {
+
   const season = generateSeasonStats(s);
   // Injury report, named injuries that actually cost matches
   if (season.injury) {
@@ -7671,11 +7685,20 @@ export function acceptRetirementSuggestion(prev: CareerState): CareerState {
   return s;
 }
 
-export function declineRetirementSuggestion(prev: CareerState): CareerState {
-  const s = { ...prev };
+export function declineRetirementSuggestion(prev: CareerState, clubs: ClubData[]): CareerState {
+  /* Round 850: Keep Playing plays the season he just aged into. The year was
+     already started when the suggestion came up (advanceProSeason ran up to
+     it), so this resumes that same advance at the season and nothing above it
+     runs twice. A save written while sitting on this screen, by any version,
+     is in exactly that state, so declining on it plays the pending season
+     once. Off this screen it keeps the old behaviour and plays nothing. */
+  const s = repairCareer({ ...prev });
   s.events = [...s.events, "💪 Decided to push on, not ready to hang up the boots yet"];
-  s.phase = "playing";
-  return s;
+  if (prev.phase !== "retirement_suggestion" || prev.retired) {
+    s.phase = "playing";
+    return s;
+  }
+  return playPendingProSeason(s, clubs);
 }
 
 /* ─── Manager Career ─── */

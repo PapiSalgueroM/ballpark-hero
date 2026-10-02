@@ -149,7 +149,7 @@ if (dominantRuns === 0) {
       if (s.pendingBallonDor) s = eng.dismissBallonDor(s, clubs);
       if (s.seasons.length === before) break;
       if (s.phase === "transfer_window") s = eng.stayAtClub(s);
-      if (s.phase === "retirement_suggestion") s = eng.declineRetirementSuggestion(s);
+      if (s.phase === "retirement_suggestion") s = eng.declineRetirementSuggestion(s, clubs);
       if (s.phase !== "playing") break;
     }
   }
