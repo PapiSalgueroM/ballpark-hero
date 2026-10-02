@@ -13,8 +13,6 @@ import { DailyRail } from '@/components/home/DailyRail';
 import { JustShipped } from '@/components/home/JustShipped';
 import { ContinueRow } from '@/components/home/ContinueRow';
 import { FavouriteSport } from '@/components/home/FavouriteSport';
-import { HomeAbout } from '@/components/home/HomeAbout';
-import { HOME_COPY } from '@/data/homeCopy';
 import { SportGlyph, sportStyle } from '@/components/home/SportGlyph';
 import { useStreaks } from '@/hooks/useStreaks';
 import { AuthModal } from '@/components/auth/AuthModal';
@@ -281,15 +279,17 @@ export default function Index() {
             <div className="min-w-0">
               <div className="flex h-8 items-center gap-3 md:h-11">
                 {/* Round 840: the owner's headline, the name and nothing
-                    else ("hero headline is too long", 2026-08-28), read from
-                    src/data/homeCopy.ts so the template's h1 says the same.
-                    Every word of it is on screen: no hidden half for a
-                    renderer, which is hidden text however good the words.
-                    What the site is, in words, is the line under it and the
-                    About section below the tiles. simHomeCopy part 8 fails on
-                    any visually hidden text in this file or that section. */}
+                    else ("hero headline is too long", 2026-08-28). A literal
+                    rather than an import, so the copy module stays out of the
+                    chunk every page downloads; simHomeCopy part 7 holds it
+                    equal to HOME_COPY.h1 and to the template's h1. Every word
+                    of it is on screen: no hidden half for a renderer, which is
+                    hidden text however good the words. What the site is, in
+                    words, is the line under it and the About section below the
+                    tiles. simHomeCopy part 8 fails on any visually hidden text
+                    in this file or that section. */}
                 <h1 className="font-display text-2xl font-bold leading-none tracking-tight text-primary md:text-[40px]">
-                  {HOME_COPY.h1}
+                  DoUKnowBall
                 </h1>
                 {/* Stats: PERSONAL stats, signed-in only (owner 2026-08-05).
                     Streak = consecutive days, played = today's count, plus
@@ -526,11 +526,20 @@ export default function Index() {
                   </RevealSection>
                 </section>
               ))}
-
-              {/* Round 840: the words. Below every tile, above the footer. */}
-              <HomeAbout />
             </div>
           )}
+
+          {/* Round 840: the words, below every tile and above the footer, for
+              every visitor and outside every condition (a search result list
+              sits above it too). Its own chunk, requested the moment this page
+              first renders, so the copy stays out of the entry every page
+              downloads; the fallback is nothing and holds no height, and it is
+              the last thing on the page, so its arrival moves nothing above
+              it. simHomeCopy part 9 holds the mount unconditional and keeps
+              src/data/homeCopy.ts out of the entry's static imports. */}
+          <Suspense fallback={null}>
+            <HomeAbout />
+          </Suspense>
 
           {/* Golf went live 2026-08-05 (Guess The Golfer + Golf Higher or
               Lower), so the old Coming Soon placeholder is gone; the Golf
@@ -552,6 +561,11 @@ export default function Index() {
    loads, the placeholder holds the section's exact box, and because the
    swap happens well below what anyone is reading, nothing they see moves. */
 const LazyPolls = lazy(() => import('@/components/home/PollOfTheDay').then(m => ({ default: m.PollOfTheDay })));
+
+/* Round 840: the About copy, its own chunk. Mounted unconditionally above,
+   so React asks for it on the page's first render: no scroll, no idle, no
+   observer stands between a visitor (or a renderer) and the words. */
+const HomeAbout = lazy(() => import('@/components/home/HomeAbout').then(m => ({ default: m.HomeAbout })));
 
 function PollsWhenNear() {
   const ref = useRef<HTMLDivElement>(null);

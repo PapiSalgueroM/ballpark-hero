@@ -50,7 +50,7 @@ function Block({ block }: { block: HomeCopyBlock }) {
 
 export function HomeAbout() {
   return (
-    <section data-home-about="" aria-labelledby="home-about-heading" className="border-t border-border pt-8">
+    <section data-home-about="" aria-labelledby="home-about-heading" className="mt-10 border-t border-border pt-8">
       <h2 id="home-about-heading" className="text-lg font-display font-bold text-foreground">
         {HOME_COPY.aboutHeading}
       </h2>
