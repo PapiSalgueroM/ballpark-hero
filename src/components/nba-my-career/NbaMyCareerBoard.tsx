@@ -25,6 +25,7 @@ import { buildSeasonReveal, draftPressureLine, type SeasonReveal } from '@/lib/u
 /* Round 530: draft day as a moment, and the retirement card on the same
    celebration kit the season curtain uses. */
 import DraftDayCard, { type DraftDayFacts } from '@/components/us-career/DraftDayCard';
+import USCareerActionConfirm from '@/components/us-career/USCareerActionConfirm';
 import { CelebrationStyles, revealDelay } from '@/components/club-manager/Celebration';
 import { SeasonRevealCard } from '@/components/us-career/SeasonRevealCard';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
@@ -663,9 +664,11 @@ export default function NbaMyCareerBoard() {
             <span className="rounded-full border border-border bg-background px-3 py-1.5">{legacy.hof ? '🏛️ Hall of Fame' : 'No jacket in Springfield'}</span>
           </div>
           <div className="mt-4 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
-            <button onClick={reset} className="inline-flex items-center gap-2 rounded-full border border-border px-6 py-2.5 text-sm font-semibold text-foreground">
-              <RotateCcw className="h-4 w-4" /> New career
-            </button>
+            <USCareerActionConfirm action="restart" sport="NBA" onConfirm={reset}>
+              <button className="inline-flex min-h-11 min-w-11 items-center gap-2 rounded-full border border-border px-6 py-2.5 text-sm font-semibold text-foreground">
+                <RotateCcw className="h-4 w-4" /> New career
+              </button>
+            </USCareerActionConfirm>
             <ShareButtons
               gameName="NBA My Career"
               gamePath="/nba-my-career"
@@ -970,7 +973,9 @@ export default function NbaMyCareerBoard() {
             {`${totals.pts.toLocaleString()} career points`}
           </p>
           {career.seasons.length >= 6 && (
-            <button onClick={retireNow} className="mt-2 text-[11px] text-muted-foreground hover:text-destructive">Hang them up now</button>
+            <USCareerActionConfirm action="retire" sport="NBA" onConfirm={retireNow}>
+              <button className="mt-2 min-h-11 min-w-11 text-[11px] text-muted-foreground hover:text-destructive">Hang them up now</button>
+            </USCareerActionConfirm>
           )}
         </div>
       )}

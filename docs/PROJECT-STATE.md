@@ -1,15 +1,22 @@
 # Project state
 
-## Codex886 claimed, US career destructive-action confirmation, 2026-10-02
+## Codex886 accepted, US career retirement/restart confirmation, 2026-10-02
 
-884/885 code and accepted evidence pushed through95f39842. Next bounded repair:
-the four US career boards commit manual retirement and saved player/coaching
-deletion immediately. Confirm those two actions with the shared AlertDialog;
-Cancel/Escape keep exact saves, Confirm invokes the original callback once,
-and focus stays safe without scrolling. Original behavior reproduction, real
-board persistence proof, existing recording outcomes and clean native gates
-are required. Engine/save/automatic retirement behavior stays held. Claude owns
-875/883 and publication. Next free887; paused drafts/stashes remain untouched.
+884/885 are pushed through95f39842.886 confirms manual retirement and New
+career on allfourUSboards, with actual consequences, initialCancel, safe
+preventScroll return and one acceptance. Cancel/Escape preserve exact saves.
+Eight original immediate effects reproduced,18 focused cases and12 effective
+controls pass. Existing67recording checks before/after and coachflip1red/66held
+pass with every original assertion unchanged. Native actualboards12/12 across
+1440keyboard,390touch and320touch/reduced:1,036 checks,24 images, including
+non-null coaching save deletion. Clean cf3679e7 gate: type/build0, all15 built
+fences and final source guards green, peer clear. Evidence/limits are in
+`docs/audits/US-CAREER-CONFIRMATION-RECEIPT-2026-10-02.md`.
+Engine/save/automatic retirement and real data stay held. Simulatedfixtures,
+not fullseason/fullpage or remote-save proof. Owned processes closed; paused
+12tracked rawhashes/stashes held. Claude: pull886 with884/885 and publish from
+your release gate. Claude owns875/883 and publication. Next free887. No desktop,
+Supabase or live requests here.
 
 ## Release U is LIVE, 2026-10-02 08:01 EDT: main `bca2a0e8`, deployment `f7c690be`, entry `index-UMagImw7.js`
 
