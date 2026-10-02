@@ -142,7 +142,7 @@ const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
 const BUDGETS = [
   ['/', 231], /* release R: 230K measured, the About copy the rendered page now keeps (Round 840), in its own lazy chunk that only this page loads; was 229 */ /* Round 700: 226.6K measured, 0.6K of it the seoMeta part loaders in the entry chunk, 225.9K on main; was 226 */
   ['/club-manager', 633], /* Round 700: 629.1K measured with the seoMeta split, 637.4K on main; was 641 */ /* release K: 637K measured, the shootout order (782) and job applications (783) in the engine chunk; was 630 */ /* release H: 628K measured, the ticker's sport filter menu (711) in the entry chunk; release G: 626K with the match centre (714), the squad rows (715) and the double roster fix (742); was 622 */
-  ['/soccer-career', 706], /* Round 700: 702.0K measured with the seoMeta split, 709.9K on main; was 736 */
+  ['/soccer-career', 708], /* Release S: 707K measured (706 at Release R); the soccer guides chunk it shares with /footle and /soccer-grid grew with the Build Your XI chemistry guide. Round 700: 702.0K measured with the seoMeta split, 709.9K on main; was 736 */
   ['/stadium-tycoon', 284], /* Round 700: 281.8K measured with the seoMeta split, 290.2K on main; was 290 */
   /* Round 216: the new idle game. Measured 243K on the day it shipped,
      mostly the shared index chunk. */
