@@ -104,23 +104,61 @@ type Screen = "home" | "qualifying" | "squad" | "bracket" | "matches";
 
 /* Round 926: the end of a tournament is a moment, and a moment plays once.
    It plays when the card first lands, never again when a tile is opened and
-   closed, and never on a reload of a save still sitting on this card. The
-   save is not ours to write (the engine owns it), so the memory is the tab's
-   sessionStorage, keyed by the tournament itself, with an in memory set
-   behind it for a browser that blocks storage. Forgetting fails quiet: the
-   worst case is a card that shows without its entrance, never one that
-   replays a win that is days old. */
-const MOMENT_PREFIX = "dukb-intl-moment:";
+   closed, and never when a save still sitting on this card is reopened: on a
+   reload, in a new tab, or after the browser was closed. The save is not ours
+   to write (the engine owns it), so the memory is a short list in the same
+   localStorage the save lives in, with an in memory set behind it.
+
+   The key is the run, not just the edition. Tournament years follow a fixed
+   calendar, so a second career with the same nation reaches the same World
+   Cup in the same year; the key therefore carries this run's own numbers (his
+   games, his ratings, the scores) through a small hash, and a different
+   career's win is a different key and gets its own moment.
+
+   What happens when the memory fails: if storage cannot be read, the card
+   plays. That is the storage the save is read from, so a browser that cannot
+   read it has not reopened this save from it; the card in front of it is new.
+   The one known replay is a save opened in a different browser, which has
+   never seen the moment and plays it once there. */
+const MOMENT_STORE = "dukb-intl-moments";
+const MOMENT_KEEP = 60;
 const momentsThisLoad = new Set<string>();
 
+/** FNV-1a over a string, as 8 hex digits. Not security, just a short tag. */
+function shortHash(s: string): string {
+  let h = 0x811c9dc5;
+  for (let i = 0; i < s.length; i++) {
+    h ^= s.charCodeAt(i);
+    h = Math.imul(h, 0x01000193);
+  }
+  return (h >>> 0).toString(16).padStart(8, "0");
+}
+
 function momentKey(t: IntlTournament): string {
-  return `${t.nation}|${t.name}|${t.year}|${t.myResult}`;
+  const run = JSON.stringify([
+    t.champion, t.runnerUp, t.playerApps, t.playerGoals, t.playerAssists, t.playerAvgRating,
+    t.squad?.myScore,
+    (t.matches ?? []).map(m => [m.round, m.home, m.away, m.homeGoals, m.awayGoals, m.playerGoals, m.playerAssists, m.playerRating]),
+    (t.bracket ?? []).map(b => [b.round, b.slot, b.home, b.away, b.homeGoals, b.awayGoals]),
+  ]);
+  return `${t.nation}|${t.name}|${t.year}|${t.myResult}|${shortHash(run)}`;
+}
+
+function readMoments(): string[] {
+  const raw = window.localStorage.getItem(MOMENT_STORE);
+  if (!raw) return [];
+  try {
+    const list: unknown = JSON.parse(raw);
+    return Array.isArray(list) ? list.filter((k): k is string => typeof k === "string") : [];
+  } catch {
+    return [];
+  }
 }
 
 function momentPlayed(key: string): boolean {
   if (momentsThisLoad.has(key)) return true;
   try {
-    return window.sessionStorage.getItem(MOMENT_PREFIX + key) === "1";
+    return readMoments().includes(key);
   } catch {
     return false;
   }
@@ -129,9 +167,11 @@ function momentPlayed(key: string): boolean {
 function markMomentPlayed(key: string): void {
   momentsThisLoad.add(key);
   try {
-    window.sessionStorage.setItem(MOMENT_PREFIX + key, "1");
+    const kept = readMoments().filter(k => k !== key);
+    kept.push(key);
+    window.localStorage.setItem(MOMENT_STORE, JSON.stringify(kept.slice(-MOMENT_KEEP)));
   } catch {
-    /* Storage blocked: the in memory set still stops a replay this visit. */
+    /* Storage blocked or full: the in memory set still stops a replay this visit. */
   }
 }
 
@@ -385,7 +425,10 @@ export function TournamentCard({
 
   /* Round 926: a won tournament lands as the biggest night of the career.
      Gold confetti, the trophy and the title slam in, and every line under
-     them ticks in on the kit's pace. Anything else (out in the group, beaten
+     them ticks in on the kit's pace. This is every tournament the engine
+     runs, not only the World Cup: the Euros, the Copa, the Africa Cup of
+     Nations, the Asian Cup, the Gold Cup and the OFC Nations Cup too.
+     Anything else (out in the group, beaten
      in the final, never picked) stays quiet: the card rises in once, no shake
      and no confetti. Every animated class sits on a wrapper, never on a
      control, and every number prints its final value from the first frame.
@@ -459,12 +502,14 @@ export function TournamentCard({
 
       <div className="grid grid-cols-2 gap-1.5">
         {tiles.map(tile => (
-          /* Round 926: the tick sits on this wrapper, not the button, so the
-             button's hover still works once the animation has filled. */
+          /* Round 926: the entrance sits on this wrapper, not the button, so
+             the button's hover still works once the animation has filled. It
+             is the gated rise because a tile is a control: hidden (so it cannot
+             be tapped) through its delay, since one tap ends the moment. */
           <div
             key={tile.key}
             data-intl-tile={tile.key}
-            className={`min-w-0${won ? " cm-tick-in" : ""}`}
+            className={`min-w-0${won ? " cm-rise-gated" : ""}`}
             style={won ? nextBeat() : undefined}
           >
             <button

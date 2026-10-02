@@ -1,22 +1,27 @@
 /**
  * Round 926: winning an international tournament becomes a moment.
  *
- * TournamentCard is the card every World Cup, Euros or Copa run ends on. A
- * won tournament now lands with gold confetti, the trophy and the title
- * slamming in and the lines under them ticking in on the kit's pace. A lost or
- * missed one stays quiet: one plain rise, no shake, no confetti.
+ * TournamentCard is the card every international tournament run ends on (the
+ * World Cup and all six continental cups the engine plays). A won tournament
+ * now lands with gold confetti, the trophy and the title slamming in and the
+ * lines under them ticking in on the kit's pace. A lost or missed one stays
+ * quiet: one plain rise, no shake, no confetti.
  *
  * What this file holds, over a winner fixture and a group exit fixture:
  *  1. the winner has the confetti layer and cm-slam on the heading, the group
  *     exit has neither (and no shake), only a plain cm-rise on the card;
- *  2. every number in the markup is a number the fixture carries (or one the
- *     card derives from it in plain sight: the group position and size);
- *  3. the staggered delays strictly increase top to bottom, and the speech
- *     buttons land last, gated so they cannot be pressed before they show;
- *  4. the moment plays once: opening a tile and coming Back does not replay
- *     it, a second mount of the same card does not replay it, a reload (fresh
- *     module, same tab storage) does not replay it, and the control (fresh
- *     module, storage cleared) proves it is the memory doing the stopping.
+ *  2. every number in the markup is a number the fixture carries, and each
+ *     stat tile and tile line prints its OWN field (so a count up that starts
+ *     at 0, or a 3 where the run scored 6, is caught);
+ *  3. the staggered delays strictly increase top to bottom, the speech lands
+ *     last, and every control on the won card is gated so it cannot be
+ *     pressed before it shows;
+ *  4. the moment plays once, on the won AND the quiet path: opening a tile and
+ *     coming Back, a second mount, a reload, and a new tab (session storage
+ *     gone, the save still in local storage) all leave it quiet; the control
+ *     (local storage cleared) proves the memory does the stopping;
+ *  5. the memory is per run: a different career reaching the same edition
+ *     with the same nation and the same result still gets its moment.
  *
  * Rendered with testing-library rather than react-dom/server because the
  * confetti draws in an effect (it honours reduced motion there), and a static
@@ -80,6 +85,12 @@ function mount(t: IntlTournament, Card: typeof TournamentCard = TournamentCard) 
   );
 }
 
+/** The card from a fresh copy of its module, as a page reload would load it
+    (call vi.resetModules first). */
+async function reload(): Promise<typeof TournamentCard> {
+  return (await import('@/components/soccer-career/InternationalPanel')).TournamentCard;
+}
+
 const card = (c: HTMLElement) => c.querySelector('[data-intl-moment]') as HTMLElement;
 const confettiPieces = (c: HTMLElement) => c.querySelectorAll('.animate-confetti-fall').length;
 
@@ -114,7 +125,48 @@ function staggerDelays(c: HTMLElement): number[] {
     .map(el => parseFloat(el.style.animationDelay));
 }
 
-beforeEach(() => { window.sessionStorage.clear(); });
+/** The four stat tiles and the four nav tiles, read by their own labels, as
+    label to printed value. */
+function statTiles(c: HTMLElement): Record<string, string> {
+  const out: Record<string, string> = {};
+  for (const el of card(c).querySelectorAll<HTMLElement>('div')) {
+    if (el.children.length !== 2) continue;
+    const label = el.children[1].textContent ?? '';
+    if (['Apps', 'Goals', 'Assists', 'Rating'].includes(label)) out[label] = el.children[0].textContent ?? '';
+  }
+  return out;
+}
+
+function tileSub(c: HTMLElement, key: string): string {
+  const b = card(c).querySelector(`[data-intl-tile="${key}"] button`) as HTMLElement;
+  return b.children[2].textContent ?? '';
+}
+
+/** The run's own numbers, field by field, as the card must print them. */
+function expectOwnFields(c: HTMLElement, t: IntlTournament) {
+  expect(statTiles(c)).toEqual({
+    Apps: String(t.playerApps),
+    Goals: String(t.playerGoals),
+    Assists: String(t.playerAssists),
+    Rating: t.playerAvgRating.toFixed(1),
+  });
+  expect(tileSub(c, 'matches')).toBe(`${t.playerApps} apps`);
+  expect(tileSub(c, 'bracket')).toBe(`${t.teams} nations`);
+}
+
+/** The same tournament, the same nation, the same result, as a different
+    career would play it: other games, other numbers. */
+function winnerOtherRun(year = 2030): IntlTournament {
+  const t = winner(year);
+  return {
+    ...t,
+    matches: [{ ...t.matches[0], playerGoals: 0, playerRating: 7.0 }, t.matches[1]],
+    playerGoals: 2, playerAvgRating: 7.21,
+    squad: t.squad && { ...t.squad, myScore: 77 },
+  };
+}
+
+beforeEach(() => { window.sessionStorage.clear(); window.localStorage.clear(); });
 afterEach(() => { cleanup(); });
 
 describe('Round 926: the won tournament moment', () => {
@@ -125,8 +177,19 @@ describe('Round 926: the won tournament moment', () => {
     const h3 = card(container).querySelector('h3') as HTMLElement;
     expect(h3.textContent).toBe('World Cup 2030');
     expect(h3.className).toContain('cm-slam');
-    expect(card(container).querySelectorAll('.cm-tick-in').length).toBe(8);
+    /* The four stat tiles tick in; the four nav tiles and the speech are
+       controls, so they rise gated. */
+    expect(card(container).querySelectorAll('.cm-tick-in').length).toBe(4);
+    expect(card(container).querySelectorAll('.cm-rise-gated').length).toBe(5);
     expect(card(container).className).not.toContain('cm-loss-shake');
+  });
+
+  it('every control on the won card is gated, so none can be tapped while it is still invisible', () => {
+    const { container } = mount(winner(2040));
+    const buttons = [...card(container).querySelectorAll('button')];
+    expect(buttons.length).toBeGreaterThanOrEqual(5);
+    const ungated = buttons.filter(b => !b.closest('.cm-rise-gated')).map(b => b.textContent);
+    expect(ungated).toEqual([]);
   });
 
   it('a group exit stays quiet: one plain rise, no confetti, no slam, no shake', () => {
@@ -147,6 +210,15 @@ describe('Round 926: the won tournament moment', () => {
     expect(strayNumbers(lost.container, groupExit(2029))).toEqual([]);
   });
 
+  it('each stat tile and tile line prints its own field, final from the first frame', () => {
+    const won = mount(winner(2031));
+    expectOwnFields(won.container, winner(2031));
+    expect(card(won.container).textContent).toContain(`Golden Boot, ${winner(2031).playerGoals} goals`);
+    cleanup();
+    const lost = mount(groupExit(2029));
+    expectOwnFields(lost.container, groupExit(2029));
+  });
+
   it('the control: a number the fixture never carried is caught', () => {
     const { container } = mount(winner(2032));
     const extra = document.createElement('span');
@@ -162,8 +234,10 @@ describe('Round 926: the won tournament moment', () => {
        four tiles, the speech: fourteen beats on a won card with honours. */
     expect(delays.length).toBe(14);
     for (let i = 1; i < delays.length; i++) expect(delays[i]).toBeGreaterThan(delays[i - 1]);
-    const gated = card(container).querySelector('.cm-rise-gated') as HTMLElement;
-    expect(gated).not.toBeNull();
+    const allGated = [...card(container).querySelectorAll<HTMLElement>('.cm-rise-gated')];
+    const gated = allGated[allGated.length - 1];
+    expect(gated).toBeDefined();
+    expect(gated.hasAttribute('data-intl-tile')).toBe(false);
     expect(parseFloat(gated.style.animationDelay)).toBe(delays[delays.length - 1]);
     expect(gated.querySelectorAll('button').length).toBeGreaterThan(0);
     /* No animated class sits on a control: every button's own class is clean. */
@@ -195,18 +269,69 @@ describe('Round 926: the moment plays once', () => {
     expect(card(next.container).dataset.intlMoment).toBe('won');
   });
 
-  it('a reload (fresh module, same tab) does not replay it; the control with storage cleared does', async () => {
+  it('a reload, or a new tab days later (session storage gone, the save still there), does not replay it; the control with the memory cleared does', async () => {
     mount(winner(2036));
     cleanup();
     vi.resetModules();
-    const reloaded = (await import('@/components/soccer-career/InternationalPanel')).TournamentCard;
+    const reloaded = await reload();
     const after = mount(winner(2036), reloaded);
     expect(card(after.container).dataset.intlMoment).toBe('none');
     cleanup();
     window.sessionStorage.clear();
     vi.resetModules();
-    const cleared = (await import('@/components/soccer-career/InternationalPanel')).TournamentCard;
+    const newTab = await reload();
+    const later = mount(winner(2036), newTab);
+    expect(card(later.container).dataset.intlMoment).toBe('none');
+    expect(confettiPieces(later.container)).toBe(0);
+    cleanup();
+    window.localStorage.clear();
+    vi.resetModules();
+    const cleared = await reload();
     const control = mount(winner(2036), cleared);
     expect(card(control.container).dataset.intlMoment).toBe('won');
+  });
+
+  it('a different career winning the same edition with the same nation still gets its moment, even after a reload', async () => {
+    mount(winner(2041));
+    expect(winnerOtherRun(2041).name).toBe(winner(2041).name);
+    expect(winnerOtherRun(2041).nation).toBe(winner(2041).nation);
+    cleanup();
+    const sameTab = mount(winnerOtherRun(2041));
+    expect(card(sameTab.container).dataset.intlMoment).toBe('won');
+    cleanup();
+    vi.resetModules();
+    const reloaded = await reload();
+    expect(card(mount(winner(2041), reloaded).container).dataset.intlMoment).toBe('none');
+    cleanup();
+    expect(card(mount(winnerOtherRun(2041), reloaded).container).dataset.intlMoment).toBe('none');
+  });
+
+  it('a memory that is not a list is read as empty, and the card still plays once', () => {
+    window.localStorage.setItem('dukb-intl-moments', '{not json');
+    const first = mount(winner(2037));
+    expect(card(first.container).dataset.intlMoment).toBe('won');
+    cleanup();
+    expect(card(mount(winner(2037)).container).dataset.intlMoment).toBe('none');
+    expect(JSON.parse(window.localStorage.getItem('dukb-intl-moments') ?? '[]')).toHaveLength(1);
+  });
+});
+
+describe('Round 926: the quiet card also plays once', () => {
+  it('Back, a second mount, a reload and a new tab leave a group exit quiet', async () => {
+    const { container, getByText } = mount(groupExit(2042));
+    expect(card(container).dataset.intlMoment).toBe('quiet');
+    fireEvent.click(getByText('Bracket'));
+    fireEvent.click(getByText(/Back/));
+    expect(card(container).dataset.intlMoment).toBe('none');
+    expect(card(container).className).not.toContain('cm-rise');
+    cleanup();
+    expect(card(mount(groupExit(2042)).container).dataset.intlMoment).toBe('none');
+    cleanup();
+    window.sessionStorage.clear();
+    vi.resetModules();
+    const newTab = await reload();
+    const later = mount(groupExit(2042), newTab);
+    expect(card(later.container).dataset.intlMoment).toBe('none');
+    expect(card(later.container).className).not.toContain('cm-rise');
   });
 });
