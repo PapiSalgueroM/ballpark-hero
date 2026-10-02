@@ -1,5 +1,17 @@
 # Work board
 
+Codex CLAIMS897, NHL new-franchise ratings and versioned economy, 2026-10-02.
+
+Owns NHL engine initializer, compact saved lineage, flat fictional quotes,
+next-cap AI draft affordability, Board/help and focused/native verification.
+Only the exact new model adopts pricing and draft guards. Existing saves,
+contracts, shared player seed/Gauntlet, identities/ages stay held. Validate
+all416 opening rows before any mutation or model marker.896 reviewed frozen
+input preparation and895 NBA final acceptance finish separately. Defense/
+goalie proxies and forward offense-only limits must remain clear. Claude
+retains875/database and publication.12paused drafts/sevenstashes held.
+Next free898.
+
 Codex CLAIMS896, NHL frozen opening-rating preparation, 2026-10-02.
 
 Owns script-only reviewed-v2 inputs/model, a reproducible generator, separate
