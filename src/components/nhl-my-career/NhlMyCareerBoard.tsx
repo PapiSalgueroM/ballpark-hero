@@ -11,6 +11,8 @@ import {
   repairNetWorth,
   getNhlSpendItem
 } from '@/lib/nhlMyCareer';
+/* Round 833: every position's own stat line, shared with the other three careers. */
+import { countOf, nhlMajorAward, nhlStatLine } from '@/lib/usCareerStatLine';
 // Round 179: real free agency, shared engine and shared screen.
 import { pushFaOffer, applyFaSigning } from '@/lib/usCareerFreeAgency';
 import type { FaWindow } from '@/lib/usCareerFreeAgency';
@@ -478,11 +480,11 @@ export default function NhlMyCareerBoard() {
 
   /* Round 126: see the note in NflMyCareerBoard. A suspended season has no
      stat fields, so this printed "undefined G, undefined A" on the retirement
-     screen. */
-  const statLine = (s: NhlSeasonLine, p: NhlCareerPos) =>
-    s.teamResult === 'SUSPENDED' ? 'Suspended, no season played'
-      : p === 'G' ? `${s.wins} W, .${String(Math.round((s.svpct ?? 0.9) * 1000))} SV%`
-      : `${s.goals} G, ${s.assists} A, ${s.points} P`;
+     screen.
+     Round 833: the line lives in usCareerStatLine.ts with the other three
+     sports'. Same words for a goalie and a skater; a goalie line missing its
+     save percentage no longer invents a .900 for it. */
+  const statLine: (s: NhlSeasonLine, p: NhlCareerPos) => string = nhlStatLine;
 
   /* ------------------------------ create ------------------------------ */
   if (phase === 'create' || !career) {
@@ -669,7 +671,7 @@ export default function NhlMyCareerBoard() {
               gameName="NHL My Career"
               gamePath="/nhl-my-career"
               score={`legacy ${legacy.score}`}
-              customText={`NHL My Career 🏒 ${career.name}: ${career.seasons.length} seasons, ${career.cups} rings, ${career.harts} MVPs. Verdict: ${legacy.verdict}. Legacy ${legacy.score}. douknowball.com/nhl-my-career`}
+              customText={`NHL My Career 🏒 ${career.name}: ${career.seasons.length} seasons, ${countOf(career.cups, 'Cup', 'Cups')}, ${countOf(career.harts, nhlMajorAward(career.pos).one, nhlMajorAward(career.pos).many)}. Verdict: ${legacy.verdict}. Legacy ${legacy.score}. douknowball.com/nhl-my-career`}
             />
           </div>
         </div>
@@ -965,7 +967,7 @@ export default function NhlMyCareerBoard() {
             <Dumbbell className="h-4 w-4" /> Play the {career.year} season
           </button>
           <p className="mt-2 text-[10px] text-muted-foreground">
-            Career so far: {career.cups} Cups · {career.harts} majors · {career.allStars} All-Star ·{' '}
+            Career so far: {countOf(career.cups, 'Cup', 'Cups')} · {countOf(career.harts, nhlMajorAward(career.pos).one, nhlMajorAward(career.pos).many)} · {career.allStars} All-Star ·{' '}
             {career.pos === 'G' ? `${totals.wins} career wins` : `${totals.points.toLocaleString()} career points`}
           </p>
           {career.seasons.length >= 6 && (
