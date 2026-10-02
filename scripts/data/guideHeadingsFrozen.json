@@ -2492,7 +2492,7 @@
     },
     "/nhl-front-office": {
       "howToPlay": [
-        "Pick any of the 32 clubs and inherit its actual roster.",
+        "Pick any of the 32 clubs from the roster snapshot. Read each opening estimate note: the e marker means limited evidence, and an unmeasured game prior means the model lacks a usable observation. These estimates do not measure every skill. Existing saves keep their grades and development.",
         "Read the ownership mandate: a contender is told to win the Cup, a bubble club to make the bracket, a rebuild to hit an honest win number. It resets every offseason from where the roster really stands.",
         "Shape it: waive players, sign free agents, and work the phone on trades, where the other GM counters with pick demands and lesser returns instead of a flat yes or no.",
         "Open Roster and choose your simulation contributors: six healthy forwards, four healthy defensemen and one healthy goalie. If a group has fewer available players, use all of them. Uncheck a selected forward or defenseman before choosing his replacement.",
@@ -2502,11 +2502,11 @@
         "Win four best-of-7 rounds to lift the Stanley Cup, then draft and go again, as long as ownership keeps you."
       ],
       "rules": [
-        "The hard cap starts at 104M and rises about 9 percent a season; every move must fit.",
+        "The cap starts at 104M and rises about 9 percent a season in this simulation. Free-agent offers must fit your room, including dead money. The existing salary-matching trade rules can allow a club above the cap; this is a limit of the game's model. New-model future offers use one fixed rating curve; unexpired signed contracts keep their price.",
         "Points are real: 2 for a win, 1 for an overtime loss, and roughly a quarter of losses go to overtime.",
         "Rosters run between 8 and 15 players, floor and ceiling both enforced.",
         "Trades are player for player plus an optional pick, and the AI prices age, rating and position before saying yes.",
-        "At the draft you make 2 picks, and scouting grades carry error; the true rating appears only after you commit.",
+        "At the draft you make 2 picks, and scouting grades carry error; the true rating appears only after you commit. In new-model franchises, rival clubs follow the scouting order and choose an affordable contract against the next cap, keeping unavailable choices in the pool. A contract price depends on the underlying simulated ability, so it is not a scout-only knowledge model.",
         "Waiving a man is not free. Half his salary stays on this season's cap as dead money, a quarter lands on next season's if he had years left, and you cannot sign him back until the offseason.",
         "Trust upstairs runs 0 to 100: beat the mandate and it climbs, miss it and it falls, a Cup fixes almost anything, and at zero you are fired and the save ends."
       ],
