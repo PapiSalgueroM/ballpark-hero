@@ -10,7 +10,7 @@ const NhlFrontOffice = () => {
   return (
     <>
       <PageSeo
-        title="NHL Front Office - GM Sim With Real 2026-27 Rosters | DoUKnowBall"
+        title="NHL Front Office - GM Simulation | DoUKnowBall"
         description="Run a real NHL franchise: hard cap, waivers, trades the AI evaluates, points and OT losses, the divisional playoff bracket, four best-of-7 rounds to the Cup, drafts and dynasties."
         path="/nhl-front-office"
       />
@@ -21,16 +21,16 @@ const NhlFrontOffice = () => {
           <div className="text-center mb-4">
             <h1 className="text-2xl font-display font-bold text-primary">NHL Front Office</h1>
             <p className="text-xs text-muted-foreground mt-1">
-              Real 2026-27 rosters. A hard cap with no mercy. Sixteen teams, one Cup.
+              A roster snapshot. Original simulation ratings. Sixteen teams, one Cup.
             </p>
           </div>
           <NhlFrontOfficeBoard />
           <GameSeoContent
           pageHasOwnH1
             title="NHL Front Office: the GM Sim"
-            description="Take over a real NHL club with its actual 2026-27 roster, every player rated off real 2025-26 stats pulled from the league's own data. Work under the hard salary cap, waive contracts, sign free agents, swing trades the AI weighs on age, position and rating, then chase points through an 80 game season where overtime losses still pay. Make the real divisional bracket: top three per division plus two wild cards per conference, four best-of-7 rounds, the Stanley Cup at the end. Draft prospects whose scouting grades can lie, manage aging curves where goalies last longer, and stack Cups across unlimited saved seasons."
+            description="Take over an NHL franchise from a curated roster snapshot. New games use original estimates from 2024-25 and 2025-26 regular-season inputs, with limited evidence marked. Forward ratings measure offensive production; defensemen and goalies use qualified proxies. Potential, contracts and future events are simulated. Work the salary cap, waive contracts, sign free agents and negotiate trades, then chase points through an 80 game season where overtime losses still pay. Finish top three in your division or take a wild card, win four best-of-7 rounds for the Cup, then draft, develop and continue. Existing saves keep their ratings and progress."
             howToPlay={[
-              'Pick a franchise and inherit its real 2026-27 top-six, blue line and crease.',
+              'Pick a franchise from the roster snapshot. Read the opening estimate notes before comparing players.',
               'Work the cap: waive contracts, sign free agents, swing trades with pick sweeteners.',
               'Play the season in stretches; wins are two points, OT losses one.',
               'Finish top three in the division or grab a wild card to make the bracket.',

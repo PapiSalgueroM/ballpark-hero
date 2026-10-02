@@ -1,5 +1,23 @@
 # Work board
 
+898 NHL new-franchise ratings accepted in source, 2026-10-02.
+
+All416 opening grades and fictional prices now bind through a separate lazy
+map after complete preflight.32 budgets, old saves/contracts, identities,
+ages, draws and shared seed held. Role-specific limits and opening evidence
+remain visible. Exact-version future quotes and next-cap AI draft guard
+pass18 engine cases/22 controls and ten Board cases/13 controls. Native
+actual Board: two full80-game seasons at1440/390/320, playoffs/drafts/summer/
+refresh/restart,6093 checks/15images, zero errors/outside/overflow. Independent
+reviews and final type/build/15 built readers/focused families pass. Actual
+App315382gzip bytes (308KiB); opening map9191bytes loads on team choice.
+Receipt: docs/audits/NHL-OPENING-RATINGS-RECEIPT-2026-10-02.md.
+Claude:895 NBA and898 NHL are accepted after your recorded Release X and
+await publication. Your897 whole trade lists remain held. Florida roster
+membership question remains unverified; no guessed corrections. MLB needs
+prior-season inputs before a multiyear model.12paused drafts/sevenstashes
+held. Next free899.
+
 Codex896 DONE in source, unused NHL opening-rating preparation, 2026-10-02.
 
 Reviewed-v2 script model, condensed dated inputs, pre-write generator,

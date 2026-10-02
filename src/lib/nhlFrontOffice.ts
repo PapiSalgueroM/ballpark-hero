@@ -1,4 +1,5 @@
 import { NHL_FO_ROSTERS } from '@/data/nhlFoPlayers';
+import type { NhlOpeningRating, NhlOpeningRatingEvidence } from '@/data/nhlOpeningRatings';
 /* Round 211: no two men in one league share a name. */
 import { leagueNames, uniqueName } from './foNames';
 /* Round 531: the cap comes from one sourced file, never a bare literal here. */
@@ -11,10 +12,11 @@ import { type CutLedger, cutPlayer, payrollWithDeadCap, rollDeadCap, rosterFullR
 
 /**
  * NHL Front Office engine (2026-08-05). Hockey sibling of the NFL, NBA and
- * MLB GM engines, built over real 2026-27 rosters pulled from the NHL's own
- * public API with overalls derived from real 2025-26 stats (see
- * src/data/nhlFoPlayers.ts). Every salary, contract and transaction the
- * engine produces is explicitly fictional.
+ * MLB GM engines, built over the existing curated roster snapshot (see
+ * src/data/nhlFoPlayers.ts). New careers can apply original simulation
+ * estimates from a versioned 2024-25 and 2025-26 regular-season model.
+ * Defensive and goalie proxies remain partial. Every salary, contract
+ * and transaction the engine produces is explicitly fictional.
  *
  * Season model: 20 rounds of 4 games (80 games a club, booked by foSchedule since Round 851) with real NHL points
  * (2 for a win, 1 for an overtime loss; about a quarter of losses go to OT).
@@ -55,6 +57,8 @@ export interface NhlGmPlayer {
   years: number;
   out: number; // rounds remaining injured
   pot: number;
+  /** Original simulation estimate, retained as this player develops or moves. */
+  openingRatingEvidence?: NhlOpeningRatingEvidence;
 }
 
 /** Selected ratings for this simulation, not full NHL lines or ice time. */
@@ -77,6 +81,8 @@ export interface NhlGmTeam extends CutLedger {
 }
 
 export interface NhlLeague {
+  ratingModelVersion?: string;
+  draftAffordabilityVersion?: string;
   season: number;
   cap: number;
   teams: Record<string, NhlGmTeam>;
@@ -107,11 +113,18 @@ export function nhlPoints(t: NhlGmTeam): number {
   return t.wins * 2 + t.otLosses;
 }
 
-export function nhlSalaryFor(ovr: number): number {
-  return Math.round(Math.max(0.7, (ovr - 70) * 0.4) * 10) / 10;
+export const NHL_RATING_MODEL_VERSION = 'nhl-multiyear-candidate-v2-economy-flat-v1';
+export const NHL_DRAFT_AFFORDABILITY_VERSION = 'nhl-flat-nextcap-ai-v1';
+const NHL_PRICE_FACTOR = 1.3199808744620938;
+
+export function nhlSalaryFor(ovr: number, version?: string): number {
+  const originalAsk = Math.round(Math.max(0.7, (ovr - 70) * 0.4) * 10) / 10;
+  return version === NHL_RATING_MODEL_VERSION
+    ? Math.round((0.7 + NHL_PRICE_FACTOR * Math.max(0, originalAsk - 0.7)) * 10) / 10
+    : originalAsk;
 }
 
-export function initNhlLeague(rng: () => number = Math.random): NhlLeague {
+export function initNhlLeague(rng: () => number = Math.random, opening?: Record<string, Record<string, NhlOpeningRating>>): NhlLeague {
   const teams: Record<string, NhlGmTeam> = {};
   for (const [abbr, seeds] of Object.entries(NHL_FO_ROSTERS)) {
     const players: NhlGmPlayer[] = seeds.map(s => ({
@@ -137,6 +150,47 @@ export function initNhlLeague(rng: () => number = Math.random): NhlLeague {
     champions: [],
   };
   league.schedule = nhlBookSeason(league, rng);
+  if (opening !== undefined) {
+    // This exact version pins the reviewed 2024-25 and 2025-26 regular-season window.
+    const clubs = Object.keys(NHL_FO_ROSTERS);
+    if (!opening || typeof opening !== 'object' || Array.isArray(opening) || Object.keys(opening).length !== clubs.length || Object.keys(opening).some(abbr => !clubs.includes(abbr))) {
+      throw new Error('Opening NHL ratings do not match this roster.');
+    }
+    for (const [abbr, seeds] of Object.entries(NHL_FO_ROSTERS)) {
+      const group = opening[abbr], keys = seeds.map(s => `${s.name}|${s.pos}`);
+      if (!group || typeof group !== 'object' || Array.isArray(group) || Object.keys(group).length !== keys.length || Object.keys(group).some(key => !keys.includes(key))) {
+        throw new Error('Opening NHL ratings do not match this roster.');
+      }
+      for (const source of seeds) {
+        const rating = group[`${source.name}|${source.pos}`], e = rating?.evidence;
+        const basis = source.pos === 'D' ? 'offense-usage-proxy' : source.pos === 'G' ? 'save-rate-proxy' : 'offensive-production';
+        if (!rating || !Number.isInteger(rating.ovr) || rating.ovr < 0 || rating.ovr > 99 ||
+            !Number.isFinite(rating.salary) || rating.salary < 0.7 || Math.abs(rating.salary * 10 - Math.round(rating.salary * 10)) > 1e-9 ||
+            !e || Object.keys(e).sort().join('|') !== 'basis|modelVersion|openingOvr|originKey|partial' ||
+            e.modelVersion !== NHL_RATING_MODEL_VERSION || e.originKey !== `${abbr}|${source.name}|${source.pos}` ||
+            e.openingOvr !== rating.ovr || typeof e.partial !== 'boolean' || ![basis, 'unmeasured-prior'].includes(e.basis) ||
+            ((source.pos === 'D' || source.pos === 'G' || e.basis === 'unmeasured-prior') && !e.partial)) {
+          throw new Error('Opening NHL ratings do not match this roster.');
+        }
+      }
+      const openingBudget = Math.round(Object.values(group).reduce((sum, p) => sum + p.salary, 0) * 10);
+      if (openingBudget !== Math.round(nhlCapUsed(league.teams[abbr]) * 10)) throw new Error('Opening NHL ratings do not match this roster.');
+    }
+    for (const [abbr, team] of Object.entries(league.teams)) for (const player of team.players) {
+      const rating = opening[abbr][`${player.name}|${player.pos}`], evidence = rating.evidence;
+      const headroom = Math.max(0, player.pot - player.ovr);
+      player.ovr = rating.ovr;
+      player.salary = rating.salary;
+      player.pot = Math.min(99, rating.ovr + headroom);
+      player.openingRatingEvidence = {
+        modelVersion: evidence.modelVersion, originKey: evidence.originKey,
+        openingOvr: evidence.openingOvr, basis: evidence.basis, partial: evidence.partial,
+      };
+    }
+    for (const fa of league.freeAgents) fa.salary = nhlSalaryFor(fa.ovr, NHL_RATING_MODEL_VERSION);
+    league.ratingModelVersion = NHL_RATING_MODEL_VERSION;
+    league.draftAffordabilityVersion = NHL_DRAFT_AFFORDABILITY_VERSION;
+  }
   return league;
 }
 
@@ -393,20 +447,28 @@ export function runNhlFoPlayoffs(league: NhlLeague, rng: () => number): { series
 export const NHL_ROSTER_MIN = 8;
 export const NHL_ROSTER_MAX = 15;
 
-export function nhlRelease(t: NhlGmTeam, fas: NhlGmPlayer[], id: string): boolean {
+export function nhlRelease(t: NhlGmTeam, fas: NhlGmPlayer[], id: string, version?: string): boolean {
   const released = cutPlayer(t, fas, id, NHL_ROSTER_MIN);
-  if (released) repairNhlContributors(t);
+  if (released) {
+    repairNhlContributors(t);
+    if (version === NHL_RATING_MODEL_VERSION) {
+      const p = fas.find(p => p.id === id)!;
+      p.salary = nhlSalaryFor(p.ovr, version);
+    }
+  }
   return released;
 }
 
-export function nhlSign(t: NhlGmTeam, fas: NhlGmPlayer[], id: string, cap: number): boolean {
+export function nhlSign(t: NhlGmTeam, fas: NhlGmPlayer[], id: string, cap: number, version?: string): boolean {
   const i = fas.findIndex(p => p.id === id);
   if (i < 0 || rosterFullRefusal(t, NHL_ROSTER_MAX)) return false;
   /* Round 631: the same refusal the board shows beside the greyed button. */
   if (signRefusal(t, id)) return false;
   const p = fas[i];
-  if (nhlCapRoom(t, cap) < p.salary) return false;
+  const ask = version === NHL_RATING_MODEL_VERSION ? nhlSalaryFor(p.ovr, version) : p.salary;
+  if (nhlCapRoom(t, cap) < ask) return false;
   fas.splice(i, 1);
+  if (version === NHL_RATING_MODEL_VERSION) p.salary = ask;
   t.players.push(p);
   repairNhlContributors(t);
   return true;
@@ -483,13 +545,39 @@ export function nhlDraftClass(rng: () => number, size = 24, taken: Set<string> =
   return out.sort((a, b) => b.grade - a.grade);
 }
 
-export function nhlProspectToPlayer(pr: NhlProspect, rng: () => number): NhlGmPlayer {
+export function nhlProspectToPlayer(pr: NhlProspect, rng: () => number, version?: string): NhlGmPlayer {
   return {
     id: fid(), name: pr.name, pos: pr.pos, age: pr.age, ovr: pr.trueOvr,
-    salary: Math.max(0.8, Math.round((pr.trueOvr - 66) * 0.15 * 10) / 10),
+    salary: version === NHL_RATING_MODEL_VERSION ? nhlSalaryFor(pr.trueOvr, version) : Math.max(0.8, Math.round((pr.trueOvr - 66) * 0.15 * 10) / 10),
     years: 3, out: 0,
     pot: Math.min(99, pr.trueOvr + 4 + Math.floor(rng() * 9)),
   };
+}
+
+/** Existing scouting order with a known-version next-cap commitment check. */
+export function nhlAiDraftPicks(league: NhlLeague, remaining: NhlProspect[], order: string[], rng: () => number) {
+  const guarded = league.ratingModelVersion === NHL_RATING_MODEL_VERSION && league.draftAffordabilityVersion === NHL_DRAFT_AFFORDABILITY_VERSION;
+  if (!guarded) {
+    const aiTakes = remaining.slice(0, 5);
+    const picks = aiTakes.map((prospect, i) => {
+      const team = league.teams[order[i % order.length]], player = nhlProspectToPlayer(prospect, rng, league.ratingModelVersion);
+      team.players.push(player);
+      return { team: team.abbr, prospect, player };
+    });
+    return { remaining: remaining.filter(p => !aiTakes.includes(p)), picks, skipped: 0, substituted: 0, guarded };
+  }
+  const available = [...remaining], picks: { team: string; prospect: NhlProspect; player: NhlGmPlayer }[] = [];
+  const nextCap = Math.round(league.cap * 1.09);
+  let skipped = 0, substituted = 0;
+  for (let slot = 0; slot < Math.min(5, remaining.length); slot++) {
+    const team = league.teams[order[slot % order.length]];
+    const index = available.findIndex(p => nhlSalaryFor(p.trueOvr, league.ratingModelVersion) <= nhlCapRoom(team, nextCap));
+    if (index < 0) { skipped++; continue; }
+    const prospect = available[index], player = nhlProspectToPlayer(prospect, rng, league.ratingModelVersion);
+    if (index > 0) substituted++;
+    team.players.push(player); available.splice(index, 1); picks.push({ team: team.abbr, prospect, player });
+  }
+  return { remaining: available, picks, skipped, substituted, guarded };
 }
 
 export function nhlOffseason(league: NhlLeague, rng: () => number): string[] {
@@ -508,7 +596,7 @@ export function nhlOffseason(league: NhlLeague, rng: () => number): string[] {
       p.years -= 1;
       if (p.years <= 0) {
         p.years = p.age <= 25 ? 4 : p.age <= 29 ? 3 : 2;
-        p.salary = nhlSalaryFor(p.ovr);
+        p.salary = nhlSalaryFor(p.ovr, league.ratingModelVersion);
         if (p.ovr < 80 && rng() < 0.45) { league.freeAgents.push({ ...p, years: 1 }); continue; }
       }
       keep.push(p);
@@ -516,11 +604,11 @@ export function nhlOffseason(league: NhlLeague, rng: () => number): string[] {
     t.players = keep;
     t.wins = 0; t.losses = 0; t.otLosses = 0; t.picks = [1, 2];
     rollDeadCap(t);
-    replenishNhlRoster(t, rng, taken);
+    replenishNhlRoster(t, rng, taken, league.ratingModelVersion);
     repairNhlContributors(t);
   }
   league.freeAgents = league.freeAgents.sort((a, b) => b.ovr - a.ovr).slice(0, 30);
-  for (const fa of league.freeAgents) { fa.age += 1; if (fa.age >= 32) fa.ovr = Math.max(63, fa.ovr - 1); }
+  for (const fa of league.freeAgents) { fa.age += 1; if (fa.age >= 32) fa.ovr = Math.max(63, fa.ovr - 1); if (league.ratingModelVersion === NHL_RATING_MODEL_VERSION) fa.salary = nhlSalaryFor(fa.ovr, league.ratingModelVersion); }
   league.cap = Math.round(league.cap * 1.09);
   league.season += 1;
   league.round = 1;
@@ -530,12 +618,12 @@ export function nhlOffseason(league: NhlLeague, rng: () => number): string[] {
 }
 
 /** Keep every club playable: at least 5 forwards, 3 D, 1 goalie, 10 players. */
-export function replenishNhlRoster(t: NhlGmTeam, rng: () => number, taken: Set<string> = new Set()): void {
+export function replenishNhlRoster(t: NhlGmTeam, rng: () => number, taken: Set<string> = new Set(), version?: string): void {
   const add = (pos: NhlPos) => {
     const ovr = 69 + Math.floor(rng() * 7);
     t.players.push({
       id: fid(), name: nhlGenName(rng, taken), pos,
-      age: 23 + Math.floor(rng() * 8), ovr, salary: nhlSalaryFor(ovr),
+      age: 23 + Math.floor(rng() * 8), ovr, salary: nhlSalaryFor(ovr, version),
       years: 1 + Math.floor(rng() * 2), out: 0, pot: ovr,
     });
   };
@@ -551,8 +639,9 @@ export function nhlAiMoves(league: NhlLeague, myTeam: string, rng: () => number)
   for (const t of cpu) {
     if (rng() > 0.25 || !league.freeAgents.length) continue;
     const best = [...league.freeAgents].sort((a, b) => b.ovr - a.ovr)[0];
-    if (best && nhlCapRoom(t, league.cap) >= best.salary && t.players.length < 15) {
-      nhlSign(t, league.freeAgents, best.id, league.cap);
+    const ask = best ? league.ratingModelVersion === NHL_RATING_MODEL_VERSION ? nhlSalaryFor(best.ovr, league.ratingModelVersion) : best.salary : 0;
+    if (best && nhlCapRoom(t, league.cap) >= ask && t.players.length < 15) {
+      nhlSign(t, league.freeAgents, best.id, league.cap, league.ratingModelVersion);
     }
   }
 }
