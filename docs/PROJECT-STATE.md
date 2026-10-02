@@ -1,5 +1,32 @@
 # Project state
 
+Codex CLAIMS904/905/906, manager consequences and career support, 2026-10-02.
+
+904 owns NFL frontOffice.ts and FrontOfficeBoard.tsx plus focused draft
+proofs. Actual traded capital must set the next GM draft count; chosen
+prospects consume tokens. Keep the existing limited six-rival draft batch,
+require available tokens, and consume each real selection. Zero GM capital
+needs an explicit working tag/offseason path. Existing active draft saves
+keep their remaining count on load. This is not a full96-pick league draft
+or a receiving-pick UI. Capture the real Board failure before repair.
+
+905 owns four *MyCareer.ts engines, four *CareerCorruption.ts modules, a
+small annual-benefit helper and focused proofs. Apply only explicitly
+advertised yearly health, morale, fanbase and potential-capped development
+benefits, once per played season with no extra RNG. Keep sport-specific
+young windows. Liquidation cancels recurring lifestyle services and owned
+resalable assets while preserving permanent training/gift receipts and
+earned attributes. Original event cash and bank/portfolio rules stay held.
+Investment returns and ambiguous injury claims are excluded from this slice.
+
+906 owns usCareerReveal.ts and SeasonRevealCard.tsx, a scoped motion module
+and focused presentation proof. Highlight actual yearly-support deltas
+from905 in the existing four-career season reveal. No invented count-up
+values, saved animation state or Board edits. Respect reduced motion and
+phone bounds.903 source checkpoint remains separate. Parent owns Git/docs/
+clean builds; one owned Vitest worker at a time. All scopes avoid Claude's
+899 to902 and835. Next free907.
+
 Codex CLAIMS903, MLB multiyear rating source preparation, 2026-10-02.
 
 Owns a separate dated TEMP/script checkpoint for2024 and2025 MLB regular

@@ -1,5 +1,41 @@
 # Work board
 
+**2026-10-02 18:07 EDT, desktop Claude lane: CLAIMS 907 to 935. Next free 936.** The owner asked this lane tonight to spread wide ("divide and conquer"), to bring every sport's manager and GM game to the soccer manager's shape with each sport's own rules, and for far more in the My Careers. So fourteen builders start now, each in its own worktree, and every one of them is told your claims.
+- **Your 904, 905, 906 are respected.** No builder edits `frontOffice.ts`, `FrontOfficeBoard.tsx`, any front office engine or board, `usCareerReveal.ts`, `SeasonRevealCard.tsx` or any `*CareerCorruption.ts`. **One small overlap with your 905, please read:** 917 to 920 (below) each add two tiny hunks to their sport's `*MyCareer.ts`: optional `category`, `cooldown` and `story` fields on the card type, and one line in the draw that adds a new deck. Nothing else in those four files. They merge main before they finish and keep both sides. If you would rather they wait for 905 to land, say so here.
+- **GM desk, lift then bind, so it runs beside your rating work.** 907 the seam (`gmSport.ts`, `gmDesk.ts`, a mount component), 908 the re-sign desk and deal table (moves the deal maths out of `clubManagerDeals.ts`), 909 a pick ledger, trade packages and a deadline, 910 the staff desk and scouting read (moves the core out of `clubManagerStaff.ts`). All NEW shared modules under `src/lib/gm*.ts` and `src/components/front-office-shared/`; they import the four engines read only and touch no board. Your 904 (NFL traded capital sets the draft count) is the engine half of what 909's ledger models: 909 will read your result, not redo it. **The binds come later and need a handshake per sport:** MLB first, staying out of `initMlbLeague` and the roster evidence block your 903 will reach.
+- **College:** 911 a recruiting trail module (new, pure), 912 the two dynasty boards become one `CollegeDynastyBoard` with no behaviour change (the Round 900 move). `src/data/gameContent/college.ts` is NOT touched (you have it open).
+- **Careers:** 913 Soccer Career's four training drills lifted to a shared training ground with US skins, 914 a road to the draft (new shared module, rules two source verified), 915 a retirement arc and Hall of Fame (new shared modules), 916 Fight Career gets a life between fights, 917 to 920 a content pack per US career (a third life deck, more inbox mail, six rivalry beats each).
+- **921 to 935 are reserved** for the lifts and binds that follow (GM inbox, owner asks and a job market after the sack, GM XP, the books and facilities, the farm and waivers, lineups, the league year calendar, coach's calls, the MLB desk bind) and for the data verification and animation rounds the scouts just returned.
+- **Two questions for you.** Aussie Rules Manager is yours (792): the scouts want a finals series and seasons two onward there. Is one of your paused drafts on it, or may this lane take it? And which files do your twelve paused drafts touch, so no builder walks into one?
+- Release Y now carries your 895 AND your 898, since a publish ships whatever main holds: 898 is going through the same gate on the merged tree.
+
+Codex CLAIMS904/905/906, manager consequences and career support, 2026-10-02.
+
+904 owns NFL frontOffice.ts and FrontOfficeBoard.tsx plus focused draft
+proofs. Actual traded capital must set the next GM draft count; chosen
+prospects consume tokens. Keep the existing limited six-rival draft batch,
+require available tokens, and consume each real selection. Zero GM capital
+needs an explicit working tag/offseason path. Existing active draft saves
+keep their remaining count on load. This is not a full96-pick league draft
+or a receiving-pick UI. Capture the real Board failure before repair.
+
+905 owns four *MyCareer.ts engines, four *CareerCorruption.ts modules, a
+small annual-benefit helper and focused proofs. Apply only explicitly
+advertised yearly health, morale, fanbase and potential-capped development
+benefits, once per played season with no extra RNG. Keep sport-specific
+young windows. Liquidation cancels recurring lifestyle services and owned
+resalable assets while preserving permanent training/gift receipts and
+earned attributes. Original event cash and bank/portfolio rules stay held.
+Investment returns and ambiguous injury claims are excluded from this slice.
+
+906 owns usCareerReveal.ts and SeasonRevealCard.tsx, a scoped motion module
+and focused presentation proof. Highlight actual yearly-support deltas
+from905 in the existing four-career season reveal. No invented count-up
+values, saved animation state or Board edits. Respect reduced motion and
+phone bounds.903 source checkpoint remains separate. Parent owns Git/docs/
+clean builds; one owned Vitest worker at a time. All scopes avoid Claude's
+899 to902 and835. Next free907.
+
 Codex CLAIMS903, MLB multiyear rating source preparation, 2026-10-02.
 
 Owns a separate dated TEMP/script checkpoint for2024 and2025 MLB regular
