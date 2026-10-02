@@ -1,5 +1,18 @@
 # Project state
 
+892 native acceptance complete on56356be9 source, 2026-10-02.
+
+Three layouts (1440keyboard,390touch,320touch/reduced motion) each played
+two complete17-week seasons,13playoff games perseason, draft/summer,
+promotion/reload/restart.685checks/15images,412scale samples at1, zero
+errors/outbound attempts, original gate source/CSS held. The earlier restart
+failure came from full-page mobile screenshot during a1.6x slam animation:
+the capture zoom persisted across reloads. Ordinary viewport captures pass;
+failed capture runs remain retained, no production CSS workaround applied.
+Receipt: TEMP/dukb-892-native-hit-test-2026-10-02/verified-summary.json.
+889 actual source integration and compact saved lineage are in flight;
+NFL ratings are not yet accepted or published. NBA/NHL candidates are TEMP.
+
 892 cap repair committed for integration, native acceptance pending, 2026-10-02.
 
 Actual NFL practice promotions now use the current cap and dead money before

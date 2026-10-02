@@ -118,3 +118,24 @@ tap was intercepted by feed paragraphs. Raw run `1790963248620` is retained
 with173checks before failure and nine screenshots. It is not a complete native
 acceptance. The earlier fresh-team selector failure is also retained. Diagnosis
 continues before publication; no force-click workaround is acceptance.
+
+### Final892 native acceptance
+
+The diagnostic isolated a capture artifact. Immediately after an accepted
+call-up, the existing feed animation briefly scales its paragraph1.6x.
+A mobile full-page screenshot at that moment resized the visual viewport
+from390 to329.935 CSS pixels (scale1.182051), retained across reloads. At the
+restart button's actual center, hit testing returned the button; there was
+no verified feed/control overlap. Separate no-capture and viewport-only
+arms retained scale1. No production CSS change was used as a workaround.
+
+The final immutable892 build passes all three layouts: desktop1440 with
+keyboard,390touch and320touch with reduced motion.685checks,15screenshots,
+412visual-scale samples at1, zero console/page errors or outbound attempts.
+Each plays two17-week seasons and13playoff games perseason, draft/summer,
+exact-cap promotion, save/reload, restart and unrelated-save preservation.
+All original42check expressions and five source/CSS holds remain intact;
+the forced disabled-button stimulus is confined to component proof, not
+native acceptance. All earlier capture/selector failures remain uncredited.
+Receipt: `TEMP/dukb-892-native-hit-test-2026-10-02/verified-summary.json`,
+accepted run `1790964612156`. Owned browser, contexts and host are closed.

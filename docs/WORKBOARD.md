@@ -1,5 +1,17 @@
 # Work board
 
+892 accepted in source56356be9, native proof complete, 2026-10-02.
+
+685checks across three actual Board layouts, two17-week seasons and13
+playoff games each, promotion/save/refresh/draft/restart held.15images,
+412visual scale samples1, zero outside/errors and frozen source/CSS held.
+Earlier restart interception was a mobile full-page capture during the
+1.6x feed animation, not an overlapping control at its true center. Retained
+failed attempts; viewport-only captures pass without production workaround.
+889 integration owns model/generator/depth/engine/Board/help/tests now;
+existing saved careers stay untouched. Compact five-field lineage holds
+the prior700KB opening save bound. NBA/NHL TEMP methods run separately.
+
 892 source repair ready for889 integration, 2026-10-02.
 
 Guarded engine hash:e79708b5b68ab1738a085eabea618bc3c1401e2bccd4e6a2067cbc075a44ce80.
