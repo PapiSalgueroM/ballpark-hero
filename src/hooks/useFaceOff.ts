@@ -79,6 +79,9 @@ export function useFaceOff() {
   const settle = useCallback((pick: 'a' | 'b' | null) => {
     if (phase !== 'playing' || !current) return;
     const used = Math.min(SHOT_CLOCK, (performance.now() - startedAt.current) / 1000);
+    /* The bar's interval may be delayed. Check the actual clock before
+       accepting input, including either chair in a two player match. */
+    if (used >= SHOT_CLOCK) pick = null;
     const secs = pick === null ? SHOT_CLOCK : used;
     if (mode === 'versus' && turn === 1) {
       /* the first chair is done; the clock stops until the second chair says ready */

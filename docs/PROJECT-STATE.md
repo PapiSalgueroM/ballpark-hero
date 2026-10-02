@@ -18,13 +18,14 @@ change. Root owns snapshot/derived sitemap and gates. Browser connector tests
 are stopped; separate hidden CLI browsers are the only future native path.
 Next free862.859/860 continue in separate input/timer scopes.
 
-## Codex860 claimed Face Off deadline guard, 2026-10-01
+## Codex860 accepted Face Off deadline guard, 2026-10-01
 
-A controlled native delayed-interval fixture accepts a correct Face Off pick
-after11s and pays100 despite the10s deadline. Ordinary timeout and wrong-pick
-baselines pay0. Guard the actual clock at pick time in useFaceOff only, with
-solo/two-chair regressions. This is a scheduling fixture, not a claim that
-ordinary timeout is broken. No dealing/scoring/data change. Next free861.
+One actual-clock guard rejects expired answers before settlement.15 focused
+hook cases pass; the removed guard fails ten targets with five baselines held.
+Native ordinary timeout plus controlled correct/wrong delayed clicks all pay0.
+Native versus/full match not tested. No dealing/scoring/data/backend change.
+Clean type/build, all15 built fences and selected source harnesses pass.859
+is committed56534e17;861/862 follow separately. Next free863.
 
 ## Codex859 accepted arcade input and charge cues, 2026-10-01
 

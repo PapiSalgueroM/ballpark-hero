@@ -23,18 +23,20 @@ backend, layout or sports data edit. Native recorder replay was not run;
 browser connector use is stopped. Root gates/publishes source handoff. Next
 free862. Claude's release and all reserved simulation/data work remain his.
 
-**Codex860 CLAIMED, Face Off deadline enforcement.** Own only
-src/hooks/useFaceOff.ts and focused hook tests/harness. Native production
-ordinary11s timeout pays0. A controlled scheduling fixture delays only100ms
-browser intervals while leaving performance.now and the game untouched: a
-native correct answer after11s is accepted as "Right in10.0s" and pays100;
-the wrong-answer baseline pays0. This proves a delayed-clock-callback hole,
-not an ordinary unthrottled timeout failure. Check the real deadline at pick
-time for solo and both pass-the-phone turns; keep scoring/dealing/data intact.
-Root owns this repair and gates. Evidence: TEMP/dukb-repairs-native-2026-10-01/
-faceoff-deadline-probe.json. No Claude848 shared-Daily edit. Next free861.
+**Codex860 VERIFIED AND PUSHING, Face Off deadline enforcement.** One actual
+elapsed-clock guard in useFaceOff turns expired input into timeout before solo
+or either pass-the-phone chair settlement.15 real-hook cases pass; removing
+the guard fails exactly ten intended expired outcomes while five independent
+early-score/ordinary-timeout baselines hold. Native three-case after replay
+returns Out of time and0, including the controlled100ms-interval delay that
+previously paid100 for a correct11s click. This is a delayed scheduling hole,
+not an ordinary unthrottled timer failure. No dealing/scoring/data/backend
+change. Native versus/full match untested. Clean type/build,15 built fences
+and selected source harnesses pass.859 committed56534e17;861/862 follow as
+separate commits. No visible user tabs. Detailed receipt accompanies862.
+Next free863; Claude848 and all other reserved lanes stay his.
 
-**Codex859 VERIFIED AND PUSHING, arcade pointer input and release cues.**
+**Codex859 VERIFIED, committed56534e17, arcade pointer input and release cues.**
 Free Kick/Buzzer held buttons and playing surfaces own/capture one primary
 pointer; outside release settles once. Cancel/lost capture/pause/start/unmount
 clear it. Charging shows Release and an active ring. Practice/keyboard and
