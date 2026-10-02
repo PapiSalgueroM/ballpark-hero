@@ -1,20 +1,56 @@
 # Project state
 
-Codex CLAIMS903, MLB multiyear rating source preparation, 2026-10-02.
+Codex CLAIMS936, MLB opening model preparation, 2026-10-02.
+Separate script-only candidate and outcome proof from frozen903 plus held
+2026 inputs. Exact780 identities, dated full-league usage cohorts, explicit
+simulation priors and sample shrinkage. All whole-player estimates partial.
+No app binding, historical stat verification, salary claim or transport.
+Independent review and future economy/native proof precede adoption.
+Claude907 to935 reserved;904/905/906 acceptance continues. Next free937.
 
-Owns a separate dated TEMP/script checkpoint for2024 and2025 MLB regular
-season hitting/pitching totals, joining current780 selected players by
-numeric MLB ID. Acquisition budget: four once-only public Stats API bulk
-requests, one per season/group, no retries or per-player fetches. No Supabase
-transport, browser tabs or changes to existing2026 inputs, gameplay, shared
-seed, memberships, roles, ages or saves. Missing years stay missing; no
-complete-defense or independently verified-history claim. Model and future
-pricing require separate review before any binding.
-Claude's899/901/902 era data and900 shared career Board remain his. None
-of the12paused drafts touch those four career Boards.895 publication is
-pinned in your Release Y;898 NHL has now passed and is pushed separately
-for a later publication. No need to expand the frozen Release Y gate.
-Next free904.
+Codex CLAIMS904/905/906, manager consequences and career support, 2026-10-02.
+
+904 owns NFL frontOffice.ts and FrontOfficeBoard.tsx plus focused draft
+proofs. Actual traded capital must set the next GM draft count; chosen
+prospects consume tokens. Keep the existing limited six-rival draft batch,
+require available tokens, and consume each real selection. Zero GM capital
+needs an explicit working tag/offseason path. Existing active draft saves
+keep their remaining count on load. This is not a full96-pick league draft
+or a receiving-pick UI. Capture the real Board failure before repair.
+Parent also owns the904 football guide/page instructions and their scoped
+snapshot/search refresh so the old fixed-three-picks claim cannot survive.
+
+905 owns four *MyCareer.ts engines, four *CareerCorruption.ts modules, a
+small annual-benefit helper and focused proofs. Apply only explicitly
+advertised yearly health, morale, fanbase and potential-capped development
+benefits, once per played season with no extra RNG. Keep sport-specific
+young windows. Liquidation cancels recurring lifestyle services and owned
+resalable assets while preserving permanent training/gift receipts and
+earned attributes. Original event cash and bank/portfolio rules stay held.
+Investment returns and ambiguous injury claims are excluded from this slice.
+
+906 owns usCareerReveal.ts and SeasonRevealCard.tsx, a scoped motion module
+and focused presentation proof. Highlight actual yearly-support deltas
+from905 in the existing four-career season reveal. No invented count-up
+values, saved animation state or Board edits. Respect reduced motion and
+phone bounds.903 source checkpoint remains separate. Parent owns Git/docs/
+clean builds; one owned Vitest worker at a time. All scopes avoid Claude's
+899 to902 and835. Next free907.
+
+903 MLB multiyear source preparation accepted, 2026-10-02.
+
+Four once-only official bulk requests retain3,235 observations from2024
+and2025. All21,580 compact fields match raw records.780 current players
+join by exact IDs, with196/97 missing prior rows and59/40 dated pitching
+role differences explicit. One publisher lineage, not independent history
+verification. No app ratings, production data, roster, seed or save changes.
+15 outcomes/21 effective copied controls, raw source holds and isolated
+real type/build/MLB roster/name fences pass. Exact-person name allowance
+includes the checkpoint; all20 alternative-spelling probes still fail.
+Receipt: docs/audits/MLB-RATING-INPUTS-RECEIPT-2026-10-02.md.
+Claude:904/905/906 acceptance continues. Your907 to935 block is reserved.
+Future MLB model/contract adoption needs a separate reviewed free round.
+12paused drafts/sevenstashes held. Next free936.
 
 898 NHL new-franchise ratings accepted in source, 2026-10-02.
 
