@@ -48,13 +48,14 @@ export const SOCIAL_MEDIA_ACTIONS: SocialPostDef[] = [
   { id: "controversial_opinion", label: "Post controversial opinion", emoji: "🔥", description: "Share a hot take about football", followerGain: [1_000_000, 1_000_000], reputationChange: -10, extraEffect: "Reputation -10" },
   { id: "charity_work", label: "Announce charity work", emoji: "❤️", description: "Highlight your philanthropic efforts", followerGain: [200_000, 200_000], reputationChange: 15, extraEffect: "Reputation +15" },
   { id: "personal_life", label: "Post about personal life", emoji: "📸", description: "Share a glimpse into your life off the pitch", followerGain: [300_000, 300_000], reputationChange: 0 },
-  { id: "troll_rival", label: "Troll your rival on social media", emoji: "😈", description: "Take a shot at your rival online", followerGain: [800_000, 800_000], reputationChange: 0, extraEffect: "All talk: your rival gets named, nothing else moves" },
+  { id: "troll_rival", label: "Troll your rival on social media", emoji: "😈", description: "Take a shot at your rival online", followerGain: [800_000, 800_000], reputationChange: 0, extraEffect: "All talk: just the followers, nothing else moves" },
   { id: "stay_off", label: "Stay off social media", emoji: "🧘", description: "Focus on football, no distractions", followerGain: [0, 0], reputationChange: 0, extraEffect: "+2 to all stats next season" },
 ];
 
 /* The rival post's card used to promise that rivalry intensity rises. The post
    has never moved it: it gains its followers and writes one line naming the
-   rival, while there is one still playing. The card now says exactly that.
+   rival, while there is one still playing. The card now promises the
+   followers and nothing else, which is true with a rival or without one.
    scripts/simCareerSocialBrands.mjs section 2a reads every card against what
    its post does and has no exceptions list. */
 

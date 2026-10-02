@@ -135,7 +135,7 @@ const CONTROLS = {
   },
   cardlie: {
     file: 'src/lib/soccerCareerBrand.ts',
-    from: 'extraEffect: "All talk: your rival gets named, nothing else moves" },\n',
+    from: 'extraEffect: "All talk: just the followers, nothing else moves" },\n',
     to: 'extraEffect: "Rivalry intensity increases" },\n',
   },
   doubleraise: {
@@ -210,7 +210,7 @@ if (SECTIONS.includes('1')) {
      entry is stale and fails; the tree must produce the second, or the
      comparison fails. The fixture file is never edited to match. */
   const COPY_CHANGES = [
-    { post: 'troll_rival', field: 'extraEffect', from: 'Rivalry intensity increases', to: 'All talk: your rival gets named, nothing else moves' },
+    { post: 'troll_rival', field: 'extraEffect', from: 'Rivalry intensity increases', to: 'All talk: just the followers, nothing else moves' },
   ];
   for (const c of COPY_CHANGES) {
     const def = rec.units.defs.posts.find(p => p.id === c.post);
@@ -483,7 +483,7 @@ if (SECTIONS.includes('2')) {
     const EXTRA_SHAPES = [
       { re: /^Reputation ([+-]\d+)$/, claim: 'standing' },
       { re: /^\+(\d+) to all stats next season$/, claim: 'focus' },
-      { re: /^All talk: your rival gets named, nothing else moves$/, claim: null },
+      { re: /^All talk: just the followers, nothing else moves$/, claim: null },
     ];
     const gaps = {};
     for (const post of SB.SOCIAL_MEDIA_ACTIONS) {
@@ -527,13 +527,22 @@ if (SECTIONS.includes('2')) {
       Math.random = mulberry32(8358);
       try {
         const base = E.initCareer('Jab', 'Spain', 'ST', '2020s', { pace: 70, shooting: 70, passing: 70, dribbling: 70, defending: 70, physical: 70, reflexes: 70 }, 70, 2020, clubs, null, 88);
-        base.rival = { name: 'Rival One', retired: false };
         base.rivalryIntensity = 40;
-        const s = structuredClone(base);
-        SO.applySocialPost(s, SB.SOCCER_SOCIAL.rivalPost, SB.SOCCER_SOCIAL);
-        const named = s.events.filter(e => e.includes('Rival One')).length;
-        check(s.rivalryIntensity === 40 && named === 1 && r2(s.socialMediaFollowers - base.socialMediaFollowers) === 0.8 && JSON.stringify(s.rival) === JSON.stringify(base.rival),
-          `the rival post gains its 0.8M, names the rival once and leaves the rivalry meter where it was (${s.rivalryIntensity})`);
+        const wrong = [];
+        /* A rival still playing is named once in the log; a retired one and
+           no rival at all are not. The card promises followers and nothing
+           else in all three, so that is what has to hold in all three. */
+        for (const [rival, wantNamed] of [[{ name: 'Rival One', retired: false }, 1], [{ name: 'Rival One', retired: true }, 0], [null, 0]]) {
+          const before = { ...structuredClone(base), rival };
+          const s = structuredClone(before);
+          SO.applySocialPost(s, SB.SOCCER_SOCIAL.rivalPost, SB.SOCCER_SOCIAL);
+          const named = s.events.filter(e => e.includes('Rival One')).length;
+          const moved = changedKeys(before, s).sort().join(',');
+          if (named !== wantNamed) wrong.push(`named the rival ${named} times, expected ${wantNamed}`);
+          if (moved !== 'events,socialMediaActionUsedThisSeason,socialMediaFollowers') wrong.push(`moved ${moved}`);
+          if (r2(s.socialMediaFollowers - before.socialMediaFollowers) !== 0.8 || s.rivalryIntensity !== 40) wrong.push(`followers +${r2(s.socialMediaFollowers - before.socialMediaFollowers)}, rivalry ${s.rivalryIntensity}`);
+        }
+        check(wrong.length === 0, `the rival post gains its 0.8M and moves nothing else, the rivalry meter included, with a rival playing, retired or absent${wrong.length ? `: ${wrong.join(' | ')}` : ''}`);
       } finally { Math.random = real; }
     }
   }
