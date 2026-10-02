@@ -125,6 +125,21 @@ describe('Club Manager: an era save waits for its era', () => {
     expect(localStorage.getItem(KEY)).toBe(saved);
   }, 60000);
 
+  /* Round 832 review: the round's promise that the engine refuses a past
+     season on today's squads had no check. Before this round an era with no
+     world quietly answered with 2026's; a fallback put back that way would
+     start a 2010-11 Barcelona with no Messi in it (he is at Inter Miami in
+     the 2026 data) and write it into the save. */
+  it('the engine refuses a past season before its squads arrive, and plays the real one after', async () => {
+    vi.resetModules();
+    const cm = await import('@/lib/clubManager');
+    expect(cm.eraRostersLoaded('era2010')).toBe(false);
+    expect(() => cm.startCareer('Barcelona', 'era2010')).toThrow(/not loaded yet/);
+    await cm.ensureEraRosters('era2010');
+    const s = cm.startCareer('Barcelona', 'era2010');
+    expect(s.squad.some((p: { name: string; age: number }) => p.name === 'Lionel Messi' && p.age <= 23)).toBe(true);
+  }, 60000);
+
   it('a modern save opens on the same pass and fetches no era', async () => {
     const { useHook, eras } = await saveThenReload('Arsenal', 'now');
     const Harness = harnessFor(useHook);
