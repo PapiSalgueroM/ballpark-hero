@@ -6,6 +6,15 @@ How code gets from a session to douknowball.com. Every rule here was paid for.
 
 ## Which pipeline are you on
 
+**Runner network mode since Round872.** `node scripts/runAllSims.mjs` defaults
+to offline and permits literal loopback transport only. It sends no database
+probe and does not retry database harnesses. Checks needing production are
+reported as skipped or failed, never credited as verified. `DB_PROBE` does not
+grant transport permission. Only the release lead may set `SIM_NETWORK=live`
+after coordinating the production load budget; that mode runs harnesses serially.
+The offline guard uses the installed Playwright internals and checks inherited
+Node children. It is not a sandbox for arbitrary executables or raw sockets.
+
 **Read this section first. There are two, and most of this document only describes one of them.**
 
 | | Cowork session | claude.ai/code session |

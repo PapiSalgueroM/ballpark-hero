@@ -1,5 +1,49 @@
 # Project state
 
+## Codex877 accepted and ready for release lane, 2026-10-02
+
+Manual finals feedback and earned score, guarded keyboard Next focus and daily
+save/booking timing are verified.24 focused cases/eight controls, native3/3 at
+1440/390/320 with keyboard/true touch/reduced motion,67 existing recording cases
+and effective overnight/reload controls pass. App type/build0,15 built fences
+and10 source guards green. Entryindex-DVB2NgdH.js. Details in new request/reveal
+repair receipt. Fixture UI proof only, no live historical-data or publication
+claim. All private browser/server processes closed.878 continues, next free880.
+
+## Codex879 accepted, first integration gate green, 2026-10-02
+
+871-877 accepted-file app type/build0, all15 built fences and10 selected source
+harnesses green.879 outside abort repair preserves all original boot assertions;
+removed-fence copy fails runner transport while app boot still passes. Initial
+failed integration retained. Entryindex-DVB2NgdH.js, SHA256
+2526d63334175bcbbb8bf4a106a6d50237f896c22e009b3a99cc85aa4477c086.
+877 native nearing completion,878 money presentation pending. No desktop or
+Supabase operations. Claude publication/live verification still required.
+
+## Codex879 claimed after integration finding, 2026-10-02
+
+Type/build0 for871-877. Required built fences14 pass, boot harness fails under
+the new offline runner because it tried10 external flag images despite boot
+assertions passing.879 adds explicit outside aborts to that harness, without
+weakening boot/asset/style/redirect checks. Retain failure and effective control.
+877 native and878 money feedback continue. No production traffic. Next free880.
+
+## Codex872 offline runner accepted locally, 2026-10-02
+
+Default runner sends no production probe/retry and guards inherited child
+transport. Blocked traffic cannot report PASS, including swallowed nested output.
+63 local normal outcomes, four effective controls and2/2 scoped integration
+checks pass; denied sentinel TCP0. Peer review clear. Installed Chromium/private
+Playwright scope, not an arbitrary executable/raw-socket sandbox. Explicit live
+opt-in stays subject to Claude's production load budget.877/878 continue offline.
+
+## Codex878 claimed, career money feedback, 2026-10-02
+
+Shared MoneyApp will show the committed transaction and finite changed-balance
+feedback across four US careers. No engine, financial rule, action or save
+change. Opening/recovery/no-op/reduced-motion baselines must hold. Source and
+offline proof only.872 review clear;877 keyboard proof ongoing. Next free879.
+
 ## Codex873 PB timing repair accepted locally, 2026-10-02
 
 Independent successful tile bests display while rank remains pending. No new

@@ -664,6 +664,7 @@ const CASES: Case[] = [
       for (let i = 0; i < 30 && !api.r.done; i += 1) {
         await run(() => api.r.answer(api.r.current.correctIndex));
         await advance(2300);
+        await run(() => api.r.advanceReveal());
       }
     }),
     finished: api => api.r.mode === 'daily' && api.r.done,
@@ -879,8 +880,8 @@ const hlSaved = ([id, useHook]: [string, () => unknown]): Check => ({
   },
 });
 
-/* Champ or Not and Who'd They Beat advance after a short reveal. Silverware
-   waits for Next board. The daily is saved at the
+/* Champ or Not advances after a short reveal. Who'd They Beat and Silverware
+   wait for the player's Next action. The daily is saved at the
    final pick, so it is recorded then; a reload or a trip to Unlimited inside
    the final reveal must neither lose that record nor add a second one, and
    the late reveal must not land the daily's answers on the Unlimited board. */
@@ -895,7 +896,7 @@ interface Race {
   /** The tap that decides the round and saves it. */
   pick: (api: Api) => Promise<void>;
   revealMs: number;
-  /** Silverware advances through its actual player action after the wait. */
+  /** Manual reveals advance through the actual player action after the wait. */
   advance?: (api: Api) => Promise<void>;
   /** Where the daily of `day` is saved. */
   saveKey: (day: string) => string;
@@ -913,6 +914,7 @@ const RACES: Race[] = [
     ready: r => r.loadState === 'ready' && r.questions.length > 0,
     total: r => r.questions.length, shown: r => r.answers.length,
     pick: api => run(() => api.r.answer(api.r.current.correctIndex)),
+    advance: api => run(() => api.r.advanceReveal()),
     saveKey: day => `whod-they-beat-daily-${day}`,
   },
   {
