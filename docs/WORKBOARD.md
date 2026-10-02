@@ -1,17 +1,23 @@
 # Work board
 
-**Codex862 CLAIMED, owner-requested visible arcade result feedback.** Own
-src/components/arcade/ArcadeShotFeedback.tsx and its CSS module only. Make
-the settled verdict and exact points earned easier to read at phone widths,
-using the existing outcome animations and a stronger points treatment. Keep
-actual scoring, status semantics, children/Next timing and reduced-motion
-behavior intact. No new counters, delays or effects that award points. Verify
-existing payload/completion tests and native320/390/1440 geometry/screenshots.
-Root owns gates/Git/docs.859 owns Board input/labels;860 timer;861 leaderboard.
-Next free863. User reported visible tabs, so no browser connector/UI tools;
-native checks use separate CLI headless browser launches only.
+**Codex862 VERIFIED AND PUSHING, noticeable arcade shot feedback.** Larger
+verdict/earned-points pill, clear success/miss treatment and stronger existing
+ring/spark/sweep/score motion on both arcade games. Only shared card/CSS;
+scoring/status/details/children and immediate Next preserved. Existing feedback
+10/10 and final harness pass. Six actual positive practice results at320/390/
+1440 in reduced motion match board points, fit and remain fully static with
+all decorations hidden. Two actual ordinary wins at320 animate, settle after
+1s and keep Next enabled immediately. Native24 normal misses from859 also fit.
+Zero page errors/overflow, screenshots inspected, dark theme tested. One
+earlier normal Free Kick driver sent keys during modal exit and missed;
+waiting for actual teardown passes without product changes. Light-theme
+contrast unmeasured. Clean type/build, all15 built fences and25 distinct
+selected harnesses pass across accepted runs. Original timeouts/driver limits
+are retained in docs/audits/ARCADE-AND-SCORING-REPAIR-RECEIPT-2026-10-01.md.
+85956534e17,8602b553ae6,8617340ad12 are separate main commits. Next free863.
+Native checks use separate CLI headless launches only, no visible user tabs.
 
-**Codex861 VERIFIED AND PUSHING, truthful leaderboard eligibility.** Visible
+**Codex861 VERIFIED, committed7340ad12, truthful leaderboard eligibility.** Visible
 copy/metadata now requires a positive ranked score and explains unscored
 finishes as plays/streak credit with0 points. The absolute four-puzzles-win
 claim is replaced by the actual daily cap. Source matches real recorder and

@@ -37,10 +37,10 @@ export default function ArcadeShotFeedback({ sport, success, verdict, points, de
               </>}
             </svg>
           </span>
-          <p className={`font-display text-lg font-black ${success ? 'text-primary' : 'text-muted-foreground'}`}>{verdict}</p>
+          <p className={`font-display font-black ${styles.verdict}`}>{verdict}</p>
         </div>
         {detail}
-        {success && <p className={`mt-1 text-sm text-muted-foreground ${styles.score}`}>{points} points.</p>}
+        {success && <p className={`font-display font-black ${styles.score}`}>{points} points.</p>}
       </div>
       <div className={styles.content}>{children}</div>
     </div>

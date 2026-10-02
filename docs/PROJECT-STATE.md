@@ -1,13 +1,15 @@
 # Project state
 
-## Codex862 claimed visible arcade feedback, 2026-10-01
+## Codex862 accepted visible arcade results, 2026-10-02
 
-Owner requested more noticeable improvements. Strengthen settled verdict and
-exact points earned on shared arcade result cards, preserving existing flight,
-scoring, immediate Next, status and reduced-motion behavior. Only shared card
-and CSS;859 separately adds clear charge/release cues. Verify phone geometry
-and existing payload/completion tests. Native testing must use separate hidden
-CLI browsers; browser connector/UI calls are stopped. Next free863.
+Free Kick/Buzzer now show larger verdicts/points and stronger existing motion.
+Scoring, details/status, immediate Next and complete reduced-motion output
+stay intact. Six real scoring cases at320/390/1440 reduced and two animated
+wins at320 pass;24 ordinary miss cases fit too. Existing feedback10/10 and
+final harness pass. Clean type/build, all15 built fences and25 distinct
+selected harnesses pass across accepted runs. Detailed receipt records earlier
+timeouts/driver limits.85956534e17,8602b553ae6,8617340ad12 are pushed;862 follows.
+Only separate hidden CLI browsers used. Next free863; publication is Claude's.
 
 ## Codex861 accepted truthful leaderboard copy, 2026-10-02
 
