@@ -23,9 +23,14 @@
  *      season (the paper or the season summary for that year).
  *   3. The season after it is the next year: one more Next Season moves the
  *      age and the calendar on by one each.
- * A season that ends in a serious injury's rehab choice is a separate known
- * defect (its year is lost too, scripts/simCareerKeepPlaying.mjs counts it),
- * so such a candidate is noted and skipped rather than passed.
+ * A season that stops for a serious injury's rehab choice writes that year
+ * too (the games before the injury, marked injured), so it counts the same.
+ *
+ * And the two other stops, for a save left sitting on them: a save on the
+ * rehab choice or on the conviction paper, in the shape the pre-850 engine
+ * wrote it (no row for that year) and in this engine's shape (the row already
+ * there), is loaded into the real page, the button is pressed, and the year
+ * must come out with exactly one row: never none, never two.
  */
 import { describe, it, expect, vi, beforeEach, afterEach, afterAll } from 'vitest';
 import { act, cleanup, fireEvent, render } from '@testing-library/react';
@@ -141,6 +146,42 @@ function makeSave(seed: number): CareerState | null {
   return null;
 }
 
+/* An engine-made save walked to a screen; null if he retires first. With
+   `heat`, the corruption meter sits at the trial line from 22 on, so the
+   engine runs the trial on its own roll (a state the dirty choices reach). */
+function walkTo(seed: number, want: (s: CareerState) => boolean, heat: boolean): CareerState | null {
+  const clubs = E.FALLBACK_CLUBS;
+  const o = 58 + (seed % 20);
+  const st = { pace: o, shooting: o, passing: o, dribbling: o, defending: o, physical: o, reflexes: o };
+  let s = E.initCareer(`Stop ${seed}`, NATIONS[seed % NATIONS.length], POSITIONS[seed % POSITIONS.length], '2020s', st, o, 2020, clubs, null);
+  for (let guard = 0; guard < 900; guard++) {
+    if (want(s)) return s;
+    if (s.retired) return null;
+    if (heat && s.phase === 'playing' && s.age >= 22) s = { ...s, corruptionHeat: 95, dirtyMoney: Math.max(2, s.dirtyMoney ?? 0) };
+    switch (s.phase) {
+      case 'youth': s = E.advanceYouthYear(s, clubs); break;
+      case 'playing': s = E.advanceProSeason(s, clubs); break;
+      case 'contract_offer': { const offers = s.pendingOffers || []; s = offers.length ? E.acceptOffer(s, offers[0]) : { ...s, phase: 'playing' }; break; }
+      case 'rehab_choice': s = E.applyRehabChoice(s, 1); break;
+      case 'newspaper': s = E.dismissNewspaper(s); break;
+      case 'season_summary': s = E.dismissSummary(s, clubs); break;
+      case 'random_events': s = s.pendingEvents?.[0] ? E.applyEventChoice(s, 1, clubs) : { ...s, pendingEvents: [], phase: 'playing' }; break;
+      case 'moral_dilemma': s = E.dismissMoralDilemma(s, clubs); break;
+      case 'social_media_action': s = E.dismissSocialMediaPhase(s, clubs); break;
+      case 'red_card_appeal_result': s = E.dismissAppealResult(s, clubs); break;
+      case 'international_debut': s = E.dismissDebut(s, clubs); break;
+      case 'world_cup': s = E.dismissWorldCup(s, clubs); break;
+      case 'rivalry_event': s = E.dismissRivalryEvent(s, clubs); break;
+      case 'ballon_dor': s = E.dismissBallonDor(s, clubs); break;
+      case 'transfer_window': s = E.stayAtClub(s); break;
+      case 'retirement_suggestion': s = E.acceptRetirementSuggestion(s); break;
+      default: return null;
+    }
+  }
+  return null;
+}
+const onConvictionPaper = (s: CareerState) => s.phase === 'newspaper' && !s.pendingSummary && (s.prisonSeasons ?? 0) > 0;
+
 /* the screen of the moment and the buttons a player would press on it */
 const PREFER = ['← Back', 'Stay', 'Sign', 'Continue', 'Next', 'Accept', 'Confirm', 'Done', 'Close'];
 const screenCard = (root: HTMLElement) => root.querySelector('div.space-y-3.order-1')?.firstElementChild?.firstElementChild as HTMLElement | null;
@@ -182,8 +223,9 @@ async function playOne(seed: number): Promise<Run | null> {
     await press(keep);
     const played = readSave()!;
     if (played.age !== warned.age) problems.push(`Keep Playing moved the age ${warned.age} to ${played.age}`);
-    if (played.phase === 'rehab_choice') return { seed, problems, skipped: `the season at ${warned.age} stopped for a rehab choice` };
     const row = played.seasons[played.seasons.length - 1];
+    /* a season that stops for a serious injury still writes that year, marked */
+    if (played.phase === 'rehab_choice' && !row.injurySevere) problems.push(`the injury stop at ${warned.age} wrote a row with no injury on it`);
     const lastYear = start.seasons[start.seasons.length - 1].year;
     if (played.seasons.length !== start.seasons.length + 1) problems.push(`Keep Playing wrote ${played.seasons.length - start.seasons.length} rows, expected 1`);
     if (row.age !== warned.age || row.year !== lastYear + 1 || row.type !== 'playing') {
@@ -191,7 +233,8 @@ async function playOne(seed: number): Promise<Run | null> {
     }
     const drawn = root.textContent ?? '';
     const drawsSeason = played.phase === 'newspaper'
-      || (played.phase === 'season_summary' && drawn.includes('Season Summary') && drawn.includes(`${row.year}/`));
+      || (played.phase === 'season_summary' && drawn.includes('Season Summary') && drawn.includes(`${row.year}/`))
+      || (played.phase === 'rehab_choice' && drawn.includes('How do you want to come back?'));
     if (!drawsSeason) problems.push(`after Keep Playing the page is on ${played.phase}, not the season it played`);
     if (drawn.includes('YOUR BODY IS SHOWING SIGNS OF WEAR')) problems.push('the warning is still on screen after Keep Playing');
 
@@ -258,6 +301,53 @@ describe('Soccer Career: Keep Playing plays the season through the page', () => 
       for (const p of r.problems) problems.push(`seed ${seed}: ${p}`);
     }
     expect(checked, 'careers driven through the warning and Keep Playing').toBe(WANT);
+    expect(problems, problems.join('\n')).toEqual([]);
+  }, 240_000);
+
+  it('a save left on the rehab choice or the conviction paper gets that year once', async () => {
+    const problems: string[] = [];
+    const seen = { rehab: 0, conviction: 0 };
+    /* load a save into the real page, press one button, read what it saved */
+    const pressOn = async (save: CareerState, label: string): Promise<CareerState | null> => {
+      localStorage.setItem(SAVE_KEY, JSON.stringify(save));
+      const v = mount(<SoccerCareer />);
+      try {
+        await tick(60);
+        const b = buttonStarting(v.container, label);
+        if (!b) return null;
+        await press(b);
+        return readSave();
+      } finally { v.unmount(); }
+    };
+    const realRandom = Math.random;
+    try {
+      for (let seed = 900; seed < 960 && (seen.rehab < 2 || seen.conviction < 2); seed++) {
+        for (const kind of ['rehab', 'conviction'] as const) {
+          if (seen[kind] >= 2) continue;
+          Math.random = seeded(seed * 7919 + (kind === 'rehab' ? 851 : 852));
+          const now = kind === 'rehab'
+            ? walkTo(seed, s => s.phase === 'rehab_choice', false)
+            : walkTo(seed, onConvictionPaper, true);
+          if (!now) continue;
+          seen[kind] += 1;
+          const age = now.age;
+          /* the pre-850 engine stopped in exactly this state minus the year's
+             row (scripts/simCareerKeepPlaying.mjs holds that byte for byte) */
+          const shapes: [string, CareerState][] = [['pre-850', { ...now, seasons: now.seasons.slice(0, -1) }], ['this round', now]];
+          for (const [shape, save] of shapes) {
+            const out = await pressOn(save, kind === 'rehab' ? "Follow the club's plan" : 'Continue to Season Summary');
+            if (!out) { problems.push(`seed ${seed}: no button on the ${kind} screen of a ${shape} save`); continue; }
+            const year = out.seasons.filter(r => r.age === age);
+            if (year.length !== 1) problems.push(`seed ${seed}: a ${shape} save on the ${kind} screen at ${age} came out with ${year.length} rows for that year`);
+            else if (kind === 'conviction' && year[0].club !== 'CONVICTED') problems.push(`seed ${seed}: the trial year at ${age} reads ${year[0].club}`);
+            else if (kind === 'rehab' && !year[0].injurySevere) problems.push(`seed ${seed}: the injury year at ${age} carries no injury`);
+            if (out.phase !== 'playing') problems.push(`seed ${seed}: a ${shape} save on the ${kind} screen went to ${out.phase}, not back to Next Season`);
+          }
+          console.log(`STOP seed=${seed} ${kind} at ${age}`);
+        }
+      }
+    } finally { Math.random = realRandom; }
+    expect(seen, 'saves walked to each screen').toEqual({ rehab: 2, conviction: 2 });
     expect(problems, problems.join('\n')).toEqual([]);
   }, 240_000);
 });
