@@ -1,5 +1,14 @@
 # Project state
 
+## Codex862 claimed visible arcade feedback, 2026-10-01
+
+Owner requested more noticeable improvements. Strengthen settled verdict and
+exact points earned on shared arcade result cards, preserving existing flight,
+scoring, immediate Next, status and reduced-motion behavior. Only shared card
+and CSS;859 separately adds clear charge/release cues. Verify phone geometry
+and existing payload/completion tests. Native testing must use separate hidden
+CLI browsers; browser connector/UI calls are stopped. Next free863.
+
 ## Codex861 claimed leaderboard trust copy, 2026-10-01
 
 Leaderboard page/crawler copy claims every finish reaches the board, but

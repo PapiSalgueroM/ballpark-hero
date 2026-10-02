@@ -1,5 +1,16 @@
 # Work board
 
+**Codex862 CLAIMED, owner-requested visible arcade result feedback.** Own
+src/components/arcade/ArcadeShotFeedback.tsx and its CSS module only. Make
+the settled verdict and exact points earned easier to read at phone widths,
+using the existing outcome animations and a stronger points treatment. Keep
+actual scoring, status semantics, children/Next timing and reduced-motion
+behavior intact. No new counters, delays or effects that award points. Verify
+existing payload/completion tests and native320/390/1440 geometry/screenshots.
+Root owns gates/Git/docs.859 owns Board input/labels;860 timer;861 leaderboard.
+Next free863. User reported visible tabs, so no browser connector/UI tools;
+native checks use separate CLI headless browser launches only.
+
 **Codex861 CLAIMED, truthful leaderboard participation wording.** Own
 src/pages/Leaderboard.tsx and focused content/recorder verification. Root owns
 its one crawler snapshot and derived sitemap artifacts. Current page and saved
