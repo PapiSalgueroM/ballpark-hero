@@ -48,7 +48,8 @@
    talks of the drop (every headline is read, not just the newest eight), and
    finishing last is no relegation on the manager's record (wildernessProfile
    read last place, 18th, as one before this round). Its cupless rows ride
-   on part B: no cup week, no bracket, no cup match, no cup name.
+   on part B: no cup week, no bracket, no cup match, no cup name (every
+   save's league names no cup).
 
    MEASURED 2026-10-02, Round 883 tree, six seasons a run, SIM_SEED unset
    and 1 to 5:
@@ -61,6 +62,12 @@
                 on an empty feed)
      Brazil on the same tree: 39.0 to 52.7 and 43.3 to 51.2, rho 0.932 to
                 0.956, above the Round 876 numbers and well clear of its band
+     After the review's namesake fix (Palmeiras regain Paulinho, FC Juárez
+                regain José Luis Rodríguez), SIM_SEED unset: Liga MX 20.8 and
+                15.8, rho 0.963; Brazil 43.8 and 53.3, rho 0.958. 251 Liga MX
+                headlines, none about the drop under the wider pattern. The
+                cupon control now also trips the cup name check (16 fails),
+                dropcount2 trips 38.
 
    NEGATIVE CONTROLS (each must turn the run red, and each refuses to run if
    the text it mutates is not in the source):
@@ -108,7 +115,11 @@ const NEW_LEAGUES = [
   },
 ];
 /* Round 883: what a league that relegates nobody must never say. */
-const DROP_TALK = /relegat|from safety|stay up/i;
+/* The review widened it past the three phrasings the engine used then to
+   every way it words the drop today (grep of clubManager.ts on 2026-10-02:
+   the drop, bottom three, survival, from safety, Stay up) plus the obvious
+   next ones, so a new line about going down is caught too. */
+const DROP_TALK = /relegat|from safety|stay up|surviv|the drop\b|drop zone|bottom (two|three|four)\b|going down\b/i;
 
 let failures = 0;
 const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
@@ -242,7 +253,7 @@ function partSeasons(cm, row, lg) {
     Math.random = seeded(hashKey(`newleagues${SEED_SET}|${row.id}|${k}`));
     const start = cm.startCareer(club, 'now');
     cupWeeks += start.calendar.filter(e => e.type === 'cup').length;
-    if (cm.careerLeagueOf(start).cupName === row.cup) cupNamed += 1;
+    if ((cm.careerLeagueOf(start).cupName ?? null) === row.cup) cupNamed += 1;
     const played = playSeason(cm, start);
     const s = played.state;
     if (played.stuck) { fail(`${row.id} seed ${k} at ${club}: the season never ended`); Math.random = REAL_RANDOM; continue; }
@@ -295,7 +306,11 @@ function partSeasons(cm, row, lg) {
   if (row.cup) {
     if (cupNamed !== k) fail(`the ${row.cup} was named on ${cupNamed} of ${k} saves`);
     if (cupWeeks !== 4 * k) fail(`${cupWeeks} cup weeks over ${k} saves, a cup league schedules four each`);
-  } else if (cupWeeks) fail(`${cupWeeks} cup weeks were scheduled in a cupless league`);
+  } else {
+    if (cupWeeks) fail(`${cupWeeks} cup weeks were scheduled in a cupless league`);
+    /* The header's "no cup name": a cupless league's save names no cup. */
+    if (cupNamed !== k) fail(`a cupless league named a cup on ${k - cupNamed} of ${k} saves`);
+  }
   return perClub;
 }
 
