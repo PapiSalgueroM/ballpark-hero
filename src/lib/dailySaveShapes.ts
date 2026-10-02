@@ -32,10 +32,14 @@ export function isHigherLowerDailyLog(log: ReadonlyArray<unknown>): boolean {
 const FOOTLE_COLUMNS = ['nationality', 'club', 'goals', 'assists', 'position', 'kitNumber', 'age', 'marketValue'];
 const UFC_COLUMNS = ['yearsActive', 'weightClass', 'nationality', 'age', 'wins', 'losses', 'draws', 'koTko', 'submissions'];
 
+/* A cell's value is drawn as text. Round 848 review: anything React can draw
+   passes, a blank included (a pool row with no nationality on file writes
+   null, and that is a blank tile, not a broken page); only an object, which
+   React refuses to draw, fails. */
 function hasCells(cells: unknown, columns: string[]): boolean {
   return isRecord(cells) && columns.every((key) => {
     const cell = cells[key];
-    return isRecord(cell) && isText(cell.status) && (isText(cell.value) || typeof cell.value === 'number');
+    return isRecord(cell) && isText(cell.status) && (cell.value === null || typeof cell.value !== 'object');
   });
 }
 

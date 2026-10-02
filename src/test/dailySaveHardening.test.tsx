@@ -58,6 +58,15 @@ import { toast } from 'sonner';
 import { clubSeasonsOf, shareClub } from '@/lib/transferPathGraph';
 import { careerPlayers } from '@/data/careerPlayers';
 import { consumeRestoredFinish } from '@/lib/restoredFinish';
+import { isFootleLog, isSportConnectionsLog, isUfcLog } from '@/lib/dailySaveShapes';
+import { compareGuess } from '@/lib/gameLogic';
+import { compareUfcGuess } from '@/lib/ufcGameLogic';
+import { players as footlePlayers } from '@/data/players';
+import { uniqueUfcFighters } from '@/data/ufcFighters';
+import { baseballConnectionsPuzzles } from '@/data/baseballConnectionsPuzzles';
+import { nbaConnectionsPuzzles } from '@/data/nbaConnectionsPuzzles';
+import { nflConnectionsPuzzles } from '@/data/nflConnectionsPuzzles';
+import { nhlConnectionsPuzzles } from '@/data/nhlConnectionsPuzzles';
 
 /* Same pass-through as the page test: which key, index and id a hook reads. */
 const seen = vi.hoisted(() => new Map<string, { index: number; id?: string; loaded: boolean }>());
@@ -537,5 +546,51 @@ describe('5) saves written before this round load unchanged', () => {
       view.unmount();
     }
     expect(recordCompletion).not.toHaveBeenCalled();
+  });
+});
+
+/* ------------------------------------------------------------------ 6 */
+
+/* Round 848 review: a game's own check may be no stricter than what the game
+   writes. These run every check over every item its game can make from its
+   own shipped data (every Footle player against every target band, every
+   fighter, every connections group), and over the one value the live tables
+   could hand a page tomorrow without a code change: a missing text field on a
+   pool row. The pages draw a cell's value as text, so an empty one is a blank
+   tile, never a crash, and must never cost the player their day. */
+describe('6) every per game check passes everything its game writes', () => {
+  it('Footle: every fallback player guessed against a spread of targets, and a pool row with no nationality or club', () => {
+    const targets = footlePlayers.filter((_, i) => i % 25 === 0);
+    for (const target of targets) {
+      const log = footlePlayers.map((p) => compareGuess(p, target));
+      expect(isFootleLog(log.slice(0, 8), 8), target.name).toBe(true);
+      for (const g of log) expect(isFootleLog([g], 8), `${g.playerName} against ${target.name}`).toBe(true);
+    }
+    const blank = { ...footlePlayers[1], nationality: null, club: null } as unknown as typeof footlePlayers[number];
+    const saved = JSON.parse(JSON.stringify([compareGuess(blank, footlePlayers[0])]));
+    expect(isFootleLog(saved, 8)).toBe(true);
+  });
+
+  it('UFC: every fighter guessed against every fighter, and a row with no nationality', () => {
+    for (const target of uniqueUfcFighters) {
+      for (const f of uniqueUfcFighters) expect(isUfcLog([compareUfcGuess(f, target, TODAY)], 8), `${f.name} against ${target.name}`).toBe(true);
+    }
+    const blank = { ...uniqueUfcFighters[1], nationality: null } as unknown as typeof uniqueUfcFighters[number];
+    expect(isUfcLog(JSON.parse(JSON.stringify([compareUfcGuess(blank, uniqueUfcFighters[0], TODAY)])), 8)).toBe(true);
+  });
+
+  it('the four sport connections: every shipped group solved, then the four misses that end the day', () => {
+    for (const pool of [baseballConnectionsPuzzles, nbaConnectionsPuzzles, nflConnectionsPuzzles, nhlConnectionsPuzzles]) {
+      for (const puzzle of pool) {
+        const log = [...puzzle.groups.map((g) => ({ t: 'ok', theme: g.theme, players: g.players, diff: g.difficulty })), ...Array.from({ length: 4 }, () => ({ t: 'x' }))];
+        expect(isSportConnectionsLog(JSON.parse(JSON.stringify(log))), String(puzzle.id)).toBe(true);
+      }
+    }
+  });
+
+  it('a cell value that is an object, which React cannot draw, is still refused', () => {
+    const g = JSON.parse(JSON.stringify(compareGuess(footlePlayers[2], footlePlayers[0])));
+    g.cells.club.value = { name: 'not text' };
+    expect(isFootleLog([g], 8)).toBe(false);
   });
 });
