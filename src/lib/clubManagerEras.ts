@@ -308,6 +308,12 @@ let REAL_NAME_SET: Set<string> | null = null;
  */
 const ALSO_REAL_ELSEWHERE = [
   'Cesar Ruiz', 'Erik Karlsson', 'Isaac Paredes', 'Rasmus Falk', 'Thiago Silva',
+  /* Round 876: the 2026 window re-bake brought Alan Varela and Manu Silva
+     into the modern rosters ahead of the nationality map the harness reads,
+     and took Pedro Lima out of them (on loan at Sao Paulo) while the site
+     still ships him elsewhere. Listing a man the rosters also carry is
+     harmless: the set is a union. */
+  'Alan Varela', 'Manu Silva', 'Pedro Lima',
 ];
 
 /**
