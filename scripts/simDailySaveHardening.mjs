@@ -52,7 +52,9 @@
  *           win for a chain that never reached the target.
  *   verdict (review) takeNewerSave never takes over: exactly the eleven
  *           section 2b rows, where a stale tab showed a reveal, a "correct,
- *           you scored" or a "guesses left" for an answer that never counted.
+ *           you scored" or a "guesses left" for an answer that never counted,
+ *           and section 7's Higher or Lower click row, whose reveal of the
+ *           dropped answer hides the finish it took over (twelve).
  *   event   the storage listener removed: exactly the eighteen storage event
  *           rows (sections 1, 2, 7, 7b and 9).
  *   mark    (review) a finish taken over from another tab is not marked as
@@ -241,13 +243,13 @@ try {
       stale: (t) => guardRows.test(t) || hlRows.test(t) || verdictRows.test(t),
       guard: (t) => guardRows.test(t),
       turn: (t) => /1b\) a handler whose first answer is dropped/.test(t),
-      verdict: (t) => verdictRows.test(t),
+      verdict: (t) => verdictRows.test(t) || /7\) .*Higher or Lower: taken over through its own next click/.test(t),
       event: (t) => /an open tab follows another tab through the storage event|: an open tab moves to the saved round|7\) .*through the storage event|7b\) |9\) /.test(t),
       mark: (t) => /a finish taken over from another tab|7\) a finish is recorded once|7b\) |9\) .*Hard run/.test(t),
       finished: (t) => /7b\) /.test(t),
       decided: (t) => /8\) .*a finished tab is never sent back to playing/.test(t),
     }[CONTROL];
-    const expected = { stale: 30, guard: 9, turn: 3, verdict: 11, event: 18, mark: 12, finished: 2, decided: 1 }[CONTROL];
+    const expected = { stale: 30, guard: 9, turn: 3, verdict: 12, event: 18, mark: 12, finished: 2, decided: 1 }[CONTROL];
     const failed = run.rows.filter((r) => r.status === 'failed');
     const intended = run.rows.filter((r) => want(r.title));
     assert.equal(intended.length, expected, `the control's ${expected} target rows exist`);
