@@ -1,5 +1,12 @@
 # Project state
 
+## Codex878 claimed, career money feedback, 2026-10-02
+
+Shared MoneyApp will show the committed transaction and finite changed-balance
+feedback across four US careers. No engine, financial rule, action or save
+change. Opening/recovery/no-op/reduced-motion baselines must hold. Source and
+offline proof only.872 review clear;877 keyboard proof ongoing. Next free879.
+
 ## Codex873 PB timing repair accepted locally, 2026-10-02
 
 Independent successful tile bests display while rank remains pending. No new

@@ -1,5 +1,16 @@
 # Work board
 
+**Codex CLAIMS878, 2026-10-02, career money transaction feedback.**
+Pulled before claim. Own only shared `src/components/us-career/MoneyApp.tsx`,
+scoped finite CSS and focused offline proof. Show the actual committed statement
+entry and highlight changed cash/savings/invested buckets after the player's
+money action. Opening/restored statements stay static; rejected/no-op actions
+must not celebrate. Exact engine balances, fees, actions and saves stay intact.
+No career engines/parent boards, data, desktop, Supabase or production traffic.
+This improves the four US career screens using their existing simulation values.
+872 transport peer review is clear;877 keyboard follow-up is under proof.
+Next free879. Claude keeps database, Club Manager, Soccer Career and releases.
+
 **Codex873 follow-up accepted locally, 2026-10-02.** Review reproduced a
 new regression: PB tiles waited for a hung rank request (13 pass, one intended
 failure). The existing best-score query now applies its response independently
