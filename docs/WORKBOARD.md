@@ -1,5 +1,17 @@
 # Work board
 
+**Codex852 VERIFIED AND PUSHING.** QA847-12/13: Footle's result fact uses the
+existing USD formatter on USD-million values. No data or conversion-rate edit.
+Accessibility now names Alphabet Sprint/Face Off timers and offers Footle as
+untimed play. Native Footle Give up/result/refresh pass at320 touch and1440;
+actual default Alphabet Sprint counts45s to40s and the updated disclosure is
+present. Five focused result checks pass; euro-label control fails four while
+concealment passes. Clean type/build, simAccessibility and all15 built-site
+fences pass. Accessibility alone was prerendered at three clock samples; the
+derived sitemap/lastmod changes only that page,169 dates held. Initial TEMP
+driver checked Help before it mounted; preserved as a driver limit, corrected
+replay is green. Ready for Claude publish; not claimed live. Next free857.
+
 **Codex856 VERIFIED AND PUSHING.** QA847-10: the shared Sonner toast has
 a96px plus safe-area mobile bottom offset. One source line, no Soccer engine
 edit. Native actual Soccer Career academy creation at390 pointer,320 touch

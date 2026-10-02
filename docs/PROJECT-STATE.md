@@ -1,5 +1,14 @@
 # Project state
 
+## Codex852 accepted repair, 2026-10-01
+
+Footle's result value is labeled in dollars, matching its stored USD millions.
+Accessibility identifies timed modes and links to untimed Footle. Native
+Footle result/refresh at320/1440 and actual Alphabet45s timer pass. Five focused
+tests pass with the old-euro control rejected. Clean type/build, accessibility
+and all15 built-site fences pass. Accessibility's crawler page was redrawn;
+only its derived sitemap date changed. Ready for Claude's publication lane.
+
 ## Codex856 accepted repair, 2026-10-01
 
 Mobile toasts sit above the fixed career action bar. Actual Soccer Career
