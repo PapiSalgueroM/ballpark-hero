@@ -2,7 +2,8 @@ import { useState, useMemo, useCallback, useEffect, useRef } from 'react';
 import { makeFirstDraw } from '@/lib/firstDraw';
 import { hockeyHLPlayers, HockeyHLPlayer } from '@/data/hockeyHLPlayers';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
-import { higherLowerScore, isHigherLowerDailyLog } from '@/lib/higherLowerScore';
+import { higherLowerScore } from '@/lib/higherLowerScore';
+import { isHigherLowerDailyLog } from '@/lib/dailySaveShapes';
 import { useDailyPuzzle } from '@/hooks/useDailyPuzzle';
 import { dateSeed } from '@/lib/dateUtils';
 

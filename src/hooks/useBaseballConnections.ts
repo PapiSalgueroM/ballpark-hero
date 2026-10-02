@@ -2,6 +2,7 @@ import { useState, useMemo, useCallback, useEffect, useRef } from 'react';
 import { baseballConnectionsPuzzles } from '@/data/baseballConnectionsPuzzles';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { useDailyPuzzle } from '@/hooks/useDailyPuzzle';
+import { isSportConnectionsLog } from '@/lib/dailySaveShapes';
 import { fetchBaseballConnectionsPuzzles } from '@/lib/fetchBaseballConnectionsPuzzles';
 import { dailyIndex, getTodayET } from '@/lib/dateUtils';
 
@@ -83,6 +84,7 @@ export function useBaseballConnections() {
     isWon: (g, puzzle) => g.filter(a => a.t === 'ok').length >= puzzle.groups.length,
     isLost: (g) => 4 - g.filter(a => a.t === 'x').length <= 0,
     deserializeGuesses: (raw) => raw as BBConnAction[],
+    isValidGuesses: isSportConnectionsLog,
   });
 
   // Derived daily state
