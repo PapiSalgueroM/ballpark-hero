@@ -171,7 +171,17 @@ green. Native unavailable because production GETs stall,0 native passes
 credited. All production probes/contexts stopped, publication held.864 and
 incident merge are pushed;863/866 source commits follow. Exact receipt in
 docs/audits/PLAYER-DECISION-REPAIR-RECEIPT-2026-10-02.md. Paused drafts preserved.
-## INCIDENT 2026-10-02 00:10 ET: the production database stopped answering (open when this was written)
+## INCIDENT 2026-10-02 00:10 ET to 02:49 ET: the production database stopped answering (CLOSED)
+
+**Closed 02:49 ET.** The owner restarted the database at 01:58 (Postgres came back and still crawled: an admin
+statement took 34 s at 02:35), raised the disk from 2 GB to 8 GB at about 02:28 (free; it was not full: 655 MB of
+data, 144 MB of WAL), and the instance came up again at 02:49 (`pg_postmaster_start_time` 06:49:24 UTC). REST has
+answered in 0.1 to 0.7 s since, the rank refresh runs in 1.2 to 1.7 s, `max_connections` is still 60 (Micro). A
+Postgres restart did not help and a machine restart did, so the likeliest cause is memory pressure and swap on a
+1 GB instance after a day of very heavy reads and the midnight load, not a spent burst allowance as first read
+below. Light check after recovery, once each: `simWindow2026Integration` APPLIED, `simPlayersPool`,
+`simLeaderboardCache` green; `/leaderboard` and `/footle` load live; reports `2e3dc3dc` and `1bc9b2e5` closed.
+What follows is the account written while it was open.
 
 From about 04:10 UTC the Supabase project answered REST calls with 5xx or not at all (20 to 25 second aborts),
 PostgREST logged "Timed out acquiring connection from connection pool", pg_cron logged "job startup timeout" for
