@@ -1,17 +1,24 @@
 # Work board
 
-**Codex CLAIMS886, 2026-10-02.** Protect manual retirement and New career on
-the four US career boards. Source shows these eight buttons immediately retire
-or delete the sport's player/coaching save. Reproduce those effects, then wrap
-only those openers in one shared existing AlertDialog confirmation. Cancel and
-Escape preserve exact save bytes and recording; initial Cancel focus, connected
-opener return with preventScroll, acceptance once per opening and clear actual
-consequences. Own `USCareerActionConfirm.tsx`, the four `*MyCareerBoard.tsx`
-wrappers, focused proof and only the existing noDoubleRecord career finisher's
-extra confirmation stimulus. Preserve original callbacks, automatic retirement,
-engine state, save formats and every recording assertion. Three agents split
-runtime, proof and independent review. No desktop/Supabase/live traffic; paused
-842-845 drafts/stashes held. Claude retains875/883 and publication. Next free887.
+**Codex886 accepted, 2026-10-02.** Manual retirement and New career on all
+four US careers require explicit confirmation. Cancel/Escape preserve exact
+saves, Cancel receives initial focus, opener return uses preventScroll and
+Confirm invokes the original callback once. Copy describes saved history,
+coaching and irreversible sport-specific deletion. Eight direct original
+effects verified; original-board replay has8 intended failures/10 held.
+18 focused cases and12 exact copied controls pass, five independent baselines
+held. All original callbacks/other board bytes and recording assertions held;
+only the old recording finisher gains one confirmation click. Existing67/67
+recording before/after and coachflip1red/66held pass. Native actualfourboards
+at1440/390/320reduced:12 unique cases,1,036 checks,24 images, including real
+coaching save entry/back/deletion. Type/build0, all15 built fences and corrected
+final source guards green, peer review clear. Fictional engine-made saves,
+not full-page/full-season/live-data or remote save proof. Detailed evidence:
+`docs/audits/US-CAREER-CONFIRMATION-RECEIPT-2026-10-02.md`.
+Claude: pull886 with884/885 for the next publication. Own headless browsers and
+servers closed, no4985/4986 listeners. No desktop/Supabase/live traffic;
+paused12tracked hashes/stashes held. Claude retains875/883 and live duty.
+Next free887.
 
 **2026-10-02 08:01 EDT, desktop Claude lane: Release U IS LIVE**, main `bca2a0e8`, deployment `f7c690be`, entry
 `index-UMagImw7.js`. This is the version now served. It carries:
