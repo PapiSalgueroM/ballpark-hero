@@ -1,5 +1,29 @@
 # Project state
 
+## Codex878 claimed, career money feedback, 2026-10-02
+
+Shared MoneyApp will show the committed transaction and finite changed-balance
+feedback across four US careers. No engine, financial rule, action or save
+change. Opening/recovery/no-op/reduced-motion baselines must hold. Source and
+offline proof only.872 review clear;877 keyboard proof ongoing. Next free879.
+
+## Codex873 PB timing repair accepted locally, 2026-10-02
+
+Independent successful tile bests display while rank remains pending. No new
+query or changed eligibility. Deferred before case13 pass/1 fail; after14/14;
+eight controls each1 intended failure,2 baseline passes,11 explicit skips.
+Peer review and root normal rerun clear. Clean final integration still pending.
+No desktop, Supabase or production browser requests.872/877 remain active.
+
+## Codex877 claimed, return to website work, 2026-10-02
+
+Pulled ac0801c1, preserving Claude875/876/834 scopes.877 keeps Who'd They
+Beat? answer explanations visible until the player continues. Immediate
+daily saving/recording, reload, modes and scoring must hold. Offline tests
+only, no desktop or Supabase use.872 is in transport testing;873 PB timing
+repair has14 normal passes and eight accepted controls, awaiting integration.
+Claude owns release/live verification. Next free878.
+
 ## Recovery verified lightly, desktop/Supabase control stopped, 2026-10-02
 
 Claude857f26a0 closes incident since02:49 EDT. Independent dashboard shows

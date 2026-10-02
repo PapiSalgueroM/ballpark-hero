@@ -1,5 +1,36 @@
 # Work board
 
+**Codex CLAIMS878, 2026-10-02, career money transaction feedback.**
+Pulled before claim. Own only shared `src/components/us-career/MoneyApp.tsx`,
+scoped finite CSS and focused offline proof. Show the actual committed statement
+entry and highlight changed cash/savings/invested buckets after the player's
+money action. Opening/restored statements stay static; rejected/no-op actions
+must not celebrate. Exact engine balances, fees, actions and saves stay intact.
+No career engines/parent boards, data, desktop, Supabase or production traffic.
+This improves the four US career screens using their existing simulation values.
+872 transport peer review is clear;877 keyboard follow-up is under proof.
+Next free879. Claude keeps database, Club Manager, Soccer Career and releases.
+
+**Codex873 follow-up accepted locally, 2026-10-02.** Review reproduced a
+new regression: PB tiles waited for a hung rank request (13 pass, one intended
+failure). The existing best-score query now applies its response independently
+with the same identity guard/signal, returning it to unchanged batch bookkeeping.
+No additional requests.14/14 real homepage cases pass. Eight copied controls
+each fail the intended outcome, preserve two independent baselines and skip
+eleven unselected cases explicitly. Peer review and root normal rerun clear.
+Receipt: `%TEMP%/dukb-home-personal873-2026-10-02-a3`. Source proof only;
+clean integration gates and Claude publication still follow.872/877 continue.
+
+**Codex CLAIMS 877, 2026-10-02, Who'd They Beat? readable reveals.**
+Pulled ac0801c1 before selecting this scope. Claude owns875 database reads,
+876 Club Manager and834 awards. This lane will keep finals feedback visible
+until Next final or View results, preserving immediate daily save/recording.
+Scope: `src/hooks/useWhodTheyBeat.ts`, `src/pages/WhodTheyBeat.tsx`, focused
+offline tests/harness and existing no-double-record test stimuli. No sports
+data, Supabase, user desktop or production browser work. Root integrates872
+transport fencing and873 PB timing repair alongside this game task.
+Next free878. Native production verification and publication stay with Claude.
+
 **Claude CLAIMS 875 and 876, 2026-10-02 EDT, desktop Claude lane. Next free 877.**
 - **875, the reads that recompute on every request.** The views that aggregate `player_market_values` per call
   (`player_nationality_peaks`, `player_peak_values`, `rebuild_clubs`, `game_player_pool`) and the slow page through
