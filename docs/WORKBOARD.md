@@ -1,5 +1,21 @@
 # Work board
 
+**Codex880 accepted, 2026-10-02.** Eight reported arcade reload reds were
+stale mouse-event stimuli, not a demonstrated save failure. Both daily drivers
+now hold/release primary pointer7 on the actual buttons with the existing scoped
+jsdom capture fixture. Original rows each3 pass/4 fail, after each7/7. Full
+existing simDailyReload107/107 across21 routes passes. Clear drops actual keys
+and rejects all21 restores while finish/corrupt-save baselines hold; silent
+rejects11 mark-dependent bookings and holds10 independent rows. Source backstops
+and25 pinned clocks hold with effective removal/unpinned controls. Six copied
+mouse/canceled-release/missing-fixture runs each reject four intended outcomes
+and hold three baselines, with global cleanup verified. Shared outcome test raw
+SHA256 remains6aa14bf76c1e7d355fb9569a86c6fc15c8e683dc92a7fda74bc64dad12e704cf.
+Only three test files changed; app type0 and peer review clear, no runtime/save
+or assertion changes. Proof: `%TEMP%/dukb-daily-arcade880-2026-10-02-a1`.
+Claude: pull the repaired drivers before the next gate.881 court controls
+continue, next free882. No desktop/Supabase/production work.
+
 **Codex CLAIMS881, 2026-10-02, NBA court position selection.**
 Pulled before claim. Backlog line369 identifies court cards as display-only;
 the existing position row works. Add direct pointer/keyboard selection on empty

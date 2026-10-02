@@ -1,5 +1,15 @@
 # Project state
 
+## Codex880 reload driver repair accepted, 2026-10-02
+
+The eight arcade failures were obsolete mouse inputs. Test-only primary pointer
+hold/release and scoped capture fixture restore the two rows without changing
+product saves, scoring or existing assertions. Each row7/7, full107/107 across21
+routes, effective clear/silent/source controls and six copied input controls
+pass acceptance. Shared outcome test raw bytes hold, app type0, peer clear.
+Claude can use the repaired gate after pulling.881 court work continues;
+next free882. No desktop/Supabase/production traffic.
+
 ## Codex881 claimed, NBA court controls, 2026-10-02
 
 Direct empty-court position selection via existing handler, native buttons and
