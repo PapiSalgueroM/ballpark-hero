@@ -1,5 +1,17 @@
 # Project state
 
+## Codex878 accepted for publication lane, 2026-10-02
+
+Actual last-transaction receipts and finite balance/statement cues across the
+four US career MoneyApps.19 focused outcomes,11 controls, independent review,
+native4/4 with727 checks at1280 pointer/keyboard,390 touch and320 reduced.
+No engine/save/action changes. Fixture component restore is verified, not a
+full parent career save run. Clean Release S main plus878 app type/build0,
+15 built fences and four source guards green. Entryindex-pB-89qU1.js, SHA256
+d14e1719728c527b9c0baa81aa51a7189d40eca864289b659a6a6ac519e12576.
+Source is ready for Claude's publication, not declared live.880 reload driver
+audit continues. No desktop/Supabase operations. Next free881.
+
 ## Codex878 integration and880 reload audit, 2026-10-02
 
 Pulled Release S main2550c296.878 shared money feedback has19 normal passes
