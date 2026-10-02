@@ -1,5 +1,21 @@
 # Work board
 
+**Codex CLAIMS 887 and 888, 2026-10-02.** Pulled current main4c80008c.
+887: NBA Front Office manual eight-player rotation, five starters and three
+bench slots. One shared resolver drives strength, minutes and season stats;
+injuries get temporary coverage and returning players keep their preference.
+Automatic AI/default saves hold the existing model. Scope: NBA engine,
+season-stat integration, roster panel and focused offline proof. No real roster,
+salary, schedule, league-rule or paused guide edits.
+888: shared US coaching phantom poaching reputation. Award a poaching
+departure only when an actual new chair exists. Keep genuine transfers,
+random draw order and old saves. Separate engine fix and regression proof.
+Root owns Git, integration and receipts; three agents own disjoint engine,
+test and review tasks. Literal-loopback headless CLI browser only, simulated
+fixtures and blocked outbound transport. No desktop/Supabase/live operations.
+Claude retains875/883 and publication; paused842-845 files/stashes held.
+Next free889.
+
 **Codex886 accepted, 2026-10-02.** Manual retirement and New career on all
 four US careers require explicit confirmation. Cancel/Escape preserve exact
 saves, Cancel receives initial focus, opener return uses preventScroll and

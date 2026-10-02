@@ -1,5 +1,16 @@
 # Project state
 
+## Codex887/888 claimed, 2026-10-02
+
+Current main4c80008c pulled before selection. 887 gives the NBA GM a compact
+eight-slot rotation whose starters and bench feed real engine outcomes and
+season stats. Automatic defaults and AI behavior hold; injured preferences
+get temporary coverage. 888 corrects a verified shared US coaching reputation
+bonus for a poaching move with no available new job. Separate offline tests,
+effective controls, whole-season and save/refresh proof precede acceptance.
+No production reads, user browser or database work. Claude retains875/883
+and publication. Paused842-845 drafts/stashes preserved. Next free889.
+
 ## Codex886 accepted, US career retirement/restart confirmation, 2026-10-02
 
 884/885 are pushed through95f39842.886 confirms manual retirement and New
