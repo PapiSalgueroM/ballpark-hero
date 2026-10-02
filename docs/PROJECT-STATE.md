@@ -1,5 +1,48 @@
 # Project state
 
+## Release V is LIVE, 2026-10-02 11:57 EDT: main `a224d290`, deployment `1a3a309b`, entry `index-PYxk2nEA.js`
+
+Assembled by the desktop Claude lane in the gate clone (`release-v`), gated under the production load rule.
+
+- **883, Club Manager: Liga MX 2026-27.** The 22nd league and the first real cupless one: **368 clubs in 22 leagues
+  and 19 countries, 4,365 real players**. 18 clubs (ESPN's table and the league's own site, Atlante included), nobody
+  goes down (relegation is suspended; a last place there is not a relegation and the board never threatens one), no
+  domestic cup because there is none, the Apertura and Clausura played as one double round robin with no Liguilla,
+  all stated in the guide. Five derbies, each from two sources. All 29 carried 2025 rows at Mexican clubs were
+  checked on the web before shipping: seven men moved to where they really play.
+- **A bake defect found by the review and fixed for every league.** `scripts/bakeClubManagerRosters.mjs` keyed
+  players by display name alone, so two different men with one name were merged and one of them silently vanished
+  from his club: mapping Toluca's Paulinho took Palmeiras' Paulinho away. The bake now treats two rows as the same
+  man only when the age moves by minus one to three years and the position group matches. Six of 1,213 same name
+  pairs in the pull fail that test and every one of them is two men: all six are back at the clubs they play for
+  (two sources each), four of them at a new club.
+- **851, the front offices play a fair season (QA847-09) and trade their whole roster (QA847-08).** On main a full
+  season gave NBA clubs 58 to 101 games, MLB clubs 136 to 204 and NHL clubs 63 to 104 (20 seeds), and the standings
+  compared raw wins. A shared `src/lib/foSchedule.ts` now books a balanced schedule from the seed: every club plays
+  exactly 80, 162 and 80, every game is booked once for both sides, home and away split evenly. The NFL already had
+  its own schedule. A save caught mid season finishes that season the old way and is booked from its next summer.
+  The NBA trade screens show all 13 men in the Trade Finder, the send list and the partner list (they showed the top
+  eight). The NHL trade lists are left to the held `r830-nhl-full-rosters`, which rewrites those lines. Title share
+  for the three strongest NBA clubs moves from 36 to 43 of 60 seeds under the fair schedule; the game was not
+  retuned. Reviewed adversarially: ship, five minors (one fixed here: the NHL copy now says 80 games).
+- `simClubManagerNewLeagues` plays Liga MX too (no cup scheduled, drawn, shown or named; nobody relegated and no drop
+  talk in any headline or board line; controls cupon and dropcount2). `simCmLeagueRules` baseline rewritten for 22
+  leagues after an attribution run (the previous roster file reproduces the old baseline exactly).
+
+**Gate.** Type gate 0 on the final tree. The Club Manager fence family, detached, each with its closing line and exit code: `simClubManagerNewLeagues`, `simCmLeagueRules`, the three era harnesses, `simEraWorldTables`, `simClubManagerEraUcl`, `simClubManagerEraMidSeason`, `simInventedNames`, `simClubManager`, `simCmStoppageTime`, `simUclSeasonOne`, `simClubManagerSaveSize`, `simClubManagerClubList`, `simCreateClub`, `simCup`, `simWorld`, `simExtraTime`, `simYouthPadding`, `simPromotion`, `simRosterAdjudication`, `simFootleLeagues`, `simTransferOverlay`, `simFreeAgents`, `simFinance`, `simBoardObjectives`, `simNationJob`, `simEras`, `simHalftime`, the Club Manager vitest files. The front office family for Round 851: `simFrontOfficeSchedule`, `simNbaSeasonStats`, `simMlbFullRosters`, `simFrontOfficeSaveRecovery`, `simFrontOfficeCuts`, `simFrontOfficeRoster`, `simRevealMoments`, `simNbaLuxuryTax`, `simBooks`, `simEngineIds`, `simTradeFinder`, `simTradeTalks`, `simOwnerMandate`, `simMlbTradeRoster`, `simNhlContributors`, `simNhlContributorsBoard`, `simHomeFront`, `simLeagueCaps`, `simNflFullRosters`, `simUsCareerDefects`. The 22 snapshot and copy readers, `simDailyReload`, `simNoDoubleRecord`, and the full vitest suite (182 files; 20 tests timed out or raced beside two long harnesses and passed when rerun alone). **What the gate caught, all repaired here:** `simClubManager` expected a cup draw for every club and Liga MX has no cup (the harness now asserts a cupless club has no draw); `/club-manager` 612K against 611K and `/nfl-my-career` 409K against 406K (Codex 884 and 886 in the shared US career chunk), both budgets now follow the measured figures; the NHL front office copy promised an 82 game shaped season where the engine plays 80. **And one coin toss, measured before it was touched:** `simPress` section 6 went red at 1.52 against a floor of 4.00. A probe of that section at three seed bases gave 1.52, 5.58 and 11.67 on this tree and 5.86, 13.63 and 13.72 on main: one base of 240 paired seasons carries a standard error near 3, so the floor was barely one and a half standard errors under the effect. The rule now reads the three bases pooled (6.26 here, 11.07 on main, floor 4.00); its `nopress` control lands at minus 3.02 and is red. `simOpposition` (4,800 Everton seasons, one silent hour) hit its cap while sharing the machine with those probes and passed when run again (the season cost is the same as main's: 370 ms on both trees). ONE browser pass on the built site: `sweepGames` 182 routes at phone and desktop, 364 checks, 0 findings; the three era walks; `playClubManager` a whole season through the interface, 0 findings; `playGames` clean on `/club-manager`, `/deadline-day`, `/manager-hot-seat`, `/footle`, `/soccer-career`, `/nba-front-office`, `/mlb-front-office`, `/nhl-front-office`, `/front-office` and the four US careers; `playHomeFold`, `playSoftFourOhFour`, `sweepWeight` green.
+
+**Proof.** `x-deployment-id` carries `1a3a309b`; the home page serves `index-PYxk2nEA.js` (Release U served `index-UMagImw7.js`); `/club-manager` says 368 real clubs across 22 leagues; `/whats-new` carries the Mexico entry and the front office entry; `/nhl-front-office` says an 80 game season; in a real browser on the live site, Today then Mexico shows Liga MX with 18 clubs and no domestic cup, and the team step lists America, Toluca, Guadalajara, Tigres and the rest with their squads, budgets and what the board wants (the title for the top two, the Liguilla for the next); no console error.
+
+**Found on the way, not fixed, worth its own small round:** `ensurePairLedger` takes 60 percent of a simulated Club
+Manager season on main and on this tree alike (profiled: 8.4 of 14 seconds over 16 Everton seasons). `notePair` calls
+it for every league result and it re-validates every pair already stored, so a season is quadratic in its fixtures.
+Validating at load and at the season turn only (where an unchecked ledger can arrive) would make every sim to the end
+about twice as fast; `simCmLeagueRules` digests are the proof it changes nothing.
+
+**Known:** Edgar Guerra is baked at Puebla from a 2026 row while one publisher's Leon squad lists an Edgar Guerra;
+it is not a carried row and was not chased, worth a look in the next data pass. An old save mid season shows an all
+zero table for a league added after it began, until its next summer, as with every earlier league.
+
 ## Codex888 accepted, 2026-10-02
 
 Phantom coaching poaching credit is repaired across four US careers. Verified
