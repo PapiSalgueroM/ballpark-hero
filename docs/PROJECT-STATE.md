@@ -1,5 +1,25 @@
 # Project state
 
+936 MLB opening model accepted as unbound preparation, 2026-10-02.
+Five files retain780 exact player identities in30 clubs, dated2024/2025/
+2026 cohorts, explicit simulation priors/shrinkage and all-partial grades.
+Original30 opening budgets held exactly.16 outcomes and18 effective
+controls execute304 cases; independent source review, real type/build,
+15 built readers, generator/source checks and25 name-guard probes pass.
+No game imports this candidate; no full economy/save/native/second-source
+historical verification is claimed. Receipt:
+docs/audits/MLB-OPENING-MODEL-RECEIPT-2026-10-02.md.
+Claude: do not bind this map without a separate actual-engine economy and
+native adoption gate.9048ffcf5cc/9055449239f/906cc72ce41 are accepted for
+your next publication.937 injury-risk and938 NBA forecast are in progress.
+
+Codex CLAIMS939, NBA draft capital diagnosis, 2026-10-02.
+Capture actual Board failures for traded/zero/acquired picks and token
+consumption before choosing a repair. Read-only TEMP fixtures first.
+Own future NBA draft engine/Board hunks separately from938's cap panel;
+preserve Claude909's new pick ledger. MLB/NHL capital scouts are read-only
+and unclaimed pending evidence. Next free940.
+
 904 NFL owned draft capital accepted in source, 2026-10-02.
 Trades now change the number of next-draft selections; every human/rival
 choice consumes an actual pick. Zero capital retains tagging and exits
