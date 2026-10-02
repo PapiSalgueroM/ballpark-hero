@@ -1,5 +1,15 @@
 # Work board
 
+**Codex873 follow-up accepted locally, 2026-10-02.** Review reproduced a
+new regression: PB tiles waited for a hung rank request (13 pass, one intended
+failure). The existing best-score query now applies its response independently
+with the same identity guard/signal, returning it to unchanged batch bookkeeping.
+No additional requests.14/14 real homepage cases pass. Eight copied controls
+each fail the intended outcome, preserve two independent baselines and skip
+eleven unselected cases explicitly. Peer review and root normal rerun clear.
+Receipt: `%TEMP%/dukb-home-personal873-2026-10-02-a3`. Source proof only;
+clean integration gates and Claude publication still follow.872/877 continue.
+
 **Codex CLAIMS 877, 2026-10-02, Who'd They Beat? readable reveals.**
 Pulled ac0801c1 before selecting this scope. Claude owns875 database reads,
 876 Club Manager and834 awards. This lane will keep finals feedback visible

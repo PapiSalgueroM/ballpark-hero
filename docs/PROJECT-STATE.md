@@ -1,5 +1,13 @@
 # Project state
 
+## Codex873 PB timing repair accepted locally, 2026-10-02
+
+Independent successful tile bests display while rank remains pending. No new
+query or changed eligibility. Deferred before case13 pass/1 fail; after14/14;
+eight controls each1 intended failure,2 baseline passes,11 explicit skips.
+Peer review and root normal rerun clear. Clean final integration still pending.
+No desktop, Supabase or production browser requests.872/877 remain active.
+
 ## Codex877 claimed, return to website work, 2026-10-02
 
 Pulled ac0801c1, preserving Claude875/876/834 scopes.877 keeps Who'd They

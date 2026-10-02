@@ -9,6 +9,8 @@ import { fileURLToPath } from 'node:url';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const component = 'src/pages/Index.tsx', test = 'src/test/homePersonalReads.test.tsx';
 const baselines = ['preserves useful public popularity for signed out visitors', 'preserves visible signed in rank distinct games local floor and tile bests'];
+const bestTimingAnchor = '.then(bestRes => {\n              if (active && bestRes?.data) {\n                const map: Record<string, number> = {};\n                bestRes.data.forEach(r => { map[r.game_type] = r.best_score; });\n                setBestScores(map);\n              }\n              return bestRes;\n            }),\n        ]);\n        if (!active) return;\n        loaded = !rankRes?.error && !todayRes?.error && !bestRes?.error;';
+const bestTimingReplacement = ',\n        ]);\n        if (!active) return;\n        loaded = !rankRes?.error && !todayRes?.error && !bestRes?.error;\n        if (bestRes?.data) {\n          const map: Record<string, number> = {};\n          bestRes.data.forEach(r => { map[r.game_type] = r.best_score; });\n          setBestScores(map);\n        }';
 const controls = {
   eligibility: ['!canReadPersonal', 'false', 'guests make zero personal reads through focus visibility and idle time'],
   visibility: ["document.visibilityState !== 'visible'", 'false', 'hidden eligible accounts defer reads until one foreground batch'],
@@ -16,7 +18,8 @@ const controls = {
   ownership: ['if (!active) return;', 'if (false) return;', 'late prior account responses cannot overwrite the new visible identity'],
   cancel: ['controller?.abort();', 'void controller;', 'unmount aborts owned requests and removes foreground listeners'],
   history: [".eq('completed_on', todayUtc).abortSignal(controller.signal),", '.abortSignal(controller.signal),', 'does not query unused traffic counts or unbounded lifetime history'],
-  count: [".eq('user_id', accountId).abortSignal(controller.signal),", ".eq('user_id', accountId).abortSignal(controller.signal),\n          supabase.from('daily_completions').select('user_id', { count: 'exact', head: true }),", 'does not query unused traffic counts or unbounded lifetime history'],
+  count: ['return bestRes;\n            }),', "return bestRes;\n            }),\n          supabase.from('daily_completions').select('user_id', { count: 'exact', head: true }),", 'does not query unused traffic counts or unbounded lifetime history'],
+  bestTiming: [bestTimingAnchor, bestTimingReplacement, 'healthy tile bests appear while rank remains pending'],
 };
 const control = process.env.HOME_PERSONAL_READ_CONTROL || '';
 assert.ok(!control || control in controls, 'Known homepage read control');
@@ -50,23 +53,24 @@ try {
   assert.doesNotMatch(output, /Unhandled (?:Error|Rejection)|Test timed out|Timeout calling|Failed to (?:resolve import|load)|Cannot find module|SyntaxError|Transform failed/);
   const report = JSON.parse(await readFile(reportFile, 'utf8'));
   assert.equal(Number(report.numUnhandledErrors ?? 0), 0);
-  const rows = report.testResults.flatMap(file => file.assertionResults); assert.equal(rows.length, 13);
+  const rows = report.testResults.flatMap(file => file.assertionResults); assert.equal(rows.length, 14);
   if (control) {
-    assert.equal(run.status, 1); assert.equal(report.numFailedTests, 1); assert.equal(report.numPassedTests, 2); assert.equal(report.numPendingTests, 10);
+    assert.equal(run.status, 1); assert.equal(report.numFailedTests, 1); assert.equal(report.numPassedTests, 2); assert.equal(report.numPendingTests, 11);
     const target = rows.find(row => row.title === controls[control][2]); assert.equal(target?.status, 'failed');
     for (const title of baselines) assert.equal(rows.find(row => row.title === title)?.status, 'passed');
     assert.match(target.failureMessages.join('\n'), /AssertionError:|expect\(element\)|TestingLibraryElementError: Unable to find an element with the text:/);
     console.log(`Homepage personal ${control}: one executable binding changed in an isolated page.`);
-    console.log(`Homepage personal ${control}: one intended outcome failed, both real public/signed-in baselines passed, ten explicit skips.`);
+    console.log(`Homepage personal ${control}: one intended outcome failed, both real public/signed-in baselines passed, eleven explicit skips.`);
     console.log(`HOME_PERSONAL_CONTROL: ${JSON.stringify({ control, title: target.title, failure: target.failureMessages[0].split('\n')[0] })}`);
   } else {
     if (run.status !== 0) process.stdout.write(output);
-    assert.equal(run.status, 0); assert.equal(report.numPassedTests, 13); assert.equal(report.numPendingTests, 0);
-    console.log('Homepage personal reads: 13/13 real homepage cases passed, none skipped; inert Supabase boundary, zero fetch calls.');
+    assert.equal(run.status, 0); assert.equal(report.numPassedTests, 14); assert.equal(report.numPendingTests, 0);
+    console.log('Homepage personal reads: 14/14 real homepage cases passed, none skipped; inert Supabase boundary, zero fetch calls.');
     console.log('Homepage personal reads: guests make zero personal reads; public trending queries and rendered links stay useful.');
     console.log('Homepage personal reads: one visible account batch preserves two hero reads and the existing tile-best read, without background polling.');
     console.log('Homepage personal reads: matching profiles, in-flight coalescing, stable identities, account/handle ownership and abort cleanup hold.');
     console.log('Homepage personal reads: failed reads keep local facts until a foreground retry; invisible traffic counts and lifetime-history reads are gone.');
+    console.log('Homepage personal reads: healthy tile bests appear before a hung rank settles, within the same owned request batch.');
   }
 } finally {
   for (const file of owned) await rm(file, { force: true }); if (folder) await rmdir(folder);
