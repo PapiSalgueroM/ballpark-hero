@@ -1,5 +1,155 @@
 # Work board
 
+**Codex CLAIMS874, 2026-10-02, ticker request ownership.** Separate log-stream
+aggregation for06:26:21Z to06:41:21Z shows151 `live_scores` calls with58 HTTP5xx
+responses, and74 `game_completions` calls with52 HTTP5xx responses. These are
+observed request counts, not attribution of the outage to either endpoint.
+Source `useLiveScores` polls hidden tabs and allows overlapping visibility
+loads; leaving the page does not cancel its fetch. Root will repair only
+`src/hooks/useLiveScores.ts` and the optional signal in `src/lib/liveScores.ts`,
+with local deferred tests and controls. Preserve score rows, freshness/server
+clock rules, five-minute cadence and visible ticker copy. No feed/cron/SQL
+change.871-873 remain with the three builders; Claude owns recovery/release.
+Next free875. Prepared Nano to Micro confirmation remains pending user choice.
+
+
+**Codex incident UI handoff, 2026-10-02 02:41 EDT.** Anthony explicitly
+authorized control of his computer and Supabase for this incident. Existing
+authenticated dashboard shows project `flawuiqbvjobmkfkauhw` **Unhealthy**,
+compute **NANO** (`t4g.nano`), and Disk IO budget warning at5MB/s baseline.
+Pro organization status does not mean the project has Micro compute.
+Infrastructure offers Nano to Micro at identical$0.01344/hour. Final reviewed
+quote: compute$9.68/month before and after, **+$0.00/month**, excluding taxes;
+automatic restart, with a warning that downtime may be longer than normal.
+No final confirmation clicked. User choice is pending because the Computer
+Use billing confirmation rule requires action-time consent. Claude: please
+avoid a simultaneous restart/resize while this prepared change is pending.
+
+One bounded read of the separate ClickHouse log stream (not a Postgres query)
+for06:26:21Z to06:41:21Z reports93 Postgres log entries,10 containing the word
+timeout and88 containing connection. This is not a count of slow queries or
+proof of a specific culprit. No site/REST/SQL tests resumed.871-873 builders
+continue offline. No disk/spend-cap/security setting changed.
+
+
+**Codex CLAIMS871-873, 2026-10-02 02:35 EDT, database incident takes priority.**
+Anthony supplied a fresh Supabase dashboard screenshot showing the Disk IO
+budget warning and schema connection timeout. No recovery clearance exists.
+No owned production browser, REST probe, SQL query or data audit will resume.
+Three builders are working on separate source-only scopes:
+
+- **871:** Player Bingo load cancellation, bounded retry ownership and request
+  concurrency in `src/pages/PlayerBingo.tsx` and `src/lib/playerBingo.ts`, with
+  deferred local transport tests. Current successful-load source upper bound
+  is77 GETs, including up to25 simultaneous pool chunks. This is a pressure
+  risk, not a measured cause of the outage. No roster/data/rules changes.
+- **872:** prevent `scripts/runAllSims.mjs` and its offline runs from silently
+  reaching production. `ONLY` still runs a live probe today and
+  `DB_PROBE=unreachable` does not block child requests. Prove transport fencing
+  with local tests, distinguish skipped live checks from passes.
+- **873:** stop the home page's invisible guest personal-stat reads in
+  `src/pages/Index.tsx`. Preserve public popularity and signed-in statistics;
+  test request counts, eligibility and stale replies locally.
+
+Root owns Git, this incident receipt and integration. Claude retains recovery,
+database queries/migrations, pending releases and all earlier reserved scopes.
+Please continue the production traffic stop across both lanes. No restart,
+compute upgrade or spend authorized by this screenshot. Next free874.
+
+
+**Codex863-870 HANDOFF, all source pushed throughda976382, 2026-10-02.**
+Seven product scopes plus867 test repair are integrated with Release R.112
+new runtime cases,7 reload checks,12 selected source guards,15 built fences
+and app type/build pass. Actual868/869 management browser coverage is8/8,
+362 assertions across two preserved reports:6 phone-width/desktop pointer/
+keyboard cases and2 true Chromium touch contexts (maxTouchPoints1, coarse
+pointer, actual touchstart/pointerdown on renewal and Current date).
+All562 outside attempts intercepted locally,0 external responses/page errors.
+Exact final build entryindex-OjecPy7M.js; all owned browsers/contexts and4964
+server closed.34 management screenshots, representative images inspected.
+Touch report supplements, never replaces, original6/254 report. No source
+changes after final gate except committed docs.12 relevant root/gate/HEAD
+sources match after normalizing checkout CRLF; raw byte claims remain limited
+to each control hold and exact career-save checks.
+
+**Claude release lane:** new863/865/866/867/868/869/870 are on main.864 was
+already in your published Release R. Your stale NoDoubleRecord Buzzer gate
+and five Guess Nation reload failures are settled with unchanged accounting
+assertions and executable controls. Please retain the incident stop: no live
+probes were resumed. After recovery, coordinate one bounded live pass/native
+acceptance for data-backed863/865/866/870 before publication verification.
+Full live suite, physical-device/Safari checks and whole-game completion were
+not claimed. Next free871. Paused842-845 drafts/stashes remain preserved.
+Full evidence: docs/audits/PLAYER-DECISION-REPAIR-RECEIPT-2026-10-02.md.
+
+
+**Codex863-870 final offline gate VERIFIED, 2026-10-02.** All accepted runtime
+files in the isolated merged archive pass real app type0/build0,12 selected
+source harnesses and all15 required built fences. Entryindex-OjecPy7M.js,
+SHA256b9fc28441893467b73f8b63257f79f6db5dd772c11b4c3f4cbceae19bd543bcd.
+112 new runtime cases pass;867 reload-driver7/7 and existing recording/scoring
+baselines also hold. Initial final type found four test inference errors;
+annotated the contract fixture as CareerState without changing assertions,
+then type passed. Expanded granted-clause list uses the existing bounded
+scroll pattern. Six actual management UI cases at320/390/1440 pass254 checks,
+including real deal save/reload and three calendar returns preserving raw
+save. Phone-width pointer/keyboard paths verified; actual touch cases follow
+separately. All423 outside attempts blocked,0 external responses/page errors.
+No production requests. Data-backed native863/865/866/870 remain pending
+the incident. No whole-suite, whole-game or live publication claim. Next871.
+
+
+**Codex870 SOURCE VERIFIED, native pending, 2026-10-02.** Player Bingo extra
+line feedback shows the actual earned delta: two intersecting lines give+200,
+one gives+100. Polite status and existing finite motion now honor reduced
+motion. Original score/bank/continue/blackout/deck/data/booking untouched.
+Seven actual-page cases pass; before5pass/2 intended feedback failures.
+Controls: constant1001fail/6held, cumulative delta2/5, status1/6, motion1/6.
+All7 run with0 pending/unhandled, CRLF anchors changed once and raw bytes held.
+Existing Bingo scoring2/2 also pass,14 other cases explicitly unselected.
+Fictional criterion/deck boundary only, real layout/count/placement/score/share/
+booking; no real-data or native proof claimed. Peer review clear. Final clean
+type/build running, then offline built fences and blocked-external management
+browser acceptance. Next free871; incident still holds production traffic.
+
+
+**Codex868 review correction VERIFIED, 2026-10-02.** A supported old save can
+lack wageCap. Renewal then retains the missing field, and the committed card
+derives its cap from the new bill. Forecast now uses that same actual next
+state for denominator/warning/delta. Expanded15 cases: before12pass/3 exact
+legacy-cap quote failures, after15/15. New stale-cap initializer control
+rejects exactly those3, with12 held. Budget/fee controls now11 targets/4held,
+cap2/13, all15 run with0 pending/unhandled. Peer review finding closed. No cap
+or renewal rules changed. Combined clean type/build is running with869/870;
+no harnesses read writing dist, no live requests.
+
+
+**Codex869 SOURCE VERIFIED, native pending, 2026-10-02.** Calendar Current
+date returns to seasonDays(career).today and clears inspected day without
+simulating, saving or changing training. Native44px button, original month
+browsing/fast forwards intact. Before6 failures/2 original baselines, after
+8/8. Five copied controls each reject1 intended outcome while2 original
+baselines pass and5 cases are explicit selected skips. No pending/unhandled
+in normal; raw source/test/engine bytes held and owned copies cleaned. Anchor
+fence passes554 parsed scripts/119 multiline-anchored guards. Unsupported
+test role option was removed; today's existing window styling was accounted
+for without changing product styling. Final combined gate/native follows870.
+No live transport. Next free871.
+
+
+**Codex868 SOURCE VERIFIED, native pending, 2026-10-02.** ContractsCard now
+shows each real engine renewal's years, signing fee, release clause, remaining
+transfer kitty and weekly bill before the original immediate action. Remove
+quotes its full renewal too. Shortfalls and over-budget wages are visible;
+affordable over-cap renewals remain allowed.13 focused component/actual-engine
+cases pass, including saved deal reload. Before10 failures/3 held baselines.
+Copied budget/fee controls each reject9 content assertions/4 held, cap rejects
+2 warnings/11 held, all13 run with0 pending/unhandled. Source/tests/guard bytes
+preserved and owned copies cleaned. Native acceptance is being prepared with
+all external transport blocked; no production requests. Combined final gates
+follow869/870 integration. Engine, hooks, save, roster and data unchanged.
+
+
 **Codex867 VERIFIED and870 CLAIMED, 2026-10-02.** Fresh git pull before870
 is up to date at8724ceac.867 changes one driver selector: actual ResultScreen
 status card contains its result h2; transient feedback does not. Before five

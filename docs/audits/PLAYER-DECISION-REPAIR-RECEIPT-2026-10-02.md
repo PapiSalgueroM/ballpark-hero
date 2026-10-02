@@ -199,3 +199,213 @@ do not verify its merged result. Local863d7c3c755/8650a1942fe push attempts
 were rejected by remote advances. Root will merge and check the combined
 source offline, then push. After recovery, complete real-data browser
 acceptance for863/865/866 and verify live assets before publication credit.
+
+## Release R merge and second batch
+
+Merged both source lanes atd2466763. Only WORKBOARD/PROJECT-STATE conflicted;
+both sets of entries were retained. Claude'se641a405 handoff reports Release R
+published at01:29 EDT, deploymentb710846e, entryindex-DIZtEVXD.js. This lane
+did not verify that live report. The database incident remains open and no
+production requests were resumed. The pre-merge held-publication wording above
+is historical; this lane's new source still has no publication credit.
+
+Parked only the overlapping paused football guide in a scoped stash named
+"Paused Codex845 football guide before Release R merge, preserve for later
+review". Earlier stashes, other paused drafts and old untracked files remain.
+No stale guide was applied over Release R's actual53 roster text.
+
+Fresh clean Git archive from the merged head:
+TEMP/dukb-release-r-codex863-866-offline. App type gate0, build0 and all15
+offline built fences pass. Entryindex-BJXDNBsH.js, SHA256
+f7c01fe29b4765468e7583c61664bd8d0309508fcac70bea3926f091bee66004.
+`DB_PROBE=unreachable` prevents the runner's automatic REST probe; only named
+offline guards ran. Boot contexts held Supabase requests before transport.
+
+Seven source harnesses: six passed in the concurrent runner; Silverware's
+actual page case returned STACK_TRACE_ERROR and the runner exited1. Retained
+source-863-866-gate.log. With source/assertions/timeouts unchanged, one-worker
+direct replay passed10/10; its normal and all three copied controls then
+passed. Cause of the first failure is not proved. Reduced test worker overhead
+using supported VITEST_MAX_FORKS/VITEST_MIN_FORKS environment values, without
+changing shared config or relaxing expectations. Replay/control logs retained
+in that archive. This merged proof predates868-870 runtime additions.
+
+Accepted source863d7c3c755,8650a1942fe,86689373f3f and merge/claim8724ceac
+were pushed after integration.864f0c70331 was already on main. Preview/source
+pushes alone are not live deployment proof.
+
+## 867: Guess the Nation reload driver
+
+URL: `/guess-the-nation`. Product is unchanged.
+
+The driver mistook831's transient feedback status for a completed ResultScreen.
+One selector now requires the result card's actual h2 before treating it as
+finished. Normalized original/current driver differ by exactly that line;
+all stimuli, score/fingerprint/save/corruption/booking assertions remain.
+The one-hint path still earns1100 and verifies restored clues.
+
+Before5 Nation checks failed,2 independent discovery/restore-handshake checks
+passed. After7/7 pass. Clear-save control rejects restore and rebooking with
+the other3 Nation baselines held. Silent-mark control rejects duplicate booking
+only with4 held. Existing source mark/date controls also reject their defects.
+Before/after logs and receipt: TEMP/dukb-daily-reload867-2026-10-02-a1.
+No timers, expectations, gameplay or data changed. Commit19b179e8 pushed.
+
+## 868: Club Manager contract decisions
+
+URL: `/club-manager`, Squad Contracts.
+
+Original pure renewContract/renewContractWithClause produce visible term,
+fee, clause, remaining transfer kitty and weekly bill. Remove shows the full
+plain renewal behind that action. Signing shortfall and soft-cap pressure are
+visible before signing. Original callbacks, affordable over-cap signing,
+engine/save/data stay unchanged. New renewal buttons have44px targets.
+
+13 focused actual-screen/engine cases pass, including matching signed state
+and real saveCareer/loadCareer recovery. Test careers use existing Brentford
+players with controlled simulation contract boundaries, no historical fixtures.
+Before10 missing-preview failures and3 independent baselines held. Budget/fee
+copied controls each reject9 quote assertions with4 held; cap rejects2 warnings
+with11 held. All13 run per control,0 pending/unhandled; actual source/test/engine
+bytes held and owned copies cleaned. Receipts TEMP/dukb-868-contract-before.json
+and -after.json. Commite9cfb96f pushed. Native and final combined gates follow.
+
+Peer review caught one own forecast error before final acceptance: loadCareer
+does not fill absent wageCap. The old-save renewal keeps it absent, so actual
+next card derives its fallback cap from next wage bill, whereas the first
+forecast printed the current fallback. Corrected denominator/warning/delta
+from actual next state, no engine rule change. Two new committing old-save
+cases compare forecast with actual signed header and save/reload.
+
+Expanded15-case before:12pass/3 exact legacy quote failures; after15/15. Budget
+and fee controls each11 targeted failures/4 held, removed warning2/13. New
+legacy control changes the actual nextCap initializer once back to current
+cap and rejects exactly the three missing-cap outcomes,12 held. All15 run,
+0 pending/unhandled, source bytes held and owned copies cleaned. Before proof
+TEMP/dukb-868-legacy-cap-before.json. Peer review confirms the finding is closed.
+
+## 869: Club Manager calendar return
+
+URL: `/club-manager`, Home Calendar.
+
+Current date uses seasonDays(career).today on the current render and clears
+the inspected day. Only component view/selection change. No simulation,
+training, save or automatic month-following was added. Existing bounded month
+browsing/fast forwards remain. Added button is native with44px minimum height.
+
+8 actual-screen/real-calendar tests pass; before6 intended feature failures
+with2 original browsing/callback baselines passing. Test careers start through
+the existing engine, with explicit simulation-week/season boundaries for
+advanced-date checks. Five controls (view, selection, current date, accidental
+simulation, target size) each reject exactly1 intended assertion,2 original
+baselines pass and5 explicit selected skips. Do not count those skips as passes.
+Normal runs all8 with0 pending/unhandled. Raw source/test/engine bytes held,
+temporary component copies cleaned. Receipt TEMP/dukb-calendar869-2026-10-02-a3.
+
+Initial test used unsupported ByRole exact:true, removed before handoff. Another
+test assumed today's border is always primary, but existing January window
+styling makes it gold. Assert existing today background/bold date text instead;
+no product styling changed. Final anchor fence554 parsed scripts,119 multiline
+guards,123 normalized reads pass. Native Enter/mobile geometry are pending here.
+
+## 870: Player Bingo earned bonus
+
+URL: `/player-bingo`.
+
+When a placement completes two extra lines the old banner says+100 although
+score actually increases200. Flash now stores the actual line delta's points
+and displays them, with polite status and the existing1800ms lifetime. Only
+the extra-line animation gets motion-safe classes; first-line motion remains
+unchanged. Score/placement/bank/continue/blackout/deck/completion branches are
+unchanged. Existing start and effect cleanup clear pending feedback.
+
+Seven actual-page cases use explicitly fictional criterion/deck boundaries
+and the real layoutGrid/countCompletedLines, placements, score, share and
+ResultScreen booking. Before5pass/2 intended failures; after7/7. One-line100,
+intersection200 with real300 total, first-line bank100 and blackout1700 all
+verified. Incorrect placement, skip, final deck, exact booking, replay/unmount
+and feedback lifetime hold. This does not verify native/mobile or real data.
+
+Four controls: constant1001 failed/6 held, cumulative delta2/5, missing status
+1/6, unguarded motion1/6. All7 run,0 pending/unhandled. Actual executable
+anchors change once, CRLF binding checked, source/test/line/recording bytes held
+and owned copies cleaned. Unchanged existing scoreShown Bingo first-bank/
+blackout cases pass2/2 with14 other cases explicitly unselected. Peer source
+review clear. Exact receipts TEMP/dukb-player-bingo870-2026-10-02-a1.
+
+## Final accepted-files gate and management native
+
+Copied only accepted868-870 files into the existing clean merged archive,
+including final legacy cap correction. Initial final app type gate found four
+TS2322 test inference errors: fixture made contractYears required, but observer
+receives CareerState with the supported optional field. Added an explicit
+fixture return annotation, no test stimulus/expectation changed. Original
+final-868-870-type.log retained; repaired type exits0 with empty output.
+
+Bounded the now-expanded granted-clause quote list with the existing256px
+overflow-y-auto pattern. Final build0,12 selected source guards0 and all15
+required built fences0. Entryindex-OjecPy7M.js, SHA256
+b9fc28441893467b73f8b63257f79f6db5dd772c11b4c3f4cbceae19bd543bcd.
+Logs final-868-870-build-repair.log, final-source-gate.log, final-built-gate.log
+in TEMP/dukb-release-r-codex863-866-offline. No suites read writing dist;
+DB_PROBE=unreachable stops automatic live REST probe, Boot holds Supabase.
+112 new runtime cases across the seven product scopes pass. Full live-reading
+suite and whole-site sweep remain deliberately unrun.
+
+Native management6/6 cases,254 assertions,24 screenshots on that exact build:
+plain and clause renewals at320/390/1440 via actual Enter/click; actual new
+careers, no injected save, data/engine/RNG replacements. Every quote matches
+fee, remaining kitty, duration, wage, clause and weekly bill in actual signed
+save, then reload/resume. Other players and career week stay unchanged.
+Plain4yr/46k costs£8.3m, leaves£60.7m, bill678/773; clause4yr/40k costs£7.2m,
+leaves£61.8m, exit£17.3m, bill672/773. Values are generated simulation state,
+not real athlete contracts. Legacy/over-cap saves are covered by focused
+engine cases, no native old-save injection was used.
+
+Three calendar widths browse/select a day, then Current date returns to
+August2026 and clears selection while exact career-save bytes stay unchanged.
+Clause list's computed256px/auto scrolling and44px Remove access hold after
+grant/reload. Quotes/cards have0 sideways overflow,0 clipped quote text.
+Root and agent inspected representative phone screenshots. These six cases
+verify phone-width layout plus mouse/keyboard, not true touch interaction.
+
+Owned headless contexts use serviceWorkers:block and install all-URL routing
+before first navigation. Only exact local origin can continue; all outside
+HTTP/WebSocket connections blocked.423 attempts intercepted,0 external
+responses/unexpected local writes/page errors. Browser and contexts close in
+finally. Receipt and visual notes TEMP/dukb-868-869-native-2026-10-02.
+No user browser connector or visible tabs.
+
+True-touch supplement: two new contexts use hasTouch/isMobile, with actual
+maxTouchPoints1 and coarse pointer at320/390. Renewal control.tap and Current
+date.tap record actual touchstart and pointerdown pointerType touch on those
+buttons.2/2 pass108 assertions,10 screenshots on the same final entry. Actual
+renewal/save/reload and calendar raw-save hold remain.139 outside attempts
+blocked,0 external responses/page errors. Both contexts/owned browser close.
+Receipt TEMP/dukb-868-869-touch-2026-10-02, representative images inspected.
+Original6/254 report remains byte-identical, SHA256
+0eb351879f176d6c845c86088e18fae619f29ce3ed40f278c47df1663365039f.
+
+Combined868/869 native8 cases/362 assertions/34 screenshots across two distinct
+reports,562 outside attempts blocked. Chromium emulation is measured, physical
+devices/mobile Safari are not. All renewed the same actual starting player;
+advanced-date/old-save/over-cap boundaries remain focused real-engine proof.
+Root's local4964 server closed after the supplement; no owned browser remains.
+
+## Git handoff and remaining acceptance
+
+Source commits pushed:864f0c70331,8650a1942fe,863d7c3c755,86689373f3f,
+86719b179e8,868e9cfb96f,8691a3e99eb,868 reviewa40329ed,8705e1c92a1,
+final wrapper/type/gateda976382, plus coordination/merge/docs commits.
+Root/gate/HEAD normalized content matches on12 relevant runtime/test files.
+One raw comparison noticed CSS LF versus checkout CRLF; diff ignoring CR at
+EOL was empty, then normalized comparison with committed blobs passed. This
+does not weaken each harness's raw-byte holds or exact native save-byte checks.
+
+All source acceptance above is bounded. Data-backed native863/865/866/870 still
+wait for recovery; failed native attempts are not passes. Full live suite,
+whole-game/multi-season completeness and physical-device/Safari acceptance
+are unclaimed. Current publishing evidence is Claude's Release R report only;
+new pushes have no live publication proof. No AdSense approval claim.
+Next free871, no new scope reserved. Keep paused drafts and scoped stashes;
+coordinate one bounded live acceptance pass after the incident is cleared.

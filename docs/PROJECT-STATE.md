@@ -1,5 +1,116 @@
 # Project state
 
+## Codex874 ticker load ownership claimed, 2026-10-02
+
+Root adds hidden-tab/in-flight/stale-reply/cancellation guards to existing
+live ticker reads. Source currently allows overlap and hidden polling.
+Recent separate logs show151 score calls/58 HTTP5xx in15 minutes, not proof
+of cause. Keep data/freshness/cadence/feed/cron unchanged. Offline tests only.
+871-873 continue. Micro confirmation pending. Next free875.
+
+
+## Incident UI: Nano despite Pro, free Micro change prepared, 2026-10-02
+
+Owner authorized Supabase computer control. Dashboard currently says
+Unhealthy/NANO. Reviewed Nano to Micro quote is+$0.00/month ($9.68 before and
+after, taxes excluded), with automatic restart and possible extended downtime.
+Final confirmation has NOT been clicked; action-time user choice is pending.
+Claude should avoid a simultaneous resize/restart. One separate ClickHouse
+log aggregation, no Postgres SQL/REST probe, shows continued timeout-bearing
+entries in the last15 minutes.871-873 remain offline. Recovery unconfirmed.
+
+
+## Codex871-873 claimed, database incident priority, 2026-10-02 02:35 EDT
+
+New owner screenshot shows Disk IO budget warning and schema connection
+timeout. Recovery is unconfirmed; all Codex production traffic stays stopped.
+Offline builders:871 cancellable/bounded Player Bingo loads,872 test-runner
+transport safety,873 invisible guest home-stat reads. No database mutation,
+restart, spend change or live test. Source traffic risks do not prove the exact
+outage cause. Claude keeps recovery and pending publication. Next free874.
+
+
+## Codex863-870 handoff, source throughda976382 pushed, 2026-10-02
+
+Seven product scopes and one reload-driver repair merged with Claude Release R.
+App type/build0,12 source guards and15 built fences green.112 new runtime
+cases and867's7 reload checks pass. Final entryindex-OjecPy7M.js, SHA256
+b9fc28441893467b73f8b63257f79f6db5dd772c11b4c3f4cbceae19bd543bcd.
+868/869 actual UI8/8,362 checks: six pointer/keyboard and two real Chromium
+touch contexts, save/reload and read-only calendar return.562 external
+attempts blocked,0 external responses/page errors. Original six-case receipt
+held, touch report separate. All owned contexts/browsers/local server closed.
+12 relevant root/gate/HEAD sources match normalized EOL; no runtime changed
+after final gate. Detailed evidence and failed-driver/type logs retained.
+
+New source is on main, publication not verified by this lane.864 is reported
+in Claude's live Release R; remaining new scopes require release verification.
+Database incident remains open by last notice, no live requests resumed.
+Data-backed native863/865/866/870, whole live suite and physical-device/Safari
+remain pending. Next free871, no claim made. Paused drafts/stashes untouched.
+
+
+## Codex863-870 final offline gate and management native verified, 2026-10-02
+
+Final accepted-files type/build0,12 selected source guards and all15 built
+fences pass. Entryindex-OjecPy7M.js, SHA256
+b9fc28441893467b73f8b63257f79f6db5dd772c11b4c3f4cbceae19bd543bcd.
+112 new runtime cases,867 reload7/7 and existing accounting baselines pass.
+Four test inference errors corrected by fixture CareerState annotation;
+granted-clause quotes bounded inside existing scroll pattern. Actual management
+UI6/6,254 checks at320/390/1440: real renewal/save/reload and read-only calendar
+return. Pointer/keyboard at phone widths, actual touch follows separately.
+All outside HTTP/WebSocket transport blocked,0 external responses/page errors.
+Data-backed native863/865/866/870 and live release verification remain pending
+the database incident. Paused drafts/stashes preserved. Next free871.
+
+
+## Codex870 earned Bingo feedback source verified, 2026-10-02
+
+Extra-line banner uses actual line delta's points, with polite status and finite
+motion-safe animation.7 actual-page cases and four asserted copied controls
+pass; before5pass/2fail. Independent scoring2/2 held,14 explicit unselected.
+Real page/line accounting/share/booking with fictional boundary pool/criteria,
+no real-data/native proof. Runtime scoring/completion/placement unchanged.
+Peer review clear. Clean combined type/build running with final868/869 too;
+then15 offline built fences and native management checks with all external
+requests blocked. No production probes/publication. Next free871.
+
+
+## Codex868 legacy-cap forecast corrected, 2026-10-02
+
+Peer review found a real old-save mismatch: absent wageCap falls back from the
+new bill after signing. Forecast now uses actual next-state cap consistently.
+Expanded15 focused cases pass; original faulty initializer rejects3 exact
+legacy quote/committing outcomes with12 held. Budget/fee11/4, cap2/13 controls
+accepted, all15 run. No engine/cap rules changed. Peer review closed; final
+combined type/build running on accepted files only, native remains pending.
+Database incident still holds every outgoing production query. Next free871.
+
+
+## Codex869 calendar shortcut source verified, 2026-10-02
+
+Current date changes only the visible simulated month and inspected day,
+with44px native button.8 focused cases pass from6fail/2held before. Five
+asserted controls reject one intended outcome each, two original baselines
+hold, five explicit selected skips per control. Normal has no skips. Anchor
+fence554 scripts green. All engine/date/save/training/simulation behavior
+unchanged. Native actual Enter/mobile geometry and combined gates follow870.
+Production incident stays open. Next free871.
+
+
+## Codex868 contract previews source verified, 2026-10-02
+
+Actual renewal functions drive visible term/fee/clause/budget/wage forecasts,
+including Remove full-renewal cost and signing shortfall. Original one-tap
+callbacks and soft cap remain.13 focused cases and three controls pass with
+actual engine/save reload baselines. Before10fail/3pass; copied quote controls
+reject9 targets/4held, cap rejects2/11held. No engine/data/hook changes. Final
+combined type/build/native gates await869/870. Production incident remains
+open and all transport stopped. Native preparation must block every external
+URL. Next free871.
+
+
 ## Codex867 verified;870 bonus feedback claimed, 2026-10-02
 
 Guess the Nation reload driver now finds actual ResultScreen, with one exact
