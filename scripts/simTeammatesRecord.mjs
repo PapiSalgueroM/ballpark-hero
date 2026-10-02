@@ -279,6 +279,14 @@ const labelKeys = (sport, i, label) => {
   }
   return keys;
 };
+/* season arithmetic on the record's two label shapes, "2015" and "2015-16" */
+const shiftSeason = (s, d) => {
+  const m = String(s).match(/^(\d{4})(-\d{2})?$/);
+  if (!m) return '';
+  const y = Number(m[1]) + d;
+  return m[2] ? `${y}-${String((y + 1) % 100).padStart(2, '0')}` : String(y);
+};
+const nextSeason = s => shiftSeason(s, 1), prevSeason = s => shiftSeason(s, -1);
 const onKeys = (p, i, keys) => [...new Set(seasonsOf(p, i).filter(s => keys.has(s.team)).map(s => s.season))].sort();
 const careerFirst = (p, i) => seasonsOf(p, i).map(s => s.season).sort()[0];
 let claimsChecked = 0;
@@ -310,12 +318,27 @@ for (const r of rows) {
         const a = players[`${r.sport}|${r.p1}`], b = players[`${r.sport}|${r.p2}`];
         const sa = new Set(onKeys(a, i, keys));
         err = spanCheck(`${c.team} together`, onKeys(b, i, keys).filter(s => sa.has(s)), c);
+      } else if (c.t === 'spell') {
+        /* one unbroken run of shared seasons: first to last with no gap, and
+           not shared the season either side, so "from 2012 through 2015" is
+           exactly that and not the first half of something longer */
+        const a = players[`${r.sport}|${r.p1}`], b = players[`${r.sport}|${r.p2}`];
+        const sa = new Set(onKeys(a, i, keys)), shared = new Set(onKeys(b, i, keys).filter(s => sa.has(s)));
+        const run = [];
+        for (let s = c.first; s && run.length < 40; s = nextSeason(s)) { run.push(s); if (s === c.last) break; }
+        if (run[run.length - 1] !== c.last) err = `${c.team} spell ${c.first} to ${c.last} is not a run of seasons`;
+        else if (run.some(s => !shared.has(s))) err = `${c.team}: not together in every season from ${c.first} to ${c.last}`;
+        else if (shared.has(prevSeason(c.first)) || shared.has(nextSeason(c.last))) err = `${c.team}: the run from ${c.first} to ${c.last} is longer than the claim says`;
+        else if (c.seasons && run.length !== c.seasons) err = `${c.team}: ${run.length} seasons, not ${c.seasons}`;
       } else if (c.t === 'stint') {
         const ss = onKeys(subject, i, keys);
         err = spanCheck(`${c.player} at ${c.team}`, ss, c);
         if (!err && c.only && seasonsOf(subject, i).some(s => !keys.has(s.team))) err = `${c.player} also played for another team`;
       } else if (c.t === 'debut') {
         if (careerFirst(subject, i) !== c.first) err = `${c.player}'s first season is ${careerFirst(subject, i)}, not ${c.first}`;
+      } else if (c.t === 'final') {
+        const last = seasonsOf(subject, i).map(s => s.season).sort().pop();
+        if (last !== c.last) err = `${c.player}'s last season is ${last}, not ${c.last}`;
       } else if (c.t === 'never') {
         if (onKeys(subject, i, keys).length) err = `${c.player} did play for ${c.team}`;
       } else if (c.t === 'split') {
@@ -331,7 +354,8 @@ console.log(`  ${claimsChecked} claims checked on both hosts`);
 
 // ---------------------------------------------------------------------------
 console.log('\n--- 7. every year, count and team in a funFact is one a claim declares ---');
-const WORDS = { one: 1, two: 2, three: 3, four: 4, five: 5, six: 6, seven: 7, eight: 8, nine: 9, ten: 10, eleven: 11, twelve: 12 };
+const WORDS = { one: 1, two: 2, three: 3, four: 4, five: 5, six: 6, seven: 7, eight: 8, nine: 9, ten: 10, eleven: 11, twelve: 12, thirteen: 13, fourteen: 14, fifteen: 15, sixteen: 16, seventeen: 17, eighteen: 18, nineteen: 19, twenty: 20 };
+const COUNT = new RegExp(`\\b(${Object.keys(WORDS).join('|')}|\\d{1,2})( straight)? (seasons?|years?)\\b`, 'gi');
 const yearsOfLabel = s => {
   const m = String(s).match(/^(\d{4})(?:-(\d{2}))?$/);
   if (!m) return [];
@@ -352,7 +376,7 @@ for (const r of rows) {
   for (const y of r.funFact.match(/\b(?:19|20)\d\d(?:-\d\d)?\b/g) || []) {
     if (!allowed.has(y)) fail(7, `${pairKey(r)}: the funFact says ${y}, which no claim declares`);
   }
-  for (const m of r.funFact.matchAll(/\b(one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|\d{1,2}) (seasons?|years?)\b/gi)) {
+  for (const m of r.funFact.matchAll(COUNT)) {
     const n = WORDS[m[1].toLowerCase()] ?? Number(m[1]);
     if (!counts.has(n)) fail(7, `${pairKey(r)}: the funFact says "${m[0]}", and no claim counts ${n}`);
   }
