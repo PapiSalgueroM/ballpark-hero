@@ -1,8 +1,8 @@
 {
   "__version": 3,
   "/": {
-    "hash": "a4fa4e7733ac9013",
-    "date": "2026-10-01"
+    "hash": "49724f1fefbb859f",
+    "date": "2026-10-02"
   },
   "/about": {
     "hash": "74a425d771c0b5e1",
@@ -193,8 +193,8 @@
     "date": "2026-10-01"
   },
   "/front-office": {
-    "hash": "d9fa158a8b694df7",
-    "date": "2026-10-01"
+    "hash": "11ea224bc7ce60fd",
+    "date": "2026-10-02"
   },
   "/gauntlet-draft": {
     "hash": "36beece8c33d7f2d",
@@ -653,8 +653,8 @@
     "date": "2026-09-19"
   },
   "/whats-new": {
-    "hash": "7b7497346d4e3d3e",
-    "date": "2026-10-01"
+    "hash": "ac955b18d402340c",
+    "date": "2026-10-02"
   },
   "/who-am-i": {
     "hash": "a63cb97ee4158083",
