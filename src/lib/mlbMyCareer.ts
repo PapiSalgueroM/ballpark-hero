@@ -233,6 +233,13 @@ export interface MlbCareerEvent {
   title: string;
   body: string;
   options: { label: string; effect: string; apply: (c: MlbCareerState, rng: () => number) => string }[];
+  /** Round 919: the deck section a card sits under, the seasons it rests
+      after it fires (99 means once a career), and a key shared by cards that
+      tell one story. All optional and read by nothing yet, so the draw is
+      byte for byte what it was. */
+  category?: string;
+  cooldown?: number;
+  story?: string;
 }
 
 /* ---------- Round 173: era starts, his "add eras to every sport" ask ---------- */
