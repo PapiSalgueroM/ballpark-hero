@@ -794,3 +794,50 @@ describe('8) the storage event never moves a tab backwards or breaks it', () => 
     set.mockRestore();
   });
 });
+
+/* ------------------------------------------------------------------ 9 */
+
+/* Round 848 review: the modes that live beside a daily (Hard and Unlimited)
+   share its hook and its page, never its save. A tab playing one of them
+   while another tab plays the daily keeps its own run exactly as it was, the
+   daily it comes back to is the other tab's, and nothing is recorded twice. */
+describe('9) Hard and Unlimited are untouched by the daily in another tab', () => {
+  it('Afl Higher or Lower: a Hard run keeps its rounds while the daily finishes elsewhere', () => {
+    const key = `afl-hl-daily-${TODAY}`;
+    const a = renderHook(() => useAflHL()), b = renderHook(() => useAflHL());
+    act(() => b.result.current.toggleHard());
+    expect(b.result.current.mode).toBe('unlimited');
+    answer(b as never, 'left');
+    expect(raw(key), 'a Hard round writes no daily save').toBeNull();
+    const run = { round: b.result.current.currentRound, results: b.result.current.results.map((r) => r.correct), pair: b.result.current.currentPair };
+    for (let i = 0; i < 10; i++) answer(a as never, 'left');
+    expect(recordCompletion).toHaveBeenCalledTimes(1);
+    const done = raw(key);
+    storage(key);
+    expect({ round: b.result.current.currentRound, results: b.result.current.results.map((r) => r.correct), pair: b.result.current.currentPair }).toEqual(run);
+    expect(b.result.current.hard).toBe(true);
+    answer(b as never, 'right');
+    expect(b.result.current.currentRound).toBe(run.round + 1);
+    act(() => b.result.current.switchMode('daily'));
+    expect(b.result.current.gameStatus).toBe('complete');
+    expect(raw(key)).toBe(done);
+    expect(recordCompletion).toHaveBeenCalledTimes(1);
+  });
+
+  it('Footle: an Unlimited game is not touched by the daily another tab plays', async () => {
+    const key = `footle-daily-${TODAY}`;
+    const a = renderHook(() => useGame()), b = renderHook(() => useGame());
+    await flush();
+    act(() => b.result.current.switchMode('unlimited'));
+    const wrongFor = (r: { availablePlayers: { name: string }[]; targetPlayer: { name: string } }) => r.availablePlayers.find((p) => p.name !== r.targetPlayer.name)!;
+    act(() => b.result.current.makeGuess(wrongFor(b.result.current) as never));
+    expect(raw(key), 'an Unlimited guess writes no daily save').toBeNull();
+    const before = b.result.current.guesses;
+    act(() => a.result.current.makeGuess(wrongFor(a.result.current) as never));
+    storage(key);
+    expect(b.result.current.mode).toBe('unlimited');
+    expect(b.result.current.guesses).toBe(before);
+    act(() => b.result.current.switchMode('daily'));
+    expect(b.result.current.guesses).toEqual(a.result.current.guesses);
+  });
+});

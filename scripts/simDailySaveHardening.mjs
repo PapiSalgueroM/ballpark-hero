@@ -53,11 +53,11 @@
  *   verdict (review) takeNewerSave never takes over: exactly the eleven
  *           section 2b rows, where a stale tab showed a reveal, a "correct,
  *           you scored" or a "guesses left" for an answer that never counted.
- *   event   the storage listener removed: exactly the sixteen storage event
- *           rows (sections 1, 2, 7 and 7b).
+ *   event   the storage listener removed: exactly the eighteen storage event
+ *           rows (sections 1, 2, 7, 7b and 9).
  *   mark    (review) a finish taken over from another tab is not marked as
- *           restored: exactly the eleven rows that count the recorder across
- *           two tabs (section 1's and all of sections 7 and 7b).
+ *           restored: exactly the twelve rows that count the recorder across
+ *           two tabs (section 1's, all of 7 and 7b, and 9's Hard run).
  *   finished (review) the guard ignores a stored finish no longer than this
  *           tab's log: exactly the two section 7b rows (a Footle or UFC give
  *           up in one tab, which the other tab could then win and record).
@@ -238,12 +238,12 @@ try {
       guard: (t) => guardRows.test(t),
       turn: (t) => /1b\) a handler whose first answer is dropped/.test(t),
       verdict: (t) => verdictRows.test(t),
-      event: (t) => /an open tab follows another tab through the storage event|: an open tab moves to the saved round|7\) .*through the storage event|7b\) /.test(t),
-      mark: (t) => /a finish taken over from another tab|7\) a finish is recorded once|7b\) /.test(t),
+      event: (t) => /an open tab follows another tab through the storage event|: an open tab moves to the saved round|7\) .*through the storage event|7b\) |9\) /.test(t),
+      mark: (t) => /a finish taken over from another tab|7\) a finish is recorded once|7b\) |9\) .*Hard run/.test(t),
       finished: (t) => /7b\) /.test(t),
       decided: (t) => /8\) .*a finished tab is never sent back to playing/.test(t),
     }[CONTROL];
-    const expected = { stale: 30, guard: 9, turn: 3, verdict: 11, event: 16, mark: 11, finished: 2, decided: 1 }[CONTROL];
+    const expected = { stale: 30, guard: 9, turn: 3, verdict: 11, event: 18, mark: 12, finished: 2, decided: 1 }[CONTROL];
     const failed = run.rows.filter((r) => r.status === 'failed');
     const intended = run.rows.filter((r) => want(r.title));
     assert.equal(intended.length, expected, `the control's ${expected} target rows exist`);
