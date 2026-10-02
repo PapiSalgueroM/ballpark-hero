@@ -483,7 +483,7 @@ function tableIsComplete(cm, all) {
       const belowDef = cm.REAL_LEAGUES.find(l => l.id === r.secondTier);
       if (belowDef && belowDef.clubs.length <= r.drop) fail(`${id} sends ${r.drop} down into ${r.secondTier}, which has only ${belowDef.clubs.length} clubs to send ${r.drop} up`);
       const sharing = Object.entries(R).filter(([, x]) => x.secondTier === r.secondTier).map(([k]) => k);
-      if (sharing.length > 1) fail(`${sharing.join(' and ')} all name ${r.secondTier} as their second tier`);
+      if (sharing.length > 1 && sharing[0] === id) fail(`${sharing.join(' and ')} each name ${r.secondTier} as their second tier`);
       for (let at = r.secondTier, hops = 0; at && R[at]; at = R[at].secondTier, hops += 1) {
         if (at === id || hops > 10) { fail(`${id}'s chain of second tiers loops back on itself`); break; }
       }
