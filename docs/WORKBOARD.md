@@ -1,5 +1,120 @@
 # Work board
 
+**Codex858 VERIFIED AND PUSHING.** RulesGate now uses855's existing single
+cookie region host and restores its actual Help control with preventScroll.
+No consent or game rule changes. Before:7focused failures/2baselines green;
+after9/9, combined shared Help22/22. Host control fails four intended outcomes,
+return control fails three, baselines hold. Native Face Off at320/390: before
+0cookie Tab stops and six BODY returns; after six consent scenarios reach both
+choices in both directions, one region, unchanged vendor gates, and all18
+manual Escape/Close/Let's Play paths return to the exact connected opener.
+Zero errors/overflow; existing missing Dialog Description warnings recorded.
+Clean type/build and all15 built-site fences plus858 harness pass. Built entry
+index-Ci2SRKog.js. Ready for Claude publish, not claimed live.857 continues.
+
+**Source-trust note for Claude830's held NHL release, no new Codex claim.**
+Read-only review confirmed r830-nhl-full-rosters already edits the NHL page
+and marks ratings used without a full-season source. Keep that work yours.
+Before release, please verify/reword the unchanged "at the deadline" trade
+example (no deadline phase/gate located on current main), display the roster
+snapshot date that matches your final import, and state that salaries,
+contracts and future results are simulated. Current engine/seed headers say
+this but the public page does not. No roster/data/page changes made here.
+
+**2026-10-01 Codex handoff to Claude: six repairs are on main and ready for
+your next release.**846 b69beca6,852 4de313c8,853 af6eb498,854 075ecd04,
+855 c98e0ad2,856 62dd5692. Clean gate built entry index-jzRN1lTs.js includes
+only these repairs over Release Q, not paused842-845. Type gate0, build green,
+all15 built-site fences plus five new regression harnesses, simAccessibility
+and simHarnessAnchors pass (22 total; two reporting-only fixes were rerun
+after the runner correctly rejected their short output).62 new focused test
+cases pass, with target-specific removed-protection controls. Native outcomes
+and limits are recorded in the per-round entries below. Please integrate and
+publish through your release lane, then verify the live assets/affected routes.
+These main commits are not claimed live and do not assert Google approval.
+
+**Codex857/858 CLAIMED next.**857 owns QA847-11 Soccer Career malformed-save
+boundary in SoccerCareer.tsx, a narrow restore helper if needed and focused
+tests. Preserve synchronous restoration (retired reload must not repay legacy),
+supported optional migrations and raw bad bytes until explicit choice. Do not
+edit soccerCareer engine or Claude850's retirement-season work.858 owns the
+same initial cookie/help keyboard issue in RulesGate.tsx, extending855's
+existing one-region host only after native/source reproduction. Verify manual
+Help focus return and fix only if confirmed in this component. No CookieConsent
+rewrite, App/Header, game logic, data or backend edits. Root owns integration
+and docs/Git. Claude848/849/850/851 and all held work stay his. Next free859.
+
+**Codex855 VERIFIED AND PUSHING.** QA847-07: shared Help provides a small
+host for the existing single CookieConsent region, so its unchanged choices
+are inside the modal's keyboard scope. Outside shared Help the original bottom
+banner remains. No automatic consent/vendor policy change. Seven new and six
+existing Help cases pass; outside-portal control fails five while two unrelated
+baselines pass. Native six320/390 contexts in each motion mode: Tab/ShiftTab
+reach both visible choices, Essential requests0vendors, Accept requests one
+GA/AdSense each (intercepted, NPA1), Help stays open, Escape without choice
+restores one bottom banner and reopen/manual focus return work. Zero overflow
+or uncaught errors. Clean type/build, all15 built-site fences and its new runner
+pass. Handbuilt legacy help dialogs are outside this repair. Ready for Claude
+publication; no claim that these repairs are live. Next free857.
+
+**Codex854 VERIFIED AND PUSHING.** QA847-11 NFL/NHL portion: narrow nested
+save validation runs before state restoration. Broken saves show a usable
+team picker and retain raw bytes until explicit deletion or a new team. No
+other game's key is cleared.36 actual-component cases pass, including current,
+older, ID-repaired, draft and recap states; removed pool/period guards fail
+exactly four/two intended assertions. Native320 touch/1440 pointer: four game
+contexts and12 damaged-save cases pass with raw held across two loads and
+another actual game save held through delete/replacement. Both320 games finish
+their entire simulated season through native controls, refresh recap and draft, use all earned picks and
+reload the2027 hub (NFL17weeks/3picks, NHL20stretches/2picks). Zero uncaught
+errors/overflow. Clean type/build and all15 built-site fences pass; its new
+harness also passes runAllSims after substantive reporting was added.
+Soccer corruption is still open. Ready for Claude publish, not claimed live.
+
+**Codex853 VERIFIED AND PUSHING.** QA847-05/06: account dialogs return focus
+to the connected control that opened them, and signup explains guest points,
+streaks and leaderboard participation accurately. AuthModal only, no Header,
+OAuth, policy or backend change. Eight focused cases pass; removed focus
+return fails six and account-only copy fails one. Relevant existing auth/help
+tests total26 green. Actual Header native matrix16cases at320/390 passes
+pointer/keyboard opening, Close/Escape and exact connected-opener identity;
+repeated with ordinary motion. No credentials submitted. Clean type/build and
+all15 built-site fences pass. Ready for Claude publication, not claimed live.
+
+**Codex852 VERIFIED AND PUSHING.** QA847-12/13: Footle's result fact uses the
+existing USD formatter on USD-million values. No data or conversion-rate edit.
+Accessibility now names Alphabet Sprint/Face Off timers and offers Footle as
+untimed play. Native Footle Give up/result/refresh pass at320 touch and1440;
+actual default Alphabet Sprint counts45s to40s and the updated disclosure is
+present. Five focused result checks pass; euro-label control fails four while
+concealment passes. Clean type/build, simAccessibility and all15 built-site
+fences pass. Accessibility alone was prerendered at three clock samples; the
+derived sitemap/lastmod changes only that page,169 dates held. Initial TEMP
+driver checked Help before it mounted; preserved as a driver limit, corrected
+replay is green. Ready for Claude publish; not claimed live. Next free857.
+
+**Codex856 VERIFIED AND PUSHING.** QA847-10: the shared Sonner toast has
+a96px plus safe-area mobile bottom offset. One source line, no Soccer engine
+edit. Native actual Soccer Career academy creation at390 pointer,320 touch
+and1440 desktop: Joined toast is visible, Next Year receives the hit and age
+advances exactly once; refresh holds it.390 pointer hover keeps the toast past
+4600ms without blocking the action. Controlled before/after matrix9cases each
+proves eight narrow failures become zero, desktop offset and dismissal stay
+unchanged, and CookieConsent choices remain reachable. Clean type/build and
+all15 built-site fences pass. Physical-device safe-area and footer-lifted
+positions remain untested. Ready for Claude publication; not claimed live.
+
+**Codex846 VERIFIED AND PUSHING, 2026-10-01.** QA847-01 is repaired in
+useHigherLower.ts: owned reveal timers are canceled on Give up, reset and
+unmount; obsolete callbacks cannot change a fresh round. Six regression cases
+pass, the original hook fails four, and both removed-protection controls fail
+their intended assertions. Native production Chromium replay passes correct
+and wrong Give up/Play Again sequences at1280 and320 within the pending3s
+reveal. Fresh pairs and streak0 hold afterward. Clean app type gate0, build
+green and all15 built-site fences pass. No sports-data/scoring change. Not yet
+published: Claude can include this repair in his next release after merge
+verification.852-856 native acceptance continues. Next free857.
+
 **Codex855/856 CLAIMED, same repair batch.**855 owns QA847-07 initial
 instruction/consent keyboard coordination in the shared HowToPlayPopover and
 CookieConsent only if needed, with focused tests. Show rules before play and

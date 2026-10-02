@@ -1,5 +1,80 @@
 # Project state
 
+## Codex858 accepted shared-rules repair, 2026-10-01
+
+RulesGate's visible cookie choices now join its keyboard scope and closing
+manual Help restores its exact trigger. Nine regression cases and two controls
+verify both fixes. Native Face Off at320/390 passes six consent scenarios and
+all18 manual close paths. Clean type/build and all15 built-site fences plus
+the858 harness pass. Shared instructions and seen-per-route behavior remain
+intact. Source ready for Claude publication;857 save recovery is finishing.
+
+## Codex six-repair batch pushed; next claims857/858, 2026-10-01
+
+846,852,853,854,855,856 are separate main commits through c98e0ad2. Clean
+type/build and22 selected harnesses are green, including all15 built-site
+fences and62 new focused cases. Native game outcomes are in WORKBOARD. Claude
+has a concrete release handoff there; main pushes are not proof of live publish.
+842-845 remain paused. Next857 handles Soccer malformed-save recovery at the
+page boundary without touching Claude850's engine;858 verifies/repairs initial
+RulesGate consent reachability using855's existing region. Next free859.
+
+## Codex855 accepted repair, 2026-10-01
+
+Shared Help's cookie choices now sit inside its focus scope using one existing
+region/handler set. Seven focused cases, six existing Help cases and the
+outside-portal control pass expected outcomes. Six native320/390 contexts in
+each motion mode verify both keyboard directions, visible choices, unchanged
+Essential/Accept gates, Help staying open and banner restoration/reopening.
+Clean type/build, all15 built-site fences and the harness runner pass. Legacy
+handbuilt help is outside this scope. Ready for Claude's publication lane.
+
+## Codex854 accepted repair, 2026-10-01
+
+NFL/NHL malformed saves recover to a usable picker with raw bytes preserved
+until explicit delete/new team; other game saves remain intact.36 focused
+component checks and two guard-removal controls pass expected outcomes. Native
+four320/1440 contexts and12 damaged-save cases pass. Both320 franchises finish a
+whole season, refresh recap/draft and reload2027 after all earned picks.
+Clean type/build, all15 built-site fences and the new harness runner pass.
+Soccer malformed-save recovery remains open. Ready for Claude publication.
+
+## Codex853 accepted repair, 2026-10-01
+
+Account dialogs restore their actual opener focus and signup accurately says
+guests earn points/streaks and appear on the leaderboard. Eight focused cases,
+two removed-protection controls and26 relevant existing/new auth/help tests
+verify the change. Actual Header native16case matrix at320/390 passes with
+reduced and ordinary motion. Clean type/build and all15 built-site fences pass.
+No credentials/backend change. Ready for Claude publication, not claimed live.
+
+## Codex852 accepted repair, 2026-10-01
+
+Footle's result value is labeled in dollars, matching its stored USD millions.
+Accessibility identifies timed modes and links to untimed Footle. Native
+Footle result/refresh at320/1440 and actual Alphabet45s timer pass. Five focused
+tests pass with the old-euro control rejected. Clean type/build, accessibility
+and all15 built-site fences pass. Accessibility's crawler page was redrawn;
+only its derived sitemap date changed. Ready for Claude's publication lane.
+
+## Codex856 accepted repair, 2026-10-01
+
+Mobile toasts sit above the fixed career action bar. Actual Soccer Career
+academy toast with390 pointer,320 touch and1440 desktop permits Next Year,
+advances age once and survives refresh. Hovered toast stays visible past its
+normal delay without blocking the390 action. One Sonner option, no engine
+edit. Clean type/build and all15 built-site fences pass. Ready for Claude's
+publish lane; physical device safe areas and footer-lifted bars are untested.
+
+## Codex846 accepted repair, 2026-10-01
+
+Soccer Higher or Lower restarts are isolated from pending reveals. Six focused
+tests and both negative controls pass their expected outcomes; the original
+hook fails four cases. Native correct/wrong restart paths pass at1280/320.
+Clean production type/build and all15 built-site fences pass for this repair
+batch.852-856 native checks and two new harness reporting repairs continue.
+846 is ready for Claude's publication lane, with no claim that main is live.
+
 ## Current Codex repair batch, 2026-10-01
 
 Additional disjoint claims855/856 cover initial help/consent keyboard access
