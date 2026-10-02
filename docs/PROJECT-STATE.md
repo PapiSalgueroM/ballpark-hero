@@ -1,5 +1,14 @@
 # Project state
 
+## Codex858 accepted shared-rules repair, 2026-10-01
+
+RulesGate's visible cookie choices now join its keyboard scope and closing
+manual Help restores its exact trigger. Nine regression cases and two controls
+verify both fixes. Native Face Off at320/390 passes six consent scenarios and
+all18 manual close paths. Clean type/build and all15 built-site fences plus
+the858 harness pass. Shared instructions and seen-per-route behavior remain
+intact. Source ready for Claude publication;857 save recovery is finishing.
+
 ## Codex six-repair batch pushed; next claims857/858, 2026-10-01
 
 846,852,853,854,855,856 are separate main commits through c98e0ad2. Clean

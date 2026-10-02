@@ -1,5 +1,28 @@
 # Accepted quality repairs after audit847
 
+## Follow-up858, accepted after the six-repair batch
+
+RulesGate, the other shared rules dialog, now uses the same existing cookie
+region host and returns focus to its Help control. Nine focused cases pass;
+the unchanged component fails seven with two baselines held. Executable host
+and return controls fail exactly four/three intended outcomes. Combined shared
+Help tests22/22 pass. Clean type/build and all15 built-site fences plus the new
+harness pass, entry `index-Ci2SRKog.js`, SHA256
+`1bc25a51164ff36ea9816d672b556ba19d594f9a4565ad4f8637936e613ebf4b`.
+
+Native Face Off at320/390: before, both cookie choices were visible but neither
+was reached with12Tab/6ShiftTab, and six manual closes returned BODY. After,
+six consent contexts pass and all18 manual close paths restore the exact
+connected Help control. Choices remain one pair, visible and reachable in
+both Tab directions; Essential/Accept vendor gates are unchanged, with requests
+intercepted. Zero errors/overflow. Existing Dialog Description warnings remain.
+An initial after driver excluded the aria-hidden background opener during its
+read-only handle lookup; that attempt is preserved as a driver error. Corrected
+lookup passes without product changes. Evidence:
+`C:/Users/antho/AppData/Local/Temp/dukb-native-rules-gate-858-2026-10-01-a3/native-summary.json`.
+This is normal-motion Face Off and focused shared-component coverage, not a
+native gameplay audit of every RulesGate consumer. Publication remains separate.
+
 Six repairs are committed and pushed to main. Publication is a separate step
 owned by Claude's release lane. No Google approval or full-site completion is
 claimed. This receipt covers the tested code, not the currently published site.
