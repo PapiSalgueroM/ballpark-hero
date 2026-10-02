@@ -37,8 +37,13 @@
  *      (other field names, another currency, thousands not millions):
  *      a. a post moves exactly the meters it names, by what it names, and
  *         touches nothing else; soccer's seven posts are held to the same
- *         rule on real saves, and the words on soccer's cards are read
- *         against what each post does (one known gap, see KNOWN_CARD_GAPS);
+ *         rule on real saves, and the words on every one of soccer's cards
+ *         are read whole against what the post does, with no exceptions
+ *         list (the rival post was on one until its card stopped promising a
+ *         rivalry meter it never moved); a banked focus boost is paid by the
+ *         sport's own raise and by nothing in the shared file, shown on a
+ *         raise that stops at each player's ceiling, and the shared code
+ *         names no attribute and no attribute ceiling;
  *      b. a deal pays what its card prints, rung by rung, soccer's five
  *         included; the cover offer pays the cash and followers its terms
  *         and its log line print;
@@ -54,6 +59,13 @@
  *      the rung, and the neutral rung id never lands on a soccer save; the
  *      'fifa_cover' value still maps on load. No real brand name appears in
  *      the shared modules or in any line the soccer binding prints.
+ *      3b: each of the five stored ids and the pre rename cover value, on 4
+ *      careers about to play a season at 22 or older and 3 followings (one
+ *      that fits the rung, 0, and 80M): it loads as itself, loading writes
+ *      nothing and signs nothing, a second load changes nothing, and the
+ *      season that follows earns exactly one payment of the deal more than
+ *      the same season, same seed, played with no deal (72 loads, 72 season
+ *      pairs; tolerances are two decimals of rounding, 0.011 and 0.021).
  *
  * NEGATIVE CONTROLS, each asserted to change the source before it is
  * trusted, each run in the bundle only (the files on disk are untouched):
@@ -65,6 +77,19 @@
  *                                  section 2d goes red.
  *   SOCIAL_BRANDS_CONTROL=leak     a post also nudges standing it never
  *                                  names: sections 1 and 2a go red.
+ *   SOCIAL_BRANDS_CONTROL=cardlie  the rival post's card promises the
+ *                                  rivalry meter again: section 1 (the card
+ *                                  text) and the 2a card check go red.
+ *   SOCIAL_BRANDS_CONTROL=doubleraise  the shared rule pays a banked focus
+ *                                  boost twice: section 1 and both 2a focus
+ *                                  checks go red.
+ *   SOCIAL_BRANDS_CONTROL=resign   loading a save signs the rung its
+ *                                  following has reached: sections 1, 3 and
+ *                                  3b go red.
+ *   SOCIAL_BRANDS_CONTROL=paytwice the season's money is run twice:
+ *                                  sections 1 and 3b go red.
+ * All eight were run on 2026-10-02 and went red where it says, for the
+ * reason it says.
  *
  * Run: node scripts/simCareerSocialBrands.mjs
  *      SECTIONS=2,3 node scripts/simCareerSocialBrands.mjs   (skips the replay)
@@ -73,7 +98,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { loadSoccerBrand, probeSoccerBrand, POST_IDS, LEGACY_TIERS } from './lib/soccerBrandProbe835.mjs';
+import { loadSoccerBrand, probeSoccerBrand, driveToPlaying, POST_IDS, LEGACY_TIERS } from './lib/soccerBrandProbe835.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const FIXTURE = path.join(ROOT, 'scripts', 'data', 'soccerBrandFixture835.json');
@@ -107,6 +132,26 @@ const CONTROLS = {
     file: 'src/lib/careerSocial.ts',
     from: '  sport.log(s, sport.words.gained(post, gain / sport.followerUnit));\n',
     to: '  sport.log(s, sport.words.gained(post, gain / sport.followerUnit));\n  sport.standing.set(s, clamp100(sport.standing.get(s) + 1));\n',
+  },
+  cardlie: {
+    file: 'src/lib/soccerCareerBrand.ts',
+    from: 'extraEffect: "All talk: your rival gets named, nothing else moves" },\n',
+    to: 'extraEffect: "Rivalry intensity increases" },\n',
+  },
+  doubleraise: {
+    file: 'src/lib/careerSocial.ts',
+    from: '  sport.payFocus(s);\n',
+    to: '  sport.payFocus(s);\n  sport.payFocus(s);\n',
+  },
+  resign: {
+    file: 'src/lib/soccerCareerEngine.ts',
+    from: "  if (legacySponsor.activeSponsorship === 'fifa_cover') s.activeSponsorship = 'cover_athlete';\n",
+    to: "  if (legacySponsor.activeSponsorship === 'fifa_cover') s.activeSponsorship = 'cover_athlete';\n  updateBrandRung(s, SOCCER_BRAND);\n",
+  },
+  paytwice: {
+    file: 'src/lib/soccerCareerEngine.ts',
+    from: '  simulateSeasonFinances(s, season);\n',
+    to: '  simulateSeasonFinances(s, season);\n  simulateSeasonFinances(s, season);\n',
   },
 };
 if (CONTROL && !CONTROLS[CONTROL]) {
@@ -670,6 +715,72 @@ if (SECTIONS.includes('3')) {
     check(cover.activeSponsorship === 'cover_athlete', 'the renamed cover value still maps on load');
   } finally {
     Math.random = real;
+  }
+
+  /* 3b. EVERY stored id, on a save about to play a season. Three questions:
+     does it load as it was, does loading sign anything, and is the deal paid
+     once in the season that follows. Each id is tried on a following that
+     fits its rung and on one that does not (0, and far above the top line),
+     because a load that "corrects" the tier to the following is the re-sign
+     this guards against. Paid once: the same save, same seed, is played with
+     the deal and with none; nothing before the season's money reads the
+     tier, so the two seasons are the same season and the only difference in
+     what was earned is the deal, one time. */
+  console.log('\n3b. Every stored tier id loads, is not re-signed by loading, and is paid once a season');
+  {
+    const STORED = [...SB.SPONSORSHIP_TIERS.map(t => ({ stored: t.tier, loads: t.tier, row: t })),
+      { stored: LEGACY_TIERS[5], loads: 'cover_athlete', row: SB.SPONSORSHIP_TIERS.find(t => t.tier === 'cover_athlete') }];
+    check(STORED.length === 6 && STORED.every(x => x.row) && STORED.map(x => x.stored).join() === 'local_brand,nike_adidas,global_ambassador,merchandise_line,cover_athlete,' + LEGACY_TIERS[5],
+      'the five ids live saves hold and the pre rename cover value are all tried');
+    const seeded = (seed, fn) => { const keep = Math.random; Math.random = mulberry32(seed); try { return fn(); } finally { Math.random = keep; } };
+    const bad = [];
+    let loads = 0, seasons = 0, cutSeen = 0;
+    for (const seed of [11, 12, 13, 14]) {
+      const base = seeded(seed * 613 + 5, () => driveToPlaying(E, seed, 22));
+      if (!base) { bad.push(`seed ${seed}: the career never reached a pro season at 22`); continue; }
+      for (const { stored, loads: wantId, row } of STORED) {
+        for (const followers of [r2(row.minFollowers / 1_000_000 + 0.4), 0, 80]) {
+          const raw = JSON.parse(JSON.stringify(base));
+          raw.activeSponsorship = stored;
+          raw.socialMediaFollowers = followers;
+          raw.purchasedItems = [];
+          raw.sponsorDeal = null;
+          /* The pot an event can drive below zero: left alone, the floor at
+             zero could swallow the deal and the two seasons would read alike. */
+          raw.sponsorBonus = 0;
+          raw.matchFixBanned = 0;
+          raw.prisonSeasons = 0;
+          const at = `seed ${seed} ${wantId}${stored === wantId ? '' : ' (old value)'} at ${followers}M`;
+          /* Loading. */
+          const loaded = E.repairCareer(JSON.parse(JSON.stringify(raw)));
+          loads += 1;
+          if (loaded.activeSponsorship !== wantId) bad.push(`${at}: loaded as ${loaded.activeSponsorship}`);
+          if (JSON.stringify(loaded.events) !== JSON.stringify(raw.events)) bad.push(`${at}: loading wrote to the season log`);
+          if (loaded.socialMediaFollowers !== followers || loaded.netWorth !== raw.netWorth || loaded.sponsorshipIncome !== raw.sponsorshipIncome) bad.push(`${at}: loading moved followers or money`);
+          const twice = E.repairCareer(JSON.parse(JSON.stringify(loaded)));
+          if (JSON.stringify(twice) !== JSON.stringify(loaded)) bad.push(`${at}: loading the loaded save again changed it`);
+          if (twice.activeSponsorship !== wantId) bad.push(`${at}: a second load changed the tier to ${twice.activeSponsorship}`);
+          /* The season, with the deal and with none. */
+          const playSeed = seed * 7001 + 3;
+          const withDeal = seeded(playSeed, () => E.advanceProSeason(JSON.parse(JSON.stringify(raw)), clubs));
+          const without = seeded(playSeed, () => E.advanceProSeason({ ...JSON.parse(JSON.stringify(raw)), activeSponsorship: null }, clubs));
+          seasons += 1;
+          if (withDeal.activeSponsorship !== wantId) bad.push(`${at}: the season left the tier as ${withDeal.activeSponsorship}`);
+          if (withDeal.events.some(e => /NEW SPONSORSHIP/.test(e))) bad.push(`${at}: the season signed a deal nobody posted for`);
+          if (withDeal.seasons.length !== without.seasons.length || withDeal.seasons.length !== raw.seasons.length + 1) bad.push(`${at}: the two runs did not play the same one season`);
+          const mult = L.personalitySponsorMult(withDeal.personality);
+          const cut = L.agentIncomeCutRate(withDeal.agentId);
+          if (cut > 0) cutSeen += 1;
+          const dSponsor = withDeal.sponsorshipIncome - without.sponsorshipIncome;
+          if (Math.abs(dSponsor - row.income * mult) > 0.011) bad.push(`${at}: the season's sponsor money is ${r2(dSponsor)} above the same season with no deal, the card says ${row.income} (x${mult})`);
+          const dEarned = withDeal.totalEarnings - without.totalEarnings;
+          if (Math.abs(dEarned - dSponsor * (1 - cut)) > 0.021) bad.push(`${at}: earned ${r2(dEarned)} more over the season, one payment after the agent's cut is ${r2(dSponsor * (1 - cut))}`);
+        }
+      }
+    }
+    check(bad.length === 0, `${loads} loads and ${seasons} seasons over 4 careers, 6 stored values and 3 followings: every id loaded as itself, loading signed and moved nothing, and the deal was paid once${bad.length ? `: ${bad.slice(0, 4).join(' | ')}` : ''}`);
+    check(loads === 72 && seasons === 72, `all 72 cases ran (${loads} loads, ${seasons} seasons)`);
+    console.log(`     agent cut in play on ${cutSeen} of ${seasons} seasons`);
   }
 
   /* No real brand in the shared modules, in any form; and none in any line

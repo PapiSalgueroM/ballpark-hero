@@ -241,6 +241,28 @@ function driveFrom(E, s0, cfg, clubs, maxSteps, steps) {
   return s;
 }
 
+/**
+ * A career played with the probe's own answers until it is about to play a
+ * pro season at `minAge` or older. For the harness's own checks, never called
+ * by the probe, so the fixture does not depend on it. The caller seeds
+ * Math.random. Null if the career never gets there.
+ */
+export function driveToPlaying(E, seed, minAge) {
+  const clubs = E.FALLBACK_CLUBS;
+  const cfg = newCfg(seed);
+  cfg.boost = null;
+  cfg.train = false;
+  let s = E.initCareer(`Stored ${seed}`, NATIONS[seed % NATIONS.length], POSITIONS[seed % POSITIONS.length], '2010s', stats(68), 68, 2012, clubs, null, 88);
+  for (let k = 0; k < 400; k += 1) {
+    if (s.retired || s.phase === 'retirement_ceremony' || s.phase === 'retired') return null;
+    if (s.phase === 'playing' && s.age >= minAge) return s;
+    const [label, next] = step(E, s, cfg, k, clubs);
+    if (label === null) return null;
+    s = next;
+  }
+  return null;
+}
+
 function newCfg(seed) {
   return {
     seed,
