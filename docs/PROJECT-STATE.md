@@ -1,5 +1,18 @@
 # Project state
 
+892 cap repair committed for integration, native acceptance pending, 2026-10-02.
+
+Actual NFL practice promotions now use the current cap and dead money before
+mutation. Invalid quotes fail closed; price and refusal are readable and
+Call up has a44px touch target. Physical original26cases:21intended failures;
+repaired26/26, seven effective controls. Final isolated type/build0, all15
+built readers and focused/full-roster/save/cut fences pass. Native desktop
+played two complete seasons, promotion/reload/restart passed. Phone390 played
+both seasons and cap paths, but restart tap was intercepted by feed text.
+That failure is retained and being diagnosed, not credited as a native pass.
+889 integration may proceed against this explicit guarded engine baseline;
+publication remains held. No existing saves are rerated. Next free895.
+
 Ratings source preparation reviewed, 2026-10-02.
 
 893 NHL retains official two-season inputs with415/416 conservative identity

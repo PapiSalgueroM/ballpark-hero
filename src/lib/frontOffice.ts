@@ -853,11 +853,23 @@ export function deepRosterRefusal(team: GmTeamState): string | null {
    offseason calls them up first when a group runs short, before it invents
    anybody. Sending men down in season, the squad's own size rules and
    faster growth for young men on it are the development tier round's. */
-export function promoteFromPractice(team: GmTeamState, playerId: string): boolean {
-  if (team.rosterDepth !== 2 || !team.practice) return false;
-  const idx = team.practice.findIndex(p => p.id === playerId);
-  if (idx < 0 || deepRosterRefusal(team)) return false;
-  const [p] = team.practice.splice(idx, 1);
+export function practicePromotionRefusal(team: GmTeamState, playerId: string, cap: number): string | null {
+  if (!Number.isFinite(cap) || cap <= 0) return 'The current cap is unavailable.';
+  if (team.rosterDepth !== 2 || !team.practice) return 'This team does not have a practice squad.';
+  const p = team.practice.find(p => p.id === playerId);
+  if (!p) return 'He is not on your practice squad.';
+  if (!Number.isFinite(p.salary) || p.salary < 0) return 'His call-up salary is unavailable.';
+  const full = deepRosterRefusal(team);
+  if (full) return full;
+  const room = capRoom(team, cap);
+  if (p.salary > room) return `Need $${Math.round((p.salary - room) * 10) / 10}M more cap room to call him up.`;
+  return null;
+}
+
+export function promoteFromPractice(team: GmTeamState, playerId: string, cap: number): boolean {
+  if (practicePromotionRefusal(team, playerId, cap)) return false;
+  const idx = team.practice!.findIndex(p => p.id === playerId);
+  const [p] = team.practice!.splice(idx, 1);
   team.players.push(p);
   return true;
 }

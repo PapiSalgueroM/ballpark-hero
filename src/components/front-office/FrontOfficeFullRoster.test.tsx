@@ -83,7 +83,7 @@ describe('NFL Front Office: a full roster on the board', () => {
     /* at 53 the call up and every Sign are refused, with the reason on screen */
     const full = initLeague(lehmer(4), { depth: FO_DEPTH });
     const t = full.teams.KC;
-    while (t.players.length < DEEP_ROSTER_MAX) promoteFromPractice(t, t.practice![0].id);
+    while (t.players.length < DEEP_ROSTER_MAX) promoteFromPractice(t, t.practice![0].id, full.cap);
     save(full, 'KC');
     render(<FrontOfficeBoard />);
     fireEvent.click(screen.getByText('Roster'));

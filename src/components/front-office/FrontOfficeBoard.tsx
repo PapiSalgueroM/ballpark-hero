@@ -18,7 +18,7 @@ import {
   DEPTH_GROUPS, depthChart, swapDepth, starterIds, hasSavedDepth, resetDepth, type DepthPos,
   expiringPlayers, tagRefusal, applyFranchiseTag, franchiseTagSalary,
   /* Round 828: full rosters, the 53 limit and the practice squad. */
-  deepRosterRefusal, promoteFromPractice, DEEP_ROSTER_MAX, STARTER_SLOTS, tradeProbeCopy, type GmPlayer,
+  deepRosterRefusal, promoteFromPractice, practicePromotionRefusal, DEEP_ROSTER_MAX, STARTER_SLOTS, tradeProbeCopy, type GmPlayer,
   /* Round 828 follow up: men to cut before Play, the MLB and NHL shape. */
   deepOverLimit,
 } from '@/lib/frontOffice';
@@ -1044,7 +1044,7 @@ export default function FrontOfficeBoard() {
     const lg: LeagueState = JSON.parse(JSON.stringify(league));
     const t = lg.teams[myTeam];
     const man = t.practice?.find(p => p.id === pid);
-    if (man && promoteFromPractice(t, pid)) {
+    if (man && promoteFromPractice(t, pid, lg.cap)) {
       slamFeed(`⬆️ ${man.name} (${man.pos}) is called up from the practice squad.`);
       setLeague(lg);
       persist({}, lg, myTeam);
@@ -1319,30 +1319,34 @@ export default function FrontOfficeBoard() {
               {rosterGroup === 'practice' ? (
                 <>
                   <p className="text-center text-[10px] text-muted-foreground">
-                    Real men who practise with the club. They do not play and do not count against the cap. Call one up when you have a spot on the {DEEP_ROSTER_MAX}.
+                    Real men who practise with the club. They do not play and do not count against the cap. Call one up when you have a spot on the {DEEP_ROSTER_MAX} and cap room for his salary.
                   </p>
                   {fullBlock && <p data-practice-full className="text-center text-[10px] text-destructive">{fullBlock}</p>}
                   <div className="grid grid-cols-1 gap-1 sm:grid-cols-2">
                     {practice.length === 0 && <p className="text-center text-[10px] text-muted-foreground">Nobody left on the practice squad.</p>}
-                    {[...practice].sort((a, b) => b.ovr - a.ovr).map(p => (
+                    {[...practice].sort((a, b) => b.ovr - a.ovr).map(p => {
+                      const refusal = practicePromotionRefusal(my, p.id, league.cap);
+                      return (
                       <div key={p.id} data-practice-row={p.id} className="flex items-center justify-between rounded-lg border border-border/60 bg-background px-2.5 py-1.5 text-xs">
                         <span className="min-w-0">
                           <span className="block truncate font-bold text-foreground">{p.name}</span>
-                          <span className="block text-[10px] text-muted-foreground">{p.pos} · {p.age}y{noTape(p)}</span>
+                          <span className="block text-[10px] text-muted-foreground">{p.pos} · {p.age}y · {Number.isFinite(p.salary) && p.salary >= 0 ? `$${p.salary}M` : 'Salary unavailable'}{noTape(p)}</span>
+                          {refusal && !fullBlock && <span data-practice-refusal className="block text-[10px] text-destructive">{refusal}</span>}
                         </span>
                         <span className="ml-2 flex shrink-0 items-center gap-1.5">
                           <b className="text-primary">{p.ovr}</b>
                           <button
                             onClick={() => doPromote(p.id)}
-                            disabled={!!fullBlock}
-                            title={fullBlock ?? `Call ${p.name} up to the roster at $${p.salary}M`}
-                            className="rounded-full bg-primary px-2.5 py-0.5 text-[10px] font-bold text-primary-foreground disabled:opacity-40"
+                            disabled={!!refusal}
+                            title={refusal ?? `Call ${p.name} up to the roster at $${p.salary}M`}
+                            className="min-h-11 min-w-11 rounded-full bg-primary px-2.5 py-0.5 text-[10px] font-bold text-primary-foreground disabled:opacity-40"
                           >
                             Call up
                           </button>
                         </span>
                       </div>
-                    ))}
+                      );
+                    })}
                   </div>
                 </>
               ) : (

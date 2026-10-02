@@ -171,8 +171,8 @@ const ENGINE_SWAPS = {
     'for (const t of Object.values(teams)) if (t.abbr !== gm || true) cutDownToMax(',
   ]],
   promoteover: [[
-    '  if (idx < 0 || deepRosterRefusal(team)) return false;',
-    '  if (idx < 0) return false;',
+    '  const full = deepRosterRefusal(team);\n  if (full) return full;',
+    '  const full = null;\n  if (full) return full;',
   ]],
   declinefloor: [[
     'const declined = (ovr: number, by: number): number => Math.max(Math.min(62, ovr), ovr - by);',
@@ -745,9 +745,9 @@ const CLUBS = data.FO_TEAMS.map(t => t.abbr);
   {
     const lg = deepLeague(SEEDS[2]);
     const t = lg.teams.KC;
-    while (t.players.length < engine.DEEP_ROSTER_MAX && t.practice.length) engine.promoteFromPractice(t, t.practice[0].id);
+    while (t.players.length < engine.DEEP_ROSTER_MAX && t.practice.length) { if (!engine.promoteFromPractice(t, t.practice[0].id, lg.cap)) break; }
     const psBefore = t.practice.length;
-    const called = t.practice.length ? engine.promoteFromPractice(t, t.practice[0].id) : null;
+    const called = t.practice.length ? engine.promoteFromPractice(t, t.practice[0].id, lg.cap) : null;
     ok(6, 'a call up is refused at 53, and the roster and the squad stay as they were',
       called === false && t.players.length === engine.DEEP_ROSTER_MAX && t.practice.length === psBefore,
       `call up ${called}, roster ${t.players.length}, squad ${psBefore} to ${t.practice.length}`);
@@ -847,7 +847,7 @@ const CLUBS = data.FO_TEAMS.map(t => t.abbr);
             }
           }
           /* fill to 53 off the practice squad, then a signing must be refused */
-          while (me().players.length < engine.DEEP_ROSTER_MAX && me().practice.length) engine.promoteFromPractice(me(), me().practice[0].id);
+          while (me().players.length < engine.DEEP_ROSTER_MAX && me().practice.length) { if (!engine.promoteFromPractice(me(), me().practice[0].id, lg.cap)) break; }
           const fa = [...lg.freeAgents].filter(p => !cuts.signRefusal(me(), p.id)).sort((a, b) => b.ovr - a.ovr)[0];
           if (me().players.length >= engine.DEEP_ROSTER_MAX && fa) {
             if (!engine.signPlayer(me(), lg.freeAgents, fa.id, lg.cap) && engine.deepRosterRefusal(me())) stats.fullRefused += 1;

@@ -1,5 +1,17 @@
 # Work board
 
+892 source repair ready for889 integration, 2026-10-02.
+
+Guarded engine hash:e79708b5b68ab1738a085eabea618bc3c1401e2bccd4e6a2067cbc075a44ce80.
+Only promotion affordability/quote validation, Board price/reason/target,
+direct callers and focused proofs changed. Original26cases21intendedfailures,
+final26green plus seven controls; isolated type/build0/all15built readers
+and existing focused fences green. Desktop native two seasons/restart passed;
+390touch two seasons/cap paths passed but restart intercepted by feed text.
+Diagnostic is open, no overall native or publication approval. 889 can now
+integrate reviewed v2.2 with saved opening evidence, unchanged old saves,
+exact original opening budgets and original core/trivia pool held.
+
 893/894 source preparation reviewed, 2026-10-02. Ratings cutovers stay open.
 
 Official NHL two-season summaries/bios/realtime are retained in TEMP after
