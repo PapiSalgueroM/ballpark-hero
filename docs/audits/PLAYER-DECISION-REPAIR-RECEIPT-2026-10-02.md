@@ -199,3 +199,97 @@ do not verify its merged result. Local863d7c3c755/8650a1942fe push attempts
 were rejected by remote advances. Root will merge and check the combined
 source offline, then push. After recovery, complete real-data browser
 acceptance for863/865/866 and verify live assets before publication credit.
+
+## Release R merge and second batch
+
+Merged both source lanes atd2466763. Only WORKBOARD/PROJECT-STATE conflicted;
+both sets of entries were retained. Claude'se641a405 handoff reports Release R
+published at01:29 EDT, deploymentb710846e, entryindex-DIZtEVXD.js. This lane
+did not verify that live report. The database incident remains open and no
+production requests were resumed. The pre-merge held-publication wording above
+is historical; this lane's new source still has no publication credit.
+
+Parked only the overlapping paused football guide in a scoped stash named
+"Paused Codex845 football guide before Release R merge, preserve for later
+review". Earlier stashes, other paused drafts and old untracked files remain.
+No stale guide was applied over Release R's actual53 roster text.
+
+Fresh clean Git archive from the merged head:
+TEMP/dukb-release-r-codex863-866-offline. App type gate0, build0 and all15
+offline built fences pass. Entryindex-BJXDNBsH.js, SHA256
+f7c01fe29b4765468e7583c61664bd8d0309508fcac70bea3926f091bee66004.
+`DB_PROBE=unreachable` prevents the runner's automatic REST probe; only named
+offline guards ran. Boot contexts held Supabase requests before transport.
+
+Seven source harnesses: six passed in the concurrent runner; Silverware's
+actual page case returned STACK_TRACE_ERROR and the runner exited1. Retained
+source-863-866-gate.log. With source/assertions/timeouts unchanged, one-worker
+direct replay passed10/10; its normal and all three copied controls then
+passed. Cause of the first failure is not proved. Reduced test worker overhead
+using supported VITEST_MAX_FORKS/VITEST_MIN_FORKS environment values, without
+changing shared config or relaxing expectations. Replay/control logs retained
+in that archive. This merged proof predates868-870 runtime additions.
+
+Accepted source863d7c3c755,8650a1942fe,86689373f3f and merge/claim8724ceac
+were pushed after integration.864f0c70331 was already on main. Preview/source
+pushes alone are not live deployment proof.
+
+## 867: Guess the Nation reload driver
+
+URL: `/guess-the-nation`. Product is unchanged.
+
+The driver mistook831's transient feedback status for a completed ResultScreen.
+One selector now requires the result card's actual h2 before treating it as
+finished. Normalized original/current driver differ by exactly that line;
+all stimuli, score/fingerprint/save/corruption/booking assertions remain.
+The one-hint path still earns1100 and verifies restored clues.
+
+Before5 Nation checks failed,2 independent discovery/restore-handshake checks
+passed. After7/7 pass. Clear-save control rejects restore and rebooking with
+the other3 Nation baselines held. Silent-mark control rejects duplicate booking
+only with4 held. Existing source mark/date controls also reject their defects.
+Before/after logs and receipt: TEMP/dukb-daily-reload867-2026-10-02-a1.
+No timers, expectations, gameplay or data changed. Commit19b179e8 pushed.
+
+## 868: Club Manager contract decisions
+
+URL: `/club-manager`, Squad Contracts.
+
+Original pure renewContract/renewContractWithClause produce visible term,
+fee, clause, remaining transfer kitty and weekly bill. Remove shows the full
+plain renewal behind that action. Signing shortfall and soft-cap pressure are
+visible before signing. Original callbacks, affordable over-cap signing,
+engine/save/data stay unchanged. New renewal buttons have44px targets.
+
+13 focused actual-screen/engine cases pass, including matching signed state
+and real saveCareer/loadCareer recovery. Test careers use existing Brentford
+players with controlled simulation contract boundaries, no historical fixtures.
+Before10 missing-preview failures and3 independent baselines held. Budget/fee
+copied controls each reject9 quote assertions with4 held; cap rejects2 warnings
+with11 held. All13 run per control,0 pending/unhandled; actual source/test/engine
+bytes held and owned copies cleaned. Receipts TEMP/dukb-868-contract-before.json
+and -after.json. Commite9cfb96f pushed. Native and final combined gates follow.
+
+## 869: Club Manager calendar return
+
+URL: `/club-manager`, Home Calendar.
+
+Current date uses seasonDays(career).today on the current render and clears
+the inspected day. Only component view/selection change. No simulation,
+training, save or automatic month-following was added. Existing bounded month
+browsing/fast forwards remain. Added button is native with44px minimum height.
+
+8 actual-screen/real-calendar tests pass; before6 intended feature failures
+with2 original browsing/callback baselines passing. Test careers start through
+the existing engine, with explicit simulation-week/season boundaries for
+advanced-date checks. Five controls (view, selection, current date, accidental
+simulation, target size) each reject exactly1 intended assertion,2 original
+baselines pass and5 explicit selected skips. Do not count those skips as passes.
+Normal runs all8 with0 pending/unhandled. Raw source/test/engine bytes held,
+temporary component copies cleaned. Receipt TEMP/dukb-calendar869-2026-10-02-a3.
+
+Initial test used unsupported ByRole exact:true, removed before handoff. Another
+test assumed today's border is always primary, but existing January window
+styling makes it gold. Assert existing today background/bold date text instead;
+no product styling changed. Final anchor fence554 parsed scripts,119 multiline
+guards,123 normalized reads pass. Native Enter/mobile geometry are pending here.

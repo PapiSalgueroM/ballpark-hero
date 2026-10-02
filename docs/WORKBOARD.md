@@ -1,5 +1,18 @@
 # Work board
 
+**Codex869 SOURCE VERIFIED, native pending, 2026-10-02.** Calendar Current
+date returns to seasonDays(career).today and clears inspected day without
+simulating, saving or changing training. Native44px button, original month
+browsing/fast forwards intact. Before6 failures/2 original baselines, after
+8/8. Five copied controls each reject1 intended outcome while2 original
+baselines pass and5 cases are explicit selected skips. No pending/unhandled
+in normal; raw source/test/engine bytes held and owned copies cleaned. Anchor
+fence passes554 parsed scripts/119 multiline-anchored guards. Unsupported
+test role option was removed; today's existing window styling was accounted
+for without changing product styling. Final combined gate/native follows870.
+No live transport. Next free871.
+
+
 **Codex868 SOURCE VERIFIED, native pending, 2026-10-02.** ContractsCard now
 shows each real engine renewal's years, signing fee, release clause, remaining
 transfer kitty and weekly bill before the original immediate action. Remove

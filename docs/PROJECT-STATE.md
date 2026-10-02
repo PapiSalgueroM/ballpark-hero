@@ -1,5 +1,16 @@
 # Project state
 
+## Codex869 calendar shortcut source verified, 2026-10-02
+
+Current date changes only the visible simulated month and inspected day,
+with44px native button.8 focused cases pass from6fail/2held before. Five
+asserted controls reject one intended outcome each, two original baselines
+hold, five explicit selected skips per control. Normal has no skips. Anchor
+fence554 scripts green. All engine/date/save/training/simulation behavior
+unchanged. Native actual Enter/mobile geometry and combined gates follow870.
+Production incident stays open. Next free871.
+
+
 ## Codex868 contract previews source verified, 2026-10-02
 
 Actual renewal functions drive visible term/fee/clause/budget/wage forecasts,

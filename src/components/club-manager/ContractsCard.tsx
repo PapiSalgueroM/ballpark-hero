@@ -125,7 +125,7 @@ export function ContractsCard({ career, onRenew, onRenewWithClause, onRelease, o
               Renew · {terms.wage}k/w · {money(terms.fee)}
             </button>
             {forecast(p, 'plain', terms, renewContract(career, p.id))}
-            </div>
+          </div>
           <div className="min-w-0">
             <button
               onClick={() => onRenewWithClause(p.id)}
@@ -139,7 +139,7 @@ export function ContractsCard({ career, onRenew, onRenewWithClause, onRelease, o
               +Clause · {withClause.wage}k/w · exit {money(withClause.clause)}
             </button>
             {forecast(p, 'clause', withClause, renewContractWithClause(career, p.id))}
-            </div>
+          </div>
         </div>
       </div>
     );
@@ -209,7 +209,7 @@ export function ContractsCard({ career, onRenew, onRenewWithClause, onRelease, o
                   >
                     Remove · {money(terms.fee)}
                   </button>
-                  </div>
+                </div>
                 {forecast(p, 'remove', terms, renewContract(career, p.id))}
               </div>
             );
