@@ -23,10 +23,15 @@ import { nbaUnreadInboxCount, answerNbaInboxMessage, nbaDraftNightInbox, NBA_CAL
 import { dismissNbaRivalryEvent, resolveNbaRivalryChoice } from '@/lib/nbaCareerRivalryEvents';
 import type { UsCareerSport } from '@/lib/usCareerSport';
 
+/* The key this career saves under. It stays a named constant so the home
+   page's Continue fence (simHomeFront section 7) can find where every save
+   key in src is declared; the value is the one the old board used. */
+const SAVE_KEY = 'nba-my-career-save-v1';
+
 export const NBA_CAREER_SPORT: UsCareerSport<NbaCareerState, NbaSeasonLine> = {
   slug: 'nba',
   label: 'NBA',
-  saveKey: 'nba-my-career-save-v1',
+  saveKey: SAVE_KEY,
   gameSlug: 'nba-my-career',
   gameName: 'NBA My Career',
   /* The NBA drafts 30 in round one. */

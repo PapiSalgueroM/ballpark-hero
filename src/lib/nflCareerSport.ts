@@ -23,10 +23,15 @@ import { nflUnreadInboxCount, answerNflInboxMessage, nflDraftNightInbox, NFL_CAL
 import { dismissNflRivalryEvent, resolveNflRivalryChoice } from '@/lib/nflCareerRivalryEvents';
 import type { UsCareerSport } from '@/lib/usCareerSport';
 
+/* The key this career saves under. It stays a named constant so the home
+   page's Continue fence (simHomeFront section 7) can find where every save
+   key in src is declared; the value is the one the old board used. */
+const SAVE_KEY = 'nfl-my-career-save-v1';
+
 export const NFL_CAREER_SPORT: UsCareerSport<CareerState, SeasonLine> = {
   slug: 'nfl',
   label: 'NFL',
-  saveKey: 'nfl-my-career-save-v1',
+  saveKey: SAVE_KEY,
   gameSlug: 'nfl-my-career',
   gameName: 'NFL My Career',
   /* The NFL has 32 clubs, so round one is 32. */

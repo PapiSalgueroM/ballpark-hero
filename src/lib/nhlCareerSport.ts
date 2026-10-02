@@ -23,10 +23,15 @@ import { nhlUnreadInboxCount, answerNhlInboxMessage, nhlDraftNightInbox, NHL_CAL
 import { dismissNhlRivalryEvent, resolveNhlRivalryChoice } from '@/lib/nhlCareerRivalryEvents';
 import type { UsCareerSport } from '@/lib/usCareerSport';
 
+/* The key this career saves under. It stays a named constant so the home
+   page's Continue fence (simHomeFront section 7) can find where every save
+   key in src is declared; the value is the one the old board used. */
+const SAVE_KEY = 'nhl-my-career-save-v1';
+
 export const NHL_CAREER_SPORT: UsCareerSport<NhlCareerState, NhlSeasonLine> = {
   slug: 'nhl',
   label: 'NHL',
-  saveKey: 'nhl-my-career-save-v1',
+  saveKey: SAVE_KEY,
   gameSlug: 'nhl-my-career',
   gameName: 'NHL My Career',
   /* The NHL has 32 clubs, so round one is 32. */

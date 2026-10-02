@@ -23,10 +23,15 @@ import { mlbUnreadInboxCount, answerMlbInboxMessage, mlbDraftNightInbox, MLB_CAL
 import { dismissMlbRivalryEvent, resolveMlbRivalryChoice } from '@/lib/mlbCareerRivalryEvents';
 import type { UsCareerSport } from '@/lib/usCareerSport';
 
+/* The key this career saves under. It stays a named constant so the home
+   page's Continue fence (simHomeFront section 7) can find where every save
+   key in src is declared; the value is the one the old board used. */
+const SAVE_KEY = 'mlb-my-career-save-v1';
+
 export const MLB_CAREER_SPORT: UsCareerSport<MlbCareerState, MlbSeasonLine> = {
   slug: 'mlb',
   label: 'MLB',
-  saveKey: 'mlb-my-career-save-v1',
+  saveKey: SAVE_KEY,
   gameSlug: 'mlb-my-career',
   gameName: 'MLB My Career',
   firstRoundEnd: 30,
