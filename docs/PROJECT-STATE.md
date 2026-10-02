@@ -1,5 +1,30 @@
 # Project state
 
+## Codex882 claimed, readable Champ or Not reveals, 2026-10-02
+
+881 pushedfd7ee739. Active Champ or Not will hold historical feedback until
+Next claim/View results, show earned score at answer time and preserve daily
+save/completion timing. Root owns hook/page; agents own focused proof, existing
+recording stimulus and independent review. No real data/query change, desktop,
+Supabase or live work. Football Draft is retired, so its source-only candidate
+is deferred without a product repair claim. Claude owns publication, next883.
+
+## Codex881 court controls accepted, 2026-10-02
+
+Empty NBA Starting 5 court cards select positions directly, with native buttons,
+matching spin/validation locks, selected state and keyboard focus. Filled cards
+remain display-only. Court selection avoids input autofocus that caused a
+verified phone jump; position-row autofocus remains as before.14 focused cases,
+eight effective controls and peer review pass. Actual page/court/autocomplete
+native4/4,341 checks and16 screenshots at1280 pointer/keyboard,390 touch,320
+touch/reduced. Fictional hook/presentation fixtures only, no data or complete
+game claim. Phone court center/top stays fixed with native82px scroll anchoring;
+the same detector rejects the old452px visible displacement and input focus.
+Type/build0,15 built fences and four source guards green. Entryindex-B1_iQCl7.js,
+SHA256bfcf9ad9a6f9960b170d6b8cbadc96b2f8f43aaf04a1038d57947fa53413c559.
+878/880 are pushed;881 joins the next Claude publication. Next free882.
+No desktop/Supabase/live use. Owned local browser/server processes closed.
+
 ## Codex880 reload driver repair accepted, 2026-10-02
 
 The eight arcade failures were obsolete mouse inputs. Test-only primary pointer

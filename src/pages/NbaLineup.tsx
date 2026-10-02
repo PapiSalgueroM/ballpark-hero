@@ -51,6 +51,7 @@ const NbaLineup = () => {
 
   const [playerInput, setPlayerInput] = useState('');
   const [showHowToPlay, setShowHowToPlay] = useState(false);
+  const [courtSelection, setCourtSelection] = useState(false);
 
   const handleSelectPlayer = async (entity: PlayerEntity) => {
     if (isValidating) return;
@@ -156,10 +157,11 @@ const NbaLineup = () => {
                   return (
                     <button
                       key={i}
-                      disabled={isFilled || isTeamSpinning}
-                      onClick={() => selectPosition(i)}
+                      disabled={isFilled || isTeamSpinning || isValidating}
+                      aria-pressed={isSelected}
+                      onClick={() => { setCourtSelection(false); selectPosition(i); }}
                       className={cn(
-                        'w-12 h-12 rounded-xl flex items-center justify-center text-sm font-bold transition-all',
+                        'w-12 h-12 rounded-xl flex items-center justify-center text-sm font-bold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background motion-reduce:transition-none',
                         isFilled
                           ? 'bg-orange-500 text-black cursor-default'
                           : isSelected
@@ -213,7 +215,7 @@ const NbaLineup = () => {
                         exclude: filledNormalizedNames,
                       }}
                       placeholder="Type a player name..."
-                      autoFocus
+                      autoFocus={!courtSelection}
                       disabled={isValidating}
                       validateOnly
                     />
@@ -238,7 +240,7 @@ const NbaLineup = () => {
               {/* Prompt to pick position if none selected */}
               {selectedPosition === null && !isTeamSpinning && currentTeam && filledCount < 5 && (
                 <p className="text-sm text-center text-muted-foreground animate-fade-in">
-                  👆 Select a position above to start picking a player
+                  👆 Select a position above or on the court to start picking a player
                 </p>
               )}
             </div>
@@ -258,6 +260,8 @@ const NbaLineup = () => {
                 filledSlots={filledSlots}
                 selectedPosition={selectedPosition}
                 challengeUnit={challenge?.unit}
+                onSelectPosition={index => { setCourtSelection(true); selectPosition(index); }}
+                selectionDisabled={isTeamSpinning || isValidating}
               />
             </div>
           </div>
