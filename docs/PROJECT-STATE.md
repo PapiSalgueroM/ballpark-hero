@@ -34,6 +34,100 @@ green. Native unavailable because production GETs stall,0 native passes
 credited. All production probes/contexts stopped, publication held.864 and
 incident merge are pushed;863/866 source commits follow. Exact receipt in
 docs/audits/PLAYER-DECISION-REPAIR-RECEIPT-2026-10-02.md. Paused drafts preserved.
+## INCIDENT 2026-10-02 00:10 ET: the production database stopped answering (open when this was written)
+
+From about 04:10 UTC the Supabase project answered REST calls with 5xx or not at all (20 to 25 second aborts),
+PostgREST logged "Timed out acquiring connection from connection pool", pg_cron logged "job startup timeout" for
+the rank refresh from 04:15 on, Auth refreshes timed out, and catalog queries took 8 to 16 seconds. The project
+reported ACTIVE_HEALTHY throughout. One admin connection at 01:13 ET showed 25 of 60 connections open, nothing
+waiting on a lock, nothing idle in a transaction and almost nothing active: the instance itself was throttled,
+the pattern of a spent CPU or disk IO burst allowance (Round 370's subject), not a blocked or crashed database.
+- **What preceded it:** a day of very heavy reads from both lanes (agents pulling whole tables, spot checks,
+  bakes, the audit), four data migrations at 00:00 to 00:03 ET, the Eastern midnight rollover, and then this
+  lane's release gate against the live tables: about 40 harnesses and a 546 page browser sweep, run more than
+  once inside the hour as main kept moving. The migrations themselves verified clean before the slowdown.
+- **What was done:** every harness and headless browser of this lane was killed at 00:41 ET; the board carried a
+  stop notice and Codex stopped its live runs; the owner was notified. No admin action was possible beyond that
+  (the MCP has no restart, and pause or restore is not something to try on production).
+- **What players saw:** games that read the database (dailies, the leaderboard, player search, score recording)
+  failed or hung; games that run from baked data kept working.
+- **Standing change:** the live reading harnesses and the browser sweeps run once per release, never in parallel
+  lanes, never in the half hour after a data migration and never around midnight Eastern. Recovery or a larger
+  compute size is the owner's call.
+
+## LIVE 2026-10-02: Release R (840 the rendered home page keeps its copy, 850 Soccer Career loses no years, 795 the 2026 transfer windows, Claude828 NFL real 53, Claude833 US career stat lines and era money, 706's college table cleanup, six Codex repairs), main `ab34dbb0`
+
+Assembled by the desktop Claude lane in the gate clone (`release-r`) and published at 01:29 Eastern (the data
+went in at 00:03; the publish waited on two more merges of main and then on the incident above), because two of
+its parts move a daily pool. **douknowball.com is serving it:** deployment `b710846e`, called only
+after `get_project` showed `latest_commit_sha` `ab34dbb0`; the live entry moved from `index-COxixK8K.js` to
+`index-DIZtEVXD.js`. Proof by content: the live Soccer Career chunk contains the new CONVICTED row and the pushed on line; the About copy is served as its own chunk (`HomeAbout-sFh8leVb.js`, 9.4 KB) and renders on the home page; `/front-office` renders the full roster copy; `/whats-new` carries the new lines; six changed routes answer 200.
+
+- **840, fix 1 of the rendered audit (the AdSense and indexing work order).** The home page's written copy lived
+  only in the template and vanished when React mounted, so the page Google renders and a reviewer lands on was a
+  wall of tiles. The copy now lives in `src/data/homeCopy.ts`; `scripts/genHomeCopy.mjs` writes it into
+  `index.html` between two markers and the React home renders the same sections as an "About DoUKnowBall" block
+  below the last sport section. Measured on the built site with the audit's own harness: the home page settles at
+  19,807 characters on desktop and 17,808 on a phone with 0 lost (before: all 5,592 saved characters lost), 16
+  blocks of 120 characters or more against 5, exactly one h1, the first tile where it was (y 249 on a phone).
+  **The review removed hidden text:** the builder had put half the headline in a clipped 1 pixel span so a
+  renderer read more than a visitor saw. The h1 is the brand, as it was; the description is visible text only;
+  `simHomeCopy` part 8 and `playHomeFold` now fail on any visually hidden text in the home page.
+- **795, from two player reports (`2e3dc3dc`, `1bc9b2e5`: stale transfers and missing players in Player Bingo).**
+  The January and summer 2026 windows, researched league by league in Rounds 735 to 740 with two sources a move,
+  reached the tables at 00:03 ET on 2026-10-02 through one guarded migration: 482 market rows moved to the verified
+  club, 3 players inserted, 490 stint rows added (5,862 to 5,865 rows for 2026; the migration's own hash checks
+  passed). Player Bingo, Footle, Rarity Round and player search read the table directly. `simWindow2026Integration`
+  reports APPLIED (0 rows at the measured club, 482 at the verified one, 490 of 490 stints covered). The apply
+  call typed the lists, so each was held to the md5 of the committed file's rows and it went in on the first try.
+  Only the Footle fallback was re-baked tonight (`src/data/players.ts`, `simPlayersPool` green). The Club Manager
+  rosters, club squads, rebuild squads and nationalities re-bakes are owed as their own gated round.
+- **706's data half, held since Release K for a midnight:** `cbb_programs` lost its three schools filed twice (281 to 278 rows), `cfb_qb_stats` and
+  `cfb_rb_stats` lost their placeholder names (5,800 to 5,797 and 14,800 to 14,787), each through its own guarded
+  block; `simCollegeTables` is green on the live counts. Still held: `nfl_draft_picks` with the College Grid key
+  regeneration and table reload (a multi step change that belongs with Round 841), and `ncaa_player_stats`.
+- **Claude828: the NFL front office starts every club with its real 53 and practice squad.** Source: the nflverse
+  rosters release, season 2026 week 4, read 2026-10-01, committed as `scripts/data/nflRosters2026.json` with a
+  generator that bakes offline (`--check` compares byte for byte) and a left out list with a reason per man (360:
+  kickers, punters and long snappers, reserve list men who are not starters, eight with no birth date, one position
+  disagreement). Spot check: 60 men on six clubs against each club's own page and ESPN, 59 settled and agreeing.
+  936 men with no 2025 season are rated on draft position and service and wear a small "d" wherever the rating
+  shows. Salaries are the game's own curve and the page says so. Old saves replay identically (465 states).
+  The review found the bake could not be reproduced from committed files (fixed). Over the limit after the draft,
+  the NFL now does what MLB and NHL do: computer clubs cut themselves, the user's club is never cut behind his
+  back, and Play is locked with the count owed until he cuts.
+- **Claude833: the four US careers' visible defects.** Defenders, kickers and relievers printed "undefined rec,
+  undefined yds" and ".000, undefined HR"; each position now has its own line on every surface, awards carry the
+  right names, and holds count. Throwback careers were paid 2026 money on every contract card; the supermax is
+  gated on the 2017 offseason and the qualifying offer on 2013 (two sources each) and all cards quote the engine's
+  own market at the era's scale. Shop items can no longer push a rating past potential. 2026 careers move only
+  where a card's money changed (the tables are in the review).
+
+- **850, QA847-14 from Codex847's audit: Soccer Career lost a season every time a retirement suggestion was
+  declined** (one audited career lost six). `advanceProSeason` aged the player before the suggestion's early
+  return and Keep Playing only changed the phase. Keep Playing now plays the pending season. The review found the
+  same loss in two more places and fixed them under one rule, a year lived always has exactly one row: the severe
+  injury rehab year (about 40 percent of all careers lost one) now records the season the engine generated up to
+  the injury, and a corruption trial year records the same zero appearance row the ban and prison years use. Over
+  60 careers a policy and five seed bases, years lived with no row went from 28 to 40 (accepting), 234 to 263
+  (declining) and 211 to 269 (the worst road) to 0. A career the old engine never stopped is byte identical end to
+  end; accepting retirement is byte identical on 80 of 80. Old saves sitting on the warning, the rehab choice or
+  the trial paper get exactly one row; years already lost are not invented back. Declining careers now retire
+  about two years younger (40.4 to 40.9 against 43), because the phantom years no longer skip the ageing.
+  **Two reds that are not this round's, both measured on the tree without it:** `simBallonDorFairness` fails at
+  its fixed seed here and fails on main at 5 seeds of 20 (this tree 4 of 20); and `playSoccerCareer`, the real
+  browser walk, reaches no Champions League campaign in its 240 steps and once crashed its tab, with and without
+  this round (same seed, same result on the tree without 850). The walk has not been run since the dilemma and
+  social screens started taking steps; it needs a longer budget and the tab crash needs a look. Open item.
+- **Codex846, 852, 853, 854, 855, 856**, six repairs from its audit backlog, merged from main (the abandoned Soccer
+  Higher or Lower reveal, the account dialog focus and wording, front office save recovery, Footle's currency
+  label, the cookie choices inside Help, a narrow toast). One conflict with Claude828 in `FrontOfficeBoard.tsx`,
+  both sides kept; its save recovery test now waits for the NFL board's async start.
+
+**Gates.** Type gate 0 on the final tree. Before the midnight step: 58 fences in three lanes (two reds settled: a pinned test count, and `simPlayersPool`, which could only go green after the re-bake and did), then again after each of three merges of main: the snapshot readers (25 or 26 each time), the rounds' own fences and both lanes' new harnesses. **Real browser pass on the built site, four times as the tree changed** (Chromium, host like server): `sweepGames` 182 routes at phone, tablet and desktop, 546 checks, 0 findings on the final tree (the first pass found one thing, a What's New line that printed the old bug text; reworded); `playGames` clean on fifteen routes; `playHomeFold`, `playSoftFourOhFour`, `playRenderStability` green; the rendered audit on the home page; `sweepWeight` green after the About copy moved to its own lazy chunk (the first build put it in the entry chunk and six pages went over budget; only `/` and `/front-office` needed a new measured budget). **Not measured on the final tree:** the last pass was cut short by the database incident above, so `simLeaderboardCache`, `simWindow2026Integration` and `simPlayersPool` have their green from earlier the same hour, not from the final merge (which changed none of their inputs). Verified on the live site in a real browser after the publish: the home page shows the About section, 16 paragraphs of 120 characters or more, one h1, no console errors; `/front-office` describes the 53 and the practice squad. No page that reads the database could be verified live.
+
+**Not in this release.** 848 (shared daily save hardening) is built and in review. Claude830 (NHL rosters) waits for a re-read after the opening
+night roster deadline. Claude825, 827, 832, 834 and 835 wait for review or their data order.
 
 ## Codex864 accepted, 2026-10-02
 

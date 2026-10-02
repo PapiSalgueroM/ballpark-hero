@@ -146,7 +146,7 @@ function makeSave(seed: number, startAge: number): CareerState | null {
         s = E.stayAtClub(s);
         break;
       }
-      case 'retirement_suggestion': s = E.declineRetirementSuggestion(s); break;
+      case 'retirement_suggestion': s = E.declineRetirementSuggestion(s, clubs); break;
       default: return null;
     }
   }

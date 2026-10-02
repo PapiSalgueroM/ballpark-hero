@@ -1581,6 +1581,21 @@ export const MORAL_DILEMMAS: MoralDilemma[] = [
   rivalChoiceDilemma("rival_charity_match"),
 ];
 
+/* Round 850: one zero appearance row for a year he lived without playing it,
+   the shape the ban and prison years in advanceProSeason already write. With
+   a reason, the reason is the club, the way "BANNED" and "PRISON" are; with
+   null he spent the year at his own club (a year lost to injury). */
+function yearOutRow(s: CareerState, reason: string | null): SeasonRecord {
+  const last = s.seasons[s.seasons.length - 1];
+  return {
+    year: (last ? last.year : 2019) + 1, age: s.age,
+    club: reason ?? s.currentClub, clubCountry: reason ? "" : s.currentClubCountry, clubTier: reason ? 99 : s.currentClubTier,
+    apps: 0, goals: 0, assists: 0, cleanSheets: 0, yellowCards: 0, redCards: 0, rating: 0,
+    leagueTitle: false, domesticCup: false, championsLeague: false, worldCup: false, ballonDor: false, ballonDorRank: null, type: "playing",
+    intApps: 0, intGoals: 0, intAssists: 0, intRating: 0, tournament: null, tournamentResult: null,
+  };
+}
+
 /**
  * Round 253: the three roads back from a serious injury, and the whole
  * point of the arc: each one is a real trade, none is free.
@@ -1605,9 +1620,25 @@ export function applyRehabChoice(prev: CareerState, choiceIndex: number): Career
   s.pendingRehab = null;
   s.phase = "playing";
   if (!r) return s;
+  /* Round 850: a save written before this round can be sitting here with the
+     injury year unrecorded, because the season used to be thrown away at this
+     stop. Its games are gone, so the year goes on as a zero appearance
+     injured row (with its year of money) rather than as matches nobody
+     played. A save from this round
+     already has the row (written when the injury stopped the season), the age
+     check finds it, and nothing is added. */
+  s.events = [...s.events];
+  const lastRow = s.seasons[s.seasons.length - 1];
+  if (lastRow && lastRow.age < s.age) {
+    const row = yearOutRow(s, null);
+    row.injury = r.name; row.injuryWeeks = r.weeks; row.injurySevere = true;
+    if (s.loan) row.onLoanFrom = s.loan.parentClub;
+    s.seasons = [...s.seasons, row];
+    simulateSeasonFinances(s, row);
+    runTournamentSummer(s, row, row.year, true);
+  }
 
   const history = [...(s.seriousInjuries ?? [])];
-  s.events = [...s.events];
 
   if (choiceIndex === 0) {
     const backIn = Math.max(2, Math.round(r.weeks * 0.6));
@@ -4593,10 +4624,13 @@ function generateIntSeasonStats(state: CareerState, year: number): { intApps: nu
    Three things can go wrong for the player and all three are real football:
    the country misses out, the manager leaves you at home, or you go and lose.
 */
-function runTournamentSummer(s: CareerState, season: SeasonRecord, year: number): void {
+/* Round 850: `out` runs the summer without him (an injury year or a trial
+   year): the world still crowns its champion and the history keeps the
+   summer, and no screen waits for a player who was never in it. */
+function runTournamentSummer(s: CareerState, season: SeasonRecord, year: number, out = false): void {
   const fmt = tournamentForYear(s.nationality, year);
   if (!fmt) return;
-  const eligible = s.internationalCareer && !s.intStats.isRetired && !s.retired;
+  const eligible = !out && s.internationalCareer && !s.intStats.isRetired && !s.retired;
   const t = runInternationalSummer(s.nationality, year, eligible ? playerFormOf(s) : null);
   if (!t) return;
 
@@ -4824,6 +4858,15 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
       newspaper: disgrace.paper, type: "negative",
       headline: disgrace.headline, body: disgrace.body,
     }];
+    /* Round 850: the trial is a year he lived, so it gets its row and its
+       year of money, the same as the ban and prison years: the zero
+       appearance shape with the reason as the club. Before this the year
+       went by with no row, the market and the bank skipped it, and the
+       calendar fell a year behind his age (the prison row comes the year
+       after). A tournament that summer is played without him. */
+    s.seasons = [...s.seasons, yearOutRow(s, "CONVICTED")];
+    simulateSeasonFinances(s, s.seasons[s.seasons.length - 1]);
+    runTournamentSummer(s, s.seasons[s.seasons.length - 1], s.seasons[s.seasons.length - 1].year, true);
     s.phase = "newspaper";
     return s;
   } else if (heat >= 70 && Math.random() < 0.35) {
@@ -4913,6 +4956,20 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
     s.phase = "retirement_suggestion";
     return s;
   }
+  return playPendingProSeason(s, clubs);
+}
+
+/* Round 850: the season itself, split off the start of the year above so the
+   retirement talk can sit between the two. Everything above is the year
+   beginning (the birthday, bans, the heat, the drug test, forced retirement);
+   everything below is the season being played and written down. When the
+   suggestion stops the year above, he has already aged into it, so Keep
+   Playing (declineRetirementSuggestion) comes back in here and plays that
+   exact season. Before this round Keep Playing only set the phase back to
+   playing, the next Next Season aged him again, and the year he chose to
+   play was never played or recorded: one live career lost six seasons and
+   finished six years behind its own calendar (audit QA847-14). */
+function playPendingProSeason(s: CareerState, clubs: ClubData[]): CareerState {
   
   const season = generateSeasonStats(s);
   // Injury report, named injuries that actually cost matches
@@ -4934,6 +4991,22 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
         year: s.seasons.length > 0 ? s.seasons[s.seasons.length - 1].year + 1 : 2020,
         specialistCost: s.netWorth >= 1.6 ? 0.8 : null,
       };
+      /* Round 850: the season stops here for the rehab choice and the next
+         Next Season is the year after, so this IS the injury year and it goes
+         on the record now: the games and goals the engine played him before
+         and around the injury, marked with the injury the way every injured
+         season is. Only his own line: the trophy rolls are dropped because the
+         rest of that season (the Champions League, the world's results, the
+         announcements) never runs. And the year's money runs, the way it does
+         for a ban or prison year: the wages still come in while he is out.
+         If it is a tournament summer it is played without him, so the
+         calendar moving on never skips a World Cup. Before this the year had
+         no row and no money at all. */
+      const injuryRow: SeasonRecord = { ...season, leagueTitle: false, domesticCup: false };
+      if (s.loan) injuryRow.onLoanFrom = s.loan.parentClub;
+      s.seasons = [...s.seasons, injuryRow];
+      simulateSeasonFinances(s, injuryRow);
+      runTournamentSummer(s, injuryRow, injuryRow.year, true);
       s.phase = "rehab_choice";
       return s;
     }
@@ -5616,6 +5689,20 @@ function generateNewsArticles(s: CareerState, season: SeasonRecord, totalGoals: 
 export function dismissNewspaper(prev: CareerState): CareerState {
   const s = { ...prev };
   s.pendingNews = [];
+  /* Round 850: a conviction saved by an older version sits here with the
+     trial year unrecorded, so it gets its row (and its year of money) now.
+     Since this round the
+     conviction writes that row itself, the age check finds it, and nothing
+     is added twice. */
+  if (!s.pendingSummary && (s.prisonSeasons ?? 0) > 0) {
+    const lastRow = s.seasons[s.seasons.length - 1];
+    if (lastRow && lastRow.age < s.age) {
+      s.events = [...s.events];
+      s.seasons = [...s.seasons, yearOutRow(s, "CONVICTED")];
+      simulateSeasonFinances(s, s.seasons[s.seasons.length - 1]);
+      runTournamentSummer(s, s.seasons[s.seasons.length - 1], s.seasons[s.seasons.length - 1].year, true);
+    }
+  }
   /* ROUND 502: THIS LINE ENDED CAREERS, PERMANENTLY, AND THE PLAYER WAS STILL
      SITTING THERE.
      The newspaper phase is reachable from exactly ONE place, the corruption
@@ -7671,11 +7758,20 @@ export function acceptRetirementSuggestion(prev: CareerState): CareerState {
   return s;
 }
 
-export function declineRetirementSuggestion(prev: CareerState): CareerState {
-  const s = { ...prev };
+export function declineRetirementSuggestion(prev: CareerState, clubs: ClubData[]): CareerState {
+  /* Round 850: Keep Playing plays the season he just aged into. The year was
+     already started when the suggestion came up (advanceProSeason ran up to
+     it), so this resumes that same advance at the season and nothing above it
+     runs twice. A save written while sitting on this screen, by any version,
+     is in exactly that state, so declining on it plays the pending season
+     once. Off this screen it keeps the old behaviour and plays nothing. */
+  const s = repairCareer({ ...prev });
   s.events = [...s.events, "💪 Decided to push on, not ready to hang up the boots yet"];
-  s.phase = "playing";
-  return s;
+  if (prev.phase !== "retirement_suggestion" || prev.retired) {
+    s.phase = "playing";
+    return s;
+  }
+  return playPendingProSeason(s, clubs);
 }
 
 /* ─── Manager Career ─── */

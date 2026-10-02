@@ -21,7 +21,7 @@
    and blank the page. That bug shipped here once already.
 */
 import type { NbaCareerState, NbaCareerEvent } from './nbaMyCareer';
-import { nbaTeamLabelOf } from './nbaMyCareer';
+import { nbaTeamLabelOf, nbaMarketSalary, nbaEraById } from './nbaMyCareer';
 
 /* Round 57 optional fields. Declared locally so this file compiles against
    old and new versions of NbaCareerState alike, and so every read guards with
@@ -81,7 +81,14 @@ const bagNoun = (c: NbaCareerState): string => {
   if ((a.rebounding ?? 1) >= 1.2) return 'rebounds';
   return 'buckets';
 };
-const marketOf = (c: NbaCareerState): number => Math.max(2.5, money((c.ovr - 66) * 2.3 - 6));
+/* Round 833: the market a card quotes is the engine's own, the one free
+   agency pays, era money included. This was a private copy without the era
+   scale, so a 2003-04 career that stayed "for every dollar" signed for four
+   years of 2026 money, about three times its league. Called inside function
+   bodies only, per the import cycle note above. */
+const marketOf = (c: NbaCareerState): number => nbaMarketSalary(c);
+/** A fixed amount on a card (a pay floor), in the career's era money. */
+const atEra = (c: NbaCareerState, amount: number): number => money(nbaEraById(c.eraId).moneyScale * amount);
 
 /* Local abbr list so this file imports nothing but types and nbaTeamLabelOf. */
 const ABBRS = [
@@ -806,7 +813,7 @@ export function getNbaLifeEventsA(c: NbaCareerState, rng: () => number): NbaCare
         {
           label: 'Take the pay cut and go get a ring', effect: 'Less money, real shot',
           apply: (cc, r) => {
-            const nt = otherTeam(cc, r); const was = cc.salary; const cut = Math.max(2.5, money(was * 0.7));
+            const nt = otherTeam(cc, r); const was = cc.salary; const cut = Math.max(atEra(cc, 2.5), money(was * 0.7));
             cc.team = nt; cc.salary = cut; cc.contractYears = 3; cc.fanbase = 46; mor(cc, 14);
             return `You left ${money(was - cut)}M a year on the table to sign with ${nbaTeamLabelOf(nt)} at ${cut}M for three years. Morale +14, fanbase reset to 46, and half the league called you soft for it.`;
           },

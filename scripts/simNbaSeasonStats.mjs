@@ -732,7 +732,7 @@ console.log('7) A save from before the round: no lines this season, lines from t
   } else {
     const vitest = findUp(path.join('node_modules', 'vitest', 'vitest.mjs'));
     ok(7, 'vitest can be found by walking up from the repo root', !!vitest);
-    for (const [file, want] of [['src/components/nba-front-office/NbaSeasonStats.test.tsx', 4], ['src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx', 20]]) {
+    for (const [file, want] of [['src/components/nba-front-office/NbaSeasonStats.test.tsx', 4], ['src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx', 25]]) {
       if (!vitest) break;
       const r = spawnSync(process.execPath, [vitest, 'run', file], { cwd: ROOT, encoding: 'utf8', env: { ...process.env, CI: '1', FORCE_COLOR: '0', NO_COLOR: '1' }, maxBuffer: 64 * 1024 * 1024 });
       const out = (r.stdout || '') + (r.stderr || '');

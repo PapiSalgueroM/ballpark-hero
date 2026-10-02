@@ -1,0 +1,114 @@
+[
+  {
+    "name": "Oso",
+    "move": "Sevilla to Strasbourg (a Spanish aggregator's summer list)",
+    "reason": "Not two sourced, and contradicted: LALIGA registered him with Sevilla's first team on 2026-08-13 (from Sevilla Atletico), while ESPN's Sevilla 2026-27 squad page does not list him. His 2026 row already says Sevilla FC, which is what the league register says, so nothing is written.",
+    "sources": [
+      "https://www.laliga.com/en-GB/clubs/sevilla-fc/transfers",
+      "https://www.espn.com/soccer/team/squad/_/id/243/sevilla"
+    ],
+    "checked": "2026-09-30"
+  },
+  {
+    "name": "Juan Cruz",
+    "move": "CD Leganes to Malaga on loan (LALIGA registration 2026-08-12, LALIGA player page: Malaga, 7 matches, born 2000-04-25 in Quilmes; ESPN lists Juan Cruz, midfielder, 26)",
+    "reason": "Two sourced but a namesake trap: the table has no 2026 row for him and two 2025 rows named Juan Cruz, the Leganes winger (24) and Osasuna's left back (32). The bake keys on the name alone and Osasuna is a modeled club, so an entry would move the Osasuna veteran to Malaga. Nothing is written until the table carries a 2026 row that tells them apart.",
+    "sources": [
+      "https://www.laliga.com/en-GB/clubs/malaga-cf/transfers",
+      "https://www.laliga.com/en-GB/player/juan-cruz",
+      "https://www.espn.com/soccer/team/squad/_/id/99/league/ESP.1"
+    ],
+    "checked": "2026-10-01"
+  },
+  {
+    "name": "Jon Pacheco",
+    "move": "Alaves loan ended, back at Real Sociedad (ESPN's Real Sociedad 2026-27 squad lists Jon Martin and Jon Pacheco; his 2026 row sits at Deportivo Alaves)",
+    "reason": "One source. The LALIGA player page did not answer before the session's fetch budget ran out, and Real Sociedad's LALIGA transfers page shows registrations only, which a loan return is not.",
+    "sources": [
+      "https://www.espn.com/soccer/team/squad/_/id/89/real-sociedad"
+    ],
+    "checked": "2026-10-01"
+  },
+  {
+    "name": "Álvaro Djaló",
+    "move": "Al-Gharafa loan ended, back at Athletic (ESPN's Athletic 2026-27 squad lists Alvaro Djalo, forward, 27; his 2026 row sits at Al-Gharafa SC)",
+    "reason": "One source. The LALIGA player page did not answer before the fetch budget ran out.",
+    "sources": [
+      "https://www.espn.com/soccer/team/squad/_/id/93/athletic-club"
+    ],
+    "checked": "2026-10-01"
+  },
+  {
+    "name": "Christantus Uche",
+    "move": "Crystal Palace to Getafe (ESPN's Getafe 2026-27 squad lists Christantus Uche, midfielder, 23; his 2026 row sits at Crystal Palace)",
+    "reason": "One source. Not on Getafe's LALIGA transfers list (which starts 2026-08-11, so an earlier registration would not show) and the LALIGA player page did not answer before the fetch budget ran out.",
+    "sources": [
+      "https://www.espn.com/soccer/team/squad/_/id/2922/getafe"
+    ],
+    "checked": "2026-10-01"
+  },
+  {
+    "name": "Alfon González",
+    "move": "Villarreal to Sevilla (ESPN's Sevilla 2026-27 squad lists Alfonso Gonzalez, forward, 27, and Villarreal's no longer lists him; his 2026 row sits at Villarreal CF)",
+    "reason": "One source. Not on Sevilla's LALIGA transfers list (fifteen rows back to 2026-07-27, so an earlier registration would not show) and the LALIGA player page did not answer before the fetch budget ran out.",
+    "sources": [
+      "https://www.espn.com/soccer/team/squad/_/id/243/sevilla"
+    ],
+    "checked": "2026-10-01"
+  },
+  {
+    "name": "Arnau Tenas",
+    "move": "Villarreal to Mallorca (ESPN's Mallorca 2026-27 squad lists Arnau Tenas, 25, and Villarreal's no longer lists him; his 2026 row sits at Villarreal CF). Mallorca is not a club the bake models, so the entry would be to null with db RCD Mallorca.",
+    "reason": "One source. The LALIGA player page did not answer before the fetch budget ran out.",
+    "sources": [
+      "https://www.espn.com/soccer/team/squad/_/id/84/mallorca"
+    ],
+    "checked": "2026-10-01"
+  },
+  {
+    "name": "Antoniu Roca",
+    "move": "Espanyol to Mallorca (ESPN's Mallorca 2026-27 squad lists Antoniu Roca, 24, and Espanyol's no longer lists him; his 2026 row sits at RCD Espanyol Barcelona)",
+    "reason": "One source, and Espanyol's LALIGA transfers page is empty.",
+    "sources": [
+      "https://www.espn.com/soccer/team/squad/_/id/84/mallorca"
+    ],
+    "checked": "2026-10-01"
+  },
+  {
+    "name": "Pablo García",
+    "move": "Real Betis to Racing Santander (ESPN's Racing 2026-27 squad lists Pablo Garcia, forward, 20, and Betis's no longer lists him; the table's 2026 Pablo Garcia is Betis's 19 year old right winger)",
+    "reason": "One source, and the identity is not proven: the LALIGA player page did not answer before the fetch budget ran out, and Pablo Garcia is a common name.",
+    "sources": [
+      "https://www.espn.com/soccer/team/squad/_/id/87/league/ESP.1"
+    ],
+    "checked": "2026-10-01"
+  },
+  {
+    "name": "Aarón Martín",
+    "move": "Genoa to Racing Santander (ESPN's Racing 2026-27 squad lists Aaron Martin, defender, 29; his 2026 row sits at Genoa CFC)",
+    "reason": "One source. Two LALIGA player page slugs returned 404 and Racing's LALIGA transfers page carries no data.",
+    "sources": [
+      "https://www.espn.com/soccer/team/squad/_/id/87/league/ESP.1"
+    ],
+    "checked": "2026-10-01"
+  },
+  {
+    "name": "André Almeida",
+    "move": "Valencia to Racing Santander (ESPN's Racing 2026-27 squad lists Andre Almeida, midfielder, 26, and Valencia's no longer lists him; his 2026 row sits at Valencia CF)",
+    "reason": "One source. The LALIGA player page slug resolves to a different Andre with no data, and Racing's LALIGA transfers page carries no data.",
+    "sources": [
+      "https://www.espn.com/soccer/team/squad/_/id/87/league/ESP.1"
+    ],
+    "checked": "2026-10-01"
+  },
+  {
+    "name": "Daniel Carvajal",
+    "move": "Left Real Madrid at the end of his contract (beIN Sports window round up, 2026-09-01; ESPN's Real Madrid 2026-27 squad no longer lists him; his 2026 row sits at Real Madrid)",
+    "reason": "No destination club found with two sources, and the overlay cannot express a player without a club: to null still needs a db spelling the table carries.",
+    "sources": [
+      "https://www.beinsports.com/en-us/soccer/la-liga/articles/top-5-laliga-signings-2026-09-01",
+      "https://www.espn.com/soccer/team/squad/_/id/86/real-madrid"
+    ],
+    "checked": "2026-10-01"
+  }
+]

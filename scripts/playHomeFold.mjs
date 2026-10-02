@@ -65,7 +65,10 @@ const FOLD_CONTROL = process.env.HOMEFOLD_CONTROL || '';
    appears (the second 6b goes red, and 6c with it, since the cards it reads
    are gone), favignored wipes the stored sport before the app reads it (only
    6e goes red). Measured 2026-09-30, each exactly that. */
-const FOLD_CONTROLS = ['notehome', 'notegone', 'h1text', 'continuepush', 'continuegone', 'favignored'];
+/* Round 840's h1hidden: the moment the app draws its h1, a one pixel clipped
+   span with words in it goes inside, so a renderer reads more than a visitor
+   sees; only section 1's "nothing in it is hidden" check may go red. */
+const FOLD_CONTROLS = ['notehome', 'notegone', 'h1text', 'h1hidden', 'continuepush', 'continuegone', 'favignored'];
 if (FOLD_CONTROL && !FOLD_CONTROLS.includes(FOLD_CONTROL)) {
   console.error(`HOMEFOLD_CONTROL=${FOLD_CONTROL} is not a control this harness knows (${FOLD_CONTROLS.join(', ')})`);
   process.exit(2);
@@ -88,6 +91,22 @@ async function look(width, height) {
       const mo = new MutationObserver(() => {
         const h = document.querySelector('#dukb-main h1');
         if (h && !h.dataset.controlled) { h.dataset.controlled = '1'; h.append(' Home'); mo.disconnect(); }
+      });
+      mo.observe(document, { childList: true, subtree: true });
+    });
+  }
+  if (FOLD_CONTROL === 'h1hidden') {
+    await page.addInitScript(() => {
+      const mo = new MutationObserver(() => {
+        const h = document.querySelector('#dukb-main h1');
+        if (h && !h.dataset.controlled) {
+          h.dataset.controlled = '1';
+          const s = document.createElement('span');
+          s.setAttribute('style', 'display:inline-block;width:1px;height:1px;overflow:hidden;white-space:nowrap;clip-path:inset(50%)');
+          s.textContent = ': free daily sports trivia, puzzles and career sims';
+          h.append(s);
+          mo.disconnect();
+        }
       });
       mo.observe(document, { childList: true, subtree: true });
     });
@@ -163,8 +182,38 @@ async function look(width, height) {
         return spans.length > 1 ? spans[spans.length - 1] : null;
       })
       .filter(t => t && t.length > 6);
-    /* Round 658: the h1, read as the page renders it. */
-    const h1s = [...document.querySelectorAll('h1')].map(h => (h.innerText || h.textContent || '').trim());
+    /* Round 658: the h1, read as the page renders it. Round 840: read twice,
+       WHOLE (every text node, which is what a parser, a renderer and a screen
+       reader get) and as SHOWN (only the text nodes a visitor can see). The
+       two must be the same string, or the h1 carries hidden text. Hidden is a
+       shape, not a class name: display none, visibility hidden, opacity 0, a
+       font size of 0, a box of a pixel or less with its overflow cut, any clip
+       or clip path, a text indent thrown off the page, or a box entirely off
+       the left or top of the document. */
+    const shownText = root => {
+      let out = '';
+      const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+      for (let node = walker.nextNode(); node; node = walker.nextNode()) {
+        let hidden = false;
+        for (let el = node.parentElement; el && el !== root.parentElement; el = el.parentElement) {
+          const cs = getComputedStyle(el);
+          const r = el.getBoundingClientRect();
+          if (cs.display === 'none' || cs.visibility === 'hidden' || cs.visibility === 'collapse'
+            || Number(cs.opacity) === 0 || parseFloat(cs.fontSize) === 0
+            || (r.width <= 1 && r.height <= 1 && cs.overflow !== 'visible')
+            || (cs.clip && cs.clip !== 'auto') || (cs.clipPath && cs.clipPath !== 'none')
+            || parseFloat(cs.textIndent) <= -100
+            || r.right + window.scrollX <= 0 || r.bottom + window.scrollY <= 0) { hidden = true; break; }
+        }
+        if (!hidden) out += node.nodeValue;
+      }
+      return out.replace(/\s+/g, ' ').trim();
+    };
+    const h1s = [...document.querySelectorAll('h1')].map(h => ({
+      whole: (h.textContent || '').replace(/\s+/g, ' ').trim(),
+      shown: shownText(h),
+      inApp: !!h.closest('#dukb-main'),
+    }));
     return { first, prompts, subtitles, viewport: vh, tickerPresent, h1s };
   }, { nonGameSrc: NON_GAME.source, vh: height });
   await ctx.close();
@@ -188,9 +237,19 @@ console.log('1) a phone sees something to play, high enough to see it');
     `${r.prompts.length} place(s) above it ask for an account (max ${MAX_PROMPTS}) | ${r.prompts.join(' | ') || 'none'}`);
   /* Round 658: the redesign moved the h1 into a compact title row, and the
      owner's headline is the name, nothing else ("hero headline is too long",
-     2026-08-28). Exactly one h1, and its text is exactly the name. */
-  say(r.h1s.length === 1 && r.h1s[0] === 'DoUKnowBall',
-    `the page has one h1 and it reads exactly "DoUKnowBall" (${JSON.stringify(r.h1s)})`);
+     2026-08-28). Round 840: the h1 is the template's h1 (both drawn from
+     src/data/homeCopy.ts), exactly one, drawn by the app, and every word of
+     it is on screen. A first draft gave the h1 a clipped half sentence for
+     renderers only, which is hidden text; HOMEFOLD_CONTROL=h1hidden plants
+     that and must turn the second check red, h1text adds a visible word and
+     must turn the first. */
+  const tplBlock = (fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8').split('<div id="dukb-home-copy">')[1] ?? '').replace(/<!--[\s\S]*?-->/g, ' ');
+  const tplH1 = ((tplBlock.match(/<h1>([^<]{1,200})<\/h1>/) ?? [])[1] ?? '').trim();
+  if (!tplH1) say(false, 'could not read the h1 out of the copy block in index.html, so the h1 checks below would prove nothing');
+  say(r.h1s.length === 1 && r.h1s[0].inApp && r.h1s[0].shown === tplH1,
+    `the page has one h1, drawn by the app, and on screen it reads the template's ${JSON.stringify(tplH1)} (${JSON.stringify(r.h1s.map(h => h.shown))})`);
+  say(r.h1s.length === 1 && r.h1s[0].whole === r.h1s[0].shown,
+    `nothing in the h1 is hidden: the words a renderer reads are the words on screen (read ${JSON.stringify(r.h1s.map(h => h.whole))}, shown ${JSON.stringify(r.h1s.map(h => h.shown))})`);
 }
 
 console.log('2) desktop, same rule');

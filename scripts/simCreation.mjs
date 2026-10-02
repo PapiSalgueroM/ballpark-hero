@@ -103,7 +103,7 @@ function playCareer({ position = 'ST', overall, potential, physique = null, shap
       continue;
     }
     if (c.phase === 'playing') { c = advanceProSeason(c, FALLBACK_CLUBS); continue; }
-    if (c.phase === 'retirement_suggestion') { c = engine.declineRetirementSuggestion(c); continue; }
+    if (c.phase === 'retirement_suggestion') { c = engine.declineRetirementSuggestion(c, FALLBACK_CLUBS); continue; }
     /* Everything else is a screen waiting to be dismissed. Clearing the
        pending fields is what the buttons on those screens do. */
     c = {
@@ -639,7 +639,7 @@ console.log('11) A pre Round 131 save');
       if (played.phase === 'youth') { played = advanceYouthYear(played, FALLBACK_CLUBS); continue; }
       if (played.phase === 'contract_offer' && played.pendingOffers.length) { played = acceptOffer(played, played.pendingOffers[0]); continue; }
       if (played.phase === 'playing') { played = advanceProSeason(played, FALLBACK_CLUBS); continue; }
-      if (played.phase === 'retirement_suggestion') { played = engine.declineRetirementSuggestion(played); continue; }
+      if (played.phase === 'retirement_suggestion') { played = engine.declineRetirementSuggestion(played, FALLBACK_CLUBS); continue; }
       played = { ...played, phase: 'playing', pendingSummary: null, pendingNews: [], pendingEvents: [], transferSituation: null, pendingBallonDor: null, pendingTournament: null, pendingWorldCup: null, pendingRivalryEvent: null, pendingMoralDilemma: null, pendingAppealResult: null };
     }
   } catch (e) { crashed = String(e).split('\n')[0]; }

@@ -1,0 +1,1201 @@
+[
+  {
+    "name": "Ademola Lookman",
+    "to": "Atlético Madrid",
+    "db": "Atlético de Madrid",
+    "sources": [
+      "https://www.laliga.com/en-GB/player/ademola-lookman",
+      "https://www.espn.com/soccer/team/squad/_/id/1068/atletico-madrid"
+    ],
+    "window": "2026-01",
+    "checked": "2026-09-30",
+    "note": "From Atalanta in January 2026. LALIGA page: Atletico, 7 matches in 2026-27."
+  },
+  {
+    "name": "Rodrigo Mendoza",
+    "to": "Atlético Madrid",
+    "db": "Atlético de Madrid",
+    "sources": [
+      "https://www.laliga.com/en-GB/player/rodrigo-mendoza",
+      "https://www.espn.com/soccer/team/squad/_/id/1068/atletico-madrid"
+    ],
+    "window": "2026-01",
+    "checked": "2026-09-30",
+    "note": "From Elche in January 2026. LALIGA page: Atletico, 3 matches in 2026-27."
+  },
+  {
+    "name": "Mamadou Sarr",
+    "to": "Real Sociedad",
+    "db": "Real Sociedad",
+    "loan": true,
+    "sources": [
+      "https://www.laliga.com/en-GB/clubs/real-sociedad/transfers",
+      "https://www.espn.com/soccer/team/squad/_/id/89/real-sociedad"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "LALIGA registration 2026-08-28, loan from Chelsea."
+  },
+  {
+    "name": "Carlos Romero",
+    "to": "Villarreal",
+    "db": "Villarreal CF",
+    "sources": [
+      "https://www.laliga.com/en-GB/player/carlos-romero",
+      "https://www.espn.com/soccer/team/squad/_/id/102/villarreal"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "Espanyol loan ended, back at Villarreal. LALIGA page: Villarreal, 5 matches in 2026-27."
+  },
+  {
+    "name": "Troy Parrott",
+    "to": "Real Betis",
+    "db": "Real Betis Balompié",
+    "sources": [
+      "https://www.laliga.com/en-GB/clubs/real-betis/transfers",
+      "https://www.espn.com/soccer/team/squad/_/id/244/real-betis"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "LALIGA registration 2026-08-24, transfer from AZ Alkmaar."
+  },
+  {
+    "name": "Héctor Fort",
+    "to": "Real Sociedad",
+    "db": "Real Sociedad",
+    "sources": [
+      "https://www.laliga.com/en-GB/clubs/real-sociedad/transfers",
+      "https://www.espn.com/soccer/team/squad/_/id/89/real-sociedad"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "Elche loan ended and Barcelona re-registered him (LALIGA 2026-07-30), then LALIGA registration at Real Sociedad 2026-09-01, transfer from Barcelona."
+  },
+  {
+    "name": "Fran García",
+    "to": "Real Betis",
+    "db": "Real Betis Balompié",
+    "sources": [
+      "https://www.laliga.com/en-GB/clubs/real-betis/transfers",
+      "https://www.espn.com/soccer/team/squad/_/id/244/real-betis"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "LALIGA registration 2026-08-19, transfer from Real Madrid. Left out on 2026-09-05 with one source; now two."
+  },
+  {
+    "name": "Dani Ceballos",
+    "to": "Real Betis",
+    "db": "Real Betis Balompié",
+    "sources": [
+      "https://www.laliga.com/en-GB/clubs/real-betis/transfers",
+      "https://www.espn.com/soccer/team/squad/_/id/244/real-betis"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "LALIGA registration 2026-09-02, free from Real Madrid (a free agent may register after the window). Left out on 2026-09-05 with one source; now two."
+  },
+  {
+    "name": "Diego Conde",
+    "to": "Real Betis",
+    "db": "Real Betis Balompié",
+    "loan": true,
+    "sources": [
+      "https://www.laliga.com/en-GB/clubs/real-betis/transfers",
+      "https://www.espn.com/soccer/team/squad/_/id/244/real-betis"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "LALIGA registration 2026-08-19, loan from Villarreal."
+  },
+  {
+    "name": "Nathan-Dylan Saliba",
+    "to": "Villarreal",
+    "db": "Villarreal CF",
+    "sources": [
+      "https://www.laliga.com/en-GB/clubs/villarreal-cf/transfers",
+      "https://www.espn.com/soccer/team/squad/_/id/102/villarreal"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "LALIGA registration 2026-08-28 (SALIBA), transfer from Anderlecht; ESPN lists him as Nathan Saliba."
+  },
+  {
+    "name": "Péter Gulácsi",
+    "to": "Villarreal",
+    "db": "Villarreal CF",
+    "sources": [
+      "https://www.laliga.com/en-GB/clubs/villarreal-cf/transfers",
+      "https://www.espn.com/soccer/team/squad/_/id/102/villarreal"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "LALIGA registration 2026-08-11, transfer from RB Leipzig."
+  },
+  {
+    "name": "Arnau Martínez",
+    "to": "Valencia",
+    "db": "Valencia CF",
+    "sources": [
+      "https://www.laliga.com/en-GB/clubs/valencia-cf/transfers",
+      "https://www.espn.com/soccer/team/squad/_/id/94/valencia"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "LALIGA registration 2026-08-27 (ARNAU), transfer from Girona. add is his 2026 row at Girona FC (the table's own position, age and value), a club the bake does not model.",
+    "add": {
+      "p": "Right-Back",
+      "a": 22,
+      "usd": 11000000
+    }
+  },
+  {
+    "name": "Pablo Maffeo",
+    "to": "Valencia",
+    "db": "Valencia CF",
+    "loan": true,
+    "sources": [
+      "https://www.laliga.com/en-GB/clubs/valencia-cf/transfers",
+      "https://www.espn.com/soccer/team/squad/_/id/94/valencia"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "LALIGA registration 2026-08-21, loan from Olympiacos (he left Mallorca for Olympiacos this summer). add is his 2026 row at RCD Mallorca (the table's own position, age and value), a club the bake does not model.",
+    "add": {
+      "p": "Right-Back",
+      "a": 28,
+      "usd": 5000000
+    }
+  },
+  {
+    "name": "Justin de Haas",
+    "to": "Valencia",
+    "db": "Valencia CF",
+    "sources": [
+      "https://www.laliga.com/en-GB/clubs/valencia-cf/transfers",
+      "https://www.espn.com/soccer/team/squad/_/id/94/valencia"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "LALIGA registration 2026-08-05, free from Famalicao."
+  },
+  {
+    "name": "Kayne van Oevelen",
+    "to": "Valencia",
+    "db": "Valencia CF",
+    "loan": true,
+    "sources": [
+      "https://www.laliga.com/en-GB/clubs/valencia-cf/transfers",
+      "https://www.espn.com/soccer/team/squad/_/id/94/valencia"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "LALIGA registration 2026-08-25, loan from Ipswich Town. add is his 2026 row at FC Volendam (the table's own position, age and value), a club the bake does not model.",
+    "add": {
+      "p": "Goalkeeper",
+      "a": 22,
+      "usd": 2000000
+    }
+  },
+  {
+    "name": "Félix Correia",
+    "to": "Sevilla",
+    "db": "Sevilla FC",
+    "loan": true,
+    "sources": [
+      "https://www.laliga.com/en-GB/clubs/sevilla-fc/transfers",
+      "https://www.espn.com/soccer/team/squad/_/id/243/sevilla"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "LALIGA registration 2026-09-01 (FELIX), loan from Lille."
+  },
+  {
+    "name": "Lucas Stassin",
+    "to": "Sevilla",
+    "db": "Sevilla FC",
+    "loan": true,
+    "sources": [
+      "https://www.laliga.com/en-GB/clubs/sevilla-fc/transfers",
+      "https://www.espn.com/soccer/team/squad/_/id/243/sevilla"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "LALIGA registration 2026-09-01, loan from Saint-Etienne. add is his 2026 row at AS Saint-Étienne (the table's own position, age and value), a club the bake does not model.",
+    "add": {
+      "p": "Centre-Forward",
+      "a": 21,
+      "usd": 16000000
+    }
+  },
+  {
+    "name": "Giorgi Kochorashvili",
+    "to": "Sevilla",
+    "db": "Sevilla FC",
+    "sources": [
+      "https://www.laliga.com/en-GB/clubs/sevilla-fc/transfers",
+      "https://www.espn.com/soccer/team/squad/_/id/243/sevilla"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "LALIGA registration 2026-08-21, transfer from Sporting CP."
+  },
+  {
+    "name": "Julio Díaz",
+    "to": "Sevilla",
+    "db": "Sevilla FC",
+    "sources": [
+      "https://www.laliga.com/en-GB/clubs/sevilla-fc/transfers",
+      "https://www.espn.com/soccer/team/squad/_/id/243/sevilla"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "LALIGA registration 2026-08-14, transfer from Atletico Madrileno."
+  },
+  {
+    "name": "Juan Iglesias",
+    "to": "Sevilla",
+    "db": "Sevilla FC",
+    "sources": [
+      "https://www.laliga.com/en-GB/clubs/sevilla-fc/transfers",
+      "https://www.espn.com/soccer/team/squad/_/id/243/sevilla"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "LALIGA registration 2026-08-13, free from Getafe."
+  },
+  {
+    "name": "Arouna Sangante",
+    "to": "Sevilla",
+    "db": "Sevilla FC",
+    "sources": [
+      "https://www.laliga.com/en-GB/clubs/sevilla-fc/transfers",
+      "https://www.espn.com/soccer/team/squad/_/id/243/sevilla"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "LALIGA registration 2026-08-13, free from Le Havre."
+  },
+  {
+    "name": "Sebastián Cáceres",
+    "to": "Celta Vigo",
+    "db": "Celta de Vigo",
+    "sources": [
+      "https://www.laliga.com/en-GB/clubs/rc-celta/transfers",
+      "https://www.espn.com/soccer/team/squad/_/id/85/celta-vigo"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "LALIGA registration 2026-09-01, transfer from Club America. add is his 2026 row at CF América (the table's own position, age and value), a club the bake does not model.",
+    "add": {
+      "p": "Centre-Back",
+      "a": 26,
+      "usd": 5000000
+    }
+  },
+  {
+    "name": "Couhaib Driouech",
+    "to": "Celta Vigo",
+    "db": "Celta de Vigo",
+    "sources": [
+      "https://www.laliga.com/en-GB/clubs/rc-celta/transfers",
+      "https://www.espn.com/soccer/team/squad/_/id/85/celta-vigo"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "LALIGA registration 2026-08-28 (COUHAIB), transfer from PSV."
+  },
+  {
+    "name": "Javi Galán",
+    "to": "Celta Vigo",
+    "db": "Celta de Vigo",
+    "sources": [
+      "https://www.laliga.com/en-GB/clubs/rc-celta/transfers",
+      "https://www.espn.com/soccer/team/squad/_/id/85/celta-vigo"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "LALIGA registration 2026-08-11, free from Osasuna."
+  },
+  {
+    "name": "Aleix Febas",
+    "to": "Celta Vigo",
+    "db": "Celta de Vigo",
+    "sources": [
+      "https://www.laliga.com/en-GB/clubs/rc-celta/transfers",
+      "https://www.espn.com/soccer/team/squad/_/id/85/celta-vigo"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "LALIGA registration 2026-08-05, free from Elche."
+  },
+  {
+    "name": "Iván Azón",
+    "to": "Getafe",
+    "db": "Getafe CF",
+    "loan": true,
+    "sources": [
+      "https://www.laliga.com/en-GB/clubs/getafe-cf/transfers",
+      "https://www.espn.com/soccer/team/squad/_/id/2922/getafe"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "LALIGA registration 2026-09-01 (IVAN), loan from Como; ESPN lists Ivan Azon. His 2026 row sits at Ipswich."
+  },
+  {
+    "name": "Francho Serrano",
+    "to": "Getafe",
+    "db": "Getafe CF",
+    "sources": [
+      "https://www.laliga.com/en-GB/clubs/getafe-cf/transfers",
+      "https://www.espn.com/soccer/team/squad/_/id/2922/getafe"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "LALIGA registration 2026-08-19, transfer from Real Zaragoza. add is his 2026 row at Real Zaragoza (the table's own position, age and value), a club the bake does not model.",
+    "add": {
+      "p": "Central Midfield",
+      "a": 24,
+      "usd": 3000000
+    }
+  },
+  {
+    "name": "Johan Mojica",
+    "to": "Getafe",
+    "db": "Getafe CF",
+    "sources": [
+      "https://www.laliga.com/en-GB/clubs/getafe-cf/transfers",
+      "https://www.espn.com/soccer/team/squad/_/id/2922/getafe"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "LALIGA registration 2026-08-14, transfer from Mallorca. add is his 2026 row at RCD Mallorca (the table's own position, age and value), a club the bake does not model.",
+    "add": {
+      "p": "Left-Back",
+      "a": 33,
+      "usd": 2000000
+    }
+  },
+  {
+    "name": "Martín Satriano",
+    "to": "Getafe",
+    "db": "Getafe CF",
+    "sources": [
+      "https://www.laliga.com/en-GB/clubs/getafe-cf/transfers",
+      "https://www.espn.com/soccer/team/squad/_/id/2922/getafe"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "LALIGA registration 2026-08-12, transfer from Lyon."
+  },
+  {
+    "name": "Andrés García",
+    "to": "Getafe",
+    "db": "Getafe CF",
+    "loan": true,
+    "sources": [
+      "https://www.laliga.com/en-GB/clubs/getafe-cf/transfers",
+      "https://www.espn.com/soccer/team/squad/_/id/2922/getafe"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "LALIGA registration 2026-08-12, loan from Aston Villa."
+  },
+  {
+    "name": "Ramón Terrats",
+    "to": "Getafe",
+    "db": "Getafe CF",
+    "sources": [
+      "https://www.laliga.com/en-GB/clubs/getafe-cf/transfers",
+      "https://www.espn.com/soccer/team/squad/_/id/2922/getafe"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "LALIGA registration 2026-08-11, transfer from Villarreal after his Espanyol loan."
+  },
+  {
+    "name": "Jonathan Dubasin",
+    "to": "Osasuna",
+    "db": "CA Osasuna",
+    "sources": [
+      "https://www.laliga.com/en-GB/clubs/c-a-osasuna/transfers",
+      "https://www.espn.com/soccer/team/squad/_/id/97/osasuna"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "LALIGA registration 2026-08-14, transfer from Sporting Gijon. add is his 2026 row at Sporting Gijón (the table's own position, age and value), a club the bake does not model.",
+    "add": {
+      "p": "Right Winger",
+      "a": 25,
+      "usd": 4000000
+    }
+  },
+  {
+    "name": "Raúl Moro",
+    "to": "Osasuna",
+    "db": "CA Osasuna",
+    "sources": [
+      "https://www.laliga.com/en-GB/player/raul-moro",
+      "https://www.espn.com/soccer/team/squad/_/id/97/osasuna"
+    ],
+    "window": "2026-01",
+    "checked": "2026-09-30",
+    "note": "From Ajax in January 2026. LALIGA page: Osasuna, 5 matches in 2026-27."
+  },
+  {
+    "name": "Emil Audero",
+    "to": "Rayo Vallecano",
+    "db": "Rayo Vallecano",
+    "loan": true,
+    "sources": [
+      "https://www.laliga.com/en-GB/clubs/rayo-vallecano/transfers",
+      "https://www.espn.com/soccer/team/squad/_/id/101/rayo-vallecano"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "LALIGA registration 2026-09-01, loan from Como; his 2026 row sits at Cremonese. add is his 2026 row at US Cremonese (the table's own position, age and value), a club the bake does not model.",
+    "add": {
+      "p": "Goalkeeper",
+      "a": 28,
+      "usd": 3000000
+    }
+  },
+  {
+    "name": "Mujaid Sadick",
+    "to": "Rayo Vallecano",
+    "db": "Rayo Vallecano",
+    "loan": true,
+    "sources": [
+      "https://www.laliga.com/en-GB/clubs/rayo-vallecano/transfers",
+      "https://www.espn.com/soccer/team/squad/_/id/101/rayo-vallecano"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "LALIGA registration 2026-09-01 (MUJAID), loan from Genk."
+  },
+  {
+    "name": "Adrià Pedrosa",
+    "to": "Rayo Vallecano",
+    "db": "Rayo Vallecano",
+    "loan": true,
+    "sources": [
+      "https://www.laliga.com/en-GB/clubs/rayo-vallecano/transfers",
+      "https://www.espn.com/soccer/team/squad/_/id/101/rayo-vallecano"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "LALIGA registration 2026-08-28, loan from Sevilla; his 2026 row sits at Elche."
+  },
+  {
+    "name": "Roy Revivo",
+    "to": "Elche",
+    "db": "Elche CF",
+    "sources": [
+      "https://www.laliga.com/en-GB/clubs/elche-c-f/transfers",
+      "https://www.espn.com/soccer/team/squad/_/id/3751/elche"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "LALIGA registration 2026-09-01, transfer from Maccabi Tel Aviv. add is his 2026 row at Maccabi Tel Aviv (the table's own position, age and value), a club the bake does not model.",
+    "add": {
+      "p": "Left-Back",
+      "a": 22,
+      "usd": 3000000
+    }
+  },
+  {
+    "name": "Kevin Lomónaco",
+    "to": "Elche",
+    "db": "Elche CF",
+    "sources": [
+      "https://www.laliga.com/en-GB/clubs/elche-c-f/transfers",
+      "https://www.espn.com/soccer/team/squad/_/id/3751/elche"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "LALIGA registration 2026-09-01, release clause paid to Independiente. add is his 2026 row at CA Independiente (the table's own position, age and value), a club the bake does not model.",
+    "add": {
+      "p": "Centre-Back",
+      "a": 23,
+      "usd": 10000000
+    }
+  },
+  {
+    "name": "Thomas Lemar",
+    "to": "Elche",
+    "db": "Elche CF",
+    "loan": true,
+    "sources": [
+      "https://www.laliga.com/en-GB/clubs/elche-c-f/transfers",
+      "https://www.espn.com/soccer/team/squad/_/id/3751/elche"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "LALIGA registration 2026-09-01, loan from Atletico; his 2026 row sits at Girona."
+  },
+  {
+    "name": "Rubén Sánchez",
+    "to": "Elche",
+    "db": "Elche CF",
+    "sources": [
+      "https://www.laliga.com/en-GB/clubs/elche-c-f/transfers",
+      "https://www.espn.com/soccer/team/squad/_/id/3751/elche"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "LALIGA registration 2026-09-01 (RUBEN S.), transfer from Espanyol."
+  },
+  {
+    "name": "Ezequiel Ponce",
+    "to": "Elche",
+    "db": "Elche CF",
+    "sources": [
+      "https://www.laliga.com/en-GB/clubs/elche-c-f/transfers",
+      "https://www.espn.com/soccer/team/squad/_/id/3751/elche"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "LALIGA registration 2026-08-17, transfer from Houston Dynamo."
+  },
+  {
+    "name": "Petar Ratkov",
+    "to": "Levante",
+    "db": "Levante UD",
+    "loan": true,
+    "sources": [
+      "https://www.laliga.com/en-GB/clubs/levante-ud/transfers",
+      "https://www.espn.com/soccer/team/squad/_/id/1538/levante"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "LALIGA registration 2026-09-01, loan from Lazio."
+  },
+  {
+    "name": "Axel Tape",
+    "to": "Levante",
+    "db": "Levante UD",
+    "loan": true,
+    "sources": [
+      "https://www.laliga.com/en-GB/clubs/levante-ud/transfers",
+      "https://www.espn.com/soccer/team/squad/_/id/1538/levante"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "LALIGA registration 2026-09-01, loan from Bayer Leverkusen."
+  },
+  {
+    "name": "Hugo Sotelo",
+    "to": "Levante",
+    "db": "Levante UD",
+    "loan": true,
+    "sources": [
+      "https://www.laliga.com/en-GB/clubs/levante-ud/transfers",
+      "https://www.espn.com/soccer/team/squad/_/id/1538/levante"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "LALIGA registration 2026-08-24, loan from Celta."
+  },
+  {
+    "name": "Thiago Fernández",
+    "to": "Levante",
+    "db": "Levante UD",
+    "loan": true,
+    "sources": [
+      "https://www.laliga.com/en-GB/clubs/levante-ud/transfers",
+      "https://www.espn.com/soccer/team/squad/_/id/1538/levante"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "LALIGA registration 2026-08-24 (THIAGO), loan from Villarreal; his 2026 row sits at Oviedo. add is his 2026 row at Real Oviedo (the table's own position, age and value), a club the bake does not model.",
+    "add": {
+      "p": "Left Winger",
+      "a": 21,
+      "usd": 5000000
+    }
+  },
+  {
+    "name": "Enzo Bardeli",
+    "to": "Levante",
+    "db": "Levante UD",
+    "sources": [
+      "https://www.laliga.com/en-GB/clubs/levante-ud/transfers",
+      "https://www.espn.com/soccer/team/squad/_/id/1538/levante"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "LALIGA registration 2026-08-16, free from Dunkerque. add is his 2026 row at USL Dunkerque (the table's own position, age and value), a club the bake does not model.",
+    "add": {
+      "p": "Central Midfield",
+      "a": 24,
+      "usd": 6000000
+    }
+  },
+  {
+    "name": "José María Giménez",
+    "to": "Deportivo La Coruña",
+    "db": "Deportivo de La Coruña",
+    "loan": true,
+    "sources": [
+      "https://www.laliga.com/en-GB/clubs/rc-deportivo/transfers",
+      "https://www.espn.com/soccer/team/squad/_/id/90/deportivo-la-coruna"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "LALIGA registration 2026-09-01, loan from Atletico."
+  },
+  {
+    "name": "Adama Traoré",
+    "to": "Deportivo La Coruña",
+    "db": "Deportivo de La Coruña",
+    "sources": [
+      "https://www.laliga.com/en-GB/clubs/rc-deportivo/transfers",
+      "https://www.espn.com/soccer/team/squad/_/id/90/deportivo-la-coruna"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "LALIGA registration 2026-09-01 (ADAMA), free from West Ham. ESPN lists him as a 30 year old Spanish forward, the winger whose 2026 row sits at Fulham."
+  },
+  {
+    "name": "Jonathan Asp Jensen",
+    "to": "Deportivo La Coruña",
+    "db": "Deportivo de La Coruña",
+    "sources": [
+      "https://www.laliga.com/en-GB/clubs/rc-deportivo/transfers",
+      "https://www.espn.com/soccer/team/squad/_/id/90/deportivo-la-coruna"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "LALIGA registration 2026-08-14, transfer from Bayern; his 2026 row sits at Grasshopper."
+  },
+  {
+    "name": "Angeliño",
+    "to": "Deportivo La Coruña",
+    "db": "Deportivo de La Coruña",
+    "loan": true,
+    "sources": [
+      "https://www.laliga.com/en-GB/clubs/rc-deportivo/transfers",
+      "https://www.espn.com/soccer/team/squad/_/id/90/deportivo-la-coruna"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "LALIGA registration 2026-08-13, loan from Roma."
+  },
+  {
+    "name": "Leo Román",
+    "to": "Deportivo La Coruña",
+    "db": "Deportivo de La Coruña",
+    "sources": [
+      "https://www.laliga.com/en-GB/clubs/rc-deportivo/transfers",
+      "https://www.espn.com/soccer/team/squad/_/id/90/deportivo-la-coruna"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "LALIGA registration 2026-07-29, release clause paid to Mallorca. add is his 2026 row at RCD Mallorca (the table's own position, age and value), a club the bake does not model.",
+    "add": {
+      "p": "Goalkeeper",
+      "a": 25,
+      "usd": 6000000
+    }
+  },
+  {
+    "name": "Dominik Livakovic",
+    "to": "Barcelona",
+    "db": "FC Barcelona",
+    "sources": [
+      "https://www.laliga.com/en-GB/clubs/fc-barcelona/transfers",
+      "https://www.espn.com/soccer/team/squad/_/id/83/barcelona"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "LALIGA registration 2026-09-01, transfer from Fenerbahce; his 2026 row sits at Dinamo Zagreb."
+  },
+  {
+    "name": "Ilias Akhomach",
+    "to": "Villarreal",
+    "db": "Villarreal CF",
+    "sources": [
+      "https://www.laliga.com/en-GB/player/ilias-akhomach",
+      "https://www.espn.com/soccer/team/squad/_/id/102/villarreal"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "Rayo loan ended, back at Villarreal. LALIGA page: Villarreal, appearances in 2026-27."
+  },
+  {
+    "name": "Álvaro Núñez",
+    "to": "Celta Vigo",
+    "db": "Celta de Vigo",
+    "sources": [
+      "https://www.laliga.com/en-GB/player/alvaro-nunez",
+      "https://www.espn.com/soccer/team/squad/_/id/85/celta-vigo"
+    ],
+    "window": "2026-01",
+    "checked": "2026-09-30",
+    "note": "From Elche in January 2026. LALIGA page: Celta, 3 matches in 2026-27."
+  },
+  {
+    "name": "Peio Canales",
+    "to": "Athletic Club",
+    "db": "Athletic Bilbao",
+    "sources": [
+      "https://www.laliga.com/en-GB/player/peio-canales",
+      "https://www.espn.com/soccer/team/squad/_/id/93/athletic-club"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "Racing loan ended, back at Athletic. LALIGA page: Athletic, 4 matches in 2026-27."
+  },
+  {
+    "name": "Hugo Rincón",
+    "to": "Athletic Club",
+    "db": "Athletic Bilbao",
+    "sources": [
+      "https://www.laliga.com/en-GB/player/hugo-rincon",
+      "https://www.espn.com/soccer/team/squad/_/id/93/athletic-club"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "Girona loan ended, back at Athletic. LALIGA page: Athletic, 2 matches in 2026-27. add is his 2026 row at Girona FC (the table's own position, age and value), a club the bake does not model.",
+    "add": {
+      "p": "Right-Back",
+      "a": 22,
+      "usd": 4000000
+    }
+  },
+  {
+    "name": "Quilindschy Hartman",
+    "to": "Espanyol",
+    "db": "RCD Espanyol Barcelona",
+    "sources": [
+      "https://www.laliga.com/en-GB/player/quilindschy-hartman",
+      "https://www.espn.com/soccer/team/squad/_/id/88/espanyol"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "From Burnley. LALIGA page: Espanyol, 3 matches in 2026-27 (Espanyol's LALIGA transfers page is empty)."
+  },
+  {
+    "name": "Bryan Zaragoza",
+    "to": "Espanyol",
+    "db": "RCD Espanyol Barcelona",
+    "sources": [
+      "https://www.laliga.com/en-GB/player/bryan-zaragoza",
+      "https://www.espn.com/soccer/team/squad/_/id/88/espanyol"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "LALIGA page: Espanyol, 4 matches in 2026-27. His 2026 row sits at Roma."
+  },
+  {
+    "name": "Andoni Gorosabel",
+    "to": "Espanyol",
+    "db": "RCD Espanyol Barcelona",
+    "sources": [
+      "https://www.laliga.com/en-GB/player/gorosabel",
+      "https://www.espn.com/soccer/team/squad/_/id/88/espanyol"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "note": "From Athletic. LALIGA page moved from Athletic to Espanyol for 2026-27 (0 matches so far); a page only changes club on a new registration."
+  },
+  {
+    "name": "Miguel Rodríguez",
+    "to": "Alavés",
+    "db": "Deportivo Alavés",
+    "sources": [
+      "https://www.laliga.com/en-GB/clubs/d-alaves/transfers",
+      "https://www.espn.com/soccer/team/squad/_/id/96/alaves"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "LALIGA registration 2026-08-14 (MIGUEL), transfer from FC Utrecht; ESPN lists Miguel Rodriguez, forward, 23. His 2026 row sits at FC Utrecht."
+  },
+  {
+    "name": "Nicolás Valentini",
+    "to": "Alavés",
+    "db": "Deportivo Alavés",
+    "sources": [
+      "https://www.laliga.com/en-GB/clubs/d-alaves/transfers",
+      "https://www.espn.com/soccer/team/squad/_/id/96/alaves"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "LALIGA registration 2026-08-14 (VALENTINI), transfer from Fiorentina. The table has only a 2025 row for him, at Hellas Verona. add is his 2025 row at Hellas Verona (the table's own position, age plus one and value), a club the bake does not model.",
+    "add": {
+      "p": "Centre-Back",
+      "a": 24,
+      "usd": 6000000
+    }
+  },
+  {
+    "name": "Jens Cajuste",
+    "to": "Málaga",
+    "db": "Málaga CF",
+    "loan": true,
+    "sources": [
+      "https://www.laliga.com/en-GB/clubs/malaga-cf/transfers",
+      "https://www.espn.com/soccer/team/squad/_/id/99/league/ESP.1"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "LALIGA registration 2026-09-01, loan from Napoli. His 2026 row already says Malaga CF. ESPN's default Malaga squad page still shows last season's Segunda squad; the LALIGA league variant of the page is the one cited."
+  },
+  {
+    "name": "José Salinas",
+    "to": "Málaga",
+    "db": "Málaga CF",
+    "loan": true,
+    "sources": [
+      "https://www.laliga.com/en-GB/clubs/malaga-cf/transfers",
+      "https://www.espn.com/soccer/team/squad/_/id/99/league/ESP.1"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "LALIGA registration 2026-08-12 (SALINAS), loan from RCD Espanyol; ESPN lists Jose Salinas, defender, 26. His 2026 row sits at Espanyol."
+  },
+  {
+    "name": "Adam Aznou",
+    "to": "Málaga",
+    "db": "Málaga CF",
+    "sources": [
+      "https://www.laliga.com/en-GB/player/adam-aznou",
+      "https://www.espn.com/soccer/team/squad/_/id/99/league/ESP.1"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "LALIGA player page: Malaga Club de Futbol SAD, 2026-27 (0 matches so far); ESPN lists him in the Malaga squad. Not on the club's LALIGA transfers list, so the type (loan or transfer) is not stated by either source. His 2026 row sits at Everton."
+  },
+  {
+    "name": "Morten Hjulmand",
+    "to": "Atlético Madrid",
+    "db": "Atlético de Madrid",
+    "sources": [
+      "https://www.laliga.com/en-GB/clubs/atletico-de-madrid/transfers",
+      "https://www.espn.com/soccer/team/squad/_/id/1068/atletico-madrid"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "LALIGA registration 2026-07-31, transfer from Sporting CP. His 2026 row already says Atletico de Madrid."
+  },
+  {
+    "name": "Salvi Esquivel",
+    "to": "Atlético Madrid",
+    "db": "Atlético de Madrid",
+    "sources": [
+      "https://www.laliga.com/en-GB/clubs/atletico-de-madrid/transfers",
+      "https://www.espn.com/soccer/team/squad/_/id/1068/atletico-madrid"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "LALIGA registration 2026-09-01 (ESQUIVEL), free from Atletico Madrileno, the B team; ESPN lists Salvi Esquivel, goalkeeper, 21. His 2026 row sits at Atletico Madrileno. add is his 2026 row at Atlético Madrileño (the table's own position, age and value), a club the bake does not model.",
+    "add": {
+      "p": "Goalkeeper",
+      "a": 20,
+      "usd": 1000000
+    }
+  },
+  {
+    "name": "João Cancelo",
+    "to": "Barcelona",
+    "db": "FC Barcelona",
+    "sources": [
+      "https://www.laliga.com/en-GB/clubs/fc-barcelona/transfers",
+      "https://www.espn.com/soccer/team/squad/_/id/83/barcelona"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "LALIGA registration 2026-08-22, transfer from Al Hilal (he had been on loan at Barcelona since January 2026). His 2026 row already says FC Barcelona."
+  },
+  {
+    "name": "Romain Del Castillo",
+    "to": "Osasuna",
+    "db": "CA Osasuna",
+    "sources": [
+      "https://www.laliga.com/en-GB/clubs/c-a-osasuna/transfers",
+      "https://www.espn.com/soccer/team/squad/_/id/97/osasuna"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "LALIGA registration 2026-09-01 (DEL CASTILLO), transfer, the other club Brest; ESPN's Osasuna squad lists Romain Del Castillo, forward, 30, which settles the direction. The table has only 2025 rows for him, at Stade Brestois."
+  },
+  {
+    "name": "Facundo Bernal",
+    "to": "Real Betis",
+    "db": "Real Betis Balompié",
+    "sources": [
+      "https://www.laliga.com/en-GB/clubs/real-betis/transfers",
+      "https://www.espn.com/soccer/team/squad/_/id/244/real-betis"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "LALIGA registration 2026-08-19, transfer from Fluminense. His 2026 row already says Real Betis Balompie."
+  },
+  {
+    "name": "Aliou Dieng",
+    "to": "Valencia",
+    "db": "Valencia CF",
+    "sources": [
+      "https://www.laliga.com/en-GB/clubs/valencia-cf/transfers",
+      "https://www.espn.com/soccer/team/squad/_/id/94/valencia"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "LALIGA registration 2026-08-05 (DIENG), free from Al Ahly; ESPN lists Aliou Dieng, midfielder, 28. His 2026 row already says Valencia CF."
+  },
+  {
+    "name": "Youssouf Fofana",
+    "to": "Sevilla",
+    "db": "Sevilla FC",
+    "loan": true,
+    "sources": [
+      "https://www.laliga.com/en-GB/clubs/sevilla-fc/transfers",
+      "https://www.espn.com/soccer/team/squad/_/id/243/sevilla"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "LALIGA registration 2026-09-01 (FOFANA), loan from Milan. His 2026 row already says Sevilla FC."
+  },
+  {
+    "name": "Fran González",
+    "to": "Sevilla",
+    "db": "Sevilla FC",
+    "sources": [
+      "https://www.laliga.com/en-GB/clubs/sevilla-fc/transfers",
+      "https://www.espn.com/soccer/team/squad/_/id/243/sevilla"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "LALIGA registration 2026-08-10, transfer from Real Madrid Castilla; ESPN lists Fran Gonzalez, goalkeeper, 21. His 2026 row sits at Real Madrid Castilla and is the only 2026 row with this name. add is his 2026 row at Real Madrid Castilla (the table's own position, age and value), a club the bake does not model.",
+    "add": {
+      "p": "Goalkeeper",
+      "a": 20,
+      "usd": 3000000
+    }
+  },
+  {
+    "name": "Odysseas Vlachodimos",
+    "to": "Sevilla",
+    "db": "Sevilla FC",
+    "loan": true,
+    "sources": [
+      "https://www.laliga.com/en-GB/clubs/sevilla-fc/transfers",
+      "https://www.espn.com/soccer/team/squad/_/id/243/sevilla"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "LALIGA registration 2026-08-04 (ODYSSEAS), loan from Newcastle; ESPN spells him Odisseas. His 2026 row already says Sevilla FC."
+  },
+  {
+    "name": "Orel Mangala",
+    "to": "Getafe",
+    "db": "Getafe CF",
+    "loan": true,
+    "sources": [
+      "https://www.laliga.com/en-GB/clubs/getafe-cf/transfers",
+      "https://www.espn.com/soccer/team/squad/_/id/2922/getafe"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "LALIGA registration 2026-08-13 (MANGALA), loan from Lyon. His 2026 row already says Getafe CF."
+  },
+  {
+    "name": "Mario Martín",
+    "to": "Getafe",
+    "db": "Getafe CF",
+    "sources": [
+      "https://www.laliga.com/en-GB/clubs/getafe-cf/transfers",
+      "https://www.espn.com/soccer/team/squad/_/id/2922/getafe"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "LALIGA registration 2026-08-12, transfer from Real Madrid Castilla. His 2026 row already says Getafe CF and is the only 2026 row with this name."
+  },
+  {
+    "name": "Giorgi Tsitaishvili",
+    "to": "Rayo Vallecano",
+    "db": "Rayo Vallecano",
+    "sources": [
+      "https://www.laliga.com/en-GB/clubs/rayo-vallecano/transfers",
+      "https://www.espn.com/soccer/team/squad/_/id/101/rayo-vallecano"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "LALIGA registration 2026-08-19 (G. Tsitaishvili), free from Metz; ESPN lists Giorgi Tsitaishvili, forward, 25. The table has only a 2025 row for him, at Granada. add is his 2025 row at Granada CF (the table's own position, age plus one and value), a club the bake does not model.",
+    "add": {
+      "p": "Left Winger",
+      "a": 25,
+      "usd": 3000000
+    }
+  },
+  {
+    "name": "Marash Kumbulla",
+    "to": "Rayo Vallecano",
+    "db": "Rayo Vallecano",
+    "loan": true,
+    "sources": [
+      "https://www.laliga.com/en-GB/clubs/rayo-vallecano/transfers",
+      "https://www.espn.com/soccer/team/squad/_/id/101/rayo-vallecano"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "LALIGA registration 2026-08-14 (Kumbulla), loan from Roma. The table has only a 2025 row for him, at Espanyol."
+  },
+  {
+    "name": "Manu Sánchez",
+    "to": "Levante",
+    "db": "Levante UD",
+    "loan": true,
+    "sources": [
+      "https://www.laliga.com/en-GB/clubs/levante-ud/transfers",
+      "https://www.espn.com/soccer/team/squad/_/id/1538/levante"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "LALIGA registration 2026-08-16, loan from Celta. His 2026 row already says Levante UD (his 2025 row is Alaves)."
+  },
+  {
+    "name": "Marc Casadó",
+    "to": "Deportivo La Coruña",
+    "db": "Deportivo de La Coruña",
+    "loan": true,
+    "sources": [
+      "https://www.laliga.com/en-GB/clubs/rc-deportivo/transfers",
+      "https://www.espn.com/soccer/team/squad/_/id/90/deportivo-la-coruna"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "LALIGA registration 2026-09-01 (M. Casado), loan from FC Barcelona. His 2026 row already says Deportivo de La Coruna."
+  },
+  {
+    "name": "Lorenzo Amatucci",
+    "to": "Deportivo La Coruña",
+    "db": "Deportivo de La Coruña",
+    "sources": [
+      "https://www.laliga.com/en-GB/clubs/rc-deportivo/transfers",
+      "https://www.espn.com/soccer/team/squad/_/id/90/deportivo-la-coruna"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "LALIGA registration 2026-08-04, transfer from Fiorentina. His 2026 row already says Deportivo de La Coruna."
+  },
+  {
+    "name": "Pierre-Emerick Aubameyang",
+    "to": "Deportivo La Coruña",
+    "db": "Deportivo de La Coruña",
+    "sources": [
+      "https://www.laliga.com/en-GB/clubs/rc-deportivo/transfers",
+      "https://www.espn.com/soccer/team/squad/_/id/90/deportivo-la-coruna"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "LALIGA registration 2026-07-29, transfer from Marseille. His 2026 row already says Deportivo de La Coruna."
+  },
+  {
+    "name": "Sergio Canales",
+    "to": "Racing Santander",
+    "db": "Racing Santander",
+    "sources": [
+      "https://www.laliga.com/en-GB/player/canales",
+      "https://www.espn.com/soccer/team/squad/_/id/87/league/ESP.1"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "LALIGA player page: Real Racing Club SAD, 2026-27, 7 matches, born 1991-02-16 in Santander; ESPN lists Sergio Canales, midfielder, 35. Racing's LALIGA transfers page carries no data and the club site fails TLS verification, so the player page is the official source. His 2026 row sits at CF Monterrey. ESPN's default Racing squad page still shows last season's Segunda squad; the LALIGA league variant is the one cited. add is his 2026 row at CF Monterrey (the table's own position, age and value), a club the bake does not model.",
+    "add": {
+      "p": "Attacking Midfield",
+      "a": 34,
+      "usd": 5000000
+    }
+  },
+  {
+    "name": "Yassir Zabiri",
+    "to": "Racing Santander",
+    "db": "Racing Santander",
+    "sources": [
+      "https://www.laliga.com/en-GB/player/yassir-zabiri",
+      "https://www.espn.com/soccer/team/squad/_/id/87/league/ESP.1"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "LALIGA player page: Real Racing Club SAD, 2026-27, 7 matches and 6 goals; ESPN lists Yassir Zabiri, forward, 21. His 2026 row sits at Stade Rennais. Type (loan or transfer) not stated by either source."
+  },
+  {
+    "name": "Julen Agirrezabala",
+    "to": "Racing Santander",
+    "db": "Racing Santander",
+    "sources": [
+      "https://www.laliga.com/en-GB/player/julen-agirrezabala",
+      "https://www.espn.com/soccer/team/squad/_/id/87/league/ESP.1"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "LALIGA player page: Real Racing Club SAD, 2026-27, 7 matches, all starts; ESPN lists Julen Agirrezabala, goalkeeper, 25. His 2026 row sits at Valencia CF (last season's loan). Type not stated by either source."
+  },
+  {
+    "name": "Jeanuël Belocian",
+    "to": "Racing Santander",
+    "db": "Racing Santander",
+    "sources": [
+      "https://www.laliga.com/en-GB/player/jeanuel-belocian",
+      "https://www.espn.com/soccer/team/squad/_/id/87/league/ESP.1"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "LALIGA player page: Real Racing Club SAD, 2026-27, 3 matches, born 2005-02-17; ESPN lists Jeanuel Belocian, defender, 21. His 2026 row sits at Bayer Leverkusen. Type not stated by either source."
+  },
+  {
+    "name": "Iván Martín",
+    "to": "Racing Santander",
+    "db": "Racing Santander",
+    "sources": [
+      "https://www.laliga.com/en-GB/player/ivan-martin",
+      "https://www.espn.com/soccer/team/squad/_/id/87/league/ESP.1"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "LALIGA player page: Real Racing Club SAD, 2026-27, 5 matches, born 1999-02-14 in Bilbao; ESPN lists Ivan Martin, midfielder, 27. His 2026 row sits at Girona FC and is the only 2026 row with this name. add is his 2026 row at Girona FC (the table's own position, age and value), a club the bake does not model.",
+    "add": {
+      "p": "Central Midfield",
+      "a": 26,
+      "usd": 6000000
+    }
+  },
+  {
+    "name": "Tyrhys Dolan",
+    "to": "Espanyol",
+    "db": "RCD Espanyol Barcelona",
+    "sources": [
+      "https://www.laliga.com/en-GB/player/tyrhys-dolan",
+      "https://www.espn.com/soccer/team/squad/_/id/88/espanyol"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "LALIGA player page: RCD Espanyol de Barcelona, 2026-27, 6 matches; ESPN lists Tyrhys Dolan, forward, 24. Espanyol's LALIGA transfers page is empty, so the player page is the official source. His 2026 row already says Espanyol (his 2025 row is Blackburn)."
+  },
+  {
+    "name": "Gabriel Moscardo",
+    "to": "Espanyol",
+    "db": "RCD Espanyol Barcelona",
+    "sources": [
+      "https://www.laliga.com/en-GB/player/gabriel-moscardo",
+      "https://www.espn.com/soccer/team/squad/_/id/88/espanyol"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "LALIGA player page: RCD Espanyol de Barcelona, 2026-27, 4 matches; ESPN lists Gabriel Moscardo, midfielder, 21. The Catalan press called it a loan from PSG, which neither source here states, so no loan flag. His 2026 row already says Espanyol."
+  },
+  {
+    "name": "Clemens Riedel",
+    "to": "Espanyol",
+    "db": "RCD Espanyol Barcelona",
+    "sources": [
+      "https://www.laliga.com/en-GB/player/clemens-riedel",
+      "https://www.espn.com/soccer/team/squad/_/id/88/espanyol"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "LALIGA player page: RCD Espanyol de Barcelona, 2026-27, 6 matches; ESPN lists Clemens Riedel, defender, 23. His 2026 row already says Espanyol (his 2025 row is Darmstadt)."
+  }
+]

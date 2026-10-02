@@ -16,7 +16,7 @@
    apply() MUTATES the career and RETURNS the log line the player reads.
 */
 import type { CareerState, CareerEvent } from './nflMyCareer';
-import { teamLabelOf } from './nflMyCareer';
+import { teamLabelOf, marketSalary, nflEraById } from './nflMyCareer';
 
 /* Round 56 optional fields. Declared locally so this file compiles against
    old and new versions of CareerState alike, and so every read guards with
@@ -61,10 +61,16 @@ const soreSpot = (c: CareerState): string =>
   c.pos === 'QB' ? 'throwing shoulder' : c.pos === 'RB' ? 'hamstring' : c.pos === 'WR' ? 'foot' : 'lower back';
 const foilOf = (c: CareerState): string =>
   c.pos === 'QB' ? 'an edge rusher' : c.pos === 'RB' ? 'a linebacker' : c.pos === 'WR' ? 'a corner' : 'a safety';
-const marketOf = (c: CareerState): number => {
-  const mult = c.pos === 'QB' ? 1.9 : c.pos === 'WR' ? 1.15 : 0.9;
-  return Math.max(1.2, Math.round(((c.ovr - 64) * 1.55 - 6) * mult * 10) / 10);
-};
+/* Round 833: the market these cards quote is the engine's own market, the
+   one free agency pays. This used to be a private copy of it from before
+   Round 56 gave every position its own pay (three buckets, a kicker paid like
+   a starter) and before Round 172 gave the throwback eras their money, so a
+   2005 career held out for, and was tagged at, 2026 money. A kicker's FA deal
+   sat under this copy's number every year, so he could hold out every year.
+   Read lazily, inside a function body only, per the import cycle note. */
+const marketOf = (c: CareerState): number => marketSalary(c);
+/** A fixed amount on a card (a fine), in the career's era money. */
+const atEra = (c: CareerState, amount: number): number => Math.round(nflEraById(c.eraId).moneyScale * amount * 10) / 10;
 
 const COLD_TOWNS = ['BUF', 'GB', 'CHI', 'CLE', 'PIT', 'DEN', 'NE', 'NYJ', 'NYG', 'PHI', 'BAL', 'CIN', 'WAS', 'KC'];
 
@@ -808,8 +814,9 @@ export function getNflLifeEventsA(c: CareerState, rng: () => number): CareerEven
           label: 'Hold out until they extend you', effect: 'Leverage, fines, rust',
           apply: (cc, r) => {
             if (r() < 0.5) { cc.salary = Math.round(tag * 1.18 * 10) / 10; cc.contractYears = 4; mor(cc, 9); fan(cc, -4); return `You missed 31 days and signed for ${cc.salary}M over four years on the first day of pads. Morale +9, fanbase -4.`; }
-            bank(cc, -0.6); rate(cc, -1); mor(cc, -7); cc.salary = tag; cc.contractYears = 1;
-            return `They never budged. You reported in August, 0.6M lighter in fines, and played the tag at ${tag}M anyway. Rating -1 to ${cc.ovr}, morale -7.`;
+            const fine = atEra(cc, 0.6);
+            bank(cc, -fine); rate(cc, -1); mor(cc, -7); cc.salary = tag; cc.contractYears = 1;
+            return `They never budged. You reported in August, ${fine}M lighter in fines, and played the tag at ${tag}M anyway. Rating -1 to ${cc.ovr}, morale -7.`;
           },
         },
         {
@@ -894,8 +901,9 @@ export function getNflLifeEventsA(c: CareerState, rng: () => number): CareerEven
               cc.salary = Math.round(marketOf(cc) * 1.02 * 10) / 10; cc.contractYears = 4; mor(cc, 9); fan(cc, -7);
               return `Thirty four days out and they blinked. New deal at ${cc.salary}M over four years. Morale +9, fanbase -7.`;
             }
-            bank(cc, -1.2); rate(cc, -1); mor(cc, -10); fan(cc, -7);
-            return `They never called. You reported in week 2 owing 1.2M in fines and a step behind everybody. Rating -1 to ${cc.ovr}, morale -10, fanbase -7.`;
+            const fine = atEra(cc, 1.2);
+            bank(cc, -fine); rate(cc, -1); mor(cc, -10); fan(cc, -7);
+            return `They never called. You reported in week 2 owing ${fine}M in fines and a step behind everybody. Rating -1 to ${cc.ovr}, morale -10, fanbase -7.`;
           },
         },
         {

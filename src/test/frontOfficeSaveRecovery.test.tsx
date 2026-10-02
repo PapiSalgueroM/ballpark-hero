@@ -1,5 +1,5 @@
 import { Component, type ReactNode } from 'react';
-import { cleanup, fireEvent, render } from '@testing-library/react';
+import { cleanup, fireEvent, render, waitFor } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import NflBoard from '@/components/front-office/FrontOfficeBoard';
 import NhlBoard from '@/components/nhl-front-office/NhlFrontOfficeBoard';
@@ -133,10 +133,14 @@ for (const c of cases) describe(`${c.sport} actual save recovery`, () => {
     expect(localStorage.getItem(c.key)).toBeNull(); expect(view.queryByRole('alert')).toBeNull();
     expect(localStorage.getItem('other-game-save')).toBe('unrelated progress'); expect(removes).toHaveBeenCalledExactlyOnceWith(c.key);
   });
-  it('allows a fresh club to replace the unusable save without clearing another game', () => {
+  it('allows a fresh club to replace the unusable save without clearing another game', async () => {
     const saved = save(c.sport, c.team); delete saved.league.freeAgents;
     const { view } = mount(JSON.stringify(saved));
     fireEvent.click(view.getByRole('button', { name: c.sport === 'NFL' ? /Seattle Seahawks/ : /Boston Bruins/ }));
+    /* Round 828: the NFL board fetches its roster chunk on the tap, so the new
+       franchise is written a tick after the click, not inside it. Until then the
+       unusable save must still be the one on disk. */
+    await waitFor(() => expect(Array.isArray(JSON.parse(localStorage.getItem(c.key)!).league.freeAgents)).toBe(true));
     const fresh = JSON.parse(localStorage.getItem(c.key)!);
     expect(fresh.myTeam).toBe(c.team); expect(fresh.league[c.period]).toBe(1); expect(fresh.titles).toBe(0); expect(fresh.seasonsPlayed).toBe(0);
     expect(Array.isArray(fresh.league.freeAgents)).toBe(true); expect(view.queryByRole('alert')).toBeNull();

@@ -34,9 +34,12 @@ let finderPath = `${ROOT.replaceAll('\\', '/')}/src/lib/tradeFinder.ts`;
 if (TF_CONTROL) {
   if (TF_CONTROL !== 'sharedclone') { console.error(`TF_CONTROL=${TF_CONTROL} is not a control this harness knows (sharedclone)`); process.exit(1); }
   let src = fs.readFileSync(path.join(ROOT, 'src', 'lib', 'tradeFinder.ts'), 'utf8').split('\r\n').join('\n');
+  /* Round 828 merge: the probe copy is the sport's own cheap copy when it
+     hands one in (the NFL board does), otherwise main's once written JSON, so
+     the control hoists both kinds out of the probe loop. */
   const swaps = [
-    ['    const theirJson = JSON.stringify(theirTeam);\n', '    const theirJson = JSON.stringify(theirTeam);\n    const myClone = JSON.parse(myJson) as T;\n    const theirClone = JSON.parse(theirJson) as T;\n'],
-    ['        const myClone = JSON.parse(myJson) as T;\n        const theirClone = JSON.parse(theirJson) as T;\n', ''],
+    ['    const theirJson = cheap ? null : JSON.stringify(theirTeam);\n', '    const theirJson = cheap ? null : JSON.stringify(theirTeam);\n    const myClone = cheap ? cheap(myTeam) : JSON.parse(myJson!) as T;\n    const theirClone = cheap ? cheap(theirTeam) : JSON.parse(theirJson!) as T;\n'],
+    ['        const myClone = cheap ? cheap(myTeam) : JSON.parse(myJson!) as T;\n        const theirClone = cheap ? cheap(theirTeam) : JSON.parse(theirJson!) as T;\n', ''],
   ];
   for (const [now] of swaps) if (!src.includes(now)) { console.error(`control ${TF_CONTROL}: ${JSON.stringify(now.slice(0, 60))} is not in tradeFinder.ts, so it would change nothing. Refusing to run.`); process.exit(1); }
   for (const [now, was] of swaps) src = src.split(now).join(was);
@@ -52,11 +55,12 @@ const nba = await import('${ROOT.replaceAll('\\', '/')}/src/lib/nbaFrontOffice.t
 const mlb = await import('${ROOT.replaceAll('\\', '/')}/src/lib/mlbFrontOffice.ts');
 const nhl = await import('${ROOT.replaceAll('\\', '/')}/src/lib/nhlFrontOffice.ts');
 const nfl = await import('${ROOT.replaceAll('\\', '/')}/src/lib/frontOffice.ts');
-export { finder, nba, mlb, nhl, nfl };
+const nflDepth = await import('${ROOT.replaceAll('\\', '/')}/src/data/frontOfficeDepth.ts');
+export { finder, nba, mlb, nhl, nfl, nflDepth };
 `);
 execSync(`"${ROOT}/node_modules/.bin/esbuild" "${ENTRY}" --bundle --format=esm --platform=node --outfile="${BUNDLE}" --log-level=error`, { stdio: 'inherit' });
 
-const { finder, nba, mlb, nhl, nfl } = await import(pathToFileURL(BUNDLE).href);
+const { finder, nba, mlb, nhl, nfl, nflDepth } = await import(pathToFileURL(BUNDLE).href);
 const { findTrades } = finder;
 
 let failures = 0, oracleMisses = 0;
@@ -104,6 +108,9 @@ const SPORTS = [
   { name: 'MLB', init: () => mlb.initMlbLeague(mulberry(7)), tradeFn: mlb.mlbTrade, valueFn: mlb.mlbTradeValue },
   { name: 'NHL', init: () => nhl.initNhlLeague(mulberry(7)), tradeFn: nhl.nhlTrade, valueFn: nhl.nhlTradeValue },
   { name: 'NFL', init: () => nfl.initLeague(mulberry(7)), tradeFn: nfl.proposeTrade, valueFn: nfl.tradeValue },
+  /* Round 828: a new NFL league carries the whole 53 and the board shops it
+     with the engine's cheap probe copy, so that path answers to the oracle too. */
+  { name: 'NFL full rosters', init: () => nfl.initLeague(mulberry(7), { depth: nflDepth.FO_DEPTH }), tradeFn: nfl.proposeTrade, valueFn: nfl.tradeValue, opts: { cloneTeam: nfl.tradeProbeCopy } },
 ];
 
 for (const sport of SPORTS) {
@@ -124,7 +131,7 @@ for (const sport of SPORTS) {
 
   for (const player of [...league.teams[myTeam].players].sort((a, b) => b.ovr - a.ovr).slice(0, 8)) {
     shops++;
-    const offers = findTrades(league.teams, myTeam, player.id, league.cap, sport.tradeFn, sport.valueFn);
+    const offers = findTrades(league.teams, myTeam, player.id, league.cap, sport.tradeFn, sport.valueFn, sport.opts);
     if (JSON.stringify(league) !== snapshot) { fail(`${sport.name}: findTrades MUTATED the league (shopping ${player.name})`); break; }
     /* Round 829 review: exactly the oracle's list, offer for offer */
     const oracleStart = Date.now();
