@@ -1,5 +1,25 @@
 # Work board
 
+**Codex867-869 CLAIMED, 2026-10-02, offline follow-through.** Merged Release R
+with863/865/866 atd2466763, retaining both documentation lanes. Clean merged
+type/build gates are running; production requests remain stopped. Claude's
+handoff reports Release R live atb710846e, while the database incident stays
+open. This lane has not rechecked the live site and has not published863/865/866.
+-867: repair Guess the Nation's daily-reload driver to locate the actual
+  ResultScreen, preserving all finish/save/score/booking expectations. New
+  feedback status is not a result. Own driver and scoped control only.
+-868: Club Manager contract renewal previews from existing pure renewal
+  functions. Own ContractsCard and focused verification. Show actual term,
+  signing fee, budget after and weekly bill, including soft-cap implications.
+  Keep original callbacks, engine/costs/save and affordable over-cap behavior.
+-869: Club Manager calendar Current date control. Own CalendarScreen and
+  focused verification. Return to seasonDays(career).today, clear inspected
+  day, preserve browsing and never simulate from this action.
+Three disjoint agents own these scopes; root owns Git/docs/offline gates.
+Paused football guide is parked in a scoped stash before the merge; other
+paused drafts and old files are untouched. Next free870.
+
+
 **Codex866 SOURCE VERIFIED, native pending, 2026-10-02.** Silverware Sort
 keeps earned counts/rungs visible until Next board or See results. The action
 has a44px target and receives keyboard focus. Two tries, locked greens,

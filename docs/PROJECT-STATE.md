@@ -1,5 +1,17 @@
 # Project state
 
+## Codex867-869 claimed after Release R merge, 2026-10-02
+
+Merged Claude's source atd2466763 with863/865/866. Both documentation lanes
+retained. Release R is reported live by Claude (b710846e), but the database
+incident remains open, so no production probes or live publication from this
+lane. Clean merged type/build running. Claim867 Guess the Nation reload-driver
+result targeting,868 Club Manager contract cost/budget/term previews,869
+calendar return to current date. Scopes are separate, no engine/data changes.
+Paused football guide is held in a scoped stash, other drafts untouched.
+Next free870. The later gate receipt will supersede pre-merge build evidence.
+
+
 ## Codex866 source accepted, Release R integration pending, 2026-10-02
 
 Silverware reveals wait for deliberate Next/See results and show earned points,
