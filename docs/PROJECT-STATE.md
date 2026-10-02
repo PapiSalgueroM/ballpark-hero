@@ -9,6 +9,8 @@ require available tokens, and consume each real selection. Zero GM capital
 needs an explicit working tag/offseason path. Existing active draft saves
 keep their remaining count on load. This is not a full96-pick league draft
 or a receiving-pick UI. Capture the real Board failure before repair.
+Parent also owns the904 football guide/page instructions and their scoped
+snapshot/search refresh so the old fixed-three-picks claim cannot survive.
 
 905 owns four *MyCareer.ts engines, four *CareerCorruption.ts modules, a
 small annual-benefit helper and focused proofs. Apply only explicitly
