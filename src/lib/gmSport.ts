@@ -30,10 +30,19 @@ import type { FoSportWords } from './foOwnerMandate';
 export type GmSportKey = 'nfl' | 'nba' | 'mlb' | 'nhl';
 
 /**
- * The payroll line a GM works under.
- *   hard     a ceiling the payroll may not pass (NFL, NHL)
- *   softTax  a cap with a taxed band above it (NBA)
- *   cbtLine  no cap at all, one tax line (MLB)
+ * The payroll line a GM works under, as THIS GAME runs it. Each one is simpler
+ * than the real league's rules, and none of them is a claim about how the
+ * real league works. In all three a free agent who costs more than the room
+ * under the line cannot be signed: every engine refuses that signing.
+ *   hard     one line, the cap, and nothing past it (NFL, NHL)
+ *   softTax  the cap stops signings, and a separate, higher tax line bills
+ *            the payroll above it at the season's close (NBA)
+ *   cbtLine  one line whose figure is the competitive balance tax threshold.
+ *            The game holds it exactly as hard as 'hard' and bills no tax;
+ *            only the line's name and where its figure comes from differ (MLB)
+ * scripts/simGmDesk.mjs check 2 holds each sport to its model against the
+ * engines: the signing refusal, whether the engine bills a tax, and whether
+ * the line's figure is the threshold constant.
  */
 export type GmCapModel = 'hard' | 'softTax' | 'cbtLine';
 
@@ -68,7 +77,11 @@ export interface GmRosterLimits {
 
 export interface GmCapShape {
   model: GmCapModel;
-  /** What the board calls the line the payroll is read against. */
+  /**
+   * What the board calls the line the payroll is read against, as it reads
+   * after 'the': 'the cap', 'the tax line'. For softTax this is the cap, the
+   * line that stops signings, not the tax line above it.
+   */
   line: string;
 }
 
@@ -93,7 +106,7 @@ export const GM_SPORTS: Record<GmSportKey, GmSport> = {
     },
     periods: 17,
     roster: { min: 6, max: 53, floor: null },
-    cap: { model: 'hard', line: 'salary cap' },
+    cap: { model: 'hard', line: 'cap' },
   },
   nba: {
     key: 'nba',
@@ -104,7 +117,7 @@ export const GM_SPORTS: Record<GmSportKey, GmSport> = {
     },
     periods: 20,
     roster: { min: 8, max: 15, floor: 14 },
-    cap: { model: 'softTax', line: 'salary cap' },
+    cap: { model: 'softTax', line: 'cap' },
   },
   mlb: {
     key: 'mlb',
@@ -126,7 +139,7 @@ export const GM_SPORTS: Record<GmSportKey, GmSport> = {
     },
     periods: 20,
     roster: { min: 8, max: 15, floor: null },
-    cap: { model: 'hard', line: 'salary cap' },
+    cap: { model: 'hard', line: 'cap' },
   },
 };
 

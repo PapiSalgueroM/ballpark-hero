@@ -162,7 +162,11 @@ export interface GmPanelDef<F extends GmFacts = GmFacts> {
   tile: (ctx: GmTileContext<F>) => GmTileFace | null;
   /**
    * The screen behind the box. A real component, so it may use hooks. Typed by
-   * its call alone, so a plain function, an FC and a memo all fit.
+   * its call alone, so a plain function, an FC and a memo all fit. Define it,
+   * and the definition holding it, at module level: the mount renders it as a
+   * component type, so a new function made inside a board's render is a new
+   * type every render, and every save would remount the open panel and lose
+   * whatever it held (a talk half way through).
    */
   Panel: (props: GmPanelProps<F>) => ReactNode;
 }

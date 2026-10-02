@@ -13,8 +13,13 @@
  *
  * CHECKS
  *   1  every sport declares every field, and all four in the same shape
- *   2  every number and word in the descriptor mirrors the engine constant or
- *      the board line it copies (so the two cannot quietly disagree)
+ *   2  the descriptor mirrors the engines and the boards: every number, the
+ *      board words (title, playoffs, round, games, play, period, released),
+ *      the line word against the board, and the cap model against what the
+ *      engine does (a signing past the line refused, a tax billed or not, the
+ *      line's figure the threshold constant or not). NOT mirrored, because no
+ *      board or engine says them yet: words.league, words.release and
+ *      words.coach. A bind round that puts one on screen adds its mirror.
  *   3  a desk with one corrupt block: that block comes back fresh, every other
  *      block comes back as stored, and a write keeps the others
  *   4  a save with no gm block, or an envelope this build does not know, is a
@@ -22,17 +27,22 @@
  *   5  an empty panel list draws nothing, on all four sports (with a non empty
  *      list beside it as the baseline, so "nothing" is not a dead renderer)
  *   6  hub boxes: keyed apart from a board's own, the first of a repeated key
- *      only, and a tile that says null left off
+ *      only (also when that first panel's tile says null: the repeat is not
+ *      drawn either, since a tap on the key would open the hidden first), and
+ *      a tile that says null left off
  *
  * NEGATIVE CONTROLS, each a source rewrite applied at bundle time and never on
  * disk. GM_DESK_CONTROL=<name>; the named check must go red and no other.
  *   nofield     gmSport.ts loses one descriptor field (MLB's coach)   check 1
  *   drift       gmSport.ts says MLB plays 26 rounds, not 27           check 2
+ *   capmodel    gmSport.ts gives MLB the NBA's softTax model          check 2
+ *   capline     gmSport.ts calls the NBA's line the tax line          check 2
  *   failopen    gmBlock returns a block without asking its validator  check 3
  *   dropothers  withGmBlock writes one block and forgets the rest     check 3
  *   trustany    readGmDesk stops reading the envelope version         check 4
  *   ghost       the mount keeps its wrapper when there are no boxes   check 5
  *   nodedupe    gmDeskTiles draws a repeated key twice                check 6
+ *   freekey     a panel whose tile says null frees its key            check 6
  * A control whose anchor is not in the file aborts with exit 2 ("control
  * cannot run") instead of passing, and every anchor is one line, so it
  * matches on a CRLF checkout as well as an LF one.
@@ -44,15 +54,17 @@
  * cannot pass for want of cases. Measured 2026-10-02, identical on SIM_SEED
  * unset, 1, 2 and 3 (the seed changes nothing here, which is the point):
  *     fields read (1)                 68   floor 68
- *     mirrors compared (2)            46   floor 46
+ *     mirrors compared (2)            66   floor 66
  *     corrupt block cases (3)         70   floor 70
  *     envelope cases (4)              20   floor 20
  *     renders (5)                     20   floor 20
  * The walk is fixed lists, not a sample, so each floor is the count itself:
  * dropping a case on purpose means changing its floor on purpose.
- * Check 2 does not cover cap.model for the NFL, NBA and NHL: no engine
- * exports a constant that says "hard" or "soft", so there is nothing to
- * mirror it against. MLB's line word is checked against its board.
+ * Check 2 reads cap.model through what the engines DO rather than a constant
+ * that names a model (none exists): each sport's sign function is handed one
+ * free agent with a line just below and just above his salary, the engine's
+ * exports are searched for a tax bill, and the line's base figure is compared
+ * with the committed CBT threshold in leagueCaps.ts.
  *
  * Reaches no network: the bundle is the four engines, their committed data
  * and three new files, and the run refuses to load a bundle that names the
@@ -71,14 +83,14 @@ const lf = s => s.replaceAll('\r\n', '\n');
 const J = v => JSON.stringify(v);
 
 const CONTROL = process.env.GM_DESK_CONTROL || '';
-const CONTROLS = { nofield: '1', drift: '2', failopen: '3', dropothers: '3', trustany: '4', ghost: '5', nodedupe: '6' };
+const CONTROLS = { nofield: '1', drift: '2', capmodel: '2', capline: '2', failopen: '3', dropothers: '3', trustany: '4', ghost: '5', nodedupe: '6', freekey: '6' };
 if (CONTROL && !CONTROLS[CONTROL]) {
   console.error(`GM_DESK_CONTROL=${CONTROL} is not a control this harness knows (${Object.keys(CONTROLS).join(', ')})`);
   process.exit(2);
 }
 
 /* Floors: the measured size of each walk, see the header. */
-const T = { minFields: 68, minMirrors: 46, minCorrupt: 70, minNotDesk: 20, minRenders: 20 };
+const T = { minFields: 68, minMirrors: 66, minCorrupt: 70, minNotDesk: 20, minRenders: 20 };
 
 /* The node_modules that holds react and esbuild, found by walking up, so a
    worktree inside the repo resolves the main one the way node itself does. */
@@ -116,12 +128,16 @@ const EDITS = {
   nofield: ['sport', "released: 'You designated him for assignment this season.', coach: 'manager',",
     "released: 'You designated him for assignment this season.',"],
   drift: ['sport', '    periods: 27,', '    periods: 26,'],
+  capmodel: ['sport', "cap: { model: 'cbtLine', line: 'tax line' },", "cap: { model: 'softTax', line: 'tax line' },"],
+  capline: ['sport', "cap: { model: 'softTax', line: 'cap' },", "cap: { model: 'softTax', line: 'tax line' },"],
   failopen: ['desk', '      if (isValid(v)) return v as T;', '      return v as T;'],
   dropothers: ['desk', 'blocks: { ...desk.blocks, [key]: value } };', 'blocks: { [key]: value } };'],
   trustany: ['desk', 'if (!isBag(raw) || raw.v !== GM_DESK_VERSION || !isBag(raw.blocks)) return freshGmDesk();',
     'if (!isBag(raw) || !isBag(raw.blocks)) return freshGmDesk();'],
   ghost: ['mount', '  if (tiles.length === 0) return null;', ''],
   nodedupe: ['desk', '    if (seen.has(p.key)) continue;', ''],
+  freekey: ['desk', '    if (face) out.push({ key: gmTileKey(p.key), title: p.title, ...face });',
+    '    if (face) out.push({ key: gmTileKey(p.key), title: p.title, ...face }); else seen.delete(p.key);'],
 };
 const overrides = new Map();
 if (CONTROL) {
@@ -156,6 +172,7 @@ export * as nbaTax from '${ROOT_URL}/src/lib/nbaLuxuryTax.ts';
 export * as mlb from '${ROOT_URL}/src/lib/mlbFrontOffice.ts';
 export * as nhl from '${ROOT_URL}/src/lib/nhlFrontOffice.ts';
 export * as cuts from '${ROOT_URL}/src/lib/frontOfficeCuts.ts';
+export * as caps from '${ROOT_URL}/src/lib/leagueCaps.ts';
 import React from '${NM}/react/index.js';
 import { renderToStaticMarkup } from '${NM}/react-dom/server.node.js';
 export const h = React.createElement;
@@ -302,8 +319,36 @@ for (const k of SPORTS) {
   } else {
     mirror(`${k}.words.released vs the board's CUT_SAID`, S[k]?.words.released, code.match(/^const CUT_SAID = '([^']+)';$/m)?.[1]);
   }
-  if (k === 'mlb') mirror('mlb.cap.line vs the board', code.includes(`M ${S.mlb?.cap.line}`), true);
+  /* The line word, as the board says it after 'the' ('the cap', 'the hard
+     cap') or straight after the league's own figure ('the ${league.cap}M tax
+     line'). Tied to league.cap, so the NBA's separate tax line, which its
+     board names after a different figure, cannot pass for its cap. */
+  const esc = String(S[k]?.cap.line ?? '').replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const lineSaid = new RegExp(`\\bthe (?:hard |\\$\\{league\\.cap\\}M )?${esc}\\b`);
+  mirror(`${k}.cap.line vs the board naming its line`, esc !== '' && lineSaid.test(code), true);
 }
+
+/* The cap model, read through what each engine does, since no engine
+   exports a constant that names one. */
+const SIGN = { nfl: M.nfl.signPlayer, nba: M.nba.nbaSign, mlb: M.mlb.mlbSign, nhl: M.nhl.nhlSign };
+const BASE = { nfl: M.nfl.SALARY_CAP_BASE, nba: M.nba.NBA_CAP_BASE, mlb: M.mlb.MLB_TAX_BASE, nhl: M.nhl.NHL_CAP_BASE };
+const CBT = Object.entries(M.caps).filter(([n, v]) => /CBT/.test(n) && typeof v === 'number').map(([, v]) => v);
+if (CBT.length === 0) fail('leagueCaps.ts exports no CBT threshold, so the cbtLine model has nothing to be checked against');
+for (const k of SPORTS) {
+  const model = S[k]?.cap.model;
+  /* One free agent at 5, a line a tenth above and a tenth below him. */
+  const tryOne = cap => {
+    const team = { players: [], releasedThisSeason: [] };
+    const fas = [{ id: 'gm-probe', name: 'Probe', pos: 'X', age: 27, ovr: 70, salary: 5 }];
+    try { return SIGN[k](team, fas, 'gm-probe', cap) === true && team.players.length === 1; } catch (e) { return `a throw: ${e.message}`; }
+  };
+  mirror(`${k}: a signing that fits under the line goes through (the baseline)`, tryOne(5.1), true);
+  mirror(`${k}: a signing past the line is refused, as every cap model says`, tryOne(4.9), false);
+  const taxed = Object.entries(M[k]).some(([n, v]) => typeof v === 'function' && /AssessTax|TaxBill/.test(n));
+  mirror(`${k}.cap.model is softTax vs the engine billing a tax`, model === 'softTax', taxed);
+  mirror(`${k}.cap.model is cbtLine vs the line's figure being the CBT threshold`, model === 'cbtLine', BASE[k] === undefined ? undefined : CBT.includes(BASE[k]));
+}
+mirror('nba: the tax line sits above the cap, as softTax says', M.nbaTax.nbaTaxLine(M.nba.NBA_CAP_BASE) > M.nba.NBA_CAP_BASE, true);
 if (mirrors < T.minMirrors) fail(`only ${mirrors} mirrors compared, wanted at least ${T.minMirrors}`);
 console.log(`   ${mirrors} mirrors compared`);
 
@@ -496,6 +541,16 @@ begin('6', 'hub boxes: keyed apart, first of a repeated key, null left off');
   if (gmPanelFor(list, 'gm:trade') !== trade) fail('a tile key does not open its panel');
   if (gmPanelFor(list, 'nope') !== null || gmPanelFor(list, null) !== null || gmPanelFor([], 'alpha') !== null) fail('a key that names no panel opened one');
   if (!same(gmDeskTiles(GM_SPORTS.nba, freshGmDesk(), FACTS, []), [])) fail('an empty panel list made boxes');
+  /* A repeated key whose FIRST panel is hidden: the repeat must not take the
+     key over, because a tap on that key opens the first, hidden panel. The
+     same repeat alone in a list does draw, so its absence here is the rule. */
+  const loud = toy('quiet', 'Quiet loud', { icon: 'L', value: 'loud value', sub: 'loud sub', accent: false });
+  const hiddenFirst = [QUIET, ALPHA, loud];
+  const hk = gmDeskTiles(GM_SPORTS.nhl, freshGmDesk(), FACTS, hiddenFirst).map(t => t.key);
+  if (!same(hk, ['gm:alpha'])) fail(`with the first 'quiet' panel hidden the boxes are ${J(hk)}, wanted only gm:alpha: a repeat drew a box whose tap opens the hidden panel`);
+  if (gmPanelFor(hiddenFirst, 'gm:quiet') !== QUIET) fail('a tap on a repeated key did not resolve to its first panel');
+  const alone = gmDeskTiles(GM_SPORTS.nhl, freshGmDesk(), FACTS, [loud]).map(t => t.key);
+  if (!same(alone, ['gm:quiet'])) fail(`the repeat on its own drew ${J(alone)}, so the check above proves nothing`);
   /* the tile maker is handed exactly what the board handed in */
   const desk = freshGmDesk();
   let seen = null;

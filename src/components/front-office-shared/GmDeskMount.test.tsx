@@ -16,7 +16,7 @@ import { render, screen, fireEvent, cleanup } from '@testing-library/react';
 import { memo, useState, type FC } from 'react';
 import { GmDeskMount } from './GmDeskMount';
 import {
-  freshGmDesk, gmBlock, withGmBlock, readGmDesk,
+  freshGmDesk, gmBlock, gmPanelFor, withGmBlock, readGmDesk,
   type GmDesk, type GmFacts, type GmPanelDef, type GmPanelProps,
 } from '@/lib/gmDesk';
 import { GM_SPORT_KEYS, GM_SPORTS, type GmSportKey } from '@/lib/gmSport';
@@ -152,6 +152,37 @@ describe('GmDeskMount', () => {
     first.unmount();
     render(<Host sport="nfl" panels={[TALLY, NOTES]} startOpen="gm:notes" />);
     expect(document.querySelector('[data-gm-panel="notes"]')).not.toBeNull();
+  });
+
+  it('with the documented wiring, a stale key never blanks the hub, and the mount hands it back as null', () => {
+    /* Both halves, the way a bound board writes them: its own boxes are gated
+       on gmPanelFor, not on the key. */
+    function Board({ panels, startOpen }: { panels: readonly GmPanelDef[]; startOpen: string | null }) {
+      const [open, setOpen] = useState<string | null>(startOpen);
+      return (
+        <div>
+          <p data-testid="open-key">{open ?? 'none'}</p>
+          {gmPanelFor(panels, open) === null && <button>Board box</button>}
+          <GmDeskMount sport="mlb" desk={freshGmDesk()} facts={FACTS} panels={panels} open={open} onOpen={setOpen} onDesk={() => {}} />
+        </div>
+      );
+    }
+    /* No desk boxes at all: the board's own still show, and the key is cleared. */
+    const first = render(<Board panels={[]} startOpen="gone" />);
+    expect(screen.getByText('Board box')).toBeTruthy();
+    expect(screen.getByTestId('open-key').textContent).toBe('none');
+    first.unmount();
+    /* A desk with boxes: both rows show, and the key is cleared. */
+    const second = render(<Board panels={[TALLY]} startOpen="gm:gone" />);
+    expect(screen.getByText('Board box')).toBeTruthy();
+    expect(screen.getByText('Tally')).toBeTruthy();
+    expect(screen.getByTestId('open-key').textContent).toBe('none');
+    second.unmount();
+    /* The baseline: a live key opens its panel and the board's box steps aside. */
+    render(<Board panels={[TALLY]} startOpen="tally" />);
+    expect(screen.queryByText('Board box')).toBeNull();
+    expect(screen.getByTestId('open-key').textContent).toBe('tally');
+    expect(screen.getByTestId('tally-line')).toBeTruthy();
   });
 
   it('a panel with hooks of its own survives being opened, closed and opened again', () => {

@@ -17,12 +17,25 @@
  * own boxes while a desk panel is open and the desk has to step aside while
  * one of the board's own is. The usual wiring:
  *
- *   {tab === null && gmOpen === null && <FoHubTiles ... />}
- *   {tab === null && <GmDeskMount open={gmOpen} onOpen={setGmOpen} ... />}
+ *   {tab === null && gmPanelFor(gmPanels, gmOpen) === null && <FoHubTiles ... />}
+ *   {tab === null && <GmDeskMount open={gmOpen} onOpen={setGmOpen} panels={gmPanels} ... />}
+ *
+ * Gate the board's boxes on gmPanelFor, never on gmOpen === null. A key can go
+ * stale (a panel list that changes with the phase, a key restored from a
+ * save), and a stale key opens nothing here: gating on the key itself would
+ * hide the board's five boxes behind a panel that is not there, and with no
+ * desk boxes either the hub would be blank with no way back. The mount also
+ * hands a stale key back as null, so a panel that returns later does not pop
+ * open by itself.
+ *
+ * Build the panel list once, at module level, not inside the board's render:
+ * each entry's Panel is a component type, and a new function every render
+ * remounts the open panel on every save and loses whatever it held.
  *
  * What each box SAYS comes from gmDeskTiles in the lib, so it is checkable
  * without a browser. This file is only the shape.
  */
+import { useEffect } from 'react';
 import { HubTiles, HubPanelHeader } from '@/components/hub/HubTiles';
 import { gmDeskTiles, gmPanelFor, type GmDesk, type GmFacts, type GmPanelDef } from '@/lib/gmDesk';
 import { gmSport, type GmSportKey } from '@/lib/gmSport';
@@ -43,6 +56,10 @@ export interface GmDeskMountProps<F extends GmFacts = GmFacts> {
 export function GmDeskMount<F extends GmFacts = GmFacts>({ sport, desk, facts, panels, open, onOpen, onDesk }: GmDeskMountProps<F>) {
   const descriptor = gmSport(sport);
   const panel = gmPanelFor(panels, open);
+  /* A key that names no panel goes back to null, so the board's own boxes
+     come back on its next render. Above every return, as hooks must be. */
+  const stale = open !== null && panel === null;
+  useEffect(() => { if (stale) onOpen(null); }, [stale, onOpen]);
 
   if (panel) {
     const back = () => onOpen(null);
@@ -54,8 +71,9 @@ export function GmDeskMount<F extends GmFacts = GmFacts>({ sport, desk, facts, p
     );
   }
 
-  /* A stale key (a panel that is no longer in the list) lands here too: the
-     hub is the honest answer to "open something that does not exist". And no
+  /* A stale key (a panel that is no longer in the list) lands here too, for
+     the one render before the effect above clears it: the hub is the honest
+     answer to "open something that does not exist". And no
      boxes means no wrapper either: an empty list, or one whose every tile said
      null, must leave nothing on the hub, not an empty gap. */
   const tiles = gmDeskTiles(descriptor, desk, facts, panels);
