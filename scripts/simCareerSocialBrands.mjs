@@ -157,8 +157,22 @@ if (SECTIONS.includes('1')) {
   /* The header says which main the fixture is a photograph of. It is set
      aside before the comparison and has to be a real sha. */
   const { recordedFrom, ...rec } = JSON.parse(fs.readFileSync(FIXTURE, 'utf8'));
-  const want = JSON.stringify(rec);
   check(/^[0-9a-f]{40}$/.test(recordedFrom?.main || ''), `the fixture names the main it was recorded from (${String(recordedFrom?.main || 'nothing').slice(0, 8)})`);
+  /* DELIBERATE COPY CHANGES since that main. Words on a card only: a post's
+     definition is never written into a save, so no hash moves and every one
+     of them is still required below. Each entry names the words main shipped
+     and the words this tree ships. The fixture must hold the first, or the
+     entry is stale and fails; the tree must produce the second, or the
+     comparison fails. The fixture file is never edited to match. */
+  const COPY_CHANGES = [
+    { post: 'troll_rival', field: 'extraEffect', from: 'Rivalry intensity increases', to: 'All talk: your rival gets named, nothing else moves' },
+  ];
+  for (const c of COPY_CHANGES) {
+    const def = rec.units.defs.posts.find(p => p.id === c.post);
+    check(Boolean(def) && def[c.field] === c.from, `the fixture holds main's words for the ${c.post} card (${c.field})`);
+    if (def) def[c.field] = c.to;
+  }
+  const want = JSON.stringify(rec);
   const t0 = Date.now();
   const got = probeSoccerBrand({ soccer: E, life: L });
   const gotText = JSON.stringify(got);
@@ -224,10 +238,15 @@ const TB_POSTS = [
 const meter = key => ({ get: s => s[key], set: (s, v) => { s[key] = v; } });
 const tbLog = (s, line) => { s.lines = [...s.lines, line]; };
 let tbRng = mulberry32(835);
+const tbFocusCalls = [];
 const TB_SOCIAL = {
   posts: TB_POSTS, focusPost: 'quiet', rivalPost: 'jab', followerUnit: 1000,
   followers: meter('fans'), standing: meter('rep'), posted: meter('didPost'), focus: meter('calm'),
-  payFocus: s => { s.power += 1; s.speed += 1; },
+  /* Testball's raise is headroom aware, the kind an American career will
+     hand in: +3 power, never past the player's own ceiling, and speed is
+     left alone. Nothing like soccer's flat +2 across seven attributes, so a
+     shared rule that knew soccer's raise would show here. */
+  payFocus: (...args) => { tbFocusCalls.push(args); const s = args[0]; s.power = Math.min(s.ceiling, s.power + 3); },
   rivalName: s => (s.foe && s.foe.active ? s.foe.name : null),
   log: tbLog,
   rng: () => tbRng(),
@@ -268,7 +287,7 @@ function tbHost(i) {
   return {
     fans: r2(r() * 300), rep: reps[i % reps.length], bank: r2(r() * 20), grade: 60 + (i % 40),
     deal: null, coverDone: false, coverWaiting: false, didPost: i % 17 === 9, calm: false,
-    power: 50, speed: 50, foe: i % 3 === 0 ? null : { name: `Foe ${i}`, active: i % 3 === 1 }, lines: [], trophies: [],
+    power: 50, speed: 50, ceiling: 51 + (i % 4), foe: i % 3 === 0 ? null : { name: `Foe ${i}`, active: i % 3 === 1 }, lines: [], trophies: [],
   };
 }
 const changedKeys = (a, b) => Object.keys({ ...a, ...b }).filter(k => JSON.stringify(a[k]) !== JSON.stringify(b[k]));
@@ -327,10 +346,62 @@ if (SECTIONS.includes('2')) {
     const s = tbHost(1); s.didPost = false;
     const unknown = SO.applySocialPost(s, 'not_a_post', TB_SOCIAL);
     check(!unknown && !s.didPost && s.lines.length === 0, 'an unknown post is refused and uses up nothing');
-    s.calm = true;
-    const paid = SO.payFocusBoost(s, TB_SOCIAL);
-    const again = SO.payFocusBoost(s, TB_SOCIAL);
-    check(paid && !again && s.power === 51 && s.speed === 51 && s.calm === false, 'a banked focus boost pays out once, through the sport\'s own stats');
+  }
+
+  /* The raise goes through the sport. The shared rule pays a banked boost by
+     calling the sport's payFocus with the save and nothing else, once, and
+     moves no stat itself: Testball's headroom aware raise comes out exactly
+     as Testball wrote it, on every ceiling. */
+  {
+    const bad = [];
+    const reached = new Set();
+    for (let i = 0; i < 40; i += 1) {
+      const idle = tbHost(i); idle.didPost = false;
+      const idleBefore = structuredClone(idle);
+      tbFocusCalls.length = 0;
+      if (SO.payFocusBoost(idle, TB_SOCIAL) || tbFocusCalls.length || changedKeys(idleBefore, idle).length) bad.push(`${i}: paid a boost nobody banked`);
+      const s = tbHost(i); s.calm = true;
+      const before = structuredClone(s);
+      tbFocusCalls.length = 0;
+      const paid = SO.payFocusBoost(s, TB_SOCIAL);
+      const again = SO.payFocusBoost(s, TB_SOCIAL);
+      if (!paid || again) bad.push(`${i}: paid ${paid}, then again ${again}`);
+      if (tbFocusCalls.length !== 1 || tbFocusCalls[0].length !== 1 || tbFocusCalls[0][0] !== s) bad.push(`${i}: the sport's raise was called ${tbFocusCalls.length} times`);
+      const want = Math.min(before.ceiling, before.power + 3);
+      if (s.power !== want) bad.push(`${i}: power ${before.power} became ${s.power}, the sport's own raise makes it ${want}`);
+      if (s.power > s.ceiling) bad.push(`${i}: power ${s.power} went past the ceiling ${s.ceiling}`);
+      const moved = changedKeys(before, s).sort().join(',');
+      if (moved !== 'calm,lines,power') bad.push(`${i}: a paid boost moved ${moved}`);
+      if (s.calm !== false || s.lines[s.lines.length - 1] !== 'quiet paid') bad.push(`${i}: the flag or the line is wrong`);
+      reached.add(s.power - before.power);
+    }
+    check(bad.length === 0, `a banked focus boost is paid once, by the sport's own raise and nothing else, over 40 Testball saves${bad.length ? `: ${bad.slice(0, 3).join(' | ')}` : ''}`);
+    check([1, 2, 3].every(d => reached.has(d)), `Testball's raise was held to the player's ceiling: gains of ${[...reached].sort().join(', ')} were all seen`);
+  }
+
+  /* And the shared files, comments stripped, name no soccer attribute and no
+     attribute ceiling: the raise lives in the binding. Only the Round 835 part
+     of careerSocial.ts is read (the papers above it are other sports' words,
+     and "passing" is a real word in one of them). */
+  {
+    const strip = t => t.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
+    const MARK = '/* ─── Round 835: the posts you make';
+    const socialAll = fs.readFileSync(path.join(ROOT, 'src/lib/careerSocial.ts'), 'utf8').split('\r\n').join('\n');
+    check(count(socialAll, MARK) === 1, 'careerSocial.ts still carries the Round 835 section marker this check reads from');
+    const shared = {
+      'src/lib/careerSocial.ts': strip(socialAll.slice(socialAll.indexOf(MARK))),
+      'src/lib/careerBrand.ts': strip(fs.readFileSync(path.join(ROOT, 'src/lib/careerBrand.ts'), 'utf8').split('\r\n').join('\n')),
+      'src/lib/careerIdentity.ts': strip(fs.readFileSync(path.join(ROOT, 'src/lib/careerIdentity.ts'), 'utf8').split('\r\n').join('\n')),
+    };
+    const ATTR = /\b(pace|shooting|passing|dribbling|defending|physical|reflexes|overall|potential)\b|\b99\b/;
+    for (const [rel, code] of Object.entries(shared)) {
+      const hit = code.split('\n').filter(l => ATTR.test(l)).map(l => l.trim());
+      check(code.length > 500 && hit.length === 0, `${rel} names no attribute and no attribute ceiling in its code${hit.length ? `: ${hit[0].slice(0, 80)}` : ''}`);
+    }
+    const body = /export function payFocusBoost<S>\([^)]*\): boolean \{\n([\s\S]*?)\n\}/.exec(shared['src/lib/careerSocial.ts']);
+    check(Boolean(body) && count(body[1], 'sport.payFocus(s);') === 1 && !/[+\-*]=|Math\./.test(body[1]), 'payFocusBoost calls the sport\'s raise once and does no arithmetic of its own');
+    const bindingCode = strip(fs.readFileSync(path.join(ROOT, 'src/lib/soccerCareerBrand.ts'), 'utf8').split('\r\n').join('\n'));
+    check(/payFocus: s => \{\n\s*for \(const k of FOCUS_STATS\) s\[k\] = clamp\(s\[k\] \+ 2, 20, 99\);\n\s*\},/.test(bindingCode), 'soccer\'s raise is in soccer\'s binding: +2 on each of its attributes, held inside 20 to 99');
   }
 
   /* Soccer's seven posts, on real saves, through the same rule. */
@@ -360,31 +431,66 @@ if (SECTIONS.includes('2')) {
 
     /* The card's words against what the post does. A card prints its
        follower gain when the low end is above zero, and its extra line. */
-    const KNOWN_CARD_GAPS = {
-      /* Found by this round, left for the lead: the card says "Rivalry
-         intensity increases" and the post only writes a line about the
-         rival. Making it true moves rivalryIntensity, which changes saves and
-         later draws, so it is not a lift's call. Remove this entry when it is
-         fixed. */
-      troll_rival: 'rivalry',
-    };
-    const claims = post => {
-      const out = new Set();
-      if (post.followerGain[0] > 0) out.add('followers');
-      const x = post.extraEffect || '';
-      if (/Reputation [+-]\d+/.test(x)) out.add('standing');
-      if (/all stats next season/.test(x)) out.add('focus');
-      if (/Rivalry intensity/.test(x)) out.add('rivalry');
-      return out;
-    };
+    /* Every card, no exceptions list (the rival post was on one until its
+       card stopped promising a rivalry meter it never moved). The extra line
+       has to be one of the shapes below, whole, so a new line that promises
+       something this check cannot read fails instead of passing unread. */
+    const EXTRA_SHAPES = [
+      { re: /^Reputation ([+-]\d+)$/, claim: 'standing' },
+      { re: /^\+(\d+) to all stats next season$/, claim: 'focus' },
+      { re: /^All talk: your rival gets named, nothing else moves$/, claim: null },
+    ];
     const gaps = {};
     for (const post of SB.SOCIAL_MEDIA_ACTIONS) {
       const does = new Set(SO.postMeters(post, SB.SOCCER_SOCIAL));
-      for (const c of claims(post)) if (!does.has(c)) gaps[post.id] = c;
-      const rep = /Reputation ([+-]\d+)/.exec(post.extraEffect || '');
-      if (rep && Number(rep[1]) !== post.reputationChange) gaps[post.id] = `prints reputation ${rep[1]}, moves ${post.reputationChange}`;
+      const says = new Set();
+      if (post.followerGain[0] > 0) says.add('followers');
+      const x = post.extraEffect || '';
+      const shape = EXTRA_SHAPES.find(sh => sh.re.test(x));
+      if (x && !shape) { gaps[post.id] = `prints "${x}", which this check cannot read against the post`; continue; }
+      if (shape?.claim) says.add(shape.claim);
+      for (const c of says) if (!does.has(c)) gaps[post.id] = `says ${c}, does not move it`;
+      for (const d of does) if (!says.has(d)) gaps[post.id] = `moves ${d}, never says so`;
+      const m = shape ? shape.re.exec(x) : null;
+      if (shape?.claim === 'standing' && Number(m[1]) !== post.reputationChange) gaps[post.id] = `prints reputation ${m[1]}, moves ${post.reputationChange}`;
+      if (shape?.claim === null && post.id !== SB.SOCCER_SOCIAL.rivalPost) gaps[post.id] = 'prints the rival post\'s line and is not the rival post';
+      if (shape?.claim === 'focus') {
+        /* The card's number against soccer's own raise, on a real save. */
+        const real = Math.random;
+        Math.random = mulberry32(8357);
+        try {
+          const s = E.initCareer('Quiet', 'Spain', 'CM', '2020s', { pace: 70, shooting: 70, passing: 70, dribbling: 70, defending: 70, physical: 70, reflexes: 70 }, 70, 2020, clubs, null, 60);
+          /* Two at the top, so the 99 line is met from 98 and from 99, and
+             every one of them already past this player's potential of 60. */
+          Object.assign(s, { pace: 50, shooting: 98, passing: 99, dribbling: 60, defending: 20, physical: 70, reflexes: 97 });
+          const before = structuredClone(s);
+          s.socialMediaFocusBoost = true;
+          SO.payFocusBoost(s, SB.SOCCER_SOCIAL);
+          const keys = ['pace', 'shooting', 'passing', 'dribbling', 'defending', 'physical', 'reflexes'];
+          const wrong = keys.filter(k => s[k] !== Math.min(99, before[k] + Number(m[1])));
+          if (wrong.length) gaps[post.id] = `prints +${m[1]} to all stats, the raise did something else to ${wrong.join(', ')}`;
+          const other = changedKeys(before, s).filter(k => !keys.includes(k) && k !== 'events' && k !== 'socialMediaFocusBoost');
+          if (other.length) gaps[post.id] = `the raise also moved ${other.join(', ')}`;
+        } finally { Math.random = real; }
+      }
     }
-    check(JSON.stringify(gaps) === JSON.stringify(KNOWN_CARD_GAPS), `soccer's post cards say what the posts do, apart from the known gap list (${JSON.stringify(gaps)})`);
+    check(Object.keys(gaps).length === 0, `every one of soccer's ${SB.SOCIAL_MEDIA_ACTIONS.length} post cards says what its post does, with no exceptions list${Object.keys(gaps).length ? `: ${JSON.stringify(gaps)}` : ''}`);
+    /* And the rival post does what its card now says: followers, one line
+       naming the rival while there is one, and the rivalry meter untouched. */
+    {
+      const real = Math.random;
+      Math.random = mulberry32(8358);
+      try {
+        const base = E.initCareer('Jab', 'Spain', 'ST', '2020s', { pace: 70, shooting: 70, passing: 70, dribbling: 70, defending: 70, physical: 70, reflexes: 70 }, 70, 2020, clubs, null, 88);
+        base.rival = { name: 'Rival One', retired: false };
+        base.rivalryIntensity = 40;
+        const s = structuredClone(base);
+        SO.applySocialPost(s, SB.SOCCER_SOCIAL.rivalPost, SB.SOCCER_SOCIAL);
+        const named = s.events.filter(e => e.includes('Rival One')).length;
+        check(s.rivalryIntensity === 40 && named === 1 && r2(s.socialMediaFollowers - base.socialMediaFollowers) === 0.8 && JSON.stringify(s.rival) === JSON.stringify(base.rival),
+          `the rival post gains its 0.8M, names the rival once and leaves the rivalry meter where it was (${s.rivalryIntensity})`);
+      } finally { Math.random = real; }
+    }
   }
 
   console.log('\n2b. A deal pays what its card prints');

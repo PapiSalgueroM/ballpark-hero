@@ -615,7 +615,10 @@ export interface SocialPostSport<S> {
   posted: Toggle<S>;
   /** Banked by the focus post, cleared when it pays out. */
   focus: Toggle<S>;
-  /** What the focus boost does when it pays out: the sport's own stats. */
+  /** What the focus boost does when it pays out. The whole raise is the
+   *  sport's: which stats, by how much, and where it stops (a hard ceiling,
+   *  the player's potential, nothing at all). This file names no stat and
+   *  clamps none; it calls this once per banked boost and clears the flag. */
   payFocus: (s: S) => void;
   /** The rival's name while there is one still playing, else null. */
   rivalName: (s: S) => string | null;
