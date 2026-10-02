@@ -1,5 +1,60 @@
 # Project state
 
+## LIVE 2026-10-01: Release Q (839 leaderboard page, Claude822 career calendar inboxes, Claude823 CBB assistants, Claude824 NBA stats and awards, Claude826 Gauntlet overtime label, Claude829 MLB real 26, the rendered audit report), main `30db5f44`
+
+Assembled by the desktop Claude lane in the gate clone (`release-q`). **douknowball.com is serving it:** deployment
+`3798e290`, called only after `get_project` showed `latest_commit_sha` `30db5f44`; the live entry moved from
+`index-E8L0RxXO.js` to `index-COxixK8K.js`. Proof by content: `/whats-new` carries all six new lines; the live Leaderboard chunk contains the failed board and failed rank wording; the live MLB Front Office chunk contains the salary note; the nine changed routes answer 200.
+
+Every round below was built, attacked by an independent reviewer and fixed before it was merged. Numbers written
+ClaudeNNN overlap a Codex round of the same number.
+
+- **839, from the rendered audit: the World Leaderboard told every visitor "No scores yet today".** Two causes.
+  In the database (both migrations applied on 2026-10-01 before this publish, `round_839_leaderboard_board_plan`
+  and `round_839_global_rank_plan`): the period filter could not become an index condition when the period is a
+  function parameter, so the board read the whole covering index (2,831 ms measured against a 3 second anonymous
+  timeout). The window is now a range on the day, the denominators are computed once, and the unfiltered all time
+  board reads the `player_ranks` cache. As a visitor: today 0.2 s (was a 500), all time 0.2 s (was 2.2 s), the
+  30 day rank 0.55 s (was up to 1.96 s). Old against new: identical rows in 62 compared cases. In the page: a
+  failed board or rank call says so (supabase-js resolves on an HTTP error, so the old catch never ran), and Try
+  again really refetches Today and All Time. `simLeaderboardCache` takes its fresh truth from an every game call
+  (the unfiltered call would now be the cache against itself), rechecks after a refresh before failing, and asks
+  every window the page asks as a single anonymous request.
+- **Claude822: NBA, MLB and NHL My Career get the calendar inbox** the NFL career got in Round 796, through the
+  shared `careerInbox.ts` (57, 59 and 54 texts tagged by beat, role senders only, no forward looking text in a
+  final season, the inbox's draws on their own keyed stream so a text cannot reshuffle a career).
+- **Claude823: CBB Dynasty runs the football dynasty's staff, rivalry night and strength of schedule code**, not a
+  copy. The review added the check that a winner always outscores the loser (4 percent of games went red with
+  the clamp removed). The same two fences are owed for CFB after Codex818.
+- **Claude824: NBA Front Office season stats, five awards, and contracts that scale with the cap.** Box scores
+  are written off the result the sim already decided, so lines add up to the score. The review removed a worked
+  example the engine could not produce and fenced the rookie rule. Left open: computer clubs refill on minimum
+  deals, so tax payers still fall to about 0.3 a season from season four; that needs computer free agency.
+- **Claude826: Gauntlet Draft says when a game was settled in extra time or overtime**, in each sport's words, in
+  the one shared engine (same scores for a seed). And a Soccer Career financial crisis no longer wipes the private
+  physio's yearly cost. Left open: "Sell everything" in the four US careers zeroes the bill and keeps the items.
+- **Claude829: MLB Front Office starts every club with its real 26.** Source: MLB's Stats API, each club's list on
+  2026-09-27 (the last day of the regular season), read 2026-10-01, committed with a generator that re-bakes
+  offline. Two spot checks against ESPN, 110 men on eleven clubs, no real disagreement; eleven stat lines identical.
+  The review found Detroit shipping one catcher (the API lists the second as a DH; a club short of two listed
+  catchers now makes up the pair from games caught), a second pair of real namesakes, clubs opening seasons with
+  no catcher (808 of 9,000 club seasons, now 0), the draft carrying clubs past 28 (computer clubs now cut, the
+  user is asked to), and a rival names scanner skip that was three whole files wide (now one exact real name in
+  three files, with a control). Ratings are the game's own from 2026 numbers; twelve are marked thin; the page
+  says salaries are the game's own. Old saves replay identically.
+- **The rendered audit** (`docs/audits/LIVE-RENDERED-AUDIT-2026-10-01.md`, `scripts/playLiveRenderedAudit.mjs`) is
+  on main. Its ranked fix list is the AdSense and indexing work order: 839 was fix 2.
+- **One copy edit:** the magazine cover dilemma in Soccer Career lost its nudity joke (Round 819's reviewer left
+  it for a call against the ad content policies).
+
+**Gates.** Type gate 0 on the merged tree. 55 fences green in three lanes (24 snapshot and release readers; the rounds' own fences including `simLeaderboardCache`, `simCareerInboxBeats`, `simCbbStaff`, `simNbaSeasonStats`, `simNbaLuxuryTax`, `simGauntletEngine`, `simCareerLifeCooldowns`, `simMlbFullRosters` with 6,199 checks, `simFrontOfficeCuts`, `simTradeFinder`); `simHarnessAnchors` was red once on a raw read in `simMlbFullRosters`, fixed and green. The four test files the release changed, 24 tests, pass. **Real browser pass on the built site** (Chromium, host like server): `sweepGames` 182 routes at phone, tablet and desktop, 546 checks, 0 findings; `playGames` clean on `/nba-my-career`, `/mlb-my-career`, `/nhl-my-career`, `/nba-front-office`, `/mlb-front-office`, `/cbb-dynasty`, `/leaderboard`, `/gauntlet-draft`, `/nhl-gauntlet-draft` and `/soccer-career`; `playRenderStability` green on nine routes; `sweepWeight` green. Thirteen pages were redrawn alone. **Release P's owed check:** `simAcademy`, `simEras` and `simRoles` finished green after that publish; `simHalftime`, `simPress` and `simOpposition` hit a 50 minute cap under load and are rerunning without one.
+
+**Held, with the reason.** Claude830 (NHL real rosters, reviewed) is held for data: 61 men on ESPN's club rosters,
+43 of them injured and some of them stars, are missing from the NHL list it was read from, so it will be re-read
+after the opening night roster deadline. Claude833 (US career stat lines and era money, reviewed) needs its merge
+with Claude822 resolved. Claude825 was built late and has not been reviewed. Claude827's reviewed migration waits
+for its place in the data order. Claude834 and 835 (engine lifts with identical fixtures) wait for review.
+
 ## LIVE 2026-10-01: Release P (781 Club Manager stoppage time and the aggregate on a second leg; 819 Soccer Career's dilemmas are reachable and every option does what its card says), main `5738ab58`
 
 Assembled by the desktop Claude lane in the gate clone (`release-p`). **douknowball.com is serving it:** deployment

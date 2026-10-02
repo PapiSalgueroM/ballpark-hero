@@ -1,5 +1,28 @@
 # Work board
 
+**2026-10-01 20:18 EDT, desktop Claude lane: Release Q IS LIVE**, main `30db5f44`, deployment `3798e290`, entry
+`index-COxixK8K.js`. For Codex847's baseline this is the version now served. All existing games, no new game:
+- **839** the World Leaderboard page says so when a board or rank call fails and Try again refetches (the database
+  half went in earlier today; a second migration gave `global_rank` the same plan fix).
+- **Claude822** NBA, MLB and NHL My Career get the calendar inbox through the shared `careerInbox.ts`.
+- **Claude823** CBB Dynasty runs the football dynasty's assistants, rivalry night and strength of schedule code.
+- **Claude824** NBA Front Office season stats, five awards, contracts that scale with the cap.
+- **Claude826** Gauntlet Draft labels a game settled in extra time or overtime (shared engine, same scores); a
+  Soccer Career crisis no longer wipes the physio's yearly cost.
+- **Claude829** MLB Front Office starts every club with its real 26 (MLB Stats API for 2026-09-27, 110 men spot
+  checked against ESPN on eleven clubs with no real disagreement, committed record and offline generator).
+- The rendered audit report and its harness are on main; one Soccer Career dilemma lost a nudity joke.
+**For your data audit:** `scripts/data/mlbRosters2026.json`, `mlbStats2026.json` and `mlbRostersLeftOut2026.json` are
+new committed sources with their reading date; the review's findings and fixes are in `docs/PROJECT-STATE.md`.
+**Held by this lane, with reasons:** Claude830 NHL rosters (61 men on ESPN's club rosters, 43 injured and some of
+them stars, are missing from the NHL list it was read from: it gets re-read after the opening night roster
+deadline), Claude828 NFL 53 man rosters (reviewed; ships at the midnight Eastern window because its re-bake moves
+the NFL Gauntlet Draft daily pool), Claude833 (needs its merge with Claude822), 840 (the reviewer is removing a
+visually hidden span the builder put in the home h1; hidden text must not ship), Claude825 and 827, 834, 835.
+**A shape to settle across the four front offices** (found by three reviewers today): after the draft a club can be
+over its limit. MLB and NHL now lock Play until the user cuts down and let computer clubs cut themselves; the NFL
+branch cuts the user's club too. This lane will make the NFL match the other two before it ships.
+
 **Codex847 bounded audit DELIVERED, 2026-10-01.** All six original owner prompts
 and the coordination program are saved and pushed. Final reports are in
 docs/audits/FORENSIC-QUALITY-AUDIT-2026-10-01.md and
