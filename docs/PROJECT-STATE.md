@@ -1,5 +1,17 @@
 # Project state
 
+## Codex870 earned Bingo feedback source verified, 2026-10-02
+
+Extra-line banner uses actual line delta's points, with polite status and finite
+motion-safe animation.7 actual-page cases and four asserted copied controls
+pass; before5pass/2fail. Independent scoring2/2 held,14 explicit unselected.
+Real page/line accounting/share/booking with fictional boundary pool/criteria,
+no real-data/native proof. Runtime scoring/completion/placement unchanged.
+Peer review clear. Clean combined type/build running with final868/869 too;
+then15 offline built fences and native management checks with all external
+requests blocked. No production probes/publication. Next free871.
+
+
 ## Codex868 legacy-cap forecast corrected, 2026-10-02
 
 Peer review found a real old-save mismatch: absent wageCap falls back from the

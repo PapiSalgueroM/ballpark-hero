@@ -307,3 +307,28 @@ test assumed today's border is always primary, but existing January window
 styling makes it gold. Assert existing today background/bold date text instead;
 no product styling changed. Final anchor fence554 parsed scripts,119 multiline
 guards,123 normalized reads pass. Native Enter/mobile geometry are pending here.
+
+## 870: Player Bingo earned bonus
+
+URL: `/player-bingo`.
+
+When a placement completes two extra lines the old banner says+100 although
+score actually increases200. Flash now stores the actual line delta's points
+and displays them, with polite status and the existing1800ms lifetime. Only
+the extra-line animation gets motion-safe classes; first-line motion remains
+unchanged. Score/placement/bank/continue/blackout/deck/completion branches are
+unchanged. Existing start and effect cleanup clear pending feedback.
+
+Seven actual-page cases use explicitly fictional criterion/deck boundaries
+and the real layoutGrid/countCompletedLines, placements, score, share and
+ResultScreen booking. Before5pass/2 intended failures; after7/7. One-line100,
+intersection200 with real300 total, first-line bank100 and blackout1700 all
+verified. Incorrect placement, skip, final deck, exact booking, replay/unmount
+and feedback lifetime hold. This does not verify native/mobile or real data.
+
+Four controls: constant1001 failed/6 held, cumulative delta2/5, missing status
+1/6, unguarded motion1/6. All7 run,0 pending/unhandled. Actual executable
+anchors change once, CRLF binding checked, source/test/line/recording bytes held
+and owned copies cleaned. Unchanged existing scoreShown Bingo first-bank/
+blackout cases pass2/2 with14 other cases explicitly unselected. Peer source
+review clear. Exact receipts TEMP/dukb-player-bingo870-2026-10-02-a1.

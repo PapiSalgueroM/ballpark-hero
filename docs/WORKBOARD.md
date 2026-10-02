@@ -1,5 +1,19 @@
 # Work board
 
+**Codex870 SOURCE VERIFIED, native pending, 2026-10-02.** Player Bingo extra
+line feedback shows the actual earned delta: two intersecting lines give+200,
+one gives+100. Polite status and existing finite motion now honor reduced
+motion. Original score/bank/continue/blackout/deck/data/booking untouched.
+Seven actual-page cases pass; before5pass/2 intended feedback failures.
+Controls: constant1001fail/6held, cumulative delta2/5, status1/6, motion1/6.
+All7 run with0 pending/unhandled, CRLF anchors changed once and raw bytes held.
+Existing Bingo scoring2/2 also pass,14 other cases explicitly unselected.
+Fictional criterion/deck boundary only, real layout/count/placement/score/share/
+booking; no real-data or native proof claimed. Peer review clear. Final clean
+type/build running, then offline built fences and blocked-external management
+browser acceptance. Next free871; incident still holds production traffic.
+
+
 **Codex868 review correction VERIFIED, 2026-10-02.** A supported old save can
 lack wageCap. Renewal then retains the missing field, and the committed card
 derives its cap from the new bill. Forecast now uses that same actual next
