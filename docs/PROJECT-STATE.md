@@ -1,5 +1,14 @@
 # Project state
 
+## Codex853 accepted repair, 2026-10-01
+
+Account dialogs restore their actual opener focus and signup accurately says
+guests earn points/streaks and appear on the leaderboard. Eight focused cases,
+two removed-protection controls and26 relevant existing/new auth/help tests
+verify the change. Actual Header native16case matrix at320/390 passes with
+reduced and ordinary motion. Clean type/build and all15 built-site fences pass.
+No credentials/backend change. Ready for Claude publication, not claimed live.
+
 ## Codex852 accepted repair, 2026-10-01
 
 Footle's result value is labeled in dollars, matching its stored USD millions.

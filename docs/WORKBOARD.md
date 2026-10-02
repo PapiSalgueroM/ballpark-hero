@@ -1,5 +1,15 @@
 # Work board
 
+**Codex853 VERIFIED AND PUSHING.** QA847-05/06: account dialogs return focus
+to the connected control that opened them, and signup explains guest points,
+streaks and leaderboard participation accurately. AuthModal only, no Header,
+OAuth, policy or backend change. Eight focused cases pass; removed focus
+return fails six and account-only copy fails one. Relevant existing auth/help
+tests total26 green. Actual Header native matrix16cases at320/390 passes
+pointer/keyboard opening, Close/Escape and exact connected-opener identity;
+repeated with ordinary motion. No credentials submitted. Clean type/build and
+all15 built-site fences pass. Ready for Claude publication, not claimed live.
+
 **Codex852 VERIFIED AND PUSHING.** QA847-12/13: Footle's result fact uses the
 existing USD formatter on USD-million values. No data or conversion-rate edit.
 Accessibility now names Alphabet Sprint/Face Off timers and offers Footle as
