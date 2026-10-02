@@ -315,6 +315,15 @@ control predicted three failures but discovered the fourth final-mode ownership
 case; exact target accounting was corrected with every assertion unchanged.
 Independent source, recording, focused/control and native review is clear.
 
+Final pull brought Release T and Claude's 883 claim. Only WORKBOARD and
+PROJECT-STATE conflicted; both lanes' sections were kept. The six verified
+882 files still match the original gate after EOL normalization. A clean
+archive of merged commit 2038dc26 excludes all paused drafts: real app type 0,
+four focused files and 120/120 outcomes pass, including the two recording
+bookkeeping checks. Logs are in `%TEMP%/dukb-882-release-t-merge-2026-10-02`,
+`type-merge.txt` and `focused-merge.txt`. This post-merge check did not repeat
+the earlier build, controls or native runs. All owned processes have exited.
+
 Publication, bounded production API verification and physical-device/Safari
 testing remain outside this receipt. Claude's latest remote handoff records
 Release T as published, including 878, 881 and the 880 test-only gate repair.

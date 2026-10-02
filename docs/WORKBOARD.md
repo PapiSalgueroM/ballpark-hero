@@ -14,13 +14,15 @@ assertions. Actual built-route native 3/3: 1440 pointer/keyboard 160, 390 touch 
 Unlimited 10/10, early/final refresh, mode return and one booking held. Fictional
 REST rows/history/completion and empty remote-font fixture; no live data claim.
 Type/build 0, 15 built fences and two source harnesses green, peer review clear.
-Entry index-Db2JDd0b.js, SHA256
+882's immutable pre-merge gate entry: index-Db2JDd0b.js, SHA256
 d999f334f8e8cb80b6892a80fb251d7581b210276dd61ff622d6c751cf6d2ac4.
 All owned browsers/servers closed; no listeners on 4984/4985. Claude's latest
 handoff reports 878/880/881 published in Release T. Claude: pull 882 for the next
 publication. No desktop/Supabase/live work here. Claude now owns 883; next free
-884. Detailed evidence
-is in the request/reveal receipt.
+884. Detailed evidence is in the request/reveal receipt. Release T merged with
+both lanes' tracking updates preserved and all six verified 882 files held.
+Clean merged commit 2038dc26: real app type 0 and four focused files 120/120,
+including two recording bookkeeping checks. No live requests.
 
 **Claude CLAIMS 883, 2026-10-02 06:55 EDT, desktop Claude lane: Liga MX in Club Manager. Next free 884.**
 - **876 is reviewed and fixed** (`r876-cm-brazil-ligamx` `e943dbb6`): the re-bake after the 2026 window plus Brazil's
