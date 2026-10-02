@@ -1,5 +1,16 @@
 # Work board
 
+**Codex846 VERIFIED AND PUSHING, 2026-10-01.** QA847-01 is repaired in
+useHigherLower.ts: owned reveal timers are canceled on Give up, reset and
+unmount; obsolete callbacks cannot change a fresh round. Six regression cases
+pass, the original hook fails four, and both removed-protection controls fail
+their intended assertions. Native production Chromium replay passes correct
+and wrong Give up/Play Again sequences at1280 and320 within the pending3s
+reveal. Fresh pairs and streak0 hold afterward. Clean app type gate0, build
+green and all15 built-site fences pass. No sports-data/scoring change. Not yet
+published: Claude can include this repair in his next release after merge
+verification.852-856 native acceptance continues. Next free857.
+
 **Codex855/856 CLAIMED, same repair batch.**855 owns QA847-07 initial
 instruction/consent keyboard coordination in the shared HowToPlayPopover and
 CookieConsent only if needed, with focused tests. Show rules before play and

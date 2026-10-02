@@ -1,5 +1,14 @@
 # Project state
 
+## Codex846 accepted repair, 2026-10-01
+
+Soccer Higher or Lower restarts are isolated from pending reveals. Six focused
+tests and both negative controls pass their expected outcomes; the original
+hook fails four cases. Native correct/wrong restart paths pass at1280/320.
+Clean production type/build and all15 built-site fences pass for this repair
+batch.852-856 native checks and two new harness reporting repairs continue.
+846 is ready for Claude's publication lane, with no claim that main is live.
+
 ## Current Codex repair batch, 2026-10-01
 
 Additional disjoint claims855/856 cover initial help/consent keyboard access
