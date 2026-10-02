@@ -1,3 +1,4 @@
+import { installArcadePointers } from './arcadePointerFixture';
 import { act, cleanup, fireEvent, render, renderHook, screen } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { HowToPlayPopover } from '@/components/game/HowToPlayPopover';
@@ -30,6 +31,7 @@ const games = [
   { name: 'Free Kick', Board: FreeKickBoard, hold: 'Hold to strike', next: 'Next kick', phase: 'kickEnd', points: 173, slug: 'free-kick', countField: 'goals', flight: 700 },
   { name: 'Buzzer Beater', Board: BuzzerBeaterBoard, hold: 'Hold to shoot', next: 'Next shot', phase: 'shotEnd', points: 241, slug: 'buzzer-beater', countField: 'made', flight: 780 },
 ];
+let pointerFixture: ReturnType<typeof installArcadePointers>;
 let now = 0;
 let frameId = 0;
 let frames = new Map<number, FrameRequestCallback>();
@@ -37,6 +39,7 @@ let frames = new Map<number, FrameRequestCallback>();
 beforeEach(() => {
   vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout', 'setInterval', 'clearInterval'] });
   vi.clearAllMocks();
+  pointerFixture = installArcadePointers();
   localStorage.clear();
   now = 0;
   frameId = 0;
@@ -47,7 +50,7 @@ beforeEach(() => {
   vi.mocked(kickShot).mockReturnValue(kickResult);
   vi.mocked(hoopShot).mockReturnValue(hoopResult);
 });
-afterEach(() => { cleanup(); vi.restoreAllMocks(); vi.unstubAllGlobals(); vi.useRealTimers(); });
+afterEach(() => { cleanup(); pointerFixture.restore(); vi.restoreAllMocks(); vi.unstubAllGlobals(); vi.useRealTimers(); });
 
 function advance(milliseconds: number, drawFrame = true) {
   act(() => {
@@ -177,12 +180,12 @@ describe.each(games)('$name pause and input safety', game => {
     const hold = () => screen.getByRole('button', { name: game.hold });
     return { ...view, board, hold };
   }
-  const shoot = (hold: HTMLElement) => { fireEvent.mouseDown(hold); fireEvent.mouseUp(hold); };
+  const shoot = (hold: HTMLElement) => { fireEvent.pointerDown(hold); fireEvent.pointerUp(hold); };
 
   it('cancels a held charge and requires a fresh press after resume', () => {
     const view = mount();
     const hold = view.hold();
-    fireEvent.mouseDown(hold);
+    fireEvent.pointerDown(hold);
     advance(32);
     fireEvent.click(screen.getByRole('button', { name: 'Pause' }));
     const pausedText = view.board.textContent;
@@ -190,11 +193,11 @@ describe.each(games)('$name pause and input safety', game => {
     expect(view.board.textContent).toBe(pausedText);
     expect(hold).toBeDisabled();
     for (const input of view.container.querySelectorAll('input')) expect(input).toBeDisabled();
-    fireEvent.mouseUp(hold);
+    fireEvent.pointerUp(hold);
     fireEvent.keyUp(window, { key: ' ' });
     expect(view.board).toHaveAttribute('data-arcade-phase', 'aiming');
     fireEvent.click(screen.getByRole('button', { name: 'Resume' }));
-    fireEvent.mouseUp(hold);
+    fireEvent.pointerUp(hold);
     fireEvent.pointerUp(view.getByRole('img'));
     fireEvent.keyUp(window, { key: ' ' });
     expect(view.board).toHaveAttribute('data-arcade-phase', 'aiming');

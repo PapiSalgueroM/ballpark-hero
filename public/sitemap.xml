@@ -7,15 +7,15 @@
   Regenerate with: node scripts/genSitemap.mjs
 -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://douknowball.com/</loc><lastmod>2026-10-02</lastmod><changefreq>daily</changefreq><priority>1.0</priority></url>
-  <url><loc>https://douknowball.com/leaderboard</loc><lastmod>2026-09-12</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+  <url><loc>https://douknowball.com/</loc><lastmod>2026-10-01</lastmod><changefreq>daily</changefreq><priority>1.0</priority></url>
+  <url><loc>https://douknowball.com/leaderboard</loc><lastmod>2026-10-02</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
   <url><loc>https://douknowball.com/college</loc><lastmod>2026-10-01</lastmod><changefreq>weekly</changefreq><priority>0.6</priority></url>
   <url><loc>https://douknowball.com/soccer</loc><lastmod>2026-10-01</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
   <url><loc>https://douknowball.com/pro-basketball</loc><lastmod>2026-10-01</lastmod><changefreq>weekly</changefreq><priority>0.6</priority></url>
   <url><loc>https://douknowball.com/pro-football</loc><lastmod>2026-09-30</lastmod><changefreq>weekly</changefreq><priority>0.6</priority></url>
   <url><loc>https://douknowball.com/baseball</loc><lastmod>2026-10-01</lastmod><changefreq>weekly</changefreq><priority>0.6</priority></url>
   <url><loc>https://douknowball.com/hockey</loc><lastmod>2026-10-01</lastmod><changefreq>weekly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://douknowball.com/whats-new</loc><lastmod>2026-10-02</lastmod><changefreq>weekly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://douknowball.com/whats-new</loc><lastmod>2026-10-01</lastmod><changefreq>weekly</changefreq><priority>0.5</priority></url>
   <url><loc>https://douknowball.com/records</loc><lastmod>2026-09-30</lastmod><changefreq>weekly</changefreq><priority>0.6</priority></url>
   <url><loc>https://douknowball.com/records/super-bowl-winners</loc><lastmod>2026-09-30</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://douknowball.com/records/nba-champions</loc><lastmod>2026-09-30</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
@@ -82,7 +82,7 @@
   <url><loc>https://douknowball.com/gauntlet-draft</loc><lastmod>2026-09-30</lastmod><changefreq>daily</changefreq><priority>0.8</priority></url>
   <url><loc>https://douknowball.com/player-stock-market</loc><lastmod>2026-09-30</lastmod><changefreq>daily</changefreq><priority>0.8</priority></url>
   <url><loc>https://douknowball.com/perfect-season-nfl</loc><lastmod>2026-10-01</lastmod><changefreq>daily</changefreq><priority>0.8</priority></url>
-  <url><loc>https://douknowball.com/front-office</loc><lastmod>2026-10-02</lastmod><changefreq>daily</changefreq><priority>0.8</priority></url>
+  <url><loc>https://douknowball.com/front-office</loc><lastmod>2026-10-01</lastmod><changefreq>daily</changefreq><priority>0.8</priority></url>
   <url><loc>https://douknowball.com/nfl-my-career</loc><lastmod>2026-10-01</lastmod><changefreq>daily</changefreq><priority>0.8</priority></url>
   <url><loc>https://douknowball.com/football-grid</loc><lastmod>2026-09-30</lastmod><changefreq>daily</changefreq><priority>0.8</priority></url>
   <url><loc>https://douknowball.com/nfl-career</loc><lastmod>2026-09-30</lastmod><changefreq>daily</changefreq><priority>0.8</priority></url>

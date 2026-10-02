@@ -321,8 +321,8 @@ export default function Leaderboard() {
           <p className="font-semibold">No points {WINDOW_WORDS[period]}</p>
           <p className="text-xs text-muted-foreground">
             {period === 'alltime'
-              ? `Finish any game and you'll appear here as ${ownShownName}.`
-              : `Play something and you'll appear here as ${ownShownName}.`}
+              ? `Earn a positive ranked score to appear here as ${ownShownName}.`
+              : `Earn a positive ranked score in this window to appear here as ${ownShownName}.`}
           </p>
         </div>
       )}
@@ -401,14 +401,14 @@ export default function Leaderboard() {
     <>
       <PageSeo
         title="World Leaderboard: Total Points | DoUKnowBall"
-        description="One global leaderboard for every game on DoUKnowBall. Top 100 for today, the last 7 days, the last 30 days and all-time, plus your own world rank. No account needed."
+        description="Compare ranked scores across sports. Top 100 today, 7 days, 30 days and all-time, plus your world rank. Guests can appear without an account."
         path="/leaderboard"
       />
       <div className="min-h-screen bg-background">
         <main id="dukb-main" className="max-w-4xl mx-auto px-4 py-8">
           <h1 className="text-3xl md:text-4xl font-display font-bold mb-2 text-center">World Leaderboard</h1>
           <p className="text-center text-muted-foreground text-sm mb-6">
-            One board, every game. Each game pays up to 100 pts a day: your best run counts, spamming doesn't.
+            Scored games share one board. Each pays up to 100 pts a day: only your best run counts.
           </p>
 
           <div className="mb-4">
@@ -496,16 +496,16 @@ export default function Leaderboard() {
         <section className="max-w-4xl mx-auto px-4 pb-16 prose-sm text-muted-foreground">
           <h2 className="text-xl font-display font-bold text-foreground mt-4 mb-3">How the world leaderboard works</h2>
           <p className="mb-3">
-            There is one board on this site and everybody is on it. Points from every game you
-            play add into the same total, so a run on <Link className="underline" to="/soccer-grid">Soccer Grid</Link> and a
+            Ranked scores from different games add into the same total, so a run on <Link className="underline" to="/soccer-grid">Soccer Grid</Link> and a
             run on <Link className="underline" to="/nhl-connect-4">NHL Connect 4</Link> count toward the same
-            standing. You do not need an account to appear: finish a game and you are on it under
-            whatever handle you are playing as.
+            standing. You do not need an account to appear: earn a positive ranked score and it
+            counts under whatever handle you are playing as. Games without a ranked score still
+            count toward your plays and streaks, but add no leaderboard points.
           </p>
 
-          <h3 className="text-base font-semibold text-foreground mt-5 mb-2">Every game is worth the same day</h3>
+          <h3 className="text-base font-semibold text-foreground mt-5 mb-2">How ranked games earn points</h3>
           <p className="mb-3">
-            Each game pays up to 100 points a day and only your best run of that day counts. That
+            Each scored game pays up to 100 points a day and only your best run of that day counts. That
             is deliberate and it decides two things at once. A thirty second game cannot be replayed
             forty times for forty scores, so the board does not reward whoever had the most idle
             afternoon. And a long career sim cannot bury a quick daily puzzle, because both top out
@@ -544,8 +544,8 @@ export default function Leaderboard() {
             <Link className="underline" to="/baseball">baseball</Link>,{' '}
             <Link className="underline" to="/hockey">hockey</Link> or{' '}
             <Link className="underline" to="/college">college</Link> sections, play the daily puzzles
-            there, then take one run at a game you have never tried. Four daily puzzles played
-            reasonably will out score one game played obsessively, every time.
+            there, then try a few different scored games. Replaying one game cannot raise its
+            contribution beyond the daily cap.
           </p>
           <p className="mb-3">
             If you want to know what the games are actually built on before you start,{' '}

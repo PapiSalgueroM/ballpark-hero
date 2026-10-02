@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState, type KeyboardEvent as ReactKeyboardEvent } from 'react';
+import { useCallback, useEffect, useRef, useState, type KeyboardEvent as ReactKeyboardEvent, type PointerEvent as ReactPointerEvent } from 'react';
 import { Button } from '@/components/ui/button';
 import ShareButtons from '@/components/game/ShareButtons';
 import ArcadeShotFeedback from '@/components/arcade/ArcadeShotFeedback';
@@ -65,6 +65,18 @@ export default function FreeKickBoard() {
   const [power, setPower] = useState(0.6);
   const [charging, setCharging] = useState(false);
   const chargingRef = useRef(false);
+  const heldPointerRef = useRef<{ id: number; target: Element } | null>(null);
+
+  const clearPointerHold = useCallback(() => {
+    const held = heldPointerRef.current;
+    heldPointerRef.current = null;
+    if (held?.target.hasPointerCapture(held.id)) held.target.releasePointerCapture(held.id);
+  }, []);
+
+  useEffect(() => () => {
+    chargingRef.current = false;
+    clearPointerHold();
+  }, [clearPointerHold]);
 
   const rngRef = useRef<() => number>(lehmer(1));
   const savedRef = useRef(restored !== null);
@@ -97,6 +109,7 @@ export default function FreeKickBoard() {
   }, [charging, paused]);
 
   const start = useCallback((m: Mode) => {
+    clearPointerHold();
     aimingRef.current = false;
     chargingRef.current = false;
     setCharging(false);
@@ -124,7 +137,7 @@ export default function FreeKickBoard() {
     setAimX(0); setAimY(0.5); setCurve(0); setPower(0.6);
     savedRef.current = false;
     setPhase('aiming');
-  }, [restored, todayStr, resetFlight]);
+  }, [restored, todayStr, resetFlight, clearPointerHold]);
 
   const strike = useCallback(() => {
     if (paused || phase !== 'aiming' || !setup) return;
@@ -152,16 +165,38 @@ export default function FreeKickBoard() {
   }, [mode, paused, phase]);
 
   const endCharge = useCallback(() => {
+    clearPointerHold();
     if (!chargingRef.current) return;
     chargingRef.current = false;
     setCharging(false);
     if (!paused && !document.querySelector('[role="dialog"]')) strike();
-  }, [paused, strike]);
+  }, [paused, strike, clearPointerHold]);
+
+  const beginPointerCharge = (event: ReactPointerEvent<HTMLElement | SVGSVGElement>) => {
+    if (event.button !== 0 || event.isPrimary === false || heldPointerRef.current || chargingRef.current) return;
+    beginCharge();
+    if (!chargingRef.current) return;
+    heldPointerRef.current = { id: event.pointerId, target: event.currentTarget };
+    event.currentTarget.setPointerCapture(event.pointerId);
+  };
+
+  const finishPointerCharge = (event: ReactPointerEvent<HTMLElement | SVGSVGElement>) => {
+    if (heldPointerRef.current?.id !== event.pointerId) return;
+    endCharge();
+  };
+
+  const cancelPointerCharge = (event: ReactPointerEvent<HTMLElement | SVGSVGElement>) => {
+    if (heldPointerRef.current?.id !== event.pointerId) return;
+    clearPointerHold();
+    chargingRef.current = false;
+    setCharging(false);
+  };
 
   const togglePause = () => {
     aimingRef.current = false;
     if (paused) resume();
     else {
+      clearPointerHold();
       chargingRef.current = false;
       setCharging(false);
       pause();
@@ -207,14 +242,14 @@ export default function FreeKickBoard() {
     const up = (e: KeyboardEvent) => {
       if (mode === 'practice') return;
       if (e.key !== ' ') return;
-      if (isInteractive(e)) { chargingRef.current = false; setCharging(false); return; }
+      if (isInteractive(e)) { clearPointerHold(); chargingRef.current = false; setCharging(false); return; }
       endCharge();
       e.preventDefault();
     };
     window.addEventListener('keydown', down);
     window.addEventListener('keyup', up);
     return () => { window.removeEventListener('keydown', down); window.removeEventListener('keyup', up); };
-  }, [mode, paused, phase, beginCharge, endCharge, strike]);
+  }, [mode, paused, phase, beginCharge, endCharge, strike, clearPointerHold]);
 
   /* Touch and mouse: drag anywhere on the pitch to aim, let go to strike. */
   const pitchRef = useRef<SVGSVGElement | null>(null);
@@ -324,11 +359,15 @@ export default function FreeKickBoard() {
         role="img"
         tabIndex={mode === 'practice' ? 0 : undefined}
         aria-label={setup ? `Free kick from ${setup.distance} metres with ${setup.wallSize} in the wall` : 'Free kick'}
-        onPointerDown={e => { if (!paused && phase === 'aiming') { pointerAim(e.clientX, e.clientY); if (mode === 'practice') { aimingRef.current = true; e.currentTarget.setPointerCapture?.(e.pointerId); } else beginCharge(); } }}
-        onPointerMove={e => { if (!paused && phase === 'aiming' && (mode === 'practice' ? aimingRef.current : chargingRef.current)) pointerAim(e.clientX, e.clientY); }}
-        onPointerUp={e => { if (mode === 'practice') { aimingRef.current = false; if (e.currentTarget.hasPointerCapture?.(e.pointerId)) e.currentTarget.releasePointerCapture(e.pointerId); } else endCharge(); }}
-        onPointerCancel={() => { if (mode === 'practice') aimingRef.current = false; }}
-        onLostPointerCapture={e => { if (mode === 'practice' && e.target === e.currentTarget) aimingRef.current = false; }}
+        onPointerDown={e => {
+          if (paused || phase !== 'aiming') return;
+          if (mode === 'practice') { pointerAim(e.clientX, e.clientY); aimingRef.current = true; e.currentTarget.setPointerCapture?.(e.pointerId); }
+          else { beginPointerCharge(e); if (heldPointerRef.current?.id === e.pointerId) pointerAim(e.clientX, e.clientY); }
+        }}
+        onPointerMove={e => { if (!paused && phase === 'aiming' && (mode === 'practice' ? aimingRef.current : chargingRef.current && (!heldPointerRef.current || heldPointerRef.current.id === e.pointerId))) pointerAim(e.clientX, e.clientY); }}
+        onPointerUp={e => { if (mode === 'practice') { aimingRef.current = false; if (e.currentTarget.hasPointerCapture?.(e.pointerId)) e.currentTarget.releasePointerCapture(e.pointerId); } else finishPointerCharge(e); }}
+        onPointerCancel={e => { if (mode === 'practice') aimingRef.current = false; else cancelPointerCharge(e); }}
+        onLostPointerCapture={e => { if (e.target === e.currentTarget) { if (mode === 'practice') aimingRef.current = false; else cancelPointerCharge(e); } }}
       >
         {/* grass stripes, so the pitch reads as a pitch */}
         {[0, 1, 2, 3, 4, 5].map(i => (
@@ -441,11 +480,12 @@ export default function FreeKickBoard() {
           <div className="flex flex-wrap gap-2 pt-1">
             {mode === 'practice' ? <Button ref={practiceKick} className="flex-1" disabled={paused} onClick={strike}
               onKeyDown={event => { event.stopPropagation(); if (event.repeat && (event.key === 'Enter' || event.key === ' ')) event.preventDefault(); }}
-              onKeyUp={event => event.stopPropagation()}>Kick</Button> : <Button size="sm" className="flex-1" disabled={paused} onMouseDown={beginCharge} onMouseUp={endCharge}
-              onTouchStart={e => { e.preventDefault(); beginCharge(); }} onTouchEnd={e => { e.preventDefault(); endCharge(); }}
+              onKeyUp={event => event.stopPropagation()}>Kick</Button> : <Button size="sm" className={cn('flex-1 touch-none', charging && 'ring-2 ring-primary ring-offset-2 ring-offset-background')} disabled={paused}
+              onPointerDown={beginPointerCharge} onPointerUp={finishPointerCharge} onPointerCancel={cancelPointerCharge}
+              onLostPointerCapture={e => { if (e.target === e.currentTarget) cancelPointerCharge(e); }}
               onKeyDown={e => { e.stopPropagation(); if ((e.key === ' ' || e.key === 'Enter') && !e.repeat) { e.preventDefault(); beginCharge(); } }}
               onKeyUp={e => { e.stopPropagation(); if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); endCharge(); } }}>
-              Hold to strike
+              {charging ? 'Release to strike' : 'Hold to strike'}
             </Button>}
           </div>
           <p className="text-center text-[11px] text-muted-foreground">

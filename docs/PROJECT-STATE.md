@@ -1,5 +1,66 @@
 # Project state
 
+## Codex862 accepted visible arcade results, 2026-10-02
+
+Free Kick/Buzzer now show larger verdicts/points and stronger existing motion.
+Scoring, details/status, immediate Next and complete reduced-motion output
+stay intact. Six real scoring cases at320/390/1440 reduced and two animated
+wins at320 pass;24 ordinary miss cases fit too. Existing feedback10/10 and
+final harness pass. Clean type/build, all15 built fences and25 distinct
+selected harnesses pass across accepted runs. Detailed receipt records earlier
+timeouts/driver limits.85956534e17,8602b553ae6,8617340ad12 are pushed;862 follows.
+Only separate hidden CLI browsers used. Next free863; publication is Claude's.
+
+## Codex861 accepted truthful leaderboard copy, 2026-10-02
+
+Page and crawler copy require a positive ranked score; unscored finishes give
+plays/streak credit with0 points. Eight focused/eight existing failure cases
+pass; four-copy-target control rejects universal claims while four accounting
+baselines hold. CRLF matching/source-byte checks and final anchor fence pass.
+Only leaderboard snapshot and its derived sitemap date change,169 dates held.
+No scoring/backend/layout edit. Clean type/build and all15 built fences pass.
+85956534e17 and8602b553ae6 pushed;862 visual commit follows. Next free863.
+
+## Codex860 accepted Face Off deadline guard, 2026-10-01
+
+One actual-clock guard rejects expired answers before settlement.15 focused
+hook cases pass; the removed guard fails ten targets with five baselines held.
+Native ordinary timeout plus controlled correct/wrong delayed clicks all pay0.
+Native versus/full match not tested. No dealing/scoring/data/backend change.
+Clean type/build, all15 built fences and selected source harnesses pass.859
+is committed56534e17;861/862 follow separately. Next free863.
+
+## Codex859 accepted arcade input and charge cues, 2026-10-01
+
+Free Kick/Buzzer outside release now fires once using owned primary capture.
+Cancel/lost capture/pause/start/unmount clear holds; button shows Release while
+charging.30 focused cases, seven controls and native24 inside/outside paths
+pass. Four real ten-shot dailies at320 keyboard/1440 mouse finish, restart and
+refresh with one booking and no duplicate. Physics/scoring/practice preserved.
+Clean combined type/build and all15 built fences pass. Anchor fence caught two
+new raw read paths; matching now normalizes CRLF with raw bytes held, final
+source runner green.860/861/862 ship separately next. Next free863.
+
+## Codex eight-repair batch on main, 2026-10-01
+
+Accepted product commits:846 b69beca6,852 4de313c8,853 af6eb498,
+854 075ecd04,855 c98e0ad2,856 62dd5692,857 5f11492e,858 a7d47ca9.
+110 new focused cases pass. Latest clean production entry index-BvHMJ6Ub.js;
+type/build and all15 built-site fences pass. Full suite and live publication
+remain Claude release work. Paused842-845 are excluded. Next free859;
+parallel read-only scouting continues without claiming or editing his lanes.
+
+## Codex857 accepted Soccer Career save repair, 2026-10-01
+
+Malformed core saves recover before rendering and retain their raw bytes until
+explicit delete/new career. Existing synchronous restore and optional migration
+remain.39 focused cases pass; two controls each fail exactly two intended
+outcomes with37 unaffected and no pending/unhandled errors. Native16/16 at320
+touch/1280 pointer verify current recovery and exact older24-season retirement:
+one booking on completion, zero on reload. Clean type/build and all15 built-site
+fences plus857 pass. No engine/data/backend edit. Source ready for Claude's
+publication lane. Eight repairs accepted this batch; next free859.
+
 ## Codex858 accepted shared-rules repair, 2026-10-01
 
 RulesGate's visible cookie choices now join its keyboard scope and closing
@@ -7,7 +68,7 @@ manual Help restores its exact trigger. Nine regression cases and two controls
 verify both fixes. Native Face Off at320/390 passes six consent scenarios and
 all18 manual close paths. Clean type/build and all15 built-site fences plus
 the858 harness pass. Shared instructions and seen-per-route behavior remain
-intact. Source ready for Claude publication;857 save recovery is finishing.
+intact. Source ready for Claude publication;857 save recovery is accepted above.
 
 ## Codex six-repair batch pushed; next claims857/858, 2026-10-01
 

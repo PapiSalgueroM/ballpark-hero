@@ -1,6 +1,96 @@
 # Work board
 
-**Codex858 VERIFIED AND PUSHING.** RulesGate now uses855's existing single
+**Codex862 VERIFIED AND PUSHING, noticeable arcade shot feedback.** Larger
+verdict/earned-points pill, clear success/miss treatment and stronger existing
+ring/spark/sweep/score motion on both arcade games. Only shared card/CSS;
+scoring/status/details/children and immediate Next preserved. Existing feedback
+10/10 and final harness pass. Six actual positive practice results at320/390/
+1440 in reduced motion match board points, fit and remain fully static with
+all decorations hidden. Two actual ordinary wins at320 animate, settle after
+1s and keep Next enabled immediately. Native24 normal misses from859 also fit.
+Zero page errors/overflow, screenshots inspected, dark theme tested. One
+earlier normal Free Kick driver sent keys during modal exit and missed;
+waiting for actual teardown passes without product changes. Light-theme
+contrast unmeasured. Clean type/build, all15 built fences and25 distinct
+selected harnesses pass across accepted runs. Original timeouts/driver limits
+are retained in docs/audits/ARCADE-AND-SCORING-REPAIR-RECEIPT-2026-10-01.md.
+85956534e17,8602b553ae6,8617340ad12 are separate main commits. Next free863.
+Native checks use separate CLI headless launches only, no visible user tabs.
+
+**Codex861 VERIFIED, committed7340ad12, truthful leaderboard eligibility.** Visible
+copy/metadata now requires a positive ranked score and explains unscored
+finishes as plays/streak credit with0 points. The absolute four-puzzles-win
+claim is replaced by the actual daily cap. Source matches real recorder and
+Round839 ranking, with no scoring/RPC/layout/backend edit. Eight focused and
+eight existing failure cases pass. Restored universal-copy control rejects
+four targets with four accounting/retry baselines held, no pending/unhandled.
+The wrapped read normalizes CRLF while holding raw bytes; normal/control pass
+on the actual560-CRLF-line page and the anchor fence passes. One leaderboard
+snapshot redrawn,169 sitemap dates held and only this page changed. Clean
+type/build and all15 built fences pass. Native unscored completion/live ranking
+untested.85956534e17 and8602b553ae6 are pushed;862 visible result commit next.
+No user browser tabs. Detailed receipt accompanies862. Next free863.
+
+**Codex860 VERIFIED, committed2b553ae6, Face Off deadline enforcement.** One actual
+elapsed-clock guard in useFaceOff turns expired input into timeout before solo
+or either pass-the-phone chair settlement.15 real-hook cases pass; removing
+the guard fails exactly ten intended expired outcomes while five independent
+early-score/ordinary-timeout baselines hold. Native three-case after replay
+returns Out of time and0, including the controlled100ms-interval delay that
+previously paid100 for a correct11s click. This is a delayed scheduling hole,
+not an ordinary unthrottled timer failure. No dealing/scoring/data/backend
+change. Native versus/full match untested. Clean type/build,15 built fences
+and selected source harnesses pass.859 committed56534e17;861/862 follow as
+separate commits. No visible user tabs. Detailed receipt accompanies862.
+Next free863; Claude848 and all other reserved lanes stay his.
+
+**Codex859 VERIFIED, committed56534e17, arcade pointer input and release cues.**
+Free Kick/Buzzer held buttons and playing surfaces own/capture one primary
+pointer; outside release settles once. Cancel/lost capture/pause/start/unmount
+clear it. Charging shows Release and an active ring. Practice/keyboard and
+physics/scoring/flight remain. Before four native outside releases stayed
+charging with four inside baselines held; after30 focused cases and seven
+controls pass exact outcomes. Legacy assertions are preserved. Native24/24
+inside/outside paths pass at320 touch/390 and1440 mouse. Four actual ten-shot
+daily runs at320 keyboard/1440 mouse finish, restart Unlimited and refresh
+the original daily with one booking and no duplicate. Zero page errors or
+overflow. Native cancellation/simultaneous arbitration remain untested.
+Clean combined859-862 type/build and all15 built fences pass. Final source
+anchor runner passes after two harness CRLF read repairs; normal/controls are
+rerun and raw source bytes held. No backend/data edit or visible user tabs.
+Detailed receipt will accompany862.860/861/862 remain separate source commits.
+Next free863. Claude's simulation/data and publication lanes remain his.
+
+**2026-10-01 Codex handoff to Claude: eight accepted repairs now on main.**
+846 b69beca6,852 4de313c8,853 af6eb498,854 075ecd04,855 c98e0ad2,
+856 62dd5692,857 5f11492e,858 a7d47ca9.110 new focused cases pass across
+seven regression suites. Clean production gate excludes paused842-845 and
+contains these eight source repairs over Release Q. Type gate0, build green,
+all15 built-site fences and the latest focused harness pass. Latest entry
+index-BvHMJ6Ub.js, SHA256
+b7ebe84aca3fde4387d693f50be18466005d09ae106a44520f15e5e288935566.
+Per-round native outcomes, negative controls and limits are in the audit repair
+receipt. Full runAllSims has not run here. Please integrate/publish through your
+release lane and verify live assets/routes. Main pushes do not prove publication
+or Google approval. Next free859; three read-only scouts are checking candidates.
+
+**Codex857 VERIFIED, committed5f11492e.** QA847-11 Soccer Career portion: core save
+shapes are checked before the existing synchronous restoration and optional
+migration. Invalid saves show a usable creator and preserve raw bytes until
+explicit deletion or a new career; other game saves stay intact. No engine
+edit.39 actual-component cases pass. The original page fails26/38, with12
+baselines held; a further normal baseline was added afterward. Both seasons
+and async-retired-restore controls fail exactly two intended assertions with
+37 unaffected, zero pending/unhandled errors and source bytes held. Native
+production16/16 checks at320 touch/1280 pointer pass: creation/advance/refresh,
+six corruption cases per size and exact older24-season ceremony restoration.
+Retirement books once and its reload books nothing extra. Zero uncaught errors;
+this driver did not explicitly measure overflow. Initial locator/navigation
+limits are retained separately. Clean type/build, all15 built-site fences and
+the857 harness pass; final harness/anchor runner passes too. Built entry
+index-BvHMJ6Ub.js. Ready for Claude publication, not claimed live. Next free859.
+
+**Codex858 VERIFIED, committed a7d47ca9.** RulesGate now uses855's existing single
 cookie region host and restores its actual Help control with preventScroll.
 No consent or game rule changes. Before:7focused failures/2baselines green;
 after9/9, combined shared Help22/22. Host control fails four intended outcomes,
@@ -10,7 +100,7 @@ choices in both directions, one region, unchanged vendor gates, and all18
 manual Escape/Close/Let's Play paths return to the exact connected opener.
 Zero errors/overflow; existing missing Dialog Description warnings recorded.
 Clean type/build and all15 built-site fences plus858 harness pass. Built entry
-index-Ci2SRKog.js. Ready for Claude publish, not claimed live.857 continues.
+index-Ci2SRKog.js. Ready for Claude publish, not claimed live.857 accepted above.
 
 **Source-trust note for Claude830's held NHL release, no new Codex claim.**
 Read-only review confirmed r830-nhl-full-rosters already edits the NHL page
