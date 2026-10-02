@@ -35,8 +35,8 @@
  * of them is kept below as section 9, opt in (TEAMMATES_LIVE=1), because it
  * reads the production database and only the lead runs that, once a release.
  *
- * BANDS (section 8), measured 2026-10-02 over seeds 1 to 12, ten deals per
- * seed: see the numbers beside each constant. Never a max.
+ * BANDS (section 8), measured 2026-10-02 over seeds 1 to 12, 400 pairs of
+ * runs per seed: the numbers sit beside the constant. Never a max.
  *
  * CONTROLS (TEAMMATES_CONTROL=...), each must make its section fire:
  *   fileflip     one answer flipped in the shipped file only        -> 3
@@ -47,6 +47,8 @@
  *   wrongyear    a funFact year changed in file and record          -> 7
  *   dupe         the same pairing twice                             -> 2
  *   thindeal     every easy row moved to medium                     -> 8
+ *   smallbank    the deal drawn from the old bank's 12/12/26 shape  -> 8 (repeat ceiling)
+ *   spellgap     a spell claim cut a season short                   -> 6
  */
 import fs from 'node:fs';
 import path from 'node:path';
@@ -103,6 +105,7 @@ if (CONTROL === 'dupe') {
   src = rewrite(src, '  // MEDIUM (difficulty 2), less obvious',
     `  { player1: "Ray Allen", player2: "Kevin Garnett", sport: "NBA", answer: true, funFact: "Celtics teammates.", difficulty: 2 },\n  // MEDIUM (difficulty 2), less obvious`, 'the medium difficulty comment');
 }
+if (CONTROL === 'spellgap') rec = rewrite(rec, '{"t":"spell","team":"Seattle Seahawks","first":"2012","last":"2015"}', '{"t":"spell","team":"Seattle Seahawks","first":"2012","last":"2014"}', 'the Seahawks spell claim');
 if (CONTROL === 'thindeal') {
   src = rewrite(src, 'difficulty: 1 }', 'difficulty: 2 }', 'an easy row', true);
   rec = rewrite(rec, '"difficulty":1,', '"difficulty":2,', 'an easy record row', true);
@@ -309,6 +312,9 @@ for (const r of rows) {
     const subject = c.player ? players[`${r.sport}|${c.player}`] : null;
     if (c.player && (!subject || ![r.p1, r.p2].includes(c.player))) { fail(6, `${pairKey(r)}: a claim about "${c.player}", who is not in this row's record`); continue; }
     for (const i of [0, 1]) {
+      /* a missing host is section 4's failure; here it only means this host
+         cannot be asked, which must not crash the sections after it */
+      if ([r.p1, r.p2].some(n => !players[`${r.sport}|${n}`]?.sources?.[i])) { fail(6, `${pairKey(r)}: host ${i + 1} is missing for a player, so its claims cannot be checked there`); continue; }
       const host = (subject || players[`${r.sport}|${r.p1}`])?.sources?.[i]?.host;
       const tag = `${pairKey(r)} on ${host}`;
       const keys = c.team ? labelKeys(r.sport, i, c.team) : new Set();
@@ -396,10 +402,13 @@ console.log('\n--- 8. the deal: how much of one run the next run repeats ---');
    hook's own comparator, sort(() => random - 0.5), driven by a seeded
    generator. The outcome measured is the share of a run's pairs that the
    very next run deals again, which is what a player notices. Measured
-   2026-10-02, 12 seeds x 400 run pairs: the 50 row bank before Round 921
-   repeated 20.8 to 21.3 percent; the 120 row bank 8.4 to 8.8 percent. The
-   ceiling sits between the two, far from both, so it fails on a bank that
-   shrinks back toward the old one and on nothing else. */
+   2026-10-02, seeds 1 to 12, 400 run pairs each, and the gate is the MEAN
+   over seeds, never the worst seed: the 50 row bank before Round 921
+   repeated 20.8 to 22.8 percent per seed, mean 21.9; the 121 row bank 8.3
+   to 10.0, mean 9.3. The ceiling of 14 sits 4.7 points above the new mean
+   and 7.9 below the old one, so it fails on a bank that shrinks back toward
+   the old one and on nothing else (the smallbank control deals the old
+   12/12/26 shape and reads 21.9). */
 const REPEAT_CEILING = 0.14;
 const hookSrc = fs.readFileSync(path.join(ROOT, HOOK), 'utf8');
 const sliceM = hookSrc.match(/easy\.slice\(0, (\d+)\), \.\.\.med\.slice\(0, (\d+)\), \.\.\.hard\.slice\(0, (\d+)\)/);
@@ -412,7 +421,12 @@ if (!sliceM || !/sort\(\(\) => Math\.random\(\) - 0\.5\)/.test(hookSrc)) {
     if (n < 2 * take[d]) fail(8, `difficulty ${d} holds ${n} rows, fewer than two runs of ${take[d]}`);
   }
   const mulberry = seed => () => { seed |= 0; seed = (seed + 0x6D2B79F5) | 0; let t = Math.imul(seed ^ (seed >>> 15), 1 | seed); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
-  const deal = rand => [1, 2, 3].flatMap(d => rows.filter(r => r.difficulty === d).sort(() => rand() - 0.5).slice(0, take[d]));
+  /* the smallbank control deals from the old bank's shape (12 easy, 12
+     medium, 26 hard, the first of each in file order), which must trip the
+     repeat ceiling and nothing else in this section */
+  const OLD_SHAPE = { 1: 12, 2: 12, 3: 26 };
+  const pool = d => rows.filter(r => r.difficulty === d).slice(0, CONTROL === 'smallbank' ? OLD_SHAPE[d] : undefined);
+  const deal = rand => [1, 2, 3].flatMap(d => pool(d).sort(() => rand() - 0.5).slice(0, take[d]));
   const shares = [];
   for (let seed = 1; seed <= 12; seed += 1) {
     const rand = mulberry(seed);
@@ -425,14 +439,70 @@ if (!sliceM || !/sort\(\(\) => Math\.random\(\) - 0\.5\)/.test(hookSrc)) {
   }
   const mean = shares.reduce((s, v) => s + v, 0) / shares.length;
   console.log(`  per seed: ${shares.map(s => (100 * s).toFixed(1)).join(' ')} percent; mean ${(100 * mean).toFixed(1)} (ceiling ${(100 * REPEAT_CEILING).toFixed(1)})`);
-  if (mean > REPEAT_CEILING) fail(8, `the next run repeats ${(100 * mean).toFixed(1)} percent of the last one on average, above the ${(100 * REPEAT_CEILING).toFixed(1)} percent ceiling`);
+  if (mean > REPEAT_CEILING) fail('8r', `the next run repeats ${(100 * mean).toFixed(1)} percent of the last one on average, above the ${(100 * REPEAT_CEILING).toFixed(1)} percent ceiling`);
 }
 const bySport = {};
 for (const r of rows) bySport[r.sport] = (bySport[r.sport] || 0) + 1;
 console.log(`  bank by sport: ${Object.entries(bySport).map(([s, n]) => `${s} ${n}`).join(', ')}`);
 
 // ---------------------------------------------------------------------------
-const EXPECT = { fileflip: 3, recordflip: 5, hostgap: 5, onesource: 4, wrongclaim: 6, wrongyear: 7, dupe: 2, thindeal: 8 };
+/* 9. LIVE, opt in. Sections 3 and 4 of simTeammatesPairs, which this file
+   replaces, moved here unchanged in logic: the soccer rows against
+   public.soccer_player_club_stints. That reads the production database, so it
+   never runs by default (standing rule since 2026-10-02: the lead runs live
+   checks once a release). A shared club with overlapping years is evidence
+   they were teammates; no overlap is NOT evidence they were not, so it is
+   reported and fails nothing. */
+const soccer = rows.filter(r => r.sport === 'Soccer');
+if (process.env.TEAMMATES_LIVE !== '1') {
+  console.log(`\n--- 9. live soccer table check: skipped (reads production; TEAMMATES_LIVE=1, lead only, once a release). ${soccer.length} soccer rows would be asked. ---`);
+} else {
+  console.log(`\n--- 9. the ${soccer.length} soccer rows against soccer_player_club_stints (LIVE) ---`);
+  const lines = fs.readFileSync(path.join(ROOT, 'supabase', 'functions', 'soccer-grid-validate', 'index.ts'), 'utf8').split(/\r?\n/);
+  const start = lines.findIndex(l => l.startsWith('const TRANSLIT'));
+  const end = lines.findIndex((l, i) => i > start && l.includes('.trim();'));
+  if (start < 0 || end < 0) fail(9, 'could not lift the name fold out of the shipped edge function; refusing to retype it');
+  else {
+    const js = lines.slice(start, end + 1).join('\n').replace(': Record<string, string>', '').replace('(s: string)', '(s)');
+    const shippedFold = eval(`(() => { ${js}; return norm; })()`);
+    const NAME_FORMS = { jr: 'junior' };
+    const sfold = n => shippedFold(n).split(/\s+/).map(t => NAME_FORMS[t] || t).join(' ');
+    const { supabaseFromClientTs } = await import('./bakeCareerPlayers.mjs');
+    const supabase = supabaseFromClientTs(ROOT);
+    const wanted = [...new Set(soccer.flatMap(r => [r.p1, r.p2]))];
+    const { data: stints, error } = await supabase.from('soccer_player_club_stints')
+      .select('player_name, name_folded, club, first_year, last_year').in('name_folded', wanted.map(sfold));
+    if (error) fail(9, `could not read soccer_player_club_stints: ${error.message}; an unreadable table is not a green run`);
+    else {
+      const byPlayer = new Map();
+      for (const s of stints) { const k = s.name_folded || sfold(s.player_name); if (!byPlayer.has(k)) byPlayer.set(k, []); byPlayer.get(k).push(s); }
+      const unresolved = wanted.filter(n => !byPlayer.has(sfold(n)));
+      if (unresolved.length) fail(9, `these names match no row even folded: ${unresolved.join(', ')}`);
+      const DROP = new Set(['fc', 'cf', 'sc', 'afc', 'ac', 'as', 'club', 'the']);
+      const cnorm = s => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9 ]/g, ' ').split(/\s+/).filter(t => t && !DROP.has(t)).join(' ');
+      const SHORT_FORMS = { 'paris saint germain': ['psg'], 'manchester united': ['man utd', 'man united'], 'new york city': ['nycfc'], 'barcelona': ['barca'] };
+      let adjudicated = 0;
+      for (const r of soccer) {
+        const ov = [];
+        for (const x of byPlayer.get(sfold(r.p1)) || []) for (const y of byPlayer.get(sfold(r.p2)) || []) {
+          if (x.club === y.club && x.first_year <= y.last_year && y.first_year <= x.last_year) ov.push({ club: x.club, from: Math.max(x.first_year, y.first_year), to: Math.min(x.last_year, y.last_year) });
+        }
+        if (!ov.length) { console.log(`    unadjudicated (a coverage gap, not a wrong row): ${r.p1} + ${r.p2}`); continue; }
+        adjudicated += 1;
+        if (!r.answer) fail(9, `${r.p1} and ${r.p2} are told they were never teammates, but the table has them both at ${ov.map(o => `${o.club} ${o.from}-${o.to}`).join(' and ')}`);
+        else {
+          const fact = cnorm(r.funFact);
+          if (!ov.some(o => { const c = cnorm(o.club); return fact.includes(c) || (SHORT_FORMS[c] || []).some(sf => fact.includes(sf)); })) fail(9, `${r.p1} and ${r.p2} shared ${ov.map(o => o.club).join(' and ')}, but the funFact names none of them`);
+        }
+      }
+      console.log(`  adjudicated by the table: ${adjudicated} of ${soccer.length}`);
+      if (adjudicated < 10) fail(9, `only ${adjudicated} soccer pairs could be adjudicated, against the floor of 10 the old harness held`);
+    }
+  }
+}
+
+// ---------------------------------------------------------------------------
+const EXPECT = { fileflip: 3, recordflip: 5, hostgap: 5, onesource: 4, wrongclaim: 6, wrongyear: 7, dupe: 2, thindeal: 8, smallbank: '8r', spellgap: 6 };
 let code = 0;
 if (CONTROL) {
   const want = EXPECT[CONTROL];
