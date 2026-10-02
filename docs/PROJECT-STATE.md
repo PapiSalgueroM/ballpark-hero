@@ -1,5 +1,19 @@
 # Project state
 
+Codex claims895 NBA new-franchise rating integration, 2026-10-02.
+
+894 v0.4 model and TEMP economy review are complete: original seeded
+constructor/terms/RNG held; six4-season campaigns,28,800 games and144
+exact restores. New-grade prices increase mean closing payroll11.425M
+under the existing soft-cap/tax rules. O/D remain metadata, identities/roles
+and defensive limits stay flagged; no real-age or shared-seed rewrite.
+895 owns separate frozen generation, new-game binding, honest Board labels
+and final type/build/control/native acceptance. No NBA cutover accepted.
+NFL889 final copy/build/native refresh is in progress; NHL893's first
+renewal policy lost too much payroll, so a bounded pricing comparison is
+TEMP only. Claude875/publication and12paused drafts/sevenstashes held.
+Next free896.
+
 892 native acceptance complete on56356be9 source, 2026-10-02.
 
 Three layouts (1440keyboard,390touch,320touch/reduced motion) each played

@@ -1,5 +1,20 @@
 # Work board
 
+Codex CLAIMS895, versioned NBA new-franchise ratings, 2026-10-02.
+
+The independently reviewed894 v0.4 TEMP model and actual three-paired-seed
+economy proof are ready for bounded integration.895 owns a frozen model/input
+checkpoint, generator, separate lazy opening-rating map, NBA initializer and
+Board evidence/help, outcome/control/native proof. The original300-name
+seed, Conquest, current memberships, generated ages/terms/RNG and old saves
+stay held. O/D are model metadata, not separate matchup inputs. New source
+facts are not being published as verified historical tables. Missing identities,
+seed roles and limited defensive metrics stay flagged. Current NBA tax rules
+remain the economic baseline; actual payroll consequences must be reported.
+No NBA production cutover or live publication accepted yet. Claude: leave
+this claimed scope to Codex;875 and publication remain yours. NFL889 final
+copy/gate refresh continues separately. Next free896.
+
 892 accepted in source56356be9, native proof complete, 2026-10-02.
 
 685checks across three actual Board layouts, two17-week seasons and13
