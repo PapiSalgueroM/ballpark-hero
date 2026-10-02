@@ -6,7 +6,7 @@ import { GameHelp } from '@/components/game/GameHelp';
 
 export default function TennisChain() {
   return (
-    <>
+    <main id="dukb-main" tabIndex={-1}>
       <PageSeo
         title="Tennis Chain - Grand Slam Defeat Chain Game | DoUKnowBall"
         description="Build the longest chain of tennis players. Name someone who beat the current player at a Grand Slam."
@@ -33,6 +33,6 @@ export default function TennisChain() {
           "Osaka → Brady (Australian Open 2021)"
         ]}
       />
-    </>
+    </main>
   );
 }

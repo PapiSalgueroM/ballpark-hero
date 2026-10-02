@@ -8,6 +8,7 @@ import { fetchCareerPlayers } from '@/lib/fetchCareerPlayers';
 import { buildSeasonIndex, clubSeasonsOf, linkedFrom, shareClub } from '@/lib/transferPathGraph';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { useDailyPuzzle } from '@/hooks/useDailyPuzzle';
+import { isTransferPathLog } from '@/lib/dailySaveShapes';
 import { dateSeed, getTodayET } from '@/lib/dateUtils';
 import {
   TRANSFER_PATH_RULES,
@@ -147,6 +148,7 @@ export function useTransferPath(): TransferPathState {
        recorded the surrender again on every visit. */
     isLost: (actions) => actions.some(a => a.t === 'give'),
     deserializeGuesses: (raw) => raw as TransferAction[],
+    isValidGuesses: isTransferPathLog,
   });
 
   // Derive chain / connections / status / score from stored actions

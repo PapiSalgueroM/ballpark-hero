@@ -1,5 +1,6 @@
 import { cn } from '@/lib/utils';
 import type { PositionSlot, FilledSlot } from '@/types/lineupBuilder';
+import { pitchCoords } from '@/lib/xiFit';
 
 interface FormationPitchProps {
   positions: PositionSlot[];
@@ -8,47 +9,12 @@ interface FormationPitchProps {
   onSelectPosition: (index: number) => void;
 }
 
-// Maps each position index to a grid location based on formation rows
-function getPositionCoords(positions: PositionSlot[]): { x: number; y: number }[] {
-
-  const roleOrder: Record<string, number> = {
-    GK: 0,
-    LWB: 1, LB: 1, CB: 1, RB: 1, RWB: 1,
-    CDM: 2, LM: 2, CM: 2, RM: 2,
-    CAM: 3, LW: 3, RW: 3,
-    CF: 4, ST: 4,
-  };
-
-  // Group by role tiers
-  const tiers: Map<number, number[]> = new Map();
-  positions.forEach((pos, i) => {
-    const tier = roleOrder[pos.role] ?? 2;
-    if (!tiers.has(tier)) tiers.set(tier, []);
-    tiers.get(tier)!.push(i);
-  });
-
-  const sortedTiers = [...tiers.entries()].sort(([a], [b]) => a - b);
-
-  const coords: { x: number; y: number }[] = Array.from({ length: positions.length });
-
-  sortedTiers.forEach(([_tier, indices], rowIdx) => {
-    const padding = 8; // % padding top/bottom so edge positions aren't clipped
-    const rowY = padding + (1 - rowIdx / (sortedTiers.length - 1)) * (100 - 2 * padding); // bottom (GK) to top (ST) with padding
-    const count = indices.length;
-    indices.forEach((posIdx, col) => {
-      const xSpacing = 100 / (count + 1);
-      coords[posIdx] = {
-        x: xSpacing * (col + 1),
-        y: rowY,
-      };
-    });
-  });
-
-  return coords;
-}
-
+/* Round 825: the layout lives in src/lib/xiFit.ts now, because chemistry
+   links neighbours and has to read the same pitch the player sees. Same lines
+   as before; inside a line the left sided slots come first, which moves the
+   3-5-2's left wing back from the right of the back line to the left. */
 const FormationPitch = ({ positions, filledSlots, selectedIndex, onSelectPosition }: FormationPitchProps) => {
-  const coords = getPositionCoords(positions);
+  const coords = pitchCoords(positions.map((p) => p.role));
 
   return (
     <div className="relative w-full max-w-lg mx-auto aspect-[3/4.5] bg-correct/10 rounded-2xl border border-correct/20 overflow-hidden">

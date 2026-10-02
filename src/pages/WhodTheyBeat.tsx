@@ -1,3 +1,4 @@
+import { useLayoutEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { useWhodTheyBeat } from '@/hooks/useWhodTheyBeat';
 import { GameNav } from '@/components/game/GameNav';
@@ -19,10 +20,26 @@ import { cn } from '@/lib/utils';
 const WhodTheyBeat = () => {
   const {
     loadState, mode, switchMode, questions, qIdx, current, showingResult,
-    pickedIndex, answers, done, score, answer, playAgain,
+    pickedIndex, answers, done, score, answer, advanceReveal, playAgain,
   } = useWhodTheyBeat();
 
   const total = questions.length;
+  const shownScore = score + (showingResult && pickedIndex === current?.correctIndex ? 1 : 0);
+  const advanceButton = useRef<HTMLButtonElement>(null);
+  const revealFocus = useRef<{ question: typeof current; pickedIndex: number; opener: HTMLButtonElement } | null>(null);
+  useLayoutEffect(() => {
+    const request = revealFocus.current;
+    if (!request) return;
+    revealFocus.current = null;
+    if (!showingResult || current !== request.question || pickedIndex !== request.pickedIndex) return;
+    const active = document.activeElement;
+    if (active === request.opener || active === document.body || !active?.isConnected) advanceButton.current?.focus({ preventScroll: true });
+  }, [showingResult, current, pickedIndex]);
+  const pickAnswer = (index: number, opener: HTMLButtonElement) => {
+    if (!current || showingResult || revealFocus.current) return;
+    revealFocus.current = { question: current, pickedIndex: index, opener };
+    answer(index);
+  };
 
   return (
     <>
@@ -54,7 +71,7 @@ const WhodTheyBeat = () => {
             {loadState === 'ready' && !done && (
               <div className="flex items-center justify-center gap-4 mt-3 text-sm">
                 <span className="text-muted-foreground">Final: <span className="font-semibold text-foreground">{Math.min(qIdx + 1, total)}</span>/{total}</span>
-                <span className="text-muted-foreground">Right: <span className="font-semibold text-gold">{score}</span></span>
+                <span className="text-muted-foreground">Right: <span className="font-semibold text-gold">{shownScore}</span></span>
               </div>
             )}
           </>
@@ -68,6 +85,7 @@ const WhodTheyBeat = () => {
               <li>Ten finals a day: two each from the Super Bowl, NBA, World Series, Stanley Cup and WNBA.</li>
               <li>Four options, all of them real beaten finalists from that same competition. One of them is from the right year.</li>
               <li>One point per correct pick, same ten for everyone, and the reveal shows the series result.</li>
+              <li>Take your time with the answer. Tap Next final when ready, or View results after the last final.</li>
             </ul>
             <p className="font-semibold text-foreground">Worked example:</p>
             <p>"The Houston Rockets won the 1994 NBA Finals. Who did they beat?" The Knicks took that one to seven games, so the answer is New York. If you picked Orlando, that was the year after, which is exactly the trap.</p>
@@ -103,7 +121,7 @@ const WhodTheyBeat = () => {
                   return (
                     <button
                       key={`${opt}-${i}`}
-                      onClick={() => answer(i)}
+                      onClick={event => pickAnswer(i, event.currentTarget)}
                       disabled={showingResult}
                       className={cn('px-4 py-3 rounded-xl font-semibold border text-sm transition-all',
                         !showingResult && 'bg-secondary text-foreground border-border hover:border-primary',
@@ -119,11 +137,18 @@ const WhodTheyBeat = () => {
               </div>
 
               {showingResult && (
-                <p className="text-sm text-muted-foreground text-center mt-4">
-                  {pickedIndex === current.correctIndex ? 'Right! ' : 'Nope. '}
-                  The {current.winner} beat the {current.options[current.correctIndex]}.
-                  {current.detail ? ` ${current.detail}.` : ''}
-                </p>
+                <div className="mt-4 space-y-3">
+                  <p role="status" className="text-sm text-muted-foreground text-center">
+                    {pickedIndex === current.correctIndex ? 'Right! ' : 'Nope. '}
+                    The {current.winner} beat the {current.options[current.correctIndex]}.
+                    {current.detail ? ` ${current.detail}.` : ''}
+                  </p>
+                  <button
+                    ref={advanceButton}
+                    onClick={advanceReveal}
+                    className="w-full px-4 py-3 rounded-xl bg-primary text-primary-foreground font-semibold text-sm hover:opacity-90 transition-opacity"
+                  >{qIdx + 1 === total ? 'View results' : 'Next final'}</button>
+                </div>
               )}
             </div>
 

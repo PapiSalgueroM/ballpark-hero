@@ -186,9 +186,9 @@ const VITEST_CONTROLS = {
     point: /after midnight/,
   },
   lateday: {
-    edits: REVEAL_HOOKS.flatMap(([file, item]) => file.endsWith('useSilverwareSort.ts') ? [
-      { file, from: '      setDailyResults(next);\n', to: '' },
-      { file, from: '    if (!next) return;\n', to: "    if (!next) return;\n    if (mode === 'daily') setDailyResults(next);\n" },
+    edits: REVEAL_HOOKS.flatMap(([file, item]) => !file.endsWith('useChampOrNot.ts') ? [
+      { file, from: `      setDaily${item}(next);\n`, to: '' },
+      { file, from: '    if (!next) return;\n', to: `    if (!next) return;\n    if (mode === 'daily') setDaily${item}(next);\n` },
     ] : [{
       file,
       from: `      setDaily${item}(next);\n    }\n    clearReveal();\n    revealTimer.current = window.setTimeout(() => {\n      revealTimer.current = null;\n`,

@@ -140,7 +140,14 @@ export default function Index() {
             .eq('completed_on', todayUtc).abortSignal(controller.signal),
           supabase.from('user_best_scores')
             .select('game_type, best_score')
-            .eq('user_id', accountId).abortSignal(controller.signal),
+            .eq('user_id', accountId).abortSignal(controller.signal).then(bestRes => {
+              if (active && bestRes?.data) {
+                const map: Record<string, number> = {};
+                bestRes.data.forEach(r => { map[r.game_type] = r.best_score; });
+                setBestScores(map);
+              }
+              return bestRes;
+            }),
         ]);
         if (!active) return;
         loaded = !rankRes?.error && !todayRes?.error && !bestRes?.error;
@@ -156,11 +163,6 @@ export default function Index() {
           const rankRow = Array.isArray(rankRes?.data) ? rankRes.data[0] : rankRes?.data ?? null;
           const rank = rankRow ? Number(rankRow.rank) : 0;
           setWorldRank(rank > 0 ? rank : null);
-        }
-        if (bestRes?.data) {
-          const map: Record<string, number> = {};
-          bestRes.data.forEach(r => { map[r.game_type] = r.best_score; });
-          setBestScores(map);
         }
       } catch { /* silent: keep local values until a later foreground retry */ }
       finally { fetching = false; }

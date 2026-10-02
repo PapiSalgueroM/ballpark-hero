@@ -11,16 +11,19 @@
    the shop the sport already draws, so the NBA, NHL and MLB careers can open
    the same screen the day their engines bind careerMoney.ts. Nothing in this
    file names a sport. */
-import { useState, type ReactNode } from 'react';
-import type { MoneyAction, MoneyHost, MoneySport } from '@/lib/careerMoney';
+import { useLayoutEffect, useRef, useState, type ReactNode } from 'react';
+import type { BankSummary, LedgerEntry, MoneyAction, MoneyHost, MoneySport } from '@/lib/careerMoney';
 import {
   ASSETS, ensureMoney, bankSummary, holdingValue, unrealised, priceRead, lastMove,
   spendable, fmtMoney, cardCap, cardStatus,
   MAX_LEDGER, PAR, SAVINGS_RATE, CARD_WIN, CARD_PAYS, CARD_MAX, CARD_SHUT,
 } from '@/lib/careerMoney';
 import { cn } from '@/lib/utils';
+import motion from './MoneyAppFeedback.module.css';
 
 type Tab = 'account' | 'market' | 'cards' | 'shop';
+type Balance = 'cash' | 'vault' | 'invested';
+type Receipt = { id: number; entry: LedgerEntry; changed: Balance[] };
 
 function Chip({ label, onClick, disabled, tone }: { label: string; onClick: () => void; disabled?: boolean; tone?: 'sell' }) {
   return (
@@ -79,10 +82,31 @@ export function MoneyApp<S extends MoneyHost>({ host, sport, incomeLine, onMoney
 }) {
   const [tab, setTab] = useState<Tab>('account');
   const [asset, setAsset] = useState<string | null>(null);
+  const [attempt, setAttempt] = useState(0);
+  const [receipt, setReceipt] = useState<Receipt | null>(null);
+  const [ledgerCue, setLedgerCue] = useState(false);
+  const pending = useRef<BankSummary | null>(null);
   const fmt = (v: number) => fmtMoney(v, sport.currency);
   const bank = bankSummary(host, sport);
   const free = spendable(host);
   const m = ensureMoney(host, sport);
+
+  const act = (action: MoneyAction) => {
+    pending.current = bank;
+    setAttempt(value => value + 1);
+    onMoney(action);
+  };
+  useLayoutEffect(() => {
+    const before = pending.current;
+    pending.current = null;
+    if (!before) return;
+    const changed = (['cash', 'vault', 'invested'] as const).filter(key => bank[key] !== before[key]);
+    const ledgerChanged = JSON.stringify(bank.entries) !== JSON.stringify(before.entries);
+    const entry = bank.entries[0];
+    if (!entry || (changed.length === 0 && !ledgerChanged)) return;
+    setLedgerCue(tab === 'account');
+    setReceipt({ id: attempt, entry, changed });
+  }, [attempt, bank, tab]);
 
   const tabs: { key: Tab; label: string }[] = [
     { key: 'account', label: '🏦 Account' },
@@ -98,17 +122,30 @@ export function MoneyApp<S extends MoneyHost>({ host, sport, incomeLine, onMoney
         <p className="text-2xl font-black text-gold">{fmt(bank.total)}</p>
         <p className="text-[10px] text-muted-foreground">{incomeLine}</p>
         <div className="mt-2 grid grid-cols-3 gap-2 text-center">
-          <div className="rounded-xl bg-secondary p-2"><div className="text-[13px] font-black text-foreground">{fmt(bank.cash)}</div><div className="text-[9px] text-muted-foreground">in the account</div></div>
-          <div className="rounded-xl bg-secondary p-2"><div className="text-[13px] font-black text-emerald-500">{fmt(bank.vault)}</div><div className="text-[9px] text-muted-foreground">savings</div></div>
-          <div className="rounded-xl bg-secondary p-2"><div className="text-[13px] font-black text-primary">{fmt(bank.invested)}</div><div className="text-[9px] text-muted-foreground">invested</div></div>
+          <div key={`cash-${receipt?.id ?? 0}`} className={cn('rounded-xl bg-secondary p-2', receipt?.changed.includes('cash') && motion.changed)}><div className="text-[13px] font-black text-foreground">{fmt(bank.cash)}</div><div className="text-[9px] text-muted-foreground">in the account</div></div>
+          <div key={`vault-${receipt?.id ?? 0}`} className={cn('rounded-xl bg-secondary p-2', receipt?.changed.includes('vault') && motion.changed)}><div className="text-[13px] font-black text-emerald-500">{fmt(bank.vault)}</div><div className="text-[9px] text-muted-foreground">savings</div></div>
+          <div key={`invested-${receipt?.id ?? 0}`} className={cn('rounded-xl bg-secondary p-2', receipt?.changed.includes('invested') && motion.changed)}><div className="text-[13px] font-black text-primary">{fmt(bank.invested)}</div><div className="text-[9px] text-muted-foreground">invested</div></div>
         </div>
       </div>
+
+      {receipt && (
+        <div key={receipt.id} role="status" className={cn('rounded-xl border border-primary/40 bg-primary/10 px-3 py-2', motion.receipt)}>
+          <div className="flex items-center justify-between gap-2 text-[10px]">
+            <span className="font-bold text-primary">Last transaction</span>
+            <span className="text-muted-foreground">Season {receipt.entry.y}</span>
+          </div>
+          <div className="mt-0.5 flex items-center justify-between gap-2 text-xs font-black text-foreground">
+            <span className="min-w-0 break-words">{receipt.entry.t}</span>
+            <span className="shrink-0">{receipt.entry.a >= 0 ? '+' : ''}{fmt(receipt.entry.a)}</span>
+          </div>
+        </div>
+      )}
 
       <div className="grid grid-cols-4 gap-1">
         {tabs.map(t => (
           <button
             key={t.key}
-            onClick={() => { setTab(t.key); setAsset(null); }}
+            onClick={() => { setTab(t.key); setAsset(null); setLedgerCue(false); }}
             className={cn(
               /* py-2, not py-1.5: measured at 390 by 844 these four came out
                  87 by 29px, a shade under the 30px floor every tap target on
@@ -132,13 +169,13 @@ export function MoneyApp<S extends MoneyHost>({ host, sport, incomeLine, onMoney
             </div>
             <p className="text-[10px] leading-snug text-muted-foreground">Boring, safe, and better than leaving it in the account doing nothing.</p>
             <div className="flex gap-1.5">
-              <Chip label="Save 25%" disabled={free < 0.2} onClick={() => onMoney({ t: 'deposit', amount: free * 0.25 })} />
-              <Chip label="Save half" disabled={free < 0.1} onClick={() => onMoney({ t: 'deposit', amount: free * 0.5 })} />
-              <Chip label="Save it all" disabled={free < 0.05} onClick={() => onMoney({ t: 'deposit', amount: free })} />
+              <Chip label="Save 25%" disabled={free < 0.2} onClick={() => act({ t: 'deposit', amount: free * 0.25 })} />
+              <Chip label="Save half" disabled={free < 0.1} onClick={() => act({ t: 'deposit', amount: free * 0.5 })} />
+              <Chip label="Save it all" disabled={free < 0.05} onClick={() => act({ t: 'deposit', amount: free })} />
             </div>
             <div className="flex gap-1.5">
-              <Chip tone="sell" label="Take out half" disabled={bank.vault < 0.02} onClick={() => onMoney({ t: 'withdraw', amount: bank.vault * 0.5 })} />
-              <Chip tone="sell" label="Take it all out" disabled={bank.vault < 0.01} onClick={() => onMoney({ t: 'withdraw', amount: bank.vault })} />
+              <Chip tone="sell" label="Take out half" disabled={bank.vault < 0.02} onClick={() => act({ t: 'withdraw', amount: bank.vault * 0.5 })} />
+              <Chip tone="sell" label="Take it all out" disabled={bank.vault < 0.01} onClick={() => act({ t: 'withdraw', amount: bank.vault })} />
             </div>
           </div>
 
@@ -151,7 +188,7 @@ export function MoneyApp<S extends MoneyHost>({ host, sport, incomeLine, onMoney
               <p className="py-3 text-center text-[10px] text-muted-foreground">Nothing yet. Save something or buy something.</p>
             ) : (
               bank.entries.map((e, i) => (
-                <div key={i} className="flex items-center justify-between border-b border-border/50 py-1 text-[11px] last:border-0">
+                <div key={i === 0 ? `latest-${receipt?.id ?? 0}` : i} className={cn('flex items-center justify-between border-b border-border/50 py-1 text-[11px] last:border-0', i === 0 && ledgerCue && receipt && e.t === receipt.entry.t && e.a === receipt.entry.a && e.y === receipt.entry.y && motion.latest)}>
                   <span className="min-w-0 truncate text-foreground/80">{e.t}</span>
                   <span className="flex shrink-0 items-center gap-2 pl-2">
                     <span className="text-[9px] text-muted-foreground">{e.y}</span>
@@ -251,16 +288,16 @@ export function MoneyApp<S extends MoneyHost>({ host, sport, incomeLine, onMoney
             <div className="space-y-1.5">
               <div className="px-0.5 text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Buy</div>
               <div className="flex gap-1.5">
-                <Chip label="10%" disabled={free < 0.5} onClick={() => onMoney({ t: 'buy', id: def.id, amount: free * 0.1 })} />
-                <Chip label="25%" disabled={free < 0.2} onClick={() => onMoney({ t: 'buy', id: def.id, amount: free * 0.25 })} />
-                <Chip label="Half" disabled={free < 0.1} onClick={() => onMoney({ t: 'buy', id: def.id, amount: free * 0.5 })} />
-                <Chip label="The lot" disabled={free < 0.05} onClick={() => onMoney({ t: 'buy', id: def.id, amount: free })} />
+                <Chip label="10%" disabled={free < 0.5} onClick={() => act({ t: 'buy', id: def.id, amount: free * 0.1 })} />
+                <Chip label="25%" disabled={free < 0.2} onClick={() => act({ t: 'buy', id: def.id, amount: free * 0.25 })} />
+                <Chip label="Half" disabled={free < 0.1} onClick={() => act({ t: 'buy', id: def.id, amount: free * 0.5 })} />
+                <Chip label="The lot" disabled={free < 0.05} onClick={() => act({ t: 'buy', id: def.id, amount: free })} />
               </div>
               <div className="px-0.5 pt-1 text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Sell</div>
               <div className="flex gap-1.5">
-                <Chip tone="sell" label="A quarter" disabled={held <= 0.02} onClick={() => onMoney({ t: 'sell', id: def.id, frac: 0.25 })} />
-                <Chip tone="sell" label="Half" disabled={held <= 0.02} onClick={() => onMoney({ t: 'sell', id: def.id, frac: 0.5 })} />
-                <Chip tone="sell" label="All of it" disabled={held <= 0.01} onClick={() => onMoney({ t: 'sell', id: def.id, frac: 1 })} />
+                <Chip tone="sell" label="A quarter" disabled={held <= 0.02} onClick={() => act({ t: 'sell', id: def.id, frac: 0.25 })} />
+                <Chip tone="sell" label="Half" disabled={held <= 0.02} onClick={() => act({ t: 'sell', id: def.id, frac: 0.5 })} />
+                <Chip tone="sell" label="All of it" disabled={held <= 0.01} onClick={() => act({ t: 'sell', id: def.id, frac: 1 })} />
               </div>
             </div>
           </div>
@@ -283,8 +320,8 @@ export function MoneyApp<S extends MoneyHost>({ host, sport, incomeLine, onMoney
             </div>
             {status.open ? (
               <div className="flex gap-1.5">
-                <Chip label={`Sit in for ${fmt(Math.max(0.01, cap * 0.5))}`} disabled={cap < 0.02} onClick={() => onMoney({ t: 'cards', stake: cap * 0.5 })} />
-                <Chip label={`Sit in for ${fmt(cap)}`} disabled={cap < 0.01} onClick={() => onMoney({ t: 'cards', stake: cap })} />
+                <Chip label={`Sit in for ${fmt(Math.max(0.01, cap * 0.5))}`} disabled={cap < 0.02} onClick={() => act({ t: 'cards', stake: cap * 0.5 })} />
+                <Chip label={`Sit in for ${fmt(cap)}`} disabled={cap < 0.01} onClick={() => act({ t: 'cards', stake: cap })} />
               </div>
             ) : (
               <p className="rounded-xl bg-secondary p-2.5 text-center text-[10px] text-muted-foreground">{status.why}</p>

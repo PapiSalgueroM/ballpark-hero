@@ -31,6 +31,9 @@ export interface PickMeta {
   age?: number;
   /** Year of that row, so the result screen can say which season it is quoting. */
   year?: number;
+  /** Round 825: positions his verified history covers (player_verified_positions),
+   *  kept when the game looked them up, so role fit reads them too. */
+  played?: PositionRole[];
 }
 
 export interface FilledSlot extends PositionSlot {

@@ -35,7 +35,7 @@ import type { Formation, FormationSlot } from '@/lib/squadDeal';
 /* Round 505: the one position rule the lineup games share, so an out of
    position man here is graded by the same family table World XI uses.
    positionFit imports nothing but types, so there is no cycle. */
-import { ALL_POSITIONS, eligiblePositions, fitsAllowed } from '@/lib/positionFit';
+import { ALL_POSITIONS, eligiblePositions, FIT_PENALTY, gradeFit, type FitGrade } from '@/lib/positionFit';
 import { players as RAW_POOL } from '@/data/players';
 // Round 70: real 2026 rosters for every club in the big five leagues, baked
 // from the Transfermarkt style market value data in Supabase. The bake file
@@ -4884,13 +4884,15 @@ export function isAvailable(p: CMPlayer): boolean {
  * because the owner wants the freedom and the engine wants a price for it.
  * 'keeper' is the goalkeeper boundary crossed either way, and it is checked
  * first so no widening can reach around it.
+ *
+ * Round 825: the grade and its table (FIT_PENALTY, rating points taken off
+ * THAT MAN ONLY in the match strength, so a fully natural eleven pays
+ * nothing and the Round 95 rule holds) now live in positionFit.ts, so Build
+ * Your XI's season reads the same table. Same names, same numbers, exported
+ * from here as before.
  */
-export type FitGrade = 'natural' | 'family' | 'wrong' | 'keeper';
-
-/** Rating points taken off THAT MAN ONLY in the match strength. A fully
- *  natural eleven pays nothing, so the Round 95 rule holds: my club is on
- *  the same scale as an AI club with the identical squad. */
-export const FIT_PENALTY: Record<FitGrade, number> = { natural: 0, family: 2, wrong: 6, keeper: 14 };
+export type { FitGrade };
+export { FIT_PENALTY };
 
 /** Every position he can call his own: the one he plays plus any he has learned. */
 export function heldPositions(p: CMPlayer): Position[] {
@@ -4898,12 +4900,7 @@ export function heldPositions(p: CMPlayer): Position[] {
 }
 
 export function fitGrade(p: CMPlayer, slot: FormationSlot): FitGrade {
-  const slotIsGoal = slot.allowed.includes('GK');
-  if (slotIsGoal !== (p.position === 'GK')) return 'keeper';
-  const held = heldPositions(p);
-  if (held.some(pos => slot.allowed.includes(pos))) return 'natural';
-  if (held.some(pos => fitsAllowed(pos, slot.allowed))) return 'family';
-  return 'wrong';
+  return gradeFit(heldPositions(p), slot.allowed);
 }
 
 /** The penalty for a man in a slot; nothing when the slot is unknown. */

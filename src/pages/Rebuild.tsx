@@ -6,7 +6,7 @@ import { RebuildBoard } from '@/components/rebuild/RebuildBoard';
 
 export default function Rebuild() {
   return (
-    <>
+    <main id="dukb-main" tabIndex={-1}>
       <PageSeo
         title="Rebuild Challenge - Fix a Real Club | DoUKnowBall"
         description="Pick a real club, open the board's envelope, then spin for one XI shirt at a time: keep the man you drew or sell him for three priced replacements, a free bench and a 40 overall. Rebuild Man United, Barcelona, or drag Southampton up."
@@ -33,6 +33,6 @@ export default function Rebuild() {
           'The punishment card was the dressing room turning: the XI plays two ratings below itself',
         ]}
       />
-    </>
+    </main>
   );
 }

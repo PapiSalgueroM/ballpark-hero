@@ -27,8 +27,10 @@
  * takes minutes and because Playwright cannot reach the live domain from a
  * sandbox anyway, so it serves dist/ instead.
  */
-import { readdirSync, readFileSync, existsSync } from 'node:fs';
+import { readdirSync, readFileSync, existsSync, mkdtempSync, writeFileSync, unlinkSync, rmdirSync } from 'node:fs';
 import { spawn } from 'node:child_process';
+import { tmpdir } from 'node:os';
+import { randomUUID } from 'node:crypto';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -37,6 +39,14 @@ const ROOT = path.resolve(HERE, '..');
 const WANT_BROWSER = process.argv.includes('--browser') || process.env.BROWSER === '1';
 const ONLY = (process.env.ONLY || '').split(',').map((s) => s.trim()).filter(Boolean);
 const PORT = Number(process.env.PORT || 4173);
+const NETWORK = process.env.SIM_NETWORK || 'offline';
+if (!['offline', 'live'].includes(NETWORK)) {
+  console.error('SIM_NETWORK must be offline or live. The default is offline.');
+  process.exit(1);
+}
+const OFFLINE = NETWORK === 'offline';
+const TRANSPORT_BLOCK = /^\[SIM_OFFLINE_BLOCK\] (database|external) /;
+const PRELOAD = path.join(HERE, 'lib', 'offlineTransport.cjs');
 
 /* A harness that comes back this quiet did not do any work.
    The first version of this file also failed anything that finished in under
@@ -88,6 +98,8 @@ if (ONLY.length) {
     process.exit(1);
   }
 }
+const trafficFolder = OFFLINE ? mkdtempSync(path.join(tmpdir(), 'dukb-sim-traffic-')) : null;
+const cleanupTraffic = () => { if (trafficFolder) rmdirSync(trafficFolder); };
 
 /* ONLY means "which harnesses do I run" to this file and "which game route do I
    play" to playGames.mjs, and the two meanings are not compatible. Running
@@ -105,6 +117,12 @@ function run(file, extraEnv = {}) {
     let out = '';
     const childEnv = { ...process.env, ...extraEnv };
     for (const k of OWN_CONTROLS) if (!(k in extraEnv)) delete childEnv[k];
+    const receipt = OFFLINE ? path.join(trafficFolder, `${randomUUID()}.log`) : null;
+    if (receipt) {
+      writeFileSync(receipt, '');
+      childEnv.SIM_OFFLINE_RECEIPT = receipt;
+      childEnv.NODE_OPTIONS = `${childEnv.NODE_OPTIONS || ''} --require ${JSON.stringify(PRELOAD.replaceAll('\\', '/'))}`.trim();
+    }
     const child = spawn(process.execPath, [path.join(HERE, file)], {
       cwd: ROOT,
       env: childEnv,
@@ -113,14 +131,21 @@ function run(file, extraEnv = {}) {
     child.stderr.on('data', (d) => { out += d; });
     child.on('close', (code) => {
       const ms = Date.now() - started;
-      const lines = out.split('\n').filter((l) => l.trim()).length;
+      const receiptLines = receipt ? readFileSync(receipt, 'utf8').split('\n') : [];
+      if (receipt) unlinkSync(receipt);
+      const blocks = [...new Set([...out.split('\n'), ...receiptLines].filter(l => TRANSPORT_BLOCK.test(l)))];
+      const lines = out.split('\n').filter(l => l.trim() && !TRANSPORT_BLOCK.test(l)).length;
       let verdict = code === 0 ? 'PASS' : 'FAIL';
       let why = '';
       if (verdict === 'PASS' && lines < MIN_LINES) {
         verdict = 'EMPTY';
         why = `printed ${lines} line${lines === 1 ? '' : 's'}, so its checks did not run`;
       }
-      resolve({ file, verdict, why, ms, lines, out });
+      if (blocks.length && verdict === 'PASS') {
+        verdict = 'FAIL';
+        why = 'it reported success after an offline transport block; checks needing live data did not run';
+      }
+      resolve({ file, verdict, why, ms, lines, out, blocks });
     });
   });
 }
@@ -188,6 +213,7 @@ function report(results) {
 const NOTHING_CHECKED = /NOTHING WAS CHECKED/i;
 
 async function databaseReachable() {
+  if (OFFLINE) return { ok: false, why: 'offline mode blocks production; no database probe was sent' };
   const forced = process.env.DB_PROBE || '';
   if (forced === 'reachable') return { ok: true, why: 'DB_PROBE=reachable forced it' };
   if (forced === 'unreachable') return { ok: false, why: 'DB_PROBE=unreachable forced it' };
@@ -219,10 +245,12 @@ const db = await databaseReachable();
 const failures = [];
 const skipped = [];
 
+console.log(`Network mode: ${NETWORK}${OFFLINE ? ', loopback only, no production probe or database retries' : ', explicit live opt-in, one harness at a time'}.`);
 console.log(`Running ${nodeGroup.length} node harness${nodeGroup.length === 1 ? '' : 'es'}`);
-const nodeResults = await pool(nodeGroup, 3, (f) => run(f));
+const nodeResults = await pool(nodeGroup, OFFLINE ? 3 : 1, (f) => run(f));
 for (const r of nodeResults) {
-  if (r.verdict === 'FAIL' && !db.ok && NOTHING_CHECKED.test(r.out)) {
+  const onlyDatabaseBlocks = r.blocks.length > 0 && r.blocks.every(line => /^\[SIM_OFFLINE_BLOCK\] database /.test(line));
+  if (r.verdict === 'FAIL' && !db.ok && NOTHING_CHECKED.test(r.out) && (!OFFLINE || onlyDatabaseBlocks)) {
     r.verdict = 'SKIP';
     r.why = `it reached no database and said so, and the database is unreachable here (${db.why})`;
   }
@@ -261,6 +289,11 @@ const retried = [];
 for (const r of nodeResults) {
   if (r.verdict !== 'FAIL' || !db.ok || !NOTHING_CHECKED.test(r.out)) continue;
   const again = await databaseReachable();
+  if (!again.ok) {
+    r.verdict = 'SKIP';
+    r.why = `retry probe could not reach the database (${again.why}); no second harness run was sent`;
+    continue;
+  }
   console.log(`
   retrying ${r.file}: it said it checked nothing, and the database answers here (${again.why}). Running it alone.`);
   const second = await run(r.file);
@@ -293,7 +326,7 @@ if (browserGroup.length && !WANT_BROWSER) {
 } else if (browserGroup.length) {
   if (!existsSync(path.join(ROOT, 'dist', 'index.html'))) {
     console.log('\nNo dist/ to serve. Run npm run build first.');
-    process.exit(1);
+    cleanupTraffic(); process.exit(1);
   }
   console.log(`\nServing dist on ${PORT} for ${browserGroup.length} browser harnesses`);
   /* Round 284: not `npx serve -s dist` any more. That flag rewrites every
@@ -320,7 +353,7 @@ if (browserGroup.length && !WANT_BROWSER) {
   if (!up) {
     server.kill();
     console.log(`Nothing came up on ${PORT}, so the browser harnesses cannot run.`);
-    process.exit(1);
+    cleanupTraffic(); process.exit(1);
   }
   /* Round 127: SWEEP_BASE as well as BASE. Every browser harness in the repo
      reads SWEEP_BASE and falls back to a hardcoded 127.0.0.1:4173, so this only
@@ -341,6 +374,7 @@ if (browserGroup.length && !WANT_BROWSER) {
 }
 
 console.log('');
+cleanupTraffic();
 /* Round 356: a skip is said out loud every time, above the verdict line, so
    "all green" can never quietly mean "all green except the ones nobody ran". */
 if (skipped.length) {
@@ -349,7 +383,7 @@ if (skipped.length) {
       `${skipped.map((r) => r.file.replace('.mjs', '')).join(', ')}.`,
   );
   console.log(`Each one reached no database and said so, and the database is unreachable here: ${db.why}.`);
-  console.log('Run these where egress to the database is open, or DB_PROBE=reachable to see them fail here.');
+  console.log('Run SIM_NETWORK=live only after production traffic is cleared. DB_PROBE changes classification in live mode, not transport permission.');
 }
 if (!failures.length) {
   const ran = nodeResults.length + (WANT_BROWSER ? browserGroup.length : 0) - skipped.length;

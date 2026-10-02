@@ -99,6 +99,25 @@ export function clubTableNames(clubName: string): string[] {
 }
 
 /**
+ * Round 825: one spelling per club, so two rows that spell one club two ways
+ * read as the same club. Build Your XI's chemistry links clubmates, and Manuel
+ * Locatelli's row says "Juventus" while Bremer's says "Juventus FC": compared
+ * as stored strings they were never linked, although the Juventus slot itself
+ * offers both spellings. A stored name in the list above comes back as the
+ * first stored name of its club ("Juventus" becomes "Juventus FC"), never as
+ * the label, because a bare label like "Barcelona" may be some other club's
+ * stored name. Any other name comes back exactly as it was stored.
+ */
+export function canonicalClubName(stored: string | undefined): string | undefined {
+  const name = stored?.trim();
+  if (!name) return stored;
+  for (const names of Object.values(CLUB_TABLE_NAMES)) {
+    if (names.includes(name)) return names[0];
+  }
+  return name;
+}
+
+/**
  * Round 442. The nation filter is an exact `eq` on player_market_values
  * .nationality, and two of the 25 nations above are spelled differently in the
  * table, so the search box came back empty for every letter typed and the slot

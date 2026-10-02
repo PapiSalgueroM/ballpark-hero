@@ -6,7 +6,7 @@ import { MysteryBoxBoard } from '@/components/mystery-box/MysteryBoxBoard';
 
 export default function MysteryBox() {
   return (
-    <>
+    <main id="dukb-main" tabIndex={-1}>
       <PageSeo
         title="Mystery Box - Pack-Luck Squad Builder | DoUKnowBall"
         description="Open 15 mystery packs, keep or bin each player, and build the best 4-3-3 your luck allows. Same packs for everyone daily, beat their pulls."
@@ -33,6 +33,6 @@ export default function MysteryBox() {
           'Binned three early, now every pack is a forced keep',
         ]}
       />
-    </>
+    </main>
   );
 }

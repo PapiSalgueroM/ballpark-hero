@@ -6,7 +6,7 @@ import { GameHelp } from '@/components/game/GameHelp';
 
 export default function UfcChain() {
   return (
-    <>
+    <main id="dukb-main" tabIndex={-1}>
       <PageSeo
         title="Combat Chain - MMA Fighter Chain Game | DoUKnowBall"
         description="Build the longest chain of MMA fighters. Name a fighter who defeated the current fighter to extend your chain."
@@ -33,6 +33,6 @@ export default function UfcChain() {
           "Max Holloway → Alexander Volkanovski → Islam Makhachev"
         ]}
       />
-    </>
+    </main>
   );
 }
