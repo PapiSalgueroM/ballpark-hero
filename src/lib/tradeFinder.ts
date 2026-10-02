@@ -38,10 +38,16 @@ export function findTrades<T extends FinderTeam>(
   cap: number,
   tradeFn: TradeFn<T>,
   valueFn: (p: FinderPlayer) => number,
-  opts?: { maxOffers?: number; pickPenalty?: number },
+  opts?: { maxOffers?: number; pickPenalty?: number; cloneTeam?: (t: T) => T },
 ): FinderOffer[] {
   const maxOffers = opts?.maxOffers ?? 4;
   const pickPenalty = opts?.pickPenalty ?? 8; // gain discount when a deal costs you a pick
+  /* Round 828: a sport whose trade function only reassigns its clubs' players
+     and picks arrays can hand in a cheaper copy. An NFL club now carries fifty
+     men, and a full JSON copy of both clubs for every man probed took the
+     finder from about 40 ms to about 700 ms on a desktop. Without it, the
+     deep copy, exactly as before. */
+  const cheap = opts?.cloneTeam;
   const myTeam = teams[myTeamId];
   const mine = myTeam?.players.find(p => p.id === myPlayerId);
   if (!myTeam || !mine) return [];
@@ -52,7 +58,7 @@ export function findTrades<T extends FinderTeam>(
      originals, so the copy is the same; MLB's 26 man rosters doubled both
      the probes and the size of every copy, and the shop got four times
      slower. */
-  const myJson = JSON.stringify(myTeam);
+  const myJson = cheap ? null : JSON.stringify(myTeam);
 
   for (const [teamId, theirTeam] of Object.entries(teams)) {
     if (teamId === myTeamId) continue;
@@ -60,13 +66,16 @@ export function findTrades<T extends FinderTeam>(
     // single best accepted deal so the list spans several franchises.
     let best: FinderOffer | null = null;
     const sorted = [...theirTeam.players].sort((a, b) => b.ovr - a.ovr);
-    const theirJson = JSON.stringify(theirTeam);
+    const theirJson = cheap ? null : JSON.stringify(theirTeam);
     for (const target of sorted) {
       // try the pickless deal first; only spend a pick when we must
       for (const sweeten of [false, true]) {
         if (sweeten && myTeam.picks.length === 0) continue;
-        const myClone = JSON.parse(myJson) as T;
-        const theirClone = JSON.parse(theirJson) as T;
+        /* Round 828 and 829 together: a sport's own cheap copy when it hands
+           one in (the NFL), otherwise a fresh deep copy of each club written
+           out once per shop. */
+        const myClone = cheap ? cheap(myTeam) : JSON.parse(myJson!) as T;
+        const theirClone = cheap ? cheap(theirTeam) : JSON.parse(theirJson!) as T;
         if (tradeFn(myClone, theirClone, myPlayerId, target.id, sweeten, cap) === 'accepted') {
           const gain = valueFn(target) - myValue - (sweeten ? pickPenalty : 0);
           if (!best || gain > best.gain) {

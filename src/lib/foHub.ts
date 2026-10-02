@@ -108,6 +108,15 @@ export interface FoHubFacts {
   tax?: { bill: number; over: number };
   /** Round 722: the roster floor the season cannot tip off below, when the sport has one. */
   rosterFloor?: number;
+  /**
+   * Round 828: the men the sim starts, when the roster carries a bench (an NFL
+   * league with full rosters). The roster box's injury line and star, the
+   * market's upgrade bar and the trade box's chip read these, because a hurt
+   * practice body or a signing better than the fortieth man is not news. The
+   * count still reads the whole roster. Absent, everything reads the roster
+   * as it always did.
+   */
+  starters?: FoHubPlayer[];
 }
 
 /**
@@ -193,8 +202,9 @@ export function foHubTiles(f: FoHubFacts): FoTile[] {
 
   /* ---------------------------------------------------------------- roster */
   {
-    const hurt = f.roster.filter(p => p.out > 0);
-    const star = best(f.roster);
+    const core = f.starters ?? f.roster;
+    const hurt = core.filter(p => p.out > 0);
+    const star = best(core);
     const starHurt = hurt.length > 0 ? [...hurt].sort((a, b) => b.ovr - a.ovr)[0] : null;
     /* Round 722: a roster the season cannot start with outranks a hurt star
        on the second line, because it is the one roster fact with a deadline.
@@ -237,7 +247,7 @@ export function foHubTiles(f: FoHubFacts): FoTile[] {
     const topAvailable = best(market);
     /* Worth a dot only if he would walk into the better two thirds of the
        squad. A 71 rated body you can afford is not news. */
-    const bar = percentileOvr(f.roster, 0.67);
+    const bar = percentileOvr(f.starters ?? f.roster, 0.67);
     const upgrade = pick !== null && f.roster.length > 0 && pick.ovr > bar;
     out.push({
       key: 'market',
@@ -260,7 +270,7 @@ export function foHubTiles(f: FoHubFacts): FoTile[] {
   /* ----------------------------------------------------------------- trades */
   {
     const over = f.capRoom < 0;
-    const chip = best(f.roster.filter(p => p.out === 0));
+    const chip = best((f.starters ?? f.roster).filter(p => p.out === 0));
     /* Round 722: a tax cheque in the post is the trade fact that matters most
        in a sport that has one. Over the cap alone is ordinary there. */
     const taxed = !!f.tax && f.tax.bill > 0;

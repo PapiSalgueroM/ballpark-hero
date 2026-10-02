@@ -1,11 +1,14 @@
 import { FO_TEAMS, FO_TEAM_MAP, type FoPlayer, type FoTeam } from '@/data/frontOfficePlayers';
+/* Round 828: a type only. The bench and the practice squad are a separate,
+   lazily loaded chunk the board hands to initLeague for a new league. */
+import type { FoDepthTeam } from '@/data/frontOfficeDepth';
 /* Round 211: no two men in one league share a name. */
 import { leagueNames, uniqueName } from './foNames';
 /* Round 531: the cap comes from one sourced file, never a bare literal here. */
 import { NFL_SALARY_CAP_2026 } from './leagueCaps';
 import { makeIdMinter, ensureLeagueEntityIds } from './entityIds';
 /* Round 631: dead money and the no way back rule, shared by the four GM sims. */
-import { type CutLedger, type DeadCapEntry, cutPlayer, payrollWithDeadCap, rollDeadCap, signRefusal, tradeRefusal } from './frontOfficeCuts';
+import { type CutLedger, type DeadCapEntry, cutPlayer, payrollWithDeadCap, rollDeadCap, signRefusal, tradeRefusal, rosterFullRefusal } from './frontOfficeCuts';
 
 /**
  * NFL Front Office engine (2026-08-05, the manager-for-every-sport push).
@@ -39,6 +42,9 @@ export interface GmPlayer extends FoPlayer {
   tagCount?: number;
   /** A fully guaranteed deal. frontOfficeCuts reads it: cutting him is dead money in full. */
   guaranteed?: boolean;
+  /** Round 828: he had no 2025 season to rate (a rookie, or hurt all year), so his
+      opening rating is draft position and service alone. The board says so. */
+  noSeason?: boolean;
 }
 
 /** Round 723: the position groups the depth chart is drawn in. The roster
@@ -67,6 +73,13 @@ export interface GmTeamState extends CutLedger {
   depth?: Partial<Record<DepthPos, string[]>>;
   /** The season the franchise tag was last used for. One tag per offseason. */
   tagUsedFor?: number;
+  /* Round 828. Both absent on every league saved before this round, which
+     keeps playing exactly as it did: fifteen men, every one of them read. */
+  /** A full roster: the units read each group's starters off the chart
+      (STARTER_SLOTS), the bench waits, and DEEP_ROSTER_MAX holds. */
+  rosterDepth?: 2;
+  /** The practice squad: real men off the active roster, off the cap. */
+  practice?: GmPlayer[];
 }
 
 export interface GmGame {
@@ -96,6 +109,8 @@ export interface LeagueState {
   schedule: GmGame[][]; // week -> games
   week: number; // 1..17, 18 = playoffs
   champions: { season: number; team: string }[];
+  /** Round 828: present on a league started with full rosters. Absent on every older save. */
+  rosterDepth?: 2;
 }
 
 /* Round 568: this counter used to live at module scope, which restarts on
@@ -109,7 +124,10 @@ export const freshId = makeIdMinter('p');
     Loose lists (a draft class, a recruiting class, a portal) come from the
     same counter, so they are one id space with the rosters. */
 export function ensureFoLeagueIds(lg: LeagueState, ...loose: (({ id: string }[]) | null | undefined)[]): number {
-  return ensureLeagueEntityIds(freshId, lg as never, ...loose);
+  /* Round 828: the practice squads share the id space, so they are passed as
+     loose lists. A league without them passes nothing extra. */
+  const practice = Object.values(lg.teams ?? {}).map(t => t.practice);
+  return ensureLeagueEntityIds(freshId, lg as never, ...practice, ...loose);
 }
 
 export function makeGmPlayer(p: FoPlayer, rng: () => number): GmPlayer {
@@ -121,7 +139,37 @@ export function makeGmPlayer(p: FoPlayer, rng: () => number): GmPlayer {
   };
 }
 
-export function initLeague(rng: () => number = Math.random): LeagueState {
+/* ROUND 828: THE WHOLE CLUB. A league started with `depth` carries every
+   club's real active roster (the fifteen starters plus the bench) and its
+   practice squad, where every league before carried the fifteen alone.
+
+   THE STARTERS ARE DEALT FIRST AND EVERYTHING THE SEASON READS IS DRAWN
+   BEFORE THE BENCH ARRIVES. The starters, the opening free agent pool and
+   the schedule take the same draws from the same rng in the same order as a
+   fifteen man league, and only then do the bench and the practice squad
+   draw their growth ceilings. So for one seed a full league and a fifteen
+   man league open on the same starters, the same market and the same
+   fixtures, which is what lets scripts/simNflFullRosters.mjs show that the
+   bench changes no result while every starter is fit. The name book the
+   pool is dealt against includes the bench and the practice squad, so no
+   invented free agent shares a name with a real backup; simInventedNames
+   keeps every name bank clear of every real name, so that book never makes
+   uniqueName draw again and the pool is the same either way.
+
+   Without `depth` this is the fifteen man league exactly as it always was,
+   which is what every harness and every older save is built on. */
+export interface InitLeagueOptions {
+  /** The bench and the practice squad per club, from src/data/frontOfficeDepth.ts. */
+  depth?: Record<string, FoDepthTeam>;
+  /** Round 828 follow up: the GM's own club. On a full roster league every
+      other club over 53 (the starters rule counts a starter on injured
+      reserve, so the Giants open at 54) cuts itself down before Week 1, the
+      way the offseason does; the GM's club is never cut behind his back and
+      owes its cut on the board instead. Absent, nobody is cut. */
+  userTeam?: string;
+}
+
+export function initLeague(rng: () => number = Math.random, opts: InitLeagueOptions = {}): LeagueState {
   const teams: Record<string, GmTeamState> = {};
   for (const t of FO_TEAMS) {
     teams[t.abbr] = {
@@ -133,18 +181,40 @@ export function initLeague(rng: () => number = Math.random): LeagueState {
       picks: [1, 2, 3],
     };
   }
-  return {
+  const depth = opts.depth;
+  const taken = leagueNames({ teams, freeAgents: [] });
+  if (depth) {
+    for (const d of Object.values(depth)) for (const p of [...d.bench, ...d.practice]) taken.add(p.name);
+  }
+  const league: LeagueState = {
     season: 2026,
     cap: SALARY_CAP_BASE,
     teams,
     /* Round 211: the pool is dealt against the names already on the
        thirty two rosters, so an invented free agent can never share a name
        with a real player either. */
-    freeAgents: buildInitialFreeAgents(rng, leagueNames({ teams, freeAgents: [] })),
+    freeAgents: buildInitialFreeAgents(rng, taken),
     schedule: buildSchedule(rng),
     week: 1,
     champions: [],
   };
+  if (depth) {
+    league.rosterDepth = 2;
+    for (const t of FO_TEAMS) {
+      const team = teams[t.abbr];
+      const d = depth[t.abbr];
+      team.rosterDepth = 2;
+      team.players.push(...(d?.bench ?? []).map(p => makeGmPlayer(p, rng)));
+      team.practice = (d?.practice ?? []).map(p => makeGmPlayer(p, rng));
+      const unrated = new Set(d?.noSeason ?? []);
+      for (const p of [...team.players, ...team.practice]) if (unrated.has(p.name)) p.noSeason = true;
+    }
+    /* the computer clubs cut themselves before Week 1, never the GM's own; the
+       cut draws no random numbers, so the deal above is the same either way */
+    const gm = opts.userTeam;
+    if (gm) for (const t of Object.values(teams)) if (t.abbr !== gm) cutDownToMax(t, league.freeAgents);
+  }
+  return league;
 }
 
 /** A believable opening FA pool: fictional veterans at every position. */
@@ -290,6 +360,37 @@ export function defenceRating(team: GmTeamState): number {
 export const SKILL_SLOTS = 5;
 export const OL_SLOTS = Number.POSITIVE_INFINITY;
 
+/* ROUND 828: A FULL ROSTER STARTS THE SAME SHAPE THE FIFTEEN DID. With the
+   whole club on the books, "every healthy man in the group" stops meaning
+   "the starters": nine linemen would all play, and a receiver fourth on his
+   own chart would compete for a skill slot he never had. So on a club with
+   rosterDepth 2 each group offers the units its first STARTER_SLOTS healthy
+   men off the chart, which is exactly the shape the fifteen man bake ships
+   (scripts/genFrontOfficeRoster.mjs SLOTS), and the units then do what they
+   always did with them: QB1, the best five of the six skill men, the line,
+   the best six defenders. A fit club therefore reads the same men at the
+   same ratings as its fifteen man self, and the bench only plays when a
+   starter is hurt or the GM promotes him on the chart. A five man line and
+   real formations are a later round (the plan's FO-7); this one moves no
+   result. A club without the flag reads every healthy man, as before. */
+export const STARTER_SLOTS: Record<DepthPos, number> = { QB: 1, RB: 2, WR: 3, TE: 1, OL: 2, DL: 2, LB: 2, DB: 2 };
+/** Round 828: the real active roster limit. Signing is refused at it; the offseason cuts down to it. */
+export const DEEP_ROSTER_MAX = 53;
+/* The size of each group a full club is refilled to every offseason: the
+   median of the thirty two real active rosters the bake read (nflverse,
+   2026 week 4), 51 in all. scripts/simNflFullRosters.mjs recomputes the
+   medians off the data files and fails if these drift from them. */
+export const DEEP_GROUP_TARGET: Record<DepthPos, number> = { QB: 3, RB: 4, WR: 6, TE: 4, OL: 9, DL: 7, LB: 8, DB: 10 };
+/* The band a backup sits on, the generator's DEPTH_SCALE: under every
+   starter, above REPLACEMENT_OVR. An invented depth man is drawn from it. */
+export const DEPTH_BAND: Record<'OL' | 'other', [number, number]> = { OL: [75, 79], other: [61, 65] };
+
+/** The men a group offers its unit: every healthy man, or on a full roster the first STARTER_SLOTS healthy men off the chart. */
+function unitCandidates(team: GmTeamState, groups: DepthPos[]): GmPlayer[] {
+  if (team.rosterDepth !== 2) return team.players.filter(p => p.out === 0 && groups.includes(p.pos));
+  return groups.flatMap(g => depthOrder(team, g).filter(p => p.out === 0).slice(0, STARTER_SLOTS[g]));
+}
+
 /** A group's chart: the saved order, with any man it does not name slotted
     in by his rating. With nothing saved this is the order by rating the sim
     always used. */
@@ -371,7 +472,7 @@ export function swapDepth(team: GmTeamState, pos: DepthPos, idA: string, idB: st
 
 /** The healthy men a unit starts: slots shared out by rating, filled by chart order. */
 export function unitStarters(team: GmTeamState, groups: DepthPos[], slots: number): GmPlayer[] {
-  const pool = team.players.filter(p => p.out === 0 && groups.includes(p.pos));
+  const pool = unitCandidates(team, groups);
   const top = [...pool].sort((a, b) => b.ovr - a.ovr).slice(0, slots);
   const out: GmPlayer[] = [];
   for (const g of groups) {
@@ -732,11 +833,43 @@ export function signPlayer(team: GmTeamState, freeAgents: GmPlayer[], playerId: 
   if (idx < 0) return false;
   /* Round 631: the same refusal the board shows beside the greyed button. */
   if (signRefusal(team, playerId)) return false;
+  /* Round 828: a full roster holds 53. A fifteen man club has no ceiling, as before. */
+  if (deepRosterRefusal(team)) return false;
   const p = freeAgents[idx];
   if (capRoom(team, cap) < p.salary) return false;
   freeAgents.splice(idx, 1);
   team.players.push(p);
   return true;
+}
+
+/** Round 828: why a full roster cannot add a man right now, or null. Always null on a fifteen man club. */
+export function deepRosterRefusal(team: GmTeamState): string | null {
+  if (team.rosterDepth !== 2) return null;
+  return rosterFullRefusal(team, DEEP_ROSTER_MAX);
+}
+
+/* Round 828: THE PRACTICE SQUAD. Real men off the active roster and off the
+   cap. This round lets the GM call one up when there is room, and the
+   offseason calls them up first when a group runs short, before it invents
+   anybody. Sending men down in season, the squad's own size rules and
+   faster growth for young men on it are the development tier round's. */
+export function promoteFromPractice(team: GmTeamState, playerId: string): boolean {
+  if (team.rosterDepth !== 2 || !team.practice) return false;
+  const idx = team.practice.findIndex(p => p.id === playerId);
+  if (idx < 0 || deepRosterRefusal(team)) return false;
+  const [p] = team.practice.splice(idx, 1);
+  team.players.push(p);
+  return true;
+}
+
+/* Round 828: the copy the Trade Finder probes on. proposeTrade only ever
+   reassigns a club's players array and moves picks between the two picks
+   arrays, so copying those two arrays is all a probe needs, and it is what
+   keeps the finder quick with fifty men a club. scripts/simNflFullRosters.mjs
+   checks it finds exactly the deep copy's offers and leaves the league as it
+   found it. */
+export function tradeProbeCopy(t: GmTeamState): GmTeamState {
+  return { ...t, players: [...t.players], picks: [...t.picks] };
 }
 
 /** Trade evaluation: AI accepts when incoming value beats outgoing by margin. */
@@ -1040,7 +1173,18 @@ export interface OffseasonNews {
   developed: { team: string; player: string; from: number; to: number }[];
   /** Round 723: the CPU clubs' franchise tags this offseason. */
   tagged: { team: string; player: string; salary: number }[];
+  /** Round 828, full rosters only: called up off the practice squad to refill a group. */
+  promoted?: { team: string; player: string; pos: string }[];
+  /** Round 828, full rosters only: released in the cut to 53 (a real cut, dead money and all). */
+  cutDown?: { team: string; player: string; pos: string }[];
 }
+
+/* Round 828: A DECLINE NEVER RAISES A MAN. The floor of 62 below was written
+   when nobody on a roster sat under it, so "at least 62" only ever stopped a
+   veteran falling too far. A real backup can sit at 61, and the same floor
+   would have lifted him a point for getting older. Every man at 62 or above
+   reads exactly as before. */
+const declined = (ovr: number, by: number): number => Math.max(Math.min(62, ovr), ovr - by);
 
 /* Round 723: userTeam is the club whose tag decision is the GM's own, so the
    CPU policy skips it. Callers without one (the harnesses) run it everywhere. */
@@ -1059,7 +1203,7 @@ export function runOffseason(league: LeagueState, rng: () => number, userTeam?: 
         p.ovr = Math.min(p.pot, p.ovr + 1 + Math.floor(rng() * 2));
         if (p.ovr - from >= 2) news.developed.push({ team: t.abbr, player: p.name, from, to: p.ovr });
       } else if (p.age >= 31) {
-        p.ovr = Math.max(62, p.ovr - (1 + Math.floor(rng() * 2) + (p.age >= 34 ? 1 : 0)));
+        p.ovr = declined(p.ovr, 1 + Math.floor(rng() * 2) + (p.age >= 34 ? 1 : 0));
       }
       // retirement
       if (p.age >= 34 && (p.ovr <= 70 || rng() < 0.3 || p.age >= 40)) {
@@ -1091,6 +1235,24 @@ export function runOffseason(league: LeagueState, rng: () => number, userTeam?: 
       keep.push(p);
     }
     t.players = keep;
+    /* Round 828: the practice squad ages, grows and retires by the same
+       rules. Its deals do not run out yet: the squad's own contract rules
+       are the development tier round's. */
+    if (t.practice) {
+      const stay: GmPlayer[] = [];
+      for (const p of t.practice) {
+        p.age += 1;
+        p.out = 0;
+        if (p.age <= 25 && p.ovr < p.pot) p.ovr = Math.min(p.pot, p.ovr + 1 + Math.floor(rng() * 2));
+        else if (p.age >= 31) p.ovr = declined(p.ovr, 1 + Math.floor(rng() * 2) + (p.age >= 34 ? 1 : 0));
+        if (p.age >= 34 && (p.ovr <= 70 || rng() < 0.3 || p.age >= 40)) {
+          news.retired.push({ team: t.abbr, player: p.name });
+          continue;
+        }
+        stay.push(p);
+      }
+      t.practice = stay;
+    }
     t.wins = 0;
     t.losses = 0;
     t.picks = [1, 2, 3];
@@ -1117,7 +1279,23 @@ export function runOffseason(league: LeagueState, rng: () => number, userTeam?: 
   }
   // trim the FA pool to the useful part
   league.freeAgents = league.freeAgents.sort((a, b) => b.ovr - a.ovr).slice(0, 40);
-  for (const fa of league.freeAgents) { fa.age += 1; fa.ovr = fa.age >= 31 ? Math.max(62, fa.ovr - 1) : fa.ovr; }
+  for (const fa of league.freeAgents) { fa.age += 1; fa.ovr = fa.age >= 31 ? declined(fa.ovr, 1) : fa.ovr; }
+  /* Round 828: a full club refills from its own practice squad first and cuts
+     down to 53 last. A fifteen man club goes through the old pass untouched.
+     Round 828 follow up: the computer clubs cut themselves; the GM's own club
+     is never cut behind his back (it owes its cut on the board, Play locked
+     until it is at 53, the shape MLB and the NHL use). The refills draw from
+     the rng and the cuts never do, so cutting after every refill rather than
+     club by club changes no draw and no result. */
+  const deep = Object.values(league.teams).filter(t => t.rosterDepth === 2);
+  if (deep.length) {
+    news.promoted = [];
+    news.cutDown = [];
+    const taken = leagueNames(league);
+    for (const t of deep) news.promoted.push(...refillDeepRoster(t, taken, rng));
+    /* the computer clubs cut themselves, as mlbOffseason does; userTeam absent (the harnesses) cuts every club */
+    for (const t of deep) if (t.abbr !== userTeam) news.cutDown.push(...cutDownToMax(t, league.freeAgents));
+  }
   replenishRosters(league, rng);
   league.cap = Math.round(league.cap * 1.05);
   league.season += 1;
@@ -1136,6 +1314,8 @@ export function replenishRosters(league: LeagueState, rng: () => number): void {
   /* Round 211: one name book for the whole replenishment pass. */
   const taken = leagueNames(league);
   for (const t of Object.values(league.teams)) {
+    /* Round 828: a full club was refilled by refillDeepRoster already. */
+    if (t.rosterDepth === 2) continue;
     const addDepth = (pos: GmPlayer['pos']) => {
       const ovr = 66 + Math.floor(rng() * 8);
       t.players.push({
@@ -1170,6 +1350,80 @@ export function replenishRosters(league: LeagueState, rng: () => number): void {
   }
 }
 
+/* Round 828: A FULL CLUB REFILLS FROM ITS OWN PEOPLE FIRST. Every group
+   short of DEEP_GROUP_TARGET calls up its best practice squad man at that
+   position, and only when the squad has nobody left there does the club
+   sign a generated depth man, drawn from the backup band (DEPTH_BAND) and
+   the same name bank as the draft, so an invented man never outrates the
+   real bench. Groups are walked in DEPTH_GROUPS order so the draws are
+   repeatable for a seed. */
+export function refillDeepRoster(t: GmTeamState, taken: Set<string>, rng: () => number): { team: string; player: string; pos: string }[] {
+  const promoted: { team: string; player: string; pos: string }[] = [];
+  for (const g of DEPTH_GROUPS) {
+    let have = t.players.filter(p => p.pos === g).length;
+    /* a club already at 53 fills only what it needs to start */
+    while (have < DEEP_GROUP_TARGET[g] && (t.players.length < DEEP_ROSTER_MAX || have < STARTER_SLOTS[g])) {
+      const up = (t.practice ?? []).filter(p => p.pos === g).sort((a, b) => b.ovr - a.ovr)[0];
+      if (up) {
+        t.practice = (t.practice ?? []).filter(p => p.id !== up.id);
+        t.players.push(up);
+        promoted.push({ team: t.abbr, player: up.name, pos: g });
+      } else {
+        const [lo, hi] = g === 'OL' ? DEPTH_BAND.OL : DEPTH_BAND.other;
+        const ovr = lo + Math.floor(rng() * (hi - lo + 1));
+        t.players.push({
+          id: freshId(),
+          name: prospectName(rng, taken),
+          pos: g,
+          age: 24 + Math.floor(rng() * 8),
+          ovr,
+          salary: salaryFor(g, ovr),
+          years: 1 + Math.floor(rng() * 2),
+          out: 0,
+          pot: ovr,
+        });
+      }
+      have += 1;
+    }
+  }
+  return promoted;
+}
+
+/** Round 828 follow up: how many men a full roster club must cut before it
+    may play, 0 at or under 53 and always 0 on a fifteen man club. The board
+    holds Play on it until the GM has cut down through the shared cut. */
+export function deepOverLimit(team: GmTeamState): number {
+  return team.rosterDepth === 2 ? Math.max(0, team.players.length - DEEP_ROSTER_MAX) : 0;
+}
+
+/* Round 828: THE CUT DOWN TO 53. A full club over DEEP_ROSTER_MAX after the
+   draft releases its lowest rated men who do not start until it is at 53.
+   It is a real cut, through cutPlayer like every other: the man goes to the
+   pool, half his salary stays on the cap as dead money, and he cannot come
+   back this season (simFrontOfficeCuts section 7 holds every engine to that,
+   so a quiet move to the practice squad, which would free his salary for
+   nothing, is not on offer). A guaranteed deal is never the one released,
+   and a group carrying more than its share gives a man up before a thin one
+   loses any. A starter is never released. */
+export function cutDownToMax(t: GmTeamState, freeAgents: GmPlayer[]): { team: string; player: string; pos: string }[] {
+  const out: { team: string; player: string; pos: string }[] = [];
+  if (t.rosterDepth !== 2) return out;
+  while (t.players.length > DEEP_ROSTER_MAX) {
+    const roster = [...t.players];
+    const starting = starterIds(t);
+    const count = (pos: DepthPos) => roster.reduce((n, q) => n + (q.pos === pos ? 1 : 0), 0);
+    const spare = roster.filter(p => !starting.has(p.id) && !p.guaranteed);
+    const crowded = spare.filter(p => count(p.pos) > DEEP_GROUP_TARGET[p.pos]);
+    const down = (crowded.length ? crowded : spare)
+      .sort((a, b) => a.ovr - b.ovr || b.age - a.age || a.name.localeCompare(b.name))[0];
+    if (!down || !cutPlayer(t, freeAgents, down.id, NFL_ROSTER_MIN)) break;
+    const saved = t.depth?.[down.pos];
+    if (t.depth && saved) { t.depth[down.pos] = saved.filter(id => id !== down.id); settleDepth(t, down.pos); }
+    out.push({ team: t.abbr, player: down.name, pos: down.pos });
+  }
+  return out;
+}
+
 function years0(age: number): number {
   if (age <= 25) return 4;
   if (age <= 28) return 3;
@@ -1188,7 +1442,14 @@ export function aiWeeklyMoves(league: LeagueState, userTeam: string, rng: () => 
       .filter(p => p.salary <= room)
       .sort((a, b) => b.ovr - a.ovr)[0];
     if (!target) continue;
-    const worstSamePos = t.players.filter(p => p.pos === target.pos).sort((a, b) => a.ovr - b.ovr)[0];
+    /* Round 828: on a full roster the man to beat is the worst STARTER at his
+       position, as he was when the starters were the whole group. Measured
+       against the bench every free agent would beat somebody, and the CPU
+       would sign until the cap ran out. A full club at 53 signs nobody. */
+    if (deepRosterRefusal(t)) continue;
+    const worstSamePos = (t.rosterDepth === 2
+      ? depthOrder(t, target.pos).slice(0, STARTER_SLOTS[target.pos])
+      : t.players.filter(p => p.pos === target.pos)).sort((a, b) => a.ovr - b.ovr)[0];
     if (worstSamePos && worstSamePos.ovr + 2 < target.ovr) {
       signPlayer(t, league.freeAgents, target.id, league.cap);
       log.push(`${t.abbr} sign ${target.name} (${target.pos} ${target.ovr})`);
