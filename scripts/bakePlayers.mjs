@@ -115,6 +115,9 @@ const ENGINE_LEAGUE_TO_POOL = {
   'Danish Superliga': 'Danish Superliga',
   'Swiss Super League': 'Swiss Super League',
   'SuperSport HNL': 'Croatian HNL',
+  /* Round 876: without this row the bake (and simPlayersPool section 3) would
+     stop on the new league, which is what the fail closed rule is for. */
+  'Brasileirão Série A': 'Brazilian Série A',
 };
 
 /* ------------------------------------------------------------------ */
