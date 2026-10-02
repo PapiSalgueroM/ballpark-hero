@@ -136,7 +136,7 @@ const F = vi.hoisted(() => ({
     name: `Made Up ${i}`, club: `Club ${i}`, position: 'Midfielder', age: 20 + i, nationality: 'England',
     marketValue: (i + 1) * 5_000_000, matches: 10, goals: i, assists: i,
   })),
-  GRID_NAMES: ['Fit Alpha', 'Fit Bravo', 'Fit Charlie', 'Fit Delta', 'Miss One', 'Miss Two', 'Miss Three', 'Miss Four', 'Miss Five', 'Miss Six', 'Miss Seven', 'Miss Eight', 'Miss Nine', 'Miss Ten'],
+  GRID_NAMES: ['Fit Alpha', 'Fit Bravo', 'Fit Charlie', 'Fit Delta', 'Fit Echo', 'Fit Foxtrot', 'Fit Golf', 'Fit Hotel', 'Fit India', 'Miss 1', 'Miss 2', 'Miss 3', 'Miss 4', 'Miss 5', 'Miss 6', 'Miss 7', 'Miss 8', 'Miss 9', 'Miss 10', 'Miss 11', 'Miss 12', 'Miss 13', 'Miss 14', 'Miss 15'],
 }));
 
 vi.mock('@/lib/fetchCareerPlayers', () => ({ fetchCareerPlayers: () => Promise.resolve([]) }));
@@ -378,6 +378,7 @@ function clueCareer(id: string, storage: string, useHook: () => unknown, who: (r
 
 function sportConnections(id: string, useHook: () => unknown): Driver {
   const pick = (names: string[]): Step => step(`pick ${names.length}`, async (api) => {
+    await run(() => api.r.deselectAll());
     for (const n of names) await run(() => api.r.togglePlayer(n));
   });
   const groups = (api: Api) => api.r.puzzle.groups as { players: string[] }[];
@@ -404,11 +405,13 @@ function gridHook(id: string, useHook: () => unknown, ok: boolean): Driver {
       await advance(1600);
     },
   });
-  const misses = repeat(9, (i) => guess(i % 9, `Miss ${['One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine'][i]}`));
+  /* Fifteen misses is the day's guess limit on all three grids. */
+  const misses = repeat(15, (i) => guess(i % 9, `Miss ${i + 1}`));
+  const fits = repeat(9, (i) => guess(i, `Fit ${['Alpha', 'Bravo', 'Charlie', 'Delta', 'Echo', 'Foxtrot', 'Golf', 'Hotel', 'India'][i]}`));
   return {
     id, key: keyOf(id), mount: () => mountHook(useHook, (r) => !r.isLoading), view: hookView,
     plays: ok
-      ? { mixed: [guess(0, 'Miss One'), guess(0, 'Fit Alpha'), guess(4, 'Fit Bravo'), guess(8, 'Miss Two')], lose: misses }
+      ? { mixed: [guess(0, 'Miss 1'), guess(0, 'Fit Alpha'), guess(4, 'Fit Bravo'), guess(8, 'Miss 2')], lose: misses, win: [guess(0, 'Miss 3'), ...fits] }
       : { lose: misses },
   };
 }
