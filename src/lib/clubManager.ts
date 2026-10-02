@@ -2679,6 +2679,36 @@ export const LEAGUE_RULES: Record<string, LeagueRules> = {
     nationId: 'brazil', flag: 'Brazil', cup: 'Copa do Brasil', europe: null, drop: 4, ladder: 'top', season: 'calendarYear',
     simplified: 'Played on the August to May calendar rather than January to December, with no Copa Libertadores, and clubs level on points split by goal difference then goals scored, where the real table reads wins first.',
   },
+  /* Round 883: Liga MX 2026-27, the first real league with no domestic cup
+     (cup null, the shape Round 832 proved on a synthetic row). Each fact
+     from two sources, read 2026-10-02:
+     - No promotion or relegation from 2026-27 on (article 35 of the new
+       competition regulations): Infobae, "Oficial: desaparece el descenso y
+       ascenso en la Liga MX a partir del Apertura 2026" (2026-07-16), and
+       Record, "Oficial: no habra ascenso y descenso en la Liga MX"
+       (2026-07-16). So drop 0 and the MLS ladder: no board threatens it.
+     - No domestic cup: the Copa MX was last played in November 2020 and its
+       return was only ever promised (Record, 2025-10-17, the federation
+       president saying it would come back "for 2025 or 2026"); the 2026-27
+       calendar guides list the Leagues Cup and the Liguilla and no cup
+       (Excelsior, "Guia de calendario de la Liga MX Apertura 2026"; TUDN,
+       "Revela la Liga MX el calendario del Apertura 2026"). The Leagues Cup
+       is a cross border competition with MLS and is not used as a cup.
+     - The top eight of the table go straight to the Liguilla quarter finals,
+       the play-in gone (TUDN as above; Mediotiempo, "Liga MX elimina el
+       Play-In definitivamente", 2026-04-23): the board's playoff rung.
+     Simplified: the Apertura and Clausura are played as one double round
+     robin of 34 rounds and the Liguilla is not played, so the table settles
+     the season. Level clubs split by goal difference then goals scored,
+     which are the real first two steps (Fox Sports Mexico, 2026-04-22, then
+     head to head and away goals); only that one source spelled the order
+     out, so the row takes the gdGfOnly default rather than claiming the
+     head to head step. */
+  ligamx: {
+    nationId: 'mexico', flag: 'Mexico', cup: null, europe: null, drop: 0, ladder: 'playoffs',
+    playoff: { rankUpTo: 10, target: 8, label: 'Make the Liguilla' }, floorFromBottom: 4, season: 'autumnSpring',
+    simplified: 'The Apertura and Clausura are played as one double round robin and the Liguilla is not played, so the table settles the season. There is no domestic cup (the Copa MX has not been played since 2020), and clubs level on points split by goal difference then goals scored, the real table\'s first two steps.',
+  },
   /* The era leagues. No Conference League existed before 2021, so uecl is 0
      and the board's ladder skips that band; 2005-06 still called the second
      competition the UEFA Cup. */
@@ -2870,6 +2900,18 @@ export const REAL_LEAGUES: LeagueDef[] = [
     id: 'brasileirao', name: 'Brasileirão Série A',
     clubs: ['Flamengo', 'Palmeiras', 'Athletico Paranaense', 'Fluminense', 'Bahia', 'Cruzeiro', 'Atlético Mineiro', 'Santos', 'Coritiba', 'Red Bull Bragantino', 'São Paulo', 'Botafogo', 'Vitória', 'Corinthians', 'Mirassol', 'Vasco da Gama', 'Grêmio', 'Internacional', 'Remo', 'Chapecoense'],
   },
+  /* Round 883: Liga MX 2026-27. Membership read 2026-10-02 off two agreeing
+     lists, Liga MX's own site (https://ligamx.net/, the Apertura 2026 club
+     menus and table) and ESPN's 2026-27 standings
+     (https://www.espn.com/soccer/standings/_/league/mex.1): the same
+     eighteen clubs. Atlante are back in place of Mazatlan, whose top flight
+     certificate their owner bought (Telemundo, "Atlante esta de regreso",
+     and Mediotiempo, "Liga MX recibe a Atlante"). Atlante have no usable
+     rows in the value table and ship as a youth padded squad that says so. */
+  {
+    id: 'ligamx', name: 'Liga MX',
+    clubs: ['América', 'Guadalajara', 'Cruz Azul', 'Monterrey', 'Tigres UANL', 'Toluca', 'Pumas UNAM', 'Pachuca', 'León', 'Santos Laguna', 'Atlas', 'Necaxa', 'Puebla', 'Querétaro', 'Tijuana', 'FC Juárez', 'Atlético San Luis', 'Atlante'],
+  },
 ].map(leagueFromRow);
 
 /**
@@ -2982,6 +3024,11 @@ const STRENGTH_PRIORS: Record<string, number> = {
   // Iraklis, Kalamata, Austria Lustenau, AC Horsens), below the 64 a $1m
   // player rates at, which is the value table's floor.
   'Chapecoense': 61,
+  // Round 883: Liga MX. Atlante are the one member with no baked player
+  // (back in the top flight in place of Mazatlan, from the second tier), so
+  // they take the same 61 every promoted side with no usable rows has
+  // shipped with, Chapecoense the last of them.
+  'Atlante': 61,
 };
 
 /** The real league a club plays in. Every playable club is covered.
@@ -3229,6 +3276,8 @@ export const NATIONS: NationDef[] = [
   { id: 'croatia', name: 'Croatia', flag: '🇭🇷' },
   // Round 876
   { id: 'brazil', name: 'Brazil', flag: '🇧🇷' },
+  // Round 883
+  { id: 'mexico', name: 'Mexico', flag: '🇲🇽' },
 ].map(n => ({ ...n, leagueIds: REAL_LEAGUES.filter(l => leagueRulesOf(l.id).nationId === n.id).map(l => l.id) }));
 
 /** Primary kit colors for the club dot in the UI (approximate, decorative). */
@@ -3373,6 +3422,13 @@ const CLUB_COLORS: Record<string, string> = {
   'Vitória': '#d02128', 'Corinthians': '#d9d9d9', 'Mirassol': '#f5d800',
   'Vasco da Gama': '#2b2b2b', 'Grêmio': '#0d80bf', 'Internacional': '#d02128',
   'Remo': '#12294a', 'Chapecoense': '#0a7040',
+  // Round 883: Liga MX (plain shirt colours, no crest art)
+  'América': '#f5d800', 'Guadalajara': '#c8102e', 'Cruz Azul': '#0057b8',
+  'Monterrey': '#12294a', 'Tigres UANL': '#f5a800', 'Toluca': '#d02128',
+  'Pumas UNAM': '#12294a', 'Pachuca': '#12294a', 'León': '#0a7040',
+  'Santos Laguna': '#0a7040', 'Atlas': '#c8102e', 'Necaxa': '#d02128',
+  'Puebla': '#1b3f94', 'Querétaro': '#2b2b2b', 'Tijuana': '#c8102e',
+  'FC Juárez': '#1f9d55', 'Atlético San Luis': '#d02128', 'Atlante': '#0057b8',
 };
 
 /**
@@ -3427,6 +3483,15 @@ const RIVALS: Record<string, string> = {
   'D.C. United': 'New York Red Bulls', 'Toronto FC': 'CF Montréal', 'CF Montréal': 'Toronto FC',
   'Ajax': 'Feyenoord', 'Feyenoord': 'Ajax', 'PSV': 'Ajax', 'Sparta Rotterdam': 'Feyenoord',
   'Groningen': 'Heerenveen', 'Heerenveen': 'Groningen', 'ADO Den Haag': 'Ajax',
+  // Round 883: Liga MX, only the five clasicos two sources both name
+  // (Mediotiempo, "Que antiguedad tiene cada clasico del futbol mexicano",
+  // and Goal, "En Mexico, cuantos clasicos de futbol existen"): Nacional
+  // (America and Guadalajara), Joven (America and Cruz Azul), Capitalino
+  // (Pumas and America), Tapatio (Guadalajara and Atlas), Regio (Monterrey
+  // and Tigres). One direction per club, so America point at Guadalajara.
+  'América': 'Guadalajara', 'Guadalajara': 'América', 'Cruz Azul': 'América',
+  'Pumas UNAM': 'América', 'Atlas': 'Guadalajara',
+  'Monterrey': 'Tigres UANL', 'Tigres UANL': 'Monterrey',
 };
 
 /**

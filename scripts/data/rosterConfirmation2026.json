@@ -1,8 +1,9 @@
 {
  "measuredOn": "2026-09-11",
  "rule": "A baked Club Manager player whose newest row in public.player_market_values_dedup is year 2025, with no year-2026 row at any club the game models and none anywhere else either. The bake falls back to the 2025 row for these, which carries the 2025 CLUB, so the player ships at last season's club with nothing saying so.",
- "population": 379,
+ "population": 408,
  "populationRound876": "Round 876 mapped the table's 1.FC Nuremberg spelling to Nürnberg and re-baked from the 2026-10-02 dump. Three Nürnberg players came in on a 2025 row with no 2026 row anywhere (Berkay Yilmaz, Oliver Villadsen, Tim Janisch), so they joined the population and wait in pending like the rest. No other new fallback row appeared that an overlay row does not already source. Then Brazil's Serie A was mapped (twenty table spellings) and the bake re-run from the same dump. Twenty players at those clubs came in on a 2025 row with no 2026 row anywhere (Luiz Araújo, Gustavo Gómez, Weverton, Lima, Júnior Alonso, Everson, Zé Rafael, Lucas Ronier, Juninho Capixaba, Ignacio Laquintana, Matheus Martins, Nathan Fernandes, Matheus Nascimento, Rafael Lobato, Memphis Depay, Talles Magno, Pedro Raul, Jean Meneses, Alexander Aravena, Gustavo Prado), so they joined the population. The same day a review found two of them false, and all twenty were then checked on the web (adjudicatorWeb2026_10_02): nineteen settled, Pedro Raul still pending. Two rows that sat in removedClubNotModelled because the World Cup table put them at Vasco da Gama and Palmeiras (Andrés Gómez, Ramón Sosa) moved to movedTo on that same evidence, since both clubs are modelled now.",
+ "populationRound883": "Round 883 mapped Liga MX (seventeen table spellings, Atlante having none) and re-baked from the 2026-10-02 dump. Twenty nine players at those clubs came in on a 2025 row (Esteban Andrada, Nathan Silva, Robert Ergas, Alejandro Mayorga, Dagoberto Espinoza, Pablo Bennevendo, Sebastián Santos, Pablo Monroy, Gustavo Ferrareis, Diego Valdés, Piero Quispe, Mateo Klimowicz, Lorenzo Faravelli, Luka Romero, Jairo Torres, Diego Valoyes, Hugo Camberos, Oussama Idrissi, Ronaldo Nájera, Amaury Morales, Josué Colmán, Yairo Moreno, Fernando González, Fernando Beltrán, Richard Sánchez, Érick Gutiérrez, Andrés Montaño, Emiliano Gómez, Franco Fagúndez), so they joined the population and wait in pending. Nine of them do have a 2026 row, but at a club the bake does not map: four at their own club's U21 side (Dagoberto Espinoza, Pablo Bennevendo, Sebastián Santos, Pablo Monroy) and five elsewhere (Diego Valdés at Vélez Sarsfield, Mateo Klimowicz at Cerro Porteño, Diego Valoyes at Talleres, Yairo Moreno at Independiente Medellín, Fernando González at Dorados de Sinaloa), so the bake falls back to their 2025 club just the same, and they are counted here with the rest rather than trusted.",
  "source": "public.player_market_values_dedup, read through the Supabase MCP on 2026-09-11.",
  "adjudicator": "public.world_cup_players where world_cup_year = 2026: the 2026 World Cup squads of all 48 nations, applied Round 389 (supabase/migrations/20260901_round_389_world_cup_2026_squads.sql). Every row there is a player two independent sources agree on, Wikipedia squad templates read through the API and Al Jazeera 2026-06-02, with Yahoo Sports 2026-06-11 as the third voice where they differed. Clubs are Wikipedia's. It covers only players picked for the World Cup, which is why it resolves 23 of the 356 and no more.",
  "adjudicatorWeb2026_09_15": "Web adjudication, 2026-09-15, for the 18 pending Premier League rows. Two independent source families were read with WebFetch and WebSearch only: A, official (the premierleague.com squad data feed for season 2026, which lists a loaned-out player at his loan club and not at his parent, plus club, league and UEFA pages) and B, independent press (Sky Sports, ESPN, Sports Illustrated and others; Sky Sport Deutschland never counted as independent of Sky Sports UK). A row moved out of pending only where both families agreed on status and club. Each row carries its own URLs and read dates.",
@@ -2783,6 +2784,122 @@
    "club": "Corinthians",
    "checkedOn": "2026-10-02",
    "note": "Checked 2026-10-02 and left pending: ESPN's Corinthians 2026-27 squad page lists him (shirt 18), but the only press found (Mais Goiás, 2026-08-04) says Corinthians wanted to sell him before the window shut, and no second source after the window confirms he stayed."
+  },
+  {
+   "name": "Esteban Andrada",
+   "club": "Monterrey"
+  },
+  {
+   "name": "Nathan Silva",
+   "club": "Pumas UNAM"
+  },
+  {
+   "name": "Robert Ergas",
+   "club": "Pumas UNAM"
+  },
+  {
+   "name": "Alejandro Mayorga",
+   "club": "Necaxa"
+  },
+  {
+   "name": "Dagoberto Espinoza",
+   "club": "América"
+  },
+  {
+   "name": "Pablo Bennevendo",
+   "club": "Pumas UNAM"
+  },
+  {
+   "name": "Sebastián Santos",
+   "club": "León"
+  },
+  {
+   "name": "Pablo Monroy",
+   "club": "Pumas UNAM"
+  },
+  {
+   "name": "Gustavo Ferrareis",
+   "club": "Puebla"
+  },
+  {
+   "name": "Diego Valdés",
+   "club": "América"
+  },
+  {
+   "name": "Piero Quispe",
+   "club": "Pumas UNAM"
+  },
+  {
+   "name": "Mateo Klimowicz",
+   "club": "Atlético San Luis"
+  },
+  {
+   "name": "Lorenzo Faravelli",
+   "club": "Cruz Azul"
+  },
+  {
+   "name": "Luka Romero",
+   "club": "Cruz Azul"
+  },
+  {
+   "name": "Jairo Torres",
+   "club": "FC Juárez"
+  },
+  {
+   "name": "Diego Valoyes",
+   "club": "FC Juárez"
+  },
+  {
+   "name": "Hugo Camberos",
+   "club": "Guadalajara"
+  },
+  {
+   "name": "Oussama Idrissi",
+   "club": "Pachuca"
+  },
+  {
+   "name": "Ronaldo Nájera",
+   "club": "Atlético San Luis"
+  },
+  {
+   "name": "Amaury Morales",
+   "club": "Cruz Azul"
+  },
+  {
+   "name": "Josué Colmán",
+   "club": "Querétaro"
+  },
+  {
+   "name": "Yairo Moreno",
+   "club": "León"
+  },
+  {
+   "name": "Fernando González",
+   "club": "Querétaro"
+  },
+  {
+   "name": "Fernando Beltrán",
+   "club": "Guadalajara"
+  },
+  {
+   "name": "Richard Sánchez",
+   "club": "América"
+  },
+  {
+   "name": "Érick Gutiérrez",
+   "club": "Guadalajara"
+  },
+  {
+   "name": "Andrés Montaño",
+   "club": "Cruz Azul"
+  },
+  {
+   "name": "Emiliano Gómez",
+   "club": "Puebla"
+  },
+  {
+   "name": "Franco Fagúndez",
+   "club": "Santos Laguna"
   }
  ],
  "adjudicatorWeb2026_10_02": "Web adjudication, 2026-10-02, for the twenty Brazilian rows Round 876 added to pending, after a review found two of them false (Weverton at Grêmio since January, Júnior Alonso at Atlanta United since July). Read with WebFetch and WebSearch only. Family A is the club's own site where it could be reached; family B is independent press and ESPN's 2026-27 squad pages, read after the Brazilian window shut on 2026-09-11. A row left pending only where two publishers agreed on the club. Nineteen of the twenty were settled: ten at a new club (nine moves plus Antonio Sanabria, below), three at clubs the game does not model, seven confirmed where they were. Pedro Raul stays pending with what the check found. The same pass found Antonio Sanabria, held out as removedClubNotModelled at Cremonese, signed for Internacional on 2026-08-20, so he moves to movedTo now that Internacional are modelled."

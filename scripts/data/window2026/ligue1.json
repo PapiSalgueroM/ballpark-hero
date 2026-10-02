@@ -718,7 +718,7 @@
   },
   {
     "name": "Óscar Perea",
-    "to": null,
+    "to": "América",
     "db": "CF América",
     "sources": [
       "https://www.rcstrasbourgalsace.fr/oscar-perea-quitte-le-racing/",
@@ -726,7 +726,7 @@
     ],
     "window": "2026-summer",
     "checked": "2026-10-01",
-    "note": "A Strasbourg player whose 2026 row sits at AVS, his 2025-26 loan club. Sold to Club America (engine does not model the club), announced by Strasbourg on 2026-07-28 as a permanent transfer. ESPN's player page lists him at America with 2026-27 stats."
+    "note": "A Strasbourg player whose 2026 row sits at AVS, his 2025-26 loan club. Sold to Club America (engine does not model the club), announced by Strasbourg on 2026-07-28 as a permanent transfer. ESPN's player page lists him at America with 2026-27 stats. Round 883: America are modelled now (Liga MX)."
   },
   {
     "name": "Morgan Guilavogui",

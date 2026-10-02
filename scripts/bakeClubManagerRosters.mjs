@@ -67,7 +67,10 @@ const KNOWN_EMPTY = ['ADO Den Haag', 'Cambuur',
   // Round 876: Brazil's Serie A 2026. Chapecoense have no 2026 row in the
   // table and their one 2025 row belongs to a man whose 2026 row is at
   // Fortaleza, so their spelling is left unmapped and they ship empty.
-  'Chapecoense'];
+  'Chapecoense',
+  // Round 883: Liga MX 2026-27. Atlante have no row in the table under any
+  // spelling (they were in the second tier until this season).
+  'Atlante'];
 
 /** Core clubs (big five leagues) must have 7+ players or the bake fails. */
 const CORE_LEAGUE_CLUBS = new Set([
@@ -321,6 +324,12 @@ if (!(xiAvg('Hajduk Split') > xiAvg('Gorica'))) errors.push('SANITY: Hajduk <= G
 // real ratings rather than the 60s xiAvg pads a near empty club with.
 if (!(xiAvg('Flamengo') > xiAvg('Remo'))) errors.push('SANITY: Flamengo <= Remo');
 if (!(xiAvg('Palmeiras') > xiAvg('Vitória'))) errors.push('SANITY: Palmeiras <= Vitória');
+// Round 883: Liga MX's two biggest clubs outrate two smaller ones, every side
+// with real players (America 21, Necaxa 10, Guadalajara 13, Juarez 8 in the
+// 2026-10-02 bake), so both pairs compare real ratings and neither leans on
+// the pads of an empty club.
+if (!(xiAvg('América') > xiAvg('Necaxa'))) errors.push('SANITY: América <= Necaxa');
+if (!(xiAvg('Guadalajara') > xiAvg('FC Juárez'))) errors.push('SANITY: Guadalajara <= FC Juárez');
 
 const total = [...byClub.values()].reduce((s, l) => s + l.length, 0);
 if (total < 2800) errors.push(`Only ${total} players total (expected 2800+)`);
@@ -345,8 +354,8 @@ let out = `// Rounds 70+72: real rosters for every Club Manager club, generated 
 // (2026-27 memberships), EFL Championship, Saudi Pro League, MLS East and
 // West, Eredivisie, Primeira Liga, Scottish Premiership, Süper Lig,
 // 2. Bundesliga, Belgian Pro League, Austrian Bundesliga, Super League
-// Greece, Danish Superliga, Swiss Super League, SuperSport HNL and
-// Brazil's Serie A.
+// Greece, Danish Superliga, Swiss Super League, SuperSport HNL,
+// Brazil's Serie A and Liga MX.
 // Values in £m, ratings 48-94 from the value curve.
 // Regenerate with: node scripts/bakeClubManagerRosters.mjs
 // DO NOT EDIT BY HAND.

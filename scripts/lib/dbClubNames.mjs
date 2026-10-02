@@ -201,6 +201,19 @@ export const DB_TO_ENGINE = {
   'Sport Club Corinthians Paulista': 'Corinthians', 'Mirassol Futebol Clube (SP)': 'Mirassol',
   'Clube de Regatas Vasco da Gama': 'Vasco da Gama', 'Grêmio Foot-Ball Porto Alegrense': 'Grêmio',
   'Sport Club Internacional': 'Internacional', 'Clube do Remo (PA)': 'Remo',
+  // Round 883: Liga MX 2026-27. Every table spelling read off the 2026-10-02
+  // dump, one per club. Left unmapped on purpose: the U21 sides (CF America
+  // U21, Club Leon U21, Club Necaxa U21, Tigres UANL U21, UNAM Pumas U21,
+  // Atletico de San Luis U21: reserve rows, as no other league maps them),
+  // "Mazatlán FC" (three 2025 rows for a club that no longer plays, its place
+  // bought by Atlante), and "Tigres FC" and "Leones FC" (one row each, neither of them a Liga MX member).
+  // Atlante have no spelling at all and are KNOWN_EMPTY in the bake.
+  'CF América': 'América', 'Deportivo Guadalajara': 'Guadalajara', 'CD Cruz Azul': 'Cruz Azul',
+  'CF Monterrey': 'Monterrey', 'Tigres UANL': 'Tigres UANL', 'Deportivo Toluca': 'Toluca',
+  'UNAM Pumas': 'Pumas UNAM', 'CF Pachuca': 'Pachuca', 'Club León FC': 'León',
+  'Santos Laguna': 'Santos Laguna', 'Atlas Guadalajara': 'Atlas', 'Club Necaxa': 'Necaxa',
+  'Puebla FC': 'Puebla', 'Querétaro FC': 'Querétaro', 'Club Tijuana': 'Tijuana',
+  'FC Juárez': 'FC Juárez', 'Atlético de San Luis': 'Atlético San Luis',
   // UCL flavor clubs outside the baked leagues
   'Club Brugge KV': 'Club Brugge',
 };

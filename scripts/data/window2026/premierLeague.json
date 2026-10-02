@@ -213,8 +213,8 @@
   },
   {
     "name": "Santiago Bueno",
-    "to": null,
-    "note": "Club America, season long loan with an option, 2026-09-11 (the Liga MX window was open). Not a club the engine models.",
+    "to": "América",
+    "note": "Club America, season long loan with an option, 2026-09-11 (the Liga MX window was open). Round 883: America are modelled now (Liga MX), listed at the club he plays for.",
     "db": "CF América",
     "loan": true,
     "sources": [
