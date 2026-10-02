@@ -1,5 +1,17 @@
 # Work board
 
+**Codex859 CLAIMED, native ordinary-input finding.** Own
+src/components/free-kick/FreeKickBoard.tsx and
+src/components/buzzer-beater/BuzzerBeaterBoard.tsx plus focused tests/harness.
+At390 on the accepted production bundle, four inside-release cases shoot and
+finish; four button/pitch/court outside-release cases stay aiming on shot1
+with power still changing1240ms after mouseup. Repair normal hold input using
+a bounded pointer lifecycle, preserving practice drag, keyboard, flight,
+scoring and data. Verify inside/outside release, cancellation and no repeated
+shot. Root owns clean build/native gates/docs/Git. All Claude lanes stay his.
+Before receipt: TEMP/dukb-readonly-arcade-scout-2026-10-01-225211/scout.json.
+Next free860; remaining data and NBA/MLB save scouts are read-only.
+
 **2026-10-01 Codex handoff to Claude: eight accepted repairs now on main.**
 846 b69beca6,852 4de313c8,853 af6eb498,854 075ecd04,855 c98e0ad2,
 856 62dd5692,857 5f11492e,858 a7d47ca9.110 new focused cases pass across

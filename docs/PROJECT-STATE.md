@@ -1,5 +1,13 @@
 # Project state
 
+## Codex859 claimed arcade hold-release repair, 2026-10-01
+
+Native390 Free Kick and Buzzer Beater stay charging after releasing outside
+the held control or playing surface. Four failed paths and four working
+inside-release baselines are recorded. Own only their two Board components
+and focused verification. Preserve practice, keyboard and scoring. Claude
+simulation/data lanes remain separate. Next free860; two scouts are read-only.
+
 ## Codex eight-repair batch on main, 2026-10-01
 
 Accepted product commits:846 b69beca6,852 4de313c8,853 af6eb498,
