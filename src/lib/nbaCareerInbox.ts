@@ -112,6 +112,56 @@ const NBA_INBOX_POOL: InboxMessageDef[] = [
       { label: "Thumbs up emoji", reply: "👍", karma: -2 },
     ],
   },
+  /* Round 918: six more for draft night, which had five. */
+  {
+    id: "draft_dad", from: "Dad", emoji: "🧢", phase: "any", beat: "draft",
+    text: "I'm not crying, the TV is just loud. Proud of you. First thing Monday, learn the equipment guy's name. Those are the people who run the place.",
+    choices: [
+      { label: "Learn everybody's name", reply: "Equipment guy, security, the lady at the front desk. All of them by Friday", karma: 6, morale: 2 },
+      { label: "Love you, pops", reply: "Love you too. Even if the TV was that loud", karma: 5, morale: 3 },
+    ],
+  },
+  {
+    id: "draft_hs_coach", from: "High school coach", emoji: "🏫", phase: "any", beat: "draft",
+    text: "They put your name on the sign out front of the gym. Whole town watched it in the cafeteria. The freshmen want to know what number you're wearing.",
+    choices: [
+      { label: "Send a signed jersey for the gym", reply: "One's coming for the trophy case as soon as I have a number", karma: 7, popularity: 2, cash: -0.02 },
+      { label: "Call him tomorrow", reply: "Calling you tomorrow coach. Tonight's a blur", karma: 2, morale: 1 },
+    ],
+  },
+  {
+    id: "draft_equipment", from: "Equipment manager", emoji: "🧺", phase: "any", beat: "draft",
+    text: "Welcome. I need a shoe size, a sock length and a jersey number. The one you wore in school belongs to a ten year veteran here. Second choice?",
+    choices: [
+      { label: "Pick a new number and make it mine", reply: "Give me a new one. I'll make people remember it", karma: 4, morale: 2 },
+      { label: "Ask the vet what it would cost", reply: "Let me talk to him first. Everything has a price", karma: -2, popularity: 2, cash: -0.05 },
+    ],
+  },
+  {
+    id: "draft_friend", from: "Best friend", emoji: "🤝", phase: "any", beat: "draft",
+    text: "bro. BRO. you're in the league. do i quit my job and move out there or what",
+    choices: [
+      { label: "Keep the job, tickets are on me", reply: "Keep your job. You've got tickets any night you want", karma: 5, morale: 1 },
+      { label: "Come visit first", reply: "Come out for a week first and see if you even like it", karma: 3, morale: 2 },
+      { label: "Pack your bags", reply: "Pack up. I need somebody out here who knew me before", karma: -2, morale: 3, cash: -0.1 },
+    ],
+  },
+  {
+    id: "draft_pr", from: "Team PR", emoji: "🎙️", phase: "any", beat: "draft",
+    text: "Intro press conference tomorrow at 11. Keep it simple: happy to be here, ready to work. Please do not guarantee anything.",
+    choices: [
+      { label: "Happy to be here, ready to work", reply: "Happy to be here, ready to work. Got it", karma: 4, morale: 1 },
+      { label: "Guarantee the playoffs", reply: "I'll keep it simple. We're making the playoffs", karma: -3, popularity: 3, morale: 1 },
+    ],
+  },
+  {
+    id: "draft_trainer", from: "Skills trainer", emoji: "🎯", phase: "any", beat: "draft",
+    text: "Congrats. I wrote up the six weeks before camp and none of it is fun. We start Monday at 6, or you take a week to enjoy this first?",
+    choices: [
+      { label: "Monday, 6am", reply: "Monday at 6. The party was tonight", karma: 4, morale: 2 },
+      { label: "One week to enjoy it", reply: "Give me one week. Then I'm all yours", karma: 0, morale: 3 },
+    ],
+  },
 
   /* ── summer league ── */
   {
@@ -152,6 +202,58 @@ const NBA_INBOX_POOL: InboxMessageDef[] = [
     choices: [
       { label: "Sign it and take a picture", reply: "Find me by the tunnel after. Picture too", karma: 7, popularity: 3 },
       { label: "Leave it on read", reply: "", karma: -4 },
+    ],
+  },
+  /* Round 918: six more for summer league, which had five. */
+  {
+    id: "summer_gm", from: "GM", emoji: "📋", phase: "any", beat: "summer",
+    text: "I'm in the stands all week. I'm not counting your points. I'm watching whether you talk on defense.",
+    choices: [
+      { label: "Talk on every possession", reply: "You'll hear me from up there", karma: 4, morale: 2 },
+      { label: "My game does the talking", reply: "I let my game talk", karma: -1, popularity: 1 },
+    ],
+  },
+  {
+    id: "summer_mom", from: "Mom", emoji: "❤️", phase: "any", beat: "summer",
+    text: "Is it supposed to be that hot there? Are you drinking water? You looked tired in the second half. I could tell.",
+    choices: [
+      { label: "Drinking water, promise", reply: "Water all day mama, I promise", karma: 4, morale: 2 },
+      { label: "It's hot for everybody", reply: "Mom it's a hundred degrees for the other team too", karma: 1, morale: 1 },
+    ],
+  },
+  {
+    id: "summer_strength", from: "Strength coach", emoji: "🏋️", phase: "any", beat: "summer",
+    text: "You cramped up in the fourth. That's sleep and salt, not bad luck. Curfew is your call, but I know what time you got in.",
+    choices: [
+      { label: "Lights out at ten all week", reply: "Lights out at ten the rest of the week. My fault", karma: 5, morale: 1 },
+      { label: "It's summer league, relax", reply: "It's summer league. I'm fine", karma: -4, morale: 2 },
+    ],
+  },
+  {
+    id: "summer_tryout", from: "Summer league teammate", emoji: "🙏", phase: "any", beat: "summer",
+    text: "I don't have a contract, this week is the whole thing for me. If you see me open in the corner, please.",
+    choices: [
+      { label: "Find him every time", reply: "Be ready. It's coming to you every time you're open", karma: 7, morale: 2 },
+      { label: "If you're open", reply: "If you're open you'll get it", karma: 2 },
+      { label: "I'm getting mine first", reply: "We're all out here trying to eat", karma: -5, popularity: 1 },
+    ],
+  },
+  {
+    id: "summer_beat", from: "Beat writer", emoji: "📝", phase: "any", beat: "summer",
+    text: "Quick one for the notebook: what's the biggest difference between this and where you played last year?",
+    choices: [
+      { label: "The speed", reply: "Honestly, the speed. Everything happens a beat sooner", karma: 3, popularity: 1 },
+      { label: "Everybody is a grown man", reply: "Everybody out here is a grown man with a mortgage", karma: 2, popularity: 2 },
+      { label: "No comment", reply: "Ask me after I've played a real game", karma: 0 },
+    ],
+  },
+  {
+    id: "summer_sneaker", from: "Sneaker rep", emoji: "👟", phase: "any", beat: "summer",
+    text: "Loved the game last night. We made a pair with your initials on the tongue, if you want to wear them Friday. No contract, just see how they feel.",
+    choices: [
+      { label: "Wear them Friday", reply: "Send them over. I'll break them in Friday", karma: 0, popularity: 2, cash: 0.05 },
+      { label: "Not until there's a deal", reply: "Appreciate it. Talk to my agent first", karma: 1 },
+      { label: "Sticking with what I've got", reply: "I'm good in what I've got. Thank you though", karma: 2, morale: 1 },
     ],
   },
 
@@ -558,6 +660,56 @@ const NBA_INBOX_POOL: InboxMessageDef[] = [
     choices: [
       { label: "Make a plan", reply: "Let's sit down this week. Real plan", karma: 3, morale: 2, cash: -0.05 },
       { label: "Later", reply: "After the season. One thing at a time", karma: 0 },
+    ],
+  },
+  /* Round 918: six more for the contract year summer, which had five. */
+  {
+    id: "contract_teammate", from: "Teammate", emoji: "🤝", phase: "any", beat: "contract",
+    text: "Heard you're up after this year. Selfishly: don't go anywhere. We've got something here.",
+    choices: [
+      { label: "I want to stay too", reply: "I want to be here. Let's make it an easy decision for them", karma: 4, morale: 3 },
+      { label: "It's a business", reply: "You know how it is. It's a business", karma: -1, morale: -1 },
+    ],
+  },
+  {
+    id: "contract_coach", from: "Head coach", emoji: "🧢", phase: "any", beat: "contract",
+    text: "I don't do contracts, I do minutes. Play the way you've been playing and the rest takes care of itself. My door's open.",
+    choices: [
+      { label: "Appreciate that, coach", reply: "Appreciate that coach. I'll be ready", karma: 4, morale: 3 },
+      { label: "More minutes would help", reply: "More minutes would help the number, just saying", karma: -2, morale: 1, popularity: 1 },
+    ],
+  },
+  {
+    id: "contract_trainer", from: "Skills trainer", emoji: "🎯", phase: "any", beat: "contract",
+    text: "Contract year summer. Guys either add something or get found out. My plan: one new thing, drilled every day until it's boring. In?",
+    choices: [
+      { label: "In, every day", reply: "In. Every day until it's boring", karma: 3, morale: 3, cash: -0.05 },
+      { label: "Stick with what works", reply: "I'm going to keep sharpening what already works", karma: 0, morale: 1 },
+    ],
+  },
+  {
+    id: "contract_beat", from: "Beat writer", emoji: "📝", phase: "any", beat: "contract",
+    text: "People around the league say you'll test the market next summer. Anything you want on the record before camp?",
+    choices: [
+      { label: "I love it here, write that", reply: "I love it here. You can write that", karma: 3, popularity: 2, morale: 1 },
+      { label: "Nothing on the record", reply: "Nothing on the record. Ask me in April", karma: 1 },
+      { label: "Write that I know my worth", reply: "Write that I know what I'm worth", karma: -3, popularity: 3 },
+    ],
+  },
+  {
+    id: "contract_dad", from: "Dad", emoji: "🧢", phase: "any", beat: "contract",
+    text: "Whatever they offer, remember I drove a truck for thirty years for less than your meal money. Sign the one where you're happy.",
+    choices: [
+      { label: "Happy first, I hear you", reply: "Happy first. I hear you", karma: 6, morale: 3 },
+      { label: "Happy and paid, pops", reply: "Happy and paid, pops. Both", karma: 2, morale: 2 },
+    ],
+  },
+  {
+    id: "contract_insure", from: "Agent", emoji: "💼", phase: "any", beat: "contract",
+    text: "One more thing before the season: an insurance policy in case you get hurt before you sign the next one. It costs real money and I hope it's wasted.",
+    choices: [
+      { label: "Buy the policy", reply: "Buy it. I'll sleep better", karma: 2, morale: 2, cash: -0.15 },
+      { label: "I'm not getting hurt", reply: "Save the money. I'm not getting hurt", karma: -1, morale: 1 },
     ],
   },
 ];
