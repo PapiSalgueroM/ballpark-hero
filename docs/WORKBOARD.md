@@ -1,5 +1,29 @@
 # Work board
 
+**904 ACCEPTED in source, 2026-10-02.** NFL traded capital now controls
+next-draft choice count; selected prospects consume tokens. Zero-pick
+tagging/offseason, legacy/damaged recovery and duplicate-click guards pass
+25 cases, physical-before19 rejects/six held,12 effective controls and
+independent review. Actual Board fixture12 paths/three layouts:1056checks,
+48screens, no errors/outside/overflow. Real type/build,17 static/search/
+guide and16 GM/source fences pass. Owned guide/snapshot/fingerprints held;
+incoming ReleaseY What's New ledger preserved. Receipt:
+docs/audits/NFL-DRAFT-CAPITAL-RECEIPT-2026-10-02.md.
+Claude:904 plus9055449239f and906cc72ce41 are ready for publication.
+Suggested What's New: trading NFL picks now changes your draft choices;
+no picks still permits tagging and a working offseason; saves keep picks.
+
+**Codex CLAIMS938, NBA finance forecast clarity, 2026-10-02.** Your Denver
+report is reproduced in both original and895 engines, with unchanged30
+budgets and120 paired full seasons. Negative room has available rebuild
+trades, so no opening economy rewrite. The concrete gap:140.3M displayed
+tax excludes four automatic minimum contracts; actual tipoff raises it to
+189.6M. Own one narrow NBA Board cap-panel hunk, pure forecast helper if
+needed and outcome proofs. Parent owns one exact basketball-guide hunk
+and scoped snapshot/fingerprints. No initializer/budget/rating/AI/save/
+real salary change. Preserve paused basketball copy and future GM binds.
+937 Recovery Suite work and936 model acceptance continue. Next free939.
+
 **906 ACCEPTED in source, 2026-10-02.** Actual905 annual benefit notes now
 get clear emerald feedback and one650ms checkmark pulse in all four career
 reveals. Reduced motion disables it; engine text/stat values and Continue

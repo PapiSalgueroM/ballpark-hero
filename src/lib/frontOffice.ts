@@ -13,7 +13,7 @@ import { type CutLedger, type DeadCapEntry, cutPlayer, payrollWithDeadCap, rollD
 /**
  * NFL Front Office engine (2026-08-05, the manager-for-every-sport push).
  * A full GM sim over the REAL 2025-26 roster bake in frontOfficePlayers.ts:
- * cap sheet, releases, free agency, trades, a three-round draft of clearly
+ * cap sheet, releases, free agency, trades, a draft of clearly
  * fictional prospects, a 17-game schedule with true divisional structure,
  * injuries, the real 14-team playoff format (7 seeds per conference, first
  * round byes for the 1 seeds), aging and contract churn across unlimited
@@ -1029,6 +1029,31 @@ export function generateDraftClass(rng: () => number, size = 40, taken: Set<stri
 /** Reverse standings draft order (worst record first). */
 export function draftOrder(teams: Record<string, GmTeamState>): string[] {
   return standings(teams).map(t => t.abbr).reverse();
+}
+
+export function consumeDraftPick(team: GmTeamState): boolean {
+  if (team.picks.length === 0) return false;
+  team.picks.shift();
+  return true;
+}
+
+export function nflAiDraftPicks(
+  league: LeagueState, prospects: Prospect[], userTeam: string, rng: () => number,
+): { remaining: Prospect[]; picks: { team: string; playerName: string; pos: string; grade: number }[] } {
+  const order = draftOrder(league.teams).filter(a => a !== userTeam && league.teams[a].picks.length > 0).slice(0, 6);
+  const remaining = [...prospects];
+  const picks: { team: string; playerName: string; pos: string; grade: number }[] = [];
+  for (const abbr of order) {
+    const prospect = remaining[0];
+    if (!prospect) break;
+    const player = prospectToPlayer(prospect, rng);
+    if (!player) continue;
+    consumeDraftPick(league.teams[abbr]);
+    league.teams[abbr].players.push(player);
+    remaining.shift();
+    picks.push({ team: abbr, playerName: prospect.name, pos: player.pos, grade: prospect.grade });
+  }
+  return { remaining, picks };
 }
 
 export function prospectToPlayer(pr: Prospect, rng: () => number): GmPlayer | null {
