@@ -78,7 +78,7 @@ export const CLUB_MANAGEMENT_CONTENT: GameContentMap = {
         heading: "League lengths, past eras and created clubs",
         items: [
           "Every league plays its real length: 38 rounds in the Premier League, 46 in the Championship, 34 in the Bundesliga, with the domestic cup from a round of 16 to the final and a full Champions League on top for qualified clubs.",
-          "Brazil's Serie A is 20 clubs over 38 rounds with four going down and the Copa do Brasil as its cup. Two simplifications: it plays on the game's August to May calendar like MLS does rather than Brazil's own January to December one, and the Copa Libertadores is not modelled, so a Brazilian club's season is the league and the cup.",
+          "Brazil's Serie A is 20 clubs over 38 rounds with four going down and the Copa do Brasil as its cup. Three simplifications: it plays on the game's August to May calendar like MLS does rather than Brazil's own January to December one, the Copa Libertadores is not modelled, so a Brazilian club's season is the league and the cup, and clubs level on points are split by goal difference then goals scored, where the real table looks at wins first.",
         ],
         subsections: [
           {

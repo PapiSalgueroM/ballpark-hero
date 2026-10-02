@@ -2666,12 +2666,19 @@ export const LEAGUE_RULES: Record<string, LeagueRules> = {
     nationId: 'croatia', flag: 'Croatia', cup: 'Croatian Cup', europe: { ucl: 1, uel: 2, uecl: 3 }, drop: 1, ladder: 'top', season: 'autumnSpring',
     simplified: 'The real league plays each other four times over 36 rounds and settles ninth in a playoff; it is played here as a straight double round robin with one going straight down.',
   },
-  /* Round 876: Brazil's Serie A. The real format exactly (20 clubs, double
-     round robin, four down), only the calendar differs: the real league runs
+  /* Round 876: Brazil's Serie A. The real shape (20 clubs, double round
+     robin, four down) with three simplifications. The real league runs
      through the calendar year and is played here on the game's August to May
      calendar, as MLS is. No continental competition is modelled for it (the
-     Copa Libertadores is not in the game), so it has no European places. */
-  brasileirao: { nationId: 'brazil', flag: 'Brazil', cup: 'Copa do Brasil', europe: null, drop: 4, ladder: 'top', season: 'calendarYear' },
+     Copa Libertadores is not in the game), so it has no European places. And
+     the real table splits clubs level on points by wins first, then goal
+     difference, goals scored and head to head (the 2026 regulations as
+     reported by O Imparcial, January 2026, and Flashscore's 2026 guide);
+     TiebreakRule has no wins step, so it takes the gdGfOnly default. */
+  brasileirao: {
+    nationId: 'brazil', flag: 'Brazil', cup: 'Copa do Brasil', europe: null, drop: 4, ladder: 'top', season: 'calendarYear',
+    simplified: 'Played on the August to May calendar rather than January to December, with no Copa Libertadores, and clubs level on points split by goal difference then goals scored, where the real table reads wins first.',
+  },
   /* The era leagues. No Conference League existed before 2021, so uecl is 0
      and the board's ladder skips that band; 2005-06 still called the second
      competition the UEFA Cup. */
