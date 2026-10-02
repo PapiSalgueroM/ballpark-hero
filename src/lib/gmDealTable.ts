@@ -120,8 +120,9 @@ export function patienceCost(verdict: OfferVerdict): number {
 /** At or under this the desk is quoting a number, not a range. */
 export const VALUATION_EXACT_AT = 0.02;
 
-/** FNV-1a, the hash clubManagerStaff already uses, so no draw is spent here. */
-function hash32(s: string): number {
+/** FNV-1a, the hash clubManagerStaff already uses, so no draw is spent here.
+    Exported for the re-sign desk, which needs the same "fixed by the key, not by a draw" property. */
+export function hash32(s: string): number {
   let h = 2166136261;
   for (let i = 0; i < s.length; i++) {
     h ^= s.charCodeAt(i);
