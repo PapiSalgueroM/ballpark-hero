@@ -16,6 +16,8 @@ export { NBA_TIPOFF_MIN, NBA_MIN_CONTRACT, nbaTaxLine, nbaFirstApron, nbaSecondA
    this one, so there is no cycle at run time. */
 import { type FoSeasonStats, foNewSeasonStats } from './foSeasonStats';
 import { type NbaSeasonAwards, nbaBoxScore, nbaRecordBox, nbaLiveStats } from './nbaSeasonStats';
+/* Round 851: a booked, balanced schedule, shared with MLB and the NHL. */
+import { type FoSchedule, buildFoSchedule, foPlayRound } from './foSchedule';
 
 /**
  * NBA Front Office engine (2026-08-05). Basketball sibling of
@@ -94,6 +96,12 @@ export interface NbaLeague {
   stats?: FoSeasonStats;
   /** Round 824: every closed season's awards, oldest first. */
   awards?: NbaSeasonAwards[];
+  /**
+   * Round 851: this season's fixtures, one list of "HOME-AWAY" games per round
+   * (foSchedule.ts). Optional: a league saved before the round finishes the
+   * season it was saved in the old way and is booked at its next summer.
+   */
+  schedule?: FoSchedule;
 }
 
 /* Round 568: this counter used to live at module scope, which restarts on
@@ -186,7 +194,13 @@ export function initNbaLeague(rng: () => number = Math.random): NbaLeague {
   };
   /* Round 722: the tax lines are set from this league's own payrolls. */
   nbaCalibrateLeagueTax(league);
+  league.schedule = nbaBookSeason(league, rng);
   return league;
+}
+
+/** Round 851: every club plays NBA_ROUNDS x GAMES_PER_ROUND games, half at home. */
+export function nbaBookSeason(league: NbaLeague, rng: () => number): FoSchedule {
+  return buildFoSchedule(Object.keys(league.teams), NBA_ROUNDS, GAMES_PER_ROUND, rng);
 }
 
 /**
@@ -322,7 +336,7 @@ export interface RoundReport {
   notes: string[];
 }
 
-/** Simulate one round: every team plays GAMES_PER_ROUND against random peers. */
+/** Simulate one round: every team plays its GAMES_PER_ROUND booked games. */
 export function simRound(league: NbaLeague, myTeam: string, rng: () => number): RoundReport {
   const abbrs = Object.keys(league.teams);
   const notes: string[] = [];
@@ -339,25 +353,21 @@ export function simRound(league: NbaLeague, myTeam: string, rng: () => number): 
   }
   /* Round 824: the season's lines, when the league is keeping them this season. */
   const stats = nbaLiveStats(league);
-  for (let ai = 0; ai < abbrs.length; ai += 1) {
-    const abbr = abbrs[ai];
+  /* Round 851: the round's booked games (foSchedule.ts), every club exactly
+     GAMES_PER_ROUND of them; a league saved mid season before the round
+     finishes that season the old way. */
+  foPlayRound(league, abbrs, GAMES_PER_ROUND, rng, (abbr, opp, k) => {
     const me = league.teams[abbr];
-    for (let g = 0; g < GAMES_PER_ROUND; g++) {
-      let opp = abbrs[Math.floor(rng() * abbrs.length)];
-      if (opp === abbr) opp = abbrs[(abbrs.indexOf(abbr) + 1) % abbrs.length];
-      const them = league.teams[opp];
-      // each matchup is counted once from the home side only: half rate
-      if (rng() < 0.5) continue;
-      const p = nbaWinProb(me, them);
-      /* Round 824: the deciding draw is kept so the box score can be read off
-         it. Still exactly one draw, so every result is what it always was. */
-      const draw = rng();
-      const homeWon = draw < p;
-      if (homeWon) { me.wins += 1; them.losses += 1; if (abbr === myTeam) myW += 1; if (opp === myTeam) myL += 1; }
-      else { me.losses += 1; them.wins += 1; if (abbr === myTeam) myL += 1; if (opp === myTeam) myW += 1; }
-      if (stats) nbaRecordBox(stats, nbaBoxScore(me, them, homeWon, draw, p, league.round * 1000 + ai * GAMES_PER_ROUND + g, league.season));
-    }
-  }
+    const them = league.teams[opp];
+    const p = nbaWinProb(me, them);
+    /* Round 824: the deciding draw is kept so the box score can be read off
+       it. Still exactly one draw, so every result is what it always was. */
+    const draw = rng();
+    const homeWon = draw < p;
+    if (homeWon) { me.wins += 1; them.losses += 1; if (abbr === myTeam) myW += 1; if (opp === myTeam) myL += 1; }
+    else { me.losses += 1; them.wins += 1; if (abbr === myTeam) myL += 1; if (opp === myTeam) myW += 1; }
+    if (stats) nbaRecordBox(stats, nbaBoxScore(me, them, homeWon, draw, p, league.round * 1000 + k, league.season));
+  }, () => nbaBookSeason(league, rng));
   return { myWins: myW, myLosses: myL, notes };
 }
 
@@ -738,5 +748,7 @@ export function nbaOffseason(league: NbaLeague, rng: () => number, myTeam?: stri
      its first summer, from the payrolls it will tip off with. A calibrated
      league keeps its scale, and its lines rise with the cap. */
   if (league.taxScale == null) nbaCalibrateLeagueTax(league);
+  /* Round 851: the new season's fixtures, for an old save too. */
+  league.schedule = nbaBookSeason(league, rng);
   return notes;
 }
