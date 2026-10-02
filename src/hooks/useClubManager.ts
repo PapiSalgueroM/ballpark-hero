@@ -4,7 +4,7 @@ import {
   CareerState, MatchWeekReport, SeasonSummary, MarketPlayer, Mentality,
   FORMATIONS, startCareer, playNextEntry, finishSeason, startNextSeason,
   buildMarket, buyPlayer, autoPickXI, nextFixture, sortedLeagueTable,
-  leaguePosition, currentSeasonScore, saveCareer, loadCareer, clearCareer,
+  leaguePosition, currentSeasonScore, saveCareer, loadCareer, clearCareer, savedCareerEraId,
   startNegotiation, makeOffer, offerTerms, exerciseLoanOption, breakLoan, recallLoanedPlayer, walkAway, respondApproach, expandGround,
   enterWilderness, wildernessWeek, acceptWildernessJob, takeNationJob, leaveNationJob, payClause, loanIn, acceptBid, rejectBid,
   answerMessage, setTransferStatus, loanOutPlayer, renewContract, renewContractWithClause,
@@ -26,6 +26,8 @@ import type { Position } from '@/types/game';
 import type { TransferStatus, FacilityKind, TrainingPlan, SquadRole, TalkTone, DealExtras } from '@/lib/clubManager';
 import type { NextFixtureInfo, TableRow, CustomClubSpec, ManagerSpec } from '@/lib/clubManager';
 import { simToWeek as runSimToWeek, startMidSeason, joinClubNow } from '@/lib/clubManagerCalendar';
+import { eraById, eraRostersLoaded, ensureEraRosters } from '@/lib/clubManagerEras';
+import { reloadToRetryChunk } from '@/lib/freshBuild';
 import type { MidSeasonEntry } from '@/lib/clubManagerCalendar';
 import { upgradeFacility as upgradeClubFacility } from '@/lib/clubManagerFacilities';
 import type { FacilityId } from '@/lib/clubManagerFacilities';
@@ -113,17 +115,53 @@ export function useClubManager() {
   const [activeTab, setActiveTab] = useState<HubTab>('overview');
   const [pendingClub, setPendingClub] = useState<string | null>(null);
 
+  /* Round 832: the label of an era whose squads would not load at boot, or
+     null. An era save cannot be played without its squads. loadCareer can
+     still hand one back without them (the review opened a 2005, a 2010 and a
+     2015 save that way: its repairs did not happen to read the squads), and
+     the first screen or match that does read them then throws; a repair that
+     does read them makes loadCareer answer "no save". Either way the career
+     must not open early, so the page holds on a plain notice with a retry
+     instead of a crash or a fresh start over the career. */
+  const [bootError, setBootError] = useState<string | null>(null);
+  const [bootTry, setBootTry] = useState(0);
+  const retryBoot = useCallback(() => setBootTry(n => n + 1), []);
+
   // Boot: look for a saved career and offer to resume it.
   useEffect(() => {
-    const saved = loadCareer();
-    if (saved) {
-      setCareer(saved);
-      if (saved.pendingSummary) setSummary(saved.pendingSummary);
-      setPhase('resume');
-    } else {
-      setPhase('clubSelect');
+    let alive = true;
+    const open = () => {
+      const saved = loadCareer();
+      if (saved) {
+        setCareer(saved);
+        if (saved.pendingSummary) setSummary(saved.pendingSummary);
+        setPhase('resume');
+      } else {
+        setPhase('clubSelect');
+      }
+    };
+    /* Round 832: an era save fetches its era's squads first. Today's world
+       and an era already here open exactly as before, in this same pass. */
+    const eraId = savedCareerEraId() ?? undefined;
+    if (eraRostersLoaded(eraId)) {
+      open();
+      return;
     }
-  }, []);
+    setBootError(null);
+    ensureEraRosters(eraId).then(
+      () => { if (alive) open(); },
+      () => {
+        if (!alive) return;
+        /* Round 832 review: a retry the player asked for reloads the page,
+           because Chromium never fetches a failed chunk again in the same
+           page (see reloadToRetryChunk). The first failure only shows the
+           notice; offline, the notice stays. */
+        if (bootTry > 0 && reloadToRetryChunk()) return;
+        setBootError(eraById(eraId).label);
+      },
+    );
+    return () => { alive = false; };
+  }, [bootTry]);
 
   /* Round 634: whether the last write was refused. saveCareer swallowed every
      throw until this round, so a browser out of storage for this site, or one
@@ -813,6 +851,7 @@ export function useClubManager() {
   return {
     simToWeek,
     saveFailed, deskNote, clearDeskNote: () => setDeskNote(null),
+    bootError, retryBoot,
     phase, career, report, summary, activeTab, setActiveTab, pendingClub,
     market, nextFx, tableRows, myPosition, facts,
     resume, startNew, chooseClub, confirmClub, confirmCustomClub,

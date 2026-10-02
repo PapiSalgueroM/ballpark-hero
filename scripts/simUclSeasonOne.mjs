@@ -186,8 +186,10 @@ const CONTROLS = {
   places: {
     red: ['11'],
     what: 'the Premier League gets a fifth Champions League place',
-    re: /premier: \{ ucl: 4, uel: 5, uecl: 6 \}/g,
-    to: () => 'premier: { ucl: 5, uel: 6, uecl: 7 }',
+    /* Round 832: the places sit on the Premier League's LEAGUE_RULES row now
+       (europe), not on a line of their own in EURO_SLOTS, which is derived. */
+    re: /(premier: \{ nationId: ["']england["'][^\n]*?europe: )\{ ucl: 4, uel: 5, uecl: 6 \}/g,
+    to: (_m, row) => `${row}{ ucl: 5, uel: 6, uecl: 7 }`,
   },
   vacuous: {
     red: ['9'],
@@ -316,7 +318,14 @@ globalThis.localStorage = {
    same call twice in one instance differs by design. Every compared run gets
    a FRESH instance of its bundle, which is what a page load is. */
 let instances = 0;
-const fresh = async which => (await import(`${pathToFileURL(OUT[which]).href}?instance=${++instances}`)).mod;
+/* Round 832: an era's squads load with the era, so a fresh instance that has
+   the loader fetches all three before it is handed out. A reference engine
+   from before the round has none and carries its eras already. */
+const fresh = async which => {
+  const m = (await import(`${pathToFileURL(OUT[which]).href}?instance=${++instances}`)).mod;
+  if (typeof m.ensureAllEraRosters === 'function') await m.ensureAllEraRosters();
+  return m;
+};
 const mine = await fresh('mine');
 const DATA = (await import(pathToFileURL(OUT.data).href)).mod;
 console.log(baseHasRound612

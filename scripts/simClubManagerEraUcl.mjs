@@ -234,6 +234,8 @@ execSync(`"${ROOT}/node_modules/.bin/esbuild" "${ENTRY}" --bundle --format=cjs -
 const store = new Map();
 globalThis.localStorage = { getItem: k => store.get(k) ?? null, setItem: (k, v) => store.set(k, String(v)), removeItem: k => store.delete(k), clear: () => store.clear() };
 const { cm, UclGroupsCard, UclBracketCard, render } = createRequire(import.meta.url)(BUNDLE);
+/* Round 832: an era's squads load with the era, so the harness fetches all three first. */
+await cm.ensureAllEraRosters();
 const {
   startCareer, playNextEntry, sortedTable, sortedLeagueTable, sortedWorldTable, careerLeagueOf, worldLeagueDefs,
   leagueTiebreak, tiebreakFootnote, uclFirstKoRound, uclRoundOf16Draw, saveCareer, loadCareer, clearCareer,

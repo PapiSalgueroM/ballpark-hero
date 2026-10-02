@@ -38,6 +38,8 @@ export const mods = { cal, cm };
 execSync(`"${ROOT}/node_modules/.bin/esbuild" "${ENTRY}" --bundle --format=esm --platform=node --outfile="${BUNDLE}" --log-level=error --jsx=automatic --alias:@=${ROOT.replaceAll('\\', '/')}/src`, { stdio: 'inherit' });
 
 const { cal, cm } = (await import(pathToFileURL(BUNDLE).href)).mods;
+/* Round 832: an era's squads load with the era, so the harness fetches all three first. */
+await cm.ensureAllEraRosters();
 const { dayOfWeek, daysInMonth, seasonKickoff, dateOfWeek, dateOfEntries } = cal;
 const { startCareer } = cm;
 

@@ -320,4 +320,5 @@ testing remain outside this receipt. Claude's latest remote handoff records
 Release T as published, including 878, 881 and the 880 test-only gate repair.
 882 needs the next publication. Football Draft's source-only delayed-callback candidate
 is retained, but its route redirects home and it is absent from the active
-registry, so no repair or playable-site failure is credited there. Next free883.
+registry, so no repair or playable-site failure is credited there. Claude claimed
+883 during the final pull; next free 884.
