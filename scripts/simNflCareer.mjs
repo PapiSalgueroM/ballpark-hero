@@ -233,7 +233,7 @@ for (const eraId of [undefined, 'y2005']) for (const year of [2008, 2026]) for (
 /* The card list is read off the source with its comments stripped (a guard
    that reads source reads the code, not the prose), so a card added to the
    file and never drawn, or never checked, shows up by name. */
-const LIFE_C_SRC = readFileSync('src/lib/nflCareerLifeC.ts', 'utf8')
+const LIFE_C_SRC = readFileSync('src/lib/nflCareerLifeC.ts', 'utf8').replace(/\r\n/g, '\n')
   .replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
 const LIFE_C_IDS = [...LIFE_C_SRC.matchAll(/id: '(lifeC_[a-z0-9_]+)'/g)].map(m => m[1]);
 
