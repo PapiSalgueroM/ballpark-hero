@@ -153,6 +153,10 @@ export function CalendarScreen({ career, onSimTo, onSetTraining }: CalendarScree
     });
     setSelectedKey(null);
   };
+  const returnToCurrentDate = () => {
+    setView({ y: days.today.y, m: days.today.m });
+    setSelectedKey(null);
+  };
 
   /* The month's match and window days, for the list under the grid. */
   const monthEntries = useMemo(
@@ -192,8 +196,16 @@ export function CalendarScreen({ career, onSimTo, onSetTraining }: CalendarScree
           >
             <ChevronLeft className="w-3.5 h-3.5" />
           </button>
-          <div className="text-sm font-bold font-display text-foreground flex items-center gap-1.5">
-            <CalendarDays className="w-3.5 h-3.5 text-primary" /> {MONTH_NAMES[view.m - 1]} {view.y}
+          <div className="text-center">
+            <div className="text-sm font-bold font-display text-foreground flex items-center justify-center gap-1.5">
+              <CalendarDays className="w-3.5 h-3.5 text-primary" /> {MONTH_NAMES[view.m - 1]} {view.y}
+            </div>
+            <button
+              type="button"
+              onClick={returnToCurrentDate}
+              title={`Back to ${shortDate(days.today)}`}
+              className="min-h-[44px] rounded-lg px-3 text-xs font-semibold text-primary hover:bg-primary/10 transition-colors"
+            >Current date</button>
           </div>
           <button
             onClick={() => step(1)}

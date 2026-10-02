@@ -11,6 +11,8 @@ import { NBA_ERAS,
   repairNetWorth,
   getNbaSpendItem
 } from '@/lib/nbaMyCareer';
+/* Round 833: the stat line, shared with the other three careers. */
+import { countOf, nbaStatLine } from '@/lib/usCareerStatLine';
 // Round 179: real free agency, shared engine and shared screen.
 import { pushFaOffer, applyFaSigning } from '@/lib/usCareerFreeAgency';
 import type { FaWindow } from '@/lib/usCareerFreeAgency';
@@ -59,7 +61,7 @@ import { fmtFollowers, pushHeadlines } from '@/lib/careerSocial';
    bound to the NBA in nbaCareerInbox.ts and nbaCareerRivalryEvents.ts. */
 import { InboxPanel } from '@/components/us-career/InboxPanel';
 import { RivalryEventCard } from '@/components/us-career/RivalryEventCard';
-import { nbaUnreadInboxCount, answerNbaInboxMessage } from '@/lib/nbaCareerInbox';
+import { nbaUnreadInboxCount, answerNbaInboxMessage, nbaDraftNightInbox, NBA_CALENDAR } from '@/lib/nbaCareerInbox';
 import { dismissNbaRivalryEvent, resolveNbaRivalryChoice } from '@/lib/nbaCareerRivalryEvents';
 /* Round 796: the rival choice card, the same one the NFL board draws. */
 import { RivalryChoiceCard } from '@/components/us-career/RivalryChoiceCard';
@@ -194,6 +196,10 @@ export default function NbaMyCareerBoard() {
     const tq = nbaRollTeamQuality(null, Math.random);
     /* Round 182: the rotation is set the night you arrive. */
     const roleNote = nbaAssignRole(c, tq, Math.random);
+    /* Round 822: draft night's texts (the draft, and the summer league that
+       follows it) land before a game is played, drawn from the inbox's own
+       keyed stream. */
+    nbaDraftNightInbox(c);
     setCareer(c);
     setTeamQuality(tq);
     const pressureLine = draftPressureLine(c.draftPick, FIRST_ROUND_END);
@@ -475,8 +481,11 @@ export default function NbaMyCareerBoard() {
     persist(career, 'retired', teamQuality);
   };
 
-  const statLine = (s: NbaSeasonLine, _p: NbaCareerPos) =>
-    `${s.ppg} ppg, ${s.rpg} rpg, ${s.apg} apg`;
+  /* Round 833: the line lives in usCareerStatLine.ts with the other three
+     sports'. Every position records the same three averages; what changed is
+     a suspended season, which read "0 ppg, 0 rpg, 0 apg" here while the other
+     three games said it was a suspension. */
+  const statLine = (s: NbaSeasonLine, _p: NbaCareerPos) => nbaStatLine(s);
 
   /* ------------------------------ create ------------------------------ */
   if (phase === 'create' || !career) {
@@ -661,7 +670,7 @@ export default function NbaMyCareerBoard() {
               gameName="NBA My Career"
               gamePath="/nba-my-career"
               score={`legacy ${legacy.score}`}
-              customText={`NBA My Career 🏀 ${career.name}: ${career.seasons.length} seasons, ${career.rings} rings, ${career.mvps} MVPs. Verdict: ${legacy.verdict}. Legacy ${legacy.score}. douknowball.com/nba-my-career`}
+              customText={`NBA My Career 🏀 ${career.name}: ${career.seasons.length} seasons, ${countOf(career.rings, 'ring', 'rings')}, ${countOf(career.mvps, 'MVP', 'MVPs')}. Verdict: ${legacy.verdict}. Legacy ${legacy.score}. douknowball.com/nba-my-career`}
             />
           </div>
         </div>
@@ -811,7 +820,7 @@ export default function NbaMyCareerBoard() {
         {panel === 'inbox' && (
           /* Round 525: the Round 80 half of the flagship's phone, on the
              engine careerInbox.ts, bound to the NBA in nbaCareerInbox.ts. */
-          <InboxPanel messages={[...(career.phoneInbox ?? [])].reverse()} onAnswer={handleInboxAnswer} seen={inboxSeenRef.current} />
+          <InboxPanel messages={[...(career.phoneInbox ?? [])].reverse()} onAnswer={handleInboxAnswer} seen={inboxSeenRef.current} calendar={NBA_CALENDAR} />
         )}
       </div>
     );
@@ -957,7 +966,7 @@ export default function NbaMyCareerBoard() {
             <Dumbbell className="h-4 w-4" /> Play the {career.year} season
           </button>
           <p className="mt-2 text-[10px] text-muted-foreground">
-            Career so far: {career.rings} rings · {career.mvps} MVPs · {career.allNbas} All-NBA ·{' '}
+            Career so far: {countOf(career.rings, 'ring', 'rings')} · {countOf(career.mvps, 'MVP', 'MVPs')} · {career.allNbas} All-NBA ·{' '}
             {`${totals.pts.toLocaleString()} career points`}
           </p>
           {career.seasons.length >= 6 && (

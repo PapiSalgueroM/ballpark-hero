@@ -445,7 +445,7 @@ begin('3b', 'The timeline on the card is the report\'s own timeline, row for row
     full.forEach((row, i) => {
       const e = d.timeline[i];
       if (!e || row.kind !== e.kind || row.side !== e.side) fail(`${ctx}: full view row ${i} is ${row.kind}/${row.side}, the timeline's is ${e?.kind}/${e?.side}`);
-      else if (e.minute >= 1 && e.kind !== 'halftime' && e.kind !== 'fulltime' && e.kind !== 'extratime' && e.kind !== 'pens' && row.clock !== `${e.minute}'`) fail(`${ctx}: full view row ${i} reads ${row.clock} for minute ${e.minute}`);
+      else if (e.minute >= 1 && e.kind !== 'halftime' && e.kind !== 'fulltime' && e.kind !== 'extratime' && e.kind !== 'pens' && row.clock !== (e.plus ? `${e.minute}+${e.plus}'` : `${e.minute}'`)) fail(`${ctx}: full view row ${i} reads ${row.clock} for minute ${e.minute}`);
     });
     const more = d.timeline.filter(e => allOnly.has(e.kind)).length;
     const toggle = html.match(/data-cm-tl-toggle="1"[^>]*>([\s\S]*?)<\/button>/);

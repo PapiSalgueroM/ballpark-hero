@@ -187,6 +187,30 @@ const HISTORY_MAX_PAGES = 6;
 const WC_MIN_YEAR = 2010; // a 2024+ pool player cannot have played a pre-2010 World Cup
 const WC_PAGE = 1000;
 const WC_MAX_PAGES = 8;
+const QUERY_CONCURRENCY = 3;
+
+function checkBingoLoad(signal: AbortSignal): void {
+  if (signal.aborted) throw new Error('Player Bingo load canceled');
+}
+
+async function mapBingoChunks<T, R>(chunks: T[], read: (chunk: T) => Promise<R>, controller: AbortController): Promise<R[]> {
+  const results = new Array<R>(chunks.length);
+  let next = 0;
+  const worker = async () => {
+    while (next < chunks.length) {
+      checkBingoLoad(controller.signal);
+      const index = next++;
+      try {
+        results[index] = await read(chunks[index]);
+      } catch (error) {
+        controller.abort();
+        throw error;
+      }
+    }
+  };
+  await Promise.all(Array.from({ length: Math.min(QUERY_CONCURRENCY, chunks.length) }, worker));
+  return results;
+}
 
 function shuffle<T>(arr: T[]): T[] {
   const a = [...arr];
@@ -246,6 +270,7 @@ interface HistoryRow {
  */
 async function fetchClubHistoryAndStats(
   pool: BingoPlayer[],
+  controller: AbortController,
 ): Promise<{
   clubHistory: Map<string, Set<string>>;
   clubYears: Map<string, ClubYear[]>;
@@ -261,16 +286,19 @@ async function fetchClubHistoryAndStats(
   for (let i = 0; i < names.length; i += HISTORY_CHUNK) {
     chunks.push(names.slice(i, i + HISTORY_CHUNK));
   }
-  await Promise.all(
-    chunks.map(async chunk => {
+  const signal = controller.signal;
+  await mapBingoChunks(
+    chunks, async chunk => {
       let from = 0;
       for (let page = 0; page < HISTORY_MAX_PAGES; page++) {
+        checkBingoLoad(signal);
         const { data, error } = await supabase
           .from('player_market_values')
           .select('player_name, club, year, age, market_value_usd, goals, assists, matches, yellow_cards, red_cards')
           .in('player_name', chunk)
           .order('id', { ascending: true })
-          .range(from, from + HISTORY_PAGE - 1);
+          .range(from, from + HISTORY_PAGE - 1)
+          .abortSignal(signal);
         if (error) throw error;
         for (const r of (data ?? []) as HistoryRow[]) {
           const name = (r.player_name ?? '').trim();
@@ -320,7 +348,7 @@ async function fetchClubHistoryAndStats(
         if (!data || data.length < HISTORY_PAGE) break;
         from += HISTORY_PAGE;
       }
-    }),
+    }, controller,
   );
   return { clubHistory, clubYears, seasonStats };
 }
@@ -339,7 +367,9 @@ async function fetchClubHistoryAndStats(
  * the 467 pool players carried a row older than their newest, 67 of them at
  * a club they had left.
  */
-async function fetchPool(): Promise<BingoPlayer[] | null> {
+async function fetchPool(controller: AbortController): Promise<BingoPlayer[]> {
+  const signal = controller.signal;
+  checkBingoLoad(signal);
   const { data: rows, error } = await supabase
     .from('player_market_values')
     .select('player_name')
@@ -347,17 +377,18 @@ async function fetchPool(): Promise<BingoPlayer[] | null> {
     .gt('market_value_usd', 0)
     .not('age', 'is', null)
     .order('market_value_usd', { ascending: false })
-    .limit(POOL_ROW_FETCH);
-  if (error || !rows) return null;
+    .limit(POOL_ROW_FETCH)
+    .abortSignal(signal);
+  if (error || !rows) throw error ?? new Error('Player Bingo pool unavailable');
   const names = [...new Set((rows as { player_name: string | null }[]).map(r => (r.player_name ?? '').trim()).filter(Boolean))];
 
   // Every recent row for those names, in small chunks so no chunk can reach
   // the PostgREST row cap (40 names, three seasons, a few duplicate rows).
   const chunks: string[][] = [];
   for (let i = 0; i < names.length; i += POOL_CHUNK) chunks.push(names.slice(i, i + POOL_CHUNK));
-  const results = await Promise.all(
-    chunks.map(chunk =>
-      supabase
+  const results = await mapBingoChunks(
+    chunks, async chunk => {
+      const response = await supabase
         .from('player_market_values')
         .select('player_name, nationality, position, club, market_value_usd, age, year')
         .in('player_name', chunk)
@@ -365,13 +396,15 @@ async function fetchPool(): Promise<BingoPlayer[] | null> {
         .gt('market_value_usd', 0)
         .not('age', 'is', null)
         .order('year', { ascending: false })
-        .limit(HISTORY_PAGE),
-    ),
+        .limit(HISTORY_PAGE)
+        .abortSignal(signal);
+      if (response.error || !response.data) throw response.error ?? new Error('Player Bingo pool unavailable');
+      return response;
+    }, controller,
   );
 
   const byName = new Map<string, BingoPlayer>();
   for (const res of results) {
-    if (res.error || !res.data) return null;
     for (const r of res.data as PoolRow[]) {
       const name = (r.player_name ?? '').trim();
       const value = Number(r.market_value_usd) || 0;
@@ -395,7 +428,8 @@ async function fetchPool(): Promise<BingoPlayer[] | null> {
   }
 
   const pool = [...byName.values()].sort((a, b) => b.value - a.value).slice(0, POOL_SIZE);
-  return pool.length >= 100 ? pool : null;
+  if (pool.length < 100) throw new Error('Player Bingo pool unavailable');
+  return pool;
 }
 
 /**
@@ -418,18 +452,20 @@ const WORLD_CUP_WINNERS_2010_2026: Record<number, string> = {
 };
 
 /** Normalized name sets from World Cup squads (2010 and later), paged. */
-async function fetchWorldCupSets(): Promise<{ all: Set<string>; y2022: Set<string>; winners: Set<string> }> {
+async function fetchWorldCupSets(signal: AbortSignal): Promise<{ all: Set<string>; y2022: Set<string>; winners: Set<string> }> {
   const all = new Set<string>();
   const y2022 = new Set<string>();
   const winners = new Set<string>();
   let from = 0;
   for (let page = 0; page < WC_MAX_PAGES; page++) {
+    checkBingoLoad(signal);
     const { data, error } = await supabase
       .from('world_cup_players')
       .select('player_name, world_cup_year, nationality')
       .gte('world_cup_year', WC_MIN_YEAR)
       .order('id', { ascending: true })
-      .range(from, from + WC_PAGE - 1);
+      .range(from, from + WC_PAGE - 1)
+      .abortSignal(signal);
     if (error) throw error;
     for (const r of data ?? []) {
       const key = normalizeName(r.player_name ?? '');
@@ -446,8 +482,9 @@ async function fetchWorldCupSets(): Promise<{ all: Set<string>; y2022: Set<strin
 }
 
 /** Normalized names of men's Ballon d'Or winners (rank 1 rows, or unranked winner rows). */
-async function fetchBallonDorWinners(): Promise<Set<string>> {
-  const { data, error } = await supabase.from('ballon_dor').select('player_name, rank, award_type');
+async function fetchBallonDorWinners(signal: AbortSignal): Promise<Set<string>> {
+  checkBingoLoad(signal);
+  const { data, error } = await supabase.from('ballon_dor').select('player_name, rank, award_type').abortSignal(signal);
   if (error) throw error;
   const winners = new Set<string>();
   for (const r of data ?? []) {
@@ -463,16 +500,21 @@ async function fetchBallonDorWinners(): Promise<Set<string>> {
  * Boot fetch for the whole game. Returns null on any failure so the page can
  * show an error state with retry.
  */
-export async function fetchBingoData(): Promise<BingoData | null> {
+export async function fetchBingoData(signal?: AbortSignal): Promise<BingoData | null> {
+  const controller = new AbortController();
+  const cancel = () => controller.abort();
+  signal?.addEventListener('abort', cancel, { once: true });
+  if (signal?.aborted) cancel();
   try {
+    checkBingoLoad(controller.signal);
     const [pool, wc, ballonDor] = await Promise.all([
-      fetchPool(),
-      fetchWorldCupSets(),
-      fetchBallonDorWinners(),
+      fetchPool(controller),
+      fetchWorldCupSets(controller.signal),
+      fetchBallonDorWinners(controller.signal),
     ]);
-    if (!pool) return null;
-
-    const { clubHistory, clubYears, seasonStats } = await fetchClubHistoryAndStats(pool);
+    checkBingoLoad(controller.signal);
+    const { clubHistory, clubYears, seasonStats } = await fetchClubHistoryAndStats(pool, controller);
+    checkBingoLoad(controller.signal);
     // Every player at least carries their current club, even if a history page fell short.
     for (const p of pool) {
       const key = clubKey(p.club);
@@ -496,7 +538,10 @@ export async function fetchBingoData(): Promise<BingoData | null> {
       ballonDor,
     };
   } catch {
+    controller.abort();
     return null;
+  } finally {
+    signal?.removeEventListener('abort', cancel);
   }
 }
 

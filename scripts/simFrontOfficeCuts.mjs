@@ -478,11 +478,16 @@ for (const f of fixtures) {
   ok(3, sport.key, `${abbr}: has a roster spot to take him back (fixture)`, spot, `${team.players.length} on the roster against a ceiling of ${sport.ceiling}`);
   if (stillPooled && spot) {
     const room = E.capRoom(team, BIG);
+    /* Round 824: what he signs for is his ask in the pool today. The NBA
+       prices a free agent's ask in each new season's money, so a summer
+       later it is no longer the salary he was cut on; the other three
+       sports' asks never move, so for them this is the same number. */
+    const ask = league.freeAgents.find(x => x.id === f.two.id).salary;
     const back = E.sign(team, league.freeAgents, f.two.id, BIG);
     ok(3, sport.key, `${abbr}: signs ${f.two.name} back the season after cutting him`, back === true && team.players.some(x => x.id === f.two.id),
       `returned ${back}`);
     ok(3, sport.key, `${abbr}: and pays his salary on top of the dead money, not instead of it`,
-      near(E.capRoom(team, BIG), round1(room - f.two.salary)) && !!rolled && near(cuts.deadCapUsed(team), rolled.amount),
+      near(E.capRoom(team, BIG), round1(room - ask)) && !!rolled && near(cuts.deadCapUsed(team), rolled.amount),
       `room ${room} to ${E.capRoom(team, BIG)}, dead ${cuts.deadCapUsed(team)}`);
   }
   E.offseason(league, rng);

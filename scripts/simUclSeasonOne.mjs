@@ -121,12 +121,19 @@ const PREMIER_2025_26 = ['Arsenal', 'Manchester City', 'Manchester United', 'Ast
 const seqRe = names => new RegExp(names.map(n => JSON.stringify(n).replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join(',\\s*'), 'g');
 const quoteList = names => names.map(n => JSON.stringify(n)).join(', ');
 
+/* The one expression that decides season one's field. Round 783 put a branch in
+   the middle of it (a manager who takes a new job mid save keeps the world's
+   field: `world ? world.uclField :`), every anchor here stopped matching, and
+   this harness refused to run on main from that round until Release P. Three
+   groups: the custom guard, the world branch when there is one, the era. */
+const seasonOneRe = () => /(custom \? null : )((?:\w+ \? \w+\.uclField : )?)seasonOneUclField\((\w+)\.id\)/g;
+
 const CONTROLS = {
   tier: {
     red: ['2', '3'],
     what: 'season one seeded by squad tier and the prestige pool again',
-    re: /custom \? null : seasonOneUclField\((\w+)\.id\)/g,
-    to: () => 'null',
+    re: seasonOneRe(),
+    to: (_m, guard, world) => `${guard}${world}null`,
   },
   holders: {
     red: ['4'],
@@ -155,8 +162,8 @@ const CONTROLS = {
   custom: {
     red: ['7'],
     what: "a custom club's season one gets the derived field",
-    re: /custom \? null : seasonOneUclField\((\w+)\.id\)/g,
-    to: (_m, era) => `seasonOneUclField(${era}.id)`,
+    re: seasonOneRe(),
+    to: (_m, _guard, world, era) => `${world}seasonOneUclField(${era}.id)`,
   },
   rollover: {
     red: ['8'],
@@ -186,7 +193,7 @@ const CONTROLS = {
     red: ['9'],
     on: 'reference',
     what: 'the reference is this engine with season one left on, so sections 6 to 9 compare it with itself',
-    re: /custom \? null : seasonOneUclField\((\w+)\.id\)/g,
+    re: seasonOneRe(),
   },
   partial: {
     red: ['10'],
@@ -261,13 +268,13 @@ let mineText = mineOut.outputFiles[0].text;
 let refText;
 let REF_LABEL;
 if (baseHasRound612) {
-  const SEASON_ONE_SWITCH = /custom \? null : seasonOneUclField\((\w+)\.id\)/g;
+  const SEASON_ONE_SWITCH = seasonOneRe();
   const hits = (mineText.match(SEASON_ONE_SWITCH) || []).length;
   if (hits !== 1) {
     console.error(`${BASE}'s merge base already carries Round 612, so the reference is this engine with season one's derived field switched off, but that switch appears ${hits} times in the bundle, not exactly once. Refusing to run.`);
     process.exit(1);
   }
-  refText = mineText.replace(SEASON_ONE_SWITCH, 'null');
+  refText = mineText.replace(SEASON_ONE_SWITCH, (_m, guard, world) => `${guard}${world}null`);
   REF_LABEL = 'this engine with season one switched off';
 } else {
   refText = baseOut.outputFiles[0].text;

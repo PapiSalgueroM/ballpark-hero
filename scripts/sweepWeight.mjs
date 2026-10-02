@@ -140,7 +140,7 @@ const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
    part of the 14.6K the hub prose cut took off every route (see the header);
    the other five were over and spent it getting back under. */
 const BUDGETS = [
-  ['/', 229], /* Round 700: 226.6K measured, 0.6K of it the seoMeta part loaders in the entry chunk, 225.9K on main; was 226 */
+  ['/', 231], /* release R: 230K measured, the About copy the rendered page now keeps (Round 840), in its own lazy chunk that only this page loads; was 229 */ /* Round 700: 226.6K measured, 0.6K of it the seoMeta part loaders in the entry chunk, 225.9K on main; was 226 */
   ['/club-manager', 633], /* Round 700: 629.1K measured with the seoMeta split, 637.4K on main; was 641 */ /* release K: 637K measured, the shootout order (782) and job applications (783) in the engine chunk; was 630 */ /* release H: 628K measured, the ticker's sport filter menu (711) in the entry chunk; release G: 626K with the match centre (714), the squad rows (715) and the double roster fix (742); was 622 */
   ['/soccer-career', 706], /* Round 700: 702.0K measured with the seoMeta split, 709.9K on main; was 736 */
   ['/stadium-tycoon', 284], /* Round 700: 281.8K measured with the seoMeta split, 290.2K on main; was 290 */
@@ -150,7 +150,7 @@ const BUDGETS = [
   ['/minefield', 280], /* Round 700: 276.8K measured with the seoMeta split, 285.1K on main; was 288 */ /* release K: 285K measured, two new games in the registry and the What's New entries in the shared chunks; was 284 */ /* release G: 280K measured; the shared result moment (710), the native share sheet (744) and the hub trail (654) sit in chunks every game loads; was 276 */
   ['/footle', 326], /* Round 700: 322.0K measured with the seoMeta split, 329.8K on main; was 333 */ /* release K: 330K measured, the same shared chunk growth as /minefield; was 328 */ /* release J: 325K measured after the Round 669 re-bake put 15 more players in the bundled pool (538 to 553); before that 324 at release G on 319K measured; was 316 */
   ['/nfl-my-career', 406], /* release N: 403K measured, the calendar inbox and the rival choices (796); was 398 */ /* Round 700: 395.1K measured with the seoMeta split, 403.6K on main; was 404 */ /* release H: 401K measured; the ticker's sport filter menu (711) and the share sheet (744) sit in the entry chunk every page loads; was 400 */
-  ['/front-office', 304], /* Round 700: 299.5K measured with the seoMeta split, 307.7K on main; was 312 */ /* release K: 308K measured, the franchise tag and the depth chart (723); was 304 */ /* release H: 302K measured, the entry chunk's ticker menu (711); was 300 */ /* release G: 299K measured, same shared chunks as above; was 296 */
+  ['/front-office', 306], /* release R: 305K measured, the board for a full 53 and the practice squad (Round 828; the roster data is its own chunk, loaded on a team tap); was 304 */ /* Round 700: 299.5K measured with the seoMeta split, 307.7K on main; was 312 */ /* release K: 308K measured, the franchise tag and the depth chart (723); was 304 */ /* release H: 302K measured, the entry chunk's ticker menu (711); was 300 */ /* release G: 299K measured, same shared chunks as above; was 296 */
   ['/soccer-grid', 302], /* Round 700: 299.7K measured with the seoMeta split, 308.0K on main; was 308 */ /* release J: 304K measured; this release changes no soccer grid code, the growth is in the shared chunks every route loads; was 300 */
   ['/leaderboard', 266],
 ];

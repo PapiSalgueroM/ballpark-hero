@@ -225,11 +225,21 @@ for (let c = 0; c < CAREERS; c++) {
           }
           break;
         }
-        case "retirement_suggestion":
+        case "retirement_suggestion": {
           /* half the fleet plays into decline like real stubborn captains,
              which is the only road to the 33+ handover */
-          step(x => (c % 2 === 0 ? acceptRetirementSuggestion(x) : engine.declineRetirementSuggestion(x)), "retire");
+          if (c % 2 === 0) { step(x => acceptRetirementSuggestion(x), "retire"); break; }
+          /* Round 850: Keep Playing plays the pending season now, so it is a
+             season step held to everything Next Season is held to. Labelled
+             "retire" it let an armband earned in that season read as a vote
+             and the counter's step go unwatched, which went red the moment a
+             seed put a seniority award in a declined year. */
+          const wasCap = isCap(s);
+          const wasClub = s.currentClub;
+          step(x => engine.declineRetirementSuggestion(x, clubs), "season");
+          if (wasCap && !isCap(s) && s.currentClub === wasClub && !s.retired) handovers += 1;
           break;
+        }
         case "retirement_ceremony": s.retired = true; break;
         /* Round 253: a serious injury now pauses the season for a rehab
            decision. An unknown phase falls into the default below and

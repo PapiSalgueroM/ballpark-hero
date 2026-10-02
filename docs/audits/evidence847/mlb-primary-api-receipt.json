@@ -1,0 +1,124 @@
+{
+  "retrievedAt": "2026-10-01T22:29:10.849Z",
+  "requests": [
+    {
+      "url": "https://statsapi.mlb.com/api/v1/people/search?names=Al%20Bridwell",
+      "status": 200,
+      "data": {
+        "copyright": "Copyright 2026 MLB Advanced Media, L.P.  Use of any content on this page acknowledges agreement to the terms posted here http://gdx.mlb.com/components/copyright.txt",
+        "people": [
+          {
+            "id": 111459,
+            "fullName": "Al Bridwell",
+            "link": "/api/v1/people/111459",
+            "firstName": "Albert",
+            "lastName": "Bridwell",
+            "birthDate": "1884-01-04",
+            "currentAge": 85,
+            "birthCity": "Friendship",
+            "birthStateProvince": "OH",
+            "birthCountry": "USA",
+            "height": "5' 9\"",
+            "weight": 170,
+            "active": false,
+            "primaryPosition": {
+              "code": "6",
+              "name": "Shortstop",
+              "type": "Infielder",
+              "abbreviation": "SS"
+            },
+            "useName": "Al",
+            "useLastName": "Bridwell",
+            "middleName": "Henry",
+            "boxscoreName": "Bridwell",
+            "gender": "M",
+            "isPlayer": true,
+            "isVerified": true,
+            "deathDate": "1969-01-23",
+            "deathCity": "Portsmouth",
+            "deathStateProvince": "OH",
+            "deathCountry": "USA",
+            "lastPlayedDate": "1913-10-04",
+            "mlbDebutDate": "1905-04-16",
+            "batSide": {
+              "code": "L",
+              "description": "Left"
+            },
+            "pitchHand": {
+              "code": "R",
+              "description": "Right"
+            },
+            "nameFirstLast": "Al Bridwell",
+            "nameSlug": "al-bridwell-111459",
+            "firstLastName": "Al Bridwell",
+            "lastFirstName": "Bridwell, Al",
+            "lastInitName": "Bridwell, A",
+            "initLastName": "A Bridwell",
+            "fullFMLName": "Albert Henry Bridwell",
+            "fullLFMName": "Bridwell, Albert Henry",
+            "strikeZoneTop": 3.076,
+            "strikeZoneBottom": 1.553
+          }
+        ]
+      }
+    },
+    {
+      "url": "https://statsapi.mlb.com/api/v1/people/111459/stats?stats=career&group=hitting",
+      "status": 200,
+      "data": {
+        "copyright": "Copyright 2026 MLB Advanced Media, L.P.  Use of any content on this page acknowledges agreement to the terms posted here http://gdx.mlb.com/components/copyright.txt",
+        "stats": [
+          {
+            "type": {
+              "displayName": "career"
+            },
+            "group": {
+              "displayName": "hitting"
+            },
+            "exemptions": [],
+            "splits": [
+              {
+                "stat": {
+                  "gamesPlayed": 1253,
+                  "runs": 457,
+                  "doubles": 95,
+                  "triples": 32,
+                  "homeRuns": 2,
+                  "strikeOuts": 98,
+                  "baseOnBalls": 557,
+                  "hits": 1064,
+                  "hitByPitch": 32,
+                  "avg": ".255",
+                  "atBats": 4169,
+                  "obp": ".347",
+                  "slg": ".295",
+                  "ops": ".642",
+                  "stolenBases": 136,
+                  "plateAppearances": 4928,
+                  "totalBases": 1229,
+                  "rbi": 348,
+                  "sacBunts": 170,
+                  "babip": ".261",
+                  "atBatsPerHomeRun": "2084.50"
+                },
+                "player": {
+                  "id": 111459,
+                  "fullName": "Al Bridwell",
+                  "link": "/api/v1/people/111459"
+                },
+                "sport": {
+                  "id": 1,
+                  "link": "/api/v1/sports/1",
+                  "abbreviation": "MLB"
+                },
+                "gameType": "R",
+                "numTeams": 5,
+                "numLeagues": 2
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

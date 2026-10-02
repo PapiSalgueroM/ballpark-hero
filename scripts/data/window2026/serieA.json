@@ -1,0 +1,1854 @@
+[
+  {
+    "name": "Ademola Lookman",
+    "to": "Atlético Madrid",
+    "db": "Atlético de Madrid",
+    "window": "2026-01",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://www.atalanta.it/news/ademola-lookman-all-atletico-madrid",
+      "https://www.espn.com/soccer/team/squad/_/id/1068/atletico-madrid"
+    ]
+  },
+  {
+    "name": "Mattéo Guendouzi",
+    "to": "Fenerbahçe",
+    "db": "Fenerbahce",
+    "window": "2026-01",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://www.sslazio.it/it/news/comunicati/matteo-guendouzi-ceduto-a-titolo-definitivo-al-fenerbahce",
+      "https://www.espn.com/soccer/team/squad/_/id/436/fenerbahce"
+    ]
+  },
+  {
+    "name": "Konstantinos Koulierakis",
+    "to": "Roma",
+    "db": "AS Roma",
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://www.asroma.com/it/notizie/75719/konstantinos-koulierakis-e-un-nuovo-calciatore-giallorosso",
+      "https://www.espn.com/soccer/team/squad/_/id/104/as-roma"
+    ]
+  },
+  {
+    "name": "Jhon Lucumí",
+    "to": "Juventus",
+    "db": "Juventus FC",
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://www.juventus.com/it/news/articoli/ufficiale-jhon-lucumi-e-un-nuovo-giocatore-della-juventus",
+      "https://www.espn.com/soccer/team/squad/_/id/111/juventus"
+    ]
+  },
+  {
+    "name": "Pietro Comuzzo",
+    "to": "Torino",
+    "db": "Torino FC",
+    "loan": true,
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://www.torinofc.it/news/29/07/2026/comuzzo-al-toro_43887",
+      "https://www.espn.com/soccer/team/squad/_/id/239/torino"
+    ]
+  },
+  {
+    "name": "Yan Couto",
+    "to": "Como",
+    "db": "Como 1907",
+    "loan": true,
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://comofootball.com/como-1907-ingaggia-il-nazionale-brasiliano-yan-couto/",
+      "https://www.espn.com/soccer/team/squad/_/id/2572/como"
+    ]
+  },
+  {
+    "name": "Arthur Theate",
+    "to": "Bologna",
+    "db": "Bologna FC 1909",
+    "loan": true,
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://www.bolognafc.it/arthur-theate-al-bologna-2/",
+      "https://www.espn.com/soccer/team/squad/_/id/107/bologna"
+    ]
+  },
+  {
+    "name": "Jonathan Rowe",
+    "to": "Atalanta",
+    "db": "Atalanta BC",
+    "loan": true,
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://www.bolognafc.it/jonathan-rowe-allatalanta/",
+      "https://www.espn.com/soccer/team/squad/_/id/105/atalanta"
+    ],
+    "note": "ESPN lists him as Jon Rowe"
+  },
+  {
+    "name": "Robinio Vaz",
+    "to": "Hull City",
+    "db": "Hull City",
+    "loan": true,
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://www.asroma.com/it/notizie/75805/robinio-vaz-ceduto-allhull-city",
+      "https://www.espn.com/soccer/team/squad/_/id/306/hull-city"
+    ]
+  },
+  {
+    "name": "Leonardo Balerdi",
+    "to": "Roma",
+    "db": "AS Roma",
+    "loan": true,
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://www.asroma.com/it/notizie/75798/leonardo-balerdi-e-un-nuovo-calciatore-giallorosso",
+      "https://www.espn.com/soccer/team/squad/_/id/104/as-roma"
+    ]
+  },
+  {
+    "name": "Christ Inao Oulaï",
+    "to": "Fiorentina",
+    "db": "ACF Fiorentina",
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://www.acffiorentina.com/news/oulai-e-un-nuovo-calciatore-della-fiorentina-1907262",
+      "https://www.espn.com/soccer/team/squad/_/id/109/fiorentina"
+    ]
+  },
+  {
+    "name": "Miguel Gutiérrez",
+    "to": "Bayer Leverkusen",
+    "db": "Bayer 04 Leverkusen",
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://sscnapoli.it/ufficiale-gutierrez-al-bayer-04-leverkusen-fusball/",
+      "https://www.espn.com/soccer/team/squad/_/id/131/bayer-leverkusen"
+    ]
+  },
+  {
+    "name": "Roberto Piccoli",
+    "to": "Bologna",
+    "db": "Bologna FC 1909",
+    "loan": true,
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://www.bolognafc.it/roberto-piccoli-al-bologna/",
+      "https://www.espn.com/soccer/team/squad/_/id/107/bologna"
+    ]
+  },
+  {
+    "name": "Fabio Miretti",
+    "to": "Beşiktaş",
+    "db": "Besiktas JK",
+    "loan": true,
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://www.juventus.com/it/news/articoli/ufficiale-miretti-in-prestito-al-besiktas",
+      "https://www.espn.com/soccer/team/squad/_/id/1895/besiktas"
+    ]
+  },
+  {
+    "name": "Arthur Atta",
+    "to": "Fiorentina",
+    "db": "ACF Fiorentina",
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://www.acffiorentina.com/news/atta-e-viola",
+      "https://www.espn.com/soccer/team/squad/_/id/109/fiorentina"
+    ]
+  },
+  {
+    "name": "Hamed Traoré",
+    "to": "Genoa",
+    "db": "Genoa CFC",
+    "loan": true,
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://genoacfc.it/2026/07/17/hamed-junior-traore-e-un-giocatore-del-genoa/",
+      "https://www.espn.com/soccer/team/squad/_/id/3263/genoa"
+    ]
+  },
+  {
+    "name": "Kerim Alajbegovic",
+    "to": "Juventus",
+    "db": "Juventus FC",
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://www.juventus.com/it/news/articoli/kerim-alajbegovic-joins",
+      "https://www.espn.com/soccer/team/squad/_/id/111/juventus"
+    ]
+  },
+  {
+    "name": "El Bilal Touré",
+    "to": "Parma",
+    "db": "Parma Calcio 1913",
+    "loan": true,
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://www.atalanta.it/news/el-bilal-toure-al-parma",
+      "https://www.espn.com/soccer/team/squad/_/id/115/parma"
+    ]
+  },
+  {
+    "name": "Romano Schmid",
+    "to": "Frosinone",
+    "db": "Frosinone Calcio",
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://www.frosinonecalcio.com/schmid-e-giallazzurro/",
+      "https://www.espn.com/soccer/team/squad/_/id/4057/frosinone"
+    ]
+  },
+  {
+    "name": "Mateo Pellegrino",
+    "to": "Fiorentina",
+    "db": "ACF Fiorentina",
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://www.acffiorentina.com/news/la-fiorentina-acquista-pellegrino",
+      "https://www.espn.com/soccer/team/squad/_/id/109/fiorentina"
+    ]
+  },
+  {
+    "name": "Josip Sutalo",
+    "to": "Lazio",
+    "db": "SS Lazio",
+    "loan": true,
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://www.sslazio.it/it/news/comunicati/josip-sutalo-in-biancoceleste-a-titolo-temporaneo",
+      "https://www.espn.com/soccer/team/squad/_/id/112/lazio"
+    ]
+  },
+  {
+    "name": "Andrea Pinamonti",
+    "to": "Lazio",
+    "db": "SS Lazio",
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://www.sslazio.it/it/news/comunicati/andrea-pinamonti-in-biancoceleste-a-titolo-definitivo",
+      "https://www.espn.com/soccer/team/squad/_/id/112/lazio"
+    ]
+  },
+  {
+    "name": "Eljif Elmas",
+    "to": "Atalanta",
+    "db": "Atalanta BC",
+    "loan": true,
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://www.atalanta.it/news/benvenuto-eljif-elmas",
+      "https://www.espn.com/soccer/team/squad/_/id/105/atalanta"
+    ]
+  },
+  {
+    "name": "Jeff Ekhator",
+    "to": "Juventus",
+    "db": "Juventus FC",
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://www.juventus.com/it/news/articoli/ufficiale-jeff-ekhator-e-un-nuovo-giocatore-della-juventus",
+      "https://www.espn.com/soccer/team/squad/_/id/111/juventus"
+    ]
+  },
+  {
+    "name": "Danilho Doekhi",
+    "to": "Lazio",
+    "db": "SS Lazio",
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://www.sslazio.it/it/news/comunicati/danilho-doekhi-e-un-nuovo-calciatore-biancoceleste",
+      "https://www.espn.com/soccer/team/squad/_/id/112/lazio"
+    ]
+  },
+  {
+    "name": "Giovane",
+    "to": "Napoli",
+    "db": "SSC Napoli",
+    "window": "2026-01",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://sscnapoli.it/sscn-ufficiale-lingaggio-di-giovane/",
+      "https://www.espn.com/soccer/team/squad/_/id/114/napoli"
+    ]
+  },
+  {
+    "name": "Akor Adams",
+    "to": "Venezia",
+    "db": "Venezia FC",
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://www.veneziafc.it/news/akor-adams-al-venezia-fc",
+      "https://www.espn.com/soccer/team/squad/_/id/17530/venezia"
+    ]
+  },
+  {
+    "name": "Thomas Kristensen",
+    "to": "Atalanta",
+    "db": "Atalanta BC",
+    "loan": true,
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://www.atalanta.it/news/benvenuto-thomas-kristensen",
+      "https://www.espn.com/soccer/team/squad/_/id/105/atalanta"
+    ]
+  },
+  {
+    "name": "Thijs Dallinga",
+    "to": "Köln",
+    "db": "1.FC Köln",
+    "loan": true,
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://www.bolognafc.it/dallinga-al-koln/",
+      "https://www.espn.com/soccer/team/squad/_/id/122/fc-cologne"
+    ]
+  },
+  {
+    "name": "Kamil Grabara",
+    "to": "Juventus",
+    "db": "Juventus FC",
+    "loan": true,
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://www.juventus.com/it/news/articoli/ufficiale-kamil-grabara-e-un-nuovo-giocatore-della-juventus",
+      "https://www.espn.com/soccer/team/squad/_/id/111/juventus"
+    ]
+  },
+  {
+    "name": "Franck Kessié",
+    "to": "Atalanta",
+    "db": "Atalanta BC",
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://www.atalanta.it/news/bentornato-franck",
+      "https://www.espn.com/soccer/team/squad/_/id/105/atalanta"
+    ]
+  },
+  {
+    "name": "Jan Ziolkowski",
+    "to": "Monza",
+    "db": "AC Monza",
+    "loan": true,
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://www.acmonza.com/it/news/jan-ziolkowski-e-biancorosso/",
+      "https://www.espn.com/soccer/team/squad/_/id/4007/monza"
+    ]
+  },
+  {
+    "name": "Nicolas Kühn",
+    "to": "Gladbach",
+    "db": "Borussia Mönchengladbach",
+    "loan": true,
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://comofootball.com/nicolas-kuhn-passa-in-prestito-al-borussia-monchengladbach/",
+      "https://www.espn.com/soccer/team/squad/_/id/268/borussia-monchengladbach"
+    ]
+  },
+  {
+    "name": "Diogo Leite",
+    "to": "Lazio",
+    "db": "SS Lazio",
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://www.sslazio.it/it/news/comunicati/diogo-leite-e-un-nuovo-calciatore-biancoceleste",
+      "https://www.espn.com/soccer/team/squad/_/id/112/lazio"
+    ],
+    "note": "a free agent, signed 2026-09-08 after the window shut"
+  },
+  {
+    "name": "Anass Salah-Eddine",
+    "to": "Panathinaikos",
+    "db": "Panathinaikos",
+    "loan": true,
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://www.asroma.com/it/notizie/75860/anass-salah-eddine-ceduto-al-panathinaikos",
+      "https://www.espn.com/soccer/team/squad/_/id/443/panathinaikos"
+    ],
+    "note": "his 2026 row is at PSV, where Roma had loaned him"
+  },
+  {
+    "name": "Petar Ratkov",
+    "to": "Levante",
+    "db": "Levante UD",
+    "loan": true,
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://www.sslazio.it/it/news/comunicati/petar-ratkov-ceduto-al-levante",
+      "https://www.espn.com/soccer/team/squad/_/id/1538/levante"
+    ]
+  },
+  {
+    "name": "Giovanni Fabbian",
+    "to": "Parma",
+    "db": "Parma Calcio 1913",
+    "loan": true,
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://www.parmacalcio1913.com/news/giovanni-fabbian-e-un-nuovo-calciatore-del-parma-calcio/",
+      "https://www.espn.com/soccer/team/squad/_/id/115/parma"
+    ],
+    "note": "Bologna to Fiorentina on loan in January, then Parma"
+  },
+  {
+    "name": "Daniel Maldini",
+    "to": "Cagliari",
+    "db": "Cagliari Calcio",
+    "loan": true,
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://cagliaricalcio.com/news/maldini-firma-per-il-cagliari-serie-a/",
+      "https://www.espn.com/soccer/team/squad/_/id/2925/cagliari"
+    ],
+    "note": "on loan at Lazio from January to June"
+  },
+  {
+    "name": "Angeliño",
+    "to": "Deportivo La Coruña",
+    "db": "Deportivo de La Coruña",
+    "loan": true,
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://www.asroma.com/en/news/75726/angelino-transferred-to-deportivo-la-coruna",
+      "https://www.espn.com/soccer/team/squad/_/id/90/deportivo"
+    ]
+  },
+  {
+    "name": "Zachary Athekame",
+    "to": "Lyon",
+    "db": "Olympique Lyon",
+    "loan": true,
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://www.acmilan.com/en/news/articles/media/2026-08-14/official-statement-zachary-athekame",
+      "https://www.espn.com/soccer/team/squad/_/id/167/lyon"
+    ]
+  },
+  {
+    "name": "Alessandro Circati",
+    "to": "Benfica",
+    "db": "SL Benfica",
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://www.parmacalcio1913.com/news/alessandro-circati-ceduto-a-titolo-definitivo-allo-sl-benfica/",
+      "https://www.espn.com/soccer/team/squad/_/id/1929/benfica"
+    ]
+  },
+  {
+    "name": "Niccolò Fortini",
+    "to": "Torino",
+    "db": "Torino FC",
+    "loan": true,
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://www.torinofc.it/news/21/08/2026/fortini-al-toro_44456",
+      "https://www.espn.com/soccer/team/squad/_/id/239/torino"
+    ]
+  },
+  {
+    "name": "Ivan Ilić",
+    "to": "Lecce",
+    "db": "US Lecce",
+    "loan": true,
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://uslecce.it/ilic-in-giallorosso/",
+      "https://www.espn.com/soccer/team/squad/_/id/113/lecce"
+    ]
+  },
+  {
+    "name": "Daniel Bragança",
+    "to": "Torino",
+    "db": "Torino FC",
+    "loan": true,
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://www.torinofc.it/news/01/09/2026/braganca-al-toro_44672",
+      "https://www.espn.com/soccer/team/squad/_/id/239/torino"
+    ]
+  },
+  {
+    "name": "Samuel Mbangula",
+    "to": "Bologna",
+    "db": "Bologna FC 1909",
+    "loan": true,
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://www.bolognafc.it/samuel-mbangula-al-bologna/",
+      "https://www.espn.com/soccer/team/squad/_/id/107/bologna"
+    ]
+  },
+  {
+    "name": "Marco Brescianini",
+    "to": "Fiorentina",
+    "db": "ACF Fiorentina",
+    "window": "2026-01",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://www.acffiorentina.com/news/la-fiorentina-acquista-brescianini-090126",
+      "https://www.espn.com/soccer/team/squad/_/id/109/fiorentina"
+    ],
+    "note": "joined on loan in January 2026 with an option and a conditional obligation; ESPN lists him at Fiorentina for 2026-27"
+  },
+  {
+    "name": "Jacopo Fazzini",
+    "to": "Cagliari",
+    "db": "Cagliari Calcio",
+    "loan": true,
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://cagliaricalcio.com/news/fazzini-al-cagliari-seriea-craisportcenter/",
+      "https://www.espn.com/soccer/team/squad/_/id/2925/cagliari"
+    ]
+  },
+  {
+    "name": "Simon Sohm",
+    "to": "Venezia",
+    "db": "Venezia FC",
+    "loan": true,
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://www.veneziafc.it/news/simon-sohm-al-venezia-fc",
+      "https://www.espn.com/soccer/team/squad/_/id/17530/venezia"
+    ],
+    "note": "on loan at Bologna from January to June"
+  },
+  {
+    "name": "Cyril Ngonge",
+    "to": "Monza",
+    "db": "AC Monza",
+    "loan": true,
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://www.acmonza.com/it/news/cyril-ngonge-e-biancorosso/",
+      "https://www.espn.com/soccer/team/squad/_/id/4007/monza"
+    ],
+    "note": "a Napoli player; his 2026 row is at Torino, where he was on loan"
+  },
+  {
+    "name": "João Mário",
+    "to": "Fiorentina",
+    "db": "ACF Fiorentina",
+    "loan": true,
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://www.acffiorentina.com/news/la-fiorentina-acquista-joao-mario-030826",
+      "https://www.espn.com/soccer/team/squad/_/id/109/fiorentina"
+    ],
+    "note": "on loan at Bologna from January to June"
+  },
+  {
+    "name": "Issa Doumbia",
+    "to": "Sporting CP",
+    "db": "Sporting CP",
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://www.veneziafc.it/news/issa-doumbia-allo-sporting-lisbona",
+      "https://www.espn.com/soccer/team/squad/_/id/2250/sporting-cp"
+    ]
+  },
+  {
+    "name": "Lucas Beltrán",
+    "to": null,
+    "db": "CA River Plate",
+    "loan": true,
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://www.acffiorentina.com/news/beltran-ceduto-al-river-plate",
+      "https://www.espn.com/soccer/team/squad/_/id/16/river-plate"
+    ],
+    "note": "River Plate is not a Club Manager club; a Fiorentina player; his 2026 row is at Valencia, where he was on loan"
+  },
+  {
+    "name": "Vasilije Adžić",
+    "to": "Sassuolo",
+    "db": "US Sassuolo",
+    "loan": true,
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://www.sassuolocalcio.it/prima-squadra/vasilije-adzic-benvenuto-in-neroverde/",
+      "https://www.espn.com/soccer/team/squad/_/id/3997/sassuolo"
+    ]
+  },
+  {
+    "name": "Jay Robinson",
+    "to": "Monza",
+    "db": "AC Monza",
+    "loan": true,
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://www.acmonza.com/it/news/jay-robinson-e-biancorosso/",
+      "https://www.espn.com/soccer/team/squad/_/id/4007/monza"
+    ]
+  },
+  {
+    "name": "Álvaro Morata",
+    "to": null,
+    "db": "CD Leganés",
+    "loan": true,
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://comofootball.com/alvaro-morata-passa-in-prestito-al-leganes/",
+      "https://www.espn.com/soccer/team/squad/_/id/17534/leganes"
+    ],
+    "note": "Leganés is not a Club Manager club"
+  },
+  {
+    "name": "Adrian Przyborek",
+    "to": "Lazio",
+    "db": "SS Lazio",
+    "window": "2026-01",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://www.sslazio.it/it/news/comunicati/adrian-przyborek-in-biancoceleste-a-titolo-definitivo",
+      "https://www.espn.com/soccer/team/squad/_/id/112/lazio"
+    ],
+    "note": "his 2026 row spells the club \"Lazio\", a one-row variant; this writes the spelling every other Lazio row uses"
+  },
+  {
+    "name": "Alphadjo Cissè",
+    "to": "AC Milan",
+    "db": "AC Milan",
+    "window": "2026-01",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://www.hellasverona.it/news/alphadjo-cisse-a-titolo-definitivo-al-milan",
+      "https://www.espn.com/soccer/team/squad/_/id/103/ac-milan"
+    ],
+    "note": "his 2026 row is at Catanzaro, where Verona had loaned him"
+  },
+  {
+    "name": "Armel Bella-Kotchap",
+    "to": "Venezia",
+    "db": "Venezia FC",
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://www.veneziafc.it/news/armel-bella-kotchap-al-venezia-fc",
+      "https://www.espn.com/soccer/team/squad/_/id/17530/venezia"
+    ]
+  },
+  {
+    "name": "Albion Rrahmani",
+    "to": "Venezia",
+    "db": "Venezia FC",
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://www.veneziafc.it/news/albion-rrahmani-al-venezia-fc",
+      "https://www.espn.com/soccer/team/squad/_/id/17530/venezia"
+    ]
+  },
+  {
+    "name": "Mattia Liberali",
+    "to": "Como",
+    "db": "Como 1907",
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://comofootball.com/il-como-1907-annuncia-il-giovane-azzurro-mattia-liberali/",
+      "https://www.espn.com/soccer/team/squad/_/id/2572/como"
+    ]
+  },
+  {
+    "name": "Djibril Sow",
+    "to": "Genoa",
+    "db": "Genoa CFC",
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://genoacfc.it/2026/08/06/djibril-sow-e-un-nuovo-giocatore-del-genoa/",
+      "https://www.espn.com/soccer/team/squad/_/id/3263/genoa"
+    ]
+  },
+  {
+    "name": "Tomas Bobcek",
+    "to": "Frosinone",
+    "db": "Frosinone Calcio",
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://www.frosinonecalcio.com/bobcek-e-giallazzurro/",
+      "https://www.espn.com/soccer/team/squad/_/id/4057/frosinone"
+    ]
+  },
+  {
+    "name": "Joël Monteiro",
+    "to": "Lecce",
+    "db": "US Lecce",
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://uslecce.it/monteiro-in-giallorosso/",
+      "https://www.espn.com/soccer/team/squad/_/id/113/lecce"
+    ]
+  },
+  {
+    "name": "Rafik Belghali",
+    "to": "Torino",
+    "db": "Torino FC",
+    "loan": true,
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://www.torinofc.it/news/01/09/2026/belghali-al-toro_44664",
+      "https://www.espn.com/soccer/team/squad/_/id/239/torino"
+    ],
+    "note": "a loan with an obligation to buy"
+  },
+  {
+    "name": "Yukinari Sugawara",
+    "to": "Cagliari",
+    "db": "Cagliari Calcio",
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://cagliaricalcio.com/news/sugawara-firma-con-il-cagliari/",
+      "https://www.espn.com/soccer/team/squad/_/id/2925/cagliari"
+    ],
+    "note": "a Southampton player; his 2026 row is at Werder Bremen, where he was on loan"
+  },
+  {
+    "name": "Oliver Sørensen",
+    "to": "Celtic",
+    "db": "Celtic FC",
+    "loan": true,
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://www.parmacalcio1913.com/news/oliver-sorensen-ceduto-a-titolo-temporaneo-al-celtic-f-c/",
+      "https://www.espn.com/soccer/team/squad/_/id/256/celtic"
+    ]
+  },
+  {
+    "name": "Boulaye Dia",
+    "to": "Rennes",
+    "db": "Stade Rennais FC",
+    "loan": true,
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://www.sslazio.it/it/news/comunicati/boulaye-dia-ceduto-allo-stade-rennais",
+      "https://www.espn.com/soccer/team/squad/_/id/169/stade-rennais"
+    ]
+  },
+  {
+    "name": "Ebenezer Akinsanmiro",
+    "to": "Monza",
+    "db": "AC Monza",
+    "loan": true,
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://www.acmonza.com/it/news/ebenezer-akinsanmiro-e-biancorosso/",
+      "https://www.espn.com/soccer/team/squad/_/id/4007/monza"
+    ],
+    "note": "an Inter player; his 2026 row is at Pisa, where he was on loan"
+  },
+  {
+    "name": "Jacob Ondrejka",
+    "to": "Groningen",
+    "db": "FC Groningen",
+    "loan": true,
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://www.parmacalcio1913.com/news/jacob-ondrejka-ceduto-a-titolo-temporaneo-al-football-club-groningen/",
+      "https://www.espn.com/soccer/team/squad/_/id/145/fc-groningen"
+    ]
+  },
+  {
+    "name": "Gaetano Oristanio",
+    "to": "Torino",
+    "db": "Torino FC",
+    "loan": true,
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://www.torinofc.it/news/09/07/2026/oristanio-al-toro_43697",
+      "https://www.espn.com/soccer/team/squad/_/id/239/torino"
+    ],
+    "note": "a Venezia player; his 2026 row is at Parma, where he was on loan"
+  },
+  {
+    "name": "Kieron Bowie",
+    "to": "Sassuolo",
+    "db": "US Sassuolo",
+    "loan": true,
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://www.sassuolocalcio.it/prima-squadra/kieron-bowie-benvenuto-in-neroverde/",
+      "https://www.espn.com/soccer/team/squad/_/id/3997/sassuolo"
+    ]
+  },
+  {
+    "name": "Mario Mitaj",
+    "to": "Genoa",
+    "db": "Genoa CFC",
+    "loan": true,
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://genoacfc.it/2026/07/31/mario-mitaj-e-un-nuovo-giocatore-del-genoa/",
+      "https://www.espn.com/soccer/team/squad/_/id/3263/genoa"
+    ]
+  },
+  {
+    "name": "Martín Payero",
+    "to": "Watford",
+    "db": "Watford FC",
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://www.udinese.it/news/squadra/payero-al-watford-fc",
+      "https://www.espn.com/soccer/team/squad/_/id/395/watford"
+    ],
+    "note": "an Udinese player; his 2026 row is at Cremonese, where he was on loan"
+  },
+  {
+    "name": "Idrissa Touré",
+    "to": "Monza",
+    "db": "AC Monza",
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://www.acmonza.com/it/news/idrissa-toure-e-biancorosso/",
+      "https://www.espn.com/soccer/team/squad/_/id/4007/monza"
+    ]
+  },
+  {
+    "name": "Michael Folorunsho",
+    "to": "Monza",
+    "db": "AC Monza",
+    "loan": true,
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://www.acmonza.com/it/news/michael-folorunsho-e-biancorosso/",
+      "https://www.espn.com/soccer/team/squad/_/id/4007/monza"
+    ],
+    "note": "a Napoli player; his 2026 row is at Cagliari, where he was on loan"
+  },
+  {
+    "name": "Diego Carlos",
+    "to": "Parma",
+    "db": "Parma Calcio 1913",
+    "loan": true,
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://www.parmacalcio1913.com/news/diego-carlos-santos-silva-e-un-nuovo-calciatore-del-parma-calcio/",
+      "https://www.espn.com/soccer/team/squad/_/id/115/parma"
+    ],
+    "note": "a Fenerbahce player; his 2026 row is at Como, where he was on loan"
+  },
+  {
+    "name": "Ben Godfrey",
+    "to": "Rangers",
+    "db": "Rangers FC",
+    "loan": true,
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://www.atalanta.it/news/benjamin-godfrey-ai-glasgow-rangers",
+      "https://www.espn.com/soccer/team/squad/_/id/257/rangers"
+    ],
+    "note": "an Atalanta player; his 2026 row is at Brondby, where he was on loan from January"
+  },
+  {
+    "name": "Stefan Posch",
+    "to": "Mainz",
+    "db": "1.FSV Mainz 05",
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://comofootball.com/stefan-posch-passa-al-mainz-a-titolo-definitivo/",
+      "https://www.espn.com/soccer/team/squad/_/id/2950/mainz"
+    ]
+  },
+  {
+    "name": "Amir Richardson",
+    "to": "Le Havre",
+    "db": "Le Havre AC",
+    "loan": true,
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://www.acffiorentina.com/news/richardson-passa-al-le-havre-190726",
+      "https://www.espn.com/soccer/team/squad/_/id/3236/le-havre-ac"
+    ],
+    "note": "a Fiorentina player; his 2026 row is at Copenhagen, where he was on loan from January"
+  },
+  {
+    "name": "M'Bala Nzola",
+    "to": "Cagliari",
+    "db": "Cagliari Calcio",
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://cagliaricalcio.com/news/nzola-e-del-cagliari/",
+      "https://www.espn.com/soccer/team/squad/_/id/2925/cagliari"
+    ],
+    "note": "a Fiorentina player; his 2026 row is at Pisa, where he was on loan"
+  },
+  {
+    "name": "Saba Goglichidze",
+    "to": "Monza",
+    "db": "AC Monza",
+    "loan": true,
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://www.acmonza.com/it/news/saba-goglichidze-e-biancorosso/",
+      "https://www.espn.com/soccer/team/squad/_/id/4007/monza"
+    ],
+    "note": "on loan at Watford from January to June"
+  },
+  {
+    "name": "Giorgi Chakvetadze",
+    "to": "Udinese",
+    "db": "Udinese Calcio",
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://www.udinese.it/news/squadra/chakvetadze-e-bianconero",
+      "https://www.espn.com/soccer/team/squad/_/id/118/udinese"
+    ]
+  },
+  {
+    "name": "Unai Gómez",
+    "to": "Udinese",
+    "db": "Udinese Calcio",
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://www.udinese.it/news/squadra/benvenuto-unai",
+      "https://www.espn.com/soccer/team/squad/_/id/118/udinese"
+    ]
+  },
+  {
+    "name": "Robin Gosens",
+    "to": "Schalke 04",
+    "db": "FC Schalke 04",
+    "loan": true,
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://www.acffiorentina.com/news/gosens-ceduto-allo-schalke-04",
+      "https://www.espn.com/soccer/team/squad/_/id/133/schalke-04"
+    ]
+  },
+  {
+    "name": "Raphael Kofler",
+    "to": "Cagliari",
+    "db": "Cagliari Calcio",
+    "loan": true,
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://cagliaricalcio.com/news/kofler-e-del-cagliari-seriea/",
+      "https://www.espn.com/soccer/team/squad/_/id/2925/cagliari"
+    ]
+  },
+  {
+    "name": "Simone Pafundi",
+    "to": null,
+    "db": "US Catanzaro",
+    "loan": true,
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://www.udinese.it/news/squadra/pafundi-al-catanzaro",
+      "https://www.espn.com/soccer/team/squad/_/id/3257/catanzaro"
+    ],
+    "note": "Catanzaro is not a Club Manager club; an Udinese player; his 2026 row is at Sampdoria, where he was on loan"
+  },
+  {
+    "name": "Víctor Valdepeñas",
+    "to": "Fiorentina",
+    "db": "ACF Fiorentina",
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://www.acffiorentina.com/news/valdepenas-310726",
+      "https://www.espn.com/soccer/team/squad/_/id/109/fiorentina"
+    ]
+  },
+  {
+    "name": "Willem Geubbels",
+    "to": "Lecce",
+    "db": "US Lecce",
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://uslecce.it/geubbels-in-giallorosso/",
+      "https://www.espn.com/soccer/team/squad/_/id/113/lecce"
+    ]
+  },
+  {
+    "name": "Patrizio Masini",
+    "to": "Frosinone",
+    "db": "Frosinone Calcio",
+    "loan": true,
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://www.frosinonecalcio.com/masini-e-giallazzurro/",
+      "https://www.espn.com/soccer/team/squad/_/id/4057/frosinone"
+    ]
+  },
+  {
+    "name": "Kevin Carlos",
+    "to": "Cagliari",
+    "db": "Cagliari Calcio",
+    "loan": true,
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://cagliaricalcio.com/news/kevin-carlos-rossoblu-cagliaricalcio-nizza/",
+      "https://www.espn.com/soccer/team/squad/_/id/2925/cagliari"
+    ]
+  },
+  {
+    "name": "Fabio Rispoli",
+    "to": null,
+    "db": "FC Südtirol",
+    "loan": true,
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://comofootball.com/fabio-rispoli-passa-in-prestito-al-sudtirol-2/",
+      "https://www.espn.com/soccer/team/squad/_/id/11139/sudtirol"
+    ],
+    "note": "Südtirol is not a Club Manager club; a Como player; his 2026 row is at Catanzaro, where he was on loan"
+  },
+  {
+    "name": "David Odogu",
+    "to": "Toulouse",
+    "db": "FC Toulouse",
+    "loan": true,
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://www.acmilan.com/en/news/articles/media/2026-08-18/official-statement-david-odogu",
+      "https://www.espn.com/soccer/team/squad/_/id/179/toulouse"
+    ]
+  },
+  {
+    "name": "Fedde Leysen",
+    "to": "Sassuolo",
+    "db": "US Sassuolo",
+    "loan": true,
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://www.sassuolocalcio.it/prima-squadra/fedde-leysen-benvenuto-in-neroverde/",
+      "https://www.espn.com/soccer/team/squad/_/id/3997/sassuolo"
+    ]
+  },
+  {
+    "name": "Alieu Fadera",
+    "to": "Cagliari",
+    "db": "Cagliari Calcio",
+    "loan": true,
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://cagliaricalcio.com/news/fadera-firma-per-il-cagliari-calcio-seriea/",
+      "https://www.espn.com/soccer/team/squad/_/id/2925/cagliari"
+    ],
+    "note": "a Como player; his 2026 row is at Sassuolo, where he was on loan"
+  },
+  {
+    "name": "Vanja Vlahović",
+    "to": null,
+    "db": "Mantova 1911",
+    "loan": true,
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://www.mantova1911.club/news/ufficiale-vanja-vlahovic-nuovo-calciatore-del-mantova",
+      "https://www.espn.com/soccer/team/squad/_/id/3991/mantova"
+    ],
+    "note": "Mantova is not a Club Manager club; an Atalanta player; his 2026 row is at Spezia, where he was on loan"
+  },
+  {
+    "name": "Daniel Bîrligea",
+    "to": "Frosinone",
+    "db": "Frosinone Calcio",
+    "loan": true,
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://www.frosinonecalcio.com/birligea-e-giallazzurro/",
+      "https://www.espn.com/soccer/team/squad/_/id/4057/frosinone"
+    ]
+  },
+  {
+    "name": "Kevin Zeroli",
+    "to": null,
+    "db": "FC Südtirol",
+    "loan": true,
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://www.acmilan.com/en/news/articles/media/2026-09-01/official-statement-kevin-zeroli",
+      "https://www.espn.com/soccer/team/squad/_/id/11139/sudtirol"
+    ],
+    "note": "Südtirol is not a Club Manager club; a Milan player; his 2026 row is at Juve Stabia, where he was on loan to June"
+  },
+  {
+    "name": "Iker Bravo",
+    "to": "Watford",
+    "db": "Watford FC",
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://www.udinese.it/news/squadra/bravo-ceduto-al-watford",
+      "https://www.espn.com/soccer/team/squad/_/id/395/watford"
+    ],
+    "note": "on loan at Las Palmas from January to June"
+  },
+  {
+    "name": "Giovanni Bonfanti",
+    "to": null,
+    "db": "UD Las Palmas",
+    "loan": true,
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://www.atalanta.it/news/u23-giovanni-bonfanti-all-ud-las-palmas",
+      "https://www.espn.com/soccer/team/squad/_/id/98/las-palmas"
+    ],
+    "note": "Las Palmas is not a Club Manager club; an Atalanta player; his 2026 row is at Pisa, and he was on loan at Spezia from January"
+  },
+  {
+    "name": "Patrick Cutrone",
+    "to": "Monza",
+    "db": "AC Monza",
+    "window": "2026-01",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://www.acmonza.com/it/news/patrick-cutrone-e-biancorosso/",
+      "https://www.espn.com/soccer/team/squad/_/id/4007/monza"
+    ],
+    "note": "joined on loan from Como in January 2026 with a conditional obligation to buy (his 2026 row is at Parma, his 2025-26 loan); ESPN lists him at Monza for 2026-27"
+  },
+  {
+    "name": "Branimir Mlacic",
+    "to": "Watford",
+    "db": "Watford FC",
+    "loan": true,
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://www.udinese.it/news/squadra/mlacic-al-watford",
+      "https://www.espn.com/soccer/team/squad/_/id/395/watford"
+    ]
+  },
+  {
+    "name": "Yanis Massolin",
+    "to": "Cagliari",
+    "db": "Cagliari Calcio",
+    "loan": true,
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://cagliaricalcio.com/news/massolin-firma-per-il-cagliari/",
+      "https://www.espn.com/soccer/team/squad/_/id/2925/cagliari"
+    ],
+    "note": "Inter bought him from Modena in January (his 2026 row is still at Modena), then loaned him to Cagliari"
+  },
+  {
+    "name": "Luis Milla",
+    "to": "Como",
+    "db": "Como 1907",
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://comofootball.com/il-como-1907-ingaggia-il-centrocampista-spagnolo-luis-milla/",
+      "https://www.espn.com/soccer/team/squad/_/id/2572/como"
+    ]
+  },
+  {
+    "name": "Matías Moreno",
+    "to": "Venezia",
+    "db": "Venezia FC",
+    "loan": true,
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://www.veneziafc.it/news/matias-moreno-al-venezia-fc",
+      "https://www.espn.com/soccer/team/squad/_/id/17530/venezia"
+    ],
+    "note": "a Fiorentina player; his 2026 row is at Levante, where he was on loan"
+  },
+  {
+    "name": "Kian Fitz-Jim",
+    "to": "Torino",
+    "db": "Torino FC",
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://www.torinofc.it/news/31/07/2026/fitz-jim-al-toro_43895",
+      "https://www.espn.com/soccer/team/squad/_/id/239/torino"
+    ]
+  },
+  {
+    "name": "Adam Buksa",
+    "to": null,
+    "db": "RCD Mallorca",
+    "loan": true,
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://www.udinese.it/news/squadra/buksa-in-prestito-al-maiorca",
+      "https://www.espn.com/soccer/team/squad/_/id/84/mallorca"
+    ],
+    "note": "Mallorca is not a Club Manager club"
+  },
+  {
+    "name": "Willy Kambwala",
+    "to": "Como",
+    "db": "Como 1907",
+    "loan": true,
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://comofootball.com/il-como-1907-ingaggia-willy-kambwala-in-prestito/",
+      "https://www.espn.com/soccer/team/squad/_/id/2572/como"
+    ]
+  },
+  {
+    "name": "Gabriele Zappa",
+    "to": null,
+    "db": "Hellas Verona",
+    "loan": true,
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://cagliaricalcio.com/news/grazie-gabri-zappa-cagliaricalcio/",
+      "https://www.espn.com/soccer/team/squad/_/id/119/hellas-verona"
+    ],
+    "note": "Hellas Verona is not a Club Manager club"
+  },
+  {
+    "name": "Ignace Van der Brempt",
+    "to": "Sassuolo",
+    "db": "US Sassuolo",
+    "loan": true,
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://www.sassuolocalcio.it/prima-squadra/ignace-van-der-brempt-benvenuto-in-neroverde/",
+      "https://www.espn.com/soccer/team/squad/_/id/3997/sassuolo"
+    ]
+  },
+  {
+    "name": "Lazar Jovanovic",
+    "to": "Udinese",
+    "db": "Udinese Calcio",
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://www.udinese.it/news/squadra/jovanovic-e-un-giocatore-dell-udinese",
+      "https://www.espn.com/soccer/team/squad/_/id/118/udinese"
+    ]
+  },
+  {
+    "name": "Iván Azón",
+    "to": "Getafe",
+    "db": "Getafe CF",
+    "loan": true,
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://comofootball.com/ivan-azon-passa-in-prestito-al-getafe/",
+      "https://www.espn.com/soccer/team/squad/_/id/2922/getafe"
+    ],
+    "note": "a Como player; his 2026 row is at Ipswich, where he was on loan"
+  },
+  {
+    "name": "Vincent Sierro",
+    "to": "Parma",
+    "db": "Parma Calcio 1913",
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://www.parmacalcio1913.com/news/vincent-sierro-e-un-nuovo-calciatore-del-parma-calcio/",
+      "https://www.espn.com/soccer/team/squad/_/id/115/parma"
+    ],
+    "note": "a free agent, signed 2026-09-04 after the window shut"
+  },
+  {
+    "name": "Matteo Dagasso",
+    "to": "Venezia",
+    "db": "Venezia FC",
+    "window": "2026-01",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://www.pescaracalcio.com/il-pescara-saluta-matteo-dagasso/",
+      "https://www.espn.com/soccer/team/squad/_/id/17530/venezia"
+    ]
+  },
+  {
+    "name": "Morten Thorsby",
+    "to": null,
+    "db": "US Cremonese",
+    "window": "2026-01",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://uscremonese.it/morten-thorsby-e-grigiorosso/",
+      "https://www.espn.com/soccer/team/squad/_/id/4050/cremonese"
+    ],
+    "note": "Cremonese is not a Club Manager club"
+  },
+  {
+    "name": "Thierry Correia",
+    "to": "Venezia",
+    "db": "Venezia FC",
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://www.veneziafc.it/news/thierry-rendall-correia-al-venezia-fc",
+      "https://www.espn.com/soccer/team/squad/_/id/17530/venezia"
+    ]
+  },
+  {
+    "name": "Alfonso Pedraza",
+    "to": "Lazio",
+    "db": "SS Lazio",
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://www.sslazio.it/it/news/comunicati/alfonso-pedraza-sag-in-biancoceleste-a-titolo-definitivo",
+      "https://www.espn.com/soccer/team/squad/_/id/112/lazio"
+    ]
+  },
+  {
+    "name": "Ivan Provedel",
+    "to": "Inter Milan",
+    "db": "Inter Milan",
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://www.inter.it/it/notizie/ivan-provedel-annuncio-nuovo-giocatore-inter",
+      "https://www.espn.com/soccer/team/squad/_/id/110/internazionale"
+    ]
+  },
+  {
+    "name": "Mërgim Vojvoda",
+    "to": "Udinese",
+    "db": "Udinese Calcio",
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://www.udinese.it/news/squadra/benvenuto-mergim",
+      "https://www.espn.com/soccer/team/squad/_/id/118/udinese"
+    ]
+  },
+  {
+    "name": "Luis Hasa",
+    "to": "Frosinone",
+    "db": "Frosinone Calcio",
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://www.frosinonecalcio.com/hasa-e-giallazzurro/",
+      "https://www.espn.com/soccer/team/squad/_/id/4057/frosinone"
+    ],
+    "note": "a Napoli player; his 2026 row is at Carrarese, where he was on loan"
+  },
+  {
+    "name": "Ricardo Mangas",
+    "to": "Monza",
+    "db": "AC Monza",
+    "loan": true,
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://www.acmonza.com/it/news/ricardo-mangas-e-biancorosso/",
+      "https://www.espn.com/soccer/team/squad/_/id/4007/monza"
+    ]
+  },
+  {
+    "name": "Emanuele Rao",
+    "to": null,
+    "db": "Pisa Sporting Club",
+    "loan": true,
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://pisasportingclub.com/emanuele-rao-e-del-pisa/",
+      "https://www.espn.com/soccer/team/squad/_/id/3956/pisa"
+    ],
+    "note": "Pisa is not a Club Manager club; a Napoli player; his 2026 row is at Bari, where he was on loan"
+  },
+  {
+    "name": "Aleksa Terzic",
+    "to": "Frosinone",
+    "db": "Frosinone Calcio",
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://www.frosinonecalcio.com/terzic-e-giallazzurro/",
+      "https://www.espn.com/soccer/team/squad/_/id/4057/frosinone"
+    ]
+  },
+  {
+    "name": "Costantino Favasuli",
+    "to": "Napoli",
+    "db": "SSC Napoli",
+    "loan": true,
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://sscnapoli.it/sscn-ufficiale-lingaggio-di-favasuli/",
+      "https://www.espn.com/soccer/team/squad/_/id/114/napoli"
+    ],
+    "note": "a loan with an obligation to buy"
+  },
+  {
+    "name": "Bartosz Mrozek",
+    "to": "Udinese",
+    "db": "Udinese Calcio",
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://www.udinese.it/news/squadra/mrozek-e-bianconero",
+      "https://www.espn.com/soccer/team/squad/_/id/118/udinese"
+    ]
+  },
+  {
+    "name": "Alieu Njie",
+    "to": "Fiorentina",
+    "db": "ACF Fiorentina",
+    "loan": true,
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://www.torinofc.it/news/30/08/2026/njie-alla-fiorentina_44658",
+      "https://www.espn.com/soccer/team/squad/_/id/109/fiorentina"
+    ],
+    "note": "a loan with an obligation to buy"
+  },
+  {
+    "name": "Emil Audero",
+    "to": "Rayo Vallecano",
+    "db": "Rayo Vallecano",
+    "loan": true,
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://comofootball.com/emil-audero-passa-in-prestito-al-rayo-vallecano/",
+      "https://www.espn.com/soccer/team/squad/_/id/101/rayo-vallecano"
+    ],
+    "note": "a Como player; his 2026 row is at Cremonese, where he was on loan"
+  },
+  {
+    "name": "Cody Drameh",
+    "to": "Genoa",
+    "db": "Genoa CFC",
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://genoacfc.it/2026/09/01/cody-drameh-ha-firmato-per-il-genoa/",
+      "https://www.espn.com/soccer/team/squad/_/id/3263/genoa"
+    ]
+  },
+  {
+    "name": "Toni Fernández",
+    "to": "Venezia",
+    "db": "Venezia FC",
+    "loan": true,
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://www.veneziafc.it/news/antonio-fernandez-al-venezia-fc",
+      "https://www.espn.com/soccer/team/squad/_/id/17530/venezia"
+    ]
+  },
+  {
+    "name": "Stephan El Shaarawy",
+    "to": "Genoa",
+    "db": "Genoa CFC",
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://genoacfc.it/2026/09/02/el-shaarawy-ce-il-sogno-si-avvera/",
+      "https://www.espn.com/soccer/team/squad/_/id/3263/genoa"
+    ],
+    "note": "a free agent after leaving Roma, signed 2026-09-02; his 2026 row says Without Club"
+  },
+  {
+    "name": "Marko Farji",
+    "to": "Heerenveen",
+    "db": "SC Heerenveen",
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://www.veneziafc.it/news/marko-farji-al-sc-heerenveen",
+      "https://www.espn.com/soccer/team/squad/_/id/146/heerenveen"
+    ]
+  },
+  {
+    "name": "Agustín Albarracín",
+    "to": null,
+    "db": "Albacete Balompié",
+    "loan": true,
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://cagliaricalcio.com/news/albarracin-allalbacete/",
+      "https://www.espn.com/soccer/team/squad/_/id/2737/albacete"
+    ],
+    "note": "Albacete is not a Club Manager club"
+  },
+  {
+    "name": "Tommaso Corazza",
+    "to": null,
+    "db": "LR Vicenza",
+    "loan": true,
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://www.bolognafc.it/corazza-al-vicenza/",
+      "https://www.espn.com/soccer/team/squad/_/id/120/vicenza"
+    ],
+    "note": "Vicenza is not a Club Manager club; a Bologna player; his 2026 row is at Pescara, and he was on loan at Cesena from January"
+  },
+  {
+    "name": "Giovanni Daffara",
+    "to": "Parma",
+    "db": "Parma Calcio 1913",
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://www.juventus.com/it/news/articoli/ufficiale-giovanni-daffara-al-parma-a-titolo-definitivo",
+      "https://www.espn.com/soccer/team/squad/_/id/115/parma"
+    ],
+    "note": "a Juventus player; his 2026 row is at Avellino, where he was on loan"
+  },
+  {
+    "name": "Nicola Leali",
+    "to": null,
+    "db": "Hellas Verona",
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://www.hellasverona.it/news/benvenuto-nicola-leali-e-un-nuovo-giocatore-gialloblu",
+      "https://www.espn.com/soccer/team/squad/_/id/119/hellas-verona"
+    ],
+    "note": "Hellas Verona is not a Club Manager club"
+  },
+  {
+    "name": "Maat Daniel Caprini",
+    "to": null,
+    "db": "Cesena FC",
+    "loan": true,
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://www.acffiorentina.com/news/caprini-ceduto-14-07-2026",
+      "https://www.espn.com/soccer/team/squad/_/id/3337/cesena"
+    ],
+    "note": "Cesena is not a Club Manager club; a Fiorentina player; his 2026 row is at Mantova, where he was on loan; ESPN lists him as Maat Caprini"
+  },
+  {
+    "name": "Rahim Alhassane",
+    "to": "Bologna",
+    "db": "Bologna FC 1909",
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://www.bolognafc.it/rahim-alhassane-al-bologna/",
+      "https://www.espn.com/soccer/team/squad/_/id/107/bologna"
+    ]
+  },
+  {
+    "name": "Matteo Cocchi",
+    "to": null,
+    "db": "Calcio Padova",
+    "loan": true,
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://www.padovacalcio.it/matteo-cocchi-calcio-padova-inter/",
+      "https://www.espn.com/soccer/team/squad/_/id/3952/padova"
+    ],
+    "note": "Padova is not a Club Manager club; his 2026 row is at Inter U23"
+  },
+  {
+    "name": "Alessio Zerbin",
+    "to": "Frosinone",
+    "db": "Frosinone Calcio",
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://www.frosinonecalcio.com/zerbin-torna-in-giallazzurro/",
+      "https://www.espn.com/soccer/team/squad/_/id/4057/frosinone"
+    ],
+    "note": "a Napoli player; his 2026 row is at Cremonese, where he was on loan"
+  },
+  {
+    "name": "Federico Ravaglia",
+    "to": "Watford",
+    "db": "Watford FC",
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://www.bolognafc.it/ravaglia-al-watford/",
+      "https://www.espn.com/soccer/team/squad/_/id/395/watford"
+    ]
+  },
+  {
+    "name": "Luigi Cherubini",
+    "to": null,
+    "db": "Benevento Calcio",
+    "loan": true,
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://www.beneventocalcio.club/news/comunicatistampa/7518/luigi-cherubini-e-un-nuovo-calciatore-del-benevento.shtml",
+      "https://www.espn.com/soccer/team/squad/_/id/4059/benevento"
+    ],
+    "note": "Benevento is not a Club Manager club; a Roma player; his 2026 row is at Sampdoria, where he was on loan"
+  },
+  {
+    "name": "Enzo Tchato",
+    "to": "Frosinone",
+    "db": "Frosinone Calcio",
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://www.frosinonecalcio.com/tchato-e-giallazzurro/",
+      "https://www.espn.com/soccer/team/squad/_/id/4057/frosinone"
+    ]
+  },
+  {
+    "name": "Mattia Perin",
+    "to": null,
+    "db": "Palermo FC",
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://www.palermofc.com/it/news/perin-e-rosanero",
+      "https://www.espn.com/soccer/team/squad/_/id/2923/palermo"
+    ],
+    "note": "Palermo is not a Club Manager club"
+  },
+  {
+    "name": "Pasquale Mazzocchi",
+    "to": "Venezia",
+    "db": "Venezia FC",
+    "loan": true,
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://www.veneziafc.it/news/pasquale-mazzocchi-al-venezia-fc",
+      "https://www.espn.com/soccer/team/squad/_/id/17530/venezia"
+    ]
+  },
+  {
+    "name": "Noel Törnqvist",
+    "to": "Monza",
+    "db": "AC Monza",
+    "loan": true,
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://www.acmonza.com/it/news/noel-tornqvist-e-biancorosso/",
+      "https://www.espn.com/soccer/team/squad/_/id/4007/monza"
+    ]
+  },
+  {
+    "name": "Ricardo Rodríguez",
+    "to": "Torino",
+    "db": "Torino FC",
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://www.torinofc.it/news/03/09/2026/rodriguez-al-toro_44684",
+      "https://www.espn.com/soccer/team/squad/_/id/239/torino"
+    ],
+    "note": "a free agent after Betis, signed 2026-09-03"
+  },
+  {
+    "name": "Kingsley Ehizibue",
+    "to": "Genoa",
+    "db": "Genoa CFC",
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://genoacfc.it/2026/09/03/ehizibue-e-un-nuovo-giocatore-del-genoa/",
+      "https://www.espn.com/soccer/team/squad/_/id/3263/genoa"
+    ],
+    "note": "a free agent after Udinese, signed 2026-09-03"
+  },
+  {
+    "name": "Lorenzo Berardi",
+    "to": "Venezia",
+    "db": "Venezia FC",
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://www.veneziafc.it/news/lorenzo-berardi-al-venezia-fc",
+      "https://www.espn.com/soccer/team/squad/_/id/17530/venezia"
+    ]
+  },
+  {
+    "name": "Alessandro Plizzari",
+    "to": null,
+    "db": "FC Südtirol",
+    "loan": true,
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://www.veneziafc.it/news/alessandro-plizzari-al-fc-sudtirol",
+      "https://www.espn.com/soccer/team/squad/_/id/11139/sudtirol"
+    ],
+    "note": "Südtirol is not a Club Manager club"
+  },
+  {
+    "name": "Paulo Azzi",
+    "to": null,
+    "db": "Modena FC",
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://modenacalcio.com/calciomercato-bentornato-paulo-azzi/",
+      "https://www.espn.com/soccer/team/squad/_/id/2573/modena"
+    ],
+    "note": "Modena is not a Club Manager club; his 2026 row is at Cagliari; he was a Monza player when Modena signed him"
+  },
+  {
+    "name": "Diego Mascardi",
+    "to": "Torino",
+    "db": "Torino FC",
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://www.torinofc.it/news/16/07/2026/mascardi-al-toro_43770",
+      "https://www.espn.com/soccer/team/squad/_/id/239/torino"
+    ]
+  },
+  {
+    "name": "Sebastiano Desplanches",
+    "to": "Frosinone",
+    "db": "Frosinone Calcio",
+    "loan": true,
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://www.palermofc.com/it/news/prolungamento-contrattuale-e-prestito-al-frosinone-per-desplanches",
+      "https://www.espn.com/soccer/team/squad/_/id/4057/frosinone"
+    ],
+    "note": "a Palermo player; his 2026 row is at Pescara, where he was on loan"
+  },
+  {
+    "name": "Andrea Oliveri",
+    "to": null,
+    "db": "Ascoli Calcio",
+    "loan": true,
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://www.ascolicalcio1898.it/ascoli-calcio-calciomercato-ufficiale-andrea-oliveri-dallatalanta/",
+      "https://www.espn.com/soccer/team/squad/_/id/3346/ascoli"
+    ],
+    "note": "Ascoli is not a Club Manager club; an Atalanta player; his 2026 row is at Pescara"
+  },
+  {
+    "name": "Mattia Compagnon",
+    "to": null,
+    "db": "Hellas Verona",
+    "loan": true,
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://www.veneziafc.it/news/mattia-compagnon-all-hellas-verona",
+      "https://www.espn.com/soccer/team/squad/_/id/119/hellas-verona"
+    ],
+    "note": "Hellas Verona is not a Club Manager club"
+  },
+  {
+    "name": "Christian Früchtl",
+    "to": "RB Salzburg",
+    "db": "Red Bull Salzburg",
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://uslecce.it/cessione-fruchtl/",
+      "https://www.espn.com/soccer/team/squad/_/id/2790/rb-salzburg"
+    ]
+  },
+  {
+    "name": "Lorenzo Montipò",
+    "to": "Venezia",
+    "db": "Venezia FC",
+    "window": "2026-summer",
+    "checked": "2026-09-30",
+    "sources": [
+      "https://www.hellasverona.it/news/lorenzo-montipo-a-titolo-definitivo-al-venezia",
+      "https://www.espn.com/soccer/team/squad/_/id/17530/venezia"
+    ]
+  }
+]

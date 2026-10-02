@@ -77,6 +77,7 @@ export function HowToPlayPopover({
             </DialogTitle>
           </DialogHeader>
 
+          {isOpen && <div data-dukb-help-cookie-choices="" className="empty:hidden" />}
           <div className="space-y-5 text-sm">
             {children}
 

@@ -1,0 +1,642 @@
+{
+  "finishedAt": "2026-10-01T22:57:24.252Z",
+  "startedAt": "2026-10-01T22:56:12.384Z",
+  "elapsedMs": 71868,
+  "base": "https://douknowball.com",
+  "viewport": {
+    "width": 390,
+    "height": 844
+  },
+  "assets": [
+    {
+      "url": "https://douknowball.com/assets/index-E8L0RxXO.js",
+      "status": 200,
+      "headers": {
+        "cache-control": "public, max-age=31536000, immutable",
+        "cf-ray": "a43f0f48193e9446-CLE",
+        "content-encoding": "gzip",
+        "content-type": "text/javascript; charset=utf-8",
+        "date": "Thu, 01 Oct 2026 22:56:16 GMT",
+        "etag": "W/\"a04be3e331358cfa3a6ad8b43aba9d4f\"",
+        "referrer-policy": "strict-origin-when-cross-origin",
+        "server": "cloudflare",
+        "strict-transport-security": "max-age=31536000; includeSubDomains",
+        "x-content-type-options": "nosniff",
+        "x-deployment-id": "psr2.4ff29cca-7dce-4d43-82a1-359660f62268.1791500176.hFwQ6MWNGq0Ej2kGzrE4Cl8r2mpzG2DPHXTZbfkm7Ls"
+      },
+      "at": "2026-10-01T22:56:16.661Z"
+    },
+    {
+      "url": "https://douknowball.com/assets/index-E8L0RxXO.js",
+      "status": 200,
+      "headers": {
+        "cache-control": "public, max-age=31536000, immutable",
+        "cf-ray": "a43f0f881f6a9446-CLE",
+        "content-encoding": "gzip",
+        "content-type": "text/javascript; charset=utf-8",
+        "date": "Thu, 01 Oct 2026 22:56:26 GMT",
+        "etag": "W/\"a04be3e331358cfa3a6ad8b43aba9d4f\"",
+        "referrer-policy": "strict-origin-when-cross-origin",
+        "server": "cloudflare",
+        "strict-transport-security": "max-age=31536000; includeSubDomains",
+        "x-content-type-options": "nosniff",
+        "x-deployment-id": "psr2.4ff29cca-7dce-4d43-82a1-359660f62268.1791500186.7lzCkq43BrcH6cZ0AxkTgoU9o8i9SL87j5ChxQb3bqo"
+      },
+      "at": "2026-10-01T22:56:26.975Z"
+    },
+    {
+      "url": "https://douknowball.com/assets/index-E8L0RxXO.js",
+      "status": 200,
+      "headers": {
+        "cache-control": "public, max-age=31536000, immutable",
+        "cf-ray": "a43f10a98eaf9446-CLE",
+        "content-encoding": "gzip",
+        "content-type": "text/javascript; charset=utf-8",
+        "date": "Thu, 01 Oct 2026 22:57:13 GMT",
+        "etag": "W/\"a04be3e331358cfa3a6ad8b43aba9d4f\"",
+        "referrer-policy": "strict-origin-when-cross-origin",
+        "server": "cloudflare",
+        "strict-transport-security": "max-age=31536000; includeSubDomains",
+        "x-content-type-options": "nosniff",
+        "x-deployment-id": "psr2.4ff29cca-7dce-4d43-82a1-359660f62268.1791500233.6jpDANscRh_TDL1HfTO7mbNfTlvqiZi4Jc6v8MLHXOU"
+      },
+      "at": "2026-10-01T22:57:13.330Z"
+    },
+    {
+      "url": "https://douknowball.com/assets/index-E8L0RxXO.js",
+      "status": 200,
+      "headers": {
+        "cache-control": "public, max-age=31536000, immutable",
+        "cf-ray": "a43f10c41d509446-CLE",
+        "content-encoding": "gzip",
+        "content-type": "text/javascript; charset=utf-8",
+        "date": "Thu, 01 Oct 2026 22:57:17 GMT",
+        "etag": "W/\"a04be3e331358cfa3a6ad8b43aba9d4f\"",
+        "referrer-policy": "strict-origin-when-cross-origin",
+        "server": "cloudflare",
+        "strict-transport-security": "max-age=31536000; includeSubDomains",
+        "x-content-type-options": "nosniff",
+        "x-deployment-id": "psr2.4ff29cca-7dce-4d43-82a1-359660f62268.1791500237.t1qzEhzv1t27ewGq8eX8R3xoTVETEJRQqH9v18mr4dg"
+      },
+      "at": "2026-10-01T22:57:17.339Z"
+    },
+    {
+      "url": "https://douknowball.com/assets/index-E8L0RxXO.js",
+      "status": 200,
+      "headers": {
+        "cache-control": "public, max-age=31536000, immutable",
+        "cf-ray": "a43f10d37c4f9446-CLE",
+        "content-encoding": "gzip",
+        "content-type": "text/javascript; charset=utf-8",
+        "date": "Thu, 01 Oct 2026 22:57:19 GMT",
+        "etag": "W/\"a04be3e331358cfa3a6ad8b43aba9d4f\"",
+        "referrer-policy": "strict-origin-when-cross-origin",
+        "server": "cloudflare",
+        "strict-transport-security": "max-age=31536000; includeSubDomains",
+        "x-content-type-options": "nosniff",
+        "x-deployment-id": "psr2.4ff29cca-7dce-4d43-82a1-359660f62268.1791500239.0whfW93QBMl4oACUFvRwSIBJSuEwBfZ5Vn9bDkNyXHM"
+      },
+      "at": "2026-10-01T22:57:19.763Z"
+    },
+    {
+      "url": "https://douknowball.com/assets/index-E8L0RxXO.js",
+      "status": 200,
+      "headers": {
+        "cache-control": "public, max-age=31536000, immutable",
+        "cf-ray": "a43f10e32e3e9446-CLE",
+        "content-encoding": "gzip",
+        "content-type": "text/javascript; charset=utf-8",
+        "date": "Thu, 01 Oct 2026 22:57:22 GMT",
+        "etag": "W/\"a04be3e331358cfa3a6ad8b43aba9d4f\"",
+        "referrer-policy": "strict-origin-when-cross-origin",
+        "server": "cloudflare",
+        "strict-transport-security": "max-age=31536000; includeSubDomains",
+        "x-content-type-options": "nosniff",
+        "x-deployment-id": "psr2.4ff29cca-7dce-4d43-82a1-359660f62268.1791500242.PXby-BCBd1kyz__obtgzkMJYVCBRIsHmwN1ID6muxXA"
+      },
+      "at": "2026-10-01T22:57:22.185Z"
+    }
+  ],
+  "boundary": "Actual native UI in disposable context; no injected engine/player/state. Read-only saved-state inspection. Only deliberately labelled corrupt local save values injected after gameplay. All outward non-GET/HEAD/OPTIONS and ad/analytics requests blocked.",
+  "season": {
+    "seasonEnd": true,
+    "sacked": false,
+    "ending": "played the season out",
+    "halftimes": 0,
+    "fullTimes": 6,
+    "subsMade": 0,
+    "shapeChanges": 0,
+    "windows": 11,
+    "signingsMade": 0,
+    "liveSkips": 0,
+    "reviewSeen": true,
+    "finalClub": "Brentford",
+    "finalSeason": 1,
+    "week": 54,
+    "calendarLength": 54
+  },
+  "driverFindings": [
+    {
+      "kind": "BROKEN ",
+      "detail": "never reached a single half time, so Round 119 is not covered by this run"
+    },
+    {
+      "kind": "SHALLOW",
+      "detail": "reached the season review having signed nobody, so the transfer business block was not rendered and its branch is still uncovered"
+    },
+    {
+      "kind": "SHALLOW",
+      "detail": "11 transfer window(s) opened and not one signing completed, so the market was not exercised either"
+    }
+  ],
+  "errors": [],
+  "checks": [
+    {
+      "name": "refresh preserves initial native save",
+      "pass": false
+    },
+    {
+      "name": "native renewal changes saved player",
+      "pass": true
+    },
+    {
+      "name": "refresh preserves settled season/offseason save bytes",
+      "pass": true
+    }
+  ],
+  "extra": {
+    "renewalButtons": 3,
+    "renewal": {
+      "beforeBudget": 69,
+      "afterBudget": 60.7,
+      "changedPlayers": [
+        {
+          "id": "p-dango-ouattara",
+          "name": "Dango Ouattara"
+        }
+      ]
+    },
+    "fastForwards": 5,
+    "offseason": {
+      "heading": "BRENTFORD",
+      "text": "Skip to main content DOUKNOWBALL Back Track stats Brentford 2027-28 · Season 2 Season not started £142m No matches yet Board Under pressure Fans Hopeful Home Squad Tactics Table Market ☀️ Transfer window open. Tap to do business before your next match PREMIER LEAGUE · ROUND 1 Brentford vs Wolves Away · their strength ~82 · your XI avg 86 Play Live ⚡ Quick Sim On the pitch with the break in your hands, or straight to the report. Same match either way. 📊 Match Centre: form, head to head, odds, team talk Club home August 2027 S M T W T F S 1 2 3 4 5 6 7 8 9 10 11 12 13 14 ⚽ @ WOL 15 16 17 18 19 20 21 ⚽ v CPA 22 23 24 25 26 27 28 ⚽ @ NEW 29 30 31 Sat 14 Aug ⚽ at Wolves Premier League Sat 21 Aug ⚽ vs Crystal Palace Premier League Sat 28 Aug ⚽ at Newcastle Premier League ⚽ league match day 🏅 cup ⭐ Europe training 🔓 window opens 🔒 deadline day window open faded: a round you reach by winning the one before Season: August 2027 to May 2028 🏋️ BETWEEN MATCHES Rest first Two light sessions. Freshest legs on Saturday, slowest growth. Balanced Train one day, rest the next. The default rhythm.",
+      "season": 2
+    },
+    "corrupt-null": {
+      "heading": "CLUB MANAGER",
+      "length": 24965,
+      "errorBoundary": false,
+      "text": "Skip to main content DOUKNOWBALL Back Track stats CLUB MANAGER A saved career was found on this device. 💼 Brentford 2027-28 · Season 2 · Week 1 of 54 · Board 49/100 🏆 0 trophies won so far Resume Career Start Fresh Club Manager: Free Football Management Game A full club-management sim in your browser: 330 clubs across 20 real leagues, from the Premier League, the 2. Bundesliga and the Scottish Premiership to the Saudi Pro League, MLS, Croatia, Denmark, Switzerland, Austria and Greece, each with its real squad and market values as of August 2026. Manage today or in a real past season: 2015-16 with Leicester at 5000 to 1, 2010-11 with prime M"
+    },
+    "corrupt-invalid-json": {
+      "heading": "CLUB MANAGER",
+      "length": 24965,
+      "errorBoundary": false,
+      "text": "Skip to main content DOUKNOWBALL Back Track stats CLUB MANAGER A saved career was found on this device. 💼 Brentford 2027-28 · Season 2 · Week 1 of 54 · Board 49/100 🏆 0 trophies won so far Resume Career Start Fresh Club Manager: Free Football Management Game A full club-management sim in your browser: 330 clubs across 20 real leagues, from the Premier League, the 2. Bundesliga and the Scottish Premiership to the Saudi Pro League, MLS, Croatia, Denmark, Switzerland, Austria and Greece, each with its real squad and market values as of August 2026. Manage today or in a real past season: 2015-16 with Leicester at 5000 to 1, 2010-11 with prime M"
+    },
+    "corrupt-empty-object": {
+      "heading": "CLUB MANAGER",
+      "length": 24965,
+      "errorBoundary": false,
+      "text": "Skip to main content DOUKNOWBALL Back Track stats CLUB MANAGER A saved career was found on this device. 💼 Brentford 2027-28 · Season 2 · Week 1 of 54 · Board 49/100 🏆 0 trophies won so far Resume Career Start Fresh Club Manager: Free Football Management Game A full club-management sim in your browser: 330 clubs across 20 real leagues, from the Premier League, the 2. Bundesliga and the Scottish Premiership to the Saudi Pro League, MLS, Croatia, Denmark, Switzerland, Austria and Greece, each with its real squad and market values as of August 2026. Manage today or in a real past season: 2015-16 with Leicester at 5000 to 1, 2010-11 with prime M"
+    }
+  },
+  "samples": [
+    {
+      "label": "job-started",
+      "elapsedMs": 13766,
+      "heading": "BRENTFORD",
+      "club": "Brentford",
+      "season": 1,
+      "budget": 69,
+      "squadSize": 25,
+      "signedNames": [],
+      "geometry": {
+        "width": 390,
+        "bodyWidth": 390,
+        "overflow": 0,
+        "scrollY": 1195
+      }
+    },
+    {
+      "label": "initial-refresh",
+      "elapsedMs": 17931,
+      "heading": "BRENTFORD",
+      "club": "Brentford",
+      "season": 1,
+      "budget": 69,
+      "squadSize": 25,
+      "signedNames": [],
+      "geometry": {
+        "width": 390,
+        "bodyWidth": 390,
+        "overflow": 0,
+        "scrollY": 0
+      }
+    },
+    {
+      "label": "season-step-0",
+      "elapsedMs": 20858,
+      "heading": "BRENTFORD",
+      "club": "Brentford",
+      "season": 1,
+      "budget": 60.7,
+      "squadSize": 25,
+      "signedNames": [],
+      "geometry": {
+        "width": 390,
+        "bodyWidth": 390,
+        "overflow": 0,
+        "scrollY": 0
+      }
+    },
+    {
+      "label": "before-native-season-sim",
+      "elapsedMs": 39386,
+      "heading": "BRENTFORD",
+      "club": "Brentford",
+      "season": 1,
+      "budget": 62.41,
+      "squadSize": 25,
+      "signedNames": [],
+      "geometry": {
+        "width": 390,
+        "bodyWidth": 390,
+        "overflow": 0,
+        "scrollY": 308
+      }
+    },
+    {
+      "label": "after-native-season-sim",
+      "elapsedMs": 41532,
+      "heading": "FULL TIME",
+      "club": "Brentford",
+      "season": 1,
+      "budget": 70.86,
+      "squadSize": 25,
+      "signedNames": [],
+      "geometry": {
+        "width": 390,
+        "bodyWidth": 390,
+        "overflow": 0,
+        "scrollY": 101
+      }
+    },
+    {
+      "label": "before-native-season-sim",
+      "elapsedMs": 43129,
+      "heading": "BRENTFORD",
+      "club": "Brentford",
+      "season": 1,
+      "budget": 70.86,
+      "squadSize": 25,
+      "signedNames": [],
+      "geometry": {
+        "width": 390,
+        "bodyWidth": 390,
+        "overflow": 0,
+        "scrollY": 1410
+      }
+    },
+    {
+      "label": "after-native-season-sim",
+      "elapsedMs": 44552,
+      "heading": "FULL TIME",
+      "club": "Brentford",
+      "season": 1,
+      "budget": 74.19,
+      "squadSize": 25,
+      "signedNames": [],
+      "geometry": {
+        "width": 390,
+        "bodyWidth": 390,
+        "overflow": 0,
+        "scrollY": 101
+      }
+    },
+    {
+      "label": "before-native-season-sim",
+      "elapsedMs": 45844,
+      "heading": "BRENTFORD",
+      "club": "Brentford",
+      "season": 1,
+      "budget": 74.19,
+      "squadSize": 25,
+      "signedNames": [],
+      "geometry": {
+        "width": 390,
+        "bodyWidth": 390,
+        "overflow": 0,
+        "scrollY": 1196
+      }
+    },
+    {
+      "label": "after-native-season-sim",
+      "elapsedMs": 48625,
+      "heading": "BRENTFORD",
+      "club": "Brentford",
+      "season": 1,
+      "budget": 79.11,
+      "squadSize": 25,
+      "signedNames": [],
+      "geometry": {
+        "width": 390,
+        "bodyWidth": 390,
+        "overflow": 0,
+        "scrollY": 1196
+      }
+    },
+    {
+      "label": "season-step-12",
+      "elapsedMs": 49218,
+      "heading": "BRENTFORD",
+      "club": "Brentford",
+      "season": 1,
+      "budget": 79.11,
+      "squadSize": 25,
+      "signedNames": [],
+      "geometry": {
+        "width": 390,
+        "bodyWidth": 390,
+        "overflow": 0,
+        "scrollY": 1196
+      }
+    },
+    {
+      "label": "before-native-season-sim",
+      "elapsedMs": 50408,
+      "heading": "BRENTFORD",
+      "club": "Brentford",
+      "season": 1,
+      "budget": 79.11,
+      "squadSize": 25,
+      "signedNames": [],
+      "geometry": {
+        "width": 390,
+        "bodyWidth": 390,
+        "overflow": 0,
+        "scrollY": 0
+      }
+    },
+    {
+      "label": "after-native-season-sim",
+      "elapsedMs": 51616,
+      "heading": "FULL TIME",
+      "club": "Brentford",
+      "season": 1,
+      "budget": 89.23,
+      "squadSize": 25,
+      "signedNames": [],
+      "geometry": {
+        "width": 390,
+        "bodyWidth": 390,
+        "overflow": 0,
+        "scrollY": 101
+      }
+    },
+    {
+      "label": "before-native-season-sim",
+      "elapsedMs": 52782,
+      "heading": "BRENTFORD",
+      "club": "Brentford",
+      "season": 1,
+      "budget": 89.23,
+      "squadSize": 25,
+      "signedNames": [],
+      "geometry": {
+        "width": 390,
+        "bodyWidth": 390,
+        "overflow": 0,
+        "scrollY": 1310
+      }
+    },
+    {
+      "label": "after-native-season-sim",
+      "elapsedMs": 54109,
+      "heading": "FULL TIME",
+      "club": "Brentford",
+      "season": 1,
+      "budget": 94.86,
+      "squadSize": 25,
+      "signedNames": [],
+      "geometry": {
+        "width": 390,
+        "bodyWidth": 390,
+        "overflow": 0,
+        "scrollY": 101
+      }
+    },
+    {
+      "label": "primary-walk-end",
+      "elapsedMs": 56239,
+      "heading": "SEASON 1 COMPLETE",
+      "club": "Brentford",
+      "season": 1,
+      "budget": 94.86,
+      "squadSize": 25,
+      "signedNames": [],
+      "geometry": {
+        "width": 390,
+        "bodyWidth": 390,
+        "overflow": 0,
+        "scrollY": 101
+      }
+    },
+    {
+      "label": "offseason-or-next-season",
+      "elapsedMs": 59274,
+      "heading": "BRENTFORD",
+      "club": "Brentford",
+      "season": 2,
+      "budget": 142,
+      "squadSize": 23,
+      "signedNames": [],
+      "geometry": {
+        "width": 390,
+        "bodyWidth": 390,
+        "overflow": 0,
+        "scrollY": 827
+      }
+    },
+    {
+      "label": "settled-refresh",
+      "elapsedMs": 64295,
+      "heading": "BRENTFORD",
+      "club": "Brentford",
+      "season": 2,
+      "budget": 142,
+      "squadSize": 23,
+      "signedNames": [],
+      "geometry": {
+        "width": 390,
+        "bodyWidth": 390,
+        "overflow": 0,
+        "scrollY": 0
+      }
+    }
+  ],
+  "actions": [
+    {
+      "label": "the 2026-27 era",
+      "at": 7682
+    },
+    {
+      "label": "England",
+      "at": 8493
+    },
+    {
+      "label": "Premier League",
+      "at": 9340
+    },
+    {
+      "label": "the pinned confirm bar",
+      "at": 10408
+    },
+    {
+      "label": "skip the dugout form, the classic career",
+      "at": 11790
+    },
+    {
+      "label": "resume after initial reload",
+      "at": 17249
+    },
+    {
+      "label": "the match centre",
+      "at": 21076
+    },
+    {
+      "label": "back out of the match centre",
+      "at": 21840
+    },
+    {
+      "label": "the calendar tile",
+      "at": 22597
+    },
+    {
+      "label": "back out of the calendar",
+      "at": 24042
+    },
+    {
+      "label": "quick sim",
+      "at": 24827
+    },
+    {
+      "label": "continue from the report",
+      "at": 26397
+    },
+    {
+      "label": "play it live",
+      "at": 27108
+    },
+    {
+      "label": "4x speed",
+      "at": 28698
+    },
+    {
+      "label": "skip to the break",
+      "at": 29524
+    },
+    {
+      "label": "second half inside the viewer",
+      "at": 31168
+    },
+    {
+      "label": "skip to full time",
+      "at": 33890
+    },
+    {
+      "label": "full report",
+      "at": 36143
+    },
+    {
+      "label": "continue from the report",
+      "at": 37695
+    },
+    {
+      "label": "calendar for native rest of season",
+      "at": 38519
+    },
+    {
+      "label": "native rest of season",
+      "at": 40079
+    },
+    {
+      "label": "continue from the report",
+      "at": 41913
+    },
+    {
+      "label": "native rest of season",
+      "at": 43648
+    },
+    {
+      "label": "continue from the report",
+      "at": 44920
+    },
+    {
+      "label": "native rest of season",
+      "at": 46323
+    },
+    {
+      "label": "back to the hub",
+      "at": 49595
+    },
+    {
+      "label": "native rest of season",
+      "at": 50885
+    },
+    {
+      "label": "continue from the report",
+      "at": 51874
+    },
+    {
+      "label": "native rest of season",
+      "at": 53309
+    },
+    {
+      "label": "continue from the report",
+      "at": 54351
+    },
+    {
+      "label": "advance into offseason",
+      "at": 57421
+    },
+    {
+      "label": "resume after settled reload",
+      "at": 63538
+    }
+  ],
+  "traffic": {
+    "blockedWrites": [
+      {
+        "method": "POST",
+        "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/game_completions"
+      },
+      {
+        "method": "POST",
+        "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/game_completions"
+      },
+      {
+        "method": "POST",
+        "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/game_completions"
+      },
+      {
+        "method": "POST",
+        "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/game_completions"
+      },
+      {
+        "method": "POST",
+        "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/game_completions"
+      },
+      {
+        "method": "POST",
+        "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/game_completions"
+      },
+      {
+        "method": "POST",
+        "url": "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/game_completions"
+      }
+    ],
+    "blockedTracking": [],
+    "publicReads": 351
+  }
+}

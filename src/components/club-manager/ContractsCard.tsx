@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
-import { money, moneyIn, wageBill, wageCapFrom, renewalTerms, renewalTermsWithClause, expiringPlayers, sellValue, severanceFor, severanceBill, releaseBlock, freeAgentBlock, freeAgentTerms } from '@/lib/clubManager';
+import { money, moneyIn, wageBill, wageCapFrom, renewalTerms, renewalTermsWithClause, renewContract, renewContractWithClause, expiringPlayers, sellValue, severanceFor, severanceBill, releaseBlock, freeAgentBlock, freeAgentTerms } from '@/lib/clubManager';
 import type { CareerState, CMPlayer, ReleaseBlock, FreeAgentBlock, FreeAgent } from '@/lib/clubManager';
 import { ratingTint, MadeUpTag } from '@/components/club-manager/SquadScreen';
 
@@ -77,6 +77,24 @@ export function ContractsCard({ career, onRenew, onRenewWithClause, onRelease, o
     .filter(p => !p.onLoan && (p.releaseClause ?? 0) > 0)
     .sort((a, b) => (sellValue(b) / (b.releaseClause as number)) - (sellValue(a) / (a.releaseClause as number)));
 
+  const forecast = (p: CMPlayer, kind: 'plain' | 'clause' | 'remove', terms: ReturnType<typeof renewalTerms> & { clause?: number }, next: CareerState | null) => {
+    const nextBill = next ? wageBill(next) : bill;
+    const nextCap = next?.wageCap ?? wageCapFrom(nextBill);
+    return (
+      <div data-contract-preview={kind} data-contract-player-id={p.id} className="mt-1 rounded-lg border border-border/40 bg-secondary/30 p-2 text-[10px] leading-relaxed text-muted-foreground break-words">
+        <p className="font-bold text-foreground">{terms.years} years at {terms.wage}k a week. {money(terms.fee)} to sign.</p>
+        <p>{terms.clause === undefined ? 'No release clause.' : `Exit clause ${money(terms.clause)}. Any club can pay it.`}</p>
+        {next ? (
+          <>
+            <p>Leaves <span className="font-bold text-foreground">{money(next.budget)}</span> in the transfer kitty.</p>
+            <p>Wage bill: {nextBill}k of {nextCap}k a week.</p>
+            {nextBill > nextCap && <p className="text-amber-400">Over the wage budget by {nextBill - nextCap}k a week. The board notice every week.</p>}
+          </>
+        ) : <p className="text-amber-400">Need {money(terms.fee - career.budget)} more for the signing fee.</p>}
+      </div>
+    );
+  };
+
   const row = (p: CMPlayer) => {
     const terms = renewalTerms(p);
     const withClause = renewalTermsWithClause(p);
@@ -94,29 +112,35 @@ export function ContractsCard({ career, onRenew, onRenewWithClause, onRelease, o
           </div>
           <span className={cn('text-sm font-bold font-display', ratingTint(p.rating))}>{p.rating}</span>
         </div>
-        <div className="mt-1 flex gap-1.5 pl-11">
-          <button
-            onClick={() => onRenew(p.id)}
-            disabled={!affordable}
-            title={affordable
-              ? `${terms.years} more years at ${terms.wage}k a week, ${money(terms.fee)} to sign. No clause; deletes any he carries.`
-              : `You cannot afford the ${money(terms.fee)} signing on fee`}
-            className={cn('flex-1 px-2 py-1.5 rounded-lg text-[10px] font-bold transition-all',
-              affordable ? 'bg-primary text-primary-foreground hover:opacity-90' : 'bg-secondary text-muted-foreground cursor-not-allowed')}
-          >
-            Renew · {terms.wage}k/w · {money(terms.fee)}
-          </button>
-          <button
-            onClick={() => onRenewWithClause(p.id)}
-            disabled={!clauseAffordable}
-            title={clauseAffordable
-              ? `${withClause.years} years at only ${withClause.wage}k a week, ${money(withClause.fee)} to sign, but a ${money(withClause.clause)} release clause any club can pay. It cannot be rejected or blocked.`
-              : `You cannot afford the ${money(withClause.fee)} signing on fee`}
-            className={cn('flex-1 px-2 py-1.5 rounded-lg text-[10px] font-bold transition-all border',
-              clauseAffordable ? 'border-gold/60 bg-gold/10 text-foreground hover:border-gold' : 'border-border bg-secondary text-muted-foreground cursor-not-allowed')}
-          >
-            +Clause · {withClause.wage}k/w · exit {money(withClause.clause)}
-          </button>
+        <div className="mt-1 grid grid-cols-2 gap-1.5">
+          <div className="min-w-0">
+            <button
+              onClick={() => onRenew(p.id)}
+              disabled={!affordable}
+              title={affordable
+                ? `${terms.years} more years at ${terms.wage}k a week, ${money(terms.fee)} to sign. No clause; deletes any he carries.`
+                : `You cannot afford the ${money(terms.fee)} signing on fee`}
+              className={cn('w-full min-h-11 px-2 py-1.5 rounded-lg text-[10px] font-bold transition-all',
+                affordable ? 'bg-primary text-primary-foreground hover:opacity-90' : 'bg-secondary text-muted-foreground cursor-not-allowed')}
+            >
+              Renew · {terms.wage}k/w · {money(terms.fee)}
+            </button>
+            {forecast(p, 'plain', terms, renewContract(career, p.id))}
+          </div>
+          <div className="min-w-0">
+            <button
+              onClick={() => onRenewWithClause(p.id)}
+              disabled={!clauseAffordable}
+              title={clauseAffordable
+                ? `${withClause.years} years at only ${withClause.wage}k a week, ${money(withClause.fee)} to sign, but a ${money(withClause.clause)} release clause any club can pay. It cannot be rejected or blocked.`
+                : `You cannot afford the ${money(withClause.fee)} signing on fee`}
+              className={cn('w-full min-h-11 px-2 py-1.5 rounded-lg text-[10px] font-bold transition-all border',
+                clauseAffordable ? 'border-gold/60 bg-gold/10 text-foreground hover:border-gold' : 'border-border bg-secondary text-muted-foreground cursor-not-allowed')}
+            >
+              +Clause · {withClause.wage}k/w · exit {money(withClause.clause)}
+            </button>
+            {forecast(p, 'clause', withClause, renewContractWithClause(career, p.id))}
+          </div>
         </div>
       </div>
     );
@@ -162,32 +186,37 @@ export function ContractsCard({ career, onRenew, onRenewWithClause, onRelease, o
           <div className="text-[10px] uppercase tracking-wider font-bold pt-1 text-muted-foreground">
             🔓 Release clauses you have granted ({claused.length})
           </div>
+          <div className="max-h-64 overflow-y-auto" data-contract-clauses>
           {claused.map(p => {
             const ratio = sellValue(p) / (p.releaseClause as number);
             const terms = renewalTerms(p);
             const affordable = terms.fee <= career.budget;
             return (
-              <div key={p.id} className="flex items-center gap-2 py-1 border-b border-border/30 last:border-0">
-                <div className="flex-1 min-w-0">
-                  <div className="text-xs text-foreground truncate">{p.name}</div>
-                  <div className={cn('text-[9px]', ratio >= 1 ? 'text-red-400 font-bold' : 'text-muted-foreground')}>
-                    clause {money(p.releaseClause as number)} · worth {money(sellValue(p))}{ratio >= 1 ? ' · A BARGAIN, clubs will pay this' : ''}
+              <div key={p.id} className="py-1 border-b border-border/30 last:border-0">
+                <div className="flex items-center gap-2">
+                  <div className="flex-1 min-w-0">
+                    <div className="text-xs text-foreground truncate">{p.name}</div>
+                    <div className={cn('text-[9px]', ratio >= 1 ? 'text-red-400 font-bold' : 'text-muted-foreground')}>
+                      clause {money(p.releaseClause as number)} · worth {money(sellValue(p))}{ratio >= 1 ? ' · A BARGAIN, clubs will pay this' : ''}
+                    </div>
                   </div>
+                  <button
+                    onClick={() => onRenew(p.id)}
+                    disabled={!affordable}
+                    title={affordable
+                      ? `A plain renewal deletes the clause: ${terms.years} years at ${terms.wage}k a week, ${money(terms.fee)} to sign.`
+                      : `Deleting the clause means a full renewal, and you cannot afford the ${money(terms.fee)} fee`}
+                    className={cn('shrink-0 min-h-11 px-2.5 py-1.5 rounded-lg text-[10px] font-bold transition-all',
+                      affordable ? 'bg-primary text-primary-foreground hover:opacity-90' : 'bg-secondary text-muted-foreground cursor-not-allowed')}
+                  >
+                    Remove · {money(terms.fee)}
+                  </button>
                 </div>
-                <button
-                  onClick={() => onRenew(p.id)}
-                  disabled={!affordable}
-                  title={affordable
-                    ? `A plain renewal deletes the clause: ${terms.years} years at ${terms.wage}k a week, ${money(terms.fee)} to sign.`
-                    : `Deleting the clause means a full renewal, and you cannot afford the ${money(terms.fee)} fee`}
-                  className={cn('shrink-0 px-2.5 py-1.5 rounded-lg text-[10px] font-bold transition-all',
-                    affordable ? 'bg-primary text-primary-foreground hover:opacity-90' : 'bg-secondary text-muted-foreground cursor-not-allowed')}
-                >
-                  Remove · {money(terms.fee)}
-                </button>
+                {forecast(p, 'remove', terms, renewContract(career, p.id))}
               </div>
             );
           })}
+          </div>
         </>
       )}
 

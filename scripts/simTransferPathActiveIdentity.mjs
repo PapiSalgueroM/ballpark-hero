@@ -134,12 +134,18 @@ if (CONTROL === 'rawname') {
 const entry = path.join(tmp, 'tpai-entry.mjs');
 const bundle = path.join(tmp, 'tpai-bundle.mjs');
 globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
+/* Round 795: the active identity evidence is the HAND overlay. The generated
+   window rows (scripts/data/window2026/overlayAdditions.generated.mjs) would
+   activate one more identity (Alvaro Morata), which moves the tripwires
+   below and the active hints refresh migration, so that change belongs to a
+   Transfer Path round that reviews it. scripts/simWindow2026Integration.mjs
+   reports exactly which identities the window rows would add. */
 fs.writeFileSync(entry, [
   `export { isActivePlayer, playersUnderRule } from '${modesPath}';`,
   `export { transferPathIdentityKey } from '${SRC}/lib/transferPathIdentity.ts';`,
   `export { VERIFIED_ACTIVE_IDENTITY_KEYS } from '${identitiesPath}';`,
   `export { careerPlayers as fallbackPlayers } from '${SRC}/data/careerPlayers.ts';`,
-  `export { TRANSFER_OVERLAY_2026 as overlay } from '${SRC}/../scripts/transferOverlay2026.mjs';`,
+  `export { TRANSFER_OVERLAY_2026_HAND as overlay } from '${SRC}/../scripts/transferOverlay2026.mjs';`,
 ].join('\n'));
 await build({ entryPoints: [entry], bundle: true, format: 'esm', platform: 'node', outfile: bundle, logLevel: 'error', alias: { '@': path.join(ROOT, 'src') } });
 const site = await import(pathToFileURL(bundle).href + `?v=${Date.now()}`);

@@ -1,5 +1,651 @@
 # Project state
 
+## Recovery verified lightly, desktop/Supabase control stopped, 2026-10-02
+
+Claude857f26a0 closes incident since02:49 EDT. Independent dashboard shows
+Healthy/MICRO/11MB/s and one tiny public score read answered200 in295ms.
+Owner asked Codex to stop using the computer/Supabase; no further UI input,
+DB queries, probes or sweeps from this lane. Claude keeps database/release.
+Codex prepared the free Micro quote but did not click final confirmation;
+the later dashboard already showed Micro. No pending upgrade decision.
+871/874 source pushed, focused proof/reviews clear.873 source pushed but PB
+timing review repair still required.872 transport guards remain under test.
+Final clean type/build/fences follow integration. Next free875.
+
+
+## Codex874 ticker load ownership claimed, 2026-10-02
+
+Root adds hidden-tab/in-flight/stale-reply/cancellation guards to existing
+live ticker reads. Source currently allows overlap and hidden polling.
+Recent separate logs show151 score calls/58 HTTP5xx in15 minutes, not proof
+of cause. Keep data/freshness/cadence/feed/cron unchanged. Offline tests only.
+871-873 continue. Micro confirmation pending. Next free875.
+
+
+## Incident UI: Nano despite Pro, free Micro change prepared, 2026-10-02
+
+Owner authorized Supabase computer control. Dashboard currently says
+Unhealthy/NANO. Reviewed Nano to Micro quote is+$0.00/month ($9.68 before and
+after, taxes excluded), with automatic restart and possible extended downtime.
+Final confirmation has NOT been clicked; action-time user choice is pending.
+Claude should avoid a simultaneous resize/restart. One separate ClickHouse
+log aggregation, no Postgres SQL/REST probe, shows continued timeout-bearing
+entries in the last15 minutes.871-873 remain offline. Recovery unconfirmed.
+
+
+## Codex871-873 claimed, database incident priority, 2026-10-02 02:35 EDT
+
+New owner screenshot shows Disk IO budget warning and schema connection
+timeout. Recovery is unconfirmed; all Codex production traffic stays stopped.
+Offline builders:871 cancellable/bounded Player Bingo loads,872 test-runner
+transport safety,873 invisible guest home-stat reads. No database mutation,
+restart, spend change or live test. Source traffic risks do not prove the exact
+outage cause. Claude keeps recovery and pending publication. Next free874.
+
+
+## Codex863-870 handoff, source throughda976382 pushed, 2026-10-02
+
+Seven product scopes and one reload-driver repair merged with Claude Release R.
+App type/build0,12 source guards and15 built fences green.112 new runtime
+cases and867's7 reload checks pass. Final entryindex-OjecPy7M.js, SHA256
+b9fc28441893467b73f8b63257f79f6db5dd772c11b4c3f4cbceae19bd543bcd.
+868/869 actual UI8/8,362 checks: six pointer/keyboard and two real Chromium
+touch contexts, save/reload and read-only calendar return.562 external
+attempts blocked,0 external responses/page errors. Original six-case receipt
+held, touch report separate. All owned contexts/browsers/local server closed.
+12 relevant root/gate/HEAD sources match normalized EOL; no runtime changed
+after final gate. Detailed evidence and failed-driver/type logs retained.
+
+New source is on main, publication not verified by this lane.864 is reported
+in Claude's live Release R; remaining new scopes require release verification.
+Database incident remains open by last notice, no live requests resumed.
+Data-backed native863/865/866/870, whole live suite and physical-device/Safari
+remain pending. Next free871, no claim made. Paused drafts/stashes untouched.
+
+
+## Codex863-870 final offline gate and management native verified, 2026-10-02
+
+Final accepted-files type/build0,12 selected source guards and all15 built
+fences pass. Entryindex-OjecPy7M.js, SHA256
+b9fc28441893467b73f8b63257f79f6db5dd772c11b4c3f4cbceae19bd543bcd.
+112 new runtime cases,867 reload7/7 and existing accounting baselines pass.
+Four test inference errors corrected by fixture CareerState annotation;
+granted-clause quotes bounded inside existing scroll pattern. Actual management
+UI6/6,254 checks at320/390/1440: real renewal/save/reload and read-only calendar
+return. Pointer/keyboard at phone widths, actual touch follows separately.
+All outside HTTP/WebSocket transport blocked,0 external responses/page errors.
+Data-backed native863/865/866/870 and live release verification remain pending
+the database incident. Paused drafts/stashes preserved. Next free871.
+
+
+## Codex870 earned Bingo feedback source verified, 2026-10-02
+
+Extra-line banner uses actual line delta's points, with polite status and finite
+motion-safe animation.7 actual-page cases and four asserted copied controls
+pass; before5pass/2fail. Independent scoring2/2 held,14 explicit unselected.
+Real page/line accounting/share/booking with fictional boundary pool/criteria,
+no real-data/native proof. Runtime scoring/completion/placement unchanged.
+Peer review clear. Clean combined type/build running with final868/869 too;
+then15 offline built fences and native management checks with all external
+requests blocked. No production probes/publication. Next free871.
+
+
+## Codex868 legacy-cap forecast corrected, 2026-10-02
+
+Peer review found a real old-save mismatch: absent wageCap falls back from the
+new bill after signing. Forecast now uses actual next-state cap consistently.
+Expanded15 focused cases pass; original faulty initializer rejects3 exact
+legacy quote/committing outcomes with12 held. Budget/fee11/4, cap2/13 controls
+accepted, all15 run. No engine/cap rules changed. Peer review closed; final
+combined type/build running on accepted files only, native remains pending.
+Database incident still holds every outgoing production query. Next free871.
+
+
+## Codex869 calendar shortcut source verified, 2026-10-02
+
+Current date changes only the visible simulated month and inspected day,
+with44px native button.8 focused cases pass from6fail/2held before. Five
+asserted controls reject one intended outcome each, two original baselines
+hold, five explicit selected skips per control. Normal has no skips. Anchor
+fence554 scripts green. All engine/date/save/training/simulation behavior
+unchanged. Native actual Enter/mobile geometry and combined gates follow870.
+Production incident stays open. Next free871.
+
+
+## Codex868 contract previews source verified, 2026-10-02
+
+Actual renewal functions drive visible term/fee/clause/budget/wage forecasts,
+including Remove full-renewal cost and signing shortfall. Original one-tap
+callbacks and soft cap remain.13 focused cases and three controls pass with
+actual engine/save reload baselines. Before10fail/3pass; copied quote controls
+reject9 targets/4held, cap rejects2/11held. No engine/data/hook changes. Final
+combined type/build/native gates await869/870. Production incident remains
+open and all transport stopped. Native preparation must block every external
+URL. Next free871.
+
+
+## Codex867 verified;870 bonus feedback claimed, 2026-10-02
+
+Guess the Nation reload driver now finds actual ResultScreen, with one exact
+selector change and all assertions preserved. Offline7/7 pass; clear/silent
+controls reject the intended restore/booking regressions. Fresh pull before
+870 is up to date. Player Bingo bonus feedback will show actual earned line
+delta instead of a constant100.868 contract/869 calendar work continues.
+Merged863-866 type/build and15 offline built fences pass. Seven source scopes
+pass across runs; one concurrent Silverware page case returned STACK_TRACE_ERROR,
+then unchanged one-worker replay10/10 and all three controls passed. Cause is
+not proven; retain failed log. Database incident still holds live testing.
+Next free871.
+
+
+## Codex867-869 claimed after Release R merge, 2026-10-02
+
+Merged Claude's source atd2466763 with863/865/866. Both documentation lanes
+retained. Release R is reported live by Claude (b710846e), but the database
+incident remains open, so no production probes or live publication from this
+lane. Clean merged type/build running. Claim867 Guess the Nation reload-driver
+result targeting,868 Club Manager contract cost/budget/term previews,869
+calendar return to current date. Scopes are separate, no engine/data changes.
+Paused football guide is held in a scoped stash, other drafts untouched.
+Next free870. The later gate receipt will supersede pre-merge build evidence.
+
+
+## Codex866 source accepted, Release R integration pending, 2026-10-02
+
+Silverware reveals wait for deliberate Next/See results and show earned points,
+with keyboard focus and44px action.10 focused cases/three controls, existing
+recording67 checks and peer review pass. Final daily still saves/books at the
+deciding answer. Pre-Release-R clean type/build,15 offline built fences and7
+selected source harnesses pass. Source863d7c3c755/8650a1942fe are local only:
+remote advances rejected their pushes; earlier pushed wording was premature.
+864f0c70331 and incident merge160de45d reached main. Root integrates Release R
+next, preserving paused football guide separately. No live requests or
+publication until the database incident is cleared. Next unclaimed867.
+
+
+## Codex863 source accepted, native pending, 2026-10-02
+
+Ball IQ now explains actual answer outcomes and submitted/correct progress,
+focuses enabled Next after the player's answer and adds finite feedback motion
+with static reduced mode. Questions/hook/IQ/save/share/booking remain unchanged.
+11 focused cases,13 executable copied controls and peer review pass. Clean
+app type/build,15 offline built fences and7 source harnesses green. Real-data
+native acceptance is pending the database incident,0 native passes credited.
+864/865 and incident merge pushed;866 source follows. No production reads,
+publication or approval claim. Exact audit receipt recorded in docs/audits.
+
+## Codex865 source accepted, native pending, 2026-10-02
+
+Tennis/NASCAR requests now belong to their current run; exited/unmounted replies
+stay quiet and cannot alter score or unlock a newer check.50 focused cases and
+two asserted controls pass, peer review clear, no backend/data changes.
+Clean app type/build,15 offline built fences and7 selected source harnesses
+green. Native unavailable because production GETs stall,0 native passes
+credited. All production probes/contexts stopped, publication held.864 and
+incident merge are pushed;863/866 source commits follow. Exact receipt in
+docs/audits/PLAYER-DECISION-REPAIR-RECEIPT-2026-10-02.md. Paused drafts preserved.
+## INCIDENT 2026-10-02 00:10 ET to 02:49 ET: the production database stopped answering (CLOSED)
+
+**Closed 02:49 ET.** The owner restarted the database at 01:58 (Postgres came back and still crawled: an admin
+statement took 34 s at 02:35), raised the disk from 2 GB to 8 GB at about 02:28 (free; it was not full: 655 MB of
+data, 144 MB of WAL), and the instance came up again at 02:49 (`pg_postmaster_start_time` 06:49:24 UTC). REST has
+answered in 0.1 to 0.7 s since, the rank refresh runs in 1.2 to 1.7 s, `max_connections` is still 60 (Micro). A
+Postgres restart did not help and a machine restart did, so the likeliest cause is memory pressure and swap on a
+1 GB instance after a day of very heavy reads and the midnight load, not a spent burst allowance as first read
+below. Light check after recovery, once each: `simWindow2026Integration` APPLIED, `simPlayersPool`,
+`simLeaderboardCache` green; `/leaderboard` and `/footle` load live; reports `2e3dc3dc` and `1bc9b2e5` closed.
+What follows is the account written while it was open.
+
+From about 04:10 UTC the Supabase project answered REST calls with 5xx or not at all (20 to 25 second aborts),
+PostgREST logged "Timed out acquiring connection from connection pool", pg_cron logged "job startup timeout" for
+the rank refresh from 04:15 on, Auth refreshes timed out, and catalog queries took 8 to 16 seconds. The project
+reported ACTIVE_HEALTHY throughout. One admin connection at 01:13 ET showed 25 of 60 connections open, nothing
+waiting on a lock, nothing idle in a transaction and almost nothing active: the instance itself was throttled,
+the pattern of a spent CPU or disk IO burst allowance (Round 370's subject), not a blocked or crashed database.
+- **What preceded it:** a day of very heavy reads from both lanes (agents pulling whole tables, spot checks,
+  bakes, the audit), four data migrations at 00:00 to 00:03 ET, the Eastern midnight rollover, and then this
+  lane's release gate against the live tables: about 40 harnesses and a 546 page browser sweep, run more than
+  once inside the hour as main kept moving. The migrations themselves verified clean before the slowdown.
+- **What was done:** every harness and headless browser of this lane was killed at 00:41 ET; the board carried a
+  stop notice and Codex stopped its live runs; the owner was notified. No admin action was possible beyond that
+  (the MCP has no restart, and pause or restore is not something to try on production).
+- **What players saw:** games that read the database (dailies, the leaderboard, player search, score recording)
+  failed or hung; games that run from baked data kept working.
+- **Standing change:** the live reading harnesses and the browser sweeps run once per release, never in parallel
+  lanes, never in the half hour after a data migration and never around midnight Eastern. Recovery or a larger
+  compute size is the owner's call.
+
+## LIVE 2026-10-02: Release R (840 the rendered home page keeps its copy, 850 Soccer Career loses no years, 795 the 2026 transfer windows, Claude828 NFL real 53, Claude833 US career stat lines and era money, 706's college table cleanup, six Codex repairs), main `ab34dbb0`
+
+Assembled by the desktop Claude lane in the gate clone (`release-r`) and published at 01:29 Eastern (the data
+went in at 00:03; the publish waited on two more merges of main and then on the incident above), because two of
+its parts move a daily pool. **douknowball.com is serving it:** deployment `b710846e`, called only
+after `get_project` showed `latest_commit_sha` `ab34dbb0`; the live entry moved from `index-COxixK8K.js` to
+`index-DIZtEVXD.js`. Proof by content: the live Soccer Career chunk contains the new CONVICTED row and the pushed on line; the About copy is served as its own chunk (`HomeAbout-sFh8leVb.js`, 9.4 KB) and renders on the home page; `/front-office` renders the full roster copy; `/whats-new` carries the new lines; six changed routes answer 200.
+
+- **840, fix 1 of the rendered audit (the AdSense and indexing work order).** The home page's written copy lived
+  only in the template and vanished when React mounted, so the page Google renders and a reviewer lands on was a
+  wall of tiles. The copy now lives in `src/data/homeCopy.ts`; `scripts/genHomeCopy.mjs` writes it into
+  `index.html` between two markers and the React home renders the same sections as an "About DoUKnowBall" block
+  below the last sport section. Measured on the built site with the audit's own harness: the home page settles at
+  19,807 characters on desktop and 17,808 on a phone with 0 lost (before: all 5,592 saved characters lost), 16
+  blocks of 120 characters or more against 5, exactly one h1, the first tile where it was (y 249 on a phone).
+  **The review removed hidden text:** the builder had put half the headline in a clipped 1 pixel span so a
+  renderer read more than a visitor saw. The h1 is the brand, as it was; the description is visible text only;
+  `simHomeCopy` part 8 and `playHomeFold` now fail on any visually hidden text in the home page.
+- **795, from two player reports (`2e3dc3dc`, `1bc9b2e5`: stale transfers and missing players in Player Bingo).**
+  The January and summer 2026 windows, researched league by league in Rounds 735 to 740 with two sources a move,
+  reached the tables at 00:03 ET on 2026-10-02 through one guarded migration: 482 market rows moved to the verified
+  club, 3 players inserted, 490 stint rows added (5,862 to 5,865 rows for 2026; the migration's own hash checks
+  passed). Player Bingo, Footle, Rarity Round and player search read the table directly. `simWindow2026Integration`
+  reports APPLIED (0 rows at the measured club, 482 at the verified one, 490 of 490 stints covered). The apply
+  call typed the lists, so each was held to the md5 of the committed file's rows and it went in on the first try.
+  Only the Footle fallback was re-baked tonight (`src/data/players.ts`, `simPlayersPool` green). The Club Manager
+  rosters, club squads, rebuild squads and nationalities re-bakes are owed as their own gated round.
+- **706's data half, held since Release K for a midnight:** `cbb_programs` lost its three schools filed twice (281 to 278 rows), `cfb_qb_stats` and
+  `cfb_rb_stats` lost their placeholder names (5,800 to 5,797 and 14,800 to 14,787), each through its own guarded
+  block; `simCollegeTables` is green on the live counts. Still held: `nfl_draft_picks` with the College Grid key
+  regeneration and table reload (a multi step change that belongs with Round 841), and `ncaa_player_stats`.
+- **Claude828: the NFL front office starts every club with its real 53 and practice squad.** Source: the nflverse
+  rosters release, season 2026 week 4, read 2026-10-01, committed as `scripts/data/nflRosters2026.json` with a
+  generator that bakes offline (`--check` compares byte for byte) and a left out list with a reason per man (360:
+  kickers, punters and long snappers, reserve list men who are not starters, eight with no birth date, one position
+  disagreement). Spot check: 60 men on six clubs against each club's own page and ESPN, 59 settled and agreeing.
+  936 men with no 2025 season are rated on draft position and service and wear a small "d" wherever the rating
+  shows. Salaries are the game's own curve and the page says so. Old saves replay identically (465 states).
+  The review found the bake could not be reproduced from committed files (fixed). Over the limit after the draft,
+  the NFL now does what MLB and NHL do: computer clubs cut themselves, the user's club is never cut behind his
+  back, and Play is locked with the count owed until he cuts.
+- **Claude833: the four US careers' visible defects.** Defenders, kickers and relievers printed "undefined rec,
+  undefined yds" and ".000, undefined HR"; each position now has its own line on every surface, awards carry the
+  right names, and holds count. Throwback careers were paid 2026 money on every contract card; the supermax is
+  gated on the 2017 offseason and the qualifying offer on 2013 (two sources each) and all cards quote the engine's
+  own market at the era's scale. Shop items can no longer push a rating past potential. 2026 careers move only
+  where a card's money changed (the tables are in the review).
+
+- **850, QA847-14 from Codex847's audit: Soccer Career lost a season every time a retirement suggestion was
+  declined** (one audited career lost six). `advanceProSeason` aged the player before the suggestion's early
+  return and Keep Playing only changed the phase. Keep Playing now plays the pending season. The review found the
+  same loss in two more places and fixed them under one rule, a year lived always has exactly one row: the severe
+  injury rehab year (about 40 percent of all careers lost one) now records the season the engine generated up to
+  the injury, and a corruption trial year records the same zero appearance row the ban and prison years use. Over
+  60 careers a policy and five seed bases, years lived with no row went from 28 to 40 (accepting), 234 to 263
+  (declining) and 211 to 269 (the worst road) to 0. A career the old engine never stopped is byte identical end to
+  end; accepting retirement is byte identical on 80 of 80. Old saves sitting on the warning, the rehab choice or
+  the trial paper get exactly one row; years already lost are not invented back. Declining careers now retire
+  about two years younger (40.4 to 40.9 against 43), because the phantom years no longer skip the ageing.
+  **Two reds that are not this round's, both measured on the tree without it:** `simBallonDorFairness` fails at
+  its fixed seed here and fails on main at 5 seeds of 20 (this tree 4 of 20); and `playSoccerCareer`, the real
+  browser walk, reaches no Champions League campaign in its 240 steps and once crashed its tab, with and without
+  this round (same seed, same result on the tree without 850). The walk has not been run since the dilemma and
+  social screens started taking steps; it needs a longer budget and the tab crash needs a look. Open item.
+- **Codex846, 852, 853, 854, 855, 856**, six repairs from its audit backlog, merged from main (the abandoned Soccer
+  Higher or Lower reveal, the account dialog focus and wording, front office save recovery, Footle's currency
+  label, the cookie choices inside Help, a narrow toast). One conflict with Claude828 in `FrontOfficeBoard.tsx`,
+  both sides kept; its save recovery test now waits for the NFL board's async start.
+
+**Gates.** Type gate 0 on the final tree. Before the midnight step: 58 fences in three lanes (two reds settled: a pinned test count, and `simPlayersPool`, which could only go green after the re-bake and did), then again after each of three merges of main: the snapshot readers (25 or 26 each time), the rounds' own fences and both lanes' new harnesses. **Real browser pass on the built site, four times as the tree changed** (Chromium, host like server): `sweepGames` 182 routes at phone, tablet and desktop, 546 checks, 0 findings on the final tree (the first pass found one thing, a What's New line that printed the old bug text; reworded); `playGames` clean on fifteen routes; `playHomeFold`, `playSoftFourOhFour`, `playRenderStability` green; the rendered audit on the home page; `sweepWeight` green after the About copy moved to its own lazy chunk (the first build put it in the entry chunk and six pages went over budget; only `/` and `/front-office` needed a new measured budget). **Not measured on the final tree:** the last pass was cut short by the database incident above, so `simLeaderboardCache`, `simWindow2026Integration` and `simPlayersPool` have their green from earlier the same hour, not from the final merge (which changed none of their inputs). Verified on the live site in a real browser after the publish: the home page shows the About section, 16 paragraphs of 120 characters or more, one h1, no console errors; `/front-office` describes the 53 and the practice squad. No page that reads the database could be verified live.
+
+**Not in this release.** 848 (shared daily save hardening) is built and in review. Claude830 (NHL rosters) waits for a re-read after the opening
+night roster deadline. Claude825, 827, 832, 834 and 835 wait for review or their data order.
+
+## Codex864 accepted, 2026-10-02
+
+Club Manager facilities now show actual upgrade benefit and remaining budget,
+with shortfall/max explanations and44px controls. Real engine and save unchanged.
+11 focused cases and two asserted quote controls pass; native6/6 new-career
+paths at four widths pass147 assertions with actual purchases and five reloads.
+No overflow/page errors/writes. Clean combined type/build pass; final built
+fences remain pending. Root pushes this repair separately;863/865/866 continue.
+Shared browser public-data loading stall is being traced separately. No live
+publication or Google approval claimed. Paused drafts remain untouched.
+
+## Codex863-866 claimed, 2026-10-02
+
+Continue noticeable product work:863 Ball IQ answer/progress presentation,
+864 Club Manager facilities benefit/budget preview,865 Tennis/NASCAR stale
+validation isolation,866 Silverware deliberate result advance. Three builders
+own disjoint scopes; root owns866 and integration/Git/native gates. Existing
+questions, real sports data, simulation engines and backend stay unchanged.
+Pull before work was up to date at3f9d517a. Claude reserved/held work and paused
+842-845 drafts are untouched. No user browser connector/visible tabs. Next867.
+
+## Twelve Codex source repairs pushed, 2026-10-02
+
+New85956534e17 input/charge cues,8602b553ae6 deadline,8617340ad12 leaderboard
+claims and8625515beb2 result visuals follow the eight repairs recorded below.
+163 new focused cases total. Clean gate type/build0; all15 built-site fences
+and25 distinct selected harnesses green across accepted runs. Production entry
+index-3CYGbOij.js, SHA256
+7ea4e205f04fb3e594980bad134efe7e937a9f650f3dfee94ecc23e814dccb81.
+Native24 release paths, four ten-shot dailies and eight actual scoring practice
+cases pass, with original driver/test limits retained in the new arcade/scoring
+receipt. Main source through5515beb2 is pushed, not confirmed published. Claude
+owns full-suite/release/live verification and his reserved simulation/data work.
+Paused842-845 drafts excluded; scoped stash and unrelated files preserved.
+No visible test tabs or user-browser connector. Next free863.
+
+## Codex862 accepted visible arcade results, 2026-10-02
+
+Free Kick/Buzzer now show larger verdicts/points and stronger existing motion.
+Scoring, details/status, immediate Next and complete reduced-motion output
+stay intact. Six real scoring cases at320/390/1440 reduced and two animated
+wins at320 pass;24 ordinary miss cases fit too. Existing feedback10/10 and
+final harness pass. Clean type/build, all15 built fences and25 distinct
+selected harnesses pass across accepted runs. Detailed receipt records earlier
+timeouts/driver limits.85956534e17,8602b553ae6,8617340ad12,8625515beb2 are pushed.
+Only separate hidden CLI browsers used. Next free863; publication is Claude's.
+
+## Codex861 accepted truthful leaderboard copy, 2026-10-02
+
+Page and crawler copy require a positive ranked score; unscored finishes give
+plays/streak credit with0 points. Eight focused/eight existing failure cases
+pass; four-copy-target control rejects universal claims while four accounting
+baselines hold. CRLF matching/source-byte checks and final anchor fence pass.
+Only leaderboard snapshot and its derived sitemap date change,169 dates held.
+No scoring/backend/layout edit. Clean type/build and all15 built fences pass.
+85956534e17 and8602b553ae6 pushed;862 visual commit follows. Next free863.
+
+## Codex860 accepted Face Off deadline guard, 2026-10-01
+
+One actual-clock guard rejects expired answers before settlement.15 focused
+hook cases pass; the removed guard fails ten targets with five baselines held.
+Native ordinary timeout plus controlled correct/wrong delayed clicks all pay0.
+Native versus/full match not tested. No dealing/scoring/data/backend change.
+Clean type/build, all15 built fences and selected source harnesses pass.859
+is committed56534e17;861/862 follow separately. Next free863.
+
+## Codex859 accepted arcade input and charge cues, 2026-10-01
+
+Free Kick/Buzzer outside release now fires once using owned primary capture.
+Cancel/lost capture/pause/start/unmount clear holds; button shows Release while
+charging.30 focused cases, seven controls and native24 inside/outside paths
+pass. Four real ten-shot dailies at320 keyboard/1440 mouse finish, restart and
+refresh with one booking and no duplicate. Physics/scoring/practice preserved.
+Clean combined type/build and all15 built fences pass. Anchor fence caught two
+new raw read paths; matching now normalizes CRLF with raw bytes held, final
+source runner green.860/861/862 ship separately next. Next free863.
+
+## Codex eight-repair batch on main, 2026-10-01
+
+Accepted product commits:846 b69beca6,852 4de313c8,853 af6eb498,
+854 075ecd04,855 c98e0ad2,856 62dd5692,857 5f11492e,858 a7d47ca9.
+110 new focused cases pass. Latest clean production entry index-BvHMJ6Ub.js;
+type/build and all15 built-site fences pass. Full suite and live publication
+remain Claude release work. Paused842-845 are excluded. Next free859;
+parallel read-only scouting continues without claiming or editing his lanes.
+
+## Codex857 accepted Soccer Career save repair, 2026-10-01
+
+Malformed core saves recover before rendering and retain their raw bytes until
+explicit delete/new career. Existing synchronous restore and optional migration
+remain.39 focused cases pass; two controls each fail exactly two intended
+outcomes with37 unaffected and no pending/unhandled errors. Native16/16 at320
+touch/1280 pointer verify current recovery and exact older24-season retirement:
+one booking on completion, zero on reload. Clean type/build and all15 built-site
+fences plus857 pass. No engine/data/backend edit. Source ready for Claude's
+publication lane. Eight repairs accepted this batch; next free859.
+
+## Codex858 accepted shared-rules repair, 2026-10-01
+
+RulesGate's visible cookie choices now join its keyboard scope and closing
+manual Help restores its exact trigger. Nine regression cases and two controls
+verify both fixes. Native Face Off at320/390 passes six consent scenarios and
+all18 manual close paths. Clean type/build and all15 built-site fences plus
+the858 harness pass. Shared instructions and seen-per-route behavior remain
+intact. Source ready for Claude publication;857 save recovery is accepted above.
+
+## Codex six-repair batch pushed; next claims857/858, 2026-10-01
+
+846,852,853,854,855,856 are separate main commits through c98e0ad2. Clean
+type/build and22 selected harnesses are green, including all15 built-site
+fences and62 new focused cases. Native game outcomes are in WORKBOARD. Claude
+has a concrete release handoff there; main pushes are not proof of live publish.
+842-845 remain paused. Next857 handles Soccer malformed-save recovery at the
+page boundary without touching Claude850's engine;858 verifies/repairs initial
+RulesGate consent reachability using855's existing region. Next free859.
+
+## Codex855 accepted repair, 2026-10-01
+
+Shared Help's cookie choices now sit inside its focus scope using one existing
+region/handler set. Seven focused cases, six existing Help cases and the
+outside-portal control pass expected outcomes. Six native320/390 contexts in
+each motion mode verify both keyboard directions, visible choices, unchanged
+Essential/Accept gates, Help staying open and banner restoration/reopening.
+Clean type/build, all15 built-site fences and the harness runner pass. Legacy
+handbuilt help is outside this scope. Ready for Claude's publication lane.
+
+## Codex854 accepted repair, 2026-10-01
+
+NFL/NHL malformed saves recover to a usable picker with raw bytes preserved
+until explicit delete/new team; other game saves remain intact.36 focused
+component checks and two guard-removal controls pass expected outcomes. Native
+four320/1440 contexts and12 damaged-save cases pass. Both320 franchises finish a
+whole season, refresh recap/draft and reload2027 after all earned picks.
+Clean type/build, all15 built-site fences and the new harness runner pass.
+Soccer malformed-save recovery remains open. Ready for Claude publication.
+
+## Codex853 accepted repair, 2026-10-01
+
+Account dialogs restore their actual opener focus and signup accurately says
+guests earn points/streaks and appear on the leaderboard. Eight focused cases,
+two removed-protection controls and26 relevant existing/new auth/help tests
+verify the change. Actual Header native16case matrix at320/390 passes with
+reduced and ordinary motion. Clean type/build and all15 built-site fences pass.
+No credentials/backend change. Ready for Claude publication, not claimed live.
+
+## Codex852 accepted repair, 2026-10-01
+
+Footle's result value is labeled in dollars, matching its stored USD millions.
+Accessibility identifies timed modes and links to untimed Footle. Native
+Footle result/refresh at320/1440 and actual Alphabet45s timer pass. Five focused
+tests pass with the old-euro control rejected. Clean type/build, accessibility
+and all15 built-site fences pass. Accessibility's crawler page was redrawn;
+only its derived sitemap date changed. Ready for Claude's publication lane.
+
+## Codex856 accepted repair, 2026-10-01
+
+Mobile toasts sit above the fixed career action bar. Actual Soccer Career
+academy toast with390 pointer,320 touch and1440 desktop permits Next Year,
+advances age once and survives refresh. Hovered toast stays visible past its
+normal delay without blocking the390 action. One Sonner option, no engine
+edit. Clean type/build and all15 built-site fences pass. Ready for Claude's
+publish lane; physical device safe areas and footer-lifted bars are untested.
+
+## Codex846 accepted repair, 2026-10-01
+
+Soccer Higher or Lower restarts are isolated from pending reveals. Six focused
+tests and both negative controls pass their expected outcomes; the original
+hook fails four cases. Native correct/wrong restart paths pass at1280/320.
+Clean production type/build and all15 built-site fences pass for this repair
+batch.852-856 native checks and two new harness reporting repairs continue.
+846 is ready for Claude's publication lane, with no claim that main is live.
+
+## Current Codex repair batch, 2026-10-01
+
+Additional disjoint claims855/856 cover initial help/consent keyboard access
+and narrow toast geometry. Neither changes consent decisions, vendor gating,
+Soccer engine or production sports data. Next free857.
+
+Audit847 was delivered and Anthony said keep going. Product-quality repairs
+resume under the saved AdSense request: root resumes846's Soccer Higher or
+Lower callback isolation;852 fixes Footle's result currency and Accessibility
+timing copy;853 fixes account opener focus and guest-scoring copy;854 repairs
+NFL/NHL structured-save recovery only. Source ownership and verification are
+in WORKBOARD. Claude850 owns lost Soccer seasons,851 schedules/NBA trades,
+848 shared Daily/skip fixes and849 reviewed sports data. Next free855.
+Release Q was pulled at29e64f42, with four paused845 guide drafts preserved in
+a scoped stash and reapplied cleanly.842-845 remain unaccepted and excluded
+from this repair batch. Earlier audit-only notes below describe the audit phase.
+
+## LIVE 2026-10-01: Release Q (839 leaderboard page, Claude822 career calendar inboxes, Claude823 CBB assistants, Claude824 NBA stats and awards, Claude826 Gauntlet overtime label, Claude829 MLB real 26, the rendered audit report), main `30db5f44`
+
+Assembled by the desktop Claude lane in the gate clone (`release-q`). **douknowball.com is serving it:** deployment
+`3798e290`, called only after `get_project` showed `latest_commit_sha` `30db5f44`; the live entry moved from
+`index-E8L0RxXO.js` to `index-COxixK8K.js`. Proof by content: `/whats-new` carries all six new lines; the live Leaderboard chunk contains the failed board and failed rank wording; the live MLB Front Office chunk contains the salary note; the nine changed routes answer 200.
+
+Every round below was built, attacked by an independent reviewer and fixed before it was merged. Numbers written
+ClaudeNNN overlap a Codex round of the same number.
+
+- **839, from the rendered audit: the World Leaderboard told every visitor "No scores yet today".** Two causes.
+  In the database (both migrations applied on 2026-10-01 before this publish, `round_839_leaderboard_board_plan`
+  and `round_839_global_rank_plan`): the period filter could not become an index condition when the period is a
+  function parameter, so the board read the whole covering index (2,831 ms measured against a 3 second anonymous
+  timeout). The window is now a range on the day, the denominators are computed once, and the unfiltered all time
+  board reads the `player_ranks` cache. As a visitor: today 0.2 s (was a 500), all time 0.2 s (was 2.2 s), the
+  30 day rank 0.55 s (was up to 1.96 s). Old against new: identical rows in 62 compared cases. In the page: a
+  failed board or rank call says so (supabase-js resolves on an HTTP error, so the old catch never ran), and Try
+  again really refetches Today and All Time. `simLeaderboardCache` takes its fresh truth from an every game call
+  (the unfiltered call would now be the cache against itself), rechecks after a refresh before failing, and asks
+  every window the page asks as a single anonymous request.
+- **Claude822: NBA, MLB and NHL My Career get the calendar inbox** the NFL career got in Round 796, through the
+  shared `careerInbox.ts` (57, 59 and 54 texts tagged by beat, role senders only, no forward looking text in a
+  final season, the inbox's draws on their own keyed stream so a text cannot reshuffle a career).
+- **Claude823: CBB Dynasty runs the football dynasty's staff, rivalry night and strength of schedule code**, not a
+  copy. The review added the check that a winner always outscores the loser (4 percent of games went red with
+  the clamp removed). The same two fences are owed for CFB after Codex818.
+- **Claude824: NBA Front Office season stats, five awards, and contracts that scale with the cap.** Box scores
+  are written off the result the sim already decided, so lines add up to the score. The review removed a worked
+  example the engine could not produce and fenced the rookie rule. Left open: computer clubs refill on minimum
+  deals, so tax payers still fall to about 0.3 a season from season four; that needs computer free agency.
+- **Claude826: Gauntlet Draft says when a game was settled in extra time or overtime**, in each sport's words, in
+  the one shared engine (same scores for a seed). And a Soccer Career financial crisis no longer wipes the private
+  physio's yearly cost. Left open: "Sell everything" in the four US careers zeroes the bill and keeps the items.
+- **Claude829: MLB Front Office starts every club with its real 26.** Source: MLB's Stats API, each club's list on
+  2026-09-27 (the last day of the regular season), read 2026-10-01, committed with a generator that re-bakes
+  offline. Two spot checks against ESPN, 110 men on eleven clubs, no real disagreement; eleven stat lines identical.
+  The review found Detroit shipping one catcher (the API lists the second as a DH; a club short of two listed
+  catchers now makes up the pair from games caught), a second pair of real namesakes, clubs opening seasons with
+  no catcher (808 of 9,000 club seasons, now 0), the draft carrying clubs past 28 (computer clubs now cut, the
+  user is asked to), and a rival names scanner skip that was three whole files wide (now one exact real name in
+  three files, with a control). Ratings are the game's own from 2026 numbers; twelve are marked thin; the page
+  says salaries are the game's own. Old saves replay identically.
+- **The rendered audit** (`docs/audits/LIVE-RENDERED-AUDIT-2026-10-01.md`, `scripts/playLiveRenderedAudit.mjs`) is
+  on main. Its ranked fix list is the AdSense and indexing work order: 839 was fix 2.
+- **One copy edit:** the magazine cover dilemma in Soccer Career lost its nudity joke (Round 819's reviewer left
+  it for a call against the ad content policies).
+
+**Gates.** Type gate 0 on the merged tree. 55 fences green in three lanes (24 snapshot and release readers; the rounds' own fences including `simLeaderboardCache`, `simCareerInboxBeats`, `simCbbStaff`, `simNbaSeasonStats`, `simNbaLuxuryTax`, `simGauntletEngine`, `simCareerLifeCooldowns`, `simMlbFullRosters` with 6,199 checks, `simFrontOfficeCuts`, `simTradeFinder`); `simHarnessAnchors` was red once on a raw read in `simMlbFullRosters`, fixed and green. The four test files the release changed, 24 tests, pass. **Real browser pass on the built site** (Chromium, host like server): `sweepGames` 182 routes at phone, tablet and desktop, 546 checks, 0 findings; `playGames` clean on `/nba-my-career`, `/mlb-my-career`, `/nhl-my-career`, `/nba-front-office`, `/mlb-front-office`, `/cbb-dynasty`, `/leaderboard`, `/gauntlet-draft`, `/nhl-gauntlet-draft` and `/soccer-career`; `playRenderStability` green on nine routes; `sweepWeight` green. Thirteen pages were redrawn alone. **Release P's owed check:** `simAcademy`, `simEras` and `simRoles` finished green after that publish; `simHalftime`, `simPress` and `simOpposition` hit a 50 minute cap under load and are rerunning without one.
+
+**Held, with the reason.** Claude830 (NHL real rosters, reviewed) is held for data: 61 men on ESPN's club rosters,
+43 of them injured and some of them stars, are missing from the NHL list it was read from, so it will be re-read
+after the opening night roster deadline. Claude833 (US career stat lines and era money, reviewed) needs its merge
+with Claude822 resolved. Claude825 was built late and has not been reviewed. Claude827's reviewed migration waits
+for its place in the data order. Claude834 and 835 (engine lifts with identical fixtures) wait for review.
+
+## LIVE 2026-10-01: Release P (781 Club Manager stoppage time and the aggregate on a second leg; 819 Soccer Career's dilemmas are reachable and every option does what its card says), main `5738ab58`
+
+Assembled by the desktop Claude lane in the gate clone (`release-p`). **douknowball.com is serving it:** deployment
+`4ff29cca`, called only after `get_project` showed `latest_commit_sha` `5738ab58`; the live entry moved from
+`index-Bj5VrkKR.js` to `index-E8L0RxXO.js`. Proof by content: `/whats-new` carries both new lines; the live Soccer Career chunk contains "THE HOTEL BAR" and the private trainer wording; the live match centre and match report chunks contain "First leg"; `/club-manager`, `/soccer-career`, `/buzzer-beater` and `/leaderboard` answer 200.
+
+- **781, from a player report (`f3cd3431`: "no stoppage time goals, and no aggregate on the second leg").** Nothing
+  could happen past the 45th or the 90th minute before; the board on the clock was a caption. The clock now runs
+  on to 45+N and 90+N in the live match and goals, cards and injuries land in it with the right label on every
+  surface (the banner, the timeline, the report): about one goal in 25 in first half stoppage time and one in 12
+  after the 90th. Extra time still only comes when a Champions League decider is level after ninety, and wears its
+  own board at 120. On a second leg the first leg and the running aggregate sit under the score, the match centre
+  says who leads going in, and the bracket labels its headline numbers as the aggregate.
+- **What 781's review changed (five majors, all fixed).** The live goal banner and the extra time clock had no
+  gate at all (a "90'" banner on a stoppage time goal stayed green); a change made at 90 could put an away
+  substitution at 91 to 96 with no plus label (81 of 3,852 changes in a probe); the round broke the pinned
+  shootout fixture from 782 (0 of 150 replays matched; re-recorded from this round's engine before the merge as
+  that harness's header allows, 150 of 150, its control still red on 135); and `simClubManagerStaff` capped scouted
+  ceilings at 93 when the engine allows a rare 95, which was already red on main at one seed.
+- **781 moves every Club Manager match for a given seed.** The goal counts and the board roll are drawn before
+  the goal minutes, over a longer clock, so a save in progress replays differently from here on. Balance is
+  unchanged over 12,000 seeds (level at 90: 18.9 percent before, 19.6 after; goals per match 2.782 and 2.772). Old
+  saves paused mid match open and finish (284 saves, 568 matches, none re-decided). Manager Hot Seat's daily changes
+  on deploy for the same reason; that code tolerates it and `simManagerHotSeat` is green.
+- **819, found by this lane during Round 796.** Soccer Career's moral dilemmas were meant to land about one season
+  in three from age 20 and never did: dismissing the social media screen skipped past them (60 careers, 943
+  social media screens, 0 dilemmas). They now come up after you post, never more than one a season, and nothing
+  piles up from seasons missed.
+- **What 819's review changed.** A doping offer came from "your club's fitness coach" at a real club, with a line
+  saying every top player does it: that is an accusation against an identifiable role at a real club, and it is
+  now a private trainer with nobody from the club involved. An old save with a podium finish years ago got "The
+  snub" at once, because the flag behind it is never cleared; it now fires only on the close of the season the
+  podium came in. About a dozen options did not do what their card said (a "2 season ban" served one, taking the
+  armband never made you captain, joining your rival's club paid the fee and never moved you, a promised fine never
+  came): each now does what it says or says what it does, checked by a new `simCareerDilemmaTruth`. The reach
+  harness could not see a lost consequence (three mutations stayed green) and now can. Balance over 200 careers a
+  policy: no career ends early, and every dilemma has an option that does not hurt you.
+- **Also in this publish:** Codex838's Buzzer Beater three point contest (on main at the merge).
+- **Left open, recorded by the reviewers:** reloading during first half stoppage time opens at the interval;
+  `soccerCareerCorruption.ts` has the same ban off by one on two lines (older code, reachable before this round);
+  a double tap on Continue can reroll a dilemma; a magazine cover joke in one dilemma is the owner's to judge
+  against AdSense.
+
+**Gates.** Type gate 0. Lane A (23 snapshot and release readers) and lane B (21 fences for the two rounds, `simCmStoppageTime` with seven controls, `simCmShootoutOrder`, `simLiveSimMotion`, `simCareerDilemmaReach`, `simCareerDilemmaTruth`, `simNoInventedQuotes`, `simNoInventedConduct` among them) green on the release tree; `simUclSeasonOne`, which had refused to run on main since Round 783 changed the expression its anchors match, was repaired here and is green with its tier, custom and vacuous controls firing. **Real browser pass on the built site** (Chromium, host like server): `sweepGames` 182 routes at phone, tablet and desktop, 546 checks, 0 findings; `playGames` on `/club-manager` and `/soccer-career`, 14 interactions each, clean; `playRenderStability` green on the three redrawn or changed routes; `sweepWeight` green. After the merge of main: type gate 0, `simSitemap`, `simIndexNow`, `simPrerender`, `simHarnessAnchors`, `simNoRivalNames` green. **Not measured on the release tree:** `simHalftime` hit a 50 minute cap with a dozen builders sharing the machine (a season costs the same as on main, 2.4 to 3.0 s against 2.5 to 3.7 s, so it is load, not the round; the reviewer ran its four sections in pieces before the merge, all green), and `simAcademy`, `simPress`, `simRoles`, `simEras` and `simOpposition` were still running at the publish. They are owed as a post release check on a quiet machine. Builder, reviewer and fixer ran on Opus; the lead merged, built and gated here.
+
+## Current audit-only instruction, 2026-10-01
+
+Codex847 is a forensic and hostile QA audit. The latest request explicitly says
+do not fix issues. Local842-846 edits are paused, unaccepted drafts and excluded
+from the clean audit baseline. No production data, gameplay, saved pages or
+deployment changes will be made. Report verified defects with reproduction
+steps, distinguish source checks from browser play, and state coverage gaps.
+Next free round850 after Claude848's shared-code repair claim and his reserved
+849 data review. Earlier active implementation notes below are historical.
+
+Evidence delivered: 174 mounted live pages at 320px, the full 193-row route
+inventory, nine actual ten-round Daily completions, four shared UX defects,
+and the read-only data-quality report. The data lane found 69 overlapping NHL
+structural corruption records, 161 MLB corruption records and Lundqvist's
+displayed 46 points versus two-source 27. Bo Nix remains a source disagreement.
+22 production datasets, 48 local data files and 16 ledgers were inventoried;
+all 64 selected local RAW hashes held. Existing 31 Higher or Lower checks and
+10 sports-facts sections passed, but those do not verify every sports fact.
+No permanent tests or production data corrections were added. The bounded
+simulation and broader gameplay evidence is delivered below; full-catalog
+end-to-end completeness remains unestablished.
+
+Further audit evidence: seven full Front Office regular-season UI runs and
+14 original draft picks, one Club Manager season into its second, Footle Daily
+and Unlimited completions,111 exploratory short-game routes, and Soccer Career
+creation16 through retirement45. Retirement declines lost six seasons and
+desynchronized age/calendar. NBA/MLB schedules give unequal win opportunities;
+NBA/NHL trade screens omit roster depth. Current-live save/crash and Footle
+currency receipts are delivered. These are findings, not repairs or proof of
+whole-game completeness. Claude's Release P was merged and published during
+the audit; current observed entry is E8L0RxXO, while the clean gate remains old.
+The final bounded pass is delivered: four American career flows each completed
+six native season/decision cycles, manual retirement, midcareer/retired return
+and restart (24cycles total). All170 sitemap pages were measured with stored
+Accept and blocked vendor scripts on Release P:75 pages have one reserved slot,
+all150px upper padding. Filled creatives and later-state ad geometry remain
+untested. The193-row inventory now joins gameplay, data, indexability and ad
+evidence.14 product defect families and seven data findings/flags are ranked
+in docs/audits/QUALITY-REPAIR-BACKLOG-2026-10-01.md with exact repair targets,
+page decisions and a20-item pre-submission checklist. All230 corrupt raw records
+are unchanged and annotated; MLB original53 TEXT reversals are distinguished
+from nine real numeric reversals. No fixes or Google review request were made.
+Claude848 owns three shared fixes; his849 data correction remains separately
+reviewed. Preserve842-846. No whole-game completeness or approval claim follows
+from these bounded measurements; unplayed routes/branches remain open.
+
+## Owner priority, clarified 2026-10-01
+
+AdSense approval comes first. Existing games must then have correct data and
+complete gameplay, including connected daily GM/career responsibilities and
+meaningful animations. Build new games only after that quality work. Hold new
+game rounds and avoid new paid services. Current 842-845 content corrections
+continue beside Claude839-841's functional fixes. Keep code-tested, verified-live
+and Google-approved statuses separate. Approval is still unresolved.
+
+## Active Codex work, 2026-10-01
+
+846 adds a concrete existing-game fix found during the guide review: Soccer
+Higher or Lower must cancel a previous answer's delayed callback before a new
+run. The old callback can currently change the fresh pair, score or status.
+Code ownership is separate from the guide copy. Next free round 847.
+
+842-845 accept Claude836's proposed copy work: About/Contact, record-page
+explanations/related links, distinct hub/archive metadata and the ten Higher or
+Lower guides. Disjoint builder ownership is recorded in WORKBOARD. No new
+sports data or game-engine changes are planned. Claude keeps 839-841.
+Next free round 846. Earlier completed/pending notes below are historical.
+
 ## LIVE 2026-10-01: Release O (820 honest Perfect Season odds for NFL, NHL and MLB; 821 the MLB and NHL wheels read their whole tables), main `fcdae1bf`
 
 Assembled by the desktop Claude lane in the gate clone (`release-o`). **douknowball.com is serving it:** deployment

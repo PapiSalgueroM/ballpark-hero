@@ -91,6 +91,7 @@ import { FlagImg, FlagFromEmoji, TextWithFlags } from "@/components/FlagImg";
 import { shareResult } from "@/lib/share";
 import { useRevealScroll } from "@/hooks/useRevealScroll";
 import { TournamentCard, InternationalHistoryTile } from "@/components/soccer-career/InternationalPanel";
+import { isSoccerCareerSave } from '@/lib/soccerCareerSave';
 
 /* ─── Constants ─── */
 // Round 76: 131 nations (was 49), every one with a real flag in FlagImg,
@@ -647,22 +648,24 @@ export default function SoccerCareer() {
      counter is all that is needed to redraw every money figure after the
      picker changes, and it costs nothing when nobody touches it. */
   const [, setCurrencyTick] = useState(0);
-  const [career, setCareer] = useState<CareerState | null>(() => {
+  const [restoredSave] = useState(() => {
+    let saved: string | null;
+    try { saved = localStorage.getItem(SAVE_KEY); } catch { return { career: null, invalid: false }; }
+    if (saved === null) return { career: null, invalid: false };
     try {
-      const saved = localStorage.getItem(SAVE_KEY);
-      if (saved) {
-        const parsed = JSON.parse(saved) as CareerState;
-        /* Round 127's lesson, and Round 131 keeps learning it: repairing a save
-           only inside the step function is not enough, because the player can
-           open the training ground, the phone or the attributes screen before
-           taking a single step. repairCareer fills every optional field this
-           game has grown, including the primeType migration that used to live
-           here, and it runs again at the top of both step functions. */
-        return repairCareer(parsed);
-      }
-    } catch {}
-    return null;
+      const parsed: unknown = JSON.parse(saved);
+      if (!isSoccerCareerSave(parsed)) return { career: null, invalid: true };
+      /* Round 127's lesson, and Round 131 keeps learning it: repairing a save
+         only inside the step function is not enough, because the player can
+         open the training ground, the phone or the attributes screen before
+         taking a single step. repairCareer fills every optional field this
+         game has grown, including the primeType migration that used to live
+         here, and it runs again at the top of both step functions. */
+      return { career: repairCareer(parsed as CareerState), invalid: false };
+    } catch { return { career: null, invalid: true }; }
   });
+  const [career, setCareer] = useState<CareerState | null>(restoredSave.career);
+  const [saveError, setSaveError] = useState(restoredSave.invalid);
   const [clubs, setClubs] = useState<ClubData[]>([]);
   const [clubsLoading, setClubsLoading] = useState(true);
   const [clubsError, setClubsError] = useState(false);
@@ -767,6 +770,7 @@ export default function SoccerCareer() {
     if (!previewStats || !isFormValid || clubs.length === 0 || rolledOvr === null) return;
     const startYear = ERAS.find(e => e.value === era)?.startYear ?? 2020;
     const newCareer = initCareer(playerName.trim(), nationality, position, era, previewStats, rolledOvr, startYear, clubs, appearance, rolledPot ?? undefined, physique, attrShape);
+    setSaveError(false);
     setCareer(newCareer);
     toast.success(`Joined ${newCareer.currentClub}!`);
   };
@@ -1011,7 +1015,7 @@ export default function SoccerCareer() {
 
   const handleDeclineRetirement = () => {
     if (!career) return;
-    setCareer(declineRetirementSuggestion(career));
+    setCareer(declineRetirementSuggestion(career, clubs));
   };
 
   const handlePunditAction = (action: PunditAction) => {
@@ -1056,6 +1060,7 @@ export default function SoccerCareer() {
 
   const handleConfirmNewCareer = () => {
     localStorage.removeItem(SAVE_KEY);
+    setSaveError(false);
     setCareer(null);
     setPreviewStats(null);
     setRolledOvr(null);
@@ -1089,6 +1094,14 @@ export default function SoccerCareer() {
         <GameNavbar />
         <div className="relative z-10 mx-auto w-full max-w-4xl"><GameHelp /></div>
         <main id="dukb-main" className="flex-1 w-full max-w-5xl mx-auto px-3 sm:px-4 py-4">
+          {saveError && !career && (
+            <div role="alert" className="mb-4 rounded-xl border border-amber-500/40 bg-amber-500/10 p-4 space-y-3 text-sm">
+              <p>We couldn't open this save. You can create a new player below. Your old save stays here until you begin a new career or delete it.</p>
+              <Button variant="outline" onClick={() => {
+                try { localStorage.removeItem(SAVE_KEY); setSaveError(false); } catch { toast.error('Could not delete the save. Try again.'); }
+              }}>Delete unusable save</Button>
+            </div>
+          )}
           {!career ? (
             <CreationScreen
               playerName={playerName} setPlayerName={setPlayerName}
@@ -3141,16 +3154,25 @@ function MoralDilemmaCard({ career, onChoice, onDismiss }: {
   onChoice: (choiceIndex: number) => void;
   onDismiss: () => void;
 }) {
-  const [chosen, setChosen] = useState(false);
   const dilemma = career.pendingMoralDilemma;
 
-  if (!dilemma && chosen) {
+  /* Round 819: no pending dilemma on this screen means the choice is made.
+     This used to wait on a local "chosen" flag as well, so a save reloaded
+     between the choice and Continue drew nothing at all and could not move. */
+  if (!dilemma) {
+    /* Round 819 review: say what the choice did, right here. Every option
+       writes its outcome as the last line of the season's events, and before
+       this a caught fixer or a failed test only showed in the log at the
+       bottom of the page. */
+    const outcome = career.events.length > 0 ? career.events[career.events.length - 1] : null;
     return (
       <div className="rounded-xl border-2 border-red-500/40 bg-gradient-to-b from-red-500/10 to-transparent p-6 space-y-4">
         <div className="text-center space-y-2">
           <div className="text-3xl">⚠️</div>
           <h3 className="text-lg font-black">Decision Made</h3>
-          <p className="text-xs text-muted-foreground">The consequences of your choice will unfold...</p>
+          {outcome
+            ? <p data-dilemma-outcome className="text-sm text-foreground/80 leading-relaxed max-w-md mx-auto"><TextWithFlags text={money(outcome)} size={14} /></p>
+            : <p className="text-xs text-muted-foreground">The consequences of your choice will unfold...</p>}
         </div>
         <Button onClick={onDismiss} className="w-full h-10 text-sm font-bold bg-red-600 hover:bg-red-500 text-black">
           Continue →
@@ -3158,8 +3180,6 @@ function MoralDilemmaCard({ career, onChoice, onDismiss }: {
       </div>
     );
   }
-
-  if (!dilemma) return null;
 
   return (
     <div className="rounded-xl border-2 border-red-500/60 bg-gradient-to-b from-red-900/30 via-red-500/5 to-transparent p-6 space-y-5 shadow-[0_0_40px_rgba(239,68,68,0.15)]">
@@ -3180,7 +3200,7 @@ function MoralDilemmaCard({ career, onChoice, onDismiss }: {
         {dilemma.choices.map((choice, i) => (
           <button
             key={i}
-            onClick={() => { onChoice(i); setChosen(true); }}
+            onClick={() => onChoice(i)}
             className="w-full rounded-xl border-2 border-red-500/20 bg-red-500/5 p-4 text-left hover:bg-red-500/15 hover:border-red-500/40 transition-all active:scale-[0.98] group"
           >
             <div className="flex items-start gap-3">

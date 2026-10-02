@@ -1,16 +1,16 @@
 {
   "__version": 3,
   "/": {
-    "hash": "a4fa4e7733ac9013",
-    "date": "2026-10-01"
+    "hash": "49724f1fefbb859f",
+    "date": "2026-10-02"
   },
   "/about": {
     "hash": "74a425d771c0b5e1",
     "date": "2026-10-01"
   },
   "/accessibility": {
-    "hash": "be624390c0098085",
-    "date": "2026-08-27"
+    "hash": "b723b35037fcd796",
+    "date": "2026-10-02"
   },
   "/afl-higher-lower": {
     "hash": "ae510d9d49dca5f1",
@@ -61,8 +61,8 @@
     "date": "2026-10-01"
   },
   "/cbb-dynasty": {
-    "hash": "55acf0673082d064",
-    "date": "2026-09-30"
+    "hash": "a4aaf47c5caeaba6",
+    "date": "2026-10-01"
   },
   "/cbb-grid": {
     "hash": "2312edafa6482e43",
@@ -193,8 +193,8 @@
     "date": "2026-10-01"
   },
   "/front-office": {
-    "hash": "d9fa158a8b694df7",
-    "date": "2026-10-01"
+    "hash": "11ea224bc7ce60fd",
+    "date": "2026-10-02"
   },
   "/gauntlet-draft": {
     "hash": "36beece8c33d7f2d",
@@ -269,8 +269,8 @@
     "date": "2026-09-19"
   },
   "/leaderboard": {
-    "hash": "69ac03793458756a",
-    "date": "2026-09-12"
+    "hash": "78227029f717b3b4",
+    "date": "2026-10-02"
   },
   "/list-quiz": {
     "hash": "b7b5bee9032621cc",
@@ -305,7 +305,7 @@
     "date": "2026-09-30"
   },
   "/mlb-front-office": {
-    "hash": "ff3910fe8e1a2d0c",
+    "hash": "2361a5c36b7c204e",
     "date": "2026-10-01"
   },
   "/mlb-gauntlet-draft": {
@@ -325,7 +325,7 @@
     "date": "2026-09-30"
   },
   "/mlb-my-career": {
-    "hash": "47c8e4cab729629f",
+    "hash": "36d1c6de46af01bc",
     "date": "2026-10-01"
   },
   "/mlb-postseason-format-history": {
@@ -357,7 +357,7 @@
     "date": "2026-09-30"
   },
   "/nba-front-office": {
-    "hash": "f84afe1dcba2eeaf",
+    "hash": "4d57e4a168beaad9",
     "date": "2026-10-01"
   },
   "/nba-gauntlet-draft": {
@@ -377,7 +377,7 @@
     "date": "2026-09-30"
   },
   "/nba-my-career": {
-    "hash": "963e0f7e519ac316",
+    "hash": "47abffbd460c1556",
     "date": "2026-10-01"
   },
   "/nba-playoff-format-history": {
@@ -437,7 +437,7 @@
     "date": "2026-10-01"
   },
   "/nhl-my-career": {
-    "hash": "879134eb6ccda7d9",
+    "hash": "cdb5dda331095416",
     "date": "2026-10-01"
   },
   "/nhl-playoff-format-history": {
@@ -653,8 +653,8 @@
     "date": "2026-09-19"
   },
   "/whats-new": {
-    "hash": "974423a47a0e4b71",
-    "date": "2026-10-01"
+    "hash": "90063d166c795e9c",
+    "date": "2026-10-02"
   },
   "/who-am-i": {
     "hash": "a63cb97ee4158083",

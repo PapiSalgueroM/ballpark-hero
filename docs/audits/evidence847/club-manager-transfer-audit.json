@@ -1,0 +1,356 @@
+{
+  "finishedAt": "2026-10-01T23:00:06.408Z",
+  "startedAt": "2026-10-01T22:59:34.609Z",
+  "elapsedMs": 31799,
+  "base": "https://douknowball.com",
+  "viewport": {
+    "width": 390,
+    "height": 844
+  },
+  "assets": [
+    {
+      "url": "https://douknowball.com/assets/index-E8L0RxXO.js",
+      "status": 200,
+      "headers": {
+        "cache-control": "public, max-age=31536000, immutable",
+        "cf-ray": "a43f142d2d68daa2-CLE",
+        "content-encoding": "gzip",
+        "content-type": "text/javascript; charset=utf-8",
+        "date": "Thu, 01 Oct 2026 22:59:37 GMT",
+        "etag": "W/\"a04be3e331358cfa3a6ad8b43aba9d4f\"",
+        "referrer-policy": "strict-origin-when-cross-origin",
+        "server": "cloudflare",
+        "strict-transport-security": "max-age=31536000; includeSubDomains",
+        "x-content-type-options": "nosniff",
+        "x-deployment-id": "psr2.4ff29cca-7dce-4d43-82a1-359660f62268.1791500377.HKZx9xdkK6x02FdHo5i2CBeqfeDUiQGQltxhTcK6fYM"
+      },
+      "at": "2026-10-01T22:59:37.061Z"
+    },
+    {
+      "url": "https://douknowball.com/assets/index-E8L0RxXO.js",
+      "status": 200,
+      "headers": {
+        "cache-control": "public, max-age=31536000, immutable",
+        "cf-ray": "a43f1461ba85daa2-CLE",
+        "content-encoding": "gzip",
+        "content-type": "text/javascript; charset=utf-8",
+        "date": "Thu, 01 Oct 2026 22:59:45 GMT",
+        "etag": "W/\"a04be3e331358cfa3a6ad8b43aba9d4f\"",
+        "referrer-policy": "strict-origin-when-cross-origin",
+        "server": "cloudflare",
+        "strict-transport-security": "max-age=31536000; includeSubDomains",
+        "x-content-type-options": "nosniff",
+        "x-deployment-id": "psr2.4ff29cca-7dce-4d43-82a1-359660f62268.1791500385.CKADiedLJlfduYhrlhBZMFamldRXX_KfGOaAjx-3-M4"
+      },
+      "at": "2026-10-01T22:59:45.314Z"
+    },
+    {
+      "url": "https://douknowball.com/assets/index-E8L0RxXO.js",
+      "status": 200,
+      "headers": {
+        "cache-control": "public, max-age=31536000, immutable",
+        "cf-ray": "a43f14a789c1daa2-CLE",
+        "content-encoding": "gzip",
+        "content-type": "text/javascript; charset=utf-8",
+        "date": "Thu, 01 Oct 2026 22:59:56 GMT",
+        "etag": "W/\"a04be3e331358cfa3a6ad8b43aba9d4f\"",
+        "referrer-policy": "strict-origin-when-cross-origin",
+        "server": "cloudflare",
+        "strict-transport-security": "max-age=31536000; includeSubDomains",
+        "x-content-type-options": "nosniff",
+        "x-deployment-id": "psr2.4ff29cca-7dce-4d43-82a1-359660f62268.1791500396.aeRn7Q8YDc4w6uCvAN8XaSoIvpGN1J5SwKof3GTRNi0"
+      },
+      "at": "2026-10-01T22:59:56.481Z"
+    },
+    {
+      "url": "https://douknowball.com/assets/index-E8L0RxXO.js",
+      "status": 200,
+      "headers": {
+        "cache-control": "public, max-age=31536000, immutable",
+        "cf-ray": "a43f14bbba71daa2-CLE",
+        "content-encoding": "gzip",
+        "content-type": "text/javascript; charset=utf-8",
+        "date": "Thu, 01 Oct 2026 23:00:00 GMT",
+        "etag": "W/\"a04be3e331358cfa3a6ad8b43aba9d4f\"",
+        "referrer-policy": "strict-origin-when-cross-origin",
+        "server": "cloudflare",
+        "strict-transport-security": "max-age=31536000; includeSubDomains",
+        "x-content-type-options": "nosniff",
+        "x-deployment-id": "psr2.4ff29cca-7dce-4d43-82a1-359660f62268.1791500399.oXRCd2cPNs04EJK53pM70CaKX-QxokxAZIptCyttVdE"
+      },
+      "at": "2026-10-01T22:59:59.768Z"
+    },
+    {
+      "url": "https://douknowball.com/assets/index-E8L0RxXO.js",
+      "status": 200,
+      "headers": {
+        "cache-control": "public, max-age=31536000, immutable",
+        "cf-ray": "a43f14ca4b6fdaa2-CLE",
+        "content-encoding": "gzip",
+        "content-type": "text/javascript; charset=utf-8",
+        "date": "Thu, 01 Oct 2026 23:00:02 GMT",
+        "etag": "W/\"a04be3e331358cfa3a6ad8b43aba9d4f\"",
+        "referrer-policy": "strict-origin-when-cross-origin",
+        "server": "cloudflare",
+        "strict-transport-security": "max-age=31536000; includeSubDomains",
+        "x-content-type-options": "nosniff",
+        "x-deployment-id": "psr2.4ff29cca-7dce-4d43-82a1-359660f62268.1791500402.pAtJ30qh6E5QZ2idDKONJ7-Wli3GQrHriJo8sqIUHq0"
+      },
+      "at": "2026-10-01T23:00:02.005Z"
+    },
+    {
+      "url": "https://douknowball.com/assets/index-E8L0RxXO.js",
+      "status": 200,
+      "headers": {
+        "cache-control": "public, max-age=31536000, immutable",
+        "cf-ray": "a43f14d8ea3adaa2-CLE",
+        "content-encoding": "gzip",
+        "content-type": "text/javascript; charset=utf-8",
+        "date": "Thu, 01 Oct 2026 23:00:04 GMT",
+        "etag": "W/\"a04be3e331358cfa3a6ad8b43aba9d4f\"",
+        "referrer-policy": "strict-origin-when-cross-origin",
+        "server": "cloudflare",
+        "strict-transport-security": "max-age=31536000; includeSubDomains",
+        "x-content-type-options": "nosniff",
+        "x-deployment-id": "psr2.4ff29cca-7dce-4d43-82a1-359660f62268.1791500404.taLitliOH8ldUtDvGJ3hFk7tSeGjBWyvrCjm7307s0Q"
+      },
+      "at": "2026-10-01T23:00:04.376Z"
+    }
+  ],
+  "boundary": "Actual native UI in disposable context; no injected engine/player/state. Read-only saved-state inspection. Only deliberately labelled corrupt local save values injected after gameplay. All outward non-GET/HEAD/OPTIONS and ad/analytics requests blocked.",
+  "season": {
+    "seasonEnd": false,
+    "sacked": false,
+    "ending": "ran out of steps",
+    "halftimes": 0,
+    "fullTimes": 0,
+    "subsMade": 0,
+    "shapeChanges": 0,
+    "windows": 0,
+    "signingsMade": 0,
+    "liveSkips": 0,
+    "reviewSeen": false,
+    "finalClub": "Brentford",
+    "finalSeason": 1,
+    "week": 0,
+    "calendarLength": 54
+  },
+  "driverFindings": [
+    {
+      "kind": "SHALLOW",
+      "detail": "only reached 0 matches, so most of the season was never exercised"
+    },
+    {
+      "kind": "SHALLOW",
+      "detail": "only 0 matches were played, which is too few to have exercised much"
+    },
+    {
+      "kind": "BROKEN ",
+      "detail": "never reached a single half time, so Round 119 is not covered by this run"
+    }
+  ],
+  "errors": [],
+  "checks": [
+    {
+      "name": "refresh preserves initial native save",
+      "pass": false
+    },
+    {
+      "name": "native renewal changes saved player",
+      "pass": true
+    },
+    {
+      "name": "refresh preserves settled season/offseason save bytes",
+      "pass": false
+    }
+  ],
+  "extra": {
+    "renewalButtons": 3,
+    "renewal": {
+      "beforeBudget": 69,
+      "afterBudget": 60.7,
+      "changedPlayers": [
+        {
+          "id": "p-dango-ouattara",
+          "name": "Dango Ouattara"
+        }
+      ]
+    },
+    "marketBefore": "Skip to main content DOUKNOWBALL Back Track stats Brentford 2026-27 · Season 1 Season not started £60.7m No matches yet Board Safe Fans Hopeful Home Squad Tactics Table Market ☀️ Summer window OPEN 4 match weeks until the deadline · offers can arrive any week · loans used 0/2 BUDGET £60.7m AROUND THE LEAGUE 📰 Chelsea sign Désiré Doué from PSG for £97m. 📰 Crystal Palace sign Alessandro Bastoni from Inter Milan for £65m. 📰 Manchester City sign Bukayo Saka from Arsenal for £110m. 📰 💰 The window's biggest deal so far: Bukayo Saka to Manchester City for £110m. Buy Sell Latest ALL GK DEF MID ATT Exact position… GK CB LB RB LWB RWB CDM CM CAM LM RM LW RW ST CF Any age U21 U24 U28 29 plus Any price Under 10m Under 25m Under 60m Any league 2. Bundesliga Austrian Bundesliga Belgian Pro League Bundesliga Danish Superliga EFL Championship Eredivisie La Liga Ligue 1 MLS Eastern Conference MLS Western Conference Premier League Primeira Liga Saudi Pro League Scottish Premiership Serie A Super League Greece SuperSport HNL Swiss Super League Süper Lig Any nation England (283) Spain (283) France (249) Germany (233) Italy (151) Portugal (143) Netherlands (134) Belgium (109) Denmark (98) Switzerland (78) Türkiye (69) Austria (67) Croatia (66) Sweden (56) Norway (52) Ireland (43) Poland (40) Serbia (39) Scotland (38) Greece (37) Czech Republic (28) Bosnia-Herzegovina (23) Wales (22) Romania (1",
+    "nativeSigns": [
+      true,
+      true
+    ],
+    "transfer": {
+      "beforeBudget": 60.7,
+      "afterBudget": 58.1,
+      "beforeSquad": 25,
+      "afterSquad": 27,
+      "newPlayers": [
+        {
+          "id": "sign-daniel-bachmann-s1",
+          "name": "Daniel Bachmann"
+        },
+        {
+          "id": "sign-juan-cuadrado-s1",
+          "name": "Juan Cuadrado"
+        }
+      ]
+    },
+    "literalSearch": {
+      "text": "Skip to main content DOUKNOWBALL Back Track stats Brentford 2026-27 · Season 1 Season not started £58.1m No matches yet Board Safe Fans Hopeful Home Squad Tactics Table Market ☀️ Summer window OPEN 4 match weeks until the deadline · offers can arrive any week · loans used 0/2 BUDGET £58.1m AROUND THE LEAGUE 📰 Chelsea sign Désiré Doué from PSG for £97m. 📰 Crystal Palace sign Alessandro Bastoni from Inter Milan for £65m. 📰 Manchester City sign Bukayo Saka from Arsenal for £110m. 📰 💰 The window's biggest deal so far: Bukayo Saka to Manchester City for £110m. Buy Sell Latest ALL GK DEF MID ATT Exact position… GK CB LB RB LWB RWB CDM CM CAM LM RM LW RW ST CF Any age U21 U24 U28 29 plus Any p",
+      "pageErrors": 0
+    },
+    "corrupt-null": {
+      "heading": "CLUB MANAGER",
+      "length": 24965,
+      "errorBoundary": false,
+      "text": "Skip to main content DOUKNOWBALL Back Track stats CLUB MANAGER A saved career was found on this device. 💼 Brentford 2026-27 · Season 1 · Week 1 of 54 · Board 60/100 🏆 0 trophies won so far Resume Career Start Fresh Club Manager: Free Football Management Game A full club-management sim in your browser: 330 clubs across 20 real leagues, from the Premier League, the 2. Bundesliga and the Scottish Premiership to the Saudi Pro League, MLS, Croatia, Denmark, Switzerland, Austria and Greece, each with its real squad and market values as of August 2026. Manage today or in a real past season: 2015-16 with Leicester at 5000 to 1, 2010-11 with prime M"
+    },
+    "corrupt-invalid-json": {
+      "heading": "CLUB MANAGER",
+      "length": 24965,
+      "errorBoundary": false,
+      "text": "Skip to main content DOUKNOWBALL Back Track stats CLUB MANAGER A saved career was found on this device. 💼 Brentford 2026-27 · Season 1 · Week 1 of 54 · Board 60/100 🏆 0 trophies won so far Resume Career Start Fresh Club Manager: Free Football Management Game A full club-management sim in your browser: 330 clubs across 20 real leagues, from the Premier League, the 2. Bundesliga and the Scottish Premiership to the Saudi Pro League, MLS, Croatia, Denmark, Switzerland, Austria and Greece, each with its real squad and market values as of August 2026. Manage today or in a real past season: 2015-16 with Leicester at 5000 to 1, 2010-11 with prime M"
+    },
+    "corrupt-empty-object": {
+      "heading": "CLUB MANAGER",
+      "length": 24965,
+      "errorBoundary": false,
+      "text": "Skip to main content DOUKNOWBALL Back Track stats CLUB MANAGER A saved career was found on this device. 💼 Brentford 2026-27 · Season 1 · Week 1 of 54 · Board 60/100 🏆 0 trophies won so far Resume Career Start Fresh Club Manager: Free Football Management Game A full club-management sim in your browser: 330 clubs across 20 real leagues, from the Premier League, the 2. Bundesliga and the Scottish Premiership to the Saudi Pro League, MLS, Croatia, Denmark, Switzerland, Austria and Greece, each with its real squad and market values as of August 2026. Manage today or in a real past season: 2015-16 with Leicester at 5000 to 1, 2010-11 with prime M"
+    }
+  },
+  "samples": [
+    {
+      "label": "job-started",
+      "elapsedMs": 10406,
+      "heading": "BRENTFORD",
+      "club": "Brentford",
+      "season": 1,
+      "budget": 69,
+      "squadSize": 25,
+      "signedNames": [],
+      "geometry": {
+        "width": 390,
+        "bodyWidth": 390,
+        "overflow": 0,
+        "scrollY": 1195
+      }
+    },
+    {
+      "label": "initial-refresh",
+      "elapsedMs": 13729,
+      "heading": "BRENTFORD",
+      "club": "Brentford",
+      "season": 1,
+      "budget": 69,
+      "squadSize": 25,
+      "signedNames": [],
+      "geometry": {
+        "width": 390,
+        "bodyWidth": 390,
+        "overflow": 0,
+        "scrollY": 0
+      }
+    },
+    {
+      "label": "before-native-transfer",
+      "elapsedMs": 16386,
+      "heading": "BRENTFORD",
+      "club": "Brentford",
+      "season": 1,
+      "budget": 60.7,
+      "squadSize": 25,
+      "signedNames": [],
+      "geometry": {
+        "width": 390,
+        "bodyWidth": 390,
+        "overflow": 0,
+        "scrollY": 0
+      }
+    },
+    {
+      "label": "after-native-transfer",
+      "elapsedMs": 19980,
+      "heading": "BRENTFORD",
+      "club": "Brentford",
+      "season": 1,
+      "budget": 58.1,
+      "squadSize": 27,
+      "signedNames": [],
+      "geometry": {
+        "width": 390,
+        "bodyWidth": 390,
+        "overflow": 0,
+        "scrollY": 667
+      }
+    },
+    {
+      "label": "primary-walk-end",
+      "elapsedMs": 21311,
+      "heading": "BRENTFORD",
+      "club": "Brentford",
+      "season": 1,
+      "budget": 58.1,
+      "squadSize": 27,
+      "signedNames": [],
+      "geometry": {
+        "width": 390,
+        "bodyWidth": 390,
+        "overflow": 0,
+        "scrollY": 0
+      }
+    },
+    {
+      "label": "settled-refresh",
+      "elapsedMs": 24563,
+      "heading": "BRENTFORD",
+      "club": "Brentford",
+      "season": 1,
+      "budget": 58.1,
+      "squadSize": 27,
+      "signedNames": [],
+      "geometry": {
+        "width": 390,
+        "bodyWidth": 390,
+        "overflow": 0,
+        "scrollY": 0
+      }
+    }
+  ],
+  "actions": [
+    {
+      "label": "the 2026-27 era",
+      "at": 5452
+    },
+    {
+      "label": "England",
+      "at": 6056
+    },
+    {
+      "label": "Premier League",
+      "at": 6817
+    },
+    {
+      "label": "the pinned confirm bar",
+      "at": 7760
+    },
+    {
+      "label": "skip the dugout form, the classic career",
+      "at": 8697
+    },
+    {
+      "label": "resume after initial reload",
+      "at": 13170
+    },
+    {
+      "label": "resume after settled reload",
+      "at": 24003
+    }
+  ],
+  "traffic": {
+    "blockedWrites": [],
+    "blockedTracking": [],
+    "publicReads": 348
+  }
+}

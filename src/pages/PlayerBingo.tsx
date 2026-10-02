@@ -1,5 +1,5 @@
 import { FlagFromEmoji } from '@/components/FlagImg';
-import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { cn } from '@/lib/utils';
 import { Loader2, SkipForward, X } from 'lucide-react';
 import { GameNav } from '@/components/game/GameNav';
@@ -32,6 +32,7 @@ type EndReason = 'deck' | 'strikes' | 'banked' | 'blackout' | null;
 type Phase = 'boot' | 'error' | 'playing' | 'won' | 'lost';
 
 const BEST_KEY = 'player_bingo_best_lines_v2';
+const LOAD_TIMEOUT_MS = 30_000;
 
 function loadBest(): number {
   try { return Number(localStorage.getItem(BEST_KEY)) || 0; } catch { return 0; }
@@ -53,21 +54,40 @@ const PlayerBingo = () => {
   const [best, setBest] = useState(() => loadBest());
   const [extended, setExtended] = useState(false); // accepted "keep playing" after the first bingo
   const [choice, setChoice] = useState(false); // first-line bank/continue prompt is open
-  const [lineFlash, setLineFlash] = useState<number | null>(null); // transient extra-line banner
+  const [lineFlash, setLineFlash] = useState<{ lines: number; points: number } | null>(null); // transient extra-line banner
   const [endReason, setEndReason] = useState<EndReason>(null);
+  const loadRef = useRef<{ controller: AbortController; timer: ReturnType<typeof setTimeout> } | null>(null);
 
   const criteria = useMemo(() => (data ? buildCriteria(data) : []), [data]);
   const cells = useMemo(() => layoutGrid(board), [board]);
 
   const boot = useCallback(async () => {
+    if (loadRef.current) return;
+    const request = { controller: new AbortController(), timer: null as ReturnType<typeof setTimeout> | null };
+    loadRef.current = request;
     setPhase('boot');
-    const d = await fetchBingoData();
-    if (!d) {
+    setData(null);
+    request.timer = setTimeout(() => {
+      if (loadRef.current !== request) return;
+      loadRef.current = null;
+      request.controller.abort();
       setPhase('error');
-      return;
+    }, LOAD_TIMEOUT_MS);
+    try {
+      const d = await fetchBingoData(request.controller.signal);
+      if (loadRef.current !== request || request.controller.signal.aborted) return;
+      if (!d) {
+        setPhase('error');
+        return;
+      }
+      setData(d);
+      setPhase('boot');
+    } catch {
+      if (loadRef.current === request && !request.controller.signal.aborted) setPhase('error');
+    } finally {
+      clearTimeout(request.timer);
+      if (loadRef.current === request) loadRef.current = null;
     }
-    setData(d);
-    setPhase('boot');
   }, []);
 
   const start = useCallback(
@@ -93,7 +113,17 @@ const PlayerBingo = () => {
     [],
   );
 
-  useEffect(() => { boot(); }, [boot]);
+  useEffect(() => {
+    boot();
+    return () => {
+      const request = loadRef.current;
+      loadRef.current = null;
+      if (request) {
+        clearTimeout(request.timer);
+        request.controller.abort();
+      }
+    };
+  }, [boot]);
 
   // Once data + criteria are ready, generate the first board.
   useEffect(() => {
@@ -174,7 +204,7 @@ const PlayerBingo = () => {
         setChoice(true);
         return;
       }
-      if (linesNow > linesCompleted) setLineFlash(linesNow);
+      if (linesNow > linesCompleted) setLineFlash({ lines: linesNow, points: (linesNow - linesCompleted) * 100 });
       advanceOrEnd(linesNow);
     } else {
       setShakeId(cell.id);
@@ -338,7 +368,7 @@ const PlayerBingo = () => {
             </div>
 
             {phase === 'playing' && choice && <FirstLineBanner onBank={bankWin} onContinue={continueRun} />}
-            {phase === 'playing' && !choice && lineFlash !== null && <LineFlash lines={lineFlash} />}
+            {phase === 'playing' && !choice && lineFlash !== null && <LineFlash lines={lineFlash.lines} points={lineFlash.points} />}
 
             {phase === 'playing' && !choice && current && (
               <div className="bg-card border border-border rounded-2xl p-5 text-center mb-4">

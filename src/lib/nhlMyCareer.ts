@@ -39,6 +39,8 @@ import { receiveNhlInboxTexts } from './nhlCareerInbox';
 import type { RivalryEvent } from './careerRivalryEvents';
 import { nhlRivalryTick, nhlRivalryChoiceTick } from './nhlCareerRivalryEvents';
 import type { RivalryChoiceCard } from './careerRivalryChoices';
+import { countOf, nhlMajorAward } from './usCareerStatLine';
+import { raiseWithinPotential, ratingRaiseNote } from './careerHeadroom';
 /* Round 422: the share of gross pay that actually reaches the bank, after tax,
    agent and living. It was already the number this file used to turn career
    earnings into net worth; it is named here so the yearly banking and the
@@ -643,8 +645,12 @@ export function nhlProgress(c: NhlCareerState, rng: () => number): string[] {
   for (const line of nhlMoneySeasonTick(c).events) notes.push(line);
   /* Round 525: the inbox. Silent on purpose, the same way the flagship's
      phone never announces a new text in the season feed: the unread badge
-     on the Inbox box is the tell. */
-  receiveNhlInboxTexts(c, rng);
+     on the Inbox box is the tell. Round 822: it delivers on the hockey
+     calendar and draws from its own keyed stream, never this season's rng,
+     and it is told whether the career goes on (the same nhlShouldRetire the
+     board asks right after this returns), so a player who retires this
+     summer is never sent a text about next season. */
+  receiveNhlInboxTexts(c, !nhlShouldRetire(c));
   return notes;
 }
 
@@ -792,8 +798,10 @@ export function nhlLegacyOf(c: NhlCareerState): NhlLegacy {
     : score >= 330 ? 'Franchise icon, Hall of Very Good'
     : score >= 230 ? 'A long, honest NHL career'
     : 'A cup of coffee and a great story';
+  /* Round 833: a defenceman's trophy count read "2 Norriss". */
+  const award = nhlMajorAward(c.pos);
   const bullets = [
-    `${c.seasons.length} seasons, ${c.cups} Cup${c.cups === 1 ? '' : 's'}, ${c.harts} ${majorAwardName(c.pos)}${c.harts === 1 ? '' : 's'}, ${c.connSmythes} Conn Smythe${c.connSmythes === 1 ? '' : 's'}, ${c.allStars} All-Star nods`,
+    `${c.seasons.length} seasons, ${c.cups} Cup${c.cups === 1 ? '' : 's'}, ${countOf(c.harts, award.one, award.many)}, ${c.connSmythes} Conn Smythe${c.connSmythes === 1 ? '' : 's'}, ${c.allStars} All-Star nods`,
     c.pos === 'G' ? `${t.wins} wins in ${t.games} games` : `${t.goals} goals, ${t.assists} assists, ${t.points} points in ${t.games} games`,
     `${Math.round(c.earnings)}M career earnings, drafted pick ${c.draftPick}`,
   ];
@@ -837,7 +845,7 @@ export const NHL_SPEND_ITEMS: NhlSpendItem[] = [
   { id: 'shot_doctor', name: 'Private Skating Coach', emoji: '🎯', category: 'body', cost: 0, yearly: 0.2, desc: 'The guy who rebuilt three strides, 200k a year', oneTime: true, effect: 'Rating +1 a year while young' },
   { id: 'sleep_nhl', name: 'Sleep Program', emoji: '😴', category: 'body', cost: 0.7, desc: 'Turns out most of it is sleep, 700k', oneTime: true, effect: 'Health +8' },
   { id: 'psych_nhl', name: 'Sports Psychologist', emoji: '🧠', category: 'body', cost: 0, yearly: 0.12, desc: 'The part nobody used to talk about, 120k a year', oneTime: true, effect: 'Morale +8 on hire' },
-  { id: 'biomech_nhl', name: 'Biomechanics Team', emoji: '🔬', category: 'body', cost: 1.2, desc: 'They rebuilt your landing mechanics, 1.2M', oneTime: true, effect: 'Rating +2' },
+  { id: 'biomech_nhl', name: 'Biomechanics Team', emoji: '🔬', category: 'body', cost: 1.2, desc: 'They rebuilt your landing mechanics, 1.2M', oneTime: true, effect: 'Rating +2, up to your ceiling' },
   // Flex
   { id: 'chain_nhl', name: 'The Chain', emoji: '💎', category: 'flex', cost: 0.6, desc: 'Iced out, photographed in every tunnel, 600k', oneTime: false, minFanbase: 40 },
   { id: 'tunnel_fits', name: 'A Stylist And A Tunnel Budget', emoji: '🕶️', category: 'flex', cost: 0, yearly: 0.3, desc: 'The tunnel is a runway now, 300k a year', oneTime: true, minFanbase: 45, effect: 'Fanbase +5 a year' },
@@ -862,7 +870,7 @@ export const NHL_SPEND_ITEMS: NhlSpendItem[] = [
   { id: 'hshady_offshore', name: 'Offshore Account', emoji: '🏝️', category: 'shady', cost: 0.5, desc: 'An island, a bank, a form nobody files, 500k', oneTime: true, requiresDirty: true, effect: 'Hides money, heat +6' },
   // Round 59 hockey specific
   { id: 'skate_sharpener', name: 'Your Own Skate Sharpener', emoji: '⛸️', category: 'body', cost: 0, yearly: 0.07, desc: 'Travels with you, one hollow, never wrong, 70k a year', oneTime: true, effect: 'Morale +4 a year' },
-  { id: 'shooting_room', name: 'Home Shooting Room', emoji: '🥅', category: 'body', cost: 0.5, desc: 'Synthetic ice, radar, 500 pucks a night, 500k', oneTime: true, effect: 'Rating +1' },
+  { id: 'shooting_room', name: 'Home Shooting Room', emoji: '🥅', category: 'body', cost: 0.5, desc: 'Synthetic ice, radar, 500 pucks a night, 500k', oneTime: true, effect: 'Rating +1, up to your ceiling' },
   { id: 'billet_house', name: 'Buy Your Billet Family A House', emoji: '🏠', category: 'family', cost: 1.5, desc: 'They fed you for three years at sixteen, 1.5M', oneTime: true, minNetWorth: 2, effect: 'Morale +15' },
   { id: 'junior_stake', name: 'Buy Into Your Junior Club', emoji: '🏒', category: 'invest', cost: 3, desc: 'The barn you came up in, 3M', oneTime: true, minNetWorth: 5, effect: 'Fanbase +8' },
   { id: 'outdoor_rink', name: 'Build An Outdoor Rink In Your Town', emoji: '❄️', category: 'home', cost: 0.8, yearly: 0.05, desc: 'Free, lit, open until 11pm all winter, 800k', oneTime: true, minNetWorth: 1.5, effect: 'Fanbase +10' },
@@ -904,7 +912,7 @@ export function buyNhlItem(c: NhlCareerState, itemId: string): { state: NhlCaree
     case 'youth_academy_nhl': s.fanbase = Math.min(100, s.fanbase + 8); log = 'Your academy opened with 120 kids on day one.'; break;
     case 'team_stake': s.fanbase = Math.min(100, s.fanbase + 10); log = 'You own a piece of a franchise now. The other owners are still deciding how they feel about that.'; break;
     case 'sleep_nhl': s.health = Math.min(100, s.health + 8); log = 'Turns out it was mostly sleep the whole time. Health +8.'; break;
-    case 'biomech_nhl': s.ovr = Math.min(99, s.ovr + 2); log = 'They rebuilt how you land and everything got easier. Rating +2.'; break;
+    case 'biomech_nhl': s.ovr = raiseWithinPotential(s.ovr, s.pot, 2); log = `They rebuilt how you land and everything got easier. ${ratingRaiseNote(c.ovr, s.ovr, 2)}`; break;
     case 'psych_nhl': s.morale = Math.min(100, s.morale + 8); log = 'Best hire you ever made and the one you almost skipped. Morale +8.'; break;
     case 'mom_house_nhl': s.morale = Math.min(100, s.morale + 15); log = 'You handed your mother the keys and she did not say a word for a full minute. Morale +15.'; break;
     case 'siblings_nhl': s.morale = Math.min(100, s.morale + 10); log = 'Every sibling, all four years, paid in full. Morale +10.'; break;
@@ -916,7 +924,7 @@ export function buyNhlItem(c: NhlCareerState, itemId: string): { state: NhlCaree
     case 'hshady_club': { const w = Math.min(4, c.dirtyMoney ?? 0); s.dirtyMoney = Math.max(0, Math.round(((s.dirtyMoney ?? 0) - 4) * 10) / 10); s.netWorth = Math.round((s.netWorth + w) * 10) / 10; s.heat = Math.min(100, (s.heat ?? 0) + 3); log = 'The club opened. Four million cleaned and a line around the block.'; break; }
     case 'hshady_fixer': s.heat = Math.max(0, (s.heat ?? 0) - 8); log = 'You have a guy now. Heat -8, and you genuinely do not want to know how.'; break;
     case 'hshady_offshore': s.heat = Math.min(100, (s.heat ?? 0) + 6); log = 'The account is open. An island, a bank, and a form nobody will ever file. Heat +6.'; break;
-    case 'shooting_room': s.ovr = Math.min(99, s.ovr + 1); log = 'Five hundred pucks a night in your own basement. Rating +1.'; break;
+    case 'shooting_room': s.ovr = raiseWithinPotential(s.ovr, s.pot, 1); log = `Five hundred pucks a night in your own basement. ${ratingRaiseNote(c.ovr, s.ovr, 1)}`; break;
     case 'billet_house': s.morale = Math.min(100, s.morale + 15); log = 'You handed the keys to the family that fed you at sixteen. Nobody in that kitchen said anything for a full minute. Morale +15.'; break;
     case 'junior_stake': s.fanbase = Math.min(100, s.fanbase + 8); log = 'You own a piece of the barn you came up in. Fanbase +8.'; break;
     case 'outdoor_rink': s.fanbase = Math.min(100, s.fanbase + 10); log = 'The outdoor rink opened in November. It has not been empty since. Fanbase +10.'; break;

@@ -1,13 +1,48 @@
-import { useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState, type KeyboardEvent } from 'react';
 import { Link } from 'react-router-dom';
-import { Check, Copy } from 'lucide-react';
+import { Check, Copy, X } from 'lucide-react';
 import { GameNav } from '@/components/game/GameNav';
 import { useBallIq } from '@/hooks/useBallIq';
+import styles from './BallIqFeedback.module.css';
 
 export function BallIqBoard() {
   const { loading, questions, index, current, status, correctCount, iq, rank, answer, next, shareText } =
     useBallIq();
   const [copied, setCopied] = useState(false);
+  const nextRef = useRef<HTMLButtonElement>(null);
+  const pendingAnswer = useRef<{ index: number; id: string; chosen: string; opener: Element | null } | null>(null);
+  const [cue, setCue] = useState<{ id: string; chosen: string } | null>(null);
+  const answeredCount = questions.filter(q => q.chosen !== null).length;
+
+  useLayoutEffect(() => {
+    const request = pendingAnswer.current;
+    if (!request) return;
+    pendingAnswer.current = null;
+    if (status !== 'revealed' || index !== request.index || current?.clue.clueId !== request.id || current.chosen !== request.chosen) return;
+    setCue({ id: request.id, chosen: request.chosen });
+    const active = document.activeElement;
+    if (active === request.opener || active === document.body || !active?.isConnected) nextRef.current?.focus({ preventScroll: true });
+  }, [index, status, current?.clue.clueId, current?.chosen]);
+
+  useEffect(() => {
+    if (!cue) return;
+    const timer = window.setTimeout(() => setCue(null), 600);
+    return () => window.clearTimeout(timer);
+  }, [cue]);
+
+  const guardRepeat = (event: KeyboardEvent<HTMLButtonElement>) => {
+    if (event.repeat && (event.key === 'Enter' || event.key === ' ')) event.preventDefault();
+  };
+  const submitAnswer = (option: string) => {
+    if (!current || status !== 'answering' || pendingAnswer.current) return;
+    pendingAnswer.current = { index, id: current.clue.clueId, chosen: option, opener: document.activeElement };
+    answer(option);
+  };
+  const advance = () => {
+    if (status !== 'revealed' || pendingAnswer.current) return;
+    setCue(null);
+    next();
+  };
 
   const copyShare = async () => {
     try {
@@ -97,9 +132,12 @@ export function BallIqBoard() {
 
   if (!current) return null;
   const revealed = status === 'revealed';
+  const correct = current.chosen === current.clue.answer;
+  const cueActive = revealed && cue?.id === current.clue.clueId && cue.chosen === current.chosen;
+  const announcement = correct ? `Correct. ${current.clue.answer}.` : `Not quite. The answer is ${current.clue.answer}.`;
 
   return (
-    <div className="mx-auto max-w-xl px-4 py-8">
+    <div className={`mx-auto max-w-xl px-4 py-8 ${styles.board}`}>
       <div className="mb-4 flex items-center justify-between">
         <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
           Question {index + 1} of {questions.length}
@@ -109,12 +147,15 @@ export function BallIqBoard() {
         </span>
       </div>
 
-      <div className="mb-4 flex gap-1">
+      <p className="mb-2 text-sm font-semibold text-muted-foreground">{answeredCount}/{questions.length} answered · {correctCount} correct</p>
+      <div className="mb-4 flex gap-1" role="progressbar" aria-label="Questions answered" aria-valuemin={0} aria-valuemax={questions.length} aria-valuenow={answeredCount}>
         {questions.map((q, i) => (
           <span
             key={i}
+            data-ball-iq-progress={i}
+            data-answer-state={q.chosen !== null ? q.chosen === q.clue.answer ? 'correct' : 'wrong' : 'unanswered'}
             className={`h-1.5 flex-1 rounded-full ${
-              i < index
+              q.chosen !== null
                 ? q.chosen === q.clue.answer ? 'bg-emerald-500' : 'bg-destructive'
                 : i === index ? 'bg-primary/50' : 'bg-muted'
             }`}
@@ -144,18 +185,33 @@ export function BallIqBoard() {
               <button
                 key={opt}
                 disabled={revealed}
-                onClick={() => answer(opt)}
-                className={`w-full rounded-xl border-2 px-4 py-3 text-left text-sm font-medium text-foreground transition-colors ${cls}`}
+                aria-label={revealed ? `${opt}${isAnswer ? ', correct answer' : isChosen ? ', your pick' : ''}` : undefined}
+                onClick={() => submitAnswer(opt)}
+                onKeyDown={guardRepeat}
+                className={`flex min-h-[44px] w-full items-center gap-2 rounded-xl border-2 px-4 py-3 text-left text-sm font-medium text-foreground transition-colors ${styles.option} ${styles.fullText} ${cls}`}
               >
-                {opt}
+                <span className="min-w-0 flex-1">{opt}</span>
+                <span aria-hidden="true" className="w-5 shrink-0">{revealed && (isAnswer ? <Check className="h-5 w-5 text-primary" /> : isChosen ? <X className="h-5 w-5 text-destructive" /> : null)}</span>
               </button>
             );
           })}
         </div>
 
+        <div data-ball-iq-outcome={revealed ? correct ? 'correct' : 'wrong' : undefined}
+          data-ball-iq-cue={cueActive ? correct ? 'correct' : 'wrong' : undefined}
+          className={`${styles.feedback} ${styles.fullText} ${revealed ? correct ? styles.correct : styles.wrong : ''} ${cueActive ? styles.reveal : ''}`}>
+          {revealed ? <>
+            <p className="font-display text-xl font-black text-foreground">{correct ? 'Correct.' : 'Not quite.'}</p>
+            <p className="mt-1 text-sm text-foreground"><span className="text-muted-foreground">Answer: </span><strong>{current.clue.answer}</strong></p>
+          </> : <p className="text-sm text-muted-foreground">Your answer locks in when you choose it.</p>}
+        </div>
+        <p role="status" aria-live="polite" aria-atomic="true" className="sr-only">{cueActive ? `${announcement} ${answeredCount} of ${questions.length} answered, ${correctCount} correct.` : ''}</p>
+
         {revealed && (
           <button
-            onClick={next}
+            ref={nextRef}
+            onClick={advance}
+            onKeyDown={guardRepeat}
             className="mt-5 w-full rounded-full bg-primary py-3 font-display font-bold text-primary-foreground hover:opacity-90"
           >
             {index + 1 >= questions.length ? 'See my IQ' : 'Next question'}

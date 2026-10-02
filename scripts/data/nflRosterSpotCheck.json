@@ -1,0 +1,102 @@
+{
+ "round": 828,
+ "read": "2026-10-01",
+ "what": "The Round 828 review's second source spot check of the NFL Front Office bake (scripts/data/nflRosters2026.json, nflverse rosters release, season 2026, week 4, read 2026-10-01). Six clubs spread across the alphabet, ten men each, chosen by a rule fixed before looking: the starting QB, the first QB on the bench, the top starting OL, the middle bench OL, the first kicker or punter in the left out list, the bench men at index 3, 9 and 15 of the depth file and the practice squad men at index 2 and 8 (WAS repeats Chris Paul at 9, so its index 10 man is used). Each man is read off the club's own roster page and ESPN's on the same day. tier is where the bake puts him (roster, practice, or leftout for a specialist). clubSite and espn are the list each source put him on (roster, practice, reserve). ages are the ages each source printed on 2026-10-01, game is the game's age on 1 September 2026, and born is the release's birth date. ESPN prints a practice squad man elevated for a game day on its active list, so where ESPN alone says roster for a practice squad man the club's page settles it. heldOut names every man the bake leaves out because both other sources contradict the release, and the bake reads that list.",
+ "rule": "QB1, bench QB, top starting OL, middle bench OL, first specialist left out, bench index 3, 9, 15, practice index 2, 8",
+ "clubs": [
+  {
+   "abbr": "ARI", "clubSite": "https://www.azcardinals.com/team/players-roster/", "espn": "https://www.espn.com/nfl/team/roster/_/name/ari/arizona-cardinals",
+   "men": [
+    { "name": "Jacoby Brissett", "pos": "QB", "tier": "roster", "clubSite": "roster", "espn": "roster", "clubPos": "QB", "espnPos": "QB", "born": "1992-12-11", "ages": { "game": 33, "clubSite": 33, "espn": 33 } },
+    { "name": "Carson Beck", "pos": "QB", "tier": "roster", "clubSite": "roster", "espn": "roster", "clubPos": "QB", "espnPos": "QB", "born": "2001-11-19", "ages": { "game": 24, "clubSite": 24, "espn": 23 }, "note": "ESPN prints 23; the club page prints 24 and his birth date, 19 November 2001, makes him 24, so ESPN is the odd one out" },
+    { "name": "Paris Johnson Jr.", "pos": "OL", "tier": "roster", "clubSite": "roster", "espn": "roster", "clubPos": "OL", "espnPos": "OT", "born": "2001-07-03", "ages": { "game": 25, "clubSite": 25, "espn": 25 } },
+    { "name": "Elijah Wilkinson", "pos": "OL", "tier": "roster", "clubSite": "roster", "espn": "roster", "clubPos": "OL", "espnPos": "OT", "born": "1995-02-10", "ages": { "game": 31, "clubSite": 31, "espn": 31 } },
+    { "name": "Blake Gillikin", "pos": "P", "tier": "leftout", "clubSite": "roster", "espn": "roster", "clubPos": "P", "espnPos": "P", "born": "1998-01-21", "ages": { "clubSite": 28, "espn": 28 } },
+    { "name": "Tyler Allgeier", "pos": "RB", "tier": "roster", "clubSite": "roster", "espn": "roster", "clubPos": "RB", "espnPos": "RB", "born": "2000-04-15", "ages": { "game": 26, "clubSite": 26, "espn": 26 } },
+    { "name": "Hunter Long", "pos": "TE", "tier": "roster", "clubSite": "roster", "espn": "roster", "clubPos": "TE", "espnPos": "TE", "born": "1998-08-19", "ages": { "game": 28, "clubSite": 28, "espn": 28 } },
+    { "name": "Jayden Williams", "pos": "OL", "tier": "roster", "clubSite": "roster", "espn": "roster", "clubPos": "OL", "espnPos": "OT", "born": "2003-04-10", "ages": { "game": 23, "clubSite": 23, "espn": 23 } },
+    { "name": "Teagan Quitoriano", "pos": "TE", "tier": "practice", "clubSite": "practice", "espn": "practice", "clubPos": "TE", "espnPos": "TE", "born": "2000-03-15", "ages": { "game": 26, "clubSite": 26, "espn": 26 } },
+    { "name": "Jay Toia", "pos": "DL", "tier": "practice", "clubSite": "practice", "espn": "practice", "clubPos": "DL", "espnPos": "DT", "born": "2003-07-16", "ages": { "game": 23, "clubSite": 23, "espn": 23 } }
+   ]
+  },
+  {
+   "abbr": "CLE", "clubSite": "https://www.clevelandbrowns.com/team/players-roster/", "espn": "https://www.espn.com/nfl/team/roster/_/name/cle/cleveland-browns",
+   "men": [
+    { "name": "Shedeur Sanders", "pos": "QB", "tier": "roster", "clubSite": "roster", "espn": "roster", "clubPos": "QB", "espnPos": "QB", "born": "2002-02-07", "ages": { "game": 24, "clubSite": 24, "espn": 24 } },
+    { "name": "Deshaun Watson", "pos": "QB", "tier": "roster", "clubSite": "roster", "espn": "roster", "clubPos": "QB", "espnPos": "QB", "born": "1995-09-14", "ages": { "game": 30, "clubSite": 31, "espn": 31 }, "note": "turned 31 on 14 September, after the game's 1 September age" },
+    { "name": "Spencer Fano", "pos": "OL", "tier": "roster", "clubSite": "roster", "espn": "roster", "clubPos": "T", "espnPos": "OT", "born": "2004-11-04", "ages": { "game": 21, "clubSite": 21, "espn": 21 } },
+    { "name": "Dawand Jones", "pos": "OL", "tier": "roster", "clubSite": "roster", "espn": "roster", "clubPos": "T", "espnPos": "OT", "born": "2001-08-06", "ages": { "game": 25, "clubSite": 25, "espn": 25 } },
+    { "name": "Andre Szmyt", "pos": "K", "tier": "leftout", "clubSite": "roster", "espn": "roster", "clubPos": "K", "espnPos": "PK", "born": "1998-09-26", "ages": { "clubSite": 28, "espn": 28 } },
+    { "name": "Jaleel McLaughlin", "pos": "RB", "tier": "roster", "clubSite": "practice", "espn": "roster", "clubPos": "RB", "espnPos": "RB", "born": "2000-09-13", "ages": { "game": 25, "clubSite": 26, "espn": 26 }, "note": "split: the club page still lists him on the practice squad, ESPN and the release on the 53; a news report says the club signed him to the 53 when Dylan Sampson went on injured reserve, which is what the release shows" },
+    { "name": "Blake Whiteheart", "pos": "TE", "tier": "roster", "clubSite": "roster", "espn": "roster", "clubPos": "TE", "espnPos": "TE", "born": "2000-03-22", "ages": { "game": 26, "clubSite": 26, "espn": 26 } },
+    { "name": "Zak Zinter", "pos": "OL", "tier": "roster", "clubSite": "roster", "espn": "roster", "clubPos": "G", "espnPos": "G", "born": "2001-04-17", "ages": { "game": 25, "clubSite": 25, "espn": 25 } },
+    { "name": "Jimmy Horn Jr.", "pos": "WR", "tier": "practice", "clubSite": "practice", "espn": "practice", "clubPos": "WR", "espnPos": "WR", "born": "2002-09-12", "ages": { "game": 23, "clubSite": 24, "espn": 24 } },
+    { "name": "Sam Kamara", "pos": "DL", "tier": "practice", "clubSite": "practice", "espn": "practice", "clubPos": "DT", "espnPos": "DT", "born": "1997-12-21", "ages": { "game": 28, "clubSite": 28, "espn": 28 } }
+   ]
+  },
+  {
+   "abbr": "JAX", "clubSite": "https://www.jaguars.com/team/players-roster/", "espn": "https://www.espn.com/nfl/team/roster/_/name/jax/jacksonville-jaguars",
+   "men": [
+    { "name": "Trevor Lawrence", "pos": "QB", "tier": "roster", "clubSite": "roster", "espn": "roster", "clubPos": "QB", "espnPos": "QB", "born": "1999-10-06", "ages": { "game": 26, "clubSite": 26, "espn": 26 } },
+    { "name": "Quinn Ewers", "pos": "QB", "tier": "roster", "clubSite": "roster", "espn": "roster", "clubPos": "QB", "espnPos": "QB", "born": "2003-03-15", "ages": { "game": 23, "clubSite": 23, "espn": 23 } },
+    { "name": "Anton Harrison", "pos": "OL", "tier": "roster", "clubSite": "roster", "espn": "roster", "clubPos": "OL", "espnPos": "OT", "born": "2002-02-02", "ages": { "game": 24, "clubSite": 24, "espn": 24 } },
+    { "name": "Robert Hainsey", "pos": "OL", "tier": "roster", "clubSite": "roster", "espn": "roster", "clubPos": "OL", "espnPos": "C", "born": "1998-08-12", "ages": { "game": 28, "clubSite": 28, "espn": 28 } },
+    { "name": "Cam Little", "pos": "K", "tier": "leftout", "clubSite": "roster", "espn": "roster", "clubPos": "K", "espnPos": "PK", "born": "2003-08-17", "ages": { "clubSite": 23, "espn": 23 } },
+    { "name": "Travis Hunter", "pos": "WR", "tier": "roster", "clubSite": "roster", "espn": "roster", "clubPos": "WR", "espnPos": "WR", "born": "2003-05-18", "ages": { "game": 23, "clubSite": 23, "espn": 23 }, "note": "the club lists him WR/CB; the game has him at WR, where ESPN and the release put him" },
+    { "name": "Ezra Cleveland", "pos": "OL", "tier": "roster", "clubSite": "roster", "espn": "roster", "clubPos": "OL", "espnPos": "G", "born": "1998-05-08", "ages": { "game": 28, "clubSite": 28, "espn": 28 } },
+    { "name": "Jonah Monheim", "pos": "OL", "tier": "roster", "clubSite": "roster", "espn": "roster", "clubPos": "OL", "espnPos": "C", "born": "2002-06-07", "ages": { "game": 24, "clubSite": 24, "espn": 24 } },
+    { "name": "J'Mari Taylor", "pos": "RB", "tier": "practice", "clubSite": "practice", "espn": "practice", "clubPos": "RB", "espnPos": "RB", "born": "2002-03-15", "ages": { "game": 24, "clubSite": 24, "espn": 24 } },
+    { "name": "Geron Christian", "pos": "OL", "tier": "practice", "clubSite": "practice", "espn": "practice", "clubPos": "OT", "espnPos": "OT", "born": "1996-09-10", "ages": { "game": 29, "clubSite": 30, "espn": 30 } }
+   ]
+  },
+  {
+   "abbr": "MIA", "clubSite": "https://www.miamidolphins.com/team/players-roster/", "espn": "https://www.espn.com/nfl/team/roster/_/name/mia/miami-dolphins",
+   "men": [
+    { "name": "Malik Willis", "pos": "QB", "tier": "roster", "clubSite": "roster", "espn": "roster", "clubPos": "QB", "espnPos": "QB", "born": "1999-05-25", "ages": { "game": 27, "clubSite": 27, "espn": 27 } },
+    { "name": "Brady Cook", "pos": "QB", "tier": "roster", "clubSite": "roster", "espn": "roster", "clubPos": "QB", "espnPos": "QB", "born": "2001-10-12", "ages": { "game": 24, "clubSite": 24, "espn": 24 } },
+    { "name": "Austin Jackson", "pos": "OL", "tier": "roster", "clubSite": "roster", "espn": "roster", "clubPos": "T", "espnPos": "OT", "born": "1999-08-11", "ages": { "game": 27, "clubSite": 27, "espn": 27 } },
+    { "name": "Andrew Meyer", "pos": "OL", "tier": "roster", "clubSite": "roster", "espn": "roster", "clubPos": "C", "espnPos": "C", "born": "2000-01-14", "ages": { "game": 26, "clubSite": 26, "espn": 26 } },
+    { "name": "Bradley Pinion", "pos": "P", "tier": "leftout", "clubSite": "roster", "espn": "roster", "clubPos": "P", "espnPos": "P", "born": "1994-06-01", "ages": { "clubSite": 32, "espn": 32 } },
+    { "name": "DJ Herman", "pos": "RB", "tier": "roster", "clubSite": "roster", "espn": "roster", "clubPos": "FB", "espnPos": "FB", "born": "2002-03-17", "ages": { "game": 24, "clubSite": 24, "espn": 24 } },
+    { "name": "Seydou Traore", "pos": "TE", "tier": "roster", "clubSite": "roster", "espn": "roster", "clubPos": "TE", "espnPos": "TE", "born": "2002-08-12", "ages": { "game": 24, "clubSite": 24, "espn": 24 } },
+    { "name": "Chukwuebuka Godrick", "pos": "OL", "tier": "roster", "clubSite": "roster", "espn": "roster", "clubPos": "T", "espnPos": "OT", "born": "2000-10-11", "ages": { "game": 25, "clubSite": 25, "espn": 25 } },
+    { "name": "Jalen Reagor", "pos": "WR", "tier": "practice", "clubSite": "practice", "espn": "practice", "clubPos": "WR", "espnPos": "WR", "born": "1999-01-02", "ages": { "game": 27, "clubSite": 27, "espn": 27 } },
+    { "name": "James Ester", "pos": "DL", "tier": "heldout", "clubSite": "practice", "espn": "practice", "clubPos": "G", "espnPos": "G", "born": "2001-08-31", "ages": { "clubSite": 25, "espn": 25 }, "note": "the release files him at DT; the club page (number 65, 310 pounds) and ESPN both list him at guard, so the bake holds him out rather than pick a position" }
+   ]
+  },
+  {
+   "abbr": "NYJ", "clubSite": "https://www.newyorkjets.com/team/players-roster/", "espn": "https://www.espn.com/nfl/team/roster/_/name/nyj/new-york-jets",
+   "men": [
+    { "name": "Geno Smith", "pos": "QB", "tier": "roster", "clubSite": "roster", "espn": "roster", "clubPos": "QB", "espnPos": "QB", "born": "1990-10-10", "ages": { "game": 35, "clubSite": 35, "espn": 35 } },
+    { "name": "Cade Klubnik", "pos": "QB", "tier": "roster", "clubSite": "roster", "espn": "roster", "clubPos": "QB", "espnPos": "QB", "born": "2003-10-10", "ages": { "game": 22, "clubSite": 22, "espn": 22 } },
+    { "name": "Armand Membou", "pos": "OL", "tier": "roster", "clubSite": "roster", "espn": "roster", "clubPos": "OT", "espnPos": "OT", "born": "2004-03-27", "ages": { "game": 22, "clubSite": 22, "espn": 22 } },
+    { "name": "Dylan Parham", "pos": "OL", "tier": "roster", "clubSite": "roster", "espn": "roster", "clubPos": "OL", "espnPos": "G", "born": "1999-08-24", "ages": { "game": 27, "clubSite": 27, "espn": 27 } },
+    { "name": "Austin McNamara", "pos": "P", "tier": "leftout", "clubSite": "roster", "espn": "roster", "clubPos": "P", "espnPos": "P", "born": "2001-02-24", "ages": { "clubSite": 25, "espn": 25 } },
+    { "name": "Kene Nwangwu", "pos": "RB", "tier": "roster", "clubSite": "roster", "espn": "roster", "clubPos": "RB", "espnPos": "RB", "born": "1998-02-09", "ages": { "game": 28, "clubSite": 28, "espn": 28 } },
+    { "name": "Jeremy Ruckert", "pos": "TE", "tier": "roster", "clubSite": "roster", "espn": "roster", "clubPos": "TE", "espnPos": "TE", "born": "2000-08-11", "ages": { "game": 26, "clubSite": 26, "espn": 26 } },
+    { "name": "Jordan Meredith", "pos": "OL", "tier": "roster", "clubSite": "roster", "espn": "roster", "clubPos": "OL", "espnPos": "C", "born": "1998-01-04", "ages": { "game": 28, "clubSite": 28, "espn": 28 } },
+    { "name": "Tyler Johnson", "pos": "WR", "tier": "practice", "clubSite": "practice", "espn": "practice", "clubPos": "WR", "espnPos": "WR", "born": "1998-08-25", "ages": { "game": 28, "clubSite": 28, "espn": 28 } },
+    { "name": "Isaiahh Loudermilk", "pos": "DL", "tier": "practice", "clubSite": "practice", "espn": "practice", "clubPos": "DL", "espnPos": "DT", "born": "1997-10-10", "ages": { "game": 28, "clubSite": 28, "espn": 28 } }
+   ]
+  },
+  {
+   "abbr": "WAS", "clubSite": "https://www.commanders.com/team/players-roster/", "espn": "https://www.espn.com/nfl/team/roster/_/name/wsh/washington-commanders",
+   "men": [
+    { "name": "Jayden Daniels", "pos": "QB", "tier": "roster", "clubSite": "roster", "espn": "roster", "clubPos": "QB", "espnPos": "QB", "born": "2000-12-18", "ages": { "game": 25, "clubSite": 25, "espn": 25 } },
+    { "name": "Marcus Mariota", "pos": "QB", "tier": "roster", "clubSite": "roster", "espn": "roster", "clubPos": "QB", "espnPos": "QB", "born": "1993-10-30", "ages": { "game": 32, "clubSite": 32, "espn": 32 } },
+    { "name": "Laremy Tunsil", "pos": "OL", "tier": "roster", "clubSite": "reserve", "espn": "reserve", "clubPos": "T", "espnPos": "OT", "born": "1994-08-02", "ages": { "game": 32, "clubSite": 32, "espn": 32 }, "note": "a starter in the game because the starters rule has always read the reserve list (Round 416); both sources have him on injured reserve" },
+    { "name": "Chris Paul", "pos": "OL", "tier": "roster", "clubSite": "roster", "espn": "roster", "clubPos": "G", "espnPos": "G", "born": "1998-11-19", "ages": { "game": 27, "clubSite": 27, "espn": 27 } },
+    { "name": "Drew Stevens", "pos": "K", "tier": "leftout", "clubSite": "roster", "espn": "roster", "clubPos": "K", "espnPos": "PK", "born": "2003-12-09", "ages": { "clubSite": 22, "espn": 22 } },
+    { "name": "Kaytron Allen", "pos": "RB", "tier": "roster", "clubSite": "roster", "espn": "roster", "clubPos": "RB", "espnPos": "RB", "born": "2003-01-08", "ages": { "game": 23, "clubSite": 23, "espn": 23 } },
+    { "name": "John Bates", "pos": "TE", "tier": "roster", "clubSite": "roster", "espn": "roster", "clubPos": "TE", "espnPos": "TE", "born": "1997-11-06", "ages": { "game": 28, "clubSite": 28, "espn": 28 } },
+    { "name": "Colson Yankoff", "pos": "TE", "tier": "roster", "clubSite": "roster", "espn": "roster", "clubPos": "TE", "espnPos": "TE", "born": "2000-03-01", "ages": { "game": 26, "clubSite": 26, "espn": 26 } },
+    { "name": "Robert Henry Jr.", "pos": "RB", "tier": "practice", "clubSite": "practice", "espn": "practice", "clubPos": "RB", "espnPos": "RB", "born": "2001-12-31", "ages": { "game": 24, "clubSite": 24, "espn": 24 } },
+    { "name": "Esa Pole", "pos": "OL", "tier": "practice", "clubSite": "practice", "espn": "practice", "clubPos": "OT", "espnPos": "OT", "born": "2001-07-04", "ages": { "game": 25, "clubSite": 25, "espn": 25 } }
+   ]
+  }
+ ],
+ "wholeClubs": "Beyond the sixty, every man the game carries for these six clubs (407) was compared with ESPN's whole page. 391 agreed on club and list (7 of them starters the game carries off a reserve list, whom ESPN has on injured reserve, as the starters rule expects). The other 16: 6 are one man under two spellings (JuJu and Julius Brents, Olu and Olumuyiwa Fashanu, Kiko and Francisco Mauigoa, Josh and Joshua Uche, Robert and Rob Beal Jr., Cameron and Cam Robertson); 9 are practice squad men ESPN prints on the active list (Nick Mullens, Jalen McLeod, Max Llewellyn, Liam Anderson, Will Levis, Sterling Shepard, Julian Good-Jones, Ricky Barber, Ale Kaho), every one of them on the practice squad on his club's own page; and 1 is a real move after the reading: Matt Pryor, an ARI practice squad tackle in the week 4 release, is on neither ARI page on 2026-10-01, so the game has him where the club had him on the day the release was read. ESPN also carries men the release does not: four on injured reserve (Xavier Weaver, Josh Minkins, Devon Marshall, Caullin Lacy), who would not be in the game anyway, and one practice squad man, Jimto Obidegwu, whom the release lists as cut and the Jaguars' own page does not carry.",
+ "heldOut": [
+  { "team": "MIA", "name": "James Ester", "reason": "the second source disagrees: the release files him at DT, while the club's own roster page and ESPN both list him at guard (read 2026-10-01)" }
+ ]
+}
