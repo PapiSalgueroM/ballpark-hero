@@ -16,7 +16,7 @@ import { type CutLedger, cutPlayer, payrollWithDeadCap, rollDeadCap, rosterFullR
  * src/data/nhlFoPlayers.ts). Every salary, contract and transaction the
  * engine produces is explicitly fictional.
  *
- * Season model: 20 rounds of 4 games (82-game-shaped) with real NHL points
+ * Season model: 20 rounds of 4 games (80 games a club, booked by foSchedule since Round 851) with real NHL points
  * (2 for a win, 1 for an overtime loss; about a quarter of losses go to OT).
  * Playoffs follow the real divisional format: top three per division plus
  * two wild cards per conference, bracketed inside each division, all rounds
