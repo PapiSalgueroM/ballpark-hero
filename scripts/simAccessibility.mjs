@@ -117,7 +117,7 @@ console.log('7) the hand rolled dialogs behave, the banner takes focus, the tick
   /* Round 307. The seven overlays that predate the shadcn Dialog carry the
      essentials by hand; each file listed must keep every one of them. */
   const OVERLAYS = [
-    ['src/components/soccer-career/TrainingPanel.tsx', 1],
+    ['src/components/career/TrainingGround.tsx', 1], // Round 913: the training panel's dialog moved here
     ['src/components/soccer-career/PhonePanel.tsx', 1],
     ['src/components/nascar-driver/NascarDriverHowToPlay.tsx', 1],
     ['src/pages/StadiumTycoon.tsx', 2],
