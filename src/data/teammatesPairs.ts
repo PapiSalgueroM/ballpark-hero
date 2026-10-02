@@ -10,7 +10,7 @@ export const teammatesPairs: TeammatesPair[] = [
   { player1: "Tom Brady", player2: "Rob Gronkowski", sport: "NFL", answer: true, funFact: "Patriots teammates through 2018, then together again on the Buccaneers in 2020 and 2021.", difficulty: 1 },
   { player1: "Stephen Curry", player2: "Kevin Durant", sport: "NBA", answer: true, funFact: "Warriors teammates for three seasons, 2016-17 through 2018-19.", difficulty: 1 },
   { player1: "Peyton Manning", player2: "Aaron Rodgers", sport: "NFL", answer: false, funFact: "Never on the same team. Manning played for the Colts and the Broncos, Rodgers for the Packers, the Jets and the Steelers.", difficulty: 1 },
-  { player1: "Patrick Mahomes", player2: "Travis Kelce", sport: "NFL", answer: true, funFact: "Chiefs teammates from 2017, Mahomes' first season in the league. Kelce had been in Kansas City since 2013.", difficulty: 1 },
+  { player1: "Patrick Mahomes", player2: "Travis Kelce", sport: "NFL", answer: true, funFact: "Chiefs teammates from 2017, Mahomes' first season in the league.", difficulty: 1 },
   { player1: "Kobe Bryant", player2: "Shaquille O'Neal", sport: "NBA", answer: true, funFact: "Lakers teammates for eight seasons, 1996-97 through 2003-04.", difficulty: 1 },
   { player1: "Michael Jordan", player2: "Scottie Pippen", sport: "NBA", answer: true, funFact: "Bulls teammates from 1987-88 through 1997-98, apart from 1993-94. Jordan sat that season out.", difficulty: 1 },
   { player1: "Luka Dončić", player2: "Anthony Davis", sport: "NBA", answer: false, funFact: "They were traded for each other. The February 2025 deal sent Dončić to the Lakers and Davis to the Mavericks, so they were never on the same roster.", difficulty: 1 },
