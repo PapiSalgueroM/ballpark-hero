@@ -1,5 +1,16 @@
 # Project state
 
+## Codex864 accepted, 2026-10-02
+
+Club Manager facilities now show actual upgrade benefit and remaining budget,
+with shortfall/max explanations and44px controls. Real engine and save unchanged.
+11 focused cases and two asserted quote controls pass; native6/6 new-career
+paths at four widths pass147 assertions with actual purchases and five reloads.
+No overflow/page errors/writes. Clean combined type/build pass; final built
+fences remain pending. Root pushes this repair separately;863/865/866 continue.
+Shared browser public-data loading stall is being traced separately. No live
+publication or Google approval claimed. Paused drafts remain untouched.
+
 ## Codex863-866 claimed, 2026-10-02
 
 Continue noticeable product work:863 Ball IQ answer/progress presentation,

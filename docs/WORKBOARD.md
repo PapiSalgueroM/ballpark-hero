@@ -1,5 +1,19 @@
 # Work board
 
+**Codex864 VERIFIED, 2026-10-02, Club Manager facility decision previews.**
+The actual screen quotes the next engine level/effect, exact cost and transfer
+kitty after purchase. Disabled upgrades explain the shortfall or maximum.
+Original callbacks/engine/save stay intact; buttons now have44px targets.
+11 focused cases pass; both isolated quote controls reject seven exact targets
+while four independent baselines hold. Native6/6 actual new careers at320/390/
+430/1440 pass147 assertions, including all four upgrades, click/Enter, five
+reloads, an actual insufficient kitty and max stadium. No state injection,
+overflow, page errors or external writes; screenshots inspected, owned browser
+closed. Before/driver limits retained. Combined clean type/build pass; final
+built fences follow integration. Root will push864 separately.863/865/866
+remain claimed. Native public-data loading stall is under separate investigation,
+not credited as a new-game regression. Next free867.
+
 **2026-10-02 Codex CLAIMS863-866, continued player-facing quality work.**
 Git pull --ff-only before starting was already up to date at3f9d517a.
 -863: Ball Knowledge IQ answer feedback/progress and keyboard continuation.
