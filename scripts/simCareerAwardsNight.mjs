@@ -43,16 +43,28 @@
  *   5. No second copy. The inline shortlist, the wider ranking and the four
  *      hand written speech buttons must not come back beside the shared ones,
  *      and Soccer must keep calling them.
- *   6. The ceremony card tells the truth (Round 834 part 2). Every "Word +N"
- *      the winner and podium lines print must be a meter the night moves by
- *      exactly that much, and every meter it moves must be named (the card
- *      used to promise "Legacy +20" while the night moved popularity). A won
- *      ceremony offers the speeches this save may give in place of Continue,
- *      one pick moves exactly that speech's steps and writes one line, a
- *      second pick does nothing, the card then shows what it did with
- *      Continue, a lost or stale ceremony offers nothing, and on the replay's
- *      real ceremonies the offer comes up on every win (30 of 30) and on no
- *      loss.
+ *   6. The ceremony card tells the truth (Round 834 part 2 and its review).
+ *      Every "Word +N" the winner and podium lines print must be what the
+ *      night really moved that meter, and every meter it moves must be named
+ *      (the card used to promise "Legacy +20" while the night moved
+ *      popularity, then "Popularity +20" to winners already at the cap of
+ *      100). Checked at popularity 50 (where the night must do exactly its
+ *      steps), 95 and 100 (where the cap cuts them, and the case is asserted
+ *      to be cut). A won ceremony offers the speeches this save may give in
+ *      place of Continue, one pick moves exactly that speech's steps and
+ *      writes one line, a second pick does nothing, the card then shows what
+ *      it did with Continue, a lost or stale ceremony offers nothing. On the
+ *      replay's real ceremonies the offer comes up on every win and on no
+ *      loss, the measured move is on every win and podium and no other night,
+ *      and every speech each real winner may give is given on a copy of his
+ *      save: what the card shows after it must name only what really moved.
+ *      Measured on the review's tree: 25 of 30 real wins cut short of
+ *      Popularity +20 by the cap; 98 speeches given, 94 cut by a cap, the
+ *      log line's own number untrue on 18 (the card no longer shows it).
+ *
+ * The probe hashes a save with the night's measured `moved` taken out (the
+ * one field the review added; no tree before it writes one), so the fixture
+ * recorded from main still proves everything else unchanged.
  *
  * Negative controls (SIM_AWARDS_NIGHT_CONTROL), each must turn its section red:
  *   reorderdraw   the era star loop draws assists before goals   -> section 1
@@ -63,10 +75,14 @@
  *   cardtext      the winner line goes back to "Legacy +20, ..."  -> section 6
  *   effectonly    the night drops the winner's first step only    -> section 6
  *   speechtwice   the card's speech loses its once-only guard     -> section 6
+ *   nominalnight  the night records its steps, not what landed    -> section 6
+ *   nominalmoved  the speech reports its steps, not what landed   -> section 6
+ *   numberedline  the card's speech line keeps the log's number   -> section 6
  * Each patch is refused unless the exact text it replaces is present, so a
  * control can never pass by changing nothing. Measured on the round's tree:
- * every control turns its own section red (winnernottop also breaks section 1,
- * speechleak sections 1 and 3, effectonly sections 1 and 2).
+ * every control turns its own section red (winnernottop also breaks sections
+ * 1 and 6, speechleak sections 1 and 3, effectonly sections 1 and 2,
+ * nominalnight section 2).
  *
  * Bands, all on fixed seeds so the same numbers come back every run: the
  * synthetic 35% gamble came up 338 of 1,000 (band 30 to 40%); Soccer's
