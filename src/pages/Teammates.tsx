@@ -10,7 +10,7 @@ import AdBanner from '@/components/ads/AdBanner';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
 
-const sportEmoji: Record<string, string> = { NFL: '🏈', NBA: '🏀', Soccer: '⚽' };
+const sportEmoji: Record<string, string> = { NFL: '🏈', NBA: '🏀', Soccer: '⚽', MLB: '⚾', NHL: '🏒' };
 
 const Teammates = () => {
   const {
@@ -34,7 +34,7 @@ const Teammates = () => {
     <>
       <PageSeo
         title="Teammates or Not? - Sports Trivia Quiz | DoUKnowBall"
-        description="Were these two athletes ever on the same team? Test your sports knowledge across NFL, NBA, and soccer."
+        description="Were these two athletes ever on the same team? Test your sports knowledge across the NFL, NBA, MLB, NHL and soccer."
         path="/teammates"
       />
       <GameShell
@@ -177,9 +177,9 @@ const Teammates = () => {
         <GameSeoContent
           pageHasOwnH1
           title="Teammates or Not? | DoUKnowBall"
-          description="Test your sports knowledge: were these two athletes ever on the same team? Covers NFL, NBA, and soccer with fun facts and shareable scores."
+          description="Test your sports knowledge: were these two athletes ever on the same team? Covers the NFL, NBA, MLB, NHL and soccer with fun facts and shareable scores."
           howToPlay={[
-            "Two athlete names are shown from NFL, NBA, or soccer",
+            "Two athlete names are shown from the NFL, NBA, MLB, NHL or soccer",
             "Decide if they ever played on the same team",
             "Tap YES or NO to answer",
             "Learn fun facts after each answer: 10 questions per round",

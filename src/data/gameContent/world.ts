@@ -133,11 +133,11 @@ export const WORLD_CONTENT: GameContentMap = {
 
   '/teammates': {
     intro: [
-      "Two names, one question: did these guys ever wear the same shirt? Teammates or Not flashes a pair of athletes from the NFL, NBA or soccer and you call it, yes or no.",
+      "Two names, one question: did these guys ever wear the same shirt? Teammates or Not flashes a pair of athletes from the NFL, NBA, MLB, NHL or soccer and you call it, yes or no.",
       "It sounds easy until you hit the pairs whose careers brushed past each other by a season. That one year in a strange uniform is exactly what this game lives on.",
     ],
     headings: {
-      howToPlay: "Teammates or Not? Here's how to play this NFL, NBA and soccer game",
+      howToPlay: "Teammates or Not? Here's how to play this NFL, NBA, MLB, NHL and soccer game",
       rules: "Teammates or Not? rules for rounds, scoring and difficulty",
       example: "Teammates or Not? walkthrough: Kobe and Shaq, Brady and Manning",
       tips: "Teammates or Not? tips for spotting real career overlaps",
@@ -244,7 +244,7 @@ export const WORLD_CONTENT: GameContentMap = {
       },
       {
         q: "Which sports are covered?",
-        a: "Pairs come from the NFL, the NBA and soccer, and each question shows a sport badge so you know which world you're in.",
+        a: "Pairs come from the NFL, the NBA, MLB, the NHL and soccer, and each question shows a sport badge so you know which world you're in.",
       },
       {
         q: "Is this a daily puzzle?",
