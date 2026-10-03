@@ -32,21 +32,27 @@
  *     and the page must not bleed sideways. It also proves the moment really
  *     ran: the pulse element's computed animation is the kit's cmWinPulse.
  *
+ *  4. Coverage floors, so section 1 cannot pass on a walk that skipped a rung.
+ *
  * Measured headroom (Round 983, seeds 1 to 3, Real Madrid and Manchester
- * City, two seasons each, 12 seasons): see the FLOORS block below; the
+ * City today plus Real Madrid in 2010-11, two seasons each, 18 seasons, 895
+ * steps, about 3 minutes 40): the numbers are in section 4's comment. The
  * agreement checks are exact because the moment is a rule, not a statistic.
  *
- * Controls, each refusing to run if its rewrite changed nothing, each
- * reddening its own section (section 2 reads the real tree, so it is skipped
- * while a control is on):
+ * Controls, each refusing to run if its rewrite changed nothing (section 2
+ * reads the real tree, so it is skipped while a control is on). Measured at
+ * seed 1:
  *   BRACKET_MOMENT_CONTROL=reload     first sight counts from zero in a copy of
  *                                     the card, so a reload replays the season;
- *                                     section 1 must go red.
+ *                                     sections 1 and 3 go red (331 and 4: both
+ *                                     hold the reload rule, 3 on the plain
+ *                                     table it measures against).
  *   BRACKET_MOMENT_CONTROL=allrounds  a missed round is played as well as the
- *                                     latest one in a copy; section 1 red.
+ *                                     latest one in a copy; section 1 red (57).
  *   BRACKET_MOMENT_CONTROL=layout     the kit's style tag goes first in the
  *                                     card in a copy, so the card's space-y
- *                                     gap lands on the header; section 3 red.
+ *                                     gap lands on the header and everything
+ *                                     under it moves 12px; section 3 red (60).
  *
  * Nothing here reads dist, the network or the clock. Run:
  *   node scripts/simBracketMoment.mjs
@@ -234,9 +240,9 @@ if (CONTROL) {
 } else if (process.env.BRACKET_MOMENT_SKIP_VITEST === '1') {
   console.log('   skipped by BRACKET_MOMENT_SKIP_VITEST=1 (run the vitest file on its own)');
 } else {
-  const res = spawnSync(findBin('vitest') + (process.platform === 'win32' ? '.cmd' : ''),
-    ['run', 'src/test/clubManagerBracketMoment.test.tsx'],
-    { cwd: ROOT, encoding: 'utf8', shell: process.platform === 'win32', env: { ...process.env, CI: '1' } });
+  const vitest = path.join(path.dirname(path.dirname(findBin('vitest'))), 'vitest', 'vitest.mjs');
+  const res = spawnSync(process.execPath, [vitest, 'run', 'src/test/clubManagerBracketMoment.test.tsx'],
+    { cwd: ROOT, encoding: 'utf8', env: { ...process.env, CI: '1' } });
   const out = (res.stdout || '') + (res.stderr || '');
   const plain = out.replace(/\u001b\[[0-9;]*m/g, '');
   const passed = plain.match(/Tests\s+(\d+) passed/);
@@ -375,8 +381,32 @@ window.__draw = (comp, career) => {
   console.log(`   ${cases.length} moments (${cases.map(c => c[0]).join(', ')}) at 390 and 1440, ${compared} samples against the plain table`);
 }
 
-/* ---------- floors from measured headroom ---------- */
-section = 'floors';
+/* ---------- 4. Coverage floors, from measured headroom ----------
+   So the agreement checks in section 1 cannot pass on a walk that never
+   reached a rung. Measured in Round 983, seed 1 alone and then seeds 1 to 3:
+   the Champions League QF, SF and F each settled 5 times, then 16 (16 of the
+   18 career seasons qualified); the 2010 round of 16 twice, then 6; the
+   ladder had 98 rungs, then 300; silent steps 545, then 1664. The floors are
+   per seed and sit under seed 1's numbers: 4 for each of QF, SF and F, 1 for
+   the round of 16, 80 rungs, 400 silent steps. The cup is a rule, not a
+   sample: every round settles once a season. */
+section = '4';
+console.log('4) Coverage floors');
+{
+  const seeds = SEEDS.length;
+  const seasonsWalked = seeds * CLUBS.length * SEASONS;
+  for (const r of ORDER) {
+    const n = seen.moments.cup[r] || 0;
+    if (n !== seasonsWalked) fail(`cup ${r}: ${n} moments over ${seasonsWalked} seasons, and every cup round settles once a season`);
+  }
+  for (const [r, floor] of [['R16', 1], ['QF', 4], ['SF', 4], ['F', 4]]) {
+    const n = seen.moments.ucl[r] || 0;
+    if (n < floor * seeds) fail(`Champions League ${r}: ${n} moments, the floor is ${floor * seeds}`);
+  }
+  if (seen.rungs < 80 * seeds) fail(`only ${seen.rungs} ladder rungs walked, the floor is ${80 * seeds}`);
+  if (seen.still < 400 * seeds) fail(`only ${seen.still} silent steps checked, the floor is ${400 * seeds}`);
+  console.log(`   cup ${seasonsWalked} a round, Champions League ${JSON.stringify(seen.moments.ucl)}, ${seen.rungs} rungs, ${seen.still} silent steps over ${seeds} seed(s)`);
+}
 
 console.log(failures === 0 ? '\nALL BRACKET MOMENT CHECKS PASSED' : `\n${failures} FAILURES (by section ${JSON.stringify(sectionFails)})`);
 process.exit(failures === 0 ? 0 : 1);

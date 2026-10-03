@@ -103,7 +103,7 @@ describe.each([
     first.unmount();
 
     /* Round N plus 1: the four quarter-final winners land, the semis tick in. */
-    const second = render(<Card career={withBracket(c, qf)} />);
+    const second = render(<Card career={withBracket(c, qf)} onClubClick={() => {}} />);
     const root = second.container;
     expect(keysOf(root, '.cm-win-pulse', 'data-cm-bracket-through')).toEqual(['QF-0', 'QF-1', 'QF-2', 'QF-3']);
     expect(keysOf(root, '.cm-slam', 'data-cm-bracket-landed')).toEqual(['QF-0', 'QF-1', 'QF-2', 'QF-3']);
@@ -116,8 +116,8 @@ describe.each([
     }
     /* The pulse sits on a wrapper, never on the clickable line. */
     for (const el of Array.from(root.querySelectorAll('.cm-win-pulse'))) {
-      expect(el.getAttribute('onclick')).toBeNull();
-      expect(el.firstElementChild?.className).toContain('flex items-center');
+      expect(el.className).not.toContain('cursor-pointer');
+      expect(el.firstElementChild?.className).toContain('cursor-pointer');
     }
     /* Winners first, then the draw, every step later than the one before. */
     const order = [...delays(root, '.cm-win-pulse'), ...delays(root, '.cm-tick-in')];
