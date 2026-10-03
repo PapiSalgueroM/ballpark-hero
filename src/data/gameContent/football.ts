@@ -178,7 +178,7 @@ export const FOOTBALL_CONTENT: GameContentMap = {
       {
         heading: "Drafting rookies after the Super Bowl",
         items: [
-          "After the Super Bowl, spend 3 picks on a 40 prospect class where scout grades can lie. Defensive picks join the roster as players, the same as any other pick.",
+          "After the Super Bowl, use the draft picks your team still owns. Trading a pick away costs a selection in your next draft. If you traded them all away, decide the franchise tag, then run the league draft and offseason. Scout grades can lie. Defensive picks join your roster like every other selection.",
         ],
       },
       {

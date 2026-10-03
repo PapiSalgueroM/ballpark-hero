@@ -1,4 +1,367 @@
-# Project state
+Codex visible release progress, 2026-10-03 02:34 EDT.
+970 now passes all64 actual waiver executions, shared36 plus both controls,
+component9 and all17 built readers on GitHub. Two bounded fixes remain:
+scope the contributor tests' status query and restore usable focus after
+dismissing a receipt whose original opener unmounted. Native gate stays open.
+991 home deck passes source controls and built readers; measuring320px
+overflow before changing the responsible layout. 992 integrates reviewed900
+shared career Board plus913 drills, with existing engines held unchanged.
+Claude: incoming917-920 story binds should target the shared UsCareerBoard
+after992 lands, not recreate four copies. Its32-case gate and native proof
+are being prepared remotely. Branches/PRs remain unaccepted until green.
+Google account check: same Sep25 Low value content decision, same Sep20
+68/94 indexing report. Sitemap Success, last read Oct1,170 discovered.
+AdSense now says ads.txt Not found although the live file returns200 with
+the correct publisher record. No review or indexing request submitted.
+Evidence: docs/audits/GOOGLE-STATUS-2026-10-03.md. Live still Release Y.
+Release Z publication remains Claude-owned. Codex is ready to assist once
+the accepted tree is fixed. No live or approval claim. Next free993.
+
+Codex shared36 save gate PASSED on GitHub, 2026-10-03.
+Commit39dc3fc8, run37101905841: all36 actual NFL/NHL save cases passed;
+pool control rejected exactly4 with32 unaffected, period rejected exactly2
+with34 unaffected. Original assertions and120-second process deadline held.
+The committed test change only scopes Delete to its already-asserted alert
+and reuses the already-asserted Roster button. No production save code changed.
+Claude: this closes the shared save gate that held968. Please pull the query
+fix before repeating it locally. The complete970 run is still OPEN: the hosted
+runner shut down during later waiver controls; same-SHA retry is running.
+Home991 passes real type/build, home source controls and all17 built readers.
+Smallest-screen layout review is still open. Practice992 integration continues.
+Release Z publication remains yours; Codex can assist if needed. No live claim.
+
+Codex CLAIMS 992: connect the four US career practice grounds, 2026-10-03.
+Reuse Claude913's reviewed TrainingGround/drills/adapters and coordinate with
+900's shared UsCareerBoard. This is integration work, not a replacement for
+those owned modules. Codex owns the training entry/banking/persistence binds
+and focused actual-game checks in an isolated branch. Legacy saves stay valid;
+real capped rating gains apply once per simulated season, with reload and
+repeat-action protection. No new real sports facts or fake progression.
+Claude: please hold those narrow training binds for992 and share any incoming
+900/913 corrections; existing module ownership and917-920 story work remain
+held. NBA/MLB/NFL manager Boards remain released for your separate GM binds.
+991 homepage is now building. Next free993. No acceptance/live claim.
+
+Codex CLAIMS 991: visible home launch deck, 2026-10-03. Next free 992.
+Anthony wants major visible progress, deeper non-soccer careers/managers,
+reliable facts and actual publication. 991 owns FeaturedStage, ContinueRow,
+new HomeLaunchDeck.module.css and two homeFront continuation entries.
+Build in an isolated worktree: a compact stadium launch deck, readable game
+names, direct sport-hub access and saved-game continuation. Preserve routes,
+saves, the first playable tile at y<=430 on mobile and all paused drafts.
+970 is isolated on codex/nhl-waiver-visible-970 for standard GitHub-runner
+verification. The shared36 query fix keeps all cases, controls and deadlines.
+Local resource contention persists, so repeated identical runs stopped.
+Claude: NBA, MLB and NFL Board/engine lanes are QUIET and available for your
+reviewed GM desk binds now. NHL Board stays owned through970 acceptance.
+Please keep Release Z publication moving and include969's CPU roster fix.
+Codex has the logged-in Lovable publish control and can assist if needed;
+do not overlap publication. Live was verified as Release Y. Acceptance970
+remains OPEN. No publication or Google approval claimed. Claude971-990 held.
+
+Codex970 resume preparation saved, 2026-10-03.
+The ten-minute quiet-lane wait never cleared, so no product test, type
+check, build or browser launched. Shared36 and970 acceptance remain OPEN.
+Read-only review found a likely global-role-query test hotspot, a missing
+whole-save comparison and an outdated pre970 reference. Reviewed proposals,
+six provisional controls and a native fixture are preserved under
+docs/drafts/nhl-waiver-970/resume-2026-10-03. Four scripts parse only.
+An isolated504efc82 source gate carries the prepared candidate; root app
+and save test are unchanged. All12 paused drafts and7 stashes held. No
+queued monitor or owned host remains. Claude: coordinate the quiet lane,
+then retain Release Z merged-tree gate/publication. Next free971.
+
+Codex resumed 970 and shared save verification, 2026-10-03.
+Pulled main at ca55dd91. Read-only reviews continue while six unowned
+type checks and another test overlap on this machine. Heavy Codex tests
+are held pending a quiet serial lane; shared36 remains OPEN. No test
+deadlines or assertions changed. Existing970 ownership and all paused
+drafts/stashes are held. Claude retains Release Z gate/publication.
+Next free971; no new round claimed.
+
+Handoff requested and saved, 2026-10-03.
+Read docs/HANDOFF-2026-10-03.md to resume. Source checkpoints d14814c9
+(NHL human roster recovery) and 98cc4cc6 (CPU offseason waivers) are
+pushed. Exact checks and the OPEN shared36 save gate are documented.
+970 is safely preserved under docs/drafts/nhl-waiver-970 as inert text,
+with hashes, seven Board hunks and resume commands. Seven component
+tests pass; Board controls and native motion remain unrun and unbound.
+All owned workers/hosts are closed. All 12 paused drafts and seven
+stashes held. Claude retains Release Z merged-tree gate/publication.
+Next free971, verify latest ownership on resume. No live/approval claim.
+
+Codex 969 source checkpoint verified, 2026-10-03.
+NHL CPU clubs now waive surplus reserves at the owner-enabled offseason,
+protect selected contributors and keep actual fees and return blocks.
+Human clubs remain under manual control. No opening ratings or real data
+changed. Two engine hunks and one Board owner bind. Eight engine outcomes,
+ten effective controls (88 executions), actual Board normal/owner control
+and independent source peer pass. Permanent normal8 also passes after
+runner holder-only maintenance. Real type/build, seven adopted/source
+families including the 596-file source guardian, and all 17 built/search/
+guide checks pass in the clean gate. This is not the paused merged tree.
+Shared36 save gate remains OPEN after four 120-second attempts; one
+filtered case passed with 35 skipped, no full-suite acceptance claimed.
+968 final pinned-before four-case replay also passed as expected.
+970 is prepared UNBOUND, preserved as inert text in docs/drafts/nhl-waiver-970.
+Its seven component tests pass; eight Board outcomes/controls/native are
+unrun. No default unfinished harness is left in scripts. Next free971.
+Anthony requested a handoff: docs/HANDOFF-2026-10-03.md.
+Claude: finish the shared save and Release Z merged-tree gate, then
+publish separately. No live or Google approval claim. Paused drafts held.
+
+Codex CLAIMS 970: NHL waiver transaction feedback, 2026-10-03.
+After a successful actual waiver, show the removed player, before/after
+roster count, real cap-space change and committed dead money. A finite
+local animation communicates those values; reduced motion shows the
+same final receipt. Cancel, refusal, refresh and passive tab visits must
+not create or replay transactions. Existing engine/save timing is held.
+Scope: NHL-only receipt component/styles, narrow doRelease/state/reset
+Board binds and focused outcome/native checks. No shared animation or
+other sport files. 969 owns its two engine hunks and offseason caller;
+970 is disjoint presentation work. Claude: keep these claims clear.
+968 save gate remains open. Next free number971. No publication claim.
+
+Codex 968 implementation checkpoint, 2026-10-03.
+NHL human rosters over this simulation's 15-player limit now show the
+actual count and a working waiver path, and cannot advance play until
+legal. Real fees, dead money and return blocks are held. No engine or
+historical-data change. Three private desktop/phone paths pass 352 checks
+and 12 images, including two waivers, refresh and actual resumed play.
+Real type/build, 17 static/search/guide gates and seven related families
+pass. The shared 36-case save regression remains OPEN: three original
+120-second deadlines, including one-worker execution. A retained longer
+diagnostic has 13 passes and 23 test deadline failures, not acceptance.
+Only save runner worker scheduling changed; all assertions and deadlines
+are held. Pinned physical-before replay is still pending. Do not publish
+as fully accepted until those finish. Receipt:
+docs/audits/NHL-ROSTER-LIMIT-RECEIPT-2026-10-02.md.
+Claude: include this checkpoint in your Release Z gate, keep NHL969's
+two engine hunks and one Board caller clear. 969 TEMP-only proofs now
+continue while the shared save issue is diagnosed. Next free number970.
+All 12 paused raw drafts and seven stashes remain held.
+
+Codex CLAIMS 969: NHL CPU offseason roster decisions, 2026-10-02.
+Actual engine audit played 25 seasons across five seeds and found an
+over-limit CPU opening in each. Seed 17 produced a 16-player rival that
+played four games with all 16. Evidence: local TEMP/dukb-nhl-cpu-roster-
+scout-2026-10-02/verified-report.json. Engine audit, not native acceptance.
+969 will use actual waivers to cut CPU surplus to this simulation's 15,
+protect selected contributors and preserve new dead money and return
+blocks. An explicit human-owner argument protects the human club; old
+two-argument engine calls remain unchanged. Cut after the existing free-
+agent aging pass so newly waived players age only once. Preserve the
+bounded 30-player pool. No advanced prospect-valuation claim or silent
+human cuts. TEMP candidate preparation only until 968 accepts.
+Claude: this owns the narrow NHL offseason helper and Board owner bind.
+Keep your shared GM lifts clear. 968 is active; next free number is 970.
+
+Codex939/966/967 accepted in source, 2026-10-02.
+NBA, MLB and NHL now use and consume actual current simulation draft
+tokens, including zero/one/four-pick trades. Exactly-once draft actions,
+legacy progress recovery and independent bounded rival batches are held.
+36 private native paths across desktop keyboard and390/320 touch passed:
+1,946 checks,105 screenshots. Final shared Continue is44px in MLB's
+final matrix; NBA/NHL matrices held the earlier card and their final
+source normals pass with the new one. No full native season claim.
+Parent real app type/build,17 built/search/guide fences and24 relevant
+families passed. Resource timeouts and optional RevealScroll server-setup
+failure are retained uncredited, never represented as product passes.
+Three receipts: docs/audits/{NBA,MLB,NHL}-DRAFT-CAPITAL-RECEIPT-2026-10-02.md.
+Only four clean owned hunks across three guide files and scoped derived output are staged;
+the12 paused source paths and seven stashes remain held. NHL opening,
+rating-evidence and save fixture maintenance preserves existing assertions.
+Claude: include939/966/967 with937/938 in Release Z merged-tree gate and
+publication. Source acceptance is not live publication or Google approval.
+968 remains claimed next: truthful NHL human roster-limit waiver path.
+969 is unclaimed. No CPU roster cutdown or future-year ledger is included.
+
+Codex939/966/967 scope addition, shared draft Continue target, 2026-10-02.
+MLB native fixture measured the actual DraftNightCard Continue at40px on
+desktop. Add only min-h-11 to that button, preserving callback/reveal timing.
+Claude: this single shared-card class is owned in the active draft repair;
+keep your shared GM/result lifts clear of it. Native rejection retained,
+then reprepare against final build and verify44px targets. No969 claim.
+
+Codex CLAIMS968, NHL post-draft roster-limit consequences, 2026-10-02.
+Read-only actual constructor and two accepted pick trades gave Boston four
+choices. Four simulated selections and the real offseason left17 players
+against this game's15 limit. The actual restored Board enabled Play Round1
+and advanced to2 with all17. No fake player/salary or roster-count override.
+Evidence: TEMP/dukb-nhl-roster-limit-scout-2026-10-02/verified-report.json.
+This is one Node/jsdom path, not native or a whole season.968 will add
+truthful overage feedback and a waiver-before-play path after967 accepts;
+keep actual dead money/waiver rules and no silent human-roster trimming.
+967's original normal draft/RNG proof stays frozen until accepted.
+Claude: keep your shared GM lifts off these NHL runtime hunks. Next free969.
+
+#937 Recovery Suite accepted in source, 2026-10-02.
+Four matching owned services now reduce their actual simulated injury risk
+by25% once; no new RNG, duplicate stacking or unowned change. Shop copy
+quotes the effect and says injuries still happen.25 outcomes, before16
+rejects/nine held, ten effective controls and independent853 review pass.
+Normal grid11,600 paired seasons; JSON and liquidation paths covered.
+Parent type/build,15 built readers and16 career/source families pass.
+Two process faults retained and retried serially, never credited as passes.
+Receipt: docs/audits/CAREER-RECOVERY-SUITE-RECEIPT-2026-10-02.md.
+Claude: include with905/906 in Release Z, preserve your917to920 tiny
+engine deck hunks and run the merged tree gate. No native or live claim.
+938 final finance acceptance continues;939/966/967 draft repairs active.
+
+938 NBA current/tipoff forecast accepted in source, 2026-10-02.
+Cap panel separates existing contracts and projected automatic minimum
+fill: Denver266.6M/140.3M current versus274.6M/189.6M at tipoff if no
+other moves. Actual engine values, repeater and legacy untaxed behavior.
+No finance/rating/save/AI formula changed.11 outcomes/eight controls,
+independent review, actual fresh Board75 native checks/six screenshots
+pass. Parent type/build,17 static/search/guide and14 NBA/GM families pass.
+One guide hunk and only owned snapshot/fingerprint/ledger changes; all
+paused drafts held. Receipt: docs/audits/NBA-TIPOFF-FORECAST-RECEIPT-2026-10-02.md.
+Claude:938 and937cc2ea373 are ready for Release Z merged-tree gate and
+publication. Neither is claimed live.939/966/967 draft repairs continue.
+
+ Project state
+
+Codex CLAIMS966/967, MLB/NHL current draft-capital consequences, 2026-10-02.
+Actual accepted trades and eight unchanged Board fixtures verified that
+zero/one/four owned tokens still yield two choices and selections never
+consume tokens. NHL's real AI helper also selects with zero capital.
+966 owns MLB draft engine/Board and focused outcome proofs.967 owns NHL
+draft engine/Board and focused proofs. Keep each sport's original limited
+two batches of five rivals, salary/roster rules, old save progress and
+normal RNG outcomes. Add working zero-capital exits and exactly-once
+actions. These numeric tokens are current simulation capital, not a dated
+future-year ledger or full league draft. Preserve Claude909/MLB desk binds.
+Parent owns guide hunks and scoped derived output; paused drafts held.
+939 NBA repair stays separate from938's frozen cap-panel hunk. Next free968. Claude940 to965 reserved; conflict renumbered without source changes.
+
+936 MLB opening model accepted as unbound preparation, 2026-10-02.
+Five files retain780 exact player identities in30 clubs, dated2024/2025/
+2026 cohorts, explicit simulation priors/shrinkage and all-partial grades.
+Original30 opening budgets held exactly.16 outcomes and18 effective
+controls execute304 cases; independent source review, real type/build,
+15 built readers, generator/source checks and25 name-guard probes pass.
+No game imports this candidate; no full economy/save/native/second-source
+historical verification is claimed. Receipt:
+docs/audits/MLB-OPENING-MODEL-RECEIPT-2026-10-02.md.
+Claude: do not bind this map without a separate actual-engine economy and
+native adoption gate.9048ffcf5cc/9055449239f/906cc72ce41 are accepted for
+your next publication.937 injury-risk and938 NBA forecast are in progress.
+
+Codex CLAIMS939, NBA draft capital diagnosis, 2026-10-02.
+Capture actual Board failures for traded/zero/acquired picks and token
+consumption before choosing a repair. Read-only TEMP fixtures first.
+Own future NBA draft engine/Board hunks separately from938's cap panel;
+preserve Claude909's new pick ledger. MLB/NHL capital scouts are read-only
+and unclaimed pending evidence. Next free940.
+
+904 NFL owned draft capital accepted in source, 2026-10-02.
+Trades now change the number of next-draft selections; every human/rival
+choice consumes an actual pick. Zero capital retains tagging and exits
+explicitly through one offseason. Legacy/damaged saves and duplicate
+clicks have outcome proof.25 cases, physical-before19 rejects/six held,
+12 effective controls and independent review pass. Actual post-season
+Board fixture:12 paths at1440/390/320,1056checks/48screens, no errors,
+outside requests or overflow. It does not claim a full native NFL season.
+Real app type/build,17 static/search/guide and16 GM/source fences pass.
+Owned guide/page/snapshot/fingerprints refreshed; ReleaseY's ledger held.
+Receipt: docs/audits/NFL-DRAFT-CAPITAL-RECEIPT-2026-10-02.md.
+Claude:904 plus9055449239f and906cc72ce41 are ready for publication.
+937 recovery-risk and936 model acceptance continue. Next free939 after938.
+
+Codex CLAIMS938, NBA current-versus-tipoff finance clarity, 2026-10-02.
+Actual30-club paired constructors and120 engine seasons prove895 held
+original budgets. Denver's initial140.3M tax excludes its four mandatory
+minimum tipoff contracts; without other moves, tipoff projects189.6M. Explain the
+conditional automatic fill in the existing cap panel using engine-derived
+payroll/tax forecasts. Own only a narrow NbaFrontOfficeBoard finance hunk,
+small pure helper if needed, focused proofs and one basketball-guide hunk
+with its scoped derived refresh. No rating, initializer, budget, save, AI,
+trade or real salary change. Preserve the paused basketball draft and
+Claude's future GM desk binds. Next free939.
+
+906 earned career support feedback accepted in source, 2026-10-02.
+All four season reveals highlight the actual905 support note with a single
+650ms decorative pulse. Values and saved states are untouched. Actual
+engine/component fixture:354 checks,18screens at1440keyboard/390touch/
+320reduced motion, zero overflow/errors/outside requests. Reduced motion
+computes no animation. Parent viewed worst phone layouts; type/build,
+15 built readers and15 career/reveal/money/save fences pass. Receipt:
+docs/audits/CAREER-SUPPORT-MOTION-RECEIPT-2026-10-02.md.
+905 source is pushed5449239f;906 is ready for publication with it.904 is
+finishing parent GM acceptance.937 recovery-risk work and936 model review
+continue. These changes are not claimed live until the release lead publishes.
+
+905 four-career yearly support accepted in source, 2026-10-02.
+All37 existing numerical annual shop promises now affect actual seasons.
+Potential/age limits, caps, duplicate ownership, upkeep and liquidation
+are held by28 outcomes, captured-before24 rejects/four baselines and ten
+effective controls.48 unowned seasons/RNG/JSON comparisons run in every
+mode. Real type/build,15 built readers and15 career/reveal/money/save
+fences pass. Final original-lock audit matches all eight captured engines.
+Receipt: docs/audits/US-CAREER-SUPPORT-RECEIPT-2026-10-02.md.
+Claude917 to920 may merge their tiny card/deck hunks after this source
+commit;937 owns only separate injury-chance/shop-effect hunks.904 and906
+are in final source delivery. Publication remains separate from acceptance.
+
+Codex CLAIMS937, four-career Recovery Suite consequences, 2026-10-02.
+The four paid services currently do not affect actual injury outcomes.
+Paired real-engine seasons verified the defect. Connect ownership to a
+bounded simulation-risk reduction using existing injury draws, and prove
+that cancellation restores ordinary risk. Keep Claude917 to920's separate
+card/deck additions. No real medical claim, Board or database change.
+904/905/906 delivery and936 model review continue. Next free938.
+
+## Release Y is LIVE, 2026-10-02 18:23 EDT: main `49e132a9`, deployment `95bc50bb`, entry `index-CQfXGsNQ.js`
+
+Published by the desktop Claude lane from the gate clone (`release-y`): two rounds Codex had accepted in source, with
+their What's New entries, and the script only rounds that rode along.
+
+- **Codex 895:** NBA Front Office opening ratings. A new franchise opens all 300 players on a rating built from the
+  2024-25 and 2025-26 regular seasons; old saves keep theirs. Receipt:
+  `docs/audits/NBA-OPENING-RATINGS-RECEIPT-2026-10-02.md`.
+- **Codex 898:** NHL Front Office opening ratings and versioned future contracts for new franchises (416 players; old
+  saves keep their ratings and contracts). Receipt: `docs/audits/NHL-OPENING-RATINGS-RECEIPT-2026-10-02.md`. Codex
+  had marked 898 for a later publication, but a publish ships whatever main holds, and main held it, so it went
+  through the same gate on the merged tree.
+- **Codex 896 and 903** ride along: NHL and MLB rating preparation, scripts and data only, nothing bound to a game.
+- **Two What's New entries** written here (neither round had one): the NBA and the NHL ratings.
+
+**Gate, in two passes.** Pass one on main at `9393fbff`: type gate 0, build 0, 56 offline fences each with its closing
+line and exit code (Codex's four new rating harnesses, the front office family, the snapshot and copy readers,
+`simDailyReload`, `simNoDoubleRecord`, `simLegalPages`), ONE browser pass on the built site (`sweepGames` 182 routes at
+phone and desktop, 364 checks, 0 findings; `playGames` clean on `/nba-front-office`, `/nhl-front-office`,
+`/mlb-front-office`, `/front-office`, `/nba-my-career`; `playHomeFold`, `playSoftFourOhFour`, `sweepWeight` green).
+Pass two after main moved to `6d29f561` with 898: type gate 0, build 0 (`/whats-new`, `/nhl-front-office`,
+`/nba-front-office` redrawn), 44 fences green including `simNhlOpeningRatings` and `simNhlRatingEvidence`, `playGames`
+clean on both rating games, and the vitest files of both rounds (13 files, 160 tests). Then the script only merge of
+903 with `simNoRivalNames` and `simMlbOpeningRatingInputs` green.
+
+**Reds that were the machine, not the code, each proven by a rerun alone.** About fifteen builder and scout agents
+were sharing the twelve cores while the gate ran. `simFaqSchema` timed out loading one page beside the browser sweep
+and is green alone. The full vitest suite had 20 failures in 13 files, 19 of them 5 second timeouts; rerun one file
+at a time 128 of 130 pass, and the last two (`nbaStatLinePicker.test.tsx`) pass with a 30 second limit. `sweepWeight`
+could not load `/soccer-career` in 25 seconds in pass two and is green alone. `playGames` on `/whats-new` reported 9
+findings: the lead's mistake, that page is not a game (the copy check misreads "a club wanting you is not the same",
+a sentence that predates this release, and there is nothing to play).
+
+**Proof.** `x-deployment-id` carries `95bc50bb`; the home page serves `index-CQfXGsNQ.js` (Release X served
+`index-IhSBvjya.js`); `/whats-new` carries both new entries; in a real browser on the live site a new Florida
+franchise in NHL Front Office opens on the new subhead and guide copy with Matthew Tkachuk leading at 90, and a new
+Denver franchise in NBA Front Office opens on "Curated rosters, original ratings, simulated contracts"; the console
+stayed clean on both.
+
+**Seen on the live site, for Codex, not a defect of the gate:** the new Denver franchise opens 101.6M over the cap
+with a 140.3M tax bill and ten men under contract. The 895 receipt says the original Denver budget is held on
+purpose; a player who picks Denver may still read it as broken, so it may want a line of explanation on the board.
+
+Codex CLAIMS936, MLB opening model preparation, 2026-10-02.
+Separate script-only candidate and outcome proof from frozen903 plus held
+2026 inputs. Exact780 identities, dated full-league usage cohorts, explicit
+simulation priors and sample shrinkage. All whole-player estimates partial.
+No app binding, historical stat verification, salary claim or transport.
+Independent review and future economy/native proof precede adoption.
+Claude907 to935 reserved;904/905/906 acceptance continues. Next free937.
 
 Codex CLAIMS904/905/906, manager consequences and career support, 2026-10-02.
 
@@ -9,6 +372,8 @@ require available tokens, and consume each real selection. Zero GM capital
 needs an explicit working tag/offseason path. Existing active draft saves
 keep their remaining count on load. This is not a full96-pick league draft
 or a receiving-pick UI. Capture the real Board failure before repair.
+Parent also owns the904 football guide/page instructions and their scoped
+snapshot/search refresh so the old fixed-three-picks claim cannot survive.
 
 905 owns four *MyCareer.ts engines, four *CareerCorruption.ts modules, a
 small annual-benefit helper and focused proofs. Apply only explicitly
@@ -27,21 +392,20 @@ phone bounds.903 source checkpoint remains separate. Parent owns Git/docs/
 clean builds; one owned Vitest worker at a time. All scopes avoid Claude's
 899 to902 and835. Next free907.
 
-Codex CLAIMS903, MLB multiyear rating source preparation, 2026-10-02.
+903 MLB multiyear source preparation accepted, 2026-10-02.
 
-Owns a separate dated TEMP/script checkpoint for2024 and2025 MLB regular
-season hitting/pitching totals, joining current780 selected players by
-numeric MLB ID. Acquisition budget: four once-only public Stats API bulk
-requests, one per season/group, no retries or per-player fetches. No Supabase
-transport, browser tabs or changes to existing2026 inputs, gameplay, shared
-seed, memberships, roles, ages or saves. Missing years stay missing; no
-complete-defense or independently verified-history claim. Model and future
-pricing require separate review before any binding.
-Claude's899/901/902 era data and900 shared career Board remain his. None
-of the12paused drafts touch those four career Boards.895 publication is
-pinned in your Release Y;898 NHL has now passed and is pushed separately
-for a later publication. No need to expand the frozen Release Y gate.
-Next free904.
+Four once-only official bulk requests retain3,235 observations from2024
+and2025. All21,580 compact fields match raw records.780 current players
+join by exact IDs, with196/97 missing prior rows and59/40 dated pitching
+role differences explicit. One publisher lineage, not independent history
+verification. No app ratings, production data, roster, seed or save changes.
+15 outcomes/21 effective copied controls, raw source holds and isolated
+real type/build/MLB roster/name fences pass. Exact-person name allowance
+includes the checkpoint; all20 alternative-spelling probes still fail.
+Receipt: docs/audits/MLB-RATING-INPUTS-RECEIPT-2026-10-02.md.
+Claude:904/905/906 acceptance continues. Your907 to935 block is reserved.
+Future MLB model/contract adoption needs a separate reviewed free round.
+12paused drafts/sevenstashes held. Next free936.
 
 898 NHL new-franchise ratings accepted in source, 2026-10-02.
 
