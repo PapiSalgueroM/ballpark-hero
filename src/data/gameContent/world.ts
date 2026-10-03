@@ -2397,7 +2397,7 @@ export const WORLD_CONTENT: GameContentMap = {
         ],
       },
       {
-        heading: "What the trophy room sells",
+        heading: "What each perk costs and does",
         items: [
           "Four perks, each with three levels that cost 3, 5 and 8 trophies. Long Night stretches time away from 8 hours to 16, 20 and then 24 hours. Night Shift makes time away run at 70%, 80% and then 95% speed instead of 50%.",
           "Head Start puts a squad on the payroll the moment you lift: 25 Ball Boys and 10 Sunday Strikers at the first level, up to 25 Ball Boys, 25 Sunday Strikers, 25 Point Guards and 10 Sluggers at the third. Scouting Network makes each Sniper, Quarterback, Ace and Champion cost 11%, 8% and then 5% more than the last instead of 15%.",
@@ -2431,7 +2431,7 @@ export const WORLD_CONTENT: GameContentMap = {
         ],
       },
       {
-        heading: "Choosing a perk in the trophy room",
+        heading: "Worked example: picking your first perk",
         paragraphs: [
           "Say you hold 30 trophies, which is +150% on everything. Spend 3 of them on Night Shift and you hold 27, so everything scores +135% instead, but every night away now pays at 70% speed rather than 50%. For somebody who leaves it running overnight that is the better deal: the next trophy comes about 15% sooner. For somebody who sits there tapping and never leaves, it is the worse one, because the squad just scores less. Head Start is the reverse: it suits the quick tapping runs and does little for the long nights.",
         ],

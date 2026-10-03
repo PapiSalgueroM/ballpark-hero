@@ -1545,26 +1545,33 @@
         "Switch the buy toggle to x10 or max when the points are coming faster than you can spend them.",
         "Own five of an archetype and its own upgrade appears. Buy it and that whole line scores double.",
         "Earn a million in one run and the trophy box lights up. Lift it, the run resets, and every trophy you hold is +5% on everything from then on.",
+        "Open the trophy room and spend trophies on perks that never go away. A spent trophy stops paying its 5%, so each perk is a trade, not a free gift.",
         "Walk away whenever you like. The squad keeps scoring at half speed for up to eight hours, whether you closed the tab or left it sitting there, and the door tells you what it made when you come back."
       ],
       "rules": [
         "Your first Ball Boy is free, so something is always scoring, even for somebody who never taps at all.",
         "Every archetype you sign costs 15% more than the last one of its kind. A Ball Boy costs 15, the tenth one costs 53, the hundredth costs about 15 million.",
         "Trophies are paid on points earned in one run, not on points in hand. One trophy at a million, two at four million, three at nine million: the square root of the millions, rounded down.",
-        "Lifting the trophy clears the points, the squad and the upgrades. Trophies, badges and the all time total are the only things that carry over, and they carry over forever.",
+        "Lifting the trophy clears the points, the squad and the upgrades. Trophies, trophy room perks, badges and the all time total are the only things that carry over, and they carry over forever.",
+        "Four perks, each with three levels that cost 3, 5 and 8 trophies. Long Night stretches time away from 8 hours to 16, 20 and then 24 hours. Night Shift makes time away run at 70%, 80% and then 95% speed instead of 50%.",
+        "Head Start puts a squad on the payroll the moment you lift: 25 Ball Boys and 10 Sunday Strikers at the first level, up to 25 Ball Boys, 25 Sunday Strikers, 25 Point Guards and 10 Sluggers at the third. Scouting Network makes each Sniper, Quarterback, Ace and Champion cost 11%, 8% and then 5% more than the last instead of 15%.",
         "Ten badges, each worth a permanent +1% on everything. They are earned by tapping, by squad size, by points and by trophies, and they survive every lift.",
-        "Time away runs at half speed and stops after eight hours. That is the same eight hours whether the tab was shut or just sitting in a background window, because being there is what matters, not the tab being open."
+        "Time away runs at half speed and stops after eight hours. That is the same eight hours whether the tab was shut or just sitting in a background window, because being there is what matters, not the tab being open.",
+        "Long Night and Night Shift from the trophy room change those two numbers, and nothing else about the rule: one cap for the whole absence, and never full speed."
       ],
       "example": [
         "You tap eighteen times and sign a second Ball Boy. Two of them make 0.8 a second, which pays for a third in about twenty five seconds, and the three of them save toward a Sunday Striker at 100. Ten minutes in, the squad makes more in a second than your first minute of tapping did.",
-        "Fifteen or twenty minutes of steady buying gets a run past a million, which is the first trophy. Lift it and the arena empties, but every tap and every archetype now scores 5% more, so the second run reaches the same million faster than the first did, and the third faster still."
+        "Fifteen or twenty minutes of steady buying gets a run past a million, which is the first trophy. Lift it and the arena empties, but every tap and every archetype now scores 5% more, so the second run reaches the same million faster than the first did, and the third faster still.",
+        "Say you hold 30 trophies, which is +150% on everything. Spend 3 of them on Night Shift and you hold 27, so everything scores +135% instead, but every night away now pays at 70% speed rather than 50%. For somebody who leaves it running overnight that is the better deal: the next trophy comes about 15% sooner. For somebody who sits there tapping and never leaves, it is the worse one, because the squad just scores less. Head Start is the reverse: it suits the quick tapping runs and does little for the long nights."
       ],
       "tips": [
         "Read the rate against the price, not the price alone. A new archetype pays back slower than the tier below it at first, but the tier below has been getting 15% dearer with every signing, so the moment always comes when the bigger name is the better buy.",
         "Five of anything is the magic number. That archetype's upgrade doubles the whole line, so buy to five before you spread out.",
         "Muscle Memory turns taps into a share of the squad's rate. Once the squad is scoring thousands a second, it is the best tap upgrade on the board.",
         "Do not lift at exactly one trophy. Four million pays two, nine million pays three, and the run you are in already has the squad built.",
-        "Leave it running before bed. Eight hours at half speed is four hours of income you did not have to be there for."
+        "Leave it running before bed. Eight hours at half speed is four hours of income you did not have to be there for.",
+        "Buy the perk that matches how you actually play. Back once a day: Long Night. Back every morning: Night Shift. Quick tapping runs: Head Start. Long runs where you sign dozens of the top archetypes: Scouting Network. If you tap through every run and never leave, the two away perks do nothing for you, so leave them on the shelf.",
+        "The second and third levels cost more than the first, so they pay best once you hold a big cabinet."
       ]
     },
     "/list-quiz": {
@@ -2972,26 +2979,38 @@
       "howToPlay": [
         "Say who is playing: just you, or two to four seats on one phone. Seat one is you; tap any other seat to make it a friend (pass and play) or the CPU. The seats lock once the first club is picked.",
         "Pick a market restriction first: the open market, the top five leagues only, under 25s only, wonderkids only (21 and under) or the bargain bin (nobody over 30 million). It locks the moment you pick a club.",
-        "Pick a real club, tiered from elite down to modest (only clubs with a complete 2026 squad are offered, so the list moves with the data). At a fuller table each human picks in seat order, no club can be taken twice, and the CPU seats draw clubs from the same tier as the first pick. The board's envelope is open on the desk: its mood, its money and its demands. Then pick one of fifteen finance envelopes blind and live with it.",
+        "Pick a real club, tiered from elite down to modest (only clubs with a complete 2026 squad are offered, so the list moves with the data). At a fuller table each human picks in seat order, no club can be taken twice, and the CPU seats draw clubs from the same tier as the first pick. The board's envelope is open on the desk: its mood, its money and its demands. Then pick one of twenty finance envelopes blind and live with it.",
         "Hire a manager or keep the man you have for free. Each of the three candidates gets more out of one kind of player (the under 25s, the over 30s, the defence or the attack), and the number beside each name is what your XI reads with him in charge.",
-        "SPIN. The wheel draws one of your eleven shirts in a hidden order, and every shirt comes up exactly once.",
+        "SPIN. The wheel draws one of your eleven shirts in a hidden order, and every shirt comes up once (only the second spin power up brings the wheel back to a shirt you already settled).",
         "Keep the man it landed on, or sell him at market value. Selling is final: the scouts bring three prices (a marquee, a solid buy and a cheap seat), promoting a fit from your own squad costs nothing, and a 40 overall is always there for the shirt if you cannot or will not pay.",
         "When all eleven shirts are settled, the final whistle brings the reckoning: on your own, the rivals' windows and the season sim follow at once. At a fuller table your window shuts, a hand over screen asks for the next player (or the CPU plays its whole window on the spot), and the season kicks off when the last window is shut."
       ],
       "rules": [
-        "At a table of two to four, the windows run one at a time and every seat gets the same eleven spins. No two seats can hold the same club or end up with the same player: everyone at the table's own squad is off your market, and a man an earlier seat signed is gone by the time your list is dealt. The hand over screen shows the shut windows as numbers only, never a board, so nobody sees another seat's XI mid window.",
+        "At a table of two to four, the windows run one at a time and every seat gets the same eleven spins, plus any second spin its envelopes hand it. No two seats can hold the same club or end up with the same player: everyone at the table's own squad is off your market, and a man an earlier seat signed is gone by the time your list is dealt. The hand over screen shows the shut windows as numbers only, never a board, so nobody sees another seat's XI mid window.",
         "The shared season is every finished XI plus neutral clubs from the first pick's tier to make six, home and away on a real calendar, with the same goal model as the solo season. It hands out the title, the Golden Boot, the best defence and Rebuild of the year, and records each squad's biggest win, longest unbeaten run and top scorer. Every line is a simulated result or tally and nothing more.",
         "Pots scale with the club: 200 million at elite clubs, 140 at strong, 100 at mid, 65 at modest. The board's envelope then adds or takes up to 35 million depending on its mood (scaled to the club), sales add to it, and the manager's fee, war premiums and bad envelopes eat it.",
         "The board's mood runs from horrible to great. A great board drops one demand and tops the pot up. A horrible board cuts the pot and adds a fourth demand. Where a club's own money story is documented (Barcelona's sponsorship deal) the envelope says so; everywhere else the board speaks in general terms.",
         "The wallet can run 60 million past zero. Finish in debt and settled shirts are force sold at random, each swapped for the cheapest fit going, until the books balance.",
         "Demands are things like three under 25s, two marquee buys, a clearout or money in the bank. They are judged on the window as you closed it, before the board's own clawback. Every miss draws a punishment card from a five card deck, without replacement: a forced sale of your best, a random exit, a 25 million clawback, a dressing room turn worth two rating points, and exactly one card that lets it go.",
-        "Every second deal, another envelope arrives: from a 40 million TV windfall to a 25 million sponsor scandal, or a perk (a fresh scouts' list, 20 percent off your next signing, no bidding war on your next buy).",
+        "Every second deal, another envelope arrives: from a 40 million TV windfall to a 25 million sponsor scandal, or a power up instead of money (the eight are below).",
+        "A power up sits in your pocket until you play it, and each one is used up when you do. The finance envelope can hold one, and so can any envelope that lands as you go.",
+        "Fresh list: ask the scouts for a new three, once, whenever their list is open (not during a part exchange). 20 percent off: your next signing costs a fifth under his value. No war: the rivals stay out of your next signing.",
+        "Second spin: between spins, bring the wheel back to a shirt you already settled (not one you bought or borrowed). A man you kept is sold, a squad man you promoted goes back to the bench, and the scouts deal a new list for the shirt.",
+        "Veto: at the whistle the board's punishment cards come up face first. Send one back and it is shuffled in with the cards the board has not dealt, and one comes out in its place. It can be the same card, so it is a gamble, and you can always take the cards as they fell instead. You hold one veto at a time, because the whistle only takes one.",
+        "Part exchange: when the wheel lands on a man, see the scouts' three before you decide. Take one and your man goes the other way, with the new man 25 percent under his value. Call it off and he stays, but the exchange is gone.",
+        "Loan: when the scouts' list is open (not during a part exchange), borrow one of the three for the season at 40 percent of his value. He plays, nobody can sell him, he goes back after the season, and he does not count as a signing for the board's demands.",
+        "Sneak peek: see the next envelope before it lands, money or power up, so you know how hard to spend. It lands after your next transfer move or two (a sale, a signing, a loan or a promotion), so the peek is only offered while one can still come, and if the whistle goes first it never arrives.",
         "Signing a star rated 72 or higher can spark a bidding war. The rival's hidden ceiling is 112 to 157 percent of value: outbid it or walk away, and a man you walk away from is gone from your market for good.",
         "The target is your starting rating plus 2 for elite clubs, 3 for strong, 5 for mid and 7 for modest. A manager's lift only lands on the players who fit him, so no hire covers the target on its own.",
         "The run is written to this phone after every move, not at the end, so a refresh or a locked screen comes back to the same window, and at a table to the same seats and the same seat's turn. One run at a time, on that phone only. Starting again clears it, and a save that cannot be read back exactly opens a fresh run rather than a half restored one."
       ],
       "example": [
         "A modest club with a 74 rated XI makes the target 81 on a 65 million pot. The board is in a plain mood, the finance envelope is a sell on clause worth 20 million, and you hire the youth coach for 5 million. The first spin lands on the 68 rated left back: an easy sale at 4 million, and the scouts' solid option is a 74 for 18 million.",
+        "Part exchange: the wheel lands on your 71 rated right back, worth 20 million. You play the exchange and the scouts show a 76 rated right back worth 40 million. Take him and he costs 30 million, your man's 20 goes the other way, so the swap costs you 10 million net for five points in the shirt.",
+        "Loan: the scouts' three for a hole at centre back include an 80 rated man worth 50 million you could never buy. A loan puts him in the XI for 20 million. If the board wants three signings, though, he is not one of them.",
+        "Second spin: you promoted a 66 rated squad man at left wing early, then an envelope brought 30 million. Play the second spin on that shirt, he goes back to the bench, and the new list has a 74 you can now afford.",
+        "Veto: you missed two demands and drew The big sale and The clawback. Send The big sale back and it is shuffled in with itself and the three cards the board has not dealt (Somebody goes, The dressing room turns, The board lets it go). It is about a one in four chance it comes straight back and about one in four it is the safe card, while The dressing room turns costs two points of rating, so it is a real call.",
+        "Sneak peek: you are about to go 40 million into the overdraft on a striker. Peek first: the next envelope is a 25 million sponsor scandal, so you take the cheaper option and finish out of debt.",
         "Three spins later the wheel finds your 84 rated striker. Keep him and the rating holds, sell him and 70 million funds two upgrades elsewhere. You keep him, finish 12 million in debt, and one forced sale later the XI still lands on 82. Job Done."
       ],
       "tips": [
