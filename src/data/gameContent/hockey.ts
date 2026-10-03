@@ -1071,7 +1071,7 @@ export const HOCKEY_CONTENT: GameContentMap = {
         ],
       },
       {
-        heading: "Run the GM desk: staff, contracts, picks and the deadline",
+        heading: "Hire a staff, settle contracts and build packages",
         items: [
           "Under the hub's own boxes sit four more: Staff, Re-sign desk, Draft picks and Trade desk. A new franchise opens with them switched on. An older save plays on exactly as it did until you open one of them.",
           "Staff: a head coach, a special teams assistant, a goalie coach, a scouting director and a head athletic therapist, each rated 1 to 10. Hire off a shortlist, pay off the man you do not want, and match or let go when another club comes in for a good one.",
@@ -1134,7 +1134,7 @@ export const HOCKEY_CONTENT: GameContentMap = {
         ],
       },
       {
-        heading: "The GM desk rules: deadline, contracts, picks and staff",
+        heading: "Deadline day, restricted free agents and retained salary",
         items: [
           "The trade deadline shuts every deal, phone calls and packages alike, once round 15 of 20 is played, and deals open again in the summer. The real one falls in early March. At the deadline clubs in a playoff place, or close to one, are buyers who pay up for veterans; clubs well out of it are sellers who want picks and young players.",
           "A draft pick signs an entry level deal, three seasons from 18 to 21. When it runs out, a player under 27 with fewer than seven seasons is a restricted free agent: a qualifying offer keeps his rights, and a rival with a roster spot may table an offer sheet you either match or let go for the picks it carries. Everyone else is unrestricted. The money is this game's own figures, not real contracts.",
@@ -1151,7 +1151,7 @@ export const HOCKEY_CONTENT: GameContentMap = {
         ],
       },
       {
-        heading: "A season at the GM desk: a coach, an RFA and a deadline deal",
+        heading: "A goalie coach, an RFA tender and a deadline buy",
         paragraphs: [
           "Open Staff and hire a level 7 goalie coach off the shortlist. Level 7 is two rating points on the goalie, and the goalie carries a fifth of your strength, so the club gets 0.4 stronger on every night. That is a nudge to your odds, not a promised result.",
           "Your 21 year old winger's entry deal runs out this summer, so he is a restricted free agent on the Re-sign desk. Tender him the qualifying offer and he stays a season at the money he earns now. If a rival has tabled an offer sheet, the tile says so: match it and he stays on the sheet's terms, or let him go and the picks on the sheet come to you.",
