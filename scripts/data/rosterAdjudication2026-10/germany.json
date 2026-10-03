@@ -190,11 +190,13 @@
    "to": "Hertha BSC",
    "realClub": "Hertha BSC",
    "adjudicatedOn": "2026-10-02",
-   "note": "Mads Valentin Pedersen, born 1996-09-01, the Danish left back. Left Augsburg for Hertha on 2026-08-24 on a one year deal with an option.",
+   "note": "Mads Valentin Pedersen, born 1996-09-01, the Danish left back. Left Augsburg for Hertha on 2026-08-24 on a contract to 2027 with a Hertha option for one more season (Berliner Kurier and MS Aktuell below; the Augsburg announcement does not give the length).",
    "sources": [
     {"family": "A", "url": "https://www.bundesliga.com/en/2bundesliga/clubs/hertha-bsc/squad", "publisher": "Bundesliga (Hertha BSC squad, season 2026-2027)", "readOn": "2026-10-02", "says": "listed among the defenders"},
     {"family": "A", "url": "https://www.fcaugsburg.de/en/article/mads-pedersen-joins-hertha-bsc-23375", "publisher": "FC Augsburg (club announcement)", "readOn": "2026-10-02", "says": "joins Hertha BSC with immediate effect"},
-    {"family": "B", "url": "https://www.fotmob.com/players/657217", "publisher": "FotMob", "readOn": "2026-10-02", "says": "Hertha BSC, left back, born 1996-09-01, played 90 minutes against Dynamo Dresden on 2026-09-19"}
+    {"family": "B", "url": "https://www.fotmob.com/players/657217", "publisher": "FotMob", "readOn": "2026-10-02", "says": "Hertha BSC, left back, born 1996-09-01, played 90 minutes against Dynamo Dresden on 2026-09-19"},
+    {"family": "B", "url": "https://www.berliner-kurier.de/hertha/neuzugang-fuer-hertha-spielt-mads-pedersen-schon-in-braunschweig-li.10320505", "publisher": "Berliner Kurier (2026-08-23, updated 2026-08-27)", "readOn": "2026-10-03", "says": "signed with Hertha until 2027, plus a one year option"},
+    {"family": "B", "url": "https://ms-aktuell.de/?p=153485", "publisher": "MS Aktuell (2026-08-24)", "readOn": "2026-10-03", "says": "contract until 2027, Hertha holds an option for a further season; Hertha announced the transfer officially on 2026-08-24"}
    ]
   },
   {
