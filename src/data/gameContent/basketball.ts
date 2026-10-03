@@ -1863,7 +1863,7 @@ export const BASKETBALL_CONTENT: GameContentMap = {
       {
         heading: "The luxury tax, the aprons and the repeater rate",
         items: [
-          "The real league put its 2026-27 tax line at 200.4 million, but the salaries here are the game's own and run richer at the top, so every new league sets its line from its own payrolls instead: enough clubs over it to look like a real season (eight paid tax in 2023-24), but nobody facing a bill above 190 million, about the most any club has ever been billed. A new league opens on a 226.7 million line with five clubs over it, and the line rises 7 percent a season with the cap.",
+          "The real league put its 2026-27 tax line at 200.4 million, but the salaries here are the game's own and run richer at the top, so every new league sets its line from its own payrolls instead: enough clubs over it to look like a real season (eight paid tax in 2023-24), but nobody facing a bill above 190 million, about the most any club has ever been billed. The opening line is 226.7 million, with five clubs over it once minimum deals fill the rosters. Your cap panel shows current contracts and a separate tipoff forecast that includes those missing deals. The line rises 7 percent a season with the cap.",
           "Every dollar of payroll over the line, dead money included, is taxed at season close in brackets about 3 percent of the line wide (6.9 million in a new league), at the league's real rates: 1.00 and 1.25 on the first two brackets, 3.50 and 4.75 on the next two, then half a dollar more per bracket. Pay tax in three of the previous four seasons and you are a repeater, taxed at 3.00, 3.25, 5.50 and 6.75 on the same brackets.",
           "The cap panel shows the projected bill all season. At close the bill is listed beside the results, ownership takes one point of trust per 6 million of it (never more than 20), and the money is held back from next season's cap room. Above the first apron (236.4 million in a new league) a trade has to send out at least the salary it brings back. Computer teams that pay tax let their expiring depth walk the next summer, so the line moves the whole league, not just you. A save from before the tax plays out its current season untaxed and gets its line that summer.",
         ],
@@ -1883,7 +1883,7 @@ export const BASKETBALL_CONTENT: GameContentMap = {
       {
         heading: "Draft classes and scouting uncertainty",
         items: [
-          "Draft classes have 24 prospects, you pick twice, and scouting grades can miss the truth by a few points either way.",
+          "Each club starts with 2 simulation picks. Trades can leave you with fewer or more choices, and each selection spends one owned pick. With none left, finish the draft and offseason. The pool has at least 24 prospects, and rivals get two batches of up to five eligible selections in this abbreviated draft. Scouting grades can miss the truth by a few points either way.",
         ],
       },
       {

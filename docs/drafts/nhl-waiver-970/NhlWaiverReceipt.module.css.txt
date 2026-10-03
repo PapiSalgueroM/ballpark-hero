@@ -1,0 +1,34 @@
+.receipt {
+  min-width: 0;
+  border: 1px solid hsl(var(--primary) / 0.45);
+  border-radius: 12px;
+  padding: 12px;
+  background: hsl(var(--card));
+  color: hsl(var(--foreground));
+  opacity: 1;
+  transform: none;
+  overflow-anchor: none;
+  animation: waiverEnter 420ms ease-out 1;
+}
+
+.label { font-size: 10px; color: hsl(var(--muted-foreground)); }
+.player { margin-top: 2px; font-size: 13px; font-weight: 700; overflow-wrap: anywhere; }
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 8px; margin-top: 8px; }
+.stats > div { min-width: 0; }
+.stats dt { font-size: 10px; color: hsl(var(--muted-foreground)); }
+.stats dd { margin-top: 2px; font-size: 12px; overflow-wrap: anywhere; }
+.value { display: inline-block; border-radius: 3px; animation: waiverValue 420ms ease-out 1; }
+
+@keyframes waiverEnter {
+  from { opacity: 0.65; transform: translateY(4px); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes waiverValue {
+  from { background-color: hsl(var(--primary) / 0.25); }
+  to { background-color: transparent; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .receipt, .value { animation: none; opacity: 1; transform: none; }
+}
