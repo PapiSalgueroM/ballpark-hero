@@ -92,6 +92,8 @@ export const NBA_EARLY_BIRD_AVERAGE = 1.05;
 export const NBA_EARLY_BIRD_MAX_YEARS = 4;
 export const NBA_EARLY_BIRD_MIN_YEARS = 2;
 export const NBA_BIRD_MAX_YEARS = 5;
+/** Any deal without full Bird rights (Non-Bird, or a man with no rights signed into room) runs four seasons at most. */
+export const NBA_NON_BIRD_MAX_YEARS = 4;
 
 /** The most a first year salary may be, as a share of the cap, by seasons in the league. */
 export const NBA_MAX_SHARE: { maxService: number; share: number }[] = [
@@ -182,13 +184,15 @@ export const CONTRACT_RULES: ContractRule[] = [
     id: 'nba-bird-rights',
     sport: 'nba',
     name: 'Bird rights',
-    plain: 'A club may go over the salary cap to re-sign its own player. After three seasons with the club he has full Bird rights: up to five years at anything up to his maximum salary. After two he has Early Bird rights: up to 175 percent of his last salary or 105 percent of the league average, whichever is greater, for two to four years. After one he has Non-Bird rights: up to 120 percent of his last salary. Changing teams as a free agent restarts the count.',
-    inGame: 'The count runs from the season the desk first saw him on this roster. A man who was already here when the desk opened, or who came in a trade, gets full rights, because the game does not know how long he had been with his club. A man signed from the pool starts at zero. The rights only matter when the club has no cap room for his ask, and the tax and the aprons still bill the payroll exactly as they did before.',
+    plain: 'A club may go over the salary cap to re-sign its own player. After three seasons with the club he has full Bird rights: up to five years at anything up to his maximum salary. After two he has Early Bird rights: up to 175 percent of his last salary or 105 percent of the league average, whichever is greater, for two to four years. After one he has Non-Bird rights: up to 120 percent of his last salary. Only full Bird rights buy a fifth season: every other deal runs four at most. Changing teams as a free agent restarts the count.',
+    inGame: 'The count runs from the season the desk first saw him on this roster. A man who was already here when the desk opened, or who came in a trade, gets full rights, because the game does not know how long he had been with his club. A man signed from the pool starts at zero. The price limits only matter when the club has no cap room for his ask; the length limit always applies. Room is counted the way the engine counts it, with next season\'s dead money and any tax cheque from the last season held back, and the tax and the aprons still bill the payroll exactly as they did before.',
     sources: [
       { url: 'https://www.hoopsrumors.com/2026/03/hoops-rumors-glossary-bird-rights-8.html', says: 'Three seasons with the same team; re-sign for up to five years at any price up to his maximum, whatever the cap room; the clock resets when he changes teams as a free agent or is waived.' },
       { url: 'https://www.cbssports.com/nba/news/nba-salary-cap-explained-glossary-for-the-terms-you-need-to-know-ahead-of-basketball-free-agency/', says: 'Non-Bird after one season, up to 120 percent of previous salary; Early Bird after two, up to 175 percent or 105 percent of the average salary; full Bird after three, anything up to the maximum.' },
       { url: 'https://www.hoopsrumors.com/2025/03/hoops-rumors-glossary-early-bird-rights-8.html', says: 'Early Bird after two seasons: 175 percent of previous salary or 105 percent of the league average, whichever is greater, two to four years.' },
       { url: 'https://www.hoopsrumors.com/2022/04/hoops-rumors-glossary-non-bird-rights-6.html', says: 'Non-Bird covers a man with a season or less with his club: a starting salary up to 120 percent of his previous one, up to four years.' },
+      { url: 'https://www.nba.com/news/free-agency-explained', says: 'Bird rights need some or all of each of the three prior consecutive seasons with the club, and a change of teams only keeps the count when it came by trade or a waiver claim, so a free agent move restarts it; Early Bird deals run two seasons at least.' },
+      { url: 'https://www.cbssports.com/nba/news/nba-free-agency-cheat-sheet-everything-you-need-to-know', says: 'With his Bird rights his own club can offer five years; any other club four. Bird rights need three uninterrupted seasons with the club.' },
     ],
   },
   {
@@ -200,6 +204,8 @@ export const CONTRACT_RULES: ContractRule[] = [
     sources: [
       { url: 'https://www.hoopsrumors.com/2024/05/hoops-rumors-glossary-maximum-salary-4.html', says: 'Six seasons or fewer: up to 25 percent of the cap; seven to nine: 30 percent; ten or more: 35 percent.' },
       { url: 'https://www.cbssports.com/nba/news/nba-salary-cap-explained-glossary-for-the-terms-you-need-to-know-ahead-of-basketball-free-agency/', says: '25 percent for most players with four to six years, 30 percent with seven to nine, 35 percent with ten or more.' },
+      { url: 'https://www.cbssports.com/nba/news/nba-free-agency-cheat-sheet-everything-you-need-to-know', says: 'Zero to six years: 25 percent of the cap; seven to nine: 30 percent; ten or more: 35 percent.' },
+      { url: 'https://www.salaryswish.com/maximum-salary-faq/', says: 'Zero to six years of service: 25 percent of the salary cap; seven to nine: 30 percent; ten or more: 35 percent.' },
     ],
   },
   {
@@ -218,7 +224,7 @@ export const CONTRACT_RULES: ContractRule[] = [
     sport: 'mlb',
     name: 'Qualifying offer',
     plain: 'A club may offer its own free agent one season at the average of the 125 highest salaries in the game. He must have spent the whole season with the club and never have had the offer before. If he turns it down and signs elsewhere, his old club gets a draft pick.',
-    inGame: "The figure is the mean of the 125 highest salaries in this save, so it is the game's own money. He takes it when it meets his ask, and turns it down otherwise, in which case he leaves and the club is owed one extra pick in the next draft. One offer per man, ever, kept in the desk's ledger.",
+    inGame: "The figure is the mean of the 125 highest salaries in this save, so it is the game's own money. He takes it when it meets his ask, and turns it down otherwise, in which case he leaves. The club is owed one extra pick once another club has signed him, paid in the first draft after the desk sees him there; sign him back yourself and there is no pick. One offer per man, ever, kept in the desk's ledger.",
     sources: [
       { url: 'https://www.cbssports.com/mlb/news/mlb-qualifying-offer-predictions-contract-kyle-schwarber-bo-bichette-kyle-tucker/', says: 'A one year deal at the average of the top 125 salaries; only for a player who spent the whole season with the team and never received it before; draft pick compensation when he rejects it and signs elsewhere.' },
       { url: 'https://www.espn.com/mlb/story/_/id/46874206/sources-cubs-kyle-tucker-13-get-22m-qualifying-offer', says: 'A one year deal; a player who accepts cannot be given the offer again; draft picks change hands when a tagged free agent signs elsewhere.' },

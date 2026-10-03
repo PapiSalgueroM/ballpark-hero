@@ -39,7 +39,7 @@ import {
 import {
   MLB_ARBITRATION_AFTER, MLB_FREE_AGENCY_AFTER, MLB_QUALIFYING_OFFER_TOP, MLB_QUALIFYING_OFFER_YEARS,
   NBA_BIRD_MAX_YEARS, NBA_BIRD_SEASONS, NBA_EARLY_BIRD_AVERAGE, NBA_EARLY_BIRD_MAX_YEARS, NBA_EARLY_BIRD_MIN_YEARS,
-  NBA_EARLY_BIRD_RAISE, NBA_NON_BIRD_RAISE, NFL_OPTION_ROUND, NFL_OPTION_YEARS, NHL_RFA_UNDER_AGE,
+  NBA_EARLY_BIRD_RAISE, NBA_NON_BIRD_MAX_YEARS, NBA_NON_BIRD_RAISE, NFL_OPTION_ROUND, NFL_OPTION_YEARS, NHL_RFA_UNDER_AGE,
   NHL_RFA_UNDER_SEASONS, nbaMaxShare, offerSheetPicks, type BirdTier, type GmSportKey,
 } from '@/lib/gmContractRules';
 
@@ -92,7 +92,7 @@ export interface GmContractHost<L extends GmContractLeague = GmContractLeague, R
    * belonged to the old one.
    */
   endDeal?(man: GmMan): void;
-  /** Next season's payroll without this man, the way the engine counts it (the NBA adds dead money). Defaults to the sum of salaries. */
+  /** Next season's payroll without this man, the way the engine counts it against its room (the NBA adds dead money and the last tax cheque). Defaults to the sum of salaries. */
   nextPayroll?(league: L, team: string, without: string): number;
   /** The most men a club may carry. A rival with a full roster cannot table an offer sheet. */
   rosterMax?(league: L): number;
@@ -152,6 +152,12 @@ export interface GmContractLedger {
    * down, left, and was signed back from the pool can never have another.
    */
   qualifiedIds?: string[];
+  /**
+   * MLB: the pick a turned down qualifying offer pays, waiting on him. It is
+   * paid when he turns up at another club, and dropped if he comes back here
+   * or is not seen for LEDGER_SEASONS_KEPT seasons.
+   */
+  qoOwed?: { id: string; season: number; round: number }[];
 }
 
 /** How many seasons of decisions the ledger keeps, so a long save stays small. */
@@ -225,6 +231,7 @@ export function isValidLedger(x: unknown): x is GmContractLedger {
     if (d.picks != null && (!Array.isArray(d.picks) || d.picks.some(r => !isNum(r)))) return false;
   }
   if (l.qualifiedIds != null && (!Array.isArray(l.qualifiedIds) || l.qualifiedIds.some(id => typeof id !== 'string'))) return false;
+  if (l.qoOwed != null && (!Array.isArray(l.qoOwed) || l.qoOwed.some(o => !o || typeof o.id !== 'string' || !isNum(o.season) || !isNum(o.round)))) return false;
   return true;
 }
 
@@ -536,8 +543,10 @@ export function deskCase<L extends GmContractLeague>(
     const room = host.nextCap(league) - used;
     const max = nbaMaxFor(host, league, ledger, man);
     out.maxSalary = max;
+    /* Only full Bird rights buy a fifth season, room or no room. */
     if (cls === 'bird-early') out.maxYears = NBA_EARLY_BIRD_MAX_YEARS;
     if (cls === 'bird-full') out.maxYears = NBA_BIRD_MAX_YEARS;
+    if (cls === 'bird-non' || cls === 'veteran') out.maxYears = NBA_NON_BIRD_MAX_YEARS;
     if (ask.salary > room) {
       /* No room for his ask, so the Bird exception is the only way to pay him. */
       let limit = max;
@@ -581,7 +590,8 @@ export function deskCase<L extends GmContractLeague>(
   }
 
   if (cls === 'restricted') {
-    const sheet = offerSheetFor(league, man, ask, host.nextCap(league));
+    /* A rival with no roster spot cannot sign him, so with none open there is no sheet. */
+    const sheet = sheetClubFor(host, league, ledger.team, man.id) ? offerSheetFor(league, man, ask, host.nextCap(league)) : null;
     out.restricted = { qualifying: { years: 1, salary: round1(Math.max(floor, man.salary)) }, sheet };
     /* With a sheet on the table the only choices are to match it or take the picks. */
     if (sheet) out.canNegotiate = false;
@@ -646,6 +656,9 @@ export function pushFor(
   const rec = ledger.men[c.man.id];
   if (!rec) return null;
   if (rec.push && rec.push.season === league.season) return pushOnce(c.ask, rec.push.offer);
+  /* A man already settled this winter is not pushed: a push that ended in a
+     walkout would quietly undo the decision. */
+  if (decisionFor(ledger, league.season, c.man.id)) return null;
   /* Nothing over what the rules let the club pay him can be offered, so a
      push can never agree a figure the club is not allowed to sign. */
   const salary = Math.min(offer.salary, topSalary(c));
@@ -694,7 +707,7 @@ export function tenderHim(ledger: GmContractLedger, league: GmContractLeague, c:
   return { ok: false, reason: c.restricted ? 'A rival sheet is on the table. Match it or take the picks.' : 'He is not under club control.' };
 }
 
-/** MLB: make the qualifying offer. He takes it, or he goes and the club is owed a pick. One per man, ever. */
+/** MLB: make the qualifying offer. He takes it, or he goes, and the club is owed a pick once another club signs him. One per man, ever. */
 export function qualify(ledger: GmContractLedger, league: GmContractLeague, c: DeskCase, via: 'gm' | 'auto' = 'gm'): Made {
   const q = c.qualifying;
   const rec = ledger.men[c.man.id];
@@ -819,6 +832,20 @@ export function runDeskOffseason<L extends GmContractLeague, R>(
 
   const applied: GmDecision[] = [];
   const owed: number[] = [];
+  /* MLB: a pick waiting on a man who turned down the qualifying offer is paid
+     once he has turned up at another club, and dropped if he came back here. */
+  if (ledger.qoOwed?.length) {
+    const clubOf = (id: string): string | null => {
+      for (const [k, t] of Object.entries(league.teams)) if (t.players.some(p => p.id === id)) return k;
+      return null;
+    };
+    ledger.qoOwed = ledger.qoOwed.filter(o => {
+      const where = clubOf(o.id);
+      if (where === ledger.team) return false;
+      if (where) { owed.push(o.round); return false; }
+      return o.season > season - LEDGER_SEASONS_KEPT;
+    });
+  }
   for (const man of up) {
     const d = decisionFor(ledger, season, man.id);
     if (!d) continue;
@@ -837,10 +864,16 @@ export function runDeskOffseason<L extends GmContractLeague, R>(
       if (sheetClub) {
         /* He signed the rival's sheet, so he goes to that club on its terms. */
         league.teams[sheetClub].players.push({ ...man, years: (d.years ?? 1) + 1, salary: d.salary ?? man.salary });
+        /* The ladder pays only when he has really gone to the club that tabled it. */
+        if (d.picks) owed.push(...d.picks);
       } else {
         league.freeAgents.push({ ...man, years: 1, salary: host.marketSalary(league, man) });
       }
-      if (d.picks) owed.push(...d.picks);
+      /* A turned down qualifying offer pays when another club signs him, not
+         when he walks into the pool, so signing him straight back pays nothing. */
+      if (d.kind === 'qualify-rejected' && d.picks) {
+        ledger.qoOwed = [...(ledger.qoOwed ?? []), ...d.picks.map(round => ({ id: man.id, season, round }))];
+      }
     }
   }
 

@@ -368,3 +368,75 @@ describe('the review of 2026-10-02', () => {
     expect(lg.freeAgents.some(p => p.id === sheet.man.id)).toBe(false);
   });
 });
+
+describe('the second review of 2026-10-02', () => {
+  it('NHL: restricted means under 27 and under seven seasons, at both edges', () => {
+    const lg = league([man('a26', 80, 26, 1, 1), man('a27', 80, 27, 1, 1), man('s6', 80, 24, 1, 1), man('s7', 80, 24, 1, 1)]);
+    const ledger = openLedger(lg, 'ME');
+    noteArrival(ledger, 'a26', 2027, 'draft', 1);
+    noteArrival(ledger, 'a27', 2027, 'draft', 1);
+    noteArrival(ledger, 's6', 2024, 'draft', 1);
+    noteArrival(ledger, 's7', 2023, 'draft', 1);
+    const cls = lg.teams.ME.players.map(p => contractClass('nhl', ledger, lg, p));
+    expect(cls).toEqual(['restricted', 'veteran', 'restricted', 'veteran']);
+  });
+
+  it('a man already settled this winter cannot be pushed, so a walkout can never undo the decision', () => {
+    const lg = league([man('k', 85, 27, 1, 5)]);
+    const ledger = openLedger(lg, 'ME');
+    const c = deskCase(host('nfl'), lg, ledger, lg.teams.ME.players[0]);
+    expect(keepAtAsk(ledger, lg, c).ok).toBe(true);
+    expect(pushFor(ledger, lg, c, { years: c.ask.years, salary: c.ask.salary * 0.3 })).toBeNull();
+    expect(decisionFor(ledger, lg.season, 'k')!.kind).toBe('keep');
+  });
+
+  it('NBA: only full Bird rights buy a fifth season, even with room for the ask', () => {
+    const lg = league([man('full', 80, 27, 1, 5), man('early', 80, 27, 1, 5), man('non', 80, 27, 1, 5)], 400);
+    const ledger = openLedger(lg, 'ME');
+    noteArrival(ledger, 'early', 2029, 'signing');
+    noteArrival(ledger, 'non', 2030, 'signing');
+    const [full, early, non] = lg.teams.ME.players.map(p => deskCase(host('nba'), lg, ledger, p));
+    expect([full.cls, early.cls, non.cls]).toEqual(['bird-full', 'bird-early', 'bird-non']);
+    expect([full.maxYears, early.maxYears, non.maxYears]).toEqual([5, 4, 4]);
+    expect(non.ceiling).toBeUndefined();
+    pushFor(ledger, lg, non, { years: 5, salary: non.ask.salary });
+    expect(decisionFor(ledger, lg.season, 'non')!.years).toBe(4);
+  });
+
+  it('MLB: a turned down qualifying offer pays its pick once another club signs him, and nothing when he is signed back', () => {
+    const h = host('mlb');
+    const lg = league([man('back', 90, 30, 1, 20), man('gone', 90, 30, 1, 20)]);
+    const ledger = openLedger(lg, 'ME');
+    for (const p of [...lg.teams.ME.players]) {
+      const c = deskCase(h, lg, ledger, p);
+      expect(c.qualifying!.accepts).toBe(false);
+      expect(qualify(ledger, lg, c).ok).toBe(true);
+    }
+    const first = runDeskOffseason(h, lg, ledger, () => 0.5);
+    expect(first.ok && first.picksAdded).toEqual([]);
+    expect(ledger.qoOwed!.map(o => o.id).sort()).toEqual(['back', 'gone']);
+    const take = (id: string): GmMan => {
+      const p = lg.freeAgents.find(x => x.id === id)!;
+      lg.freeAgents = lg.freeAgents.filter(x => x.id !== id);
+      return p;
+    };
+    lg.teams.ME.players.push({ ...take('back'), years: 3 });
+    noteArrival(ledger, 'back', lg.season, 'signing');
+    lg.teams.CPU.players.push({ ...take('gone'), years: 3 });
+    const second = runDeskOffseason(h, lg, ledger, () => 0.5);
+    expect(second.ok && second.picksAdded).toEqual([2]);
+    expect(ledger.qoOwed).toEqual([]);
+    expect(isValidLedger({ ...ledger, qoOwed: [{ id: 'x', season: 'soon', round: 2 }] })).toBe(false);
+  });
+
+  it('NHL: with no rival holding a roster spot no sheet is tabled', () => {
+    const men = Array.from({ length: 40 }, (_, i) => man(`d${i}`, 86, 22, 1, 1));
+    const lg = league(men);
+    const ledger = openLedger(lg, 'ME');
+    for (const m of men) noteArrival(ledger, m.id, 2028, 'draft', 1);
+    const full = { ...host('nhl'), rosterMax: () => 130 };
+    const open = { ...host('nhl'), rosterMax: () => 131 };
+    expect(men.every(m => deskCase(full, lg, ledger, m).restricted!.sheet === null)).toBe(true);
+    expect(men.some(m => deskCase(open, lg, ledger, m).restricted!.sheet)).toBe(true);
+  });
+});

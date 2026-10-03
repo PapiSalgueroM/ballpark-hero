@@ -244,6 +244,18 @@ const CONTROLS = {
     to: '    const step = Math.min(ARBITRATION_SHARES.length - 1, Math.max(0, service - MLB_ARBITRATION_AFTER + 1));',
     section: 4,
   },
+  fiveyears: { from: "    if (cls === 'bird-non' || cls === 'veteran') out.maxYears = NBA_NON_BIRD_MAX_YEARS;", to: '', section: 4 },
+  notax: {
+    file: 'gmContractsHostNba.ts',
+    from: 'deadCapUsed(next) + (t.taxDue ?? 0);',
+    to: 'deadCapUsed(next);',
+    section: 4,
+  },
+  qoback: {
+    from: '      if (where === ledger.team) return false;',
+    to: '      if (where === ledger.team) { owed.push(o.round); return false; }',
+    section: 4,
+  },
   nobird: {
     from: '        limit = Math.min(max, man.salary * NBA_NON_BIRD_RAISE);',
     to: '        limit = max;',
@@ -615,7 +627,9 @@ function checkCase(sport, lg, ledger, team, c, st, s) {
     /* Next season's dead money, rolled by hand: a cut's entry halves and loses a season. */
     const dead = (club.deadCap ?? []).filter(e => e.seasonsLeft > 1).reduce((a, e) => a + r1(e.amount / 2), 0);
     if (dead > 0) bump('cases with dead money on the books');
-    const room = cap - club.players.reduce((a, p) => a + (p.id === c.man.id ? 0 : p.salary), 0) - r1(dead);
+    /* Room as the engine's nbaCapRoom counts it: less the tax cheque from the last season close too (review 2, finding 11). */
+    if ((club.taxDue ?? 0) > 0) bump('cases with a tax cheque held back');
+    const room = cap - club.players.reduce((a, p) => a + (p.id === c.man.id ? 0 : p.salary), 0) - r1(dead) - (club.taxDue ?? 0);
     st.nbaTop[c.man.id] = { top: max, capped: false };
     /* The same man under a ceiling of 85 and of 65 percent of his ask, so his
        last word lands as a counter and as an insult, both over the ceiling:
@@ -646,6 +660,9 @@ function checkCase(sport, lg, ledger, team, c, st, s) {
     const floor = host.minSalary(lg);
     const tier = played == null || played >= 3 ? 'full' : played === 2 ? 'early' : played === 1 ? 'non' : 'none';
     st.rule[`tier ${tier}`] = (st.rule[`tier ${tier}`] ?? 0) + 1;
+    /* Only full Bird rights buy a fifth season, room or no room (review 2, finding 12). */
+    const longest = tier === 'full' ? 5 : 4;
+    if (c.maxYears !== longest) fail(4, `${tag}: ${tier} Bird rights allow ${c.maxYears} seasons, the rule says ${longest}`);
     /* An ask exactly at the room is a coin toss in floating point: not judged. */
     if (Math.abs(c.ask.salary - room) < 1e-6) bump('asks exactly at the room, not judged');
     else if (c.ask.salary > room) {
@@ -806,6 +823,8 @@ function deskRun(sport, seed, st) {
   st.taggedLast = new Set();
   st.midIds = new Set();
   st.market = {};
+  st.qoRival = [];
+  st.qoN = 0;
   for (let s = 0; s < SEASONS; s++) {
     /* NFL: the GM tags his best expiring man who was not tagged last winter,
        BEFORE the desk opens, the way the board's tag window runs. A man tagged
@@ -834,6 +853,10 @@ function deskRun(sport, seed, st) {
         st.midIds.add(best.id);
       }
     }
+    /* NBA: no games are played here, so no season close writes a tax cheque.
+       Every other winter the GM's club carries one, standing in for the bill
+       nbaAssessTax would write, so the room the desk counts must hold it back. */
+    if (sport.key === 'nba') lg.teams[team].taxDue = s % 2 ? r1(0.04 * lg.cap) : 0;
     trackDesk(st.track, lg, team);
     /* Who is up, read off the roster by this harness and never off the desk:
        every man on his last season except the one the GM just tagged (review
@@ -917,19 +940,33 @@ function deskRun(sport, seed, st) {
       }
     }
     st.taggedLast = st.taggedNow;
-    /* MLB: a man who turned the qualifying offer down is signed straight back
-       from the pool, so his next winter tests "one offer per man, ever"
-       (review finding 3). */
+    /* MLB: of the men who turned the qualifying offer down, every other one is
+       signed straight back from the pool, so his next winter tests "one offer
+       per man, ever" (review finding 3), and the rest are signed by a rival.
+       The pick is the rival's signing's: this offseason pays one for each man a
+       rival signed last winter, and none for a man the GM signed back (review
+       2, finding 7). */
     if (sport.key === 'mlb') {
+      if (run.picksAdded.length !== st.qoRival.length) {
+        fail(4, `mlb ${lg.season}: ${run.picksAdded.length} qualifying offer picks paid, ${st.qoRival.length} refusers went to a rival last winter`);
+      }
+      st.qoRival = [];
+      const rivals = Object.keys(lg.teams).filter(k => k !== team).sort();
       for (const d of run.applied) {
         if (d.kind !== 'qualify-rejected') continue;
         const back = lg.freeAgents.find(p => p.id === d.id);
         if (!back) continue;
         lg.freeAgents = lg.freeAgents.filter(p => p.id !== d.id);
-        lg.teams[team].players.push({ ...back, years: 1 });
-        desk.noteArrival(ledger, d.id, lg.season, 'signing');
-        delete st.track[d.id];
-        st.rule['qualifying offer refusers signed back'] = (st.rule['qualifying offer refusers signed back'] ?? 0) + 1;
+        if (st.qoN++ % 2 === 0) {
+          lg.teams[team].players.push({ ...back, years: 1 });
+          desk.noteArrival(ledger, d.id, lg.season, 'signing');
+          delete st.track[d.id];
+          st.rule['qualifying offer refusers signed back'] = (st.rule['qualifying offer refusers signed back'] ?? 0) + 1;
+        } else {
+          lg.teams[rivals[(st.qoN + lg.season) % rivals.length]].players.push({ ...back, years: 2 });
+          st.qoRival.push(d.id);
+          st.rule['qualifying offer refusers signed by a rival'] = (st.rule['qualifying offer refusers signed by a rival'] ?? 0) + 1;
+        }
       }
     }
     for (const c of cases) if (!run.applied.some(d => d.id === c.man.id)) fail(1, `${sport.key} ${c.man.name}: expiring but no decision was applied`);

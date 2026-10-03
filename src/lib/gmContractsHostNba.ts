@@ -14,14 +14,16 @@ export const nbaContractHost: GmContractHost<NbaLeague, string[]> = {
   nextCap: league => nbaNextCap(league.cap),
   runOffseason: (league, rng, team) => nbaOffseason(league, rng, team),
   minSalary: league => nbaMinContract(nbaNextCap(league.cap)),
-  /* The engine's cap line is salaries plus dead money (nbaCapUsed). Next
-     season's dead money is this season's rolled forward by the engine's own
-     rollDeadCap, run on a copy so the club is not touched. */
+  /* The engine's room is the cap less salaries, dead money and the tax cheque
+     written at the last season close (nbaCapRoom). Next season's dead money is
+     this season's rolled forward by the engine's own rollDeadCap, run on a
+     copy so the club is not touched. The cheque is held back from next
+     season's spending, so it counts here as it does in nbaCapRoom. */
   nextPayroll: (league, team, without) => {
     const t = league.teams[team];
     if (!t) return 0;
     const next: CutLedger = { deadCap: t.deadCap, releasedThisSeason: [] };
     rollDeadCap(next);
-    return t.players.reduce((s, p) => s + (p.id === without ? 0 : p.salary), 0) + deadCapUsed(next);
+    return t.players.reduce((s, p) => s + (p.id === without ? 0 : p.salary), 0) + deadCapUsed(next) + (t.taxDue ?? 0);
   },
 };

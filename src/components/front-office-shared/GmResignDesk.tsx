@@ -191,7 +191,9 @@ function ResignTable({
       {d ? (
         <p data-resign-decided className="rounded-lg bg-secondary/40 px-2 py-2 text-center text-[11px] text-foreground">
           {DECISION_LABEL[d.kind]}{d.salary != null && d.years != null ? `: ${yrs(d.years)} at ${m(d.salary)}` : ''}
-          {d.picks && d.picks.length ? `. Picks owed to you: round ${d.picks.join(', round ')}.` : '.'}
+          {d.picks && d.picks.length
+            ? `. Picks owed to you: round ${d.picks.join(', round ')}${d.kind === 'qualify-rejected' ? ', once another club signs him' : ''}.`
+            : '.'}
         </p>
       ) : (
         <div className="space-y-2">
@@ -209,7 +211,7 @@ function ResignTable({
             <button type="button" className={quiet} onClick={() => onQualify(c)}>
               Qualifying offer, 1 season at {m(c.qualifying.salary)}: {c.qualifying.accepts
                 ? 'he would take it'
-                : `he would turn it down and leave, and you get a round ${c.qualifying.pick} pick`}
+                : `he would turn it down and leave, and you get a round ${c.qualifying.pick} pick once another club signs him`}
             </button>
           )}
           {c.restricted && !sheet && (
