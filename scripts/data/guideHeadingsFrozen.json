@@ -1781,7 +1781,7 @@
         "The tax line starts at 244 million, matching the real 2026 threshold, and it is a hard cap, rising 3 percent a season.",
         "Playoffs use the real format: best-of-3 Wild Card, best-of-5 Division Series, best-of-7 LCS and World Series.",
         "Trades weigh rating, age and position, with premiums on aces, shortstops and catchers.",
-        "You hold 2 picks a year, and scout grades carry error. True ratings show only after you pick.",
+        "Each club starts with 2 simulation picks. Trades can leave you with fewer or more choices, and each selection spends one owned pick. With none left, finish the draft and offseason. Rivals get two batches of up to five eligible selections in this abbreviated draft. Scout grades carry error; true ratings show only after you pick.",
         "Injuries cost one to four rounds on the IL, and your franchise saves automatically.",
         "A new franchise carries 26 and can hold 22 to 28. The 13 men the sim plays earn their rating's price, the other 13 start on depth deals at 0.7 million until those deals run out, and then they re-sign at their rating's price like anybody else. The roster box flags a cheap deal in its last year with what he will cost, so the jump never lands by surprise.",
         "If the draft takes you past 28, you DFA down to 28 before Round 1, dead money and all, and Play waits until you have. The CPU clubs cut their own lowest rated depth men the same way.",
@@ -2090,7 +2090,7 @@
         "The cap panel shows the projected bill all season. At close the bill is listed beside the results, ownership takes one point of trust per 6 million of it (never more than 20), and the money is held back from next season's cap room. Above the first apron (236.4 million in a new league) a trade has to send out at least the salary it brings back. Computer teams that pay tax let their expiring depth walk the next summer, so the line moves the whole league, not just you. A save from before the tax plays out its current season untaxed and gets its line that summer.",
         "Trades are a negotiation now: open talks and the other GM answers with a handshake, a pick demand, a lesser man, or the dial tone. You can stand firm exactly once per call, and it genuinely gambles: they blink and the price drops, or they dig in and it rises.",
         "The play-in covers seeds 7 through 10, with one last game deciding the 8 seed.",
-        "Draft classes have 24 prospects, you pick twice, and scouting grades can miss the truth by a few points either way.",
+        "Each club starts with 2 simulation picks. Trades can leave you with fewer or more choices, and each selection spends one owned pick. With none left, finish the draft and offseason. The pool has at least 24 prospects, and rivals get two batches of up to five eligible selections in this abbreviated draft. Scouting grades can miss the truth by a few points either way.",
         "Everyone ages each summer: young players develop toward potential, decline starts at 32, veterans retire.",
         "Trust upstairs runs 0 to 100: beat the mandate and it climbs, miss it and it falls, a banner fixes almost anything, and at zero you are fired and the save ends.",
         "Waiving a man is not free. Half his salary stays on this season's cap as dead money, a quarter lands on next season's if he had years left, and you cannot sign him back until the offseason."
@@ -2506,7 +2506,7 @@
         "Points are real: 2 for a win, 1 for an overtime loss, and roughly a quarter of losses go to overtime.",
         "Rosters run between 8 and 15 players, floor and ceiling both enforced.",
         "Trades are player for player plus an optional pick, and the AI prices age, rating and position before saying yes.",
-        "At the draft you make 2 picks, and scouting grades carry error; the true rating appears only after you commit. In new-model franchises, rival clubs follow the scouting order and choose an affordable contract against the next cap, keeping unavailable choices in the pool. A contract price depends on the underlying simulated ability, so it is not a scout-only knowledge model.",
+        "Each club starts with 2 simulation picks. Trades can leave you with fewer or more choices, and each selection spends one owned pick. With none left, finish the draft and offseason. Rivals get two batches of up to five eligible selections in this abbreviated draft. Scouting grades carry error; the true rating appears only after you commit. In new-model franchises, rival clubs follow the scouting order and choose an affordable contract against the next cap, keeping unavailable choices in the pool. A contract price depends on the underlying simulated ability, so it is not a scout-only knowledge model.",
         "Waiving a man is not free. Half his salary stays on this season's cap as dead money, a quarter lands on next season's if he had years left, and you cannot sign him back until the offseason.",
         "Trust upstairs runs 0 to 100: beat the mandate and it climbs, miss it and it falls, a Cup fixes almost anything, and at zero you are fired and the save ends."
       ],
