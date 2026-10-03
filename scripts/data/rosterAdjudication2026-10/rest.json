@@ -218,6 +218,17 @@
         { "family": "A", "url": "https://www.slgr.gr/en/team/1196/teamComp/25/", "publisher": "Super League Greece (OFI 2026-2027 roster)", "readOn": "2026-10-03", "says": "forward, shirt 11, born 1995-09-04, 5 appearances" },
         { "family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/1010", "publisher": "ESPN (OFI Crete squad page, season 2026-27)", "readOn": "2026-10-03", "says": "forward, shirt 11, age 31" }
       ]
+    },
+    {
+      "name": "Pedro Raul",
+      "club": "Corinthians",
+      "officialPageRead": false,
+      "adjudicatedOn": "2026-10-03",
+      "note": "Forward born 1996-11-05, shirt 18. The 2026-10-02 pass held him because press said Corinthians wanted to sell before the window shut and nothing after the window confirmed he stayed. Both publishers now do: ESPN shows him coming on for Corinthians in Serie A on 2026-09-20, after the Brazilian window closed on 2026-09-11, and Soccerway shows no transfer since he came back from the Ceara loan on 2025-12-31, with a contract to 2028-12-31. Corinthians' own squad page answered 405, so this rests on two independent publishers that agree.",
+      "sources": [
+        { "family": "B", "url": "https://www.espn.com/soccer/player/_/id/234070/pedro-raul", "publisher": "ESPN (player page)", "readOn": "2026-10-03", "says": "Corinthians, shirt 18, born 1996-11-05, substitute in Serie A on 2026-08-30, 2026-09-06 and 2026-09-20 and in the Libertadores on 2026-09-09 and 2026-09-16" },
+        { "family": "B", "url": "https://www.soccerway.com/player/pedro-raul/SbL3tZWd/", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Corinthians, born 1996-11-05, contract to 2028-12-31, back from the Ceara loan 2025-12-31, 14 Serie A appearances in 2026, no later transfer" }
+      ]
     }
   ],
   "movedTo": [
