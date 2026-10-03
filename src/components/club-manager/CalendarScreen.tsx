@@ -325,7 +325,7 @@ export function CalendarScreen({ career, onSimTo, onSetTraining }: CalendarScree
                 <span className="w-12 shrink-0 text-muted-foreground">{shortDate(day.date)}</span>
                 <span className="shrink-0" aria-hidden="true">{day.kind === 'match' || day.kind === 'window' ? dayEmoji(day) : '🌍'}</span>
                 <span className={cn('truncate', day.potential ? 'text-muted-foreground italic' : 'text-foreground')}>
-                  {day.kind === 'window' ? 'January window opens' : day.kind === 'match' ? venueLine(day) : `International break, ${intlByKey.get(day.key)?.label ?? ''}`}
+                  {day.kind === 'window' ? 'January window opens' : day.kind === 'match' ? venueLine(day) : `International window, ${intlByKey.get(day.key)?.label ?? ''}`}
                 </span>
                 {day.deadline && <span className="shrink-0 text-[9px] text-red-400 font-bold">🔒 deadline</span>}
                 {day.res ? (
@@ -352,7 +352,7 @@ export function CalendarScreen({ career, onSimTo, onSetTraining }: CalendarScree
           <span className="inline-flex items-center gap-0.5"><Cone /> training</span>
           <span>🔓 window opens</span>
           <span>🔒 deadline day</span>
-          {intlByKey.size > 0 && <span>🌍 international break starts</span>}
+          {intlByKey.size > 0 && <span>🌍 international window opens</span>}
           <span><span className="inline-block w-2 h-2 rounded-sm bg-gold/30 align-middle" /> window open</span>
           <span>faded: a round you reach by winning the one before</span>
           <span>Season: {MONTH_NAMES[days.seasonStart.m - 1]} {days.seasonStart.y} to {MONTH_NAMES[days.seasonEnd.m - 1]} {days.seasonEnd.y}</span>

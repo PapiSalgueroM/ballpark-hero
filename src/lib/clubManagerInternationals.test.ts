@@ -8,7 +8,7 @@ import { startCareer } from '@/lib/clubManager';
 import type { CareerState } from '@/lib/clubManager';
 import {
   VERIFIED_WINDOWS, ruleWindows, intlWindowsFor, intlDatesPartial, windowLabel, hash01,
-  validIntl, ensureIntl, freshIntl, callUpsFor, breakMessage, restingIds, backFromDuty, nationBars,
+  validIntl, ensureIntl, freshIntl, callUpsFor, breakMessage, restingIds, backFromDuty, nationBars, intlMarkLine,
 } from '@/lib/clubManagerInternationals';
 import { nationalityOf } from '@/data/playerNationalities';
 
@@ -16,10 +16,12 @@ const key = (d: { y: number; m: number; d: number }) => d.y * 10000 + d.m * 100 
 
 describe('the window rule', () => {
   it('gives exactly the two source verified dates', () => {
-    for (const [year, verified] of Object.entries(VERIFIED_WINDOWS)) {
-      const rule = ruleWindows(Number(year));
-      expect(rule.map(w => [key(w.start), key(w.end)])).toEqual(verified.map(w => [key(w.start), key(w.end)]));
-      expect(intlDatesPartial(Number(year))).toBe(false);
+    const ids = Object.keys(VERIFIED_WINDOWS);
+    expect(ids.length).toBeGreaterThanOrEqual(2);
+    for (const id of ids) {
+      const y = Number(id.slice(0, 4));
+      const w = [...ruleWindows(y), ...ruleWindows(y - 1)].find(x => x.id === id);
+      expect(w && [key(w.start), key(w.end)]).toEqual([key(VERIFIED_WINDOWS[id].start), key(VERIFIED_WINDOWS[id].end)]);
     }
   });
 
@@ -33,14 +35,16 @@ describe('the window rule', () => {
   });
 
   it('marks every era and far future season as structure only', () => {
-    for (const y of [2005, 2010, 2015, 2028, 2035]) expect(intlWindowsFor(y).every(w => !w.verified)).toBe(true);
-    expect(intlWindowsFor(2026).every(w => w.verified)).toBe(true);
+    for (const y of [2005, 2010, 2015, 2027, 2028, 2035]) expect(intlWindowsFor(y).every(w => !w.verified)).toBe(true);
+    /* March 2027 has one recorded source, so only the autumn and November windows of 2026-27 are confirmed. */
+    expect(intlWindowsFor(2026).map(w => w.verified)).toEqual([true, true, false]);
+    expect(intlDatesPartial(2026)).toBe(true);
   });
 
   it('labels a window without a dash', () => {
     const label = windowLabel(intlWindowsFor(2026)[0]);
     expect(label).toBe('21 Sep to 6 Oct');
-    expect(label).not.toMatch(/[–—]/);
+    expect(label).not.toMatch(/[\u2013\u2014]/);
   });
 });
 
@@ -98,8 +102,29 @@ describe('who goes', () => {
     const msg = breakMessage({ windowId: '2026-sepoct', atWeek: 6, label: '21 Sep to 6 Oct', backWeek: 7, backOpponent: 'Everton', called });
     expect(msg?.from).toBe('Your assistant');
     for (const c of called) expect(msg?.text).toContain(c.name);
-    expect(msg?.text).not.toMatch(/[–—]/);
+    expect(msg?.text).not.toMatch(/[\u2013\u2014]/);
     expect(msg?.text).not.toMatch(/["“”]/);
     expect(breakMessage({ windowId: 'x', atWeek: 0, label: 'y', backWeek: 1, backOpponent: null, called: [] })).toBeNull();
+  });
+
+  it('says the rest watched from the bench only when somebody did', () => {
+    const called = callUpsFor(s, { id: '2026-sepoct', matches: 4 }).slice(0, 3);
+    const brk = { windowId: '2026-sepoct', atWeek: 6, label: '21 Sep to 6 Oct', backWeek: 7, backOpponent: 'Everton' };
+    const allStarted = breakMessage({ ...brk, called: called.map(c => ({ ...c, starts: true, injuredWeeks: 0 })) });
+    expect(allStarted?.text).not.toContain('the rest mostly watched');
+    const oneSat = breakMessage({ ...brk, called: called.map((c, i) => ({ ...c, starts: i > 0, injuredWeeks: 0 })) });
+    expect(oneSat?.text).toContain('the rest mostly watched');
+  });
+
+  it('never claims the men are away for the whole window, and counts games only on confirmed dates', () => {
+    const msg = breakMessage({ windowId: '2026-nov', atWeek: 6, label: '9 to 17 Nov', backWeek: 7, backOpponent: 'Everton', called: callUpsFor(s, { id: '2026-nov', matches: 2 }) });
+    expect(msg?.text).toContain('your fixtures do not stop for it');
+    const w = intlWindowsFor(2026)[0];
+    const confirmed = intlMarkLine({ window: w, key: 0, label: '21 Sep to 6 Oct', partial: false, done: false });
+    expect(confirmed).toContain('up to 4 games for each country');
+    const era = intlWindowsFor(2010)[0];
+    const approx = intlMarkLine({ window: era, key: 0, label: 'x', partial: true, done: false });
+    expect(approx).not.toContain('games for each country');
+    expect(approx).toContain('approximate');
   });
 });

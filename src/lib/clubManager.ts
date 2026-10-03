@@ -91,7 +91,7 @@ import { PATIENCE_FLOOR, askPremiumScale, currencySymbol, ensureStartOptions, na
 import { BOARD_ASKS_VERSION, askStatus, buildBoardAsks, ensureBoardAsks, isBoardAsk } from '@/lib/clubManagerBoardAsks';
 /* Round 978: international duty. Called only inside functions, never at module
    scope, so the cycle back into this file stays evaluation safe. */
-import { answerBreak, ensureIntl, fireDueBreaks, freshIntl, restingIds } from '@/lib/clubManagerInternationals';
+import { answerBreak, backFromDuty, endRest, ensureIntl, fireDueBreaks, freshIntl, restingIds } from '@/lib/clubManagerInternationals';
 import type { IntlDuty } from '@/lib/clubManagerInternationals';
 /* Round 478: the Champions League orders a level group table by its own
    rule, not a league one. That module imports nothing but types from here,
@@ -8026,6 +8026,14 @@ function pushMessage(state: CareerState, msg: Omit<PlayerMessage, 'id' | 'week'>
 /** Round 978: play every international window the save has reached and post
  *  your assistant's note on who went. Draws nothing from the seeded stream. */
 function runIntlBreaks(state: CareerState): void {
+  /* The last break's rest ends after its match, before any new break fires. */
+  endRest(state);
+  /* A note nobody answered before its match (a fast forward plays straight
+     through) is settled, so it never sits in the inbox counting toward the
+     three unresolved messages that hold every other sender back. */
+  if (!backFromDuty(state).length && (state.inbox ?? []).some(m => m.kind === 'intlDuty' && !m.resolved)) {
+    state.inbox = (state.inbox ?? []).map(m => (m.kind === 'intlDuty' && !m.resolved ? { ...m, resolved: 'That game has been and gone.' } : m));
+  }
   for (const msg of fireDueBreaks(state)) pushMessage(state, msg);
 }
 
@@ -8522,7 +8530,7 @@ export function answerMessage(career: CareerState, messageId: string, optionIdx:
       const answer = answerBreak(career, opt.effect === 'restIntl');
       return {
         ...career,
-        ...(answer ? { intl: answer.intl } : {}),
+        ...(answer ? { intl: answer.intl, xiIds: answer.xiIds } : {}),
         inbox: inbox.map(m => (m.id === messageId
           ? { ...m, resolved: answer ? answer.resolved : 'That game has been and gone.' }
           : m)),
@@ -11951,22 +11959,20 @@ export function effectiveXIWithSlots(state: CareerState): XiSlot[] {
   const used = new Set<string>();
   const out: XiSlot[] = [];
   /* Round 978: the men you rested for the match after an international
-     break sit this one out, and the slot fills the same way as for an
-     injured man. Empty on every other match, so this is the old rule there. */
+     break. The rest itself is written into xiIds (applyRest in
+     clubManagerInternationals.ts), so a man you put back in the eleven
+     yourself plays; here they are only passed over when a slot needs
+     filling. Empty on every other match, so this is the old rule there. */
   const resting = restingIds(state);
   formation.slots.forEach((slot, i) => {
     const id = state.xiIds[i];
     let p = id ? state.squad.find(x => x.id === id) : undefined;
-    if (!p || !isAvailable(p) || used.has(p.id) || resting.has(p.id)) {
+    if (!p || !isAvailable(p) || used.has(p.id)) {
       /* Round 505: the best available man for the slot as the match will
          read him, his rating less the price he pays there (a natural fit
          pays nothing, so he still comes first at equal rating), and a
-         position he has retrained into counts as natural.
-         Round 978: a slot you opened by resting a man is about legs, so it
-         goes to the man worth most on the day by myMatchStrength's own
-         terms, his freshness included. Every other slot fills as before. */
-      const restFill = !!p && resting.has(p.id);
-      const worth = (x: CMPlayer) => x.rating - fitPenalty(x, slot) + (restFill ? CONDITION_PER_FITNESS * x.fitness : 0);
+         position he has retrained into counts as natural. */
+      const worth = (x: CMPlayer) => x.rating - fitPenalty(x, slot);
       const best = (pool: CMPlayer[]) => pool
         .sort((a, b) => worth(b) - worth(a) || b.rating - a.rating)[0];
       const open = state.squad.filter(x => isAvailable(x) && !used.has(x.id));
@@ -12052,7 +12058,8 @@ function dutyLookup(xi: XiSlot[]): (p: CMPlayer) => Duty | null {
  * simHalftime measures is untouched.
  */
 /** Round 978: the strength a point of the eleven's average fitness is worth,
- *  named so the rest fill-in in effectiveXIWithSlots prices legs the same way. */
+ *  named so the international rest (applyRest in clubManagerInternationals.ts)
+ *  prices a stand-in's legs the same way. */
 export const CONDITION_PER_FITNESS = 0.14;
 
 function myMatchStrength(state: CareerState, xi: XiSlot[]): number {
@@ -12066,8 +12073,9 @@ function myMatchStrength(state: CareerState, xi: XiSlot[]): number {
 }
 
 /** Round 978: the strength the eleven that would take the field right now
- *  plays at, by the engine's own rule. Read by scripts/simCmInternationals.mjs
- *  to price an international break; no screen depends on it. */
+ *  plays at, by the engine's own rule. The international rest plan (restPlan,
+ *  behind your assistant's inbox answer) prices a rest with it, and
+ *  scripts/simCmInternationals.mjs prices a break with it. */
 export function matchStrengthNow(state: CareerState): number {
   return myMatchStrength(state, effectiveXIWithSlots(state));
 }
@@ -16135,10 +16143,10 @@ export function playNextEntry(career: CareerState, opts?: { skipHalftime?: boole
        cover. The entries before it have been played or skipped through this
        same loop, so a tap on a quiet Tuesday never plays the match after it. */
     if (opts?.untilWeek !== undefined && state.week >= opts.untilWeek) return { state, kind: 'reached' };
-    /* Round 978: an international window the calendar has reached is played
-       before the next entry. Normally the hook after my match below has
-       already done it, so this only catches a break that falls between two
-       entries the world plays without me. */
+    /* Round 978: an international window my next match has reached is
+       played before the next entry. The hook after my match below fires
+       every break straight after the last match of mine before its window,
+       so this only catches a save that reaches one some other way. */
     if (!state.live) runIntlBreaks(state);
     /* Round 504: a match already kicked off and paused (the save closed mid
        match) is picked back up, never kicked off a second time over the top
@@ -16229,7 +16237,7 @@ export function playNextEntry(career: CareerState, opts?: { skipHalftime?: boole
     }
     const report = playMyMatch(state, entry, live);
     state.week = live.week + 1;
-    /* Round 978: the break, if it falls before my next entry, happens now,
+    /* Round 978: the break, if it falls before my next match, happens now,
        so the note on who went is waiting before the match they come back
        for and you can rest them. */
     runIntlBreaks(state);

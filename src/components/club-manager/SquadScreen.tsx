@@ -500,7 +500,11 @@ export function SquadScreen({ squad, xiIds, eraId, captainId = null, career }: S
   const resting = restingIds(career);
   const dutyById = new Map(back.map(call => [call.id, call]));
   const backOpp = career.intl?.last?.backOpponent ?? null;
-  const restNames = back.filter(call => resting.has(call.id)).map(call => call.name);
+  /* A rested man you put back in the eleven yourself plays, so he is not resting any more. */
+  const restingNow = (id: string) => resting.has(id) && !career.xiIds.includes(id);
+  const restNames = back.filter(call => restingNow(call.id)).map(call => call.name);
+  /* The ask is only shown while the assistant's note is still waiting for an answer. */
+  const asked = (career.inbox ?? []).some(m => m.kind === 'intlDuty' && !m.resolved);
 
   const pick = (key: SquadSortKey) => setSort(s => (
     s.key === key ? { key, dir: s.dir === 'asc' ? 'desc' : 'asc' } : { key, dir: SORT_BY_KEY.get(key)?.first ?? 'desc' }
@@ -519,8 +523,10 @@ export function SquadScreen({ squad, xiIds, eraId, captainId = null, career }: S
         <div data-cm-intl-banner className="mb-2 rounded-lg border border-emerald-400/40 bg-emerald-500/10 px-2.5 py-1.5 text-[11px] text-foreground">
           <span className="font-bold">🌍 Back from international duty{backOpp ? ` for ${backOpp}` : ''}: {back.length} {back.length === 1 ? 'player' : 'players'}.</span>{' '}
           {restNames.length > 0
-            ? <span>Resting for that game: {restNames.join(', ')}. They are on the bench if you need them.</span>
-            : <span className="text-muted-foreground">They start tired unless you rest the spent ones: your assistant asks in the inbox.</span>}
+            ? <span>Resting for that game: {restNames.join(', ')}. They are on the bench: put one back in your eleven and he plays.</span>
+            : asked
+              ? <span className="text-muted-foreground">They start tired unless you rest the spent ones: your assistant asks in the inbox.</span>
+              : <span className="text-muted-foreground">They start that game on tired legs.</span>}
         </div>
       )}
       <div className="flex items-center justify-between gap-2 pb-1.5 border-b border-border/60 md:border-0 md:pb-0.5">
@@ -586,7 +592,7 @@ export function SquadScreen({ squad, xiIds, eraId, captainId = null, career }: S
           sortKey={sort.key}
           scoutLevel={scoutLevel}
           money={money}
-          duty={dutyById.has(p.id) ? { call: dutyById.get(p.id)!, resting: resting.has(p.id) } : null}
+          duty={dutyById.has(p.id) ? { call: dutyById.get(p.id)!, resting: restingNow(p.id) } : null}
         />
       ))}
       <p className="text-[9px] text-muted-foreground pt-2">

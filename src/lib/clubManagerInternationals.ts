@@ -13,35 +13,38 @@
  * across late September and early October with up to four matches, then nine
  * days in November and nine days in March with up to two each. Before 2026 it
  * was four nine day windows (September, October, November, March). One rule
- * covers each shape (intlWindowsFor) and the seasons whose dates two sources
- * confirm are pinned in VERIFIED_WINDOWS, which scripts/simCmInternationals.mjs
- * holds the rule to. Every other season, the era seasons included, uses the
- * rule as a STRUCTURE only and reads as partial (intlDatesPartial), the same
- * honesty rule as the rosters' CM_PARTIAL, so the screen can say its dates
- * are approximate.
+ * covers each shape (intlWindowsFor) and the windows whose dates two sources
+ * with a URL confirm are pinned in VERIFIED_WINDOWS, which
+ * scripts/simCmInternationals.mjs holds the rule to. Every other window, the
+ * era seasons included, uses the rule as a STRUCTURE only and reads as
+ * partial, the same honesty rule as the rosters' CM_PARTIAL, so the screen
+ * says its dates are approximate.
  *
- * Sources, read 2026-10-03:
- *  - The governing body's own "Men's International Match Calendar 2023-2030"
- *    (the April 2026 edition), digitalhub.fifa.com/m/3123d37097318f7f/original/
- *    Men-s-International-Match-Calendar-2023-2030_EN.pdf. 2026: 21 September
- *    to 6 October (4 matches), 9 to 17 November. 2027: 22 to 30 March, 20
- *    September to 5 October, 8 to 16 November. 2028: 20 to 28 March.
- *  - notjustok.com, its sports desk piece on the merged autumn window ahead of
- *    2026/27: September 21 to October 6, November 9 to 17, March 22 to 30 for
- *    2026-27.
- *  - beIN Sports, its 2026-08-24 explainer on the next international break and
- *    why it runs longer: 21 September to 6 October 2026 and 9 to 17 November
- *    2026.
- *  - Groundhopper Soccer Guides, "When Are the Next International Breaks in
- *    English and European Football?": the blank club weekends of 2027-28 are
- *    25 September and 2 October 2027, 13 November 2027 and 25 March 2028, each
- *    inside the governing body's range above, the second source for 2027-28.
- *  - The FIFA Council media release approving the international match
- *    calendars: the three in season windows and their lengths from 2026.
- * The rule below reproduces every published in season date for 2026-27
- * through 2029-30 and, in the older shape, 2023-24 and 2024-25 exactly
- * (2025-26's March window it puts a week early). That is why seasons past
- * 2027-28 and every era season are structure only.
+ * Sources, each read 2026-10-03:
+ *  1. The governing body's "Men's International Match Calendar 2023-2030"
+ *     (April 2026 edition), https://digitalhub.fifa.com/m/3123d37097318f7f/
+ *     original/Men-s-International-Match-Calendar-2023-2030_EN.pdf, text
+ *     extracted and read: 2026: 21 September to 6 October (4 matches), 9 to
+ *     17 November (2). 2027: 22 to 30 March, 20 September to 5 October (4),
+ *     8 to 16 November. 2028: 20 to 28 March, 18 September to 3 October.
+ *  2. UEFA's 2026/27 Nations League league phase fixture list,
+ *     https://editorial.uefa.com/resources/02a2-1fea0cbd54af-e56dd26a4579-1000/
+ *     unl_2627_-_league_phase_fixture_list_per_matchday.pdf: matches on every
+ *     day from 24 September to 6 October 2026 and from 12 to 17 November
+ *     2026, and UEFA's league phase page, https://www.uefa.com/
+ *     uefanationsleague/news/02a2-1fea18abbcbc-456e846509e7-1000/: "kicked
+ *     off on 24 September and concludes on 17 November". Both windows' last
+ *     days and their match weeks agree with source 1, so 2026-sepoct and
+ *     2026-nov are pinned.
+ * NOT pinned, and why: March 2027 and all of 2027-28 have only source 1 with
+ * a URL recorded here (UEFA's 2026-28 national team calendar is Annex A of
+ * its Nations League regulations, https://documents.uefa.com/r/
+ * Regulations-of-the-UEFA-Nations-League-2026/27-Online, whose body could
+ * not be read), so they show as approximate although the rule gives source
+ * 1's dates. The rule reproduces every in season date source 1 lists for
+ * 2026-27 through 2029-30 and, in the older shape, 2023-24 and 2024-25
+ * (2025-26's March window it puts a week early). Seasons before 2023-24 are
+ * in no source here: the era seasons use the older shape as a stand in.
  *
  * WHO GOES. A man is called up when the nationality map knows his country
  * (src/data/playerNationalities.ts, through nationalityOf) and his rating
@@ -58,10 +61,17 @@
  * off the save, the window and the man, so the engine's seeded stream is
  * untouched and reloading a save cannot reroll a knock.
  *
- * THE DECISION. The break lands between two of your matches. Your assistant
+ * THE DECISION. The break lands between two of your matches, straight after
+ * the last of yours before the window opens. Club Manager's fixture list does
+ * not stop for a window (moving every date would move the January window and
+ * the season's end with it), so the copy gives the window's real dates as the
+ * window's and never claims your men are away for all of it. Your assistant
  * names who went in the inbox and asks whether to start them in the match
- * they come back for, or rest them for that one game (they are then picked
- * only off the bench). The rest lasts exactly one match and needs no undoing.
+ * they come back for, or rest them for that one game. A rest is written into
+ * your picked eleven (applyRest), so the tactics screen shows the side that
+ * will play, the rested men sit on the bench, and putting one back in the
+ * eleven yourself plays him. After that match they go back into their slots
+ * (endRest).
  *
  * Old saves: a save from before this round has no `intl` block, and a missing
  * block means no windows. startCareer and startNextSeason write one, so an old
@@ -71,7 +81,7 @@
 import type { CareerState, CMPlayer, PlayerMessage } from '@/lib/clubManager';
 import {
   careerLeagueOf, LEAGUE_NATIONS, entryInvolvesMe, fixtureFor, matchStrengthNow, effectiveXIWithSlots,
-  CONDITION_PER_FITNESS, MATCH_FITNESS_COST, MATCH_FITNESS_SPREAD,
+  CONDITION_PER_FITNESS, MATCH_FITNESS_COST, MATCH_FITNESS_SPREAD, FORMATIONS, fitPenalty, isAvailable,
 } from '@/lib/clubManager';
 import { nationalityOf } from '@/data/playerNationalities';
 import { NATION_CONFED } from '@/lib/soccerInternational';
@@ -136,32 +146,23 @@ export function ruleWindows(worldYear: number): Omit<IntlWindow, 'verified'>[] {
 }
 
 /**
- * The seasons whose in season window dates two sources confirm (see the
- * header), keyed by the year the season starts in. The rule above must give
- * exactly these; scripts/simCmInternationals.mjs holds it to them.
+ * The windows whose dates two sources with a URL confirm (see the header),
+ * by window id. The rule above must give exactly these;
+ * scripts/simCmInternationals.mjs holds it to them.
  */
-export const VERIFIED_WINDOWS: Record<number, { start: CalDate; end: CalDate }[]> = {
-  2026: [
-    { start: { y: 2026, m: 9, d: 21 }, end: { y: 2026, m: 10, d: 6 } },
-    { start: { y: 2026, m: 11, d: 9 }, end: { y: 2026, m: 11, d: 17 } },
-    { start: { y: 2027, m: 3, d: 22 }, end: { y: 2027, m: 3, d: 30 } },
-  ],
-  2027: [
-    { start: { y: 2027, m: 9, d: 20 }, end: { y: 2027, m: 10, d: 5 } },
-    { start: { y: 2027, m: 11, d: 8 }, end: { y: 2027, m: 11, d: 16 } },
-    { start: { y: 2028, m: 3, d: 20 }, end: { y: 2028, m: 3, d: 28 } },
-  ],
+export const VERIFIED_WINDOWS: Record<string, { start: CalDate; end: CalDate }> = {
+  '2026-sepoct': { start: { y: 2026, m: 9, d: 21 }, end: { y: 2026, m: 10, d: 6 } },
+  '2026-nov': { start: { y: 2026, m: 11, d: 9 }, end: { y: 2026, m: 11, d: 17 } },
 };
 
-/** True when a season's window dates are the rule's structure rather than confirmed dates. */
+/** True when any of a season's window dates are the rule's structure rather than confirmed dates. */
 export function intlDatesPartial(worldYear: number): boolean {
-  return !VERIFIED_WINDOWS[worldYear];
+  return !ruleWindows(worldYear).every(w => VERIFIED_WINDOWS[w.id]);
 }
 
-/** The windows of the season that starts in `worldYear`. */
+/** The windows of the season that starts in `worldYear`, each marked confirmed or not. */
 export function intlWindowsFor(worldYear: number): IntlWindow[] {
-  const verified = !intlDatesPartial(worldYear);
-  return ruleWindows(worldYear).map(w => ({ ...w, verified }));
+  return ruleWindows(worldYear).map(w => ({ ...w, verified: !!VERIFIED_WINDOWS[w.id] }));
 }
 
 /** "21 Sep to 6 Oct". */
@@ -322,7 +323,15 @@ export interface IntlDuty {
   /** The latest break. */
   last?: IntlBreak;
   /** One match rest: these ids start on the bench in calendar entry `week`. */
-  rest?: { week: number; ids: string[] };
+  rest?: IntlRest;
+}
+
+export interface IntlRest {
+  week: number;
+  ids: string[];
+  /** The slots the rest handed over in the picked eleven (xiIds), so the men
+   *  go back into them after the match. Absent on a rest nobody was swapped for. */
+  swaps?: { slot: number; out: string; in: string }[];
 }
 
 /** A fresh block for the season the save is starting. */
@@ -354,6 +363,13 @@ export function validIntl(block: unknown): block is IntlDuty {
   if (b.rest !== undefined) {
     const r = b.rest as Record<string, unknown> | null;
     if (!r || typeof r !== 'object' || !isInt(r.week) || !Array.isArray(r.ids) || !r.ids.every(isStr)) return false;
+    if (r.swaps !== undefined) {
+      if (!Array.isArray(r.swaps)) return false;
+      for (const s of r.swaps as unknown[]) {
+        const x = s as Record<string, unknown> | null;
+        if (!x || typeof x !== 'object' || !isInt(x.slot) || !isStr(x.out) || !isStr(x.in)) return false;
+      }
+    }
   }
   return true;
 }
@@ -402,8 +418,9 @@ export function breakMessage(brk: IntlBreak): IntlMessage | null {
     ? ` ${listNames(hurt.map(c => c.name))} picked up a knock away and ${hurt.length === 1 ? 'is' : 'are'} out for a bit.`
     : '';
   const played = fit.filter(c => c.starts);
+  const benchLine = played.length < fit.length ? ', the rest mostly watched from the bench' : '';
   const playedLine = played.length
-    ? ` ${listNames(played.map(c => c.name))} started for ${played.length === 1 ? 'his country' : 'their countries'}, the rest mostly watched from the bench.`
+    ? ` ${listNames(played.map(c => c.name))} started for ${played.length === 1 ? 'his country' : 'their countries'}${benchLine}.`
     : ' Nobody started for his country, so the legs are mostly fine.';
   const longHaul = played.some(c => c.far) ? ' The long trips hurt most.' : '';
   const ask = fit.length
@@ -414,7 +431,9 @@ export function breakMessage(brk: IntlBreak): IntlMessage | null {
     from: 'Your assistant',
     playerName: 'Your assistant',
     playerId: '',
-    text: `International break, ${brk.label}. Away with their countries (${who}). They are back for ${back}.${fit.length ? playedLine : ''}${longHaul}${hurtLine}${ask}`,
+    /* The window's dates are the window's, never the time the men are away:
+       the fixture list plays on through a window, so the note says so. */
+    text: `International break: the window runs ${brk.label}, and your fixtures do not stop for it, so they went straight after your last game. Away with their countries (${who}). They are back for ${back}.${fit.length ? playedLine : ''}${longHaul}${hurtLine}${ask}`,
     options: fit.length
       ? [
         { label: 'Rest the ones who are spent', effect: 'restIntl' },
@@ -425,19 +444,25 @@ export function breakMessage(brk: IntlBreak): IntlMessage | null {
 }
 
 /**
- * Plays every window the save has reached: a window is reached when the next
- * calendar entry is dated on or after its first day. Each one sends its men
- * away and back (fitness cost, maybe a knock), records the break and returns
- * the assistant's note for the engine to post. A season with no block, or a
- * block from another season, plays nothing. Mutates `state`, which is the
- * engine's own working copy.
+ * Plays every window the save has reached: a window is reached when MY next
+ * match is dated on or after its first day, so the break always lands right
+ * after one of my matches and the note waits in the inbox before the match
+ * they come back for. (Reading the next calendar entry instead let a bye or a
+ * world only entry carry the break to the top of the play that then kicked
+ * off my match in the same call, with no chance to answer.) Each one sends its
+ * men away and back (fitness cost, maybe a knock), records the break and
+ * returns the assistant's note for the engine to post. A season with no block,
+ * a block from another season, or a season with no match of mine left, plays
+ * nothing. Mutates `state`, which is the engine's own working copy.
  */
 export function fireDueBreaks(state: CareerState): IntlMessage[] {
   const intl = liveIntl(state);
   if (!intl || state.week >= state.calendar.length) return [];
+  const backWeek = myNextMatchWeek(state, state.week);
+  if (backWeek < 0) return [];
   const worldYear = worldYearOf(state);
   const dates = dateOfEntries(worldYear, state.calendar);
-  const nextKey = dateKey(dates[state.week]);
+  const nextKey = dateKey(dates[backWeek]);
   const out: IntlMessage[] = [];
   for (const w of intlWindowsFor(worldYear)) {
     if (intl.fired.includes(w.id) || dateKey(w.start) > nextKey) continue;
@@ -450,8 +475,7 @@ export function fireDueBreaks(state: CareerState): IntlMessage[] {
       const fitness = Math.max(20, Math.min(100, p.fitness - c.cost));
       return { ...p, fitness, injuryWeeks: Math.max(p.injuryWeeks, c.injuredWeeks) };
     });
-    const backWeek = myNextMatchWeek(state, state.week);
-    const fx = backWeek >= 0 ? fixtureFor(state, state.calendar[backWeek]) : null;
+    const fx = fixtureFor(state, state.calendar[backWeek]);
     const brk: IntlBreak = { windowId: w.id, atWeek: state.week, label: windowLabel(w), backWeek, backOpponent: fx ? fx.opponent : null, called };
     intl.last = brk;
     delete intl.rest;
@@ -470,6 +494,54 @@ export function restingIds(state: Pick<CareerState, 'intl' | 'season' | 'week'>)
   const intl = liveIntl(state);
   if (!intl?.rest || state.week > intl.rest.week) return new Set();
   return new Set(intl.rest.ids);
+}
+
+/**
+ * A rest written into the picked eleven, so every screen that reads xiIds
+ * (the tactics pitch, the header average, the bench list) shows the eleven
+ * the engine will field. Each rested man's slot goes to the man worth most
+ * there on the day by myMatchStrength's own terms (his rating less the slot's
+ * fit price, plus his legs at CONDITION_PER_FITNESS), from the men outside
+ * the eleven, so nobody is listed twice. A rested man who was only in the
+ * side as a fill for an empty or injured slot has no slot to hand over: the
+ * engine's fill already passes over anyone resting. Pure.
+ */
+export function applyRest(state: CareerState, week: number, ids: string[]): { xiIds: (string | null)[]; rest: IntlRest } {
+  const formation = FORMATIONS[state.formationIndex] ?? FORMATIONS[0];
+  const resting = new Set(ids);
+  const xiIds = [...state.xiIds];
+  const swaps: { slot: number; out: string; in: string }[] = [];
+  xiIds.forEach((id, i) => {
+    if (!id || !resting.has(id)) return;
+    const slot = formation.slots[i];
+    const taken = new Set(xiIds.filter((x): x is string => !!x));
+    const worth = (x: CMPlayer) => x.rating - fitPenalty(x, slot) + CONDITION_PER_FITNESS * x.fitness;
+    const standIn = state.squad
+      .filter(x => isAvailable(x) && !taken.has(x.id) && !resting.has(x.id))
+      .sort((a, b) => worth(b) - worth(a) || b.rating - a.rating)[0];
+    if (!standIn) return;
+    xiIds[i] = standIn.id;
+    swaps.push({ slot: i, out: id, in: standIn.id });
+  });
+  return { xiIds, rest: swaps.length ? { week, ids, swaps } : { week, ids } };
+}
+
+/**
+ * After the match they came back for: the rested men go back into the slots
+ * their stand-ins took, unless you changed that slot yourself since, and the
+ * rest ends. Mutates `state`, the engine's working copy. Called before any
+ * new break fires, which would otherwise drop the rest unreturned.
+ */
+export function endRest(state: CareerState): void {
+  const intl = liveIntl(state);
+  const rest = intl?.rest;
+  if (!intl || !rest || state.week <= rest.week) return;
+  for (const s of rest.swaps ?? []) {
+    if (state.xiIds[s.slot] !== s.in || state.xiIds.includes(s.out)) continue;
+    if (!state.squad.some(p => p.id === s.out)) continue;
+    state.xiIds = state.xiIds.map((id, i) => (i === s.slot ? s.out : id));
+  }
+  delete intl.rest;
 }
 
 /** The men just back from duty, while the match they came back for is still ahead. */
@@ -518,9 +590,11 @@ export function restPlan(state: CareerState): string[] {
   const starting = new Set(effectiveXIWithSlots({ ...state, intl: { ...intl, rest: undefined } }).map(x => x.p.id));
   const pool = last.called.filter(c => c.injuredWeeks === 0 && starting.has(c.id)).sort((a, b) => b.cost - a.cost);
   const fitness = new Map(state.squad.map(p => [p.id, p.fitness]));
-  const value = (ids: string[]): number =>
-    matchStrengthNow({ ...state, intl: { ...intl, rest: { week: last.backWeek, ids } } })
-    + ids.reduce((s, id) => s + legsLaterWorth(fitness.get(id) ?? 100), 0);
+  const value = (ids: string[]): number => {
+    const { xiIds, rest } = applyRest(state, last.backWeek, ids);
+    return matchStrengthNow({ ...state, xiIds, intl: { ...intl, rest } })
+      + ids.reduce((s, id) => s + legsLaterWorth(fitness.get(id) ?? 100), 0);
+  };
   let chosen: string[] = [];
   let best = value(chosen);
   for (let pass = 0; pass < 3; pass++) {
@@ -541,22 +615,28 @@ export function restPlan(state: CareerState): string[] {
  * match, or start them all. Returns the new block and the line the inbox
  * shows. Null when there is nothing left to decide (the match has gone).
  */
-export function answerBreak(state: CareerState, rest: boolean): { intl: IntlDuty; resolved: string } | null {
+export function answerBreak(
+  state: CareerState, rest: boolean,
+): { intl: IntlDuty; xiIds: (string | null)[]; resolved: string } | null {
   const intl = liveIntl(state);
   const last = intl?.last;
   if (!intl || !last || last.backWeek < 0 || state.week > last.backWeek) return null;
   const vs = last.backOpponent ? ` against ${last.backOpponent}` : '';
   const { rest: _dropped, ...kept } = intl;
-  if (!rest) return { intl: kept, resolved: `They start${vs}. Tired legs, but your best eleven.` };
+  /* Every man called came back hurt: there is nobody to start or rest. */
+  if (!last.called.some(c => c.injuredWeeks === 0)) return { intl: kept, xiIds: state.xiIds, resolved: 'Noted.' };
+  if (!rest) return { intl: kept, xiIds: state.xiIds, resolved: `They start${vs}. Tired legs, but your best eleven.` };
   const ids = restPlan(state);
   if (!ids.length) {
-    return { intl: kept, resolved: `Your assistant ran the numbers: nobody on the bench beats tired legs this time, so they start${vs}.` };
+    return { intl: kept, xiIds: state.xiIds, resolved: `Your assistant ran the numbers: nobody on the bench beats tired legs this time, so they start${vs}.` };
   }
+  const applied = applyRest(state, last.backWeek, ids);
   const names = ids.map(id => last.called.find(c => c.id === id)?.name ?? '').filter(Boolean);
   const one = names.length === 1;
   return {
-    intl: { ...intl, rest: { week: last.backWeek, ids } },
-    resolved: `${listNames(names)} ${one ? 'sits' : 'sit'} out${vs} and ${one ? 'comes' : 'come'} back into the side fresh after it. Still on the bench if you need ${one ? 'him' : 'them'}.`,
+    intl: { ...intl, rest: applied.rest },
+    xiIds: applied.xiIds,
+    resolved: `${listNames(names)} ${one ? 'sits' : 'sit'} out${vs} and ${one ? 'goes' : 'go'} back into your eleven after it. ${one ? 'He is' : 'They are'} on the bench: put ${one ? 'him' : 'one'} back in your eleven and ${one ? 'he' : 'that one'} plays.`,
   };
 }
 
@@ -589,10 +669,18 @@ export function intlMarks(state: CareerState): IntlMark[] {
   }));
 }
 
-/** One line for a window's day on the calendar. */
+/**
+ * One line for a window's day on the calendar. The number of games is said
+ * only for a window whose dates are confirmed: the others use the
+ * window pattern as a structure, and nothing sources their match counts.
+ * Your fixtures here play on through a window, so the line never says the
+ * men are away for its whole length.
+ */
 export function intlMarkLine(mark: IntlMark): string {
-  const games = `up to ${mark.window.matches} games for each country`;
-  const when = mark.done ? 'Played.' : 'Your internationals go away and come back tired for your next match.';
-  const dates = mark.partial ? ' Dates for this season are approximate.' : '';
-  return `International break, ${mark.label} (${games}). ${when}${dates}`;
+  const games = mark.partial ? '' : ` (up to ${mark.window.matches} games for each country)`;
+  const when = mark.done
+    ? 'Played.'
+    : 'Your fixtures do not stop for it: your internationals go after your last game before it and come back tired for the next one.';
+  const dates = mark.partial ? ' These dates are approximate.' : '';
+  return `International window, ${mark.label}${games}. ${when}${dates}`;
 }

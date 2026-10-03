@@ -6,10 +6,15 @@
  * seeded Math.random and a frozen clock:
  *
  *  1. THE DATES. The window rule gives exactly the two source verified dates
- *     (VERIFIED_WINDOWS, 2026-27 and 2027-28), every other season and every
- *     era season reads as approximate, and a played season fires each window
- *     once, in date order, on the first of its entries dated on or after the
- *     window's first day, with the assistant's note naming every man who went.
+ *     (VERIFIED_WINDOWS, the 2026-27 autumn and November windows), every
+ *     other window and every era season reads as approximate, and a season
+ *     played on the LIVE path (every match stopped at the interval and
+ *     finished by resumeMatch, as the screen plays it) fires each window its
+ *     matches reach once, in date order, between the last match of mine
+ *     before its first day and the first one on or after it, with the
+ *     assistant's note naming every man who went and waiting in the inbox
+ *     before the match they come back for. Arsenal plus three MLS clubs,
+ *     whose 15 club conferences give someone a bye every round.
  *  2. HARDER. Over seeded seasons of six squads heavy in internationals, the
  *     match each break hands back is weaker than the SAME save with call ups
  *     switched off: the save forks at the break (the engine draws nothing for
@@ -18,8 +23,9 @@
  *     they come back for. Held as a mean over every break, and for each of
  *     the three window kinds on its own, so a window that stopped costing
  *     anything cannot hide behind the others.
- *  3. RESTING GETS IT BACK. The same forks with the assistant's rest
- *     (answerBreak, restPlan): the cost of the break over the two matches it
+ *  3. RESTING GETS IT BACK. The same forks with the assistant's rest,
+ *     answered through the inbox note the way a player answers it
+ *     (answerMessage, answerBreak, restPlan): the cost of the break over the two matches it
  *     touches (the one they come back for and the one after it, read at each
  *     kick off with form and morale held to the switched off arm, so only
  *     legs and selection differ) is pooled over every break, and the rest
@@ -31,6 +37,17 @@
  *     this round) plays its whole season with no break, no note and no block,
  *     then gets one from startNextSeason and its first break fires. A damaged
  *     block is dropped on the next play and the season goes on without it.
+ *  6. A REST IS WHAT PLAYS. In every rest arm of check 3, at the kick off of
+ *     the match they come back for: no rested man is in the eleven the
+ *     engine fields while fitter cover sits on the bench, none is still in
+ *     the picked eleven the tactics screen draws, a rested man put back in
+ *     his slot by hand does play, and after the match every rested man is
+ *     back in the slot he handed over and the rest is gone. These are rules,
+ *     so they are held exactly (zero breaks), over at least 20 rested men.
+ *  7. THE LONG TRIPS COST MORE. Among men who started for their country,
+ *     those whose country plays on another continent from the club (worked
+ *     out here from the two confederations) come back with more fitness gone
+ *     than those who stayed on their own, compared inside each window kind.
  *
  * MEASURED HEADROOM, 2026-10-03, three batches of 6 squads x 3 seeds
  * (SEED_BASE 0, 10, 20), 49 to 54 breaks a batch:
@@ -47,13 +64,20 @@
  * The pooled share is the claim, and it is a little over half.
  *
  * NEGATIVE CONTROLS, SIM_CMINTL_CONTROL=<name>, each rewrites one line of
- * the module into a temp copy (it refuses to run if the line is not there)
- * and must turn its check red:
+ * the module or the engine as the bundler loads it (it refuses to run unless
+ * the file holds exactly one copy of the line) and must turn its check red.
+ * A control that turns nothing red exits 3, never 0:
  *   dates    the September window ends a day early          -> check 1
+ *   livehook resumeMatch loses its break hook               -> check 1
  *   nocost   a break takes no fitness                       -> check 2
  *   norest   the assistant never rests anybody              -> check 3
  *   anyone   a man with no known country is called as well   -> check 4
  *   oldsave  a save with no block is given one on the spot   -> check 5
+ *   writexi  the rest is not written into the picked eleven  -> check 6
+ *   restfill a gap in the eleven may be filled by a rested man -> check 6
+ *   repick   a rested man picked back by hand is still benched -> check 6
+ *   endrest  the rested men are not put back after the match  -> check 6
+ *   near     the long trip cost goes to the short trips       -> check 7
  *
  * Run: node scripts/simCmInternationals.mjs   (SEEDS=<n> to widen the sample)
  */
@@ -73,8 +97,38 @@ const SEED_BASE = Math.max(0, Number(process.env.SEED_BASE ?? 0));
 const GAP_FLOOR = 1.5;
 const KIND_FLOOR = { sepoct: 2.0, nov: 1.4, mar: 0.6 };
 const REC_FLOOR = 0.40;
+const FAR_FLOOR = 5;
 
+/* Each control rewrites one line of the module, or of the engine where the
+   hook it guards lives (file: 'engine'). */
 const CONTROLS = {
+  livehook: {
+    file: 'engine',
+    fixed: "  /* Round 978: same hook as the quick sim's, see playNextEntry. */\n  runIntlBreaks(state);\n",
+    broken: "  /* Round 978: same hook as the quick sim's, see playNextEntry. */\n",
+  },
+  restfill: {
+    file: 'engine',
+    fixed: 'p = best(open.filter(x => !resting.has(x.id))) ?? best(open);',
+    broken: 'p = best(open);',
+  },
+  repick: {
+    file: 'engine',
+    fixed: 'if (!p || !isAvailable(p) || used.has(p.id)) {',
+    broken: 'if (!p || !isAvailable(p) || used.has(p.id) || resting.has(p.id)) {',
+  },
+  writexi: {
+    fixed: '    xiIds: applied.xiIds,\n',
+    broken: '    xiIds: state.xiIds,\n',
+  },
+  endrest: {
+    fixed: '    state.xiIds = state.xiIds.map((id, i) => (i === s.slot ? s.out : id));\n',
+    broken: '',
+  },
+  near: {
+    fixed: 'const far = !!home && !!theirs && theirs !== home;',
+    broken: 'const far = !!home && !!theirs && theirs === home;',
+  },
   dates: {
     fixed: '{ id: `${y}-sepoct`, start: sep, end: addDays(sep, 15), matches: 4 },',
     broken: '{ id: `${y}-sepoct`, start: sep, end: addDays(sep, 14), matches: 4 },',
@@ -97,23 +151,22 @@ const CONTROLS = {
   },
 };
 
-/* ---- the module, or a control's copy of it ---- */
-let modulePath = MODULE;
+/* ---- a control rewrites its file as the bundler loads it, never on disk ---- */
+const ENGINE = `${ROOT}/src/lib/clubManager.ts`;
+const norm = p => p.replaceAll('\\', '/').toLowerCase();
+let patched = null;
 if (CONTROL) {
   const c = CONTROLS[CONTROL];
   if (!c) { console.error(`unknown control ${CONTROL}`); process.exit(2); }
-  const src = fs.readFileSync(MODULE, 'utf8').replaceAll('\r\n', '\n');
-  if (!src.includes(c.fixed)) {
-    console.error(`control cannot run: clubManagerInternationals.ts is not in the shape SIM_CMINTL_CONTROL=${CONTROL} rewrites`);
+  const file = c.file === 'engine' ? ENGINE : MODULE;
+  const src = fs.readFileSync(file, 'utf8').replaceAll('\r\n', '\n');
+  if (src.split(c.fixed).length !== 2) {
+    console.error(`control cannot run: ${path.basename(file)} does not hold exactly one copy of the line SIM_CMINTL_CONTROL=${CONTROL} rewrites`);
     process.exit(2);
   }
-  /* In the run's own temp folder, never in src: every import in the module
-     goes through the @ alias, so it resolves from anywhere. */
-  modulePath = `${TMP}/clubManagerInternationals.control-${CONTROL}.ts`;
-  fs.writeFileSync(modulePath, src.replace(c.fixed, c.broken));
-  console.log(`CONTROL ${CONTROL}: one line of the module rewritten, its check must go red`);
+  patched = { path: norm(file), contents: src.replace(c.fixed, c.broken) };
+  console.log(`CONTROL ${CONTROL}: one line of ${path.basename(file)} rewritten, its check must go red`);
 }
-const cleanup = () => { if (modulePath !== MODULE) { try { fs.unlinkSync(modulePath); } catch { /* gone */ } } };
 
 const ENTRY = `${TMP}/entry.mjs`;
 const BUNDLE = `${TMP}/bundle.mjs`;
@@ -126,17 +179,18 @@ export * as cal from '${ROOT}/src/lib/clubManagerCalendar.ts';
 const swap = {
   name: 'control-swap',
   setup(b) {
-    b.onResolve({ filter: /[\\/]lib[\\/]clubManagerInternationals$/ }, () => ({ path: modulePath }));
+    b.onLoad({ filter: /clubManager(Internationals)?\.ts$/ }, args => {
+      if (!patched || norm(args.path) !== patched.path) return undefined;
+      patched.loaded = true;
+      return { contents: patched.contents, loader: 'ts' };
+    });
   },
 };
-try {
-  await build({
-    entryPoints: [ENTRY], bundle: true, format: 'esm', platform: 'node', outfile: BUNDLE,
-    logLevel: 'error', jsx: 'automatic', alias: { '@': `${ROOT}/src` }, plugins: [swap],
-  });
-} finally {
-  cleanup();
-}
+await build({
+  entryPoints: [ENTRY], bundle: true, format: 'esm', platform: 'node', outfile: BUNDLE,
+  logLevel: 'error', jsx: 'automatic', alias: { '@': `${ROOT}/src` }, plugins: [swap],
+});
+if (patched && !patched.loaded) { console.error(`control ${CONTROL}: the rewritten file never reached the bundle`); process.exit(2); }
 globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
 const { cm, intl, cal, nationalityOf } = await import(pathToFileURL(BUNDLE).href);
 await cm.ensureAllEraRosters();
@@ -164,7 +218,14 @@ const noteCalls = st => {
   if (!last) return;
   for (const c of last.called) {
     const p = st.squad.find(x => x.id === c.id);
-    everyCall.push({ name: c.name, nation: c.nation, eraId: st.eraId, made: !p || !!p.generated || (p.isYouth && /\(Youth\)/.test(p.name)) });
+    /* Whether his country plays on another continent from the club, worked
+       out here from the two confederations rather than read off the call up. */
+    const home = intl.clubConfed(st);
+    const theirs = intl.confedOfNation(c.nation);
+    everyCall.push({
+      name: c.name, nation: c.nation, eraId: st.eraId, made: !p || !!p.generated || (p.isYouth && /\(Youth\)/.test(p.name)),
+      cost: c.cost, starts: c.starts, four: last.windowId.endsWith('sepoct'), far: home && theirs ? theirs !== home : null,
+    });
   }
 };
 
@@ -172,54 +233,71 @@ const noteCalls = st => {
 console.log('1) The window rule against the verified dates, and a played season firing each window once, in order');
 {
   let pinned = 0;
-  for (const [year, verified] of Object.entries(intl.VERIFIED_WINDOWS)) {
-    const rule = intl.ruleWindows(Number(year));
-    if (rule.length !== verified.length) { fail(`${year}: the rule gives ${rule.length} windows, ${verified.length} are verified`); continue; }
-    rule.forEach((w, i) => {
-      if (key(w.start) !== key(verified[i].start) || key(w.end) !== key(verified[i].end)) {
-        fail(`${year} window ${i + 1}: the rule says ${key(w.start)} to ${key(w.end)}, the sources say ${key(verified[i].start)} to ${key(verified[i].end)}`);
-      } else pinned += 1;
-    });
-    if (intl.intlDatesPartial(Number(year))) fail(`${year} is verified but reads as approximate`);
+  const seasonWindows = y => [...intl.intlWindowsFor(y), ...intl.intlWindowsFor(y - 1)];
+  for (const [id, v] of Object.entries(intl.VERIFIED_WINDOWS)) {
+    const w = seasonWindows(Number(id.slice(0, 4))).find(x => x.id === id);
+    if (!w) { fail(`${id} is verified but the rule has no such window`); continue; }
+    if (key(w.start) !== key(v.start) || key(w.end) !== key(v.end)) {
+      fail(`${id}: the rule says ${key(w.start)} to ${key(w.end)}, the sources say ${key(v.start)} to ${key(v.end)}`);
+    } else pinned += 1;
+    if (!w.verified) fail(`${id} is verified but reads as approximate`);
   }
-  for (const y of [2005, 2010, 2015, 2020, 2028]) if (!intl.intlDatesPartial(y)) fail(`${y} reads as confirmed dates`);
+  for (const y of [2005, 2010, 2015, 2020, 2027, 2028]) if (intl.intlWindowsFor(y).some(w => w.verified)) fail(`${y} reads as confirmed dates`);
   console.log(`   ${pinned} verified windows held to the rule`);
-  if (pinned < 6) fail(`only ${pinned} verified windows were checked`);
+  if (pinned < 2) fail(`only ${pinned} verified windows were checked`);
 
-  a = 4242;
-  let s = cm.startCareer('Arsenal');
-  let fired = [], ordered = 0, notes = 0, missed = 0, guard = 0;
-  while (s.week < s.calendar.length && guard++ < 200) {
-    const before = (s.intl?.fired ?? []).length;
-    const res = cm.playNextEntry(s, { skipHalftime: true });
-    s = res.state;
-    if (res.kind === 'seasonOver') break;
-    const now = s.intl?.fired ?? [];
-    if (now.length === before) continue;
-    noteCalls(s);
-    for (const id of now.slice(before)) {
-      const w = intl.intlWindowsFor(2026).find(x => x.id === id);
-      if (!w) { fail(`fired an unknown window ${id}`); continue; }
-      fired.push(id);
-      const entryDates = cal.dateOfEntries(cal.worldYearOf(s), s.calendar);
-      const at = s.intl.last.atWeek;
-      const prev = at > 0 ? key(entryDates[at - 1]) : 0;
-      const next = at < entryDates.length ? key(entryDates[at]) : Infinity;
-      if (s.intl.last.backWeek >= 0 && s.week > s.intl.last.backWeek) missed += 1;
-      if (prev < key(w.start) && key(w.start) <= next) ordered += 1;
-      else fail(`${id} fired between entries dated ${prev} and ${next}, its first day is ${key(w.start)}`);
+  /* Played on the LIVE path, the one the screen uses: every match stops at
+     the interval and is finished by resumeMatch, whose hook is the one a
+     player normally hits. The MLS clubs play 15 club conferences with a bye
+     every round, so the last entry before a window is sometimes not theirs. */
+  const playLive = st => {
+    const res = cm.playNextEntry(st);
+    return res.kind === 'halftime' ? cm.resumeMatch(res.state) : res;
+  };
+  let missed = 0, ordered = 0, notes = 0, seasons = 0;
+  for (const club of ['Arsenal', 'Inter Miami', 'LA Galaxy', 'Toronto FC']) {
+    a = 4242;
+    let s = cm.startCareer(club);
+    const year = cal.worldYearOf(s);
+    const dates = cal.dateOfEntries(year, s.calendar);
+    const mine = w => { const e = s.calendar[w]; return e.type !== 'window' && cm.entryInvolvesMe(s, e) && !!cm.fixtureFor(s, e); };
+    let fired = [], lastMatch = 0, guard = 0;
+    while (s.week < s.calendar.length && guard++ < 200) {
+      const before = (s.intl?.fired ?? []).length;
+      const res = playLive(s);
+      s = res.state;
+      if (res.kind === 'match') lastMatch = key(dates[s.week - 1]);
+      if (res.kind === 'seasonOver') break;
+      const now = s.intl?.fired ?? [];
+      if (now.length === before) continue;
+      noteCalls(s);
+      const last = s.intl.last;
+      for (const id of now.slice(before)) {
+        const w = intl.intlWindowsFor(year).find(x => x.id === id);
+        if (!w) { fail(`${club}: fired an unknown window ${id}`); continue; }
+        fired.push(id);
+        let prevMine = -1;
+        for (let i = last.atWeek - 1; i >= 0; i--) if (mine(i)) { prevMine = i; break; }
+        const prev = prevMine >= 0 ? key(dates[prevMine]) : 0;
+        const back = last.backWeek >= 0 ? key(dates[last.backWeek]) : Infinity;
+        if (prev < key(w.start) && key(w.start) <= back) ordered += 1;
+        else fail(`${club} ${id} fired between my matches of ${prev} and ${back}, its first day is ${key(w.start)}`);
+      }
+      if (last.backWeek >= 0 && (s.week > last.backWeek || s.live?.week === last.backWeek)) missed += 1;
+      const note = (s.inbox ?? []).find(m => m.kind === 'intlDuty' && m.text.includes(`International break: the window runs ${last.label},`));
+      if (last.called.length) {
+        if (!note) fail(`${club} ${last.windowId}: ${last.called.length} went and the inbox says nothing`);
+        else if (last.called.every(c => note.text.includes(c.name))) notes += 1;
+        else fail(`${club} ${last.windowId}: the note leaves somebody out`);
+      }
     }
-    const last = s.intl.last;
-    const note = (s.inbox ?? []).find(m => m.kind === 'intlDuty' && m.text.includes(`International break, ${last.label}.`));
-    if (last.called.length) {
-      if (!note) fail(`${last.windowId}: ${last.called.length} went and the inbox says nothing`);
-      else if (last.called.every(c => note.text.includes(c.name))) notes += 1;
-      else fail(`${last.windowId}: the note leaves somebody out`);
-    }
+    const want = intl.intlWindowsFor(year).filter(w => key(w.start) <= lastMatch).map(w => w.id);
+    if (club === 'Arsenal' && want.length !== 3) fail(`Arsenal's season reached ${want.length} windows, the season holds 3`);
+    if (JSON.stringify(fired) !== JSON.stringify(want)) fail(`${club} fired ${fired.join(', ') || 'nothing'}, its matches reach ${want.join(', ')}`);
+    console.log(`   ${club} ${year}: fired ${fired.join(', ') || 'nothing'}`);
+    seasons += 1;
   }
-  const want = intl.intlWindowsFor(2026).map(w => w.id);
-  if (JSON.stringify(fired) !== JSON.stringify(want)) fail(`fired ${fired.join(', ')}, the season holds ${want.join(', ')}`);
-  console.log(`   Arsenal 2026-27 fired ${fired.join(", ")}; ${ordered} on the right entry, ${notes} notes naming everyone, ${missed} played before the note could be read`);
+  console.log(`   ${seasons} seasons on the live path: ${ordered} breaks between the right two matches of mine, ${notes} notes naming everyone, ${missed} where the match they come back for kicked off in the same play as the note`);
   if (missed > 0) fail(`${missed} breaks reached the match they come back for in the same play, so the manager never got to answer`);
 }
 
@@ -227,6 +305,7 @@ console.log('1) The window rule against the verified dates, and a played season 
 const HEAVY = ['Arsenal', 'Manchester City', 'Real Madrid', 'Liverpool', 'Chelsea', 'Bayern Munich'];
 const rows = [];
 let missedAll = 0;
+const restCheck = { rested: 0, playing: 0, picked: 0, repicks: 0, repickPlays: 0, swaps: 0, returned: 0, lingering: 0 };
 /** My first match after week w, or -1. */
 const myNextAfter = (st, w) => {
   for (let i = w + 1; i < st.calendar.length; i++) {
@@ -259,10 +338,31 @@ for (const club of HEAVY) {
       const toBack = st => { a = after; return cm.playNextEntry(st, { skipHalftime: true, untilWeek: back }).state; };
       const off = toBack(cm.playNextEntry(offIn, { skipHalftime: true }).state);
       const start = toBack(clone(s));
-      const restIn = clone(s);
-      const ans = intl.answerBreak(restIn, true);
-      if (ans) restIn.intl = ans.intl;
+      /* REST: answered the way a player answers, through the inbox note. */
+      let restIn = clone(s);
+      const note = (restIn.inbox ?? []).find(m => m.kind === 'intlDuty' && !m.resolved);
+      const restIdx = note ? note.options.findIndex(o => o.effect === 'restIntl') : -1;
+      if (restIdx >= 0) restIn = cm.answerMessage(restIn, note.id, restIdx);
       const rest = toBack(restIn);
+      /* 6. The rest is what plays, on every screen, and it ends. */
+      const r = rest.intl?.rest;
+      if (r && r.week === back) {
+        const xi = new Set(cm.effectiveXIWithSlots(rest).map(x => x.p.id));
+        const cover = rest.squad.some(p => cm.isAvailable(p) && !xi.has(p.id) && !r.ids.includes(p.id));
+        for (const id of r.ids) {
+          restCheck.rested += 1;
+          if (xi.has(id) && cover) restCheck.playing += 1;
+          if (rest.xiIds.includes(id)) restCheck.picked += 1;
+        }
+        for (const sw of r.swaps ?? []) {
+          const out = rest.squad.find(p => p.id === sw.out);
+          if (!out || !cm.isAvailable(out)) continue;
+          restCheck.repicks += 1;
+          const again = clone(rest);
+          again.xiIds[sw.slot] = sw.out;
+          if (cm.effectiveXIWithSlots(again).some(x => x.p.id === sw.out)) restCheck.repickPlays += 1;
+        }
+      }
       /* The match after: play the one they come back for from one stream, then on to my next. */
       const next = myNextAfter(off, back);
       const m1seed = (after ^ 0x5bd1e995) | 0;
@@ -275,10 +375,19 @@ for (const club of HEAVY) {
       const off2 = toNext(off);
       const mor = new Map(off2.squad.map(p => [p.id, p.morale]));
       const held = st => cm.matchStrengthNow({ ...st, form: off2.form, squad: st.squad.map(p => ({ ...p, morale: mor.get(p.id) ?? p.morale })) });
+      const rest2 = toNext(rest);
+      /* After the match they came back for, the rested men are back in their slots. */
+      if (r && r.week === back) {
+        for (const sw of r.swaps ?? []) {
+          restCheck.swaps += 1;
+          if (rest2.xiIds.includes(sw.out)) restCheck.returned += 1;
+        }
+        if (rest2.intl?.rest) restCheck.lingering += 1;
+      }
       rows.push({
         club, seed, kind: s.intl.last.windowId.split('-')[1], called: s.intl.last.called.length,
         off: cm.matchStrengthNow(off), start: cm.matchStrengthNow(start), rest: cm.matchStrengthNow(rest),
-        off2: held(off2), start2: held(toNext(start)), rest2: held(toNext(rest)),
+        off2: held(off2), start2: held(toNext(start)), rest2: held(rest2),
       });
       a = after;
     }
@@ -320,6 +429,20 @@ console.log('3) Resting the spent ones wins back the cost over the two matches t
   }
   console.log(`   pooled: the break costs ${f2(cost)} over two matches and the rest wins back ${f2(won)}, a share of ${f2(share)} (floor ${REC_FLOOR})`);
   if (share < REC_FLOOR) fail(`resting wins back only ${f2(share)} of the break's cost, floor ${REC_FLOOR}`);
+}
+
+console.log('6) A rest is what plays: the rested men are out of your picked eleven, nobody fills a gap with them, picking one back plays him, and they return after the match');
+{
+  const c = restCheck;
+  console.log(`   ${c.rested} men rested: ${c.playing} still played with cover on the bench, ${c.picked} still in the picked eleven; ${c.repickPlays} of ${c.repicks} picked back by hand played; ${c.returned} of ${c.swaps} back in their slot after the match, ${c.lingering} rests still standing after it`);
+  if (c.rested < 20) fail(`only ${c.rested} rested men were checked`);
+  if (c.playing > 0) fail(`${c.playing} rested men played the match they were told they sit out, with fitter cover on the bench`);
+  if (c.picked > 0) fail(`${c.picked} rested men were still in the picked eleven the tactics screen shows`);
+  if (c.repicks < 10) fail(`only ${c.repicks} hand picks were tried`);
+  else if (c.repickPlays < c.repicks) fail(`${c.repicks - c.repickPlays} rested men picked back into the eleven by hand still did not play`);
+  if (c.swaps < 10) fail(`only ${c.swaps} handed over slots were checked`);
+  else if (c.returned < c.swaps) fail(`${c.swaps - c.returned} rested men were not back in the eleven after the match`);
+  if (c.lingering > 0) fail(`${c.lingering} rests outlived their match`);
 }
 
 /* ---------- 4. Nobody unknown goes ---------- */
@@ -389,8 +512,34 @@ console.log('5) A save from before this round plays its season with no break, th
   if (d.week < 1) fail('a save with a damaged block did not play');
 }
 
+
+/* ---------- 7. The long trips cost more ---------- */
+console.log('7) A man who started for a country on another continent from his club comes back more tired than one who stayed on his own');
+{
+  const starters = everyCall.filter(c => c.starts && c.far !== null);
+  let gaps = 0, sum = 0;
+  for (const four of [true, false]) {
+    const far = starters.filter(c => c.four === four && c.far);
+    const near = starters.filter(c => c.four === four && !c.far);
+    const m = l => l.reduce((x, c) => x + c.cost, 0) / l.length;
+    if (far.length < 5 || near.length < 5) continue;
+    console.log(`   ${four ? 'four game window' : 'two game windows'}: far starters ${far.length} cost ${f2(m(far))}, near starters ${near.length} cost ${f2(m(near))}`);
+    gaps += 1;
+    sum += m(far) - m(near);
+  }
+  const gap = gaps ? sum / gaps : 0;
+  console.log(`   the long trip costs ${f2(gap)} more fitness on average (floor ${FAR_FLOOR})`);
+  if (gaps < 2) fail(`only ${gaps} window kinds had enough far and near starters to compare`);
+  else if (gap < FAR_FLOOR) fail(`a long trip costs only ${f2(gap)} more than a short one, floor ${FAR_FLOOR}`);
+}
+
 if (failures > 0) {
   console.error(`simCmInternationals: ${failures} FAILURES${CONTROL ? ` (control ${CONTROL})` : ''}`);
   process.exit(1);
 }
-console.log(`simCmInternationals: all green${CONTROL ? ` (control ${CONTROL} did NOT fire)` : ''}`);
+/* A control that changed nothing is a broken guard, never a pass. */
+if (CONTROL) {
+  console.error(`simCmInternationals: control ${CONTROL} did NOT fire, so its check guards nothing`);
+  process.exit(3);
+}
+console.log('simCmInternationals: all green');
