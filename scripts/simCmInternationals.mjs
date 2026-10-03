@@ -13,7 +13,7 @@
  *     matches reach once, in date order, between the last match of mine
  *     before its first day and the first one on or after it, with the
  *     assistant's note naming every man who went and waiting in the inbox
- *     before the match they come back for. Arsenal plus three MLS clubs,
+ *     before the match they come back for. Arsenal plus six MLS clubs,
  *     whose 15 club conferences give someone a bye every round.
  *  2. HARDER. Over seeded seasons of six squads heavy in internationals, the
  *     match each break hands back is weaker than the SAME save with call ups
@@ -69,6 +69,8 @@
  * A control that turns nothing red exits 3, never 0:
  *   dates    the September window ends a day early          -> check 1
  *   livehook resumeMatch loses its break hook               -> check 1
+ *   nextentry a break fires off the next entry's date, not my next match's
+ *            (a bye before a window then carries it into the match) -> check 1
  *   nocost   a break takes no fitness                       -> check 2
  *   norest   the assistant never rests anybody              -> check 3
  *   anyone   a man with no known country is called as well   -> check 4
@@ -106,6 +108,10 @@ const CONTROLS = {
     file: 'engine',
     fixed: "  /* Round 978: same hook as the quick sim's, see playNextEntry. */\n  runIntlBreaks(state);\n",
     broken: "  /* Round 978: same hook as the quick sim's, see playNextEntry. */\n",
+  },
+  nextentry: {
+    fixed: 'const nextKey = dateKey(dates[backWeek]);',
+    broken: 'const nextKey = dateKey(dates[state.week]);',
   },
   restfill: {
     file: 'engine',
@@ -255,7 +261,7 @@ console.log('1) The window rule against the verified dates, and a played season 
     return res.kind === 'halftime' ? cm.resumeMatch(res.state) : res;
   };
   let missed = 0, ordered = 0, notes = 0, seasons = 0;
-  for (const club of ['Arsenal', 'Inter Miami', 'LA Galaxy', 'Toronto FC']) {
+  for (const club of ['Arsenal', 'Inter Miami', 'LA Galaxy', 'Toronto FC', 'Seattle Sounders', 'Atlanta United', 'Columbus Crew']) {
     a = 4242;
     let s = cm.startCareer(club);
     const year = cal.worldYearOf(s);
