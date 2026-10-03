@@ -22,6 +22,9 @@ import {
   rngFrom, hashLabel, clamp, clampi, genPersonName, declineAt,
   legacyTier, type LegacyVerdict,
 } from '@/lib/careerEngine';
+/* Round 916: a TYPE import only, erased at build. The life layer imports this
+   file's values and this file imports nothing of its, so there is no cycle. */
+import type { FightLife } from '@/lib/fightCareerLife';
 
 /* ─────────────────────────── the sport ─────────────────────────── */
 
@@ -158,6 +161,16 @@ const LAST = [
   'Petrov', 'Quintero', 'Rivas', 'Salgado', 'Toure', 'Ubaldi', 'Varga', 'Wolde',
   'Yilmaz', 'Zadrozny', 'Brandao', 'Cisse', 'Delgado', 'Farkas', 'Guerrero',
 ];
+
+/**
+ * Round 916: one generated name off the two banks above, for everybody in the
+ * life layer who is not a fighter (the trainer, the manager) and for the
+ * rival, who is. Drawing them here keeps every invented name in this game on
+ * the one pair of banks scripts/simInventedNames.mjs already checks.
+ */
+export function genFighterName(rng: () => number): string {
+  return genPersonName(rng, FIRST, LAST);
+}
 
 let seq = 0;
 function nextId(): string {
@@ -649,9 +662,53 @@ export interface FightCareerState {
   rngTick: number;
   seed: number;
   log: string[];
+  /**
+   * Round 916: everything between fights (the corner, the bank, the inbox, the
+   * rival, the cards). Optional, so a save from before the round opens as it
+   * was and gets a default block the first time the board reads it. Nothing in
+   * this file reads it: the life layer wraps these functions instead.
+   */
+  life?: FightLife;
+}
+
+/**
+ * Round 916: what the life layer can do to one fight night. Left out, the
+ * night is exactly the night it always was.
+ */
+export interface FightMods {
+  /** Multiplies the damage carried out of the ring. A cut man is under 1. */
+  damageMul?: number;
+  /**
+   * Sharpness: whole points added to power, speed, stamina and defence for
+   * this bout only. The fighter on the save is not changed, so the ceiling
+   * that camp growth obeys is not touched either.
+   */
+  sharp?: number;
 }
 
 const CAMP_WEEKS = 6;
+
+/**
+ * Round 916: what a camp is worth to one attribute before it is rounded onto
+ * the fighter. Lifted out of runCamp unchanged so the life layer can bank the
+ * fraction a specialist trainer adds without carrying a second copy of this
+ * sum. Growth against headroom, never flat: see runCamp.
+ */
+export function campGain(cur: number, potential: number, weeks: number): number {
+  const headroom = clamp((potential - cur) / 22, 0, 1);
+  return (weeks / CAMP_WEEKS) * 2.4 * headroom;
+}
+
+/** Round 916: the fighter as he is on one sharpened (or blunted) night. */
+function sharpened(f: Fighter, sharp: number): Fighter {
+  const s = Math.round(sharp);
+  if (!s) return f;
+  const up = (v: number) => clampi(v + s, 15, 99);
+  return {
+    ...f,
+    attrs: { ...f.attrs, power: up(f.attrs.power), speed: up(f.attrs.speed), stamina: up(f.attrs.stamina), defence: up(f.attrs.defence) },
+  };
+}
 
 export function newFightCareer(name: string, weight: WeightId, style: FightStyle, seedLabel?: string): FightCareerState {
   const seed = hashLabel(seedLabel ?? `${name}|${weight}|${style}`);
@@ -773,10 +830,7 @@ export function runCamp(st: FightCareerState, plan: CampPlan): FightCareerState 
      take him past it. Headroom reaches zero at the ceiling, so this can only
      ever raise an attribute and never lower one a fighter was generated with. */
   const pot = next.fighter.potential;
-  const grow = (cur: number, weeks: number) => {
-    const headroom = clamp((pot - cur) / 22, 0, 1);
-    return clampi(cur + (weeks / CAMP_WEEKS) * 2.4 * headroom, 15, 99);
-  };
+  const grow = (cur: number, weeks: number) => clampi(cur + campGain(cur, pot, weeks), 15, 99);
   next.fighter.attrs.stamina = grow(next.fighter.attrs.stamina, plan.conditioning);
   next.fighter.attrs.power = grow(next.fighter.attrs.power, plan.power);
   next.fighter.attrs.defence = grow(next.fighter.attrs.defence, plan.defence);
@@ -788,17 +842,23 @@ export function runCamp(st: FightCareerState, plan: CampPlan): FightCareerState 
   return next;
 }
 
-export function takeFight(st: FightCareerState, offerId: string, tactics: Tactic[]): {
+export function takeFight(st: FightCareerState, offerId: string, tactics: Tactic[], mods?: FightMods): {
   state: FightCareerState; result: BoutResult; offer: Offer;
 } | null {
   if (st.retired) return null;
   const offer = st.offers.find(o => o.id === offerId);
   if (!offer) return null;
   const { rng, done } = streamFor(st);
-  const result = simBout({
-    player: st.fighter, opponent: offer.opponent, rounds: offer.rounds,
+  const fought = simBout({
+    player: mods?.sharp ? sharpened(st.fighter, mods.sharp) : st.fighter,
+    opponent: offer.opponent, rounds: offer.rounds,
     weight: st.weight, tactics, campQuality: st.campQuality,
   }, rng);
+  /* Round 916: the cut man works on the result, so the number the screen
+     shows as taken tonight is the number that is kept. */
+  const result = mods?.damageMul === undefined
+    ? fought
+    : { ...fought, damageTaken: Math.round(fought.damageTaken * mods.damageMul * 100) / 100 };
   done(offer.rounds * 6 + 4);
   return { state: applyResult(st, offer, result), result, offer };
 }
