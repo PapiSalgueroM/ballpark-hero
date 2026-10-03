@@ -36,12 +36,10 @@
      checked on both sides (2019 and 2020, 2011 and 2012, the three injured
      reserve eras, starter against backup, kicker, quarterback, and the
      early years windows). 1,628 checks, deterministic.
-   - COIN FLIP ODDS. Seven "Coin flip:" buttons used to win 35 to 60 percent
-     of the time and seeing both ends could not tell. Every flip is now
-     played at a roll of 0.4999 and 0.5001: 32 rolls, 16 buttons.
-   - ERA MONEY. A deck C card that paid 2026 money to a 2005 career stayed
-     green. 768 bank moves are compared today against 2005 at the era's
-     scale (0.32). The floor is 700; the count is deterministic.
+   - COIN FLIP ODDS and ERA MONEY: both moved in Round 988 to
+     scripts/simUsCareerDeckC.mjs (its odds and era money checks), which
+     plays every flip at 0.4999 and 0.5001 and pairs every money card today
+     against the older era, for all four sports.
    Measured after the review's fixes, 400 careers: deck C fired 36 of 36 on
    the filename seed and on SIM_SEED 1 to 8, share 9 to 11 percent, backup
    seasons 28 to 31 percent, average peak 81.4 to 82.0.

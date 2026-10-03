@@ -13,10 +13,12 @@
    so adding this deck moves nothing in the stream before the pick itself.
 
    THE WORDS ON A BUTTON ARE WHAT THE CODE APPLIES. Every option's effect line
-   is typed in one grammar ("Morale +5, health -2", "Net worth -0.3M", "Coin
+   reads in one grammar ("Morale +5, health -2", "Net worth -0.3M", "Coin
    flip: rating +1 or health -6", "No change") and every log line ends with
-   what really moved, measured after the clamps. scripts/simNflCareer.mjs
-   parses both and compares them with the save, over 2,000 draws a card.
+   what really moved, measured after the clamps. Since Round 988 both are
+   written by the shared engine (usCareerDeckC.ts) from the effect itself,
+   and scripts/simUsCareerDeckC.mjs parses them back and compares them with
+   the save for all four sports.
 
    SPEAKERS. Every voice here is a role (the head coach, your agent, the cap
    guy, the long snapper). No name is generated and no real person appears.
