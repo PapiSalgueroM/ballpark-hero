@@ -55,6 +55,36 @@
         { "family": "A", "url": "https://www.lask.at/de/m/teams/pros", "publisher": "LASK (Profis squad page)", "readOn": "2026-10-03", "says": "midfielder, shirt 9, 7 games 1 goal 1 assist" },
         { "family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/4411", "publisher": "ESPN (LASK Linz squad page, season 2026-27)", "readOn": "2026-10-03", "says": "midfielder, shirt 9, age 23" }
       ]
+    },
+    {
+      "name": "Ivan Nevistic",
+      "club": "Dinamo Zagreb",
+      "adjudicatedOn": "2026-10-03",
+      "note": "Goalkeeper born 1998-07-31, three HNL appearances for Dinamo in 2026-27 on the league's own table.",
+      "sources": [
+        { "family": "A", "url": "https://hnl.hr/klubovi/dinamo/", "publisher": "SuperSport HNL (Dinamo player table, 2026-2027)", "readOn": "2026-10-03", "says": "listed, 3 appearances" },
+        { "family": "B", "url": "https://www.soccerway.com/player/nevistic-ivan/Qk9dNm0G/", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Din. Zagreb, goalkeeper, born 1998-07-31, contract to 2028-06-30, HNL and Champions League appearances in 2026/2027" }
+      ]
+    },
+    {
+      "name": "Lukas Kacavenda",
+      "club": "Dinamo Zagreb",
+      "adjudicatedOn": "2026-10-03",
+      "note": "Midfielder born 2003-03-02. Spent 2025-26 on loan at LASK and came back on 2026-06-30; seven HNL appearances for Dinamo in 2026-27.",
+      "sources": [
+        { "family": "A", "url": "https://hnl.hr/klubovi/dinamo/", "publisher": "SuperSport HNL (Dinamo player table, 2026-2027)", "readOn": "2026-10-03", "says": "listed, 7 appearances" },
+        { "family": "B", "url": "https://www.soccerway.com/player/kacavenda-lukas/djxsB91T/", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Dinamo Zagreb, born 2003-03-02, loan to LASK 2025-07-01, back 2026-06-30, 7 HNL and 6 Champions League appearances in 2026/27" }
+      ]
+    },
+    {
+      "name": "Marko Livaja",
+      "club": "Hajduk Split",
+      "adjudicatedOn": "2026-10-03",
+      "note": "Forward born 1993-08-26, seven HNL appearances and three goals for Hajduk in 2026-27.",
+      "sources": [
+        { "family": "A", "url": "https://hnl.hr/klubovi/hajduk/", "publisher": "SuperSport HNL (Hajduk player table, 2026-2027)", "readOn": "2026-10-03", "says": "listed, 7 appearances, 3 goals" },
+        { "family": "B", "url": "https://www.soccerway.com/player/livaja-marko/8CyvzF4J/", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Hajduk Split, born 1993-08-26, contract to 2027-06-30, 7 appearances 3 goals in 2026/2027" }
+      ]
     }
   ],
   "movedTo": [
@@ -81,6 +111,60 @@
         { "family": "A", "url": "https://www.bundesliga.at/team/sk-puntigamer-sturm-graz/6505/kader", "publisher": "Austrian Bundesliga (Sturm Graz 2026/2027 squad)", "readOn": "2026-10-03", "says": "not in the squad" },
         { "family": "B", "url": "https://www.espn.com/soccer/player/_/id/346760/lovro-zvonarek", "publisher": "ESPN (player page)", "readOn": "2026-10-03", "says": "Estrela, shirt 14, born 2005-05-08, started at Academico de Viseu 2026-09-20 and against Rio Ave 2026-09-14 in the Portuguese Liga" },
         { "family": "B", "url": "https://www.soccerway.com/player/zvonarek-lovro/lAIL4mGi/", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Bayern to Estrela 2026-07-16, 1.5m transfer, contract to 2029-06-30; loan at Grasshoppers 2025-07-29 to 2026-06-30" }
+      ]
+    },
+    {
+      "name": "Adrian Leon Barisic",
+      "from": "Basel",
+      "to": "Braga",
+      "realClub": "Braga",
+      "adjudicatedOn": "2026-10-03",
+      "note": "Bosnian centre back born 2001-07-19. On loan at Braga from January 2026, bought outright on 2026-07-01, shirt 37, league starts for Braga on 2026-09-14 and 2026-09-20. Absent from Basel's own squad page. The destination rests on two independent publishers that agree: Braga's own site gave no squad page to a plain fetch.",
+      "sources": [
+        { "family": "A", "url": "https://fcb.ch/pages/1-mannschaft/spieler", "publisher": "FC Basel (1. Mannschaft players page)", "readOn": "2026-10-03", "says": "not in the squad" },
+        { "family": "B", "url": "https://www.espn.com/soccer/player/_/id/322209/adrian-leon-barisic", "publisher": "ESPN (player page)", "readOn": "2026-10-03", "says": "Braga, shirt 37, born 2001-07-19, started against Estoril 2026-09-14 and Santa Clara 2026-09-20" },
+        { "family": "B", "url": "https://www.soccerway.com/player/barisic-adrian/Wh521XJd/", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "loan Basel to Braga 2026-01-20; transfer Basel to Braga 2026-07-01, 3.5m, contract to 2030-06-30" }
+      ]
+    },
+    {
+      "name": "Finn van Breemen",
+      "from": "Basel",
+      "to": "Famalicão",
+      "realClub": "Famalicão",
+      "adjudicatedOn": "2026-10-03",
+      "note": "Dutch centre back born 2003-02-25. Sold by Basel to Famalicao on 2026-07-01, shirt 4, seven league appearances for Famalicao by 2026-09-19. Absent from Basel's own squad page. The destination rests on two independent publishers that agree: Famalicao's own site answered 403.",
+      "sources": [
+        { "family": "A", "url": "https://fcb.ch/pages/1-mannschaft/spieler", "publisher": "FC Basel (1. Mannschaft players page)", "readOn": "2026-10-03", "says": "not in the squad" },
+        { "family": "B", "url": "https://www.espn.com/soccer/player/_/id/340623/finn-van-breemen", "publisher": "ESPN (player page)", "readOn": "2026-10-03", "says": "FC Famalicao, shirt 4, born 2003-02-25, started five Portuguese Liga games from 2026-08-23 to 2026-09-19" },
+        { "family": "B", "url": "https://www.soccerway.com/player/van-breemen-finn/IPWz2xmG/", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Basel to Famalicao 2026-07-01, 1.5m, contract to 2030-06-30" }
+      ]
+    },
+    {
+      "name": "Marin Soticek",
+      "from": "Basel",
+      "to": "Hajduk Split",
+      "realClub": "Hajduk Split, on a season-long loan from Basel",
+      "loan": true,
+      "loanFrom": "Basel",
+      "adjudicatedOn": "2026-10-03",
+      "note": "Croatian forward born 2004-09-18, loaned to Hajduk on 2026-07-29 until 2027-06-30, eight HNL appearances and two goals for Hajduk in 2026-27. Placed at the club he plays for, per loanPolicy; the loan fields are information only.",
+      "sources": [
+        { "family": "A", "url": "https://hnl.hr/klubovi/hajduk/", "publisher": "SuperSport HNL (Hajduk player table, 2026-2027)", "readOn": "2026-10-03", "says": "Marin Soticek listed, 8 appearances, 2 goals" },
+        { "family": "A", "url": "https://fcb.ch/pages/1-mannschaft/spieler", "publisher": "FC Basel (1. Mannschaft players page)", "readOn": "2026-10-03", "says": "not in the squad" },
+        { "family": "B", "url": "https://www.soccerway.com/player/soticek-marin/2JBIvUPJ/", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Hajduk Split on loan from Basel, loan from 2026-07-29 to 2027-06-30, born 2004-09-18" }
+      ]
+    },
+    {
+      "name": "Roko Jurisic",
+      "from": "Osijek",
+      "to": "Estoril",
+      "realClub": "Estoril",
+      "adjudicatedOn": "2026-10-03",
+      "note": "Croatian defender born 2001-09-28. Played five HNL games for Osijek in 2026-27 (the league's table keeps them), then was sold to Estoril on 2026-09-04, shirt 21, starting at Braga 2026-09-14 and against Casa Pia 2026-09-20. The destination rests on two independent publishers that agree; no official Estoril page was read.",
+      "sources": [
+        { "family": "A", "url": "https://hnl.hr/klubovi/osijek/", "publisher": "SuperSport HNL (Osijek player table, 2026-2027)", "readOn": "2026-10-03", "says": "listed with 5 appearances, 404 minutes, consistent with a September sale" },
+        { "family": "B", "url": "https://www.espn.com/soccer/player/_/id/310038/roko-jurisic", "publisher": "ESPN (player page)", "readOn": "2026-10-03", "says": "Estoril, shirt 21, born 2001-09-28, Portuguese Liga starts 2026-09-14 and 2026-09-20" },
+        { "family": "B", "url": "https://www.soccerway.com/player/jurisic-roko/p87XoL39/", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Osijek to Estoril 2026-09-04, 500k, contract to 2029-06-30" }
       ]
     }
   ],
@@ -119,6 +203,30 @@
         { "family": "A", "url": "https://www.bundesliga.at/team/scr-altach/6495/kader", "publisher": "Austrian Bundesliga (Altach 2026/2027 squad)", "readOn": "2026-10-03", "says": "not in the squad" },
         { "family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/4405", "publisher": "ESPN (SC Rheindorf Altach squad page, season 2026-27)", "readOn": "2026-10-03", "says": "not in the squad" },
         { "family": "B", "url": "https://www.soccerway.com/player/schreiner-emanuel/QT80kXI0/", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "born 1989-02-02; Altach to Weisskirchen 2023-07-01" }
+      ]
+    },
+    {
+      "name": "Stipe Biuk",
+      "from": "Hajduk Split",
+      "realClub": "Widzew Lodz (Poland)",
+      "adjudicatedOn": "2026-10-03",
+      "note": "Croatian forward born 2002-12-26. Hajduk was a 2024-25 loan from Valladolid that ended on 2025-06-30; he joined Widzew Lodz on a free on 2026-08-21. Not in Hajduk's 2026-27 player table. Poland is not modelled.",
+      "sources": [
+        { "family": "A", "url": "https://hnl.hr/klubovi/hajduk/", "publisher": "SuperSport HNL (Hajduk player table, 2026-2027)", "readOn": "2026-10-03", "says": "not listed" },
+        { "family": "B", "url": "https://www.soccerway.com/player/biuk-stipe/MBmNyYIa/", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Widzew Lodz, born 2002-12-26, Valladolid to Widzew 2026-08-21 free, contract to 2029-06-30" },
+        { "family": "B", "url": "https://site.web.api.espn.com/apis/search/v2?query=Stipe%20Biuk&limit=10", "publisher": "ESPN (player index, links https://www.espn.com/soccer/player/_/id/319496/stipe-biuk)", "readOn": "2026-10-03", "says": "Widzew Lodz" }
+      ]
+    },
+    {
+      "name": "Ivan Lucic",
+      "from": "Hajduk Split",
+      "realClub": "Miedz Legnica (Poland)",
+      "adjudicatedOn": "2026-10-03",
+      "note": "Goalkeeper born 1995-03-23 (Austrian passport). Left Hajduk on a free for Miedz Legnica on 2026-01-26. Not in Hajduk's 2026-27 player table. Poland is not modelled.",
+      "sources": [
+        { "family": "A", "url": "https://hnl.hr/klubovi/hajduk/", "publisher": "SuperSport HNL (Hajduk player table, 2026-2027)", "readOn": "2026-10-03", "says": "not listed" },
+        { "family": "B", "url": "https://www.soccerway.com/player/lucic-ivan/nZCskbG4/", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Legnica, goalkeeper, born 1995-03-23, Hajduk Split to Legnica 2026-01-26 free, contract to 2028-06-30" },
+        { "family": "B", "url": "https://site.web.api.espn.com/apis/search/v2?query=Ivan%20Lucic&limit=10", "publisher": "ESPN (player index, links https://www.espn.com/soccer/player/_/id/207181/ivan-lucic)", "readOn": "2026-10-03", "says": "Miedz Legnica" }
       ]
     }
   ],
