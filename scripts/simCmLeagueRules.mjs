@@ -346,7 +346,9 @@ async function partEras() {
   }
   /* Round 899: nine, the 2015-16 era gained its Bundesliga and its Ligue 1 (a league added to an era
      regenerates the baseline on purpose, like a modern one). */
-  if (saves.length !== 9) fail(`the eras hold ${saves.length} leagues where Round 899 left 9`);
+  /* Round 971: fourteen, the 2020-21 era arrived with its five leagues. Its five digests are new baseline
+     rows; the nine older ones were measured unchanged on this tree before the baseline was rewritten. */
+  if (saves.length !== 14) fail(`the eras hold ${saves.length} leagues where Round 971 left 14`);
   const got = await digestSaves(saves, mod);
   if (WRITE) written.eras = got; else compare('eras', got, baseline.parts.eras);
 }

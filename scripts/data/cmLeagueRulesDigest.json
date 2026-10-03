@@ -1168,6 +1168,171 @@
      "cupDrawNext": "4f7e824bbb423181",
      "wholeNext": "268872f6c9738185"
     }
+   },
+   "era2020|premier2020": {
+    "club": "Manchester City",
+    "eraId": "era2020",
+    "entries": 52,
+    "read": {
+     "position": 4,
+     "champion": "Wolves",
+     "bottom": "Leeds United",
+     "cupWinner": "Wolves",
+     "uclWinner": "Atlético Madrid",
+     "nextLeague": "premier2020",
+     "nextUcl": true,
+     "overrides": {}
+    },
+    "hashes": {
+     "start": "a288a73e6b853f60",
+     "table": "a84b3cf5f43f6cc2",
+     "results": "2837e0b6644b45b5",
+     "world": "2505b7bada6b7c70",
+     "cup": "27e146564b31b2af",
+     "europe": "b9cea8c6d06184e0",
+     "trophies": "4f53cda18c2baa0c",
+     "objectives": "c7f4d8477e449b6e",
+     "whole": "5f065a9bed5ce6a0",
+     "summary": "f7cab5cda195039e",
+     "promotions": "74234e98afe7498f",
+     "europeNext": "6bea97f5b152b463",
+     "objectivesNext": "ec504def056b12dd",
+     "calendarNext": "bc765b33645f0e7b",
+     "cupDrawNext": "69705b0396efe60d",
+     "wholeNext": "c86451fff03f2050"
+    }
+   },
+   "era2020|laliga2020": {
+    "club": "Atlético Madrid",
+    "eraId": "era2020",
+    "entries": 49,
+    "read": {
+     "position": 1,
+     "champion": "Real Madrid",
+     "bottom": "Huesca",
+     "cupWinner": "Sevilla",
+     "uclWinner": "Manchester City",
+     "nextLeague": "laliga2020",
+     "nextUcl": true,
+     "overrides": {}
+    },
+    "hashes": {
+     "start": "60f1d52d16993a56",
+     "table": "f2400e932d35b534",
+     "results": "b799cedd5c5d43b6",
+     "world": "18df22cf40de85a7",
+     "cup": "4d6f670a87726fe4",
+     "europe": "9617f338bd18dde7",
+     "trophies": "4f53cda18c2baa0c",
+     "objectives": "4d4ae915b3a2ef01",
+     "whole": "143fc02accd52492",
+     "summary": "7da54a2c08a4cae1",
+     "promotions": "74234e98afe7498f",
+     "europeNext": "d2bcbf4b72bf2ec6",
+     "objectivesNext": "e0e9b78fd3b3a97a",
+     "calendarNext": "bc765b33645f0e7b",
+     "cupDrawNext": "86bf2ae2c2e7ba9e",
+     "wholeNext": "63f5d79a9d40ee51"
+    }
+   },
+   "era2020|seriea2020": {
+    "club": "Inter Milan",
+    "eraId": "era2020",
+    "entries": 49,
+    "read": {
+     "position": 1,
+     "champion": "Inter Milan",
+     "bottom": "Crotone",
+     "cupWinner": "Sassuolo",
+     "uclWinner": "Borussia Dortmund",
+     "nextLeague": "seriea2020",
+     "nextUcl": true,
+     "overrides": {}
+    },
+    "hashes": {
+     "start": "b3c242904b643d80",
+     "table": "34617e909cf987cf",
+     "results": "619fc6f5a77dcfe6",
+     "world": "852dca329ef7bba1",
+     "cup": "a8aee2a3a196e6b3",
+     "europe": "dd1b3fba90a255b0",
+     "trophies": "4f53cda18c2baa0c",
+     "objectives": "86acac7eacf6ac4b",
+     "whole": "d81875a85d7cb536",
+     "summary": "bccd01f6d72ba00a",
+     "promotions": "74234e98afe7498f",
+     "europeNext": "640f7efe17d43583",
+     "objectivesNext": "783480ed46e12fdb",
+     "calendarNext": "bc765b33645f0e7b",
+     "cupDrawNext": "bba43d8848ba5515",
+     "wholeNext": "043ba7e7d4997c0a"
+    }
+   },
+   "era2020|bundesliga2020": {
+    "club": "Bayern Munich",
+    "eraId": "era2020",
+    "entries": 50,
+    "read": {
+     "position": 3,
+     "champion": "Borussia Dortmund",
+     "bottom": "Arminia Bielefeld",
+     "cupWinner": "Köln",
+     "uclWinner": "Sevilla",
+     "nextLeague": "bundesliga2020",
+     "nextUcl": true,
+     "overrides": {}
+    },
+    "hashes": {
+     "start": "d6861ca0c5c6c005",
+     "table": "6ba4377c8a097a75",
+     "results": "8d93b089226a6d37",
+     "world": "593f0b60273dc852",
+     "cup": "fbfaaf928479bf36",
+     "europe": "91fab12488cadf92",
+     "trophies": "4f53cda18c2baa0c",
+     "objectives": "93b6b48c4d24704d",
+     "whole": "069b9adaa664a2e6",
+     "summary": "d91be72ed87577f1",
+     "promotions": "74234e98afe7498f",
+     "europeNext": "df55914f726470b3",
+     "objectivesNext": "1c7f7f6dd9220b0d",
+     "calendarNext": "2fd0ce2aa56f0a07",
+     "cupDrawNext": "711220e1b024456d",
+     "wholeNext": "fb0f35253d8b1523"
+    }
+   },
+   "era2020|ligue12020": {
+    "club": "Lille",
+    "eraId": "era2020",
+    "entries": 50,
+    "read": {
+     "position": 5,
+     "champion": "PSG",
+     "bottom": "Angers",
+     "cupWinner": "Lille",
+     "uclWinner": "Liverpool",
+     "nextLeague": "ligue12020",
+     "nextUcl": false,
+     "overrides": {}
+    },
+    "hashes": {
+     "start": "d1cb3e7886814aa6",
+     "table": "4efa03654958fe66",
+     "results": "554bc115b8c1f508",
+     "world": "bf7a2f515b5800a5",
+     "cup": "00aed7524829db95",
+     "europe": "2cc43e4ed58af6b6",
+     "trophies": "169f057818963c9d",
+     "objectives": "0431dc6494536085",
+     "whole": "591e5f3ffd8caa86",
+     "summary": "725fa5ced61483fd",
+     "promotions": "74234e98afe7498f",
+     "europeNext": "85583c158b019c6c",
+     "objectivesNext": "9c344efd00c9e435",
+     "calendarNext": "bc765b33645f0e7b",
+     "cupDrawNext": "6ab57f53cfcdde85",
+     "wholeNext": "f62125879e1239a8"
+    }
    }
   },
   "pure": {
@@ -1388,13 +1553,48 @@
     "demand": "8dd5efb2f048ae01",
     "objectives": "58b1b108e9262add"
    },
+   "era2020|premier2020": {
+    "drop": "4e07408562bedb8b",
+    "ucl": "4b227777d4dd1fc6",
+    "def": "4ae5f39e16de5822",
+    "demand": "fb32eba28e465944",
+    "objectives": "d2bca67fe328a898"
+   },
+   "era2020|laliga2020": {
+    "drop": "4e07408562bedb8b",
+    "ucl": "4b227777d4dd1fc6",
+    "def": "ae08b9038ef458bf",
+    "demand": "ff1a2989961032c6",
+    "objectives": "0b22e74491fe38eb"
+   },
+   "era2020|seriea2020": {
+    "drop": "4e07408562bedb8b",
+    "ucl": "4b227777d4dd1fc6",
+    "def": "d9d704ffdd1c9e4c",
+    "demand": "cc9d3574b58867f9",
+    "objectives": "0cffa11cee85607b"
+   },
+   "era2020|bundesliga2020": {
+    "drop": "d4735e3a265e16ee",
+    "ucl": "4b227777d4dd1fc6",
+    "def": "90407a88e9e1dd97",
+    "demand": "55296f84070402e8",
+    "objectives": "c5fb17972cee4d3f"
+   },
+   "era2020|ligue12020": {
+    "drop": "d4735e3a265e16ee",
+    "ucl": "4e07408562bedb8b",
+    "def": "6ca60a1b126170ee",
+    "demand": "f8048545de529449",
+    "objectives": "6af963076a014e62"
+   },
    "views": {
     "pyramids": "7948e7f92fbb0ad0",
     "nations": "eac10a4f2b46d3b0",
-    "leagueNations": "761fcb0ad26f4327",
-    "euroSlots": "0aa7e1da9ee09c52",
-    "eraIds": "b61feed18056a8cc",
-    "historic": "58e7fc74426ffa01"
+    "leagueNations": "82bc68b49dcd8415",
+    "euroSlots": "0dfc9f51fd814270",
+    "eraIds": "fc05b8d0a73b1fa4",
+    "historic": "fc5c2a576cc5bc9a"
    }
   }
  }

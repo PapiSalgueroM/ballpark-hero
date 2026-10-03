@@ -2763,6 +2763,8 @@ export const LEAGUE_RULES: Record<string, LeagueRules> = {
     simplified: 'The real relegation playoff (sixteenth against the 2. Bundesliga\'s third) is not played: two go straight down.',
   },
   ligue12015: { nationId: 'france', flag: 'France', cup: 'Coupe de France', europe: { ucl: 3, uel: 4, uecl: 0 }, drop: 3, ladder: 'top', season: 'autumnSpring' },
+  premier2005: { nationId: 'england', flag: 'England', cup: 'FA Cup', europe: { ucl: 4, uel: 5, uecl: 0, uelName: 'UEFA Cup' }, drop: 3, tiebreak: 'gdGf', ladder: 'top', season: 'autumnSpring' },
+  laliga2005: { nationId: 'spain', flag: 'Spain', cup: 'Copa del Rey', europe: { ucl: 4, uel: 6, uecl: 0, uelName: 'UEFA Cup' }, drop: 3, tiebreak: 'h2h', ladder: 'top', season: 'autumnSpring' },
   /* Round 971: the 2020-21 big five, each fact from two sources read
      2026-10-03: RSSSF's season records (https://www.rsssf.org/tablese/eng2021.html,
      tabless/span2021.html, tablesi/ital2021.html, tablesd/duit2021.html,
@@ -2821,8 +2823,6 @@ export const LEAGUE_RULES: Record<string, LeagueRules> = {
     nationId: 'france', flag: 'France', cup: 'Coupe de France', europe: { ucl: 3, uel: 4, uecl: 0 }, drop: 2, ladder: 'top', season: 'autumnSpring',
     simplified: `The real relegation playoff (eighteenth against Ligue 2's third) is not played: two go straight down. ${CONFERENCE_LEAGUE_UNPLAYED}`,
   },
-  premier2005: { nationId: 'england', flag: 'England', cup: 'FA Cup', europe: { ucl: 4, uel: 5, uecl: 0, uelName: 'UEFA Cup' }, drop: 3, tiebreak: 'gdGf', ladder: 'top', season: 'autumnSpring' },
-  laliga2005: { nationId: 'spain', flag: 'Spain', cup: 'Copa del Rey', europe: { ucl: 4, uel: 6, uecl: 0, uelName: 'UEFA Cup' }, drop: 3, tiebreak: 'h2h', ladder: 'top', season: 'autumnSpring' },
 };
 
 /** What an id with no row reads as: a cupless top flight outside Europe that
@@ -3219,6 +3219,20 @@ export const ERA_LEAGUES: Record<string, LeagueDef[]> = {
       clubs: ['PSG', 'Lyon', 'Monaco', 'Nice', 'Lille', 'Saint-Étienne', 'Caen', 'Rennes', 'Angers', 'Bastia', 'Bordeaux', 'Montpellier', 'Marseille', 'Nantes', 'Lorient', 'Guingamp', 'Toulouse', 'Reims', 'GFC Ajaccio', 'Troyes'],
     },
   ].map(leagueFromRow),
+  /* Round 176: the 2005-06 season, memberships verified against the season
+     records (Wikipedia and worldfootball plus RSSSF final tables, checked
+     2026-08-19) AND against the market values table itself. Cadiz and
+     Alaves are the two thin squads and the picker says so. */
+  era2005: [
+    {
+      id: 'premier2005', name: 'Premier League',
+      clubs: ['Arsenal', 'Aston Villa', 'Birmingham City', 'Blackburn Rovers', 'Bolton Wanderers', 'Charlton Athletic', 'Chelsea', 'Everton', 'Fulham', 'Liverpool', 'Manchester City', 'Manchester United', 'Middlesbrough', 'Newcastle', 'Portsmouth', 'Sunderland', 'Tottenham', 'West Brom', 'West Ham', 'Wigan Athletic'],
+    },
+    {
+      id: 'laliga2005', name: 'La Liga',
+      clubs: ['Alavés', 'Athletic Club', 'Atlético Madrid', 'Barcelona', 'Cádiz', 'Celta Vigo', 'Deportivo La Coruña', 'Espanyol', 'Getafe', 'Málaga', 'Mallorca', 'Osasuna', 'Racing Santander', 'Real Betis', 'Real Madrid', 'Real Sociedad', 'Sevilla', 'Valencia', 'Villarreal', 'Zaragoza'],
+    },
+  ].map(leagueFromRow),
   /* Round 971: the 2020-21 season, a full big five from the start. Every
      membership is the final table of that season from two publishers that
      agree on every club, read 2026-10-03: RSSSF's season records and ESPN's
@@ -3249,20 +3263,6 @@ export const ERA_LEAGUES: Record<string, LeagueDef[]> = {
     {
       id: 'ligue12020', name: 'Ligue 1',
       clubs: ['Lille', 'PSG', 'Monaco', 'Lyon', 'Marseille', 'Rennes', 'Lens', 'Montpellier', 'Nice', 'Metz', 'Saint-Étienne', 'Bordeaux', 'Angers', 'Reims', 'Strasbourg', 'Lorient', 'Brest', 'Nantes', 'Nîmes', 'Dijon'],
-    },
-  ].map(leagueFromRow),
-  /* Round 176: the 2005-06 season, memberships verified against the season
-     records (Wikipedia and worldfootball plus RSSSF final tables, checked
-     2026-08-19) AND against the market values table itself. Cadiz and
-     Alaves are the two thin squads and the picker says so. */
-  era2005: [
-    {
-      id: 'premier2005', name: 'Premier League',
-      clubs: ['Arsenal', 'Aston Villa', 'Birmingham City', 'Blackburn Rovers', 'Bolton Wanderers', 'Charlton Athletic', 'Chelsea', 'Everton', 'Fulham', 'Liverpool', 'Manchester City', 'Manchester United', 'Middlesbrough', 'Newcastle', 'Portsmouth', 'Sunderland', 'Tottenham', 'West Brom', 'West Ham', 'Wigan Athletic'],
-    },
-    {
-      id: 'laliga2005', name: 'La Liga',
-      clubs: ['Alavés', 'Athletic Club', 'Atlético Madrid', 'Barcelona', 'Cádiz', 'Celta Vigo', 'Deportivo La Coruña', 'Espanyol', 'Getafe', 'Málaga', 'Mallorca', 'Osasuna', 'Racing Santander', 'Real Betis', 'Real Madrid', 'Real Sociedad', 'Sevilla', 'Valencia', 'Villarreal', 'Zaragoza'],
     },
   ].map(leagueFromRow),
 };

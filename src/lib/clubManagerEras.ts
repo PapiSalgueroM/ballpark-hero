@@ -350,6 +350,13 @@ export const ERA_NAMES_THE_FILLER_COULD_BUILD = [
      Hansen left it in the second review fix, Nantes to Midtjylland in May
      2015, and moved to ALSO_REAL_ELSEWHERE so the guard's set is unchanged.) */
   'Jesper Hansen', 'Thiago Silva', 'Yannick Carrasco',
+  /* Round 971: the 2020-21 big five holds four more real men the generator
+     could build. Jonas Hofmann (Gladbach) and Juan Miranda (Schalke) are in
+     the 2026 rosters too, so the guard's set does not change for them; Matteo
+     Ricci (Spezia) and Thiago Mendes (Lyon) are new to it, so a made up
+     youth who would have carried one of those two names now re-rolls, the
+     one change this list makes to a seed's name. */
+  'Jonas Hofmann', 'Juan Miranda', 'Matteo Ricci', 'Thiago Mendes',
 ];
 
 function realNames(): Set<string> {
