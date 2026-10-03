@@ -62,6 +62,154 @@
     { "name": "Christian McCaffrey", "fact": "Scoring: game book 'C.McCaffrey 21 yd. pass from J.Jennings' (Q2 4:23); pfr 'Christian McCaffrey 21 yard pass from Jauan Jennings'. Jennings is in the 49ers substitutions, not the starters, on both." },
     { "name": "Kyle Juszczyk", "fact": "Game book lineup FB 44 K.Juszczyk; pfr starters Kyle Juszczyk/FB." }
    ]
+  },
+  {
+   "id": "sb-lix-phi",
+   "game": "Super Bowl LIX",
+   "matchDate": "2025-02-09",
+   "unit": "offense",
+   "team": "Philadelphia Eagles",
+   "sources": [
+    { "host": "nfl.com", "what": "Official game book PDF, page 1 Lineups, Philadelphia Eagles Offense", "url": "https://static.www.nfl.com/image/upload/v1739186285/gamecenter/882c1e9c-dc59-11ef-8d24-59614ea9df0f.pdf", "via": "https://www.nfl.com/games/chiefs-at-eagles-2024-post-4", "read": "2026-10-03" },
+    { "host": "pro-football-reference.com", "what": "Box score #home_starters (Eagles Starters Table)", "url": "https://www.pro-football-reference.com/boxscores/202502090phi.htm", "read": "2026-10-03" }
+   ],
+   "agree": "11/11",
+   "starters": [
+    ["QB", "Jalen Hurts", "QB 1 J.Hurts", "Jalen Hurts/QB"],
+    ["RB", "Saquon Barkley", "RB 26 S.Barkley", "Saquon Barkley/RB"],
+    ["WR", "A.J. Brown", "WR 11 A.Brown", "A.J. Brown/WR"],
+    ["WR", "DeVonta Smith", "WR 6 D.Smith", "DeVonta Smith/WR"],
+    ["WR", "Jahan Dotson", "WR 83 J.Dotson", "Jahan Dotson/WR"],
+    ["TE", "Dallas Goedert", "TE 88 D.Goedert", "Dallas Goedert/TE"],
+    ["LT", "Jordan Mailata", "LT 68 J.Mailata", "Jordan Mailata/T"],
+    ["LG", "Landon Dickerson", "LG 69 L.Dickerson", "Landon Dickerson/G"],
+    ["C", "Cam Jurgens", "C 51 C.Jurgens", "Cam Jurgens/OL"],
+    ["RG", "Mekhi Becton", "RG 77 M.Becton", "Mekhi Becton/T"],
+    ["RT", "Lane Johnson", "RT 65 L.Johnson", "Lane Johnson/T"]
+   ],
+   "facts": [
+    { "name": "DeVonta Smith", "fact": "Scoring: game book 'D.Smith 46 yd. pass from J.Hurts' (Q3 2:40); pfr 'DeVonta Smith 46 yard pass from Jalen Hurts'." },
+    { "name": "Jahan Dotson", "fact": "Both list three starting receivers: Dotson with A.J. Brown and DeVonta Smith." },
+    { "name": "Mekhi Becton", "fact": "Game book lineup RG 77 M.Becton; pfr starters Mekhi Becton/T (pfr prints his roster position)." }
+   ]
+  },
+  {
+   "id": "sb-lix-phi-d",
+   "game": "Super Bowl LIX",
+   "matchDate": "2025-02-09",
+   "unit": "defense",
+   "team": "Philadelphia Eagles",
+   "sources": [
+    { "host": "nfl.com", "what": "Official game book PDF, page 1 Lineups, Philadelphia Eagles Defense", "url": "https://static.www.nfl.com/image/upload/v1739186285/gamecenter/882c1e9c-dc59-11ef-8d24-59614ea9df0f.pdf", "via": "https://www.nfl.com/games/chiefs-at-eagles-2024-post-4", "read": "2026-10-03" },
+    { "host": "pro-football-reference.com", "what": "Box score #home_starters (Eagles Starters Table)", "url": "https://www.pro-football-reference.com/boxscores/202502090phi.htm", "read": "2026-10-03" }
+   ],
+   "agree": "11/11",
+   "starters": [
+    ["OLB", "Josh Sweat", "OLB 19 J.Sweat", "Josh Sweat/OLB"],
+    ["DT", "Jordan Davis", "DT 90 J.Davis", "Jordan Davis/DT"],
+    ["DT", "Jalen Carter", "DT 98 J.Carter", "Jalen Carter/DT"],
+    ["OLB", "Nolan Smith", "OLB 3 N.Smith", "Nolan Smith/OLB"],
+    ["LB", "Zack Baun", "LB 53 Z.Baun", "Zack Baun/LB"],
+    ["LB", "Oren Burks", "LB 42 O.Burks", "Oren Burks/LB"],
+    ["CB", "Darius Slay", "CB 2 D.Slay", "Darius Slay/CB"],
+    ["CB", "Quinyon Mitchell", "CB 27 Q.Mitchell", "Quinyon Mitchell/CB"],
+    ["DB", "Cooper DeJean", "DB 33 C.DeJean", "Cooper DeJean/DB"],
+    ["S", "Reed Blankenship", "S 32 R.Blankenship", "Reed Blankenship/S"],
+    ["S", "C.J. Gardner-Johnson", "S 8 C.Gardner-Johnson", "C.J. Gardner-Johnson/S"]
+   ],
+   "facts": [
+    { "name": "Cooper DeJean", "fact": "Scoring: game book 'C.DeJean 38 yd. interception return' (Q2 7:03); pfr 'Cooper DeJean 38 yard interception return'." },
+    { "name": "Oren Burks", "fact": "Game book lineup LB 42 O.Burks beside LB 53 Z.Baun; pfr starters Oren Burks/LB." }
+   ]
+  },
+  {
+   "id": "sb-lv-tb",
+   "game": "Super Bowl LV",
+   "matchDate": "2021-02-07",
+   "unit": "offense",
+   "team": "Tampa Bay Buccaneers",
+   "sources": [
+    { "host": "nfl.com", "what": "Official game book PDF, page 1 Lineups, Tampa Bay Buccaneers Offense", "url": "https://static.www.nfl.com/image/upload/v1677629321/gamecenter/10012021-0207-0069-5207-a78dd8bf8075.pdf", "via": "https://www.nfl.com/games/chiefs-at-buccaneers-2020-post-4", "read": "2026-10-03" },
+    { "host": "pro-football-reference.com", "what": "Box score #home_starters (Buccaneers Starters Table)", "url": "https://www.pro-football-reference.com/boxscores/202102070tam.htm", "read": "2026-10-03" }
+   ],
+   "agree": "11/11",
+   "starters": [
+    ["QB", "Tom Brady", "QB 12 T.Brady", "Tom Brady/QB"],
+    ["RB", "Leonard Fournette", "RB 28 L.Fournette", "Leonard Fournette/RB"],
+    ["WR", "Mike Evans", "WR 13 M.Evans", "Mike Evans/WR"],
+    ["WR", "Chris Godwin", "WR 14 C.Godwin", "Chris Godwin/WR"],
+    ["WR", "Scott Miller", "WR 10 S.Miller", "Scott Miller/WR"],
+    ["TE", "Rob Gronkowski", "TE 87 R.Gronkowski", "Rob Gronkowski/TE"],
+    ["LT", "Donovan Smith", "LT 76 D.Smith", "Donovan Smith/T"],
+    ["LG", "Ali Marpet", "LG 74 A.Marpet", "Ali Marpet/G"],
+    ["C", "Ryan Jensen", "C 66 R.Jensen", "Ryan Jensen/C"],
+    ["RG", "Aaron Stinnie", "RG 64 A.Stinnie", "Aaron Stinnie/G"],
+    ["RT", "Tristan Wirfs", "RT 78 T.Wirfs", "Tristan Wirfs/T"]
+   ],
+   "facts": [
+    { "name": "Scott Miller", "fact": "Game book lists WR 81 A.Brown under Buccaneers substitutions and pfr's starters omit him; both scoring tables have 'A.Brown 1 yd. pass from T.Brady' / 'Antonio Brown 1 yard pass from Tom Brady' (Q2 0:06)." },
+    { "name": "Rob Gronkowski", "fact": "Scoring: game book 'R.Gronkowski 8 yd. pass from T.Brady' (Q1 0:37) and '17 yd.' (Q2 6:05); pfr the same two plays." },
+    { "name": "Aaron Stinnie", "fact": "Game book lineup RG 64 A.Stinnie; pfr starters Aaron Stinnie/G." }
+   ]
+  },
+  {
+   "id": "sb-lv-tb-d",
+   "game": "Super Bowl LV",
+   "matchDate": "2021-02-07",
+   "unit": "defense",
+   "team": "Tampa Bay Buccaneers",
+   "sources": [
+    { "host": "nfl.com", "what": "Official game book PDF, page 1 Lineups, Tampa Bay Buccaneers Defense", "url": "https://static.www.nfl.com/image/upload/v1677629321/gamecenter/10012021-0207-0069-5207-a78dd8bf8075.pdf", "via": "https://www.nfl.com/games/chiefs-at-buccaneers-2020-post-4", "read": "2026-10-03" },
+    { "host": "pro-football-reference.com", "what": "Box score #home_starters (Buccaneers Starters Table)", "url": "https://www.pro-football-reference.com/boxscores/202102070tam.htm", "read": "2026-10-03" }
+   ],
+   "agree": "11/11",
+   "starters": [
+    ["DL", "Ndamukong Suh", "DL 93 N.Suh", "Ndamukong Suh/DL"],
+    ["NT", "Rakeem Nunez-Roches", "NT 56 R.Nunez-Roches", "Rakeem Nunez-Roches/DL"],
+    ["OLB", "Jason Pierre-Paul", "OLB 90 J.Pierre-Paul", "Jason Pierre-Paul/OLB"],
+    ["ILB", "Devin White", "ILB 45 D.White", "Devin White/ILB"],
+    ["ILB", "Lavonte David", "ILB 54 L.David", "Lavonte David/ILB"],
+    ["OLB", "Shaquil Barrett", "OLB 58 S.Barrett", "Shaquil Barrett/OLB"],
+    ["CB", "Carlton Davis", "CB 24 C.Davis", "Carlton Davis/CB"],
+    ["CB", "Jamel Dean", "CB 35 J.Dean", "Jamel Dean/CB"],
+    ["CB", "Sean Murphy-Bunting", "CB 23 S.Murphy-Bunting", "Sean Murphy-Bunting/CB"],
+    ["S", "Jordan Whitehead", "S 33 J.Whitehead", "Jordan Whitehead/S"],
+    ["S", "Antoine Winfield Jr.", "S 31 A.Winfield", "Antoine Winfield Jr./S"]
+   ],
+   "facts": [
+    { "name": "Devin White", "fact": "Both scoring tables: the Chiefs' only points were three Harrison Butker field goals (49, 34, 52 yards); no Kansas City touchdown." },
+    { "name": "Sean Murphy-Bunting", "fact": "Both list three starting corners (Davis, Dean, Murphy-Bunting): a nickel opening card." }
+   ]
+  },
+  {
+   "id": "sb-lv-kc",
+   "game": "Super Bowl LV",
+   "matchDate": "2021-02-07",
+   "unit": "offense",
+   "team": "Kansas City Chiefs",
+   "sources": [
+    { "host": "nfl.com", "what": "Official game book PDF, page 1 Lineups, Kansas City Chiefs Offense", "url": "https://static.www.nfl.com/image/upload/v1677629321/gamecenter/10012021-0207-0069-5207-a78dd8bf8075.pdf", "via": "https://www.nfl.com/games/chiefs-at-buccaneers-2020-post-4", "read": "2026-10-03" },
+    { "host": "pro-football-reference.com", "what": "Box score #vis_starters (Chiefs Starters Table)", "url": "https://www.pro-football-reference.com/boxscores/202102070tam.htm", "read": "2026-10-03" }
+   ],
+   "agree": "11/11",
+   "starters": [
+    ["QB", "Patrick Mahomes", "QB 15 P.Mahomes", "Patrick Mahomes/QB"],
+    ["RB", "Clyde Edwards-Helaire", "RB 25 C.Edwards-Helaire", "Clyde Edwards-Helaire/RB"],
+    ["WR", "Tyreek Hill", "WR 10 T.Hill", "Tyreek Hill/WR"],
+    ["WR", "Demarcus Robinson", "WR 11 D.Robinson", "Demarcus Robinson/WR"],
+    ["WR", "Byron Pringle", "WR 13 B.Pringle", "Byron Pringle/WR"],
+    ["TE", "Travis Kelce", "TE 87 T.Kelce", "Travis Kelce/TE"],
+    ["LT", "Mike Remmers", "LT 75 M.Remmers", "Mike Remmers/T"],
+    ["LG", "Nick Allegretti", "LG 73 N.Allegretti", "Nick Allegretti/G"],
+    ["C", "Austin Reiter", "C 62 A.Reiter", "Austin Reiter/C"],
+    ["RG", "Stefen Wisniewski", "RG 61 S.Wisniewski", "Stefen Wisniewski/G"],
+    ["RT", "Andrew Wylie", "RT 77 A.Wylie", "Andrew Wylie/G"]
+   ],
+   "facts": [
+    { "name": "Mike Remmers", "fact": "Game book lineup LT 75 M.Remmers; pfr starters Mike Remmers/T." },
+    { "name": "Andrew Wylie", "fact": "Game book lineup RT 77 A.Wylie; pfr prints his roster position, Andrew Wylie/G." },
+    { "name": "Byron Pringle", "fact": "Both list three starting receivers: Pringle with Tyreek Hill and Demarcus Robinson." }
+   ]
   }
  ]
 }
