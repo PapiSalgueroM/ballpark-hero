@@ -9,6 +9,7 @@ import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { useArcadeFlight } from '@/hooks/useArcadeFlight';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
 import ShotLabComparison, { type LabShot } from '@/components/buzzer-beater/ShotLabComparison';
+import { CourtArtwork, BallSeams } from '@/components/buzzer-beater/BuzzerCourtArtwork';
 import { getTodayET } from '@/lib/dateUtils';
 import { readArcadeRun, writeArcadeRun } from '@/lib/arcadeRecord';
 import {
@@ -467,8 +468,10 @@ export default function BuzzerBeaterBoard() {
         onPointerCancel={e => { if (isSteady) aimingRef.current = false; else cancelPointerCharge(e); }}
         onLostPointerCapture={e => { if (e.target === e.currentTarget) { if (isSteady) aimingRef.current = false; else cancelPointerCharge(e); } }}
       >
+        <CourtArtwork setup={setup} toX={toX} toY={toY} floorY={FLOOR_Y}
+          rimHeight={RIM_HEIGHT} rimRadius={RIM_RADIUS} releaseHeight={RELEASE_HEIGHT}
+          released={Boolean(result) && phase !== 'aiming'} flight={flight} />
         {/* the floor, with a metre tick every two metres so distance reads */}
-        <rect x={0} y={FLOOR_Y} width={VIEW_W} height={VIEW_H - FLOOR_Y} fill="hsl(28 40% 22%)" />
         <line x1={0} y1={FLOOR_Y} x2={VIEW_W} y2={FLOOR_Y} stroke="hsl(28 25% 45%)" strokeWidth={1.2} />
         {[2, 4, 6, 8].map(m => (
           <line key={m} x1={toX(m)} y1={FLOOR_Y} x2={toX(m)} y2={FLOOR_Y + 5} stroke="hsl(28 25% 45%)" strokeWidth={1} />
@@ -484,42 +487,11 @@ export default function BuzzerBeaterBoard() {
               x2={toX(setup.distance + 0.381)} y2={toY(2.9)}
               stroke="hsl(0 0% 88%)" strokeWidth={2.6}
             />
-            <line
+            <line data-court-rim=""
               x1={toX(setup.distance - RIM_RADIUS)} y1={toY(RIM_HEIGHT)}
               x2={toX(setup.distance + RIM_RADIUS)} y2={toY(RIM_HEIGHT)}
               stroke="hsl(18 85% 55%)" strokeWidth={3.2} strokeLinecap="round"
             />
-            <path
-              d={`M ${toX(setup.distance - RIM_RADIUS)} ${toY(RIM_HEIGHT)} Q ${toX(setup.distance)} ${toY(RIM_HEIGHT - 0.42)} ${toX(setup.distance + RIM_RADIUS)} ${toY(RIM_HEIGHT)}`}
-              fill="none" stroke="hsl(0 0% 82%)" strokeWidth={0.8} opacity={0.6}
-            />
-            <line
-              x1={toX(setup.distance + 0.381)} y1={toY(2.9)}
-              x2={toX(setup.distance + 0.381)} y2={FLOOR_Y}
-              stroke="hsl(0 0% 55%)" strokeWidth={2}
-            />
-
-            {/* the closeout: a body and a hand that really does reach that high */}
-            {setup.contestReach > 0 && (
-              <g>
-                <line
-                  x1={toX(setup.contestDist)} y1={FLOOR_Y}
-                  x2={toX(setup.contestDist)} y2={toY(setup.contestReach - 0.55)}
-                  stroke="hsl(210 55% 52%)" strokeWidth={7} strokeLinecap="round"
-                />
-                <circle cx={toX(setup.contestDist)} cy={toY(setup.contestReach - 0.42)} r={4.4} fill="hsl(210 60% 64%)" />
-                <line
-                  x1={toX(setup.contestDist)} y1={toY(setup.contestReach - 0.5)}
-                  x2={toX(setup.contestDist + 0.12)} y2={toY(setup.contestReach)}
-                  stroke="hsl(210 60% 64%)" strokeWidth={4} strokeLinecap="round"
-                />
-              </g>
-            )}
-
-            {/* the shooter */}
-            <line x1={toX(0)} y1={FLOOR_Y} x2={toX(0)} y2={toY(1.55)} stroke="hsl(45 80% 55%)" strokeWidth={7} strokeLinecap="round" />
-            <circle cx={toX(0)} cy={toY(1.72)} r={4.6} fill="hsl(45 85% 65%)" />
-            <line x1={toX(0)} y1={toY(1.6)} x2={toX(0.1)} y2={toY(RELEASE_HEIGHT)} stroke="hsl(45 85% 65%)" strokeWidth={4} strokeLinecap="round" />
           </>
         )}
 
@@ -541,7 +513,7 @@ export default function BuzzerBeaterBoard() {
         })}
 
         {/* the ball, on the exact path the rules scored */}
-        <circle
+        <circle data-court-ball=""
           cx={ball ? toX(ball.x) : toX(0.1)}
           cy={ball ? toY(ball.y) : toY(RELEASE_HEIGHT)}
           r={BALL_RADIUS * PX_PER_M_X}
@@ -549,6 +521,22 @@ export default function BuzzerBeaterBoard() {
           stroke="hsl(20 40% 25%)"
           strokeWidth={0.8}
         />
+        <BallSeams cx={ball ? toX(ball.x) : toX(0.1)} cy={ball ? toY(ball.y) : toY(RELEASE_HEIGHT)}
+          r={BALL_RADIUS * PX_PER_M_X} flight={ball ? flight : 0} />
+      </svg>
+
+      <div className="flex items-center gap-3">
+        {mode === 'lab' ? <p className="min-w-0 flex-1 flex flex-wrap gap-x-3 gap-y-1 text-[11px] text-muted-foreground" data-lab-legend>
+          <span><span className="text-amber-500">┄</span> Previous: amber dashed</span>
+          <span><span className="text-cyan-500">━</span> Latest: cyan solid</span>
+          <span>Green dotted: aiming preview</span>
+          <span>Far misses sit at the edge of the rim view.</span>
+        </p> : <p className="min-w-0 flex-1 text-xs text-muted-foreground">
+          The rim view helps you line up Fade. Watch the court for height and distance.
+        </p>}
+        <figure className="m-0 w-[72px] shrink-0">
+        <svg data-court-readout="" viewBox="266 6 80 80" width={72} height={72}
+          className="block w-full" aria-hidden="true" focusable="false" pointerEvents="none">
 
         {/* The ring down the line of the shot: the only place a side to side
             miss is visible, so it is the aim readout too. The ball is drawn at
@@ -583,18 +571,11 @@ export default function BuzzerBeaterBoard() {
               r={BALL_RADIUS * INSET_PX_PER_M} fill="none" stroke={previous ? '#fbbf24' : '#67e8f9'}
               strokeWidth={2} strokeDasharray={previous ? '3 2' : undefined} />;
           })}
-          <text x={INSET_CX} y={INSET_CY + 46} textAnchor="middle" fontSize={7} fill="hsl(28 15% 62%)">
-            {mode === 'lab' ? 'rim-height view' : result && phase !== 'aiming' ? 'where it crossed' : 'where you are aiming'}
-          </text>
         </g>
-      </svg>
-
-      {mode === 'lab' && <p className="flex flex-wrap gap-x-3 gap-y-1 text-[11px] text-muted-foreground" data-lab-legend>
-        <span><span className="text-amber-500">┄</span> Previous: amber dashed</span>
-        <span><span className="text-cyan-500">━</span> Latest: cyan solid</span>
-        <span>Green dotted: aiming preview</span>
-        <span>Far misses sit at the edge of the rim view.</span>
-      </p>}
+        </svg>
+        <figcaption className="text-center text-[10px] leading-[14px] text-muted-foreground">Rim view</figcaption>
+        </figure>
+      </div>
 
       {phase === 'aiming' && (
         <div className="space-y-2 rounded-2xl border border-border bg-card p-3">
