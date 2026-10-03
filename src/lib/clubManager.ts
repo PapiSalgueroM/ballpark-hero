@@ -2740,6 +2740,56 @@ export const LEAGUE_RULES: Record<string, LeagueRules> = {
      competition the UEFA Cup. */
   premier2010: { nationId: 'england', flag: 'England', cup: 'FA Cup', europe: { ucl: 4, uel: 5, uecl: 0 }, drop: 3, tiebreak: 'gdGf', ladder: 'top', season: 'autumnSpring' },
   laliga2010: { nationId: 'spain', flag: 'Spain', cup: 'Copa del Rey', europe: { ucl: 4, uel: 6, uecl: 0 }, drop: 3, tiebreak: 'h2h', ladder: 'top', season: 'autumnSpring' },
+  /* Round 901: the 2010-11 Serie A, Bundesliga and Ligue 1, each fact from
+     two sources read 2026-10-03.
+     - Europe. ESPN's final standings carry the legend (Serie A: first to
+       third Champions League, fourth its qualifying, fifth, sixth and eighth
+       Europa League; Bundesliga: first and second Champions League, third its
+       qualifying, fourth, fifth and fourteenth Europa League; Ligue 1: first
+       and second Champions League, third its qualifying, fourth to sixth
+       Europa League), https://www.espn.com/soccer/standings/_/league/ITA.1/season/2010
+       and .../GER.1/season/2010 and .../FRA.1/season/2010, and RSSSF's
+       2011-12 European cups record shows who entered where (Udinese in the
+       Champions League qualifying, lost to Arsenal; Bayern and Lyon through
+       qualifying; Lazio, Roma and Palermo, Hannover, Mainz and Schalke, PSG,
+       Sochaux and Rennes in the Europa League),
+       https://www.rsssf.org/ec/ec201112.html. Italy still had four Champions
+       League places that season (three from the next). A qualifying route
+       counts as in, as everywhere in this table. The places a CUP handed down
+       are not counted, the way premier2015 counts fifth only: Palermo went in
+       eighth as the Coppa Italia runners up because Inter, who beat them in
+       the final (RSSSF), were already in the Champions League; Schalke went in
+       fourteenth as DFB-Pokal winners (5-0 against Duisburg, RSSSF); and
+       France's fifth and sixth took the two cup places because Lille won the
+       Coupe de France and Marseille the Coupe de la Ligue (RSSSF), both in the
+       Champions League.
+     - Relegation. Italy: three down (Sampdoria, Brescia, Bari), RSSSF
+       https://www.rsssf.org/tablesi/ital2011.html and ESPN's legend. Germany:
+       seventeenth and eighteenth down, sixteenth into a playoff against the
+       second tier's third (Gladbach beat Bochum), RSSSF
+       https://www.rsssf.org/tablesd/duit2011.html; the playoff is not played,
+       exactly as on the modern bundesliga row. France: three down (Monaco,
+       Lens, Arles-Avignon), RSSSF https://www.rsssf.org/tablesf/fran2011.html
+       and ESPN's legend.
+     - The cups, one per nation: the Coppa Italia, the DFB-Pokal and the Coupe
+       de France. The Coupe de la Ligue is not modelled.
+     - Level on points. Serie A split level clubs on head to head first in
+       2010-11, the order it brought back in 2005-06 and still used in
+       2011-12 (90min, "I criteri per stabilire la classifica in caso di parita
+       nella storia della Serie A"), the same h2h rule the seriea2015 and
+       modern rows carry; that season's own table cannot tell the two orders
+       apart (Udinese above Lazio on 66, and Chievo, Parma and Catania on 46,
+       fall the same way on goal difference). The Bundesliga and Ligue 1
+       tables split level clubs on goal difference (Freiburg above Koln on 44;
+       Auxerre, Saint-Etienne and Lorient on 49); no later step was found in
+       two sources FOR THAT SEASON, so neither row claims one: no tiebreak
+       field, which reads goal difference then goals scored. */
+  seriea2010: { nationId: 'italy', flag: 'Italy', cup: 'Coppa Italia', europe: { ucl: 4, uel: 6, uecl: 0 }, drop: 3, tiebreak: 'h2h', ladder: 'top', season: 'autumnSpring' },
+  bundesliga2010: {
+    nationId: 'germany', flag: 'Germany', cup: 'DFB-Pokal', europe: { ucl: 3, uel: 5, uecl: 0 }, drop: 2, ladder: 'top', season: 'autumnSpring',
+    simplified: 'The real relegation playoff (sixteenth against the 2. Bundesliga\'s third) is not played: two go straight down.',
+  },
+  ligue12010: { nationId: 'france', flag: 'France', cup: 'Coupe de France', europe: { ucl: 3, uel: 4, uecl: 0 }, drop: 3, ladder: 'top', season: 'autumnSpring' },
   premier2015: { nationId: 'england', flag: 'England', cup: 'FA Cup', europe: { ucl: 4, uel: 5, uecl: 0 }, drop: 3, tiebreak: 'gdGf', ladder: 'top', season: 'autumnSpring' },
   laliga2015: { nationId: 'spain', flag: 'Spain', cup: 'Copa del Rey', europe: { ucl: 4, uel: 6, uecl: 0 }, drop: 3, tiebreak: 'h2h', ladder: 'top', season: 'autumnSpring' },
   seriea2015: { nationId: 'italy', flag: 'Italy', cup: 'Coppa Italia', europe: { ucl: 3, uel: 5, uecl: 0 }, drop: 3, tiebreak: 'h2h', ladder: 'top', season: 'autumnSpring' },
@@ -3134,6 +3184,30 @@ export const ERA_LEAGUES: Record<string, LeagueDef[]> = {
       id: 'laliga2010', name: 'La Liga',
       clubs: ['Almería', 'Athletic Club', 'Atlético Madrid', 'Barcelona', 'Deportivo La Coruña', 'Espanyol', 'Getafe', 'Hércules', 'Levante', 'Málaga', 'Mallorca', 'Osasuna', 'Racing Santander', 'Real Madrid', 'Real Sociedad', 'Sevilla', 'Sporting Gijón', 'Valencia', 'Villarreal', 'Zaragoza'],
     },
+    /* Round 901: the era becomes a full big five. Membership of all three
+       leagues from two publishers that agree on every club, read 2026-10-03:
+       RSSSF's season records (https://www.rsssf.org/tablesi/ital2011.html,
+       https://www.rsssf.org/tablesd/duit2011.html and
+       https://www.rsssf.org/tablesf/fran2011.html) and ESPN's final standings
+       (https://www.espn.com/soccer/standings/_/league/ITA.1/season/2010 and
+       .../GER.1/season/2010 and .../FRA.1/season/2010), AND against the market
+       values table itself. In final table order. Names reuse the 2026 and
+       2015 spellings wherever the club exists there, so colours and
+       rivalries carry over, and the era's Champions League field already
+       used them. Cesena is the one thin squad of the three leagues and the
+       picker says so. */
+    {
+      id: 'seriea2010', name: 'Serie A',
+      clubs: ['AC Milan', 'Inter Milan', 'Napoli', 'Udinese', 'Lazio', 'Roma', 'Juventus', 'Palermo', 'Fiorentina', 'Genoa', 'Chievo Verona', 'Parma', 'Catania', 'Cagliari', 'Cesena', 'Bologna', 'Lecce', 'Sampdoria', 'Brescia', 'Bari'],
+    },
+    {
+      id: 'bundesliga2010', name: 'Bundesliga',
+      clubs: ['Borussia Dortmund', 'Bayer Leverkusen', 'Bayern Munich', 'Hannover 96', 'Mainz', 'Nürnberg', 'Kaiserslautern', 'Hamburg', 'Freiburg', 'Köln', 'Hoffenheim', 'Stuttgart', 'Werder Bremen', 'Schalke 04', 'Wolfsburg', 'Gladbach', 'Eintracht Frankfurt', 'St. Pauli'],
+    },
+    {
+      id: 'ligue12010', name: 'Ligue 1',
+      clubs: ['Lille', 'Marseille', 'Lyon', 'PSG', 'Sochaux', 'Rennes', 'Bordeaux', 'Toulouse', 'Auxerre', 'Saint-Étienne', 'Lorient', 'Valenciennes', 'Nancy', 'Montpellier', 'Caen', 'Brest', 'Nice', 'Monaco', 'Lens', 'Arles-Avignon'],
+    },
   ].map(leagueFromRow),
   /* Round 175: the 2015-16 season, memberships verified against the season
      records (Wikipedia and worldfootball final tables, checked 2026-08-18)
@@ -3477,6 +3551,10 @@ const CLUB_COLORS: Record<string, string> = {
   'Ingolstadt': '#d02128', 'Saint-Étienne': '#0a7040', 'Caen': '#1b458f',
   'Bastia': '#005ca9', 'Bordeaux': '#002d72', 'Montpellier': '#1b458f',
   'Guingamp': '#d02128', 'Reims': '#d02128', 'GFC Ajaccio': '#d02128',
+  // Round 901: 2010-11 Serie A and Ligue 1 clubs not covered above, the same
+  // derivation: the club's plain home kit colour from this file's own palette.
+  'Cesena': '#d5d5d5', 'Brescia': '#005ca9', 'Bari': '#d02128', 'Catania': '#d02128',
+  'Sochaux': '#f7d417', 'Valenciennes': '#d02128', 'Nancy': '#d02128', 'Arles-Avignon': '#1b458f',
   // Round 176: 2005-06 era clubs not covered above.
   'Cádiz': '#ffe100', 'Zaragoza': '#2b5da8', 'Wigan Athletic': '#1d59af',
   'Almería': '#d02128', 'Hércules': '#1d59af',
