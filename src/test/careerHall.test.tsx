@@ -305,6 +305,7 @@ describe('the four sports, on careers their own engines play', () => {
   }
 });
 
+// Rendering pulls in testing-library on first use, which takes seconds on a busy machine.
 describe('the two cards say what they do', () => {
   it('the farewell card offers the three answers with their own words', async () => {
     const { render, fireEvent, cleanup } = await import('@testing-library/react');
@@ -320,7 +321,7 @@ describe('the two cards say what they do', () => {
     }
     expect(picked).toEqual(RETIREMENT_CHOICES.map(c => c.id));
     cleanup();
-  });
+  }, 30000);
 
   it('the Hall card prints shares only where the Hall publishes them, and the speech buttons carry their effects', async () => {
     const { render, fireEvent, cleanup } = await import('@testing-library/react');
@@ -357,5 +358,5 @@ describe('the two cards say what they do', () => {
     expect(mlb.container.textContent).toContain('10 years on the ballot at most.');
     expect(mlb.queryByText('Your induction speech')).toBeNull();
     cleanup();
-  });
+  }, 30000);
 });

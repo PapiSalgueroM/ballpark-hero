@@ -41,6 +41,13 @@
      7. talk       the retirement talk comes exactly when an independent
                    reading of the rule says, and reaches a real share of
                    careers before the hard stop. Control notalk.
+     7b. answers   the loop answers the talk as a board would: a quarter of
+                   the careers never answer, a quarter play one more year
+                   every time, a quarter retire at the first talk, a quarter
+                   announce a farewell. Retire now ends the career on that
+                   season, one more year plays the next, a farewell plays
+                   exactly one more season marked as the farewell. The talk
+                   check reads the answers too. Controls farewelloff, retireoff.
      8. jersey     the jersey goes to the club with the most seasons (ties to
                    games, then the first club), named by the engine's own
                    club label, never a bare id. Controls jerseyfirst, jerseyraw.
@@ -126,6 +133,8 @@ const CONTROLS = {
   // MLB only (the one Hall with a stay floor): the fall off reads the raw share, not the one the card prints.
   shownraw: { file: 'careerHallOfFame.ts', from: 'if (rules.stayFloor !== null && shown < rules.stayFloor) {', to: 'if (rules.stayFloor !== null && share < rules.stayFloor) {' },
   sharesides: { file: 'careerHallOfFame.ts', from: 'const final = Math.min(99.7, t + ', to: 'const final = Math.min(99.7, t - 20 + ' },
+  farewelloff: { file: 'careerRetirement.ts', from: 'return block.farewellYear !== undefined && year >= block.farewellYear;', to: 'return block.farewellYear !== undefined && year > block.farewellYear;' },
+  retireoff: { file: 'careerRetirement.ts', from: 'if (block.retiredYear !== undefined && year >= block.retiredYear) return true;', to: 'if (false) return true;' },
   notalk: { file: 'careerRetirement.ts', from: 'if (drop >= rule.dropFromPeak) return', to: 'if (false) return' },
   jerseyfirst: { file: 'careerHallOfFame.ts', from: 't.seasons > best.seasons ||', to: 't.seasons < best.seasons ||' },
   jerseyraw: { file: 'careerHallOfFame.ts', from: 'teamName: (team, c) => def.teamLabel(team, c.eraId),', to: 'teamName: (team) => team,' },
@@ -155,7 +164,7 @@ const entry = [
   `export { ${E.legacy} as LEGACY, ${E.label} as LABEL, ${E.arch} as ARCH, ${E.start} as start, ${E.season} as season, ${E.progress} as progress, ${E.event} as drawEvent, ${E.stop} as stop, ${E.roll} as roll } from './src/lib/${E.file}';`,
   `export { ${E.hall} as HALL } from './src/lib/${SPORT}CareerHall.ts';`,
   `export { hallRecordFor, runHallBallot, giveHallSpeech, HALL_SPEECHES } from './src/lib/careerHallOfFame.ts';`,
-  `export { retirementTalk } from './src/lib/careerRetirement.ts';`,
+  `export { retirementTalk, answerRetirement, careerEndsAfter, isFarewellSeason } from './src/lib/careerRetirement.ts';`,
 ].join('\n');
 await build({
   stdin: { contents: entry, resolveDir: ROOT, loader: 'ts' },
@@ -181,6 +190,9 @@ for (let i = 0; i < CAREERS; i += 1) {
     const archs = eng.ARCH[pos];
     const c = eng.start(`Hall ${i}`, pos, archs[i % archs.length], Math.random, null);
     let tq = null, talks = 0, firstTalkAge = null, guard = 0;
+    // The retirement block the save would carry, and this loop's own note of the answer that matters.
+    let block, answer = null;
+    const declined = new Set();
     while (!c.retired && guard++ < 30) {
       if ((c.suspendedSeasons ?? 0) > 0) {
         c.suspendedSeasons -= 1;
@@ -193,15 +205,30 @@ for (let i = 0; i < CAREERS; i += 1) {
       const ev = eng.drawEvent(c, Math.random);
       if (ev) ev.options[Math.floor(Math.random() * ev.options.length)].apply(c, Math.random);
       if (eng.stop(c)) c.retired = true;
+      const year = c.seasons.at(-1).year;
+      if (answer && answer.choice === 'farewell' && year === answer.year + 1 && eng.isFarewellSeason(block, year)) answer.flagged = true;
       // The talk, read after the offseason, exactly where a board would ask it.
       const snap = HALL.snapshot(c);
-      const talk = eng.retirementTalk(rule, snap, undefined);
-      // An independent reading of the rule, from the save itself.
+      const talk = eng.retirementTalk(rule, snap, block);
+      // An independent reading of the rule, from the save and this loop's own record of the answers.
       const peak = Math.max(c.ovr, ...c.seasons.map(s => s.ovr));
-      const expect = !eng.stop(c) && c.age >= rule.minAge && (peak - c.ovr >= rule.dropFromPeak || c.ovr <= rule.floor);
+      const ended = answer !== null && answer.choice !== 'oneMore';
+      const expect = !eng.stop(c) && !ended && !declined.has(year) && c.age >= rule.minAge && (peak - c.ovr >= rule.dropFromPeak || c.ovr <= rule.floor);
       if (Boolean(talk) !== expect) talkMismatch += 1;
       if (talk && c.age < rule.minAge) talkBeforeAge += 1;
-      if (talk) { talks += 1; if (firstTalkAge === null) firstTalkAge = c.age; }
+      if (talk) {
+        talks += 1;
+        if (firstTalkAge === null) firstTalkAge = c.age;
+        // The answer: policy 0 never answers, 1 always plays one more, 2 retires at the first talk, 3 announces a farewell.
+        // Rotated by the position cycle, so no answer is tied to two positions (nfl has eight).
+        const choice = [null, 'oneMore', 'retireNow', 'farewell'][(i + Math.floor(i / E.positions.length)) % 4];
+        if (choice) {
+          block = eng.answerRetirement(block, year, choice);
+          if (choice === 'oneMore') declined.add(year);
+          if (!answer || answer.choice === 'oneMore') answer = { choice, year, flagged: false };
+        }
+      }
+      if (eng.careerEndsAfter(block, year)) c.retired = true;
     }
     const legacy = eng.LEGACY(c);
     counting = true;
@@ -214,7 +241,7 @@ for (let i = 0; i < CAREERS; i += 1) {
       score: legacy.score, hof: legacy.hof, rec, same: JSON.stringify(rec) === JSON.stringify(again),
       // Read off the save, not through HALL.lastSeasonYear, which is under test.
       last: c.seasons.at(-1)?.year ?? Number.NaN, seasons: c.seasons.map(s => ({ team: s.team, games: s.games })),
-      talks, firstTalkAge, speech, finalAge: c.age, seasonsPlayed: c.seasons.length, eraId: c.eraId,
+      talks, firstTalkAge, speech, finalAge: c.age, seasonsPlayed: c.seasons.length, eraId: c.eraId, answer,
     });
   } catch (err) {
     counting = false;
@@ -285,6 +312,20 @@ for (const c of careers) {
   });
   const early = r.outcome === 'fellOff' && rules.ballotYears !== null && r.ballots.length < rules.ballotYears;
   if (early && !(rules.stayFloor !== null && r.ballots.at(-1).share < rules.stayFloor)) sideMiss += 1;
+}
+
+/* The three answers, held to their button words on these careers. Retire now:
+   the season he answered after was his last. One more year: he plays the next
+   season. Farewell: exactly one more season, marked as the farewell, then done. */
+let answerMiss = 0;
+const answered = { retireNow: 0, oneMore: 0, farewell: 0 };
+for (const c of careers) {
+  const a = c.answer;
+  if (!a) continue;
+  answered[a.choice] += 1;
+  if (a.choice === 'retireNow' && c.last !== a.year) answerMiss += 1;
+  if (a.choice === 'oneMore' && !(c.last > a.year)) answerMiss += 1;
+  if (a.choice === 'farewell' && (c.last !== a.year + 1 || !a.flagged)) answerMiss += 1;
 }
 
 /* The stay floor read on 20000 synthetic candidates from the nomination line
@@ -381,12 +422,13 @@ const checks = [
   ['keyed', hallDraws === 0 && notSame === 0, `${hallDraws} Math.random draws, ${notSame} records that changed on a second run`],
   ['sides', sideMiss === 0 && (rules.stayFloor === null || atFloor >= BAND.atFloor), `${sideMiss} ballots on the wrong side of a rule${rules.stayFloor === null ? '' : `, ${atFloor} synthetic ballots shown at exactly the floor`}`],
   ['talk', talkMismatch === 0 && talkBeforeAge === 0 && talked >= BAND.talkReach, `${talkMismatch} talks off the rule, ${talkBeforeAge} before the age, reached ${(100 * talked).toFixed(1)} percent (needs ${100 * BAND.talkReach})`],
+  ['answers', answerMiss === 0 && Object.values(answered).every(n => n > 0), `${answerMiss} answers that did not do what the button says; answered ${JSON.stringify(answered)}`],
   ['jersey', jerseyMiss === 0 && jerseyRaw === 0 && jerseys > 0, `${jerseyMiss} jerseys off the rule or misnamed, ${jerseyRaw} named by a bare club id, ${jerseys} retired`],
 ];
 for (const [name, ok, detail] of checks) console.log(`  ${ok ? 'ok  ' : 'FAIL'} ${name}: ${detail}`);
 const red = checks.filter(c => !c[1]).map(c => c[0]);
 if (CONTROL) {
-  const WANT = { everyonein: 'iff', bindhof: 'iff', outcomeswap: 'outcome', nominationgone: 'outcome', oldcurve: 'outcome', waitoff: 'table', shownraw: 'sides', flatfirst: 'rises', nopromise: 'promise', mathrandom: 'keyed', sharesides: 'sides', notalk: 'talk', jerseyfirst: 'jersey', jerseyraw: 'jersey' }[CONTROL];
+  const WANT = { everyonein: 'iff', bindhof: 'iff', outcomeswap: 'outcome', nominationgone: 'outcome', oldcurve: 'outcome', waitoff: 'table', shownraw: 'sides', flatfirst: 'rises', nopromise: 'promise', mathrandom: 'keyed', sharesides: 'sides', notalk: 'talk', farewelloff: 'answers', retireoff: 'answers', jerseyfirst: 'jersey', jerseyraw: 'jersey' }[CONTROL];
   console.log(`simCareerHall ${SPORT} CONTROL ${CONTROL}: wanted ${WANT} red, red [${red.join(',')}], ${red.includes(WANT) ? 'FIRED' : 'DID NOT FIRE'}`);
   // Exit 1 only when the check this control targets went red, so the exit
   // code alone proves the control hit its own check. Any other red is printed.
