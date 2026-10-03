@@ -1,0 +1,246 @@
+/* Round 974 harness: the Soccer Career story keeps every season.
+
+   THE BUG. Both season steps (advanceYouthYear, advanceProSeason) started
+   with events = [], so every line the engine wrote about an earlier season
+   was thrown away, and the page drew the last three lines of the current one.
+   Round 974 writes the season that is ending into CareerState.story at both
+   resets (archiveSeasonStory) and the Career Story screen reads it back.
+
+   WHAT IT DOES. Bundles the real engine and plays CAREERS full careers (four
+   seeds by default, eight positions and three choice styles, transfers taken
+   and refused), noting before every season step what the log holds and which
+   season row it belongs to. That note is what the story must end up holding.
+
+   CHECKS, all on outcomes:
+     1. Completeness, walked step by step: after every season step the story
+        has grown by exactly that season, and at the end every line of every
+        finished season is in the story, in order, once, under its own row.
+        Baseline: before Round 974 a finished career kept only its live
+        season, printed below as the share of lines a player could still read.
+     2. No draw moved: every career plays identically (rows, log, overall,
+        money) on a second bundle of the same source with the archive taken
+        out of both resets, which is the engine before Round 974.
+     3. Size: mean bytes per story season and mean save size at the end of a
+        career, against bands set from measurement (below). Never a max.
+
+   MEASURED 2026-10-03, eight seeds x 24 careers, before setting the bands:
+     seed     story bytes a season   seasons a career   save mean bytes
+     9741            254                  21.9              33,752
+     19741           260                  22.4              34,107
+     29741           261                  22.6              35,053
+     39741           256                  22.0              34,288
+     49741           253                  21.8              34,080
+     59741           257                  22.5              34,714
+     69741           245                  22.7              34,559
+     79741           250                  22.4              34,627
+     all 192 careers: 15,058 lines written, every one kept; a finished career
+     could read 244 of them (1.6%) before this round. Run time about 60 s.
+   The default run is the first four seeds (story 258 B a season, save mean
+   34,300 B). Bands: story bytes a season 180 to 400 (the seed spread is 245
+   to 261, so 400 is half again over and catches a line that starts carrying
+   data), save mean 25,000 to 45,000 (seed spread 33,752 to 35,053; the save
+   without the story is about 28,600, so the floor is below the old engine).
+   Means only; a max is noise.
+
+   CONTROLS. CAREER_STORY_CONTROL=reset drops the archive at the pro season
+   reset, =cap keeps 5 lines a season, =draw makes the archive draw once. Each
+   mutates the engine source as it is bundled (the anchor is asserted to be
+   there first) and must fail its own check: reset and cap fail check 1, draw
+   fails check 2. A control run exits 0 only when its check failed and prints
+   which one; it exits 1 when the control did not fire.
+
+   Run: node scripts/simCareerStory.mjs [careersPerSeed]
+   Reads no network: fetch is replaced with a thrower before the engine loads. */
+import { build } from "esbuild";
+import fs from "node:fs";
+import os from "node:os";
+import path from "node:path";
+import { pathToFileURL, fileURLToPath } from "node:url";
+
+const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
+const ENGINE = path.join(ROOT, "src", "lib", "soccerCareerEngine.ts");
+const CONTROL = process.env.CAREER_STORY_CONTROL || "";
+const PER_SEED = Number(process.argv[2] || 24);
+const SEEDS = (process.env.CAREER_STORY_SEEDS || "9741,19741,29741,39741").split(",").map(Number);
+
+const RESET = "s.age += 1; s.story = archiveSeasonStory(s); s.events = [];";
+const MUTATIONS = {
+  reset: { anchor: RESET, count: 2, apply: src => { const i = src.lastIndexOf(RESET); return src.slice(0, i) + "s.age += 1; s.events = [];" + src.slice(i + RESET.length); } },
+  cap: { anchor: "export const STORY_LINES_PER_SEASON = 40;", count: 1, apply: src => src.replace("export const STORY_LINES_PER_SEASON = 40;", "export const STORY_LINES_PER_SEASON = 5;") },
+  draw: { anchor: "export function archiveSeasonStory(s: CareerState): CareerStorySeason[] {", count: 1, apply: src => src.replace("export function archiveSeasonStory(s: CareerState): CareerStorySeason[] {", "export function archiveSeasonStory(s: CareerState): CareerStorySeason[] {\n  Math.random();") },
+};
+const EXPECT_FAIL = { reset: "completeness", cap: "completeness", draw: "draws" };
+if (CONTROL && !MUTATIONS[CONTROL]) { console.error(`unknown CAREER_STORY_CONTROL ${CONTROL}`); process.exit(2); }
+
+const original = fs.readFileSync(ENGINE, "utf8");
+let engineText = original;
+if (CONTROL) {
+  const m = MUTATIONS[CONTROL];
+  const found = original.split(m.anchor).length - 1;
+  if (found !== m.count) { console.error(`control ${CONTROL}: anchor found ${found} times, expected ${m.count}`); process.exit(1); }
+  engineText = m.apply(original);
+  if (engineText === original) { console.error(`control ${CONTROL} changed nothing`); process.exit(1); }
+}
+
+const DIR = fs.mkdtempSync(path.join(os.tmpdir(), "career-story974-"));
+const ENTRY = path.join(DIR, "entry.mjs");
+const OUT = path.join(DIR, "engine.mjs");
+fs.writeFileSync(ENTRY, `
+globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
+globalThis.fetch = () => { throw new Error("simCareerStory reads no network"); };
+const mod = await import('${ROOT.replaceAll("\\", "/")}/src/lib/soccerCareerEngine.ts');
+export const engine = mod;
+`);
+/* Two bundles of the same source: the engine as it ships (or as the control
+   mutated it), and the baseline, the same text with the archive taken out of
+   both season resets, which is the engine before Round 974. */
+const baselineText = engineText.split(RESET).join("s.age += 1; s.events = [];");
+if (!CONTROL && baselineText.split("archiveSeasonStory(s)").length - 1 !== 0) { console.error("the baseline still archives"); process.exit(1); }
+async function bundle(text, name) {
+  const out = OUT.replace(/engine\.mjs$/, `${name}.mjs`);
+  const swapEngine = {
+    name: "swap-engine",
+    setup(b) {
+      b.onLoad({ filter: /soccerCareerEngine\.ts$/ }, args =>
+        path.resolve(args.path) === path.resolve(ENGINE) ? { contents: text, loader: "ts" } : undefined);
+    },
+  };
+  await build({ entryPoints: [ENTRY], bundle: true, format: "esm", platform: "node", outfile: out, logLevel: "error", alias: { "@": "./src" }, plugins: [swapEngine] });
+  return (await import(pathToFileURL(out).href)).engine;
+}
+const E = await bundle(engineText, "engine");
+const BASE = await bundle(baselineText, "baseline");
+fs.rmSync(DIR, { recursive: true, force: true });
+const clubs = E.FALLBACK_CLUBS;
+
+function seeded(seed) {
+  let a = seed >>> 0;
+  return () => {
+    a |= 0; a = (a + 0x6d2b79f5) | 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+const NATIONS = ["England", "Brazil", "France", "Japan", "Nigeria", "Argentina", "Morocco", "Norway"];
+const POSITIONS = ["ST", "CAM", "CM", "CB", "GK", "LW", "RB", "CDM"];
+
+/* One full career. Before every season step it notes the log and its row;
+   after the step it checks the story grew by exactly that season (the walk
+   over every rung, not just the two ends). E is the engine bundle to play,
+   the shipped one or the baseline; walk is off for the baseline, which keeps
+   no story by design. */
+function career(E, seed, c, walk) {
+  Math.random = seeded(seed * 1000 + c);
+  const ovr = 45 + (c % 25);
+  const st = { pace: ovr, shooting: ovr, passing: ovr, dribbling: ovr, defending: ovr, physical: ovr, reflexes: ovr };
+  let s = E.initCareer(`Story ${seed}-${c}`, NATIONS[c % 8], POSITIONS[c % 8], "2020s", st, ovr, 2020, clubs, null);
+  const seen = [];
+  const stepFaults = [];
+  let lines = 0;
+  for (let guard = 0; guard < 1500 && !s.retired; guard++) {
+    const phase = s.phase;
+    if (phase === "youth" || phase === "playing") {
+      const row = s.seasons[s.seasons.length - 1];
+      const had = (s.story ?? []).length;
+      const wrote = s.events.length > 0;
+      if (wrote) { seen.push({ year: row.year, age: row.age, club: row.club, lines: [...s.events] }); lines += s.events.length; }
+      s = phase === "youth" ? E.advanceYouthYear(s, clubs) : E.advanceProSeason(s, clubs);
+      if (walk) {
+        const want = had + (wrote ? 1 : 0);
+        if ((s.story ?? []).length !== want) stepFaults.push(`${seed}/${c} age ${s.age}: story ${(s.story ?? []).length}, want ${want}`);
+      }
+      continue;
+    }
+    switch (phase) {
+      case "contract_offer": { const o = s.pendingOffers || []; s = o.length ? E.acceptOffer(s, o.find(x => x.isHomegrown) || o[0]) : { ...s, phase: "playing" }; break; }
+      case "rehab_choice": s = E.applyRehabChoice(s, c % 3); break;
+      case "newspaper": s = E.dismissNewspaper(s); break;
+      case "season_summary": s = E.dismissSummary(s, clubs); break;
+      case "random_events": s = s.pendingEvents?.[0] ? E.applyEventChoice(s, c % 3 === 0 ? 0 : Math.min(s.pendingEvents[0].choices.length - 1, 1), clubs) : { ...s, pendingEvents: [], phase: "playing" }; break;
+      case "moral_dilemma": s = s.pendingMoralDilemma ? E.applyMoralDilemmaChoice(s, c % 2) : E.dismissMoralDilemma(s, clubs); break;
+      case "social_media_action": s = E.dismissSocialMediaPhase(s, clubs); break;
+      case "red_card_appeal_result": s = E.dismissAppealResult(s, clubs); break;
+      case "international_debut": s = E.dismissDebut(s, clubs); break;
+      case "world_cup": s = E.dismissWorldCup(s, clubs); break;
+      case "rivalry_event": s = E.dismissRivalryEvent(s, clubs); break;
+      case "ballon_dor": s = E.dismissBallonDor(s, clubs); break;
+      case "transfer_window": {
+        const sit = s.transferSituation;
+        if (sit?.type === "contract_expiry") { const o = sit.offers || []; s = o.length ? E.acceptOffer(s, o[0]) : E.signExtension(s); }
+        else if (sit?.offer && c % 2 === 0) s = E.acceptOffer(s, sit.offer);
+        else if (sit?.offerA && c % 2 === 0) s = E.acceptOffer(s, sit.offerA);
+        else s = E.stayAtClub(s);
+        break;
+      }
+      case "retirement_suggestion": s = c % 4 === 0 ? E.acceptRetirementSuggestion(s) : E.declineRetirementSuggestion(s, clubs); break;
+      default: throw new Error(`no move for ${phase} (${seed}/${c})`);
+    }
+  }
+  return { s, seen, lines, stepFaults };
+}
+
+/* Bands, set from the measured numbers in the header. */
+const BANDS = {
+  storyBytesPerSeason: [180, 400],
+  saveBytesMean: [25000, 45000],
+};
+
+const fails = { completeness: [], draws: [], size: [] };
+let careers = 0, seasonsKept = 0, linesKept = 0, linesWritten = 0, liveLines = 0, cut = 0;
+let storyBytes = 0, saveBytes = 0;
+const saves = [];
+const bySeed = { careers: 0, storyBytes: 0, seasons: 0, saveBytes: 0 };
+for (const seed of SEEDS) {
+  for (let c = 0; c < PER_SEED; c++) {
+    const a = career(E, seed, c, true);
+    const b = career(BASE, seed, c, false);
+    careers++;
+    const story = a.s.story ?? [];
+    fails.completeness.push(...a.stepFaults);
+    if (story.length !== a.seen.length) fails.completeness.push(`${seed}/${c}: story ${story.length} seasons, played ${a.seen.length}`);
+    story.forEach((e, i) => {
+      const want = a.seen[i];
+      if (!want) return;
+      if (e.year !== want.year || e.age !== want.age || e.club !== want.club) fails.completeness.push(`${seed}/${c} season ${i}: filed under ${e.year}/${e.age}/${e.club}, belongs to ${want.year}/${want.age}/${want.club}`);
+      if (JSON.stringify(e.lines) !== JSON.stringify(want.lines)) fails.completeness.push(`${seed}/${c} season ${i}: ${e.lines.length} lines kept of ${want.lines.length}`);
+      if (e.more) cut += e.more;
+    });
+    const same = JSON.stringify(a.s.seasons) === JSON.stringify(b.s.seasons) && a.s.overall === b.s.overall && a.s.netWorth === b.s.netWorth && JSON.stringify(a.s.events) === JSON.stringify(b.s.events);
+    if (!same) fails.draws.push(`${seed}/${c}: the career played differently from the engine without the story`);
+    seasonsKept += story.length;
+    linesKept += story.reduce((n, e) => n + e.lines.length, 0);
+    linesWritten += a.lines + a.s.events.length;
+    liveLines += a.s.events.length;
+    storyBytes += JSON.stringify(story).length;
+    const bytes = JSON.stringify(a.s).length;
+    saveBytes += bytes;
+    saves.push(bytes);
+  }
+  const n = careers - bySeed.careers, sb = storyBytes - bySeed.storyBytes, ss = seasonsKept - bySeed.seasons, vb = saveBytes - bySeed.saveBytes;
+  console.log(`seed ${seed}: ${n} careers, story ${(sb / Math.max(1, ss)).toFixed(0)} bytes a season, ${(ss / Math.max(1, n)).toFixed(1)} seasons a career, save mean ${(vb / Math.max(1, n)).toFixed(0)} bytes`);
+  Object.assign(bySeed, { careers, storyBytes, seasons: seasonsKept, saveBytes });
+}
+if (cut > 0) fails.completeness.push(`${cut} lines past the season cap were not kept`);
+const perSeason = storyBytes / Math.max(1, seasonsKept);
+const meanSave = saveBytes / Math.max(1, careers);
+if (perSeason < BANDS.storyBytesPerSeason[0] || perSeason > BANDS.storyBytesPerSeason[1]) fails.size.push(`mean story bytes a season ${perSeason.toFixed(0)} outside ${BANDS.storyBytesPerSeason}`);
+if (meanSave < BANDS.saveBytesMean[0] || meanSave > BANDS.saveBytesMean[1]) fails.size.push(`mean save bytes ${meanSave.toFixed(0)} outside ${BANDS.saveBytesMean}`);
+if (seasonsKept < careers * 10) fails.completeness.push(`only ${seasonsKept} story seasons over ${careers} careers: the driver is not playing careers`);
+
+saves.sort((x, y) => x - y);
+console.log(`careers ${careers} (${SEEDS.length} seeds x ${PER_SEED}), story seasons ${seasonsKept}, lines written ${linesWritten}, kept in the story ${linesKept} plus ${liveLines} live`);
+console.log(`baseline before Round 974: a finished career could read ${liveLines} of ${linesWritten} lines (${(100 * liveLines / Math.max(1, linesWritten)).toFixed(1)}%); now ${linesKept + liveLines} (${(100 * (linesKept + liveLines) / Math.max(1, linesWritten)).toFixed(1)}%)`);
+console.log(`size: story ${perSeason.toFixed(0)} bytes a season, save mean ${meanSave.toFixed(0)} bytes, median ${saves[Math.floor(saves.length / 2)]}`);
+for (const [name, list] of Object.entries(fails)) {
+  console.log(`check ${name}: ${list.length === 0 ? "ok" : `FAIL (${list.length})`}`);
+  for (const f of list.slice(0, 5)) console.log(`  ${f}`);
+}
+const failed = Object.keys(fails).filter(k => fails[k].length > 0);
+if (CONTROL) {
+  const want = EXPECT_FAIL[CONTROL];
+  if (failed.includes(want)) { console.log(`simCareerStory control ${CONTROL}: fired, check ${want} failed as it must (failed: ${failed.join(", ")})`); process.exit(0); }
+  console.log(`simCareerStory control ${CONTROL}: DID NOT FIRE, check ${want} stayed green`); process.exit(1);
+}
+if (failed.length) { console.log(`simCareerStory: RED, ${failed.join(", ")}`); process.exit(1); }
+console.log(`simCareerStory: GREEN, ${careers} careers keep every season's lines in order, draw nothing and stay inside the size bands`);
