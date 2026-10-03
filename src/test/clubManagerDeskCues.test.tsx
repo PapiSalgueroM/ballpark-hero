@@ -60,7 +60,10 @@ function Desk({ initial, observe, show }: {
 }
 
 const cueOf = (id: string) => screen.getByTestId(id);
-const said = (id: string) => (cueOf(id).textContent ?? '').trim();
+/** The line on show, or '' when the desk carries no status element at all. */
+const said = (id: string) => (screen.queryByTestId(id)?.textContent ?? '').trim();
+/** Nothing said means no status element anywhere, the shape the preview tests hold. */
+const silent = () => expect(screen.queryAllByRole('status')).toHaveLength(0);
 
 beforeEach(() => localStorage.clear());
 afterEach(() => { cleanup(); vi.useRealTimers(); vi.restoreAllMocks(); });
@@ -150,12 +153,14 @@ describe('Club Manager desk cues: contracts', () => {
     fireEvent.click(within(refused.view.container).getByRole('button', { name: /^Renew ·/ }));
     expect(refused.after()).toBe(career);
     expect(said('cm-contracts-cue')).toBe('');
+    silent();
     cleanup();
     /* The parent answers with a different change: the kitty moves but no deal is signed. */
     const moved = mountContracts(career, () => c => ({ ...c, budget: c.budget - 1 }));
     fireEvent.click(within(moved.view.container).getByRole('button', { name: /^Renew ·/ }));
     expect(moved.after()).not.toBe(career);
     expect(said('cm-contracts-cue')).toBe('');
+    silent();
   });
 
   it('the line clears on its timer', () => {
@@ -296,10 +301,12 @@ describe('Club Manager desk cues: facilities', () => {
     expect(refused.after()).toBe(career);
     expect(refused.view.container.querySelector('[data-facility-pip-fresh], [data-facility-fresh]')).toBeNull();
     expect(said('cm-facilities-cue')).toBe('');
+    silent();
     cleanup();
     const moved = mountFacilities(career, () => c => ({ ...c, budget: c.budget - 1 }));
     fireEvent.click(upgradeButton(moved.view.container, id));
     expect(moved.view.container.querySelector('[data-facility-pip-fresh], [data-facility-fresh]')).toBeNull();
     expect(said('cm-facilities-cue')).toBe('');
+    silent();
   });
 });

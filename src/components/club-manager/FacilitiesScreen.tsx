@@ -106,10 +106,9 @@ export function FacilitiesScreen({ career, onUpgrade }: FacilitiesScreenProps) {
         </p>
       </div>
       {/* Round 982: the pip and the Now line are the moment for the eye; this
-          says it for a screen reader. Always mounted, out of the flow. */}
-      <p role="status" aria-live="polite" data-testid="cm-facilities-cue" className="sr-only !mt-0">
-        {cue ? <span key={cue.id}>{cue.text}</span> : null}
-      </p>
+          says it for a screen reader, out of the flow, and only while there
+          is something to say. */}
+      {cue && <p key={cue.id} role="status" data-testid="cm-facilities-cue" className="sr-only !mt-0">{cue.text}</p>}
       <CelebrationStyles />
     </div>
   );

@@ -61,31 +61,32 @@ export function useDeskCue<K>(career: CareerState | null | undefined, holdMs: nu
  * Where a desk's cue is shown. The anchor has no height and sticks to the
  * bottom of the screen while the card runs past it, so the line is in view
  * wherever on the card the press was, and nothing below or above it moves:
- * the pill is drawn over the card, never in its flow. The status region is
- * always mounted, so a screen reader hears the line when it arrives. The slam
- * sits on the pill, a plain paragraph, never on a control, and the box that
- * holds it clips the first frames of the slam rather than letting a 1.6 scale
- * widen the page on a 320 phone.
+ * the pill is drawn over the card, never in its flow. The status element
+ * exists only while there is something to say, the staff room's way, so a desk
+ * where nothing happened carries no status at all (the contract and facility
+ * preview tests hold the desks to that). The slam sits on the pill, a plain
+ * paragraph, never on a control, and the box that holds it clips the first
+ * frames of the slam rather than letting a 1.6 scale widen the page on a 320
+ * phone.
  */
 export function DeskCueLine({ cue, testId }: { cue: { text: string; id: number } | null; testId: string }) {
   return (
     <div className="sticky bottom-3 z-20 h-0 !mt-0" data-desk-cue-anchor>
-      <div
-        role="status"
-        aria-live="polite"
-        data-testid={testId}
-        className="pointer-events-none absolute inset-x-0 bottom-0 flex justify-center overflow-hidden px-1 pt-4 pb-1"
-      >
-        {cue && (
+      {cue && (
+        <div
+          key={cue.id}
+          role="status"
+          data-testid={testId}
+          className="pointer-events-none absolute inset-x-0 bottom-0 flex justify-center overflow-hidden px-1 pt-4 pb-1"
+        >
           <p
-            key={cue.id}
             data-desk-cue={cue.id}
             className="cm-slam max-w-full rounded-lg border border-primary/50 bg-card px-3 py-1.5 text-center text-[11px] font-bold text-foreground shadow-lg break-words"
           >
             {cue.text}
           </p>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 }
