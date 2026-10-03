@@ -81,7 +81,10 @@ export function Connect4Finish({ phase, winner, gameName, gamePath, onNewGame }:
   const won = phase === 'won';
   const team: Connect4FinishTeam = winner === 'red' ? 'red' : 'blue';
   return (
-    <div data-connect4-finish={won ? 'win' : 'draw'} className="mx-auto mt-6 max-w-lg">
+    /* role status, the way ResultScreen has it since Round 306: the answer
+       box a screen reader was in unmounts on the last drop, so the result
+       has to announce itself rather than appear in silence. */
+    <div role="status" data-connect4-finish={won ? 'win' : 'draw'} className="mx-auto mt-6 max-w-lg">
       <ResultMoment
         outcome={won ? 'win' : 'close'}
         gamePath={gamePath}
