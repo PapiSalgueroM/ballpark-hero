@@ -63,6 +63,16 @@
     {"family": "A", "url": "https://www.bundesliga.com/en/bundesliga/clubs/sc-freiburg/squad", "publisher": "Bundesliga (SC Freiburg squad, season 2026-2027)", "readOn": "2026-10-02", "says": "listed among the midfielders"},
     {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/126/ger.freiburg", "publisher": "ESPN (SC Freiburg squad page, season 2026-27)", "readOn": "2026-10-02", "says": "midfielder, shirt 32, age 33"}
    ]
+  },
+  {
+   "name": "Immanuel Pherai",
+   "club": "Hamburg",
+   "adjudicatedOn": "2026-10-02",
+   "note": "Hamburg's number 10, aged 25 on ESPN. On both 2026-27 squad pages, though ESPN shows no minutes for him yet this season.",
+   "sources": [
+    {"family": "A", "url": "https://www.bundesliga.com/en/bundesliga/clubs/hamburger-sv/squad", "publisher": "Bundesliga (Hamburger SV squad, season 2026-2027)", "readOn": "2026-10-02", "says": "listed among the midfielders"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/127/ger.hamburg", "publisher": "ESPN (Hamburg SV squad page, season 2026-27)", "readOn": "2026-10-02", "says": "midfielder, shirt 10, age 25"}
+   ]
   }
  ],
  "movedTo": [
@@ -168,6 +178,59 @@
     {"family": "B", "url": "https://www.hessenschau.de/sport/fussball/eintracht-frankfurt/eintracht-frankfurt-bestaetigt-transfer-batshuayi-wechselt-nach-saudi-arabien-v1,batshuayi-fix-100.html", "publisher": "hessenschau, Hessischer Rundfunk (2026-08-17)", "readOn": "2026-10-02", "says": "Eintracht Frankfurt confirms the move to Abha"},
     {"family": "B", "url": "https://www.fotmob.com/players/248689", "publisher": "FotMob", "readOn": "2026-10-02", "says": "Abha, born 1993-10-02, 6 Saudi Pro League appearances, played 90 minutes at Al-Diriyah on 2026-09-13"}
    ]
+  },
+  {
+   "name": "Alassane Pléa",
+   "from": "Gladbach",
+   "to": "PSV",
+   "realClub": "PSV",
+   "adjudicatedOn": "2026-10-02",
+   "note": "Born 1993-10-03, the French forward. Registered by PSV for the 2026-27 Champions League as their number 14, and on ESPN's PSV squad with the same shirt. On neither 2026-27 Gladbach squad page.",
+   "sources": [
+    {"family": "A", "url": "https://www.uefa.com/uefachampionsleague/clubs/players/250026751--alassane-plea/", "publisher": "UEFA (Champions League player page, 2026/27)", "readOn": "2026-10-02", "says": "PSV, forward, shirt 14, born 1993-10-03"},
+    {"family": "A", "url": "https://www.bundesliga.com/en/bundesliga/clubs/borussia-moenchengladbach/squad", "publisher": "Bundesliga (Borussia Moenchengladbach squad, season 2026-2027)", "readOn": "2026-10-02", "says": "not listed"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/148/ned.psv", "publisher": "ESPN (PSV squad page, season 2026-27)", "readOn": "2026-10-02", "says": "forward, shirt 14, age 33"}
+   ]
+  },
+  {
+   "name": "Luca Netz",
+   "from": "Gladbach",
+   "to": "Nottingham Forest",
+   "realClub": "Nottingham Forest",
+   "adjudicatedOn": "2026-10-02",
+   "note": "Born 2003-05-15, the German left back. Sold to Forest on 2026-02-02, contract to June 2030, shirt 25.",
+   "sources": [
+    {"family": "A", "url": "https://sdp-prem-prod.premier-league-prod.pulselive.com/api/v2/competitions/8/seasons/2026/teams/17/squad", "publisher": "Premier League data feed (premierleague.com), Nottingham Forest 2026 squad", "readOn": "2026-10-02", "says": "shirt 25, defender, born 2003-05-15, joined 2026-02-02, loan 0"},
+    {"family": "A", "url": "https://www.bundesliga.com/en/bundesliga/clubs/borussia-moenchengladbach/squad", "publisher": "Bundesliga (Borussia Moenchengladbach squad, season 2026-2027)", "readOn": "2026-10-02", "says": "not listed"},
+    {"family": "B", "url": "https://ca.soccerway.com/player/netz-luca/YZUjjz4A/transfers", "publisher": "Soccerway", "readOn": "2026-10-02", "says": "Gladbach to Nottingham Forest 2026-02-02, born 2003-05-15, contract to June 2030"}
+   ]
+  },
+  {
+   "name": "Emir Sahiti",
+   "from": "Hamburg",
+   "to": "Hannover 96",
+   "realClub": "Hannover 96",
+   "adjudicatedOn": "2026-10-02",
+   "note": "Born 1998-11-29, the Kosovan winger. On loan at Maccabi Tel Aviv for the second half of 2025-26, back at Hamburg on 2026-06-30, then moved permanently to Hannover on 2026-09-01.",
+   "sources": [
+    {"family": "A", "url": "https://www.hsv.de/en/news/emir-sahiti-joins-hannover-96", "publisher": "Hamburger SV (club announcement, 2026-09-01)", "readOn": "2026-10-02", "says": "joins Hannover 96 permanently with immediate effect"},
+    {"family": "A", "url": "https://www.bundesliga.com/en/2bundesliga/clubs/hannover-96/squad", "publisher": "Bundesliga (Hannover 96 squad, season 2026-2027)", "readOn": "2026-10-02", "says": "listed among the midfielders"},
+    {"family": "B", "url": "https://us.soccerway.com/player/sahiti-emir/buHrzjdj/transfers", "publisher": "Soccerway", "readOn": "2026-10-02", "says": "Hamburger SV to Hannover 2026-09-01, born 1998-11-29"}
+   ]
+  },
+  {
+   "name": "Jean-Luc Dompé",
+   "from": "Hamburg",
+   "to": "Konyaspor",
+   "realClub": "Konyaspor",
+   "adjudicatedOn": "2026-10-02",
+   "note": "Born 1995-08-12. Released by Hamburg and signed for Konyaspor as a free agent on 2026-08-28 on a two year deal, shirt 91.",
+   "sources": [
+    {"family": "A", "url": "https://www.konyaspor.org.tr/futbolcular", "publisher": "Konyaspor (club player list)", "readOn": "2026-10-02", "says": "shirt 91, midfielder, born 12.08.1995"},
+    {"family": "A", "url": "https://www.bundesliga.com/en/bundesliga/clubs/hamburger-sv/squad", "publisher": "Bundesliga (Hamburger SV squad, season 2026-2027)", "readOn": "2026-10-02", "says": "not listed"},
+    {"family": "B", "url": "https://www.soccerway.com/player/dompe-jean-luc/GOw3GAue/transfers", "publisher": "Soccerway", "readOn": "2026-10-02", "says": "Hamburger SV to Konyaspor 2026-08-28 as a free agent, born 1995-08-12, contract to June 2028"},
+    {"family": "B", "url": "https://haberkenti.com/konyaspor-jean-luc-dompe-ile-anlasti", "publisher": "Haber Kenti, from the Ihlas news agency (2026-08-28)", "readOn": "2026-10-02", "says": "two year contract signed at the Konyaspor Museum, shirt 91"}
+   ]
   }
  ],
  "removedClubNotModelled": [
@@ -219,6 +282,20 @@
     {"family": "B", "url": "https://www.soccerway.com/player/dahoud-mahmoud/YkH1Bfia/transfers", "publisher": "Soccerway", "readOn": "2026-10-02", "says": "Eintracht Frankfurt to United FC 2026-09-24 as a free agent, born 1996-01-01"},
     {"family": "B", "url": "https://bulinews.com/former-dortmund-brighton-and-frankfurt-midfielder-mahmoud-dahoud-set-play-under-andrea-pirlo", "publisher": "Bulinews", "readOn": "2026-10-02", "says": "set to be unveiled by the Dubai club, which teased the signing on Instagram"}
    ]
+  },
+  {
+   "name": "Tomas Cvancara",
+   "from": "Gladbach",
+   "realClub": "Hradec Králové, on loan from Gladbach",
+   "loan": true,
+   "loanFrom": "Gladbach",
+   "adjudicatedOn": "2026-10-02",
+   "note": "Born 2000-08-13, the Czech striker. Spent the second half of 2025-26 on loan at Celtic, went back to Gladbach on 2026-06-30, and was loaned to Hradec Kralove on 2026-09-03 until 2027-06-30. The Czech league is not modelled.",
+   "sources": [
+    {"family": "A", "url": "https://www.fchk.cz/", "publisher": "FC Hradec Kralove (club site)", "readOn": "2026-10-02", "says": "in the A team roster, shirt 70, scored twice in a friendly against Kladno on 2026-10-02"},
+    {"family": "A", "url": "https://www.bundesliga.com/en/bundesliga/clubs/borussia-moenchengladbach/squad", "publisher": "Bundesliga (Borussia Moenchengladbach squad, season 2026-2027)", "readOn": "2026-10-02", "says": "not listed"},
+    {"family": "B", "url": "https://us.soccerway.com/player/cvancara-tomas/zgMpZZSc/transfers", "publisher": "Soccerway", "readOn": "2026-10-02", "says": "loaned Gladbach to Hradec Kralove 2026-09-03 until 2027-06-30, born 2000-08-13"}
+   ]
   }
  ],
  "notCurrent": [
@@ -244,6 +321,17 @@
     {"family": "A", "url": "https://www.bundesliga.com/en/bundesliga/clubs/sc-freiburg/squad", "publisher": "Bundesliga (SC Freiburg squad, season 2026-2027)", "readOn": "2026-10-02", "says": "not listed"},
     {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/126/ger.freiburg", "publisher": "ESPN (SC Freiburg squad page, season 2026-27)", "readOn": "2026-10-02", "says": "not listed"},
     {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/202802/maximilian-philipp", "publisher": "ESPN (player page)", "readOn": "2026-10-02", "says": "still shows SC Freiburg; last game listed is 2026-05-16 against RB Leipzig; born 1994-03-01"}
+   ]
+  },
+  {
+   "name": "Rabbi Matondo",
+   "from": "Hannover 96",
+   "why": "Unattached. Born 2000-09-09, the Welsh winger. Hannover only had him on loan from Rangers for the second half of 2024-25; he went back to Rangers on 2025-06-30, joined Brann in Norway as a free agent on 2026-03-31, and left Brann on 2026-08-29. No new club was found up to 2026-10-02. Medium confidence: no official source was found for the Brann exit, and a free agent can sign at any time, so re-check at the next adjudication.",
+   "adjudicatedOn": "2026-10-02",
+   "sources": [
+    {"family": "A", "url": "https://www.bundesliga.com/en/2bundesliga/clubs/hannover-96/squad", "publisher": "Bundesliga (Hannover 96 squad, season 2026-2027)", "readOn": "2026-10-02", "says": "not listed"},
+    {"family": "B", "url": "https://us.soccerway.com/player/matondo-rabbi/j1r9Csqe/transfers", "publisher": "Soccerway", "readOn": "2026-10-02", "says": "status free agent; Rangers to Brann 2026-03-31; loan at Hannover ended 2025-06-30; born 2000-09-09"},
+    {"family": "B", "url": "https://africasoccer.com/welsh-winger-rabbi-matondo-becomes-unattached-after-sk-brann-exit/", "publisher": "AfricaSoccer (2026-08-29)", "readOn": "2026-10-02", "says": "without a club from 2026-08-29 after leaving Brann"}
    ]
   }
  ],
