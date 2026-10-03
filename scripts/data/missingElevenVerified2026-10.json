@@ -3,6 +3,7 @@
  "round": 950,
  "checkedOn": "2026-10-03",
  "method": "Every starter of every sheet below was read from two hosts on the read date. nfl.com: the official game book PDF linked from the nfl.com game page ('Download Game Book (PDF)'), page 1 'Lineups' block, read with pypdf text extraction; the game book prints the starters as position, jersey number and initial plus surname. pro-football-reference.com: the box score page's Starters table for that team (#vis_starters or #home_starters, which the site ships inside an HTML comment), read from the rendered page in a browser. A sheet ships only when both hosts list the same eleven men; a sheet where they differ on any starter is held out. Positions are the game book's (pfr prints generic OL labels on some tables). Each blank candidate fact is read from the same two hosts (the game book scoring summary or substitution list and the pfr scoring table). Wikipedia was not used.",
+ "nationalityMethod": "The first hint says Nationality. Every blank on a Round 950 sheet carries USA because its pro-football-reference.com player page (pfrPlayer on the candidate, read 2026-10-03) gives a birthplace in a US state (bornPerPfr). That is one host, not two: a birthplace was not read from a second source. All 66 were born in a US state, so none is a borderline case.",
  "starterColumns": [
   "position",
   "name",
