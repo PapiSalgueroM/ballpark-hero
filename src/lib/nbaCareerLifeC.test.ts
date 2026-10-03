@@ -88,6 +88,13 @@ describe('gates', () => {
     old.seasons[0].awards.push('All-NBA');
     expect(has(old)).toBe(false);
     expect(has(allNba(career('SG', { ovr: 92, role: 'backup' }, 5)))).toBe(false);
+    /* The edges of the window: three seasons back is in, four back is out. */
+    const threeBack = career('SG', { ovr: 78 }, 5);
+    threeBack.seasons[2].awards.push('All-NBA');
+    expect(has(threeBack)).toBe(true);
+    const fourBack = career('SG', { ovr: 78 }, 5);
+    fourBack.seasons[1].awards.push('All-NBA');
+    expect(has(fourBack)).toBe(false);
   });
 
   it('holds the G League assignment to the first three seasons', () => {

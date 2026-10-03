@@ -22,7 +22,13 @@
        with it, 85.7 and 85.8 on the same fleet with the catalog emptied.
    C1e The era gates hold. A modern only card (G League assignment, the two
        way deal, the national TV rest rule, the awards games line, the shot
-       chart meeting) is never drawn in a 2003-04 career. Exact, no band.
+       chart meeting, and deck A's send down card) is never offered or drawn
+       in a 2003-04 career, and neither send down card is offered or drawn
+       after a player's third season (three years of service or less). The
+       gate is read every offseason, not only on a draw: a draw of the send
+       down card is too rare for a slip to show (giving deck A back its five
+       seasons was 0 leaks in a 400 career fleet when only draws were read).
+       Exact, no band.
    C2  The words are the effect. Every card, 2,000 draws on saves the fleet
        found eligible for it: the line the player reads is parsed back and
        compared with what the save did, nothing outside the stats a card may
@@ -53,12 +59,15 @@
    mutates exists and each must turn the run red:
      nodeck       empties the catalog                     -> C1 red
      eraleak      drops the era gate on one card          -> C1e red
+     eraleaka     drops the era from deck A's send down   -> C1e red
+     serviceleak  gives deck A's send down five seasons   -> C1e red
      wordsbreak   hides a morale change in a card         -> C2 red
      tradepay     cuts the salary on the trade            -> C2 red
      eraleaktrade drops the era from the trade's team list -> C2 red
      chipcap      writes the chips from a save with room  -> C2 red
      notags       strips one deck A card's tags           -> T red
      sameteam     drops the team check from beat 318      -> R1 red
+     sameteam320  drops the team check from beat 320      -> R1 red
      beatwords    moves beat 319's morale by -6, words -4 -> R2 red
 */
 /* Round 299: seeded stream, see scripts/lib/seedRandom.mjs. First import on purpose. */
@@ -70,7 +79,7 @@ import { unlinkSync, readFileSync, writeFileSync } from 'node:fs';
 import { pathToFileURL } from 'node:url';
 
 const CONTROL = process.env.SIM_NBA_CONTROL || '';
-const CONTROLS = ['', 'nodeck', 'eraleak', 'wordsbreak', 'tradepay', 'eraleaktrade', 'chipcap', 'notags', 'sameteam', 'beatwords'];
+const CONTROLS = ['', 'nodeck', 'eraleak', 'eraleaka', 'serviceleak', 'wordsbreak', 'tradepay', 'eraleaktrade', 'chipcap', 'notags', 'sameteam', 'sameteam320', 'beatwords'];
 if (!CONTROLS.includes(CONTROL)) {
   console.error(`unknown SIM_NBA_CONTROL "${CONTROL}", expected one of: ${CONTROLS.slice(1).join(', ')}`);
   process.exit(2);
@@ -81,7 +90,8 @@ const OUT = path.join(os.tmpdir(), `nba-engine-${process.pid}.mjs`);
 await build({
   stdin: {
     contents: "export * from './src/lib/nbaMyCareer.ts';\nexport * from './src/lib/nbaCareerLifeC.ts';\n"
-      + "export { NBA_RIVALRY_EVENTS } from './src/lib/nbaCareerRivalryEvents.ts';\n",
+      + "export { NBA_RIVALRY_EVENTS } from './src/lib/nbaCareerRivalryEvents.ts';\n"
+      + "export { getNbaLifeEventsA } from './src/lib/nbaCareerLifeA.ts';\n",
     resolveDir: process.cwd(), loader: 'ts',
   },
   bundle: true, format: 'esm', platform: 'node', outfile: OUT,
@@ -108,15 +118,28 @@ if (CONTROL === 'eraleaktrade') {
   if (n !== 1) throw new Error(`control eraleaktrade: expected the trade's team list call once in the bundle, found ${n}`);
   writeFileSync(OUT, src.replace(call, 'nbaEraTeamIds().filter('));
 }
+if (CONTROL === 'eraleaka' || CONTROL === 'serviceleak') {
+  /* Deck A's send down card: drop its era check, or give it back the five
+     seasons it had before this round. */
+  const src = readFileSync(OUT, 'utf8');
+  const at = src.indexOf('id: "nbaA_gleague_stint"');
+  if (at < 0) throw new Error(`control ${CONTROL}: the card id is not in the bundle`);
+  const gateAt = src.lastIndexOf('if (', at);
+  const gate = src.slice(gateAt, at);
+  const was = CONTROL === 'eraleaka' ? /\s*&&\s*nbaEraById\(\w+\.eraId\)\.id === "now"/ : /(\w+) <= 3 &&/;
+  if (gateAt < 0 || at - gateAt > 200 || !was.test(gate)) throw new Error(`control ${CONTROL}: the gate before the card is not the one expected: ${gate}`);
+  const now = CONTROL === 'eraleaka' ? gate.replace(was, '') : gate.replace(was, '$1 <= 5 &&');
+  writeFileSync(OUT, src.slice(0, gateAt) + now + src.slice(at));
+}
 
 const eng = await import(pathToFileURL(OUT).href);
 const {
   NBA_ARCHETYPES, startNbaCareer, simNbaSeason, nbaProgress, drawNbaEvent, nbaShouldRetire,
   nbaLegacyOf, nbaCareerTotals, nbaRollTeamQuality, nbaMarketSalary,
   NBA_SPEND_ITEMS, buyNbaItem, nbaAssignRole, nbaCampBattle,
-  NBA_LIFE_C, buildNbaLifeCCard, nbaEraTeamIds, nbaTeamLabelOf, NBA_RIVALRY_EVENTS,
+  NBA_LIFE_C, buildNbaLifeCCard, nbaEraTeamIds, nbaTeamLabelOf, NBA_RIVALRY_EVENTS, getNbaLifeEventsA,
 } = eng;
-if (!Array.isArray(NBA_RIVALRY_EVENTS) || !nbaEraTeamIds || !nbaTeamLabelOf) throw new Error('the bundle is missing the rivalry table or the era team helpers');
+if (!Array.isArray(NBA_RIVALRY_EVENTS) || !nbaEraTeamIds || !nbaTeamLabelOf || !getNbaLifeEventsA) throw new Error('the bundle is missing the rivalry table or the era team helpers');
 unlinkSync(OUT);
 
 const CAREERS = Number(process.argv[2] || 400);
@@ -130,7 +153,13 @@ const DRAWS_PER_CARD = 2000;
 const MODERN_ONLY = [
   'nbaC_rule_g_league', 'nbaC_rule_two_way_kid', 'nbaC_rule_national_tv',
   'nbaC_rule_award_games', 'nbaC_sg_shot_diet',
+  /* Deck A's send down card: assignment began in 2005-06 and then only in a
+     player's first two seasons, which a 2003-04 career has already played. */
+  'nbaA_gleague_stint',
 ];
+/* The two send down cards, held to the modern rule of three years of
+   service or less. */
+const SEND_DOWN = ['nbaC_rule_g_league', 'nbaA_gleague_stint'];
 
 if (NBA_LIFE_C.length !== DECK_C) throw new Error(`deck C is ${NBA_LIFE_C.length} cards, the harness expects ${DECK_C}`);
 const defOf = id => {
@@ -167,6 +196,11 @@ if (CONTROL === 'sameteam') {
   if (!/r\.team\s*!==\s*s\.team/.test(String(b.when))) throw new Error('control sameteam: beat 318 has no team check to drop');
   b.when = (s, r) => !r.retired && r.pos === s.pos;
 }
+if (CONTROL === 'sameteam320') {
+  const b = beatOf(320);
+  if (!/r\.team\s*!==\s*s\.team/.test(String(b.when))) throw new Error('control sameteam320: beat 320 has no team check to drop');
+  b.when = (s, r) => !r.retired && r.ovr >= 82;
+}
 if (CONTROL === 'beatwords') {
   const b = beatOf(319);
   if (b.consequence !== 'Morale -4, Fanbase +2') throw new Error(`control beatwords: beat 319 says "${b.consequence}"`);
@@ -185,10 +219,15 @@ const peaks = [];
 const cFired = new Map();        // deck C id -> times drawn
 const cEligible = new Map();     // deck C id -> offseasons it was eligible in
 const eraLeaks = [];             // modern only cards drawn in a 2003-04 career
+const serviceLeaks = [];         // a send down card after three seasons
 const untagged = new Set();      // life card ids drawn without their tags
 const pools = new Map();         // deck C id -> saves the fleet found eligible
 let benchSeasons = 0, eraCareers = 0, lifeDraws = 0;
-let beat318Rolls = 0, beat318SameTeam = 0;   // R1
+/* R1: the beats whose words need the rival on another team. Listed by
+   hand, like MODERN_ONLY. */
+const TWO_TEAM_BEATS = [318, 320];
+const beatRolls = Object.fromEntries(TWO_TEAM_BEATS.map(id => [id, 0]));
+const beatSameTeam = Object.fromEntries(TWO_TEAM_BEATS.map(id => [id, 0]));
 let r2Save = null;                           // R2: one fleet save with a rival
 const POOL_CAP = 40;
 const clone = x => JSON.parse(JSON.stringify(x));
@@ -224,9 +263,9 @@ for (let i = 0; i < CAREERS; i++) {
         const { line } = simNbaSeason(c, tq, Math.random);
         /* R1: a beat rolled this season, read the moment it is rolled. */
         const beat = c.pendingRivalryEvent;
-        if (beat && beat !== heldBeat && beat.id === 318) {
-          beat318Rolls++;
-          if (c.rival && c.rival.team === c.team) beat318SameTeam++;
+        if (beat && beat !== heldBeat && TWO_TEAM_BEATS.includes(beat.id)) {
+          beatRolls[beat.id]++;
+          if (c.rival && c.rival.team === c.team) beatSameTeam[beat.id]++;
         }
         // every position must produce at least one real stat
         const hasStat = [line.ppg, line.rpg, line.apg].some(v => typeof v === 'number' && v > 0);
@@ -243,6 +282,17 @@ for (let i = 0; i < CAREERS; i++) {
 
       /* Round 918: keep a few of the saves each deck C card was eligible on,
          for section C2. Reads the gate only, draws nothing. */
+      /* C1e at the gate, every offseason: is a send down card offered where
+         the rule says it cannot be? Deck A is built on a copy with its own
+         rng, so the fleet's stream is untouched. A draw alone is too rare to
+         see a slip (one low rated player in his fourth year is a few
+         offseasons a fleet). */
+      const offered = getNbaLifeEventsA(clone(c), () => 0).map(e => e.id)
+        .concat(NBA_LIFE_C.filter(d => d.when(c)).map(d => d.id));
+      for (const id of offered) {
+        if (eraId === 'y2004' && MODERN_ONLY.includes(id)) eraLeaks.push(`${id} offered in career ${i}, ${c.year}`);
+        if (SEND_DOWN.includes(id) && c.seasons.length > 3) serviceLeaks.push(`${id} offered in career ${i} after ${c.seasons.length} seasons`);
+      }
       for (const d of NBA_LIFE_C) {
         if (!d.when(c)) continue;
         cEligible.set(d.id, (cEligible.get(d.id) ?? 0) + 1);
@@ -258,13 +308,10 @@ for (let i = 0; i < CAREERS; i++) {
           lifeDraws++;
           if (typeof ev.category !== 'string' || !ev.category || !(ev.cooldown >= 1)) untagged.add(ev.id);
         }
-        /* Deck A's send down card, same rule: nobody was sent down before
-           the 2005-06 season (c.year is the season ahead). */
-        if (eraId === 'y2004' && ev.id === 'nbaA_gleague_stint' && c.year < 2005) eraLeaks.push(`${ev.id} in career ${i}, ${c.year}`);
-        if (ev.id.startsWith('nbaC_')) {
-          cFired.set(ev.id, (cFired.get(ev.id) ?? 0) + 1);
-          if (eraId === 'y2004' && MODERN_ONLY.includes(ev.id)) eraLeaks.push(`${ev.id} in career ${i}, ${c.year}`);
-        }
+        if (eraId === 'y2004' && MODERN_ONLY.includes(ev.id)) eraLeaks.push(`${ev.id} in career ${i}, ${c.year}`);
+        /* The send down rule's service limit: three years or less. */
+        if (SEND_DOWN.includes(ev.id) && c.seasons.length > 3) serviceLeaks.push(`${ev.id} in career ${i} after ${c.seasons.length} seasons`);
+        if (ev.id.startsWith('nbaC_')) cFired.set(ev.id, (cFired.get(ev.id) ?? 0) + 1);
         const pick = ev.options[Math.floor(Math.random() * ev.options.length)];
         const log = pick.apply(c, Math.random);
         if (typeof log !== 'string') throw new Error(`event ${ev.id} option returned ${typeof log}, expected string`);
@@ -441,12 +488,13 @@ if (cMissing.length) console.log(`    never drawn    : ${cMissing.join(', ')}`);
 console.log(`    rarest three   : ${NBA_LIFE_C.map(d => [d.id, cFired.get(d.id) ?? 0]).sort((a, b) => a[1] - b[1]).slice(0, 3).map(([id, n]) => `${id} ${n} (eligible in ${cEligible.get(id) ?? 0} offseasons)`).join(', ')}`);
 console.log(`  corruption fired : ${[...seenEventIds].filter(id => id.startsWith('ncorr_')).length}`);
 console.log(`shop items usable  : ${buyable.size}/${NBA_SPEND_ITEMS.length}`);
-console.log(`C1e era leaks      : ${eraLeaks.length}  (modern only cards drawn in a 2003-04 career, must be 0)`);
+console.log(`C1e era leaks      : ${eraLeaks.length}  (modern only cards offered or drawn in a 2003-04 career, must be 0)`);
+console.log(`C1e service leaks  : ${serviceLeaks.length}  (a send down card offered or drawn after three seasons, must be 0)`);
 console.log(`C2 words vs effect : ${c2Draws} draws (${c2RealDraws} on the fleet's own saves), ${c2Bad} mismatches, ${c2Unseen.length} outcomes never seen, ${c2NoSave.length} cards with no eligible save`);
 console.log(`   trades checked  : ${c2Trades} (${c2EraTrades} in a 2003-04 career)`);
 if (CONTROL === 'chipcap') console.log(`   chipcap         : ${chipcapMoved} draws where the loose chips differed`);
 for (const ex of c2Examples) console.log(`    ${ex}`);
-console.log(`R1 beat 318        : rolled ${beat318Rolls} times, ${beat318SameTeam} of them with the rival on your own team (must be 0)`);
+for (const id of TWO_TEAM_BEATS) console.log(`R1 beat ${id}        : rolled ${beatRolls[id]} times, ${beatSameTeam[id]} of them with the rival on your own team (must be 0)`);
 console.log(`R2 beat words      : ${R2_IDS.length} beats, ${r2Bad.length} mismatches${r2Bad.length ? ` (${r2Bad.slice(0, 3).join('; ')})` : ''}`);
 console.log(`T  life cards drawn: ${lifeDraws}, without tags: ${untagged.size}${untagged.size ? ` (${[...untagged].slice(0, 5).join(', ')})` : ''}`);
 console.log('\nsample stat lines by position:');
@@ -470,8 +518,11 @@ if (c2NoSave.length) fails.push(`C2: ${c2NoSave.length} cards had no eligible sa
 if (untagged.size) fails.push(`T: ${untagged.size} life cards drawn without category and cooldown`);
 if (!c2EraTrades) fails.push('C2: no 2003-04 trade was checked, so the era wall went untested');
 if (CONTROL === 'chipcap' && !chipcapMoved) throw new Error('control chipcap changed no chip, so it proves nothing');
-if (beat318SameTeam) fails.push(`R1: beat 318 rolled ${beat318SameTeam} times with the rival on your own team`);
-if (!beat318Rolls) fails.push('R1: beat 318 was never rolled, so its gate went untested');
+for (const id of TWO_TEAM_BEATS) {
+  if (beatSameTeam[id]) fails.push(`R1: beat ${id} rolled ${beatSameTeam[id]} times with the rival on your own team`);
+  if (!beatRolls[id]) fails.push(`R1: beat ${id} was never rolled, so its gate went untested`);
+}
+if (serviceLeaks.length) fails.push(`C1e: ${serviceLeaks.length} send down cards after three seasons (${serviceLeaks[0]})`);
 if (r2Bad.length) fails.push(`R2: ${r2Bad.length} rivalry beats whose words and effect disagree`);
 console.log(fails.length
   ? `\nFAIL: ${fails.join('; ')}`

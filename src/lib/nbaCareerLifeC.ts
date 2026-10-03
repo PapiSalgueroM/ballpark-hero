@@ -36,12 +36,21 @@
      assignment card is gated to the modern era, and to a player's first
      three seasons (the assignment rule: three years of service or less).
      nba.com/suns/news/d_league_050919.html ; gleague.nba.com/faq ; gleague.nba.com/2005-06-nba-assignments
+     When it began it covered only a player's first two seasons, which a
+     2003-04 career has already played by 2005-06, so deck A's send down
+     card is modern only too (both read 2026-10-02):
+     oursportscentral.com/services/releases/thunderbirds-announce-nba-affiliations/n-3224930
+     (2005-09-19, "during their first two NBA seasons") ;
+     deseret.com/2007/7/12/20029195/flash-will-be-affiliated-with-jazz
+     (2007-07-12, "in their first or second NBA seasons").
    - A team over the cap has to send out salary close to what it takes back,
      in 2003-04 as now, and a traded player keeps his contract.
      blazersedge.com/2025/1/15/24344488 ; nationalbasketballnews.com/how-nba-trades-work-salary-matching-trade-exceptions-and-draft-picks
-     For 2003-04: cbafaq.com/salarycap99.htm (the 1999 agreement). On a
-     re-read on 2026-10-02 it failed on an expired certificate, so that era's
-     second source is the one recorded on the first read, not a fresh one.
+     For 2003-04: blogmaverick.com/2004/07/12/some-nba-rules/ (2004-07-12,
+     read 2026-10-02: over the cap, the salaries traded must be within 15
+     percent plus 100k of each other) ; cbafaq.com/salarycap99.htm (the 1999
+     agreement, read on the first pass; a re-read failed on an expired
+     certificate). The card states the rule without the number.
    - Since 2023-24 a healthy star is expected to play the national TV games,
      a star being an All-Star or All-NBA pick in the past three seasons, and
      the big awards ask for a minimum number of games. Modern era only.
@@ -50,8 +59,10 @@
      eras. Now: nba.com/news/2025-nba-all-star-game-reserves ;
      pr.nba.com/2021-nba-all-star-game-reserves. Then (read 2026-10-02):
      cbsnews.com/news/all-star-reserves-announced (2001, reserves picked in
-     a vote by coaches) ; insidehoops.com/all-star-reserves-2004.shtml (seen
-     through a search summary only: the page would not load).
+     a vote by coaches) ; espn.com/nba/news/2002/0129/1319553.html (2002-01-29,
+     read 2026-10-02: "Reserves were selected in a vote by NBA coaches").
+     insidehoops.com/all-star-reserves-2004.shtml was seen through a search
+     summary only and is not counted.
 
    Nothing imported is touched at module scope (nbaMyCareer.ts imports this
    file): the catalog below is functions, and they run at draw time.
@@ -247,7 +258,7 @@ export const NBA_LIFE_C: NbaLifeCDef[] = [
     id: 'nbaC_sg_cold_streak', category: 'position', cooldown: 3,
     when: c => pos('SG')(c) && yrsOf(c) >= 1,
     title: 'Two for your last twenty six',
-    body: 'A shooting guard who cannot shoot is a tall guy standing in the corner. The slump is three weeks old, everybody has a theory, and your mother has texted you a video of your own form.',
+    body: 'A shooting guard who cannot shoot is a tall guy standing in the corner. The slump is three weeks old, everybody has a theory, and your mother has called twice to talk you through your own elbow.',
     options: [
       {
         label: 'Keep shooting, shooters shoot', p: 0.55,
@@ -422,7 +433,7 @@ export const NBA_LIFE_C: NbaLifeCDef[] = [
     id: 'nbaC_rookie_first_check', category: 'rookie', cooldown: 99,
     when: c => yrsOf(c) === 1,
     title: 'The first real check',
-    body: 'It was a lot smaller than the number in the headline. Taxes, the agent, the dues. And your phone has been busy: a cousin with a food truck, a friend with an app, an uncle with a sure thing.',
+    body: 'It was a lot smaller than the number in the headline. Taxes, the agent, the dues. And your phone has been busy: a cousin with a food truck, a friend with a restaurant idea, an uncle with a sure thing.',
     options: [
       { label: 'Hire a boring money person and put it away', say: 'She put most of it somewhere dull and gave you an allowance. You were annoyed for a week and fine forever.', fx: { netWorth: 0.2, morale: -2 } },
       { label: 'Take care of everybody who helped you get here', say: 'A few debts paid, a few cars bought, a lot of hugs. The account felt it.', fx: { netWorth: -0.4, morale: 8 } },

@@ -923,10 +923,12 @@ export function getNbaLifeEventsA(c: NbaCareerState, rng: () => number): NbaCare
     });
   }
 
-  /* Round 918: a team sending its own player down began before the 2005-06
-     season (sources in nbaCareerLifeC.ts), so a 2003-04 career cannot be
-     sent down ahead of the 2004-05 season. c.year here is the season ahead. */
-  if (c.ovr <= 76 && yrs >= 1 && yrs <= 5 && (nbaEraById(c.eraId).id === 'now' || c.year >= 2005)) {
+  /* Round 918: modern league only, first three seasons, the same gate as deck
+     C's G League card (sources in nbaCareerLifeC.ts). Sending a player down
+     began with the 2005-06 season and then only for players in their first
+     two seasons, which a 2003-04 career never is by then (c.year here is the
+     season ahead, so his third season at the earliest). */
+  if (c.ovr <= 76 && yrs >= 1 && yrs <= 3 && nbaEraById(c.eraId).id === 'now') {
     deck.push({
       id: 'nbaA_gleague_stint',
       category: 'basketball', cooldown: 2, story: 'gLeague',
