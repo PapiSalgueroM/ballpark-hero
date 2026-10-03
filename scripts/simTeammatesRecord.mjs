@@ -49,6 +49,7 @@
  *   thindeal     every easy row moved to medium                     -> 8
  *   smallbank    the deal drawn from the old bank's 12/12/26 shape  -> 8 (repeat ceiling)
  *   spellgap     a spell claim cut a season short                   -> 6
+ *   longdash     a long dash typed into one shipped funFact         -> 1
  */
 import fs from 'node:fs';
 import path from 'node:path';
@@ -79,6 +80,7 @@ let rec = fs.readFileSync(path.join(ROOT, RECORD), 'utf8').replace(/\r\n/g, '\n'
 const GARNETT = `player1: "Kevin Garnett", player2: "Ray Allen", sport: "NBA", answer: true`;
 const GARNETT_REC = `"player1":"Kevin Garnett","player2":"Ray Allen","sport":"NBA","answer":true`;
 if (CONTROL === 'fileflip') src = rewrite(src, GARNETT, GARNETT.replace('true', 'false'), 'the Garnett and Allen row');
+if (CONTROL === 'longdash') src = rewrite(src, 'funFact: "Celtics teammates for five seasons, ', `funFact: "Celtics teammates for five seasons ${String.fromCharCode(0x2014)} `, "the Garnett and Allen funFact's comma");
 if (CONTROL === 'recordflip') {
   src = rewrite(src, GARNETT, GARNETT.replace('true', 'false'), 'the Garnett and Allen row');
   rec = rewrite(rec, GARNETT_REC, GARNETT_REC.replace('true', 'false'), 'the Garnett and Allen record row');
@@ -138,7 +140,7 @@ for (const r of rows) {
   if (!SPORTS.has(r.sport)) fail(1, `${r.p1} and ${r.p2} are filed under "${r.sport}"`);
   if (r.difficulty < 1 || r.difficulty > 3) fail(1, `${r.p1} and ${r.p2} have difficulty ${r.difficulty}`);
   if (!r.funFact.trim()) fail(1, `${r.p1} and ${r.p2} have no funFact`);
-  if (/[–—]/.test(r.funFact)) fail(1, `${r.p1} and ${r.p2}: the funFact carries a long dash, which the site never uses`);
+  if (new RegExp(`[${String.fromCharCode(0x2013, 0x2014)}]`).test(r.funFact)) fail(1, `${r.p1} and ${r.p2}: the funFact carries a long dash, which the site never uses`);
   for (const clause of r.funFact.split(/[.;:!?]/)) {
     if (!TOGETHER.test(clause)) continue;
     const negated = NEGATED.test(clause);
@@ -502,7 +504,7 @@ if (process.env.TEAMMATES_LIVE !== '1') {
 }
 
 // ---------------------------------------------------------------------------
-const EXPECT = { fileflip: 3, recordflip: 5, hostgap: 5, onesource: 4, wrongclaim: 6, wrongyear: 7, dupe: 2, thindeal: 8, smallbank: '8r', spellgap: 6 };
+const EXPECT = { fileflip: 3, recordflip: 5, hostgap: 5, onesource: 4, wrongclaim: 6, wrongyear: 7, dupe: 2, thindeal: 8, smallbank: '8r', spellgap: 6, longdash: 1 };
 let code = 0;
 if (CONTROL) {
   const want = EXPECT[CONTROL];
