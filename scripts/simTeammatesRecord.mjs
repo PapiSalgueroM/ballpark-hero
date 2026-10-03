@@ -26,30 +26,48 @@
  * agree on, and an undecided pair needs an adjudication in the record with
  * every fact on two hosts. Then every claim a funFact makes (a span, a count,
  * a split season, a team never played for) is recomputed on both hosts, and
- * every year and every "N seasons" in the text must be one a claim declares.
- * A funFact cannot carry a number nobody checked.
+ * every year and every "N seasons" in the text must be one a claim declares,
+ * every club nickname in the text must be one a claim or adjudication of the
+ * row names (and every claimed team must be named), and every title, numbered
+ * Super Bowl or score must be stated word for word by an adjudication of the
+ * row. A funFact cannot carry a number or a team nobody checked.
+ *
+ * THE REVEAL (section 10). The record settles club and league teams only, so
+ * the NO reveal on the page must name the league ("NEVER NBA teammates",
+ * "club" for soccer) and no line on the page may deny teammates unscoped.
  *
  * LEGACY. 15 soccer rows predate this record and are not verified by it.
- * They get the structural checks only, the count is a ratchet that can only
- * fall, and the live soccer_player_club_stints check that used to cover ten
+ * They get the structural checks, a pinned answer each (section 4), the count
+ * is a ratchet that can only fall, and the live soccer_player_club_stints
+ * check that used to cover ten
  * of them is kept below as section 9, opt in (TEAMMATES_LIVE=1), because it
  * reads the production database and only the lead runs that, once a release.
  *
  * BANDS (section 8), measured 2026-10-02 over seeds 1 to 12, 400 pairs of
  * runs per seed: the numbers sit beside the constant. Never a max.
  *
- * CONTROLS (TEAMMATES_CONTROL=...), each must make its section fire:
- *   fileflip     one answer flipped in the shipped file only        -> 3
- *   recordflip   the same answer flipped in file AND record         -> 5
- *   hostgap      one season deleted from one host of one player     -> 5
- *   onesource    one player's second source deleted                 -> 4
- *   wrongclaim   a claim's span end moved a season                  -> 6
- *   wrongyear    a funFact year changed in file and record          -> 7
- *   dupe         the same pairing twice                             -> 2
- *   thindeal     every easy row moved to medium                     -> 8
- *   smallbank    the deal drawn from the old bank's 12/12/26 shape  -> 8 (repeat ceiling)
- *   spellgap     a spell claim cut a season short                   -> 6
- *   longdash     a long dash typed into one shipped funFact         -> 1
+ * CONTROLS (TEAMMATES_CONTROL=...). Each must make EXACTLY the sections
+ * listed fire, no fewer and no more (the EXPECT table at the bottom says why
+ * each extra one fires); a control that fires exits 0, one that does not
+ * exits 1, and a stale control that finds nothing to mutate exits 2:
+ *   fileflip       one answer flipped in the shipped file only        -> 1 3 5
+ *   recordflip     the same answer flipped in file AND record         -> 1 5
+ *   hostgap        one season deleted from one host of one player     -> 5 6
+ *   onesource      one player's second source deleted                 -> 4 5 6
+ *   wrongclaim     a claim's span end moved a season                  -> 6 7
+ *   wrongyear      a funFact year changed in file and record          -> 7
+ *   dupe           the same pairing twice                             -> 2 3 8
+ *   thindeal       every easy row moved to medium                     -> 8
+ *   smallbank      the deal drawn from the old bank's 12/12/26 shape  -> 8r (repeat ceiling)
+ *   spellgap       a spell claim cut a season short                   -> 6 7
+ *   longdash       a long dash typed into one shipped funFact         -> 1 3
+ *   shortdeal      the hook deals 3 hard cards, 9 in a 10 card game   -> 8
+ *   widepool       the hook's hard pile also takes medium rows        -> 8
+ *   unscopedbanner the NO reveal back to a bare "NEVER teammates"     -> 10
+ *   legacypin      Ronaldo and Messi flipped to YES, funFact too      -> 4
+ *   legacyflip     the same flip with the denial left in              -> 1 4
+ *   extrateam      "the Vikings" added to Rodgers' teams              -> 7
+ *   superbowl      "Super Bowl LVI" moved to LVII in file and record  -> 7
  */
 import fs from 'node:fs';
 import path from 'node:path';
@@ -123,6 +141,11 @@ if (CONTROL === 'legacyflip') {
   src = rewrite(src, `answer: false, funFact: "${RONALDO_MESSI}"`, `answer: true, funFact: "${RONALDO_MESSI}"`, 'the Ronaldo and Messi row');
   rec = rewrite(rec, `"answer":false,"funFact":"${RONALDO_MESSI}"`, `"answer":true,"funFact":"${RONALDO_MESSI}"`, 'the Ronaldo and Messi record row');
 }
+/* the reviewers' mutations M1 and M2, each in file AND record: a team Rodgers
+   never played for, and the Super Bowl numeral moved one game on */
+const both = (from, to, what) => { src = rewrite(src, from, to, what); rec = rewrite(rec, from, to, `${what} in the record`); };
+if (CONTROL === 'extrateam') both('Rodgers for the Packers, the Jets and the Steelers', 'Rodgers for the Packers, the Vikings, the Jets and the Steelers', "the Manning and Rodgers funFact");
+if (CONTROL === 'superbowl') both('the Super Bowl LVI win', 'the Super Bowl LVII win', "the Miller and Beckham funFact");
 if (CONTROL === 'thindeal') {
   src = rewrite(src, 'difficulty: 1 }', 'difficulty: 2 }', 'an easy row', true);
   rec = rewrite(rec, '"difficulty":1,', '"difficulty":2,', 'an easy record row', true);
@@ -416,7 +439,18 @@ const yearsOfLabel = s => {
   if (!m) return [];
   return m[2] ? [s, m[1], String(Number(m[1]) + 1)] : [s];
 };
-let linted = 0;
+/* club nicknames per league, current and former, plus the short forms a
+   funFact might use. Soccer has none: its one verified row names clubs by
+   their full names, which the claimed team check above already covers. */
+const NICKNAMES = {
+  NBA: ['Hawks', 'Celtics', 'Nets', 'Hornets', 'Bulls', 'Cavaliers', 'Cavs', 'Mavericks', 'Mavs', 'Nuggets', 'Pistons', 'Warriors', 'Rockets', 'Pacers', 'Clippers', 'Lakers', 'Grizzlies', 'Heat', 'Bucks', 'Timberwolves', 'Wolves', 'Pelicans', 'Knicks', 'Thunder', 'Magic', '76ers', 'Sixers', 'Suns', 'Trail Blazers', 'Blazers', 'Kings', 'Spurs', 'Raptors', 'Jazz', 'Wizards', 'SuperSonics', 'Sonics', 'Bullets', 'Bobcats', 'Braves', 'Royals'],
+  NFL: ['Cardinals', 'Falcons', 'Ravens', 'Bills', 'Panthers', 'Bears', 'Bengals', 'Browns', 'Cowboys', 'Broncos', 'Lions', 'Packers', 'Texans', 'Colts', 'Jaguars', 'Chiefs', 'Raiders', 'Chargers', 'Rams', 'Dolphins', 'Vikings', 'Patriots', 'Saints', 'Giants', 'Jets', 'Eagles', 'Steelers', '49ers', 'Niners', 'Seahawks', 'Buccaneers', 'Bucs', 'Titans', 'Commanders', 'Oilers', 'Football Team'],
+  MLB: ['Diamondbacks', 'D-backs', 'Braves', 'Orioles', 'Red Sox', 'Cubs', 'White Sox', 'Reds', 'Guardians', 'Indians', 'Rockies', 'Tigers', 'Astros', 'Royals', 'Angels', 'Dodgers', 'Marlins', 'Brewers', 'Twins', 'Mets', 'Yankees', 'Athletics', 'Phillies', 'Pirates', 'Padres', 'Giants', 'Mariners', 'Cardinals', 'Rays', 'Devil Rays', 'Rangers', 'Blue Jays', 'Nationals', 'Expos'],
+  NHL: ['Ducks', 'Mighty Ducks', 'Coyotes', 'Bruins', 'Sabres', 'Flames', 'Hurricanes', 'Blackhawks', 'Avalanche', 'Blue Jackets', 'Stars', 'North Stars', 'Red Wings', 'Oilers', 'Panthers', 'Kings', 'Wild', 'Canadiens', 'Habs', 'Predators', 'Devils', 'Islanders', 'Rangers', 'Senators', 'Flyers', 'Penguins', 'Sharks', 'Kraken', 'Blues', 'Lightning', 'Maple Leafs', 'Leafs', 'Canucks', 'Golden Knights', 'Capitals', 'Jets', 'Mammoth', 'Hockey Club', 'Nordiques', 'Whalers', 'Thrashers'],
+};
+const TITLE = /\b(Super Bowls? [IVXLC]+|Super Bowls?|Stanley Cups?|World Series|Finals|titles?|championships?|champions|rings?|pennants?|MVPs?|trophy|trophies|\d{1,3}-\d{1,3})\b/gi;
+const escRe = s => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+let linted = 0, nicknamesSeen = 0, titlesSeen = 0;
 for (const r of rows) {
   const x = recRows.get(pairKey(r));
   if (!x || x.legacy) continue;
@@ -441,15 +475,43 @@ for (const r of rows) {
     const nick = words[words.length - 1].replace(/s$/, ''), city = words.slice(0, -1).join(' ');
     if (!r.funFact.includes(nick) && !(city && r.funFact.includes(city))) fail(7, `${pairKey(r)}: a claim rests on the ${t}, and the funFact never names them`);
   }
+  /* and the other way: every club nickname in the text is one a claim or an
+     adjudication of this row names, so "the Packers, the Vikings, the Jets"
+     cannot slip a team past the record. The row's own player names are taken
+     out first ("Magic's last season" is a man, not Orlando). A city alone
+     ("a Denver jersey") is not read this way, only nicknames. */
+  const says = (adjudications[pairKey(r)]?.facts || []).map(f => f.says).join(' ');
+  let text = r.funFact;
+  for (const w of `${r.p1} ${r.p2}`.split(/\s+/)) if (w.length > 2) text = text.replace(new RegExp(`(?<![A-Za-z])${escRe(w)}(?![A-Za-z])`, 'g'), ' ');
+  for (const nick of NICKNAMES[r.sport] || []) {
+    const stem = nick.replace(/s$/, '');
+    if (!new RegExp(`(?<![A-Za-z-])${stem}s?(?![A-Za-z])`).test(text)) continue;
+    nicknamesSeen += 1;
+    if (!names.some(t => t.includes(stem)) && !says.includes(stem)) fail(7, `${pairKey(r)}: the funFact names the ${nick}, and no claim or adjudication of this row does`);
+  }
+  /* a title, a numbered Super Bowl or a score is checked by no table, so it
+     must be one an adjudication of this row states word for word (the false
+     "Super Bowl LIX" this round removed was exactly this kind of line) */
+  for (const m of r.funFact.matchAll(TITLE)) {
+    titlesSeen += 1;
+    if (!new RegExp(`(?<![\\w-])${escRe(m[0])}(?![\\w-])`).test(says)) fail(7, `${pairKey(r)}: the funFact says "${m[0]}", which no adjudication of this row states`);
+  }
 }
-console.log(`  ${linted} funFacts linted`);
+/* every team a claim rests on must be in the nickname list, or the list
+   above would be quietly blind to it */
+for (const x of record.rows) {
+  if (x.legacy || !NICKNAMES[x.sport]) continue;
+  for (const c of x.claims || []) if (c.team && !NICKNAMES[x.sport].some(n => c.team.endsWith(n))) fail(7, `${x.sport} claim team "${c.team}" ends in no nickname the section 7 list knows`);
+}
+console.log(`  ${linted} funFacts linted: ${nicknamesSeen} club nicknames and ${titlesSeen} titles or scores each traced to a claim or an adjudication`);
 
 // ---------------------------------------------------------------------------
 console.log('\n--- 8. the deal: how much of one run the next run repeats ---');
-/* The deal is LIFTED from src/hooks/useTeammates.ts, not retyped: the per
-   difficulty slice sizes are read out of the hook, and the shuffle is the
-   hook's own comparator, sort(() => random - 0.5), driven by a seeded
-   generator. The outcome measured is the share of a run's pairs that the
+/* The deal is LIFTED from src/hooks/useTeammates.ts, not retyped: the hook's
+   own buildRound() runs here with Math.random swapped for a seeded generator.
+   Every deal must hold ROUNDS distinct pairs in the 3, 3, 4 mix the rules
+   card promises, because a short deal leaves question 10 with no card and
+   no button (the shortdeal control). The outcome measured is the share of a run's pairs that the
    very next run deals again, which is what a player notices. Measured
    2026-10-02, seeds 1 to 12, 400 run pairs each, and the gate is the MEAN
    over seeds, never the worst seed: the 50 row bank before Round 921
@@ -620,6 +682,8 @@ const EXPECT = {
   widepool: [8],
   unscopedbanner: [10],
   legacypin: [4],
+  extrateam: [7],
+  superbowl: [7],
   legacyflip: [1, 4],    /* the denial now contradicts the answer, and the pin */
 };
 let code = 0;
