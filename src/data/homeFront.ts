@@ -92,8 +92,8 @@ export interface StageEntry {
 export const HOME_STAGE: StageEntry[] = [
   { path: '/soccer-career', kicker: 'Career sim', cta: 'Start your career', continueCta: 'Continue your career', saveKey: 'soccerCareerSave', art: 'pitch' },
   { path: '/club-manager', kicker: 'Management sim', cta: 'Take the job', continueCta: 'Back to the dugout', saveKey: 'dukb-club-manager-save', art: 'tactics' },
-  { path: '/stadium-tycoon', kicker: 'Idle empire', cta: 'Build it', art: 'stand' },
-  { path: '/nba-my-career', kicker: 'Hoops career', cta: 'Get drafted', art: 'court' },
+  { path: '/stadium-tycoon', kicker: 'Idle empire', cta: 'Build it', continueCta: 'Back to your club', saveKey: 'stadiumTycoonSaveV1', art: 'stand' },
+  { path: '/nba-my-career', kicker: 'Hoops career', cta: 'Get drafted', continueCta: 'Continue your career', saveKey: 'nba-my-career-save-v1', art: 'court' },
 ];
 
 /* ── Round 659 ─────────────────────────────────────────────────────────── */
