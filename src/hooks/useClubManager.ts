@@ -158,7 +158,10 @@ export function useClubManager() {
         }
       } else if (views.some(v => v.summary)) {
         /* Round 928: nothing playable in the active slot, but another slot
-           holds a career, so the slots screen, never a picker over them. */
+           holds a career, so the slots screen, never a picker over them. A
+           career the player just asked for that would not open says so,
+           rather than dropping him back on the tiles without a word. */
+        if (goStraightIn.current) setSlotNote('That career would not open on this version of the game. It is still saved in its slot, and your other managers are fine.');
         goStraightIn.current = false;
         setPhase('resume');
       } else {
