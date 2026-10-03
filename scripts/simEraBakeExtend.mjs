@@ -180,7 +180,9 @@ console.log('B) every guard dies on its own bad correction');
   /* [what it breaks, how, the words its death must carry] */
   const CASES = [
     ['a spelling with no rows', c => { c.newLeagues = [{ ...NEW_LEAGUE, dbToEra: { ...NEW_LEAGUE.dbToEra, 'Ghost FC': 'Ghost' } }]; }, 'the spelling map is wrong'],
-    ['an unmapped position', c => { c.rows = [...ROWS, row('Pat Odd', 'Gamma FC', 'Sweeper', 20, 1e6)]; }, 'unmapped position'],
+    /* Round 902 moved 'Sweeper' into the lib's map (the 2005 bake had always
+       mapped it), so the unmapped position here is one no map knows. */
+    ['an unmapped position', c => { c.rows = [...ROWS, row('Pat Odd', 'Gamma FC', 'Libero', 20, 1e6)]; }, 'unmapped position'],
     ['the extend run twice', c => { c.newLeagues = [{ label: 'Again', dbToEra: { 'Alpha AFC': 'Alpha' } }]; }, 'must not run twice'],
     ['a shipped file holding a name twice', c => { c.file = writeShipped('twice.ts', { players: 7, extraLine: SHIPPED.Alpha[0] }); }, 'twice'],
     ['a META that miscounts', c => { c.file = writeShipped('meta.ts', { players: 9 }); }, 'META says'],
@@ -248,6 +250,38 @@ console.log('C) the 2015-16 bake rebuilds from its 60 club base byte for byte');
     const verdict = out.split('\n').filter(l => l.startsWith('CHECK:') || l.startsWith('FATAL:')).join(' / ');
     console.log(`   ${verdict || '(no verdict line)'}`);
     if (code !== 0 || !out.includes('byte identical')) fail(`the rebuilt 2015-16 era file does not match the shipped one (exit ${code})`);
+  }
+}
+
+/* ---------- C2. the real 2005-06 bake rebuilds byte for byte ---------- */
+/* Round 902: the same proof for the second era to grow through the step,
+   rebuilt from the 40 club file it grew from (git show 06dc0741, Round 899's
+   head, where the 2005-06 file was still Round 176's). */
+console.log('C2) the 2005-06 bake rebuilds from its 40 club base byte for byte');
+{
+  const PULL = process.env.ERA_PULL ?? 'C:/Users/antho/dukb-handoff/data/market-base-2005-2010-2015.json';
+  const NEXT_PULL = process.env.ERA_NEXT ?? 'C:/Users/antho/dukb-handoff/data/market-base-2006-2011-2016.json';
+  let skip = null;
+  if (CONTROL) skip = 'a control run checks A and B only';
+  else if (!fs.existsSync(PULL) || !fs.existsSync(NEXT_PULL)) skip = `the offline pulls are not on this machine (${PULL}, ${NEXT_PULL}); set ERA_PULL and ERA_NEXT to run it`;
+  let base = null;
+  if (!skip) {
+    try {
+      base = path.join(TMP, 'base40.ts');
+      fs.writeFileSync(base, execFileSync('git', ['show', '06dc0741:src/data/clubManagerEra2005.ts'], { cwd: ROOT, maxBuffer: 1 << 26 }));
+    } catch { skip = 'git cannot show the 40 club base (06dc0741), a shallow clone?'; }
+  }
+  if (skip) console.log(`   SKIPPED: ${skip}`);
+  else {
+    let out = '';
+    let code = 0;
+    try {
+      out = execFileSync(process.execPath, [path.join(ROOT, 'scripts', 'bakeEra2005.mjs'), '--extend-big-five', '--check',
+        `--base=${base}`, `--pull=${PULL}`, `--next=${NEXT_PULL}`], { cwd: ROOT, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'], maxBuffer: 1 << 26 });
+    } catch (e) { code = e.status ?? 1; out = `${e.stdout ?? ''}${e.stderr ?? ''}`; }
+    const verdict = out.split('\n').filter(l => l.startsWith('CHECK:') || l.startsWith('FATAL:')).join(' / ');
+    console.log(`   ${verdict || '(no verdict line)'}`);
+    if (code !== 0 || !out.includes('byte identical')) fail(`the rebuilt 2005-06 era file does not match the shipped one (exit ${code})`);
   }
 }
 
