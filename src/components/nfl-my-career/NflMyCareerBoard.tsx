@@ -3,8 +3,9 @@
    careers, and this file hands it football's binding (src/lib/nflCareerSport.ts).
    Wire a new screen in the shared board, once; put a football word or number
    in the binding. The page and the tests keep importing this file, and it is
-   the only one that imports the NFL engine, so the other three routes never
-   load it. */
+   the only file that imports the NFL binding. The NFL engine itself still
+   reaches the other three routes through the coach career
+   (usCareerToCoach.ts), as it did before Round 900. */
 import UsCareerBoard from '@/components/us-career/UsCareerBoard';
 import { NFL_CAREER_SPORT } from '@/lib/nflCareerSport';
 

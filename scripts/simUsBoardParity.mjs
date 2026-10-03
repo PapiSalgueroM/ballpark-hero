@@ -35,6 +35,16 @@
  *   US_BOARD_PARITY_CONTROL=binding  one word changed in a copy of the NHL
  *                                    binding: the NHL goes red on the words and
  *                                    the other three stay green
+ *   US_BOARD_PARITY_CONTROL=restore  the pre Round 182 role repair deleted from
+ *                                    a copy of the shared board: all four go
+ *                                    red on the old shape save "noRole" (the
+ *                                    saves a board just wrote all carry a role,
+ *                                    so before the old shapes were added this
+ *                                    left the replay green)
+ *   US_BOARD_PARITY_CONTROL=era      the NFL binding stops passing the era to
+ *                                    its engine: the NFL goes red on the save
+ *                                    of its second career (always an older era
+ *                                    one), the other three stay green
  *   US_BOARD_PARITY_CONTROL=fixture  one save hash changed in a copy of the
  *                                    fixture: that sport goes red (no source
  *                                    is touched, so this is the replay's own
@@ -48,6 +58,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createRequire } from 'node:module';
+import { US_CAREER_BOARD, usCareerSport, wrapperProblems } from './lib/usCareerFiles.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const TEST = 'src/test/usBoardFixture.test.tsx';
@@ -70,9 +81,8 @@ const read = f => fs.readFileSync(f, 'utf8').split('\r\n').join('\n');
    shared board draws every sport whose wrapper hands it a binding (read off
    the four wrappers, so this stays true if a board ever leaves the shared
    one), and a binding draws only its own. */
-const BOARD = 'src/components/us-career/UsCareerBoard.tsx';
-const wrapperOf = slug => `src/components/${slug}-my-career/${slug[0].toUpperCase()}${slug.slice(1)}MyCareerBoard.tsx`;
-const onSharedBoard = SPORTS.filter(slug => read(path.join(ROOT, wrapperOf(slug))).includes("from '@/components/us-career/UsCareerBoard'"));
+const BOARD = US_CAREER_BOARD;
+const onSharedBoard = SPORTS.filter(slug => wrapperProblems(ROOT, usCareerSport(slug)).length === 0);
 const SOURCE_CONTROLS = {
   label: {
     file: BOARD,
@@ -91,12 +101,33 @@ const SOURCE_CONTROLS = {
     says: 'the save differs',
   },
   binding: {
-    file: 'src/lib/nhlCareerSport.ts',
+    file: usCareerSport('nhl').binding,
     alias: '@/lib/nhlCareerSport',
     from: "'⭐ Top of the lineup'",
     to: "'⭐ Top line'",
     red: ['nhl'],
     says: 'the screen reads',
+  },
+  /* The restore's first repair dropped from the shared board: only the old
+     shape save with no role can see it, so this is what proves those saves
+     are in the fixture and replayed. */
+  restore: {
+    file: BOARD,
+    alias: '@/components/us-career/UsCareerBoard',
+    from: "if (!s.c.role) s.c.role = 'starter';",
+    to: '',
+    red: onSharedBoard,
+    says: 'save "noRole"',
+  },
+  /* The NFL binding stops handing the era to its engine: only an older-era
+     career can see it, so this proves the path starts one in the NFL. */
+  era: {
+    file: usCareerSport('nfl').binding,
+    alias: '@/lib/nflCareerSport',
+    from: "rng, appearance, eraId as 'now' | 'y2005')",
+    to: 'rng, appearance)',
+    red: ['nfl'],
+    says: 'the save differs',
   },
 };
 
@@ -144,7 +175,7 @@ if (CONTROL) {
     says = 'mlb click path step 40';
   } else {
     const c = SOURCE_CONTROLS[CONTROL];
-    if (!c) { console.error(`unknown control "${CONTROL}": use label, draw, binding or fixture`); process.exit(1); }
+    if (!c) { console.error(`unknown control "${CONTROL}": use label, draw, binding, restore, era or fixture`); process.exit(1); }
     const src = read(path.join(ROOT, c.file));
     if (!c.red.length) { console.error(`control ${CONTROL}: no sport is drawn by ${c.file}, so this control would prove nothing`); process.exit(1); }
     if (src.split(c.from).length !== 2) { console.error(`control ${CONTROL}: ${c.file} does not carry exactly one "${c.from.trim()}", so this control would change nothing and prove nothing`); process.exit(1); }
@@ -167,7 +198,10 @@ if (CONTROL) {
 }
 
 console.log('A) the fixture is whole');
-const REQUIRED_SAVES = ['rookie', 'mid', 'ext', 'fa', 'retired', 'coach'];
+/* The six the round asked for, then the old shapes the restore repairs (a
+   save from before Round 182, 422 or 126), so the restore cannot lose a
+   repair with this harness green. */
+const REQUIRED_SAVES = ['rookie', 'mid', 'ext', 'fa', 'retired', 'coach', 'noRole', 'negNet', 'noCoachKey', 'coachPhaseNoCoach', 'retiredNoCoachKey'];
 const MIN_SEASONS = 12;
 if (!fs.existsSync(FIXTURE)) {
   fail('scripts/data/usBoardFixture.json is missing: node scripts/recordUsBoardFixture.mjs writes it');
@@ -201,5 +235,14 @@ if (!failures) {
 }
 
 console.log('');
-if (failures) { console.error(`simUsBoardParity: ${failures} failure${failures === 1 ? '' : 's'}`); process.exit(1); }
+if (failures) {
+  /* This is a golden master, so it also goes red when a round changes a US
+     career ON PURPOSE (Codex 905 and 906 did, inside Round 900). Say what to
+     do, so the remedy is a decision and not a habit. */
+  console.error('  If your round meant to change what a US career does, re-record from your tree');
+  console.error('  (node scripts/recordUsBoardFixture.mjs), commit the fixture with the change and say so in the');
+  console.error('  commit. If it did not, the red is a real change: read the first differing step above.');
+  console.error(`simUsBoardParity: ${failures} failure${failures === 1 ? '' : 's'}`);
+  process.exit(1);
+}
 console.log('simUsBoardParity: green. Four sports replayed click for click, save for save and screen for screen.');

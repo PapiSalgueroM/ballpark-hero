@@ -4,8 +4,12 @@ import ShareButtons from '@/components/game/ShareButtons';
 /* Round 900: the one board. The NFL, NBA, MLB and NHL careers were four copies
    of this file; what they really differed in is the `sport` this board is
    handed (src/lib/usCareerSport.ts), bound per sport in nflCareerSport.ts and
-   its three siblings. This file imports no sport, so a sport's route loads its
-   own engine and none of the other three. Wire a new screen here, once. */
+   its three siblings. This file imports no sport directly, and
+   scripts/simUsCareerWeight.mjs holds it to that. It is not yet true that a
+   route loads no other sport: the coach career (usCoachCareer.ts through
+   usCareerToCoach.ts) still pulls in the NFL engine and the NBA, MLB and NHL
+   conquest data on all four routes, as it did before this round.
+   Wire a new screen here, once. */
 import type { UsCareerCore, UsCareerEvent, UsCareerSeason, UsCareerSport, UsShopItem } from '@/lib/usCareerSport';
 // Round 179: real free agency, shared engine and shared screen.
 import { pushFaOffer, applyFaSigning } from '@/lib/usCareerFreeAgency';
@@ -51,7 +55,7 @@ import { fmtFollowers, pushHeadlines } from '@/lib/careerSocial';
    sport (nflCareerInbox.ts, nflCareerRivalryEvents.ts and their siblings). */
 import { InboxPanel } from '@/components/us-career/InboxPanel';
 import { RivalryEventCard } from '@/components/us-career/RivalryEventCard';
-/* Round 796: the rival choice card, and the inbox on the football calendar. */
+/* Round 796: the rival choice card, and the inbox on the sport's own calendar. */
 import { RivalryChoiceCard } from '@/components/us-career/RivalryChoiceCard';
 import type { RivalryChoiceCard as RivalryChoice } from '@/lib/careerRivalryChoices';
 import { cn } from '@/lib/utils';
@@ -856,10 +860,10 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
        the save, so the box does not forget the career. */
     headlines: feed.length ? feed : (career.headlines ?? []),
   });
-  /* Round 521: a sixth box for the inbox, appended locally rather than
-     folded into careerHub.ts's shared five: that function also draws the
-     NBA, MLB and NHL hubs, none of which have an inbox to show yet, and a
-     box with nothing behind it is worse than no box. */
+  /* Round 521: a sixth box for the inbox, appended here rather than folded
+     into careerHub.ts's shared five. When this was written only the NFL had
+     an inbox; since Round 796 every sport does, and this board draws the box
+     for all four through the binding's unreadInboxCount. */
   const unread = sport.unreadInboxCount(career);
   const hubTilesWithInbox: HubTile[] = [
     ...hubTiles,

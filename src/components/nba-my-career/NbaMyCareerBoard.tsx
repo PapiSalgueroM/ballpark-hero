@@ -3,8 +3,9 @@
    careers, and this file hands it basketball's binding (src/lib/nbaCareerSport.ts).
    Wire a new screen in the shared board, once; put a basketball word or number
    in the binding. The page and the tests keep importing this file, and it is
-   the only one that imports the NBA engine, so the other three routes never
-   load it. */
+   the only file that imports the NBA binding and engine. The NBA conquest
+   data still reaches every route through the coach career
+   (usCareerToCoach.ts), as it did before Round 900. */
 import UsCareerBoard from '@/components/us-career/UsCareerBoard';
 import { NBA_CAREER_SPORT } from '@/lib/nbaCareerSport';
 

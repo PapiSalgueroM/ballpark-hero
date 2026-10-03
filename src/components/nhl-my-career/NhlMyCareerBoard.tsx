@@ -3,8 +3,9 @@
    careers, and this file hands it hockey's binding (src/lib/nhlCareerSport.ts).
    Wire a new screen in the shared board, once; put a hockey word or number
    in the binding. The page and the tests keep importing this file, and it is
-   the only one that imports the NHL engine, so the other three routes never
-   load it. */
+   the only file that imports the NHL binding and engine. The NHL conquest
+   data still reaches every route through the coach career
+   (usCareerToCoach.ts), as it did before Round 900. */
 import UsCareerBoard from '@/components/us-career/UsCareerBoard';
 import { NHL_CAREER_SPORT } from '@/lib/nhlCareerSport';
 

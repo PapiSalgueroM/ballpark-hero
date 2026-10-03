@@ -8,8 +8,10 @@
  * the board; a new sport is one binding (nflCareerSport.ts and its three
  * siblings), never an `if (sport.slug === ...)` inside the board.
  *
- * This file imports no sport. A route loads the board, this file and its own
- * binding, and nothing of the other three.
+ * This file and the board import no sport, and a route reaches only its own
+ * binding (scripts/simUsCareerWeight.mjs fences those direct imports). The
+ * coach career still loads the NFL engine and the other sports' conquest data
+ * on all four routes through usCareerToCoach.ts, as it did before Round 900.
  *
  * The save is untouched by any of this: the four keys, the shape
  * { c, phase, teamQuality, coach } and the restore rule are exactly what

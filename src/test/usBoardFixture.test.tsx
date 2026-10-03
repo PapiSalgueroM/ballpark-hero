@@ -144,10 +144,13 @@ interface Coverage {
   seasons: number; event: number; extension: number; freeagency: number; rivalryBeat: number;
   rivalryChoice: number; retireCancel: number; retireConfirm: number; restartCancel: number;
   restartConfirm: number; retired: number; coach: number; coachSeasons: number; panels: number; remounts: number;
+  /** Careers started in an older era (the second career of every path). */
+  throwback: number;
 }
 const emptyCoverage = (): Coverage => ({
   seasons: 0, event: 0, extension: 0, freeagency: 0, rivalryBeat: 0, rivalryChoice: 0, retireCancel: 0,
   retireConfirm: 0, restartCancel: 0, restartConfirm: 0, retired: 0, coach: 0, coachSeasons: 0, panels: 0, remounts: 0,
+  throwback: 0,
 });
 
 class Walker {
@@ -264,7 +267,17 @@ class Walker {
         await this.click(this.choose(all.filter(b => !/^Enter the draft$/.test(squash(b.textContent ?? '')))), 'create: ');
         return true;
       }
+      /* The second career is always an older-era one (the era buttons that
+         are not today's carry the rewind mark), so every sport's binding has
+         to hand the era to its engine for the path to replay. Left to the
+         random clicks above, only two sports happened to get one. */
+      const throwback = all.find(b => squash(b.textContent ?? '').startsWith('⏪'));
+      if (this.careers === 1 && throwback && !throwback.className.includes('border-gold')) {
+        await this.click(throwback, 'create: ');
+        return true;
+      }
       await this.click(byText(body, /^Enter the draft$/)!, 'create: ');
+      if (((this.save()?.c?.eraId as string | undefined) ?? 'now') !== 'now') this.cov.throwback += 1;
       return true;
     }
     const save = this.save();
@@ -342,15 +355,27 @@ interface SportFixture {
 }
 interface Fixture { header: Record<string, string>; sports: Record<string, SportFixture> }
 
-const SAVE_NAMES = ['rookie', 'mid', 'ext', 'fa', 'retired', 'coach', 'beat', 'choice', 'suspended', 'dirty'];
-/* The six the brief asks for must exist in every sport. The other four are
-   kept when the path happened to produce them (a rival beat, a rival choice)
-   or can be made from the mid save by a named edit. */
-const REQUIRED_SAVES = ['rookie', 'mid', 'ext', 'fa', 'retired', 'coach'];
+/* The last five are old-shape saves: what a save written before a repair
+   existed looks like on disk, so the restore effect's repairs are on the
+   record. Every other save is one the current code just wrote, and a repair
+   dropped from the restore would leave all of those green. */
+const LEGACY_SAVES = ['noRole', 'negNet', 'noCoachKey', 'coachPhaseNoCoach', 'retiredNoCoachKey'];
+const SAVE_NAMES = ['rookie', 'mid', 'ext', 'fa', 'retired', 'coach', 'beat', 'choice', 'suspended', 'dirty', ...LEGACY_SAVES];
+/* The six the brief asks for must exist in every sport, and so must the old
+   shapes, which are named edits of two of them. The other four are kept when
+   the path happened to produce them (a rival beat, a rival choice) or can be
+   made from the mid save by a named edit. */
+const REQUIRED_SAVES = ['rookie', 'mid', 'ext', 'fa', 'retired', 'coach', ...LEGACY_SAVES];
 
 function editSave(raw: string, edit: (c: Record<string, unknown>) => void): string {
   const s = JSON.parse(raw) as Save;
   edit(s.c as Record<string, unknown>);
+  return JSON.stringify(s);
+}
+/* The same for the fields beside the career: the phase and the coach. */
+function editWhole(raw: string, edit: (s: Record<string, unknown>) => void): string {
+  const s = JSON.parse(raw) as Record<string, unknown>;
+  edit(s);
   return JSON.stringify(s);
 }
 
@@ -387,6 +412,18 @@ async function walkPath(Board: ComponentType, key: string, seed: number, saves: 
     saves.fa = editSave(saves.mid, c => { c.contractYears = 0; });
     saves.suspended = editSave(saves.mid, c => { c.suspendedSeasons = 1; });
     saves.dirty = editSave(saves.mid, c => { c.heat = 55; c.dirtyMoney = 2.5; });
+    /* The restore's repairs, one old shape each: a career from before Round
+       182 has no role, the pre 422 money bug left a balance below zero, and a
+       save from before Round 126 has no coach key at all. */
+    saves.noRole = editSave(saves.mid, c => { delete c.role; });
+    saves.negNet = editSave(saves.mid, c => { c.netWorth = -40; });
+    saves.noCoachKey = editWhole(saves.mid, s => { delete s.coach; });
+  }
+  if (saves?.retired) {
+    /* A retired save that says coach but holds no coaching career opens on
+       the retirement screen, and one with no coach key at all does the same. */
+    saves.coachPhaseNoCoach = editWhole(saves.retired, s => { s.phase = 'coach'; s.coach = null; });
+    saves.retiredNoCoachKey = editWhole(saves.retired, s => { delete s.coach; });
   }
   return w;
 }
