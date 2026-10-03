@@ -60,7 +60,8 @@ import {
   deskCopy, nhlDeadlineRefusal, nhlDeskAfterRound, nhlDeskEdges, nhlDeskOffseason, nhlDeskRoundOptions, nhlMirrorPickMove,
   nhlNoteArrivals, nhlPicksOf, nhlScoutRead, nhlStaffOf, nhlTradeWindow, openNhlDesk, syncNhlPicks, NHL_DESK_KEYS,
 } from '@/lib/nhlGmDesk';
-import { NHL_DESK_PANELS, NHL_RECAP_PANELS, type NhlDeskFacts } from './NhlGmDesk';
+/* By its full path, not './': the waiver, roster limit and draft capital harnesses bundle a copy of this board from a temp folder. */
+import { NHL_DESK_PANELS, NHL_RECAP_PANELS, type NhlDeskFacts } from '@/components/nhl-front-office/NhlGmDesk';
 
 /* Round 180: 'fired' is new. Zero trust upstairs ends the save. */
 type Phase = 'pick' | 'hub' | 'draft' | 'recap' | 'fired';
@@ -269,7 +270,11 @@ export default function NhlFrontOfficeBoard() {
   const [pressTilt, setPressTilt] = useState<-1 | 0 | 1>(0);
   const [seasonTradeLine, setSeasonTradeLine] = useState<string | null>(null);
   /* Round 987: the GM desk. null is a save the desk has never been opened on. */
-  const [gm, setGm] = useState<GmDesk | null>(null);
+  const [gm, setGmState] = useState<GmDesk | null>(null);
+  /* Every save reads the desk from here, so a handler that has just changed
+     it saves the new one without touching any of the board's persist calls. */
+  const gmLive = useRef<GmDesk | null>(null);
+  const setGm = (d: GmDesk | null) => { gmLive.current = d; setGmState(d); };
   const [gmOpen, setGmOpen] = useState<string | null>(null);
 
   useGameCompletion('nhl-front-office', wonNow, titles * 100 + seasonsPlayed * 5);
@@ -340,10 +345,10 @@ export default function NhlFrontOfficeBoard() {
         ...(draftBatchesLeft !== null ? { draftBatchesLeft } : {}),
         mandate, trust, fired, pressTilt, seasonTradeLine,
         postseason: champion ? { series, champion, gradeLine } : null,
-        ...(gm ? { gm } : {}), ...patch,
+        ...(gmLive.current ? { gm: gmLive.current } : {}), ...patch,
       } satisfies SaveShape));
     } catch { /* full */ }
-  }, [phase, titles, seasonsPlayed, draftClass, picksLeft, draftBatchesLeft, mandate, trust, fired, pressTilt, seasonTradeLine, champion, series, gradeLine, gm]);
+  }, [phase, titles, seasonsPlayed, draftClass, picksLeft, draftBatchesLeft, mandate, trust, fired, pressTilt, seasonTradeLine, champion, series, gradeLine]);
 
   const label = (abbr: string) => {
     const t = NHL_TEAM_MAP.get(abbr);
@@ -377,7 +382,7 @@ export default function NhlFrontOfficeBoard() {
        before it waits for the GM to open a desk box. */
     const desk = openNhlDesk(lg, abbr);
     setGm(desk); setGmOpen(null);
-    persist({ phase: 'hub', titles: 0, seasonsPlayed: 0, mandate: m, trust: FO_TRUST_START, fired: false, pressTilt: 0, seasonTradeLine: null, gm: desk }, lg, abbr);
+    persist({ phase: 'hub', titles: 0, seasonsPlayed: 0, mandate: m, trust: FO_TRUST_START, fired: false, pressTilt: 0, seasonTradeLine: null }, lg, abbr);
     } catch {
       if (alive.current) setStartError('We could not load the opening ratings. Try your team again. Your existing save is unchanged.');
     } finally {
@@ -491,7 +496,7 @@ export default function NhlFrontOfficeBoard() {
       setPhase('recap');
       setLeague(lg);
       setFeed(newFeed); setFeedSlam(null);
-      persist({ phase: nowFired ? 'fired' : 'recap', titles: nt, seasonsPlayed: ns, trust: newTrust, fired: nowFired, postseason: { series: sr, champion: champ, gradeLine: gradeVerdict }, ...(nextGm ? { gm: nextGm } : {}) }, lg, myTeam);
+      persist({ phase: nowFired ? 'fired' : 'recap', titles: nt, seasonsPlayed: ns, trust: newTrust, fired: nowFired, postseason: { series: sr, champion: champ, gradeLine: gradeVerdict } }, lg, myTeam);
       return;
     }
     lg.round += 1;
@@ -499,7 +504,7 @@ export default function NhlFrontOfficeBoard() {
     if (nextGm && nhlTradeWindow(league).open && !nhlTradeWindow(lg).open) newFeed.splice(1, 0, '🔒 The trade deadline has passed. Deals open again once the season is over.');
     setLeague(lg);
     setFeed(newFeed); setFeedSlam(null);
-    persist(nextGm ? { gm: nextGm } : {}, lg, myTeam);
+    persist({}, lg, myTeam);
   };
 
   /* Round 431: the step after the recap, a draft class for the season just
@@ -576,7 +581,7 @@ export default function NhlFrontOfficeBoard() {
       return;
     }
     setLeague(lg);
-    persist({ draftClass: nextClass, picksLeft: nextPicks, draftBatchesLeft: beforeBatches - batchCount, ...(deskNow ? { gm: deskNow } : {}) }, lg, myTeam);
+    persist({ draftClass: nextClass, picksLeft: nextPicks, draftBatchesLeft: beforeBatches - batchCount }, lg, myTeam);
   };
 
   const finishDraft = (lg: NhlLeague, deskNow: GmDesk | null = gm) => {
@@ -611,7 +616,7 @@ export default function NhlFrontOfficeBoard() {
       setFeedSlam(null); setTab(null);
       setLeague(lg);
       setPicksLeft(0); setDraftBatchesLeft(0);
-      persist({ phase: 'hub', draftClass: null, picksLeft: 0, draftBatchesLeft: 0, mandate: m, pressTilt: 0, seasonTradeLine: null, postseason: null, ...(deskAfter ? { gm: deskAfter } : {}) }, lg, myTeam);
+      persist({ phase: 'hub', draftClass: null, picksLeft: 0, draftBatchesLeft: 0, mandate: m, pressTilt: 0, seasonTradeLine: null, postseason: null }, lg, myTeam);
   };
 
   const draftWithoutPicks = () => {
@@ -694,7 +699,7 @@ export default function NhlFrontOfficeBoard() {
       if (signed) slamFeed(`✍️ ${signed.name} (${signed.pos}) signs, $${signed.salary}M a year.`);
       const deskNow = gm ? nhlNoteArrivals(gm, lg, myTeam, [pid], 'signing') : null;
       if (deskNow) setGm(deskNow);
-      setLeague(lg); persist(deskNow ? { gm: deskNow } : {}, lg, myTeam);
+      setLeague(lg); persist({}, lg, myTeam);
     }
   };
   /* Round 190: the direct deal is a phone call now. The instant verdict
@@ -764,7 +769,7 @@ export default function NhlFrontOfficeBoard() {
       setSeasonTradeLine(line);
       const deskNow = deskAfterTrade(lg, talks.partner, pkg.theirPlayerId, pickRound);
       if (deskNow) setGm(deskNow);
-      setLeague(lg); persist({ seasonTradeLine: line, ...(deskNow ? { gm: deskNow } : {}) }, lg, myTeam);
+      setLeague(lg); persist({ seasonTradeLine: line }, lg, myTeam);
     } else {
       setFeed(f => ['❌ The agreed deal no longer fits (cap or roster rules).', ...f].slice(0, 6));
     }
@@ -790,7 +795,7 @@ export default function NhlFrontOfficeBoard() {
       setSeasonTradeLine(line);
       const deskNow = deskAfterTrade(lg, o.teamId, o.playerId, pickRound);
       if (deskNow) setGm(deskNow);
-      setLeague(lg); persist({ seasonTradeLine: line, ...(deskNow ? { gm: deskNow } : {}) }, lg, myTeam);
+      setLeague(lg); persist({ seasonTradeLine: line }, lg, myTeam);
     } else {
       setFeed(f => ['❌ That offer went stale, shop him again.', ...f].slice(0, 6));
       setShopOffers([]); setShopTried(false);
@@ -815,13 +820,13 @@ export default function NhlFrontOfficeBoard() {
       const lg: NhlLeague = JSON.parse(JSON.stringify(league));
       syncNhlPicks(lg, nhlPicksOf(desk, lg));
       setGm(desk); setLeague(lg);
-      persist({ gm: desk }, lg, myTeam);
+      persist({}, lg, myTeam);
     }
     setGmOpen(key);
   };
   const changeDesk = (next: GmDesk) => {
     setGm(next);
-    persist({ gm: next }, league, myTeam);
+    persist({}, league, myTeam);
   };
   const deskFacts = (hub: NhlDeskFacts['hub']): NhlDeskFacts | null => league ? {
     teamId: myTeam, teamLabel: label(myTeam), seasonsPlayed, phase, hub, league,
@@ -829,7 +834,7 @@ export default function NhlFrontOfficeBoard() {
     say: line => setFeed(f => [line, ...f].slice(0, 6)),
     commit: (lg, desk, line) => {
       setGm(desk); setLeague(lg); slamFeed(line);
-      persist({ gm: desk }, lg, myTeam);
+      persist({}, lg, myTeam);
     },
   } : null;
 
