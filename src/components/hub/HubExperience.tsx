@@ -1,4 +1,4 @@
-import { useState, type CSSProperties } from 'react';
+import { useRef, useState, type CSSProperties } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { ArrowUpRight, CalendarDays, Gamepad2, Search, Shuffle, X } from 'lucide-react';
 import type { GameDef } from '@/data/gameRegistry';
@@ -37,6 +37,7 @@ export default function HubExperience({ hub, games }: { hub: SportHub; games: Ga
   const navigate = useNavigate();
   const [filter, setFilter] = useState<HubFilter>('all');
   const [query, setQuery] = useState('');
+  const searchRef = useRef<HTMLInputElement>(null);
   const [continuations] = useState<Record<string, string>>(() => readContinuations(games));
   const arena = arenas[hub.route as keyof typeof arenas] ?? arenas['/soccer'];
   const visible = filterHubGames(games, filter, query);
@@ -107,8 +108,8 @@ export default function HubExperience({ hub, games }: { hub: SportHub; games: Ga
           <div role="group" aria-label="Filter games" className={styles.filters}>
             {filters.filter(item => item.count > 0).map(item => <button key={item.id} aria-pressed={filter === item.id} onClick={() => setFilter(item.id)}>{item.label}<span>{item.count}</span></button>)}
           </div>
-          <label className={styles.search}><Search aria-hidden="true" /><input aria-label={`Search ${hub.navLabel} games`} value={query} onChange={event => setQuery(event.target.value)} placeholder="Find your game" />
-            {query && <button onClick={() => setQuery('')} aria-label="Clear game search"><X /></button>}
+          <label className={styles.search}><Search aria-hidden="true" /><input ref={searchRef} aria-label={`Search ${hub.navLabel} games`} value={query} onChange={event => setQuery(event.target.value)} placeholder="Find your game" />
+            {query && <button onClick={() => { setQuery(''); searchRef.current?.focus({ preventScroll: true }); }} aria-label="Clear game search"><X /></button>}
           </label>
         </div>
         <p role="status" className={styles.resultCount}>{visible.length} {visible.length === 1 ? 'game' : 'games'}{query ? ` matching "${query.trim()}"` : ''}</p>
@@ -122,7 +123,7 @@ export default function HubExperience({ hub, games }: { hub: SportHub; games: Ga
           <p className={styles.sectionNote}>{hub.quick.blurb}</p>
           <div className={styles.gameGrid}>{quick.map(game => card(game))}</div>
         </section>}
-        {visible.length === 0 && <div className={styles.empty}><Search aria-hidden="true" /><h3>No games match that search.</h3><p>Try a shorter name, or see the full collection.</p><button onClick={() => { setQuery(''); setFilter('all'); }}>Show all {hub.navLabel} games</button></div>}
+        {visible.length === 0 && <div className={styles.empty}><Search aria-hidden="true" /><h3>No games match that search.</h3><p>Try a shorter name, or see the full collection.</p><button onClick={() => { setQuery(''); setFilter('all'); searchRef.current?.focus({ preventScroll: true }); }}>Show all {hub.navLabel} games</button></div>}
       </section>
     </div>
   );
