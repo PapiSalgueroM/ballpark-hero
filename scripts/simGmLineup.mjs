@@ -120,7 +120,7 @@ try {
   process.exit(1);
 }
 
-const SEEDS = [11, 29, 47, 83, 131];
+const SEEDS = process.env.GM_LINEUP_SEEDS ? process.env.GM_LINEUP_SEEDS.split(",").map(Number) : [11, 29, 47, 83, 131];
 const SPORT = { mlb: S.mlbLineupSport(), nhl: S.nhlLineupSport(), nfl: S.nflLineupSport() };
 const ENGINE = { mlb: t => MLB.mlbStrength(t), nhl: t => NHL.nhlStrength(t), nfl: t => NFL.teamStrength(t) };
 const pick = (rng, xs) => xs[Math.floor(rng() * xs.length)];
@@ -370,6 +370,75 @@ console.log('3) a starter on short rest is weaker');
   }
   console.log(`   ${men} starters priced a game short; ${fives} five man turns on full rest, ${fours} four man turns all short and weaker, ${shortAfterHurt} of ${hurtWalks} walks went short after a starter was hurt`);
   ok(3, 'enough turns walked', fours >= 100 && hurtWalks >= 100, `${fours}, ${hurtWalks}`);
+}
+
+/* ---- 4. the spread of team strength against the real league ------------- */
+console.log('4) the spread of team strength sits inside a band set from the real league');
+const SPREAD = JSON.parse(fs.readFileSync(path.join(ROOT, 'scripts', 'data', 'gmLineupRealSpread.json'), 'utf8'));
+const sdOf = xs => { const m = xs.reduce((a, b) => a + b, 0) / xs.length; return Math.sqrt(xs.reduce((a, b) => a + (b - m) ** 2, 0) / xs.length); };
+/* Each engine's own chance of winning one game, from two strengths. Checked
+   against the engine's function below, so a change there cannot slip by. */
+const WIN = {
+  mlb: (a, b) => 1 / (1 + Math.pow(10, -(a - b) / 25)),
+  nhl: (a, b) => 1 / (1 + Math.pow(10, -(a - b) / 14)),
+  nfl: (a, b) => (1 / (1 + Math.pow(10, -(a - b + 2) / 14)) + 1 - 1 / (1 + Math.pow(10, -(b - a + 2) / 14))) / 2,
+};
+const ENGINE_WIN = { mlb: (x, y) => MLB.mlbWinProb(x, y), nhl: (x, y) => NHL.nhlWinProb(x, y), nfl: (x, y) => (NFL.winProb(x, y) + (1 - NFL.winProb(y, x))) / 2 };
+const opening = (sport, seed) => (sport === 'mlb' ? MLB.initMlbLeague(lcg(seed)) : sport === 'nhl' ? NHL.initNhlLeague(lcg(seed), NHL_OPENING) : NFL.initLeague(lcg(seed), { depth: FO_DEPTH }));
+/* A season's win percentage spread from a set of strengths: the spread of
+   each club's expected share against the league, plus a season's luck. */
+const seasonSd = (sport, strengths) => {
+  const exp = strengths.map((s, i) => strengths.reduce((acc, o, j) => (i === j ? acc : acc + WIN[sport](s, o)), 0) / (strengths.length - 1));
+  const luck = exp.reduce((acc, p) => acc + p * (1 - p), 0) / exp.length / SPREAD[sport].games;
+  return Math.sqrt(sdOf(exp) ** 2 + luck);
+};
+/* A GM's lineup: the sim's own, then six random taps of the panel. */
+function fiddled(sport, team, rng) {
+  const sp = SPORT[sport];
+  if (sp.chartOnly) return { schemes: { skill: pick(rng, ['11', '12', '21']), def: pick(rng, ['43', '34']) } };
+  let choice = {};
+  for (let k = 0; k < 6; k++) {
+    const g = pick(rng, sp.groups);
+    const placed = L.gmResolveLineup(sp, team, choice)[g.key];
+    const pool = L.gmGroupPool(g, sp.men(team));
+    const a = pick(rng, placed.filter(Boolean)), b = pick(rng, pool);
+    if (!a || !b) continue;
+    choice = L.gmLineupSwap(sp, team, choice, g.key, { id: a.id }, { id: b.id }) ?? choice;
+  }
+  return choice;
+}
+/* Bands, on the median over the seeds, from 17 seeds measured 2026-10-03:
+   sim season spread over the real one, MLB 1.066, NHL 1.024, NFL 0.810 on
+   every seed (the opening rosters are real, so the seed barely moves them);
+   with six random taps of the panel per club over without, MLB 0.948 to
+   1.151 (median about 1.02), NHL 0.963 to 1.027 (about 0.98), NFL 0.991 to
+   1.009 (about 1.00). */
+const BAND = { real: [0.7, 1.3], lineup: [0.9, 1.1] };
+const ratios = { mlb: [], nhl: [], nfl: [] };
+const moved = { mlb: [], nhl: [], nfl: [] };
+for (const sport of ['mlb', 'nhl', 'nfl']) {
+  const real = sdOf(Object.values(SPREAD[sport].records).map(r => (r[0] + r[2] * (sport === 'nfl' ? 0.5 : 0)) / SPREAD[sport].games));
+  let formula = 0, pairs = 0;
+  for (const seed of SEEDS) {
+    const lg = opening(sport, seed);
+    const teams = Object.values(lg.teams);
+    const rng = lcg(seed * 31 + 7);
+    for (let k = 0; k < 20; k++) {
+      const x = pick(rng, teams), y = pick(rng, teams);
+      const mine = WIN[sport](L.gmLineupStrength(SPORT[sport], x), L.gmLineupStrength(SPORT[sport], y));
+      pairs += 1;
+      if (Math.abs(mine - ENGINE_WIN[sport](x, y)) < 1e-12) formula += 1;
+    }
+    const base = teams.map(t => L.gmLineupStrength(SPORT[sport], t));
+    const gm = teams.map(t => L.gmLineupStrength(SPORT[sport], t, fiddled(sport, t, rng)));
+    ratios[sport].push(seasonSd(sport, base) / real);
+    moved[sport].push(seasonSd(sport, gm) / seasonSd(sport, base));
+  }
+  ok(4, `${sport}: the win chance used here is the engine's own`, formula === pairs, `${formula} of ${pairs}`);
+  const r = median(ratios[sport]), m = median(moved[sport]);
+  ok(4, `${sport}: the sim's season spread sits within ${BAND.real.join(' to ')} of the real league's`, r >= BAND.real[0] && r <= BAND.real[1], r.toFixed(3));
+  ok(4, `${sport}: GM lineups keep the spread within ${BAND.lineup.join(' to ')} of the sim's own`, m >= BAND.lineup[0] && m <= BAND.lineup[1], m.toFixed(3));
+  console.log(`   ${sport}: real spread ${real.toFixed(4)}; sim season spread / real ${ratios[sport].map(r => r.toFixed(3)).join(' ')}; with GM lineups / without ${moved[sport].map(r => r.toFixed(3)).join(' ')}`);
 }
 
 /* ---- summary -------------------------------------------------------------- */
