@@ -1,0 +1,78 @@
+name: Home launch deck verification
+
+on:
+  push:
+    branches: [codex/home-launch-deck-991]
+  pull_request:
+    paths:
+      - .github/workflows/home-launch.yml
+      - scripts/qa/home991.mjs
+      - src/components/home/**
+      - src/data/homeFront.ts
+      - src/pages/Index.tsx
+
+permissions:
+  contents: read
+concurrency:
+  group: home-launch-${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    defaults:
+      run:
+        shell: bash
+    env:
+      SIM_NETWORK: offline
+      ENGINES: chromium
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install verification dependencies
+        run: |
+          mkdir -p home-launch-artifacts
+          npm ci
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium
+          python -m pip install fonttools pillow
+      - name: Type check and build
+        id: build
+        run: |
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee home-launch-artifacts/types.log
+          npm run build 2>&1 | tee home-launch-artifacts/build.log
+      - name: Home behavior and existing rejection controls
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          ONLY=simHomeFront,simHomeCopy node scripts/runAllSims.mjs 2>&1 | tee home-launch-artifacts/home.log
+          for control in stage savekey continuekey continuecold; do
+            HOME_FRONT_CONTROL="$control" node scripts/simHomeFront.mjs 2>&1 | tee "home-launch-artifacts/control-$control.log"
+          done
+      - name: All built readers, search and guide checks
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          for harness in simAdsense simBrand simHeadTags simHiddenPages simHubs simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets simSiteSearch simGuideHeadings; do
+            ONLY="$harness" node scripts/runAllSims.mjs --browser 2>&1 | tee "home-launch-artifacts/$harness.log"
+          done
+      - name: Actual mobile fold and saved-game navigation
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: ONLY=playHomeFold node scripts/runAllSims.mjs --browser 2>&1 | tee home-launch-artifacts/home-fold.log
+      - name: Four viewport screenshots and keyboard navigation
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: node scripts/qa/home991.mjs 2>&1 | tee home-launch-artifacts/native.log
+      - name: Save review evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: home-launch-${{ github.run_id }}-${{ github.run_attempt }}
+          retention-days: 1
+          path: home-launch-artifacts/
