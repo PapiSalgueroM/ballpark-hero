@@ -8,6 +8,7 @@ import type { BestRecord, PerfectSeasonSportKey } from '@/lib/perfectSeason';
 vi.mock('@/components/game/ShareButtons', () => ({ default: () => <div data-share-stub /> }));
 
 import { SeasonVerdict, verdictOutcome } from '@/components/perfect-season/SeasonVerdict';
+import { SeasonOddsLines } from '@/components/perfect-season/SeasonOdds';
 
 afterEach(cleanup);
 
@@ -42,7 +43,6 @@ function renderVerdict(sport: (typeof SPORTS)[number], kind: Kind) {
   const view = render(
     <SeasonVerdict
       gamePath={sport.path}
-      sport={sport.key}
       wins={wins}
       losses={losses}
       perfect={perfect}
@@ -50,10 +50,8 @@ function renderVerdict(sport: (typeof SPORTS)[number], kind: Kind) {
       badge={perfect ? '🏆' : '📉'}
       headline={headline}
       overallLabel={88}
-      overall={87.6}
       spins={9}
-      best={best}
-      newBest={newBest}
+      odds={<SeasonOddsLines sport={sport.key} overall={87.6} perfect={perfect} best={best} newBest={newBest} />}
       shareName="Perfect Season"
       emojiGrid="🟩🟥"
       onRestart={() => {}}

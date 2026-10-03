@@ -3,8 +3,6 @@ import { RotateCcw, Trophy } from 'lucide-react';
 import ShareButtons from '@/components/game/ShareButtons';
 import { ResultMoment, type ResultOutcome } from '@/components/game/ResultMoment';
 import { CelebrationStyles, ConfettiBurst } from '@/components/club-manager/Celebration';
-import type { BestRecord, PerfectSeasonSportKey } from '@/lib/perfectSeason';
-import { SeasonOddsLines } from '@/components/perfect-season/SeasonOdds';
 
 /* Round 954: the end of a Perfect Season run, one card for all four sports.
    It used to be copied into each page as a static emoji, a headline and a
@@ -25,7 +23,6 @@ import { SeasonOddsLines } from '@/components/perfect-season/SeasonOdds';
 export interface SeasonVerdictProps {
   /** The page's route; the moment takes the sport's ink and mark from it. */
   gamePath: string;
-  sport: PerfectSeasonSportKey;
   wins: number;
   losses: number;
   perfect: boolean;
@@ -37,13 +34,13 @@ export interface SeasonVerdictProps {
   headline: ReactNode;
   /** The overall as the page prints it (rounded). */
   overallLabel: ReactNode;
-  /** The raw overall the sim played, for the odds line. */
-  overall: number;
   spins: number;
   /** Today's date when this was the daily, printed in the meta line. */
   dailyDate?: string;
-  best: BestRecord | null;
-  newBest: boolean;
+  /** The page's own SeasonOddsLines (Round 820): the odds at the raw overall
+      and the best line, whose "New personal best." slams in on a new best.
+      The page keeps that wiring so simPerfectSeasonOdds still reads it there. */
+  odds: ReactNode;
   /** The share card's game name, e.g. "17-0 Perfect Season (Daily)". */
   shareName: string;
   emojiGrid: string;
@@ -60,7 +57,7 @@ export function verdictOutcome(perfect: boolean, wins: number, closeAt: number):
 }
 
 export function SeasonVerdict(props: SeasonVerdictProps) {
-  const { gamePath, sport, wins, losses, perfect, closeAt, badge, headline, overallLabel, overall, spins, dailyDate, best, newBest, shareName, emojiGrid, countdown, onBackToModes, onRestart } = props;
+  const { gamePath, wins, losses, perfect, closeAt, badge, headline, overallLabel, spins, dailyDate, odds, shareName, emojiGrid, countdown, onBackToModes, onRestart } = props;
   const daily = dailyDate !== undefined;
   return (
     <div className="bg-card border border-border rounded-2xl p-6 text-center" data-season-verdict>
@@ -80,7 +77,7 @@ export function SeasonVerdict(props: SeasonVerdictProps) {
         {daily && `Daily · ${dailyDate} · `}
         Team overall {overallLabel} · drafted in {spins} spin{spins === 1 ? '' : 's'}
       </p>
-      <SeasonOddsLines sport={sport} overall={overall} perfect={perfect} best={best} newBest={newBest} />
+      {odds}
       {perfect && (
         <p className="text-sm text-correct font-semibold mb-2 inline-flex items-center gap-1.5">
           <Trophy className="w-4 h-4" /> Share this. Nobody will believe you.

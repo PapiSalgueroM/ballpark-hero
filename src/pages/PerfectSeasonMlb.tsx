@@ -26,7 +26,7 @@ import {
 import { recordCompletion, getCurrentPlayerName } from '@/lib/completions';
 import { perfectSeasonTagline, MLB_WINS_RECORD } from '@/lib/perfectSeasonOdds';
 import { usePerfectSeasonBest } from '@/hooks/usePerfectSeasonBest';
-import { BestSoFar } from '@/components/perfect-season/SeasonOdds';
+import { BestSoFar, SeasonOddsLines } from '@/components/perfect-season/SeasonOdds';
 import { SeasonVerdict } from '@/components/perfect-season/SeasonVerdict';
 
 const SPORT_KEY = 'mlb';
@@ -616,7 +616,6 @@ const PerfectSeasonMlb = () => {
                  Round 820's odds and best lines live inside it. */
               <SeasonVerdict
                 gamePath="/perfect-season-mlb"
-                sport={SPORT_KEY}
                 wins={sim.wins}
                 losses={sim.losses}
                 perfect={sim.perfect}
@@ -634,11 +633,9 @@ const PerfectSeasonMlb = () => {
                   ? `A juggernaut, just shy of ${MLB_WINS_RECORD}.`
                   : 'The wheel giveth, the wheel taketh.'}
                 overallLabel={sim.overall}
-                overall={overall}
                 spins={spins}
                 dailyDate={mode === 'daily' ? todayStr : undefined}
-                best={best}
-                newBest={newBest}
+                odds={<SeasonOddsLines sport={SPORT_KEY} overall={overall} perfect={sim.perfect} best={best} newBest={newBest} />}
                 shareName={mode === 'daily' ? '162-0 Perfect Season (Daily)' : '162-0 Perfect Season'}
                 emojiGrid={emojiGrid}
                 countdown={countdown}

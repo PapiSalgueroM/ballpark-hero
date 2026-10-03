@@ -31,7 +31,7 @@ import {
 import { recordCompletion, getCurrentPlayerName } from '@/lib/completions';
 import { perfectSeasonTagline } from '@/lib/perfectSeasonOdds';
 import { usePerfectSeasonBest } from '@/hooks/usePerfectSeasonBest';
-import { BestSoFar } from '@/components/perfect-season/SeasonOdds';
+import { BestSoFar, SeasonOddsLines } from '@/components/perfect-season/SeasonOdds';
 import { SeasonVerdict } from '@/components/perfect-season/SeasonVerdict';
 
 const SPORT_KEY = 'nfl';
@@ -730,7 +730,6 @@ const PerfectSeasonNfl = () => {
                   Round 820's odds and best lines live inside it. */}
               <SeasonVerdict
                 gamePath="/perfect-season-nfl"
-                sport={SPORT_KEY}
                 wins={sim.wins}
                 losses={sim.losses}
                 perfect={sim.perfect}
@@ -744,11 +743,9 @@ const PerfectSeasonNfl = () => {
                   ? 'A contender, but not perfect.'
                   : 'The wheel giveth, the wheel taketh.'}
                 overallLabel={ovrDisplay}
-                overall={overall}
                 spins={spins}
                 dailyDate={mode === 'daily' ? todayStr : undefined}
-                best={best}
-                newBest={newBest}
+                odds={<SeasonOddsLines sport={SPORT_KEY} overall={overall} perfect={sim.perfect} best={best} newBest={newBest} />}
                 shareName={mode === 'daily' ? '17-0 Perfect Season (Daily)' : '17-0 Perfect Season'}
                 emojiGrid={emojiGrid}
                 countdown={countdown}
