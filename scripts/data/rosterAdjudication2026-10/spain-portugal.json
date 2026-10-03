@@ -515,6 +515,68 @@
      "says": "not listed"
     }
    ]
+  },
+  {
+   "name": "Jeremiah St. Juste",
+   "from": "Sporting CP",
+   "to": "Feyenoord",
+   "realClub": "Feyenoord",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1996-10-19, the Dutch centre back ESPN writes as Jerry St. Juste. Sporting's number 3 in 2024-25, gone from Sporting's own 2026-27 squad page and from ESPN's 2025-26 one; Feyenoord's number 6, playing their Eredivisie and Champions League games in August and September 2026.",
+   "sources": [
+    {
+     "family": "A",
+     "url": "https://eredivisie.com/competition/clubs/feyenoord/",
+     "publisher": "Eredivisie (Feyenoord club page, carrying 2026/27 news)",
+     "readOn": "2026-10-03",
+     "says": "J. St. Juste, number 6, defender, profile at eredivisie.com/clubs/feyenoord/players/jeremiah-israel-st-juste/"
+    },
+    {
+     "family": "A",
+     "url": "https://www.sporting.pt/pt/futebol/equipa-principal/plantel",
+     "publisher": "Sporting CP (first team squad, season 2026-27)",
+     "readOn": "2026-10-03",
+     "says": "not among the nine defenders or anywhere in the squad"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/player/_/id/215524/jerry-st-juste",
+     "publisher": "ESPN (player page)",
+     "readOn": "2026-10-03",
+     "says": "Feyenoord Rotterdam, shirt 6, born 1996-10-19, played v Cambuur 2026-08-23 to v Utrecht 2026-09-20"
+    }
+   ]
+  },
+  {
+   "name": "Gonçalo Borges",
+   "from": "Porto",
+   "to": "Feyenoord",
+   "realClub": "Feyenoord",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 2001-03-29, the winger (Gonçalo Óscar Albuquerque Borges on the league's profile). In Porto's 2024-25 squad on ESPN, not in their 2025-26 or 2026-27 one; Feyenoord's number 11, played at Go Ahead Eagles on 2026-08-16 and against Barcelona on 2026-09-09.",
+   "sources": [
+    {
+     "family": "A",
+     "url": "https://eredivisie.com/competition/clubs/feyenoord/",
+     "publisher": "Eredivisie (Feyenoord club page, carrying 2026/27 news)",
+     "readOn": "2026-10-03",
+     "says": "Gonçalo Borges, number 11, attacker, profile at eredivisie.com/clubs/feyenoord/players/goncalo-oscar-albuquerque-borges/"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/player/_/id/332362/goncalo-borges",
+     "publisher": "ESPN (player page)",
+     "readOn": "2026-10-03",
+     "says": "Feyenoord Rotterdam, shirt 11, born 2001-03-29"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/437",
+     "publisher": "ESPN (FC Porto squad page, season 2026-27)",
+     "readOn": "2026-10-03",
+     "says": "not listed"
+    }
+   ]
   }
  ],
  "removedClubNotModelled": [
