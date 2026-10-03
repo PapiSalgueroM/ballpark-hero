@@ -566,7 +566,7 @@
    "from": "Le Havre",
    "realClub": "Al-Duhail",
    "adjudicatedOn": "2026-10-03",
-   "note": "Born 1994-04-07. Left Le Havre on a free and joined Al-Duhail on 2025-09-28; their number 16, with AFC Champions League Elite matches. Qatar is not modelled.",
+   "note": "Born 1994-04-07. Left Le Havre on a free and joined Al-Duhail on 2025-09-28; their number 16, with AFC Champions League Elite matches in the autumn of 2025. Qatar is not modelled. The realClub value is thin on currency: ESPN's newest Al-Duhail match for him is from October 2025 and Soccerway shows no contract end, so Al-Duhail is the last club both publishers record rather than one confirmed for 2026-27. The removal from Le Havre stands either way, on Le Havre's own squad and ESPN's.",
    "sources": [
     {"family": "A", "url": "https://hac.football/fr/players?competition=LI1", "publisher": "Le Havre AC (Ligue 1 squad)", "readOn": "2026-10-03", "says": "not listed"},
     {"family": "B", "url": "https://us.soccerway.com/player/desmas-arthur/xMzvOmz3/transfers", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Le Havre to Al-Duhail free 2025-09-28, born 1994-04-07, goalkeeper"},
@@ -644,7 +644,7 @@
   {
    "name": "Gaetano Castrovilli",
    "from": "Lazio",
-   "why": "Not at Lazio: he left them on a free to Bari on 2025-08-21 and joined Cesena on 2026-02-02. He is not in Cesena's 2026/2027 squad, and Soccerway shows no current club. Unattached is INFERRED, medium confidence: ESPN still names Cesena but shows no match for him after 2026-05-08. Off Lazio is certain, and neither Cesena (Serie B) nor a free agent is modelled, so the in-game effect, removal, is the same either way. Re-check at the next adjudication.",
+   "why": "Not at Lazio: he left them on a free to Bari on 2025-08-21 and joined Cesena on 2026-02-02. He is not in Cesena's 2026/2027 squad, and Soccerway shows no current club. Unattached is INFERRED, medium confidence, and does NOT meet the brief's bar of two sources for the status itself: ESPN still names Cesena but shows no match for him after 2026-05-08, and no second publisher says he is without a club (also tried: the Lega Serie A player page, which returns 404, and Cesena's site search; Transfermarkt is blocked to the reader). What IS two-sourced is that he is off Lazio (the league page and ESPN's 2026-27 Lazio squad), and neither Cesena (Serie B) nor a free agent is modelled, so the in-game effect, removal, is the same either way. Re-check at the next adjudication.",
    "adjudicatedOn": "2026-10-03",
    "note": "Born 1997-02-17.",
    "sources": [
@@ -658,7 +658,7 @@
   {
    "name": "Alessio Iovine",
    "from": "Como",
-   "why": "Not at Como: neither the league's current Como squad nor ESPN's 2026-27 Como squad lists him. Soccerway records his career as ended. Retired rests on that ONE source (ESPN's player page still says Como, with no shirt number and no match), so it is medium confidence. Off Como is certain, and no club is named anywhere, so the in-game effect, removal, is two-sourced. Re-check at the next adjudication.",
+   "why": "Not at Como: neither the league's current Como squad nor ESPN's 2026-27 Como squad lists him. Soccerway records his career as ended. Retired rests on that ONE source (ESPN's player page still says Como, with no shirt number and no match, and ESPN's search lists him as a Como player, both stale against ESPN's own 2026-27 Como squad), so it is medium confidence and does NOT meet the brief's bar of two sources for the status itself (also tried: the Lega Serie A player page, which returns 404, and Como's site search, which finds only a 2024 feature; Transfermarkt is blocked to the reader and the FotMob API returns 404). Off Como is two-sourced (the league page and ESPN's 2026-27 Como squad), and no current club is named anywhere, so the in-game effect, removal, rests on both families. Re-check at the next adjudication.",
    "adjudicatedOn": "2026-10-03",
    "note": "Born 1991-02-01, a Como midfielder since July 2019.",
    "sources": [
