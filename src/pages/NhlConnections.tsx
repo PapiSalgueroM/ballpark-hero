@@ -57,8 +57,22 @@ const NhlConnections = () => {
     if (notice.id > focusedReceipt.current && notice.text && !showRules) {
       focusedReceipt.current = notice.id;
       actionRef.current?.focus({ preventScroll: true });
+      const frame = requestAnimationFrame(() => {
+        const bench = receiptRef.current;
+        const action = actionRef.current;
+        if (!bench || !action || gameStatus !== 'playing') return;
+        const benchBox = bench.getBoundingClientRect();
+        const actionBox = action.getBoundingClientRect();
+        if (benchBox.top >= 0 && actionBox.bottom > window.innerHeight) {
+          bench.scrollIntoView({
+            behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
+            block: 'start',
+          });
+        }
+      });
+      return () => cancelAnimationFrame(frame);
     }
-  }, [notice.id, notice.text, showRules]);
+  }, [notice.id, notice.text, showRules, gameStatus, receiptRef]);
 
   useEffect(() => {
     let seen = false;
