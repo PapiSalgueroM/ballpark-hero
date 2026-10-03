@@ -193,7 +193,7 @@ const NONE: DeskEffect = { kind: 'none' };
 /** The man whose head has dropped furthest, if anybody's has. */
 function lowestMorale(s: CareerState): { id: string; name: string; morale: number } | null {
   const p = s.squad
-    .filter(x => !x.isYouth && !x.onLoan && x.morale < 55)
+    .filter(x => !x.isYouth && x.morale < 55)
     .sort((a, b) => a.morale - b.morale || a.id.localeCompare(b.id))[0];
   return p ? { id: p.id, name: p.name, morale: Math.round(p.morale) } : null;
 }
@@ -223,7 +223,7 @@ export const DECK: DeckCard[] = [
   },
   {
     id: 'quietWord', from: 'The head coach', fits: () => true, who: lowestMorale,
-    text: (_s, who) => `The head coach says ${who?.name ?? 'one of the squad'} has gone quiet around the place (his morale is down at ${who?.morale ?? 0}) and a word from the manager would help.`,
+    text: (_s, who) => `The head coach flags ${who?.name ?? 'one of the squad'}: his morale is down at ${who?.morale ?? 0}, the lowest in the first team squad, and a word from the manager would help.`,
     options: [
       { verb: 'Take him for a coffee', effect: move('morale', 6) },
       { verb: 'Leave it to the coach', effect: NONE },
@@ -424,6 +424,8 @@ export function answerDecision(career: CareerState, id: string, optionIdx: numbe
     const squad = career.squad.map(x => (x.id === p.id ? { ...x, morale } : x));
     return close(`Done. ${p.name}'s morale ${signed(round1(morale - p.morale))}.`, undefined, { squad });
   }
-  const budget = round1(career.budget + delta);
+  /* Exactly the stated amount: a budget can carry hundredths, so snapping the
+     sum to a tenth could move it by more or less than the button says. */
+  const budget = Math.round((career.budget + delta) * 1000) / 1000;
   return close(`Done. ${effectWords({ kind: 'move', meter: 'budget', delta: round1(budget - career.budget) }, career)}.`, undefined, { budget });
 }
