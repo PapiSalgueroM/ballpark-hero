@@ -63,7 +63,51 @@ Final artifact11273433102,1847684 bytes, was downloaded and SHA256-verified:
 Local evidence: C:/Users/antho/AppData/Local/Temp/dukb-rugby998-ci-2026-10-03/31ce1b24/evidence.
 User preview: C:/Users/antho/.codex/visualizations/2026/10/03/01a10028-7165-70b1-90e1-1946dd227be4/rugby-league-preview998.png.
 
-## Remaining publication blocker
+## Final combined integration accepted
+
+2026-10-03. PR113 merged head `22dcb67ac04baf51bb87f34ef45f0e98bb332f0d`
+as `ba7708f84e424ca11626608a5830368eca8af1b9`. The actual merge, candidate
+and tested PR checkout `928e739efb40651db968956eea5d4526abff1dda` share tree
+`7939371cf3102ab30b06bc38e43ce89b0831484c`. This includes published Release Z
+and the accepted Rank Em circuit from PR114.
+
+Remote [run37126966275](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/37126966275)
+passed real app types/build, all 15 normal cases and 16 effective controls,
+both original compatibility gates, all 17 built readers and five native profiles.
+Individual control reports each contain exactly one intended assertion failure,
+two passing legacy baselines and 12 intentional skips. All 17 runner logs hold
+eight inputs byte for byte. The changed control copies hash-match the previously
+accepted copies. All nine rugby source/test/fixture/workflow paths are unchanged
+from the accepted31ce1b24 candidate. No runtime fault earned control credit.
+
+The final native report retains 31 independently checked claims, 21 screenshots,
+42 width checks, 117 positive visibility checks and two effective geometry
+controls. All five profiles passed with no browser/asset errors, score writes
+or protected-save writes. Final320px and390px intro, reveal and results were
+visually reviewed: complete claim, winner and action remain readable together.
+
+Final artifact11274738049 (1,848,704 bytes) was downloaded and hash verified:
+`65498c8d47bbe2d32fbe883737dae0f69908ceeba4efcbfb7b516c0ccc589a3a`.
+Evidence: `C:/Users/antho/AppData/Local/Temp/dukb-rugby998-ci-2026-10-03/22dcb67a/evidence/`.
+This accepts integration, not publication. Publish accepted main and verify the
+actual public Rugby League and Legends circuit modes before claiming delivery.
+No local runtime gates or production database probes were performed.
+
+## Integration after Release Z
+
+The previous publication dependency is resolved: Claude published997 in
+Release Z, and Codex subsequently played the actual public Shot lab. The
+Rugby League branch merged Release Z main87bac711 without changing any owned
+rugby source. Head8382fa88 passed remote run37126463822, including real app
+types/build, all outcome/control gates, 17 readers and five native profiles.
+Artifact SHA256: `922304959b81f027e1cb2832d379193cd8743aa963a6f05e4435020e3b030b2e`.
+
+PR114 then merged the independently accepted Rank Em circuit as mainb1b8a289.
+PR113 is now incorporating that accepted head and these documentation receipts
+for a final combined remote check. Do not infer publication from either merge.
+The next publisher must publish accepted main and verify both new modes.
+
+## Previous publication blocker
 
 The existing Lovable project still opened an empty Publish panel after a fresh
 reload. Preview and revision history did not initialize. No final publish action

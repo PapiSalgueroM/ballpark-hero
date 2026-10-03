@@ -114,7 +114,33 @@ Artifact11273100846 (2,110,411 bytes) SHA256 matched the published digest:
 Evidence: `C:/Users/antho/AppData/Local/Temp/dukb-buzzer997-ci-2026-10-03/c76a4523/evidence/`.
 The twelve held raw drafts and seven stashes passed preservation after merge.
 
-## Publication pending
+## Published and played on the public site
+
+2026-10-03, live checks completed about 09:35 EDT. Claude published Release Z
+from main `3da2d38f91cf71dde3b99bde43e88e0aaee31f3e`, deployment `50e48280`.
+The public entry is `/assets/index-DW37SCnC.js`; the Buzzer Beater chunk
+`BuzzerBeater-DpT_UUj2.js` includes Shot lab. This clears the previous hold.
+
+Codex then played the actual Shot lab at https://douknowball.com/buzzer-beater
+in the existing browser. Two Power40, Arc60, square releases both showed a
+46 degree entry, 212cm long and 2cm right. Changing only Power to35 produced
+a separate visible trajectory and 172cm long, 1cm right. The paired previous
+and latest readings stayed visible. Reopened rules retained the worked example.
+Change setup advanced to setup2, cleared attempts/comparison and retained the
+chosen controls. Leave lab opened its menu and Steady practice returned to
+the original unrecorded ten-shot mode. No public-tab error logs were recorded.
+
+This live check establishes public interaction, not another storage audit;
+save isolation is covered by the retained remote evidence above. Screenshot:
+`C:/Users/antho/.codex/visualizations/2026/10/03/01a10028-7165-70b1-90e1-1946dd227be4/shot-lab-live997.png`.
+
+The Release Z Windows harness report was investigated separately. The mutation
+source already normalizes CRLF. Its conservative source scanner instead flags
+raw Buffer reads used only for byte-preservation checks. A narrow verifier
+representation repair and explicit CRLF remote proof are in progress; no
+product behavior or scanner rule is being weakened.
+
+## Previous publication blocker, resolved by Release Z
 
 As of 2026-10-03 07:34 EDT, no final publish action was sent. Lovable's editor
 reported Firebase auth initialization timing out after 60 seconds. Reloading,

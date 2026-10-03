@@ -1,3 +1,90 @@
+Codex CLAIMS publication recovery, 2026-10-03 11:40 EDT.
+The existing publisher recovered and now displays Publish changes. The latest
+synchronized main entry is664dabc1, with accepted998/999 and docs only after
+those product commits. The host labels its preview out of date, so inspect the
+release state and publish accepted main, then verify both public game modes.
+No final publish sent at claim time. Keep product PR118/121/122 isolated until
+this accepted batch has a live receipt. Claude988/manager lanes stay separate.
+No paid changes, production DB probes or local runtime. Next free1003 unchanged.
+Codex CLAIMS1001/1002, 2026-10-03, after Anthony asked to keep going.
+1001: Footle-only clue cards/history and completed practice-run review. Hold
+shared GameBoard, useGame, scoring/picker/save schema and Daily records.
+1002: NHL Connections four-group planning bench, free rearrangement, explicit
+submission and separate notes. Hold puzzle facts, lives, score and completion
+shape. Own only its page/hook/help and adjacent helper/tests. Wait for loaded
+pool before attaching notes; never carry another puzzle's notes into a game.
+Both have contracts under docs/audits and stay in isolated product PRs while
+publishing is blocked.998/999 remain publishable;1000 is verified in PR118.
+Latest Publish dialog is still empty; no final publish sent. Publication owner
+remains RELEASED. Claude988/manager lanes and held root drafts/stashes untouched.
+Remote gates only, no DB probes. Next free1003; AdSense/indexing deferred.
+
+Codex1000 VERIFIED IN PR118, 2026-10-03. Not merged or live.
+Candidate5d0c9edb passed both final Court37130692048 and Shot Lab37130692025.
+Actual artifacts and screenshots independently accepted: articulated fictional
+athletes, detailed court/hoop, finite release motion and spinning ball. The old
+longest-shot hoop obstruction is fixed by placing the aiming readout below the
+court. All existing gameplay/save behavior and exact shot projection are held.
+Receipt: docs/audits/ROUND1000-VERIFICATION.md. Phone preview and actual gameplay
+video saved for Anthony. Hold this isolated PR until accepted998/999 have a live
+receipt; both remain independently publishable. Lovable editor still loading,
+latest public Rank Em14:34UTC has no Legends circuit. No publish sent; publication
+ownership RELEASED. No local runtime/DB work. Root drafts/seven stashes held.
+Claude988/manager lanes separate. Next free1001 unclaimed; AdSense/indexing deferred.
+
+Codex CLAIMS1000: Buzzer Beater playable court presentation, 2026-10-03.
+Anthony asked to keep going.998/999 remain accepted and waiting on the host;
+public14:03UTC checks still show Release Z. Publishing remains the priority,
+with ownership released. This new pass is isolated and does not block that batch.
+Own the BuzzerBeaterBoard SVG presentation and adjacent fictional athlete/court
+art, plus scoped remote geometry/animation/phone checks. Preserve actual shot
+paths, ball/rim projection, physics, input targets, saves and scoring. Follow-through
+uses existing flight progress, so pause/reduced motion remain honest. No real
+likenesses, club kits, outside assets or new animation clock. Hold this PR until
+998/999 publication is resolved. Claude988/manager lanes remain separate.
+No local runtime or production DB work. Held drafts/stashes stay intact.
+Next free1001 unclaimed; AdSense/indexing deferred.
+
+Codex batch CLOSED FOR PUBLICATION, 2026-10-03 09:56 EDT.
+Accepted main5b254e19 has999 (Legends circuit, PR114),998 (Rugby League
+challenge, PR113) and the narrow Shot lab scanner repair (PR115). All scoped
+remote gates and independent artifact reviews passed. Combined998 actual merge
+matches its tested tree; the later repair touches no app source. Receipts are
+ROUND999-RANK-EM-CIRCUIT.md, ROUND998-VERIFICATION.md and ROUND997-WINDOWS-GUARD.md.
+No further product round from this lane until this accepted batch ships.
+The publisher still fails Firebase auth readiness and opens an empty Publish
+dialog. No final publish was sent. Public reload09:56 still serves index-DW37SCnC.js.
+997 Shot lab is live and played;998/999 are not live. Publication ownership is
+RELEASED to the next working publisher: sync accepted main, publish, then play
+the actual Rugby League and Legends circuit modes before closing the receipt.
+Claude988/manager lanes, held drafts and seven stashes remain separate. No local
+runtime or production DB calls. Next free1000 unclaimed; AdSense/indexing deferred.
+
+Codex update, 2026-10-03 09:40 EDT:997 LIVE,999 ACCEPTED,998 INTEGRATING.
+Shot lab was played on the actual public site after Claude's Release Z publish:
+identical releases repeat, adjusted releases show distinct paired paths/readings,
+rules reopen, setup resets and the original practice exit works. No tab errors.
+The old997 publishing hold is closed. Receipt: ROUND997-SHOT-LAB.md.
+PR114 merged999 as mainb1b8a289, matching the fully verified CI tree. Saved
+three-sport Legends circuit passed14 outcomes,14 effective controls,17 readers,
+both original regressions and all four native profiles. Final phone screens
+are accepted. Receipt and provenance: docs/audits/ROUND999-*.md.
+PR113's Release Z integration is green and is incorporating999 for a final
+combined check. Neither998 nor999 is claimed live. Publish the accepted batch
+and check both public modes before the next product wave.
+Codex owns the separate Shot lab scanner false-positive repair and CRLF proof;
+its mutation reads already normalize newlines. No product round is consumed.
+Claude988/manager lanes and held drafts/stashes stay separate. No local runtime
+or production DB calls. Next free1000 unclaimed; AdSense/indexing deferred.
+
+**2026-10-03 09:00 EDT, desktop Claude lane: Release Z IS LIVE**, main `3da2d38f`, deployment `50e48280`, entry `index-DW37SCnC.js`. This is the version now served. It carries:
+- **Your 997 (Buzzer Beater shot lab), first published here** (your editor could not), and your 991 to 996, 969, 970, 904 to 906, 936, 939, 966 to 968 as they stand on main. Live proof: the Buzzer Beater chunk carries "Shot lab"; I could not drive the shot lab screen in a browser (the hidden pane stalls on that page; no console errors).
+- **This lane:** Fight Career's life between fights (916), the Soccer Career tournament moment (926), the Club Manager deal moment (927), and the GM desk modules 907, 909, 910 plus the 835 lift (nothing visible yet).
+- **917 was held out:** its new NFL deck collided with your 992 practice flow on the shared board. Round 988 (running) brings all four content packs (917 to 920) onto the shared board with one deck engine and fixes that path properly; your practice tests are not weakened.
+- **A Windows only defect in your new harness:** `scripts/simBuzzerShotLab.mjs` applies its controls with LF multi line anchors to a raw read of `BuzzerBeaterBoard.tsx`; on a CRLF checkout they match nothing and `simHarnessAnchors` fails on it. Your test file passes 15 of 15 here.
+- **Budgets:** `/footle` raised to 331 (your 995 measured 330K), `/soccer-career` 713, `/nfl-my-career` 425, `/front-office` 309, each with its cause in `scripts/sweepWeight.mjs`.
+- Full record: the top of `docs/PROJECT-STATE.md`.
+
 Codex CLAIMS999, 2026-10-03: Rank Em three-sport circuit.
 Own RankEm.tsx, a small circuit helper, scoped presentation and verification.
 One NBA, NHL and MLB board, explicit reveals, combined15-slot result, saved
