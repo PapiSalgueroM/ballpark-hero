@@ -69,7 +69,10 @@
  * next season on. A damaged block is dropped (that block alone).
  */
 import type { CareerState, CMPlayer, PlayerMessage } from '@/lib/clubManager';
-import { careerLeagueOf, LEAGUE_NATIONS, entryInvolvesMe, fixtureFor } from '@/lib/clubManager';
+import {
+  careerLeagueOf, LEAGUE_NATIONS, entryInvolvesMe, fixtureFor, matchStrengthNow, effectiveXIWithSlots,
+  CONDITION_PER_FITNESS, MATCH_FITNESS_COST, MATCH_FITNESS_SPREAD,
+} from '@/lib/clubManager';
 import { nationalityOf } from '@/data/playerNationalities';
 import { NATION_CONFED } from '@/lib/soccerInternational';
 import type { Confederation } from '@/lib/soccerInternational';
@@ -255,6 +258,8 @@ export interface IntlCallUp {
   injuredWeeks: number;
   /** His country plays on another continent from his club. */
   far: boolean;
+  /** He started their games; false when he mostly sat on their bench. */
+  starts: boolean;
 }
 
 /**
@@ -274,13 +279,18 @@ export function callUpsFor(state: CareerState, window: Pick<IntlWindow, 'id' | '
     const theirs = confedOfNation(nation);
     const far = !!home && !!theirs && theirs !== home;
     const seed = `${state.clubName}|${state.season}|${window.id}|${p.id}`;
-    const base = far ? 22 : 12;
-    const spread = far ? 9 : 7;
-    const long = window.matches >= 4 ? 6 : 0;
-    const cost = base + long + Math.floor(hash01(`${seed}|cost`) * (spread + 1));
-    const knock = (window.matches >= 4 ? 0.05 : 0.03) + (far ? 0.01 : 0);
+    /* Not everybody who goes plays. The further a man sits above his
+       country's bar, the likelier he started every game for them; the rest
+       mostly watched from the bench and come back lighter. */
+    const startChance = Math.max(0.2, Math.min(0.9, 0.35 + (p.rating - bar) / 20));
+    const starts = hash01(`${seed}|starts`) < startChance;
+    const four = window.matches >= 4;
+    const cost = starts
+      ? (far ? 24 : 14) + (four ? 10 : 0) + Math.floor(hash01(`${seed}|cost`) * 9)
+      : (far ? 12 : 4) + Math.floor(hash01(`${seed}|cost`) * 5);
+    const knock = starts ? (four ? 0.06 : 0.04) + (far ? 0.01 : 0) : 0.01;
     const injuredWeeks = hash01(`${seed}|knock`) < knock ? 1 + Math.floor(hash01(`${seed}|weeks`) * 3) : 0;
-    out.push({ id: p.id, name: p.name, nation, cost, injuredWeeks, far });
+    out.push({ id: p.id, name: p.name, nation, cost, injuredWeeks, far, starts });
   }
   const rating = new Map(state.squad.map(p => [p.id, p.rating]));
   return out.sort((a, b) => (rating.get(b.id) ?? 0) - (rating.get(a.id) ?? 0));
@@ -324,7 +334,8 @@ const isInt = (x: unknown): x is number => typeof x === 'number' && Number.isInt
 function validCallUp(c: unknown): boolean {
   if (!c || typeof c !== 'object') return false;
   const x = c as Record<string, unknown>;
-  return isStr(x.id) && isStr(x.name) && isStr(x.nation) && isInt(x.cost) && isInt(x.injuredWeeks) && typeof x.far === 'boolean';
+  return isStr(x.id) && isStr(x.name) && isStr(x.nation) && isInt(x.cost) && isInt(x.injuredWeeks)
+    && typeof x.far === 'boolean' && typeof x.starts === 'boolean';
 }
 
 /** True when a block has the shape this module writes. */
@@ -379,26 +390,32 @@ const listNames = (names: string[]): string =>
 export function breakMessage(brk: IntlBreak): IntlMessage | null {
   const going = brk.called;
   if (!going.length) return null;
-  const who = listNames(going.map(c => `${c.name} (${c.nation})`));
+  const byNation = new Map<string, string[]>();
+  for (const c of going) byNation.set(c.nation, [...(byNation.get(c.nation) ?? []), c.name]);
+  const who = [...byNation].map(([nation, names]) => `${nation}: ${listNames(names)}`).join('; ');
   const hurt = going.filter(c => c.injuredWeeks > 0);
   const fit = going.filter(c => c.injuredWeeks === 0);
   const back = brk.backOpponent ? `the ${brk.backOpponent} game` : 'the next game';
   const hurtLine = hurt.length
     ? ` ${listNames(hurt.map(c => c.name))} picked up a knock away and ${hurt.length === 1 ? 'is' : 'are'} out for a bit.`
     : '';
-  const longHaul = fit.some(c => c.far) ? ' The ones who flew furthest are feeling it most.' : '';
+  const played = fit.filter(c => c.starts);
+  const playedLine = played.length
+    ? ` ${listNames(played.map(c => c.name))} started for ${played.length === 1 ? 'his country' : 'their countries'}, the rest mostly watched from the bench.`
+    : ' Nobody started for his country, so the legs are mostly fine.';
+  const longHaul = played.some(c => c.far) ? ' The long trips hurt most.' : '';
   const ask = fit.length
-    ? ` Your assistant wants to know: start them against ${brk.backOpponent ?? 'the next lot'}, or rest them for that one?`
+    ? ` Your assistant wants to know: start them against ${brk.backOpponent ?? 'the next lot'}, or rest the spent ones for that one game?`
     : '';
   return {
     kind: 'intlDuty',
     from: 'Your assistant',
     playerName: going[0].name,
     playerId: going[0].id,
-    text: `🌍 International break, ${brk.label}. Away with their countries: ${who}. They are back for ${back}, tired.${longHaul}${hurtLine}${ask}`,
+    text: `🌍 International break, ${brk.label}. Away with their countries (${who}). They are back for ${back}.${fit.length ? playedLine : ''}${longHaul}${hurtLine}${ask}`,
     options: fit.length
       ? [
-        { label: 'Rest them for that game', effect: 'restIntl' },
+        { label: 'Rest the ones who are spent', effect: 'restIntl' },
         { label: 'Pick them anyway', effect: 'startIntl' },
       ]
       : [{ label: 'Noted', effect: 'startIntl' }],
@@ -462,22 +479,110 @@ export function backFromDuty(state: Pick<CareerState, 'intl' | 'season' | 'week'
 }
 
 /**
- * The answer to the assistant: rest the men who came back whole for that one
- * match, or start them. Returns the new block and the line the inbox shows.
- * Null when there is nothing left to decide (the match has gone).
+ * What a man rested now is worth in the match after next, in strength: he
+ * skips the legs a match takes out of him (the engine's own mean,
+ * MATCH_FITNESS_COST plus half the spread), capped by how far he can still
+ * climb, and one man's legs count for one eleventh of the side's condition
+ * (CONDITION_PER_FITNESS, the rule myMatchStrength uses).
+ */
+function legsLaterWorth(fitness: number): number {
+  const saved = Math.min(MATCH_FITNESS_COST + MATCH_FITNESS_SPREAD / 2, Math.max(0, 100 - fitness));
+  return (CONDITION_PER_FITNESS * saved) / 11;
+}
+
+/**
+ * Who your assistant would rest: the men back from duty for whom sitting out
+ * is the better bet over the two matches the trip touches. The match they
+ * come back for is priced by the engine itself (matchStrengthNow, the rule
+ * the match is played on, with a rested man's slot going to the freshest
+ * value man); the match after it by the legs he keeps (legsLaterWorth).
+ * Greedy, most worn first, keeping a rest only when the sum goes up, so the
+ * answer can be nobody when every deputy is far worse than tired legs.
+ */
+export function restPlan(state: CareerState): string[] {
+  const intl = liveIntl(state);
+  const last = intl?.last;
+  if (!intl || !last || last.backWeek < 0 || state.week > last.backWeek) return [];
+  /* Only a man who would start can be rested: resting a man on the bench
+     changes nothing now and saves him no legs later. */
+  const starting = new Set(effectiveXIWithSlots({ ...state, intl: { ...intl, rest: undefined } }).map(x => x.p.id));
+  const pool = last.called.filter(c => c.injuredWeeks === 0 && starting.has(c.id)).sort((a, b) => b.cost - a.cost);
+  const fitness = new Map(state.squad.map(p => [p.id, p.fitness]));
+  const value = (ids: string[]): number =>
+    matchStrengthNow({ ...state, intl: { ...intl, rest: { week: last.backWeek, ids } } })
+    + ids.reduce((s, id) => s + legsLaterWorth(fitness.get(id) ?? 100), 0);
+  let chosen: string[] = [];
+  let best = value(chosen);
+  for (let pass = 0; pass < 3; pass++) {
+    let moved = false;
+    for (const c of pool) {
+      if (chosen.includes(c.id)) continue;
+      const trial = [...chosen, c.id];
+      const v = value(trial);
+      if (v > best + 0.005) { chosen = trial; best = v; moved = true; }
+    }
+    if (!moved) break;
+  }
+  return chosen;
+}
+
+/**
+ * The answer to the assistant: rest the men restPlan picks for that one
+ * match, or start them all. Returns the new block and the line the inbox
+ * shows. Null when there is nothing left to decide (the match has gone).
  */
 export function answerBreak(state: CareerState, rest: boolean): { intl: IntlDuty; resolved: string } | null {
   const intl = liveIntl(state);
   const last = intl?.last;
   if (!intl || !last || last.backWeek < 0 || state.week > last.backWeek) return null;
-  const fit = last.called.filter(c => c.injuredWeeks === 0);
   const vs = last.backOpponent ? ` against ${last.backOpponent}` : '';
-  if (!rest || !fit.length) {
-    const { rest: _dropped, ...kept } = intl;
-    return { intl: kept, resolved: `They start${vs}. Tired legs, but your best eleven.` };
+  const { rest: _dropped, ...kept } = intl;
+  if (!rest) return { intl: kept, resolved: `They start${vs}. Tired legs, but your best eleven.` };
+  const ids = restPlan(state);
+  if (!ids.length) {
+    return { intl: kept, resolved: `Your assistant ran the numbers: nobody on the bench beats tired legs this time, so they start${vs}.` };
   }
+  const names = ids.map(id => last.called.find(c => c.id === id)?.name ?? '').filter(Boolean);
+  const one = names.length === 1;
   return {
-    intl: { ...intl, rest: { week: last.backWeek, ids: fit.map(c => c.id) } },
-    resolved: `${listNames(fit.map(c => c.name))} sit out${vs} and come back into the side fresh after it. They can still come off the bench.`,
+    intl: { ...intl, rest: { week: last.backWeek, ids } },
+    resolved: `${listNames(names)} ${one ? 'sits' : 'sit'} out${vs} and ${one ? 'comes' : 'come'} back into the side fresh after it. Still on the bench if you need ${one ? 'him' : 'them'}.`,
   };
+}
+
+/* ================================================================== */
+/* The calendar                                                       */
+/* ================================================================== */
+
+export interface IntlMark {
+  window: IntlWindow;
+  /** dateKey of the window's first day, where the grid draws it. */
+  key: number;
+  label: string;
+  /** The dates are the rule's structure, not confirmed ones. */
+  partial: boolean;
+  /** Already played this season. */
+  done: boolean;
+}
+
+/** The season's windows for the grid; none on a save whose current season has no block. */
+export function intlMarks(state: CareerState): IntlMark[] {
+  const intl = liveIntl(state);
+  if (!intl) return [];
+  const worldYear = worldYearOf(state);
+  return intlWindowsFor(worldYear).map(w => ({
+    window: w,
+    key: dateKey(w.start),
+    label: windowLabel(w),
+    partial: !w.verified,
+    done: intl.fired.includes(w.id),
+  }));
+}
+
+/** One line for a window's day on the calendar. */
+export function intlMarkLine(mark: IntlMark): string {
+  const games = `up to ${mark.window.matches} games for each country`;
+  const when = mark.done ? 'Played.' : 'Your internationals go away and come back tired for your next match.';
+  const dates = mark.partial ? ' Dates for this season are approximate.' : '';
+  return `International break, ${mark.label} (${games}). ${when}${dates}`;
 }

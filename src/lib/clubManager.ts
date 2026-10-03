@@ -11961,9 +11961,14 @@ export function effectiveXIWithSlots(state: CareerState): XiSlot[] {
       /* Round 505: the best available man for the slot as the match will
          read him, his rating less the price he pays there (a natural fit
          pays nothing, so he still comes first at equal rating), and a
-         position he has retrained into counts as natural. */
+         position he has retrained into counts as natural.
+         Round 978: a slot you opened by resting a man is about legs, so it
+         goes to the man worth most on the day by myMatchStrength's own
+         terms, his freshness included. Every other slot fills as before. */
+      const restFill = !!p && resting.has(p.id);
+      const worth = (x: CMPlayer) => x.rating - fitPenalty(x, slot) + (restFill ? CONDITION_PER_FITNESS * x.fitness : 0);
       const best = (pool: CMPlayer[]) => pool
-        .sort((a, b) => (b.rating - fitPenalty(b, slot)) - (a.rating - fitPenalty(a, slot)) || b.rating - a.rating)[0];
+        .sort((a, b) => worth(b) - worth(a) || b.rating - a.rating)[0];
       const open = state.squad.filter(x => isAvailable(x) && !used.has(x.id));
       p = best(open.filter(x => !resting.has(x.id))) ?? best(open);
     }
@@ -12046,12 +12051,16 @@ function dutyLookup(xi: XiSlot[]): (p: CMPlayer) => Duty | null {
  * a bill rather than a refusal. Deterministic, so the Poisson split
  * simHalftime measures is untouched.
  */
+/** Round 978: the strength a point of the eleven's average fitness is worth,
+ *  named so the rest fill-in in effectiveXIWithSlots prices legs the same way. */
+export const CONDITION_PER_FITNESS = 0.14;
+
 function myMatchStrength(state: CareerState, xi: XiSlot[]): number {
   if (!xi.length) return 40;
   const avg = xi.reduce((s, x) => s + x.p.rating - fitPenalty(x.p, x.slot), 0) / xi.length;
   const fit = xi.reduce((s, x) => s + x.p.fitness, 0) / xi.length;
   const mor = xi.reduce((s, x) => s + x.p.morale, 0) / xi.length;
-  const condition = clamp((fit - 78) * 0.14 + (mor - 68) * 0.06, -7, 4);
+  const condition = clamp((fit - 78) * CONDITION_PER_FITNESS + (mor - 68) * 0.06, -7, 4);
   const formBonus = state.form.reduce((s, f) => s + (f === 'W' ? 0.7 : f === 'L' ? -0.7 : 0), 0);
   return avg + condition + formBonus;
 }
@@ -13923,6 +13932,12 @@ export function liveStatsAt(
  * back near 100 within a week, and rotation is a real edge instead of the
  * only way to avoid collapse.
  */
+/** Round 978: what a match takes out of a man's legs, the floor and the
+ *  spread of the draw, named so the international rest plan can price the
+ *  match after next by the same numbers (unchanged from Round 95). */
+export const MATCH_FITNESS_COST = 20;
+export const MATCH_FITNESS_SPREAD = 8;
+
 function tickWeek(state: CareerState, playedIds: Set<string> | null): void {
   /* Round 619: a settlement counts down HERE, in the same function that charges
      the wage bill, and a row at zero is gone.
@@ -13952,7 +13967,7 @@ function tickWeek(state: CareerState, playedIds: Set<string> | null): void {
   state.squad = state.squad.map(p => {
     const played = playedIds ? playedIds.has(p.id) : false;
     const recovery = Math.round((100 - p.fitness) * 0.71 * recoveryMod) + flat;
-    const cost = played ? 20 + ri(0, 8) : 0;
+    const cost = played ? MATCH_FITNESS_COST + ri(0, MATCH_FITNESS_SPREAD) : 0;
     const fitness = clamp(p.fitness + recovery - cost, 20, 100);
     let injuryWeeks = Math.max(0, p.injuryWeeks - 1);
     if (knockRisk > 0 && injuryWeeks === 0 && Math.random() < knockRisk) injuryWeeks = injurySpell(state, ri(1, 3));
