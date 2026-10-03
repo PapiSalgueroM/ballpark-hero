@@ -1,0 +1,7658 @@
+{
+ "round": 923,
+ "game": "/hockey-career (NHL Career Path), src/data/hockeyCareerPlayers.ts",
+ "read": "2026-10-03",
+ "about": "Every line the game shows, with the value on the official NHL source and on hockey-reference.com, both read on the date above. The Hall of Fame year has hhof.com as a third source. Written by Round 923; scripts/simNhlCareerPathFacts.mjs pins the data file to this record word for word.",
+ "sources": {
+  "official": "api-web.nhle.com, the NHL feed behind nhl.com/player/<id>: draftDetails, careerTotals.regularSeason, seasonTotals (NHL, regular season), awards, inHHOF, birthCountry, birthCity.",
+  "second": "hockey-reference.com player page: the meta block (position, birthplace, draft, Hall of Fame line), the NHL totals row of the regular season table, the NHL season rows, and the Recognition list.",
+  "third": "hhof.com player inductees by year, for the induction year."
+ },
+ "rules": {
+  "position": "Forward for C, LW, RW; Defense; Goalie. Both sources.",
+  "country": "Country of birth in present-day borders; the NHL birthCountry and the hockey-reference birthplace (USSR and Czechoslovakia births resolve by city, which both sources give).",
+  "draftInfo": "'Nth Round, Nth Overall (YYYY)' from both draft records; a player with no NHL draft on either source shows 'Undrafted (NHL debut YYYY-YY)' with the first NHL regular season on both.",
+  "teams": "NHL regular season teams in order of first appearance, named as the official NHL source names them (accents folded, the 1979 Winnipeg suffix dropped). Both sources give the same order.",
+  "stats": "Career NHL regular season. Retired skaters: exact G, A, Pts. Active skaters: each total rounded down to a ten, below the lower of the two sources. Retired goalies: W, GAA, SV%. Active goalies: W and GP rounded down to a ten, SO rounded down to a five.",
+  "awards": "Up to four lines: the trophies the old row named when they hold on both sources, then by importance, and the Hall of Fame year last when NHL inHHOF is 1 and hockey-reference and hhof.com give the same year. A single Stanley Cup shows without a year (hockey-reference gives the count only). Counts on active players are as of the read date."
+ },
+ "order": "The array order is deliberate. The daily pick is dailyIndex(dateET, 60) in src/lib/dateUtils.ts, a shuffle per 60 day cycle; the cycle holding the release runs 2026-09-04 to 2026-11-02. The 30 new players sit on the indices dealt 2026-10-04 to 2026-11-02, so a release between 2026-10-04 and 2026-10-20 deals only players the old pool never dealt for at least two weeks.",
+ "heldOut": [
+  {
+   "name": "Peter Bondra",
+   "oldIds": [
+    "hc-034"
+   ],
+   "why": "No NHL trophy on either source (the old Rocket Richard line is false, the trophy began in 1998-99), and the shown country Slovakia is his national team while both sources give a birthplace of Luck, USSR (today Ukraine). Held out rather than shown a guess.",
+   "oldLines": [
+    "8th Round, 156th Overall (1990)",
+    "503 G",
+    "389 A",
+    "892 Pts",
+    "2× Rocket Richard Trophy",
+    "503 career goals",
+    "5× 30+ goal seasons"
+   ]
+  },
+  {
+   "name": "Felix Potvin",
+   "oldIds": [
+    "hc-038"
+   ],
+   "why": "No NHL trophy on either source; the old award lines were a nickname, a description and a junior award, and his GAA and shutout lines were wrong (2.97 and 18 shown; 2.76 and 32 on both sources). Held out rather than padded.",
+   "oldLines": [
+    "2nd Round, 31st Overall (1990)",
+    "266 W",
+    "2.97 GAA",
+    "18 SO",
+    "\"The Cat\"",
+    "Beloved 1990s Leafs goalie",
+    "OHL Goaltender of the Year"
+   ]
+  }
+ ],
+ "removedDuplicates": [
+  {
+   "name": "Bobby Orr",
+   "keptId": "hc-011",
+   "removedId": "hc-021"
+  },
+  {
+   "name": "Mark Messier",
+   "keptId": "hc-015",
+   "removedId": "hc-023"
+  },
+  {
+   "name": "Nicklas Lidstrom",
+   "keptId": "hc-006",
+   "removedId": "hc-027"
+  },
+  {
+   "name": "Martin Brodeur",
+   "keptId": "hc-009",
+   "removedId": "hc-030"
+  },
+  {
+   "name": "Patrick Roy",
+   "keptId": "hc-007",
+   "removedId": "hc-031"
+  },
+  {
+   "name": "Jaromir Jagr",
+   "keptId": "hc-008",
+   "removedId": "hc-036"
+  }
+ ],
+ "corrections": [
+  {
+   "oldId": "hc-001",
+   "name": "Wayne Gretzky",
+   "field": "draftInfo",
+   "old": "Undrafted (WHA signing, 1978)",
+   "now": "Undrafted (NHL debut 1979-80)",
+   "kind": "reworded",
+   "why": "Neither source gives a signing date; both give no NHL draft and a first NHL season of 1979-80."
+  },
+  {
+   "oldId": "hc-002",
+   "name": "Sidney Crosby",
+   "field": "draftInfo",
+   "old": "1st Round, 1st Pick (2005)",
+   "now": "1st Round, 1st Overall (2005)",
+   "kind": "reworded",
+   "why": "Same round, pick and year on both sources; one format across the pool."
+  },
+  {
+   "oldId": "hc-002",
+   "name": "Sidney Crosby",
+   "field": "stats",
+   "old": "600+ G",
+   "now": null,
+   "kind": "stale",
+   "why": "True but stale floor; now 654 on the lower of the two sources."
+  },
+  {
+   "oldId": "hc-002",
+   "name": "Sidney Crosby",
+   "field": "stats",
+   "old": "1,020+ A",
+   "now": null,
+   "kind": "stale",
+   "why": "True but stale floor; now 1108 on the lower of the two sources."
+  },
+  {
+   "oldId": "hc-002",
+   "name": "Sidney Crosby",
+   "field": "stats",
+   "old": "1,620+ Pts",
+   "now": null,
+   "kind": "stale",
+   "why": "True but stale floor; now 1762 on the lower of the two sources."
+  },
+  {
+   "oldId": "hc-003",
+   "name": "Alexander Ovechkin",
+   "field": "draftInfo",
+   "old": "1st Round, 1st Pick (2004)",
+   "now": "1st Round, 1st Overall (2004)",
+   "kind": "reworded",
+   "why": "Same round, pick and year on both sources; one format across the pool."
+  },
+  {
+   "oldId": "hc-003",
+   "name": "Alexander Ovechkin",
+   "field": "stats",
+   "old": "900+ G",
+   "now": null,
+   "kind": "stale",
+   "why": "True but stale floor; now 929 on the lower of the two sources."
+  },
+  {
+   "oldId": "hc-003",
+   "name": "Alexander Ovechkin",
+   "field": "stats",
+   "old": "700+ A",
+   "now": null,
+   "kind": "stale",
+   "why": "True but stale floor; now 758 on the lower of the two sources."
+  },
+  {
+   "oldId": "hc-003",
+   "name": "Alexander Ovechkin",
+   "field": "stats",
+   "old": "1,610+ Pts",
+   "now": null,
+   "kind": "stale",
+   "why": "True but stale floor; now 1687 on the lower of the two sources."
+  },
+  {
+   "oldId": "hc-003",
+   "name": "Alexander Ovechkin",
+   "field": "awards",
+   "old": "Stanley Cup Champion (2018)",
+   "now": null,
+   "kind": "reworded",
+   "why": "The same trophy and count ship in the pool format: Stanley Cup Champion."
+  },
+  {
+   "oldId": "hc-003",
+   "name": "Alexander Ovechkin",
+   "field": "awards",
+   "old": "9× Maurice Richard Trophy",
+   "now": null,
+   "kind": "reworded",
+   "why": "The same trophy and count ship in the pool format: 9× Rocket Richard Trophy."
+  },
+  {
+   "oldId": "hc-003",
+   "name": "Alexander Ovechkin",
+   "field": "awards",
+   "old": "Broke Gretzky's all-time goal record (2025)",
+   "now": null,
+   "kind": "unsourced",
+   "why": "True, but not an award either award list carries; his 920+ G line shows it."
+  },
+  {
+   "oldId": "hc-004",
+   "name": "Connor McDavid",
+   "field": "draftInfo",
+   "old": "1st Round, 1st Pick (2015)",
+   "now": "1st Round, 1st Overall (2015)",
+   "kind": "reworded",
+   "why": "Same round, pick and year on both sources; one format across the pool."
+  },
+  {
+   "oldId": "hc-004",
+   "name": "Connor McDavid",
+   "field": "stats",
+   "old": "360+ G",
+   "now": null,
+   "kind": "stale",
+   "why": "True but stale floor; now 410 on the lower of the two sources."
+  },
+  {
+   "oldId": "hc-004",
+   "name": "Connor McDavid",
+   "field": "stats",
+   "old": "680+ A",
+   "now": null,
+   "kind": "stale",
+   "why": "True but stale floor; now 817 on the lower of the two sources."
+  },
+  {
+   "oldId": "hc-004",
+   "name": "Connor McDavid",
+   "field": "stats",
+   "old": "1,050+ Pts",
+   "now": null,
+   "kind": "stale",
+   "why": "True but stale floor; now 1227 on the lower of the two sources."
+  },
+  {
+   "oldId": "hc-004",
+   "name": "Connor McDavid",
+   "field": "awards",
+   "old": "4× Hart Trophy",
+   "now": null,
+   "kind": "false",
+   "why": "Three Harts (2017, 2021, 2023) on both sources."
+  },
+  {
+   "oldId": "hc-004",
+   "name": "Connor McDavid",
+   "field": "awards",
+   "old": "5× Art Ross Trophy",
+   "now": null,
+   "kind": "stale",
+   "why": "Six Art Ross Trophies now (2017, 2018, 2021, 2022, 2023, 2026) on both sources."
+  },
+  {
+   "oldId": "hc-004",
+   "name": "Connor McDavid",
+   "field": "awards",
+   "old": "3× Ted Lindsay Award",
+   "now": null,
+   "kind": "false",
+   "why": "Five Ted Lindsay Awards (2017, 2018, 2021, 2023, 2026) on both sources."
+  },
+  {
+   "oldId": "hc-004",
+   "name": "Connor McDavid",
+   "field": "awards",
+   "old": "Conn Smythe Trophy (2025)",
+   "now": null,
+   "kind": "false",
+   "why": "His Conn Smythe was 2024 (2023-24) on both sources."
+  },
+  {
+   "oldId": "hc-005",
+   "name": "Mario Lemieux",
+   "field": "draftInfo",
+   "old": "1st Round, 1st Pick (1984)",
+   "now": "1st Round, 1st Overall (1984)",
+   "kind": "reworded",
+   "why": "Same round, pick and year on both sources; one format across the pool."
+  },
+  {
+   "oldId": "hc-006",
+   "name": "Nicklas Lidstrom",
+   "field": "draftInfo",
+   "old": "3rd Round, 53rd Pick (1989)",
+   "now": "3rd Round, 53rd Overall (1989)",
+   "kind": "reworded",
+   "why": "Same round, pick and year on both sources; one format across the pool."
+  },
+  {
+   "oldId": "hc-007",
+   "name": "Patrick Roy",
+   "field": "draftInfo",
+   "old": "3rd Round, 51st Pick (1984)",
+   "now": "3rd Round, 51st Overall (1984)",
+   "kind": "reworded",
+   "why": "Same round, pick and year on both sources; one format across the pool."
+  },
+  {
+   "oldId": "hc-008",
+   "name": "Jaromir Jagr",
+   "field": "draftInfo",
+   "old": "1st Round, 5th Pick (1990)",
+   "now": "1st Round, 5th Overall (1990)",
+   "kind": "reworded",
+   "why": "Same round, pick and year on both sources; one format across the pool."
+  },
+  {
+   "oldId": "hc-008",
+   "name": "Jaromir Jagr",
+   "field": "awards",
+   "old": "Hall of Fame (2024)",
+   "now": null,
+   "kind": "false",
+   "why": "Not inducted: NHL inHHOF is 0, hockey-reference shows no induction, and he is not on the hhof.com player inductee list."
+  },
+  {
+   "oldId": "hc-009",
+   "name": "Martin Brodeur",
+   "field": "draftInfo",
+   "old": "1st Round, 20th Pick (1990)",
+   "now": "1st Round, 20th Overall (1990)",
+   "kind": "reworded",
+   "why": "Same round, pick and year on both sources; one format across the pool."
+  },
+  {
+   "oldId": "hc-010",
+   "name": "Nathan MacKinnon",
+   "field": "draftInfo",
+   "old": "1st Round, 1st Pick (2013)",
+   "now": "1st Round, 1st Overall (2013)",
+   "kind": "reworded",
+   "why": "Same round, pick and year on both sources; one format across the pool."
+  },
+  {
+   "oldId": "hc-010",
+   "name": "Nathan MacKinnon",
+   "field": "stats",
+   "old": "320+ G",
+   "now": null,
+   "kind": "stale",
+   "why": "True but stale floor; now 422 on the lower of the two sources."
+  },
+  {
+   "oldId": "hc-010",
+   "name": "Nathan MacKinnon",
+   "field": "stats",
+   "old": "570+ A",
+   "now": null,
+   "kind": "stale",
+   "why": "True but stale floor; now 722 on the lower of the two sources."
+  },
+  {
+   "oldId": "hc-010",
+   "name": "Nathan MacKinnon",
+   "field": "stats",
+   "old": "900+ Pts",
+   "now": null,
+   "kind": "stale",
+   "why": "True but stale floor; now 1144 on the lower of the two sources."
+  },
+  {
+   "oldId": "hc-010",
+   "name": "Nathan MacKinnon",
+   "field": "awards",
+   "old": "Stanley Cup Champion (2022)",
+   "now": null,
+   "kind": "reworded",
+   "why": "The same trophy and count ship in the pool format: Stanley Cup Champion."
+  },
+  {
+   "oldId": "hc-011",
+   "name": "Bobby Orr",
+   "field": "draftInfo",
+   "old": "1st Round, 4th Pick (1966)",
+   "now": "Undrafted (NHL debut 1966-67)",
+   "kind": "false",
+   "why": "Never drafted: no draft on either source; first NHL season 1966-67."
+  },
+  {
+   "oldId": "hc-012",
+   "name": "Auston Matthews",
+   "field": "draftInfo",
+   "old": "1st Round, 1st Pick (2016)",
+   "now": "1st Round, 1st Overall (2016)",
+   "kind": "reworded",
+   "why": "Same round, pick and year on both sources; one format across the pool."
+  },
+  {
+   "oldId": "hc-012",
+   "name": "Auston Matthews",
+   "field": "stats",
+   "old": "390+ G",
+   "now": null,
+   "kind": "stale",
+   "why": "True but stale floor; now 428 on the lower of the two sources."
+  },
+  {
+   "oldId": "hc-012",
+   "name": "Auston Matthews",
+   "field": "stats",
+   "old": "290+ A",
+   "now": null,
+   "kind": "stale",
+   "why": "True but stale floor; now 352 on the lower of the two sources."
+  },
+  {
+   "oldId": "hc-012",
+   "name": "Auston Matthews",
+   "field": "stats",
+   "old": "690+ Pts",
+   "now": null,
+   "kind": "stale",
+   "why": "True but stale floor; now 780 on the lower of the two sources."
+  },
+  {
+   "oldId": "hc-012",
+   "name": "Auston Matthews",
+   "field": "awards",
+   "old": "3× Maurice Richard Trophy",
+   "now": null,
+   "kind": "reworded",
+   "why": "The same trophy and count ship in the pool format: 3× Rocket Richard Trophy."
+  },
+  {
+   "oldId": "hc-013",
+   "name": "Cale Makar",
+   "field": "draftInfo",
+   "old": "1st Round, 4th Pick (2017)",
+   "now": "1st Round, 4th Overall (2017)",
+   "kind": "reworded",
+   "why": "Same round, pick and year on both sources; one format across the pool."
+  },
+  {
+   "oldId": "hc-013",
+   "name": "Cale Makar",
+   "field": "stats",
+   "old": "110+ G",
+   "now": null,
+   "kind": "stale",
+   "why": "True but stale floor; now 136 on the lower of the two sources."
+  },
+  {
+   "oldId": "hc-013",
+   "name": "Cale Makar",
+   "field": "stats",
+   "old": "310+ A",
+   "now": null,
+   "kind": "stale",
+   "why": "True but stale floor; now 373 on the lower of the two sources."
+  },
+  {
+   "oldId": "hc-013",
+   "name": "Cale Makar",
+   "field": "stats",
+   "old": "420+ Pts",
+   "now": null,
+   "kind": "stale",
+   "why": "True but stale floor; now 509 on the lower of the two sources."
+  },
+  {
+   "oldId": "hc-013",
+   "name": "Cale Makar",
+   "field": "awards",
+   "old": "Stanley Cup Champion (2022)",
+   "now": null,
+   "kind": "reworded",
+   "why": "The same trophy and count ship in the pool format: Stanley Cup Champion."
+  },
+  {
+   "oldId": "hc-014",
+   "name": "Henrik Lundqvist",
+   "field": "draftInfo",
+   "old": "7th Round, 205th Pick (2000)",
+   "now": "7th Round, 205th Overall (2000)",
+   "kind": "reworded",
+   "why": "Same round, pick and year on both sources; one format across the pool."
+  },
+  {
+   "oldId": "hc-014",
+   "name": "Henrik Lundqvist",
+   "field": "awards",
+   "old": "5× All-Star",
+   "now": null,
+   "kind": "unsourced",
+   "why": "Neither source carries it."
+  },
+  {
+   "oldId": "hc-014",
+   "name": "Henrik Lundqvist",
+   "field": "awards",
+   "old": "Olympic Gold Medal (2006)",
+   "now": null,
+   "kind": "unsourced",
+   "why": "Not an NHL record; neither NHL source carries it."
+  },
+  {
+   "oldId": "hc-015",
+   "name": "Mark Messier",
+   "field": "draftInfo",
+   "old": "3rd Round, 48th Pick (1979)",
+   "now": "3rd Round, 48th Overall (1979)",
+   "kind": "reworded",
+   "why": "Same round, pick and year on both sources; one format across the pool."
+  },
+  {
+   "oldId": "hc-016",
+   "name": "Nikita Kucherov",
+   "field": "draftInfo",
+   "old": "2nd Round, 58th Pick (2011)",
+   "now": "2nd Round, 58th Overall (2011)",
+   "kind": "reworded",
+   "why": "Same round, pick and year on both sources; one format across the pool."
+  },
+  {
+   "oldId": "hc-016",
+   "name": "Nikita Kucherov",
+   "field": "stats",
+   "old": "310+ G",
+   "now": null,
+   "kind": "stale",
+   "why": "True but stale floor; now 402 on the lower of the two sources."
+  },
+  {
+   "oldId": "hc-016",
+   "name": "Nikita Kucherov",
+   "field": "stats",
+   "old": "560+ A",
+   "now": null,
+   "kind": "stale",
+   "why": "True but stale floor; now 723 on the lower of the two sources."
+  },
+  {
+   "oldId": "hc-016",
+   "name": "Nikita Kucherov",
+   "field": "stats",
+   "old": "880+ Pts",
+   "now": null,
+   "kind": "stale",
+   "why": "True but stale floor; now 1125 on the lower of the two sources."
+  },
+  {
+   "oldId": "hc-016",
+   "name": "Nikita Kucherov",
+   "field": "awards",
+   "old": "Hart Trophy (2019)",
+   "now": null,
+   "kind": "stale",
+   "why": "Reads as one Hart; he has two (2019, 2026) on both sources."
+  },
+  {
+   "oldId": "hc-016",
+   "name": "Nikita Kucherov",
+   "field": "awards",
+   "old": "2× Stanley Cup Champion (2020, 2021)",
+   "now": null,
+   "kind": "reworded",
+   "why": "The same trophy and count ship in the pool format: 2× Stanley Cup Champion."
+  },
+  {
+   "oldId": "hc-016",
+   "name": "Nikita Kucherov",
+   "field": "awards",
+   "old": "Art Ross Trophy (2019)",
+   "now": null,
+   "kind": "stale",
+   "why": "Reads as one Art Ross; he has three (2019, 2024, 2025) on both sources."
+  },
+  {
+   "oldId": "hc-016",
+   "name": "Nikita Kucherov",
+   "field": "awards",
+   "old": "Ted Lindsay Award (2019)",
+   "now": null,
+   "kind": "stale",
+   "why": "Reads as one; he has two (2019, 2025) on both sources."
+  },
+  {
+   "oldId": "hc-017",
+   "name": "Leon Draisaitl",
+   "field": "draftInfo",
+   "old": "1st Round, 3rd Pick (2014)",
+   "now": "1st Round, 3rd Overall (2014)",
+   "kind": "reworded",
+   "why": "Same round, pick and year on both sources; one format across the pool."
+  },
+  {
+   "oldId": "hc-017",
+   "name": "Leon Draisaitl",
+   "field": "stats",
+   "old": "320+ G",
+   "now": null,
+   "kind": "stale",
+   "why": "True but stale floor; now 436 on the lower of the two sources."
+  },
+  {
+   "oldId": "hc-017",
+   "name": "Leon Draisaitl",
+   "field": "stats",
+   "old": "500+ A",
+   "now": null,
+   "kind": "stale",
+   "why": "True but stale floor; now 621 on the lower of the two sources."
+  },
+  {
+   "oldId": "hc-017",
+   "name": "Leon Draisaitl",
+   "field": "stats",
+   "old": "920+ Pts",
+   "now": null,
+   "kind": "stale",
+   "why": "True but stale floor; now 1057 on the lower of the two sources."
+  },
+  {
+   "oldId": "hc-017",
+   "name": "Leon Draisaitl",
+   "field": "awards",
+   "old": "Conn Smythe Trophy (2025)",
+   "now": null,
+   "kind": "false",
+   "why": "No Conn Smythe on either source."
+  },
+  {
+   "oldId": "hc-018",
+   "name": "Patrick Kane",
+   "field": "draftInfo",
+   "old": "1st Round, 1st Pick (2007)",
+   "now": "1st Round, 1st Overall (2007)",
+   "kind": "reworded",
+   "why": "Same round, pick and year on both sources; one format across the pool."
+  },
+  {
+   "oldId": "hc-018",
+   "name": "Patrick Kane",
+   "field": "stats",
+   "old": "460+ G",
+   "now": null,
+   "kind": "stale",
+   "why": "True but stale floor; now 509 on the lower of the two sources."
+  },
+  {
+   "oldId": "hc-018",
+   "name": "Patrick Kane",
+   "field": "stats",
+   "old": "780+ A",
+   "now": null,
+   "kind": "stale",
+   "why": "True but stale floor; now 892 on the lower of the two sources."
+  },
+  {
+   "oldId": "hc-018",
+   "name": "Patrick Kane",
+   "field": "stats",
+   "old": "1,250+ Pts",
+   "now": null,
+   "kind": "stale",
+   "why": "True but stale floor; now 1401 on the lower of the two sources."
+  },
+  {
+   "oldId": "hc-019",
+   "name": "Victor Hedman",
+   "field": "draftInfo",
+   "old": "1st Round, 2nd Pick (2009)",
+   "now": "1st Round, 2nd Overall (2009)",
+   "kind": "reworded",
+   "why": "Same round, pick and year on both sources; one format across the pool."
+  },
+  {
+   "oldId": "hc-019",
+   "name": "Victor Hedman",
+   "field": "stats",
+   "old": "130+ G",
+   "now": null,
+   "kind": "stale",
+   "why": "True but stale floor; now 172 on the lower of the two sources."
+  },
+  {
+   "oldId": "hc-019",
+   "name": "Victor Hedman",
+   "field": "stats",
+   "old": "540+ A",
+   "now": null,
+   "kind": "stale",
+   "why": "True but stale floor; now 639 on the lower of the two sources."
+  },
+  {
+   "oldId": "hc-019",
+   "name": "Victor Hedman",
+   "field": "stats",
+   "old": "680+ Pts",
+   "now": null,
+   "kind": "stale",
+   "why": "True but stale floor; now 811 on the lower of the two sources."
+  },
+  {
+   "oldId": "hc-019",
+   "name": "Victor Hedman",
+   "field": "awards",
+   "old": "2× Stanley Cup Champion (2020, 2021)",
+   "now": null,
+   "kind": "reworded",
+   "why": "The same trophy and count ship in the pool format: 2× Stanley Cup Champion."
+  },
+  {
+   "oldId": "hc-019",
+   "name": "Victor Hedman",
+   "field": "awards",
+   "old": "All-Star",
+   "now": null,
+   "kind": "unsourced",
+   "why": "Too vague to check (hockey-reference lists 7 NHL All-Star Team selections, the NHL lists none)."
+  },
+  {
+   "oldId": "hc-020",
+   "name": "Evgeni Malkin",
+   "field": "draftInfo",
+   "old": "1st Round, 2nd Pick (2004)",
+   "now": "1st Round, 2nd Overall (2004)",
+   "kind": "reworded",
+   "why": "Same round, pick and year on both sources; one format across the pool."
+  },
+  {
+   "oldId": "hc-020",
+   "name": "Evgeni Malkin",
+   "field": "stats",
+   "old": "460+ G",
+   "now": null,
+   "kind": "stale",
+   "why": "True but stale floor; now 534 on the lower of the two sources."
+  },
+  {
+   "oldId": "hc-020",
+   "name": "Evgeni Malkin",
+   "field": "stats",
+   "old": "700+ A",
+   "now": null,
+   "kind": "stale",
+   "why": "True but stale floor; now 874 on the lower of the two sources."
+  },
+  {
+   "oldId": "hc-020",
+   "name": "Evgeni Malkin",
+   "field": "stats",
+   "old": "1,160+ Pts",
+   "now": null,
+   "kind": "stale",
+   "why": "True but stale floor; now 1408 on the lower of the two sources."
+  },
+  {
+   "oldId": "hc-021",
+   "name": "Bobby Orr",
+   "field": "position",
+   "old": "Defenseman",
+   "now": "Defense",
+   "kind": "reworded",
+   "why": "One word per role across the pool."
+  },
+  {
+   "oldId": "hc-021",
+   "name": "Bobby Orr",
+   "field": "draftInfo",
+   "old": "1st Overall (1966)",
+   "now": "Undrafted (NHL debut 1966-67)",
+   "kind": "false",
+   "why": "Never drafted: no draft on either source; first NHL season 1966-67."
+  },
+  {
+   "oldId": "hc-021",
+   "name": "Bobby Orr",
+   "field": "teams",
+   "old": "Boston Bruins > Chicago Black Hawks",
+   "now": "Boston Bruins > Chicago Blackhawks",
+   "kind": "reworded",
+   "why": "Same franchise; the official NHL source names it Chicago Blackhawks."
+  },
+  {
+   "oldId": "hc-022",
+   "name": "Phil Esposito",
+   "field": "draftInfo",
+   "old": "Undrafted (signed 1963)",
+   "now": "Undrafted (NHL debut 1963-64)",
+   "kind": "reworded",
+   "why": "Neither source gives a signing date; both give no NHL draft and a first NHL season of 1963-64."
+  },
+  {
+   "oldId": "hc-022",
+   "name": "Phil Esposito",
+   "field": "teams",
+   "old": "Chicago Black Hawks > Boston Bruins > New York Rangers",
+   "now": "Chicago Blackhawks > Boston Bruins > New York Rangers",
+   "kind": "reworded",
+   "why": "Same franchise; the official NHL source names it Chicago Blackhawks."
+  },
+  {
+   "oldId": "hc-023",
+   "name": "Mark Messier",
+   "field": "draftInfo",
+   "old": "2nd Round, 48th Overall (1979)",
+   "now": "3rd Round, 48th Overall (1979)",
+   "kind": "false",
+   "why": "3rd round, 48th overall on both sources."
+  },
+  {
+   "oldId": "hc-023",
+   "name": "Mark Messier",
+   "field": "awards",
+   "old": "Conn Smythe Trophy",
+   "now": null,
+   "kind": "reworded",
+   "why": "The same trophy and count ship in the pool format: Conn Smythe Trophy (1984)."
+  },
+  {
+   "oldId": "hc-024",
+   "name": "Gordie Howe",
+   "field": "draftInfo",
+   "old": "Undrafted (signed 1946)",
+   "now": "Undrafted (NHL debut 1946-47)",
+   "kind": "reworded",
+   "why": "Neither source gives a signing date; both give no NHL draft and a first NHL season of 1946-47."
+  },
+  {
+   "oldId": "hc-025",
+   "name": "Steve Yzerman",
+   "field": "awards",
+   "old": "Selke Trophy",
+   "now": null,
+   "kind": "reworded",
+   "why": "The same trophy and count ship in the pool format: Selke Trophy (2000)."
+  },
+  {
+   "oldId": "hc-026",
+   "name": "Guy Lafleur",
+   "field": "draftInfo",
+   "old": "1st Overall (1971)",
+   "now": "1st Round, 1st Overall (1971)",
+   "kind": "reworded",
+   "why": "Same round, pick and year on both sources; one format across the pool."
+  },
+  {
+   "oldId": "hc-027",
+   "name": "Nicklas Lidstrom",
+   "field": "position",
+   "old": "Defenseman",
+   "now": "Defense",
+   "kind": "reworded",
+   "why": "One word per role across the pool."
+  },
+  {
+   "oldId": "hc-028",
+   "name": "Brendan Shanahan",
+   "field": "awards",
+   "old": "8× All-Star",
+   "now": null,
+   "kind": "unsourced",
+   "why": "Neither source carries it; hockey-reference lists 3 NHL All-Star Team selections."
+  },
+  {
+   "oldId": "hc-029",
+   "name": "Teemu Selanne",
+   "field": "awards",
+   "old": "Stanley Cup Champion (2007)",
+   "now": null,
+   "kind": "reworded",
+   "why": "The same trophy and count ship in the pool format: Stanley Cup Champion."
+  },
+  {
+   "oldId": "hc-029",
+   "name": "Teemu Selanne",
+   "field": "awards",
+   "old": "Calder Trophy (76 goals as rookie)",
+   "now": null,
+   "kind": "reworded",
+   "why": "Calder Trophy (1993) on both sources; the 76 goals note is not an award line."
+  },
+  {
+   "oldId": "hc-029",
+   "name": "Teemu Selanne",
+   "field": "awards",
+   "old": "Rocket Richard Trophy",
+   "now": null,
+   "kind": "reworded",
+   "why": "The same trophy and count ship in the pool format: Rocket Richard Trophy (1999)."
+  },
+  {
+   "oldId": "hc-030",
+   "name": "Martin Brodeur",
+   "field": "position",
+   "old": "Goaltender",
+   "now": "Goalie",
+   "kind": "reworded",
+   "why": "One word per role across the pool."
+  },
+  {
+   "oldId": "hc-030",
+   "name": "Martin Brodeur",
+   "field": "stats",
+   "old": "125 SO",
+   "now": null,
+   "kind": "trimmed",
+   "why": "True on both sources; the goalie lines are now wins, GAA and save percentage."
+  },
+  {
+   "oldId": "hc-030",
+   "name": "Martin Brodeur",
+   "field": "awards",
+   "old": "Calder Trophy",
+   "now": null,
+   "kind": "trimmed",
+   "why": "True on both sources (Calder Trophy (1994)), cut to keep four award lines."
+  },
+  {
+   "oldId": "hc-031",
+   "name": "Patrick Roy",
+   "field": "position",
+   "old": "Goaltender",
+   "now": "Goalie",
+   "kind": "reworded",
+   "why": "One word per role across the pool."
+  },
+  {
+   "oldId": "hc-031",
+   "name": "Patrick Roy",
+   "field": "stats",
+   "old": "66 SO",
+   "now": null,
+   "kind": "trimmed",
+   "why": "True on both sources; the goalie lines are now wins, GAA and save percentage."
+  },
+  {
+   "oldId": "hc-032",
+   "name": "Dominik Hasek",
+   "field": "position",
+   "old": "Goaltender",
+   "now": "Goalie",
+   "kind": "reworded",
+   "why": "One word per role across the pool."
+  },
+  {
+   "oldId": "hc-032",
+   "name": "Dominik Hasek",
+   "field": "stats",
+   "old": "81 SO",
+   "now": null,
+   "kind": "trimmed",
+   "why": "True on both sources; the goalie lines are now wins, GAA and save percentage."
+  },
+  {
+   "oldId": "hc-033",
+   "name": "Joe Nieuwendyk",
+   "field": "awards",
+   "old": "Calder Trophy",
+   "now": null,
+   "kind": "reworded",
+   "why": "The same trophy and count ship in the pool format: Calder Trophy (1988)."
+  },
+  {
+   "oldId": "hc-035",
+   "name": "Mats Sundin",
+   "field": "draftInfo",
+   "old": "1st Overall (1989)",
+   "now": "1st Round, 1st Overall (1989)",
+   "kind": "reworded",
+   "why": "Same round, pick and year on both sources; one format across the pool."
+  },
+  {
+   "oldId": "hc-035",
+   "name": "Mats Sundin",
+   "field": "awards",
+   "old": "1st European 1st Overall Pick",
+   "now": null,
+   "kind": "unsourced",
+   "why": "Neither player page carries it."
+  },
+  {
+   "oldId": "hc-035",
+   "name": "Mats Sundin",
+   "field": "awards",
+   "old": "13× All-Star",
+   "now": null,
+   "kind": "unsourced",
+   "why": "Neither source carries it; hockey-reference lists 2 NHL All-Star Team selections."
+  },
+  {
+   "oldId": "hc-036",
+   "name": "Jaromir Jagr",
+   "field": "teams",
+   "old": "Pittsburgh Penguins > Washington Capitals > New York Rangers > Florida Panthers > New Jersey Devils > Dallas Stars > Boston Bruins > Philadelphia Flyers > Calgary Flames",
+   "now": "Pittsburgh Penguins > Washington Capitals > New York Rangers > Philadelphia Flyers > Dallas Stars > Boston Bruins > New Jersey Devils > Florida Panthers > Calgary Flames",
+   "kind": "false",
+   "why": "Wrong order: both sources give Philadelphia, Dallas, Boston, New Jersey, Florida after the Rangers."
+  },
+  {
+   "oldId": "hc-036",
+   "name": "Jaromir Jagr",
+   "field": "awards",
+   "old": "Hall of Fame (2024)",
+   "now": null,
+   "kind": "false",
+   "why": "Not inducted: NHL inHHOF is 0, hockey-reference shows no induction, and he is not on the hhof.com player inductee list."
+  },
+  {
+   "oldId": "hc-037",
+   "name": "Paul Coffey",
+   "field": "position",
+   "old": "Defenseman",
+   "now": "Defense",
+   "kind": "reworded",
+   "why": "One word per role across the pool."
+  },
+  {
+   "oldId": "hc-037",
+   "name": "Paul Coffey",
+   "field": "awards",
+   "old": "Most goals by a defenseman",
+   "now": null,
+   "kind": "false",
+   "why": "Ray Bourque scored more (410 to 396) on both sources."
+  }
+ ],
+ "players": [
+  {
+   "index": 0,
+   "id": "hc-033",
+   "name": "Joe Nieuwendyk",
+   "status": "kept",
+   "oldIds": [
+    "hc-033"
+   ],
+   "active": false,
+   "position": "Forward",
+   "country": "Canada",
+   "countryFlag": "🇨🇦",
+   "draftInfo": "2nd Round, 27th Overall (1985)",
+   "teams": [
+    "Calgary Flames",
+    "Dallas Stars",
+    "New Jersey Devils",
+    "Toronto Maple Leafs",
+    "Florida Panthers"
+   ],
+   "stats": [
+    "564 G",
+    "562 A",
+    "1,126 Pts"
+   ],
+   "awards": [
+    "3× Stanley Cup Champion",
+    "Conn Smythe Trophy (1999)",
+    "Calder Trophy (1988)",
+    "Hall of Fame (2011)"
+   ],
+   "sources": {
+    "official": {
+     "host": "api-web.nhle.com",
+     "url": "https://api-web.nhle.com/v1/player/8449893/landing",
+     "page": "https://www.nhl.com/player/8449893"
+    },
+    "second": {
+     "host": "hockey-reference.com",
+     "url": "https://www.hockey-reference.com/players/n/nieuwjo01.html"
+    }
+   },
+   "facts": [
+    {
+     "field": "position",
+     "line": "Forward",
+     "official": "C",
+     "second": "C"
+    },
+    {
+     "field": "country",
+     "line": "Canada",
+     "official": "CAN, born Oshawa",
+     "second": "born Oshawa, Ontario [ca]"
+    },
+    {
+     "field": "draftInfo",
+     "line": "2nd Round, 27th Overall (1985)",
+     "official": "1985 CGY round 2 overall 27",
+     "second": "Calgary, 2nd round (27th overall), 1985 NHL Entry"
+    },
+    {
+     "field": "teams",
+     "line": "Calgary Flames > Dallas Stars > New Jersey Devils > Toronto Maple Leafs > Florida Panthers",
+     "official": "Calgary Flames > Dallas Stars > New Jersey Devils > Toronto Maple Leafs > Florida Panthers",
+     "second": "CGY > DAL > NJD > TOR > FLA"
+    },
+    {
+     "field": "stats",
+     "line": "564 G",
+     "official": "G 564",
+     "second": "G 564"
+    },
+    {
+     "field": "stats",
+     "line": "562 A",
+     "official": "A 562",
+     "second": "A 562"
+    },
+    {
+     "field": "stats",
+     "line": "1,126 Pts",
+     "official": "Pts 1126",
+     "second": "Pts 1126"
+    },
+    {
+     "field": "awards",
+     "line": "3× Stanley Cup Champion",
+     "official": "Stanley Cup: 1989, 1999, 2003",
+     "second": "3x Cup Winner"
+    },
+    {
+     "field": "awards",
+     "line": "Conn Smythe Trophy (1999)",
+     "official": "Conn Smythe Trophy: 1999",
+     "second": "1998-99 Conn Smythe Trophy winner"
+    },
+    {
+     "field": "awards",
+     "line": "Calder Trophy (1988)",
+     "official": "Calder Memorial Trophy: 1988",
+     "second": "1987-88 Calder Memorial Trophy winner"
+    },
+    {
+     "field": "awards",
+     "line": "Hall of Fame (2011)",
+     "official": "inHHOF: 1",
+     "second": "Inducted as Player 2011",
+     "third": {
+      "host": "hhof.com",
+      "url": "https://www.hhof.com/HonouredMembers/playersByYear.html?type=Player",
+      "data": "https://www.hhof.com/LegendsOfHockey/jsp/MembersByYear.jsp?type=Player",
+      "value": "2011: Joe Nieuwendyk (P201104)"
+     }
+    }
+   ],
+   "otherVerifiedAwardLines": [
+    "King Clancy Trophy (1995)"
+   ]
+  },
+  {
+   "index": 1,
+   "id": "hc-063",
+   "name": "Erik Karlsson",
+   "status": "new",
+   "oldIds": [],
+   "active": true,
+   "position": "Defense",
+   "country": "Sweden",
+   "countryFlag": "🇸🇪",
+   "draftInfo": "1st Round, 15th Overall (2008)",
+   "teams": [
+    "Ottawa Senators",
+    "San Jose Sharks",
+    "Pittsburgh Penguins"
+   ],
+   "stats": [
+    "210+ G",
+    "720+ A",
+    "930+ Pts"
+   ],
+   "awards": [
+    "3× Norris Trophy"
+   ],
+   "sources": {
+    "official": {
+     "host": "api-web.nhle.com",
+     "url": "https://api-web.nhle.com/v1/player/8474578/landing",
+     "page": "https://www.nhl.com/player/8474578"
+    },
+    "second": {
+     "host": "hockey-reference.com",
+     "url": "https://www.hockey-reference.com/players/k/karlser01.html"
+    }
+   },
+   "facts": [
+    {
+     "field": "position",
+     "line": "Defense",
+     "official": "D",
+     "second": "D"
+    },
+    {
+     "field": "country",
+     "line": "Sweden",
+     "official": "SWE, born Landsbro",
+     "second": "born Landsbro, Sweden [se]"
+    },
+    {
+     "field": "draftInfo",
+     "line": "1st Round, 15th Overall (2008)",
+     "official": "2008 OTT round 1 overall 15",
+     "second": "Ottawa, 1st round (15th overall), 2008 NHL Entry"
+    },
+    {
+     "field": "teams",
+     "line": "Ottawa Senators > San Jose Sharks > Pittsburgh Penguins",
+     "official": "Ottawa Senators > San Jose Sharks > Pittsburgh Penguins",
+     "second": "OTT > SJS > PIT"
+    },
+    {
+     "field": "stats",
+     "line": "210+ G",
+     "official": "G 215",
+     "second": "G 215"
+    },
+    {
+     "field": "stats",
+     "line": "720+ A",
+     "official": "A 722",
+     "second": "A 722"
+    },
+    {
+     "field": "stats",
+     "line": "930+ Pts",
+     "official": "Pts 937",
+     "second": "Pts 937"
+    },
+    {
+     "field": "awards",
+     "line": "3× Norris Trophy",
+     "official": "James Norris Memorial Trophy: 2012, 2015, 2023",
+     "second": "3x James Norris Memorial Trophy winner"
+    }
+   ],
+   "otherVerifiedAwardLines": []
+  },
+  {
+   "index": 2,
+   "id": "hc-002",
+   "name": "Sidney Crosby",
+   "status": "kept",
+   "oldIds": [
+    "hc-002"
+   ],
+   "active": true,
+   "position": "Forward",
+   "country": "Canada",
+   "countryFlag": "🇨🇦",
+   "draftInfo": "1st Round, 1st Overall (2005)",
+   "teams": [
+    "Pittsburgh Penguins"
+   ],
+   "stats": [
+    "650+ G",
+    "1,100+ A",
+    "1,760+ Pts"
+   ],
+   "awards": [
+    "3× Stanley Cup Champion",
+    "2× Hart Trophy",
+    "2× Conn Smythe Trophy",
+    "2× Art Ross Trophy"
+   ],
+   "sources": {
+    "official": {
+     "host": "api-web.nhle.com",
+     "url": "https://api-web.nhle.com/v1/player/8471675/landing",
+     "page": "https://www.nhl.com/player/8471675"
+    },
+    "second": {
+     "host": "hockey-reference.com",
+     "url": "https://www.hockey-reference.com/players/c/crosbsi01.html"
+    }
+   },
+   "facts": [
+    {
+     "field": "position",
+     "line": "Forward",
+     "official": "C",
+     "second": "C"
+    },
+    {
+     "field": "country",
+     "line": "Canada",
+     "official": "CAN, born Cole Harbour",
+     "second": "born Cole Harbour, Nova Scotia [ca]"
+    },
+    {
+     "field": "draftInfo",
+     "line": "1st Round, 1st Overall (2005)",
+     "official": "2005 PIT round 1 overall 1",
+     "second": "Pittsburgh, 1st round (1st overall), 2005 NHL Entry"
+    },
+    {
+     "field": "teams",
+     "line": "Pittsburgh Penguins",
+     "official": "Pittsburgh Penguins",
+     "second": "PIT"
+    },
+    {
+     "field": "stats",
+     "line": "650+ G",
+     "official": "G 654",
+     "second": "G 654"
+    },
+    {
+     "field": "stats",
+     "line": "1,100+ A",
+     "official": "A 1108",
+     "second": "A 1108"
+    },
+    {
+     "field": "stats",
+     "line": "1,760+ Pts",
+     "official": "Pts 1762",
+     "second": "Pts 1762"
+    },
+    {
+     "field": "awards",
+     "line": "3× Stanley Cup Champion",
+     "official": "Stanley Cup: 2009, 2016, 2017",
+     "second": "3x Cup Winner"
+    },
+    {
+     "field": "awards",
+     "line": "2× Hart Trophy",
+     "official": "Hart Memorial Trophy: 2007, 2014",
+     "second": "2x Hart Memorial Trophy winner"
+    },
+    {
+     "field": "awards",
+     "line": "2× Conn Smythe Trophy",
+     "official": "Conn Smythe Trophy: 2016, 2017",
+     "second": "2x Conn Smythe Trophy winner"
+    },
+    {
+     "field": "awards",
+     "line": "2× Art Ross Trophy",
+     "official": "Art Ross Trophy: 2007, 2014",
+     "second": "2x Art Ross Trophy winner"
+    }
+   ],
+   "otherVerifiedAwardLines": [
+    "2× Rocket Richard Trophy",
+    "3× Ted Lindsay Award",
+    "Mark Messier Leadership Award (2010)"
+   ]
+  },
+  {
+   "index": 3,
+   "id": "hc-043",
+   "name": "Mike Bossy",
+   "status": "new",
+   "oldIds": [],
+   "active": false,
+   "position": "Forward",
+   "country": "Canada",
+   "countryFlag": "🇨🇦",
+   "draftInfo": "1st Round, 15th Overall (1977)",
+   "teams": [
+    "New York Islanders"
+   ],
+   "stats": [
+    "573 G",
+    "553 A",
+    "1,126 Pts"
+   ],
+   "awards": [
+    "4× Stanley Cup Champion",
+    "Conn Smythe Trophy (1982)",
+    "Calder Trophy (1978)",
+    "Hall of Fame (1991)"
+   ],
+   "sources": {
+    "official": {
+     "host": "api-web.nhle.com",
+     "url": "https://api-web.nhle.com/v1/player/8445611/landing",
+     "page": "https://www.nhl.com/player/8445611"
+    },
+    "second": {
+     "host": "hockey-reference.com",
+     "url": "https://www.hockey-reference.com/players/b/bossymi01.html"
+    }
+   },
+   "facts": [
+    {
+     "field": "position",
+     "line": "Forward",
+     "official": "R",
+     "second": "RW"
+    },
+    {
+     "field": "country",
+     "line": "Canada",
+     "official": "CAN, born Montréal",
+     "second": "born Montreal, Quebec [ca]"
+    },
+    {
+     "field": "draftInfo",
+     "line": "1st Round, 15th Overall (1977)",
+     "official": "1977 NYI round 1 overall 15",
+     "second": "NY Islanders, 1st round (15th overall), 1977 NHL Amateur"
+    },
+    {
+     "field": "teams",
+     "line": "New York Islanders",
+     "official": "New York Islanders",
+     "second": "NYI"
+    },
+    {
+     "field": "stats",
+     "line": "573 G",
+     "official": "G 573",
+     "second": "G 573"
+    },
+    {
+     "field": "stats",
+     "line": "553 A",
+     "official": "A 553",
+     "second": "A 553"
+    },
+    {
+     "field": "stats",
+     "line": "1,126 Pts",
+     "official": "Pts 1126",
+     "second": "Pts 1126"
+    },
+    {
+     "field": "awards",
+     "line": "4× Stanley Cup Champion",
+     "official": "Stanley Cup: 1980, 1981, 1982, 1983",
+     "second": "4x Cup Winner"
+    },
+    {
+     "field": "awards",
+     "line": "Conn Smythe Trophy (1982)",
+     "official": "Conn Smythe Trophy: 1982",
+     "second": "1981-82 Conn Smythe Trophy winner"
+    },
+    {
+     "field": "awards",
+     "line": "Calder Trophy (1978)",
+     "official": "Calder Memorial Trophy: 1978",
+     "second": "1977-78 Calder Memorial Trophy winner"
+    },
+    {
+     "field": "awards",
+     "line": "Hall of Fame (1991)",
+     "official": "inHHOF: 1",
+     "second": "Inducted as Player 1991",
+     "third": {
+      "host": "hhof.com",
+      "url": "https://www.hhof.com/HonouredMembers/playersByYear.html?type=Player",
+      "data": "https://www.hhof.com/LegendsOfHockey/jsp/MembersByYear.jsp?type=Player",
+      "value": "1991: Michael (Mike) Bossy (P199101)"
+     }
+    }
+   ],
+   "otherVerifiedAwardLines": [
+    "3× Lady Byng Trophy"
+   ]
+  },
+  {
+   "index": 4,
+   "id": "hc-016",
+   "name": "Nikita Kucherov",
+   "status": "kept",
+   "oldIds": [
+    "hc-016"
+   ],
+   "active": true,
+   "position": "Forward",
+   "country": "Russia",
+   "countryFlag": "🇷🇺",
+   "draftInfo": "2nd Round, 58th Overall (2011)",
+   "teams": [
+    "Tampa Bay Lightning"
+   ],
+   "stats": [
+    "400+ G",
+    "720+ A",
+    "1,120+ Pts"
+   ],
+   "awards": [
+    "2× Stanley Cup Champion",
+    "2× Hart Trophy",
+    "3× Art Ross Trophy",
+    "2× Ted Lindsay Award"
+   ],
+   "sources": {
+    "official": {
+     "host": "api-web.nhle.com",
+     "url": "https://api-web.nhle.com/v1/player/8476453/landing",
+     "page": "https://www.nhl.com/player/8476453"
+    },
+    "second": {
+     "host": "hockey-reference.com",
+     "url": "https://www.hockey-reference.com/players/k/kucheni01.html"
+    }
+   },
+   "facts": [
+    {
+     "field": "position",
+     "line": "Forward",
+     "official": "R",
+     "second": "RW"
+    },
+    {
+     "field": "country",
+     "line": "Russia",
+     "official": "RUS, born Maykop",
+     "second": "born Maykop, Russia [ru]"
+    },
+    {
+     "field": "draftInfo",
+     "line": "2nd Round, 58th Overall (2011)",
+     "official": "2011 TBL round 2 overall 58",
+     "second": "Tampa Bay, 2nd round (58th overall), 2011 NHL Entry"
+    },
+    {
+     "field": "teams",
+     "line": "Tampa Bay Lightning",
+     "official": "Tampa Bay Lightning",
+     "second": "TBL"
+    },
+    {
+     "field": "stats",
+     "line": "400+ G",
+     "official": "G 402",
+     "second": "G 402"
+    },
+    {
+     "field": "stats",
+     "line": "720+ A",
+     "official": "A 723",
+     "second": "A 723"
+    },
+    {
+     "field": "stats",
+     "line": "1,120+ Pts",
+     "official": "Pts 1125",
+     "second": "Pts 1125"
+    },
+    {
+     "field": "awards",
+     "line": "2× Stanley Cup Champion",
+     "official": "Stanley Cup: 2020, 2021",
+     "second": "2x Cup Winner"
+    },
+    {
+     "field": "awards",
+     "line": "2× Hart Trophy",
+     "official": "Hart Memorial Trophy: 2019, 2026",
+     "second": "2x Hart Memorial Trophy winner"
+    },
+    {
+     "field": "awards",
+     "line": "3× Art Ross Trophy",
+     "official": "Art Ross Trophy: 2019, 2024, 2025",
+     "second": "3x Art Ross Trophy winner"
+    },
+    {
+     "field": "awards",
+     "line": "2× Ted Lindsay Award",
+     "official": "Ted Lindsay Award: 2019, 2025",
+     "second": "2x Ted Lindsay Award winner"
+    }
+   ],
+   "otherVerifiedAwardLines": []
+  },
+  {
+   "index": 5,
+   "id": "hc-050",
+   "name": "Pavel Bure",
+   "status": "new",
+   "oldIds": [],
+   "active": false,
+   "position": "Forward",
+   "country": "Russia",
+   "countryFlag": "🇷🇺",
+   "draftInfo": "6th Round, 113th Overall (1989)",
+   "teams": [
+    "Vancouver Canucks",
+    "Florida Panthers",
+    "New York Rangers"
+   ],
+   "stats": [
+    "437 G",
+    "342 A",
+    "779 Pts"
+   ],
+   "awards": [
+    "2× Rocket Richard Trophy",
+    "Calder Trophy (1992)",
+    "Hall of Fame (2012)"
+   ],
+   "sources": {
+    "official": {
+     "host": "api-web.nhle.com",
+     "url": "https://api-web.nhle.com/v1/player/8455738/landing",
+     "page": "https://www.nhl.com/player/8455738"
+    },
+    "second": {
+     "host": "hockey-reference.com",
+     "url": "https://www.hockey-reference.com/players/b/burepa01.html"
+    }
+   },
+   "facts": [
+    {
+     "field": "position",
+     "line": "Forward",
+     "official": "R",
+     "second": "RW"
+    },
+    {
+     "field": "country",
+     "line": "Russia",
+     "official": "RUS, born Moscow",
+     "second": "born Moscow, USSR [su]"
+    },
+    {
+     "field": "draftInfo",
+     "line": "6th Round, 113th Overall (1989)",
+     "official": "1989 VAN round 6 overall 113",
+     "second": "Vancouver, 6th round (113th overall), 1989 NHL Entry"
+    },
+    {
+     "field": "teams",
+     "line": "Vancouver Canucks > Florida Panthers > New York Rangers",
+     "official": "Vancouver Canucks > Florida Panthers > New York Rangers",
+     "second": "VAN > FLA > NYR"
+    },
+    {
+     "field": "stats",
+     "line": "437 G",
+     "official": "G 437",
+     "second": "G 437"
+    },
+    {
+     "field": "stats",
+     "line": "342 A",
+     "official": "A 342",
+     "second": "A 342"
+    },
+    {
+     "field": "stats",
+     "line": "779 Pts",
+     "official": "Pts 779",
+     "second": "Pts 779"
+    },
+    {
+     "field": "awards",
+     "line": "2× Rocket Richard Trophy",
+     "official": "Maurice “Rocket” Richard Trophy: 2000, 2001",
+     "second": "2x Maurice Richard Trophy winner"
+    },
+    {
+     "field": "awards",
+     "line": "Calder Trophy (1992)",
+     "official": "Calder Memorial Trophy: 1992",
+     "second": "1991-92 Calder Memorial Trophy winner"
+    },
+    {
+     "field": "awards",
+     "line": "Hall of Fame (2012)",
+     "official": "inHHOF: 1",
+     "second": "Inducted as Player 2012",
+     "third": {
+      "host": "hhof.com",
+      "url": "https://www.hhof.com/HonouredMembers/playersByYear.html?type=Player",
+      "data": "https://www.hhof.com/LegendsOfHockey/jsp/MembersByYear.jsp?type=Player",
+      "value": "2012: Pavel Bure (P201201)"
+     }
+    }
+   ],
+   "otherVerifiedAwardLines": []
+  },
+  {
+   "index": 6,
+   "id": "hc-040",
+   "name": "Ray Bourque",
+   "status": "new",
+   "oldIds": [],
+   "active": false,
+   "position": "Defense",
+   "country": "Canada",
+   "countryFlag": "🇨🇦",
+   "draftInfo": "1st Round, 8th Overall (1979)",
+   "teams": [
+    "Boston Bruins",
+    "Colorado Avalanche"
+   ],
+   "stats": [
+    "410 G",
+    "1,169 A",
+    "1,579 Pts"
+   ],
+   "awards": [
+    "Stanley Cup Champion",
+    "5× Norris Trophy",
+    "Calder Trophy (1980)",
+    "Hall of Fame (2004)"
+   ],
+   "sources": {
+    "official": {
+     "host": "api-web.nhle.com",
+     "url": "https://api-web.nhle.com/v1/player/8445621/landing",
+     "page": "https://www.nhl.com/player/8445621"
+    },
+    "second": {
+     "host": "hockey-reference.com",
+     "url": "https://www.hockey-reference.com/players/b/bourqra01.html"
+    }
+   },
+   "facts": [
+    {
+     "field": "position",
+     "line": "Defense",
+     "official": "D",
+     "second": "D"
+    },
+    {
+     "field": "country",
+     "line": "Canada",
+     "official": "CAN, born Montréal",
+     "second": "born Montreal, Quebec [ca]"
+    },
+    {
+     "field": "draftInfo",
+     "line": "1st Round, 8th Overall (1979)",
+     "official": "1979 BOS round 1 overall 8",
+     "second": "Boston, 1st round (8th overall), 1979 NHL Entry"
+    },
+    {
+     "field": "teams",
+     "line": "Boston Bruins > Colorado Avalanche",
+     "official": "Boston Bruins > Colorado Avalanche",
+     "second": "BOS > COL"
+    },
+    {
+     "field": "stats",
+     "line": "410 G",
+     "official": "G 410",
+     "second": "G 410"
+    },
+    {
+     "field": "stats",
+     "line": "1,169 A",
+     "official": "A 1169",
+     "second": "A 1169"
+    },
+    {
+     "field": "stats",
+     "line": "1,579 Pts",
+     "official": "Pts 1579",
+     "second": "Pts 1579"
+    },
+    {
+     "field": "awards",
+     "line": "Stanley Cup Champion",
+     "official": "Stanley Cup: 2001",
+     "second": "1x Cup Winner"
+    },
+    {
+     "field": "awards",
+     "line": "5× Norris Trophy",
+     "official": "James Norris Memorial Trophy: 1987, 1988, 1990, 1991, 1994",
+     "second": "5x James Norris Memorial Trophy winner"
+    },
+    {
+     "field": "awards",
+     "line": "Calder Trophy (1980)",
+     "official": "Calder Memorial Trophy: 1980",
+     "second": "1979-80 Calder Memorial Trophy winner"
+    },
+    {
+     "field": "awards",
+     "line": "Hall of Fame (2004)",
+     "official": "inHHOF: 1",
+     "second": "Inducted as Player 2004",
+     "third": {
+      "host": "hhof.com",
+      "url": "https://www.hhof.com/HonouredMembers/playersByYear.html?type=Player",
+      "data": "https://www.hhof.com/LegendsOfHockey/jsp/MembersByYear.jsp?type=Player",
+      "value": "2004: Raymond Jean Bourque (P200401)"
+     }
+    }
+   ],
+   "otherVerifiedAwardLines": [
+    "King Clancy Trophy (1992)"
+   ]
+  },
+  {
+   "index": 7,
+   "id": "hc-058",
+   "name": "Duncan Keith",
+   "status": "new",
+   "oldIds": [],
+   "active": false,
+   "position": "Defense",
+   "country": "Canada",
+   "countryFlag": "🇨🇦",
+   "draftInfo": "2nd Round, 54th Overall (2002)",
+   "teams": [
+    "Chicago Blackhawks",
+    "Edmonton Oilers"
+   ],
+   "stats": [
+    "106 G",
+    "540 A",
+    "646 Pts"
+   ],
+   "awards": [
+    "3× Stanley Cup Champion",
+    "Conn Smythe Trophy (2015)",
+    "2× Norris Trophy",
+    "Hall of Fame (2025)"
+   ],
+   "sources": {
+    "official": {
+     "host": "api-web.nhle.com",
+     "url": "https://api-web.nhle.com/v1/player/8470281/landing",
+     "page": "https://www.nhl.com/player/8470281"
+    },
+    "second": {
+     "host": "hockey-reference.com",
+     "url": "https://www.hockey-reference.com/players/k/keithdu01.html"
+    }
+   },
+   "facts": [
+    {
+     "field": "position",
+     "line": "Defense",
+     "official": "D",
+     "second": "D"
+    },
+    {
+     "field": "country",
+     "line": "Canada",
+     "official": "CAN, born Winnipeg",
+     "second": "born Winnipeg, Manitoba [ca]"
+    },
+    {
+     "field": "draftInfo",
+     "line": "2nd Round, 54th Overall (2002)",
+     "official": "2002 CHI round 2 overall 54",
+     "second": "Chicago, 2nd round (54th overall), 2002 NHL Entry"
+    },
+    {
+     "field": "teams",
+     "line": "Chicago Blackhawks > Edmonton Oilers",
+     "official": "Chicago Blackhawks > Edmonton Oilers",
+     "second": "CHI > EDM"
+    },
+    {
+     "field": "stats",
+     "line": "106 G",
+     "official": "G 106",
+     "second": "G 106"
+    },
+    {
+     "field": "stats",
+     "line": "540 A",
+     "official": "A 540",
+     "second": "A 540"
+    },
+    {
+     "field": "stats",
+     "line": "646 Pts",
+     "official": "Pts 646",
+     "second": "Pts 646"
+    },
+    {
+     "field": "awards",
+     "line": "3× Stanley Cup Champion",
+     "official": "Stanley Cup: 2010, 2013, 2015",
+     "second": "3x Cup Winner"
+    },
+    {
+     "field": "awards",
+     "line": "Conn Smythe Trophy (2015)",
+     "official": "Conn Smythe Trophy: 2015",
+     "second": "2014-15 Conn Smythe Trophy winner"
+    },
+    {
+     "field": "awards",
+     "line": "2× Norris Trophy",
+     "official": "James Norris Memorial Trophy: 2010, 2014",
+     "second": "2x James Norris Memorial Trophy winner"
+    },
+    {
+     "field": "awards",
+     "line": "Hall of Fame (2025)",
+     "official": "inHHOF: 1",
+     "second": "Inducted as Player 2025",
+     "third": {
+      "host": "hhof.com",
+      "url": "https://www.hhof.com/HonouredMembers/playersByYear.html?type=Player",
+      "data": "https://www.hhof.com/LegendsOfHockey/jsp/MembersByYear.jsp?type=Player",
+      "value": "2025: Duncan Keith (P202504)"
+     }
+    }
+   ],
+   "otherVerifiedAwardLines": []
+  },
+  {
+   "index": 8,
+   "id": "hc-004",
+   "name": "Connor McDavid",
+   "status": "kept",
+   "oldIds": [
+    "hc-004"
+   ],
+   "active": true,
+   "position": "Forward",
+   "country": "Canada",
+   "countryFlag": "🇨🇦",
+   "draftInfo": "1st Round, 1st Overall (2015)",
+   "teams": [
+    "Edmonton Oilers"
+   ],
+   "stats": [
+    "410+ G",
+    "810+ A",
+    "1,220+ Pts"
+   ],
+   "awards": [
+    "3× Hart Trophy",
+    "Conn Smythe Trophy (2024)",
+    "6× Art Ross Trophy",
+    "5× Ted Lindsay Award"
+   ],
+   "sources": {
+    "official": {
+     "host": "api-web.nhle.com",
+     "url": "https://api-web.nhle.com/v1/player/8478402/landing",
+     "page": "https://www.nhl.com/player/8478402"
+    },
+    "second": {
+     "host": "hockey-reference.com",
+     "url": "https://www.hockey-reference.com/players/m/mcdavco01.html"
+    }
+   },
+   "facts": [
+    {
+     "field": "position",
+     "line": "Forward",
+     "official": "C",
+     "second": "C"
+    },
+    {
+     "field": "country",
+     "line": "Canada",
+     "official": "CAN, born Richmond Hill",
+     "second": "born Richmond Hill, Ontario [ca]"
+    },
+    {
+     "field": "draftInfo",
+     "line": "1st Round, 1st Overall (2015)",
+     "official": "2015 EDM round 1 overall 1",
+     "second": "Edmonton, 1st round (1st overall), 2015 NHL Entry"
+    },
+    {
+     "field": "teams",
+     "line": "Edmonton Oilers",
+     "official": "Edmonton Oilers",
+     "second": "EDM"
+    },
+    {
+     "field": "stats",
+     "line": "410+ G",
+     "official": "G 410",
+     "second": "G 410"
+    },
+    {
+     "field": "stats",
+     "line": "810+ A",
+     "official": "A 817",
+     "second": "A 817"
+    },
+    {
+     "field": "stats",
+     "line": "1,220+ Pts",
+     "official": "Pts 1227",
+     "second": "Pts 1227"
+    },
+    {
+     "field": "awards",
+     "line": "3× Hart Trophy",
+     "official": "Hart Memorial Trophy: 2017, 2021, 2023",
+     "second": "3x Hart Memorial Trophy winner"
+    },
+    {
+     "field": "awards",
+     "line": "Conn Smythe Trophy (2024)",
+     "official": "Conn Smythe Trophy: 2024",
+     "second": "2023-24 Conn Smythe Trophy winner"
+    },
+    {
+     "field": "awards",
+     "line": "6× Art Ross Trophy",
+     "official": "Art Ross Trophy: 2017, 2018, 2021, 2022, 2023, 2026",
+     "second": "6x Art Ross Trophy winner"
+    },
+    {
+     "field": "awards",
+     "line": "5× Ted Lindsay Award",
+     "official": "Ted Lindsay Award: 2017, 2018, 2021, 2023, 2026",
+     "second": "5x Ted Lindsay Award winner"
+    }
+   ],
+   "otherVerifiedAwardLines": [
+    "Rocket Richard Trophy (2023)"
+   ]
+  },
+  {
+   "index": 9,
+   "id": "hc-025",
+   "name": "Steve Yzerman",
+   "status": "kept",
+   "oldIds": [
+    "hc-025"
+   ],
+   "active": false,
+   "position": "Forward",
+   "country": "Canada",
+   "countryFlag": "🇨🇦",
+   "draftInfo": "1st Round, 4th Overall (1983)",
+   "teams": [
+    "Detroit Red Wings"
+   ],
+   "stats": [
+    "692 G",
+    "1,063 A",
+    "1,755 Pts"
+   ],
+   "awards": [
+    "3× Stanley Cup Champion",
+    "Conn Smythe Trophy (1998)",
+    "Selke Trophy (2000)",
+    "Hall of Fame (2009)"
+   ],
+   "sources": {
+    "official": {
+     "host": "api-web.nhle.com",
+     "url": "https://api-web.nhle.com/v1/player/8452578/landing",
+     "page": "https://www.nhl.com/player/8452578"
+    },
+    "second": {
+     "host": "hockey-reference.com",
+     "url": "https://www.hockey-reference.com/players/y/yzermst01.html"
+    }
+   },
+   "facts": [
+    {
+     "field": "position",
+     "line": "Forward",
+     "official": "C",
+     "second": "C"
+    },
+    {
+     "field": "country",
+     "line": "Canada",
+     "official": "CAN, born Cranbrook",
+     "second": "born Cranbrook, British Columbia [ca]"
+    },
+    {
+     "field": "draftInfo",
+     "line": "1st Round, 4th Overall (1983)",
+     "official": "1983 DET round 1 overall 4",
+     "second": "Detroit, 1st round (4th overall), 1983 NHL Entry"
+    },
+    {
+     "field": "teams",
+     "line": "Detroit Red Wings",
+     "official": "Detroit Red Wings",
+     "second": "DET"
+    },
+    {
+     "field": "stats",
+     "line": "692 G",
+     "official": "G 692",
+     "second": "G 692"
+    },
+    {
+     "field": "stats",
+     "line": "1,063 A",
+     "official": "A 1063",
+     "second": "A 1063"
+    },
+    {
+     "field": "stats",
+     "line": "1,755 Pts",
+     "official": "Pts 1755",
+     "second": "Pts 1755"
+    },
+    {
+     "field": "awards",
+     "line": "3× Stanley Cup Champion",
+     "official": "Stanley Cup: 1997, 1998, 2002",
+     "second": "3x Cup Winner"
+    },
+    {
+     "field": "awards",
+     "line": "Conn Smythe Trophy (1998)",
+     "official": "Conn Smythe Trophy: 1998",
+     "second": "1997-98 Conn Smythe Trophy winner"
+    },
+    {
+     "field": "awards",
+     "line": "Selke Trophy (2000)",
+     "official": "Frank J. Selke Trophy: 2000",
+     "second": "1999-00 Frank J. Selke Trophy winner"
+    },
+    {
+     "field": "awards",
+     "line": "Hall of Fame (2009)",
+     "official": "inHHOF: 1",
+     "second": "Inducted as Player 2009",
+     "third": {
+      "host": "hhof.com",
+      "url": "https://www.hhof.com/HonouredMembers/playersByYear.html?type=Player",
+      "data": "https://www.hhof.com/LegendsOfHockey/jsp/MembersByYear.jsp?type=Player",
+      "value": "2009: Stephen Gregory Yzerman (P200904)"
+     }
+    }
+   ],
+   "otherVerifiedAwardLines": [
+    "Ted Lindsay Award (1989)",
+    "Masterton Trophy (2003)"
+   ]
+  },
+  {
+   "index": 10,
+   "id": "hc-064",
+   "name": "Eric Lindros",
+   "status": "new",
+   "oldIds": [],
+   "active": false,
+   "position": "Forward",
+   "country": "Canada",
+   "countryFlag": "🇨🇦",
+   "draftInfo": "1st Round, 1st Overall (1991)",
+   "teams": [
+    "Philadelphia Flyers",
+    "New York Rangers",
+    "Toronto Maple Leafs",
+    "Dallas Stars"
+   ],
+   "stats": [
+    "372 G",
+    "493 A",
+    "865 Pts"
+   ],
+   "awards": [
+    "Hart Trophy (1995)",
+    "Ted Lindsay Award (1995)",
+    "Hall of Fame (2016)"
+   ],
+   "sources": {
+    "official": {
+     "host": "api-web.nhle.com",
+     "url": "https://api-web.nhle.com/v1/player/8458515/landing",
+     "page": "https://www.nhl.com/player/8458515"
+    },
+    "second": {
+     "host": "hockey-reference.com",
+     "url": "https://www.hockey-reference.com/players/l/lindrer01.html"
+    }
+   },
+   "facts": [
+    {
+     "field": "position",
+     "line": "Forward",
+     "official": "C",
+     "second": "C"
+    },
+    {
+     "field": "country",
+     "line": "Canada",
+     "official": "CAN, born London",
+     "second": "born London, Ontario [ca]"
+    },
+    {
+     "field": "draftInfo",
+     "line": "1st Round, 1st Overall (1991)",
+     "official": "1991 QUE round 1 overall 1",
+     "second": "Quebec, 1st round (1st overall), 1991 NHL Entry"
+    },
+    {
+     "field": "teams",
+     "line": "Philadelphia Flyers > New York Rangers > Toronto Maple Leafs > Dallas Stars",
+     "official": "Philadelphia Flyers > New York Rangers > Toronto Maple Leafs > Dallas Stars",
+     "second": "PHI > NYR > TOR > DAL"
+    },
+    {
+     "field": "stats",
+     "line": "372 G",
+     "official": "G 372",
+     "second": "G 372"
+    },
+    {
+     "field": "stats",
+     "line": "493 A",
+     "official": "A 493",
+     "second": "A 493"
+    },
+    {
+     "field": "stats",
+     "line": "865 Pts",
+     "official": "Pts 865",
+     "second": "Pts 865"
+    },
+    {
+     "field": "awards",
+     "line": "Hart Trophy (1995)",
+     "official": "Hart Memorial Trophy: 1995",
+     "second": "1994-95 Hart Memorial Trophy winner"
+    },
+    {
+     "field": "awards",
+     "line": "Ted Lindsay Award (1995)",
+     "official": "Ted Lindsay Award: 1995",
+     "second": "1994-95 Ted Lindsay Award winner"
+    },
+    {
+     "field": "awards",
+     "line": "Hall of Fame (2016)",
+     "official": "inHHOF: 1",
+     "second": "Inducted as Player 2016",
+     "third": {
+      "host": "hhof.com",
+      "url": "https://www.hhof.com/HonouredMembers/playersByYear.html?type=Player",
+      "data": "https://www.hhof.com/LegendsOfHockey/jsp/MembersByYear.jsp?type=Player",
+      "value": "2016: Eric Lindros (P201601)"
+     }
+    }
+   ],
+   "otherVerifiedAwardLines": []
+  },
+  {
+   "index": 11,
+   "id": "hc-057",
+   "name": "Mike Modano",
+   "status": "new",
+   "oldIds": [],
+   "active": false,
+   "position": "Forward",
+   "country": "United States",
+   "countryFlag": "🇺🇸",
+   "draftInfo": "1st Round, 1st Overall (1988)",
+   "teams": [
+    "Minnesota North Stars",
+    "Dallas Stars",
+    "Detroit Red Wings"
+   ],
+   "stats": [
+    "561 G",
+    "813 A",
+    "1,374 Pts"
+   ],
+   "awards": [
+    "Stanley Cup Champion",
+    "Hall of Fame (2014)"
+   ],
+   "sources": {
+    "official": {
+     "host": "api-web.nhle.com",
+     "url": "https://api-web.nhle.com/v1/player/8449645/landing",
+     "page": "https://www.nhl.com/player/8449645"
+    },
+    "second": {
+     "host": "hockey-reference.com",
+     "url": "https://www.hockey-reference.com/players/m/modanmi01.html"
+    }
+   },
+   "facts": [
+    {
+     "field": "position",
+     "line": "Forward",
+     "official": "C",
+     "second": "C"
+    },
+    {
+     "field": "country",
+     "line": "United States",
+     "official": "USA, born Livonia",
+     "second": "born Livonia, Michigan [us]"
+    },
+    {
+     "field": "draftInfo",
+     "line": "1st Round, 1st Overall (1988)",
+     "official": "1988 MNS round 1 overall 1",
+     "second": "Minnesota, 1st round (1st overall), 1988 NHL Entry"
+    },
+    {
+     "field": "teams",
+     "line": "Minnesota North Stars > Dallas Stars > Detroit Red Wings",
+     "official": "Minnesota North Stars > Dallas Stars > Detroit Red Wings",
+     "second": "MNS > DAL > DET"
+    },
+    {
+     "field": "stats",
+     "line": "561 G",
+     "official": "G 561",
+     "second": "G 561"
+    },
+    {
+     "field": "stats",
+     "line": "813 A",
+     "official": "A 813",
+     "second": "A 813"
+    },
+    {
+     "field": "stats",
+     "line": "1,374 Pts",
+     "official": "Pts 1374",
+     "second": "Pts 1374"
+    },
+    {
+     "field": "awards",
+     "line": "Stanley Cup Champion",
+     "official": "Stanley Cup: 1999",
+     "second": "1x Cup Winner"
+    },
+    {
+     "field": "awards",
+     "line": "Hall of Fame (2014)",
+     "official": "inHHOF: 1",
+     "second": "Inducted as Player 2014",
+     "third": {
+      "host": "hhof.com",
+      "url": "https://www.hhof.com/HonouredMembers/playersByYear.html?type=Player",
+      "data": "https://www.hhof.com/LegendsOfHockey/jsp/MembersByYear.jsp?type=Player",
+      "value": "2014: Mike Modano (P201404)"
+     }
+    }
+   ],
+   "otherVerifiedAwardLines": []
+  },
+  {
+   "index": 12,
+   "id": "hc-048",
+   "name": "Chris Pronger",
+   "status": "new",
+   "oldIds": [],
+   "active": false,
+   "position": "Defense",
+   "country": "Canada",
+   "countryFlag": "🇨🇦",
+   "draftInfo": "1st Round, 2nd Overall (1993)",
+   "teams": [
+    "Hartford Whalers",
+    "St. Louis Blues",
+    "Edmonton Oilers",
+    "Anaheim Ducks",
+    "Philadelphia Flyers"
+   ],
+   "stats": [
+    "157 G",
+    "541 A",
+    "698 Pts"
+   ],
+   "awards": [
+    "Stanley Cup Champion",
+    "Hart Trophy (2000)",
+    "Norris Trophy (2000)",
+    "Hall of Fame (2015)"
+   ],
+   "sources": {
+    "official": {
+     "host": "api-web.nhle.com",
+     "url": "https://api-web.nhle.com/v1/player/8459424/landing",
+     "page": "https://www.nhl.com/player/8459424"
+    },
+    "second": {
+     "host": "hockey-reference.com",
+     "url": "https://www.hockey-reference.com/players/p/prongch01.html"
+    }
+   },
+   "facts": [
+    {
+     "field": "position",
+     "line": "Defense",
+     "official": "D",
+     "second": "D"
+    },
+    {
+     "field": "country",
+     "line": "Canada",
+     "official": "CAN, born Dryden",
+     "second": "born Dryden, Ontario [ca]"
+    },
+    {
+     "field": "draftInfo",
+     "line": "1st Round, 2nd Overall (1993)",
+     "official": "1993 HFD round 1 overall 2",
+     "second": "Hartford, 1st round (2nd overall), 1993 NHL Entry"
+    },
+    {
+     "field": "teams",
+     "line": "Hartford Whalers > St. Louis Blues > Edmonton Oilers > Anaheim Ducks > Philadelphia Flyers",
+     "official": "Hartford Whalers > St. Louis Blues > Edmonton Oilers > Anaheim Ducks > Philadelphia Flyers",
+     "second": "HAR > STL > EDM > ANA > PHI"
+    },
+    {
+     "field": "stats",
+     "line": "157 G",
+     "official": "G 157",
+     "second": "G 157"
+    },
+    {
+     "field": "stats",
+     "line": "541 A",
+     "official": "A 541",
+     "second": "A 541"
+    },
+    {
+     "field": "stats",
+     "line": "698 Pts",
+     "official": "Pts 698",
+     "second": "Pts 698"
+    },
+    {
+     "field": "awards",
+     "line": "Stanley Cup Champion",
+     "official": "Stanley Cup: 2007",
+     "second": "1x Cup Winner"
+    },
+    {
+     "field": "awards",
+     "line": "Hart Trophy (2000)",
+     "official": "Hart Memorial Trophy: 2000",
+     "second": "1999-00 Hart Memorial Trophy winner"
+    },
+    {
+     "field": "awards",
+     "line": "Norris Trophy (2000)",
+     "official": "James Norris Memorial Trophy: 2000",
+     "second": "1999-00 James Norris Memorial Trophy winner"
+    },
+    {
+     "field": "awards",
+     "line": "Hall of Fame (2015)",
+     "official": "inHHOF: 1",
+     "second": "Inducted as Player 2015",
+     "third": {
+      "host": "hhof.com",
+      "url": "https://www.hhof.com/HonouredMembers/playersByYear.html?type=Player",
+      "data": "https://www.hhof.com/LegendsOfHockey/jsp/MembersByYear.jsp?type=Player",
+      "value": "2015: Chris Pronger (P201504)"
+     }
+    }
+   ],
+   "otherVerifiedAwardLines": []
+  },
+  {
+   "index": 13,
+   "id": "hc-053",
+   "name": "Scott Niedermayer",
+   "status": "new",
+   "oldIds": [],
+   "active": false,
+   "position": "Defense",
+   "country": "Canada",
+   "countryFlag": "🇨🇦",
+   "draftInfo": "1st Round, 3rd Overall (1991)",
+   "teams": [
+    "New Jersey Devils",
+    "Anaheim Ducks"
+   ],
+   "stats": [
+    "172 G",
+    "568 A",
+    "740 Pts"
+   ],
+   "awards": [
+    "4× Stanley Cup Champion",
+    "Conn Smythe Trophy (2007)",
+    "Norris Trophy (2004)",
+    "Hall of Fame (2013)"
+   ],
+   "sources": {
+    "official": {
+     "host": "api-web.nhle.com",
+     "url": "https://api-web.nhle.com/v1/player/8458517/landing",
+     "page": "https://www.nhl.com/player/8458517"
+    },
+    "second": {
+     "host": "hockey-reference.com",
+     "url": "https://www.hockey-reference.com/players/n/niedesc01.html"
+    }
+   },
+   "facts": [
+    {
+     "field": "position",
+     "line": "Defense",
+     "official": "D",
+     "second": "D"
+    },
+    {
+     "field": "country",
+     "line": "Canada",
+     "official": "CAN, born Edmonton",
+     "second": "born Edmonton, Alberta [ca]"
+    },
+    {
+     "field": "draftInfo",
+     "line": "1st Round, 3rd Overall (1991)",
+     "official": "1991 NJD round 1 overall 3",
+     "second": "New Jersey, 1st round (3rd overall), 1991 NHL Entry"
+    },
+    {
+     "field": "teams",
+     "line": "New Jersey Devils > Anaheim Ducks",
+     "official": "New Jersey Devils > Anaheim Ducks",
+     "second": "NJD > MDA > ANA"
+    },
+    {
+     "field": "stats",
+     "line": "172 G",
+     "official": "G 172",
+     "second": "G 172"
+    },
+    {
+     "field": "stats",
+     "line": "568 A",
+     "official": "A 568",
+     "second": "A 568"
+    },
+    {
+     "field": "stats",
+     "line": "740 Pts",
+     "official": "Pts 740",
+     "second": "Pts 740"
+    },
+    {
+     "field": "awards",
+     "line": "4× Stanley Cup Champion",
+     "official": "Stanley Cup: 1995, 2000, 2003, 2007",
+     "second": "4x Cup Winner"
+    },
+    {
+     "field": "awards",
+     "line": "Conn Smythe Trophy (2007)",
+     "official": "Conn Smythe Trophy: 2007",
+     "second": "2006-07 Conn Smythe Trophy winner"
+    },
+    {
+     "field": "awards",
+     "line": "Norris Trophy (2004)",
+     "official": "James Norris Memorial Trophy: 2004",
+     "second": "2003-04 James Norris Memorial Trophy winner"
+    },
+    {
+     "field": "awards",
+     "line": "Hall of Fame (2013)",
+     "official": "inHHOF: 1",
+     "second": "Inducted as Player 2013",
+     "third": {
+      "host": "hhof.com",
+      "url": "https://www.hhof.com/HonouredMembers/playersByYear.html?type=Player",
+      "data": "https://www.hhof.com/LegendsOfHockey/jsp/MembersByYear.jsp?type=Player",
+      "value": "2013: Scott Niedermayer (P201303)"
+     }
+    }
+   ],
+   "otherVerifiedAwardLines": []
+  },
+  {
+   "index": 14,
+   "id": "hc-008",
+   "name": "Jaromir Jagr",
+   "status": "kept",
+   "oldIds": [
+    "hc-008",
+    "hc-036"
+   ],
+   "active": false,
+   "position": "Forward",
+   "country": "Czech Republic",
+   "countryFlag": "🇨🇿",
+   "draftInfo": "1st Round, 5th Overall (1990)",
+   "teams": [
+    "Pittsburgh Penguins",
+    "Washington Capitals",
+    "New York Rangers",
+    "Philadelphia Flyers",
+    "Dallas Stars",
+    "Boston Bruins",
+    "New Jersey Devils",
+    "Florida Panthers",
+    "Calgary Flames"
+   ],
+   "stats": [
+    "766 G",
+    "1,155 A",
+    "1,921 Pts"
+   ],
+   "awards": [
+    "2× Stanley Cup Champion",
+    "Hart Trophy (1999)",
+    "5× Art Ross Trophy",
+    "3× Ted Lindsay Award"
+   ],
+   "sources": {
+    "official": {
+     "host": "api-web.nhle.com",
+     "url": "https://api-web.nhle.com/v1/player/8448208/landing",
+     "page": "https://www.nhl.com/player/8448208"
+    },
+    "second": {
+     "host": "hockey-reference.com",
+     "url": "https://www.hockey-reference.com/players/j/jagrja01.html"
+    }
+   },
+   "facts": [
+    {
+     "field": "position",
+     "line": "Forward",
+     "official": "R",
+     "second": "RW"
+    },
+    {
+     "field": "country",
+     "line": "Czech Republic",
+     "official": "CZE, born Kladno",
+     "second": "born Kladno, Czechoslovakia [cs]"
+    },
+    {
+     "field": "draftInfo",
+     "line": "1st Round, 5th Overall (1990)",
+     "official": "1990 PIT round 1 overall 5",
+     "second": "Pittsburgh, 1st round (5th overall), 1990 NHL Entry"
+    },
+    {
+     "field": "teams",
+     "line": "Pittsburgh Penguins > Washington Capitals > New York Rangers > Philadelphia Flyers > Dallas Stars > Boston Bruins > New Jersey Devils > Florida Panthers > Calgary Flames",
+     "official": "Pittsburgh Penguins > Washington Capitals > New York Rangers > Philadelphia Flyers > Dallas Stars > Boston Bruins > New Jersey Devils > Florida Panthers > Calgary Flames",
+     "second": "PIT > WSH > NYR > PHI > DAL > BOS > NJD > FLA > CGY"
+    },
+    {
+     "field": "stats",
+     "line": "766 G",
+     "official": "G 766",
+     "second": "G 766"
+    },
+    {
+     "field": "stats",
+     "line": "1,155 A",
+     "official": "A 1155",
+     "second": "A 1155"
+    },
+    {
+     "field": "stats",
+     "line": "1,921 Pts",
+     "official": "Pts 1921",
+     "second": "Pts 1921"
+    },
+    {
+     "field": "awards",
+     "line": "2× Stanley Cup Champion",
+     "official": "Stanley Cup: 1991, 1992",
+     "second": "2x Cup Winner"
+    },
+    {
+     "field": "awards",
+     "line": "Hart Trophy (1999)",
+     "official": "Hart Memorial Trophy: 1999",
+     "second": "1998-99 Hart Memorial Trophy winner"
+    },
+    {
+     "field": "awards",
+     "line": "5× Art Ross Trophy",
+     "official": "Art Ross Trophy: 1995, 1998, 1999, 2000, 2001",
+     "second": "5x Art Ross Trophy winner"
+    },
+    {
+     "field": "awards",
+     "line": "3× Ted Lindsay Award",
+     "official": "Ted Lindsay Award: 1999, 2000, 2006",
+     "second": "3x Ted Lindsay Award winner"
+    }
+   ],
+   "otherVerifiedAwardLines": [
+    "Masterton Trophy (2016)"
+   ]
+  },
+  {
+   "index": 15,
+   "id": "hc-019",
+   "name": "Victor Hedman",
+   "status": "kept",
+   "oldIds": [
+    "hc-019"
+   ],
+   "active": true,
+   "position": "Defense",
+   "country": "Sweden",
+   "countryFlag": "🇸🇪",
+   "draftInfo": "1st Round, 2nd Overall (2009)",
+   "teams": [
+    "Tampa Bay Lightning"
+   ],
+   "stats": [
+    "170+ G",
+    "630+ A",
+    "810+ Pts"
+   ],
+   "awards": [
+    "2× Stanley Cup Champion",
+    "Conn Smythe Trophy (2020)",
+    "Norris Trophy (2018)"
+   ],
+   "sources": {
+    "official": {
+     "host": "api-web.nhle.com",
+     "url": "https://api-web.nhle.com/v1/player/8475167/landing",
+     "page": "https://www.nhl.com/player/8475167"
+    },
+    "second": {
+     "host": "hockey-reference.com",
+     "url": "https://www.hockey-reference.com/players/h/hedmavi01.html"
+    }
+   },
+   "facts": [
+    {
+     "field": "position",
+     "line": "Defense",
+     "official": "D",
+     "second": "D"
+    },
+    {
+     "field": "country",
+     "line": "Sweden",
+     "official": "SWE, born Ornskoldsvik",
+     "second": "born Ornskoldsvik, Sweden [se]"
+    },
+    {
+     "field": "draftInfo",
+     "line": "1st Round, 2nd Overall (2009)",
+     "official": "2009 TBL round 1 overall 2",
+     "second": "Tampa Bay, 1st round (2nd overall), 2009 NHL Entry"
+    },
+    {
+     "field": "teams",
+     "line": "Tampa Bay Lightning",
+     "official": "Tampa Bay Lightning",
+     "second": "TBL"
+    },
+    {
+     "field": "stats",
+     "line": "170+ G",
+     "official": "G 172",
+     "second": "G 172"
+    },
+    {
+     "field": "stats",
+     "line": "630+ A",
+     "official": "A 639",
+     "second": "A 639"
+    },
+    {
+     "field": "stats",
+     "line": "810+ Pts",
+     "official": "Pts 811",
+     "second": "Pts 811"
+    },
+    {
+     "field": "awards",
+     "line": "2× Stanley Cup Champion",
+     "official": "Stanley Cup: 2020, 2021",
+     "second": "2x Cup Winner"
+    },
+    {
+     "field": "awards",
+     "line": "Conn Smythe Trophy (2020)",
+     "official": "Conn Smythe Trophy: 2020",
+     "second": "2019-20 Conn Smythe Trophy winner"
+    },
+    {
+     "field": "awards",
+     "line": "Norris Trophy (2018)",
+     "official": "James Norris Memorial Trophy: 2018",
+     "second": "2017-18 James Norris Memorial Trophy winner"
+    }
+   ],
+   "otherVerifiedAwardLines": []
+  },
+  {
+   "index": 16,
+   "id": "hc-042",
+   "name": "Pavel Datsyuk",
+   "status": "new",
+   "oldIds": [],
+   "active": false,
+   "position": "Forward",
+   "country": "Russia",
+   "countryFlag": "🇷🇺",
+   "draftInfo": "6th Round, 171st Overall (1998)",
+   "teams": [
+    "Detroit Red Wings"
+   ],
+   "stats": [
+    "314 G",
+    "604 A",
+    "918 Pts"
+   ],
+   "awards": [
+    "2× Stanley Cup Champion",
+    "3× Selke Trophy",
+    "4× Lady Byng Trophy",
+    "Hall of Fame (2024)"
+   ],
+   "sources": {
+    "official": {
+     "host": "api-web.nhle.com",
+     "url": "https://api-web.nhle.com/v1/player/8467514/landing",
+     "page": "https://www.nhl.com/player/8467514"
+    },
+    "second": {
+     "host": "hockey-reference.com",
+     "url": "https://www.hockey-reference.com/players/d/datsypa01.html"
+    }
+   },
+   "facts": [
+    {
+     "field": "position",
+     "line": "Forward",
+     "official": "C",
+     "second": "C"
+    },
+    {
+     "field": "country",
+     "line": "Russia",
+     "official": "RUS, born Sverdlovsk",
+     "second": "born Sverdlovsk, USSR [su]"
+    },
+    {
+     "field": "draftInfo",
+     "line": "6th Round, 171st Overall (1998)",
+     "official": "1998 DET round 6 overall 171",
+     "second": "Detroit, 6th round (171st overall), 1998 NHL Entry"
+    },
+    {
+     "field": "teams",
+     "line": "Detroit Red Wings",
+     "official": "Detroit Red Wings",
+     "second": "DET"
+    },
+    {
+     "field": "stats",
+     "line": "314 G",
+     "official": "G 314",
+     "second": "G 314"
+    },
+    {
+     "field": "stats",
+     "line": "604 A",
+     "official": "A 604",
+     "second": "A 604"
+    },
+    {
+     "field": "stats",
+     "line": "918 Pts",
+     "official": "Pts 918",
+     "second": "Pts 918"
+    },
+    {
+     "field": "awards",
+     "line": "2× Stanley Cup Champion",
+     "official": "Stanley Cup: 2002, 2008",
+     "second": "2x Cup Winner"
+    },
+    {
+     "field": "awards",
+     "line": "3× Selke Trophy",
+     "official": "Frank J. Selke Trophy: 2008, 2009, 2010",
+     "second": "3x Frank J. Selke Trophy winner"
+    },
+    {
+     "field": "awards",
+     "line": "4× Lady Byng Trophy",
+     "official": "Lady Byng Memorial Trophy: 2006, 2007, 2008, 2009",
+     "second": "4x Lady Byng Memorial Trophy winner"
+    },
+    {
+     "field": "awards",
+     "line": "Hall of Fame (2024)",
+     "official": "inHHOF: 1",
+     "second": "Inducted as Player 2024",
+     "third": {
+      "host": "hhof.com",
+      "url": "https://www.hhof.com/HonouredMembers/playersByYear.html?type=Player",
+      "data": "https://www.hhof.com/LegendsOfHockey/jsp/MembersByYear.jsp?type=Player",
+      "value": "2024: Pavel Datsyuk (P202402)"
+     }
+    }
+   ],
+   "otherVerifiedAwardLines": []
+  },
+  {
+   "index": 17,
+   "id": "hc-059",
+   "name": "David Pastrnak",
+   "status": "new",
+   "oldIds": [],
+   "active": true,
+   "position": "Forward",
+   "country": "Czech Republic",
+   "countryFlag": "🇨🇿",
+   "draftInfo": "1st Round, 25th Overall (2014)",
+   "teams": [
+    "Boston Bruins"
+   ],
+   "stats": [
+    "420+ G",
+    "510+ A",
+    "930+ Pts"
+   ],
+   "awards": [
+    "Rocket Richard Trophy (2020)"
+   ],
+   "sources": {
+    "official": {
+     "host": "api-web.nhle.com",
+     "url": "https://api-web.nhle.com/v1/player/8477956/landing",
+     "page": "https://www.nhl.com/player/8477956"
+    },
+    "second": {
+     "host": "hockey-reference.com",
+     "url": "https://www.hockey-reference.com/players/p/pastrda01.html"
+    }
+   },
+   "facts": [
+    {
+     "field": "position",
+     "line": "Forward",
+     "official": "R",
+     "second": "RW"
+    },
+    {
+     "field": "country",
+     "line": "Czech Republic",
+     "official": "CZE, born Havirov",
+     "second": "born Havirov, Czech Republic [cz]"
+    },
+    {
+     "field": "draftInfo",
+     "line": "1st Round, 25th Overall (2014)",
+     "official": "2014 BOS round 1 overall 25",
+     "second": "Boston, 1st round (25th overall), 2014 NHL Entry"
+    },
+    {
+     "field": "teams",
+     "line": "Boston Bruins",
+     "official": "Boston Bruins",
+     "second": "BOS"
+    },
+    {
+     "field": "stats",
+     "line": "420+ G",
+     "official": "G 420",
+     "second": "G 420"
+    },
+    {
+     "field": "stats",
+     "line": "510+ A",
+     "official": "A 515",
+     "second": "A 513"
+    },
+    {
+     "field": "stats",
+     "line": "930+ Pts",
+     "official": "Pts 935",
+     "second": "Pts 933"
+    },
+    {
+     "field": "awards",
+     "line": "Rocket Richard Trophy (2020)",
+     "official": "Maurice “Rocket” Richard Trophy: 2020",
+     "second": "2019-20 Maurice Richard Trophy winner"
+    }
+   ],
+   "otherVerifiedAwardLines": []
+  },
+  {
+   "index": 18,
+   "id": "hc-055",
+   "name": "Brett Hull",
+   "status": "new",
+   "oldIds": [],
+   "active": false,
+   "position": "Forward",
+   "country": "Canada",
+   "countryFlag": "🇨🇦",
+   "draftInfo": "6th Round, 117th Overall (1984)",
+   "teams": [
+    "Calgary Flames",
+    "St. Louis Blues",
+    "Dallas Stars",
+    "Detroit Red Wings",
+    "Phoenix Coyotes"
+   ],
+   "stats": [
+    "741 G",
+    "650 A",
+    "1,391 Pts"
+   ],
+   "awards": [
+    "2× Stanley Cup Champion",
+    "Hart Trophy (1991)",
+    "Ted Lindsay Award (1991)",
+    "Hall of Fame (2009)"
+   ],
+   "sources": {
+    "official": {
+     "host": "api-web.nhle.com",
+     "url": "https://api-web.nhle.com/v1/player/8448091/landing",
+     "page": "https://www.nhl.com/player/8448091"
+    },
+    "second": {
+     "host": "hockey-reference.com",
+     "url": "https://www.hockey-reference.com/players/h/hullbr01.html"
+    }
+   },
+   "facts": [
+    {
+     "field": "position",
+     "line": "Forward",
+     "official": "R",
+     "second": "RW"
+    },
+    {
+     "field": "country",
+     "line": "Canada",
+     "official": "CAN, born Belleville",
+     "second": "born Belleville, Ontario [ca]"
+    },
+    {
+     "field": "draftInfo",
+     "line": "6th Round, 117th Overall (1984)",
+     "official": "1984 CGY round 6 overall 117",
+     "second": "Calgary, 6th round (117th overall), 1984 NHL Entry"
+    },
+    {
+     "field": "teams",
+     "line": "Calgary Flames > St. Louis Blues > Dallas Stars > Detroit Red Wings > Phoenix Coyotes",
+     "official": "Calgary Flames > St. Louis Blues > Dallas Stars > Detroit Red Wings > Phoenix Coyotes",
+     "second": "CGY > STL > DAL > DET > PHX"
+    },
+    {
+     "field": "stats",
+     "line": "741 G",
+     "official": "G 741",
+     "second": "G 741"
+    },
+    {
+     "field": "stats",
+     "line": "650 A",
+     "official": "A 650",
+     "second": "A 650"
+    },
+    {
+     "field": "stats",
+     "line": "1,391 Pts",
+     "official": "Pts 1391",
+     "second": "Pts 1391"
+    },
+    {
+     "field": "awards",
+     "line": "2× Stanley Cup Champion",
+     "official": "Stanley Cup: 1999, 2002",
+     "second": "2x Cup Winner"
+    },
+    {
+     "field": "awards",
+     "line": "Hart Trophy (1991)",
+     "official": "Hart Memorial Trophy: 1991",
+     "second": "1990-91 Hart Memorial Trophy winner"
+    },
+    {
+     "field": "awards",
+     "line": "Ted Lindsay Award (1991)",
+     "official": "Ted Lindsay Award: 1991",
+     "second": "1990-91 Ted Lindsay Award winner"
+    },
+    {
+     "field": "awards",
+     "line": "Hall of Fame (2009)",
+     "official": "inHHOF: 1",
+     "second": "Inducted as Player 2009",
+     "third": {
+      "host": "hhof.com",
+      "url": "https://www.hhof.com/HonouredMembers/playersByYear.html?type=Player",
+      "data": "https://www.hhof.com/LegendsOfHockey/jsp/MembersByYear.jsp?type=Player",
+      "value": "2009: Brett Andrew Hull (P200901)"
+     }
+    }
+   ],
+   "otherVerifiedAwardLines": [
+    "Lady Byng Trophy (1990)"
+   ]
+  },
+  {
+   "index": 19,
+   "id": "hc-018",
+   "name": "Patrick Kane",
+   "status": "kept",
+   "oldIds": [
+    "hc-018"
+   ],
+   "active": true,
+   "position": "Forward",
+   "country": "United States",
+   "countryFlag": "🇺🇸",
+   "draftInfo": "1st Round, 1st Overall (2007)",
+   "teams": [
+    "Chicago Blackhawks",
+    "New York Rangers",
+    "Detroit Red Wings"
+   ],
+   "stats": [
+    "500+ G",
+    "890+ A",
+    "1,400+ Pts"
+   ],
+   "awards": [
+    "3× Stanley Cup Champion",
+    "Hart Trophy (2016)",
+    "Conn Smythe Trophy (2013)",
+    "Calder Trophy (2008)"
+   ],
+   "sources": {
+    "official": {
+     "host": "api-web.nhle.com",
+     "url": "https://api-web.nhle.com/v1/player/8474141/landing",
+     "page": "https://www.nhl.com/player/8474141"
+    },
+    "second": {
+     "host": "hockey-reference.com",
+     "url": "https://www.hockey-reference.com/players/k/kanepa01.html"
+    }
+   },
+   "facts": [
+    {
+     "field": "position",
+     "line": "Forward",
+     "official": "R",
+     "second": "RW"
+    },
+    {
+     "field": "country",
+     "line": "United States",
+     "official": "USA, born Buffalo",
+     "second": "born Buffalo, New York [us]"
+    },
+    {
+     "field": "draftInfo",
+     "line": "1st Round, 1st Overall (2007)",
+     "official": "2007 CHI round 1 overall 1",
+     "second": "Chicago, 1st round (1st overall), 2007 NHL Entry"
+    },
+    {
+     "field": "teams",
+     "line": "Chicago Blackhawks > New York Rangers > Detroit Red Wings",
+     "official": "Chicago Blackhawks > New York Rangers > Detroit Red Wings",
+     "second": "CHI > NYR > DET"
+    },
+    {
+     "field": "stats",
+     "line": "500+ G",
+     "official": "G 509",
+     "second": "G 509"
+    },
+    {
+     "field": "stats",
+     "line": "890+ A",
+     "official": "A 892",
+     "second": "A 892"
+    },
+    {
+     "field": "stats",
+     "line": "1,400+ Pts",
+     "official": "Pts 1401",
+     "second": "Pts 1401"
+    },
+    {
+     "field": "awards",
+     "line": "3× Stanley Cup Champion",
+     "official": "Stanley Cup: 2010, 2013, 2015",
+     "second": "3x Cup Winner"
+    },
+    {
+     "field": "awards",
+     "line": "Hart Trophy (2016)",
+     "official": "Hart Memorial Trophy: 2016",
+     "second": "2015-16 Hart Memorial Trophy winner"
+    },
+    {
+     "field": "awards",
+     "line": "Conn Smythe Trophy (2013)",
+     "official": "Conn Smythe Trophy: 2013",
+     "second": "2012-13 Conn Smythe Trophy winner"
+    },
+    {
+     "field": "awards",
+     "line": "Calder Trophy (2008)",
+     "official": "Calder Memorial Trophy: 2008",
+     "second": "2007-08 Calder Memorial Trophy winner"
+    }
+   ],
+   "otherVerifiedAwardLines": [
+    "Art Ross Trophy (2016)",
+    "Ted Lindsay Award (2016)"
+   ]
+  },
+  {
+   "index": 20,
+   "id": "hc-024",
+   "name": "Gordie Howe",
+   "status": "kept",
+   "oldIds": [
+    "hc-024"
+   ],
+   "active": false,
+   "position": "Forward",
+   "country": "Canada",
+   "countryFlag": "🇨🇦",
+   "draftInfo": "Undrafted (NHL debut 1946-47)",
+   "teams": [
+    "Detroit Red Wings",
+    "Hartford Whalers"
+   ],
+   "stats": [
+    "801 G",
+    "1,049 A",
+    "1,850 Pts"
+   ],
+   "awards": [
+    "4× Stanley Cup Champion",
+    "6× Hart Trophy",
+    "6× Art Ross Trophy",
+    "Hall of Fame (1972)"
+   ],
+   "sources": {
+    "official": {
+     "host": "api-web.nhle.com",
+     "url": "https://api-web.nhle.com/v1/player/8448000/landing",
+     "page": "https://www.nhl.com/player/8448000"
+    },
+    "second": {
+     "host": "hockey-reference.com",
+     "url": "https://www.hockey-reference.com/players/h/howego01.html"
+    }
+   },
+   "facts": [
+    {
+     "field": "position",
+     "line": "Forward",
+     "official": "R",
+     "second": "RW"
+    },
+    {
+     "field": "country",
+     "line": "Canada",
+     "official": "CAN, born Floral",
+     "second": "born Floral, Saskatchewan [ca]"
+    },
+    {
+     "field": "draftInfo",
+     "line": "Undrafted (NHL debut 1946-47)",
+     "official": "no draftDetails; first NHL regular season 19461947",
+     "second": "no draft line; first NHL season 1946-47"
+    },
+    {
+     "field": "teams",
+     "line": "Detroit Red Wings > Hartford Whalers",
+     "official": "Detroit Red Wings > Hartford Whalers",
+     "second": "DET > HAR"
+    },
+    {
+     "field": "stats",
+     "line": "801 G",
+     "official": "G 801",
+     "second": "G 801"
+    },
+    {
+     "field": "stats",
+     "line": "1,049 A",
+     "official": "A 1049",
+     "second": "A 1049"
+    },
+    {
+     "field": "stats",
+     "line": "1,850 Pts",
+     "official": "Pts 1850",
+     "second": "Pts 1850"
+    },
+    {
+     "field": "awards",
+     "line": "4× Stanley Cup Champion",
+     "official": "Stanley Cup: 1950, 1952, 1954, 1955",
+     "second": "4x Cup Winner"
+    },
+    {
+     "field": "awards",
+     "line": "6× Hart Trophy",
+     "official": "Hart Memorial Trophy: 1952, 1953, 1957, 1958, 1960, 1963",
+     "second": "6x Hart Memorial Trophy winner"
+    },
+    {
+     "field": "awards",
+     "line": "6× Art Ross Trophy",
+     "official": "Art Ross Trophy: 1951, 1952, 1953, 1954, 1957, 1963",
+     "second": "6x Art Ross Trophy winner"
+    },
+    {
+     "field": "awards",
+     "line": "Hall of Fame (1972)",
+     "official": "inHHOF: 1",
+     "second": "Inducted as Player 1972",
+     "third": {
+      "host": "hhof.com",
+      "url": "https://www.hhof.com/HonouredMembers/playersByYear.html?type=Player",
+      "data": "https://www.hhof.com/LegendsOfHockey/jsp/MembersByYear.jsp?type=Player",
+      "value": "1972: Gordon (Gordie) Howe (P197204)"
+     }
+    }
+   ],
+   "otherVerifiedAwardLines": []
+  },
+  {
+   "index": 21,
+   "id": "hc-052",
+   "name": "Paul Kariya",
+   "status": "new",
+   "oldIds": [],
+   "active": false,
+   "position": "Forward",
+   "country": "Canada",
+   "countryFlag": "🇨🇦",
+   "draftInfo": "1st Round, 4th Overall (1993)",
+   "teams": [
+    "Anaheim Ducks",
+    "Colorado Avalanche",
+    "Nashville Predators",
+    "St. Louis Blues"
+   ],
+   "stats": [
+    "402 G",
+    "587 A",
+    "989 Pts"
+   ],
+   "awards": [
+    "2× Lady Byng Trophy",
+    "Hall of Fame (2017)"
+   ],
+   "sources": {
+    "official": {
+     "host": "api-web.nhle.com",
+     "url": "https://api-web.nhle.com/v1/player/8459426/landing",
+     "page": "https://www.nhl.com/player/8459426"
+    },
+    "second": {
+     "host": "hockey-reference.com",
+     "url": "https://www.hockey-reference.com/players/k/kariypa01.html"
+    }
+   },
+   "facts": [
+    {
+     "field": "position",
+     "line": "Forward",
+     "official": "L",
+     "second": "LW"
+    },
+    {
+     "field": "country",
+     "line": "Canada",
+     "official": "CAN, born Vancouver",
+     "second": "born Vancouver, British Columbia [ca]"
+    },
+    {
+     "field": "draftInfo",
+     "line": "1st Round, 4th Overall (1993)",
+     "official": "1993 ANA round 1 overall 4",
+     "second": "Anaheim, 1st round (4th overall), 1993 NHL Entry"
+    },
+    {
+     "field": "teams",
+     "line": "Anaheim Ducks > Colorado Avalanche > Nashville Predators > St. Louis Blues",
+     "official": "Anaheim Ducks > Colorado Avalanche > Nashville Predators > St. Louis Blues",
+     "second": "MDA > COL > NSH > STL"
+    },
+    {
+     "field": "stats",
+     "line": "402 G",
+     "official": "G 402",
+     "second": "G 402"
+    },
+    {
+     "field": "stats",
+     "line": "587 A",
+     "official": "A 587",
+     "second": "A 587"
+    },
+    {
+     "field": "stats",
+     "line": "989 Pts",
+     "official": "Pts 989",
+     "second": "Pts 989"
+    },
+    {
+     "field": "awards",
+     "line": "2× Lady Byng Trophy",
+     "official": "Lady Byng Memorial Trophy: 1996, 1997",
+     "second": "2x Lady Byng Memorial Trophy winner"
+    },
+    {
+     "field": "awards",
+     "line": "Hall of Fame (2017)",
+     "official": "inHHOF: 1",
+     "second": "Inducted as Player 2017",
+     "third": {
+      "host": "hhof.com",
+      "url": "https://www.hhof.com/HonouredMembers/playersByYear.html?type=Player",
+      "data": "https://www.hhof.com/LegendsOfHockey/jsp/MembersByYear.jsp?type=Player",
+      "value": "2017: Paul Kariya (P201703)"
+     }
+    }
+   ],
+   "otherVerifiedAwardLines": []
+  },
+  {
+   "index": 22,
+   "id": "hc-067",
+   "name": "Kirill Kaprizov",
+   "status": "new",
+   "oldIds": [],
+   "active": true,
+   "position": "Forward",
+   "country": "Russia",
+   "countryFlag": "🇷🇺",
+   "draftInfo": "5th Round, 135th Overall (2015)",
+   "teams": [
+    "Minnesota Wild"
+   ],
+   "stats": [
+    "230+ G",
+    "240+ A",
+    "470+ Pts"
+   ],
+   "awards": [
+    "Calder Trophy (2021)"
+   ],
+   "sources": {
+    "official": {
+     "host": "api-web.nhle.com",
+     "url": "https://api-web.nhle.com/v1/player/8478864/landing",
+     "page": "https://www.nhl.com/player/8478864"
+    },
+    "second": {
+     "host": "hockey-reference.com",
+     "url": "https://www.hockey-reference.com/players/k/kapriki01.html"
+    }
+   },
+   "facts": [
+    {
+     "field": "position",
+     "line": "Forward",
+     "official": "L",
+     "second": "LW"
+    },
+    {
+     "field": "country",
+     "line": "Russia",
+     "official": "RUS, born Novokuznetsk",
+     "second": "born Novokuznetsk, Russia [ru]"
+    },
+    {
+     "field": "draftInfo",
+     "line": "5th Round, 135th Overall (2015)",
+     "official": "2015 MIN round 5 overall 135",
+     "second": "Minnesota, 5th round (135th overall), 2015 NHL Entry"
+    },
+    {
+     "field": "teams",
+     "line": "Minnesota Wild",
+     "official": "Minnesota Wild",
+     "second": "MIN"
+    },
+    {
+     "field": "stats",
+     "line": "230+ G",
+     "official": "G 231",
+     "second": "G 231"
+    },
+    {
+     "field": "stats",
+     "line": "240+ A",
+     "official": "A 245",
+     "second": "A 245"
+    },
+    {
+     "field": "stats",
+     "line": "470+ Pts",
+     "official": "Pts 476",
+     "second": "Pts 476"
+    },
+    {
+     "field": "awards",
+     "line": "Calder Trophy (2021)",
+     "official": "Calder Memorial Trophy: 2021",
+     "second": "2020-21 Calder Memorial Trophy winner"
+    }
+   ],
+   "otherVerifiedAwardLines": []
+  },
+  {
+   "index": 23,
+   "id": "hc-015",
+   "name": "Mark Messier",
+   "status": "kept",
+   "oldIds": [
+    "hc-015",
+    "hc-023"
+   ],
+   "active": false,
+   "position": "Forward",
+   "country": "Canada",
+   "countryFlag": "🇨🇦",
+   "draftInfo": "3rd Round, 48th Overall (1979)",
+   "teams": [
+    "Edmonton Oilers",
+    "New York Rangers",
+    "Vancouver Canucks"
+   ],
+   "stats": [
+    "694 G",
+    "1,193 A",
+    "1,887 Pts"
+   ],
+   "awards": [
+    "6× Stanley Cup Champion",
+    "2× Hart Trophy",
+    "Conn Smythe Trophy (1984)",
+    "Hall of Fame (2007)"
+   ],
+   "sources": {
+    "official": {
+     "host": "api-web.nhle.com",
+     "url": "https://api-web.nhle.com/v1/player/8449573/landing",
+     "page": "https://www.nhl.com/player/8449573"
+    },
+    "second": {
+     "host": "hockey-reference.com",
+     "url": "https://www.hockey-reference.com/players/m/messima01.html"
+    }
+   },
+   "facts": [
+    {
+     "field": "position",
+     "line": "Forward",
+     "official": "C",
+     "second": "LW/C"
+    },
+    {
+     "field": "country",
+     "line": "Canada",
+     "official": "CAN, born Edmonton",
+     "second": "born Edmonton, Alberta [ca]"
+    },
+    {
+     "field": "draftInfo",
+     "line": "3rd Round, 48th Overall (1979)",
+     "official": "1979 EDM round 3 overall 48",
+     "second": "Edmonton, 3rd round (48th overall), 1979 NHL Entry"
+    },
+    {
+     "field": "teams",
+     "line": "Edmonton Oilers > New York Rangers > Vancouver Canucks",
+     "official": "Edmonton Oilers > New York Rangers > Vancouver Canucks",
+     "second": "EDM > NYR > VAN"
+    },
+    {
+     "field": "stats",
+     "line": "694 G",
+     "official": "G 694",
+     "second": "G 694"
+    },
+    {
+     "field": "stats",
+     "line": "1,193 A",
+     "official": "A 1193",
+     "second": "A 1193"
+    },
+    {
+     "field": "stats",
+     "line": "1,887 Pts",
+     "official": "Pts 1887",
+     "second": "Pts 1887"
+    },
+    {
+     "field": "awards",
+     "line": "6× Stanley Cup Champion",
+     "official": "Stanley Cup: 1984, 1985, 1987, 1988, 1990, 1994",
+     "second": "6x Cup Winner"
+    },
+    {
+     "field": "awards",
+     "line": "2× Hart Trophy",
+     "official": "Hart Memorial Trophy: 1990, 1992",
+     "second": "2x Hart Memorial Trophy winner"
+    },
+    {
+     "field": "awards",
+     "line": "Conn Smythe Trophy (1984)",
+     "official": "Conn Smythe Trophy: 1984",
+     "second": "1983-84 Conn Smythe Trophy winner"
+    },
+    {
+     "field": "awards",
+     "line": "Hall of Fame (2007)",
+     "official": "inHHOF: 1",
+     "second": "Inducted as Player 2007",
+     "third": {
+      "host": "hhof.com",
+      "url": "https://www.hhof.com/HonouredMembers/playersByYear.html?type=Player",
+      "data": "https://www.hhof.com/LegendsOfHockey/jsp/MembersByYear.jsp?type=Player",
+      "value": "2007: Mark Messier (P200703)"
+     }
+    }
+   ],
+   "otherVerifiedAwardLines": [
+    "2× Ted Lindsay Award"
+   ]
+  },
+  {
+   "index": 24,
+   "id": "hc-001",
+   "name": "Wayne Gretzky",
+   "status": "kept",
+   "oldIds": [
+    "hc-001"
+   ],
+   "active": false,
+   "position": "Forward",
+   "country": "Canada",
+   "countryFlag": "🇨🇦",
+   "draftInfo": "Undrafted (NHL debut 1979-80)",
+   "teams": [
+    "Edmonton Oilers",
+    "Los Angeles Kings",
+    "St. Louis Blues",
+    "New York Rangers"
+   ],
+   "stats": [
+    "894 G",
+    "1,963 A",
+    "2,857 Pts"
+   ],
+   "awards": [
+    "4× Stanley Cup Champion",
+    "9× Hart Trophy",
+    "10× Art Ross Trophy",
+    "Hall of Fame (1999)"
+   ],
+   "sources": {
+    "official": {
+     "host": "api-web.nhle.com",
+     "url": "https://api-web.nhle.com/v1/player/8447400/landing",
+     "page": "https://www.nhl.com/player/8447400"
+    },
+    "second": {
+     "host": "hockey-reference.com",
+     "url": "https://www.hockey-reference.com/players/g/gretzwa01.html"
+    }
+   },
+   "facts": [
+    {
+     "field": "position",
+     "line": "Forward",
+     "official": "C",
+     "second": "C"
+    },
+    {
+     "field": "country",
+     "line": "Canada",
+     "official": "CAN, born Brantford",
+     "second": "born Brantford, Ontario [ca]"
+    },
+    {
+     "field": "draftInfo",
+     "line": "Undrafted (NHL debut 1979-80)",
+     "official": "no draftDetails; first NHL regular season 19791980",
+     "second": "no draft line; first NHL season 1979-80"
+    },
+    {
+     "field": "teams",
+     "line": "Edmonton Oilers > Los Angeles Kings > St. Louis Blues > New York Rangers",
+     "official": "Edmonton Oilers > Los Angeles Kings > St. Louis Blues > New York Rangers",
+     "second": "EDM > LAK > STL > NYR"
+    },
+    {
+     "field": "stats",
+     "line": "894 G",
+     "official": "G 894",
+     "second": "G 894"
+    },
+    {
+     "field": "stats",
+     "line": "1,963 A",
+     "official": "A 1963",
+     "second": "A 1963"
+    },
+    {
+     "field": "stats",
+     "line": "2,857 Pts",
+     "official": "Pts 2857",
+     "second": "Pts 2857"
+    },
+    {
+     "field": "awards",
+     "line": "4× Stanley Cup Champion",
+     "official": "Stanley Cup: 1984, 1985, 1987, 1988",
+     "second": "4x Cup Winner"
+    },
+    {
+     "field": "awards",
+     "line": "9× Hart Trophy",
+     "official": "Hart Memorial Trophy: 1980, 1981, 1982, 1983, 1984, 1985, 1986, 1987, 1989",
+     "second": "9x Hart Memorial Trophy winner"
+    },
+    {
+     "field": "awards",
+     "line": "10× Art Ross Trophy",
+     "official": "Art Ross Trophy: 1981, 1982, 1983, 1984, 1985, 1986, 1987, 1990, 1991, 1994",
+     "second": "10x Art Ross Trophy winner"
+    },
+    {
+     "field": "awards",
+     "line": "Hall of Fame (1999)",
+     "official": "inHHOF: 1",
+     "second": "Inducted as Player 1999",
+     "third": {
+      "host": "hhof.com",
+      "url": "https://www.hhof.com/HonouredMembers/playersByYear.html?type=Player",
+      "data": "https://www.hhof.com/LegendsOfHockey/jsp/MembersByYear.jsp?type=Player",
+      "value": "1999: Wayne Douglas Gretzky (P199901)"
+     }
+    }
+   ],
+   "otherVerifiedAwardLines": [
+    "2× Conn Smythe Trophy",
+    "5× Ted Lindsay Award",
+    "5× Lady Byng Trophy"
+   ]
+  },
+  {
+   "index": 25,
+   "id": "hc-006",
+   "name": "Nicklas Lidstrom",
+   "status": "kept",
+   "oldIds": [
+    "hc-006",
+    "hc-027"
+   ],
+   "active": false,
+   "position": "Defense",
+   "country": "Sweden",
+   "countryFlag": "🇸🇪",
+   "draftInfo": "3rd Round, 53rd Overall (1989)",
+   "teams": [
+    "Detroit Red Wings"
+   ],
+   "stats": [
+    "264 G",
+    "878 A",
+    "1,142 Pts"
+   ],
+   "awards": [
+    "4× Stanley Cup Champion",
+    "Conn Smythe Trophy (2002)",
+    "7× Norris Trophy",
+    "Hall of Fame (2015)"
+   ],
+   "sources": {
+    "official": {
+     "host": "api-web.nhle.com",
+     "url": "https://api-web.nhle.com/v1/player/8457063/landing",
+     "page": "https://www.nhl.com/player/8457063"
+    },
+    "second": {
+     "host": "hockey-reference.com",
+     "url": "https://www.hockey-reference.com/players/l/lidstni01.html"
+    }
+   },
+   "facts": [
+    {
+     "field": "position",
+     "line": "Defense",
+     "official": "D",
+     "second": "D"
+    },
+    {
+     "field": "country",
+     "line": "Sweden",
+     "official": "SWE, born Vasteras",
+     "second": "born Vasteras, Sweden [se]"
+    },
+    {
+     "field": "draftInfo",
+     "line": "3rd Round, 53rd Overall (1989)",
+     "official": "1989 DET round 3 overall 53",
+     "second": "Detroit, 3rd round (53rd overall), 1989 NHL Entry"
+    },
+    {
+     "field": "teams",
+     "line": "Detroit Red Wings",
+     "official": "Detroit Red Wings",
+     "second": "DET"
+    },
+    {
+     "field": "stats",
+     "line": "264 G",
+     "official": "G 264",
+     "second": "G 264"
+    },
+    {
+     "field": "stats",
+     "line": "878 A",
+     "official": "A 878",
+     "second": "A 878"
+    },
+    {
+     "field": "stats",
+     "line": "1,142 Pts",
+     "official": "Pts 1142",
+     "second": "Pts 1142"
+    },
+    {
+     "field": "awards",
+     "line": "4× Stanley Cup Champion",
+     "official": "Stanley Cup: 1997, 1998, 2002, 2008",
+     "second": "4x Cup Winner"
+    },
+    {
+     "field": "awards",
+     "line": "Conn Smythe Trophy (2002)",
+     "official": "Conn Smythe Trophy: 2002",
+     "second": "2001-02 Conn Smythe Trophy winner"
+    },
+    {
+     "field": "awards",
+     "line": "7× Norris Trophy",
+     "official": "James Norris Memorial Trophy: 2001, 2002, 2003, 2006, 2007, 2008, 2011",
+     "second": "7x James Norris Memorial Trophy winner"
+    },
+    {
+     "field": "awards",
+     "line": "Hall of Fame (2015)",
+     "official": "inHHOF: 1",
+     "second": "Inducted as Player 2015",
+     "third": {
+      "host": "hhof.com",
+      "url": "https://www.hhof.com/HonouredMembers/playersByYear.html?type=Player",
+      "data": "https://www.hhof.com/LegendsOfHockey/jsp/MembersByYear.jsp?type=Player",
+      "value": "2015: Nicklas Lidstrom (P201503)"
+     }
+    }
+   ],
+   "otherVerifiedAwardLines": []
+  },
+  {
+   "index": 26,
+   "id": "hc-005",
+   "name": "Mario Lemieux",
+   "status": "kept",
+   "oldIds": [
+    "hc-005"
+   ],
+   "active": false,
+   "position": "Forward",
+   "country": "Canada",
+   "countryFlag": "🇨🇦",
+   "draftInfo": "1st Round, 1st Overall (1984)",
+   "teams": [
+    "Pittsburgh Penguins"
+   ],
+   "stats": [
+    "690 G",
+    "1,033 A",
+    "1,723 Pts"
+   ],
+   "awards": [
+    "2× Stanley Cup Champion",
+    "3× Hart Trophy",
+    "2× Conn Smythe Trophy",
+    "Hall of Fame (1997)"
+   ],
+   "sources": {
+    "official": {
+     "host": "api-web.nhle.com",
+     "url": "https://api-web.nhle.com/v1/player/8448782/landing",
+     "page": "https://www.nhl.com/player/8448782"
+    },
+    "second": {
+     "host": "hockey-reference.com",
+     "url": "https://www.hockey-reference.com/players/l/lemiema01.html"
+    }
+   },
+   "facts": [
+    {
+     "field": "position",
+     "line": "Forward",
+     "official": "C",
+     "second": "C"
+    },
+    {
+     "field": "country",
+     "line": "Canada",
+     "official": "CAN, born Montréal",
+     "second": "born Montreal, Quebec [ca]"
+    },
+    {
+     "field": "draftInfo",
+     "line": "1st Round, 1st Overall (1984)",
+     "official": "1984 PIT round 1 overall 1",
+     "second": "Pittsburgh, 1st round (1st overall), 1984 NHL Entry"
+    },
+    {
+     "field": "teams",
+     "line": "Pittsburgh Penguins",
+     "official": "Pittsburgh Penguins",
+     "second": "PIT"
+    },
+    {
+     "field": "stats",
+     "line": "690 G",
+     "official": "G 690",
+     "second": "G 690"
+    },
+    {
+     "field": "stats",
+     "line": "1,033 A",
+     "official": "A 1033",
+     "second": "A 1033"
+    },
+    {
+     "field": "stats",
+     "line": "1,723 Pts",
+     "official": "Pts 1723",
+     "second": "Pts 1723"
+    },
+    {
+     "field": "awards",
+     "line": "2× Stanley Cup Champion",
+     "official": "Stanley Cup: 1991, 1992",
+     "second": "2x Cup Winner"
+    },
+    {
+     "field": "awards",
+     "line": "3× Hart Trophy",
+     "official": "Hart Memorial Trophy: 1988, 1993, 1996",
+     "second": "3x Hart Memorial Trophy winner"
+    },
+    {
+     "field": "awards",
+     "line": "2× Conn Smythe Trophy",
+     "official": "Conn Smythe Trophy: 1991, 1992",
+     "second": "2x Conn Smythe Trophy winner"
+    },
+    {
+     "field": "awards",
+     "line": "Hall of Fame (1997)",
+     "official": "inHHOF: 1",
+     "second": "Inducted as Player 1997",
+     "third": {
+      "host": "hhof.com",
+      "url": "https://www.hhof.com/HonouredMembers/playersByYear.html?type=Player",
+      "data": "https://www.hhof.com/LegendsOfHockey/jsp/MembersByYear.jsp?type=Player",
+      "value": "1997: Mario Lemieux (P199701)"
+     }
+    }
+   ],
+   "otherVerifiedAwardLines": [
+    "6× Art Ross Trophy",
+    "4× Ted Lindsay Award",
+    "Calder Trophy (1985)",
+    "Masterton Trophy (1993)"
+   ]
+  },
+  {
+   "index": 27,
+   "id": "hc-020",
+   "name": "Evgeni Malkin",
+   "status": "kept",
+   "oldIds": [
+    "hc-020"
+   ],
+   "active": true,
+   "position": "Forward",
+   "country": "Russia",
+   "countryFlag": "🇷🇺",
+   "draftInfo": "1st Round, 2nd Overall (2004)",
+   "teams": [
+    "Pittsburgh Penguins"
+   ],
+   "stats": [
+    "530+ G",
+    "870+ A",
+    "1,400+ Pts"
+   ],
+   "awards": [
+    "3× Stanley Cup Champion",
+    "Hart Trophy (2012)",
+    "Conn Smythe Trophy (2009)",
+    "Calder Trophy (2007)"
+   ],
+   "sources": {
+    "official": {
+     "host": "api-web.nhle.com",
+     "url": "https://api-web.nhle.com/v1/player/8471215/landing",
+     "page": "https://www.nhl.com/player/8471215"
+    },
+    "second": {
+     "host": "hockey-reference.com",
+     "url": "https://www.hockey-reference.com/players/m/malkiev01.html"
+    }
+   },
+   "facts": [
+    {
+     "field": "position",
+     "line": "Forward",
+     "official": "C",
+     "second": "C"
+    },
+    {
+     "field": "country",
+     "line": "Russia",
+     "official": "RUS, born Magnitogorsk",
+     "second": "born Magnitogorsk, USSR [su]"
+    },
+    {
+     "field": "draftInfo",
+     "line": "1st Round, 2nd Overall (2004)",
+     "official": "2004 PIT round 1 overall 2",
+     "second": "Pittsburgh, 1st round (2nd overall), 2004 NHL Entry"
+    },
+    {
+     "field": "teams",
+     "line": "Pittsburgh Penguins",
+     "official": "Pittsburgh Penguins",
+     "second": "PIT"
+    },
+    {
+     "field": "stats",
+     "line": "530+ G",
+     "official": "G 534",
+     "second": "G 534"
+    },
+    {
+     "field": "stats",
+     "line": "870+ A",
+     "official": "A 874",
+     "second": "A 874"
+    },
+    {
+     "field": "stats",
+     "line": "1,400+ Pts",
+     "official": "Pts 1408",
+     "second": "Pts 1408"
+    },
+    {
+     "field": "awards",
+     "line": "3× Stanley Cup Champion",
+     "official": "Stanley Cup: 2009, 2016, 2017",
+     "second": "3x Cup Winner"
+    },
+    {
+     "field": "awards",
+     "line": "Hart Trophy (2012)",
+     "official": "Hart Memorial Trophy: 2012",
+     "second": "2011-12 Hart Memorial Trophy winner"
+    },
+    {
+     "field": "awards",
+     "line": "Conn Smythe Trophy (2009)",
+     "official": "Conn Smythe Trophy: 2009",
+     "second": "2008-09 Conn Smythe Trophy winner"
+    },
+    {
+     "field": "awards",
+     "line": "Calder Trophy (2007)",
+     "official": "Calder Memorial Trophy: 2007",
+     "second": "2006-07 Calder Memorial Trophy winner"
+    }
+   ],
+   "otherVerifiedAwardLines": [
+    "2× Art Ross Trophy",
+    "Ted Lindsay Award (2012)"
+   ]
+  },
+  {
+   "index": 28,
+   "id": "hc-041",
+   "name": "Carey Price",
+   "status": "new",
+   "oldIds": [],
+   "active": false,
+   "position": "Goalie",
+   "country": "Canada",
+   "countryFlag": "🇨🇦",
+   "draftInfo": "1st Round, 5th Overall (2005)",
+   "teams": [
+    "Montreal Canadiens"
+   ],
+   "stats": [
+    "361 W",
+    "2.51 GAA",
+    ".917 SV%"
+   ],
+   "awards": [
+    "Hart Trophy (2015)",
+    "Vezina Trophy (2015)",
+    "Ted Lindsay Award (2015)",
+    "Jennings Trophy (2015)"
+   ],
+   "sources": {
+    "official": {
+     "host": "api-web.nhle.com",
+     "url": "https://api-web.nhle.com/v1/player/8471679/landing",
+     "page": "https://www.nhl.com/player/8471679"
+    },
+    "second": {
+     "host": "hockey-reference.com",
+     "url": "https://www.hockey-reference.com/players/p/priceca01.html"
+    }
+   },
+   "facts": [
+    {
+     "field": "position",
+     "line": "Goalie",
+     "official": "G",
+     "second": "G"
+    },
+    {
+     "field": "country",
+     "line": "Canada",
+     "official": "CAN, born Anahim Lake",
+     "second": "born Anahim Lake, British Columbia [ca]"
+    },
+    {
+     "field": "draftInfo",
+     "line": "1st Round, 5th Overall (2005)",
+     "official": "2005 MTL round 1 overall 5",
+     "second": "Montreal, 1st round (5th overall), 2005 NHL Entry"
+    },
+    {
+     "field": "teams",
+     "line": "Montreal Canadiens",
+     "official": "Montréal Canadiens",
+     "second": "MTL"
+    },
+    {
+     "field": "stats",
+     "line": "361 W",
+     "official": "W 361",
+     "second": "W 361"
+    },
+    {
+     "field": "stats",
+     "line": "2.51 GAA",
+     "official": "GAA 2.506817",
+     "second": "GAA 2.51"
+    },
+    {
+     "field": "stats",
+     "line": ".917 SV%",
+     "official": "SV% 0.916663",
+     "second": "SV% .917"
+    },
+    {
+     "field": "awards",
+     "line": "Hart Trophy (2015)",
+     "official": "Hart Memorial Trophy: 2015",
+     "second": "2014-15 Hart Memorial Trophy winner"
+    },
+    {
+     "field": "awards",
+     "line": "Vezina Trophy (2015)",
+     "official": "Vezina Trophy: 2015",
+     "second": "2014-15 Vezina Trophy winner"
+    },
+    {
+     "field": "awards",
+     "line": "Ted Lindsay Award (2015)",
+     "official": "Ted Lindsay Award: 2015",
+     "second": "2014-15 Ted Lindsay Award winner"
+    },
+    {
+     "field": "awards",
+     "line": "Jennings Trophy (2015)",
+     "official": "William M. Jennings Trophy: 2015",
+     "second": "2014-15 William M. Jennings Trophy winner"
+    }
+   ],
+   "otherVerifiedAwardLines": [
+    "Masterton Trophy (2022)"
+   ]
+  },
+  {
+   "index": 29,
+   "id": "hc-060",
+   "name": "Peter Forsberg",
+   "status": "new",
+   "oldIds": [],
+   "active": false,
+   "position": "Forward",
+   "country": "Sweden",
+   "countryFlag": "🇸🇪",
+   "draftInfo": "1st Round, 6th Overall (1991)",
+   "teams": [
+    "Quebec Nordiques",
+    "Colorado Avalanche",
+    "Philadelphia Flyers",
+    "Nashville Predators"
+   ],
+   "stats": [
+    "249 G",
+    "636 A",
+    "885 Pts"
+   ],
+   "awards": [
+    "2× Stanley Cup Champion",
+    "Hart Trophy (2003)",
+    "Art Ross Trophy (2003)",
+    "Hall of Fame (2014)"
+   ],
+   "sources": {
+    "official": {
+     "host": "api-web.nhle.com",
+     "url": "https://api-web.nhle.com/v1/player/8458520/landing",
+     "page": "https://www.nhl.com/player/8458520"
+    },
+    "second": {
+     "host": "hockey-reference.com",
+     "url": "https://www.hockey-reference.com/players/f/forsbpe01.html"
+    }
+   },
+   "facts": [
+    {
+     "field": "position",
+     "line": "Forward",
+     "official": "C",
+     "second": "C"
+    },
+    {
+     "field": "country",
+     "line": "Sweden",
+     "official": "SWE, born Ornskoldsvik",
+     "second": "born Ornskoldsvik, Sweden [se]"
+    },
+    {
+     "field": "draftInfo",
+     "line": "1st Round, 6th Overall (1991)",
+     "official": "1991 PHI round 1 overall 6",
+     "second": "Philadelphia, 1st round (6th overall), 1991 NHL Entry"
+    },
+    {
+     "field": "teams",
+     "line": "Quebec Nordiques > Colorado Avalanche > Philadelphia Flyers > Nashville Predators",
+     "official": "Quebec Nordiques > Colorado Avalanche > Philadelphia Flyers > Nashville Predators",
+     "second": "QUE > COL > PHI > NSH"
+    },
+    {
+     "field": "stats",
+     "line": "249 G",
+     "official": "G 249",
+     "second": "G 249"
+    },
+    {
+     "field": "stats",
+     "line": "636 A",
+     "official": "A 636",
+     "second": "A 636"
+    },
+    {
+     "field": "stats",
+     "line": "885 Pts",
+     "official": "Pts 885",
+     "second": "Pts 885"
+    },
+    {
+     "field": "awards",
+     "line": "2× Stanley Cup Champion",
+     "official": "Stanley Cup: 1996, 2001",
+     "second": "2x Cup Winner"
+    },
+    {
+     "field": "awards",
+     "line": "Hart Trophy (2003)",
+     "official": "Hart Memorial Trophy: 2003",
+     "second": "2002-03 Hart Memorial Trophy winner"
+    },
+    {
+     "field": "awards",
+     "line": "Art Ross Trophy (2003)",
+     "official": "Art Ross Trophy: 2003",
+     "second": "2002-03 Art Ross Trophy winner"
+    },
+    {
+     "field": "awards",
+     "line": "Hall of Fame (2014)",
+     "official": "inHHOF: 1",
+     "second": "Inducted as Player 2014",
+     "third": {
+      "host": "hhof.com",
+      "url": "https://www.hhof.com/HonouredMembers/playersByYear.html?type=Player",
+      "data": "https://www.hhof.com/LegendsOfHockey/jsp/MembersByYear.jsp?type=Player",
+      "value": "2014: Peter Forsberg (P201402)"
+     }
+    }
+   ],
+   "otherVerifiedAwardLines": [
+    "Calder Trophy (1995)"
+   ]
+  },
+  {
+   "index": 30,
+   "id": "hc-054",
+   "name": "Joe Thornton",
+   "status": "new",
+   "oldIds": [],
+   "active": false,
+   "position": "Forward",
+   "country": "Canada",
+   "countryFlag": "🇨🇦",
+   "draftInfo": "1st Round, 1st Overall (1997)",
+   "teams": [
+    "Boston Bruins",
+    "San Jose Sharks",
+    "Toronto Maple Leafs",
+    "Florida Panthers"
+   ],
+   "stats": [
+    "430 G",
+    "1,109 A",
+    "1,539 Pts"
+   ],
+   "awards": [
+    "Hart Trophy (2006)",
+    "Art Ross Trophy (2006)",
+    "Hall of Fame (2025)"
+   ],
+   "sources": {
+    "official": {
+     "host": "api-web.nhle.com",
+     "url": "https://api-web.nhle.com/v1/player/8466138/landing",
+     "page": "https://www.nhl.com/player/8466138"
+    },
+    "second": {
+     "host": "hockey-reference.com",
+     "url": "https://www.hockey-reference.com/players/t/thornjo01.html"
+    }
+   },
+   "facts": [
+    {
+     "field": "position",
+     "line": "Forward",
+     "official": "C",
+     "second": "C"
+    },
+    {
+     "field": "country",
+     "line": "Canada",
+     "official": "CAN, born London",
+     "second": "born London, Ontario [ca]"
+    },
+    {
+     "field": "draftInfo",
+     "line": "1st Round, 1st Overall (1997)",
+     "official": "1997 BOS round 1 overall 1",
+     "second": "Boston, 1st round (1st overall), 1997 NHL Entry"
+    },
+    {
+     "field": "teams",
+     "line": "Boston Bruins > San Jose Sharks > Toronto Maple Leafs > Florida Panthers",
+     "official": "Boston Bruins > San Jose Sharks > Toronto Maple Leafs > Florida Panthers",
+     "second": "BOS > SJS > TOR > FLA"
+    },
+    {
+     "field": "stats",
+     "line": "430 G",
+     "official": "G 430",
+     "second": "G 430"
+    },
+    {
+     "field": "stats",
+     "line": "1,109 A",
+     "official": "A 1109",
+     "second": "A 1109"
+    },
+    {
+     "field": "stats",
+     "line": "1,539 Pts",
+     "official": "Pts 1539",
+     "second": "Pts 1539"
+    },
+    {
+     "field": "awards",
+     "line": "Hart Trophy (2006)",
+     "official": "Hart Memorial Trophy: 2006",
+     "second": "2005-06 Hart Memorial Trophy winner"
+    },
+    {
+     "field": "awards",
+     "line": "Art Ross Trophy (2006)",
+     "official": "Art Ross Trophy: 2006",
+     "second": "2005-06 Art Ross Trophy winner"
+    },
+    {
+     "field": "awards",
+     "line": "Hall of Fame (2025)",
+     "official": "inHHOF: 1",
+     "second": "Inducted as Player 2025",
+     "third": {
+      "host": "hhof.com",
+      "url": "https://www.hhof.com/HonouredMembers/playersByYear.html?type=Player",
+      "data": "https://www.hhof.com/LegendsOfHockey/jsp/MembersByYear.jsp?type=Player",
+      "value": "2025: Joe Thornton (P202506)"
+     }
+    }
+   ],
+   "otherVerifiedAwardLines": []
+  },
+  {
+   "index": 31,
+   "id": "hc-046",
+   "name": "Ken Dryden",
+   "status": "new",
+   "oldIds": [],
+   "active": false,
+   "position": "Goalie",
+   "country": "Canada",
+   "countryFlag": "🇨🇦",
+   "draftInfo": "3rd Round, 14th Overall (1964)",
+   "teams": [
+    "Montreal Canadiens"
+   ],
+   "stats": [
+    "258 W",
+    "2.24 GAA",
+    ".922 SV%"
+   ],
+   "awards": [
+    "6× Stanley Cup Champion",
+    "Conn Smythe Trophy (1971)",
+    "5× Vezina Trophy",
+    "Hall of Fame (1983)"
+   ],
+   "sources": {
+    "official": {
+     "host": "api-web.nhle.com",
+     "url": "https://api-web.nhle.com/v1/player/8446490/landing",
+     "page": "https://www.nhl.com/player/8446490"
+    },
+    "second": {
+     "host": "hockey-reference.com",
+     "url": "https://www.hockey-reference.com/players/d/drydeke01.html"
+    }
+   },
+   "facts": [
+    {
+     "field": "position",
+     "line": "Goalie",
+     "official": "G",
+     "second": "G"
+    },
+    {
+     "field": "country",
+     "line": "Canada",
+     "official": "CAN, born Hamilton",
+     "second": "born Hamilton, Ontario [ca]"
+    },
+    {
+     "field": "draftInfo",
+     "line": "3rd Round, 14th Overall (1964)",
+     "official": "1964 BOS round 3 overall 14",
+     "second": "Boston, 3rd round (14th overall), 1964 NHL Amateur"
+    },
+    {
+     "field": "teams",
+     "line": "Montreal Canadiens",
+     "official": "Montréal Canadiens",
+     "second": "MTL"
+    },
+    {
+     "field": "stats",
+     "line": "258 W",
+     "official": "W 258",
+     "second": "W 258"
+    },
+    {
+     "field": "stats",
+     "line": "2.24 GAA",
+     "official": "GAA 2.237566",
+     "second": "GAA 2.24"
+    },
+    {
+     "field": "stats",
+     "line": ".922 SV%",
+     "official": "SV% 0.921501",
+     "second": "SV% .922"
+    },
+    {
+     "field": "awards",
+     "line": "6× Stanley Cup Champion",
+     "official": "Stanley Cup: 1971, 1973, 1976, 1977, 1978, 1979",
+     "second": "6x Cup Winner"
+    },
+    {
+     "field": "awards",
+     "line": "Conn Smythe Trophy (1971)",
+     "official": "Conn Smythe Trophy: 1971",
+     "second": "1970-71 Conn Smythe Trophy winner"
+    },
+    {
+     "field": "awards",
+     "line": "5× Vezina Trophy",
+     "official": "Vezina Trophy: 1973, 1976, 1977, 1978, 1979",
+     "second": "5x Vezina Trophy winner"
+    },
+    {
+     "field": "awards",
+     "line": "Hall of Fame (1983)",
+     "official": "inHHOF: 1",
+     "second": "Inducted as Player 1983",
+     "third": {
+      "host": "hhof.com",
+      "url": "https://www.hhof.com/HonouredMembers/playersByYear.html?type=Player",
+      "data": "https://www.hhof.com/LegendsOfHockey/jsp/MembersByYear.jsp?type=Player",
+      "value": "1983: Kenneth Wayne Dryden (P198301)"
+     }
+    }
+   ],
+   "otherVerifiedAwardLines": [
+    "Calder Trophy (1972)"
+   ]
+  },
+  {
+   "index": 32,
+   "id": "hc-061",
+   "name": "Connor Hellebuyck",
+   "status": "new",
+   "oldIds": [],
+   "active": true,
+   "position": "Goalie",
+   "country": "United States",
+   "countryFlag": "🇺🇸",
+   "draftInfo": "5th Round, 130th Overall (2012)",
+   "teams": [
+    "Winnipeg Jets"
+   ],
+   "stats": [
+    "340+ W",
+    "45+ SO",
+    "620+ GP"
+   ],
+   "awards": [
+    "Hart Trophy (2025)",
+    "3× Vezina Trophy",
+    "2× Jennings Trophy"
+   ],
+   "sources": {
+    "official": {
+     "host": "api-web.nhle.com",
+     "url": "https://api-web.nhle.com/v1/player/8476945/landing",
+     "page": "https://www.nhl.com/player/8476945"
+    },
+    "second": {
+     "host": "hockey-reference.com",
+     "url": "https://www.hockey-reference.com/players/h/helleco01.html"
+    }
+   },
+   "facts": [
+    {
+     "field": "position",
+     "line": "Goalie",
+     "official": "G",
+     "second": "G"
+    },
+    {
+     "field": "country",
+     "line": "United States",
+     "official": "USA, born Commerce",
+     "second": "born Commerce, Michigan [us]"
+    },
+    {
+     "field": "draftInfo",
+     "line": "5th Round, 130th Overall (2012)",
+     "official": "2012 WPG round 5 overall 130",
+     "second": "Winnipeg, 5th round (130th overall), 2012 NHL Entry"
+    },
+    {
+     "field": "teams",
+     "line": "Winnipeg Jets",
+     "official": "Winnipeg Jets",
+     "second": "WPG"
+    },
+    {
+     "field": "stats",
+     "line": "340+ W",
+     "official": "W 345",
+     "second": "W 345"
+    },
+    {
+     "field": "stats",
+     "line": "45+ SO",
+     "official": "SO 45",
+     "second": "SO 45"
+    },
+    {
+     "field": "stats",
+     "line": "620+ GP",
+     "official": "GP 625",
+     "second": "GP 625"
+    },
+    {
+     "field": "awards",
+     "line": "Hart Trophy (2025)",
+     "official": "Hart Memorial Trophy: 2025",
+     "second": "2024-25 Hart Memorial Trophy winner"
+    },
+    {
+     "field": "awards",
+     "line": "3× Vezina Trophy",
+     "official": "Vezina Trophy: 2020, 2024, 2025",
+     "second": "3x Vezina Trophy winner"
+    },
+    {
+     "field": "awards",
+     "line": "2× Jennings Trophy",
+     "official": "William M. Jennings Trophy: 2024, 2025",
+     "second": "2x William M. Jennings Trophy winner"
+    }
+   ],
+   "otherVerifiedAwardLines": []
+  },
+  {
+   "index": 33,
+   "id": "hc-003",
+   "name": "Alexander Ovechkin",
+   "status": "kept",
+   "oldIds": [
+    "hc-003"
+   ],
+   "active": true,
+   "position": "Forward",
+   "country": "Russia",
+   "countryFlag": "🇷🇺",
+   "draftInfo": "1st Round, 1st Overall (2004)",
+   "teams": [
+    "Washington Capitals"
+   ],
+   "stats": [
+    "920+ G",
+    "750+ A",
+    "1,680+ Pts"
+   ],
+   "awards": [
+    "Stanley Cup Champion",
+    "3× Hart Trophy",
+    "Conn Smythe Trophy (2018)",
+    "9× Rocket Richard Trophy"
+   ],
+   "sources": {
+    "official": {
+     "host": "api-web.nhle.com",
+     "url": "https://api-web.nhle.com/v1/player/8471214/landing",
+     "page": "https://www.nhl.com/player/8471214"
+    },
+    "second": {
+     "host": "hockey-reference.com",
+     "url": "https://www.hockey-reference.com/players/o/ovechal01.html"
+    }
+   },
+   "facts": [
+    {
+     "field": "position",
+     "line": "Forward",
+     "official": "L",
+     "second": "LW"
+    },
+    {
+     "field": "country",
+     "line": "Russia",
+     "official": "RUS, born Moscow",
+     "second": "born Moscow, USSR [su]"
+    },
+    {
+     "field": "draftInfo",
+     "line": "1st Round, 1st Overall (2004)",
+     "official": "2004 WSH round 1 overall 1",
+     "second": "Washington, 1st round (1st overall), 2004 NHL Entry"
+    },
+    {
+     "field": "teams",
+     "line": "Washington Capitals",
+     "official": "Washington Capitals",
+     "second": "WSH"
+    },
+    {
+     "field": "stats",
+     "line": "920+ G",
+     "official": "G 929",
+     "second": "G 929"
+    },
+    {
+     "field": "stats",
+     "line": "750+ A",
+     "official": "A 759",
+     "second": "A 758"
+    },
+    {
+     "field": "stats",
+     "line": "1,680+ Pts",
+     "official": "Pts 1688",
+     "second": "Pts 1687"
+    },
+    {
+     "field": "awards",
+     "line": "Stanley Cup Champion",
+     "official": "Stanley Cup: 2018",
+     "second": "1x Cup Winner"
+    },
+    {
+     "field": "awards",
+     "line": "3× Hart Trophy",
+     "official": "Hart Memorial Trophy: 2008, 2009, 2013",
+     "second": "3x Hart Memorial Trophy winner"
+    },
+    {
+     "field": "awards",
+     "line": "Conn Smythe Trophy (2018)",
+     "official": "Conn Smythe Trophy: 2018",
+     "second": "2017-18 Conn Smythe Trophy winner"
+    },
+    {
+     "field": "awards",
+     "line": "9× Rocket Richard Trophy",
+     "official": "Maurice “Rocket” Richard Trophy: 2008, 2009, 2013, 2014, 2015, 2016, 2018, 2019, 2020",
+     "second": "9x Maurice Richard Trophy winner"
+    }
+   ],
+   "otherVerifiedAwardLines": [
+    "Art Ross Trophy (2008)",
+    "3× Ted Lindsay Award",
+    "Calder Trophy (2006)",
+    "Mark Messier Leadership Award (2025)"
+   ]
+  },
+  {
+   "index": 34,
+   "id": "hc-039",
+   "name": "Joe Sakic",
+   "status": "new",
+   "oldIds": [],
+   "active": false,
+   "position": "Forward",
+   "country": "Canada",
+   "countryFlag": "🇨🇦",
+   "draftInfo": "1st Round, 15th Overall (1987)",
+   "teams": [
+    "Quebec Nordiques",
+    "Colorado Avalanche"
+   ],
+   "stats": [
+    "625 G",
+    "1,016 A",
+    "1,641 Pts"
+   ],
+   "awards": [
+    "2× Stanley Cup Champion",
+    "Hart Trophy (2001)",
+    "Conn Smythe Trophy (1996)",
+    "Hall of Fame (2012)"
+   ],
+   "sources": {
+    "official": {
+     "host": "api-web.nhle.com",
+     "url": "https://api-web.nhle.com/v1/player/8451101/landing",
+     "page": "https://www.nhl.com/player/8451101"
+    },
+    "second": {
+     "host": "hockey-reference.com",
+     "url": "https://www.hockey-reference.com/players/s/sakicjo01.html"
+    }
+   },
+   "facts": [
+    {
+     "field": "position",
+     "line": "Forward",
+     "official": "C",
+     "second": "C"
+    },
+    {
+     "field": "country",
+     "line": "Canada",
+     "official": "CAN, born Burnaby",
+     "second": "born Burnaby, British Columbia [ca]"
+    },
+    {
+     "field": "draftInfo",
+     "line": "1st Round, 15th Overall (1987)",
+     "official": "1987 QUE round 1 overall 15",
+     "second": "Quebec, 1st round (15th overall), 1987 NHL Entry"
+    },
+    {
+     "field": "teams",
+     "line": "Quebec Nordiques > Colorado Avalanche",
+     "official": "Quebec Nordiques > Colorado Avalanche",
+     "second": "QUE > COL"
+    },
+    {
+     "field": "stats",
+     "line": "625 G",
+     "official": "G 625",
+     "second": "G 625"
+    },
+    {
+     "field": "stats",
+     "line": "1,016 A",
+     "official": "A 1016",
+     "second": "A 1016"
+    },
+    {
+     "field": "stats",
+     "line": "1,641 Pts",
+     "official": "Pts 1641",
+     "second": "Pts 1641"
+    },
+    {
+     "field": "awards",
+     "line": "2× Stanley Cup Champion",
+     "official": "Stanley Cup: 1996, 2001",
+     "second": "2x Cup Winner"
+    },
+    {
+     "field": "awards",
+     "line": "Hart Trophy (2001)",
+     "official": "Hart Memorial Trophy: 2001",
+     "second": "2000-01 Hart Memorial Trophy winner"
+    },
+    {
+     "field": "awards",
+     "line": "Conn Smythe Trophy (1996)",
+     "official": "Conn Smythe Trophy: 1996",
+     "second": "1995-96 Conn Smythe Trophy winner"
+    },
+    {
+     "field": "awards",
+     "line": "Hall of Fame (2012)",
+     "official": "inHHOF: 1",
+     "second": "Inducted as Player 2012",
+     "third": {
+      "host": "hhof.com",
+      "url": "https://www.hhof.com/HonouredMembers/playersByYear.html?type=Player",
+      "data": "https://www.hhof.com/LegendsOfHockey/jsp/MembersByYear.jsp?type=Player",
+      "value": "2012: Joe Sakic (P201203)"
+     }
+    }
+   ],
+   "otherVerifiedAwardLines": [
+    "Ted Lindsay Award (2001)",
+    "Lady Byng Trophy (2001)"
+   ]
+  },
+  {
+   "index": 35,
+   "id": "hc-007",
+   "name": "Patrick Roy",
+   "status": "kept",
+   "oldIds": [
+    "hc-007",
+    "hc-031"
+   ],
+   "active": false,
+   "position": "Goalie",
+   "country": "Canada",
+   "countryFlag": "🇨🇦",
+   "draftInfo": "3rd Round, 51st Overall (1984)",
+   "teams": [
+    "Montreal Canadiens",
+    "Colorado Avalanche"
+   ],
+   "stats": [
+    "551 W",
+    "2.54 GAA",
+    ".910 SV%"
+   ],
+   "awards": [
+    "4× Stanley Cup Champion",
+    "3× Conn Smythe Trophy",
+    "3× Vezina Trophy",
+    "Hall of Fame (2006)"
+   ],
+   "sources": {
+    "official": {
+     "host": "api-web.nhle.com",
+     "url": "https://api-web.nhle.com/v1/player/8451033/landing",
+     "page": "https://www.nhl.com/player/8451033"
+    },
+    "second": {
+     "host": "hockey-reference.com",
+     "url": "https://www.hockey-reference.com/players/r/roypa01.html"
+    }
+   },
+   "facts": [
+    {
+     "field": "position",
+     "line": "Goalie",
+     "official": "G",
+     "second": "G"
+    },
+    {
+     "field": "country",
+     "line": "Canada",
+     "official": "CAN, born Quebec City",
+     "second": "born Quebec City, Quebec [ca]"
+    },
+    {
+     "field": "draftInfo",
+     "line": "3rd Round, 51st Overall (1984)",
+     "official": "1984 MTL round 3 overall 51",
+     "second": "Montreal, 3rd round (51st overall), 1984 NHL Entry"
+    },
+    {
+     "field": "teams",
+     "line": "Montreal Canadiens > Colorado Avalanche",
+     "official": "Montréal Canadiens > Colorado Avalanche",
+     "second": "MTL > COL"
+    },
+    {
+     "field": "stats",
+     "line": "551 W",
+     "official": "W 551",
+     "second": "W 551"
+    },
+    {
+     "field": "stats",
+     "line": "2.54 GAA",
+     "official": "GAA 2.536927",
+     "second": "GAA 2.54"
+    },
+    {
+     "field": "stats",
+     "line": ".910 SV%",
+     "official": "SV% 0.910181",
+     "second": "SV% .910"
+    },
+    {
+     "field": "awards",
+     "line": "4× Stanley Cup Champion",
+     "official": "Stanley Cup: 1986, 1993, 1996, 2001",
+     "second": "4x Cup Winner"
+    },
+    {
+     "field": "awards",
+     "line": "3× Conn Smythe Trophy",
+     "official": "Conn Smythe Trophy: 1986, 1993, 2001",
+     "second": "3x Conn Smythe Trophy winner"
+    },
+    {
+     "field": "awards",
+     "line": "3× Vezina Trophy",
+     "official": "Vezina Trophy: 1989, 1990, 1992",
+     "second": "3x Vezina Trophy winner"
+    },
+    {
+     "field": "awards",
+     "line": "Hall of Fame (2006)",
+     "official": "inHHOF: 1",
+     "second": "Inducted as Player 2006",
+     "third": {
+      "host": "hhof.com",
+      "url": "https://www.hhof.com/HonouredMembers/playersByYear.html?type=Player",
+      "data": "https://www.hhof.com/LegendsOfHockey/jsp/MembersByYear.jsp?type=Player",
+      "value": "2006: Patrick Roy (P200602)"
+     }
+    }
+   ],
+   "otherVerifiedAwardLines": [
+    "5× Jennings Trophy"
+   ]
+  },
+  {
+   "index": 36,
+   "id": "hc-013",
+   "name": "Cale Makar",
+   "status": "kept",
+   "oldIds": [
+    "hc-013"
+   ],
+   "active": true,
+   "position": "Defense",
+   "country": "Canada",
+   "countryFlag": "🇨🇦",
+   "draftInfo": "1st Round, 4th Overall (2017)",
+   "teams": [
+    "Colorado Avalanche"
+   ],
+   "stats": [
+    "130+ G",
+    "370+ A",
+    "500+ Pts"
+   ],
+   "awards": [
+    "Stanley Cup Champion",
+    "Conn Smythe Trophy (2022)",
+    "2× Norris Trophy",
+    "Calder Trophy (2020)"
+   ],
+   "sources": {
+    "official": {
+     "host": "api-web.nhle.com",
+     "url": "https://api-web.nhle.com/v1/player/8480069/landing",
+     "page": "https://www.nhl.com/player/8480069"
+    },
+    "second": {
+     "host": "hockey-reference.com",
+     "url": "https://www.hockey-reference.com/players/m/makarca01.html"
+    }
+   },
+   "facts": [
+    {
+     "field": "position",
+     "line": "Defense",
+     "official": "D",
+     "second": "D"
+    },
+    {
+     "field": "country",
+     "line": "Canada",
+     "official": "CAN, born Calgary",
+     "second": "born Calgary, Alberta [ca]"
+    },
+    {
+     "field": "draftInfo",
+     "line": "1st Round, 4th Overall (2017)",
+     "official": "2017 COL round 1 overall 4",
+     "second": "Colorado, 1st round (4th overall), 2017 NHL Entry"
+    },
+    {
+     "field": "teams",
+     "line": "Colorado Avalanche",
+     "official": "Colorado Avalanche",
+     "second": "COL"
+    },
+    {
+     "field": "stats",
+     "line": "130+ G",
+     "official": "G 136",
+     "second": "G 136"
+    },
+    {
+     "field": "stats",
+     "line": "370+ A",
+     "official": "A 373",
+     "second": "A 373"
+    },
+    {
+     "field": "stats",
+     "line": "500+ Pts",
+     "official": "Pts 509",
+     "second": "Pts 509"
+    },
+    {
+     "field": "awards",
+     "line": "Stanley Cup Champion",
+     "official": "Stanley Cup: 2022",
+     "second": "1x Cup Winner"
+    },
+    {
+     "field": "awards",
+     "line": "Conn Smythe Trophy (2022)",
+     "official": "Conn Smythe Trophy: 2022",
+     "second": "2021-22 Conn Smythe Trophy winner"
+    },
+    {
+     "field": "awards",
+     "line": "2× Norris Trophy",
+     "official": "James Norris Memorial Trophy: 2022, 2025",
+     "second": "2x James Norris Memorial Trophy winner"
+    },
+    {
+     "field": "awards",
+     "line": "Calder Trophy (2020)",
+     "official": "Calder Memorial Trophy: 2020",
+     "second": "2019-20 Calder Memorial Trophy winner"
+    }
+   ],
+   "otherVerifiedAwardLines": []
+  },
+  {
+   "index": 37,
+   "id": "hc-049",
+   "name": "Jonathan Toews",
+   "status": "new",
+   "oldIds": [],
+   "active": false,
+   "position": "Forward",
+   "country": "Canada",
+   "countryFlag": "🇨🇦",
+   "draftInfo": "1st Round, 3rd Overall (2006)",
+   "teams": [
+    "Chicago Blackhawks",
+    "Winnipeg Jets"
+   ],
+   "stats": [
+    "383 G",
+    "529 A",
+    "912 Pts"
+   ],
+   "awards": [
+    "3× Stanley Cup Champion",
+    "Conn Smythe Trophy (2010)",
+    "Selke Trophy (2013)",
+    "Mark Messier Leadership Award (2015)"
+   ],
+   "sources": {
+    "official": {
+     "host": "api-web.nhle.com",
+     "url": "https://api-web.nhle.com/v1/player/8473604/landing",
+     "page": "https://www.nhl.com/player/8473604"
+    },
+    "second": {
+     "host": "hockey-reference.com",
+     "url": "https://www.hockey-reference.com/players/t/toewsjo01.html"
+    }
+   },
+   "facts": [
+    {
+     "field": "position",
+     "line": "Forward",
+     "official": "C",
+     "second": "C"
+    },
+    {
+     "field": "country",
+     "line": "Canada",
+     "official": "CAN, born Winnipeg",
+     "second": "born Winnipeg, Manitoba [ca]"
+    },
+    {
+     "field": "draftInfo",
+     "line": "1st Round, 3rd Overall (2006)",
+     "official": "2006 CHI round 1 overall 3",
+     "second": "Chicago, 1st round (3rd overall), 2006 NHL Entry"
+    },
+    {
+     "field": "teams",
+     "line": "Chicago Blackhawks > Winnipeg Jets",
+     "official": "Chicago Blackhawks > Winnipeg Jets",
+     "second": "CHI > WPG"
+    },
+    {
+     "field": "stats",
+     "line": "383 G",
+     "official": "G 383",
+     "second": "G 383"
+    },
+    {
+     "field": "stats",
+     "line": "529 A",
+     "official": "A 529",
+     "second": "A 529"
+    },
+    {
+     "field": "stats",
+     "line": "912 Pts",
+     "official": "Pts 912",
+     "second": "Pts 912"
+    },
+    {
+     "field": "awards",
+     "line": "3× Stanley Cup Champion",
+     "official": "Stanley Cup: 2010, 2013, 2015",
+     "second": "3x Cup Winner"
+    },
+    {
+     "field": "awards",
+     "line": "Conn Smythe Trophy (2010)",
+     "official": "Conn Smythe Trophy: 2010",
+     "second": "2009-10 Conn Smythe Trophy winner"
+    },
+    {
+     "field": "awards",
+     "line": "Selke Trophy (2013)",
+     "official": "Frank J. Selke Trophy: 2013",
+     "second": "2012-13 Frank J. Selke Trophy winner"
+    },
+    {
+     "field": "awards",
+     "line": "Mark Messier Leadership Award (2015)",
+     "official": "Mark Messier NHL Leadership Award: 2015",
+     "second": "2014-15 Mark Messier Leadership Award winner"
+    }
+   ],
+   "otherVerifiedAwardLines": []
+  },
+  {
+   "index": 38,
+   "id": "hc-010",
+   "name": "Nathan MacKinnon",
+   "status": "kept",
+   "oldIds": [
+    "hc-010"
+   ],
+   "active": true,
+   "position": "Forward",
+   "country": "Canada",
+   "countryFlag": "🇨🇦",
+   "draftInfo": "1st Round, 1st Overall (2013)",
+   "teams": [
+    "Colorado Avalanche"
+   ],
+   "stats": [
+    "420+ G",
+    "720+ A",
+    "1,140+ Pts"
+   ],
+   "awards": [
+    "Stanley Cup Champion",
+    "Hart Trophy (2024)",
+    "Calder Trophy (2014)",
+    "Lady Byng Trophy (2020)"
+   ],
+   "sources": {
+    "official": {
+     "host": "api-web.nhle.com",
+     "url": "https://api-web.nhle.com/v1/player/8477492/landing",
+     "page": "https://www.nhl.com/player/8477492"
+    },
+    "second": {
+     "host": "hockey-reference.com",
+     "url": "https://www.hockey-reference.com/players/m/mackina01.html"
+    }
+   },
+   "facts": [
+    {
+     "field": "position",
+     "line": "Forward",
+     "official": "C",
+     "second": "C"
+    },
+    {
+     "field": "country",
+     "line": "Canada",
+     "official": "CAN, born Halifax",
+     "second": "born Halifax, Nova Scotia [ca]"
+    },
+    {
+     "field": "draftInfo",
+     "line": "1st Round, 1st Overall (2013)",
+     "official": "2013 COL round 1 overall 1",
+     "second": "Colorado, 1st round (1st overall), 2013 NHL Entry"
+    },
+    {
+     "field": "teams",
+     "line": "Colorado Avalanche",
+     "official": "Colorado Avalanche",
+     "second": "COL"
+    },
+    {
+     "field": "stats",
+     "line": "420+ G",
+     "official": "G 422",
+     "second": "G 422"
+    },
+    {
+     "field": "stats",
+     "line": "720+ A",
+     "official": "A 722",
+     "second": "A 722"
+    },
+    {
+     "field": "stats",
+     "line": "1,140+ Pts",
+     "official": "Pts 1144",
+     "second": "Pts 1144"
+    },
+    {
+     "field": "awards",
+     "line": "Stanley Cup Champion",
+     "official": "Stanley Cup: 2022",
+     "second": "1x Cup Winner"
+    },
+    {
+     "field": "awards",
+     "line": "Hart Trophy (2024)",
+     "official": "Hart Memorial Trophy: 2024",
+     "second": "2023-24 Hart Memorial Trophy winner"
+    },
+    {
+     "field": "awards",
+     "line": "Calder Trophy (2014)",
+     "official": "Calder Memorial Trophy: 2014",
+     "second": "2013-14 Calder Memorial Trophy winner"
+    },
+    {
+     "field": "awards",
+     "line": "Lady Byng Trophy (2020)",
+     "official": "Lady Byng Memorial Trophy: 2020",
+     "second": "2019-20 Lady Byng Memorial Trophy winner"
+    }
+   ],
+   "otherVerifiedAwardLines": [
+    "Rocket Richard Trophy (2026)",
+    "Ted Lindsay Award (2024)"
+   ]
+  },
+  {
+   "index": 39,
+   "id": "hc-047",
+   "name": "Jarome Iginla",
+   "status": "new",
+   "oldIds": [],
+   "active": false,
+   "position": "Forward",
+   "country": "Canada",
+   "countryFlag": "🇨🇦",
+   "draftInfo": "1st Round, 11th Overall (1995)",
+   "teams": [
+    "Calgary Flames",
+    "Pittsburgh Penguins",
+    "Boston Bruins",
+    "Colorado Avalanche",
+    "Los Angeles Kings"
+   ],
+   "stats": [
+    "625 G",
+    "675 A",
+    "1,300 Pts"
+   ],
+   "awards": [
+    "Art Ross Trophy (2002)",
+    "2× Rocket Richard Trophy",
+    "Ted Lindsay Award (2002)",
+    "Hall of Fame (2020)"
+   ],
+   "sources": {
+    "official": {
+     "host": "api-web.nhle.com",
+     "url": "https://api-web.nhle.com/v1/player/8462042/landing",
+     "page": "https://www.nhl.com/player/8462042"
+    },
+    "second": {
+     "host": "hockey-reference.com",
+     "url": "https://www.hockey-reference.com/players/i/iginlja01.html"
+    }
+   },
+   "facts": [
+    {
+     "field": "position",
+     "line": "Forward",
+     "official": "R",
+     "second": "RW"
+    },
+    {
+     "field": "country",
+     "line": "Canada",
+     "official": "CAN, born Edmonton",
+     "second": "born Edmonton, Alberta [ca]"
+    },
+    {
+     "field": "draftInfo",
+     "line": "1st Round, 11th Overall (1995)",
+     "official": "1995 DAL round 1 overall 11",
+     "second": "Dallas, 1st round (11th overall), 1995 NHL Entry"
+    },
+    {
+     "field": "teams",
+     "line": "Calgary Flames > Pittsburgh Penguins > Boston Bruins > Colorado Avalanche > Los Angeles Kings",
+     "official": "Calgary Flames > Pittsburgh Penguins > Boston Bruins > Colorado Avalanche > Los Angeles Kings",
+     "second": "CGY > PIT > BOS > COL > LAK"
+    },
+    {
+     "field": "stats",
+     "line": "625 G",
+     "official": "G 625",
+     "second": "G 625"
+    },
+    {
+     "field": "stats",
+     "line": "675 A",
+     "official": "A 675",
+     "second": "A 675"
+    },
+    {
+     "field": "stats",
+     "line": "1,300 Pts",
+     "official": "Pts 1300",
+     "second": "Pts 1300"
+    },
+    {
+     "field": "awards",
+     "line": "Art Ross Trophy (2002)",
+     "official": "Art Ross Trophy: 2002",
+     "second": "2001-02 Art Ross Trophy winner"
+    },
+    {
+     "field": "awards",
+     "line": "2× Rocket Richard Trophy",
+     "official": "Maurice “Rocket” Richard Trophy: 2002, 2004",
+     "second": "2x Maurice Richard Trophy winner"
+    },
+    {
+     "field": "awards",
+     "line": "Ted Lindsay Award (2002)",
+     "official": "Ted Lindsay Award: 2002",
+     "second": "2001-02 Ted Lindsay Award winner"
+    },
+    {
+     "field": "awards",
+     "line": "Hall of Fame (2020)",
+     "official": "inHHOF: 1",
+     "second": "Inducted as Player 2020",
+     "third": {
+      "host": "hhof.com",
+      "url": "https://www.hhof.com/HonouredMembers/playersByYear.html?type=Player",
+      "data": "https://www.hhof.com/LegendsOfHockey/jsp/MembersByYear.jsp?type=Player",
+      "value": "2020: Jarome Iginla (P202002)"
+     }
+    }
+   ],
+   "otherVerifiedAwardLines": [
+    "King Clancy Trophy (2004)",
+    "Mark Messier Leadership Award (2009)"
+   ]
+  },
+  {
+   "index": 40,
+   "id": "hc-011",
+   "name": "Bobby Orr",
+   "status": "kept",
+   "oldIds": [
+    "hc-011",
+    "hc-021"
+   ],
+   "active": false,
+   "position": "Defense",
+   "country": "Canada",
+   "countryFlag": "🇨🇦",
+   "draftInfo": "Undrafted (NHL debut 1966-67)",
+   "teams": [
+    "Boston Bruins",
+    "Chicago Blackhawks"
+   ],
+   "stats": [
+    "270 G",
+    "645 A",
+    "915 Pts"
+   ],
+   "awards": [
+    "2× Stanley Cup Champion",
+    "3× Hart Trophy",
+    "8× Norris Trophy",
+    "Hall of Fame (1979)"
+   ],
+   "sources": {
+    "official": {
+     "host": "api-web.nhle.com",
+     "url": "https://api-web.nhle.com/v1/player/8450070/landing",
+     "page": "https://www.nhl.com/player/8450070"
+    },
+    "second": {
+     "host": "hockey-reference.com",
+     "url": "https://www.hockey-reference.com/players/o/orrbo01.html"
+    }
+   },
+   "facts": [
+    {
+     "field": "position",
+     "line": "Defense",
+     "official": "D",
+     "second": "D"
+    },
+    {
+     "field": "country",
+     "line": "Canada",
+     "official": "CAN, born Parry Sound",
+     "second": "born Parry Sound, Ontario [ca]"
+    },
+    {
+     "field": "draftInfo",
+     "line": "Undrafted (NHL debut 1966-67)",
+     "official": "no draftDetails; first NHL regular season 19661967",
+     "second": "no draft line; first NHL season 1966-67"
+    },
+    {
+     "field": "teams",
+     "line": "Boston Bruins > Chicago Blackhawks",
+     "official": "Boston Bruins > Chicago Blackhawks",
+     "second": "BOS > CBH"
+    },
+    {
+     "field": "stats",
+     "line": "270 G",
+     "official": "G 270",
+     "second": "G 270"
+    },
+    {
+     "field": "stats",
+     "line": "645 A",
+     "official": "A 645",
+     "second": "A 645"
+    },
+    {
+     "field": "stats",
+     "line": "915 Pts",
+     "official": "Pts 915",
+     "second": "Pts 915"
+    },
+    {
+     "field": "awards",
+     "line": "2× Stanley Cup Champion",
+     "official": "Stanley Cup: 1970, 1972",
+     "second": "2x Cup Winner"
+    },
+    {
+     "field": "awards",
+     "line": "3× Hart Trophy",
+     "official": "Hart Memorial Trophy: 1970, 1971, 1972",
+     "second": "3x Hart Memorial Trophy winner"
+    },
+    {
+     "field": "awards",
+     "line": "8× Norris Trophy",
+     "official": "James Norris Memorial Trophy: 1968, 1969, 1970, 1971, 1972, 1973, 1974, 1975",
+     "second": "8x James Norris Memorial Trophy winner"
+    },
+    {
+     "field": "awards",
+     "line": "Hall of Fame (1979)",
+     "official": "inHHOF: 1",
+     "second": "Inducted as Player 1979",
+     "third": {
+      "host": "hhof.com",
+      "url": "https://www.hhof.com/HonouredMembers/playersByYear.html?type=Player",
+      "data": "https://www.hhof.com/LegendsOfHockey/jsp/MembersByYear.jsp?type=Player",
+      "value": "1979: Robert Gordon (Bobby) Orr (P197902)"
+     }
+    }
+   ],
+   "otherVerifiedAwardLines": [
+    "2× Conn Smythe Trophy",
+    "2× Art Ross Trophy",
+    "Ted Lindsay Award (1975)",
+    "Calder Trophy (1967)"
+   ]
+  },
+  {
+   "index": 41,
+   "id": "hc-068",
+   "name": "Patrice Bergeron",
+   "status": "new",
+   "oldIds": [],
+   "active": false,
+   "position": "Forward",
+   "country": "Canada",
+   "countryFlag": "🇨🇦",
+   "draftInfo": "2nd Round, 45th Overall (2003)",
+   "teams": [
+    "Boston Bruins"
+   ],
+   "stats": [
+    "427 G",
+    "613 A",
+    "1,040 Pts"
+   ],
+   "awards": [
+    "Stanley Cup Champion",
+    "6× Selke Trophy",
+    "King Clancy Trophy (2013)",
+    "Mark Messier Leadership Award (2021)"
+   ],
+   "sources": {
+    "official": {
+     "host": "api-web.nhle.com",
+     "url": "https://api-web.nhle.com/v1/player/8470638/landing",
+     "page": "https://www.nhl.com/player/8470638"
+    },
+    "second": {
+     "host": "hockey-reference.com",
+     "url": "https://www.hockey-reference.com/players/b/bergepa01.html"
+    }
+   },
+   "facts": [
+    {
+     "field": "position",
+     "line": "Forward",
+     "official": "C",
+     "second": "C"
+    },
+    {
+     "field": "country",
+     "line": "Canada",
+     "official": "CAN, born L'Ancienne-Lorette",
+     "second": "born Ancienne-Lorette, Quebec [ca]"
+    },
+    {
+     "field": "draftInfo",
+     "line": "2nd Round, 45th Overall (2003)",
+     "official": "2003 BOS round 2 overall 45",
+     "second": "Boston, 2nd round (45th overall), 2003 NHL Entry"
+    },
+    {
+     "field": "teams",
+     "line": "Boston Bruins",
+     "official": "Boston Bruins",
+     "second": "BOS"
+    },
+    {
+     "field": "stats",
+     "line": "427 G",
+     "official": "G 427",
+     "second": "G 427"
+    },
+    {
+     "field": "stats",
+     "line": "613 A",
+     "official": "A 613",
+     "second": "A 613"
+    },
+    {
+     "field": "stats",
+     "line": "1,040 Pts",
+     "official": "Pts 1040",
+     "second": "Pts 1040"
+    },
+    {
+     "field": "awards",
+     "line": "Stanley Cup Champion",
+     "official": "Stanley Cup: 2011",
+     "second": "1x Cup Winner"
+    },
+    {
+     "field": "awards",
+     "line": "6× Selke Trophy",
+     "official": "Frank J. Selke Trophy: 2012, 2014, 2015, 2017, 2022, 2023",
+     "second": "6x Frank J. Selke Trophy winner"
+    },
+    {
+     "field": "awards",
+     "line": "King Clancy Trophy (2013)",
+     "official": "King Clancy Memorial Trophy: 2013",
+     "second": "2012-13 King Clancy Memorial Trophy winner"
+    },
+    {
+     "field": "awards",
+     "line": "Mark Messier Leadership Award (2021)",
+     "official": "Mark Messier NHL Leadership Award: 2021",
+     "second": "2020-21 Mark Messier Leadership Award winner"
+    }
+   ],
+   "otherVerifiedAwardLines": []
+  },
+  {
+   "index": 42,
+   "id": "hc-056",
+   "name": "Marc-Andre Fleury",
+   "status": "new",
+   "oldIds": [],
+   "active": false,
+   "position": "Goalie",
+   "country": "Canada",
+   "countryFlag": "🇨🇦",
+   "draftInfo": "1st Round, 1st Overall (2003)",
+   "teams": [
+    "Pittsburgh Penguins",
+    "Vegas Golden Knights",
+    "Chicago Blackhawks",
+    "Minnesota Wild"
+   ],
+   "stats": [
+    "575 W",
+    "2.60 GAA",
+    ".912 SV%"
+   ],
+   "awards": [
+    "3× Stanley Cup Champion",
+    "Vezina Trophy (2021)",
+    "Jennings Trophy (2021)"
+   ],
+   "sources": {
+    "official": {
+     "host": "api-web.nhle.com",
+     "url": "https://api-web.nhle.com/v1/player/8470594/landing",
+     "page": "https://www.nhl.com/player/8470594"
+    },
+    "second": {
+     "host": "hockey-reference.com",
+     "url": "https://www.hockey-reference.com/players/f/fleurma01.html"
+    }
+   },
+   "facts": [
+    {
+     "field": "position",
+     "line": "Goalie",
+     "official": "G",
+     "second": "G"
+    },
+    {
+     "field": "country",
+     "line": "Canada",
+     "official": "CAN, born Sorel",
+     "second": "born Sorel, Quebec [ca]"
+    },
+    {
+     "field": "draftInfo",
+     "line": "1st Round, 1st Overall (2003)",
+     "official": "2003 PIT round 1 overall 1",
+     "second": "Pittsburgh, 1st round (1st overall), 2003 NHL Entry"
+    },
+    {
+     "field": "teams",
+     "line": "Pittsburgh Penguins > Vegas Golden Knights > Chicago Blackhawks > Minnesota Wild",
+     "official": "Pittsburgh Penguins > Vegas Golden Knights > Chicago Blackhawks > Minnesota Wild",
+     "second": "PIT > VEG > CHI > MIN"
+    },
+    {
+     "field": "stats",
+     "line": "575 W",
+     "official": "W 575",
+     "second": "W 575"
+    },
+    {
+     "field": "stats",
+     "line": "2.60 GAA",
+     "official": "GAA 2.603963",
+     "second": "GAA 2.60"
+    },
+    {
+     "field": "stats",
+     "line": ".912 SV%",
+     "official": "SV% 0.911707",
+     "second": "SV% .912"
+    },
+    {
+     "field": "awards",
+     "line": "3× Stanley Cup Champion",
+     "official": "Stanley Cup: 2009, 2016, 2017",
+     "second": "3x Cup Winner"
+    },
+    {
+     "field": "awards",
+     "line": "Vezina Trophy (2021)",
+     "official": "Vezina Trophy: 2021",
+     "second": "2020-21 Vezina Trophy winner"
+    },
+    {
+     "field": "awards",
+     "line": "Jennings Trophy (2021)",
+     "official": "William M. Jennings Trophy: 2021",
+     "second": "2020-21 William M. Jennings Trophy winner"
+    }
+   ],
+   "otherVerifiedAwardLines": []
+  },
+  {
+   "index": 43,
+   "id": "hc-062",
+   "name": "Bryan Trottier",
+   "status": "new",
+   "oldIds": [],
+   "active": false,
+   "position": "Forward",
+   "country": "Canada",
+   "countryFlag": "🇨🇦",
+   "draftInfo": "2nd Round, 22nd Overall (1974)",
+   "teams": [
+    "New York Islanders",
+    "Pittsburgh Penguins"
+   ],
+   "stats": [
+    "524 G",
+    "901 A",
+    "1,425 Pts"
+   ],
+   "awards": [
+    "6× Stanley Cup Champion",
+    "Hart Trophy (1979)",
+    "Conn Smythe Trophy (1980)",
+    "Hall of Fame (1997)"
+   ],
+   "sources": {
+    "official": {
+     "host": "api-web.nhle.com",
+     "url": "https://api-web.nhle.com/v1/player/8451965/landing",
+     "page": "https://www.nhl.com/player/8451965"
+    },
+    "second": {
+     "host": "hockey-reference.com",
+     "url": "https://www.hockey-reference.com/players/t/trottbr01.html"
+    }
+   },
+   "facts": [
+    {
+     "field": "position",
+     "line": "Forward",
+     "official": "C",
+     "second": "C"
+    },
+    {
+     "field": "country",
+     "line": "Canada",
+     "official": "CAN, born Val Marie",
+     "second": "born Val Marie, Saskatchewan [ca]"
+    },
+    {
+     "field": "draftInfo",
+     "line": "2nd Round, 22nd Overall (1974)",
+     "official": "1974 NYI round 2 overall 22",
+     "second": "NY Islanders, 2nd round (22nd overall), 1974 NHL Amateur"
+    },
+    {
+     "field": "teams",
+     "line": "New York Islanders > Pittsburgh Penguins",
+     "official": "New York Islanders > Pittsburgh Penguins",
+     "second": "NYI > PIT"
+    },
+    {
+     "field": "stats",
+     "line": "524 G",
+     "official": "G 524",
+     "second": "G 524"
+    },
+    {
+     "field": "stats",
+     "line": "901 A",
+     "official": "A 901",
+     "second": "A 901"
+    },
+    {
+     "field": "stats",
+     "line": "1,425 Pts",
+     "official": "Pts 1425",
+     "second": "Pts 1425"
+    },
+    {
+     "field": "awards",
+     "line": "6× Stanley Cup Champion",
+     "official": "Stanley Cup: 1980, 1981, 1982, 1983, 1991, 1992",
+     "second": "6x Cup Winner"
+    },
+    {
+     "field": "awards",
+     "line": "Hart Trophy (1979)",
+     "official": "Hart Memorial Trophy: 1979",
+     "second": "1978-79 Hart Memorial Trophy winner"
+    },
+    {
+     "field": "awards",
+     "line": "Conn Smythe Trophy (1980)",
+     "official": "Conn Smythe Trophy: 1980",
+     "second": "1979-80 Conn Smythe Trophy winner"
+    },
+    {
+     "field": "awards",
+     "line": "Hall of Fame (1997)",
+     "official": "inHHOF: 1",
+     "second": "Inducted as Player 1997",
+     "third": {
+      "host": "hhof.com",
+      "url": "https://www.hhof.com/HonouredMembers/playersByYear.html?type=Player",
+      "data": "https://www.hhof.com/LegendsOfHockey/jsp/MembersByYear.jsp?type=Player",
+      "value": "1997: Bryan John Trottier (P199702)"
+     }
+    }
+   ],
+   "otherVerifiedAwardLines": [
+    "Art Ross Trophy (1979)",
+    "Calder Trophy (1976)",
+    "King Clancy Trophy (1989)"
+   ]
+  },
+  {
+   "index": 44,
+   "id": "hc-022",
+   "name": "Phil Esposito",
+   "status": "kept",
+   "oldIds": [
+    "hc-022"
+   ],
+   "active": false,
+   "position": "Forward",
+   "country": "Canada",
+   "countryFlag": "🇨🇦",
+   "draftInfo": "Undrafted (NHL debut 1963-64)",
+   "teams": [
+    "Chicago Blackhawks",
+    "Boston Bruins",
+    "New York Rangers"
+   ],
+   "stats": [
+    "717 G",
+    "873 A",
+    "1,590 Pts"
+   ],
+   "awards": [
+    "2× Stanley Cup Champion",
+    "2× Hart Trophy",
+    "5× Art Ross Trophy",
+    "Hall of Fame (1984)"
+   ],
+   "sources": {
+    "official": {
+     "host": "api-web.nhle.com",
+     "url": "https://api-web.nhle.com/v1/player/8446722/landing",
+     "page": "https://www.nhl.com/player/8446722"
+    },
+    "second": {
+     "host": "hockey-reference.com",
+     "url": "https://www.hockey-reference.com/players/e/esposph01.html"
+    }
+   },
+   "facts": [
+    {
+     "field": "position",
+     "line": "Forward",
+     "official": "C",
+     "second": "C"
+    },
+    {
+     "field": "country",
+     "line": "Canada",
+     "official": "CAN, born Sault Ste. Marie",
+     "second": "born Sault Ste. Marie, Ontario [ca]"
+    },
+    {
+     "field": "draftInfo",
+     "line": "Undrafted (NHL debut 1963-64)",
+     "official": "no draftDetails; first NHL regular season 19631964",
+     "second": "no draft line; first NHL season 1963-64"
+    },
+    {
+     "field": "teams",
+     "line": "Chicago Blackhawks > Boston Bruins > New York Rangers",
+     "official": "Chicago Blackhawks > Boston Bruins > New York Rangers",
+     "second": "CBH > BOS > NYR"
+    },
+    {
+     "field": "stats",
+     "line": "717 G",
+     "official": "G 717",
+     "second": "G 717"
+    },
+    {
+     "field": "stats",
+     "line": "873 A",
+     "official": "A 873",
+     "second": "A 873"
+    },
+    {
+     "field": "stats",
+     "line": "1,590 Pts",
+     "official": "Pts 1590",
+     "second": "Pts 1590"
+    },
+    {
+     "field": "awards",
+     "line": "2× Stanley Cup Champion",
+     "official": "Stanley Cup: 1970, 1972",
+     "second": "2x Cup Winner"
+    },
+    {
+     "field": "awards",
+     "line": "2× Hart Trophy",
+     "official": "Hart Memorial Trophy: 1969, 1974",
+     "second": "2x Hart Memorial Trophy winner"
+    },
+    {
+     "field": "awards",
+     "line": "5× Art Ross Trophy",
+     "official": "Art Ross Trophy: 1969, 1971, 1972, 1973, 1974",
+     "second": "5x Art Ross Trophy winner"
+    },
+    {
+     "field": "awards",
+     "line": "Hall of Fame (1984)",
+     "official": "inHHOF: 1",
+     "second": "Inducted as Player 1984",
+     "third": {
+      "host": "hhof.com",
+      "url": "https://www.hhof.com/HonouredMembers/playersByYear.html?type=Player",
+      "data": "https://www.hhof.com/LegendsOfHockey/jsp/MembersByYear.jsp?type=Player",
+      "value": "1984: Philip Anthony (Phil) Esposito (P198401)"
+     }
+    }
+   ],
+   "otherVerifiedAwardLines": [
+    "2× Ted Lindsay Award"
+   ]
+  },
+  {
+   "index": 45,
+   "id": "hc-017",
+   "name": "Leon Draisaitl",
+   "status": "kept",
+   "oldIds": [
+    "hc-017"
+   ],
+   "active": true,
+   "position": "Forward",
+   "country": "Germany",
+   "countryFlag": "🇩🇪",
+   "draftInfo": "1st Round, 3rd Overall (2014)",
+   "teams": [
+    "Edmonton Oilers"
+   ],
+   "stats": [
+    "430+ G",
+    "620+ A",
+    "1,050+ Pts"
+   ],
+   "awards": [
+    "Hart Trophy (2020)",
+    "Art Ross Trophy (2020)",
+    "Rocket Richard Trophy (2025)",
+    "Ted Lindsay Award (2020)"
+   ],
+   "sources": {
+    "official": {
+     "host": "api-web.nhle.com",
+     "url": "https://api-web.nhle.com/v1/player/8477934/landing",
+     "page": "https://www.nhl.com/player/8477934"
+    },
+    "second": {
+     "host": "hockey-reference.com",
+     "url": "https://www.hockey-reference.com/players/d/draisle01.html"
+    }
+   },
+   "facts": [
+    {
+     "field": "position",
+     "line": "Forward",
+     "official": "C",
+     "second": "C"
+    },
+    {
+     "field": "country",
+     "line": "Germany",
+     "official": "DEU, born Cologne",
+     "second": "born Cologne, Germany [de]"
+    },
+    {
+     "field": "draftInfo",
+     "line": "1st Round, 3rd Overall (2014)",
+     "official": "2014 EDM round 1 overall 3",
+     "second": "Edmonton, 1st round (3rd overall), 2014 NHL Entry"
+    },
+    {
+     "field": "teams",
+     "line": "Edmonton Oilers",
+     "official": "Edmonton Oilers",
+     "second": "EDM"
+    },
+    {
+     "field": "stats",
+     "line": "430+ G",
+     "official": "G 436",
+     "second": "G 436"
+    },
+    {
+     "field": "stats",
+     "line": "620+ A",
+     "official": "A 621",
+     "second": "A 621"
+    },
+    {
+     "field": "stats",
+     "line": "1,050+ Pts",
+     "official": "Pts 1057",
+     "second": "Pts 1057"
+    },
+    {
+     "field": "awards",
+     "line": "Hart Trophy (2020)",
+     "official": "Hart Memorial Trophy: 2020",
+     "second": "2019-20 Hart Memorial Trophy winner"
+    },
+    {
+     "field": "awards",
+     "line": "Art Ross Trophy (2020)",
+     "official": "Art Ross Trophy: 2020",
+     "second": "2019-20 Art Ross Trophy winner"
+    },
+    {
+     "field": "awards",
+     "line": "Rocket Richard Trophy (2025)",
+     "official": "Maurice “Rocket” Richard Trophy: 2025",
+     "second": "2024-25 Maurice Richard Trophy winner"
+    },
+    {
+     "field": "awards",
+     "line": "Ted Lindsay Award (2020)",
+     "official": "Ted Lindsay Award: 2020",
+     "second": "2019-20 Ted Lindsay Award winner"
+    }
+   ],
+   "otherVerifiedAwardLines": []
+  },
+  {
+   "index": 46,
+   "id": "hc-037",
+   "name": "Paul Coffey",
+   "status": "kept",
+   "oldIds": [
+    "hc-037"
+   ],
+   "active": false,
+   "position": "Defense",
+   "country": "Canada",
+   "countryFlag": "🇨🇦",
+   "draftInfo": "1st Round, 6th Overall (1980)",
+   "teams": [
+    "Edmonton Oilers",
+    "Pittsburgh Penguins",
+    "Los Angeles Kings",
+    "Detroit Red Wings",
+    "Hartford Whalers",
+    "Philadelphia Flyers",
+    "Chicago Blackhawks",
+    "Carolina Hurricanes",
+    "Boston Bruins"
+   ],
+   "stats": [
+    "396 G",
+    "1,135 A",
+    "1,531 Pts"
+   ],
+   "awards": [
+    "4× Stanley Cup Champion",
+    "3× Norris Trophy",
+    "Hall of Fame (2004)"
+   ],
+   "sources": {
+    "official": {
+     "host": "api-web.nhle.com",
+     "url": "https://api-web.nhle.com/v1/player/8446117/landing",
+     "page": "https://www.nhl.com/player/8446117"
+    },
+    "second": {
+     "host": "hockey-reference.com",
+     "url": "https://www.hockey-reference.com/players/c/coffepa01.html"
+    }
+   },
+   "facts": [
+    {
+     "field": "position",
+     "line": "Defense",
+     "official": "D",
+     "second": "D"
+    },
+    {
+     "field": "country",
+     "line": "Canada",
+     "official": "CAN, born Weston",
+     "second": "born Weston, Ontario [ca]"
+    },
+    {
+     "field": "draftInfo",
+     "line": "1st Round, 6th Overall (1980)",
+     "official": "1980 EDM round 1 overall 6",
+     "second": "Edmonton, 1st round (6th overall), 1980 NHL Entry"
+    },
+    {
+     "field": "teams",
+     "line": "Edmonton Oilers > Pittsburgh Penguins > Los Angeles Kings > Detroit Red Wings > Hartford Whalers > Philadelphia Flyers > Chicago Blackhawks > Carolina Hurricanes > Boston Bruins",
+     "official": "Edmonton Oilers > Pittsburgh Penguins > Los Angeles Kings > Detroit Red Wings > Hartford Whalers > Philadelphia Flyers > Chicago Blackhawks > Carolina Hurricanes > Boston Bruins",
+     "second": "EDM > PIT > LAK > DET > HAR > PHI > CHI > CAR > BOS"
+    },
+    {
+     "field": "stats",
+     "line": "396 G",
+     "official": "G 396",
+     "second": "G 396"
+    },
+    {
+     "field": "stats",
+     "line": "1,135 A",
+     "official": "A 1135",
+     "second": "A 1135"
+    },
+    {
+     "field": "stats",
+     "line": "1,531 Pts",
+     "official": "Pts 1531",
+     "second": "Pts 1531"
+    },
+    {
+     "field": "awards",
+     "line": "4× Stanley Cup Champion",
+     "official": "Stanley Cup: 1984, 1985, 1987, 1991",
+     "second": "4x Cup Winner"
+    },
+    {
+     "field": "awards",
+     "line": "3× Norris Trophy",
+     "official": "James Norris Memorial Trophy: 1985, 1986, 1995",
+     "second": "3x James Norris Memorial Trophy winner"
+    },
+    {
+     "field": "awards",
+     "line": "Hall of Fame (2004)",
+     "official": "inHHOF: 1",
+     "second": "Inducted as Player 2004",
+     "third": {
+      "host": "hhof.com",
+      "url": "https://www.hhof.com/HonouredMembers/playersByYear.html?type=Player",
+      "data": "https://www.hhof.com/LegendsOfHockey/jsp/MembersByYear.jsp?type=Player",
+      "value": "2004: Paul Douglas Coffey (P200402)"
+     }
+    }
+   ],
+   "otherVerifiedAwardLines": []
+  },
+  {
+   "index": 47,
+   "id": "hc-035",
+   "name": "Mats Sundin",
+   "status": "kept",
+   "oldIds": [
+    "hc-035"
+   ],
+   "active": false,
+   "position": "Forward",
+   "country": "Sweden",
+   "countryFlag": "🇸🇪",
+   "draftInfo": "1st Round, 1st Overall (1989)",
+   "teams": [
+    "Quebec Nordiques",
+    "Toronto Maple Leafs",
+    "Vancouver Canucks"
+   ],
+   "stats": [
+    "564 G",
+    "785 A",
+    "1,349 Pts"
+   ],
+   "awards": [
+    "Mark Messier Leadership Award (2008)",
+    "Hall of Fame (2012)"
+   ],
+   "sources": {
+    "official": {
+     "host": "api-web.nhle.com",
+     "url": "https://api-web.nhle.com/v1/player/8451774/landing",
+     "page": "https://www.nhl.com/player/8451774"
+    },
+    "second": {
+     "host": "hockey-reference.com",
+     "url": "https://www.hockey-reference.com/players/s/sundima01.html"
+    }
+   },
+   "facts": [
+    {
+     "field": "position",
+     "line": "Forward",
+     "official": "C",
+     "second": "C"
+    },
+    {
+     "field": "country",
+     "line": "Sweden",
+     "official": "SWE, born Bromma",
+     "second": "born Bromma, Sweden [se]"
+    },
+    {
+     "field": "draftInfo",
+     "line": "1st Round, 1st Overall (1989)",
+     "official": "1989 QUE round 1 overall 1",
+     "second": "Quebec, 1st round (1st overall), 1989 NHL Entry"
+    },
+    {
+     "field": "teams",
+     "line": "Quebec Nordiques > Toronto Maple Leafs > Vancouver Canucks",
+     "official": "Quebec Nordiques > Toronto Maple Leafs > Vancouver Canucks",
+     "second": "QUE > TOR > VAN"
+    },
+    {
+     "field": "stats",
+     "line": "564 G",
+     "official": "G 564",
+     "second": "G 564"
+    },
+    {
+     "field": "stats",
+     "line": "785 A",
+     "official": "A 785",
+     "second": "A 785"
+    },
+    {
+     "field": "stats",
+     "line": "1,349 Pts",
+     "official": "Pts 1349",
+     "second": "Pts 1349"
+    },
+    {
+     "field": "awards",
+     "line": "Mark Messier Leadership Award (2008)",
+     "official": "Mark Messier NHL Leadership Award: 2008",
+     "second": "2007-08 Mark Messier Leadership Award winner"
+    },
+    {
+     "field": "awards",
+     "line": "Hall of Fame (2012)",
+     "official": "inHHOF: 1",
+     "second": "Inducted as Player 2012",
+     "third": {
+      "host": "hhof.com",
+      "url": "https://www.hhof.com/HonouredMembers/playersByYear.html?type=Player",
+      "data": "https://www.hhof.com/LegendsOfHockey/jsp/MembersByYear.jsp?type=Player",
+      "value": "2012: Mats Sundin (P201204)"
+     }
+    }
+   ],
+   "otherVerifiedAwardLines": []
+  },
+  {
+   "index": 48,
+   "id": "hc-044",
+   "name": "Zdeno Chara",
+   "status": "new",
+   "oldIds": [],
+   "active": false,
+   "position": "Defense",
+   "country": "Slovakia",
+   "countryFlag": "🇸🇰",
+   "draftInfo": "3rd Round, 56th Overall (1996)",
+   "teams": [
+    "New York Islanders",
+    "Ottawa Senators",
+    "Boston Bruins",
+    "Washington Capitals"
+   ],
+   "stats": [
+    "209 G",
+    "471 A",
+    "680 Pts"
+   ],
+   "awards": [
+    "Stanley Cup Champion",
+    "Norris Trophy (2009)",
+    "Mark Messier Leadership Award (2011)",
+    "Hall of Fame (2025)"
+   ],
+   "sources": {
+    "official": {
+     "host": "api-web.nhle.com",
+     "url": "https://api-web.nhle.com/v1/player/8465009/landing",
+     "page": "https://www.nhl.com/player/8465009"
+    },
+    "second": {
+     "host": "hockey-reference.com",
+     "url": "https://www.hockey-reference.com/players/c/charazd01.html"
+    }
+   },
+   "facts": [
+    {
+     "field": "position",
+     "line": "Defense",
+     "official": "D",
+     "second": "D"
+    },
+    {
+     "field": "country",
+     "line": "Slovakia",
+     "official": "SVK, born Trencin",
+     "second": "born Trencin, Czechoslovakia [cs]"
+    },
+    {
+     "field": "draftInfo",
+     "line": "3rd Round, 56th Overall (1996)",
+     "official": "1996 NYI round 3 overall 56",
+     "second": "NY Islanders, 3rd round (56th overall), 1996 NHL Entry"
+    },
+    {
+     "field": "teams",
+     "line": "New York Islanders > Ottawa Senators > Boston Bruins > Washington Capitals",
+     "official": "New York Islanders > Ottawa Senators > Boston Bruins > Washington Capitals",
+     "second": "NYI > OTT > BOS > WSH"
+    },
+    {
+     "field": "stats",
+     "line": "209 G",
+     "official": "G 209",
+     "second": "G 209"
+    },
+    {
+     "field": "stats",
+     "line": "471 A",
+     "official": "A 471",
+     "second": "A 471"
+    },
+    {
+     "field": "stats",
+     "line": "680 Pts",
+     "official": "Pts 680",
+     "second": "Pts 680"
+    },
+    {
+     "field": "awards",
+     "line": "Stanley Cup Champion",
+     "official": "Stanley Cup: 2011",
+     "second": "1x Cup Winner"
+    },
+    {
+     "field": "awards",
+     "line": "Norris Trophy (2009)",
+     "official": "James Norris Memorial Trophy: 2009",
+     "second": "2008-09 James Norris Memorial Trophy winner"
+    },
+    {
+     "field": "awards",
+     "line": "Mark Messier Leadership Award (2011)",
+     "official": "Mark Messier NHL Leadership Award: 2011",
+     "second": "2010-11 Mark Messier Leadership Award winner"
+    },
+    {
+     "field": "awards",
+     "line": "Hall of Fame (2025)",
+     "official": "inHHOF: 1",
+     "second": "Inducted as Player 2025",
+     "third": {
+      "host": "hhof.com",
+      "url": "https://www.hhof.com/HonouredMembers/playersByYear.html?type=Player",
+      "data": "https://www.hhof.com/LegendsOfHockey/jsp/MembersByYear.jsp?type=Player",
+      "value": "2025: Zdeno Chara (P202502)"
+     }
+    }
+   ],
+   "otherVerifiedAwardLines": []
+  },
+  {
+   "index": 49,
+   "id": "hc-026",
+   "name": "Guy Lafleur",
+   "status": "kept",
+   "oldIds": [
+    "hc-026"
+   ],
+   "active": false,
+   "position": "Forward",
+   "country": "Canada",
+   "countryFlag": "🇨🇦",
+   "draftInfo": "1st Round, 1st Overall (1971)",
+   "teams": [
+    "Montreal Canadiens",
+    "New York Rangers",
+    "Quebec Nordiques"
+   ],
+   "stats": [
+    "560 G",
+    "793 A",
+    "1,353 Pts"
+   ],
+   "awards": [
+    "5× Stanley Cup Champion",
+    "2× Hart Trophy",
+    "3× Art Ross Trophy",
+    "Hall of Fame (1988)"
+   ],
+   "sources": {
+    "official": {
+     "host": "api-web.nhle.com",
+     "url": "https://api-web.nhle.com/v1/player/8448624/landing",
+     "page": "https://www.nhl.com/player/8448624"
+    },
+    "second": {
+     "host": "hockey-reference.com",
+     "url": "https://www.hockey-reference.com/players/l/laflegu01.html"
+    }
+   },
+   "facts": [
+    {
+     "field": "position",
+     "line": "Forward",
+     "official": "R",
+     "second": "RW"
+    },
+    {
+     "field": "country",
+     "line": "Canada",
+     "official": "CAN, born Thurso",
+     "second": "born Thurso, Quebec [ca]"
+    },
+    {
+     "field": "draftInfo",
+     "line": "1st Round, 1st Overall (1971)",
+     "official": "1971 MTL round 1 overall 1",
+     "second": "Montreal, 1st round (1st overall), 1971 NHL Amateur"
+    },
+    {
+     "field": "teams",
+     "line": "Montreal Canadiens > New York Rangers > Quebec Nordiques",
+     "official": "Montréal Canadiens > New York Rangers > Quebec Nordiques",
+     "second": "MTL > NYR > QUE"
+    },
+    {
+     "field": "stats",
+     "line": "560 G",
+     "official": "G 560",
+     "second": "G 560"
+    },
+    {
+     "field": "stats",
+     "line": "793 A",
+     "official": "A 793",
+     "second": "A 793"
+    },
+    {
+     "field": "stats",
+     "line": "1,353 Pts",
+     "official": "Pts 1353",
+     "second": "Pts 1353"
+    },
+    {
+     "field": "awards",
+     "line": "5× Stanley Cup Champion",
+     "official": "Stanley Cup: 1973, 1976, 1977, 1978, 1979",
+     "second": "5x Cup Winner"
+    },
+    {
+     "field": "awards",
+     "line": "2× Hart Trophy",
+     "official": "Hart Memorial Trophy: 1977, 1978",
+     "second": "2x Hart Memorial Trophy winner"
+    },
+    {
+     "field": "awards",
+     "line": "3× Art Ross Trophy",
+     "official": "Art Ross Trophy: 1976, 1977, 1978",
+     "second": "3x Art Ross Trophy winner"
+    },
+    {
+     "field": "awards",
+     "line": "Hall of Fame (1988)",
+     "official": "inHHOF: 1",
+     "second": "Inducted as Player 1988",
+     "third": {
+      "host": "hhof.com",
+      "url": "https://www.hhof.com/HonouredMembers/playersByYear.html?type=Player",
+      "data": "https://www.hhof.com/LegendsOfHockey/jsp/MembersByYear.jsp?type=Player",
+      "value": "1988: Guy Damien Lafleur (P198802)"
+     }
+    }
+   ],
+   "otherVerifiedAwardLines": [
+    "Conn Smythe Trophy (1977)",
+    "3× Ted Lindsay Award"
+   ]
+  },
+  {
+   "index": 50,
+   "id": "hc-065",
+   "name": "Martin St. Louis",
+   "status": "new",
+   "oldIds": [],
+   "active": false,
+   "position": "Forward",
+   "country": "Canada",
+   "countryFlag": "🇨🇦",
+   "draftInfo": "Undrafted (NHL debut 1998-99)",
+   "teams": [
+    "Calgary Flames",
+    "Tampa Bay Lightning",
+    "New York Rangers"
+   ],
+   "stats": [
+    "391 G",
+    "642 A",
+    "1,033 Pts"
+   ],
+   "awards": [
+    "Stanley Cup Champion",
+    "Hart Trophy (2004)",
+    "2× Art Ross Trophy",
+    "Hall of Fame (2018)"
+   ],
+   "sources": {
+    "official": {
+     "host": "api-web.nhle.com",
+     "url": "https://api-web.nhle.com/v1/player/8466378/landing",
+     "page": "https://www.nhl.com/player/8466378"
+    },
+    "second": {
+     "host": "hockey-reference.com",
+     "url": "https://www.hockey-reference.com/players/s/stlouma01.html"
+    }
+   },
+   "facts": [
+    {
+     "field": "position",
+     "line": "Forward",
+     "official": "R",
+     "second": "RW"
+    },
+    {
+     "field": "country",
+     "line": "Canada",
+     "official": "CAN, born Laval",
+     "second": "born Laval, Quebec [ca]"
+    },
+    {
+     "field": "draftInfo",
+     "line": "Undrafted (NHL debut 1998-99)",
+     "official": "no draftDetails; first NHL regular season 19981999",
+     "second": "no draft line; first NHL season 1998-99"
+    },
+    {
+     "field": "teams",
+     "line": "Calgary Flames > Tampa Bay Lightning > New York Rangers",
+     "official": "Calgary Flames > Tampa Bay Lightning > New York Rangers",
+     "second": "CGY > TBL > NYR"
+    },
+    {
+     "field": "stats",
+     "line": "391 G",
+     "official": "G 391",
+     "second": "G 391"
+    },
+    {
+     "field": "stats",
+     "line": "642 A",
+     "official": "A 642",
+     "second": "A 642"
+    },
+    {
+     "field": "stats",
+     "line": "1,033 Pts",
+     "official": "Pts 1033",
+     "second": "Pts 1033"
+    },
+    {
+     "field": "awards",
+     "line": "Stanley Cup Champion",
+     "official": "Stanley Cup: 2004",
+     "second": "1x Cup Winner"
+    },
+    {
+     "field": "awards",
+     "line": "Hart Trophy (2004)",
+     "official": "Hart Memorial Trophy: 2004",
+     "second": "2003-04 Hart Memorial Trophy winner"
+    },
+    {
+     "field": "awards",
+     "line": "2× Art Ross Trophy",
+     "official": "Art Ross Trophy: 2004, 2013",
+     "second": "2x Art Ross Trophy winner"
+    },
+    {
+     "field": "awards",
+     "line": "Hall of Fame (2018)",
+     "official": "inHHOF: 1",
+     "second": "Inducted as Player 2018",
+     "third": {
+      "host": "hhof.com",
+      "url": "https://www.hhof.com/HonouredMembers/playersByYear.html?type=Player",
+      "data": "https://www.hhof.com/LegendsOfHockey/jsp/MembersByYear.jsp?type=Player",
+      "value": "2018: Martin St. Louis (P201803)"
+     }
+    }
+   ],
+   "otherVerifiedAwardLines": [
+    "Ted Lindsay Award (2004)",
+    "3× Lady Byng Trophy"
+   ]
+  },
+  {
+   "index": 51,
+   "id": "hc-045",
+   "name": "Steven Stamkos",
+   "status": "new",
+   "oldIds": [],
+   "active": true,
+   "position": "Forward",
+   "country": "Canada",
+   "countryFlag": "🇨🇦",
+   "draftInfo": "1st Round, 1st Overall (2008)",
+   "teams": [
+    "Tampa Bay Lightning",
+    "Nashville Predators"
+   ],
+   "stats": [
+    "620+ G",
+    "630+ A",
+    "1,250+ Pts"
+   ],
+   "awards": [
+    "2× Stanley Cup Champion",
+    "2× Rocket Richard Trophy",
+    "Mark Messier Leadership Award (2023)"
+   ],
+   "sources": {
+    "official": {
+     "host": "api-web.nhle.com",
+     "url": "https://api-web.nhle.com/v1/player/8474564/landing",
+     "page": "https://www.nhl.com/player/8474564"
+    },
+    "second": {
+     "host": "hockey-reference.com",
+     "url": "https://www.hockey-reference.com/players/s/stamkst01.html"
+    }
+   },
+   "facts": [
+    {
+     "field": "position",
+     "line": "Forward",
+     "official": "C",
+     "second": "C"
+    },
+    {
+     "field": "country",
+     "line": "Canada",
+     "official": "CAN, born Markham",
+     "second": "born Markham, Ontario [ca]"
+    },
+    {
+     "field": "draftInfo",
+     "line": "1st Round, 1st Overall (2008)",
+     "official": "2008 TBL round 1 overall 1",
+     "second": "Tampa Bay, 1st round (1st overall), 2008 NHL Entry"
+    },
+    {
+     "field": "teams",
+     "line": "Tampa Bay Lightning > Nashville Predators",
+     "official": "Tampa Bay Lightning > Nashville Predators",
+     "second": "TBL > NSH"
+    },
+    {
+     "field": "stats",
+     "line": "620+ G",
+     "official": "G 624",
+     "second": "G 624"
+    },
+    {
+     "field": "stats",
+     "line": "630+ A",
+     "official": "A 633",
+     "second": "A 633"
+    },
+    {
+     "field": "stats",
+     "line": "1,250+ Pts",
+     "official": "Pts 1257",
+     "second": "Pts 1257"
+    },
+    {
+     "field": "awards",
+     "line": "2× Stanley Cup Champion",
+     "official": "Stanley Cup: 2020, 2021",
+     "second": "2x Cup Winner"
+    },
+    {
+     "field": "awards",
+     "line": "2× Rocket Richard Trophy",
+     "official": "Maurice “Rocket” Richard Trophy: 2010, 2012",
+     "second": "2x Maurice Richard Trophy winner"
+    },
+    {
+     "field": "awards",
+     "line": "Mark Messier Leadership Award (2023)",
+     "official": "Mark Messier NHL Leadership Award: 2023",
+     "second": "2022-23 Mark Messier Leadership Award winner"
+    }
+   ],
+   "otherVerifiedAwardLines": []
+  },
+  {
+   "index": 52,
+   "id": "hc-028",
+   "name": "Brendan Shanahan",
+   "status": "kept",
+   "oldIds": [
+    "hc-028"
+   ],
+   "active": false,
+   "position": "Forward",
+   "country": "Canada",
+   "countryFlag": "🇨🇦",
+   "draftInfo": "1st Round, 2nd Overall (1987)",
+   "teams": [
+    "New Jersey Devils",
+    "St. Louis Blues",
+    "Hartford Whalers",
+    "Detroit Red Wings",
+    "New York Rangers"
+   ],
+   "stats": [
+    "656 G",
+    "698 A",
+    "1,354 Pts"
+   ],
+   "awards": [
+    "3× Stanley Cup Champion",
+    "King Clancy Trophy (2003)",
+    "Hall of Fame (2013)"
+   ],
+   "sources": {
+    "official": {
+     "host": "api-web.nhle.com",
+     "url": "https://api-web.nhle.com/v1/player/8451302/landing",
+     "page": "https://www.nhl.com/player/8451302"
+    },
+    "second": {
+     "host": "hockey-reference.com",
+     "url": "https://www.hockey-reference.com/players/s/shanabr01.html"
+    }
+   },
+   "facts": [
+    {
+     "field": "position",
+     "line": "Forward",
+     "official": "L",
+     "second": "LW"
+    },
+    {
+     "field": "country",
+     "line": "Canada",
+     "official": "CAN, born Mimico",
+     "second": "born Mimico, Ontario [ca]"
+    },
+    {
+     "field": "draftInfo",
+     "line": "1st Round, 2nd Overall (1987)",
+     "official": "1987 NJD round 1 overall 2",
+     "second": "New Jersey, 1st round (2nd overall), 1987 NHL Entry"
+    },
+    {
+     "field": "teams",
+     "line": "New Jersey Devils > St. Louis Blues > Hartford Whalers > Detroit Red Wings > New York Rangers",
+     "official": "New Jersey Devils > St. Louis Blues > Hartford Whalers > Detroit Red Wings > New York Rangers",
+     "second": "NJD > STL > HAR > DET > NYR"
+    },
+    {
+     "field": "stats",
+     "line": "656 G",
+     "official": "G 656",
+     "second": "G 656"
+    },
+    {
+     "field": "stats",
+     "line": "698 A",
+     "official": "A 698",
+     "second": "A 698"
+    },
+    {
+     "field": "stats",
+     "line": "1,354 Pts",
+     "official": "Pts 1354",
+     "second": "Pts 1354"
+    },
+    {
+     "field": "awards",
+     "line": "3× Stanley Cup Champion",
+     "official": "Stanley Cup: 1997, 1998, 2002",
+     "second": "3x Cup Winner"
+    },
+    {
+     "field": "awards",
+     "line": "King Clancy Trophy (2003)",
+     "official": "King Clancy Memorial Trophy: 2003",
+     "second": "2002-03 King Clancy Memorial Trophy winner"
+    },
+    {
+     "field": "awards",
+     "line": "Hall of Fame (2013)",
+     "official": "inHHOF: 1",
+     "second": "Inducted as Player 2013",
+     "third": {
+      "host": "hhof.com",
+      "url": "https://www.hhof.com/HonouredMembers/playersByYear.html?type=Player",
+      "data": "https://www.hhof.com/LegendsOfHockey/jsp/MembersByYear.jsp?type=Player",
+      "value": "2013: Brendan Shanahan (P201304)"
+     }
+    }
+   ],
+   "otherVerifiedAwardLines": []
+  },
+  {
+   "index": 53,
+   "id": "hc-066",
+   "name": "Marcel Dionne",
+   "status": "new",
+   "oldIds": [],
+   "active": false,
+   "position": "Forward",
+   "country": "Canada",
+   "countryFlag": "🇨🇦",
+   "draftInfo": "1st Round, 2nd Overall (1971)",
+   "teams": [
+    "Detroit Red Wings",
+    "Los Angeles Kings",
+    "New York Rangers"
+   ],
+   "stats": [
+    "731 G",
+    "1,040 A",
+    "1,771 Pts"
+   ],
+   "awards": [
+    "Art Ross Trophy (1980)",
+    "2× Ted Lindsay Award",
+    "2× Lady Byng Trophy",
+    "Hall of Fame (1992)"
+   ],
+   "sources": {
+    "official": {
+     "host": "api-web.nhle.com",
+     "url": "https://api-web.nhle.com/v1/player/8446430/landing",
+     "page": "https://www.nhl.com/player/8446430"
+    },
+    "second": {
+     "host": "hockey-reference.com",
+     "url": "https://www.hockey-reference.com/players/d/dionnma01.html"
+    }
+   },
+   "facts": [
+    {
+     "field": "position",
+     "line": "Forward",
+     "official": "C",
+     "second": "C"
+    },
+    {
+     "field": "country",
+     "line": "Canada",
+     "official": "CAN, born Drummondville",
+     "second": "born Drummondville, Quebec [ca]"
+    },
+    {
+     "field": "draftInfo",
+     "line": "1st Round, 2nd Overall (1971)",
+     "official": "1971 DET round 1 overall 2",
+     "second": "Detroit, 1st round (2nd overall), 1971 NHL Amateur"
+    },
+    {
+     "field": "teams",
+     "line": "Detroit Red Wings > Los Angeles Kings > New York Rangers",
+     "official": "Detroit Red Wings > Los Angeles Kings > New York Rangers",
+     "second": "DET > LAK > NYR"
+    },
+    {
+     "field": "stats",
+     "line": "731 G",
+     "official": "G 731",
+     "second": "G 731"
+    },
+    {
+     "field": "stats",
+     "line": "1,040 A",
+     "official": "A 1040",
+     "second": "A 1040"
+    },
+    {
+     "field": "stats",
+     "line": "1,771 Pts",
+     "official": "Pts 1771",
+     "second": "Pts 1771"
+    },
+    {
+     "field": "awards",
+     "line": "Art Ross Trophy (1980)",
+     "official": "Art Ross Trophy: 1980",
+     "second": "1979-80 Art Ross Trophy winner"
+    },
+    {
+     "field": "awards",
+     "line": "2× Ted Lindsay Award",
+     "official": "Ted Lindsay Award: 1979, 1980",
+     "second": "2x Ted Lindsay Award winner"
+    },
+    {
+     "field": "awards",
+     "line": "2× Lady Byng Trophy",
+     "official": "Lady Byng Memorial Trophy: 1975, 1977",
+     "second": "2x Lady Byng Memorial Trophy winner"
+    },
+    {
+     "field": "awards",
+     "line": "Hall of Fame (1992)",
+     "official": "inHHOF: 1",
+     "second": "Inducted as Player 1992",
+     "third": {
+      "host": "hhof.com",
+      "url": "https://www.hhof.com/HonouredMembers/playersByYear.html?type=Player",
+      "data": "https://www.hhof.com/LegendsOfHockey/jsp/MembersByYear.jsp?type=Player",
+      "value": "1992: Marcel Elphege Dionne (P199201)"
+     }
+    }
+   ],
+   "otherVerifiedAwardLines": []
+  },
+  {
+   "index": 54,
+   "id": "hc-029",
+   "name": "Teemu Selanne",
+   "status": "kept",
+   "oldIds": [
+    "hc-029"
+   ],
+   "active": false,
+   "position": "Forward",
+   "country": "Finland",
+   "countryFlag": "🇫🇮",
+   "draftInfo": "1st Round, 10th Overall (1988)",
+   "teams": [
+    "Winnipeg Jets",
+    "Anaheim Ducks",
+    "San Jose Sharks",
+    "Colorado Avalanche"
+   ],
+   "stats": [
+    "684 G",
+    "773 A",
+    "1,457 Pts"
+   ],
+   "awards": [
+    "Stanley Cup Champion",
+    "Rocket Richard Trophy (1999)",
+    "Calder Trophy (1993)",
+    "Hall of Fame (2017)"
+   ],
+   "sources": {
+    "official": {
+     "host": "api-web.nhle.com",
+     "url": "https://api-web.nhle.com/v1/player/8457981/landing",
+     "page": "https://www.nhl.com/player/8457981"
+    },
+    "second": {
+     "host": "hockey-reference.com",
+     "url": "https://www.hockey-reference.com/players/s/selante01.html"
+    }
+   },
+   "facts": [
+    {
+     "field": "position",
+     "line": "Forward",
+     "official": "R",
+     "second": "RW"
+    },
+    {
+     "field": "country",
+     "line": "Finland",
+     "official": "FIN, born Helsinki",
+     "second": "born Helsinki, Finland [fi]"
+    },
+    {
+     "field": "draftInfo",
+     "line": "1st Round, 10th Overall (1988)",
+     "official": "1988 WIN round 1 overall 10",
+     "second": "Winnipeg, 1st round (10th overall), 1988 NHL Entry"
+    },
+    {
+     "field": "teams",
+     "line": "Winnipeg Jets > Anaheim Ducks > San Jose Sharks > Colorado Avalanche",
+     "official": "Winnipeg Jets (1979) > Anaheim Ducks > San Jose Sharks > Colorado Avalanche",
+     "second": "WIN > MDA > SJS > COL > ANA"
+    },
+    {
+     "field": "stats",
+     "line": "684 G",
+     "official": "G 684",
+     "second": "G 684"
+    },
+    {
+     "field": "stats",
+     "line": "773 A",
+     "official": "A 773",
+     "second": "A 773"
+    },
+    {
+     "field": "stats",
+     "line": "1,457 Pts",
+     "official": "Pts 1457",
+     "second": "Pts 1457"
+    },
+    {
+     "field": "awards",
+     "line": "Stanley Cup Champion",
+     "official": "Stanley Cup: 2007",
+     "second": "1x Cup Winner"
+    },
+    {
+     "field": "awards",
+     "line": "Rocket Richard Trophy (1999)",
+     "official": "Maurice “Rocket” Richard Trophy: 1999",
+     "second": "1998-99 Maurice Richard Trophy winner"
+    },
+    {
+     "field": "awards",
+     "line": "Calder Trophy (1993)",
+     "official": "Calder Memorial Trophy: 1993",
+     "second": "1992-93 Calder Memorial Trophy winner"
+    },
+    {
+     "field": "awards",
+     "line": "Hall of Fame (2017)",
+     "official": "inHHOF: 1",
+     "second": "Inducted as Player 2017",
+     "third": {
+      "host": "hhof.com",
+      "url": "https://www.hhof.com/HonouredMembers/playersByYear.html?type=Player",
+      "data": "https://www.hhof.com/LegendsOfHockey/jsp/MembersByYear.jsp?type=Player",
+      "value": "2017: Teemu Selanne (P201705)"
+     }
+    }
+   ],
+   "otherVerifiedAwardLines": [
+    "Masterton Trophy (2006)"
+   ]
+  },
+  {
+   "index": 55,
+   "id": "hc-032",
+   "name": "Dominik Hasek",
+   "status": "kept",
+   "oldIds": [
+    "hc-032"
+   ],
+   "active": false,
+   "position": "Goalie",
+   "country": "Czech Republic",
+   "countryFlag": "🇨🇿",
+   "draftInfo": "10th Round, 199th Overall (1983)",
+   "teams": [
+    "Chicago Blackhawks",
+    "Buffalo Sabres",
+    "Detroit Red Wings",
+    "Ottawa Senators"
+   ],
+   "stats": [
+    "389 W",
+    "2.20 GAA",
+    ".922 SV%"
+   ],
+   "awards": [
+    "2× Stanley Cup Champion",
+    "2× Hart Trophy",
+    "6× Vezina Trophy",
+    "Hall of Fame (2014)"
+   ],
+   "sources": {
+    "official": {
+     "host": "api-web.nhle.com",
+     "url": "https://api-web.nhle.com/v1/player/8447687/landing",
+     "page": "https://www.nhl.com/player/8447687"
+    },
+    "second": {
+     "host": "hockey-reference.com",
+     "url": "https://www.hockey-reference.com/players/h/hasekdo01.html"
+    }
+   },
+   "facts": [
+    {
+     "field": "position",
+     "line": "Goalie",
+     "official": "G",
+     "second": "G"
+    },
+    {
+     "field": "country",
+     "line": "Czech Republic",
+     "official": "CZE, born Pardubice",
+     "second": "born Pardubice, Czechoslovakia [cs]"
+    },
+    {
+     "field": "draftInfo",
+     "line": "10th Round, 199th Overall (1983)",
+     "official": "1983 CHI round 10 overall 199",
+     "second": "Chicago, 10th round (199th overall), 1983 NHL Entry"
+    },
+    {
+     "field": "teams",
+     "line": "Chicago Blackhawks > Buffalo Sabres > Detroit Red Wings > Ottawa Senators",
+     "official": "Chicago Blackhawks > Buffalo Sabres > Detroit Red Wings > Ottawa Senators",
+     "second": "CHI > BUF > DET > OTT"
+    },
+    {
+     "field": "stats",
+     "line": "389 W",
+     "official": "W 389",
+     "second": "W 389"
+    },
+    {
+     "field": "stats",
+     "line": "2.20 GAA",
+     "official": "GAA 2.201864",
+     "second": "GAA 2.20"
+    },
+    {
+     "field": "stats",
+     "line": ".922 SV%",
+     "official": "SV% 0.922255",
+     "second": "SV% .922"
+    },
+    {
+     "field": "awards",
+     "line": "2× Stanley Cup Champion",
+     "official": "Stanley Cup: 2002, 2008",
+     "second": "2x Cup Winner"
+    },
+    {
+     "field": "awards",
+     "line": "2× Hart Trophy",
+     "official": "Hart Memorial Trophy: 1997, 1998",
+     "second": "2x Hart Memorial Trophy winner"
+    },
+    {
+     "field": "awards",
+     "line": "6× Vezina Trophy",
+     "official": "Vezina Trophy: 1994, 1995, 1997, 1998, 1999, 2001",
+     "second": "6x Vezina Trophy winner"
+    },
+    {
+     "field": "awards",
+     "line": "Hall of Fame (2014)",
+     "official": "inHHOF: 1",
+     "second": "Inducted as Player 2014",
+     "third": {
+      "host": "hhof.com",
+      "url": "https://www.hhof.com/HonouredMembers/playersByYear.html?type=Player",
+      "data": "https://www.hhof.com/LegendsOfHockey/jsp/MembersByYear.jsp?type=Player",
+      "value": "2014: Dominik Hasek (P201403)"
+     }
+    }
+   ],
+   "otherVerifiedAwardLines": [
+    "2× Ted Lindsay Award",
+    "3× Jennings Trophy"
+   ]
+  },
+  {
+   "index": 56,
+   "id": "hc-051",
+   "name": "Andrei Vasilevskiy",
+   "status": "new",
+   "oldIds": [],
+   "active": true,
+   "position": "Goalie",
+   "country": "Russia",
+   "countryFlag": "🇷🇺",
+   "draftInfo": "1st Round, 19th Overall (2012)",
+   "teams": [
+    "Tampa Bay Lightning"
+   ],
+   "stats": [
+    "370+ W",
+    "40+ SO",
+    "590+ GP"
+   ],
+   "awards": [
+    "2× Stanley Cup Champion",
+    "Conn Smythe Trophy (2021)",
+    "2× Vezina Trophy"
+   ],
+   "sources": {
+    "official": {
+     "host": "api-web.nhle.com",
+     "url": "https://api-web.nhle.com/v1/player/8476883/landing",
+     "page": "https://www.nhl.com/player/8476883"
+    },
+    "second": {
+     "host": "hockey-reference.com",
+     "url": "https://www.hockey-reference.com/players/v/vasilan02.html"
+    }
+   },
+   "facts": [
+    {
+     "field": "position",
+     "line": "Goalie",
+     "official": "G",
+     "second": "G"
+    },
+    {
+     "field": "country",
+     "line": "Russia",
+     "official": "RUS, born Tyumen",
+     "second": "born Tyumen, Russia [ru]"
+    },
+    {
+     "field": "draftInfo",
+     "line": "1st Round, 19th Overall (2012)",
+     "official": "2012 TBL round 1 overall 19",
+     "second": "Tampa Bay, 1st round (19th overall), 2012 NHL Entry"
+    },
+    {
+     "field": "teams",
+     "line": "Tampa Bay Lightning",
+     "official": "Tampa Bay Lightning",
+     "second": "TBL"
+    },
+    {
+     "field": "stats",
+     "line": "370+ W",
+     "official": "W 370",
+     "second": "W 370"
+    },
+    {
+     "field": "stats",
+     "line": "40+ SO",
+     "official": "SO 42",
+     "second": "SO 42"
+    },
+    {
+     "field": "stats",
+     "line": "590+ GP",
+     "official": "GP 599",
+     "second": "GP 599"
+    },
+    {
+     "field": "awards",
+     "line": "2× Stanley Cup Champion",
+     "official": "Stanley Cup: 2020, 2021",
+     "second": "2x Cup Winner"
+    },
+    {
+     "field": "awards",
+     "line": "Conn Smythe Trophy (2021)",
+     "official": "Conn Smythe Trophy: 2021",
+     "second": "2020-21 Conn Smythe Trophy winner"
+    },
+    {
+     "field": "awards",
+     "line": "2× Vezina Trophy",
+     "official": "Vezina Trophy: 2019, 2026",
+     "second": "2x Vezina Trophy winner"
+    }
+   ],
+   "otherVerifiedAwardLines": []
+  },
+  {
+   "index": 57,
+   "id": "hc-012",
+   "name": "Auston Matthews",
+   "status": "kept",
+   "oldIds": [
+    "hc-012"
+   ],
+   "active": true,
+   "position": "Forward",
+   "country": "United States",
+   "countryFlag": "🇺🇸",
+   "draftInfo": "1st Round, 1st Overall (2016)",
+   "teams": [
+    "Toronto Maple Leafs"
+   ],
+   "stats": [
+    "420+ G",
+    "350+ A",
+    "780+ Pts"
+   ],
+   "awards": [
+    "Hart Trophy (2022)",
+    "3× Rocket Richard Trophy",
+    "Ted Lindsay Award (2022)",
+    "Calder Trophy (2017)"
+   ],
+   "sources": {
+    "official": {
+     "host": "api-web.nhle.com",
+     "url": "https://api-web.nhle.com/v1/player/8479318/landing",
+     "page": "https://www.nhl.com/player/8479318"
+    },
+    "second": {
+     "host": "hockey-reference.com",
+     "url": "https://www.hockey-reference.com/players/m/matthau01.html"
+    }
+   },
+   "facts": [
+    {
+     "field": "position",
+     "line": "Forward",
+     "official": "C",
+     "second": "C"
+    },
+    {
+     "field": "country",
+     "line": "United States",
+     "official": "USA, born San Ramon",
+     "second": "born San Ramon, California [us]"
+    },
+    {
+     "field": "draftInfo",
+     "line": "1st Round, 1st Overall (2016)",
+     "official": "2016 TOR round 1 overall 1",
+     "second": "Toronto, 1st round (1st overall), 2016 NHL Entry"
+    },
+    {
+     "field": "teams",
+     "line": "Toronto Maple Leafs",
+     "official": "Toronto Maple Leafs",
+     "second": "TOR"
+    },
+    {
+     "field": "stats",
+     "line": "420+ G",
+     "official": "G 428",
+     "second": "G 428"
+    },
+    {
+     "field": "stats",
+     "line": "350+ A",
+     "official": "A 352",
+     "second": "A 352"
+    },
+    {
+     "field": "stats",
+     "line": "780+ Pts",
+     "official": "Pts 780",
+     "second": "Pts 780"
+    },
+    {
+     "field": "awards",
+     "line": "Hart Trophy (2022)",
+     "official": "Hart Memorial Trophy: 2022",
+     "second": "2021-22 Hart Memorial Trophy winner"
+    },
+    {
+     "field": "awards",
+     "line": "3× Rocket Richard Trophy",
+     "official": "Maurice “Rocket” Richard Trophy: 2021, 2022, 2024",
+     "second": "3x Maurice Richard Trophy winner"
+    },
+    {
+     "field": "awards",
+     "line": "Ted Lindsay Award (2022)",
+     "official": "Ted Lindsay Award: 2022",
+     "second": "2021-22 Ted Lindsay Award winner"
+    },
+    {
+     "field": "awards",
+     "line": "Calder Trophy (2017)",
+     "official": "Calder Memorial Trophy: 2017",
+     "second": "2016-17 Calder Memorial Trophy winner"
+    }
+   ],
+   "otherVerifiedAwardLines": []
+  },
+  {
+   "index": 58,
+   "id": "hc-014",
+   "name": "Henrik Lundqvist",
+   "status": "kept",
+   "oldIds": [
+    "hc-014"
+   ],
+   "active": false,
+   "position": "Goalie",
+   "country": "Sweden",
+   "countryFlag": "🇸🇪",
+   "draftInfo": "7th Round, 205th Overall (2000)",
+   "teams": [
+    "New York Rangers"
+   ],
+   "stats": [
+    "459 W",
+    "2.43 GAA",
+    ".918 SV%"
+   ],
+   "awards": [
+    "Vezina Trophy (2012)",
+    "Hall of Fame (2023)"
+   ],
+   "sources": {
+    "official": {
+     "host": "api-web.nhle.com",
+     "url": "https://api-web.nhle.com/v1/player/8468685/landing",
+     "page": "https://www.nhl.com/player/8468685"
+    },
+    "second": {
+     "host": "hockey-reference.com",
+     "url": "https://www.hockey-reference.com/players/l/lundqhe01.html"
+    }
+   },
+   "facts": [
+    {
+     "field": "position",
+     "line": "Goalie",
+     "official": "G",
+     "second": "G"
+    },
+    {
+     "field": "country",
+     "line": "Sweden",
+     "official": "SWE, born Are",
+     "second": "born Are, Sweden [se]"
+    },
+    {
+     "field": "draftInfo",
+     "line": "7th Round, 205th Overall (2000)",
+     "official": "2000 NYR round 7 overall 205",
+     "second": "NY Rangers, 7th round (205th overall), 2000 NHL Entry"
+    },
+    {
+     "field": "teams",
+     "line": "New York Rangers",
+     "official": "New York Rangers",
+     "second": "NYR"
+    },
+    {
+     "field": "stats",
+     "line": "459 W",
+     "official": "W 459",
+     "second": "W 459"
+    },
+    {
+     "field": "stats",
+     "line": "2.43 GAA",
+     "official": "GAA 2.432797",
+     "second": "GAA 2.43"
+    },
+    {
+     "field": "stats",
+     "line": ".918 SV%",
+     "official": "SV% 0.917962",
+     "second": "SV% .918"
+    },
+    {
+     "field": "awards",
+     "line": "Vezina Trophy (2012)",
+     "official": "Vezina Trophy: 2012",
+     "second": "2011-12 Vezina Trophy winner"
+    },
+    {
+     "field": "awards",
+     "line": "Hall of Fame (2023)",
+     "official": "inHHOF: 1",
+     "second": "Inducted as Player 2023",
+     "third": {
+      "host": "hhof.com",
+      "url": "https://www.hhof.com/HonouredMembers/playersByYear.html?type=Player",
+      "data": "https://www.hhof.com/LegendsOfHockey/jsp/MembersByYear.jsp?type=Player",
+      "value": "2023: Henrik Lundqvist (P202302)"
+     }
+    }
+   ],
+   "otherVerifiedAwardLines": []
+  },
+  {
+   "index": 59,
+   "id": "hc-009",
+   "name": "Martin Brodeur",
+   "status": "kept",
+   "oldIds": [
+    "hc-009",
+    "hc-030"
+   ],
+   "active": false,
+   "position": "Goalie",
+   "country": "Canada",
+   "countryFlag": "🇨🇦",
+   "draftInfo": "1st Round, 20th Overall (1990)",
+   "teams": [
+    "New Jersey Devils",
+    "St. Louis Blues"
+   ],
+   "stats": [
+    "691 W",
+    "2.24 GAA",
+    ".912 SV%"
+   ],
+   "awards": [
+    "3× Stanley Cup Champion",
+    "4× Vezina Trophy",
+    "5× Jennings Trophy",
+    "Hall of Fame (2018)"
+   ],
+   "sources": {
+    "official": {
+     "host": "api-web.nhle.com",
+     "url": "https://api-web.nhle.com/v1/player/8455710/landing",
+     "page": "https://www.nhl.com/player/8455710"
+    },
+    "second": {
+     "host": "hockey-reference.com",
+     "url": "https://www.hockey-reference.com/players/b/brodema01.html"
+    }
+   },
+   "facts": [
+    {
+     "field": "position",
+     "line": "Goalie",
+     "official": "G",
+     "second": "G"
+    },
+    {
+     "field": "country",
+     "line": "Canada",
+     "official": "CAN, born Montréal",
+     "second": "born Montreal, Quebec [ca]"
+    },
+    {
+     "field": "draftInfo",
+     "line": "1st Round, 20th Overall (1990)",
+     "official": "1990 NJD round 1 overall 20",
+     "second": "New Jersey, 1st round (20th overall), 1990 NHL Entry"
+    },
+    {
+     "field": "teams",
+     "line": "New Jersey Devils > St. Louis Blues",
+     "official": "New Jersey Devils > St. Louis Blues",
+     "second": "NJD > STL"
+    },
+    {
+     "field": "stats",
+     "line": "691 W",
+     "official": "W 691",
+     "second": "W 691"
+    },
+    {
+     "field": "stats",
+     "line": "2.24 GAA",
+     "official": "GAA 2.241583",
+     "second": "GAA 2.24"
+    },
+    {
+     "field": "stats",
+     "line": ".912 SV%",
+     "official": "SV% 0.912296",
+     "second": "SV% .912"
+    },
+    {
+     "field": "awards",
+     "line": "3× Stanley Cup Champion",
+     "official": "Stanley Cup: 1995, 2000, 2003",
+     "second": "3x Cup Winner"
+    },
+    {
+     "field": "awards",
+     "line": "4× Vezina Trophy",
+     "official": "Vezina Trophy: 2003, 2004, 2007, 2008",
+     "second": "4x Vezina Trophy winner"
+    },
+    {
+     "field": "awards",
+     "line": "5× Jennings Trophy",
+     "official": "William M. Jennings Trophy: 1997, 1998, 2003, 2004, 2010",
+     "second": "5x William M. Jennings Trophy winner"
+    },
+    {
+     "field": "awards",
+     "line": "Hall of Fame (2018)",
+     "official": "inHHOF: 1",
+     "second": "Inducted as Player 2018",
+     "third": {
+      "host": "hhof.com",
+      "url": "https://www.hhof.com/HonouredMembers/playersByYear.html?type=Player",
+      "data": "https://www.hhof.com/LegendsOfHockey/jsp/MembersByYear.jsp?type=Player",
+      "value": "2018: Martin Brodeur (P201801)"
+     }
+    }
+   ],
+   "otherVerifiedAwardLines": [
+    "Calder Trophy (1994)"
+   ]
+  }
+ ]
+}
