@@ -430,8 +430,9 @@ export default function NhlFrontOfficeBoard() {
   /* Round 987: with the desk on, the grade the draft board shows is your
      scouting director's read (his level sets the miss); the CPU clubs keep
      the engine's own. */
-  const gradeOf = (pr: NhlProspect): number => gm && league
-    ? nhlScoutRead(pr, myTeam, league.season, gmStaffLevel(nhlStaffOf(gm, league, myTeam).block, 'scouting'))
+  const scoutLevel = gm && league ? gmStaffLevel(nhlStaffOf(gm, league, myTeam).block, 'scouting') : null;
+  const gradeOf = (pr: NhlProspect): number => scoutLevel !== null && league
+    ? nhlScoutRead(pr, myTeam, league.season, scoutLevel)
     : pr.grade;
 
   const playRound = () => {

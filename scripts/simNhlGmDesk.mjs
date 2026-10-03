@@ -55,8 +55,10 @@
  *                          a three round injury 3.00 to 2.25 rounds; alone, the head coach takes the win
  *                          .566 to .614, special teams and the goalie coach .566 to .590 each
  * Every floor in T sits near 70 percent of the lowest set. Every control was
- * run on seeds 1..10 and fired in its own check (counts in the commit that
- * set these numbers).
+ * run on seeds 1..10 and fired in its own check, failures counted: coinflip
+ * 29 in 2, latetrade 400 in 3, droppick 452 in 4, flatstaff 63 in 5,
+ * nodefault 7 in 1, refusaldrift 100 in 3, noguard 1 in 3, onepost 18 in 5,
+ * sheetpicks 34 in 4, shortelc 120 in 2, retaintwice 1 in 6.
  */
 import './lib/seedRandom.mjs';
 import fs from 'node:fs';
@@ -123,7 +125,7 @@ const FILES = {
 const EDITS = {
   coinflip: ['desk', '  const run = runDeskOffseason(nhlContractHost, league, ledger, rng);',
     '  const run = { ok: true as const, engine: nhlContractHost.runOffseason(league, rng, team), applied: [] as GmDecision[], picksAdded: [] as number[] };'],
-  latetrade: ['desk', 'periodsPlayed: Math.max(0, league.round - 1), seasonClosed: false },', 'periodsPlayed: 0, seasonClosed: false },'],
+  latetrade: ['desk', 'periodsPlayed: nhlPeriodsPlayed(league), seasonClosed: false },', 'periodsPlayed: 0, seasonClosed: false },'],
   droppick: ['desk', '  let next = withGmBlock(desk, NHL_DESK_KEYS.picks, out.ledger);',
     '  let next = withGmBlock(desk, NHL_DESK_KEYS.picks, { v: 1, picks: out.ledger.picks.filter(p => !pkg.give.some(a => a.kind === \'pick\' && a.key === pickKey(p))) });'],
   flatstaff: ['desk', "  const e = (key: string) => gmStaffEffect(NHL_STAFF_PACK, block, key);", "  const e = (key: string) => 0 * gmStaffEffect(NHL_STAFF_PACK, block, key);"],
