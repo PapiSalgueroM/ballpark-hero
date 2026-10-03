@@ -179,8 +179,8 @@ export function preDraftEffectText(e: PreDraftEffect): string {
 export const SHARED_PRE_DRAFT_CHOICES: PreDraftChoice[] = [
   {
     id: 'summer',
-    title: 'The summer',
-    body: 'Three months off. Your position coach has a plan, your friends have a beach house.',
+    title: 'The offseason',
+    body: 'Time off between seasons. Your coach has a plan, your friends have a beach house.',
     options: [
       { label: 'Train all summer', effect: { rating: 2, stock: 1 } },
       { label: 'Rest up', effect: { health: 15 } },
@@ -216,8 +216,11 @@ export const SHARED_PRE_DRAFT_CHOICES: PreDraftChoice[] = [
 ];
 
 export const PRE_DRAFT_APPROACHES: PreDraftApproach[] = [
-  { id: 'allout', label: 'Go all out', blurb: 'Bigger swings both ways.' },
-  { id: 'steady', label: 'Play it safe', blurb: 'Smaller swings both ways.' },
+  /* The blurbs say nothing about size: near either end of the meter both
+     approaches can move the stock the same amount, and the line under each
+     button prints the real numbers from this stock. */
+  { id: 'allout', label: 'Go all out', blurb: 'Push every drill to the limit.' },
+  { id: 'steady', label: 'Play it safe', blurb: 'Stay within yourself.' },
   { id: 'skip', label: 'Skip it', blurb: 'No drill and no grade. The scouts notice.' },
 ];
 
@@ -454,7 +457,9 @@ export function preDraftRunDraft(desc: PreDraftDescriptor, prev: PreDraftState):
   let age = s.age;
   if (desc.postDraft) {
     const dev = keyedRng(preDraftKey(s.seed, 'development'));
-    const n = preDraftDevSeasonCount(desc.postDraft, rating, dev);
+    /* Undrafted means the longest climb, from the first rung of the ladder:
+       the undrafted lines promise exactly that. */
+    const n = drafted ? preDraftDevSeasonCount(desc.postDraft, rating, dev) : desc.postDraft.max;
     for (let i = 0; i < n; i += 1) {
       const perf = seasonPerf(rating, 100, dev);
       devSeasons.push({
@@ -482,26 +487,65 @@ const SPORTS: PreDraftSport[] = ['nfl', 'nba', 'mlb', 'nhl'];
 const isNum = (x: unknown): x is number => typeof x === 'number' && Number.isFinite(x);
 const isStr = (x: unknown): x is string => typeof x === 'string';
 
+const isObj = (x: unknown): x is Record<string, unknown> => !!x && typeof x === 'object' && !Array.isArray(x);
+const isNumOrNull = (x: unknown) => x === null || isNum(x);
+const GRADES = ['A', 'B', 'C', 'D'];
+const APPROACH_IDS = ['allout', 'steady', 'skip'];
+
+/** A season line the cards can print: every field they read, every stat. */
+function isSeasonRecord(x: unknown): boolean {
+  if (!isObj(x) || !isNum(x.age) || !isStr(x.level) || !isNum(x.perf) || !isNum(x.stockDelta)) return false;
+  return Array.isArray(x.stats) && x.stats.every(st => isObj(st) && isStr(st.label) && isStr(st.value));
+}
+
+function isShowcase(x: unknown): boolean {
+  if (!isObj(x) || !APPROACH_IDS.includes(x.approach as string) || !isStr(x.drill) || !isNum(x.stockDelta)) return false;
+  return x.approach === 'skip' ? x.grade === null : GRADES.includes(x.grade as string);
+}
+
+function isOutcome(x: unknown): boolean {
+  if (!isObj(x) || !isStr(x.team) || !isNum(x.ageAtDraft) || !isNum(x.draftYear)) return false;
+  if (!isNumOrNull(x.pick) || !isNumOrNull(x.round) || !isNumOrNull(x.pickInRound) || !isNumOrNull(x.slotValue)) return false;
+  if ((x.pick === null) !== (x.round === null) || (x.pick === null) !== (x.pickInRound === null)) return false;
+  if (!isNum(x.ratingAfter) || !isNum(x.ageAfter)) return false;
+  return Array.isArray(x.devSeasons) && x.devSeasons.every(isSeasonRecord);
+}
+
 /** Reads a saved block. Anything that is not a whole, sane block comes back
  *  as null, so a corrupt block resets that block alone and never the career
- *  around it. A save from before Round 914 has no block and reads as null. */
-export function loadPreDraft(raw: unknown): PreDraftState | null {
-  if (!raw || typeof raw !== 'object') return null;
-  const r = raw as Record<string, unknown>;
+ *  around it. A save from before Round 914 has no block and reads as null.
+ *  Every field a card reads is checked down to the elements: the season
+ *  lines and their stats, the showcase, the draft outcome and its seasons.
+ *  Each phase carries exactly what it needs: a pending card only in
+ *  'choice', a showcase from 'draft' on, an outcome only in 'done'.
+ *  Given the sport's descriptor it also checks the block belongs to that
+ *  sport, era and one of its routes, and a pending card the descriptor no
+ *  longer deals (a later round renamed it) is dropped and the road goes on,
+ *  so a renamed card can never leave a player with no button to press. */
+export function loadPreDraft(raw: unknown, desc?: PreDraftDescriptor): PreDraftState | null {
+  if (!isObj(raw)) return null;
+  const r = raw;
   if (r.v !== 1 || !SPORTS.includes(r.sport as PreDraftSport) || !isStr(r.eraId) || !isStr(r.seed) || !isStr(r.routeId)) return null;
   if (![r.rating, r.pot, r.stock, r.health, r.age, r.seasonsDone].every(isNum)) return null;
   if (!PHASES.includes(r.phase as PreDraftPhase)) return null;
-  if (!Array.isArray(r.lines) || !Array.isArray(r.choicesSeen) || !r.choicesSeen.every(isStr)) return null;
-  if (r.pendingChoice !== null && !isStr(r.pendingChoice)) return null;
+  if (!Array.isArray(r.lines) || !r.lines.every(isSeasonRecord)) return null;
+  if (!Array.isArray(r.choicesSeen) || !r.choicesSeen.every(isStr)) return null;
   if (r.pos !== undefined && !isStr(r.pos)) return null;
-  if (r.phase === 'done') {
-    const d = r.draft as Record<string, unknown> | null;
-    if (!d || typeof d !== 'object' || !isStr(d.team) || !(d.pick === null || isNum(d.pick))) return null;
-    if (!isNum(d.ratingAfter) || !isNum(d.ageAfter) || !Array.isArray(d.devSeasons)) return null;
-  }
-  return {
+  if (r.phase === 'choice' ? !isStr(r.pendingChoice) : r.pendingChoice !== null) return null;
+  const late = r.phase === 'draft' || r.phase === 'done';
+  if (late ? !isShowcase(r.showcase) : r.showcase !== null) return null;
+  if (r.phase === 'done' ? !isOutcome(r.draft) : r.draft !== null) return null;
+  const s: PreDraftState = {
     ...(r as unknown as PreDraftState),
     stock: clampMeter(r.stock as number),
     health: clampMeter(r.health as number),
   };
+  if (desc) {
+    if (s.sport !== desc.sport || s.eraId !== desc.eraId || !desc.routes.some(x => x.id === s.routeId)) return null;
+    if (s.phase === 'choice' && !preDraftChoicePool(desc).some(c => c.id === s.pendingChoice)) {
+      s.pendingChoice = null;
+      s.phase = s.seasonsDone >= preDraftRoute(desc, s.routeId).seasons ? 'showcase' : 'season';
+    }
+  }
+  return s;
 }

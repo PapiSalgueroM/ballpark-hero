@@ -17,24 +17,25 @@ const DEV_LEVEL: Record<string, string> = {
   europe: 'European pro league',
 };
 
+/** Rates only, never a games count: a major junior, US junior, European,
+ *  college and pro season are all different lengths, and none of those
+ *  lengths was confirmed twice, so no line implies one. */
 function nhlStatLine(perf: number, rng: () => number, pos: string | undefined): PreDraftStat[] {
-  const gp = 50 + Math.floor(rng() * 18);
   if (pos === 'G') {
     const sv = Math.min(0.935, Math.max(0.86, 0.875 + perf / 2000 + (rng() - 0.5) * 0.01));
     return [
-      { label: 'GP', value: String(Math.round(gp * 0.7)) },
       { label: 'SV%', value: sv.toFixed(3).replace(/^0/, '') },
       { label: 'GAA', value: Math.max(1.6, 4.2 - perf / 40 + (rng() - 0.5) * 0.4).toFixed(2) },
     ];
   }
   const f = 0.4 + perf / 100;
-  const g = Math.max(0, Math.round((pos === 'D' ? 8 : 24) * f * (0.75 + rng() * 0.5)));
-  const a = Math.max(0, Math.round((pos === 'D' ? 26 : 30) * f * (0.75 + rng() * 0.5)));
+  const perGame = (base: number) => Math.round(base * f * (0.75 + rng() * 0.5) / 60 * 100) / 100;
+  const g = perGame(pos === 'D' ? 8 : 24);
+  const a = perGame(pos === 'D' ? 26 : 30);
   return [
-    { label: 'GP', value: String(gp) },
-    { label: 'G', value: String(g) },
-    { label: 'A', value: String(a) },
-    { label: 'PTS', value: String(g + a) },
+    { label: 'G/GP', value: g.toFixed(2) },
+    { label: 'A/GP', value: a.toFixed(2) },
+    { label: 'PTS/GP', value: (g + a).toFixed(2) },
   ];
 }
 
@@ -66,7 +67,12 @@ export function nhlPreDraftDescriptor(eraId?: string): PreDraftDescriptor {
       },
     ],
     showcaseName: 'Scouting combine',
-    drills: ['Fitness testing', 'Skating sprint', 'Agility course', 'Interview day'],
+    /* The combine is off ice: no skating test. Today's tests are verified
+       twice (audit, NHL section); the 2006 test list is not, so that era
+       names only the fitness testing and the team interviews. */
+    drills: era.id === 'now'
+      ? ['Bike test', 'Standing long jump', 'Pro agility', 'Interview day']
+      : ['Fitness testing', 'Interview day'],
     statLine: (perf, rng, pos) => nhlStatLine(perf, rng, pos),
     choices: [
       {

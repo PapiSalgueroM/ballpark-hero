@@ -3,9 +3,9 @@
    Verified (docs/audits/US-PRE-DRAFT-RULES-2026-10.md): seven rounds, one
    pick per club per round, in both eras (seven rounds since 1994); order by
    inverse finish with no lottery; eligible three seasons after high school,
-   in force in 2004 and 2005 too (Clarett, 2004). An undrafted rookie is free
-   to sign with any club. Three college seasons is the shortest road, so
-   both routes run three. */
+   in force in 2004 and 2005 too (Clarett, 2004). What an undrafted rookie
+   may sign confirmed only once, so the undrafted line states no rule. Three
+   college seasons is the shortest road, so both routes run three. */
 
 import { nflEraById } from './nflMyCareer';
 import type { PreDraftDescriptor, PreDraftStat } from './careerPreDraft';
@@ -45,7 +45,7 @@ export function nflPreDraftDescriptor(eraId?: string): PreDraftDescriptor {
       },
       {
         id: 'small', label: 'Small school', level: 'College, small school',
-        blurb: 'You start sooner, but the scouts have to come looking. Three seasons before you can declare.',
+        blurb: 'Fewer eyes on you, so the scouts have to come looking. Three seasons before you can declare.',
         seasons: 3, startAge: 18, stockStart: -6,
       },
     ],
@@ -63,17 +63,19 @@ export function nflPreDraftDescriptor(eraId?: string): PreDraftDescriptor {
         ],
       },
       {
-        id: 'nfl_transfer',
-        title: 'A bigger program calls',
-        body: 'A big program wants you as a transfer. Your small school coach found you first.',
+        /* Not a transfer card: nothing here moves a player to another
+           route, so no card offers to. */
+        id: 'nfl_paycheck',
+        title: 'The paycheck game',
+        body: 'Your small school plays a big program on the road. Every scout in the region will be in the stands.',
         routes: ['small'],
         options: [
-          { label: 'Transfer up', effect: { stock: 5, rating: -1 } },
-          { label: 'Stay loyal', effect: { rating: 1 } },
+          { label: 'Go right at their best player', effect: { stock: 5, health: -10 } },
+          { label: 'Play your own game', effect: { rating: 1 } },
         ],
       },
     ],
     postDraft: null,
-    undraftedLine: 'Nobody calls your name. You can still sign with any club, and one gives you a camp invite.',
+    undraftedLine: 'Nobody calls your name. A club gives you a camp invite.',
   };
 }
