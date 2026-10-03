@@ -203,7 +203,7 @@ export const PERK_LABEL: Record<PerkKind, { emoji: string; short: string; long: 
   discount: { emoji: '\u{1F3F7}️', short: '20% off', long: 'Your next signing costs 20 percent under his value' },
   noWar: { emoji: '\u{1F92B}', short: 'No war', long: 'The rivals stay out of your next signing' },
   respin: { emoji: '\u{1F3A1}', short: 'Second spin', long: 'Bring the wheel back to one shirt you already settled (not one you bought)' },
-  veto: { emoji: '✋', short: 'Veto', long: 'At the whistle, see the board\'s punishment cards and tear one up' },
+  veto: { emoji: '✋', short: 'Veto', long: 'At the whistle, see the board\'s punishment cards and send one back. The board deals another from what is left of its deck, and that one stands' },
   swap: { emoji: '\u{1F501}', short: 'Part exchange', long: 'See the scouts\' three before you let a man go. Take one and he goes the other way, 15 percent off the new man' },
   loan: { emoji: '\u{1F9F3}', short: 'Loan', long: 'Take one of the scouts\' three on a season loan for half his value. He is not your signing and he goes back after the season' },
   peek: { emoji: '\u{1F440}', short: 'Sneak peek', long: 'Find out what the next envelope holds before it lands' },
@@ -249,7 +249,7 @@ export const FORTUNE_DECK: FortuneCard[] = [
 /** The five Round 980 cards, dealt only from deck 2. */
 const FORTUNE_PERKS_980: FortuneCard[] = [
   { id: 'secondSpin', emoji: '\u{1F3A1}', title: 'A second spin', text: 'The board gives you one do over. Once this window, the wheel can come back to a shirt you already settled.', delta: 0, perk: 'respin' },
-  { id: 'chairman', emoji: '✋', title: 'The chairman likes you', text: 'Miss a target and he will quietly tear up one punishment card. Just the one.', delta: 0, perk: 'veto' },
+  { id: 'chairman', emoji: '✋', title: 'The chairman likes you', text: 'Miss a target and he will send one punishment card back to the board. They deal another from what is left, so pick the one you fear most.', delta: 0, perk: 'veto' },
   { id: 'tradeIn', emoji: '\u{1F501}', title: 'A part exchange', text: 'A selling club will take one of your men as part of a deal. See their three before he goes, and the new man comes 15 percent under his value.', delta: 0, perk: 'swap' },
   { id: 'loanContact', emoji: '\u{1F9F3}', title: 'A loan contact', text: 'A friend at a big club will lend you one man for the season at half his value. He goes back when the season ends.', delta: 0, perk: 'loan' },
   { id: 'insider', emoji: '\u{1F440}', title: 'Somebody in finance talks', text: 'Once this window, you can find out what the next envelope holds before it lands.', delta: 0, perk: 'peek' },
@@ -629,7 +629,7 @@ const FIN_EVENTS: FinEvent[] = [
 /** The five Round 980 envelopes, dealt only from deck 2. */
 const FIN_PERKS_980: FinEvent[] = [
   { emoji: '\u{1F3A1}', text: 'The board grants a do over: the wheel can come back to one shirt you already settled', delta: 0, perk: 'respin' },
-  { emoji: '✋', text: 'The chairman owes you one: he will tear up a punishment card at the whistle', delta: 0, perk: 'veto' },
+  { emoji: '✋', text: 'The chairman owes you one: at the whistle he can send a punishment card back for another', delta: 0, perk: 'veto' },
   { emoji: '\u{1F501}', text: 'A selling club offers a part exchange: your man goes the other way, theirs comes 15 percent cheaper', delta: 0, perk: 'swap' },
   { emoji: '\u{1F9F3}', text: 'A loan contact calls: one man for the season at half his value', delta: 0, perk: 'loan' },
   { emoji: '\u{1F440}', text: 'Somebody in finance talks: you can see the next envelope before it lands', delta: 0, perk: 'peek' },

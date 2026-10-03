@@ -5,7 +5,7 @@ import {
   hashSeed, budgetFor, managerOptionsFor, KEEP_MANAGER, managerFits, boardEnvelopeFor, fortuneDeckFor,
   drawFinEvent, planRivals, isContested, warRivalIndex, rivalCapFor, nextRaise, spinOrder, dealReplacements,
   drawPunishments, applyPreset, forceSales, bestFor, buildXi, xiRatingWithHoles, OVERDRAFT_LIMIT,
-  CURRENT_DECK, SWAP_DISCOUNT, LOAN_FEE,
+  CURRENT_DECK, SWAP_DISCOUNT, LOAN_FEE, PUNISH_DECK,
   type ManagerOption, type BoardEnvelope, type BoardObjective, type FinEvent, type FortuneCard,
   type ReplacementDeal, type RebuildPreset, type RivalPlan, type PunishCard, type ForcedSwap, type DeckVersion,
 } from '@/lib/rebuildDeck';
@@ -69,8 +69,10 @@ export interface Reckoning {
   remainingDeficit: number;
   cards: PunishCard[];
   missed: BoardObjective[];
-  /** Round 980: the card the veto tore up, by index into `cards`. */
+  /** Round 980: the card the veto sent back, by index into `cards`. */
   vetoed?: number;
+  /** Round 980: the card the board dealt in its place. Absent when its deck had nothing left. */
+  redrawn?: PunishCard;
 }
 
 export interface RunState {
@@ -660,13 +662,22 @@ export function canBlowWhistle(s: RunState): boolean {
 
 /** The board's verdict as the window stands: the money it closed on, the
  *  demands it missed, and the punishment card each miss draws. */
-export function whistleDraw(s: RunState): { windowFunds: number; missed: BoardObjective[]; cards: PunishCard[] } {
+export function whistleDraw(s: RunState): { windowFunds: number; missed: BoardObjective[]; cards: PunishCard[]; left: PunishCard[] } {
   const windowFunds = budgetOf(s);
   // The demands are judged on the window as the player closed it, not on the
   // books after the board's own clawback, or "finish with money in the bank"
   // would read as met the moment the forced sales cleared the debt.
   const missed = s.board.demands.filter(o => !o.check({ signed: s.signed, sold: s.sold, budget: windowFunds }));
-  return { windowFunds, missed, cards: drawPunishments(s.seed, missed.length) };
+  const cards = drawPunishments(s.seed, missed.length);
+  /* What is left in the board's deck, face down: a vetoed card is replaced from these. */
+  const left = PUNISH_DECK.filter(c => !cards.some(d => d.id === c.id));
+  return { windowFunds, missed, cards, left };
+}
+
+/** The card the board deals in place of a vetoed one: the next in its seeded
+ *  order, face down until then. Null when the deck has nothing left. */
+function redrawFor(s: RunState, drawn: number): PunishCard | null {
+  return drawPunishments(s.seed, drawn + 1)[drawn] ?? null;
 }
 
 /** The whistle. Holding a veto with a card that hurts on the table, the cards
@@ -677,12 +688,25 @@ export function blowWhistle(s: RunState): RunState {
   return settleWindow(s, null);
 }
 
-/** Tear up card k of the verdict. The safe card is not worth a veto and is refused. */
+/** Veto card k of the verdict: it is sent back and the board deals the next
+ *  card of its deck in its place, face down until it lands, and that one
+ *  stands. The safe card is not worth a veto and is refused. */
 export function vetoCard(s: RunState, k: number): RunState {
+  if (!s.verdict || s.phase !== 'spin') return s;
+  const { cards } = whistleDraw(s);
+  const card = cards[k];
+  if (!card || card.kind === 'safe') return s;
+  return settleWindow({ ...s, verdict: false, perks: { ...s.perks, veto: s.perks.veto - 1 } }, k, redrawFor(s, cards.length));
+}
+
+/** What a veto of card k would leave if the board dealt `instead` in its
+ *  place. For a policy weighing the veto over every card still face down,
+ *  so it never reads the one the seed will actually deal. */
+export function vetoPreview(s: RunState, k: number, instead: PunishCard | null): RunState {
   if (!s.verdict || s.phase !== 'spin') return s;
   const card = whistleDraw(s).cards[k];
   if (!card || card.kind === 'safe') return s;
-  return settleWindow({ ...s, verdict: false, perks: { ...s.perks, veto: s.perks.veto - 1 } }, k);
+  return settleWindow({ ...s, verdict: false, perks: { ...s.perks, veto: s.perks.veto - 1 } }, k, instead);
 }
 
 /** Take every card as drawn and keep the veto in the drawer. */
@@ -691,7 +715,7 @@ export function acceptVerdict(s: RunState): RunState {
   return settleWindow({ ...s, verdict: false }, null);
 }
 
-function settleWindow(s: RunState, vetoed: number | null): RunState {
+function settleWindow(s: RunState, vetoed: number | null, redrawn: PunishCard | null = null): RunState {
   const notes: string[] = [];
   const xi: (Player | null)[] = s.formation.slots.map((_, i) => s.decided[i] ?? null);
   const { windowFunds, missed, cards } = whistleDraw(s);
@@ -721,10 +745,16 @@ function settleWindow(s: RunState, vetoed: number | null): RunState {
   }
 
   const soldNames = new Set(s.sold.map(p => p.name));
-  cards.forEach((card, k) => {
+  cards.forEach((drawn, k) => {
     const miss = missed[k];
-    const head = `${card.emoji} ${card.title} (you missed: ${miss.text})`;
-    if (k === vetoed) { notes.push(`✋ Vetoed: ${head}. The chairman tore it up, nothing happens.`); return; }
+    let card = drawn;
+    let head = `${card.emoji} ${card.title} (you missed: ${miss.text})`;
+    if (k === vetoed) {
+      if (!redrawn) { notes.push(`✋ Vetoed: ${head}. The board's deck is empty, so nothing comes in its place.`); return; }
+      notes.push(`✋ Vetoed: ${head}. The board deals another in its place.`);
+      card = redrawn;
+      head = `${card.emoji} ${card.title} (dealt in place of the vetoed card)`;
+    }
     if (card.kind === 'safe') { notes.push(`${head}: ${card.text}`); return; }
     if (card.kind === 'fine') { funds -= card.amount; notes.push(`${head}: ${card.text}`); return; }
     if (card.kind === 'ratingHit') { ratingPen += card.amount; notes.push(`${head}: ${card.text}`); return; }
@@ -754,6 +784,9 @@ function settleWindow(s: RunState, vetoed: number | null): RunState {
   return {
     ...s,
     phase: 'done',
-    reckoning: { notes, xi, windowFunds, funds, ratingPen, swaps, remainingDeficit, cards, missed, ...(vetoed !== null ? { vetoed } : {}) },
+    reckoning: {
+      notes, xi, windowFunds, funds, ratingPen, swaps, remainingDeficit, cards, missed,
+      ...(vetoed !== null ? { vetoed } : {}), ...(vetoed !== null && redrawn ? { redrawn } : {}),
+    },
   };
 }

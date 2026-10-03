@@ -52,7 +52,7 @@ export interface RebuildPolicy {
   peek?: (s: RunState) => boolean;
   /** The settled shirt to bring the wheel back to, or null. */
   respin?: (s: RunState) => number | null;
-  /** The punishment card to tear up, or null to take them all. */
+  /** The punishment card to send back, or null to take them all. */
   veto?: (s: RunState) => number | null;
 }
 
@@ -368,26 +368,29 @@ export const THINKING: RebuildPolicy = {
     }
     return best;
   },
-  /* The veto goes on the card that would leave the best XI, read off the
-     engine itself: every card that hurts is torn up in turn and the
-     outcomes compared, rating first and money second. */
+  /* A veto sends a card back and the board deals another from what is left,
+     face down. The policy weighs each card that hurts against the average of
+     every card still in the deck (never the one the seed will deal), read off
+     the engine itself, rating first and money second, and vetoes only when
+     the gamble beats taking the cards as they fell. */
   veto: s => {
     if (!s.verdict) return null;
-    const { cards } = loop.whistleDraw(s);
+    const { cards, left } = loop.whistleDraw(s);
+    const value = (r: RunState) => loop.ratingOf(r) * 1000 + loop.finalFundsOf(r);
     let best: number | null = null;
-    let bestScore = -Infinity;
+    let bestScore = value(loop.acceptVerdict(s));
     cards.forEach((c, k) => {
       if (c.kind === 'safe') return;
-      const out = loop.vetoCard(s, k);
-      if (out === s) return;
-      const v = loop.ratingOf(out) * 1000 + loop.finalFundsOf(out);
+      const outs = (left.length ? left : [null]).map(instead => loop.vetoPreview(s, k, instead));
+      if (outs.some(o => o === s)) return;
+      const v = mean(outs.map(value));
       if (v > bestScore) { best = k; bestScore = v; }
     });
     return best;
   },
 };
 
-/** What a policy with no veto rule does with a verdict: tear up the first card that hurts. */
+/** What a policy with no veto rule does with a verdict: veto the first card that hurts. */
 function firstHarmful(s: RunState): number | null {
   const k = loop.whistleDraw(s).cards.findIndex(c => c.kind !== 'safe');
   return k >= 0 ? k : null;
