@@ -64,10 +64,12 @@ jobs:
       - name: Actual prospect saves and rejection controls
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}
         run: |
-          node scripts/simUsCareerProspect.mjs 2>&1 | tee prospect-journey-artifacts/prospect.log
+          status=0
+          if ! node scripts/simUsCareerProspect.mjs 2>&1 | tee prospect-journey-artifacts/prospect.log; then status=1; fi
           for control in before save restore handoff duplicate choice invalid showcase undrafted archive corrupt back rules; do
-            US_CAREER_PROSPECT_CONTROL="$control" node scripts/simUsCareerProspect.mjs 2>&1 | tee "prospect-journey-artifacts/prospect-$control.log"
+            if ! US_CAREER_PROSPECT_CONTROL="$control" node scripts/simUsCareerProspect.mjs 2>&1 | tee "prospect-journey-artifacts/prospect-$control.log"; then status=1; fi
           done
+          exit "$status"
       - name: Original pre-draft model and controls
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}
         run: |
