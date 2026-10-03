@@ -29,7 +29,10 @@
  * Marseille 6,2,2,9,2,1 mean 3.67; Cesena 19,20,20,20,20,17 mean 19.33; on
  * the review fix's corrected tree AC Milan 1,2,2,3,3,1 mean 2.00, Bayern
  * 3,1,1,2,6,2 mean 2.50, Marseille 3,8,2,5,2,1 mean 3.50, Cesena
- * 20,20,20,20,19,18 mean 19.50; the bands' seed families are at BAND),
+ * 20,20,20,20,19,18 mean 19.50; and once merged with Release AB, whose
+ * international breaks shift the random stream, AC Milan 1,4,2,6,3,3 mean
+ * 3.17, Bayern 2.33, Marseille 2.17, Cesena 19.50, the very swing the old
+ * 3.5 band could not take; the bands' seed families are at BAND),
  * the bake's accounting pinned with the re-audit (Ibrahimovic and Robinho at
  * Milan), a sample of the summer 2010 window, the men who left the five
  * leagues and the men who moved only in January 2011 (5), and an old two
