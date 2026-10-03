@@ -11,8 +11,11 @@
  *
  * What it asserts, reading the module itself (bundled), never its comments:
  *   1. The pool holds at least 40 sheets (a floor, so it cannot quietly shrink).
- *   2. Every sheet's source string names at least two distinct hosts, written
- *      as domains. A wiki host never counts.
+ *   2. Every sheet's source string names at least two distinct hosts, each
+ *      written as a read: the reads are joined by ' + ' and each opens with
+ *      its domain. Parenthesised prose never counts, so "(nba.com has no box
+ *      for a 1990s Finals game)" does not make nba.com a source. A wiki host
+ *      never counts.
  *   3. The box ids in the source belong to this sheet's game: the bref id
  *      starts with the match date, and an nba.com id is the Finals id for
  *      that season and game number (004 + season + 0040 + game).
@@ -20,13 +23,25 @@
  *      so the guide's "NBA Finals night" wording stays true.
  *   5. No game is on the sheet list twice for the same team.
  *   6. The daily pick deals every sheet within a simulated year.
+ *   7. The five names on the court are, in order, the five the source string
+ *      says it read ("Starters (A/B/C/D/E)"), so a starter edited back to the
+ *      famous wrong name cannot ship beside a source that disagrees.
+ *   8. Every blank's slotIndex points at the slot that carries its own name,
+ *      so the game never hides one man and leaves the answer on the court.
+ *   9. The hint ladder narrows by the family name, worked out here without
+ *      the module (trailing Jr./Sr./II/III/IV dropped, letters only), and a
+ *      family-name guess wins exactly when it has four letters or more.
  *
  * Measured at Round 949 (deterministic, no seed: the data is fixed and the
  * daily walk is a fixed function of the date, so one run is the measurement):
  *   sheets 40; hosts per sheet: 2 on all 40 (minimum 2); bref ids matching
  *   the date 40 of 40; nba.com ids matching 38 of 38 that name nba.com (the
  *   two 1998 sheets name statmuse.com); duplicate team-games 0; distinct
- *   sheets dealt in 365 days 40 of 40.
+ *   sheets dealt in 365 days 40 of 40; five on the court equal to the five
+ *   read 40 of 40; blanks hiding their own slot 119 of 119; blanks whose
+ *   ladder reads the family name 119 of 119 (3 of them with a suffix or a
+ *   hyphen: Porter Jr. and Caldwell-Pope twice). Every check is a count of
+ *   the whole pool against itself, so the bar is all of them.
  *
  * Negative controls (SIM_MF_CONTROL=<name>), each must turn this red:
  *   onehost  cuts one sheet's source down to its first host     -> check 2
@@ -36,8 +51,17 @@
  *   shrink   drops one sheet                                    -> check 1
  *   dupe     adds a second copy of one game under a new id      -> check 5
  *   stuck    makes the daily pick see one sheet in two places   -> check 6
+ *   negated  drops a 1998 sheet's statmuse read, keeping the line
+ *            that names nba.com only to say it has no box       -> check 2
+ *   swapslot puts Dennis Rodman back for Toni Kukoc, 1998 Bulls -> check 7
+ *   slotindex points McGee's blank (2018 Warriors) at slot 3    -> check 8
+ *   suffix   deletes Porter Jr.'s surname override              -> check 9
+ *   lettercount edits the module's CODE at bundle time back to
+ *            the raw length, which counts the hyphen            -> check 9
  * Each control asserts that the string or shape it mutates exists first, so
  * a control that changes nothing fails loudly instead of passing quietly.
+ * Measured: every control exits 1 with failures only on its own check
+ * (stuck also trips check 5, since one sheet then sits in two places).
  */
 import { build } from 'esbuild';
 import os from 'node:os';
