@@ -113,6 +113,36 @@
     {"family": "A", "url": "https://www.bundesliga.com/en/2bundesliga/clubs/1-fc-heidenheim-1846/squad", "publisher": "Bundesliga (1. FC Heidenheim squad, 2. Bundesliga season 2026-2027)", "readOn": "2026-10-02", "says": "listed among the defenders"},
     {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/6418/ger.heidenheim", "publisher": "ESPN (1. FC Heidenheim 1846 squad page, season 2026-27)", "readOn": "2026-10-02", "says": "defender, shirt 19, age 30, 6 appearances"}
    ]
+  },
+  {
+   "name": "Lasse Rosenboom",
+   "club": "Holstein Kiel",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Kiel's number 23, aged 24 on ESPN. On both 2026-27 squad pages (Kiel play in the 2. Bundesliga).",
+   "sources": [
+    {"family": "A", "url": "https://www.bundesliga.com/en/2bundesliga/clubs/holstein-kiel/squad", "publisher": "Bundesliga (Holstein Kiel squad, 2. Bundesliga season 2026-2027)", "readOn": "2026-10-03", "says": "listed among the defenders"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/7884/holstein-kiel", "publisher": "ESPN (Holstein Kiel squad page, season 2026-27)", "readOn": "2026-10-03", "says": "defender, shirt 23, age 24"}
+   ]
+  },
+  {
+   "name": "Phil Harres",
+   "club": "Holstein Kiel",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Kiel's number 19, aged 24 on ESPN. On both 2026-27 squad pages.",
+   "sources": [
+    {"family": "A", "url": "https://www.bundesliga.com/en/2bundesliga/clubs/holstein-kiel/squad", "publisher": "Bundesliga (Holstein Kiel squad, 2. Bundesliga season 2026-2027)", "readOn": "2026-10-03", "says": "listed among the strikers"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/7884/holstein-kiel", "publisher": "ESPN (Holstein Kiel squad page, season 2026-27)", "readOn": "2026-10-03", "says": "forward, shirt 19, age 24"}
+   ]
+  },
+  {
+   "name": "Rogério",
+   "club": "Wolfsburg",
+   "adjudicatedOn": "2026-10-03",
+   "note": "The Brazilian left back, Wolfsburg's number 13, aged 28 on ESPN. On both 2026-27 squad pages; Wolfsburg now play in the 2. Bundesliga.",
+   "sources": [
+    {"family": "A", "url": "https://www.bundesliga.com/en/2bundesliga/clubs/vfl-wolfsburg/squad", "publisher": "Bundesliga (VfL Wolfsburg squad, 2. Bundesliga season 2026-2027)", "readOn": "2026-10-03", "says": "listed among the defenders"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/138/ger.wolfsburg", "publisher": "ESPN (VfL Wolfsburg squad page, season 2026-27)", "readOn": "2026-10-03", "says": "defender, shirt 13, age 28"}
+   ]
   }
  ],
  "movedTo": [
@@ -307,7 +337,7 @@
    "to": "Heidenheim",
    "realClub": "1. FC Heidenheim",
    "adjudicatedOn": "2026-10-02",
-   "note": "The Kosovan left back, spelled Paqarada by ESPN and the club. Koln sold him to Heidenheim on 2025-08-28 and he is their number 23 in 2026-27, though ESPN shows no appearances for him yet this season.",
+   "note": "The Kosovan left back, spelled Paqarada by ESPN. Koln sold him to Heidenheim on 2025-08-28 and he is their number 23 in 2026-27, though ESPN shows no appearances for him yet this season.",
    "sources": [
     {"family": "A", "url": "https://fc.de/en/news/all-news/leart-pacarada-joins-heidenheim", "publisher": "1. FC Koln (club announcement, 2025-08-28)", "readOn": "2026-10-02", "says": "permanent move to Heidenheim"},
     {"family": "A", "url": "https://www.bundesliga.com/en/2bundesliga/clubs/1-fc-heidenheim-1846/squad", "publisher": "Bundesliga (1. FC Heidenheim squad, 2. Bundesliga season 2026-2027)", "readOn": "2026-10-02", "says": "listed among the defenders"},
@@ -339,6 +369,47 @@
     {"family": "A", "url": "https://www.lafc.com/news/lafc-signs-german-forward-armindo-sieb-from-bayern-munich", "publisher": "LAFC (club announcement)", "readOn": "2026-10-02", "says": "permanent signing from Bayern through 2028-29 with a club option"},
     {"family": "A", "url": "https://www.bundesliga.com/en/bundesliga/news/armindo-sieb-bayern-munich-los-angeles-fc-transfer-mainz-38601", "publisher": "Bundesliga (news, 2026-08-13)", "readOn": "2026-10-02", "says": "completed a permanent move to Los Angeles FC after two seasons on loan at Mainz"},
     {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/18966/usa.lafc", "publisher": "ESPN (LAFC squad page, 2026 season)", "readOn": "2026-10-02", "says": "forward, shirt 9, age 23, 5 appearances"}
+   ]
+  },
+  {
+   "name": "Armin Gigovic",
+   "from": "Holstein Kiel",
+   "to": "Young Boys",
+   "realClub": "BSC Young Boys",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 2002-04-06, the Bosnian midfielder. Sold by Kiel to Young Boys on 2025-08-12; their number 8.",
+   "sources": [
+    {"family": "A", "url": "https://www.bscyb.ch/kader", "publisher": "BSC Young Boys (club squad page)", "readOn": "2026-10-03", "says": "shirt 8, midfielder, at YB since 2025"},
+    {"family": "A", "url": "https://www.bundesliga.com/en/2bundesliga/clubs/holstein-kiel/squad", "publisher": "Bundesliga (Holstein Kiel squad, 2. Bundesliga season 2026-2027)", "readOn": "2026-10-03", "says": "not listed"},
+    {"family": "B", "url": "https://ca.soccerway.com/player/gigovic-armin/Yitlr4Gb/transfers", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Holstein Kiel to Young Boys 2025-08-12, born 2002-04-06"}
+   ]
+  },
+  {
+   "name": "Andreas Skov Olsen",
+   "from": "Wolfsburg",
+   "to": "Başakşehir",
+   "realClub": "Başakşehir, on loan from Wolfsburg",
+   "loan": true,
+   "loanFrom": "Wolfsburg",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1999-12-29, the Danish winger. On loan at Rangers for the second half of 2025-26, back at Wolfsburg on 2026-06-30, then loaned to Basaksehir on 2026-07-28 to the end of 2026-27 with a conditional obligation to buy. Placed at the club he plays for, the ledger's loan policy.",
+   "sources": [
+    {"family": "A", "url": "https://www.bundesliga.com/en/2bundesliga/clubs/vfl-wolfsburg/squad", "publisher": "Bundesliga (VfL Wolfsburg squad, 2. Bundesliga season 2026-2027)", "readOn": "2026-10-03", "says": "not listed"},
+    {"family": "B", "url": "https://beinsports.com.tr/haber/rams-basaksehir-yeni-transferini-acikladi-2", "publisher": "beIN Sports Turkey (2026-07-28), quoting the club's announcement", "readOn": "2026-10-03", "says": "Basaksehir announce Skov Olsen on loan from Wolfsburg to the end of 2026-27 with a conditional obligation to buy"},
+    {"family": "B", "url": "https://ca.soccerway.com/player/skov-olsen-andreas/l2cmORl4/transfers", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "loan Wolfsburg to Basaksehir 2026-07-28 until 2027-06-30, born 1999-12-29"}
+   ]
+  },
+  {
+   "name": "Marius Müller",
+   "from": "Wolfsburg",
+   "to": "Aberdeen",
+   "realClub": "Aberdeen",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1993-07-12, the German goalkeeper. Joined Aberdeen from Wolfsburg on 2026-07-16 on a two year deal.",
+   "sources": [
+    {"family": "A", "url": "https://www.afc.co.uk/en/news/marius-mueller-joins-the-dons", "publisher": "Aberdeen FC (club announcement, 2026-07-16)", "readOn": "2026-10-03", "says": "joins from VfL Wolfsburg on a two year deal, aged 33"},
+    {"family": "A", "url": "https://www.bundesliga.com/en/2bundesliga/clubs/vfl-wolfsburg/squad", "publisher": "Bundesliga (VfL Wolfsburg squad, 2. Bundesliga season 2026-2027)", "readOn": "2026-10-03", "says": "not listed"},
+    {"family": "B", "url": "https://us.soccerway.com/player/muller-marius/OYbFR8ut/transfers", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Wolfsburg to Aberdeen 2026-07-16, born 1993-07-12"}
    ]
   }
  ],
