@@ -1,3 +1,14 @@
+Codex CLAIMS998, 2026-10-03: Rugby League challenge preparation.
+Anthony asked to keep going. Build an isolated ten-claim mode in Champ or Not,
+alternating existing premiership and Dally M records, with worked help, retained
+reveals and truthful results. Keep the existing Daily/Unlimited hook and saves.
+A bounded single-bank scheduler fix prevents partial loading freezing the page.
+Own ChampOrNot page, a new adjacent panel/helper, targeted tests and remote QA.
+No new production records or DB probes. No local runtime. Claude lanes and held
+drafts stay separate.997 remains accepted but publication is blocked on the host.
+Prepare998 in its own branch; do not claim either feature live from a CI preview.
+Next free999 is unclaimed. AdSense/indexing submissions remain deferred.
+
 Codex997 PUBLICATION PENDING, 2026-10-03 07:34 EDT.
 Implementation is accepted and merged; all scoped remote gates are green.
 Lovable's editor repeatedly timed out initializing Firebase auth. Both original
