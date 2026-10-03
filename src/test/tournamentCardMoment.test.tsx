@@ -314,6 +314,40 @@ describe('Round 926: the moment plays once', () => {
     expect(card(mount(winner(2037)).container).dataset.intlMoment).toBe('none');
     expect(JSON.parse(window.localStorage.getItem('dukb-intl-moments') ?? '[]')).toHaveLength(1);
   });
+
+  it('a full memory drops its oldest key, never the one just played, so a reload stays settled', async () => {
+    const old = Array.from({ length: 60 }, (_, i) => `old-${i}`);
+    window.localStorage.setItem('dukb-intl-moments', JSON.stringify(old));
+    expect(card(mount(winner(2043)).container).dataset.intlMoment).toBe('won');
+    const kept = JSON.parse(window.localStorage.getItem('dukb-intl-moments') ?? '[]') as string[];
+    expect(kept).toHaveLength(60);
+    expect(kept[0]).toBe('old-1');
+    expect(kept).not.toContain('old-0');
+    cleanup();
+    vi.resetModules();
+    const reloaded = await reload();
+    expect(card(mount(winner(2043), reloaded).container).dataset.intlMoment).toBe('none');
+  });
+});
+
+describe('Round 926: the moment does not move the card', () => {
+  it('the confetti layer is the last child, so the space-y gap cannot push the headline down', () => {
+    const won = card(mount(winner(2044)).container);
+    expect(won.dataset.intlMoment).toBe('won');
+    const layer = won.lastElementChild as HTMLElement;
+    expect(layer.getAttribute('aria-hidden')).toBe('true');
+    expect(layer.className).toContain('absolute');
+    expect(layer.querySelectorAll('.animate-confetti-fall').length).toBeGreaterThan(0);
+    expect(won.firstElementChild?.querySelector('h3')?.textContent).toBe('World Cup 2044');
+    const wonTags = [...won.children].map(c => c.tagName);
+    cleanup();
+    /* The same card once played: the same children in the same order, and
+       the layer is the only extra one, so nothing in flow came or went. */
+    const settled = card(mount(winner(2044)).container);
+    expect(settled.dataset.intlMoment).toBe('none');
+    const settledTags = [...settled.children].map(c => c.tagName);
+    expect(wonTags).toEqual([...settledTags, layer.tagName]);
+  });
 });
 
 describe('Round 926: the quiet card also plays once', () => {

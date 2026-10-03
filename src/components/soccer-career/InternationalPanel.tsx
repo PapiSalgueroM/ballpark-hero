@@ -118,8 +118,14 @@ type Screen = "home" | "qualifying" | "squad" | "bracket" | "matches";
    What happens when the memory fails: if storage cannot be read, the card
    plays. That is the storage the save is read from, so a browser that cannot
    read it has not reopened this save from it; the card in front of it is new.
-   The one known replay is a save opened in a different browser, which has
-   never seen the moment and plays it once there. */
+   The save lives only in this browser's localStorage (no export, no sync), so
+   it cannot turn up somewhere that has not seen its moment. Two cases do play
+   it again, both rare: a save already sitting on a won card when this shipped
+   has an empty list and plays the moment once on its next load; and if
+   setItem keeps throwing (storage full or blocked), nothing is remembered past
+   this load, so every reload plays it. The list keeps the newest MOMENT_KEEP
+   keys and drops the oldest; only one save exists, so the card on screen is
+   always among the newest. */
 const MOMENT_STORE = "dukb-intl-moments";
 const MOMENT_KEEP = 60;
 const momentsThisLoad = new Set<string>();
