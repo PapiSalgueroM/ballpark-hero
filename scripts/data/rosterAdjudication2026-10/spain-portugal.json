@@ -100,6 +100,28 @@
      "says": "Yuri Berchiche, defender, shirt 17, age 36"
     }
    ]
+  },
+  {
+   "name": "Gianluca Prestianni",
+   "club": "Benfica",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 2006-01-31, the Argentine forward. Benfica's number 25 on the club's own 2026-27 squad page and on ESPN's. No namesake in the game.",
+   "sources": [
+    {
+     "family": "A",
+     "url": "https://www.slbenfica.pt/en-us/futebol/plantel-principal",
+     "publisher": "SL Benfica (first team squad, season 2026/27)",
+     "readOn": "2026-10-03",
+     "says": "Prestianni listed among the forwards; his profile page gives shirt 25 and born 2006-01-31"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/1929",
+     "publisher": "ESPN (Benfica squad page, season 2026-27)",
+     "readOn": "2026-10-03",
+     "says": "Gianluca Prestianni, forward, shirt 25, age 20"
+    }
+   ]
   }
  ],
  "movedTo": [
@@ -181,6 +203,43 @@
      "says": "River Plate agreed the permanent transfer from Tigres UANL, contract to December 2029"
     }
    ]
+  },
+  {
+   "name": "Hugo Félix",
+   "from": "Benfica",
+   "realClub": "Tondela",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 2004-03-03, João Félix's younger brother. Left Benfica and joined Tondela as a free agent in September 2025, contract to 2029-06-30. Tondela is not in Club Manager's 2026-27 Primeira Liga and no other league models it. The departure is on Benfica's own page, the destination on two independent publishers.",
+   "sources": [
+    {
+     "family": "A",
+     "url": "https://www.slbenfica.pt/en-us/futebol/plantel-principal",
+     "publisher": "SL Benfica (first team squad, season 2026/27)",
+     "readOn": "2026-10-03",
+     "says": "not listed"
+    },
+    {
+     "family": "B",
+     "url": "https://us.soccerway.com/player/felix-hugo/zkgZgom6/transfers",
+     "publisher": "Soccerway",
+     "readOn": "2026-10-03",
+     "says": "current club Tondela, born 2004-03-03, contract to 2029-06-30"
+    },
+    {
+     "family": "B",
+     "url": "https://www.fotmob.com/players/1374503",
+     "publisher": "FotMob",
+     "readOn": "2026-10-03",
+     "says": "Tondela since September 2025 as a free agent, born 2004-03-03; Benfica and Benfica B until June 2025"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/1929",
+     "publisher": "ESPN (Benfica squad page, season 2026-27)",
+     "readOn": "2026-10-03",
+     "says": "not listed"
+    }
+   ]
   }
  ],
  "notCurrent": [
@@ -234,6 +293,18 @@
    "club": "Arouca",
    "checkedOn": "2026-10-03",
    "note": "Checked 2026-10-03 and left pending: the sources disagree. Born 2000-02-06, German goalkeeper. Arouca loaned him to Blau-Weiss Linz from 2026-01-28 to 2026-06-30 (Soccerway, FotMob). A preseason Flashscore piece lists him in Arouca's provisional 2026-27 squad (https://www.flashscore.pt/noticias/arouca-com-menos-mexidas-procura-melhorar-a-oitava-posicao-da-epoca-passada/0dMDWOCM/), but ESPN's Arouca 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/15784) lists only Vinarcik, De Arruabarrena and Martim Duarte in goal, FotMob shows no match since 2026-05-16 for Linz, and no official Arouca or Liga Portugal page could be read (both render their squads in script). Re-check against Liga Portugal's player page."
+  },
+  {
+   "name": "Renato Sanches",
+   "club": "Benfica",
+   "checkedOn": "2026-10-03",
+   "note": "Checked 2026-10-03 and left pending, but he is certainly not at Benfica: Benfica's own 2026-27 squad page (https://www.slbenfica.pt/en-us/futebol/plantel-principal) and ESPN's (https://www.espn.com/soccer/team/squad/_/id/1929) both leave him out. Born 1997-08-18. Benfica was only a 2024-25 loan from PSG; he spent 2025-26 on loan at Panathinaikos (announced by the club on 2025-08-24, https://www.pao.gr/en/transfer/renato-sanches-is-green/) and Soccerway (https://us.soccerway.com/player/sanches-renato/Kbo7UsAS/transfers) records his return to PSG on 2026-06-30. But PSG's own 2026-27 squad page (https://www.psg.fr/en/mens-football/players) and ESPN's PSG page (https://www.espn.com/soccer/team/squad/_/id/160) both leave him out too, FotMob (https://www.fotmob.com/players/589344/renato-sanches) shows nothing after the loan, and no source found names a 2026-27 club or says he is unattached. The safe in-game effect is removal from Benfica; which list he belongs in needs a source for where he is."
+  },
+  {
+   "name": "Tiago Gouveia",
+   "club": "Benfica",
+   "checkedOn": "2026-10-03",
+   "note": "Checked 2026-10-03 and left pending for want of an official page on the destination. Born 2001-06-18. Not at Benfica: Benfica's own 2026-27 squad page (https://www.slbenfica.pt/en-us/futebol/plantel-principal) and ESPN's 2025-26 and 2026-27 Benfica pages leave him out. ESPN listed him at Nice in 2025-26 (shirt 47) and its player page (https://www.espn.com/soccer/player/_/id/290081/tiago-gouveia) now has him at Gençlerbirliği, shirt 7, with five Süper Lig matches from 2026-08-23 to 2026-09-19. Gençlerbirliği is modelled, so this would be a move, but the club's site answered HTTP 522 and no Süper Lig or TFF page was read. Re-check with a TFF or club page."
   }
  ]
 }
