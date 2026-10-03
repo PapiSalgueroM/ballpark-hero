@@ -1,0 +1,35 @@
+{
+  "implemented": false,
+  "baseSha256": "7a46e8cc2088c7461b6b62372136b73d9d521d6113e70c6bf3a8a8ea002e8d01",
+  "candidateSha256": "8ff85a06869b83c3382f1b2c77af9ec4b01fbcadfb8a97aeb0047fb1b94e35ef",
+  "hunks": [
+    {
+      "before": "import contributorsStyles from './NhlContributors.module.css';",
+      "after": "import contributorsStyles from './NhlContributors.module.css';\nimport { NhlWaiverReceipt, type NhlWaiverReceiptEvent } from './NhlWaiverReceipt';"
+    },
+    {
+      "before": "  const [cutArmed, setCutArmed] = useState<string | null>(null);",
+      "after": "  const [cutArmed, setCutArmed] = useState<string | null>(null);\n  const [waiverReceipt, setWaiverReceipt] = useState<NhlWaiverReceiptEvent | null>(null);\n  const waiverSequence = useRef(0), waiverCommit = useRef<NhlLeague | null>(null);"
+    },
+    {
+      "before": "    setLeague(lg); setMyTeam(abbr); setPhase('hub'); setTab(null);",
+      "after": "    setLeague(lg); setMyTeam(abbr); setPhase('hub'); setTab(null);\n    setWaiverReceipt(null);"
+    },
+    {
+      "before": "      const notes = nhlOffseason(lg, Math.random, myTeam);",
+      "after": "      const notes = nhlOffseason(lg, Math.random, myTeam);\n      setWaiverReceipt(null);"
+    },
+    {
+      "before": "    localStorage.removeItem(SAVE_KEY);\n    setPhase('pick');",
+      "after": "    localStorage.removeItem(SAVE_KEY);\n    setWaiverReceipt(null);\n    setPhase('pick');"
+    },
+    {
+      "before": "  const doRelease = (pid: string) => {\n    if (!league) return;\n    setCutArmed(null);\n    const lg: NhlLeague = JSON.parse(JSON.stringify(league));\n    if (nhlRelease(lg.teams[myTeam], lg.freeAgents, pid, lg.ratingModelVersion)) { setLeague(lg); persist({}, lg, myTeam); }\n  };",
+      "after": "  const doRelease = (pid: string) => {\n    if (!league || waiverCommit.current === league) return;\n    setCutArmed(null);\n    const lg: NhlLeague = JSON.parse(JSON.stringify(league));\n    const team = lg.teams[myTeam], player = team.players.find(p => p.id === pid);\n    if (!player) return;\n    const rosterBefore = team.players.length, capBefore = nhlCapRoom(team, lg.cap);\n    if (nhlRelease(team, lg.freeAgents, pid, lg.ratingModelVersion)) {\n      waiverCommit.current = league;\n      setLeague(lg); persist({}, lg, myTeam);\n      setWaiverReceipt({ id: ++waiverSequence.current, playerName: player.name,\n        rosterBefore, rosterAfter: team.players.length, capBefore, capAfter: nhlCapRoom(team, lg.cap),\n        deadMoneyAfter: deadCapUsed(team) });\n    }\n  };"
+    },
+    {
+      "before": "      {/* Round 180: the owner card, always visible on the hub.",
+      "after": "      <NhlWaiverReceipt event={waiverReceipt} />\n\n      {/* Round 180: the owner card, always visible on the hub."
+    }
+  ]
+}

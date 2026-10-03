@@ -34,6 +34,8 @@ function state(mode: 'daily' | 'unlimited', gameStatus: 'playing' | 'won' | 'los
     mode, gameStatus, targetPlayer, guesses, dailyTier: 'easy', difficulty: 'easy', maxGuesses: 8,
     switchMode: vi.fn(), changeDifficulty: vi.fn(), makeGuess: vi.fn(), giveUp: vi.fn(), resetGame: vi.fn(),
     availablePlayers: [targetPlayer], guessedPlayerNames: guesses.map(guess => guess.playerName), isLoading: false, isLoadingPool: false,
+    practiceRun: null, practiceSaveFailed: false, practiceComplete: false, practiceReady: false,
+    startPractice: vi.fn(), advancePractice: vi.fn(), examplePlayer: undefined,
   };
 }
 

@@ -23,14 +23,14 @@ export function JustShipped({ children }: { children: (games: GameDef[]) => Reac
   if (games.length === 0) return null;
   return (
     <section aria-labelledby="home-shipped" data-home-shipped="">
-      <div className="mb-3 flex items-center justify-between gap-3">
+      <div className="mb-3 flex flex-wrap items-center justify-between gap-3">
         <h2 id="home-shipped" className="flex items-center gap-2.5 text-lg font-display font-bold text-foreground">
           <span aria-hidden="true" className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-gold/15 text-gold ring-1 ring-inset ring-gold/30">
             <Rocket className="h-4 w-4" />
           </span>
           Just shipped
         </h2>
-        <Link to="/whats-new" className="inline-flex shrink-0 items-center gap-1 rounded-lg px-2 py-2 text-xs font-semibold text-primary hover:underline">
+        <Link to="/whats-new" className="inline-flex min-h-11 shrink-0 items-center gap-1 rounded-lg px-2 py-2 text-xs font-semibold text-primary hover:underline">
           Everything that changed
           <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
         </Link>

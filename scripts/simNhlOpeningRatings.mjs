@@ -58,7 +58,7 @@ const controls = {
   guard: ['const guarded = league.ratingModelVersion === NHL_RATING_MODEL_VERSION && league.draftAffordabilityVersion === NHL_DRAFT_AFFORDABILITY_VERSION;', 'const guarded = false;', [T.guard, T.skip, T.campaign]],
   nextCap: ['const nextCap = Math.round(league.cap * 1.09);', 'const nextCap = league.cap;', [T.guard, T.campaign]],
   order: ['const index = available.findIndex(p => nhlSalaryFor(p.trueOvr, league.ratingModelVersion) <= nhlCapRoom(team, nextCap));', 'const index = available.map((p, i) => nhlSalaryFor(p.trueOvr, league.ratingModelVersion) <= nhlCapRoom(team, nextCap) ? i : -1).filter(i => i >= 0).at(-1) ?? -1;', [T.guard]],
-  skipRng: ['if (index < 0) { skipped++; continue; }', 'if (index < 0) { nhlProspectToPlayer(available[0], rng, league.ratingModelVersion); skipped++; continue; }', [T.skip]],
+  skipRng: ['if (index < 0) { skipped++; continue; }', 'if (index < 0) { nhlProspectToPlayer(available[0], rng, league.ratingModelVersion); skipped++; continue; }', [T.guard, T.skip]],
   legacy: ['const guarded = league.ratingModelVersion === NHL_RATING_MODEL_VERSION && league.draftAffordabilityVersion === NHL_DRAFT_AFFORDABILITY_VERSION;', 'const guarded = true;', [T.fallback]],
 };
 const control = process.env.NHL_OPENING_RATINGS_CONTROL ?? '';
