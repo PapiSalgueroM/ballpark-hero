@@ -1,0 +1,67 @@
+{
+  "round": 935,
+  "shard": "rest: every pending row of scripts/data/rosterConfirmation2026.json whose club plays in none of the Bundesliga, 2. Bundesliga, La Liga, Primeira Liga, Serie A, Ligue 1, Premier League, Championship, MLS, Belgian Pro League, Eredivisie or Super Lig, by the league table in src/lib/clubManager.ts. That is the Austrian Bundesliga, Swiss Super League, Saudi Pro League, Scottish Premiership, Super League Greece, SuperSport HNL, Danish Superliga and the Brasileirao (Liga MX has no pending row left).",
+  "measuredRowCount": 59,
+  "measuredRowCountByLeague": { "austria": 10, "switzerland": 16, "saudi": 10, "scottish": 4, "greece": 7, "croatia": 6, "denmark": 5, "brasileirao": 1 },
+  "adjudicatedOn": "2026-10-03",
+  "method": "Read with WebFetch only on 2026-10-03 (the session's web search budget was spent, so pages were reached by their own navigation and by ESPN's public search endpoint). Family A is the club's own squad page or the league's own page. Family B is an independent publisher on another host, mostly ESPN's squad and player pages for season 2026-27. A row leaves pending only when an A and a B source agree on the day read. Namesakes are told apart by the birth date or age the sources print against the baked age in src/data/clubManagerRosters.ts (a 2025 row, so one year younger). Same row shapes as the ledger: confirmedStill rows carry club, movedTo rows carry from, to and realClub, removedClubNotModelled rows carry from and realClub, notCurrent rows carry from and why, pending rows carry club, checkedOn and the reason.",
+  "confirmedStill": [
+    {
+      "name": "Jonas Auer",
+      "club": "Rapid Wien",
+      "adjudicatedOn": "2026-10-03",
+      "note": "Left back, shirt 23, in both 2026-27 squad lists.",
+      "sources": [
+        { "family": "A", "url": "https://www.skrapid.at/teams/sk-rapid/", "publisher": "SK Rapid (first team squad page)", "readOn": "2026-10-03", "says": "defender, shirt 23" },
+        { "family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/519", "publisher": "ESPN (Rapid Vienna squad page, season 2026-27)", "readOn": "2026-10-03", "says": "defender, shirt 23, age 26" }
+      ]
+    },
+    {
+      "name": "Matthias Seidl",
+      "club": "Rapid Wien",
+      "adjudicatedOn": "2026-10-03",
+      "note": "Midfielder, shirt 18, in both 2026-27 squad lists.",
+      "sources": [
+        { "family": "A", "url": "https://www.skrapid.at/teams/sk-rapid/", "publisher": "SK Rapid (first team squad page)", "readOn": "2026-10-03", "says": "midfielder, shirt 18" },
+        { "family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/519", "publisher": "ESPN (Rapid Vienna squad page, season 2026-27)", "readOn": "2026-10-03", "says": "midfielder, shirt 18, age 25" }
+      ]
+    },
+    {
+      "name": "Nikolaus Wurmbrand",
+      "club": "Rapid Wien",
+      "adjudicatedOn": "2026-10-03",
+      "note": "Forward, shirt 15, in both 2026-27 squad lists.",
+      "sources": [
+        { "family": "A", "url": "https://www.skrapid.at/teams/sk-rapid/", "publisher": "SK Rapid (first team squad page)", "readOn": "2026-10-03", "says": "attacker, shirt 15" },
+        { "family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/519", "publisher": "ESPN (Rapid Vienna squad page, season 2026-27)", "readOn": "2026-10-03", "says": "forward, shirt 15, age 20" }
+      ]
+    },
+    {
+      "name": "Serge-Philippe Raux-Yao",
+      "club": "Rapid Wien",
+      "adjudicatedOn": "2026-10-03",
+      "note": "Centre back, shirt 6, in both 2026-27 squad lists (ESPN spells him Serge Raux Yao).",
+      "sources": [
+        { "family": "A", "url": "https://www.skrapid.at/teams/sk-rapid/", "publisher": "SK Rapid (first team squad page)", "readOn": "2026-10-03", "says": "defender, shirt 6" },
+        { "family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/519", "publisher": "ESPN (Rapid Vienna squad page, season 2026-27)", "readOn": "2026-10-03", "says": "Serge Raux Yao, defender, shirt 6, age 27" }
+      ]
+    }
+  ],
+  "movedTo": [
+    {
+      "name": "Isak Jansson",
+      "from": "Rapid Wien",
+      "to": "Nice",
+      "realClub": "Nice",
+      "adjudicatedOn": "2026-10-03",
+      "note": "Swedish forward born 2002-01-31, shirt 21 at Nice for 2026-27 and absent from both Rapid squad lists. ESPN shows him on the Nice bench in Ligue 1 on 2026-08-30 and 2026-09-12.",
+      "sources": [
+        { "family": "A", "url": "https://www.ogcnice.com/fr/f/equipes/2026-2027/equipe-pro", "publisher": "OGC Nice (2026-2027 first team squad page)", "readOn": "2026-10-03", "says": "attacker, shirt 21" },
+        { "family": "B", "url": "https://www.espn.com/soccer/player/_/id/282597/isak-jansson", "publisher": "ESPN (player page)", "readOn": "2026-10-03", "says": "Nice, forward, shirt 21, born 2002-01-31, Sweden, two Ligue 1 substitute appearances in 2026-27" }
+      ]
+    }
+  ],
+  "removedClubNotModelled": [],
+  "notCurrent": [],
+  "pending": []
+}
