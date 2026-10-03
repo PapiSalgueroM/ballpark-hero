@@ -15838,7 +15838,14 @@ export interface SeasonWorld {
   keepLeagueOverrides: boolean;
 }
 
-export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID, custom?: CustomClubSpec, manager?: ManagerSpec, world?: SeasonWorld): CareerState {
+/* Round 964: `edit` is a world editor edit (src/lib/clubManagerWorldEdit.ts),
+   the memberships a NEW career starts on. It is its own argument rather than
+   a SeasonWorld because a SeasonWorld reopens a running save (its aged
+   squads, its derived Europe field, a club qualifying through that field),
+   where an edited world is a fresh start in every other way. It applies to a
+   real club in today's world only: a historic era never reads the overrides,
+   and a custom club is placed against the real lineups. */
+export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID, custom?: CustomClubSpec, manager?: ManagerSpec, world?: SeasonWorld, edit?: Record<string, string[]> | null): CareerState {
   /* Round 132: the era decides what year season one is, and the year decides
      everything else: the squad you are handed, how good every other club is,
      and who is on the market. The default era is the current one and its
@@ -15872,7 +15879,8 @@ export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID, cu
   /* Round 310: and it starts on the static memberships for the same reason,
      custom or not: a NEW career has no promotions behind it, so a previous
      save's registered pyramid must never leak into its world. */
-  if (!world?.keepLeagueOverrides) registerLeagueOverrides(null);
+  const worldEdit = edit && !custom && !historic && !world ? edit : null;
+  if (!world?.keepLeagueOverrides) registerLeagueOverrides(worldEdit);
   const club = custom ? clubDefFor(custom.name)
     : historic ? eraClubDefFor(clubName, era.id) : clubDefFor(clubName);
   const startYearsOn = world ? world.yearsOn : historic ? 0 : Math.max(0, era.startYear - CM_BASE_YEAR);
@@ -15962,6 +15970,9 @@ export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID, cu
     promisedStarts: [],
     pairResults: {},
   };
+  /* Round 964: the edited world rides on the save the way a promoted one
+     does, so the first summer resolves on it and a reload registers it. */
+  if (worldEdit) state.leagueOverrides = worldEdit;
   if (custom) {
     state.customClub = custom;
     /* Round 640: its founders were priced by the market rule above, so a load

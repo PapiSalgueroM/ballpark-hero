@@ -286,9 +286,10 @@ export function useClubManager() {
      current era, which is the world this game has always started in.
      Round 303: the optional manager spec rides the same way; absent means
      the second person career this has always been. */
-  const confirmClub = useCallback((eraId?: string, manager?: ManagerSpec, entry?: MidSeasonEntry) => {
+  /* Round 964: and so does a world editor edit, null or absent for the real world. */
+  const confirmClub = useCallback((eraId?: string, manager?: ManagerSpec, entry?: MidSeasonEntry, worldEdit?: Record<string, string[]> | null) => {
     if (!pendingClub) return;
-    const fresh = startCareer(pendingClub, eraId ?? DEFAULT_ERA_ID, undefined, manager);
+    const fresh = startCareer(pendingClub, eraId ?? DEFAULT_ERA_ID, undefined, manager, undefined, worldEdit);
     /* Round 549: a mid season takeover plays the run-in first, under the
        manager before you, and hands the club over where it stands. */
     const s = entry ? startMidSeason(fresh, entry) : fresh;
