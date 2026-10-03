@@ -2,10 +2,11 @@ import { describe, expect, it } from 'vitest';
 import {
   acceptFinal, askFor, autoDecide, contractClass, decisionFor, deskCase, expiringMen, isValidLedger, keepAtAsk,
   letGo, loadLedger, matchSheet, noteArrival, offerSheetFor, openLedger, pushFor, pushOnce, qualify, readOffer,
-  runDeskOffseason, takePicks, tenderHim, undecided, useOption,
+  runDeskOffseason, takePicks, tenderHim, topSalary, undecided, useOption,
   type GmContractHost, type GmContractLeague, type GmMan,
 } from '@/lib/gmContracts';
 import { CONTRACT_RULES, nbaMaxShare, offerSheetPicks, type GmSportKey } from '@/lib/gmContractRules';
+import { nflContractHost } from '@/lib/gmContractsHostNfl';
 
 /* A stand in engine with the one property that matters: every man whose deal
    runs out inside its offseason WALKS. So anybody still on the roster
@@ -254,5 +255,116 @@ describe('the ledger', () => {
     expect(loadLedger({ ...fresh, team: 'OTHER' }, lg, 'ME').team).toBe('ME');
     expect(expiringMen(host('nhl'), lg, 'ME')).toHaveLength(1);
     expect(askFor(host('nhl'), lg, fresh, lg.teams.ME.players[0]).salary).toBeGreaterThan(0);
+  });
+});
+
+describe('the review of 2026-10-02', () => {
+  it('NFL: the option goes with the rookie deal, even when he was kept on a new one instead', () => {
+    const h = host('nfl');
+    const lg = league([man('r1', 84, 24, 1, 3)]);
+    const ledger = openLedger(lg, 'ME');
+    noteArrival(ledger, 'r1', 2026, 'draft', 1);
+    const c = deskCase(h, lg, ledger, lg.teams.ME.players[0]);
+    expect(c.option).toBeDefined();
+    expect(keepAtAsk(ledger, lg, c).ok).toBe(true);
+    expect(runDeskOffseason(h, lg, ledger, () => 0.5).ok).toBe(true);
+    const r1 = lg.teams.ME.players.find(p => p.id === 'r1')!;
+    r1.years = 1;
+    const again = deskCase(h, lg, ledger, r1);
+    expect(again.option).toBeUndefined();
+    expect(again.cls).toBe('veteran');
+  });
+
+  it('NFL: a man kept after his tag year leaves the tag and the guarantee behind, and a man tagged now never reaches the desk', () => {
+    const h: GmContractHost<GmContractLeague, string[]> = { ...host('nfl'), held: nflContractHost.held as never, endDeal: nflContractHost.endDeal };
+    const tagYear = { ...man('t', 85, 28, 1, 20), guaranteed: true, tagSeason: 2030, tagCount: 1 };
+    const taggedNow = { ...man('n', 85, 28, 1, 20), guaranteed: true, tagSeason: 2031, tagCount: 1 };
+    const lg = league([tagYear, taggedNow]);
+    const ledger = openLedger(lg, 'ME');
+    expect(expiringMen(h, lg, 'ME').map(p => p.id)).toEqual(['t']);
+    expect(keepAtAsk(ledger, lg, deskCase(h, lg, ledger, lg.teams.ME.players[0])).ok).toBe(true);
+    expect(runDeskOffseason(h, lg, ledger, () => 0.5).ok).toBe(true);
+    const t = lg.teams.ME.players.find(p => p.id === 't') as GmMan & { tagSeason?: number; tagCount?: number };
+    expect(t.years).toBeGreaterThan(1);
+    expect(t.guaranteed).toBeUndefined();
+    expect(t.tagSeason).toBeUndefined();
+    expect(t.tagCount).toBeUndefined();
+  });
+
+  it('MLB: one qualifying offer per man, ever, even after he leaves and is signed back', () => {
+    const h = host('mlb');
+    const lg = league([man('vet', 90, 30, 1, 20)]);
+    const ledger = openLedger(lg, 'ME');
+    const c = deskCase(h, lg, ledger, lg.teams.ME.players[0]);
+    expect(c.qualifying!.accepts).toBe(false);
+    expect(qualify(ledger, lg, c).ok).toBe(true);
+    expect(runDeskOffseason(h, lg, ledger, () => 0.5).ok).toBe(true);
+    const back = lg.freeAgents.find(p => p.id === 'vet')!;
+    lg.freeAgents = lg.freeAgents.filter(p => p.id !== 'vet');
+    lg.teams.ME.players.push({ ...back, years: 1 });
+    noteArrival(ledger, 'vet', lg.season, 'signing');
+    expect(ledger.men.vet.qualified).toBeUndefined();
+    expect(deskCase(h, lg, ledger, lg.teams.ME.players[0]).qualifying).toBeUndefined();
+  });
+
+  it('MLB: no qualifying offer for a mid season arrival, and one the winter after he plays a full season', () => {
+    const h = host('mlb');
+    const lg = league([man('mid', 90, 30, 1, 20)]);
+    const ledger = openLedger(lg, 'ME');
+    noteArrival(ledger, 'mid', 2030, 'signing', undefined, true);
+    const c = deskCase(h, lg, ledger, lg.teams.ME.players[0]);
+    expect(c.qualifying).toBeUndefined();
+    expect(keepAtAsk(ledger, lg, c).ok).toBe(true);
+    expect(runDeskOffseason(h, lg, ledger, () => 0.5).ok).toBe(true);
+    const mid = lg.teams.ME.players[0];
+    mid.years = 1;
+    expect(deskCase(h, lg, ledger, mid).qualifying).toBeDefined();
+  });
+
+  it('NBA: the maximum ladder at every boundary, and a push can never sign over it', () => {
+    expect([0, 6, 7, 9, 10, 15].map(nbaMaxShare)).toEqual([0.25, 0.25, 0.3, 0.3, 0.35, 0.35]);
+    const h = host('nba');
+    const lg = league([man('star', 99, 27, 1, 10)], 400);
+    const ledger = openLedger(lg, 'ME');
+    const c = deskCase(h, lg, ledger, lg.teams.ME.players[0]);
+    expect(c.ceiling).toBeUndefined();
+    expect(c.maxSalary).toBeDefined();
+    pushFor(ledger, lg, c, { years: c.ask.years, salary: c.maxSalary! * 3 });
+    expect(decisionFor(ledger, lg.season, 'star')!.salary!).toBeLessThanOrEqual(topSalary(c));
+  });
+
+  it('NBA: an Early Bird exception deal runs two seasons at the least', () => {
+    const h = host('nba');
+    const filler = Array.from({ length: 12 }, (_, i) => man(`f${i}`, 75, 28, 3, 18));
+    const lg = league([man('eb', 92, 33, 1, 10), ...filler]);
+    const ledger = openLedger(lg, 'ME');
+    noteArrival(ledger, 'eb', 2029, 'signing');
+    const c = deskCase(h, lg, ledger, lg.teams.ME.players[0]);
+    expect(c.cls).toBe('bird-early');
+    expect(c.minYears).toBe(2);
+    pushFor(ledger, lg, c, { years: 1, salary: c.ceiling! });
+    expect(ledger.men.eb.push!.offer.years).toBe(2);
+  });
+
+  it('a walkout is final, letting go with a sheet on the table takes the picks, and the pool reprices', () => {
+    const h = host('nhl');
+    const men = Array.from({ length: 40 }, (_, i) => man(`d${i}`, 86, 22, 1, 1));
+    const lg = league([man('w', 80, 27, 1, 9), man('old', 90, 30, 1, 3), ...men]);
+    const ledger = openLedger(lg, 'ME');
+    for (const m of men) noteArrival(ledger, m.id, 2028, 'draft', 1);
+    const w = deskCase(h, lg, ledger, lg.teams.ME.players[0]);
+    expect(pushFor(ledger, lg, w, { years: w.ask.years, salary: w.ask.salary * 0.3 })!.verdict).toBe('walkout');
+    expect(keepAtAsk(ledger, lg, w).ok).toBe(false);
+    expect(decisionFor(ledger, lg.season, 'w')!.kind).toBe('walkout');
+    const old = deskCase(h, lg, ledger, lg.teams.ME.players[1]);
+    expect(letGo(ledger, lg, old).ok).toBe(true);
+    const sheet = men.map(m => deskCase(h, lg, ledger, m)).find(c => c.restricted!.sheet)!;
+    expect(letGo(ledger, lg, sheet).ok && decisionFor(ledger, lg.season, sheet.man.id)!.kind).toBe('take-picks');
+    autoDecide(h, lg, ledger);
+    expect(runDeskOffseason(h, lg, ledger, () => 0.5).ok).toBe(true);
+    expect(lg.freeAgents.find(p => p.id === 'old')!.salary).toBe(h.marketSalary(lg, man('x', 90, 30, 1, 3)));
+    const atRival = lg.teams.CPU.players.find(p => p.id === sheet.man.id)!;
+    expect(atRival.salary).toBe(sheet.restricted!.sheet!.salary);
+    expect(lg.freeAgents.some(p => p.id === sheet.man.id)).toBe(false);
   });
 });
