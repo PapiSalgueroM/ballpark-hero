@@ -103,6 +103,16 @@
     {"family": "A", "url": "https://www.bundesliga.com/en/bundesliga/clubs/1-fc-union-berlin/squad", "publisher": "Bundesliga (1. FC Union Berlin squad, season 2026-2027)", "readOn": "2026-10-02", "says": "listed among the strikers"},
     {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/598/ger.union_berlin", "publisher": "ESPN (FC Union Berlin squad page, season 2026-27)", "readOn": "2026-10-02", "says": "forward, shirt 27, age 24"}
    ]
+  },
+  {
+   "name": "Jonas Föhrenbach",
+   "club": "Heidenheim",
+   "adjudicatedOn": "2026-10-02",
+   "note": "Heidenheim's number 19, aged 30 on ESPN, six appearances this season. Heidenheim now play in the 2. Bundesliga. On both 2026-27 squad pages.",
+   "sources": [
+    {"family": "A", "url": "https://www.bundesliga.com/en/2bundesliga/clubs/1-fc-heidenheim-1846/squad", "publisher": "Bundesliga (1. FC Heidenheim squad, 2. Bundesliga season 2026-2027)", "readOn": "2026-10-02", "says": "listed among the defenders"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/6418/ger.heidenheim", "publisher": "ESPN (1. FC Heidenheim 1846 squad page, season 2026-27)", "readOn": "2026-10-02", "says": "defender, shirt 19, age 30, 6 appearances"}
+   ]
   }
  ],
  "movedTo": [
@@ -289,6 +299,46 @@
     {"family": "B", "url": "https://us.soccerway.com/player/ducksch-marvin/8McNJcKC/transfers/", "publisher": "Soccerway", "readOn": "2026-10-02", "says": "Werder Bremen to Birmingham 2025-08-07, born 1994-03-07, contract to June 2028"},
     {"family": "B", "url": "https://www.fotmob.com/players/343757/marvin-ducksch", "publisher": "FotMob", "readOn": "2026-10-02", "says": "Birmingham City, born 1994-03-07, played 19 minutes against Middlesbrough on 2026-09-19"},
     {"family": "B", "url": "https://www.comuniate.com/noticias/37654/se-descarta-el-fichaje-de-marvin-ducksch", "publisher": "Comuniate (2026-09-01)", "readOn": "2026-10-02", "says": "the Valencia loan is off because Birmingham would not release him so late in the window"}
+   ]
+  },
+  {
+   "name": "Leart Paçarada",
+   "from": "Köln",
+   "to": "Heidenheim",
+   "realClub": "1. FC Heidenheim",
+   "adjudicatedOn": "2026-10-02",
+   "note": "The Kosovan left back, spelled Paqarada by ESPN and the club. Koln sold him to Heidenheim on 2025-08-28 and he is their number 23 in 2026-27, though ESPN shows no appearances for him yet this season.",
+   "sources": [
+    {"family": "A", "url": "https://fc.de/en/news/all-news/leart-pacarada-joins-heidenheim", "publisher": "1. FC Koln (club announcement, 2025-08-28)", "readOn": "2026-10-02", "says": "permanent move to Heidenheim"},
+    {"family": "A", "url": "https://www.bundesliga.com/en/2bundesliga/clubs/1-fc-heidenheim-1846/squad", "publisher": "Bundesliga (1. FC Heidenheim squad, 2. Bundesliga season 2026-2027)", "readOn": "2026-10-02", "says": "listed among the defenders"},
+    {"family": "A", "url": "https://www.bundesliga.com/en/bundesliga/clubs/1-fc-koeln/squad", "publisher": "Bundesliga (1. FC Koln squad, season 2026-2027)", "readOn": "2026-10-02", "says": "not listed"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/6418/ger.heidenheim", "publisher": "ESPN (1. FC Heidenheim 1846 squad page, season 2026-27)", "readOn": "2026-10-02", "says": "defender, shirt 23, age 31, no appearances yet"}
+   ]
+  },
+  {
+   "name": "Andreas Hanche-Olsen",
+   "from": "Mainz",
+   "to": "Chicago Fire",
+   "realClub": "Chicago Fire FC",
+   "adjudicatedOn": "2026-10-02",
+   "note": "Born 1997-01-17, the Norwegian centre back. Sold by Mainz to Chicago Fire on 2026-09-01.",
+   "sources": [
+    {"family": "A", "url": "https://www.mainz05.de/en/news-en/hanche-olsen-moves-to-chicago-fire-fc", "publisher": "1. FSV Mainz 05 (club announcement, 2026-09-01)", "readOn": "2026-10-02", "says": "permanent move to Chicago Fire FC"},
+    {"family": "A", "url": "https://www.bundesliga.com/en/bundesliga/clubs/1-fsv-mainz-05/squad", "publisher": "Bundesliga (1. FSV Mainz 05 squad, season 2026-2027)", "readOn": "2026-10-02", "says": "not listed"},
+    {"family": "B", "url": "https://ca.soccerway.com/player/hanche-olsen-andreas/ru11TuPI/transfers", "publisher": "Soccerway", "readOn": "2026-10-02", "says": "Mainz to Chicago Fire 2026-09-01, born 1997-01-17"}
+   ]
+  },
+  {
+   "name": "Armindo Sieb",
+   "from": "Mainz",
+   "to": "LAFC",
+   "realClub": "Los Angeles FC",
+   "adjudicatedOn": "2026-10-02",
+   "note": "The 23 year old German forward. He was only on loan at Mainz from Bayern for 2024-25 and 2025-26; Bayern then sold him to LAFC on 2026-08-13, contract through 2028-29. LAFC's number 9.",
+   "sources": [
+    {"family": "A", "url": "https://www.lafc.com/news/lafc-signs-german-forward-armindo-sieb-from-bayern-munich", "publisher": "LAFC (club announcement)", "readOn": "2026-10-02", "says": "permanent signing from Bayern through 2028-29 with a club option"},
+    {"family": "A", "url": "https://www.bundesliga.com/en/bundesliga/news/armindo-sieb-bayern-munich-los-angeles-fc-transfer-mainz-38601", "publisher": "Bundesliga (news, 2026-08-13)", "readOn": "2026-10-02", "says": "completed a permanent move to Los Angeles FC after two seasons on loan at Mainz"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/18966/usa.lafc", "publisher": "ESPN (LAFC squad page, 2026 season)", "readOn": "2026-10-02", "says": "forward, shirt 9, age 23, 5 appearances"}
    ]
   }
  ],
