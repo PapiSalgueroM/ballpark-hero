@@ -459,9 +459,9 @@ export const NHL_LIFE_C: NhlLifeCDef[] = [
   },
   {
     id: 'nhlC_rookie_second_year', category: 'rookie', cooldown: 99,
-    when: c => yrsOf(c) === 1 && c.ovr >= 74,
+    when: c => yrsOf(c) === 1,
     title: 'The second year question',
-    body: 'The rookie year went well enough that people are already warning you about a sophomore slump, which is a strange thing to be warned about. The coach wants more. Your agent wants you visible.',
+    body: 'One season in, and people are already warning you about a sophomore slump, which is a strange thing to be warned about. The coach wants more. Your agent wants you visible.',
     options: [
       {
         label: 'Spend the summer adding a new weapon', p: 0.6,
@@ -683,14 +683,17 @@ export const NHL_LIFE_C: NhlLifeCDef[] = [
     ],
   },
   {
-    /* Reads deck B's clause flags: only a player who took the no move or
-       the ten team list has a clause to waive. */
+    /* Reads deck B's clause flags: a player who took the no move or the
+       ten team list is told his clause decides it. A long serving star
+       without one is asked as a courtesy, and the words say only that. */
     id: 'nhlC_rule_no_trade_list', category: 'rules', cooldown: 99, story: 'noTrade',
-    when: c => (flagOf(c, 'noMove') > 0 || flagOf(c, 'tenTeamList') > 0) && c.contractYears >= 1,
-    title: 'A contender wants you, and your clause says you decide',
-    body: 'Your deal has trade protection in it, so nothing happens without your signature. The GM sat you down: a contender wants you, it is a real shot at a Cup, and your family would have to move by Thursday.',
+    when: c => (flagOf(c, 'noMove') > 0 || flagOf(c, 'tenTeamList') > 0 || (yrsOf(c) >= 8 && c.ovr >= 84)) && c.contractYears >= 1,
+    title: 'A contender wants you, and the call is yours',
+    body: c => `${flagOf(c, 'noMove') > 0 || flagOf(c, 'tenTeamList') > 0
+      ? 'Your deal has trade protection in it, so nothing happens without your signature.'
+      : 'You have been here long enough that the GM will not move you without asking first.'} He sat you down: a contender wants you, it is a real shot at a Cup, and your family would have to move by Thursday.`,
     options: [
-      { label: 'Waive it and go', say: 'You signed the paper on a Tuesday and were on a plane by dinner.', fx: { morale: 2, fanbase: -2 }, move: 'trade' },
+      { label: 'Say yes and go', say: 'You signed off on it on a Tuesday and were on a plane by dinner.', fx: { morale: 2, fanbase: -2 }, move: 'trade' },
       { label: 'Say no and stay', say: 'You told the GM this is home. He nodded and called the contender back.', fx: { morale: 4, fanbase: 4 } },
       {
         label: 'Ask for a day with your family', p: 0.5,
