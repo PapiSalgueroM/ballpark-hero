@@ -1,3 +1,4 @@
+import { nhlPreDraftDescriptor } from '@/lib/nhlCareerPreDraft';
 /**
  * Round 900: the NHL's binding for the one US career board.
  *
@@ -50,8 +51,14 @@ export const NHL_CAREER_SPORT: UsCareerSport<NhlCareerState, NhlSeasonLine> = {
     archetypes: NHL_ARCHETYPES,
   },
 
-  startCareer: (name, pos, arch, rng, appearance, eraId) =>
-    startNhlCareer(name, pos as NhlCareerPos, arch as NhlCareerState['archetype'], rng, appearance, eraId as 'now' | 'y2006'),
+  preDraft: nhlPreDraftDescriptor,
+  prospectRatings: (arch, rng) => {
+    const a = arch as NhlCareerState['archetype'];
+    const rating = 66 + Math.floor(rng() * 8) + a.ovrBoost;
+    return { rating, pot: Math.min(99, rating + 11 + Math.floor(rng() * 13) + a.potBoost) };
+  },
+  startCareer: (name, pos, arch, rng, appearance, eraId, entry) =>
+    startNhlCareer(name, pos as NhlCareerPos, arch as NhlCareerState['archetype'], rng, appearance, eraId as 'now' | 'y2006', entry),
   rollTeamQuality: nhlRollTeamQuality,
   assignRole: nhlAssignRole,
   campBattle: nhlCampBattle,
