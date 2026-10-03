@@ -79,6 +79,7 @@ import * as E from '@/lib/soccerCareerEngine';
 import type { CareerState, LegacyTier } from '@/lib/soccerCareerEngine';
 import SoccerCareer, { InternationalDebutCard, LegacyCard, RivalrySummaryCard } from '@/pages/SoccerCareer';
 import { resetCareerMomentsForTest, settleLoadedMoments } from '@/components/soccer-career/careerMoments';
+import { CelebrationStyles } from '@/components/club-manager/Celebration';
 
 const SAVE_KEY = 'soccerCareerSave';
 const ANIMATED = ['cm-slam', 'cm-rise', 'cm-tick-in', 'cm-rise-gated'];
@@ -323,5 +324,47 @@ describe('Round 985: through the real page, a reload never replays the moment', 
     resetCareerMomentsForTest();
     const fresh = render(wrap(<InternationalDebutCard career={c} onDismiss={() => undefined} />));
     expect(animatedIn(fresh.container).length).toBe(5);
+  });
+});
+
+/* The page must not jump. jsdom lays nothing out, so this holds the cause
+   instead of the box: every class the cards use animates only opacity and
+   transform (neither moves a neighbour), its resting rule sets nothing that
+   takes space, and the confetti is an absolute layer inside a relative card. */
+describe('Round 985: nothing the moments use can move the page', () => {
+  function block(css: string, head: string): string {
+    const at = css.indexOf(head);
+    expect(at).toBeGreaterThanOrEqual(0);
+    const open = css.indexOf('{', at);
+    let depth = 0;
+    for (let i = open; i < css.length; i++) {
+      if (css[i] === '{') depth++;
+      if (css[i] === '}' && --depth === 0) return css.slice(open + 1, i);
+    }
+    throw new Error(`unclosed ${head}`);
+  }
+  const props = (body: string) => new Set((body.match(/[a-z-]+(?=\s*:)/g) ?? []));
+
+  it('cm-slam, cm-rise and cm-tick-in move only opacity and transform', () => {
+    const { container } = render(<CelebrationStyles />);
+    const css = container.querySelector('style')!.textContent ?? '';
+    for (const [cls, frames] of [['cm-slam', 'cmSlam'], ['cm-rise', 'cmRise'], ['cm-tick-in', 'cmTickIn']]) {
+      const kf = props(block(css, `@keyframes ${frames} `));
+      expect(kf.size).toBeGreaterThan(0);
+      for (const p of kf) expect(['opacity', 'transform']).toContain(p);
+      const rest = props(block(css, `.${cls} {`));
+      for (const p of rest) expect(['opacity', 'animation']).toContain(p);
+    }
+  });
+
+  it('the confetti is an absolute layer inside the legacy card, which is relative', () => {
+    const c = retiredCareer('LEGEND');
+    const { container } = render(wrap(<LegacyCard career={c} totals={fixtureTotals(c)} onShare={() => undefined} />));
+    const card = container.firstElementChild as HTMLElement;
+    expect(card.classList.contains('relative')).toBe(true);
+    const layer = container.querySelector('.animate-confetti-fall')!.parentElement!;
+    expect(layer.classList.contains('absolute')).toBe(true);
+    expect(layer.classList.contains('pointer-events-none')).toBe(true);
+    expect(layer.parentElement).toBe(card);
   });
 });
