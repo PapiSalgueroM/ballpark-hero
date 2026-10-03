@@ -9,6 +9,8 @@ import {
 } from '@/lib/clubManagerCalendar';
 import type { CalendarDay, FastForward as FastForwardTarget } from '@/lib/clubManagerCalendar';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
+/* Round 978: the international breaks on the grid. */
+import { intlMarks, intlMarkLine } from '@/lib/clubManagerInternationals';
 
 /**
  * Round 158: the season as a real month calendar, off the phone calendar
@@ -86,6 +88,8 @@ export function CalendarScreen({ career, onSimTo, onSetTraining }: CalendarScree
 
   const grid = useMemo(() => monthGrid(days, view.y, view.m, intensity), [days, view, intensity]);
   const ff = useMemo(() => fastForwardTargets(c, days), [c, days]);
+  /* Round 978: each international break, drawn on the day it starts. */
+  const intlByKey = useMemo(() => new Map(intlMarks(c).map(m => [m.key, m])), [c]);
 
   const selected = useMemo(
     () => (selectedKey === null ? null : grid.find(cell => cell !== null && cell.key === selectedKey) ?? null),
@@ -160,9 +164,10 @@ export function CalendarScreen({ career, onSimTo, onSetTraining }: CalendarScree
 
   /* The month's match and window days, for the list under the grid. */
   const monthEntries = useMemo(
-    () => grid.filter((cell): cell is CalendarDay => cell !== null && (cell.kind === 'match' || cell.kind === 'window')),
-    [grid],
+    () => grid.filter((cell): cell is CalendarDay => cell !== null && (cell.kind === 'match' || cell.kind === 'window' || intlByKey.has(cell.key))),
+    [grid, intlByKey],
   );
+  const selectedIntl = selected ? intlByKey.get(selected.key) ?? null : null;
 
   const weeksLeft = c.calendar.length - c.week;
 
@@ -265,6 +270,9 @@ export function CalendarScreen({ career, onSimTo, onSetTraining }: CalendarScree
                 )}
                 {cell.kind === 'training' && <Cone className="mt-1.5" />}
                 {cell.deadline && <span className="absolute top-0 right-0 text-[10px] leading-none" aria-hidden="true">🔒</span>}
+                {intlByKey.has(cell.key) && (
+                  <span data-cm-intl-day className={cn('absolute top-0 left-0 text-[10px] leading-none', intlByKey.get(cell.key)!.done && 'opacity-50')} aria-hidden="true">🌍</span>
+                )}
               </button>
             );
           })}
@@ -276,6 +284,7 @@ export function CalendarScreen({ career, onSimTo, onSetTraining }: CalendarScree
             <div className="text-[11px] font-bold text-foreground">{shortDate(selected.date)}{selected.isToday ? ' · today' : ''}</div>
             <div className="text-[11px] text-foreground/90">{dayEmoji(selected) ? `${dayEmoji(selected)} ` : ''}{dayLine(selected)}</div>
             {windowLine && <div className="text-[10px] text-gold mt-0.5">{selected.deadline ? '🔒' : '🔓'} {windowLine}</div>}
+            {selectedIntl && <div data-cm-intl-line className="text-[10px] text-emerald-300 mt-0.5">🌍 {intlMarkLine(selectedIntl)}</div>}
             <div className="mt-1.5 flex items-center gap-2">
               {selectedTarget !== null ? (
                 <button
@@ -314,9 +323,9 @@ export function CalendarScreen({ career, onSimTo, onSetTraining }: CalendarScree
                 )}
               >
                 <span className="w-12 shrink-0 text-muted-foreground">{shortDate(day.date)}</span>
-                <span className="shrink-0" aria-hidden="true">{dayEmoji(day)}</span>
+                <span className="shrink-0" aria-hidden="true">{day.kind === 'match' || day.kind === 'window' ? dayEmoji(day) : '🌍'}</span>
                 <span className={cn('truncate', day.potential ? 'text-muted-foreground italic' : 'text-foreground')}>
-                  {day.kind === 'window' ? 'January window opens' : venueLine(day)}
+                  {day.kind === 'window' ? 'January window opens' : day.kind === 'match' ? venueLine(day) : `International window, ${intlByKey.get(day.key)?.label ?? ''}`}
                 </span>
                 {day.deadline && <span className="shrink-0 text-[9px] text-red-400 font-bold">🔒 deadline</span>}
                 {day.res ? (
@@ -343,6 +352,7 @@ export function CalendarScreen({ career, onSimTo, onSetTraining }: CalendarScree
           <span className="inline-flex items-center gap-0.5"><Cone /> training</span>
           <span>🔓 window opens</span>
           <span>🔒 deadline day</span>
+          {intlByKey.size > 0 && <span>🌍 international window opens</span>}
           <span><span className="inline-block w-2 h-2 rounded-sm bg-gold/30 align-middle" /> window open</span>
           <span>faded: a round you reach by winning the one before</span>
           <span>Season: {MONTH_NAMES[days.seasonStart.m - 1]} {days.seasonStart.y} to {MONTH_NAMES[days.seasonEnd.m - 1]} {days.seasonEnd.y}</span>
