@@ -60,6 +60,8 @@ const CONTROL = process.env.TEAMMATES_CONTROL || '';
 const FILE = 'src/data/teammatesPairs.ts';
 const RECORD = 'scripts/data/teammatesVerified2026-10.json';
 const HOOK = 'src/hooks/useTeammates.ts';
+const GUIDE = 'src/data/gameContent/world.ts';
+const PAGE = 'src/pages/Teammates.tsx';
 
 let failures = 0;
 const fired = new Set();
@@ -412,12 +414,29 @@ console.log('\n--- 8. the deal: how much of one run the next run repeats ---');
    the old one and on nothing else (the smallbank control deals the old
    12/12/26 shape and reads 21.9). */
 const REPEAT_CEILING = 0.14;
-const hookSrc = fs.readFileSync(path.join(ROOT, HOOK), 'utf8');
-const sliceM = hookSrc.match(/easy\.slice\(0, (\d+)\), \.\.\.med\.slice\(0, (\d+)\), \.\.\.hard\.slice\(0, (\d+)\)/);
-if (!sliceM || !/sort\(\(\) => Math\.random\(\) - 0\.5\)/.test(hookSrc)) {
-  fail(8, `the deal could not be lifted out of ${HOOK}; refusing to retype it`);
+let hookSrc = fs.readFileSync(path.join(ROOT, HOOK), 'utf8').replace(/\r\n/g, '\n');
+if (CONTROL === 'shortdeal') hookSrc = rewrite(hookSrc, 'hard.slice(0, 4)', 'hard.slice(0, 3)', "the hook's hard slice");
+if (CONTROL === 'widepool') hookSrc = rewrite(hookSrc, 'p => p.difficulty === 3', 'p => p.difficulty >= 2', "the hook's hard filter");
+/* the round size is the hook's own constant, and the mix is the one the rules
+   card promises the player, read out of the Teammates block of the guide */
+const roundsM = hookSrc.match(/const ROUNDS = (\d+);/);
+const guideSrc = fs.readFileSync(path.join(ROOT, GUIDE), 'utf8');
+const mixM = guideSrc.slice(guideSrc.indexOf("'/teammates': {")).match(/Each round is (\d+) questions: (\d+) easy, (\d+) medium and (\d+) hard/);
+const fnAt = hookSrc.indexOf('function buildRound(');
+const fnEnd = fnAt < 0 ? -1 : hookSrc.indexOf('\n}\n', fnAt);
+let buildRoundOf = null;
+if (roundsM && mixM && fnAt >= 0 && fnEnd > fnAt) {
+  /* only the return type is TypeScript; anything else the hook grows makes
+     this throw, which fails below rather than measuring a retyped deal */
+  const fnSrc = hookSrc.slice(fnAt, fnEnd + 2).replace(/^function buildRound\(\)\s*:\s*[\w[\]<>]+\s*\{/, 'function buildRound() {');
+  try { buildRoundOf = new Function('teammatesPairs', 'Math', `${fnSrc}\nreturn buildRound;`); } catch (e) { fail(8, `the lifted buildRound() does not run as JavaScript: ${e.message}`); }
+}
+if (!buildRoundOf) {
+  fail(8, `the deal could not be lifted out of ${HOOK} (or the rules card's mix out of ${GUIDE}); refusing to retype it`);
 } else {
-  const take = { 1: Number(sliceM[1]), 2: Number(sliceM[2]), 3: Number(sliceM[3]) };
+  const ROUNDS = Number(roundsM[1]);
+  const take = { 1: Number(mixM[2]), 2: Number(mixM[3]), 3: Number(mixM[4]) };
+  if (Number(mixM[1]) !== ROUNDS || take[1] + take[2] + take[3] !== ROUNDS) fail(8, `the rules card promises ${mixM[1]} questions as ${take[1]}+${take[2]}+${take[3]}, and the hook plays ${ROUNDS}`);
   for (const d of [1, 2, 3]) {
     const n = rows.filter(r => r.difficulty === d).length;
     if (n < 2 * take[d]) fail(8, `difficulty ${d} holds ${n} rows, fewer than two runs of ${take[d]}`);
@@ -427,20 +446,36 @@ if (!sliceM || !/sort\(\(\) => Math\.random\(\) - 0\.5\)/.test(hookSrc)) {
      medium, 26 hard, the first of each in file order), which must trip the
      repeat ceiling and nothing else in this section */
   const OLD_SHAPE = { 1: 12, 2: 12, 3: 26 };
-  const pool = d => rows.filter(r => r.difficulty === d).slice(0, CONTROL === 'smallbank' ? OLD_SHAPE[d] : undefined);
-  const deal = rand => [1, 2, 3].flatMap(d => pool(d).sort(() => rand() - 0.5).slice(0, take[d]));
+  const bank = CONTROL === 'smallbank' ? [1, 2, 3].flatMap(d => rows.filter(r => r.difficulty === d).slice(0, OLD_SHAPE[d])) : rows;
+  const deal = rand => buildRoundOf(bank, Object.assign(Object.create(Math), { random: rand }))();
+  /* every deal keeps the promise before anything about it is measured */
+  const broken = new Set();
+  const checkDeal = d => {
+    if (d.length !== ROUNDS) broken.add(`a run deals ${d.length} pairs into a ${ROUNDS} question game`);
+    if (new Set(d.map(pairKey)).size !== d.length) broken.add('a run deals the same pairing twice');
+    for (const k of [1, 2, 3]) {
+      const n = d.filter(r => r.difficulty === k).length;
+      if (n !== take[k]) broken.add(`a run deals ${n} difficulty ${k} pairs where the rules card promises ${take[k]}`);
+    }
+    return d;
+  };
   const shares = [];
+  let yes = 0, asked = 0;
   for (let seed = 1; seed <= 12; seed += 1) {
     const rand = mulberry(seed);
     let rep = 0, dealt = 0;
     for (let k = 0; k < 400; k += 1) {
-      const a = new Set(deal(rand).map(pairKey)), b = deal(rand);
+      const first = checkDeal(deal(rand)), b = checkDeal(deal(rand));
+      const a = new Set(first.map(pairKey));
       rep += b.filter(r => a.has(pairKey(r))).length; dealt += b.length;
+      yes += b.filter(r => r.answer).length; asked += b.length;
     }
     shares.push(rep / dealt);
   }
+  for (const msg of broken) fail(8, msg);
   const mean = shares.reduce((s, v) => s + v, 0) / shares.length;
   console.log(`  per seed: ${shares.map(s => (100 * s).toFixed(1)).join(' ')} percent; mean ${(100 * mean).toFixed(1)} (ceiling ${(100 * REPEAT_CEILING).toFixed(1)})`);
+  console.log(`  every one of ${12 * 800} runs dealt ${ROUNDS} distinct pairs as ${take[1]}+${take[2]}+${take[3]}: ${broken.size ? 'NO' : 'yes'}; tapping YES every time scores ${(ROUNDS * yes / asked).toFixed(2)} of ${ROUNDS} on average`);
   if (mean > REPEAT_CEILING) fail('8r', `the next run repeats ${(100 * mean).toFixed(1)} percent of the last one on average, above the ${(100 * REPEAT_CEILING).toFixed(1)} percent ceiling`);
 }
 const bySport = {};
@@ -504,13 +539,31 @@ if (process.env.TEAMMATES_LIVE !== '1') {
 }
 
 // ---------------------------------------------------------------------------
-const EXPECT = { fileflip: 3, recordflip: 5, hostgap: 5, onesource: 4, wrongclaim: 6, wrongyear: 7, dupe: 2, thindeal: 8, smallbank: '8r', spellgap: 6, longdash: 1 };
+/* each control names EVERY section it must fire, and a control proves its
+   check only when exactly those fire: one that also trips something else, or
+   lands on a section that was already red, proves nothing about its own */
+const EXPECT = {
+  fileflip: [1, 3, 5],   /* the funFact now contradicts the answer, the file the record, the hosts the answer */
+  recordflip: [1, 5],    /* file and record agree, so 3 stays quiet; the hosts and the funFact do not */
+  hostgap: [5, 6],       /* the hosts disagree on the verdict and on the claim behind the funFact */
+  onesource: [4, 5, 6],  /* one host left: 4 counts it, 5 and 6 cannot ask the missing host */
+  wrongclaim: [6, 7],    /* the claim no longer holds, and the funFact's 2011-12 is no longer one it declares */
+  wrongyear: [7],
+  dupe: [2, 3, 8],       /* the twin has no record row and lets one run deal the same pairing twice */
+  thindeal: [8],
+  smallbank: ['8r'],
+  spellgap: [6, 7],      /* the spell no longer matches the hosts, and 2015 is no longer declared */
+  longdash: [1, 3],      /* the dash, and a file that no longer says what the record says */
+  shortdeal: [8],
+  widepool: [8],
+};
 let code = 0;
 if (CONTROL) {
   const want = EXPECT[CONTROL];
+  const got = [...fired].map(String).sort(), wanted = (want || []).map(String).sort();
   if (want === undefined) { console.error(`Unknown TEAMMATES_CONTROL "${CONTROL}"`); code = 2; }
-  else if (fired.has(want)) console.log(`\nCONTROL ${CONTROL}: section ${want} fired, as it must.`);
-  else { console.error(`\nCONTROL ${CONTROL}: section ${want} did NOT fire. The check is not measuring what it claims to.`); code = 1; }
+  else if (got.join() === wanted.join()) console.log(`\nCONTROL ${CONTROL}: section(s) ${wanted.join(', ')} fired and nothing else did, as it must.`);
+  else { console.error(`\nCONTROL ${CONTROL}: expected section(s) ${wanted.join(', ')} and only those, got ${got.join(', ') || 'none'}. The check is not measuring what it claims to.`); code = 1; }
 } else if (failures) {
   console.error(`\nsimTeammatesRecord: ${failures} failure(s)`);
   code = 1;

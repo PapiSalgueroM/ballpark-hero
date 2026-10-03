@@ -130,7 +130,7 @@ const Teammates = () => {
                     {lastCorrect ? '✅ Correct!' : '❌ Wrong!'}
                   </p>
                   <p className="text-sm text-muted-foreground mt-1">
-                    {currentPair.answer ? 'They WERE teammates!' : 'They were NEVER teammates.'}
+                    {currentPair.answer ? 'They WERE teammates!' : `They were NEVER ${currentPair.sport === 'Soccer' ? 'club' : currentPair.sport} teammates.`}
                   </p>
                 </div>
                 <div className="bg-secondary/50 rounded-xl p-4 mb-4">
@@ -187,7 +187,7 @@ const Teammates = () => {
           examples={[
             "Messi & Neymar: YES (Barcelona, PSG)",
             "LeBron James & Kyrie Irving: YES (Cleveland Cavaliers)",
-            "Tom Brady & Peyton Manning: NO (rivals, never teammates)",
+            "Tom Brady & Peyton Manning: NO (rivals, never NFL teammates)",
             "Ronaldo & Rooney: YES (Manchester United)",
             "Kobe Bryant & Shaquille O'Neal: YES (LA Lakers)",
             "Zidane & Ronaldinho: NO (never played on the same club)"
