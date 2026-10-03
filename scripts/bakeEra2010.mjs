@@ -423,7 +423,7 @@ const B5_REMOVALS = [
   { n: 'Jean-Alain Boumsong', why: 'Lyon to Panathinaikos, 1 Jul 2010 (KICKER; MF-REC)' },
   { n: 'Jiri Stajner', why: 'Hannover 96 to Slovan Liberec (Focus, 15 May 2010, Jiri Stajner verlässt Hannover)' },
   { n: 'Johan Audel', why: 'Valenciennes to Stuttgart, 9 Aug 2010 (KICKER); the year-2011 row is outside the world' },
-  { n: 'Julian Koch', why: 'Borussia Dortmund to MSV Duisburg (MSV Duisburg, 20 Apr 2010, U20-Nationalspieler verstärkt die Zebras zur neuen Saison – MSV leiht Julian Koch von Borussia Dortmund aus)' },
+  { n: 'Julian Koch', why: 'Borussia Dortmund to MSV Duisburg (MSV Duisburg, 20 Apr 2010, U20-Nationalspieler verstärkt die Zebras zur neuen Saison, MSV leiht Julian Koch von Borussia Dortmund aus)' },
   { n: 'Keirrison', why: 'Fiorentina to Santos (ESPN-ES, 26 Jul 2010)' },
   { n: 'Kevin Kuranyi', why: 'Schalke 04 to Dynamo Moscow (Die Welt, 9 May 2010, Kuranyi kassiert für drei Jahre Moskau 18 Millionen)' },
   { n: 'Kevin Mirallas', why: 'Saint-Etienne to Olympiacos, 1 Jul 2010 (KICKER)' },
