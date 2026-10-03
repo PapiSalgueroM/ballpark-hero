@@ -1,0 +1,86 @@
+name: Rugby League challenge verification
+
+on:
+  pull_request:
+    paths:
+      - .github/workflows/rugby-league-challenge.yml
+      - scripts/qa/rugbyLeague998.mjs
+      - scripts/simRugbyLeagueChallenge.mjs
+      - src/components/champ-or-not/**
+      - src/pages/ChampOrNot.tsx
+      - src/lib/champOrNot.ts
+      - src/lib/rugbyLeagueChallenge.ts
+      - src/test/rugbyLeagueChallenge.test.tsx
+      - src/test/fixtures/rugbyLeagueRecords.json
+  workflow_dispatch:
+
+permissions:
+  contents: read
+concurrency:
+  group: rugby-league-challenge-${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    defaults:
+      run:
+        shell: bash
+    env:
+      SIM_NETWORK: offline
+      ENGINES: chromium
+      VITEST_MAX_FORKS: 1
+      VITEST_MIN_FORKS: 1
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install verification dependencies
+        run: |
+          mkdir -p rugby-league-challenge-artifacts
+          git rev-parse HEAD | tee rugby-league-challenge-artifacts/commit.txt
+          npm ci
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium
+          python -m pip install fonttools pillow
+      - name: Type check and build
+        id: build
+        run: |
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee rugby-league-challenge-artifacts/types.log
+          npm run build 2>&1 | tee rugby-league-challenge-artifacts/build.log
+      - name: Actual challenge outcomes and effective controls
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: RUGBY_LEAGUE_CHALLENGE_CONTROL=all ONLY=simRugbyLeagueChallenge node scripts/runAllSims.mjs 2>&1 | tee rugby-league-challenge-artifacts/mounted.log
+      - name: Original Champ reveal and completion compatibility
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          failed=0
+          ONLY=simChampOrNotReveal node scripts/runAllSims.mjs 2>&1 | tee rugby-league-challenge-artifacts/simChampOrNotReveal.log || failed=1
+          NO_DOUBLE_ONLY=champ-or-not ONLY=simNoDoubleRecord node scripts/runAllSims.mjs 2>&1 | tee rugby-league-challenge-artifacts/simNoDoubleRecord.log || failed=1
+          exit "$failed"
+      - name: All built readers and guide checks
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          failed=0
+          for harness in simAdsense simBrand simHeadTags simHiddenPages simHubs simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets simSiteSearch simGuideHeadings; do
+            ONLY="$harness" node scripts/runAllSims.mjs --browser 2>&1 | tee "rugby-league-challenge-artifacts/$harness.log" || failed=1
+          done
+          exit "$failed"
+      - name: Native ten-claim runs and unavailable-bank handling
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: node scripts/qa/rugbyLeague998.mjs 2>&1 | tee rugby-league-challenge-artifacts/native.log
+      - name: Preserve verification evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: rugby-league-challenge-${{ github.run_id }}-${{ github.run_attempt }}
+          retention-days: 7
+          path: rugby-league-challenge-artifacts/
