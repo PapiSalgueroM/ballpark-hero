@@ -45,7 +45,7 @@
  *     higher by a floor per pack, and the two-bad-years group draws a top
  *     half offer at most 3 percent of the time. Control `tierceiling`
  *     (managerOffers' own tier filter removed, in the bundle only, never on
- *     disk) lifts that share to 15 to 21 percent.
+ *     disk) lifts that share to 16 to 22 percent (seed 1, 2026-10-03).
  *  8. takeSeat moves the seat (team, trust, mandate), drops the old club's
  *     press state (tilt and trade line) and keeps the league object, its
  *     season, its champions and its teams. Control `takeseat`.
@@ -72,8 +72,8 @@
  *     cbb title 58.2-64.8 (573 to 625 years), over the ask 34.8-35.2.
  *   Bands sit at least four standard errors outside the measured spread;
  *   margin floors at about two thirds of the lowest seed. Under `departure`
- *   (seed 1, 2026-10-02) the empty shares were nfl 31.5 nba 28.0 nhl 29.9
- *   mlb 31.6 cfb 35.4 cbb 20.1.
+ *   (seed 1, 2026-10-03) the empty shares were nfl 32.2 nba 28.7 nhl 30.6
+ *   mlb 31.9 cfb 35.8 cbb 18.9 afl 42.2.
  *
  * Run: node scripts/simGmSeat.mjs
  * Seeds: SIM_GMSEAT_SEEDS=1,2,3 (the default). Measure only: SIM_GMSEAT_MEASURE=1.
@@ -432,7 +432,7 @@ console.log("1. seat words: buildOwnerMandate's ladder at every rank, champion f
   if (checked < 1000) fail(`only ${checked} mandates checked`);
   if (ladderBad) fail(`${ladderBad} mandates left buildOwnerMandate's ladder`); else ok(`${checked} mandates keep the ladder`);
   if (textBad) fail(`${textBad} asks carry a raw placeholder or a dash`); else ok('no raw placeholder and no dash in any ask');
-  if (leak) fail(`${leak} program, club or gym asks talk about ownership or a franchise`); else ok('no program, club or gym ask talks like a franchise');
+  if (leak) fail(`${leak} program or club asks talk about ownership or a franchise, or a ladder ask promises a final`); else ok('no program or club ask talks like a franchise, and no ladder ask promises a final');
 }
 console.log("2. a man who leaves straight after a 'badly' season (fired, or his contract ran out) is never offered a top tier job (every simulated feed)");
 console.log("2. a man fired straight after a 'badly' season is never offered a top tier job (every simulated feed)");
