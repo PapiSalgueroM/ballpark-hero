@@ -364,7 +364,9 @@ for (const c of careers) {
   if (JSON.stringify(want) !== JSON.stringify(got)) jerseyMiss += 1;
   // The card names the club with the engine's own label, never a bare abbreviation it knows.
   if (c.rec.jersey && c.rec.jersey.teamName !== eng.LABEL(c.rec.jersey.team, c.eraId)) jerseyMiss += 1;
-  if (c.rec.jersey && c.rec.jersey.teamName === c.rec.jersey.team) jerseyRaw += 1;
+  // A bare abbreviation on the card. Not "name equals id": a club abroad (an MLB career's
+  // seasons in Japan, "Yomiuri Giants") already carries its full name as its id.
+  if (c.rec.jersey && /^[A-Z]{2,4}$/.test(c.rec.jersey.teamName ?? c.rec.jersey.team)) jerseyRaw += 1;
   if (c.rec.jersey) jerseys += 1;
 }
 
