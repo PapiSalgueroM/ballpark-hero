@@ -22,14 +22,21 @@
  *          animation held at its first frame and at its last (layout offsets,
  *          not boxes, so a transform that never moves layout is not a shift)
  *
- * Measured headroom (2026-10-03, 34 cases): see the printed "narrowest slack"
- * line; the checks themselves are geometric (one line, inside the box, equal
- * offsets within half a pixel), so they carry no tuned band.
+ * Measured headroom (2026-10-03, 34 cases, 390 by 844): the widest pill is
+ * Face Off's "2600 to 2600" (a two player duel tied to the last extra round),
+ * 174px wide with 71.0px spare on each side; every other game's widest pill is
+ * 125px or less with 95px or more spare. The checks themselves are geometric
+ * (one line, inside the box, equal layout offsets within half a pixel), so
+ * they carry no tuned band. Measured controls: noscore turns all 34 cases red;
+ * cramp leaves 17.0px spare and wraps all three Face Off scorelines onto two
+ * lines (6 findings), which is why the widest Face Off case is in the list;
+ * shift moves the card, the moment, the stat line and the emoji block by 32px
+ * at the first frame in all 34 cases (136 findings).
  *
  * NEGATIVE CONTROLS (RESULT_PILL_CONTROL=<name>), each mutates one anchor in
  * memory, refuses to run if the anchor is missing, and must turn its check red:
  *   noscore   ResultScreen stops forwarding the score (text)
- *   cramp     ResultMoment draws every score at its biggest size (fit)
+ *   cramp     ResultMoment draws every score at a display size, too big for a long one (fit)
  *   shift     the headline's rise animates margin instead of transform (shift)
  *
  * RESULT_PILL_SHOTS=<dir> saves one 390 wide screenshot of each case's card.
@@ -71,7 +78,7 @@ const momentFile = path.join(root, 'src/components/game/ResultMoment.tsx');
 let screenSrc = fs.readFileSync(screenFile, 'utf8');
 let momentSrc = fs.readFileSync(momentFile, 'utf8');
 if (control === 'noscore') screenSrc = mutateOnce(screenSrc, 'score={score}', 'score={undefined}', 'ResultScreen.tsx');
-if (control === 'cramp') momentSrc = mutateOnce(momentSrc, "if (len <= 3) return 'text-4xl';", "if (len <= 99) return 'text-4xl';", 'ResultMoment.tsx');
+if (control === 'cramp') momentSrc = mutateOnce(momentSrc, "if (len <= 3) return 'text-4xl';", "if (len <= 99) return 'text-6xl';", 'ResultMoment.tsx');
 if (control === 'shift') momentSrc = mutateOnce(momentSrc, '@keyframes rmRise { 0% { opacity: 0; transform: translateY(6px); }', '@keyframes rmRise { 0% { opacity: 0; margin-top: 40px; }', 'ResultMoment.tsx');
 
 /* The game hooks, each answering with the fixture the case dealt; the recorder does nothing. */
@@ -162,7 +169,7 @@ console.log(`bundled the sixteen pages (${(jsOut.length / 1e6).toFixed(1)} MB of
 const configOutput = await build({ entryPoints: [path.join(root, 'tailwind.config.ts')], write: false, format: 'cjs', platform: 'node', logLevel: 'silent' });
 const configModule = { exports: {} };
 new Function('module', 'exports', 'require', configOutput.outputFiles[0].text)(configModule, configModule.exports, createRequire(import.meta.url));
-const css = await postcss([tailwind(configModule.exports.default)]).process(read('src/index.css'), { from: path.join(root, 'src/index.css') });
+const css = await postcss([tailwind({ ...configModule.exports.default, content: [...configModule.exports.default.content, { raw: momentSrc + screenSrc, extension: 'tsx' }] })]).process(read('src/index.css'), { from: path.join(root, 'src/index.css') });
 
 const shots = process.env.RESULT_PILL_SHOTS || '';
 if (shots) fs.mkdirSync(shots, { recursive: true });
