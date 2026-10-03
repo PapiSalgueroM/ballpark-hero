@@ -70,7 +70,10 @@ const browser = await chromium.launch();
 
   console.log('2) Spain in 2015');
   say(await page.locator('text=England').count() >= 1 && await page.locator('text=Spain').count() >= 1, 'England and Spain offered in 2015');
-  say(await page.locator('text=Germany').count() === 0, 'Germany correctly absent from 2015');
+  /* Round 899 made 2015-16 a full big five: Germany and France are offered now, and a nation that had no league in
+     this world (the Netherlands) still is not. */
+  say(await page.locator('text=Germany').count() >= 1 && await page.locator('text=France').count() >= 1, 'Germany and France offered in 2015 (Round 899)');
+  say(await page.locator('text=Netherlands').count() === 0, 'the Netherlands correctly absent from 2015');
   await page.locator('text=Spain').first().click();
   await page.waitForTimeout(700);
   say(await page.locator('text=La Liga').count() >= 1, 'the 2015 La Liga is offered');
