@@ -1,0 +1,255 @@
+/**
+ * Round 900 harness: the four US career boards still do exactly what they did.
+ *
+ * Round 900 turned NflMyCareerBoard, NbaMyCareerBoard, MlbMyCareerBoard and
+ * NhlMyCareerBoard (four copies of one 1,090 line file) into one board plus
+ * four bindings, with the rule that nothing a player sees, clicks or has saved
+ * may move. scripts/data/usBoardFixture.json was recorded from main's tree
+ * BEFORE any board was touched (its header carries the sha), and this harness
+ * replays it against the tree it runs in.
+ *
+ * A) The fixture is whole: four sports, every screen the round names reached
+ *    on each path (event card, extension talk, free agency window, rival beat,
+ *    rival choice, both confirmations answered no and yes, retirement, the
+ *    coach career, a reload, an older-era career), at least 12 seasons, the
+ *    six required saves and the five old-shape saves the restore repairs.
+ * B) The replay: src/test/usBoardFixture.test.tsx mounts the real boards in
+ *    jsdom with the fixture's seeds and clock and presses the same buttons.
+ *    After every press the save's bytes and the original screen markup must
+ *    hash to what the fixture holds. Round 992 excludes only its additive
+ *    practice section and its buttons; that new flow has separate tests. The
+ *    fixture itself remains unchanged. Green needs Vitest's real exit code 0, all four
+ *    sports passed, and an empty report.
+ *
+ * Measured when it was written (2026-10-02, this machine): 436, 506, 475 and
+ * 442 clicks on the four paths (23 or 24 seasons each) and 1,860 more steps
+ * across the ten fixed saves per sport; one replay takes about 160 seconds.
+ * After the review that added the five old-shape saves and an older-era
+ * second career in every sport (re-recorded from main 4ae96019): 439, 506,
+ * 475 and 441 clicks, fifteen fixed saves per sport and 701, 721, 688 and
+ * 688 screen steps; the fixture is 1,875,117 bytes.
+ * Recorded twice from the same tree, the fixture came out byte for byte the
+ * same (cmp exit 0), which is what makes a red replay mean something. There is no
+ * band here on purpose: the check is byte equality, and a path either
+ * replays or it does not.
+ *
+ * Controls, one per run (each is a full replay, about three minutes):
+ *   US_BOARD_PARITY_CONTROL=label    one label changed in a copy of the shared
+ *                                    board: all four sports go red on the words
+ *   US_BOARD_PARITY_CONTROL=draw     one extra Math.random() before the camp
+ *                                    battle in the shared board: all four go
+ *                                    red on the save
+ *   US_BOARD_PARITY_CONTROL=binding  one word changed in a copy of the NHL
+ *                                    binding: the NHL goes red on the words and
+ *                                    the other three stay green
+ *   US_BOARD_PARITY_CONTROL=restore  the pre Round 182 role repair deleted from
+ *                                    a copy of the shared board: all four go
+ *                                    red on the old shape save "noRole" (the
+ *                                    saves a board just wrote all carry a role,
+ *                                    so before the old shapes were added this
+ *                                    left the replay green)
+ *   US_BOARD_PARITY_CONTROL=era      the NFL binding stops passing the era to
+ *                                    its engine: the NFL goes red on the save
+ *                                    of its second career (always an older era
+ *                                    one), the other three stay green
+ *   US_BOARD_PARITY_CONTROL=fixture  one save hash changed in a copy of the
+ *                                    fixture: that sport goes red (no source
+ *                                    is touched, so this is the replay's own
+ *                                    comparison being proved)
+ *
+ * Nothing here reaches the network. Run: node scripts/simUsBoardParity.mjs
+ */
+import { spawnSync } from 'node:child_process';
+import fs from 'node:fs';
+import os from 'node:os';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { createRequire } from 'node:module';
+import { US_CAREER_BOARD, usCareerSport, wrapperProblems } from './lib/usCareerFiles.mjs';
+
+const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const TEST = 'src/test/usBoardFixture.test.tsx';
+const FIXTURE = path.join(ROOT, 'scripts/data/usBoardFixture.json');
+const SPORTS = ['nfl', 'nba', 'mlb', 'nhl'];
+const CONTROL = process.env.US_BOARD_PARITY_CONTROL || '';
+/* Resolved the way node resolves it, so a worktree that borrows the main tree's node_modules works too. */
+const VITEST = path.join(path.dirname(createRequire(path.join(ROOT, 'package.json')).resolve('vitest/package.json')), 'vitest.mjs');
+
+const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'usboard-'));
+const litter = [];
+process.on('exit', () => {
+  for (const f of litter) { try { fs.rmSync(f, { force: true }); } catch { /* best effort */ } }
+  try { fs.rmSync(tmp, { recursive: true, force: true }); } catch { /* best effort */ }
+});
+const read = f => fs.readFileSync(f, 'utf8').split('\r\n').join('\n');
+
+/* The source controls. Each changes one thing in a copy of one file and
+   points the replay at the copy. `red` is which sports that file draws: the
+   shared board draws every sport whose wrapper hands it a binding (read off
+   the four wrappers, so this stays true if a board ever leaves the shared
+   one), and a binding draws only its own. */
+const BOARD = US_CAREER_BOARD;
+const onSharedBoard = SPORTS.filter(slug => wrapperProblems(ROOT, usCareerSport(slug)).length === 0);
+const SOURCE_CONTROLS = {
+  label: {
+    file: BOARD,
+    alias: '@/components/us-career/UsCareerBoard',
+    from: '>Create your player</p>',
+    to: '>Create your athlete</p>',
+    red: onSharedBoard,
+    says: 'the screen reads',
+  },
+  draw: {
+    file: BOARD,
+    alias: '@/components/us-career/UsCareerBoard',
+    from: 'const campNote = sport.campBattle(c, teamQuality, Math.random);',
+    to: 'Math.random(); const campNote = sport.campBattle(c, teamQuality, Math.random);',
+    red: onSharedBoard,
+    says: 'the save differs',
+  },
+  binding: {
+    file: usCareerSport('nhl').binding,
+    alias: '@/lib/nhlCareerSport',
+    from: "'⭐ Top of the lineup'",
+    to: "'⭐ Top line'",
+    red: ['nhl'],
+    says: 'the screen reads',
+  },
+  /* The restore's first repair dropped from the shared board: only the old
+     shape save with no role can see it, so this is what proves those saves
+     are in the fixture and replayed. */
+  restore: {
+    file: BOARD,
+    alias: '@/components/us-career/UsCareerBoard',
+    from: "if (!s.c.role) s.c.role = 'starter';",
+    to: '',
+    red: onSharedBoard,
+    says: 'save "noRole"',
+  },
+  /* The NFL binding stops handing the era to its engine: only an older-era
+     career can see it, so this proves the path starts one in the NFL. */
+  era: {
+    file: usCareerSport('nfl').binding,
+    alias: '@/lib/nflCareerSport',
+    from: "rng, appearance, eraId as 'now' | 'y2005', entry)",
+    to: 'rng, appearance, undefined, entry)',
+    red: ['nfl'],
+    says: 'the save differs',
+  },
+};
+
+function replay(env) {
+  const out = path.join(tmp, `report-${Date.now()}.json`);
+  const report = path.join(tmp, `problems-${Date.now()}.txt`);
+  fs.writeFileSync(report, '');
+  const r = spawnSync(
+    process.execPath,
+    [VITEST, 'run', TEST, '--reporter=json', `--outputFile.json=${out}`, '--reporter=default'],
+    {
+      cwd: ROOT, encoding: 'utf8', maxBuffer: 64 * 1024 * 1024,
+      env: { ...process.env, ...env, US_BOARD_FIXTURE: 'replay', US_BOARD_FIXTURE_REPORT: report, CI: '1', FORCE_COLOR: '0', NO_COLOR: '1' },
+    },
+  );
+  const text = (r.stdout || '') + (r.stderr || '');
+  if (!fs.existsSync(out)) return { exit: r.status, passed: [], failed: SPORTS, problems: ['Vitest wrote no report: ' + text.slice(-800)] };
+  const rows = (JSON.parse(fs.readFileSync(out, 'utf8')).testResults || []).flatMap(f => f.assertionResults || []);
+  const titled = status => rows.filter(a => a.status === status).map(a => a.title);
+  return { exit: r.status, passed: titled('passed'), failed: titled('failed'), problems: read(report).split('\n').filter(Boolean) };
+}
+
+/* The first few problems of each sport, so one sport's long list cannot hide another's. */
+const firstPerSport = (problems, n) => SPORTS.flatMap(slug => problems.filter(p => p.startsWith(slug + ' ')).slice(0, n))
+  .concat(problems.filter(p => !SPORTS.some(slug => p.startsWith(slug + ' '))).slice(0, n));
+
+let failures = 0;
+const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
+const same = (a, b) => [...a].sort().join(',') === [...b].sort().join(',');
+
+if (CONTROL) {
+  let r;
+  let red;
+  let says;
+  if (CONTROL === 'fixture') {
+    const src = read(FIXTURE);
+    const fx = JSON.parse(src);
+    const victim = fx.sports.mlb.path[40];
+    if (!victim?.s) { console.error('control fixture: the fixture has no step 40 on the MLB path, so this control would prove nothing'); process.exit(1); }
+    victim.s = '000000000000';
+    const copy = path.join(tmp, 'fixture.json');
+    fs.writeFileSync(copy, JSON.stringify(fx));
+    r = replay({ US_BOARD_FIXTURE_IN: copy });
+    red = ['mlb'];
+    says = 'mlb click path step 40';
+  } else {
+    const c = SOURCE_CONTROLS[CONTROL];
+    if (!c) { console.error(`unknown control "${CONTROL}": use label, draw, binding, restore, era or fixture`); process.exit(1); }
+    const src = read(path.join(ROOT, c.file));
+    if (!c.red.length) { console.error(`control ${CONTROL}: no sport is drawn by ${c.file}, so this control would prove nothing`); process.exit(1); }
+    if (src.split(c.from).length !== 2) { console.error(`control ${CONTROL}: ${c.file} does not carry exactly one "${c.from.trim()}", so this control would change nothing and prove nothing`); process.exit(1); }
+    const copy = path.join(ROOT, 'src/test', `__control_usBoard_${CONTROL}${path.extname(c.file)}`);
+    litter.push(copy);
+    fs.writeFileSync(copy, src.replace(c.from, c.to));
+    r = replay({ US_BOARD_CONTROL_ALIAS: c.alias, US_BOARD_CONTROL_FILE: copy });
+    red = c.red;
+    says = c.says;
+  }
+  console.log(`control ${CONTROL}: Vitest exit ${r.exit}, passed [${r.passed.join(', ')}], failed [${r.failed.join(', ')}]`);
+  for (const p of firstPerSport(r.problems, 2)) console.log('   ' + p.slice(0, 300));
+  if (r.exit === 0) fail(`control ${CONTROL} left the replay green`);
+  else if (!same(r.failed, red)) fail(`control ${CONTROL} should turn exactly [${red.join(', ')}] red, and it turned [${r.failed.join(', ')}]`);
+  else if (!r.problems.some(p => p.includes(says))) fail(`control ${CONTROL} went red, but not for its own reason ("${says}" is not in the report)`);
+  else console.log(`  CONTROL FIRED: [${red.join(', ')}] red on "${says}", the rest green`);
+  if (failures) { console.error(`simUsBoardParity control ${CONTROL}: failed`); process.exit(1); }
+  console.log(`simUsBoardParity control ${CONTROL}: green. The control turned its own sports red for its own reason.`);
+  process.exit(0);
+}
+
+console.log('A) the fixture is whole');
+/* The six the round asked for, then the old shapes the restore repairs (a
+   save from before Round 182, 422 or 126), so the restore cannot lose a
+   repair with this harness green. */
+const REQUIRED_SAVES = ['rookie', 'mid', 'ext', 'fa', 'retired', 'coach', 'noRole', 'negNet', 'noCoachKey', 'coachPhaseNoCoach', 'retiredNoCoachKey'];
+const MIN_SEASONS = 12;
+if (!fs.existsSync(FIXTURE)) {
+  fail('scripts/data/usBoardFixture.json is missing: node scripts/recordUsBoardFixture.mjs writes it');
+} else {
+  const fx = JSON.parse(read(FIXTURE));
+  console.log(`   recorded from ${fx.header?.recordedFrom ?? 'nowhere it says'}`);
+  if (!/^[0-9a-f]{40} /.test(fx.header?.recordedFrom ?? '')) fail('the fixture header does not say which commit it was recorded from');
+  if (!same(Object.keys(fx.sports ?? {}), SPORTS)) fail(`the fixture holds [${Object.keys(fx.sports ?? {}).join(', ')}], not the four sports`);
+  for (const slug of SPORTS) {
+    const s = fx.sports?.[slug];
+    if (!s) continue;
+    const unreached = Object.keys(s.coverage).filter(k => !(s.coverage[k] > 0));
+    const noSave = REQUIRED_SAVES.filter(n => !s.saves[n] || !(s.screens[n]?.length > 0));
+    const screens = Object.values(s.screens).reduce((n, steps) => n + steps.length, 0);
+    console.log(`   ${slug}: ${s.path.length} clicks, ${s.coverage.seasons} seasons, ${Object.keys(s.saves).length} fixed saves, ${screens} screen steps`);
+    if (unreached.length) fail(`${slug}: the recorded path never reached ${unreached.join(', ')}`);
+    if (s.coverage.seasons < MIN_SEASONS) fail(`${slug}: ${s.coverage.seasons} seasons on the path, the round asks for ${MIN_SEASONS}`);
+    if (noSave.length) fail(`${slug}: no fixed save or no screens for ${noSave.join(', ')}`);
+    if (s.path.some(st => !st.s || !st.m)) fail(`${slug}: a path step carries no hash`);
+  }
+}
+
+console.log('B) the replay: every click, every save, every screen');
+if (!failures) {
+  const r = replay({});
+  console.log(`   Vitest exit ${r.exit}, passed [${r.passed.join(', ')}], failed [${r.failed.join(', ')}]`);
+  for (const p of firstPerSport(r.problems, 3)) console.error('   ' + p.slice(0, 400));
+  if (r.exit !== 0) fail(`the replay exited ${r.exit}`);
+  if (!same(r.passed, SPORTS)) fail(`the replay passed [${r.passed.join(', ')}], not all four sports`);
+  if (r.problems.length) fail(`${r.problems.length} step${r.problems.length === 1 ? '' : 's'} differ from the fixture`);
+}
+
+console.log('');
+if (failures) {
+  /* This is a golden master, so it also goes red when a round changes a US
+     career ON PURPOSE (Codex 905 and 906 did, inside Round 900). Say what to
+     do, so the remedy is a decision and not a habit. */
+  console.error('  If your round meant to change what a US career does, re-record from your tree');
+  console.error('  (node scripts/recordUsBoardFixture.mjs), commit the fixture with the change and say so in the');
+  console.error('  commit. If it did not, the red is a real change: read the first differing step above.');
+  console.error(`simUsBoardParity: ${failures} failure${failures === 1 ? '' : 's'}`);
+  process.exit(1);
+}
+console.log('simUsBoardParity: green. Four sports replayed click for click, save for save and screen for screen.');

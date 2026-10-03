@@ -3760,7 +3760,7 @@ export const UCL_LABELS: Record<UclKoRound, string> = {
   R16: 'Round of 16', QF: 'Quarter-final', SF: 'Semi-final', F: 'Final',
 };
 
-const SAVE_KEY = 'dukb-club-manager-save';
+export const SAVE_KEY = 'dukb-club-manager-save';
 // v2 (2026-08-05): real leagues replaced the fictional World Super League;
 // old saves carry a 20-club fictional table and must start fresh.
 // v3 (2026-08-13, Round 70): every club in the big five leagues is playable
@@ -16014,6 +16014,12 @@ export const FOCUS_INFO: Record<TrainingFocus, { label: string; desc: string; em
   youth: { label: 'Youth', desc: 'The whole week is about the teenagers. Your senior players stagnate.', emoji: '\u{1F476}' },
 };
 
+/** Round 963: the fastest anybody grows, the top of developmentRate's clamp. */
+export const DEVELOPMENT_RATE_MAX = 2.6;
+
+/** Round 963: a regular's season, the appearances that earn developmentRate's top game time step. */
+export const REGULAR_APPS = 30;
+
 /**
  * The multiplier on a player's positive growth for the season.
  *
@@ -16030,7 +16036,7 @@ export function developmentRate(p: CMPlayer, career: CareerState): number {
   const headroom = gap <= 0 ? 0.1 : gap <= 3 ? 0.55 : gap <= 8 ? 1 : gap <= 15 ? 1.5 : 1.9;
   // Game time. Nobody has ever developed sitting on a bench.
   const apps = p.apps ?? 0;
-  const minutes = apps >= 30 ? 1.3 : apps >= 18 ? 1.12 : apps >= 8 ? 0.85 : apps >= 1 ? 0.6 : 0.4;
+  const minutes = apps >= REGULAR_APPS ? 1.3 : apps >= 18 ? 1.12 : apps >= 8 ? 0.85 : apps >= 1 ? 0.6 : 0.4;
   const plan = career.training ?? DEFAULT_TRAINING;
   const intensity = plan.intensity === 'double' ? 1.28 : plan.intensity === 'light' ? 0.78 : 1;
   const focus =
@@ -16047,7 +16053,30 @@ export function developmentRate(p: CMPlayer, career: CareerState): number {
      Round 471: and his own coach, exactly 1 at level 1 and on an empty post,
      in the same place for the same reason. The training ground lifts the
      whole squad, the coach lifts his half of the pitch. */
-  return clamp(headroom * minutes * intensity * focus * staff * trainingGroundGrowthMult(career) * coachGrowthMult(career, p.position), 0.1, 2.6);
+  return clamp(headroom * minutes * intensity * focus * staff * trainingGroundGrowthMult(career) * coachGrowthMult(career, p.position), 0.1, DEVELOPMENT_RATE_MAX);
+}
+
+/**
+ * Round 963: the players a growth lift would be cut short for, because
+ * developmentRate would sit at its ceiling for them. Every lift sits inside
+ * that clamp on purpose (Rounds 116, 467 and 471), so a kid near the ceiling
+ * gets only part of a better coach or a better training ground, and a kid on
+ * it gets none. The cards that sell those lifts print this count instead of
+ * promising every man the full percentage.
+ *
+ * Read as a regular's season, not the season so far: agePlayer applies the
+ * rate at the summer on the whole season's appearances and then wipes them,
+ * so a count on today's apps read zero all pre-season, exactly when a manager
+ * hires. The cards say "as regulars" for that reason.
+ *
+ * Not developingPlayers' filter: no age 24 cut, because the lifts reach every
+ * age that can still grow, but nobody whose next birthday's drift band tops
+ * out at zero (thirty and up), since his growth never reads the rate at all.
+ */
+export function growingAtCeiling(career: CareerState, applies: (p: CMPlayer) => boolean): CMPlayer[] {
+  return career.squad.filter(p => !p.onLoan && (p.potential ?? p.rating) > p.rating
+    && ageDriftBand(p.age + 1)[1] > 0 && applies(p)
+    && developmentRate({ ...p, apps: Math.max(p.apps ?? 0, REGULAR_APPS) }, career) >= DEVELOPMENT_RATE_MAX);
 }
 
 /** Everyone under 24 with room left, worst prepared first, for the UI. */
