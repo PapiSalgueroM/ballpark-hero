@@ -162,6 +162,20 @@
     {"family": "B", "url": "https://us.soccerway.com/player/kouame-cristian/6ZevPMzQ/transfers", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Fiorentina to Aris 2026-02-06, born 1997-12-06, contract to 2027-06-30, current club Aris"},
     {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/241415/christian-kouame", "publisher": "ESPN (player page)", "readOn": "2026-10-03", "says": "Aris number 8, born 1997-12-06, played 2026-09-19"}
    ]
+  },
+  {
+   "name": "Thórir Jóhann Helgason",
+   "from": "Lecce",
+   "to": "Venezia",
+   "realClub": "Venezia",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 2000-09-28. Left Lecce when his contract ran out and joined Venezia on a free on 2026-07-01, contract to June 2029; Venezia's number 21.",
+   "sources": [
+    {"family": "A", "url": "https://www.legaseriea.it/team/venezia/squad", "publisher": "Lega Serie A (Venezia squad, current)", "readOn": "2026-10-03", "says": "listed, midfielder, shirt 21"},
+    {"family": "A", "url": "https://www.legaseriea.it/team/lecce/squad", "publisher": "Lega Serie A (Lecce squad, current)", "readOn": "2026-10-03", "says": "not listed"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/17530/venezia", "publisher": "ESPN (Venezia squad page, season 2026-27)", "readOn": "2026-10-03", "says": "midfielder, shirt 21, age 26"},
+    {"family": "B", "url": "https://us.soccerway.com/player/helgason-thorir/QsP2aUC4/transfers", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Lecce to Venezia free 2026-07-01, born 2000-09-28, contract to 2029-06-30"}
+   ]
   }
  ],
  "removedClubNotModelled": [
@@ -244,6 +258,60 @@
     {"family": "B", "url": "https://us.soccerway.com/player/moreno-alberto/pdBI3oS8/transfers", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Como to Mallorca free 2026-08-24, born 1992-07-05, contract to 2027-06-30, current club Mallorca"},
     {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/172998/alberto-moreno", "publisher": "ESPN (player page)", "readOn": "2026-10-03", "says": "Mallorca number 5, born 1992-07-05, played 2026-09-27; last Como match 2026-05-24"},
     {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/2572/como", "publisher": "ESPN (Como squad page, season 2026-27)", "readOn": "2026-10-03", "says": "not listed"}
+   ]
+  },
+  {
+   "name": "Filippo Distefano",
+   "from": "Frosinone",
+   "realClub": "Empoli",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 2003-08-28 (Soccerway spells him Di Stefano). His 2024-25 loan at Frosinone was from Fiorentina; after a loan at Carrarese he was sold by Fiorentina to Empoli on 2026-07-21, contract to June 2029. Empoli's number 20, with Serie B matches from 2026-08-22 to 2026-09-20. Empoli is not modelled.",
+   "sources": [
+    {"family": "A", "url": "https://www.legaseriea.it/team/frosinone/squad", "publisher": "Lega Serie A (Frosinone squad, current)", "readOn": "2026-10-03", "says": "not listed"},
+    {"family": "B", "url": "https://us.soccerway.com/player/di-stefano-filippo/YTpHlpak/transfers", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Fiorentina to Empoli 2026-07-21, born 2003-08-28, contract to 2029-06-30, current club Empoli"},
+    {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/331072/filippo-distefano", "publisher": "ESPN (player page)", "readOn": "2026-10-03", "says": "Empoli number 20, born 2003-08-28, played 2026-09-20"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/4057/frosinone", "publisher": "ESPN (Frosinone squad page, season 2026-27)", "readOn": "2026-10-03", "says": "not listed"}
+   ]
+  },
+  {
+   "name": "Riccardo Marchizza",
+   "from": "Frosinone",
+   "realClub": "Vicenza",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1998-03-26. Left Frosinone when his contract ran out and joined Vicenza on a free on 2026-07-08, contract to June 2028; Vicenza's number 5, with Serie B matches from 2026-08-21 to 2026-09-20. Vicenza is not modelled.",
+   "sources": [
+    {"family": "A", "url": "https://www.legaseriea.it/team/frosinone/squad", "publisher": "Lega Serie A (Frosinone squad, current)", "readOn": "2026-10-03", "says": "not listed"},
+    {"family": "B", "url": "https://us.soccerway.com/player/marchizza-riccardo/fL14Xe6b/transfers", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Frosinone to Vicenza free 2026-07-08, born 1998-03-26, contract to 2028-06-30, current club Vicenza"},
+    {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/227272/riccardo-marchizza", "publisher": "ESPN (player page)", "readOn": "2026-10-03", "says": "Vicenza number 5, born 1998-03-26, played 2026-09-20; last Frosinone match 2026-03-04"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/4057/frosinone", "publisher": "ESPN (Frosinone squad page, season 2026-27)", "readOn": "2026-10-03", "says": "not listed"}
+   ]
+  },
+  {
+   "name": "Frédéric Guilbert",
+   "from": "Lecce",
+   "realClub": "Nantes",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1994-12-24. Left Lecce and joined Nantes on a free on 2026-01-28, contract to June 2028; Nantes's number 24, with Ligue 2 matches from 2026-08-14 to 2026-09-19. Nantes is in Ligue 2 and not modelled.",
+   "sources": [
+    {"family": "A", "url": "https://www.legaseriea.it/team/lecce/squad", "publisher": "Lega Serie A (Lecce squad, current)", "readOn": "2026-10-03", "says": "not listed"},
+    {"family": "B", "url": "https://us.soccerway.com/player/guilbert-frederic/6TtQuJeb/transfers", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Lecce to Nantes free 2026-01-28, born 1994-12-24, contract to 2028-06-30, current club Nantes"},
+    {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/215709/frederic-guilbert", "publisher": "ESPN (player page)", "readOn": "2026-10-03", "says": "Nantes number 24, born 1994-12-24, played 2026-09-19"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/113/lecce", "publisher": "ESPN (Lecce squad page, season 2026-27)", "readOn": "2026-10-03", "says": "not listed"}
+   ]
+  },
+  {
+   "name": "Antonio Candela",
+   "from": "Venezia",
+   "realClub": "Catanzaro, on loan from Spezia",
+   "loan": true,
+   "loanFrom": "Spezia",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 2000-04-27. No longer a Venezia player: Soccerway has him on loan at Catanzaro from Spezia since July 2026, to 2027-06-30, after a loan at Empoli in the spring. Catanzaro's number 27, with Serie B matches from 2026-08-21 to 2026-09-19. Neither Catanzaro nor Spezia is modelled.",
+   "sources": [
+    {"family": "A", "url": "https://www.legaseriea.it/team/venezia/squad", "publisher": "Lega Serie A (Venezia squad, current)", "readOn": "2026-10-03", "says": "not listed"},
+    {"family": "B", "url": "https://us.soccerway.com/player/candela-antonio/nHot9WLH/transfers", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "on loan at Catanzaro from Spezia from July 2026 to 2027-06-30, born 2000-04-27"},
+    {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/250668/antonio-candela", "publisher": "ESPN (player page)", "readOn": "2026-10-03", "says": "Catanzaro number 27, born 2000-04-27, played 2026-09-19"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/17530/venezia", "publisher": "ESPN (Venezia squad page, season 2026-27)", "readOn": "2026-10-03", "says": "not listed"}
    ]
   }
  ],
