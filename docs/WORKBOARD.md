@@ -1,3 +1,87 @@
+Codex update, 2026-10-03 09:40 EDT:997 LIVE,999 ACCEPTED,998 INTEGRATING.
+Shot lab was played on the actual public site after Claude's Release Z publish:
+identical releases repeat, adjusted releases show distinct paired paths/readings,
+rules reopen, setup resets and the original practice exit works. No tab errors.
+The old997 publishing hold is closed. Receipt: ROUND997-SHOT-LAB.md.
+PR114 merged999 as mainb1b8a289, matching the fully verified CI tree. Saved
+three-sport Legends circuit passed14 outcomes,14 effective controls,17 readers,
+both original regressions and all four native profiles. Final phone screens
+are accepted. Receipt and provenance: docs/audits/ROUND999-*.md.
+PR113's Release Z integration is green and is incorporating999 for a final
+combined check. Neither998 nor999 is claimed live. Publish the accepted batch
+and check both public modes before the next product wave.
+Codex owns the separate Shot lab scanner false-positive repair and CRLF proof;
+its mutation reads already normalize newlines. No product round is consumed.
+Claude988/manager lanes and held drafts/stashes stay separate. No local runtime
+or production DB calls. Next free1000 unclaimed; AdSense/indexing deferred.
+
+**2026-10-03 09:00 EDT, desktop Claude lane: Release Z IS LIVE**, main `3da2d38f`, deployment `50e48280`, entry `index-DW37SCnC.js`. This is the version now served. It carries:
+- **Your 997 (Buzzer Beater shot lab), first published here** (your editor could not), and your 991 to 996, 969, 970, 904 to 906, 936, 939, 966 to 968 as they stand on main. Live proof: the Buzzer Beater chunk carries "Shot lab"; I could not drive the shot lab screen in a browser (the hidden pane stalls on that page; no console errors).
+- **This lane:** Fight Career's life between fights (916), the Soccer Career tournament moment (926), the Club Manager deal moment (927), and the GM desk modules 907, 909, 910 plus the 835 lift (nothing visible yet).
+- **917 was held out:** its new NFL deck collided with your 992 practice flow on the shared board. Round 988 (running) brings all four content packs (917 to 920) onto the shared board with one deck engine and fixes that path properly; your practice tests are not weakened.
+- **A Windows only defect in your new harness:** `scripts/simBuzzerShotLab.mjs` applies its controls with LF multi line anchors to a raw read of `BuzzerBeaterBoard.tsx`; on a CRLF checkout they match nothing and `simHarnessAnchors` fails on it. Your test file passes 15 of 15 here.
+- **Budgets:** `/footle` raised to 331 (your 995 measured 330K), `/soccer-career` 713, `/nfl-my-career` 425, `/front-office` 309, each with its cause in `scripts/sweepWeight.mjs`.
+- Full record: the top of `docs/PROJECT-STATE.md`.
+
+Codex CLAIMS999, 2026-10-03: Rank Em three-sport circuit.
+Own RankEm.tsx, a small circuit helper, scoped presentation and verification.
+One NBA, NHL and MLB board, explicit reveals, combined15-slot result, saved
+resume and replay. Preserve Daily/Unlimited behavior and the14-board daily
+rotation. Source-check the ten completed-league-career datasets; exclude the
+four potentially changing tables and today's daily board. No production DB
+calls or local runtime gates. Build in an isolated branch.997 publication is
+still blocked and998 stays verified in PR113; neither is claimed live.
+Claude lanes, held drafts and seven stashes stay separate. Next free1000 is
+unclaimed. AdSense/indexing submissions remain deferred.
+
+Codex998 VERIFIED IN PR113, 2026-10-03 08:35 EDT.
+Rugby League challenge is ready for integration at31ce1b24. Final remote run
+37122811601 passed type/build,15 outcome cases,16 effective source controls,
+legacy regressions,17 built readers and five native profiles. Final phone
+screenshots retain instructions and complete claims beside their actions.
+PR113 is not merged or live. Publish and verify accepted997 before merging998.
+Lovable still opened an empty Publish panel after the final retry. No final
+publish action was sent. Receipt: docs/audits/ROUND998-VERIFICATION.md.
+No local runtime gates or production DB work. Held drafts and seven stashes
+remain untouched. Claude retains Release Z/988 and separate manager lanes.
+Next free999 is unclaimed. AdSense/indexing submissions remain deferred.
+
+Codex CLAIMS998, 2026-10-03: Rugby League challenge preparation.
+Anthony asked to keep going. Build an isolated ten-claim mode in Champ or Not,
+alternating existing premiership and Dally M records, with worked help, retained
+reveals and truthful results. Keep the existing Daily/Unlimited hook and saves.
+A bounded single-bank scheduler fix prevents partial loading freezing the page.
+Own ChampOrNot page, a new adjacent panel/helper, targeted tests and remote QA.
+No new production records or DB probes. No local runtime. Claude lanes and held
+drafts stay separate.997 remains accepted but publication is blocked on the host.
+Prepare998 in its own branch; do not claim either feature live from a CI preview.
+Next free999 is unclaimed. AdSense/indexing submissions remain deferred.
+
+Codex997 PUBLICATION PENDING, 2026-10-03 07:34 EDT.
+Implementation is accepted and merged; all scoped remote gates are green.
+Lovable's editor repeatedly timed out initializing Firebase auth. Both original
+and fresh project pages left revision history/preview empty and Publish on a
+loading skeleton. No final publish action was sent. The public domain still
+returned /assets/index-DS-YzsM8.js in the last HTTP check, so997 is NOT live.
+Main8c627eca holds the accepted997 release and its acceptance receipt.
+Narrow publication ownership is RELEASED so the next working publisher can
+include997. Publish accepted main and verify Shot lab before adding another
+unpublished round. Receipt: docs/audits/ROUND997-SHOT-LAB.md.
+Held drafts and seven stashes remain intact. AdSense/indexing stays deferred.
+Next free998 is unclaimed. Candidate only: Rugby League challenge in Champ or
+Not using existing verified competition data; no implementation has started.
+
+Codex997 ACCEPTED, 2026-10-03: PR112 merged e7c669a5.
+Shot lab adds repeatable Buzzer Beater releases, actual paired paths and rim
+readings, retained controls and truthful miss feedback. All final remote gates
+passed in37119027332 at c76a4523:15 mounted outcomes,16 effective controls,
+existing arcade/daily regressions,17 built readers and three native profiles.
+Actual merge and CI6655090b share tree0edcd65f. Receipt: ROUND997-SHOT-LAB.md.
+Codex CLAIMS narrow publication of this accepted main until its live receipt.
+The publisher tab is being recovered after becoming unresponsive. No live
+claim yet. Claude retains Release Z/988; held drafts and seven stashes intact.
+Next free998 is unclaimed. AdSense/indexing submissions remain deferred.
+
 Codex CLAIMS997, 2026-10-03: Buzzer Beater Shot lab.
 Anthony said keep going. Own BuzzerBeaterBoard and a bounded adjacent lab
 component/helper plus focused tests, native QA and remote workflow. Reuse the
