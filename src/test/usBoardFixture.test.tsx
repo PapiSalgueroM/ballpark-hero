@@ -22,6 +22,10 @@
  * retains that recording and excludes only its new practice entry from the
  * old screen projection and click candidates. Save bytes and all existing
  * screens remain exact; the new practice interactions have their own tests.
+ * Round 996 keeps the real appearance editor on its recorded soccer copy in
+ * this historical projection. Its callbacks, saved IDs and random draws stay
+ * live; sport-specific presentation is covered by appearanceSportCopy and
+ * native career creation checks instead of changing the recorded fixture.
  *
  *   US_BOARD_FIXTURE=record  writes the fixture to US_BOARD_FIXTURE_OUT
  *   US_BOARD_FIXTURE=replay  compares against scripts/data/usBoardFixture.json
@@ -33,7 +37,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { createHash } from 'node:crypto';
-import type { ComponentType } from 'react';
+import type { ComponentProps, ComponentType } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { MemoryRouter } from 'react-router-dom';
 import { afterAll, afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
@@ -51,6 +55,11 @@ vi.mock('@/contexts/AuthContext', () => ({
   useAuth: () => ({ user: null, profile: null, refreshProfile: () => undefined }),
 }));
 vi.mock('sonner', () => ({ toast: { success: () => undefined } }));
+vi.mock('@/components/soccer-career/AppearanceBuilder', async importOriginal => {
+  const original = await importOriginal<typeof import('@/components/soccer-career/AppearanceBuilder')>();
+  const Builder = original.default;
+  return { ...original, default: (props: ComponentProps<typeof Builder>) => <Builder {...props} sport="soccer" /> };
+});
 
 import NflMyCareerBoard from '@/components/nfl-my-career/NflMyCareerBoard';
 import NbaMyCareerBoard from '@/components/nba-my-career/NbaMyCareerBoard';
@@ -90,11 +99,11 @@ const squash = (s: string) => s.replace(/\s+/g, ' ').trim();
    one counter for the whole process, so the id a dialog trigger carries says
    how many dialogs every earlier test mounted and nothing about this screen:
    left in, one sport's path could turn another sport red. The number is
-   taken out. Only Round 992's additive practice entry is excluded; removing
-   its parent or changing the existing season button still changes the hash. */
+   taken out. Only the additive practice and prospect entries are excluded;
+   removing a parent or changing the existing season button still changes the hash. */
 const legacyScreen = () => {
   const copy = document.body.cloneNode(true) as HTMLElement;
-  copy.querySelectorAll('section[data-career-practice]').forEach(el => el.remove());
+  copy.querySelectorAll('section[data-career-practice], section[data-career-prospect-entry]').forEach(el => el.remove());
   return copy;
 };
 const markupNow = () => legacyScreen().innerHTML.replace(/radix-:r[0-9a-z]+:/g, 'radix-:r:');
@@ -143,7 +152,7 @@ function fieldHashes(save: Save | null): Record<string, string> {
 /* ------------------------------ the walker ------------------------------ */
 
 const enabledButtons = (root: ParentNode): HTMLButtonElement[] =>
-  [...root.querySelectorAll('button')].filter(b => !b.disabled && !b.closest('section[data-career-practice]')) as HTMLButtonElement[];
+  [...root.querySelectorAll('button')].filter(b => !b.disabled && !b.closest('section[data-career-practice], section[data-career-prospect-entry]')) as HTMLButtonElement[];
 const labelOf = (b: Element) => squash(b.textContent ?? '').slice(0, 60) || `(${b.getAttribute('aria-label') ?? 'button'})`;
 const byText = (root: ParentNode, re: RegExp) => enabledButtons(root).find(b => re.test(squash(b.textContent ?? '')));
 
@@ -481,7 +490,8 @@ async function buildSport(Board: ComponentType, key: string, seed: number, fixed
   /* The router's layout effect warning is about the server render itself and
      says nothing about the board, so it is kept out of the log. */
   const quiet = vi.spyOn(console, 'error').mockImplementation(() => undefined);
-  const html = renderToStaticMarkup(<MemoryRouter><Board /></MemoryRouter>);
+  const html = renderToStaticMarkup(<MemoryRouter><Board /></MemoryRouter>)
+    .replace(/<section data-career-prospect-entry="[^"]*"[^>]*>[\s\S]*?<\/section>/g, '');
   quiet.mockRestore();
   const ordered: Record<string, string> = {};
   for (const name of SAVE_NAMES) if (use[name]) ordered[name] = use[name];
