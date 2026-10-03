@@ -67,19 +67,23 @@ try {
   const report = JSON.parse(await readFile(reportFile, 'utf8'));
   assert.equal(Number(report.numUnhandledErrors ?? 0), 0);
   const rows = report.testResults.flatMap(file => file.assertionResults);
-  assert.equal(rows.length, 11);
+  assert.equal(rows.length, 12);
   if (control) {
-    assert.equal(run.status, 1); assert.equal(report.numFailedTests, 1); assert.equal(report.numPassedTests, 1); assert.equal(report.numPendingTests, 9);
+    assert.equal(run.status, 1); assert.equal(report.numFailedTests, 1); assert.equal(report.numPassedTests, 1); assert.equal(report.numPendingTests, 10);
     const target = rows.find(row => row.title === controls[control].test);
     assert.equal(target?.status, 'failed'); assert.equal(rows.find(row => row.title === baseline)?.status, 'passed');
-    assert.match(target.failureMessages.join('\n'), /AssertionError:|expect\(element\)|Expected element with focus|TestingLibraryElementError: Unable to find an element with the text:/);
+    /* Colour codes come out: on Windows vitest colours a matcher hint even with
+       FORCE_COLOR=0, which split "expect(element)" and failed the answer, bar
+       and names controls on a message they had produced correctly. */
+    const plain = target.failureMessages.join('\n').replace(/\x1B\[[0-9;]*m/g, '');
+    assert.match(plain, /AssertionError:|expect\(element\)|Expected element with focus|TestingLibraryElementError: Unable to find an element with the text:/);
     console.log(`simBallIqFeedback ${control}: actual executable binding changes one owned source copy.`);
-    console.log(`simBallIqFeedback ${control}: one intended assertion fails, original twelve-question score/save/share/completion baseline passes, nine explicit skips.`);
+    console.log(`simBallIqFeedback ${control}: one intended assertion fails, original twelve-question score/save/share/completion baseline passes, ten explicit skips.`);
     console.log(`BALL_IQ_CONTROL: ${JSON.stringify({ control, intended: target.title, messages: target.failureMessages })}`);
   } else {
     if (run.status !== 0) process.stdout.write(output);
-    assert.equal(run.status, 0); assert.equal(report.numPassedTests, 11); assert.equal(report.numPendingTests, 0);
-    console.log('simBallIqFeedback: eleven actual Board/hook outcomes pass, none skipped.');
+    assert.equal(run.status, 0); assert.equal(report.numPassedTests, 12); assert.equal(report.numPendingTests, 0);
+    console.log('simBallIqFeedback: twelve actual Board/hook outcomes pass, none skipped.');
     console.log('simBallIqFeedback: original twelve questions, IQ106 mixed result, exact picks/index/share and once-only completion held.');
     console.log('simBallIqFeedback: answers immediately update tally/bar and reveal the actual answer; enabled Next receives owned focus.');
     console.log('simBallIqFeedback: first submitted answer locks, held keys stay quiet, restored answers/clones do not replay feedback.');

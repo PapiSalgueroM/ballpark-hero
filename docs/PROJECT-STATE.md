@@ -1,3 +1,20 @@
+## Release AA is LIVE, 2026-10-03 13:04 EDT: main `1a67d69c`, deployment `0d97a1d6`, entry `index-CC1YKSFq.js`
+
+Sixteen rounds of the desktop Claude lane, each built, reviewed twice, fixed and closed, plus Codex 998 to 1000 as they stood on main.
+
+What a player sees:
+- **Club Manager, 2015-16 becomes a full big five (899):** the Bundesliga and Ligue 1 join the Premier League, La Liga and Serie A; window corrections re-audited for the bigger world. Live proof: picking 2015-16 now offers Germany and France.
+- **Club Manager, manager slots (928):** three careers side by side; starting a new one no longer deletes the old one. **The coach development fix (963):** a level 10 coach now moves development by what the staff screen says.
+- **Soccer Career:** your club's league finish every season (929), and the career story kept and readable (974).
+- **Teammates or Not (921):** wrong answers fixed (Doncic and Davis, Super Bowl LIX and others), every row on two hosts, the bank grown from 50 to 141 pairs with MLB and NHL. **Missing Nine (948):** more lineups, every one two sourced.
+- **Fight Gym and Fight Promoter (955):** a deliberate exit with its own verdict, and training as a weekly decision.
+- **Quiz Board, Ball IQ, Emoji Guess and Mystery Box (951)** end on the shared result moment.
+- Groundwork, nothing visible yet: the GM re-sign desk (908), inbox (940), seat (941), XP (942); the college recruiting trail (911) and one college dynasty board (912); the retirement and Hall of Fame module (915).
+
+**Gate.** Pass AA on the sixteen: type gate 0, build 0, 73 fences, ONE browser sweep (182 routes, 364 checks, 0 findings), nine games played clean, 23 test files 299 of 299. Three cross round interactions found and fixed on `release-aa-fix` by an integration agent (929 and 974 both add saved state, so 929's digest check now leaves out 974's `story` by name; the awards fixture re-recorded after proving every difference is an intended change of 899, 929 or 974; Ball IQ's feedback test limit raised, behaviour byte identical to 951). Pass AA2 after merging main (Codex 998 to 1000): type gate 0, build 0, every fence green including `simHarnessAnchors` (Codex fixed its shot lab harness for Windows), sweepWeight green, the awards card test 3 of 3. `playEra2015` updated for the new truth (Germany and France offered) and green.
+**Reds that are not this release's:** `simNationalities` red ON MAIN (30 current players brought in by the 2026 window re-bake have no nationality: `bakeNationalities` is owed and needs one production read by the lead); `simSeoMetaSplit` section 4 red by design until 921's new Teammates title is on main; several child test runs timed out under load and passed alone. **Budgets:** /club-manager 622 (928, 899, 942, 963), /soccer-career 716 (929, 974).
+**Proof.** `x-deployment-id` carries `0d97a1d6`, the home page serves `index-CC1YKSFq.js`, `/whats-new` carries the 2015-16, league finish, career story and Teammates lines, and the live Club Manager offers Germany and France in 2015-16.
+
 ## Codex998/999 published, 2026-10-03
 
 The recovered publisher confirmed "Your website was updated". Public build

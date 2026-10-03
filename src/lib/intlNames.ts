@@ -139,7 +139,10 @@ export const NAME_FAMILIES: NameFamily[] = [
   {
     id: 'westAfricaFr',
     firsts: ['Abdoulaye', 'Bakary', 'Cheikh', 'Djibril', 'Fodé', 'Ibrahima', 'Lamine', 'Modou', 'Ousseynou', 'Seydou', 'Thierno', 'Youssouf'],
-    lasts: ['Badiane', 'Camara-Sylla', 'Dembouré', 'Faye-Ndour', 'Gassama', 'Kanouté', 'Mbengue', 'Ndao', 'Ouedraogo', 'Sagna-Diatta', 'Tandia', 'Zoungrana'],
+    lasts: ['Badiane', 'Camara-Sylla', 'Dembouré', 'Faye-Ndour', 'Gassama-Ndoye', 'Kanouté', 'Mbengue', 'Ndao', 'Ouedraogo', 'Sagna-Diatta', 'Tandia', 'Zoungrana'],
+    /* 'Gassama' became 'Gassama-Ndoye' in Round 899: paired with Lamine above
+       it matched a real man, Lorient's defender of 2015-16, who joined the
+       2015-16 era with Ligue 1. Same move as 'Zwane' below. */
   },
   {
     id: 'westAfricaEn',
