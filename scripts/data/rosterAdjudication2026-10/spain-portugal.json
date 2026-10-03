@@ -891,6 +891,66 @@
    "club": "Racing Santander",
    "checkedOn": "2026-10-03",
    "note": "Checked 2026-10-03 and left pending: no source places him. ESPN's Racing pages for 2025-26 and 2026-27 (https://www.espn.com/soccer/team/squad/_/id/87) leave him out, LaLiga's page under his name (https://www.laliga.com/en-GB/player/ekain-zenitagoia) says it has no data on him, and neither ESPN's Real Valladolid nor Sporting Gijón 2026-27 page lists him. No birth date was read, so a namesake cannot be ruled out either. Needs a source that names his current club."
+  },
+  {
+   "name": "Cláudio Ramos",
+   "club": "Porto",
+   "checkedOn": "2026-10-03",
+   "note": "Checked 2026-10-03 and left pending on one family: everything read says he is still at Porto, but no official page that names his club could be read. Born 1991-11-16, goalkeeper. ESPN's Porto 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/437) lists him, shirt 14, age 34. Liga Portugal's own player record (https://www.ligaportugal.pt/bo/api/players/8442, refreshed 2026-10-03) gives shirt 14, born 1991-11-16 and the 2025/26 league title, but carries no club field. Porto's and Liga Portugal's squad pages render in script and returned no names. Settle with any official Porto or league squad page."
+  },
+  {
+   "name": "Vasco Sousa",
+   "club": "Porto",
+   "checkedOn": "2026-10-03",
+   "note": "Checked 2026-10-03 and left pending on one family: everything read says he is still at Porto. Vasco José Cardoso Sousa, born 2003-04-03, midfielder. ESPN's Porto 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/437) lists him, shirt 15, age 23. Liga Portugal's own player record (id 8476, refreshed 2026-10-03) gives shirt 15 and that birth date but no club. A different Vasco Sousa (Vasco Pereira Sousa, born 2004-04-06, a defender) also has a league record. Settle with any official Porto or league squad page."
+  },
+  {
+   "name": "Diego Rodrigues",
+   "club": "Braga",
+   "checkedOn": "2026-10-03",
+   "note": "Checked 2026-10-03 and left pending on one family: everything read says he is still at Braga. Diego Henrique Oliveira Rodrigues, born 2005-05-24, midfielder. ESPN's Braga 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/2994) lists him, shirt 50, age 21; Liga Portugal's player record (id 8705, refreshed 2026-10-03) gives shirt 50 and that birth date but no club. Braga's site is a script app and its squad page could not be read."
+  },
+  {
+   "name": "André Horta",
+   "club": "Braga",
+   "checkedOn": "2026-10-03",
+   "note": "Checked 2026-10-03 and left pending: the sources disagree on where he is, though not on Braga. André Filipe Luz Horta, born 1996-11-07. ESPN has no André Horta in Braga's squads from 2023-24 to 2026-27 (raw page read for each season), and Liga Portugal's record for him was last touched 2025-01-27. ESPN's player page (https://www.espn.com/soccer/player/_/id/214565/andre-horta) shows him at Almería in LaLiga 2 to 2026-05-24 and then at Al Ula, shirt 7, in the Saudi King's Cup on 2026-08-19. LaLiga's player page (https://www.laliga.com/en-GB/player/andre-horta) still lists Almería for 2026-27, with no shirt number and no minutes. Neither Almería (Spanish second tier) nor Al Ula is modelled, so either answer means removal; the row waits for a second source on the club."
+  },
+  {
+   "name": "Vasconcelos",
+   "club": "Braga",
+   "checkedOn": "2026-10-03",
+   "note": "Checked 2026-10-03 and left pending: the man could not be identified. The game row carries only the single name Vasconcelos (attacking midfielder, aged 20). ESPN's Braga squads from 2022-23 to 2026-27 (raw pages read) never list a Vasconcelos, and Liga Portugal's player records hold only two Vasconcelos, both defenders born in 1989 and 1997. He may be a Braga B or youth player; the full name and birth date from the 2025 source row are needed before anyone can check him."
+  },
+  {
+   "name": "Rafa Soares",
+   "club": "Famalicão",
+   "checkedOn": "2026-10-03",
+   "note": "Checked 2026-10-03 and left pending on one family. Luís Rafael Soares Alves, born 1995-05-09, left back. Not at Famalicão on ESPN: their 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/12698) leaves him out, and he was in their 2024-25 one. ESPN's player page (https://www.espn.com/soccer/player/_/id/219663/rafa-soares) has him at Estrela (Estrela Amadora, modelled), shirt 55, in five league games from 2026-08-30 to 2026-09-20, and Liga Portugal's player record (id 8743, refreshed 2026-10-03) gives shirt 55 but no club. Estrela's site did not resolve. Settle with an official Estrela or league page: if it agrees, this is a move to Estrela Amadora."
+  },
+  {
+   "name": "Gustavo Silva",
+   "club": "Vitória Guimarães",
+   "checkedOn": "2026-10-03",
+   "note": "Checked 2026-10-03 and left pending on one family: everything read says he is still at Vitória. Gustavo da Silva Cunha, born 1999-06-01, the Brazilian forward. ESPN's Vitória 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/5309) lists him as Gustavo da Silva, shirt 11, with league games to 2026-09-20; Liga Portugal's player record (id 8654, refreshed 2026-10-03) gives shirt 11 and that birth date but no club. Vitória's squad page loads its names in script, and the club's player records reachable through its site date from 2021 and 2022."
+  },
+  {
+   "name": "Toni Borevković",
+   "club": "Vitória Guimarães",
+   "checkedOn": "2026-10-03",
+   "note": "Checked 2026-10-03 and left pending on one family: everything read says he is at Vitória. Born 1997-06-18, Croatian centre back. ESPN's Vitória 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/5309) lists him, shirt 21; his ESPN player page (https://www.espn.com/soccer/player/_/id/275239/toni-borevkovic) shows Vitória league games on 2026-09-12 and 2026-09-20 but also a Süper Lig game against Fenerbahçe on 2026-08-30, which nothing read explains. Liga Portugal's player record (id 8616, refreshed 2026-10-03) gives shirt 21 but no club. Needs an official page."
+  },
+  {
+   "name": "Kaio César",
+   "club": "Vitória Guimarães",
+   "checkedOn": "2026-10-03",
+   "note": "Checked 2026-10-03 and left pending on one family. Kaio César Andrade Lima, born 2004-02-15, the Brazilian winger. Not at Vitória: ESPN's Vitória pages for 2024-25, 2025-26 and 2026-27 leave him out, and Liga Portugal's record for him was last touched 2024-11-12. ESPN's player page (https://www.espn.com/soccer/player/_/id/347456/kaio) has him at Corinthians, shirt 37, in Série A and Libertadores games from 2026-09-06 to 2026-09-20. Corinthians is modelled, so if an official page agrees this is a move to Corinthians; Corinthians' own squad page refused the request."
+  },
+  {
+   "name": "Tiago Silva",
+   "club": "Vitória Guimarães",
+   "checkedOn": "2026-10-03",
+   "note": "Checked 2026-10-03 and left pending on one family. Tiago Rafael Maia da Silva, born 1993-06-02, midfielder (Liga Portugal's record, id 8633, last touched 2026-08-04, nine league records share the name). ESPN's Vitória 2026-27 squad page leaves him out, and his ESPN player page (https://www.espn.com/soccer/player/_/id/189474/tiago-silva) has him at Al Shamal of Qatar, shirt 70, playing an AFC Champions League Elite game on 09-14, after three Vitória league games in mid August (ESPN prints no year on those). Qatar is not modelled, so if an official page agrees this is removal."
   }
  ]
 }
