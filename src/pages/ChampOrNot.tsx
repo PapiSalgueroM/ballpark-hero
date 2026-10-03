@@ -211,6 +211,8 @@ const ChampOrNot = () => {
           <div className="max-w-md mx-auto">
             <ResultScreen
               won={score >= 7}
+              score={`${score}/${total}`}
+              scoreLabel="claims called right"
               outcomeEmoji={score >= 9 ? '🏆' : score >= 7 ? '👏' : '😅'}
               headline={`${score}/${total} Called Right!`}
               statLine={<>You can smell a fake title from a mile away{score >= 9 ? '.' : score >= 7 ? ', mostly.' : '... eventually.'}</>}
