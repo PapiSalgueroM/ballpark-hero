@@ -477,7 +477,7 @@ export default function FightGymBoard() {
           persist(n, n.closed ? 'closed' : 'hub');
         }}
         className="min-h-[48px] w-full rounded-md border px-4 py-3 font-semibold">
-        Nothing more this week, pay the bills
+        Nothing this week, pay the bills
       </button>
 
       <div className="rounded-lg border bg-card p-3">
