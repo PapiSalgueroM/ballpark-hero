@@ -10,7 +10,7 @@ const continentMap: Record<string, string> = {
   'Scotland': 'Europe', 'Wales': 'Europe', 'Ukraine': 'Europe',
   'Czech Republic': 'Europe', 'Slovenia': 'Europe', 'Albania': 'Europe',
   'Greece': 'Europe', 'Israel': 'Europe', 'Bosnia': 'Europe',
-  'Guinea-Bissau': 'Europe',
+  'Guinea-Bissau': 'Africa',
   'Brazil': 'South America', 'Argentina': 'South America',
   'Uruguay': 'South America', 'Colombia': 'South America',
   'Ecuador': 'South America', 'Paraguay': 'South America',
@@ -46,13 +46,19 @@ function compareClub(guessClub: string, targetClub: string, guessLeague: string,
   if (guessClub === targetClub) {
     return { value: guessClub, status: 'correct' };
   }
+  if (!guessLeague || !targetLeague || guessLeague === 'Other' || targetLeague === 'Other') {
+    return { value: guessClub, status: 'unknown' };
+  }
   if (guessLeague === targetLeague) {
     return { value: guessClub, status: 'close' };
   }
   return { value: guessClub, status: 'incorrect' };
 }
 
-function compareNumeric(guessVal: number, targetVal: number, threshold: number, displayValue?: string): CellResult {
+function compareNumeric(guessVal: number | null, targetVal: number | null, threshold: number, displayValue?: string): CellResult {
+  if (guessVal === null || targetVal === null) {
+    return { value: guessVal === null ? '?' : displayValue ?? String(guessVal), status: 'unknown' };
+  }
   const display = displayValue || String(guessVal);
   if (guessVal === targetVal) return { value: display, status: 'correct' };
   const diff = Math.abs(guessVal - targetVal);
