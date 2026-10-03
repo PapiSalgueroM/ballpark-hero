@@ -2,10 +2,17 @@
 
    What this pins, each section against a baseline:
 
-   0. NO EDIT IS TODAY'S GAME. With no edit (absent, or null) a new career is
-      byte identical to the same career started by origin/main's engine
-      under the same random stream, at kickoff and after a whole season and
-      its summer rollover.
+   0. NO EDIT IS TODAY'S GAME. With no edit (absent, null, an edit swapped
+      back to nothing, or a stale edit some screen left registered) a new
+      career is byte identical, at kickoff and after a whole season and its
+      summer rollover, to the same career started under the same random
+      stream by THIS branch's engine with this round's edit hunks taken out
+      (stripped by the same mutate() the controls use, so a hunk that moves
+      fails closed). Review fix: the baseline used to be origin/main's
+      engine, which compares main with itself once this round lands and goes
+      red on any branch where another round legitimately changed the engine.
+      The one time proof that the round changed nothing else was made
+      against origin/main at 4c5622f8 (2196 checks, 0 failures).
    1. EVERY SWAP KEEPS THE WORLD WHOLE. A long random chain of swaps across
       all 22 leagues, checked after EVERY step (not just the end): each
       league holds exactly its real number of clubs, no club is in two
@@ -15,7 +22,12 @@
       other league's world table is its edited lineup, no club plays in two
       tables, the domestic cup draws from the edited country, the calendar
       has the round count the edited league's size needs, and the summer
-      rollover keeps every size and every club once.
+      rollover keeps every size and every club once. Europe: season one is
+      my club's real world answer wherever the edit put it, and next
+      season's Champions League field is the one the PLAYED tables earn
+      (review fix: it was read after the new memberships registered, so a
+      club promoted into the Premier League handed it the Championship's top
+      four).
    3. THE BOARD READS THE NEW LEAGUE. A top club moved down is asked for the
       title, a weak club moved up is asked to survive, and walking every
       Scottish club into the Premier League one at a time, the demand never
@@ -31,11 +43,15 @@
      staticrank  the club def map ranks the REAL leagues   -> section 3 red
      stature     a title stature club keeps it when moved   -> section 3 red
      noload      loadCareer drops the save's memberships   -> section 4 red
+     lateucl     next season's field read after the swap   -> section 2 red
+     euroone     season one Europe reads the edited league -> section 2 red
 
    Measured headroom (SIM_SEED unset and 1, 2, 3, 4): section 3 is
-   deterministic (stature comes from the baked rosters, no draw); sections
-   0, 1, 2 and 4 are exact identities, so there is no band to set. Their
-   counts are printed so a run shows it did the work.
+   deterministic (stature comes from the baked rosters, no draw), and its
+   one count, the middle asks across the two Bundesliga ladders, measured 7
+   against a floor of 4 (the reasoning is beside the check); sections 0, 1,
+   2 and 4 are exact identities, so there is no band to set. Their counts
+   are printed so a run shows it did the work.
 
    Run: node scripts/simWorldEditor.mjs */
 import './lib/seedRandom.mjs';
@@ -52,7 +68,7 @@ let checks = 0;
 const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
 const ok = (cond, m) => { checks += 1; if (!cond) fail(m); return cond; };
 const CONTROL = process.env.SIM_WORLD_EDITOR_CONTROL ?? '';
-const CONTROLS = ['', 'noregister', 'leak', 'dupe', 'staticrank', 'stature', 'noload'];
+const CONTROLS = ['', 'noregister', 'leak', 'dupe', 'staticrank', 'stature', 'noload', 'lateucl', 'euroone'];
 if (!CONTROLS.includes(CONTROL)) { console.error(`unknown control ${CONTROL}`); process.exit(1); }
 
 /* A worktree has no node_modules of its own, so esbuild is found by walking up. */
@@ -68,14 +84,15 @@ const TMP = fs.mkdtempSync(path.join(os.tmpdir(), 'worldedit-'));
 
 function mutate(src, needle, replacement, what) {
   if (!src.includes(needle)) {
-    console.error(`control ${CONTROL}: the ${what} to mutate is not in the source, refusing a dead control`);
+    console.error(`${CONTROL ? `control ${CONTROL}` : 'baseline'}: the ${what} to mutate is not in the source, refusing a dead control or a stale baseline`);
     process.exit(1);
   }
   return src.replace(needle, replacement);
 }
 
 /* The branch's engine and editor, with the control's mutation if any. */
-let cmSrc = fs.readFileSync(path.join(ROOT, 'src/lib/clubManager.ts'), 'utf8');
+const cmOriginal = fs.readFileSync(path.join(ROOT, 'src/lib/clubManager.ts'), 'utf8');
+let cmSrc = cmOriginal;
 let weSrc = fs.readFileSync(path.join(ROOT, 'src/lib/clubManagerWorldEdit.ts'), 'utf8');
 if (CONTROL === 'noregister') cmSrc = mutate(cmSrc, 'registerLeagueOverrides(worldEdit);', 'registerLeagueOverrides(null);', 'edit registration');
 if (CONTROL === 'leak') cmSrc = mutate(cmSrc, 'if (worldEdit) state.leagueOverrides = worldEdit;', 'if (worldEdit || edit === null) state.leagueOverrides = worldEdit ?? {};', 'save write of the edit');
@@ -83,12 +100,25 @@ if (CONTROL === 'staticrank') cmSrc = mutate(cmSrc, 'for (const league of REAL_L
 if (CONTROL === 'stature') cmSrc = mutate(cmSrc, 'TITLE_STATURE.has(clubName) && playsInRealLeague(clubName);', 'TITLE_STATURE.has(clubName);', 'real league stature guard');
 if (CONTROL === 'noload') cmSrc = mutate(cmSrc, 'registerLeagueOverrides(parsed.leagueOverrides ?? null);', 'registerLeagueOverrides(null);', 'load registration');
 if (CONTROL === 'dupe') weSrc = mutate(weSrc, '.map(c => (c === b ? a : c));', '.map(c => c);', 'second half of the swap');
+const EARLY_UCL = '  const nextUclField = uclQualifiersFrom(career);\n  registerLeagueOverrides(pr.overrides);';
+if (CONTROL === 'lateucl') cmSrc = mutate(cmSrc.replaceAll('\r\n', '\n'), EARLY_UCL, '  registerLeagueOverrides(pr.overrides);\n  const nextUclField = uclQualifiersFrom(career);', 'played world Europe read');
+const QUAL_LEAGUE = 'const qualLeague = worldEdit ? (REAL_LEAGUES.find(l => l.clubs.includes(club.name)) ?? league) : league;';
+if (CONTROL === 'euroone') cmSrc = mutate(cmSrc, QUAL_LEAGUE, 'const qualLeague = league;', 'season one real league read');
 const cmPath = path.join(TMP, 'clubManager.ts').replaceAll('\\', '/');
 fs.writeFileSync(cmPath, cmSrc);
 fs.writeFileSync(path.join(TMP, 'clubManagerWorldEdit.ts'), weSrc.replace("from '@/lib/clubManager'", `from '${cmPath}'`));
-/* origin/main's engine, the baseline section 0 compares against. */
-const mainPath = path.join(TMP, 'clubManager.main.ts').replaceAll('\\', '/');
-fs.writeFileSync(mainPath, execSync('git show origin/main:src/lib/clubManager.ts', { cwd: ROOT, maxBuffer: 64 * 1024 * 1024 }).toString('utf8'));
+/* The baseline section 0 compares against: this branch's engine, unmutated,
+   with every hunk through which an edit reaches a career taken out. It moves
+   with every other round's change to the engine, so it measures the edit
+   plumbing and nothing else, and a hunk that is renamed or moved stops the
+   run rather than leaving a baseline that quietly includes it. */
+let baseSrc = cmOriginal;
+baseSrc = mutate(baseSrc, 'registerLeagueOverrides(worldEdit);', 'registerLeagueOverrides(null);', 'baseline: edit registration');
+baseSrc = mutate(baseSrc, 'if (worldEdit) state.leagueOverrides = worldEdit;', '', 'baseline: save write of the edit');
+baseSrc = mutate(baseSrc, 'TITLE_STATURE.has(clubName) && playsInRealLeague(clubName);', 'TITLE_STATURE.has(clubName);', 'baseline: real league stature guard');
+baseSrc = mutate(baseSrc, QUAL_LEAGUE, 'const qualLeague = league;', 'baseline: season one real league read');
+const basePath = path.join(TMP, 'clubManager.base.ts').replaceAll('\\', '/');
+fs.writeFileSync(basePath, baseSrc);
 
 function bundle(name, body) {
   const entry = path.join(TMP, `${name}.entry.mjs`);
@@ -98,7 +128,7 @@ function bundle(name, body) {
   return out;
 }
 const branchBundle = bundle('branch', `export * as cm from '${cmPath}';\nexport * as we from '${path.join(TMP, 'clubManagerWorldEdit.ts').replaceAll('\\', '/')}';\n`);
-const mainBundle = bundle('main', `export * as cm from '${mainPath}';\n`);
+const baseBundle = bundle('base', `export * as cm from '${basePath}';\n`);
 
 const store = new Map();
 globalThis.localStorage = {
@@ -108,7 +138,7 @@ globalThis.localStorage = {
   clear: () => { store.clear(); },
 };
 const { cm, we } = await import(pathToFileURL(branchBundle).href);
-const { cm: mainCm } = await import(pathToFileURL(mainBundle).href);
+const { cm: baseCm } = await import(pathToFileURL(baseBundle).href);
 
 /* A resettable stream for the identity checks: both engines must see the same draws. */
 function withSeed(seed, fn) {
@@ -142,24 +172,37 @@ const sameSet = (a, b) => a.length === b.length && new Set(a).size === a.length 
 function sectionZero() {
   console.log('0) no edit is today\'s game, byte for byte');
   for (const club of ['Celtic', 'Arsenal', 'Hull City', 'Real Madrid']) {
-    const base = withSeed(SEED, () => JSON.stringify(mainCm.startCareer(club)));
+    const base = withSeed(SEED, () => JSON.stringify(baseCm.startCareer(club)));
     const absent = withSeed(SEED, () => JSON.stringify(cm.startCareer(club)));
     const nul = withSeed(SEED, () => JSON.stringify(cm.startCareer(club, undefined, undefined, undefined, undefined, null)));
-    ok(absent === base, `${club}: a career with no edit argument differs from origin/main at kickoff`);
-    ok(nul === base, `${club}: a career with a null edit differs from origin/main at kickoff`);
+    ok(absent === base, `${club}: a career with no edit argument differs from the engine without the edit at kickoff`);
+    ok(nul === base, `${club}: a career with a null edit differs from the engine without the edit at kickoff`);
+    /* A swap made and undone is no edit, and an edit some preview left
+       registered never reaches a career started without one. */
+    const undone = we.swapClubs(we.swapClubs(null, club, 'Brentford'), club, 'Brentford');
+    const back = withSeed(SEED, () => JSON.stringify(cm.startCareer(club, undefined, undefined, undefined, undefined, undone)));
+    ok(back === base, `${club}: a swap made and undone differs from the engine without the edit at kickoff`);
+    cm.registerLeagueOverrides(we.swapClubs(null, 'Celtic', 'Real Madrid'));
+    const stale = withSeed(SEED, () => JSON.stringify(cm.startCareer(club)));
+    ok(stale === base, `${club}: a stale registered edit leaked into a career started without one`);
   }
-  /* A whole season and its summer, on both engines, one stream each. */
-  const playOut = (engine, edit) => withSeed(SEED + 1, () => {
-    const s = edit === 'absent' ? engine.startCareer('Celtic') : engine.startCareer('Celtic', undefined, undefined, undefined, undefined, null);
+  /* Whole seasons and their summers, on both engines, one stream each:
+     a league no pyramid touches, and one whose summer promotes and relegates. */
+  const playOut = (engine, club, edit) => withSeed(SEED + 1, () => {
+    const s = edit === 'absent' ? engine.startCareer(club) : engine.startCareer(club, undefined, undefined, undefined, undefined, null);
     const end = runSeason(engine, s);
     const next = engine.startNextSeason(end);
     return { end: JSON.stringify(end), next: JSON.stringify(next), table: end.table.length };
   });
-  const base = playOut(mainCm, 'absent');
-  const mine = playOut(cm, null);
-  ok(mine.end === base.end, 'a null edit season ends differently from origin/main');
-  ok(mine.next === base.next, 'a null edit summer rollover differs from origin/main');
-  console.log(`   4 kickoffs x 2 call shapes and one ${base.table} club season plus its summer compared (${base.end.length} bytes)`);
+  let bytes = 0;
+  for (const club of ['Celtic', 'Hull City']) {
+    const base = playOut(baseCm, club, 'absent');
+    const mine = playOut(cm, club, null);
+    ok(mine.end === base.end, `${club}: a null edit season ends differently from the engine without the edit`);
+    ok(mine.next === base.next, `${club}: a null edit summer rollover differs from the engine without the edit`);
+    bytes += base.end.length;
+  }
+  console.log(`   4 kickoffs x 4 call shapes and two seasons plus their summers compared (${bytes} bytes)`);
 }
 
 function sectionOne() {
@@ -208,7 +251,11 @@ function seasonOn(edit, club, label) {
   /* The calendar a real member of that league gets, with no edit at all. */
   const realMember = cm.REAL_LEAGUES.find(l => l.id === L).clubs.find(c => lineup.includes(c));
   const realCal = leagueRounds(cm.startCareer(realMember));
+  /* Season one's Europe is who really qualified, wherever they play now: my
+     club is in it on the edited world exactly when it is in the real one. */
+  const homeEurope = !!cm.startCareer(club).uclGroup;
   const s = cm.startCareer(club, undefined, undefined, undefined, undefined, edit);
+  ok(!!s.uclGroup === homeEurope, `${label}: season one Europe is ${!!s.uclGroup} on the edited world and ${homeEurope} in the real one`);
   ok(leagueRounds(s) === realCal, `${label}: ${leagueRounds(s)} league rounds, a real ${L} club plays ${realCal}`);
   const end = runSeason(cm, s);
   const leagueOpps = (end.resultLog ?? []).filter(r => r.competition === 'league').map(r => r.opp);
@@ -241,6 +288,20 @@ function seasonOn(edit, club, label) {
   }
   /* The summer keeps the world whole, and leagues no pyramid touches keep their edit. */
   const next = cm.startNextSeason(end);
+  /* Next season's Champions League is what the PLAYED tables earned: each
+     European league's table as it was played, mine read as league L whatever
+     the summer moved my club into, through the engine's own rule. */
+  const played = cm.REAL_LEAGUES.filter(l => l.euro).map(league => ({
+    league,
+    clubs: (league.id === L ? cm.sortedWorldTable(end, L, end.table) : end.world?.[league.id] ? cm.sortedWorldTable(end, league.id, end.world[league.id].table) : []).map(r => r.club),
+  }));
+  const earned = cm.uclFieldFromTables(played, end.uclBracket?.find(t => t.round === 'F')?.winner);
+  const field = next.uclField ?? [];
+  ok(field.length > 0 && JSON.stringify(field) === JSON.stringify(earned), `${label}: next season's Champions League is not the one the played tables earned (${field.slice(0, 4).join(', ')} against ${earned.slice(0, 4).join(', ')})`);
+  const europeans = new Set(played.flatMap(t => t.clubs));
+  const outsiders = field.filter(c => !europeans.has(c));
+  ok(outsiders.length === 0, `${label}: next season's Champions League has clubs that played outside Europe's leagues: ${outsiders.slice(0, 4).join(', ')}`);
+  const myMove = cm.careerLeagueOf(next).id !== L ? ` (${club} moved ${L} to ${cm.careerLeagueOf(next).id})` : '';
   const ov = next.leagueOverrides ?? {};
   const all = cm.REAL_LEAGUES.flatMap(l => ov[l.id] ?? l.clubs);
   ok(new Set(all).size === all.length && all.length === seen.size, `${label}: the summer rollover broke the world (${all.length} slots, ${new Set(all).size} clubs)`);
@@ -250,7 +311,7 @@ function seasonOn(edit, club, label) {
     if (paired.has(l.id)) continue;
     ok(sameSet(ov[l.id] ?? l.clubs, we.editedClubsOf(edit, l.id)), `${label}: ${l.id} lost its edit over the summer`);
   }
-  return { L, rounds: realCal, cupTies: (end.cupBracket ?? []).length };
+  return { L, rounds: realCal, cupTies: (end.cupBracket ?? []).length, europe: `season one Europe ${!!s.uclGroup}, next field ${field.length}${myMove}` };
 }
 
 /* startCareer leaves its world registered, so each read puts the real world back. */
@@ -292,14 +353,24 @@ function sectionThree() {
     ['Bundesliga into the Premier League', walk('bundesliga', 'Brentford'), true],
     ['Premier League into the Bundesliga', walk('premier', weakestBuli), false],
   ];
+  /* Between the title and staying up the board has middle asks too, not two
+     answers. Measured on the baked rosters (deterministic, every seed): the
+     Bundesliga ladder into the Premier League has 1 middle ask (1 5 17x16)
+     and the Premier League ladder into the Bundesliga 6 (1x14 4 4 5 5 6 6),
+     7 in all. Review fix: this used to be "at least 3 different asks" per
+     ladder, which the first ladder met with exactly 3 and no headroom, so one
+     re-bake moving one club out of the 5 band turned it red with nothing
+     broken. A floor of 4 of the measured 7 leaves room for a re-bake to move
+     three clubs between bands and still fails a board that only ever says
+     win it or stay up. */
+  const middle = ladders.flatMap(([, rows]) => rows).filter(r => r.ask.target > 1 && !isSurvive(r.ask)).length;
+  ok(middle >= 4, `only ${middle} middle asks (neither the title nor survival) across both ladders, measured 7`);
   for (const [name, rows, up] of ladders) {
-    const kinds = new Set(rows.map(r => r.ask.target)).size;
     ok(inversions(rows) === 0, `the ${name} ladder inverts: ${listed(rows)}`);
     ok(rows[0].ask.target === 1, `the strongest club of the ${name} ladder is asked "${rows[0].ask.label}"`);
     /* Measured: the weakest Premier League squad is still a Conference League
        side in the Bundesliga, so only a ladder into the stronger league ends on survival. */
     if (up) ok(isSurvive(rows.at(-1).ask), `the weakest club of the ${name} ladder is asked "${rows.at(-1).ask.label}"`);
-    ok(kinds >= 3, `the ${name} ladder uses only ${kinds} different asks: ${listed(rows)}`);
   }
   /* And the top flight moved down a level: far more title asks than at home. */
   const down = walk('premier', weakestScot);
@@ -308,6 +379,7 @@ function sectionThree() {
   ok(downTitles > homeTitles, `${downTitles} Premier League clubs are asked for the title in Scotland, ${homeTitles} at home`);
   console.log(`   title asks for Premier League clubs in Scotland ${downTitles}, at home ${homeTitles}`);
   console.log(`   Scottish clubs in the PL: ${show(scotUp)}`);
+  console.log(`   middle asks across the two Bundesliga ladders: ${middle} (floor 4)`);
   for (const [name, rows] of ladders) console.log(`   ${name}: ${show(rows)}`);
 }
 
@@ -374,7 +446,7 @@ function sectionTwo(chaosEdit) {
   for (const [edit, club, label] of runs) {
     const t0 = Date.now();
     const r = seasonOn(edit, club, label);
-    console.log(`   ${label}: ${r.rounds} league rounds, ${r.cupTies} cup ties, ${((Date.now() - t0) / 1000).toFixed(1)}s`);
+    console.log(`   ${label}: ${r.rounds} league rounds, ${r.cupTies} cup ties, ${r.europe}, ${((Date.now() - t0) / 1000).toFixed(1)}s`);
   }
 }
 {

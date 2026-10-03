@@ -2234,8 +2234,11 @@ export interface CareerState {
   /** Round 310: this save's league memberships once its own promotions and
    *  relegations have moved clubs, keyed by league id, each value the FULL
    *  membership list. Absent until the first summer a PYRAMIDS pair swaps
-   *  clubs; leagues outside the pyramids never get an entry. Registered
-   *  into the engine on load exactly like customClub. */
+   *  clubs; promotion never writes an entry for a league outside the
+   *  pyramids. Round 964: a world editor edit (clubManagerWorldEdit.ts) is
+   *  written here from kickoff, and it CAN hold any league the player swapped
+   *  clubs into or out of. Registered into the engine on load exactly like
+   *  customClub. */
   leagueOverrides?: Record<string, string[]>;
   /** Round 467: the four club facilities, level 1 to 10. Absent on a save
    *  from before the desk existed and repaired by ensureFacilities to the
@@ -15916,11 +15919,18 @@ export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID, cu
      its last rollover, and the club is in Europe exactly when that field
      names it. */
   const seasonOneField = custom ? null : world ? world.uclField : seasonOneUclField(era.id);
+  /* Round 964: on an edited world season one's Europe is still who really
+     qualified, wherever they play now. seasonOneUclField already hands the
+     AI field the real qualifiers whatever league the edit put them in, so my
+     club is judged by its REAL league too, not the one it was moved into.
+     Arsenal moved into the Championship stay in the Champions League, the
+     same as a computer run Arsenal would. With no edit this is `league`. */
+  const qualLeague = worldEdit ? (REAL_LEAGUES.find(l => l.clubs.includes(club.name)) ?? league) : league;
   const qualifiedSeasonOne = world
     ? (seasonOneField ? seasonOneField.includes(club.name) : club.tier <= 2 && league.euro)
-    : seasonOneField && seasonOneTableOf(league.id)
+    : seasonOneField && seasonOneTableOf(qualLeague.id)
       ? uclDirectQualifiersFromTables(seasonOneTables(), CM_FINAL_TABLES_2025_26.holders).includes(club.name)
-      : club.tier <= 2 && league.euro;
+      : club.tier <= 2 && qualLeague.euro;
   const state: CareerState = {
     saveVersion: SAVE_VERSION,
     clubName: club.name,
@@ -17710,6 +17720,14 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
   /* Round 543: uclPlacesIn returns 0 for a non-European league, so this one
      value carries both halves of what Round 310 added here. */
   const playedLeagueUclPlaces = uclPlacesIn(careerLeagueOf(career));
+  /* Round 547: read the Champions League field off the season that has just
+     finished, while its tables are still on `career`. Round 964: and before
+     next season's memberships register, because uclQualifiersFrom finds MY
+     table's league through careerLeagueOf. Read after the swap, a club just
+     promoted into the Premier League handed the Championship's top four the
+     Premier League's places, and one just relegated out of it left the
+     Premier League sending nobody. */
+  const nextUclField = uclQualifiersFrom(career);
   registerLeagueOverrides(pr.overrides);
   /* Round 146: inside a historic save, a "playable club" is an era club, so
      the move guard consults the era world before the modern one. */
@@ -17969,10 +17987,6 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
   const leagueClubs = shuffle(nextCustom
     ? league.clubs.map(c => (c === nextCustom.replacedClub ? nextCustom.name : c))
     : [...league.clubs]);
-  /* Round 547: read the Champions League field off the season that has just
-     finished, while its tables are still on `career`. The new state's own
-     world is blank, so this has to happen here and not later. */
-  const nextUclField = uclQualifiersFrom(career);
 
   const state: CareerState = {
     ...JSON.parse(JSON.stringify(career)) as CareerState,
