@@ -35,6 +35,26 @@
     {"family": "A", "url": "https://www.legaseriea.it/team/roma/squad", "publisher": "Lega Serie A (Roma squad, current)", "readOn": "2026-10-03", "says": "listed, forward, shirt 21"},
     {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/104/as-roma", "publisher": "ESPN (AS Roma squad page, season 2026-27)", "readOn": "2026-10-03", "says": "forward, shirt 21, age 32, 5 appearances"}
    ]
+  },
+  {
+   "name": "Dany Mota",
+   "club": "Monza",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Monza's number 47, aged 28 on ESPN. On both current squad pages.",
+   "sources": [
+    {"family": "A", "url": "https://www.legaseriea.it/team/monza/squad", "publisher": "Lega Serie A (Monza squad, current)", "readOn": "2026-10-03", "says": "listed, forward, shirt 47"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/4007/monza", "publisher": "ESPN (Monza squad page, season 2026-27)", "readOn": "2026-10-03", "says": "forward, shirt 47, age 28"}
+   ]
+  },
+  {
+   "name": "Omari Forson",
+   "club": "Monza",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Monza's number 11, aged 22 on ESPN. On both current squad pages.",
+   "sources": [
+    {"family": "A", "url": "https://www.legaseriea.it/team/monza/squad", "publisher": "Lega Serie A (Monza squad, current)", "readOn": "2026-10-03", "says": "listed, midfielder, shirt 11"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/4007/monza", "publisher": "ESPN (Monza squad page, season 2026-27)", "readOn": "2026-10-03", "says": "forward, shirt 11, age 22"}
+   ]
   }
  ],
  "movedTo": [
@@ -176,6 +196,20 @@
     {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/17530/venezia", "publisher": "ESPN (Venezia squad page, season 2026-27)", "readOn": "2026-10-03", "says": "midfielder, shirt 21, age 26"},
     {"family": "B", "url": "https://us.soccerway.com/player/helgason-thorir/QsP2aUC4/transfers", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Lecce to Venezia free 2026-07-01, born 2000-09-28, contract to 2029-06-30"}
    ]
+  },
+  {
+   "name": "Pedro Pereira",
+   "from": "Monza",
+   "to": "Gençlerbirliği",
+   "realClub": "Gençlerbirliği",
+   "adjudicatedOn": "2026-10-03",
+   "note": "The Portuguese right back born 1998-01-22 (the baked row is an RB aged 27, so it is him and not one of the many namesakes). Left Monza on a free and joined Gencerbirligi on 2025-07-24, contract to June 2027; their number 13 in the 2026-27 squad. The destination rests on two independent publishers: Gencerbirligi's own site did not answer (HTTP 522), so the official voice is the league page that no longer lists him at Monza.",
+   "sources": [
+    {"family": "A", "url": "https://www.legaseriea.it/team/monza/squad", "publisher": "Lega Serie A (Monza squad, current)", "readOn": "2026-10-03", "says": "not listed"},
+    {"family": "B", "url": "https://us.soccerway.com/player/pereira-pedro/8t5OxIB9/transfers", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Monza to Genclerbirligi free 2025-07-24, born 1998-01-22, Portugal, defender, contract to 2027-06-30"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/996/genclerbirligi", "publisher": "ESPN (Genclerbirligi squad page, season 2026-27)", "readOn": "2026-10-03", "says": "defender, shirt 13, age 28, Portugal (player id 224188)"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/4007/monza", "publisher": "ESPN (Monza squad page, season 2026-27)", "readOn": "2026-10-03", "says": "not listed"}
+   ]
   }
  ],
  "removedClubNotModelled": [
@@ -312,6 +346,19 @@
     {"family": "B", "url": "https://us.soccerway.com/player/candela-antonio/nHot9WLH/transfers", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "on loan at Catanzaro from Spezia from July 2026 to 2027-06-30, born 2000-04-27"},
     {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/250668/antonio-candela", "publisher": "ESPN (player page)", "readOn": "2026-10-03", "says": "Catanzaro number 27, born 2000-04-27, played 2026-09-19"},
     {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/17530/venezia", "publisher": "ESPN (Venezia squad page, season 2026-27)", "readOn": "2026-10-03", "says": "not listed"}
+   ]
+  },
+  {
+   "name": "Gianluca Caprari",
+   "from": "Monza",
+   "realClub": "Padova",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1993-07-30. Moved from Monza to Padova on 2026-01-30, contract to June 2027; Padova's number 10, with Serie B matches from 2026-08-23 to 2026-09-12. Padova is not modelled.",
+   "sources": [
+    {"family": "A", "url": "https://www.legaseriea.it/team/monza/squad", "publisher": "Lega Serie A (Monza squad, current)", "readOn": "2026-10-03", "says": "not listed"},
+    {"family": "B", "url": "https://us.soccerway.com/player/caprari-gianluca/hM9I17fh/transfers", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Monza to Padova 2026-01-30, born 1993-07-30, contract to 2027-06-30, current club Padova"},
+    {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/156792/gianluca-caprari", "publisher": "ESPN (player page)", "readOn": "2026-10-03", "says": "Padova number 10, born 1993-07-30, played 2026-09-12"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/4007/monza", "publisher": "ESPN (Monza squad page, season 2026-27)", "readOn": "2026-10-03", "says": "not listed"}
    ]
   }
  ],
