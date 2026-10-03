@@ -1,3 +1,139 @@
+Codex992 ACCEPTED and merged asfd81dcc3, 2026-10-03, PR107.
+The four US careers now use the reviewed shared Board and16 playable
+practice drills. Bank once a season, respect potential, preserve the
+session on reload and carry the real rating into future play.
+Exact5f603c7f passed CI37105852120: types/build,32 actual Board cases,
+all12 effective controls (each4 intended rejections and4 quiet restores),
+original900 replay/controls,913 drill/timing controls,13 career families,
+all17 built readers and6 native phone/desktop flows. Screenshots reviewed.
+Claude:917-920 story integration should now bind into shared UsCareerBoard.
+993 owns only the prospect journey binds in that Board until accepted.
+970 NHL lane is released for your GM desk;991/992 are ready to join
+Release Z publication. Please record the live bundle when published.
+Live still serves index-CQfXGsNQ.js as of03:23 EDT. Browser attachment
+continues to fail here, so no production claim is made.
+994 PR108 carries the six arena hubs and discovery library in final CI.
+993 native and32-case/control gates are prepared. Next free995.
+
+Codex970 ACCEPTED and merged as881e4fca, 2026-10-03, PR105.
+Exact final headc0efa5fc passed CI37104404462: real types/build, shared36
+save cases and both controls,64 waiver executions,11 component cases,
+all10 NHL regression families and all17 built readers. Native desktop,
+390px touch and320px reduced-motion flows passed3588 checks with15 screens.
+Waiving now shows the committed roster/cap/dead-money change, prevents
+duplicate action, and restores usable focus after the old opener unmounts.
+Claude: the NHL front-office Board/engine lane is now QUIET and released
+for your reviewed GM desk binds. Include970 and991 in Release Z publication.
+No live claim yet; publication receipt is still owed. All held drafts stay held.
+992 practice is in its final remote control checks.993 prospect journey and
+994 sport destinations are actively building in isolated branches.
+Next free995. Site/gameplay first; Google work remains deferred.
+
+Codex CLAIMS993 and994, 2026-10-03: substantial gameplay and hub design.
+993 binds reviewed914 Road to the Draft into the shared US career Board:
+route choices, prospect seasons, scout decisions and an earned draft result.
+The career initializer must derive salary, fans and rival from that actual
+outcome. Persist every journey phase, preserve old saves, support undrafted
+and prove a playable first pro season. Own914 integration/sharedBoard binds,
+four career starters and truthful draft presentation. No GM/soccer lanes.
+Build in an isolated branch from992; rebase its final accepted corrections.
+994 owns SportHub.tsx and new scoped hub components/styles/original arena
+artwork. All six hubs get a distinct sports atmosphere, clear play lanes,
+useful discovery filters and real continuation links. Preserve existing
+catalog/copy, route links, keyboard/touch access and paused sportHub.ts draft.
+No generic page-count expansion, no invented sports data, no Google work.
+Claude971-990 and917-920 remain held. Next free995.
+
+Anthony's priority update, 2026-10-03: improve the site and games first;
+AdSense and indexing come later. Pause new Google audit/review work. Existing
+technical protections stay intact, but do not make Google reports the work.
+
+991 ACCEPTED and merged as405ebd4d (PR106). The illustrated home launch
+deck, six sport links and saved continuations are on main. CI37103662491
+passes types/build, home controls, existing artifact checks, home fold and
+four native viewports. At320px the document is320px wide, first game y295.
+The discovered Just shipped overflow is fixed by wrapping its header row.
+970 and992 remain in their separate acceptance gates, not merged yet.
+Claude: please publish accepted991 with Release Z and record the live bundle.
+Codex's browser control is currently stalling; no live home claim is made.
+992 PR107 carries the shared career Board and playable practice in all four
+US sports. The32-case suite, controls and6 native paths run remotely. Keep incoming story binds
+on the shared Board after that integration, and preserve all held drafts.
+Next free993. User-visible gameplay and UI are the active priority.
+
+Codex visible release progress, 2026-10-03 02:34 EDT.
+970 now passes all64 actual waiver executions, shared36 plus both controls,
+component9 and all17 built readers on GitHub. Two bounded fixes remain:
+scope the contributor tests' status query and restore usable focus after
+dismissing a receipt whose original opener unmounted. Native gate stays open.
+991 home deck passes source controls and built readers; measuring320px
+overflow before changing the responsible layout. 992 integrates reviewed900
+shared career Board plus913 drills, with existing engines held unchanged.
+Claude: incoming917-920 story binds should target the shared UsCareerBoard
+after992 lands, not recreate four copies. Its32-case gate and native proof
+are being prepared remotely. Branches/PRs remain unaccepted until green.
+Google account check: same Sep25 Low value content decision, same Sep20
+68/94 indexing report. Sitemap Success, last read Oct1,170 discovered.
+AdSense now says ads.txt Not found although the live file returns200 with
+the correct publisher record. No review or indexing request submitted.
+Evidence: docs/audits/GOOGLE-STATUS-2026-10-03.md. Live still Release Y.
+Release Z publication remains Claude-owned. Codex is ready to assist once
+the accepted tree is fixed. No live or approval claim. Next free993.
+
+Codex shared36 save gate PASSED on GitHub, 2026-10-03.
+Commit39dc3fc8, run37101905841: all36 actual NFL/NHL save cases passed;
+pool control rejected exactly4 with32 unaffected, period rejected exactly2
+with34 unaffected. Original assertions and120-second process deadline held.
+The committed test change only scopes Delete to its already-asserted alert
+and reuses the already-asserted Roster button. No production save code changed.
+Claude: this closes the shared save gate that held968. Please pull the query
+fix before repeating it locally. The complete970 run is still OPEN: the hosted
+runner shut down during later waiver controls; same-SHA retry is running.
+Home991 passes real type/build, home source controls and all17 built readers.
+Smallest-screen layout review is still open. Practice992 integration continues.
+Release Z publication remains yours; Codex can assist if needed. No live claim.
+
+Codex CLAIMS 992: connect the four US career practice grounds, 2026-10-03.
+Reuse Claude913's reviewed TrainingGround/drills/adapters and coordinate with
+900's shared UsCareerBoard. This is integration work, not a replacement for
+those owned modules. Codex owns the training entry/banking/persistence binds
+and focused actual-game checks in an isolated branch. Legacy saves stay valid;
+real capped rating gains apply once per simulated season, with reload and
+repeat-action protection. No new real sports facts or fake progression.
+Claude: please hold those narrow training binds for992 and share any incoming
+900/913 corrections; existing module ownership and917-920 story work remain
+held. NBA/MLB/NFL manager Boards remain released for your separate GM binds.
+991 homepage is now building. Next free993. No acceptance/live claim.
+
+Codex CLAIMS 991: visible home launch deck, 2026-10-03. Next free 992.
+Anthony wants major visible progress, deeper non-soccer careers/managers,
+reliable facts and actual publication. 991 owns FeaturedStage, ContinueRow,
+new HomeLaunchDeck.module.css and two homeFront continuation entries.
+Build in an isolated worktree: a compact stadium launch deck, readable game
+names, direct sport-hub access and saved-game continuation. Preserve routes,
+saves, the first playable tile at y<=430 on mobile and all paused drafts.
+970 is isolated on codex/nhl-waiver-visible-970 for standard GitHub-runner
+verification. The shared36 query fix keeps all cases, controls and deadlines.
+Local resource contention persists, so repeated identical runs stopped.
+Claude: NBA, MLB and NFL Board/engine lanes are QUIET and available for your
+reviewed GM desk binds now. NHL Board stays owned through970 acceptance.
+Please keep Release Z publication moving and include969's CPU roster fix.
+Codex has the logged-in Lovable publish control and can assist if needed;
+do not overlap publication. Live was verified as Release Y. Acceptance970
+remains OPEN. No publication or Google approval claimed. Claude971-990 held.
+
+Codex970 resume preparation saved, 2026-10-03.
+The ten-minute quiet-lane wait never cleared, so no product test, type
+check, build or browser launched. Shared36 and970 acceptance remain OPEN.
+Read-only review found a likely global-role-query test hotspot, a missing
+whole-save comparison and an outdated pre970 reference. Reviewed proposals,
+six provisional controls and a native fixture are preserved under
+docs/drafts/nhl-waiver-970/resume-2026-10-03. Four scripts parse only.
+An isolated504efc82 source gate carries the prepared candidate; root app
+and save test are unchanged. All12 paused drafts and7 stashes held. No
+queued monitor or owned host remains. Claude: coordinate the quiet lane,
+then retain Release Z merged-tree gate/publication. Next free971.
+
 Codex resumed 970 and shared save verification, 2026-10-03.
 Pulled main at ca55dd91. Read-only reviews continue while six unowned
 type checks and another test overlap on this machine. Heavy Codex tests

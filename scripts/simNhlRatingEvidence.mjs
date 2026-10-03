@@ -36,7 +36,7 @@ const definitions = {
   damaged: { anchor: "  return e && e.modelVersion === NHL_RATING_MODEL_VERSION && typeof e.originKey === 'string' && e.originKey.length > 0\n    && Number.isInteger(e.openingOvr) && e.openingOvr >= 0 && e.openingOvr <= 99 && typeof e.partial === 'boolean'\n    && (e.basis === basis || e.basis === 'unmeasured-prior')\n    && (e.basis === 'offensive-production' || e.partial) ? e : null;", replacement: '  return e || null;', failed: [6] },
   partial: { anchor: '  return openingEvidence(p)?.partial ?', replacement: '  return openingEvidence(p) ?', failed: [1] },
   retry: { anchor: '      startPending.current = false;', replacement: '', failed: [7] },
-  release: { anchor: 'nhlRelease(lg.teams[myTeam], lg.freeAgents, pid, lg.ratingModelVersion)', replacement: 'nhlRelease(lg.teams[myTeam], lg.freeAgents, pid)', failed: [8] },
+  release: { anchor: 'nhlRelease(team, lg.freeAgents, pid, lg.ratingModelVersion)', replacement: 'nhlRelease(team, lg.freeAgents, pid)', failed: [8] },
   market: { anchor: 'const ask = league.ratingModelVersion === NHL_RATING_MODEL_VERSION ? nhlSalaryFor(p.ovr, league.ratingModelVersion) : p.salary;', replacement: 'const ask = p.salary;', failed: [8] },
   sign: { anchor: 'nhlSign(lg.teams[myTeam], lg.freeAgents, pid, lg.cap, lg.ratingModelVersion)', replacement: 'nhlSign(lg.teams[myTeam], lg.freeAgents, pid, lg.cap)', failed: [8] },
   gmDraft: { anchor: 'nhlProspectToPlayer(pr, Math.random, lg.ratingModelVersion)', replacement: 'nhlProspectToPlayer(pr, Math.random)', failed: [9] },
@@ -77,7 +77,8 @@ try {
     const relative = "from './NhlContributors.module.css'";
     assert.equal(copySource.split(relative).length - 1, 1, 'Copy retains the actual contributor CSS');
     const copy = path.join(folder, 'NhlFrontOfficeBoard.tsx'); owned.push(copy);
-    await writeFile(copy, copySource.replace(relative, "from '@/components/nhl-front-office/NhlContributors.module.css'"));
+    await writeFile(copy, copySource.replace(relative, "from '@/components/nhl-front-office/NhlContributors.module.css'")
+      .replace("from './NhlWaiverReceipt'", "from '@/components/nhl-front-office/NhlWaiverReceipt'"));
     env.NO_DOUBLE_SWAP = JSON.stringify({ '@/components/nhl-front-office/NhlFrontOfficeBoard': copy });
   }
   const reportFile = path.join(receiptFolder, 'vitest.json');
