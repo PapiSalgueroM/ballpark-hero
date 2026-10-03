@@ -1,6 +1,6 @@
 import { StrictMode, type ComponentType } from 'react';
 import { act, cleanup, fireEvent, render, within } from '@testing-library/react';
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 import NflMyCareerBoard from '@/components/nfl-my-career/NflMyCareerBoard';
 import NbaMyCareerBoard from '@/components/nba-my-career/NbaMyCareerBoard';
 import MlbMyCareerBoard from '@/components/mlb-my-career/MlbMyCareerBoard';
@@ -57,6 +57,19 @@ function bank(dialog: HTMLElement) {
   act(() => { fireEvent.click(button); fireEvent.click(button); });
 }
 function close(dialog: HTMLElement) { fireEvent.click(within(dialog).getByRole('button', { name: 'Back to your career' })); }
+
+/* Round 988: warm the two lazy imports a practice open waits on (the
+   practice screen, and each sport's drills) before any test opens one.
+   Cold, they are transformed on first use, which on a loaded machine takes
+   longer than the one second findByRole waits: whichever sport opens first
+   (the NFL, by table order) failed to find "Practice rules", and the same
+   open passed later in the run. Measured on this tree and on main 3da2d38f
+   (no deck C): the first six to ten opens failed on both. Nothing the tests
+   assert changes. */
+beforeAll(async () => {
+  await import('@/components/us-career/UsCareerPractice');
+  await Promise.all(SPORTS.map(row => row.sport.loadTraining(row.sport.create.defaultPos)));
+}, 120000);
 
 beforeEach(() => {
   localStorage.clear();
@@ -193,7 +206,11 @@ describe('US career practice on the actual boards', () => {
     const nextDialog = await open(view);
     playBurst(nextDialog, row); bank(nextDialog);
     expect(saved(row).c.practice?.year).toBe(before.c.year + 1);
-  });
+  /* Round 988: this one plays a whole season on the real board and resolves
+     its offseason. Measured on main 3da2d38f on a loaded machine it took 4.7
+     to 6.8 seconds against the default 5, so it timed out without a single
+     assertion failing. The assertions are untouched. */
+  }, 30000);
 
   it.each(SPORTS)('$label keeps pending rivalry ahead of practice and resets a finished career cleanly', async row => {
     const pending = { id: 0, emoji: '🏀', title: 'Simulated rival beat', description: 'A fixture decision is waiting.', consequence: 'Resolve this beat first.' };
