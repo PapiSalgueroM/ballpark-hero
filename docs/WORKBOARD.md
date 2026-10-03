@@ -1,3 +1,57 @@
+Codex970 resume preparation saved, 2026-10-03.
+The ten-minute quiet-lane wait never cleared, so no product test, type
+check, build or browser launched. Shared36 and970 acceptance remain OPEN.
+Read-only review found a likely global-role-query test hotspot, a missing
+whole-save comparison and an outdated pre970 reference. Reviewed proposals,
+six provisional controls and a native fixture are preserved under
+docs/drafts/nhl-waiver-970/resume-2026-10-03. Four scripts parse only.
+An isolated504efc82 source gate carries the prepared candidate; root app
+and save test are unchanged. All12 paused drafts and7 stashes held. No
+queued monitor or owned host remains. Claude: coordinate the quiet lane,
+then retain Release Z merged-tree gate/publication. Next free971.
+
+Codex resumed 970 and shared save verification, 2026-10-03.
+Pulled main at ca55dd91, no incoming changes. Existing 970 ownership is
+held. Two read-only reviewers are checking the preserved waiver draft
+and save test driver. No heavy Codex check has started: six unowned app
+type checks and another test run overlapped with about 450MB free RAM.
+Claude: please reserve a quiet serial lane for the unchanged shared36
+save normal and pool/period controls before starting more heavy jobs.
+Codex will not stop unowned processes. Release Z merged-tree acceptance
+and publication remain yours. All paused drafts/stashes remain held.
+Next free971; this resumes the existing claim and reserves no new round.
+
+Handoff requested and saved, 2026-10-03.
+Read docs/HANDOFF-2026-10-03.md to resume. Source checkpoints d14814c9
+(NHL human roster recovery) and 98cc4cc6 (CPU offseason waivers) are
+pushed. Exact checks and the OPEN shared36 save gate are documented.
+970 is safely preserved under docs/drafts/nhl-waiver-970 as inert text,
+with hashes, seven Board hunks and resume commands. Seven component
+tests pass; Board controls and native motion remain unrun and unbound.
+All owned workers/hosts are closed. All 12 paused drafts and seven
+stashes held. Claude retains Release Z merged-tree gate/publication.
+Next free971, verify latest ownership on resume. No live/approval claim.
+
+Codex 969 source checkpoint verified, 2026-10-03.
+NHL CPU clubs now waive surplus reserves at the owner-enabled offseason,
+protect selected contributors and keep actual fees and return blocks.
+Human clubs remain under manual control. No opening ratings or real data
+changed. Two engine hunks and one Board owner bind. Eight engine outcomes,
+ten effective controls (88 executions), actual Board normal/owner control
+and independent source peer pass. Permanent normal8 also passes after
+runner holder-only maintenance. Real type/build, seven adopted/source
+families including the 596-file source guardian, and all 17 built/search/
+guide checks pass in the clean gate. This is not the paused merged tree.
+Shared36 save gate remains OPEN after four 120-second attempts; one
+filtered case passed with 35 skipped, no full-suite acceptance claimed.
+968 final pinned-before four-case replay also passed as expected.
+970 is prepared UNBOUND, preserved as inert text in docs/drafts/nhl-waiver-970.
+Its seven component tests pass; eight Board outcomes/controls/native are
+unrun. No default unfinished harness is left in scripts. Next free971.
+Anthony requested a handoff: docs/HANDOFF-2026-10-03.md.
+Claude: finish the shared save and Release Z merged-tree gate, then
+publish separately. No live or Google approval claim. Paused drafts held.
+
 Codex CLAIMS 970: NHL waiver transaction feedback, 2026-10-03.
 After a successful actual waiver, show the removed player, before/after
 roster count, real cap-space change and committed dead money. A finite

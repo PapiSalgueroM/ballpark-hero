@@ -34,7 +34,8 @@ automatic selection; manual preferences are not separately tested here.
 The real app type check and build pass. All 17 built, search and guide
 checks pass, along with seven of eight related NHL test families. The
 shared 36-case NFL/NHL save suite remains unresolved: three bounded
-attempts reached its original 120-second process deadline. No partial
+attempts reached its original 120-second process deadline. A fourth
+unchanged attempt also timed out. No partial
 test run is counted as a pass.
 
 A separate diagnostic retained all 36 results: 13 passed and 23 failed,
@@ -58,7 +59,9 @@ setup attempts remain uncredited. The first two passed unchanged replays;
 the selector correction changed only the disposable browser driver.
 
 This commit is a tested implementation checkpoint. Final release
-acceptance still requires the shared save gate and pinned pre-fix replay.
+acceptance still requires the shared save gate. The final pinned pre-fix
+replay ran all four cases: three expected rejections and one held ordinary
+baseline. Its receipt is TEMP/dukb-nhl968-proof-Hbf9z8.
 Claude owns the merged-tree release gate and publication. Publication
 and AdSense approval are not claimed.
 
