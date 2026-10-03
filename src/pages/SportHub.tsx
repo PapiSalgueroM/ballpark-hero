@@ -17,8 +17,9 @@ import { Link, Navigate } from 'react-router-dom';
 import { GameNavbar } from '@/components/game/GameNavbar';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
-import { ALL_GAMES, categoriesByTitle, type GameDef } from '@/data/gameRegistry';
+import { ALL_GAMES, categoriesByTitle } from '@/data/gameRegistry';
 import { hubFor, SPORT_HUBS } from '@/lib/sportHub';
+import HubExperience from '@/components/hub/HubExperience';
 
 /* Round 654: a game's path written into a hub's prose ships as that game's
    name, linked. The NBA and College hubs had 33 of these ("/nba-grid,
@@ -49,43 +50,6 @@ function withGameLinks(text: string): ReactNode[] {
   return out;
 }
 
-/* Round 639: each game is an h3 now, so the page's outline reads NFL Front
-   Office, NFL My Career, NFL Grid under the section they sit in, rather than a
-   run of links with no headings between them. The heading HOLDS the link and
-   the link is stretched over the whole card with a pseudo element, which keeps
-   the whole card a tap target without a heading nested inside a link: the
-   prerenderer writes a link out on its own before the blocks inside it, so a
-   card that was a link around a heading would have shipped every game's name
-   twice. The link keeps a 30px floor so sweepPhone measures a real target.
-   Round 672: the link no longer turns its focus outline off. Round 639 did,
-   leaving the card's one pixel border tint (the same tint hover gives it) as
-   the only sign of keyboard focus; the site's own focus ring draws again. */
-function GameCard({ game }: { game: GameDef }) {
-  return (
-    <div className="group relative flex items-start gap-3 rounded-xl border border-border bg-card p-4 hover:border-primary/40 hover:bg-card/80 focus-within:border-primary/60 transition-all">
-      <span className="text-2xl shrink-0" aria-hidden="true">{game.emoji}</span>
-      <div className="min-w-0">
-        <div className="flex items-center gap-2 flex-wrap">
-          <h3 className="text-base font-semibold text-foreground">
-            <Link
-              to={game.path}
-              className="inline-flex min-h-[30px] items-center after:absolute after:inset-0 after:rounded-xl"
-            >
-              {game.label}
-            </Link>
-          </h3>
-          {game.daily && (
-            <span className="text-[10px] uppercase tracking-wide font-bold text-primary border border-primary/40 rounded px-1.5 py-0.5">
-              Daily
-            </span>
-          )}
-        </div>
-        <p className="text-xs text-muted-foreground mt-1">{game.description}</p>
-      </div>
-    </div>
-  );
-}
-
 const SportHub = ({ route }: { route: string }) => {
   const hub = hubFor(route);
   /* A route mounted without a definition is a wiring mistake, not a page. Send
@@ -95,46 +59,13 @@ const SportHub = ({ route }: { route: string }) => {
   if (!hub) return <Navigate to="/" replace />;
 
   const games = categoriesByTitle(...hub.titles).flatMap(c => c.games);
-  /* Grouped by what the registry already knows, so a new game files itself:
-     the ones the home page showcases are the long sims, the rest are short,
-     with the dailies first because they are the reason to come back. */
-  const deep = games.filter(g => g.featured);
-  const quick = games.filter(g => !g.featured).sort((a, b) => Number(!!b.daily) - Number(!!a.daily));
-  const dailyCount = games.filter(g => g.daily).length;
 
   return (
     <div className="min-h-screen flex flex-col bg-background">
       <PageSeo title={hub.seoTitle} description={hub.seoDescription} path={hub.route} />
       <GameNavbar />
-      <main id="dukb-main" className="flex-1 max-w-4xl mx-auto w-full px-4 pt-6 pb-16">
-        <header className="text-center mb-8">
-          <h1 className="text-3xl font-black text-foreground">{hub.emoji} {hub.h1}</h1>
-          <p className="text-muted-foreground mt-2 max-w-xl mx-auto">
-            All {games.length} of them in one place.{' '}
-            {dailyCount > 0 && <>{dailyCount} reset every day, and </>}
-            every one is free with no sign-up. {hub.intro}
-          </p>
-        </header>
-
-        {hub.deep && deep.length > 0 && (
-          <section className="mb-10">
-            <h2 className="text-lg font-display font-bold text-foreground mb-1">{hub.deep.heading}</h2>
-            <p className="text-xs text-muted-foreground mb-4">{hub.deep.blurb}</p>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              {deep.map(g => <GameCard key={g.path} game={g} />)}
-            </div>
-          </section>
-        )}
-
-        {quick.length > 0 && (
-          <section className="mb-10">
-            <h2 className="text-lg font-display font-bold text-foreground mb-1">{hub.quick.heading}</h2>
-            <p className="text-xs text-muted-foreground mb-4">{hub.quick.blurb}</p>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-              {quick.map(g => <GameCard key={g.path} game={g} />)}
-            </div>
-          </section>
-        )}
+      <main id="dukb-main" className="flex-1 max-w-6xl mx-auto w-full px-4 pt-4 pb-16">
+        <HubExperience key={hub.route} hub={hub} games={games} />
 
         {/* ROUND 357: the cornerstone sections. These are what turn a hub from
             an icon grid into a page worth landing on, and they are plain
