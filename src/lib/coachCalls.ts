@@ -239,8 +239,13 @@ function cappedSwing(pack: CoachCallsPack, st: CallsState, raw: number): number 
   return clampTo(sofar + one, -pack.oneScore, pack.oneScore) - sofar;
 }
 
-/** Make the call. An unknown option is the book call. */
-export function answerMoment(pack: CoachCallsPack, st: CallsState, moment: Moment, optionId: string): CallsState {
+/** Make the call on the moment the game is at. An unknown option is the book
+ *  call. The moment and its odds are worked out here rather than taken from
+ *  the caller, so a repeated tap or a stale screen can never answer the same
+ *  moment twice or bring its own odds. */
+export function answerMoment(pack: CoachCallsPack, st: CallsState, optionId: string): CallsState {
+  const moment = nextMoment(pack, st);
+  if (!moment) return st;
   const idx = Math.max(0, moment.def.options.findIndex(o => o.id === optionId));
   const opt = moment.def.options[idx];
   const odds = moment.odds[idx];
@@ -303,7 +308,7 @@ export function chooseOption(pack: CoachCallsPack, st: CallsState, moment: Momen
 export function playCalls(pack: CoachCallsPack, input: CallsInput, policy: CallPolicy, pick?: () => number): CallsResult {
   let st = startCalls(pack, input);
   for (let m = nextMoment(pack, st); m; m = nextMoment(pack, st)) {
-    st = answerMoment(pack, st, m, chooseOption(pack, st, m, policy, pick));
+    st = answerMoment(pack, st, chooseOption(pack, st, m, policy, pick));
   }
   return finishCalls(pack, st);
 }

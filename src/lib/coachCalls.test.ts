@@ -101,7 +101,7 @@ describe('the calls', () => {
         expect(st.count).toBe(first.count);
         let pick = seed;
         for (let m = nextMoment(pack, st); m; m = nextMoment(pack, st)) {
-          st = answerMoment(pack, st, m, chooseOption(pack, st, m, policy, () => ((pick = (pick * 16807) % 2147483647) / 2147483647)));
+          st = answerMoment(pack, st, chooseOption(pack, st, m, policy, () => ((pick = (pick * 16807) % 2147483647) / 2147483647)));
           expect(Math.abs(st.calls[st.calls.length - 1].swing)).toBeLessThanOrEqual(pack.oneScore);
         }
         expect(Math.abs(st.calls.reduce((s, c) => s + c.swing, 0))).toBeLessThanOrEqual(pack.oneScore);
@@ -120,7 +120,9 @@ describe('the calls', () => {
     const st = startCalls(pack, input(pack, { myScore: 70, oppScore: 69 }));
     const m = nextMoment(pack, st)!;
     expect(m).not.toBeNull();
-    expect(answerMoment(pack, st, m, 'not-an-option').calls[0].option).toBe(m.def.options[0].id);
+    expect(answerMoment(pack, st, 'not-an-option').calls[0].option).toBe(m.def.options[0].id);
+    const done = { ...st, count: 0 };
+    expect(answerMoment(pack, done, m.def.options[1].id)).toBe(done);
   });
   it('overtime settles a level college game, a level Aussie Rules game is a draw', () => {
     const cfb = callPack('cfb'), afl = callPack('afl');
