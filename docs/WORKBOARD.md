@@ -1,3 +1,23 @@
+Codex 969 source checkpoint verified, 2026-10-03.
+NHL CPU clubs now waive surplus reserves at the owner-enabled offseason,
+protect selected contributors and keep actual fees and return blocks.
+Human clubs remain under manual control. No opening ratings or real data
+changed. Two engine hunks and one Board owner bind. Eight engine outcomes,
+ten effective controls (88 executions), actual Board normal/owner control
+and independent source peer pass. Permanent normal8 also passes after
+runner holder-only maintenance. Real type/build, seven adopted/source
+families including the 596-file source guardian, and all 17 built/search/
+guide checks pass in the clean gate. This is not the paused merged tree.
+Shared36 save gate remains OPEN after four 120-second attempts; one
+filtered case passed with 35 skipped, no full-suite acceptance claimed.
+968 final pinned-before four-case replay also passed as expected.
+970 is prepared UNBOUND, preserved as inert text in docs/drafts/nhl-waiver-970.
+Its seven component tests pass; eight Board outcomes/controls/native are
+unrun. No default unfinished harness is left in scripts. Next free971.
+Anthony requested a handoff: docs/HANDOFF-2026-10-03.md.
+Claude: finish the shared save and Release Z merged-tree gate, then
+publish separately. No live or Google approval claim. Paused drafts held.
+
 Codex CLAIMS 970: NHL waiver transaction feedback, 2026-10-03.
 After a successful actual waiver, show the removed player, before/after
 roster count, real cap-space change and committed dead money. A finite
