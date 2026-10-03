@@ -1,6 +1,6 @@
 # Round 993: Road to the Draft
 
-Status: implemented for remote verification, 2026-10-03. Not accepted or published.
+Status: accepted and merged as 9b9bfb14 through PR109, 2026-10-03. Publication pending.
 
 ## Player experience
 
@@ -64,28 +64,30 @@ and [Baseball America](https://www.baseballamerica.com/stories/2026-mlb-draft-bo
 
 ## Acceptance
 
-Local work is limited to source inspection, TS/TSX and CSS parsing, and diff
-checks because this machine is under memory pressure. Type checking, build,
-original900/913/914 checks and controls, actual Board reload/handoff/undrafted
-cases, one professional season, and native mobile/desktop review remain CI gates.
-The mounted993 harness is owned separately by save_diagnosis in this worktree.
-The serial prospect-journey workflow includes original900 controls, all914 model
-controls, the992 practice outcomes/controls and913 timing controls. The native
-career993 walk covers all four sports at390px, NBA at320px with reduced motion,
-and NBA at1440px with keyboard. It captures choices, the draft reveal, the scout
-archive and the first professional season, and checks complete saves after each
-transition against an expectation computed before the input.
+Exact commit `dacafa8a1af42ebb97e51a5e6fb1d3d87c65545d` passed
+[CI37110583860](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/37110583860).
+Verification ran on a standard public GitHub runner because the local machine
+was under memory pressure. This is the scoped product gate, not a claim that
+the entire repository suite or production database probes ran.
 
-The first complete remote gate passed at f3b5545d (run 37107869842), including
-both native reveal controls. It is retained as a baseline, not final acceptance.
-The reviewed 914 model through fc4bd863 is now integrated: corrected NHL combine
-tests, truthful NFL decisions, route-specific NBA cards, MLB/NHL rate lines and
-the full undrafted development ladder. The updated model harness retains its
-measured bands and all 14 controls. Our constructor entry, invalid-input guards,
-integer/length/age validation and truthful NHL draft-entry wording remain.
-The renamed-card fixture now reaches its final choice through actual seasons;
-corrupt line cases retain valid array lengths to isolate their content guard.
-Fresh type, build, compatibility, model and native gates are required.
+- Real app type check and production build.
+- 36 mounted prospect outcomes and 15 effective controls. Each control rejected
+  four named assertions and preserved four quiet legacy cases.
+- 26 original model/component tests and all 14 model controls.
+- Four original career replays and six controls, plus 32 practice outcomes and
+  12 controls. All 48 training tests, 43 recorded replays and six timing controls
+  passed, with 2,245,687 training checks recorded.
+- 13 career regression families, the own-key action control and all 17 built
+  readers passed.
+- Six native journeys: all four sports at 390px, NBA at 320px with reduced
+  motion, and NBA at 1440px with keyboard. Two viewport controls failed as
+  intended. All six normal paths had zero horizontal overflow. Screenshots of
+  route choice, decisions, draft results, scout archives and pro play were reviewed.
+
+The reviewed 914 closing corrections are included: off-ice NHL combine tests,
+truthful NFL decisions, prep-only NBA cards, MLB/NHL rate lines and the full
+undrafted development ladder. Invalid-input guards and strict saved outcome
+validation remain in place.
 
 Completed awaiting-Join saves now validate their stored team, pick/round math,
 year, rating, age and development length without rerunning the current model.
@@ -94,4 +96,7 @@ their existing structural reader. Four added mounted cases carry deliberately
 different valid historical stats and ratings through reload, career entry,
 archive viewing and a professional season. The actual previous replay reader is
 a rejection control, and a second control removes semantic outcome validation.
-The final mounted gate is 36 outcomes with 15 controls.
+Artifact `11269388362` was retained locally with matching SHA256:
+`8f50f27d479357dbc2df4fc35477b9d6bf7696f740bbfea36933de78bf7fff62`.
+Evidence: `C:/Users/antho/AppData/Local/Temp/dukb-prospect993-ci37110583860/ballpark-hero/ballpark-hero/prospect-journey-artifacts/`.
+PR: https://github.com/PapiSalgueroM/ballpark-hero/pull/109.
