@@ -125,7 +125,20 @@ export function nhlLineupSport(): GmLineupSport<NhlGmTeam> {
      offense  11 (1 RB, 3 WR, 1 TE, the default), 12 (1 RB, 2 WR, 2 TE), 21 (2 RB, 2 WR, 1 TE)
      defense  4-3 (4 DL, 3 LB, 4 DB, the default), 3-4 (3 DL, 4 LB, 4 DB)
    The line is five off the chart and has no scheme, so it never moves the
-   number beyond what the chart already does. */
+   number beyond what the chart already does.
+   Sources for the shapes, all read 2026-10-03:
+     personnel, first digit backs, second tight ends, receivers the rest of
+     the eleven, 11 = 1 RB 1 TE 3 WR, 12 = 1 RB 2 TE 2 WR, 21 = 2 RB 1 TE 2 WR:
+       http://www.insidethe49.com/football-101/offensive-personnel-packages-nfl/
+       http://www.footballboost.com/OffensiveFormations.html
+     fronts, 4-3 four linemen and three linebackers, 3-4 three and four, and
+     a nickel brings on a fifth defensive back (so the base front has four):
+       https://operations.nfl.com/learn-the-game/nfl-basics/terms-glossary/
+     the linebackers (three in a 4-3 base set, four in a 3-4) a second time:
+       https://bleacherreport.com/articles/1212418-football-101-linebacker-assignments-and-alignment
+     The linemen and defensive back counts rest on the glossary alone: no
+     second source read that day states them, so they are flagged for a
+     second read in the round's report rather than claimed twice. */
 const personnel = (rb: number, wr: number, te: number): GmSlot[] =>
   [...slots('RB', rb, 1, ['RB']), ...slots('WR', wr, 1, ['WR']), ...slots('TE', te, 1, ['TE'])];
 const front = (dl: number, lb: number): GmSlot[] =>

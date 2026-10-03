@@ -56,7 +56,10 @@
         play spot: NFL 8509 and NHL 1929 men not allowed, both red.
      6. MLB 300 of 300 and NHL 480 of 480 back in their slot; control held
         takes it to 0 of 300 and 0 of 480.
-     7. 150 of 150 fifth slots filled again; control vacancy, 0 of 150. */
+     7. 150 of 150 fifth slots filled again; control vacancy, 0 of 150.
+   The fixture is written with stable ids since the review fixes: two
+   --write-fixture runs gave the same file byte for byte, and its 25 rows
+   equal the first recording in every number and, ids masked, every field. */
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
@@ -223,8 +226,25 @@ for (const sport of ['mlb', 'nhl', 'nfl']) {
 /* The fixture: a few clubs per sport pinned at today's number, so a later
    bind that changes the engine and this file together still has to answer
    to the number the game gave before it. */
+/* The engines stamp player ids with a per load value, so every man's id
+   (the roster, the NFL practice squad, anything holding a man) is renamed
+   by sport, club and the order he is met in, everywhere it appears in the
+   club, and a fixture written twice is the same file byte for byte. */
+const stableIds = row => {
+  const ids = [];
+  const walk = v => {
+    if (Array.isArray(v)) { v.forEach(walk); return; }
+    if (!v || typeof v !== 'object') return;
+    if (typeof v.id === 'string' && typeof v.pos === 'string' && !ids.includes(v.id)) ids.push(v.id);
+    Object.values(v).forEach(walk);
+  };
+  walk(row.team);
+  let json = JSON.stringify(row.team);
+  ids.forEach((id, i) => { json = json.split(JSON.stringify(id)).join(JSON.stringify(`${row.sport}-${row.team.abbr}-${i + 1}`)); });
+  return { ...row, team: JSON.parse(json) };
+};
 if (WRITE_FIXTURE && !CONTROL) {
-  fs.writeFileSync(FIXTURE, JSON.stringify({ madeBy: 'scripts/simGmLineup.mjs --write-fixture, Round 945, against the engines as they stood before any lineup bind', rows: fixtureRows }) + '\n');
+  fs.writeFileSync(FIXTURE, JSON.stringify({ madeBy: 'scripts/simGmLineup.mjs --write-fixture, Round 945, against the engines as they stood before any lineup bind', rows: fixtureRows.map(stableIds) }) + '\n');
   console.log(`   wrote ${path.relative(ROOT, FIXTURE)} (${fixtureRows.length} clubs)`);
 }
 {
