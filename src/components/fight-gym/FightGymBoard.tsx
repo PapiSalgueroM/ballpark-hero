@@ -10,8 +10,50 @@ import { STYLES, TACTICS, weightById, ratingOf, effectiveAttrs, conditionTrack, 
 import {
   newGym, signProspect, trainFighter, offersForFighter, takeGymFight,
   releaseFighter, advanceWeek, gymVerdict, guessWeight, weeklyCost, cutRate, TRAIN_COST,
-  type GymState, type GymOffer,
+  trainedThisWeek, campQualityFor, sellGym, salePrice, canSellGym, sanitizeGym, wentBroke,
+  SELL_MIN_WEEKS, BROKE_PENALTY, TRAIN_FOCI,
+  type GymState, type GymOffer, type TrainFocus,
 } from '@/lib/fightGym';
+import { HowToPlayPopover } from '@/components/game/HowToPlayPopover';
+
+const FOCUS_LABEL: Record<TrainFocus, string> = {
+  conditioning: 'Conditioning',
+  power: 'Power',
+  defence: 'Defence',
+  speed: 'Speed',
+};
+
+/* Round 955: the one place the new rules are written down for the player,
+   because the page's guide lives in a file another lane is editing. The worked
+   example uses this file's own numbers through the lib, so it cannot drift. */
+function GymRules() {
+  return (
+    <HowToPlayPopover title="Training and selling up" triggerLabel="How training and selling work" floatingTrigger={false}>
+      <div className="space-y-3 text-sm">
+        <p>
+          <strong>Training.</strong> Each fighter gets one training block a week, {TRAIN_COST.toFixed(3)}m a time. Pick what
+          the block works on: conditioning, power, defence or speed. Only that area grows, and it grows less the closer he
+          is to his ceiling.
+        </p>
+        <p>
+          The work also carries into his next fight. A man nobody has worked with goes in at sharpness 50. Every block since
+          his last fight adds 5, up to four blocks, and a conditioning block among them adds 10 more, which is gas for the
+          late rounds. The fight spends it, so the next camp starts from zero.
+        </p>
+        <p className="rounded-md border bg-muted/40 p-2 text-xs">
+          Example: you give him power in week 10, conditioning in week 11 and defence in week 12, then fight him in week 12.
+          That is three blocks, so 50 + 15 + 10 for the conditioning, and he goes in at sharpness 75. Try a second block on
+          him in week 12 and the gym says no.
+        </p>
+        <p>
+          <strong>Selling up.</strong> From week {SELL_MIN_WEEKS} you can sell the gym. The buyer pays for your name, your
+          belts and the men still under contract, less what they are carrying. Selling ends the game and shows the verdict
+          with the sale counted in. Run out of money instead and the doors close with {BROKE_PENALTY} points off.
+        </p>
+      </div>
+    </HowToPlayPopover>
+  );
+}
 
 type Phase = 'setup' | 'hub' | 'plan' | 'fight' | 'closed';
 
@@ -41,6 +83,10 @@ export default function FightGymBoard() {
   const [offer, setOffer] = useState<GymOffer | null>(null);
   const [tactics, setTactics] = useState<Tactic[]>(['box', 'press', 'counter']);
   const [result, setResult] = useState<BoutResult | null>(null);
+  /* Round 955: which fighter's focus picker is open, and which one tap action is
+     waiting on a second tap: 'reset', 'sell', or a fighter id to let go. */
+  const [trainingId, setTrainingId] = useState<string | null>(null);
+  const [confirm, setConfirm] = useState<string | null>(null);
 
   const revealRef = useRevealScroll<HTMLDivElement>(`${phase}:${g?.week ?? 0}:${activeId ?? ''}`);
   const verdict = useMemo(() => (g ? gymVerdict(g) : null), [g]);
@@ -56,8 +102,9 @@ export default function FightGymBoard() {
          This restore runs after mount, so without the mark every reload
          paid the verdict again. */
       if (s.g.closed) markRestoredFinish('fight-gym');
-      setG(s.g);
-      setPhase(s.g.closed ? 'closed' : 'hub');
+      const g0 = sanitizeGym(s.g);
+      setG(g0);
+      setPhase(g0.closed ? 'closed' : 'hub');
     } catch { /* a fresh gym is the right fallback */ }
   }, []);
 
@@ -70,6 +117,7 @@ export default function FightGymBoard() {
   const reset = () => {
     try { localStorage.removeItem(SAVE_KEY); } catch { /* ignore */ }
     setG(null); setPhase('setup'); setActiveId(null); setOffer(null); setResult(null);
+    setTrainingId(null); setConfirm(null);
   };
 
   if (phase === 'setup' || !g) {
@@ -84,6 +132,10 @@ export default function FightGymBoard() {
             You start with two kids nobody wanted and enough money for a few weeks. The fighters are yours to
             look after. Everything that happens to them is your decision.
           </p>
+          <div className="mt-2 flex items-center gap-2 text-[11px] text-muted-foreground">
+            <GymRules />
+            <span>One training block per fighter a week, and from week {SELL_MIN_WEEKS} you can sell up.</span>
+          </div>
         </div>
         <button onClick={() => persist(newGym(name), 'hub')}
           className="min-h-[48px] w-full rounded-md bg-primary px-4 py-3 font-semibold text-primary-foreground">
@@ -122,7 +174,10 @@ export default function FightGymBoard() {
       <div className="space-y-4" ref={revealRef}>
         {Header}
         <div className="rounded-lg border bg-card p-4 text-center">
-          <Trophy className="mx-auto mb-2 h-7 w-7 text-amber-500" />
+          <Trophy className={cn('mx-auto mb-2 h-7 w-7', wentBroke(g) ? 'text-muted-foreground' : 'text-amber-500')} />
+          <p className="text-sm font-semibold">
+            {wentBroke(g) ? 'The doors closed' : `Sold for ${(g.soldFor ?? 0).toFixed(3)}m`}
+          </p>
           <p className="text-xs uppercase tracking-wide text-muted-foreground">What the gym is remembered as</p>
           <p className="text-2xl font-bold text-primary">{verdict.tier}</p>
           <p className="mb-3 text-sm text-muted-foreground">{verdict.score} out of 100</p>
@@ -132,7 +187,9 @@ export default function FightGymBoard() {
         </div>
         <ShareButtons gameName="Fight Gym" gamePath="/fight-gym"
           score={`${verdict.tier}, ${verdict.score}/100`}
-          customText={`${g.name} put ${g.alumni.length} fighters through and came out as ${verdict.tier}.`} />
+          customText={wentBroke(g)
+            ? `${g.name} put ${g.alumni.length} fighters through and came out as ${verdict.tier}.`
+            : `${g.name} put ${g.alumni.length} fighters through, sold up in week ${g.week} and went out as ${verdict.tier}.`} />
         <button onClick={reset} className="min-h-[48px] w-full rounded-md border px-4 py-3 font-semibold">
           <RotateCcw className="mr-2 inline h-4 w-4" />Open a new gym
         </button>
@@ -160,6 +217,12 @@ export default function FightGymBoard() {
                 He is carrying {f.damage.toFixed(0)} damage. Putting him in will be noticed, whatever happens.
               </p>
             )}
+            <p className="mt-2 text-[11px] text-muted-foreground">
+              Sharpness {Math.round(campQualityFor(g, f.id) * 100)}.{' '}
+              {campQualityFor(g, f.id) > 0.5
+                ? 'The training since his last fight goes in with him.'
+                : 'Nobody has worked with him since his last fight, so he goes in at an even 50.'}
+            </p>
           </div>
           <div className="space-y-3">
             {[0, 1, 2].map(i => (
@@ -274,6 +337,10 @@ export default function FightGymBoard() {
   return (
     <div className="space-y-4" ref={revealRef}>
       {Header}
+      <div className="flex items-center justify-end gap-2 text-xs text-muted-foreground">
+        <span>Training limits and selling up</span>
+        <GymRules />
+      </div>
 
       <div>
         <p className="mb-2 text-xs uppercase tracking-wide text-muted-foreground">Your fighters</p>
@@ -310,17 +377,50 @@ export default function FightGymBoard() {
                     <Swords className="mr-1 inline h-3 w-3" />Find him a fight
                   </button>
                   <button
-                    disabled={g.money < TRAIN_COST}
-                    onClick={() => { const t = trainFighter(g, f.id); if (t) persist(t, 'hub'); }}
+                    disabled={g.money < TRAIN_COST || trainedThisWeek(g, f.id)}
+                    onClick={() => { setTrainingId(trainingId === f.id ? null : f.id); setConfirm(null); }}
                     className="min-h-[36px] rounded-md border px-3 py-1.5 text-xs disabled:opacity-40">
-                    <Dumbbell className="mr-1 inline h-3 w-3" />Train {TRAIN_COST.toFixed(3)}m
+                    <Dumbbell className="mr-1 inline h-3 w-3" />
+                    {trainedThisWeek(g, f.id) ? 'Trained this week' : `Train ${TRAIN_COST.toFixed(3)}m`}
                   </button>
                   <button
-                    onClick={() => { const r = releaseFighter(g, f.id); if (r) persist(r, 'hub'); }}
+                    onClick={() => { setConfirm(confirm === f.id ? null : f.id); setTrainingId(null); }}
                     className="min-h-[36px] rounded-md border px-3 py-1.5 text-xs text-muted-foreground">
                     Let go
                   </button>
                 </div>
+                {trainingId === f.id && !trainedThisWeek(g, f.id) && (
+                  <div className="mt-2 border-t pt-2">
+                    <p className="mb-1 text-[11px] text-muted-foreground">One block this week. What does he work on?</p>
+                    <div className="grid grid-cols-2 gap-2">
+                      {TRAIN_FOCI.map(fo => (
+                        <button key={fo}
+                          onClick={() => { const t = trainFighter(g, f.id, fo); setTrainingId(null); if (t) persist(t, 'hub'); }}
+                          className="min-h-[40px] rounded-md border px-2 py-1.5 text-xs font-medium hover:border-primary">
+                          {FOCUS_LABEL[fo]}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+                {confirm === f.id && (
+                  <div className="mt-2 border-t pt-2">
+                    <p className="mb-1 text-[11px] text-muted-foreground">
+                      Let {f.name} go for good?{f.damage >= 50 ? ' Sending him out this hurt will cost the gym some of its name.' : ''}
+                    </p>
+                    <div className="flex gap-2">
+                      <button
+                        onClick={() => { const r = releaseFighter(g, f.id); setConfirm(null); if (r) persist(r, 'hub'); }}
+                        className="min-h-[40px] flex-1 rounded-md border border-destructive/60 px-3 py-1.5 text-xs font-medium text-destructive">
+                        Yes, let him go
+                      </button>
+                      <button onClick={() => setConfirm(null)}
+                        className="min-h-[40px] flex-1 rounded-md border px-3 py-1.5 text-xs">
+                        Keep him
+                      </button>
+                    </div>
+                  </div>
+                )}
                 {activeId === f.id && offers.length > 0 && (
                   <div className="mt-2 space-y-1.5 border-t pt-2">
                     {offers.map(o => (
@@ -370,10 +470,50 @@ export default function FightGymBoard() {
       </div>
 
       <button
-        onClick={() => { const n = advanceWeek(g); setActiveId(null); setOffers([]); persist(n, n.closed ? 'closed' : 'hub'); }}
+        onClick={() => {
+          const n = advanceWeek(g);
+          setActiveId(null); setOffers([]); setTrainingId(null); setConfirm(null);
+          persist(n, n.closed ? 'closed' : 'hub');
+        }}
         className="min-h-[48px] w-full rounded-md border px-4 py-3 font-semibold">
-        Nothing this week, pay the bills
+        Nothing more this week, pay the bills
       </button>
+
+      <div className="rounded-lg border bg-card p-3">
+        <div className="flex items-start justify-between gap-2">
+          <div className="min-w-0">
+            <p className="text-sm font-semibold">Sell the gym</p>
+            <p className="text-[11px] text-muted-foreground">
+              {canSellGym(g)
+                ? `A buyer will pay ${salePrice(g).toFixed(3)}m today. Selling ends it here and shows the verdict.`
+                : `Nobody buys a gym this new. Offers start in week ${SELL_MIN_WEEKS}.`}
+            </p>
+          </div>
+          <button
+            disabled={!canSellGym(g)}
+            onClick={() => { setConfirm(confirm === 'sell' ? null : 'sell'); setTrainingId(null); }}
+            className="min-h-[36px] shrink-0 rounded-md border px-3 py-1.5 text-xs font-medium disabled:opacity-40">
+            Sell
+          </button>
+        </div>
+        {confirm === 'sell' && canSellGym(g) && (
+          <div className="mt-2 flex gap-2 border-t pt-2">
+            <button
+              onClick={() => {
+                const s = sellGym(g);
+                setConfirm(null); setActiveId(null); setOffers([]);
+                if (s) persist(s, 'closed');
+              }}
+              className="min-h-[40px] flex-1 rounded-md bg-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground">
+              Yes, sell for {salePrice(g).toFixed(3)}m
+            </button>
+            <button onClick={() => setConfirm(null)}
+              className="min-h-[40px] flex-1 rounded-md border px-3 py-1.5 text-xs">
+              Not yet
+            </button>
+          </div>
+        )}
+      </div>
 
       {g.log.length > 0 && (
         <div className="rounded-lg border bg-card p-3">
@@ -384,9 +524,28 @@ export default function FightGymBoard() {
         </div>
       )}
 
-      <button onClick={reset} className="min-h-[44px] w-full rounded-md border px-4 py-2 text-sm text-muted-foreground">
-        Close the gym and start again
-      </button>
+      {confirm === 'reset' ? (
+        <div className="rounded-lg border border-destructive/50 p-3">
+          <p className="mb-2 text-xs text-muted-foreground">
+            Walk away and start a new gym? This one is gone for good, with no verdict.
+          </p>
+          <div className="flex gap-2">
+            <button onClick={reset}
+              className="min-h-[44px] flex-1 rounded-md border border-destructive/60 px-3 py-2 text-sm text-destructive">
+              Yes, start again
+            </button>
+            <button onClick={() => setConfirm(null)}
+              className="min-h-[44px] flex-1 rounded-md border px-3 py-2 text-sm">
+              Keep this gym
+            </button>
+          </div>
+        </div>
+      ) : (
+        <button onClick={() => { setConfirm('reset'); setTrainingId(null); }}
+          className="min-h-[44px] w-full rounded-md border px-4 py-2 text-sm text-muted-foreground">
+          Close the gym and start again
+        </button>
+      )}
     </div>
   );
 }

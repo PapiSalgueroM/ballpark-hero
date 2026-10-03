@@ -75,6 +75,29 @@ export interface GymState {
   log: string[];
   seed: number;
   rngTick: number;
+  /**
+   * Round 955: how the gym ended. Absent while it is open. An old save that is
+   * closed without one went broke, because until this round that was the only
+   * way a gym could close.
+   */
+  exit?: GymExit;
+  /** Round 955: what the buyer paid, in millions, when the gym was sold. */
+  soldFor?: number;
+  /** Round 955: per fighter, the week of his last block and the work since his last fight. */
+  training?: Record<string, GymCamp>;
+}
+
+export type GymExit = 'sold' | 'broke';
+
+/** Round 955: what a training block works on. The same four areas as a career camp. */
+export type TrainFocus = 'conditioning' | 'power' | 'defence' | 'speed';
+export const TRAIN_FOCI: TrainFocus[] = ['conditioning', 'power', 'defence', 'speed'];
+
+export interface GymCamp {
+  /** The week of his last block, which is what holds the one block a week limit. */
+  week: number;
+  /** Blocks since his last fight, by focus. Cleared when he fights. */
+  blocks: Record<TrainFocus, number>;
 }
 
 /** Weekly overhead in millions: rent, coaches, and everybody who eats. */
@@ -188,28 +211,73 @@ export function guessWeight(f: Fighter): WeightId {
 /**
  * A training block. Costs money, moves a fighter toward his ceiling, and the
  * closer he already is the less it buys, exactly as camp does in the career.
+ *
+ * Round 955: ONE BLOCK PER FIGHTER PER WEEK, AND IT WORKS ON ONE THING. Before
+ * this a block bumped all four areas and could be bought as many times a week
+ * as the money allowed, so training was a button you pressed until the cash
+ * ran low rather than a decision. Now each block picks a focus, that area alone
+ * grows, and the work also carries into his next fight: see campQualityFor.
  */
 export const TRAIN_COST = 0.035;
 
-export function trainFighter(g: GymState, fighterId: string): GymState | null {
+/** Growth per block in the focus area, at full headroom. The career camp's figure. */
+const FOCUS_GAIN = 2.4;
+
+const FOCUS_ATTR: Record<TrainFocus, 'stamina' | 'power' | 'defence' | 'speed'> = {
+  conditioning: 'stamina',
+  power: 'power',
+  defence: 'defence',
+  speed: 'speed',
+};
+
+const FOCUS_LINE: Record<TrainFocus, string> = {
+  conditioning: 'ran the hills and did the rounds on the bags',
+  power: 'spent the week on the heavy bag',
+  defence: 'spent the week slipping and blocking',
+  speed: 'spent the week on the pads and the rope',
+};
+
+const noBlocks = (): Record<TrainFocus, number> => ({ conditioning: 0, power: 0, defence: 0, speed: 0 });
+
+/** True when this fighter has already had his block this week. */
+export function trainedThisWeek(g: GymState, fighterId: string): boolean {
+  return g.training?.[fighterId]?.week === g.week;
+}
+
+export function trainFighter(g: GymState, fighterId: string, focus: TrainFocus): GymState | null {
   if (g.closed || g.money < TRAIN_COST) return null;
+  if (!FOCUS_ATTR[focus]) return null;
+  if (trainedThisWeek(g, fighterId)) return null;
   const i = g.roster.findIndex(f => f.id === fighterId);
   if (i < 0) return null;
   const f = { ...g.roster[i], attrs: { ...g.roster[i].attrs } };
-  const pot = f.potential;
-  const bump = (cur: number) => clampi(cur + clamp((pot - cur) / 22, 0, 1) * 2.1, 15, 99);
-  f.attrs.stamina = bump(f.attrs.stamina);
-  f.attrs.defence = bump(f.attrs.defence);
-  f.attrs.speed = bump(f.attrs.speed);
-  f.attrs.power = bump(f.attrs.power);
+  const key = FOCUS_ATTR[focus];
+  f.attrs[key] = clampi(f.attrs[key] + clamp((f.potential - f.attrs[key]) / 22, 0, 1) * FOCUS_GAIN, 15, 99);
   const roster = g.roster.slice();
   roster[i] = f;
+  const prev = g.training?.[fighterId];
+  const blocks = { ...noBlocks(), ...(prev?.blocks ?? {}) };
+  blocks[focus] += 1;
   return {
     ...g,
     money: Math.round((g.money - TRAIN_COST) * 1000) / 1000,
     roster,
-    log: [`${f.name} put in a hard block of work.`, ...g.log],
+    training: { ...(g.training ?? {}), [fighterId]: { week: g.week, blocks } },
+    log: [`${f.name} ${FOCUS_LINE[focus]}.`, ...g.log],
   };
+}
+
+/**
+ * How ready a man is for his next fight, 0 to 1, which simBout reads as the
+ * camp. A man nobody has worked with comes in at the even 0.5 every gym fight
+ * used before Round 955. Each block since his last fight adds a little, up to
+ * four, and a conditioning block among them gives him gas for the late rounds.
+ */
+export function campQualityFor(g: GymState, fighterId: string): number {
+  const b = g.training?.[fighterId]?.blocks;
+  if (!b) return 0.5;
+  const total = b.conditioning + b.power + b.defence + b.speed;
+  return clamp(0.5 + Math.min(total, 4) * 0.05 + (b.conditioning > 0 ? 0.1 : 0), 0, 1);
 }
 
 /**
@@ -278,7 +346,7 @@ export function takeGymFight(g: GymState, fighterId: string, offer: GymOffer, ta
   const fighter = g.roster[i];
   const result = simBout({
     player: fighter, opponent: offer.opponent, rounds: offer.rounds,
-    weight: guessWeight(fighter), tactics, campQuality: 0.5,
+    weight: guessWeight(fighter), tactics, campQuality: campQualityFor(g, fighterId),
   }, rng);
   done(offer.rounds * 6 + 4);
 
@@ -324,9 +392,14 @@ export function takeGymFight(g: GymState, fighterId: string, offer: GymOffer, ta
   if (fighter.damage >= 70) rep -= 2.6;
   if (!won && (result.method === 'KO' || result.method === 'TKO') && fighter.damage > 45) rep -= 3.2;
 
+  /* The camp is spent on the night. The week stays, so the weekly limit still holds. */
+  const camp = g.training?.[fighterId];
+  const training = camp ? { ...g.training, [fighterId]: { week: camp.week, blocks: noBlocks() } } : g.training;
+
   const next: GymState = {
     ...g,
     roster,
+    training,
     money: Math.round((g.money + cut) * 1000) / 1000,
     reputation: clamp(Math.round(rep * 10) / 10, 0, 100),
     titles: g.titles + (offer.title && won ? 1 : 0),
@@ -365,8 +438,14 @@ function retireOut(g: GymState, f: Fighter, how: string): GymState {
      only thing stopping the obvious exploit: fight the broken ones until they
      stop earning and sign new ones. */
   const penalty = f.damage >= 70 ? 4.5 : f.damage >= 50 ? 1.8 : 0;
+  let training = g.training;
+  if (training && training[f.id]) {
+    training = { ...training };
+    delete training[f.id];
+  }
   return {
     ...g,
+    training,
     roster: g.roster.filter(x => x.id !== f.id),
     reputation: clamp(Math.round((g.reputation - penalty) * 10) / 10, 0, 100),
     alumni: [...g.alumni, {
@@ -395,10 +474,93 @@ export function advanceWeek(g: GymState): GymState {
     reputation: clamp(Math.round((next.reputation - 0.08) * 10) / 10, 0, 100),
   };
   next.prospects = prospectsFor(next);
-  if (next.money < 0) {
-    next = { ...next, closed: true, log: ['The rent went unpaid and the doors closed.', ...next.log] };
-  }
+  if (next.money < 0) next = closeBroke(next);
   return next;
+}
+
+/** The only way a gym closed before Round 955, and still the way it closes when the rent goes unpaid. */
+export function closeBroke(g: GymState): GymState {
+  return { ...g, closed: true, exit: 'broke', log: ['The rent went unpaid and the doors closed.', ...g.log] };
+}
+
+/**
+ * Round 955: GOING OUT ON TOP. Until this round a gym could only end by going
+ * broke, so a well run one never saw its verdict and never finished. Selling
+ * is the deliberate ending, open once the gym has been going long enough to be
+ * worth something.
+ */
+export const SELL_MIN_WEEKS = 26;
+
+/**
+ * What a buyer pays for the gym, in millions: the name above the door, the
+ * belts on the wall, and the men still under contract, each worth less for
+ * what he is carrying.
+ */
+export function salePrice(g: GymState): number {
+  const name = (clamp(g.reputation, 0, 100) / 100) ** 1.5 * 2.5;
+  const belts = g.titles * 0.3;
+  const men = g.roster.reduce((s, f) => s + (ratingOf(f) / 100) ** 2 * 0.6 * (1 - clamp(f.damage, 0, 100) / 100), 0);
+  return Math.round((0.2 + name + belts + men) * 1000) / 1000;
+}
+
+export function canSellGym(g: GymState): boolean {
+  return !g.closed && g.week >= SELL_MIN_WEEKS;
+}
+
+export function sellGym(g: GymState): GymState | null {
+  if (!canSellGym(g)) return null;
+  const price = salePrice(g);
+  return {
+    ...g,
+    money: Math.round((g.money + price) * 1000) / 1000,
+    closed: true,
+    exit: 'sold',
+    soldFor: price,
+    log: [`You sell the gym in week ${g.week} for ${price.toFixed(3)}m and hand over the keys.`, ...g.log],
+  };
+}
+
+/** True for a gym that closed because the money ran out, old saves included. */
+export function wentBroke(g: GymState): boolean {
+  return g.closed && g.exit !== 'sold';
+}
+
+/** Verdict points a sale is worth on top of the record, and what going under costs. */
+const SALE_BONUS_CAP = 8;
+export const BROKE_PENALTY = 12;
+
+/**
+ * Round 955: THE ROUND 955 SAVE CHECK. The three blocks this round added are
+ * optional, and a block that does not read right is dropped on its own so the
+ * rest of the gym loads. Everything older is left exactly as it was saved.
+ */
+export function sanitizeGym(g: GymState): GymState {
+  const out: GymState = { ...g };
+  if (out.exit !== undefined && out.exit !== 'sold' && out.exit !== 'broke') delete out.exit;
+  if (out.soldFor !== undefined && !(typeof out.soldFor === 'number' && Number.isFinite(out.soldFor))) delete out.soldFor;
+  if (out.training !== undefined) {
+    const t = out.training as unknown;
+    if (!t || typeof t !== 'object' || Array.isArray(t)) {
+      delete out.training;
+    } else {
+      const clean: Record<string, GymCamp> = {};
+      for (const [id, raw] of Object.entries(t as Record<string, unknown>)) {
+        const c = raw as { week?: unknown; blocks?: Record<string, unknown> } | null;
+        if (!c || typeof c.week !== 'number' || !c.blocks || typeof c.blocks !== 'object') continue;
+        const blocks = noBlocks();
+        let okBlocks = true;
+        for (const k of TRAIN_FOCI) {
+          const v = c.blocks[k];
+          if (v === undefined) continue;
+          if (typeof v !== 'number' || !Number.isFinite(v) || v < 0) { okBlocks = false; break; }
+          blocks[k] = Math.floor(v);
+        }
+        if (okBlocks) clean[id] = { week: c.week, blocks };
+      }
+      out.training = clean;
+    }
+  }
+  return out;
 }
 
 export interface GymVerdict { score: number; tier: string; bullets: string[] }
@@ -411,14 +573,27 @@ export interface GymVerdict { score: number; tier: string; bullets: string[] }
 export function gymVerdict(g: GymState): GymVerdict {
   const wrecked = g.alumni.filter(a => a.damage >= 70).length;
   const clean = g.alumni.filter(a => a.damage < 45).length;
+  /* Round 955: how it ended counts. A gym sold as a going concern is worth
+     something to somebody, and a gym that ran out of rent is not. */
+  const sold = g.closed && g.exit === 'sold';
+  const broke = wentBroke(g);
+  const exitPoints = sold
+    ? Math.min(SALE_BONUS_CAP, (g.soldFor ?? 0) * 3)
+    : broke ? -BROKE_PENALTY : 0;
   const score = clampi(
     g.reputation * 0.5 +
     g.titles * 13 +
     g.history.filter(h => h.result === 'W').length * 0.7 +
     clean * 2 -
-    wrecked * 5,
+    wrecked * 5 +
+    exitPoints,
     0, 100,
   );
+  const ending = sold
+    ? `Sold in week ${g.week} for ${(g.soldFor ?? 0).toFixed(3)}m. Going out on your own terms.`
+    : broke
+      ? `The rent went unpaid in week ${g.week}. Going under costs the gym ${BROKE_PENALTY} points.`
+      : null;
   const tier = score >= 88 ? 'A Great Gym'
     : score >= 70 ? 'Respected'
       : score >= 50 ? 'Getting Known'
@@ -428,6 +603,7 @@ export function gymVerdict(g: GymState): GymVerdict {
     score,
     tier,
     bullets: [
+      ...(ending ? [ending] : []),
       `${g.history.filter(h => h.result === 'W').length} wins from ${g.history.length} fights over ${g.week} weeks.`,
       g.titles ? `${g.titles} world title${g.titles > 1 ? 's' : ''} out of this gym.` : 'No world titles.',
       `${g.alumni.length} fighters came through. ${clean} got out clean, ${wrecked} did not.`,
