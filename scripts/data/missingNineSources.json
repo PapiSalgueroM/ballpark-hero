@@ -279,6 +279,66 @@
         { "name": "Milt Thompson", "nationality": "USA", "born": "Washington, D.C.", "fact": "Started in left; Pete Incaviglia pinch-hit for him and drove in a run with a sacrifice fly.", "checked": "both boxes: Thompson lf 7th, Incaviglia ph,lf indented, SF Incaviglia off Leiter; bref subs: Incaviglia hit for Thompson." },
         { "name": "Darren Daulton", "nationality": "USA", "born": "Arkansas City, Kansas", "fact": "Caught the whole game and doubled off Dave Stewart.", "checked": "both boxes: Daulton c 5th, no Phillies catching sub, 2B off Stewart." }
       ]
+    },
+    {
+      "id": "ws-1960-g7-pit",
+      "game": "1960 World Series Game 7, 1960-10-13, Forbes Field: Pirates 10, Yankees 9",
+      "sources": [
+        { "host": "baseball-almanac.com", "url": "https://www.baseball-almanac.com/box-scores/boxscore.php?boxid=196010130PIT", "read": "2026-10-02" },
+        { "host": "baseball-reference.com", "url": "https://www.baseball-reference.com/boxes/PIT/PIT196010130.shtml", "read": "2026-10-02" }
+      ],
+      "starters": ["CF Bill Virdon", "SS Dick Groat", "LF Bob Skinner", "1B Rocky Nelson", "RF Roberto Clemente", "C Smoky Burgess", "3B Don Hoak", "2B Bill Mazeroski", "P Vern Law"],
+      "trap": "Hal Smith, whose three-run homer in the 8th set up the finish, did not start: Smoky Burgess caught.",
+      "blanks": [
+        { "name": "Bill Mazeroski", "nationality": "USA", "born": "Wheeling, West Virginia", "fact": "Led off the bottom of the 9th with a walk-off homer off Ralph Terry.", "checked": "both boxes: HR 9th off Terry, 0 on, 0 out; Terry L, 0.1 IP; 10-9 final at home." },
+        { "name": "Smoky Burgess", "nationality": "USA", "born": "Caroleen, North Carolina", "fact": "Started at catcher; Hal Smith, whose three-run homer came in the 8th, only entered after Burgess was pinch-run for.", "checked": "both boxes: Burgess c 6th, Christopher pr then Smith c indented under him; Smith HR 8th off Coates, 2 on; bref subs: Christopher ran for Burgess, Smith took over at catcher." },
+        { "name": "Rocky Nelson", "nationality": "USA", "born": "Portsmouth, Ohio", "fact": "Hit a two-run homer off Bob Turley in the 1st.", "checked": "both boxes: HR 1st off Turley, 1 on." }
+      ]
+    },
+    {
+      "id": "ws-1960-g7-nyy",
+      "game": "1960 World Series Game 7, 1960-10-13, Forbes Field: Pirates 10, Yankees 9",
+      "sources": [
+        { "host": "baseball-almanac.com", "url": "https://www.baseball-almanac.com/box-scores/boxscore.php?boxid=196010130PIT", "read": "2026-10-02" },
+        { "host": "baseball-reference.com", "url": "https://www.baseball-reference.com/boxes/PIT/PIT196010130.shtml", "read": "2026-10-02" }
+      ],
+      "starters": ["2B Bobby Richardson", "SS Tony Kubek", "RF Roger Maris", "CF Mickey Mantle", "LF Yogi Berra", "1B Bill Skowron", "C Johnny Blanchard", "3B Clete Boyer", "P Bob Turley"],
+      "trap": "Johnny Blanchard caught, not Elston Howard, and Yogi Berra played left field.",
+      "blanks": [
+        { "name": "Johnny Blanchard", "nationality": "USA", "born": "Minneapolis, Minnesota", "fact": "Started at catcher and drove in a run; Elston Howard did not play.", "checked": "both boxes: Blanchard c 7th, 1 RBI; no Howard anywhere in the Yankees box." },
+        { "name": "Yogi Berra", "nationality": "USA", "born": "St. Louis, Missouri", "fact": "Played left field and hit a three-run homer off Roy Face in the 6th.", "checked": "both boxes: Berra lf 5th, HR 6th off Face, 2 on." },
+        { "name": "Bob Turley", "nationality": "USA", "born": "Troy, Illinois", "fact": "Started but lasted one inning, Rocky Nelson's two-run homer came off him in the 1st.", "checked": "both boxes: Turley 1.0 IP, 3 R; Nelson HR 1st off Turley, 1 on." }
+      ]
+    },
+    {
+      "id": "ws-2014-g7-sf",
+      "game": "2014 World Series Game 7, 2014-10-29, Kauffman Stadium: Giants 3, Royals 2",
+      "sources": [
+        { "host": "baseball-almanac.com", "url": "https://www.baseball-almanac.com/box-scores/boxscore.php?boxid=201410290KCA", "read": "2026-10-02" },
+        { "host": "baseball-reference.com", "url": "https://www.baseball-reference.com/boxes/KCA/KCA201410290.shtml", "read": "2026-10-02" }
+      ],
+      "starters": ["CF Gregor Blanco", "2B Joe Panik", "C Buster Posey", "3B Pablo Sandoval", "RF Hunter Pence", "1B Brandon Belt", "DH Mike Morse", "SS Brandon Crawford", "LF Juan Perez"],
+      "trap": "Madison Bumgarner did not start: Tim Hudson did, and Bumgarner threw five scoreless innings in relief.",
+      "blanks": [
+        { "name": "Mike Morse", "nationality": "USA", "born": "Fort Lauderdale, Florida", "fact": "Drove in two of the Giants' three runs as the DH, one with a sacrifice fly.", "checked": "both boxes: Morse dh 3-0-1-2, SF Morse off Guthrie; Giants scored 3." },
+        { "name": "Pablo Sandoval", "nationality": "Venezuela", "born": "Puerto Cabello, Carabobo, Venezuela", "fact": "Had three hits, one a double off Wade Davis.", "checked": "both boxes: Sandoval 3-2-3-0, 2B off Davis." },
+        { "name": "Buster Posey", "nationality": "USA", "born": "Leesburg, Georgia", "fact": "Caught the whole game, including Madison Bumgarner's five scoreless innings in relief.", "checked": "both boxes: Posey c 3rd, no Giants catching sub; Hudson started, Bumgarner 5.0 IP, 0 R, save." }
+      ]
+    },
+    {
+      "id": "ws-2014-g7-kc",
+      "game": "2014 World Series Game 7, 2014-10-29, Kauffman Stadium: Giants 3, Royals 2",
+      "sources": [
+        { "host": "baseball-almanac.com", "url": "https://www.baseball-almanac.com/box-scores/boxscore.php?boxid=201410290KCA", "read": "2026-10-02" },
+        { "host": "baseball-reference.com", "url": "https://www.baseball-reference.com/boxes/KCA/KCA201410290.shtml", "read": "2026-10-02" }
+      ],
+      "starters": ["SS Alcides Escobar", "RF Nori Aoki", "CF Lorenzo Cain", "1B Eric Hosmer", "DH Billy Butler", "LF Alex Gordon", "C Salvador Perez", "3B Mike Moustakas", "2B Omar Infante"],
+      "trap": "Nori Aoki batted second in right, Lorenzo Cain played center.",
+      "blanks": [
+        { "name": "Alex Gordon", "nationality": "USA", "born": "Lincoln, Nebraska", "fact": "Had two hits, one a double off Tim Hudson, and drove in a run.", "checked": "both boxes: Gordon 3-1-2-1, 2B off Hudson." },
+        { "name": "Omar Infante", "nationality": "Venezuela", "born": "Puerto La Cruz, Anzoategui, Venezuela", "fact": "Drove in a run with a sacrifice fly off Tim Hudson.", "checked": "both boxes: SF Infante off Hudson, Infante 1 RBI." },
+        { "name": "Nori Aoki", "nationality": "Japan", "born": "Hyuga, Miyazaki, Japan", "fact": "Batted second and started in right field.", "checked": "both boxes: Aoki rf 2nd. Name: see playerPages.nameDisagreements." }
+      ]
     }
   ]
 }
