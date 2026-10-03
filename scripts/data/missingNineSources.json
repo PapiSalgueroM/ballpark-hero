@@ -339,6 +339,126 @@
         { "name": "Omar Infante", "nationality": "Venezuela", "born": "Puerto La Cruz, Anzoategui, Venezuela", "fact": "Drove in a run with a sacrifice fly off Tim Hudson.", "checked": "both boxes: SF Infante off Hudson, Infante 1 RBI." },
         { "name": "Nori Aoki", "nationality": "Japan", "born": "Hyuga, Miyazaki, Japan", "fact": "Batted second and started in right field.", "checked": "both boxes: Aoki rf 2nd. Name: see playerPages.nameDisagreements." }
       ]
+    },
+    {
+      "id": "ws-1977-g6-nyy",
+      "game": "1977 World Series Game 6, 1977-10-18, Yankee Stadium: Yankees 8, Dodgers 4",
+      "sources": [
+        { "host": "baseball-almanac.com", "url": "https://www.baseball-almanac.com/box-scores/boxscore.php?boxid=197710180NYA", "read": "2026-10-02" },
+        { "host": "baseball-reference.com", "url": "https://www.baseball-reference.com/boxes/NYA/NYA197710180.shtml", "read": "2026-10-02" }
+      ],
+      "starters": ["CF Mickey Rivers", "2B Willie Randolph", "C Thurman Munson", "RF Reggie Jackson", "1B Chris Chambliss", "3B Graig Nettles", "LF Lou Piniella", "SS Bucky Dent", "P Mike Torrez"],
+      "trap": "No DH in this Series: Mike Torrez batted ninth and pitched all nine innings.",
+      "blanks": [
+        { "name": "Reggie Jackson", "nationality": "USA", "born": "Pennsylvania (town differs, see playerPages)", "fact": "Homered three times, off Burt Hooton, Elias Sosa and Charlie Hough.", "checked": "both boxes: Jackson 3-4-3-5; HR 4th off Hooton, 5th off Sosa, 8th off Hough." },
+        { "name": "Chris Chambliss", "nationality": "USA", "born": "Dayton, Ohio", "fact": "Hit a two-run homer off Burt Hooton in the 2nd and added a double.", "checked": "both boxes: HR 2nd off Hooton, 1 on; 2B off Sosa." },
+        { "name": "Mike Torrez", "nationality": "USA", "born": "Topeka, Kansas", "fact": "Pitched all nine innings and got the win.", "checked": "both boxes: Torrez 9.0 IP, W, the only Yankees pitcher." }
+      ]
+    },
+    {
+      "id": "ws-1977-g6-lad",
+      "game": "1977 World Series Game 6, 1977-10-18, Yankee Stadium: Yankees 8, Dodgers 4",
+      "sources": [
+        { "host": "baseball-almanac.com", "url": "https://www.baseball-almanac.com/box-scores/boxscore.php?boxid=197710180NYA", "read": "2026-10-02" },
+        { "host": "baseball-reference.com", "url": "https://www.baseball-reference.com/boxes/NYA/NYA197710180.shtml", "read": "2026-10-02" }
+      ],
+      "starters": ["2B Davey Lopes", "SS Bill Russell", "RF Reggie Smith", "3B Ron Cey", "1B Steve Garvey", "LF Dusty Baker", "CF Rick Monday", "C Steve Yeager", "P Burt Hooton"],
+      "trap": "Steve Garvey batted fifth, behind Reggie Smith and Ron Cey.",
+      "blanks": [
+        { "name": "Burt Hooton", "nationality": "USA", "born": "Greenville, Texas", "fact": "Started and took the loss, charged with four runs in three innings.", "checked": "both boxes: Hooton 3.0 IP, 4 R, L." },
+        { "name": "Steve Garvey", "nationality": "USA", "born": "Tampa, Florida", "fact": "Tripled off Mike Torrez and drove in two runs.", "checked": "both boxes: 3B off Torrez; Garvey 4-1-2-2." },
+        { "name": "Reggie Smith", "nationality": "USA", "born": "Shreveport, Louisiana", "fact": "Homered off Mike Torrez in the 3rd.", "checked": "both boxes: HR 3rd off Torrez, 0 on." }
+      ]
+    },
+    {
+      "id": "ws-2017-g7-hou",
+      "game": "2017 World Series Game 7, 2017-11-01, Dodger Stadium: Astros 5, Dodgers 1",
+      "sources": [
+        { "host": "baseball-almanac.com", "url": "https://www.baseball-almanac.com/box-scores/boxscore.php?boxid=201711010LAN", "read": "2026-10-02" },
+        { "host": "baseball-reference.com", "url": "https://www.baseball-reference.com/boxes/LAN/LAN201711010.shtml", "read": "2026-10-02" }
+      ],
+      "starters": ["CF George Springer", "3B Alex Bregman", "2B Jose Altuve", "SS Carlos Correa", "1B Yuli Gurriel", "C Brian McCann", "LF Marwin Gonzalez", "RF Josh Reddick", "P Lance McCullers Jr."],
+      "trap": "NL park, no DH: Lance McCullers Jr. batted ninth, and Charlie Morton, who got the win, did not start.",
+      "blanks": [
+        { "name": "George Springer", "nationality": "USA", "born": "New Britain, Connecticut", "fact": "Doubled and hit a two-run homer off Yu Darvish in the 2nd.", "checked": "both boxes: 2B off Darvish; HR 2nd off Darvish, 1 on." },
+        { "name": "Brian McCann", "nationality": "USA", "born": "Athens, Georgia", "fact": "Caught all nine innings as five Houston pitchers held the Dodgers to one run.", "checked": "both boxes: McCann c 6th, no Astros catching sub; five Astros pitchers (McCullers Jr., Peacock, Liriano, Devenski, Morton); Dodgers scored 1." },
+        { "name": "Marwin Gonzalez", "nationality": "Venezuela", "born": "Puerto Ordaz, Bolivar, Venezuela", "fact": "Had two hits, one a double off Yu Darvish.", "checked": "both boxes: Gonzalez 3-1-2-0, 2B off Darvish." }
+      ]
+    },
+    {
+      "id": "ws-2017-g7-lad",
+      "game": "2017 World Series Game 7, 2017-11-01, Dodger Stadium: Astros 5, Dodgers 1",
+      "sources": [
+        { "host": "baseball-almanac.com", "url": "https://www.baseball-almanac.com/box-scores/boxscore.php?boxid=201711010LAN", "read": "2026-10-02" },
+        { "host": "baseball-reference.com", "url": "https://www.baseball-reference.com/boxes/LAN/LAN201711010.shtml", "read": "2026-10-02" }
+      ],
+      "starters": ["CF Chris Taylor", "SS Corey Seager", "3B Justin Turner", "1B Cody Bellinger", "RF Yasiel Puig", "LF Joc Pederson", "2B Logan Forsythe", "C Austin Barnes", "P Yu Darvish"],
+      "trap": "Clayton Kershaw did not start: Yu Darvish did, and Kershaw came on in relief.",
+      "blanks": [
+        { "name": "Yu Darvish", "nationality": "Japan", "born": "Osaka, Japan (town differs, see playerPages)", "fact": "Started but got only five outs; Clayton Kershaw later threw four scoreless innings in relief.", "checked": "both boxes: Darvish 1.2 IP, L; Kershaw 4.0 IP, 0 R, indented sub." },
+        { "name": "Joc Pederson", "nationality": "USA", "born": "Palo Alto, California", "fact": "Scored the Dodgers' only run.", "checked": "both boxes: Pederson 4-1-1-0; Dodgers scored 1." },
+        { "name": "Chris Taylor", "nationality": "USA", "born": "Virginia Beach, Virginia", "fact": "Led off and doubled off Lance McCullers Jr.", "checked": "both boxes: Taylor cf 1st, 2B off McCullers." }
+      ]
+    },
+    {
+      "id": "ws-2019-g7-wsh",
+      "game": "2019 World Series Game 7, 2019-10-30, Minute Maid Park: Nationals 6, Astros 2",
+      "sources": [
+        { "host": "baseball-almanac.com", "url": "https://www.baseball-almanac.com/box-scores/boxscore.php?boxid=201910300HOA", "read": "2026-10-02" },
+        { "host": "baseball-reference.com", "url": "https://www.baseball-reference.com/boxes/HOU/HOU201910300.shtml", "read": "2026-10-02" }
+      ],
+      "starters": ["SS Trea Turner", "RF Adam Eaton", "3B Anthony Rendon", "LF Juan Soto", "DH Howie Kendrick", "2B Asdrubal Cabrera", "1B Ryan Zimmerman", "C Yan Gomes", "CF Victor Robles"],
+      "trap": "Howie Kendrick was the DH, not at second: Asdrubal Cabrera started there.",
+      "blanks": [
+        { "name": "Howie Kendrick", "nationality": "USA", "born": "Jacksonville, Florida", "fact": "His two-run homer off Will Harris in the 7th turned a 2-1 deficit into a 3-2 lead.", "checked": "both boxes: HR 7th off Harris, 1 on, 1 out; Harris BS and L. Houston's 2 runs were both off Scherzer (5.0 IP); Washington's first run was Rendon's solo homer earlier in the 7th, and Greinke was charged with 2 runs (Rendon and the runner Kendrick drove in)." },
+        { "name": "Anthony Rendon", "nationality": "USA", "born": "Houston, Texas", "fact": "His homer off Zack Greinke in the 7th was Washington's first run.", "checked": "both boxes: HR 7th off Greinke, 0 on, 1 out. Washington's 6 runs: Greinke 2 (both in the 7th), Harris 1, Osuna 1, Smith 2, all relievers after Greinke, so nothing scored before the 7th." },
+        { "name": "Yan Gomes", "nationality": "Brazil", "born": "Sao Paulo, Brazil", "fact": "Caught the whole game: Max Scherzer's five innings and Patrick Corbin's three scoreless.", "checked": "both boxes: Gomes c 8th, no Nationals catching sub; Scherzer 5.0 IP, Corbin 3.0 IP, 0 R." }
+      ]
+    },
+    {
+      "id": "ws-2019-g7-hou",
+      "game": "2019 World Series Game 7, 2019-10-30, Minute Maid Park: Nationals 6, Astros 2",
+      "sources": [
+        { "host": "baseball-almanac.com", "url": "https://www.baseball-almanac.com/box-scores/boxscore.php?boxid=201910300HOA", "read": "2026-10-02" },
+        { "host": "baseball-reference.com", "url": "https://www.baseball-reference.com/boxes/HOU/HOU201910300.shtml", "read": "2026-10-02" }
+      ],
+      "starters": ["CF George Springer", "2B Jose Altuve", "LF Michael Brantley", "3B Alex Bregman", "1B Yuli Gurriel", "DH Yordan Alvarez", "SS Carlos Correa", "C Robinson Chirinos", "RF Josh Reddick"],
+      "trap": "Jake Marisnick did not start: Josh Reddick was in right and Springer in center.",
+      "blanks": [
+        { "name": "Yuli Gurriel", "nationality": "Cuba", "born": "Sancti Spiritus, Cuba", "fact": "Led off the 2nd with a homer off Max Scherzer.", "checked": "both boxes: HR 2nd off Scherzer, 0 on, 0 out. Almanac's player id is gurriyu01, baseball-reference's gourryu01; same man, same slot, same name." },
+        { "name": "Carlos Correa", "nationality": "Puerto Rico", "born": "Ponce, Puerto Rico", "fact": "Had two hits and drove in a run.", "checked": "both boxes: Correa 4-0-2-1." },
+        { "name": "Josh Reddick", "nationality": "USA", "born": "Savannah, Georgia", "fact": "Started in right field; Jake Marisnick later pinch-hit for him.", "checked": "both boxes: Reddick rf 9th, Marisnick ph,cf indented under him; bref subs: Marisnick hit for Reddick." }
+      ]
+    },
+    {
+      "id": "ws-1956-g5-nyy",
+      "game": "1956 World Series Game 5, 1956-10-08, Yankee Stadium: Yankees 2, Dodgers 0",
+      "sources": [
+        { "host": "baseball-almanac.com", "url": "https://www.baseball-almanac.com/box-scores/boxscore.php?boxid=195610080NYA", "read": "2026-10-02" },
+        { "host": "baseball-reference.com", "url": "https://www.baseball-reference.com/boxes/NYA/NYA195610080.shtml", "read": "2026-10-02" }
+      ],
+      "starters": ["RF Hank Bauer", "1B Joe Collins", "CF Mickey Mantle", "C Yogi Berra", "LF Enos Slaughter", "2B Billy Martin", "SS Gil McDougald", "3B Andy Carey", "P Don Larsen"],
+      "trap": "No DH in 1956: Don Larsen batted ninth on the day he was perfect.",
+      "blanks": [
+        { "name": "Don Larsen", "nationality": "USA", "born": "Michigan City, Indiana", "fact": "Threw a perfect game: nine innings, no hits, no walks, seven strikeouts.", "checked": "both boxes: Larsen 9.0 IP, 0 H, 0 BB, 7 SO, W; Brooklyn 27 at-bats, 0 runs; no error and no hit batter on either box." },
+        { "name": "Yogi Berra", "nationality": "USA", "born": "St. Louis, Missouri", "fact": "Caught every pitch of Don Larsen's perfect game.", "checked": "both boxes: Berra c 4th, the Yankees made no substitution at all." },
+        { "name": "Mickey Mantle", "nationality": "USA", "born": "Spavinaw, Oklahoma", "fact": "Homered off Sal Maglie in the 4th.", "checked": "both boxes: HR 4th off Maglie, 0 on." }
+      ]
+    },
+    {
+      "id": "ws-1956-g5-bro",
+      "game": "1956 World Series Game 5, 1956-10-08, Yankee Stadium: Yankees 2, Dodgers 0",
+      "sources": [
+        { "host": "baseball-almanac.com", "url": "https://www.baseball-almanac.com/box-scores/boxscore.php?boxid=195610080NYA", "read": "2026-10-02" },
+        { "host": "baseball-reference.com", "url": "https://www.baseball-reference.com/boxes/NYA/NYA195610080.shtml", "read": "2026-10-02" }
+      ],
+      "starters": ["2B Jim Gilliam", "SS Pee Wee Reese", "CF Duke Snider", "3B Jackie Robinson", "1B Gil Hodges", "LF Sandy Amoros", "RF Carl Furillo", "C Roy Campanella", "P Sal Maglie"],
+      "trap": "Jackie Robinson played third base, not second: Jim Gilliam led off at second.",
+      "blanks": [
+        { "name": "Sal Maglie", "nationality": "USA", "born": "Niagara Falls, New York", "fact": "Allowed two runs in eight innings and still took the loss.", "checked": "both boxes: Maglie 8.0 IP, 2 R, L." },
+        { "name": "Jackie Robinson", "nationality": "USA", "born": "Cairo, Georgia", "fact": "Played third base and batted cleanup.", "checked": "both boxes: Robinson 3b, 4th in the order." },
+        { "name": "Sandy Amoros", "nationality": "Cuba", "born": "Cuba (town differs, see playerPages)", "fact": "Started in left field and batted sixth.", "checked": "both boxes: Amoros lf, 6th in the order." }
+      ]
     }
   ]
 }
