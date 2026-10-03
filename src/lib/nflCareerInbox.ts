@@ -234,7 +234,7 @@ const NFL_INBOX_POOL: InboxMessageDef[] = [
   },
   {
     id: "camp_cousin", from: "Kid cousin", emoji: "🧒", phase: "any", beat: "camp",
-    text: "Mom says there's a day fans can watch practice. Can I come? Can I get on the field? Can I meet the quarterback?",
+    text: "Mom says there's a day fans can watch practice. Can I come? Can I get on the field? Can I meet the head coach?",
     choices: [
       { label: "Get him a pass and a jersey", reply: "You're on the list. Wear the jersey I'm sending you", karma: 7, morale: 3, cash: -0.05 },
       { label: "Watch from the fence, buddy", reply: "You can watch from the fence like everybody else buddy", karma: 0 },

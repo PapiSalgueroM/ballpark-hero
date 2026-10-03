@@ -29,13 +29,23 @@
        espn.com/nfl/story/_/id/31869693 (its 2021 terms); predictthe53.com/rules
        says elevations exist today.
      - Returning from injured reserve: new in 2012, before which the list ended
-       a season. profootballrumors.com/2020/05/nfl-injured-reserve-return and
+       a season. From 2012 to 2019 the way back was open to only a very few
+       players per team per year, and from 2020 to far more, so the card has
+       three eras and states no number in any of them.
+       profootballrumors.com/2020/05/nfl-injured-reserve-return,
        nfl.com/news/chargers-first-to-pull-designated-to-return-trigger-0ap1000000058123
+       and espn.com/nfl/story/_/id/29820641 (all three read 2026-10-02 by the
+       round's review). The card is drawn in the offseason, so it is a
+       surgery choice now with the list as the stake in the fall.
      - A restructure turns salary into a signing bonus paid now, the cap charge
        spread over the years left; the player is paid the same money, which is
        what makes it different from a pay cut.
        si.com/nfl/chiefs/onsi/gm-report/the-art-of-nfl-contracts-part-4 and
        profootballnetwork.com/how-do-nfl-contract-restructures-work-everything-around-nfl-contracts-explained
+       The card does not make it the player's call: the second of those says
+       a team mostly does not even have to consult the player on a simple
+       restructure (newsweek.com/how-restructuring-nfl-contracts-works-1875079
+       agrees), so the cap guy calls to explain it, not to ask.
      - The offseason program is voluntary and one minicamp is mandatory, with
        fines for skipping it: overthecap.com/collective-bargaining-agreement/article/21
        and tsn.ca/how-do-otas-and-training-camps-work-in-the-nfl-19.79215. Gated
@@ -94,9 +104,12 @@ type Opt = CareerEvent['options'][number];
  *  `fx` is the code, and the harness fails the card when the two disagree. */
 const opt = (label: string, effect: string, fx: LifeFx, story: string): Opt =>
   ({ label, effect, apply: (cc) => land(cc, fx, story) });
-/** A gamble. The effect line must start "Coin flip:" and name both ends. */
-const flip = (label: string, effect: string, chance: number, win: LifeFx, winStory: string, lose: LifeFx, loseStory: string): Opt =>
-  ({ label, effect, apply: (cc, rng) => (rng() < chance ? land(cc, win, winStory) : land(cc, lose, loseStory)) });
+/** A gamble. The effect line must start "Coin flip:" and name both ends, and
+ *  a coin flip is even odds, so there is no chance to pass: a long shot
+ *  written as a coin flip would be a button promising odds it does not give.
+ *  The harness plays every flip at a roll of 0.4999 and 0.5001. */
+const flip = (label: string, effect: string, win: LifeFx, winStory: string, lose: LifeFx, loseStory: string): Opt =>
+  ({ label, effect, apply: (cc, rng) => (rng() < 0.5 ? land(cc, win, winStory) : land(cc, lose, loseStory)) });
 
 /** A fixed amount in the career's era money, never rounding to nothing. */
 const eraCash = (c: CareerState, m: number): number => Math.max(0.1, r1(nflEraById(c.eraId).moneyScale * m));
@@ -126,7 +139,7 @@ export function getNflLifeEventsC(c: CareerState, _rng: () => number): CareerEve
       title: 'The two minute period is yours',
       body: 'The head coach hands you the two minute period in practice. Your calls, no voice in your ear, the whole defense knowing a pass is coming.',
       options: [
-        flip('Call it your way', 'Coin flip: morale +7, fanbase +3 or morale -5', 0.55,
+        flip('Call it your way', 'Coin flip: morale +7, fanbase +3 or morale -5',
           { morale: 7, fanbase: 3 }, 'You went the length of the field on your own calls and somebody leaked the clip. The building talks about you differently now.',
           { morale: -5 }, 'Three plays, a sack and a pick. The coach took the period back without a word.'),
         opt('Call what the coordinator would call', 'Morale +2', { morale: 2 }, 'You ran his calls from memory. Nothing viral, nothing broken, a nod from the coordinator.'),
@@ -190,7 +203,7 @@ export function getNflLifeEventsC(c: CareerState, _rng: () => number): CareerEve
       body: 'The tight ends coach wants your hand in the dirt more this year. The run game needs it. The stat sheet will not thank you for a single snap of it.',
       options: [
         opt('Embrace the blocking', 'Morale +5, fanbase -3', { morale: 5, fanbase: -3 }, 'The line adopted you as one of their own. Your catches dipped and nobody on the offense minded.'),
-        flip('Lobby for more routes', 'Coin flip: fanbase +6 or morale -5', 0.5,
+        flip('Lobby for more routes', 'Coin flip: fanbase +6 or morale -5',
           { fanbase: 6 }, 'The coordinator listened, and the seam route became your route.',
           { morale: -5 }, 'The coordinator heard you out and changed nothing. Now he knows you asked.'),
       ],
@@ -214,7 +227,7 @@ export function getNflLifeEventsC(c: CareerState, _rng: () => number): CareerEve
       title: 'You make the calls now',
       body: 'The coordinator wants you running the defense on the field: setting the front, making the checks, getting everybody lined up before the snap. If it goes wrong, it is your voice on the film.',
       options: [
-        flip('Take the job', 'Coin flip: morale +7, fanbase +3 or morale -5', 0.6,
+        flip('Take the job', 'Coin flip: morale +7, fanbase +3 or morale -5',
           { morale: 7, fanbase: 3 }, 'You had the defense lined up before the offense broke the huddle. They call it your defense now.',
           { morale: -5 }, 'Two busted coverages in one afternoon, both on your check. The coordinator gave the calls back to the old veteran.'),
         opt('Let the veteran keep it', 'Morale +2', { morale: 2 }, 'You told him you would rather just play fast. He respected the honesty.'),
@@ -239,7 +252,7 @@ export function getNflLifeEventsC(c: CareerState, _rng: () => number): CareerEve
       title: 'Travel with their best',
       body: 'The coordinator asks if you want to follow the other team\'s top receiver all over the field, every week. No help, no hiding, your name on every highlight one way or the other.',
       options: [
-        flip('Yes, every snap', 'Coin flip: fanbase +8, morale +4 or fanbase -5, morale -4', 0.5,
+        flip('Yes, every snap', 'Coin flip: fanbase +8, morale +4 or fanbase -5, morale -4',
           { fanbase: 8, morale: 4 }, 'You erased a star in front of a national audience. People started calling your side of the field an island.',
           { fanbase: -5, morale: -4 }, 'He got you twice deep, and both clips ran all week.'),
         opt('Play your side of the field', 'Morale +2', { morale: 2 }, 'You stayed on your side and did your job. Quiet weeks are good weeks for a corner.'),
@@ -252,7 +265,7 @@ export function getNflLifeEventsC(c: CareerState, _rng: () => number): CareerEve
       body: 'Four hours into the tape you see it: a receiver in your own division changes his stance when the deep ball is coming. Nobody else in the room has noticed.',
       options: [
         opt('Share it with the whole secondary', 'Morale +6', { morale: 6 }, 'You put it on the big screen Wednesday morning. The safeties bought your lunch for a month.'),
-        flip('Keep it and jump the route', 'Coin flip: fanbase +7 or morale -4', 0.5,
+        flip('Keep it and jump the route', 'Coin flip: fanbase +7 or morale -4',
           { fanbase: 7 }, 'You sat on it, broke on the ball before he did, and took it the other way.',
           { morale: -4 }, 'He had fixed the stance. You guessed, he ran by you, and you could not explain why you bit.'),
       ],
@@ -289,7 +302,7 @@ export function getNflLifeEventsC(c: CareerState, _rng: () => number): CareerEve
       title: 'The kicker\'s week',
       body: 'Your week is not their week. One real kicking day, a lot of stretching, and an operation with the long snapper and the holder that nobody notices until it breaks. How do you spend this one?',
       options: [
-        flip('Add a second full kicking day', 'Coin flip: rating +1 or health -6', 0.5,
+        flip('Add a second full kicking day', 'Coin flip: rating +1 or health -6',
           { rating: 1 }, 'The extra day sharpened the long ones. You are hitting from a range you used to leave to the punter.',
           { health: -6 }, 'The leg was dead by the weekend. A kicker has only so many swings in a week, and you spent them early.'),
         opt('Keep the routine, protect the leg', 'Health +4', { health: 4 }, 'Same routine as always. The leg felt new on game day.'),
@@ -318,11 +331,11 @@ export function getNflLifeEventsC(c: CareerState, _rng: () => number): CareerEve
       id: 'lifeC_playbook_test',
       category: 'earlyYears', cooldown: CD.once,
       title: 'The playbook test',
-      body: 'Your position coach gives the rookies a written test every Friday. Fail it and you are doing up downs in front of the veterans while they eat.',
+      body: 'The playbook grew over the winter and your position coach gives the young players a written test on it every Friday of the spring. Fail it and you are doing up downs in front of the veterans while they eat.',
       options: [
         opt('Study with the other rookies', 'Morale +5', { morale: 5 }, 'Flash cards in a hotel hallway until midnight. All of you passed, and all of you are closer for it.'),
         opt('Study alone and ace it', 'Rating +1, morale -3', { rating: 1, morale: -3 }, 'You skipped the group and knew every check cold. The game slowed down. The rookie class noticed who was missing.'),
-        flip('Wing it', 'Coin flip: morale +3 or morale -6', 0.4,
+        flip('Wing it', 'Coin flip: morale +3 or morale -6',
           { morale: 3 }, 'You guessed right more than you had any business doing. The coach squinted at you and moved on.',
           { morale: -6 }, 'You failed it. Up downs, in front of everybody, with a veteran counting them out loud.'),
       ],
@@ -334,7 +347,7 @@ export function getNflLifeEventsC(c: CareerState, _rng: () => number): CareerEve
         id: 'lifeC_first_check',
         category: 'earlyYears', cooldown: CD.once,
         title: 'The first real check',
-        body: 'Your first game check lands and the taxes took more than you were ready for. Your agent knows an adviser who will sit down with you. Your cousins know a truck dealership.',
+        body: 'Your rookie season is done and so is your first full year of game checks, and the taxes took more than you were ready for. Your agent knows an adviser who will sit down with you. Your cousins know a truck dealership.',
         options: [
           opt('Sit down and build a budget', 'Morale +3', { morale: 3 }, 'A boring hour with a spreadsheet. You know what you can spend now, and it is less than you thought.'),
           opt('Buy the truck first', `Fanbase +3, net worth ${signed(-truck)}M`, { fanbase: 3, cash: -truck }, 'It is very large and very loud and the whole parking lot came out to look at it.'),
@@ -346,17 +359,21 @@ export function getNflLifeEventsC(c: CareerState, _rng: () => number): CareerEve
       id: 'lifeC_rookie_wall',
       category: 'earlyYears', cooldown: CD.once,
       title: 'The rookie wall',
-      body: 'Your college season would be long over by now. This one keeps going, and your legs noticed about the time the leaves came down.',
+      body: 'Your first season ran weeks past where a college season ends, and your legs noticed about the time the leaves came down. The strength staff wants this offseason to make sure it never happens again.',
       options: [
         opt('Sleep, eat, cut the extras', 'Health +8, fanbase -2', { health: 8, fanbase: -2 }, 'You turned down every appearance and went to bed early like it was a job. It is a job.'),
-        flip('Push through with extra work', 'Coin flip: rating +1 or health -7', 0.45,
-          { rating: 1 }, 'You ran through the wall. The veterans stopped calling you rookie.',
-          { health: -7 }, 'The wall won. A soft tissue thing that would not go away until the season did.'),
+        flip('Pile on extra work', 'Coin flip: rating +1 or health -7',
+          { rating: 1 }, 'You worked all offseason like the wall was still in front of you. The veterans stopped calling you rookie.',
+          { health: -7 }, 'The extra work found a soft tissue thing that took the whole spring to go away.'),
       ],
     });
   }
 
-  if (yrs >= 1 && yrs <= 2) {
+  /* A card is drawn in the offseason AFTER a season is played, so yrs is 1 in
+     the offseason between the first year and the second, and 2 before the
+     third. One window each: the cooldown tags are read by nothing yet, so a
+     card with two windows could fire twice. */
+  if (yrs === 1) {
     deck.push({
       id: 'lifeC_second_year_jump',
       category: 'earlyYears', cooldown: CD.once,
@@ -367,6 +384,9 @@ export function getNflLifeEventsC(c: CareerState, _rng: () => number): CareerEve
         opt('Go home to the private trainer', 'Health +5, morale +3', { health: 5, morale: 3 }, 'Home cooking and a trainer who has known you since you were fifteen. You reported fresh and happy.'),
       ],
     });
+  }
+
+  if (yrs === 2) {
     deck.push({
       id: 'lifeC_captains_locker',
       category: 'earlyYears', cooldown: CD.once,
@@ -400,7 +420,7 @@ export function getNflLifeEventsC(c: CareerState, _rng: () => number): CareerEve
       body: 'The team just used a draft pick on a kid who plays your position. Nobody in the building will say why. Everybody in the building knows why.',
       options: [
         opt('Teach him everything you know', 'Morale +5, fanbase +4', { morale: 5, fanbase: 4 }, 'You gave him your notes, your tape and your seat in the meeting room. The city noticed how you carried it.'),
-        flip('Make him earn every rep', 'Coin flip: morale +5 or morale -5', 0.5,
+        flip('Make him earn every rep', 'Coin flip: morale +5 or morale -5',
           { morale: 5 }, 'You beat him every day for a whole camp. The coaches stopped mentioning the future.',
           { morale: -5 }, 'He was better than you expected, sooner than you expected. That is a hard thing to watch up close.'),
         opt('Ask the front office for the plan', 'Morale -3', { morale: -3 }, 'You got a very polite answer that did not contain an answer.'),
@@ -429,10 +449,10 @@ export function getNflLifeEventsC(c: CareerState, _rng: () => number): CareerEve
       title: 'Two clips, side by side',
       body: 'Your position coach puts two clips on the screen. You, four years ago. You, last month. He does not say anything. He does not have to.',
       options: [
-        flip('Change your game and win with your head', 'Coin flip: rating +1 or morale -4', 0.5,
+        flip('Change your game and win with your head', 'Coin flip: rating +1 or morale -4',
           { rating: 1 }, 'You stopped trying to be fast and started being early. Old players who last all learn this trick.',
           { morale: -4 }, 'You tried to play a smarter game and mostly played a slower one.'),
-        flip('Train like you are 25 again', 'Coin flip: morale +5 or health -8', 0.4,
+        flip('Train like you are 25 again', 'Coin flip: morale +5 or health -8',
           { morale: 5 }, 'You outworked the kids all summer and it showed. For one more year, anyway.',
           { health: -8 }, 'Something pulled in June. You are not 25, and the training table knew it before you did.'),
         opt('Laugh it off', 'Morale +2', { morale: 2 }, 'You told him the old clip was a worse haircut. He laughed. The tape stayed the tape.'),
@@ -449,7 +469,7 @@ export function getNflLifeEventsC(c: CareerState, _rng: () => number): CareerEve
       body: 'A network wants you in the studio for a playoff weekend as a guest analyst. Nobody uses the word audition. It is an audition.',
       options: [
         opt('Do it and play it safe', `Fanbase +6, net worth ${signed(fee)}M`, { fanbase: 6, cash: fee }, 'You were smooth, prepared and a little dull. The producer asked for your number anyway.'),
-        flip('Do it and say what you think', 'Coin flip: fanbase +9 or fanbase -4, morale -3', 0.5,
+        flip('Do it and say what you think', 'Coin flip: fanbase +9 or fanbase -4, morale -3',
           { fanbase: 9 }, 'You called a play before it happened, live on air. The clip did numbers.',
           { fanbase: -4, morale: -3 }, 'You criticized a scheme on air and found out Monday that the coach who runs it has friends in your building.'),
         opt('Decline, you still play', 'Morale +3', { morale: 3 }, 'You said you will talk about the game when you are done playing it.'),
@@ -467,7 +487,7 @@ export function getNflLifeEventsC(c: CareerState, _rng: () => number): CareerEve
       body: 'Your job this week is to be the other team\'s best player in practice so the starters get a look at him. They are starting to hate how good you are at it.',
       options: [
         opt('Give the starters an honest look', 'Morale +5', { morale: 5 }, 'You ran it exactly the way the opponent does. The starters were ready, and a coordinator learned your name.'),
-        flip('Go at them like it counts', 'Coin flip: rating +1, morale +3 or health -6', 0.5,
+        flip('Go at them like it counts', 'Coin flip: rating +1, morale +3 or health -6',
           { rating: 1, morale: 3 }, 'You won the rep so many times the head coach stopped practice to yell at the starters.',
           { health: -6 }, 'A starter got tired of losing to the scout team and finished a rep through the whistle. You wore it.'),
       ],
@@ -482,6 +502,10 @@ export function getNflLifeEventsC(c: CareerState, _rng: () => number): CareerEve
         opt('Take the mental reps and save your legs', 'Health +5', { health: 5 }, 'You watched, you listened and you stayed fresh. Nobody could tell you were wrong.'),
       ],
     });
+  }
+
+  /* Nobody puts a backup quarterback on the kickoff coverage unit. */
+  if (backup && c.pos !== 'QB') {
     deck.push({
       id: 'lifeC_kick_coverage',
       category: 'backup', cooldown: CD.backup,
@@ -501,7 +525,7 @@ export function getNflLifeEventsC(c: CareerState, _rng: () => number): CareerEve
       title: 'Your agent finds a door',
       body: 'Your agent says there is a team that would give you a real shot at starting. Getting there means letting this front office know you want out.',
       options: [
-        flip('Tell him to ask around quietly', 'Coin flip: morale +6 or morale -4, fanbase -2', 0.5,
+        flip('Tell him to ask around quietly', 'Coin flip: morale +6 or morale -4, fanbase -2',
           { morale: 6 }, 'Nothing came of it this year, but your coaches found out other teams were calling and started giving you more to do.',
           { morale: -4, fanbase: -2 }, 'It leaked. A backup who wants out is not a story the fans enjoy.'),
         opt('Stay and win the job here', 'Morale +4', { morale: 4 }, 'You told him you are not done here. It felt good to say out loud.'),
@@ -519,7 +543,7 @@ export function getNflLifeEventsC(c: CareerState, _rng: () => number): CareerEve
       title: 'Up on Saturday, down on Monday',
       body: 'The team keeps calling the same practice squad kid up for game day and sending him back down the morning after. The rules only allow that so many times before they have to sign him for real or stop. The last one was last week. A coach asks what you think of him.',
       options: [
-        flip('Vouch for him, loudly', 'Coin flip: morale +7 or morale -3', 0.6,
+        flip('Vouch for him, loudly', 'Coin flip: morale +7 or morale -3',
           { morale: 7 }, 'They signed him to the roster. He found you in the locker room and could not get the words out.',
           { morale: -3 }, 'They let him go back down and brought in somebody else. Your word did not carry as far as you thought.'),
         opt('Tell the truth: he is not ready yet', 'Morale -2', { morale: -2 }, 'You said it kindly and you said it straight. It still felt bad.'),
@@ -529,21 +553,25 @@ export function getNflLifeEventsC(c: CareerState, _rng: () => number): CareerEve
   }
 
   if (c.health < 80) {
-    /* Before 2012 the list ended your season. From 2012 a player could be
-       brought back from it the same year. */
-    const canReturn = c.year >= 2012;
+    /* The card is drawn in the offseason, so the choice is the surgery now and
+       the list is the stake in the fall. What the list costs depends on the
+       year: before 2012 it ended a season; from 2012 to 2019 a team could
+       bring back only a very few players a year from it; from 2020 the way
+       back is open to far more. No number is stated in any era. */
+    const irEra = c.year < 2012 ? 'ends' : c.year < 2020 ? 'narrow' : 'open';
     deck.push({
       id: 'lifeC_injured_reserve',
       category: 'rosterRules', cooldown: CD.rosterRules, story: STORY.injuredReserve,
-      title: canReturn ? 'Injured reserve, with a way back' : 'Injured reserve',
-      body: canReturn
-        ? 'The trainers want you on injured reserve. These days the list is not the end of a season: you sit out a stretch of games, you heal, and the team can bring you back before the year is over. You would still be watching football you could be playing.'
-        : 'The trainers want you on injured reserve. In this league that list ends your season. There is no coming back in December. You can shut it down and heal, or you can keep playing hurt.',
+      title: irEra === 'ends' ? 'Injured reserve ends a season' : irEra === 'narrow' ? 'Injured reserve, and a narrow way back' : 'Injured reserve, with a way back',
+      body: 'The joint you played on all last season needs surgery, and the trainers want it done now, while there is time to heal before camp. Put it off and the next bad week puts you on injured reserve. '
+        + (irEra === 'ends'
+          ? 'In this league that list ends a season. There is no coming back in December.'
+          : irEra === 'narrow'
+            ? 'A team gets to bring back only a very few players a year from that list, and nobody is promising you are one of them.'
+            : 'Players come back from that list now, but only after a stretch of games in a sweatsuit.'),
       options: [
-        canReturn
-          ? opt('Go on the list and heal right', 'Health +14, morale -4', { health: 14, morale: -4 }, 'You sat, you rehabbed and you came back with legs under you. The weeks in a sweatsuit were the hard part.')
-          : opt('Go on the list and lose the year', 'Health +20, morale -8, fanbase -4', { health: 20, morale: -8, fanbase: -4 }, 'Your season ended on a piece of paper. You healed all the way for the first time in years, and the city moved on without you for a while.'),
-        opt('Play through it', 'Health -8, fanbase +4', { health: -8, fanbase: 4 }, 'You stayed on the field. The crowd knew what you were playing through. So did your body.'),
+        opt('Have the surgery now', 'Health +14, morale -4', { health: 14, morale: -4 }, 'You spent the spring in a rehab room while everybody else was in the weight room. The joint feels new.'),
+        opt('Put it off and play through it', 'Health -8, fanbase +4', { health: -8, fanbase: 4 }, 'You skipped the surgery and kept playing. The crowd knew what you were playing through. So did your body.'),
       ],
     });
   }
@@ -552,12 +580,12 @@ export function getNflLifeEventsC(c: CareerState, _rng: () => number): CareerEve
     deck.push({
       id: 'lifeC_restructure',
       category: 'rosterRules', cooldown: CD.rosterRules, story: STORY.capRestructure,
-      title: 'The cap guy needs a signature',
-      body: `The front office wants to turn a chunk of your ${r1(c.salary)}M salary into a signing bonus. You get that money now, in one check, instead of week by week. The team gets to spread the cap charge over the years left on your deal. Your pay does not drop by a dollar. This is a restructure, not a pay cut.`,
+      title: 'The cap guy calls',
+      body: `The front office is turning a chunk of your ${r1(c.salary)}M salary into a signing bonus, and the cap guy calls to walk you through it. You get that money now, in one check, instead of week by week. The team gets to spread the cap charge over the years left on your deal. Your pay does not drop by a dollar. This is a restructure, not a pay cut.`,
       options: [
-        opt('Sign it', 'Morale +4, fanbase +3', { morale: 4, fanbase: 3 }, 'You signed, the check cleared and the team used the room to add help. Same money, sooner, and a front office that owes you one.'),
-        opt('Have your agent read every line first', 'Morale +2', { morale: 2 }, 'Your agent took two days and found nothing wrong with it. You signed knowing exactly what it was.'),
-        opt('Refuse on principle', 'Morale -3, fanbase -3', { morale: -3, fanbase: -3 }, 'You said the cap is their problem. It was your right, and the story that came out made it sound like you turned down a favor.'),
+        opt('Thank him and tell him to use the room', 'Morale +4, fanbase +3', { morale: 4, fanbase: 3 }, 'The check cleared and the team used the room to add help. Same money, sooner, and a front office that remembers how you took it.'),
+        opt('Have your agent read every line first', 'Morale +2', { morale: 2 }, 'Your agent took two days and found nothing wrong with it. You know exactly what it was.'),
+        opt('Complain about it in public', 'Morale -3, fanbase -3', { morale: -3, fanbase: -3 }, 'You told a reporter the cap is their problem. The money landed the same either way, and the story made you sound ungrateful for it.'),
       ],
     });
   }
@@ -567,10 +595,10 @@ export function getNflLifeEventsC(c: CareerState, _rng: () => number): CareerEve
       id: 'lifeC_final_cuts',
       category: 'rosterRules', cooldown: CD.rosterRules,
       title: 'Cutdown day',
-      body: 'The roster has to be down to the limit by the afternoon, and the guy who drove you to the facility every morning of camp is on the wrong side of the number.',
+      body: 'The roster has to be down to the limit by the end of the day, and the guy who drove you to the facility every morning of camp is on the wrong side of the number.',
       options: [
         opt('Call him that night', 'Morale +4', { morale: 4 }, 'You talked for an hour about nothing. He will catch on somewhere. You told him so and you meant it.'),
-        flip('Tell the coaches they got it wrong', 'Coin flip: morale +5 or morale -4', 0.35,
+        flip('Tell the coaches they got it wrong', 'Coin flip: morale +5 or morale -4',
           { morale: 5 }, 'They brought him back to the practice squad two days later. Maybe your word helped.',
           { morale: -4 }, 'The coach heard you out and said that is why he makes the decisions and you do not.'),
         opt('Keep your head down, it is a business', 'Morale -2', { morale: -2 }, 'You cleaned out the passenger seat of his car in your head and went to meetings.'),

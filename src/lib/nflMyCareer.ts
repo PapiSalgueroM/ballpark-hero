@@ -297,7 +297,7 @@ export interface CareerEvent {
   /** Round 917: the deck section a card sits under, the seasons it rests
       after it fires, and a key shared by cards that tell one story. All
       optional and read by nothing yet (nflCareerLifeTags.ts). */
-  category?: string;
+  category?: import('./nflCareerLifeTags').NflLifeCategory;
   cooldown?: number;
   story?: string;
   options: { label: string; effect: string; apply: (c: CareerState, rng: () => number) => string }[];
