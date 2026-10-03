@@ -1,0 +1,104 @@
+{
+  "preparedOnly": true,
+  "applicationIntegrated": false,
+  "productTestsExecuted": 0,
+  "nativePathsExecuted": 0,
+  "saveGateOpen": true,
+  "syntaxChecksPassed": 4,
+  "sourceBase": "504efc82",
+  "physicalPre970Reference": "98cc4cc6",
+  "saveTestRestoredRawSha256": "dbbf0e114325292015833167cffa32bd92bbf66add7266d4da058dae092b08ce",
+  "rows": [
+    {
+      "artifact": "frontOfficeSaveRecovery.test.tsx.txt",
+      "source": "C:\\Users\\antho\\ballpark-hero\\src\\test\\frontOfficeSaveRecovery.test.tsx",
+      "rawSha256": "7a5dd8fc00928539e89bc300432150fd1a92ef205e857fcdf161a673dc21eb93",
+      "normalizedSha256": "583c22452fa3be77bdf592a909e35c60ae97fb9bccd0103cdd44e8e8adb4a0ff"
+    },
+    {
+      "artifact": "NhlWaiverReceipt.outcomes.tsx.txt",
+      "source": "C:\\Users\\antho\\AppData\\Local\\Temp\\dukb-nhl970-resume-2026-10-03\\NhlWaiverReceipt.outcomes.tsx",
+      "rawSha256": "b2a8557f7826d28b75516d927b5718a01bb8d8a002c3477956a43bda615c3be3",
+      "normalizedSha256": "b2a8557f7826d28b75516d927b5718a01bb8d8a002c3477956a43bda615c3be3"
+    },
+    {
+      "artifact": "simNhlWaiverReceipt.mjs.txt",
+      "source": "C:\\Users\\antho\\AppData\\Local\\Temp\\dukb-nhl970-resume-2026-10-03\\simNhlWaiverReceipt.mjs",
+      "rawSha256": "496a3fc66b92189fcd91f94dfab1837d11fce7b92088fda6c8497e9bc5dad8bd",
+      "normalizedSha256": "496a3fc66b92189fcd91f94dfab1837d11fce7b92088fda6c8497e9bc5dad8bd"
+    },
+    {
+      "artifact": "prepare-source.mjs.txt",
+      "source": "C:\\Users\\antho\\AppData\\Local\\Temp\\dukb-nhl970-resume-2026-10-03\\prepare-source.mjs",
+      "rawSha256": "09e3cb7cea3f6a1a1c1bddba9de74a7b56438b46530277d87128d2625efc6727",
+      "normalizedSha256": "09e3cb7cea3f6a1a1c1bddba9de74a7b56438b46530277d87128d2625efc6727"
+    },
+    {
+      "artifact": "native/prepare.mjs.txt",
+      "source": "C:\\Users\\antho\\AppData\\Local\\Temp\\dukb-nhl970-native-2026-10-03-resume\\prepare.mjs",
+      "rawSha256": "8ce52931ed17049e18a20251e6f37397394ceb57f19e7a65dcd83bbf97f454bc",
+      "normalizedSha256": "8ce52931ed17049e18a20251e6f37397394ceb57f19e7a65dcd83bbf97f454bc"
+    },
+    {
+      "artifact": "native/driver.mjs.txt",
+      "source": "C:\\Users\\antho\\AppData\\Local\\Temp\\dukb-nhl970-native-2026-10-03-resume\\driver.mjs",
+      "rawSha256": "f7ad4d056a07a5d8effa9b7523303eb3a5daa743990a7136d44fb54ab474a3e8",
+      "normalizedSha256": "f7ad4d056a07a5d8effa9b7523303eb3a5daa743990a7136d44fb54ab474a3e8"
+    },
+    {
+      "artifact": "native/entry.tsx.txt",
+      "source": "C:\\Users\\antho\\AppData\\Local\\Temp\\dukb-nhl970-native-2026-10-03-resume\\entry.tsx",
+      "rawSha256": "4e50b18726f42145b74d5ab8bab9c650c32be4233668ed39ae6827220799a7e2",
+      "normalizedSha256": "4e50b18726f42145b74d5ab8bab9c650c32be4233668ed39ae6827220799a7e2"
+    },
+    {
+      "artifact": "native/completions.ts.txt",
+      "source": "C:\\Users\\antho\\AppData\\Local\\Temp\\dukb-nhl970-native-2026-10-03-resume\\completions.ts",
+      "rawSha256": "14c39ae5ca181c326c3aa6ffcec2573b31588b7512e63966c0669728d93fcb79",
+      "normalizedSha256": "14c39ae5ca181c326c3aa6ffcec2573b31588b7512e63966c0669728d93fcb79"
+    },
+    {
+      "artifact": "native/share.tsx.txt",
+      "source": "C:\\Users\\antho\\AppData\\Local\\Temp\\dukb-nhl970-native-2026-10-03-resume\\share.tsx",
+      "rawSha256": "c634dac0af5713a37c9422db7f32007f63a5d837d73892093d8ca54191fb2f29",
+      "normalizedSha256": "c634dac0af5713a37c9422db7f32007f63a5d837d73892093d8ca54191fb2f29"
+    },
+    {
+      "artifact": "native/README.md.txt",
+      "source": "C:\\Users\\antho\\AppData\\Local\\Temp\\dukb-nhl970-native-2026-10-03-resume\\README.md",
+      "rawSha256": "a0cacdb3748598d613621cd1a17bc3aafd1efa79e510b5de586196a384495661",
+      "normalizedSha256": "a0cacdb3748598d613621cd1a17bc3aafd1efa79e510b5de586196a384495661"
+    },
+    {
+      "artifact": "prepared-source.json",
+      "source": "C:\\Users\\antho\\AppData\\Local\\Temp\\dukb-nhl970-resume-2026-10-03\\prepared-source.json",
+      "rawSha256": "3515b454b313b0a7d7b339c22c601182ce1640933d0eeeb0d72f8bc5434f7043",
+      "normalizedSha256": "3515b454b313b0a7d7b339c22c601182ce1640933d0eeeb0d72f8bc5434f7043"
+    },
+    {
+      "artifact": "quiet-lane.jsonl",
+      "source": "C:\\Users\\antho\\AppData\\Local\\Temp\\dukb-nhl970-resume-2026-10-03\\quiet-lane.jsonl",
+      "rawSha256": "7cb5c946577911bfdddfd2d59ff4775c3e1e64b348ddbbae525129f4b115bcfa",
+      "normalizedSha256": "24f963c6c18e61f7637117c9642f498e9a8e7e3f98574f6f80887c5fd2a658bf"
+    }
+  ],
+  "quietLane": {
+    "samples": 34,
+    "first": {
+      "Time": "2026-10-03T01:17:15.9824525-04:00",
+      "ActiveChecks": 6,
+      "FreeMB": 576,
+      "QuietSamples": 0
+    },
+    "last": {
+      "Time": "2026-10-03T01:26:59.1935588-04:00",
+      "ActiveChecks": 4,
+      "FreeMB": 409,
+      "QuietSamples": 0
+    },
+    "minFreeMB": 81,
+    "maxActiveChecks": 7,
+    "result": "No two quiet samples with at least2GB free during10-minute wait. No test launched."
+  },
+  "warning": "All new outcome maps, whole-save checks and native checks are authored but unexecuted. Syntax success is not product acceptance."
+}

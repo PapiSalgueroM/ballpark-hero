@@ -34,7 +34,9 @@
      put back to the index-by-roster-size line; sections 2 and 3 must go red.
      CFB_DYNASTY_CONTROL=replay points the board test at a copy of the board
      with the recap restore put back to its pre-fix shape and the closed
-     season guard removed; the reload test must go red.
+     season guard removed; the reload test must go red. Since Round 912 that
+     is two copies: the shared college board (the restore) and CFB Dynasty's
+     own file (the guard), the second pointed at the first.
      Either control refuses to run if its rewrite changed nothing.
 
    Run: node scripts/simCfbDynasty.mjs
@@ -183,16 +185,33 @@ console.log('4) the board: a reload on the recap draws the recap again and never
   let env = {};
   let copy = null;
   if (CONTROL === 'replay') {
-    /* normalised on read: both patterns below end a line with \n, which a CRLF checkout never matches */
-    const src = fs.readFileSync(path.join(ROOT, 'src/components/cfb-dynasty/CfbDynastyBoard.tsx'), 'utf8').replaceAll('\r\n', '\n');
-    let regressed = src.replace(/if \(state\.natties\.some\(n => n\.season === state\.season\)\) return;\n/, '');
-    regressed = regressed.replace(/if \(s\.phase === 'recap'\) \{\n\s*if \(s\.postseason\) \{ setPostseason\(s\.postseason\); setPhase\('recap'\); \}\n\s*else openRecruiting\(s\.st\);\n\s*\} else \{\n\s*setPhase\(s\.phase\);\n\s*\}/, "setPhase(s.phase === 'recap' ? 'season' : s.phase);");
-    if (regressed === src || /natties\.some\(n => n\.season === state\.season\)/.test(regressed) || !/setPhase\(s\.phase === 'recap' \? 'season' : s\.phase\);/.test(regressed)) {
-      console.error('control cannot run: CfbDynastyBoard.tsx is not in the shape this control rewrites');
+    /* Round 912: the board is two files now. The closed season guard is
+       football's, so it sits in CFB Dynasty's descriptor; the recap restore is
+       every sport's, so it sits in the shared college board. The control
+       rewrites a copy of each and points the wrapper copy at the board copy.
+       Normalised on read: the patterns end a line with \n, which a CRLF
+       checkout never matches. */
+    const wrapperSrc = fs.readFileSync(path.join(ROOT, 'src/components/cfb-dynasty/CfbDynastyBoard.tsx'), 'utf8').replaceAll('\r\n', '\n');
+    const boardSrc = fs.readFileSync(path.join(ROOT, 'src/components/college-dynasty/CollegeDynastyBoard.tsx'), 'utf8').replaceAll('\r\n', '\n');
+    const guard = 'closedAtFinal: state => state.natties.some(n => n.season === state.season),';
+    const boardImport = "from '@/components/college-dynasty/CollegeDynastyBoard';";
+    const restored = boardSrc.replace(/if \(s\.phase === 'recap'\) \{\n\s*const held = sport\.recapOf\(s\);\n\s*if \(held\) \{ setRecap\(held\); setPhase\('recap'\); \}\n\s*else openRecruiting\(s\.st\);\n\s*\} else \{\n\s*setPhase\(s\.phase\);\n\s*\}/, "setPhase(s.phase === 'recap' ? 'season' : s.phase);");
+    if (wrapperSrc.split(guard).length !== 2 || wrapperSrc.split(boardImport).length !== 2 || restored === boardSrc
+      || !/setPhase\(s\.phase === 'recap' \? 'season' : s\.phase\);/.test(restored)) {
+      console.error('control cannot run: CfbDynastyBoard.tsx or CollegeDynastyBoard.tsx is not in the shape this control rewrites');
       process.exit(1);
     }
     const dir = path.join(ROOT, 'dist', '.cfb-control');
     fs.mkdirSync(dir, { recursive: true });
+    const boardCopy = path.join(dir, 'CollegeDynastyBoard.control.tsx');
+    fs.writeFileSync(boardCopy, restored);
+    const regressed = wrapperSrc
+      .replace(guard, 'closedAtFinal: () => false,')
+      .replace(boardImport, `from '${boardCopy.replaceAll('\\', '/')}';`);
+    if (/natties\.some\(n => n\.season === state\.season\)/.test(regressed) || regressed.includes(boardImport)) {
+      console.error('control cannot run: the wrapper rewrite did not take');
+      process.exit(1);
+    }
     copy = path.join(dir, 'CfbDynastyBoard.control.tsx');
     fs.writeFileSync(copy, regressed);
     env = { CFB_BOARD: copy.replaceAll('\\', '/') };

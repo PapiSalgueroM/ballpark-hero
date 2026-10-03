@@ -17,6 +17,10 @@
    scripts/simCareerLifeCooldowns.mjs audits it.
    ──────────────────────────────────────────────────────────────────────────── */
 import type { CareerState, RandomEvent } from "./soccerCareerEngine";
+import {
+  personalityOf, personalityMult, agentOf, agentWage, agentIncomeCut, agentTransferCut, identityBeatDue,
+} from "./careerIdentity";
+import type { IdentitySport, PersonalityDef, AgentDef } from "./careerIdentity";
 
 /* ─── tiny local helpers (duplicated on purpose: no runtime import cycle) ─── */
 const clamp = (v: number, min: number, max: number) => Math.max(min, Math.min(max, v));
@@ -66,67 +70,45 @@ export const STORY = {
   podcastLaunch: "podcastLaunch",
 } as const;
 
-/* ─── Personalities ─── */
-export interface PersonalityDef {
-  id: string;
-  name: string;
-  emoji: string;
-  blurb: string;
-  /** shown as a chip in the UI */
-  perk: string;
-}
+/* ─── Personalities ───
+   Round 835: the rules (the bound on what a personality may move, the
+   fallbacks, the staggered beats) live in careerIdentity.ts and every career
+   shares them. What is soccer is below: who you can be, the two multipliers
+   each one carries, the agents and their cuts. The multipliers used to be two
+   switch statements; they are the same numbers, now on the row they belong
+   to, so the perk a card prints and the number behind it sit side by side. */
+export type { PersonalityDef, AgentDef } from "./careerIdentity";
 
 export const PERSONALITIES: PersonalityDef[] = [
   { id: "showman", name: "The Showman", emoji: "🎭", blurb: "Cameras find you. You find them first.",
-    perk: "Followers grow 60% faster, sponsors pay 25% more, scandals hit harder" },
+    perk: "Followers grow 60% faster, sponsors pay 25% more, scandals hit harder",
+    followerMult: 1.6, sponsorMult: 1.25 },
   { id: "iceman", name: "Ice Cold", emoji: "🧊", blurb: "No celebration. No panic. No comment.",
-    perk: "Sponsors trust you, drama slides off, slower follower growth" },
+    perk: "Sponsors trust you, drama slides off, slower follower growth",
+    followerMult: 0.9, sponsorMult: 1.05 },
   { id: "hothead", name: "The Hothead", emoji: "🌋", blurb: "Plays angry. Lives angrier.",
-    perk: "Exclusive chaos events and fear-factor edges, riskier sponsor money" },
+    perk: "Exclusive chaos events and fear-factor edges, riskier sponsor money",
+    followerMult: 1.15, sponsorMult: 0.9 },
   { id: "professor", name: "The Professor", emoji: "📐", blurb: "Watches film on the team bus. For fun.",
-    perk: "Respected by managers and brands, fewer viral moments" },
+    perk: "Respected by managers and brands, fewer viral moments",
+    followerMult: 0.85, sponsorMult: 1.1 },
   { id: "enigma", name: "The Enigma", emoji: "🃏", blurb: "Nobody, including you, knows what happens next.",
-    perk: "Wildcard bonuses, cult following, chaos both ways" },
+    perk: "Wildcard bonuses, cult following, chaos both ways",
+    followerMult: 1.25, sponsorMult: 1 },
 ];
 
 export const getPersonalityDef = (id?: string | null): PersonalityDef | undefined =>
-  PERSONALITIES.find(p => p.id === id);
+  personalityOf(id, SOCCER_IDENTITY);
 
 export function personalityFollowerMult(id?: string | null): number {
-  switch (id) {
-    case "showman": return 1.6;
-    case "enigma": return 1.25;
-    case "hothead": return 1.15;
-    case "iceman": return 0.9;
-    case "professor": return 0.85;
-    default: return 1;
-  }
+  return personalityMult(id, "followers", SOCCER_IDENTITY);
 }
 
 export function personalitySponsorMult(id?: string | null): number {
-  switch (id) {
-    case "showman": return 1.25;
-    case "professor": return 1.1;
-    case "iceman": return 1.05;
-    case "hothead": return 0.9;
-    default: return 1;
-  }
+  return personalityMult(id, "sponsors", SOCCER_IDENTITY);
 }
 
 /* ─── Agents ─── */
-export interface AgentDef {
-  id: string;
-  name: string;
-  emoji: string;
-  blurb: string;
-  /** multiplier applied to negotiated wages */
-  wageMult: number;
-  /** yearly cut of wage + sponsorship income */
-  incomeCut: number;
-  /** cut of any transfer fee when you move */
-  transferCut: number;
-}
-
 export const AGENTS: AgentDef[] = [
   { id: "cousin", name: "Cousin Ricky", emoji: "🧢", blurb: "Family discount. Family-grade paperwork.",
     wageMult: 0.95, incomeCut: 0, transferCut: 0.03 },
@@ -138,29 +120,39 @@ export const AGENTS: AgentDef[] = [
     wageMult: 1, incomeCut: 0, transferCut: 0 },
 ];
 
+/** What makes the identity rules the soccer ones. Data, not rules. Legacy
+ *  saves without an agent keep the old flat 10% transfer fee. */
+export const SOCCER_IDENTITY: IdentitySport = {
+  personalities: PERSONALITIES,
+  agents: AGENTS,
+  noAgentTransferCut: 0.1,
+  beats: { personalityAge: 18, agentAge: 19 },
+};
+
 export const getAgentDef = (id?: string | null): AgentDef | undefined =>
-  AGENTS.find(a => a.id === id);
+  agentOf(id, SOCCER_IDENTITY);
 
 export function agentWageMult(id?: string | null): number {
-  return getAgentDef(id)?.wageMult ?? 1;
+  return agentWage(id, SOCCER_IDENTITY);
 }
 
 export function agentIncomeCutRate(id?: string | null): number {
-  return getAgentDef(id)?.incomeCut ?? 0;
+  return agentIncomeCut(id, SOCCER_IDENTITY);
 }
 
-/** Legacy saves without an agent keep the old flat 10% transfer fee. */
 export function agentTransferCutRate(id?: string | null): number {
-  if (!id) return 0.1;
-  return getAgentDef(id)?.transferCut ?? 0.1;
+  return agentTransferCut(id, SOCCER_IDENTITY);
 }
+
+/** The event that tells each identity beat in this catalog. */
+const IDENTITY_EVENT = { personality: 200, agent: 201 } as const;
 
 /** Events that must appear the season they become due (identity beats).
     Staggered on purpose: personality first, agent the season after. */
 export function getPriorityLifeEventIds(state: CareerState): number[] {
   const ids: number[] = [];
-  if (!state.personality && state.age >= 18 && !state.retired) ids.push(200);
-  else if (state.personality && !state.agentId && state.age >= 19 && !state.retired) ids.push(201);
+  const beat = identityBeatDue(state, SOCCER_IDENTITY);
+  if (beat) ids.push(IDENTITY_EVENT[beat]);
   /* Round 725: the comeback game (262) is a beat of the same kind. Left in
      the general draw it showed up in about one comeback in three, and a
      return from a long injury is not a story that should lose a raffle. */
