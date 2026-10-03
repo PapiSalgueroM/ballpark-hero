@@ -136,6 +136,37 @@
         { "family": "A", "url": "https://www.fcsion.ch/fr/les-equipes/", "publisher": "FC Sion (Equipe premiere page)", "readOn": "2026-10-03", "says": "attaquant, shirt 7, born 2000-12-12" },
         { "family": "B", "url": "https://www.soccerway.com/player/chouaref-ylyas/bV1XwLf5/", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Sion, born 2000-12-12, contract to 2028-06-30, 7 Super League appearances 2 goals in 2026/2027" }
       ]
+    },
+    {
+      "name": "Mohamed Elyounoussi",
+      "club": "FC Copenhagen",
+      "adjudicatedOn": "2026-10-03",
+      "note": "Shirt 10, eight appearances and six goals in 2026-27 on ESPN.",
+      "sources": [
+        { "family": "A", "url": "https://www.fck.dk/holdet", "publisher": "F.C. Kobenhavn (Forsteholdet page)", "readOn": "2026-10-03", "says": "forward, shirt 10" },
+        { "family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/909", "publisher": "ESPN (F.C. Kobenhavn squad page, season 2026-27)", "readOn": "2026-10-03", "says": "midfielder, shirt 10, age 32, 8 appearances 6 goals" }
+      ]
+    },
+    {
+      "name": "Mikel Gogorza",
+      "club": "FC Midtjylland",
+      "adjudicatedOn": "2026-10-03",
+      "note": "Shirt 41 in both 2026-27 lists, no appearance yet on ESPN.",
+      "sources": [
+        { "family": "A", "url": "https://www.fcm.dk/herreholdet/truppen/", "publisher": "FC Midtjylland (Truppen page)", "readOn": "2026-10-03", "says": "midfield, shirt 41" },
+        { "family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/572", "publisher": "ESPN (FC Midtjylland squad page, season 2026-27)", "readOn": "2026-10-03", "says": "forward, shirt 41, age 20" }
+      ]
+    },
+    {
+      "name": "Andreas Hansen",
+      "club": "FC Nordsjælland",
+      "officialPageRead": false,
+      "adjudicatedOn": "2026-10-03",
+      "note": "Goalkeeper born 1995-08-11, shirt 13, nine Superliga and six Conference League appearances in 2026-27. FC Nordsjaelland's own site gave no squad to a plain fetch, so this rests on two independent publishers that agree.",
+      "sources": [
+        { "family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/3101", "publisher": "ESPN (FC Nordsjaelland squad page, season 2026-27)", "readOn": "2026-10-03", "says": "goalkeeper, shirt 13, age 31" },
+        { "family": "B", "url": "https://www.soccerway.com/player/hansen-andreas/tv1OOujN/", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Nordsjaelland, born 1995-08-11, contract to 2028-06-30, 9 Superliga and 6 Conference League appearances in 2026/2027" }
+      ]
     }
   ],
   "movedTo": [
@@ -331,6 +362,19 @@
         { "family": "B", "url": "https://www.espn.com/soccer/player/_/id/287077/ebrima-colley", "publisher": "ESPN (player page)", "readOn": "2026-10-03", "says": "Konyaspor, shirt 19, born 2000-02-01, Super Lig substitute appearance 2026-09-18" },
         { "family": "B", "url": "https://www.soccerway.com/player/colley-ebrima/t6HYZ4HP/", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Konyaspor on loan from Young Boys 2026-07-15 to 2027-06-30, 5 Super Lig appearances 1 goal in 2026/2027" }
       ]
+    },
+    {
+      "name": "Zidan Sertdemir",
+      "from": "FC Nordsjælland",
+      "to": "Lyngby",
+      "realClub": "Lyngby",
+      "adjudicatedOn": "2026-10-03",
+      "note": "Danish midfielder born 2005-02-04. Sold by Nordsjaelland to Preussen Munster on 2025-08-31, then to Lyngby on 2026-09-01, shirt 16. Absent from ESPN's Nordsjaelland 2026-27 squad.",
+      "sources": [
+        { "family": "A", "url": "https://lyngby-boldklub.dk/foersteholdstruppen/", "publisher": "Lyngby Boldklub (first team squad page)", "readOn": "2026-10-03", "says": "shirt 16" },
+        { "family": "B", "url": "https://www.espn.com/soccer/player/_/id/322760/zidan-sertdemir", "publisher": "ESPN (player page)", "readOn": "2026-10-03", "says": "Lyngby Boldklub, shirt 16, born 2005-02-04; last listed games for Preussen Munster in the 2. Bundesliga to 2026-05-17" },
+        { "family": "B", "url": "https://www.soccerway.com/player/sertdemir-zidane/fsOZHtn5/", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Nordsjaelland to Preussen Munster 2025-08-31, Preussen Munster to Lyngby 2026-09-01, contract to 2030-06-30" }
+      ]
     }
   ],
   "removedClubNotModelled": [
@@ -428,6 +472,18 @@
       "sources": [
         { "family": "A", "url": "https://www.fcvaduz.li/teams/1-mannschaft", "publisher": "FC Vaduz (1. Mannschaft Kader)", "readOn": "2026-10-03", "says": "not in the squad" },
         { "family": "B", "url": "https://www.soccerway.com/player/ris-joel/lpMtkuTC/", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Cham (Promotion League), born 2001-01-16, Bulle to Kriens 2024-07-16, Kriens to Cham 2025-07-01, contract to 2027-06-30" }
+      ]
+    },
+    {
+      "name": "Serginho",
+      "from": "Viborg FF",
+      "realClub": "Al Wasl (United Arab Emirates)",
+      "adjudicatedOn": "2026-10-03",
+      "note": "The Cape Verdean forward born 2001-01-29 (baked age 24 matches), at Viborg from Estoril on 2023-07-31 and sold to Al Wasl on 2025-08-04, with UAE League appearances in 2026/2027. Not in Viborg's own squad or ESPN's Viborg 2026-27 squad. The destination is Soccerway alone. Not the Brazilian Serginho born 1995 now at Atromitos, nor the Portuguese one born 1999 now at Levski Sofia; neither ever played for Viborg. The UAE is not modelled.",
+      "sources": [
+        { "family": "A", "url": "https://www.vff.dk/ligaen/truppen", "publisher": "Viborg FF (Truppen page)", "readOn": "2026-10-03", "says": "not in the squad" },
+        { "family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/3153", "publisher": "ESPN (Viborg FF squad page, season 2026-27)", "readOn": "2026-10-03", "says": "not in the squad" },
+        { "family": "B", "url": "https://www.soccerway.com/player/serginho/fNsSBRtt/", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Al Wasl, born 2001-01-29, Cape Verde, Estoril to Viborg 2023-07-31 500k, Viborg to Al Wasl 2025-08-04 3.5m" }
       ]
     }
   ],
