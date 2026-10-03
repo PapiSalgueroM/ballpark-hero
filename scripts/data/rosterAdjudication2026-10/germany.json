@@ -1,0 +1,150 @@
+{
+ "round": 930,
+ "shard": "Germany: every pending row of scripts/data/rosterConfirmation2026.json whose club plays in the Bundesliga or the 2. Bundesliga (51 rows at origin/main 5f2622fd)",
+ "adjudicatedOn": "2026-10-02",
+ "method": "Each row was read on the web on 2026-10-02. A row leaves pending only when an official page (family A: bundesliga.com squad page for the club in question, a club's own squad page or announcement, or a league's own squad page) and an independent publisher on another host (family B: Soccerway, FotMob, ESPN) agree where the man is. Birth dates are in the note so a namesake cannot be mistaken for him. A season-long loanee is placed at the club he plays for, with loan and loanFrom as information only, the ledger's loanPolicy. The to field is the Club Manager club name the bake knows; realClub is the club as the sources write it. This file is folded into rosterConfirmation2026.json by the lead; nothing reads it directly.",
+ "confirmedStill": [
+  {
+   "name": "Serge Gnabry",
+   "club": "Bayern Munich",
+   "adjudicatedOn": "2026-10-02",
+   "note": "Bayern's number 7, aged 31 on ESPN. On both 2026-27 squad pages. No namesake in the game.",
+   "sources": [
+    {"family": "A", "url": "https://www.bundesliga.com/en/bundesliga/clubs/fc-bayern-muenchen/squad", "publisher": "Bundesliga (Bayern Munich squad, season 2026-2027)", "readOn": "2026-10-02", "says": "listed among the strikers"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/132/ger.bayern_munich", "publisher": "ESPN (Bayern Munich squad page, season 2026-27)", "readOn": "2026-10-02", "says": "forward, shirt 7, age 31"}
+   ]
+  }
+ ],
+ "movedTo": [
+  {
+   "name": "Henri Koudossou",
+   "from": "Augsburg",
+   "to": "Arminia Bielefeld",
+   "realClub": "Arminia Bielefeld",
+   "adjudicatedOn": "2026-10-02",
+   "note": "Born 1999-09-03. Spent 2025-26 on loan at Nuernberg, went back to Augsburg on 2026-06-30 and was sold to Bielefeld from 2026-07-01, contract to June 2028.",
+   "sources": [
+    {"family": "A", "url": "https://www.bundesliga.com/en/2bundesliga/clubs/dsc-arminia-bielefeld/squad", "publisher": "Bundesliga (Arminia Bielefeld squad, season 2026-2027)", "readOn": "2026-10-02", "says": "listed among the defenders"},
+    {"family": "A", "url": "https://www.fcaugsburg.de/en/article/henri-koudossou-wechselt-nach-bielefeld-23210", "publisher": "FC Augsburg (club announcement)", "readOn": "2026-10-02", "says": "joins Arminia Bielefeld, terms undisclosed"},
+    {"family": "B", "url": "https://us.soccerway.com/player/koudossou-henri/0hLlI34C/transfers", "publisher": "Soccerway", "readOn": "2026-10-02", "says": "Augsburg to Arminia Bielefeld 2026-07-01, born 1999-09-03, contract to June 2028"}
+   ]
+  },
+  {
+   "name": "Mads Pedersen",
+   "from": "Augsburg",
+   "to": "Hertha BSC",
+   "realClub": "Hertha BSC",
+   "adjudicatedOn": "2026-10-02",
+   "note": "Mads Valentin Pedersen, born 1996-09-01, the Danish left back. Left Augsburg for Hertha on 2026-08-24 on a one year deal with an option.",
+   "sources": [
+    {"family": "A", "url": "https://www.bundesliga.com/en/2bundesliga/clubs/hertha-bsc/squad", "publisher": "Bundesliga (Hertha BSC squad, season 2026-2027)", "readOn": "2026-10-02", "says": "listed among the defenders"},
+    {"family": "A", "url": "https://www.fcaugsburg.de/en/article/mads-pedersen-joins-hertha-bsc-23375", "publisher": "FC Augsburg (club announcement)", "readOn": "2026-10-02", "says": "joins Hertha BSC with immediate effect"},
+    {"family": "B", "url": "https://www.fotmob.com/players/657217", "publisher": "FotMob", "readOn": "2026-10-02", "says": "Hertha BSC, left back, born 1996-09-01, played 90 minutes against Dynamo Dresden on 2026-09-19"}
+   ]
+  },
+  {
+   "name": "Mergim Berisha",
+   "from": "Augsburg",
+   "to": "Kaiserslautern",
+   "realClub": "1. FC Kaiserslautern",
+   "adjudicatedOn": "2026-10-02",
+   "note": "Born 1996-05-11. Augsburg had him on loan from Hoffenheim only for the second half of 2024-25; he went back to Hoffenheim on 2025-06-30 and joined Kaiserslautern on a free on 2026-02-02, contract to June 2027.",
+   "sources": [
+    {"family": "A", "url": "https://www.bundesliga.com/en/2bundesliga/clubs/1-fc-kaiserslautern/squad", "publisher": "Bundesliga (Kaiserslautern squad, season 2026-2027)", "readOn": "2026-10-02", "says": "listed among the strikers"},
+    {"family": "B", "url": "https://us.soccerway.com/player/berisha-mergim/KWrYlSTD/transfers", "publisher": "Soccerway", "readOn": "2026-10-02", "says": "Hoffenheim to Kaiserslautern 2026-02-02, born 1996-05-11, current club Kaiserslautern"}
+   ]
+  },
+  {
+   "name": "Samuel Essende",
+   "from": "Augsburg",
+   "to": "Young Boys",
+   "realClub": "BSC Young Boys",
+   "adjudicatedOn": "2026-10-02",
+   "note": "Born 1998-01-23, the DR Congo striker. Sold to Young Boys on 2026-02-16, contract to June 2029, shirt 99.",
+   "sources": [
+    {"family": "A", "url": "https://www.bscyb.ch/kader", "publisher": "BSC Young Boys (club squad page)", "readOn": "2026-10-02", "says": "shirt 99, forward, joined 2026"},
+    {"family": "B", "url": "https://www.soccerway.com/player/essende-samuel/WUr4kj1n/transfers", "publisher": "Soccerway", "readOn": "2026-10-02", "says": "Augsburg to Young Boys 2026-02-16, born 1998-01-23, contract to June 2029"}
+   ]
+  },
+  {
+   "name": "Thomas Müller",
+   "from": "Bayern Munich",
+   "to": "Vancouver Whitecaps",
+   "realClub": "Vancouver Whitecaps",
+   "adjudicatedOn": "2026-10-02",
+   "note": "Born 1989-09-13. Left Bayern on a free in August 2025 for Vancouver, where he wears 13.",
+   "sources": [
+    {"family": "A", "url": "https://www.whitecapsfc.com/club/roster/", "publisher": "Vancouver Whitecaps FC (club roster)", "readOn": "2026-10-02", "says": "number 13, midfielder"},
+    {"family": "A", "url": "https://www.bundesliga.com/en/bundesliga/clubs/fc-bayern-muenchen/squad", "publisher": "Bundesliga (Bayern Munich squad, season 2026-2027)", "readOn": "2026-10-02", "says": "not listed"},
+    {"family": "B", "url": "https://www.fotmob.com/players/116772/thomas-muller", "publisher": "FotMob", "readOn": "2026-10-02", "says": "Vancouver Whitecaps, born 1989-09-13, played DC United on 2026-09-27"}
+   ]
+  },
+  {
+   "name": "Wisdom Mike",
+   "from": "Bayern Munich",
+   "to": "Club Brugge",
+   "realClub": "Club Brugge",
+   "adjudicatedOn": "2026-10-02",
+   "note": "Born 2008-09-24. Sold to Club Brugge on 2026-08-27, a permanent move. He holds shirt 27 in the first team squad, though his minutes so far have come for the club's second team, Club Brugge NXT.",
+   "sources": [
+    {"family": "A", "url": "https://www.bundesliga.com/en/bundesliga/news/wisdom-mike-bayern-munich-club-brugge-transfer-38778", "publisher": "Bundesliga (news, 2026-08-27)", "readOn": "2026-10-02", "says": "permanent transfer from Bayern to Club Brugge"},
+    {"family": "A", "url": "https://www.bundesliga.com/en/bundesliga/clubs/fc-bayern-muenchen/squad", "publisher": "Bundesliga (Bayern Munich squad, season 2026-2027)", "readOn": "2026-10-02", "says": "not listed"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/570/bel.club_brugge", "publisher": "ESPN (Club Brugge squad page, season 2026-27)", "readOn": "2026-10-02", "says": "forward, shirt 27, age 18"},
+    {"family": "B", "url": "https://www.fotmob.com/players/1692886/wisdom-mike", "publisher": "FotMob", "readOn": "2026-10-02", "says": "born 2008-09-24, played for Club Brugge NXT on 2026-09-18"}
+   ]
+  },
+  {
+   "name": "Felix Passlack",
+   "from": "Bochum",
+   "to": "Hibernian",
+   "realClub": "Hibernian",
+   "adjudicatedOn": "2026-10-02",
+   "note": "Born 1998-05-29. Sold by Bochum to Hibernian on 2026-02-02, contract to June 2029, shirt 25.",
+   "sources": [
+    {"family": "A", "url": "https://www.uefa.com/uefaconferenceleague/clubs/players/250076274--felix-passlack/", "publisher": "UEFA (Conference League player page, 2026/27)", "readOn": "2026-10-02", "says": "Hibernian, defender, shirt 25, born 29/5/1998"},
+    {"family": "A", "url": "https://www.bundesliga.com/en/2bundesliga/clubs/vfl-bochum-1848/squad", "publisher": "Bundesliga (VfL Bochum squad, season 2026-2027)", "readOn": "2026-10-02", "says": "not listed"},
+    {"family": "B", "url": "https://ca.soccerway.com/player/passlack-felix/rHIRgwGG/transfers", "publisher": "Soccerway", "readOn": "2026-10-02", "says": "Bochum to Hibernian 2026-02-02, born 1998-05-29, contract to June 2029"}
+   ]
+  }
+ ],
+ "removedClubNotModelled": [
+  {
+   "name": "Arne Maier",
+   "from": "Augsburg",
+   "realClub": "Újpest",
+   "adjudicatedOn": "2026-10-02",
+   "note": "Born 1999-01-08. Left Augsburg for Ujpest on 2026-02-01, contract to June 2027. Hungary is not modelled.",
+   "sources": [
+    {"family": "A", "url": "https://www.fcaugsburg.de/en/article/arne-maier-joins-ujpest-fc-22817", "publisher": "FC Augsburg (club announcement, 2026-02-01)", "readOn": "2026-10-02", "says": "joins Ujpest FC with immediate effect"},
+    {"family": "A", "url": "https://www.bundesliga.com/en/bundesliga/clubs/fc-augsburg/squad", "publisher": "Bundesliga (FC Augsburg squad, season 2026-2027)", "readOn": "2026-10-02", "says": "not listed"},
+    {"family": "B", "url": "https://no.soccerway.com/player/maier-arne/jVumZKI4/transfers", "publisher": "Soccerway", "readOn": "2026-10-02", "says": "Augsburg to Ujpest 2026-01-31, born 1999-01-08, current club Ujpest"}
+   ]
+  },
+  {
+   "name": "Robert Gumny",
+   "from": "Augsburg",
+   "realClub": "Lech Poznań",
+   "adjudicatedOn": "2026-10-02",
+   "note": "Born 1998-06-04, the Polish right back. Left Augsburg at the end of his contract and rejoined Lech on 2025-07-01, contract to June 2027. Poland is not modelled.",
+   "sources": [
+    {"family": "A", "url": "https://www.lechpoznan.pl/first-team,11.html", "publisher": "Lech Poznan (club first team page)", "readOn": "2026-10-02", "says": "defender, shirt 20"},
+    {"family": "B", "url": "https://ca.soccerway.com/player/gumny-robert/x8uj789H/transfers", "publisher": "Soccerway", "readOn": "2026-10-02", "says": "Augsburg to Lech Poznan 2025-07-01 as a free agent, born 1998-06-04"},
+    {"family": "B", "url": "https://www.espn.com.sg/football/player/_/id/235180/robert-gumny", "publisher": "ESPN (player page)", "readOn": "2026-10-02", "says": "Lech Poznan number 20, came on against Crystal Palace on 2026-09-18"}
+   ]
+  },
+  {
+   "name": "Matus Bero",
+   "from": "Bochum",
+   "realClub": "Ferencváros",
+   "adjudicatedOn": "2026-10-02",
+   "note": "Matus Bero, born 1995-09-06, the Slovak midfielder. Left Bochum and joined Ferencvaros as a free agent on 2026-09-01. Hungary is not modelled.",
+   "sources": [
+    {"family": "A", "url": "https://www.fradi.hu/en/football/men-s/news/experienced-slovak-midfielder-signs", "publisher": "Ferencvaros (club announcement, 2026-09-01)", "readOn": "2026-10-02", "says": "signs from Bochum, born 1995-09-06"},
+    {"family": "A", "url": "https://www.bundesliga.com/en/2bundesliga/clubs/vfl-bochum-1848/squad", "publisher": "Bundesliga (VfL Bochum squad, season 2026-2027)", "readOn": "2026-10-02", "says": "not listed"},
+    {"family": "B", "url": "https://ca.soccerway.com/player/bero-matus/lWQqSFyt/transfers", "publisher": "Soccerway", "readOn": "2026-10-02", "says": "Bochum to Ferencvaros 2026-09-01 as a free agent, born 1995-09-06"}
+   ]
+  }
+ ],
+ "notCurrent": [],
+ "pending": []
+}
