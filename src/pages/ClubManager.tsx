@@ -286,6 +286,7 @@ const ClubManager = () => {
             'Win enough and manage your country as well: real tournaments between seasons, real qualifying groups, and a place in the cabinet if you lift one.',
             'Handle the press when they come for you, and pick your team talk before kick off and again at half time.',
             'Win trophies, keep the board happy, and build a managerial career that can cross leagues and continents.',
+            'Run up to three managers on one device, each with a career of his own in its own slot: tap Managers on the hub to switch between them or start another.',
           ]}
         >
           {/* Round 655: every league and club as readable text, below the guide. */}

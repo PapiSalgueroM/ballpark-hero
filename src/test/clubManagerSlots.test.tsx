@@ -85,6 +85,34 @@ describe('Club Manager: three manager slots', () => {
     expect(activeSlot()).toBe(1);
   });
 
+  it('the screen asks before it deletes, and every tile says what it holds', async () => {
+    const { default: ManagerSlotsScreen } = await import('@/components/club-manager/ManagerSlotsScreen');
+    const onDelete = vi.fn(), onContinue = vi.fn(), onNew = vi.fn();
+    const summary = { managerName: null, clubName: 'Everton', season: 4, worldSeason: '2029-30', trophies: 2, eraId: 'now', eraLabel: '2026-27', historic: false, sacked: false };
+    const slots = [
+      { slot: 1, active: true, summary, damaged: false },
+      { slot: 2, active: false, summary: null, damaged: false },
+      { slot: 3, active: false, summary: null, damaged: true },
+    ];
+    const r = render(<ManagerSlotsScreen slots={slots} onContinue={onContinue} onNew={onNew} onDelete={onDelete} />);
+    const tile = (n: number) => r.getByTestId(`cm-slot-${n}`);
+    expect(tile(1).textContent).toContain('Everton');
+    expect(tile(1).textContent).toContain('2 trophies');
+    expect(tile(2).textContent).toContain('Empty slot');
+    expect(tile(3).textContent).toContain('could not be read');
+    act(() => { r.getByRole('button', { name: 'Delete' }).click(); });
+    expect(onDelete).not.toHaveBeenCalled();
+    expect(tile(1).textContent).toContain('for good');
+    act(() => { r.getByRole('button', { name: 'Keep' }).click(); });
+    expect(onDelete).not.toHaveBeenCalled();
+    act(() => { r.getByRole('button', { name: 'Delete' }).click(); });
+    act(() => { r.getAllByRole('button', { name: 'Delete' })[0].click(); });
+    expect(onDelete).toHaveBeenCalledWith(1);
+    act(() => { r.getByRole('button', { name: 'New manager' }).click(); });
+    expect(onNew).toHaveBeenCalledWith(2);
+    r.unmount();
+  });
+
   it('delete takes one career and leaves the other', async () => {
     const r = render(<Harness />);
     await start('Everton');

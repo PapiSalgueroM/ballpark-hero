@@ -4,7 +4,7 @@
  * Drives the REAL built page in Chromium on a phone viewport: take a job,
  * open Managers, start a second manager in slot 2 at a different club, leave
  * the page for the home page, come back, and both managers must be on the
- * slots screen. Then Continue on slot 1 must open the first club's hub, and
+ * slots screen. Then Resume Career on slot 1 must open the first club's hub, and
  * slot 2 must still hold the second club. No page error anywhere.
  *
  * The database host is blocked for the whole walk (the production rule of
@@ -134,11 +134,11 @@ try {
   if (!s2.includes(second)) fail(`after coming back slot 2 reads "${s2}", not ${second}`);
   else ok(`slot 2 still ${second}`);
 
-  console.log('4) Continue on slot 1');
-  await tap(/^continue$/i, 'Continue in slot 1', page.locator('[data-testid="cm-slot-1"]'));
+  console.log('4) Resume Career on slot 1');
+  await tap(/^resume career$/i, 'Resume Career in slot 1', page.locator('[data-testid="cm-slot-1"]'));
   await page.locator('[data-testid="cm-show-slots"]').waitFor({ timeout: 10000 }).catch(() => {});
   const h1 = ((await page.locator('h1').first().innerText().catch(() => '')) || '').trim();
-  if (h1 !== first) fail(`Continue on slot 1 opened "${h1}", not ${first}`);
+  if (h1 !== first) fail(`Resume Career on slot 1 opened "${h1}", not ${first}`);
   else ok(`slot 1 opened on ${first}'s hub`);
   if (await saved() !== first) fail(`the active save holds ${await saved()}, not ${first}`);
   const parked2 = await page.evaluate(() => { const raw = localStorage.getItem('dukb-cm-slot-2'); return raw ? JSON.parse(raw).clubName : null; });

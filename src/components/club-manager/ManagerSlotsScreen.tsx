@@ -1,6 +1,8 @@
 /**
  * Round 928: the manager slots screen, where the resume prompt used to be.
- * One small tile per slot: Continue, New manager in an empty one, and Delete
+ * One small tile per slot: Resume Career (the label every Club Manager walk
+ * and the prerender personal state guard in simPrerender already know), New
+ * manager in an empty one, and Delete
  * behind a confirm. Everything on it is read off the store without opening a
  * save (src/lib/clubManagerSlots.ts).
  */
@@ -76,7 +78,7 @@ export default function ManagerSlotsScreen({ slots, activeDetail, note, onContin
                           onClick={() => onContinue(v.slot)}
                           className="w-full px-4 py-2.5 bg-primary text-primary-foreground rounded-xl font-bold hover:opacity-90 transition-opacity"
                         >
-                          Continue
+                          Resume Career
                         </button>
                         <button
                           onClick={() => setConfirming(v.slot)}
