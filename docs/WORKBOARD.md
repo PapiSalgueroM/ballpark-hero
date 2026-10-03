@@ -1,3 +1,37 @@
+Codex CLAIMS999, 2026-10-03: Rank Em three-sport circuit.
+Own RankEm.tsx, a small circuit helper, scoped presentation and verification.
+One NBA, NHL and MLB board, explicit reveals, combined15-slot result, saved
+resume and replay. Preserve Daily/Unlimited behavior and the14-board daily
+rotation. Source-check the ten completed-league-career datasets; exclude the
+four potentially changing tables and today's daily board. No production DB
+calls or local runtime gates. Build in an isolated branch.997 publication is
+still blocked and998 stays verified in PR113; neither is claimed live.
+Claude lanes, held drafts and seven stashes stay separate. Next free1000 is
+unclaimed. AdSense/indexing submissions remain deferred.
+
+Codex998 VERIFIED IN PR113, 2026-10-03 08:35 EDT.
+Rugby League challenge is ready for integration at31ce1b24. Final remote run
+37122811601 passed type/build,15 outcome cases,16 effective source controls,
+legacy regressions,17 built readers and five native profiles. Final phone
+screenshots retain instructions and complete claims beside their actions.
+PR113 is not merged or live. Publish and verify accepted997 before merging998.
+Lovable still opened an empty Publish panel after the final retry. No final
+publish action was sent. Receipt: docs/audits/ROUND998-VERIFICATION.md.
+No local runtime gates or production DB work. Held drafts and seven stashes
+remain untouched. Claude retains Release Z/988 and separate manager lanes.
+Next free999 is unclaimed. AdSense/indexing submissions remain deferred.
+
+Codex CLAIMS998, 2026-10-03: Rugby League challenge preparation.
+Anthony asked to keep going. Build an isolated ten-claim mode in Champ or Not,
+alternating existing premiership and Dally M records, with worked help, retained
+reveals and truthful results. Keep the existing Daily/Unlimited hook and saves.
+A bounded single-bank scheduler fix prevents partial loading freezing the page.
+Own ChampOrNot page, a new adjacent panel/helper, targeted tests and remote QA.
+No new production records or DB probes. No local runtime. Claude lanes and held
+drafts stay separate.997 remains accepted but publication is blocked on the host.
+Prepare998 in its own branch; do not claim either feature live from a CI preview.
+Next free999 is unclaimed. AdSense/indexing submissions remain deferred.
+
 Codex997 PUBLICATION PENDING, 2026-10-03 07:34 EDT.
 Implementation is accepted and merged; all scoped remote gates are green.
 Lovable's editor repeatedly timed out initializing Firebase auth. Both original
