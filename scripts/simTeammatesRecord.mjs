@@ -516,10 +516,14 @@ console.log('\n--- 8. the deal: how much of one run the next run repeats ---');
    2026-10-02, seeds 1 to 12, 400 run pairs each, and the gate is the MEAN
    over seeds, never the worst seed: the 50 row bank before Round 921
    repeated 20.8 to 22.8 percent per seed, mean 21.9; the 121 row bank 8.3
-   to 10.0, mean 9.3. The ceiling of 14 sits 4.7 points above the new mean
+   to 10.0, mean 9.3; the 141 row bank (2026-10-03, twenty NO rows added)
+   7.1 to 8.5, mean 7.8. The ceiling of 14 sits 6.2 points above the new mean
    and 7.9 below the old one, so it fails on a bank that shrinks back toward
    the old one and on nothing else (the smallbank control deals the old
-   12/12/26 shape and reads 21.9). */
+   12/12/26 shape and reads 21.9). The same runs report what tapping YES on
+   every card scores: 7.95 of 10 on the 121 row bank, 6.87 on 141. That line
+   is reported, not gated: the hook's sort shuffle leans toward file order,
+   so it moves with row order as well as with the answers. */
 const REPEAT_CEILING = 0.14;
 let hookSrc = fs.readFileSync(path.join(ROOT, HOOK), 'utf8').replace(/\r\n/g, '\n');
 if (CONTROL === 'shortdeal') hookSrc = rewrite(hookSrc, 'hard.slice(0, 4)', 'hard.slice(0, 3)', "the hook's hard slice");
