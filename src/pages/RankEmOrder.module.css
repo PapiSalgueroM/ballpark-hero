@@ -10,3 +10,10 @@
 .committed { animation: orderReveal 420ms ease-out 1; }
 @keyframes orderReveal { from { opacity: 0.55; } to { opacity: 1; } }
 @media (prefers-reduced-motion: reduce) { .committed { animation: none; } }
+.board.circuitPage { padding-top: 16px; }
+.circuitPage > header { margin-bottom: 8px; }
+.circuitPage > header > h1 { font-size: 24px; line-height: 1.25; letter-spacing: .04em; }
+.circuitPage .circuitModes { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); width: 100%; max-width: 358px; margin-top: 8px; }
+.circuitModes > button { padding-left: 4px; padding-right: 4px; }
+.circuit { max-width: 448px; margin: 0 auto; }
+.circuit [data-circuit-reveal] { overflow-wrap: anywhere; }
