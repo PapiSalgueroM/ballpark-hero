@@ -82,7 +82,7 @@ export type BirdTier = 'none' | 'non' | 'early' | 'full';
 
 /** Seasons with the club, without changing teams as a free agent, that earn each tier. */
 export const NBA_BIRD_SEASONS = { non: 1, early: 2, full: 3 } as const;
-/** Non-Bird: up to this multiple of his previous salary. One publisher, see the rule. */
+/** Non-Bird: up to this multiple of his previous salary. Two publishers, see the rule. */
 export const NBA_NON_BIRD_RAISE = 1.2;
 /** Early Bird: up to this multiple of his previous salary, or the next line, whichever is greater. */
 export const NBA_EARLY_BIRD_RAISE = 1.75;
@@ -90,6 +90,7 @@ export const NBA_EARLY_BIRD_RAISE = 1.75;
 export const NBA_EARLY_BIRD_AVERAGE = 1.05;
 /** Early Bird deals run two to four seasons, full Bird up to five. */
 export const NBA_EARLY_BIRD_MAX_YEARS = 4;
+export const NBA_EARLY_BIRD_MIN_YEARS = 2;
 export const NBA_BIRD_MAX_YEARS = 5;
 
 /** The most a first year salary may be, as a share of the cap, by seasons in the league. */
@@ -122,9 +123,11 @@ export const NHL_RFA_UNDER_AGE = 27;
 export const NHL_RFA_UNDER_SEASONS = 7;
 /** Days the club has to match an offer sheet. */
 export const NHL_MATCH_DAYS = 7;
-/** Entry level deal length by the age he signs at. ONE publisher, see the rule. */
+/** Entry level deal length by the age he signs at. Three sources, see the rule. */
 export const NHL_ENTRY_LEVEL_YEARS: { maxAge: number; years: number }[] = [
   { maxAge: 21, years: 3 },
+  { maxAge: 23, years: 2 },
+  { maxAge: 24, years: 1 },
 ];
 
 /** The cap the published ladder below was set against, $M (2025-26). */
@@ -161,7 +164,7 @@ export const CONTRACT_RULES: ContractRule[] = [
     inGame: 'Already in the NFL front office since Round 723, with its own sources in src/lib/frontOffice.ts. A tagged man never reaches the desk.',
     sources: [
       { url: 'https://www.profootballhof.com/news/2020-franchise-and-transition-players-named', says: 'Each club may designate one franchise player among its veteran free agents.' },
-      { url: 'https://www.buffalobills.com/news/a-closer-look-what-is-the-franchise-tag-12632897', says: 'One year, at a tender set by position; a second tag in a row costs 120 percent of the first.' },
+      { url: 'https://www.buffalobills.com/news/a-closer-look-what-is-the-franchise-tag-12632897', says: 'One year, at the mean of the five largest prior year salaries at his position or 120 percent of his own prior year salary, whichever is greater.' },
     ],
   },
   {
@@ -185,10 +188,8 @@ export const CONTRACT_RULES: ContractRule[] = [
       { url: 'https://www.hoopsrumors.com/2026/03/hoops-rumors-glossary-bird-rights-8.html', says: 'Three seasons with the same team; re-sign for up to five years at any price up to his maximum, whatever the cap room; the clock resets when he changes teams as a free agent or is waived.' },
       { url: 'https://www.cbssports.com/nba/news/nba-salary-cap-explained-glossary-for-the-terms-you-need-to-know-ahead-of-basketball-free-agency/', says: 'Non-Bird after one season, up to 120 percent of previous salary; Early Bird after two, up to 175 percent or 105 percent of the average salary; full Bird after three, anything up to the maximum.' },
       { url: 'https://www.hoopsrumors.com/2025/03/hoops-rumors-glossary-early-bird-rights-8.html', says: 'Early Bird after two seasons: 175 percent of previous salary or 105 percent of the league average, whichever is greater, two to four years.' },
+      { url: 'https://www.hoopsrumors.com/2022/04/hoops-rumors-glossary-non-bird-rights-6.html', says: 'Non-Bird covers a man with a season or less with his club: a starting salary up to 120 percent of his previous one, up to four years.' },
     ],
-    /* The 120 percent Non-Bird figure was read on one publisher (the CBS
-       glossary). Full Bird and Early Bird each have two. */
-    singleSource: true,
   },
   {
     id: 'nba-max-salary',
@@ -221,18 +222,20 @@ export const CONTRACT_RULES: ContractRule[] = [
     sources: [
       { url: 'https://www.cbssports.com/mlb/news/mlb-qualifying-offer-predictions-contract-kyle-schwarber-bo-bichette-kyle-tucker/', says: 'A one year deal at the average of the top 125 salaries; only for a player who spent the whole season with the team and never received it before; draft pick compensation when he rejects it and signs elsewhere.' },
       { url: 'https://www.espn.com/mlb/story/_/id/46874206/sources-cubs-kyle-tucker-13-get-22m-qualifying-offer', says: 'A one year deal; a player who accepts cannot be given the offer again; draft picks change hands when a tagged free agent signs elsewhere.' },
+      { url: 'https://www.justbaseball.com/mlb/which-free-agents-cant-receive-qualifying-offer/', says: 'A free agent cannot get the offer if he has had one before or if he was traded during the season just played.' },
     ],
   },
   {
     id: 'nhl-entry-level',
     sport: 'nhl',
     name: 'Entry level contract',
-    plain: "A player's first NHL deal is an entry level contract, with its length set by his age when he signs (three years at 18) and its salary and bonuses capped.",
-    inGame: 'A man this GM drafted is on his entry level deal until it runs out, and the desk labels it. The length is whatever the engine gave him at the draft. The full ladder by age was read on one publisher only (two others refused the read), so only the three year line is recorded here and nothing in the game is priced off it.',
+    plain: "A player's first NHL deal is an entry level contract, with its length set by his age when he signs (three years from 18 to 21, two at 22 or 23, one at 24) and its salary and bonuses capped.",
+    inGame: 'A man this GM drafted plays out whatever first deal the engine gave him at the draft, and the desk does not reprice it. When it runs out he comes to the desk as a restricted free agent (the next rule). Nothing in the game is priced off the age ladder.',
     sources: [
       { url: 'https://www.nhl.com/flyers/news/transaction-analysis-explaining-bonk-s-entry-level-deal-345659582', says: 'Signed at 18, the entry level deal is three years; the agreement sets length by signing age and caps base salary and bonuses.' },
+      { url: 'https://www.dkpittsburghsports.com/2020/10/10/nhl-waivers-contracts-faq-tlh', says: 'Entry level deals run three years for players aged 18 to 21, two for 22 and 23, one for 24.' },
+      { url: 'https://fansided.com/nhl/what-does-entry-level-contract-mean-in-the-nhl-rules-explained-for-draft-picks', says: 'Three years when he signs between 18 and 21, two at 22 or 23, one at 24; from 25 no entry level deal is needed.' },
     ],
-    singleSource: true,
   },
   {
     id: 'nhl-restricted-free-agency',

@@ -38,7 +38,7 @@ import {
 } from '@/lib/gmDealTable';
 import {
   MLB_ARBITRATION_AFTER, MLB_FREE_AGENCY_AFTER, MLB_QUALIFYING_OFFER_TOP, MLB_QUALIFYING_OFFER_YEARS,
-  NBA_BIRD_MAX_YEARS, NBA_BIRD_SEASONS, NBA_EARLY_BIRD_AVERAGE, NBA_EARLY_BIRD_MAX_YEARS,
+  NBA_BIRD_MAX_YEARS, NBA_BIRD_SEASONS, NBA_EARLY_BIRD_AVERAGE, NBA_EARLY_BIRD_MAX_YEARS, NBA_EARLY_BIRD_MIN_YEARS,
   NBA_EARLY_BIRD_RAISE, NBA_NON_BIRD_RAISE, NFL_OPTION_ROUND, NFL_OPTION_YEARS, NHL_RFA_UNDER_AGE,
   NHL_RFA_UNDER_SEASONS, nbaMaxShare, offerSheetPicks, type BirdTier, type GmSportKey,
 } from '@/lib/gmContractRules';
@@ -85,6 +85,17 @@ export interface GmContractHost<L extends GmContractLeague = GmContractLeague, R
   held?(league: L, man: GmMan): boolean;
   /** The lowest salary the engine signs anybody for. Defaults to 0.5. */
   minSalary?(league: L): number;
+  /**
+   * What the engine itself does to a man the moment his deal ends, before he
+   * re-signs or walks (the NFL clears his tag and his guarantee). The desk
+   * calls it on every man it settles, so a new deal never inherits flags that
+   * belonged to the old one.
+   */
+  endDeal?(man: GmMan): void;
+  /** Next season's payroll without this man, the way the engine counts it (the NBA adds dead money). Defaults to the sum of salaries. */
+  nextPayroll?(league: L, team: string, without: string): number;
+  /** The most men a club may carry. A rival with a full roster cannot table an offer sheet. */
+  rosterMax?(league: L): number;
 }
 
 /* ================================================================== */
@@ -101,6 +112,8 @@ export interface LedgerMan {
   round?: number;
   /** NFL: the fifth year option has been used on him. */
   optionUsed?: boolean;
+  /** His first deal with this club has run out. The fifth year option belonged to that deal and goes with it. */
+  firstDealDone?: boolean;
   /** MLB: he has had a qualifying offer, so he can never have another. */
   qualified?: boolean;
   /** He arrived during a season, not before it. No qualifying offer for him that winter. */
@@ -133,6 +146,12 @@ export interface GmContractLedger {
   opened: number;
   men: Record<string, LedgerMan>;
   decisions: GmDecision[];
+  /**
+   * MLB: every man this club has ever made a qualifying offer to. Kept after
+   * he leaves, because the offer is once per man, ever: a man who turned it
+   * down, left, and was signed back from the pool can never have another.
+   */
+  qualifiedIds?: string[];
 }
 
 /** How many seasons of decisions the ledger keeps, so a long save stays small. */
@@ -205,7 +224,13 @@ export function isValidLedger(x: unknown): x is GmContractLedger {
     if (STAYS.has(d.kind) && (!isNum(d.years) || !isNum(d.salary) || d.years < 1 || d.salary <= 0)) return false;
     if (d.picks != null && (!Array.isArray(d.picks) || d.picks.some(r => !isNum(r)))) return false;
   }
+  if (l.qualifiedIds != null && (!Array.isArray(l.qualifiedIds) || l.qualifiedIds.some(id => typeof id !== 'string'))) return false;
   return true;
+}
+
+/** MLB: whether this man has ever had a qualifying offer from this club, on the roster or since gone. */
+export function everQualified(ledger: GmContractLedger, id: string): boolean {
+  return !!ledger.men[id]?.qualified || !!ledger.qualifiedIds?.includes(id);
 }
 
 /** The saved block if it is sound and belongs to this club, a fresh one otherwise. Old saves have none and get a fresh one. */
@@ -252,7 +277,9 @@ export function contractClass(sport: GmSportKey, ledger: GmContractLedger, leagu
   const drafted = rec?.how === 'draft';
   const service = seasonsHere(ledger, league, man);
   if (sport === 'nfl') {
-    return drafted && rec?.round === NFL_OPTION_ROUND && !rec.optionUsed ? 'fifth-year-option' : 'veteran';
+    /* The option is part of a first rounder's rookie deal, so it is offered
+       at the end of that deal and never again, whatever happened at it. */
+    return drafted && rec?.round === NFL_OPTION_ROUND && !rec.optionUsed && !rec.firstDealDone ? 'fifth-year-option' : 'veteran';
   }
   if (sport === 'nba') {
     const tier = birdTier(ledger, league, man);
@@ -419,6 +446,10 @@ export interface DeskCase {
   ceiling?: number;
   /** NBA only: the longest deal his Bird tier allows. */
   maxYears: number;
+  /** NBA only: the shortest deal allowed, two seasons when Early Bird rights are what pay him. Absent means one. */
+  minYears?: number;
+  /** NBA only: his maximum salary. No first year figure may go over it, room or no room. */
+  maxSalary?: number;
   /** NFL: pick up the fifth year. One guaranteed season at this figure. */
   option?: GmTerms;
   /** MLB: he is under club control. One season at this figure, and he cannot walk. */
@@ -449,6 +480,18 @@ export const QUALIFYING_PICK_ROUND = 2;
 
 const payroll = (club: GmClub, without?: string): number =>
   club.players.reduce((s, p) => s + (p.id === without ? 0 : p.salary), 0);
+
+/** The shortest deal this case allows. */
+export const minYearsOf = (c: DeskCase): number => c.minYears ?? 1;
+
+/** The most the rules let the club pay him in his first year: the Bird ceiling and the maximum salary, whichever is lower. */
+export function topSalary(c: DeskCase): number {
+  return Math.min(c.ceiling ?? Number.POSITIVE_INFINITY, c.maxSalary ?? Number.POSITIVE_INFINITY);
+}
+
+/** A length the case allows, nearest to the one asked for. */
+const fitYears = (c: DeskCase, years: number): number =>
+  Math.max(minYearsOf(c), Math.min(c.maxYears, Math.round(years)));
 
 /** The mean of the highest salaries in the save: the qualifying offer's figure. */
 export function qualifyingOfferValue(league: GmContractLeague): number {
@@ -489,8 +532,10 @@ export function deskCase<L extends GmContractLeague>(
 
   if (host.sport === 'nba') {
     const club = league.teams[ledger.team];
-    const room = host.nextCap(league) - (club ? payroll(club, man.id) : 0);
+    const used = host.nextPayroll ? host.nextPayroll(league, ledger.team, man.id) : (club ? payroll(club, man.id) : 0);
+    const room = host.nextCap(league) - used;
     const max = nbaMaxFor(host, league, ledger, man);
+    out.maxSalary = max;
     if (cls === 'bird-early') out.maxYears = NBA_EARLY_BIRD_MAX_YEARS;
     if (cls === 'bird-full') out.maxYears = NBA_BIRD_MAX_YEARS;
     if (ask.salary > room) {
@@ -507,6 +552,9 @@ export function deskCase<L extends GmContractLeague>(
       }
       /* Whatever room there is can always be used, rights or no rights. */
       out.ceiling = round1(Math.max(limit, room, floor));
+      /* An Early Bird deal runs at least two seasons. With room for him the
+         club does not need the exception, so the minimum does not apply. */
+      if (cls === 'bird-early' && limit > room) out.minYears = NBA_EARLY_BIRD_MIN_YEARS;
     }
   }
 
@@ -521,7 +569,7 @@ export function deskCase<L extends GmContractLeague>(
   if (host.sport === 'mlb' && cls === 'free-agent') {
     const rec = ledger.men[man.id];
     /* Only a man who spent the whole season here and has never had the offer. */
-    if (rec && !rec.qualified && !rec.mid) {
+    if (rec && !everQualified(ledger, man.id) && !rec.mid) {
       const salary = qualifyingOfferValue(league);
       if (salary > 0) {
         out.qualifying = {
@@ -562,6 +610,9 @@ function record(
   ledger: GmContractLedger, league: GmContractLeague, c: DeskCase, kind: DecisionKind, via: 'gm' | 'auto',
   terms?: GmTerms, picks?: number[],
 ): Made {
+  /* A walkout is final: his agent ended the call, so nothing signs him after it. */
+  const before = decisionFor(ledger, league.season, c.man.id);
+  if (before?.kind === 'walkout' && kind !== 'walkout') return { ok: false, reason: 'He has already gone.' };
   const decision: GmDecision = {
     season: league.season, id: c.man.id, name: c.man.name, kind, via,
     ...(terms ? { years: terms.years, salary: terms.salary } : {}),
@@ -580,7 +631,7 @@ export function keepAtAsk(ledger: GmContractLedger, league: GmContractLeague, c:
   if (overCeiling(c, c.ask.salary)) {
     return { ok: false, reason: `The rules cap what you can pay him at ${c.ceiling}M and he wants ${c.ask.salary}M.` };
   }
-  return record(ledger, league, c, 'keep', via, { years: Math.min(c.ask.years, c.maxYears), salary: c.ask.salary });
+  return record(ledger, league, c, 'keep', via, { years: fitYears(c, c.ask.years), salary: c.ask.salary });
 }
 
 /**
@@ -595,10 +646,12 @@ export function pushFor(
   const rec = ledger.men[c.man.id];
   if (!rec) return null;
   if (rec.push && rec.push.season === league.season) return pushOnce(c.ask, rec.push.offer);
-  const salary = c.ceiling != null ? Math.min(offer.salary, c.ceiling) : offer.salary;
+  /* Nothing over what the rules let the club pay him can be offered, so a
+     push can never agree a figure the club is not allowed to sign. */
+  const salary = Math.min(offer.salary, topSalary(c));
   rec.push = {
     season: league.season,
-    offer: { years: Math.max(1, Math.min(c.maxYears, Math.round(offer.years))), salary: round1(Math.max(0, salary)) },
+    offer: { years: fitYears(c, offer.years), salary: round1(Math.max(0, salary)) },
   };
   const res = pushOnce(c.ask, rec.push.offer);
   if (res.verdict === 'agreed' && res.final) record(ledger, league, c, 'keep', via, res.final);
@@ -615,11 +668,16 @@ export function acceptFinal(ledger: GmContractLedger, league: GmContractLeague, 
   if (overCeiling(c, res.final.salary)) {
     return { ok: false, reason: `The rules cap what you can pay him at ${c.ceiling}M and his last word was ${res.final.salary}M.` };
   }
-  return record(ledger, league, c, 'keep', via, { years: Math.min(res.final.years, c.maxYears), salary: res.final.salary });
+  return record(ledger, league, c, 'keep', via, { years: fitYears(c, res.final.years), salary: res.final.salary });
 }
 
-/** Let him go. Always allowed. His deal ran out, so there is no dead money. */
+/**
+ * Let him go. Always allowed. His deal ran out, so there is no dead money.
+ * With a rival sheet on the table, not matching it IS letting him go, and the
+ * ladder pays for him, so it is recorded as taking the picks.
+ */
 export function letGo(ledger: GmContractLedger, league: GmContractLeague, c: DeskCase, via: 'gm' | 'auto' = 'gm'): Made {
+  if (c.restricted?.sheet) return takePicks(ledger, league, c, via);
   return record(ledger, league, c, 'release', via);
 }
 
@@ -640,8 +698,10 @@ export function tenderHim(ledger: GmContractLedger, league: GmContractLeague, c:
 export function qualify(ledger: GmContractLedger, league: GmContractLeague, c: DeskCase, via: 'gm' | 'auto' = 'gm'): Made {
   const q = c.qualifying;
   const rec = ledger.men[c.man.id];
-  if (!q || !rec) return { ok: false, reason: 'He cannot be given a qualifying offer.' };
+  if (!q || !rec || everQualified(ledger, c.man.id)) return { ok: false, reason: 'He cannot be given a qualifying offer.' };
+  if (decisionFor(ledger, league.season, c.man.id)?.kind === 'walkout') return { ok: false, reason: 'He has already gone.' };
   rec.qualified = true;
+  ledger.qualifiedIds = [...(ledger.qualifiedIds ?? []), c.man.id];
   if (q.accepts) return record(ledger, league, c, 'qualify-accepted', via, { years: q.years, salary: q.salary });
   return record(ledger, league, c, 'qualify-rejected', via, undefined, [q.pick]);
 }
@@ -657,7 +717,8 @@ export function matchSheet(ledger: GmContractLedger, league: GmContractLeague, c
 export function takePicks(ledger: GmContractLedger, league: GmContractLeague, c: DeskCase, via: 'gm' | 'auto' = 'gm'): Made {
   const sheet = c.restricted?.sheet;
   if (!sheet) return { ok: false, reason: 'There is no offer sheet on the table.' };
-  return record(ledger, league, c, 'take-picks', via, undefined, sheet.picks);
+  /* The sheet's terms go down with it: he joins the club that tabled it on them. */
+  return record(ledger, league, c, 'take-picks', via, { years: sheet.years, salary: sheet.salary }, sheet.picks);
 }
 
 /** The men still waiting on a decision this winter. */
@@ -714,15 +775,30 @@ export type DeskRun<R = unknown> =
     picksAdded: number[];
   };
 
-/** Put the agreed deal on his line, plus the season the engine's offseason is about to take off it. */
-function holdMan(man: GmMan, d: GmDecision, ledger: GmContractLedger): void {
+/**
+ * Put the agreed deal on his line, plus the season the engine's offseason is
+ * about to take off it. His old deal ends first, exactly as the engine ends
+ * one (host.endDeal), so a tag or a guarantee from the old deal never rides
+ * onto the new one. Only the option year is guaranteed, and it says so.
+ */
+function holdMan<L extends GmContractLeague>(host: GmContractHost<L, unknown>, man: GmMan, d: GmDecision, ledger: GmContractLedger): void {
+  host.endDeal?.(man);
   man.years = (d.years ?? 1) + 1;
   man.salary = d.salary ?? man.salary;
+  const rec = ledger.men[man.id];
+  if (rec) rec.firstDealDone = true;
   if (d.kind === 'option') {
     man.guaranteed = true;
-    const rec = ledger.men[man.id];
     if (rec) rec.optionUsed = true;
   }
+}
+
+/** The club that tabled the sheet: fixed by the player and the season, among clubs with a roster spot. */
+export function sheetClubFor<L extends GmContractLeague>(host: GmContractHost<L, unknown>, league: L, team: string, id: string): string | null {
+  const max = host.rosterMax?.(league) ?? Number.POSITIVE_INFINITY;
+  const open = Object.keys(league.teams).filter(k => k !== team && league.teams[k].players.length < max).sort();
+  if (!open.length) return null;
+  return open[hash32(`${id}:${league.season}:sheet-club`) % open.length];
 }
 
 /**
@@ -747,12 +823,23 @@ export function runDeskOffseason<L extends GmContractLeague, R>(
     const d = decisionFor(ledger, season, man.id);
     if (!d) continue;
     applied.push(d);
-    if (STAYS.has(d.kind)) holdMan(man, d, ledger);
+    if (STAYS.has(d.kind)) holdMan(host, man, d, ledger);
     else {
-      /* Exactly what the engine does with a man who walks: off the roster and
-         into the pool on a one year line. No dead money, his deal ran out. */
+      /* What the engine does with a man who walks: his deal ends, he is
+         priced at what the engine would pay him now, and he goes into the
+         pool on a one year line. No dead money, his deal ran out. Leaving
+         his old figure on him would let the club sign a star straight back
+         at his rookie price. */
       club.players = club.players.filter(p => p.id !== man.id);
-      league.freeAgents.push({ ...man, years: 1 });
+      host.endDeal?.(man);
+      const sheetClub = d.kind === 'take-picks' && d.years != null && d.salary != null
+        ? sheetClubFor(host, league, ledger.team, man.id) : null;
+      if (sheetClub) {
+        /* He signed the rival's sheet, so he goes to that club on its terms. */
+        league.teams[sheetClub].players.push({ ...man, years: (d.years ?? 1) + 1, salary: d.salary ?? man.salary });
+      } else {
+        league.freeAgents.push({ ...man, years: 1, salary: host.marketSalary(league, man) });
+      }
       if (d.picks) owed.push(...d.picks);
     }
   }
@@ -764,8 +851,11 @@ export function runDeskOffseason<L extends GmContractLeague, R>(
   const after = league.teams[ledger.team];
   if (after && owed.length) after.picks.push(...owed);
 
-  /* The new season's roster, and only the last few winters of decisions. */
+  /* The new season's roster, and only the last few winters of decisions.
+     Everybody on it now is here from the first day of the season, so a man
+     who arrived mid season last year can have a qualifying offer next winter. */
   noteRoster(ledger, league);
+  for (const rec of Object.values(ledger.men)) delete rec.mid;
   ledger.decisions = ledger.decisions.filter(d => d.season > league.season - LEDGER_SEASONS_KEPT);
   return { ok: true, engine, applied, picksAdded: owed };
 }

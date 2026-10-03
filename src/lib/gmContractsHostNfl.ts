@@ -19,4 +19,15 @@ export const nflContractHost: GmContractHost<LeagueState, OffseasonNews> = {
      keeps him and the desk never sees him. */
   held: (league, man) => (man as GmPlayer).tagSeason === league.season + 1,
   minSalary: () => 1,
+  /* The engine's own clearTag (frontOffice.ts, not exported): when a deal
+     ends the tag and its guarantee end with it. The engine runs it on every
+     expiring man it re-signs or lets walk; the desk settles the GM's men
+     before the engine reaches them, so it runs the same three lines here.
+     scripts/simGmContracts.mjs checks a kept man comes out without them. */
+  endDeal: man => {
+    const p = man as GmPlayer;
+    delete p.tagSeason;
+    delete p.tagCount;
+    delete p.guaranteed;
+  },
 };

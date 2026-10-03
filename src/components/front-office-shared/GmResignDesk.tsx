@@ -12,7 +12,7 @@ import { useMemo, useState, type ReactNode } from 'react';
 import { HowToPlayPopover } from '@/components/game/HowToPlayPopover';
 import { cn } from '@/lib/utils';
 import {
-  readOffer, type DeskCase, type GmDecision, type GmTerms, type PushResult,
+  minYearsOf, readOffer, topSalary, type DeskCase, type GmDecision, type GmTerms, type PushResult,
 } from '@/lib/gmContracts';
 import { contractRulesFor, contractRulesNote, type GmSportKey } from '@/lib/gmContractRules';
 
@@ -40,7 +40,7 @@ const DECISION_LABEL: Record<GmDecision['kind'], string> = {
   'qualify-accepted': 'Took the qualifying offer',
   'qualify-rejected': 'Turned down the qualifying offer',
   match: 'Sheet matched',
-  'take-picks': 'Gone, picks coming',
+  'take-picks': 'Gone to the rival on its sheet, picks coming',
 };
 
 export interface GmResignDeskProps {
@@ -77,7 +77,7 @@ export function GmResignDesk(props: GmResignDeskProps) {
         <ul className="list-disc space-y-1 pl-5">
           <li><b>Keep him</b> pays exactly what he asked for.</li>
           <li><b>Push once</b> sends your own number. You get one answer: yes, a last word part way down, his ask back with no movement, or he walks.</li>
-          <li><b>Let him go</b> sends him to the free agent pool. His deal ran out, so there is no dead money.</li>
+          <li><b>Let him go</b> sends him to the free agent pool, priced at what he is worth now, not what he was paid. His deal ran out, so there is no dead money.</li>
         </ul>
         <p><b>Worked example.</b> Your 27 year old guard asks for 3 seasons at $12.0M. You push 3 seasons at $10.3M, which is 86 percent of the ask, so the meter sits at 73. His agent comes down 40 percent of the gap to $11.3M and that is the last word: sign it or let him go. Push $7.0M instead (58 percent) and he is insulted and goes back to $12.0M. Push $6.0M and he walks.</p>
         <p className="font-bold">This league's own rules</p>
@@ -153,9 +153,16 @@ function ResignTable({
 }) {
   const d = decisions[c.man.id];
   const push = pushes[c.man.id];
-  /* What is sent is what the meter reads: an offer over what his rights allow
-     is cut to the ceiling by pushFor, so the meter reads the cut figure too. */
-  const sendable: GmTerms = c.ceiling != null ? { ...offer, salary: Math.min(offer.salary, c.ceiling) } : offer;
+  /* What is sent is what the meter reads: pushFor cuts an offer to what the
+     rules allow and rounds it to a tenth, and fits the length to what his
+     rights allow, so the meter reads exactly that figure too. */
+  const top = topSalary(c);
+  const minYears = minYearsOf(c);
+  const fit = (y: number) => Math.max(minYears, Math.min(c.maxYears, Math.round(y)));
+  const sendable: GmTerms = {
+    years: fit(offer.years),
+    salary: Math.round(Math.max(0, Math.min(offer.salary, top)) * 10) / 10,
+  };
   const read = readOffer(c.ask, sendable);
   const capped = c.ceiling != null && c.ask.salary > c.ceiling;
   const finalAllowed = !!push?.final && !(c.ceiling != null && push.final.salary > c.ceiling);
@@ -163,7 +170,7 @@ function ResignTable({
   const main = cn(btn, 'bg-primary text-primary-foreground');
   const quiet = cn(btn, 'border border-border bg-background text-foreground');
   const sheet = c.restricted?.sheet ?? null;
-  const yearsOptions = Array.from({ length: c.maxYears }, (_, i) => i + 1);
+  const yearsOptions = Array.from({ length: c.maxYears - minYears + 1 }, (_, i) => i + minYears);
 
   return (
     <div data-resign-table className="relative space-y-3 rounded-xl border border-border p-3">
@@ -230,7 +237,7 @@ function ResignTable({
             <>
               {!capped && (
                 <button type="button" className={main} onClick={() => onKeep(c)}>
-                  Keep him: {yrs(Math.min(c.ask.years, c.maxYears))} at {m(c.ask.salary)}
+                  Keep him: {yrs(fit(c.ask.years))} at {m(c.ask.salary)}
                 </button>
               )}
               <div className="space-y-1 rounded-lg border border-border p-2">
@@ -251,7 +258,7 @@ function ResignTable({
                     M a season
                   </label>
                   <select
-                    value={offer.years}
+                    value={sendable.years}
                     onChange={e => setOffer({ ...offer, years: Number(e.target.value) })}
                     className="rounded border border-border bg-background px-1 py-1"
                     aria-label="Seasons"
@@ -263,8 +270,11 @@ function ResignTable({
                   <div className="h-full bg-primary" style={{ width: `${read.closeness}%` }} />
                 </div>
                 <p className="text-[10px] text-muted-foreground">Closeness {read.closeness} of 100. At 100 he signs your terms.</p>
-                {c.ceiling != null && offer.salary > c.ceiling && (
-                  <p className="text-[10px] text-muted-foreground">His rights cap what you can send at {m(c.ceiling)}, so that is what goes.</p>
+                {offer.salary > top && (
+                  <p className="text-[10px] text-muted-foreground">The rules cap what you can send at {m(top)}, so that is what goes.</p>
+                )}
+                {minYears > 1 && (
+                  <p className="text-[10px] text-muted-foreground">Early Bird rights only pay him on a deal of {yrs(minYears)} or more.</p>
                 )}
                 <button type="button" className={quiet} onClick={() => onPush(c, sendable)}>Send it. You only get one</button>
               </div>
@@ -279,15 +289,18 @@ function ResignTable({
               )}
               {push.final && finalAllowed && (
                 <button type="button" className={main} onClick={() => onAcceptFinal(c)}>
-                  Sign it: {yrs(Math.min(push.final.years, c.maxYears))} at {m(push.final.salary)}
+                  Sign it: {yrs(fit(push.final.years))} at {m(push.final.salary)}
                 </button>
               )}
             </div>
           )}
 
-          <button type="button" className={quiet} onClick={() => onLetGo(c)}>
-            Let him go. He joins the free agent pool, no dead money
-          </button>
+          {/* With a sheet on the table, letting him go is taking the picks, the button above. */}
+          {!sheet && (
+            <button type="button" className={quiet} onClick={() => onLetGo(c)}>
+              Let him go. He joins the free agent pool at his market price, no dead money
+            </button>
+          )}
         </div>
       )}
       <p className="text-center text-[10px] text-muted-foreground">{contractRulesNote()}</p>

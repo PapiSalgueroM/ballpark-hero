@@ -2,7 +2,7 @@
  * Round 908: the NHL front office, as the re-sign desk sees it. The engine is
  * imported and never edited.
  */
-import { nhlOffseason, nhlSalaryFor, type NhlLeague } from '@/lib/nhlFrontOffice';
+import { NHL_ROSTER_MAX, nhlOffseason, nhlSalaryFor, type NhlLeague } from '@/lib/nhlFrontOffice';
 import type { GmContractHost } from '@/lib/gmContracts';
 
 /** The engine raises its upper limit by 9 percent inside nhlOffseason. scripts/simGmContracts.mjs checks this still matches. */
@@ -17,4 +17,6 @@ export const nhlContractHost: GmContractHost<NhlLeague, string[]> = {
   runOffseason: (league, rng) => nhlOffseason(league, rng),
   /* The lowest figure the engine signs a draft pick for. */
   minSalary: () => 0.8,
+  /* The engine's own roster ceiling: a rival with no spot cannot table a sheet. */
+  rosterMax: () => NHL_ROSTER_MAX,
 };
