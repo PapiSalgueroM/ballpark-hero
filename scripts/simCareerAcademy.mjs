@@ -64,18 +64,31 @@
  *   oldtiers      the verdict reads the overall gained (the first cut) -> section 7
  *
  * MEASURED on the round's tree, seeds 0 to 4 (SIM_CAREER_ACADEMY_SEED):
- *   section 1: 2,838 to 2,990 saves compared against the merge base, 60 of
- *     60 academy years each with a report, every save identical.
+ *   section 1: 2,838 to 2,990 saves compared against the tree without the
+ *     academy line, 60 of 60 academy years each with a report, every save
+ *     identical (the same counts the first cut measured against the merge base).
  *   section 2: 427 focused academy years a seed; the rungs came up as
  *     +2 x177 to x184, +1 x157 to x164, 0 x86 (the 0 rung is the 14 legacy
  *     saves whose ceiling sits on or under the overall). Floors are about
  *     half the lowest: +2 at least 90, +1 at least 75, 0 at least 40. These
  *     are coverage floors (the rung has to be exercised), never a max.
+ *     427 of 427 saved overalls were the overall of the saved skills.
  *   section 3: 0 careers lifted past their ceiling on every seed.
  *   section 4: 2,611 report lines a seed, 0 wrong, 0 draws, 0 unstable.
- *   Each run takes 14 to 20 seconds plus the two bundles.
- *   Controls: all seven FIRED on their own sections (alwayswrite also turns 2
- *   and 5 red, since the stray field shows on the no focus and corrupt arms).
+ *   section 6: the press reads (career, next); the guard showed 20 of 20 and
+ *     hid 20 of 20 stale reports; the handler was right in 5 of 5 phases.
+ *   section 7: 600 real academy years a seed, 540 of them saved with an
+ *     overall apart from their skills (every position but CB). Verdict shares:
+ *     big 16.3 to 22.3%, solid 55.0 to 61.8%, quiet 17.3 to 21.5%, flat 2.7 to
+ *     3.9% (16 to 23 years). One share's standard error at 600 is about 1.6 to
+ *     2 points, so the bands sit four to five of them outside the measured
+ *     range: big 10 to 28%, solid 45 to 72%, quiet 10 to 32%, flat at least 5
+ *     years. Before this section the verdict read the overall gained and 1,497
+ *     of 1,500 real careers drew the big reading (oldtiers puts that back).
+ *     Card start, overall range and focus steadiness: 600 of 600 on every seed.
+ *   Each run takes 17 to 45 seconds on a busy machine, bundles included.
+ *   Controls: all twelve FIRED on their own sections (alwayswrite also turns
+ *   2 and 5 red, since the stray field shows on the no focus and corrupt arms).
  *
  * Run: node scripts/simCareerAcademy.mjs
  */
@@ -589,7 +602,7 @@ async function main() {
   check(startsRight === real && lineInRange === real && verdictSteady === real, 'the real careers above broke the card or the verdict');
   /* Bands: see MEASURED in the header. Every tier a player can reach on a
      new career has to come up, and none may swallow the rest. */
-  const BANDS = { big: [0.08, 0.28], solid: [0.42, 0.75], quiet: [0.1, 0.34] };
+  const BANDS = { big: [0.1, 0.28], solid: [0.45, 0.72], quiet: [0.1, 0.32] };
   for (const [k, [lo, hi]] of Object.entries(BANDS)) check(share(k) >= lo && share(k) <= hi, `the ${k} verdict is ${pct(k)} of real years, the band is ${lo * 100}% to ${hi * 100}%`);
   check(tiers.flat + tiers.flatCeiling >= 5, `only ${tiers.flat + tiers.flatCeiling} real years read flat`);
 

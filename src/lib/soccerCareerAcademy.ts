@@ -215,8 +215,11 @@ export function buildAcademyReport(before: ReportSave, after: ReportSave, potent
      quiet and a few flat. */
   const natural = lines.reduce((sum, l) => sum + l.delta, 0) - (focus ? focus.added : 0);
   const perSkill = natural / lines.length;
+  /* Where the year alone left you against the ceiling, the focus taken back
+     out, so the flat reading cannot flip on it either. */
+  const naturalAfter = allocOverall(focus ? { ...after, [focus.key]: after[focus.key] - focus.added } : after, after.position);
   const tier = perSkill >= VERDICT_BIG ? "big" : perSkill >= VERDICT_SOLID ? "solid" : perSkill >= VERDICT_QUIET ? "quiet"
-    : after.overall >= potential - ACADEMY_FOCUS_NEAR ? "flatCeiling" : "flat";
+    : naturalAfter >= potential - ACADEMY_FOCUS_NEAR ? "flatCeiling" : "flat";
   return {
     year: row.year, age: after.age, club: after.currentClub, lines,
     overallBefore, overallAfter: after.overall, focus,

@@ -132,16 +132,16 @@ describe("the coach's verdict", () => {
   const KEYS = ["pace", "shooting", "passing", "dribbling", "defending", "physical"] as const;
   /* One academy year where every skill grew by `per`, the focus (if any)
      adding `added` on top of its own. */
-  const year = (per: number, focus: (typeof KEYS)[number] | null = null, added = 0) => {
+  const year = (per: number, focus: (typeof KEYS)[number] | null = null, added = 0, ceiling = 90) => {
     const start = withAcademyFocus(save(), focus);
     const grown: Record<string, number> = {};
     for (const k of KEYS) grown[k] = STATS[k] + per + (k === focus ? added : 0);
     const end = {
-      ...start, ...grown, age: 17, overall: 55 + per,
+      ...start, ...grown, age: 17, overall: Math.round(KEYS.reduce((sum, k) => sum + grown[k], 0) / 6),
       ...(focus ? { academyFocusAdded: added } : {}),
       seasons: [...start.seasons, { year: 2021, apps: 18, goals: 4, assists: 2, cleanSheets: 0, type: "youth" }],
     };
-    return buildAcademyReport(start, end, 90)!.verdict;
+    return buildAcademyReport(start, end, ceiling)!.verdict;
   };
   const TIERS: [string, RegExp][] = [
     ["big", /biggest jump|huge year/], ["solid", /happy with it|good, honest year/],
@@ -162,5 +162,13 @@ describe("the coach's verdict", () => {
         for (const added of [0, 1, 2]) expect(year(per, k, added)).toBe(year(per));
       }
     }
+  });
+
+  it("reads flat near the ceiling off the year alone, never off the focus", () => {
+    /* +2 a skill leaves these skills worth 57; a +2 focus would make it 58.
+       Under a 61 ceiling 58 is within 3, 57 is not. */
+    expect(tierOf(year(2, null, 0, 61))).toBe("flat");
+    for (const k of KEYS) expect(year(2, k, 2, 61)).toBe(year(2, null, 0, 61));
+    expect(year(2, null, 0, 60)).toMatch(/close to your ceiling|not much left/);
   });
 });
