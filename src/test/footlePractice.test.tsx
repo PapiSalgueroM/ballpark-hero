@@ -209,6 +209,7 @@ describe('Footle practice mounted outcomes', () => {
     });
     const view = await page();
     await start(view);
+    expect(view.queryByRole('alert')).not.toBeNull();
     expect(view.queryByRole('alert')).toHaveTextContent('could not save your run');
     expect(view.getByRole('combobox')).toBeEnabled();
     expect(localStorage.getItem(FOOTLE_PRACTICE_KEY)).toBeNull();
