@@ -16,6 +16,15 @@ type CareerAction = { t: 'skip' } | { t: 'won' } | { t: 'give' };
 
 type Puzzle = (typeof baseballCareerPuzzles)[number];
 
+// Round 924: a surname guess skips a trailing Jr. or III, so "griffey" finds Ken Griffey Jr.
+// (it used to need "jr.", which then matched every Jr. in the pool).
+const NAME_SUFFIX = /^(jr|sr|ii|iii|iv)\.?$/;
+function surnameOf(lowerName: string): string {
+  const words = lowerName.trim().split(/\s+/);
+  while (words.length > 1 && NAME_SUFFIX.test(words[words.length - 1])) words.pop();
+  return words[words.length - 1];
+}
+
 export function useBaseballCareer() {
   // ---- MODE ----------------------------------------------------------------
   const [mode, setMode] = useState<BaseballCareerMode>('daily');
@@ -31,6 +40,9 @@ export function useBaseballCareer() {
   } = useDailyPuzzle<Puzzle, CareerAction>({
     gameSlug: 'baseball-career',
     puzzles: baseballCareerPuzzles,
+    // Round 924: the save carries the row id, so a later change to the pool cannot hand
+    // today's clue log to a different player
+    getPuzzleId: (p) => p.id,
     maxGuesses: 999, // game ends only via isWon / isLost
     isWon: (g) => g.some(a => a.t === 'won'),
     isLost: (g) => g.some(a => a.t === 'give'),
@@ -107,7 +119,7 @@ export function useBaseballCareer() {
     if (activeStatus !== 'playing' || !player) return;
     const normalized = guess.trim().toLowerCase();
     const target = player.name.toLowerCase();
-    if (normalized === target || normalized === target.split(' ').pop()) {
+    if (normalized === target || normalized === surnameOf(target)) {
       if (mode === 'daily') {
         addDailyAction({ t: 'won' });
       } else {
