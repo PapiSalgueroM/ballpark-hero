@@ -59,6 +59,32 @@ describe('Club Manager facilities preview', () => {
     expect(JSON.stringify(initial)).toBe(before);
   });
 
+  it('owns up to the growth ceiling on the training ground card only, counting a regular season', () => {
+    /* Round 963: the training ground's lift sits inside developmentRate's clamp. The kid has
+       played twelve games and the other none, and both count because the card reads a
+       regular's season. The veteran turns thirty and never grows; the slow man is far off. */
+    /* Every facility above level 1, so the three that must stay quiet are not quiet for that reason. */
+    let initial: CareerState = { ...fixture(), budget: 3000 };
+    for (const id of FACILITY_IDS) initial = upgradeFacility(initial, id) ?? initial;
+    const young = { ...initial.squad[0], position: 'CM', rating: 60, potential: 80, age: 19, apps: 12, onLoan: false } as CareerState['squad'][number];
+    initial.squad = [
+      { ...young, id: 'fixture-kid', name: 'Fixture Kid' },
+      { ...young, id: 'fixture-summer', name: 'Fixture Summer', apps: 0 },
+      { ...young, id: 'fixture-veteran', name: 'Fixture Veteran', age: 29 },
+      { ...young, id: 'fixture-slow', name: 'Fixture Slow', potential: 62 },
+    ];
+    initial.academy = { ...initial.academy!, coaching: 20, facilities: 20 };
+    initial.training = { intensity: 'double', focus: 'balanced' };
+    const view = render(<FacilitiesScreen career={initial} onUpgrade={vi.fn()} />);
+    expect(facilitiesOf(initial).trainingGround).toBeGreaterThan(1);
+    expect(row(view.container, 'trainingGround').querySelector('[data-facility-current]')).toHaveTextContent(
+      `Now: ${facilityEffectLine(initial, 'trainingGround')} As regulars, 2 players would be growing as fast as anyone can, so they would get less of the lift.`);
+    for (const id of FACILITY_IDS.filter(other => other !== 'trainingGround')) {
+      expect(facilitiesOf(initial)[id]).toBeGreaterThan(1);
+      expect(row(view.container, id)).not.toHaveTextContent('as fast as anyone can');
+    }
+  });
+
   it('explains each exact shortfall and never calls a blocked upgrade', () => {
     const initial = { ...fixture(), budget: 0 };
     const onUpgrade = vi.fn();
