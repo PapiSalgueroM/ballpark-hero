@@ -73,6 +73,9 @@ jobs:
             ONLY="$harness" node scripts/runAllSims.mjs --browser 2>&1 | tee "nhl-planning-artifacts/$harness.log" || failed=1
           done
           exit "$failed"
+      - name: Phone and desktop planning, reload and completion
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: node scripts/qa/nhlPlanning1002.mjs 2>&1 | tee nhl-planning-artifacts/native.log
       - name: Preserve verification evidence
         if: always()
         uses: actions/upload-artifact@v4
