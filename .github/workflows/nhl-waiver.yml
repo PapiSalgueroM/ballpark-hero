@@ -1,0 +1,123 @@
+name: NHL waiver verification
+
+on:
+  push:
+    branches: [codex/nhl-waiver-visible-970]
+  pull_request:
+    paths:
+      - .github/workflows/nhl-waiver.yml
+      - scripts/qa/nhl-waiver970/**
+      - scripts/simNhl*.mjs
+      - scripts/simFrontOffice*.mjs
+      - scripts/lib/offlineTransport.cjs
+      - src/components/nhl-front-office/**
+      - src/components/front-office-shared/**
+      - src/lib/nhl*.ts
+      - src/lib/frontOffice*.ts
+      - src/test/Nhl*.tsx
+      - src/test/Nhl*.ts
+      - src/test/frontOfficeSaveRecovery.test.tsx
+      - src/data/nhl*.ts
+      - src/index.css
+      - package*.json
+      - '*config*'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: nhl-waiver-${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    defaults:
+      run:
+        shell: bash
+    env:
+      SIM_NETWORK: offline
+      ENGINES: chromium
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install verification dependencies
+        run: |
+          mkdir -p "$RUNNER_TEMP/nhl-waiver970" nhl-waiver-artifacts
+          echo "TMPDIR=$RUNNER_TEMP/nhl-waiver970" >> "$GITHUB_ENV"
+          npm ci
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium
+          python -m pip install fonttools pillow
+      - name: Type check and build
+        id: build
+        run: |
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee nhl-waiver-artifacts/types.log
+          npm run build 2>&1 | tee nhl-waiver-artifacts/build.log
+      - name: Shared saves and both rejection controls
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        env:
+          FRONT_OFFICE_SAVE_CONTROL: all
+        run: node scripts/simFrontOfficeSaveRecovery.mjs 2>&1 | tee nhl-waiver-artifacts/shared-saves.log
+      - name: Receipt component
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: node node_modules/vitest/vitest.mjs run src/components/nhl-front-office/NhlWaiverReceipt.test.tsx --maxWorkers=1 --no-file-parallelism 2>&1 | tee nhl-waiver-artifacts/receipt-component.log
+      - name: Actual waiver outcomes and negative controls
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        env:
+          NHL_WAIVER_CONTROL: all
+          NHL_WAIVER_REFERENCE_COMMIT: 98cc4cc6
+        run: node scripts/simNhlWaiverReceipt.mjs 2>&1 | tee nhl-waiver-artifacts/waiver-outcomes.log
+      - name: Related NHL regressions, serial and offline
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          failed=0
+          for harness in simNhlContributors simNhlContributorsBoard simNhlOpeningRatings simNhlRatingEvidence simNhlDraftCapital simNhlRosterLimit simNhlCpuRosters simFrontOfficeCuts simFrontOfficeRoster simFrontOfficeSchedule; do
+            if ! ONLY="$harness" node scripts/runAllSims.mjs 2>&1 | tee "nhl-waiver-artifacts/$harness.log"; then failed=1; fi
+          done
+          exit "$failed"
+      - name: All built readers, search and guide checks, serial and offline
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          failed=0
+          for harness in simAdsense simBrand simHeadTags simHiddenPages simHubs simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets simSiteSearch simGuideHeadings; do
+            if ! ONLY="$harness" node scripts/runAllSims.mjs --browser 2>&1 | tee "nhl-waiver-artifacts/$harness.log"; then failed=1; fi
+          done
+          exit "$failed"
+      - name: Prepare isolated native source gate
+        id: native_prepare
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          gate="$RUNNER_TEMP/nhl-waiver970-source"
+          mkdir "$gate"
+          git archive HEAD | tar -x -C "$gate"
+          ln -s "$GITHUB_WORKSPACE/node_modules" "$gate/node_modules"
+          NHL_WAIVER_NATIVE_GATE="$gate" node scripts/qa/nhl-waiver970/prepare.mjs 2>&1 | tee nhl-waiver-artifacts/native-prepare.log
+      - name: Native keyboard, touch and reduced motion
+        if: ${{ !cancelled() && steps.native_prepare.outcome == 'success' }}
+        run: node scripts/qa/nhl-waiver970/driver.mjs 2>&1 | tee nhl-waiver-artifacts/native.log
+      - name: Preserve verification evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: nhl-waiver-${{ github.run_id }}-${{ github.run_attempt }}
+          retention-days: 1
+          if-no-files-found: warn
+          path: |
+            nhl-waiver-artifacts/
+            dist/index.html
+            dist/nhl-front-office/index.html
+            scripts/qa/nhl-waiver970/build-*.json
+            scripts/qa/nhl-waiver970/built/
+            scripts/qa/nhl-waiver970/run-*/
+            ${{ runner.temp }}/nhl-waiver970/dukb-nhl970-proof-*/

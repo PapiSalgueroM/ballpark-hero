@@ -42,7 +42,7 @@ import {
   applySocialMediaAction, handleCoverAthleteDecision, dismissSocialMediaPhase,
   applyMoralDilemmaChoice, dismissMoralDilemma, MORAL_DILEMMAS,
   applyRehabChoice,
-  SOCIAL_MEDIA_ACTIONS, SPONSORSHIP_TIERS,
+  SOCIAL_MEDIA_ACTIONS, SPONSORSHIP_TIERS, SOCCER_COVER,
   dismissAppealResult,
   generateShareText, getYouthAcademyClub,
   getCareerTotals, calcOverall, formatWage, formatNetWorth, formatFollowers,
@@ -66,8 +66,11 @@ import type { MoneyAction } from "@/lib/soccerMoney";
 import { bankSummary } from "@/lib/soccerMoney";
 import PhonePanel from "@/components/soccer-career/PhonePanel";
 import TrainingPanel from "@/components/soccer-career/TrainingPanel";
+import CareerStory from "@/components/soccer-career/CareerStory";
 import { applyDrillResult, type DrillKind } from "@/lib/careerDrills";
 import { rollStartingOverall, rollPotential, potentialTier, adjustClubsForYear, allocOverall, normalizeAllocation, allocMax, ALLOC_MIN, playsLike, stepAllocation } from "@/lib/careerEras";
+import { ordinal, leagueWithArticle, readLeagueFinish } from "@/lib/soccerCareerLeague";
+import type { WorldSeason } from "@/lib/soccerPhone";
 /* Round 131: height, weight and the specifics under each family. */
 import {
   type PlayerPhysique, type AttrShape,
@@ -86,6 +89,9 @@ import { availableSpeeches } from "@/lib/careerAwardsNight";
 import { CelebrationStyles, revealDelay } from "@/components/club-manager/Celebration";
 import { SignedSlip } from "@/components/soccer-career/SignedSlip";
 import type { SignedNote } from "@/components/soccer-career/SignedSlip";
+import { AcademyFocusPicker, AcademyReportCard } from "@/components/soccer-career/AcademyReportCard";
+import { buildAcademyReport, academyFocusOf, withAcademyFocus } from "@/lib/soccerCareerAcademy";
+import type { AcademyFocus, AcademyReport } from "@/lib/soccerCareerAcademy";
 import { heatLabel } from "@/lib/soccerCareerCorruption";
 import ShareButtons from "@/components/game/ShareButtons";
 import { FlagImg, FlagFromEmoji, TextWithFlags } from "@/components/FlagImg";
@@ -351,6 +357,7 @@ function NumberStepper({ value, min, max, onChange, label, disabled, wide }: {
 function TimelineEntry({ season, isCurrent, isLast }: { season: SeasonRecord; isCurrent: boolean; isLast: boolean }) {
   const label = season.type === "youth" ? "A" : season.type === "retired" ? "R" : null;
   const trophies = [season.leagueTitle && "🏆", season.domesticCup && "🏆", season.championsLeague && "⭐", season.worldCup && "🌍", season.continentalCup && "🌐", season.ballonDor && "🏅"].filter(Boolean);
+  const finish = season.type === "playing" ? readLeagueFinish(season) : null;
 
   return (
     <div className={`relative flex items-start gap-3 py-2 px-3 rounded-lg transition-colors ${isCurrent ? 'bg-emerald-500/15 border border-emerald-500/30' : ''}`}>
@@ -370,6 +377,16 @@ function TimelineEntry({ season, isCurrent, isLast }: { season: SeasonRecord; is
         {season.type === "playing" && (
           <div className="flex items-center gap-2 mt-0.5 flex-wrap">
             <span className="text-[10px] text-muted-foreground">{season.apps}A · {season.goals}G · {season.assists}As</span>
+            {/* Round 929: where the club finished. Absent on old saves and in
+                leagues whose size is not verified, so it prints nothing there. */}
+            {finish && (
+              <span
+                className={`text-[9px] font-bold px-1 rounded tabular-nums ${finish.finish === 1 ? "bg-amber-500/20 text-amber-400" : "bg-muted/60 text-muted-foreground"}`}
+                title={finish.size ? `Finished ${ordinal(finish.finish)} of ${finish.size}` : `Finished ${ordinal(finish.finish)}`}
+              >
+                {ordinal(finish.finish)}
+              </span>
+            )}
             {trophies.length > 0 && <span className="text-[11px]">{trophies.join("")}</span>}
           </div>
         )}
@@ -495,8 +512,14 @@ function NewspaperCard({ articles, seasonKey, onContinue }: { articles: NewsArti
 }
 
 /* ─── Season Summary Card ─── */
-function SeasonSummaryCard({ season, position, onContinue, appearance }: { season: SeasonRecord; position: string; onContinue: () => void; appearance?: PlayerAppearance | null }) {
+function SeasonSummaryCard({ season, position, onContinue, appearance, league, world }: { season: SeasonRecord; position: string; onContinue: () => void; appearance?: PlayerAppearance | null; league?: string; world?: WorldSeason | null }) {
   const isGK = position === "GK";
+  /* Round 929: the champion is the one the phone's world already crowned for
+     this season, so the card and the feed can never name two winners. */
+  const finish = readLeagueFinish(season);
+  const champion = finish && finish.finish !== 1 && league && world && world.year === season.year
+    ? (world.leagues?.[league] && world.leagues[league] !== season.club ? world.leagues[league] : null)
+    : null;
   const trophies = [season.leagueTitle && "🏆 League", season.domesticCup && "🏆 Cup", season.championsLeague && "⭐ UCL", season.worldCup && "🌍 World Cup", season.continentalCup && "🌐 Continental", season.ballonDor && "🏅 Ballon d'Or"].filter(Boolean);
   const celebration = appearance ? getCelebration(appearance.celebration) : null;
 
@@ -506,6 +529,14 @@ function SeasonSummaryCard({ season, position, onContinue, appearance }: { seaso
       <div className="text-center">
         <h3 className="text-lg font-black">Season Summary</h3>
         <p className="text-xs text-muted-foreground flex items-center justify-center gap-1"><FlagImg name={season.clubCountry} size={14} />{season.club}{season.onLoanFrom ? ` (on loan from ${season.onLoanFrom})` : ""} · {season.year}/{(season.year + 1).toString().slice(-2)}</p>
+        {finish && (
+          <p className="text-xs font-semibold mt-1">
+            {finish.finish === 1
+              ? <>Champions{league ? ` of ${leagueWithArticle(league)}` : ""}{finish.size ? `, top of ${finish.size}` : ""}</>
+              : <>Finished {ordinal(finish.finish)}{finish.size ? ` of ${finish.size}` : ""}{league ? ` in ${leagueWithArticle(league)}` : ""}</>}
+            {champion && <span className="font-normal text-muted-foreground"> · {champion} won it</span>}
+          </p>
+        )}
       </div>
 
       {/* Round 530: the finals, printed in place. They used to count up from
@@ -683,6 +714,12 @@ export default function SoccerCareer() {
      game produces a new career object, so the next action of any kind
      dismisses it without anybody having to clear it. */
   const [signedNote, setSignedNote] = useState<SignedNote | null>(null);
+  /* Round 973: the academy year's report card. Built from the save before
+     the year and the save after it at the moment of the press, and held here
+     rather than in the save: a career's save is hashed step by step by the
+     awards night fixture, and a career that never picks a focus has to come
+     out of the academy byte for byte the save it always was. */
+  const [academyReport, setAcademyReport] = useState<AcademyReport | null>(null);
   const timelineRef = useRef<HTMLDivElement>(null);
   /* Round 129: the training and phone buttons are pinned to the bottom right on
      every screen of this game, so they were sitting over the footer's Privacy
@@ -779,7 +816,9 @@ export default function SoccerCareer() {
   const handleNextSeason = () => {
     if (!career) return;
     if (career.phase === "youth") {
-      setCareer(advanceYouthYear(career, clubs));
+      const next = advanceYouthYear(career, clubs);
+      setAcademyReport(buildAcademyReport(career, next, effectivePotential(career)));
+      setCareer(next);
     } else if (career.phase === "playing") {
       setCareer(advanceProSeason(career, clubs));
     }
@@ -792,6 +831,13 @@ export default function SoccerCareer() {
        longer writes a ranked row and a streak record (Round 301's shape). */
     recordActivity('/soccer-career');
     recordStreakDay('/soccer-career');
+  };
+
+  /* Round 973: pick or drop the academy focus. Only while the academy year
+     is still to be played; dropping it removes the field from the save. */
+  const handleAcademyFocus = (focus: AcademyFocus | null) => {
+    if (!career || career.phase !== "youth") return;
+    setCareer(withAcademyFocus(career, focus));
   };
 
   const handleAcceptOffer = (offer: ContractOffer) => {
@@ -1126,6 +1172,8 @@ export default function SoccerCareer() {
               career={career}
               clubs={clubs}
               signedNote={signedNote && signedNote.forCareer === career ? signedNote : null}
+              academyReport={academyReport}
+              onAcademyFocus={handleAcademyFocus}
               onCurrencyChange={() => setCurrencyTick(t => t + 1)}
               onNextSeason={handleNextSeason}
               onAcceptOffer={handleAcceptOffer}
@@ -3267,7 +3315,7 @@ function SocialMediaActionCard({ career, onAction, onCoverAthlete, onDismiss }: 
             <div className="flex items-center justify-between">
               <div>
                 <div className="text-sm font-bold text-amber-300">✅ Accept: Become the Cover Star</div>
-                <div className="text-[10px] text-muted-foreground mt-0.5">{money('€25M payment')} · +5M followers · Legacy +10</div>
+                <div className="text-[10px] text-muted-foreground mt-0.5">{money(`€${SOCCER_COVER.pay}M payment`)}{` · +${SOCCER_COVER.followers}M followers · Legacy +10`}</div>
               </div>
               <span className="text-lg">🌟</span>
             </div>
@@ -3279,7 +3327,7 @@ function SocialMediaActionCard({ career, onAction, onCoverAthlete, onDismiss }: 
             <div className="flex items-center justify-between">
               <div>
                 <div className="text-sm font-bold text-foreground">❌ Decline: Stay Selective</div>
-                <div className="text-[10px] text-muted-foreground mt-0.5">Reputation +5 for being humble</div>
+                <div className="text-[10px] text-muted-foreground mt-0.5">{`Reputation +${SOCCER_COVER.declineStanding} for being humble`}</div>
               </div>
               <span className="text-lg">🧘</span>
             </div>
@@ -3378,11 +3426,14 @@ function SocialMediaActionCard({ career, onAction, onCoverAthlete, onDismiss }: 
 }
 
 /* ─── Game Screen ─── */
-function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSummary, onDismissNewspaper, onStay, onSignExtension, onRequestTransfer, onAcceptLoan, onEventChoice, onDismissDebut, onDismissWorldCup, onWorldCupSpeech, onRetireInternational, onDismissRivalryEvent, onDismissBallonDor, onBdorSpeech, onManualRetire, onPostRetirement, onAdvanceManager, onAcceptManagerOffer, onEndManager, onShare, onNewCareer, onOpenPhone, onSocialMediaAction, onCoverAthlete, onDismissSocialMedia, onMoralDilemmaChoice, onRehabChoice, onDismissMoralDilemma, onDismissAppeal, onAcceptRetirement, onDeclineRetirement, onPunditAction, onEndPundit, onAdvanceOwner, onEndOwner, onCurrencyChange, timelineRef, signedNote }: {
+function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSummary, onDismissNewspaper, onStay, onSignExtension, onRequestTransfer, onAcceptLoan, onEventChoice, onDismissDebut, onDismissWorldCup, onWorldCupSpeech, onRetireInternational, onDismissRivalryEvent, onDismissBallonDor, onBdorSpeech, onManualRetire, onPostRetirement, onAdvanceManager, onAcceptManagerOffer, onEndManager, onShare, onNewCareer, onOpenPhone, onSocialMediaAction, onCoverAthlete, onDismissSocialMedia, onMoralDilemmaChoice, onRehabChoice, onDismissMoralDilemma, onDismissAppeal, onAcceptRetirement, onDeclineRetirement, onPunditAction, onEndPundit, onAdvanceOwner, onEndOwner, onCurrencyChange, timelineRef, signedNote, academyReport, onAcademyFocus }: {
   career: CareerState;
   clubs: ClubData[];
   /** Round 530: the deal slip under the toast, already scoped to this career object by the page. */
   signedNote?: SignedNote | null;
+  /* Round 973: the academy report and the focus picker. */
+  academyReport?: AcademyReport | null;
+  onAcademyFocus?: (focus: AcademyFocus | null) => void;
   onNextSeason: () => void;
   onAcceptOffer: (offer: ContractOffer) => void;
   onDismissSummary: () => void;
@@ -3437,6 +3488,8 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
   const statBars = getPositionStatBars(career.position, career);
 
   const [showRetireConfirm, setShowRetireConfirm] = useState(false);
+  // Round 974: the career story, every season kept, opened from Latest Events
+  const [storyOpen, setStoryOpen] = useState(false);
   // Round 131: the whole attribute tree on its own screen with a back button
   const [attrsOpen, setAttrsOpen] = useState(false);
   const showActionButton = career.phase === "youth" || career.phase === "playing" || career.phase === "manager_season" || career.phase === "pundit_season" || career.phase === "owner_season";
@@ -3646,12 +3699,19 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
 
           {/* OVERLAY: Season Summary */}
           {career.phase === "season_summary" && career.pendingSummary && (
-            <SeasonSummaryCard season={career.pendingSummary} position={career.position} onContinue={onDismissSummary} appearance={career.appearance} />
+            <SeasonSummaryCard season={career.pendingSummary} position={career.position} onContinue={onDismissSummary} appearance={career.appearance}
+              league={clubs.find(c => c.name === career.pendingSummary?.club)?.league} world={career.phone?.world} />
           )}
 
           {/* OVERLAY: Contract Offers (youth → pro) */}
           {career.phase === "contract_offer" && career.pendingOffers.length > 0 && (
             <div className="space-y-3">
+              {/* Round 973: the academy year that just ended, above the offers
+                  it earned. Only for the year it was built for; after a reload
+                  the page has no before picture, so the card simply is not there. */}
+              {academyReport && academyReport.year === currentSeason.year && academyReport.club === career.currentClub && (
+                <AcademyReportCard report={academyReport} />
+              )}
               <div className="bg-amber-500/10 border border-amber-500/30 rounded-xl p-4 text-center">
                 <h3 className="text-lg font-black">📩 Contract Offers</h3>
                 <p className="text-xs text-muted-foreground mt-1">Choose a club to start your professional career</p>
@@ -3933,6 +3993,11 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
             </div>
           )}
 
+          {/* Round 973: one optional focus for the academy year about to be played. */}
+          {career.phase === "youth" && onAcademyFocus && (
+            <AcademyFocusPicker position={career.position} focus={academyFocusOf(career)} onPick={onAcademyFocus} />
+          )}
+
           {/* Round 262: your place in the squad, above the money because on a
               given season it matters more. Renders only while you are actually
               at a club, and only when there is a real squad to show. */}
@@ -4140,9 +4205,14 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
       </div>
 
       {/* Events log */}
-      {career.events.length > 0 && (
+      {(career.events.length > 0 || (career.story?.length ?? 0) > 0) && (
         <div className="bg-card border border-border rounded-xl p-3">
-          <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Latest Events</span>
+          {/* Round 974: the whole career, season by season, one tap away */}
+          <div className="flex items-center justify-between gap-2">
+            <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Latest Events</span>
+            <button type="button" onClick={() => setStoryOpen(true)} data-open-career-story
+              className="text-[11px] font-bold text-sky-400 px-2 py-1 rounded hover:bg-white/5">📖 Career Story</button>
+          </div>
           <div className="mt-2 space-y-1">
             {career.events.slice(-3).map((e, i) => (
               <div key={i} className="text-xs text-foreground/80 flex items-start gap-2">
@@ -4152,6 +4222,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
           </div>
         </div>
       )}
+      {storyOpen && <CareerStory career={career} onClose={() => setStoryOpen(false)} />}
 
       {/* Action bar */}
       {/* Round 86: the bar only floats when it actually has buttons to offer.
@@ -4218,6 +4289,8 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
       {career.phase === "retired" && career.legacy && (
         <LegacyCard career={career} totals={totals} onShare={onShare} />
       )}
+      {/* Round 974: the same story on the retirement screen, every season a tile */}
+      {career.phase === "retired" && <CareerStory career={career} />}
 
       {/* Retire Confirmation Dialog */}
       {showRetireConfirm && (

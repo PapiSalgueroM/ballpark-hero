@@ -33,8 +33,21 @@
  * Everything here is pure. Nothing draws from Math.random and nothing is
  * evaluated at module scope, because clubManager.ts imports this file and this
  * file imports clubManager.ts for its types.
+ *
+ * Round 942: the level curve and the spending of points moved to gmXp.ts, so
+ * every manager seat climbs the same ladder. This file keeps the football
+ * (the trees, the earning, the effects) and delegates the rest, and
+ * scripts/simGmXp.mjs replays a fixture recorded before the move to prove
+ * not one number changed.
  */
 import type { CareerState } from '@/lib/clubManager';
+import {
+  addXp as sharedAddXp, clampTreePoints, isValidPoints, levelFor as sharedLevelFor,
+  levelProgress as sharedLevelProgress, pointsEarned as sharedPointsEarned,
+  pointsFree as sharedPointsFree, pointsSpent as sharedPointsSpent, spendPoint as sharedSpendPoint,
+  xpForLevel as sharedXpForLevel, zeroPoints,
+} from '@/lib/gmXp';
+import type { XpTreeSet } from '@/lib/gmXp';
 
 /* ================================================================== */
 /* The trees                                                          */
@@ -50,6 +63,9 @@ export const SKILL_TREES: SkillTree[] = [
 
 /** The most points one tree will take. Seven trees, so 35 points is everything. */
 export const MAX_TREE_POINTS = 5;
+
+/** The set the shared ladder in gmXp.ts is handed. Built from this file's own values only. */
+const CM_TREE_SET: XpTreeSet<SkillTree> = { trees: SKILL_TREES, maxPoints: MAX_TREE_POINTS };
 
 export interface TreeDef {
   id: SkillTree;
@@ -162,7 +178,7 @@ export function defaultXp(): ManagerXp {
   return {
     v: XP_VERSION,
     xp: 0,
-    points: { tactics: 0, recruitment: 0, negotiation: 0, youth: 0, manManagement: 0, finance: 0, media: 0 },
+    points: zeroPoints(CM_TREE_SET),
   };
 }
 
@@ -178,10 +194,7 @@ export function isValidXp(u: unknown): u is ManagerXp {
      this block fails closed like every other field here. */
   const g = o.graduatesSeen;
   if (g !== undefined && (typeof g !== 'number' || !Number.isFinite(g) || g < 0)) return false;
-  return SKILL_TREES.every(t => {
-    const n = p[t];
-    return typeof n === 'number' && Number.isInteger(n) && n >= 0 && n <= MAX_TREE_POINTS;
-  });
+  return isValidPoints(CM_TREE_SET, p);
 }
 
 /** The block for READING, never writing, so a component cannot mutate a save. */
@@ -207,14 +220,12 @@ export function ensureXp(state: CareerState): ManagerXp {
 
 /** Add a season's earnings. Pure: returns the new block, never mutates. */
 export function addXp(block: ManagerXp, amount: number): ManagerXp {
-  const add = Number.isFinite(amount) && amount > 0 ? Math.round(amount) : 0;
-  return { ...block, xp: block.xp + add };
+  return sharedAddXp(block, amount);
 }
 
 /** How many points this tree has, which is the only input every effect takes. */
 export function treePoints(state: CareerState, tree: SkillTree): number {
-  const n = xpOf(state).points[tree];
-  return Math.max(0, Math.min(MAX_TREE_POINTS, n));
+  return clampTreePoints(CM_TREE_SET, xpOf(state), tree);
 }
 
 /* ================================================================== */
@@ -279,68 +290,42 @@ export function seasonXp(input: {
 /* Levels and points                                                  */
 /* ================================================================== */
 
-/**
- * A level costs more than the one before it, so the first few come inside a
- * season or two and the last ones are a career. 400 XP for level 2 and a 35
- * percent step means a full tree is roughly a decade of winning things, which
- * is the point: the trees are the long game, not a first season upgrade.
- */
 /*
- * The step was 1.35 in the first draft and the harness caught it immediately:
- * compounded over the thirty five levels the trees hold, the full board cost
- * 41,643,757 XP. A good season pays about 580 (a trophy, a European run, twenty
- * wins, two objectives, a promotion and a profit), so that was seventy thousand
- * seasons and the trees would never have filled at all. 1.04 puts the first
- * point inside a season, ten points at about eight seasons, twenty at about
- * twenty, and the whole board at roughly fifty, which is a long tail somebody
- * could actually walk. Section 6 measures those numbers rather than trusting
- * this comment.
+ * The curve (400 XP for level 2, each level 4 percent dearer) and the rules for
+ * spending lived here until Round 942 and now live in gmXp.ts, shared with every
+ * GM seat. Why the step is 1.04 and not the first draft's 1.35 is written there.
+ * These keep their Round 513 signatures so nothing that imports them changes.
  */
-export const XP_FIRST_LEVEL = 400;
-export const XP_LEVEL_STEP = 1.04;
+export { XP_FIRST_LEVEL, XP_LEVEL_STEP } from '@/lib/gmXp';
 /** Seven trees at five points each. Nothing beyond this is earnable. */
 export const MAX_LEVEL = 1 + SKILL_TREES.length * MAX_TREE_POINTS;
 
 /** Total XP needed to REACH this level. Level 1 is where everybody starts. */
 export function xpForLevel(level: number): number {
-  if (level <= 1) return 0;
-  let total = 0;
-  let step = XP_FIRST_LEVEL;
-  for (let l = 2; l <= level; l++) {
-    total += step;
-    step = Math.round(step * XP_LEVEL_STEP);
-  }
-  return total;
+  return sharedXpForLevel(level);
 }
 
 /** The level this much XP has bought, capped so the trees cannot be overfilled. */
 export function levelFor(xp: number): number {
-  let level = 1;
-  while (level < MAX_LEVEL && xp >= xpForLevel(level + 1)) level += 1;
-  return level;
+  return sharedLevelFor(xp, MAX_LEVEL);
 }
 
 /** One point a level, after the first. */
 export function pointsEarned(xp: number): number {
-  return levelFor(xp) - 1;
+  return sharedPointsEarned(xp, MAX_LEVEL);
 }
 
 export function pointsSpent(block: ManagerXp): number {
-  return SKILL_TREES.reduce((n, t) => n + Math.max(0, block.points[t] ?? 0), 0);
+  return sharedPointsSpent(CM_TREE_SET, block);
 }
 
 export function pointsFree(block: ManagerXp): number {
-  return Math.max(0, pointsEarned(block.xp) - pointsSpent(block));
+  return sharedPointsFree(CM_TREE_SET, block);
 }
 
 /** How far through the current level, 0 to 1, for a bar on the screen. */
 export function levelProgress(xp: number): number {
-  const level = levelFor(xp);
-  if (level >= MAX_LEVEL) return 1;
-  const floor = xpForLevel(level);
-  const ceiling = xpForLevel(level + 1);
-  if (ceiling <= floor) return 1;
-  return Math.max(0, Math.min(1, (xp - floor) / (ceiling - floor)));
+  return sharedLevelProgress(xp, MAX_LEVEL);
 }
 
 /**
@@ -350,11 +335,7 @@ export function levelProgress(xp: number): number {
  * not a decision.
  */
 export function spendPoint(block: ManagerXp, tree: SkillTree): ManagerXp | null {
-  if (!SKILL_TREES.includes(tree)) return null;
-  if (pointsFree(block) <= 0) return null;
-  const now = block.points[tree] ?? 0;
-  if (now >= MAX_TREE_POINTS) return null;
-  return { ...block, points: { ...block.points, [tree]: now + 1 } };
+  return sharedSpendPoint(CM_TREE_SET, block, tree);
 }
 
 /**

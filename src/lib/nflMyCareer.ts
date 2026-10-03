@@ -1,3 +1,4 @@
+import type { CareerDraftEntry, PreDraftState } from './careerPreDraft';
 /**
  * NFL My Career engine (2026-08-05, the career-for-every-sport push).
  * A cradle to retirement player career: you are a fictional prospect (your name,
@@ -45,6 +46,8 @@ import { nflRivalryTick, nflRivalryChoiceTick } from './nflCareerRivalryEvents';
 import type { RivalryChoiceCard } from './careerRivalryChoices';
 import { countOf, nflCareerStatBullet, nflMajorAward, type NflCareerSums } from './usCareerStatLine';
 import { raiseWithinPotential, ratingRaiseNote } from './careerHeadroom';
+import { applyUsCareerAnnualBenefits } from './usCareerAnnualBenefits';
+import { careerRecoveryRisk } from './usCareerRecovery';
 
 export type CareerPos = 'QB' | 'RB' | 'WR' | 'TE' | 'LB' | 'CB' | 'EDGE' | 'K';
 
@@ -236,7 +239,9 @@ export interface CareerState {
   mvps: number;
   allPros: number;
   retired: boolean;
+  /** Zero records an undrafted camp signing. */
   draftPick: number;
+  prospect?: PreDraftState;
   earnings: number;
   /** Round 56 life layer. All optional so pre-R56 saves keep loading. */
   netWorth?: number;          // millions actually banked, after tax and living
@@ -297,26 +302,26 @@ export interface CareerEvent {
 
 export function startCareer(
   name: string, pos: CareerPos, archetype: Archetype, rng: () => number = Math.random,
-  appearance?: PlayerAppearance | null, eraId?: string,
+  appearance?: PlayerAppearance | null, eraId?: string, entry?: CareerDraftEntry,
 ): CareerState {
   /* Round 172: the era decides the year, the league you are drafted into
      and the money. Leaving it off is today's league, byte for byte. */
   const era = nflEraById(eraId);
-  const base = 66 + Math.floor(rng() * 8) + archetype.ovrBoost;
-  const pot = Math.min(99, base + 10 + Math.floor(rng() * 14) + archetype.potBoost);
+  const base = entry?.ratingAfter ?? (66 + Math.floor(rng() * 8) + archetype.ovrBoost);
+  const pot = entry?.pot ?? Math.min(99, base + 10 + Math.floor(rng() * 14) + archetype.potBoost);
   // draft stock from rating: better prospects go earlier
-  const stock = Math.max(1, Math.round(90 - (base - 64) * 9 + rng() * 40));
-  const team = era.teams[Math.floor(rng() * era.teams.length)].abbr;
-  const firstRound = stock <= 32;
+  const stock = entry ? entry.pick ?? 0 : Math.max(1, Math.round(90 - (base - 64) * 9 + rng() * 40));
+  const team = entry?.team ?? era.teams[Math.floor(rng() * era.teams.length)].abbr;
+  const firstRound = stock > 0 && stock <= 32;
   const c: CareerState = {
     name, pos, archetype, team,
-    year: era.startYear,
-    age: 22,
+    year: entry ? entry.draftYear + entry.devSeasons.length : era.startYear,
+    age: entry?.ageAfter ?? (22),
     ovr: base,
     pot,
     morale: 70,
     fanbase: firstRound ? 55 : 35,
-    health: 100,
+    health: entry?.health ?? 100,
     salary: Math.max(0.3, Math.round((firstRound ? (33 - stock) * 0.9 + 4 : 1.2) * era.moneyScale * 10) / 10),
     contractYears: 4,
     seasons: [],
@@ -337,6 +342,7 @@ export function startCareer(
   if (era.id !== 'now') c.eraId = era.id;
   // Round 104: draft the rival at the same moment the player is created.
   c.rival = draftRival(pos, c.ovr, c.pot, c.age, c.team, rng);
+  if (entry) c.prospect = entry.prospect;
   return c;
 }
 
@@ -376,7 +382,7 @@ function nflIncumbentOvr(teamQuality: number, rng: () => number): number {
 export function nflAssignRole(c: CareerState, teamQuality: number, rng: () => number = Math.random): string {
   if (c.pos === 'K') { c.role = 'starter'; return '🎯 Kickers do not sit. The job is yours from day one.'; }
   const incumbent = nflIncumbentOvr(teamQuality, rng);
-  if (c.draftPick <= 12) {
+  if (c.draftPick > 0 && c.draftPick <= 12) {
     c.role = 'starter';
     return '📋 Top pick money buys the keys. You open the season as the starter.';
   }
@@ -414,7 +420,7 @@ export function nflCampBattle(c: CareerState, teamQuality: number, rng: () => nu
 }
 
 function seasonGames(c: CareerState, rng: () => number): { games: number; injuryNote: string | null } {
-  const risk = (1 - c.archetype.durability) * 0.5 + (100 - c.health) / 260 + (c.pos === 'RB' ? 0.07 : 0);
+  const risk = careerRecoveryRisk('nfl', c.purchased, (1 - c.archetype.durability) * 0.5 + (100 - c.health) / 260 + (c.pos === 'RB' ? 0.07 : 0));
   if (rng() < risk) {
     const missed = 2 + Math.floor(rng() * 9);
     return { games: Math.max(4, 17 - missed), injuryNote: `Missed ${missed} games hurt.` };
@@ -720,6 +726,8 @@ export function progress(c: CareerState, rng: () => number): string[] {
      stream, never this season's rng, and it is told whether the career goes
      on (the same shouldRetire the board asks right after this returns), so a
      player who retires this summer is never sent a text about next season. */
+  const support = applyUsCareerAnnualBenefits(c, 'nfl', c.age - 1);
+  if (support) notes.push(support);
   receiveNflInboxTexts(c, !shouldRetire(c));
   return notes;
 }
@@ -772,8 +780,8 @@ export const NFL_SPEND_ITEMS: NflSpendItem[] = [
   { id: 'minority_stake', name: 'Minority Stake In A Pro Team', emoji: '🏆', category: 'invest', cost: 25, desc: 'A real piece of a real franchise, 25M', oneTime: true, minNetWorth: 45, effect: 'The retirement plan, fanbase +10' },
   // ── Body ──
   { id: 'private_chef', name: 'Private Chef', emoji: '👨‍🍳', category: 'body', cost: 0, yearly: 0.12, desc: 'Every meal built for the season, 120k a year', oneTime: true, effect: 'Health +4 a year' },
-  { id: 'recovery_suite', name: 'Recovery Suite', emoji: '🧊', category: 'body', cost: 1.5, yearly: 0.1, desc: 'Cryo, hyperbaric, the whole circus, 1.5M', oneTime: true, minNetWorth: 2, effect: 'Injury risk down' },
-  { id: 'speed_coach', name: 'Private Speed Coach', emoji: '⚡', category: 'body', cost: 0, yearly: 0.15, desc: 'The guy who fixes everyone, 150k a year', oneTime: true, effect: 'Rating +1 a year while young' },
+  { id: 'recovery_suite', name: 'Recovery Suite', emoji: '🧊', category: 'body', cost: 1.5, yearly: 0.1, desc: 'Cryo, hyperbaric, the whole circus, 1.5M. Injuries can still happen.', oneTime: true, minNetWorth: 2, effect: '25% lower simulated injury risk' },
+  { id: 'speed_coach', name: 'Private Speed Coach', emoji: '⚡', category: 'body', cost: 0, yearly: 0.15, desc: 'The guy who fixes everyone, 150k a year', oneTime: true, effect: 'Rating +1 each offseason through age 26, up to your ceiling' },
   { id: 'sleep_lab', name: 'Sleep Program', emoji: '😴', category: 'body', cost: 0.6, desc: 'Turns out most of it is sleep, 600k', oneTime: true, effect: 'Health +8' },
   { id: 'sports_psych', name: 'Sports Psychologist', emoji: '🧠', category: 'body', cost: 0, yearly: 0.1, desc: 'The part nobody used to talk about, 100k a year', oneTime: true, effect: 'Morale +8 on hire' },
   { id: 'vision_training', name: 'Vision Training', emoji: '👁️', category: 'body', cost: 0.8, desc: 'Read the field a quarter second sooner, 800k', oneTime: true, effect: 'Rating +2, up to your ceiling' },
@@ -1031,7 +1039,7 @@ export function legacyOf(c: CareerState): Legacy {
   const bullets = [
     `${c.seasons.length} seasons, ${c.rings} ring${c.rings === 1 ? '' : 's'}, ${countOf(c.mvps, award.one, award.many)}, ${c.allPros} All-Pro nod${c.allPros === 1 ? '' : 's'}`,
     nflCareerStatBullet(totals, c.pos),
-    `${Math.round(c.earnings)}M career earnings, drafted pick ${c.draftPick}`,
+    `${Math.round(c.earnings)}M career earnings, ${c.draftPick > 0 ? `drafted pick ${c.draftPick}` : 'undrafted signing'}`,
   ];
   return { score, verdict, hof, bullets };
 }
