@@ -131,8 +131,8 @@ const SOURCE_CONTROLS = {
   era: {
     file: usCareerSport('nfl').binding,
     alias: '@/lib/nflCareerSport',
-    from: "rng, appearance, eraId as 'now' | 'y2005')",
-    to: 'rng, appearance)',
+    from: "rng, appearance, eraId as 'now' | 'y2005', entry)",
+    to: 'rng, appearance, undefined, entry)',
     red: ['nfl'],
     says: 'the save differs',
   },

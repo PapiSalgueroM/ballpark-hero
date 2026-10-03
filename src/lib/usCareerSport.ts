@@ -18,6 +18,7 @@
  * they were, and scripts/simUsBoardParity.mjs replays a fixture recorded from
  * the four old boards to hold that.
  */
+import type { CareerDraftEntry, PreDraftDescriptor, PreDraftState } from '@/lib/careerPreDraft';
 import type { PlayerAppearance } from '@/lib/soccerCareerAppearance';
 import type { CareerRival } from '@/lib/careerRival';
 import type { InboxBeat, InboxMessage } from '@/lib/careerInbox';
@@ -68,6 +69,7 @@ export interface UsCareerCore {
   seasons: UsCareerSeason[];
   retired: boolean;
   draftPick: number;
+  prospect?: PreDraftState;
   earnings: number;
   netWorth?: number;
   dirtyMoney?: number;
@@ -160,8 +162,11 @@ export interface UsCareerSport<C extends UsCareerCore = any, L extends UsCareerS
   practiceLabel: string;
   loadTraining(pos: string): Promise<TrainingSport>;
 
+  preDraft(eraId: string): PreDraftDescriptor;
+  prospectRatings(arch: UsCareerArchetype, rng: () => number): { rating: number; pot: number };
+
   /* The engine. */
-  startCareer(name: string, pos: string, arch: UsCareerArchetype, rng: () => number, appearance: PlayerAppearance, eraId: string): C;
+  startCareer(name: string, pos: string, arch: UsCareerArchetype, rng: () => number, appearance: PlayerAppearance, eraId: string, entry?: CareerDraftEntry): C;
   rollTeamQuality(prev: number | null, rng: () => number): number;
   assignRole(c: C, teamQuality: number, rng: () => number): string;
   campBattle(c: C, teamQuality: number, rng: () => number): string | null;

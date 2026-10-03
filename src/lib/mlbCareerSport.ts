@@ -1,3 +1,4 @@
+import { mlbPreDraftDescriptor } from '@/lib/mlbCareerPreDraft';
 /**
  * Round 900: MLB's binding for the one US career board.
  *
@@ -49,8 +50,14 @@ export const MLB_CAREER_SPORT: UsCareerSport<MlbCareerState, MlbSeasonLine> = {
     archetypes: MLB_ARCHETYPES,
   },
 
-  startCareer: (name, pos, arch, rng, appearance, eraId) =>
-    startMlbCareer(name, pos as MlbCareerPos, arch as MlbCareerState['archetype'], rng, appearance, eraId as 'now' | 'y2004'),
+  preDraft: mlbPreDraftDescriptor,
+  prospectRatings: (arch, rng) => {
+    const a = arch as MlbCareerState['archetype'];
+    const rating = 64 + Math.floor(rng() * 8) + a.ovrBoost;
+    return { rating, pot: Math.min(99, rating + 12 + Math.floor(rng() * 14) + a.potBoost) };
+  },
+  startCareer: (name, pos, arch, rng, appearance, eraId, entry) =>
+    startMlbCareer(name, pos as MlbCareerPos, arch as MlbCareerState['archetype'], rng, appearance, eraId as 'now' | 'y2004', entry),
   rollTeamQuality: mlbRollTeamQuality,
   assignRole: mlbAssignRole,
   campBattle: mlbCampBattle,
