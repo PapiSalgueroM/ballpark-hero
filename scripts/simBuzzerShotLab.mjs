@@ -63,7 +63,12 @@ if (control === 'all') {
 }
 
 const heldFiles = [board, comparison, 'src/lib/buzzerBeater.ts', 'src/lib/arcade.ts', 'src/lib/arcadeRecord.ts', 'src/hooks/useArcadeFlight.ts', 'src/hooks/useGameCompletion.ts', testFile];
-const held = await Promise.all(heldFiles.map(async file => ({ file, bytes: await readFile(path.join(root, file)) })));
+const verifyBytes = [];
+for (const relative of heldFiles) {
+  const file = path.join(root, relative);
+  const bytes = await readFile(file);
+  verifyBytes.push(() => readFile(file).then(current => assert.deepEqual(current, bytes, `${relative} raw bytes held`)));
+}
 const env = { ...process.env, FORCE_COLOR: '0' }; delete env.NO_COLOR; delete env.NO_DOUBLE_SWAP;
 const reportFile = path.join(evidence, `${control || 'normal'}-report.json`);
 let folder;
@@ -114,6 +119,6 @@ try {
 } finally {
   if (copy) await rm(copy, { force: true });
   if (folder) await rmdir(folder);
-  for (const item of held) assert.deepEqual(await readFile(path.join(root, item.file)), item.bytes, `${item.file} raw bytes held`);
+  await Promise.all(verifyBytes.map(verify => verify()));
 }
 console.log('simBuzzerShotLab: eight runtime inputs held byte for byte; reports and changed copies retained for review.');
