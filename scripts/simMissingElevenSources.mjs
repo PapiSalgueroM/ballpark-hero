@@ -23,26 +23,37 @@
  *    The 16 reread older sheets (legacyRecheck) are held to the same rows,
  *    names in order, with pfr's spelling recorded where it differs (Ben
  *    Watson, Steve Neal, Michael Person).
- * 3) Every reveal line on a record sheet has evidence for that man in the
- *    record, so no line is written from memory.
+ * 3) Every reveal line on a record sheet is word for word the line the
+ *    record holds for that man (candidates[].reveal), and the record has
+ *    evidence for him, so no line is written from memory and a later edit
+ *    that turns a true line false cannot pass without changing the record.
  * 4) Every blank can be solved fairly, on all 40 sheets: the blank points at
  *    its own slot, nobody else on the sheet shares its surname (a surname
  *    guess is accepted), and the surname the hints spell out is not a suffix.
- * 5) The daily. dailyIndex shuffles in cycles the length of the pool, so a
- *    longer pool deals a different sheet on every date. Before
- *    ELEVEN_GROWN_DAILY_FROM the deal must equal what origin/main deals
- *    (MAIN_DEALS, measured on origin/main 3da2d38f on 2026-10-03 with the
- *    same fake clock): the outcome against a baseline, not the code against
- *    itself. From the cutover every full cycle of 40 days shows every sheet
- *    once, no sheet runs two days, and all 22 new sheets are dealt by the
- *    end of the first full cycle.
+ * 5) The daily before the cutover. dailyIndex shuffles in cycles the length
+ *    of the pool, so a longer pool deals a different sheet on every date.
+ *    Before ELEVEN_GROWN_DAILY_FROM the deal must equal what origin/main
+ *    deals (MAIN_DEALS, measured on origin/main with the same fake clock):
+ *    the outcome against a baseline, not the code against itself.
+ * 6) The daily from the cutover. It deals from ELEVEN_GROWN_POOL (40), a
+ *    number and not the length of the list, the first 40 sheets sit in a
+ *    frozen order (FROZEN_IDS), and the cutover day and the 19 days after it
+ *    deal what was measured (GROWN_DEALS). So moving a sheet, dealing from
+ *    41, or a cutover test that slips by a day goes red, while a sheet
+ *    appended after the 40 joins Unlimited and leaves every daily alone.
+ *    Every full cycle of 40 days shows every sheet once, and all 22 new
+ *    sheets are dealt by the end of the first full cycle.
+ * 7) The switch. No sheet is dealt the day before the cutover and on it,
+ *    and no sheet comes back across the switch sooner than either pool on
+ *    its own brings one back.
  *
  * Every check here is exact, there is no sampled statistic and so no band
  * to set. Measured 2026-10-03: 40 sheets all naming two hosts, 22 record
  * sheets with 242 starter rows plus 16 reread sheets with 176, 40 reveal
- * lines with evidence,
- * 123 blanks, 9 of 9 frozen main deals matched, 3 full cycles after the
- * cutover with all 40 sheets in each and 0 repeats. Every control fires.
+ * lines equal to the record's, 123 blanks, 9 of 9 frozen main deals and 20
+ * of 20 grown deals matched, 3 full cycles after the cutover with all 40
+ * sheets in each, and a shortest return of 2 days in each pool against 9
+ * across the switch. Every control fires.
  *
  * Negative controls, SIM_ME_CONTROL=<name>. Each asserts the text it mutates
  * exists before mutating it, and the run fails unless the check it targets
@@ -53,8 +64,13 @@
  *   swap      replaces one starter in the file with a man not in the record (2)
  *   recordpfr blanks one pfr cell in the record (2)
  *   fact      adds a reveal line to a blank the record has no evidence for (3)
+ *   factnum   turns the 21-yard McCaffrey catch into a 12-yard one (3)
  *   slot      points one blank at the wrong slot (4)
- *   olddeal   deals the daily from the whole pool on every date (5)
+ *   olddeal   deals the daily from the grown pool on every date (5)
+ *   reorder   moves the 40th sheet to slot 18 (6)
+ *   grow      appends a 41st sheet and deals the daily from 41 (6)
+ *   lte       lets the cutover day deal from the old 18 (6)
+ *   rerun     deals the cutover day the sheet of the day before (7)
  *
  * Run: node scripts/simMissingElevenSources.mjs
  */
@@ -70,7 +86,7 @@ const RECORD = `${ROOT}/scripts/data/missingElevenVerified2026-10.json`;
 const TMP = fs.mkdtempSync(path.join(os.tmpdir(), 'simME-')).replace(/\\/g, '/');
 
 const CONTROL = process.env.SIM_ME_CONTROL || '';
-const CONTROLS = { onehost: 1, wikihost: 1, swap: 2, legacyrow: 2, recordpfr: 2, fact: 3, slot: 4, olddeal: 5 };
+const CONTROLS = { onehost: 1, wikihost: 1, swap: 2, legacyrow: 2, recordpfr: 2, fact: 3, factnum: 3, slot: 4, olddeal: 5, reorder: 6, grow: 6, lte: 6, rerun: 7 };
 if (CONTROL && !CONTROLS[CONTROL]) { console.error(`unknown control ${CONTROL}`); process.exit(2); }
 
 const red = new Set();
@@ -90,8 +106,14 @@ if (CONTROL === 'wikihost') src = mustReplace(src, 'pro-football-reference.com b
 if (CONTROL === 'legacyrow') src = mustReplace(src, "S('FB', 'Patrick DiMarco'),", "S('FB', 'Mike Tolbert'),", 'the SB LI Falcons fullback');
 if (CONTROL === 'swap') src = mustReplace(src, "S('C', 'Jake Brendel'),", "S('C', 'Alex Mack'),", 'the SB LVIII 49ers center');
 if (CONTROL === 'fact') src = mustReplace(src, "{ name: 'Jake Brendel', slotIndex: 8, nationality: 'USA' }", "{ name: 'Jake Brendel', slotIndex: 8, nationality: 'USA', fact: 'Snapped every down.' }", 'the Brendel blank');
+if (CONTROL === 'factnum') src = mustReplace(src, "fact: 'Scored on a 21-yard catch,", "fact: 'Scored on a 12-yard catch,", 'the McCaffrey reveal line');
 if (CONTROL === 'slot') src = mustReplace(src, "{ name: 'Noah Gray', slotIndex: 5,", "{ name: 'Noah Gray', slotIndex: 4,", 'the Noah Gray blank');
-if (CONTROL === 'olddeal') src = mustReplace(src, 'return dateStr < ELEVEN_GROWN_DAILY_FROM ? ELEVEN_ORIGINAL_POOL : ELEVEN_LINEUPS.length;', 'return ELEVEN_LINEUPS.length;', 'the daily pool size');
+if (CONTROL === 'olddeal') src = mustReplace(src, 'return dateStr < ELEVEN_GROWN_DAILY_FROM ? ELEVEN_ORIGINAL_POOL : ELEVEN_GROWN_POOL;', 'return ELEVEN_GROWN_POOL;', 'the daily pool size');
+if (CONTROL === 'lte') src = mustReplace(src, 'return dateStr < ELEVEN_GROWN_DAILY_FROM ?', 'return dateStr <= ELEVEN_GROWN_DAILY_FROM ?', 'the cutover test');
+if (CONTROL === 'grow') src = mustReplace(src, 'export const ELEVEN_GROWN_POOL = 40;', 'export const ELEVEN_GROWN_POOL = 41;', 'the grown pool size');
+if (CONTROL === 'rerun') src = mustReplace(src, 'const lineup = ELEVEN_LINEUPS[dailyIndex(today, elevenDailyPoolSize(today))];',
+  "const eve = new Date(Date.parse(today + 'T12:00:00Z') - 86400000).toISOString().slice(0, 10);\n  const lineup = ELEVEN_LINEUPS[today === ELEVEN_GROWN_DAILY_FROM ? dailyIndex(eve, ELEVEN_ORIGINAL_POOL) : dailyIndex(today, elevenDailyPoolSize(today))];",
+  'the daily pick');
 if (CONTROL === 'recordpfr') {
   const row = rec.sheets.find((s) => s.id === 'sb-lix-phi')?.starters?.[2];
   if (!row || row[3] !== 'A.J. Brown/WR') { console.error('control recordpfr: the A.J. Brown pfr cell is not where expected'); process.exit(2); }
@@ -112,6 +134,12 @@ globalThis.Date = class extends RealDate {
 const m = await import(pathToFileURL(`${TMP}/bundle.mjs`).href);
 const LINEUPS = m.ELEVEN_LINEUPS;
 if (!Array.isArray(LINEUPS) || LINEUPS.length === 0) { console.error('ELEVEN_LINEUPS not found'); process.exit(1); }
+/* Two controls change the list the module deals from, in place. */
+if (CONTROL === 'reorder') {
+  if (LINEUPS[39]?.id !== 'sb-xlii-nyg-d') { console.error('control reorder: sb-xlii-nyg-d is not the 40th sheet'); process.exit(2); }
+  LINEUPS.splice(18, 0, LINEUPS.pop());
+}
+if (CONTROL === 'grow') LINEUPS.push({ ...LINEUPS[0], id: 'sb-control-41' });
 
 /* Hosts named in a note: dotted names ending in a web suffix, reduced to the
    registrable pair (static.www.nfl.com is nfl.com). */
@@ -213,11 +241,15 @@ console.log('3) Every reveal line on a Round 950 sheet has evidence in the recor
     const l = byId.get(s.id);
     if (!l) continue;
     const evidence = new Set((s.facts ?? []).filter((f) => String(f.fact ?? '').trim()).map((f) => f.name));
+    const recorded = new Map((s.candidates ?? []).map((c) => [c.name, String(c.reveal ?? '')]));
     for (const c of l.blankCandidates) {
+      /* The shipped words are the recorded words, exactly: an edit that turns
+         a true line false (21 yards to 12) has to change the record too. */
+      if (String(c.fact ?? '') !== (recorded.get(c.name) ?? '')) fail(3, `${s.id}: the reveal line for ${c.name} is not the line the record holds`);
       if (!c.fact) continue;
       lines += 1;
       if (!evidence.has(c.name)) fail(3, `${s.id}: the reveal line for ${c.name} has no evidence in the record`);
-      if (/[–—]/.test(c.fact)) fail(3, `${s.id}: the reveal line for ${c.name} carries a long dash`);
+      if (/[\u2013\u2014]/.test(c.fact)) fail(3, `${s.id}: the reveal line for ${c.name} carries a long dash`);
     }
   }
   console.log(`   ${lines} reveal lines, each backed by a record entry`);
@@ -242,26 +274,57 @@ console.log('4) Every blank can be solved fairly');
   console.log(`   ${blanks} blanks on ${LINEUPS.length} sheets, each on its own slot with a surname nobody else on the sheet has`);
 }
 
-/* What origin/main deals (3da2d38f, measured 2026-10-03 with this clock) from
-   the measuring day to the cutover. Dailies before 2026-10-03 are over and
-   nobody can play them again; Round 950 took Kyle Brady off the SB XLII
-   Patriots blanks (Tom Brady on the same sheet answered it), which moved
-   only the already finished 2026-10-01 deal. */
+/* What origin/main deals (measured 2026-10-03 on 3da2d38f, rechecked on
+   665898cf, with this clock) from the measuring day to 2026-10-25. Only the
+   dates before the cutover are compared, so moving the cutover later keeps
+   this baseline honest without a new measurement. Dailies before
+   2026-10-03 are over and nobody can play them again. Round 950 took Kyle
+   Brady off the SB XLII Patriots blanks (Tom Brady on the same sheet
+   answered it), which changed the answer on 11 finished dates from
+   2025-10-01 on, every one of them an sb-xlii-ne day (2026-08-23,
+   2026-09-18 and 2026-10-01 among them), and none from 2026-10-03 to the
+   cutover. The 2026-10-24 entry is an sb-xlii-ne day: a cutover moved past
+   it goes red here, which is the point. */
 const MAIN_DEALS = {
   '2026-10-03': 'sb-xlv-pit|David Johnson', '2026-10-04': 'sb-xlviii-sea-d|Clinton McDonald',
   '2026-10-05': 'sb-xlv-gb|James Jones', '2026-10-06': 'sb-50-den|Vernon Davis', '2026-10-07': 'sb-50-den-d|Danny Trevathan',
   '2026-10-08': 'sb-liv-kc|Mecole Hardman', '2026-10-09': 'sb-xx-chi-d|Leslie Frazier', '2026-10-10': 'sb-liv-sf|Kyle Juszczyk',
-  '2026-10-11': 'sb-xlix-ne|Shane Vereen',
+  '2026-10-11': 'sb-xlix-ne|Shane Vereen', '2026-10-12': 'sb-50-den-d|Malik Jackson', '2026-10-13': 'sb-lvii-kc|Isiah Pacheco',
+  '2026-10-14': 'sb-xlv-gb|James Starks', '2026-10-15': 'sb-xxxv-bal-d|Jamie Sharper', '2026-10-16': 'sb-lii-phi|Halapoulivaati Vaitai',
+  '2026-10-17': 'sb-xlv-pit|Rashard Mendenhall', '2026-10-18': 'sb-xx-chi-d|Gary Fencik', '2026-10-19': 'sb-liv-kc|Laurent Duvernay-Tardif',
+  '2026-10-20': 'sb-lvii-phi|Jason Kelce', '2026-10-21': 'sb-lii-ne|Dion Lewis', '2026-10-22': 'sb-xlviii-sea-d|Byron Maxwell',
+  '2026-10-23': 'sb-xlix-sea|Jermaine Kearse', '2026-10-24': 'sb-xlii-ne|Benjamin Watson', '2026-10-25': 'sb-li-atl|Mohamed Sanu',
+};
+/* The first 40 sheets in the order the grown daily deals them. dailyIndex
+   reads a sheet by its index, so moving one, or dealing from 41, changes
+   every deal from the cutover on, today's included. New sheets go on the
+   end, after these, and reach the daily only through a new cutover. */
+const FROZEN_IDS = [
+  'sb-li-ne', 'sb-li-atl', 'sb-xlix-ne', 'sb-xlix-sea', 'sb-xlii-ne', 'sb-50-den', 'sb-lvii-kc', 'sb-lvii-phi', 'sb-xlv-pit', 'sb-xlv-gb',
+  'sb-liv-sf', 'sb-liv-kc', 'sb-lii-phi', 'sb-lii-ne', 'sb-xx-chi-d', 'sb-xxxv-bal-d', 'sb-xlviii-sea-d', 'sb-50-den-d', 'sb-lviii-kc', 'sb-lviii-sf',
+  'sb-lix-phi', 'sb-lix-phi-d', 'sb-lv-tb', 'sb-lv-tb-d', 'sb-lv-kc', 'sb-lvi-lar', 'sb-lvi-lar-d', 'sb-lvi-cin', 'sb-liii-ne-d', 'sb-liii-lar',
+  'sb-xlvii-bal', 'sb-xlvii-sf', 'sb-xlvi-nyg', 'sb-xlvi-ne', 'sb-xliv-no', 'sb-xliv-ind', 'sb-xliii-pit', 'sb-xliii-pit-d', 'sb-xliii-ari', 'sb-xlii-nyg-d',
+];
+/* What the grown daily deals (this branch, measured 2026-10-03), cutover day
+   first. Compared only on dates from the cutover on. */
+const GROWN_DEALS = {
+  '2026-10-12': 'sb-lvi-lar-d|Eric Weddle', '2026-10-13': 'sb-xlviii-sea-d|Walter Thurmond', '2026-10-14': 'sb-lv-tb|Scott Miller',
+  '2026-10-15': 'sb-lii-phi|Halapoulivaati Vaitai', '2026-10-16': 'sb-xlix-sea|Ricardo Lockette', '2026-10-17': 'sb-lviii-sf|Kyle Juszczyk',
+  '2026-10-18': 'sb-xlvi-nyg|Jake Ballard', '2026-10-19': 'sb-lvi-cin|Isaiah Prince', '2026-10-20': 'sb-lv-kc|Andrew Wylie',
+  '2026-10-21': 'sb-xlix-ne|Michael Hoomanawanui', '2026-10-22': 'sb-xlii-nyg-d|Reggie Torbor', '2026-10-23': 'sb-xlvii-bal|Vonta Leach',
+  '2026-10-24': 'sb-xlv-gb|James Jones', '2026-10-25': 'sb-xliii-ari|Leonard Pope', '2026-10-26': 'sb-li-ne|Martellus Bennett',
+  '2026-10-27': 'sb-50-den-d|Sylvester Williams', '2026-10-28': 'sb-xx-chi-d|William Perry', '2026-10-29': 'sb-li-atl|Mohamed Sanu',
+  '2026-10-30': 'sb-liv-kc|Mecole Hardman', '2026-10-31': 'sb-liii-lar|Josh Reynolds',
 };
 const setDate = (iso) => { const [y, mo, d] = iso.split('-').map(Number); fixedNow = RealDate.UTC(y, mo - 1, d, 18, 0, 0); };
 const isoPlus = (iso, k) => { const [y, mo, d] = iso.split('-').map(Number); return new RealDate(RealDate.UTC(y, mo - 1, d + k)).toISOString().slice(0, 10); };
+const deal = (iso) => { setDate(iso); const p = m.getDailyElevenPuzzle(); return `${p.lineup.id}|${p.candidate.name}`; };
+const cut = m.ELEVEN_GROWN_DAILY_FROM;
+if (typeof cut !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(cut)) { console.error('ELEVEN_GROWN_DAILY_FROM is missing'); process.exit(1); }
 
-console.log('5) The daily: no played daily changes, then the whole pool deals');
+console.log('5) Before the cutover the daily deals what origin/main deals');
 {
-  const cut = m.ELEVEN_GROWN_DAILY_FROM;
   const FIRST = 18;
-  if (typeof cut !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(cut)) fail(5, 'ELEVEN_GROWN_DAILY_FROM is missing');
-  const deal = (iso) => { setDate(iso); const p = m.getDailyElevenPuzzle(); return `${p.lineup.id}|${p.candidate.name}`; };
   let same = 0;
   for (const [iso, want] of Object.entries(MAIN_DEALS)) {
     if (iso >= cut) continue;
@@ -274,31 +337,81 @@ console.log('5) The daily: no played daily changes, then the whole pool deals');
   const firstIds = LINEUPS.slice(0, FIRST).map((l) => l.id);
   const mainIds = new Set(Object.values(MAIN_DEALS).map((v) => v.split('|')[0]));
   for (const id of mainIds) if (!firstIds.includes(id)) fail(5, `${id} was dealt on main but is not among the first ${FIRST} sheets`);
+  console.log(`   ${same} of ${before} days from 2026-10-03 to ${cut} deal exactly what origin/main deals`);
+}
+
+console.log('6) From the cutover the daily deals the first 40 sheets, in their frozen order');
+const GROWN = FROZEN_IDS.length;
+{
+  if (m.ELEVEN_GROWN_POOL !== GROWN) fail(6, `the grown daily deals from ${m.ELEVEN_GROWN_POOL} sheets, not the frozen ${GROWN}; a new sheet needs a new cutover`);
+  const ids = LINEUPS.map((l) => l.id);
+  const moved = FROZEN_IDS.findIndex((id, i) => ids[i] !== id);
+  if (moved >= 0) fail(6, `slot ${moved} holds ${ids[moved]}, the frozen order has ${FROZEN_IDS[moved]} there; new sheets go on the end`);
+  let same = 0;
+  for (const [iso, want] of Object.entries(GROWN_DEALS)) {
+    if (iso < cut) continue;
+    const got = deal(iso);
+    if (got === want) same += 1;
+    else fail(6, `${iso} deals ${got}, the grown daily was measured dealing ${want}`);
+  }
+  const after = Object.keys(GROWN_DEALS).filter((d) => d >= cut).length;
+  if (after < 7) fail(6, `only ${after} measured grown deals fall from the cutover on, too few to prove anything`);
   /* dailyIndex walks the pool in cycles cut on the day number, not on the
      cutover, so the full cycles are found by the day number. */
-  const pool = LINEUPS.length;
   const dayNo = (iso) => { const [y, mo, d] = iso.split('-').map(Number); return Math.floor(RealDate.UTC(y, mo - 1, d) / 86_400_000); };
   const seen = [];
-  let runs = 0;
-  for (let k = 0; k < pool * 4; k += 1) {
-    setDate(isoPlus(cut, k));
-    seen.push(m.getDailyElevenPuzzle().lineup.id);
-    if (k > 0 && seen[k] === seen[k - 1]) runs += 1;
-  }
-  if (runs) fail(5, `${runs} sheets dealt two days running after the cutover`);
+  for (let k = 0; k < GROWN * 4; k += 1) { setDate(isoPlus(cut, k)); seen.push(m.getDailyElevenPuzzle().lineup.id); }
   let a = 0;
-  while (dayNo(isoPlus(cut, a)) % pool !== 0) a += 1;
+  while (dayNo(isoPlus(cut, a)) % GROWN !== 0) a += 1;
   let cycles = 0;
-  for (let w = a; w + pool <= seen.length; w += pool) {
+  for (let w = a; w + GROWN <= seen.length; w += GROWN) {
     cycles += 1;
-    const n = new Set(seen.slice(w, w + pool)).size;
-    if (n !== pool) fail(5, `the cycle from ${isoPlus(cut, w)} shows ${n} of ${pool} sheets`);
+    const n = new Set(seen.slice(w, w + GROWN)).size;
+    if (n !== GROWN) fail(6, `the cycle from ${isoPlus(cut, w)} shows ${n} of ${GROWN} sheets`);
   }
-  if (cycles < 3) fail(5, `only ${cycles} full cycles measured after the cutover`);
-  const firstCycle = seen.slice(0, a + pool);
+  if (cycles < 3) fail(6, `only ${cycles} full cycles measured after the cutover`);
+  const firstCycle = seen.slice(0, a + GROWN);
   const fresh = rec.sheets.map((s) => s.id).filter((id) => !firstCycle.includes(id));
-  if (fresh.length) fail(5, `new sheets not dealt by the end of the first full cycle: ${fresh.join(', ')}`);
-  console.log(`   ${same} of ${before} days from 2026-10-03 to ${cut} deal exactly what origin/main deals; after it, ${cycles} full cycles each show all ${pool} sheets, ${runs} repeats`);
+  if (fresh.length) fail(6, `new sheets not dealt by the end of the first full cycle: ${fresh.join(', ')}`);
+  console.log(`   ${same} of ${after} measured days from ${cut} deal as measured, the first ${GROWN} sheets sit in their frozen order, ${cycles} full cycles each show all ${GROWN}`);
+}
+
+/* The switch itself. Each pool on its own brings a sheet back after 2 days
+   at the shortest (measured 2026-10-03: the 18 pool over 640 days from
+   2025-01-01, the 40 pool over 800 days from the cutover), so the switch is
+   held to that: no sheet two days running across it, and no sheet back
+   sooner than either pool on its own brings one back. Measured: the
+   shortest return across the switch is 9 days (sb-xlviii-sea-d, 2026-10-04
+   and 2026-10-13). */
+console.log('7) The switch deals no sheet back sooner than either pool does on its own');
+{
+  const shortest = (from, days) => {
+    const last = new Map();
+    let best = Infinity;
+    for (let k = 0; k < days; k += 1) {
+      setDate(isoPlus(from, k));
+      const id = m.getDailyElevenPuzzle().lineup.id;
+      if (last.has(id)) best = Math.min(best, k - last.get(id));
+      last.set(id, k);
+    }
+    return best;
+  };
+  const oldPool = shortest(isoPlus(cut, -400), 400);
+  const newPool = shortest(cut, 400);
+  const span = GROWN;
+  const ids = [];
+  for (let k = -span; k < span; k += 1) { setDate(isoPlus(cut, k)); ids.push(m.getDailyElevenPuzzle().lineup.id); }
+  let across = Infinity;
+  let where = '';
+  for (let i = 0; i < span; i += 1) {
+    for (let j = span; j < ids.length; j += 1) {
+      if (ids[i] === ids[j] && j - i < across) { across = j - i; where = `${ids[i]} on ${isoPlus(cut, i - span)} and ${isoPlus(cut, j - span)}`; }
+    }
+  }
+  if (ids[span - 1] === ids[span]) fail(7, `${ids[span]} is dealt the day before the cutover and on it`);
+  const floor = Math.min(oldPool, newPool);
+  if (across < floor) fail(7, `${where}: back after ${across} days across the switch, while each pool on its own waits at least ${floor}`);
+  console.log(`   shortest return: ${oldPool} days in the 18 pool, ${newPool} in the 40 pool, ${across} across the switch (${where || 'none'})`);
 }
 
 fs.rmSync(TMP, { recursive: true, force: true });

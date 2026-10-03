@@ -1380,16 +1380,22 @@ export const ELEVEN_LINEUPS: ElevenLineup[] = [
  * who played it, and the day the release lands would change mid day. So a
  * daily dated before this keeps dealing from the first 18 sheets exactly as
  * it did (they stay at indexes 0 to 17, in order), and every daily from this
- * date on deals from all of them. Unlimited uses the whole pool at once.
+ * date on deals from the first 40. Unlimited uses the whole pool at once.
+ * The 40 is a number, not the length of the list, for the same reason: a
+ * sheet added later goes on the end and joins Unlimited at once, and joins
+ * the daily only through a new cutover date of its own, never by moving
+ * every deal from today on.
  * Set a week and a bit out on purpose: the release has to land before it.
- * scripts/simMissingElevenSources.mjs proves the old deal is unchanged.
+ * scripts/simMissingElevenSources.mjs proves the old deal is unchanged and
+ * holds the first 40 sheets to their order.
  */
 export const ELEVEN_GROWN_DAILY_FROM = '2026-10-12';
 export const ELEVEN_ORIGINAL_POOL = 18;
+export const ELEVEN_GROWN_POOL = 40;
 
 /** How many sheets the daily for this ET date deals from. */
 export function elevenDailyPoolSize(dateStr: string): number {
-  return dateStr < ELEVEN_GROWN_DAILY_FROM ? ELEVEN_ORIGINAL_POOL : ELEVEN_LINEUPS.length;
+  return dateStr < ELEVEN_GROWN_DAILY_FROM ? ELEVEN_ORIGINAL_POOL : ELEVEN_GROWN_POOL;
 }
 
 export function getDailyElevenPuzzle(): ActiveElevenPuzzle {
