@@ -61,7 +61,7 @@ export interface GmSlotGroup {
   /** How many men today's formula averages here (0: this group is new and only moves the number). */
   counted: number;
   /** Who may fill the group at all. */
-  positions: readonly string[];
+  positions: readonly string[] | { not: readonly string[] };
   slots: readonly GmSlot[];
   /** What a group nobody fills reads, and what an empty slot reads in the slot rating. */
   fallback: number;
@@ -179,12 +179,16 @@ export function gmGroupSlots<T>(sport: GmLineupSport<T>, group: GmSlotGroup, cho
   return (offered.find(s => s.key === key) ?? offered[0]).slots;
 }
 
+/** Whether a position belongs to a group: on its list, or off its list of exclusions. */
+export const gmInGroup = (group: GmSlotGroup, pos: string): boolean =>
+  Array.isArray(group.positions) ? group.positions.includes(pos) : !(group.positions as { not: readonly string[] }).not.includes(pos);
+
 const accepts = (group: GmSlotGroup, slot: GmSlot, p: GmLineupMan): boolean =>
-  (slot.accepts ?? group.positions).includes(p.pos);
+  (slot.accepts ? slot.accepts.includes(p.pos) : gmInGroup(group, p.pos));
 
 /** The healthy men a group may use. */
 export function gmGroupPool(group: GmSlotGroup, men: readonly GmLineupMan[]): GmLineupMan[] {
-  return men.filter(p => p.out === 0 && group.positions.includes(p.pos));
+  return men.filter(p => p.out === 0 && gmInGroup(group, p.pos));
 }
 
 /** Fill slots best first: heavier slots first, each with the best man left that it takes.
