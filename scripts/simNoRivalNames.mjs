@@ -275,7 +275,7 @@ const LIVE_IDENTIFIERS = [
 const REAL_PEOPLE = [
   /* Detroit Tigers pitcher, born 2000-02-21: MLB's Stats API record of the
      2026-09-27 roster and ESPN's Detroit roster (read 2026-10-01) agree. */
-  { name: 'Ty Madden', files: ['scripts/data/mlbRosters2026.json', 'scripts/data/mlbStats2026.json', 'src/data/mlbFoRosters2026.ts'] },
+  { name: 'Ty Madden', files: ['scripts/data/mlbRosters2026.json', 'scripts/data/mlbStats2026.json', 'src/data/mlbFoRosters2026.ts', 'scripts/data/mlbOpeningRatingInputs2026.json', 'src/data/mlbOpeningRatings2026.ts'] },
 ];
 const PERSON_CONTROL = process.env.SIM_RIVAL_CONTROL === 'person';
 
