@@ -22,6 +22,10 @@
  * retains that recording and excludes only its new practice entry from the
  * old screen projection and click candidates. Save bytes and all existing
  * screens remain exact; the new practice interactions have their own tests.
+ * Round 996 keeps the real appearance editor on its recorded soccer copy in
+ * this historical projection. Its callbacks, saved IDs and random draws stay
+ * live; sport-specific presentation is covered by appearanceSportCopy and
+ * native career creation checks instead of changing the recorded fixture.
  *
  *   US_BOARD_FIXTURE=record  writes the fixture to US_BOARD_FIXTURE_OUT
  *   US_BOARD_FIXTURE=replay  compares against scripts/data/usBoardFixture.json
@@ -33,7 +37,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { createHash } from 'node:crypto';
-import type { ComponentType } from 'react';
+import type { ComponentProps, ComponentType } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { MemoryRouter } from 'react-router-dom';
 import { afterAll, afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
@@ -51,6 +55,11 @@ vi.mock('@/contexts/AuthContext', () => ({
   useAuth: () => ({ user: null, profile: null, refreshProfile: () => undefined }),
 }));
 vi.mock('sonner', () => ({ toast: { success: () => undefined } }));
+vi.mock('@/components/soccer-career/AppearanceBuilder', async importOriginal => {
+  const original = await importOriginal<typeof import('@/components/soccer-career/AppearanceBuilder')>();
+  const Builder = original.default;
+  return { ...original, default: (props: ComponentProps<typeof Builder>) => <Builder {...props} sport="soccer" /> };
+});
 
 import NflMyCareerBoard from '@/components/nfl-my-career/NflMyCareerBoard';
 import NbaMyCareerBoard from '@/components/nba-my-career/NbaMyCareerBoard';
