@@ -13,12 +13,21 @@
      2) EXACT EFFECTS. Every option of every event, answered through the
         engine on a fresh desk, moves exactly what it declares and nothing
         else, its card line names exactly those moves, and a second answer
-        moves nothing.
+        moves nothing. Answered again with each moved 0 to 100 meter one
+        short of the end it moves toward, it lands exactly on that end.
      3) RULES OVER 1,000 SEASONS PER PACK (100 desks of 10 seasons): every
         delivery is on its beat with every declared condition true over that
         week's facts (judged against a pristine copy of the pack), a one shot
-        never comes twice, a repeatable never comes back inside its cooldown,
-        never more than three open, never more than eight kept.
+        never comes twice (the Australian football pack has two), a
+        repeatable never comes back inside its cooldown, never more than
+        three open, never more than eight kept, and no message still open is
+        ever dropped. Eight and three are literals here, the brief's and
+        Club Manager's numbers, and the engine's constants must equal them.
+     3b) THE CAPS AT THEIR EDGES. The desks above rarely reach either cap, so
+        20 silent desks a pack (never answer) must reach three open and stop
+        there, and 20 stubborn desks (leave the first message open, answer
+        the rest) must fill to eight kept with that first message still on
+        the desk. Measured: every one of the 140 of each reaches its cap.
      4) RATE. Each pack's mean events per season sits in a band set from
         measured headroom (numbers below).
      5) REACH. Every event of every pack arrives in at least one ten season
@@ -32,13 +41,14 @@
    deck's own rhythm on those desks, to be remeasured on a real board when
    one binds it.
 
-   MEASURED at seeds 1 to 5 (100 desks of 10 seasons a pack, every pack at
-   chance 0.5), mean events a season:
-     nfl 2.76 to 2.86, nba 2.27 to 2.37, mlb 2.53 to 2.57, nhl 2.73 to 2.79,
-     college 3.31 to 3.34, gym 2.83 to 2.84, afl 2.82 to 2.99.
-   Seasons with no event at all: 0.0% (gym) to 5.7% (nba).
-   About 19,300 to 19,650 events dealt a run, 0 rule breaks at every seed.
-   The rarest event (nba_trade_demand, two conditions) reached 41% to 49% of
+   MEASURED 2026-10-03 at seeds 1 to 10 (100 desks of 10 seasons a pack,
+   packs at chance 0.5, the Australian football pack on its ten round year),
+   mean events a season:
+     nfl 2.76 to 2.86, nba 2.23 to 2.37, mlb 2.53 to 2.60, nhl 2.73 to 2.85,
+     college 3.29 to 3.36, gym 2.77 to 2.84, afl 2.18 to 2.25.
+   Seasons with no event at all: 0.0% (gym) to 6.7% (nba).
+   About 18,700 to 18,900 events dealt a run, 0 rule breaks at every seed.
+   The rarest event (nba_trade_demand, two conditions) reached 40% to 49% of
    ten season runs, so REACH_FLOOR is 25%.
 
    Negative controls, each must turn this harness red:
@@ -54,6 +64,16 @@
                               5 fails.
      GM_INBOX_CONTROL=random  the engine rolls chance on Math.random instead of
                               the seeded stream; section 6 fails.
+     GM_INBOX_CONTROL=shift   the kept cap drops the oldest message whether or
+                              not it was answered; section 3b fails.
+     GM_INBOX_CONTROL=opencap the engine forgets the open cap; section 3b fails.
+     GM_INBOX_CONTROL=maxcap  the engine keeps twelve; sections 3 and 3b fail.
+     GM_INBOX_CONTROL=oneshot the engine ignores oneShot; section 3 fails.
+     GM_INBOX_CONTROL=ungate  nfl_holdout loses its condition in both copies
+                              of the pack (a data edit section 3 cannot see);
+                              section 4 fails.
+     GM_INBOX_CONTROL=unclamp careerInbox stops clamping trust at 0 and 100;
+                              section 2 fails.
    Each control asserts the thing it mutates exists first, and refuses to run
    otherwise.
 
@@ -151,6 +171,8 @@ for (const rel of ROSTER_FILES) {
   const txt = fs.readFileSync(path.join(ROOT, rel), 'utf8');
   for (const m of txt.matchAll(/name:\s*['"]([A-Z][^'"]{1,40} [^'"]{2,40})['"]/g)) REAL.add(deaccent(m[1]));
 }
+/* Measured 2,236 names on 2026-10-03. The floor only proves the harvest
+   worked: a roster file that moved or changed shape drops it far below. */
 const REAL_FLOOR = 1500;
 if (REAL.size < REAL_FLOOR) fail(`only ${REAL.size} real names harvested (floor ${REAL_FLOOR}): the name scan would mean nothing`);
 else ok(`${REAL.size} real names harvested from ${ROSTER_FILES.length} roster files`);
@@ -166,7 +188,7 @@ const CONDUCT = /transfer request|bust-up|bust up|agents? for|leaked|reject(ed|s
 /* A voice is a role: a possessive role, an indefinite or definite one, or
    one of the club's departments. */
 const ROLE = /^(Your |His |A |The )[a-z]/;
-const DEPARTMENTS = new Set(['Ownership', 'Team doctor', 'Ticket office', 'Marketing', 'Compliance office', 'Membership team']);
+const DEPARTMENTS = new Set(['Ownership', 'Team doctor', 'Ticket office', 'Marketing', 'Compliance office']);
 const namesIn = text => { const flat = deaccent(text); return [...REAL].filter(n => flat.includes(n)); };
 
 if (CONTROL === 'quote') {
@@ -204,7 +226,11 @@ if (CONTROL === 'quote') {
   }
   console.log(`   scanned ${strings} strings across ${SEATS.length} packs, ${bad.length} findings`);
   for (const b of bad.slice(0, 12)) console.error(`     ${b}`);
-  if (strings < 350) fail(`only ${strings} strings scanned: the packs are thinner than this harness was written for`);
+  /* Measured 389 strings on 2026-10-03 (labels, beats, targets, every event's
+     text and voice, every option's label and reply). The floor, about four
+     fifths of that, proves the scan reached the packs' events without going
+     red when a pack drops an event or two. */
+  if (strings < 300) fail(`only ${strings} strings scanned: the packs are thinner than this harness was written for`);
   if (bad.length) fail(`${bad.length} legal findings in the packs`);
   else ok('no quote, no real name, no placeholder, every voice a role');
 }
@@ -480,10 +506,12 @@ console.log(`3b) The caps at their edges: ${EDGE_DESKS} silent and ${EDGE_DESKS}
 }
 
 console.log('4) Each pack deals a measured number of events a season');
-/* Mean events a season over 1,000 seasons, measured at seeds 1 to 5 (see the
-   header). The band is the measured range widened by at least 0.4 a side. */
+/* Mean events a season over 1,000 seasons, measured at seeds 1 to 10 (see the
+   header). The band is the measured range widened by 0.15 a side: about three
+   seed to seed spreads, and tight enough that one event losing its gate (the
+   ungate control, about +0.4 on the NFL) lands outside it. */
 const RATE_BANDS = {
-  nfl: [2.3, 3.3], nba: [1.8, 2.8], mlb: [2.1, 3.0], nhl: [2.3, 3.2], college: [2.9, 3.8], gym: [2.4, 3.3], afl: [2.4, 3.4],
+  nfl: [2.61, 3.01], nba: [2.08, 2.52], mlb: [2.38, 2.75], nhl: [2.58, 3.0], college: [3.14, 3.51], gym: [2.62, 2.99], afl: [2.03, 2.4],
 };
 for (const seat of SEATS) {
   const all = runs[seat].flatMap(r => r.perSeason);

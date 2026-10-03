@@ -212,4 +212,13 @@ describe('gmInbox packs', () => {
       expect(c.morale).toBeUndefined();
     }
   });
+  it('the Australian football pack fits the ten round manager: ten weeks, no money, no supporters', () => {
+    const p = GM_INBOX_PACKS.afl;
+    expect(gmSeasonWeeks(p)).toHaveLength(10);
+    for (const c of p.events.flatMap(e => e.choices)) {
+      expect(c.cash).toBeUndefined();
+      expect(c.popularity).toBeUndefined();
+    }
+    expect(p.events.filter(e => e.oneShot).length).toBeGreaterThan(0);
+  });
 });

@@ -118,4 +118,5 @@ export const MLB_GM_INBOX: GmInboxPack = {
      https://www.cbssports.com/mlb/news/mlb-hot-stove-rumors-and-news-roundup-for-january-16
    Holding a prospect down a few weeks can still buy an extra year of control:
      https://www.espn.com/mlb/story/_/id/33761266/the-end-mlb-service-manipulation-how-kris-bryant-paved-way-next-kris-bryant
-     https://pitcherlist.com/cba-variables-service-time */
+     https://frontofficesports.com/article/jackson-holliday-service-time/ (April 2024, under the 2022 CBA: a top prospect
+     called up well after the cutoff for a year of service; replaces a 2022 source written to the 2016 CBA) */

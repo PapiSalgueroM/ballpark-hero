@@ -62,7 +62,7 @@ export const NFL_GM_INBOX: GmInboxPack = {
     {
       id: 'nfl_cutdown_money', beat: 'cutdown', from: 'Your capologist', emoji: '📑',
       when: [{ fact: 'capSpace', op: '<', value: 5 }],
-      text: 'You are tight against the cap. Your capologist wants to ask a veteran to take less this year, and the room will not love it.',
+      text: 'You are tight against the cap. Your capologist wants to ask a veteran to take less this year. The saving lands in the budget, and the room will not love it.',
       choices: [
         { label: 'Ask for the pay cut', reply: 'Make the call.', karma: 2, cash: 1.5, morale: -3 },
         { label: 'Leave his deal alone', reply: 'Find the room somewhere else.', karma: -2, morale: 1 },

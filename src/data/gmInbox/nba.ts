@@ -54,7 +54,7 @@ export const NBA_GM_INBOX: GmInboxPack = {
     {
       id: 'nba_extension', beat: 'summer', from: 'Your capologist', emoji: '📑',
       when: [{ fact: 'starExtEligible', op: '==', value: true }],
-      text: 'Your best player is eligible for an extension this summer. Sign now at today\'s number, or wait and pay what he is worth next year.',
+      text: 'Your best player is eligible for an extension this summer. Open talks now and show him he is wanted, or wait a year and let him prove it.',
       choices: [
         { label: 'Open extension talks now', reply: 'Let us get it done this summer.', karma: 2, morale: 3 },
         { label: 'Wait a year', reply: 'Let him prove it first.', karma: -1, morale: -2 },

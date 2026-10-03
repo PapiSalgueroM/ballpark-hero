@@ -3,7 +3,12 @@
    freshman, a game day), so football and basketball programs share one pack.
    Every voice is a role and every man is a role, and the booster is a
    nameless generated person: nothing here names or quotes anybody. NIL and
-   the transfer portal appear as words, with no number, date or window. */
+   the transfer portal appear as words, with no number, date or window.
+   The money meter is the dynasties' own NIL budget, kept in points
+   (cfbDynasty's nil, roughly 40 to 100 a year; the basketball board prints
+   it as points too), so only NIL money moves it: a booster's collective
+   money and a starter's bigger deal. Coaching pay and recruiting trips are
+   not NIL, so they cost AD trust instead. */
 import type { GmInboxPack } from '@/lib/gmInbox';
 
 export const COLLEGE_GM_INBOX: GmInboxPack = {
@@ -27,8 +32,8 @@ export const COLLEGE_GM_INBOX: GmInboxPack = {
     winPct: { kind: 'num', min: 0, max: 1, per: 'week' },
   },
   targets: { freshman: 'Your freshman', flagged: 'The starter under review' },
-  meters: { trust: 'AD trust', fans: 'Fans', money: 'NIL fund', morale: 'Locker room', recruit: 'Recruit interest' },
-  money: { prefix: '$', suffix: 'M' },
+  meters: { trust: 'AD trust', fans: 'Fans', money: 'NIL budget', morale: 'Locker room', recruit: 'Recruit interest' },
+  money: { prefix: '', suffix: ' pts' },
   perWeek: 1,
   cooldown: 19,
   chance: 0.5,
@@ -46,8 +51,8 @@ export const COLLEGE_GM_INBOX: GmInboxPack = {
       when: [{ fact: 'boosterLoud', op: '==', value: true }, { fact: 'winPct', op: '<', value: 0.5 }],
       text: 'A big booster wants a say in who starts, and he has been generous to the NIL collective.',
       choices: [
-        { label: 'Hear him out', reply: 'Sit down with him.', karma: -3, cash: 0.5, morale: -2 },
-        { label: 'Keep those calls in the building', reply: 'Thanks, but no.', karma: 2, cash: -0.5, morale: 1 },
+        { label: 'Hear him out', reply: 'Sit down with him.', karma: -3, cash: 5, morale: -2 },
+        { label: 'Keep those calls in the building', reply: 'Thanks, but no.', karma: 2, cash: -5, morale: 1 },
       ],
     },
     {
@@ -63,16 +68,16 @@ export const COLLEGE_GM_INBOX: GmInboxPack = {
       id: 'col_game_day_visit', beat: 'season', from: 'Your recruiting coordinator', emoji: '📞',
       text: 'A top target is coming to a game this week. Roll out the full visit, or keep it simple?',
       choices: [
-        { label: 'The full treatment', reply: 'Make it a day he remembers.', karma: -1, cash: -0.5, recruit: 6 },
+        { label: 'The full treatment', reply: 'Make it a day he remembers.', karma: -2, recruit: 6 },
         { label: 'Keep it simple', reply: 'Let the program sell itself.', karma: 0, recruit: 2 },
       ],
     },
     {
       id: 'col_blackout', beat: 'stretch', from: 'Marketing', emoji: '📣',
       when: [{ fact: 'winPct', op: '>=', value: 0.5 }],
-      text: 'Rivalry week. The student section wants a blackout and marketing wants to sell shirts for it.',
+      text: 'Rivalry week. The student section wants a blackout and marketing is all for it.',
       choices: [
-        { label: 'Do the blackout', reply: 'Black it out.', karma: 0, cash: 0.25, popularity: 3 },
+        { label: 'Do the blackout', reply: 'Black it out.', karma: 0, popularity: 3 },
         { label: 'Keep it normal', reply: 'Just play the game.', karma: 1, popularity: -1 },
       ],
     },
@@ -81,7 +86,7 @@ export const COLLEGE_GM_INBOX: GmInboxPack = {
       when: [{ fact: 'coordinatorHot', op: '==', value: true }],
       text: 'A bigger school has called about your coordinator. Recruits are already asking whether he is staying.',
       choices: [
-        { label: 'Find him a raise', reply: 'Keep him here.', karma: -1, cash: -0.5, morale: 2, recruit: 2 },
+        { label: 'Find him a raise', reply: 'Keep him here.', karma: -2, morale: 2, recruit: 2 },
         { label: 'Let him interview', reply: 'He has earned the chance.', karma: 1, morale: -2, recruit: -3 },
       ],
     },
@@ -90,7 +95,7 @@ export const COLLEGE_GM_INBOX: GmInboxPack = {
       when: [{ fact: 'starterUnhappy', op: '==', value: true }],
       text: 'Your best starter wants a bigger NIL deal, and his representative says the transfer portal is the other option.',
       choices: [
-        { label: 'Find more NIL money', reply: 'We will find it.', karma: -1, cash: -0.5, morale: 2 },
+        { label: 'Find more NIL money', reply: 'We will find it.', karma: -1, cash: -10, morale: 2 },
         { label: 'Hold the line', reply: 'The number is the number.', karma: 2, morale: -2, popularity: -2 },
       ],
     },
@@ -99,7 +104,7 @@ export const COLLEGE_GM_INBOX: GmInboxPack = {
       when: [{ fact: 'commitWavering', op: '==', value: true }],
       text: 'Your top commit is taking calls from a rival program. One more home visit could settle it.',
       choices: [
-        { label: 'Fly out for a home visit', reply: 'Book the flight.', karma: 0, cash: -0.25, recruit: 8 },
+        { label: 'Fly out for a home visit', reply: 'Book the flight.', karma: -1, recruit: 8 },
         { label: 'Trust the commitment', reply: 'He gave his word.', karma: 0, recruit: -5 },
       ],
     },
