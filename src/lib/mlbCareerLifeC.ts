@@ -40,6 +40,11 @@
      offered back to his old club; a player on the 40 man is protected.
      mlb.com/glossary/transactions/rule-5-draft ;
      baseballamerica.com/stories/explaining-the-rule-5-draft
+   - Holding a ready player in the minors for the first few weeks of his
+     first season can push his free agency back a full year: a longstanding
+     practice, true in 2004 and now (the card gives no day count).
+     cbssports.com/mlb/news/mlb-service-time-manipulation-why-longstanding-baseball-practice-is-a-major-issue-in-2021 ;
+     cronkitenews.azpbs.org/2021/05/17/service-time-manipulation-debate-rages-as-mlb-teams-hold-off-on-bringing-up-top-prospects
    - Rosters still expand in September (to 28 since 2020, up to 40 before),
      so the card says they expand and gives no size. The three batter
      minimum for pitchers began in 2020, so its card waits for 2020 in a
