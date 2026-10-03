@@ -168,6 +168,7 @@ function sectionOne() {
   const everyone = leagues.flatMap(l => l.clubs);
   const sorted = [...everyone].sort().join('|');
   let edit = null;
+  const startFailures = failures;
   let steps = 0;
   let moved = 0;
   const STEPS = 200;
@@ -187,7 +188,7 @@ function sectionOne() {
     ok(JSON.stringify(we.validWorldEdit(edit)) === JSON.stringify(edit), `step ${i}: the edit does not validate`);
     ok(we.editedLeagueIdOf(edit, a) !== null && we.editedLeagueIdOf(edit, b) !== null, `step ${i}: a swapped club is in no league`);
     moved = we.worldEditMoves(edit).length;
-    if (failures > 5) break;
+    if (failures - startFailures > 5) break;
   }
   ok(steps > STEPS / 2, `only ${steps} of ${STEPS} draws made a swap`);
   console.log(`   ${steps} swaps applied and checked one at a time, ${moved} clubs away from home at the end`);

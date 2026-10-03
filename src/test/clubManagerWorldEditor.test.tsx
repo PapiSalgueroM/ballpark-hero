@@ -3,7 +3,7 @@
  * an edit (startCareer). scripts/simWorldEditor.mjs plays full seasons on
  * edited worlds; this file pins the swap arithmetic and the guard rails.
  */
-import { describe, it, expect, afterEach } from 'vitest';
+import { describe, it, expect, afterEach, vi } from 'vitest';
 import {
   REAL_LEAGUES, leagueOf, startCareer, registerLeagueOverrides, engineRegistrations,
 } from '@/lib/clubManager';
@@ -12,8 +12,15 @@ import {
   editedLeagueIdOf, realLeagueIdOf,
 } from '@/lib/clubManagerWorldEdit';
 import type { WorldEdit } from '@/lib/clubManagerWorldEdit';
-import { render, fireEvent, cleanup } from '@testing-library/react';
+import { render, fireEvent, cleanup, renderHook, waitFor, act } from '@testing-library/react';
 import { WorldEditorScreen } from '@/components/club-manager/WorldEditorScreen';
+import { useClubManager } from '@/hooks/useClubManager';
+
+vi.mock('@/lib/completions', () => ({
+  recordCompletion: vi.fn(),
+  recordActivity: vi.fn(),
+  recordStreakDay: vi.fn(),
+}));
 
 const sizeOf = (id: string) => REAL_LEAGUES.find(l => l.id === id)!.clubs.length;
 const allClubs = (edit: WorldEdit | null) => REAL_LEAGUES.flatMap(l => editedClubsOf(edit, l.id));
@@ -147,5 +154,23 @@ describe('WorldEditorScreen', () => {
     fireEvent.click(view.getByText('Cancel'));
     expect(view.getByLabelText('Move Rangers')).toBeTruthy();
     expect(calls).toBe(0);
+  });
+});
+
+describe('useClubManager with an edit', () => {
+  it('starts the picked club on the edited world, with no network', async () => {
+    vi.stubGlobal('fetch', vi.fn(() => Promise.reject(new Error('no network in this test'))));
+    localStorage.clear();
+    const r = renderHook(() => useClubManager());
+    await waitFor(() => expect(r.result.current.phase).toBe('clubSelect'));
+    const e = swapClubs(null, 'Celtic', 'Brentford');
+    act(() => r.result.current.chooseClub('Celtic'));
+    act(() => r.result.current.confirmClub(undefined, undefined, undefined, e));
+    expect(r.result.current.phase).toBe('hub');
+    expect(r.result.current.career?.leagueOverrides).toEqual(e);
+    expect(r.result.current.career?.leagueClubs).toContain('Arsenal');
+    expect(leagueOf('Celtic').id).toBe('premier');
+    r.unmount();
+    vi.unstubAllGlobals();
   });
 });
