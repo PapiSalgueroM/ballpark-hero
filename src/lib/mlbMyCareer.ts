@@ -42,6 +42,7 @@ import type { RivalryChoiceCard } from './careerRivalryChoices';
 import { countOf, mlbCareerStatBullet, mlbMajorAward, type MlbCareerSums } from './usCareerStatLine';
 import { raiseWithinPotential, ratingRaiseNote } from './careerHeadroom';
 import { applyUsCareerAnnualBenefits } from './usCareerAnnualBenefits';
+import { careerRecoveryRisk } from './usCareerRecovery';
 /* Round 422: the share of gross pay that actually reaches the bank, after tax,
    agent and living. It was already the number this file used to turn career
    earnings into net worth; it is named here so the yearly banking and the
@@ -440,7 +441,7 @@ function gamesFor(c: MlbCareerState, rng: () => number): { games: number; note: 
   const isRp = c.pos === 'RP';
   const full = isSp ? 32 : isRp ? 62 + Math.floor(rng() * 10) : 155 + Math.floor(rng() * 8);
   const floorGames = isSp ? 8 : isRp ? 20 : 45;
-  const risk = (1 - c.archetype.durability) * 0.55 + (100 - c.health) / 250;
+  const risk = careerRecoveryRisk('mlb', c.purchased, (1 - c.archetype.durability) * 0.55 + (100 - c.health) / 250);
   if (rng() < risk) {
     const frac = 0.35 + rng() * 0.4;
     return { games: Math.max(floorGames, Math.round(full * frac)), note: (isSp || isRp) && rng() < 0.4 ? 'The elbow. Season shortened, surgery whispers.' : 'Injured list stints ate the season.' };
@@ -921,7 +922,7 @@ export const MLB_SPEND_ITEMS: MlbSpendItem[] = [
   { id: 'team_stake', name: 'Minority Stake In A Franchise', emoji: '🏆', category: 'invest', cost: 40, desc: 'A real piece of a real team, 40M', oneTime: true, minNetWorth: 70, effect: 'The retirement plan, fanbase +10' },
   // Body
   { id: 'chef_mlb', name: 'Private Chef', emoji: '👨‍🍳', category: 'body', cost: 0, yearly: 0.15, desc: 'Every meal built for a baseball season, 150k a year', oneTime: true, effect: 'Health +4 a year' },
-  { id: 'recovery_mlb', name: 'Recovery Suite', emoji: '🧊', category: 'body', cost: 2, yearly: 0.12, desc: 'Cryo, compression, the whole circus, 2M', oneTime: true, minNetWorth: 3, effect: 'Injury risk down' },
+  { id: 'recovery_mlb', name: 'Recovery Suite', emoji: '🧊', category: 'body', cost: 2, yearly: 0.12, desc: 'Cryo, compression, the whole circus, 2M. Injuries can still happen.', oneTime: true, minNetWorth: 3, effect: '25% lower simulated injury risk' },
   { id: 'shot_doctor', name: 'Private Hitting Coach', emoji: '🎯', category: 'body', cost: 0, yearly: 0.2, desc: 'The guy who rebuilt three batting titles, 200k a year', oneTime: true, effect: 'Rating +1 each offseason through age 26, up to your ceiling' },
   { id: 'sleep_mlb', name: 'Sleep Program', emoji: '😴', category: 'body', cost: 0.7, desc: 'Turns out most of it is sleep, 700k', oneTime: true, effect: 'Health +8' },
   { id: 'psych_mlb', name: 'Sports Psychologist', emoji: '🧠', category: 'body', cost: 0, yearly: 0.12, desc: 'The part nobody used to talk about, 120k a year', oneTime: true, effect: 'Morale +8 on hire' },
