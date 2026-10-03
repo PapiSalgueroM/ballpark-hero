@@ -216,8 +216,11 @@ export function runHallBallot(rules: HallRules, lines: HallLines, cand: { key: s
   if (cand.score < lines.hofLine * HALL_GAME_RULES.nominationShare) {
     return { ...base, outcome: "notOnBallot", ballots, inductedClass: null, firstBallot: false };
   }
+  // The opening share climbs steeply with the score. A career just over the
+  // nomination line opens in low single figures, so where the Hall drops a
+  // candidate under a floor, the bottom of the ballot really does drop off.
   const reach = Math.min(1, Math.max(0, cand.score / lines.hofLine));
-  let share = (t - 10) * reach * reach * (0.6 + 0.4 * rng());
+  let share = (t - 10) * reach ** 4 * (0.3 + 0.7 * rng());
   for (let i = 0; i < maxBallots; i += 1) {
     if (i > 0) share = Math.min(t - 1, Math.max(0, share + 8 * rng() - 3));
     // The floor is read off the share the card prints, so 4.96 (shown 5.0) stays on.

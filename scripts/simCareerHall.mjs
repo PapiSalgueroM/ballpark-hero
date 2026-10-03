@@ -7,17 +7,27 @@
    and exits with the worst code; give a sport to keep a run short.
 
    WHAT IT HOLDS, per sport, each with a control that must turn it red:
-     1. iff        inducted if and only if the sport's own legacyOf says hof.
-                   Control everyonein.
+     1. iff        inducted if and only if the sport's own legacyOf says hof,
+                   read straight from the engine (exported by the bundle
+                   entry), never through the Hall binding, and the record's
+                   score is that legacyOf score. Controls everyonein (the
+                   ballot) and bindhof (the binding).
+     1b. outcome   every career outside the Hall: off the ballot exactly under
+                   half the Hall line; on it, a Hall with a ballot limit drops
+                   him (early only under the stay floor, and no earlier ballot
+                   under it), one without a limit keeps him waiting. Where the
+                   Hall has a stay floor, a real share falls off early.
+                   Controls outcomeswap, nominationgone, oldcurve (mlb only).
      2. table      the data file's rules equal the audit table in
                    docs/audits/US-HALL-RULES-2026-10.md, and every career's
-                   first class is its last season plus that table's offset.
-                   Control waitoff.
+                   first class is its last season, read off the save, plus
+                   that table's offset. Control waitoff.
      3. rises      the first ballot share rises with the score. Measured two
-                   ways: on the real careers (the top third of the Hall of
-                   Famers by score against the bottom third), and on a ladder
-                   of synthetic candidates walked step by step up the Hall
-                   band. Control flatfirst.
+                   ways: on the real careers, at every one of the nine cuts
+                   between score deciles of the Hall of Famers (all deciles
+                   above the cut against all below), and on a ladder of
+                   synthetic candidates walked step by step up the Hall band.
+                   Control flatfirst.
      4. promise    a score at the verdict's first ballot line always goes in
                    first ballot. Control nopromise.
      5. keyed      no Math.random draw while the Hall record and the speech
@@ -25,18 +35,32 @@
                    Control mathrandom.
      6. sides      every elected share is at or over the threshold, every
                    other share under it, no more ballots than the Hall allows,
-                   and an early fall off is under the floor. Control sharesides.
+                   and an early fall off is under the floor. Controls
+                   sharesides, and shownraw (mlb only: the fall off reads the
+                   raw share, not the one the card prints).
      7. talk       the retirement talk comes exactly when an independent
                    reading of the rule says, and reaches a real share of
                    careers before the hard stop. Control notalk.
      8. jersey     the jersey goes to the club with the most seasons (ties to
                    games, then the first club). Control jerseyfirst.
 
+   A control run exits 1 only when the check it targets is red (FIRED), and 0
+   when it is not (DID NOT FIRE), whatever else went red.
+
    BANDS, from measured headroom. Measured 2026-10-03 at 2000 careers a sport,
    the default seed plus SIM_SEED 1 to 5 (six runs a sport):
-     rises, real careers: first ballot share of the top third of Hall of
-       Famers by score minus the bottom third, in points. Lowest of six:
-       nfl 55.2, nba 36.6, mlb 55.7, nhl 55.1. Band: at least 20.
+     rises, real careers: at each of the nine decile cuts, the first ballot
+       share above the cut minus below it. Smallest cut of six runs:
+       nfl 0.303, nba 0.136, mlb 0.271, nhl 0.350. Band: every cut at least
+       0.06. (A single decile against its neighbour is too small a sample:
+       mlb's second decile came out under its first in the base run.)
+     outcome, early fall off where the Hall has a stay floor (mlb): early
+       fall offs over careers on the ballot outside the Hall, 25.7 to 30.0
+       percent in six runs (2 in 1053 before the review's curve change).
+       Band: at least 10 percent.
+     sides, the floor sweep (mlb): synthetic ballots shown at exactly the
+       floor, 379 base (371 under shownraw, which then misses 178). Band: at
+       least 100, so the 4.96 shown as 5.0 guard is really exercised.
      rises, ladder: ten steps up the Hall band, 4000 synthetic candidates a
        step, every step must rise. The expected step is 0.07; the smallest
        step of all 24 seeded runs was 0.036 (nhl). Band: every step over 0.015.
@@ -96,6 +120,10 @@ const CONTROLS = {
   flatfirst: { file: 'careerHallOfFame.ts', from: 'return f + (1 - f) * bandFraction(score, lines);', to: 'return f;' },
   nopromise: { file: 'careerHallOfFame.ts', from: 'if (score >= lines.firstBallotScore) return 1;', to: 'if (score >= lines.firstBallotScore) return 0.5;' },
   mathrandom: { file: 'careerHallOfFame.ts', from: 'const rng = keyedRng(`hall:${rules.sport}:${cand.key}`);', to: 'const rng = Math.random;' },
+  // MLB only (the one Hall with a stay floor): the opening share curve before the review, under which almost nobody fell off early.
+  oldcurve: { file: 'careerHallOfFame.ts', from: 'let share = (t - 10) * reach ** 4 * (0.3 + 0.7 * rng());', to: 'let share = (t - 10) * reach * reach * (0.6 + 0.4 * rng());' },
+  // MLB only (the one Hall with a stay floor): the fall off reads the raw share, not the one the card prints.
+  shownraw: { file: 'careerHallOfFame.ts', from: 'if (rules.stayFloor !== null && shown < rules.stayFloor) {', to: 'if (rules.stayFloor !== null && share < rules.stayFloor) {' },
   sharesides: { file: 'careerHallOfFame.ts', from: 'const final = Math.min(99.7, t + ', to: 'const final = Math.min(99.7, t - 20 + ' },
   notalk: { file: 'careerRetirement.ts', from: 'if (drop >= rule.dropFromPeak) return', to: 'if (false) return' },
   jerseyfirst: { file: 'careerHallOfFame.ts', from: 't.seasons > best.seasons ||', to: 't.seasons < best.seasons ||' },
@@ -201,6 +229,18 @@ const inducted = careers.filter(c => c.rec.outcome === 'inducted').sort((a, b) =
 const third = Math.floor(inducted.length / 3);
 const fbLow = share(inducted.slice(0, third), c => c.rec.firstBallot);
 const fbHigh = share(inducted.slice(inducted.length - third), c => c.rec.firstBallot);
+/* Score deciles of the real Hall of Famers, and every cut between two of
+   them: the first ballot share of all the deciles above the cut minus all
+   those below. Each of the nine cuts must open a gap, so the share rises
+   across the whole ladder of deciles, and neither side of a cut is one small
+   decile on its own. */
+const DECILES = 10;
+const decile = k => inducted.slice(Math.floor((k * inducted.length) / DECILES), Math.floor(((k + 1) * inducted.length) / DECILES));
+const decileShares = Array.from({ length: DECILES }, (_, k) => share(decile(k), c => c.rec.firstBallot));
+const decileCuts = Array.from({ length: DECILES - 1 }, (_, k) => {
+  const cut = Math.floor(((k + 1) * inducted.length) / DECILES);
+  return share(inducted.slice(cut), c => c.rec.firstBallot) - share(inducted.slice(0, cut), c => c.rec.firstBallot);
+});
 
 // The audit table, read from the file the data files cite.
 const doc = readFileSync(path.join(ROOT, 'docs/audits/US-HALL-RULES-2026-10.md'), 'utf8');
@@ -243,6 +283,23 @@ for (const c of careers) {
   });
   const early = r.outcome === 'fellOff' && rules.ballotYears !== null && r.ballots.length < rules.ballotYears;
   if (early && !(rules.stayFloor !== null && r.ballots.at(-1).share < rules.stayFloor)) sideMiss += 1;
+}
+
+/* The stay floor read on 20000 synthetic candidates from the nomination line
+   up, so a share shown at exactly the floor (a raw 4.96 printed 5.0 stays on)
+   comes up hundreds of times a run instead of once or twice in the careers. */
+let atFloor = 0;
+if (rules.stayFloor !== null) {
+  for (let j = 0; j < 20000; j += 1) {
+    const score = lines.hofLine * (0.5 + 0.3 * ((j % 200) / 200));
+    const r = eng.runHallBallot(rules, lines, { key: `floor:${SEED}:${j}`, hof: false, score, lastSeasonYear: 2030 });
+    r.ballots.forEach((b, k) => {
+      if (b.share === rules.stayFloor) atFloor += 1;
+      if (k < r.ballots.length - 1 && b.share < rules.stayFloor) sideMiss += 1;
+    });
+    const early = r.outcome === 'fellOff' && rules.ballotYears !== null && r.ballots.length < rules.ballotYears;
+    if (early && !(r.ballots.at(-1).share < rules.stayFloor)) sideMiss += 1;
+  }
 }
 
 // The jersey, read independently: most seasons, ties to games, then the first club.
@@ -299,28 +356,31 @@ console.log(`simCareerHall ${SPORT}: ${careers.length} careers, ${crashes} crash
 console.log(`  hof ${pct(inducted.length, careers.length)}% (${inducted.length}), first ballot ${pct(fbAll * 1000, 1000)}% of them; bottom third ${pct(fbLow * 1000, 1000)}%, top third ${pct(fbHigh * 1000, 1000)}%`);
 console.log(`  outcomes ${JSON.stringify(outcomes)}; jerseys ${jerseys}; talk reached ${pct(talked * 1000, 1000)}% of careers`);
 console.log(`  ladder ${ladder.map(v => v.toFixed(3)).join(' ')}; smallest step ${Math.min(...ladderSteps).toFixed(3)}`);
+console.log(`  deciles ${decileShares.map(v => v.toFixed(2)).join(' ')}; cuts ${decileCuts.map(v => v.toFixed(2)).join(' ')}; smallest cut ${Math.min(...decileCuts).toFixed(3)}`);
 console.log(`  misses: iff ${iffMiss}, outcome ${outcomeMiss}, table [${tableDiffs.join(',')}], offset ${offsetMiss}, promise ${promiseMiss}/${promiseN}, draws ${hallDraws}, notSame ${notSame}, sides ${sideMiss}, talk ${talkMismatch}+${talkBeforeAge}, jersey ${jerseyMiss}`);
 const med = a => { const s = [...a].sort((x, y) => x - y); return s.length ? s[Math.floor(s.length / 2)] : null; };
 console.log(`  talk timing: talks a career, median ${med(careers.map(c => c.talks))}; first talk at ${med(careers.filter(c => c.firstTalkAge !== null).map(c => c.firstTalkAge))}; career ends at ${med(careers.map(c => c.finalAge))}; non finite scores ${careers.filter(c => !Number.isFinite(c.score)).length}`);
 
 /* ─── Check ───────────────────────────────────────────────────────────── */
-const BAND = { minInducted: 0.05, riseGap: 0.20, ladderStep: 0.015, talkReach: 0.70 };
+const BAND = { minInducted: 0.05, decileCut: 0.06, ladderStep: 0.015, talkReach: 0.70, earlyFall: 0.10, atFloor: 100 };
+const smallestCut = Math.min(...decileCuts);
+const fellEarlyEnough = rules.stayFloor === null || earlyFalls >= BAND.earlyFall * onBallotOut;
 const checks = [
   ['crashes', crashes === 0 && careers.length === CAREERS, `${crashes} crashed of ${CAREERS}`],
   ['iff', iffMiss === 0 && inducted.length >= BAND.minInducted * careers.length, `${iffMiss} disagree with the engine's own legacyOf, ${inducted.length} inducted`],
-  ['outcome', outcomeMiss === 0 && offBallot > 0 && onBallotOut > 0, `${outcomeMiss} careers outside the Hall with the wrong outcome; ${offBallot} off the ballot, ${onBallotOut} on it, ${earlyFalls} early fall offs`],
+  ['outcome', outcomeMiss === 0 && offBallot > 0 && onBallotOut > 0 && fellEarlyEnough, `${outcomeMiss} careers outside the Hall with the wrong outcome; ${offBallot} off the ballot, ${onBallotOut} on it, ${earlyFalls} early fall offs${rules.stayFloor === null ? '' : ` (needs ${100 * BAND.earlyFall} percent of those on it)`}`],
   ['table', tableDiffs.length === 0 && offsetMiss === 0, `rules off the audit table: [${tableDiffs.join(',')}], ${offsetMiss} careers on the wrong first class`],
-  ['rises', fbHigh - fbLow >= BAND.riseGap && Math.min(...ladderSteps) > BAND.ladderStep, `top third minus bottom third ${(100 * (fbHigh - fbLow)).toFixed(1)} points (needs ${100 * BAND.riseGap}), smallest ladder step ${Math.min(...ladderSteps).toFixed(3)} (needs over ${BAND.ladderStep})`],
+  ['rises', smallestCut >= BAND.decileCut && Math.min(...ladderSteps) > BAND.ladderStep, `smallest of the nine decile cuts ${smallestCut.toFixed(3)} (needs ${BAND.decileCut}), smallest ladder step ${Math.min(...ladderSteps).toFixed(3)} (needs over ${BAND.ladderStep})`],
   ['promise', promiseMiss === 0 && promiseN >= 500, `${promiseMiss} of ${promiseN} promised first ballots missed`],
   ['keyed', hallDraws === 0 && notSame === 0, `${hallDraws} Math.random draws, ${notSame} records that changed on a second run`],
-  ['sides', sideMiss === 0, `${sideMiss} ballots on the wrong side of a rule`],
+  ['sides', sideMiss === 0 && (rules.stayFloor === null || atFloor >= BAND.atFloor), `${sideMiss} ballots on the wrong side of a rule${rules.stayFloor === null ? '' : `, ${atFloor} synthetic ballots shown at exactly the floor`}`],
   ['talk', talkMismatch === 0 && talkBeforeAge === 0 && talked >= BAND.talkReach, `${talkMismatch} talks off the rule, ${talkBeforeAge} before the age, reached ${(100 * talked).toFixed(1)} percent (needs ${100 * BAND.talkReach})`],
   ['jersey', jerseyMiss === 0 && jerseys > 0, `${jerseyMiss} jerseys off the rule, ${jerseys} retired`],
 ];
 for (const [name, ok, detail] of checks) console.log(`  ${ok ? 'ok  ' : 'FAIL'} ${name}: ${detail}`);
 const red = checks.filter(c => !c[1]).map(c => c[0]);
 if (CONTROL) {
-  const WANT = { everyonein: 'iff', bindhof: 'iff', outcomeswap: 'outcome', nominationgone: 'outcome', waitoff: 'table', flatfirst: 'rises', nopromise: 'promise', mathrandom: 'keyed', sharesides: 'sides', notalk: 'talk', jerseyfirst: 'jersey' }[CONTROL];
+  const WANT = { everyonein: 'iff', bindhof: 'iff', outcomeswap: 'outcome', nominationgone: 'outcome', oldcurve: 'outcome', waitoff: 'table', shownraw: 'sides', flatfirst: 'rises', nopromise: 'promise', mathrandom: 'keyed', sharesides: 'sides', notalk: 'talk', jerseyfirst: 'jersey' }[CONTROL];
   console.log(`simCareerHall ${SPORT} CONTROL ${CONTROL}: wanted ${WANT} red, red [${red.join(',')}], ${red.includes(WANT) ? 'FIRED' : 'DID NOT FIRE'}`);
   // Exit 1 only when the check this control targets went red, so the exit
   // code alone proves the control hit its own check. Any other red is printed.
