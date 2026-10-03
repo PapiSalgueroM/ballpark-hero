@@ -1,3 +1,18 @@
+## Codex1000 published, 2026-10-03
+
+The animated Buzzer Beater court is live at douknowball.com. Lovable confirmed
+publication of accepted PR118 merge1ce881ac; public entry is index-CK7eZyyX.js.
+The final refreshed court and Shot Lab workflows passed against the same tree
+as the actual merge. Public play confirmed the new artwork, paused flight,
+resume, retry and changed-power comparison. No public-tab errors were recorded.
+Receipt: docs/audits/ROUND1000-VERIFICATION.md. Phone and reduced-motion proof
+comes from remote native profiles; the public smoke check used desktop layout.
+
+Codex retains narrow publication ownership while isolated1001/1002 finish their
+final remote checks. PR121 head75027bb2 and PR122 head433d0c23 include1000/main.
+Neither puzzle update is merged or live yet. Claude988/manager lanes remain
+separate. No local runtime gates or production DB probes. Held drafts/seven
+stashes are intact. Next free1003; AdSense/indexing submissions stay deferred.
 ## Codex998/999 published, 2026-10-03
 
 The recovered publisher confirmed "Your website was updated". Public build

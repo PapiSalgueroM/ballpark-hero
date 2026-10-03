@@ -1,6 +1,39 @@
 # Round1000: Buzzer Beater court verification
 
-2026-10-03. Verified in isolated PR118. Not merged or published.
+2026-10-03. PR118 merged and published. The later receipt below supersedes the historical publication boundary at the end.
+
+## Final integration and live receipt
+
+Candidate7125dc18bb1c6a5a170c2bf964f5988998a0c99e includes the unchanged
+accepted product and current main documentation. Refreshed court37134629322,
+job111236537181, and Shot Lab37134629333, job111236537566, passed all their
+type/build, outcome/control, regression, built-reader and native gates.
+CI merge4723e862d9dd45d5fb9f12ea12a58659da07ef0a and actual merge
+1ce881ac2620c39e064581ae4e47bbbebdc1922a share tree
+cd0228c97218bb862193bce3ee97c7653f013ddb.
+
+Downloaded court artifact11278701174 matched SHA256
+821b52717a27386e772ce5fcbbd42d1243aacfd67b8140d15f80e1116c4572b5.
+Shot Lab artifact11278456589 matched SHA256
+281b763fd45548079fd5421ec76d3323ab112f2d932eccc8c7efd584c8837661.
+The final native report confirms all six before/after profiles, with the three
+effective geometry controls. The refreshed longest-shot image was inspected.
+Files are in `%TEMP%/dukb-court1000-ci-2026-10-03/7125dc18/`.
+
+Lovable history showed the synchronized Round1000 merge and its final Publish
+changes action confirmed "Your website was updated". The public domain now
+loads `index-CK7eZyyX.js`. Normal public UI play confirmed the actual new artwork,
+a stable ball position while paused, resume, a completed shot, retry, changed
+Power40 to39 and both retained comparison cards. The first release crossed
+211cm long, the second203cm long, consistent with the shown change. No public
+tab error was recorded. This live check used desktop layout; phone/reduced-motion
+coverage comes from the remote native profiles, not a claim of extra live runs.
+Actual public images are saved as `buzzer-court1000-live.png` and
+`buzzer-court1000-live-court.png` in this chat's visualization directory.
+
+The1000 publication is complete. Codex retains the narrow publication slot for
+isolated1001/1002 after their final remote acceptance. No local runtime gates,
+production DB probes, paid actions or AdSense/indexing submissions were made.
 
 ## What changes for a player
 
