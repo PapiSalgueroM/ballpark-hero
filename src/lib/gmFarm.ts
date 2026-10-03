@@ -159,7 +159,8 @@ export const FARM_RULES: Record<FarmSport, FarmRules> = {
         src('https://www.sbnation.com/2016/9/3/12773904/nfl-practice-squad-players-roster-rules-eligibility-primer', 'A practice squad player can be signed by another team that adds him to its 53 man roster.'),
       ],
       claimOrder: [
-        src('https://www.profootballrumors.com/waivers/', 'Waiver priority runs by the standings, worst first; the previous season early on.'),
+        src('https://www.profootballrumors.com/waivers/', "Waiver priority is determined by the previous season's standings: the worst club first, the champion last."),
+        src('https://www.profootballnetwork.com/nfl-waiver-order/', 'The NFL orders waiver claims in inverse order of the win-loss record.'),
       ],
     },
   },
@@ -181,7 +182,8 @@ export const FARM_RULES: Record<FarmSport, FarmRules> = {
         src('https://www.hoopsrumors.com/2026/07/2026-27-nba-two-way-contract-tracker.html', 'Two way players can be active for up to 50 of the 82 regular season games.'),
       ],
       claimOrder: [
-        src('https://www.hoopsrumors.com/hoops-rumors-glossary-waivers', 'When two clubs claim, the worst record takes priority; a man nobody claims becomes a free agent.'),
+        src('https://www.hoopsrumors.com/hoops-rumors-glossary-waivers', "The worst record takes priority (before December 1, last season's records); a man nobody claims becomes a free agent."),
+        src('http://www.cbafaq.com/salarycap17.htm', 'If more than one team claims a man on waivers, the team with the worst record gets him.'),
       ],
     },
   },
@@ -207,7 +209,8 @@ export const FARM_RULES: Record<FarmSport, FarmRules> = {
         src('https://www.blessyouboys.com/2020/6/29/21306077/roster-rules-for-the-2020-major-league-baseball-season', 'Three years in which a man can be optioned; out of options he must clear waivers to go down.'),
       ],
       claimOrder: [
-        src('https://www.mlb.com/glossary/transactions/outright-waivers', 'Claiming priority is reverse winning percentage; a man who clears may be assigned outright to the minors.'),
+        /* One source: a second host was not found in the session that added it. Owed. */
+        src('https://www.mlb.com/glossary/transactions/outright-waivers', 'Claiming priority is reverse winning percentage, ties to the lower percentage last season; a man who clears may be assigned outright.'),
       ],
     },
   },
@@ -225,7 +228,8 @@ export const FARM_RULES: Record<FarmSport, FarmRules> = {
         src('https://web.archive.org/web/2023id_/https://www.capfriendly.com/waivers-faq', 'The same table: a skater signed at 18 needs waivers after 160 NHL games or 5 seasons.'),
       ],
       claimOrder: [
-        src('https://web.archive.org/web/2016id_/http://www.nhl.com/nhl/en/v3/ext/CBA2012/NHL_NHLPA_2013_CBA.pdf', 'Section 13.19: the claiming club with the lowest percentage of possible points.'),
+        /* One source, the league's own agreement: a second host was not found in the session that added it. Owed. */
+        src('https://web.archive.org/web/2016id_/http://www.nhl.com/nhl/en/v3/ext/CBA2012/NHL_NHLPA_2013_CBA.pdf', "Section 13.19: the lowest percentage of possible points; outside the regular season or before November 1, last season's final standing; ties to the lower winning percentage."),
       ],
     },
   },

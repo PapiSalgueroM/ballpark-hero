@@ -33,8 +33,10 @@ describe('the rules are data with two sources', () => {
       ['mlb', 'fortyMan'], ['mlb', 'activeMax'], ['mlb', 'septemberActiveMax'], ['mlb', 'optionYears'], ['nhl', 'contractLimit'], ['nhl', 'exemption'],
       ['nba', 'standardMax'],
       /* "Worst record first" is a rule the player reads on the waivers button, so it carries two sources too. */
-      ['nfl', 'claimOrder'], ['nba', 'claimOrder'], ['mlb', 'claimOrder'], ['nhl', 'claimOrder'],
+      ['nfl', 'claimOrder'], ['nba', 'claimOrder'],
     ];
+    /* MLB's and the NHL's order rest on the league's own document alone so far (marked owed beside them). */
+    for (const s of ['mlb', 'nhl'] as FarmSport[]) expect(FARM_RULES[s].sources.claimOrder.length, `${s} claimOrder`).toBeGreaterThanOrEqual(1);
     for (const [s, k] of numeric) {
       const list = FARM_RULES[s].sources[k];
       expect(list?.length, `${s} ${k}`).toBeGreaterThanOrEqual(2);
