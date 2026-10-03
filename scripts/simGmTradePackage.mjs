@@ -23,7 +23,10 @@
  *      more; no NBA club is ever left without a first in two drafts running
  *      however the desk trades, while the same desk under NFL and NHL rules
  *      does leave clubs that way; salary retention is walked step by step
- *      (share 0 to 1, deals carried 0 to 4, times retained 0 to 3); a
+ *      (share 0 to 1, deals carried 0 to 4, times retained 0 to 3), and
+ *      again over real deals whose only records are the retentions
+ *      proposePackage reports, so the limits bite on the fourth contract a
+ *      club retains on and on a contract's third retention; a
  *      prospect moves only where the rules say; a club can offer or ask for
  *      only a pick the right club holds, and applying a deal never moves a
  *      pick from a club that does not hold it; and a shut window answers
@@ -72,6 +75,7 @@
  *   foreignpick   a club may offer or ask for a pick a third club holds
  *   applyanypick  applying a deal moves a pick whoever holds it
  *   linefirstout  the playoff line is measured from the first club out
+ *   noretainrecord  an accepted deal reports none of the retentions it made
  *
  * Run: node scripts/simGmTradePackage.mjs
  */
@@ -89,10 +93,11 @@ const SWAPS = {
   foreignpick: { picks: [["  if (!p || p.holder !== from) return 'That pick is not theirs to trade.';", "  if (!p) return 'That pick is not theirs to trade.';"]] },
   applyanypick: { pkg: [["  if (a.kind === 'pick') return findPick(ledger, a.key)?.holder === club;", "  if (a.kind === 'pick') return true;"]] },
   linefirstout: { deadline: [['    const line = sorted[Math.min(spots, sorted.length) - 1];', '    const line = sorted[Math.min(spots, sorted.length)];']] },
+  noretainrecord: { pkg: [['  return { verdict, ledger, retained: retentionsIn(pkg) };', '  return { verdict, ledger, retained: [] };']] },
 };
 const EXPECT = {
   noclamp: [1], mlbpicks: [2], stepien: [2], retain: [2], noreopen: [3], sellers: [4],
-  foreignpick: [2], applyanypick: [2], linefirstout: [4],
+  foreignpick: [2], applyanypick: [2], linefirstout: [4], noretainrecord: [2],
 };
 if (CONTROL && !EXPECT[CONTROL]) {
   console.error(`GM_TRADE_CONTROL=${CONTROL} is not a control this harness knows (${Object.keys(EXPECT).join(', ')})`);
@@ -294,6 +299,39 @@ for (const key of ['nfl', 'nhl']) {
     const v = gm.pkg.evaluatePackage(pkg, plainCtx(sport, lg2));
     ok(2, `${key}: salary cannot be retained here, and the refusal says it is the game's limit`,
       v.verdict === 'invalid' && v.step === 3 && /retained/i.test(v.reason ?? '') && /this game/.test(v.reason ?? ''), `${v.verdict} ${v.reason ?? ''}`);
+  }
+  /* The same limits over real deals, where the only records are what
+     proposePackage hands back: the walk proves the module reports every
+     retention it makes, so an engine that keeps those records sees the
+     limits bite. C01 keeps part of four men's pay in four deals, and the
+     fourth is refused. One contract goes C03 to C04 to C05 to C06 with a
+     share kept each time, and the third retention is refused. */
+  {
+    const lg3 = makeLeague(nhl, gm, 13);
+    const records = [];
+    const ctx3 = () => plainCtx(nhl, lg3, {
+      retainedDeals: club => records.filter(r => r.club === club).length,
+      timesRetained: id => records.filter(r => r.playerId === id).length,
+    });
+    const deal = (from, to, id) => {
+      const pkg = { from, to, give: [{ kind: 'player', id, retain: 0.25 }], get: [firstMan(lg3, to)] };
+      const out = gm.pkg.proposePackage(pkg, lg3.teams[from], lg3.teams[to], ctx3());
+      if (out.verdict.verdict === 'accepted') lg3.ledger = out.ledger;
+      records.push(...out.retained);
+      return out;
+    };
+    const club = [];
+    for (let k = 0; k < 4; k++) club.push(deal('C01', 'C02', lg3.teams.C01.players[0].id));
+    ok(2, 'nhl: over real deals a club retains on three contracts and the fourth is refused',
+      club.slice(0, 3).every(o => o.verdict.verdict === 'accepted' && o.retained.length === 1 && o.retained[0].club === 'C01')
+        && club[3].verdict.verdict === 'invalid' && club[3].verdict.step === 3 && club[3].retained.length === 0,
+      club.map(o => `${o.verdict.verdict}/${o.retained.length}`).join(' '));
+    const x = lg3.teams.C03.players[0].id;
+    const chain = [deal('C03', 'C04', x), deal('C04', 'C05', x), deal('C05', 'C06', x)];
+    ok(2, 'nhl: over real deals one contract is retained on twice and the third is refused',
+      chain[0].verdict.verdict === 'accepted' && chain[1].verdict.verdict === 'accepted'
+        && chain[2].verdict.verdict === 'invalid' && chain[2].verdict.step === 3,
+      chain.map(o => `${o.verdict.verdict} ${o.verdict.reason ?? ''}`).join(' | '));
   }
   const split = gm.pkg.splitRetained(8, 0.5);
   ok(2, 'a salary of 8 retained at half splits 4 and 4', split.kept === 4 && split.moved === 4, JSON.stringify(split));

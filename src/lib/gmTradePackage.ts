@@ -310,15 +310,36 @@ export function applyPackage(pkg: TradePackage, from: PackageTeam, to: PackageTe
   return movePicks(movePicks(ledger, pickKeys(pkg.give), pkg.to), pickKeys(pkg.get), pkg.from);
 }
 
-export interface PackageOutcome { verdict: PackageVerdict; ledger: GmPickLedger }
+/** One salary retention a deal creates: `club` keeps paying `share` of
+    player `playerId`'s salary. The retention limits read ctx.retainedDeals
+    and ctx.timesRetained, so the engine keeps these records (adding what
+    proposePackage returns, dropping one when its contract ends) and answers
+    those two from them. */
+export interface RetentionRecord { club: string; playerId: string; share: number }
+
+/** The retentions a package creates: every player sent with a share kept. */
+export function retentionsIn(pkg: TradePackage): RetentionRecord[] {
+  const out: RetentionRecord[] = [];
+  for (const [side, club] of [[pkg.give, pkg.from], [pkg.get, pkg.to]] as const) {
+    for (const a of side) if (a.kind === 'player' && a.retain) out.push({ club, playerId: a.id, share: a.retain });
+  }
+  return out;
+}
+
+export interface PackageOutcome {
+  verdict: PackageVerdict;
+  ledger: GmPickLedger;
+  /** The retentions this deal made, for the engine's records. Empty unless accepted. */
+  retained: RetentionRecord[];
+}
 
 /** The whole trade path: judge it, and when the answer is yes, make it. */
 export function proposePackage(pkg: TradePackage, from: PackageTeam, to: PackageTeam, ctx: PackageContext): PackageOutcome {
   const verdict = evaluatePackage(pkg, ctx);
-  if (verdict.verdict !== 'accepted') return { verdict, ledger: ctx.ledger };
+  if (verdict.verdict !== 'accepted') return { verdict, ledger: ctx.ledger, retained: [] };
   const ledger = applyPackage(pkg, from, to, ctx.ledger);
-  if (!ledger) return { verdict: refuse(2, 'A piece of that deal is no longer where it was.'), ledger: ctx.ledger };
-  return { verdict, ledger };
+  if (!ledger) return { verdict: refuse(2, 'A piece of that deal is no longer where it was.'), ledger: ctx.ledger, retained: [] };
+  return { verdict, ledger, retained: retentionsIn(pkg) };
 }
 
 export interface PickValueCurve {
