@@ -238,7 +238,9 @@ const DB_TO_ERA_L1 = {
  *   REP  la Repubblica, cited by the article slug and date, read through
  *        the Wayback Machine: http://www.repubblica.it/2005/<month>/sezioni/sport/calcio/<slug>/
  *   and, named on the line, UEFA.com news, 11v11.com club histories,
- *   soccerway transfer histories and Ultima Hora.
+ *   soccerway transfer histories and Ultima Hora; and for the review fix
+ *   of UNRESOLVED below only, as spot checks of single men, the English or
+ *   Italian Wikipedia article named on the line (read 2026-10-03).
  *
  * WHERE AND WHEN. FBref and the year 2006 row prove WHERE a man played in
  * 2005-06; neither proves WHEN he got there, and a January arrival must not
@@ -256,8 +258,9 @@ const DB_TO_ERA_L1 = {
  * or out of a Bundesliga club that is not on it did not happen that summer
  * (Boris Zivkovic reached Koln, Masmanidis, Kristiansen, Hoiland, Tararache,
  * Cabanas, Borbely, Azaouagh, de Jong and Julio dos Santos their clubs, only
- * later). A man with no proof of WHEN stays where the snapshot has him, and
- * is listed as UNRESOLVED below rather than moved on a guess. Records that
+ * later). A man with no proof of WHEN is never moved on a guess, but a keep
+ * is a claim too: where the records put him somewhere else at the start of
+ * the season, he is removed rather than kept (see UNRESOLVED). Records that
  * showed a January move kept the snapshot too (Pelizzoli to Reggina and
  * Pepe to Udinese on 1 Jan 2006, soccerway; Baseggio to Treviso and Saidi
  * to Lecce at the winter break; Frau stayed at Lyon at the deadline, LEQ
@@ -279,18 +282,26 @@ const DB_TO_ERA_L1 = {
  * Lille centre-back Rafael Schmitz and the Messina full-back Rafael da
  * Silva. The step keeps the higher value, Lille's.
  *
- * UNRESOLVED. Twenty-two men of the new leagues show signs of having moved
- * by the deadline (a summer listing, no FBref game for the snapshot club,
- * a year 2006 row elsewhere) but no record proving WHEN was found, so they
- * stay where the year 2005 snapshot has them: Alessandro Doga (Livorno),
- * Alessandro Monticciolo (Ascoli), Alexander Manninger (Siena), Benoit
- * Angbwa (Lille), Cristian Bucchi (Ascoli), Fabio Pecchia (Siena), Filippo
- * Antonelli Agomeri (Ascoli), Florin Bratu (Nantes), Goran Rubil (Nantes),
- * Ilyas Zeytullaev (Reggina), Jean Carlos (Hamburg), Lamberto Zauli
- * (Palermo), Loris Del Nevo (Cagliari), Manuel Belleri (Udinese), Manuel
- * Caponi (Empoli), Mattia Marchesetti (Chievo), Roberto Baronio (Chievo),
- * Roberto Colacone (Ascoli), Roberto Cortellini (Treviso), Toledo (Ascoli),
- * Tore Andre Flo (Siena) and Oscar Lopez (Lazio). Arrivals with no proof of
+ * UNRESOLVED, THEN RESOLVED. The first pass left twenty-two men of the new
+ * leagues where the year 2005 snapshot has them, because they showed signs
+ * of having moved by the deadline (a summer listing, no FBref game for the
+ * snapshot club, a year 2006 row elsewhere) but no record proving WHEN was
+ * found. A review then found most of them elsewhere, so the fix round
+ * checked every one, and two the first pass never listed. Three moved on
+ * dated records with a year 2006 row at the club (Manuel Belleri and
+ * Roberto Baronio to Lazio, Oscar Lopez to Real Betis). Seventeen were
+ * removed because the records put them somewhere else at the start of the
+ * season: Alessandro Doga, Alessandro Monticciolo, Alexander Manninger,
+ * Cristian Bucchi, Fabio Pecchia, Filippo Antonelli Agomeri, Florin Bratu,
+ * Goran Rubil, Jean Carlos, Lamberto Zauli, Loris Del Nevo, Manuel Caponi,
+ * Mattia Marchesetti, Roberto Colacone, Roberto Cortellini, Toledo and Tore
+ * Andre Flo. Two stay because their records keep them where the snapshot
+ * has them: Benoit Angbwa (Lille) and Ilyas Zeytullaev (Reggina until his
+ * January 2006 loan to Crotone). The two never listed, Mohamed Kallon
+ * (Monaco, loaned to Al-Ittihad on 29 Jul 2005) and Valerio Virga (Roma,
+ * loaned to Ascoli and injured all season), are removed too. The same check
+ * kept Christian Maggio and Gianni Guigou at Fiorentina and Roberto Nanni
+ * at Siena: all three went on in January 2006. Arrivals with no proof of
  * WHEN (forty candidate rows, most of them January signings) are simply not
  * added. Three shipped lines are left as Round 176 made them because their
  * summer move stayed outside the new leagues: David Bellion (Manchester
@@ -409,6 +420,7 @@ const B5_MOVES = [
   { n: 'Ludovic Magnin', to: 'Stuttgart', why: 'Werder Bremen to Stuttgart (KI 25 May 2005; FB: 25 Bundesliga games for Stuttgart, none for Werder Bremen)' },
   { n: 'Mamadou Bagayoko', to: 'Nice', why: 'Nantes to Nice (FB: 32 Ligue 1 games for Nice, none for Nantes)' },
   { n: 'Mamadou Niang', to: 'Marseille', why: 'Strasbourg to Marseille (FB: 28 Ligue 1 games for Marseille, none for Strasbourg)' },
+  { n: 'Manuel Belleri', to: 'Lazio', why: 'Udinese to Lazio in co-ownership, among Lazio\'s summer 2005 arrivals (en.wikipedia, 2005-06 SS Lazio season; it.wikipedia, Manuel Belleri; FB: 16 Serie A games for Lazio, none for Udinese)' },
   { n: 'Marco Donadel', to: 'Fiorentina', why: 'Sampdoria to Fiorentina (FB: 34 Serie A games for Fiorentina, none for Sampdoria)' },
   { n: 'Marek Jankulovski', to: 'AC Milan', why: 'Udinese to AC Milan (FB: 22 Serie A games for AC Milan, none for Udinese)' },
   { n: 'Martin Petrov', to: 'Atlético Madrid', why: 'Wolfsburg to Atlético Madrid (KI 25 Jul 2005; FB: 36 La Liga games for Atlético Madrid, none for Wolfsburg)' },
@@ -424,6 +436,7 @@ const B5_MOVES = [
   { n: 'Nicola Amoruso', to: 'Reggina', why: 'Messina to Reggina (FB: 29 Serie A games for Reggina, none for Messina)' },
   { n: 'Niels Oude Kamphuis', to: 'Gladbach', why: 'Schalke 04 to Gladbach (KI 30 May 2005, Suche nach einem Verteidiger geht weiter)' },
   { n: 'Olivier Kapo', to: 'Monaco', why: 'Juventus to Monaco (FB: 25 Ligue 1 games for Monaco, none for Juventus)' },
+  { n: 'Óscar López', to: 'Real Betis', why: 'his Lazio loan from Barcelona was 2004-05 only, and Barcelona loaned him to Real Betis on 3 Aug 2005 (en.wikipedia, Oscar Lopez (footballer, born 1980); FB: 18 La Liga games for Real Betis, none for Lazio)' },
   { n: 'Otto Addo', to: 'Mainz', why: 'Borussia Dortmund to Mainz (KI 25 May 2005, Stürmer kommt aus Dortmund)' },
   { n: 'Patrick Owomoyela', to: 'Werder Bremen', why: 'Arminia Bielefeld to Werder Bremen (KI 25 May 2005; FB: 32 Bundesliga games for Werder Bremen, none for Arminia Bielefeld)' },
   { n: 'Patrick Weiser', to: 'Köln', why: 'Wolfsburg to Köln (KI 29 Aug 2005, Zehnter Neuzugang steht fest)' },
@@ -435,6 +448,7 @@ const B5_MOVES = [
   { n: 'Pontus Farnerud', to: 'Strasbourg', why: 'Monaco to Strasbourg (FB: 32 Ligue 1 games for Strasbourg, none for Monaco)' },
   { n: 'Rémy Vercoutre', to: 'Lyon', why: 'back at Lyon from his Strasbourg loan as second keeper, confirmed 17 Jun 2005 (LEQ 20050617_211647)' },
   { n: 'Robert Kovac', to: 'Juventus', why: 'Bayern Munich to Juventus (KI 25 May 2005)' },
+  { n: 'Roberto Baronio', to: 'Lazio', why: 'his Chievo loan ended on 30 Jun 2005 and he was a Lazio player until Lazio loaned him to Udinese in January 2006 (en.wikipedia, 2005-06 SS Lazio season; it.wikipedia, Roberto Baronio, 7 Lazio games before the loan; FB files all 17 of his games under Udinese and none under Chievo)' },
   { n: 'Rodrigo Taddei', to: 'Roma', why: 'Siena to Roma (FB: 38 Serie A games for Roma, none for Siena)' },
   { n: 'Rolando Bianchi', to: 'Reggina', why: 'Cagliari to Reggina, 1 Jul 2005 (soccerway transfers, Rolando Bianchi)' },
   { n: 'Samuele Dalla Bona', to: 'Sampdoria', why: 'Lecce to Sampdoria (FB: 29 Serie A games for Sampdoria, none for Lecce)' },
@@ -470,7 +484,10 @@ const B5_MOVES = [
 const B5_REMOVALS = [
   { n: 'Aílton', why: 'Schalke to Besiktas for 3m, 21 Jul 2005 (KI 21 Jul 2005, Drei Millionen Abloese fuer Ailton); his year 2006 row is Hamburg, where he went in January 2006 (FBref: 13 games for Hamburg)', later: true },
   { n: 'Albert Riera', why: 'Bordeaux to Espanyol, signed 8 Jul 2005 (LEQ 20050708_230409); his year 2006 row is Manchester City, where he went on loan in January 2006 (FBref: 8 games for Espanyol, 15 for City)', later: true },
+  { n: 'Alessandro Doga', why: 'Livorno to Mantova, a three year contract signed on 15 Jul 2005 (it.wikipedia, Alessandro Doga); his year 2006 row is Mantova' },
+  { n: 'Alessandro Monticciolo', why: 'Ascoli to Lucchese in the summer of 2005, 11 Serie C1 games there that season (it.wikipedia, Alessandro Monticciolo); no league game for Ascoli (FB) and no year 2006 row', single: true },
   { n: 'Alessandro Rosina', why: 'Parma to Torino, 1 Jul 2005 (soccerway transfers, Alessandro Rosina)' },
+  { n: 'Alexander Manninger', why: 'his Siena loan was 2004-05 only; Red Bull Salzburg re-signed him from Bologna in July 2005, 16 games there in 2005-06 (en.wikipedia, Alexander Manninger); his year 2006 row is Red Bull Salzburg' },
   { n: 'Alexander Voigt', why: 'left Köln in the summer of 2005 (KI 13 Jun 2005, Voigt-Wechsel nach Kerkrade perfekt)' },
   { n: 'Almami Moreira', why: 'left Hamburg in the summer of 2005 (KI 25 May 2005)' },
   { n: 'Anthony Braizat', why: 'Toulouse to Cannes, listed among Toulouse\'s departures on 22 Jun 2005 (LEQ 20050622_183836)' },
@@ -486,6 +503,7 @@ const B5_REMOVALS = [
   { n: 'Christian Riganò', why: 'Fiorentina to Empoli for the season (FBref 2005-06: 33 Serie A games for Empoli, none for Fiorentina); no year 2006 row to place him', single: true },
   { n: 'Christian Vieri', why: 'Inter to AC Milan, 6 Jul 2005 (REP vierimilan, 7 Jul 2005); his year 2006 row is Monaco, where he went in January 2006 (FBref: 8 games for Milan, 7 for Monaco)', later: true },
   { n: 'Christophe Avezac', why: 'Metz to Dijon, one of Dijon\'s signings by 22 Jun 2005 (LEQ 20050622_150838)' },
+  { n: 'Cristian Bucchi', why: 'Ascoli sold their half of him to Modena in the summer of 2005, 41 Serie B games for Modena in 2005-06 (en.wikipedia, Cristian Bucchi); his year 2006 row is Modena' },
   { n: 'Cristian Raimondi', why: 'Palermo to Arezzo, 1 Jul 2005 (soccerway transfers, Cristian Raimondi)' },
   { n: 'Cristiano Lupatelli', why: 'Fiorentina to Parma for the autumn (FBref 2005-06: 8 games for Parma, then 5 for Palermo, none for Fiorentina); his year 2006 row is Palermo, reached in January 2006', later: true },
   { n: 'Daniele Corvia', why: 'Roma loaned him to Ternana for the season, 1 Jul 2005 (soccerway transfers, Daniele Corvia)' },
@@ -498,10 +516,13 @@ const B5_REMOVALS = [
   { n: 'Élson', why: 'left Stuttgart in the summer of 2005 (KI 31 Aug 2005, Brasilianer soll Spielpraxis sammeln)' },
   { n: 'Evanilson', why: 'left Dortmund on a free in the summer of 2005 (KI 25 May 2005) and is on no Bundesliga club\'s summer arrivals in the same list; his year 2006 row is Koln, a later window (FBref: 3 games for Koln)', later: true },
   { n: 'Fabián Carini', why: 'Inter to Cagliari on a free, 1 Jul 2005 (soccerway transfers, Fabian Carini), but his year 2006 row says retired, so the table cannot place him at Cagliari' },
+  { n: 'Fabio Pecchia', why: 'his Siena loan was 2004-05 only; 32 Serie B games for Bologna in 2005-06 (it.wikipedia, Fabio Pecchia); his year 2006 row is Bologna' },
   { n: 'Fabrice Fiorèse', why: 'Marseille loaned him to Al-Rayyan for the season, 29 Jul 2005 (LEQ 20050730_004317)' },
   { n: 'Fabrizio Miccoli', why: 'back at Juventus from his Fiorentina loan, then loaned to Benfica for the season on 31 Aug 2005 (LEQ 20050831_160323)' },
   { n: 'Fausto Rossini', why: 'joined Udinese from Atalanta by 29 Jun 2005 (UEFA.com newsid 312951), so not at Sampdoria; no year 2006 row to place him at Udinese', single: true },
   { n: 'Filipe Teixeira', why: 'PSG to Academica Coimbra, signed by 4 Aug 2005 (LEQ 20050803_211432)' },
+  { n: 'Filippo Antonelli Agomeri', why: 'Ascoli to Chievo in the summer of 2005, one Serie A game for Chievo on 30 Oct 2005, then on loan to Messina in January 2006 (it.wikipedia, Filippo Antonelli); his year 2006 row is Messina, reached in that later window, and no row places him at Chievo', later: true },
+  { n: 'Florin Bratu', why: 'Nantes loaned him to Dinamo Bucharest for 2005-06, 23 games there (en.wikipedia, Florin Bratu); no league game for Nantes (FB) and no year 2006 row', single: true },
   { n: 'França', why: 'left Bayer Leverkusen in the summer of 2005 (KI 3 Aug 2005)' },
   { n: 'Frank Wiblishauser', why: 'left Nürnberg in the summer of 2005 (KI 30 Aug 2005, Abwehrspieler wechselt nach St. Gallen)' },
   { n: 'Gennaro Iezzo', why: 'Cagliari to Napoli, 1 Jul 2005 (soccerway transfers, Gennaro Iezzo)' },
@@ -509,6 +530,7 @@ const B5_REMOVALS = [
   { n: 'Gianfranco Zola', why: 'retired from Cagliari, 30 Jun 2005 (REP zolaritiro, 1 Jul 2005)' },
   { n: 'Giovanni Federico', why: 'left Köln in the summer of 2005 (KI 25 May 2005, Vertrag bis 2007)' },
   { n: 'Giuseppe Reina', why: 'left Hertha BSC in the summer of 2005 (KI 30 May 2005)' },
+  { n: 'Goran Rubil', why: 'stayed at Nantes to the end of 2004-05 and signed for Shonan Bellmare in mid 2005 (en.wikipedia, Goran Rubil); his year 2006 row is HNK Rijeka' },
   { n: 'Grégory Paisley', why: 'Sochaux to Metz, signed 7 Jun 2005 (LEQ 20050607_162950); his year 2006 row is Troyes, where he went in January 2006 (FBref: 8 games for Metz, 13 for Troyes)', later: true },
   { n: 'Gustavo Nery', why: 'left Werder Bremen in the summer of 2005 (KI 25 May 2005)' },
   { n: 'Holger Wehlage', why: 'left Duisburg in the summer of 2005 (KI 25 May 2005, Mittelfeldspieler ist ablösefrei)' },
@@ -518,6 +540,7 @@ const B5_REMOVALS = [
   { n: 'Ivo Ulich', why: 'left Gladbach in the summer of 2005 (KI 11 Aug 2005, Mittelfeldspieler wechselt zu Vissel Kobe)' },
   { n: 'Jacek Bak', why: 'released by Lens to join Al-Rayyan, 2 Aug 2005 (LEQ 20050802_233832)' },
   { n: 'Javier Portillo', why: 'Real Madrid, back from his Fiorentina loan, loaned him to Club Brugge on 31 Aug 2005 (LEQ 20050831_203734)' },
+  { n: 'Jean Carlos', why: 'his Hamburg loan from Feyenoord was 2004-05 only (en.wikipedia, Jean Carlos (footballer, born 1983)); no league game for Hamburg in 2005-06 (FB); his year 2006 row is Fluminense' },
   { n: 'Jean-Philippe Caillet', why: 'Metz to Litex Lovech, 19 Jul 2005 (LEQ 20050719_170746)' },
   { n: 'Jérémy Gavanon', why: 'Marseille to Clermont, gone by 21 Jul 2005 (LEQ 20050721_105008)' },
   { n: 'Johan Audel', why: 'Lille loaned him to Lorient for the season, 26 Jul 2005 (soccerway transfers, Johan Audel)' },
@@ -529,11 +552,14 @@ const B5_REMOVALS = [
   { n: 'Jürgen Kramny', why: 'left Mainz in the summer of 2005 (KI 16 Jun 2005); no year 2006 row', single: true },
   { n: 'Kamil Kosowski', why: 'left Kaiserslautern in the summer of 2005 (KI 31 Aug 2005, Kosowski geht nach England - Nekounam kommt nicht)' },
   { n: 'Krisztián Lisztes', why: 'released by Werder Bremen (KI 25 May 2005), a free agent until Gladbach signed him on 1 Sep 2005, after the window (KI 1 Sep 2005); his year 2006 row is retired' },
+  { n: 'Lamberto Zauli', why: 'Palermo to Sampdoria for the start of 2005-06, then Bologna in January 2006 (en.wikipedia, Lamberto Zauli; FB: 8 games for Sampdoria, none for Palermo); his year 2006 row is Bologna, so no row places him at Sampdoria' },
   { n: 'Lawrence Aidoo', why: 'left Nürnberg in the summer of 2005 (KI 4 Jul 2005, Nach dem Aidoo-Transfer); no year 2006 row', single: true },
   { n: 'Leonardo Talamonti', why: 'his one year Lazio loan from Rosario Central ended in 2005 and he went home to Argentina, to River Plate (c5n.com, Jugo en River y en Lazio)' },
+  { n: 'Loris Del Nevo', why: 'Cagliari to Triestina in Serie B for 2005-06, then Ternana in January (it.wikipedia, Loris Del Nevo); no league game for Cagliari (FB) and no year 2006 row', single: true },
   { n: 'Luca Ariatti', why: 'Fiorentina to Atalanta, 1 Jul 2005 (soccerway transfers, Luca Ariatti)' },
   { n: 'Ludovic Clément', why: 'Toulouse to Montpellier, listed among Toulouse\'s departures on 22 Jun 2005 (LEQ 20050622_183836)' },
   { n: 'Mamadou Seck', why: 'out of contract at AC Ajaccio and missing from its preseason on 27 Jun 2005 (LEQ 20050627_214654)' },
+  { n: 'Manuel Caponi', why: 'not in Empoli\'s 2005-06 squad (it.wikipedia, Empoli Football Club 2005-2006) and no league game for Empoli that season (FB); no year 2006 row', single: true },
   { n: 'Marcel Ketelaer', why: 'left Nürnberg in the summer of 2005 (KI 20 Jun 2005, Paulinho bleibt zumindest bis zum Winter)' },
   { n: 'Marcelo Trapasso', why: 'released by Sochaux, signed for Chateauroux on 31 Aug 2005 (LEQ 20050831_185130); no year 2006 row', single: true },
   { n: 'Marco Borriello', why: 'Reggina to Sampdoria for the autumn (FBref 2005-06: 11 games for Sampdoria, then 20 for Treviso, none for Reggina); his year 2006 row is Treviso, reached in January 2006', later: true },
@@ -543,10 +569,12 @@ const B5_REMOVALS = [
   { n: 'Martin Pieckenhagen', why: 'left Hamburg in the summer of 2005 (KI 5 Jul 2005, Keeper wechselt in die Niederlande)' },
   { n: 'Massimiliano Fusani', why: 'Chievo to Modena, 1 Jul 2005 (soccerway transfers, Massimiliano Fusani)' },
   { n: 'Matthias Langkamp', why: 'Arminia Bielefeld to Wolfsburg (KI 25 May 2005); no year 2006 row, so the table cannot place him at Wolfsburg', single: true },
+  { n: 'Mattia Marchesetti', why: 'began 2005-06 on loan at Cremonese in Serie B, 18 games, then Sampdoria in January 2006 (it.wikipedia, Mattia Marchesetti); his year 2006 row is Sampdoria, reached in that later window', later: true },
   { n: 'Michalis Kapsis', why: 'Bordeaux to Olympiacos, announced 5 Jul 2005 (LEQ 20050705_144649)' },
   { n: 'Mika Nurmela', why: 'left Kaiserslautern in the summer of 2005 (KI 25 May 2005)' },
   { n: 'Mirko Savini', why: 'Fiorentina to Napoli on a free, 1 Jul 2005 (soccerway transfers, Mirko Savini)' },
   { n: 'Miso Brecko', why: 'left Hamburg in the summer of 2005 (KI 11 Aug 2005, Chance für Prica - Rydlewicz ins zentrale Mittelfeld)' },
+  { n: 'Mohamed Kallon', why: 'Monaco loaned him to Al-Ittihad on 29 Jul 2005, 18 games there in 2005-06 (en.wikipedia, Mohamed Kallon); his year 2006 row is Monaco, back from that loan', later: true },
   { n: 'Mounir Diane', why: 'Lens loaned him to Bastia for the season, 25 Aug 2005 (LEQ 20050825_211922)' },
   { n: 'Mozart', why: 'Reggina to Spartak Moscow, 1 Jul 2005 (soccerway transfers, Mozart)' },
   { n: 'Nebojsa Krupnikovic', why: 'Hannover to Arminia Bielefeld on a free (KI 25 May 2005), but his year 2006 row is JEF United, so the table cannot place him at Bielefeld' },
@@ -560,6 +588,8 @@ const B5_REMOVALS = [
   { n: 'Renaud Cohade', why: 'Bordeaux loaned him to Sete for the season, 30 Aug 2005 (LEQ 20050830_170012)' },
   { n: 'Renaud Connen', why: 'AC Ajaccio loaned him to Grenoble for the season, 16 Jul 2005 (LEQ 20050716_174700)' },
   { n: 'Reto Ziegler', why: 'Tottenham loaned him to Hamburg, 31 Aug 2005 (KI; LEQ 20050831_171255); his year 2006 row is Wigan, where he went on loan in January 2006 (FBref: 8 games for Hamburg, 10 for Wigan)', later: true },
+  { n: 'Roberto Colacone', why: 'Ascoli to Modena, at Modena from 2005 to 2007 (it.wikipedia, Roberto Colacone) and not in Ascoli\'s 2005-06 squad (it.wikipedia, Ascoli Calcio 1898 2005-2006); his year 2006 row is Modena' },
+  { n: 'Roberto Cortellini', why: 'his Treviso spell was 2004-05; two full seasons at Brescia from 2005-06 (it.wikipedia, Roberto Cortellini); his year 2006 row is Brescia' },
   { n: 'Robson Ponté', why: 'left Bayer Leverkusen in the summer of 2005 (KI 25 May 2005)' },
   { n: 'Roman Wallner', why: 'left Hannover 96 in the summer of 2005 (KI 29 Jun 2005); no year 2006 row', single: true },
   { n: 'Samir Handanovič', why: 'Udinese loaned him out (FBref 2005-06: 1 game for Lazio, 3 for Treviso, none for Udinese); no year 2006 row', single: true },
@@ -578,8 +608,11 @@ const B5_REMOVALS = [
   { n: 'Thibault Scotto', why: 'Nice loaned him to Amiens for the season, 1 Jul 2005 (soccerway transfers, Thibault Scotto); no year 2006 row', single: true },
   { n: 'Thomas Rytter', why: 'left Wolfsburg in the summer of 2005 (KI 21 Jul 2005, Bröndby IF zahlt keine Ablösesumme)' },
   { n: 'Timo Achenbach', why: 'left Köln in the summer of 2005 (KI 2 Aug 2005, Neuzugang für die linke Bahn); no year 2006 row', single: true },
+  { n: 'Toledo', why: 'not in Ascoli\'s 2005-06 squad (it.wikipedia, Ascoli Calcio 1898 2005-2006) and no league game for Ascoli that season (FB); his year 2006 row is Taranto' },
   { n: 'Tommy Svindal Larsen', why: 'left Nurnberg on a free in the summer of 2005 (KI 25 May 2005); his year 2006 row is Odd Grenland' },
+  { n: 'Tore André Flo', why: 'Siena to Vålerenga in July 2005 (en.wikipedia, Tore André Flo; no league game for Siena in 2005-06, FB); his year 2006 row is Vålerenga' },
   { n: 'Traianos Dellas', why: 'out of contract at Roma on 30 Jun 2005, a free agent until AEK Athens signed him on 19 Sep 2005 (UEFA.com newsid 342702)' },
+  { n: 'Valerio Virga', why: 'Roma loaned him to Ascoli for 2005-06 and a cruciate injury in a summer friendly kept him out all season (it.wikipedia, Valerio Virga); his year 2006 row is Roma, back from that loan, so no row places him at Ascoli', later: true },
   { n: 'Vasilios Tsiartas', why: 'left Koln in the summer of 2005 (KI 29 Jun 2005, Tsiartas, Vassilios)' },
   { n: 'Victor Agali', why: 'Nice to Kayseri Erciyesspor on a free, 1 Jul 2005 (soccerway transfers, Victor Agali)' },
   { n: 'Yacine Bezzaz', why: 'AC Ajaccio to Valenciennes on a free, 1 Jul 2005 (soccerway transfers, Yacine Bezzaz)' },
@@ -617,7 +650,7 @@ const B5_ARRIVALS = [
   { n: 'John Carew', from: 'Besiktas JK', to: 'Lyon', why: 'Besiktas JK to Lyon (FB: 26 Ligue 1 games for Lyon)' },
   { n: 'Kai Michalke', from: 'Alemannia Aachen', to: 'Duisburg', why: 'Alemannia Aachen to Duisburg (KI 25 May 2005)' },
   { n: 'Leon Andreasen', from: 'Aarhus GF', to: 'Werder Bremen', why: 'Aarhus GF to Werder Bremen (KI 25 May 2005)' },
-  { n: 'Levan Tskitishvili', from: 'SC Freiburg', to: 'Wolfsburg', why: 'SC Freiburg to Wolfsburg (KI 27 Jul 2005, Transfer des Georgiers unter Dach und Fach - Ex-Freiburger kommt aus Donezk)' },
+  { n: 'Levan Tskitishvili', from: 'SC Freiburg', to: 'Wolfsburg', why: 'to Wolfsburg from a club in Donetsk, the former Freiburg man (KI 27 Jul 2005, Transfer des Georgiers unter Dach und Fach - Ex-Freiburger kommt aus Donezk); his year 2005 row still files him at SC Freiburg, which is the row this line reads' },
   { n: 'Luís Figo', from: 'Real Madrid', to: 'Inter Milan', why: 'Real Madrid to Inter Milan (FB: 34 Serie A games for Inter Milan)' },
   { n: 'Manuel Pasqual', from: 'SS Arezzo', to: 'Fiorentina', why: 'SS Arezzo to Fiorentina (FB: 35 Serie A games for Fiorentina)' },
   { n: 'Marcin Zewlakow', from: 'Excelsior Mouscron', to: 'Metz', why: 'Mouscron to Metz, cleared to play for Metz on 5 Aug 2005 (LEQ 20050805_150058)' },

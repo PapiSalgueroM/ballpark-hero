@@ -29,7 +29,7 @@
  *      Henry above the modern best, the 17 year old Messi honest at 73.
  *
  * ROUND 902: the era is a full big five (Serie A, the Bundesliga and Ligue 1
- * joined, 98 clubs, 1,747 real players). What grew:
+ * joined, 98 clubs, 1,728 real players after the review fix). What grew:
  *   1. Juventus, Bayern and Lyon get their real squads name for name, both
  *      directions, summer arrivals included (Vieira, Lahm, Ismael, Tiago).
  *   2. Every new shared name across the four worlds is a verified namesake
@@ -39,26 +39,33 @@
  *      Cup; Juventus, Bayern and Lyon are told to win it; the three promoted
  *      thin squads and Duisburg are told no such thing; each new nation's cup
  *      is named in the cup demand.
- *   4. Measured 2026-10-03 over six seeds each (the streams in the code):
- *      Juventus 1,1,1,1,1,1 (mean 1.00), Bayern 1,1,1,1,1,1 (1.00), Lyon
- *      1,1,1,1,2,1 (1.17), Troyes, the thinnest squad of the three new
- *      leagues with four real players, 20,17,14,20,20,17 (18.00); Chelsea
- *      1 six times and Cadiz 19,20,17,20,19,18 on the grown world. The bands
- *      are on the MEANS: a giant must average 3.5 or better (2.33 places of
- *      headroom over the worst giant mean measured) and the thin club 11 or
- *      worse (7 places of headroom, and its best single seed of 14 is still
- *      above the band). No band reads a single worst seed.
- *   5. The extension's accounting: 98 clubs, 1,747 players, 361
- *      corrections, 310 Serie A, 333 Bundesliga and 345 Ligue 1 players, the
+ *   4. Measured 2026-10-03 over six seeds each (the streams in the code), on
+ *      the world as the review fix left it: Juventus 1,2,2,1,1,1 (mean 1.33),
+ *      Bayern 3,1,2,1,1,1 (1.50), Lyon 1,1,1,1,1,6 (1.83), Troyes, a promoted
+ *      squad of four real players (Nancy, with three, is the thinnest of the
+ *      three new leagues), 19,16,19,19,19,12 (17.33); Chelsea 1 six times and
+ *      Cadiz 19,20,17,18,19,17. (The first pass measured 1.00, 1.00, 1.17
+ *      and 18.00 on the world before the fix.) The bands are on the MEANS: a
+ *      giant must average 3.5 or better (1.67 places of headroom over the
+ *      worst giant mean measured) and the thin club 11 or worse (6.33 places
+ *      of headroom, and its best single seed of 12 is still above the band).
+ *      No band reads a single worst seed.
+ *   5. The extension's accounting: 98 clubs, 1,728 players, 383
+ *      corrections, 294 Serie A, 332 Bundesliga and 342 Ligue 1 players, the
  *      five thin clubs by name, one man at one club in the whole world, the
  *      three men Round 176 removed who are home now, the two folds, a sample
  *      of the window, the men kept on their snapshot club because their move
- *      was dated January 2006, and men gone from the world.
+ *      was dated January 2006, and men gone from the world. The review fix
+ *      added the men the first pass had left at clubs they did not start
+ *      2005-06 at: three moved, nineteen gone, two checked and kept.
  *   7. A save from before the round (a two league world, no strength for the
- *      new leagues' Champions League clubs) rates them on the era scale,
- *      plays its season out, and gets all five leagues in the summer.
- * Three negative controls, SIM_ERA2005_CONTROL=dupe|stale|twoleagues, each of
- * which must end the run red (see the block where they are defined).
+ *      new leagues' Champions League clubs) reads them at the era's finish
+ *      based rating until its first summer, exactly as it read them while
+ *      they were foreign, plays its season out, and gets all five leagues in
+ *      the summer, where they are rated from their real squads.
+ * Six negative controls, SIM_ERA2005_CONTROL=dupe|stale|twoleagues|euro|
+ * thinswap|nocut, each of which must end the run red (see the block where
+ * they are defined).
  *
  * Run: node scripts/simEra2005.mjs
  */
@@ -110,14 +117,22 @@ const REAL_RANDOM = Math.random;
    1. Each control first proves the thing it breaks is there, and refuses with
    exit 2 when it is not, so a control that changed nothing can never read as
    a control that fired. A control run skips the played seasons of sections 4
-   and 7, which no control touches.
+   and 7, except the control aimed at that section.
      dupe        Vieira at Juventus AND back at Arsenal: the one man, one club
                  check and the re-audit check must both fail.
      stale       Toni sent back to Palermo: the window check must fail.
      twoleagues  the era cut back to its first two leagues for section 3:
-                 the league count, the sizes and the 98 demands must fail. */
+                 the league count, the sizes and the 98 demands must fail.
+     euro        (review fix) the Bundesliga's UEFA Cup line moved from fifth
+                 to sixth in memory: the European places pin must fail.
+     thinswap    (review fix) section 4 plays Troyes where it plays Juventus
+                 and Juventus where it plays Troyes: the giant band and the
+                 thin band must both fail, so both read real finishes.
+     nocut       (review fix) section 7 skips the cut, so the "old" save is a
+                 fresh five league save: the strength match with Ajax and the
+                 two league world at the season's end must both fail. */
 const CONTROL = process.env.SIM_ERA2005_CONTROL ?? '';
-if (CONTROL && !['dupe', 'stale', 'twoleagues'].includes(CONTROL)) { console.error(`unknown control ${CONTROL}`); process.exit(2); }
+if (CONTROL && !['dupe', 'stale', 'twoleagues', 'euro', 'thinswap', 'nocut'].includes(CONTROL)) { console.error(`unknown control ${CONTROL}`); process.exit(2); }
 const controlRefuse = why => { console.error(`CONTROL ${CONTROL} did not apply: ${why}`); process.exit(2); };
 function controlDupe(rosters) {
   const row = (rosters['Juventus'] ?? []).find(p => p.n === 'Patrick Vieira');
@@ -367,11 +382,35 @@ console.log('3) Boards talk 2005: the UEFA Cup is the UEFA Cup');
     if (!o) fail(`2005 ${club} has no cup objective at all`);
     else if (!cup.test(o.label)) fail(`2005 ${club}'s cup objective says "${o.label}"`);
   }
+  /* Review fix: the European places of the three new rules rows, pinned here
+     and not only in simCmLeagueRules' digest (whose baseline --write retakes).
+     Two sources each, see the rules rows in src/lib/clubManager.ts: Italy
+     four in the Champions League, fifth and sixth the UEFA Cup; Germany
+     three, fourth and fifth; France three, fourth; three down everywhere,
+     no Conference League in 2005. */
+  const rulesOf = id => {
+    const r = cm.LEAGUE_RULES?.[id];
+    if (CONTROL !== 'euro' || id !== 'bundesliga2005' || !r) return r;
+    if (r.europe?.uel !== 5) controlRefuse(`the Bundesliga row has uel ${r.europe?.uel}, not the 5 the control moves`);
+    console.log('   CONTROL euro applied: the Bundesliga UEFA Cup line reads sixth');
+    return { ...r, europe: { ...r.europe, uel: 6 } };
+  };
+  const EURO_2005 = {
+    seriea2005: 'ucl 4, uel 6, uecl 0, UEFA Cup, drop 3, Coppa Italia',
+    bundesliga2005: 'ucl 3, uel 5, uecl 0, UEFA Cup, drop 3, DFB-Pokal',
+    ligue12005: 'ucl 3, uel 4, uecl 0, UEFA Cup, drop 3, Coupe de France',
+  };
+  for (const [id, want] of Object.entries(EURO_2005)) {
+    const r = rulesOf(id);
+    const got = r ? `ucl ${r.europe?.ucl}, uel ${r.europe?.uel}, uecl ${r.europe?.uecl}, ${r.europe?.uelName}, drop ${r.drop}, ${r.cup}` : 'no rules row';
+    if (got !== want) fail(`${id} rules read "${got}", the 2005-06 season was "${want}"`);
+  }
+  console.log(`   European places pinned for ${Object.keys(EURO_2005).length} new rules rows`);
 }
 
 /* ---------- 4. Seasons complete and land where 2005 says ---------- */
 console.log('4) Full seasons play out plausibly in all five leagues');
-if (CONTROL) console.log('   skipped: a control run plays no seasons');
+if (CONTROL && CONTROL !== 'thinswap') console.log('   skipped: a control run plays no seasons');
 else {
   const posOf = (club, era, seed) => {
     Math.random = seeded(seed);
@@ -389,13 +428,21 @@ else {
   if (Math.max(...che) > 10) fail(`Mourinho's Chelsea finished ${Math.max(...che)} in one seed, a broken model, not variance`);
   if (mean(cad) < 11) fail(`Cadiz averaged position ${mean(cad).toFixed(1)}, the thinnest squad in the game is overperforming wildly`);
 
-  /* Round 902: the three new leagues, six seeds each, a giant of each and the
-     thinnest squad of the three (Troyes, four real players). The measured
-     finishes are in the header; the bands are means, never a max. */
-  const juve = [1, 2, 3, 4, 5, 6].map(i => posOf('Juventus', 'era2005', i * 7919));
+  /* Round 902: the three new leagues, six seeds each, a giant of each and a
+     thin promoted squad (Troyes, four real players; Nancy, with three, is the
+     thinnest, and Troyes was kept as the band's club because its six seeds
+     were measured first). The measured finishes are in the header; the bands
+     are means, never a max. Under the thinswap control the giant band plays
+     Troyes and the thin band plays Juventus, so both must go red. */
+  const swap = CONTROL === 'thinswap';
+  if (swap) {
+    if (!ERA2005_PARTIAL.includes('Troyes') || ERA2005_PARTIAL.includes('Juventus')) controlRefuse('Troyes is not the thin club or Juventus is');
+    console.log('   CONTROL thinswap applied: Juventus plays in the thin band, Troyes in the giant band');
+  }
+  const juve = [1, 2, 3, 4, 5, 6].map(i => posOf(swap ? 'Troyes' : 'Juventus', 'era2005', i * 7919));
   const bayern = [1, 2, 3, 4, 5, 6].map(i => posOf('Bayern Munich', 'era2005', i * 7919));
   const lyon = [1, 2, 3, 4, 5, 6].map(i => posOf('Lyon', 'era2005', i * 7919));
-  const troyes = [1, 2, 3, 4, 5, 6].map(i => posOf('Troyes', 'era2005', i * 104729));
+  const troyes = [1, 2, 3, 4, 5, 6].map(i => posOf(swap ? 'Juventus' : 'Troyes', 'era2005', i * 104729));
   console.log(`   Juventus finishes: ${juve.join(',')} · Bayern finishes: ${bayern.join(',')} · Lyon finishes: ${lyon.join(',')} · Troyes finishes: ${troyes.join(',')}`);
   console.log(`   means: Juventus ${mean(juve).toFixed(2)}, Bayern ${mean(bayern).toFixed(2)}, Lyon ${mean(lyon).toFixed(2)}, Troyes ${mean(troyes).toFixed(2)}`);
   if (mean(juve) > 3.5) fail(`2005 Juventus averaged position ${mean(juve).toFixed(2)} over six seeds`);
@@ -451,10 +498,10 @@ console.log('5) The bake file tells the truth about itself');
   const at = (club, name) => (R[club] ?? []).some(p => p.n === name);
   const clubsOf = name => Object.entries(R).filter(([, list]) => list.some(p => p.n === name)).map(([c]) => c);
   if (ERA2005_META.clubs !== 98) fail(`meta clubs ${ERA2005_META.clubs}, the big five of 2005-06 are 98`);
-  if (ERA2005_META.players !== 1747) fail(`meta players ${ERA2005_META.players}, the Round 902 bake wrote 1747`);
-  if (ERA2005_META.moves !== 361) fail(`meta moves ${ERA2005_META.moves}: 26 before Round 902 plus 146 moved, 115 removed, 72 arrived and 2 folded is 361`);
+  if (ERA2005_META.players !== 1728) fail(`meta players ${ERA2005_META.players}, the Round 902 bake wrote 1728`);
+  if (ERA2005_META.moves !== 383) fail(`meta moves ${ERA2005_META.moves}: 26 before Round 902 plus 149 moved, 134 removed, 72 arrived and 2 folded is 383`);
   /* Serie A, Bundesliga and Ligue 1, as the bake wrote them. */
-  const LEAGUE_TOTALS = '310,333,345';
+  const LEAGUE_TOTALS = '294,332,342';
   const leagueTotal = id => (ERA_LEAGUES['era2005'].find(l => l.id === id)?.clubs ?? []).reduce((s, c) => s + (R[c]?.length ?? 0), 0);
   const totals = `${leagueTotal('seriea2005')},${leagueTotal('bundesliga2005')},${leagueTotal('ligue12005')}`;
   if (totals !== LEAGUE_TOTALS) fail(`Serie A, Bundesliga and Ligue 1 hold ${totals} players, the bake wrote ${LEAGUE_TOTALS}`);
@@ -498,8 +545,22 @@ console.log('5) The bake file tells the truth about itself');
      shows a January 2006 move (see the bake header): they must still be at
      their year 2005 club. */
   for (const [name, club] of [['Ivan Pelizzoli', 'Roma'], ['Christian Maggio', 'Fiorentina'], ['Gianni Guigou', 'Fiorentina'],
-    ['Matteo Sereni', 'Lazio'], ['Roberto Nanni', 'Siena'], ['Luigi Sartor', 'Roma'], ['Boris Zivkovic', 'Stuttgart'], ['Pierre-Alain Frau', 'Lyon']]) {
+    ['Matteo Sereni', 'Lazio'], ['Roberto Nanni', 'Siena'], ['Luigi Sartor', 'Roma'], ['Boris Zivkovic', 'Stuttgart'], ['Pierre-Alain Frau', 'Lyon'],
+    // Review fix: checked and kept, his loan to Crotone was January 2006; and Angbwa, on loan at Lille that season.
+    ['Ilyas Zeytullaev', 'Reggina'], ['Benoît Angbwa', 'Lille']]) {
     if (clubsOf(name).join(',') !== club) fail(`${name} should still be at ${club}, he is at: ${clubsOf(name).join(',') || 'nowhere'}`);
+  }
+  /* Review fix: the men the first pass left at clubs they did not start
+     2005-06 at. Three moved on dated records with a year 2006 row at the
+     club; the rest are gone (see UNRESOLVED in the bake's header). */
+  for (const [name, club, old] of [['Óscar López', 'Real Betis', 'Lazio'], ['Manuel Belleri', 'Lazio', 'Udinese'], ['Roberto Baronio', 'Lazio', 'Chievo Verona']]) {
+    if (clubsOf(name).join(',') !== club) fail(`${name} should be at ${club} and nowhere else, he is at: ${clubsOf(name).join(',') || 'nowhere'}`);
+    if (at(old, name)) fail(`${name} is still at ${old}`);
+  }
+  for (const name of ['Tore André Flo', 'Alexander Manninger', 'Fabio Pecchia', 'Cristian Bucchi', 'Lamberto Zauli', 'Alessandro Doga',
+    'Goran Rubil', 'Jean Carlos', 'Roberto Colacone', 'Roberto Cortellini', 'Toledo', 'Florin Bratu', 'Loris Del Nevo',
+    'Alessandro Monticciolo', 'Manuel Caponi', 'Mattia Marchesetti', 'Mohamed Kallon', 'Valerio Virga', 'Filippo Antonelli Agomeri']) {
+    if (clubsOf(name).length) fail(`${name} should be gone (his snapshot club is not where he started 2005-06), he is at ${clubsOf(name).join(',')}`);
   }
   // Left the world, or left his club with no provable season start club.
   for (const name of ['Fabrizio Miccoli', 'Georgios Karagounis', 'Stephen Appiah', 'Shunsuke Nakamura', 'Gianfranco Zola', 'Traianos Dellas',
@@ -553,10 +614,13 @@ console.log('6) Ronaldinho and Henry above the modern best; teenage Messi honest
    built by the previous engine itself is in the round's record; this section
    keeps the same path under test: a fresh save cut back to that exact shape,
    sent through JSON the way storage sends it, must rate a Champions League
-   club of the new leagues from its real squad, finish its season on the two
-   leagues it knows, and get all five in the summer. */
+   club of the new leagues exactly as it rated it while it was foreign (the
+   era's finish based rating, the one Ajax still reads) until its first
+   summer, never from the new squad files and never from a 2026 preview;
+   finish its season on the two leagues it knows; and get all five in the
+   summer, where the new clubs are rated from their real squads. */
 console.log('7) A two league save from before Round 902 plays on and grows in the summer');
-if (CONTROL) console.log('   skipped: a control run plays no seasons');
+if (CONTROL && CONTROL !== 'nocut') console.log('   skipped: a control run plays no seasons');
 else {
   Math.random = seeded(4801);
   let s = startCareer('Barcelona', 'era2005');
@@ -564,12 +628,17 @@ else {
   const before = Object.keys(s.world ?? {}).sort().join(',');
   if (before !== 'bundesliga2005,ligue12005,premier2005,seriea2005') fail(`a fresh Barcelona save carries the world ${before}`);
   const old = JSON.parse(JSON.stringify(s));
-  delete old.world.seriea2005;
-  delete old.world.bundesliga2005;
-  delete old.world.ligue12005;
-  for (const lg of ERA_LEAGUES.era2005) {
-    if (lg.id === 'premier2005' || lg.id === 'laliga2005') continue;
-    for (const c of lg.clubs) delete old.clubStrengths?.[c];
+  if (CONTROL === 'nocut') {
+    if (!old.world?.seriea2005 || old.clubStrengths?.['Werder Bremen'] === undefined) controlRefuse('the fresh save has no Serie A world or no Bremen strength to leave in place');
+    console.log('   CONTROL nocut applied: the save keeps its five league world and its Bremen strength');
+  } else {
+    delete old.world.seriea2005;
+    delete old.world.bundesliga2005;
+    delete old.world.ligue12005;
+    for (const lg of ERA_LEAGUES.era2005) {
+      if (lg.id === 'premier2005' || lg.id === 'laliga2005') continue;
+      for (const c of lg.clubs) delete old.clubStrengths?.[c];
+    }
   }
   /* Werder Bremen went out in the last sixteen, like Ajax, who stay
      foreign. Until its first summer the old save holds no strength for
