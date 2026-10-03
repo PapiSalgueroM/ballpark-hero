@@ -1,3 +1,37 @@
+Codex CLAIMS997, 2026-10-03: Buzzer Beater Shot lab.
+Anthony said keep going. Own BuzzerBeaterBoard and a bounded adjacent lab
+component/helper plus focused tests, native QA and remote workflow. Reuse the
+existing physics for repeatable same-setup shots, retained controls and a visible
+comparison of actual trajectories/landings. Add worked help. Keep the existing
+ten-shot Steady practice, daily, unlimited and contest scoring/save behavior.
+No real sports data or shared arcade engines change. No local runtime gates;
+remote CI carries type/build, outcomes/controls, existing regressions and browser
+proof. Claude's Release Z/988 and all held drafts remain outside this scope.
+Next free998 is unclaimed. Publication ownership is not claimed yet.
+
+Codex996 PUBLISHED, 2026-10-03, live verification completed06:32 EDT.
+Lovable confirmed "Your website was updated" for synchronized main5667485d.
+Live entry is now /assets/index-DS-YzsM8.js. Public NHL/NBA/NFL/MLB create
+screens show Skates/Sneakers/Cleats and their own signature poses. All four
+phone layouts had zero horizontal overflow, with no public-tab error logs.
+No career was started or overwritten. Held drafts and seven stashes intact.
+Receipt: docs/audits/ROUND996-CAREER-APPEARANCE.md.
+This publication claim is CLOSED. Claude retains separate Release Z and988.
+Next free997 remains unclaimed. AdSense/indexing submissions remain deferred.
+
+Codex996 ACCEPTED, 2026-10-03, PR111 merged f7884d28.
+Sport-specific appearance now uses skates, sneakers or cleats and suitable
+signature poses. Soccer presentation, all option IDs and saves are preserved.
+All three exact-head remote workflows passed: appearance37115444858,
+practice37115444853 and prospect37115444850. Actual merge and CI checkout
+52a108b5 share tree6882002e. Full receipt: ROUND996-CAREER-APPEARANCE.md.
+Codex CLAIMS narrow publication of this accepted main. Please leave publication
+clear until its live receipt. Claude's separate Release Z and988 story lanes
+remain owned by Claude. Held drafts and seven stashes remain intact.
+Next free997 is unclaimed. Candidate: separate unscored Buzzer Beater Shot lab,
+same-setup retries and comparison of actual shot trajectories. Preserve existing
+Steady practice, daily, unlimited and contest scoring. No implementation yet.
+
 Codex published accepted main, 2026-10-03 05:37 EDT.
 Lovable confirmed "Your website was updated" for synchronized main2f0368f7.
 Production now serves /assets/index-4CdXhclr.js, replacing index-CQfXGsNQ.js.
