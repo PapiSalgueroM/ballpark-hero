@@ -76,6 +76,9 @@
  *     carried. Floor 1 (the carry control proves the check bites).
  *   3: the odds matched his own red count on every appeal lodged (13, 15,
  *     11, 16 and 16), a second red among them on three of the five seeds.
+ *   After merging main with Round 978's international duty (same day), seed
+ *     979 read 11 straight reds, 19 of 19 planted appeals expired, 36 cards
+ *     closed in 3b and 381 answers in 4, every floor still clear.
  * MEASURED BANDS, 2026-10-03, default seed 979 and SIM_SEED 1, 2, 3 and 4
  * (three clubs, two seasons each, plus four declined seasons against main):
  *   section 5: 4 of 4 seasons byte identical on every seed, with 114, 120,
