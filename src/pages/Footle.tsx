@@ -1,6 +1,6 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useRef } from 'react';
 import { useGame, footleScore, FOOTLE_SCORE_BUCKETS } from '@/hooks/useGame';
-import type { GuessResult } from '@/types/game';
+import type { GuessResult, Player } from '@/types/game';
 import { PlayerSearch } from '@/components/game/PlayerSearch';
 import { GameBoard } from '@/components/game/GameBoard';
 import { GameShell } from '@/components/game/GameShell';
@@ -35,9 +35,22 @@ const Index = () => {
     targetPlayer,
     isLoading,
     isLoadingPool,
+    practiceRun,
+    practiceSaveFailed,
+    practiceComplete,
+    practiceReady,
+    startPractice,
+    advancePractice,
+    examplePlayer,
   } = useGame();
 
   const [showRules, setShowRules] = useState(false);
+  const practicePanel = useRef<HTMLElement>(null);
+  const inPractice = mode === 'practice';
+  const practicePlaying = inPractice && !!practiceRun && !practiceComplete;
+  useEffect(() => {
+    if (inPractice) practicePanel.current?.focus({ preventScroll: true });
+  }, [inPractice, practiceRun?.index, gameStatus]);
 
   // Show rules on first visit
   useEffect(() => {
@@ -161,6 +174,14 @@ const Index = () => {
               </section>
 
               <section>
+                <h3 className="font-bold text-foreground mb-2">Try a five-puzzle run</h3>
+                <p className="text-muted-foreground">Pick a difficulty and solve five different players. You get eight guesses per player. Give up reveals that answer and counts as a miss. Finish all five for your run receipt. Practice never changes your daily score.</p>
+                <p className="text-muted-foreground mt-2">Worked example: if your guess has 10 goals and the answer has 12, the goals tile is yellow with an up arrow. These example numbers are hypothetical.</p>
+                {examplePlayer && <p className="text-muted-foreground mt-2">From this puzzle pool: {examplePlayer.name} is listed with {examplePlayer.club}, {examplePlayer.nationality}, position {examplePlayer.position}.</p>}
+                <p className="text-muted-foreground mt-2">Stats and values use the puzzle data snapshot, not live totals. A question mark or unknown comparison means a clue is unavailable. Different clubs with an unknown league cannot be compared by league.</p>
+              </section>
+
+              <section>
                 <h3 className="font-bold text-foreground mb-2">⚙️ Difficulty Modes</h3>
                 <ul className="space-y-1.5 text-muted-foreground">
                   {/* ROUND 381: this said "the world's most famous stars", and
@@ -180,19 +201,21 @@ const Index = () => {
             </HowToPlayPopover>
 
             {/* Daily / Unlimited toggle */}
-            <div className="flex items-center justify-center gap-1 mt-6 bg-secondary rounded-full p-1 w-fit mx-auto">
-              {(['daily', 'unlimited'] as const).map((m) => (
+            <div className="flex flex-wrap items-center justify-center gap-1 mt-6 bg-secondary rounded-2xl p-1 w-fit max-w-full mx-auto">
+              {(['daily', 'unlimited', 'practice'] as const).map((m) => (
                 <button
                   key={m}
                   onClick={() => switchMode(m)}
+                  aria-pressed={mode === m}
+                  data-footle-mode={m}
                   className={cn(
-                    'px-5 py-2 rounded-full text-sm font-semibold transition-all',
+                    'px-4 py-2 min-h-[44px] rounded-xl text-sm font-semibold transition-all',
                     mode === m
                       ? 'bg-background text-foreground shadow-sm'
                       : 'text-muted-foreground hover:text-foreground'
                   )}
                 >
-                  {m === 'daily' ? '📅 Daily' : '∞ Unlimited'}
+                  {m === 'daily' ? '📅 Daily' : m === 'unlimited' ? '∞ Unlimited' : 'Five-puzzle run'}
                 </button>
               ))}
             </div>
@@ -210,14 +233,16 @@ const Index = () => {
             )}
 
             {/* Difficulty selector: unlimited mode only */}
-            {mode === 'unlimited' && (
+            {(mode === 'unlimited' || (inPractice && (!practiceRun || practiceComplete))) && (
               <div className="flex items-center justify-center gap-2 mt-3">
                 {(['easy', 'hard', 'insane'] as const).map((d) => (
                   <button
                     key={d}
                     onClick={() => changeDifficulty(d)}
+                    aria-pressed={difficulty === d}
+                    disabled={isLoadingPool}
                     className={cn(
-                      'px-6 py-2 rounded-full text-sm font-semibold transition-all capitalize',
+                      'px-5 py-2 min-h-[44px] rounded-full text-sm font-semibold transition-all capitalize disabled:opacity-50',
                       difficulty === d
                         ? d === 'easy'
                           ? 'bg-correct text-correct-foreground'
@@ -234,30 +259,84 @@ const Index = () => {
             )}
 
             {/* Guess Counter */}
-            <p className="text-sm text-muted-foreground mt-4">
+            {(!inPractice || practicePlaying) && <p className="text-sm text-muted-foreground mt-4">
               Guesses:{' '}
               <span className="text-foreground font-semibold">
                 {guesses.length}
               </span>{' '}
               / {maxGuesses}
-            </p>
+            </p>}
           </>
         }
       >
+        {inPractice && (
+          <section ref={practicePanel} tabIndex={-1} aria-label="Five-puzzle run" data-footle-practice="" data-testid="footle-practice" data-practice-index={practiceRun?.index ?? -1} className="mb-6 rounded-2xl border border-primary/30 bg-gradient-to-br from-primary/10 via-card to-card p-4 sm:p-6 outline-none focus-visible:ring-2 focus-visible:ring-primary">
+            {!practiceRun ? (
+              <>
+                <h2 className="font-display text-2xl sm:text-3xl text-foreground">Five players. One run.</h2>
+                <p className="mt-2 text-sm text-muted-foreground">Eight guesses each. Five different answers. See how many you can solve.</p>
+                <div className="mt-4 grid grid-cols-5 gap-2" aria-hidden="true">
+                  {[1, 2, 3, 4, 5].map(number => <div key={number} className="rounded-xl border border-primary/20 bg-background/60 py-3 text-center font-display text-xl text-primary">{number}</div>)}
+                </div>
+                <p className="mt-4 text-sm text-muted-foreground">Pick your difficulty above. Your run saves on this device. The daily answer is left out.</p>
+                <button data-testid="practice-start" onClick={startPractice} disabled={!practiceReady} className="mt-4 w-full min-h-[44px] rounded-xl bg-primary px-4 py-3 font-semibold text-primary-foreground disabled:opacity-50">Start run</button>
+                {!isLoadingPool && !practiceReady && <p role="status" className="mt-2 text-sm text-muted-foreground">This tier needs five available players. Try another difficulty.</p>}
+              </>
+            ) : practiceComplete ? (
+              <div data-footle-practice-result="" data-testid="practice-receipt">
+                <h2 className="font-display text-3xl text-foreground">Run complete</h2>
+                <p className="mt-2 text-lg font-semibold text-primary">{practiceRun.rounds.filter(round => round.status === 'won').length} of 5 solved</p>
+                <p className="text-sm text-muted-foreground">{practiceRun.rounds.reduce((total, round) => total + round.guesses.length, 0)} total guesses · {practiceRun.tier} · no daily points used</p>
+                <button data-testid="practice-start" onClick={startPractice} disabled={!practiceReady} className="mt-4 w-full min-h-[44px] rounded-xl bg-primary px-4 py-3 font-semibold text-primary-foreground disabled:opacity-50">Play another five</button>
+                <ol className="mt-4 grid gap-2 sm:grid-cols-2">
+                  {practiceRun.rounds.map((round, index) => {
+                    const answer = practiceRun.pool.find(player => player.name === practiceRun.targets[index])!;
+                    return <li key={answer.name} className="min-w-0 rounded-xl border border-border bg-background/70 p-3">
+                      <p className="text-xs font-semibold text-muted-foreground">Puzzle {index + 1} · {round.status === 'won' ? 'Solved' : 'Missed'} · {round.guesses.length} {round.guesses.length === 1 ? 'guess' : 'guesses'}</p>
+                      <p className="mt-1 break-words font-semibold text-foreground">{answer.name}</p>
+                      <p className="break-words text-xs text-muted-foreground">{answer.club} · {answer.position}</p>
+                      <details className="mt-2"><summary className="min-h-[44px] cursor-pointer py-3 text-xs font-semibold text-primary">View player details</summary><PracticeAnswer player={answer} /></details>
+                    </li>;
+                  })}
+                </ol>
+                <p className="mt-3 text-xs text-muted-foreground">Player details are from this run's saved puzzle snapshot.</p>
+              </div>
+            ) : (
+              <>
+                <div className="flex flex-wrap items-baseline justify-between gap-2">
+                  <h2 className="font-display text-2xl text-foreground" data-testid="practice-progress">Puzzle {practiceRun.index + 1} of 5</h2>
+                  <span className="text-sm capitalize text-muted-foreground">{practiceRun.tier} · {practiceRun.rounds.filter(round => round.status === 'won').length} solved</span>
+                </div>
+                <ol className="mt-3 grid grid-cols-5 gap-2" aria-label="Run progress">
+                  {practiceRun.rounds.map((round, index) => <li key={index} aria-current={index === practiceRun.index ? 'step' : undefined} className={cn('rounded-lg border py-2 text-center text-sm font-semibold', round.status === 'won' ? 'border-correct bg-correct/15 text-foreground' : round.status === 'lost' ? 'border-border bg-secondary text-muted-foreground' : index === practiceRun.index ? 'border-primary text-primary' : 'border-border text-muted-foreground')}><span aria-hidden="true">{round.status === 'won' ? '✓' : round.status === 'lost' ? '×' : index + 1}</span><span className="sr-only">Puzzle {index + 1}: {round.status === 'won' ? 'solved' : round.status === 'lost' ? 'missed' : index === practiceRun.index ? 'current' : 'up next'}</span></li>)}
+                </ol>
+                {gameStatus !== 'playing' && targetPlayer ? (
+                  <div className="mt-4" data-testid="practice-feedback">
+                    <p role="status" className="font-semibold text-foreground">{gameStatus === 'won' ? 'Solved!' : 'The answer was'} {targetPlayer.name}</p>
+                    <p className="mt-1 text-sm text-muted-foreground">{targetPlayer.club} · {targetPlayer.nationality} · {targetPlayer.position}</p>
+                    <button data-testid="practice-next" onClick={advancePractice} className="mt-4 w-full min-h-[44px] rounded-xl bg-primary px-4 py-3 font-semibold text-primary-foreground">Next puzzle</button>
+                    <details className="mt-2"><summary className="min-h-[44px] cursor-pointer py-3 text-sm font-semibold text-primary">View player details</summary><PracticeAnswer player={targetPlayer} /></details>
+                  </div>
+                ) : <p className="mt-3 text-sm text-muted-foreground">Use the clues below. Every player in the saved pool is available to guess.</p>}
+              </>
+            )}
+            {practiceSaveFailed && <p role="alert" className="mt-3 text-sm text-destructive">This device could not save your run. You can keep playing, but reloading may lose your progress.</p>}
+          </section>
+        )}
         {/* Search */}
-        {(isLoadingPool || isLoading) ? (
+        {(!inPractice && (isLoadingPool || isLoading)) ? (
           <div className="mb-8 flex justify-center">
             <p data-no-prerender className="text-muted-foreground text-sm animate-pulse">Loading today's puzzle…</p>
           </div>
-        ) : gameStatus === 'playing' ? (
+        ) : gameStatus === 'playing' && (!inPractice || practicePlaying) ? (
           <div className="mb-8 space-y-3">
             <PlayerSearch
               players={availablePlayers}
               guessedNames={guessedPlayerNames}
               onSelect={makeGuess}
             />
-            <div className="flex justify-center">
-              <GiveUpButton onGiveUp={giveUp} />
+            <div className={cn('flex justify-center', inPractice && '[&_button]:min-h-[44px]')}>
+              <GiveUpButton onGiveUp={giveUp} className={inPractice ? 'min-h-[44px]' : undefined} />
             </div>
           </div>
         ) : null}
@@ -290,10 +369,10 @@ const Index = () => {
         )}
 
         {/* Game Board */}
-        <GameBoard guesses={guesses} maxGuesses={maxGuesses} />
+        {(!inPractice || practicePlaying) && <GameBoard guesses={guesses} maxGuesses={maxGuesses} />}
 
         {/* Game Over */}
-        {gameStatus !== 'playing' && (
+        {!inPractice && gameStatus !== 'playing' && (
           <div className="mt-8 flex justify-center">
             <ResultScreen
               won={gameStatus === 'won'}
@@ -318,7 +397,7 @@ const Index = () => {
               }
               funFact={
                 targetPlayer
-                  ? `💡 Did you know? ${targetPlayer.name} plays as a ${targetPlayer.position} and is valued at ${fmtCompactUsd(targetPlayer.marketValue * 1_000_000)}.`
+                  ? `Puzzle snapshot: ${targetPlayer.name} is listed as a ${targetPlayer.position} and valued at ${fmtCompactUsd(targetPlayer.marketValue * 1_000_000)}.`
                   : undefined
               }
               emojiGrid={footleEmojiGrid(guesses, maxGuesses)}
@@ -330,7 +409,7 @@ const Index = () => {
               onPlayAgain={mode === 'unlimited' ? () => resetGame() : undefined}
               playNext={
                 mode === 'daily'
-                  ? <p className="text-sm text-muted-foreground">Come back tomorrow for a new puzzle!</p>
+                  ? <button onClick={() => switchMode('practice')} className="min-h-[44px] w-full rounded-xl bg-primary px-4 py-3 font-semibold text-primary-foreground">{practiceRun && !practiceComplete ? 'Resume five-puzzle run' : 'Play five more'}</button>
                   : undefined
               }
             >
@@ -384,22 +463,23 @@ const Index = () => {
             "After each guess, colored tiles show how close you are: green means correct, yellow means close.",
             "Use the clues to narrow down the mystery player. A new puzzle is available every day."
           ]}
-          examples={[
-            "Lionel Messi: Inter Miami, MLS, Argentina, Forward",
-            "Erling Haaland: Manchester City, Premier League, Norway, Forward",
-            "Jude Bellingham: Real Madrid, La Liga, England, Midfielder",
-            "Kylian Mbappé: Real Madrid, La Liga, France, Forward",
-            "Bukayo Saka: Arsenal, Premier League, England, Winger",
-            "Vinícius Júnior: Real Madrid, La Liga, Brazil, Forward",
-            "Pedri: Barcelona, La Liga, Spain, Midfielder",
-            "Florian Wirtz: Bayer Leverkusen, Bundesliga, Germany, Midfielder"
-          ]}
+          examples={examplePlayer ? [`${examplePlayer.name}: ${examplePlayer.club}, ${examplePlayer.league}, ${examplePlayer.nationality}, ${examplePlayer.position}. From this puzzle pool.`] : []}
         />
         <GameNav />
       </GameShell>
     </>
   );
 };
+
+function PracticeAnswer({ player }: { player: Player }) {
+  const facts = [
+    ['Club', player.club], ['League', player.league === 'Other' ? 'Unknown' : player.league],
+    ['Nation', player.nationality], ['Position', player.position], ['Goals', player.goals ?? 'Unknown'],
+    ['Assists', player.assists ?? 'Unknown'], ['Age', player.age], ['Kit #', player.kitNumber ?? 'Unknown'],
+    ['Value', fmtCompactUsd(player.marketValue * 1_000_000)],
+  ];
+  return <><dl className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-3">{facts.map(([label, value]) => <div key={label} className="min-w-0 rounded-lg bg-background/70 p-2"><dt className="text-xs text-muted-foreground">{label}</dt><dd className="break-words text-sm font-medium text-foreground">{value}</dd></div>)}</dl><p className="mt-2 text-xs text-muted-foreground">Puzzle snapshot, not live totals.</p></>;
+}
 
 /** Builds a shareable emoji grid from Footle's guess history: one row per
  *  guess, one colored square per revealed cell. Per R5 spec Problem 6, Footle
