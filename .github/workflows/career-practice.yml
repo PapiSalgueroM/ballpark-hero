@@ -63,10 +63,12 @@ jobs:
       - name: Actual practice outcomes and rejection controls
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}
         run: |
-          node scripts/simUsCareerPractice.mjs 2>&1 | tee career-practice-artifacts/practice.log
+          failed=0
+          node scripts/simUsCareerPractice.mjs 2>&1 | tee career-practice-artifacts/practice.log || failed=1
           for control in before gain cap once save receipt renew rules abort pending reset carry; do
-            US_CAREER_PRACTICE_CONTROL="$control" node scripts/simUsCareerPractice.mjs 2>&1 | tee "career-practice-artifacts/practice-$control.log"
+            US_CAREER_PRACTICE_CONTROL="$control" node scripts/simUsCareerPractice.mjs 2>&1 | tee "career-practice-artifacts/practice-$control.log" || failed=1
           done
+          exit "$failed"
       - name: Original career behavior and save replay
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}
         run: |

@@ -33,6 +33,25 @@ const controls = {
 };
 assert(!CONTROL || CONTROL === 'before' || controls[CONTROL], `Unknown practice control: ${CONTROL}`);
 const work = fs.mkdtempSync(path.join(os.tmpdir(), 'dukb-practice992-'));
+const sourceCopies = [];
+let sourceFolder;
+if (CONTROL) {
+  const parent = path.join(ROOT, '.sim-control');
+  fs.mkdirSync(parent, { recursive: true });
+  sourceFolder = fs.mkdtempSync(path.join(parent, 'practice992-'));
+  process.once('exit', () => {
+    for (const copy of sourceCopies) fs.rmSync(copy, { force: true });
+    fs.rmdirSync(sourceFolder);
+  });
+}
+const writeControl = (name, source) => {
+  fs.writeFileSync(path.join(work, name), source);
+  // React imports resolve from the project; TEMP retains the evidence copy.
+  const copy = path.join(sourceFolder, name);
+  fs.writeFileSync(copy, source);
+  sourceCopies.push(copy);
+  return copy.replaceAll('\\', '/');
+};
 const swaps = {};
 const alias = file => `@/${file.slice(4).replace(/\.tsx?$/, '')}`;
 if (CONTROL === 'before') {
@@ -40,9 +59,7 @@ if (CONTROL === 'before') {
     const file = `src/components/${slug}-my-career/${name}MyCareerBoard.tsx`;
     const original = execFileSync('git', ['show', `a0ba8344:${file}`], { cwd: ROOT, encoding: 'utf8' });
     assert(original.includes('Play the {career.year} season') && !original.includes('data-career-practice'), `Not a pre-practice board: ${file}`);
-    const copy = path.join(work, `${name}Before.tsx`);
-    fs.writeFileSync(copy, original);
-    swaps[alias(file)] = copy.replaceAll('\\', '/');
+    swaps[alias(file)] = writeControl(`${name}Before.tsx`, original);
   }
 } else if (CONTROL) {
   const control = controls[CONTROL];
@@ -50,9 +67,7 @@ if (CONTROL === 'before') {
   assert.equal(source.split(control.from).length - 1, 1, `${CONTROL} must change exactly one source anchor`);
   const broken = source.replace(control.from, control.to);
   assert.notEqual(broken, source, `${CONTROL} did not change source`);
-  const copy = path.join(work, path.basename(control.file));
-  fs.writeFileSync(copy, broken);
-  swaps[alias(control.file)] = copy.replaceAll('\\', '/');
+  swaps[alias(control.file)] = writeControl(path.basename(control.file), broken);
 }
 const report = path.join(work, 'report.json');
 const require = createRequire(path.join(ROOT, 'package.json'));
@@ -76,20 +91,29 @@ const results = JSON.parse(fs.readFileSync(report, 'utf8'));
 const tests = results.testResults.flatMap(file => file.assertionResults);
 const failed = tests.filter(test => test.status === 'failed');
 const passed = tests.filter(test => test.status === 'passed');
+for (const file of results.testResults) {
+  if (file.status === 'failed' && !file.assertionResults.length) console.error(file.message);
+}
 const labels = ['NFL', 'NBA', 'MLB', 'NHL'];
+// Vitest formats an object-table string as 'NFL'; retain the exact outcome
+// title while normalising only those four known sport prefixes.
+const outcomeTitle = test => test.title.replace(/^'(NFL|NBA|MLB|NHL)' /, '$1 ');
 if (!CONTROL) {
   for (const test of failed) console.error(`${test.fullName}\n${test.failureMessages.join('\n')}`.slice(0, 6000));
   assert.equal(run.status, 0, `Practice failed: ${failed.map(t => t.fullName).join('; ')}`);
   assert.equal(failed.length, 0);
   assert.equal(passed.length, 32, 'All 32 actual-board outcomes must run');
-  for (const label of labels) assert.equal(passed.filter(t => t.fullName.includes(`${label} `)).length, 8, `${label} outcomes missing`);
+  for (const label of labels) {
+    assert.equal(passed.filter(t => outcomeTitle(t).startsWith(`${label} `)).length, 8, `${label} outcomes missing`);
+    console.log(`   ${label}: 8 actual-board outcomes passed, including saved gains, reload and the next season`);
+  }
   console.log('simUsCareerPractice: 32 actual-board outcomes passed across NFL, NBA, MLB and NHL');
 } else {
   assert.equal(run.status, 1, `${CONTROL} must be an assertion failure, not a stall or runner error`);
   assert.equal(failed.length, 4, `${CONTROL}: exactly four named sport outcomes must fail`);
-  for (const label of labels) assert(failed.some(t => t.fullName.includes(`${label} ${named}`)), `${CONTROL}: missing ${label} named failure`);
+  for (const label of labels) assert(failed.some(t => outcomeTitle(t) === `${label} ${named}`), `${CONTROL}: missing ${label} named failure`);
   assert.equal(passed.length, 4, `${CONTROL}: the four independent quiet restores must stay green`);
-  for (const label of labels) assert(passed.some(t => t.fullName.includes(`${label} ${QUIET}`)), `${CONTROL}: ${label} quiet restore did not pass`);
+  for (const label of labels) assert(passed.some(t => outcomeTitle(t) === `${label} ${QUIET}`), `${CONTROL}: ${label} quiet restore did not pass`);
   assert(failed.every(t => t.failureMessages?.some(message => /AssertionError|TestingLibraryElementError|expect\(/.test(message))
     && !t.failureMessages.some(message => /timed out|Failed to resolve|Cannot find module|ReferenceError|TypeError|unhandled/i.test(message))), `${CONTROL}: failures must be assertions, never runner errors or deadlines`);
   assert.equal(results.numRuntimeErrorTestSuites ?? 0, 0, `${CONTROL}: runtime suite errors are not a control result`);
