@@ -40,7 +40,7 @@ export function AcademyFocusPicker({ position, focus, onPick }: {
               aria-pressed={on}
               onClick={() => onPick(on ? null : o.key)}
               className={`min-h-[36px] rounded-lg border px-2 py-1.5 text-[11px] font-bold leading-tight transition-colors active:scale-[0.98] ${
-                on ? "border-emerald-500 bg-emerald-500/15 text-emerald-300" : "border-border bg-muted/20 text-foreground"
+                on ? "border-emerald-500 bg-emerald-500/10 text-[hsl(var(--wc-green-ink))]" : "border-border bg-muted/20 text-foreground"
               }`}
             >
               {o.label}
@@ -90,7 +90,7 @@ export function AcademyReportCard({ report }: { report: AcademyReport }) {
           >
             <div className="text-[10px] text-muted-foreground truncate">{l.label}{l.focus ? " 🎯" : ""}</div>
             <div className="text-sm font-black">
-              {l.after} <span className={l.delta > 0 ? "text-emerald-400" : "text-muted-foreground"}>{signed(l.delta)}</span>
+              {l.after} <span className={l.delta > 0 ? "text-[hsl(var(--wc-green-ink))]" : "text-muted-foreground"}>{signed(l.delta)}</span>
             </div>
           </div>
         ))}
@@ -98,7 +98,7 @@ export function AcademyReportCard({ report }: { report: AcademyReport }) {
       <ul className="space-y-1 text-xs text-muted-foreground">
         <li>{seasonLine(report)}</li>
         <li>{report.cupLine}</li>
-        {report.focus && <li data-academy-focus-result className="text-emerald-300">{academyFocusResultLine(report.focus)}</li>}
+        {report.focus && <li data-academy-focus-result className="text-[hsl(var(--wc-green-ink))]">{academyFocusResultLine(report.focus)}</li>}
         <li className="text-foreground">{report.verdict}</li>
       </ul>
     </div>

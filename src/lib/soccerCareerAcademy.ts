@@ -26,7 +26,7 @@
  *    person.
  */
 import { attrTreeFor } from "./soccerCareerAttributes";
-import type { AllocKey } from "./careerEras";
+import { allocOverall, type AllocKey } from "./careerEras";
 
 export type AcademyFocus = AllocKey;
 
@@ -139,9 +139,17 @@ type ReportSave = StatBlock & AcademyFields & {
   seasons: { year: number; apps: number; goals: number; assists: number; cleanSheets: number; type?: string }[];
 };
 
+/* The verdict's cut points, in normal growth per skill over the year. On real
+   careers the year gives 3.7 a skill on average (2.8 at the 10th percentile,
+   4.7 at the 90th), the same for every position. */
+const VERDICT_BIG = 4.5;
+const VERDICT_SOLID = 3.25;
+const VERDICT_QUIET = 2.5;
+
 /* The coach's verdict, narrated about a role. Two readings per tier so two
-   careers do not read identically, picked by the hash. */
-const VERDICTS: Record<"big" | "solid" | "quiet" | "flatCeiling" | "flat", [string, string]> = {
+   careers do not read identically, picked by the hash. Exported for
+   simCareerAcademy, which reads each tier's share off real careers. */
+export const VERDICTS: Record<"big" | "solid" | "quiet" | "flatCeiling" | "flat", [string, string]> = {
   big: [
     "Your academy coach calls it the biggest jump anyone in the group made this year, and the first team staff have started turning up to watch.",
     "Your academy coach rates it a huge year. Your name has started coming up in first team meetings.",
@@ -191,12 +199,27 @@ export function buildAcademyReport(before: ReportSave, after: ReportSave, potent
   const h = academyHash(`${before.playerName}|${row.year}|${before.currentClub}|${before.position}`);
   const lift = before.overall >= 70 ? 2 : before.overall >= 62 ? 1 : 0;
   const cupStage = Math.min(ACADEMY_CUP_STAGES.length - 1, (h % 4) + lift);
-  const gained = after.overall - before.overall;
-  const tier = gained >= 3 ? "big" : gained === 2 ? "solid" : gained === 1 ? "quiet"
+  /* The overall the skills were really worth going in. A new career's saved
+     overall is the creation screen's average of all seven stats, while the
+     game's overall (allocOverall, the exact mirror of the engine's
+     calcOverall) weighs six for an outfielder and seven by weight for a
+     keeper, so the saved number can sit a point (five for a keeper) under the
+     skills. Reading the start off the skills keeps the year's gain to what
+     the year did; the end is the overall the year itself saved. */
+  const overallBefore = allocOverall(before, before.position);
+  /* The coach's verdict reads the year's normal growth per skill, so a keeper's
+     seven weigh the same as an outfielder's six and a focus never changes it
+     (the focus has its own line). The cut points come from real careers made
+     the way the creation screen makes them, measured in simCareerAcademy
+     section 7: about one year in six reads big, most read solid, one in five
+     quiet and a few flat. */
+  const natural = lines.reduce((sum, l) => sum + l.delta, 0) - (focus ? focus.added : 0);
+  const perSkill = natural / lines.length;
+  const tier = perSkill >= VERDICT_BIG ? "big" : perSkill >= VERDICT_SOLID ? "solid" : perSkill >= VERDICT_QUIET ? "quiet"
     : after.overall >= potential - ACADEMY_FOCUS_NEAR ? "flatCeiling" : "flat";
   return {
     year: row.year, age: after.age, club: after.currentClub, lines,
-    overallBefore: before.overall, overallAfter: after.overall, focus,
+    overallBefore, overallAfter: after.overall, focus,
     apps: row.apps, goals: row.goals, assists: row.assists, cleanSheets: row.cleanSheets,
     keeper: after.position === "GK",
     cupStage, cupLine: ACADEMY_CUP_STAGES[cupStage],
@@ -205,13 +228,18 @@ export function buildAcademyReport(before: ReportSave, after: ReportSave, potent
 }
 
 /** The line the focus picker prints, and the one the report prints, built
-    from the same constants the year applies so the words cannot drift. */
+    from the same constants the year applies so the words cannot drift. The
+    game never shows the ceiling as a number (careerEras potentialTier), so
+    the rule says "close" rather than a distance the player cannot measure;
+    the report's result line then says which rung the year landed on. */
 export const ACADEMY_FOCUS_RULE =
-  `+${ACADEMY_FOCUS_BONUS} to that skill on top of the year's normal growth, +1 if the year leaves you within ${ACADEMY_FOCUS_NEAR} of your ceiling, nothing once you are on it.`;
+  `+${ACADEMY_FOCUS_BONUS} to that skill on top of the year's normal growth. If the year takes you close to your ceiling it adds +1, and nothing once you reach it.`;
 
 export function academyFocusResultLine(focus: { label: string; added: number; maxed: boolean }): string {
-  if (focus.added > 0) return `Your ${focus.label} focus added +${focus.added} on top of the normal growth.`;
+  const head = `Your ${focus.label} focus added +${focus.added} on top of the normal growth`;
+  if (focus.added >= ACADEMY_FOCUS_BONUS) return `${head}.`;
+  if (focus.added > 0) return focus.maxed ? `${head}, which took it to 99.` : `${head}: the year took you close to your ceiling.`;
   return focus.maxed
     ? `Your ${focus.label} is already 99, so the focus had nothing to add.`
-    : `Your ${focus.label} focus added nothing: you were already on your ceiling.`;
+    : `Your ${focus.label} focus added nothing: you are on your ceiling now.`;
 }

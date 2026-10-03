@@ -3,14 +3,19 @@
  * (src/lib/soccerCareerAcademy.ts, applied inside advanceYouthYear, shown by
  * src/components/soccer-career/AcademyReportCard.tsx).
  *
- *   1. No focus is main, byte for byte. The tree this branch grew from (git
- *      merge-base HEAD origin/main, archived to a temp folder and bundled
- *      beside this tree) and this tree drive the same seeded careers from
- *      initCareer through the academy year, the contract and the first pro
- *      seasons, and the whole save must match after every step. On this tree
- *      the report is built at the academy step exactly as the page builds it,
- *      so a report that drew from Math.random would part the two streams.
- *      A career that picks a focus and then drops it must match too.
+ *   1. No focus changes nothing, byte for byte. This tree is bundled twice,
+ *      once as it is and once with the one engine line that applies the focus
+ *      cut out (ENGINE_HOOK below), and both drive the same seeded careers
+ *      from initCareer through the academy year, the contract and the first
+ *      pro seasons: the whole save must match after every step. The report is
+ *      built at the academy step exactly as the page builds it, so a report
+ *      that drew from Math.random would part the two streams. A career that
+ *      picks a focus and then drops it must match too. The baseline is this
+ *      tree minus the hook, not git's merge base, so every later Soccer Career
+ *      round (and a release tree several rounds ahead of origin/main) compares
+ *      like with like, and on main the check still means something. The
+ *      lasting proof that the academy year itself is main's is
+ *      simCareerAwardsNight's committed fixture.
  *   2. Every focus moves only its own family, by the printed amount. Each
  *      seed is played twice from the same dice, once with no focus and once
  *      with each family the position offers (six, seven for a keeper): the
@@ -29,6 +34,19 @@
  *   5. Old and corrupt saves: a save sitting in the academy with no field
  *      plays on, and a focus that is not one of the position's families
  *      (a corrupt or hand edited save) moves no stat at all.
+ *   6. The page's wiring, read from src/pages/SoccerCareer.tsx with its
+ *      comments stripped: the press builds the report from the save before
+ *      the year and the save the year returned (in that order), the card's
+ *      render guard is evaluated against real reports (true for its own year,
+ *      false for a stale one), and the focus handler refuses every phase but
+ *      the academy.
+ *   7. Real careers, made the way the creation screen makes them (the page's
+ *      own generateStatsFromOverall lifted out of its source, rollStartingOverall
+ *      and rollPotential): the coach's verdict spreads across its tiers, a focus
+ *      never changes it, and the card's overall line starts from what the
+ *      skills were worth (calcOverall), so it moves no more than the skills did.
+ *      Section 1's flat stat careers cannot see either: there every stat equals
+ *      the overall.
  *
  * Negative controls (SIM_CAREER_ACADEMY_CONTROL), each must turn its section
  * red, each patch refused unless its exact text is in the file:
@@ -39,6 +57,11 @@
  *   nocap         the ladder ignores the ceiling                   -> sections 2 and 3
  *   cardlie       the card prints the before value as the after    -> section 4
  *   corrupt       a foreign focus is trusted without a check       -> section 5
+ *   norecalc      the year applies the focus but keeps the old overall -> section 2
+ *   swapargs      the page builds the report from (after, before)  -> section 6
+ *   anyphase      the page lets the focus change outside the academy -> section 6
+ *   createdovr    the card starts from the saved overall           -> section 7
+ *   oldtiers      the verdict reads the overall gained (the first cut) -> section 7
  *
  * MEASURED on the round's tree, seeds 0 to 4 (SIM_CAREER_ACADEMY_SEED):
  *   section 1: 2,838 to 2,990 saves compared against the merge base, 60 of
@@ -59,7 +82,6 @@
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-import { execFileSync } from 'node:child_process';
 import { createRequire } from 'node:module';
 import { fileURLToPath } from 'node:url';
 
@@ -67,6 +89,8 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.SIM_CAREER_ACADEMY_CONTROL ?? '';
 const ACADEMY = 'src/lib/soccerCareerAcademy.ts';
 const CARD = 'src/components/soccer-career/AcademyReportCard.tsx';
+const ENGINE = 'src/lib/soccerCareerEngine.ts';
+const PAGE = 'src/pages/SoccerCareer.tsx';
 const CONTROLS = {
   alwayswrite: { file: ACADEMY, from: '  if (!focus) return 0;\n  const before = s[focus];', to: '  if (!focus) { s.academyFocusAdded = 0; return 0; }\n  const before = s[focus];' },
   drawinreport: { file: ACADEMY, from: '(h % 4) + lift', to: 'Math.floor(Math.random() * 4) + lift' },
@@ -75,7 +99,15 @@ const CONTROLS = {
   nocap: { file: ACADEMY, from: '  if (!(overall < potential)) return 0;\n  if (overall >= potential - ACADEMY_FOCUS_NEAR) return 1;\n', to: '' },
   cardlie: { file: CARD, from: '{l.after} <span', to: '{l.before} <span' },
   corrupt: { file: ACADEMY, from: '  return academyFocusOptions(s.position).some(o => o.key === f) ? (f as AcademyFocus) : null;', to: '  return f as AcademyFocus;' },
+  norecalc: { file: ENGINE, from: '  if (applyAcademyFocus(s, pot) > 0) s.overall = calcOverall(s, s.position);', to: '  applyAcademyFocus(s, pot);' },
+  swapargs: { file: PAGE, from: 'buildAcademyReport(career, next, effectivePotential(career))', to: 'buildAcademyReport(next, career, effectivePotential(career))' },
+  anyphase: { file: PAGE, from: '    if (!career || career.phase !== "youth") return;\n    setCareer(withAcademyFocus(', to: '    if (!career) return;\n    setCareer(withAcademyFocus(' },
+  createdovr: { file: ACADEMY, from: '  const overallBefore = allocOverall(before, before.position);', to: '  const overallBefore = before.overall;' },
+  oldtiers: { file: ACADEMY, from: '  const tier = perSkill >= VERDICT_BIG ? "big"', to: '  const tier = after.overall - before.overall >= 3 ? "big"' },
 };
+/* The one engine line the round adds to the academy year. Section 1's
+   baseline is this tree with it cut out. */
+const ENGINE_HOOK = { file: ENGINE, from: '  if (applyAcademyFocus(s, pot) > 0) s.overall = calcOverall(s, s.position);\n', to: '' };
 if (CONTROL && !CONTROLS[CONTROL]) { console.error(`unknown control ${CONTROL}`); process.exit(2); }
 
 let failures = 0;
@@ -105,6 +137,8 @@ async function bundle(root, name, { withAcademy, patches = [] }) {
       `import * as cards from '${R}/${CARD}';`,
       'export const renderReport = report => renderToStaticMarkup(React.createElement(cards.AcademyReportCard, { report }));',
       'export const renderPicker = (position, focus) => renderToStaticMarkup(React.createElement(cards.AcademyFocusPicker, { position, focus, onPick: () => undefined }));',
+      `export { rollStartingOverall, rollPotential } from '${R}/src/lib/careerEras.ts';`,
+      `export { POSITION_OFFSETS } from '${R}/src/lib/soccerCareerAttributes.ts';`,
     ] : []),
   ].join('\n'));
   const norm = p => p.replaceAll('\\', '/').toLowerCase();
@@ -139,27 +173,37 @@ async function bundle(root, name, { withAcademy, patches = [] }) {
   return require(out);
 }
 
-/* The tree this branch grew from, written out of git object by object (no
-   tar, no checkout: nothing in the working tree or the index is touched). */
-function writeBaseTree() {
-  const git = args => execFileSync('git', args, { cwd: ROOT, maxBuffer: 1 << 30 });
-  const base = git(['merge-base', 'HEAD', 'origin/main']).toString().trim();
-  const dir = path.join(TMP, 'base');
-  const entries = git(['ls-tree', '-r', '-z', base, 'src']).toString().split('\0').filter(Boolean)
-    .map(line => { const [meta, file] = line.split('\t'); return { sha: meta.split(' ')[2], file }; });
-  const blob = execFileSync('git', ['cat-file', '--batch'], {
-    cwd: ROOT, input: entries.map(e => e.sha).join('\n') + '\n', maxBuffer: 1 << 30,
-  });
-  let at = 0;
-  for (const e of entries) {
-    const nl = blob.indexOf(10, at);
-    const size = Number(blob.subarray(at, nl).toString().split(' ')[2]);
-    const target = path.join(dir, e.file);
-    fs.mkdirSync(path.dirname(target), { recursive: true });
-    fs.writeFileSync(target, blob.subarray(nl + 1, nl + 1 + size));
-    at = nl + 1 + size + 1;
+/** Replaces each patch's exact text once, refusing a patch whose text is
+    missing or repeated, so a control that matches nothing cannot pass. */
+function patchText(file, src, patches) {
+  for (const p of patches) {
+    if (!src.includes(p.from)) throw new Error(`control refused: ${file} does not contain ${JSON.stringify(p.from.slice(0, 80))}`);
+    if (src.split(p.from).length !== 2) throw new Error(`control refused: ${file} contains its text more than once`);
+    src = src.replace(p.from, p.to);
   }
-  return { base, dir, files: entries.length };
+  return src;
+}
+
+/** The page's source with its comments stripped, so a check can only be
+    satisfied by code, never by the prose that explains it. */
+function pageCode(patches) {
+  const raw = fs.readFileSync(path.join(ROOT, PAGE), 'utf8').replaceAll('\r\n', '\n');
+  return patchText(PAGE, raw, patches)
+    .replace(/\{\/\*[\s\S]*?\*\/\}/g, '')
+    .replace(/\/\*[\s\S]*?\*\//g, '')
+    .replace(/(^|[^:"'`\\])\/\/[^\n]*/g, '$1');
+}
+
+/** The creation screen's own generateStatsFromOverall, lifted out of the page
+    source and compiled here, so section 7's careers are the ones a player
+    really gets and a change to the page shows up in this harness. */
+function pageStatsGenerator(POSITION_OFFSETS) {
+  const src = fs.readFileSync(path.join(ROOT, PAGE), 'utf8').replaceAll('\r\n', '\n');
+  const at = src.indexOf('function generateStatsFromOverall(');
+  if (at < 0 || src.indexOf('function generateStatsFromOverall(', at + 1) >= 0) throw new Error(`${PAGE} must define generateStatsFromOverall exactly once`);
+  const end = src.indexOf('\n}\n', at);
+  const js = esbuild.transformSync(`type Stats = Record<string, number>;\n${src.slice(at, end + 2)}`, { loader: 'ts' }).code;
+  return new Function('POSITION_OFFSETS', `${js}\nreturn generateStatsFromOverall;`)(POSITION_OFFSETS);
 }
 
 const mulberry32 = a => () => {
@@ -239,6 +283,7 @@ function step(soccer, s, clubs) {
 
 const CONTROL_SECTIONS = {
   alwayswrite: [1], drawinreport: [1, 4], leak: [2], wrongprint: [2, 3], nocap: [2, 3], cardlie: [4], corrupt: [5],
+  norecalc: [2], swapargs: [6], anyphase: [6], createdovr: [7], oldtiers: [7],
 };
 const counted = fn => {
   const inner = Math.random;
@@ -251,16 +296,17 @@ const signed = n => (n > 0 ? `+${n}` : `${n}`);
 async function main() {
   const t0 = Date.now();
   if (CONTROL) console.log(`CONTROL ${CONTROL} active: section ${CONTROL_SECTIONS[CONTROL].join(' and ')} must go red\n`);
-  const { base, dir, files } = writeBaseTree();
-  const here = await bundle(ROOT, 'here', { withAcademy: true, patches: CONTROL ? [CONTROLS[CONTROL]] : [] });
-  const was = await bundle(dir, 'base', { withAcademy: false });
+  const pagePatches = CONTROL && CONTROLS[CONTROL].file === PAGE ? [CONTROLS[CONTROL]] : [];
+  const here = await bundle(ROOT, 'here', { withAcademy: true, patches: CONTROL && !pagePatches.length ? [CONTROLS[CONTROL]] : [] });
+  const was = await bundle(ROOT, 'base', { withAcademy: false, patches: [ENGINE_HOOK] });
+  const base = 'the tree without the academy line';
   const { soccer, academy } = here;
   const clubs = soccer.FALLBACK_CLUBS;
-  console.log(`bundled this tree and ${base.slice(0, 8)} (${files} files under src) in ${((Date.now() - t0) / 1000).toFixed(1)}s\n`);
+  console.log(`bundled this tree twice, with and without the academy line, in ${((Date.now() - t0) / 1000).toFixed(1)}s\n`);
 
   /* 1 */
   section = 1;
-  console.log('1) No focus is main, byte for byte');
+  console.log('1) No focus changes nothing, byte for byte');
   const CAREERS1 = 60, PRO_SEASONS = 3;
   let compared = 0, youthSteps = 0, reports1 = 0;
   for (let c = 0; c < CAREERS1; c += 1) {
@@ -295,22 +341,24 @@ async function main() {
       const at = a.findIndex((x, i) => x !== b[i]);
       if (at >= 0 || a.length !== b.length) {
         const i = at >= 0 ? at : Math.min(a.length, b.length);
-        fail(`career ${c} (${arm}) parts from ${base.slice(0, 8)} at step ${i} of ${a.length}: phase ${JSON.parse(a[i] ?? '{}').phase ?? '?'}`);
+        fail(`career ${c} (${arm}) parts from ${base} at step ${i} of ${a.length}: phase ${JSON.parse(a[i] ?? '{}').phase ?? '?'}`);
       }
       compared += a.length;
     }
   }
-  console.log(`   ${CAREERS1} careers, ${compared} saves compared against ${base.slice(0, 8)}, ${youthSteps} academy years, ${reports1} reports built`);
+  console.log(`   ${CAREERS1} careers, ${compared} saves compared against ${base}, ${youthSteps} academy years, ${reports1} reports built`);
   check(youthSteps === CAREERS1 && reports1 === CAREERS1, `every career should play one academy year and get one report (${youthSteps} years, ${reports1} reports)`);
   check(compared >= CAREERS1 * 2 * 8, `too few saves compared (${compared}), the check cannot prove much`);
 
-  /* The promise, read off the picker's own words for an outfielder and a keeper. */
-  const RULE = /\+(\d+) to that skill on top of the year&#x27;s normal growth, \+(\d+) if the year leaves you within (\d+) of your ceiling, nothing once you are on it\./;
+  /* The promise, read off the picker's own words for an outfielder and a
+     keeper. The game never shows the ceiling as a number, so the picker says
+     "close" and the distance that means is the module's ACADEMY_FOCUS_NEAR. */
+  const RULE = /\+(\d+) to that skill on top of the year&#x27;s normal growth\. If the year takes you close to your ceiling it adds \+(\d+), and nothing once you reach it\./;
   const printed = {};
   for (const pos of ['ST', 'GK']) {
     const m = here.renderPicker(pos, null).match(RULE);
     if (!m) { fail(`the ${pos} picker does not print the focus rule`); continue; }
-    printed[pos] = { bonus: Number(m[1]), nearBonus: Number(m[2]), near: Number(m[3]) };
+    printed[pos] = { bonus: Number(m[1]), nearBonus: Number(m[2]), near: academy.ACADEMY_FOCUS_NEAR };
   }
   const promise = printed.ST ?? { bonus: NaN, nearBonus: NaN, near: NaN };
   const ladder = (overall, pot) => (overall >= pot ? 0 : overall >= pot - promise.near ? promise.nearBonus : promise.bonus);
@@ -318,7 +366,7 @@ async function main() {
   /* 2, 3 and 4 share the runs: each seed with no focus, then with every focus. */
   const CAREERS2 = 70;
   const rungs = { 0: 0, 1: 0, 2: 0 };
-  let runs = 0, breaches = 0, nearSeen = 0, reportDraws = 0, reportsBuilt = 0, cardLines = 0;
+  let runs = 0, breaches = 0, nearSeen = 0, reportDraws = 0, reportsBuilt = 0, cardLines = 0, overallsRight = 0;
   const truth = { lines: 0, wrong: 0, cupMoved: 0, unstable: 0 };
   const sec = (n, ok, msg) => { const was = section; section = n; check(ok, msg); section = was; };
   for (let c = 0; c < CAREERS2; c += 1) {
@@ -343,6 +391,10 @@ async function main() {
         if (k !== opt.key) sec(2, after[k] === plain[k], `career ${c} focus ${opt.key}: ${k} moved ${signed(after[k] - plain[k])} and it was not the focus`);
       }
       sec(2, after.academyFocusAdded === got, `career ${c} focus ${opt.key}: the save says it added ${after.academyFocusAdded}, it added ${got}`);
+      /* The saved overall (the header, the card, the contract offers) has to
+         count the focus too. */
+      if (after.overall === soccer.calcOverall(after, after.position)) overallsRight += 1;
+      else sec(2, false, `career ${c} focus ${opt.key}: the saved overall ${after.overall} is not the overall of the saved skills ${soccer.calcOverall(after, after.position)}`);
       if (plain.overall <= pot && after.overall > pot) breaches += 1;
 
       const built = counted(() => academy.buildAcademyReport(picked, after, pot));
@@ -357,7 +409,8 @@ async function main() {
         truth.lines += 1;
         if (l.before !== picked[l.key] || l.after !== after[l.key] || l.delta !== after[l.key] - picked[l.key] || l.focus !== (l.key === opt.key)) truth.wrong += 1;
       }
-      sec(4, r.overallBefore === picked.overall && r.overallAfter === after.overall, `career ${c}: the report's overall ${r.overallBefore} to ${r.overallAfter} is not the saves' ${picked.overall} to ${after.overall}`);
+      const skillsBefore = soccer.calcOverall(picked, picked.position);
+      sec(4, r.overallBefore === skillsBefore && r.overallAfter === after.overall, `career ${c}: the report's overall ${r.overallBefore} to ${r.overallAfter} is not the saves' ${skillsBefore} to ${after.overall}`);
       const row = after.seasons[after.seasons.length - 1];
       sec(4, r.apps === row.apps && r.goals === row.goals && r.assists === row.assists && r.year === row.year, `career ${c}: the report's season line is not the season row`);
       const html = here.renderReport(r);
@@ -375,6 +428,8 @@ async function main() {
   console.log(`   ${CAREERS2} careers, ${runs} focused academy years, moved by: +2 x${rungs[2]}, +1 x${rungs[1]}, 0 x${rungs[0]}`);
   check(JSON.stringify(printed.ST) === JSON.stringify(printed.GK), 'the keeper picker prints a different rule from the outfield one');
   check(runs >= CAREERS2 * 6, `too few focused years (${runs})`);
+  console.log(`   ${overallsRight} of ${runs} focused years saved the overall of their own skills`);
+  check(overallsRight === runs, `${runs - overallsRight} focused years saved a stale overall`);
 
   /* 3 */
   section = 3;
@@ -427,6 +482,116 @@ async function main() {
       `career ${c}: a focused save read back from storage plays a different year`);
   }
   console.log(`   ${corruptRuns} academy years on corrupt focus values, ${reloads} focused saves read back from storage`);
+
+  /* 6 */
+  section = 6;
+  console.log("\n6) The page's wiring");
+  const code = pageCode(pagePatches);
+  const once = (re, what) => {
+    const all = [...code.matchAll(re)];
+    if (all.length !== 1) { fail(`${PAGE}: expected ${what} once, found it ${all.length} times`); return null; }
+    return all[0];
+  };
+  const press = once(/const (\w+) = advanceYouthYear\((\w+), \w+\);\s*setAcademyReport\(buildAcademyReport\((\w+), (\w+), effectivePotential\((\w+)\)\)\);/g, 'the academy press');
+  if (press) {
+    const [, out, from, a, b, p] = press;
+    check(a === from && b === out && p === from,
+      `the press builds the report from (${a}, ${b}, ceiling of ${p}) while the year is ${out} = advanceYouthYear(${from}): it must be (${from}, ${out}, ceiling of ${from})`);
+  }
+  const guard = once(/\{(academyReport && [^{}]+?) && \(\s*<AcademyReportCard report=\{academyReport\} \/>/g, 'the report card and its guard');
+  const overlay = code.indexOf('career.phase === "contract_offer" && career.pendingOffers.length > 0 && (');
+  const heading = code.indexOf('Contract Offers</h3>');
+  check(guard && overlay >= 0 && overlay < guard.index && guard.index < heading, 'the report card is not inside the contract offers overlay, above the offers');
+  let guardShown = 0, guardStale = 0;
+  if (guard) {
+    /* The guard's own expression, run against real reports: currentSeason is
+       the game screen's last season row. */
+    const show = new Function('academyReport', 'currentSeason', 'career', `return Boolean(${guard[1]});`);
+    for (let c = 0; c < 20; c += 1) {
+      const fresh = () => { seeded(c * 104729 + 7); const s = newCareer(soccer, c); unseed(); return s; };
+      const s0 = fresh();
+      seeded(c * 31 + 5); const after = soccer.advanceYouthYear(s0, clubs); unseed();
+      const r = academy.buildAcademyReport(fresh(), after, soccer.effectivePotential(fresh()));
+      const cur = after.seasons[after.seasons.length - 1];
+      if (r && show(r, cur, after)) guardShown += 1;
+      else fail(`career ${c}: the card's guard hides the report of the year just played`);
+      if (r && !show({ ...r, year: r.year - 1 }, cur, after) && !show({ ...r, club: `${r.club} B` }, cur, after) && !show(null, cur, after)) guardStale += 1;
+      else fail(`career ${c}: the card's guard shows a stale or missing report`);
+    }
+  }
+  const handler = once(/const handleAcademyFocus = \((\w+)[^)]*\) => \{\s*if \(([^)]*)\) return;\s*setCareer\(withAcademyFocus\(career, (\w+)\)\);/g, 'the focus handler');
+  let phasesRight = 0;
+  if (handler) {
+    const [, arg, cond, passed] = handler;
+    check(passed === arg, `the focus handler saves ${passed}, not the focus it was handed (${arg})`);
+    const refuses = new Function('career', `return Boolean(${cond});`);
+    for (const phase of ['youth', 'contract_offer', 'playing', 'season_summary', 'random_events']) {
+      const blocked = refuses({ phase });
+      if (blocked === (phase !== 'youth')) phasesRight += 1;
+      else fail(`the focus handler ${blocked ? 'refuses' : 'accepts'} a focus in the ${phase} phase`);
+    }
+    check(refuses(null) === true, 'the focus handler runs with no career');
+  }
+  once(/career\.phase === "youth" && onAcademyFocus && \(\s*<AcademyFocusPicker position=\{career\.position\} focus=\{academyFocusOf\(career\)\} onPick=\{onAcademyFocus\} \/>/g, 'the focus picker on the academy screen');
+  once(/onAcademyFocus=\{handleAcademyFocus\}/g, 'the focus handler handed to the game screen');
+  once(/academyReport=\{academyReport\}/g, 'the report handed to the game screen');
+  console.log(`   press ${press ? `(${press[3]}, ${press[4]})` : 'missing'}, guard shown ${guardShown} of 20 and hid ${guardStale} of 20 stale reports, focus handler right in ${phasesRight} of 5 phases`);
+
+  /* 7 */
+  section = 7;
+  console.log("\n7) Real careers: the verdict spreads, and the overall line is the skills'");
+  const gen = pageStatsGenerator(here.POSITION_OFFSETS);
+  const REAL_POS = ['ST', 'LW', 'RW', 'CAM', 'CM', 'CDM', 'CB', 'LB', 'RB', 'GK'];
+  const CAREERS7 = 600;
+  const tiers = { big: 0, solid: 0, quiet: 0, flat: 0, flatCeiling: 0 };
+  let real = 0, startsRight = 0, lineInRange = 0, verdictSteady = 0, createdApart = 0, unknownVerdict = 0;
+  for (let c = 0; c < CAREERS7; c += 1) {
+    const pos = REAL_POS[c % REAL_POS.length];
+    const era = ERAS[c % ERAS.length];
+    /* The creation screen's roll, stats and initCareer call, in its order. */
+    const start = () => {
+      seeded(c * 7919 + 1);
+      const ovr = here.rollStartingOverall(pos);
+      const pot = here.rollPotential(ovr);
+      const s = soccer.initCareer(`Real Probe ${c}`, NATS[c % NATS.length], pos, era.value, gen(ovr, pos), ovr, era.startYear, clubs, null, pot);
+      unseed();
+      return s;
+    };
+    const play = s => { seeded(c * 31 + 5); const out = soccer.advanceYouthYear(s, clubs); unseed(); return out; };
+    const before = start();
+    const pot = soccer.effectivePotential(before);
+    const after = play(start());
+    const r = academy.buildAcademyReport(before, after, pot);
+    if (!r) { fail(`real career ${c} ${pos}: no report for its academy year`); continue; }
+    real += 1;
+    const tier = Object.keys(academy.VERDICTS).find(k => academy.VERDICTS[k].includes(r.verdict));
+    if (tier) tiers[tier] += 1; else unknownVerdict += 1;
+    const skills = soccer.calcOverall(before, pos);
+    if (skills !== before.overall) createdApart += 1;
+    if (r.overallBefore === skills && r.overallAfter === after.overall) startsRight += 1;
+    else fail(`real career ${c} ${pos}: the card says ${r.overallBefore} to ${r.overallAfter}, the skills say ${skills} to ${after.overall}`);
+    const ds = r.lines.map(l => l.delta);
+    const gained = r.overallAfter - r.overallBefore;
+    if (gained >= Math.min(...ds) - 1 && gained <= Math.max(...ds) + 1) lineInRange += 1;
+    else fail(`real career ${c} ${pos}: the overall line moved ${signed(gained)} while the skills moved ${Math.min(...ds)} to ${Math.max(...ds)}`);
+    /* The same year with a focus reads the same verdict. */
+    const options = academy.academyFocusOptions(pos);
+    const pick = options[c % options.length].key;
+    const focused = academy.buildAcademyReport(academy.withAcademyFocus(start(), pick), play(academy.withAcademyFocus(start(), pick)), pot);
+    if (focused && focused.verdict === r.verdict) verdictSteady += 1;
+    else fail(`real career ${c} ${pos}: picking ${pick} changed the coach's verdict`);
+  }
+  const share = k => (real ? tiers[k] / real : 0);
+  const pct = k => `${(100 * share(k)).toFixed(1)}%`;
+  console.log(`   ${real} real academy years (${createdApart} saved an overall apart from their skills): big ${pct('big')}, solid ${pct('solid')}, quiet ${pct('quiet')}, flat ${pct('flat')}, flat near the ceiling ${pct('flatCeiling')}`);
+  console.log(`   card starts from the skills ${startsRight} of ${real}, overall line within the skills' range ${lineInRange} of ${real}, verdict unmoved by a focus ${verdictSteady} of ${real}`);
+  check(real === CAREERS7 && unknownVerdict === 0, `${CAREERS7 - real} real years got no report and ${unknownVerdict} verdicts are no tier's`);
+  check(startsRight === real && lineInRange === real && verdictSteady === real, 'the real careers above broke the card or the verdict');
+  /* Bands: see MEASURED in the header. Every tier a player can reach on a
+     new career has to come up, and none may swallow the rest. */
+  const BANDS = { big: [0.08, 0.28], solid: [0.42, 0.75], quiet: [0.1, 0.34] };
+  for (const [k, [lo, hi]] of Object.entries(BANDS)) check(share(k) >= lo && share(k) <= hi, `the ${k} verdict is ${pct(k)} of real years, the band is ${lo * 100}% to ${hi * 100}%`);
+  check(tiers.flat + tiers.flatCeiling >= 5, `only ${tiers.flat + tiers.flatCeiling} real years read flat`);
 
   console.log('');
   const red = Object.keys(sectionFails).map(Number).sort();

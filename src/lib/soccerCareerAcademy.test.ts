@@ -113,7 +113,54 @@ describe("the report", () => {
 
   it("prints what the focus really added", () => {
     expect(academyFocusResultLine({ label: "Dribbling", added: 2, maxed: false })).toContain("+2");
+    expect(academyFocusResultLine({ label: "Dribbling", added: 1, maxed: false })).toContain("close to your ceiling");
+    expect(academyFocusResultLine({ label: "Dribbling", added: 1, maxed: true })).toContain("took it to 99");
     expect(academyFocusResultLine({ label: "Dribbling", added: 0, maxed: false })).toContain("ceiling");
     expect(academyFocusResultLine({ label: "Dribbling", added: 0, maxed: true })).toContain("99");
+  });
+
+  it("starts the overall line from what the skills were worth, not the saved number", () => {
+    /* A created career saves the average of all seven stats; the game's
+       overall weighs six for an outfielder. These skills are worth 55. */
+    const r = buildAcademyReport({ ...before, overall: 50 }, after, 80)!;
+    expect(r.overallBefore).toBe(55);
+    expect(r.overallAfter).toBe(57);
+  });
+});
+
+describe("the coach's verdict", () => {
+  const KEYS = ["pace", "shooting", "passing", "dribbling", "defending", "physical"] as const;
+  /* One academy year where every skill grew by `per`, the focus (if any)
+     adding `added` on top of its own. */
+  const year = (per: number, focus: (typeof KEYS)[number] | null = null, added = 0) => {
+    const start = withAcademyFocus(save(), focus);
+    const grown: Record<string, number> = {};
+    for (const k of KEYS) grown[k] = STATS[k] + per + (k === focus ? added : 0);
+    const end = {
+      ...start, ...grown, age: 17, overall: 55 + per,
+      ...(focus ? { academyFocusAdded: added } : {}),
+      seasons: [...start.seasons, { year: 2021, apps: 18, goals: 4, assists: 2, cleanSheets: 0, type: "youth" }],
+    };
+    return buildAcademyReport(start, end, 90)!.verdict;
+  };
+  const TIERS: [string, RegExp][] = [
+    ["big", /biggest jump|huge year/], ["solid", /happy with it|good, honest year/],
+    ["quiet", /quiet year|coasted/], ["flat", /flat year|barely moved/],
+  ];
+  const tierOf = (v: string) => TIERS.find(([, re]) => re.test(v))?.[0];
+
+  it("reads every tier off the year's growth per skill", () => {
+    expect(tierOf(year(5))).toBe("big");
+    expect(tierOf(year(4))).toBe("solid");
+    expect(tierOf(year(3))).toBe("quiet");
+    expect(tierOf(year(2))).toBe("flat");
+  });
+
+  it("is not moved by the focus, at any rung", () => {
+    for (const per of [2, 3, 4, 5]) {
+      for (const k of KEYS) {
+        for (const added of [0, 1, 2]) expect(year(per, k, added)).toBe(year(per));
+      }
+    }
   });
 });
