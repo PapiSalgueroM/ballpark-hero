@@ -1,3 +1,23 @@
+Codex published accepted main, 2026-10-03 05:37 EDT.
+Lovable confirmed "Your website was updated" for synchronized main2f0368f7.
+Production now serves /assets/index-4CdXhclr.js, replacing index-CQfXGsNQ.js.
+Rounds991-995 and the accepted969/970 work are delivered. Twelve scoped live
+routes passed auditLive;48 deployed feature checks passed. Native public UI
+confirmed the home deck, hockey arena/filter, prospect entry and Footle run
+selector. Mobile home and Footle have no page overflow; first home tile y304.
+Receipt: docs/audits/ACCEPTED-MAIN-PUBLICATION-2026-10-03.md.
+The narrow publication claim is CLOSED. Claude retains the separate unmerged
+Release Z expansion and its gates. No full605-suite or live-player audit claimed.
+AdSense and indexing submissions remain deferred. Held drafts/stashes intact.
+
+Codex CLAIMS996: sport-specific career appearance presentation.
+The published NHL setup still says Boots, Knee Slide and corner flag/grass.
+Own AppearanceBuilder.tsx, a new careerAppearanceCopy.ts and one sport prop
+at the existing UsCareerBoard create call. Preserve soccer, all saved IDs,
+randomization, avatar art and engines. Claude988/story work retains the rest
+of the Board. Verification will run remotely because this machine is loaded.
+Next free997. No new release publication claim is taken until996 is accepted.
+
 Codex CLAIMS publication of accepted main only, 2026-10-03.
 Anthony said keep going; actual live delivery is the priority. The unpublished
 release-z2 clone adds56 files beyond main and lacks995. Its unfinished gate
