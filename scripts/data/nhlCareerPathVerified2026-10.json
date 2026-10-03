@@ -17,6 +17,160 @@
   "awards": "Up to four lines: the trophies the old row named when they hold on both sources, then by importance, and the Hall of Fame year last when NHL inHHOF is 1 and hockey-reference and hhof.com give the same year. A single Stanley Cup shows without a year (hockey-reference gives the count only). Counts on active players are as of the read date."
  },
  "order": "The array order is deliberate. The daily pick is dailyIndex(dateET, 60) in src/lib/dateUtils.ts, a shuffle per 60 day cycle; the cycle holding the release runs 2026-09-04 to 2026-11-02. The 30 new players sit on the indices dealt 2026-10-04 to 2026-11-02, so a release between 2026-10-04 and 2026-10-20 deals only players the old pool never dealt for at least two weeks.",
+ "oldPool": [
+  {
+   "id": "hc-001",
+   "name": "Wayne Gretzky"
+  },
+  {
+   "id": "hc-002",
+   "name": "Sidney Crosby"
+  },
+  {
+   "id": "hc-003",
+   "name": "Alexander Ovechkin"
+  },
+  {
+   "id": "hc-004",
+   "name": "Connor McDavid"
+  },
+  {
+   "id": "hc-005",
+   "name": "Mario Lemieux"
+  },
+  {
+   "id": "hc-006",
+   "name": "Nicklas Lidstrom"
+  },
+  {
+   "id": "hc-007",
+   "name": "Patrick Roy"
+  },
+  {
+   "id": "hc-008",
+   "name": "Jaromir Jagr"
+  },
+  {
+   "id": "hc-009",
+   "name": "Martin Brodeur"
+  },
+  {
+   "id": "hc-010",
+   "name": "Nathan MacKinnon"
+  },
+  {
+   "id": "hc-011",
+   "name": "Bobby Orr"
+  },
+  {
+   "id": "hc-012",
+   "name": "Auston Matthews"
+  },
+  {
+   "id": "hc-013",
+   "name": "Cale Makar"
+  },
+  {
+   "id": "hc-014",
+   "name": "Henrik Lundqvist"
+  },
+  {
+   "id": "hc-015",
+   "name": "Mark Messier"
+  },
+  {
+   "id": "hc-016",
+   "name": "Nikita Kucherov"
+  },
+  {
+   "id": "hc-017",
+   "name": "Leon Draisaitl"
+  },
+  {
+   "id": "hc-018",
+   "name": "Patrick Kane"
+  },
+  {
+   "id": "hc-019",
+   "name": "Victor Hedman"
+  },
+  {
+   "id": "hc-020",
+   "name": "Evgeni Malkin"
+  },
+  {
+   "id": "hc-021",
+   "name": "Bobby Orr"
+  },
+  {
+   "id": "hc-022",
+   "name": "Phil Esposito"
+  },
+  {
+   "id": "hc-023",
+   "name": "Mark Messier"
+  },
+  {
+   "id": "hc-024",
+   "name": "Gordie Howe"
+  },
+  {
+   "id": "hc-025",
+   "name": "Steve Yzerman"
+  },
+  {
+   "id": "hc-026",
+   "name": "Guy Lafleur"
+  },
+  {
+   "id": "hc-027",
+   "name": "Nicklas Lidstrom"
+  },
+  {
+   "id": "hc-028",
+   "name": "Brendan Shanahan"
+  },
+  {
+   "id": "hc-029",
+   "name": "Teemu Selanne"
+  },
+  {
+   "id": "hc-030",
+   "name": "Martin Brodeur"
+  },
+  {
+   "id": "hc-031",
+   "name": "Patrick Roy"
+  },
+  {
+   "id": "hc-032",
+   "name": "Dominik Hasek"
+  },
+  {
+   "id": "hc-033",
+   "name": "Joe Nieuwendyk"
+  },
+  {
+   "id": "hc-034",
+   "name": "Peter Bondra"
+  },
+  {
+   "id": "hc-035",
+   "name": "Mats Sundin"
+  },
+  {
+   "id": "hc-036",
+   "name": "Jaromir Jagr"
+  },
+  {
+   "id": "hc-037",
+   "name": "Paul Coffey"
+  },
+  {
+   "id": "hc-038",
+   "name": "Felix Potvin"
+  }
+ ],
  "heldOut": [
   {
    "name": "Peter Bondra",
