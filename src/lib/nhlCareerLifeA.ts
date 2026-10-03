@@ -680,11 +680,20 @@ export function getNhlLifeEventsA(c: NhlCareerState, rng: () => number): NhlCare
       id: 'nhlA_playoff_beard',
       category: 'hockey', cooldown: 1,
       title: 'The playoff beard',
-      body: 'Round one starts and the razors go in a drawer. Yours has come in patchy since juniors and the boys have noticed.',
+      body: 'The playoffs start and the razors go in a drawer until it is over. Everybody on the team is in, from the rookies to the trainers. Yours has come in patchy since juniors, in three separate places that do not connect, and the boys have noticed.',
       options: [
-        { label: 'Grow whatever shows up', effect: 'Honor the code', apply: (cc) => { const m = mor(cc, 6); const f = fan(cc, 6); flag(cc, 'beardCommitted'); return `Three good patches and a lot of hope. Morale +${m}, fanbase +${f}.`; } },
-        { label: 'Shave and say it is faster', effect: 'Break the code', apply: (cc) => { const m = mor(cc, -4); const f = fan(cc, 4); const g = rate(cc, 1); return `Clean face, zero superstition, all business. Morale ${m}, fanbase +${f}, rating +${g}.`; } },
-        { label: 'Bleach the patchy one blond', effect: 'Lean all the way in', apply: (cc) => { const f = fan(cc, 10); const m = mor(cc, 4); return `Half the arena did it too by Game 4. Fanbase +${f}, morale +${m}.`; } },
+        {
+          label: 'Grow whatever shows up', effect: 'Honor the code',
+          apply: (cc) => { const m = mor(cc, 6); const f = fan(cc, 6); flag(cc, 'beardCommitted'); return `Three good patches and a lot of hope. It looked terrible and nobody said a word, because that is the code. Morale +${m}, fanbase +${f}.`; },
+        },
+        {
+          label: 'Shave and say it is faster', effect: 'Break the code',
+          apply: (cc) => { const m = mor(cc, -4); const f = fan(cc, 4); const g = rate(cc, 1); return `Clean face, zero superstition, all business. Two veterans did not talk to you for a week. Morale ${m}, fanbase +${f}, rating +${g}.`; },
+        },
+        {
+          label: 'Bleach the patchy one blond', effect: 'Lean all the way in',
+          apply: (cc) => { const f = fan(cc, 10); const m = mor(cc, 4); return `You leaned all the way into it, and half the arena showed up with bleached chins by the next home game. Fanbase +${f}, morale +${m}.`; },
+        },
       ],
     });
   }
@@ -694,11 +703,20 @@ export function getNhlLifeEventsA(c: NhlCareerState, rng: () => number): NhlCare
       id: 'nhlA_unwanted_fight',
       category: 'hockey', cooldown: 2,
       title: 'He dropped his gloves and looked at you',
-      body: 'You have never fought in your life. He is 6 foot 4, he has done this 40 times, and the whole building is standing up.',
+      body: 'You have never fought in your life, not once, not even in junior. He is six foot four, he has done this forty times, and he is already circling. The linesmen are backing off and the whole building is on its feet.',
       options: [
-        { label: 'Drop them and hang on', effect: 'Answer the bell', apply: (cc, r) => { const f = fan(cc, 12); const m = mor(cc, 6); const h = hp(cc, r() < 0.5 ? -6 : -10); flag(cc, 'answeredTheBell'); return `You threw two and ate five. Fanbase +${f}, morale +${m}, health ${h}. Nobody questions you again.`; } },
-        { label: 'Skate away and go score', effect: 'Answer differently', apply: (cc) => { const g = rate(cc, 1); const f = fan(cc, -2); const m = mor(cc, 3); return `You scored on the next shift and pointed at the box. Rating +${g}, morale +${m}, fanbase ${f}.`; } },
-        { label: 'Let the tough guy handle it', effect: 'Send the cavalry', apply: (cc) => { const m = mor(cc, 4); const f = fan(cc, 2); flag(cc, 'oweTheEnforcer'); return `Your winger was over the boards in two seconds. Morale +${m}, fanbase +${f}, and you owe him dinner forever.`; } },
+        {
+          label: 'Drop them and hang on', effect: 'Answer the bell',
+          apply: (cc, r) => { const f = fan(cc, 12); const m = mor(cc, 6); const h = hp(cc, r() < 0.5 ? -6 : -10); flag(cc, 'answeredTheBell'); return `You threw two, ate five and grabbed his sweater like your life depended on it, which it did. Fanbase +${f}, morale +${m}, health ${h}. Nobody questions you again.`; },
+        },
+        {
+          label: 'Skate away and go score', effect: 'Answer differently',
+          apply: (cc) => { const g = rate(cc, 1); const f = fan(cc, -2); const m = mor(cc, 3); return `You skated away to boos, then scored on the next shift and pointed at his penalty box. Rating +${g}, morale +${m}, fanbase ${f}.`; },
+        },
+        {
+          label: 'Let the tough guy handle it', effect: 'Send the cavalry',
+          apply: (cc) => { const m = mor(cc, 4); const f = fan(cc, 2); flag(cc, 'oweTheEnforcer'); return `Your team's tough guy was over the boards in two seconds and handled it. Morale +${m}, fanbase +${f}, and you owe him dinner forever.`; },
+        },
       ],
     });
   }
@@ -708,11 +726,20 @@ export function getNhlLifeEventsA(c: NhlCareerState, rng: () => number): NhlCare
       id: 'nhlA_enforcer_teammate',
       category: 'hockey', cooldown: 2,
       title: 'The tough guy is getting waived',
-      body: 'He fought everyone in the league for you, he cannot skate anymore, and management wants his roster spot for a kid.',
+      body: 'He fought everyone in the league for you and the other young guys. His knees are gone, he cannot keep up anymore, and management wants his roster spot for a kid who can. He has been the heart of the room for years and he is going on waivers tomorrow.',
       options: [
-        { label: 'Back him publicly', effect: 'Stand up for him', apply: (cc) => { const m = mor(cc, 7); const f = fan(cc, 6); heatUp(cc, 3); flag(cc, 'roomBoss'); return `You said what everyone was thinking. Morale +${m}, fanbase +${f}, and the GM has a note about you now.`; } },
-        { label: 'Buy him the send off dinner', effect: 'Private class', apply: (cc) => { const spent = cash(cc, -0.03); const m = mor(cc, 8); return `Twenty three guys, one back room, ${spent}M. Morale +${m}. He cried at the toast.`; } },
-        { label: 'Say nothing, it is a business', effect: 'Stay out of it', apply: (cc) => { const m = mor(cc, -3); const g = rate(cc, 1); return `You kept your head down and your minutes. Morale ${m}, rating +${g}.`; } },
+        {
+          label: 'Back him publicly', effect: 'Stand up for him',
+          apply: (cc) => { const m = mor(cc, 7); const f = fan(cc, 6); heatUp(cc, 3); flag(cc, 'roomBoss'); return `You stood at your stall and said what everyone was thinking. Morale +${m}, fanbase +${f}, and the GM has a note about you now.`; },
+        },
+        {
+          label: 'Buy him the send off dinner', effect: 'Private class',
+          apply: (cc) => { const spent = cash(cc, -0.03); const m = mor(cc, 8); return `Twenty three guys, one back room, ${spent}M, and every story about every fight told twice. Morale +${m}. He cried at the toast.`; },
+        },
+        {
+          label: 'Say nothing, it is a business', effect: 'Stay out of it',
+          apply: (cc) => { const m = mor(cc, -3); const g = rate(cc, 1); return `You kept your head down and your minutes. It is a business. It did not feel like one. Morale ${m}, rating +${g}.`; },
+        },
       ],
     });
   }
@@ -723,12 +750,21 @@ export function getNhlLifeEventsA(c: NhlCareerState, rng: () => number): NhlCare
       category: 'hockey', cooldown: 2,
       title: 'The routine got out of hand',
       body: isG
-        ? 'Same tape job, same water bottle angle, same three taps on each post, and now a specific song at a specific volume. It is 40 minutes long.'
-        : 'Right skate first, no stick touching the floor before warmups, and now you need the same parking spot or the day is ruined.',
+        ? 'Same tape job, same water bottle angle, same three taps on each post, the same stretch in the same corner of the room, and now a specific song at a specific volume. The whole routine is forty minutes long and the backup has started timing it.'
+        : 'Right skate first, no stick touching the floor before warmups, the same stall in every visiting room, and now you need the same parking spot or the whole day is ruined. Last week somebody parked in it and you were not right until the second period.',
       options: [
-        { label: 'Protect the routine at all costs', effect: 'Feed the ritual', apply: (cc) => { const m = mor(cc, 7); const g = rate(cc, 1); const h = hp(cc, -2); flag(cc, 'superstitious'); return `You arrive 90 minutes earlier to guarantee the spot. Morale +${m}, rating +${g}, health ${h}.`; } },
-        { label: 'Let a teammate break one on purpose', effect: 'Break the spell', apply: (cc) => { const m = mor(cc, -3); const h = hp(cc, 5); const f = fan(cc, 3); return `He touched your stick to the floor and you played fine. Morale ${m}, health +${h}, fanbase +${f}.`; } },
-        { label: 'Tell the media the whole list', effect: 'Feature material', apply: (cc) => { const f = fan(cc, 9); const m = mor(cc, 2); return `Every rival crowd chants about the water bottle now. Fanbase +${f}, morale +${m}.`; } },
+        {
+          label: 'Protect the routine at all costs', effect: 'Feed the ritual',
+          apply: (cc) => { const m = mor(cc, 7); const g = rate(cc, 1); const h = hp(cc, -2); flag(cc, 'superstitious'); return `You arrive 90 minutes earlier than anybody else to guarantee the spot, and you have never felt more ready. Morale +${m}, rating +${g}, health ${h}.`; },
+        },
+        {
+          label: 'Let a teammate break one on purpose', effect: 'Break the spell',
+          apply: (cc) => { const m = mor(cc, -3); const h = hp(cc, 5); const f = fan(cc, 3); return `He touched your stick to the floor in warmups, grinning, and you played fine. You hated that you played fine. Morale ${m}, health +${h}, fanbase +${f}.`; },
+        },
+        {
+          label: 'Tell the media the whole list', effect: 'Feature material',
+          apply: (cc) => { const f = fan(cc, 9); const m = mor(cc, 2); return `You walked a reporter through every step on camera. Every rival crowd chants about the water bottle now. Fanbase +${f}, morale +${m}.`; },
+        },
       ],
     });
   }
@@ -738,11 +774,20 @@ export function getNhlLifeEventsA(c: NhlCareerState, rng: () => number): NhlCare
       id: 'nhlA_chirp_war',
       category: 'hockey', cooldown: 1,
       title: 'The chirp war',
-      body: 'Their center has been in your ear for three seasons and this time he brought up your minus rating in front of a hot mic.',
+      body: 'Their center has been in your ear for three seasons: your hair, your contract, your mother\'s minivan. This time he brought up your plus minus in front of a hot mic, and the clip is already everywhere.',
       options: [
-        { label: 'Out chirp him on the broadcast', effect: 'Win the mic', apply: (cc) => { const f = fan(cc, 11); const m = mor(cc, 4); const h = heatUp(cc, 4); return `Your line about his contract ran on every show. Fanbase +${f}, morale +${m}, heat now ${h}.`; } },
-        { label: 'Say nothing, beat him head to head', effect: 'Scoreboard reply', apply: (cc) => { const g = rate(cc, 1); const m = mor(cc, 5); const f = fan(cc, 4); return `Four points against him in two meetings. Rating +${g}, morale +${m}, fanbase +${f}.`; } },
-        { label: 'Send him a case of beer', effect: 'Disarm him', apply: (cc) => { const spent = cash(cc, -0.002); const m = mor(cc, 6); const f = fan(cc, 6); flag(cc, 'chirpTruce'); return `${spent}M of beer ended a three year war. Morale +${m}, fanbase +${f}.`; } },
+        {
+          label: 'Out chirp him on the broadcast', effect: 'Win the mic',
+          apply: (cc) => { const f = fan(cc, 11); const m = mor(cc, 4); const h = heatUp(cc, 4); return `You found a mic of your own, and your line about his contract ran on every show in two countries. Fanbase +${f}, morale +${m}, heat now ${h}.`; },
+        },
+        {
+          label: 'Say nothing, beat him head to head', effect: 'Scoreboard reply',
+          apply: (cc) => { const g = rate(cc, 1); const m = mor(cc, 5); const f = fan(cc, 4); return `Not a word. Four points against him in the next two meetings, and you skated past his bench after every one. Rating +${g}, morale +${m}, fanbase +${f}.`; },
+        },
+        {
+          label: 'Send him a case of beer', effect: 'Disarm him',
+          apply: (cc) => { cash(cc, -0.002); const m = mor(cc, 6); const f = fan(cc, 6); flag(cc, 'chirpTruce'); return `A case of good beer to his hotel with a note that just said "see you Thursday" ended a three year war. Morale +${m}, fanbase +${f}.`; },
+        },
       ],
     });
   }
@@ -752,11 +797,20 @@ export function getNhlLifeEventsA(c: NhlCareerState, rng: () => number): NhlCare
       id: 'nhlA_handshake_line',
       category: 'hockey', cooldown: 1,
       title: 'The handshake line',
-      body: 'Game 7 is over and the worst line in sports starts moving. Twenty guys who hate each other, all telling the truth for nine seconds.',
+      body: 'The series is over and the hardest line in sports starts moving. Twenty guys who spent two weeks trying to hurt each other, all telling the truth for nine seconds at a time. You have a few things you could say.',
       options: [
-        { label: 'Look every one of them in the eye', effect: 'Do it properly', apply: (cc) => { const m = mor(cc, 8); const f = fan(cc, 7); flag(cc, 'respectedTheLine'); return `You told their goalie he stole it and you meant it. Morale +${m}, fanbase +${f}.`; } },
-        { label: 'Get through it and get out', effect: 'Just survive it', apply: (cc) => { const m = mor(cc, 2); const g = rate(cc, 1); return `Head down, glove taps, tunnel. Morale +${m}, rating +${g}, and you used the whole summer as fuel.`; } },
-        { label: 'Tell their captain you will see him next year', effect: 'Plant a flag', apply: (cc) => { const f = fan(cc, 9); const m = mor(cc, 5); heatUp(cc, 3); return `The camera caught it and the rivalry doubled. Fanbase +${f}, morale +${m}.`; } },
+        {
+          label: 'Look every one of them in the eye', effect: 'Do it properly',
+          apply: (cc) => { const m = mor(cc, 8); const f = fan(cc, 7); flag(cc, 'respectedTheLine'); return `Every glove off, every hand, every pair of eyes. You told their goalie he stole it and you meant it. Morale +${m}, fanbase +${f}.`; },
+        },
+        {
+          label: 'Get through it and get out', effect: 'Just survive it',
+          apply: (cc) => { const m = mor(cc, 2); const g = rate(cc, 1); return `Head down, glove taps, tunnel. You did not say a word to anybody until August. Morale +${m}, rating +${g}, and you used the whole summer as fuel.`; },
+        },
+        {
+          label: 'Tell their captain you will see him next year', effect: 'Plant a flag',
+          apply: (cc) => { const f = fan(cc, 9); const m = mor(cc, 5); heatUp(cc, 3); return `You said it quietly. The camera caught it anyway, and the rivalry doubled overnight. Fanbase +${f}, morale +${m}.`; },
+        },
       ],
     });
   }
@@ -766,11 +820,20 @@ export function getNhlLifeEventsA(c: NhlCareerState, rng: () => number): NhlCare
       id: 'nhlA_three_teeth',
       category: 'hockey', cooldown: 2,
       title: 'Three teeth and a team photo',
-      body: 'A deflection took out the front three on Tuesday. The dentist can build the bridge now or you can wait until June like everybody else.',
+      body: 'A deflection took out the front three on Tuesday. You finished the shift and the game. The team dentist can build the bridge now, which means two games out, or you can wait until June like everybody else and smile for the team photo the way you are.',
       options: [
-        { label: 'Fix it now, miss two games', effect: 'Get the bridge', apply: (cc) => { const spent = cash(cc, -0.02); const h = hp(cc, 5); const m = mor(cc, 5); const f = fan(cc, -2); return `${spent}M of dental work and two nights in a suit. Health +${h}, morale +${m}, fanbase ${f}.`; } },
-        { label: 'Play toothless until June', effect: 'Full hockey player', apply: (cc) => { const f = fan(cc, 9); const m = mor(cc, 3); const h = hp(cc, -3); flag(cc, 'toothless'); return `The team photo is legendary. Fanbase +${f}, morale +${m}, health ${h}.`; } },
-        { label: 'Get the flipper, never smile', effect: 'Removable solution', apply: (cc) => { const spent = cash(cc, -0.004); const m = mor(cc, 3); const f = fan(cc, 4); return `A ${spent}M piece of plastic that lives in your glove. Morale +${m}, fanbase +${f}.`; } },
+        {
+          label: 'Fix it now, miss two games', effect: 'Get the bridge',
+          apply: (cc) => { const spent = cash(cc, -0.02); const h = hp(cc, 5); const m = mor(cc, 5); const f = fan(cc, -2); return `${spent}M of dental work, two nights in a suit, and a smile your mom recognizes again. Health +${h}, morale +${m}, fanbase ${f}.`; },
+        },
+        {
+          label: 'Play toothless until June', effect: 'Full hockey player',
+          apply: (cc) => { const f = fan(cc, 9); const m = mor(cc, 3); const h = hp(cc, -3); flag(cc, 'toothless'); return `You played the rest of the year with a gap you could fit a puck through. The team photo is legendary. Fanbase +${f}, morale +${m}, health ${h}.`; },
+        },
+        {
+          label: 'Get the flipper, never smile', effect: 'Removable solution',
+          apply: (cc) => { cash(cc, -0.004); const m = mor(cc, 3); const f = fan(cc, 4); return `A little piece of plastic that lives in your glove during games and in your pocket at dinner. Morale +${m}, fanbase +${f}.`; },
+        },
       ],
     });
   }
