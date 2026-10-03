@@ -55,9 +55,15 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { US_CAREER_BOARD, US_CAREER_SPORTS, readUsSource, stripComments, wrapperProblems } from './lib/usCareerFiles.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const read = f => fs.readFileSync(path.join(ROOT, f), 'utf-8');
+/* Round 900: line endings are normalised, because section 1 measures a
+   distance in characters and a CRLF checkout counts every line break twice.
+   On Anthony's machine that put the NFL front office mark at 502 against a
+   limit of 500 while an LF clone read 492, so the same tree was red on one
+   machine and green on another. */
+const read = f => fs.readFileSync(path.join(ROOT, f), 'utf-8').replace(/\r\n/g, '\n');
 
 let failures = 0;
 const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
@@ -68,17 +74,24 @@ const BOARDS = [
   ['src/components/nba-front-office/NbaFrontOfficeBoard.tsx', '/nba-front-office', 'playRound', 'if (!league || !my) return;'],
   ['src/components/nhl-front-office/NhlFrontOfficeBoard.tsx', '/nhl-front-office', 'playRound', 'if (!league || !my) return;'],
   ['src/components/mlb-front-office/MlbFrontOfficeBoard.tsx', '/mlb-front-office', 'playRound', 'if (!league || !my) return;'],
-  ['src/components/nfl-my-career/NflMyCareerBoard.tsx', '/nfl-my-career', 'playSeason', 'if (!career || teamQuality == null) return;'],
-  ['src/components/nba-my-career/NbaMyCareerBoard.tsx', '/nba-my-career', 'playSeason', 'if (!career || teamQuality == null) return;'],
-  ['src/components/nhl-my-career/NhlMyCareerBoard.tsx', '/nhl-my-career', 'playSeason', 'if (!career || teamQuality == null) return;'],
-  ['src/components/mlb-my-career/MlbMyCareerBoard.tsx', '/mlb-my-career', 'playSeason', 'if (!career || teamQuality == null) return;'],
+  /* Round 900: the four My Career boards are one board. It marks the route
+     its sport binding names, so the mark is written once, as a template,
+     and the four routes are proven below it: each binding must name its own
+     route and each sport's page must be on this board. */
+  [US_CAREER_BOARD, null, 'playSeason', 'if (!career || teamQuality == null) return;', 'recordActivity(`/${sport.gameSlug}`'],
 ];
 const TYCOON = 'src/hooks/useStadiumTycoon.ts';
 
-/* ---------- 1. Eight boards: unscored, once, in the right place ---------- */
+/* ---------- 1. Eight routes: unscored, once, in the right place ---------- */
 console.log('1) Every board pings its play unscored, once, after the guard, and never as a full completion');
-for (const [file, route, fn, guard] of BOARDS) {
+for (const s of US_CAREER_SPORTS) {
+  const slugLine = `gameSlug: '${s.route.slice(1)}',`;
+  if (!stripComments(readUsSource(ROOT, s.binding)).includes(slugLine)) fail(`${s.binding}: does not name ${s.route} as the route its board marks`);
+  for (const why of wrapperProblems(ROOT, s)) fail(why);
+}
+for (const [file, route, fn, guard, markHead] of BOARDS) {
   const t = read(file);
+  const head = markHead ?? `recordActivity('${route}'`;
   if (!t.includes("import { recordActivity } from '@/lib/completions';")) {
     fail(`${file}: no recordActivity import`);
     continue;
@@ -88,10 +101,10 @@ for (const [file, route, fn, guard] of BOARDS) {
   if (/\brecordCompletion\s*\(/.test(t)) {
     fail(`${file}: calls recordCompletion; board marks are pings, recordActivity only`);
   }
-  const unscored = `recordActivity('${route}');`;
+  const unscored = `${head});`;
   const calls = t.split(unscored).length - 1;
   if (calls !== 1) { fail(`${file}: expected exactly 1 unscored mark, found ${calls}`); continue; }
-  if (t.includes(`recordActivity('${route}',`)) {
+  if (t.includes(`${head},`)) {
     fail(`${file}: a SCORED direct call exists; scores belong to useGameCompletion only`);
   }
   /* one call in the whole file: the unscored one (imports aside) */
@@ -114,6 +127,11 @@ console.log('2) useGameCompletion still writes the scored legacy in all eight');
 for (const [file] of BOARDS) {
   const t = read(file);
   if (!t.includes('useGameCompletion')) fail(`${file}: the scored completion path is GONE`);
+}
+/* Round 900: on the shared board the scored path has to go to the same
+   route the mark does, the one the sport binding names. */
+if (!stripComments(readUsSource(ROOT, US_CAREER_BOARD)).includes('useGameCompletion(sport.gameSlug, done,')) {
+  fail(`${US_CAREER_BOARD}: the scored completion no longer goes to the binding's own game`);
 }
 
 /* ---------- 3. The tycoon: once per session, by ref ---------- */
@@ -155,7 +173,10 @@ console.log('3) Stadium Tycoon marks once per session, on the first real action'
 console.log('4) The marked paths are routes App.tsx actually serves');
 {
   const app = read('src/App.tsx');
-  const paths = [...BOARDS.map(b => b[1]), '/stadium-tycoon', '/club-manager', '/soccer-career'];
+  /* The shared US career board has no route of its own (null above): its
+     routes are the four its bindings name. */
+  const paths = [...BOARDS.map(b => b[1]).filter(Boolean), ...US_CAREER_SPORTS.map(s => s.route), '/stadium-tycoon', '/club-manager', '/soccer-career'];
+  if (paths.length !== 11) fail(`section 4 walked ${paths.length} routes, expected 11 (4 front offices, 4 My Careers, 3 others)`);
   for (const p of paths) {
     if (!app.includes(`path="${p}"`)) fail(`App.tsx: no route for ${p}, the header attribution would dangle`);
   }
