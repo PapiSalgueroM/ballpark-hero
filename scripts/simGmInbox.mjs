@@ -170,6 +170,79 @@ if (CONTROL === 'quote') {
   else ok('no quote, no real name, no placeholder, every voice a role');
 }
 
+/* ═══ 2. EXACT EFFECTS: every option of every event, through the engine ═══ */
+
+console.log('2) Every option moves exactly what its card says, once');
+const clamp100 = v => Math.max(0, Math.min(100, v));
+const newDesk = () => ({ morale: 50, trust: 50, fans: 50, cash: 10, year: 2030, recruit: 50, out: {}, rating: {} });
+const bindDesk = pack => E.bindGmInbox(pack, {
+  moodOf: s => s.trust, setMood: (s, v) => { s.trust = v; },
+  addPopularity: (s, d) => { s.fans = clamp100(s.fans + d); },
+  addCash: (s, a) => { s.cash = Math.round((s.cash + a) * 1000) / 1000; },
+  yearOf: s => s.year,
+  setOut: (s, who, w) => { s.out[who] = (s.out[who] ?? 0) + w; },
+  addRating: (s, who, d) => { s.rating[who] = (s.rating[who] ?? 0) + d; },
+  addRecruit: (s, d) => { s.recruit += d; },
+});
+const meters = s => JSON.stringify({ morale: s.morale, trust: s.trust, fans: s.fans, cash: s.cash, recruit: s.recruit, out: s.out, rating: s.rating });
+/* A value that makes one condition true, so the event can be dealt. */
+const satisfy = c => {
+  if (c.op === '==' || c.op === '<=' || c.op === '>=') return c.value;
+  if (c.op === '!=') return typeof c.value === 'boolean' ? !c.value : typeof c.value === 'number' ? c.value + 1 : `${c.value}-other`;
+  return c.op === '<' ? c.value - 0.01 : c.value + 0.01;
+};
+const sgn = v => (v > 0 ? `+${v}` : `${v}`);
+{
+  let options = 0;
+  const bad = [];
+  for (const seat of SEATS) {
+    const pack = PACKS[seat];
+    const pristine = PRISTINE[seat];
+    for (const pe of pristine.events) {
+      const e = pack.events.find(x => x.id === pe.id);
+      const facts = Object.fromEntries((pe.when ?? []).map(c => [c.fact, satisfy(c)]));
+      pe.choices.forEach((pc, idx) => {
+        options++;
+        const s = newDesk();
+        const seat1 = bindDesk({ ...pack, chance: 1, events: [{ ...e, chance: 1 }] });
+        const got = E.gmInboxWeek(s, seat1, pe.beat, facts, 0, () => 0);
+        if (got.length !== 1 || got[0].defId !== pe.id) { bad.push(`${pe.id}: could not be dealt with its own conditions true`); return; }
+        const line = E.answerGmInbox(s, got[0].id, idx, seat1);
+        const want = newDesk();
+        want.trust = clamp100(50 + pc.karma);
+        if (pc.popularity) want.fans = clamp100(50 + pc.popularity);
+        if (pc.cash) want.cash = Math.round((10 + pc.cash) * 1000) / 1000;
+        if (pc.morale) want.morale = clamp100(50 + pc.morale);
+        if (pc.out && pc.out.weeks > 0) want.out[pc.out.who] = pc.out.weeks;
+        if (pc.rating && pc.rating.delta) want.rating[pc.rating.who] = pc.rating.delta;
+        if (pc.recruit) want.recruit = 50 + pc.recruit;
+        if (meters(s) !== meters(want)) bad.push(`${pe.id} option ${idx}: moved ${meters(s)}, declared ${meters(want)}`);
+        /* The card, rebuilt here from the declaration, not from choiceEffects. */
+        const m = pristine.meters;
+        const card = [];
+        if (pc.karma) card.push(`${m.trust} ${sgn(pc.karma)}`);
+        if (pc.popularity) card.push(`${m.fans} ${sgn(pc.popularity)}`);
+        if (pc.cash) card.push(`${m.money} ${pc.cash > 0 ? '+' : '-'}${pristine.money.prefix}${Math.abs(pc.cash)}${pristine.money.suffix}`);
+        if (pc.morale) card.push(`${m.morale} ${sgn(pc.morale)}`);
+        if (pc.out && pc.out.weeks > 0) card.push(`${pristine.targets[pc.out.who]} out ${pc.out.weeks} week${pc.out.weeks === 1 ? '' : 's'}`);
+        if (pc.rating && pc.rating.delta) card.push(`${pristine.targets[pc.rating.who]} rating ${sgn(pc.rating.delta)}`);
+        if (pc.recruit) card.push(`${m.recruit ?? 'Recruit interest'} ${sgn(pc.recruit)}`);
+        const shown = E.gmChoiceLabel(pc, pristine);
+        if (card.length === 0) bad.push(`${pe.id} option ${idx}: moves nothing`);
+        if (shown !== `${pc.label} · ${card.join(', ')}`) bad.push(`${pe.id} option ${idx}: the card reads "${shown}", the effects are ${card.join(', ')}`);
+        if (!line || !card.every(c => line.includes(c))) bad.push(`${pe.id} option ${idx}: the feed line "${line}" misses an effect`);
+        const after = meters(s);
+        if (E.answerGmInbox(s, got[0].id, idx, seat1) !== null || meters(s) !== after) bad.push(`${pe.id} option ${idx}: a second answer moved something`);
+      });
+    }
+  }
+  console.log(`   ${options} options answered on a fresh desk, ${bad.length} findings`);
+  for (const b of bad.slice(0, 10)) console.error(`     ${b}`);
+  if (options < 100) fail(`only ${options} options checked`);
+  if (bad.length) fail(`${bad.length} options move something other than their card`);
+  else ok('every option moved exactly its declared effects, its card said exactly that, and moved once');
+}
+
 /* ═══ end ═══ */
 
 console.log('');
