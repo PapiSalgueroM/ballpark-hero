@@ -167,6 +167,36 @@
         { "family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/3101", "publisher": "ESPN (FC Nordsjaelland squad page, season 2026-27)", "readOn": "2026-10-03", "says": "goalkeeper, shirt 13, age 31" },
         { "family": "B", "url": "https://www.soccerway.com/player/hansen-andreas/tv1OOujN/", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Nordsjaelland, born 1995-08-11, contract to 2028-06-30, 9 Superliga and 6 Conference League appearances in 2026/2027" }
       ]
+    },
+    {
+      "name": "Abdulrahman Ghareeb",
+      "club": "Al-Nassr",
+      "adjudicatedOn": "2026-10-03",
+      "note": "Forward, shirt 29, in both 2026-27 lists.",
+      "sources": [
+        { "family": "A", "url": "https://www.spl.com.sa/en/teams/al-nassr/squad", "publisher": "Saudi Pro League (Al Nassr squad page)", "readOn": "2026-10-03", "says": "forward, shirt 29" },
+        { "family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/817", "publisher": "ESPN (Al Nassr squad page, season 2026-27)", "readOn": "2026-10-03", "says": "forward, shirt 29, age 29" }
+      ]
+    },
+    {
+      "name": "Saad Haqawi",
+      "club": "Al-Nassr",
+      "adjudicatedOn": "2026-10-03",
+      "note": "Forward, shirt 60, in both 2026-27 lists.",
+      "sources": [
+        { "family": "A", "url": "https://www.spl.com.sa/en/teams/al-nassr/squad", "publisher": "Saudi Pro League (Al Nassr squad page)", "readOn": "2026-10-03", "says": "forward, shirt 60" },
+        { "family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/817", "publisher": "ESPN (Al Nassr squad page, season 2026-27)", "readOn": "2026-10-03", "says": "forward, shirt 60, age 20" }
+      ]
+    },
+    {
+      "name": "Danilo Pereira",
+      "club": "Al-Ittihad",
+      "adjudicatedOn": "2026-10-03",
+      "note": "Defender, shirt 2, in both 2026-27 lists.",
+      "sources": [
+        { "family": "A", "url": "https://www.spl.com.sa/en/teams/al-ittihad/squad", "publisher": "Saudi Pro League (Al Ittihad squad page)", "readOn": "2026-10-03", "says": "defender, shirt 2" },
+        { "family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/2276", "publisher": "ESPN (Al Ittihad squad page, season 2026-27)", "readOn": "2026-10-03", "says": "defender, shirt 2, age 35" }
+      ]
     }
   ],
   "movedTo": [
@@ -375,6 +405,36 @@
         { "family": "B", "url": "https://www.espn.com/soccer/player/_/id/322760/zidan-sertdemir", "publisher": "ESPN (player page)", "readOn": "2026-10-03", "says": "Lyngby Boldklub, shirt 16, born 2005-02-04; last listed games for Preussen Munster in the 2. Bundesliga to 2026-05-17" },
         { "family": "B", "url": "https://www.soccerway.com/player/sertdemir-zidane/fsOZHtn5/", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Nordsjaelland to Preussen Munster 2025-08-31, Preussen Munster to Lyngby 2026-09-01, contract to 2030-06-30" }
       ]
+    },
+    {
+      "name": "Musa Barrow",
+      "from": "Al-Taawoun",
+      "to": "Al-Khaleej",
+      "realClub": "Al-Khaleej",
+      "adjudicatedOn": "2026-10-03",
+      "note": "Gambian forward born 1998-11-14. Left Al Taawoun on a free for Al Khaleej on 2026-07-31, shirt 99, six league appearances in 2026-27. Absent from Al Taawoun's squad on the league's page and on ESPN.",
+      "sources": [
+        { "family": "A", "url": "https://www.spl.com.sa/en/teams/al-khaleej/squad", "publisher": "Saudi Pro League (Al Khaleej squad page)", "readOn": "2026-10-03", "says": "forward, shirt 99, Gambia" },
+        { "family": "A", "url": "https://www.spl.com.sa/en/teams/al-taawoun/squad", "publisher": "Saudi Pro League (Al Taawoun squad page)", "readOn": "2026-10-03", "says": "not in the squad" },
+        { "family": "B", "url": "https://www.soccerway.com/player/barrow-musa/ppDqdKi5/", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Al Khaleej, born 1998-11-14, Al Taawon to Al Khaleej 2026-07-31 free, contract to 2027-06-30, 6 league appearances in 2026/2027" },
+        { "family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/18459", "publisher": "ESPN (Al Taawoun squad page, season 2026-27)", "readOn": "2026-10-03", "says": "not in the squad" }
+      ]
+    },
+    {
+      "name": "Glen Kamara",
+      "from": "Al-Shabab",
+      "to": "QPR",
+      "realClub": "Queens Park Rangers, on a season-long loan from Rennes",
+      "loan": true,
+      "loanFrom": "Rennes",
+      "officialPageRead": false,
+      "adjudicatedOn": "2026-10-03",
+      "note": "Finnish midfielder born 1995-10-28. Al Shabab was a loan from Rennes that ended on 2025-06-30; Rennes loaned him to QPR on 2026-08-03 until 2027-06-30, shirt 18, Championship games from 2026-09-05 to 2026-09-19. Absent from Al Shabab's squad on the league's page and on ESPN. QPR's own page was not read. Placed at the club he plays for, per loanPolicy.",
+      "sources": [
+        { "family": "A", "url": "https://www.spl.com.sa/en/teams/al-shabab/squad", "publisher": "Saudi Pro League (Al Shabab squad page)", "readOn": "2026-10-03", "says": "not in the squad" },
+        { "family": "B", "url": "https://www.espn.com/soccer/player/_/id/175064/glen-kamara", "publisher": "ESPN (player page)", "readOn": "2026-10-03", "says": "Queens Park Rangers, shirt 18, born 1995-10-28, Championship games 2026-09-05, 2026-09-09, 2026-09-12, 2026-09-19" },
+        { "family": "B", "url": "https://www.soccerway.com/player/kamara-glen/IPBMorSq/", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "QPR on loan from Rennes 2026-08-03 to 2027-06-30; Al Shabab loan ended 2025-06-30; 7 Championship appearances in 2026/2027" }
+      ]
     }
   ],
   "removedClubNotModelled": [
@@ -485,9 +545,59 @@
         { "family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/3153", "publisher": "ESPN (Viborg FF squad page, season 2026-27)", "readOn": "2026-10-03", "says": "not in the squad" },
         { "family": "B", "url": "https://www.soccerway.com/player/serginho/fNsSBRtt/", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Al Wasl, born 2001-01-29, Cape Verde, Estoril to Viborg 2023-07-31 500k, Viborg to Al Wasl 2025-08-04 3.5m" }
       ]
+    },
+    {
+      "name": "Mateus Castro",
+      "from": "Al-Taawoun",
+      "realClub": "Nagoya Grampus (Japan)",
+      "adjudicatedOn": "2026-10-03",
+      "note": "Brazilian forward born 1994-09-11 (baked age 31 matches). Joined Al Taawoun from Nagoya in August 2023 and went back to Nagoya on 2025-01-22; four J1 League appearances in 2026. Absent from Al Taawoun's squad on the league's page and on ESPN. The destination is Soccerway alone (it lists him as Mateus). Japan is not modelled.",
+      "sources": [
+        { "family": "A", "url": "https://www.spl.com.sa/en/teams/al-taawoun/squad", "publisher": "Saudi Pro League (Al Taawoun squad page)", "readOn": "2026-10-03", "says": "not in the squad" },
+        { "family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/18459", "publisher": "ESPN (Al Taawoun squad page, season 2026-27)", "readOn": "2026-10-03", "says": "not in the squad" },
+        { "family": "B", "url": "https://www.soccerway.com/player/mateus/xS3VYFu2/", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Nagoya Grampus, born 1994-09-11, Brazil, Nagoya to Al Taawon 2023-08-03 2.8m, Al Taawon to Nagoya 2025-01-22, 4 J1 League appearances in 2026" }
+      ]
+    },
+    {
+      "name": "Mohammed Majrashi",
+      "from": "Al-Faisaly",
+      "realClub": "Al Anwar (Saudi First Division)",
+      "adjudicatedOn": "2026-10-03",
+      "note": "Saudi forward born 1991-05-20 (baked age 34 matches). Joined Al-Faisaly from Al Fayha on 2024-08-18 and left on a free for Al Anwar on 2025-09-20. Absent from Al-Faisaly's squad on the league's page and on ESPN. The destination is Soccerway alone; several other Saudi players share the surname, and this is the forward born 1991. The Saudi second tier is not modelled.",
+      "sources": [
+        { "family": "A", "url": "https://www.spl.com.sa/en/teams/al-faisaly/squad", "publisher": "Saudi Pro League (Al Faisaly squad page)", "readOn": "2026-10-03", "says": "not in the squad" },
+        { "family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/21446", "publisher": "ESPN (Al Faisaly squad page, season 2026-27)", "readOn": "2026-10-03", "says": "not in the squad" },
+        { "family": "B", "url": "https://www.soccerway.com/player/majrashi-mohammed/SbH1Vole/", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Al Anwar (Saudi Division 1), forward, born 1991-05-20, Al Fayha to Al-Faisaly 2024-08-18, Al-Faisaly to Al Anwar 2025-09-20 free" }
+      ]
     }
   ],
-  "notCurrent": [],
+  "notCurrent": [
+    {
+      "name": "Henry Onyekuru",
+      "from": "Al-Fayha",
+      "why": "Unattached on the evidence read. Nigerian forward born 1997-06-05. He left Al Fayha on a free for Gencerbirligi on 2025-07-21 and played for them into April 2026, but is not in Gencerbirligi's 2026-27 squad on ESPN, has no 2026-27 appearance on ESPN, and Soccerway now lists him as a free agent with no club. Not in Al Fayha's squad on the league's page or on ESPN. Medium confidence: a free agent can sign at any time, so re-check at the next adjudication.",
+      "officialPageRead": false,
+      "adjudicatedOn": "2026-10-03",
+      "sources": [
+        { "family": "A", "url": "https://www.spl.com.sa/en/teams/al-fayha/squad", "publisher": "Saudi Pro League (Al Fayha squad page)", "readOn": "2026-10-03", "says": "not in the squad" },
+        { "family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/996", "publisher": "ESPN (Genclerbirligi squad page, season 2026-27)", "readOn": "2026-10-03", "says": "not in the squad" },
+        { "family": "B", "url": "https://www.espn.com/soccer/player/_/id/238772/henry-onyekuru", "publisher": "ESPN (player page)", "readOn": "2026-10-03", "says": "still labelled Genclerbirligi; last games 2026-03-09 to 2026-04-11; 0 appearances in 2026-27" },
+        { "family": "B", "url": "https://www.soccerway.com/player/onyekuru-henry/f1ZuTp99/", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "free agent, born 1997-06-05, Al Fayha to Genclerbirligi 2025-07-21 free, no current club" }
+      ]
+    },
+    {
+      "name": "Giacomo Bonaventura",
+      "from": "Al-Shabab",
+      "why": "Unattached on the evidence read. Italian midfielder born 1989-08-22. Joined Al Shabab on a free from Fiorentina on 2024-08-05 and his last season on record is 2024/2025 there. Not in Al Shabab's 2026-27 squad on the league's page or on ESPN, and Soccerway gives him no club. ESPN's player index still labels him Al Shabab, a stale profile its own squad page contradicts. No retirement notice was found. Medium confidence: re-check at the next adjudication.",
+      "officialPageRead": false,
+      "adjudicatedOn": "2026-10-03",
+      "sources": [
+        { "family": "A", "url": "https://www.spl.com.sa/en/teams/al-shabab/squad", "publisher": "Saudi Pro League (Al Shabab squad page)", "readOn": "2026-10-03", "says": "not in the squad" },
+        { "family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/793", "publisher": "ESPN (Al Shabab squad page, season 2026-27)", "readOn": "2026-10-03", "says": "not in the squad" },
+        { "family": "B", "url": "https://www.soccerway.com/player/bonaventura-giacomo/lxFZfQF4/", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "born 1989-08-22, Fiorentina to Al Shabab 2024-08-05 free, last season 2024/2025 at Al Shabab (6 appearances), no current club" }
+      ]
+    }
+  ],
   "pending": [
     {
       "name": "Lars Villiger",
