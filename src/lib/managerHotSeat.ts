@@ -57,12 +57,14 @@ import {
   REAL_LEAGUES,
   answerPress,
   clubDefFor,
+  cupProgressRank,
   engineRegistrations,
   fixtureFor,
   isPartialClub,
   leaguePosition,
   matchEdge,
   nextFixture,
+  objectiveStatuses,
   playNextEntry,
   playableClubs,
   registerCustomClub,
@@ -71,6 +73,7 @@ import {
   restoreEngineRegistrations,
   saveCareer,
   startCareer,
+  uclProgressRank,
   type CareerState,
   type Competition,
   type FormResult,
@@ -79,6 +82,7 @@ import {
   type TalkTone,
 } from '@/lib/clubManager';
 import { FAN_SINGING, boardMeter, fanMeter, type Meter, type MeterTone } from '@/lib/clubManagerMeters';
+import type { SeasonHandover } from '@/lib/clubManagerScore';
 import { dailyIndex, dailyPrngSeed } from '@/lib/dateUtils';
 
 /* ---------------- the numbers ---------------- */
@@ -258,6 +262,9 @@ export interface TakeoverInfo {
   form: FormResult[];
   /** The league week the job opened after. */
   week: number;
+  /** Round 956: the calendar entry the job opened on, so the handover can
+   *  tell the previous manager's post from yours. */
+  calendarWeek: number;
 }
 
 export type VerdictKind = 'survived' | 'reprieve' | 'sacked' | 'boardSacked';
@@ -361,6 +368,35 @@ function skipToMatch(run: HotSeatRun): void {
 }
 
 /**
+ * Round 956 review fix: what the previous manager had banked when the job
+ * opened, in the shape Club Manager stamps on its own takeovers (its
+ * handoverFrom in clubManagerCalendar.ts, which is private, so the same five
+ * readings are taken here through the same exported engine calls). Club
+ * Manager's season score subtracts it, so the weeks the engine played before
+ * you arrived are not scored as yours. Section 5 of the harness holds it to
+ * the takeover's own numbers and to Club Manager's own record check.
+ */
+function takeoverStamp(s: CareerState): SeasonHandover {
+  const row = myRow(s);
+  return {
+    pts: row ? row.pts : 0,
+    played: leagueGamesPlayed(s),
+    cupRank: cupProgressRank(s).rank,
+    euroRank: uclProgressRank(s).rank,
+    objectivesDone: objectiveStatuses(s).filter(o => o.status === 'done').map(o => o.objective.id),
+    wonLeague: s.trophies.some(t => t.season === s.season && t.name === 'League Title'),
+  };
+}
+
+/** Which of Club Manager's three takeover points (28, 50 and 72 percent of
+ *  the season) the job opened nearest, by league games played. With the
+ *  stamp above in place Club Manager reads this only for its badge. */
+function midSeasonEntryOf(s: CareerState): NonNullable<CareerState['midSeasonStart']> {
+  const share = leagueGamesPlayed(s) / Math.max(1, leagueRounds(s));
+  return share < 0.39 ? 'autumn' : share < 0.61 ? 'newYear' : 'runIn';
+}
+
+/**
  * Opens the job: the engine's season up to the worst run of form in league
  * weeks 6 to 14, the board dropped to 30 and the target named. Heavy (about
  * twenty engine calls), so the page runs it once per run and never in render.
@@ -397,7 +433,18 @@ function startOnStaticWorld(setup: HotSeatSetup): HotSeatRun {
     }
   }
   const chosen = best ?? { state: s, formPts: formPoints(formOf(s)), week: leagueGamesPlayed(s) };
-  const taken: CareerState = { ...chosen.state, boardConfidence: HOT_SEAT_BOARD_START, sacked: false, teamTalk: null };
+  const taken: CareerState = {
+    ...chosen.state,
+    boardConfidence: HOT_SEAT_BOARD_START,
+    sacked: false,
+    teamTalk: null,
+    /* Round 956 review fix: this is a takeover, so it wears Club Manager's
+       takeover stamp (Round 633) from the day you walk in. Nothing in a match
+       reads either field; Club Manager's season score and its "took over mid
+       season" badge do, once the career is carried on there. */
+    midSeasonStart: midSeasonEntryOf(chosen.state),
+    handover: takeoverStamp(chosen.state),
+  };
   const row = myRow(taken);
   const def = clubDefFor(taken.clubName);
   const run: HotSeatRun = {
@@ -411,6 +458,7 @@ function startOnStaticWorld(setup: HotSeatSetup): HotSeatRun {
       points: row ? row.pts : 0,
       form: formOf(taken),
       week: chosen.week,
+      calendarWeek: taken.week,
     },
     target: 0,
     leash: HOT_SEAT_LEASH,
@@ -673,9 +721,14 @@ export function existingClubManagerSave(): ExistingClubManagerSave | null {
 }
 
 /** The career Club Manager receives: the run's state as it stands, copied so
- *  nothing the page does to the run afterwards can reach the save. */
+ *  nothing the page does to the run afterwards can reach the save. The one
+ *  thing left behind is the previous manager's post: messages dated before
+ *  the job opened were his, the way Club Manager's own takeovers clear them. */
 export function handoverState(run: HotSeatRun): CareerState {
-  return JSON.parse(JSON.stringify(run.state)) as CareerState;
+  const copy = JSON.parse(JSON.stringify(run.state)) as CareerState;
+  const from = run.takeover.calendarWeek;
+  if (Array.isArray(copy.inbox)) copy.inbox = copy.inbox.filter(m => !(typeof m.week === 'number' && m.week < from));
+  return copy;
 }
 
 export interface CarryOnSummary {
@@ -683,18 +736,28 @@ export interface CarryOnSummary {
   clubs: number;
   points: number;
   leaguePlayed: number;
+  /** The board as the meter on the same screen prints it. */
   board: number;
+  /** The meter's own words for that number and its tone. */
+  boardBand: string;
+  boardTone: MeterTone;
+  /** True when a transfer window, not a match, is the next thing on the calendar. */
+  windowFirst: boolean;
 }
 
 /** Where the career stands as it goes across, off the engine's own table, for the offer card. */
 export function carryOnSummary(run: HotSeatRun): CarryOnSummary {
   const s = run.state;
+  const board = boardMeter(s);
   return {
     position: onStaticWorld(() => leaguePosition(s)),
     clubs: s.table.length,
     points: myRow(s)?.pts ?? 0,
     leaguePlayed: leagueGamesPlayed(s),
-    board: Math.round(s.boardConfidence),
+    board: board.shown,
+    boardBand: board.band,
+    boardTone: board.tone,
+    windowFirst: onStaticWorld(() => nextFixture(s)).kind === 'window',
   };
 }
 

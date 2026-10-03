@@ -127,7 +127,7 @@ const TMP = os.tmpdir().replaceAll('\\', '/');
 const CONTROL = process.env.HOT_SEAT_CONTROL || '';
 /* Round 956: the handover controls aim at section 5 alone, so they run it
    alone and a red they cause is section 5's red. */
-const HANDOVER_CONTROLS = ['nocal', 'clobber', 'sackoffer'];
+const HANDOVER_CONTROLS = ['nocal', 'clobber', 'sackoffer', 'nostamp', 'card'];
 if (CONTROL && !['flat', 'deaf', 'drift', 'leak', ...HANDOVER_CONTROLS].includes(CONTROL)) {
   console.error(`HOT_SEAT_CONTROL=${CONTROL} is not a control this harness knows`);
   process.exit(1);
@@ -204,8 +204,16 @@ if (CONTROL === 'leak') {
   console.log('NEGATIVE CONTROL ON: the hot seat runs inside whatever the tab registered and startCareer wipes it; section 4 must go red');
 }
 if (CONTROL === 'nocal') {
-  libPath = rewrite(LIB, [['  return JSON.parse(JSON.stringify(run.state)) as CareerState;\n', '  return { ...JSON.parse(JSON.stringify(run.state)), calendar: undefined } as CareerState;\n']], 'managerHotSeat.nocal.ts', 'the handover copy');
+  libPath = rewrite(LIB, [['  const copy = JSON.parse(JSON.stringify(run.state)) as CareerState;\n', '  const copy = { ...JSON.parse(JSON.stringify(run.state)), calendar: undefined } as CareerState;\n']], 'managerHotSeat.nocal.ts', 'the handover copy');
   console.log('NEGATIVE CONTROL ON: the handover drops the calendar; section 5 must go red');
+}
+if (CONTROL === 'nostamp') {
+  libPath = rewrite(LIB, [['    handover: takeoverStamp(chosen.state),\n', '    handover: null,\n']], 'managerHotSeat.nostamp.ts', 'the takeover stamp');
+  console.log('NEGATIVE CONTROL ON: the takeover goes across without Club Manager\'s takeover stamp; section 5 must go red');
+}
+if (CONTROL === 'card') {
+  libPath = rewrite(LIB, [['    leaguePlayed: leagueGamesPlayed(s),\n', '    leaguePlayed: run.leaguePlayed,\n']], 'managerHotSeat.card.ts', 'the offer card\'s game count');
+  console.log('NEGATIVE CONTROL ON: the offer card counts only the games played in the job; section 5 must go red');
 }
 if (CONTROL === 'clobber') {
   libPath = rewrite(LIB, [['  if (!opts.replace && existingClubManagerSave() !== null) return \'confirm\';\n', '  if (!opts.replace && false) return \'confirm\';\n']], 'managerHotSeat.clobber.ts', 'the existing save check');
@@ -414,8 +422,9 @@ ok('a custom club and a league override registered before the run are the same o
 
 /* ---------- 5. carrying on in Club Manager (Round 956) ---------- */
 console.log('5) A manager who keeps the job carries on in Club Manager');
-const { canCarryOn, carryOnInClubManager, carryOnSummary, existingClubManagerSave, hotSeatLeagues } = hs;
-const { loadCareer, saveCareer, startCareer, playNextEntry, leaguePosition } = cm;
+const failsBeforeFive = failures;
+const { canCarryOn, carryOnInClubManager, carryOnSummary, existingClubManagerSave, hotSeatLeagues, hotSeatMeters } = hs;
+const { loadCareer, saveCareer, startCareer, playNextEntry, leaguePosition, nextFixture, ensureHandover } = cm;
 const SAVE_KEY = 'dukb-club-manager-save';
 /* Floors from the measured runs in the header, section 5's table. */
 const HAND_FLOOR = 20, LEAGUE_FLOOR = 15, SEASON_END_FLOOR = 18, REFUSAL_FLOOR = 5;
@@ -436,7 +445,7 @@ if (!saveCareer(other)) fail('Club Manager\'s own saveCareer refused the probe c
 const otherRaw = store.get(SAVE_KEY);
 if (typeof otherRaw !== 'string') fail(`saveCareer did not write ${SAVE_KEY}; the hot seat reads the wrong key`);
 if (existingClubManagerSave()?.club !== other.clubName) fail('the hot seat does not see the career Club Manager saved');
-let handed = 0, toSeasonEnd = 0, sackedInCm = 0, refusals = 0, asked = 0, reprieves = 0;
+let handed = 0, toSeasonEnd = 0, sackedInCm = 0, refusals = 0, asked = 0, reprieves = 0, windowFirst = 0, oldPostDropped = 0;
 const leaguesHanded = new Set();
 function checkHandover(run, tag, league) {
   if (!run.verdict) { fail(`${tag}: no verdict to hand over`); return; }
@@ -465,6 +474,19 @@ function checkHandover(run, tag, league) {
   if (rowSig(loaded.table) !== rowSig(run.state.table)) fail(`${tag}: the table Club Manager opens is not the hot seat's final table`);
   const myLoaded = loaded.table.find(x => x.club === loaded.clubName);
   if (leaguePosition(loaded) !== sum.position || myLoaded?.pts !== sum.points) fail(`${tag}: Club Manager has ${leaguePosition(loaded)} on ${myLoaded?.pts}, the hot seat ended ${sum.position} on ${sum.points}`);
+  /* Review fix: every other number on the offer card is the career's too. */
+  if (sum.leaguePlayed !== playedOf(myLoaded ?? { w: 0, d: 0, l: 0 }) || sum.clubs !== loaded.table.length) fail(`${tag}: the card says ${sum.leaguePlayed} league games of ${sum.clubs} clubs, Club Manager has ${playedOf(myLoaded ?? { w: 0, d: 0, l: 0 })} of ${loaded.table.length}`);
+  if (sum.board !== hotSeatMeters(loaded).board.shown) fail(`${tag}: the card says the board is on ${sum.board}, the meter shows ${hotSeatMeters(loaded).board.shown}`);
+  if (sum.windowFirst !== (nextFixture(loaded).kind === 'window')) fail(`${tag}: the card says a window is ${sum.windowFirst ? '' : 'not '}next, Club Manager's next entry is a ${nextFixture(loaded).kind}`);
+  if (sum.windowFirst) windowFirst += 1;
+  /* Review fix: a takeover wears Club Manager's takeover stamp (Round 633),
+     so its season score never counts the weeks before you arrived. Read
+     through Club Manager's own record check, which drops a malformed one. */
+  const stamp = ensureHandover(loaded);
+  if (!stamp || stamp.played !== run.takeover.played || stamp.pts !== run.takeover.points || !loaded.midSeasonStart) fail(`${tag}: the handed over career carries ${stamp ? `a stamp of ${stamp.pts} points from ${stamp.played}` : 'no takeover stamp'} (${loaded.midSeasonStart ?? 'no takeover badge'}), the job opened on ${run.takeover.points} from ${run.takeover.played}`);
+  const oldPost = (loaded.inbox ?? []).filter(m => typeof m.week === 'number' && m.week < run.takeover.calendarWeek).length;
+  if (oldPost) fail(`${tag}: ${oldPost} of the previous manager's messages went across`);
+  oldPostDropped += (run.state.inbox ?? []).filter(m => typeof m.week === 'number' && m.week < run.takeover.calendarWeek).length;
   handed += 1;
   leaguesHanded.add(league);
   /* And Club Manager plays it out, entry by entry, through its own playNextEntry. */
@@ -502,13 +524,13 @@ for (const setup of handSetups) {
 for (const run of (sectionTwoArms ? Object.values(sectionTwoArms).flat() : []).filter(x => x.verdict?.kind === 'reprieve').slice(0, 6)) {
   checkHandover(run, `${run.setup.club} seed ${run.setup.seed} (section 2 reprieve)`, hotSeatPool().find(c => c.club === run.setup.club)?.leagueId ?? '?');
 }
-console.log(`   ${handSetups.length} setups in ${hotSeatLeagues().length} leagues: ${handed} handed over (${reprieves} on a reprieve) from ${leaguesHanded.size} leagues, ${toSeasonEnd} played to the end of the season, ${sackedInCm} sacked in Club Manager on the way, ${refusals} sacked runs refused, ${asked} asked before replacing`);
+console.log(`   ${handSetups.length} setups in ${hotSeatLeagues().length} leagues: ${handed} handed over (${reprieves} on a reprieve) from ${leaguesHanded.size} leagues, ${toSeasonEnd} played to the end of the season, ${sackedInCm} sacked in Club Manager on the way, ${refusals} sacked runs refused, ${asked} asked before replacing, ${windowFirst} with a window before the next fixture, ${oldPostDropped} of the previous manager's messages left behind`);
 if (handed < HAND_FLOOR) fail(`only ${handed} careers were handed over (floor ${HAND_FLOOR})`);
 if (leaguesHanded.size < LEAGUE_FLOOR) fail(`careers were handed over from only ${leaguesHanded.size} leagues (floor ${LEAGUE_FLOOR})`);
 if (toSeasonEnd < SEASON_END_FLOOR) fail(`only ${toSeasonEnd} handed over seasons were played to the end (floor ${SEASON_END_FLOOR})`);
 if (refusals < REFUSAL_FLOOR) fail(`only ${refusals} sacked runs were checked for the refusal (floor ${REFUSAL_FLOOR})`);
-if (asked < handed) fail(`${handed - asked} handovers skipped the confirm check`);
-ok('every survivor\'s career opens in Club Manager on the hot seat\'s own table and plays to the end of the season; a saved career is never replaced without the confirm, and a sacked manager is never offered one');
+/* Only when section 5 itself stayed clean (review fix: it used to print under its own FAILs). */
+if (failures === failsBeforeFive) ok('every survivor\'s career opens in Club Manager on the hot seat\'s own table, with the takeover stamp and the card\'s numbers, and plays to the end of the season; a saved career is never replaced without the confirm, and a sacked manager is never offered one');
 
 /* ---------- verdict ---------- */
 
@@ -517,4 +539,7 @@ if (failures) {
   console.error(`\nsimManagerHotSeat: ${failures} failure(s)`);
   process.exit(1);
 }
-console.log('\nsimManagerHotSeat: green. The target is the club\'s, reading the room pays, outcomes replay and a Club Manager save keeps its registrations.');
+/* The closing line claims only the sections that ran (review fix). */
+console.log(HANDOVER_ONLY
+  ? '\nsimManagerHotSeat: green (section 5 only). A survivor carries on in Club Manager on the hot seat\'s own season.'
+  : '\nsimManagerHotSeat: green. The target is the club\'s, reading the room pays, outcomes replay, a Club Manager save keeps its registrations and a survivor carries on in Club Manager.');

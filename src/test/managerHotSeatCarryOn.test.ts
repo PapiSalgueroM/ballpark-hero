@@ -8,12 +8,14 @@
  * small rules one at a time.
  */
 import { afterEach, beforeAll, describe, expect, it, vi } from 'vitest';
-import { clearCareer, loadCareer, saveCareer, startCareer } from '@/lib/clubManager';
+import { clearCareer, ensureHandover, loadCareer, saveCareer, startCareer } from '@/lib/clubManager';
 import {
   canCarryOn,
   carryOnInClubManager,
+  carryOnSummary,
   existingClubManagerSave,
   handoverState,
+  hotSeatMeters,
   hotSeatPool,
   startHotSeat,
   type HotSeatRun,
@@ -85,6 +87,32 @@ describe('Manager Hot Seat: carry on in Club Manager', () => {
   it('says so when the browser refuses the write', () => {
     vi.spyOn(Storage.prototype, 'setItem').mockImplementation(() => { throw new Error('quota'); });
     expect(carryOnInClubManager(withVerdict('survived'), { replace: true })).toBe('failed');
+  });
+
+  it('goes across with Club Manager\'s takeover stamp, so the weeks before you are not scored as yours', () => {
+    const run = withVerdict('survived');
+    expect(run.state.handover).toMatchObject({ pts: run.takeover.points, played: run.takeover.played });
+    expect(run.state.midSeasonStart).toBeTruthy();
+    expect(carryOnInClubManager(run, { replace: false })).toBe('saved');
+    const loaded = loadCareer()!;
+    expect(ensureHandover(loaded)).toMatchObject({ pts: run.takeover.points, played: run.takeover.played });
+    expect(loaded.midSeasonStart).toBe(run.state.midSeasonStart);
+  });
+
+  it('the card reads the career, not the games in the job', () => {
+    const s = carryOnSummary(base);
+    const row = base.state.table.find(r => r.club === base.state.clubName)!;
+    expect(s.leaguePlayed).toBe(row.w + row.d + row.l);
+    expect(s.leaguePlayed).toBe(base.takeover.played);
+    expect(s.leaguePlayed).toBeGreaterThan(base.leaguePlayed);
+    expect(s.clubs).toBe(base.state.table.length);
+    expect(s.points).toBe(row.pts);
+    expect(s.board).toBe(hotSeatMeters(base.state).board.shown);
+  });
+
+  it('leaves the previous manager\'s post behind', () => {
+    const copy = handoverState(base);
+    expect(copy.inbox.every(m => m.week >= base.takeover.calendarWeek)).toBe(true);
   });
 
   it('the handed over career is a copy, not the run itself', () => {
