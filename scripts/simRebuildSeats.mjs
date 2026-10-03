@@ -627,7 +627,9 @@ console.log('\n8. THE CPU SEAT PLAYS EVERY POWER UP');
       for (const p of NEW) {
         const got = s.run.post.filter(e => e.perk === p).length;
         dealt[p] += got;
-        if (got - s.run.perks[p] > 0) played[p] += 1;
+        /* the pocket stops at one veto (Round 980 review), so dealt minus held
+           would count a second, never playable copy as played: the reckoning says */
+        if (p === 'veto' ? s.run.reckoning?.vetoed !== undefined : got - s.run.perks[p] > 0) played[p] += 1;
       }
     }
   }
