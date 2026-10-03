@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { lazy, Suspense, useCallback, useMemo, useState } from 'react';
+import { lazy, Suspense, useCallback, useEffect, useMemo, useState } from 'react';
 import type { ReactNode } from 'react';
 import { cn } from '@/lib/utils';
 import type { MidSeasonEntry } from '@/lib/clubManagerCalendar';
@@ -42,6 +42,7 @@ const ClubManagerBoardPanel = lazy(() => import('@/components/club-manager/ClubM
 const ClubManagerCareerPanel = lazy(() => import('@/components/club-manager/ClubManagerCareerPanel'));
 const ConfettiBurst = lazy(() => import('@/components/club-manager/Celebration').then(m => ({ default: m.ConfettiBurst })));
 const ClubManagerHelp = lazy(() => import('@/components/club-manager/ClubManagerHelp'));
+const ManagerSlotsScreen = lazy(() => import('@/components/club-manager/ManagerSlotsScreen'));
 const ClubManagerSeasonSummary = lazy(() => import('@/components/club-manager/ClubManagerSeasonSummary'));
 const SackedCareerSummary = lazy(() => import('@/components/club-manager/ClubManagerSeasonSummary').then(m => ({ default: m.SackedCareerSummary })));
 const CustomClubForm = lazy(() => import('@/components/club-manager/CustomClubForm').then(m => ({ default: m.CustomClubForm })));
@@ -84,7 +85,7 @@ function ScreenLoading({ children, compact = false }: { children: ReactNode; com
 
 /** Round 832: a past era's squads did not arrive (offline, a dropped
  *  connection, a new deploy). Says so and offers the fetch again. */
-function EraLoadFailed({ label, onRetry, onBack }: { label: string; onRetry: () => void; onBack?: () => void }) {
+function EraLoadFailed({ label, onRetry, onBack, backLabel = 'Pick another season' }: { label: string; onRetry: () => void; onBack?: () => void; backLabel?: string }) {
   return (
     <div role="alert" data-testid="cm-era-load-failed" className="max-w-md mx-auto my-12 rounded-xl border border-border bg-card p-5 text-center">
       <div className="text-sm font-bold text-foreground">The {label} squads did not load.</div>
@@ -102,7 +103,7 @@ function EraLoadFailed({ label, onRetry, onBack }: { label: string; onRetry: () 
           onClick={onBack}
           className="mt-4 ml-2 px-5 py-2.5 rounded-xl font-bold bg-secondary text-foreground hover:bg-secondary/70 transition-colors"
         >
-          Pick another season
+          {backLabel}
         </button>
       )}
     </div>
@@ -197,6 +198,16 @@ const ClubManager = () => {
      tactics tab to open that tile on arrival; the tab hands the request back. */
   const [tacticsTile, setTacticsTile] = useState<'shootout' | null>(null);
   const panelRef = useRevealScroll<HTMLDivElement>(`hub:${hubPanel ?? ''}:${clubView ?? ''}`, { skipFirst: true });
+  /* Round 928 review: the managers screen is where one career is swapped for
+     another, so the hub's open panel, rival view, live viewer switch and
+     tactics request belong to the career being left, not the one coming in. */
+  useEffect(() => {
+    if (g.phase !== 'resume') return;
+    setHubPanel(null);
+    setClubView(null);
+    setWatchMode(false);
+    setTacticsTile(null);
+  }, [g.phase]);
 
   /* Round 154: clubDefFor, not clubByName, because a custom club has no
      entry in any static table and resolves through the save's registered
@@ -286,6 +297,7 @@ const ClubManager = () => {
             'Win enough and manage your country as well: real tournaments between seasons, real qualifying groups, and a place in the cabinet if you lift one.',
             'Handle the press when they come for you, and pick your team talk before kick off and again at half time.',
             'Win trophies, keep the board happy, and build a managerial career that can cross leagues and continents.',
+            'Run up to three managers on one device, each with a career of his own in its own slot: tap Managers on the hub to switch between them or start another.',
           ]}
         >
           {/* Round 655: every league and club as readable text, below the guide. */}
@@ -302,42 +314,33 @@ const ClubManager = () => {
        says so with a way to try again, never a blank page and never a fresh
        start offered over the career. */
     if (g.bootError) {
-      return shell(<EraLoadFailed label={g.bootError} onRetry={g.retryBoot} />);
+      /* Round 928 review: opening an era slot moves the index first, so a
+         failed fetch used to leave the player stuck here, away from managers
+         that would open fine. The way back to them is right beside the retry. */
+      return shell(<EraLoadFailed label={g.bootError} onRetry={g.retryBoot} onBack={g.showSlots} backLabel="Back to your managers" />);
     }
     return shell(<div className="text-center py-24 text-muted-foreground animate-pulse">Loading…</div>);
   }
 
-  /* ================= RESUME PROMPT ================= */
-  if (g.phase === 'resume' && g.career) {
+  /* ================= MANAGER SLOTS (Round 928, where the resume prompt was) ================= */
+  if (g.phase === 'resume') {
     const c = g.career;
     return shell(
-      <div className="max-w-md mx-auto">
-        <header className="text-center mb-6">
-          <h1 className="text-4xl md:text-6xl font-bold tracking-[0.1em] text-primary font-display mb-1">CLUB MANAGER</h1>
-          <p className="text-muted-foreground text-sm">A saved career was found on this device.</p>
-        </header>
-        <div className="bg-card border border-border rounded-2xl p-5 text-center">
-          <div className="text-3xl mb-2">💼</div>
-          <div className="text-xl font-bold font-display text-foreground">{c.clubName}</div>
-          <div className="text-sm text-muted-foreground mt-1">
-            {worldSeasonLabel(c)} · Season {c.season} · Week {Math.min(c.week + 1, c.calendar.length)} of {c.calendar.length} · Board {Math.round(c.boardConfidence)}/100
-          </div>
-          <div className="text-xs text-muted-foreground mt-0.5">🏆 {c.trophies.length} trophies won so far</div>
-          <div className="flex gap-3 mt-5">
-            <button onClick={g.resume} className="flex-1 px-5 py-3 bg-primary text-primary-foreground rounded-xl font-bold hover:opacity-90 transition-opacity">
-              Resume Career
-            </button>
-            <button onClick={g.startNew} className="flex-1 px-5 py-3 bg-secondary text-foreground rounded-xl font-bold hover:bg-secondary/70 transition-colors">
-              Start Fresh
-            </button>
-          </div>
-        </div>
-      </div>
+      <ScreenLoading>
+        <ManagerSlotsScreen
+          slots={g.slots}
+          activeDetail={c ? `Week ${Math.min(c.week + 1, c.calendar.length)} of ${c.calendar.length} · Board ${Math.round(c.boardConfidence)}/100` : null}
+          note={g.slotNote}
+          onContinue={g.openSlot}
+          onNew={g.newInSlot}
+          onDelete={g.removeSlot}
+        />
+      </ScreenLoading>
     );
   }
 
   /* ================= CLUB SELECT (Round 70: nation -> league -> team) ================= */
-  if (g.phase === 'clubSelect' || (g.phase === 'resume' && !g.career)) {
+  if (g.phase === 'clubSelect') {
     /* Round 303: the dugout step hands in null (skip) or a manager spec, and
        either way the picker resets for the next career. */
     const confirmAndReset = (manager: ManagerSpec | null, entry?: MidSeasonEntry) => {
@@ -440,6 +443,14 @@ const ClubManager = () => {
             <p className="text-[10px] text-center mt-1">
               <Link to="/champions-league-format-history" className="inline-flex items-center min-h-[32px] px-2 text-primary hover:underline">How the real Champions League format changed, and what each era here plays</Link>
             </p>
+            {/* Round 928: a way back to the other managers from a new one's picker. */}
+            {g.slots.some(v => v.summary && !v.active) && (
+              <p className="text-[11px] text-center mt-1">
+                <button onClick={g.showSlots} className="inline-flex items-center min-h-[32px] px-2 text-muted-foreground hover:text-primary hover:underline">
+                  <ChevronLeft className="w-3.5 h-3.5" /> Back to your managers
+                </button>
+              </p>
+            )}
           </div>
         )}
 
@@ -763,6 +774,10 @@ const ClubManager = () => {
         <h1 className="text-3xl md:text-5xl font-bold text-primary font-display mb-1">SEASON {sm.season} COMPLETE</h1>
         <p className="text-muted-foreground text-sm mb-5">{sm.club} · finished <span className="text-foreground font-bold">#{sm.position}</span> with {sm.points} pts</p>
         <ScreenLoading><ClubManagerSeasonSummary sm={sm} c={c} g={g} /></ScreenLoading>
+        {/* Round 928 review: the managers are a tap away here too, not only on the hub. */}
+        <button onClick={g.showSlots} data-testid="cm-show-slots-end" className="mt-4 text-xs text-muted-foreground underline underline-offset-2 hover:text-primary transition-colors">
+          Your managers
+        </button>
       </div>
     );
   }
@@ -777,6 +792,9 @@ const ClubManager = () => {
             are document wide once mounted, so the class is live up here. */}
         <h1 className="cm-loss-shake text-3xl md:text-5xl font-bold text-destructive font-display mb-5">SACKED!</h1>
         <ScreenLoading><SackedCareerSummary c={c} g={g} /></ScreenLoading>
+        <button onClick={g.showSlots} data-testid="cm-show-slots-sacked" className="mt-4 text-xs text-muted-foreground underline underline-offset-2 hover:text-primary transition-colors">
+          Your managers
+        </button>
       </div>
     );
   }
@@ -861,6 +879,10 @@ const ClubManager = () => {
             ))}
           </span>
           {c.trophies.length > 0 && <span>🏆×{c.trophies.length}</span>}
+          {/* Round 928: back to the three manager slots, this career saved first. */}
+          <button onClick={g.showSlots} data-testid="cm-show-slots" className="underline underline-offset-2 hover:text-primary transition-colors">
+            Managers
+          </button>
         </div>
         {/* Round 465: the board and the fans, on every tab, words by default
             and the number on tap. */}

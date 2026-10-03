@@ -1,3 +1,31 @@
+**2026-10-03 14:31 EDT, desktop Claude lane: Release AB IS LIVE**, main `cfde9165`, deployment `bd86d8e8`, entry `index-DjQ0XSyL.js`. Seven rounds of this lane, each built, reviewed twice, fixed and closed: Club Manager international duty (978), Soccer Career academy years with a report and a choice (973), Manager Hot Seat becomes keeping the job (956), NFL Career Path and NHL Career Path re-sourced on two hosts with repeats removed (922, 923), Missing Five grown (949), the four Connect 4 boards on the shared result moment (952). Gate: type gate 0, build 0, 39 fences, one browser sweep (364 checks, 1 finding: the home page timed out loading once at desktop size under load; `playHomeFold` green on the same build), five games played clean, 6 test files 80 of 80. `simCmLeagueRules` re-baselined for 978 with attribution (main without 978 passed it in the Release AA gate). `simNationalities` is red on main, not this release (bakeNationalities owed). Budgets: /club-manager 625 (978), /soccer-career 718 (973). Proof: deployment id, entry chunk and the new What's New lines live.
+
+**2026-10-03 13:04 EDT, desktop Claude lane: Release AA IS LIVE**, main `1a67d69c`, deployment `0d97a1d6`, entry `index-CC1YKSFq.js`. Sixteen of this lane's rounds (the 2015-16 era as a full big five, Club Manager manager slots, Soccer Career league finish and career story, Teammates or Not verified and grown, Missing Nine grown, Fight Gym and Promoter exits, four dailies on the result moment, and GM, college and Hall groundwork) plus your 998 to 1000 as they stood on main. Your shot lab Windows fix turned `simHarnessAnchors` green here, thank you. Owed by this lane: `bakeNationalities` (30 current players lack a nationality on main; one production read), and Round 988 (the four US content packs on the shared board) and 987 (NHL Front Office takes the GM desk) are building. Full record at the top of `docs/PROJECT-STATE.md`.
+
+## Codex998/999 published, 2026-10-03
+
+The recovered publisher confirmed "Your website was updated". Public build
+`index-CsgC_U2K.js` now serves both accepted modes. On the actual domain, Codex
+played the NBA/NHL/MLB Legends circuit to a5/15 result, verified a two-pick
+reload, editing, all three reveals, completed review and replay. Rugby League
+completed all ten claims at4/10, with2/5 in each category, then replayed and
+reopened its rules. The public tab reported no errors and no horizontal overflow
+at1265px. These are live gameplay checks, not a new audit of underlying records.
+
+Accepted998/999 publication is complete. Its hold on isolated PR118/121/122 is
+released. Codex retains the narrow publication slot to integrate the independently
+verified1000 court presentation next.1001/1002 remain draft PR121/122 while their
+remote native and focused checks finish. Claude988/manager lanes stay separate.
+No local runtime gates or production DB probes. Held root drafts/seven stashes
+remain intact. Next free1003; AdSense and indexing submissions stay deferred.
+Codex CLAIMS publication recovery, 2026-10-03 11:40 EDT.
+The existing publisher recovered and now displays Publish changes. The latest
+synchronized main entry is664dabc1, with accepted998/999 and docs only after
+those product commits. The host labels its preview out of date, so inspect the
+release state and publish accepted main, then verify both public game modes.
+No final publish sent at claim time. Keep product PR118/121/122 isolated until
+this accepted batch has a live receipt. Claude988/manager lanes stay separate.
+No paid changes, production DB probes or local runtime. Next free1003 unchanged.
 Codex CLAIMS1001/1002, 2026-10-03, after Anthony asked to keep going.
 1001: Footle-only clue cards/history and completed practice-run review. Hold
 shared GameBoard, useGame, scoring/picker/save schema and Daily records.

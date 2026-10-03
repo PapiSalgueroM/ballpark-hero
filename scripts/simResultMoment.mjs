@@ -162,10 +162,6 @@ const OWN_SURFACE = {
   '/perfect-season-nba': 'its own final record panel in the page, revealed game by game',
   '/perfect-season-mlb': 'its own final record panel in the page, revealed game by game',
   '/perfect-season-nhl': 'its own final record panel in the page, revealed game by game',
-  '/nfl-connect-4': 'a two player board; a won or draw banner over it names a colour, not a score',
-  '/nba-connect-4': 'a two player board; a won or draw banner over it names a colour, not a score',
-  '/mlb-connect-4': 'a two player board; a won or draw banner over it names a colour, not a score',
-  '/nhl-connect-4': 'a two player board; a won or draw banner over it names a colour, not a score',
   '/guess-cbb-team': 'its own game over panel in CbbProgramBoard, under the revealed clues',
   '/f1-driver': 'its own game over panel in F1DriverBoard, under the revealed clues',
   '/f1-constructor': 'its own game over panel in F1ConstructorBoard, under the revealed clues',
@@ -181,10 +177,6 @@ const OWN_SURFACE = {
   '/nascar-chain': 'its own game over block in NascarChainBoard, the chain and the reason it ended',
   '/ufc-chain': 'its own game over block in CombatChainBoard, the chain and the reason it ended',
   '/minefield': 'its own done panel in the page, the banked score and rounds won',
-  '/quiz-board': 'its own finished panel in QuizBoard, the bank after the last tile',
-  '/ball-iq': 'its own finished screen in BallIqBoard, an IQ number, a rank and correct out of the questions',
-  '/emoji-guess': "its own Today's result screen in EmojiGuessBoard, solved out of the rounds",
-  '/mystery-box': 'its own finished panel in MysteryBoxBoard, the squad rating and best pull',
   '/aussie-rules-manager': 'its own season complete panel in AussieRulesManagerBoard, the league winner and the final ladder',
 };
 

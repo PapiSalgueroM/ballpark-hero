@@ -1,0 +1,464 @@
+{
+  "_about": "Round 948 source record for Missing Nine (src/lib/missingNine.ts). One row per sheet: the game, the two box scores it was read from (two different hosts, never a wiki), the nine starters in batting order exactly as both boxes agree, and every blank with its nationality (birthplace as both player pages give it) and its fact as checked. scripts/simMissingNineSources.mjs holds the data file to this record. Box reads: 2026-10-02 (new sheets, 2016 G7) and 2026-10-03 (2001, 1988, 1986, 2013); player pages read 2026-10-03 on baseball-reference.com/players and baseball-almanac.com/players. Starters are the un-indented almanac batting rows and the baseball-reference Starting Lineups table, matched by player id; positions are the starting position (almanac lists every position played, the first one is the start).",
+  "playerPages": {
+    "read": "2026-10-03",
+    "hosts": ["baseball-reference.com", "baseball-almanac.com"],
+    "townDisagreements": [
+      "Reggie Jackson: baseball-reference Abington, PA; baseball-almanac Wyncote, Pennsylvania. Both USA.",
+      "Sandy Amoros: baseball-reference Matanzas, Cuba; baseball-almanac Havana, Cuba. Both Cuba.",
+      "Dave Parker: baseball-reference Grenada, MS; baseball-almanac Calhoun, Mississippi. Both USA.",
+      "Yu Darvish: baseball-reference Habikino, Osaka; baseball-almanac Osaka. Both Japan."
+    ],
+    "nameDisagreements": [
+      "Nori Aoki: baseball-reference bills him Nori Aoki, baseball-almanac Norichika Aoki. The sheet uses Nori Aoki, the name he played under; the surname is what the game checks."
+    ]
+  },
+  "sheets": [
+    {
+      "id": "ws-2016-g7-chc",
+      "game": "2016 World Series Game 7, 2016-11-02, Progressive Field: Cubs 8, Indians 7 (10 inn)",
+      "sources": [
+        { "host": "baseball-almanac.com", "url": "https://www.baseball-almanac.com/box-scores/boxscore.php?boxid=201611020CLE", "read": "2026-10-02" },
+        { "host": "baseball-reference.com", "url": "https://www.baseball-reference.com/boxes/CLE/CLE201611020.shtml", "read": "2026-10-02" },
+        { "host": "sabr.org", "url": "https://sabr.org/gamesproj/game/november-2-2016-cubs-end-world-series-curse-with-thrilling-game-7-victory/", "read": "2026-10-02", "role": "recap for the inning by inning facts" }
+      ],
+      "starters": ["CF Dexter Fowler", "DH Kyle Schwarber", "3B Kris Bryant", "1B Anthony Rizzo", "LF Ben Zobrist", "SS Addison Russell", "C Willson Contreras", "RF Jason Heyward", "2B Javier Baez"],
+      "blanks": [
+        { "name": "Kyle Schwarber", "nationality": "USA", "born": "Middletown, Ohio", "fact": "Had three hits as the DH before Albert Almora Jr. ran for him in the 10th and scored the go-ahead run.", "checked": "almanac 5-0-3-0 and Almora Jr. pr,dh scoring a run; bref subs: Almora pinch runs for Schwarber, top 10th, and pbp: Zobrist double at 6-6, Almora scores; SABR: Almora ran for Schwarber and scored on the Zobrist double. Old fact (knee ligaments, seven months) dropped: SABR says leg ligaments and almost seven months, no second host." },
+        { "name": "Willson Contreras", "nationality": "Venezuela", "born": "Puerto Cabello, Carabobo, Venezuela", "fact": "Started behind the plate, David Ross (who homered) only entered in the 5th with Jon Lester.", "checked": "bref subs bottom 5th: Lester replaces Hendricks, Ross replaces Contreras; SABR: along with Lester came David Ross, fifth inning; Ross HR 6th off Miller on both boxes." },
+        { "name": "Ben Zobrist", "nationality": "USA", "born": "Eureka, Illinois", "fact": "His 10th-inning double off Bryan Shaw broke the 6-6 tie.", "checked": "both boxes: 2B off Shaw; bref pbp top 10th at 6-6, Almora scores; SABR same. Old 'Series MVP' dropped: not in either box." }
+      ]
+    },
+    {
+      "id": "ws-2016-g7-cle",
+      "game": "2016 World Series Game 7, 2016-11-02, Progressive Field: Cubs 8, Indians 7 (10 inn)",
+      "sources": [
+        { "host": "baseball-almanac.com", "url": "https://www.baseball-almanac.com/box-scores/boxscore.php?boxid=201611020CLE", "read": "2026-10-02" },
+        { "host": "baseball-reference.com", "url": "https://www.baseball-reference.com/boxes/CLE/CLE201611020.shtml", "read": "2026-10-02" },
+        { "host": "sabr.org", "url": "https://sabr.org/gamesproj/game/november-2-2016-cubs-end-world-series-curse-with-thrilling-game-7-victory/", "read": "2026-10-02", "role": "recap for the inning by inning facts" }
+      ],
+      "starters": ["DH Carlos Santana", "2B Jason Kipnis", "SS Francisco Lindor", "1B Mike Napoli", "3B Jose Ramirez", "RF Lonnie Chisenhall", "CF Rajai Davis", "LF Coco Crisp", "C Roberto Perez"],
+      "blanks": [
+        { "name": "Rajai Davis", "nationality": "USA", "born": "Norwich, Connecticut", "fact": "His two-run, two-out homer off Aroldis Chapman in the 8th tied Game 7 at 6-6.", "checked": "both boxes: HR 8th off Chapman, 1 on, 2 out; bref pbp bottom 8th at 4-6; SABR: two-run, game-tying home run in the eighth." },
+        { "name": "Roberto Perez", "nationality": "Puerto Rico", "born": "Mayaguez, Puerto Rico", "fact": "Batted ninth and caught the start, Yan Gomes only entered late.", "checked": "both boxes: Perez c 9th, Gomes c indented sub; bref subs: Gomes in at catcher top 8th after Naquin ran for Perez." },
+        { "name": "Coco Crisp", "nationality": "USA", "born": "Los Angeles, California", "fact": "Doubled and scored Cleveland's first run; Michael Martinez later replaced him in the field.", "checked": "both boxes: 2B off Hendricks, Martinez indented sub; bref pbp bottom 3rd: Crisp double, Santana single, Crisp scores; SABR: Santana singled in Crisp, who had reached on a double. DISAGREEMENT: SABR puts Martinez's entry in the eighth, bref pbp in the top of the 9th, so the old 'in the 8th' is dropped and no inning is claimed." }
+      ]
+    },
+    {
+      "id": "ws-2001-g7-nyy",
+      "game": "2001 World Series Game 7, 2001-11-04, Bank One Ballpark: Diamondbacks 3, Yankees 2",
+      "sources": [
+        { "host": "baseball-almanac.com", "url": "https://www.baseball-almanac.com/box-scores/boxscore.php?boxid=200111040ARI", "read": "2026-10-03" },
+        { "host": "baseball-reference.com", "url": "https://www.baseball-reference.com/boxes/ARI/ARI200111040.shtml", "read": "2026-10-03" },
+        { "host": "sabr.org", "url": "https://sabr.org/gamesproj/game/november-4-2001-luis-gonzalezs-walk-off-single-lifts-diamondbacks-to-game-7-win-over-yankees/", "read": "2026-10-03", "role": "recap for the inning by inning facts" }
+      ],
+      "starters": ["SS Derek Jeter", "RF Paul O'Neill", "CF Bernie Williams", "1B Tino Martinez", "C Jorge Posada", "LF Shane Spencer", "2B Alfonso Soriano", "3B Scott Brosius", "P Roger Clemens"],
+      "blanks": [
+        { "name": "Shane Spencer", "nationality": "USA", "born": "Key West, Florida", "fact": "Started in left field; Chuck Knoblauch and David Justice only came off the bench.", "checked": "both boxes: Spencer lf starter, Knoblauch ph,lf and Justice ph indented. Old wording said both only pinch-hit, but Knoblauch stayed on in left, so it now says off the bench." },
+        { "name": "Alfonso Soriano", "nationality": "Dominican Republic", "born": "San Pedro de Macoris, Dominican Republic", "fact": "His 8th-inning homer off Curt Schilling briefly put New York ahead 2-1.", "checked": "both boxes: HR 8th off Schilling, 0 on; bref pbp: Martinez RBI single top 7th made it 1-1 first; SABR: Martinez tied it 1-1 in the 7th, Soriano led off the 8th with the homer for 2-1." },
+        { "name": "Roger Clemens", "nationality": "USA", "born": "Dayton, Ohio", "fact": "NL park, no DH: Clemens batted ninth and struck out 10 in 6.1 innings.", "checked": "both boxes: Clemens p in the 9 hole, 6.1 IP, 10 SO." }
+      ]
+    },
+    {
+      "id": "ws-2001-g7-ari",
+      "game": "2001 World Series Game 7, 2001-11-04, Bank One Ballpark: Diamondbacks 3, Yankees 2",
+      "sources": [
+        { "host": "baseball-almanac.com", "url": "https://www.baseball-almanac.com/box-scores/boxscore.php?boxid=200111040ARI", "read": "2026-10-03" },
+        { "host": "baseball-reference.com", "url": "https://www.baseball-reference.com/boxes/ARI/ARI200111040.shtml", "read": "2026-10-03" },
+        { "host": "sabr.org", "url": "https://sabr.org/gamesproj/game/november-4-2001-luis-gonzalezs-walk-off-single-lifts-diamondbacks-to-game-7-win-over-yankees/", "read": "2026-10-03", "role": "recap for the inning by inning facts" }
+      ],
+      "starters": ["SS Tony Womack", "2B Craig Counsell", "LF Luis Gonzalez", "3B Matt Williams", "CF Steve Finley", "RF Danny Bautista", "1B Mark Grace", "C Damian Miller", "P Curt Schilling"],
+      "blanks": [
+        { "name": "Tony Womack", "nationality": "USA", "born": "Danville, Virginia", "fact": "His ninth-inning double off Mariano Rivera tied the game before the walk-off.", "checked": "both boxes: 2B off Rivera, 1 RBI; bref pbp bottom 9th at 1-2, double, Cummings scores; SABR: Cummings scored and the game was tied 2-2." },
+        { "name": "Craig Counsell", "nationality": "USA", "born": "South Bend, Indiana", "fact": "Hit by a Rivera pitch in the 9th, setting the stage for Gonzalez's walk-off single.", "checked": "both boxes: HBP Counsell by Rivera; bref pbp bottom 9th: Gonzalez single, Bell scores, Counsell to 2B; SABR: Rivera hit Counsell to load the bases, then Gonzalez singled in the winner." },
+        { "name": "Danny Bautista", "nationality": "Dominican Republic", "born": "Santo Domingo, Dominican Republic", "fact": "His double off Clemens drove in Arizona's first run.", "checked": "both boxes: 2B off Clemens, his only hit, 1 RBI; bref pbp bottom 6th at 0-0: double, Finley scores; SABR: Finley scored on the double to put Arizona up 1-0 in the sixth." }
+      ]
+    },
+    {
+      "id": "ws-1988-g1-oak",
+      "game": "1988 World Series Game 1, 1988-10-15, Dodger Stadium: Dodgers 5, Athletics 4",
+      "sources": [
+        { "host": "baseball-almanac.com", "url": "https://www.baseball-almanac.com/box-scores/boxscore.php?boxid=198810150LAN", "read": "2026-10-03" },
+        { "host": "baseball-reference.com", "url": "https://www.baseball-reference.com/boxes/LAN/LAN198810150.shtml", "read": "2026-10-03" }
+      ],
+      "starters": ["3B Carney Lansford", "CF Dave Henderson", "RF Jose Canseco", "LF Dave Parker", "1B Mark McGwire", "C Terry Steinbach", "2B Glenn Hubbard", "SS Walt Weiss", "P Dave Stewart"],
+      "blanks": [
+        { "name": "Jose Canseco", "nationality": "Cuba", "born": "Havana, Cuba", "fact": "His second-inning grand slam off Tim Belcher gave Oakland a 4-2 lead.", "checked": "both boxes: HR 2nd off Belcher, 3 on; bref pbp top 2nd at 0-2." },
+        { "name": "Dave Parker", "nationality": "USA", "born": "Mississippi (town differs, see playerPages)", "fact": "Started in left field and batted cleanup for Oakland.", "checked": "both boxes: Parker lf 4th, Stan Javier ran for him. Old 'The Cobra' nickname dropped: not in either box." },
+        { "name": "Dave Stewart", "nationality": "USA", "born": "Oakland, California", "fact": "Threw 8 innings, then Dennis Eckersley took the loss on Kirk Gibson's walk-off.", "checked": "both boxes: Stewart 8.0 IP, Eckersley L (0-1), Gibson HR 9th off Eckersley, 1 on, 2 out." }
+      ]
+    },
+    {
+      "id": "ws-1988-g1-lad",
+      "game": "1988 World Series Game 1, 1988-10-15, Dodger Stadium: Dodgers 5, Athletics 4",
+      "sources": [
+        { "host": "baseball-almanac.com", "url": "https://www.baseball-almanac.com/box-scores/boxscore.php?boxid=198810150LAN", "read": "2026-10-03" },
+        { "host": "baseball-reference.com", "url": "https://www.baseball-reference.com/boxes/LAN/LAN198810150.shtml", "read": "2026-10-03" }
+      ],
+      "starters": ["2B Steve Sax", "1B Franklin Stubbs", "LF Mickey Hatcher", "RF Mike Marshall", "CF John Shelby", "C Mike Scioscia", "3B Jeff Hamilton", "SS Alfredo Griffin", "P Tim Belcher"],
+      "blanks": [
+        { "name": "Mickey Hatcher", "nationality": "USA", "born": "Cleveland, Ohio", "fact": "Homered in the 1st inning. Kirk Gibson never started, his walk-off homer was a pinch-hit at-bat.", "checked": "both boxes: Hatcher lf starter, HR 1st off Stewart, 1 on; Gibson ph only, HR 9th." },
+        { "name": "Franklin Stubbs", "nationality": "USA", "born": "Laurinburg, North Carolina", "fact": "Started at first base on the night of Gibson's pinch-hit walk-off.", "checked": "both boxes: Stubbs 1b, batting 2nd." },
+        { "name": "Mike Scioscia", "nationality": "USA", "born": "Upper Darby, Pennsylvania", "fact": "Caught the whole game and drove in a run with a single.", "checked": "both boxes: Scioscia c, no Dodger catching sub, 1 RBI, no extra base hit (so the RBI hit was a single); bref pbp bottom 6th: single, Marshall scores. The inning is bref only, so the fact does not name it. Old 'later a World Series-winning manager' dropped: not in either box." }
+      ]
+    },
+    {
+      "id": "ws-1986-g6-bos",
+      "game": "1986 World Series Game 6, 1986-10-25, Shea Stadium: Mets 6, Red Sox 5 (10 inn)",
+      "sources": [
+        { "host": "baseball-almanac.com", "url": "https://www.baseball-almanac.com/box-scores/boxscore.php?boxid=198610250NYN", "read": "2026-10-03" },
+        { "host": "baseball-reference.com", "url": "https://www.baseball-reference.com/boxes/NYN/NYN198610250.shtml", "read": "2026-10-03" },
+        { "host": "sabr.org", "url": "https://sabr.org/gamesproj/game/october-25-1986-a-little-roller-up-along-first-mets-win-wild-game-six-on-buckner-error/", "read": "2026-10-03", "role": "recap for the inning by inning facts" }
+      ],
+      "starters": ["3B Wade Boggs", "2B Marty Barrett", "1B Bill Buckner", "LF Jim Rice", "RF Dwight Evans", "C Rich Gedman", "CF Dave Henderson", "SS Spike Owen", "P Roger Clemens"],
+      "blanks": [
+        { "name": "Roger Clemens", "nationality": "USA", "born": "Dayton, Ohio", "fact": "Started and threw seven innings with eight strikeouts.", "checked": "both boxes: 7.0 IP, 8 SO; SABR: 134 pitches through seven innings. Old 'the collapse came after he left' dropped as opinion." },
+        { "name": "Bill Buckner", "nationality": "USA", "born": "Vallejo, California", "fact": "Batted third and played first base; his error on Mookie Wilson's grounder in the 10th let the winning run score.", "checked": "both boxes: Buckner 1b 3rd, E Buckner; bref pbp bottom 10th: Wilson reached on E3, Knight scores, last play; SABR: the ball skipped through Buckner's legs and Ray Knight scored." },
+        { "name": "Dave Henderson", "nationality": "USA", "born": "Merced, California", "fact": "His homer leading off the 10th, off Rick Aguilera, put Boston ahead 4-3.", "checked": "both boxes: HR 10th off Aguilera, 0 on, 0 out; bref pbp: Barrett's single next at 4-3; SABR: Henderson homered in the 10th off Aguilera, 5-3 after Barrett's single. Old 'one strike from the title' dropped: not in either box." }
+      ]
+    },
+    {
+      "id": "ws-1986-g6-nym",
+      "game": "1986 World Series Game 6, 1986-10-25, Shea Stadium: Mets 6, Red Sox 5 (10 inn)",
+      "sources": [
+        { "host": "baseball-almanac.com", "url": "https://www.baseball-almanac.com/box-scores/boxscore.php?boxid=198610250NYN", "read": "2026-10-03" },
+        { "host": "baseball-reference.com", "url": "https://www.baseball-reference.com/boxes/NYN/NYN198610250.shtml", "read": "2026-10-03" },
+        { "host": "sabr.org", "url": "https://sabr.org/gamesproj/game/october-25-1986-a-little-roller-up-along-first-mets-win-wild-game-six-on-buckner-error/", "read": "2026-10-03", "role": "recap for the inning by inning facts" }
+      ],
+      "starters": ["CF Lenny Dykstra", "2B Wally Backman", "1B Keith Hernandez", "C Gary Carter", "RF Darryl Strawberry", "3B Ray Knight", "LF Mookie Wilson", "SS Rafael Santana", "P Bob Ojeda"],
+      "blanks": [
+        { "name": "Bob Ojeda", "nationality": "USA", "born": "Los Angeles, California", "fact": "Started Game 6, not Dwight Gooden, and went six innings.", "checked": "both boxes: Ojeda p 9th, 6.0 IP, no Gooden anywhere; SABR: Bob Ojeda started. Name fixed from Bobby to Bob: both player pages and the SABR recap bill him Bob Ojeda. Old 'lefty ex-Red Sox' dropped: not in either box.", "aliases": ["Bobby Ojeda"], "aliasWhy": "Round 948 review: the game billed him Bobby Ojeda before this round, so a guess of that name (the diminutive of his full name, Robert Michael Ojeda on baseball-reference) is still accepted. Display name stays Bob Ojeda." },
+        { "name": "Mookie Wilson", "nationality": "USA", "born": "Bamberg, South Carolina", "fact": "His 10th-inning grounder went for an error on Bill Buckner at first, and Ray Knight scored the winning run.", "checked": "bref pbp bottom 10th: Wilson reached on E3 (ground ball), Knight scores, final play; almanac: E Buckner, Knight's run, 6-5 final; SABR: little roller up along first, Ray Knight scored. Round 948 review: the fact used to say the ball went through Buckner's legs, which only the SABR recap says (neither box does), so it now says only what both boxes give." },
+        { "name": "Rafael Santana", "nationality": "Dominican Republic", "born": "La Romana, Dominican Republic", "fact": "Started at short and batted eighth; Kevin Elster and Howard Johnson both took turns there later.", "checked": "both boxes: Santana ss 8th, Elster ss and Johnson ph,ss indented under him. Old 'most famous Game 6 ever' dropped as opinion." }
+      ]
+    },
+    {
+      "id": "ws-2013-g6-bos",
+      "game": "2013 World Series Game 6, 2013-10-30, Fenway Park: Red Sox 6, Cardinals 1",
+      "sources": [
+        { "host": "baseball-almanac.com", "url": "https://www.baseball-almanac.com/box-scores/boxscore.php?boxid=201310300BOS", "read": "2026-10-03" },
+        { "host": "baseball-reference.com", "url": "https://www.baseball-reference.com/boxes/BOS/BOS201310300.shtml", "read": "2026-10-03" }
+      ],
+      "starters": ["CF Jacoby Ellsbury", "2B Dustin Pedroia", "DH David Ortiz", "1B Mike Napoli", "LF Jonny Gomes", "RF Shane Victorino", "3B Xander Bogaerts", "SS Stephen Drew", "C David Ross"],
+      "blanks": [
+        { "name": "David Ross", "nationality": "USA", "born": "Bainbridge, Georgia", "fact": "Started at catcher; Jarrod Saltalamacchia did not play in the clincher.", "checked": "both boxes: Ross c 9th, no Saltalamacchia in the Boston box. The old second source was Wikipedia, which does not count; 'regular' and 'his glove anchored' dropped." },
+        { "name": "Xander Bogaerts", "nationality": "Aruba", "born": "Oranjestad, Aruba, born 1992-10-01", "fact": "Started at third base, aged 21.", "checked": "both boxes: Bogaerts 3b 7th; both player pages: born 1992-10-01, so 21 on 2013-10-30. Old 'rookie' dropped: not in either box." },
+        { "name": "Stephen Drew", "nationality": "USA", "born": "Hahira, Georgia", "fact": "Led off the 4th with a homer off Michael Wacha.", "checked": "both boxes: HR 4th off Wacha, 0 on, 0 out. Old 'limited at the plate all series' dropped: a series claim neither box makes." }
+      ]
+    },
+    {
+      "id": "ws-2013-g6-stl",
+      "game": "2013 World Series Game 6, 2013-10-30, Fenway Park: Red Sox 6, Cardinals 1",
+      "sources": [
+        { "host": "baseball-almanac.com", "url": "https://www.baseball-almanac.com/box-scores/boxscore.php?boxid=201310300BOS", "read": "2026-10-03" },
+        { "host": "baseball-reference.com", "url": "https://www.baseball-reference.com/boxes/BOS/BOS201310300.shtml", "read": "2026-10-03" }
+      ],
+      "starters": ["2B Matt Carpenter", "RF Carlos Beltran", "LF Matt Holliday", "DH Allen Craig", "C Yadier Molina", "1B Matt Adams", "3B David Freese", "CF Jon Jay", "SS Daniel Descalso"],
+      "blanks": [
+        { "name": "Daniel Descalso", "nationality": "USA", "born": "Redwood City, California", "fact": "Started at shortstop; Pete Kozma did not play in Game 6.", "checked": "both boxes: Descalso ss 9th, no Kozma in the St. Louis box. Old 'reduced to a pinch-running role' came from Wikipedia and is dropped." },
+        { "name": "Matt Adams", "nationality": "USA", "born": "Philipsburg, Pennsylvania", "fact": "Started at first base while Allen Craig was the designated hitter.", "checked": "both boxes: Adams 1b 6th, Craig dh 4th." },
+        { "name": "Allen Craig", "nationality": "USA", "born": "Mission Viejo, California", "fact": "Batted cleanup as the designated hitter in the AL park.", "checked": "both boxes: Craig dh, 4th in the order, at Fenway Park." }
+      ]
+    },
+    {
+      "id": "ws-1991-g7-min",
+      "game": "1991 World Series Game 7, 1991-10-27, Hubert H. Humphrey Metrodome: Twins 1, Braves 0 (10 inn)",
+      "sources": [
+        { "host": "baseball-almanac.com", "url": "https://www.baseball-almanac.com/box-scores/boxscore.php?boxid=199110270MIN", "read": "2026-10-02" },
+        { "host": "baseball-reference.com", "url": "https://www.baseball-reference.com/boxes/MIN/MIN199110270.shtml", "read": "2026-10-02" }
+      ],
+      "starters": ["LF Dan Gladden", "2B Chuck Knoblauch", "CF Kirby Puckett", "1B Kent Hrbek", "DH Chili Davis", "C Brian Harper", "RF Shane Mack", "3B Mike Pagliarulo", "SS Greg Gagne"],
+      "trap": "Gene Larkin, whose pinch-hit single won it, did not start: Chili Davis was the DH.",
+      "blanks": [
+        { "name": "Chili Davis", "nationality": "Jamaica", "born": "Kingston, Jamaica", "fact": "Started at DH. Gene Larkin's pinch-hit winner in the 10th came in his spot in the order.", "checked": "almanac: Brown pr,dh and Larkin ph,dh indented under Davis, Larkin 1 hit 1 RBI, the only RBI of a 1-0 game that Morris pitched 10.0 innings of; bref subs: Brown ran for Davis (bottom 9th), Larkin hit for Brown (bottom 10th)." },
+        { "name": "Dan Gladden", "nationality": "USA", "born": "San Jose, California", "fact": "Had three hits, two of them doubles, and scored the game's only run.", "checked": "both boxes: Gladden 5-1-3-0, 2B twice (off Smoltz and Pena); the Twins scored 1." },
+        { "name": "Brian Harper", "nationality": "USA", "born": "Los Angeles, California", "fact": "Caught all ten innings of Jack Morris's shutout and had two hits.", "checked": "both boxes: Harper c 4-0-2-0, no Twins catching sub; Morris 10.0 IP, 0 R, the only Twins pitcher." }
+      ]
+    },
+    {
+      "id": "ws-1991-g7-atl",
+      "game": "1991 World Series Game 7, 1991-10-27, Hubert H. Humphrey Metrodome: Twins 1, Braves 0 (10 inn)",
+      "sources": [
+        { "host": "baseball-almanac.com", "url": "https://www.baseball-almanac.com/box-scores/boxscore.php?boxid=199110270MIN", "read": "2026-10-02" },
+        { "host": "baseball-reference.com", "url": "https://www.baseball-reference.com/boxes/MIN/MIN199110270.shtml", "read": "2026-10-02" }
+      ],
+      "starters": ["DH Lonnie Smith", "3B Terry Pendleton", "CF Ron Gant", "RF David Justice", "1B Sid Bream", "LF Brian Hunter", "C Greg Olson", "2B Mark Lemke", "SS Rafael Belliard"],
+      "trap": "Jeff Blauser did not start at short: Rafael Belliard did, batting ninth.",
+      "blanks": [
+        { "name": "Lonnie Smith", "nationality": "USA", "born": "Chicago, Illinois", "fact": "Led off as the DH and had two of Atlanta's seven hits off Jack Morris.", "checked": "both boxes: Smith dh 4-0-2-0; Morris pitched all 10 innings and allowed 7 hits." },
+        { "name": "Rafael Belliard", "nationality": "Dominican Republic", "born": "Pueblo Nuevo, Valverde, Dominican Republic", "fact": "Started at short and batted ninth; Jeff Blauser later pinch-hit for him.", "checked": "both boxes: Belliard ss 9th, Blauser ph,ss indented; bref subs: Blauser hit for Belliard, top 10th (inning bref only, not claimed)." },
+        { "name": "Brian Hunter", "nationality": "USA", "born": "Torrance, California", "fact": "Started in left field and doubled off Jack Morris.", "checked": "both boxes: Hunter lf 6th, 2B off Morris." }
+      ]
+    },
+    {
+      "id": "ws-2011-g6-stl",
+      "game": "2011 World Series Game 6, 2011-10-27, Busch Stadium: Cardinals 10, Rangers 9 (11 inn)",
+      "sources": [
+        { "host": "baseball-almanac.com", "url": "https://www.baseball-almanac.com/box-scores/boxscore.php?boxid=201110270SLN", "read": "2026-10-02" },
+        { "host": "baseball-reference.com", "url": "https://www.baseball-reference.com/boxes/SLN/SLN201110270.shtml", "read": "2026-10-02" }
+      ],
+      "starters": ["SS Rafael Furcal", "CF Skip Schumaker", "1B Albert Pujols", "RF Lance Berkman", "LF Matt Holliday", "3B David Freese", "C Yadier Molina", "2B Nick Punto", "P Jaime Garcia"],
+      "trap": "Allen Craig, who homered, did not start: Matt Holliday was in left.",
+      "blanks": [
+        { "name": "David Freese", "nationality": "USA", "born": "Corpus Christi, Texas", "fact": "Tripled off Neftali Feliz, then won it with a homer off Mark Lowe leading off the 11th.", "checked": "both boxes: 3B off Feliz; HR 11th off Lowe, 0 on, 0 out; Lowe L, 10-9 final at home." },
+        { "name": "Lance Berkman", "nationality": "USA", "born": "Waco, Texas", "fact": "Scored four runs and hit a two-run homer off Colby Lewis in the 1st.", "checked": "both boxes: Berkman 5-4-3-3; HR 1st off Lewis, 1 on." },
+        { "name": "Matt Holliday", "nationality": "USA", "born": "Stillwater, Oklahoma", "fact": "Started in left; Allen Craig replaced him and homered off Derek Holland in the 8th.", "checked": "both boxes: Holliday lf starter, Craig lf indented; Craig HR 8th off Holland, 0 on." }
+      ]
+    },
+    {
+      "id": "ws-2011-g6-tex",
+      "game": "2011 World Series Game 6, 2011-10-27, Busch Stadium: Cardinals 10, Rangers 9 (11 inn)",
+      "sources": [
+        { "host": "baseball-almanac.com", "url": "https://www.baseball-almanac.com/box-scores/boxscore.php?boxid=201110270SLN", "read": "2026-10-02" },
+        { "host": "baseball-reference.com", "url": "https://www.baseball-reference.com/boxes/SLN/SLN201110270.shtml", "read": "2026-10-02" }
+      ],
+      "starters": ["2B Ian Kinsler", "SS Elvis Andrus", "LF Josh Hamilton", "1B Michael Young", "3B Adrian Beltre", "RF Nelson Cruz", "C Mike Napoli", "CF Craig Gentry", "P Colby Lewis"],
+      "trap": "NL park, no DH: Colby Lewis batted ninth, and Hamilton started in left, not center.",
+      "blanks": [
+        { "name": "Josh Hamilton", "nationality": "USA", "born": "Raleigh, North Carolina", "fact": "Hit a two-run homer off Jason Motte in the 10th.", "checked": "both boxes: HR 10th off Motte, 1 on." },
+        { "name": "Adrian Beltre", "nationality": "Dominican Republic", "born": "Santo Domingo, Dominican Republic", "fact": "He and Nelson Cruz opened the 7th with back-to-back homers off Lance Lynn.", "checked": "both boxes: Beltre HR 7th off Lynn, 0 on, 0 out, and Cruz (next in the order) HR 7th off Lynn, 0 on, 0 out." },
+        { "name": "Craig Gentry", "nationality": "USA", "born": "Fort Smith, Arkansas", "fact": "Started in center field; David Murphy later pinch-hit for him.", "checked": "both boxes: Gentry cf 8th, Murphy ph,lf,rf indented under him; bref subs: Murphy hit for Gentry." }
+      ]
+    },
+    {
+      "id": "ws-1975-g6-bos",
+      "game": "1975 World Series Game 6, 1975-10-21, Fenway Park: Red Sox 7, Reds 6 (12 inn)",
+      "sources": [
+        { "host": "baseball-almanac.com", "url": "https://www.baseball-almanac.com/box-scores/boxscore.php?boxid=197510210BOS", "read": "2026-10-02" },
+        { "host": "baseball-reference.com", "url": "https://www.baseball-reference.com/boxes/BOS/BOS197510210.shtml", "read": "2026-10-02" }
+      ],
+      "starters": ["1B Cecil Cooper", "2B Denny Doyle", "LF Carl Yastrzemski", "C Carlton Fisk", "CF Fred Lynn", "3B Rico Petrocelli", "RF Dwight Evans", "SS Rick Burleson", "P Luis Tiant"],
+      "trap": "Bernie Carbo, whose three-run homer tied it in the 8th, did not start: he pinch-hit.",
+      "blanks": [
+        { "name": "Carlton Fisk", "nationality": "USA", "born": "Bellows Falls, Vermont", "fact": "Led off the 12th with the homer off Pat Darcy that won it 7-6.", "checked": "both boxes: HR 12th off Darcy, 0 on, 0 out; Darcy L; 7-6 final at home." },
+        { "name": "Fred Lynn", "nationality": "USA", "born": "Chicago, Illinois", "fact": "Hit a three-run homer off Gary Nolan in the 1st.", "checked": "both boxes: HR 1st off Nolan, 2 on." },
+        { "name": "Luis Tiant", "nationality": "Cuba", "born": "Marianao, Cuba", "fact": "Started and batted ninth; Bernie Carbo's tying three-run homer in the 8th came as a pinch-hitter in this spot.", "checked": "both boxes: Tiant p 9th, 7.0 IP charged with all 6 Reds runs; Moret then Carbo ph,lf indented under him; Carbo HR 8th off Eastwick, 2 on. Boston's 7 runs are Lynn 3, Carbo 3, Fisk 1, so Carbo's homer made it 6-6. bref subs: Carbo hit for Moret, batting 9th." }
+      ]
+    },
+    {
+      "id": "ws-1975-g6-cin",
+      "game": "1975 World Series Game 6, 1975-10-21, Fenway Park: Red Sox 7, Reds 6 (12 inn)",
+      "sources": [
+        { "host": "baseball-almanac.com", "url": "https://www.baseball-almanac.com/box-scores/boxscore.php?boxid=197510210BOS", "read": "2026-10-02" },
+        { "host": "baseball-reference.com", "url": "https://www.baseball-reference.com/boxes/BOS/BOS197510210.shtml", "read": "2026-10-02" }
+      ],
+      "starters": ["3B Pete Rose", "RF Ken Griffey", "2B Joe Morgan", "C Johnny Bench", "1B Tony Perez", "LF George Foster", "SS Dave Concepcion", "CF Cesar Geronimo", "P Gary Nolan"],
+      "trap": "No DH in 1975: Gary Nolan batted ninth, and Pete Rose started at third base.",
+      "blanks": [
+        { "name": "Cesar Geronimo", "nationality": "Dominican Republic", "born": "El Seibo, Dominican Republic", "fact": "Led off the 8th with a homer off Luis Tiant.", "checked": "both boxes: HR 8th off Tiant, 0 on, 0 out." },
+        { "name": "George Foster", "nationality": "USA", "born": "Tuscaloosa, Alabama", "fact": "Doubled off Luis Tiant and drove in two runs.", "checked": "both boxes: 2B off Tiant; Foster 6-0-2-2." },
+        { "name": "Gary Nolan", "nationality": "USA", "born": "Herlong, California", "fact": "Started but lasted two innings, Fred Lynn's three-run homer came off him in the 1st.", "checked": "both boxes: Nolan 2.0 IP, 3 R; Lynn HR 1st off Nolan, 2 on." }
+      ]
+    },
+    {
+      "id": "ws-1993-g6-tor",
+      "game": "1993 World Series Game 6, 1993-10-23, SkyDome: Blue Jays 8, Phillies 6",
+      "sources": [
+        { "host": "baseball-almanac.com", "url": "https://www.baseball-almanac.com/box-scores/boxscore.php?boxid=199310230TOR", "read": "2026-10-02" },
+        { "host": "baseball-reference.com", "url": "https://www.baseball-reference.com/boxes/TOR/TOR199310230.shtml", "read": "2026-10-02" }
+      ],
+      "starters": ["LF Rickey Henderson", "CF Devon White", "DH Paul Molitor", "RF Joe Carter", "1B John Olerud", "2B Roberto Alomar", "SS Tony Fernandez", "3B Ed Sprague", "C Pat Borders"],
+      "trap": "Rickey Henderson led off in left; Molitor was the DH, not at a position.",
+      "blanks": [
+        { "name": "Joe Carter", "nationality": "USA", "born": "Oklahoma City, Oklahoma", "fact": "His three-run homer off Mitch Williams in the 9th turned a 6-5 deficit into an 8-6 win.", "checked": "both boxes: HR 9th off Williams, 2 on, 1 out; Williams L; Toronto's 8 runs at home, 8-6 final, so it stood 5-6 before the swing." },
+        { "name": "Paul Molitor", "nationality": "USA", "born": "St. Paul, Minnesota", "fact": "Homered, tripled and scored three runs as the DH.", "checked": "both boxes: Molitor dh 5-3-3-2, HR 5th off Mulholland, 3B off Mulholland." },
+        { "name": "Roberto Alomar", "nationality": "Puerto Rico", "born": "Ponce, Puerto Rico", "fact": "Had three hits, one a double off Terry Mulholland.", "checked": "both boxes: Alomar 4-1-3-1, 2B off Mulholland." }
+      ]
+    },
+    {
+      "id": "ws-1993-g6-phi",
+      "game": "1993 World Series Game 6, 1993-10-23, SkyDome: Blue Jays 8, Phillies 6",
+      "sources": [
+        { "host": "baseball-almanac.com", "url": "https://www.baseball-almanac.com/box-scores/boxscore.php?boxid=199310230TOR", "read": "2026-10-02" },
+        { "host": "baseball-reference.com", "url": "https://www.baseball-reference.com/boxes/TOR/TOR199310230.shtml", "read": "2026-10-02" }
+      ],
+      "starters": ["CF Lenny Dykstra", "DH Mariano Duncan", "1B John Kruk", "3B Dave Hollins", "C Darren Daulton", "RF Jim Eisenreich", "LF Milt Thompson", "SS Kevin Stocker", "2B Mickey Morandini"],
+      "trap": "Pete Incaviglia did not start in left: Milt Thompson did.",
+      "blanks": [
+        { "name": "Lenny Dykstra", "nationality": "USA", "born": "Santa Ana, California", "fact": "Hit a three-run homer off Dave Stewart in the 7th.", "checked": "both boxes: HR 7th off Stewart, 2 on, 0 out." },
+        { "name": "Milt Thompson", "nationality": "USA", "born": "Washington, D.C.", "fact": "Started in left; Pete Incaviglia pinch-hit for him and drove in a run with a sacrifice fly.", "checked": "both boxes: Thompson lf 7th, Incaviglia ph,lf indented, SF Incaviglia off Leiter; bref subs: Incaviglia hit for Thompson." },
+        { "name": "Darren Daulton", "nationality": "USA", "born": "Arkansas City, Kansas", "fact": "Caught the whole game and doubled off Dave Stewart.", "checked": "both boxes: Daulton c 5th, no Phillies catching sub, 2B off Stewart." }
+      ]
+    },
+    {
+      "id": "ws-1960-g7-pit",
+      "game": "1960 World Series Game 7, 1960-10-13, Forbes Field: Pirates 10, Yankees 9",
+      "sources": [
+        { "host": "baseball-almanac.com", "url": "https://www.baseball-almanac.com/box-scores/boxscore.php?boxid=196010130PIT", "read": "2026-10-02" },
+        { "host": "baseball-reference.com", "url": "https://www.baseball-reference.com/boxes/PIT/PIT196010130.shtml", "read": "2026-10-02" }
+      ],
+      "starters": ["CF Bill Virdon", "SS Dick Groat", "LF Bob Skinner", "1B Rocky Nelson", "RF Roberto Clemente", "C Smoky Burgess", "3B Don Hoak", "2B Bill Mazeroski", "P Vern Law"],
+      "trap": "Hal Smith, whose three-run homer in the 8th set up the finish, did not start: Smoky Burgess caught.",
+      "blanks": [
+        { "name": "Bill Mazeroski", "nationality": "USA", "born": "Wheeling, West Virginia", "fact": "Led off the bottom of the 9th with a walk-off homer off Ralph Terry.", "checked": "both boxes: HR 9th off Terry, 0 on, 0 out; Terry L, 0.1 IP; 10-9 final at home." },
+        { "name": "Smoky Burgess", "nationality": "USA", "born": "Caroleen, North Carolina", "fact": "Started at catcher; Hal Smith, whose three-run homer came in the 8th, only entered after Burgess was pinch-run for.", "checked": "both boxes: Burgess c 6th, Christopher pr then Smith c indented under him; Smith HR 8th off Coates, 2 on; bref subs: Christopher ran for Burgess, Smith took over at catcher." },
+        { "name": "Rocky Nelson", "nationality": "USA", "born": "Portsmouth, Ohio", "fact": "Hit a two-run homer off Bob Turley in the 1st.", "checked": "both boxes: HR 1st off Turley, 1 on." }
+      ]
+    },
+    {
+      "id": "ws-1960-g7-nyy",
+      "game": "1960 World Series Game 7, 1960-10-13, Forbes Field: Pirates 10, Yankees 9",
+      "sources": [
+        { "host": "baseball-almanac.com", "url": "https://www.baseball-almanac.com/box-scores/boxscore.php?boxid=196010130PIT", "read": "2026-10-02" },
+        { "host": "baseball-reference.com", "url": "https://www.baseball-reference.com/boxes/PIT/PIT196010130.shtml", "read": "2026-10-02" }
+      ],
+      "starters": ["2B Bobby Richardson", "SS Tony Kubek", "RF Roger Maris", "CF Mickey Mantle", "LF Yogi Berra", "1B Bill Skowron", "C Johnny Blanchard", "3B Clete Boyer", "P Bob Turley"],
+      "trap": "Johnny Blanchard caught, not Elston Howard, and Yogi Berra played left field.",
+      "blanks": [
+        { "name": "Johnny Blanchard", "nationality": "USA", "born": "Minneapolis, Minnesota", "fact": "Started at catcher and drove in a run; Elston Howard did not play.", "checked": "both boxes: Blanchard c 7th, 1 RBI; no Howard anywhere in the Yankees box." },
+        { "name": "Yogi Berra", "nationality": "USA", "born": "St. Louis, Missouri", "fact": "Played left field and hit a three-run homer off Roy Face in the 6th.", "checked": "both boxes: Berra lf 5th, HR 6th off Face, 2 on." },
+        { "name": "Bob Turley", "nationality": "USA", "born": "Troy, Illinois", "fact": "Started but lasted one inning, Rocky Nelson's two-run homer came off him in the 1st.", "checked": "both boxes: Turley 1.0 IP, 3 R; Nelson HR 1st off Turley, 1 on." }
+      ]
+    },
+    {
+      "id": "ws-2014-g7-sf",
+      "game": "2014 World Series Game 7, 2014-10-29, Kauffman Stadium: Giants 3, Royals 2",
+      "sources": [
+        { "host": "baseball-almanac.com", "url": "https://www.baseball-almanac.com/box-scores/boxscore.php?boxid=201410290KCA", "read": "2026-10-02" },
+        { "host": "baseball-reference.com", "url": "https://www.baseball-reference.com/boxes/KCA/KCA201410290.shtml", "read": "2026-10-02" }
+      ],
+      "starters": ["CF Gregor Blanco", "2B Joe Panik", "C Buster Posey", "3B Pablo Sandoval", "RF Hunter Pence", "1B Brandon Belt", "DH Mike Morse", "SS Brandon Crawford", "LF Juan Perez"],
+      "trap": "Madison Bumgarner did not start: Tim Hudson did, and Bumgarner threw five scoreless innings in relief.",
+      "blanks": [
+        { "name": "Mike Morse", "nationality": "USA", "born": "Fort Lauderdale, Florida", "fact": "Drove in two of the Giants' three runs as the DH, one with a sacrifice fly.", "checked": "both boxes: Morse dh 3-0-1-2, SF Morse off Guthrie; Giants scored 3." },
+        { "name": "Pablo Sandoval", "nationality": "Venezuela", "born": "Puerto Cabello, Carabobo, Venezuela", "fact": "Had three hits, one a double off Wade Davis.", "checked": "both boxes: Sandoval 3-2-3-0, 2B off Davis." },
+        { "name": "Buster Posey", "nationality": "USA", "born": "Leesburg, Georgia", "fact": "Caught the whole game, including Madison Bumgarner's five scoreless innings in relief.", "checked": "both boxes: Posey c 3rd, no Giants catching sub; Hudson started, Bumgarner 5.0 IP, 0 R, save." }
+      ]
+    },
+    {
+      "id": "ws-2014-g7-kc",
+      "game": "2014 World Series Game 7, 2014-10-29, Kauffman Stadium: Giants 3, Royals 2",
+      "sources": [
+        { "host": "baseball-almanac.com", "url": "https://www.baseball-almanac.com/box-scores/boxscore.php?boxid=201410290KCA", "read": "2026-10-02" },
+        { "host": "baseball-reference.com", "url": "https://www.baseball-reference.com/boxes/KCA/KCA201410290.shtml", "read": "2026-10-02" }
+      ],
+      "starters": ["SS Alcides Escobar", "RF Nori Aoki", "CF Lorenzo Cain", "1B Eric Hosmer", "DH Billy Butler", "LF Alex Gordon", "C Salvador Perez", "3B Mike Moustakas", "2B Omar Infante"],
+      "trap": "Nori Aoki batted second in right, Lorenzo Cain played center.",
+      "blanks": [
+        { "name": "Alex Gordon", "nationality": "USA", "born": "Lincoln, Nebraska", "fact": "Had two hits, one a double off Tim Hudson, and drove in a run.", "checked": "both boxes: Gordon 3-1-2-1, 2B off Hudson." },
+        { "name": "Omar Infante", "nationality": "Venezuela", "born": "Puerto La Cruz, Anzoategui, Venezuela", "fact": "Drove in a run with a sacrifice fly off Tim Hudson.", "checked": "both boxes: SF Infante off Hudson, Infante 1 RBI." },
+        { "name": "Nori Aoki", "nationality": "Japan", "born": "Hyuga, Miyazaki, Japan", "fact": "Batted second and started in right field.", "checked": "both boxes: Aoki rf 2nd. Name: see playerPages.nameDisagreements.", "aliases": ["Norichika Aoki"], "aliasWhy": "Round 948 review: baseball-almanac bills him Norichika Aoki and baseball-reference gives the same full name on his player page, so that guess is accepted too." }
+      ]
+    },
+    {
+      "id": "ws-1977-g6-nyy",
+      "game": "1977 World Series Game 6, 1977-10-18, Yankee Stadium: Yankees 8, Dodgers 4",
+      "sources": [
+        { "host": "baseball-almanac.com", "url": "https://www.baseball-almanac.com/box-scores/boxscore.php?boxid=197710180NYA", "read": "2026-10-02" },
+        { "host": "baseball-reference.com", "url": "https://www.baseball-reference.com/boxes/NYA/NYA197710180.shtml", "read": "2026-10-02" }
+      ],
+      "starters": ["CF Mickey Rivers", "2B Willie Randolph", "C Thurman Munson", "RF Reggie Jackson", "1B Chris Chambliss", "3B Graig Nettles", "LF Lou Piniella", "SS Bucky Dent", "P Mike Torrez"],
+      "trap": "No DH in this Series: Mike Torrez batted ninth and pitched all nine innings.",
+      "blanks": [
+        { "name": "Reggie Jackson", "nationality": "USA", "born": "Pennsylvania (town differs, see playerPages)", "fact": "Homered three times, off Burt Hooton, Elias Sosa and Charlie Hough.", "checked": "both boxes: Jackson 3-4-3-5; HR 4th off Hooton, 5th off Sosa, 8th off Hough." },
+        { "name": "Chris Chambliss", "nationality": "USA", "born": "Dayton, Ohio", "fact": "Hit a two-run homer off Burt Hooton in the 2nd and added a double.", "checked": "both boxes: HR 2nd off Hooton, 1 on; 2B off Sosa." },
+        { "name": "Mike Torrez", "nationality": "USA", "born": "Topeka, Kansas", "fact": "Pitched all nine innings and got the win.", "checked": "both boxes: Torrez 9.0 IP, W, the only Yankees pitcher." }
+      ]
+    },
+    {
+      "id": "ws-1977-g6-lad",
+      "game": "1977 World Series Game 6, 1977-10-18, Yankee Stadium: Yankees 8, Dodgers 4",
+      "sources": [
+        { "host": "baseball-almanac.com", "url": "https://www.baseball-almanac.com/box-scores/boxscore.php?boxid=197710180NYA", "read": "2026-10-02" },
+        { "host": "baseball-reference.com", "url": "https://www.baseball-reference.com/boxes/NYA/NYA197710180.shtml", "read": "2026-10-02" }
+      ],
+      "starters": ["2B Davey Lopes", "SS Bill Russell", "RF Reggie Smith", "3B Ron Cey", "1B Steve Garvey", "LF Dusty Baker", "CF Rick Monday", "C Steve Yeager", "P Burt Hooton"],
+      "trap": "Steve Garvey batted fifth, behind Reggie Smith and Ron Cey.",
+      "blanks": [
+        { "name": "Burt Hooton", "nationality": "USA", "born": "Greenville, Texas", "fact": "Started and took the loss, charged with four runs in three innings.", "checked": "both boxes: Hooton 3.0 IP, 4 R, L." },
+        { "name": "Steve Garvey", "nationality": "USA", "born": "Tampa, Florida", "fact": "Tripled off Mike Torrez and drove in two runs.", "checked": "both boxes: 3B off Torrez; Garvey 4-1-2-2." },
+        { "name": "Reggie Smith", "nationality": "USA", "born": "Shreveport, Louisiana", "fact": "Homered off Mike Torrez in the 3rd.", "checked": "both boxes: HR 3rd off Torrez, 0 on." }
+      ]
+    },
+    {
+      "id": "ws-2017-g7-hou",
+      "game": "2017 World Series Game 7, 2017-11-01, Dodger Stadium: Astros 5, Dodgers 1",
+      "sources": [
+        { "host": "baseball-almanac.com", "url": "https://www.baseball-almanac.com/box-scores/boxscore.php?boxid=201711010LAN", "read": "2026-10-02" },
+        { "host": "baseball-reference.com", "url": "https://www.baseball-reference.com/boxes/LAN/LAN201711010.shtml", "read": "2026-10-02" }
+      ],
+      "starters": ["CF George Springer", "3B Alex Bregman", "2B Jose Altuve", "SS Carlos Correa", "1B Yuli Gurriel", "C Brian McCann", "LF Marwin Gonzalez", "RF Josh Reddick", "P Lance McCullers Jr."],
+      "trap": "NL park, no DH: Lance McCullers Jr. batted ninth, and Charlie Morton, who got the win, did not start.",
+      "blanks": [
+        { "name": "George Springer", "nationality": "USA", "born": "New Britain, Connecticut", "fact": "Doubled and hit a two-run homer off Yu Darvish in the 2nd.", "checked": "both boxes: 2B off Darvish; HR 2nd off Darvish, 1 on." },
+        { "name": "Brian McCann", "nationality": "USA", "born": "Athens, Georgia", "fact": "Caught all nine innings as five Houston pitchers held the Dodgers to one run.", "checked": "both boxes: McCann c 6th, no Astros catching sub; five Astros pitchers (McCullers Jr., Peacock, Liriano, Devenski, Morton); Dodgers scored 1." },
+        { "name": "Marwin Gonzalez", "nationality": "Venezuela", "born": "Puerto Ordaz, Bolivar, Venezuela", "fact": "Had two hits, one a double off Yu Darvish.", "checked": "both boxes: Gonzalez 3-1-2-0, 2B off Darvish." }
+      ]
+    },
+    {
+      "id": "ws-2017-g7-lad",
+      "game": "2017 World Series Game 7, 2017-11-01, Dodger Stadium: Astros 5, Dodgers 1",
+      "sources": [
+        { "host": "baseball-almanac.com", "url": "https://www.baseball-almanac.com/box-scores/boxscore.php?boxid=201711010LAN", "read": "2026-10-02" },
+        { "host": "baseball-reference.com", "url": "https://www.baseball-reference.com/boxes/LAN/LAN201711010.shtml", "read": "2026-10-02" }
+      ],
+      "starters": ["CF Chris Taylor", "SS Corey Seager", "3B Justin Turner", "1B Cody Bellinger", "RF Yasiel Puig", "LF Joc Pederson", "2B Logan Forsythe", "C Austin Barnes", "P Yu Darvish"],
+      "trap": "Clayton Kershaw did not start: Yu Darvish did, and Kershaw came on in relief.",
+      "blanks": [
+        { "name": "Yu Darvish", "nationality": "Japan", "born": "Osaka, Japan (town differs, see playerPages)", "fact": "Started but got only five outs; Clayton Kershaw later threw four scoreless innings in relief.", "checked": "both boxes: Darvish 1.2 IP, L; Kershaw 4.0 IP, 0 R, indented sub." },
+        { "name": "Joc Pederson", "nationality": "USA", "born": "Palo Alto, California", "fact": "Scored the Dodgers' only run.", "checked": "both boxes: Pederson 4-1-1-0; Dodgers scored 1." },
+        { "name": "Chris Taylor", "nationality": "USA", "born": "Virginia Beach, Virginia", "fact": "Led off and doubled off Lance McCullers Jr.", "checked": "both boxes: Taylor cf 1st, 2B off McCullers." }
+      ]
+    },
+    {
+      "id": "ws-2019-g7-wsh",
+      "game": "2019 World Series Game 7, 2019-10-30, Minute Maid Park: Nationals 6, Astros 2",
+      "sources": [
+        { "host": "baseball-almanac.com", "url": "https://www.baseball-almanac.com/box-scores/boxscore.php?boxid=201910300HOA", "read": "2026-10-02" },
+        { "host": "baseball-reference.com", "url": "https://www.baseball-reference.com/boxes/HOU/HOU201910300.shtml", "read": "2026-10-02" }
+      ],
+      "starters": ["SS Trea Turner", "RF Adam Eaton", "3B Anthony Rendon", "LF Juan Soto", "DH Howie Kendrick", "2B Asdrubal Cabrera", "1B Ryan Zimmerman", "C Yan Gomes", "CF Victor Robles"],
+      "trap": "Howie Kendrick was the DH, not at second: Asdrubal Cabrera started there.",
+      "blanks": [
+        { "name": "Howie Kendrick", "nationality": "USA", "born": "Jacksonville, Florida", "fact": "His two-run homer off Will Harris in the 7th turned a 2-1 deficit into a 3-2 lead.", "checked": "both boxes: HR 7th off Harris, 1 on, 1 out; Harris BS and L. Houston's 2 runs were both off Scherzer (5.0 IP); Washington's first run was Rendon's solo homer earlier in the 7th, and Greinke was charged with 2 runs (Rendon and the runner Kendrick drove in)." },
+        { "name": "Anthony Rendon", "nationality": "USA", "born": "Houston, Texas", "fact": "His homer off Zack Greinke in the 7th was Washington's first run.", "checked": "both boxes: HR 7th off Greinke, 0 on, 1 out. Washington's 6 runs: Greinke 2 (both in the 7th), Harris 1, Osuna 1, Smith 2, all relievers after Greinke, so nothing scored before the 7th." },
+        { "name": "Yan Gomes", "nationality": "Brazil", "born": "Sao Paulo, Brazil", "fact": "Caught all nine innings, from Max Scherzer's start to Daniel Hudson's ninth.", "checked": "both boxes: Gomes c 8th, no Nationals catching sub; Scherzer 5.0 IP, Corbin 3.0 IP, Hudson 1.0 IP (almanac pitching table, total 9.0); bref pbp: Bottom of the 9th, Daniel Hudson facing 1-2-3, Hudson replaces Corbin. Round 948 review: the old fact listed only Scherzer and Corbin, which left out Hudson's ninth." }
+      ]
+    },
+    {
+      "id": "ws-2019-g7-hou",
+      "game": "2019 World Series Game 7, 2019-10-30, Minute Maid Park: Nationals 6, Astros 2",
+      "sources": [
+        { "host": "baseball-almanac.com", "url": "https://www.baseball-almanac.com/box-scores/boxscore.php?boxid=201910300HOA", "read": "2026-10-02" },
+        { "host": "baseball-reference.com", "url": "https://www.baseball-reference.com/boxes/HOU/HOU201910300.shtml", "read": "2026-10-02" }
+      ],
+      "starters": ["CF George Springer", "2B Jose Altuve", "LF Michael Brantley", "3B Alex Bregman", "1B Yuli Gurriel", "DH Yordan Alvarez", "SS Carlos Correa", "C Robinson Chirinos", "RF Josh Reddick"],
+      "trap": "Jake Marisnick did not start: Josh Reddick was in right and Springer in center.",
+      "blanks": [
+        { "name": "Yuli Gurriel", "nationality": "Cuba", "born": "Sancti Spiritus, Cuba", "fact": "Led off the 2nd with a homer off Max Scherzer.", "checked": "both boxes: HR 2nd off Scherzer, 0 on, 0 out. Almanac's player id is gurriyu01, baseball-reference's gourryu01; same man, same slot, same name." },
+        { "name": "Carlos Correa", "nationality": "Puerto Rico", "born": "Ponce, Puerto Rico", "fact": "Had two hits and drove in a run.", "checked": "both boxes: Correa 4-0-2-1." },
+        { "name": "Josh Reddick", "nationality": "USA", "born": "Savannah, Georgia", "fact": "Started in right field; Jake Marisnick later pinch-hit for him.", "checked": "both boxes: Reddick rf 9th, Marisnick ph,cf indented under him; bref subs: Marisnick hit for Reddick." }
+      ]
+    },
+    {
+      "id": "ws-1956-g5-nyy",
+      "game": "1956 World Series Game 5, 1956-10-08, Yankee Stadium: Yankees 2, Dodgers 0",
+      "sources": [
+        { "host": "baseball-almanac.com", "url": "https://www.baseball-almanac.com/box-scores/boxscore.php?boxid=195610080NYA", "read": "2026-10-02" },
+        { "host": "baseball-reference.com", "url": "https://www.baseball-reference.com/boxes/NYA/NYA195610080.shtml", "read": "2026-10-02" }
+      ],
+      "starters": ["RF Hank Bauer", "1B Joe Collins", "CF Mickey Mantle", "C Yogi Berra", "LF Enos Slaughter", "2B Billy Martin", "SS Gil McDougald", "3B Andy Carey", "P Don Larsen"],
+      "trap": "No DH in 1956: Don Larsen batted ninth on the day he was perfect.",
+      "blanks": [
+        { "name": "Don Larsen", "nationality": "USA", "born": "Michigan City, Indiana", "fact": "Threw a perfect game: nine innings, no hits, no walks, seven strikeouts.", "checked": "both boxes: Larsen 9.0 IP, 0 H, 0 BB, 7 SO, W; Brooklyn 27 at-bats, 0 runs; no error and no hit batter on either box." },
+        { "name": "Yogi Berra", "nationality": "USA", "born": "St. Louis, Missouri", "fact": "Caught every pitch of Don Larsen's perfect game.", "checked": "both boxes: Berra c 4th, the Yankees made no substitution at all." },
+        { "name": "Mickey Mantle", "nationality": "USA", "born": "Spavinaw, Oklahoma", "fact": "Homered off Sal Maglie in the 4th.", "checked": "both boxes: HR 4th off Maglie, 0 on." }
+      ]
+    },
+    {
+      "id": "ws-1956-g5-bro",
+      "game": "1956 World Series Game 5, 1956-10-08, Yankee Stadium: Yankees 2, Dodgers 0",
+      "sources": [
+        { "host": "baseball-almanac.com", "url": "https://www.baseball-almanac.com/box-scores/boxscore.php?boxid=195610080NYA", "read": "2026-10-02" },
+        { "host": "baseball-reference.com", "url": "https://www.baseball-reference.com/boxes/NYA/NYA195610080.shtml", "read": "2026-10-02" }
+      ],
+      "starters": ["2B Jim Gilliam", "SS Pee Wee Reese", "CF Duke Snider", "3B Jackie Robinson", "1B Gil Hodges", "LF Sandy Amoros", "RF Carl Furillo", "C Roy Campanella", "P Sal Maglie"],
+      "trap": "Jackie Robinson played third base, not second: Jim Gilliam led off at second.",
+      "blanks": [
+        { "name": "Sal Maglie", "nationality": "USA", "born": "Niagara Falls, New York", "fact": "Allowed two runs in eight innings and still took the loss.", "checked": "both boxes: Maglie 8.0 IP, 2 R, L." },
+        { "name": "Jackie Robinson", "nationality": "USA", "born": "Cairo, Georgia", "fact": "Played third base and batted cleanup.", "checked": "both boxes: Robinson 3b, 4th in the order." },
+        { "name": "Sandy Amoros", "nationality": "Cuba", "born": "Cuba (town differs, see playerPages)", "fact": "Started in left field and batted sixth.", "checked": "both boxes: Amoros lf, 6th in the order." }
+      ]
+    }
+  ]
+}

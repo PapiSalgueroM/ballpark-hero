@@ -3342,7 +3342,7 @@
     "/teammates": {
       "howToPlay": [
         "Look at the two players and the sport badge above them.",
-        "Decide whether they were ever on the same team at any point in their careers.",
+        "Decide whether they were ever on the same club or league team at any point in their careers. For the NFL, NBA, MLB and NHL pairs that means the same team in that league, and for soccer the same club. National teams, the Olympics, All-Star games, the Pro Bowl and college teams don't count.",
         "Tap YES or NO to lock in your answer.",
         "Read the fun fact that explains the real story behind the pair.",
         "Hit Next Question and keep going until all 10 are done, then see your score."
@@ -3354,8 +3354,8 @@
         "Play again reshuffles a brand new set of pairs, as many rounds as you like."
       ],
       "example": [
-        "Imagine the board serves up Kobe Bryant and Shaquille O'Neal. Easy yes, they won three straight titles together on the Lakers. Next comes Tom Brady and Peyton Manning. They defined a rivalry for years but never shared a locker room, so that's a no.",
-        "The hard ones are sneakier, the pairs where you have to remember exactly when someone left. Finish 7 of 10 and you're doing better than most."
+        "Imagine the board serves up Kobe Bryant and Shaquille O'Neal. Easy yes, they won three straight titles together on the Lakers. Next comes Tom Brady and Peyton Manning. They defined a rivalry for years but never played for the same NFL team, so that's a no.",
+        "The hard ones are sneakier, the pairs where you have to remember exactly when someone left. Get 9 or 10 and you really know your rosters."
       ],
       "tips": [
         "Timelines beat team lists. Two legends at the same club in different decades were never teammates.",
