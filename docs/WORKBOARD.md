@@ -1,3 +1,16 @@
+Codex1000 VERIFIED IN PR118, 2026-10-03. Not merged or live.
+Candidate5d0c9edb passed both final Court37130692048 and Shot Lab37130692025.
+Actual artifacts and screenshots independently accepted: articulated fictional
+athletes, detailed court/hoop, finite release motion and spinning ball. The old
+longest-shot hoop obstruction is fixed by placing the aiming readout below the
+court. All existing gameplay/save behavior and exact shot projection are held.
+Receipt: docs/audits/ROUND1000-VERIFICATION.md. Phone preview and actual gameplay
+video saved for Anthony. Hold this isolated PR until accepted998/999 have a live
+receipt; both remain independently publishable. Lovable editor still loading,
+latest public Rank Em14:34UTC has no Legends circuit. No publish sent; publication
+ownership RELEASED. No local runtime/DB work. Root drafts/seven stashes held.
+Claude988/manager lanes separate. Next free1001 unclaimed; AdSense/indexing deferred.
+
 Codex CLAIMS1000: Buzzer Beater playable court presentation, 2026-10-03.
 Anthony asked to keep going.998/999 remain accepted and waiting on the host;
 public14:03UTC checks still show Release Z. Publishing remains the priority,

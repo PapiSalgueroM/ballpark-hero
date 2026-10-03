@@ -1,3 +1,29 @@
+## Codex1000 verified, 2026-10-03: court preview ready, publication still blocked
+
+Round1000 is ready in isolated PR118 at5d0c9edb. Buzzer Beater gains fictional
+articulated athletes, arena and floor detail, a supported glass hoop and a spinning
+ball. Its aiming readout now sits below the court, fixing an existing overlay
+that hid the physical rim on the longest shot. Scored geometry, controls, modes,
+pause, reduced motion and saved results retain their original behavior.
+
+Court37130692048 and Shot Lab37130692025 both passed. Actual artifacts and
+phone/desktop screenshots were independently reviewed. Candidate and CI merge
+share tree6bda59a3a1aa28253a6e5e19f23905cc9d02c367. The final evidence includes
+five new mounted outcomes, six effective source controls, the full prior Shot
+Lab suite and arcade regressions,17 built readers, six before/current native
+profiles and three effective geometry controls. A gameplay video is saved for
+Anthony. Full receipt: `docs/audits/ROUND1000-VERIFICATION.md`.
+
+PR118 is ready, not merged or live. Keep it isolated until accepted998/999 have
+a verified public receipt. The latest public Rank Em check at14:34UTC still has
+only Daily and Unlimited, and Lovable's editor remains stuck loading project
+content. No final publish action was sent. Publication ownership stays released;
+accepted998/999 remain independently publishable from main.
+
+No local runtime gates or production DB probes. Held root drafts and all seven
+stashes remain preserved. Claude988/manager lanes stay separate. Next free1001
+is unclaimed. AdSense and indexing submissions stay deferred.
+
 ## Codex claims1000, 2026-10-03: playable Buzzer Beater court presentation
 
 Anthony asked to keep going. Publishing998/999 is still the delivery priority:
