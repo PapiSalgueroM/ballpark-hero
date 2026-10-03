@@ -25,7 +25,17 @@
      adapters    legacy (the sport's legacyOf), key, last season year, seasons.
 
    Every draw is on keyedRng, keyed to the career, so the same career always
-   gets the same ballot and nothing here shifts a season's seeded stream. */
+   gets the same ballot and nothing here shifts a season's seeded stream.
+
+   FOR THE ROUND THAT WIRES THIS (open, found in review). The life decks
+   already have a number retirement event: flags b_jersey (nflCareerLifeB),
+   nb_jersey (nbaCareerLifeB) and b_number (mlbCareerLifeB); 1 or 2 mean the
+   club retired it, 3 means "wait until you are done". It fires for c.team in
+   that season, and the flag does not keep which club. jerseyFor reads only the
+   seasons, so a wired board could log one club retiring the number and show
+   another on this card. Reconcile before mounting it: have the deck record
+   the club, and add an adapter here that lets a recorded retirement win (and
+   brings the "wait" answer back at the end). */
 
 import { keyedRng } from "./keyedRng";
 import { peakRating } from "./careerRetirement";

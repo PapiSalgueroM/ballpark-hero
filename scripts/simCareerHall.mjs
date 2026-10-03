@@ -220,8 +220,8 @@ for (let i = 0; i < CAREERS; i += 1) {
         talks += 1;
         if (firstTalkAge === null) firstTalkAge = c.age;
         // The answer: policy 0 never answers, 1 always plays one more, 2 retires at the first talk, 3 announces a farewell.
-        // Rotated by the position cycle, so no answer is tied to two positions (nfl has eight).
-        const choice = [null, 'oneMore', 'retireNow', 'farewell'][(i + Math.floor(i / E.positions.length)) % 4];
+        // One answer per full cycle of positions, so every position gets all four (i % 4 tied them to positions).
+        const choice = [null, 'oneMore', 'retireNow', 'farewell'][Math.floor(i / E.positions.length) % 4];
         if (choice) {
           block = eng.answerRetirement(block, year, choice);
           if (choice === 'oneMore') declined.add(year);
@@ -405,6 +405,9 @@ console.log(`  outcomes ${JSON.stringify(outcomes)}; jerseys ${jerseys}; talk re
 console.log(`  ladder ${ladder.map(v => v.toFixed(3)).join(' ')}; smallest step ${Math.min(...ladderSteps).toFixed(3)}`);
 console.log(`  deciles ${decileShares.map(v => v.toFixed(2)).join(' ')}; cuts ${decileCuts.map(v => v.toFixed(2)).join(' ')}; smallest cut ${Math.min(...decileCuts).toFixed(3)}`);
 console.log(`  misses: iff ${iffMiss}, outcome ${outcomeMiss}, table [${tableDiffs.join(',')}], offset ${offsetMiss}, promise ${promiseMiss}/${promiseN}, draws ${hallDraws}, notSame ${notSame}, sides ${sideMiss}, talk ${talkMismatch}+${talkBeforeAge}, jersey ${jerseyMiss}`);
+// Printed, not checked: careers under ten seasons with games (MLB's real ballot needs ten, which the model leaves to legacyOf).
+const shortCareer = c => c.seasons.filter(s => s.games > 0).length < 10;
+console.log(`  under ten seasons played: ${careers.filter(c => shortCareer(c) && c.rec.outcome === 'inducted').length} inducted, ${careers.filter(c => shortCareer(c) && c.rec.ballots.length > 0 && c.rec.outcome !== 'inducted').length} on the ballot outside the Hall`);
 const med = a => { const s = [...a].sort((x, y) => x - y); return s.length ? s[Math.floor(s.length / 2)] : null; };
 console.log(`  talk timing: talks a career, median ${med(careers.map(c => c.talks))}; first talk at ${med(careers.filter(c => c.firstTalkAge !== null).map(c => c.firstTalkAge))}; career ends at ${med(careers.map(c => c.finalAge))}; non finite scores ${careers.filter(c => !Number.isFinite(c.score)).length}`);
 

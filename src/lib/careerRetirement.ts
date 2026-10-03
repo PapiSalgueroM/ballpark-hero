@@ -16,7 +16,21 @@
 
    Saves: the block is optional. A save without one reads as never asked, and
    `sanitizeRetirement` turns a corrupt block into an empty one on its own,
-   leaving the rest of the save alone. */
+   leaving the rest of the save alone.
+
+   FOR THE ROUND THAT WIRES THIS (open, found in review). The life decks
+   already offer retirement choices that end nothing: lifeB_retireHealthy
+   (nflCareerLifeB, flag b_walkAway; the nba and mlb decks have the same
+   event, and nothing reads the flag to end a career), the farewell tour
+   events in all four decks, and nhlCareerLifeB's "One farewell year, then
+   done". A board that mounts FarewellCard should stop drawing those, or
+   route their answers through answerRetirement, so one offseason never asks
+   twice and a farewell said in the deck really ends the career.
+
+   SOCCER (a later round). Soccer asks once (retirementSuggested) and then
+   re-asks only from 34 at 65 or lower, on a 40 percent coin. RetirementRule
+   cannot say either yet; that round adds them as optional fields, with the
+   coin on keyedRng, so the US rules above keep their meaning. */
 
 /** A sport's retirement talk rule. Game tuning, not a real world number. */
 export interface RetirementRule {
