@@ -36,6 +36,7 @@ import { execSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
+import { US_CAREER_BOARD, US_CAREER_SPORTS, readUsSource, stripComments, wrapperProblems } from './lib/usCareerFiles.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const ENTRY = path.join(os.tmpdir(), 'extEntry.mjs');
@@ -236,15 +237,22 @@ console.log('6) All four games open the talk on the final year, before free agen
 
   /* And the boards call it in the right place: on the final year, ahead of
      the free agency gate, with a signed deal moving the contract on. */
-  const BOARDS = [
-    ['src/components/nfl-my-career/NflMyCareerBoard.tsx', 'buildNflExtension'],
-    ['src/components/mlb-my-career/MlbMyCareerBoard.tsx', 'buildMlbExtension'],
-    ['src/components/nba-my-career/NbaMyCareerBoard.tsx', 'buildNbaExtension'],
-    ['src/components/nhl-my-career/NhlMyCareerBoard.tsx', 'buildNhlExtension'],
-  ];
-  for (const [rel, build] of BOARDS) {
-    const t = fs.readFileSync(path.join(ROOT, rel), 'utf-8');
-    if (!t.includes(build)) { fail(`${rel}: never builds an extension`); continue; }
+  /* Round 900: the four boards are one board plus a binding per sport. Each
+     binding has to hand the board its own two builders, each sport's page
+     has to be on the shared board, and the gate itself is checked once, in
+     the shared board. Comments are stripped: a guard reads code, not prose. */
+  for (const s of US_CAREER_SPORTS) {
+    const b = stripComments(readUsSource(ROOT, s.binding));
+    const build = `build${s.pascal}Extension`;
+    const push = `${s.slug}ExtPushArgs`;
+    if (!b.includes(`buildExtension: ${build},`)) fail(`${s.binding}: does not hand the board ${build}`);
+    if (!b.includes(`extPushArgs: ${push},`)) fail(`${s.binding}: does not hand the board ${push}`);
+    for (const why of wrapperProblems(ROOT, s)) fail(why);
+  }
+  for (const rel of [US_CAREER_BOARD]) {
+    const t = stripComments(readUsSource(ROOT, rel));
+    if (!t.includes('sport.buildExtension(c, Math.random)')) { fail(`${rel}: never builds an extension`); continue; }
+    if (!t.includes('sport.extPushArgs(career, Math.random)')) fail(`${rel}: never pushes back through the sport binding`);
     if (!t.includes('<ExtensionCard')) fail(`${rel}: never renders the card`);
     if (!t.includes('extensionDue(c)')) fail(`${rel}: does not gate on the final year`);
     /* Order matters: an expired deal must reach free agency, so the
@@ -258,7 +266,7 @@ console.log('6) All four games open the talk on the final year, before free agen
     /* Turning it down must not ask again in the same season. */
     if (!t.includes('extDeclinedRef.current = true;')) fail(`${rel}: turning it down would ask again`);
   }
-  console.log('   4 engines, 4 wrappers, 4 boards, gate above free agency in all of them');
+  console.log(`   4 engines, 4 wrappers, ${US_CAREER_SPORTS.length} bindings on one board, gate above free agency in it`);
 }
 
 console.log('');
