@@ -115,13 +115,13 @@ async function bundle(root, name, { withAcademy, patches = [] }) {
       b.onLoad({ filter: /\.(ts|tsx)$/ }, async args => {
         const mine = patches.filter(p => norm(path.join(root, p.file)) === norm(args.path));
         if (!mine.length) return undefined;
-        let src = await fs.promises.readFile(args.path, 'utf8');
+        /* A Windows checkout stores these CRLF and the anchors are LF, so
+           the text is normalised before any anchor is looked for. */
+        let src = (await fs.promises.readFile(args.path, 'utf8')).replaceAll('\r\n', '\n');
         for (const p of mine) {
-          const eol = !src.includes(p.from) && src.includes(p.from.replaceAll('\n', '\r\n')) ? '\r\n' : '\n';
-          const from = p.from.replaceAll('\n', eol);
-          if (!src.includes(from)) throw new Error(`control refused: ${p.file} does not contain ${JSON.stringify(p.from.slice(0, 80))}`);
-          if (src.split(from).length !== 2) throw new Error(`control refused: ${p.file} contains its text more than once`);
-          src = src.replace(from, p.to.replaceAll('\n', eol));
+          if (!src.includes(p.from)) throw new Error(`control refused: ${p.file} does not contain ${JSON.stringify(p.from.slice(0, 80))}`);
+          if (src.split(p.from).length !== 2) throw new Error(`control refused: ${p.file} contains its text more than once`);
+          src = src.replace(p.from, p.to);
           applied.add(p);
         }
         return { contents: src, loader: args.path.endsWith('.tsx') ? 'tsx' : 'ts' };
