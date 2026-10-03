@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { cn } from '@/lib/utils';
-import { RotateCcw, Loader2, FastForward, Dices, Trophy, Lock, EyeOff, CalendarClock } from 'lucide-react';
+import { Loader2, FastForward, Dices, Lock, EyeOff, CalendarClock } from 'lucide-react';
 import ShareButtons from '@/components/game/ShareButtons';
 import { GameNav } from '@/components/game/GameNav';
 import { GameNavbar } from '@/components/game/GameNavbar';
@@ -31,7 +31,8 @@ import {
 import { recordCompletion, getCurrentPlayerName } from '@/lib/completions';
 import { perfectSeasonTagline } from '@/lib/perfectSeasonOdds';
 import { usePerfectSeasonBest } from '@/hooks/usePerfectSeasonBest';
-import { BestSoFar, SeasonOddsLines } from '@/components/perfect-season/SeasonOdds';
+import { BestSoFar } from '@/components/perfect-season/SeasonOdds';
+import { SeasonVerdict } from '@/components/perfect-season/SeasonVerdict';
 
 const SPORT_KEY = 'nfl';
 
@@ -724,60 +725,36 @@ const PerfectSeasonNfl = () => {
 
             {phase === 'done' && (
               <>
-              <div className="bg-card border border-border rounded-2xl p-6 text-center">
-                <div className="text-5xl mb-2">{sim.perfect ? '🏆' : sim.wins >= 15 ? '😤' : sim.wins >= 12 ? '🔥' : '📉'}</div>
-                <h2 className="text-2xl font-bold text-primary font-display mb-1">
-                  {sim.perfect
-                    ? 'PERFECT SEASON!'
-                    : sim.wins >= 15
-                    ? `So close. ${sim.losses} bad Sunday${sim.losses === 1 ? '' : 's'}.`
-                    : sim.wins >= 12
-                    ? 'A contender, but not perfect.'
-                    : 'The wheel giveth, the wheel taketh.'}
-                </h2>
-                <p className="text-sm text-muted-foreground mb-3">
-                  {mode === 'daily' && `Daily · ${todayStr} · `}
-                  Team overall {ovrDisplay} · drafted in {spins} spin{spins === 1 ? '' : 's'}
-                </p>
-                {/* Round 820: the odds of an unbeaten season for the lineup the sim
-                    just played (the raw overall, not the rounded one above), and
-                    the best record. Shared with the other three sports. */}
-                <SeasonOddsLines sport={SPORT_KEY} overall={overall} perfect={sim.perfect} best={best} newBest={newBest} />
-                {sim.perfect && (
-                  <p className="text-sm text-correct font-semibold mb-2 inline-flex items-center gap-1.5">
-                    <Trophy className="w-4 h-4" /> Share this. Nobody will believe you.
-                  </p>
-                )}
-                <pre className="text-sm tracking-wide whitespace-pre-wrap mb-2">{emojiGrid}</pre>
-                <ShareButtons
-                  score={`${sim.wins}-${sim.losses}`}
-                  gameName={mode === 'daily' ? '17-0 Perfect Season (Daily)' : '17-0 Perfect Season'}
-                  gamePath="/perfect-season-nfl"
-                  emojiGrid={emojiGrid}
-                />
-                {mode === 'daily' ? (
-                  <>
-                    {countdown && (
-                      <p className="text-xs text-muted-foreground mt-4">
-                        Next daily puzzle in <span className="font-mono font-semibold text-foreground">{countdown}</span>
-                      </p>
-                    )}
-                    <button
-                      onClick={backToModes}
-                      className="mt-3 inline-flex items-center gap-2 px-8 py-3 bg-secondary text-foreground rounded-full font-semibold hover:bg-secondary/70"
-                    >
-                      Play Classic or Hard
-                    </button>
-                  </>
-                ) : (
-                  <button
-                    onClick={restart}
-                    className="mt-4 inline-flex items-center gap-2 px-8 py-3 bg-primary text-primary-foreground rounded-full font-semibold hover:opacity-90 transition-opacity"
-                  >
-                    <RotateCcw className="w-4 h-4" /> Run it back
-                  </button>
-                )}
-              </div>
+              {/* Round 954: the shared verdict (one card for all four sports).
+                  The headline, its thresholds and the emoji stay this page's.
+                  Round 820's odds and best lines live inside it. */}
+              <SeasonVerdict
+                gamePath="/perfect-season-nfl"
+                sport={SPORT_KEY}
+                wins={sim.wins}
+                losses={sim.losses}
+                perfect={sim.perfect}
+                closeAt={12}
+                badge={sim.perfect ? '🏆' : sim.wins >= 15 ? '😤' : sim.wins >= 12 ? '🔥' : '📉'}
+                headline={sim.perfect
+                  ? 'PERFECT SEASON!'
+                  : sim.wins >= 15
+                  ? `So close. ${sim.losses} bad Sunday${sim.losses === 1 ? '' : 's'}.`
+                  : sim.wins >= 12
+                  ? 'A contender, but not perfect.'
+                  : 'The wheel giveth, the wheel taketh.'}
+                overallLabel={ovrDisplay}
+                overall={overall}
+                spins={spins}
+                dailyDate={mode === 'daily' ? todayStr : undefined}
+                best={best}
+                newBest={newBest}
+                shareName={mode === 'daily' ? '17-0 Perfect Season (Daily)' : '17-0 Perfect Season'}
+                emojiGrid={emojiGrid}
+                countdown={countdown}
+                onBackToModes={backToModes}
+                onRestart={restart}
+              />
 
               {playoffRun ? (
                 <div className="bg-card border border-border rounded-2xl p-6 mt-4">
