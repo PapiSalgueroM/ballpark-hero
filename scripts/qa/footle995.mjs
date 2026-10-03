@@ -126,7 +126,8 @@ try {
       const records = await heldRecords();
       await activate(page.getByRole('button', { name: 'Five-puzzle run', exact: true }), 'open practice');
       await activate(page.getByRole('button', { name: new RegExp(`^${tier}$`, 'i') }), `choose ${tier}`);
-      await layout('setup'); await page.screenshot({ path: path.join(output, `${width}-setup.png`) });
+      await page.waitForFunction(tier => [...document.querySelectorAll('button')].some(button => button.textContent?.trim() === tier && button.getAttribute('aria-pressed') === 'true'), tier);
+      await layout('setup'); await page.screenshot({ path: path.join(output, `${width}-setup.png`), animations: 'disabled' });
       await activate(page.getByRole('button', { name: 'Start run', exact: true }), 'start run');
       await waitRound(0, 0, 'playing');
       const initial = await run(), poolBytes = JSON.stringify(initial.pool);
