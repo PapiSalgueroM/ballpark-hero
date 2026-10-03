@@ -17,8 +17,8 @@ import { dailyIndex, dateSeed, getTodayET } from '@/lib/dateUtils';
  *   - 2016 G7 Warriors: Festus EZELI started at center (Bogut was injured);
  *     everyone misremembers Bogut or Varejao.
  *   - 1998 G6 Bulls: Toni KUKOC started, Dennis Rodman came off the bench
- *     that night. Verified vs bref Starters table AND the Wikipedia box
- *     (Rodman's 38:59 line sits in the reserves block in both).
+ *     that night. Read on the bref Starters table (Rodman's 38:59 line sits
+ *     in the reserves block) and on the statmuse.com starters answer.
  *   - 1998 G6 Jazz: Adam KEEFE started at center in the biggest game of the
  *     Stockton-Malone era.
  * Do NOT "fix" these back to the famous-but-wrong names.
@@ -51,6 +51,12 @@ export interface FiveBlankCandidate {
   nationality: string;
   /** One-line VERIFIED flavor fact shown on reveal (never invented by the UI). */
   fact?: string;
+  /**
+   * The family name, only when it is not the last word of the name (the
+   * Missing XI shape). Without it the hint ladder read "Jr." off Michael
+   * Porter Jr.: starts with J, three letters, and "Porter" never won.
+   */
+  surname?: string;
 }
 
 export interface FiveLineup {
@@ -208,7 +214,7 @@ export const FIVE_LINEUPS: FiveLineup[] = [
     blankCandidates: [
       { name: 'Kentavious Caldwell-Pope', slotIndex: 1, nationality: 'USA' },
       { name: 'Aaron Gordon', slotIndex: 3, nationality: 'USA' },
-      { name: 'Michael Porter Jr.', slotIndex: 2, nationality: 'USA', fact: 'Grabbed 13 rebounds in the title clincher.' },
+      { name: 'Michael Porter Jr.', slotIndex: 2, nationality: 'USA', surname: 'Porter', fact: 'Grabbed 13 rebounds in the title clincher.' },
     ],
     source: 'basketball-reference.com box 202306120DEN Starters (Jamal Murray/Kentavious Caldwell-Pope/Michael Porter Jr./Aaron Gordon/Nikola Jokic) + nba.com box 0042200405 starters block (first five rows), both read 2026-10-03.',
   },
@@ -234,7 +240,7 @@ export const FIVE_LINEUPS: FiveLineup[] = [
     blankCandidates: [
       { name: 'Gabe Vincent', slotIndex: 0, nationality: 'USA', fact: 'An undrafted starter in an NBA Finals game, peak Heat culture.' },
       { name: 'Max Strus', slotIndex: 1, nationality: 'USA', fact: 'Undrafted out of DePaul, starting in the Finals.' },
-      { name: 'Kevin Love', slotIndex: 3, nationality: 'USA', fact: 'Reinserted into the starting lineup mid-series, the documented Spoelstra adjustment.' },
+      { name: 'Kevin Love', slotIndex: 3, nationality: 'USA', fact: 'Started Game 5 but played only 14 minutes, with 3 points.' },
     ],
     source: 'basketball-reference.com box 202306120DEN Starters (Gabe Vincent/Max Strus/Jimmy Butler/Kevin Love/Bam Adebayo) + nba.com box 0042200405 starters block (first five rows), both read 2026-10-03.',
   },
@@ -262,7 +268,7 @@ export const FIVE_LINEUPS: FiveLineup[] = [
     blankCandidates: [
       { name: 'Manu Ginobili', slotIndex: 1, nationality: 'Argentina', fact: 'The career sixth man started Game 7, Popovich moved him into the lineup with Tiago Splitter benched.' },
       { name: 'Kawhi Leonard', slotIndex: 3, nationality: 'USA', fact: 'A 21-year-old Leonard started at forward, one year before his Finals MVP.' },
-      { name: 'Danny Green', slotIndex: 2, nationality: 'USA', fact: 'Had broken the record for made threes in a single Finals series (27) earlier in the same series.' },
+      { name: 'Danny Green', slotIndex: 2, nationality: 'USA', fact: 'Started Game 7 and played 36 minutes, with 5 points and 5 rebounds.' },
     ],
     source: 'basketball-reference.com box 201306200MIA Starters (Tony Parker/Manu Ginobili/Danny Green/Kawhi Leonard/Tim Duncan) + nba.com box 0041200407 starters block (first five rows), both read 2026-10-03.',
   },
@@ -293,9 +299,13 @@ export const FIVE_LINEUPS: FiveLineup[] = [
     source: 'basketball-reference.com box 201306200MIA Starters (Mario Chalmers/Dwyane Wade/Mike Miller/LeBron James/Chris Bosh) + nba.com box 0041200407 starters block (first five rows), both read 2026-10-03.',
   },
 
-  // 9. 2008 NBA Finals Game 6, Los Angeles Lakers (the Radmanovic trap)
+  // 9. 2008 NBA Finals Game 6, Los Angeles Lakers
   // Verified 2026-07-22: bref box 200806170BOS Starters + NBA.com box
   // 0040700406 starters block (Walton bench in both).
+  // Radmanovic is on the court but NOT a blank: the nationality hint needs
+  // two hosts, nba.com lists Serbia and bref gives only a birthplace in
+  // Bosnia and Herzegovina, which is not a nationality source. He comes
+  // back as a blank once a second host for his nationality is read.
   {
     id: 'finals-2008-g6-lal',
     dateLabel: '2008 NBA Finals, Game 6',
@@ -305,7 +315,7 @@ export const FIVE_LINEUPS: FiveLineup[] = [
     opponent: 'Boston Celtics',
     scoreLine: 'Celtics 131-92 Lakers',
     venue: 'TD Banknorth Garden, Boston',
-    // Trap: Vladimir Radmanovic started at small forward, not Walton, not Ariza.
+    // Vladimir Radmanovic started at small forward, not Walton, not Ariza.
     slots: [
       PG('Derek Fisher'),
       SG('Kobe Bryant'),
@@ -338,7 +348,7 @@ export const FIVE_LINEUPS: FiveLineup[] = [
       C('Kendrick Perkins'),
     ],
     blankCandidates: [
-      { name: 'Kendrick Perkins', slotIndex: 4, nationality: 'USA', fact: 'Started the 131-92 clincher but played only 13 minutes with a shoulder injury, P.J. Brown soaked up the frontcourt minutes.' },
+      { name: 'Kendrick Perkins', slotIndex: 4, nationality: 'USA', fact: 'Started the 131-92 rout but played only 13 minutes, with 2 points and 4 rebounds.' },
       { name: 'Rajon Rondo', slotIndex: 0, nationality: 'USA', fact: 'The second-year point guard ran the offense in the biggest banner-clinching rout in Finals history.' },
       { name: 'Ray Allen', slotIndex: 1, nationality: 'USA' },
     ],
@@ -356,7 +366,7 @@ export const FIVE_LINEUPS: FiveLineup[] = [
     opponent: 'Miami Heat',
     scoreLine: 'Mavericks 105-95 Heat',
     venue: 'AmericanAirlines Arena, Miami',
-    // Trap: 6-foot backup J.J. Barea started the title clincher.
+    // Trap: backup guard J.J. Barea started Game 6.
     slots: [
       PG('Jason Kidd'),
       SG('J.J. Barea'),
@@ -365,7 +375,7 @@ export const FIVE_LINEUPS: FiveLineup[] = [
       C('Tyson Chandler'),
     ],
     blankCandidates: [
-      { name: 'J.J. Barea', slotIndex: 1, nationality: 'Puerto Rico', fact: 'The 6-foot backup was moved into the starting lineup mid-series, Dallas won the last three games.' },
+      { name: 'J.J. Barea', slotIndex: 1, nationality: 'Puerto Rico', fact: 'Scored 15 with 5 assists in Game 6 off a starting spot.' },
       { name: 'Shawn Marion', slotIndex: 2, nationality: 'USA', fact: 'The Matrix drew the LeBron assignment in the clincher.' },
       { name: 'Tyson Chandler', slotIndex: 4, nationality: 'USA' },
     ],
@@ -442,8 +452,8 @@ export const FIVE_LINEUPS: FiveLineup[] = [
       C('Kevon Looney'),
     ],
     blankCandidates: [
-      { name: 'Andre Iguodala', slotIndex: 2, nationality: 'USA', fact: 'Started in place of Kevin Durant, who had torn his Achilles in Game 5.' },
-      { name: 'Kevon Looney', slotIndex: 4, nationality: 'USA', fact: 'Started at center and left in the second half with a chest injury.' },
+      { name: 'Andre Iguodala', slotIndex: 2, nationality: 'USA', fact: 'Scored 22 points in 32 minutes in Game 6.' },
+      { name: 'Kevon Looney', slotIndex: 4, nationality: 'USA', fact: 'Started at center and played 27 minutes, with 6 points, 3 rebounds and 4 assists.' },
       { name: 'Draymond Green', slotIndex: 3, nationality: 'USA', fact: 'Had a triple-double in Game 6 anyway: 11 points, 19 rebounds, 13 assists.' },
     ],
     source: 'basketball-reference.com box 201906130GSW Starters (Stephen Curry/Klay Thompson/Andre Iguodala/Draymond Green/Kevon Looney) + nba.com box 0041800406 starters block (first five rows), both read 2026-10-03.',
@@ -1134,8 +1144,13 @@ export function isCorrectFiveGuess(guess: string, candidate: FiveBlankCandidate)
   const g = normalizeFiveName(guess);
   const target = normalizeFiveName(candidate.name);
   if (g === target) return true;
-  const surname = target.split(' ').slice(-1)[0];
+  const surname = normalizeFiveName(fiveSurname(candidate));
   return g === surname && surname.length >= 4;
+}
+
+/** The family name the hints narrow by: the override, else the last word. */
+export function fiveSurname(candidate: FiveBlankCandidate): string {
+  return candidate.surname ?? candidate.name.trim().split(/\s+/).slice(-1)[0];
 }
 
 /**
@@ -1146,8 +1161,9 @@ export function isCorrectFiveGuess(guess: string, candidate: FiveBlankCandidate)
  *   3: surname letter count
  */
 export function fiveHintForLevel(level: FiveHintLevel, candidate: FiveBlankCandidate): string | null {
-  const surname = candidate.name.split(' ').slice(-1)[0];
-  if (level >= 3) return `The surname has ${surname.length} letters`;
+  const surname = fiveSurname(candidate);
+  // Letters only: "Caldwell-Pope" has twelve, not thirteen.
+  if (level >= 3) return `The surname has ${surname.replace(/[^\p{L}]/gu, '').length} letters`;
   if (level >= 2) return `The surname starts with "${surname[0]}"`;
   if (level >= 1) return `Nationality: ${candidate.nationality}`;
   return null;

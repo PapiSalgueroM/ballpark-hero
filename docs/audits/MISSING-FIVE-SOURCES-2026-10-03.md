@@ -16,7 +16,10 @@ Every sheet in `src/lib/missingFive.ts` (`FIVE_LINEUPS`), 14 existing and 26 new
   the same five per side with minutes and points that match bref to the rounded minute.
 - **Nationality** (shown as hint 1). Host A is the bref player page's birthPlace; host B is the nba.com
   player page's COUNTRY field. A blank ships only when the birth country and COUNTRY agree. All 68 new
-  blanks agree (53 USA, 15 elsewhere).
+  blanks agree (53 USA, 15 elsewhere). What this measures is the league's listed country confirmed by the
+  birth country. A birthplace is not a nationality, so the rule cannot see a dual national (Gabe Vincent,
+  Corrections 2) and refuses a player whose birth country and listed country differ (Vladimir Radmanovic,
+  Corrections 3). Neither case means the other value was wrong.
 - **Reveal facts** on new sheets are only box score numbers (points, rebounds, assists, minutes rounded to
   the nearest minute) that both hosts print identically, filled into a sentence by script; a number the two
   hosts disagree on is refused. 2004 and 2005 minutes on nba.com are whole minutes that do not always match
@@ -42,20 +45,39 @@ Every sheet in `src/lib/missingFive.ts` (`FIVE_LINEUPS`), 14 existing and 26 new
 
 1. **finals-2019-g6-gsw, Draymond Green.** The fact said he "fell one assist short of a triple-double".
    Both hosts: 11 points, 19 rebounds, 13 assists, which is a triple-double. Fact now says so.
-2. **finals-2023-g5-mia, Gabe Vincent.** Nationality was Nigeria. bref birthplace Modesto, California,
-   United States; nba.com COUNTRY USA. Both hosts say USA, so the hint now says USA.
-3. **finals-2008-g6-lal, Vladimir Radmanovic.** Nationality Serbia: nba.com COUNTRY Serbia, but bref's
-   birthplace is Trebinje, Bosnia and Herzegovina. The two hosts do not agree, so he is held out as a blank
-   (he stays on the sheet as the starter he was; both hosts confirm that). A third source naming his
-   nationality would let the lead put him back.
+2. **finals-2023-g5-mia, Gabe Vincent.** The hint said Nigeria and now says USA. This is a change of basis,
+   not the fix of an error: Vincent is a dual national who plays for Nigeria (the round's review read
+   olympedia.org listing him on Nigeria's Tokyo 2020 team), so Nigeria was true. The hint now follows the
+   rule above: nba.com COUNTRY USA, bref birthplace Modesto, California, United States.
+3. **finals-2008-g6-lal, Vladimir Radmanovic.** nba.com COUNTRY Serbia; bref gives only a birthplace,
+   Trebinje, Bosnia and Herzegovina, which is not a nationality source. With one host for the nationality
+   he is held out as a blank (he stays on the sheet as the starter he was; both hosts confirm that). A
+   second host naming his nationality puts him back (basketball.realgm.com answered 403 on 2026-10-03).
 4. **1998 blanks other than Kukoc** (Harper, Longley, Keefe, Hornacek, Russell): nba.com has no reachable
    player id for them, so their nationality rests on bref's birthplace alone. Marked here as one host, not
    changed. Kukoc: bref Split, Croatia; nba.com/player/389 COUNTRY Croatia.
+5. **Review corrections, same day.** Two adversarial reviews of the round found reveal facts on the
+   existing sheets that the box scores do not support. Each was replaced by box score numbers both hosts
+   print, read from the tables below:
+   - finals-2019-g6-gsw, Andre Iguodala. Was "Started in place of Kevin Durant, who had torn his Achilles
+     in Game 5": false, the review read the Game 5 box on bref (201906100TOR) and statmuse with Iguodala
+     starting beside Durant. Now: 22 points in 32 minutes (32:01 on both).
+   - finals-2019-g6-gsw, Kevon Looney. Was "left in the second half with a chest injury": in the bref
+     play-by-play the review read, he is back on in the fourth quarter. Now: 27 minutes (26:50 bref, 26:51 nba.com), 6, 3, 4.
+   - finals-2011-g6-dal, J.J. Barea. Was "The 6-foot backup": bref lists him at 5-10. Now: 15 points and
+     5 assists (both hosts).
+   - finals-2008-g6-bos, Kendrick Perkins. Was "with a shoulder injury, P.J. Brown soaked up the
+     frontcourt minutes": no box names an injury, and James Posey (26:07) played more than Brown (16:11).
+     Now: 13 minutes (13:25 on both), 2 points, 4 rebounds.
+   - finals-2013-g7-sas, Danny Green. Was "had broken the record (27) earlier in the same series": not
+     supported. Now: 36 minutes (36:27 on both), 5 points, 5 rebounds.
+   - finals-2023-g5-mia, Kevin Love. Was "the documented Spoelstra adjustment": nothing documents it. Now:
+     14 minutes (14:10 on both), 3 points.
 
-Narrative facts on the 14 existing sheets that are not box score numbers (injury reasons, trades, "the
-documented Spoelstra adjustment" and the like) were not re-read in this round. Box score numbers in them
-were checked and hold: Love 14 rebounds and Green 32/15/9 (2016), Kukoc 15 and Jordan 45, Hornacek 17 and
-Malone 31 (1998), Porter Jr. 13 rebounds (2023), Perkins 13:25 (2008), Joel Anthony 10:55 (2011).
+The other narrative facts on the 14 existing sheets (trades, "the famous final defensive stand" and the
+like) were not re-read. Box score numbers in them were checked and hold: Love 14 rebounds and Green
+32/15/9 (2016), Kukoc 15 and Jordan 45, Hornacek 17 and Malone 31 (1998), Porter Jr. 13 rebounds (2023),
+Joel Anthony 10:55 (2011), Splitter, Allen and Battier in the reserves block on both hosts (2013).
 
 ## Existing sheets
 
@@ -169,7 +191,7 @@ Malone 31 (1998), Porter Jr. 13 rebounds (2023), Perkins 13:25 (2008), Joel Anth
 
 | Blank | Nationality in file | bref birthplace | nba.com COUNTRY |
 |---|---|---|---|
-| Gabe Vincent | Nigeria | Modesto, California, United States | USA |
+| Gabe Vincent | USA (was Nigeria, see Corrections 2) | Modesto, California, United States | USA |
 | Max Strus | USA | Hickory Hills, Illinois, United States | USA |
 | Kevin Love | USA | Santa Monica, California, United States | USA |
 
@@ -226,9 +248,11 @@ Malone 31 (1998), Porter Jr. 13 rebounds (2023), Perkins 13:25 (2008), Joel Anth
 
 | Blank | Nationality in file | bref birthplace | nba.com COUNTRY |
 |---|---|---|---|
-| Vladimir Radmanovic | Serbia | Trebinje, Bosnia and Herzegovina | Serbia |
 | Lamar Odom | USA | Jamaica, New York, United States | USA |
 | Pau Gasol | Spain | Barcelona, Spain | Spain |
+
+Vladimir Radmanovic is no longer a blank (Corrections 3): bref birthplace Trebinje, Bosnia and
+Herzegovina; nba.com COUNTRY Serbia. He stays on the court as the starter both hosts confirm.
 
 ### finals-2008-g6-bos: Boston Celtics, 2008 NBA Finals Game 6 (existing sheet, second host added)
 
