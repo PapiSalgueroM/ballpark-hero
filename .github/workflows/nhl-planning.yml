@@ -1,0 +1,82 @@
+name: NHL planning bench verification
+
+on:
+  pull_request:
+    paths:
+      - .github/workflows/nhl-planning.yml
+      - src/pages/NhlConnections.tsx
+      - src/hooks/useNhlConnections.ts
+      - src/lib/nhlConnectionDrafts.ts
+      - src/components/nhl-connections/**
+      - src/test/nhlPlanningBench.test.tsx
+      - scripts/simNhlPlanningBench.mjs
+      - scripts/qa/nhlPlanning1002*
+
+permissions:
+  contents: read
+concurrency:
+  group: nhl-planning-${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    defaults:
+      run:
+        shell: bash
+    env:
+      SIM_NETWORK: offline
+      ENGINES: chromium
+      VITEST_MAX_FORKS: 1
+      VITEST_MIN_FORKS: 1
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install verification dependencies
+        run: |
+          mkdir -p nhl-planning-artifacts
+          npm ci
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium
+          python -m pip install fonttools pillow
+      - name: Type check and build
+        id: build
+        run: |
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee nhl-planning-artifacts/types.log
+          npm run build 2>&1 | tee nhl-planning-artifacts/build.log
+      - name: Planning outcomes and effective controls
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: NHL_PLANNING_CONTROL=all ONLY=simNhlPlanningBench node scripts/runAllSims.mjs 2>&1 | tee nhl-planning-artifacts/planning.log
+      - name: Existing loss, timer and completion regressions
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          failed=0
+          for harness in simConnectionsLoss simConnectionsShake simHarnessAnchors; do
+            ONLY="$harness" node scripts/runAllSims.mjs 2>&1 | tee "nhl-planning-artifacts/$harness.log" || failed=1
+          done
+          NO_DOUBLE_ONLY=nhl-connections ONLY=simNoDoubleRecord node scripts/runAllSims.mjs 2>&1 | tee nhl-planning-artifacts/simNoDoubleRecord.log || failed=1
+          exit "$failed"
+      - name: All built readers, search and guide checks
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          failed=0
+          for harness in simAdsense simBrand simHeadTags simHiddenPages simHubs simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets simSiteSearch simGuideHeadings; do
+            ONLY="$harness" node scripts/runAllSims.mjs --browser 2>&1 | tee "nhl-planning-artifacts/$harness.log" || failed=1
+          done
+          exit "$failed"
+      - name: Preserve verification evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: nhl-planning-${{ github.run_id }}-${{ github.run_attempt }}
+          retention-days: 1
+          path: nhl-planning-artifacts/

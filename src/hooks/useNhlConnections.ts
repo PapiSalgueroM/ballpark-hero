@@ -5,6 +5,7 @@ import { useDailyPuzzle } from '@/hooks/useDailyPuzzle';
 import { isSportConnectionsLog } from '@/lib/dailySaveShapes';
 import { fetchNhlConnectionsPuzzles } from '@/lib/fetchNhlConnectionsPuzzles';
 import { dailyIndex, getTodayET } from '@/lib/dateUtils';
+import { emptyNhlDrafts, nhlDraftKey, nhlDraftScope, parseNhlDrafts, toggleNhlDraft, type NhlConnectionDrafts } from '@/lib/nhlConnectionDrafts';
 
 /**
  * NHL Connections, direct port of useNbaConnections/useNflConnections
@@ -59,6 +60,15 @@ export function useNhlConnections() {
     fetchNhlConnectionsPuzzles().then((pool) => {
       if (cancelled) return;
       if (pool.length > 0) setPuzzlePool(pool as Puzzle[]);
+      const loadedPool = pool.length > 0 ? pool : fallbackNhlPuzzles;
+      try {
+        const raw = localStorage.getItem(nhlDraftKey('unlimited'));
+        const savedIndex = loadedPool.findIndex(candidate => {
+          const names = candidate.groups.flatMap(group => group.players);
+          return parseNhlDrafts(raw, nhlDraftScope('unlimited', candidate.id, ''), names, names) !== null;
+        });
+        if (savedIndex >= 0) setUnlimitedIndex(savedIndex);
+      } catch { /* No valid notes: retain the ordinary random draw. */ }
       setIsLoadingPool(false);
     });
     return () => { cancelled = true; };
@@ -77,6 +87,8 @@ export function useNhlConnections() {
     gameStatus: rawDailyStatus,
     isLoading,
     reset: resetDailyHook,
+    todayStr,
+    takeNewerSave,
   } = useDailyPuzzle<Puzzle, NhlConnAction>({
     gameSlug: 'nhl-connections',
     puzzles: fallbackNhlPuzzles,
@@ -163,7 +175,48 @@ export function useNhlConnections() {
   );
 
   // ---- SHARED LOCAL STATE --------------------------------------------------
-  const [selected, setSelected] = useState<string[]>([]);
+  const scope = puzzle ? nhlDraftScope(mode, puzzle.id, todayStr) : '';
+  const roster = puzzle?.groups.flatMap(group => group.players) ?? [];
+  const rosterSignature = JSON.stringify([...roster].sort());
+  const remainingSignature = JSON.stringify([...remainingPlayers].sort());
+  const [drafts, setDrafts] = useState<NhlConnectionDrafts | null>(null);
+  const draftsRef = useRef<NhlConnectionDrafts | null>(null);
+  const submittedRef = useRef('');
+  const [notice, setNotice] = useState({ id: 0, text: '' });
+  const [notesWarning, setNotesWarning] = useState(false);
+  const loadingGame = isLoadingPool || (mode === 'daily' && isLoading);
+  const notesReady = !loadingGame && drafts?.scope === scope && JSON.stringify(drafts.roster) === rosterSignature
+    && drafts.groups.every(group => group.every(name => remainingPlayers.includes(name)));
+  const selected = notesReady ? drafts.groups[drafts.active] : [];
+
+  useEffect(() => {
+    if (loadingGame || !puzzle) return;
+    if (draftsRef.current?.scope === scope && JSON.stringify(draftsRef.current.roster) === rosterSignature) {
+      const next = { ...draftsRef.current, groups: draftsRef.current.groups.map(group => group.filter(name => remainingPlayers.includes(name))) };
+      draftsRef.current = next; setDrafts(next);
+      return;
+    }
+    let loaded: NhlConnectionDrafts | null = null;
+    try { loaded = parseNhlDrafts(localStorage.getItem(nhlDraftKey(mode)), scope, roster, remainingPlayers); }
+    catch { setNotesWarning(true); }
+    const next = loaded ?? emptyNhlDrafts(scope, roster);
+    draftsRef.current = next; setDrafts(next); submittedRef.current = '';
+    setNotice(previous => ({ id: previous.id, text: '' }));
+    // Only actual player edits write notes. Loading never overwrites saved bytes.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [loadingGame, scope, rosterSignature, remainingSignature]);
+
+  const writeDrafts = useCallback((next: NhlConnectionDrafts) => {
+    draftsRef.current = next; setDrafts(next); submittedRef.current = '';
+    try { localStorage.setItem(nhlDraftKey(mode), JSON.stringify(next)); setNotesWarning(false); }
+    catch { setNotesWarning(true); }
+  }, [mode]);
+
+  const selectDraft = useCallback((active: number) => {
+    const current = draftsRef.current;
+    if (!notesReady || !current || gameStatus !== 'playing' || !Number.isInteger(active) || active < 0 || active > 3) return;
+    writeDrafts({ ...current, active });
+  }, [notesReady, gameStatus, writeDrafts]);
   const [shakeWrong, setShakeWrong] = useState(false);
   /* Round 503: the shake timer is held so it can be cleared. The 600ms
      timeout used to be fire and forget, so an unmount mid shake (a route
@@ -180,18 +233,24 @@ export function useNhlConnections() {
   // ---- CALLBACKS -----------------------------------------------------------
   const switchMode = useCallback((newMode: NhlConnMode) => {
     setMode(newMode);
-    setSelected([]);
   }, []);
 
   const togglePlayer = useCallback((name: string) => {
-    if (gameStatus !== 'playing') return;
-    setSelected(prev =>
-      prev.includes(name) ? prev.filter(p => p !== name) : prev.length < 5 ? [...prev, name] : prev
-    );
-  }, [gameStatus]);
+    const current = draftsRef.current;
+    if (!notesReady || !current || current.scope !== scope || gameStatus !== 'playing' || !remainingPlayers.includes(name)) return;
+    const next = toggleNhlDraft(current, name);
+    if (next !== current) writeDrafts(next);
+  }, [notesReady, scope, gameStatus, remainingPlayers, writeDrafts]);
 
   const submitSelection = useCallback(() => {
-    if (selected.length !== 5 || gameStatus !== 'playing' || !puzzle) return;
+    const current = draftsRef.current;
+    const selected = current?.groups[current.active] ?? [];
+    if (!notesReady || current?.scope !== scope || selected.length !== 5 || gameStatus !== 'playing' || !puzzle
+      || selected.some(name => !remainingPlayers.includes(name))) return;
+    const submission = JSON.stringify([scope, [...selected].sort()]);
+    if (submittedRef.current === submission) return;
+    if (mode === 'daily' && takeNewerSave()) return;
+    submittedRef.current = submission;
 
     const match = puzzle.groups.find(g =>
       !solvedGroups.some(s => s.theme === g.theme) &&
@@ -206,7 +265,8 @@ export function useNhlConnections() {
       } else {
         setUnlimitedSolvedGroups(prev => [...prev, { theme: match.theme, players: match.players, difficulty: match.difficulty }]);
       }
-      setSelected([]);
+      writeDrafts({ ...current, groups: current.groups.map(group => group.filter(name => !match.players.includes(name))) });
+      setNotice(previous => ({ id: previous.id + 1, text: `Locked: ${match.theme}. Those five are solved.` }));
     } else {
       if (mode === 'daily') {
         addDailyAction({ t: 'x' });
@@ -219,27 +279,36 @@ export function useNhlConnections() {
         }
       }
       setShakeWrong(true);
+      setNotice(previous => ({ id: previous.id + 1, text: 'Not a group. One life used. Your draft stays here to revise.' }));
       if (shakeTimer.current !== null) clearTimeout(shakeTimer.current);
       shakeTimer.current = setTimeout(() => {
         shakeTimer.current = null;
         setShakeWrong(false);
       }, 600);
     }
-  }, [mode, selected, gameStatus, puzzle, solvedGroups, unlimitedLives, unlimitedSolvedGroups, addDailyAction]);
+  }, [mode, notesReady, scope, remainingPlayers, gameStatus, puzzle, solvedGroups, unlimitedLives, unlimitedSolvedGroups, addDailyAction, takeNewerSave, writeDrafts]);
 
-  const deselectAll = useCallback(() => setSelected([]), []);
+  const deselectAll = useCallback(() => {
+    const current = draftsRef.current;
+    if (!notesReady || !current || gameStatus !== 'playing') return;
+    writeDrafts({ ...current, groups: current.groups.map((group, index) => index === current.active ? [] : group) });
+  }, [notesReady, gameStatus, writeDrafts]);
 
   const resetGame = useCallback(() => {
     if (mode === 'daily') {
       resetDailyHook();
+      if (puzzle) writeDrafts(emptyNhlDrafts(scope, roster));
     } else {
-      setUnlimitedIndex(Math.floor(Math.random() * puzzlePool.length));
+      const nextIndex = Math.floor(Math.random() * puzzlePool.length);
+      const nextPuzzle = puzzlePool[nextIndex];
+      setUnlimitedIndex(nextIndex);
       setUnlimitedSolvedGroups([]);
       setUnlimitedRevealed([]);
       setUnlimitedLives(4);
+      writeDrafts(emptyNhlDrafts(nhlDraftScope('unlimited', nextPuzzle.id, todayStr), nextPuzzle.groups.flatMap(group => group.players)));
     }
-    setSelected([]);
-  }, [mode, resetDailyHook, puzzlePool]);
+    setNotice(previous => ({ id: previous.id, text: '' }));
+  }, [mode, resetDailyHook, puzzlePool, puzzle, scope, roster, todayStr, writeDrafts]);
 
   // ---- COMPLETION ----------------------------------------------------------
   const dailyWon = rawDailyStatus === 'won';
@@ -252,6 +321,11 @@ export function useNhlConnections() {
     puzzle,
     remainingPlayers,
     selected,
+    drafts: notesReady ? drafts : null,
+    selectDraft,
+    notice,
+    notesWarning,
+    canSubmit: notesReady && selected.length === 5 && submittedRef.current !== JSON.stringify([scope, [...selected].sort()]),
     togglePlayer,
     submitSelection,
     deselectAll,
@@ -261,7 +335,7 @@ export function useNhlConnections() {
     gameStatus,
     shakeWrong,
     resetGame,
-    isLoading: mode === 'daily' ? isLoading : false,
+    isLoading: !notesReady,
     isLoadingPool,
   };
 }
