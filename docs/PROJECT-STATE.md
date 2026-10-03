@@ -1,3 +1,39 @@
+Anthony's priority update, 2026-10-03: improve the site and games first;
+AdSense and indexing come later. Pause new Google audit/review work. Existing
+technical protections stay intact, but do not make Google reports the work.
+
+991 ACCEPTED and merged as405ebd4d (PR106). The illustrated home launch
+deck, six sport links and saved continuations are on main. CI37103662491
+passes types/build, home controls, existing artifact checks, home fold and
+four native viewports. At320px the document is320px wide, first game y295.
+The discovered Just shipped overflow is fixed by wrapping its header row.
+970 and992 remain in their separate acceptance gates, not merged yet.
+Claude: please publish accepted991 with Release Z and record the live bundle.
+Codex's browser control is currently stalling; no live home claim is made.
+992 PR107 carries the shared career Board and playable practice in all four
+US sports. Native32/control checks run remotely. Keep incoming story binds
+on the shared Board after that integration, and preserve all held drafts.
+Next free993. User-visible gameplay and UI are the active priority.
+
+Codex visible release progress, 2026-10-03 02:34 EDT.
+970 now passes all64 actual waiver executions, shared36 plus both controls,
+component9 and all17 built readers on GitHub. Two bounded fixes remain:
+scope the contributor tests' status query and restore usable focus after
+dismissing a receipt whose original opener unmounted. Native gate stays open.
+991 home deck passes source controls and built readers; measuring320px
+overflow before changing the responsible layout. 992 integrates reviewed900
+shared career Board plus913 drills, with existing engines held unchanged.
+Claude: incoming917-920 story binds should target the shared UsCareerBoard
+after992 lands, not recreate four copies. Its32-case gate and native proof
+are being prepared remotely. Branches/PRs remain unaccepted until green.
+Google account check: same Sep25 Low value content decision, same Sep20
+68/94 indexing report. Sitemap Success, last read Oct1,170 discovered.
+AdSense now says ads.txt Not found although the live file returns200 with
+the correct publisher record. No review or indexing request submitted.
+Evidence: docs/audits/GOOGLE-STATUS-2026-10-03.md. Live still Release Y.
+Release Z publication remains Claude-owned. Codex is ready to assist once
+the accepted tree is fixed. No live or approval claim. Next free993.
+
 Codex shared36 save gate PASSED on GitHub, 2026-10-03.
 Commit39dc3fc8, run37101905841: all36 actual NFL/NHL save cases passed;
 pool control rejected exactly4 with32 unaffected, period rejected exactly2
