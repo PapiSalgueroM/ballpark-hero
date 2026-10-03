@@ -5360,6 +5360,8 @@ function pushCeiling(s: CareerState, season: SeasonRecord): void {
   const decorated = !!(season.championsLeague || season.worldCup || season.ballonDor)
     || (topLevel && (
       !!season.leagueTitle
+      // Round 972: a continental club cup outside UEFA is only ever won in the top two tiers.
+      || !!season.clubCupTitle
       || (season.goals ?? 0) >= 30
       || (season.rating ?? 0) >= 8.2
     ));
@@ -5422,9 +5424,9 @@ function generateNewsArticles(s: CareerState, season: SeasonRecord, totalGoals: 
       gen: () => ({ newspaper: pick(NEWSPAPERS), type: "positive",
         headline: `${name} Voted Fan Favourite At ${club}`,
         body: `After ${seasonsAtClub} seasons of dedication, the ${club} faithful have spoken: ${name} is their Player of the Year. The bond between player and fans has become something truly special.` }) },
-    { weight: 1, check: () => s.isLeader && (season.leagueTitle || season.domesticCup || season.championsLeague),
+    { weight: 1, check: () => s.isLeader && (season.leagueTitle || season.domesticCup || season.championsLeague || !!season.clubCupTitle),
       gen: () => {
-        const trophy = season.championsLeague ? "Champions League" : season.leagueTitle ? "League Title" : "Domestic Cup";
+        const trophy = season.championsLeague ? "Champions League" : season.clubCupTitle ? season.clubCupTitle : season.leagueTitle ? "League Title" : "Domestic Cup";
         return { newspaper: pick(NEWSPAPERS), type: "positive",
           headline: `CAPTAIN FANTASTIC: ${name} Leads ${club} To ${trophy} Glory`,
           body: `Wearing the armband with pride, ${name} delivered when it mattered most. A season that will live long in the memory of every ${club} supporter.` };
@@ -6743,7 +6745,7 @@ function calculateBallonDor(state: CareerState, season: SeasonRecord, year: numb
   // Outscored every single nominee, the plainest version of "best stats".
   const fieldTopGoals = visibleField.reduce((mx, n) => Math.max(mx, n.goals), 0);
   const outscoredEveryone = season.goals > fieldTopGoals;
-  const wonMajor = season.leagueTitle || season.championsLeague || season.worldCup || !!season.continentalCup;
+  const wonMajor = season.leagueTitle || season.championsLeague || season.worldCup || !!season.continentalCup || !!season.clubCupTitle;
   // Led the world on production, or outscored the entire field while winning a
   // major, or posted a monster line and at least matched the best of the field,
   // or won a domestic treble while staying in touch.
@@ -8274,6 +8276,6 @@ export function endOwnerCareer(prev: CareerState): CareerState {
 export function generateShareText(state: CareerState): string {
   const totals = getCareerTotals(state.seasons);
   const tier = state.legacy?.tier || "JOURNEYMAN";
-  const totalTrophies = totals.leagueTitles + totals.domesticCups + totals.championsLeagues + totals.worldCups;
+  const totalTrophies = totals.leagueTitles + totals.domesticCups + totals.championsLeagues + totals.worldCups + totals.clubCups;
   return `I finished my Soccer Career as a ${tier}: ${totals.goals} goals, ${totalTrophies} trophies, ${totals.ballonDors} Ballon d'Ors. Can you beat me? douknowball.com/soccer-career`;
 }

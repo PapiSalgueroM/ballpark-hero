@@ -222,9 +222,17 @@ function getPositionStatBars(pos: string, s: AttrHolder) {
   });
 }
 
+/* Round 972: the cabinet tile for continental club cups won outside UEFA. One
+   name when every win was the same cup, a plain label when the cup was renamed
+   or the player won in two parts of the world. */
+function clubCupTileLabel(seasons: SeasonRecord[]): string {
+  const names = [...new Set(seasons.map(s => s.clubCupTitle).filter((n): n is string => !!n))];
+  return names.length === 1 ? names[0] : "Club continental cups";
+}
+
 /* ─── Position-specific career stats display ─── */
-function getPositionCareerStats(pos: string, totals: { apps: number; goals: number; assists: number; cleanSheets: number; leagueTitles: number; domesticCups: number; championsLeagues: number; worldCups: number; continentalCups: number; yellowCards: number; redCards: number }) {
-  const trophies = totals.leagueTitles + totals.domesticCups + totals.championsLeagues + totals.worldCups + totals.continentalCups;
+function getPositionCareerStats(pos: string, totals: { apps: number; goals: number; assists: number; cleanSheets: number; leagueTitles: number; domesticCups: number; championsLeagues: number; worldCups: number; continentalCups: number; clubCups: number; yellowCards: number; redCards: number }) {
+  const trophies = totals.leagueTitles + totals.domesticCups + totals.championsLeagues + totals.worldCups + totals.continentalCups + totals.clubCups;
   // Derive approximate stats from existing data
   const saves = totals.cleanSheets * 4 + Math.round(totals.apps * 2.5); // ~estimated saves
   const pensSaved = Math.max(0, Math.floor(totals.cleanSheets / 5)); // ~1 per 5 clean sheets
@@ -2899,7 +2907,7 @@ function RetirementCeremonyCard({ career, totals, onPostRetirement }: { career: 
       <div className="grid grid-cols-3 gap-2 text-center">
         {[
           { l: "Apps", v: totals.apps }, { l: "Goals", v: totals.goals }, { l: "Assists", v: totals.assists },
-          { l: "Trophies", v: totals.leagueTitles + totals.domesticCups + totals.championsLeagues + totals.worldCups + totals.continentalCups },
+          { l: "Trophies", v: totals.leagueTitles + totals.domesticCups + totals.championsLeagues + totals.worldCups + totals.continentalCups + totals.clubCups },
           { l: "Ballon d'Or", v: totals.ballonDors }, { l: "Int'l Caps", v: career.intStats.caps },
         ].map((s, i) => (
           <div key={s.l} className="cm-tick-in bg-muted/20 rounded-lg p-2" style={{ animationDelay: at(i) }}>
@@ -3096,7 +3104,7 @@ function LegacyCard({ career, totals, onShare }: { career: CareerState; totals: 
   const tierEmoji: Record<LegacyTier, string> = { "GOAT": "🐐", "LEGEND": "🏛️", "GREAT": "⭐", "SOLID PRO": "💪", "JOURNEYMAN": "🎒" };
   const tierBorder: Record<LegacyTier, string> = { "GOAT": "border-amber-400/50", "LEGEND": "border-purple-400/40", "GREAT": "border-emerald-400/40", "SOLID PRO": "border-blue-400/30", "JOURNEYMAN": "border-border" };
 
-  const totalTrophies = totals.leagueTitles + totals.domesticCups + totals.championsLeagues + totals.worldCups + totals.continentalCups;
+  const totalTrophies = totals.leagueTitles + totals.domesticCups + totals.championsLeagues + totals.worldCups + totals.continentalCups + totals.clubCups;
 
   return (
     <div className={`rounded-xl border-2 ${tierBorder[legacy.tier]} bg-card p-5 space-y-4`}>
@@ -4062,11 +4070,14 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
           {/* Trophies */}
           <div className="bg-card border border-border rounded-xl p-4">
             <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Trophy Cabinet</span>
-            <div className="grid grid-cols-3 sm:grid-cols-6 gap-2 mt-3">
+            <div className={`grid grid-cols-3 gap-2 mt-3 ${totals.clubCups > 0 ? "sm:grid-cols-7" : "sm:grid-cols-6"}`}>
               {[
                 { emoji: "🏆", l: "Leagues", v: totals.leagueTitles },
                 { emoji: "🏆", l: "Cups", v: totals.domesticCups },
                 { emoji: "⭐", l: "UCL", v: totals.championsLeagues },
+                // Round 972: a continental club cup won outside UEFA gets its
+                // own tile under its own name, never the UCL one.
+                ...(totals.clubCups > 0 ? [{ emoji: "⭐", l: clubCupTileLabel(career.seasons), v: totals.clubCups }] : []),
                 { emoji: "🌍", l: "World Cup", v: totals.worldCups },
                 // Round 124: continental championships are a trophy too.
                 { emoji: "🌐", l: "Continental", v: totals.continentalCups },
@@ -4150,8 +4161,8 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
                   return (
                     <Fragment key={i}>
                       <div className="flex items-center justify-between text-xs bg-muted/20 rounded-lg px-3 py-1.5">
-                        <span className="text-[10px] text-muted-foreground w-14 shrink-0">
-                          {m.round}{twoLegged ? " L2" : m.leg === 1 && m.aggFor === undefined ? " L1" : ""}
+                        <span className="text-[10px] text-muted-foreground w-16 shrink-0">
+                          {m.round === "PO" ? "Play-off" : m.round}{twoLegged ? " L2" : m.leg === 1 && m.aggFor === undefined ? " L1" : ""}
                         </span>
                         <span className="font-semibold text-foreground truncate">{m.home ? career.currentClub : m.opponent}</span>
                         <span className="font-black mx-2 shrink-0">{m.home ? m.goalsFor : m.goalsAgainst} - {m.home ? m.goalsAgainst : m.goalsFor}</span>
