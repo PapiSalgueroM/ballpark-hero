@@ -71,6 +71,7 @@ import os from 'node:os';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
+import { US_CAREER_BOARD, allWrapperProblems } from './lib/usCareerFiles.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.INBOX_CONTROL || '';
@@ -193,20 +194,33 @@ const IMPORTS = [
   { rel: 'src/lib/soccerCareerEngine.ts', re: /from\s+["']\.\/careerInbox["']/, what: 'the soccer engine binds careerInbox' },
   { rel: 'src/lib/nflCareerInbox.ts', re: /from\s+["']\.\/careerInbox["']/, what: 'the NFL binding binds careerInbox' },
   { rel: 'src/lib/nflMyCareer.ts', re: /from\s+["']\.\/nflCareerInbox["']/, what: 'the NFL engine runs the inbox tick' },
-  { rel: 'src/components/nfl-my-career/NflMyCareerBoard.tsx', re: /from\s+["']@\/lib\/nflCareerInbox["']/, what: 'the NFL board opens the inbox' },
+  { rel: 'src/lib/nflCareerSport.ts', re: /from\s+["']@\/lib\/nflCareerInbox["']/, what: 'the NFL board binding hands the board its inbox' },
   { rel: 'src/lib/mlbCareerInbox.ts', re: /from\s+["']\.\/careerInbox["']/, what: 'the MLB binding binds careerInbox' },
   { rel: 'src/lib/mlbMyCareer.ts', re: /from\s+["']\.\/mlbCareerInbox["']/, what: 'the MLB engine runs the inbox tick' },
-  { rel: 'src/components/mlb-my-career/MlbMyCareerBoard.tsx', re: /from\s+["']@\/lib\/mlbCareerInbox["']/, what: 'the MLB board opens the inbox' },
+  { rel: 'src/lib/mlbCareerSport.ts', re: /from\s+["']@\/lib\/mlbCareerInbox["']/, what: 'the MLB board binding hands the board its inbox' },
   { rel: 'src/lib/nbaCareerInbox.ts', re: /from\s+["']\.\/careerInbox["']/, what: 'the NBA binding binds careerInbox' },
   { rel: 'src/lib/nbaMyCareer.ts', re: /from\s+["']\.\/nbaCareerInbox["']/, what: 'the NBA engine runs the inbox tick' },
-  { rel: 'src/components/nba-my-career/NbaMyCareerBoard.tsx', re: /from\s+["']@\/lib\/nbaCareerInbox["']/, what: 'the NBA board opens the inbox' },
+  { rel: 'src/lib/nbaCareerSport.ts', re: /from\s+["']@\/lib\/nbaCareerInbox["']/, what: 'the NBA board binding hands the board its inbox' },
   { rel: 'src/lib/nhlCareerInbox.ts', re: /from\s+["']\.\/careerInbox["']/, what: 'the NHL binding binds careerInbox' },
   { rel: 'src/lib/nhlMyCareer.ts', re: /from\s+["']\.\/nhlCareerInbox["']/, what: 'the NHL engine runs the inbox tick' },
-  { rel: 'src/components/nhl-my-career/NhlMyCareerBoard.tsx', re: /from\s+["']@\/lib\/nhlCareerInbox["']/, what: 'the NHL board opens the inbox' },
+  { rel: 'src/lib/nhlCareerSport.ts', re: /from\s+["']@\/lib\/nhlCareerInbox["']/, what: 'the NHL board binding hands the board its inbox' },
 ];
 for (const imp of IMPORTS) {
   if (!imp.re.test(code.get(imp.rel) ?? '')) fail(`${imp.what}: no import found in ${imp.rel}`);
 }
+/* Round 900: the four boards are one. A binding importing its inbox proves
+   nothing unless the shared board opens it and each sport's page is on that
+   board, so both halves are checked here. */
+const BOARD_OPENS = [
+  { re: /<InboxPanel\b/, what: 'draws the inbox panel' },
+  { re: /sport\.answerInbox\(/, what: 'answers a message through the sport binding' },
+  { re: /sport\.unreadInboxCount\(/, what: 'counts unread through the sport binding' },
+  { re: /sport\.draftNightInbox\(/, what: 'delivers the draft night messages through the sport binding' },
+];
+for (const b of BOARD_OPENS) {
+  if (!b.re.test(code.get(US_CAREER_BOARD) ?? '')) fail(`the shared US career board no longer ${b.what} (${US_CAREER_BOARD})`);
+}
+for (const why of allWrapperProblems(ROOT)) fail(why);
 console.log(`   ${RULES.length} rule fingerprints checked, ${IMPORTS.length} bindings confirmed`);
 
 /* ═══════════════════════════════════════════════════════════════════════════

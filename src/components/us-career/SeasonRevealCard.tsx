@@ -12,6 +12,7 @@
 import { ConfettiBurst, CelebrationStyles, revealDelay } from '@/components/club-manager/Celebration';
 import { cn } from '@/lib/utils';
 import type { SeasonReveal } from '@/lib/usCareerReveal';
+import supportMotion from './CareerSupportMotion.module.css';
 
 export function SeasonRevealCard({ reveal, onContinue }: { reveal: SeasonReveal; onContinue: () => void }) {
   const banned = reveal.resultTone === 'banned';
@@ -53,12 +54,14 @@ export function SeasonRevealCard({ reveal, onContinue }: { reveal: SeasonReveal;
           {reveal.lines.map((l, i) => (
             <p
               key={i}
+              data-yearly-support={l.tone === 'support' ? '' : undefined}
               className={cn(
                 'cm-tick-in rounded-lg px-2.5 py-1.5 text-xs leading-snug',
-                l.tone === 'award' ? 'bg-gold/10 font-semibold text-gold' : l.tone === 'sting' ? 'bg-destructive/10 text-foreground' : 'bg-background text-muted-foreground',
+                l.tone === 'award' ? 'bg-gold/10 font-semibold text-gold' : l.tone === 'sting' ? 'bg-destructive/10 text-foreground' : l.tone === 'support' ? supportMotion.support : 'bg-background text-muted-foreground',
               )}
               style={{ animationDelay: lineDelay(i) }}
             >
+              {l.tone === 'support' && <span aria-hidden="true" className={supportMotion.mark} style={{ animationDelay: lineDelay(i) }}>✓ </span>}
               {l.text}
             </p>
           ))}
