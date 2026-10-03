@@ -16,19 +16,33 @@
  *      sources are on two or more different hosts, none a wiki, each a real
  *      https address on the host it claims, each with a read date
  *   3) the record's nine starters are the sheet's nine, slot for slot
- *   4) every blank matches the record: name, slot, nationality and fact text
+ *   4) every blank matches the record: name, slot, nationality, fact text and
+ *      aliases, and the real guess check accepts every alias
  *   5) every blank's surname hint is a real surname (not Jr., Sr., II, III)
  *   6) the pool does not shrink below 30 sheets (it was 10 before this round)
- *   7) the real daily pick deals every sheet: 90 days from a fixed start
+ *   7) the real daily pick deals every sheet at least twice in three pool
+ *      lengths of days from a fixed start
  *   8) no long dash in any sheet text (house style)
+ *   9) every blank's nationality agrees with the birthplace the record holds
+ *  10) every source address carries its game's date (the almanac boxid, the
+ *      baseball-reference box code, the SABR recap's month-day-year), so a
+ *      row cannot cite another game's box
+ *  11) the card's header (dateLabel, matchDate, venue, scoreLine, team and
+ *      opponent, all shown before play) is the record's game line, and the
+ *      two sides of one game mirror each other
+ *  12) the baseball hub FAQ's years for Missing Nine are the pool's real span
+ *      (it said 1986 to 2016 after the pool had grown to 1956 to 2019)
  *
  * Nothing here is random, so there are no seeds and no bands: one run is the
  * measurement. Measured on the Round 948 tree: 30 sheets, 66 hosts named in
  * sheet sources (2 per sheet, 6 sheets also cite the SABR recap), 90 blanks
- * all matching, and the 90 day walk from 2026-10-03 deals 30 of 30 sheets,
- * the rarest twice (the old ten-sheet pool could only ever deal 10). A full
- * cycle is as long as the pool, so 90 days always holds two whole cycles. The floor is the count,
- * not a band: a pool may grow, it may not shrink.
+ * all matching, 2 aliases, 66 source addresses dated, and the 90 day walk
+ * (3 x 30) from 2026-10-03 deals 30 of 30 sheets, the rarest twice (the old
+ * ten-sheet pool could only ever deal 10). dailyIndex cycles are as long as
+ * the pool and aligned to the day number, so three pool lengths always hold
+ * two whole cycles at any pool size; a fixed 90 held that only up to 30
+ * sheets. The floor is the count, not a band: a pool may grow, it may not
+ * shrink.
  *
  * Negative controls, each mutates a COPY (never the tree) and asserts the
  * string it mutates exists first, then demands its own check goes red:
