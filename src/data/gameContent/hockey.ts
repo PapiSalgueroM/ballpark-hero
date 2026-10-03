@@ -1136,7 +1136,7 @@ export const HOCKEY_CONTENT: GameContentMap = {
       {
         heading: "Deadline day, restricted free agents and retained salary",
         items: [
-          "The trade deadline shuts every deal, phone calls and packages alike, once round 15 of 20 is played, and deals open again in the summer. The real one falls in early March. At the deadline clubs in a playoff place, or close to one, are buyers who pay up for veterans; clubs well out of it are sellers who want picks and young players.",
+          "The trade deadline falls after round 15 of 20. The break after round 15 is deadline day, your last chance to deal, and once round 16 is played every deal is shut, phone calls and packages alike, until the summer. The real one falls in early March. At the deadline clubs in a playoff place, or close to one, are buyers who pay up for veterans; clubs well out of it are sellers who want picks and young players.",
           "A draft pick signs an entry level deal, three seasons from 18 to 21. When it runs out, a player under 27 with fewer than seven seasons is a restricted free agent: a qualifying offer keeps his rights, and a rival with a roster spot may table an offer sheet you either match or let go for the picks it carries. Everyone else is unrestricted. The money is this game's own figures, not real contracts.",
           "Your club's picks now run three drafts deep, two rounds each in this game's short draft, and any of them can be traded. A club can keep paying up to half of a traded player's salary, carry three retained deals at a time, and one contract can be retained on twice.",
           "Staff effects are small and capped. The head coach adds rating points on attack and defense, the goalie coach on the goalies, and the special teams assistant counts at a fifth because this game has no power play of its own. A better scouting director misses by less on a prospect's grade, and the therapist shortens injuries. Ownership gives the staff 8M each summer for fees and pay offs; wages sit outside the cap.",
@@ -1155,7 +1155,7 @@ export const HOCKEY_CONTENT: GameContentMap = {
         paragraphs: [
           "Open Staff and hire a level 7 goalie coach off the shortlist. Level 7 is two rating points on the goalie, and the goalie carries a fifth of your strength, so the club gets 0.4 stronger on every night. That is a nudge to your odds, not a promised result.",
           "Your 21 year old winger's entry deal runs out this summer, so he is a restricted free agent on the Re-sign desk. Tender him the qualifying offer and he stays a season at the money he earns now. If a rival has tabled an offer sheet, the tile says so: match it and he stays on the sheet's terms, or let him go and the picks on the sheet come to you.",
-          "At round 14 you sit in a wild card place, which makes you a buyer. On the Trade desk you send a depth winger and a second rounder two drafts out to a club well out of it for its veteran center, keeping half the winger's salary so the cap works. Wait until after round 15 and the box just reads Deadline passed.",
+          "At round 14 you sit in a wild card place, which makes you a buyer. On the Trade desk you send a depth winger and a second rounder two drafts out to a club well out of it for its veteran center, keeping half the winger's salary so the cap works. Wait until round 16 is played and the box just reads Deadline passed.",
         ],
       },
       {

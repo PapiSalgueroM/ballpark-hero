@@ -291,7 +291,9 @@ export const NHL_STAFF_PACK: GmStaffPack<NhlStaffPost> = {
     injuryWeeks: INJURY_KEY,
   },
   money: {
-    wageUnit: 'k a week', purseUnit: 'm', ticksPerSeason: 24, tickWord: 'week', seasonPurse: 8,
+    /* Round 987: the board ticks the desk once a round over its 20 rounds
+       (NHL_FO_ROUNDS), so the clock and the wages count rounds. */
+    wageUnit: 'k a round', purseUnit: 'm', ticksPerSeason: 20, tickWord: 'round', seasonPurse: 8,
     purseNote: 'The staff budget ownership opens the desk with, in the game\'s own millions. Staff are paid outside the hard cap.',
   },
 };

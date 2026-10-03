@@ -30,11 +30,11 @@ import {
 } from './gmContracts';
 import { nhlContractHost } from './gmContractsHostNhl';
 import {
-  type GmPickLedger, type GmPickRules, NHL_PICK_RULES, awardPick, findPick, migrateLegacyPicks, movePicks, pickKey,
+  type GmPickLedger, type GmPickRules, NHL_PICK_RULES, findPick, migrateLegacyPicks, movePicks, pickKey,
   picksHeldBy, rollLedger, validateLedger,
 } from './gmPicks';
 import {
-  NHL_DEADLINE, type DeadlineStance, deadlineRefusal, deadlineStances, stanceValue, tradeWindow, type TradeWindow,
+  NHL_DEADLINE, type DeadlineStance, deadlineStances, stanceValue, tradeWindow, type TradeWindow,
 } from './gmDeadline';
 import {
   NHL_TRADE_RULES, type PackageContext, type PackageVerdict, type PickValueCurve, type TradeAsset, type TradePackage,
@@ -45,6 +45,7 @@ import {
   gmScoutNoise, gmStaffEffect, gmStaffLevel, gmStatureAnchor, gmSummerWalk, gmTickStaff,
 } from './gmStaff';
 import { tradeRefusal } from './frontOfficeCuts';
+import { NHL_ENTRY_LEVEL_YEARS } from './gmContractRules';
 import { NHL_STAFF_PACK, type NhlStaffPost } from '@/data/gmStaff/packs';
 import {
   EASTERN, NHL_FO_ROUNDS, NHL_ROSTER_MAX, NHL_ROSTER_MIN, type NhlGmPlayer, type NhlLeague, type NhlProspect,
@@ -70,7 +71,7 @@ export function nhlGamePickRules(): GmPickRules {
     partial: [
       ...NHL_PICK_RULES.partial,
       'The real draft runs seven rounds. This game drafts two, so the ledger carries two.',
-      'The lottery is in the rules, but draft night here is the game\'s own short draft, run in reverse standings.',
+      'The lottery is in the rules, but draft night here is the game\'s own short draft: you pick first in each batch, then the other clubs go in reverse standings.',
     ],
   };
 }
@@ -254,14 +255,23 @@ export function nhlMirrorPickMove(ledger: GmPickLedger, from: string, to: string
 /* The deadline, and who is buying                                    */
 /* ------------------------------------------------------------------ */
 
-/** The window as the hub sees it: `league.round` is the round about to be played. */
+/**
+ * Rounds already played this season. `league.round` is the round about to
+ * be played. The one place the deadline's clock is read, so the hub, the
+ * old trade paths and the packages can never count it two ways.
+ */
+export function nhlPeriodsPlayed(league: NhlLeague): number {
+  return Math.max(0, league.round - 1);
+}
+
+/** The window as the hub sees it. */
 export function nhlTradeWindow(league: NhlLeague): TradeWindow {
-  return tradeWindow(NHL_DEADLINE, NHL_FO_ROUNDS, Math.max(0, league.round - 1), false);
+  return tradeWindow(NHL_DEADLINE, NHL_FO_ROUNDS, nhlPeriodsPlayed(league), false);
 }
 
 /** Why a trade is refused today, or null. Every trade path on the board asks this first once the desk is on. */
 export function nhlDeadlineRefusal(league: NhlLeague): string | null {
-  return deadlineRefusal(NHL_DEADLINE, NHL_FO_ROUNDS, Math.max(0, league.round - 1), false);
+  return nhlTradeWindow(league).reason;
 }
 
 /** Buyers and sellers by the standings: eight playoff places a conference, points share as the record. */
@@ -308,7 +318,7 @@ export function nhlPackageCapCheck(league: NhlLeague, pkg: TradePackage): string
     const outMen = out.flatMap(a => (a.kind === 'player' ? [a] : []));
     const inMen = inc.flatMap(a => (a.kind === 'player' ? [a] : []));
     const after = t.players.length - outMen.length + inMen.length;
-    if (after <= NHL_ROSTER_MIN) return `That would leave ${club} with ${after} players. A club needs more than ${NHL_ROSTER_MIN}.`;
+    if (after < NHL_ROSTER_MIN) return `That would leave ${club} with ${after} players. A club needs at least ${NHL_ROSTER_MIN}.`;
     if (after > NHL_ROSTER_MAX) return `${club} has no room for that many players: the limit is ${NHL_ROSTER_MAX}.`;
     let outMoved = 0, inMoved = 0;
     for (const a of outMen) { const p = playerIn(league, a.id); if (p) outMoved += splitRetained(p.salary, a.retain).moved; }
@@ -335,7 +345,7 @@ export function nhlPackageContext(league: NhlLeague, desk: GmDesk, team: string,
   const retained = nhlRetainedOf(desk);
   return {
     ledger, pickRules: nhlGamePickRules(), tradeRules: NHL_TRADE_RULES, season: league.season,
-    clock: { rules: NHL_DEADLINE, periods: NHL_FO_ROUNDS, periodsPlayed: Math.max(0, league.round - 1), seasonClosed: false },
+    clock: { rules: NHL_DEADLINE, periods: NHL_FO_ROUNDS, periodsPlayed: nhlPeriodsPlayed(league), seasonClosed: false },
     valueOf: (a: TradeAsset) => {
       if (a.kind === 'player') { const p = playerIn(league, a.id); return p ? stanceValue(stance, nhlTradeValue(p), p.age) : 0; }
       if (a.kind === 'pick') {
@@ -391,6 +401,23 @@ export function nhlProposePackage(league: NhlLeague, desk: GmDesk, team: string,
   return { verdict: out.verdict, desk: next, arrived };
 }
 
+/** Seasons on the entry level deal a man signs at this age (the rules ladder of gmContractRules). */
+export function nhlEntryLevelYears(age: number): number {
+  return (NHL_ENTRY_LEVEL_YEARS.find(r => age <= r.maxAge) ?? NHL_ENTRY_LEVEL_YEARS[NHL_ENTRY_LEVEL_YEARS.length - 1]).years;
+}
+
+/**
+ * A draftee with the desk on signs his entry level deal: the ladder's
+ * seasons, plus the one the summer right after draft night takes off before
+ * he has played a game (the engine's offseason runs after the draft and
+ * takes a season off every deal). So an 18 year old plays three seasons
+ * before he comes up on the re-sign desk, as the rules say. With the desk
+ * off the engine's own figure stands, so an old save plays as it did.
+ */
+export function nhlSignDraftee(p: NhlGmPlayer): void {
+  p.years = nhlEntryLevelYears(p.age) + 1;
+}
+
 /** Tell the re-sign ledger how men arrived: a trade or a signing in season, or the draft with its round. */
 export function nhlNoteArrivals(desk: GmDesk, league: NhlLeague, team: string, ids: string[], how: 'trade' | 'signing' | 'draft', round?: number): GmDesk {
   if (!ids.length) return desk;
@@ -430,6 +457,8 @@ export interface NhlDeskSummer {
   autoSettled: GmDecision[];
   /** Every decision applied this summer. */
   applied: GmDecision[];
+  /** Each pick an offer sheet paid this summer: the club that tabled it and the pick it handed over (null: it held none in that round). */
+  sheetPicks: { id: string; club: string; round: number; key: string | null }[];
 }
 
 /**
@@ -453,15 +482,25 @@ export function nhlDeskOffseason(league: NhlLeague, desk: GmDesk, team: string, 
   const ledger = deskCopy(nhlContractsOf(desk, league, team));
   const autoSettled = autoDecide(nhlContractHost, league, ledger);
   const run = runDeskOffseason(nhlContractHost, league, ledger, rng);
-  if (run.ok === false) return { ok: false, desk, notes: [], lines: [`Still waiting on: ${run.undecided.map(u => u.name).join(', ')}.`], autoSettled: [], applied: [] };
+  if (run.ok === false) return { ok: false, desk, notes: [], lines: [`Still waiting on: ${run.undecided.map(u => u.name).join(', ')}.`], autoSettled: [], applied: [], sheetPicks: [] };
 
   let picks = rollLedger(picksBefore, ids, closed, nhlGamePickRules());
-  for (const d of run.applied) {
-    if (d.kind !== 'take-picks' || !d.picks?.length) continue;
-    const club = ids.find(k => k !== team && league.teams[k].players.some(p => p.id === d.id));
-    for (const round of d.picks) {
-      const own = club ? picksHeldBy(picks, club).find(p => p.round === round && p.orig === club && p.year >= league.season) : undefined;
-      picks = own ? movePicks(picks, [pickKey(own)], team) : awardPick(picks, league.season, round, team, 'comp');
+  const sheetLines: string[] = [];
+  const sheetPicks: NhlDeskSummer['sheetPicks'] = [];
+  /* An offer sheet the GM cashed in: the club that tabled it (the one
+     runDeskOffseason sent him to) hands over its own pick in each round, the
+     soonest it holds. A club that has traded its own away hands over another
+     it holds in that round. A pick is only ever moved, never made, so the
+     league's count stays whole; if the club holds none in that round, the
+     feed says so rather than inventing one. */
+  for (const sheet of run.sheets ?? []) {
+    for (const round of sheet.picks) {
+      const held = picksHeldBy(picks, sheet.club).filter(p => p.round === round && p.year >= league.season)
+        .sort((a, b) => a.year - b.year);
+      const pay = held.find(p => p.orig === sheet.club) ?? held[0];
+      sheetPicks.push({ id: sheet.id, club: sheet.club, round, key: pay ? pickKey(pay) : null });
+      if (pay) picks = movePicks(picks, [pickKey(pay)], team);
+      else sheetLines.push(`📋 ${sheet.club} had no round ${round} pick left to hand over for the offer sheet.`);
     }
   }
   syncNhlPicks(league, picks);
@@ -484,12 +523,13 @@ export function nhlDeskOffseason(league: NhlLeague, desk: GmDesk, team: string, 
   if (run.applied.length) lines.push(`📋 The re-sign desk: ${stayed} kept, ${run.applied.length - stayed} gone.`);
   if (autoSettled.length) lines.push(`📋 You left ${autoSettled.length} deal${autoSettled.length === 1 ? '' : 's'} open, so your staff settled ${autoSettled.length === 1 ? 'it' : 'them'} by its own rule.`);
   if (walk) lines.push(`👋 ${walk.person.name} took the ${postLabel(walk.post)} job at ${walk.club}. Nobody matched it.`);
+  lines.push(...sheetLines);
 
   let next = withGmBlock(desk, NHL_DESK_KEYS.contracts, ledger);
   next = withGmBlock(next, NHL_DESK_KEYS.picks, picks);
   next = withGmBlock(next, NHL_DESK_KEYS.staff, staff);
   next = withGmBlock(next, NHL_DESK_KEYS.retained, retained);
-  return { ok: true, desk: next, notes: run.engine, lines, autoSettled, applied: run.applied };
+  return { ok: true, desk: next, notes: run.engine, lines, autoSettled, applied: run.applied, sheetPicks };
 }
 
 /* ------------------------------------------------------------------ */
@@ -540,9 +580,17 @@ export function nhlPicksTile(desk: GmDesk, league: NhlLeague, team: string): GmT
   };
 }
 
-/** The deal box: packages, and how long until the deadline shuts them. */
-export function nhlDealsTile(league: NhlLeague): GmTileFace {
+/**
+ * The deal box: packages, and how long until the deadline shuts them. On a
+ * save without the desk yet (`on` false) the deadline does not apply, the
+ * phone and the trade finder still deal, so the box says what opening it
+ * brings instead of a deadline that is not running.
+ */
+export function nhlDealsTile(league: NhlLeague, on = true): GmTileFace {
   const w = nhlTradeWindow(league);
+  if (!on) {
+    return { icon: '🔁', value: 'Packages and a deadline', sub: `Open it to start the desk: deals shut once round ${w.deadlineAfter + 1} is played`, accent: false };
+  }
   return {
     icon: '🔁',
     value: !w.open ? 'Deadline passed' : w.periodsLeft === 0 ? 'Last round to deal' : `${plural(w.periodsLeft, 'round')} to the deadline`,

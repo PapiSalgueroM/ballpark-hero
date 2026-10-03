@@ -58,7 +58,7 @@ import { type GmDesk, gmPanelFor, readGmDesk, withGmBlock } from '@/lib/gmDesk';
 import { gmStaffLevel } from '@/lib/gmStaff';
 import {
   deskCopy, nhlDeadlineRefusal, nhlDeskAfterRound, nhlDeskEdges, nhlDeskOffseason, nhlDeskRoundOptions, nhlMirrorPickMove,
-  nhlNoteArrivals, nhlPicksOf, nhlScoutRead, nhlStaffOf, nhlTradeWindow, openNhlDesk, syncNhlPicks, NHL_DESK_KEYS,
+  nhlNoteArrivals, nhlPicksOf, nhlScoutRead, nhlSignDraftee, nhlStaffOf, nhlTradeWindow, openNhlDesk, syncNhlPicks, NHL_DESK_KEYS,
 } from '@/lib/nhlGmDesk';
 /* By its full path, not './': the waiver, roster limit and draft capital harnesses bundle a copy of this board from a temp folder. */
 import { NHL_DESK_PANELS, NHL_RECAP_PANELS, type NhlDeskFacts } from '@/components/nhl-front-office/NhlGmDesk';
@@ -541,6 +541,8 @@ export default function NhlFrontOfficeBoard() {
     if (!nhlConsumeDraftPick(mine)) return;
     draftAction.current = true;
     const drafted = nhlProspectToPlayer(pr, Math.random, lg.ratingModelVersion);
+    /* Round 987: with the desk on he signs the rules' entry level deal. */
+    if (gm) nhlSignDraftee(drafted);
     mine.players.push(drafted);
     /* Round 987: the re-sign desk learns he is a draft pick on an entry level
        deal, so he comes up restricted when it runs out. */
@@ -560,7 +562,7 @@ export default function NhlFrontOfficeBoard() {
       const aiDraft = nhlAiDraftPicks(lg, aiRemaining, order, Math.random);
       aiRemaining = aiDraft.remaining;
       for (const { team, prospect } of aiDraft.picks) {
-        rivalPicks.push({ team, playerName: prospect.name, pos: String(prospect.pos), grade: prospect.grade });
+        rivalPicks.push({ team, playerName: prospect.name, pos: String(prospect.pos), grade: gradeOf(prospect) });
       }
     }
     const nextClass = aiRemaining;
@@ -571,7 +573,7 @@ export default function NhlFrontOfficeBoard() {
        when the player presses Continue under the card. The offseason still
        runs right here, in the same order, drawing the same randomness. */
     setDraftNight(buildDraftNight(
-      { team: myTeam, playerName: pr.name, pos: String(pr.pos), grade: pr.grade },
+      { team: myTeam, playerName: pr.name, pos: String(pr.pos), grade: gradeOf(pr) },
       rivalPicks,
     ));
     setDraftClass(nextClass); setPicksLeft(nextPicks); setDraftBatchesLeft(beforeBatches - batchCount);
@@ -637,7 +639,7 @@ export default function NhlFrontOfficeBoard() {
       const order = nhlFoStandings(lg).map(t => t.abbr).reverse().filter(a => a !== myTeam);
       const resolved = nhlAiDraftPicks(lg, remaining, order, Math.random);
       remaining = resolved.remaining;
-      rivalPicks.push(...resolved.picks.map(({ team, prospect }) => ({ team, playerName: prospect.name, pos: String(prospect.pos), grade: prospect.grade })));
+      rivalPicks.push(...resolved.picks.map(({ team, prospect }) => ({ team, playerName: prospect.name, pos: String(prospect.pos), grade: gradeOf(prospect) })));
     }
     setDraftClass(remaining); setDraftNight(buildDraftNight(null, rivalPicks));
     finishDraft(lg);
@@ -830,7 +832,7 @@ export default function NhlFrontOfficeBoard() {
   };
   const deskFacts = (hub: NhlDeskFacts['hub']): NhlDeskFacts | null => league ? {
     teamId: myTeam, teamLabel: label(myTeam), seasonsPlayed, phase, hub, league,
-    seasonOver: phase === 'recap', clubName: label,
+    seasonOver: phase === 'recap', deskOn: gm !== null, clubName: label,
     say: line => setFeed(f => [line, ...f].slice(0, 6)),
     commit: (lg, desk, line) => {
       setGm(desk); setLeague(lg); slamFeed(line);
@@ -1047,7 +1049,8 @@ export default function NhlFrontOfficeBoard() {
         {!draftDone && noCapital && <button onClick={draftWithoutPicks} className="min-h-11 w-full rounded-full bg-primary px-4 py-2.5 text-sm font-bold text-primary-foreground">Finish the draft and offseason</button>}
         {!draftDone && !noCapital && draftClass.length === 0 && <div className="rounded-xl border border-border bg-card p-3 text-xs text-muted-foreground"><p>No prospects remain on this saved board. Generate another board to use your remaining picks.</p><button onClick={replaceDraftBoard} className="mt-2 min-h-11 w-full rounded-full bg-primary px-4 py-2.5 font-bold text-primary-foreground">Generate remaining prospects</button></div>}
         {!draftDone && !noCapital && <div className="grid max-h-96 grid-cols-1 gap-1.5 overflow-y-auto sm:grid-cols-2">
-          {draftClass.slice(0, 14).map(pr => (
+          {/* Round 987: with the desk on, the board is your scout's, in his order. */}
+          {(gm ? [...draftClass].sort((a, b) => gradeOf(b) - gradeOf(a) || a.id.localeCompare(b.id)) : draftClass).slice(0, 14).map(pr => (
             <button key={pr.id} onClick={() => draftPick(pr.id)} className="flex items-center justify-between rounded-lg border border-border bg-card px-3 py-2 text-left hover:border-primary/60">
               <span>
                 <span className="block text-sm font-bold text-foreground">{pr.name}</span>
@@ -1238,7 +1241,7 @@ export default function NhlFrontOfficeBoard() {
         <div className="rounded-2xl border border-border bg-card p-3 space-y-2">
           {/* Round 987: with the desk on, the deadline shuts this screen too. */}
           {gm && nhlDeadlineRefusal(league) && <p data-nhl-deadline className="rounded-lg border border-destructive/40 bg-destructive/5 p-2 text-center text-xs font-semibold">🔒 {nhlDeadlineRefusal(league)}</p>}
-          {gm && !nhlDeadlineRefusal(league) && <p data-nhl-deadline className="text-center text-[11px] text-muted-foreground">Trade deadline after round {nhlTradeWindow(league).deadlineAfter}. Packages with picks and retained salary are on the Trade desk box.</p>}
+          {gm && !nhlDeadlineRefusal(league) && <p data-nhl-deadline className="text-center text-[11px] text-muted-foreground">Trade deadline: the break after round {nhlTradeWindow(league).deadlineAfter} is the last chance, and deals shut once round {nhlTradeWindow(league).deadlineAfter + 1} is played. Packages with picks and retained salary are on the Trade desk box.</p>}
           {/* Round 82: Trade Finder, shop a player and let the league bid */}
           <div className="rounded-xl border border-gold/30 bg-gold/5 p-2.5 space-y-2">
             <p className="text-center text-[11px] font-bold text-foreground">🔍 Trade Finder</p>

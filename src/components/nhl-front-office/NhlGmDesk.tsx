@@ -35,6 +35,8 @@ export interface NhlDeskFacts extends GmFacts {
   league: NhlLeague;
   /** The regular season is over (the recap). Deals are shut, the re-sign desk is the business of the day. */
   seasonOver: boolean;
+  /** The save carries the desk. Until it does (an old save), the deadline does not apply yet and the deal box says so. */
+  deskOn: boolean;
   /** How the board prints a club. */
   clubName: (abbr: string) => string;
   /** A line for the board's feed. */
@@ -201,7 +203,7 @@ function DealsPanel({ desk, facts }: Props) {
         </select>
       </label>
       <p className="text-center text-[11px] text-muted-foreground">
-        Clubs in a playoff place buy: they pay up for veterans and mark their own picks down. Clubs well out of it sell. Retained salary: up to half, three deals a club at a time.
+        Clubs in a playoff place buy: they rate every veteran higher and every pick and young player lower, theirs and yours alike, so a vet fetches more from them and a pick less. Clubs well out of it sell, the other way round. Retained salary: up to half, three deals a club at a time.
       </p>
       {myPlayersIn.length > 0 && (
         <div className="space-y-1 rounded-lg border border-border p-2" data-nhl-retain>
@@ -257,7 +259,7 @@ const PICKS: GmPanelDef<NhlDeskFacts> = {
 };
 const DEALS: GmPanelDef<NhlDeskFacts> = {
   key: 'deals', title: 'Trade desk',
-  tile: ({ facts }) => nhlDealsTile(facts.league),
+  tile: ({ facts }) => nhlDealsTile(facts.league, facts.deskOn),
   Panel: DealsPanel,
 };
 

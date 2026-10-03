@@ -32,7 +32,7 @@ const NhlFrontOffice = () => {
             howToPlay={[
               'Pick a franchise from the roster snapshot. Read the opening estimate notes before comparing players.',
               'Work the cap: waive contracts, sign free agents, swing trades with pick sweeteners.',
-              'Run the GM desk: hire your staff, settle every expiring deal on the re-sign desk, and build packages of players and picks before the trade deadline after round 15.',
+              'Run the GM desk: hire your staff, settle every expiring deal on the re-sign desk, and build packages of players and picks until the trade deadline: deals shut once round 16 is played.',
               'Play the season in stretches; wins are two points, OT losses one.',
               'Finish top three in the division or grab a wild card to make the bracket.',
               'Win four best-of-7 rounds for the Cup, then draft, develop and go again.',
