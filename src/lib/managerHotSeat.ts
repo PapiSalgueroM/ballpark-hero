@@ -69,6 +69,7 @@ import {
   registerLeagueOverrides,
   resolveXI,
   restoreEngineRegistrations,
+  saveCareer,
   startCareer,
   type CareerState,
   type Competition,
@@ -612,4 +613,101 @@ export function shareText(run: HotSeatRun): string {
   const head = run.setup.daily ? `Manager Hot Seat ${run.setup.daily}` : 'Manager Hot Seat';
   const verdict = v ? VERDICT_WORDS[v.kind].title : 'In the dugout';
   return `${head}\n${run.state.clubName}: ${verdict}\n${run.points} of ${run.target} points ${dots}`;
+}
+
+/* ---------------- Round 956: carry on in Club Manager ---------------- */
+
+/*
+ * A hot seat run IS a Club Manager career: run.state was built by startCareer
+ * and every match was played by playNextEntry. So a manager who keeps the job
+ * can keep it for real. The state goes across exactly as it stands (the
+ * table, the squad, the form, the calendar, the board's confidence) through
+ * Club Manager's own saveCareer, and Club Manager opens it with its own
+ * loadCareer like any other save. Nothing is rebuilt or topped up here, which
+ * is the point: the season you saved is the season you carry on.
+ *
+ * Club Manager keeps one career per device under one key, so a save already
+ * there is never replaced without the player saying so.
+ * scripts/simManagerHotSeat.mjs section 5 holds all of it.
+ */
+
+/** Club Manager's save key. clubManager.ts does not export its own copy, so
+ *  section 5 of the harness proves this one is the key saveCareer writes. */
+const CLUB_MANAGER_SAVE_KEY = 'dukb-club-manager-save';
+
+/** Only a manager still in the job can carry on in it. */
+export function canCarryOn(run: HotSeatRun): boolean {
+  const kind = run.verdict?.kind;
+  return (kind === 'survived' || kind === 'reprieve') && !run.state.sacked;
+}
+
+export interface ExistingClubManagerSave {
+  /** The club on the save, or null when the save cannot be read. */
+  club: string | null;
+  season: number | null;
+}
+
+/**
+ * The Club Manager career already on this device, or null when there is none.
+ * Read raw rather than through loadCareer, which registers the save's custom
+ * club and league memberships as it opens it. Anything at the key counts as a
+ * save, even one that cannot be read, so the answer errs toward asking.
+ */
+export function existingClubManagerSave(): ExistingClubManagerSave | null {
+  let raw: string | null;
+  try {
+    raw = localStorage.getItem(CLUB_MANAGER_SAVE_KEY);
+  } catch {
+    return null;
+  }
+  if (!raw) return null;
+  try {
+    const p = JSON.parse(raw) as { clubName?: unknown; season?: unknown } | null;
+    return {
+      club: p && typeof p.clubName === 'string' ? p.clubName : null,
+      season: p && typeof p.season === 'number' && Number.isFinite(p.season) ? p.season : null,
+    };
+  } catch {
+    return { club: null, season: null };
+  }
+}
+
+/** The career Club Manager receives: the run's state as it stands, copied so
+ *  nothing the page does to the run afterwards can reach the save. */
+export function handoverState(run: HotSeatRun): CareerState {
+  return JSON.parse(JSON.stringify(run.state)) as CareerState;
+}
+
+export interface CarryOnSummary {
+  position: number;
+  clubs: number;
+  points: number;
+  leaguePlayed: number;
+  board: number;
+}
+
+/** Where the career stands as it goes across, off the engine's own table, for the offer card. */
+export function carryOnSummary(run: HotSeatRun): CarryOnSummary {
+  const s = run.state;
+  return {
+    position: onStaticWorld(() => leaguePosition(s)),
+    clubs: s.table.length,
+    points: myRow(s)?.pts ?? 0,
+    leaguePlayed: leagueGamesPlayed(s),
+    board: Math.round(s.boardConfidence),
+  };
+}
+
+export type CarryOnResult = 'saved' | 'confirm' | 'refused' | 'failed';
+
+/**
+ * Hands the run to Club Manager. 'refused' when the manager was sacked,
+ * 'confirm' when a Club Manager career is already saved and the player has
+ * not said to replace it (nothing is written), 'failed' when the browser
+ * refused the write, 'saved' when Club Manager will open this career next.
+ */
+export function carryOnInClubManager(run: HotSeatRun, opts: { replace: boolean }): CarryOnResult {
+  if (!canCarryOn(run)) return 'refused';
+  if (!opts.replace && existingClubManagerSave() !== null) return 'confirm';
+  return saveCareer(handoverState(run)) ? 'saved' : 'failed';
 }
