@@ -1,10 +1,10 @@
 import { Component, type ReactNode } from 'react';
-import { cleanup, fireEvent, render, waitFor } from '@testing-library/react';
+import { cleanup, fireEvent, render, waitFor, within } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import NflBoard from '@/components/front-office/FrontOfficeBoard';
 import NhlBoard from '@/components/nhl-front-office/NhlFrontOfficeBoard';
-import { initLeague, generateDraftClass, runPlayoffs } from '@/lib/frontOffice';
-import { initNhlLeague, nhlDraftClass, runNhlFoPlayoffs, nhlContributors } from '@/lib/nhlFrontOffice';
+import { initLeague, generateDraftClass, runPlayoffs, REGULAR_WEEKS } from '@/lib/frontOffice';
+import { initNhlLeague, nhlDraftClass, runNhlFoPlayoffs, nhlContributors, NHL_FO_ROUNDS } from '@/lib/nhlFrontOffice';
 
 vi.mock('@/integrations/supabase/client', () => ({ supabase: {}, SUPABASE_URL: 'https://fixture.invalid', SUPABASE_PUBLISHABLE_KEY: 'fixture-public-key' }));
 vi.mock('@/contexts/AuthContext', () => ({ useAuth: () => ({ user: null, profile: null, refreshProfile: vi.fn() }) }));
@@ -49,11 +49,12 @@ for (const c of cases) describe(`${c.sport} actual save recovery`, () => {
     else tm.contributors = nhlContributors(tm);
     const raw = JSON.stringify(saved);
     const { view, writes, removes } = mount(raw);
-    expect(view.getByRole('button', { name: /^👔\s*Roster/ })).toBeVisible();
+    const rosterButton = view.getByRole('button', { name: /^👔\s*Roster/ });
+    expect(rosterButton).toBeVisible();
     expect(view.getByText(new RegExp(`${c.sport === 'NFL' ? 'Week' : 'Round'} 4/`))).toBeVisible();
     expect(view.queryByRole('alert')).toBeNull();
     expect(localStorage.getItem(c.key)).toBe(raw); expect(writes).not.toHaveBeenCalled(); expect(removes).not.toHaveBeenCalled();
-    fireEvent.click(view.getByRole('button', { name: /^👔\s*Roster/ }));
+    fireEvent.click(rosterButton);
     expect(view.getByText(saved.league.teams[c.team].players[0].name)).toBeVisible();
     expect(localStorage.getItem(c.key)).toBe(raw);
   });
@@ -83,6 +84,7 @@ for (const c of cases) describe(`${c.sport} actual save recovery`, () => {
   });
   it('restores an in-progress draft with its remaining choices', () => {
     const saved = save(c.sport, c.team); saved.phase = 'draft'; saved.draftClass = c.draft(() => 0.52); saved.picksLeft = 1;
+    saved.league[c.period] = c.sport === 'NFL' ? REGULAR_WEEKS : NHL_FO_ROUNDS;
     const raw = JSON.stringify(saved), { view, writes } = mount(raw);
     expect(view.getByText(saved.draftClass[0].name)).toBeVisible();
     expect(view.getByText(/You hold/)).toHaveTextContent('1 pick');
@@ -127,9 +129,10 @@ for (const c of cases) describe(`${c.sport} actual save recovery`, () => {
     const { view, writes, removes } = mount(raw);
     expect(view.queryByText('TEST: route crashed')).toBeNull();
     expect(view.getByText(c.picker)).toBeVisible();
-    expect(view.getByRole('alert')).toHaveTextContent("We couldn't open this save.");
+    const alert = view.getByRole('alert');
+    expect(alert).toHaveTextContent("We couldn't open this save.");
     expect(localStorage.getItem(c.key)).toBe(raw); expect(writes).not.toHaveBeenCalled(); expect(removes).not.toHaveBeenCalled();
-    fireEvent.click(view.getByRole('button', { name: 'Delete unusable save' }));
+    fireEvent.click(within(alert).getByRole('button', { name: 'Delete unusable save' }));
     expect(localStorage.getItem(c.key)).toBeNull(); expect(view.queryByRole('alert')).toBeNull();
     expect(localStorage.getItem('other-game-save')).toBe('unrelated progress'); expect(removes).toHaveBeenCalledExactlyOnceWith(c.key);
   });

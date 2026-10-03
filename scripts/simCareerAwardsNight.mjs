@@ -23,7 +23,11 @@
  *      identical. Soccer calls Math.random directly in a fixed order, so a
  *      single reordered draw anywhere breaks it. The winner's and the podium's
  *      ceremony cards are left out of the comparison since part 2 changed them
- *      on purpose (section 6 holds them); every other card is compared whole.
+ *      on purpose (section 6 holds them); so is every tournament card's hash,
+ *      since Round 926 changed TournamentCard on purpose (the won tournament
+ *      moment; src/test/tournamentCardMoment.test.tsx holds it, and the rest
+ *      of every tournament entry is still compared); every other card is
+ *      compared whole.
  *   2. The contract, on a synthetic sport (2,000 nights with repeated names,
  *      short fields, fillers that repeat themselves, and verdict rules that
  *      throw points about): the shortlist never names a rival twice, the list
@@ -221,17 +225,35 @@ console.log('1) Soccer Career replays the pre-lift fixture byte for byte');
   /* Round 834 part 2 changed the winner's and the podium's ceremony cards on
      purpose (the speech is offered, the lines say what the night does), so
      those two cards are left out of the replay on both sides; section 6 holds
-     them. Every other card, the shortlist, the wider ranking, no nomination
-     and both tournament cards, is still compared whole. */
+     them. Every other ceremony card, the shortlist, the wider ranking, no
+     nomination and both World Cup cards, is still compared whole.
+     Round 926 changed TournamentCard on purpose (a won tournament lands as a
+     moment: confetti, cm-slam, cm-rise, wrappers around the tiles, and a
+     data-intl-moment flag on every card), so every tournament's card hash
+     moved while nothing else did: with only InternationalPanel.tsx put back
+     to main's copy this section replays the fixture whole. The fixture is
+     only ever recorded from main, never from a branch, so the card's hash is
+     left out on both sides the same way as the ceremony cards above, and
+     src/test/tournamentCardMoment.test.tsx holds the card. Every other field
+     of every tournament (career, year, name, result, speeches, the choice)
+     is still compared whole, and the card is still drawn for each one. */
   const changedOnPurpose = d => {
     let n = 0;
     for (const night of d.nights) if (night.rank !== null && night.rank <= 3 && 'ui' in night) { delete night.ui; n += 1; }
     d.markup = d.markup.map(m => (m.what === 'bdor winner' || m.what === 'bdor podium') && (m.html || m.ui) ? (n += 1, { what: m.what, night: m.night }) : m);
     return n;
   };
+  const tournamentCards = d => {
+    let n = 0;
+    for (const t of d.tournaments) if ('ui' in t) { delete t.ui; n += 1; }
+    return n;
+  };
   const leftOut = changedOnPurpose(fixture);
   changedOnPurpose(fresh);
+  const cardsWant = tournamentCards(fixture), cardsGot = tournamentCards(fresh);
   console.log(`   ${leftOut} winner and podium cards left out of the replay (changed on purpose, section 6)`);
+  console.log(`   ${cardsWant} tournament cards left out of the replay (Round 926 changed the card on purpose, tournamentCardMoment.test.tsx), ${cardsGot} drawn now`);
+  check(cardsWant > 0 && cardsGot === cardsWant, `the tournament card was drawn for ${cardsGot} tournaments, the fixture recorded ${cardsWant}`);
   const stepCount = fixture.careers.reduce((a, c) => a + c.steps.split(' ').length, 0);
   console.log(`   fixture: ${fixture.careers.length} careers, ${stepCount} saves, ${fixture.nights.length} nights (${fixture.nights.filter(n => n.rank === 1).length} won), ${fixture.tournaments.length} tournaments, ${fixture.speeches.length} speeches, ${fixture.markup.length} kept cards`);
   check(fixture.careers.length >= 40 && stepCount > 5000 && fixture.nights.length > 500, 'the fixture is smaller than the round recorded, it cannot prove much');

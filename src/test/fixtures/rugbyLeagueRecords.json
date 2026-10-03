@@ -1,0 +1,30 @@
+{
+  "nrl": [
+    { "year": 1997, "team": "Newcastle Knights" },
+    { "year": 1997, "team": "Brisbane Broncos" },
+    { "year": 1998, "team": "Brisbane Broncos" },
+    { "year": 1999, "team": "Melbourne Storm" },
+    { "year": 2000, "team": "Brisbane Broncos" },
+    { "year": 2001, "team": "Newcastle Knights" },
+    { "year": 2002, "team": "Sydney Roosters" },
+    { "year": 2003, "team": "Penrith Panthers" },
+    { "year": 2004, "team": "Canterbury-Bankstown Bulldogs" },
+    { "year": 2005, "team": "Wests Tigers" },
+    { "year": 2006, "team": "Brisbane Broncos" },
+    { "year": 2008, "team": "Manly-Warringah Sea Eagles" },
+    { "year": 2010, "team": "St George Illawarra Dragons" }
+  ],
+  "dallym": [
+    { "year": 2008, "team": "Matt Orford" },
+    { "year": 2009, "team": "Jarryd Hayne" },
+    { "year": 2010, "team": "Todd Carney" },
+    { "year": 2011, "team": "Billy Slater" },
+    { "year": 2012, "team": "Ben Barba" },
+    { "year": 2013, "team": "Cooper Cronk" },
+    { "year": 2014, "team": "Jarryd Hayne" },
+    { "year": 2014, "team": "Johnathan Thurston" },
+    { "year": 2015, "team": "Johnathan Thurston" },
+    { "year": 2016, "team": "Cooper Cronk" },
+    { "year": 2016, "team": "Jason Taumalolo" }
+  ]
+}
