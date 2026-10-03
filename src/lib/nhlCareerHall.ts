@@ -3,7 +3,7 @@
    real rule below is sourced in docs/audits/US-HALL-RULES-2026-10.md and
    scripts/simCareerHall.mjs holds these numbers to that file's table. */
 
-import { nhlLegacyOf, nhlShouldRetire, type NhlCareerState } from "./nhlMyCareer";
+import { nhlLegacyOf, nhlShouldRetire, nhlTeamLabelOf, type NhlCareerState } from "./nhlMyCareer";
 import { usCareerHall } from "./careerHallOfFame";
 
 export const NHL_CAREER_HALL = usCareerHall<NhlCareerState>({
@@ -18,7 +18,7 @@ export const NHL_CAREER_HALL = usCareerHall<NhlCareerState>({
     ballotYears: null,
     stayFloor: null,
     publishesShares: false,
-    provenance: { wait: "verified", threshold: "verified", ballotYears: "believed", stayFloor: "believed", publishesShares: "believed" },
+    provenance: { wait: "verified", firstClass: "verified", threshold: "verified", ballotYears: "believed", stayFloor: "believed", publishesShares: "believed" },
   },
   // nhlLegacyOf: hof at 500. No tier promises a first ballot; the game makes it certain
   // at 900, "Rushmore of the sport".
@@ -27,4 +27,5 @@ export const NHL_CAREER_HALL = usCareerHall<NhlCareerState>({
   retirement: { minAge: 31, dropFromPeak: 8, floor: 69 },
   legacy: nhlLegacyOf,
   shouldRetire: nhlShouldRetire,
+  teamLabel: nhlTeamLabelOf,
 });

@@ -1,6 +1,7 @@
 # US Hall of Fame rules, as the career Halls model them (Round 915)
 
-Read date for every source below: 2026-10-02. Wikipedia was not used as a source.
+Read date for every source below: 2026-10-02, unless the line says otherwise. Wikipedia was not
+used as a source.
 
 This file is the evidence behind the four data files `src/lib/nflCareerHall.ts`,
 `src/lib/nbaCareerHall.ts`, `src/lib/mlbCareerHall.ts` and `src/lib/nhlCareerHall.ts`.
@@ -13,7 +14,10 @@ number differs from it.
 
 Columns: sport, waiting period in seasons, ballot length in years (none = no limit claimed),
 vote share needed in percent, minimum share to stay on the ballot (none = no such rule claimed),
-first class after the last season (years added to the last season's label).
+first class after the last season (years added to the last season's label). Each sport's
+section below holds that offset to real players' first eligible classes, with dated sources;
+the data files mark it `firstClass: "verified"` and only then does the card print
+"Eligible from the Class of ...".
 
 <!-- hall-table:start -->
 | sport | wait | ballot | threshold | stayFloor | firstClassOffset |
@@ -39,8 +43,15 @@ first class after the last season (years added to the last season's label).
   official page does not state it either way, so the game claims no limit and no fall off.
 - Class size three to seven. verified (official page and ESPN). Not modelled: the game has one
   candidate, the player.
-- Year labels: an NFL season is labelled by the year it kicks off. Last season Y, five seasons
-  away (Y+1 to Y+5), first class Y+6.
+- First class, the last season plus six (`firstClassOffset` 6). verified, read 2026-10-03. An NFL
+  season is labelled by the year it kicks off.
+  1. The rule's own worked example, https://www.profootballhof.com/hall-of-famers/selection-process :
+     "A candidate for the 2027 class must have concluded his career not later than the 2021 season."
+  2. Peyton Manning, last season 2015 (https://www.espn.com/nfl/player/stats/_/id/1428/peyton-manning ,
+     last row 2015 DEN; https://www.profootballhof.com/players/peyton-manning/ , career 1998-2015),
+     Class of 2021 (the same PFHOF page). 2015 + 6 = 2021, the first class the rule allows.
+  3. Drew Brees, career 2001-2020, Class of 2026 (https://www.profootballhof.com/players/drew-brees/ ;
+     ESPN's Sep 4, 2026 piece above carries his Hall of Fame speech). 2020 + 6 = 2026.
 
 ## Naismith Memorial Basketball Hall of Fame (NBA career). Rule year: Class of 2025 onward
 
@@ -60,8 +71,16 @@ first class after the last season (years added to the last season's label).
   2. https://www.nba.com/news/thirteen-finalists-basketball-hall-fame-class-2018 (Feb 17, 2018):
      "A finalist must receive 18 votes from the 24-member Honor Committee".
 - Ballot length. No source states one. believed, no number printed, no fall off.
-- Year labels: an NBA season is labelled by its start year. Last season Y ends in Y+1; two full
-  seasons away; with the Hall's process adding a year as the old rule did, first class Y+4.
+- First class, the last season plus four (`firstClassOffset` 4). verified, read 2026-10-03, from
+  real first eligible classes rather than worked out from the waiting rule (no source spells out
+  the arithmetic). An NBA season is labelled by its start year.
+  1. Carmelo Anthony, last NBA season 2021-22 (https://www.espn.com/nba/player/stats/_/id/1975/carmelo-anthony ,
+     last row 2021-22 LAL), a first-time nominee for the Class of 2025 (the nba.com and CBS
+     pieces of Dec 19, 2024 above; CBS marks him with the first-time nominee asterisk).
+     2021 + 4 = 2025.
+  2. Kyle Lowry, "retiring this summer" after 2025-26, and Chris Paul, both "Eligible: 2029" in
+     ESPN's Aug 14, 2026 piece above. 2025 + 4 = 2029. The same piece still quotes the old "three
+     full seasons" wording (the conflict above); the year it prints matches this offset.
 
 ## National Baseball Hall of Fame, BBWAA ballot (MLB career). Rule year: 2014 onward
 
@@ -86,9 +105,23 @@ first class after the last season (years added to the last season's label).
      ballots, 99.7 percent.
   So the MLB card prints the share for every ballot year. The other three Halls are `believed`
   on this point and their cards print no share.
-- Ten big league seasons to be eligible: one source in this pass (bbwaa.com search summary).
-  Not modelled. The engine's own Hall verdict decides who gets in.
-- Year labels: calendar years. Last season Y, five calendar years away, first election Y+6.
+- Ten big league seasons to be eligible. verified, read 2026-10-03 (an earlier pass of this file
+  wrongly called it one source).
+  1. baseballhall.org (above), rule 3(B): "Player must have played in each of ten (10) major
+     league championship seasons".
+  2. baseball-reference.com (above): "players who played in MLB for at least 10 seasons".
+  Not modelled, and the departure is deliberate: the brief fixes induction to the engine's own
+  verdict (mlbLegacyOf(c).hof), so a career under ten seasons that the engine calls a Hall of
+  Famer still goes in, and one outside the Hall can still sit on the ballot. No card prints
+  this rule, so nothing printed is contradicted. Modelling it means a balance round on the
+  engine's verdict, not this one.
+- First class, the last season plus six (`firstClassOffset` 6). verified, read 2026-10-03.
+  Calendar years: last season Y, five calendar years away, first election Y+6.
+  1. CC Sabathia, career 2001-2019 (https://baseballhall.org/hall-of-famers/sabathia-cc), and
+     Ichiro Suzuki, career 2001-2019 (https://baseballhall.org/hall-of-famers/suzuki-ichiro).
+  2. Both "1st" in the "Year on ballot" column of the 2025 vote (https://bbwaa.com/25-hof/), and
+     "1st" in the YoB column of https://www.baseball-reference.com/awards/hof_2025.shtml .
+     2019 + 6 = 2025.
 
 ## Hockey Hall of Fame (NHL career). Rule year: current bylaws (Class of 2026)
 
@@ -107,5 +140,12 @@ first class after the last season (years added to the last season's label).
 - Four male players a year at most. verified (hhof.com and the 2026 NHL.com piece). Not modelled.
 - Committee of eighteen: one source in this pass. believed, not printed.
 - Ballot length: no source states one. believed, no number printed, no fall off.
-- Year labels: a season is labelled by its start year. Last season Y ends in Y+1; three seasons
-  away (Y+1 to Y+3); elected in the summer of Y+4.
+- First class, the last season plus four (`firstClassOffset` 4). verified, read 2026-10-03. A
+  season is labelled by its start year: last season Y ends in Y+1, three seasons away (Y+1 to
+  Y+3), elected in the summer of Y+4.
+  1. https://www.nhl.com/news/class-of-2025-hockey-hall-of-fame-candidates (Jun 23, 2025), under
+     "Here are the top first-year eligible candidates": Zdeno Chara (last with the Islanders,
+     2021-22) and Duncan Keith (Edmonton Oilers 2021-22). 2021 + 4 = 2025.
+  2. https://www.nhl.com/news/class-of-2026-hockey-hall-of-fame-candidates (Jun 21, 2026), under
+     "Here are the top first-year candidates who are eligible for induction": Patrice Bergeron,
+     "his entire 20-year career with the Boston Bruins from 2003-23". 2022 + 4 = 2026.

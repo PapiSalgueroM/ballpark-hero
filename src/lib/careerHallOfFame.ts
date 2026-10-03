@@ -53,7 +53,8 @@ export interface HallRules {
   stayFloor: number | null;
   /** True when the real Hall publishes each candidate's vote share. */
   publishesShares: boolean;
-  provenance: Record<"wait" | "threshold" | "ballotYears" | "stayFloor" | "publishesShares", Provenance>;
+  /** firstClass is the offset above, held to real players' first eligible classes in the audit. */
+  provenance: Record<"wait" | "firstClass" | "threshold" | "ballotYears" | "stayFloor" | "publishesShares", Provenance>;
 }
 
 /** The sport's own legacy lines, read off its legacyOf. */
@@ -80,6 +81,8 @@ export interface HallSport<C> {
   key: (c: C) => string;
   lastSeasonYear: (c: C) => number;
   seasons: (c: C) => HallSeason[];
+  /** The club's name for a season line's club id; without it the card prints the id. */
+  teamName?: (team: string, c: C) => string;
 }
 
 export type HallOutcome = "inducted" | "fellOff" | "waiting" | "notOnBallot";
@@ -92,8 +95,11 @@ export interface HallBallot {
 }
 
 export interface HallJersey {
+  /** The club id as the season lines store it (an abbreviation in the US careers). */
   team: string;
   seasons: number;
+  /** The club's name for the card, from the sport's own label function. */
+  teamName?: string;
 }
 
 export interface HallRecord {
@@ -240,7 +246,8 @@ export function hallRecordFor<C>(sport: HallSport<C>, c: C): HallRecord {
   const ballot = runHallBallot(sport.rules, sport.lines, {
     key: sport.key(c), hof: legacy.hof, score: legacy.score, lastSeasonYear: sport.lastSeasonYear(c),
   });
-  return { ...ballot, jersey: jerseyFor(sport.seasons(c), ballot.outcome === "inducted", legacy.score, sport.lines) };
+  const jersey = jerseyFor(sport.seasons(c), ballot.outcome === "inducted", legacy.score, sport.lines);
+  return { ...ballot, jersey: jersey && sport.teamName ? { ...jersey, teamName: sport.teamName(jersey.team, c) } : jersey };
 }
 
 /** The shape all four American careers share, so one binding serves them all. */
@@ -251,6 +258,8 @@ export interface UsCareerShape {
   year: number;
   age: number;
   ovr: number;
+  /** The era the career started in, for club names. */
+  eraId?: string;
   seasons: { year: number; team: string; games: number; ovr: number }[];
 }
 
@@ -267,6 +276,8 @@ export function usCareerHall<C extends UsCareerShape>(def: {
   retirement: RetirementRule;
   legacy: (c: C) => { score: number; hof: boolean };
   shouldRetire: (c: C) => boolean;
+  /** The sport's own club label, (abbreviation, era) to name. */
+  teamLabel: (team: string, eraId?: string) => string;
 }): UsHallSport<C> {
   const lastSeasonYear = (c: C) => (c.seasons.length ? c.seasons[c.seasons.length - 1].year : c.year);
   return {
@@ -277,6 +288,7 @@ export function usCareerHall<C extends UsCareerShape>(def: {
     key: c => `${c.name}|${c.pos}|${c.draftPick}|${c.seasons[0]?.year ?? c.year}`,
     lastSeasonYear,
     seasons: c => c.seasons,
+    teamName: (team, c) => def.teamLabel(team, c.eraId),
     snapshot: c => ({ year: lastSeasonYear(c), age: c.age, rating: c.ovr, peak: peakRating(c.seasons, c.ovr), forced: def.shouldRetire(c) }),
   };
 }

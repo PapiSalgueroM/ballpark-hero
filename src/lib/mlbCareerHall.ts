@@ -3,7 +3,7 @@
    real rule below is sourced in docs/audits/US-HALL-RULES-2026-10.md and
    scripts/simCareerHall.mjs holds these numbers to that file's table. */
 
-import { mlbLegacyOf, mlbShouldRetire, type MlbCareerState } from "./mlbMyCareer";
+import { mlbLegacyOf, mlbShouldRetire, mlbTeamLabelOf, type MlbCareerState } from "./mlbMyCareer";
 import { usCareerHall } from "./careerHallOfFame";
 
 export const MLB_CAREER_HALL = usCareerHall<MlbCareerState>({
@@ -18,7 +18,7 @@ export const MLB_CAREER_HALL = usCareerHall<MlbCareerState>({
     stayFloor: 5,
     // The BBWAA prints every candidate's share (bbwaa.com and Baseball Reference, 2025 results).
     publishesShares: true,
-    provenance: { wait: "verified", threshold: "verified", ballotYears: "verified", stayFloor: "verified", publishesShares: "verified" },
+    provenance: { wait: "verified", firstClass: "verified", threshold: "verified", ballotYears: "verified", stayFloor: "verified", publishesShares: "verified" },
   },
   // mlbLegacyOf: hof at 500, and 900 reads "Cooperstown first ballot, inner circle".
   lines: { hofLine: 500, firstBallotScore: 900, jerseyScore: null },
@@ -26,4 +26,5 @@ export const MLB_CAREER_HALL = usCareerHall<MlbCareerState>({
   retirement: { minAge: 32, dropFromPeak: 8, floor: 68 },
   legacy: mlbLegacyOf,
   shouldRetire: mlbShouldRetire,
+  teamLabel: mlbTeamLabelOf,
 });

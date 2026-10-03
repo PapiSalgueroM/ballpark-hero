@@ -3,7 +3,7 @@
    real rule below is sourced in docs/audits/US-HALL-RULES-2026-10.md and
    scripts/simCareerHall.mjs holds these numbers to that file's table. */
 
-import { legacyOf, shouldRetire, type CareerState } from "./nflMyCareer";
+import { legacyOf, shouldRetire, teamLabelOf, type CareerState } from "./nflMyCareer";
 import { usCareerHall } from "./careerHallOfFame";
 
 export const NFL_CAREER_HALL = usCareerHall<CareerState>({
@@ -18,7 +18,7 @@ export const NFL_CAREER_HALL = usCareerHall<CareerState>({
     ballotYears: null,
     stayFloor: null,
     publishesShares: false,
-    provenance: { wait: "verified", threshold: "verified", ballotYears: "believed", stayFloor: "believed", publishesShares: "believed" },
+    provenance: { wait: "verified", firstClass: "verified", threshold: "verified", ballotYears: "believed", stayFloor: "believed", publishesShares: "believed" },
   },
   // legacyOf: hof at 520, and 900 reads "Inner-circle, first-ballot immortal".
   lines: { hofLine: 520, firstBallotScore: 900, jerseyScore: null },
@@ -26,4 +26,5 @@ export const NFL_CAREER_HALL = usCareerHall<CareerState>({
   retirement: { minAge: 30, dropFromPeak: 8, floor: 70 },
   legacy: legacyOf,
   shouldRetire,
+  teamLabel: teamLabelOf,
 });

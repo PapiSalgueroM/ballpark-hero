@@ -3,7 +3,7 @@
    real rule below is sourced in docs/audits/US-HALL-RULES-2026-10.md and
    scripts/simCareerHall.mjs holds these numbers to that file's table. */
 
-import { nbaLegacyOf, nbaShouldRetire, type NbaCareerState } from "./nbaMyCareer";
+import { nbaLegacyOf, nbaShouldRetire, nbaTeamLabelOf, type NbaCareerState } from "./nbaMyCareer";
 import { usCareerHall } from "./careerHallOfFame";
 
 export const NBA_CAREER_HALL = usCareerHall<NbaCareerState>({
@@ -20,7 +20,7 @@ export const NBA_CAREER_HALL = usCareerHall<NbaCareerState>({
     ballotYears: null,
     stayFloor: null,
     publishesShares: false,
-    provenance: { wait: "verified", threshold: "verified", ballotYears: "believed", stayFloor: "believed", publishesShares: "believed" },
+    provenance: { wait: "verified", firstClass: "verified", threshold: "verified", ballotYears: "believed", stayFloor: "believed", publishesShares: "believed" },
   },
   // nbaLegacyOf: hof at 500, and 650 reads "First-ballot Hall of Famer, jersey in the rafters".
   lines: { hofLine: 500, firstBallotScore: 650, jerseyScore: 650 },
@@ -28,4 +28,5 @@ export const NBA_CAREER_HALL = usCareerHall<NbaCareerState>({
   retirement: { minAge: 31, dropFromPeak: 8, floor: 72 },
   legacy: nbaLegacyOf,
   shouldRetire: nbaShouldRetire,
+  teamLabel: nbaTeamLabelOf,
 });

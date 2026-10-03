@@ -42,7 +42,8 @@
                    reading of the rule says, and reaches a real share of
                    careers before the hard stop. Control notalk.
      8. jersey     the jersey goes to the club with the most seasons (ties to
-                   games, then the first club). Control jerseyfirst.
+                   games, then the first club), named by the engine's own
+                   club label, never a bare id. Controls jerseyfirst, jerseyraw.
 
    A control run exits 1 only when the check it targets is red (FIRED), and 0
    when it is not (DID NOT FIRE), whatever else went red.
@@ -90,10 +91,10 @@ const CAREERS = Number(process.argv[3] || 2000);
 const CONTROL = process.env.SIM_CONTROL || '';
 
 const ENGINES = {
-  nfl: { file: 'nflMyCareer.ts', hall: 'NFL_CAREER_HALL', legacy: 'legacyOf', arch: 'ARCHETYPES', start: 'startCareer', season: 'simSeason', progress: 'progress', event: 'drawEvent', stop: 'shouldRetire', roll: 'rollTeamQuality', positions: ['QB', 'RB', 'WR', 'TE', 'LB', 'CB', 'EDGE', 'K'] },
-  nba: { file: 'nbaMyCareer.ts', hall: 'NBA_CAREER_HALL', legacy: 'nbaLegacyOf', arch: 'NBA_ARCHETYPES', start: 'startNbaCareer', season: 'simNbaSeason', progress: 'nbaProgress', event: 'drawNbaEvent', stop: 'nbaShouldRetire', roll: 'nbaRollTeamQuality', positions: ['PG', 'SG', 'SF', 'PF', 'C'], banned: { ppg: 0, rpg: 0, apg: 0 } },
-  mlb: { file: 'mlbMyCareer.ts', hall: 'MLB_CAREER_HALL', legacy: 'mlbLegacyOf', arch: 'MLB_ARCHETYPES', start: 'startMlbCareer', season: 'simMlbSeason', progress: 'mlbProgress', event: 'drawMlbEvent', stop: 'mlbShouldRetire', roll: 'mlbRollTeamQuality', positions: ['SP', 'RP', 'C', '1B', '2B', '3B', 'SS', 'LF', 'CF', 'RF', 'DH'] },
-  nhl: { file: 'nhlMyCareer.ts', hall: 'NHL_CAREER_HALL', legacy: 'nhlLegacyOf', arch: 'NHL_ARCHETYPES', start: 'startNhlCareer', season: 'simNhlSeason', progress: 'nhlProgress', event: 'drawNhlEvent', stop: 'nhlShouldRetire', roll: 'nhlRollTeamQuality', positions: ['C', 'LW', 'RW', 'D', 'G'] },
+  nfl: { file: 'nflMyCareer.ts', hall: 'NFL_CAREER_HALL', legacy: 'legacyOf', label: 'teamLabelOf', arch: 'ARCHETYPES', start: 'startCareer', season: 'simSeason', progress: 'progress', event: 'drawEvent', stop: 'shouldRetire', roll: 'rollTeamQuality', positions: ['QB', 'RB', 'WR', 'TE', 'LB', 'CB', 'EDGE', 'K'] },
+  nba: { file: 'nbaMyCareer.ts', hall: 'NBA_CAREER_HALL', legacy: 'nbaLegacyOf', label: 'nbaTeamLabelOf', arch: 'NBA_ARCHETYPES', start: 'startNbaCareer', season: 'simNbaSeason', progress: 'nbaProgress', event: 'drawNbaEvent', stop: 'nbaShouldRetire', roll: 'nbaRollTeamQuality', positions: ['PG', 'SG', 'SF', 'PF', 'C'], banned: { ppg: 0, rpg: 0, apg: 0 } },
+  mlb: { file: 'mlbMyCareer.ts', hall: 'MLB_CAREER_HALL', legacy: 'mlbLegacyOf', label: 'mlbTeamLabelOf', arch: 'MLB_ARCHETYPES', start: 'startMlbCareer', season: 'simMlbSeason', progress: 'mlbProgress', event: 'drawMlbEvent', stop: 'mlbShouldRetire', roll: 'mlbRollTeamQuality', positions: ['SP', 'RP', 'C', '1B', '2B', '3B', 'SS', 'LF', 'CF', 'RF', 'DH'] },
+  nhl: { file: 'nhlMyCareer.ts', hall: 'NHL_CAREER_HALL', legacy: 'nhlLegacyOf', label: 'nhlTeamLabelOf', arch: 'NHL_ARCHETYPES', start: 'startNhlCareer', season: 'simNhlSeason', progress: 'nhlProgress', event: 'drawNhlEvent', stop: 'nhlShouldRetire', roll: 'nhlRollTeamQuality', positions: ['C', 'LW', 'RW', 'D', 'G'] },
 };
 if (!SPORT) {
   // runAllSims calls every harness with no arguments: run the four sports, one child each.
@@ -127,6 +128,7 @@ const CONTROLS = {
   sharesides: { file: 'careerHallOfFame.ts', from: 'const final = Math.min(99.7, t + ', to: 'const final = Math.min(99.7, t - 20 + ' },
   notalk: { file: 'careerRetirement.ts', from: 'if (drop >= rule.dropFromPeak) return', to: 'if (false) return' },
   jerseyfirst: { file: 'careerHallOfFame.ts', from: 't.seasons > best.seasons ||', to: 't.seasons < best.seasons ||' },
+  jerseyraw: { file: 'careerHallOfFame.ts', from: 'teamName: (team, c) => def.teamLabel(team, c.eraId),', to: 'teamName: (team) => team,' },
 };
 if (CONTROL && !CONTROLS[CONTROL]) { console.error(`unknown SIM_CONTROL ${CONTROL}`); process.exit(2); }
 let controlFired = false;
@@ -150,7 +152,7 @@ const OUT = path.join(os.tmpdir(), `career-hall-${SPORT}-${CONTROL || 'base'}-${
 const entry = [
   // The engine's own legacyOf, read straight from the engine, so the iff check
   // never goes through the Hall binding it is checking.
-  `export { ${E.legacy} as LEGACY, ${E.arch} as ARCH, ${E.start} as start, ${E.season} as season, ${E.progress} as progress, ${E.event} as drawEvent, ${E.stop} as stop, ${E.roll} as roll } from './src/lib/${E.file}';`,
+  `export { ${E.legacy} as LEGACY, ${E.label} as LABEL, ${E.arch} as ARCH, ${E.start} as start, ${E.season} as season, ${E.progress} as progress, ${E.event} as drawEvent, ${E.stop} as stop, ${E.roll} as roll } from './src/lib/${E.file}';`,
   `export { ${E.hall} as HALL } from './src/lib/${SPORT}CareerHall.ts';`,
   `export { hallRecordFor, runHallBallot, giveHallSpeech, HALL_SPEECHES } from './src/lib/careerHallOfFame.ts';`,
   `export { retirementTalk } from './src/lib/careerRetirement.ts';`,
@@ -212,7 +214,7 @@ for (let i = 0; i < CAREERS; i += 1) {
       score: legacy.score, hof: legacy.hof, rec, same: JSON.stringify(rec) === JSON.stringify(again),
       // Read off the save, not through HALL.lastSeasonYear, which is under test.
       last: c.seasons.at(-1)?.year ?? Number.NaN, seasons: c.seasons.map(s => ({ team: s.team, games: s.games })),
-      talks, firstTalkAge, speech, finalAge: c.age, seasonsPlayed: c.seasons.length,
+      talks, firstTalkAge, speech, finalAge: c.age, seasonsPlayed: c.seasons.length, eraId: c.eraId,
     });
   } catch (err) {
     counting = false;
@@ -308,13 +310,17 @@ const club = seasons => {
   seasons.forEach((s, i) => { if (!s.team || !(s.games > 0)) return; const e = t.get(s.team) ?? { team: s.team, seasons: 0, games: 0, first: i }; e.seasons += 1; e.games += s.games; t.set(s.team, e); });
   return [...t.values()].sort((a, b) => b.seasons - a.seasons || b.games - a.games || a.first - b.first)[0] ?? null;
 };
-let jerseyMiss = 0, jerseys = 0;
+let jerseyMiss = 0, jerseys = 0, jerseyRaw = 0;
 for (const c of careers) {
   const best = club(c.seasons);
   const promised = lines.jerseyScore !== null && c.score >= lines.jerseyScore;
   const due = best && (promised || (c.rec.outcome === 'inducted' && best.seasons >= 5) || (best.seasons >= 12 && c.score >= lines.hofLine * 0.85));
   const want = due ? { team: best.team, seasons: best.seasons } : null;
-  if (JSON.stringify(want) !== JSON.stringify(c.rec.jersey)) jerseyMiss += 1;
+  const got = c.rec.jersey ? { team: c.rec.jersey.team, seasons: c.rec.jersey.seasons } : null;
+  if (JSON.stringify(want) !== JSON.stringify(got)) jerseyMiss += 1;
+  // The card names the club with the engine's own label, never a bare abbreviation it knows.
+  if (c.rec.jersey && c.rec.jersey.teamName !== eng.LABEL(c.rec.jersey.team, c.eraId)) jerseyMiss += 1;
+  if (c.rec.jersey && c.rec.jersey.teamName === c.rec.jersey.team) jerseyRaw += 1;
   if (c.rec.jersey) jerseys += 1;
 }
 
@@ -375,12 +381,12 @@ const checks = [
   ['keyed', hallDraws === 0 && notSame === 0, `${hallDraws} Math.random draws, ${notSame} records that changed on a second run`],
   ['sides', sideMiss === 0 && (rules.stayFloor === null || atFloor >= BAND.atFloor), `${sideMiss} ballots on the wrong side of a rule${rules.stayFloor === null ? '' : `, ${atFloor} synthetic ballots shown at exactly the floor`}`],
   ['talk', talkMismatch === 0 && talkBeforeAge === 0 && talked >= BAND.talkReach, `${talkMismatch} talks off the rule, ${talkBeforeAge} before the age, reached ${(100 * talked).toFixed(1)} percent (needs ${100 * BAND.talkReach})`],
-  ['jersey', jerseyMiss === 0 && jerseys > 0, `${jerseyMiss} jerseys off the rule, ${jerseys} retired`],
+  ['jersey', jerseyMiss === 0 && jerseyRaw === 0 && jerseys > 0, `${jerseyMiss} jerseys off the rule or misnamed, ${jerseyRaw} named by a bare club id, ${jerseys} retired`],
 ];
 for (const [name, ok, detail] of checks) console.log(`  ${ok ? 'ok  ' : 'FAIL'} ${name}: ${detail}`);
 const red = checks.filter(c => !c[1]).map(c => c[0]);
 if (CONTROL) {
-  const WANT = { everyonein: 'iff', bindhof: 'iff', outcomeswap: 'outcome', nominationgone: 'outcome', oldcurve: 'outcome', waitoff: 'table', shownraw: 'sides', flatfirst: 'rises', nopromise: 'promise', mathrandom: 'keyed', sharesides: 'sides', notalk: 'talk', jerseyfirst: 'jersey' }[CONTROL];
+  const WANT = { everyonein: 'iff', bindhof: 'iff', outcomeswap: 'outcome', nominationgone: 'outcome', oldcurve: 'outcome', waitoff: 'table', shownraw: 'sides', flatfirst: 'rises', nopromise: 'promise', mathrandom: 'keyed', sharesides: 'sides', notalk: 'talk', jerseyfirst: 'jersey', jerseyraw: 'jersey' }[CONTROL];
   console.log(`simCareerHall ${SPORT} CONTROL ${CONTROL}: wanted ${WANT} red, red [${red.join(',')}], ${red.includes(WANT) ? 'FIRED' : 'DID NOT FIRE'}`);
   // Exit 1 only when the check this control targets went red, so the exit
   // code alone proves the control hit its own check. Any other red is printed.

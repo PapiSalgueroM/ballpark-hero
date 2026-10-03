@@ -59,7 +59,9 @@ export function HallOfFameCard({ record, rules, speech, onSpeech, onDismiss }: {
         <div className={`text-5xl ${inducted ? "animate-trophy-glow" : ""}`}>{inducted ? "🏛️" : "🗳️"}</div>
         <p className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground">{record.hallName}</p>
         <h3 className="text-lg font-black tracking-tight">{hallHeadline(record)}</h3>
-        <p className="text-xs text-muted-foreground">Eligible from the Class of {record.firstClass}.</p>
+        {rules.provenance.firstClass === "verified" && (
+          <p className="text-xs text-muted-foreground">Eligible from the Class of {record.firstClass}.</p>
+        )}
       </div>
       {record.ballots.length > 0 && (
         <ul className="rounded-lg border border-border bg-muted/20 p-2 space-y-0.5 text-xs">
@@ -69,7 +71,7 @@ export function HallOfFameCard({ record, rules, speech, onSpeech, onDismiss }: {
         </ul>
       )}
       {record.jersey && (
-        <p className="text-center text-xs font-bold">👕 {record.jersey.team} retired your number after {record.jersey.seasons} seasons there.</p>
+        <p className="text-center text-xs font-bold">👕 {record.jersey.teamName ?? record.jersey.team} retired your number after {record.jersey.seasons} seasons there.</p>
       )}
       {hallRuleLines(rules).length > 0 && (
         <p className="text-center text-[11px] text-muted-foreground">{hallRuleLines(rules).join(" ")}</p>

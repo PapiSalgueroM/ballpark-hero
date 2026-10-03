@@ -327,7 +327,7 @@ describe('the two cards say what they do', () => {
     const { HallOfFameCard } = await import('@/components/career/HallOfFameCard');
     let key = 0, rec: HallRecord | null = null;
     while (!rec || rec.ballots.length < 2) {
-      rec = { ...runHallBallot(NFL_CAREER_HALL.rules, NFL_CAREER_HALL.lines, { key: `card${key++}`, hof: true, score: 560, lastSeasonYear: 2030 }), jersey: { team: 'Team A', seasons: 9 } };
+      rec = { ...runHallBallot(NFL_CAREER_HALL.rules, NFL_CAREER_HALL.lines, { key: `card${key++}`, hof: true, score: 560, lastSeasonYear: 2030 }), jersey: { team: 'TMA', seasons: 9, teamName: 'Team A' } };
     }
     const chosen: string[] = [];
     const nfl = render(<HallOfFameCard record={rec} rules={NFL_CAREER_HALL.rules} onSpeech={id => chosen.push(id)} onDismiss={() => {}} />);
@@ -335,12 +335,20 @@ describe('the two cards say what they do', () => {
     expect(items.length).toBe(rec.ballots.length);
     for (const t of items) expect(t).toMatch(/^\d{4}: (elected|not enough votes)$/);
     expect(nfl.container.textContent).toContain('Team A retired your number after 9 seasons there.');
+    expect(nfl.container.textContent).not.toContain('TMA');
     for (const o of HALL_SPEECHES) {
       const button = nfl.getByText(`${o.emoji} ${o.label}`).closest('button')!;
       expect(button.textContent).toContain(speechPromise(o));
       fireEvent.click(button);
     }
     expect(chosen).toEqual(HALL_SPEECHES.map(o => o.id));
+    expect(nfl.container.textContent).toContain(`Eligible from the Class of ${2030 + NFL_CAREER_HALL.rules.firstClassOffset}.`);
+    cleanup();
+
+    // A first class offset not verified twice is never printed.
+    const unsure = { ...NFL_CAREER_HALL.rules, provenance: { ...NFL_CAREER_HALL.rules.provenance, firstClass: 'believed' as const } };
+    const hidden = render(<HallOfFameCard record={rec} rules={unsure} onSpeech={() => {}} onDismiss={() => {}} />);
+    expect(hidden.container.textContent).not.toContain('Eligible from');
     cleanup();
 
     const mlbRec: HallRecord = { ...runHallBallot(MLB_CAREER_HALL.rules, MLB_CAREER_HALL.lines, { key: 'mlb-card', hof: false, score: 400, lastSeasonYear: 2030 }), jersey: null };
