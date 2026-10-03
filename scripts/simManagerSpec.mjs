@@ -58,6 +58,9 @@
       Tiki-taka's noise reached 0.308, above the floor: signing the sum and
       adding a seed is what separated the two. And no two styles field the
       same eleven in the same mentality at every club.
+  14. the weeks a mid season start simulates before the handover are the
+      previous manager's: the same club, entry and seed taken over by each of
+      the seven backgrounds inherits the same table and money (two clubs).
 
    Round 965 controls, each asserting its anchor exists first:
      SIM_MANAGER_CONTROL=noappearance  the stored spec drops its face; section
@@ -72,6 +75,9 @@
      SIM_MANAGER_CONTROL=dropgift       the rollover's addXp rebuilds the XP
                                         block field by field and loses the gift
                                         record; section 7 must go red.
+     SIM_MANAGER_CONTROL=runinleak      the weeks before a mid season handover
+                                        run with our manager and his point;
+                                        section 14 must go red.
      SIM_MANAGER_CONTROL=usaspelling    the first draft's homeland spelling
                                         (USA, where the job market says United
                                         States); section 10 must go red.
@@ -99,7 +105,7 @@ const fail = m => {
   console.error('  FAIL: ' + m);
 };
 const MODE = process.env.SIM_MANAGER_CONTROL || '';
-const CONTROLS = ['unguard', 'noappearance', 'leak', 'twinstyle', 'deadmentality', 'usaspelling', 'dropgift'];
+const CONTROLS = ['unguard', 'noappearance', 'leak', 'twinstyle', 'deadmentality', 'usaspelling', 'dropgift', 'runinleak'];
 if (MODE && !CONTROLS.includes(MODE)) {
   console.error(`SIM_MANAGER_CONTROL=${MODE} is not a control this harness knows (${CONTROLS.join(', ')})`);
   process.exit(1);
@@ -133,10 +139,14 @@ const rewrite = (file, pairs, outName) => {
   fs.writeFileSync(out, src);
   return out;
 };
-/* Only the main bundle carries the job market (section 10): section 12's two
-   bundles stay the engine alone. The market reads the real clubManager.ts for
-   its clubs' countries, which is the spelling a stored homeland must match. */
-const MARKET = `
+/* Only the main bundle carries the job market (section 10) and the mid season
+   calendar (section 14): section 12's two bundles stay the engine alone. The
+   market reads the real clubManager.ts for its clubs' countries, which is the
+   spelling a stored homeland must match. */
+const CAL_SRC = `${ROOT}/src/lib/clubManagerCalendar.ts`;
+let calPath = CAL_SRC;
+const MARKET = () => `
+export * as cal from '${calPath.replaceAll('\\', '/')}';
 export * as jm from '${ROOT_URL}/src/lib/managerJobMarket.ts';
 export * as mo from '${ROOT_URL}/src/lib/managerOffers.ts';`;
 const bundle = (name, cmFile, xpFile, market = false) => {
@@ -144,7 +154,7 @@ const bundle = (name, cmFile, xpFile, market = false) => {
   const out = path.join(os.tmpdir(), `${name}.bundle.mjs`);
   fs.writeFileSync(entry, `
 export * as cm from '${cmFile.replaceAll('\\', '/')}';
-export * as xp from '${(xpFile ?? XP_SRC).replaceAll('\\', '/')}';${market ? MARKET : ''}
+export * as xp from '${(xpFile ?? XP_SRC).replaceAll('\\', '/')}';${market ? MARKET() : ''}
 export { CM_ROSTERS } from '${ROOT_URL}/src/data/clubManagerRosters.ts';
 export { players as POOL } from '${ROOT_URL}/src/data/players.ts';
 `);
@@ -181,6 +191,11 @@ if (MODE === 'unguard') {
      field and loses the gift record, so the grant runs again every summer.
      Section 7 must go red. */
   xpPath = rewrite(XP_SRC, [['  return { ...block, xp: block.xp + add };', '  return { v: block.v, xp: block.xp + add, points: block.points, graduatesSeen: block.graduatesSeen };']], 'clubManagerXp.dropgift.ts');
+} else if (MODE === 'runinleak') {
+  /* Round 965 review: the weeks before a mid season handover run with our
+     manager and his background point, as the first draft had it. Section 14
+     must go red. */
+  calPath = rewrite(CAL_SRC, [['  let s: CareerState = career.manager ? { ...career, manager: undefined, managerXp: undefined } : career;', '  let s: CareerState = career;']], 'clubManagerCalendar.runinleak.ts');
 } else if (MODE === 'usaspelling') {
   /* Round 965 review: this round's first draft, which stored a homeland in the
      international engine's spelling (USA) where the job market spells its
@@ -201,7 +216,7 @@ globalThis.localStorage = {
   removeItem: k => { store.delete(k); },
   clear: () => { store.clear(); },
 };
-const { cm, xp, jm, mo, CM_ROSTERS, POOL } = await import(pathToFileURL(BUNDLE).href);
+const { cm, xp, cal, jm, mo, CM_ROSTERS, POOL } = await import(pathToFileURL(BUNDLE).href);
 
 section = '1'; console.log('1) the name gate holds');
 {
@@ -699,6 +714,34 @@ section = '13'; console.log('13) every style changes what the match engine plays
   console.log(`   ${past} of ${own.length} styles with their own mentality past the ${STYLE_SHIFT_FLOOR} floor (smallest ${Math.min(...own.map(s => s.shift)).toFixed(3)}), ${twins} twin styles`);
 }
 
+section = '14'; console.log('14) the weeks before a mid season takeover are the previous manager\'s, whatever our background');
+{
+  /* Round 965 review: a mid season start simulates the weeks before the
+     handover "under the previous manager". Once backgrounds paid a point, those
+     weeks ran with it (a Boardroom gate, a Youth coach intake). So the same
+     club, entry and seed, taken over by each of the seven backgrounds, must
+     inherit the same table and the same money. Only the XP block differs, and
+     each must still hold its own one point after the handover. */
+  let same = 0, runs = 0, weeks = 0;
+  for (const [i, club] of ['Arsenal', 'Napoli'].entries()) {
+    let ref = null;
+    for (const bg of Object.keys(BACKGROUND_TREE)) {
+      const s = withSeed(5501 + i * 7919, () => cal.startMidSeason(cm.startCareer(club, undefined, undefined, { ...SPEC, background: bg, style: 'balanced' }), 'newYear'));
+      runs += 1;
+      if (s.week < 5) { fail(`${club}: the takeover landed at week ${s.week}, so no run in was played`); continue; }
+      weeks = s.week;
+      if (s.manager?.background !== bg) fail(`${club}: the ${bg} manager did not come through the handover`);
+      if (s.managerXp?.points?.[BACKGROUND_TREE[bg]] !== 1 || xp.pointsFree(s.managerXp) !== 0) fail(`${club}: the ${bg} manager holds ${s.managerXp?.points?.[BACKGROUND_TREE[bg]]} in his tree after the handover`);
+      const inherited = json({ budget: s.budget, table: s.table, week: s.week });
+      if (ref === null) { ref = inherited; same += 1; }
+      else if (inherited === ref) same += 1;
+      else fail(`${club}: the ${bg} manager inherited a different run in (budget ${s.budget}) from the first background's`);
+    }
+  }
+  if (runs !== 14) fail(`only ${runs} takeovers ran, wanted 14`);
+  console.log(`   ${same} of ${runs} takeovers inherited the same table and money at week ${weeks}, each manager holding his own point`);
+}
+
 if (CONTROL) {
   if (failures > 0) { console.log(`\ncontrol run: ${failures} failure(s) fired as expected`); process.exit(0); }
   console.error('\ncontrol run: severing the real name gate changed NOTHING, the checks are dead');
@@ -707,7 +750,7 @@ if (CONTROL) {
 /* Round 965's controls. Each names the one section that must go red and no
    other may: the brief asks that dropping the appearance field turns only the
    new face section red, and the review made the same demand of the rest. */
-const WANT = { noappearance: '8', leak: '12', twinstyle: '13', deadmentality: '13', usaspelling: '10', dropgift: '7' };
+const WANT = { noappearance: '8', leak: '12', twinstyle: '13', deadmentality: '13', usaspelling: '10', dropgift: '7', runinleak: '14' };
 if (WANT[MODE]) {
   const red = [...failedSections.keys()].sort((a, b) => Number(a) - Number(b));
   const want = WANT[MODE];
