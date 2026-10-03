@@ -1,0 +1,287 @@
+/**
+ * Round 958: a broken save never traps a long game.
+ *
+ * WHAT IT PROVES. For every long game listed in src/data/continueSaves.ts
+ * (21 when this was written), a browser holding a structurally broken save
+ * for that game reaches a usable start screen within two clicks, and the
+ * broken save is kept aside under a backup key rather than deleted.
+ *
+ * "Structurally broken" is the SIM-04 class from
+ * docs/audits/SIMULATION-AUDIT-2026-10-01.md: a save that parses and passes
+ * the one truthy check most restores make (the name field the Continue card
+ * reads is there), while everything the game draws from is missing or the
+ * wrong type. Two shapes per route:
+ *   shell      the fields continueSaves.ts names hold plausible values (a
+ *              name, a small count, ended false) and nothing else exists
+ *   wrongtype  the same fields hold an empty object where a string or a
+ *              number belongs
+ *
+ * What counts. The page is loaded with the save in place. If the error page
+ * ("This page broke") shows, the harness clicks "Start a fresh game" (click
+ * one) and requires the raw save, byte for byte, under a key starting with
+ * the game's own key plus ".broken-". If a dialog then blocks the screen, it
+ * closes it (click two). Usable means: no error page, no open dialog, and at
+ * least one visible, enabled button outside the header, footer and nav. A
+ * game that copes with the save itself (discards it, or draws without
+ * throwing) also passes, and is counted separately, so the summary says how
+ * many routes really needed the button.
+ *
+ * NEGATIVE CONTROL. CORRUPT_CONTROL=nobutton removes the fresh start button
+ * from every page as it appears. Every route that needed the button must
+ * then fail, so the control fires only when at least one did; the harness
+ * asserts the attribute it removes exists in the boundary's code and in the
+ * built bundle first, so a renamed button cannot make the control a no-op.
+ *
+ * NETWORK. Everything that is not this machine is aborted, the database host
+ * included: this harness never reaches production.
+ *
+ * RUN. It needs a build: vite build, then
+ *   CORRUPT_DIST=<dist folder> node scripts/playCorruptSaves.mjs
+ * (default dist/). It serves the folder itself through
+ * scripts/lib/hostLikeServer.mjs on a free port. ONLY=/fight-gym,/cfb-dynasty
+ * narrows the routes (prefix MSYS_NO_PATHCONV=1 in Git Bash), and
+ * CORRUPT_VARIANTS=shell narrows the shapes.
+ *
+ * MEASURED (Round 958, local build of the round's branch, chromium):
+ * filled in below the summary line of the first full run, see the report.
+ */
+import fs from 'node:fs';
+import net from 'node:net';
+import path from 'node:path';
+import { spawn } from 'node:child_process';
+import { fileURLToPath } from 'node:url';
+import pw from './lib/playwrightLoader.mjs';
+
+const { chromium } = pw;
+const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const DIST = path.resolve(process.env.CORRUPT_DIST || path.join(ROOT, 'dist'));
+const CONTROL = process.env.CORRUPT_CONTROL || '';
+if (CONTROL && CONTROL !== 'nobutton') { console.error(`CORRUPT_CONTROL=${CONTROL} is not a control this harness knows`); process.exit(1); }
+const VARIANTS = (process.env.CORRUPT_VARIANTS || 'shell,wrongtype').split(',').map(s => s.trim()).filter(Boolean);
+for (const v of VARIANTS) if (!['shell', 'wrongtype'].includes(v)) { console.error(`unknown variant ${v}`); process.exit(1); }
+const MARK = 'data-dukb-fresh-start';
+const FRESH_LABEL = 'Start a fresh game';
+const BROKE = 'This page broke';
+const NAME = 'Broken Save Test';
+
+/* Comments and strings are different things; a guard reads code, not prose. */
+const stripComments = s => s.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
+
+/* ------------------------------------------------------------------ */
+/* The routes come from the list itself, so a new long game is walked the day
+   it is added. Each row is one line of CONTINUE_SAVES. */
+const listSrc = stripComments(fs.readFileSync(path.join(ROOT, 'src/data/continueSaves.ts'), 'utf8'));
+const arr = s => (s ? [...s.matchAll(/'([^']*)'/g)].map(m => m[1]) : null);
+const ENTRIES = [];
+for (const line of listSrc.split('\n')) {
+  const m = /^\s*\{ path: '([^']+)', saveKey: '([^']+)'/.exec(line);
+  if (!m) continue;
+  ENTRIES.push({
+    path: m[1],
+    saveKey: m[2],
+    name: arr(/\bname: \[([^\]]*)\]/.exec(line)?.[1]),
+    count: arr(/\bcount: \{ at: \[([^\]]*)\]/.exec(line)?.[1]),
+    ended: arr(/\bended: \{ at: \[([^\]]*)\]/.exec(line)?.[1]),
+  });
+}
+if (ENTRIES.length < 21) { console.error(`read ${ENTRIES.length} long games from continueSaves.ts, expected at least 21; the row pattern no longer matches`); process.exit(1); }
+const ONLY = process.env.ONLY ? process.env.ONLY.split(',').map(s => s.trim()) : null;
+const routes = ONLY ? ENTRIES.filter(e => ONLY.includes(e.path)) : ENTRIES;
+if (routes.length === 0) { console.error('no routes matched ONLY'); process.exit(1); }
+
+/** Sets one value at a path, making plain objects (or arrays for index steps) on the way. */
+function put(root, at, value) {
+  let cur = root;
+  at.forEach((step, i) => {
+    if (i === at.length - 1) { cur[step] = value; return; }
+    if (cur[step] === undefined || cur[step] === null || typeof cur[step] !== 'object') cur[step] = /^\d+$/.test(at[i + 1]) ? [] : {};
+    cur = cur[step];
+  });
+}
+
+/** The broken save text for one route and one shape. */
+function brokenSave(e, variant) {
+  const save = {};
+  const wrong = variant === 'wrongtype';
+  if (e.name) put(save, e.name, wrong ? {} : NAME);
+  if (e.count) put(save, e.count, wrong ? {} : 3);
+  if (e.ended) put(save, e.ended, wrong ? {} : false);
+  if (Object.keys(save).length === 0) save.broken = wrong ? {} : true;
+  return JSON.stringify(save);
+}
+
+/* ------------------------------------------------------------------ */
+/* The build has to be the tree under test, and the control has to have
+   something to remove: the attribute in the boundary's code and in the bundle. */
+const boundaryCode = stripComments(fs.readFileSync(path.join(ROOT, 'src/components/RouteErrorBoundary.tsx'), 'utf8'));
+if (!boundaryCode.includes(MARK) || !boundaryCode.includes(FRESH_LABEL)) {
+  console.error(`src/components/RouteErrorBoundary.tsx carries no ${MARK} button labelled "${FRESH_LABEL}", so there is nothing to walk and the control would remove nothing`);
+  process.exit(1);
+}
+const assetsDir = path.join(DIST, 'assets');
+if (!fs.existsSync(path.join(DIST, 'index.html')) || !fs.existsSync(assetsDir)) { console.error(`no build at ${DIST}; run vite build first`); process.exit(1); }
+const bundleHasButton = fs.readdirSync(assetsDir).filter(f => f.endsWith('.js'))
+  .some(f => { const t = fs.readFileSync(path.join(assetsDir, f), 'utf8'); return t.includes(MARK) && t.includes(FRESH_LABEL); });
+if (!bundleHasButton) { console.error(`the build at ${DIST} has no fresh start button in any chunk; it predates the boundary, rebuild it`); process.exit(1); }
+
+const freePort = () => new Promise((resolve, reject) => {
+  const s = net.createServer();
+  s.once('error', reject);
+  s.listen(0, '127.0.0.1', () => { const { port } = s.address(); s.close(() => resolve(port)); });
+});
+const PORT = await freePort();
+const BASE = `http://127.0.0.1:${PORT}`;
+const server = spawn(process.execPath, [path.join(ROOT, 'scripts/lib/hostLikeServer.mjs'), DIST, String(PORT)], { stdio: ['ignore', 'pipe', 'inherit'] });
+await new Promise((resolve, reject) => {
+  const t = setTimeout(() => reject(new Error('the host-like server did not start within 20 s')), 20000);
+  server.stdout.on('data', d => { if (String(d).includes('host-like server')) { clearTimeout(t); resolve(); } });
+  server.once('exit', code => { clearTimeout(t); reject(new Error(`the host-like server exited with ${code}`)); });
+});
+const isLocal = u => u.startsWith(BASE) || u.startsWith('data:') || u.startsWith('blob:');
+
+/* ------------------------------------------------------------------ */
+/* What the screen is right now. Runs in the page. */
+function readScreen({ broke, name }) {
+  const visible = el => {
+    const r = el.getBoundingClientRect();
+    if (r.width === 0 || r.height === 0) return false;
+    const s = getComputedStyle(el);
+    return s.display !== 'none' && s.visibility !== 'hidden';
+  };
+  const text = document.body?.innerText ?? '';
+  const dialogs = [...document.querySelectorAll('[role="dialog"],[role="alertdialog"]')].filter(visible);
+  const buttons = [...document.querySelectorAll('#root button')].filter(b => {
+    const t = (b.textContent || '').trim();
+    return visible(b) && !b.disabled && t && t !== '?' && !b.closest('header,footer,nav,[role="dialog"],[role="alertdialog"]');
+  });
+  return {
+    broke: text.includes(broke),
+    dialog: dialogs.length > 0,
+    buttons: buttons.length,
+    sample: buttons.slice(0, 3).map(b => (b.textContent || '').trim().replace(/\s+/g, ' ').slice(0, 24)),
+    drewName: text.includes(name),
+  };
+}
+
+/* Waits for the page to draw something (or break), then for the restore
+   effects that run after mount, then reads it. */
+async function settle(page) {
+  await page.waitForFunction(broke => {
+    const t = document.body?.innerText ?? '';
+    return t.includes(broke) || (document.querySelectorAll('#root button').length > 0 && t.trim().length > 80);
+  }, BROKE, { timeout: 30000 }).catch(() => {});
+  await page.waitForTimeout(1500);
+  return page.evaluate(readScreen, { broke: BROKE, name: NAME });
+}
+
+/* Every backup value this browser holds for one save key. */
+const backupsOf = (page, saveKey) => page.evaluate(prefix => {
+  const out = [];
+  for (let i = 0; i < localStorage.length; i += 1) {
+    const k = localStorage.key(i);
+    if (k && k.startsWith(prefix)) out.push(localStorage.getItem(k));
+  }
+  return out;
+}, `${saveKey}.broken-`);
+
+async function walk(browser, e, variant) {
+  const raw = brokenSave(e, variant);
+  const r = { route: e.path, variant, clicks: 0, outcome: '', ok: false, why: '', sample: [] };
+  const ctx = await browser.newContext({ viewport: { width: 390, height: 844 } });
+  try {
+    await ctx.route('**/*', req => (isLocal(req.request().url()) ? req.continue() : req.abort()));
+    if (CONTROL === 'nobutton') {
+      await ctx.addInitScript(mark => {
+        const add = () => {
+          const s = document.createElement('style');
+          s.textContent = `[${mark}]{display:none !important}`;
+          document.documentElement.appendChild(s);
+        };
+        if (document.documentElement) add(); else document.addEventListener('DOMContentLoaded', add);
+      }, MARK);
+    }
+    const page = await ctx.newPage();
+    /* Seed once, on a file that is not the game, so the reload after a fresh
+       start does not put the broken save straight back. */
+    await page.goto(`${BASE}/robots.txt`, { waitUntil: 'domcontentloaded', timeout: 30000 });
+    await page.evaluate(([k, v]) => localStorage.setItem(k, v), [e.saveKey, raw]);
+    await page.goto(`${BASE}${e.path}`, { waitUntil: 'domcontentloaded', timeout: 45000 });
+    let s = await settle(page);
+    if (s.broke) {
+      r.outcome = 'needed the button';
+      const btn = page.locator(`[${MARK}]`);
+      if (!(await btn.isVisible().catch(() => false))) { r.why = 'the error page showed and offered no fresh start'; return r; }
+      r.clicks += 1;
+      await Promise.all([
+        page.waitForNavigation({ waitUntil: 'domcontentloaded', timeout: 45000 }),
+        btn.evaluate(b => b.click()),
+      ]);
+      const kept = await backupsOf(page, e.saveKey);
+      if (!kept.includes(raw)) { r.why = `the broken save was not kept aside byte for byte (${kept.length} backup(s) found)`; return r; }
+      s = await settle(page);
+    } else {
+      r.outcome = s.drewName ? 'drew the save itself' : 'coped without the button';
+    }
+    if (s.dialog) {
+      r.clicks += 1;
+      const closed = await page.evaluate(() => {
+        const d = [...document.querySelectorAll('[role="dialog"],[role="alertdialog"]')].find(el => el.getBoundingClientRect().width > 0);
+        const b = d && [...d.querySelectorAll('button')].find(x => /close|got it|let'?s|play|start|ok|continue/i.test(`${x.getAttribute('aria-label') || ''} ${x.textContent || ''}`));
+        if (b) { b.click(); return true; }
+        return false;
+      });
+      if (!closed) await page.keyboard.press('Escape');
+      s = await settle(page);
+    }
+    r.sample = s.sample;
+    if (s.broke) r.why = 'still on the error page';
+    else if (s.dialog) r.why = 'a dialog still covers the screen';
+    else if (s.buttons < 1) r.why = 'no usable button on the screen';
+    else if (r.clicks > 2) r.why = `took ${r.clicks} clicks`;
+    else r.ok = true;
+    return r;
+  } catch (err) {
+    r.why = `walk threw: ${String(err?.message || err).split('\n')[0]}`;
+    return r;
+  } finally {
+    await ctx.close().catch(() => {});
+  }
+}
+
+/* ------------------------------------------------------------------ */
+const results = [];
+const browser = await chromium.launch();
+try {
+  if (CONTROL) console.log(`NEGATIVE CONTROL ON (${CONTROL}): the fresh start button is hidden on every page, every route that needs it must fail`);
+  for (const e of routes) {
+    for (const variant of VARIANTS) {
+      const r = await walk(browser, e, variant);
+      results.push(r);
+      const how = `${r.outcome}, ${r.clicks} click(s)${r.sample.length ? `, buttons: ${r.sample.join(' | ')}` : ''}`;
+      console.log(r.ok ? `  PASS  ${r.route} ${r.variant}: ${how}` : `  FAIL  ${r.route} ${r.variant}: ${r.why} (${r.outcome || 'no outcome'})`);
+    }
+  }
+} finally {
+  await browser.close().catch(() => {});
+  server.kill();
+}
+
+const failed = results.filter(r => !r.ok);
+const needed = results.filter(r => r.outcome === 'needed the button');
+const coped = results.filter(r => r.outcome === 'coped without the button');
+const drew = results.filter(r => r.outcome === 'drew the save itself');
+console.log('');
+console.log(`${results.length} broken saves over ${routes.length} long games: ${needed.length} reached the error page and needed the button, ${coped.length} were coped with by the game, ${drew.length} drew the broken save without throwing, ${failed.length} trapped`);
+
+if (CONTROL) {
+  if (needed.length === 0) { console.error('playCorruptSaves control: CANNOT FIRE. No broken save reached the error page, so hiding the button changes nothing here.'); process.exit(1); }
+  const stillPassed = needed.filter(r => r.ok);
+  if (failed.length > 0 && stillPassed.length === 0) { console.log(`playCorruptSaves control: FIRED. With the button hidden, ${failed.length} of ${needed.length} routes that need it are trapped.`); process.exit(0); }
+  console.error(`playCorruptSaves control: DID NOT FIRE. ${stillPassed.length} route(s) that reached the error page still passed with the button hidden.`);
+  process.exit(1);
+}
+if (failed.length > 0) {
+  console.error(`playCorruptSaves: ${failed.length} broken save(s) trap the player: ${failed.map(r => `${r.route} ${r.variant}`).join(', ')}`);
+  process.exit(1);
+}
+console.log('playCorruptSaves: green. No broken save traps a long game.');
