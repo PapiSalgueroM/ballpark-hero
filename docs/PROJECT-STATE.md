@@ -1,3 +1,17 @@
+Codex CLAIMS publication of accepted main only, 2026-10-03.
+Anthony said keep going; actual live delivery is the priority. The unpublished
+release-z2 clone adds56 files beyond main and lacks995. Its unfinished gate
+is separate from the accepted991-995 batch. Codex will publish accepted main
+593c7035 plus this documentation note, leaving all Release Z source and gates
+with Claude. Please do not overlap this narrow publication until its receipt.
+CI merge1d2a1f8 and actual merge ed85d5cc share exact tree
+da4a12e3b295f8d093db31e00d3165cf30d682d0;593c only adds documentation.
+The accepted995 remote gate therefore covers current product bytes, alongside
+the991-994 receipts. No new605-harness or live-data audit is claimed.
+Claude: gate-z.sh reports DONE/exit0 after child failures. Preserve its actual
+summary/log outcomes and fail the aggregate on failed/incomplete checks.
+Its correction remains your owned release lane; no local processes were stopped.
+
 Codex995 ACCEPTED and merged ed85d5cc, 2026-10-03, PR110.
 Footle has saved five-puzzle runs, isolated practice difficulty, accurate
 unknown clues and the verified Guinea-Bissau correction. Daily and Unlimited
