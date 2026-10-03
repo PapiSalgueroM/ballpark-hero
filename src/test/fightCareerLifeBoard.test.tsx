@@ -67,4 +67,27 @@ describe('Fight Career board, the life between fights', () => {
     fireEvent.click(view.getByText('Back'));
     expect(view.container.textContent).toContain('What do you take?');
   });
+
+  /* Round 916 review: a game plan save from before the round has no offerId
+     and its camp is already on the fighter. It must not let a second camp run
+     on top of the first, and a reload on the hub must still remember that. */
+  it('opens an old game plan save with its camp done and skips the second camp', async () => {
+    const before = newFightCareer('Camp Done', 'welter', 'outboxer', 'board-plan');
+    const st = runCamp(before, PLAN);
+    localStorage.setItem(KEY, JSON.stringify({ st, phase: 'plan' }));
+    let view = render(<FightCareerBoard />);
+    await view.findByText('Camp Done');
+    expect(view.container.textContent).toContain('Your camp is already done');
+    cleanup();
+    view = render(<FightCareerBoard />);
+    await view.findByText('Camp Done');
+    expect(view.container.textContent).toContain('Your camp is already done');
+    const pick = st.offers[1];
+    fireEvent.click(view.getByText(pick.label));
+    expect(view.container.textContent).toContain('Tonight');
+    const saved = JSON.parse(localStorage.getItem(KEY)!);
+    expect(saved.phase).toBe('plan');
+    expect(saved.offerId).toBe(pick.id);
+    expect(saved.st.fighter.attrs).toEqual(st.fighter.attrs);
+  });
 });

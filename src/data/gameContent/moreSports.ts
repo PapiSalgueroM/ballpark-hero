@@ -1854,7 +1854,7 @@ export const MORE_SPORTS_CONTENT: GameContentMap = {
       },
       {
         heading: "Sharpness on fight night",
-        items: ["Some cards make you sharper or flatter for the next fight only: each point is added to your power, speed, stamina and defence that night and gone the morning after. Sparring partners add a point a level, and every 10 morale above or below 50 is a point either way. Morale settles 2 back toward 50 after every fight, so a good mood has to be kept up."],
+        items: ["Some cards make you sharper or flatter for the next fight only: each point is added to your power, speed, stamina and defence that night and gone the morning after. Sparring partners add a point a level, and every 10 morale above or below 50 is a point either way. Morale settles 2 back toward 50 after every fight, so a good mood has to be kept up, and karma kept at 70 or more hands 2 back each fight."],
       },
       {
         heading: "Your rival and the grudge match",
@@ -1862,7 +1862,10 @@ export const MORE_SPORTS_CONTENT: GameContentMap = {
       },
       {
         heading: "Moving weight and the rematch clause",
-        items: ["Moving up a division makes knockouts more likely, moving down makes them rarer, and either way you start the new division unranked and any belt stays behind. A rematch clause after a loss turns the middle offer into the man who beat you, and a win is worth 4 places."],
+        /* Knockouts rising with weight, two sources read 2026-10-02: Physician
+           and Sportsmedicine 2024, PMID 37990916 (Europe PMC abstract), and
+           scirp.org/journal/paperinformation?paperid=107460. */
+        items: ["Moving up a division makes knockouts more likely, moving down makes them rarer, and either way you start the new division unranked and any belt stays behind. Your rival and the man who last beat you stay in the division you left. A rematch clause after a loss turns the middle offer into the man who beat you, and a win is worth up to 4 places."],
       },
     ],
     exampleSections: [
@@ -1876,7 +1879,7 @@ export const MORE_SPORTS_CONTENT: GameContentMap = {
       },
       {
         heading: "Two cards and a call out at number nine",
-        paragraphs: ["After your ninth fight two cards land. Four pounds over: hiring the nutritionist takes 0.02m from the bank, sweating it out leaves you 3 points flatter on the night, and coming in heavy cuts every purse on the table by 15% but leaves you 1 point sharper. You pay the nutritionist. The second card is the hometown hall, 5 more fans for 15% less money, and you stay on the road. Then your rival calls you out, you take it, and the middle offer becomes him at 30% more. With 0.31m in the bank you buy the cut man for 0.05m, and from now on you carry 4% less damage out of every fight."],
+        paragraphs: ["After your ninth fight your rival goes first: he calls you out, you take it, and the middle offer becomes him at 30% more. Then two cards land. Four pounds over: hiring the nutritionist takes 0.02m from the bank, sweating it out leaves you 3 points flatter on the night, and coming in heavy cuts every purse on the table by 15% but leaves you 1 point sharper. You pay the nutritionist. The second card is the hometown hall, 5 more fans for 15% less money, and you stay on the road. With 0.31m in the bank you buy the cut man for 0.05m, and from now on you carry 4% less damage out of every fight."],
       },
       {
         heading: "Winning the title at number one",

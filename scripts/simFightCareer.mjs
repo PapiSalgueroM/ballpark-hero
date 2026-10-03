@@ -43,6 +43,26 @@
  *   FIGHT_CONTROL=flatshop    coach levels 2 and 3 do nothing       -> 7e
  *   FIGHT_CONTROL=flatsharp   sharpness never reaches the night     -> 7e
  *   FIGHT_CONTROL=wipesave    an old save loses its record on load  -> 7d, 7f
+ *   Added by the Round 916 review, each the defect a reviewer planted and
+ *   found every section still green on:
+ *   FIGHT_CONTROL=sharpstays      card sharpness outlives its fight     -> 7g (i)
+ *   FIGHT_CONTROL=endlesspromoter the promoter deal never ends          -> 7g (ii)
+ *   FIGHT_CONTROL=grosspurse      the bank keeps the corner's share     -> 7g (iii)
+ *   FIGHT_CONTROL=rivalfollows    the rival follows a class move        -> 7g (iv)
+ *   FIGHT_CONTROL=keepbeaten      the rematch clause follows a move     -> 7g (iv)
+ *   FIGHT_CONTROL=crossbeat       a ranking beat spans two divisions    -> 7g (iv)
+ *   FIGHT_CONTROL=nodrift         morale never settles                  -> 7g (v)
+ *   FIGHT_CONTROL=totalsbeat      "he won again" reads career totals    -> 7g (vi)
+ *   FIGHT_CONTROL=staleanswer     a waiting card is never read again    -> 7g (vii)
+ *   FIGHT_CONTROL=unrankedrank    an unranked man is handed a number    -> 7g (vii)
+ *   FIGHT_CONTROL=specialtable    a class move can throw away a grudge  -> 7g (viii)
+ *   FIGHT_CONTROL=stuckchoice     an unknown rival choice blocks a save -> 7g (ix)
+ *   FIGHT_CONTROL=silentreply     a text reply hides what it does       -> 7g (x)
+ *   7g is exact rather than banded: each check is one walk whose answer is a
+ *   number the words state (a fight's 0 sharpness after, 4 promoter tables
+ *   and then the free one, the take home to the cent for all 12 corner
+ *   pairings, 70 to 68 morale, 64 text replies read back), so there is no
+ *   spread to measure, and every control turns its check red.
  *
  * Section 7's numbers, measured on healthy code on 2026-10-02:
  *   7a the baseline was recorded on origin/main at a4433f41, BEFORE the life
@@ -1121,7 +1141,7 @@ function parseWords(text) {
   if ((m = text.match(/(Down|Up) (\d+) in the rankings/))) out.rank = (m[1] === 'Down' ? 1 : -1) * Number(m[2]);
   if ((m = text.match(/Move (up|down) a weight class/))) out.moveClass = m[1] === 'up' ? 1 : -1;
   if ((m = text.match(/Purses ([+-]\d+)% for (\d+) fights, the safest offer leaves the table/))) { out.promoter = Number(m[2]); out.promoterPct = Number(m[1]); }
-  if ((m = text.match(/becomes the rematch, a win worth (\d+) places/))) out.rematch = Number(m[1]);
+  if ((m = text.match(/becomes the rematch, a win worth up to (\d+) places/))) out.rematch = Number(m[1]);
   if ((m = text.match(/becomes the grudge fight, purse ([+-]\d+)%/))) out.grudge = Number(m[1]);
   return out;
 }
