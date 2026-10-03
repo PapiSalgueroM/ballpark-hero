@@ -6460,8 +6460,13 @@ export function simulateUCL(state: CareerState, season: SeasonRecord): UCLResult
 
   /* Top scorer at 6+ goals, as it always was when the knockout was the whole
      campaign. Round 972 puts the first stage's nights in front of it, so the
-     bar rises with them (TOP_SCORER_BAR_PER_STAGE_GAME), which keeps the
-     award about as rare as it was and never more common. */
+     bar rises with them (TOP_SCORER_BAR_PER_STAGE_GAME). The bar is whole
+     goals, and the nearest bar that never makes the award more common than
+     it was makes it RARER: measured 2026-10-03 (simSoccerCareerUcl section
+     8) at 0.25%, 0.21% and 0.12% of knockout runs at Real Madrid, Ajax and
+     Sevilla against main's 0.43%, 0.31% and 0.22%, so about 55 to 70 percent
+     as common as before. One goal lower (0.3 a night) overshoots, at 0.67%,
+     0.56% and 0.33%. */
   const topScorerBar = 6 + Math.ceil(stageGames * TOP_SCORER_BAR_PER_STAGE_GAME);
   const isTopScorer = totalPlayerGoals >= topScorerBar && Math.random() < 0.5;
 

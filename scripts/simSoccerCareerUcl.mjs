@@ -650,7 +650,11 @@ let redCount8 = false;
      curves are interpolated linearly, which reads slightly under a bending
      curve), so its gate is three standard errors plus 0.6 points. The top
      scorer gate is one sided: never more common than main beyond three
-     standard errors, and not under a third of it. */
+     standard errors, and not under a third of it. This round's engine
+     measures 0.25, 0.21 and 0.12 (about 55 to 70 percent of main), the cost
+     of a whole goal bar that never makes the award more common (see
+     TOP_SCORER_BAR_PER_STAGE_GAME); at Sevilla that is about 30 awards a
+     run, too few to hold a tighter floor without a coin toss. */
   const MAIN = {
     'Real Madrid': { tier: 1, title: 5.920, ko: 85.01, ts: 0.43 },
     Ajax: { tier: 1, title: 3.385, ko: 85.03, ts: 0.31 },
