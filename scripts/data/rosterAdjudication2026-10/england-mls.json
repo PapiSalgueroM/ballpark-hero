@@ -107,7 +107,116 @@
    ]
   }
  ],
- "movedTo": [],
+ "movedTo": [
+  {
+   "name": "Omir Fernandez",
+   "from": "Colorado Rapids",
+   "to": "Portland Timbers",
+   "realClub": "Portland Timbers",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1999-02-08 (MLS and ESPN agree). Traded from Colorado to Portland on 2025-04-18 for up to $250k in allocation money, so the 2025 row was already a season out of date.",
+   "sources": [
+    {"family": "A", "url": "https://www.mlssoccer.com/news/portland-timbers-acquire-omir-fernandez-from-colorado-rapids", "publisher": "MLS (mlssoccer.com, 2025-04-19)", "readOn": "2026-10-03", "says": "Portland Timbers acquire Omir Fernandez from the Colorado Rapids"},
+    {"family": "A", "url": "https://www.timbers.com/roster/", "publisher": "Portland Timbers roster (MLS league data, stats-api.mlssoccer.com season MLS-SEA-0001KA, club MLS-CLU-00000P)", "readOn": "2026-10-03", "says": "Omir Fernández, shirt 22, born 1999-02-08; not on the Colorado Rapids roster"},
+    {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/252818/omir-fernandez", "publisher": "ESPN", "readOn": "2026-10-03", "says": "Portland Timbers; MLS appearances for Portland from 2026-08-23 to 2026-09-20"}
+   ]
+  },
+  {
+   "name": "AZ Jackson",
+   "from": "Columbus Crew",
+   "to": "Minnesota United",
+   "realClub": "Minnesota United",
+   "loan": true,
+   "loanFrom": "Jagiellonia Białystok",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Aziel Jackson, born 2001-10-25 (MLS and ESPN agree). Columbus sold him to Jagiellonia Białystok on 2025-07-23. He spent the first half of 2026 on loan at Vancouver, then Minnesota took him on loan on 2026-08-13 for the rest of the 2026 MLS season with a purchase option. Placed at the club he plays for, the ledger's loanPolicy.",
+   "sources": [
+    {"family": "A", "url": "https://www.mlssoccer.com/news/columbus-crew-transfer-aziel-jackson-to-polish-club", "publisher": "MLS (mlssoccer.com, 2025-07-23)", "readOn": "2026-10-03", "says": "Columbus transfer Aziel Jackson to Jagiellonia Białystok"},
+    {"family": "A", "url": "https://www.mlssoccer.com/news/minnesota-united-acquire-aziel-jackson-on-loan", "publisher": "MLS (mlssoccer.com, 2026-08-13)", "readOn": "2026-10-03", "says": "Minnesota acquire him on loan from Jagiellonia for the rest of the 2026 season, purchase option"},
+    {"family": "A", "url": "https://www.mnufc.com/roster/", "publisher": "Minnesota United roster (MLS league data, stats-api.mlssoccer.com season MLS-SEA-0001KA, club MLS-CLU-00000L)", "readOn": "2026-10-03", "says": "Aziel Jackson, shirt 16, born 2001-10-25; not on the Columbus Crew roster"},
+    {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/318536/aziel-jackson", "publisher": "ESPN", "readOn": "2026-10-03", "says": "Minnesota United FC; Vancouver appearances in May 2026, Minnesota appearances from 2026-08-20 to 2026-09-27"}
+   ]
+  },
+  {
+   "name": "David Schnegg",
+   "from": "D.C. United",
+   "to": "Charlotte FC",
+   "realClub": "Charlotte FC",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1998-09-29 (MLS and ESPN agree). Claimed off waivers by Charlotte on 2026-01-15, contract through 2026 with an option for 2027.",
+   "sources": [
+    {"family": "A", "url": "https://www.mlssoccer.com/news/charlotte-fc-sign-defender-david-schnegg-via-waivers", "publisher": "MLS (mlssoccer.com, 2026-01-15)", "readOn": "2026-10-03", "says": "Charlotte FC claim left back David Schnegg off waivers"},
+    {"family": "A", "url": "https://www.dcunited.com/roster/", "publisher": "D.C. United roster (MLS league data, stats-api.mlssoccer.com season MLS-SEA-0001KA)", "readOn": "2026-10-03", "says": "not listed"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/21300", "publisher": "ESPN (Charlotte FC squad, season 2026)", "readOn": "2026-10-03", "says": "David Schnegg, shirt 23, born 1998-09-29; MLS appearances for Charlotte from 2026-08-29 to 2026-09-26"}
+   ]
+  },
+  {
+   "name": "Lewis Morgan",
+   "from": "New York Red Bulls",
+   "to": "Toronto FC",
+   "realClub": "Toronto FC",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1996-09-30 (MLS and ESPN agree). Red Bull New York traded him to San Diego, and San Diego traded him on to Toronto on 2026-09-02 for a 2026 international roster slot.",
+   "sources": [
+    {"family": "A", "url": "https://www.mlssoccer.com/news/toronto-fc-acquire-lewis-morgan-from-san-diego-fc", "publisher": "MLS (mlssoccer.com, 2026-09-02)", "readOn": "2026-10-03", "says": "Toronto FC acquire Lewis Morgan from San Diego FC"},
+    {"family": "A", "url": "https://www.torontofc.ca/roster/", "publisher": "Toronto FC roster (MLS league data, stats-api.mlssoccer.com season MLS-SEA-0001KA, club MLS-CLU-00000M)", "readOn": "2026-10-03", "says": "Lewis Morgan, shirt 90, born 1996-09-30"},
+    {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/181028/lewis-morgan", "publisher": "ESPN", "readOn": "2026-10-03", "says": "Toronto FC; San Diego appearance 2026-08-23, Toronto appearances from 2026-09-05 to 2026-09-27"}
+   ]
+  },
+  {
+   "name": "Duncan McGuire",
+   "from": "Orlando City",
+   "to": "Houston Dynamo",
+   "realClub": "Houston Dynamo FC",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 2001-02-05 (MLS and ESPN agree). Traded from Orlando to Houston on 2026-07-10 for up to $2.4 million in allocation money, contract through 2027.",
+   "sources": [
+    {"family": "A", "url": "https://www.mlssoccer.com/news/houston-dynamo-acquire-duncan-mcguire-from-orlando-city", "publisher": "MLS (mlssoccer.com, 2026-07-10)", "readOn": "2026-10-03", "says": "Houston Dynamo acquire Duncan McGuire from Orlando City"},
+    {"family": "A", "url": "https://www.houstondynamofc.com/roster/", "publisher": "Houston Dynamo roster (MLS league data, stats-api.mlssoccer.com season MLS-SEA-0001KA, club MLS-CLU-00000H)", "readOn": "2026-10-03", "says": "Duncan McGuire, shirt 23, born 2001-02-05; not on the Orlando City roster"},
+    {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/294071/duncan-mcguire", "publisher": "ESPN", "readOn": "2026-10-03", "says": "Houston Dynamo FC; MLS appearances for Houston from 2026-09-05 to 2026-09-27"}
+   ]
+  },
+  {
+   "name": "David Martínez",
+   "from": "LAFC",
+   "to": "FC Midtjylland",
+   "realClub": "FC Midtjylland",
+   "adjudicatedOn": "2026-10-03",
+   "note": "The Venezuelan winger, born 2006-02-07 (MLS and FC Midtjylland agree). He played for LAFC in the Leagues Cup up to 2026-08-13 and has since played in the Danish Superliga. ESPN's record for him carries a wrong birth date (2000-03-11) and another man's club, but its LAFC game log, its Midtjylland game log and the shirt number 98 on its Midtjylland squad all match the club's own page, so it is this player. Transfer terms were not read.",
+   "sources": [
+    {"family": "A", "url": "https://www.fcm.dk/herreholdet/truppen/", "publisher": "FC Midtjylland (men's squad page)", "readOn": "2026-10-03", "says": "midfield: David Martinez 98"},
+    {"family": "A", "url": "https://www.fcm.dk/truppen/david-martinez/", "publisher": "FC Midtjylland (player profile)", "readOn": "2026-10-03", "says": "#98, born 07.02.2006, Venezuela, 3 matches for FCM"},
+    {"family": "A", "url": "https://www.lafc.com/roster/", "publisher": "LAFC roster (MLS league data, stats-api.mlssoccer.com season MLS-SEA-0001KA, club MLS-CLU-000001)", "readOn": "2026-10-03", "says": "not listed"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/572", "publisher": "ESPN (FC Midtjylland squad, season 2026-27)", "readOn": "2026-10-03", "says": "David Martínez, shirt 98, midfielder; game log LAFC v Querétaro 2026-08-13, then Midtjylland v Brøndby 2026-09-14 and v Odense 2026-09-19"}
+   ]
+  },
+  {
+   "name": "Jannes Horn",
+   "from": "St. Louis City",
+   "to": "Rapid Wien",
+   "realClub": "SK Rapid Wien",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1997-02-06 (Rapid and ESPN agree). He joined St. Louis on loan from Nürnberg in August 2024; he is now in Rapid's squad and has played in the Austrian Bundesliga and the Conference League qualifiers in August and September 2026. Transfer terms were not read.",
+   "sources": [
+    {"family": "A", "url": "https://www.skrapid.at/teams/spieler/jannes-kilian-horn", "publisher": "SK Rapid Wien (player profile)", "readOn": "2026-10-03", "says": "38 Jannes Horn, Abwehr, born 06.02.1997, 7 Bundesliga appearances"},
+    {"family": "A", "url": "https://www.stlcitysc.com/roster/", "publisher": "St. Louis CITY SC roster (MLS league data, stats-api.mlssoccer.com season MLS-SEA-0001KA)", "readOn": "2026-10-03", "says": "not listed"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/519", "publisher": "ESPN (Rapid Vienna squad, season 2026-27)", "readOn": "2026-10-03", "says": "Jannes Horn, shirt 38, defender, born 1997-02-06; Rapid appearances from 2026-08-26 to 2026-09-18"}
+   ]
+  },
+  {
+   "name": "Ethan Horvath",
+   "from": "Cardiff City",
+   "to": "New York Red Bulls",
+   "realClub": "Red Bull New York",
+   "adjudicatedOn": "2026-10-03",
+   "note": "The United States goalkeeper, born 1995-06-09 (MLS and ESPN agree). Joined Red Bull New York from Cardiff on a free transfer on 2026-01-29, contract through June 2027.",
+   "sources": [
+    {"family": "A", "url": "https://www.mlssoccer.com/news/red-bull-new-york-acquire-usmnt-goalkeeper-ethan-horvath", "publisher": "MLS (mlssoccer.com, 2026-01-29)", "readOn": "2026-10-03", "says": "Red Bull New York acquire Ethan Horvath from Cardiff City on a free transfer"},
+    {"family": "A", "url": "https://www.newyorkredbulls.com/roster/", "publisher": "New York Red Bulls roster (MLS league data, stats-api.mlssoccer.com season MLS-SEA-0001KA, club MLS-CLU-00000B)", "readOn": "2026-10-03", "says": "Ethan Horvath, shirt 34, born 1995-06-09"},
+    {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/192027/ethan-horvath", "publisher": "ESPN", "readOn": "2026-10-03", "says": "Red Bull New York; MLS appearances from 2026-09-06 to 2026-09-30"}
+   ]
+  }
+ ],
  "removedClubNotModelled": [],
  "notCurrent": [],
  "pending": []
