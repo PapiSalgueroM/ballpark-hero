@@ -82,7 +82,7 @@ export default function ClubManagerSeasonSummary({ sm, c, g }: {
                 </div>
               )}
               <button onClick={g.startNew} className="text-xs text-muted-foreground hover:text-primary transition-colors">
-                Retire and start a new career
+                Start a new manager (this career stays saved)
               </button>
             </div>
           }

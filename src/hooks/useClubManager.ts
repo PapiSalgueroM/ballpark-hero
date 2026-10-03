@@ -350,6 +350,27 @@ export function useClubManager() {
     return true;
   }, [holdsActiveSlot]);
 
+  /* Review: once another tab has switched managers, the career this page
+     holds sits parked in its slot as of its last write, so the copy in memory
+     is let go. Kept, its week and board were shown on the other career's tile. */
+  const letGoIfStale = useCallback(() => {
+    if (!careerRef.current || holdsActiveSlot()) return;
+    careerRef.current = null;
+    setCareer(null);
+    setReport(null);
+    setSummary(null);
+  }, [holdsActiveSlot]);
+
+  /* Review: the managers screen follows a change another tab makes to the
+     slots, so its tiles never offer what is no longer there. Only while it is
+     on screen, since every career write in another tab fires this. */
+  useEffect(() => {
+    if (phase !== 'resume') return;
+    const onStorage = () => { letGoIfStale(); setSlots(readSlots()); };
+    window.addEventListener('storage', onStorage);
+    return () => window.removeEventListener('storage', onStorage);
+  }, [phase, letGoIfStale]);
+
   /** Continue a slot's career. The active one opens straight away; a parked
    *  one is swapped in and opened through the boot, era squads first. */
   const openSlot = useCallback((slot: number) => {
@@ -365,7 +386,13 @@ export function useClubManager() {
   const newInSlot = useCallback((slot: number) => {
     /* Only ever an empty or unreadable slot: a career is deleted on purpose,
        behind the screen's confirm, never by starting over it. */
-    if (readSlots()[slot - 1]?.summary) return;
+    if (readSlots()[slot - 1]?.summary) {
+      /* Review: only a tile drawn before another tab filled this slot gets
+         here. Show the slots as they are now and say why nothing happened. */
+      setSlots(readSlots());
+      setSlotNote('That slot holds a career now, so nothing was started over it. Here are your managers as they stand.');
+      return;
+    }
     if (slot !== activeSlot() && !leaveActive(slot)) return;
     /* Clears the engine's registrations; SAVE_KEY is already empty for a
        slot just switched to, and a damaged active one is cleared for good
@@ -401,11 +428,12 @@ export function useClubManager() {
    *  squads would not load (review: that screen had no way back). */
   const showSlots = useCallback(() => {
     if (careerRef.current && holdsActiveSlot()) saveCareer(careerRef.current);
+    letGoIfStale();
     setBootError(null);
     setSlots(readSlots());
     setSlotNote(null);
     setPhase('resume');
-  }, [holdsActiveSlot]);
+  }, [holdsActiveSlot, letGoIfStale]);
 
   /* Retire at the season's end, or Start New Career once sacked. Before
      Round 928 both wiped the career in one tap; the review found they still
@@ -943,9 +971,11 @@ export function useClubManager() {
     const next = markLiveMinute(now, minute);
     if (next === now) return;
     careerRef.current = next;
-    saveCareer(next);
+    /* Round 928 review: the live clock of a page whose slot another tab has
+       switched must not write over the career that tab switched in. */
+    if (holdsActiveSlot()) saveCareer(next);
     setCareer(prev => (prev ? markLiveMinute(prev, minute) : prev));
-  }, []);
+  }, [holdsActiveSlot]);
 
   /* ---------- Round 135: the microphone and the dressing room ---------- */
   /* Tapping the tone you already picked takes it back, so a mis-tap is not a

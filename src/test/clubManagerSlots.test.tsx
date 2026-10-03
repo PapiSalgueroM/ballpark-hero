@@ -151,7 +151,7 @@ function TabA() { tabA = useClubManager(); return null; }
 function TabB() { tabB = useClubManager(); return null; }
 const names = () => readSlots().map(v => v.summary?.clubName ?? null);
 
-async function twoCareersOnSlotOne() {
+async function twoCareersOnSlotOne(beforeB?: () => void) {
   const a = render(<TabA />);
   await waitFor(() => expect(tabA.phase).toBe('clubSelect'));
   act(() => tabA.chooseClub('Everton'));
@@ -166,6 +166,7 @@ async function twoCareersOnSlotOne() {
   expect(tabA.career.clubName).toBe('Everton');
   expect(activeSlot()).toBe(1);
   expect(names()).toEqual(['Everton', 'Lincoln City', null]);
+  beforeB?.();
   const b = render(<TabB />);
   await waitFor(() => expect(tabB.phase).toBe('resume'));
   act(() => tabB.openSlot(2));
@@ -202,6 +203,64 @@ describe('Club Manager slots: two tabs on one device', () => {
     a.unmount();
     b.unmount();
     expect(names()).toEqual(['Everton', 'Lincoln City', null]);
+  });
+
+  /* Second review: the live match viewer marks the clock at half time, when
+     the tab is hidden and at pagehide, and markMinute wrote straight to
+     SAVE_KEY. A match left on screen in the old tab put Everton over Lincoln. */
+  it('the old tab live clock writes nothing over the career switched in', async () => {
+    let m0 = 0;
+    const { a, b } = await twoCareersOnSlotOne(() => {
+      let guard = 0;
+      while (tabA.phase !== 'halftime' && guard++ < 20) act(() => tabA.play());
+      expect(tabA.career.live).toBeTruthy();
+      m0 = tabA.career.live.minute ?? 0;
+    });
+    b.unmount();
+    act(() => tabA.markMinute(m0 + 10));
+    expect(clubAt(SAVE_KEY)).toBe('Lincoln City');
+    expect(names()).toEqual(['Everton', 'Lincoln City', null]);
+    a.unmount();
+    expect(names()).toEqual(['Everton', 'Lincoln City', null]);
+  }, 60000);
+
+  it('Managers tapped on the old tab hub writes nothing over the other career', async () => {
+    const { a, b } = await twoCareersOnSlotOne();
+    b.unmount();
+    act(() => tabA.showSlots());
+    expect(tabA.phase).toBe('resume');
+    /* The old career is let go, so its week is not shown on Lincoln's tile. */
+    expect(tabA.career).toBeNull();
+    a.unmount();
+    expect(names()).toEqual(['Everton', 'Lincoln City', null]);
+  });
+
+  it('a new manager from the old tab managers screen parks the other career where it belongs', async () => {
+    const { a, b } = await twoCareersOnSlotOne(() => {
+      act(() => tabA.showSlots());
+      expect(tabA.phase).toBe('resume');
+    });
+    b.unmount();
+    act(() => tabA.newInSlot(3));
+    expect(tabA.phase).toBe('clubSelect');
+    expect(clubAt(parkedKey(2))).toBe('Lincoln City');
+    a.unmount();
+    expect(names()).toEqual(['Everton', 'Lincoln City', null]);
+  });
+
+  it('the old tab managers screen follows the other tab, and a stale New manager says why it did nothing', async () => {
+    const { a, b } = await twoCareersOnSlotOne(() => { act(() => tabA.showSlots()); });
+    b.unmount();
+    act(() => { window.dispatchEvent(new StorageEvent('storage', { key: SAVE_KEY })); });
+    expect(tabA.slots.map((v: any) => v.active)).toEqual([false, true, false]);
+    expect(tabA.career).toBeNull();
+    /* A tile drawn before the other tab filled slot 3 (simulated by filling it
+       under the screen) gets a note, never a silent dead button. */
+    localStorage.setItem(parkedKey(3), localStorage.getItem(parkedKey(1)) as string);
+    act(() => tabA.newInSlot(3));
+    expect(tabA.phase).toBe('resume');
+    expect(tabA.slotNote).toContain('holds a career now');
+    a.unmount();
   });
 });
 
