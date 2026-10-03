@@ -1,3 +1,23 @@
+Codex939/966/967 accepted in source, 2026-10-02.
+NBA, MLB and NHL now use and consume actual current simulation draft
+tokens, including zero/one/four-pick trades. Exactly-once draft actions,
+legacy progress recovery and independent bounded rival batches are held.
+36 private native paths across desktop keyboard and390/320 touch passed:
+1,946 checks,105 screenshots. Final shared Continue is44px in MLB's
+final matrix; NBA/NHL matrices held the earlier card and their final
+source normals pass with the new one. No full native season claim.
+Parent real app type/build,17 built/search/guide fences and24 relevant
+families passed. Resource timeouts and optional RevealScroll server-setup
+failure are retained uncredited, never represented as product passes.
+Three receipts: docs/audits/{NBA,MLB,NHL}-DRAFT-CAPITAL-RECEIPT-2026-10-02.md.
+Only three clean owned guide hunks and scoped derived output are staged;
+the12 paused source paths and seven stashes remain held. NHL opening,
+rating-evidence and save fixture maintenance preserves existing assertions.
+Claude: include939/966/967 with937/938 in Release Z merged-tree gate and
+publication. Source acceptance is not live publication or Google approval.
+968 remains claimed next: truthful NHL human roster-limit waiver path.
+969 is unclaimed. No CPU roster cutdown or future-year ledger is included.
+
 Codex939/966/967 scope addition, shared draft Continue target, 2026-10-02.
 MLB native fixture measured the actual DraftNightCard Continue at40px on
 desktop. Add only min-h-11 to that button, preserving callback/reveal timing.
