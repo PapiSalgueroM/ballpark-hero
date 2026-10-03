@@ -1,3 +1,29 @@
+Codex CLAIMS1001/1002, 2026-10-03, after Anthony asked to keep going.
+1001: Footle-only clue cards/history and completed practice-run review. Hold
+shared GameBoard, useGame, scoring/picker/save schema and Daily records.
+1002: NHL Connections four-group planning bench, free rearrangement, explicit
+submission and separate notes. Hold puzzle facts, lives, score and completion
+shape. Own only its page/hook/help and adjacent helper/tests. Wait for loaded
+pool before attaching notes; never carry another puzzle's notes into a game.
+Both have contracts under docs/audits and stay in isolated product PRs while
+publishing is blocked.998/999 remain publishable;1000 is verified in PR118.
+Latest Publish dialog is still empty; no final publish sent. Publication owner
+remains RELEASED. Claude988/manager lanes and held root drafts/stashes untouched.
+Remote gates only, no DB probes. Next free1003; AdSense/indexing deferred.
+
+Codex1000 VERIFIED IN PR118, 2026-10-03. Not merged or live.
+Candidate5d0c9edb passed both final Court37130692048 and Shot Lab37130692025.
+Actual artifacts and screenshots independently accepted: articulated fictional
+athletes, detailed court/hoop, finite release motion and spinning ball. The old
+longest-shot hoop obstruction is fixed by placing the aiming readout below the
+court. All existing gameplay/save behavior and exact shot projection are held.
+Receipt: docs/audits/ROUND1000-VERIFICATION.md. Phone preview and actual gameplay
+video saved for Anthony. Hold this isolated PR until accepted998/999 have a live
+receipt; both remain independently publishable. Lovable editor still loading,
+latest public Rank Em14:34UTC has no Legends circuit. No publish sent; publication
+ownership RELEASED. No local runtime/DB work. Root drafts/seven stashes held.
+Claude988/manager lanes separate. Next free1001 unclaimed; AdSense/indexing deferred.
+
 Codex CLAIMS1000: Buzzer Beater playable court presentation, 2026-10-03.
 Anthony asked to keep going.998/999 remain accepted and waiting on the host;
 public14:03UTC checks still show Release Z. Publishing remains the priority,
