@@ -121,8 +121,12 @@ export const HALL_GAME_RULES = {
   nominationShare: 0.5,
   /** Jersey goes up for a Hall of Famer with this many seasons at the club... */
   jerseySeasonsInducted: 5,
-  /** ...or for anyone with this many. */
+  /** ...or for a club icon just short of the Hall: this many seasons there... */
   jerseySeasonsAlone: 12,
+  /** ...and a score at this share of the Hall line. Without it nearly every
+   *  long career went up, since a US career mostly stays at one club
+   *  (simCareerHall measured 199 of 200 NHL careers with 12 seasons at one). */
+  jerseyNearMiss: 0.85,
 } as const;
 
 /** How far up the Hall band a score sits: 0 at the line, 1 at the first ballot score. */
@@ -167,14 +171,16 @@ export function mostSeasonsTeam(seasons: HallSeason[]): HallJersey | null {
 }
 
 /** Whether that club retires his number: a Hall of Famer with enough seasons
- *  there, anyone with a long stay, and always where the verdict promised it. */
+ *  there, a club icon with a long stay and a score just short of the Hall,
+ *  and always where the verdict promised it. */
 export function jerseyFor(seasons: HallSeason[], inducted: boolean, score: number, lines: HallLines): HallJersey | null {
   const club = mostSeasonsTeam(seasons);
   if (!club) return null;
   const promised = lines.jerseyScore !== null && score >= lines.jerseyScore;
   if (promised) return club;
   if (inducted && club.seasons >= HALL_GAME_RULES.jerseySeasonsInducted) return club;
-  return club.seasons >= HALL_GAME_RULES.jerseySeasonsAlone ? club : null;
+  const icon = club.seasons >= HALL_GAME_RULES.jerseySeasonsAlone && score >= lines.hofLine * HALL_GAME_RULES.jerseyNearMiss;
+  return icon ? club : null;
 }
 
 const oneDecimal = (n: number) => Math.round(n * 10) / 10;
@@ -214,8 +220,10 @@ export function runHallBallot(rules: HallRules, lines: HallLines, cand: { key: s
   let share = (t - 10) * reach * reach * (0.6 + 0.4 * rng());
   for (let i = 0; i < maxBallots; i += 1) {
     if (i > 0) share = Math.min(t - 1, Math.max(0, share + 8 * rng() - 3));
-    ballots.push({ classYear: firstClass + i, share: oneDecimal(share), elected: false });
-    if (rules.stayFloor !== null && share < rules.stayFloor) {
+    // The floor is read off the share the card prints, so 4.96 (shown 5.0) stays on.
+    const shown = oneDecimal(share);
+    ballots.push({ classYear: firstClass + i, share: shown, elected: false });
+    if (rules.stayFloor !== null && shown < rules.stayFloor) {
       return { ...base, outcome: "fellOff", ballots, inductedClass: null, firstBallot: false };
     }
   }

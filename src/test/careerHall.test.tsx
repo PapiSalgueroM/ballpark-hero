@@ -179,7 +179,7 @@ describe('the jersey', () => {
     expect(mostSeasonsTeam([{ team: 'A', games: 50 }, { team: 'B', games: 50 }])).toEqual({ team: 'A', seasons: 1 });
     expect(mostSeasonsTeam([{ team: 'A', games: 0 }])).toBeNull();
   });
-  it('goes up for a long stay, a Hall of Famer, or where the verdict promised it', () => {
+  it('goes up for a Hall of Famer, a club icon just short of the Hall, or where the verdict promised it', () => {
     const nba = NBA_CAREER_HALL.lines;
     const four = Array.from({ length: 4 }, () => ({ team: 'A', games: 60 }));
     const five = Array.from({ length: 5 }, () => ({ team: 'A', games: 60 }));
@@ -187,7 +187,9 @@ describe('the jersey', () => {
     expect(jerseyFor(four, true, 520, nba)).toBeNull();
     expect(jerseyFor(five, true, 520, nba)).toEqual({ team: 'A', seasons: 5 });
     expect(jerseyFor(five, false, 300, nba)).toBeNull();
-    expect(jerseyFor(twelve, false, 300, nba)).toEqual({ team: 'A', seasons: 12 });
+    expect(jerseyFor(twelve, false, 300, nba)).toBeNull();
+    expect(jerseyFor(twelve, false, 425, nba)).toEqual({ team: 'A', seasons: 12 });
+    expect(jerseyFor(twelve.slice(1), false, 499, nba)).toBeNull();
     expect(jerseyFor(four, true, 650, nba)).toEqual({ team: 'A', seasons: 4 });
   });
 });
@@ -284,4 +286,51 @@ describe('the four sports, on careers their own engines play', () => {
       }
     });
   }
+});
+
+describe('the two cards say what they do', () => {
+  it('the farewell card offers the three answers with their own words', async () => {
+    const { render, fireEvent, cleanup } = await import('@testing-library/react');
+    const { FarewellCard } = await import('@/components/career/FarewellCard');
+    const picked: string[] = [];
+    const talk = retirementTalk(RULE, snap({ rating: 74, peak: 84 }), undefined)!;
+    const view = render(<FarewellCard talk={talk} age={33} onChoose={id => picked.push(id)} />);
+    expect(view.container.textContent).toContain('10 points off your best (84)');
+    for (const choice of RETIREMENT_CHOICES) {
+      const button = view.getByText(`${choice.emoji} ${choice.label}`).closest('button')!;
+      expect(button.textContent).toContain(choice.detail);
+      fireEvent.click(button);
+    }
+    expect(picked).toEqual(RETIREMENT_CHOICES.map(c => c.id));
+    cleanup();
+  });
+
+  it('the Hall card prints shares only where the Hall publishes them, and the speech buttons carry their effects', async () => {
+    const { render, fireEvent, cleanup } = await import('@testing-library/react');
+    const { HallOfFameCard } = await import('@/components/career/HallOfFameCard');
+    let key = 0, rec: HallRecord | null = null;
+    while (!rec || rec.ballots.length < 2) {
+      rec = { ...runHallBallot(NFL_CAREER_HALL.rules, NFL_CAREER_HALL.lines, { key: `card${key++}`, hof: true, score: 560, lastSeasonYear: 2030 }), jersey: { team: 'Team A', seasons: 9 } };
+    }
+    const chosen: string[] = [];
+    const nfl = render(<HallOfFameCard record={rec} rules={NFL_CAREER_HALL.rules} onSpeech={id => chosen.push(id)} onDismiss={() => {}} />);
+    const items = [...nfl.container.querySelectorAll('li')].map(li => li.textContent);
+    expect(items.length).toBe(rec.ballots.length);
+    for (const t of items) expect(t).toMatch(/^\d{4}: (elected|not enough votes)$/);
+    expect(nfl.container.textContent).toContain('Team A retired your number after 9 seasons there.');
+    for (const o of HALL_SPEECHES) {
+      const button = nfl.getByText(`${o.emoji} ${o.label}`).closest('button')!;
+      expect(button.textContent).toContain(speechPromise(o));
+      fireEvent.click(button);
+    }
+    expect(chosen).toEqual(HALL_SPEECHES.map(o => o.id));
+    cleanup();
+
+    const mlbRec: HallRecord = { ...runHallBallot(MLB_CAREER_HALL.rules, MLB_CAREER_HALL.lines, { key: 'mlb-card', hof: false, score: 400, lastSeasonYear: 2030 }), jersey: null };
+    const mlb = render(<HallOfFameCard record={mlbRec} rules={MLB_CAREER_HALL.rules} onSpeech={() => {}} onDismiss={() => {}} />);
+    for (const li of mlb.container.querySelectorAll('li')) expect(li.textContent).toMatch(/^\d{4}: \d+(\.\d)? percent, not enough votes$/);
+    expect(mlb.container.textContent).toContain('10 years on the ballot at most.');
+    expect(mlb.queryByText('Your induction speech')).toBeNull();
+    cleanup();
+  });
 });
