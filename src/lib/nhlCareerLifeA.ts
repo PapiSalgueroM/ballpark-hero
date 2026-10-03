@@ -70,11 +70,20 @@ export function getNhlLifeEventsA(c: NhlCareerState, rng: () => number): NhlCare
       id: 'nhlA_billet_family',
       category: 'callup', cooldown: 99,
       title: 'The billet family',
-      body: 'Sixteen years old, a spare room in a stranger\'s basement, and a billet mom who packs your lunch with a note in it. Your last junior year starts in September.',
+      body: 'You moved in at sixteen: a spare room in a stranger\'s basement, a billet mom who packs your lunch with a note in it, and a billet dad who drives you to 6am skates without ever complaining. Your last junior year starts in September, and for the first time you could afford to live somewhere else.',
       options: [
-        { label: 'Stay in the basement', effect: 'Home cooking', apply: (cc) => { const m = mor(cc, 8); const h = hp(cc, 5); flag(cc, 'billetLoyal'); return `Stayed with the billets. Morale +${m}, health +${h}, and she still texts you on game days.`; } },
-        { label: 'Get your own place downtown', effect: 'Grown man rent', apply: (cc) => { const m = mor(cc, 3); const h = hp(cc, -4); const spent = cash(cc, -0.01); return `Rented a one bedroom for ${spent}M and learned to make exactly two meals. Morale +${m}, health ${h}.`; } },
-        { label: 'Move in with two teammates', effect: 'Room chemistry', apply: (cc) => { const m = mor(cc, 6); const h = hp(cc, -2); flag(cc, 'roomGuy'); return `Three juniors, one couch, zero vegetables. Morale +${m}, health ${h}, but the room loves you.`; } },
+        {
+          label: 'Stay in the basement', effect: 'Home cooking',
+          apply: (cc) => { const m = mor(cc, 8); const h = hp(cc, 5); flag(cc, 'billetLoyal'); return `Stayed with the billets for one more year of pot roast on Sundays and a curfew nobody enforced. Morale +${m}, health +${h}, and she still texts you on game days.`; },
+        },
+        {
+          label: 'Get your own place downtown', effect: 'Grown man rent',
+          apply: (cc) => { const m = mor(cc, 3); const h = hp(cc, -4); const spent = cash(cc, -0.01); return `Rented a one bedroom for ${spent}M and learned to make exactly two meals, both of them pasta. Freedom tastes like takeout. Morale +${m}, health ${h}.`; },
+        },
+        {
+          label: 'Move in with two teammates', effect: 'Room chemistry',
+          apply: (cc) => { const m = mor(cc, 6); const h = hp(cc, -2); flag(cc, 'roomGuy'); return `Three juniors, one couch, zero vegetables and a video game tournament that never really ended. Morale +${m}, health ${h}, but the room loves you.`; },
+        },
       ],
     });
   }
@@ -84,11 +93,20 @@ export function getNhlLifeEventsA(c: NhlCareerState, rng: () => number): NhlCare
       id: 'nhlA_junior_final_year',
       category: 'callup', cooldown: 99,
       title: 'One more year of junior',
-      body: 'Your coach wants you on the ice for thirty minutes a night and every faceoff that matters. It is your draft year and everyone is watching.',
+      body: 'Your junior coach wants you on the ice for thirty minutes a night, on both special teams and for every faceoff that matters. It is your draft year, there are scouts in the stands every night with notebooks and stopwatches, and everyone has an opinion about how you should play it.',
       options: [
-        { label: 'Play the horse minutes', effect: 'Trial by fire', apply: (cc) => { const g = rate(cc, 2); const h = hp(cc, -7); return `Ninety games including playoffs. Rating +${g}, health ${h}. Scouts saw everything.`; } },
-        { label: 'Chase the scoring title', effect: 'Highlight season', apply: (cc, r) => { const g = rate(cc, 1); const f = fan(cc, 8 + Math.floor(r() * 5)); const m = mor(cc, 5); return `Led the league in points and the mixtape went everywhere. Fanbase +${f}, morale +${m}, rating +${g}.`; } },
-        { label: 'Manage the load with the trainer', effect: 'Protect the body', apply: (cc) => { const h = hp(cc, 10); const m = mor(cc, 2); const f = fan(cc, -2); return `Sixty games, fresh legs in April. Health +${h}, morale +${m}, fanbase ${f}.`; } },
+        {
+          label: 'Play the horse minutes', effect: 'Trial by fire',
+          apply: (cc) => { const g = rate(cc, 2); const h = hp(cc, -7); return `Ninety games including playoffs, and you were on the ice for most of the ones that mattered. Rating +${g}, health ${h}. Scouts saw everything, the good and the tired.`; },
+        },
+        {
+          label: 'Chase the scoring title', effect: 'Highlight season',
+          apply: (cc, r) => { const g = rate(cc, 1); const f = fan(cc, 8 + Math.floor(r() * 5)); const m = mor(cc, 5); return `Led the league in points, and the highlight package went everywhere a teenager's phone could reach. Fanbase +${f}, morale +${m}, rating +${g}.`; },
+        },
+        {
+          label: 'Manage the load with the trainer', effect: 'Protect the body',
+          apply: (cc) => { const h = hp(cc, 10); const m = mor(cc, 2); const f = fan(cc, -2); return `Sixty games, a few nights off you did not love, and fresh legs in April when it counted. Health +${h}, morale +${m}, fanbase ${f}.`; },
+        },
       ],
     });
   }
@@ -98,11 +116,20 @@ export function getNhlLifeEventsA(c: NhlCareerState, rng: () => number): NhlCare
       id: 'nhlA_ahl_bus',
       category: 'callup', cooldown: 2, story: 'ahlAssignment',
       title: 'The bus league',
-      body: 'They are sending you down for conditioning. Ten hours to the next barn in a seat that does not recline and a per diem that buys gas station sushi.',
+      body: 'They are sending you down to the minors to get you more minutes than the big club can give you. Ten hours on a bus to the next barn, a seat that does not recline, a per diem that buys gas station sushi, and a locker room full of guys who would love to take your call up.',
       options: [
-        { label: 'Dominate until they call', effect: 'Force their hand', apply: (cc) => { const g = rate(cc, 2); const m = mor(cc, -4); flag(cc, 'ahlMonster'); return `Point a game in the A. Rating +${g}, morale ${m}, and the coaches upstairs noticed.`; } },
-        { label: 'Be the leader down there', effect: 'Room respect', apply: (cc) => { const m = mor(cc, 7); const f = fan(cc, 4); const g = rate(cc, 1); return `You ran the room in the minors. Morale +${m}, fanbase +${f}, rating +${g}.`; } },
-        { label: 'Let the agent make noise', effect: 'Squeaky wheel', apply: (cc, r) => { const m = mor(cc, 4); const f = fan(cc, -3); const back = r() < 0.5; if (back) { const g = rate(cc, 1); return `The agent got you recalled in three weeks. Morale +${m}, fanbase ${f}, rating +${g}.`; } flag(cc, 'agentNoise'); return `The agent got a meeting and nothing else. Morale +${m}, fanbase ${f}.`; } },
+        {
+          label: 'Dominate until they call', effect: 'Force their hand',
+          apply: (cc) => { const g = rate(cc, 2); const m = mor(cc, -4); flag(cc, 'ahlMonster'); return `A point a game in the minors, every shift a message to the people upstairs. It was lonely and it worked. Rating +${g}, morale ${m}, and the coaches upstairs noticed.`; },
+        },
+        {
+          label: 'Be the leader down there', effect: 'Room respect',
+          apply: (cc) => { const m = mor(cc, 7); const f = fan(cc, 4); const g = rate(cc, 1); return `You ran the room in the minors: first on the bus, last off the ice, the guy the kids asked about everything. Morale +${m}, fanbase +${f}, rating +${g}.`; },
+        },
+        {
+          label: 'Let the agent make noise', effect: 'Squeaky wheel',
+          apply: (cc, r) => { const m = mor(cc, 4); const f = fan(cc, -3); const back = r() < 0.5; if (back) { const g = rate(cc, 1); return `The agent called everybody he knows and got you recalled in three weeks. Some people upstairs did not love how. Morale +${m}, fanbase ${f}, rating +${g}.`; } flag(cc, 'agentNoise'); return `The agent got a meeting, a handshake and nothing else. You stayed on the bus. Morale +${m}, fanbase ${f}.`; },
+        },
       ],
     });
   }
@@ -112,11 +139,20 @@ export function getNhlLifeEventsA(c: NhlCareerState, rng: () => number): NhlCare
       id: 'nhlA_waiver_wire',
       category: 'callup', cooldown: 2, story: 'waivers',
       title: 'Waiver wire Saturday',
-      body: 'To send you down they have to expose you first. Thirty one other teams have until noon tomorrow to change your entire life.',
+      body: 'To send you down they have to put you on waivers first, and every other team in the league has until noon tomorrow to claim you and change your entire life. Your phone is face up on the kitchen table. Nobody in your family is talking about it, which means everybody is thinking about it.',
       options: [
-        { label: 'Phone face down, skate at 8am', effect: 'Control the controllable', apply: (cc) => { const m = mor(cc, 6); const h = hp(cc, 3); return `Cleared at noon, never checked once. Morale +${m}, health +${h}.`; } },
-        { label: 'Work every contact you have', effect: 'Read the room', apply: (cc, r) => { const m = mor(cc, -3); if (r() < 0.45) { const nf = fan(cc, 5); const g = rate(cc, 1); return `Three teams were interested and your club suddenly found you a role. Morale ${m}, fanbase +${nf}, rating +${g}.`; } return `Twelve calls, zero answers, one very long morning. Morale ${m}.`; } },
-        { label: 'Tell the coach you will play anywhere', effect: 'Fourth line pitch', apply: (cc) => { const m = mor(cc, 4); const g = rate(cc, 1); const f = fan(cc, 2); return `Penalty kill, fourth line, whatever. Morale +${m}, rating +${g}, fanbase +${f}. You stayed up.`; } },
+        {
+          label: 'Phone face down, skate at 8am', effect: 'Control the controllable',
+          apply: (cc) => { const m = mor(cc, 6); const h = hp(cc, 3); return `You skated, ate, napped and never checked once. Cleared at noon and went down with your head up. Morale +${m}, health +${h}.`; },
+        },
+        {
+          label: 'Work every contact you have', effect: 'Read the room',
+          apply: (cc, r) => { const m = mor(cc, -3); if (r() < 0.45) { const nf = fan(cc, 5); const g = rate(cc, 1); return `Three teams were quietly interested, and once word got around your own club suddenly found you a role. Morale ${m}, fanbase +${nf}, rating +${g}.`; } return `Twelve calls, zero answers, one very long morning staring at a phone that never rang. Morale ${m}.`; },
+        },
+        {
+          label: 'Tell the coach you will play anywhere', effect: 'Fourth line pitch',
+          apply: (cc) => { const m = mor(cc, 4); const g = rate(cc, 1); const f = fan(cc, 2); return `Penalty kill, fourth line, the shifts nobody wants. You said yes to all of it and meant it. Morale +${m}, rating +${g}, fanbase +${f}. You stayed up.`; },
+        },
       ],
     });
   }
@@ -126,11 +162,20 @@ export function getNhlLifeEventsA(c: NhlCareerState, rng: () => number): NhlCare
       id: 'nhlA_nhl_debut',
       category: 'callup', cooldown: 99,
       title: 'Your first NHL game',
-      body: `Warmup, the anthem, your parents crying in row 14 of ${teamName}. Your first shift lasts 32 seconds and you remember none of it.`,
+      body: `Warmup, the anthem, your parents crying in row 14 for ${teamName}. The veterans sent you out alone for the rookie lap and everybody in the building knows exactly why. Your first shift lasts 32 seconds and you will remember none of it.`,
       options: [
-        { label: 'Hit the first thing that moves', effect: 'Announce yourself', apply: (cc) => { const f = fan(cc, 9); const m = mor(cc, 6); const h = hp(cc, -4); return `You ran their captain into the bench door. Fanbase +${f}, morale +${m}, health ${h}.`; } },
-        { label: 'Simple first pass, live to shift two', effect: 'Coach approved', apply: (cc) => { const g = rate(cc, 1); const m = mor(cc, 5); return `Boring, clean, thirteen minutes. Rating +${g}, morale +${m}, and you were back out there Tuesday.`; } },
-        { label: 'Shoot the first puck you touch', effect: 'Swing for it', apply: (cc, r) => { if (r() < 0.4) { const f = fan(cc, 14); const m = mor(cc, 12); flag(cc, 'debutGoal'); return `First shot, first goal, the puck is in a case at your mom\'s house. Fanbase +${f}, morale +${m}.`; } const f2 = fan(cc, 3); const m2 = mor(cc, -2); return `You fired it into the glass from the blue line. Fanbase +${f2}, morale ${m2}.`; } },
+        {
+          label: 'Hit the first thing that moves', effect: 'Announce yourself',
+          apply: (cc) => { const f = fan(cc, 9); const m = mor(cc, 6); const h = hp(cc, -4); return `You ran their captain into the bench door on your second shift and the building came apart. He found you later. Fanbase +${f}, morale +${m}, health ${h}.`; },
+        },
+        {
+          label: 'Simple first pass, live to shift two', effect: 'Coach approved',
+          apply: (cc) => { const g = rate(cc, 1); const m = mor(cc, 5); return `Boring, clean, thirteen minutes, not one puck given away. The coach said nothing, which is the best review a rookie can get. Rating +${g}, morale +${m}, and you were back out there Tuesday.`; },
+        },
+        {
+          label: 'Shoot the first puck you touch', effect: 'Swing for it',
+          apply: (cc, r) => { if (r() < 0.4) { const f = fan(cc, 14); const m = mor(cc, 12); flag(cc, 'debutGoal'); return `First shot, first goal. The puck is in a case at your mom\'s house and the veterans made you buy dinner for it. Fanbase +${f}, morale +${m}.`; } const f2 = fan(cc, 3); const m2 = mor(cc, -2); return `You fired it into the glass from the blue line and the bench laughed, kindly, mostly. Fanbase +${f2}, morale ${m2}.`; },
+        },
       ],
     });
   }
@@ -140,11 +185,20 @@ export function getNhlLifeEventsA(c: NhlCareerState, rng: () => number): NhlCare
       id: 'nhlA_vet_mentor',
       category: 'callup', cooldown: 2,
       title: 'The 38 year old winger',
-      body: 'Two Cups, one working knee, and the locker right next to yours. He offers to drive you to the rink every morning at 7.',
+      body: 'Two Cups, one working knee, and the stall right next to yours. He has seen a hundred kids like you come and go, and for some reason he has decided you are worth the trouble. He offers to drive you to the rink every morning at 7, coffee included, lecture optional.',
       options: [
-        { label: 'Ride with him every day', effect: 'Free education', apply: (cc) => { const m = mor(cc, 7); const g = rate(cc, 1); flag(cc, 'mentored'); return `Twenty minutes of hockey school each way. Morale +${m}, rating +${g}.`; } },
-        { label: 'Sleep in, drive yourself', effect: 'Rest first', apply: (cc) => { const h = hp(cc, 6); const m = mor(cc, 2); return `An extra hour of sleep every morning. Health +${h}, morale +${m}.`; } },
-        { label: 'Ask him about the Cup year', effect: 'Steal the map', apply: (cc) => { const m = mor(cc, 5); const g = rate(cc, 1); const f = fan(cc, 2); flag(cc, 'mentored'); return `He talked for two hours about one shift in Game 6. Morale +${m}, rating +${g}, fanbase +${f}.`; } },
+        {
+          label: 'Ride with him every day', effect: 'Free education',
+          apply: (cc) => { const m = mor(cc, 7); const g = rate(cc, 1); flag(cc, 'mentored'); return `Twenty minutes of hockey school each way: which refs hold a grudge, which goalies cheat glove side, where to sit on the plane. Morale +${m}, rating +${g}.`; },
+        },
+        {
+          label: 'Sleep in, drive yourself', effect: 'Rest first',
+          apply: (cc) => { const h = hp(cc, 6); const m = mor(cc, 2); return `An extra hour of sleep every morning and your own playlist in the car. He did not take it personally. Health +${h}, morale +${m}.`; },
+        },
+        {
+          label: 'Ask him about the Cup year', effect: 'Steal the map',
+          apply: (cc) => { const m = mor(cc, 5); const g = rate(cc, 1); const f = fan(cc, 2); flag(cc, 'mentored'); return `He talked for two hours about one shift in Game 6, and somewhere in there was everything you needed to know about the spring. Morale +${m}, rating +${g}, fanbase +${f}.`; },
+        },
       ],
     });
   }
@@ -154,10 +208,16 @@ export function getNhlLifeEventsA(c: NhlCareerState, rng: () => number): NhlCare
       id: 'nhlA_jersey_number',
       category: 'callup', cooldown: 99,
       title: 'That number is taken',
-      body: 'The veteran who owns the number you have worn since novice will sell it. He wants a watch and a week in Cabo for his family.',
+      body: 'The veteran who owns the number you have worn since novice will sell it to you, and he has clearly done this before. He wants a watch and a week somewhere warm for his family. The equipment manager is holding two sweaters, one with your old number and one with a number nobody wants.',
       options: [
-        { label: 'Pay the man', effect: 'Buy your number', apply: (cc) => { const spent = cash(cc, -0.06); buy(cc, 'a watch for a teammate'); const m = mor(cc, 6); const f = fan(cc, 3); return `Watch bought, villa booked, ${spent}M gone. Morale +${m}, fanbase +${f}, and the number is yours.`; } },
-        { label: 'Take a random number and make it famous', effect: 'Build your own', apply: (cc) => { const f = fan(cc, 6); const m = mor(cc, 3); return `Nobody wanted 47. In four years the kids will. Fanbase +${f}, morale +${m}.`; } },
+        {
+          label: 'Pay the man', effect: 'Buy your number',
+          apply: (cc) => { const spent = cash(cc, -0.06); buy(cc, 'a watch for a teammate'); const m = mor(cc, 6); const f = fan(cc, 3); return `Watch bought, villa booked, ${spent}M gone, and a veteran who now calls you his favorite rookie. Morale +${m}, fanbase +${f}, and the number is yours.`; },
+        },
+        {
+          label: 'Take a random number and make it famous', effect: 'Build your own',
+          apply: (cc) => { const f = fan(cc, 6); const m = mor(cc, 3); return `Nobody wanted 47. You wore it like you picked it on purpose, and in four years the kids will want it too. Fanbase +${f}, morale +${m}.`; },
+        },
       ],
     });
   }
@@ -171,11 +231,20 @@ export function getNhlLifeEventsA(c: NhlCareerState, rng: () => number): NhlCare
       id: 'nhlA_rookie_dinner',
       category: 'lockerRoom', cooldown: 99,
       title: 'The rookie dinner',
-      body: 'Nine veterans, a steakhouse, and a wine list they are treating like a personal challenge. The leather folder gets slid in front of you.',
+      body: 'Nine veterans, a private room at the best steakhouse in town, and a wine list they are treating like a personal challenge. Somebody ordered a seafood tower nobody touched. At the end of the night the leather folder gets slid in front of you, and the whole table goes quiet to watch you open it.',
       options: [
-        { label: 'Pay it, laugh, say nothing', effect: 'Buy in fully', apply: (cc) => { const spent = cash(cc, -0.05); const m = mor(cc, 9); const f = fan(cc, 2); flag(cc, 'roomGuy'); return `You covered ${spent}M of steak and 2007 Barolo. Morale +${m}, fanbase +${f}. You are in.`; } },
-        { label: 'Split it with the other rookie', effect: 'Rookie solidarity', apply: (cc) => { const spent = cash(cc, -0.026); const m = mor(cc, 4); return `Two rookies, ${spent}M each, one shared trauma. Morale +${m}.`; } },
-        { label: 'Ask the captain to cap the wine', effect: 'Set a boundary', apply: (cc) => { const spent = cash(cc, -0.014); const m = mor(cc, 1); flag(cc, 'roomTax'); return `He capped it. You paid ${spent}M and heard about it until Christmas. Morale +${m}.`; } },
+        {
+          label: 'Pay it, laugh, say nothing', effect: 'Buy in fully',
+          apply: (cc) => { const spent = cash(cc, -0.05); const m = mor(cc, 9); const f = fan(cc, 2); flag(cc, 'roomGuy'); return `You covered ${spent}M of steak and very old Barolo without blinking, and the captain stood up and toasted you for it. Morale +${m}, fanbase +${f}. You are in.`; },
+        },
+        {
+          label: 'Split it with the other rookie', effect: 'Rookie solidarity',
+          apply: (cc) => { const spent = cash(cc, -0.026); const m = mor(cc, 4); return `Two rookies, ${spent}M each, one shared trauma. You two have been close ever since. Morale +${m}.`; },
+        },
+        {
+          label: 'Ask the captain to cap the wine', effect: 'Set a boundary',
+          apply: (cc) => { const spent = cash(cc, -0.014); const m = mor(cc, 1); flag(cc, 'roomTax'); return `He capped it, smiling the whole time. You paid ${spent}M and heard about it on every bus ride until Christmas. Morale +${m}.`; },
+        },
       ],
     });
   }
@@ -185,11 +254,20 @@ export function getNhlLifeEventsA(c: NhlCareerState, rng: () => number): NhlCare
       id: 'nhlA_kangaroo_court',
       category: 'lockerRoom', cooldown: 2,
       title: 'The kangaroo court',
-      body: 'Late for the bus is 200. Sneakers with a suit is 500. Somehow you are the leading fine earner on the team and it is only November.',
+      body: 'Late for the bus is 200. Sneakers with a suit is 500. A phone ringing in a video session is a thousand and a speech. The room runs its own court with its own judge, and somehow you are the leading fine earner on the team and it is only November.',
       options: [
-        { label: 'Pay everything, never argue', effect: 'Good teammate', apply: (cc) => { const spent = cash(cc, -0.012); const m = mor(cc, 6); flag(cc, 'roomGuy'); return `You funded the Christmas party by yourself, ${spent}M of it. Morale +${m}.`; } },
-        { label: 'Appeal every single fine', effect: 'Courtroom drama', apply: (cc) => { const m = mor(cc, 3); const f = fan(cc, 2); return `Your closing arguments became the best part of Tuesdays. Morale +${m}, fanbase +${f}.`; } },
-        { label: 'Run for judge yourself', effect: 'Seize the gavel', apply: (cc) => { const m = mor(cc, 5); flag(cc, 'roomBoss'); const f = fan(cc, 3); return `You now decide what sneakers cost. Morale +${m}, fanbase +${f}, and nobody is late anymore.`; } },
+        {
+          label: 'Pay everything, never argue', effect: 'Good teammate',
+          apply: (cc) => { const spent = cash(cc, -0.012); const m = mor(cc, 6); flag(cc, 'roomGuy'); return `You paid every fine with a smile and funded the Christmas party by yourself, ${spent}M of it. The room decided you were all right. Morale +${m}.`; },
+        },
+        {
+          label: 'Appeal every single fine', effect: 'Courtroom drama',
+          apply: (cc) => { const m = mor(cc, 3); const f = fan(cc, 2); return `Your closing arguments, with exhibits, became the best part of Tuesdays. You lost every one of them. Morale +${m}, fanbase +${f}.`; },
+        },
+        {
+          label: 'Run for judge yourself', effect: 'Seize the gavel',
+          apply: (cc) => { const m = mor(cc, 5); flag(cc, 'roomBoss'); const f = fan(cc, 3); return `You won the election in a landslide and now decide what sneakers cost. Morale +${m}, fanbase +${f}, and nobody is late anymore.`; },
+        },
       ],
     });
   }
@@ -199,11 +277,20 @@ export function getNhlLifeEventsA(c: NhlCareerState, rng: () => number): NhlCare
       id: 'nhlA_goalie_screen',
       category: 'lockerRoom', cooldown: 2,
       title: 'The goalie hates screens',
-      body: 'Your starter says you are standing in his eyes on every kill. He said it loud, in the room, with everyone sitting there.',
+      body: 'Your starting goalie says you are standing in his eyes on every penalty kill. He said it loud, in the room, between periods, with everyone sitting there and the coach pretending to read his notes. Goalies are allowed to be strange. They are also usually right about what they can and cannot see.',
       options: [
-        { label: 'Move off the post, keep the peace', effect: 'Keep the peace', apply: (cc) => { const m = mor(cc, 5); const h = hp(cc, 3); return `Fewer pucks off your ankles too. Morale +${m}, health +${h}.`; } },
-        { label: 'Tell him to find the puck', effect: 'Hold your ground', apply: (cc) => { const m = mor(cc, -5); const f = fan(cc, 4); const g = rate(cc, 1); return `You kept blocking and he kept complaining. Morale ${m}, fanbase +${f}, rating +${g}.`; } },
-        { label: 'Watch a week of tape with him', effect: 'Fix it properly', apply: (cc) => { const g = rate(cc, 1); const m = mor(cc, 6); flag(cc, 'goalieAlly'); return `Turns out you were both a little bit right. Rating +${g}, morale +${m}.`; } },
+        {
+          label: 'Move off the post, keep the peace', effect: 'Keep the peace',
+          apply: (cc) => { const m = mor(cc, 5); const h = hp(cc, 3); return `You gave him his sight lines back and he gave you a stick tap after the next kill. Fewer pucks off your ankles too. Morale +${m}, health +${h}.`; },
+        },
+        {
+          label: 'Tell him to find the puck', effect: 'Hold your ground',
+          apply: (cc) => { const m = mor(cc, -5); const f = fan(cc, 4); const g = rate(cc, 1); return `You kept blocking shots and he kept complaining about it to anyone who would listen. The fans loved your blocks. Morale ${m}, fanbase +${f}, rating +${g}.`; },
+        },
+        {
+          label: 'Watch a week of tape with him', effect: 'Fix it properly',
+          apply: (cc) => { const g = rate(cc, 1); const m = mor(cc, 6); flag(cc, 'goalieAlly'); return `Five sessions in a dark room with a goalie who talks to himself. Turns out you were both a little bit right. Rating +${g}, morale +${m}.`; },
+        },
       ],
     });
   }
@@ -213,11 +300,20 @@ export function getNhlLifeEventsA(c: NhlCareerState, rng: () => number): NhlCare
       id: 'nhlA_screen_machine',
       category: 'lockerRoom', cooldown: 2,
       title: 'Your defenseman is a curtain',
-      body: 'Every power play he plants himself in your lane like he is waiting for a bus. Four goals this month you never saw leave a stick.',
+      body: 'Every power play against, one of your defensemen plants himself in your sight line like he is waiting for a bus. Four goals this month you never saw leave a stick, and every one of them goes on your save percentage, not his. He thinks he is helping.',
       options: [
-        { label: 'Snap at him on the bench', effect: 'Public correction', apply: (cc) => { const f = fan(cc, 5); const m = mor(cc, -6); heatUp(cc, 3); return `The bench cam got all of it. Fanbase +${f}, morale ${m}.`; } },
-        { label: 'Draw it up after practice', effect: 'Fix the lane', apply: (cc) => { const g = rate(cc, 1); const m = mor(cc, 7); flag(cc, 'dPairAlly'); return `Cones, a whiteboard, and twenty minutes. Rating +${g}, morale +${m}.`; } },
-        { label: 'Say nothing, swear in private', effect: 'Bottle it', apply: (cc) => { const m = mor(cc, 2); const f = fan(cc, 3); return `The mask hides a lot. Morale +${m}, fanbase +${f}.`; } },
+        {
+          label: 'Snap at him on the bench', effect: 'Public correction',
+          apply: (cc) => { const f = fan(cc, 5); const m = mor(cc, -6); heatUp(cc, 3); return `You let him have it during a TV timeout, and the bench cam got all of it. The clip did numbers. The room went quiet for a week. Fanbase +${f}, morale ${m}.`; },
+        },
+        {
+          label: 'Draw it up after practice', effect: 'Fix the lane',
+          apply: (cc) => { const g = rate(cc, 1); const m = mor(cc, 7); flag(cc, 'dPairAlly'); return `Cones, a whiteboard and twenty minutes after everybody else had gone home. He got it, and he thanked you for not doing it on the bench. Rating +${g}, morale +${m}.`; },
+        },
+        {
+          label: 'Say nothing, swear in private', effect: 'Bottle it',
+          apply: (cc) => { const m = mor(cc, 2); const f = fan(cc, 3); return `The mask hides a lot. So does a hallway with nobody in it. The fans only saw the glove saves. Morale +${m}, fanbase +${f}.`; },
+        },
       ],
     });
   }
@@ -227,11 +323,20 @@ export function getNhlLifeEventsA(c: NhlCareerState, rng: () => number): NhlCare
       id: 'nhlA_captain_vote',
       category: 'lockerRoom', cooldown: 99, story: 'captaincy',
       title: 'The letter',
-      body: 'The room voted and it was close. Two names on the sheet and one of them is yours.',
+      body: 'The coach asked the room who should wear the C, and it was close. Two names came back, and one of them is yours. The other belongs to a veteran who has been here longer than the coach and has never once asked for anything. Everybody is waiting to see what you do with it.',
       options: [
-        { label: 'Take the C', effect: 'Wear the weight', apply: (cc) => { const m = mor(cc, 8); const f = fan(cc, 11); const h = hp(cc, -2); flag(cc, 'captain'); return `Captain of ${nhlTeamLabelOf(cc.team)}. Morale +${m}, fanbase +${f}, health ${h}, and every loss is your fault now.`; } },
-        { label: 'Take an A and stay a player', effect: 'Half the weight', apply: (cc) => { const m = mor(cc, 6); const f = fan(cc, 4); flag(cc, 'alternate'); return `An A on the shoulder and no press conferences after losses. Morale +${m}, fanbase +${f}.`; } },
-        { label: 'Push it to the older guy', effect: 'Pass the torch back', apply: (cc) => { const m = mor(cc, 5); const f = fan(cc, 6); flag(cc, 'roomBoss'); return `He cried a little in the meeting. Morale +${m}, fanbase +${f}, and the room noticed who did that.`; } },
+        {
+          label: 'Take the C', effect: 'Wear the weight',
+          apply: (cc) => { const m = mor(cc, 8); const f = fan(cc, 11); const h = hp(cc, -2); flag(cc, 'captain'); return `Captain of ${nhlTeamLabelOf(cc.team)}. You stood up in the room, said four sentences and sat down, and it was enough. Morale +${m}, fanbase +${f}, health ${h}, and every loss is your fault now.`; },
+        },
+        {
+          label: 'Take an A and stay a player', effect: 'Half the weight',
+          apply: (cc) => { const m = mor(cc, 6); const f = fan(cc, 4); flag(cc, 'alternate'); return `An A on the shoulder, a voice in the room and no press conferences after losses. The veteran got the C and thanked you for it. Morale +${m}, fanbase +${f}.`; },
+        },
+        {
+          label: 'Push it to the older guy', effect: 'Pass the torch back',
+          apply: (cc) => { const m = mor(cc, 5); const f = fan(cc, 6); flag(cc, 'roomBoss'); return `You stood up and said it should be him. He cried a little in the meeting and pretended he did not. Morale +${m}, fanbase +${f}, and the room noticed who did that.`; },
+        },
       ],
     });
   }
@@ -241,11 +346,20 @@ export function getNhlLifeEventsA(c: NhlCareerState, rng: () => number): NhlCare
       id: 'nhlA_healthy_scratch',
       category: 'lockerRoom', cooldown: 2, story: 'healthyScratch',
       title: 'Healthy scratch',
-      body: 'The coach reads the lineup and your name is not in it. You watch from the press box in a suit that suddenly feels ridiculous.',
+      body: 'The coach reads the lineup at the morning skate and your name is not in it. Nobody is hurt. You will watch from the press box in a suit that suddenly feels ridiculous, next to a guy from the radio who keeps asking how you are doing.',
       options: [
-        { label: 'Skate until they cut the lights', effect: 'Answer with work', apply: (cc) => { const g = rate(cc, 2); const m = mor(cc, -3); const h = hp(cc, -2); return `Extra ice every day for a month. Rating +${g}, morale ${m}, health ${h}.`; } },
-        { label: 'Ask him what he actually wants', effect: 'Honest meeting', apply: (cc) => { const m = mor(cc, 7); const g = rate(cc, 1); return `Forty minutes of tape and one clear answer. Morale +${m}, rating +${g}.`; } },
-        { label: 'Vent to a reporter', effect: 'Go public', apply: (cc) => { const f = fan(cc, 7); const m = mor(cc, -6); const h = heatUp(cc, 6); return `The quote led the broadcast. Fanbase +${f}, morale ${m}, heat now ${h}.`; } },
+        {
+          label: 'Skate until they cut the lights', effect: 'Answer with work',
+          apply: (cc) => { const g = rate(cc, 2); const m = mor(cc, -3); const h = hp(cc, -2); return `Extra ice every day for a month with the other scratches and an assistant who never goes home. It was miserable and it worked. Rating +${g}, morale ${m}, health ${h}.`; },
+        },
+        {
+          label: 'Ask him what he actually wants', effect: 'Honest meeting',
+          apply: (cc) => { const m = mor(cc, 7); const g = rate(cc, 1); return `Forty minutes of tape and one clear answer: win more battles on the wall. You knew what to fix, and that helped more than anything. Morale +${m}, rating +${g}.`; },
+        },
+        {
+          label: 'Vent to a reporter', effect: 'Go public',
+          apply: (cc) => { const f = fan(cc, 7); const m = mor(cc, -6); const h = heatUp(cc, 6); return `The quote led the broadcast and the fans took your side. The coach did not. Fanbase +${f}, morale ${m}, heat now ${h}.`; },
+        },
       ],
     });
   }
