@@ -196,7 +196,7 @@ console.log('2) Every phase one range, two sourced or marked thin; the deadline 
 /* ---------- 3. The engine periods are the engines' own ---------- */
 console.log('3) Periods and games per period match the four front office engines');
 {
-  const code = file => fs.readFileSync(path.join(ROOT, file), 'utf8')
+  const code = file => fs.readFileSync(path.join(ROOT, file), 'utf8').replaceAll('\r\n', '\n')
     .replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
   const constant = (file, name) => {
     const m = new RegExp(`export const ${name} = (\\d+);`).exec(code(file));
