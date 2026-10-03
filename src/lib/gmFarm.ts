@@ -663,6 +663,25 @@ export function afterRound<P extends FarmMan>(ctx: FarmCtx<P>, gamesThisRound: n
 }
 
 /**
+ * The last round played: the men up for a game go back, and every cover man
+ * goes down by his sport's route before the engine's offseason runs, so no
+ * club carries a stand in into the summer over its roster limit.
+ */
+export function closeSeason<P extends FarmMan>(ctx: FarmCtx<P>): void {
+  for (const seat of ctx.seats) {
+    for (const id of seat.club.up) {
+      const i = seat.players.findIndex(p => p.id === id);
+      if (i >= 0) seat.reserve.push(seat.players.splice(i, 1)[0]);
+    }
+    seat.club.up = [];
+    for (const p of seat.players.filter(x => seat.club.ledger[x.id]?.coverFor)) {
+      if (sendDownRefusal(ctx, seat, p.id)) delete seat.club.ledger[p.id].coverFor;
+      else sendDown(ctx, seat, p.id);
+    }
+  }
+}
+
+/**
  * Opening day, MLB only: a man on the 40 man who is not on the 26 must be
  * optioned (or, out of options, designated). The engine carries up to 28 all
  * year, so the farm takes the club down to the active cap, lowest rated
