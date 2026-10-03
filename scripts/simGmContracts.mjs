@@ -22,28 +22,46 @@
  *     kept is on the roster on exactly the agreed years and salary. Plus the
  *     desk fails closed: with one decision missing nothing runs.
  *  2. Asks sit inside a band of the cap, in EVERY season of every run, not the
- *     first and the last. The band and the median range are measured.
+ *     first and the last: each season's median (its five runs pooled) inside
+ *     a measured band, plus the median and the 95th percentile of all asks.
+ *     No single ask is asserted on: a max is noise.
  *  3. The meter never falls as the offer rises: every case, every contract
  *     length the desk allows, the salary walked from nothing to 130 percent of
  *     the ask in steps of 2 percent.
- *  4. Each league's own rule holds, recomputed here independently of the desk:
+ *  4. Each league's own rule holds, recomputed here independently of the desk.
+ *     Seasons with the club are counted by this harness (trackDesk), never
+ *     read off the desk's ledger.
  *     NFL  the fifth year option is offered to first round picks this GM
- *          drafted and nobody else, once, and buys exactly one guaranteed year.
- *     NBA  no ask is over the maximum share of the cap; with no room for the
- *          ask the ceiling is the Bird tier's own (120 percent of last salary
- *          for a one season man), and a man over his ceiling cannot be kept at
- *          his ask.
+ *          drafted and nobody else, only at the end of the rookie deal (some
+ *          holders are re-signed for one season, so they come back), and buys
+ *          exactly one guaranteed year. The GM tags a man every winter: a man
+ *          tagged now never reaches the desk and comes out on his tag; a man
+ *          re-signed after a tag year or an option year carries no guarantee
+ *          or tag from the old deal.
+ *     NBA  every rung of the maximum ladder (0 to 15 seasons) against the
+ *          sources; no ask over his maximum; with no room for the ask the
+ *          ceiling is the Bird tier's own, room counted with next season's
+ *          dead money (the GM dumps salary through the engine's own cut); a
+ *          man over his ceiling cannot be kept at his ask; a push far over
+ *          the rules never signs above them; an Early Bird exception deal runs
+ *          two seasons at the least.
  *     MLB  a drafted man is tendered, not negotiated with, until six seasons;
  *          the qualifying offer is the mean of the 125 highest salaries in the
- *          save, goes to nobody twice, and a rejection pays one pick.
+ *          save, goes to nobody twice (a refuser is signed straight back to
+ *          test it), never to a mid season arrival, and a rejection pays one
+ *          pick.
  *     NHL  a drafted man under 27 is restricted; whether a sheet is tabled is
- *          the same on every read; the picks are the published ladder's.
+ *          the same on every read; the picks are the published ladder's; a man
+ *          whose sheet is not matched joins the rival on the sheet's terms.
+ *     NFL and MLB: a man let go sits in the pool at his market figure, not
+ *          his old deal's (neither pool ever reprices).
  *  5. The books. Every rule has two sources or says it has one, and each
  *     host's next cap is the cap the engine really sets.
  *
- * Negative controls. Each rewrites one line of src/lib/gmContracts.ts in
- * memory through an esbuild load hook and refuses to run if the line is not
- * there exactly once:
+ * Negative controls. Each rewrites one line of src/lib/gmContracts.ts (or the
+ * file it names) in memory through an esbuild load hook and refuses to run if
+ * the line is not there exactly once. A control that cannot run, or a crash,
+ * exits 3, so neither can pass for a control that fired (exit 1):
  *   GM_CONTRACTS_CONTROL=coinflip   the desk stops holding a kept man, so he
  *                                   reaches the engine's flip: section 1.
  *   GM_CONTRACTS_CONTROL=askdouble  a prime age man asks for 2.4 times his
@@ -54,40 +72,64 @@
  *   GM_CONTRACTS_CONTROL=nobird     a one season man gets the full maximum: 4 NBA.
  *   GM_CONTRACTS_CONTROL=noarb      arbitration years read as free agency: 4 MLB.
  *   GM_CONTRACTS_CONTROL=resheet    the sheet is a draw, not a hash: 4 NHL.
+ *  Added for the review of 2026-10-02, all section 4:
+ *   optiontwice  the option survives a re-signing (finding 1)
+ *   keepflags    a kept man keeps his old tag and guarantee (findings 2, 10)
+ *   qotwice      the qualifying offer is forgotten when he leaves (3, 15)
+ *   mutmid       a mid season arrival can be qualified (4)
+ *   mutmax       the NBA maximum tier off by one, in gmContractRules.ts (5)
+ *   muttag       the host's tag test off by a season, in the NFL host (6)
+ *   noreprice    a man let go keeps his old figure in the pool (11)
+ *   sheetpool    an unmatched sheet sends him to the pool, not the rival (11)
+ *   mutceil      a push is not cut to what the rules allow (8, 16)
+ *   earlyone     Early Bird exception deals may run one season (13)
+ *   nodeadcap    NBA room ignores next season's dead money (17)
  *
- * MEASURED 2026-10-02 on six seed sets (SIM_SEED 0, 100, 200, 300, 400, 500;
- * each is 5 seeds x 10 seasons per sport), every one green, then each control.
+ * MEASURED 2026-10-02, remeasured after the review fixes on four seed sets
+ * (SIM_SEED 0, 100, 200, 300; each is 5 seeds x 10 seasons per sport), every
+ * one green, then each control. The first build measured six sets; the
+ * baseline arm (section 0) is untouched by the fixes and reads the same.
  *
  *   0. men the engine's own flip took, no desk      NFL 31-46 of 223-247,
  *      NBA 6-10 of 114-123, MLB 69-81 of 425-431, NHL 1-4 of 192-199.
  *      All four together 114 to 126: floor 40, on the total, because the NHL
  *      count alone (as low as 1) is too small to floor.
- *   1. cases at the desk                             NFL 231-247, NBA 132-145,
- *      MLB 654-666, NHL 246-261 (floors 150, 90, 400, 150). Left without a
- *      decision: 0 on every seed. coinflip: 626 findings.
+ *   1. cases at the desk                             NFL 218-227, NBA 148-159,
+ *      MLB 712-732, NHL 247-270 (floors 150, 90, 400, 150). Left without a
+ *      decision: 0 on every seed. coinflip: 633 findings.
  *   2. ask as a share of the cap the deal is priced against
- *                 lowest  median        p95          highest
- *      NFL        0.002   0.035-0.039   0.053-0.066  0.073-0.103
- *      NBA        0.026   0.250         0.300-0.309  0.315-0.350 (the rule's max)
- *      MLB        0.002   0.037-0.044   0.070-0.072  0.085-0.099
- *      NHL        0.004   0.042-0.044   0.066-0.070  0.077-0.090
- *      Bands: every ask in every season inside 0.001 to 0.16 (NBA 0.351);
- *      median NFL 0.02-0.06, NBA 0.15-0.32, MLB 0.02-0.07, NHL 0.025-0.07;
- *      p95 at most NFL 0.085, NBA 0.33, MLB 0.09, NHL 0.085. Under askdouble
- *      the p95 measured NFL 0.104-0.131, NBA 0.350, MLB 0.117-0.123, NHL
- *      0.094-0.135 on three seed sets, so the p95 line is what catches it; the
- *      all-season line alone fired by a hair (0.161 against 0.16) and was not
- *      trusted on its own. Season one has no cases in the NBA, MLB and NHL
- *      leagues (every opening deal runs two seasons or more), so the floor
- *      on seasons with cases is 9 of 10 there and 10 of 10 in the NFL.
- *   3. meter steps per sport 44,418 to 219,780; nometer: 7,734 findings.
+ *                 median of all  p95          season medians
+ *      NFL        0.035-0.038    0.050-0.064  0.009 to 0.045
+ *      NBA        0.250          0.300-0.309  0.093 to 0.300
+ *      MLB        0.044-0.047    0.070-0.073  0.028 to 0.056
+ *      NHL        0.041-0.044    0.065-0.070  0.033 to 0.060
+ *      Bands: each season's median NFL 0.004-0.07, NBA 0.06-0.34, MLB
+ *      0.015-0.08, NHL 0.018-0.085; median of all NFL 0.02-0.06, NBA
+ *      0.15-0.32, MLB 0.02-0.07, NHL 0.025-0.07; p95 at most NFL 0.085, NBA
+ *      0.33, MLB 0.09, NHL 0.085. Under askdouble the p95 measured NFL 0.123,
+ *      NBA 0.350, MLB 0.130 (4 findings) and the NFL season medians reached
+ *      0.083. Season one has no cases in the NBA, MLB and NHL leagues (every
+ *      opening deal runs two seasons or more), and on one NFL seed set none
+ *      either, because the GM now tags the only man expiring, so the floor on
+ *      seasons with cases is 9 of 10 everywhere.
+ *   3. meter steps per sport 47,586 to 241,560; nometer: 8,144 findings.
  *   4. rule coverage, lowest to highest over the sets, and its floor:
- *      NFL options 33-35 (15), later round picks asked about 75-84 (30);
- *      NBA Non-Bird 12-15 (5), Early Bird 8-10 (3), capped by the rule 85-115
- *      (40), ask over the ceiling 12-19 (5); MLB pre arbitration 77-82 (30),
- *      arbitration 144-161 (60), qualifying offers 269-285 (100), picks paid
- *      21-26 (8); NHL restricted 123-137 (60), sheets 66-72 (30), picks paid
- *      37-43 (15). Controls: optionall 66, nobird 8, noarb 198, resheet 94.
+ *      NFL options 31-35 (15), later round picks 71-81 (30), tagged 48-49
+ *      (20), tag year men at the desk 41-44 (20), guaranteed men re-signed
+ *      25-36 (10), let go men repriced 91-96 (40), first rounders back with
+ *      the option unused 19-27 (8). NBA Non-Bird 22-24 (8), Early Bird 17-19
+ *      (6), capped by the rule 84-111 (40), ask over the ceiling 27-32 (10),
+ *      Early Bird exception 10-15 (4), cases with dead money 147-159 (60),
+ *      pushes over the rules 148-159 (60). MLB pre arbitration 72-77 (30),
+ *      arbitration 142-153 (60), qualifying offers 262-273 (100), mid season
+ *      arrivals 50 (20), let go men repriced 158-170 (60), refusers signed
+ *      back 20-26 (8), men back after an offer 192-206 (60), picks paid
+ *      20-26 (8). NHL restricted 135-141 (60), sheets 54-67 (25), sheet men
+ *      at the rival 26-39 (10), picks paid 27-41 (15).
+ *      Controls, findings on SIM_SEED 0: optionall 66, nobird 17, noarb 160,
+ *      resheet 109, optiontwice 34, keepflags 38, qotwice 33, mutmid 31,
+ *      mutmax 2 (the ladder walk: 6 and 9 seasons), muttag 95, noreprice 226,
+ *      sheetpool 41, mutceil 139, earlyone 20, nodeadcap 14 (15 on 300).
  *
  * NOT COVERED HERE, AND WHERE IT IS: the walkout and counter arithmetic of a
  * single push, the reload guard on a push and the corrupt ledger reset are in
@@ -847,18 +889,27 @@ console.log(`\n5) ${rules.CONTRACT_RULES.length} rules on the books, ${rules.CON
 
 /* ---------- the bands, from MEASURED in the header ---------- */
 const BANDS = {
-  /* ask / cap: every ask in every season inside [floor, ceiling]; the median inside [medLo, medHi]. */
-  nfl: { seasonMedLo: 0.005, seasonMedHi: 0.2, medLo: 0.02, medHi: 0.06, p95Hi: 0.085, cases: 150, seasons: 10 },
-  nba: { seasonMedLo: 0.005, seasonMedHi: 0.4, medLo: 0.15, medHi: 0.32, p95Hi: 0.33, cases: 90, seasons: 9 },
-  mlb: { seasonMedLo: 0.005, seasonMedHi: 0.2, medLo: 0.02, medHi: 0.07, p95Hi: 0.09, cases: 400, seasons: 9 },
-  nhl: { seasonMedLo: 0.005, seasonMedHi: 0.2, medLo: 0.025, medHi: 0.07, p95Hi: 0.085, cases: 150, seasons: 9 },
+  /* ask / cap: every season's median inside [seasonMedLo, seasonMedHi]; all asks' median inside [medLo, medHi]; p95 at most p95Hi. */
+  nfl: { seasonMedLo: 0.004, seasonMedHi: 0.07, medLo: 0.02, medHi: 0.06, p95Hi: 0.085, cases: 150, seasons: 9 },
+  nba: { seasonMedLo: 0.06, seasonMedHi: 0.34, medLo: 0.15, medHi: 0.32, p95Hi: 0.33, cases: 90, seasons: 9 },
+  mlb: { seasonMedLo: 0.015, seasonMedHi: 0.08, medLo: 0.02, medHi: 0.07, p95Hi: 0.09, cases: 400, seasons: 9 },
+  nhl: { seasonMedLo: 0.018, seasonMedHi: 0.085, medLo: 0.025, medHi: 0.07, p95Hi: 0.085, cases: 150, seasons: 9 },
 };
 /* Section 4 coverage floors, each well under its measured range, so a rule cannot pass empty. */
 const RULE_FLOORS = {
-  nfl: { options: 15, laterRoundsAsked: 30 },
-  nba: { 'tier non': 5, 'tier early': 3, capped: 40, overCeiling: 5 },
-  mlb: { 'pre-arbitration': 30, arbitration: 60, qualifyingOffers: 100 },
-  nhl: { restricted: 60, sheets: 30 },
+  nfl: {
+    options: 15, laterRoundsAsked: 30, tagged: 20, 'tag year men at the desk': 20, 'guaranteed men re-signed': 10,
+    'let go men repriced': 40, 'first rounders back with the option unused': 8,
+  },
+  nba: {
+    'tier non': 8, 'tier early': 6, capped: 40, overCeiling: 10, 'early bird exception': 4,
+    'cases with dead money on the books': 60, 'pushes over the rules': 60,
+  },
+  mlb: {
+    'pre-arbitration': 30, arbitration: 60, qualifyingOffers: 100, 'mid season arrivals at the desk': 20,
+    'let go men repriced': 60, 'qualifying offer refusers signed back': 8, 'men back after a qualifying offer': 60,
+  },
+  nhl: { restricted: 60, sheets: 25, 'sheet men at the rival': 10 },
 };
 const PICK_FLOORS = { nfl: 0, nba: 0, mlb: 8, nhl: 15 };
 let baseLeft = 0;
