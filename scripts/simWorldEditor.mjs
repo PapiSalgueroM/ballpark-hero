@@ -45,6 +45,7 @@
      noload      loadCareer drops the save's memberships   -> section 4 red
      lateucl     next season's field read after the swap   -> section 2 red
      euroone     season one Europe reads the edited league -> section 2 red
+     homecountry a moved club's nationality ask follows the league -> section 3 red
 
    Measured headroom (SIM_SEED unset and 1, 2, 3, 4): section 3 is
    deterministic (stature comes from the baked rosters, no draw), and its
@@ -68,7 +69,7 @@ let checks = 0;
 const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
 const ok = (cond, m) => { checks += 1; if (!cond) fail(m); return cond; };
 const CONTROL = process.env.SIM_WORLD_EDITOR_CONTROL ?? '';
-const CONTROLS = ['', 'noregister', 'leak', 'dupe', 'staticrank', 'stature', 'noload', 'lateucl', 'euroone'];
+const CONTROLS = ['', 'noregister', 'leak', 'dupe', 'staticrank', 'stature', 'noload', 'lateucl', 'euroone', 'homecountry'];
 if (!CONTROLS.includes(CONTROL)) { console.error(`unknown control ${CONTROL}`); process.exit(1); }
 
 /* A worktree has no node_modules of its own, so esbuild is found by walking up. */
@@ -104,9 +105,13 @@ const EARLY_UCL = '  const nextUclField = uclQualifiersFrom(career);\n  register
 if (CONTROL === 'lateucl') cmSrc = mutate(cmSrc.replaceAll('\r\n', '\n'), EARLY_UCL, '  registerLeagueOverrides(pr.overrides);\n  const nextUclField = uclQualifiersFrom(career);', 'played world Europe read');
 const QUAL_LEAGUE = 'const qualLeague = worldEdit ? (REAL_LEAGUES.find(l => l.clubs.includes(club.name)) ?? league) : league;';
 if (CONTROL === 'euroone') cmSrc = mutate(cmSrc, QUAL_LEAGUE, 'const qualLeague = league;', 'season one real league read');
+/* The board's transfer asks, bundled against the same engine copy. */
+let baSrc = fs.readFileSync(path.join(ROOT, 'src/lib/clubManagerBoardAsks.ts'), 'utf8');
+if (CONTROL === 'homecountry') baSrc = mutate(baSrc, 'LEAGUE_NATIONS[(home ?? careerLeagueOf(career)).id]', 'LEAGUE_NATIONS[careerLeagueOf(career).id]', 'real league country read');
 const cmPath = path.join(TMP, 'clubManager.ts').replaceAll('\\', '/');
 fs.writeFileSync(cmPath, cmSrc);
 fs.writeFileSync(path.join(TMP, 'clubManagerWorldEdit.ts'), weSrc.replace("from '@/lib/clubManager'", `from '${cmPath}'`));
+fs.writeFileSync(path.join(TMP, 'clubManagerBoardAsks.ts'), baSrc.replaceAll("from '@/lib/clubManager'", `from '${cmPath}'`));
 /* The baseline section 0 compares against: this branch's engine, unmutated,
    with every hunk through which an edit reaches a career taken out. It moves
    with every other round's change to the engine, so it measures the edit
@@ -127,7 +132,7 @@ function bundle(name, body) {
   execSync(`"${ESBUILD}" "${entry}" --bundle --format=esm --platform=node --outfile="${out}" --log-level=error --alias:@=${ROOT_FWD}/src`, { stdio: 'inherit' });
   return out;
 }
-const branchBundle = bundle('branch', `export * as cm from '${cmPath}';\nexport * as we from '${path.join(TMP, 'clubManagerWorldEdit.ts').replaceAll('\\', '/')}';\n`);
+const branchBundle = bundle('branch', `export * as cm from '${cmPath}';\nexport * as we from '${path.join(TMP, 'clubManagerWorldEdit.ts').replaceAll('\\', '/')}';\nexport * as ba from '${path.join(TMP, 'clubManagerBoardAsks.ts').replaceAll('\\', '/')}';\n`);
 const baseBundle = bundle('base', `export * as cm from '${basePath}';\n`);
 
 const store = new Map();
@@ -137,7 +142,7 @@ globalThis.localStorage = {
   removeItem: k => { store.delete(k); },
   clear: () => { store.clear(); },
 };
-const { cm, we } = await import(pathToFileURL(branchBundle).href);
+const { cm, we, ba } = await import(pathToFileURL(branchBundle).href);
 const { cm: baseCm } = await import(pathToFileURL(baseBundle).href);
 
 /* A resettable stream for the identity checks: both engines must see the same draws. */
@@ -337,6 +342,26 @@ function sectionThree() {
   const brentfordScot = leagueAsk('Brentford', we.swapClubs(null, 'Celtic', 'Brentford'));
   ok(isSurvive(celticUp), `the help says Celtic in the Premier League are asked to stay up, the board says "${celticUp.label}"`);
   ok(brentfordScot.label === 'Win the Scottish Premiership', `the help says Brentford in Scotland are asked to win the Scottish Premiership, the board says "${brentfordScot.label}"`);
+  /* Review fix: the league is new, the club is not. A moved club's board
+     asks for players from its OWN country, the same country it asks for at
+     home (it used to follow the league: Celtic in the Premier League were
+     asked for English players). */
+  const natAsk = (club, edit) => {
+    const c = ba.askCandidates(cm.startCareer(club, undefined, undefined, undefined, undefined, edit)).find(x => x.objective.id === 'natQuota');
+    cm.registerLeagueOverrides(null);
+    return c ? c.objective.country : 'none';
+  };
+  /* The fix reads the club's real league, which equals its league on every
+     unedited save only because promotion never crosses a border. */
+  const crossBorder = cm.PYRAMIDS.filter(p => cm.LEAGUE_NATIONS[p.top] !== cm.LEAGUE_NATIONS[p.second]);
+  ok(cm.PYRAMIDS.length > 0 && crossBorder.length === 0, `promotion crosses a border: ${crossBorder.map(p => `${p.top}/${p.second}`).join(', ')}`);
+  const swapCB = we.swapClubs(null, 'Celtic', 'Brentford');
+  const nat = [['Celtic', 'Scotland'], ['Brentford', 'England']].map(([club, home]) => ({ club, home, atHome: natAsk(club, null), moved: natAsk(club, swapCB) }));
+  for (const r of nat) {
+    ok(r.atHome === r.home, `${r.club}'s board asks for players from ${r.atHome} at home, measured ${r.home}`);
+    ok(r.moved === r.home, `${r.club} moved by the editor are asked for players from ${r.moved}, not their own ${r.home}`);
+  }
+  console.log(`   nationality asks, home and moved: ${nat.map(r => `${r.club} ${r.atHome}/${r.moved}`).join(', ')}`);
   /* Ladders: every club of one league moved into another, one at a time,
      strongest first. The ask may never get kinder as the club gets stronger
      (an inversion), and between two leagues of similar strength it has to
