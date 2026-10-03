@@ -11501,8 +11501,18 @@ const TITLE_STATURE = new Set([
   'Club Brugge', 'Genk', 'Union Saint-Gilloise',
 ]);
 
+/* Round 964: and only in the club's real league. Celtic's board demands the
+   Scottish title; moved into the Premier League by the world editor, Celtic
+   are measured against their new league like anyone else, so the stature of
+   the old one is never carried across. */
+function playsInRealLeague(clubName: string): boolean {
+  if (!ACTIVE_LEAGUE_OVERRIDES) return true;
+  const real = REAL_LEAGUES.find(l => l.clubs.includes(clubName));
+  return !real || effectiveClubsOf(real.id, real.clubs).includes(clubName);
+}
+
 function demandsTitle(rank: number, tier: number, titleGap: number, clubName?: string, eraId?: string): boolean {
-  const stature = !!clubName && !(eraId && isHistoricEra(eraId)) && TITLE_STATURE.has(clubName);
+  const stature = !!clubName && !(eraId && isHistoricEra(eraId)) && TITLE_STATURE.has(clubName) && playsInRealLeague(clubName);
   return rank <= 2 || (rank <= 4 && tier <= 2) || titleGap <= TITLE_GAP || stature;
 }
 

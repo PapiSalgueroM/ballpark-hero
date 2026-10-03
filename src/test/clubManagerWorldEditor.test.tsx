@@ -12,11 +12,13 @@ import {
   editedLeagueIdOf, realLeagueIdOf,
 } from '@/lib/clubManagerWorldEdit';
 import type { WorldEdit } from '@/lib/clubManagerWorldEdit';
+import { render, fireEvent, cleanup } from '@testing-library/react';
+import { WorldEditorScreen } from '@/components/club-manager/WorldEditorScreen';
 
 const sizeOf = (id: string) => REAL_LEAGUES.find(l => l.id === id)!.clubs.length;
 const allClubs = (edit: WorldEdit | null) => REAL_LEAGUES.flatMap(l => editedClubsOf(edit, l.id));
 
-afterEach(() => registerLeagueOverrides(null));
+afterEach(() => { cleanup(); registerLeagueOverrides(null); });
 
 describe('the real world', () => {
   it('names every club in exactly one league', () => {
@@ -114,5 +116,36 @@ describe('startCareer with an edit', () => {
     const s = startCareer('Celtic', undefined, undefined, undefined, undefined, null);
     expect(s.leagueOverrides).toBeUndefined();
     expect(s.leagueClubs).toContain('Rangers');
+  });
+});
+
+describe('WorldEditorScreen', () => {
+  const noop = () => {};
+  it('moves a club in two taps, says what happened, lists it and resets', () => {
+    let edit: WorldEdit | null = null;
+    const onChange = (e: WorldEdit | null) => { edit = e; };
+    const view = render(<WorldEditorScreen edit={null} onChange={onChange} onBack={noop} onDone={noop} />);
+    fireEvent.click(view.getByLabelText('Move Celtic'));
+    /* The club's own league is not offered as somewhere to swap into. */
+    const select = view.getByLabelText('League to swap into') as HTMLSelectElement;
+    expect([...select.options].map(o => o.value)).not.toContain('scottish');
+    fireEvent.click(view.getByLabelText('Swap Celtic with Brentford'));
+    expect(edit).toEqual(swapClubs(null, 'Celtic', 'Brentford'));
+    view.rerender(<WorldEditorScreen edit={edit} onChange={onChange} onBack={noop} onDone={noop} />);
+    expect(view.getByRole('status').textContent).toContain('Celtic now plays in the Premier League');
+    expect(view.getByText('2 clubs moved')).toBeTruthy();
+    fireEvent.click(view.getByText('See list'));
+    expect(view.getByTestId('cm-world-moves').textContent).toContain('Brentford');
+    expect(view.getByText('Play this world (2 moved)')).toBeTruthy();
+    fireEvent.click(view.getByText('Reset'));
+    expect(edit).toBeNull();
+  });
+  it('lets a move be cancelled before the second tap', () => {
+    let calls = 0;
+    const view = render(<WorldEditorScreen edit={null} onChange={() => { calls += 1; }} onBack={noop} onDone={noop} />);
+    fireEvent.click(view.getByLabelText('Move Celtic'));
+    fireEvent.click(view.getByText('Cancel'));
+    expect(view.getByLabelText('Move Rangers')).toBeTruthy();
+    expect(calls).toBe(0);
   });
 });
