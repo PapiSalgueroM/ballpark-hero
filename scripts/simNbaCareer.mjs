@@ -41,7 +41,10 @@
        drafted onto the player's team and keeps it, so this is the common
        case, not an edge: before the gate was fixed it was 211 of 248 rolls.
        Exact, no band. The beat must also still be rolled at least once, so
-       the check cannot pass by the beat going quiet.
+       the check cannot pass by the beat going quiet: measured 22, 32 and 42
+       rolls (default seed, SIM_SEED 1 and 2, 400 careers), far from 0. The
+       same three runs checked 543, 317 and 302 trades in 2003-04 careers
+       for the C2 era wall, whose floor is also one.
    R2  The six Round 918 rivalry beats (318 to 323): every number in the
        consequence line is what apply moves, and "the rivalry heats up" is
        said exactly when the rivalry meter rises. Exact, no band.
