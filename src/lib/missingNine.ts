@@ -61,6 +61,12 @@ export interface NineBlankCandidate {
   nationality: string;
   /** One-line VERIFIED flavor fact shown on reveal (never invented by the UI). */
   fact?: string;
+  /**
+   * Round 948 review: other full names the same man is accepted under, same
+   * shape as Missing XI. Only a name he really went by, recorded with its
+   * reason in scripts/data/missingNineSources.json, never a different person.
+   */
+  aliases?: string[];
 }
 
 export interface NineLineup {
@@ -319,7 +325,7 @@ export const NINE_LINEUPS: NineLineup[] = [
       S('P', 'Bob Ojeda'),
     ],
     blankCandidates: [
-      { name: 'Bob Ojeda', slotIndex: 8, nationality: 'USA', fact: 'Started Game 6, not Dwight Gooden, and went six innings.' },
+      { name: 'Bob Ojeda', slotIndex: 8, nationality: 'USA', fact: 'Started Game 6, not Dwight Gooden, and went six innings.', aliases: ['Bobby Ojeda'] },
       { name: 'Mookie Wilson', slotIndex: 6, nationality: 'USA', fact: 'His 10th-inning grounder went for an error on Bill Buckner at first, and Ray Knight scored the winning run.' },
       { name: 'Rafael Santana', slotIndex: 7, nationality: 'Dominican Republic', fact: 'Started at short and batted eighth; Kevin Elster and Howard Johnson both took turns there later.' },
     ],
@@ -743,7 +749,7 @@ export const NINE_LINEUPS: NineLineup[] = [
     blankCandidates: [
       { name: 'Alex Gordon', slotIndex: 5, nationality: 'USA', fact: 'Had two hits, one a double off Tim Hudson, and drove in a run.' },
       { name: 'Omar Infante', slotIndex: 8, nationality: 'Venezuela', fact: 'Drove in a run with a sacrifice fly off Tim Hudson.' },
-      { name: 'Nori Aoki', slotIndex: 1, nationality: 'Japan', fact: 'Batted second and started in right field.' },
+      { name: 'Nori Aoki', slotIndex: 1, nationality: 'Japan', fact: 'Batted second and started in right field.', aliases: ['Norichika Aoki'] },
     ],
     source: 'baseball-almanac box 201410290KCA + baseball-reference box KCA201410290: both list the same nine in the same order (matched by player id). Checked facts and birthplaces: scripts/data/missingNineSources.json.',
   },
@@ -1021,6 +1027,7 @@ export function isCorrectNineGuess(guess: string, candidate: NineBlankCandidate)
   const g = normalizeNineName(guess);
   const target = normalizeNineName(candidate.name);
   if (g === target) return true;
+  if ((candidate.aliases ?? []).some((a) => normalizeNineName(a) === g)) return true;
   const surname = target.split(' ').slice(-1)[0];
   return g === surname && surname.length >= 4;
 }

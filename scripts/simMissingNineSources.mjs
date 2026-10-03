@@ -41,6 +41,11 @@
  *   SIM_M9_SOURCES_CONTROL=floor    deletes the last sheet from the game file (6)
  *   SIM_M9_SOURCES_CONTROL=walk     makes the daily pick walk only ten sheets (7)
  *   SIM_M9_SOURCES_CONTROL=dash     puts a long dash into one fact           (8)
+ *   SIM_M9_SOURCES_CONTROL=alias    drops the alias line from the guess check (4)
+ *   SIM_M9_SOURCES_CONTROL=born     makes Chili Davis USA in both files, born Kingston (9)
+ *   SIM_M9_SOURCES_CONTROL=url      points the 2019 WSH almanac row at a 2017 box (10)
+ *   SIM_M9_SOURCES_CONTROL=team     makes the 2019 Astros sheet's team the Nationals (11)
+ *   SIM_M9_SOURCES_CONTROL=hub      puts the old 1986 to 2016 span back in the hub FAQ (12)
  *
  * Run: node scripts/simMissingNineSources.mjs
  * Reads committed files only; no network.
@@ -57,7 +62,13 @@ const RECORD = path.join(ROOT, 'scripts/data/missingNineSources.json');
 const CONTROL = process.env.SIM_M9_SOURCES_CONTROL || '';
 const FLOOR = 30;
 const WALK_START = '2026-10-03';
-const WALK_DAYS = 90;
+/* Three pool lengths, set once the pool is known (check 7). dailyIndex cuts
+   the days into cycles as long as the pool, aligned to the day number, so a
+   start in mid cycle still leaves two whole cycles inside 3 x pool days and
+   every sheet must come up at least twice whatever the pool size. A fixed 90
+   only held that up to 30 sheets: at 35 the rarest sheet came up once. */
+const WALK_CYCLES = 3;
+const HUB = path.join(ROOT, 'src/lib/sportHub.ts');
 const HOSTS = [
   ['baseball-almanac', /baseball-almanac/i],
   ['baseball-reference', /baseball-reference/i],
@@ -67,8 +78,10 @@ const HOSTS = [
 const WIKI = /wiki/i;
 const LONG_DASH = new RegExp('[' + String.fromCharCode(0x2013, 0x2014) + ']');
 
-let code = fs.readFileSync(SRC, 'utf8');
+/* Line endings folded to LF, so a control's two line anchor holds on a CRLF checkout too. */
+let code = fs.readFileSync(SRC, 'utf8').replace(/\r\n/g, '\n');
 let recordText = fs.readFileSync(RECORD, 'utf8');
+let hubText = fs.readFileSync(HUB, 'utf8').replace(/\r\n/g, '\n');
 
 /* Controls: assert the anchor exists exactly where we expect, then mutate the copy. */
 function mutate(kind, text, anchor, replacement) {
@@ -93,6 +106,14 @@ const CONTROLS = {
   }],
   walk: [7, () => { code = mutate('game file', code, 'dailyIndex(getTodayET(), NINE_LINEUPS.length)', 'dailyIndex(getTodayET(), 10)'); }],
   dash: [8, () => { code = mutate('game file', code, 'Had three hits, two of them doubles,', 'Had three hits ' + String.fromCharCode(0x2014) + ' two of them doubles,'); }],
+  alias: [4, () => { code = mutate('game file', code, "  if ((candidate.aliases ?? []).some((a) => normalizeNineName(a) === g)) return true;\n", ''); }],
+  born: [9, () => {
+    recordText = mutate('record', recordText, '"name": "Chili Davis", "nationality": "Jamaica"', '"name": "Chili Davis", "nationality": "USA"');
+    code = mutate('game file', code, "{ name: 'Chili Davis', slotIndex: 4, nationality: 'Jamaica'", "{ name: 'Chili Davis', slotIndex: 4, nationality: 'USA'");
+  }],
+  url: [10, () => { recordText = mutate('record', recordText, 'boxscore.php?boxid=201910300HOA', 'boxscore.php?boxid=201711010LAN'); }],
+  team: [11, () => { code = mutate('game file', code, "    team: 'Houston Astros',\n    opponent: 'Washington Nationals',", "    team: 'Washington Nationals',\n    opponent: 'Washington Nationals',"); }],
+  hub: [12, () => { hubText = mutate('hub', hubText, 'World Series games between 1956 and 2019', 'World Series games between 1986 and 2016'); }],
 };
 if (CONTROL && !CONTROLS[CONTROL]) { console.error(`unknown control ${CONTROL}`); process.exit(2); }
 if (CONTROL) CONTROLS[CONTROL][1]();
@@ -157,6 +178,7 @@ for (const s of sheets) {
 
 console.log('4) every blank matches the record: name, slot, nationality, fact');
 let blanks = 0;
+let aliasCount = 0;
 for (const s of sheets) {
   const r = rows.get(s.id);
   if (!r) continue;
@@ -169,9 +191,21 @@ for (const s of sheets) {
     if (b.nationality !== c.nationality) fail(4, `${s.id}: ${c.name} nationality game "${c.nationality}", record "${b.nationality}"`);
     if (b.fact !== c.fact) fail(4, `${s.id}: ${c.name} fact differs from the checked one`);
     if (!b.checked || !b.born) fail(4, `${s.id}: ${c.name} has no checked note or birthplace in the record`);
+    /* Aliases: the same man under another full name (Bobby Ojeda, Norichika Aoki). */
+    const ga = JSON.stringify(c.aliases ?? []);
+    const ra = JSON.stringify(b.aliases ?? []);
+    if (ga !== ra) fail(4, `${s.id}: ${c.name} aliases game ${ga}, record ${ra}`);
+    if ((b.aliases ?? []).length > 0 && !b.aliasWhy) fail(4, `${s.id}: ${c.name} carries an alias with no reason in the record`);
+    if (!m9.isCorrectNineGuess(c.name, c)) fail(4, `${s.id}: ${c.name} is not accepted as his own guess`);
+    for (const a of c.aliases ?? []) {
+      aliasCount += 1;
+      if (!m9.isCorrectNineGuess(a, c)) fail(4, `${s.id}: the alias "${a}" is not accepted as a guess for ${c.name}`);
+      if (a.trim().split(/\s+/).pop() !== c.name.trim().split(/\s+/).pop()) fail(4, `${s.id}: the alias "${a}" does not share ${c.name}'s surname, so the hints would mislead`);
+      if (m9.ALL_NINE_NAMES.includes(a)) fail(4, `${s.id}: the alias "${a}" is another name on the sheets`);
+    }
   }
 }
-console.log(`   ${blanks} blanks checked against the record`);
+console.log(`   ${blanks} blanks checked against the record, ${aliasCount} aliases accepted by the real guess check`);
 
 console.log('5) every surname hint is a real surname');
 const SUFFIX = /^(jr\.?|sr\.?|ii|iii|iv)$/i;
@@ -188,7 +222,8 @@ console.log(`6) the pool holds at least ${FLOOR} sheets`);
 if (sheets.length < FLOOR) fail(6, `${sheets.length} sheets, the floor is ${FLOOR} (it was 10 before Round 948)`);
 console.log(`   ${sheets.length} sheets`);
 
-console.log(`7) the real daily pick deals every sheet over ${WALK_DAYS} days`);
+const WALK_DAYS = WALK_CYCLES * sheets.length;
+console.log(`7) the real daily pick deals every sheet over ${WALK_DAYS} days (three pool lengths)`);
 {
   const RealDate = globalThis.Date;
   const counts = new Map();
@@ -218,6 +253,100 @@ console.log('8) no long dashes in any sheet text');
 for (const s of sheets) {
   const text = JSON.stringify(s);
   if (LONG_DASH.test(text)) fail(8, `${s.id}: a long dash in the sheet`);
+}
+
+console.log('9) every blank\'s nationality agrees with the birthplace the record holds');
+const US_STATES = new Set([
+  'Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut', 'Delaware',
+  'Florida', 'Georgia', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky',
+  'Louisiana', 'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota', 'Mississippi',
+  'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire', 'New Jersey', 'New Mexico',
+  'New York', 'North Carolina', 'North Dakota', 'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania',
+  'Rhode Island', 'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont',
+  'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming', 'D.C.',
+]);
+let bornChecked = 0;
+for (const r of rows.values()) {
+  for (const b of r.blanks ?? []) {
+    /* "Kingston, Jamaica", "Osaka, Japan (town differs, see playerPages)", "Oranjestad, Aruba, born 1992-10-01" */
+    const place = String(b.born ?? '').replace(/\s*\([^)]*\)/g, '').replace(/,\s*born\b.*$/, '').trim();
+    const last = place.split(',').map((x) => x.trim()).filter(Boolean).pop() ?? '';
+    const implied = US_STATES.has(last) ? 'USA' : last;
+    bornChecked += 1;
+    if (!last) fail(9, `${r.id}: ${b.name} has no birthplace to check his nationality against`);
+    else if (implied !== b.nationality) fail(9, `${r.id}: ${b.name} is "${b.nationality}" but the record has him born in ${place}`);
+  }
+}
+console.log(`   ${bornChecked} nationalities agree with their birthplaces`);
+
+/* The record's game line: "2019 World Series Game 7, 2019-10-30, Minute Maid Park: Nationals 6, Astros 2 (10 inn)" */
+const GAME_LINE = /^(\d{4}) World Series Game (\d), (\d{4})-(\d{2})-(\d{2}), ([^:]+): (.+?) (\d+), (.+?) (\d+)(?: \((\d+) inn\))?$/;
+const MONTHS = ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december'];
+function parseGame(r) {
+  const m = GAME_LINE.exec(r.game ?? '');
+  if (!m) return null;
+  const [, year, gameNo, y, mo, d, venue, winner, ws, loser, ls, inn] = m;
+  return { year, gameNo, date: `${y}-${mo}-${d}`, digits: `${y}${mo}${d}`,
+    words: `${MONTHS[Number(mo) - 1]}-${Number(d)}-${y}`, venue, winner, ws, loser, ls, inn };
+}
+
+console.log('10) every source is the box or recap of that very game: its address carries the game\'s date');
+let urlChecked = 0;
+for (const r of rows.values()) {
+  const g = parseGame(r);
+  if (!g) { fail(10, `${r.id}: the record's game line does not parse: ${r.game}`); continue; }
+  if (!r.id.startsWith(`ws-${g.year}-g${g.gameNo}-`)) fail(10, `${r.id}: the id does not match its game line (${g.year} Game ${g.gameNo})`);
+  for (const src of r.sources ?? []) {
+    urlChecked += 1;
+    const u = String(src.url ?? '').toLowerCase();
+    /* almanac boxid=YYYYMMDD0XXX, baseball-reference /XXXYYYYMMDD0.shtml, SABR /month-d-yyyy-... */
+    const ok = src.host === 'sabr.org' ? u.includes(`/${g.words}-`) : u.includes(g.digits);
+    if (!ok) fail(10, `${r.id}: the ${src.host} address does not carry ${g.date}, so it is another game's page: ${src.url}`);
+  }
+  const s = sheets.find((x) => x.id === r.id);
+  if (s && !String(s.source ?? '').includes(g.digits)) fail(10, `${r.id}: the sheet's source string names no box of ${g.date}`);
+}
+console.log(`   ${urlChecked} source addresses carry their game's date`);
+
+console.log('11) the card\'s header (date, venue, score, both teams) is the record\'s game, and both sides mirror');
+for (const s of sheets) {
+  const r = rows.get(s.id);
+  const g = r && parseGame(r);
+  if (!g) continue;
+  const score = `${g.winner} ${g.ws}-${g.ls} ${g.loser}${g.inn ? ` (${g.inn} inn)` : ''}`;
+  if (s.dateLabel !== `${g.year} World Series, Game ${g.gameNo}`) fail(11, `${s.id}: dateLabel "${s.dateLabel}" is not ${g.year} Game ${g.gameNo}`);
+  if (s.competition !== 'World Series') fail(11, `${s.id}: competition "${s.competition}"`);
+  if (s.matchDate !== g.date) fail(11, `${s.id}: matchDate ${s.matchDate}, the record says ${g.date}`);
+  if (!String(s.venue ?? '').startsWith(`${g.venue},`)) fail(11, `${s.id}: venue "${s.venue}", the record says ${g.venue}`);
+  if (s.scoreLine !== score) fail(11, `${s.id}: scoreLine "${s.scoreLine}", the record gives ${score}`);
+  const sides = [g.winner, g.loser];
+  const teamSide = sides.find((n) => String(s.team).endsWith(` ${n}`));
+  const oppSide = sides.find((n) => String(s.opponent).endsWith(` ${n}`));
+  if (!teamSide || !oppSide || teamSide === oppSide) fail(11, `${s.id}: "${s.team}" v "${s.opponent}" is not ${g.winner} v ${g.loser}`);
+  const twin = sheets.filter((x) => x.id !== s.id && rows.get(x.id)?.game === r.game);
+  if (twin.length !== 1) fail(11, `${s.id}: ${twin.length} other sheets of this game, the other side should be exactly one`);
+  else if (twin[0].team !== s.opponent || twin[0].opponent !== s.team || twin[0].scoreLine !== s.scoreLine || twin[0].venue !== s.venue || twin[0].matchDate !== s.matchDate) {
+    fail(11, `${s.id}: the other side (${twin[0].id}) does not mirror it`);
+  }
+}
+
+console.log('12) the baseball hub\'s line about Missing Nine gives the pool\'s real span');
+{
+  const years = sheets.map((s) => Number(String(s.matchDate).slice(0, 4)));
+  const lo = Math.min(...years);
+  const hi = Math.max(...years);
+  /* Read the FAQ answers (string literals in code), never a comment. */
+  const answers = [...hubText.matchAll(/\ba: '((?:[^'\\]|\\.)*)'/g)].map((m) => m[1]).filter((a) => a.includes('Missing Nine'));
+  let spans = 0;
+  for (const a of answers) {
+    for (const sentence of a.split(/(?<=\.)\s+/).filter((x) => x.includes('Missing Nine'))) {
+      const ys = [...sentence.matchAll(/\b(1[89]\d\d|20\d\d)\b/g)].map((m) => Number(m[1]));
+      if (ys.length === 0) continue;
+      spans += 1;
+      if (Math.min(...ys) !== lo || Math.max(...ys) !== hi) fail(12, `the hub says Missing Nine spans ${Math.min(...ys)} to ${Math.max(...ys)}, the pool runs ${lo} to ${hi}: "${sentence.slice(0, 120)}"`);
+    }
+  }
+  console.log(`   ${answers.length} hub answer(s) name Missing Nine, ${spans} give years; the pool runs ${lo} to ${hi}`);
 }
 
 fs.rmSync(TMP, { recursive: true, force: true });
