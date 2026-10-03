@@ -42,7 +42,7 @@ import {
   applySocialMediaAction, handleCoverAthleteDecision, dismissSocialMediaPhase,
   applyMoralDilemmaChoice, dismissMoralDilemma, MORAL_DILEMMAS,
   applyRehabChoice,
-  SOCIAL_MEDIA_ACTIONS, SPONSORSHIP_TIERS,
+  SOCIAL_MEDIA_ACTIONS, SPONSORSHIP_TIERS, SOCCER_COVER,
   dismissAppealResult,
   generateShareText, getYouthAcademyClub,
   getCareerTotals, calcOverall, formatWage, formatNetWorth, formatFollowers,
@@ -3267,7 +3267,7 @@ function SocialMediaActionCard({ career, onAction, onCoverAthlete, onDismiss }: 
             <div className="flex items-center justify-between">
               <div>
                 <div className="text-sm font-bold text-amber-300">✅ Accept: Become the Cover Star</div>
-                <div className="text-[10px] text-muted-foreground mt-0.5">{money('€25M payment')} · +5M followers · Legacy +10</div>
+                <div className="text-[10px] text-muted-foreground mt-0.5">{money(`€${SOCCER_COVER.pay}M payment`)}{` · +${SOCCER_COVER.followers}M followers · Legacy +10`}</div>
               </div>
               <span className="text-lg">🌟</span>
             </div>
@@ -3279,7 +3279,7 @@ function SocialMediaActionCard({ career, onAction, onCoverAthlete, onDismiss }: 
             <div className="flex items-center justify-between">
               <div>
                 <div className="text-sm font-bold text-foreground">❌ Decline: Stay Selective</div>
-                <div className="text-[10px] text-muted-foreground mt-0.5">Reputation +5 for being humble</div>
+                <div className="text-[10px] text-muted-foreground mt-0.5">{`Reputation +${SOCCER_COVER.declineStanding} for being humble`}</div>
               </div>
               <span className="text-lg">🧘</span>
             </div>

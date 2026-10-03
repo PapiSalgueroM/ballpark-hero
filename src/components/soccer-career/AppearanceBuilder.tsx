@@ -3,9 +3,9 @@ import { Button } from "@/components/ui/button";
 import PlayerAvatar from "./PlayerAvatar";
 import {
   type PlayerAppearance, randomAppearance,
-  SKIN_TONES, HAIRSTYLES, HAIR_COLORS, FACIAL_HAIR, ACCESSORIES, BOOTS, CELEBRATIONS,
-  getBoots, getCelebration,
+  SKIN_TONES, HAIRSTYLES, HAIR_COLORS, FACIAL_HAIR,
 } from "@/lib/soccerCareerAppearance";
+import { careerAppearanceCopy, type AppearanceSport } from "@/lib/careerAppearanceCopy";
 
 /* ─── AppearanceBuilder (Round 54) ───
    Owner asked for "create your appearance". This is the full look editor on
@@ -18,6 +18,7 @@ interface Props {
   appearance: PlayerAppearance;
   onChange: (next: PlayerAppearance) => void;
   clubColor?: string;
+  sport?: AppearanceSport;
 }
 
 type TabKey = "face" | "hair" | "beard" | "boots" | "extras" | "celebration";
@@ -31,7 +32,7 @@ const TABS: { key: TabKey; label: string; emoji: string }[] = [
   { key: "celebration", label: "Celebration", emoji: "🎉" },
 ];
 
-const AppearanceBuilder = ({ appearance, onChange, clubColor = "#10B981" }: Props) => {
+const AppearanceBuilder = ({ appearance, onChange, clubColor = "#10B981", sport = "soccer" }: Props) => {
   const [tab, setTab] = useState<TabKey>("face");
   const set = (patch: Partial<PlayerAppearance>) => onChange({ ...appearance, ...patch });
 
@@ -42,11 +43,12 @@ const AppearanceBuilder = ({ appearance, onChange, clubColor = "#10B981" }: Prop
         : "border-border bg-muted/20 text-muted-foreground hover:bg-muted/40 hover:text-foreground"
     }`;
 
-  const boots = getBoots(appearance.boots);
-  const celebration = getCelebration(appearance.celebration);
+  const copy = careerAppearanceCopy(sport);
+  const boots = copy.boots.find(option => option.id === appearance.boots) ?? copy.boots[0];
+  const celebration = copy.celebrations.find(option => option.id === appearance.celebration) ?? copy.celebrations[0];
 
   return (
-    <div className="bg-card border border-border rounded-xl p-4 sm:p-5 space-y-4">
+    <div data-career-appearance={sport === "soccer" ? undefined : sport} className="bg-card border border-border rounded-xl p-4 sm:p-5 space-y-4">
       <div className="flex items-center justify-between">
         <h2 className="text-base font-bold">Create Your Look</h2>
         <Button
@@ -71,8 +73,10 @@ const AppearanceBuilder = ({ appearance, onChange, clubColor = "#10B981" }: Prop
           <p className="text-muted-foreground leading-snug">{boots.flavor}</p>
           <div className="pt-1 text-muted-foreground">
             <span className="font-bold text-foreground">{celebration.emoji} {celebration.label}</span>
-            <span className="block leading-snug">Every goal, you {celebration.line}.</span>
+            {sport === "soccer" ? <span className="block leading-snug">Every goal, you {celebration.line}.</span>
+              : <span className="block leading-snug">{copy.celebrationIntro} {celebration.line}.</span>}
           </div>
+          {copy.styleNote && <p className="text-muted-foreground leading-snug">{copy.styleNote}</p>}
         </div>
       </div>
 
@@ -88,8 +92,8 @@ const AppearanceBuilder = ({ appearance, onChange, clubColor = "#10B981" }: Prop
                 : "border-border bg-muted/20 text-muted-foreground hover:text-foreground"
             }`}
           >
-            <span className="block text-sm leading-none mb-0.5">{t.emoji}</span>
-            {t.label}
+            <span className="block text-sm leading-none mb-0.5">{t.key === "boots" ? copy.gearEmoji : t.emoji}</span>
+            {t.key === "boots" ? copy.gearLabel : t.label}
           </button>
         ))}
       </div>
@@ -158,7 +162,7 @@ const AppearanceBuilder = ({ appearance, onChange, clubColor = "#10B981" }: Prop
 
         {tab === "boots" && (
           <div className="grid grid-cols-2 gap-1.5">
-            {BOOTS.map(b => (
+            {copy.boots.map(b => (
               <button
                 key={b.id}
                 onClick={() => set({ boots: b.id })}
@@ -177,7 +181,7 @@ const AppearanceBuilder = ({ appearance, onChange, clubColor = "#10B981" }: Prop
 
         {tab === "extras" && (
           <div className="flex flex-wrap gap-1.5">
-            {ACCESSORIES.map(a => (
+            {copy.accessories.map(a => (
               <button key={a.id} onClick={() => set({ accessory: a.id })} className={chip(appearance.accessory === a.id)}>
                 {a.label}
               </button>
@@ -187,7 +191,7 @@ const AppearanceBuilder = ({ appearance, onChange, clubColor = "#10B981" }: Prop
 
         {tab === "celebration" && (
           <div className="grid grid-cols-2 gap-1.5">
-            {CELEBRATIONS.map(c => (
+            {copy.celebrations.map(c => (
               <button
                 key={c.id}
                 onClick={() => set({ celebration: c.id })}
