@@ -444,6 +444,8 @@ const RIVAL_NAME_COLLISIONS = new Set([
   "Thiago Fernández",
   // Round 883: Liga MX brought a real Iván Moreno and Sergio Hernández into Club Manager.
   "Iván Moreno", "Sergio Hernández",
+  // Round 902: the 2005-06 era's Ligue 1 brought a real Eduardo Costa (at Espanyol after that summer).
+  "Eduardo Costa",
 ]);
 export function getEraRivalName(year: number): string {
   const first = pick(eraDefFor(year).rivalFirsts);

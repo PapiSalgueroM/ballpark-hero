@@ -350,6 +350,8 @@ export const ERA_NAMES_THE_FILLER_COULD_BUILD = [
      Hansen left it in the second review fix, Nantes to Midtjylland in May
      2015, and moved to ALSO_REAL_ELSEWHERE so the guard's set is unchanged.) */
   'Jesper Hansen', 'Thiago Silva', 'Yannick Carrasco',
+  /* Round 902: the 2005-06 Serie A, Bundesliga and Ligue 1 brought four more. */
+  'Lucas Pereira', 'Matteo Ferrari', 'Pablo Thiam', 'Yannick Fischer',
 ];
 
 function realNames(): Set<string> {

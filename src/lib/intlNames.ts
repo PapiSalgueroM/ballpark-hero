@@ -39,7 +39,10 @@ export const NAME_FAMILIES: NameFamily[] = [
     /* 'Ledesma' was here until the collision harness paired it with Cristian
        and matched a real player. The pools are ordinary names on purpose,
        and this is exactly the catch they exist for. */
-    lasts: ['Arrieta', 'Bengoechea', 'Cardozo', 'Duarte', 'Escalante', 'Gorosito', 'Lombardero', 'Maldonado', 'Ocampo', 'Quiroga', 'Urribarri', 'Vergara'],
+    lasts: ['Arrieta', 'Bengoechea', 'Cardozo', 'Duarte', 'Escalante', 'Gorosito', 'Lombardero', 'Maldonado', 'Ocampo', 'Quiroga-Leiva', 'Urribarri', 'Vergara'],
+    /* 'Quiroga' became 'Quiroga-Leiva' in Round 902: paired with Facundo above
+       it matched a real man of the 2005-06 Bundesliga, Wolfsburg's, who
+       joined the 2005-06 era with that league. Same move as 'Gassama' below. */
   },
   {
     id: 'iberian',
@@ -69,7 +72,10 @@ export const NAME_FAMILIES: NameFamily[] = [
   {
     id: 'germanic',
     firsts: ['Andreas', 'Bastian', 'Dominik', 'Fabian', 'Hendrik', 'Jannik', 'Konstantin', 'Lennart', 'Marius', 'Nico', 'Simon', 'Til'],
-    lasts: ['Achenbach', 'Bergmiller', 'Dettmar', 'Ehrensberger', 'Gundlach', 'Hollerbach', 'Kirchgässner', 'Lindenau', 'Osterkamp', 'Reinhardt', 'Steinbrück', 'Wittgenstein'],
+    lasts: ['Achenbach', 'Bergmiller', 'Dettmar', 'Ehrensberger', 'Gundlach', 'Hollerbach', 'Kirchgässner', 'Lindenau', 'Osterkamp', 'Reinhardtsberg', 'Steinbrück', 'Wittgenstein'],
+    /* 'Reinhardt' became 'Reinhardtsberg' in Round 902: paired with Bastian
+       and with Dominik above it matched two real men of the 2005-06
+       Bundesliga, Hamburg's and Nurnberg's, who joined the 2005-06 era. */
   },
   {
     id: 'nordic',
