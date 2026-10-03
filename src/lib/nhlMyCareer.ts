@@ -1,3 +1,4 @@
+import type { CareerDraftEntry, PreDraftState } from './careerPreDraft';
 /**
  * NHL My Career engine (2026-08-05). Hockey sibling of nflMyCareer.ts:
  * a fictional prospect living a whole career inside the real 32-team
@@ -42,6 +43,7 @@ import type { RivalryChoiceCard } from './careerRivalryChoices';
 import { countOf, nhlMajorAward } from './usCareerStatLine';
 import { raiseWithinPotential, ratingRaiseNote } from './careerHeadroom';
 import { applyUsCareerAnnualBenefits } from './usCareerAnnualBenefits';
+import { careerRecoveryRisk } from './usCareerRecovery';
 /* Round 422: the share of gross pay that actually reaches the bank, after tax,
    agent and living. It was already the number this file used to turn career
    earnings into net worth; it is named here so the yearly banking and the
@@ -139,7 +141,9 @@ export interface NhlCareerState {
   allStars: number;
   connSmythes: number;
   retired: boolean;
+  /** Zero records an undrafted camp signing. */
   draftPick: number;
+  prospect?: PreDraftState;
   earnings: number;
   /** Round 59 life layer. All optional so pre-R59 saves keep loading. */
   netWorth?: number;
@@ -280,22 +284,22 @@ export function majorAwardName(pos: NhlCareerPos): string {
 
 export function startNhlCareer(
   name: string, pos: NhlCareerPos, archetype: NhlArchetype, rng: () => number = Math.random,
-  appearance?: PlayerAppearance | null, eraId?: string,
+  appearance?: PlayerAppearance | null, eraId?: string, entry?: CareerDraftEntry,
 ): NhlCareerState {
   /* Round 173: the era decides the year, the league you are drafted into
      and the money. Leaving it off is today's league, byte for byte. */
   const era = nhlEraById(eraId);
   const pool = nhlEraTeamIds(eraId);
-  const base = 66 + Math.floor(rng() * 8) + archetype.ovrBoost;
-  const pot = Math.min(99, base + 11 + Math.floor(rng() * 13) + archetype.potBoost);
-  const stock = Math.max(1, Math.round(50 - (base - 64) * 4.5 + rng() * 24));
-  const team = pool[Math.floor(rng() * pool.length)];
+  const base = entry?.ratingAfter ?? (66 + Math.floor(rng() * 8) + archetype.ovrBoost);
+  const pot = entry?.pot ?? Math.min(99, base + 11 + Math.floor(rng() * 13) + archetype.potBoost);
+  const stock = entry ? entry.pick ?? 0 : Math.max(1, Math.round(50 - (base - 64) * 4.5 + rng() * 24));
+  const team = entry?.team ?? pool[Math.floor(rng() * pool.length)];
   const c: NhlCareerState = {
     name, pos, archetype, team,
-    year: era.startYear, age: 18 + Math.floor(rng() * 2),
+    year: entry ? entry.draftYear + entry.devSeasons.length : era.startYear, age: entry?.ageAfter ?? (18 + Math.floor(rng() * 2)),
     ovr: base, pot,
-    morale: 70, fanbase: stock <= 10 ? 55 : 32, health: 100,
-    salary: Math.max(0.3, Math.round((stock <= 10 ? 3.5 : 0.9) * era.moneyScale * 10) / 10),
+    morale: 70, fanbase: stock > 0 && stock <= 10 ? 55 : 32, health: entry?.health ?? 100,
+    salary: Math.max(0.3, Math.round((stock > 0 && stock <= 10 ? 3.5 : 0.9) * era.moneyScale * 10) / 10),
     contractYears: 3,
     seasons: [],
     cups: 0, harts: 0, allStars: 0, connSmythes: 0,
@@ -315,6 +319,7 @@ export function startNhlCareer(
   if (era.id !== 'now') c.eraId = era.id;
   // Round 104: draft the rival at the same moment the player is created.
   c.rival = draftRival(pos, c.ovr, c.pot, c.age, c.team, rng);
+  if (entry) c.prospect = entry.prospect;
   return c;
 }
 
@@ -345,7 +350,7 @@ export function nhlAssignRole(c: NhlCareerState, teamQuality: number, rng: () =>
     c.role = 'backup';
     return '📋 You open as the backup goalie: twenty-odd starts and a clipboard cap.';
   }
-  if (c.draftPick <= 10) {
+  if (c.draftPick > 0 && c.draftPick <= 10) {
     c.role = 'starter';
     return '📋 Top ten picks step straight into the top of the lineup.';
   }
@@ -392,7 +397,7 @@ export function nhlMarketSalary(c: NhlCareerState): number {
 }
 
 function gamesFor(c: NhlCareerState, rng: () => number): { games: number; note: string | null } {
-  const risk = (1 - c.archetype.durability) * 0.5 + (100 - c.health) / 250;
+  const risk = careerRecoveryRisk('nhl', c.purchased, (1 - c.archetype.durability) * 0.5 + (100 - c.health) / 250);
   const full = c.pos === 'G' ? 58 + Math.floor(rng() * 10) : 79 + Math.floor(rng() * 4);
   if (rng() < risk) {
     const frac = 0.45 + rng() * 0.35;
@@ -806,7 +811,7 @@ export function nhlLegacyOf(c: NhlCareerState): NhlLegacy {
   const bullets = [
     `${c.seasons.length} seasons, ${c.cups} Cup${c.cups === 1 ? '' : 's'}, ${countOf(c.harts, award.one, award.many)}, ${c.connSmythes} Conn Smythe${c.connSmythes === 1 ? '' : 's'}, ${c.allStars} All-Star nods`,
     c.pos === 'G' ? `${t.wins} wins in ${t.games} games` : `${t.goals} goals, ${t.assists} assists, ${t.points} points in ${t.games} games`,
-    `${Math.round(c.earnings)}M career earnings, drafted pick ${c.draftPick}`,
+    `${Math.round(c.earnings)}M career earnings, ${c.draftPick > 0 ? `drafted pick ${c.draftPick}` : 'undrafted signing'}`,
   ];
   return { score, verdict, hof, bullets };
 }
@@ -844,7 +849,7 @@ export const NHL_SPEND_ITEMS: NhlSpendItem[] = [
   { id: 'team_stake', name: 'Minority Stake In A Franchise', emoji: '🏆', category: 'invest', cost: 40, desc: 'A real piece of a real team, 40M', oneTime: true, minNetWorth: 70, effect: 'The retirement plan, fanbase +10' },
   // Body
   { id: 'chef_nhl', name: 'Private Chef', emoji: '👨‍🍳', category: 'body', cost: 0, yearly: 0.15, desc: 'Every meal built for 82 games, 150k a year', oneTime: true, effect: 'Health +4 a year' },
-  { id: 'recovery_nhl', name: 'Recovery Suite', emoji: '🧊', category: 'body', cost: 2, yearly: 0.12, desc: 'Cryo, compression, the whole circus, 2M', oneTime: true, minNetWorth: 3, effect: 'Injury risk down' },
+  { id: 'recovery_nhl', name: 'Recovery Suite', emoji: '🧊', category: 'body', cost: 2, yearly: 0.12, desc: 'Cryo, compression, the whole circus, 2M. Injuries can still happen.', oneTime: true, minNetWorth: 3, effect: '25% lower simulated injury risk' },
   { id: 'shot_doctor', name: 'Private Skating Coach', emoji: '🎯', category: 'body', cost: 0, yearly: 0.2, desc: 'The guy who rebuilt three strides, 200k a year', oneTime: true, effect: 'Rating +1 each offseason through age 25, up to your ceiling' },
   { id: 'sleep_nhl', name: 'Sleep Program', emoji: '😴', category: 'body', cost: 0.7, desc: 'Turns out most of it is sleep, 700k', oneTime: true, effect: 'Health +8' },
   { id: 'psych_nhl', name: 'Sports Psychologist', emoji: '🧠', category: 'body', cost: 0, yearly: 0.12, desc: 'The part nobody used to talk about, 120k a year', oneTime: true, effect: 'Morale +8 on hire' },

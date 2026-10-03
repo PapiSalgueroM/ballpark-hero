@@ -1,0 +1,77 @@
+name: Sport hub experience verification
+
+on:
+  push:
+    branches: [codex/sport-hubs-994]
+  pull_request:
+    paths:
+      - .github/workflows/sport-hubs.yml
+      - scripts/simHubExperience.mjs
+      - scripts/qa/hubs994*
+      - src/components/hub/**
+      - src/pages/SportHub.tsx
+      - src/lib/sportHub*
+      - src/data/gameRegistry.ts
+      - src/data/continueSaves.ts
+      - public/arenas/**
+
+permissions:
+  contents: read
+concurrency:
+  group: sport-hubs-${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    defaults:
+      run:
+        shell: bash
+    env:
+      SIM_NETWORK: offline
+      ENGINES: chromium
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install verification dependencies
+        run: |
+          mkdir -p sport-hubs-artifacts
+          npm ci
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium
+          python -m pip install fonttools pillow
+      - name: Type check and build
+        id: build
+        run: |
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee sport-hubs-artifacts/types.log
+          npm run build 2>&1 | tee sport-hubs-artifacts/build.log
+      - name: Actual hub outcomes and effective controls
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: HUB_EXPERIENCE_CONTROL=all ONLY=simHubExperience node scripts/runAllSims.mjs 2>&1 | tee sport-hubs-artifacts/behavior.log
+      - name: All built readers, search and guide checks
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          failed=0
+          for harness in simAdsense simBrand simHeadTags simHiddenPages simHubs simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets simSiteSearch simGuideHeadings; do
+            ONLY="$harness" node scripts/runAllSims.mjs --browser 2>&1 | tee "sport-hubs-artifacts/$harness.log" || failed=1
+          done
+          exit "$failed"
+      - name: All six hubs with native phone and keyboard input
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: node scripts/qa/hubs994.mjs 2>&1 | tee sport-hubs-artifacts/native.log
+      - name: Preserve verification evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: sport-hubs-${{ github.run_id }}-${{ github.run_attempt }}
+          retention-days: 1
+          path: sport-hubs-artifacts/

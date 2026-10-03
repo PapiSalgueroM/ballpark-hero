@@ -1,0 +1,280 @@
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import path from 'node:path';
+import { createRequire } from 'node:module';
+import { createHash } from 'node:crypto';
+import { fileURLToPath } from 'node:url';
+
+const dir = path.dirname(fileURLToPath(import.meta.url));
+const receipt = JSON.parse(fs.readFileSync(path.join(dir, 'build-receipt.json'), 'utf8'));
+const require = createRequire(path.join(receipt.root, 'package.json')), { chromium } = require('playwright');
+const origin = 'http://127.0.0.1:4995';
+const run = path.join(dir, 'run-' + Date.now()); fs.mkdirSync(run);
+const sha = file => createHash('sha256').update(fs.readFileSync(file)).digest('hex');
+const canonical = value => JSON.parse(JSON.stringify(value, (key, item) => key === 'id' ? undefined : item));
+const money = value => `${value < 0 ? '-' : ''}$${Math.abs(value)}M`;
+const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
+let checks = 0, browser;
+const check = (value, why) => { checks++; assert.ok(value, why); };
+const equal = (actual, expected, why) => { checks++; assert.deepEqual(actual, expected, why); };
+const held = () => {
+  for (const item of [...receipt.rootHolds, ...receipt.gateHolds, ...receipt.ownInputs, ...receipt.outputs]) {
+    equal(fs.existsSync(item.file) ? sha(item.file) : null, item.sha256, 'Raw input/output hold: ' + item.file);
+  }
+};
+const result = { task: 970, receipt, paths: [], failed: null,
+  scope: 'Actual isolated Board and engine, fresh compiled gate CSS, actual968-derived simulated overage fixture with969 owner argument. Native keyboard/touch waiver receipts and one played round. No full season, full app, live site or financial balance claim.',
+  transport: 'Synthetic loopback origin fulfilled entirely by Playwright routes. No host process is started.',
+  saveScope: 'Exact existing engine league outcome and native save byte preservation on passive actions/reload. First-write optional-field normalization is not an independent whole-save baseline proof; the separate actual Board outcome driver owns that proof.' };
+try {
+  held();
+  browser = await chromium.launch({ headless: true });
+  const layouts = [
+    { name: 'desktop-keyboard', width: 1440, height: 900, touch: false, reduced: false },
+    { name: 'touch390', width: 390, height: 844, touch: true, reduced: false },
+    { name: 'touch320-reduced', width: 320, height: 740, touch: true, reduced: true },
+  ];
+  for (const layout of layouts) {
+    const context = await browser.newContext({ viewport: { width: layout.width, height: layout.height }, hasTouch: layout.touch, isMobile: layout.touch, reducedMotion: layout.reduced ? 'reduce' : 'no-preference', serviceWorkers: 'block' });
+    const outside = [], errors = [], actions = [], geometries = [], scales = [], motion = [], scroll = [], focus = [], immediateReceipts = [], callbackProbes = [], dismissals = [];
+    let page;
+    try {
+      await context.route('**/*', async route => {
+        const url = new URL(route.request().url());
+        if (url.origin !== origin) { outside.push(url.href); return route.abort(); }
+        const files = { '/': ['index.html', 'text/html'], '/app.js': ['app.js', 'text/javascript'], '/app.css': ['app.css', 'text/css'], '/base.css': ['base.css', 'text/css'], '/favicon.ico': [null, null] };
+        const file = files[url.pathname];
+        if (!file) { errors.push('Unexpected local request ' + url.pathname); return route.abort(); }
+        return file[0] ? route.fulfill({ path: path.join(dir, 'built', file[0]), contentType: file[1] }) : route.fulfill({ status: 204, body: '' });
+      });
+      await context.routeWebSocket('**/*', socket => { outside.push(socket.url()); socket.close(); });
+      await context.addInitScript(() => {
+        window.__native970Writes = [];
+        const originalSet = Storage.prototype.setItem;
+        Storage.prototype.setItem = function(key, value) {
+          if (this === localStorage && key === 'nhl-front-office-save-v1') window.__native970Writes.push(value);
+          return originalSet.call(this, key, value);
+        };
+        const nodes = [], insertions = [], animations = [];
+        const selector = '[data-nhl-waiver-receipt]';
+        const styles = element => [element, ...element.querySelectorAll('strong')].map(node => {
+          const style = getComputedStyle(node);
+          return { text: node.textContent, duration: style.animationDuration, iterations: style.animationIterationCount, name: style.animationName, opacity: style.opacity, transform: style.transform,
+            animations: node.getAnimations().map(a => ({ state: a.playState, timing: { duration: a.effect.getComputedTiming().duration, iterations: a.effect.getComputedTiming().iterations } })) };
+        });
+        const capture = () => {
+          const node = document.querySelector(selector);
+          if (node && !nodes.includes(node)) {
+            nodes.push(node);
+            insertions.push({ nodeId: nodes.length, at: performance.now(), text: node.textContent, styles: styles(node), scrollY });
+          }
+        };
+        new MutationObserver(capture).observe(document, { childList: true, subtree: true });
+        for (const type of ['animationstart', 'animationend', 'animationcancel']) document.addEventListener(type, event => {
+          if (!event.target.closest?.(selector)) return;
+          animations.push({ type, name: event.animationName, seconds: event.elapsedTime, at: performance.now(), nodeId: nodes.indexOf(event.target.closest(selector)) + 1 });
+        }, true);
+        window.__native970Visual = () => {
+          capture();
+          const node = document.querySelector(selector);
+          return { currentNodeId: node ? nodes.indexOf(node) + 1 : null, insertions, animations, current: node ? styles(node) : [],
+            live: node ? { role: node.parentElement.getAttribute('role'), live: node.parentElement.getAttribute('aria-live'), atomic: node.parentElement.getAttribute('aria-atomic') } : null };
+        };
+      });
+      page = await context.newPage(); page.setDefaultTimeout(10000);
+      page.on('pageerror', error => errors.push(String(error)));
+      page.on('console', message => { if (message.type() === 'error') errors.push(message.text()); });
+      const read = () => page.evaluate(() => window.__native970.read());
+      const visual = () => page.evaluate(() => window.__native970Visual());
+      const scale = async label => {
+        const s = await page.evaluate(() => ({ scale: visualViewport?.scale ?? 1, clientWidth: document.documentElement.clientWidth, scrollWidth: document.documentElement.scrollWidth }));
+        scales.push({ label, ...s }); check(Math.abs(s.scale - 1) < .001, 'Native scale 1: ' + label); check(s.scrollWidth <= s.clientWidth + 1, 'No horizontal page bleed: ' + label);
+      };
+      const geometry = async (locator, label, require44 = false) => {
+        await locator.scrollIntoViewIfNeeded(); await sleep(100);
+        const g = await locator.evaluate(element => {
+          const r = element.getBoundingClientRect(), hit = document.elementFromPoint(r.x + r.width / 2, r.y + r.height / 2);
+          return { width: r.width, height: r.height, left: r.left, right: r.right, hit: hit === element || element.contains(hit), disabled: !!element.disabled, opacity: getComputedStyle(element).opacity };
+        });
+        geometries.push({ label, require44, ...g }); check(g.hit && !g.disabled && Number(g.opacity) > .99, 'Visible hit-tested control: ' + label);
+        if (require44) check(g.width >= 44 && g.height >= 44, 'Existing44px control: ' + label);
+      };
+      const ready = async (locator, label) => {
+        await locator.scrollIntoViewIfNeeded(); let tabs = 0;
+        if (layout.touch) await sleep(380);
+        else {
+          while (!await locator.evaluate(el => document.activeElement === el) && tabs < 120) { await page.keyboard.press('Tab'); tabs++; }
+          check(await locator.evaluate(el => document.activeElement === el), 'Actual Tab reaches intended control: ' + label);
+        }
+        return tabs;
+      };
+      const input = async (locator, label, tabs) => {
+        if (layout.touch) await locator.tap(); else await page.keyboard.press('Enter');
+        actions.push({ label, input: layout.touch ? 'native tap' : 'native Tab and Enter', tabs });
+      };
+      const activate = async (locator, label) => { const tabs = await ready(locator, label); await input(locator, label, tabs); await sleep(100); await scale(label); };
+      const image = async label => { await scale(label); await page.screenshot({ path: path.join(run, layout.name + '-' + label + '.png'), fullPage: false }); };
+      const quiet = async label => { equal(await page.locator('[data-nhl-waiver-receipt]').count(), 0, 'No unearned receipt: ' + label); equal((await visual()).insertions.length, 0, 'No receipt inserted: ' + label); };
+      const openPlay = async () => {
+        const tile = page.getByRole('button').filter({ has: page.getByText('Play', { exact: true }) });
+        equal(await tile.count(), 1, 'Exact Play tile'); await activate(tile, 'open-play');
+        const play = page.getByRole('button', { name: 'Play Round 1', exact: true }); await play.waitFor(); return play;
+      };
+      const scrollState = () => page.evaluate(() => {
+        const grid = document.querySelector('[data-roster-row]')?.parentElement;
+        return { y: scrollY, maxY: Math.max(0, document.documentElement.scrollHeight - innerHeight), grid: grid ? { top: grid.scrollTop, max: Math.max(0, grid.scrollHeight - grid.clientHeight) } : null,
+          focus: { tag: document.activeElement?.tagName, text: document.activeElement?.textContent, connected: !!document.activeElement?.isConnected } };
+      });
+      const inspectReceipt = async (expected, number) => {
+        const node = page.locator('[data-nhl-waiver-receipt]'); await node.waitFor();
+        const fields = await node.evaluate(element => ({ text: element.textContent, values: Object.fromEntries([...element.querySelectorAll('dt')].map(dt => [dt.textContent, dt.nextElementSibling.textContent])) }));
+        check(fields.text.includes(`Waived ${expected.playerName}.`), 'Actual removed person named');
+        equal(fields.values, { Roster: `${expected.rosterBefore} → ${expected.rosterAfter} players`, 'Cap space': `${money(expected.capBefore)} → ${money(expected.capAfter)}`, 'Dead money this season': money(expected.deadMoneyAfter) }, 'Exact engine-derived receipt values');
+        const initial = await visual(); equal(initial.currentNodeId, number, 'Each committed waiver has one event node'); equal(initial.insertions.length, number, 'No duplicate cue on success');
+        const insertion = initial.insertions.at(-1);
+        equal(insertion.text, fields.text, 'Final values already rendered at insertion'); equal(initial.live, { role: 'status', live: 'polite', atomic: 'true' }, 'Polite atomic live status');
+        equal(insertion.styles.length, 4, 'Receipt and three final values sampled');
+        for (const style of insertion.styles) {
+          equal(style.duration, layout.reduced ? '0s' : '0.42s', 'Computed finite/static duration at insertion');
+          equal(style.name === 'none', layout.reduced, 'Computed motion preference honored');
+          if (layout.reduced) { equal(style.opacity, '1', 'Reduced-motion final opacity'); equal(style.transform, 'none', 'Reduced-motion final transform'); }
+          else equal(style.iterations, '1', 'Single finite emphasis');
+        }
+        await sleep(650);
+        const settled = await visual(), events = settled.animations.filter(item => item.nodeId === number);
+        if (layout.reduced) equal(events, [], 'Reduced motion starts no receipt animation');
+        else {
+          equal(events.filter(item => item.type === 'animationstart').length, 4, 'Four actual finite animations started');
+          const ends = events.filter(item => item.type === 'animationend'); equal(ends.length, 4, 'Four actual finite animations ended');
+          check(ends.every(item => Math.abs(item.seconds - .42) < .002), 'Actual animationend duration is420ms');
+          equal(events.filter(item => item.type === 'animationcancel').length, 0, 'No interrupted receipt motion');
+        }
+        for (const style of settled.current) { equal(style.animations, [], 'No animation remains after420ms'); equal(style.opacity, '1', 'Settled final opacity'); equal(style.transform, 'none', 'Settled final transform'); }
+        const fit = await node.evaluate(element => {
+          const bounds = element.getBoundingClientRect();
+          const blocks = [...element.querySelectorAll('dl > div')].map(item => { const r = item.getBoundingClientRect(); return { x: r.x, y: r.y, right: r.right, bottom: r.bottom, width: r.width, height: r.height }; });
+          const clipping = [...element.querySelectorAll('p,dt,dd')].filter(item => item.scrollWidth > item.clientWidth + 1).map(item => item.textContent);
+          return { width: bounds.width, left: bounds.left, right: bounds.right, viewport: innerWidth, blocks, clipping };
+        });
+        check(fit.left >= -.5 && fit.right <= fit.viewport + .5, 'Receipt fits current viewport'); equal(fit.clipping, [], 'Receipt text has no horizontal clipping');
+        for (let a = 0; a < fit.blocks.length; a++) for (let b = a + 1; b < fit.blocks.length; b++) {
+          const one = fit.blocks[a], two = fit.blocks[b]; check(Math.min(one.right, two.right) - Math.max(one.x, two.x) <= .5 || Math.min(one.bottom, two.bottom) - Math.max(one.y, two.y) <= .5, 'Receipt stat blocks do not overlap');
+        }
+        motion.push({ expected, insertion, events, settled, fit });
+        await node.scrollIntoViewIfNeeded(); await image('receipt-' + number);
+      };
+
+      await page.goto(origin); await page.getByText('Roster', { exact: true }).waitFor();
+      let state = await read();
+      equal(state.save.league.teams[state.save.myTeam].players.length, 17, 'Actual trade/draft/offseason fixture has17');
+      equal({ trades: state.meta.trades, drafted: state.meta.drafted, offseasons: state.meta.actualOffseasons }, { trades: 2, drafted: 4, offseasons: 1 }, 'Reused engine-generated968 fixture');
+      await quiet('restored overage'); await image('initial-quiet');
+      const blockedPlay = await openPlay(); check(await blockedPlay.isDisabled(), 'Overage keeps play disabled');
+      const beforeProbe = await read();
+      await blockedPlay.evaluate(element => { const key = Object.keys(element).find(key => key.startsWith('__reactProps$')); if (!key || typeof element[key].onClick !== 'function') throw new Error('Actual rendered callback unavailable'); element[key].onClick(); });
+      await sleep(100); state = await read(); equal(state.raw, beforeProbe.raw, 'Direct disabled-play callback refuses save change'); equal(state.draws, beforeProbe.draws, 'Refusal has no RNG'); equal(state.writes.length, beforeProbe.writes.length, 'Refusal writes nothing'); await quiet('disabled-play callback');
+      callbackProbes.push({ kind: 'direct live React callback', action: 'disabled play refusal', native: false });
+      const roster = page.getByRole('button', { name: 'Open roster', exact: true }); await geometry(roster, 'open-roster', true); await activate(roster, 'open-roster');
+      equal(await page.locator('[data-roster-row]').count(), 17, 'All retained roster rows exist');
+      for (let n = 0; n < 2; n++) {
+        state = await read(); const id = state.meta.ids[n], cost = state.meta.costs[n];
+        const expected = await page.evaluate(id => window.__native970.expectedRelease(id), id);
+        const row = page.locator(`[data-roster-row="${id}"]`), arm = row.getByRole('button', { name: /^Waive,/ });
+        await geometry(arm, 'arm-' + n, true); await activate(arm, 'arm-' + n);
+        check((await row.locator('[data-cut-confirm]').innerText()).includes(`$${cost.now}M`), 'Actual dead money quote precedes confirmation'); equal((await read()).raw, state.raw, 'Arming preserves exact save');
+        if (n === 0) {
+          await quiet('armed'); const keep = row.getByRole('button', { name: 'Keep him', exact: true }); await geometry(keep, 'keep', true); await activate(keep, 'keep');
+          equal((await read()).raw, state.raw, 'Cancellation preserves exact raw save'); await quiet('cancelled'); await activate(arm, 'rearm');
+        }
+        const confirm = row.getByRole('button', { name: 'Waive him', exact: true }); await geometry(confirm, 'confirm-' + n, true);
+        const tabs = await ready(confirm, 'confirm-' + n), beforeScroll = await scrollState();
+        await input(confirm, 'confirm-' + n, tabs); await page.locator(`[data-roster-row="${id}"]`).waitFor({ state: 'detached' });
+        await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
+        const afterScroll = await scrollState(), after = await read(); scroll.push({ waiver: n + 1, before: beforeScroll, after: afterScroll });
+        // No locator click, focus, scrollIntoView or screenshot repositioning precedes this sample.
+        const immediateReceipt = await page.evaluate(() => {
+          const element = document.querySelector('[data-nhl-waiver-receipt]'), r = element?.getBoundingClientRect();
+          const active = document.activeElement, activeBounds = active?.getBoundingClientRect();
+          return { text: element?.textContent, rect: r ? { left: r.left, right: r.right, top: r.top, bottom: r.bottom, height: r.height } : null,
+            viewport: { width: innerWidth, height: innerHeight }, scrollY,
+            focus: { tag: active?.tagName, text: active?.textContent, receipt: !!active?.closest('[data-nhl-waiver-status]'),
+              connected: !!active?.isConnected, disabled: !!active?.disabled,
+              visible: !!activeBounds && activeBounds.width > 0 && activeBounds.height > 0 && activeBounds.top >= 0 && activeBounds.bottom <= innerHeight } };
+        });
+        immediateReceipts.push({ waiver: n + 1, ...immediateReceipt });
+        check(Math.abs(afterScroll.y - Math.min(beforeScroll.y, afterScroll.maxY)) <= 1, 'Waiver does not jump document scroll');
+        if (beforeScroll.grid && afterScroll.grid) check(Math.abs(afterScroll.grid.top - Math.min(beforeScroll.grid.top, afterScroll.grid.max)) <= 1, 'Waiver keeps roster scroll except natural bottom clamp');
+        check(immediateReceipt.rect && immediateReceipt.rect.top >= -.5 && immediateReceipt.rect.bottom <= immediateReceipt.viewport.height + .5 && immediateReceipt.rect.left >= -.5 && immediateReceipt.rect.right <= immediateReceipt.viewport.width + .5, 'Earned receipt is readable immediately without inspection scrolling');
+        check(!immediateReceipt.focus.receipt, 'Receipt does not steal focus during native confirmation');
+        if (!layout.touch) check(immediateReceipt.focus.connected && !immediateReceipt.focus.disabled && immediateReceipt.focus.tag === 'BUTTON' && immediateReceipt.focus.visible, 'Waiver immediately leaves keyboard focus on a usable remaining action');
+        equal(after.save.league, expected.league, 'Native waiver matches exact existing engine outcome'); equal(after.draws, state.draws, 'Native waiver adds no RNG draws'); equal(after.writes.length, state.writes.length + 1, 'Exactly one save write per native waiver');
+        equal(after.unrelated, 'exact unrelated save bytes', 'Unrelated save untouched');
+        check(!Object.hasOwn(after.save, 'waiverReceipt'), 'Receipt stays out of persisted state');
+        for (const key of Object.keys(state.save).filter(key => key !== 'league')) equal(after.save[key], state.save[key], 'Existing nonleague save field preserved: ' + key);
+        if (n === 1) equal(after.raw, JSON.stringify({ ...state.save, league: expected.league }), 'After first-write normalization the entire second committed save is exact');
+        const afterFocus = await page.evaluate(() => ({ tag: document.activeElement?.tagName, receipt: !!document.activeElement?.closest('[data-nhl-waiver-status]') }));
+        check(!afterFocus.receipt, 'Status does not steal focus');
+        focus.push({ waiver: n + 1, afterFocus, recovery: immediateReceipt.focus });
+        await inspectReceipt(expected, n + 1);
+        const beforeTab = await read(), beforeVisual = await visual();
+        await activate(page.getByRole('button', { name: 'Hub', exact: true }), 'return-hub-' + n);
+        if (n === 0) await activate(page.getByRole('button', { name: 'Open roster', exact: true }), 'return-roster-' + n);
+        else {
+          const rosterTile = page.getByRole('button').filter({ has: page.getByText('Roster', { exact: true }) }); equal(await rosterTile.count(), 1, 'Exact Roster tile'); await activate(rosterTile, 'return-roster-' + n);
+        }
+        await sleep(500); const afterTab = await read(), afterVisual = await visual();
+        equal(afterTab.raw, beforeTab.raw, 'Passive tabs preserve exact save bytes'); equal(afterTab.draws, beforeTab.draws, 'Passive tabs preserve RNG'); equal(afterTab.writes.length, beforeTab.writes.length, 'Passive tabs write nothing');
+        equal(afterVisual.currentNodeId, beforeVisual.currentNodeId, 'Passive tabs retain same receipt node'); equal(afterVisual.insertions.length, beforeVisual.insertions.length, 'Passive tabs insert no cue'); equal(afterVisual.animations, beforeVisual.animations, 'Passive tabs restart no animation');
+        const dismiss = page.getByRole('button', { name: 'Dismiss waiver receipt', exact: true });
+        await geometry(dismiss, 'dismiss-' + n, true);
+        const beforeDismiss = await read(), dismissVisual = await visual();
+        await activate(dismiss, 'dismiss-' + n);
+        equal(await page.locator('[data-nhl-waiver-receipt]').count(), 0, 'Explicit dismissal removes the receipt');
+        const afterDismiss = await read();
+        equal(afterDismiss.raw, beforeDismiss.raw, 'Dismissal preserves exact save bytes');
+        equal(afterDismiss.draws, beforeDismiss.draws, 'Dismissal preserves RNG');
+        equal(afterDismiss.writes.length, beforeDismiss.writes.length, 'Dismissal writes nothing');
+        const dismissFocus = await page.evaluate(() => ({ tag: document.activeElement?.tagName, connected: !!document.activeElement?.isConnected, receipt: !!document.activeElement?.closest('[data-nhl-waiver-status]') }));
+        check(dismissFocus.connected && !dismissFocus.receipt, 'Dismissal leaves focus outside the removed receipt');
+        if (!layout.touch) equal(dismissFocus.tag, 'BUTTON', 'Keyboard dismissal restores an outside button');
+        await activate(page.getByRole('button', { name: 'Hub', exact: true }), 'dismissed-return-hub-' + n);
+        if (n === 0) await activate(page.getByRole('button', { name: 'Open roster', exact: true }), 'dismissed-return-roster-' + n);
+        else {
+          const rosterTile = page.getByRole('button').filter({ has: page.getByText('Roster', { exact: true }) });
+          equal(await rosterTile.count(), 1, 'Exact Roster tile after dismissal'); await activate(rosterTile, 'dismissed-return-roster-' + n);
+        }
+        equal(await page.locator('[data-nhl-waiver-receipt]').count(), 0, 'Passive return cannot recreate a dismissed receipt');
+        equal((await visual()).insertions.length, dismissVisual.insertions.length, 'Dismissed receipt creates no new event node');
+        equal((await read()).raw, beforeDismiss.raw, 'Passive return after dismissal preserves save bytes');
+        dismissals.push({ waiver: n + 1, focus: dismissFocus, insertions: dismissVisual.insertions.length });
+      }
+      const beforeReload = await read(); await page.reload(); await page.getByText('Roster', { exact: true }).waitFor(); state = await read();
+      equal(state.raw, beforeReload.raw, 'Refresh restores exact save bytes'); equal(state.writes.length, 0, 'Refresh performs no action write'); await quiet('refresh after waiver'); await image('refresh-quiet');
+      equal(state.save.league.teams[state.save.myTeam].players.length, 15, 'Two native waivers recover limit');
+      const expectedRound = await page.evaluate(() => window.__native970.expectedNextRound());
+      const play = await openPlay(); check(await play.isEnabled(), 'Recovered roster can play'); await geometry(play, 'play-after-recovery');
+      const beforePlay = await read(); await activate(play, 'play-after-recovery'); const afterPlay = await read();
+      equal(canonical(afterPlay.save.league), canonical(expectedRound.league), 'Native round matches exact existing engine and AI outcome apart from generated IDs'); equal(afterPlay.draws, expectedRound.draws, 'Native round retains exact RNG tape');
+      equal(afterPlay.save.league.round, 2, 'One native round advances once'); equal(afterPlay.writes.length, beforePlay.writes.length + 1, 'One native round writes once'); await quiet('ordinary play after refresh'); await image('round2-quiet');
+      equal(outside, [], 'Zero outside transport attempts'); equal(errors, [], 'Zero browser or console errors');
+      result.paths.push({ layout, actions, callbackProbes, geometries, scales, motion, scroll, focus, immediateReceipts, dismissals, outside, errors, finalRoster: 15, finalRound: 2,
+        inputScope: 'Only waiver and panel actions and accepted play are native tap or actual Tab/Enter. Geometry screenshots use programmatic inspection scrolling. Disabled-play refusal is a separately labeled direct React callback probe.' });
+      fs.writeFileSync(path.join(run, 'checkpoint.json'), JSON.stringify({ ...result, checks }, null, 2));
+      console.log('970 native ' + layout.name + ': native waivers, actual values, finite/static motion, passive return, refresh, RNG and layout passed.');
+    } catch (error) {
+      if (page) {
+        await page.screenshot({ path: path.join(run, layout.name + '-failure.png'), fullPage: false }).catch(() => undefined);
+        const snapshot = await page.evaluate(() => ({ state: window.__native970?.read(), visual: window.__native970Visual?.(), scrollY, active: document.activeElement?.outerHTML })).catch(() => null);
+        fs.writeFileSync(path.join(run, layout.name + '-failure.json'), JSON.stringify({ error: String(error), snapshot, actions, callbackProbes, scroll, focus, immediateReceipts, dismissals, motion, outside, errors }, null, 2));
+      }
+      throw error;
+    } finally { await context.close(); }
+  }
+  held(); result.checks = checks;
+} catch (error) { result.failed = { message: String(error), stack: error.stack, checks }; throw error; }
+finally {
+  await browser?.close();
+  result.screenshots = fs.readdirSync(run).filter(file => file.endsWith('.png')).map(file => ({ file: path.join(run, file), sha256: sha(path.join(run, file)) }));
+  fs.writeFileSync(path.join(run, 'report.json'), JSON.stringify(result, null, 2));
+  console.log('970 native evidence: ' + run);
+}

@@ -129,6 +129,7 @@ export function stageVerdict(a: { iAmChampion: boolean; fired: boolean }): Verdi
    this owns the wording, and the board hands the SAME number to the card,
    so the two can never state different things about one pick. */
 export function draftPressureLine(pick: number, firstRoundEnd: number): string {
+  if (pick === 0) return 'Undrafted. Your camp invitation is a chance to earn your place.';
   if (pick <= 10) return 'The city expects a savior.';
   if (pick <= firstRoundEnd) return 'First round money, first round pressure.';
   return 'Late pick. Everything must be earned.';

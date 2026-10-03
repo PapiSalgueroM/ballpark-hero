@@ -11,7 +11,7 @@ import {
 } from '@/lib/clubManagerStaff';
 
 function fixture(vacant: StaffPostId | null = null, poached: StaffPostId | null = null): CareerState {
-  const state = { clubName: 'Fixture Staff Club', season: 3, week: 8, budget: 50, aiHeadlines: [], academy: { coaching: 12 } } as unknown as CareerState;
+  const state = { clubName: 'Fixture Staff Club', season: 3, week: 8, budget: 50, aiHeadlines: [], academy: { coaching: 12 }, squad: [] } as unknown as CareerState;
   state.staff = { ...staffOf(state), ...(vacant ? { [vacant]: null } : {}), poach: poached ? { postId: poached, club: 'Fixture Rival Club', weeksLeft: 2 } : null };
   return state;
 }
@@ -50,6 +50,29 @@ describe('Club Manager staff decision desk', () => {
     view.rerender(<StaffScreen career={{ ...state, staff: { ...staffOf(state) } }} {...calls} />);
     expect(view.queryByRole('status')).toBeNull();
     Object.values(calls).forEach(callback => expect(callback).not.toHaveBeenCalled());
+  });
+
+  it('says how many of his players would grow at the ceiling as regulars, and counts nobody else', () => {
+    /* Round 963: a lift inside developmentRate's clamp is cut short for a kid on or near it.
+       Each coach counts exactly the men coachGrowthMult lifts: his own unit, and the middle
+       of the park for the two outfield coaches only. The midfielder has played nothing yet,
+       which is every squad in the summer, and still counts because the card reads a regular's
+       season. The veteran is on the ceiling too but turns thirty, so he never grows at all. */
+    const state = fixture();
+    const flyer = { id: 'flyer', name: 'Fixture Flyer', position: 'ST', rating: 60, potential: 80, age: 19, apps: 34 } as unknown as CareerState['squad'][number];
+    const mid = { ...flyer, id: 'mid', name: 'Fixture Mid', position: 'CM' as const, apps: 0 };
+    const keeper = { ...flyer, id: 'keeper', name: 'Fixture Keeper', position: 'GK' as const };
+    const veteran = { ...flyer, id: 'veteran', name: 'Fixture Veteran', age: 29 };
+    const slow = { ...flyer, id: 'slow', name: 'Fixture Slow', position: 'CB' as const, apps: 0, potential: 62 };
+    const s = staffOf(state);
+    state.squad = [flyer, mid, keeper, veteran, slow];
+    const ten = (id: StaffPostId) => ({ ...s[id]!, level: 10, potential: 10 });
+    state.staff = { ...s, attack: ten('attack'), defence: ten('defence'), goalkeeping: ten('goalkeeping') };
+    const view = render(<StaffScreen career={state} {...callbacks()} />);
+    expect(post(view.container, 'attack')).toHaveTextContent(`${staffEffectLine(state, 'attack')} As regulars, 2 of his players would be growing as fast as anyone can, so they would get less of the lift.`);
+    expect(post(view.container, 'defence')).toHaveTextContent(`${staffEffectLine(state, 'defence')} As a regular, one of his players would be growing as fast as anyone can, so he would get less of the lift.`);
+    expect(post(view.container, 'goalkeeping')).toHaveTextContent(`${staffEffectLine(state, 'goalkeeping')} As a regular, one of his players would be growing as fast as anyone can, so he would get less of the lift.`);
+    expect(post(view.container, 'scout')).not.toHaveTextContent('as fast as anyone can');
   });
 
   it('previews the original shortlist IDs, exact fees, payroll and helper effects without writes', () => {
