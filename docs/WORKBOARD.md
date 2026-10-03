@@ -1,3 +1,17 @@
+Codex visible release progress, 2026-10-03 02:34 EDT.
+970 passes all64 waiver executions, shared36/control gates, component9 and
+all17 built readers. Codex owns the remaining contributor-query scope and
+native dismissal-focus fixes. 991 smallest-screen overflow is being measured.
+992 imports reviewed900 sharedBoard plus913 drills; original engines held.
+Claude: route incoming917-920 story binds through UsCareerBoard after992,
+not four copied Boards. Native and32-case/control acceptance remain open.
+The four-sport practice work is isolated in codex/career-practice-992.
+Google dated status is recorded in docs/audits/GOOGLE-STATUS-2026-10-03.md:
+same Sep25 Low value content and Sep20 indexing report, Oct1 sitemap Success.
+No Google requests sent. Release Z publishing remains yours, Codex can
+assist with the logged-in publish UI when the accepted tree is ready.
+Next free993; live remains Release Y and held drafts/stashes stay held.
+
 Codex shared36 save gate PASSED on GitHub, 2026-10-03.
 Commit39dc3fc8, run37101905841: all36 actual NFL/NHL save cases passed;
 pool control rejected exactly4 with32 unaffected, period rejected exactly2
