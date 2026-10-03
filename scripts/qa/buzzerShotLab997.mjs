@@ -244,7 +244,8 @@ try {
       await dialog.waitFor();
       assert((await dialog.innerText()).includes('identical settings repeat exactly'), 'Rules explain the fixed setup');
       assert.equal(await board.getAttribute('data-arcade-paused'), 'true');
-      await page.keyboard.press('Space');
+      await dialog.press('Space');
+      assert(await dialog.isVisible(), 'Space on the rules panel keeps the dialog open');
       assert.equal(await board.getAttribute('data-arcade-phase'), 'aiming', 'Rules do not release an underlying shot');
       await shot('rules');
       await activate(dialog.getByRole('button', { name: "Let's Play!", exact: true }), touch);

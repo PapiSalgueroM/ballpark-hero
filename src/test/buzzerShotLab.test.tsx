@@ -66,9 +66,9 @@ function reducedMotion(reduced = true) {
     addListener: () => {}, removeListener: () => {}, addEventListener: () => {}, removeEventListener: () => {}, dispatchEvent: () => false,
   }));
 }
-const button = (name: string) => screen.getByRole('button', { name, exact: true });
+const button = (name: string) => screen.getByRole('button', { name });
 const board = (view: View) => view.container.querySelector('[data-arcade-phase]')!;
-const power = () => screen.getByRole('slider', { name: 'Power', exact: true });
+const power = () => screen.getByRole('slider', { name: 'Power' });
 const arc = () => screen.getByRole('slider', { name: 'How high to put the arc on the shot' });
 const fade = () => screen.getByRole('slider', { name: 'How far to fade off the closeout' });
 function setRelease(release: Release) {
@@ -86,6 +86,7 @@ function startLab() {
   expect(screen.getByText(/Same setup, unlimited retries\. Try Power 35, Arc 60 and Fade square/)).toBeVisible();
   fireEvent.click(button('Shot lab'));
   expect(board(view)).toHaveAttribute('data-arcade-mode', 'lab');
+  expect(arc().nextElementSibling).toHaveTextContent(/^60$/);
   expect(power()).toHaveFocus();
   return view;
 }

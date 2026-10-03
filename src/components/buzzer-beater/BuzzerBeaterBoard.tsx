@@ -624,7 +624,7 @@ export default function BuzzerBeaterBoard() {
               className={cn('flex-1 accent-[hsl(var(--primary))]', (isSteady || mode === 'contest') && 'h-11 min-w-0')}
               aria-label="How high to put the arc on the shot"
             />
-            <span className="w-10 shrink-0 text-right tabular-nums">{Math.round(launchDegFor(arc))}&deg;</span>
+            <span className="w-10 shrink-0 text-right tabular-nums">{mode === 'lab' ? Math.round(arc * 100) : <>{Math.round(launchDegFor(arc))}&deg;</>}</span>
           </div>
           <div className="flex items-center gap-2 text-xs text-muted-foreground">
             <span className="w-14 shrink-0">Fade</span>

@@ -13,7 +13,7 @@ can be compared without an unrelated random draw. Changing setup clears the
 comparison. The interface explains that this is controlled, unscored practice.
 
 There is no lab score, leaderboard or completion reward. Existing daily,
-unlimited, ten-shot Steady practice and25-shot contest rules stay unchanged.
+unlimited, ten-shot Steady practice and 25-shot contest rules stay unchanged.
 Lab attempts never change daily saves or sitewide completions. The lab remains
 available after a completed daily and offers direct exits to the existing modes.
 
@@ -21,7 +21,7 @@ Controls use the existing steady sliders and explicit Shoot button. The
 primary actions are Retry this shot, Change setup and Leave lab. Worked
 instructions appear before entry and remain available from a rules button.
 Keyboard focus follows aiming and results without page jumps. Touch targets
-aim for44px, never below30px. Pause, help and reduced motion remain supported.
+aim for 44px, never below 30px. Pause, help and reduced motion remain supported.
 
 ## Visual direction
 
@@ -55,8 +55,8 @@ arcade physics, flight and storage modules remain unchanged.
 - Effective executable-code controls, each with a named expected rejection and
   proof the mutation changed its target. Preserve the original mode baselines.
 - Existing Buzzer, practice, contest, input, pause and storage regressions.
-- Real app type gate and production build, then all17 built readers.
-- Native320/390/1440 views, keyboard/touch and reduced motion, measuring overflow,
+- Real app type gate and production build, then all 17 built readers.
+- Native 320/390/1440 views, keyboard/touch and reduced motion, measuring overflow,
   focus and actual rendered paths. Screenshots of the comparison are reviewed.
 
 All runtime verification runs remotely because the local machine is loaded.
@@ -64,5 +64,9 @@ No live database probes, search submissions or score writes are part of QA.
 
 ## Status
 
-Claimed on main9a99a87b. Implementation and remote verification are in progress.
-No acceptance or publication is claimed yet. Next free998 is unclaimed.
+Claimed on main 9a99a87b. Implementation and remote verification are in progress.
+No acceptance or publication is claimed yet. Next free 998 is unclaimed.
+
+First remote run 37118264085 stopped at the type gate: two Testing Library
+role lookups used an unsupported `exact` option. No build, test or browser
+success is credited to that run. The role names already match exactly.
