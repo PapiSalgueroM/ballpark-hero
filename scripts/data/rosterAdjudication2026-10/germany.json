@@ -273,6 +273,8 @@
    "note": "Born 1993-10-02. Frankfurt confirmed his move to Abha on 2026-08-17, and he has six Saudi Pro League appearances for them since. Abha is a Club Manager club.",
    "sources": [
     {"family": "A", "url": "https://www.bundesliga.com/en/bundesliga/clubs/eintracht-frankfurt/squad", "publisher": "Bundesliga (Eintracht Frankfurt squad, season 2026-2027)", "readOn": "2026-10-02", "says": "not listed"},
+    {"family": "A", "url": "https://www.bundesliga.com/de/bundesliga/news/eintracht-frankfurt-michy-batshuayi-wechsel-transfer-38668", "publisher": "Bundesliga (news, 2026-08-17)", "readOn": "2026-10-03", "says": "Eintracht Frankfurt and the Saudi club Abha agreed an immediate transfer of Michy Batshuayi"},
+    {"family": "A", "url": "https://www.bundesliga.com/de/bundesliga/news/offizieller-transfermarkt-alle-wechsel-transfers-ubersicht-11850", "publisher": "Bundesliga (official transfer market, summer 2026)", "readOn": "2026-10-03", "says": "Eintracht Frankfurt departures: Michy Batshuayi (Abha Club)"},
     {"family": "B", "url": "https://www.hessenschau.de/sport/fussball/eintracht-frankfurt/eintracht-frankfurt-bestaetigt-transfer-batshuayi-wechselt-nach-saudi-arabien-v1,batshuayi-fix-100.html", "publisher": "hessenschau, Hessischer Rundfunk (2026-08-17)", "readOn": "2026-10-02", "says": "Eintracht Frankfurt confirms the move to Abha"},
     {"family": "B", "url": "https://www.fotmob.com/players/248689", "publisher": "FotMob", "readOn": "2026-10-02", "says": "Abha, born 1993-10-02, 6 Saudi Pro League appearances, played 90 minutes at Al-Diriyah on 2026-09-13"}
    ]
@@ -351,9 +353,10 @@
    "to": "Birmingham City",
    "realClub": "Birmingham City",
    "adjudicatedOn": "2026-10-02",
-   "note": "Born 1994-03-07. Sold by Werder to Birmingham on 2025-08-07, contract to June 2028. A deadline day loan to Valencia was called off on 2026-09-01 when Birmingham would not let him go, and he played for Birmingham on 2026-09-19. Family A here confirms only that he left Werder (Birmingham's own pages would not load); where he is rests on three independent publishers that agree.",
+   "note": "Born 1994-03-07. Sold by Werder to Birmingham on 2025-08-07, contract to June 2028. A deadline day loan to Valencia was called off on 2026-09-01 when Birmingham would not let him go, and he played for Birmingham on 2026-09-19. Family A: the league's own news names Birmingham as the destination (added 2026-10-03; Birmingham's own pages would not load), and three independent publishers agree he is there now.",
    "sources": [
     {"family": "A", "url": "https://www.bundesliga.com/en/bundesliga/clubs/sv-werder-bremen/squad", "publisher": "Bundesliga (Werder Bremen squad, season 2026-2027)", "readOn": "2026-10-02", "says": "not listed"},
+    {"family": "A", "url": "https://www.bundesliga.com/de/bundesliga/news/werder-bremen-abgang-marvin-ducksch-birmingham-transfer-wechsel-33383", "publisher": "Bundesliga (news, 2025-08-07)", "readOn": "2026-10-03", "says": "Marvin Ducksch wechselt aus Bremen nach Birmingham: from Werder Bremen to Birmingham City"},
     {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/392/eng.birmingham", "publisher": "ESPN (Birmingham City squad page, season 2026-27)", "readOn": "2026-10-02", "says": "forward, shirt 33, age 32, 4 appearances"},
     {"family": "B", "url": "https://us.soccerway.com/player/ducksch-marvin/8McNJcKC/transfers/", "publisher": "Soccerway", "readOn": "2026-10-02", "says": "Werder Bremen to Birmingham 2025-08-07, born 1994-03-07, contract to June 2028"},
     {"family": "B", "url": "https://www.fotmob.com/players/343757/marvin-ducksch", "publisher": "FotMob", "readOn": "2026-10-02", "says": "Birmingham City, born 1994-03-07, played 19 minutes against Middlesbrough on 2026-09-19"},
@@ -421,9 +424,10 @@
    "loan": true,
    "loanFrom": "Wolfsburg",
    "adjudicatedOn": "2026-10-03",
-   "note": "Born 1999-12-29, the Danish winger. On loan at Rangers for the second half of 2025-26, back at Wolfsburg on 2026-06-30, then loaned to Basaksehir on 2026-07-28 to the end of 2026-27 with a conditional obligation to buy. Placed at the club he plays for, the ledger's loan policy. Family A here confirms only that he is off Wolfsburg's squad; the destination rests on the club announcement as quoted by beIN Sports and on Soccerway.",
+   "note": "Born 1999-12-29, the Danish winger. On loan at Rangers for the second half of 2025-26, back at Wolfsburg on 2026-06-30, then loaned to Basaksehir on 2026-07-28 to the end of 2026-27 with a conditional obligation to buy. Placed at the club he plays for, the ledger's loan policy. Family A: the 2. Bundesliga's official summer 2026-27 transfer market lists the loan to Basaksehir (added 2026-10-03), and beIN Sports, quoting Basaksehir's statement, and Soccerway agree.",
    "sources": [
     {"family": "A", "url": "https://www.bundesliga.com/en/2bundesliga/clubs/vfl-wolfsburg/squad", "publisher": "Bundesliga (VfL Wolfsburg squad, 2. Bundesliga season 2026-2027)", "readOn": "2026-10-03", "says": "not listed"},
+    {"family": "A", "url": "https://www.bundesliga.com/de/2bundesliga/news/2-bundesliga-offizieller-transfermarkt-alle-wechsel-transfers-ubersicht-11854", "publisher": "Bundesliga (2. Bundesliga official transfer market, summer 2026-27)", "readOn": "2026-10-03", "says": "VfL Wolfsburg departures: Andreas Skov Olsen (Basaksehir FK, Leihe, zuvor an Glasgow Rangers verliehen)"},
     {"family": "B", "url": "https://beinsports.com.tr/haber/rams-basaksehir-yeni-transferini-acikladi-2", "publisher": "beIN Sports Turkey (2026-07-28), quoting the club's announcement", "readOn": "2026-10-03", "says": "Basaksehir announce Skov Olsen on loan from Wolfsburg to the end of 2026-27 with a conditional obligation to buy"},
     {"family": "B", "url": "https://ca.soccerway.com/player/skov-olsen-andreas/l2cmORl4/transfers", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "loan Wolfsburg to Basaksehir 2026-07-28 until 2027-06-30, born 1999-12-29"}
    ]
@@ -447,9 +451,10 @@
    "to": "Blackburn Rovers",
    "realClub": "Blackburn Rovers",
    "adjudicatedOn": "2026-10-03",
-   "note": "Born 1997-09-11. Sold by St. Pauli to Blackburn on 2026-02-01, contract to June 2027; their number 21 with three goals this season. Family A here confirms only that he is off St. Pauli's squad; where he is rests on two independent publishers that agree.",
+   "note": "Born 1997-09-11. Sold by St. Pauli to Blackburn on 2026-02-01, contract to June 2027; their number 21 with three goals this season. Family A: the Bundesliga's official January 2026 transfer centre lists him out of St. Pauli to Blackburn Rovers (added 2026-10-03; Blackburn's own pages would not load), and two independent publishers agree he is there now.",
    "sources": [
     {"family": "A", "url": "https://www.bundesliga.com/en/2bundesliga/clubs/fc-st-pauli/squad", "publisher": "Bundesliga (FC St. Pauli squad, 2. Bundesliga season 2026-2027)", "readOn": "2026-10-03", "says": "not listed"},
+    {"family": "A", "url": "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-winter-january-2026-35159", "publisher": "Bundesliga (official transfer centre, January 2026)", "readOn": "2026-10-03", "says": "St. Pauli, Out: Dapo Afolayan (Blackburn Rovers)"},
     {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/365/eng.blackburn", "publisher": "ESPN (Blackburn Rovers squad page, season 2026-27)", "readOn": "2026-10-03", "says": "forward, shirt 21, age 29, 8 appearances, 3 goals"},
     {"family": "B", "url": "https://ca.soccerway.com/player/afolayan-oladapo/E7kAr9I9/transfers", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "St. Pauli to Blackburn 2026-02-01, born 1997-09-11, contract to June 2027"}
    ]
@@ -553,6 +558,7 @@
    "adjudicatedOn": "2026-10-02",
    "note": "Born 1996-01-01. Frankfurt announced on 2026-04-07 that his contract ending 2026-06-30 would not be renewed, and he is off their 2026-27 squad. He joined United FC of Dubai as a free agent on 2026-09-24. The United Arab Emirates are not modelled. Medium confidence on the destination only: the club had teased the signing ahead of a full announcement that neither publisher quotes; his absence from Frankfurt is certain.",
    "sources": [
+    {"family": "A", "url": "https://www.bundesliga.com/de/bundesliga/news/offizieller-transfermarkt-alle-wechsel-transfers-ubersicht-11850", "publisher": "Bundesliga (official transfer market, summer 2026)", "readOn": "2026-10-03", "says": "Eintracht Frankfurt departures: Mahmoud Dahoud (Vertragsende), contract ended, no club named"},
     {"family": "A", "url": "https://www.bundesliga.com/de/bundesliga/news/die-adler-und-dahoud-trennen-sich-im-sommer-36783", "publisher": "Bundesliga (news, 2026-04-07)", "readOn": "2026-10-02", "says": "contract to 2026-06-30 not extended by mutual agreement"},
     {"family": "A", "url": "https://www.bundesliga.com/en/bundesliga/clubs/eintracht-frankfurt/squad", "publisher": "Bundesliga (Eintracht Frankfurt squad, season 2026-2027)", "readOn": "2026-10-02", "says": "not listed"},
     {"family": "B", "url": "https://www.soccerway.com/player/dahoud-mahmoud/YkH1Bfia/transfers", "publisher": "Soccerway", "readOn": "2026-10-02", "says": "Eintracht Frankfurt to United FC 2026-09-24 as a free agent, born 1996-01-01"},
