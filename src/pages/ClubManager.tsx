@@ -21,6 +21,7 @@ import { FACILITY_IDS, facilitiesOf } from '@/lib/clubManagerFacilities';
 import { projectFinances } from '@/lib/clubManagerFinances';
 import { fanMeter } from '@/lib/clubManagerMeters';
 import { STAFF_POST_IDS, STAFF_POST_INFO, staffOf } from '@/lib/clubManagerStaff';
+import { deskOf } from '@/lib/clubManagerDecisions';
 import type { NationDef, CupRound, CustomClubSpec, ManagerSpec } from '@/lib/clubManager';
 import { eraRealShareLabel, eraHonestyLine, eraRostersLoaded, ensureEraRosters } from '@/lib/clubManagerEras';
 import { reloadToRetryChunk } from '@/lib/freshBuild';
@@ -793,7 +794,8 @@ const ClubManager = () => {
   // Round 74: tile summaries.
   const objBehind = objStatuses.filter(s => s.status === 'behind' || s.status === 'failed').length;
   const objDone = objStatuses.filter(s => s.status === 'done').length;
-  const unreadCount = (c.inbox ?? []).filter(m => !m.resolved).length;
+  /* Round 979: an open appeal or decision counts as unread on the tile. */
+  const unreadCount = (c.inbox ?? []).filter(m => !m.resolved).length + deskOf(c).filter(d => !d.resolved).length;
   const latestMsg = (c.inbox ?? [])[0];
   const lastRes = (c.resultLog ?? []).slice(-1)[0];
   const rivalName = c.boardObjectives?.find(o => o.id === 'rival')?.rivalName ?? null;
@@ -1025,7 +1027,7 @@ const ClubManager = () => {
               <HubTile
                 icon="📩" title="Inbox" accent={unreadCount > 0}
                 value={unreadCount > 0 ? `${unreadCount} new` : 'All quiet'}
-                sub={latestMsg ? (latestMsg.from ?? latestMsg.playerName) : 'No messages yet'}
+                sub={deskOf(c).find(d => !d.resolved)?.kind === 'appeal' ? 'Red card appeal' : latestMsg ? (latestMsg.from ?? latestMsg.playerName) : 'No messages yet'}
                 onClick={() => setHubPanel('inbox')}
               />
               <HubTile
@@ -1229,7 +1231,7 @@ const ClubManager = () => {
                 </div>
               )}
               {hubPanel === 'inbox' && <ScreenLoading><InboxCard career={c} onAnswer={g.answer} /></ScreenLoading>}
-              {hubPanel === 'inbox' && (c.inbox ?? []).length === 0 && (
+              {hubPanel === 'inbox' && (c.inbox ?? []).length === 0 && deskOf(c).length === 0 && (
                 <p className="text-xs text-muted-foreground text-center py-6">Nobody has texted you yet. Play some matches, the drama finds you.</p>
               )}
 

@@ -174,7 +174,7 @@ export function effectWords(effect: DeskEffect, state?: CareerState): string {
 
 /* ---------- the deck ---------- */
 
-interface DeckCard {
+export interface DeckCard {
   id: string;
   from: string;
   /** Whether the numbers this card moves exist on this save right now. */
@@ -315,7 +315,12 @@ export function situationCard(state: CareerState, desk: DeskItem[]): DeskItem | 
   const last = desk.find(d => d.kind === 'situation')?.deckId;
   const open = DECK.filter(c => c.id !== last && c.fits(state) && (!c.who || !!c.who(state)));
   if (!open.length) return null;
-  const card = open[Math.floor(deskRoll(`${key}|pick`) * open.length)];
+  return buildSituation(state, open[Math.floor(deskRoll(`${key}|pick`) * open.length)]);
+}
+
+/** One deck card written for this save and week. Exported for the harness,
+ *  which walks every answer of every card from real mid season states. */
+export function buildSituation(state: CareerState, card: DeckCard): DeskItem {
   const who = card.who ? card.who(state) : null;
   return {
     id: `desk-${state.season}-${state.week}-${card.id}`,

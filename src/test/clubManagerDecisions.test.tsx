@@ -1,4 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
+import { cleanup, fireEvent, render, within } from '@testing-library/react';
+import { InboxCard } from '@/components/club-manager/InboxCard';
 import { answerMessage, type CareerState, type CMPlayer } from '@/lib/clubManager';
 import { ensureBooks } from '@/lib/clubManagerFinances';
 import {
@@ -143,5 +145,41 @@ describe('Round 979 decisions deck', () => {
     settleDecisionDesk(s, ['a'], 'Rival Town');
     const card = deskOf(s).find(d => d.kind === 'appeal')!;
     expect(answerMessage(s, card.id, 1)).toEqual(answerDecision(s, card.id, 1));
+  });
+});
+
+describe('Round 979 the desk on the inbox screen', () => {
+  it('shows an appeal with its odds and answers it through onAnswer', () => {
+    const s = career({ inbox: [] });
+    settleDecisionDesk(s, ['a'], 'Rival Town');
+    const card = deskOf(s).find(d => d.kind === 'appeal')!;
+    const onAnswer = vi.fn();
+    const view = render(<InboxCard career={s} onAnswer={onAnswer} />);
+    const node = view.container.querySelector<HTMLElement>(`[data-desk-card="${card.id}"]`)!;
+    expect(node).toBeTruthy();
+    expect(node.textContent).toContain('40%');
+    expect(node.textContent).toContain('Rival Town');
+    fireEvent.click(within(node).getByRole('button', { name: /^Appeal/ }));
+    expect(onAnswer).toHaveBeenCalledWith(card.id, 0);
+    cleanup();
+  });
+
+  it('shows the answered line once the card is resolved', () => {
+    const s = career({ inbox: [] });
+    settleDecisionDesk(s, ['a'], 'Rival Town');
+    const card = deskOf(s).find(d => d.kind === 'appeal')!;
+    const after = answerDecision(s, card.id, 1);
+    const view = render(<InboxCard career={after} onAnswer={vi.fn()} />);
+    const node = view.container.querySelector<HTMLElement>(`[data-desk-card="${card.id}"]`)!;
+    expect(node.dataset.inboxState).toBe('resolved');
+    expect(node.textContent).toContain('Accepted');
+    expect(within(node).queryAllByRole('button')).toHaveLength(0);
+    cleanup();
+  });
+
+  it('renders nothing with an empty inbox and an empty desk', () => {
+    const view = render(<InboxCard career={career({ inbox: [] })} onAnswer={vi.fn()} />);
+    expect(view.container.innerHTML).toBe('');
+    cleanup();
   });
 });
