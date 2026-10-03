@@ -358,6 +358,9 @@ const SA_ARRIVALS = [
    league's club. To regenerate, hand it the 60 club file it grew from:
      git show 89d31144:src/data/clubManagerEra2015.ts > base.ts
      node scripts/bakeEra2015.mjs --extend-big-five --base=base.ts
+   Add --check to rebuild and compare with the shipped file instead of
+   writing (scripts/simEraBakeExtend.mjs does exactly that when the pulls
+   are on the machine).
 
    THE RESERVE SIDE SPELLINGS. Six clubs' second teams hold one year-2015
    row each ("VfB Stuttgart II", "Hamburger SV II", "Borussia Dortmund II",
@@ -410,29 +413,37 @@ const DB_TO_ERA_L1 = {
  * 2016 or a summer 2016 move (Roy Beerens' row says Reading, where he went in
  * July 2016). So the timing of every correction rests on its dated record,
  * and a man whose year-2016 club he only reached later is left where the
- * snapshot has him (Szalai, Hannover from 7 Jan 2016; Ayhan and Nico Schulz,
- * January 2016; Bedimo, Marseille in July 2016; Kevin-Prince Boateng, under
- * contract at Schalke until 8 Dec 2015). Values stay the year-2015 snapshot
- * for every player, moved or not.
+ * snapshot has him (Szalai, Hannover from 7 Jan 2016; Kaan Ayhan, Frankfurt
+ * from 3 Jan 2016, vavel.com that day; Bedimo, Marseille in July 2016;
+ * Kevin-Prince Boateng, under contract at Schalke until 8 Dec 2015; Lindsay
+ * Rose, Lorient on loan in January 2016; Denis Petric, Angers on 28 Dec 2015;
+ * Ismael Diomande, Caen on loan on 26 Jan 2016; Mamadou Samassa, Troyes in
+ * July 2016; Francois Clerc, Saint-Etienne from 2012 to 2016). Values stay
+ * the year-2015 snapshot for every player, moved or not.
  *
  * The published records, all read 2026-10-02, cited below by these keys:
  *   WS-EN, WS-FR, WS-DE, WS-IT, WS-ES  World Soccer, "Summer 2015 transfers,
  *        August 11 update", club by club ins and outs, one page per league:
  *        https://worldsoccer.com/features/summer-2015-transfers-august-4-update-363811
  *        (England), /2 (France), /3 (Germany), /4 (Italy), /5 (Spain).
- *   MF   Maxifoot, "Tableaux transfert mercato Ete 2015", the whole French
- *        window: https://www.maxifoot.fr/mercato/index-ete-2015.php
+ *   MF   Maxifoot, "Tableaux transfert mercato Ete 2015", the French window
+ *        from May to the deadline, dated line by line (a table of the main
+ *        deals, not every one): https://www.maxifoot.fr/mercato/index-ete-2015.php
  *   and for the late August deals the World Soccer list predates, the report
  *   named on the line (ESPN, Goal, Sports Illustrated, the club's own site).
  *
- * WHAT COUNTS AS GLARING. Every man in the two new leagues valued at 4.5m
- * pounds or more whose year-2016 row names another club, plus every move MF
- * dates inside the window for a man in the Ligue 1 pull, plus the German
- * moves the records above date. The first pass missed four over the line and
- * a run of MF lines; two adversarial reviews found them and they are in the
- * lists below under "Review fix". Smaller moves with no dated record at hand
- * stay where the snapshot has them: thin evidence is not a reason to move a
- * man. The ones still standing are named in the round's record. */
+ * WHAT COUNTS AS GLARING: every man in the two new leagues who was at another
+ * club when the summer 2015 window closed, whatever his value. The first pass
+ * took the 4.5m line, the MF table and the German records above; two reviews
+ * found more under "Review fix". The second round of review (below, "Second
+ * review fix") went club by club through the whole window for BOTH leagues:
+ * every outgoing and incoming line of the eighteen Bundesliga and twenty
+ * Ligue 1 clubs in a club by club summer 2015 transfer list was crossed
+ * against this world and the year-2016 rows. That list was used to FIND the
+ * men and never as a proof; each one is placed or removed only on its own
+ * dated record (named on the line) plus the table, like every line above. A
+ * man in that list who moved only in January 2016 or later stays where the
+ * snapshot has him, named above. */
 
 /* THE FOLDS: thirteen men Rounds 175 and 191 brought INTO the first three
  * leagues as arrivals from Germany or France. Their year-2015 rows now
@@ -569,10 +580,24 @@ const B5_MOVES = [
   { n: 'Ermir Lenjani', to: 'Nantes', why: 'Rennes loaned him to Nantes, 18 Aug 2015 (MF)' },
   { n: 'Mehdi Zeffane', to: 'Rennes', why: 'Lyon to Rennes, 12 Aug 2015 (MF)' },
   { n: 'Chaker Alhadhur', to: 'Caen', why: 'Nantes to Caen, 15 Jun 2015 (MF)' },
-  { n: 'Axel Ngando', to: 'Bastia', why: 'Rennes to Bastia, 31 Aug 2015 (MF); the year-2015 row is his loan club Angers' },
+  { n: 'Axel Ngando', to: 'Bastia', why: 'Rennes to Bastia, 27 Aug 2015 (MF); the year-2015 row is his loan club Angers' },
   { n: 'Hervin Ongenda', to: 'PSG', why: 'back at PSG as his Bastia loan ended, 1 Jun 2015 (MF)' },
   { n: 'Jérémy Pied', to: 'Nice', why: 'back at Nice after the 2014-15 loan at Guingamp, played on at full-back under Claude Puel (ogcnice.com, the club\'s own player page)' },
   { n: 'Maarten Stekelenburg', to: 'Southampton', why: 'Fulham loaned him to Southampton, 22 Jun 2015, after his 2014-15 loan at Monaco (Sky Sports, Southampton sign Maarten Stekelenburg on season-long loan; ESPN; MF lists the Monaco loan ending)' },
+  /* Second review fix: the club by club pass through the whole window (see
+     WHAT COUNTS AS GLARING). Germany first. */
+  { n: 'Nico Schulz', to: 'Gladbach', why: 'Hertha to Gladbach, 18 Aug 2015 (ligainsider, 18 Aug 2015, Gladbach verpflichtet Schulz; the same site on 14 Aug 2015)' },
+  { n: 'Koen Casteels', to: 'Wolfsburg', why: 'back at Wolfsburg as his Bremen loan ended in June 2015 (Sky Sports, 22 Jan 2015, Werder Bremen sign Koen Casteels on loan from Wolfsburg until the end of the season; FourFourTwo)' },
+  { n: 'Izet Hajrovic', to: 'Eibar', why: 'Bremen loaned him to Eibar, 31 Aug 2015 (football-espana, 31 Aug 2015, Official: Eibar sign Hajrovic; weser-kurier)' },
+  { n: 'Deyverson', to: 'Levante', why: 'his Koln loan ended and Belenenses sold him to Levante, 27 Jul 2015 (football-espana, 27 Jul 2015, Levante make striker signing)' },
+  { n: 'Jhon Córdoba', to: 'Mainz', why: 'a shipped Granada line: Granada loaned him to Mainz, 31 Aug 2015 (football-espana, 31 Aug 2015, Doria in, Cordoba out at Granada; soccerway)' },
+  // France.
+  { n: 'Giovanni Sio', to: 'Rennes', why: 'his Bastia loan ended, 1 Jun 2015, and Basel sold him to Rennes, 29 Jun 2015 (MF, both lines)' },
+  { n: 'Sadio Diallo', to: 'Bastia', why: 'his Lorient loan ended, 1 Jun 2015 (MF), and Rennes let him go to Bastia in July 2015 (FotMob career, Bastia from Jul 2015)' },
+  { n: 'Yoann Andreu', to: 'Angers', why: 'GFC Ajaccio to Angers, free, July 2015 (FotMob career: GFC Ajaccio to Jul 2015, Angers from Jul 2015)' },
+  { n: 'Jonathan Delaplace', to: 'Caen', why: 'out of contract at Lille, to Caen (vl-media.fr, 23 Jul 2015, Before Ligue 1: Caen et Reims)' },
+  { n: 'Serge Gakpé', to: 'Genoa', why: 'Nantes to Genoa, free, 1 Jul 2015 (soccerway transfers)' },
+  { n: 'Hélder Costa', to: 'Monaco', why: 'a shipped Deportivo line: Benfica loaned him to Monaco, 10 Jul 2015 (MF), after his 2014-15 loan at Deportivo' },
 ];
 /* OUT OF THE WORLD. A removal, unlike a placement, cannot invent anything
  * (the Round 191 asymmetry), so it is also the honest answer for a man who
@@ -613,6 +638,58 @@ const B5_REMOVALS = [
   { n: 'Jonas Hofmann', why: 'back at Dortmund as his Mainz loan ended in June 2015 (bayer04.de and bundesliga.com career profiles)', later: 'the year-2016 row is Gladbach, who bought him on 1 Jan 2016, so Dortmund cannot be proved from the table' },
   { n: 'Kevin Großkreutz', why: 'Dortmund to Galatasaray, announced 2 Sep 2015 after a deadline day filing failed; he trained there and never played for Dortmund again (sport1, Sep 2015, Galatasaray Istanbul vermeldet Transfer von Kevin Grosskreutz; ESPN, transfer delayed)', later: 'the year-2016 row is Stuttgart, where he signed in January 2016' },
   { n: 'Abdelhamid El Kaoutari', why: 'Montpellier to Palermo, 27 Jul 2015 (MF)', later: 'the year-2016 row is Reims, his loan from 1 Feb 2016 (africatopsports.com, 2 Feb 2016; footmercato.net), so Palermo cannot be proved from the table' },
+  /* Second review fix: the club by club pass through the whole window. A man
+     whose year-2016 row sits outside the world is removed on his dated
+     record plus that row; `single` marks one whose table has no year-2016
+     row at all, so the dated record is the only proof and he cannot be
+     placed even where the record names a club of this world. Germany. */
+  { n: 'Nicolás Castillo', why: 'his Mainz loan ended and Club Brugge loaned him to Frosinone, 31 Aug 2015 (L\'Avenir, 31 Aug 2015, Nicolas Castillo prete par le FC Bruges a Frosinone; soccerway)' },
+  { n: 'Stefanos Kapino', why: 'Mainz to Olympiacos, 15 Jul 2015 (soccerway transfers)' },
+  { n: 'João Pereira', why: 'Hannover to Sporting, 13 Jul 2015 (WS-DE; soccerway transfers)' },
+  { n: 'Maximilian Beister', why: 'Hamburg to Mainz, free, 27 Jun 2015 (WS-DE; sport1, June 2015, kurioser Wechsel von Maximilian Beister vom Hamburger SV zu Mainz 05); his year-2016 row is 1860 Munich, so Mainz cannot be proved from the table' },
+  { n: 'Marcel Ndjeng', why: 'out of contract at Hertha, to Paderborn, July 2015 (FotMob career: Hertha to Jun 2015, Paderborn from Jul 2015; Mallorca Magazin, 21 Jun 2016)' },
+  { n: 'Sven Schipplock', why: 'Hoffenheim to Hamburg, 24 Jul 2015 (WS-DE; tsg-hoffenheim.de, July 2015, Sven Schipplock moves to HSV)', single: 'no year-2016 row, so Hamburg cannot be proved from the table' },
+  { n: 'Sejad Salihovic', why: 'Hoffenheim to Guizhou Renhe, June 2015 (tsg-hoffenheim.de, June 2015, Sejad Salihovic to leave TSG)', single: 'no year-2016 row; he left the five leagues' },
+  { n: 'Takashi Inui', why: 'Frankfurt to Eibar, 26 Aug 2015 (football-espana, 27 Aug 2015, Eibar sign Inui; ligainsider)', single: 'no year-2016 row, so Eibar cannot be proved from the table' },
+  { n: 'Sami Allagui', why: 'his Mainz loan ended and he went back to Hertha in summer 2015 (herthabsc.com, 14 Apr 2017)', single: 'no year-2016 row, so Hertha cannot be proved from the table' },
+  { n: 'Miso Brecko', why: 'Koln to Nuremberg (WS-DE)', single: 'no year-2016 row; he left the five leagues' },
+  { n: 'Daniel Halfar', why: 'Koln to Kaiserslautern (WS-DE)', single: 'no year-2016 row; he left the five leagues' },
+  { n: 'Marcell Jansen', why: 'retired, Hamburg (WS-DE)', single: 'no year-2016 row; he retired' },
+  { n: 'Jan Schlaudraff', why: 'his Hannover contract ran out in summer 2015 (FotMob career: Hannover to Jul 2015, no club after)', single: 'no year-2016 row; he left the five leagues' },
+  { n: 'Hajime Hosogai', why: 'Hertha loaned him to Bursaspor for 2015-16 (vfb.de, 25 Jul 2016, Hajime Hosogai signs for VfB)', single: 'no year-2016 row; he left the five leagues' },
+  { n: 'Petr Jiracek', why: 'Hamburg to Sparta Prague, 25 Aug 2015 (eurozpravy.cz, Petr Jiracek prestoupil z Hamburku do prazske Sparty; sparta.cz)', single: 'no year-2016 row; he left the five leagues' },
+  { n: 'Slawomir Peszko', why: 'Koln to Lechia Gdansk, Aug 2015 (FotMob career: Koln to Aug 2015, Lechia from Aug 2015)', single: 'no year-2016 row; he left the five leagues' },
+  { n: 'Simon Rolfes', why: 'retired when his Leverkusen contract ran out in June 2015 (myfootball.com.au, Rolfes announces retirement plans; FotMob career: Leverkusen to Jul 2015)', single: 'no year-2016 row; he retired' },
+  { n: 'György Garics', why: 'a shipped Bologna line: Bologna to Darmstadt, 14 Aug 2015 (Corriere dello Sport, 14 Aug 2015, Bologna, Garics va al Darmstadt; football-italia, Official: Garics leaves Bologna)', single: 'no year-2016 row, so Darmstadt cannot be proved from the table' },
+  { n: 'Jan Kirchhoff', why: 'his Schalke loan ended in June 2015 and he was a Bayern player until Sunderland signed him (Associated Press in the Washington Times, 7 Jan 2016, Sunderland signs Bayern defender Jan Kirchhoff; L\'Avenir, 8 Jan 2016)', later: 'the year-2016 row is Sunderland, where he went in January 2016, so Bayern cannot be proved from the table' },
+  // France.
+  { n: 'Mads Albæk', why: 'Reims to IFK Goteborg, 11 Aug 2015 (fotbolldirekt.se, 11 Aug 2015, Klart: Blavitts tunga varvning)' },
+  { n: "Landry N'Guemo", why: 'Saint-Etienne to Akhisarspor, 31 Aug 2015 (soccerway transfers)' },
+  { n: 'Lloyd Palun', why: 'Nice to Red Star, 1 Aug 2015 (soccerway transfers)' },
+  { n: 'Ladislas Douniama', why: 'out of contract at Guingamp, 30 Jun 2015, to Strasbourg (FotMob career: Guingamp to Jul 2015, Strasbourg from Aug 2015)' },
+  { n: 'Mathieu Duhamel', why: 'Caen to Le Havre, 20 Aug 2015 (MF)', single: 'no year-2016 row; he left the five leagues' },
+  { n: 'Mehdi Mostefa', why: 'Lorient to Bastia, 27 Aug 2015 (MF)', single: 'no year-2016 row, so Bastia cannot be proved from the table' },
+  { n: 'Jérémy Morel', why: 'out of contract at Marseille, to Lyon, 1 Jun 2015 (MF)', single: 'no year-2016 row, so Lyon cannot be proved from the table' },
+  { n: 'Brice Samba', why: 'Marseille loaned him to Nancy, 9 Jul 2015 (MF)', single: 'no year-2016 row; he left the five leagues' },
+  { n: 'Kian Hansen', why: 'Nantes to Midtjylland, 25 May 2015 (MF)', single: 'no year-2016 row; he left the five leagues' },
+  { n: 'Olivier Veigneau', why: 'Nantes to Kasimpasa, 17 Aug 2015 (MF)', single: 'no year-2016 row; he left the five leagues' },
+  { n: 'Vincent Bessat', why: 'out of contract at Nantes, to Caen, 10 Jun 2015 (MF)', single: 'no year-2016 row, so Caen cannot be proved from the table' },
+  { n: 'Alexy Bosetti', why: 'Nice loaned him to Tours, 15 Jul 2015 (MF)', single: 'no year-2016 row; he left the five leagues' },
+  { n: 'Christian Brüls', why: 'Rennes loaned him to Standard Liege, 18 Aug 2015 (MF)', single: 'no year-2016 row; he left the five leagues' },
+  { n: 'Yohan Mollo', why: 'Saint-Etienne loaned him to Krylia Sovetov, 20 Aug 2015 (MF)', single: 'no year-2016 row; he left the five leagues' },
+  { n: 'Ryan Mendes', why: 'Lille loaned him to Nottingham Forest, 31 Aug 2015 (MF)', single: 'no year-2016 row; he left the five leagues' },
+  { n: 'Valentin Eysseric', why: 'Nice loaned him to Saint-Etienne, 18 Aug 2015 (MF)', single: 'no year-2016 row, so Saint-Etienne cannot be proved from the table' },
+  { n: 'Julien Faubert', why: 'out of contract at Bordeaux, 9 Jun 2015 (MF)', single: 'no year-2016 row; he left the five leagues' },
+  { n: 'Junior Tallo', why: 'his Bastia loan ended and Roma sold him to Lille, 15 Jul 2015 (MF)', single: 'no year-2016 row, so Lille cannot be proved from the table' },
+  { n: 'Sanjin Prcic', why: 'Rennes loaned him to Torino, 31 Aug 2015 (soccerway transfers)', single: 'no year-2016 row, so Torino cannot be proved from the table' },
+  { n: 'Chris Mavinga', why: 'his Reims loan ended and Rubin Kazan loaned him to Troyes for 2015-16 (mlssoccer.com, Jan 2017, Toronto FC sign Chris Mavinga)', single: 'no year-2016 row, so Troyes cannot be proved from the table' },
+  { n: 'Mounir Obbadi', why: 'a shipped Hellas Verona line: his Verona loan ended, 1 Jun 2015, and Monaco sold him to Lille, 10 Jul 2015 (MF, both lines)', single: 'no year-2016 row, so Lille cannot be proved from the table' },
+  { n: 'Lorik Cana', why: 'a shipped Lazio line: Lazio to Nantes, 31 Aug 2015 (MF)', single: 'no year-2016 row, so Nantes cannot be proved from the table' },
+  { n: 'Brayan Perea', why: 'a shipped Lazio line: Lazio loaned him to Troyes, 13 Aug 2015 (MF)', single: 'no year-2016 row, so Troyes cannot be proved from the table' },
+  { n: 'Franck Tabanou', why: 'Saint-Etienne to Swansea, 19 Jun 2015 (MF)', later: 'the year-2016 row is Saint-Etienne again, a later loan back, so Swansea cannot be proved from the table' },
+  { n: 'Guillaume Gillet', why: 'his Bastia loan ended and he went back to Anderlecht, 1 Jun 2015 (MF)', later: 'the year-2016 row is Nantes, who signed him from Anderlecht on 28 Dec 2015 (L\'Avenir, 28 Dec 2015, Nantes officialise la signature de Guillaume Gillet)' },
+  { n: 'Mouhamadou Dabo', why: 'out of contract at Lyon in summer 2015 and a free agent into October (Maxifoot, 10 Oct 2015)', later: 'the year-2016 row is Troyes, who signed him in October 2015, after the window' },
+  { n: 'Sambou Yatabaré', why: 'his Guingamp loan ended and Olympiacos loaned him to Standard Liege, 1 Sep 2015 (standard.be, Sambou Yatabare to Standard)', later: 'the year-2016 row is Werder Bremen, who signed him from Standard on 28 Jan 2016 (L\'Avenir, 28 Jan 2016)' },
 ];
 
 /* ARRIVALS: a year-2015 row at a club outside the two new leagues' pulls,
@@ -693,10 +770,12 @@ if (bigFiveArg) {
       ['Barcelona', 'Lionel Messi'], ['Juventus', 'Paulo Dybala'],
     ],
     /* Thin only where the table itself is thin (under 8 real rows after
-       the corrections). Re-measured 2026-10-02 after the review fix:
-       Ingolstadt 7 and Darmstadt 7 (both promoted that summer), Angers 4
-       (Kodjia left, Sunu came) and GFC Ajaccio 3 (Issiaga Sylla came). */
-    expectedThin: ['Las Palmas', 'Frosinone', 'Angers', 'GFC Ajaccio', 'Ingolstadt', 'Darmstadt'],
+       the corrections). Re-measured 2026-10-02 after the second review fix:
+       Ingolstadt 7 and Darmstadt 7 (both promoted that summer), Angers 5
+       (Kodjia left, Sunu and Andreu came), GFC Ajaccio 2 (Issiaga Sylla
+       came, Andreu left) and Nantes 6 (Veretout, Djilobodji, Cissokho,
+       Gakpe, Veigneau, Bessat and Kian Hansen all gone by the deadline). */
+    expectedThin: ['Las Palmas', 'Frosinone', 'Angers', 'GFC Ajaccio', 'Ingolstadt', 'Darmstadt', 'Nantes'],
     header: s => [
       '// AUTO-GENERATED by scripts/bakeEra2015.mjs (Round 175, extended Rounds 191 and 899).',
       '// The 2015-16 era world: real year-2015 Transfermarkt rows from',
@@ -712,13 +791,24 @@ if (bigFiveArg) {
       '// Regenerate per the header of scripts/bakeEra2015.mjs.',
       '// DO NOT EDIT BY HAND.',
     ],
-  }, { write: !process.argv.includes('--dry') });
+  }, { write: !process.argv.includes('--dry') && !process.argv.includes('--check') });
   const s = res.stats;
   console.log(`Extended to ${s.players} players across ${s.clubs} clubs (${s.partial.length} partial: ${s.partial.join(', ')}).`);
   console.log(`Big five corrections: ${s.moved} moved, ${s.removed} removed, ${s.arrived} arrived, ${s.folded} folded, ${s.collisions} namesakes resolved.`);
   console.log(`Shipped lines: ${s.shippedLines}, of which ${s.shippedKept} are still in the world byte for byte. Touched:`);
   for (const t of s.touched) console.log(`  ${t}`);
   console.log(`New club sizes: ${Object.entries(s.sizes).map(([c, n]) => `${c} ${n}`).join(', ')}`);
+  /* --check: rebuild and compare with the shipped file, write nothing (the
+     harness scripts/simEraBakeExtend.mjs runs this from the 60 club base). */
+  if (process.argv.includes('--check')) {
+    const norm = t => t.replace(/\r\n/g, '\n');
+    if (norm(fs.readFileSync(file, 'utf8')) !== norm(res.text)) {
+      console.error('CHECK: the rebuilt era file differs from src/data/clubManagerEra2015.ts');
+      process.exit(1);
+    }
+    console.log('CHECK: the rebuilt era file is byte identical to the shipped one (line endings aside).');
+    process.exit(0);
+  }
   /* The market's nationality filter reads one map per world, and it must hold
      exactly this world's names: each new line takes the nationality on the
      row it was baked from, and a man who left the world leaves the map. */
