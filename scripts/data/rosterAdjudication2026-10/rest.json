@@ -85,6 +85,36 @@
         { "family": "A", "url": "https://hnl.hr/klubovi/hajduk/", "publisher": "SuperSport HNL (Hajduk player table, 2026-2027)", "readOn": "2026-10-03", "says": "listed, 7 appearances, 3 goals" },
         { "family": "B", "url": "https://www.soccerway.com/player/livaja-marko/8CyvzF4J/", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Hajduk Split, born 1993-08-26, contract to 2027-06-30, 7 appearances 3 goals in 2026/2027" }
       ]
+    },
+    {
+      "name": "Xherdan Shaqiri",
+      "club": "Basel",
+      "adjudicatedOn": "2026-10-03",
+      "note": "Born 1991-10-10, shirt 10, nine appearances and three goals in 2026-27.",
+      "sources": [
+        { "family": "A", "url": "https://fcb.ch/pages/1-mannschaft/spieler", "publisher": "FC Basel (1. Mannschaft players page)", "readOn": "2026-10-03", "says": "midfielder, shirt 10" },
+        { "family": "B", "url": "https://www.soccerway.com/player/shaqiri-xherdan/CKcCpcKN/", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Basel, born 1991-10-10, contract to 2027-06-30, 9 appearances 3 goals in 2026/2027" }
+      ]
+    },
+    {
+      "name": "Martim Marques",
+      "club": "Lugano",
+      "adjudicatedOn": "2026-10-03",
+      "note": "Portuguese defender born 2004-02-11, shirt 26, six Super League appearances in 2026-27.",
+      "sources": [
+        { "family": "A", "url": "https://www.fclugano.com/teams/prima-squadra", "publisher": "FC Lugano (Prima Squadra page)", "readOn": "2026-10-03", "says": "defender, shirt 26" },
+        { "family": "B", "url": "https://www.soccerway.com/player/marques-martim/0WQeBnIt/", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Lugano, born 2004-02-11, contract to 2029-06-30, 6 Super League appearances 2 goals in 2026/2027" }
+      ]
+    },
+    {
+      "name": "Uran Bislimi",
+      "club": "Lugano",
+      "adjudicatedOn": "2026-10-03",
+      "note": "Midfielder born 1999-09-25, shirt 25, nine Super League appearances in 2026-27.",
+      "sources": [
+        { "family": "A", "url": "https://www.fclugano.com/teams/prima-squadra", "publisher": "FC Lugano (Prima Squadra page)", "readOn": "2026-10-03", "says": "midfielder, shirt 25" },
+        { "family": "B", "url": "https://www.soccerway.com/player/bislimi-uran/pfn3aHPA/", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Lugano, born 1999-09-25, contract to 2027-06-30, 9 Super League and 6 Conference League appearances in 2026/2027" }
+      ]
     }
   ],
   "movedTo": [
@@ -165,6 +195,31 @@
         { "family": "A", "url": "https://hnl.hr/klubovi/osijek/", "publisher": "SuperSport HNL (Osijek player table, 2026-2027)", "readOn": "2026-10-03", "says": "listed with 5 appearances, 404 minutes, consistent with a September sale" },
         { "family": "B", "url": "https://www.espn.com/soccer/player/_/id/310038/roko-jurisic", "publisher": "ESPN (player page)", "readOn": "2026-10-03", "says": "Estoril, shirt 21, born 2001-09-28, Portuguese Liga starts 2026-09-14 and 2026-09-20" },
         { "family": "B", "url": "https://www.soccerway.com/player/jurisic-roko/p87XoL39/", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Osijek to Estoril 2026-09-04, 500k, contract to 2029-06-30" }
+      ]
+    },
+    {
+      "name": "Georgios Koutsias",
+      "from": "Lugano",
+      "to": "Famalicão",
+      "realClub": "Famalicão",
+      "adjudicatedOn": "2026-10-03",
+      "note": "Greek forward born 2004-02-08. Sold by Lugano to Famalicao on 2026-07-24, shirt 70, seven league starts and five goals by 2026-09-19. Absent from Lugano's own squad page. The destination rests on two independent publishers that agree: Famalicao's own site answered 403.",
+      "sources": [
+        { "family": "A", "url": "https://www.fclugano.com/teams/prima-squadra", "publisher": "FC Lugano (Prima Squadra page)", "readOn": "2026-10-03", "says": "not in the squad" },
+        { "family": "B", "url": "https://www.espn.com/soccer/player/_/id/304317/georgios-koutsias", "publisher": "ESPN (player page)", "readOn": "2026-10-03", "says": "FC Famalicao, shirt 70, born 2004-02-08, 7 Portuguese Liga starts 5 goals in 2026-27" },
+        { "family": "B", "url": "https://www.soccerway.com/player/koutsias-georgios/dzmQbSaB/", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Lugano to Famalicao 2026-07-24, 2.5m, contract to 2031-06-30" }
+      ]
+    },
+    {
+      "name": "Ezgjan Alioski",
+      "from": "Al-Ahli",
+      "to": "Lugano",
+      "realClub": "Lugano",
+      "adjudicatedOn": "2026-10-03",
+      "note": "North Macedonian born 1992-02-12. Left Al-Ahli on a free for Lugano on 2025-07-01, shirt 7, three Super League appearances in 2026-27.",
+      "sources": [
+        { "family": "A", "url": "https://www.fclugano.com/teams/prima-squadra", "publisher": "FC Lugano (Prima Squadra page)", "readOn": "2026-10-03", "says": "midfielder, shirt 7" },
+        { "family": "B", "url": "https://www.soccerway.com/player/alioski-egzijan/ObGOBo9F/", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Lugano, born 1992-02-12, Al Ahli to Lugano 2025-07-01 free, contract to 2027-06-30, 3 Super League appearances in 2026/2027" }
       ]
     }
   ],
