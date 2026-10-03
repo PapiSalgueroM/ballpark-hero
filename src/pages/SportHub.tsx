@@ -67,6 +67,7 @@ const SportHub = ({ route }: { route: string }) => {
       <main id="dukb-main" className="flex-1 max-w-6xl mx-auto w-full px-4 pt-4 pb-16">
         <HubExperience key={hub.route} hub={hub} games={games} />
 
+        <div className="mx-auto max-w-4xl">
         {/* ROUND 357: the cornerstone sections. These are what turn a hub from
             an icon grid into a page worth landing on, and they are plain
             semantic HTML on purpose so the prerenderer keeps every word of
@@ -138,6 +139,7 @@ const SportHub = ({ route }: { route: string }) => {
           description={hub.about}
           howToPlay={hub.howToPlay}
         />
+        </div>
       </main>
     </div>
   );
