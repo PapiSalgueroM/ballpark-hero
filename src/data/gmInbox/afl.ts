@@ -1,6 +1,6 @@
 /* Round 940: the Australian football desk's inbox. Data only, the rules are
    src/lib/gmInbox.ts. Every voice is a club role (your list manager, the
-   senior coach, the football manager) and every man is a role: nothing here
+   senior coach, the head of football) and every man is a role: nothing here
    names or quotes anybody. The trade period and the draft appear as words,
    with no number, date or rule beyond their names. */
 import type { GmInboxPack } from '@/lib/gmInbox';
@@ -39,7 +39,7 @@ export const AFL_GM_INBOX: GmInboxPack = {
       ],
     },
     {
-      id: 'afl_suspension', beat: 'season', from: 'Your football manager', emoji: '📋',
+      id: 'afl_suspension', beat: 'season', from: 'Your head of football', emoji: '📋',
       when: [{ fact: 'suspended', op: '==', value: true }],
       text: 'One of your key defenders has been handed a suspension. You can challenge it or take the weeks.',
       choices: [
