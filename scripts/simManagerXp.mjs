@@ -55,16 +55,26 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const ROOT_URL = ROOT.replaceAll('\\', '/');
 const TMP = os.tmpdir().replaceAll('\\', '/');
+/* Round 965: esbuild found by walking up, the way node resolves a module, so
+   the harness also runs from a git worktree that has no node_modules of its
+   own. On the main checkout the first directory tried is ROOT itself. */
+const ESBUILD = (() => {
+  for (let d = ROOT; ; d = path.dirname(d)) {
+    const bin = path.join(d, 'node_modules', '.bin', 'esbuild');
+    if (fs.existsSync(bin) || fs.existsSync(bin + '.cmd')) return bin.replaceAll('\\', '/');
+    if (path.dirname(d) === d) return `${ROOT_URL}/node_modules/.bin/esbuild`;
+  }
+})();
 const ENTRY = `${TMP}/mgrXp.entry.mjs`;
 const BUNDLE = `${TMP}/mgrXp.bundle.mjs`;
 
 const CONTROL = process.env.XP_CONTROL || '';
-const KNOWN = ['notneutral', 'freepoints', 'nocap', 'flatlevels', 'deadgate', 'saturate'];
+const KNOWN = ['notneutral', 'freepoints', 'nocap', 'flatlevels', 'deadgate', 'saturate', 'nomap'];
 /* The first four rewrite clubManagerXp.ts and are read by sections 1 to 6.
    'deadgate' patches the ENGINE bundle instead, because section 7 runs the
    real engine and the engine imports the real module whatever we do to a copy
    of the source. */
-const SOURCE_CONTROLS = ['notneutral', 'freepoints', 'nocap', 'flatlevels', 'saturate'];
+const SOURCE_CONTROLS = ['notneutral', 'freepoints', 'nocap', 'flatlevels', 'saturate', 'nomap'];
 if (CONTROL && !KNOWN.includes(CONTROL)) {
   console.error(`XP_CONTROL=${CONTROL} is not a control this harness knows (${KNOWN.join(', ')})`);
   process.exit(1);
@@ -93,9 +103,13 @@ if (SOURCE_CONTROLS.includes(CONTROL)) {
     );
   } else if (CONTROL === 'freepoints') {
     swap(
-      '  return Math.max(0, pointsEarned(block.xp) - pointsSpent(block));',
+      '  return Math.max(0, Math.min(pointsEarned(block.xp) - pointsBought(block), room));',
       '  return Math.max(0, pointsEarned(block.xp));',
     );
+  } else if (CONTROL === 'nomap') {
+    /* Round 965: one background mapped to no tree, which is the badge the
+       round exists to end. Section 9 must go red. */
+    swap("  pundit: 'media',", "  pundit: 'nowhere' as SkillTree,");
   } else if (CONTROL === 'nocap') {
     swap('  if (now >= MAX_TREE_POINTS) return null;', '');
   } else if (CONTROL === 'flatlevels') {
@@ -119,7 +133,7 @@ const mod = await import('${xpPath.replaceAll('\\', '/')}');
 export const xp = mod;
 `);
 execSync(
-  `"${ROOT}/node_modules/.bin/esbuild" "${ENTRY}" --bundle --format=esm --platform=node --outfile="${BUNDLE}" --log-level=error --alias:@=${ROOT_URL}/src`,
+  `"${ESBUILD}" "${ENTRY}" --bundle --format=esm --platform=node --outfile="${BUNDLE}" --log-level=error --alias:@=${ROOT_URL}/src`,
   { stdio: 'inherit' },
 );
 
@@ -466,7 +480,7 @@ globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: 
 export const engine = await import('${ROOT_URL}/src/lib/clubManager.ts');
 `);
 execSync(
-  `"${ROOT}/node_modules/.bin/esbuild" "${ENGINE_ENTRY}" --bundle --format=esm --platform=node --outfile="${ENGINE_BUNDLE}" --log-level=error${engineAlias} --alias:@=${ROOT_URL}/src`,
+  `"${ESBUILD}" "${ENGINE_ENTRY}" --bundle --format=esm --platform=node --outfile="${ENGINE_BUNDLE}" --log-level=error${engineAlias} --alias:@=${ROOT_URL}/src`,
   { stdio: 'inherit' },
 );
 const { engine } = await import(pathToFileURL(ENGINE_BUNDLE).href);
