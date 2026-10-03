@@ -162,14 +162,19 @@ export const NIL_ASK_CAP = 1.5;
 export const NIL_WEEKLY_SHARE = 0.25;
 
 /** A school leading at this interest, by this much, gets the commitment. */
-export const COMMIT_AT = 80;
+export const COMMIT_AT = 60;
 export const COMMIT_LEAD = 12;
 /** In the portal men decide fast: a lower line. */
 export const PORTAL_COMMIT_AT = 55;
 /** A committed man flips when another school with room passes his by this much. */
-export const FLIP_MARGIN = 20;
+export const FLIP_MARGIN = 10;
 /** Rivals keep working a man committed elsewhere, at this share. */
 export const RIVAL_COMMITTED_SHARE = 0.6;
+/** A school holding a commitment moves on to the next man and works this
+ *  one at this share, which is how a commitment gets stolen. */
+export const RIVAL_HOLD_SHARE = 0.4;
+/** A man I did nothing with in a week loses this share of his interest in me. */
+export const NEGLECT_DRIFT = 0.05;
 
 /** The band around a high school recruit's true rating starts this wide
  *  either way; each evaluation halves it, down to BAND_MIN. */
@@ -532,6 +537,12 @@ export function runTrailWeek(
     seen.add(key);
     spent += cost;
   }
+  /* A man I did nothing with this week cools on me a little. */
+  const touched = new Set([...seen].map(k => k.slice(k.indexOf(':') + 1)));
+  for (const r of t.recruits) {
+    if (r.signedWith || touched.has(r.id)) continue;
+    r.interest[t.mySchool] = (r.interest[t.mySchool] ?? 0) * (1 - NEGLECT_DRIFT);
+  }
   /* A standing NIL offer keeps talking every week until signing day. */
   for (const r of t.recruits) {
     if (r.signedWith || r.nilOffer <= 0) continue;
@@ -543,7 +554,7 @@ export function runTrailWeek(
     for (const id of r.rivals) {
       const s = schoolOf.get(id);
       if (!s) continue;
-      const share = r.committedTo && r.committedTo !== id ? RIVAL_COMMITTED_SHARE : 1;
+      const share = !r.committedTo ? 1 : r.committedTo === id ? RIVAL_HOLD_SHARE : RIVAL_COMMITTED_SHARE;
       r.interest[id] = (r.interest[id] ?? 0) + rivalGain(s, r, rng) * share;
     }
   }
