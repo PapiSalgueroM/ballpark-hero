@@ -14,6 +14,16 @@ import { dailyIndex, dateSeed, getTodayET } from '@/lib/dateUtils';
  * and cross-verified against the Wikipedia article's "Starting lineups"
  * table for the same game. Both sources matched 22/22 on offense for SB LI.
  *
+ * ROUND 950 (sheets 19 to 40, read 2026-10-03): two hosts per sheet, and
+ * Wikipedia is not one of them. The league's own game book PDF (linked from
+ * the nfl.com game page, page 1 "Lineups") and the pro-football-reference.com
+ * box score Starters table, both naming the same eleven men. Positions are
+ * the game book's. Every row, both URLs and the evidence for each reveal
+ * line are in scripts/data/missingElevenVerified2026-10.json, and
+ * scripts/simMissingElevenSources.mjs holds this file to that record. A side
+ * the two hosts disagree on is held out, the same rule that dropped the
+ * SB XLII Giants offense and the SB 50 Panthers below.
+ *
  * THE TRAPS ARE THE POINT, double-confirmed, do NOT "fix" them:
  *   - SB LI Patriots: Dion LEWIS started at RB. LeGarrette Blount and James
  *     White (three TDs incl. the OT winner) came off the bench. Rookie
@@ -670,15 +680,723 @@ export const ELEVEN_LINEUPS: ElevenLineup[] = [
     ],
     source: 'B/R position-by-position SB 50 preview + AMNY defenses-at-a-glance + NFL.com postgame film review (front three named) + Wikipedia player pages ("started in Super Bowl 50" for Marshall, Trevathan; Stewart FS/Ward SS assignment), 11/11 across 2+ publishers each.',
   },
+
+  // 19. Super Bowl LVIII, Kansas City Chiefs offense
+  {
+    id: 'sb-lviii-kc',
+    dateLabel: 'Super Bowl LVIII',
+    competition: 'Super Bowl',
+    matchDate: '2024-02-11',
+    team: 'Kansas City Chiefs',
+    opponent: 'San Francisco 49ers',
+    scoreLine: 'Chiefs 25-22 49ers (OT)',
+    venue: 'Allegiant Stadium, Las Vegas',
+    slots: [
+      S('QB', 'Patrick Mahomes'),
+      S('RB', 'Isiah Pacheco'),
+      S('WR', 'Rashee Rice'),
+      S('WR', 'Marquez Valdes-Scantling'),
+      S('TE', 'Travis Kelce'),
+      S('TE', 'Noah Gray'),
+      S('LT', 'Donovan Smith'),
+      S('LG', 'Nick Allegretti'),
+      S('C', 'Creed Humphrey'),
+      S('RG', 'Trey Smith'),
+      S('RT', 'Jawaan Taylor'),
+    ],
+    blankCandidates: [
+      { name: 'Noah Gray', slotIndex: 5, nationality: 'USA', fact: 'Started as the second tight end next to Travis Kelce.' },
+      { name: 'Nick Allegretti', slotIndex: 7, nationality: 'USA', fact: 'Started at left guard as the Chiefs won it 25-22 in overtime.' },
+      { name: 'Isiah Pacheco', slotIndex: 1, nationality: 'USA' },
+    ],
+    source: 'nfl.com game book (static.www.nfl.com/image/upload/v1707737132/gamecenter/674ddfc1-b342-11ee-aec3-7d8f81bc70be.pdf) + pro-football-reference.com box score 202402110kan #home_starters, read 2026-10-03, 11/11 match; full row in scripts/data/missingElevenVerified2026-10.json.',
+  },
+
+  // 20. Super Bowl LVIII, San Francisco 49ers offense
+  {
+    id: 'sb-lviii-sf',
+    dateLabel: 'Super Bowl LVIII',
+    competition: 'Super Bowl',
+    matchDate: '2024-02-11',
+    team: 'San Francisco 49ers',
+    opponent: 'Kansas City Chiefs',
+    scoreLine: 'Chiefs 25-22 49ers (OT)',
+    venue: 'Allegiant Stadium, Las Vegas',
+    slots: [
+      S('QB', 'Brock Purdy'),
+      S('RB', 'Christian McCaffrey'),
+      S('FB', 'Kyle Juszczyk'),
+      S('WR', 'Brandon Aiyuk'),
+      S('WR', 'Deebo Samuel'),
+      S('TE', 'George Kittle'),
+      S('LT', 'Trent Williams'),
+      S('LG', 'Aaron Banks'),
+      S('C', 'Jake Brendel'),
+      S('RG', 'Jon Feliciano'),
+      S('RT', 'Colton McKivitz'),
+    ],
+    blankCandidates: [
+      { name: 'Christian McCaffrey', slotIndex: 1, nationality: 'USA', fact: 'Scored on a 21-yard catch, and the pass came from receiver Jauan Jennings.' },
+      { name: 'Kyle Juszczyk', slotIndex: 2, nationality: 'USA', fact: 'San Francisco opened with a fullback on the field, and it was him.' },
+      { name: 'Jake Brendel', slotIndex: 8, nationality: 'USA' },
+    ],
+    source: 'nfl.com game book (static.www.nfl.com/image/upload/v1707737132/gamecenter/674ddfc1-b342-11ee-aec3-7d8f81bc70be.pdf) + pro-football-reference.com box score 202402110kan #vis_starters, read 2026-10-03, 11/11 match; full row in scripts/data/missingElevenVerified2026-10.json.',
+  },
+
+  // 21. Super Bowl LIX, Philadelphia Eagles offense
+  {
+    id: 'sb-lix-phi',
+    dateLabel: 'Super Bowl LIX',
+    competition: 'Super Bowl',
+    matchDate: '2025-02-09',
+    team: 'Philadelphia Eagles',
+    opponent: 'Kansas City Chiefs',
+    scoreLine: 'Eagles 40-22 Chiefs',
+    venue: 'Caesars Superdome, New Orleans',
+    slots: [
+      S('QB', 'Jalen Hurts'),
+      S('RB', 'Saquon Barkley'),
+      S('WR', 'A.J. Brown'),
+      S('WR', 'DeVonta Smith'),
+      S('WR', 'Jahan Dotson'),
+      S('TE', 'Dallas Goedert'),
+      S('LT', 'Jordan Mailata'),
+      S('LG', 'Landon Dickerson'),
+      S('C', 'Cam Jurgens'),
+      S('RG', 'Mekhi Becton'),
+      S('RT', 'Lane Johnson'),
+    ],
+    blankCandidates: [
+      { name: 'DeVonta Smith', slotIndex: 3, nationality: 'USA', fact: 'Caught a 46-yard touchdown from Jalen Hurts in the third quarter.' },
+      { name: 'Jahan Dotson', slotIndex: 4, nationality: 'USA', fact: 'The third starting receiver, alongside A.J. Brown and DeVonta Smith.' },
+      { name: 'Mekhi Becton', slotIndex: 9, nationality: 'USA' },
+    ],
+    source: 'nfl.com game book (static.www.nfl.com/image/upload/v1739186285/gamecenter/882c1e9c-dc59-11ef-8d24-59614ea9df0f.pdf) + pro-football-reference.com box score 202502090phi #home_starters, read 2026-10-03, 11/11 match; full row in scripts/data/missingElevenVerified2026-10.json.',
+  },
+
+  // 22. Super Bowl LIX, Philadelphia Eagles defense
+  {
+    id: 'sb-lix-phi-d',
+    dateLabel: 'Super Bowl LIX',
+    competition: 'Super Bowl',
+    matchDate: '2025-02-09',
+    team: 'Philadelphia Eagles',
+    opponent: 'Kansas City Chiefs',
+    scoreLine: 'Eagles 40-22 Chiefs',
+    venue: 'Caesars Superdome, New Orleans',
+    unit: 'defense',
+    slots: [
+      S('OLB', 'Josh Sweat'),
+      S('DT', 'Jordan Davis'),
+      S('DT', 'Jalen Carter'),
+      S('OLB', 'Nolan Smith'),
+      S('LB', 'Zack Baun'),
+      S('LB', 'Oren Burks'),
+      S('CB', 'Darius Slay'),
+      S('CB', 'Quinyon Mitchell'),
+      S('DB', 'Cooper DeJean'),
+      S('S', 'Reed Blankenship'),
+      S('S', 'C.J. Gardner-Johnson'),
+    ],
+    blankCandidates: [
+      { name: 'Cooper DeJean', slotIndex: 8, nationality: 'USA', fact: 'Returned an interception 38 yards for a touchdown in the second quarter.' },
+      { name: 'Oren Burks', slotIndex: 5, nationality: 'USA', fact: 'Started at linebacker beside Zack Baun.' },
+      { name: 'Jordan Davis', slotIndex: 1, nationality: 'USA' },
+    ],
+    source: 'nfl.com game book (static.www.nfl.com/image/upload/v1739186285/gamecenter/882c1e9c-dc59-11ef-8d24-59614ea9df0f.pdf) + pro-football-reference.com box score 202502090phi #home_starters, read 2026-10-03, 11/11 match; full row in scripts/data/missingElevenVerified2026-10.json.',
+  },
+
+  // 23. Super Bowl LV, Tampa Bay Buccaneers offense
+  {
+    id: 'sb-lv-tb',
+    dateLabel: 'Super Bowl LV',
+    competition: 'Super Bowl',
+    matchDate: '2021-02-07',
+    team: 'Tampa Bay Buccaneers',
+    opponent: 'Kansas City Chiefs',
+    scoreLine: 'Buccaneers 31-9 Chiefs',
+    venue: 'Raymond James Stadium, Tampa',
+    slots: [
+      S('QB', 'Tom Brady'),
+      S('RB', 'Leonard Fournette'),
+      S('WR', 'Mike Evans'),
+      S('WR', 'Chris Godwin'),
+      S('WR', 'Scott Miller'),
+      S('TE', 'Rob Gronkowski'),
+      S('LT', 'Donovan Smith'),
+      S('LG', 'Ali Marpet'),
+      S('C', 'Ryan Jensen'),
+      S('RG', 'Aaron Stinnie'),
+      S('RT', 'Tristan Wirfs'),
+    ],
+    blankCandidates: [
+      { name: 'Scott Miller', slotIndex: 4, nationality: 'USA', fact: 'Started at receiver. Antonio Brown, who caught a touchdown that night, came off the bench.' },
+      { name: 'Rob Gronkowski', slotIndex: 5, nationality: 'USA', fact: 'Caught two first-half touchdown passes from Tom Brady.' },
+      { name: 'Aaron Stinnie', slotIndex: 9, nationality: 'USA' },
+    ],
+    source: 'nfl.com game book (static.www.nfl.com/image/upload/v1677629321/gamecenter/10012021-0207-0069-5207-a78dd8bf8075.pdf) + pro-football-reference.com box score 202102070tam #home_starters, read 2026-10-03, 11/11 match; full row in scripts/data/missingElevenVerified2026-10.json.',
+  },
+
+  // 24. Super Bowl LV, Tampa Bay Buccaneers defense
+  {
+    id: 'sb-lv-tb-d',
+    dateLabel: 'Super Bowl LV',
+    competition: 'Super Bowl',
+    matchDate: '2021-02-07',
+    team: 'Tampa Bay Buccaneers',
+    opponent: 'Kansas City Chiefs',
+    scoreLine: 'Buccaneers 31-9 Chiefs',
+    venue: 'Raymond James Stadium, Tampa',
+    unit: 'defense',
+    slots: [
+      S('DL', 'Ndamukong Suh'),
+      S('NT', 'Rakeem Nunez-Roches'),
+      S('OLB', 'Jason Pierre-Paul'),
+      S('ILB', 'Devin White'),
+      S('ILB', 'Lavonte David'),
+      S('OLB', 'Shaquil Barrett'),
+      S('CB', 'Carlton Davis'),
+      S('CB', 'Jamel Dean'),
+      S('CB', 'Sean Murphy-Bunting'),
+      S('S', 'Jordan Whitehead'),
+      S('S', 'Antoine Winfield Jr.'),
+    ],
+    blankCandidates: [
+      { name: 'Devin White', slotIndex: 3, nationality: 'USA', fact: 'This defense held the Chiefs to three field goals and no touchdowns.' },
+      { name: 'Jamel Dean', slotIndex: 7, nationality: 'USA', fact: 'Tampa Bay opened in the nickel, so three corners started. Dean was one of them.' },
+      { name: 'Jordan Whitehead', slotIndex: 9, nationality: 'USA' },
+    ],
+    source: 'nfl.com game book (static.www.nfl.com/image/upload/v1677629321/gamecenter/10012021-0207-0069-5207-a78dd8bf8075.pdf) + pro-football-reference.com box score 202102070tam #home_starters, read 2026-10-03, 11/11 match; full row in scripts/data/missingElevenVerified2026-10.json.',
+  },
+
+  // 25. Super Bowl LV, Kansas City Chiefs offense
+  {
+    id: 'sb-lv-kc',
+    dateLabel: 'Super Bowl LV',
+    competition: 'Super Bowl',
+    matchDate: '2021-02-07',
+    team: 'Kansas City Chiefs',
+    opponent: 'Tampa Bay Buccaneers',
+    scoreLine: 'Buccaneers 31-9 Chiefs',
+    venue: 'Raymond James Stadium, Tampa',
+    slots: [
+      S('QB', 'Patrick Mahomes'),
+      S('RB', 'Clyde Edwards-Helaire'),
+      S('WR', 'Tyreek Hill'),
+      S('WR', 'Demarcus Robinson'),
+      S('WR', 'Byron Pringle'),
+      S('TE', 'Travis Kelce'),
+      S('LT', 'Mike Remmers'),
+      S('LG', 'Nick Allegretti'),
+      S('C', 'Austin Reiter'),
+      S('RG', 'Stefen Wisniewski'),
+      S('RT', 'Andrew Wylie'),
+    ],
+    blankCandidates: [
+      { name: 'Mike Remmers', slotIndex: 6, nationality: 'USA' },
+      { name: 'Andrew Wylie', slotIndex: 10, nationality: 'USA' },
+      { name: 'Byron Pringle', slotIndex: 4, nationality: 'USA', fact: 'The third starting receiver, with Tyreek Hill and Demarcus Robinson.' },
+    ],
+    source: 'nfl.com game book (static.www.nfl.com/image/upload/v1677629321/gamecenter/10012021-0207-0069-5207-a78dd8bf8075.pdf) + pro-football-reference.com box score 202102070tam #vis_starters, read 2026-10-03, 11/11 match; full row in scripts/data/missingElevenVerified2026-10.json.',
+  },
+
+  // 26. Super Bowl LVI, Los Angeles Rams offense
+  {
+    id: 'sb-lvi-lar',
+    dateLabel: 'Super Bowl LVI',
+    competition: 'Super Bowl',
+    matchDate: '2022-02-13',
+    team: 'Los Angeles Rams',
+    opponent: 'Cincinnati Bengals',
+    scoreLine: 'Rams 23-20 Bengals',
+    venue: 'SoFi Stadium, Inglewood',
+    slots: [
+      S('QB', 'Matthew Stafford'),
+      S('RB', 'Cam Akers'),
+      S('WR', 'Odell Beckham Jr.'),
+      S('WR', 'Cooper Kupp'),
+      S('WR', 'Van Jefferson'),
+      S('TE', 'Kendall Blanton'),
+      S('LT', 'Andrew Whitworth'),
+      S('LG', 'David Edwards'),
+      S('C', 'Brian Allen'),
+      S('RG', 'Austin Corbett'),
+      S('RT', 'Rob Havenstein'),
+    ],
+    blankCandidates: [
+      { name: 'Kendall Blanton', slotIndex: 5, nationality: 'USA' },
+      { name: 'Van Jefferson', slotIndex: 4, nationality: 'USA', fact: 'The third starting receiver, with Odell Beckham Jr. and Cooper Kupp.' },
+      { name: 'Cooper Kupp', slotIndex: 3, nationality: 'USA', fact: 'Caught the 1-yard touchdown with 1:25 left that won it 23-20.' },
+    ],
+    source: 'nfl.com game book (static.www.nfl.com/image/upload/v1677629338/gamecenter/757bbb2a-71a2-11ec-8e86-ebe0df6765ab.pdf) + pro-football-reference.com box score 202202130cin #vis_starters, read 2026-10-03, 11/11 match; full row in scripts/data/missingElevenVerified2026-10.json.',
+  },
+
+  // 27. Super Bowl LVI, Los Angeles Rams defense
+  {
+    id: 'sb-lvi-lar-d',
+    dateLabel: 'Super Bowl LVI',
+    competition: 'Super Bowl',
+    matchDate: '2022-02-13',
+    team: 'Los Angeles Rams',
+    opponent: 'Cincinnati Bengals',
+    scoreLine: 'Rams 23-20 Bengals',
+    venue: 'SoFi Stadium, Inglewood',
+    unit: 'defense',
+    slots: [
+      S('DE', 'A\'Shawn Robinson'),
+      S('NT', 'Greg Gaines'),
+      S('DT', 'Aaron Donald'),
+      S('OLB', 'Von Miller'),
+      S('OLB', 'Leonard Floyd'),
+      S('LB', 'Ernest Jones'),
+      S('LCB', 'Darious Williams'),
+      S('RCB', 'Jalen Ramsey'),
+      S('CB', 'David Long'),
+      S('DB', 'Eric Weddle'),
+      S('SS', 'Nick Scott'),
+    ],
+    blankCandidates: [
+      { name: 'Eric Weddle', slotIndex: 9, nationality: 'USA' },
+      { name: 'Greg Gaines', slotIndex: 1, nationality: 'USA', fact: 'Started at nose tackle between A\'Shawn Robinson and Aaron Donald.' },
+      { name: 'Darious Williams', slotIndex: 6, nationality: 'USA', fact: 'One of three starting corners, with Jalen Ramsey and David Long.' },
+    ],
+    source: 'nfl.com game book (static.www.nfl.com/image/upload/v1677629338/gamecenter/757bbb2a-71a2-11ec-8e86-ebe0df6765ab.pdf) + pro-football-reference.com box score 202202130cin #vis_starters, read 2026-10-03, 11/11 match; full row in scripts/data/missingElevenVerified2026-10.json.',
+  },
+
+  // 28. Super Bowl LVI, Cincinnati Bengals offense
+  {
+    id: 'sb-lvi-cin',
+    dateLabel: 'Super Bowl LVI',
+    competition: 'Super Bowl',
+    matchDate: '2022-02-13',
+    team: 'Cincinnati Bengals',
+    opponent: 'Los Angeles Rams',
+    scoreLine: 'Rams 23-20 Bengals',
+    venue: 'SoFi Stadium, Inglewood',
+    slots: [
+      S('QB', 'Joe Burrow'),
+      S('RB', 'Joe Mixon'),
+      S('WR', 'Ja\'Marr Chase'),
+      S('WR', 'Tee Higgins'),
+      S('WR', 'Tyler Boyd'),
+      S('TE', 'C.J. Uzomah'),
+      S('LT', 'Jonah Williams'),
+      S('LG', 'Quinton Spain'),
+      S('C', 'Trey Hopkins'),
+      S('RG', 'Hakeem Adeniji'),
+      S('RT', 'Isaiah Prince'),
+    ],
+    blankCandidates: [
+      { name: 'Joe Mixon', slotIndex: 1, nationality: 'USA', fact: 'The running back threw a 6-yard touchdown pass to Tee Higgins.' },
+      { name: 'Isaiah Prince', slotIndex: 10, nationality: 'USA' },
+      { name: 'Hakeem Adeniji', slotIndex: 9, nationality: 'USA' },
+    ],
+    source: 'nfl.com game book (static.www.nfl.com/image/upload/v1677629338/gamecenter/757bbb2a-71a2-11ec-8e86-ebe0df6765ab.pdf) + pro-football-reference.com box score 202202130cin #home_starters, read 2026-10-03, 11/11 match; full row in scripts/data/missingElevenVerified2026-10.json.',
+  },
+
+  // 29. Super Bowl LIII, New England Patriots defense
+  {
+    id: 'sb-liii-ne-d',
+    dateLabel: 'Super Bowl LIII',
+    competition: 'Super Bowl',
+    matchDate: '2019-02-03',
+    team: 'New England Patriots',
+    opponent: 'Los Angeles Rams',
+    scoreLine: 'Patriots 13-3 Rams',
+    venue: 'Mercedes-Benz Stadium, Atlanta',
+    unit: 'defense',
+    slots: [
+      S('LE', 'Trey Flowers'),
+      S('DT', 'Lawrence Guy'),
+      S('DT', 'Malcom Brown'),
+      S('RE', 'Deatrich Wise Jr.'),
+      S('LB', 'Dont\'a Hightower'),
+      S('LB', 'Kyle Van Noy'),
+      S('LCB', 'Jason McCourty'),
+      S('RCB', 'Stephon Gilmore'),
+      S('DB', 'Jonathan Jones'),
+      S('S', 'Devin McCourty'),
+      S('S', 'Patrick Chung'),
+    ],
+    blankCandidates: [
+      { name: 'Trey Flowers', slotIndex: 0, nationality: 'USA', fact: 'This defense gave up one field goal all night in a 13-3 win.' },
+      { name: 'Jonathan Jones', slotIndex: 8, nationality: 'USA', fact: 'The nickel back on the opening card.' },
+      { name: 'Malcom Brown', slotIndex: 2, nationality: 'USA' },
+    ],
+    source: 'nfl.com game book (static.www.nfl.com/image/upload/v1677629595/gamecenter/10012019-0203-0011-323b-548fe39c23df.pdf) + pro-football-reference.com box score 201902030ram #vis_starters, read 2026-10-03, 11/11 match; full row in scripts/data/missingElevenVerified2026-10.json.',
+  },
+
+  // 30. Super Bowl LIII, Los Angeles Rams offense
+  {
+    id: 'sb-liii-lar',
+    dateLabel: 'Super Bowl LIII',
+    competition: 'Super Bowl',
+    matchDate: '2019-02-03',
+    team: 'Los Angeles Rams',
+    opponent: 'New England Patriots',
+    scoreLine: 'Patriots 13-3 Rams',
+    venue: 'Mercedes-Benz Stadium, Atlanta',
+    slots: [
+      S('QB', 'Jared Goff'),
+      S('RB', 'Todd Gurley'),
+      S('WR', 'Robert Woods'),
+      S('WR', 'Brandin Cooks'),
+      S('WR', 'Josh Reynolds'),
+      S('TE', 'Tyler Higbee'),
+      S('LT', 'Andrew Whitworth'),
+      S('LG', 'Rodger Saffold'),
+      S('C', 'John Sullivan'),
+      S('RG', 'Austin Blythe'),
+      S('RT', 'Rob Havenstein'),
+    ],
+    blankCandidates: [
+      { name: 'Josh Reynolds', slotIndex: 4, nationality: 'USA', fact: 'The third starting receiver, with Robert Woods and Brandin Cooks.' },
+      { name: 'Austin Blythe', slotIndex: 9, nationality: 'USA' },
+      { name: 'John Sullivan', slotIndex: 8, nationality: 'USA', fact: 'Snapped for an offense that managed one field goal all night.' },
+    ],
+    source: 'nfl.com game book (static.www.nfl.com/image/upload/v1677629595/gamecenter/10012019-0203-0011-323b-548fe39c23df.pdf) + pro-football-reference.com box score 201902030ram #home_starters, read 2026-10-03, 11/11 match; full row in scripts/data/missingElevenVerified2026-10.json.',
+  },
+
+  // 31. Super Bowl XLVII, Baltimore Ravens offense
+  {
+    id: 'sb-xlvii-bal',
+    dateLabel: 'Super Bowl XLVII',
+    competition: 'Super Bowl',
+    matchDate: '2013-02-03',
+    team: 'Baltimore Ravens',
+    opponent: 'San Francisco 49ers',
+    scoreLine: 'Ravens 34-31 49ers',
+    venue: 'Mercedes-Benz Superdome, New Orleans',
+    slots: [
+      S('QB', 'Joe Flacco'),
+      S('RB', 'Ray Rice'),
+      S('FB', 'Vonta Leach'),
+      S('WR', 'Anquan Boldin'),
+      S('WR', 'Torrey Smith'),
+      S('WR', 'Jacoby Jones'),
+      S('LT', 'Bryant McKinnie'),
+      S('LG', 'Kelechi Osemele'),
+      S('C', 'Matt Birk'),
+      S('RG', 'Marshal Yanda'),
+      S('RT', 'Michael Oher'),
+    ],
+    blankCandidates: [
+      { name: 'Jacoby Jones', slotIndex: 5, nationality: 'USA', fact: 'Caught a 56-yard touchdown and returned a kickoff 108 yards for another.' },
+      { name: 'Vonta Leach', slotIndex: 2, nationality: 'USA', fact: 'Baltimore opened with a fullback and three receivers, no tight end.' },
+      { name: 'Bryant McKinnie', slotIndex: 6, nationality: 'USA' },
+    ],
+    source: 'nfl.com game book (static.www.nfl.com/image/upload/v1677630684/gamecenter/10012013-0203-00bb-9d76-3f7dbeaf2a5e.pdf) + pro-football-reference.com box score 201302030sfo #vis_starters, read 2026-10-03, 11/11 match; full row in scripts/data/missingElevenVerified2026-10.json.',
+  },
+
+  // 32. Super Bowl XLVII, San Francisco 49ers offense
+  {
+    id: 'sb-xlvii-sf',
+    dateLabel: 'Super Bowl XLVII',
+    competition: 'Super Bowl',
+    matchDate: '2013-02-03',
+    team: 'San Francisco 49ers',
+    opponent: 'Baltimore Ravens',
+    scoreLine: 'Ravens 34-31 49ers',
+    venue: 'Mercedes-Benz Superdome, New Orleans',
+    slots: [
+      S('QB', 'Colin Kaepernick'),
+      S('RB', 'Frank Gore'),
+      S('WR', 'Michael Crabtree'),
+      S('WR', 'Randy Moss'),
+      S('TE', 'Vernon Davis'),
+      S('TE', 'Delanie Walker'),
+      S('LT', 'Joe Staley'),
+      S('LG', 'Mike Iupati'),
+      S('C', 'Jonathan Goodwin'),
+      S('RG', 'Alex Boone'),
+      S('RT', 'Anthony Davis'),
+    ],
+    blankCandidates: [
+      { name: 'Delanie Walker', slotIndex: 5, nationality: 'USA', fact: 'The second starting tight end, next to Vernon Davis.' },
+      { name: 'Randy Moss', slotIndex: 3, nationality: 'USA', fact: 'Started at receiver opposite Michael Crabtree.' },
+      { name: 'Jonathan Goodwin', slotIndex: 8, nationality: 'USA' },
+    ],
+    source: 'nfl.com game book (static.www.nfl.com/image/upload/v1677630684/gamecenter/10012013-0203-00bb-9d76-3f7dbeaf2a5e.pdf) + pro-football-reference.com box score 201302030sfo #home_starters, read 2026-10-03, 11/11 match; full row in scripts/data/missingElevenVerified2026-10.json.',
+  },
+
+  // 33. Super Bowl XLVI, New York Giants offense
+  {
+    id: 'sb-xlvi-nyg',
+    dateLabel: 'Super Bowl XLVI',
+    competition: 'Super Bowl',
+    matchDate: '2012-02-05',
+    team: 'New York Giants',
+    opponent: 'New England Patriots',
+    scoreLine: 'Giants 21-17 Patriots',
+    venue: 'Lucas Oil Stadium, Indianapolis',
+    slots: [
+      S('QB', 'Eli Manning'),
+      S('RB', 'Ahmad Bradshaw'),
+      S('FB', 'Henry Hynoski'),
+      S('WR', 'Hakeem Nicks'),
+      S('WR', 'Victor Cruz'),
+      S('TE', 'Jake Ballard'),
+      S('LT', 'David Diehl'),
+      S('LG', 'Kevin Boothe'),
+      S('C', 'David Baas'),
+      S('RG', 'Chris Snee'),
+      S('RT', 'Kareem McKenzie'),
+    ],
+    blankCandidates: [
+      { name: 'Henry Hynoski', slotIndex: 2, nationality: 'USA' },
+      { name: 'Jake Ballard', slotIndex: 5, nationality: 'USA' },
+      { name: 'Ahmad Bradshaw', slotIndex: 1, nationality: 'USA', fact: 'Scored the winning 6-yard touchdown run with 57 seconds left.' },
+    ],
+    source: 'nfl.com game book (static.www.nfl.com/image/upload/v1677630587/gamecenter/10012012-0205-00bb-c38f-1f97f8af3cca.pdf) + pro-football-reference.com box score 201202050nwe #vis_starters, read 2026-10-03, 11/11 match; full row in scripts/data/missingElevenVerified2026-10.json.',
+  },
+
+  // 34. Super Bowl XLVI, New England Patriots offense
+  {
+    id: 'sb-xlvi-ne',
+    dateLabel: 'Super Bowl XLVI',
+    competition: 'Super Bowl',
+    matchDate: '2012-02-05',
+    team: 'New England Patriots',
+    opponent: 'New York Giants',
+    scoreLine: 'Giants 21-17 Patriots',
+    venue: 'Lucas Oil Stadium, Indianapolis',
+    slots: [
+      S('QB', 'Tom Brady'),
+      S('RB', 'BenJarvus Green-Ellis'),
+      S('WR', 'Wes Welker'),
+      S('WR', 'Deion Branch'),
+      S('TE', 'Rob Gronkowski'),
+      S('TE', 'Nate Solder'),
+      S('LT', 'Matt Light'),
+      S('LG', 'Logan Mankins'),
+      S('C', 'Dan Connolly'),
+      S('RG', 'Brian Waters'),
+      S('RT', 'Sebastian Vollmer'),
+    ],
+    blankCandidates: [
+      { name: 'Nate Solder', slotIndex: 5, nationality: 'USA', fact: 'Wore 77 and was listed as a starting tight end next to Gronkowski.' },
+      { name: 'Dan Connolly', slotIndex: 8, nationality: 'USA' },
+      { name: 'Deion Branch', slotIndex: 3, nationality: 'USA', fact: 'Started at receiver alongside Wes Welker.' },
+    ],
+    source: 'nfl.com game book (static.www.nfl.com/image/upload/v1677630587/gamecenter/10012012-0205-00bb-c38f-1f97f8af3cca.pdf) + pro-football-reference.com box score 201202050nwe #home_starters, read 2026-10-03, 11/11 match; full row in scripts/data/missingElevenVerified2026-10.json.',
+  },
+
+  // 35. Super Bowl XLIV, New Orleans Saints offense
+  {
+    id: 'sb-xliv-no',
+    dateLabel: 'Super Bowl XLIV',
+    competition: 'Super Bowl',
+    matchDate: '2010-02-07',
+    team: 'New Orleans Saints',
+    opponent: 'Indianapolis Colts',
+    scoreLine: 'Saints 31-17 Colts',
+    venue: 'Sun Life Stadium, Miami Gardens',
+    slots: [
+      S('QB', 'Drew Brees'),
+      S('RB', 'Pierre Thomas'),
+      S('RB', 'Reggie Bush'),
+      S('WR', 'Marques Colston'),
+      S('WR', 'Devery Henderson'),
+      S('TE', 'Jeremy Shockey'),
+      S('LT', 'Jermon Bushrod'),
+      S('LG', 'Carl Nicks'),
+      S('C', 'Jonathan Goodwin'),
+      S('RG', 'Jahri Evans'),
+      S('RT', 'Jon Stinchcomb'),
+    ],
+    blankCandidates: [
+      { name: 'Pierre Thomas', slotIndex: 1, nationality: 'USA', fact: 'Started in a two-back set with Reggie Bush and caught a 16-yard touchdown.' },
+      { name: 'Devery Henderson', slotIndex: 4, nationality: 'USA', fact: 'Started at receiver opposite Marques Colston.' },
+      { name: 'Jon Stinchcomb', slotIndex: 10, nationality: 'USA' },
+    ],
+    source: 'nfl.com game book (static.www.nfl.com/image/upload/v1677631473/gamecenter/10012010-0207-00e1-2890-45de8ffd3cb3.pdf) + pro-football-reference.com box score 201002070clt #vis_starters, read 2026-10-03, 11/11 match; full row in scripts/data/missingElevenVerified2026-10.json.',
+  },
+
+  // 36. Super Bowl XLIV, Indianapolis Colts offense
+  {
+    id: 'sb-xliv-ind',
+    dateLabel: 'Super Bowl XLIV',
+    competition: 'Super Bowl',
+    matchDate: '2010-02-07',
+    team: 'Indianapolis Colts',
+    opponent: 'New Orleans Saints',
+    scoreLine: 'Saints 31-17 Colts',
+    venue: 'Sun Life Stadium, Miami Gardens',
+    slots: [
+      S('QB', 'Peyton Manning'),
+      S('RB', 'Joseph Addai'),
+      S('H-B', 'Gijon Robinson'),
+      S('WR', 'Reggie Wayne'),
+      S('WR', 'Pierre Garcon'),
+      S('TE', 'Dallas Clark'),
+      S('LT', 'Charlie Johnson'),
+      S('LG', 'Ryan Lilja'),
+      S('C', 'Jeff Saturday'),
+      S('RG', 'Kyle DeVan'),
+      S('RT', 'Ryan Diem'),
+    ],
+    blankCandidates: [
+      { name: 'Gijon Robinson', slotIndex: 2, nationality: 'USA' },
+      { name: 'Kyle DeVan', slotIndex: 9, nationality: 'USA' },
+      { name: 'Pierre Garcon', slotIndex: 4, nationality: 'USA', fact: 'Caught a 19-yard touchdown from Peyton Manning in the first quarter.' },
+    ],
+    source: 'nfl.com game book (static.www.nfl.com/image/upload/v1677631473/gamecenter/10012010-0207-00e1-2890-45de8ffd3cb3.pdf) + pro-football-reference.com box score 201002070clt #home_starters, read 2026-10-03, 11/11 match; full row in scripts/data/missingElevenVerified2026-10.json.',
+  },
+
+  // 37. Super Bowl XLIII, Pittsburgh Steelers offense
+  {
+    id: 'sb-xliii-pit',
+    dateLabel: 'Super Bowl XLIII',
+    competition: 'Super Bowl',
+    matchDate: '2009-02-01',
+    team: 'Pittsburgh Steelers',
+    opponent: 'Arizona Cardinals',
+    scoreLine: 'Steelers 27-23 Cardinals',
+    venue: 'Raymond James Stadium, Tampa',
+    slots: [
+      S('QB', 'Ben Roethlisberger'),
+      S('RB', 'Willie Parker'),
+      S('WR', 'Hines Ward'),
+      S('TE', 'Heath Miller'),
+      S('TE', 'Matt Spaeth'),
+      S('TE', 'Sean McHugh'),
+      S('LT', 'Max Starks'),
+      S('LG', 'Chris Kemoeatu'),
+      S('C', 'Justin Hartwig'),
+      S('RG', 'Darnell Stapleton'),
+      S('RT', 'Willie Colon'),
+    ],
+    blankCandidates: [
+      { name: 'Sean McHugh', slotIndex: 5, nationality: 'USA', fact: 'Pittsburgh opened with three tight ends. Santonio Holmes, who caught the winning touchdown, came off the bench.' },
+      { name: 'Matt Spaeth', slotIndex: 4, nationality: 'USA', fact: 'One of three starting tight ends, with Heath Miller and Sean McHugh.' },
+      { name: 'Darnell Stapleton', slotIndex: 9, nationality: 'USA' },
+    ],
+    source: 'nfl.com game book (static.www.nfl.com/image/upload/v1677631650/gamecenter/10012009-0201-005b-8ea3-b4ab4e2b8bea.pdf) + pro-football-reference.com box score 200902010crd #vis_starters, read 2026-10-03, 11/11 match; full row in scripts/data/missingElevenVerified2026-10.json.',
+  },
+
+  // 38. Super Bowl XLIII, Pittsburgh Steelers defense
+  {
+    id: 'sb-xliii-pit-d',
+    dateLabel: 'Super Bowl XLIII',
+    competition: 'Super Bowl',
+    matchDate: '2009-02-01',
+    team: 'Pittsburgh Steelers',
+    opponent: 'Arizona Cardinals',
+    scoreLine: 'Steelers 27-23 Cardinals',
+    venue: 'Raymond James Stadium, Tampa',
+    unit: 'defense',
+    slots: [
+      S('DE', 'Aaron Smith'),
+      S('NT', 'Casey Hampton'),
+      S('DE', 'Brett Keisel'),
+      S('OLB', 'LaMarr Woodley'),
+      S('LILB', 'James Farrior'),
+      S('RILB', 'Larry Foote'),
+      S('OLB', 'James Harrison'),
+      S('LCB', 'Ike Taylor'),
+      S('RCB', 'Bryant McFadden'),
+      S('SS', 'Troy Polamalu'),
+      S('FS', 'Ryan Clark'),
+    ],
+    blankCandidates: [
+      { name: 'James Harrison', slotIndex: 6, nationality: 'USA', fact: 'Returned an interception 100 yards for a touchdown as the first half ended.' },
+      { name: 'Bryant McFadden', slotIndex: 8, nationality: 'USA' },
+      { name: 'Larry Foote', slotIndex: 5, nationality: 'USA', fact: 'Started inside next to James Farrior.' },
+    ],
+    source: 'nfl.com game book (static.www.nfl.com/image/upload/v1677631650/gamecenter/10012009-0201-005b-8ea3-b4ab4e2b8bea.pdf) + pro-football-reference.com box score 200902010crd #vis_starters, read 2026-10-03, 11/11 match; full row in scripts/data/missingElevenVerified2026-10.json.',
+  },
+
+  // 39. Super Bowl XLIII, Arizona Cardinals offense
+  {
+    id: 'sb-xliii-ari',
+    dateLabel: 'Super Bowl XLIII',
+    competition: 'Super Bowl',
+    matchDate: '2009-02-01',
+    team: 'Arizona Cardinals',
+    opponent: 'Pittsburgh Steelers',
+    scoreLine: 'Steelers 27-23 Cardinals',
+    venue: 'Raymond James Stadium, Tampa',
+    slots: [
+      S('QB', 'Kurt Warner'),
+      S('RB', 'Edgerrin James'),
+      S('FB', 'Terrelle Smith'),
+      S('WR', 'Larry Fitzgerald'),
+      S('WR', 'Anquan Boldin'),
+      S('TE', 'Leonard Pope'),
+      S('LT', 'Mike Gandy'),
+      S('LG', 'Reggie Wells'),
+      S('C', 'Lyle Sendlein'),
+      S('RG', 'Deuce Lutui'),
+      S('RT', 'Levi Brown'),
+    ],
+    blankCandidates: [
+      { name: 'Larry Fitzgerald', slotIndex: 3, nationality: 'USA', fact: 'Scored twice in the fourth quarter, the second on a 64-yard catch.' },
+      { name: 'Terrelle Smith', slotIndex: 2, nationality: 'USA' },
+      { name: 'Leonard Pope', slotIndex: 5, nationality: 'USA', fact: 'Started at tight end. Ben Patrick, who caught a touchdown, came off the bench.' },
+    ],
+    source: 'nfl.com game book (static.www.nfl.com/image/upload/v1677631650/gamecenter/10012009-0201-005b-8ea3-b4ab4e2b8bea.pdf) + pro-football-reference.com box score 200902010crd #home_starters, read 2026-10-03, 11/11 match; full row in scripts/data/missingElevenVerified2026-10.json.',
+  },
+
+  // 40. Super Bowl XLII, New York Giants defense
+  {
+    id: 'sb-xlii-nyg-d',
+    dateLabel: 'Super Bowl XLII',
+    competition: 'Super Bowl',
+    matchDate: '2008-02-03',
+    team: 'New York Giants',
+    opponent: 'New England Patriots',
+    scoreLine: 'Giants 17-14 Patriots',
+    venue: 'University of Phoenix Stadium, Glendale',
+    unit: 'defense',
+    slots: [
+      S('LE', 'Michael Strahan'),
+      S('DT', 'Barry Cofield'),
+      S('DT', 'Fred Robbins'),
+      S('RE', 'Osi Umenyiora'),
+      S('SLB', 'Reggie Torbor'),
+      S('MLB', 'Antonio Pierce'),
+      S('WLB', 'Kawika Mitchell'),
+      S('LCB', 'Aaron Ross'),
+      S('RCB', 'Corey Webster'),
+      S('SS', 'James Butler'),
+      S('FS', 'Gibril Wilson'),
+    ],
+    blankCandidates: [
+      { name: 'Fred Robbins', slotIndex: 2, nationality: 'USA', fact: 'Started at tackle. Justin Tuck came off the bench in this game.' },
+      { name: 'Reggie Torbor', slotIndex: 4, nationality: 'USA' },
+      { name: 'Kawika Mitchell', slotIndex: 6, nationality: 'USA', fact: 'Started at weak-side linebacker in a game the Patriots scored 14 in.' },
+    ],
+    source: 'nfl.com game book (static.www.nfl.com/image/upload/v1677631553/gamecenter/10012008-0203-00d1-c381-50c19c704227.pdf) + pro-football-reference.com box score 200802030nwe #vis_starters, read 2026-10-03, 11/11 match; full row in scripts/data/missingElevenVerified2026-10.json.',
+  },
 ];
 
 // ---------------------------------------------------------------------------
 // Puzzle selection, daily (ET-seeded, sitewide convention) + unlimited.
 // ---------------------------------------------------------------------------
 
+/**
+ * Round 950 grew the pool from 18 sheets to 40. dailyIndex shuffles the
+ * pool in cycles the length of the pool, so a longer pool deals a different
+ * sheet on every date: a daily already played would change under the people
+ * who played it, and the day the release lands would change mid day. So a
+ * daily dated before this keeps dealing from the first 18 sheets exactly as
+ * it did (they stay at indexes 0 to 17, in order), and every daily from this
+ * date on deals from all of them. Unlimited uses the whole pool at once.
+ * Set a week and a bit out on purpose: the release has to land before it.
+ * scripts/simMissingElevenSources.mjs proves the old deal is unchanged.
+ */
+export const ELEVEN_GROWN_DAILY_FROM = '2026-10-12';
+export const ELEVEN_ORIGINAL_POOL = 18;
+
+/** How many sheets the daily for this ET date deals from. */
+export function elevenDailyPoolSize(dateStr: string): number {
+  return dateStr < ELEVEN_GROWN_DAILY_FROM ? ELEVEN_ORIGINAL_POOL : ELEVEN_LINEUPS.length;
+}
+
 export function getDailyElevenPuzzle(): ActiveElevenPuzzle {
-  const seed = dateSeed(getTodayET());
-  const lineup = ELEVEN_LINEUPS[dailyIndex(getTodayET(), ELEVEN_LINEUPS.length)];
+  const today = getTodayET();
+  const seed = dateSeed(today);
+  const lineup = ELEVEN_LINEUPS[dailyIndex(today, elevenDailyPoolSize(today))];
   const candidate = lineup.blankCandidates[Math.floor(seed / 7) % lineup.blankCandidates.length];
   return { lineup, candidate };
 }

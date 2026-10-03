@@ -3,7 +3,12 @@
  "round": 950,
  "checkedOn": "2026-10-03",
  "method": "Every starter of every sheet below was read from two hosts on the read date. nfl.com: the official game book PDF linked from the nfl.com game page ('Download Game Book (PDF)'), page 1 'Lineups' block, read with pypdf text extraction; the game book prints the starters as position, jersey number and initial plus surname. pro-football-reference.com: the box score page's Starters table for that team (#vis_starters or #home_starters, which the site ships inside an HTML comment), read from the rendered page in a browser. A sheet ships only when both hosts list the same eleven men; a sheet where they differ on any starter is held out. Positions are the game book's (pfr prints generic OL labels on some tables). Each blank candidate fact is read from the same two hosts (the game book scoring summary or substitution list and the pfr scoring table). Wikipedia was not used.",
- "starterColumns": ["position", "name", "nfl.com game book line", "pfr starters row"],
+ "starterColumns": [
+  "position",
+  "name",
+  "nfl.com game book line",
+  "pfr starters row"
+ ],
  "sheets": [
   {
    "id": "sb-lviii-kc",
@@ -12,26 +17,128 @@
    "unit": "offense",
    "team": "Kansas City Chiefs",
    "sources": [
-    { "host": "nfl.com", "what": "Official game book PDF, page 1 Lineups, Kansas City Chiefs Offense", "url": "https://static.www.nfl.com/image/upload/v1707737132/gamecenter/674ddfc1-b342-11ee-aec3-7d8f81bc70be.pdf", "via": "https://www.nfl.com/games/49ers-at-chiefs-2023-post-4", "read": "2026-10-03" },
-    { "host": "pro-football-reference.com", "what": "Box score #home_starters (Chiefs Starters Table)", "url": "https://www.pro-football-reference.com/boxscores/202402110kan.htm", "read": "2026-10-03" }
+    {
+     "host": "nfl.com",
+     "what": "Official game book PDF, page 1 Lineups, Kansas City Chiefs Offense",
+     "url": "https://static.www.nfl.com/image/upload/v1707737132/gamecenter/674ddfc1-b342-11ee-aec3-7d8f81bc70be.pdf",
+     "via": "https://www.nfl.com/games/49ers-at-chiefs-2023-post-4",
+     "read": "2026-10-03"
+    },
+    {
+     "host": "pro-football-reference.com",
+     "what": "Box score #home_starters (Chiefs Starters Table)",
+     "url": "https://www.pro-football-reference.com/boxscores/202402110kan.htm",
+     "read": "2026-10-03"
+    }
    ],
    "agree": "11/11",
    "starters": [
-    ["QB", "Patrick Mahomes", "QB 15 P.Mahomes", "Patrick Mahomes/QB"],
-    ["RB", "Isiah Pacheco", "RB 10 I.Pacheco", "Isiah Pacheco/RB"],
-    ["WR", "Rashee Rice", "WR 4 R.Rice", "Rashee Rice/WR"],
-    ["WR", "Marquez Valdes-Scantling", "WR 11 M.Valdes-Scantling", "Marquez Valdes-Scantling/WR"],
-    ["TE", "Travis Kelce", "TE 87 T.Kelce", "Travis Kelce/TE"],
-    ["TE", "Noah Gray", "TE 83 N.Gray", "Noah Gray/TE"],
-    ["LT", "Donovan Smith", "LT 79 D.Smith", "Donovan Smith/T"],
-    ["LG", "Nick Allegretti", "LG 73 N.Allegretti", "Nick Allegretti/G"],
-    ["C", "Creed Humphrey", "C 52 C.Humphrey", "Creed Humphrey/C"],
-    ["RG", "Trey Smith", "RG 65 T.Smith", "Trey Smith/G"],
-    ["RT", "Jawaan Taylor", "RT 74 J.Taylor", "Jawaan Taylor/T"]
+    [
+     "QB",
+     "Patrick Mahomes",
+     "QB 15 P.Mahomes",
+     "Patrick Mahomes/QB"
+    ],
+    [
+     "RB",
+     "Isiah Pacheco",
+     "RB 10 I.Pacheco",
+     "Isiah Pacheco/RB"
+    ],
+    [
+     "WR",
+     "Rashee Rice",
+     "WR 4 R.Rice",
+     "Rashee Rice/WR"
+    ],
+    [
+     "WR",
+     "Marquez Valdes-Scantling",
+     "WR 11 M.Valdes-Scantling",
+     "Marquez Valdes-Scantling/WR"
+    ],
+    [
+     "TE",
+     "Travis Kelce",
+     "TE 87 T.Kelce",
+     "Travis Kelce/TE"
+    ],
+    [
+     "TE",
+     "Noah Gray",
+     "TE 83 N.Gray",
+     "Noah Gray/TE"
+    ],
+    [
+     "LT",
+     "Donovan Smith",
+     "LT 79 D.Smith",
+     "Donovan Smith/T"
+    ],
+    [
+     "LG",
+     "Nick Allegretti",
+     "LG 73 N.Allegretti",
+     "Nick Allegretti/G"
+    ],
+    [
+     "C",
+     "Creed Humphrey",
+     "C 52 C.Humphrey",
+     "Creed Humphrey/C"
+    ],
+    [
+     "RG",
+     "Trey Smith",
+     "RG 65 T.Smith",
+     "Trey Smith/G"
+    ],
+    [
+     "RT",
+     "Jawaan Taylor",
+     "RT 74 J.Taylor",
+     "Jawaan Taylor/T"
+    ]
    ],
    "facts": [
-    { "name": "Noah Gray", "fact": "Both books list two starting tight ends, Gray beside Travis Kelce." },
-    { "name": "Nick Allegretti", "fact": "Game book lineup LG 73 N.Allegretti; pfr starters Nick Allegretti/G." }
+    {
+     "name": "Noah Gray",
+     "fact": "Both books list two starting tight ends, Gray beside Travis Kelce."
+    },
+    {
+     "name": "Nick Allegretti",
+     "fact": "Game book lineup LG 73 N.Allegretti; pfr starters Nick Allegretti/G. Both scoring tables end 22-25 after an overtime Mahomes to Hardman touchdown (game book line score OT column; pfr 'Mecole Hardman 3 yard pass from Patrick Mahomes')."
+    }
+   ],
+   "opponent": "San Francisco 49ers",
+   "venue": "Allegiant Stadium, Las Vegas",
+   "venueAsPrinted": "at Allegiant Stadium, Las Vegas, NV",
+   "scoreLine": "Chiefs 25-22 49ers (OT)",
+   "candidates": [
+    {
+     "name": "Noah Gray",
+     "slotIndex": 5,
+     "nationality": "USA",
+     "bornPerPfr": "Leominster, MA",
+     "pfrPlayer": "https://www.pro-football-reference.com/players/G/GrayNo00.htm",
+     "reveal": "Started as the second tight end next to Travis Kelce."
+    },
+    {
+     "name": "Nick Allegretti",
+     "slotIndex": 7,
+     "nationality": "USA",
+     "bornPerPfr": "Frankfort, IL",
+     "pfrPlayer": "https://www.pro-football-reference.com/players/A/AlleNi00.htm",
+     "reveal": "Started at left guard as the Chiefs won it 25-22 in overtime."
+    },
+    {
+     "name": "Isiah Pacheco",
+     "slotIndex": 1,
+     "nationality": "USA",
+     "bornPerPfr": "Vineland, NJ",
+     "pfrPlayer": "https://www.pro-football-reference.com/players/P/PachIs00.htm",
+     "reveal": null
+    }
    ]
   },
   {
@@ -41,26 +148,128 @@
    "unit": "offense",
    "team": "San Francisco 49ers",
    "sources": [
-    { "host": "nfl.com", "what": "Official game book PDF, page 1 Lineups, San Francisco 49ers Offense", "url": "https://static.www.nfl.com/image/upload/v1707737132/gamecenter/674ddfc1-b342-11ee-aec3-7d8f81bc70be.pdf", "via": "https://www.nfl.com/games/49ers-at-chiefs-2023-post-4", "read": "2026-10-03" },
-    { "host": "pro-football-reference.com", "what": "Box score #vis_starters (49ers Starters Table)", "url": "https://www.pro-football-reference.com/boxscores/202402110kan.htm", "read": "2026-10-03" }
+    {
+     "host": "nfl.com",
+     "what": "Official game book PDF, page 1 Lineups, San Francisco 49ers Offense",
+     "url": "https://static.www.nfl.com/image/upload/v1707737132/gamecenter/674ddfc1-b342-11ee-aec3-7d8f81bc70be.pdf",
+     "via": "https://www.nfl.com/games/49ers-at-chiefs-2023-post-4",
+     "read": "2026-10-03"
+    },
+    {
+     "host": "pro-football-reference.com",
+     "what": "Box score #vis_starters (49ers Starters Table)",
+     "url": "https://www.pro-football-reference.com/boxscores/202402110kan.htm",
+     "read": "2026-10-03"
+    }
    ],
    "agree": "11/11",
    "starters": [
-    ["QB", "Brock Purdy", "QB 13 B.Purdy", "Brock Purdy/QB"],
-    ["RB", "Christian McCaffrey", "RB 23 C.McCaffrey", "Christian McCaffrey/RB"],
-    ["FB", "Kyle Juszczyk", "FB 44 K.Juszczyk", "Kyle Juszczyk/FB"],
-    ["WR", "Brandon Aiyuk", "WR 11 B.Aiyuk", "Brandon Aiyuk/WR"],
-    ["WR", "Deebo Samuel", "WR 19 D.Samuel", "Deebo Samuel/WR"],
-    ["TE", "George Kittle", "TE 85 G.Kittle", "George Kittle/TE"],
-    ["LT", "Trent Williams", "LT 71 T.Williams", "Trent Williams/T"],
-    ["LG", "Aaron Banks", "LG 65 A.Banks", "Aaron Banks/OL"],
-    ["C", "Jake Brendel", "C 64 J.Brendel", "Jake Brendel/OL"],
-    ["RG", "Jon Feliciano", "RG 55 J.Feliciano", "Jon Feliciano/OL"],
-    ["RT", "Colton McKivitz", "RT 68 C.McKivitz", "Colton McKivitz/OL"]
+    [
+     "QB",
+     "Brock Purdy",
+     "QB 13 B.Purdy",
+     "Brock Purdy/QB"
+    ],
+    [
+     "RB",
+     "Christian McCaffrey",
+     "RB 23 C.McCaffrey",
+     "Christian McCaffrey/RB"
+    ],
+    [
+     "FB",
+     "Kyle Juszczyk",
+     "FB 44 K.Juszczyk",
+     "Kyle Juszczyk/FB"
+    ],
+    [
+     "WR",
+     "Brandon Aiyuk",
+     "WR 11 B.Aiyuk",
+     "Brandon Aiyuk/WR"
+    ],
+    [
+     "WR",
+     "Deebo Samuel",
+     "WR 19 D.Samuel",
+     "Deebo Samuel/WR"
+    ],
+    [
+     "TE",
+     "George Kittle",
+     "TE 85 G.Kittle",
+     "George Kittle/TE"
+    ],
+    [
+     "LT",
+     "Trent Williams",
+     "LT 71 T.Williams",
+     "Trent Williams/T"
+    ],
+    [
+     "LG",
+     "Aaron Banks",
+     "LG 65 A.Banks",
+     "Aaron Banks/OL"
+    ],
+    [
+     "C",
+     "Jake Brendel",
+     "C 64 J.Brendel",
+     "Jake Brendel/OL"
+    ],
+    [
+     "RG",
+     "Jon Feliciano",
+     "RG 55 J.Feliciano",
+     "Jon Feliciano/OL"
+    ],
+    [
+     "RT",
+     "Colton McKivitz",
+     "RT 68 C.McKivitz",
+     "Colton McKivitz/OL"
+    ]
    ],
    "facts": [
-    { "name": "Christian McCaffrey", "fact": "Scoring: game book 'C.McCaffrey 21 yd. pass from J.Jennings' (Q2 4:23); pfr 'Christian McCaffrey 21 yard pass from Jauan Jennings'. Jennings is in the 49ers substitutions, not the starters, on both." },
-    { "name": "Kyle Juszczyk", "fact": "Game book lineup FB 44 K.Juszczyk; pfr starters Kyle Juszczyk/FB." }
+    {
+     "name": "Christian McCaffrey",
+     "fact": "Scoring: game book 'C.McCaffrey 21 yd. pass from J.Jennings' (Q2 4:23); pfr 'Christian McCaffrey 21 yard pass from Jauan Jennings'. Jennings is in the 49ers substitutions, not the starters, on both."
+    },
+    {
+     "name": "Kyle Juszczyk",
+     "fact": "Game book lineup FB 44 K.Juszczyk; pfr starters Kyle Juszczyk/FB."
+    }
+   ],
+   "opponent": "Kansas City Chiefs",
+   "venue": "Allegiant Stadium, Las Vegas",
+   "venueAsPrinted": "at Allegiant Stadium, Las Vegas, NV",
+   "scoreLine": "Chiefs 25-22 49ers (OT)",
+   "candidates": [
+    {
+     "name": "Christian McCaffrey",
+     "slotIndex": 1,
+     "nationality": "USA",
+     "bornPerPfr": "Castle Rock, CO",
+     "pfrPlayer": "https://www.pro-football-reference.com/players/M/McCaCh01.htm",
+     "reveal": "Scored on a 21-yard catch, and the pass came from receiver Jauan Jennings."
+    },
+    {
+     "name": "Kyle Juszczyk",
+     "slotIndex": 2,
+     "nationality": "USA",
+     "bornPerPfr": "Medina, OH",
+     "pfrPlayer": "https://www.pro-football-reference.com/players/J/JuszKy00.htm",
+     "reveal": "San Francisco opened with a fullback on the field, and it was him."
+    },
+    {
+     "name": "Jake Brendel",
+     "slotIndex": 8,
+     "nationality": "USA",
+     "bornPerPfr": "Madison, WI",
+     "pfrPlayer": "https://www.pro-football-reference.com/players/B/BrenJa01.htm",
+     "reveal": null
+    }
    ]
   },
   {
@@ -70,27 +279,132 @@
    "unit": "offense",
    "team": "Philadelphia Eagles",
    "sources": [
-    { "host": "nfl.com", "what": "Official game book PDF, page 1 Lineups, Philadelphia Eagles Offense", "url": "https://static.www.nfl.com/image/upload/v1739186285/gamecenter/882c1e9c-dc59-11ef-8d24-59614ea9df0f.pdf", "via": "https://www.nfl.com/games/chiefs-at-eagles-2024-post-4", "read": "2026-10-03" },
-    { "host": "pro-football-reference.com", "what": "Box score #home_starters (Eagles Starters Table)", "url": "https://www.pro-football-reference.com/boxscores/202502090phi.htm", "read": "2026-10-03" }
+    {
+     "host": "nfl.com",
+     "what": "Official game book PDF, page 1 Lineups, Philadelphia Eagles Offense",
+     "url": "https://static.www.nfl.com/image/upload/v1739186285/gamecenter/882c1e9c-dc59-11ef-8d24-59614ea9df0f.pdf",
+     "via": "https://www.nfl.com/games/chiefs-at-eagles-2024-post-4",
+     "read": "2026-10-03"
+    },
+    {
+     "host": "pro-football-reference.com",
+     "what": "Box score #home_starters (Eagles Starters Table)",
+     "url": "https://www.pro-football-reference.com/boxscores/202502090phi.htm",
+     "read": "2026-10-03"
+    }
    ],
    "agree": "11/11",
    "starters": [
-    ["QB", "Jalen Hurts", "QB 1 J.Hurts", "Jalen Hurts/QB"],
-    ["RB", "Saquon Barkley", "RB 26 S.Barkley", "Saquon Barkley/RB"],
-    ["WR", "A.J. Brown", "WR 11 A.Brown", "A.J. Brown/WR"],
-    ["WR", "DeVonta Smith", "WR 6 D.Smith", "DeVonta Smith/WR"],
-    ["WR", "Jahan Dotson", "WR 83 J.Dotson", "Jahan Dotson/WR"],
-    ["TE", "Dallas Goedert", "TE 88 D.Goedert", "Dallas Goedert/TE"],
-    ["LT", "Jordan Mailata", "LT 68 J.Mailata", "Jordan Mailata/T"],
-    ["LG", "Landon Dickerson", "LG 69 L.Dickerson", "Landon Dickerson/G"],
-    ["C", "Cam Jurgens", "C 51 C.Jurgens", "Cam Jurgens/OL"],
-    ["RG", "Mekhi Becton", "RG 77 M.Becton", "Mekhi Becton/T"],
-    ["RT", "Lane Johnson", "RT 65 L.Johnson", "Lane Johnson/T"]
+    [
+     "QB",
+     "Jalen Hurts",
+     "QB 1 J.Hurts",
+     "Jalen Hurts/QB"
+    ],
+    [
+     "RB",
+     "Saquon Barkley",
+     "RB 26 S.Barkley",
+     "Saquon Barkley/RB"
+    ],
+    [
+     "WR",
+     "A.J. Brown",
+     "WR 11 A.Brown",
+     "A.J. Brown/WR"
+    ],
+    [
+     "WR",
+     "DeVonta Smith",
+     "WR 6 D.Smith",
+     "DeVonta Smith/WR"
+    ],
+    [
+     "WR",
+     "Jahan Dotson",
+     "WR 83 J.Dotson",
+     "Jahan Dotson/WR"
+    ],
+    [
+     "TE",
+     "Dallas Goedert",
+     "TE 88 D.Goedert",
+     "Dallas Goedert/TE"
+    ],
+    [
+     "LT",
+     "Jordan Mailata",
+     "LT 68 J.Mailata",
+     "Jordan Mailata/T"
+    ],
+    [
+     "LG",
+     "Landon Dickerson",
+     "LG 69 L.Dickerson",
+     "Landon Dickerson/G"
+    ],
+    [
+     "C",
+     "Cam Jurgens",
+     "C 51 C.Jurgens",
+     "Cam Jurgens/OL"
+    ],
+    [
+     "RG",
+     "Mekhi Becton",
+     "RG 77 M.Becton",
+     "Mekhi Becton/T"
+    ],
+    [
+     "RT",
+     "Lane Johnson",
+     "RT 65 L.Johnson",
+     "Lane Johnson/T"
+    ]
    ],
    "facts": [
-    { "name": "DeVonta Smith", "fact": "Scoring: game book 'D.Smith 46 yd. pass from J.Hurts' (Q3 2:40); pfr 'DeVonta Smith 46 yard pass from Jalen Hurts'." },
-    { "name": "Jahan Dotson", "fact": "Both list three starting receivers: Dotson with A.J. Brown and DeVonta Smith." },
-    { "name": "Mekhi Becton", "fact": "Game book lineup RG 77 M.Becton; pfr starters Mekhi Becton/T (pfr prints his roster position)." }
+    {
+     "name": "DeVonta Smith",
+     "fact": "Scoring: game book 'D.Smith 46 yd. pass from J.Hurts' (Q3 2:40); pfr 'DeVonta Smith 46 yard pass from Jalen Hurts'."
+    },
+    {
+     "name": "Jahan Dotson",
+     "fact": "Both list three starting receivers: Dotson with A.J. Brown and DeVonta Smith."
+    },
+    {
+     "name": "Mekhi Becton",
+     "fact": "Game book lineup RG 77 M.Becton; pfr starters Mekhi Becton/T (pfr prints his roster position)."
+    }
+   ],
+   "opponent": "Kansas City Chiefs",
+   "venue": "Caesars Superdome, New Orleans",
+   "venueAsPrinted": "at Caesars Superdome, New Orleans, LA",
+   "scoreLine": "Eagles 40-22 Chiefs",
+   "candidates": [
+    {
+     "name": "DeVonta Smith",
+     "slotIndex": 3,
+     "nationality": "USA",
+     "bornPerPfr": "Amite City, LA",
+     "pfrPlayer": "https://www.pro-football-reference.com/players/S/SmitDe07.htm",
+     "reveal": "Caught a 46-yard touchdown from Jalen Hurts in the third quarter."
+    },
+    {
+     "name": "Jahan Dotson",
+     "slotIndex": 4,
+     "nationality": "USA",
+     "bornPerPfr": "Newark, NJ",
+     "pfrPlayer": "https://www.pro-football-reference.com/players/D/DotsJa00.htm",
+     "reveal": "The third starting receiver, alongside A.J. Brown and DeVonta Smith."
+    },
+    {
+     "name": "Mekhi Becton",
+     "slotIndex": 9,
+     "nationality": "USA",
+     "bornPerPfr": "Highland Springs, VA",
+     "pfrPlayer": "https://www.pro-football-reference.com/players/B/BectMe00.htm",
+     "reveal": null
+    }
    ]
   },
   {
@@ -100,26 +414,128 @@
    "unit": "defense",
    "team": "Philadelphia Eagles",
    "sources": [
-    { "host": "nfl.com", "what": "Official game book PDF, page 1 Lineups, Philadelphia Eagles Defense", "url": "https://static.www.nfl.com/image/upload/v1739186285/gamecenter/882c1e9c-dc59-11ef-8d24-59614ea9df0f.pdf", "via": "https://www.nfl.com/games/chiefs-at-eagles-2024-post-4", "read": "2026-10-03" },
-    { "host": "pro-football-reference.com", "what": "Box score #home_starters (Eagles Starters Table)", "url": "https://www.pro-football-reference.com/boxscores/202502090phi.htm", "read": "2026-10-03" }
+    {
+     "host": "nfl.com",
+     "what": "Official game book PDF, page 1 Lineups, Philadelphia Eagles Defense",
+     "url": "https://static.www.nfl.com/image/upload/v1739186285/gamecenter/882c1e9c-dc59-11ef-8d24-59614ea9df0f.pdf",
+     "via": "https://www.nfl.com/games/chiefs-at-eagles-2024-post-4",
+     "read": "2026-10-03"
+    },
+    {
+     "host": "pro-football-reference.com",
+     "what": "Box score #home_starters (Eagles Starters Table)",
+     "url": "https://www.pro-football-reference.com/boxscores/202502090phi.htm",
+     "read": "2026-10-03"
+    }
    ],
    "agree": "11/11",
    "starters": [
-    ["OLB", "Josh Sweat", "OLB 19 J.Sweat", "Josh Sweat/OLB"],
-    ["DT", "Jordan Davis", "DT 90 J.Davis", "Jordan Davis/DT"],
-    ["DT", "Jalen Carter", "DT 98 J.Carter", "Jalen Carter/DT"],
-    ["OLB", "Nolan Smith", "OLB 3 N.Smith", "Nolan Smith/OLB"],
-    ["LB", "Zack Baun", "LB 53 Z.Baun", "Zack Baun/LB"],
-    ["LB", "Oren Burks", "LB 42 O.Burks", "Oren Burks/LB"],
-    ["CB", "Darius Slay", "CB 2 D.Slay", "Darius Slay/CB"],
-    ["CB", "Quinyon Mitchell", "CB 27 Q.Mitchell", "Quinyon Mitchell/CB"],
-    ["DB", "Cooper DeJean", "DB 33 C.DeJean", "Cooper DeJean/DB"],
-    ["S", "Reed Blankenship", "S 32 R.Blankenship", "Reed Blankenship/S"],
-    ["S", "C.J. Gardner-Johnson", "S 8 C.Gardner-Johnson", "C.J. Gardner-Johnson/S"]
+    [
+     "OLB",
+     "Josh Sweat",
+     "OLB 19 J.Sweat",
+     "Josh Sweat/OLB"
+    ],
+    [
+     "DT",
+     "Jordan Davis",
+     "DT 90 J.Davis",
+     "Jordan Davis/DT"
+    ],
+    [
+     "DT",
+     "Jalen Carter",
+     "DT 98 J.Carter",
+     "Jalen Carter/DT"
+    ],
+    [
+     "OLB",
+     "Nolan Smith",
+     "OLB 3 N.Smith",
+     "Nolan Smith/OLB"
+    ],
+    [
+     "LB",
+     "Zack Baun",
+     "LB 53 Z.Baun",
+     "Zack Baun/LB"
+    ],
+    [
+     "LB",
+     "Oren Burks",
+     "LB 42 O.Burks",
+     "Oren Burks/LB"
+    ],
+    [
+     "CB",
+     "Darius Slay",
+     "CB 2 D.Slay",
+     "Darius Slay/CB"
+    ],
+    [
+     "CB",
+     "Quinyon Mitchell",
+     "CB 27 Q.Mitchell",
+     "Quinyon Mitchell/CB"
+    ],
+    [
+     "DB",
+     "Cooper DeJean",
+     "DB 33 C.DeJean",
+     "Cooper DeJean/DB"
+    ],
+    [
+     "S",
+     "Reed Blankenship",
+     "S 32 R.Blankenship",
+     "Reed Blankenship/S"
+    ],
+    [
+     "S",
+     "C.J. Gardner-Johnson",
+     "S 8 C.Gardner-Johnson",
+     "C.J. Gardner-Johnson/S"
+    ]
    ],
    "facts": [
-    { "name": "Cooper DeJean", "fact": "Scoring: game book 'C.DeJean 38 yd. interception return' (Q2 7:03); pfr 'Cooper DeJean 38 yard interception return'." },
-    { "name": "Oren Burks", "fact": "Game book lineup LB 42 O.Burks beside LB 53 Z.Baun; pfr starters Oren Burks/LB." }
+    {
+     "name": "Cooper DeJean",
+     "fact": "Scoring: game book 'C.DeJean 38 yd. interception return' (Q2 7:03); pfr 'Cooper DeJean 38 yard interception return'."
+    },
+    {
+     "name": "Oren Burks",
+     "fact": "Game book lineup LB 42 O.Burks beside LB 53 Z.Baun; pfr starters Oren Burks/LB."
+    }
+   ],
+   "opponent": "Kansas City Chiefs",
+   "venue": "Caesars Superdome, New Orleans",
+   "venueAsPrinted": "at Caesars Superdome, New Orleans, LA",
+   "scoreLine": "Eagles 40-22 Chiefs",
+   "candidates": [
+    {
+     "name": "Cooper DeJean",
+     "slotIndex": 8,
+     "nationality": "USA",
+     "bornPerPfr": "Sioux Falls, SD",
+     "pfrPlayer": "https://www.pro-football-reference.com/players/D/DeJeCo00.htm",
+     "reveal": "Returned an interception 38 yards for a touchdown in the second quarter."
+    },
+    {
+     "name": "Oren Burks",
+     "slotIndex": 5,
+     "nationality": "USA",
+     "bornPerPfr": "Alexandria, VA",
+     "pfrPlayer": "https://www.pro-football-reference.com/players/B/BurkOr00.htm",
+     "reveal": "Started at linebacker beside Zack Baun."
+    },
+    {
+     "name": "Jordan Davis",
+     "slotIndex": 1,
+     "nationality": "USA",
+     "bornPerPfr": "Charlotte, NC",
+     "pfrPlayer": "https://www.pro-football-reference.com/players/D/DaviJo03.htm",
+     "reveal": null
+    }
    ]
   },
   {
@@ -129,27 +545,132 @@
    "unit": "offense",
    "team": "Tampa Bay Buccaneers",
    "sources": [
-    { "host": "nfl.com", "what": "Official game book PDF, page 1 Lineups, Tampa Bay Buccaneers Offense", "url": "https://static.www.nfl.com/image/upload/v1677629321/gamecenter/10012021-0207-0069-5207-a78dd8bf8075.pdf", "via": "https://www.nfl.com/games/chiefs-at-buccaneers-2020-post-4", "read": "2026-10-03" },
-    { "host": "pro-football-reference.com", "what": "Box score #home_starters (Buccaneers Starters Table)", "url": "https://www.pro-football-reference.com/boxscores/202102070tam.htm", "read": "2026-10-03" }
+    {
+     "host": "nfl.com",
+     "what": "Official game book PDF, page 1 Lineups, Tampa Bay Buccaneers Offense",
+     "url": "https://static.www.nfl.com/image/upload/v1677629321/gamecenter/10012021-0207-0069-5207-a78dd8bf8075.pdf",
+     "via": "https://www.nfl.com/games/chiefs-at-buccaneers-2020-post-4",
+     "read": "2026-10-03"
+    },
+    {
+     "host": "pro-football-reference.com",
+     "what": "Box score #home_starters (Buccaneers Starters Table)",
+     "url": "https://www.pro-football-reference.com/boxscores/202102070tam.htm",
+     "read": "2026-10-03"
+    }
    ],
    "agree": "11/11",
    "starters": [
-    ["QB", "Tom Brady", "QB 12 T.Brady", "Tom Brady/QB"],
-    ["RB", "Leonard Fournette", "RB 28 L.Fournette", "Leonard Fournette/RB"],
-    ["WR", "Mike Evans", "WR 13 M.Evans", "Mike Evans/WR"],
-    ["WR", "Chris Godwin", "WR 14 C.Godwin", "Chris Godwin/WR"],
-    ["WR", "Scott Miller", "WR 10 S.Miller", "Scott Miller/WR"],
-    ["TE", "Rob Gronkowski", "TE 87 R.Gronkowski", "Rob Gronkowski/TE"],
-    ["LT", "Donovan Smith", "LT 76 D.Smith", "Donovan Smith/T"],
-    ["LG", "Ali Marpet", "LG 74 A.Marpet", "Ali Marpet/G"],
-    ["C", "Ryan Jensen", "C 66 R.Jensen", "Ryan Jensen/C"],
-    ["RG", "Aaron Stinnie", "RG 64 A.Stinnie", "Aaron Stinnie/G"],
-    ["RT", "Tristan Wirfs", "RT 78 T.Wirfs", "Tristan Wirfs/T"]
+    [
+     "QB",
+     "Tom Brady",
+     "QB 12 T.Brady",
+     "Tom Brady/QB"
+    ],
+    [
+     "RB",
+     "Leonard Fournette",
+     "RB 28 L.Fournette",
+     "Leonard Fournette/RB"
+    ],
+    [
+     "WR",
+     "Mike Evans",
+     "WR 13 M.Evans",
+     "Mike Evans/WR"
+    ],
+    [
+     "WR",
+     "Chris Godwin",
+     "WR 14 C.Godwin",
+     "Chris Godwin/WR"
+    ],
+    [
+     "WR",
+     "Scott Miller",
+     "WR 10 S.Miller",
+     "Scott Miller/WR"
+    ],
+    [
+     "TE",
+     "Rob Gronkowski",
+     "TE 87 R.Gronkowski",
+     "Rob Gronkowski/TE"
+    ],
+    [
+     "LT",
+     "Donovan Smith",
+     "LT 76 D.Smith",
+     "Donovan Smith/T"
+    ],
+    [
+     "LG",
+     "Ali Marpet",
+     "LG 74 A.Marpet",
+     "Ali Marpet/G"
+    ],
+    [
+     "C",
+     "Ryan Jensen",
+     "C 66 R.Jensen",
+     "Ryan Jensen/C"
+    ],
+    [
+     "RG",
+     "Aaron Stinnie",
+     "RG 64 A.Stinnie",
+     "Aaron Stinnie/G"
+    ],
+    [
+     "RT",
+     "Tristan Wirfs",
+     "RT 78 T.Wirfs",
+     "Tristan Wirfs/T"
+    ]
    ],
    "facts": [
-    { "name": "Scott Miller", "fact": "Game book lists WR 81 A.Brown under Buccaneers substitutions and pfr's starters omit him; both scoring tables have 'A.Brown 1 yd. pass from T.Brady' / 'Antonio Brown 1 yard pass from Tom Brady' (Q2 0:06)." },
-    { "name": "Rob Gronkowski", "fact": "Scoring: game book 'R.Gronkowski 8 yd. pass from T.Brady' (Q1 0:37) and '17 yd.' (Q2 6:05); pfr the same two plays." },
-    { "name": "Aaron Stinnie", "fact": "Game book lineup RG 64 A.Stinnie; pfr starters Aaron Stinnie/G." }
+    {
+     "name": "Scott Miller",
+     "fact": "Game book lists WR 81 A.Brown under Buccaneers substitutions and pfr's starters omit him; both scoring tables have 'A.Brown 1 yd. pass from T.Brady' / 'Antonio Brown 1 yard pass from Tom Brady' (Q2 0:06)."
+    },
+    {
+     "name": "Rob Gronkowski",
+     "fact": "Scoring: game book 'R.Gronkowski 8 yd. pass from T.Brady' (Q1 0:37) and '17 yd.' (Q2 6:05); pfr the same two plays."
+    },
+    {
+     "name": "Aaron Stinnie",
+     "fact": "Game book lineup RG 64 A.Stinnie; pfr starters Aaron Stinnie/G."
+    }
+   ],
+   "opponent": "Kansas City Chiefs",
+   "venue": "Raymond James Stadium, Tampa",
+   "venueAsPrinted": "at Raymond James Stadium, Tampa, FL",
+   "scoreLine": "Buccaneers 31-9 Chiefs",
+   "candidates": [
+    {
+     "name": "Scott Miller",
+     "slotIndex": 4,
+     "nationality": "USA",
+     "bornPerPfr": "Barrington, IL",
+     "pfrPlayer": "https://www.pro-football-reference.com/players/M/MillSc01.htm",
+     "reveal": "Started at receiver. Antonio Brown, who caught a touchdown that night, came off the bench."
+    },
+    {
+     "name": "Rob Gronkowski",
+     "slotIndex": 5,
+     "nationality": "USA",
+     "bornPerPfr": "Amherst, NY",
+     "pfrPlayer": "https://www.pro-football-reference.com/players/G/GronRo00.htm",
+     "reveal": "Caught two first-half touchdown passes from Tom Brady."
+    },
+    {
+     "name": "Aaron Stinnie",
+     "slotIndex": 9,
+     "nationality": "USA",
+     "bornPerPfr": "Charlottesville, VA",
+     "pfrPlayer": "https://www.pro-football-reference.com/players/S/StinAa00.htm",
+     "reveal": null
+    }
    ]
   },
   {
@@ -159,26 +680,128 @@
    "unit": "defense",
    "team": "Tampa Bay Buccaneers",
    "sources": [
-    { "host": "nfl.com", "what": "Official game book PDF, page 1 Lineups, Tampa Bay Buccaneers Defense", "url": "https://static.www.nfl.com/image/upload/v1677629321/gamecenter/10012021-0207-0069-5207-a78dd8bf8075.pdf", "via": "https://www.nfl.com/games/chiefs-at-buccaneers-2020-post-4", "read": "2026-10-03" },
-    { "host": "pro-football-reference.com", "what": "Box score #home_starters (Buccaneers Starters Table)", "url": "https://www.pro-football-reference.com/boxscores/202102070tam.htm", "read": "2026-10-03" }
+    {
+     "host": "nfl.com",
+     "what": "Official game book PDF, page 1 Lineups, Tampa Bay Buccaneers Defense",
+     "url": "https://static.www.nfl.com/image/upload/v1677629321/gamecenter/10012021-0207-0069-5207-a78dd8bf8075.pdf",
+     "via": "https://www.nfl.com/games/chiefs-at-buccaneers-2020-post-4",
+     "read": "2026-10-03"
+    },
+    {
+     "host": "pro-football-reference.com",
+     "what": "Box score #home_starters (Buccaneers Starters Table)",
+     "url": "https://www.pro-football-reference.com/boxscores/202102070tam.htm",
+     "read": "2026-10-03"
+    }
    ],
    "agree": "11/11",
    "starters": [
-    ["DL", "Ndamukong Suh", "DL 93 N.Suh", "Ndamukong Suh/DL"],
-    ["NT", "Rakeem Nunez-Roches", "NT 56 R.Nunez-Roches", "Rakeem Nunez-Roches/DL"],
-    ["OLB", "Jason Pierre-Paul", "OLB 90 J.Pierre-Paul", "Jason Pierre-Paul/OLB"],
-    ["ILB", "Devin White", "ILB 45 D.White", "Devin White/ILB"],
-    ["ILB", "Lavonte David", "ILB 54 L.David", "Lavonte David/ILB"],
-    ["OLB", "Shaquil Barrett", "OLB 58 S.Barrett", "Shaquil Barrett/OLB"],
-    ["CB", "Carlton Davis", "CB 24 C.Davis", "Carlton Davis/CB"],
-    ["CB", "Jamel Dean", "CB 35 J.Dean", "Jamel Dean/CB"],
-    ["CB", "Sean Murphy-Bunting", "CB 23 S.Murphy-Bunting", "Sean Murphy-Bunting/CB"],
-    ["S", "Jordan Whitehead", "S 33 J.Whitehead", "Jordan Whitehead/S"],
-    ["S", "Antoine Winfield Jr.", "S 31 A.Winfield", "Antoine Winfield Jr./S"]
+    [
+     "DL",
+     "Ndamukong Suh",
+     "DL 93 N.Suh",
+     "Ndamukong Suh/DL"
+    ],
+    [
+     "NT",
+     "Rakeem Nunez-Roches",
+     "NT 56 R.Nunez-Roches",
+     "Rakeem Nunez-Roches/DL"
+    ],
+    [
+     "OLB",
+     "Jason Pierre-Paul",
+     "OLB 90 J.Pierre-Paul",
+     "Jason Pierre-Paul/OLB"
+    ],
+    [
+     "ILB",
+     "Devin White",
+     "ILB 45 D.White",
+     "Devin White/ILB"
+    ],
+    [
+     "ILB",
+     "Lavonte David",
+     "ILB 54 L.David",
+     "Lavonte David/ILB"
+    ],
+    [
+     "OLB",
+     "Shaquil Barrett",
+     "OLB 58 S.Barrett",
+     "Shaquil Barrett/OLB"
+    ],
+    [
+     "CB",
+     "Carlton Davis",
+     "CB 24 C.Davis",
+     "Carlton Davis/CB"
+    ],
+    [
+     "CB",
+     "Jamel Dean",
+     "CB 35 J.Dean",
+     "Jamel Dean/CB"
+    ],
+    [
+     "CB",
+     "Sean Murphy-Bunting",
+     "CB 23 S.Murphy-Bunting",
+     "Sean Murphy-Bunting/CB"
+    ],
+    [
+     "S",
+     "Jordan Whitehead",
+     "S 33 J.Whitehead",
+     "Jordan Whitehead/S"
+    ],
+    [
+     "S",
+     "Antoine Winfield Jr.",
+     "S 31 A.Winfield",
+     "Antoine Winfield Jr./S"
+    ]
    ],
    "facts": [
-    { "name": "Devin White", "fact": "Both scoring tables: the Chiefs' only points were three Harrison Butker field goals (49, 34, 52 yards); no Kansas City touchdown." },
-    { "name": "Sean Murphy-Bunting", "fact": "Both list three starting corners (Davis, Dean, Murphy-Bunting): a nickel opening card." }
+    {
+     "name": "Devin White",
+     "fact": "Both scoring tables: the Chiefs' only points were three Harrison Butker field goals (49, 34, 52 yards); no Kansas City touchdown."
+    },
+    {
+     "name": "Jamel Dean",
+     "fact": "Both list three starting corners (Davis, Dean, Murphy-Bunting): a nickel opening card."
+    }
+   ],
+   "opponent": "Kansas City Chiefs",
+   "venue": "Raymond James Stadium, Tampa",
+   "venueAsPrinted": "at Raymond James Stadium, Tampa, FL",
+   "scoreLine": "Buccaneers 31-9 Chiefs",
+   "candidates": [
+    {
+     "name": "Devin White",
+     "slotIndex": 3,
+     "nationality": "USA",
+     "bornPerPfr": "Springhill, LA",
+     "pfrPlayer": "https://www.pro-football-reference.com/players/W/WhitDe02.htm",
+     "reveal": "This defense held the Chiefs to three field goals and no touchdowns."
+    },
+    {
+     "name": "Jamel Dean",
+     "slotIndex": 7,
+     "nationality": "USA",
+     "bornPerPfr": "Cocoa, FL",
+     "pfrPlayer": "https://www.pro-football-reference.com/players/D/DeanJa00.htm",
+     "reveal": "Tampa Bay opened in the nickel, so three corners started. Dean was one of them."
+    },
+    {
+     "name": "Jordan Whitehead",
+     "slotIndex": 9,
+     "nationality": "USA",
+     "bornPerPfr": "Aliquippa, PA",
+     "pfrPlayer": "https://www.pro-football-reference.com/players/W/WhitJo03.htm",
+     "reveal": null
+    }
    ]
   },
   {
@@ -188,27 +811,132 @@
    "unit": "offense",
    "team": "Kansas City Chiefs",
    "sources": [
-    { "host": "nfl.com", "what": "Official game book PDF, page 1 Lineups, Kansas City Chiefs Offense", "url": "https://static.www.nfl.com/image/upload/v1677629321/gamecenter/10012021-0207-0069-5207-a78dd8bf8075.pdf", "via": "https://www.nfl.com/games/chiefs-at-buccaneers-2020-post-4", "read": "2026-10-03" },
-    { "host": "pro-football-reference.com", "what": "Box score #vis_starters (Chiefs Starters Table)", "url": "https://www.pro-football-reference.com/boxscores/202102070tam.htm", "read": "2026-10-03" }
+    {
+     "host": "nfl.com",
+     "what": "Official game book PDF, page 1 Lineups, Kansas City Chiefs Offense",
+     "url": "https://static.www.nfl.com/image/upload/v1677629321/gamecenter/10012021-0207-0069-5207-a78dd8bf8075.pdf",
+     "via": "https://www.nfl.com/games/chiefs-at-buccaneers-2020-post-4",
+     "read": "2026-10-03"
+    },
+    {
+     "host": "pro-football-reference.com",
+     "what": "Box score #vis_starters (Chiefs Starters Table)",
+     "url": "https://www.pro-football-reference.com/boxscores/202102070tam.htm",
+     "read": "2026-10-03"
+    }
    ],
    "agree": "11/11",
    "starters": [
-    ["QB", "Patrick Mahomes", "QB 15 P.Mahomes", "Patrick Mahomes/QB"],
-    ["RB", "Clyde Edwards-Helaire", "RB 25 C.Edwards-Helaire", "Clyde Edwards-Helaire/RB"],
-    ["WR", "Tyreek Hill", "WR 10 T.Hill", "Tyreek Hill/WR"],
-    ["WR", "Demarcus Robinson", "WR 11 D.Robinson", "Demarcus Robinson/WR"],
-    ["WR", "Byron Pringle", "WR 13 B.Pringle", "Byron Pringle/WR"],
-    ["TE", "Travis Kelce", "TE 87 T.Kelce", "Travis Kelce/TE"],
-    ["LT", "Mike Remmers", "LT 75 M.Remmers", "Mike Remmers/T"],
-    ["LG", "Nick Allegretti", "LG 73 N.Allegretti", "Nick Allegretti/G"],
-    ["C", "Austin Reiter", "C 62 A.Reiter", "Austin Reiter/C"],
-    ["RG", "Stefen Wisniewski", "RG 61 S.Wisniewski", "Stefen Wisniewski/G"],
-    ["RT", "Andrew Wylie", "RT 77 A.Wylie", "Andrew Wylie/G"]
+    [
+     "QB",
+     "Patrick Mahomes",
+     "QB 15 P.Mahomes",
+     "Patrick Mahomes/QB"
+    ],
+    [
+     "RB",
+     "Clyde Edwards-Helaire",
+     "RB 25 C.Edwards-Helaire",
+     "Clyde Edwards-Helaire/RB"
+    ],
+    [
+     "WR",
+     "Tyreek Hill",
+     "WR 10 T.Hill",
+     "Tyreek Hill/WR"
+    ],
+    [
+     "WR",
+     "Demarcus Robinson",
+     "WR 11 D.Robinson",
+     "Demarcus Robinson/WR"
+    ],
+    [
+     "WR",
+     "Byron Pringle",
+     "WR 13 B.Pringle",
+     "Byron Pringle/WR"
+    ],
+    [
+     "TE",
+     "Travis Kelce",
+     "TE 87 T.Kelce",
+     "Travis Kelce/TE"
+    ],
+    [
+     "LT",
+     "Mike Remmers",
+     "LT 75 M.Remmers",
+     "Mike Remmers/T"
+    ],
+    [
+     "LG",
+     "Nick Allegretti",
+     "LG 73 N.Allegretti",
+     "Nick Allegretti/G"
+    ],
+    [
+     "C",
+     "Austin Reiter",
+     "C 62 A.Reiter",
+     "Austin Reiter/C"
+    ],
+    [
+     "RG",
+     "Stefen Wisniewski",
+     "RG 61 S.Wisniewski",
+     "Stefen Wisniewski/G"
+    ],
+    [
+     "RT",
+     "Andrew Wylie",
+     "RT 77 A.Wylie",
+     "Andrew Wylie/G"
+    ]
    ],
    "facts": [
-    { "name": "Mike Remmers", "fact": "Game book lineup LT 75 M.Remmers; pfr starters Mike Remmers/T." },
-    { "name": "Andrew Wylie", "fact": "Game book lineup RT 77 A.Wylie; pfr prints his roster position, Andrew Wylie/G." },
-    { "name": "Byron Pringle", "fact": "Both list three starting receivers: Pringle with Tyreek Hill and Demarcus Robinson." }
+    {
+     "name": "Mike Remmers",
+     "fact": "Game book lineup LT 75 M.Remmers; pfr starters Mike Remmers/T."
+    },
+    {
+     "name": "Andrew Wylie",
+     "fact": "Game book lineup RT 77 A.Wylie; pfr prints his roster position, Andrew Wylie/G."
+    },
+    {
+     "name": "Byron Pringle",
+     "fact": "Both list three starting receivers: Pringle with Tyreek Hill and Demarcus Robinson."
+    }
+   ],
+   "opponent": "Tampa Bay Buccaneers",
+   "venue": "Raymond James Stadium, Tampa",
+   "venueAsPrinted": "at Raymond James Stadium, Tampa, FL",
+   "scoreLine": "Buccaneers 31-9 Chiefs",
+   "candidates": [
+    {
+     "name": "Mike Remmers",
+     "slotIndex": 6,
+     "nationality": "USA",
+     "bornPerPfr": "Portland, OR",
+     "pfrPlayer": "https://www.pro-football-reference.com/players/R/RemmMi00.htm",
+     "reveal": null
+    },
+    {
+     "name": "Andrew Wylie",
+     "slotIndex": 10,
+     "nationality": "USA",
+     "bornPerPfr": "Midland, MI",
+     "pfrPlayer": "https://www.pro-football-reference.com/players/W/WyliAn00.htm",
+     "reveal": null
+    },
+    {
+     "name": "Byron Pringle",
+     "slotIndex": 4,
+     "nationality": "USA",
+     "bornPerPfr": "Tampa, FL",
+     "pfrPlayer": "https://www.pro-football-reference.com/players/P/PrinBy00.htm",
+     "reveal": "The third starting receiver, with Tyreek Hill and Demarcus Robinson."
+    }
    ]
   },
   {
@@ -218,27 +946,132 @@
    "unit": "offense",
    "team": "Los Angeles Rams",
    "sources": [
-    { "host": "nfl.com", "what": "Official game book PDF, page 1 Lineups, Los Angeles Rams Offense", "url": "https://static.www.nfl.com/image/upload/v1677629338/gamecenter/757bbb2a-71a2-11ec-8e86-ebe0df6765ab.pdf", "via": "https://www.nfl.com/games/rams-at-bengals-2021-post-4", "read": "2026-10-03" },
-    { "host": "pro-football-reference.com", "what": "Box score #vis_starters (Rams Starters Table)", "url": "https://www.pro-football-reference.com/boxscores/202202130cin.htm", "read": "2026-10-03" }
+    {
+     "host": "nfl.com",
+     "what": "Official game book PDF, page 1 Lineups, Los Angeles Rams Offense",
+     "url": "https://static.www.nfl.com/image/upload/v1677629338/gamecenter/757bbb2a-71a2-11ec-8e86-ebe0df6765ab.pdf",
+     "via": "https://www.nfl.com/games/rams-at-bengals-2021-post-4",
+     "read": "2026-10-03"
+    },
+    {
+     "host": "pro-football-reference.com",
+     "what": "Box score #vis_starters (Rams Starters Table)",
+     "url": "https://www.pro-football-reference.com/boxscores/202202130cin.htm",
+     "read": "2026-10-03"
+    }
    ],
    "agree": "11/11",
    "starters": [
-    ["QB", "Matthew Stafford", "QB 9 M.Stafford", "Matthew Stafford/QB"],
-    ["RB", "Cam Akers", "RB 23 C.Akers", "Cam Akers/RB"],
-    ["WR", "Odell Beckham Jr.", "WR 3 O.Beckham", "Odell Beckham Jr./WR"],
-    ["WR", "Cooper Kupp", "WR 10 C.Kupp", "Cooper Kupp/WR"],
-    ["WR", "Van Jefferson", "WR 12 V.Jefferson", "Van Jefferson/WR"],
-    ["TE", "Kendall Blanton", "TE 86 K.Blanton", "Kendall Blanton/TE"],
-    ["LT", "Andrew Whitworth", "LT 77 A.Whitworth", "Andrew Whitworth/OL"],
-    ["LG", "David Edwards", "LG 73 D.Edwards", "David Edwards/OL"],
-    ["C", "Brian Allen", "C 55 B.Allen", "Brian Allen/OL"],
-    ["RG", "Austin Corbett", "RG 63 A.Corbett", "Austin Corbett/OL"],
-    ["RT", "Rob Havenstein", "RT 79 R.Havenstein", "Rob Havenstein/OL"]
+    [
+     "QB",
+     "Matthew Stafford",
+     "QB 9 M.Stafford",
+     "Matthew Stafford/QB"
+    ],
+    [
+     "RB",
+     "Cam Akers",
+     "RB 23 C.Akers",
+     "Cam Akers/RB"
+    ],
+    [
+     "WR",
+     "Odell Beckham Jr.",
+     "WR 3 O.Beckham",
+     "Odell Beckham Jr./WR"
+    ],
+    [
+     "WR",
+     "Cooper Kupp",
+     "WR 10 C.Kupp",
+     "Cooper Kupp/WR"
+    ],
+    [
+     "WR",
+     "Van Jefferson",
+     "WR 12 V.Jefferson",
+     "Van Jefferson/WR"
+    ],
+    [
+     "TE",
+     "Kendall Blanton",
+     "TE 86 K.Blanton",
+     "Kendall Blanton/TE"
+    ],
+    [
+     "LT",
+     "Andrew Whitworth",
+     "LT 77 A.Whitworth",
+     "Andrew Whitworth/OL"
+    ],
+    [
+     "LG",
+     "David Edwards",
+     "LG 73 D.Edwards",
+     "David Edwards/OL"
+    ],
+    [
+     "C",
+     "Brian Allen",
+     "C 55 B.Allen",
+     "Brian Allen/OL"
+    ],
+    [
+     "RG",
+     "Austin Corbett",
+     "RG 63 A.Corbett",
+     "Austin Corbett/OL"
+    ],
+    [
+     "RT",
+     "Rob Havenstein",
+     "RT 79 R.Havenstein",
+     "Rob Havenstein/OL"
+    ]
    ],
    "facts": [
-    { "name": "Kendall Blanton", "fact": "Game book lineup TE 86 K.Blanton; pfr starters Kendall Blanton/TE." },
-    { "name": "Van Jefferson", "fact": "Both list three starting receivers: Jefferson with Odell Beckham Jr. and Cooper Kupp." },
-    { "name": "Cooper Kupp", "fact": "Scoring: game book 'C.Kupp 1 yd. pass from M.Stafford' (Q4 1:25, 23-20); pfr the same play." }
+    {
+     "name": "Kendall Blanton",
+     "fact": "Game book lineup TE 86 K.Blanton; pfr starters Kendall Blanton/TE."
+    },
+    {
+     "name": "Van Jefferson",
+     "fact": "Both list three starting receivers: Jefferson with Odell Beckham Jr. and Cooper Kupp."
+    },
+    {
+     "name": "Cooper Kupp",
+     "fact": "Scoring: game book 'C.Kupp 1 yd. pass from M.Stafford' (Q4 1:25, 23-20); pfr the same play."
+    }
+   ],
+   "opponent": "Cincinnati Bengals",
+   "venue": "SoFi Stadium, Inglewood",
+   "venueAsPrinted": "at SoFi Stadium, Inglewood, CA",
+   "scoreLine": "Rams 23-20 Bengals",
+   "candidates": [
+    {
+     "name": "Kendall Blanton",
+     "slotIndex": 5,
+     "nationality": "USA",
+     "bornPerPfr": "Blue Springs, MO",
+     "pfrPlayer": "https://www.pro-football-reference.com/players/B/BlanKe01.htm",
+     "reveal": null
+    },
+    {
+     "name": "Van Jefferson",
+     "slotIndex": 4,
+     "nationality": "USA",
+     "bornPerPfr": "Brentwood, TN",
+     "pfrPlayer": "https://www.pro-football-reference.com/players/J/JeffVa00.htm",
+     "reveal": "The third starting receiver, with Odell Beckham Jr. and Cooper Kupp."
+    },
+    {
+     "name": "Cooper Kupp",
+     "slotIndex": 3,
+     "nationality": "USA",
+     "bornPerPfr": "Yakima, WA",
+     "pfrPlayer": "https://www.pro-football-reference.com/players/K/KuppCo00.htm",
+     "reveal": "Caught the 1-yard touchdown with 1:25 left that won it 23-20."
+    }
    ]
   },
   {
@@ -248,27 +1081,132 @@
    "unit": "defense",
    "team": "Los Angeles Rams",
    "sources": [
-    { "host": "nfl.com", "what": "Official game book PDF, page 1 Lineups, Los Angeles Rams Defense", "url": "https://static.www.nfl.com/image/upload/v1677629338/gamecenter/757bbb2a-71a2-11ec-8e86-ebe0df6765ab.pdf", "via": "https://www.nfl.com/games/rams-at-bengals-2021-post-4", "read": "2026-10-03" },
-    { "host": "pro-football-reference.com", "what": "Box score #vis_starters (Rams Starters Table)", "url": "https://www.pro-football-reference.com/boxscores/202202130cin.htm", "read": "2026-10-03" }
+    {
+     "host": "nfl.com",
+     "what": "Official game book PDF, page 1 Lineups, Los Angeles Rams Defense",
+     "url": "https://static.www.nfl.com/image/upload/v1677629338/gamecenter/757bbb2a-71a2-11ec-8e86-ebe0df6765ab.pdf",
+     "via": "https://www.nfl.com/games/rams-at-bengals-2021-post-4",
+     "read": "2026-10-03"
+    },
+    {
+     "host": "pro-football-reference.com",
+     "what": "Box score #vis_starters (Rams Starters Table)",
+     "url": "https://www.pro-football-reference.com/boxscores/202202130cin.htm",
+     "read": "2026-10-03"
+    }
    ],
    "agree": "11/11",
    "starters": [
-    ["DE", "A'Shawn Robinson", "DE 94 A.Robinson", "A'Shawn Robinson/DT"],
-    ["NT", "Greg Gaines", "NT 91 G.Gaines", "Greg Gaines/DT"],
-    ["DT", "Aaron Donald", "DT 99 A.Donald", "Aaron Donald/DT"],
-    ["OLB", "Von Miller", "OLB 40 V.Miller", "Von Miller/OLB"],
-    ["OLB", "Leonard Floyd", "OLB 54 L.Floyd", "Leonard Floyd/OLB"],
-    ["LB", "Ernest Jones", "LB 50 E.Jones", "Ernest Jones/LB"],
-    ["LCB", "Darious Williams", "LCB 11 D.Williams", "Darious Williams/CB"],
-    ["RCB", "Jalen Ramsey", "RCB 5 J.Ramsey", "Jalen Ramsey/CB"],
-    ["CB", "David Long", "CB 22 D.Long", "David Long/CB"],
-    ["DB", "Eric Weddle", "DB 20 E.Weddle", "Eric Weddle/DB"],
-    ["SS", "Nick Scott", "SS 33 N.Scott", "Nick Scott/S"]
+    [
+     "DE",
+     "A'Shawn Robinson",
+     "DE 94 A.Robinson",
+     "A'Shawn Robinson/DT"
+    ],
+    [
+     "NT",
+     "Greg Gaines",
+     "NT 91 G.Gaines",
+     "Greg Gaines/DT"
+    ],
+    [
+     "DT",
+     "Aaron Donald",
+     "DT 99 A.Donald",
+     "Aaron Donald/DT"
+    ],
+    [
+     "OLB",
+     "Von Miller",
+     "OLB 40 V.Miller",
+     "Von Miller/OLB"
+    ],
+    [
+     "OLB",
+     "Leonard Floyd",
+     "OLB 54 L.Floyd",
+     "Leonard Floyd/OLB"
+    ],
+    [
+     "LB",
+     "Ernest Jones",
+     "LB 50 E.Jones",
+     "Ernest Jones/LB"
+    ],
+    [
+     "LCB",
+     "Darious Williams",
+     "LCB 11 D.Williams",
+     "Darious Williams/CB"
+    ],
+    [
+     "RCB",
+     "Jalen Ramsey",
+     "RCB 5 J.Ramsey",
+     "Jalen Ramsey/CB"
+    ],
+    [
+     "CB",
+     "David Long",
+     "CB 22 D.Long",
+     "David Long/CB"
+    ],
+    [
+     "DB",
+     "Eric Weddle",
+     "DB 20 E.Weddle",
+     "Eric Weddle/DB"
+    ],
+    [
+     "SS",
+     "Nick Scott",
+     "SS 33 N.Scott",
+     "Nick Scott/S"
+    ]
    ],
    "facts": [
-    { "name": "Eric Weddle", "fact": "Game book lineup DB 20 E.Weddle; pfr starters Eric Weddle/DB." },
-    { "name": "Greg Gaines", "fact": "Game book lineup NT 91 G.Gaines between DE A.Robinson and DT A.Donald; pfr starters Greg Gaines/DT." },
-    { "name": "Darious Williams", "fact": "Both list three starting corners (Williams, Ramsey, Long)." }
+    {
+     "name": "Eric Weddle",
+     "fact": "Game book lineup DB 20 E.Weddle; pfr starters Eric Weddle/DB."
+    },
+    {
+     "name": "Greg Gaines",
+     "fact": "Game book lineup NT 91 G.Gaines between DE A.Robinson and DT A.Donald; pfr starters Greg Gaines/DT."
+    },
+    {
+     "name": "Darious Williams",
+     "fact": "Both list three starting corners (Williams, Ramsey, Long)."
+    }
+   ],
+   "opponent": "Cincinnati Bengals",
+   "venue": "SoFi Stadium, Inglewood",
+   "venueAsPrinted": "at SoFi Stadium, Inglewood, CA",
+   "scoreLine": "Rams 23-20 Bengals",
+   "candidates": [
+    {
+     "name": "Eric Weddle",
+     "slotIndex": 9,
+     "nationality": "USA",
+     "bornPerPfr": "Fontana, CA",
+     "pfrPlayer": "https://www.pro-football-reference.com/players/W/WeddEr99.htm",
+     "reveal": null
+    },
+    {
+     "name": "Greg Gaines",
+     "slotIndex": 1,
+     "nationality": "USA",
+     "bornPerPfr": "La Habra, CA",
+     "pfrPlayer": "https://www.pro-football-reference.com/players/G/GainGr00.htm",
+     "reveal": "Started at nose tackle between A'Shawn Robinson and Aaron Donald."
+    },
+    {
+     "name": "Darious Williams",
+     "slotIndex": 6,
+     "nationality": "USA",
+     "bornPerPfr": "Jacksonville, FL",
+     "pfrPlayer": "https://www.pro-football-reference.com/players/W/WillDa09.htm",
+     "reveal": "One of three starting corners, with Jalen Ramsey and David Long."
+    }
    ]
   },
   {
@@ -278,27 +1216,132 @@
    "unit": "offense",
    "team": "Cincinnati Bengals",
    "sources": [
-    { "host": "nfl.com", "what": "Official game book PDF, page 1 Lineups, Cincinnati Bengals Offense", "url": "https://static.www.nfl.com/image/upload/v1677629338/gamecenter/757bbb2a-71a2-11ec-8e86-ebe0df6765ab.pdf", "via": "https://www.nfl.com/games/rams-at-bengals-2021-post-4", "read": "2026-10-03" },
-    { "host": "pro-football-reference.com", "what": "Box score #home_starters (Bengals Starters Table)", "url": "https://www.pro-football-reference.com/boxscores/202202130cin.htm", "read": "2026-10-03" }
+    {
+     "host": "nfl.com",
+     "what": "Official game book PDF, page 1 Lineups, Cincinnati Bengals Offense",
+     "url": "https://static.www.nfl.com/image/upload/v1677629338/gamecenter/757bbb2a-71a2-11ec-8e86-ebe0df6765ab.pdf",
+     "via": "https://www.nfl.com/games/rams-at-bengals-2021-post-4",
+     "read": "2026-10-03"
+    },
+    {
+     "host": "pro-football-reference.com",
+     "what": "Box score #home_starters (Bengals Starters Table)",
+     "url": "https://www.pro-football-reference.com/boxscores/202202130cin.htm",
+     "read": "2026-10-03"
+    }
    ],
    "agree": "11/11",
    "starters": [
-    ["QB", "Joe Burrow", "QB 9 J.Burrow", "Joe Burrow/QB"],
-    ["RB", "Joe Mixon", "HB 28 J.Mixon", "Joe Mixon/RB"],
-    ["WR", "Ja'Marr Chase", "WR 1 J.Chase", "Ja'Marr Chase/WR"],
-    ["WR", "Tee Higgins", "WR 85 T.Higgins", "Tee Higgins/WR"],
-    ["WR", "Tyler Boyd", "WR 83 T.Boyd", "Tyler Boyd/WR"],
-    ["TE", "C.J. Uzomah", "TE 87 C.Uzomah", "C.J. Uzomah/TE"],
-    ["LT", "Jonah Williams", "LT 73 J.Williams", "Jonah Williams/T"],
-    ["LG", "Quinton Spain", "LG 67 Q.Spain", "Quinton Spain/G"],
-    ["C", "Trey Hopkins", "C 66 T.Hopkins", "Trey Hopkins/C"],
-    ["RG", "Hakeem Adeniji", "RG 77 H.Adeniji", "Hakeem Adeniji/G"],
-    ["RT", "Isaiah Prince", "RT 75 I.Prince", "Isaiah Prince/T"]
+    [
+     "QB",
+     "Joe Burrow",
+     "QB 9 J.Burrow",
+     "Joe Burrow/QB"
+    ],
+    [
+     "RB",
+     "Joe Mixon",
+     "HB 28 J.Mixon",
+     "Joe Mixon/RB"
+    ],
+    [
+     "WR",
+     "Ja'Marr Chase",
+     "WR 1 J.Chase",
+     "Ja'Marr Chase/WR"
+    ],
+    [
+     "WR",
+     "Tee Higgins",
+     "WR 85 T.Higgins",
+     "Tee Higgins/WR"
+    ],
+    [
+     "WR",
+     "Tyler Boyd",
+     "WR 83 T.Boyd",
+     "Tyler Boyd/WR"
+    ],
+    [
+     "TE",
+     "C.J. Uzomah",
+     "TE 87 C.Uzomah",
+     "C.J. Uzomah/TE"
+    ],
+    [
+     "LT",
+     "Jonah Williams",
+     "LT 73 J.Williams",
+     "Jonah Williams/T"
+    ],
+    [
+     "LG",
+     "Quinton Spain",
+     "LG 67 Q.Spain",
+     "Quinton Spain/G"
+    ],
+    [
+     "C",
+     "Trey Hopkins",
+     "C 66 T.Hopkins",
+     "Trey Hopkins/C"
+    ],
+    [
+     "RG",
+     "Hakeem Adeniji",
+     "RG 77 H.Adeniji",
+     "Hakeem Adeniji/G"
+    ],
+    [
+     "RT",
+     "Isaiah Prince",
+     "RT 75 I.Prince",
+     "Isaiah Prince/T"
+    ]
    ],
    "facts": [
-    { "name": "Joe Mixon", "fact": "Scoring: game book 'T.Higgins 6 yd. pass from J.Mixon' (Q2 5:47); pfr 'Tee Higgins 6 yard pass from Joe Mixon'." },
-    { "name": "Isaiah Prince", "fact": "Game book lineup RT 75 I.Prince; pfr starters Isaiah Prince/T." },
-    { "name": "Hakeem Adeniji", "fact": "Game book lineup RG 77 H.Adeniji; pfr starters Hakeem Adeniji/G." }
+    {
+     "name": "Joe Mixon",
+     "fact": "Scoring: game book 'T.Higgins 6 yd. pass from J.Mixon' (Q2 5:47); pfr 'Tee Higgins 6 yard pass from Joe Mixon'."
+    },
+    {
+     "name": "Isaiah Prince",
+     "fact": "Game book lineup RT 75 I.Prince; pfr starters Isaiah Prince/T."
+    },
+    {
+     "name": "Hakeem Adeniji",
+     "fact": "Game book lineup RG 77 H.Adeniji; pfr starters Hakeem Adeniji/G."
+    }
+   ],
+   "opponent": "Los Angeles Rams",
+   "venue": "SoFi Stadium, Inglewood",
+   "venueAsPrinted": "at SoFi Stadium, Inglewood, CA",
+   "scoreLine": "Rams 23-20 Bengals",
+   "candidates": [
+    {
+     "name": "Joe Mixon",
+     "slotIndex": 1,
+     "nationality": "USA",
+     "bornPerPfr": "Oakley, CA",
+     "pfrPlayer": "https://www.pro-football-reference.com/players/M/MixoJo00.htm",
+     "reveal": "The running back threw a 6-yard touchdown pass to Tee Higgins."
+    },
+    {
+     "name": "Isaiah Prince",
+     "slotIndex": 10,
+     "nationality": "USA",
+     "bornPerPfr": "Greenbelt, MD",
+     "pfrPlayer": "https://www.pro-football-reference.com/players/P/PrinIs00.htm",
+     "reveal": null
+    },
+    {
+     "name": "Hakeem Adeniji",
+     "slotIndex": 9,
+     "nationality": "USA",
+     "bornPerPfr": "Garland, TX",
+     "pfrPlayer": "https://www.pro-football-reference.com/players/A/AdenHa00.htm",
+     "reveal": null
+    }
    ]
   },
   {
@@ -308,27 +1351,132 @@
    "unit": "defense",
    "team": "New England Patriots",
    "sources": [
-    { "host": "nfl.com", "what": "Official game book PDF, page 1 Lineups, New England Patriots Defense", "url": "https://static.www.nfl.com/image/upload/v1677629595/gamecenter/10012019-0203-0011-323b-548fe39c23df.pdf", "via": "https://www.nfl.com/games/patriots-at-rams-2018-post-4", "read": "2026-10-03" },
-    { "host": "pro-football-reference.com", "what": "Box score #vis_starters (Patriots Starters Table)", "url": "https://www.pro-football-reference.com/boxscores/201902030ram.htm", "read": "2026-10-03" }
+    {
+     "host": "nfl.com",
+     "what": "Official game book PDF, page 1 Lineups, New England Patriots Defense",
+     "url": "https://static.www.nfl.com/image/upload/v1677629595/gamecenter/10012019-0203-0011-323b-548fe39c23df.pdf",
+     "via": "https://www.nfl.com/games/patriots-at-rams-2018-post-4",
+     "read": "2026-10-03"
+    },
+    {
+     "host": "pro-football-reference.com",
+     "what": "Box score #vis_starters (Patriots Starters Table)",
+     "url": "https://www.pro-football-reference.com/boxscores/201902030ram.htm",
+     "read": "2026-10-03"
+    }
    ],
    "agree": "11/11",
    "starters": [
-    ["LE", "Trey Flowers", "LE 98 T.Flowers", "Trey Flowers/LDE"],
-    ["DT", "Lawrence Guy", "DT 93 L.Guy", "Lawrence Guy/DT"],
-    ["DT", "Malcom Brown", "DT 90 M.Brown", "Malcom Brown/DT"],
-    ["RE", "Deatrich Wise Jr.", "RE 91 D.Wise", "Deatrich Wise Jr./RDE"],
-    ["LB", "Dont'a Hightower", "LB 54 D.Hightower", "Dont'a Hightower/LB"],
-    ["LB", "Kyle Van Noy", "LB 53 K.Van Noy", "Kyle Van Noy/LB"],
-    ["LCB", "Jason McCourty", "LCB 30 J.McCourty", "Jason McCourty/LCB"],
-    ["RCB", "Stephon Gilmore", "RCB 24 S.Gilmore", "Stephon Gilmore/RCB"],
-    ["DB", "Jonathan Jones", "DB 31 J.Jones", "Jonathan Jones/DB"],
-    ["S", "Devin McCourty", "S 32 D.McCourty", "Devin McCourty/S"],
-    ["S", "Patrick Chung", "S 23 P.Chung", "Patrick Chung/S"]
+    [
+     "LE",
+     "Trey Flowers",
+     "LE 98 T.Flowers",
+     "Trey Flowers/LDE"
+    ],
+    [
+     "DT",
+     "Lawrence Guy",
+     "DT 93 L.Guy",
+     "Lawrence Guy/DT"
+    ],
+    [
+     "DT",
+     "Malcom Brown",
+     "DT 90 M.Brown",
+     "Malcom Brown/DT"
+    ],
+    [
+     "RE",
+     "Deatrich Wise Jr.",
+     "RE 91 D.Wise",
+     "Deatrich Wise Jr./RDE"
+    ],
+    [
+     "LB",
+     "Dont'a Hightower",
+     "LB 54 D.Hightower",
+     "Dont'a Hightower/LB"
+    ],
+    [
+     "LB",
+     "Kyle Van Noy",
+     "LB 53 K.Van Noy",
+     "Kyle Van Noy/LB"
+    ],
+    [
+     "LCB",
+     "Jason McCourty",
+     "LCB 30 J.McCourty",
+     "Jason McCourty/LCB"
+    ],
+    [
+     "RCB",
+     "Stephon Gilmore",
+     "RCB 24 S.Gilmore",
+     "Stephon Gilmore/RCB"
+    ],
+    [
+     "DB",
+     "Jonathan Jones",
+     "DB 31 J.Jones",
+     "Jonathan Jones/DB"
+    ],
+    [
+     "S",
+     "Devin McCourty",
+     "S 32 D.McCourty",
+     "Devin McCourty/S"
+    ],
+    [
+     "S",
+     "Patrick Chung",
+     "S 23 P.Chung",
+     "Patrick Chung/S"
+    ]
    ],
    "facts": [
-    { "name": "Trey Flowers", "fact": "Both scoring tables: the Rams' only points were G.Zuerlein's 53-yard field goal (Q3 2:11); the Patriots won 13-3." },
-    { "name": "Jonathan Jones", "fact": "Game book lineup DB 31 J.Jones; pfr starters Jonathan Jones/DB: the nickel back on the opening card." },
-    { "name": "Malcom Brown", "fact": "Game book lineup DT 90 M.Brown; pfr starters Malcom Brown/DT." }
+    {
+     "name": "Trey Flowers",
+     "fact": "Both scoring tables: the Rams' only points were G.Zuerlein's 53-yard field goal (Q3 2:11); the Patriots won 13-3."
+    },
+    {
+     "name": "Jonathan Jones",
+     "fact": "Game book lineup DB 31 J.Jones; pfr starters Jonathan Jones/DB: the nickel back on the opening card."
+    },
+    {
+     "name": "Malcom Brown",
+     "fact": "Game book lineup DT 90 M.Brown; pfr starters Malcom Brown/DT."
+    }
+   ],
+   "opponent": "Los Angeles Rams",
+   "venue": "Mercedes-Benz Stadium, Atlanta",
+   "venueAsPrinted": "at Mercedes-Benz Stadium, Atlanta, GA",
+   "scoreLine": "Patriots 13-3 Rams",
+   "candidates": [
+    {
+     "name": "Trey Flowers",
+     "slotIndex": 0,
+     "nationality": "USA",
+     "bornPerPfr": "Huntsville, AL",
+     "pfrPlayer": "https://www.pro-football-reference.com/players/F/FlowTr00.htm",
+     "reveal": "This defense gave up one field goal all night in a 13-3 win."
+    },
+    {
+     "name": "Jonathan Jones",
+     "slotIndex": 8,
+     "nationality": "USA",
+     "bornPerPfr": "Carrollton, GA",
+     "pfrPlayer": "https://www.pro-football-reference.com/players/J/JoneJo03.htm",
+     "reveal": "The nickel back on the opening card."
+    },
+    {
+     "name": "Malcom Brown",
+     "slotIndex": 2,
+     "nationality": "USA",
+     "bornPerPfr": "Brenham, TX",
+     "pfrPlayer": "https://www.pro-football-reference.com/players/B/BrowMa01.htm",
+     "reveal": null
+    }
    ]
   },
   {
@@ -338,27 +1486,132 @@
    "unit": "offense",
    "team": "Los Angeles Rams",
    "sources": [
-    { "host": "nfl.com", "what": "Official game book PDF, page 1 Lineups, Los Angeles Rams Offense", "url": "https://static.www.nfl.com/image/upload/v1677629595/gamecenter/10012019-0203-0011-323b-548fe39c23df.pdf", "via": "https://www.nfl.com/games/patriots-at-rams-2018-post-4", "read": "2026-10-03" },
-    { "host": "pro-football-reference.com", "what": "Box score #home_starters (Rams Starters Table)", "url": "https://www.pro-football-reference.com/boxscores/201902030ram.htm", "read": "2026-10-03" }
+    {
+     "host": "nfl.com",
+     "what": "Official game book PDF, page 1 Lineups, Los Angeles Rams Offense",
+     "url": "https://static.www.nfl.com/image/upload/v1677629595/gamecenter/10012019-0203-0011-323b-548fe39c23df.pdf",
+     "via": "https://www.nfl.com/games/patriots-at-rams-2018-post-4",
+     "read": "2026-10-03"
+    },
+    {
+     "host": "pro-football-reference.com",
+     "what": "Box score #home_starters (Rams Starters Table)",
+     "url": "https://www.pro-football-reference.com/boxscores/201902030ram.htm",
+     "read": "2026-10-03"
+    }
    ],
    "agree": "11/11",
    "starters": [
-    ["QB", "Jared Goff", "QB 16 J.Goff", "Jared Goff/QB"],
-    ["RB", "Todd Gurley", "HB 30 T.Gurley", "Todd Gurley/HB"],
-    ["WR", "Robert Woods", "WR 17 R.Woods", "Robert Woods/WR"],
-    ["WR", "Brandin Cooks", "WR 12 B.Cooks", "Brandin Cooks/WR"],
-    ["WR", "Josh Reynolds", "WR 83 J.Reynolds", "Josh Reynolds/WR"],
-    ["TE", "Tyler Higbee", "TE 89 T.Higbee", "Tyler Higbee/TE"],
-    ["LT", "Andrew Whitworth", "LT 77 A.Whitworth", "Andrew Whitworth/LT"],
-    ["LG", "Rodger Saffold", "LG 76 R.Saffold", "Rodger Saffold/LG"],
-    ["C", "John Sullivan", "C 65 J.Sullivan", "John Sullivan/C"],
-    ["RG", "Austin Blythe", "RG 66 A.Blythe", "Austin Blythe/RG"],
-    ["RT", "Rob Havenstein", "RT 79 R.Havenstein", "Rob Havenstein/RT"]
+    [
+     "QB",
+     "Jared Goff",
+     "QB 16 J.Goff",
+     "Jared Goff/QB"
+    ],
+    [
+     "RB",
+     "Todd Gurley",
+     "HB 30 T.Gurley",
+     "Todd Gurley/HB"
+    ],
+    [
+     "WR",
+     "Robert Woods",
+     "WR 17 R.Woods",
+     "Robert Woods/WR"
+    ],
+    [
+     "WR",
+     "Brandin Cooks",
+     "WR 12 B.Cooks",
+     "Brandin Cooks/WR"
+    ],
+    [
+     "WR",
+     "Josh Reynolds",
+     "WR 83 J.Reynolds",
+     "Josh Reynolds/WR"
+    ],
+    [
+     "TE",
+     "Tyler Higbee",
+     "TE 89 T.Higbee",
+     "Tyler Higbee/TE"
+    ],
+    [
+     "LT",
+     "Andrew Whitworth",
+     "LT 77 A.Whitworth",
+     "Andrew Whitworth/LT"
+    ],
+    [
+     "LG",
+     "Rodger Saffold",
+     "LG 76 R.Saffold",
+     "Rodger Saffold/LG"
+    ],
+    [
+     "C",
+     "John Sullivan",
+     "C 65 J.Sullivan",
+     "John Sullivan/C"
+    ],
+    [
+     "RG",
+     "Austin Blythe",
+     "RG 66 A.Blythe",
+     "Austin Blythe/RG"
+    ],
+    [
+     "RT",
+     "Rob Havenstein",
+     "RT 79 R.Havenstein",
+     "Rob Havenstein/RT"
+    ]
    ],
    "facts": [
-    { "name": "Josh Reynolds", "fact": "Both list three starting receivers: Reynolds with Robert Woods and Brandin Cooks." },
-    { "name": "Austin Blythe", "fact": "Game book lineup RG 66 A.Blythe; pfr starters Austin Blythe/RG." },
-    { "name": "John Sullivan", "fact": "Both scoring tables: this offense scored only a 53-yard field goal in a 13-3 loss." }
+    {
+     "name": "Josh Reynolds",
+     "fact": "Both list three starting receivers: Reynolds with Robert Woods and Brandin Cooks."
+    },
+    {
+     "name": "Austin Blythe",
+     "fact": "Game book lineup RG 66 A.Blythe; pfr starters Austin Blythe/RG."
+    },
+    {
+     "name": "John Sullivan",
+     "fact": "Both scoring tables: this offense scored only a 53-yard field goal in a 13-3 loss."
+    }
+   ],
+   "opponent": "New England Patriots",
+   "venue": "Mercedes-Benz Stadium, Atlanta",
+   "venueAsPrinted": "at Mercedes-Benz Stadium, Atlanta, GA",
+   "scoreLine": "Patriots 13-3 Rams",
+   "candidates": [
+    {
+     "name": "Josh Reynolds",
+     "slotIndex": 4,
+     "nationality": "USA",
+     "bornPerPfr": "San Antonio, TX",
+     "pfrPlayer": "https://www.pro-football-reference.com/players/R/ReynJo00.htm",
+     "reveal": "The third starting receiver, with Robert Woods and Brandin Cooks."
+    },
+    {
+     "name": "Austin Blythe",
+     "slotIndex": 9,
+     "nationality": "USA",
+     "bornPerPfr": "Williamson, IA",
+     "pfrPlayer": "https://www.pro-football-reference.com/players/B/BlytAu00.htm",
+     "reveal": null
+    },
+    {
+     "name": "John Sullivan",
+     "slotIndex": 8,
+     "nationality": "USA",
+     "bornPerPfr": "Mt. Kisco, NY",
+     "pfrPlayer": "https://www.pro-football-reference.com/players/S/SullJo24.htm",
+     "reveal": "Snapped for an offense that managed one field goal all night."
+    }
    ]
   },
   {
@@ -368,27 +1621,132 @@
    "unit": "offense",
    "team": "Baltimore Ravens",
    "sources": [
-    { "host": "nfl.com", "what": "Official game book PDF, page 1 Lineups, Baltimore Ravens Offense", "url": "https://static.www.nfl.com/image/upload/v1677630684/gamecenter/10012013-0203-00bb-9d76-3f7dbeaf2a5e.pdf", "via": "https://www.nfl.com/games/ravens-at-49ers-2012-post-4", "read": "2026-10-03" },
-    { "host": "pro-football-reference.com", "what": "Box score #vis_starters (Ravens Starters Table)", "url": "https://www.pro-football-reference.com/boxscores/201302030sfo.htm", "read": "2026-10-03" }
+    {
+     "host": "nfl.com",
+     "what": "Official game book PDF, page 1 Lineups, Baltimore Ravens Offense",
+     "url": "https://static.www.nfl.com/image/upload/v1677630684/gamecenter/10012013-0203-00bb-9d76-3f7dbeaf2a5e.pdf",
+     "via": "https://www.nfl.com/games/ravens-at-49ers-2012-post-4",
+     "read": "2026-10-03"
+    },
+    {
+     "host": "pro-football-reference.com",
+     "what": "Box score #vis_starters (Ravens Starters Table)",
+     "url": "https://www.pro-football-reference.com/boxscores/201302030sfo.htm",
+     "read": "2026-10-03"
+    }
    ],
    "agree": "11/11",
    "starters": [
-    ["QB", "Joe Flacco", "QB 5 J.Flacco", "Joe Flacco/QB"],
-    ["RB", "Ray Rice", "RB 27 R.Rice", "Ray Rice/RB"],
-    ["FB", "Vonta Leach", "FB 44 V.Leach", "Vonta Leach/FB"],
-    ["WR", "Anquan Boldin", "WR 81 A.Boldin", "Anquan Boldin/WR"],
-    ["WR", "Torrey Smith", "WR 82 T.Smith", "Torrey Smith/WR"],
-    ["WR", "Jacoby Jones", "WR 12 J.Jones", "Jacoby Jones/WR"],
-    ["LT", "Bryant McKinnie", "LT 78 B.McKinnie", "Bryant McKinnie/LT"],
-    ["LG", "Kelechi Osemele", "LG 72 K.Osemele", "Kelechi Osemele/LG"],
-    ["C", "Matt Birk", "C 77 M.Birk", "Matt Birk/C"],
-    ["RG", "Marshal Yanda", "RG 73 M.Yanda", "Marshal Yanda/RG"],
-    ["RT", "Michael Oher", "RT 74 M.Oher", "Michael Oher/RT"]
+    [
+     "QB",
+     "Joe Flacco",
+     "QB 5 J.Flacco",
+     "Joe Flacco/QB"
+    ],
+    [
+     "RB",
+     "Ray Rice",
+     "RB 27 R.Rice",
+     "Ray Rice/RB"
+    ],
+    [
+     "FB",
+     "Vonta Leach",
+     "FB 44 V.Leach",
+     "Vonta Leach/FB"
+    ],
+    [
+     "WR",
+     "Anquan Boldin",
+     "WR 81 A.Boldin",
+     "Anquan Boldin/WR"
+    ],
+    [
+     "WR",
+     "Torrey Smith",
+     "WR 82 T.Smith",
+     "Torrey Smith/WR"
+    ],
+    [
+     "WR",
+     "Jacoby Jones",
+     "WR 12 J.Jones",
+     "Jacoby Jones/WR"
+    ],
+    [
+     "LT",
+     "Bryant McKinnie",
+     "LT 78 B.McKinnie",
+     "Bryant McKinnie/LT"
+    ],
+    [
+     "LG",
+     "Kelechi Osemele",
+     "LG 72 K.Osemele",
+     "Kelechi Osemele/LG"
+    ],
+    [
+     "C",
+     "Matt Birk",
+     "C 77 M.Birk",
+     "Matt Birk/C"
+    ],
+    [
+     "RG",
+     "Marshal Yanda",
+     "RG 73 M.Yanda",
+     "Marshal Yanda/RG"
+    ],
+    [
+     "RT",
+     "Michael Oher",
+     "RT 74 M.Oher",
+     "Michael Oher/RT"
+    ]
    ],
    "facts": [
-    { "name": "Jacoby Jones", "fact": "Scoring: game book 'J.Jones 56 yd. pass from J.Flacco' (Q2 1:45) and 'J.Jones 108 yd. kickoff return' (Q3 14:49); pfr the same two plays." },
-    { "name": "Vonta Leach", "fact": "Both list a fullback and three receivers and no tight end among the eleven starters." },
-    { "name": "Bryant McKinnie", "fact": "Game book lineup LT 78 B.McKinnie; pfr starters Bryant McKinnie/LT." }
+    {
+     "name": "Jacoby Jones",
+     "fact": "Scoring: game book 'J.Jones 56 yd. pass from J.Flacco' (Q2 1:45) and 'J.Jones 108 yd. kickoff return' (Q3 14:49); pfr the same two plays."
+    },
+    {
+     "name": "Vonta Leach",
+     "fact": "Both list a fullback and three receivers and no tight end among the eleven starters."
+    },
+    {
+     "name": "Bryant McKinnie",
+     "fact": "Game book lineup LT 78 B.McKinnie; pfr starters Bryant McKinnie/LT."
+    }
+   ],
+   "opponent": "San Francisco 49ers",
+   "venue": "Mercedes-Benz Superdome, New Orleans",
+   "venueAsPrinted": "at Mercedes-Benz Superdome, New Orleans, La.",
+   "scoreLine": "Ravens 34-31 49ers",
+   "candidates": [
+    {
+     "name": "Jacoby Jones",
+     "slotIndex": 5,
+     "nationality": "USA",
+     "bornPerPfr": "New Orleans, LA",
+     "pfrPlayer": "https://www.pro-football-reference.com/players/J/JoneJa03.htm",
+     "reveal": "Caught a 56-yard touchdown and returned a kickoff 108 yards for another."
+    },
+    {
+     "name": "Vonta Leach",
+     "slotIndex": 2,
+     "nationality": "USA",
+     "bornPerPfr": "Lumberton, NC",
+     "pfrPlayer": "https://www.pro-football-reference.com/players/L/LeacVo00.htm",
+     "reveal": "Baltimore opened with a fullback and three receivers, no tight end."
+    },
+    {
+     "name": "Bryant McKinnie",
+     "slotIndex": 6,
+     "nationality": "USA",
+     "bornPerPfr": "Woodbury, NJ",
+     "pfrPlayer": "https://www.pro-football-reference.com/players/M/McKiBr21.htm",
+     "reveal": null
+    }
    ]
   },
   {
@@ -398,27 +1756,132 @@
    "unit": "offense",
    "team": "San Francisco 49ers",
    "sources": [
-    { "host": "nfl.com", "what": "Official game book PDF, page 1 Lineups, San Francisco 49ers Offense", "url": "https://static.www.nfl.com/image/upload/v1677630684/gamecenter/10012013-0203-00bb-9d76-3f7dbeaf2a5e.pdf", "via": "https://www.nfl.com/games/ravens-at-49ers-2012-post-4", "read": "2026-10-03" },
-    { "host": "pro-football-reference.com", "what": "Box score #home_starters (49ers Starters Table)", "url": "https://www.pro-football-reference.com/boxscores/201302030sfo.htm", "read": "2026-10-03" }
+    {
+     "host": "nfl.com",
+     "what": "Official game book PDF, page 1 Lineups, San Francisco 49ers Offense",
+     "url": "https://static.www.nfl.com/image/upload/v1677630684/gamecenter/10012013-0203-00bb-9d76-3f7dbeaf2a5e.pdf",
+     "via": "https://www.nfl.com/games/ravens-at-49ers-2012-post-4",
+     "read": "2026-10-03"
+    },
+    {
+     "host": "pro-football-reference.com",
+     "what": "Box score #home_starters (49ers Starters Table)",
+     "url": "https://www.pro-football-reference.com/boxscores/201302030sfo.htm",
+     "read": "2026-10-03"
+    }
    ],
    "agree": "11/11",
    "starters": [
-    ["QB", "Colin Kaepernick", "QB 7 C.Kaepernick", "Colin Kaepernick/QB"],
-    ["RB", "Frank Gore", "RB 21 F.Gore", "Frank Gore/RB"],
-    ["WR", "Michael Crabtree", "WR 15 M.Crabtree", "Michael Crabtree/WR"],
-    ["WR", "Randy Moss", "WR 84 R.Moss", "Randy Moss/WR"],
-    ["TE", "Vernon Davis", "TE 85 V.Davis", "Vernon Davis/TE"],
-    ["TE", "Delanie Walker", "TE 46 D.Walker", "Delanie Walker/TE"],
-    ["LT", "Joe Staley", "LT 74 J.Staley", "Joe Staley/LT"],
-    ["LG", "Mike Iupati", "LG 77 M.Iupati", "Mike Iupati/LG"],
-    ["C", "Jonathan Goodwin", "C 59 J.Goodwin", "Jonathan Goodwin/C"],
-    ["RG", "Alex Boone", "RG 75 A.Boone", "Alex Boone/RG"],
-    ["RT", "Anthony Davis", "RT 76 A.Davis", "Anthony Davis/RT"]
+    [
+     "QB",
+     "Colin Kaepernick",
+     "QB 7 C.Kaepernick",
+     "Colin Kaepernick/QB"
+    ],
+    [
+     "RB",
+     "Frank Gore",
+     "RB 21 F.Gore",
+     "Frank Gore/RB"
+    ],
+    [
+     "WR",
+     "Michael Crabtree",
+     "WR 15 M.Crabtree",
+     "Michael Crabtree/WR"
+    ],
+    [
+     "WR",
+     "Randy Moss",
+     "WR 84 R.Moss",
+     "Randy Moss/WR"
+    ],
+    [
+     "TE",
+     "Vernon Davis",
+     "TE 85 V.Davis",
+     "Vernon Davis/TE"
+    ],
+    [
+     "TE",
+     "Delanie Walker",
+     "TE 46 D.Walker",
+     "Delanie Walker/TE"
+    ],
+    [
+     "LT",
+     "Joe Staley",
+     "LT 74 J.Staley",
+     "Joe Staley/LT"
+    ],
+    [
+     "LG",
+     "Mike Iupati",
+     "LG 77 M.Iupati",
+     "Mike Iupati/LG"
+    ],
+    [
+     "C",
+     "Jonathan Goodwin",
+     "C 59 J.Goodwin",
+     "Jonathan Goodwin/C"
+    ],
+    [
+     "RG",
+     "Alex Boone",
+     "RG 75 A.Boone",
+     "Alex Boone/RG"
+    ],
+    [
+     "RT",
+     "Anthony Davis",
+     "RT 76 A.Davis",
+     "Anthony Davis/RT"
+    ]
    ],
    "facts": [
-    { "name": "Delanie Walker", "fact": "Both list two starting tight ends, Walker beside Vernon Davis." },
-    { "name": "Randy Moss", "fact": "Game book lineup WR 84 R.Moss; pfr starters Randy Moss/WR." },
-    { "name": "Jonathan Goodwin", "fact": "Game book lineup C 59 J.Goodwin; pfr starters Jonathan Goodwin/C." }
+    {
+     "name": "Delanie Walker",
+     "fact": "Both list two starting tight ends, Walker beside Vernon Davis."
+    },
+    {
+     "name": "Randy Moss",
+     "fact": "Game book lineup WR 84 R.Moss; pfr starters Randy Moss/WR."
+    },
+    {
+     "name": "Jonathan Goodwin",
+     "fact": "Game book lineup C 59 J.Goodwin; pfr starters Jonathan Goodwin/C."
+    }
+   ],
+   "opponent": "Baltimore Ravens",
+   "venue": "Mercedes-Benz Superdome, New Orleans",
+   "venueAsPrinted": "at Mercedes-Benz Superdome, New Orleans, La.",
+   "scoreLine": "Ravens 34-31 49ers",
+   "candidates": [
+    {
+     "name": "Delanie Walker",
+     "slotIndex": 5,
+     "nationality": "USA",
+     "bornPerPfr": "Pomona, CA",
+     "pfrPlayer": "https://www.pro-football-reference.com/players/W/WalkHu00.htm",
+     "reveal": "The second starting tight end, next to Vernon Davis."
+    },
+    {
+     "name": "Randy Moss",
+     "slotIndex": 3,
+     "nationality": "USA",
+     "bornPerPfr": "Rand, WV",
+     "pfrPlayer": "https://www.pro-football-reference.com/players/M/MossRa00.htm",
+     "reveal": "Started at receiver opposite Michael Crabtree."
+    },
+    {
+     "name": "Jonathan Goodwin",
+     "slotIndex": 8,
+     "nationality": "USA",
+     "bornPerPfr": "Columbia, SC",
+     "pfrPlayer": "https://www.pro-football-reference.com/players/G/GoodJo23.htm",
+     "reveal": null
+    }
    ]
   },
   {
@@ -428,27 +1891,132 @@
    "unit": "offense",
    "team": "New York Giants",
    "sources": [
-    { "host": "nfl.com", "what": "Official game book PDF, page 1 Lineups, New York Giants Offense", "url": "https://static.www.nfl.com/image/upload/v1677630587/gamecenter/10012012-0205-00bb-c38f-1f97f8af3cca.pdf", "via": "https://www.nfl.com/games/giants-at-patriots-2011-post-4", "read": "2026-10-03" },
-    { "host": "pro-football-reference.com", "what": "Box score #vis_starters (Giants Starters Table)", "url": "https://www.pro-football-reference.com/boxscores/201202050nwe.htm", "read": "2026-10-03" }
+    {
+     "host": "nfl.com",
+     "what": "Official game book PDF, page 1 Lineups, New York Giants Offense",
+     "url": "https://static.www.nfl.com/image/upload/v1677630587/gamecenter/10012012-0205-00bb-c38f-1f97f8af3cca.pdf",
+     "via": "https://www.nfl.com/games/giants-at-patriots-2011-post-4",
+     "read": "2026-10-03"
+    },
+    {
+     "host": "pro-football-reference.com",
+     "what": "Box score #vis_starters (Giants Starters Table)",
+     "url": "https://www.pro-football-reference.com/boxscores/201202050nwe.htm",
+     "read": "2026-10-03"
+    }
    ],
    "agree": "11/11",
    "starters": [
-    ["QB", "Eli Manning", "QB 10 E.Manning", "Eli Manning/QB"],
-    ["RB", "Ahmad Bradshaw", "RB 44 A.Bradshaw", "Ahmad Bradshaw/RB"],
-    ["FB", "Henry Hynoski", "FB 45 H.Hynoski", "Henry Hynoski/FB"],
-    ["WR", "Hakeem Nicks", "WR 88 H.Nicks", "Hakeem Nicks/WR"],
-    ["WR", "Victor Cruz", "WR 80 V.Cruz", "Victor Cruz/WR"],
-    ["TE", "Jake Ballard", "TE 85 J.Ballard", "Jake Ballard/TE"],
-    ["LT", "David Diehl", "LT 66 D.Diehl", "David Diehl/LT"],
-    ["LG", "Kevin Boothe", "LG 77 K.Boothe", "Kevin Boothe/LG"],
-    ["C", "David Baas", "C 64 D.Baas", "David Baas/C"],
-    ["RG", "Chris Snee", "RG 76 C.Snee", "Chris Snee/RG"],
-    ["RT", "Kareem McKenzie", "RT 67 K.McKenzie", "Kareem McKenzie/RT"]
+    [
+     "QB",
+     "Eli Manning",
+     "QB 10 E.Manning",
+     "Eli Manning/QB"
+    ],
+    [
+     "RB",
+     "Ahmad Bradshaw",
+     "RB 44 A.Bradshaw",
+     "Ahmad Bradshaw/RB"
+    ],
+    [
+     "FB",
+     "Henry Hynoski",
+     "FB 45 H.Hynoski",
+     "Henry Hynoski/FB"
+    ],
+    [
+     "WR",
+     "Hakeem Nicks",
+     "WR 88 H.Nicks",
+     "Hakeem Nicks/WR"
+    ],
+    [
+     "WR",
+     "Victor Cruz",
+     "WR 80 V.Cruz",
+     "Victor Cruz/WR"
+    ],
+    [
+     "TE",
+     "Jake Ballard",
+     "TE 85 J.Ballard",
+     "Jake Ballard/TE"
+    ],
+    [
+     "LT",
+     "David Diehl",
+     "LT 66 D.Diehl",
+     "David Diehl/LT"
+    ],
+    [
+     "LG",
+     "Kevin Boothe",
+     "LG 77 K.Boothe",
+     "Kevin Boothe/LG"
+    ],
+    [
+     "C",
+     "David Baas",
+     "C 64 D.Baas",
+     "David Baas/C"
+    ],
+    [
+     "RG",
+     "Chris Snee",
+     "RG 76 C.Snee",
+     "Chris Snee/RG"
+    ],
+    [
+     "RT",
+     "Kareem McKenzie",
+     "RT 67 K.McKenzie",
+     "Kareem McKenzie/RT"
+    ]
    ],
    "facts": [
-    { "name": "Henry Hynoski", "fact": "Game book lineup FB 45 H.Hynoski; pfr starters Henry Hynoski/FB." },
-    { "name": "Jake Ballard", "fact": "Game book lineup TE 85 J.Ballard; pfr starters Jake Ballard/TE." },
-    { "name": "Ahmad Bradshaw", "fact": "Scoring: game book 'A.Bradshaw 6 yd. run (run failed)' (Q4 0:57, 21-17); pfr 'Ahmad Bradshaw 6 yard rush'." }
+    {
+     "name": "Henry Hynoski",
+     "fact": "Game book lineup FB 45 H.Hynoski; pfr starters Henry Hynoski/FB."
+    },
+    {
+     "name": "Jake Ballard",
+     "fact": "Game book lineup TE 85 J.Ballard; pfr starters Jake Ballard/TE."
+    },
+    {
+     "name": "Ahmad Bradshaw",
+     "fact": "Scoring: game book 'A.Bradshaw 6 yd. run (run failed)' (Q4 0:57, 21-17); pfr 'Ahmad Bradshaw 6 yard rush'."
+    }
+   ],
+   "opponent": "New England Patriots",
+   "venue": "Lucas Oil Stadium, Indianapolis",
+   "venueAsPrinted": "at Lucas Oil Stadium, Indianapolis, IN",
+   "scoreLine": "Giants 21-17 Patriots",
+   "candidates": [
+    {
+     "name": "Henry Hynoski",
+     "slotIndex": 2,
+     "nationality": "USA",
+     "bornPerPfr": "Ellysburg, PA",
+     "pfrPlayer": "https://www.pro-football-reference.com/players/H/HynoHe01.htm",
+     "reveal": null
+    },
+    {
+     "name": "Jake Ballard",
+     "slotIndex": 5,
+     "nationality": "USA",
+     "bornPerPfr": "Springboro, OH",
+     "pfrPlayer": "https://www.pro-football-reference.com/players/B/BallJa21.htm",
+     "reveal": null
+    },
+    {
+     "name": "Ahmad Bradshaw",
+     "slotIndex": 1,
+     "nationality": "USA",
+     "bornPerPfr": "Bluefield, VA",
+     "pfrPlayer": "https://www.pro-football-reference.com/players/B/BradAh00.htm",
+     "reveal": "Scored the winning 6-yard touchdown run with 57 seconds left."
+    }
    ]
   },
   {
@@ -458,27 +2026,132 @@
    "unit": "offense",
    "team": "New England Patriots",
    "sources": [
-    { "host": "nfl.com", "what": "Official game book PDF, page 1 Lineups, New England Patriots Offense", "url": "https://static.www.nfl.com/image/upload/v1677630587/gamecenter/10012012-0205-00bb-c38f-1f97f8af3cca.pdf", "via": "https://www.nfl.com/games/giants-at-patriots-2011-post-4", "read": "2026-10-03" },
-    { "host": "pro-football-reference.com", "what": "Box score #home_starters (Patriots Starters Table)", "url": "https://www.pro-football-reference.com/boxscores/201202050nwe.htm", "read": "2026-10-03" }
+    {
+     "host": "nfl.com",
+     "what": "Official game book PDF, page 1 Lineups, New England Patriots Offense",
+     "url": "https://static.www.nfl.com/image/upload/v1677630587/gamecenter/10012012-0205-00bb-c38f-1f97f8af3cca.pdf",
+     "via": "https://www.nfl.com/games/giants-at-patriots-2011-post-4",
+     "read": "2026-10-03"
+    },
+    {
+     "host": "pro-football-reference.com",
+     "what": "Box score #home_starters (Patriots Starters Table)",
+     "url": "https://www.pro-football-reference.com/boxscores/201202050nwe.htm",
+     "read": "2026-10-03"
+    }
    ],
    "agree": "11/11",
    "starters": [
-    ["QB", "Tom Brady", "QB 12 T.Brady", "Tom Brady/QB"],
-    ["RB", "BenJarvus Green-Ellis", "RB 42 B.Green-Ellis", "BenJarvus Green-Ellis/RB"],
-    ["WR", "Wes Welker", "WR 83 W.Welker", "Wes Welker/WR"],
-    ["WR", "Deion Branch", "WR 84 D.Branch", "Deion Branch/WR"],
-    ["TE", "Rob Gronkowski", "TE 87 R.Gronkowski", "Rob Gronkowski/TE"],
-    ["TE", "Nate Solder", "TE 77 N.Solder", "Nate Solder/TE"],
-    ["LT", "Matt Light", "LT 72 M.Light", "Matt Light/LT"],
-    ["LG", "Logan Mankins", "LG 70 L.Mankins", "Logan Mankins/LG"],
-    ["C", "Dan Connolly", "C 63 D.Connolly", "Dan Connolly/C"],
-    ["RG", "Brian Waters", "RG 54 B.Waters", "Brian Waters/RG"],
-    ["RT", "Sebastian Vollmer", "RT 76 S.Vollmer", "Sebastian Vollmer/RT"]
+    [
+     "QB",
+     "Tom Brady",
+     "QB 12 T.Brady",
+     "Tom Brady/QB"
+    ],
+    [
+     "RB",
+     "BenJarvus Green-Ellis",
+     "RB 42 B.Green-Ellis",
+     "BenJarvus Green-Ellis/RB"
+    ],
+    [
+     "WR",
+     "Wes Welker",
+     "WR 83 W.Welker",
+     "Wes Welker/WR"
+    ],
+    [
+     "WR",
+     "Deion Branch",
+     "WR 84 D.Branch",
+     "Deion Branch/WR"
+    ],
+    [
+     "TE",
+     "Rob Gronkowski",
+     "TE 87 R.Gronkowski",
+     "Rob Gronkowski/TE"
+    ],
+    [
+     "TE",
+     "Nate Solder",
+     "TE 77 N.Solder",
+     "Nate Solder/TE"
+    ],
+    [
+     "LT",
+     "Matt Light",
+     "LT 72 M.Light",
+     "Matt Light/LT"
+    ],
+    [
+     "LG",
+     "Logan Mankins",
+     "LG 70 L.Mankins",
+     "Logan Mankins/LG"
+    ],
+    [
+     "C",
+     "Dan Connolly",
+     "C 63 D.Connolly",
+     "Dan Connolly/C"
+    ],
+    [
+     "RG",
+     "Brian Waters",
+     "RG 54 B.Waters",
+     "Brian Waters/RG"
+    ],
+    [
+     "RT",
+     "Sebastian Vollmer",
+     "RT 76 S.Vollmer",
+     "Sebastian Vollmer/RT"
+    ]
    ],
    "facts": [
-    { "name": "Nate Solder", "fact": "Game book lineup TE 77 N.Solder (jersey 77); pfr starters Nate Solder/TE. Both list him as a starting tight end beside Gronkowski." },
-    { "name": "Dan Connolly", "fact": "Game book lineup C 63 D.Connolly; pfr starters Dan Connolly/C." },
-    { "name": "Deion Branch", "fact": "Game book lineup WR 84 D.Branch; pfr starters Deion Branch/WR." }
+    {
+     "name": "Nate Solder",
+     "fact": "Game book lineup TE 77 N.Solder (jersey 77); pfr starters Nate Solder/TE. Both list him as a starting tight end beside Gronkowski."
+    },
+    {
+     "name": "Dan Connolly",
+     "fact": "Game book lineup C 63 D.Connolly; pfr starters Dan Connolly/C."
+    },
+    {
+     "name": "Deion Branch",
+     "fact": "Game book lineup WR 84 D.Branch; pfr starters Deion Branch/WR."
+    }
+   ],
+   "opponent": "New York Giants",
+   "venue": "Lucas Oil Stadium, Indianapolis",
+   "venueAsPrinted": "at Lucas Oil Stadium, Indianapolis, IN",
+   "scoreLine": "Giants 21-17 Patriots",
+   "candidates": [
+    {
+     "name": "Nate Solder",
+     "slotIndex": 5,
+     "nationality": "USA",
+     "bornPerPfr": "Denver, CO",
+     "pfrPlayer": "https://www.pro-football-reference.com/players/S/SoldNa00.htm",
+     "reveal": "Wore 77 and was listed as a starting tight end next to Gronkowski."
+    },
+    {
+     "name": "Dan Connolly",
+     "slotIndex": 8,
+     "nationality": "USA",
+     "bornPerPfr": "St. Louis, MO",
+     "pfrPlayer": "https://www.pro-football-reference.com/players/C/ConnDa21.htm",
+     "reveal": null
+    },
+    {
+     "name": "Deion Branch",
+     "slotIndex": 3,
+     "nationality": "USA",
+     "bornPerPfr": "Albany, GA",
+     "pfrPlayer": "https://www.pro-football-reference.com/players/B/BranDe00.htm",
+     "reveal": "Started at receiver alongside Wes Welker."
+    }
    ]
   },
   {
@@ -488,27 +2161,132 @@
    "unit": "offense",
    "team": "New Orleans Saints",
    "sources": [
-    { "host": "nfl.com", "what": "Official game book PDF, page 1 Lineups, New Orleans Saints Offense", "url": "https://static.www.nfl.com/image/upload/v1677631473/gamecenter/10012010-0207-00e1-2890-45de8ffd3cb3.pdf", "via": "https://www.nfl.com/games/saints-at-colts-2009-post-4", "read": "2026-10-03" },
-    { "host": "pro-football-reference.com", "what": "Box score #vis_starters (Saints Starters Table)", "url": "https://www.pro-football-reference.com/boxscores/201002070clt.htm", "read": "2026-10-03" }
+    {
+     "host": "nfl.com",
+     "what": "Official game book PDF, page 1 Lineups, New Orleans Saints Offense",
+     "url": "https://static.www.nfl.com/image/upload/v1677631473/gamecenter/10012010-0207-00e1-2890-45de8ffd3cb3.pdf",
+     "via": "https://www.nfl.com/games/saints-at-colts-2009-post-4",
+     "read": "2026-10-03"
+    },
+    {
+     "host": "pro-football-reference.com",
+     "what": "Box score #vis_starters (Saints Starters Table)",
+     "url": "https://www.pro-football-reference.com/boxscores/201002070clt.htm",
+     "read": "2026-10-03"
+    }
    ],
    "agree": "11/11",
    "starters": [
-    ["QB", "Drew Brees", "QB 9 D.Brees", "Drew Brees/QB"],
-    ["RB", "Pierre Thomas", "RB 23 P.Thomas", "Pierre Thomas/RB"],
-    ["RB", "Reggie Bush", "RB 25 R.Bush", "Reggie Bush/RB"],
-    ["WR", "Marques Colston", "WR 12 M.Colston", "Marques Colston/WR"],
-    ["WR", "Devery Henderson", "WR 19 D.Henderson", "Devery Henderson/WR"],
-    ["TE", "Jeremy Shockey", "TE 88 J.Shockey", "Jeremy Shockey/TE"],
-    ["LT", "Jermon Bushrod", "LT 74 J.Bushrod", "Jermon Bushrod/LT"],
-    ["LG", "Carl Nicks", "LG 77 C.Nicks", "Carl Nicks/LG"],
-    ["C", "Jonathan Goodwin", "C 76 J.Goodwin", "Jonathan Goodwin/C"],
-    ["RG", "Jahri Evans", "RG 73 J.Evans", "Jahri Evans/RG"],
-    ["RT", "Jon Stinchcomb", "RT 78 J.Stinchcomb", "Jon Stinchcomb/RT"]
+    [
+     "QB",
+     "Drew Brees",
+     "QB 9 D.Brees",
+     "Drew Brees/QB"
+    ],
+    [
+     "RB",
+     "Pierre Thomas",
+     "RB 23 P.Thomas",
+     "Pierre Thomas/RB"
+    ],
+    [
+     "RB",
+     "Reggie Bush",
+     "RB 25 R.Bush",
+     "Reggie Bush/RB"
+    ],
+    [
+     "WR",
+     "Marques Colston",
+     "WR 12 M.Colston",
+     "Marques Colston/WR"
+    ],
+    [
+     "WR",
+     "Devery Henderson",
+     "WR 19 D.Henderson",
+     "Devery Henderson/WR"
+    ],
+    [
+     "TE",
+     "Jeremy Shockey",
+     "TE 88 J.Shockey",
+     "Jeremy Shockey/TE"
+    ],
+    [
+     "LT",
+     "Jermon Bushrod",
+     "LT 74 J.Bushrod",
+     "Jermon Bushrod/LT"
+    ],
+    [
+     "LG",
+     "Carl Nicks",
+     "LG 77 C.Nicks",
+     "Carl Nicks/LG"
+    ],
+    [
+     "C",
+     "Jonathan Goodwin",
+     "C 76 J.Goodwin",
+     "Jonathan Goodwin/C"
+    ],
+    [
+     "RG",
+     "Jahri Evans",
+     "RG 73 J.Evans",
+     "Jahri Evans/RG"
+    ],
+    [
+     "RT",
+     "Jon Stinchcomb",
+     "RT 78 J.Stinchcomb",
+     "Jon Stinchcomb/RT"
+    ]
    ],
    "facts": [
-    { "name": "Pierre Thomas", "fact": "Both list two starting running backs (Thomas and Reggie Bush). Scoring: game book 'P.Thomas 16 yd. pass from D.Brees' (Q3 11:41); pfr the same play." },
-    { "name": "Devery Henderson", "fact": "Game book lineup WR 19 D.Henderson; pfr starters Devery Henderson/WR." },
-    { "name": "Jon Stinchcomb", "fact": "Game book lineup RT 78 J.Stinchcomb; pfr starters Jon Stinchcomb/RT." }
+    {
+     "name": "Pierre Thomas",
+     "fact": "Both list two starting running backs (Thomas and Reggie Bush). Scoring: game book 'P.Thomas 16 yd. pass from D.Brees' (Q3 11:41); pfr the same play."
+    },
+    {
+     "name": "Devery Henderson",
+     "fact": "Game book lineup WR 19 D.Henderson; pfr starters Devery Henderson/WR."
+    },
+    {
+     "name": "Jon Stinchcomb",
+     "fact": "Game book lineup RT 78 J.Stinchcomb; pfr starters Jon Stinchcomb/RT."
+    }
+   ],
+   "opponent": "Indianapolis Colts",
+   "venue": "Sun Life Stadium, Miami Gardens",
+   "venueAsPrinted": "at Sun Life Stadium, Miami Gardens, FL",
+   "scoreLine": "Saints 31-17 Colts",
+   "candidates": [
+    {
+     "name": "Pierre Thomas",
+     "slotIndex": 1,
+     "nationality": "USA",
+     "bornPerPfr": "Chicago, IL",
+     "pfrPlayer": "https://www.pro-football-reference.com/players/T/ThomPi00.htm",
+     "reveal": "Started in a two-back set with Reggie Bush and caught a 16-yard touchdown."
+    },
+    {
+     "name": "Devery Henderson",
+     "slotIndex": 4,
+     "nationality": "USA",
+     "bornPerPfr": "Lafayette, LA",
+     "pfrPlayer": "https://www.pro-football-reference.com/players/H/HendDe00.htm",
+     "reveal": "Started at receiver opposite Marques Colston."
+    },
+    {
+     "name": "Jon Stinchcomb",
+     "slotIndex": 10,
+     "nationality": "USA",
+     "bornPerPfr": "Atlanta, GA",
+     "pfrPlayer": "https://www.pro-football-reference.com/players/S/StinJo20.htm",
+     "reveal": null
+    }
    ]
   },
   {
@@ -518,27 +2296,132 @@
    "unit": "offense",
    "team": "Indianapolis Colts",
    "sources": [
-    { "host": "nfl.com", "what": "Official game book PDF, page 1 Lineups, Indianapolis Colts Offense", "url": "https://static.www.nfl.com/image/upload/v1677631473/gamecenter/10012010-0207-00e1-2890-45de8ffd3cb3.pdf", "via": "https://www.nfl.com/games/saints-at-colts-2009-post-4", "read": "2026-10-03" },
-    { "host": "pro-football-reference.com", "what": "Box score #home_starters (Colts Starters Table)", "url": "https://www.pro-football-reference.com/boxscores/201002070clt.htm", "read": "2026-10-03" }
+    {
+     "host": "nfl.com",
+     "what": "Official game book PDF, page 1 Lineups, Indianapolis Colts Offense",
+     "url": "https://static.www.nfl.com/image/upload/v1677631473/gamecenter/10012010-0207-00e1-2890-45de8ffd3cb3.pdf",
+     "via": "https://www.nfl.com/games/saints-at-colts-2009-post-4",
+     "read": "2026-10-03"
+    },
+    {
+     "host": "pro-football-reference.com",
+     "what": "Box score #home_starters (Colts Starters Table)",
+     "url": "https://www.pro-football-reference.com/boxscores/201002070clt.htm",
+     "read": "2026-10-03"
+    }
    ],
    "agree": "11/11",
    "starters": [
-    ["QB", "Peyton Manning", "QB 18 P.Manning", "Peyton Manning/QB"],
-    ["RB", "Joseph Addai", "RB 29 J.Addai", "Joseph Addai/RB"],
-    ["H-B", "Gijon Robinson", "H-B 47 G.Robinson", "Gijon Robinson/H-B"],
-    ["WR", "Reggie Wayne", "WR 87 R.Wayne", "Reggie Wayne/WR"],
-    ["WR", "Pierre Garcon", "WR 85 P.Garcon", "Pierre Garcon/WR"],
-    ["TE", "Dallas Clark", "TE 44 D.Clark", "Dallas Clark/TE"],
-    ["LT", "Charlie Johnson", "LT 74 Ch.Johnson", "Charlie Johnson/LT"],
-    ["LG", "Ryan Lilja", "LG 65 R.Lilja", "Ryan Lilja/LG"],
-    ["C", "Jeff Saturday", "C 63 J.Saturday", "Jeff Saturday/C"],
-    ["RG", "Kyle DeVan", "RG 66 K.DeVan", "Kyle DeVan/RG"],
-    ["RT", "Ryan Diem", "RT 71 R.Diem", "Ryan Diem/RT"]
+    [
+     "QB",
+     "Peyton Manning",
+     "QB 18 P.Manning",
+     "Peyton Manning/QB"
+    ],
+    [
+     "RB",
+     "Joseph Addai",
+     "RB 29 J.Addai",
+     "Joseph Addai/RB"
+    ],
+    [
+     "H-B",
+     "Gijon Robinson",
+     "H-B 47 G.Robinson",
+     "Gijon Robinson/H-B"
+    ],
+    [
+     "WR",
+     "Reggie Wayne",
+     "WR 87 R.Wayne",
+     "Reggie Wayne/WR"
+    ],
+    [
+     "WR",
+     "Pierre Garcon",
+     "WR 85 P.Garcon",
+     "Pierre Garcon/WR"
+    ],
+    [
+     "TE",
+     "Dallas Clark",
+     "TE 44 D.Clark",
+     "Dallas Clark/TE"
+    ],
+    [
+     "LT",
+     "Charlie Johnson",
+     "LT 74 Ch.Johnson",
+     "Charlie Johnson/LT"
+    ],
+    [
+     "LG",
+     "Ryan Lilja",
+     "LG 65 R.Lilja",
+     "Ryan Lilja/LG"
+    ],
+    [
+     "C",
+     "Jeff Saturday",
+     "C 63 J.Saturday",
+     "Jeff Saturday/C"
+    ],
+    [
+     "RG",
+     "Kyle DeVan",
+     "RG 66 K.DeVan",
+     "Kyle DeVan/RG"
+    ],
+    [
+     "RT",
+     "Ryan Diem",
+     "RT 71 R.Diem",
+     "Ryan Diem/RT"
+    ]
    ],
    "facts": [
-    { "name": "Gijon Robinson", "fact": "Game book lineup H-B 47 G.Robinson; pfr starters Gijon Robinson/H-B." },
-    { "name": "Kyle DeVan", "fact": "Game book lineup RG 66 K.DeVan; pfr starters Kyle DeVan/RG." },
-    { "name": "Pierre Garcon", "fact": "Scoring: game book 'P.Garcon 19 yd. pass from P.Manning' (Q1 0:36); pfr 'Pierre Garcon 19 yard pass from Peyton Manning'." }
+    {
+     "name": "Gijon Robinson",
+     "fact": "Game book lineup H-B 47 G.Robinson; pfr starters Gijon Robinson/H-B."
+    },
+    {
+     "name": "Kyle DeVan",
+     "fact": "Game book lineup RG 66 K.DeVan; pfr starters Kyle DeVan/RG."
+    },
+    {
+     "name": "Pierre Garcon",
+     "fact": "Scoring: game book 'P.Garcon 19 yd. pass from P.Manning' (Q1 0:36); pfr 'Pierre Garcon 19 yard pass from Peyton Manning'."
+    }
+   ],
+   "opponent": "New Orleans Saints",
+   "venue": "Sun Life Stadium, Miami Gardens",
+   "venueAsPrinted": "at Sun Life Stadium, Miami Gardens, FL",
+   "scoreLine": "Saints 31-17 Colts",
+   "candidates": [
+    {
+     "name": "Gijon Robinson",
+     "slotIndex": 2,
+     "nationality": "USA",
+     "bornPerPfr": "Denver, CO",
+     "pfrPlayer": "https://www.pro-football-reference.com/players/R/RobiGi21.htm",
+     "reveal": null
+    },
+    {
+     "name": "Kyle DeVan",
+     "slotIndex": 9,
+     "nationality": "USA",
+     "bornPerPfr": "Sacramento, CA",
+     "pfrPlayer": "https://www.pro-football-reference.com/players/D/DeVaKy00.htm",
+     "reveal": null
+    },
+    {
+     "name": "Pierre Garcon",
+     "slotIndex": 4,
+     "nationality": "USA",
+     "bornPerPfr": "Carmel, NY",
+     "pfrPlayer": "https://www.pro-football-reference.com/players/G/GarcPi00.htm",
+     "reveal": "Caught a 19-yard touchdown from Peyton Manning in the first quarter."
+    }
    ]
   },
   {
@@ -548,27 +2431,132 @@
    "unit": "offense",
    "team": "Pittsburgh Steelers",
    "sources": [
-    { "host": "nfl.com", "what": "Official game book PDF, page 1 Lineups, Pittsburgh Steelers Offense", "url": "https://static.www.nfl.com/image/upload/v1677631650/gamecenter/10012009-0201-005b-8ea3-b4ab4e2b8bea.pdf", "via": "https://www.nfl.com/games/steelers-at-cardinals-2008-post-4", "read": "2026-10-03" },
-    { "host": "pro-football-reference.com", "what": "Box score #vis_starters (Steelers Starters Table)", "url": "https://www.pro-football-reference.com/boxscores/200902010crd.htm", "read": "2026-10-03" }
+    {
+     "host": "nfl.com",
+     "what": "Official game book PDF, page 1 Lineups, Pittsburgh Steelers Offense",
+     "url": "https://static.www.nfl.com/image/upload/v1677631650/gamecenter/10012009-0201-005b-8ea3-b4ab4e2b8bea.pdf",
+     "via": "https://www.nfl.com/games/steelers-at-cardinals-2008-post-4",
+     "read": "2026-10-03"
+    },
+    {
+     "host": "pro-football-reference.com",
+     "what": "Box score #vis_starters (Steelers Starters Table)",
+     "url": "https://www.pro-football-reference.com/boxscores/200902010crd.htm",
+     "read": "2026-10-03"
+    }
    ],
    "agree": "11/11",
    "starters": [
-    ["QB", "Ben Roethlisberger", "QB 7 B.Roethlisberger", "Ben Roethlisberger/QB"],
-    ["RB", "Willie Parker", "RB 39 W.Parker", "Willie Parker/RB"],
-    ["WR", "Hines Ward", "WR 86 H.Ward", "Hines Ward/WR"],
-    ["TE", "Heath Miller", "TE 83 H.Miller", "Heath Miller/TE"],
-    ["TE", "Matt Spaeth", "TE 89 M.Spaeth", "Matt Spaeth/TE"],
-    ["TE", "Sean McHugh", "TE 49 S.McHugh", "Sean McHugh/TE"],
-    ["LT", "Max Starks", "LT 78 M.Starks", "Max Starks/LT"],
-    ["LG", "Chris Kemoeatu", "LG 68 C.Kemoeatu", "Chris Kemoeatu/LG"],
-    ["C", "Justin Hartwig", "C 62 J.Hartwig", "Justin Hartwig/C"],
-    ["RG", "Darnell Stapleton", "RG 72 D.Stapleton", "Darnell Stapleton/RG"],
-    ["RT", "Willie Colon", "RT 74 W.Colon", "Willie Colon/RT"]
+    [
+     "QB",
+     "Ben Roethlisberger",
+     "QB 7 B.Roethlisberger",
+     "Ben Roethlisberger/QB"
+    ],
+    [
+     "RB",
+     "Willie Parker",
+     "RB 39 W.Parker",
+     "Willie Parker/RB"
+    ],
+    [
+     "WR",
+     "Hines Ward",
+     "WR 86 H.Ward",
+     "Hines Ward/WR"
+    ],
+    [
+     "TE",
+     "Heath Miller",
+     "TE 83 H.Miller",
+     "Heath Miller/TE"
+    ],
+    [
+     "TE",
+     "Matt Spaeth",
+     "TE 89 M.Spaeth",
+     "Matt Spaeth/TE"
+    ],
+    [
+     "TE",
+     "Sean McHugh",
+     "TE 49 S.McHugh",
+     "Sean McHugh/TE"
+    ],
+    [
+     "LT",
+     "Max Starks",
+     "LT 78 M.Starks",
+     "Max Starks/LT"
+    ],
+    [
+     "LG",
+     "Chris Kemoeatu",
+     "LG 68 C.Kemoeatu",
+     "Chris Kemoeatu/LG"
+    ],
+    [
+     "C",
+     "Justin Hartwig",
+     "C 62 J.Hartwig",
+     "Justin Hartwig/C"
+    ],
+    [
+     "RG",
+     "Darnell Stapleton",
+     "RG 72 D.Stapleton",
+     "Darnell Stapleton/RG"
+    ],
+    [
+     "RT",
+     "Willie Colon",
+     "RT 74 W.Colon",
+     "Willie Colon/RT"
+    ]
    ],
    "facts": [
-    { "name": "Sean McHugh", "fact": "Both list three starting tight ends and Hines Ward as the only starting receiver. Game book lists WR 10 S.Holmes under Steelers substitutions and pfr's starters omit him; both scoring tables have 'S.Holmes 6 yd. pass from B.Roethlisberger' / 'Santonio Holmes 6 yard pass from Ben Roethlisberger' (Q4 0:35, 27-23)." },
-    { "name": "Matt Spaeth", "fact": "Game book lineup TE 89 M.Spaeth; pfr starters Matt Spaeth/TE." },
-    { "name": "Darnell Stapleton", "fact": "Game book lineup RG 72 D.Stapleton; pfr starters Darnell Stapleton/RG." }
+    {
+     "name": "Sean McHugh",
+     "fact": "Both list three starting tight ends and Hines Ward as the only starting receiver. Game book lists WR 10 S.Holmes under Steelers substitutions and pfr's starters omit him; both scoring tables have 'S.Holmes 6 yd. pass from B.Roethlisberger' / 'Santonio Holmes 6 yard pass from Ben Roethlisberger' (Q4 0:35, 27-23)."
+    },
+    {
+     "name": "Matt Spaeth",
+     "fact": "Game book lineup TE 89 M.Spaeth; pfr starters Matt Spaeth/TE."
+    },
+    {
+     "name": "Darnell Stapleton",
+     "fact": "Game book lineup RG 72 D.Stapleton; pfr starters Darnell Stapleton/RG."
+    }
+   ],
+   "opponent": "Arizona Cardinals",
+   "venue": "Raymond James Stadium, Tampa",
+   "venueAsPrinted": "at Raymond James Stadium, Tampa",
+   "scoreLine": "Steelers 27-23 Cardinals",
+   "candidates": [
+    {
+     "name": "Sean McHugh",
+     "slotIndex": 5,
+     "nationality": "USA",
+     "bornPerPfr": "Springfield, MA",
+     "pfrPlayer": "https://www.pro-football-reference.com/players/M/McHuSe00.htm",
+     "reveal": "Pittsburgh opened with three tight ends. Santonio Holmes, who caught the winning touchdown, came off the bench."
+    },
+    {
+     "name": "Matt Spaeth",
+     "slotIndex": 4,
+     "nationality": "USA",
+     "bornPerPfr": "St. Michael, MN",
+     "pfrPlayer": "https://www.pro-football-reference.com/players/S/SpaeMa00.htm",
+     "reveal": "One of three starting tight ends, with Heath Miller and Sean McHugh."
+    },
+    {
+     "name": "Darnell Stapleton",
+     "slotIndex": 9,
+     "nationality": "USA",
+     "bornPerPfr": "Union, NJ",
+     "pfrPlayer": "https://www.pro-football-reference.com/players/S/StapDa20.htm",
+     "reveal": null
+    }
    ]
   },
   {
@@ -578,27 +2566,132 @@
    "unit": "defense",
    "team": "Pittsburgh Steelers",
    "sources": [
-    { "host": "nfl.com", "what": "Official game book PDF, page 1 Lineups, Pittsburgh Steelers Defense", "url": "https://static.www.nfl.com/image/upload/v1677631650/gamecenter/10012009-0201-005b-8ea3-b4ab4e2b8bea.pdf", "via": "https://www.nfl.com/games/steelers-at-cardinals-2008-post-4", "read": "2026-10-03" },
-    { "host": "pro-football-reference.com", "what": "Box score #vis_starters (Steelers Starters Table)", "url": "https://www.pro-football-reference.com/boxscores/200902010crd.htm", "read": "2026-10-03" }
+    {
+     "host": "nfl.com",
+     "what": "Official game book PDF, page 1 Lineups, Pittsburgh Steelers Defense",
+     "url": "https://static.www.nfl.com/image/upload/v1677631650/gamecenter/10012009-0201-005b-8ea3-b4ab4e2b8bea.pdf",
+     "via": "https://www.nfl.com/games/steelers-at-cardinals-2008-post-4",
+     "read": "2026-10-03"
+    },
+    {
+     "host": "pro-football-reference.com",
+     "what": "Box score #vis_starters (Steelers Starters Table)",
+     "url": "https://www.pro-football-reference.com/boxscores/200902010crd.htm",
+     "read": "2026-10-03"
+    }
    ],
    "agree": "11/11",
    "starters": [
-    ["DE", "Aaron Smith", "DE 91 Aa.Smith", "Aaron Smith/DE"],
-    ["NT", "Casey Hampton", "NT 98 C.Hampton", "Casey Hampton/NT"],
-    ["DE", "Brett Keisel", "DE 99 B.Keisel", "Brett Keisel/DE"],
-    ["OLB", "LaMarr Woodley", "OLB 56 L.Woodley", "LaMarr Woodley/OLB"],
-    ["LILB", "James Farrior", "LILB 51 J.Farrior", "James Farrior/LILB"],
-    ["RILB", "Larry Foote", "RILB 50 L.Foote", "Larry Foote/RILB"],
-    ["OLB", "James Harrison", "OLB 92 J.Harrison", "James Harrison/OLB"],
-    ["LCB", "Ike Taylor", "LCB 24 I.Taylor", "Ike Taylor/LCB"],
-    ["RCB", "Bryant McFadden", "RCB 20 B.McFadden", "Bryant McFadden/RCB"],
-    ["SS", "Troy Polamalu", "SS 43 T.Polamalu", "Troy Polamalu/SS"],
-    ["FS", "Ryan Clark", "FS 25 R.Clark", "Ryan Clark/FS"]
+    [
+     "DE",
+     "Aaron Smith",
+     "DE 91 Aa.Smith",
+     "Aaron Smith/DE"
+    ],
+    [
+     "NT",
+     "Casey Hampton",
+     "NT 98 C.Hampton",
+     "Casey Hampton/NT"
+    ],
+    [
+     "DE",
+     "Brett Keisel",
+     "DE 99 B.Keisel",
+     "Brett Keisel/DE"
+    ],
+    [
+     "OLB",
+     "LaMarr Woodley",
+     "OLB 56 L.Woodley",
+     "LaMarr Woodley/OLB"
+    ],
+    [
+     "LILB",
+     "James Farrior",
+     "LILB 51 J.Farrior",
+     "James Farrior/LILB"
+    ],
+    [
+     "RILB",
+     "Larry Foote",
+     "RILB 50 L.Foote",
+     "Larry Foote/RILB"
+    ],
+    [
+     "OLB",
+     "James Harrison",
+     "OLB 92 J.Harrison",
+     "James Harrison/OLB"
+    ],
+    [
+     "LCB",
+     "Ike Taylor",
+     "LCB 24 I.Taylor",
+     "Ike Taylor/LCB"
+    ],
+    [
+     "RCB",
+     "Bryant McFadden",
+     "RCB 20 B.McFadden",
+     "Bryant McFadden/RCB"
+    ],
+    [
+     "SS",
+     "Troy Polamalu",
+     "SS 43 T.Polamalu",
+     "Troy Polamalu/SS"
+    ],
+    [
+     "FS",
+     "Ryan Clark",
+     "FS 25 R.Clark",
+     "Ryan Clark/FS"
+    ]
    ],
    "facts": [
-    { "name": "James Harrison", "fact": "Scoring: game book 'J.Harrison 100 yd. interception return' (Q2 0:00); pfr 'James Harrison 100 yard interception return'." },
-    { "name": "Bryant McFadden", "fact": "Game book lineup RCB 20 B.McFadden; pfr starters Bryant McFadden/RCB." },
-    { "name": "Larry Foote", "fact": "Game book lineup RILB 50 L.Foote beside LILB J.Farrior; pfr starters Larry Foote/RILB." }
+    {
+     "name": "James Harrison",
+     "fact": "Scoring: game book 'J.Harrison 100 yd. interception return' (Q2 0:00); pfr 'James Harrison 100 yard interception return'."
+    },
+    {
+     "name": "Bryant McFadden",
+     "fact": "Game book lineup RCB 20 B.McFadden; pfr starters Bryant McFadden/RCB."
+    },
+    {
+     "name": "Larry Foote",
+     "fact": "Game book lineup RILB 50 L.Foote beside LILB J.Farrior; pfr starters Larry Foote/RILB."
+    }
+   ],
+   "opponent": "Arizona Cardinals",
+   "venue": "Raymond James Stadium, Tampa",
+   "venueAsPrinted": "at Raymond James Stadium, Tampa",
+   "scoreLine": "Steelers 27-23 Cardinals",
+   "candidates": [
+    {
+     "name": "James Harrison",
+     "slotIndex": 6,
+     "nationality": "USA",
+     "bornPerPfr": "Akron, OH",
+     "pfrPlayer": "https://www.pro-football-reference.com/players/H/HarrJa23.htm",
+     "reveal": "Returned an interception 100 yards for a touchdown as the first half ended."
+    },
+    {
+     "name": "Bryant McFadden",
+     "slotIndex": 8,
+     "nationality": "USA",
+     "bornPerPfr": "Hollywood, FL",
+     "pfrPlayer": "https://www.pro-football-reference.com/players/M/McFaBr20.htm",
+     "reveal": null
+    },
+    {
+     "name": "Larry Foote",
+     "slotIndex": 5,
+     "nationality": "USA",
+     "bornPerPfr": "Detroit, MI",
+     "pfrPlayer": "https://www.pro-football-reference.com/players/F/FootLa20.htm",
+     "reveal": "Started inside next to James Farrior."
+    }
    ]
   },
   {
@@ -608,27 +2701,132 @@
    "unit": "offense",
    "team": "Arizona Cardinals",
    "sources": [
-    { "host": "nfl.com", "what": "Official game book PDF, page 1 Lineups, Arizona Cardinals Offense", "url": "https://static.www.nfl.com/image/upload/v1677631650/gamecenter/10012009-0201-005b-8ea3-b4ab4e2b8bea.pdf", "via": "https://www.nfl.com/games/steelers-at-cardinals-2008-post-4", "read": "2026-10-03" },
-    { "host": "pro-football-reference.com", "what": "Box score #home_starters (Cardinals Starters Table)", "url": "https://www.pro-football-reference.com/boxscores/200902010crd.htm", "read": "2026-10-03" }
+    {
+     "host": "nfl.com",
+     "what": "Official game book PDF, page 1 Lineups, Arizona Cardinals Offense",
+     "url": "https://static.www.nfl.com/image/upload/v1677631650/gamecenter/10012009-0201-005b-8ea3-b4ab4e2b8bea.pdf",
+     "via": "https://www.nfl.com/games/steelers-at-cardinals-2008-post-4",
+     "read": "2026-10-03"
+    },
+    {
+     "host": "pro-football-reference.com",
+     "what": "Box score #home_starters (Cardinals Starters Table)",
+     "url": "https://www.pro-football-reference.com/boxscores/200902010crd.htm",
+     "read": "2026-10-03"
+    }
    ],
    "agree": "11/11",
    "starters": [
-    ["QB", "Kurt Warner", "QB 13 K.Warner", "Kurt Warner/QB"],
-    ["RB", "Edgerrin James", "RB 32 E.James", "Edgerrin James/RB"],
-    ["FB", "Terrelle Smith", "FB 45 T.Smith", "Terrelle Smith/FB"],
-    ["WR", "Larry Fitzgerald", "WR 11 L.Fitzgerald", "Larry Fitzgerald/WR"],
-    ["WR", "Anquan Boldin", "WR 81 A.Boldin", "Anquan Boldin/WR"],
-    ["TE", "Leonard Pope", "TE 82 L.Pope", "Leonard Pope/TE"],
-    ["LT", "Mike Gandy", "LT 69 M.Gandy", "Mike Gandy/LT"],
-    ["LG", "Reggie Wells", "LG 74 R.Wells", "Reggie Wells/LG"],
-    ["C", "Lyle Sendlein", "C 63 L.Sendlein", "Lyle Sendlein/C"],
-    ["RG", "Deuce Lutui", "RG 76 D.Lutui", "Deuce Lutui/RG"],
-    ["RT", "Levi Brown", "RT 75 L.Brown", "Levi Brown/RT"]
+    [
+     "QB",
+     "Kurt Warner",
+     "QB 13 K.Warner",
+     "Kurt Warner/QB"
+    ],
+    [
+     "RB",
+     "Edgerrin James",
+     "RB 32 E.James",
+     "Edgerrin James/RB"
+    ],
+    [
+     "FB",
+     "Terrelle Smith",
+     "FB 45 T.Smith",
+     "Terrelle Smith/FB"
+    ],
+    [
+     "WR",
+     "Larry Fitzgerald",
+     "WR 11 L.Fitzgerald",
+     "Larry Fitzgerald/WR"
+    ],
+    [
+     "WR",
+     "Anquan Boldin",
+     "WR 81 A.Boldin",
+     "Anquan Boldin/WR"
+    ],
+    [
+     "TE",
+     "Leonard Pope",
+     "TE 82 L.Pope",
+     "Leonard Pope/TE"
+    ],
+    [
+     "LT",
+     "Mike Gandy",
+     "LT 69 M.Gandy",
+     "Mike Gandy/LT"
+    ],
+    [
+     "LG",
+     "Reggie Wells",
+     "LG 74 R.Wells",
+     "Reggie Wells/LG"
+    ],
+    [
+     "C",
+     "Lyle Sendlein",
+     "C 63 L.Sendlein",
+     "Lyle Sendlein/C"
+    ],
+    [
+     "RG",
+     "Deuce Lutui",
+     "RG 76 D.Lutui",
+     "Deuce Lutui/RG"
+    ],
+    [
+     "RT",
+     "Levi Brown",
+     "RT 75 L.Brown",
+     "Levi Brown/RT"
+    ]
    ],
    "facts": [
-    { "name": "Larry Fitzgerald", "fact": "Scoring: game book 'L.Fitzgerald 64 yd. pass from K.Warner' (Q4 2:37) and '1 yd.' (Q4 7:33); pfr the same two plays." },
-    { "name": "Terrelle Smith", "fact": "Game book lineup FB 45 T.Smith; pfr starters Terrelle Smith/FB." },
-    { "name": "Leonard Pope", "fact": "Game book lineup TE 82 L.Pope; pfr starters Leonard Pope/TE. Ben Patrick, who caught Warner's 1-yard touchdown, is TE 89 B.Patrick in the Cardinals substitutions." }
+    {
+     "name": "Larry Fitzgerald",
+     "fact": "Scoring: game book 'L.Fitzgerald 64 yd. pass from K.Warner' (Q4 2:37) and '1 yd.' (Q4 7:33); pfr the same two plays."
+    },
+    {
+     "name": "Terrelle Smith",
+     "fact": "Game book lineup FB 45 T.Smith; pfr starters Terrelle Smith/FB."
+    },
+    {
+     "name": "Leonard Pope",
+     "fact": "Game book lineup TE 82 L.Pope; pfr starters Leonard Pope/TE. Ben Patrick, who caught Warner's 1-yard touchdown, is TE 89 B.Patrick in the Cardinals substitutions."
+    }
+   ],
+   "opponent": "Pittsburgh Steelers",
+   "venue": "Raymond James Stadium, Tampa",
+   "venueAsPrinted": "at Raymond James Stadium, Tampa",
+   "scoreLine": "Steelers 27-23 Cardinals",
+   "candidates": [
+    {
+     "name": "Larry Fitzgerald",
+     "slotIndex": 3,
+     "nationality": "USA",
+     "bornPerPfr": "Minneapolis, MN",
+     "pfrPlayer": "https://www.pro-football-reference.com/players/F/FitzLa00.htm",
+     "reveal": "Scored twice in the fourth quarter, the second on a 64-yard catch."
+    },
+    {
+     "name": "Terrelle Smith",
+     "slotIndex": 2,
+     "nationality": "USA",
+     "bornPerPfr": "West Covina, CA",
+     "pfrPlayer": "https://www.pro-football-reference.com/players/S/SmitTe00.htm",
+     "reveal": null
+    },
+    {
+     "name": "Leonard Pope",
+     "slotIndex": 5,
+     "nationality": "USA",
+     "bornPerPfr": "Americus, GA",
+     "pfrPlayer": "https://www.pro-football-reference.com/players/P/PopeLe00.htm",
+     "reveal": "Started at tight end. Ben Patrick, who caught a touchdown, came off the bench."
+    }
    ]
   },
   {
@@ -638,31 +2836,139 @@
    "unit": "defense",
    "team": "New York Giants",
    "sources": [
-    { "host": "nfl.com", "what": "Official game book PDF, page 1 Lineups, New York Giants Defense", "url": "https://static.www.nfl.com/image/upload/v1677631553/gamecenter/10012008-0203-00d1-c381-50c19c704227.pdf", "via": "https://www.nfl.com/games/giants-at-patriots-2007-post-4", "read": "2026-10-03" },
-    { "host": "pro-football-reference.com", "what": "Box score #vis_starters (Giants Starters Table)", "url": "https://www.pro-football-reference.com/boxscores/200802030nwe.htm", "read": "2026-10-03" }
+    {
+     "host": "nfl.com",
+     "what": "Official game book PDF, page 1 Lineups, New York Giants Defense",
+     "url": "https://static.www.nfl.com/image/upload/v1677631553/gamecenter/10012008-0203-00d1-c381-50c19c704227.pdf",
+     "via": "https://www.nfl.com/games/giants-at-patriots-2007-post-4",
+     "read": "2026-10-03"
+    },
+    {
+     "host": "pro-football-reference.com",
+     "what": "Box score #vis_starters (Giants Starters Table)",
+     "url": "https://www.pro-football-reference.com/boxscores/200802030nwe.htm",
+     "read": "2026-10-03"
+    }
    ],
    "agree": "11/11",
    "starters": [
-    ["LE", "Michael Strahan", "LE 92 M.Strahan", "Michael Strahan/LDE"],
-    ["DT", "Barry Cofield", "DT 96 B.Cofield", "Barry Cofield/DT"],
-    ["DT", "Fred Robbins", "DT 98 F.Robbins", "Fred Robbins/DT"],
-    ["RE", "Osi Umenyiora", "RE 72 O.Umenyiora", "Osi Umenyiora/RDE"],
-    ["SLB", "Reggie Torbor", "SLB 53 R.Torbor", "Reggie Torbor/SLB"],
-    ["MLB", "Antonio Pierce", "MLB 58 A.Pierce", "Antonio Pierce/MLB"],
-    ["WLB", "Kawika Mitchell", "WLB 55 K.Mitchell", "Kawika Mitchell/WLB"],
-    ["LCB", "Aaron Ross", "LCB 31 A.Ross", "Aaron Ross/LCB"],
-    ["RCB", "Corey Webster", "RCB 23 C.Webster", "Corey Webster/RCB"],
-    ["SS", "James Butler", "SS 37 Ja.Butler", "James Butler/SS"],
-    ["FS", "Gibril Wilson", "FS 28 G.Wilson", "Gibril Wilson/FS"]
+    [
+     "LE",
+     "Michael Strahan",
+     "LE 92 M.Strahan",
+     "Michael Strahan/LDE"
+    ],
+    [
+     "DT",
+     "Barry Cofield",
+     "DT 96 B.Cofield",
+     "Barry Cofield/DT"
+    ],
+    [
+     "DT",
+     "Fred Robbins",
+     "DT 98 F.Robbins",
+     "Fred Robbins/DT"
+    ],
+    [
+     "RE",
+     "Osi Umenyiora",
+     "RE 72 O.Umenyiora",
+     "Osi Umenyiora/RDE"
+    ],
+    [
+     "SLB",
+     "Reggie Torbor",
+     "SLB 53 R.Torbor",
+     "Reggie Torbor/SLB"
+    ],
+    [
+     "MLB",
+     "Antonio Pierce",
+     "MLB 58 A.Pierce",
+     "Antonio Pierce/MLB"
+    ],
+    [
+     "WLB",
+     "Kawika Mitchell",
+     "WLB 55 K.Mitchell",
+     "Kawika Mitchell/WLB"
+    ],
+    [
+     "LCB",
+     "Aaron Ross",
+     "LCB 31 A.Ross",
+     "Aaron Ross/LCB"
+    ],
+    [
+     "RCB",
+     "Corey Webster",
+     "RCB 23 C.Webster",
+     "Corey Webster/RCB"
+    ],
+    [
+     "SS",
+     "James Butler",
+     "SS 37 Ja.Butler",
+     "James Butler/SS"
+    ],
+    [
+     "FS",
+     "Gibril Wilson",
+     "FS 28 G.Wilson",
+     "Gibril Wilson/FS"
+    ]
    ],
    "facts": [
-    { "name": "Fred Robbins", "fact": "Game book lists DE 91 J.Tuck under Giants substitutions and pfr's starters omit him; Robbins and Barry Cofield are the two starting tackles on both." },
-    { "name": "Reggie Torbor", "fact": "Game book lineup SLB 53 R.Torbor; pfr starters Reggie Torbor/SLB." },
-    { "name": "Kawika Mitchell", "fact": "Game book lineup WLB 55 K.Mitchell; pfr starters Kawika Mitchell/WLB. Both scoring tables: the Patriots scored 14 points (a Maroney run and a Moss catch)." }
+    {
+     "name": "Fred Robbins",
+     "fact": "Game book lists DE 91 J.Tuck under Giants substitutions and pfr's starters omit him; Robbins and Barry Cofield are the two starting tackles on both."
+    },
+    {
+     "name": "Reggie Torbor",
+     "fact": "Game book lineup SLB 53 R.Torbor; pfr starters Reggie Torbor/SLB."
+    },
+    {
+     "name": "Kawika Mitchell",
+     "fact": "Game book lineup WLB 55 K.Mitchell; pfr starters Kawika Mitchell/WLB. Both scoring tables: the Patriots scored 14 points (a Maroney run and a Moss catch)."
+    }
+   ],
+   "opponent": "New England Patriots",
+   "venue": "University of Phoenix Stadium, Glendale",
+   "venueAsPrinted": "at University of Phoenix Stadium, Glendale, AZ",
+   "scoreLine": "Giants 17-14 Patriots",
+   "candidates": [
+    {
+     "name": "Fred Robbins",
+     "slotIndex": 2,
+     "nationality": "USA",
+     "bornPerPfr": "Pensacola, FL",
+     "pfrPlayer": "https://www.pro-football-reference.com/players/R/RobbFr20.htm",
+     "reveal": "Started at tackle. Justin Tuck came off the bench in this game."
+    },
+    {
+     "name": "Reggie Torbor",
+     "slotIndex": 4,
+     "nationality": "USA",
+     "bornPerPfr": "Baton Rouge, LA",
+     "pfrPlayer": "https://www.pro-football-reference.com/players/T/TorbRe20.htm",
+     "reveal": null
+    },
+    {
+     "name": "Kawika Mitchell",
+     "slotIndex": 6,
+     "nationality": "USA",
+     "bornPerPfr": "Winter Springs, FL",
+     "pfrPlayer": "https://www.pro-football-reference.com/players/M/MitcKa20.htm",
+     "reveal": "Started at weak-side linebacker in a game the Patriots scored 14 in."
+    }
    ]
   }
  ],
  "notShipped": [
-  { "id": "sb-xlii-nyg", "why": "Super Bowl XLII Giants offense. On 2026-10-03 the game book (WR Burress, LT Diehl, LG Seubert, C O'Hara, RG Snee, RT McKenzie, TE Boss, WR Toomer, QB Manning, TE M.Matthews, RB Jacobs) and pfr #vis_starters agree 11/11, but the file dropped this side in an earlier round because its sources then disagreed on the 11th starter. Left out here rather than overturning that call without the third source that disagreed; the lead can add it from this row." }
+  {
+   "id": "sb-xlii-nyg",
+   "why": "Super Bowl XLII Giants offense. On 2026-10-03 the game book (WR Burress, LT Diehl, LG Seubert, C O'Hara, RG Snee, RT McKenzie, TE Boss, WR Toomer, QB Manning, TE M.Matthews, RB Jacobs) and pfr #vis_starters agree 11/11, but the file dropped this side in an earlier round because its sources then disagreed on the 11th starter. Left out here rather than overturning that call without the third source that disagreed; the lead can add it from this row."
+  }
  ]
 }
