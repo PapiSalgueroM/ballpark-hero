@@ -147,10 +147,9 @@ try {
       await activate(celebrationTab, touch);
       assert.equal(await editor.getByText('Vortex Ghost', { exact: true }).count(), 1, 'Selected footwear reaches the preview');
       assert((await editor.innerText()).includes(sport.slug === 'soccer' ? 'All white. You do NOT slide tackle in these.' : `${sport.gear} in clean white.`));
-      const pose = sport.slug === 'soccer' ? 'Backflip' : 'Fist Pump';
       await activate(editor.getByRole('button', { name: sport.slug === 'soccer' ? /^🤸\s*Backflip$/ : /^✊\s*Fist Pump$/ }), touch);
       await activate(gearTab, touch);
-      assert.equal(await editor.getByText(pose, { exact: false }).count(), 1, 'Selected pose reaches the preview');
+      assert.equal(await editor.getByText(sport.slug === 'soccer' ? /^🤸\s*Backflip$/ : /^✊\s*Fist Pump$/).count(), 1, 'Selected pose reaches the preview');
       assert((await editor.innerText()).includes(sport.slug === 'soccer' ? 'throw a full backflip that makes the physio cover their eyes' : 'punch one fist into the air'));
       result.layouts.push(await layout(page, editor)); await shot('selected');
       await activate(celebrationTab, touch);
