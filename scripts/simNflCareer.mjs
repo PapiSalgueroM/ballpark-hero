@@ -48,6 +48,21 @@
        NFL_CAREER_CONTROL=earlywindow  (the second year card at yrs 2: 8)
        NFL_CAREER_CONTROL=loadedflip   (every flip at 0.6: 16 failures)
        NFL_CAREER_CONTROL=flatcash     (deck C pays 2026 money in 2005: 640)
+
+   Round 917 second review, two gaps the first fix left:
+   - POSITION AND AGE GATES. Pointing the tight end block at 'WR', or the
+     past thirty line at 20, stayed green. Every position card is now dealt
+     to every grid fixture of its own position (read off its id) and to no
+     other, and every veteran card is checked at 23, 29, 30, 31 and 32 against
+     its line (30, or 31 for body_bill, two_clips and booth_audition), for
+     every position, role and era. Who gets dealt what: 8,582 checks.
+   - RIVALRY BEAT WORDS. The six new beats (218 to 223) are applied 48 times
+     and what the player reads is compared with what moved.
+   Controls, each measured red on a 40 career fleet:
+       NFL_CAREER_CONTROL=wrongpos     (tight end cards go to receivers: 192)
+       NFL_CAREER_CONTROL=youngvet     (the 30 line at 20: 128)
+       NFL_CAREER_CONTROL=vetline      (the 31 line at 30: 64)
+       NFL_CAREER_CONTROL=rivalwords   (beat 223 morale -5 under "-2": 8)
 */
 /* Round 299: seeded stream, see scripts/lib/seedRandom.mjs. First import on purpose. */
 import './lib/seedRandom.mjs';
@@ -110,6 +125,27 @@ const CONTROLS = {
     old: 'Math.max(0.1, r1(nflEraById(c.eraId).moneyScale * m))',
     neu: 'Math.max(0.1, r1(m))',
   },
+  /* Round 917 second review: the position and age gates. */
+  wrongpos: { /* the tight end cards go to receivers, tight ends get none */
+    file: 'nflCareerLifeC.ts',
+    old: "if (c.pos === 'TE') {",
+    neu: "if (c.pos === 'WR') {",
+  },
+  youngvet: { /* the past thirty cards reach a 23 year old */
+    file: 'nflCareerLifeC.ts',
+    old: 'if (c.age >= 30) {',
+    neu: 'if (c.age >= 20) {',
+  },
+  vetline: { /* the 31 line slips to 30, one year early */
+    file: 'nflCareerLifeC.ts',
+    old: 'if (c.age >= 31) {',
+    neu: 'if (c.age >= 30) {',
+  },
+  rivalwords: { /* beat 223 takes morale -5 under "Morale -2" */
+    file: 'nflCareerRivalryEvents.ts',
+    old: 's.morale = clamp(s.morale - 2, 0, 100);\n      s.rivalryIntensity = clamp((s.rivalryIntensity ?? 0) + 6, 0, 100);',
+    neu: 's.morale = clamp(s.morale - 5, 0, 100);\n      s.rivalryIntensity = clamp((s.rivalryIntensity ?? 0) + 6, 0, 100);',
+  },
 };
 if (CONTROL && !CONTROLS[CONTROL]) { console.error(`unknown NFL_CAREER_CONTROL ${CONTROL}`); process.exit(2); }
 const controlPlugin = {
@@ -131,7 +167,7 @@ await build({
   /* One bundle, two doors: the engine, and deck C's own builder for the
      words against effects check (one module instance, so they agree). */
   stdin: {
-    contents: "export * from './src/lib/nflMyCareer.ts';\nexport { getNflLifeEventsC } from './src/lib/nflCareerLifeC.ts';\n",
+    contents: "export * from './src/lib/nflMyCareer.ts';\nexport { getNflLifeEventsC } from './src/lib/nflCareerLifeC.ts';\nexport { NFL_RIVALRY_EVENTS } from './src/lib/nflCareerRivalryEvents.ts';\n",
     resolveDir: process.cwd(), loader: 'ts',
   },
   bundle: true, format: 'esm', platform: 'node', outfile: OUT,
@@ -142,6 +178,7 @@ const {
   ARCHETYPES, startCareer, simSeason, progress, drawEvent, shouldRetire,
   legacyOf, careerTotals, rollTeamQuality, marketSalary,
   NFL_SPEND_ITEMS, buyNflItem, nflAssignRole, nflCampBattle, getNflLifeEventsC, nflEraById,
+  NFL_RIVALRY_EVENTS,
 } = eng;
 
 const CAREERS = Number(process.argv[2] || 400);
@@ -454,8 +491,85 @@ for (const eraId of [undefined, 'y2005']) for (const pos of POSITIONS) for (cons
     const o = { role: 'starter', year: 2026, yrs, age: 23 };
     gate(has(pos, o, id) === window.includes(yrs), `${id} ${window.includes(yrs) ? 'not dealt' : 'dealt'} to a ${pos} at yrs ${yrs}; its window is yrs ${window.join(' or ')}`);
   }
+  /* Round 917 second review: the position and age gates. Pointing the tight
+     end block at 'WR', or moving the past thirty line to 20, stayed green.
+     A position card's home is read off its id (lifeC_te_ is a tight end's),
+     never off where the deck deals it, so a gate aimed at the wrong position
+     cannot teach the harness the wrong answer. Every position card is dealt
+     to every grid fixture of its own position and to no other position.
+     (Control: wrongpos.) */
+  const POS_OF_PREFIX = { qb: 'QB', rb: 'RB', wr: 'WR', te: 'TE', lb: 'LB', cb: 'CB', edge: 'EDGE', k: 'K' };
+  const homeOf = id => POS_OF_PREFIX[id.replace(/^lifeC_/, '').split('_')[0]];
+  const POSITION_IDS = LIFE_C_IDS.filter(id => homeOf(id)).sort();
+  const positionCat = [...categoryOf].filter(([, cat]) => cat === 'position').map(([id]) => id).sort();
+  gate(positionCat.join(',') === POSITION_IDS.join(','), `the position cards by section [${positionCat.join(', ')}] are not the ones named by position [${POSITION_IDS.join(', ')}]`);
+  for (const pos of POSITIONS) {
+    gate(POSITION_IDS.filter(id => homeOf(id) === pos).length >= 2, `${pos} has fewer than two position cards`);
+    for (const g of GRID) {
+      const ids = dealt(pos, g).map(e => e.id);
+      for (const id of POSITION_IDS) {
+        if (homeOf(id) === pos) gate(ids.includes(id), `${id} not dealt to a ${pos} (${g.year}, ${g.role}, yrs ${g.yrs}, age ${g.age})`);
+        else gate(!ids.includes(id), `${id}, a ${homeOf(id)} card, dealt to a ${pos}`);
+      }
+    }
+  }
+  /* The past thirty cards, on both sides of each line, for every position,
+     role and era. (Controls: youngvet, vetline.) */
+  const VET_LINE = { lifeC_vet_rest_day: 30, lifeC_your_replacement: 30, lifeC_body_bill: 31, lifeC_two_clips: 31, lifeC_booth_audition: 31 };
+  const vets = [...categoryOf].filter(([, cat]) => cat === 'veteran').map(([id]) => id).sort();
+  gate(vets.join(',') === Object.keys(VET_LINE).sort().join(','), `the veteran cards [${vets.join(', ')}] are not the ones this harness has age lines for`);
+  for (const eraId of [undefined, 'y2005']) for (const pos of POSITIONS) for (const role of ['starter', 'backup']) for (const age of [23, 29, 30, 31, 32]) {
+    const ids = dealt(pos, { eraId, role, year: 2026, yrs: 6, age }).map(e => e.id);
+    for (const [id, line] of Object.entries(VET_LINE)) {
+      gate(ids.includes(id) === (age >= line), `${id} ${age >= line ? 'not dealt' : 'dealt'} to a ${pos} ${role} aged ${age}; its line is ${line}`);
+    }
+  }
 }
 const gateFailCount = gateFails.length;
+
+/* ── Round 917 second review: THE SIX RIVALRY BEATS, WORDS AGAINST EFFECTS ──
+   simCareerRivalryEvents proves each beat is reachable and moves some state;
+   it never compared the words with the move, so beat 223 taking morale -5
+   under "Morale -2" stayed green. Each of this round's six beats is applied
+   at rolls 0.25, 0.4999, 0.5001 and 0.75, once with you rated above the
+   rival and once below, from a mid range save. What the player reads is the
+   line the beat pushes when it pushes one, else the card's consequence; its
+   numbers must equal the move to the point, "intensifies" must raise the
+   rivalry, "softens" lower it, and neither word means no change. A "50/50"
+   beat must land its two ends either side of 0.5. 48 applies; the six older
+   NFL beats and the other three sports are not covered here (the shared
+   harness is not this round's file). (Control: rivalwords.) */
+const RIVAL_BEATS = [218, 219, 220, 221, 222, 223];
+const rivalFails = [];
+let rivalApplies = 0;
+for (const id of RIVAL_BEATS) {
+  const def = NFL_RIVALRY_EVENTS.find(d => d.id === id);
+  if (!def) { rivalFails.push(`beat ${id} is missing`); continue; }
+  for (const above of [true, false]) {
+    const ends = [];
+    for (const roll of [0.25, 0.4999, 0.5001, 0.75]) {
+      const s = Object.assign(fixtureFor('QB', { year: 2026, role: 'starter', yrs: 6, age: 28 }), {
+        morale: 50, fanbase: 60, health: 60, ovr: above ? 86 : 80, rivalryIntensity: 50,
+      });
+      const r = { name: 'Words Rival', team: s.team === 'KC' ? 'DAL' : 'KC', ovr: above ? 80 : 86, age: 28, retired: false };
+      const before = { ...snapshot(s), heat: s.rivalryIntensity };
+      const lines = [];
+      def.apply(s, r, () => roll, line => lines.push(line));
+      rivalApplies++;
+      const moved = Object.fromEntries(FIELDS.map(f => [f, Math.round((snapshot(s)[f] - before[f]) * 10) / 10]));
+      const heat = s.rivalryIntensity - before.heat;
+      const read = lines.length ? lines.join(' ') : def.consequence;
+      const said = parseWords(read);
+      if (vecKey(said) !== vecKey(moved)) rivalFails.push(`beat ${id}: the player reads "${read}" and the save moved [${vecKey(moved)}]`);
+      const heatWord = /intensif/i.test(def.consequence) ? 1 : /soften/i.test(def.consequence) ? -1 : 0;
+      if (Math.sign(heat) !== heatWord) rivalFails.push(`beat ${id}: "${def.consequence}" and the rivalry moved ${heat}`);
+      ends.push(vecKey(moved));
+    }
+    if (/50\/50/.test(def.consequence) && ends[1] === ends[2]) rivalFails.push(`beat ${id}: sold as 50/50 and rolls of 0.4999 and 0.5001 land the same end`);
+  }
+}
+const RIVAL_APPLIES_MIN = 48;
+if (rivalApplies < RIVAL_APPLIES_MIN) rivalFails.push(`only ${rivalApplies} rivalry beat applies made, the floor is ${RIVAL_APPLIES_MIN}`);
 
 unlinkSync(OUT);
 
@@ -492,6 +606,8 @@ console.log(`who gets dealt what: ${gateChecks} checks on both sides of every ru
 const gateKinds = [...new Set(gateFails)];
 for (const f of gateKinds.slice(0, 8)) console.log(`  GATE: ${f}`);
 if (gateKinds.length > 8) console.log(`  GATE: and ${gateKinds.length - 8} more kinds`);
+console.log(`rivalry beat words : ${rivalApplies} applies over beats ${RIVAL_BEATS.join(', ')}, ${rivalFails.length} disagreements`);
+for (const f of [...new Set(rivalFails)].slice(0, 8)) console.log(`  RIVAL: ${f}`);
 console.log('\nsample stat lines by position:');
 for (const p of POSITIONS) {
   const lines = byPos[p] || [];
@@ -531,6 +647,7 @@ if (flipChecks < FLIP_CHECKS_MIN) fails.push(`only ${flipChecks} coin flip rolls
 if (cashChecks < CASH_CHECKS_MIN) fails.push(`only ${cashChecks} era money comparisons made, the floor is ${CASH_CHECKS_MIN}`);
 if (!(ERA_SCALE < 0.9)) fails.push(`the 2005 money scale is ${ERA_SCALE}, too close to 1 for the era money check to mean anything`);
 if (gateFailCount) fails.push(`${gateFailCount} cards dealt where their words are not true, or not dealt where they are`);
+if (rivalFails.length) fails.push(`${rivalFails.length} rivalry beat words against effects disagreements`);
 if (CONTROL) console.log(`\nCONTROL ${CONTROL} is on: this run is EXPECTED to fail.`);
-console.log(fails.length ? `\nFAIL: ${fails.join('; ')}` : '\nPASS: no crashes, every position produces stats, shop fully reachable, deck C drawn and its words true, its coin flips even, its money in the era, and every card dealt only where its words hold');
+console.log(fails.length ? `\nFAIL: ${fails.join('; ')}` : '\nPASS: no crashes, every position produces stats, shop fully reachable, deck C drawn and its words true, its coin flips even, its money in the era, every card dealt only where its words hold, and the six new rivalry beats doing what they say');
 process.exit(fails.length ? 1 : 0);

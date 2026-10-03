@@ -220,11 +220,15 @@ export const NFL_RIVALRY_EVENTS: RivalryEventDef<CareerState, CareerRival>[] = [
      on what the rival's save carries, narrated and never quoted, and every
      consequence line says what the apply does. The rival is drafted onto
      the player's own team (draftRival in careerRival.ts takes c.team), so a
-     beat that sets the two of you on opposite sides (218, 219, 221, 223)
-     gates on r.team !== s.team. */
+     beat that only reads right with the two of you on different teams (218,
+     219, 221, 223) gates on r.team !== s.team. The engine's team tables carry
+     no conference, so no beat promises a game the schedule may not hold (218
+     bills the promos, not a meeting) or a shared sideline (the all star game
+     is one conference against the other, so 221 says only that the two of
+     you spend the week around each other). */
   {
     id: 218, emoji: "🌙", title: "Prime Time Billing",
-    description: (_s, r) => `The schedule comes out and your game against ${r.name}'s team is the night game. The whole country gets the two of you now.`,
+    description: (_s, r) => `The schedule comes out and the network builds its prime time promos around you and ${r.name}, your faces side by side. The whole country gets the two of you now.`,
     consequence: "Fanbase +6, rivalry intensifies",
     when: (s, r) => !r.retired && r.team !== s.team && s.fanbase >= 55,
     apply: s => {
@@ -253,8 +257,8 @@ export const NFL_RIVALRY_EVENTS: RivalryEventDef<CareerState, CareerRival>[] = [
     },
   },
   {
-    id: 221, emoji: "🌺", title: "Same Side for a Week",
-    description: (_s, r) => `You and ${r.name} both make the all star roster and spend a week on the same sideline. It turns out he is easy to like.`,
+    id: 221, emoji: "🌺", title: "All Star Week",
+    description: (_s, r) => `You and ${r.name} both make the all star roster and spend the week around each other. It turns out he is easy to like.`,
     consequence: "Fanbase +4, the feud softens",
     when: (s, r) => !r.retired && r.team !== s.team && s.ovr >= 82 && r.ovr >= 82,
     apply: s => {
