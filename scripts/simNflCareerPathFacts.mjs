@@ -20,8 +20,9 @@
  *      equals the record.
  *   3. The record holds up: every fact has sources on two or more different hosts, each with an
  *      https url, a read date and what it showed. Facts too thin for two hosts are listed under
- *      "thin" with a reason, and that list is a ratchet: it may shrink, never grow (baseline 1,
- *      Reggie White's 1984 supplemental draft, which only the nflverse players table shows).
+ *      "thin" with a reason, and that list is a ratchet: it may shrink, never grow. Baseline 0 since the
+ *      review fix: Reggie White's 1984 supplemental draft was thin (nflverse only) until drafthistory.com's
+ *      1984 supplemental draft table gave it a second host.
  *   4. The career stat text says what its sources say: the number in the text (and its "+") must
  *      satisfy every source value the record kept, so "250+ TD passes" fails if the sources show 240.
  *   5. Shape: first team is the first club of the path, every club name is a real NFL club name in
@@ -44,7 +45,7 @@
  *   onesource  strips a fact down to one host in the record                section 3
  *   roster     moves Aaron Rodgers to the Jets in the roster file copy      section 6
  *   order      swaps the first two rows                                     section 1
- *   thin       adds a second thin fact to the record                       section 3
+ *   thin       adds a thin fact to the record (the baseline is 0)           section 3
  *   example    puts "7x Super Bowl Champion" back on the Tom Brady example     section 8
  *
  *   node scripts/simNflCareerPathFacts.mjs
@@ -58,7 +59,7 @@ const DATA = path.join(ROOT, 'src/data/nflCareerPlayers.ts');
 const RECORD = path.join(ROOT, 'scripts/data/nflCareerPathVerified2026-10.json');
 const ROSTER = path.join(ROOT, 'scripts/data/nflRosters2026.json');
 const PAGE = path.join(ROOT, 'src/pages/NFLCareer.tsx');
-const THIN_BASELINE = 1;
+const THIN_BASELINE = 0;
 const JOIN_FLOOR = 30;
 
 // Read the code, not the comments: drop block and line comments before matching rows.
@@ -237,7 +238,7 @@ const CONTROLS = {
   thin: { secs: [3], plant(c) {
     const r = c.record.rows.find(x => x.name === 'Tom Brady');
     must(r && !r.thin, 'Brady already thin');
-    r.thin = [{ field: 'draft', why: 'planted by the control: a second thin fact must break the ratchet baseline', sources: [] }];
+    r.thin = [{ field: 'draft', why: 'planted by the control: one more thin fact than the baseline must break the ratchet', sources: [] }];
   } },
 };
 
