@@ -638,6 +638,13 @@ console.log('6) The MLB binding: every beat reachable and correct, and the tick 
     215: [mlbFixture({ ovr: 90 }), rivalFixture({ ovr: 90 })],
     216: [mlbFixture({ age: 30 }), rivalFixture()],
     217: [mlbFixture({ age: 34 }), rivalFixture()],
+    /* Round 919: the six new MLB beats. */
+    218: [mlbFixture({ pos: 'SS' }), rivalFixture({ pos: 'SS' })],
+    219: [mlbFixture({ pos: 'SS' }), rivalFixture({ pos: 'SP' })],
+    220: [mlbFixture({ ovr: 80 }), rivalFixture({ ovr: 84 })],
+    221: [mlbFixture({ age: 24 }), rivalFixture({ age: 24 })],
+    222: [mlbFixture({ team: 'BOS' }), rivalFixture({ team: 'NYY' })],
+    223: [mlbFixture({ age: 34 }), rivalFixture({ age: 35 })],
   };
   let reachable = 0, correct = 0;
   const total = mlbRivalry.MLB_RIVALRY_EVENTS.length;
