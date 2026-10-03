@@ -40,7 +40,7 @@ const groups = {
   fetch: { files: ['src/lib/fetchFootlePlayerPool.test.ts'], titles: ['returns an empty pool when either obscure query fails', 'keeps the famous and obscure tiers on a complete successful fetch', 'keeps the empty fallback behavior when the famous query fails', mapper] },
 };
 const controls = {
-  tier: { file: model, anchor: 'player.difficulty !== tier || seen.has(key)', replacement: 'seen.has(key)', failed: [tierTitles[1], tierTitles[2], titles.short] },
+  tier: { file: model, anchor: 'player.difficulty !== tier || seen.has(key)', replacement: 'seen.has(key)', failed: [tierTitles[1], tierTitles[2], titles.short, titles.frozen] },
   daily: { file: model, anchor: 'new Set<string>([identity(dailyName)])', replacement: 'new Set<string>()', failed: [...tierTitles, titles.aliases] },
   aliases: { file: model, anchor: 'const identity = normalizeName;', replacement: 'const identity = (name: string) => name.trim().toLowerCase();', failed: [titles.aliases] },
   distinct: { file: model, anchor: 'targets: candidates.slice(0, PRACTICE_LENGTH).map(player => player.name)', replacement: 'targets: candidates.slice(0, PRACTICE_LENGTH).map(() => candidates[0].name)', failed: [...tierTitles, titles.aliases, titles.frozen, titles.finished] },
@@ -73,12 +73,13 @@ const folder = await mkdtemp(path.join(parent, 'footle995-'));
 const output = path.join(root, 'footle-practice-artifacts/behavior'); await mkdir(output, { recursive: true });
 const sources = new Map();
 for (const relative of new Set(Object.values(controls).map(control => control.file))) sources.set(relative, await readFile(path.join(root, relative)));
-const outcomes = [];
+const outcomes = [], problems = [];
 try {
   const modes = mode === 'all' ? [...Object.keys(groups).map(group => ({ group })), ...Object.keys(controls).map(control => ({ control }))] : mode ? [{ control: mode }] : Object.keys(groups).map(group => ({ group }));
   for (const entry of modes) {
     const control = controls[entry.control], group = groups[control?.group ?? entry.group ?? 'model'];
     const name = entry.control || `normal-${entry.group}`, env = { ...process.env, FORCE_COLOR: '0' };
+    try {
     delete env.NO_DOUBLE_SWAP;
     if (control) {
       const source = sources.get(control.file).toString('utf8').replaceAll('\r\n', '\n');
@@ -111,8 +112,13 @@ try {
     for (const row of rows) console.log(`${name} ${row.status.toUpperCase()}: ${row.title}`);
     outcomes.push({ mode: name, total: rows.length, passed: rows.length - rejected.length, rejected: rejected.map(row => row.title), expected });
     for (const [relative, bytes] of sources) assert.deepEqual(await readFile(path.join(root, relative)), bytes, `${relative}: product bytes held`);
+    } catch (error) {
+      problems.push({ mode: name, name: error.name, message: error.message });
+      console.error(`${name}: UNEXPECTED FAILURE: ${error.message}`);
+    }
   }
-  await writeFile(path.join(output, 'verified-summary.json'), JSON.stringify({ outcomes, sourceSha256: Object.fromEntries([...sources].map(([file, bytes]) => [file, createHash('sha256').update(bytes).digest('hex')])), scope: 'Actual models and mounted page/hook outcomes with frozen fictional fixtures. Effective copied-source controls. Native built-site verification is separate; no live database audit.' }, null, 2));
+  await writeFile(path.join(output, 'verified-summary.json'), JSON.stringify({ outcomes, problems, sourceSha256: Object.fromEntries([...sources].map(([file, bytes]) => [file, createHash('sha256').update(bytes).digest('hex')])), scope: 'Actual models and mounted page/hook outcomes with frozen fictional fixtures. Effective copied-source controls. Native built-site verification is separate; no live database audit.' }, null, 2));
+  assert.deepEqual(problems, [], 'Every mode must satisfy the unchanged exact outcome assertions');
   console.log(`Footle practice: ${outcomes.length} modes completed, every expected case executed and exact controls verified.`);
 } finally {
   assert.equal(path.dirname(folder), parent); assert.ok(path.basename(folder).startsWith('footle995-'));
