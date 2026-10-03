@@ -39,7 +39,10 @@ const mount = (row: SportCase) => render(<StrictMode><row.Board /></StrictMode>)
 async function open(view: ReturnType<typeof render>) {
   const card = view.getByRole('region', { name: 'Season practice' });
   fireEvent.click(within(card).getByRole('button', { name: 'Start practice' }));
-  await view.findByRole('button', { name: 'Practice rules' });
+  /* Round 988: the dialog sits behind a lazy screen and an async drill load,
+     and a loaded machine needs more than findByRole's default second for the
+     first one (measured 1.3 to 2.4 s on this tree and on main 3da2d38f). */
+  await view.findByRole('button', { name: 'Practice rules' }, { timeout: 10000 });
   return view.getByRole('dialog');
 }
 function playBurst(dialog: HTMLElement, row: SportCase, taps = 25) {
@@ -57,6 +60,14 @@ function bank(dialog: HTMLElement) {
   act(() => { fireEvent.click(button); fireEvent.click(button); });
 }
 function close(dialog: HTMLElement) { fireEvent.click(within(dialog).getByRole('button', { name: 'Back to your career' })); }
+
+/* Round 988: these tests mount whole career boards in jsdom, and the one
+   that plays a season took 4.7 to 6.8 s on main 3da2d38f on a loaded
+   machine against the default 5, timing out without one assertion failing.
+   Thirty seconds a test; open() below waits ten for the practice dialog, so
+   a dialog that never comes is still an assertion failure, not a timeout.
+   No assertion changed. */
+vi.setConfig({ testTimeout: 30000 });
 
 /* Round 988: warm the two lazy imports a practice open waits on (the
    practice screen, and each sport's drills) before any test opens one.
@@ -206,11 +217,7 @@ describe('US career practice on the actual boards', () => {
     const nextDialog = await open(view);
     playBurst(nextDialog, row); bank(nextDialog);
     expect(saved(row).c.practice?.year).toBe(before.c.year + 1);
-  /* Round 988: this one plays a whole season on the real board and resolves
-     its offseason. Measured on main 3da2d38f on a loaded machine it took 4.7
-     to 6.8 seconds against the default 5, so it timed out without a single
-     assertion failing. The assertions are untouched. */
-  }, 30000);
+  });
 
   it.each(SPORTS)('$label keeps pending rivalry ahead of practice and resets a finished career cleanly', async row => {
     const pending = { id: 0, emoji: '🏀', title: 'Simulated rival beat', description: 'A fixture decision is waiting.', consequence: 'Resolve this beat first.' };
