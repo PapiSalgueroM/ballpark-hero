@@ -419,9 +419,11 @@
    "loan": true,
    "loanFrom": "Cagliari",
    "adjudicatedOn": "2026-10-03",
-   "note": "Born 2002-03-09. Loaned by Cagliari to Mallorca on 2026-02-02, to 2027-06-30. Mallorca went down from LaLiga in 2026 and is not modelled in the current game. ESPN has two Zito Luvumbo pages, both Angola national team records, so ESPN is not used for his club.",
+   "note": "Born 2002-03-09. Loaned by Cagliari to Mallorca on 2026-02-02, and on 2026-07-10 Cagliari announced a new loan to Mallorca to the end of 2026-27, with an option to buy that becomes an obligation on sporting conditions. Mallorca went down from LaLiga in 2026 and is not modelled in the current game. ESPN's two Zito Luvumbo player pages are Angola national team records, but ESPN's 2026-27 Mallorca squad page lists him at 11, aged 24, Angola, which matches his birth date.",
    "sources": [
     {"family": "A", "url": "https://www.legaseriea.it/team/cagliari/squad", "publisher": "Lega Serie A (Cagliari squad, current)", "readOn": "2026-10-03", "says": "not listed"},
+    {"family": "A", "url": "https://cagliaricalcio.com/news/luvumbo-al-maiorca-cagliaricalcio-seria-liga/", "publisher": "Cagliari Calcio (club announcement, 2026-07-10)", "readOn": "2026-10-03", "says": "Zito Luvumbo joins RCD Mallorca on loan to the end of the 2026/27 season, option to buy that becomes an obligation on sporting conditions"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/84/mallorca", "publisher": "ESPN (Mallorca squad page, season 2026-27)", "readOn": "2026-10-03", "says": "Zito Luvumbo, forward, shirt 11, age 24, Angola, 5 appearances"},
     {"family": "B", "url": "https://us.soccerway.com/player/luvumbo-zito/QZQ9DtPs/transfers", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "on loan at Mallorca from Cagliari since 2026-02-02, to 2027-06-30, born 2002-03-09"},
     {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/2925/cagliari", "publisher": "ESPN (Cagliari squad page, season 2026-27)", "readOn": "2026-10-03", "says": "not listed"}
    ]
