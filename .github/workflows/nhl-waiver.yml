@@ -26,7 +26,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: nhl-waiver-${{ github.ref }}
+  group: nhl-waiver-${{ github.head_ref || github.ref_name }}
   cancel-in-progress: true
 
 jobs:
@@ -56,7 +56,7 @@ jobs:
           mkdir -p "$RUNNER_TEMP/nhl-waiver970" nhl-waiver-artifacts
           echo "TMPDIR=$RUNNER_TEMP/nhl-waiver970" >> "$GITHUB_ENV"
           npm ci
-          npm install --no-save --package-lock=false playwright
+          npm install --no-save playwright
           npx playwright install --with-deps chromium
           python -m pip install fonttools pillow
       - name: Type check and build
