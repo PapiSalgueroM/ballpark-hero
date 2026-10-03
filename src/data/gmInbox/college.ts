@@ -31,7 +31,7 @@ export const COLLEGE_GM_INBOX: GmInboxPack = {
   money: { prefix: '$', suffix: 'M' },
   perWeek: 1,
   cooldown: 19,
-  chance: 0.35,
+  chance: 0.5,
   events: [
     {
       id: 'col_freshman_reps', beat: 'offseason', from: 'Your coordinator', emoji: '📋',

@@ -30,7 +30,7 @@ export const MLB_GM_INBOX: GmInboxPack = {
   money: { prefix: '$', suffix: 'M' },
   perWeek: 1,
   cooldown: 22,
-  chance: 0.35,
+  chance: 0.5,
   events: [
     {
       id: 'mlb_qualifying_offer', beat: 'qo', from: 'Your capologist', emoji: '📑',

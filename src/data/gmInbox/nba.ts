@@ -31,7 +31,7 @@ export const NBA_GM_INBOX: GmInboxPack = {
   money: { prefix: '$', suffix: 'M' },
   perWeek: 1,
   cooldown: 22,
-  chance: 0.35,
+  chance: 0.5,
   events: [
     {
       id: 'nba_trade_demand', beat: 'deadline', from: 'His agent', emoji: '💼',

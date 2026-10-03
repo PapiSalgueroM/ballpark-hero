@@ -27,7 +27,7 @@ export const GYM_GM_INBOX: GmInboxPack = {
   money: { prefix: '$', suffix: 'M' },
   perWeek: 1,
   cooldown: 14,
-  chance: 0.35,
+  chance: 0.5,
   events: [
     {
       id: 'gym_sparring_knock', beat: 'camp', from: 'Your head trainer', emoji: '🥊',

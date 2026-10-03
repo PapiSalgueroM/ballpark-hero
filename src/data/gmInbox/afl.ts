@@ -28,7 +28,7 @@ export const AFL_GM_INBOX: GmInboxPack = {
   money: { prefix: 'A$', suffix: 'M' },
   perWeek: 1,
   cooldown: 20,
-  chance: 0.35,
+  chance: 0.5,
   events: [
     {
       id: 'afl_altitude_camp', beat: 'preseason', from: 'Your high performance manager', emoji: '🏔️',

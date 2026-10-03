@@ -25,17 +25,28 @@
         run, and in at least REACH_FLOOR of them.
      6) SAME SEED, SAME DECK, and a different seed deals a different one.
 
-   MEASURED (filled in from runs over seeds 1 to 5, see RATE_BANDS).
+   MEASURED at seeds 1 to 5 (100 desks of 10 seasons a pack, every pack at
+   chance 0.5), mean events a season:
+     nfl 2.76 to 2.86, nba 2.27 to 2.37, mlb 2.53 to 2.57, nhl 2.73 to 2.79,
+     college 3.31 to 3.34, gym 2.83 to 2.84, afl 2.82 to 2.99.
+   Seasons with no event at all: 0.0% (gym) to 5.7% (nba).
+   About 19,300 to 19,650 events dealt a run, 0 rule breaks at every seed.
+   The rarest event (nba_trade_demand, two conditions) reached 41% to 49% of
+   ten season runs, so REACH_FLOOR is 25%.
 
    Negative controls, each must turn this harness red:
      GM_INBOX_CONTROL=quote   puts a quoted first person line under a real
                               roster name into the NFL pack; section 1 fails.
      GM_INBOX_CONTROL=flip    flips one condition in the pack the engine
                               reads (not the pristine copy); section 3 fails.
-     GM_INBOX_CONTROL=cool    zeroes the cooldowns the engine reads; section 3
-                              fails.
+     GM_INBOX_CONTROL=cool    zeroes the cooldowns the engine reads; sections 3
+                              and 4 fail.
      GM_INBOX_CONTROL=drift   the engine stops applying the weeks out effect;
                               section 2 fails.
+     GM_INBOX_CONTROL=never   one event's condition can never be true; section
+                              5 fails.
+     GM_INBOX_CONTROL=random  the engine rolls chance on Math.random instead of
+                              the seeded stream; section 6 fails.
    Each control asserts the thing it mutates exists first, and refuses to run
    otherwise.
 
@@ -49,7 +60,7 @@ import { build } from 'esbuild';
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.GM_INBOX_CONTROL || '';
 const SEED = Number(process.env.SEED || 1);
-if (CONTROL && !['quote', 'flip', 'cool', 'drift'].includes(CONTROL)) {
+if (CONTROL && !['quote', 'flip', 'cool', 'drift', 'never', 'random'].includes(CONTROL)) {
   console.error(`GM_INBOX_CONTROL=${CONTROL} is not a control this harness knows`);
   process.exit(2);
 }
@@ -69,6 +80,12 @@ if (CONTROL === 'drift') {
   const line = 'if (c.out && c.out.weeks > 0) seat.setOut(s, c.out.who, c.out.weeks);';
   if (!src.includes(line)) { console.error('drift control: the out effect line is not in gmInbox.ts, refusing to run'); process.exit(2); }
   engineSrc = src.replace(line, '/* drift control: out effect dropped */');
+}
+if (CONTROL === 'random') {
+  const src = fs.readFileSync(ENGINE, 'utf8');
+  const roll = 'filter(e => rng() < (e.chance ?? pack.chance))';
+  if (!src.includes(roll)) { console.error('random control: the chance roll is not in gmInbox.ts, refusing to run'); process.exit(2); }
+  engineSrc = src.replace(roll, 'filter(e => Math.random() < (e.chance ?? pack.chance))');
 }
 const ENTRY = path.join(tmpDir, 'entry.mjs');
 const BUNDLE = path.join(tmpDir, 'bundle.mjs');
@@ -241,6 +258,141 @@ const sgn = v => (v > 0 ? `+${v}` : `${v}`);
   if (options < 100) fail(`only ${options} options checked`);
   if (bad.length) fail(`${bad.length} options move something other than their card`);
   else ok('every option moved exactly its declared effects, its card said exactly that, and moved once');
+}
+
+/* ═══ 3 to 6. The deck over 1,000 seasons a pack ═══ */
+
+if (CONTROL === 'flip') {
+  const e = PACKS.nfl.events.find(x => x.id === 'nfl_holdout');
+  const c = e?.when?.find(x => x.fact === 'starExpiring' && x.op === '==' && x.value === true);
+  if (!c) { console.error('flip control: nfl_holdout has no starExpiring == true condition, refusing to run'); process.exit(2); }
+  c.value = false;
+}
+if (CONTROL === 'never') {
+  const c = PACKS.nfl.events.find(x => x.id === 'nfl_holdout')?.when?.find(x => x.fact === 'starExpiring');
+  if (!c) { console.error('never control: nfl_holdout has no starExpiring condition, refusing to run'); process.exit(2); }
+  c.value = 'never';
+}
+if (CONTROL === 'cool') {
+  if (!SEATS.some(k => PACKS[k].cooldown > 0)) { console.error('cool control: no pack has a cooldown, refusing to run'); process.exit(2); }
+  for (const k of SEATS) { PACKS[k].cooldown = 0; for (const e of PACKS[k].events) if (e.cooldown !== undefined) e.cooldown = 0; }
+}
+
+const DESKS = 100;
+const SEASONS = 10;
+const holds = (c, facts) => {
+  if (!(c.fact in facts)) return false;
+  const v = facts[c.fact];
+  if (c.op === '==') return v === c.value;
+  if (c.op === '!=') return v !== c.value;
+  if (typeof v !== 'number') return false;
+  return c.op === '<' ? v < c.value : c.op === '<=' ? v <= c.value : c.op === '>' ? v > c.value : v >= c.value;
+};
+const draw = (spec, rng) => (spec.kind === 'bool' ? rng() < spec.p : Math.round((spec.min + rng() * (spec.max - spec.min)) * 100) / 100);
+
+/** One desk, ten seasons. Every judgement is made against the pristine pack. */
+function runDesk(seat, desk, seed) {
+  const pack = PACKS[seat];
+  const pristine = PRISTINE[seat];
+  const byId = new Map(pristine.events.map(e => [e.id, e]));
+  const weeks = E.gmSeasonWeeks(pristine);
+  const factRng = keyedRng(`simGmInbox|${seat}|${seed}|${desk}|facts`);
+  const deckRng = keyedRng(`simGmInbox|${seat}|${seed}|${desk}|deck`);
+  const answerRng = keyedRng(`simGmInbox|${seat}|${seed}|${desk}|answer`);
+  const s = newDesk();
+  const bound = bindDesk(pack);
+  const seen = new Set();
+  const lastAt = {};
+  const log = [];
+  const perSeason = [];
+  const bad = [];
+  let clock = 0;
+  for (let season = 0; season < SEASONS; season++) {
+    s.year = 2030 + season;
+    const seasonFacts = {};
+    for (const [k, spec] of Object.entries(pristine.facts)) if (spec.per === 'season') seasonFacts[k] = draw(spec, factRng);
+    let count = 0;
+    for (const beat of weeks) {
+      const facts = { ...seasonFacts };
+      for (const [k, spec] of Object.entries(pristine.facts)) if (spec.per === 'week') facts[k] = draw(spec, factRng);
+      for (const m of E.gmInboxWeek(s, bound, beat, facts, clock, deckRng)) {
+        const pe = byId.get(m.defId);
+        count++;
+        log.push(`${m.defId}@${clock}`);
+        if (!pe) { bad.push(`${m.defId}: not an event in the pack`); continue; }
+        if (pe.beat !== beat) bad.push(`${pe.id}: arrived on ${beat}, belongs to ${pe.beat}`);
+        const off = (pe.when ?? []).find(c => !holds(c, facts));
+        if (off) bad.push(`${pe.id}: arrived with ${off.fact} ${off.op} ${off.value} false (${off.fact} was ${facts[off.fact]})`);
+        if (pe.oneShot && seen.has(pe.id)) bad.push(`${pe.id}: a one shot arrived twice`);
+        const cd = pe.cooldown ?? pristine.cooldown;
+        if (!pe.oneShot && lastAt[pe.id] !== undefined && clock - lastAt[pe.id] < cd) bad.push(`${pe.id}: back after ${clock - lastAt[pe.id]} weeks, cooldown ${cd}`);
+        seen.add(pe.id);
+        lastAt[pe.id] = clock;
+      }
+      const open = (s.phoneInbox ?? []).filter(m => m.answered === undefined);
+      if (open.length > E.GM_INBOX_OPEN) bad.push(`${open.length} open at once`);
+      if ((s.phoneInbox ?? []).length > E.GM_INBOX_MAX) bad.push(`${s.phoneInbox.length} kept at once`);
+      /* A desk answers most weeks, not all, so the open cap gets exercised. */
+      for (const m of open) if (answerRng() < 0.75) E.answerGmInbox(s, m.id, Math.floor(answerRng() * m.choices.length), bound);
+      clock++;
+    }
+    perSeason.push(count);
+  }
+  return { log, perSeason, seen, bad };
+}
+
+const runs = {};
+for (const seat of SEATS) runs[seat] = Array.from({ length: DESKS }, (_, d) => runDesk(seat, d, SEED));
+
+console.log(`3) The rules hold over ${DESKS * SEASONS} seasons a pack`);
+{
+  const bad = SEATS.flatMap(seat => runs[seat].flatMap(r => r.bad.map(b => `${seat} ${b}`)));
+  const dealt = SEATS.reduce((n, seat) => n + runs[seat].reduce((m, r) => m + r.log.length, 0), 0);
+  console.log(`   ${dealt} events dealt, ${bad.length} rule breaks`);
+  for (const b of [...new Set(bad)].slice(0, 10)) console.error(`     ${b}`);
+  if (dealt < 1000) fail(`only ${dealt} events dealt: nothing was tested`);
+  if (bad.length) fail(`${bad.length} deliveries broke a rule (beat, condition, one shot, cooldown or caps)`);
+  else ok('every delivery was on its beat with every condition true, no one shot twice, no repeat inside a cooldown, caps held');
+}
+
+console.log('4) Each pack deals a measured number of events a season');
+/* Mean events a season over 1,000 seasons, measured at seeds 1 to 5 (see the
+   header). The band is the measured range widened by at least 0.4 a side. */
+const RATE_BANDS = {
+  nfl: [2.3, 3.3], nba: [1.8, 2.8], mlb: [2.1, 3.0], nhl: [2.3, 3.2], college: [2.9, 3.8], gym: [2.4, 3.3], afl: [2.4, 3.4],
+};
+for (const seat of SEATS) {
+  const all = runs[seat].flatMap(r => r.perSeason);
+  const mean = all.reduce((a, b) => a + b, 0) / all.length;
+  const zero = all.filter(n => n === 0).length / all.length;
+  const [lo, hi] = RATE_BANDS[seat] ?? [Infinity, -Infinity];
+  const line = `${seat}: ${mean.toFixed(2)} a season (band ${lo} to ${hi}), ${(zero * 100).toFixed(1)}% of seasons with none`;
+  if (mean < lo || mean > hi) fail(line); else ok(line);
+}
+
+console.log('5) Every event arrives in a ten season run');
+const REACH_FLOOR = 0.25;
+{
+  let worst = { share: 2, id: '' };
+  for (const seat of SEATS) {
+    for (const e of PRISTINE[seat].events) {
+      const share = runs[seat].filter(r => r.seen.has(e.id)).length / DESKS;
+      if (share < worst.share) worst = { share, id: e.id };
+      if (share === 0) fail(`${e.id} never arrived in ${DESKS} ten season runs`);
+      else if (share < REACH_FLOOR) fail(`${e.id} arrived in only ${(share * 100).toFixed(0)}% of ten season runs (floor ${REACH_FLOOR * 100}%)`);
+    }
+  }
+  console.log(`   the rarest event, ${worst.id}, arrived in ${(worst.share * 100).toFixed(0)}% of ten season runs`);
+}
+
+console.log('6) Same seed, same deck');
+{
+  const a = runDesk('nfl', 7, SEED).log.join(',');
+  const b = runDesk('nfl', 7, SEED).log.join(',');
+  const c = runDesk('nfl', 7, SEED + 1000).log.join(',');
+  if (a !== b) fail('the same seed dealt two different decks');
+  else if (a === c) fail('two different seeds dealt the same deck: the stream is not reaching the deck');
+  else ok(`same seed, same ${a.split(',').length} events; another seed, another deck`);
 }
 
 /* ═══ end ═══ */

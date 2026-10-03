@@ -29,7 +29,7 @@ export const NHL_GM_INBOX: GmInboxPack = {
   money: { prefix: '$', suffix: 'M' },
   perWeek: 1,
   cooldown: 22,
-  chance: 0.35,
+  chance: 0.5,
   events: [
     {
       id: 'nhl_offer_sheet', beat: 'july', from: 'Your capologist', emoji: '📑',
