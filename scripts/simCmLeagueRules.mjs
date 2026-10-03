@@ -47,7 +47,14 @@
       changed only the 2010-11 data file and its nationality block in src;
       on the fixed tree the five 2010-11 leagues moved, the 2015-16 and
       2005-06 saves in "whole" only, and pure in the day one objectives of
-      laliga2010, bundesliga2010 and ligue12010.
+      laliga2010, bundesliga2010 and ligue12010. Release AB then re-took the
+      whole baseline on main for Round 978 (main had no Round 901), so the
+      merge took main's file and re-took the eras and pure entries on the
+      merged tree: modern, drop4, cupless and shapes matched main's baseline
+      there untouched, and eras and pure differed exactly by this round's
+      footprint (the five 2010-11 leagues, three of them new, "whole" in the
+      2015-16 and 2005-06 saves with laliga2005 "start", the 2010-11
+      objectives and the views' leagueNations and euroSlots).
    2. DIGEST, ERAS (hard). The same for every league of every historic era,
       one career each.
    3. DIGEST, PURE (hard). For every modern and era league: the drop count,
