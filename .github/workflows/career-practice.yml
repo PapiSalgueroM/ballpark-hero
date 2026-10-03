@@ -1,0 +1,109 @@
+name: Four career practice verification
+
+on:
+  push:
+    branches: [codex/career-practice-992]
+  pull_request:
+    paths:
+      - .github/workflows/career-practice.yml
+      - scripts/qa/career992.mjs
+      - scripts/simUsCareerPractice.mjs
+      - scripts/simCareerTraining.mjs
+      - src/components/us-career/**
+      - src/components/career/**
+      - src/components/*-my-career/**
+      - src/lib/*CareerSport.ts
+      - src/lib/*CareerTraining.ts
+      - src/lib/careerTraining.ts
+      - src/test/usCareerPractice.test.tsx
+      - src/test/usBoardFixture.test.tsx
+      - src/test/careerTrainingGround.test.tsx
+
+permissions:
+  contents: read
+concurrency:
+  group: career-practice-${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    defaults:
+      run:
+        shell: bash
+    env:
+      SIM_NETWORK: offline
+      ENGINES: chromium
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install verification dependencies
+        run: |
+          mkdir -p career-practice-artifacts "$RUNNER_TEMP/career-practice"
+          echo "TMPDIR=$RUNNER_TEMP/career-practice" >> "$GITHUB_ENV"
+          npm ci
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium
+          python -m pip install fonttools pillow
+      - name: Type check and build
+        id: build
+        run: |
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee career-practice-artifacts/types.log
+          npm run build 2>&1 | tee career-practice-artifacts/build.log
+      - name: Actual practice outcomes and rejection controls
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          failed=0
+          node scripts/simUsCareerPractice.mjs 2>&1 | tee career-practice-artifacts/practice.log || failed=1
+          for control in before gain cap once save receipt renew rules abort pending reset carry; do
+            US_CAREER_PRACTICE_CONTROL="$control" node scripts/simUsCareerPractice.mjs 2>&1 | tee "career-practice-artifacts/practice-$control.log" || failed=1
+          done
+          exit "$failed"
+      - name: Original career behavior and save replay
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          node scripts/simUsBoardParity.mjs 2>&1 | tee career-practice-artifacts/parity.log
+          for control in draw restore; do
+            US_BOARD_PARITY_CONTROL="$control" node scripts/simUsBoardParity.mjs 2>&1 | tee "career-practice-artifacts/parity-$control.log"
+          done
+      - name: Shared drill outcomes and timing controls
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          node scripts/simCareerTraining.mjs 2>&1 | tee career-practice-artifacts/training.log
+          for control in tier overcap tell miss window slip; do
+            CAREER_TRAINING_CONTROL="$control" node scripts/simCareerTraining.mjs 2>&1 | tee "career-practice-artifacts/training-$control.log"
+          done
+      - name: Existing career regression families
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          for harness in simCareerHub simCareerInbox simCareerInboxBeats simCareerParity simCareerRivalryEvents simExtension simHomeFront simNoDoubleRecord simRevealMoments simSessionMarks simUsCareerActionConfirm simUsCoachCareer simUsCareerWeight; do
+            ONLY="$harness" node scripts/runAllSims.mjs --browser 2>&1 | tee "career-practice-artifacts/$harness.log"
+          done
+      - name: All built readers, search and guide checks
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          for harness in simAdsense simBrand simHeadTags simHiddenPages simHubs simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets simSiteSearch simGuideHeadings; do
+            ONLY="$harness" node scripts/runAllSims.mjs --browser 2>&1 | tee "career-practice-artifacts/$harness.log"
+          done
+      - name: Actual practice by keyboard and touch
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: node scripts/qa/career992.mjs 2>&1 | tee career-practice-artifacts/native.log
+      - name: Save review evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: career-practice-${{ github.run_id }}-${{ github.run_attempt }}
+          retention-days: 1
+          path: |
+            career-practice-artifacts/
+            ${{ runner.temp }}/career-practice/dukb-practice992-*/
