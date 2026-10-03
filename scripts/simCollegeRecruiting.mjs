@@ -18,29 +18,37 @@ const MEASURE = process.env.COLLEGE_RECRUITING_MEASURE === '1';
 const SEED_BASE = Number(process.env.COLLEGE_RECRUITING_SEED_BASE || 0);
 const SEEDS = 120;
 
-/* Each control: the exact bundled text it rewrites and what it becomes. */
+/* Each control: the exact bundled text it rewrites, what it becomes, and the
+   sections that must go red when it runs. A control that turns no section
+   red, or the wrong one, fails the run. */
 const CONTROLS = {
-  nopitch: [['PITCH_RANK_BONUS = [9, 5, 2.5]', 'PITCH_RANK_BONUS = [0, 0, 0]']],
-  nowork: [
-    ['CONTACT_GAIN = 3;', 'CONTACT_GAIN = 0;'],
-    ['PITCH_BASE = 2;', 'PITCH_BASE = 0;'],
-    ['PITCH_RANK_BONUS = [9, 5, 2.5]', 'PITCH_RANK_BONUS = [0, 0, 0]'],
-    ['VISIT_GAIN = 10;', 'VISIT_GAIN = 0;'],
-    ['NIL_COLD_MULT = 0.5;', 'NIL_COLD_MULT = 1;'],
-  ],
-  weakrivals: [['const pool = others.filter(fits);', 'const pool = others.filter((s) => s.prestige < 75);']],
-  nocap: [['const hasRoom = (t, id) => id === OFF_BOARD || (t.commits[id] ?? 0) < t.classCap;', 'const hasRoom = (t, id) => true;']],
-  overspend: [['const amount = Math.floor(Math.min(a.amount ?? r.nilAsk, t.nilLeft));', 'const amount = Math.floor(a.amount ?? r.nilAsk);']],
-  unsigned: [['r.signedWith = r.committedTo;', 'r.signedWith = null;']],
-  noflip: [['FLIP_MARGIN = 10;', 'FLIP_MARGIN = 1e9;']],
-  badband: [['const to = Math.min(r.trueOvr, r.hi - 2 * nw);', 'const to = r.hi - 2 * nw;']],
-  noretain: [['if (goes && !retained.includes(m.id)) lost.push(m);', 'if (goes) lost.push(m);']],
-  visitflat: [['VISIT_HOME_WIN = 1.7;', 'VISIT_HOME_WIN = 1;']],
+  nopitch: { red: ['1'], edits: [['PITCH_RANK_BONUS = [9, 5, 2.5]', 'PITCH_RANK_BONUS = [0, 0, 0]']] },
+  nowork: {
+    red: ['2'],
+    edits: [
+      ['CONTACT_GAIN = 3;', 'CONTACT_GAIN = 0;'],
+      ['PITCH_BASE = 2;', 'PITCH_BASE = 0;'],
+      ['PITCH_RANK_BONUS = [9, 5, 2.5]', 'PITCH_RANK_BONUS = [0, 0, 0]'],
+      ['VISIT_GAIN = 24;', 'VISIT_GAIN = 0;'],
+      ['NIL_COLD_MULT = 0.5;', 'NIL_COLD_MULT = 1;'],
+      ['NEGLECT_DRIFT = 0.05;', 'NEGLECT_DRIFT = 0;'],
+    ],
+  },
+  noreach: { red: ['3'], edits: [['return clamp(1 - Math.max(0, need - prestige) / sport.reachSpan, REACH_MIN, 1);', 'return 1;']] },
+  nocap: { red: ['4'], edits: [['const hasRoom = (t, id) => id === OFF_BOARD || (t.commits[id] ?? 0) < t.classCap;', 'const hasRoom = (t, id) => true;']] },
+  overspend: { red: ['4'], edits: [['const amount = Math.floor(Math.min(a.amount ?? r.nilAsk, t.nilLeft));', 'const amount = Math.floor(a.amount ?? r.nilAsk);']] },
+  unsigned: { red: ['4'], edits: [['r.signedWith = r.committedTo;', 'r.signedWith = null;']] },
+  noflip: { red: ['4b'], edits: [['FLIP_MARGIN = 10;', 'FLIP_MARGIN = 1e9;']] },
+  badband: { red: ['5'], edits: [['const to = Math.min(r.trueOvr, r.hi - 2 * nw);', 'const to = r.hi - 2 * nw;']] },
+  noretain: { red: ['6'], edits: [['if (goes && !retained.includes(m.id)) lost.push(m);', 'if (goes) lost.push(m);']] },
+  visitflat: { red: ['7'], edits: [['VISIT_HOME_WIN = 1.7;', 'VISIT_HOME_WIN = 1;']] },
 };
 if (CONTROL && !CONTROLS[CONTROL]) { console.error(`COLLEGE_RECRUITING_CONTROL=${CONTROL} is not a control this harness knows`); process.exit(1); }
 
 let failures = 0;
-const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
+let SECTION = '';
+const redSections = new Set();
+const fail = m => { failures += 1; redSections.add(SECTION); console.error('  FAIL: ' + m); };
 const ok = m => console.log('  ok   ' + m);
 
 /* ---- bundle the module and the two dynasties' school tables ---- */
@@ -55,7 +63,7 @@ export { CBB_SCHOOLS, CBB_SCHOOL_STATES, cbbGenName, cbbNilFor } from '${ROOT_UR
 await build({ entryPoints: [ENTRY], bundle: true, format: 'esm', platform: 'node', outfile: BUNDLE, logLevel: 'error', alias: { '@': `${ROOT_URL}/src` } });
 if (CONTROL) {
   let text = fs.readFileSync(BUNDLE, 'utf8');
-  for (const [from, to] of CONTROLS[CONTROL]) {
+  for (const [from, to] of CONTROLS[CONTROL].edits) {
     const hits = text.split(from).length - 1;
     if (hits !== 1) { console.error(`control cannot run: "${from}" is in the bundle ${hits} times, not once`); process.exit(1); }
     text = text.replace(from, to);
@@ -206,23 +214,23 @@ function runMany(sportKey, schools, makePolicy, tag) {
 const MEASURED = {};
 
 /* Commitments a neglectful coach loses a run beyond a steady one (section 4b). */
-const FLIP_FLOOR = { cfb: 0, cbb: 0 };
+const FLIP_FLOOR = { cfb: 1.2, cbb: 0.4 };
 /* The portal (section 6): the rate a good man stuck behind a starter leaves, and how much more than a starter. */
 const STUCK_BAND = [0.25, 0.37];
 const STUCK_OVER_STARTER = 0.2;
 /* Floors, each set well under the measured gap (see the header). */
 const FLOORS = {
-  s1TopOverRandom: { cfb: 36, cbb: 20 },
-  s1RandomOverNone: { cfb: 17, cbb: 13 },
-  s2BalancedOverNil: { cfb: 55, cbb: 34 },
-  s3HomeOverChase: { cfb: 20, cbb: 15 },
+  s1TopOverRandom: { cfb: 40, cbb: 22 },
+  s1RandomOverNone: { cfb: 12, cbb: 11 },
+  s2BalancedOverNil: { cfb: 55, cbb: 35 },
+  s3HomeOverChase: { cfb: 24, cbb: 16 },
 };
 
 for (const sportKey of ['cfb', 'cbb']) {
   const schools = spread(sportKey);
   console.log(`\n== ${sportKey}: programs ${schools.join(', ')}, ${SEEDS} seeds each`);
 
-  console.log('-- 1) the right pitch: top priority beats a random pitch, and both beat no effort');
+  SECTION = '1'; console.log('-- 1) the right pitch: top priority beats a random pitch, and both beat no effort');
   const top = mean(runMany(sportKey, schools, worker({ pitch: 'top' }), 's1top'));
   const rnd = mean(runMany(sportKey, schools, worker({ pitch: 'random' }), 's1rnd'));
   const none = mean(runMany(sportKey, schools, nobody(), 's1none'));
@@ -233,7 +241,7 @@ for (const sportKey of ['cfb', 'cbb']) {
   if (rnd - none >= FLOORS.s1RandomOverNone[sportKey]) ok(`random over none ${fmt(rnd - none)} >= ${FLOORS.s1RandomOverNone[sportKey]}`);
   else fail(`${sportKey} random pitch over no effort is ${fmt(rnd - none)}, floor ${FLOORS.s1RandomOverNone[sportKey]}`);
 
-  console.log('-- 2) equal budget: a balanced coach beats all NIL and no contact');
+  SECTION = '2'; console.log('-- 2) equal budget: a balanced coach beats all NIL and no contact');
   const bal = mean(runMany(sportKey, schools, worker({ pitch: 'top', visits: true, nil: true }), 's2bal'));
   const nilOnly = mean(runMany(sportKey, schools, allNil(), 's2nil'));
   MEASURED[`${sportKey} s2`] = { bal, nilOnly };
@@ -241,7 +249,7 @@ for (const sportKey of ['cfb', 'cbb']) {
   if (bal - nilOnly >= FLOORS.s2BalancedOverNil[sportKey]) ok(`balanced over all NIL ${fmt(bal - nilOnly)} >= ${FLOORS.s2BalancedOverNil[sportKey]}`);
   else fail(`${sportKey} balanced over all NIL is ${fmt(bal - nilOnly)}, floor ${FLOORS.s2BalancedOverNil[sportKey]}`);
 
-  console.log('-- 3) a low prestige program: working in-state three stars beats chasing the stars');
+  SECTION = '3'; console.log('-- 3) a low prestige program: working in-state three stars beats chasing the stars');
   const low = lowest(sportKey);
   const home = mean(runMany(sportKey, [low], worker({ pitch: 'top', visits: true, nil: true, pick: inStateThrees }), 's3home'));
   const chase = mean(runMany(sportKey, [low], worker({ pitch: 'top', visits: true, nil: true, pick: chaseStars }), 's3chase'));
@@ -265,7 +273,7 @@ const greedy = () => () => ({
 });
 for (const sportKey of ['cfb', 'cbb']) runMany(sportKey, spread(sportKey), greedy(), 'greedy');
 
-console.log('\n-- 4) on every run: every man signs once, and no cap, pot, hour or visit limit is ever broken');
+SECTION = '4'; console.log('\n-- 4) on every run: every man signs once, and no cap, pot, hour or visit limit is ever broken');
 const bad = { unsigned: 0, cap: 0, count: 0, pot: 0, paid: 0, hours: 0, visits: 0, after: 0, again: 0 };
 let flips = 0;
 for (const run of ALL_RUNS) {
@@ -290,7 +298,9 @@ const greedySpent = mean(greedyRuns.map(r => r.log.pot - r.log.nilLeftMin));
 const flipRate = flips / ALL_RUNS.length;
 const commitShare = mean(ALL_RUNS.map(r => r.t.recruits.filter(x => x.committedTo).length / r.t.recruits.length));
 const commitMine = mean(ALL_RUNS.map(r => r.t.recruits.filter(x => x.committedTo === r.t.mySchool).length));
-MEASURED.s4 = { runs: ALL_RUNS.length, flipRate, greedySpent, commitShare, commitMine };
+const flipsBy = {};
+for (const r of ALL_RUNS) flipsBy[r.tag] = (flipsBy[r.tag] ?? 0) + r.log.flips;
+MEASURED.s4 = { runs: ALL_RUNS.length, flipRate, greedySpent, commitShare, commitMine, flipsBy };
 console.log(`     ${ALL_RUNS.length} runs, ${fmt(flipRate)} flips a run, greedy coach spent ${fmt(greedySpent)} a run before signing day`);
 for (const [k, v] of Object.entries(bad)) {
   if (v === 0) ok(`${k}: 0 runs broke it`);
@@ -299,7 +309,7 @@ for (const [k, v] of Object.entries(bad)) {
 if (greedySpent > 0) ok('the greedy coach did reach the pot, so the pot check was exercised');
 else fail('the greedy coach never spent, so the pot check proved nothing');
 
-console.log('\n-- 4b) a commitment can still flip: a coach who stops working his commits loses more of them than one who keeps at it');
+SECTION = '4b'; console.log('\n-- 4b) a commitment can still flip: a coach who stops working his commits loses more of them than one who keeps at it');
 for (const sportKey of ['cfb', 'cbb']) {
   runMany(sportKey, spread(sportKey), worker({ pitch: 'top', hold: false }), 's4neglect');
   const of = tag => ALL_RUNS.filter(r => r.tag === tag && r.sportKey === sportKey);
@@ -310,7 +320,7 @@ for (const sportKey of ['cfb', 'cbb']) {
   else fail(`${sportKey} neglected commits flip away only ${fmt(away.neglect - away.steady)} a run more than worked ones, floor ${FLIP_FLOOR[sportKey]}`);
 }
 
-console.log('\n-- 5) the scouting band: only evaluation narrows it, every step halves it, and it always holds the truth');
+SECTION = '5'; console.log('\n-- 5) the scouting band: only evaluation narrows it, every step halves it, and it always holds the truth');
 {
   const sb = { truth: 0, ladder: 0, outside: 0, moved: 0 };
   let steps = 0;
@@ -349,7 +359,7 @@ console.log('\n-- 5) the scouting band: only evaluation narrows it, every step h
   for (const [k, v] of Object.entries(sb)) { if (v === 0) ok(`${k}: 0`); else fail(`band ${k}: ${v}`); }
 }
 
-console.log('\n-- 6) the portal: a sit down keeps a man, real tape, a short window, and its own cap');
+SECTION = '6'; console.log('\n-- 6) the portal: a sit down keeps a man, real tape, a short window, and its own cap');
 {
   const pb = { keptLeft: 0, crn: 0, senior: 0, oneAndDone: 0, tape: 0, window: 0, unsigned: 0, cap: 0 };
   const left = { stuck: [0, 0], starter: [0, 0] };
@@ -406,5 +416,49 @@ console.log('\n-- 6) the portal: a sit down keeps a man, real tape, a short wind
   else fail(`stuck men leave only ${fmt(rate(left.stuck) - rate(left.starter))} more than starters`);
 }
 
+SECTION = '7'; console.log('\n-- 7) the official visit: a home win week is worth more than a week away, which is worth more than a home loss');
+{
+  let wrong = 0;
+  let cases = 0;
+  const ratios = [];
+  for (const sportKey of ['cfb', 'cbb']) {
+    const sp = SPORTS[sportKey];
+    const ctx = programOf(sp, sp.schools.find(s => s.id === spread(sportKey)[3]));
+    for (let k = 0; k < SEEDS; k++) {
+      let n = 0;
+      const t0 = rec.openTrail(sp.d, sp.schools, ctx, 2026, { rng: mulberry32(SEED_BASE + k + 77), genName: sp.genName, newId: () => `v${++n}` });
+      const id = t0.recruits[k % t0.recruits.length].id;
+      const gain = wk => {
+        const t = rec.sanitizeTrail(JSON.parse(JSON.stringify(t0)));
+        const before = t.recruits.find(r => r.id === id).interest[t.mySchool];
+        rec.runTrailWeek(sp.d, t, [{ kind: 'visit', recruitId: id }], ctx, wk, sp.schools, mulberry32(k));
+        return t.recruits.find(r => r.id === id).interest[t.mySchool] - before;
+      };
+      const win = gain({ home: true, won: true });
+      const away = gain({ home: false, won: false });
+      const loss = gain({ home: true, won: false });
+      cases += 1;
+      if (!(win > away && away > loss && loss > 0)) wrong += 1;
+      ratios.push(win / away);
+    }
+  }
+  MEASURED.s7 = { cases, meanWinOverAway: mean(ratios) };
+  console.log(`     ${cases} visits priced three ways, a home win worth ${fmt(mean(ratios))} of an away week`);
+  if (wrong === 0) ok('home win > away > home loss > 0 on every case'); else fail(`${wrong} of ${cases} visits did not order home win > away > home loss > 0`);
+}
+
 if (MEASURE) console.log('\nMEASURED ' + JSON.stringify(MEASURED));
-console.log(`\nfailures so far ${failures}`);
+
+const red = [...redSections].sort();
+if (CONTROL) {
+  const want = CONTROLS[CONTROL].red;
+  const missed = want.filter(s => !redSections.has(s));
+  if (missed.length === 0) {
+    console.log(`\ncontrol "${CONTROL}": section(s) ${red.join(', ')} went red (wanted ${want.join(', ')}), ${failures} failure(s), the check works`);
+    process.exit(0);
+  }
+  console.error(`\ncontrol "${CONTROL}": wanted section(s) ${want.join(', ')} red, got [${red.join(', ')}], the check is dead`);
+  process.exit(1);
+}
+if (failures > 0) { console.error(`\nsimCollegeRecruiting: ${failures} failure(s) in section(s) ${red.join(', ')}`); process.exit(1); }
+console.log('\nsimCollegeRecruiting: all checks green');
