@@ -145,12 +145,12 @@ export const COLLEGE_FACILITY_PACK: FacilityPack = {
 
 export const GYM_FACILITY_PACK: FacilityPack = {
   id: 'gym', label: 'Fight Gym', unit: '$M', period: 'week', maxLevel: 5,
-  costStep: [0.08, 0.14, 0.24, 0.4],
+  costStep: [0.7, 1.2, 1.9, 2.9],
   buildPeriods: [2, 3, 4, 6],
   startLevel: [1, 1, 1],
-  upkeepPerLevel: 0.001,
-  goodSeasonIncome: 1,
-  goodSeasonSource: 'A busy gym\'s purse cuts over 52 weeks, measured by scripts/simGmFacilities.mjs running src/lib/fightGym.ts.',
+  upkeepPerLevel: 0.004,
+  goodSeasonIncome: 18,
+  goodSeasonSource: 'An established gym\'s purse cuts over 52 weeks: scripts/simGmFacilities.mjs runs src/lib/fightGym.ts with the careful policy and measured 16.6M in year two and 12.8M in year three (ten seeds, 2026-10-02).',
   facilities: [
     {
       id: 'ring', label: 'Ring and bags', emoji: '\u{1F94A}', costFactor: 1.0,
