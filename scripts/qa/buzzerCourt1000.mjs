@@ -79,8 +79,8 @@ async function rimOcclusion(board) {
   return board.evaluate(el => {
     const svg = el.querySelector('svg[role="img"]');
     const rim = svg.querySelector('[data-court-rim]') || svg.querySelector('line[stroke="hsl(18 85% 55%)"]');
-    const inset = svg.querySelector('circle[r="34"]');
-    const screen = (node, x, y) => { const point = svg.createSVGPoint(); point.x = x; point.y = y; const mapped = point.matrixTransform(node.getScreenCTM()); return { x: mapped.x, y: mapped.y }; };
+    const inset = el.querySelector('circle[r="34"]');
+    const screen = (node, x, y) => { const point = node.ownerSVGElement.createSVGPoint(); point.x = x; point.y = y; const mapped = point.matrixTransform(node.getScreenCTM()); return { x: mapped.x, y: mapped.y }; };
     const center = screen(inset, Number(inset.getAttribute('cx')), Number(inset.getAttribute('cy')));
     const matrix = inset.getScreenCTM(), radius = Number(inset.getAttribute('r')) * Math.hypot(matrix.a, matrix.b);
     const x1 = Number(rim.getAttribute('x1')), x2 = Number(rim.getAttribute('x2')), y = Number(rim.getAttribute('y1'));
@@ -89,6 +89,58 @@ async function rimOcclusion(board) {
     const covered = points.map(point => insetPaintsLater && Math.hypot(point.x - center.x, point.y - center.y) < radius);
     return { setup: el.getAttribute('data-lab-setup'), label: svg.getAttribute('aria-label'), center, radius, points, insetPaintsLater, covered, occluded: covered.some(Boolean) };
   });
+}
+async function readoutGeometry(page, board, stage) {
+  const value = await board.evaluate(el => {
+    const court = el.querySelector('svg[role="img"]'), readout = el.querySelector('[data-court-readout]');
+    const inset = readout?.querySelector('circle[r="34"]'), figure = readout?.closest('figure');
+    const box = node => { if (!node) return null; const r = node.getBoundingClientRect(); return { x: r.x, y: r.y, width: r.width, height: r.height, right: r.right, bottom: r.bottom }; };
+    let opacity = 1, visible = Boolean(inset);
+    for (let node = inset; node; node = node.parentElement) {
+      const style = getComputedStyle(node); opacity *= Number(style.opacity);
+      visible &&= style.display !== 'none' && style.visibility === 'visible';
+    }
+    const style = inset ? getComputedStyle(inset) : null;
+    return { court: box(court), inset: box(inset), readout: box(readout), figure: box(figure), caption: figure?.querySelector('figcaption')?.textContent,
+      visible, opacity, fill: style?.fill, fillOpacity: Number(style?.fillOpacity), stroke: style?.stroke,
+      landing: [...el.querySelectorAll('[data-lab-landing]')].map(node => ({ role: node.getAttribute('data-lab-landing'), box: box(node), stroke: getComputedStyle(node).stroke })) };
+  });
+  assert(value.inset && value.figure && value.visible && value.opacity === 1 && value.fillOpacity === 1
+    && value.fill !== 'none' && value.fill !== 'rgba(0, 0, 0, 0)' && value.stroke !== 'none', stage + ': rim view is an opaque outlined readout');
+  const disjoint = box => Math.min(box.right, value.court.right) - Math.max(box.x, value.court.x) <= 0.5
+    || Math.min(box.bottom, value.court.bottom) - Math.max(box.y, value.court.y) <= 0.5;
+  assert(disjoint(value.inset) && disjoint(value.figure), stage + ': rim view stays outside the playable court');
+  assert(value.figure.x >= -1 && value.figure.right <= page.viewportSize().width + 1
+    && value.figure.y >= -1 && value.figure.bottom <= page.viewportSize().height + 1, stage + ': whole rim view and caption are visible');
+  assert.equal(value.caption, 'Rim view', stage + ': rim view retains its readable caption');
+  for (const row of value.landing) assert(row.box.width > 0 && row.box.height > 0 && row.stroke !== 'none'
+    && row.box.x >= value.readout.x - 1 && row.box.right <= value.readout.right + 1
+    && row.box.y >= value.readout.y - 1 && row.box.bottom <= value.readout.bottom + 1, stage + ': actual landing marks render inside the rim view');
+  return { stage, ...value };
+}
+async function readoutControl(page, board) {
+  const stage = 'readout control', before = await readoutGeometry(page, board, stage);
+  const target = board.locator('[data-court-readout]').locator('..');
+  const original = await target.getAttribute('style'), scroll = await page.evaluate(() => ({ x: scrollX, y: scrollY }));
+  let changed, rejection;
+  try {
+    const rim = (await rimOcclusion(board)).points[1];
+    const center = { x: before.inset.x + before.inset.width / 2, y: before.inset.y + before.inset.height / 2 };
+    await target.evaluate((el, offset) => { el.style.transform = `translate(${offset.x}px, ${offset.y}px)`; }, { x: rim.x - center.x, y: rim.y - center.y });
+    changed = await rimOcclusion(board);
+    assert.notEqual(await target.getAttribute('style'), original, stage + ': mutation changes the real readout');
+    assert(changed.occluded && Math.hypot(changed.center.x - rim.x, changed.center.y - rim.y) < 0.5, stage + ': moved inset actually covers the physical rim');
+    try { await readoutGeometry(page, board, stage); }
+    catch (error) { assert(error instanceof assert.AssertionError && error.message === stage + ': rim view stays outside the playable court', stage + ': only the intended overlap assertion earns credit'); rejection = error.message; }
+    assert(rejection, stage + ': overlapping readout must fail');
+  } finally {
+    await target.evaluate((el, prior) => prior === null ? el.removeAttribute('style') : el.setAttribute('style', prior), original);
+    await page.evaluate(position => scrollTo({ left: position.x, top: position.y, behavior: 'instant' }), scroll);
+  }
+  assert.equal(await target.getAttribute('style'), original, stage + ': exact style restored');
+  const restored = await readoutGeometry(page, board, stage);
+  assert.deepEqual(restored, before, stage + ': exact positive geometry restored');
+  return { kind: 'readout', before, changed, rejection, restored };
 }
 async function art(board) {
   return board.evaluate(el => ({
@@ -155,7 +207,7 @@ try {
       for (const profile of profiles) {
         const { width, height, touch, reduced = false, light = false } = profile, current = variant === 'after';
         const id = `${variant}-${width}-${light ? 'light' : 'dark'}${reduced ? '-reduced' : ''}`;
-        const result = { id, variant, ...profile, screenshots: [], geometry: [], controls: [], logical: {}, pageErrors: [], consoleErrors: [], assetFailures: [], externalRequests: [], scoreWrites: [] };
+        const result = { id, variant, ...profile, screenshots: [], geometry: [], readouts: [], controls: [], logical: {}, pageErrors: [], consoleErrors: [], assetFailures: [], externalRequests: [], scoreWrites: [] };
         report.cases.push(result);
         const context = await browser.newContext({ viewport: { width, height }, isMobile: touch, hasTouch: touch, deviceScaleFactor: 1,
           reducedMotion: reduced ? 'reduce' : 'no-preference', locale: 'en-US', serviceWorkers: 'block',
@@ -189,9 +241,12 @@ try {
         const board = page.locator('[data-shot-lab]'), court = board.locator('svg[role="img"]');
         const button = name => board.getByRole('button', { name, exact: true });
         const screenshot = async stage => {
-          await court.scrollIntoViewIfNeeded(); await frames(page); await page.waitForTimeout(450);
+          if (current) await court.evaluate(el => scrollTo({ top: scrollY + el.getBoundingClientRect().top - 12, behavior: 'instant' }));
+          else await court.scrollIntoViewIfNeeded();
+          await frames(page); await page.waitForTimeout(450);
           const box = await court.boundingBox();
           assert(box && box.y >= -1 && box.y + box.height <= height + 1, stage + ': whole court visible at the fixed screenshot stop');
+          if (current) result.readouts.push(await readoutGeometry(page, board, stage));
           const file = `${id}-${stage}.png`, crop = `${id}-${stage}-court.png`;
           await page.screenshot({ path: path.join(OUT, file), animations: 'disabled' });
           await court.screenshot({ path: path.join(OUT, crop), animations: 'disabled' });
@@ -214,7 +269,10 @@ try {
           if (current) assert(aimArt.shooter && aimArt.seams && aimArt.net, 'The actual articulated shooter, ball seams and static net render');
           else assert.equal(await board.locator('[data-court-artwork]').count(), 0, 'The fixed before build predates the new artwork');
           result.geometry.push(await geometry(page, board, 'aim', current)); await screenshot('aim');
-          if (current && width === 320) result.controls.push(await geometryControl(page, board, 'athlete'));
+          if (current && width === 320) {
+            result.controls.push(await geometryControl(page, board, 'athlete'));
+            result.controls.push(await readoutControl(page, board));
+          }
           await activate(button('Shoot'), touch);
           if (reduced) assert.equal(await board.getAttribute('data-arcade-phase'), 'shotEnd', 'Reduced motion skips flight immediately');
           else {
@@ -293,7 +351,7 @@ try {
   const before = report.cases.find(result => result.variant === 'before');
   for (const after of report.cases.filter(result => result.variant === 'after')) assert.deepEqual(after.logical, before.logical, after.id + ': exact before-build ball/rim/path/outcomes preserved');
   report.exactBeforeAfter = true;
-  assert.equal(report.cases.flatMap(result => result.controls).length, 2, 'Both native geometry controls reject and restore');
+  assert.equal(report.cases.flatMap(result => result.controls).length, 3, 'All three native geometry controls reject and restore');
   for (const after of report.cases.filter(result => result.variant === 'after' && result.longestSetup)) {
     assert.deepEqual(after.longestSetup, before.longestSetup, 'Longest setup retains exact baseline shot geometry');
     assert(!after.rimOcclusion.occluded, after.id + ': the inset must not paint over the physical rim on the longest shot');
@@ -302,6 +360,6 @@ try {
 } catch (error) { report.passed = false; report.error = String(error.stack || error); throw error; }
 finally {
   const controls = report.cases.flatMap(result => result.controls);
-  report.geometryControls = { expected: 2, rejected: controls.filter(control => control.rejection).length, restored: controls.filter(control => control.restored).length };
+  report.geometryControls = { expected: 3, rejected: controls.filter(control => control.rejection).length, restored: controls.filter(control => control.restored).length };
   report.finished = new Date().toISOString(); saveReport(); await browser?.close();
 }

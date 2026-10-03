@@ -23,15 +23,17 @@ type and controls stay in place. Labels describe geometry or game state only.
 Layout stays a side elevation, not a perspective background that contradicts
 the flight. Keep the existing360x210 viewBox and projection. The shooter's wrist
 meets the release point, the defender's hand marks the actual contest reach,
-and the rim keeps its exact scored location and span. Art sits behind previews,
-retained trajectories and the rim-height inset. The court remains one pointer
-surface; child artwork cannot capture input.
+and the rim keeps its exact scored location and span. Art sits behind previews
+and retained trajectories. The court remains one pointer surface; child artwork
+cannot capture input. Move the existing rim-height readout below the court,
+beside the legend, so it cannot obscure a target or a valid flight.
 
 ```text
-quiet arena backdrop                  rim-height inset
+quiet arena backdrop
              actual flight path
 athlete       closeout              glass + rim
 floor marks and maple boards
+trajectory legend                     rim-height readout
 existing power / arc / fade / shoot controls
 ```
 
@@ -56,6 +58,13 @@ fixed releases retain exact ball/rim/path geometry, compare actual screenshots,
 and reject hidden artwork or geometric drift with focused effective controls.
 Inspect the images for recognizable silhouettes, unobstructed trajectories and
 an obvious improvement over the accepted line-body court.
+
+The first source review found an existing longest-shot defect: at8.6 metres,
+the physical rim center projects to(307.29,68), inside the opaque readout disk
+at(306,46) with radius34. Its entire rim is covered. Keep the readout's numeric
+geometry unchanged and relocate it outside the playable court. The final native
+proof must reject overlap, show the whole readout and preserve identical shot
+outcomes. PR118 contains the isolated pass; remote verification is in progress.
 
 ## Shipping boundary
 

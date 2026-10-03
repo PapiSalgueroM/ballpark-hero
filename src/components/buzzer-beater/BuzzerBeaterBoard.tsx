@@ -523,6 +523,20 @@ export default function BuzzerBeaterBoard() {
         />
         <BallSeams cx={ball ? toX(ball.x) : toX(0.1)} cy={ball ? toY(ball.y) : toY(RELEASE_HEIGHT)}
           r={BALL_RADIUS * PX_PER_M_X} flight={ball ? flight : 0} />
+      </svg>
+
+      <div className="flex items-center gap-3">
+        {mode === 'lab' ? <p className="min-w-0 flex-1 flex flex-wrap gap-x-3 gap-y-1 text-[11px] text-muted-foreground" data-lab-legend>
+          <span><span className="text-amber-500">┄</span> Previous: amber dashed</span>
+          <span><span className="text-cyan-500">━</span> Latest: cyan solid</span>
+          <span>Green dotted: aiming preview</span>
+          <span>Far misses sit at the edge of the rim view.</span>
+        </p> : <p className="min-w-0 flex-1 text-xs text-muted-foreground">
+          The rim view helps you line up Fade. Watch the court for height and distance.
+        </p>}
+        <figure className="m-0 w-[72px] shrink-0">
+        <svg data-court-readout="" viewBox="266 6 80 80" width={72} height={72}
+          className="block w-full" aria-hidden="true" focusable="false" pointerEvents="none">
 
         {/* The ring down the line of the shot: the only place a side to side
             miss is visible, so it is the aim readout too. The ball is drawn at
@@ -557,18 +571,11 @@ export default function BuzzerBeaterBoard() {
               r={BALL_RADIUS * INSET_PX_PER_M} fill="none" stroke={previous ? '#fbbf24' : '#67e8f9'}
               strokeWidth={2} strokeDasharray={previous ? '3 2' : undefined} />;
           })}
-          <text x={INSET_CX} y={INSET_CY + 46} textAnchor="middle" fontSize={7} fill="hsl(28 15% 62%)">
-            {mode === 'lab' ? 'rim-height view' : result && phase !== 'aiming' ? 'where it crossed' : 'where you are aiming'}
-          </text>
         </g>
-      </svg>
-
-      {mode === 'lab' && <p className="flex flex-wrap gap-x-3 gap-y-1 text-[11px] text-muted-foreground" data-lab-legend>
-        <span><span className="text-amber-500">┄</span> Previous: amber dashed</span>
-        <span><span className="text-cyan-500">━</span> Latest: cyan solid</span>
-        <span>Green dotted: aiming preview</span>
-        <span>Far misses sit at the edge of the rim view.</span>
-      </p>}
+        </svg>
+        <figcaption className="text-center text-[10px] leading-[14px] text-muted-foreground">Rim view</figcaption>
+        </figure>
+      </div>
 
       {phase === 'aiming' && (
         <div className="space-y-2 rounded-2xl border border-border bg-card p-3">
