@@ -70,6 +70,9 @@ export interface FarmRules {
   cover: CoverMode;
   /** Most men on the tier list at once (NFL squad, NBA two way slots). Absent where a book limit governs instead. */
   tierCap?: number;
+  /** NFL: places beyond tierCap that only a qualifying international man may fill. The game cannot tell who
+      qualifies, so a dealt real squad keeps its extra man and the farm never fills the place itself. */
+  tierExempt?: number;
   /** NFL: game day elevations per man per season before he must be signed. */
   elevationsPerSeason?: number;
   /** NFL: elevations per club per game. */
@@ -105,8 +108,7 @@ const src = (url: string, says: string): FarmSource => ({ url, read: READ, says 
    under the 2013 CBA's waiver table (unchanged by the 2020 MOU, per the 2023
    CapFriendly copy below). Wikipedia was read as a spot check only and is
    never one of the two. Left out because they are not modelled: the NFL's
-   extra international practice squad place, the six veteran places and the
-   squad eligibility rules; the NBA's 90 "under 15" games; MLB's fourth
+   six veteran places and the squad eligibility rules; the NBA's 90 "under 15" games; MLB's fourth
    option year, the 20 day rule and the five options a season; the NHL's
    eleven game rule for 18 and 19 year olds, the ten game and 30 day re-entry
    window, and the 23 man active roster (the game's own NHL roster is
@@ -114,12 +116,16 @@ const src = (url: string, says: string): FarmSource => ({ url, read: READ, says 
 export const FARM_RULES: Record<FarmSport, FarmRules> = {
   nfl: {
     sport: 'nfl', tierName: 'Practice squad', cover: 'elevate',
-    tierCap: 16, elevationsPerSeason: 3, elevationsPerGame: 2,
+    tierCap: 16, tierExempt: 1, elevationsPerSeason: 3, elevationsPerGame: 2,
     injuredCount: true, claimToActive: true, clearedTo: 'tier', drafteeTo: 'active', engineAgesTier: true,
     sources: {
       tierCap: [
         src('https://www.si.com/nfl/bengals/news/nfl-makes-changes-to-practice-squad-rules-ahead-of-2022-season', 'NFL teams will be able to have 16 players on their practice squad (2022 changes).'),
         src('https://www.espn.com/nfl/story/_/id/38392717/all-32-practice-squads-include-international-player-24', 'Squads expand to 17 in 2024, the added place being one international player, so 16 otherwise.'),
+      ],
+      tierExempt: [
+        src('https://web.archive.org/web/2024id_/https://operations.nfl.com/updates/football-ops/nfl-to-expand-practice-squad-to-include-one-international-player-for-all-32-clubs-in-2024/', 'Beginning in 2024 the practice squad expands to 17 if one player is a qualifying international player.'),
+        src('https://www.espn.com/nfl/story/_/id/38392717/all-32-practice-squads-include-international-player-24', 'All practice squads include an international player from 2024, 17 players in all.'),
       ],
       elevationsPerSeason: [
         src('https://www.si.com/nfl/bengals/news/nfl-makes-changes-to-practice-squad-rules-ahead-of-2022-season', 'Players can be elevated up to three times during the year.'),
@@ -217,9 +223,9 @@ export function nhlExemption(signedAge: number, goalie: boolean): [number, numbe
 }
 
 /* THE GAME'S OWN CHOICES, not rules. */
-/** Men a new club's tier is dealt (the NFL's squad is the engine's real one). MLB: on the 40, then off it. */
+/** Men a club's tier is filled to each summer (a new NFL league opens with its real squads). MLB: on the 40, then off it. */
 export const FARM_STOCK: Record<FarmSport, { on: number; off: number }> = {
-  nfl: { on: 0, off: 0 }, nba: { on: 3, off: 0 }, mlb: { on: 10, off: 6 }, nhl: { on: 8, off: 0 },
+  nfl: { on: 16, off: 0 }, nba: { on: 3, off: 0 }, mlb: { on: 10, off: 6 }, nhl: { on: 8, off: 0 },
 };
 /** MLB minor leaguers off the 40 man a club keeps; real systems carry far more, the game keeps the best dozen. */
 export const MLB_OFF40_CAP = 12;
@@ -390,7 +396,8 @@ export function contractCount(seat: FarmSeat): number {
 export function farmCapBreaches(rules: FarmRules, seat: FarmSeat, activeMax: number): string[] {
   const out: string[] = [];
   const l = seat.club.ledger;
-  if (rules.tierCap !== undefined && seat.reserve.length > rules.tierCap) out.push(`${seat.abbr} ${rules.tierName} ${seat.reserve.length} over ${rules.tierCap}`);
+  const tierMost = (rules.tierCap ?? Infinity) + (rules.tierExempt ?? 0);
+  if (seat.reserve.length > tierMost) out.push(`${seat.abbr} ${rules.tierName} ${seat.reserve.length} over ${tierMost}`);
   if (rules.fortyMan !== undefined && fortyManCount(seat) > rules.fortyMan) out.push(`${seat.abbr} 40 man at ${fortyManCount(seat)}`);
   if (rules.sport === 'mlb' && activeCount(rules, seat) > activeMax) out.push(`${seat.abbr} active ${activeCount(rules, seat)} over ${activeMax}`);
   if (rules.sport === 'mlb' && seat.reserve.filter(p => l[p.id]?.off40).length > MLB_OFF40_CAP) out.push(`${seat.abbr} off the 40 over ${MLB_OFF40_CAP}`);
@@ -659,6 +666,16 @@ export function afterRound<P extends FarmMan>(ctx: FarmCtx<P>, gamesThisRound: n
       if (sendDownRefusal(ctx, seat, p.id)) delete seat.club.ledger[p.id].coverFor;
       else sendDown(ctx, seat, p.id);
     }
+    /* A man back off the injured list needs his place: a cover man goes down
+       first, and MLB, whose 26 the tier owns, then options its lowest rated. */
+    let guard = seat.players.length;
+    while (!ctx.rules.injuredCount && activeCount(ctx.rules, seat) > ctx.activeMax(seat) && guard-- > 0) {
+      const healthy = seat.players.filter(p => p.out <= 0 && !seat.club.up.includes(p.id));
+      const cover = healthy.filter(p => seat.club.ledger[p.id]?.coverFor);
+      const pool = cover.length ? cover : ctx.rules.sport === 'mlb' ? healthy : [];
+      const down = pool.sort((a, b) => a.ovr - b.ovr || a.id.localeCompare(b.id))[0];
+      if (!down || !sendDown(ctx, seat, down.id)) break;
+    }
   }
 }
 
@@ -686,7 +703,7 @@ export function closeSeason<P extends FarmMan>(ctx: FarmCtx<P>): void {
  * optioned (or, out of options, designated). The engine carries up to 28 all
  * year, so the farm takes the club down to the active cap, lowest rated
  * first among the men `keep` does not name (the caller passes the men its
- * sim reads, so nobody it plays is sent down).
+ * sim reads, so nobody it plays is sent down while anybody else could go).
  */
 export function trimToActive<P extends FarmMan>(ctx: FarmCtx<P>, keep: (seat: FarmSeat<P>) => Set<string>): void {
   for (const seat of ctx.seats) {
@@ -694,10 +711,51 @@ export function trimToActive<P extends FarmMan>(ctx: FarmCtx<P>, keep: (seat: Fa
     let guard = seat.players.length;
     while (activeCount(ctx.rules, seat) > ctx.activeMax(seat) && guard-- > 0) {
       const down = seat.players
-        .filter(p => p.out <= 0 && !kept.has(p.id) && !seat.club.up.includes(p.id))
-        .sort((a, b) => a.ovr - b.ovr || a.id.localeCompare(b.id))[0];
+        .filter(p => p.out <= 0 && !seat.club.up.includes(p.id))
+        .sort((a, b) => Number(kept.has(a.id)) - Number(kept.has(b.id)) || a.ovr - b.ovr || a.id.localeCompare(b.id))[0];
       if (!down || !sendDown(ctx, seat, down.id)) break;
     }
+    trimFortyMan(ctx, seat);
+  }
+}
+
+/**
+ * Opening day, any sport with a tier limit: a list dealt over it (the real
+ * NFL week 4 squads carry an 18th man at two clubs) releases its lowest rated
+ * men to the pool until it holds the limit and its exempt places. Not a cut:
+ * a tier deal carries no dead money.
+ */
+export function trimTier<P extends FarmMan>(ctx: FarmCtx<P>): void {
+  const most = (ctx.rules.tierCap ?? Infinity) + (ctx.rules.tierExempt ?? 0);
+  for (const seat of ctx.seats) {
+    while (seat.reserve.length > most) {
+      const p = seat.reserve.filter(x => !seat.club.up.includes(x.id)).sort((a, b) => a.ovr - b.ovr || a.id.localeCompare(b.id))[0];
+      if (!p) break;
+      seat.reserve.splice(seat.reserve.indexOf(p), 1);
+      delete seat.club.ledger[p.id];
+      ctx.pool.push({ ...p, years: 1 });
+      ctx.events.push(ev('released', seat.abbr, p));
+    }
+  }
+}
+
+/**
+ * MLB: the 40 man holds all year. A club over it (the engine's own summer
+ * refill, a free agent signed in season) takes its optioned man with the
+ * lowest ceiling off it, and a man coming off the 40 is exposed to waivers:
+ * claimed he is gone, cleared he is outrighted to the minors.
+ */
+export function trimFortyMan<P extends FarmMan>(ctx: FarmCtx<P>, seat: FarmSeat<P>): void {
+  const cap = ctx.rules.fortyMan;
+  if (cap === undefined) return;
+  let guard = seat.reserve.length;
+  while (fortyManCount(seat) > cap && guard-- > 0) {
+    const off = seat.reserve
+      .filter(p => !seat.club.ledger[p.id]?.off40)
+      .sort((a, b) => a.pot - b.pot || a.ovr - b.ovr || a.id.localeCompare(b.id))[0];
+    if (!off) break;
+    seat.reserve.splice(seat.reserve.indexOf(off), 1);
+    waive(ctx, seat, off);
   }
 }
 
@@ -767,19 +825,34 @@ function tierProspect<P extends FarmMan>(seat: FarmSeat<P>, o: FarmStockOpts): P
   } as P;
 }
 
-/** Fill a club's tier to the game's stock (an offseason signing or a new league, never an injury). */
+/** The pool men a tier signs first: young enough to still be developing, best ceiling first. */
+export const TIER_POOL_AGE = 25;
+
+/**
+ * Fill a club's tier to the game's stock: an offseason signing or a new
+ * league, never an injury. Young men in the free agent pool sign first (a
+ * real squad fills from the men just cut), then the engine's own generated
+ * prospects make up the rest.
+ */
 export function stockTier<P extends FarmMan>(ctx: FarmCtx<P>, seat: FarmSeat<P>, o: FarmStockOpts): number {
   const r = ctx.rules;
   const want = FARM_STOCK[r.sport];
   let added = 0;
+  const fromPool = (): P | undefined => {
+    const best = ctx.pool.filter(p => p.age <= TIER_POOL_AGE && p.out <= 0 && p.ovr < p.pot && !waiverReturnRefusal(seat.club.lost, p.id))
+      .sort((a, b) => b.pot - a.pot || a.id.localeCompare(b.id))[0];
+    if (best) ctx.pool.splice(ctx.pool.indexOf(best), 1);
+    return best;
+  };
   const offOf = () => seat.reserve.filter(p => seat.club.ledger[p.id]?.off40).length;
   const roomOn = () => (r.tierCap === undefined || seat.reserve.length < r.tierCap)
     && (r.fortyMan === undefined || fortyManCount(seat) < r.fortyMan)
     && (r.contractLimit === undefined || contractCount(seat) < r.contractLimit);
   while (seat.reserve.length - offOf() < want.on && roomOn()) {
-    const p = tierProspect(seat, o);
+    const p = fromPool() ?? tierProspect(seat, o);
     seat.reserve.push(p);
-    seat.club.ledger[p.id] = r.sport === 'nhl' ? { signedAge: p.age, proSeasons: 1 } : {};
+    /* A ledger row only where there is something to keep. */
+    if (r.sport === 'nhl') seat.club.ledger[p.id] = { signedAge: p.age, proSeasons: 1 };
     added += 1;
   }
   while (offOf() < want.off && offOf() < MLB_OFF40_CAP) {
@@ -827,8 +900,9 @@ export function farmOffseason<P extends FarmMan>(state: FarmState<P>, ctx: FarmC
       keep.push(p);
     }
     seat.reserve.splice(0, seat.reserve.length, ...keep);
-    /* MLB keeps its best dozen off the 40, by ceiling. */
+    /* MLB keeps its best dozen off the 40, by ceiling, and the 40 itself. */
     if (r.sport === 'mlb') {
+      trimFortyMan(ctx, seat);
       const off = seat.reserve.filter(p => seat.club.ledger[p.id]?.off40).sort((a, b) => b.pot - a.pot || a.id.localeCompare(b.id));
       for (const p of off.slice(MLB_OFF40_CAP)) {
         seat.reserve.splice(seat.reserve.indexOf(p), 1);
@@ -846,6 +920,6 @@ export function farmOffseason<P extends FarmMan>(state: FarmState<P>, ctx: FarmC
       if (l.signedAge !== undefined) l.proSeasons = (l.proSeasons ?? 1) + 1;
     }
     seat.club.up = [];
-    if (!r.engineAgesTier) stockTier(ctx, seat, o);
+    stockTier(ctx, seat, o);
   }
 }

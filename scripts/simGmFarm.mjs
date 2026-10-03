@@ -151,6 +151,8 @@ const A = {
     advance: lg => { lg.week += 1; },
     playoffs: (lg, rng) => E.nfl.runPlayoffs(lg.teams, rng),
     offseason: (lg, rng) => E.nfl.runOffseason(lg, rng),
+    /* A new league opens with the real squads; each summer refills from the pool, then the draft's own name bank. */
+    genName: E.nfl.prospectName, minSalary: () => 0.8,
   },
   nba: {
     init: rng => { const lg = E.nba.initNbaLeague(rng); E.nba.nbaTipOff(lg, rng); return lg; },
@@ -196,12 +198,14 @@ function seatsOf(sport, lg, state) {
     club: state.clubs[t.abbr], wins: t.wins, losses: t.losses + (t.otLosses ?? 0),
   }));
 }
-function ctxOf(sport, lg, state, round) {
+/* In the summer there is no active roster limit (MLB's 26 runs Opening Day
+   to August 31), so `summer` lifts it; the tier's own caps still hold. */
+function ctxOf(sport, lg, state, round, summer = false) {
   const rules = farm.FARM_RULES[sport];
   const sept = sport === 'mlb' && round >= farm.MLB_SEPTEMBER_FROM_ROUND;
   return {
     rules, seats: seatsOf(sport, lg, state), pool: lg.freeAgents, season: lg.season, events: [],
-    activeMax: s => farm.activeMaxFor(rules, A[sport].engineMax(lg.teams[s.abbr]), sept),
+    activeMax: s => (summer && sport === 'mlb' ? Infinity : farm.activeMaxFor(rules, A[sport].engineMax(lg.teams[s.abbr]), sept)),
   };
 }
 const stockOpts = (sport, lg, state, rng) => ({ rng, taken: farm.farmNames(state, lg), genName: A[sport].genName, minSalary: A[sport].minSalary(lg) });
@@ -225,7 +229,7 @@ const lostPresent = (lg, state, sport) => {
 const S = {};
 const statsOf = sport => (S[sport] ??= {
   periods: 0, breaches: [], covers: 0, coverBad: [], claims: 0, farmReturns: [], engineReturns: 0,
-  gainsPS: [], gainsActive: [], draftTier: 0, draftPool: 0, draftBad: [], bytes: [], stale: [], probes: [],
+  gainsPS: [], gainsActive: [], gapBy: {}, coversBy: {}, claimsBy: {}, tierSize: [], poolSize: [], leagueBytes: [], draftTier: 0, draftPool: 0, draftBad: [], bytes: [], stale: [], probes: [],
 });
 
 function runLeague(sport, seed) {
@@ -255,10 +259,18 @@ function runLeague(sport, seed) {
     st.periods += 1;
     for (const seat of ctx.seats) for (const b of farm.farmCapBreaches(ctx.rules, seat, ctx.activeMax(seat))) st.breaches.push(`${label}: ${b}`);
   };
-  const tally = ctx => { for (const e of ctx.events) if (e.kind === 'claimed') st.claims += 1; };
+  const tally = ctx => { for (const e of ctx.events) if (e.kind === 'claimed') { st.claims += 1; st.claimsBy[seed] = (st.claimsBy[seed] ?? 0) + 1; } };
 
+  const gp0 = st.gainsPS.length;
+  const ga0 = st.gainsActive.length;
   for (let season = 0; season < SEASONS; season += 1) {
-    if (sport === 'mlb') farmStep('open', () => { const c = ctxOf(sport, lg, state, 1); farm.trimToActive(c, s => ad.keep(lg, s)); tally(c); caps(c, `s${season} open`); });
+    farmStep('open', () => {
+      const c = ctxOf(sport, lg, state, 1);
+      farm.trimTier(c);
+      if (sport === 'mlb') farm.trimToActive(c, s => ad.keep(lg, s));
+      tally(c);
+      caps(c, `s${season} open`);
+    });
     for (let r = 1; r <= ad.rounds; r += 1) {
       /* Section 2: the cover step, against a snapshot taken just before it. */
       const c1 = ctxOf(sport, lg, state, r);
@@ -273,11 +285,21 @@ function runLeague(sport, seed) {
         }
       }
       for (const id of allIds(lg, state, sport)) if (!before.has(id)) st.coverBad.push(`new id ${id} in a cover step`);
-      st.covers += c1.events.filter(e => e.coverFor).length;
+      const covered = c1.events.filter(e => e.coverFor).length;
+      st.covers += covered;
+      st.coversBy[seed] = (st.coversBy[seed] ?? 0) + covered;
       caps(c1, `s${season} r${r} cover`);
       engineStep(() => ad.play(lg, r, rng));
       const c2 = ctxOf(sport, lg, state, r);
       farmStep('after', () => { farm.afterRound(c2, ad.games); farm.rivalSignings(c2, rng); });
+      /* The GM's send down, the one path that exposes an NFL man: every
+         fourth week the first club tries to stash its best young prospect on
+         the practice squad, through waivers, and keeps him only if he clears. */
+      if (sport === 'nfl' && r % 4 === 0) {
+        const me = c2.seats[0];
+        const low = me.players.filter(p => p.out <= 0 && p.age <= 25 && !me.club.up.includes(p.id)).sort((a, b) => b.pot - a.pot || a.id.localeCompare(b.id))[0];
+        if (low && me.reserve.length < c2.rules.tierCap) farmStep('gm', () => farm.sendDown(c2, me, low.id));
+      }
       tally(c2);
       caps(c2, `s${season} r${r} after`);
       engineStep(() => ad.ai(lg, rng));
@@ -285,13 +307,15 @@ function runLeague(sport, seed) {
       if (r < ad.rounds) ad.advance(lg);
     }
     farmStep('close', () => { const c = ctxOf(sport, lg, state, ad.rounds); farm.closeSeason(c); tally(c); });
-    summer(sport, lg, state, rng, st, season, farmStep, engineStep, caps);
+    summer(sport, lg, state, rng, st, season, farmStep, engineStep, caps, tally);
   }
   probe(sport, lg, state, st, seed);
+  if (sport === 'nfl') st.gapBy[seed] = mean(st.gainsPS.slice(gp0)) - mean(st.gainsActive.slice(ga0));
+  st.leagueBytes.push(JSON.stringify(lg).length);
 }
 
 /* ---------- the summer: playoffs, the engine's offseason, the draft, the tier's own ---------- */
-function summer(sport, lg, state, rng, st, season, farmStep, engineStep, caps) {
+function summer(sport, lg, state, rng, st, season, farmStep, engineStep, caps, tally) {
   const ad = A[sport];
   const young = farm.TIER_YOUNG_AGE;
   const snapPS = new Map();
@@ -306,9 +330,19 @@ function summer(sport, lg, state, rng, st, season, farmStep, engineStep, caps) {
   const pct = t => (t.wins + t.losses > 0 ? t.wins / (t.wins + t.losses) : 0.5);
   const order = Object.values(lg.teams).sort((a, b) => pct(a) - pct(b) || a.abbr.localeCompare(b.abbr)).map(t => t.abbr);
   engineStep(() => { ad.playoffs(lg, rng); ad.offseason(lg, rng); });
+  farmStep('summer', () => {
+    const c = ctxOf(sport, lg, state, 1, true);
+    farm.farmOffseason(state, c, stockOpts(sport, lg, state, rng));
+    tally(c);
+    caps(c, `s${season} summer`);
+    for (const s of c.seats) {
+      const here = new Set([...s.players, ...s.reserve].map(p => p.id));
+      for (const id of Object.keys(s.club.ledger)) if (!here.has(id)) st.stale.push(`${s.abbr} ${id}`);
+    }
+  });
   if (ad.draftClass) {
     farmStep('draft', () => {
-      const c = ctxOf(sport, lg, state, 1);
+      const c = ctxOf(sport, lg, state, 1, true);
       const cls = ad.draftClass(rng, farm.farmNames(state, lg));
       const bySeat = new Map(c.seats.map(s => [s.abbr, s]));
       order.forEach((abbr, i) => {
@@ -323,15 +357,6 @@ function summer(sport, lg, state, rng, st, season, farmStep, engineStep, caps) {
       caps(c, `s${season} draft`);
     });
   }
-  farmStep('summer', () => {
-    const c = ctxOf(sport, lg, state, 1);
-    farm.farmOffseason(state, c, stockOpts(sport, lg, state, rng));
-    caps(c, `s${season} summer`);
-    for (const s of c.seats) {
-      const here = new Set([...s.players, ...s.reserve].map(p => p.id));
-      for (const id of Object.keys(s.club.ledger)) if (!here.has(id)) st.stale.push(`${s.abbr} ${id}`);
-    }
-  });
   if (sport === 'nfl') {
     for (const t of Object.values(lg.teams)) {
       for (const p of t.practice ?? []) if (snapPS.has(p.id)) st.gainsPS.push(p.ovr - snapPS.get(p.id));
@@ -339,6 +364,9 @@ function summer(sport, lg, state, rng, st, season, farmStep, engineStep, caps) {
     }
   }
   st.bytes.push(JSON.stringify(state).length);
+  const sizes = seatsOf(sport, lg, state).map(x => x.reserve.length);
+  (st.tierSize[season] ??= []).push(mean(sizes));
+  (st.poolSize[season] ??= []).push(lg.freeAgents.length);
 }
 
 /* ---------- section 3's probe: the claimer exposes him, the loser worst and needy ---------- */
@@ -384,24 +412,26 @@ for (const sport of SPORTS) {
   const st = S[sport];
   const per = n => (n / SEEDS.length).toFixed(1);
   console.log(`\n== ${sport}: ${st.periods} periods, ${per(st.covers)} covers, ${per(st.claims)} claims, ${st.engineReturns} engine returns per ${SEEDS.length} leagues`);
+  console.log(`   tier size by summer: ${st.tierSize.map(x => mean(x).toFixed(1)).join(' ')}; pool: ${st.poolSize.map(x => mean(x).toFixed(0)).join(' ')}`);
   check(1, st.periods > SEASONS * SEEDS.length * 10, `${sport}: ${st.periods} periods checked`);
   check(1, st.breaches.length === 0, `${sport}: no cap broken (${st.breaches.length})${st.breaches.length ? ' first: ' + st.breaches.slice(0, 3).join(' | ') : ''}`);
   check(2, st.coverBad.length === 0, `${sport}: every cover came from the club's own tier (${st.coverBad.length} bad)${st.coverBad.length ? ' first: ' + st.coverBad.slice(0, 3).join(' | ') : ''}`);
-  check(2, st.covers / SEEDS.length >= COVER_FLOOR[sport], `${sport}: ${per(st.covers)} covers a league, floor ${COVER_FLOOR[sport]}`);
-  check(3, st.claims / SEEDS.length >= CLAIM_FLOOR[sport], `${sport}: ${per(st.claims)} claims a league, floor ${CLAIM_FLOOR[sport]}`);
+  const bySeed = o => SEEDS.map(s => o[s] ?? 0);
+  check(2, bySeed(st.coversBy).every(n => n >= COVER_FLOOR[sport]), `${sport}: covers by league ${bySeed(st.coversBy).join(' ')}, floor ${COVER_FLOOR[sport]} each`);
+  check(3, bySeed(st.claimsBy).every(n => n >= CLAIM_FLOOR[sport]), `${sport}: claims by league ${bySeed(st.claimsBy).join(' ')}, floor ${CLAIM_FLOOR[sport]} each`);
   check(3, st.farmReturns.length === 0, `${sport}: no claimed man came back by a farm or waiver path (${st.farmReturns.length})${st.farmReturns.length ? ' first: ' + st.farmReturns.slice(0, 3).join(' | ') : ''}`);
   const live = st.probes.filter(p => p.live);
   if (CLAIM_FLOOR[sport] > 0) check(3, live.length > 0, `${sport}: the return probe was live in ${live.length} of ${st.probes.length} leagues`);
   check(3, st.probes.every(p => !p.back), `${sport}: the loser never got him back in the probe (${st.probes.filter(p => p.back).length} back)`);
   if (sport === 'nfl') {
-    const gap = mean(st.gainsPS) - mean(st.gainsActive);
-    check(4, gap >= GROWTH_GAP, `${sport}: young squad men gain ${mean(st.gainsPS).toFixed(2)} a summer, young active men ${mean(st.gainsActive).toFixed(2)}, gap ${gap.toFixed(2)} (n ${st.gainsPS.length} and ${st.gainsActive.length}), floor ${GROWTH_GAP}`);
+    const gaps = SEEDS.map(s => st.gapBy[s]);
+    check(4, gaps.every(g => g >= GROWTH_GAP), `${sport}: young squad men gain ${mean(st.gainsPS).toFixed(2)} a summer, young active men ${mean(st.gainsActive).toFixed(2)} (n ${st.gainsPS.length} and ${st.gainsActive.length}); gap by league ${gaps.map(g => g.toFixed(2)).join(' ')}, floor ${GROWTH_GAP} each`);
   }
   if (A[sport].draftClass) {
     check(5, st.draftBad.length === 0 && st.draftTier > 0, `${sport}: ${per(st.draftTier)} draftees a league in the tier, ${per(st.draftPool)} to the pool, ${st.draftBad.length} misplaced${st.draftBad.length ? ' first: ' + st.draftBad.slice(0, 2).join(' | ') : ''}`);
   }
   const big = Math.max(...st.bytes);
-  check(6, st.bytes.every(b => b <= BYTES_BUDGET[sport]), `${sport}: farm block ${Math.min(...st.bytes)} to ${big} bytes over ${st.bytes.length} summers, budget ${BYTES_BUDGET[sport]}`);
+  check(6, st.bytes.every(b => b <= BYTES_BUDGET[sport]), `${sport}: farm block ${Math.min(...st.bytes)} to ${big} bytes over ${st.bytes.length} summers (the league itself ${Math.min(...st.leagueBytes)} to ${Math.max(...st.leagueBytes)}), budget ${BYTES_BUDGET[sport]}`);
   check(6, st.stale.length === 0, `${sport}: no ledger row for a man who left (${st.stale.length})`);
 }
 const red = [...failedSections].sort().join(', ');
